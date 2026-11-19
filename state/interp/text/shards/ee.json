@@ -3251,5 +3251,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "20b6b59a08fa": {
+  "identity": {
+   "one_liner": "面向 JVM 的 Kotlin Web 应用框架，组合 Vaadin 视图层与 ktorm 持久层",
+   "review": "Vaadin-on-Kotlin（VoK）是用于构建数据库支撑型 Web 应用的 Kotlin 框架，不强制 MVC、依赖注入或面向服务架构，也不依赖 Spring 或 JavaEE。视图层采用 Vaadin 组件模型，持久层为 ktorm 的类型化 SQL DSL，由 ktorm-vaadin 封装；另含基于 Javalin 7 的 REST 服务端与客户端模块。0.19 为破坏性版本，文档部分页面仍在按旧版惯例编写。",
+   "highlights": [
+    "提供 vok-framework、vok-framework-vokdb、vok-rest、vok-rest-client 等模块，可单独依赖 vok-framework 并自选持久层",
+    "ktorm-vaadin 提供 EntityDataProvider 与过滤器组件，配合 Vaadin Grid 实现表格数据绑定",
+    "vok-rest 通过 Javalin 7 + Gson 暴露 ktorm 表的 CRUD 端点，支持 ?offset/?limit/?sort=col:asc 查询参数"
+   ],
+   "use_cases": [
+    "在 JVM 上用 Kotlin 编写全栈静态类型 Web 应用",
+    "需要 Vaadin Grid 与数据库直连的 CRUD 应用",
+    "需要为 ktorm 表快速生成 REST 接口的场景"
+   ]
+  },
+  "sha": "20b6b59a08fa",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d1945161e9f0": {
+  "identity": {
+   "one_liner": "面向 Roundcube 网页邮箱的模块化工具集，含 PostfixAdmin/Postfix SQL 集成。",
+   "review": "Roundcube Toolbox 是一套安装在 plugins/toolbox 下的 Roundcube 1.7 插件，通过 toolbox_tools 数组按需启用 aliases、forward、vacation、purge、tags、cloud、password_hashes 等工具。依赖 PHP 8.1+，需要分别配置 PostfixAdmin/Postfix 与 Roundcube 的 SQL 连接，部分工具需执行初始化 SQL 脚本；Tags 使用 IMAP 关键字存储，每次操作仅针对单封邮件。",
+   "highlights": [
+    "提供 11 个可选工具，覆盖别名、转发、休假回复、清理周期、附件、标签、云存储挂载和密码哈希管理",
+    "通过独立的 DSN 配置分别读写 PostfixAdmin/Postfix SQL 与 Roundcube 数据库，支持 PostgreSQL 与 MySQL",
+    "Tags 工具使用稳定 IMAP 关键字存储消息标签，支持父子定义树、按名称或值搜索及消息列表徽章显示"
+   ],
+   "use_cases": [
+    "使用 PostfixAdmin/Postfix SQL 后端管理邮箱账户的 Roundcube 运维环境",
+    "需要用户自助管理转发地址、休假回复、垃圾箱清理周期等功能的邮件站点",
+    "希望基于 IMAP 关键字为邮件添加个人标签并按标签检索的用户场景"
+   ]
+  },
+  "sha": "d1945161e9f0",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ed2f493e6ede": {
+  "identity": {
+   "one_liner": "将墨西哥银行账单转换为可审计 SQLite 账本的 CLI 与 MCP 服务器",
+   "review": "cuadra 读取墨西哥 BBVA、Nu、Ualá、Vexi、HSBC 等银行账单（PDF/CSV/XLSX，可选 OCR），按「期初余额＋流水＝银行申报期末余额」对账，差额不为零则阻断入库；金额以整数分存储于 SQLite，支持预览-提交分离、幂等导入与完整回滚。提供 CLI 和 stdio MCP 服务器供 Claude Code/Claude Desktop 调用，全部在本机运行，无外部服务调用。需要 Python 3.11+。",
+   "highlights": [
+    "对账规则：期初余额加流水须等于申报期末余额，差额非零时状态被锁定不入库",
+    "金额以整数分存储，不使用浮点；导入幂等且可整体 rollback",
+    "提供 CLI 与 MCP 服务器（stdio/JSON-RPC 2.0）两种访问方式，写操作需显式 confirm"
+   ],
+   "use_cases": [
+    "将多家墨西哥银行月度 PDF 账单汇总为本地可审计账本",
+    "在 Claude Code/Claude Desktop 中通过 MCP 预览和提出账务操作，人工显式提交",
+    "需要对账到分且保留审计历史、支持回滚的个人记账流水线"
+   ]
+  },
+  "sha": "ed2f493e6ede",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cbab3adf1004": {
+  "identity": {
+   "one_liner": "Go 应收账款微服务，从 Laravel 单体拆出，含 API、队列与只读 MCP 服务器",
+   "review": "该项目是一个用 Go 编写的应收账款微服务，设计为从 Laravel 单体中拆出的模块：PHP 单体负责注册和界面，此服务管理发票签发、部分/全额付款、余额和到期日，两者通过 RabbitMQ 异步通信。它提供 HTTP API、后台 worker、只读 MCP 服务器、PostgreSQL 持久化和 Prometheus 指标，支持使用 Docker 运行。该仓库包含一个示例 Laravel 单体以演示双方通信。值得注意的机制包括使用 SELECT FOR UPDATE 的付款事务、inbox/outbox 幂等模式，以及在 READ ONLY 事务上运行的 MCP 服务器。",
+   "highlights": [
+    "提供 HTTP API（签发票据、付款、带客户/状态/逾期过滤器的列表）、消费 vendas.faturada 事件的 worker，以及暴露余额/逾期票据/逾期客户查询的只读 MCP 服务器（stdio）",
+    "使用 PostgreSQL 存储，金额以分 (int64) 计，包含 CHECK 约束，支付事务使用 SELECT FOR UPDATE，通过事件 ID 实现消费的 inbox 幂等性，以及使用 publisher confirms 的 outbox 中继",
+    "提供 Docker Compose（Postgres 17, distroless 镜像），用于单元测试、契约测试、竞态检测、结构化 slog 日志、Prometheus 业务指标和 GitHub Actions CI 的 Make 目标"
+   ],
+   "use_cases": [
+    "将应收账款功能从 Laravel 单体拆分为通过队列通信的独立 Go 微服务",
+    "用于付款并发控制和端到端消息可靠性的 inbox/outbox 模式参考",
+    "通过 MCP 为 AI 助手提供针对应收数据的只读 SQL 访问，用于查询余额、逾期票据和逾期客户"
+   ]
+  },
+  "sha": "cbab3adf1004",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

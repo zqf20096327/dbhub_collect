@@ -2668,5 +2668,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "38cce0c11317": {
+  "identity": {
+   "one_liner": "开源动态核心，用于流程化档案系统：一份模型文件即可生成数据库、角色、API、审批流程与界面。",
+   "review": "DX-OS 是面向档案办理类系统的开源核心，适用对象为学校、院系和小型企业等有审批流程的场景。使用者在一个模型文件中声明实体、字段、角色、权限与审批步骤，核心读取文件后生成数据库、Keycloak 角色、带权限的 API、审批流程和 Web 界面。当前版本 2.0.1，Apache 2.0 协议，通过 Docker Compose 在本地部署，提供十条预置业务模板。",
+   "highlights": [
+    "支持从一个模型文件生成数据表、角色、API、审批流程、列表界面与表单，变更业务时修改文件并先预览影响后应用",
+    "提供行级权限控制、带校验链的档案历史记录，支持按状态看板、CSV 导出，并每日将旧档案归档为可用 DuckDB 查询的 Parquet 存储",
+    "基于 APISIX、Keycloak、Spring Boot、Flowable、PostgreSQL、SeaweedFS、ClamAV、React 等开源组件编排，通过 OIDC/PKCE 和带签名的 webhook 对外提供 API 与事件通知"
+   ],
+   "use_cases": [
+    "部署面向学生事务、技术支持、设备借用、房间预订、IT 服务权限等场景的档案审批系统，可直接从预置的十个模板中选择",
+    "在自托管环境中搭建数据留存本地的审批流程系统（Linux 或 WSL2 加 Docker），提供单条命令安装、备份与文件病毒扫描",
+    "以 API、OIDC 登录和 webhook 事件将档案系统接入组织内已有的外部应用与聊天渠道（Mattermost、Slack）"
+   ]
+  },
+  "sha": "38cce0c11317",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "00a2c8a6f4c1": {
+  "identity": {
+   "one_liner": "面向芬兰公共开放数据的每日仪表盘，Go 采集归一化数据并用规则生成建议。",
+   "review": "ArkiWatch 采集 FMI、HSY、HSL、Fingrid、SYKE 等芬兰数据源的开放数据，聚合天气、空气质量、交通、电价与城市活动，Go 后端负责采集与建议计算，Next.js 前端仅做展示；每条数据标注来源与抓取时间。演示模式只需 Node.js 20+，无需数据库和 API 密钥。项目处于预发布阶段，赫尔辛基覆盖最完整。",
+   "highlights": [
+    "从 FMI、HSY、HSL、Fingrid、SYKE 等开放数据源采集数据，每条读数标注来源、抓取时间与覆盖区域",
+    "提供首页、按领域的工作区（天气/空气/能源/出行/水/活动）、AI 助手和可选的个人日程四类界面，助手回答时引用所用数据源",
+    "演示版本通过同一套 Go 规则对 fixture 数据运行生成，缺失数据显示为缺失，历史日期只读"
+   ],
+   "use_cases": [
+    "查看芬兰城市（赫尔辛基、埃斯波、万塔、坦佩雷等）当日天气、空气质量、交通与电价的汇总视图",
+    "通过带来源引用的助手查询当前数据并跳转到对应工作区",
+    "基于保存地点和通勤路线生成可选的每日计划"
+   ]
+  },
+  "sha": "00a2c8a6f4c1",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fd222010d64a": {
+  "identity": {
+   "one_liner": "Go 短链接库，提供深链、OG 预览、点击分析与 MCP 服务",
+   "review": "这是一个 Go 库与独立服务，用于生成短链接并处理点击统计、链接过期与 OG 预览页。面向需要在应用中嵌入链接管理能力的开发者。核心机制包括可插拔 Processor 接口、可替换 Store 后端（内存/Redis/SQLite），以及通过 MCP 工具让 AI 客户端管理链接。MIT 协议，安装为 go get。",
+   "highlights": [
+    "支持内存、Redis、SQLite 三种存储后端，核心包仅依赖 go-nanoid，Redis 与 SQLite 驱动按需引入",
+    "点击统计在重定向路径之外后台采集，提供按平台、设备、浏览器、OS、referrer 及日期的细分查询",
+    "提供 MCP 服务端，暴露 create_link、link_stats 等工具，并支持 iOS Universal Links 与 Android App Links 的 .well-known 文件托管"
+   ],
+   "use_cases": [
+    "在 Go 服务中生成带过期时间的短链接并统计点击数据",
+    "为分享链接生成 Open Graph/Twitter Card 预览页",
+    "按平台将移动用户重定向到 App Store 或回退网页"
+   ]
+  },
+  "sha": "fd222010d64a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

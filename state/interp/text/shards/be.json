@@ -2973,5 +2973,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b5819b69e74d": {
+  "identity": {
+   "one_liner": "由 ClickHouse 驱动的进程内 OLAP SQL 引擎",
+   "review": "chDB 将 ClickHouse 引擎嵌入 Python 进程运行，无需单独安装 ClickHouse。它提供 SQL 查询 API、兼容 pandas 语法的 DataStore API 以及 DB-API 2.0 接口，可查询 Parquet、CSV、JSON 等 60 多种格式的文件与 Pandas DataFrame，并支持有状态会话、Python UDF 和流式查询。面向需要在 Python 中执行分析型 SQL 的数据科学使用者。",
+   "highlights": [
+    "进程内运行 ClickHouse 引擎，无需单独安装 ClickHouse",
+    "输入输出支持 Parquet、CSV、JSON、Arrow、ORC 等 60 多种格式，支持查询 Pandas DataFrame 与 Arrow Table",
+    "提供 pandas 兼容的 DataStore API、Python DB-API 2.0、有状态会话、标量 UDF 与分块流式查询，另有编译为 WebAssembly 的浏览器版本"
+   ],
+   "use_cases": [
+    "在 Python 环境中直接对本地文件（Parquet、CSV 等）执行 OLAP SQL 分析",
+    "用 pandas 语法处理大型数据集，由引擎生成 SQL 执行",
+    "在浏览器中通过 WebAssembly 构建运行 SQL 而无需安装"
+   ]
+  },
+  "sha": "b5819b69e74d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3ed2fb81179": {
+  "identity": {
+   "one_liner": "自托管媒体流服务器，基于 Go 后端与 React 界面，兼容 Jellyfin API",
+   "review": "Silo 是一个用 Go 编写、React 前端的自托管媒体服务器，用于组织和播放电影、剧集、有声书、电子书、播客与漫画，通过 TMDB/TVDB 等元数据插件匹配条目。部署依赖 Docker Compose 2.24+，默认镜像捆绑 PostgreSQL（含 pgvector）与 Redis。项目处于预发布阶段，API、配置和数据库迁移在首个稳定版前可能变更。",
+   "highlights": [
+    "支持直接播放、remux 与转码三级播放策略，提供 VA-API、Quick Sync 和 NVENC 硬件加速",
+    "提供 Jellyfin/Emby 兼容 API，可接入 VidHub、Findroid、Infuse 等客户端",
+    "可添加转码节点（仅需服务器 URL 和密钥）与共享 PostgreSQL/Redis 的代理节点进行扩展"
+   ],
+   "use_cases": [
+    "自托管个人影音库并通过 Web 或第三方客户端观看",
+    "为家庭成员建立独立观看状态、库访问权限和家长控制的档案",
+    "通过管理界面集中配置库、用户、存储与搜索，替代配置文件方式运维"
+   ]
+  },
+  "sha": "c3ed2fb81179",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6e939db07f4a": {
+  "identity": {
+   "one_liner": "基于 TanStack Start 与 Vite Plus 的最小化 React 启动模板",
+   "review": "Cove Stack 是一个 TanStack Start 启动模板，集成 React、TanStack Router 与 Query、Tailwind CSS、shadcn/ui、Drizzle ORM（PostgreSQL）及 Better Auth。开发者可通过 pnpm create cove 创建项目，用 vpr 脚本完成环境变量校验、数据库迁移与开发服务器启动。模板内置认证中间件、主题切换、Vitest/Playwright 测试基础，并通过 Nitro 支持多种部署目标。代码以 Unlicense（公有领域）发布，另有 monorepo 版本可用。",
+   "highlights": [
+    "集成 TanStack Start/Router/Query、Drizzle ORM、Better Auth 与 shadcn/ui",
+    "通过 Varlock 管理 .env.schema 环境变量契约并生成类型，evlog 按请求输出结构化日志",
+    "内置 Vitest 单元测试与 Playwright 端到端测试脚本，Nitro 支持多平台部署预设"
+   ],
+   "use_cases": [
+    "基于 TanStack Start + PostgreSQL + Better Auth 快速启动新 React 项目",
+    "作为 SaaS 应用或需要认证与数据库的 Web 应用的模板起点",
+    "需要 Netlify、Vercel、Node.js 等多种部署目标的全栈模板场景"
+   ]
+  },
+  "sha": "6e939db07f4a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "70b698ec99cc": {
+  "identity": {
+   "one_liner": "自托管、离线优先的任务管理应用，服务端为 Go + SQLite 单二进制",
+   "review": "OpenTodo 是一个可自托管的开源任务管理应用，前端为 React PWA，服务端为单个 Go 二进制加 SQLite 文件。所有修改以带时间戳和设备 ID 的字段级操作写入追加日志，各设备先本地生效再同步；支持 CalDAV、REST API（OpenAPI 3.1）与端到端加密，数据存于服务器单一文件夹，可导出或备份到磁盘、S3、WebDAV。通过 Docker、单二进制或 PikaPods 等方式部署。",
+   "highlights": [
+    "每台设备保留完整数据副本，离线可用，重连后基于字段级操作日志同步，备注按字符合并",
+    "提供 REST API（服务器生成 OpenAPI 3.1 描述）与 CalDAV 接口，CLI（ot）、Obsidian 插件和 n8n 节点基于该 API 构建",
+    "数据可随时导入导出，支持从 Todoist、TickTick、Things、Microsoft To Do、Apple Reminders 等导入，备份可加密写入磁盘、S3 或 WebDAV"
+   ],
+   "use_cases": [
+    "在个人服务器、树莓派或 NAS 上自托管任务管理，替代订阅制服务",
+    "家庭或团队共享项目列表，成员按 viewer/editor/admin 角色协作并离线编辑",
+    "需要端到端加密或不希望任务数据经过第三方服务的场景"
+   ]
+  },
+  "sha": "70b698ec99cc",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

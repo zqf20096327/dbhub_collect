@@ -3447,5 +3447,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4ac232814b0d": {
+  "identity": {
+   "one_liner": "基于 ZFS 克隆为 MySQL/PostgreSQL 秒级创建写时复制数据库分支",
+   "review": "db-branch 在自有服务器上以 ZFS 克隆方式创建 MySQL/PostgreSQL 数据库分支，创建时不复制数据，支持重置、检查点、按分支升级和 TTL 自动删除。多个节点可组成 Raft 集群，并可选用 ProxySQL 按用户名路由连接。核心为 Apache-2.0，认证/SSO、审计等付费模块为闭源包，目前处于 Beta 阶段，API 在 1.0 前可能变更。",
+   "highlights": [
+    "通过 ZFS 克隆实现写时复制分支，支持重置、检查点/恢复、TTL 自动过期和单分支版本升级",
+    "提供 CLI、REST API、Web 控制台与内置 MCP 服务器，同一 API 可供 LLM 代理创建与查询分支",
+    "支持单节点或 Raft 多节点集群，可选 ProxySQL 路由；支持 MySQL 与 PostgreSQL 多版本并存"
+   ],
+   "use_cases": [
+    "AI 代理沙箱：让代理在分支上执行高风险查询或迁移，不触碰生产数据",
+    "每个 PR 或 CI 运行获得独立数据库副本，结束后按 TTL 自动删除",
+    "在单个分支上先用 --check-only 预演大版本升级，再决定是否应用到基库"
+   ]
+  },
+  "sha": "4ac232814b0d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29769fb84935": {
+  "identity": {
+   "one_liner": "Rust 单二进制 MCP 记忆服务器，支持混合检索与时序知识图谱",
+   "review": "MemoryPilot 是一个面向 AI 编程助手的本地记忆层，以 MCP 服务器形式为 Cursor、Claude Desktop 等客户端提供持久化会话记忆。README 称其采用 BM25 与 jina-embeddings-v5 的 RRF 混合检索加交叉编码器重排，支持 100+ 语言、时序知识图谱、AAAK 压缩与自动分类，全程本地运行、零 LLM 调用。附带基准数据但注明为单次自测、未经第三方复现。",
+   "highlights": [
+    "提供混合检索：BM25 + 嵌入 RRF 融合 + 交叉编码器重排，支持 100+ 语言",
+    "实现时序知识图谱、GraphRAG、自动分类与自动压缩，写入与检索均不调用 LLM",
+    "纯 Rust 单二进制，无运行时依赖，提供 HTTP API 与签名自动更新"
+   ],
+   "use_cases": [
+    "为 Cursor、Claude Desktop、VS Code 等客户端的 AI 助手提供跨会话持久记忆",
+    "按模糊描述检索过往 Cursor 或 Claude 会话记录",
+    "需要本地运行、不上传数据的记忆存储与检索场景"
+   ]
+  },
+  "sha": "29769fb84935",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e8b9a4f08299": {
+  "identity": {
+   "one_liner": "开源自托管共享账单分摊工具，支持精确拆分与多币种",
+   "review": "Balancia 是一个用于旅行、合租、家庭等场景的共享支出记录与分摊工具，提供托管版和 Docker 自托管两种使用方式。拆分方式包含均分、精确金额、百分比和加权份额，金额以整数最小单位存储；支持多币种分组、多付款人、访客免注册参与、收据存储及 JSON/CSV/Excel 导出。自托管只需 Docker 与 Compose 插件，技术栈为 Next.js 与 PostgreSQL。",
+   "highlights": [
+    "支持均分、精确金额、百分比、加权份额四种拆分方式，金额以整数最小单位存储避免舍入误差",
+    "支持多币种分组独立结算或按记账时冻结汇率换算，一张账单可记录多个付款人",
+    "支持通过可撤销链接邀请访客免注册参与，并提供 Splitwise CSV/JSON 导入与 JSON/CSV/Excel 导出"
+   ],
+   "use_cases": [
+    "朋友旅行或多币种场景下的共同开销记录与结算",
+    "合租室友分摊房租、水电与日常采购费用",
+    "需要自托管并掌控数据与收据存储的个人或小团体"
+   ]
+  },
+  "sha": "e8b9a4f08299",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "833166070fbc": {
+  "identity": {
+   "one_liner": "华为云示例样例目录仓库，收录孵化中的云服务实践方案列表",
+   "review": "该仓库以表格形式编目华为云各类示例项目，涵盖应用智能、云原生、安全等领域，每个条目附描述、所属团队与孵化状态。README 本身不包含安装或运行说明，仅提供仓库索引；使用者需进入各子仓库查看具体部署方式。适合需要按场景查找华为云实践方案的开发与运维人员浏览。",
+   "highlights": [
+    "以目录表格形式收录多个孵化中（incubating）的示例仓库，含描述、团队与状态字段",
+    "条目覆盖语义搜索、无服务器架构、分布式追踪、安全治理等多个主题领域",
+    "每个条目标注负责团队及当前孵化状态"
+   ],
+   "use_cases": [
+    "按场景（应用智能、云原生、安全等）检索华为云相关示例仓库",
+    "了解华为云官方团队正在孵化的实践方案及其覆盖范围",
+    "作为索引定位具体子仓库以进一步查阅实现细节"
+   ]
+  },
+  "sha": "833166070fbc",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

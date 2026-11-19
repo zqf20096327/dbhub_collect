@@ -3151,5 +3151,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6561ab1a6a4a": {
+  "identity": {
+   "one_liner": "基于 Rust 与 Tauri 的桌面数据库工作台，支持八种数据库引擎连接、查询与编辑。",
+   "review": "Dora 是一款开源桌面数据库客户端，用于连接 PostgreSQL、MySQL、MariaDB、CockroachDB、SQLite、libSQL/Turso、Cloudflare D1、DuckDB 及 CSV/JSON/Parquet 文件。提供表格浏览与内联编辑、基于 Monaco 的多标签 SQL 控制台、Drizzle/Prisma 查询编写与迁移生成。可通过 OAuth 或令牌登录 Supabase、Neon 等托管平台获取凭据，支持本地启动数据库容器。采用 GPLv3 许可，未做代码签名，首次运行需手动放行。",
+   "highlights": [
+    "支持八种数据库引擎及 CSV、JSON、Parquet 等文件格式的浏览、编辑、查询与导出，各引擎按方言分别处理",
+    "可在编辑器内直接编写 Drizzle 和 Prisma 查询，对比 schema 与实际数据库并生成迁移语句",
+    "凭据使用 AES-256-GCM 加密存储于操作系统钥匙串，查询数据在本地与数据库之间直接传输"
+   ],
+   "use_cases": [
+    "需要同时连接多种数据库引擎（含本地文件型数据库）进行数据浏览与 SQL 查询的开发者",
+    "使用 Drizzle 或 Prisma 的项目需要编写查询、对比 schema 并生成迁移",
+    "需要直接读取 CSV、JSON、Parquet 文件并进行跨文件联表查询的场景"
+   ]
+  },
+  "sha": "6561ab1a6a4a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cc2fc83c3713": {
+  "identity": {
+   "one_liner": "Go 的 database/sql SQLite 驱动，用 LLVM 生成的 Go 汇编实现免 CGO。",
+   "review": "liustack/sqlite 是一个兼容 database/sql 的 SQLite 驱动，通过 LLVM 将 SQLite 3.54.1 的 C 代码编译为 Go 汇编，可在 CGO_ENABLED=0 下构建静态二进制并运行于 scratch 镜像。面向需要在 Go 程序中使用 SQLite 且希望免 C 编译的开发者。内置向 S3/R2/MinIO 的近实时备份与恢复；当前版本 v0.1，API 可能变动；不支持 load_extension 与 shared cache。",
+   "highlights": [
+    "以 LLVM 将 SQLite 官方 C amalgamation 编译为 Go 汇编，支持 CGO_ENABLED=0 构建，覆盖 linux/darwin amd64 与 arm64、windows amd64",
+    "内置将提交增量复制到 S3、Cloudflare R2 或 MinIO 的备份机制，写入不等待上传，支持按时间点恢复且布局与 Litestream 兼容",
+    "支持在 Go 中注册 SQL 函数、聚合、排序规则与虚拟表，内置 FTS5、R*Tree、数学函数及 regexp/uuid/hash/vec 等 ext/ 扩展包"
+   ],
+   "use_cases": [
+    "希望以单个静态 Go 二进制部署 SQLite 应用且构建环境无 C 编译器的场景",
+    "需要程序内近实时备份 SQLite 数据到对象存储（S3/R2/MinIO）的单机应用",
+    "需要在 SQLite 中使用自定义函数、全文搜索或向量距离查询的 Go 服务"
+   ]
+  },
+  "sha": "cc2fc83c3713",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

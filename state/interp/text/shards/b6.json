@@ -3078,5 +3078,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d964bc94fc53": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 Agent Skills，为 AI 编码代理注入数据库最佳实践指令包",
+   "review": "该仓库是 ClickHouse 官方发布的 Agent Skills 集合，面向使用 Claude Code、Cursor、Copilot 等 AI 编码代理的开发者。包含 8 个技能：36 条 ClickHouse 最佳实践规则、架构决策框架、Node.js 客户端故障排除、chdb DataStore 与 SQL、clickhousectl 本地与云端部署流程、Postgres 工作流及 ClickStack OTel 接入。技能遵循 agentskills.io 开放规范，通过 npx 或 clickhousectl 安装，采用 Apache 2.0 许可。",
+   "highlights": [
+    "提供 36 条按影响分级（CRITICAL/HIGH/MEDIUM）的 ClickHouse 最佳实践规则，覆盖主键选择、JOIN 优化、插入批处理、分区策略等 12 类主题",
+    "技能与代理无关，同一技能可安装到 Claude Code、Cursor、Windsurf、Copilot、Gemini CLI 等 20+ 个 AI 编码工具的配置目录",
+    "chdb DataStore 提供与 pandas 兼容的 API，支持 MySQL、PostgreSQL、S3、MongoDB、Iceberg、Delta Lake 等 16+ 数据源的跨源连接"
+   ],
+   "use_cases": [
+    "让 AI 代理在建表、写查询、调优 JOIN、设计数据摄入管道时参考 ClickHouse 最佳实践",
+    "用 chdb 在 Python 中以 pandas 风格语法查询本地文件、远程数据库，或跨数据源做连接分析",
+    "通过 clickhousectl 搭建本地 ClickHouse/Postgres 开发环境并迁移到 ClickHouse Cloud，或将 OTel collector 接入 ClickStack"
+   ]
+  },
+  "sha": "d964bc94fc53",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0a2fe7820af6": {
+  "identity": {
+   "one_liner": "基于 Rust 的终端数据库 TUI，支持 PostgreSQL、MySQL 与 SQLite 的浏览与编辑",
+   "review": "sabiql 是一个用 Rust 编写的终端界面工具，通过调用各数据库原生 CLI 实现表浏览、SQL 查询和数据编辑，支持 PostgreSQL、MySQL 和 SQLite。界面采用 Vim 风格键位，编辑遵循先展示 SQL 与风险等级再确认的流程，另有只读模式在客户端层面阻止写入。运行前需安装对应的数据库 CLI；MySQL 依赖 Oracle mysql 8.4.x，SQLite 需 3.41.1 及以上，ER 图功能需 Graphviz 且仅限 PostgreSQL 和 MySQL，SQLite 不支持 ER 图，Windows 支持为实验性。",
+   "highlights": [
+    "通过各数据库原生 CLI 连接，PostgreSQL 可复用 libpq 配置（如 .pgpass、pg_service.conf、SSL 设置）",
+    "编辑和删行前展示生成的 SQL 及风险等级，并提供 Ctrl+R 只读模式在客户端层面阻止写入",
+    "提供模糊搜索表结构、SQL 补全与历史、执行计划查看与对比、CSV 导出、JSON 文档查看编辑，以及基于 Graphviz 的 ER 图生成"
+   ],
+   "use_cases": [
+    "在终端中以 Vim 键位浏览和查询 PostgreSQL、MySQL、SQLite 数据",
+    "需要预览 SQL 再确认的行内编辑与行删除操作流程",
+    "生成并查看 PostgreSQL 或 MySQL 表间关系的 ER 图"
+   ]
+  },
+  "sha": "0a2fe7820af6",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dbdb9cc86928": {
+  "identity": {
+   "one_liner": "Text-to-SQL 的 schema 选择器，按调用者权限裁剪送入 LLM 的表清单",
+   "review": "schemagate 是一个用于 text-to-SQL 场景的 schema 选择工具：先按调用者身份过滤掉无读取权限的表，再用 BM25 与哈希嵌入从剩余表中选出与问题相关的表，只把这些表的 DDL 放入提示词。它提供 CLI、Python API、本地 studio 页面与 MCP/LangChain 集成，支持 Postgres、Oracle、MySQL、SQL Server、SQLite。选择器本身不调用模型，离线运行；依赖 SQLAlchemy，pip 安装即用。README 说明其代价是被需要的表可能被漏选。",
+   "highlights": [
+    "按 Principal/角色过滤表目录，无权限的表名不出现在提示词中",
+    "表选择由 BM25 加哈希嵌入完成，不调用模型，默认嵌入器离线运行",
+    "提供 CLI、本地 studio 页面与 LangChain/LlamaIndex/MCP 集成，支持五种数据库方言"
+   ],
+   "use_cases": [
+    "为 SQL agent 缩减提示词中的 schema 体积",
+    "多角色调用同一 text-to-SQL 服务时按身份裁剪可见表",
+    "在行级安全之前避免模型针对不可读表生成 SQL"
+   ]
+  },
+  "sha": "dbdb9cc86928",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

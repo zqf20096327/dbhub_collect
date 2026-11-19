@@ -3172,5 +3172,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "26b30318e03a": {
+  "identity": {
+   "one_liner": "自托管的上下文编译器，将 git 中的团队知识按 token 预算打包经 MCP 提供给编码代理。",
+   "review": "briefd 是面向 AI 编码团队的自托管服务：团队知识以 Markdown 存于 git 仓库，briefd 用 SQLite FTS5 与多语言向量嵌入做混合检索，通过 compile_bundle 等工具在指定 token 预算内返回去重后的上下文。代理只读不写，修改需经 propose_update 发起分支/PR 由人工合并。以 Go 实现，产出单一二进制文件，使用一个 SQLite 文件，支持 HTTP 与 stdio 两种运行方式。",
+   "highlights": [
+    "提供 7 个 MCP 工具与对应 REST 接口，返回上下文的接口均接受 max_tokens 硬预算限制",
+    "检索由 SQLite FTS5（BM25）与纯 Go 实现的 multilingual-e5-small 嵌入经倒数排名融合而成，不依赖外部向量数据库",
+    "知识仓库支持 domain/conventions/projects 目录结构、front matter 元数据、Obsidian wikilinks，代理经 propose_update 只能创建提案分支"
+   ],
+   "use_cases": [
+    "团队在多个同领域项目间共享术语、业务规则与编码规范，供编码代理按任务按需取用",
+    "使用 Claude Code 等 MCP 客户端的开发者，希望以按需检索替代每次会话全量加载知识文件",
+    "需要代理能查阅 Jira/Confluence 内容并按预算生成上下文、同时由人工评审知识变更的团队"
+   ]
+  },
+  "sha": "26b30318e03a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c2777a3eb39c": {
+  "identity": {
+   "one_liner": "Go 语言数据库抽象层，为多种存储后端提供统一的记录、查询、事务 API",
+   "review": "DALgo 是面向 Go 应用的数据库抽象层（DAL），业务代码通过统一的 dal.DB、Record、Query、事务等接口访问 Firestore、SQL、文件系统或内置内存适配器等后端，可通过 go get 安装。它提供泛型集合句柄、层级键、结构化查询构建器和访问策略，适配器可对不支持的能力返回 ErrNotSupported。",
+   "highlights": [
+    "提供 dal.Collection[K, T] 泛型集合句柄，支持类型化读写、复合键和子集合嵌套，不使用反射",
+    "内置 dalgo2memory 内存适配器，可在测试中运行同一套业务代码；适配器可返回 dal.ErrNotSupported 表示不支持的能力",
+    "支持层级键路径、结构化查询构建（过滤、排序、连接、投影、聚合）、钩子（hooks）以及基于 YAML 规则的分层访问策略"
+   ],
+   "use_cases": [
+    "需要将业务逻辑与具体数据库客户端解耦、可在 Firestore/SQL/内存后端之间更换存储实现的应用",
+    "需要在读写操作前施加能力边界、分层访问策略和审计的扩展、多租户或支持工具",
+    "对金额等小数聚合需要精确十进制文本运算（避免 float64 转换）的联邦查询场景"
+   ]
+  },
+  "sha": "c2777a3eb39c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "82f212522fe8": {
+  "identity": {
+   "one_liner": "面向 Java 17+ 的轻量级 ORM，通过编译期生成的类型化 Key 将数据库行映射到 JavaBean 或 Record。",
+   "review": "Ujorm3 是一个面向 Java 17+ 的对象关系映射库，将数据库行映射为可变 JavaBean 或不可变 Record，映射元数据可来自 JPA/Jakarta 注解。查询通过基于 Typed Key 的类型安全 DSL 构建，也提供 SqlQuery 执行原生 SQL。库不提供懒加载、1:M 集合映射、事务管理与实体缓存，运行时依赖少，适合需要在代码中显式控制 SQL 与数据获取时机的 Java 开发者。",
+   "highlights": [
+    "基于 Typed Key Pattern 的类型安全查询 DSL，编译期校验列引用与条件参数类型，支持 Criterion 过滤与自动 JOIN 生成",
+    "提供 EntityManager（按主键 CRUD）、SelectQuery（类型安全查询）、SqlQuery（原生 SQL 参数绑定）三层工具，支持批量插入与部分字段更新",
+    "映射支持 Java Record（构造器赋值）与 JavaBean（getter/setter），元数据来自字段声明与 JPA/Jakarta 注解，反射开销限于元数据初始加载"
+   ],
+   "use_cases": [
+    "希望用类型安全 DSL 构建 SELECT 语句（含 JOIN 与条件）而避免手写 SQL 字符串的 Java 应用",
+    "以 Record 或 JavaBean 承载数据、不需要懒加载与一级缓存、事务由应用层自行管理的项目",
+    "需要执行原生 SQL 并自动将 ResultSet 行（含嵌套关系别名）映射为对象的场景"
+   ]
+  },
+  "sha": "82f212522fe8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

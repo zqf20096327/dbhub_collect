@@ -3375,5 +3375,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "988f83a10f50": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Rust 编写的 DynamoDB 本地模拟器",
+   "review": "Dynoxide 是一个用 Rust 编写的 DynamoDB 模拟器，以 SQLite 作为存储层，提供 DynamoDB 兼容的 HTTP API。它可运行于 HTTP 服务器、MCP 服务器、嵌入式 Rust 库和 WebAssembly 等多种形态，面向本地开发、测试与 CI 场景，README 明确说明其并非生产环境替代品。安装支持 npm、Homebrew、Cargo、Docker 与 GitHub Actions，双许可 MIT/Apache-2。",
+   "highlights": [
+    "实现涵盖表、项、查询与扫描、批次、事务、PartiQL、Streams、TTL、标签，支持 GSI/LSI、完整表达式语法及分页与错误码",
+    "提供 HTTP 服务器、MCP 服务器、Rust/iOS 嵌入库和 WebAssembly 浏览器版四种运行形态",
+    "通过 Parity Suite 套件持续对照真实 AWS DynamoDB 进行一致性验证，结果公开"
+   ],
+   "use_cases": [
+    "为集成测试与 CI 流水线提供本地 DynamoDB 端点，AWS SDK 直接指向其 HTTP 服务",
+    "从 Rust 或 iOS 应用中以库形式嵌入调用，每个测试使用隔离的内存数据库",
+    "为编码代理提供 MCP 服务器，或以 wasm 构建在浏览器中运行"
+   ]
+  },
+  "sha": "988f83a10f50",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f0072d901944": {
+  "identity": {
+   "one_liner": "单可执行文件运行 PostgreSQL，以 .pgdb 目录承载整个数据库",
+   "review": "minipg 是一个把 Docker Hub 的 postgres:18-alpine 镜像嵌入单个可执行文件的工具，用 Zig 编写的 hypervisor 库 hyper9 直接在宿主机上运行 Alpine 的 Postgres 二进制，无需 Linux 内核、VM 镜像或 Docker。数据库存放在 .pgdb 目录中，提供 shell、serve、dump/restore、run 等命令。README 注明项目处于早期，h9 为研究原型，不适合存放无法重建的数据。",
+   "highlights": [
+    "单个静态二进制嵌入 postgres:18-alpine 镜像，支持通过 fetch 下载其他 Postgres 大版本",
+    "数据、配置、凭据集中于 .pgdb 目录，停止状态下可像普通目录一样复制",
+    "支持 Linux x86_64、macOS Apple Silicon、Windows x86_64，在容器和 CI 中无需特权运行"
+   ],
+   "use_cases": [
+    "本地开发时以命令行方式创建和连接 PostgreSQL 数据库",
+    "为测试任务提供 PostgreSQL 实例，如 minipg init 后配合 minipg run 执行测试",
+    "通过 dump/restore 命令执行 pg_dump 备份与恢复流程"
+   ]
+  },
+  "sha": "f0072d901944",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e4f861d3786": {
+  "identity": {
+   "one_liner": "KLEF Y23 批次选课与教师偏好分配门户，含确定性资格引擎与本地 SQLite。",
+   "review": "面向 KLEF 大学 Y23 批次（2026–27 第八学期）的学术注册 Web 平台，由单人开发。学生凭 10 位 ID 与出生日期登录，系统按集群、学术轨道、就业状态、专业方向、课程桶五维规则过滤可选课程与教师，支持 L/P/S 组件的 Rank 1-3 教师偏好、25 学分实时校验、jspdf 客户端 PDF 生成，另含管理员控制台。数据存于 Node 原生 node:sqlite。",
+   "highlights": [
+    "五维确定性资格引擎：集群、学术轨道（CRT/NonCRT/ICP）、就业状态、29 个专业、C0–C8 课程桶",
+    "使用 Node 原生 node:sqlite 引擎，无外部数据库服务器；内置 1,159 名学生与 426 名教师数据",
+    "通过 jspdf 与 jspdf-autotool（jspdf-autotable）在浏览器端生成注册确认 PDF；凭证均读取环境变量并使用 safeCompare 常量时间比较"
+   ],
+   "use_cases": [
+    "特定院系批次的学期选课与教师偏好收集",
+    "管理员查看注册进度图表、检索教师、重置学生密码",
+    "按专业与就业状态隔离课程边界的注册管理"
+   ]
+  },
+  "sha": "1e4f861d3786",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

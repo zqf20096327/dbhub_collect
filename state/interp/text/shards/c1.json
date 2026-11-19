@@ -3083,5 +3083,92 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "86523ee412c9": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的本地优先可审计记忆控制平面，含治理式检索",
+   "review": "AtMem 是一个 Python 包（pip 安装），为 OpenClaw、Pydantic AI、LangChain/LangGraph 或自定义 Agent 提供长期记忆与事件记录。其机制包括影子模式启动、策略治理的上下文注入、Agent Black Box 事件日志，以及由 AtMem 单独授权的存储/删除流程。本地记忆运行不依赖外部 API；学习类策略研究为实验性且默认不启用。",
+   "highlights": [
+    "通过原生适配器/中间件集成 Pydantic AI 与 LangChain/LangGraph，提供 atmem openclaw install 托管安装",
+    "所有集成默认以影子模式启动，需显式 atmem control activate 后才注入模型上下文",
+    "支持本地 Ollama、本地 OpenAI 兼容模型、托管 provider 或确定性回退，API 密钥保存在环境变量中"
+   ],
+   "use_cases": [
+    "为多框架 Agent 工作流补充长期记忆并保留可检查的事件证据",
+    "在本地环境运行 Agent 记忆，不接入外部 API",
+    "用内置离线 benchmark（24 个安全/质量用例）在发布前验证记忆行为"
+   ]
+  },
+  "sha": "86523ee412c9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "805a6293c36d": {
+  "identity": {
+   "one_liner": "Oracle JET Web 应用的构建与服务工具 API",
+   "review": "该包提供构建和运行 Oracle JET Web 应用所需的方法，可通过 grunt、gulp 等任务运行工具调用，也支持直接调用 API。按照 Oracle JET 开发指南创建 Web 应用时会自动安装此模块。README 未给出 API 清单与使用示例，具体方法需参考官方文档。",
+   "highlights": [
+    "提供构建 Oracle JET Web 应用的 API 方法",
+    "提供服务运行 Web 应用的 API 方法",
+    "既可配合 grunt/gulp 使用，也可直接调用"
+   ],
+   "use_cases": [
+    "在 grunt/gulp 任务中集成 Oracle JET 应用的构建流程",
+    "脚手架工具中自动安装并调用该模块构建 Web 应用"
+   ]
+  },
+  "sha": "805a6293c36d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0c36b0716f6a": {
+  "identity": {
+   "one_liner": "OceanBase 大赛 AMD 赛题的参赛指南文档，涵盖 GPU 算力领取、评分规则与错误自查",
+   "review": "这是 OceanBase 数据库大赛 AMD 赛题的官方说明文档，面向参赛队员。内容包含 Radeon Cloud GPU 算力的申请与额度分配流程（每日刷新、单实例 4 小时上限）、seekdb × hipVS CAGRA 优化赛的评分细则（硬门槛与性能分公式）、基于历史提交统计的零分与执行错误自查表，以及提交自测顺序和排队耗时说明。文档同时给出 V5 基线仓库地址与祖先关系校验命令。",
+   "highlights": [
+    "说明 Radeon Cloud GPU 算力的领取步骤、Credits 发放规则与实例运行限制（单实例最长 4 小时）",
+    "给出赛题二评分公式：硬门槛 4 分、构建性能 14 分、查询性能 2 分，按加权几何平均计算加速比",
+    "基于 247 个门槛零分与 446 个执行错误提交的统计，提供分类型自查表与解决办法"
+   ],
+   "use_cases": [
+    "参赛队员申请与使用 AMD Radeon Cloud GPU 算力",
+    "提交前按官方顺序自查仓库、编译、Recall 与资源门槛",
+    "提测系统排队或报错时定位失败原因并向组织方反馈"
+   ]
+  },
+  "sha": "0c36b0716f6a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f2917274dcfe": {
+  "identity": {
+   "one_liner": "Flow Steward 的 OceanBase 独立连接器，基于 MySQL 兼容接口提供数据集读取与工作流写入。",
+   "review": "Flow-Steward/ext-data-oceanbase 是一个可安装扩展，通过 OceanBase 的 MySQL 兼容端点将 OceanBase 接入 Flow Steward：数据集连接器支持连接测试、类型化模式检查、保存 SQL、预览与执行；工作流动作用 execute_write 执行带命名参数的单条 INSERT/UPDATE/DELETE。读取上限为 100 行、480 KiB；不提供 Oracle 模式接口，不暴露触发器。适用于应用数据查询、报表提取与工作流驱动的记录变更。",
+   "highlights": [
+    "数据集连接器提供连接测试、类型化表模式检查、保存 SQL 校验、预览与只读执行，读取上限为 100 行、480 KiB 内联输出",
+    "execute_write 工作流动作执行单条 INSERT/UPDATE/DELETE，SQL 与参数值分离并使用驱动原生绑定，支持可选 param_schema",
+    "提供独立的 Linux AMD64 与 ARM64 安装包，内置 Google MCP Toolbox 固定版本（v1.17.0）的本机构建，安装与运行时不另行下载驱动"
+   ],
+   "use_cases": [
+    "为后续工作流步骤提供 OceanBase 应用查询与报表提取数据（只读数据集）",
+    "在工作流中通过参数化 SQL 保存输出或更新既有应用记录",
+    "需要 AMD64/ARM64 分包安装、且仅针对 OceanBase MySQL 兼容端点的场景"
+   ]
+  },
+  "sha": "f2917274dcfe",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2790,5 +2790,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "44a62309bbaa": {
+  "identity": {
+   "one_liner": "用 Zig 从零实现的 Postgres 兼容多租户 OLTP 数据库",
+   "review": "Egres 是一个面向重负载、多租户工作负载的 Postgres 兼容数据库，使用 Zig 从零实现，并非对 Postgres 的重写。单节点无需参数即可运行，数据与 WAL 存于工作目录 egres-data，默认监听 3210 端口供 psql 等 Postgres 客户端连接。支持 Linux x86_64 与 Apple Silicon 二进制分发，也可用 Zig 0.16.0 从源码构建。文档主要在官网而非 README。",
+   "highlights": [
+    "通过 pgwire 协议接受标准 Postgres 客户端（如 psql）连接，单节点默认监听 3210 端口",
+    "包含 Jepsen 测试，用于检查基于 pgwire 的快照隔离，覆盖进程崩溃与暂停场景",
+    "源码构建仅需 Zig 0.16.0，jemalloc、Postgres 解析器与压缩库均随源码 vendor 并由 Zig 编译"
+   ],
+   "use_cases": [
+    "已有基于 Postgres 协议的客户端应用，需要接入兼容 pgwire 的存储服务",
+    "需要评估多租户、高写入负载场景下基于 LSM 树与对象存储（如 AWS S3）的数据库方案",
+    "希望从源码构建和研究数据库实现的开发者（Apache 2.0 许可）"
+   ]
+  },
+  "sha": "44a62309bbaa",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ccf41c0d2824": {
+  "identity": {
+   "one_liner": "Go+Scheme实现的列式内存SQL数据库，兼容MySQL协议，支持HTAP混合负载",
+   "review": "MemCP是GPL-3.0许可的开源列式内存数据库，采用主/差值（main/delta）架构：稳定数据存于压缩列，近期写入进入delta并由后台合并。通过MySQL线协议及HTTP端点（MySQL/PostgreSQL/T-SQL/SPARQL方言）接入，适合需持续更新并同时检索分析大数据集的应用。项目处于Beta阶段，官方建议生产切换前验证查询与备份流程。存储引擎用Go实现，SQL解析与查询优化用Scheme实现。",
+   "highlights": [
+    "支持MySQL线协议及HTTP端点提交MySQL、PostgreSQL、T-SQL方言SQL，另含SPARQL/RDF引擎和可选TDS监听器",
+    "列式存储采用位打包整数、字典、范围和稀疏编码，支持数据从内存换出并按需重新加载",
+    "基于成本的查询规划：相关子查询去相关化为可重排连接，支持自适应计划缓存与自动复合索引"
+   ],
+   "use_cases": [
+    "需要同一引擎同时处理事务写入、全文检索和列式分析的自托管ERP类应用",
+    "已有MySQL客户端/连接器的应用通过线协议接入进行评估或受控Beta部署",
+    "通过HTTP端点提交多方言SQL（含T-SQL、SPARQL）的混合负载场景"
+   ]
+  },
+  "sha": "ccf41c0d2824",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "219c147245c3": {
+  "identity": {
+   "one_liner": "Home Assistant 数据库空间分析与裁剪的 HACS 集成",
+   "review": "这是一个面向 Home Assistant 管理员的 HACS 集成，用于分析 recorder SQLite 数据库空间去向并按需清理。它按实体统计状态历史与长期统计占用，统计实体在自动化、仪表盘、YAML 等处的引用并给出建议，清理前写入压缩备份且支持批量撤销；可按实体设置状态保留天数，由夜间任务执行并重整数据库。仅支持 SQLite，不支持 MariaDB/PostgreSQL，引用匹配无法识别动态模板引用。",
+   "highlights": [
+    "按实体统计空间占用，拆分状态历史与长期统计，支持按集成、设备、类型过滤",
+    "清理前自动写入压缩备份，History 页支持整批撤销，仅恢复缺失行",
+    "支持按实体设置状态保留天数（1-7天），夜间任务自动执行并重整数据库，不触及长期统计"
+   ],
+   "use_cases": [
+    "定位占用空间较大的实体并清理其历史数据",
+    "为高频传感器单独设置较短的状态保留期",
+    "通过 History 页、传感器和事件追踪夜间清理任务的执行记录"
+   ]
+  },
+  "sha": "219c147245c3",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "047f2c738599": {
+  "identity": {
+   "one_liner": "本地运行的个人财务管理应用，含 Open Finance 银行同步",
+   "review": "Finanças Local 是一个运行在用户自己电脑上的个人财务管理网站，提供交易记录、预算、目标、账单、投资和报表功能，并通过 Meu Pluggy 接入 Open Finance 自动获取银行流水。面向 Windows 和 Linux 个人用户。数据存储在本地 SQLite 数据库，服务通过 HTTPS 仅在本机响应；接入 Open Finance 需注册 Pluggy 账号并配置 Client ID、Secret 和各银行的 Item ID，授权同意最长 12 个月。",
+   "highlights": [
+    "功能包含交易、预算、目标、应付账、投资、借贷与报表，支持按关键词自动分类的规则",
+    "通过 Meu Pluggy 接入 Open Finance，首次加载 365 天流水，之后每 6 小时自动同步",
+    "数据存储于本地 SQLite，仅经 HTTPS 在本机响应，密钥加密存放；提供 Windows .msi 安装器与 Linux 安装脚本"
+   ],
+   "use_cases": [
+    "在个人电脑上记录和管理交易、预算、储蓄目标与应付账单",
+    "通过 Open Finance 自动导入银行流水并对账",
+    "跟踪股票、FII、加密货币等投资并与 Selic 利率对比"
+   ]
+  },
+  "sha": "047f2c738599",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e6b9cd1e3caa": {
+  "identity": {
+   "one_liner": "Go 延迟任务与定时任务引擎：SQL 持久化 + 时间轮触发，支持 SQLite 内嵌或 MySQL/TiDB+etcd 集群",
+   "review": "hourglass 是面向 Go 的延迟任务与 cron 调度引擎，同一套 API 提供 SQLite 内嵌单机与 MySQL/TiDB+etcd 分片集群两种形态。机制上以数据库为长期真相（job 行与 fired_record 回执），时间轮承接秒级精度，CAS 分批准入；etcd 管理分片租约与 epoch 代数实现故障转移 fencing。状态在 v1.0 已冻结，附带 CLI 查询与 DLQ 回放。",
+   "highlights": [
+    "支持 SQLite 内嵌与分片 MySQL/TiDB+etcd 集群两种部署形态，同一引擎与 API",
+    "时间轮按秒触发，准入门控采用 CAS 批次；取消采用标记不删除策略，epoch fencing 阻止故障节点补发",
+    "每次触发写入 fired_record 回执行，任务终态保留至保留期；提供 stats/dlq ls/dlq replay CLI 命令"
+   ],
+   "use_cases": [
+    "需要秒级触发精度且以 SQL 数据库为真相源的延迟任务/定时任务调度",
+    "需要集群分片扩缩容与节点故障接管（租约过期后重新触发在飞任务）的场景",
+    "需要可查询触发回执（通过 SELECT 确认副作用是否发生）与死信重放的任务队列"
+   ]
+  },
+  "sha": "e6b9cd1e3caa",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

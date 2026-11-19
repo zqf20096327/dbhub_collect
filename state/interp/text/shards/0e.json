@@ -3164,5 +3164,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "218671ebd599": {
+  "identity": {
+   "one_liner": "收录55款免费开发者工具的清单，含自动状态检测",
+   "review": "该仓库维护一份面向开发者的免费/免费额度工具清单，共55款，涵盖AI编程代理、云托管、数据库、DevOps、支付、安全等16个分类，每条列出用途、定价模式和在线状态。可用性状态由GitHub Actions每晚自动检测生成，接受PR贡献，采用MIT许可证。适合寻找免费工具条目的开发者查阅或复用其数据。",
+   "highlights": [
+    "收录55款工具，分16个类别，标注用途、定价模式与在线状态",
+    "通过GitHub Actions每夜自动检测各工具可用性并更新列表",
+    "MIT许可证，支持通过Issue或Pull Request贡献新条目"
+   ],
+   "use_cases": [
+    "查找特定类别（如AI编程代理、数据库、托管）的免费或免费额度工具",
+    "了解各工具的定价模式（Free Tier/Open Source/BYOK等）",
+    "关注工具服务在线状态的定期检查结果"
+   ]
+  },
+  "sha": "218671ebd599",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "deb9dc98487b": {
+  "identity": {
+   "one_liner": "Windows 原生、离线优先的提示词资料库与模型作品归档工具",
+   "review": "PromptCabinet 是一个基于 WPF / .NET 10 和本地 SQLite 的 Windows 桌面应用，用于整理 AI 提示词并将不同模型生成的 HTML 作品与提示词关联归档、预览对比。数据存于本地 %LocalAppData%，默认联网操作仅限 DeepSeek 查询规划、翻译及两个公开来源站点搜索。当前为 0.1.0 预览版，许可证尚未指定。",
+   "highlights": [
+    "提供提示词的新建、编辑、分类、标签、备注、回收站及本地搜索，支持中文/English 界面",
+    "支持导入 HTML 文件或含 index.html 的静态目录归档作品（每份最多 512 个文件、单文件 32 MiB、总量 128 MiB），并用 WebView2 预览或并排对比 2–4 份作品",
+    "DeepSeek API Key 存于 Windows 凭据管理器，本地资料整理与复制不需要联网"
+   ],
+   "use_cases": [
+    "集中收藏和复用 AI 提示词，保留来源与分类标签",
+    "将不同模型生成的 HTML 作品与对应提示词一起归档并排对比",
+    "在 prompts.chat、Prompt Motion 搜索公开提示词并按需翻译保存"
+   ]
+  },
+  "sha": "deb9dc98487b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "21e8074a429c": {
+  "identity": {
+   "one_liner": "基于 oncebox 的 Spring Boot 事务性 Outbox/Inbox 示例项目，演示双写一致性方案",
+   "review": "该项目包含 order-service 与 notification-service 两个 Spring Boot 服务，基于 oncebox-starter 实现事务性 Outbox 与 Inbox：订单与事件在同一数据库事务中提交，轮询投递至 Kafka，消费端按事件 id 去重实现 effectively-once。支持 Kafka 与 RabbitMQ、PostgreSQL/MySQL/Oracle，提供按事件类型配置的轮询、重试退避、卡死恢复、DLQ 表及 REST 管理 API。注意各跳不保证事件顺序，outbox 表依赖定时清理。",
+   "highlights": [
+    "订单与事件写入同一数据库事务，提供原子发布；轮询投递支持按事件类型配置批量大小、重试次数与退避，多实例通过 FOR UPDATE SKIP LOCKED 避免重复发送",
+    "消费端通过事务性 Inbox 记录事件 id 实现去重，inbox 记录与业务效果在同一事务提交；失败事件按瞬态/重复/不可恢复三类区分处理并转入 DLQ 表或 DLT 主题",
+    "含超时事件的卡死恢复机制、分布式锁下的定时表清理，错误响应采用 RFC 9457 格式，API 以 OpenAPI 描述"
+   ],
+   "use_cases": [
+    "需要保证数据库写入与 Kafka/RabbitMQ 事件发布一致性的 Java 微服务",
+    "需要幂等消费、避免 at-least-once 投递产生重复副作用的场景",
+    "评估轮询式 Outbox 与请求内直发、内存队列、CDC 等方案取舍的团队参考实现"
+   ]
+  },
+  "sha": "21e8074a429c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9606c187e40a": {
+  "identity": {
+   "one_liner": "Go 编写的交互式 nmap 扫描客户端，用 SQLite 管理扫描状态",
+   "review": "goscan 提供交互式客户端，通过自动补全调用 nmap 完成主机发现与端口扫描，扫描状态存入 SQLite，可导入 nmap XML 结果并调用 nikto、enum4linux、Hydra 等外部工具做服务枚举。适合拥有授权目标的安全测试人员使用；需自行安装 nmap 及外部工具，枚举模式含凭据攻击等侵入性检查。",
+   "highlights": [
+    "支持从 CIDR 条目、文本文件或目录加载目标",
+    "扫描状态存储于 SQLite，可在不同阶段导入主机发现或端口扫描结果",
+    "提供 DRY 模式预览服务枚举命令，并支持后台分离运行扫描"
+   ],
+   "use_cases": [
+    "对自有或授权目标进行主机发现与端口扫描",
+    "导入已有 nmap XML 结果并查看主机与端口",
+    "在执行前预览并控制服务枚举命令的强度"
+   ]
+  },
+  "sha": "9606c187e40a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

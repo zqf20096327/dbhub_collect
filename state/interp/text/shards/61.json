@@ -3209,5 +3209,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "eb68a6f371f5": {
+  "identity": {
+   "one_liner": "在 SQL Server 内运行的存储过程式 AI 索引调优工具，结合 Azure OpenAI 生成并应用索引建议",
+   "review": "该项目以单个存储过程形式运行于 SQL Server 内部，收集缺失索引、索引重叠、Query Store、非 SARGable 谓词等诊断信息，发送至用户自有的 Azure OpenAI 部署，将建议存入表并可创建经验证的新索引。适用于 SQL Server 2025、Azure SQL Database、Azure SQL 托管实例和 Fabric SQL Database。需配置数据库范围凭据与 API 密钥或托管标识，仅支持 OpenAI 模型，拒绝系统数据库。",
+   "highlights": [
+    "通过 sp_invoke_external_rest_endpoint 调用用户自有的 Azure OpenAI 或 Microsoft Foundry 部署，仅支持 OpenAI 模型",
+    "收集缺失索引、重复与左前缀重叠索引、索引使用统计、计划缓存 top 语句、非 SARGable 谓词、Query Store top 查询及低基数倾斜列等诊断数据",
+    "支持 @Mode='CREATE' 创建已验证的新索引，并提供 @AllowColumnstore、@AllowDropIndex、@MinPriority、@MinConfidence 等变更控制参数"
+   ],
+   "use_cases": [
+    "对 SQL Server 2025 或 Azure SQL 数据库进行周期性索引调优（配合 SQL Server Agent 作业定时执行）",
+    "按模式/表名筛选，针对特定表收集诊断并获取索引建议",
+    "在 DBA 流程中仅生成建议（默认 recommend 模式）或按置信度阈值自动应用高确定性建议"
+   ]
+  },
+  "sha": "eb68a6f371f5",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -23013,5 +23013,3358 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "ce8dc24d0a4f+2": {
+  "fn": "SimpleAI2026/SimpleBase",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "SimpleBase 首页"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    14,
+    10,
+    14,
+    [
+     "|从一句需求到可用服务|云助手|",
+     "|---|---|",
+     "|从一句需求到可用服务|云助手|",
+     "|AI 工作台、Demo 一键上线、对象存储底座|按模块分工的助手（数据库 / KV / 云函数 / 定时任务 / 对象存储 / 日志 / 沙盒），工具调用过程可展开，只读助手不可写|"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    19,
+    15,
+    19,
+    [
+     "|监控大盘|数据管理（暗色主题）|",
+     "|---|---|",
+     "|监控大盘|数据管理|",
+     "|数据库状态、配额、请求趋势、P50 / P90 / P99 接口耗时|系统库只读受保护，表结构一览，支持亮 / 暗主题与中英文切换|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    24,
+    19,
+    24
+   ],
+   [
+    "replace",
+    24,
+    35,
+    24,
+    35,
+    [
+     "|亮点|说明|",
+     "|---|---|",
+     "|**单二进制、零外部依赖起步**|`./build.sh dev` 一条命令拉起后端与控制台；本地默认本地盘，不需要 Postgres / Redis / S3。前端经 `go:embed` 打进同一个二进制|",
+     "|**每项目一个单文件库**|项目数据落在一个 DuckDB 或 SQLite 文件里，SQL 表、集合文档、KV 共用；S3 模式以「不可变快照 + manifest」同步，节点丢盘可只凭 S3 恢复|",
+     "|**SQL + 文档 + KV 三种模型同库**|参数化 SQL / 批量事务；JSON 集合支持 filter、投影、patch、导入导出、字段 schema；KV 支持 String / Hash / List / Set / ZSet / TTL|",
+     "|**进程内 Go 云函数**|自研 `gofunction` 解释器，单文件 `package main` 即可部署；版本、试跑、激活分离，试跑不过不上线；`/go/:project/:fn/:export` 直接 HTTP 调用|",
+     "|**自动化全家桶**|cron / interval / once 定时任务、记录与对象事件触发器、SSE 实时订阅（支持 `Last-Event-ID` 回放）、项目级备份与恢复|",
+     "|**本地开发、云端幂等重放**|`simplebase.json` 声明库、迁移、集合、函数、定时任务；`simplebase dev plan/apply` 先查后写，重复执行全部 skip，迁移只追加、改动已应用迁移会被拒绝；远端写入必须 `--yes`|",
+     "|**LLM 网关 + 云助手**|OpenAI 兼容 `chat/completions`、`responses`、`models`；云助手经 CLI 技能操作项目资源，破坏性命令需发起人确认，只读助手 fail-closed|",
+     "|**安全默认值**|API Key HMAC 存储、权限位 + Scoped Key（资源 / 动作 / 字段级）、跨项目 403、系统库只读、SQL 守卫（拒绝清单 / 多语句 / 行数与超时）、密钥不得进 YAML、审计与日志脱敏|",
+     "|**可验证的样例**|`examples/` 4 个业务站点 + 15 个能力用例，`scripts/examples-verify/verify.sh` 双实例模拟「本地 → 云端」逐站验证|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    42,
+    35,
+    42
+   ],
+   [
+    "replace",
+    42,
+    59,
+    42,
+    43,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    75,
+    43,
+    59
+   ],
+   [
+    "replace",
+    75,
+    76,
+    59,
+    60,
+    [
+     "首次用引导账号 `simplebase2026` / `simplebase2026` 登录（首次登录必须改密），右上角创建项目，在「设置 → 连接」签发 API Key。完整步骤见 5 分钟上手。"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    93,
+    60,
+    77
+   ],
+   [
+    "replace",
+    93,
+    94,
+    77,
+    78,
+    [
+     "教程见 本地开发、云端重放；AI 编码代理使用 `skills/simplebase`。"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    107,
+    78,
+    91
+   ],
+   [
+    "replace",
+    107,
+    121,
+    91,
+    105,
+    [
+     "|能力|主要路径|权限|",
+     "|---|---|---|",
+     "|数据库|`POST/GET/DELETE /databases`|建删 `database:admin`，读 `database:read`|",
+     "|SQL|`/databases/:id/query`、`/execute`、`/batch`|读 / 写|",
+     "|集合|`/databases/:id/data/collections/:c/documents`（含 batch / export / import）|读 / 写|",
+     "|KV|`POST /kv`|读 / 写|",
+     "|对象存储|`/s3/objects`、`/s3/presign`、`/s3/link`|读 / 写|",
+     "|云函数|`/gofunctions`、`POST /go/:projectID/:name/:export`|写 / 读|",
+     "|定时任务 / 触发器|`/cron-jobs`、`/function-triggers`|写 / `project:admin`|",
+     "|实时订阅|`GET /realtime`（SSE）|读|",
+     "|备份|`/backups`（需 `backup.enabled`）|`project:admin`|",
+     "|LLM|`/v1/chat/completions`、`/v1/responses`、`/v1/models`|`llm:invoke`|",
+     "|云助手|`/agents`、`/agent-threads/:id/runs`|读 / 写|",
+     "|配额与审计|`/quota`、`/audit`、`/logs`|读|"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    105,
+    106
+   ],
+   [
+    "replace",
+    122,
+    123,
+    106,
+    107,
+    [
+     "完整说明见 `docs/` 与 `docs/cli.md`。"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    107,
+    110
+   ],
+   [
+    "replace",
+    126,
+    127,
+    110,
+    111,
+    [
+     "详见 docs/ops/deployment.md。要点：副本数为 1（滚动升级先停旧再起新）；S3 bucket 私有并开启 TLS、SSE-KMS、版本控制；`auth.api_key_hash_secret` 只从环境变量注入，更换会使全部 Key 失效；浏览器直连需显式开启 CORS，且前端生产包不得包含写权限 Key。"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    134,
+    111,
+    118
+   ],
+   [
+    "replace",
+    134,
+    148,
+    118,
+    119,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    153,
+    119,
+    124
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "8e0fbabcaa63+2": {
+  "fn": "essmos/nonodb",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "NonoDB"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    1,
+    4
+   ],
+   [
+    "replace",
+    6,
+    8,
+    4,
+    6,
+    [
+     "CI",
+     "Release"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    18,
+    6,
+    16
+   ],
+   [
+    "replace",
+    18,
+    23,
+    16,
+    19,
+    [
+     " <a href=\"docs/gui.md\">",
+     " NoNoDB GUI browsing one million documents",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    19,
+    20
+   ],
+   [
+    "replace",
+    24,
+    26,
+    20,
+    22,
+    [
+     " The embedded GUI browsing a 1,000,000-document database.",
+     "See the GUI guide. "
+    ]
+   ],
+   [
+    "equal",
+    26,
+    39,
+    22,
+    35
+   ],
+   [
+    "replace",
+    39,
+    54,
+    35,
+    50,
+    [
+     "- **Document versioning** — per-collection revision history with global revision IDs and configurable retention.",
+     "- **Tenant encryption** — vault collections with whole-document encryption and per-tenant keys through the native client/HTTP path.",
+     "- **Extremely low RAM usage** — about 5 MB idle with a 1M-document database and three indexes, plus small and tiny profiles for 512 MB–2 GB VMs.",
+     "- **Automatic indexes** — opt-in creation of indexes for frequent query shapes, with cleanup of unused automatic indexes.",
+     "- **Embedded GUI in the box** — a local browser console for documents, SQL, indexes, backups, credentials, cluster state, and metrics, with no separate frontend service.",
+     "- **Search built in** — BM25 full-text search, fuzzy trigram/Levenshtein search, and exact vector search in the same database.",
+     "- **SQL when you need it** — SQL queries and writes alongside the document API, without a separate SQL database.",
+     "- **TTL at both levels** — collection defaults and per-document overrides, with background expiry.",
+     "- **Simple encrypted backups** — native or restic backups, gzip/age encryption, local/S3/R2 destinations, verification, and restore drills.",
+     "- **Simple backup scheduling** — durable backup jobs configured through the CLI, API, or GUI.",
+     "- **Simple credential management** — principals, database-qualified scopes, hashed tokens, client certificates, lockout, and reloads.",
+     "- **Streams beyond the local socket** — watch/SSE/NDJSON streams over the TCP/TLS listener, so remote consumers can use them through a secured endpoint.",
+     "- **Schedulers and background jobs** — durable jobs, workers, leases, retries, and scheduler-friendly CLI commands.",
+     "- **Replication and failover** — asynchronous primary/replica/standby replication with durable ordered operations, snapshot bootstrap, lease-gated writes, quorum promotion, automatic election, partition rejoin, and a cluster-wide GUI.",
+     "- **MongoDB-compatible access** — an optional wire endpoint for official PyMongo, Node.js, and Go drivers, without making MongoDB a deployment dependency."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    62,
+    50,
+    58
+   ],
+   [
+    "replace",
+    62,
+    64,
+    58,
+    60,
+    [
+     " files. This removes multi-process mmap, `fork()`, and stale-reader problems.",
+     " Databases are isolated from each other while sharing one daemon and port."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    60,
+    61
+   ],
+   [
+    "replace",
+    65,
+    66,
+    61,
+    62,
+    [
+     " A Python client wraps this in a small, familiar API."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    62,
+    63
+   ],
+   [
+    "replace",
+    67,
+    68,
+    63,
+    64,
+    [
+     " performs one `fsync` per group, while reads are concurrent MVCC snapshots."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    64,
+    65
+   ],
+   [
+    "replace",
+    69,
+    71,
+    65,
+    67,
+    [
+     " indexes, update operators, and upserts follow MongoDB conventions where it",
+     " makes sense."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    67,
+    68
+   ],
+   [
+    "replace",
+    72,
+    73,
+    68,
+    69,
+    [
+     " memory-mapped, and crash-safe. A `kill -9` does not corrupt the database."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    83,
+    69,
+    79
+   ],
+   [
+    "replace",
+    83,
+    84,
+    79,
+    80,
+    [
+     "Multiple databases."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    92,
+    80,
+    88
+   ],
+   [
+    "replace",
+    92,
+    95,
+    88,
+    91,
+    [
+     " `$in`, `$nin`, `$all`, `$size`, `$elemMatch`, `$exists`, `$regex`/`$options`,",
+     " `$type`, `$mod`, `$bitsAllClear`/`$bitsAllSet`/`$bitsAnyClear`/`$bitsAnySet`,",
+     " `$expr`, `$jsonSchema`, `$not`, `$and`, `$or`, `$nor`."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    91,
+    92
+   ],
+   [
+    "replace",
+    96,
+    98,
+    92,
+    94,
+    [
+     " consistent, exact numeric comparison (`30 == 30.0`; large integers stay",
+     " distinct)."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    94,
+    95
+   ],
+   [
+    "replace",
+    99,
+    100,
+    95,
+    96,
+    [
+     " plus multi-field sort, `skip`, and `limit`."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    96,
+    97
+   ],
+   [
+    "replace",
+    101,
+    103,
+    97,
+    99,
+    [
+     " prefilter for simple string/boolean equalities, and `count({})`",
+     " in O(1)."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    99,
+    100
+   ],
+   [
+    "replace",
+    104,
+    106,
+    100,
+    102,
+    [
+     " compound index, with covering projections, `_id` exclusion, internal key",
+     " deduplication, a 64 MiB response cap, and `null` for missing keys."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    102,
+    103
+   ],
+   [
+    "replace",
+    107,
+    113,
+    103,
+    109,
+    [
+     " supports `DISTINCT`, `WHERE`, `GROUP BY`, `HAVING`, aggregates including",
+     " `COUNT(DISTINCT field)`, `CASE`, scalar functions, `ORDER BY`,",
+     " `LIMIT`/`OFFSET`, positional parameters, and `explain_sql`; simple field-only",
+     " queries use the normal indexed `find` path. Writes use the single writer and",
+     " are atomic per statement, including document expressions in `UPDATE SET`;",
+     " there are no joins."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    118,
+    109,
+    114
+   ],
+   [
+    "replace",
+    118,
+    120,
+    114,
+    116,
+    [
+     " `$rename`, `$currentDate`, `$bit`, `$pop`, `$push`, `$pull`, `$pullAll`,",
+     " `$addToSet`, `$setOnInsert`."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    122,
+    116,
+    118
+   ],
+   [
+    "replace",
+    122,
+    123,
+    118,
+    119,
+    [
+     " `$replaceRoot`, and `$replaceWith`."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    119,
+    120
+   ],
+   [
+    "replace",
+    124,
+    125,
+    120,
+    121,
+    [
+     " `$setOnInsert`."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    121,
+    122
+   ],
+   [
+    "replace",
+    126,
+    127,
+    122,
+    123,
+    [
+     " old or new document in one transaction."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    123,
+    124
+   ],
+   [
+    "replace",
+    128,
+    133,
+    124,
+    129,
+    [
+     " actual matched/returned counts. `find`, `find_one`, cursor pages, `explain`,",
+     " `count`, and `aggregate` accept `comment` and `max_time_ms`; find-shaped",
+     " queries also accept `hint`, `$natural` selects natural order, and expired",
+     " budgets return the `timeout` error code. Both find and aggregation cursors",
+     " carry `comment`/`max_time_ms` across their pages."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    137,
+    129,
+    133
+   ],
+   [
+    "replace",
+    137,
+    138,
+    133,
+    134,
+    [
+     " `get_more` and `close_cursor` for large result sets."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    143,
+    134,
+    139
+   ],
+   [
+    "replace",
+    143,
+    144,
+    139,
+    140,
+    [
+     " paths such as `items.price`; compound indexes reject parallel arrays."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    140,
+    141
+   ],
+   [
+    "replace",
+    145,
+    146,
+    141,
+    142,
+    [
+     " one transaction."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    142,
+    143
+   ],
+   [
+    "replace",
+    147,
+    149,
+    143,
+    145,
+    [
+     " multikey index allows duplicate elements inside one document but not across",
+     " documents."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    151,
+    145,
+    147
+   ],
+   [
+    "replace",
+    151,
+    153,
+    147,
+    149,
+    [
+     " sort-only queries with no filter. Multikey sorts use the lowest array element",
+     " ascending and the highest descending."
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    149,
+    150
+   ],
+   [
+    "replace",
+    154,
+    155,
+    150,
+    151,
+    [
+     " indexed `$all`, and `$elemMatch` on dotted array paths."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    151,
+    152
+   ],
+   [
+    "replace",
+    156,
+    157,
+    152,
+    153,
+    [
+     " document."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    159,
+    153,
+    155
+   ],
+   [
+    "replace",
+    159,
+    161,
+    155,
+    157,
+    [
+     " `$geoIntersects`; queries use hierarchical grid ranges plus exact residual",
+     " checks."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    162,
+    157,
+    158
+   ],
+   [
+    "replace",
+    162,
+    163,
+    158,
+    159,
+    [
+     " memory does not grow with collection size."
+    ]
+   ],
+   [
+    "equal",
+    163,
+    164,
+    159,
+    160
+   ],
+   [
+    "replace",
+    164,
+    165,
+    160,
+    161,
+    [
+     " rebuilding existing definitions transactionally after an upgrade."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    170,
+    161,
+    166
+   ],
+   [
+    "replace",
+    170,
+    171,
+    166,
+    167,
+    [
+     " (`zażółć` → `zazolc`)."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    174,
+    167,
+    170
+   ],
+   [
+    "replace",
+    174,
+    176,
+    170,
+    172,
+    [
+     " stored in LMDB and queried with a brute-force top-K scan; no external vector",
+     " service is required. Results include `_distance`, lowest first."
+    ]
+   ],
+   [
+    "equal",
+    176,
+    181,
+    172,
+    177
+   ],
+   [
+    "replace",
+    181,
+    182,
+    177,
+    178,
+    [
+     " `$out` or `$merge` stage writes the result through the single writer."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    178,
+    179
+   ],
+   [
+    "replace",
+    183,
+    187,
+    179,
+    183,
+    [
+     " `$group`, `$bucket`, `$bucketAuto`, `$sortByCount`, `$replaceRoot`/",
+     " `$replaceWith`, `$sample`, `$facet`, `$lookup`, `$unionWith`, `$graphLookup`,",
+     " `$setWindowFields`, `$densify`, `$fill`, `$sort`, `$skip`, `$limit`,",
+     " `$count`, `$out`, and `$merge`."
+    ]
+   ],
+   [
+    "equal",
+    187,
+    188,
+    183,
+    184
+   ],
+   [
+    "replace",
+    188,
+    189,
+    184,
+    185,
+    [
+     " `$derivative`, and `$integral`."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    185,
+    186
+   ],
+   [
+    "replace",
+    190,
+    191,
+    186,
+    187,
+    [
+     " `$addToSet`, and `$count`."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    192,
+    187,
+    188
+   ],
+   [
+    "replace",
+    192,
+    193,
+    188,
+    189,
+    [
+     " cardinality-preserving stages and unnecessary document materialization."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    189,
+    190
+   ],
+   [
+    "replace",
+    194,
+    197,
+    190,
+    193,
+    [
+     " bounded top-K heap, and a leading `$group` streams documents directly into",
+     " its accumulators. Order-independent groups use the query index when",
+     " available and fall back to a parallel scan."
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    193,
+    194
+   ],
+   [
+    "replace",
+    198,
+    200,
+    194,
+    196,
+    [
+     " and `_id` ranges. `$sort`+`$limit`, `$skip`, `$limit`, simple `$project`, and",
+     " a lone `$count` are also pushed into the query path where semantics allow."
+    ]
+   ],
+   [
+    "equal",
+    200,
+    201,
+    196,
+    197
+   ],
+   [
+    "replace",
+    201,
+    202,
+    197,
+    198,
+    [
+     " `$ifNull`, arithmetic, `$concat`, `$cond`, and comparison operators."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    207,
+    198,
+    203
+   ],
+   [
+    "replace",
+    207,
+    213,
+    203,
+    204,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    218,
+    204,
+    209
+   ],
+   [
+    "replace",
+    218,
+    220,
+    209,
+    211,
+    [
+     "Aggregation for the full stage list and semantics,",
+     "and benchmarks for stage timings and"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    226,
+    211,
+    217
+   ],
+   [
+    "replace",
+    226,
+    227,
+    217,
+    218,
+    [
+     " revisions to retain per document. `0` disables new history writes."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    229,
+    218,
+    220
+   ],
+   [
+    "replace",
+    229,
+    230,
+    220,
+    221,
+    [
+     " results."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    232,
+    221,
+    223
+   ],
+   [
+    "replace",
+    232,
+    233,
+    223,
+    224,
+    [
+     " `history`/`get_version` helpers in the official clients."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    252,
+    224,
+    243
+   ],
+   [
+    "replace",
+    252,
+    258,
+    243,
+    244,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    260,
+    244,
+    246
+   ],
+   [
+    "replace",
+    260,
+    261,
+    246,
+    247,
+    [
+     "See Document history for the full request and"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    267,
+    247,
+    253
+   ],
+   [
+    "replace",
+    267,
+    268,
+    253,
+    254,
+    [
+     " canonical `$numberLong`, and numeric milliseconds."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    269,
+    254,
+    255
+   ],
+   [
+    "replace",
+    269,
+    270,
+    255,
+    256,
+    [
+     " compare equal."
+    ]
+   ],
+   [
+    "equal",
+    270,
+    271,
+    256,
+    257
+   ],
+   [
+    "replace",
+    271,
+    272,
+    257,
+    258,
+    [
+     " dates."
+    ]
+   ],
+   [
+    "equal",
+    272,
+    273,
+    258,
+    259
+   ],
+   [
+    "replace",
+    273,
+    277,
+    259,
+    263,
+    [
+     " `$dateTrunc`, `$dateToString`, `$dateFromString`, `$dateFromParts`, and",
+     " `$dateToParts`.",
+     " Time zones use UTC or fixed `+HH:MM` offsets; IANA zone names are not",
+     " implemented."
+    ]
+   ],
+   [
+    "equal",
+    277,
+    286,
+    263,
+    272
+   ],
+   [
+    "replace",
+    286,
+    288,
+    272,
+    273,
+    [
+     "See Dates and time zones for formats, indexes, and limitations."
+    ]
+   ],
+   [
+    "equal",
+    288,
+    292,
+    273,
+    277
+   ],
+   [
+    "replace",
+    292,
+    293,
+    277,
+    278,
+    [
+     " type bracket."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    278,
+    279
+   ],
+   [
+    "replace",
+    294,
+    295,
+    279,
+    280,
+    [
+     " through `f64`."
+    ]
+   ],
+   [
+    "equal",
+    295,
+    297,
+    280,
+    282
+   ],
+   [
+    "replace",
+    297,
+    298,
+    282,
+    283,
+    [
+     " `$subtract`, `$multiply`, and `$divide`."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    299,
+    283,
+    284
+   ],
+   [
+    "replace",
+    299,
+    300,
+    284,
+    285,
+    [
+     " `{\"$numberDouble\": \"Infinity\"}`."
+    ]
+   ],
+   [
+    "equal",
+    300,
+    301,
+    285,
+    286
+   ],
+   [
+    "replace",
+    301,
+    302,
+    286,
+    287,
+    [
+     " preserve their BSON type."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    287,
+    288
+   ],
+   [
+    "replace",
+    303,
+    304,
+    288,
+    289,
+    [
+     " ObjectId can also be used as `_id`."
+    ]
+   ],
+   [
+    "equal",
+    304,
+    305,
+    289,
+    290
+   ],
+   [
+    "replace",
+    305,
+    306,
+    290,
+    291,
+    [
+     " including Timestamp, MinKey, and MaxKey."
+    ]
+   ],
+   [
+    "equal",
+    306,
+    308,
+    291,
+    293
+   ],
+   [
+    "replace",
+    308,
+    309,
+    293,
+    294,
+    [
+     "See Numbers and decimals for storage forms, arithmetic,"
+    ]
+   ],
+   [
+    "equal",
+    309,
+    315,
+    294,
+    300
+   ],
+   [
+    "replace",
+    315,
+    316,
+    300,
+    301,
+    [
+     " reads."
+    ]
+   ],
+   [
+    "equal",
+    316,
+    319,
+    301,
+    304
+   ],
+   [
+    "replace",
+    319,
+    320,
+    304,
+    305,
+    [
+     " is enabled; collections can opt into purging stored revisions instead."
+    ]
+   ],
+   [
+    "equal",
+    320,
+    326,
+    305,
+    311
+   ],
+   [
+    "replace",
+    326,
+    332,
+    311,
+    312,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    335,
+    312,
+    315
+   ],
+   [
+    "replace",
+    335,
+    336,
+    315,
+    316,
+    [
+     "Document TTL for update semantics, maintenance, and limits."
+    ]
+   ],
+   [
+    "equal",
+    336,
+    341,
+    316,
+    321
+   ],
+   [
+    "replace",
+    341,
+    342,
+    321,
+    322,
+    [
+     " plaintext."
+    ]
+   ],
+   [
+    "equal",
+    342,
+    343,
+    322,
+    323
+   ],
+   [
+    "replace",
+    343,
+    344,
+    323,
+    324,
+    [
+     " `X-NonoDB-Key-Id`, `X-NonoDB-Key`."
+    ]
+   ],
+   [
+    "equal",
+    344,
+    346,
+    324,
+    326
+   ],
+   [
+    "replace",
+    346,
+    347,
+    326,
+    327,
+    [
+     " fuzzy, aggregation, secondary indexes, arbitrary filters, or sorting."
+    ]
+   ],
+   [
+    "equal",
+    347,
+    348,
+    327,
+    328
+   ],
+   [
+    "replace",
+    348,
+    350,
+    328,
+    330,
+    [
+     " client/HTTP API for vault collections. See",
+     " tenant encryption."
+    ]
+   ],
+   [
+    "equal",
+    350,
+    351,
+    330,
+    331
+   ],
+   [
+    "replace",
+    351,
+    352,
+    331,
+    332,
+    [
+     " key."
+    ]
+   ],
+   [
+    "equal",
+    352,
+    360,
+    332,
+    340
+   ],
+   [
+    "replace",
+    360,
+    371,
+    340,
+    341,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    376,
+    341,
+    346
+   ],
+   [
+    "replace",
+    376,
+    377,
+    346,
+    347,
+    [
+     "Vault collections for the full contract, limitations, key"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    383,
+    347,
+    353
+   ],
+   [
+    "replace",
+    383,
+    384,
+    353,
+    354,
+    [
+     " peer uid/gid allow-lists, and configurable per-IP failed-login lockout."
+    ]
+   ],
+   [
+    "equal",
+    384,
+    385,
+    354,
+    355
+   ],
+   [
+    "replace",
+    385,
+    386,
+    355,
+    356,
+    [
+     " principals."
+    ]
+   ],
+   [
+    "equal",
+    386,
+    389,
+    356,
+    359
+   ],
+   [
+    "replace",
+    389,
+    390,
+    359,
+    360,
+    [
+     " dedicated nftables firewall table."
+    ]
+   ],
+   [
+    "equal",
+    390,
+    391,
+    360,
+    361
+   ],
+   [
+    "replace",
+    391,
+    392,
+    361,
+    362,
+    [
+     " multi-daemon shells."
+    ]
+   ],
+   [
+    "equal",
+    392,
+    395,
+    362,
+    365
+   ],
+   [
+    "replace",
+    395,
+    396,
+    365,
+    366,
+    [
+     " flush the writer queue, and remove the Unix socket."
+    ]
+   ],
+   [
+    "equal",
+    396,
+    398,
+    366,
+    368
+   ],
+   [
+    "replace",
+    398,
+    399,
+    368,
+    369,
+    [
+     " timeouts."
+    ]
+   ],
+   [
+    "equal",
+    399,
+    400,
+    369,
+    370
+   ],
+   [
+    "replace",
+    400,
+    401,
+    370,
+    371,
+    [
+     " read-replica write routing."
+    ]
+   ],
+   [
+    "equal",
+    401,
+    402,
+    371,
+    372
+   ],
+   [
+    "replace",
+    402,
+    404,
+    372,
+    374,
+    [
+     " `_events`, both handled by external workers; no stored procedures or daemon",
+     " plugins."
+    ]
+   ],
+   [
+    "equal",
+    404,
+    405,
+    374,
+    375
+   ],
+   [
+    "replace",
+    405,
+    406,
+    375,
+    376,
+    [
+     " optional field-change filtering and atomic outbox writes."
+    ]
+   ],
+   [
+    "equal",
+    406,
+    407,
+    376,
+    377
+   ],
+   [
+    "replace",
+    407,
+    409,
+    377,
+    379,
+    [
+     " client-renewed leases, and writer-side evaluation; delivered through the same",
+     " outbox."
+    ]
+   ],
+   [
+    "equal",
+    409,
+    410,
+    379,
+    380
+   ],
+   [
+    "replace",
+    410,
+    412,
+    380,
+    382,
+    [
+     " outbox events, with server-side topics/filters, projections, count thresholds,",
+     " resume tokens, truncation detection, heartbeats, and reconnect helpers."
+    ]
+   ],
+   [
+    "equal",
+    412,
+    413,
+    382,
+    383
+   ],
+   [
+    "replace",
+    413,
+    414,
+    383,
+    384,
+    [
+     " by the writer and pushed directly to the stream without writing to `_events`."
+    ]
+   ],
+   [
+    "equal",
+    414,
+    434,
+    384,
+    404
+   ],
+   [
+    "replace",
+    434,
+    444,
+    404,
+    405,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    444,
+    459,
+    405,
+    420
+   ],
+   [
+    "replace",
+    459,
+    464,
+    420,
+    421,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    484,
+    421,
+    441
+   ],
+   [
+    "replace",
+    484,
+    486,
+    441,
+    443,
+    [
+     "backups, and troubleshooting: Docker Compose. The",
+     "legacy `deploy/docker-compose.yml` variant uses a"
+    ]
+   ],
+   [
+    "equal",
+    486,
+    492,
+    443,
+    449
+   ],
+   [
+    "replace",
+    492,
+    493,
+    449,
+    450,
+    [
+     "More deployment details: Operations — Docker."
+    ]
+   ],
+   [
+    "equal",
+    493,
+    496,
+    450,
+    453
+   ],
+   [
+    "replace",
+    496,
+    497,
+    453,
+    454,
+    [
+     "Volume compression."
+    ]
+   ],
+   [
+    "equal",
+    497,
+    499,
+    454,
+    456
+   ],
+   [
+    "replace",
+    499,
+    500,
+    456,
+    457,
+    [
+     "Free-tier and low-cost VM deployment. It includes"
+    ]
+   ],
+   [
+    "equal",
+    500,
+    508,
+    457,
+    465
+   ],
+   [
+    "replace",
+    508,
+    514,
+    465,
+    471,
+    [
+     "|Platform|Release asset|",
+     "|---|---|",
+     "|Linux x86_64|`nonodb-vX.Y.Z-linux-x86_64.tar.gz`|",
+     "|macOS Apple Silicon|`nonodb-vX.Y.Z-macos-arm64.tar.gz`|",
+     "|macOS Intel|`nonodb-vX.Y.Z-macos-x86_64.tar.gz`|",
+     "|Windows x86_64|`nonodb-vX.Y.Z-windows-x86_64.zip`|"
+    ]
+   ],
+   [
+    "equal",
+    514,
+    517,
+    471,
+    474
+   ],
+   [
+    "replace",
+    517,
+    518,
+    474,
+    475,
+    [
+     "releases page."
+    ]
+   ],
+   [
+    "equal",
+    518,
+    559,
+    475,
+    516
+   ],
+   [
+    "replace",
+    559,
+    563,
+    516,
+    517,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    563,
+    572,
+    517,
+    526
+   ],
+   [
+    "replace",
+    572,
+    579,
+    526,
+    527,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    579,
+    589,
+    527,
+    537
+   ],
+   [
+    "replace",
+    589,
+    590,
+    537,
+    538,
+    [
+     "unit and installation steps in Operations."
+    ]
+   ],
+   [
+    "equal",
+    590,
+    608,
+    538,
+    556
+   ],
+   [
+    "replace",
+    608,
+    609,
+    556,
+    557,
+    [
+     "Clients: routing writes to the primary."
+    ]
+   ],
+   [
+    "equal",
+    609,
+    618,
+    557,
+    566
+   ],
+   [
+    "replace",
+    618,
+    622,
+    566,
+    567,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    622,
+    656,
+    567,
+    601
+   ],
+   [
+    "replace",
+    656,
+    660,
+    601,
+    602,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    660,
+    682,
+    602,
+    624
+   ],
+   [
+    "replace",
+    682,
+    683,
+    624,
+    625,
+    [
+     " compiler for LMDB."
+    ]
+   ],
+   [
+    "equal",
+    683,
+    685,
+    625,
+    627
+   ],
+   [
+    "replace",
+    685,
+    686,
+    627,
+    628,
+    [
+     " is an optional speedup)."
+    ]
+   ],
+   [
+    "equal",
+    686,
+    725,
+    628,
+    667
+   ],
+   [
+    "replace",
+    725,
+    729,
+    667,
+    669,
+    [
+     " NonoDB GUI overview with database selector",
+     " NonoDB GUI text search over one million documents"
+    ]
+   ],
+   [
+    "equal",
+    729,
+    732,
+    669,
+    672
+   ],
+   [
+    "replace",
+    732,
+    733,
+    672,
+    673,
+    [
+     "and a short walkthrough video are in the GUI console"
+    ]
+   ],
+   [
+    "equal",
+    733,
+    735,
+    673,
+    675
+   ],
+   [
+    "replace",
+    735,
+    736,
+    675,
+    676,
+    [
+     "Watch the 16-second GUI walkthrough."
+    ]
+   ],
+   [
+    "equal",
+    736,
+    739,
+    676,
+    679
+   ],
+   [
+    "replace",
+    739,
+    740,
+    679,
+    680,
+    [
+     "|Document|What it covers|"
+    ]
+   ],
+   [
+    "equal",
+    740,
+    741,
+    680,
+    681
+   ],
+   [
+    "replace",
+    741,
+    771,
+    681,
+    711,
+    [
+     "|Architecture|Daemon model, LMDB layout, write path, indexes, search, concurrency, crash safety|",
+     "|HTTP API|Every operation, request/response shapes, filters, updates, indexes, search, errors|",
+     "|MongoDB compatibility|Feature comparison, practical coverage, and migration caveats|",
+     "|SQL queries|`SELECT`, `INSERT`, `UPDATE`, `DELETE`, `DISTINCT`, `HAVING`, `CASE`, functions, aggregates, `explain_sql`, parameters, limits, client examples|",
+     "|Clients|Python, Rust, Node.js and Go clients: install, CRUD, batches, indexes, search, TCP/TLS, read-replica write routing|",
+     "|Migration and import|MongoDB, PostgreSQL, SQLite and CSV migration, NDJSON format, import manifest, cutover|",
+     "|Authentication and permissions|Principals, scopes, tokens, certificates, CLI/API/GUI management, lockout, reloads, audit log|",
+     "|Security checks|Local security regression checks, LiveAPISec audit method, results, hardening gaps, production checklist|",
+     "|Mutual TLS|Client certificate setup, private CA, fingerprint mapping, revocation, rotation|",
+     "|Python client|`NonoDB`/`Collection` API, caching, retries, TCP/TLS, FastAPI usage|",
+     "|Background jobs|Durable `_jobs`, workers, leases, retries, cron/systemd, language-independent contract|",
+     "|Outbox events|Atomic data + event writes, automatic collection events, source-side filters, polling consumers, checkpoints, event worker CLI, TTL, systemd|",
+     "|Conditional subscriptions|Persistent conditions over collection state, count thresholds, edge-triggered delivery|",
+     "|Streaming outbox events|Long-poll `watch`, NDJSON/SSE streams, server-side filters, count thresholds, resume tokens, truncation, client examples|",
+     "|Vault collections|Optional encrypted tenant data, headers, restrictions, key rotation|",
+     "|Document TTL|Collection defaults, per-document expiry, update semantics, maintenance|",
+     "|Dates and time zones|BSON-compatible dates, RFC 3339 input, filtering, indexes, sorting|",
+     "|Numbers and decimals|Exact numeric comparison, Decimal128, arithmetic, NaN/Infinity, index compatibility, long text limits|",
+     "|BSON scalar types|`$numberInt`/`$numberLong`, `$type`, binary/UUID, ObjectId, Timestamp, MinKey/MaxKey, index compatibility|",
+     "|GUI console|Embedded local React console, data editing, collection settings, SQL, map/metrics, authorization|",
+     "|Replication and cluster guide|Primary/replica setup, TLS, CLI, GUI Cluster view, quorum failover, monitoring, troubleshooting|",
+     "|CLI|`ping`, `gui`, `find`, `count`, `map`, `resize`, auth management, backup/verify/restore, `exec`|",
+     "|Operations|Configuration, deployment, security, snapshots, monitoring, capacity, troubleshooting|",
+     "|Docker Compose quick start|Self-contained Compose stack, auth initialization, GUI, updates, backups, troubleshooting|",
+     "|Volume compression|ZFS/Btrfs setup, Docker bind mounts, verification, benchmarks, migration|",
+     "|Free-tier and low-cost VM deployment|Oracle Cloud, GCP, AWS, DigitalOcean, small profile, Cloud Run read replicas, Spaces backups|",
+     "|Backup and restore|Online backup, snapshots, verification, restore drills, retention, Docker, vault keys, authorization state|",
+     "|Benchmarks|Test environment, throughput, latency, large data sets, RAM, reproducibility|",
+     "|Development|Repository layout, tests, linting, benchmark scripts, contribution notes|",
+     "|Roadmap and limits|Deliberate limitations, current non-goals, future work|"
+    ]
+   ],
+   [
+    "equal",
+    771,
+    775,
+    711,
+    715
+   ],
+   [
+    "replace",
+    775,
+    776,
+    715,
+    716,
+    [
+     "See Benchmarks for methodology and full tables."
+    ]
+   ],
+   [
+    "equal",
+    776,
+    777,
+    716,
+    717
+   ],
+   [
+    "replace",
+    777,
+    778,
+    717,
+    718,
+    [
+     "|Workload|Result|"
+    ]
+   ],
+   [
+    "equal",
+    778,
+    779,
+    718,
+    719
+   ],
+   [
+    "replace",
+    779,
+    788,
+    719,
+    728,
+    [
+     "|Concurrent inserts, 12 clients|~3.3k ops/s, p50 3.2 ms|",
+     "|`find_one` by `_id`, 12 clients|~6.8k ops/s, p50 1.3 ms|",
+     "|Indexed lookup at 1M / 2M / 4M / 8M docs|0.5–1.5 ms p50|",
+     "|`count({})` at 8M docs|~0.6 ms|",
+     "|1,000 `find_one` calls in read batches|~20 ms (~50k ops/s)|",
+     "|Index-only sort at 1M docs|1–2 ms|",
+     "|Full sort at 1M docs (no index)|250–420 ms|",
+     "|Idle daemon RSS at 1M docs, 3 indexes|~5 MB|",
+     "|Live backup of 8M docs + 1M text docs|5.1 GB in ~10 s|"
+    ]
+   ],
+   [
+    "equal",
+    788,
+    790,
+    728,
+    730
+   ],
+   [
+    "replace",
+    790,
+    803,
+    730,
+    731,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    803,
+    811,
+    731,
+    739
+   ],
+   [
+    "replace",
+    811,
+    813,
+    739,
+    740,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "97e6debb625d+2": {
+  "fn": "abdvlrqhman/DevDash-AgenticOS",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "replace",
+    0,
+    8,
+    0,
+    1,
+    [
+     "DevDash: a coding agent"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    11,
+    1,
+    4
+   ],
+   [
+    "replace",
+    11,
+    12,
+    4,
+    5,
+    [
+     "Built by Abdulrahman Mohamed and Youssef Eldeeb."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    5,
+    6
+   ],
+   [
+    "replace",
+    13,
+    18,
+    6,
+    11,
+    [
+     "License: PolyForm Noncommercial",
+     "Node 24",
+     "Ubuntu 24.04",
+     "Platforms",
+     "Agents: Claude Code and OpenCode"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    11,
+    12
+   ],
+   [
+    "replace",
+    19,
+    24,
+    12,
+    13,
+    [
+     "Supported agents · Hamasa · Autopilot · Features · How it works · Self-hosting · Configuration · Native apps · Development · Security"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    31,
+    13,
+    20
+   ],
+   [
+    "replace",
+    31,
+    32,
+    20,
+    21,
+    [
+     " own git worktree, so parallel work never collides."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    21,
+    22
+   ],
+   [
+    "replace",
+    33,
+    34,
+    22,
+    23,
+    [
+     " share the session with a colleague, answer its questions, and pick up the result as a branch, a pull request or a merge."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    23,
+    24
+   ],
+   [
+    "replace",
+    35,
+    36,
+    24,
+    25,
+    [
+     " sessions and runs your scheduled checks, with your access only."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    25,
+    26
+   ],
+   [
+    "replace",
+    37,
+    38,
+    26,
+    27,
+    [
+     " write, keeps stalled sessions moving, and collects everything that needs you on one page."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    27,
+    28
+   ],
+   [
+    "replace",
+    39,
+    40,
+    28,
+    29,
+    [
+     " storage and private network. DevDash itself never runs as root."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    29,
+    30
+   ],
+   [
+    "replace",
+    41,
+    42,
+    30,
+    31,
+    [
+     " you choose to connect."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    50,
+    31,
+    39
+   ],
+   [
+    "replace",
+    50,
+    54,
+    39,
+    43,
+    [
+     "|Agent|Sign in with|Models|Terminal app|Connected through|",
+     "|---|---|---|---|---|",
+     "|**Claude Code**|Your Claude plan, or an Anthropic API key|Claude: Opus, Sonnet, Haiku|The Claude Code CLI|Claude Agent SDK|",
+     "|**OpenCode**|The OpenCode account, an OpenCode Go subscription, or any provider: ChatGPT, GitHub Copilot, API keys|Any provider's: Anthropic, OpenAI, Google, OpenRouter, local models and more|OpenCode's TUI|Agent Client Protocol|"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    61,
+    43,
+    50
+   ],
+   [
+    "replace",
+    61,
+    62,
+    50,
+    51,
+    [
+     "`apps/agent/src/harness.ts`."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    67,
+    51,
+    56
+   ],
+   [
+    "replace",
+    67,
+    71,
+    56,
+    57,
+    [
+     " Hamasa"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    75,
+    57,
+    61
+   ],
+   [
+    "replace",
+    75,
+    76,
+    61,
+    62,
+    [
+     " your devices. It knows which page you're on, so \"this\" and \"here\" mean what you're looking at."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    62,
+    63
+   ],
+   [
+    "replace",
+    77,
+    78,
+    63,
+    64,
+    [
+     " brief, sends follow-ups to your running sessions or stops them, opens pages for you and notifies your phone."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    64,
+    65
+   ],
+   [
+    "replace",
+    79,
+    81,
+    65,
+    67,
+    [
+     " (empty, or cloned from a repository), then starts work there. DevDash refuses it unless you asked in a message you",
+     " wrote yourself: never from a schedule, autopilot or a teammate's request."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    67,
+    68
+   ],
+   [
+    "replace",
+    82,
+    84,
+    68,
+    70,
+    [
+     " runs on its own, out of your chat, and stays silent. When something needs you (a check-in, a question, a failure), it",
+     " hands it to your chat: Hamasa writes to you there and you get one notification."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    70,
+    71
+   ],
+   [
+    "replace",
+    85,
+    88,
+    71,
+    74,
+    [
+     " permission level you pick. Reading is free; anything that changes things asks first unless you choose otherwise. It",
+     " can reach your tailnet and your Google Drive when you switch them on. It can't answer another session's questions",
+     " for you: it tells you which one is waiting and links it."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    74,
+    75
+   ],
+   [
+    "replace",
+    89,
+    90,
+    75,
+    76,
+    [
+     " other session."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    93,
+    76,
+    79
+   ],
+   [
+    "replace",
+    93,
+    97,
+    79,
+    80,
+    [
+     " The Autopilot page on a desktop and a phone: the switch, two items in Needs you, and what autopilot approved, answered and left for the member"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    103,
+    80,
+    86
+   ],
+   [
+    "replace",
+    103,
+    108,
+    86,
+    91,
+    [
+     "|Tier|What happens|Examples|",
+     "|---|---|---|",
+     "|**Green**|Decide, log it, keep going|The next step of a plan you agreed to; choosing between options by your known preferences; test runs, renders, screenshots; fixing bugs it found; committing|",
+     "|**Yellow**|Decide, log it as yellow, keep going|Changing something you already decided (with data behind it); restructuring work that already works; adding a new library, service or database change; touching more than one project|",
+     "|**Red**|Never decided, always waits for you|Publishing outside an agreed plan; sending to people; anything paid; deleting what isn't scratch work; accounts, credentials, sharing or security; starting a new project; changing the rules|"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    117,
+    91,
+    100
+   ],
+   [
+    "replace",
+    117,
+    118,
+    100,
+    101,
+    [
+     " you'd write it. At most 3 nudges per goal; the same error twice, and it goes to *Needs you* instead."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    101,
+    102
+   ],
+   [
+    "replace",
+    119,
+    124,
+    102,
+    107,
+    [
+     " can answer first. Green and yellow answers and approvals go through, marked as autopilot's. A question about anything",
+     " red is never answered, not even with the safe \"No\". With *Autopilot handles approvals* on, a red request is declined",
+     " with a note that tells the session to carry on with other work, and lands in *Needs you*. Requests that are red on",
+     " their face (deleting outside `/tmp`, a force-push, `git reset --hard`, dropping data, publishing, sudo) are declined",
+     " without a model call."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    126,
+    107,
+    109
+   ],
+   [
+    "replace",
+    126,
+    127,
+    109,
+    110,
+    [
+     " turn mustn't be running."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    148,
+    110,
+    131
+   ],
+   [
+    "replace",
+    148,
+    150,
+    131,
+    132,
+    [
+     " How a decision flows "
+    ]
+   ],
+   [
+    "equal",
+    150,
+    154,
+    132,
+    136
+   ],
+   [
+    "replace",
+    154,
+    155,
+    136,
+    137,
+    [
+     " plan's usage leave room."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    137,
+    138
+   ],
+   [
+    "replace",
+    156,
+    157,
+    138,
+    139,
+    [
+     " *\"Checkout (answered by Autopilot…)\"* and the session continues."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    139,
+    140
+   ],
+   [
+    "replace",
+    158,
+    161,
+    140,
+    141,
+    [
+     " straight to *Needs you* without an answer."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    164,
+    141,
+    144
+   ],
+   [
+    "replace",
+    164,
+    168,
+    144,
+    145,
+    [
+     " A session in DevDash: tool steps with a diff, test results, a teammate"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    172,
+    145,
+    149
+   ],
+   [
+    "replace",
+    172,
+    175,
+    149,
+    152,
+    [
+     " Google, OpenRouter, GitHub Copilot, local models and more. Pick it per session; team roles pick theirs too. DevDash",
+     " drives Claude Code through its Agent SDK and OpenCode over the Agent Client Protocol,",
+     " so more ACP agents can follow."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    152,
+    153
+   ],
+   [
+    "replace",
+    176,
+    179,
+    153,
+    156,
+    [
+     " file links that open in a viewer, or the agent's own terminal app (the Claude Code CLI, OpenCode's TUI). Switch a",
+     " session between them any time. In the chat, typing `/model` or `/effort` switches the session like its menu does, and",
+     " code blocks have copy buttons."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    156,
+    157
+   ],
+   [
+    "replace",
+    180,
+    183,
+    157,
+    160,
+    [
+     " Go subscription or any provider (ChatGPT, GitHub Copilot, API keys), with optional extra profiles for each. Sign-ins",
+     " run in a terminal tab with a code to enter on any device. Cost, tokens and context are shown per session, and Claude",
+     " plan limits too."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    160,
+    161
+   ],
+   [
+    "replace",
+    184,
+    185,
+    161,
+    162,
+    [
+     " with permission to type. Comments, live viewers and \"ask to join\" included."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    162,
+    163
+   ],
+   [
+    "replace",
+    186,
+    187,
+    163,
+    164,
+    [
+     " shows the diff and opens a GitHub pull request or merges it on the server."
+    ]
+   ],
+   [
+    "equal",
+    187,
+    189,
+    164,
+    166
+   ],
+   [
+    "replace",
+    189,
+    192,
+    166,
+    169,
+    [
+     " change is a commit of its own in `.claude/skills`. Write them in DevDash, upload a `.zip` or `.skill`, or fetch them",
+     " from a GitHub link. Uploads and links are reviewed first, with scripts and binaries marked, and nothing from a skill",
+     " runs while it installs."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    193,
+    169,
+    170
+   ],
+   [
+    "replace",
+    193,
+    194,
+    170,
+    171,
+    [
+     " triggers, threads, approvals and a shared notebook. Switch them off server-wide with `DEVDASH_TEAM=0`."
+    ]
+   ],
+   [
+    "equal",
+    194,
+    197,
+    171,
+    174
+   ],
+   [
+    "replace",
+    197,
+    201,
+    174,
+    175,
+    [
+     " The task board across projects, in front of the home page with activity, running sessions and services"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    206,
+    175,
+    180
+   ],
+   [
+    "replace",
+    206,
+    208,
+    180,
+    182,
+    [
+     " Whoever added a project can delete it: the dialog shows what's at risk first (uncommitted work, commits not on",
+     " GitHub, running sessions and services), and *Recently deleted* restores it for seven days."
+    ]
+   ],
+   [
+    "equal",
+    208,
+    210,
+    182,
+    184
+   ],
+   [
+    "replace",
+    210,
+    211,
+    184,
+    185,
+    [
+     " download limit."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    218,
+    185,
+    192
+   ],
+   [
+    "replace",
+    218,
+    222,
+    192,
+    193,
+    [
+     " The Server page with a deploy request from a teammate"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    226,
+    193,
+    197
+   ],
+   [
+    "replace",
+    226,
+    227,
+    197,
+    198,
+    [
+     " restarts if it crashes, starts with the server and opens at a members-only URL, or inside DevDash itself."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    229,
+    198,
+    200
+   ],
+   [
+    "replace",
+    229,
+    231,
+    200,
+    202,
+    [
+     " health-checked and rolled back on its own if it isn't healthy. Agents in DevDash's own project can ask for a deploy,",
+     " but never deploy themselves."
+    ]
+   ],
+   [
+    "equal",
+    231,
+    235,
+    202,
+    206
+   ],
+   [
+    "replace",
+    235,
+    239,
+    206,
+    207,
+    [
+     " DevDash on a desktop window and two phones: a session and the task board"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    249,
+    207,
+    217
+   ],
+   [
+    "replace",
+    249,
+    250,
+    217,
+    218,
+    [
+     " datasets) there instead of filling the server's disk."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    251,
+    218,
+    219
+   ],
+   [
+    "replace",
+    251,
+    252,
+    219,
+    220,
+    [
+     " devices without exposing them to anyone else."
+    ]
+   ],
+   [
+    "equal",
+    252,
+    255,
+    220,
+    223
+   ],
+   [
+    "replace",
+    255,
+    259,
+    223,
+    224,
+    [
+     " Architecture: browser and apps reach Caddy over HTTPS; Caddy serves devdash-server; the server talks to one agent per member and a small root helper"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    261,
+    224,
+    226
+   ],
+   [
+    "replace",
+    261,
+    262,
+    226,
+    227,
+    [
+     " served from a separate origin."
+    ]
+   ],
+   [
+    "equal",
+    262,
+    263,
+    227,
+    228
+   ],
+   [
+    "replace",
+    263,
+    264,
+    228,
+    229,
+    [
+     " runs as its own unprivileged user."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    229,
+    230
+   ],
+   [
+    "replace",
+    265,
+    266,
+    230,
+    231,
+    [
+     " Tailscale all happen with that person's own permissions. It talks to the server over a local socket."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    231,
+    232
+   ],
+   [
+    "replace",
+    267,
+    268,
+    232,
+    233,
+    [
+     " starting the shared browser and deploying."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    269,
+    233,
+    234
+   ],
+   [
+    "replace",
+    269,
+    277,
+    234,
+    242,
+    [
+     "|Part|Stack|Where|",
+     "|---|---|---|",
+     "|Server|Node 24, Hono, built-in `node:sqlite`, TypeScript run directly by Node|`apps/server`|",
+     "|Agent|Node 24, Claude Agent SDK, Agent Client Protocol (OpenCode), node-pty, tmux; one systemd service per member|`apps/agent`|",
+     "|Web app|React, TanStack Router and Query, Tailwind CSS, shadcn/ui, Vite|`apps/web`|",
+     "|Native apps|Tauri 2 (Windows, Android, iOS), with small Kotlin and Swift additions|`apps/shell`|",
+     "|Agent plugins|MCP tools that let agents use tasks, notes, services and more; status from the agents' terminal apps|`packages/claude-plugin`, `packages/opencode-plugin`|",
+     "|Host setup|Bash, systemd units, Caddy|`deploy`|"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    283,
+    242,
+    248
+   ],
+   [
+    "replace",
+    283,
+    284,
+    248,
+    249,
+    [
+     " small team; agents, builds and services all run here, so more helps."
+    ]
+   ],
+   [
+    "equal",
+    284,
+    313,
+    249,
+    278
+   ],
+   [
+    "replace",
+    313,
+    314,
+    278,
+    279,
+    [
+     " Accounts are invite-only. Every member sets a password and two-factor authentication, and gets their own Linux user."
+    ]
+   ],
+   [
+    "equal",
+    314,
+    316,
+    279,
+    281
+   ],
+   [
+    "replace",
+    316,
+    317,
+    281,
+    282,
+    [
+     " `/etc/caddy/certs/origin.key`, Caddy serves an internal certificate. Add them and run step 2 again."
+    ]
+   ],
+   [
+    "equal",
+    317,
+    340,
+    282,
+    305
+   ],
+   [
+    "replace",
+    340,
+    341,
+    305,
+    306,
+    [
+     "development (see `.env.example`)."
+    ]
+   ],
+   [
+    "equal",
+    341,
+    342,
+    306,
+    307
+   ],
+   [
+    "replace",
+    342,
+    355,
+    307,
+    320,
+    [
+     "|Variable|Default|Purpose|",
+     "|---|---|---|",
+     "|`DEVDASH_ORIGIN`|*(required)*|Public URL of the space, as the browser sees it.|",
+     "|`DEVDASH_MASTER_KEY`|*(required)*|32 random bytes, base64. Encrypts secrets at rest; keep a backup.|",
+     "|`DEVDASH_DATA_DIR`|*(required)*|Where the SQLite database and uploads live.|",
+     "|`DEVDASH_SPACE_NAME`|`DevDash`|Name shown in the app and on its public pages.|",
+     "|`DEVDASH_PORT`|`8787`|Port the server listens on (behind Caddy).|",
+     "|`DEVDASH_TRUST_CF_IP`|`0`|`1` when the origin is reachable only through Cloudflare.|",
+     "|`DEVDASH_PROJECTS_ROOT`|`/srv/devdash`|Shared checkouts (`projects/`), worktrees and the team's shared files.|",
+     "|`DEVDASH_SERVICES_PORT`|`8443`|Port of the separate origin that serves members' services.|",
+     "|`DEVDASH_REPO`|this repository|GitHub repository the *Server* page deploys from and the apps update from.|",
+     "|`DEVDASH_GITHUB_TOKEN`|*(none)*|Read-only token for a private `DEVDASH_REPO`.|",
+     "|`DEVDASH_TEAM`|on|`0` switches Team roles off server-wide.|"
+    ]
+   ],
+   [
+    "equal",
+    355,
+    366,
+    320,
+    331
+   ],
+   [
+    "replace",
+    366,
+    367,
+    331,
+    332,
+    [
+     "`apps/shell/src-tauri/tauri.conf.json`, generate an updater key pair with"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    368,
+    332,
+    333
+   ],
+   [
+    "replace",
+    368,
+    369,
+    333,
+    334,
+    [
+     "secrets. The release workflow (`.github/workflows/app-release.yml`) lists every"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    397,
+    334,
+    362
+   ],
+   [
+    "replace",
+    397,
+    403,
+    362,
+    363,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    403,
+    411,
+    363,
+    371
+   ],
+   [
+    "replace",
+    411,
+    412,
+    371,
+    372,
+    [
+     " root helper accepts only a few validated operations."
+    ]
+   ],
+   [
+    "equal",
+    412,
+    415,
+    372,
+    375
+   ],
+   [
+    "replace",
+    415,
+    416,
+    375,
+    376,
+    [
+     " share links, watch-only browser invites and the app downloads are reachable."
+    ]
+   ],
+   [
+    "equal",
+    416,
+    417,
+    376,
+    377
+   ],
+   [
+    "replace",
+    417,
+    418,
+    377,
+    378,
+    [
+     "Please report vulnerabilities privately, as described in SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    418,
+    420,
+    378,
+    380
+   ],
+   [
+    "replace",
+    420,
+    424,
+    380,
+    381,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    424,
+    425,
+    381,
+    382
+   ],
+   [
+    "replace",
+    425,
+    431,
+    382,
+    383,
+    [
+     "DevDash is source-available under the PolyForm Noncommercial License 1.0.0. It's free for personal and hobby"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

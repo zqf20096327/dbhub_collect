@@ -3259,5 +3259,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bdb6df168fe1": {
+  "identity": {
+   "one_liner": "Oracle 维护的模块化 JavaScript 扩展工具包，用于构建客户端应用",
+   "review": "Oracle JET 是 Oracle 维护的开源 JavaScript 扩展工具包，面向中级到高级 JavaScript 开发者，用于构建消费和交互 Oracle 产品与服务（尤其是 Oracle Cloud 服务）的客户端应用。它组合开源 JavaScript 库与 Oracle 自有库，按模块选用；当前版本 21.1.0，通过 ojet CLI 脚手架创建应用。",
+   "highlights": [
+    "提供命令行工具（@oracle/ojet-cli）用于脚手架创建应用",
+    "支持国际化，覆盖 28 种语言和 160+ 地区",
+    "内置可访问性支持、双向数据绑定与单页应用路由"
+   ],
+   "use_cases": [
+    "构建消费 Oracle Cloud 服务的客户端应用",
+    "基于模板的单页应用（SPA）全生命周期开发",
+    "面向多语言、多地区的国际化前端项目"
+   ]
+  },
+  "sha": "bdb6df168fe1",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5c98ae48fb63": {
+  "identity": {
+   "one_liner": "用 PostgreSQL 表、函数和视图实现的可复用复式记账账本",
+   "review": "pgledger 将复式记账账本完全实现在 PostgreSQL 内部，不含应用层代码，应用通过调用 SQL 函数写入账本、通过视图查询。账户支持单币种与负余额控制，转账要求正数金额，支持 event_at 事件时间戳、幂等键重试和批量转账。适合需要在数据库内与其他业务写入共享同一事务保证的团队，安装需先执行 vendored 的 ULID 辅助 SQL 再运行 pgledger.sql。",
+   "highlights": [
+    "全部实现位于 PostgreSQL 表、函数和视图中，无应用层代码，与业务写入共享原子事务",
+    "转账支持 idempotency_key 幂等重试、可选 event_at 事件时间戳及按数组顺序执行的批量转账",
+    "账户可配置是否允许负余额，金额为 0、负数、NULL、NaN 或 Infinity 的转账会被拒绝且不改变账本"
+   ],
+   "use_cases": [
+    "为处理资金的应用在自有 PostgreSQL 数据库中搭建账本，替代自行从零开发",
+    "记录来自 webhook 等异步事件的资金变动，用 event_at 对齐真实事件发生时间",
+    "通过多账户方案维护多币种余额并记录货币兑换（含流动性账户）"
+   ]
+  },
+  "sha": "5c98ae48fb63",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

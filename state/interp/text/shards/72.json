@@ -3300,5 +3300,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "77326b79db01": {
+  "identity": {
+   "one_liner": "Neo4j 的 Java 对象图映射（OGM）库，通过注解 POJO 与 Cypher 映射图数据",
+   "review": "Neo4j-OGM 是面向 Neo4j 图数据库的 Java 对象图映射库，针对基于服务器的部署与 Cypher 查询语言优化。开发者可像 JPA 一样在 POJO 上使用 @NodeEntity、@Relationship 等注解定义图实体，经 SessionFactory/Session 持久化和加载对象。通过 Maven/Gradle 引入 core 与 bolt-driver 模块即可使用；除嵌入式驱动为 GPL v3 外，其余模块采用 Apache License v2.0。",
+   "highlights": [
+    "提供基于注解的 POJO 图实体映射，支持 @NodeEntity、@Relationship、@Id/@GeneratedValue 等，用法类似 JPA",
+    "面向基于服务器的 Neo4j 安装并针对 Cypher 优化，通过 Bolt 驱动连接",
+    "提供 Quarkus 扩展与 Spring Data fork 两种官方框架集成，并通过 Session API 保存和加载实体"
+   ],
+   "use_cases": [
+    "Java 应用中以面向对象方式读写 Neo4j 图数据",
+    "在现代 Spring 版本上继续使用 Spring Data Neo4j 5 风格的开发",
+    "Quarkus 项目中集成 Neo4j 图数据库访问"
+   ]
+  },
+  "sha": "77326b79db01",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2a97a2a147e6": {
+  "identity": {
+   "one_liner": "基于单 PocketBase 二进制的实时群聊应用",
+   "review": "Chirkle 是一个实时群聊系统，后端由单个 PocketBase 二进制承担认证、数据、实时推送和静态文件，前端为无框架的 TypeScript，经 esbuild 打包并设有体积预算。README 给出其在 1 vCPU/1GB 内存的实测负载数据，支持公共/私密/匿名房间、私信、Telegram 桥接，并提供 PWA 与 Kotlin 编写的 Android 客户端。运行需 Node.js ≥ 22，通过 npm start 或 npx chirkle 启动。",
+   "highlights": [
+    "后端为单个 PocketBase 二进制，前端为 vanilla TypeScript（约 50 KB JS / 11 KB CSS gzip），构建超尺寸预算即失败",
+    "支持公共/私密/开放房间、私信、回复、@提及、表情回应、最多 10 个 20 MB 附件、全文搜索和历史消息回溯",
+    "提供 PWA 安装与 Kotlin/Jetpack Compose 原生 Android 客户端（约 3 MB 下载），可选 Telegram 双向桥接"
+   ],
+   "use_cases": [
+    "自托管群组聊天（个人或社区在 VPS 上部署）",
+    "需要房间权限分级（私密/公开/免账号只读）与版主管理功能的聊天场景",
+    "通过 Telegram 桥接将聊天房间与 Telegram 群打通的双向消息同步"
+   ]
+  },
+  "sha": "2a97a2a147e6",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "86308385cb38": {
+  "identity": {
+   "one_liner": "基于动量排序的自托管 GitHub 新兴仓库雷达",
+   "review": "GitSift 读取 GitHub 公共数据流，过滤 fork 与疑似刷星仓库，按 stars/day、年龄、活跃度和质量先验加权计算信号分位，用于发现新近起势的仓库。面向想找新兴项目的开发者，提供 Rising/New/Hidden gems 列表、混合检索和公开 API。默认嵌入为词法哈希；需 Node 22+ 与持久化 SQLite 存储。",
+   "highlights": [
+    "五信号加权评分：momentum(0.50)、scale(0.14 freshness)、bot score 惩罚与 fork/贡献者增长不符的星标尖峰，公式公开并有单元测试",
+    "混合检索：SQLite FTS5 BM25 词法检索 + 384 维嵌入余弦相似度，倒数排名融合，支持英文/俄文概念扩展，可选 LLM 重排",
+    "内置 1,240 仓库种子数据，无需 API key 即可运行；`npm run ingest` 可从 GitHub 刷新，通过 GitHub Actions/cron 定时调度"
+   ],
+   "use_cases": [
+    "寻找 20–900 星、仍处于早期可互动阶段的小型仓库（Hidden gems 视图）",
+    "按意图而非关键词检索仓库，如“self-hosted analytics”，中英文（英/俄）概念匹配",
+    "通过无鉴权公开 API（/api/repos、/api/search）集成仓库动量数据到自己的工具或周报流程"
+   ]
+  },
+  "sha": "86308385cb38",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

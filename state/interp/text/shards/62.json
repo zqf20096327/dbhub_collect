@@ -3118,5 +3118,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9fe16ab2f112": {
+  "identity": {
+   "one_liner": "基于Spring Boot 3.4与Vue 2.6的人力资源管理系统，集成Flowable审批流与RAG智能问答。",
+   "review": "数智人事是一套前后端分离的人力资源管理系统，覆盖组织架构、员工档案、RBAC权限、Flowable请假审批、考勤加班、薪资五险一金等模块，并集成基于MySQL、PostgreSQL/pgvector、Redis、MinIO的多引擎存储与RAG知识库问答，支持DashScope/OpenAI兼容接口。适合需要人事业务流程加AI问答能力的企业或开发者本地部署实践，采用GPL v3.0开源。",
+   "highlights": [
+    "集成Flowable 8.0工作流引擎，引擎表存放于同实例hrm_flowable库并与业务状态共享本地事务",
+    "知识库检索采用向量召回与关键词召回结合RRF融合，再经DashScope重排，问答带引用编号与流式输出",
+    "Excel导入导出基于EasyExcel异步分批处理，任务进度经SSE推送并支持失败明细文件下载"
+   ],
+   "use_cases": [
+    "企业人事管理：组织架构、员工档案、考勤打卡、加班假期与薪资社保核算",
+    "人事政策咨询：基于企业知识库的智能问答，结合员工部门岗位上下文生成回答",
+    "本地部署学习：通过docker compose启动MySQL、Redis、PostgreSQL/pgvector、MinIO等中间件运行全栈系统"
+   ]
+  },
+  "sha": "9fe16ab2f112",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f2f78abd3cba": {
+  "identity": {
+   "one_liner": "基于 Ratatui 的终端数据库客户端与 SQL 编辑器，支持 PostgreSQL 与 MySQL。",
+   "review": "datarig 是运行在终端里的数据库客户端与 SQL 编辑器，面向使用 PostgreSQL 和 MySQL 的开发者与 DBA。它以键盘操作为主，提供表格编辑（先展示待执行 SQL 再确认）、带补全的 SQL 编辑器、EXPLAIN 查询计划多视图、服务端过滤、结果图表和服务器监控。项目处于 pre-1.0 阶段，PostgreSQL 完整实现，MySQL 仅部分支持，配置与按键仍可能变动。",
+   "highlights": [
+    "表格编辑的变更先在 Changes 标签列出具体 SQL，Apply 时在单个事务中执行，危险语句需确认；只读环境在发送前拒绝写入",
+    "SQL 编辑器支持 vim 按键与补全，EXPLAIN / EXPLAIN ANALYZE 以树、icicle、flame graph、treemap、时间线等多种视图展示",
+    "Monitor 标签展示服务器负载图表、会话与阻塞等待、复制状态；支持 SSH 隧道、TLS 与连接池，单二进制分发并分页加载结果"
+   ],
+   "use_cases": [
+    "在终端中浏览、查询和编辑 PostgreSQL（12+）或 MySQL（8.0+）数据表",
+    "分析慢查询的执行计划并可视化查看各节点耗时占比",
+    "通过 Monitor 标签观察服务器负载、会话阻塞与复制状态，确认后取消语句或结束会话"
+   ]
+  },
+  "sha": "f2f78abd3cba",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aadaf55bef51": {
+  "identity": {
+   "one_liner": "自托管单用户博客，数据存两个 SQLite 文件，内置 MCP 服务器供 AI 代理管理。",
+   "review": "Quire Ink 是面向单一作者的自托管博客系统：文章以 Markdown 写作，数据保存在两个 SQLite 文件中，支持 Docker 部署到 VPS、NAS、Kubernetes 或 Cloudflare Workers。内置 MCP 服务器允许 AI 代理通过令牌执行草拟、定时发布、清理垃圾评论等操作。许可证为 PolyForm Noncommercial，限非商业用途。",
+   "highlights": [
+    "提供内置 MCP 服务器，AI 代理可通过令牌调用接口完成草拟、排期、发布、读取流量和清理垃圾评论等操作",
+    "支持从 WordPress、Ghost、Substack 和 Medium 导入文章及图片并保留原链接，可一键导出为 Markdown 文件夹",
+    "包含四种主题六套配色、书页模式、五色手绘笔标注，以及表格、脚注、MathML 公式等 Markdown 扩展编辑器"
+   ],
+   "use_cases": [
+    "个人作者在 VPS 或 Cloudflare 上长期维护自己的博客并保留 Markdown 导出",
+    "通过 AI 代理代管博客的日常运营，如发布文章、生成周报和清理垃圾评论",
+    "迁移其他平台（WordPress/Ghost/Substack/Medium）的现有内容并保持旧链接可用"
+   ]
+  },
+  "sha": "aadaf55bef51",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f5ff595abfaa": {
+  "identity": {
+   "one_liner": "本地优先的编码代理持久记忆系统，基于 Rust CLI、hooks 与 MCP 提供检索注入",
+   "review": "remem 是一个面向 Claude Code 和 Codex CLI 的本地记忆工具：通过 hooks 自动捕获会话内容，后台 LLM 蒸馏为决策、缺陷修复缘由、项目偏好等条目，存入默认启用 SQLCipher 加密的 SQLite，并经 SessionStart 注入、MCP、CLI 与 localhost REST 提供带来源与过期标签的检索。适合维护长期演进项目的开发者。Cursor 仅注册 MCP，无自动捕获；DSH 适配器要求固定 DSH 0.2.1-rc.5。",
+   "highlights": [
+    "通过 hooks 自动捕获会话并由后台工作器执行蒸馏、治理、压缩与生命周期清理，存入 SQLCipher 加密的 SQLite",
+    "提供 MCP、CLI、localhost REST 三种访问面，检索结果带来源归属、过期标签、抑制与注入审计",
+    "支持 Claude Code、Codex CLI 与 Cursor（仅 MCP），提供 brew/npm/cargo/安装脚本四种安装方式与 remem doctor 诊断命令"
+   ],
+   "use_cases": [
+    "长期开发项目中让新的代理会话恢复此前决策、bug 修复缘由与未完成 TODO",
+    "需要可审计记忆来源、评审队列与生命周期治理的团队工程流程",
+    "在同一本地存储下跨多个编码代理主机检索项目历史证据"
+   ]
+  },
+  "sha": "f5ff595abfaa",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b8b6736f7335": {
+  "identity": {
+   "one_liner": "通过单一 Valkey CR 在 Kubernetes 上部署管理 Valkey 集群、Sentinel 与副本实例的 Operator",
+   "review": "该 Operator 通过单一 `Valkey` 自定义资源管理三种架构：cluster（16384 哈希槽分片部署）、failover（Sentinel 主从）与 replica（无 Sentinel 主从），并提供 ACL、TLS、在线扩缩容和版本升级能力。使用 Go 编写，提供 Helm 与 Kustomize 两种安装方式，支持 Valkey 7.2.x 至 9.1.x 与 Kubernetes 1.33-1.35。注意它独立于 valkey-io/valkey-operator 项目，Helm 安装默认依赖 cert-manager。",
+   "highlights": [
+    "支持 standalone、Sentinel failover 与 Cluster 三种架构，Cluster 架构下增删分片时在线重平衡哈希槽",
+    "支持 ACL 用户、TLS、NodePort/LB 访问、IPv4/IPv6、在线扩缩容与版本升级",
+    "生成的 StatefulSets、PodDisruptionBudgets 和 Services 可通过 spec.overwrites 打补丁，支持 nodeselector、toleration 和 affinity"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上部署和管理 Valkey Cluster 分片集群，需在线扩缩分片",
+    "需要 Sentinel 故障转移的主从架构部署",
+    "需要通过 Operator 统一管理 ACL、TLS 与版本升级的 Valkey 实例"
+   ]
+  },
+  "sha": "b8b6736f7335",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c06bc2242825": {
+  "identity": {
+   "one_liner": "本地优先的个人 LLM wiki，将文档转为可引用、可对话的知识库",
+   "review": "该项目读取本地文档，生成带引用的结构化 wiki 页面，并提供网页界面进行阅读和对话，全程在本机运行、不调用云服务。技术栈为 FastAPI、HTMX、SQLite/FTS5，兼容任意 OpenAI 端点的模型。支持预检索、代理校验、不校验三种问答模式，每个 wiki 为独立本地 git 仓库。需自行配置模型端点；项目不提供插件生态。",
+   "highlights": [
+    "通过 SQLite/FTS5 实现检索，回答附带页面引用，未命中语料时可在调用模型前拒绝",
+    "包含 datasets 引擎，可摄入并定期刷新结构化数据表，数值计算由 Python 代码完成而非 LLM",
+    "内置 lint 检查与修复机制，每个 wiki 为本地 git 仓库记录变更历史"
+   ],
+   "use_cases": [
+    "把个人文档整理为可检索、可对话的本地知识库",
+    "需要答案附带来源引用和日期的文档问答",
+    "在离线或隐私敏感环境中运行基于自有文档的问答助手"
+   ]
+  },
+  "sha": "c06bc2242825",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f33125412b5a": {
+  "identity": {
+   "one_liner": "Windows 下的 Claude Code 插件，显示发送前的成本并在本地保存对话记忆",
+   "review": "Alethite 是一个适用于 Claude Code 桌面应用（Windows）的 MIT 协议插件，它会在提示符上方的一栏显示聊天大小、缓存状态和下一次发送的成本。它包含一个干净对话切换功能、一个使用 SQLite 并可选配 Ollama 向量模型的本地内存索引，以及轻量级代理类型。安装需要 Python 3.8+；通过 PowerShell 安装，并通过 /al-health 等命令进行验证。",
+   "highlights": [
+    "显示聊天大小、缓存剩余分钟数以及下一次发送的价格，命令为 /al-band",
+    "通过 /al-index 在本地 SQLite 索引中对过去的对话进行索引，并配合可选的 Ollama 向量模型进行词法和语义检索",
+    "提供五种轻量级代理类型（侦察、研究、审查、编码、驻留），根据 README 描述，其启动需要 5k–16k tokens"
+   ],
+   "use_cases": [
+    "在 Windows 上使用 Claude Code，并希望在发送前查看上下文和成本信息",
+    "在开始新聊天之前，在本地保留并检索过去的项目对话",
+    "在多台机器上同步内存索引，并提供可选的索引和同步文件夹加密"
+   ]
+  },
+  "sha": "f33125412b5a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

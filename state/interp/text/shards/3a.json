@@ -3035,5 +3035,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "eddbf068ecac": {
+  "identity": {
+   "one_liner": "面向编程代理的本地优先记忆系统：单二进制加单个 SQLite 文件，本地嵌入检索。",
+   "review": "Palace 用 Rust 实现为 MCP 服务器，为 Claude Code、Cursor、Codex 等代理跨会话保存决策、修复、命令和偏好。数据以原文形式存入单文件 SQLite，嵌入模型 all-MiniLM-L6-v2 经 ONNX Runtime 在本地 CPU 运行，检索融合 BM25 与余弦相似度，结果附来源引用。提供 CLI 与 MCP 工具，支持 embedding 迁移与回滚。平台覆盖 Linux（glibc 2.39+）、macOS Apple Silicon、Windows x86_64，不支持 macOS Intel。",
+   "highlights": [
+    "单二进制加单 SQLite 文件运行，无需 API 密钥或云服务；嵌入在本地 CPU 上由 ONNX Runtime 计算",
+    "检索融合 BM25 关键词评分与本地嵌入余弦相似度，按意图分类（decision/how_to/preference 等）加权，返回含来源出处与分数构成的结果",
+    "提供 palace embeddings migrate/rollback 子命令，迁移时在 200 个探针上验证 recall@5 与 p95 延迟后才切换模型"
+   ],
+   "use_cases": [
+    "编程代理跨会话记忆项目决策、修复记录与用户偏好，会话开始时通过 hooks 自动注入相关记忆",
+    "多代理环境（Claude Code、Codex、Cursor、Zed 等）共享同一份本地记忆库",
+    "非软件场景：README 提供 creative 与 personal 档案，用于世界观构建、小说、coaching 或家庭笔记"
+   ]
+  },
+  "sha": "eddbf068ecac",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c5b7e1ea8d3f": {
+  "identity": {
+   "one_liner": "编译型SQL引擎，直接对Parquet文件运行分析查询，支持本机与浏览器执行。",
+   "review": "QumirDB是一个直接在Parquet文件上运行分析型SQL的引擎，支持过滤、连接、聚合与排序。它将查询表达式与算子计算经Qumir/LLVM编译为机器码或WebAssembly；通过qdbd守护进程可将任务图拆分到多节点分布式执行。提供命令行工具、HTTP服务与浏览器workbench，本地构建见docs/building.md，在线演示位于db.qumir.dev。",
+   "highlights": [
+    "将查询内核编译为机器码或WebAssembly，同一内核生成路径覆盖本机与浏览器（OPFS数据集）两种执行目标",
+    "支持通过CREATE MODULE注册Rust模块作为UDF，其LLVM bitcode与查询代码在优化前链接，可跨SQL与用户代码边界内联与向量化",
+    "优化器包含谓词下推、join重排、列裁剪与Parquet row-group剪枝；qdbd支持按节点拆分任务图的分布式执行"
+   ],
+   "use_cases": [
+    "在本机或浏览器中直接对Parquet文件执行分析查询与数据探索",
+    "在SQL中调用Rust编写的领域计算逻辑（数值模型、解析器等），并利用常量传播与内联进行特化",
+    "通过qdbd在多节点上运行分布式分析查询，仓库含TPC-H/TPC-DS/ClickBench查询包与集群运行脚本"
+   ]
+  },
+  "sha": "c5b7e1ea8d3f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

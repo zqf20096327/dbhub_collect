@@ -21947,5 +21947,1595 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "f44e78e0fe46+2": {
+  "fn": "kirimatt/goncordia",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "CI",
+     "codecov",
+     "Go Reference",
+     "GitHub release",
+     "Go version",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "Documentation · Changelog · API reference · Migrating to v2 · Who uses it"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    26,
+    10,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "`EnqueueTx` implements the transactional outbox pattern: the job is written inside your existing transaction and becomes visible to workers only after commit. If the transaction rolls back, the job disappears — no separate relay process, no dual-write risk."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    34,
+    27,
+    34
+   ],
+   [
+    "delete",
+    34,
+    36,
+    34,
+    34
+   ],
+   [
+    "equal",
+    36,
+    59,
+    34,
+    57
+   ],
+   [
+    "delete",
+    59,
+    61,
+    57,
+    57
+   ],
+   [
+    "equal",
+    61,
+    63,
+    57,
+    59
+   ],
+   [
+    "replace",
+    63,
+    64,
+    59,
+    60,
+    [
+     "|Driver|Package|Tx type|Atomic insert|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    60,
+    61
+   ],
+   [
+    "replace",
+    65,
+    79,
+    61,
+    73,
+    [
+     "|PostgreSQL (pgx v5)|`driver/pgxv5`|`pgx.Tx`|✅|LISTEN/NOTIFY, lease leadership, SKIP LOCKED|",
+     "|PostgreSQL / MySQL / MariaDB / SQLite|`driver/stdlib`|`*sql.Tx`|✅|pgx stdlib, go-sql-driver/mysql (MySQL 8, MariaDB 10.6+), modernc sqlite|",
+     "|gorm|`driver/gorm`|`*gorm.DB`|✅|thin adapter over stdlib|",
+     "|bun|`driver/bun`|`bun.Tx`|✅|thin adapter over stdlib|",
+     "|MongoDB 4.0+|`driver/mongodbv2`|`*mongo.Session` (mongo-driver v2)|✅|replica set required|",
+     "|MongoDB 4.0+ (deprecated)|`driver/mongodb`|`mongo.SessionContext` (mongo-driver v1)|✅|use `driver/mongodbv2`|",
+     "|Redis|`driver/redis`|`NoTx`|❌|at-least-once; Pub/Sub notifications|",
+     "|Cassandra 3.11+|`driver/cassandra`|`NoTx`|❌|LWT claiming; ScyllaDB / DSE compatible|",
+     "|ClickHouse 23+|`driver/clickhouse`|`NoTx`|❌|ReplacingMergeTree; at-least-once|",
+     "|Amazon DynamoDB|`driver/dynamodb`|`NoTx`|❌|conditional writes; at-least-once|",
+     "|Cloud Firestore|`driver/firestore`|`*firestore.Transaction`|✅|RunTransaction; composite index required|",
+     "|In-memory|`driver/memory`|`memory.NoTx`|❌|synchronized operations, no rollback; for tests|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    82,
+    73,
+    76
+   ],
+   [
+    "replace",
+    82,
+    83,
+    76,
+    77,
+    [
+     "||goncordia|River|Asynq|Machinery|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    77,
+    78
+   ],
+   [
+    "replace",
+    84,
+    95,
+    78,
+    89,
+    [
+     "|Backends|Postgres, MySQL, SQLite, MongoDB, Redis, Cassandra, ClickHouse, DynamoDB, Firestore, memory|**PostgreSQL only**|**Redis only**|Redis, RabbitMQ, SQS, MongoDB|",
+     "|Transactional insert (outbox pattern)|✅ where backend supports tx|✅ Postgres only|❌|❌|",
+     "|Generic `Driver[TTx]` interface|✅|✅ (Postgres only)|—|—|",
+     "|Scheduled / cron jobs|✅|✅|✅|✅|",
+     "|Unique jobs|✅|✅|✅|❌|",
+     "|Priority queues|✅|✅|✅|❌|",
+     "|Push notifications|✅ LISTEN/NOTIFY, Change Streams, Pub/Sub|✅ LISTEN/NOTIFY|✅ Pub/Sub|❌ polling|",
+     "|Web UI|✅ embeddable|✅ (River UI, Pro)|✅ (asynqmon)|❌|",
+     "|Await a job's typed result|✅ `future.Func.Call` / `Await`|❌|stores results, no await|✅ `AsyncResult.Get`|",
+     "|Unit tests without Docker|✅ in-memory driver + `gontest`|needs Postgres|needs Redis|needs a broker|",
+     "|Workflow primitives (chains, chords)|❌|❌|❌|✅|"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    103,
+    89,
+    97
+   ],
+   [
+    "delete",
+    103,
+    105,
+    97,
+    97
+   ],
+   [
+    "equal",
+    105,
+    120,
+    97,
+    112
+   ],
+   [
+    "replace",
+    120,
+    146,
+    112,
+    113,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    150,
+    113,
+    117
+   ],
+   [
+    "replace",
+    150,
+    153,
+    117,
+    118,
+    [
+     "selected. See Migrating to v2 for upgrade commands."
+    ]
+   ],
+   [
+    "equal",
+    153,
+    162,
+    118,
+    127
+   ],
+   [
+    "replace",
+    162,
+    196,
+    127,
+    128,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    213,
+    128,
+    145
+   ],
+   [
+    "replace",
+    213,
+    232,
+    145,
+    146,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    245,
+    146,
+    159
+   ],
+   [
+    "replace",
+    245,
+    257,
+    159,
+    160,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    257,
+    265,
+    160,
+    168
+   ],
+   [
+    "replace",
+    265,
+    276,
+    168,
+    169,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    284,
+    169,
+    177
+   ],
+   [
+    "replace",
+    284,
+    296,
+    177,
+    178,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    318,
+    178,
+    200
+   ],
+   [
+    "replace",
+    318,
+    333,
+    200,
+    201,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    341,
+    201,
+    209
+   ],
+   [
+    "replace",
+    341,
+    357,
+    209,
+    210,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    357,
+    365,
+    210,
+    218
+   ],
+   [
+    "replace",
+    365,
+    380,
+    218,
+    219,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    388,
+    219,
+    227
+   ],
+   [
+    "replace",
+    388,
+    406,
+    227,
+    228,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    406,
+    414,
+    228,
+    236
+   ],
+   [
+    "replace",
+    414,
+    422,
+    236,
+    237,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    435,
+    237,
+    250
+   ],
+   [
+    "delete",
+    435,
+    437,
+    250,
+    250
+   ],
+   [
+    "equal",
+    437,
+    443,
+    250,
+    256
+   ],
+   [
+    "replace",
+    443,
+    447,
+    256,
+    257,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    448,
+    257,
+    258
+   ],
+   [
+    "delete",
+    448,
+    450,
+    258,
+    258
+   ],
+   [
+    "equal",
+    450,
+    457,
+    258,
+    265
+   ],
+   [
+    "replace",
+    457,
+    471,
+    265,
+    266,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    471,
+    489,
+    266,
+    284
+   ],
+   [
+    "delete",
+    489,
+    491,
+    284,
+    284
+   ],
+   [
+    "equal",
+    491,
+    497,
+    284,
+    290
+   ],
+   [
+    "replace",
+    497,
+    533,
+    290,
+    291,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    533,
+    599,
+    291,
+    357
+   ],
+   [
+    "delete",
+    599,
+    601,
+    357,
+    357
+   ],
+   [
+    "equal",
+    601,
+    632,
+    357,
+    388
+   ],
+   [
+    "replace",
+    632,
+    636,
+    388,
+    389,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    636,
+    644,
+    389,
+    397
+   ],
+   [
+    "replace",
+    644,
+    654,
+    397,
+    398,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    654,
+    662,
+    398,
+    406
+   ],
+   [
+    "replace",
+    662,
+    672,
+    406,
+    407,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    672,
+    676,
+    407,
+    411
+   ],
+   [
+    "replace",
+    676,
+    677,
+    411,
+    412,
+    [
+     "share them) and failed jobs stay for retention; set"
+    ]
+   ],
+   [
+    "equal",
+    677,
+    712,
+    412,
+    447
+   ],
+   [
+    "replace",
+    712,
+    713,
+    447,
+    448,
+    [
+     "Runnable examples: `future/example_test.go` runs the"
+    ]
+   ],
+   [
+    "equal",
+    713,
+    714,
+    448,
+    449
+   ],
+   [
+    "replace",
+    714,
+    715,
+    449,
+    450,
+    [
+     "`driver/pgxv5/example_future_test.go`"
+    ]
+   ],
+   [
+    "equal",
+    715,
+    726,
+    450,
+    461
+   ],
+   [
+    "replace",
+    726,
+    734,
+    461,
+    462,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    734,
+    739,
+    462,
+    467
+   ],
+   [
+    "delete",
+    739,
+    741,
+    467,
+    467
+   ],
+   [
+    "equal",
+    741,
+    748,
+    467,
+    474
+   ],
+   [
+    "replace",
+    748,
+    760,
+    474,
+    475,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    760,
+    793,
+    475,
+    508
+   ],
+   [
+    "replace",
+    793,
+    794,
+    508,
+    509,
+    [
+     "|Metric|Type|Labels|"
+    ]
+   ],
+   [
+    "equal",
+    794,
+    795,
+    509,
+    510
+   ],
+   [
+    "replace",
+    795,
+    801,
+    510,
+    516,
+    [
+     "|`goncordia_future_awaits_in_flight`|gauge|—|",
+     "|`goncordia_future_await_duration_seconds`|histogram|`kind`, `outcome`|",
+     "|`goncordia_future_await_polls_total`|counter|`kind`|",
+     "|`goncordia_future_await_wakeups_total`|counter|`kind`|",
+     "|`goncordia_future_store_duration_seconds`|histogram|`kind`, `status`|",
+     "|`goncordia_future_result_size_bytes`|histogram|`kind`|"
+    ]
+   ],
+   [
+    "equal",
+    801,
+    833,
+    516,
+    548
+   ],
+   [
+    "delete",
+    833,
+    835,
+    548,
+    548
+   ],
+   [
+    "equal",
+    835,
+    844,
+    548,
+    557
+   ],
+   [
+    "replace",
+    844,
+    851,
+    557,
+    558,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    851,
+    863,
+    558,
+    570
+   ],
+   [
+    "replace",
+    863,
+    864,
+    570,
+    571,
+    [
+     "|What|Kept for|"
+    ]
+   ],
+   [
+    "equal",
+    864,
+    865,
+    571,
+    572
+   ],
+   [
+    "replace",
+    865,
+    869,
+    572,
+    576,
+    [
+     "|completed jobs|24 hours|",
+     "|cancelled jobs|24 hours|",
+     "|discarded jobs (dead letters)|7 days|",
+     "|future results of completed jobs|1 hour|"
+    ]
+   ],
+   [
+    "equal",
+    869,
+    878,
+    576,
+    585
+   ],
+   [
+    "replace",
+    878,
+    882,
+    585,
+    586,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    882,
+    890,
+    586,
+    594
+   ],
+   [
+    "replace",
+    890,
+    891,
+    594,
+    595,
+    [
+     "Futures). `Manager.Forget` drops a result"
+    ]
+   ],
+   [
+    "equal",
+    891,
+    900,
+    595,
+    604
+   ],
+   [
+    "replace",
+    900,
+    909,
+    604,
+    605,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    909,
+    916,
+    605,
+    612
+   ],
+   [
+    "replace",
+    916,
+    917,
+    612,
+    613,
+    [
+     "|Driver|How retention finds expired jobs|"
+    ]
+   ],
+   [
+    "equal",
+    917,
+    918,
+    613,
+    614
+   ],
+   [
+    "replace",
+    918,
+    924,
+    614,
+    620,
+    [
+     "|pgxv5, stdlib (Postgres, MySQL, SQLite), gorm, bun, MongoDB, Redis|index on state and finalization time, batched deletes (`driver.JobPruner`)|",
+     "|DynamoDB|sparse GSI `gsi_retention` on terminal jobs, sharded 16 ways; created by `Migrate`|",
+     "|Firestore|composite index `state ASC, finalized_at ASC` on `goncordia_jobs` (create it yourself, like the fetch index); results use the automatic `updated_at` index|",
+     "|Cassandra|lookup tables `goncordia_jobs_finalized` and `goncordia_results_written`, read from a stored watermark so deleted rows' tombstones are not rescanned|",
+     "|ClickHouse|data-skipping indexes on `state`, `finalized_at`, `id`, and result `updated_at`; expired rows are removed physically with lightweight `DELETE`, including rows that `JobDelete` only marked deleted|",
+     "|memory|scans in process memory|"
+    ]
+   ],
+   [
+    "equal",
+    924,
+    949,
+    620,
+    645
+   ],
+   [
+    "replace",
+    949,
+    950,
+    645,
+    646,
+    [
+     "|Metric|Type|Labels|"
+    ]
+   ],
+   [
+    "equal",
+    950,
+    951,
+    646,
+    647
+   ],
+   [
+    "replace",
+    951,
+    956,
+    647,
+    652,
+    [
+     "|`goncordia_retention_passes_total`|counter|`status` (`ok`, `error`)|",
+     "|`goncordia_retention_jobs_deleted_total`|counter|—|",
+     "|`goncordia_retention_results_deleted_total`|counter|—|",
+     "|`goncordia_retention_last_success_timestamp_seconds`|gauge|—|",
+     "|`goncordia_retention_last_pass_duration_seconds`|gauge|—|"
+    ]
+   ],
+   [
+    "equal",
+    956,
+    963,
+    652,
+    659
+   ],
+   [
+    "delete",
+    963,
+    965,
+    659,
+    659
+   ],
+   [
+    "equal",
+    965,
+    974,
+    659,
+    668
+   ],
+   [
+    "replace",
+    974,
+    995,
+    668,
+    669,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    995,
+    1003,
+    669,
+    677
+   ],
+   [
+    "replace",
+    1003,
+    1010,
+    677,
+    678,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1010,
+    1031,
+    678,
+    699
+   ],
+   [
+    "replace",
+    1031,
+    1033,
+    699,
+    701,
+    [
+     " scheduling, provide a stable `ID` and `StartAt`; the first occurrence is",
+     " `Schedule.Next(StartAt)`."
+    ]
+   ],
+   [
+    "equal",
+    1033,
+    1034,
+    701,
+    702
+   ],
+   [
+    "replace",
+    1034,
+    1036,
+    702,
+    704,
+    [
+     " after enqueue. Each occurrence uses a permanent uniqueness key, so leader",
+     " failover or a crash between enqueue and cursor advancement cannot duplicate it."
+    ]
+   ],
+   [
+    "equal",
+    1036,
+    1037,
+    704,
+    705
+   ],
+   [
+    "replace",
+    1037,
+    1039,
+    705,
+    707,
+    [
+     " `CronCatchUpLatest` keeps only the latest, and `CronSkipMissed` drops old",
+     " occurrences while still enqueueing an occurrence reached on the current tick."
+    ]
+   ],
+   [
+    "equal",
+    1039,
+    1042,
+    707,
+    710
+   ],
+   [
+    "replace",
+    1042,
+    1045,
+    710,
+    711,
+    [
+     " owns the lease; a stale instance cannot resign a newer leader."
+    ]
+   ],
+   [
+    "equal",
+    1045,
+    1052,
+    711,
+    718
+   ],
+   [
+    "replace",
+    1052,
+    1073,
+    718,
+    719,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1073,
+    1074,
+    719,
+    720
+   ],
+   [
+    "delete",
+    1074,
+    1076,
+    720,
+    720
+   ],
+   [
+    "equal",
+    1076,
+    1085,
+    720,
+    729
+   ],
+   [
+    "replace",
+    1085,
+    1090,
+    729,
+    730,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1090,
+    1092,
+    730,
+    732
+   ],
+   [
+    "replace",
+    1092,
+    1095,
+    732,
+    733,
+    [
+     "See `driver/driver.go` for the full core interface and optional rescue/admin capabilities, and `driver/memory/memory.go` for a reference implementation. Every `Executor` also implements `driver.JobResultStore` (`JobResultPut`, `JobResultGet`, `JobResultDelete`; `JobDelete` removes the result too), which `driver/drivertest.RunResults` verifies. Driver authors can reuse `driver/drivertest.Run` for the base contract and `driver/drivertest.RunScheduled` with an injected `clock.Manual` for scheduled-job conformance. The base contract includes opaque job/queue pagination, deterministic ordering, invalid-cursor classification, fencing, and typed stale-claim behavior."
+    ]
+   ],
+   [
+    "equal",
+    1095,
+    1106,
+    733,
+    744
+   ],
+   [
+    "replace",
+    1106,
+    1107,
+    744,
+    745,
+    [
+     "|Backend|ns/op|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1107,
+    1108,
+    745,
+    746
+   ],
+   [
+    "replace",
+    1108,
+    1117,
+    746,
+    755,
+    [
+     "|Memory|0.57 µs|in-process mutex, no I/O|",
+     "|SQLite|27 µs|WAL mode, single connection|",
+     "|Redis|109 µs|ZADD over localhost|",
+     "|Postgres (pgx v5)|129 µs|INSERT over localhost|",
+     "|MongoDB|338 µs|insertOne over localhost|",
+     "|DynamoDB|632 µs|PutItem over localhost|",
+     "|Firestore|1 195 µs|RunTransaction + Create over emulator|",
+     "|ClickHouse|1 378 µs|INSERT + new data part over localhost|",
+     "|Cassandra|7 216 µs|LWT requires Paxos quorum (3 round trips)|"
+    ]
+   ],
+   [
+    "equal",
+    1117,
+    1120,
+    755,
+    758
+   ],
+   [
+    "replace",
+    1120,
+    1121,
+    758,
+    759,
+    [
+     "|Backend|ms/batch|jobs/s|"
+    ]
+   ],
+   [
+    "equal",
+    1121,
+    1122,
+    759,
+    760
+   ],
+   [
+    "replace",
+    1122,
+    1131,
+    760,
+    769,
+    [
+     "|Memory|0.06 ms|~1 775 000|",
+     "|SQLite|2.8 ms|~35 300|",
+     "|Redis|10.9 ms|~9 200|",
+     "|Postgres (pgx v5)|12.8 ms|~7 800|",
+     "|MongoDB|34.9 ms|~2 900|",
+     "|DynamoDB|62.9 ms|~1 590|",
+     "|Firestore|93.5 ms|~1 070|",
+     "|ClickHouse|150 ms|~665|",
+     "|Cassandra|708 ms|~141|"
+    ]
+   ],
+   [
+    "equal",
+    1131,
+    1134,
+    769,
+    772
+   ],
+   [
+    "replace",
+    1134,
+    1135,
+    772,
+    773,
+    [
+     "|Backend|µs/op|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1135,
+    1136,
+    773,
+    774
+   ],
+   [
+    "replace",
+    1136,
+    1145,
+    774,
+    783,
+    [
+     "|SQLite|53 µs|indexed; faster than memory at scale|",
+     "|Memory|520 µs|O(N) linear scan|",
+     "|Redis|729 µs|Lua ZPOPMIN + HSET|",
+     "|DynamoDB|1 731 µs|Query GSI + conditional UpdateItem|",
+     "|MongoDB|2 475 µs|findAndModify + updateOne|",
+     "|Postgres (pgx v5)|12 190 µs|SELECT SKIP LOCKED + UPDATE|",
+     "|ClickHouse|14 416 µs|SELECT FINAL + INSERT new version|",
+     "|Cassandra|18 813 µs|SELECT avail + LWT UPDATE per job|",
+     "|Firestore|140 943 µs|Query + per-job RunTransaction on emulator|"
+    ]
+   ],
+   [
+    "equal",
+    1145,
+    1148,
+    783,
+    786
+   ],
+   [
+    "replace",
+    1148,
+    1149,
+    786,
+    787,
+    [
+     "|Backend|workload|concurrency|jobs/s|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1149,
+    1150,
+    787,
+    788
+   ],
+   [
+    "replace",
+    1150,
+    1159,
+    788,
+    797,
+    [
+     "|Memory|1 000|c=10|~2 020||",
+     "|Redis|1 000|c=4|~1 084|Pub/Sub notifications|",
+     "|SQLite|1 000|c=4|~800||",
+     "|DynamoDB|1 000|c=4|~780|polling; GSI query overhead|",
+     "|MongoDB|1 000|c=4|~452|Change Streams|",
+     "|Postgres (pgx v5)|1 000|c=4|~179|LISTEN/NOTIFY|",
+     "|Cassandra|1 000|c=4|~153|polling; LWT overhead|",
+     "|ClickHouse|1 000|c=4|~148|polling; SELECT FINAL overhead|",
+     "|Firestore|200|c=4|~14|polling; per-job RunTransaction on emulator|"
+    ]
+   ],
+   [
+    "equal",
+    1159,
+    1163,
+    797,
+    801
+   ],
+   [
+    "delete",
+    1163,
+    1165,
+    801,
+    801
+   ],
+   [
+    "equal",
+    1165,
+    1180,
+    801,
+    816
+   ],
+   [
+    "replace",
+    1180,
+    1188,
+    816,
+    817,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1188,
+    1199,
+    817,
+    828
+   ],
+   [
+    "replace",
+    1199,
+    1205,
+    828,
+    829,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1205,
+    1213,
+    829,
+    837
+   ],
+   [
+    "replace",
+    1213,
+    1223,
+    837,
+    838,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1223,
+    1231,
+    838,
+    846
+   ],
+   [
+    "replace",
+    1231,
+    1243,
+    846,
+    847,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1243,
+    1251,
+    847,
+    855
+   ],
+   [
+    "replace",
+    1251,
+    1261,
+    855,
+    856,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1261,
+    1262,
+    856,
+    857
+   ],
+   [
+    "delete",
+    1262,
+    1264,
+    857,
+    857
+   ],
+   [
+    "equal",
+    1264,
+    1275,
+    857,
+    868
+   ],
+   [
+    "replace",
+    1275,
+    1297,
+    868,
+    869,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1297,
+    1306,
+    869,
+    878
+   ],
+   [
+    "replace",
+    1306,
+    1307,
+    878,
+    879,
+    [
+     " (`max(created_at, run_at)`) to handler start; scheduled waiting is excluded"
+    ]
+   ],
+   [
+    "equal",
+    1307,
+    1335,
+    879,
+    907
+   ],
+   [
+    "replace",
+    1335,
+    1336,
+    907,
+    908,
+    [
+     "|Signal|Name|Attributes|"
+    ]
+   ],
+   [
+    "equal",
+    1336,
+    1337,
+    908,
+    909
+   ],
+   [
+    "replace",
+    1337,
+    1344,
+    909,
+    916,
+    [
+     "|span|`goncordia.future.await`|job id, kind, queue, state, outcome, polls, wakeups, result bytes|",
+     "|span|`goncordia.future.store`|job id, kind, queue, attempt, result bytes; child of `goncordia.process`|",
+     "|histogram (s)|`goncordia.future.await.duration`|kind, outcome, blocking|",
+     "|counter|`goncordia.future.await.polls`|kind|",
+     "|counter|`goncordia.future.await.wakeups`|kind|",
+     "|histogram (By)|`goncordia.future.result.size`|kind|",
+     "|histogram (s)|`goncordia.future.store.duration`|kind, status|"
+    ]
+   ],
+   [
+    "equal",
+    1344,
+    1347,
+    916,
+    919
+   ],
+   [
+    "replace",
+    1347,
+    1348,
+    919,
+    920,
+    [
+     "endpoint (see Admin dashboard)."
+    ]
+   ],
+   [
+    "equal",
+    1348,
+    1365,
+    920,
+    937
+   ],
+   [
+    "replace",
+    1365,
+    1371,
+    937,
+    938,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1371,
+    1379,
+    938,
+    946
+   ],
+   [
+    "replace",
+    1379,
+    1389,
+    946,
+    947,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1389,
+    1390,
+    947,
+    948
+   ],
+   [
+    "delete",
+    1390,
+    1392,
+    948,
+    948
+   ],
+   [
+    "equal",
+    1392,
+    1399,
+    948,
+    955
+   ],
+   [
+    "replace",
+    1399,
+    1424,
+    955,
+    956,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1424,
+    1425,
+    956,
+    957
+   ],
+   [
+    "delete",
+    1425,
+    1427,
+    957,
+    957
+   ],
+   [
+    "equal",
+    1427,
+    1430,
+    957,
+    960
+   ],
+   [
+    "replace",
+    1430,
+    1431,
+    960,
+    961,
+    [
+     "|Backend|Guarantee|Mechanism|"
+    ]
+   ],
+   [
+    "equal",
+    1431,
+    1432,
+    961,
+    962
+   ],
+   [
+    "replace",
+    1432,
+    1443,
+    962,
+    971,
+    [
+     "|Postgres / MySQL / SQLite|Atomic with business tx|Same DB connection, same `BEGIN`/`COMMIT`|",
+     "|gorm / bun|Atomic with business tx|Extracts underlying `*sql.Tx`|",
+     "|MongoDB|Atomic with business tx|Multi-document transaction on replica set|",
+     "|Redis|**None** — at-least-once|Pub/Sub + idempotent workers|",
+     "|Cassandra|**None** — at-least-once|LWT for claiming; no cross-statement tx|",
+     "|ClickHouse|**None** — at-least-once|ReplacingMergeTree + FINAL; no transactions|",
+     "|DynamoDB|**None** — at-least-once|Conditional writes; no cross-table tx|",
+     "|Firestore|Atomic with business tx|`RunTransaction` + `EnqueueTx`|",
+     "|In-memory|Atomic (in-process)|Single mutex|"
+    ]
+   ],
+   [
+    "equal",
+    1443,
+    1446,
+    971,
+    974
+   ],
+   [
+    "replace",
+    1446,
+    1452,
+    974,
+    980,
+    [
+     "- Using goncordia? Add yourself to ADOPTERS.md with a pull",
+     " request or the adopter form.",
+     "- Read CONTRIBUTING.md before opening an issue or pull request.",
+     "- Follow the Code of Conduct in all project spaces.",
+     "- Report vulnerabilities privately according to SECURITY.md.",
+     "- Goncordia is available under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

@@ -3016,5 +3016,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1b63edac9a9c": {
+  "identity": {
+   "one_liner": "开源职位搜索引擎，直接抓取公司 ATS 页面并统一去重入库",
+   "review": "freehire.me 是一个用 Go 编写的开源职位聚合与搜索系统，从 Workday、Greenhouse、Lever 等 160 余个 ATS 平台及聚合器抓取职位，规范化为统一结构并按稳定键去重。支持分面全文检索、无密钥公共 HTTP API、CLI 与 MCP 接入，通过 Docker Compose 一键自托管。抓取、富化、索引等均为独立 cron 式 worker；AI 相关功能需另行配置 LLM 凭据。",
+   "highlights": [
+    "从 168 个 ATS 平台等 437 类来源抓取职位，规范化为单一结构并按稳定键去重",
+    "提供无密钥公共 HTTP API、CLI 和 MCP 服务器，支持 Claude Desktop、ChatGPT Actions 等外部接入",
+    "基于 Meilisearch 提供地区、工作模式、资历、技能、薪资等分面全文检索"
+   ],
+   "use_cases": [
+    "自托管职位检索服务，对抓取自公司官网的原始职位做分面过滤与全文搜索",
+    "基于公共 API 或 MCP 为代理（agent）和第三方工具构建职位查询功能",
+    "通过 cron 调度 ingest/enrich 等独立 worker 维护自建的职位目录管道"
+   ]
+  },
+  "sha": "1b63edac9a9c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "47814a51d017": {
+  "identity": {
+   "one_liner": "基于 Next.js 16 与 Mux 的 AI 视频应用模板",
+   "review": "该项目是一个使用 Next.js 16、React 19 与 TypeScript 构建的视频平台应用，集成 Clerk 认证、Neon PostgreSQL 数据库（Drizzle ORM）、Mux 视频上传、UploadThing 文件上传以及 Upstash QStash AI 工作流。适合希望学习或搭建含视频上传、播放列表与创作者资料功能的全栈应用的开发者。部署依赖 Vercel，本地运行需配置多个第三方服务密钥，并支持通过 ngrok 调试 Webhook。",
+   "highlights": [
+    "集成 Clerk 认证、Neon PostgreSQL（Drizzle ORM）、Mux 视频上传、UploadThing 文件上传与 Upstash QStash AI 工作流",
+    "技术栈包含 Next.js 16、React 19、TypeScript、Tailwind CSS 与 tRPC、React Query",
+    "提供截图展示的播放列表功能与创作者资料页面，支持部署到 Vercel"
+   ],
+   "use_cases": [
+    "学习全栈 Next.js 项目中认证、数据库、视频处理等服务的集成方式",
+    "搭建包含视频上传、播放列表与用户资料功能的视频类 Web 应用",
+    "作为需要 AI 工作流（QStash + OpenAI）与异步任务处理的应用参考模板"
+   ]
+  },
+  "sha": "47814a51d017",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8db551e52077": {
+  "identity": {
+   "one_liner": "为 Cloudflare Durable Object SQLite 存储提供字段级加密与可搜索盲索引的库。",
+   "review": "该库提供 EncryptedDurableObject 基类，在数据写入 SQLite 前对声明字段进行加密，并通过盲索引支持精确匹配查询。需使用 new_sqlite_classes 迁移，自行定义表结构及索引列。兼容 CipherSweet FIPSCrypto 格式，仅依赖 WebCrypto，不要求 nodejs_compat。盲索引仅支持等值匹配，不支持 LIKE、范围或排序；密钥变更需全量重加密。",
+   "highlights": [
+    "字段级加密在写入 SQLite 前完成，通过盲索引实现加密列的精确匹配查询，冲突时解密候选行后过滤",
+    "支持信封加密：wrappedRootKey 结合 Worker Secret（KEK）或外部 KMS 存储 wrapped 密钥，支持按租户选密钥与 KEK 轮换",
+    "采用 CipherSweet FIPSCrypto 格式（AES-256-CTR + HMAC-SHA384），测试使用 PHP 参考实现生成的向量验证"
+   ],
+   "use_cases": [
+    "每个租户对应一个 Durable Object SQLite 数据库的多租户场景，需要为每个租户提供独立加密密钥",
+    "需要限制仅拥有存储访问权限的开发或运维人员直接读取明文数据的场景",
+    "需要通过销毁或吊销租户密钥实现数据（含备份）不可读的 crypto-shredding 场景"
+   ]
+  },
+  "sha": "8db551e52077",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

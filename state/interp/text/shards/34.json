@@ -3218,5 +3218,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dbc63df447fc": {
+  "identity": {
+   "one_liner": "面向 AI 编程代理的后端代码技能集，约束认证、数据、支付与迁移行为",
+   "review": "backendskills 是一组供 Claude Code、Codex、Cursor 使用的 agent skills，包含 api-endpoint、data-integrity、db-migration 三个技能，用于在生成后端代码时默认应用查询范围限定、并发写入保护、分阶段迁移等规则。README 附带 15 任务的基准测试（bench/），并注明使用技能会增加每轮 token 成本与对话轮数；各技能含 Make it yours 段落供团队自定义约定。",
+   "highlights": [
+    "提供 api-endpoint、data-integrity、db-migration 三个技能，覆盖接口鉴权与限流、数据完整性、数据库迁移",
+    "通过 npx skills add 安装，Codex 用 dist/AGENTS.md，Cursor 复制 dist/cursor/ 到 .cursor/rules/",
+    "自带 bench/ 基准目录，含 15 个任务、原始运行记录 runs.jsonl 及复现方法"
+   ],
+   "use_cases": [
+    "让 AI 编程代理生成后端接口时默认应用鉴权、限流与输入校验规则",
+    "规范涉及支付、退款、读改写场景的代码生成",
+    "在滚动部署中对旧版本应用与新 schema 的兼容迁移"
+   ]
+  },
+  "sha": "dbc63df447fc",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f8437961c7a0": {
+  "identity": {
+   "one_liner": "可克隆的本地 ABAP 应用服务器，转译 ABAP 并实现 /IWBEP/ OData v2 运行时",
+   "review": "open-steamgate 将真实 ABAP 代码（Gateway 类、CDS、AMDP、报表）交叉编译后在本地数据库上运行，提供 OData v2 服务给 Fiori Elements，并支持 ADT 与 SAP GUI DIAG 连接，不依赖 SAP 系统。它包含语言运行时、字典、Open SQL、ICF、LUW 等，但不含业务应用；语言、字典和 Gateway 均以子集形式实现。适合希望在本地运行 SEGW 代码式 ABAP 服务的开发者，可通过浏览器、Docker、二进制或 VS Code 运行。",
+   "highlights": [
+    "交叉编译 ABAP（_MPC_EXT/_DPC_EXT、CDS 视图、AMDP 方法、报表）并对接本地数据库（sql.js、SQLite、DuckDB、PostgreSQL、HANA）",
+    "重新实现经典代码式 SEGW 服务的 /IWBEP/ OData v2 运行时，支持 $filter、$batch、$expand、deep insert、ETags、function imports 等",
+    "提供浏览器 Service Worker、Docker、单文件 Bun 二进制、VS Code 扩展、Node 源码等多种运行方式，并支持通过 --layer 加载 abapGit 仓库"
+   ],
+   "use_cases": [
+    "在没有 SAP 系统的环境下本地运行和调试基于 SEGW 的 ABAP Gateway/OData 服务",
+    "通过 Eclipse ADT 或 VS Code 编辑 ABAP 代码并在本地树上预览数据、运行 ABAP Unit",
+    "将 Fiori Elements V2 应用连接本地转译的 OData 服务进行开发与演示"
+   ]
+  },
+  "sha": "f8437961c7a0",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a2b29831434c": {
+  "identity": {
+   "one_liner": "基于 Docker Compose 的 LAMP 环境示例代码集，用于 PHP 基础教学",
+   "review": "该项目提供不依赖框架的 PHP Web 应用示例代码，包含用户列表、留言板、登录、头像上传等页面，供 PHP 教学者与初学者学习基础用法。通过 docker-compose 一键启动 Apache、MySQL、phpMyAdmin，首次启动自动执行 SQL 脚本建库建表，数据存于命名卷。README 明确说明不可用于生产环境。",
+   "highlights": [
+    "通过 docker-compose 提供 Apache、MySQL、PHP 环境与 phpMyAdmin，访问 http://localhost 与 localhost:8080",
+    "首次启动自动执行 mysql/init/01-schema.sql，创建 greatappdb 数据库及 users/bbs 表，数据存于命名卷 db",
+    "密码 salt 等配置通过 .env 文件设置，.env 已列入 .gitignore 不会被提交；采用 MIT 许可证"
+   ],
+   "use_cases": [
+    "PHP 初学者学习不依赖框架的 PHP 基础开发",
+    "教学者获取可运行的应用示例代码用于授课",
+    "需要本地快速搭建 LAMP 环境查看用户、留言板等典型功能实现"
+   ]
+  },
+  "sha": "a2b29831434c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

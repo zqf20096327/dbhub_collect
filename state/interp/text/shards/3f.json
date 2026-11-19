@@ -3395,5 +3395,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "83fae28ba315": {
+  "identity": {
+   "one_liner": "基于 JSON 模型驱动生成 PostgreSQL CRUD REST API 的 Node.js/Express/TypeScript 框架",
+   "review": "该项目用 TypeScript、Express 和 PostgreSQL 实现通用的模型驱动 REST 接口，提供 CRUD、过滤、图表与统计能力，并自动生成 OpenAPI 文档。模型以 JSON 形式存于数据库表中，可通过 API 或 Evolutility-UI-React 的 Designer 编辑，修改后即时生效，无需重启服务器。使用者需先创建 PostgreSQL 数据库并用 Evolutility-Models 生成的 SQL 脚本建表；评论与评分功能配置项存在但尚未实现，字段 unique 约束也未实现。默认启用登录认证，可配置为匿名只读站点。",
+   "highlights": [
+    "模型以 JSON 文档存于 PostgreSQL 表（evol_model），保存历史版本于 evol_model_history，改动即时生效，无需重启服务器",
+    "提供通用 REST CRUD 端点，支持查询参数过滤（如 sw、in、lt、gt 等操作符）、分页、CSV 导出、图表与统计",
+    "内置认证（登录 cookie、角色配置）、按 IP 的请求速率限制、CORS 来源配置，以及 created_by/updated_by 等审计列"
+   ],
+   "use_cases": [
+    "为已有 PostgreSQL 数据表快速生成带过滤、分页和 API 文档的 CRUD REST 接口",
+    "配合 Evolutility-UI-React 构建模型驱动的管理类 Web 应用（如待办、通讯录、酒窖清单等示例应用）",
+    "通过 Models API 或 Designer 在线编辑模型，让数据库表结构随模型保存而增删表和列"
+   ]
+  },
+  "sha": "83fae28ba315",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7c3314e97a41": {
+  "identity": {
+   "one_liner": "AI-first Scala 3 后端模板，内置 MCP 服务器与文档，示例域为葡萄酒拍卖",
+   "review": "madrileno 是一个面向助手驱动开发的 Scala 3 后端模板，技术栈为 http4s、Skunk、cats-effect 与 PostgreSQL，以葡萄酒拍卖作为示例域。仓库提交 .mcp.json 提供编译/测试循环与只读参考 MCP 服务器，docs/ 目录充当助手知识库。生成项目可用 init-project.scala 脚本重命名并移除示例，Apache-2.0 许可且生成项目可自由再许可。",
+   "highlights": [
+    "通过提交的 .mcp.json 提供助手实时编译/测试循环（Metals）和只读上游参考（madrileno MCP 服务器）",
+    "默认仅需 Postgres 单容器即可运行，full profile 另含 Mailpit、OpenObserve、Silo（S3 API）三个可选服务，通过 .env 切换 SMTP、OTLP、S3 集成",
+    "附带 init-project.scala 重命名脚本、doctor 环境检查脚本、app 管理脚本及 MigrateMain 迁移工具（支持 migrate/info/validate/clean 子命令）"
+   ],
+   "use_cases": [
+    "作为 Scala 3 函数式后端新项目的起点模板，用脚本重命名后移除拍卖示例",
+    "在 AI 助手（如通过 MCP 协议）辅助下进行日常开发，docs/ 作为助手上下文",
+    "需要 OpenAPI/Swagger 文档（由 Baklava 从路由规格生成）、OTLP 可观测性或 S3 预签名上传集成的 API 后端开发"
+   ]
+  },
+  "sha": "7c3314e97a41",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0d9bd93b4c83": {
+  "identity": {
+   "one_liner": "本地命令行工具，将编码代理事件转换为 Tidbyt/Tronbyt 显示通知",
+   "review": "这是一个运行在 macOS/Linux 上的 Python 命令行工具，通过向导式 setup 保存凭据并接入 Claude Code、Codex、OpenCode 的钩子，不改动原有配置文件结构。依赖本地 Pixlet 渲染图像并经 /push 端点推送，无需第三方 Python 包。配置写入 0600 权限文件，仅发送项目名和事件标签，不转发提示词或会话内容。限制：不支持 Windows，OpenCode 仅支持 V2。",
+   "highlights": [
+    "提供引导式安装与配置流程，凭据保存为 owner-only 权限文件，钩子修改前自动备份 Claude 和 Codex 设置",
+    "支持 notify 命令作为通用 CLI 接口，任意脚本或工具可通过参数发送 attention/complete/error 事件",
+    "doctor 命令可检查配置权限、API 认证、Pixlet 渲染和代理集成，不推送图像也不更改亮度"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、OpenCode 会话配置权限请求或完成事件的屏幕通知",
+    "在脚本或自定义工作流中通过 CLI 调用推送自定义消息到 Tidbyt/Tronbyt 设备",
+    "使用 doctor 命令排查通知链路、凭据权限与 Pixlet 渲染问题"
+   ]
+  },
+  "sha": "0d9bd93b4c83",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

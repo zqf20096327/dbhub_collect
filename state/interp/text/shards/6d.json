@@ -3224,5 +3224,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7b3cd819a16d": {
+  "identity": {
+   "one_liner": "本地运行的开源 CLI，通过钩子实时追踪 Claude Code/OpenCode 的令牌、成本与工具调用",
+   "review": "claudestat 是一个 Node.js 编写的本地观测工具，通过 Claude Code 的事件钩子在事件触发时采集工具调用、令牌用量、代理与 MCP 活动，数据存于本地 SQLite，并提供 localhost:7337 的 Web 仪表盘、终端命令（watch/status/top 等）与 MCP 服务器。面向使用 Claude Code、OpenCode 及多代理编排并关注 API 成本与配额的开发者。要求 Node.js >= 22，支持 macOS、Linux 和 Windows，无云端依赖。",
+   "highlights": [
+    "通过 Claude Code 钩子实时采集事件，成本计价基于 Anthropic 官方费率并与 Claude Code 的 cost-state 总额核对",
+    "提供 Web 仪表盘（Live/History/Projects/Analytics/Top/System/Orchestrate 七个标签页）、配额警报（70%/85%/95%触发，可选终止开关）、循环检测、成本预测与 52 周活动热力图",
+    "内置 MCP 服务器（9 个工具），可在终端内向 Claude Code 查询自身用量；数据全部存储于本地 SQLite"
+   ],
+   "use_cases": [
+    "实时监控 Claude Code / OpenCode 会话中的令牌消耗、工具调用成本与配额使用率",
+    "追踪多代理与子代理编排运行，检测上下文循环（thrashing）及估算浪费成本",
+    "通过 MCP 服务器在终端内让 Claude 回答本周花费、按模型分解用量等自身使用问题"
+   ]
+  },
+  "sha": "7b3cd819a16d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "511fa7386a78": {
+  "identity": {
+   "one_liner": "位于编码代理与 Git 之间的事务型 Go 运行时，提供 AST 与 Git 门禁",
+   "review": "Nomos 是一个约 20 MB 的静态 Go 二进制（Apache 2.0），置于 Claude Code、Cursor、Codex、Aider 等编码代理与 Git 之间，不消耗 LLM token。运行 nomos init 后，git commit 触发 42 项多语言 AST 检查与安全钩子，阻止跳过的测试、空壳桩函数和密钥泄露，并把修复配方返回给代理在回合内自行修复。含 nomos xray 扫描、基线 ratchet、可选 CI 与 worktree 模式。",
+   "highlights": [
+    "在 feat/* 分支提交时对 Go、TypeScript、Python、Rust、Ruby、C/C++、Java、Kotlin、C# 运行 42 项 AST 检查，单文件约 24ms",
+    "nomos hook 提供 pre-tool 安全拦截，阻止读取 ~/.ssh、~/.aws 等路径、云元数据 SSRF，并在连续 3 次无进展工具失败后中止",
+    "提供 nomos xray 只读扫描、nomos.baseline.json 基线 ratchet、仅验证通过后写入的 mneme.db 记忆，以及可选的 CI mutation proof 与 --worktrees 隔离模式"
+   ],
+   "use_cases": [
+    "让编码代理在 feat/* 分支工作时自动阻止跳过测试、删除断言、修改 linter 配置等行为",
+    "对已有存量代码仓库做 Day-0 扫描并锁定基线，只对新增改动收紧复杂度与覆盖要求",
+    "通过 GitHub Actions 中 SARIF 报告与 PR mutation proof 做合并前验证，或多代理并行时使用 git worktree 隔离"
+   ]
+  },
+  "sha": "511fa7386a78",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

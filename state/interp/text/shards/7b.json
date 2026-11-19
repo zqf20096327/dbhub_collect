@@ -3485,5 +3485,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ce3c7ac56b88": {
+  "identity": {
+   "one_liner": "基于 go-zero + React 的单仓库微服务管理后台，含 RBAC 与多租户 AI 功能",
+   "review": "这是一个前后端同仓库的管理后台项目，后端由 1 个 HTTP API 和 admin/app/file/ai/tenant 5 个 RPC 服务组成，前端使用 React 19、TypeScript 与 Ant Design 6。功能覆盖用户/角色/菜单/部门管理、JWT 与 Casbin 权限、审计、APP 用户管理，以及 AI 对话、知识库检索（Qdrant 向量召回 + Qwen Embedding）、带审批的多步骤流程。数据层使用 MySQL、Redis，部署依赖 Docker Compose，提供 mysql-all.sql 完整初始化数据，需 PowerShell 启动脚本。适合需要后台与 AI 功能开发起点的 Go 团队。",
+   "highlights": [
+    "后端采用 1 个 HTTP API + 5 个 RPC 服务（admin/app/file/ai/tenant），使用 goctl 代码生成与缓存 Model 数据层",
+    "权限体系包含 JWT、Casbin 接口授权、页面入口与操作权限分离及部门数据范围控制",
+    "AI 模块支持 SSE 流式对话、知识库向量检索、带来源分析、审批工作流与用量额度管理"
+   ],
+   "use_cases": [
+    "作为企业管理后台或 SaaS 项目的开发起点",
+    "需要 RBAC、部门数据范围与多租户隔离的业务系统",
+    "需要集成 LLM 对话、RAG 知识库与人工审批流程的后台系统"
+   ]
+  },
+  "sha": "ce3c7ac56b88",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "672e29237ff3": {
+  "identity": {
+   "one_liner": "一组 SQLite 扩展，将 SQL 查询转换为对云服务和 API 的实时调用",
+   "review": "Steampipe SQLite 是一组从 Steampipe 插件派生的 SQLite 扩展，通过虚拟表把 SQL 查询翻译成对云服务与 API 的实时请求，无需 ETL 过程。使用者可通过安装器选择插件并下载对应扩展，在 SQLite 中以标准 SQL 查询数据。项目提供 Makefile 构建扩展，并支持通过 goreleaser-cross 镜像交叉编译 macOS（含 Apple Silicon）版本。",
+   "highlights": [
+    "提供基于 Steampipe 插件派生的 SQLite 扩展，支持以 SQL 查询云服务与 API 数据",
+    "包含数百个插件及数千条文档示例",
+    "支持通过 Makefile 构建，以及基于 goreleaser-cross 的 macOS 交叉编译"
+   ],
+   "use_cases": [
+    "在 SQLite 中直接查询 AWS、Azure、GCP、Kubernetes 等云服务的资源数据",
+    "以 SQL 语句筛选和检索 API 返回的实时数据",
+    "基于 Steampipe 插件自行构建定制 SQLite 扩展"
+   ]
+  },
+  "sha": "672e29237ff3",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5fc1f48bea4f": {
+  "identity": {
+   "one_liner": "开源个人理财应用，内置 MCP 服务器供 AI 客户端查询管理财务",
+   "review": "Finlynq 是一个 AGPL v3 许可的个人财务管理应用，支持预算、投资组合、目标、贷款等功能，可通过 Docker 自托管或使用托管云。核心机制是第一方 MCP 服务器（56 HTTP / 89 stdio 工具），让 Claude、Cursor 等 AI 客户端读写财务数据。需注意 pf_* API 密钥无作用域、不过期，REST 响应结构不保证稳定。",
+   "highlights": [
+    "提供 100+ MCP 工具（HTTP 与 stdio），支持读写账户、交易、预算、目标、贷款、投资组合等数据",
+    "采用 AES-256-GCM 信封加密与 scrypt 派生 KEK 对敏感字段静态加密",
+    "支持 CSV、Excel、OFX/QFX、PDF 导入，并提供规则与自动分类功能"
+   ],
+   "use_cases": [
+    "个人财务数据的本地记录与预算、目标、贷款管理",
+    "通过 Claude、Cursor 等 MCP 客户端以自然语言查询和管理财务数据",
+    "Docker 自托管部署或使用托管云、演示环境快速上手"
+   ]
+  },
+  "sha": "5fc1f48bea4f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c38bb0d5f89f": {
+  "identity": {
+   "one_liner": "面向 DeepSeek Harness 的知识库、笔记与工作日报插件",
+   "review": "这是一个安装于 DeepSeek Harness 的插件，提供知识库、笔记与工作日报三类功能。知识库支持文档分组、全文检索、项目与会话挂载，按权限召回与回写；会话内仅暴露一个 knowledge 工具入口执行 19 项操作。数据可存于本地 SQLite 或认证的中央服务。需 Node.js >=24.9.0，通过 dsh plugin 命令安装，不修改 DSH Agent Loop。",
+   "highlights": [
+    "提供知识库全文检索、项目与会话挂载，按权限召回与回写",
+    "会话内通过单一 knowledge 工具入口执行 19 项知识库/笔记操作，回答完成后在后台独立提取知识，含审核、版本历史与冲突保护",
+    "支持本地 SQLite 或认证中央知识服务部署，内置工作日报与日历，可导出 .ics"
+   ],
+   "use_cases": [
+    "为 DSH 会话挂载项目知识库，实现文档检索与知识回写",
+    "团队多客户端连接同一中央知识服务共享知识库",
+    "按工作目录采集素材生成工作日报，并用日历管理每日目标与时间段"
+   ]
+  },
+  "sha": "c38bb0d5f89f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ae10e69bac76": {
+  "identity": {
+   "one_liner": "为 DeepSeek Harness 提供记忆与人格管理的 SQLite 插件",
+   "review": "MemWeave 是 DeepSeek Harness（DSH）的插件，用于持久化记忆和人格管理，使跨会话保留用户信息、项目状态和承诺事项。它基于单个 SQLite 文件实现分层存储，按层设置半衰期做排序衰减而非删除，召回采用 FTS5 关键词与可选语义检索的 RRF 融合。人格编辑、规则变更和冲突裁决仅限人工操作，写入和合并可在 24 小时内撤销。通过 dsh plugin 命令安装，需 Node ≥ 22.13；语义召回需另行配置嵌入服务，默认仅做关键词检索。",
+   "highlights": [
+    "按层设置半衰期（话题 30 天至规则永不衰减），高频使用可将半衰期延长至 8 倍，未使用记忆合并为摘要，原始数据可恢复",
+    "召回管线为 FTS5 预筛 → BM25 + 语义 + 链接扩展 → RRF 融合 → 时间衰减 → 多样性 → top-k，向量后端按 sqlite-vec → vectra → builtin 分层回退",
+    "22 个 weave_* 工具用于写入、召回、整理与治理；人格、规则和裁决类操作对 AI 只读或拒绝，并返回 E_PERM"
+   ],
+   "use_cases": [
+    "使用 DeepSeek Harness 且需要跨会话保留用户身份、偏好和项目进展的桌面或 Web 应用场景",
+    "需要记录到期承诺、生日、纪念日并在到期前提示的个人助理使用方式",
+    "对数据本地化有要求、希望人工控制记忆写入与冲突裁决、支持加密备份的部署环境"
+   ]
+  },
+  "sha": "ae10e69bac76",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b0c99063fb57": {
+  "identity": {
+   "one_liner": "在 Postgres 中持续生成虚构消费品品牌的五系统合成电商数据，附带预设业务剧情与真值。",
+   "review": "该项目用 Docker 部署一个生成器，向 Postgres 写入模拟的 web 商城、仓库、SAP 风格 ERP、营销栈和零售商 feed 五套 schema，数据含跨系统键缺失、状态变化、季节性与促销等真实业务特征，并将预设剧情与数据质量噪声记录在 truth schema 供核对。适用于测试和评估数据分析、BI 与 AI 平台；首次启动需回填 24 个月历史（默认量约 1090 万行，低配环境约 18 分钟）。",
+   "highlights": [
+    "五套 schema（shop/wms/erp/mkt/feeds）模拟独立源系统，系统间不共享键，需通过 vbak.bstnk、erp.knmt 等引用关联",
+    "所有业务表含主键和带索引的 updated_at 字段，无物理删除，支持基于 watermark 的标准增量加载",
+    "五个预设剧情（如 promo_margin_trap、retailer_overstock）与九类数据质量噪声可实时开关，并在 truth schema 记录确切影响"
+   ],
+   "use_cases": [
+    "测试具备 Postgres 连接器和查询式增量加载能力的 BI/数据平台（如 Incorta、Microsoft Fabric、Databricks）的关联与增量同步",
+    "演示平台发现跨系统业务剧情的能力，可现场启用剧情并在下一次增量加载后查看",
+    "搭建含键缺失、卖方数据重述、GDPR 删除等已知噪声的合成数据环境，用于数据管道验证"
+   ]
+  },
+  "sha": "b0c99063fb57",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

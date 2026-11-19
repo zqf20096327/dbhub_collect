@@ -3016,5 +3016,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "789d26f9a84b": {
+  "identity": {
+   "one_liner": "Go 编写的数据库连接代理，通过用户名或 TLS SNI 将连接路由到 Kubernetes 后端",
+   "review": "该服务用 Go 实现数据库连接路由，客户端连接单一端点后，代理依据登录用户名后缀或 TLS SNI 选择后端，支持 PostgreSQL 及兼容产品、Redis、ClickHouse 和 MongoDB 等 TLS-first 协议。一个实例服务一种 DATABASE_TYPE；SNI 路由默认透传 TLS，也可配置为在代理侧终结；MySQL/MariaDB 尚在计划中。可通过 Kustomize 清单部署于 Kubernetes，也支持静态路由的容器/VM 部署，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "支持按用户名后缀（user.deployment[.pool]）和 TLS SNI 两种路由策略，转发前剥离路由后缀",
+    "通过 Service 标签实现 Kubernetes 服务发现，使用 client-go shared informer 建立路由索引",
+    "支持 TLS 透传与代理侧终结两种模式，证书每 6 小时检查并热更新，可自动生成自签名证书"
+   ],
+   "use_cases": [
+    "Kubernetes 环境中为多个数据库部署提供统一连接端点并按用户名或 SNI 分流",
+    "通过 pool 后缀将客户端连接导向 pgbouncer、odyssey 等连接池服务",
+    "无 Kubernetes 的容器或虚拟机场景下使用 STATIC_BACKENDS 进行静态后端路由"
+   ]
+  },
+  "sha": "789d26f9a84b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3379,5 +3379,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aa0accd083b8": {
+  "identity": {
+   "one_liner": "Coolify 服务器迁移与异地备份的命令行工具",
+   "review": "coolify-mirror 是一个用 Go 编写的开源工具，用于在 Coolify v4.3–v4.7 服务器之间迁移单个项目、多个项目或整个服务器，内容包含应用、数据库、环境变量、secrets、卷和代理设置。它通过终端交互菜单操作，可生成包含恢复命令的分享码在新服务器上还原；同时支持基于 rclone 的定时异地备份（Google Drive、S3、SFTP 等 70+ 目标），备份以 age X25519 加密并附带恢复密钥。使用前提是两台服务器 Coolify 版本一致，新服务器需能通过 443 端口访问旧服务器。",
+   "highlights": [
+    "支持按项目选择迁移对象，自动关联应用所引用的其他项目数据库，并迁移环境变量、secrets、卷、镜像与代理设置",
+    "提供基于 rclone 的定时全量备份，目标支持 Google Drive、S3、SFTP 等 70+ 存储，上传后校验 checksum，本地副本确认后删除",
+    "备份使用 age X25519 加密，通过恢复密钥解密，恢复密钥可通过邮件或 Telegram 自行传送"
+   ],
+   "use_cases": [
+    "将 Coolify 应用或项目从一个服务器迁移到另一个服务器",
+    "为自托管 Coolify 服务器配置每日异地备份与灾难恢复",
+    "恢复丢失的服务器：在新服务器上安装对应版本 Coolify 后从远端备份还原"
+   ]
+  },
+  "sha": "aa0accd083b8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2570dc0e9894": {
+  "identity": {
+   "one_liner": "基于 MCP 的 AI 代理共享记忆服务器，用单个 SQLite 文件存储双时态事实与决策。",
+   "review": "MIRSAD 是一个开源的 AI 代理共享记忆服务器，实现为 MCP 服务器，让 Claude、ChatGPT 等多个 MCP 客户端读写同一个本地存储。核心机制包括：双时态事实（更新作废而非删除）、决策作为一等单元记录原因/证据/结果、跨代理冲突交由所有者裁决。写入路径不含 LLM，数据存于单个 SQLite 文件。通过 pip install mirsad-mcp 安装，支持 stdio 和 HTTP 传输；注意移动端应用访问需要公网 HTTPS 地址。",
+   "highlights": [
+    "双时态事实模型，事实带有效时间与记录时间，被替换的事实作废但不删除，支持时间点回溯查询",
+    "决策作为一等单元存储，包含原因、证据、被否决的备选方案、影响与结果，可通过 why 查询追溯",
+    "跨代理冲突队列：挑战性写入作为待定候选等待所有者裁决，每个记录标注 source_agent 来源"
+   ],
+   "use_cases": [
+    "多个 AI 代理（Claude、ChatGPT 或任意 MCP 客户端）之间共享同一份事实与决策记忆",
+    "需要审计追溯的场景：查询某事实由谁写入、当时何为真、决策依据与结果",
+    "本地或低资源环境运行（单 SQLite 文件、无需外部服务或 API 密钥，可在 Termux 上运行）"
+   ]
+  },
+  "sha": "2570dc0e9894",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "19143716d156": {
+  "identity": {
+   "one_liner": "Go 重写的 SmokePing，以 ClickHouse 为后端的网络延迟监测工具",
+   "review": "gosmokeping 是 SmokePing 的 Go 单二进制重实现，将延迟数据存入 ClickHouse 四张 MergeTree 表，查询时用 toStartOfInterval 分桶，无需物化视图或预聚合任务。提供 React+uPlot 内嵌 UI 与 JSON API，支持多探测点主从聚合。ICMP/MTR 需 raw socket 权限；告警条件仅支持单谓词，状态仅存内存，重启后回到 ok。",
+   "highlights": [
+    "支持 ICMP、TCP connect、HTTP TTFB、DNS 探测与 MTR 式路径发现，可用 --slave 多探测点分布式采集",
+    "ClickHouse 存储：probe_cycle/probe_rtt/probe_hop/probe_http 四表，按表 TTL 配置保留期，bootstrap 幂等建表",
+    "保留 SmokePing 式 smoke band 可视化，含 MTR 跳表、丢包热力图、SIGHUP 热加载与阈值告警"
+   ],
+   "use_cases": [
+    "从多个探测点持续监测目标主机的延迟与丢包并留存历史趋势",
+    "对 HTTP 服务的响应时间与状态码分布做周期性采样",
+    "基于丢包率/RTT 阈值配置 webhook、Discord、exec 等动作的告警通知"
+   ]
+  },
+  "sha": "19143716d156",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b7d63106eeb7": {
+  "identity": {
+   "one_liner": "自托管短剧库：网盘转存下载、刮削入库并支持网页/App在线播放与实时转码",
+   "review": "Shuaju 刷剧是一个自托管短剧库管理系统，流程为索引搜索、夸克转存、aria2 下载、刮削入库，再通过浏览器 PWA 或 Android App 在线播放。后端为 FastAPI + SQLite，前端是无构建 SPA + PWA。实时转码限 3 路并发，且转码流不支持 Range 拖动；Android 客户端为闭源二进制。适用于已具备夸克网盘与 aria2 环境的用户自部署管理短剧片源。",
+   "highlights": [
+    "提供资源流水线：约 6.5 万条索引全量搜索后经 quark-auto-save 转存、aria2 下载并自动入库",
+    "支持 720p/480p ffmpeg 实时转码（管道直出、不落盘、不预转）及原画 Range 流播放",
+    "包含自动裁边功能，通过音频 RMS 包络对齐分析相邻集重叠并写入 skip_head/skip_tail（0~30s）"
+   ],
+   "use_cases": [
+    "通过夸克网盘索引搜索、转存并下载短剧，自动刮削元数据入库",
+    "在手机 PWA 或 Android App 上断点续播、上下滑切集、随机刷剧浏览",
+    "管理本地短剧目录：扫描同步、集数识别、收藏/拉黑与黑名单管理"
+   ]
+  },
+  "sha": "b7d63106eeb7",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

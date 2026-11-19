@@ -2687,5 +2687,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4d6e444822eb": {
+  "identity": {
+   "one_liner": "本地优先的AI简历工作台，无账号、数据存于本机，含反编造事实库机制。",
+   "review": "ResumeForge 是一个本地运行的求职材料工作台，覆盖职位解析、匹配分析、简历生成、导出投递、面试复盘流程。其机制是将事实与措辞分离：生成的学校、公司、项目名逐项比对资料库，不匹配触发反编造警告；含【待补】标记的正文会阻止导出并列出位置。支持 Windows 与 macOS，提供安装包与在线只读演示。适合需要多公司版本管理与数据本地保存的求职者。",
+   "highlights": [
+    "提供职位贴入解析、逐份匹配分析、批量分析与 AI 职位对比功能",
+    "实现事实/措辞分离：生成内容逐项比对 Profile 库并触发反编造警告，含未填标记时阻止导出",
+    "简历工作台包含排版参数、页面概览与精确模式 A4 预览，参数修改三区同步更新"
+   ],
+   "use_cases": [
+    "管理多个职位投递进度与版本记录，避免多份简历文件混乱",
+    "生成简历时核对公司、学校、项目等事实信息，防止 AI 编造内容",
+    "填写网申表单前用文本识别功能将整屏字段映射到已有资料库字段"
+   ]
+  },
+  "sha": "4d6e444822eb",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51403cd0d004": {
+  "identity": {
+   "one_liner": "单 JAR 启动的异构数据库实时同步工具，内置浏览器配置与日志 CDC",
+   "review": "Jync 捷同是一个用于在异构数据库间同步结构与数据的 Web 应用，单个 jar 启动，通过浏览器完成建连接、选表与调度配置，无需 Kafka、ZooKeeper 或作业代码。内置 34 种数据库预设，提供 keyset 分块全量加载、游标增量轮询及 MySQL binlog、Oracle LogMiner 等六类日志 CDC。要求 JDK 17+，元数据库与密钥存于固定工作目录 ./data，默认账号 admin/view 且首次登录强制改密。",
+   "highlights": [
+    "内置 34 种数据库预设类型（25 种驱动随包内置），并支持通过 JDBC URL 与驱动 jar 自定义数据库类型",
+    "提供全量分块并行加载、游标增量轮询与六类源库日志 CDC 三条数据通路，写入幂等并支持检查点续传",
+    "包含结构同步（表/索引/视图/存储过程）、ETL、列清洗、Webhook 告警与本地账号及三种统一认证"
+   ],
+   "use_cases": [
+    "政企系统在 MySQL/Oracle 等与达梦、金仓、OceanBase 等国产数据库之间双轨运行期间持续保持结构与数据一致",
+    "需要在内网离线环境私有化部署、且不想引入 Kafka/Flink 等外部组件的数据库同步场景",
+    "按自定义取数 SQL 定期从分析型引擎复制结果行的 ETL，以及 ES→Easysearch、MongoDB→MongoDB/KingbaseES 的整库迁移"
+   ]
+  },
+  "sha": "51403cd0d004",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ea07bbb67388": {
+  "identity": {
+   "one_liner": "基于 Laravel、Vue3 与 MySQL 的风暴英雄数据网站开源仓库",
+   "review": "这是 Heroes Profile 网站的公开仓库，技术栈为 Laravel、Vue3、Tailwind 与 Vite，使用 MySQL 存储，支持 Docker 或手动本地部署。README 详述了九个数据库 schema 的建库流程、种子数据（数据不完整，集中于单个玩家与特定补丁）、多套测试机制，以及公共 API 的 fixture 与配额中间件。适合希望本地运行或为其贡献代码、扩展公共 API 端点的开发者。",
+   "highlights": [
+    "提供 Docker 与本地两种安装路径，附迁移与种子脚本，种子数据映射到指定玩家与补丁 2.55.4.91418",
+    "内置 hp:test 分套测试体系（full/user/backend/unit/schema），测试运行于独立的 MySQL 8.4 容器，快照比对页面与 API 响应",
+    "公共 API 端点须配套 fixture 文件与配额中间件，提供 api:capture-samples 命令捕获真实响应并替换身份字段"
+   ],
+   "use_cases": [
+    "本地搭建 Heroes Profile 网站环境进行开发或调试",
+    "为站点添加公共 API 端点并维护其 fixture 与文档",
+    "在 CI（GitHub Actions）中运行完整测试套件验证提交"
+   ]
+  },
+  "sha": "ea07bbb67388",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cf4150f7ae3c": {
+  "identity": {
+   "one_liner": "把十种数据库以 MCP 工具形式暴露给 AI 客户端的 Go 服务",
+   "review": "该服务将 MySQL、PostgreSQL、MongoDB、Redis 等十种数据库封装为六个 MCP 工具，供支持 MCP Streamable HTTP 的 AI 客户端调用。连接凭证集中在服务端，客户端只用别名和库名。纯 Go 无 cgo 编译为单个静态二进制，内置 /admin 管理页维护数据源；数据源可存 JSON 文件（密码明文）或 MySQL 表（AES-256-GCM 加密）。",
+   "highlights": [
+    "支持 MySQL、MariaDB、TiDB、OceanBase、KingbaseES、PostgreSQL、SQL Server、SQLite、MongoDB、Redis，每个库独立连接池",
+    "提供 execute-sql、get-datasources、增删改数据源配置、refresh-config 六个 MCP 工具，SQL 类库多条语句同事务执行",
+    "凭证集中存储，任何工具不返回实例密码；mysql 模式下密码以 AES-256-GCM 加密落库"
+   ],
+   "use_cases": [
+    "让 AI 客户端通过 MCP 协议查询与操作多种数据库，而无需在客户端侧配置连接凭证",
+    "集中管理多个数据库实例的数据源配置，并通过内置管理页进行维护",
+    "部署单文件二进制于内网，为本地或内网 AI 工具链提供数据库访问端点"
+   ]
+  },
+  "sha": "cf4150f7ae3c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3320,5 +3320,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bbdff05bcf48": {
+  "identity": {
+   "one_liner": "基于 JSON 配置的 MySQL/TiDB 负载生成器，按模板持续发送 SQL",
+   "review": "database_workload 是一个用 Go 编写的数据库负载生成器，面向 MySQL 和 TiDB，根据 JSON 配置中的 SQL 模板和参数随机化规则持续发送 SQL。它以多个 goroutine worker 持连接运行，可配置长短连接、文本协议/服务端预处理语句、multi-statement 与 pipelined binary 发送方式，以及均匀、幂律热点等参数分布。它不负责建表造数，也不输出 QPS/延迟，需配合 sysbench prepare 或 dbgen 准备数据，并从数据库侧观测指标。",
+   "highlights": [
+    "支持长连接、短连接两种连接模式，模拟有无连接池的应用",
+    "支持文本协议、服务端预处理语句、multi-statement 单次往返和 pipelined binary 发送方式",
+    "参数分布支持均匀、幂律热点、分区幂律，以及事务内语句共享随机 id、连接绑定表等关联方式"
+   ],
+   "use_cases": [
+    "使用 sysbench prepare 或 dbgen 准备数据后，对 MySQL/TiDB 施加自定义形状的负载",
+    "模拟不同应用连接行为（连接池、短连接、Serverless）对数据库的影响",
+    "在相同数据上比较不同 SQL 发送方式（文本、预编译、multi-statement、pipelined）的负载形态"
+   ]
+  },
+  "sha": "bbdff05bcf48",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

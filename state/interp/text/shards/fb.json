@@ -2875,5 +2875,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fbd674a77b5e": {
+  "identity": {
+   "one_liner": "本地 MCP 记忆服务器，为 AI 编码代理存储并检索会话记忆",
+   "review": "TAM 是开源记忆服务器，将决策、方案、事实与错误记录存于本机 SQLite，通过 MCP 提供检索。检索融合 BM25、本地嵌入、模糊匹配与知识图谱，并用本地 cross-encoder 重排。面向日常使用编码代理的开发者和需本地可跑记忆基线的研究者。需 Python 3.11+，首次启动下载约 330 MB 模型。",
+   "highlights": [
+    "提供 74 个 MCP 工具，支持 Claude Code、Codex CLI、Cursor 等 9 种 IDE 或客户端，无需修改客户端代码",
+    "存储基于 SQLite 目录，检索融合 BM25、本地稠密嵌入、模糊匹配与知识图谱，并用 reciprocal rank fusion 合并后由本地 cross-encoder 重排",
+    "事实可带有效期区间（kg_add_fact/kg_at），单值事实的新值可替代旧值；默认配置在写入和检索时不调用 LLM"
+   ],
+   "use_cases": [
+    "让编码代理跨会话记住项目决策与约定，例如记录并随后查询数据库选型理由",
+    "研究者本地运行、检查和修改的记忆检索基线，可复现 LoCoMo、LongMemEval、BEAM 基准",
+    "以团队服务器模式运行，按个人/部门/公司分区分库，带角色与审计记录"
+   ]
+  },
+  "sha": "fbd674a77b5e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "741fe20d8dcb": {
+  "identity": {
+   "one_liner": "基于 Zig 编写的零依赖内存键值缓存系统",
+   "review": "zcached 是一个用 Zig 编写的内存缓存系统，默认监听 7556 端口，通过类 RESP 文本协议提供 SET/GET/PING 等命令，支持字符串、整数、浮点和列表数据类型以及 EXPIRE/TTL 键过期。存储按 16 个分片组织，支持快照与 AOF 持久化、TLS 加密连接。无 CLI，需用 netcat 或客户端发送命令；运行需 Zig 0.17.1 编译器，Linux 上依赖 io_uring。",
+   "highlights": [
+    "零依赖架构（仅 TLS 为可选依赖 OpenSSL），支持字符串、整数、浮点、列表数据类型",
+    "支持快照（SAVE/定时快照）与 AOF 两种持久化方式，键过期时间可在恢复后保留",
+    "网络层基于 std.Io，Linux 用 io_uring、macOS 用 kqueue，支持 TLS 与 pipelining"
+   ],
+   "use_cases": [
+    "需要进程内快速读写键值数据的缓存场景",
+    "使用 Zig 技术栈、希望编译为单一可执行文件部署的团队",
+    "需要为键设置过期时间（EX/PX）并配合 AOF/快照做持久化的应用"
+   ]
+  },
+  "sha": "741fe20d8dcb",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8069295f26d8": {
+  "identity": {
+   "one_liner": "基于 Remnawave 的 VPN 订阅销售面板，含 Telegram 机器人、用户中心与管理后台",
+   "review": "该项目是运行在 Remnawave 之上的 VPN 订阅销售面板，采用 Rust 和 PostgreSQL 构建，以 AGPL-3.0 许可证发布，通过 install.sh 一条命令自托管部署。它包含 Telegram 机器人、网页客户端中心、Telegram 小应用、落地页和管理后台，支持 20 余种支付系统、Telegram Stars 与 GRAM/TON 支付，面向已有 Remnawave 节点的运营者。订阅在付款后自动发放或续期，客户与配置数据保存在运营者自己的数据库中。",
+   "highlights": [
+    "支持 Crypto Pay、Heleket、Cryptomus、ЮKassa、Robokassa 等 20 余种支付系统，可按支付方式拆分为独立按钮，并支持余额、试用期与自动续费",
+    "与 Remnawave 双向同步：可将面板客户和订阅迁移到新 Remnawave 或反向导入用户，并支持从 STEALTHNET 7.x、Remnawave Telegram Shop 等多个机器人迁移数据且保留订阅链接",
+    "内置模块系统，可在不修改面板代码的情况下以任意语言编写的独立程序接入，通过带签名的事件和确认权限的 API 密钥交互"
+   ],
+   "use_cases": [
+    "已有 Remnawave 节点的运营者需要通过 Telegram 机器人、网页中心或小应用销售和续期 VPN 订阅",
+    "需要将原有 Telegram 售卖机器人（如 Remnawave Telegram Shop、Minishop 等）的客户、余额与订阅迁移到自托管面板并保持订阅链接不变",
+    "需要自托管部署并管理备份、HTTPS 证书、节点状态通知与多管理员分权限后台的场景"
+   ]
+  },
+  "sha": "8069295f26d8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

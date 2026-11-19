@@ -3068,5 +3068,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "76bf14c46b78": {
+  "identity": {
+   "one_liner": "VideoDB 的 Python SDK，以 Understand→Index→Retrieve 管道将视频作为结构化数据处理。",
+   "review": "该 SDK 通过 API key 连接 VideoDB 服务端，支持上传视频/音频/图像、运行分析器生成带时间戳工件、建立索引并进行语义检索。0.5 版将检索管道拆分为理解、索引、检索三个原语，附带多轨时间线编辑器、实时流处理、桌面录制等模块。需 Python 3.8+，依赖 requests、backoff、tqdm。",
+   "highlights": [
+    "提供 understand() 运行 spoken_words、vlm、object_detection、ocr 等分析器并存储可复用的时间戳工件，索引可基于工件创建而无需重复分析",
+    "支持 search()、semantic_search()、query()、aggregate()、ask() 等检索方法，可在视频和集合两个层级调用，并保留 legacy_search() 等旧接口",
+    "包含四层架构（Assets/Clips/Tracks/Timeline）的程序化多轨视频编辑器，以及 RTStream 实时流、CaptureClient 桌面录制、WebSocket 事件等模块"
+   ],
+   "use_cases": [
+    "构建需要语义搜索视频内容（台词、场景、对象、文字等）的 AI 应用",
+    "程序化生成多轨视频合成，如配背景音乐、画中画、自动字幕、文字叠加",
+    "处理直播流、录制会议或桌面屏幕并进行转写与索引"
+   ]
+  },
+  "sha": "76bf14c46b78",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b508cb6af2b": {
+  "identity": {
+   "one_liner": "自托管的 TypeScript 笔记应用，单 SQLite 库存储，静态数据 AES-256-GCM 加密",
+   "review": "Onyka 是一个自托管开源笔记应用，使用 TypeScript 构建，通过 Docker 或 Node.js（24+）部署，全部数据存于单个 SQLite 数据库，静态加密采用 AES-256-GCM，无遥测。功能包含 Sparks 限时速记、富文本编辑器、实时协作、评论与三级共享权限、文件夹与标签、全文搜索、10 主题、双因素登录和管理控制台。数据集中于 data/ 目录，丢失 .encryption-key 将导致加密笔记与图片无法恢复。",
+   "highlights": [
+    "静态数据使用 AES-256-GCM 加密，密码采用 Argon2id，支持邮件双因素登录与限流",
+    "Sparks 速记可在 1 小时至 30 天后过期或永久保留，最多置顶五条",
+    "实时协作编辑同一笔记，分享支持读、编辑、管理三级权限，支持线程评论"
+   ],
+   "use_cases": [
+    "个人或团队在自有服务器上部署笔记服务",
+    "需要限时自动消失的速记场景（Sparks 过期机制）",
+    "无 SMTP 环境下使用：邮件相关功能会自动关闭，其余功能照常运行"
+   ]
+  },
+  "sha": "2b508cb6af2b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "264411e954d6": {
+  "identity": {
+   "one_liner": "Go 编写的本地桌面 SQL 客户端，单可执行文件支持 SQLite/MySQL/PostgreSQL/ClickHouse",
+   "review": "DB-G 是一个本地优先的桌面数据库客户端，用 Go 与 mygo 框架实现，支持连接 SQLite、MySQL、PostgreSQL、ClickHouse 四类数据源。它提供 SQL 编辑器、对象树、结果表格编辑与导出、执行计划、AI 辅助补全与修复等功能。运行无需 Java/Electron 运行时，连接密码本机 AES-256-GCM 加密；PostgreSQL 支持写操作，ClickHouse 仅只读。",
+   "highlights": [
+    "支持 SQLite、MySQL、PostgreSQL（pgx）、ClickHouse 四类数据源的连接、查询、对象树、补全、DDL 查看与导出",
+    "提供结果集编辑（单事务提交）、CSV/JSON/SQL INSERT 导出、EXPLAIN 执行计划树展示与多语句执行",
+    "包含 AI 辅助能力（内联补全、Chat-to-SQL、SQL 改写与错误修复，支持 Ollama 或 OpenAI 兼容服务）及 Git 同步、快捷键改绑、元数据磁盘缓存（24 小时 TTL）"
+   ],
+   "use_cases": [
+    "在同一桌面工具中管理并查询 SQLite、MySQL、PostgreSQL、ClickHouse 多类数据库",
+    "需要离线/本地运行、不依赖 Java 或 Electron 运行时的 SQL 工作台环境",
+    "大表数量数据库（数万对象）的分页浏览与元数据缓存场景"
+   ]
+  },
+  "sha": "264411e954d6",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

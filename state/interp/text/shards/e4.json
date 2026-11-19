@@ -3023,5 +3023,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "922497a2d17c": {
+  "identity": {
+   "one_liner": "开源有声书元数据库：JSON 走 PR 编辑，CI 校验后编译为 SQLite",
+   "review": "audiosilo-meta 是社区维护的有声书元数据库，仓库本身即数据库：数据以分片 JSON 存于 data/ 目录，贡献者通过 pull request 或 issue 表单提交，CI 用 Go 工具校验 schema、引用完整性与标识符唯一性，合并后构建出带校验和的 meta.sqlite 发布产物。数据模型区分 Work（抽象书籍）、Recording（具体演播，含旁白者、章节、时长）、Person、Series，旁白者与章节为一等字段。许可 CC0，无服务端账号，所有写入经 GitHub。",
+   "highlights": [
+    "数据以 slug 范围分片的 JSON 文件存储，经 Go 工具（metacheck/metafmt/metabuild）校验并编译为单个 SQLite 产物",
+    "提供只读 API 服务器 metaserve，支持 FTS 搜索、work/person/series 详情、章节列表及 ASIN/ISBN/LibriVox 查询",
+    "提供与 LibriVox JSON 结构兼容的 audiobooks feed 及 Audiobookshelf 元数据提供端点，附 Docker 镜像"
+   ],
+   "use_cases": [
+    "为 Audiobookshelf 等有声书播放器提供社区元数据源",
+    "下载 meta.sqlite 离线查询或在内嵌进程中提供同一 API",
+    "为 LibriVox 应用替换 base URL 以切换数据来源"
+   ]
+  },
+  "sha": "922497a2d17c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eff5d686bd17": {
+  "identity": {
+   "one_liner": "VS Code 中的 SQLite 数据库查看与编辑扩展",
+   "review": "这是一个面向 VS Code 用户的 SQLite 数据库查看与编辑扩展，提供 Schema 浏览、分页浏览、单元格内联编辑、SQL 查询工作区、BLOB 检查器以及 CSV/JSON 导入导出等功能。采用原生 SQLite 与 sql.js 双后端，原生后端失败时自动回退到 WASM。扩展对查询、导入、编辑均设有大小与行数上限，写入操作支持撤销/重做。",
+   "highlights": [
+    "支持 .sqlite/.db/.gpkg 等多种 SQLite 文件格式，提供 Schema 浏览、分页（100–10,000 行/页）、三态排序与列级/全局过滤",
+    "SQL 工作区支持只读 SELECT/CTE 执行、Explain Query Plan、位置参数绑定与精确 64 位整数处理",
+    "支持单元格内联编辑、行/列操作、批量更新、BLOB 拖放，全部操作可撤销/重做；导出支持 CSV/JSON/SQL INSERT 并使用流式分页"
+   ],
+   "use_cases": [
+    "在 VS Code 中直接浏览和编辑本地 SQLite 数据库文件",
+    "通过 SQL 查询工作区执行只读查询并查看查询计划",
+    "将 CSV/JSON 数据导入现有 SQLite 表格，或导出表数据为 CSV/JSON/SQL"
+   ]
+  },
+  "sha": "eff5d686bd17",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7237b8baf6fe": {
+  "identity": {
+   "one_liner": "面向乌兹别克斯坦Yangiariq灌区的农业用水调度决策支持平台",
+   "review": "该平台为乌兹别克斯坦花剌子模州Yangiariq灌区的配水操作员和农户提供决策支持，覆盖渠系调度、输水损失核算、配水公平性与土壤盐渍化风险分析。技术栈为Spring Boot + PostgreSQL + Liquibase后端与React + TypeScript前端。平台仅做观测与分析，不含闸门/泵等硬件直接控制，所有物理操作需人工执行；内置反IDOR多租户隔离与大量ArchUnit规则和测试。",
+   "highlights": [
+    "提供水量守恒核算、输水损失分析、配水公平性（CV统计）与配额合规追踪",
+    "采用有向图建模渠网拓扑，支持可达性校验、多田块调度优化与内存内What-If压力测试",
+    "强制非自动执行原则：纯决策支持层，物理闸门与泵操作需人工授权执行，并有ML预测受确定性规则约束的混合预测引擎"
+   ],
+   "use_cases": [
+    "灌区管理方进行渠系水量平衡核算、事故调查与整改治理",
+    "配水操作员进行多田块配水调度优化与管网拓扑验证",
+    "农户与管理者查看田块风险剖面与预测评估结果"
+   ]
+  },
+  "sha": "7237b8baf6fe",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

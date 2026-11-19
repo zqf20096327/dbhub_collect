@@ -3179,5 +3179,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ac8ee24186be": {
+  "identity": {
+   "one_liner": "面向 AI 代理的开源自我改进上下文框架，通过查询意图账本促成工具与例程沉淀",
+   "review": "Skardi 是一个开源框架，让代理用 SQL 联邦查询多数据源，并通过 ai_context 字段声明每次查询的目的。所有查询写入审计账本（SQLite 或 Postgres），循环中的重复查询可被提升为命名 pipeline，重复意图可成为定时例程。项目处于 Beta 阶段，API 可能变动。",
+   "highlights": [
+    "通过 ai_context 记录查询意图（purpose、session_id、task），账本为按 (session_id, created_at) 索引的 SQLite 文件或 Postgres 数据库",
+    "将重复查询提升为命名 pipeline，同一份定义可经 shell、REST 及双传输 MCP（stdio 与 streamable HTTP）调用",
+    "提供 auto-context、retrieval、graph-source、graph-rag 四个 skills，支持混合检索（vector+FTS+RRF），后端可选 SQLite、Postgres+pgvector、MongoDB 或 Lance"
+   ],
+   "use_cases": [
+    "代理需跨 Postgres、Parquet、SaaS API 等多源联邦查询的场景",
+    "将重复出现的查询固化为可审阅、可回滚的 pipeline YAML 的团队",
+    "构建基于文档库或图关系的 RAG 检索服务"
+   ]
+  },
+  "sha": "ac8ee24186be",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "03754fd84c44": {
+  "identity": {
+   "one_liner": "Rust 编写的 MySQL 兼容 HTAP 数据库，内置向量/全文检索并支持 REST 与 MCP 接入。",
+   "review": "MyDB 是用 Rust 编写的通用数据库，面向在同一业务数据上混合事务与分析查询的场景，提供 MySQL 协议兼容、原生全文与向量检索、SQL 调用外部模型等能力，并通过可选 REST SQL 与 MCP 接口供服务和 AI 代理直接访问。README 提供预编译二进制（macOS ARM64、Linux x86_64、Windows x64）、Docker 镜像和源码构建方式，默认监听 8738 端口，root 初始密码为 root，仅接受本地连接。1.0.1 为公共预览版，用于功能验证与受控环境评估。",
+   "highlights": [
+    "兼容 MySQL 客户端与 JDBC 驱动，支持 ROW/FULL binlog 集成与在线 DDL、Zone Maps、可查询备份",
+    "内置 HNSW 与 IVF 向量索引、混合检索（RRF 为技术预览），SQL 中可调用外部模型",
+    "提供可选 REST SQL API（HTTPS、参数化 SQL、NDJSON 流式、持久事务）与 MCP Server，与 MySQL 账号权限共享"
+   ],
+   "use_cases": [
+    "需要事务与分析查询混合运行在同一数据集上的业务系统",
+    "为 AI 代理构建 RAG、知识库与持久记忆，需向量检索并连接业务数据",
+    "复用现有 MySQL 客户端/驱动，或通过 REST/MCP 让服务与代理直接访问数据引擎"
+   ]
+  },
+  "sha": "03754fd84c44",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1993011c3542": {
+  "identity": {
+   "one_liner": "基于 Effect 的多租户 B2B SaaS 启动模板，附带驱动 AI 代理的技能与工作流",
+   "review": "该仓库提供一个基于 Effect 4、TypeScript、Bun、Postgres 与 React 19 的多租户 B2B SaaS 起点，包含登录、组织、角色、租户隔离、计费、公共 API、后台任务、SSO 等已实现模块；同时在 .agents/ 与 .claude/ 中提供技能、子代理、钩子和命令，用于让 AI 代理按规则安全地修改代码。租户隔离采用 Postgres RLS 加 withOrgScope 双层强制，应用连接不能绕过 RLS 的数据库角色。MIT 许可，无付费层。需注意 Effect v4 为候选版本，有学习成本。",
+   "highlights": [
+    "实现组织、邀请、角色、权限覆盖、审计轨迹、Stripe 计费、OIDC/SAML SSO、事务性 outbox 后台任务、签名 outbound webhooks 与 /api/v1 公共 API",
+    "租户隔离由 Postgres 行级安全与应用层 withOrgScope 双重强制，测试以浏览器真实双用户验证",
+    "提供一套代理工作流：hooks 在每次代理编辑时执行格式化、类型检查与仓库规则，tenancy-review 子代理要求为每个发现命名可利用的请求，Effect 源码 vendored 于 repos/ 供代理读取真实签名"
+   ],
+   "use_cases": [
+    "用 AI 代理（如 Claude Code）驱动开发的 TypeScript B2B SaaS 团队，需要十ancy、计费、认证等模块已建成并通过测试",
+    "设计工程师在无后端的 apps/design 画布上，使用真实组件和三套 persona fixture 进行产品、营销站点与品牌设计，并通过 Figma 双向同步",
+    "创始人或独立开发者需要一个包含登录、组织、计费、公共 API 与部署配置的完整产品骨架，而非技术栈拼装"
+   ]
+  },
+  "sha": "1993011c3542",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b14cd95a8214": {
+  "identity": {
+   "one_liner": "基于 Flutter 与 SQLite 的离线任务规划应用，兼作教学示例",
+   "review": "这是一个离线任务管理应用与课堂教学示例，作者 Kleber de Oliveira Andrade。支持任务的创建、编辑、完成、重开与删除，数据以 SQLite 持久化（原生平台用本地 SQLite，Web 端通过 IndexedDB 存储 SQLite WASM）。界面为巴西葡萄牙语，Material 3 风格。需要 Flutter 3.50.0 / Dart 3.14.0 工具链。采用 MIT 许可证。",
+   "highlights": [
+    "支持任务优先级（1-5 级）、大小写不敏感搜索、状态过滤与删除后即时撤销",
+    "SQLite 数据库含版本 1 到版本 2 的事务性迁移，旧数据保留原 ID 并在测试中验证",
+    "提供键盘焦点导航、工具提示、文本放大适配等无障碍支持；Web 端无服务器与遥测"
+   ],
+   "use_cases": [
+    "Flutter 移动/Web 开发的 SQLite 持久化教学与实践示例",
+    "需要离线使用的个人日常任务记录",
+    "数据库版本迁移与空安全改造的参考实现"
+   ]
+  },
+  "sha": "b14cd95a8214",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

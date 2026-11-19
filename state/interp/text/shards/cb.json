@@ -2990,5 +2990,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "47947ea48101": {
+  "identity": {
+   "one_liner": "基于 Go 的自托管 Git 服务，单二进制即可部署",
+   "review": "Gogs 是一个用 Go 编写的自托管 Git 代码托管服务，目标是搭建过程简单、运行稳定。它通过单一二进制文件分发，支持 Linux、macOS、Windows 和 ARM 平台，也可用 Docker 或 Kubernetes 部署，后端支持 PostgreSQL、MySQL 和 SQLite3。提供代码托管、浏览器内代码浏览与编辑、Issue 与 Pull Request 协作、Webhook 与 REST API 集成等功能；部分能力（如 GitHub 双向同步、Actions、部分认证方式）标注为开发中。适合需要在自有服务器上运行 Git 服务的个人和团队。",
+   "highlights": [
+    "支持 Git over SSH 和 HTTP(S)（含协议 v2 和内置 SSH 服务器）、SHA-256 仓库、deploy keys 与 LFS（本地或 S3）",
+    "提供浏览器内代码浏览与编辑、仓库内及全站代码搜索、Markdown/Jupyter Notebook/PDF/Mermaid 渲染，以及带模板和表单的 Issue、多种合并方式的 Pull Request、受保护分支等协作功能",
+    "单二进制/Docker/Kubernetes 部署，支持 PostgreSQL、MySQL、SQLite3 后端，集成 OpenTelemetry 追踪、Prometheus 指标和命令行备份恢复"
+   ],
+   "use_cases": [
+    "在自有服务器或低配设备（如树莓派、小型云主机）上托管 Git 仓库",
+    "从其他代码托管平台迁移仓库、配置镜像或 fork",
+    "需要 LDAP/SMTP/PAM/OAuth 2.0 等多种认证方式对接的组织内部代码托管"
+   ]
+  },
+  "sha": "47947ea48101",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5af120a8bd2e": {
+  "identity": {
+   "one_liner": "单文件自托管 CMS，内容存于一个 .pod SQLite 文件，面向 Astro。",
+   "review": "Orbiter 是一个面向 Astro 的便携式 CMS，将内容、媒体、schema、配置和用户全部存入单个 .pod 文件（即 SQLite 数据库）。复制该文件即可迁移整个站点，不依赖云服务或 API 密钥。提供独立 Hono 管理服务器（端口 4322）、桌面应用（macOS/Windows），以及 PHP 托管方案 Lander。要求 Node.js 20+ 与 npm 10+。",
+   "highlights": [
+    "将内容、媒体、schema、配置、用户存储于单个 SQLite .pod 文件，通过复制文件即可迁移站点",
+    "管理后台为独立 Hono 服务器（默认端口 4322），并另有 PHP 8.1+ 版本 Lander，含 /api/public/<collection> 读接口",
+    "提供 macOS 与 Windows 桌面应用，内置 Blog、Portfolio、Business、Events、Dossier 等模板及备份（⌘⇧S）与自动更新功能"
+   ],
+   "use_cases": [
+    "使用 Astro 构建站点并通过 orbiter:collections 读取内容的开发者",
+    "主机无 Node.js 环境、仅有 PHP 8.1+ 托管的用户（使用 Lander）",
+    "希望通过桌面应用在无终端/npm 环境下管理内容的用户"
+   ]
+  },
+  "sha": "5af120a8bd2e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e2f8459e8c4c": {
+  "identity": {
+   "one_liner": "Telegram MTProto 协议的 Go 客户端库，支持机器人与用户账号会话。",
+   "review": "MTGo 是一个基于 MTProto 2.0 协议的 Go 客户端库，用于构建 Telegram 机器人和用户账号程序。其 TL 类型由 Telegram schema 自动生成，提供处理器、中间件、插件机制及 SQLite/PostgreSQL/MongoDB 存储后端，纯 Go 实现无需 CGO，采用 Apache 2.0 许可证，配套 CLI、IPC 桥等生态仓库。",
+   "highlights": [
+    "实现完整 MTProto 2.0，包含加密、密钥生成、CDN 与文件传输，TL 层由 schema 自动生成并可用命令更新",
+    "提供基于处理器的更新分发，带过滤器、优先级与处理组，并支持 invoker/handler 两级中间件和生命周期插件",
+    "支持会话导入导出（Telethon、Pyrogram、GramJS、mtcute、tdesktop），存储后端含 SQLite、PostgreSQL、MongoDB，另支持 MTProxy、WebSocket、HTTP 传输与自动重连"
+   ],
+   "use_cases": [
+    "使用 Go 开发 Telegram 机器人，处理消息、回调、内联查询、支付、加群请求等事件",
+    "以用户账号（手机号或二维码登录）运行自动化客户端，并可导入其他框架的既有会话",
+    "在受限网络环境下通过 WebSocket 或 HTTP 传输访问 Telegram，或在单进程中同时管理多个机器人与用户会话"
+   ]
+  },
+  "sha": "e2f8459e8c4c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9fcda9ca602d": {
+  "identity": {
+   "one_liner": "macOS 桌面数据库客户端，支持六种数据库并内置 SSH 隧道",
+   "review": "DBDock 是基于 Tauri 2 / Rust / React 的 macOS 桌面数据库客户端，支持 MySQL、PostgreSQL、SQLite、Redis、MongoDB 和 Cloudflare D1。提供连接分组与环境标签、SSH 隧道、带上下文补全的 SQL 编辑器、执行计划可视化、网格编辑与 CSV/JSON 导入。仅发布 Apple Silicon 版本；密码存于 macOS Keychain，主机密钥须已存在于 known_hosts。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、SQLite、Redis、MongoDB、Cloudflare D1 六种数据库连接，内置基于 ssh-agent、密钥文件或密码的 SSH 隧道",
+    "提供带上下文感知补全的 SQL 编辑器、可视化执行计划、主键表格网格编辑及 CSV/JSON 导入导出",
+    "可导入 TablePlus、DBeaver 的连接配置及 URL/.env 文本，导出支持 AES-256-GCM 加密"
+   ],
+   "use_cases": [
+    "在 macOS 上集中管理本地与远程的多种数据库连接，并通过环境标签区分生产环境",
+    "通过 SSH 堡垒机隧道访问内网数据库并执行 SQL 查询与调试",
+    "浏览 Redis 键与 MongoDB 集合并执行命令或 Shell 操作"
+   ]
+  },
+  "sha": "9fcda9ca602d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "074ac7270600": {
+  "identity": {
+   "one_liner": "基于仓颉+openGauss的个人数字档案私有化管理系统，字段级国密加密。",
+   "review": "AMS 将证件、学历、资产、健康等 11 类个人档案集中归档，提供全文检索、版本追溯与条目级共享。后端使用仓颉语言编写，数据库为 openGauss，敏感字段采用 SM4 加密配合盲索引支持等值查询；附件逐块加密，预览带动态水印，媒体处理与 OCR 默认关闭需显式开启。部署时单进程同时提供 API 与前端页面，支持本地开发与容器化两种方式。",
+   "highlights": [
+    "提供 11 类档案模板、关键字检索与 12 种筛选维度，敏感字段经 SM4 加密与盲索引实现服务端不明文的等值查询",
+    "实现条目级共享链接（可选密码、失败上限、有效期）与家庭组三级授权协作，默认只读",
+    "包含全链路审计哈希链、TOTP 双因子、三级 RBAC，及纯仓颉实现的附件媒体引擎（缩略图、水印、三路 OCR）"
+   ],
+   "use_cases": [
+    "个人将证件、证书、资产证明等扫描件集中私有化存储并按分类管理",
+    "家庭成员间按条目或分类授权查看特定档案，而非开放整个档案库",
+    "需要国密算法（SM3/SM4）加密与审计留痕的场景下自托管档案数据"
+   ]
+  },
+  "sha": "074ac7270600",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2843,5 +2843,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c98c17901c4a": {
+  "identity": {
+   "one_liner": "pgrx 是用 Rust 开发 PostgreSQL 扩展的框架。",
+   "review": "pgrx 提供 Rust 编写 PostgreSQL 扩展的框架，支持 Postgres 15 至 19。通过 cargo-pgrx 子命令管理开发全流程：创建项目、编译安装多版本 Postgres、运行与回归测试、生成 RPM/DEB 包。扩展可用 #[pg_extern]、#[pg_trigger] 等宏暴露函数与触发器，SQL schema 由框架生成。依赖 Rust 工具链、libclang 11+ 等，未官方支持 32 位目标。",
+   "highlights": [
+    "cargo pgrx 提供 new/init/run/test/regress/package/migrate 等子命令，覆盖扩展开发到打包流程",
+    "支持同一代码库面向 Postgres 15 至 19rc2，可用 Rust feature gating 调用版本特定 API",
+    "提供 #[pg_extern]、#[pg_trigger]、#[derive(PostgresType)] 等宏，自动生成 SQL schema 并将 Rust panic 转为 Postgres ERROR"
+   ],
+   "use_cases": [
+    "用 Rust 编写 PostgreSQL 自定义函数、触发器与自定义类型",
+    "需要同一扩展代码兼容多个 PostgreSQL 版本并做跨版本测试",
+    "为扩展生成 Linux RPM/DEB 安装包或按变更维护升级脚本"
+   ]
+  },
+  "sha": "c98c17901c4a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9abe5f973ac7": {
+  "identity": {
+   "one_liner": "开源 AI 笔记与知识库应用，支持 Cloudflare 免费层或 Docker 部署",
+   "review": "EdgeEver 是一个开源笔记与知识库工作区，采用经典三栏布局（树视图·笔记列表·编辑器），提供富文本与 Markdown 编辑、表格、思维导图、Mermaid 图表等。客户端覆盖 Web、macOS、Windows、Linux、iOS、Android，数据层使用标准 SQLite 并支持 Markdown 导入导出。部署上可在 Cloudflare 免费额度内运行（约 15 万条短笔记与 5 万张图片），或通过 Docker 自托管；iOS 客户端需要非中国大陆 Apple ID。",
+   "highlights": [
+    "提供三栏布局编辑器，支持富文本与 Markdown 切换、原生表格与 Mermaid 图表、秒级自动保存与多设备同步",
+    "内置 MCP 与 ACP 协议，外部代理可读写笔记，桌面端可驱动本地 AI 代理；BYOK 兼容 OpenAI、Claude、Gemini 及自定义端点",
+    "支持 Cloudflare 免费层零服务器部署或 Docker 一键自托管，数据采用标准 SQLite，提供 ZIP 备份与 Markdown 导入导出"
+   ],
+   "use_cases": [
+    "需要多平台客户端与即时云同步的个人笔记与知识库管理",
+    "通过浏览器扩展从网页及 20+ 平台（知乎、X、GitHub、B 站等）进行结构化剪藏",
+    "在 Cloudflare 免费额度或自有 VPS/NAS 上自托管部署，配合 MCP 接入外部 AI 代理工作流"
+   ]
+  },
+  "sha": "9abe5f973ac7",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "faf7b905a7e9": {
+  "identity": {
+   "one_liner": "可自托管的终端工作台，集成 SSH/WinRM/SFTP/Docker/数据库与 AI 助手",
+   "review": "NexTerm 是一个可自托管的终端工作台，提供持久终端、命令块、分屏、命令广播等终端工具，并支持远程文件、Docker、MySQL/PostgreSQL/Redis 管理与端口转发。适用于需要集中管理多台服务器与多种连接协议（SSH、WinRM、Telnet、RDP/VNC 等）的运维人员。支持多用户、双因素认证与审计日志；同步并非端到端加密，移动端为预览版，采用 MIT 许可证。",
+   "highlights": [
+    "提供持久终端，断网或关闭应用后可重新接管并补回输出，支持命令块、历史回放、命令广播与分屏",
+    "支持 SSH、WinRM、Telnet、本机终端、RDP/VNC 等连接方式，可从 OpenSSH 配置、Termius、PuTTY 等工具导入主机",
+    "内置 AI 助手可读取终端、文件和容器排查问题，写操作需用户确认；支持接入 OpenAI 兼容模型"
+   ],
+   "use_cases": [
+    "运维人员集中管理多台 Linux/Windows 服务器，包括终端操作、远程文件传输、Docker 与数据库管理",
+    "需要自托管多用户环境并要求双因素认证与审计日志的团队场景",
+    "通过布局模板批量打开主机终端并运行启动片段，实现日常运维流程的标准化"
+   ]
+  },
+  "sha": "faf7b905a7e9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a6e239c8becf": {
+  "identity": {
+   "one_liner": "1Panel 官方容器镜像构建仓库，覆盖 AI 代理、语言运行时、模型推理与数据库主从复制镜像",
+   "review": "该仓库构建并发布 1Panel 使用的容器镜像，分为 AI 代理（deepseek-harness、hermes-agent、openclaw）、语言运行时（node、php、java）、模型推理（vllm、comfyui）与数据库主从复制（mysql/postgresql/redis-cluster）四类。数据库镜像通过同一镜像配合不同复制环境变量区分主从节点，需要 1Panel v2.6 及以上。PHP 镜像包含 EOL 分支的安全回移植构建流程。",
+   "highlights": [
+    "数据库复制镜像支持 amd64 与 arm64 双架构，提供完整版本标签与系列别名，主从节点使用同一镜像并通过环境变量区分",
+    "PHP 镜像覆盖 5.6 至 8.5 多版本，对 EOL 分支应用 SHA256 校验的源码补丁回移植，并维护 checks/ 目录的离线检查与容器运行时检查脚本",
+    "vllm 镜像提供 NVIDIA GB10 上 ARM64 双节点 DeepSeek V4 Flash 与四节点 V4.1 Flash 运行时，以及 AMD64 的 DeepSeek 4.1 Flash 变体"
+   ],
+   "use_cases": [
+    "为 1Panel v2.6+ 应用商店部署数据库主从复制集群",
+    "在 NVIDIA GPU 环境运行 vLLM 推理或 ComfyUI 图像生成",
+    "通过 GitHub Actions 工作流重建包含安全补丁的 PHP 维护版本镜像"
+   ]
+  },
+  "sha": "a6e239c8becf",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "651fd658d573": {
+  "identity": {
+   "one_liner": "离线优先的习惯与生活事件记录应用，支持 Android、iOS 和 Web。",
+   "review": "LET 是一个跨平台的习惯与生活事件追踪应用，除是否完成外还记录数值（睡眠、饮水等）和简短笔记，并用图表展示事件之间的关联。基于历史数据提供未来 14 天的预测，需先积累 14 天记录。数据保存在本地 SQLite 数据库，不上传云端，支持 JSON 导出导入。技术栈为 React Native、Expo、TypeScript、Drizzle ORM 与 Zustand，项目仍在开发中。",
+   "highlights": [
+    "支持三类记录：是否型习惯、数值型指标和短笔记，并用图表展示事件随时间的关系",
+    "基于本地历史生成未来 14 天预测，每条预测附百分比与简短理由",
+    "数据存储在本地数据库（expo-sqlite + Drizzle ORM），提供 JSON 导出导入，无需账号"
+   ],
+   "use_cases": [
+    "记录睡眠时长、饮水量、锻炼等数值型生活指标并查看其关联模式",
+    "不愿将个人数据上传云端的用户，本地保存并自行 JSON 备份迁移",
+    "希望通过 Android、iOS 和 Web 单一代码库运行的场景（如学习 Expo/React Native 的参考）"
+   ]
+  },
+  "sha": "651fd658d573",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "93130c24812d": {
+  "identity": {
+   "one_liner": "自托管的 AI 智能体团队控制平面，含审批机制",
+   "review": "Harnesys 是一个自托管控制平面，用于运行 AI 智能体团队：一台主机运行 API 和桌面 UI，worker 机器通过 CLI 配对组成集群。智能体具备线程、工具、技能、记忆、调度和审批流程，敏感步骤以审批卡形式等待用户决策。数据以每组织 SQLite 存于本地目录，模型可接约 20 家提供商或本地 Ollama。许可为 FSL-1.1-ALv2 源码可得协议，桌面版未经公证。",
+   "highlights": [
+    "提供带完整转录的运行审计：工具调用输入与退出码、每轮 token 计数、固定选项的问题卡",
+    "支持可视化图编辑器（默认 ReAct）、智能体间 spawn/handoff、13 类配置项及步骤与 token 预算",
+    "提供权限门（allow/ask/deny）覆盖文件写入、shell、网络、MCP 与智能体，以及 cron 调度、webhook 触发和标签分发规则"
+   ],
+   "use_cases": [
+    "在自有机器或 VPS 上运行多智能体集群并逐项审批敏感操作",
+    "通过 cron/webhook/标签规则让智能体夜间自动处理看板 issue 与定时任务",
+    "需要代码工作区的开发场景：内置 Monaco 编辑器（LSP）、git 面板与真实 PTY 终端"
+   ]
+  },
+  "sha": "93130c24812d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

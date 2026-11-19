@@ -3182,5 +3182,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "28b7590ffa44": {
+  "identity": {
+   "one_liner": "Halogen LLM 推理服务器的实时仪表盘，由 Rust 采集器每秒读取指标并经 SQLite 存储历史。",
+   "review": "该项目为 Halogen LLM 推理服务器提供实时仪表盘，面向使用 Halogen 的运维人员。Rust 采集器进程每秒读取 Halogen 的 /metrics，将历史数据写入 SQLite 并推送到 Svelte 网页。注意 /metrics 的吞吐量计数器在每次读取后重置，因此采集器必须是唯一读取者，Prometheus 需改从采集器读取。通过 Docker Compose 部署，需在 .env 设置 HALOGEN_URL。",
+   "highlights": [
+    "每秒读取 Halogen /metrics，历史数据存于 SQLite，并向前端页面推送实时数据",
+    "展示状态、生成与预fill速度及吞吐、Busy Slots、队列、KV 池使用、prompt 缓存命中率、Draft acceptance 等指标，时间范围覆盖 Live 5 分钟至 30 天",
+    "支持深浅主题、图表面板的拖动/缩放/隐藏布局（保存在浏览器），附带 fake-halogen 模拟器可注入 outage/restart/degrade 事件"
+   ],
+   "use_cases": [
+    "为 Halogen 推理服务器搭建带历史数据与实时视图的监控仪表盘",
+    "通过 Prometheus 采集 Collector 的 /metrics，规避 Halogen 计数器重置问题",
+    "使用内置模拟器在无真实 Halogen 实例时演示或开发仪表盘功能"
+   ]
+  },
+  "sha": "28b7590ffa44",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab18b71287b4": {
+  "identity": {
+   "one_liner": "本体驱动的多语言代码库索引器，编译为本地 SQLite 图数据库供查询。",
+   "review": "CodeExplorer 将 C#、TypeScript/JS、Go、Python、SQL 等多种语言仓库解析为本地 SQLite 图数据库（.codeexplorer/graph.db），内置 OpenCypher 到 SQL 的查询引擎。它以独立二进制、VS Code 扩展和 MCP 服务器形式分发，CLI 与 MCP 暴露相同的 15 个工具，支持调用链追踪、影响分析、SQL 数据血缘，以及基于 YAML 规则和 SHA-256 基线的语义门禁检查。数据全程留在本机，不依赖外部图数据库服务。",
+   "highlights": [
+    "提供 CLI（ce）与 stdio MCP 服务器（ce mcp）两种一致的 15 工具接口，用于符号搜索、调用链、影响半径与数据血缘查询",
+    "以 Tree-sitter 语法与框架分析器支持 12 个语言生态（C#、TS/JS、Go、Java、Python、Rust、PHP、SQL、Terraform 等），输出 5 层本体 schema",
+    "实现基于 YAML 规则与零匹配契约的语义不变门禁（SIG），并支持 SHA-256 棘轮基线使 CI 仅拦截新增违规"
+   ],
+   "use_cases": [
+    "为 AI 编程代理（Claude Code、Cursor、Gemini CLI）提供 MCP 工具进行跨项目静态分析与调用图追踪",
+    "在 VS Code 中查看服务拓扑图、依赖矩阵与消息流，并支持 Mermaid/C4 导出",
+    "在 CI 中以门禁规则和棘轮基线约束跨服务与分层架构规则"
+   ]
+  },
+  "sha": "ab18b71287b4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "951b7b8b2ed6": {
+  "identity": {
+   "one_liner": "用于检索 ROCEEH Out of Africa Database（ROAD）数据的 R 包",
+   "review": "roadDB 提供连接 ROAD 在线数据库的 R 接口，涵盖非洲和欧亚大陆距今 300 万至 2 万年前的考古、人类学、古环境与地理数据。使用者按地点、组合、年代与出版物三级粒度调用 road_get_* 系列函数检索数据，返回与其他 R 包兼容的 data frame。包需联网使用，且当前数据库访问受大学网络限制；仅覆盖常用表和列。",
+   "highlights": [
+    "提供 road_get_* 系列函数，按 Localities、Assemblages、Dates & Publications 三个层级检索数据并返回 data frame",
+    "支持 continent、country、age_min/age_max、technocomplex、植物与动物分类单元等多种可选过滤参数",
+    "包含针对人类遗存、考古、古动物群和古植物学的组合级子函数，以及 road_get_publications() 引文检索"
+   ],
+   "use_cases": [
+    "需要将 ROAD 数据读入 R 以供史前学与古环境学分析流程使用的研究者",
+    "按年代范围、地理区域、文化分期或物种等条件筛选遗址与组合数据",
+    "通过 road_get_publications() 检索参考文献以核对原始文献"
+   ]
+  },
+  "sha": "951b7b8b2ed6",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

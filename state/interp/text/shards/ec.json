@@ -3065,5 +3065,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3ef01e27cef3": {
+  "identity": {
+   "one_liner": "自托管的 Python+React 算法交易平台，通过插件统一对接多家券商。",
+   "review": "OpenAlgo 是一个自托管的开源算法交易平台，基于 Python Flask 与 React 构建，通过 39 个券商插件提供统一的 REST API、WebSocket 行情流、可视化策略构建器 Flow、浏览器内 Python 策略托管及期权分析工具。面向手工交易者与量化开发者，要求 Python 3.12 及以上；各插件支持的交易所与功能因券商账户而异。",
+   "highlights": [
+    "提供 39 个券商插件，共享统一的 /api/v1 规范化接口，包含 76 个 REST 方法/路径对",
+    "支持五种交易入口：统一 REST API、Python 策略托管（进程隔离、IST 调度）、Flow 可视化节点编辑器、AI 聊天代理（可接入 LiteLLM/Ollama）、20 个期权与组合分析工具",
+    "提供 Analyzer 模拟测试模式（₹1 Crore 沙盒资金）与手动审批的 Action Center 审核工作流"
+   ],
+   "use_cases": [
+    "通过 TradingView、Excel、Google Sheets 或多语言客户端调用统一 API 下单与管理持仓",
+    "在浏览器内编写、调度并并行运行 Python 策略，无需外部服务器或 Docker",
+    "不写代码的用户使用拖拽节点构建策略，并用内置期权链、Greeks、回测等工具分析期权与组合"
+   ]
+  },
+  "sha": "3ef01e27cef3",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "342ae3190e89": {
+  "identity": {
+   "one_liner": "基于 Clean Architecture 的 ASP.NET 11.0 Web API 项目模板，集成 gRPC、SignalR 与 JWT 认证",
+   "review": "这是一个用于快速搭建新项目的 ASP.NET 11.0 Web API 脚手架，采用 Clean Architecture 与领域驱动设计组织代码，使用 MediatR 做进程内消息，集成 ASP.NET Identity、带刷新令牌的 JWT 认证，数据库为 PostgreSQL，可通过 dotnet-ef 迁移或自动创建。README 提供 Swagger 调试、VS/VS Code 启动、CircleCI、Kubernetes 部署及日志路径说明。适合作为新服务开发起点；注意 Swagger 在 PATH_BASE 非 / 时不可用。",
+   "highlights": [
+    "提供 gRPC、SignalR 与 REST API 三类服务端点，内置 Identity 与带 refresh token 的 JWT 认证",
+    "采用 Clean Architecture 分层，使用 MediatR、Command 与 Decorator 模式，数据库为 PostgreSQL 并支持 EF Core 迁移",
+    "集成 Swagger UI 供调试 API，内置账户管理接口（创建用户、登录、刷新令牌、改密/重置密码、锁定/解锁/删除账户）"
+   ],
+   "use_cases": [
+    "作为基于 Clean Architecture 的新 ASP.NET Web API 项目起点",
+    "需要 JWT 认证、用户账户管理或 SignalR 实时通信的服务开发",
+    "在 Kubernetes 环境中部署 ASP.NET Core 服务（注意 Swagger 与 PATH_BASE 限制）"
+   ]
+  },
+  "sha": "342ae3190e89",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7e17f5327daa": {
+  "identity": {
+   "one_liner": "Orca 编辑器内的数据库插件，用编辑器标签页查询 PostgreSQL、MySQL/MariaDB 和 SQLite。",
+   "review": "DB Studio 是一个 Orca 插件，让用户在编辑器内浏览和查询 PostgreSQL、MySQL/MariaDB 及 SQLite 数据库。每个查询标签是首行标注连接的普通 .sql 文件；工作区 .env 中的 DATABASE_URL 会自动成为连接。安装需 Orca 1.4.248+，并需以指纹批准 secrets、storage、workspace 等权限。查询超时默认 30 秒、上限 110 秒。",
+   "highlights": [
+    "提供统一面板浏览连接、数据库、模式、表和视图，SQL 编辑器带方言高亮与基于实时 schema 的自动补全",
+    "结果按游标流式读取，上限为 5000 行或约 900 KB，可取消正在数据库端执行的查询",
+    "大整数与十进制数值以字符串传输以保持精确，密码存于 Orca 的加密密钥库"
+   ],
+   "use_cases": [
+    "在 Orca 中并行运行多个 agent、按工作区 worktree 检查各自数据库的表内容",
+    "不切换窗口地对 PostgreSQL、MySQL/MariaDB、SQLite 执行即席 SQL 查询并查看结果网格",
+    "通过 sslmode 连接 Neon 等托管 PostgreSQL 服务进行查询"
+   ]
+  },
+  "sha": "7e17f5327daa",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f91a1291023": {
+  "identity": {
+   "one_liner": "自托管的 GitHub README 访客计数徽章服务，基于 FastAPI 与 PostgreSQL",
+   "review": "ProfilePulse 为 GitHub 个人 README 提供访客计数徽章，通过统计 GitHub Camo 代理请求与直接请求生成计数，仅存储 HMAC 哈希后的访客指纹与聚合计数，不保存原始 IP 和 User-Agent，原始日志 30 天后清除。支持 Docker 部署，需配置 PostgreSQL。README 明确指出计数为估计值，因静态图片无法验证真实页面访问。",
+   "highlights": [
+    "通过跟踪 GitHub Camo 代理请求和直接请求统计 README 访客数，仅存储聚合计数与 HMAC-SHA256 哈希的访客指纹，不保存原始 IP 或 User-Agent，原始日志保留 30 天后清除",
+    "徽章支持 metric、view、label、color、source、preview 等查询参数，可显示总独立访客、今日访客、徽章加载次数或活跃时间窗口等指标",
+    "基于 FastAPI 与 PostgreSQL 构建，支持 Docker Compose 一键部署，提供速率限制、GitHub 用户名校验及可配置的指纹去重周期"
+   ],
+   "use_cases": [
+    "为 GitHub 个人主页 README 嵌入访客统计徽章",
+    "开发者自托管部署（Docker、Render、Neon 等）以掌控数据与隐私",
+    "需要隐私合规（无 cookie、无原始 IP 存储）的访问计数场景"
+   ]
+  },
+  "sha": "8f91a1291023",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

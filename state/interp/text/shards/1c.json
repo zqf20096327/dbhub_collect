@@ -3260,5 +3260,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d4d44a468cf8": {
+  "identity": {
+   "one_liner": "为 AI agent 提供可分支、diff、合并的 MongoDB 沙箱数据库",
+   "review": "Argon 是一个基于 Go 的 MongoDB 沙箱工具：为每次 agent 运行fork 出独立的真实 MongoDB 数据库，agent 的写入被变更流捕获为 diff，可通过 merge preview/apply 作为数据 PR 审查后合并，或撤销、丢弃。底层实现类似 Git 的分支/合并/时间旅行模型。需要真实 mongod 运行环境；索引与集合选项不做版本控制，历史受保留窗口限制。",
+   "highlights": [
+    "每条分支创建仅是一次元数据写入，沙箱 checkout 会实际复制数据并提供带 TTL 的真实 MongoDB 连接串，任意驱动可用",
+    "支持 diff、三方合并（preview/apply 计划流）、undo（追加式，不重写历史）、pin 保护数据集、按 LSN 或时间戳的时间旅行查询",
+    "提供 MCP server（13 个工具）、Python SDK 与 LangGraph 适配器、本地 Web 控制台（UI + REST API），并支持在线导入正在写入的副本集数据库"
+   ],
+   "use_cases": [
+    "为 AI agent 的每次运行提供隔离的真实 MongoDB 工作区，运行后人工审查再合并或丢弃",
+    "对 MongoDB 数据做分支实验、按 actor 标签撤销某段写入、查询历史时点数据",
+    "需要 human-in-the-loop 流程时，通过 --disable-tools 或 --read-only 限制 MCP 工具，合并由人工执行"
+   ]
+  },
+  "sha": "d4d44a468cf8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "59b99b059f21": {
+  "identity": {
+   "one_liner": "基于 Rust 核心的 Python/TypeScript 异步 ORM，用 Prisma 语法定义 schema。",
+   "review": "MonOrm 是一个面向 Python 和 TypeScript 的异步 ORM，由单个 Rust 引擎驱动：用户用 Prisma 语法的 schema.prisma 定义模型，Rust 核心生成 SQL 并运行于 PostgreSQL 或 SQLite，两种语言获得相同的查询 API、迁移和生成的类型化模型。项目处于活跃开发期，作者自述已用于生产环境，但 README 提醒其他用户暂不应在生产环境使用。安装方式为 pip install monorm 或 npm install monorm@npm:@ufstack/monorm。",
+   "highlights": [
+    "支持 PostgreSQL 与 SQLite，Python 包覆盖 Python 3.11–3.14，TypeScript 支持 Node 20.19+/22.12+ 与 Bun，预构建 6 个平台（Linux x86-64/arm64 glibc 与 musl、macOS arm64、Windows x86-64）",
+    "查询能力包含窗口函数、CTE（含递归）、子查询与 EXISTS、关系聚合、全文搜索、JSON/数组列、游标分页；写入支持 upsert、批量插入/更新、RETURNING",
+    "内置扩展包括软删除、乐观锁、时间戳、代理模型、文件存储（基于 OpenDAL）、auth 应用等；提供 N+1 检测（monorm.debug）、行级/咨询锁、读副本、查询钩子与 OpenTelemetry"
+   ],
+   "use_cases": [
+    "团队需要在 Python 与 TypeScript 两个服务间共享同一套数据库 schema、迁移与查询 API",
+    "需要从 schema 生成迁移和类型化模型的 Prisma 语法工作流",
+    "需要窗口函数、CTE、触发器、分区、行级安全等 SQL 特性且希望减少手写 SQL 的应用"
+   ]
+  },
+  "sha": "59b99b059f21",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

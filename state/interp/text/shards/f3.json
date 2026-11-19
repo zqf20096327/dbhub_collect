@@ -3252,5 +3252,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0abd5096adf9": {
+  "identity": {
+   "one_liner": "单二进制自托管应用监控工具，Go实现，SQLite存储历史指标",
+   "review": "StatLite 是面向 VPS 和小型服务器的自托管应用监控工具。单个 Go 二进制轮询多个应用端点，将指标存入本地 SQLite，并内置历史图表，不依赖 Prometheus/Grafana。提供 Spring Boot、Quarkus、Micronaut 集成，及供任意语言使用的固定 JSON 指标端点；采集流量、延迟、CPU、内存等，可选健康与主机指标。默认绑定 localhost，需经 SSH 隧道远程访问仪表盘。",
+   "highlights": [
+    "单 Go 二进制轮询多应用，指标存储于本地 SQLite 并生成内置历史图表",
+    "支持 Spring Boot Actuator/Micrometer、Quarkus、Micronaut 集成，及任意语言可实现的 JSON 指标端点",
+    "采集流量、延迟、CPU、内存，可选应用健康与主机指标；默认绑定 localhost"
+   ],
+   "use_cases": [
+    "在资源受限的 VPS 或小型服务器上监控 Spring Boot、Quarkus、Micronaut 应用",
+    "通过自定义 JSON 端点监控 FastAPI、Express、Django、Go 等任意语言应用",
+    "需要指标保留在本地服务器、不接入第三方监控 SaaS 的场景"
+   ]
+  },
+  "sha": "0abd5096adf9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0ae15da8f29e": {
+  "identity": {
+   "one_liner": "开源自托管设备租赁平台，含店面、库存与合同生成",
+   "review": "Louez 是一个面向设备租赁业务的开源平台，用于管理库存、预订、客户并生成 PDF 合同，并提供在线店面。基于 Next.js 16、TypeScript、Tailwind CSS、Drizzle ORM 和 MySQL 构建，支持通过 docker compose 一键自托管，也可使用官方云服务。内置 13 种语言，支持单店与多租户（platform）两种运行模式。",
+   "highlights": [
+    "支持库存管理、预订日历、客户数据库、统计图表及自动生成 PDF 租赁合同",
+    "提供可自定义品牌的在线店面，含目录筛选、购物车、结账与客户门户",
+    "内置 AI 店面咨询助手与 AI 语音接线员（云版开箱即用，自托管可接入自有服务商）"
+   ],
+   "use_cases": [
+    "相机、工具、派对设备、车辆等租赁业务的库存与预订管理",
+    "自托管替代 SaaS 租赁系统，保留数据与服务器控制权",
+    "多店铺平台部署（每个店铺独立子域名店面）"
+   ]
+  },
+  "sha": "0ae15da8f29e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3165872cead1": {
+  "identity": {
+   "one_liner": "OceanBase 产品系列 Docker 镜像的官方构建源仓库",
+   "review": "该仓库包含用于构建 OceanBase 各产品 Docker 镜像的 Dockerfile 与示例，覆盖 oceanbase-ce、obproxy-ce、obagent、obdiag 等组件。使用者可基于仓库内容自行 docker build 构建镜像；obdiag 镜像通过 VERSION 文件锁定 RPM 版本（5.0.2-12026102116，el8），构建时会校验安装的 RPM 版本。发布流程要求 amd64 与 arm64 构建和冒烟测试通过，镜像发布到 Docker Hub、Quay 和 GHCR。",
+   "highlights": [
+    "提供 7 类 OceanBase 相关镜像的 Dockerfile 与构建示例，包括 oceanbase-ce、obproxy-ce、obagent、obdiag、ob-configserver、obbinlog-ce、oceanbase-cloud-native",
+    "obdiag 构建通过 VERSION 锁定 RPM 版本并校验，发布要求 amd64 与 arm64 双架构构建及冒烟测试通过",
+    "镜像发布至 Docker Hub、Quay、GHCR 三个仓库，提供多平台版本标签及 amd64/arm64 支持标签"
+   ],
+   "use_cases": [
+    "需要自行构建或定制 OceanBase 社区版及其组件容器镜像的环境",
+    "需要通过 Docker Compose 等方式部署 OceanBase 数据库及相关代理、监控、诊断组件的场景",
+    "需要维护 obdiag 等组件多架构镜像发布流程的运维团队"
+   ]
+  },
+  "sha": "3165872cead1",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f031cbaa8f5f": {
+  "identity": {
+   "one_liner": "本地运行的Python依赖漏洞扫描器，结合OSV.dev公告与本地Gemma模型复核。",
+   "review": "这是一个基于 FastAPI、PostgreSQL 和 Docker Compose 部署的 Web 应用，用于扫描 Python 依赖中的已知漏洞。它读取 requirements.txt（最大 10MB，支持 pip 格式）或项目文件夹（最多 30 个 .py 文件），通过 AST 解析 import 并映射到 PyPI 包，再查询 OSV.dev 公告，用 Ollama 中本地运行的 Gemma 3 模型生成升级建议，Claude 作为备选。所有建议会重新对照 OSV 校验。代码在本地解析，仅包名和版本发送给外部服务。README 自称学生级项目，提示结果可能不完整或有误，需自行核实。",
+   "highlights": [
+    "支持上传 requirements.txt（pip 格式，≤10MB）或项目文件夹（≤30 个 .py 文件，1MB/个），用 Python AST 解析 import 并映射到 PyPI 项目名",
+    "公告数据来自 OSV.dev，包元数据来自 PyPI，合并重复 GHSA/PYSEC/CVE 记录，建议版本在展示前重新对照 OSV 校验",
+    "扫描任务通过 PostgreSQL 队列（FOR UPDATE SKIP LOCKED）并行处理，历史记录可搜索、筛选、分页，并支持对自身依赖的自诊断扫描"
+   ],
+   "use_cases": [
+    "在本地检查 Python 项目的 requirements.txt 或代码 import 中的已知漏洞包及升级路径",
+    "通过 samples/ 示例文件或 run.sh selfscan 学习和演示依赖漏洞扫描流程",
+    "在无网络环境下运行（ONLINE_LOOKUPS=false），仅依赖本地模型和内置规则给出结果"
+   ]
+  },
+  "sha": "f031cbaa8f5f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79f89adac41e": {
+  "identity": {
+   "one_liner": "将 AI 会话记忆组织为项目书/任务章节/证据页的本地检索存档",
+   "review": "AI-Memory-Book 是一个本地运行的 AI 会话记忆工具，用 Python 和 SQLite/FTS5 实现按项目分册、任务分章、引用原始证据页的结构化存档。默认摄取与词法检索不调用模型；通过 MCP 连接 Claude Code、Codex、Gemini 等客户端，可绑定项目 ID 共享同一存档。要求 Python 3.10+ 且 SQLite 含 FTS5，默认预算 2400 字符、最多返回五条结果。README 自述其基准为作者自建的开发测试集，不衡量模型回答准确率，且缺失证据查询仍会返回相关上下文。",
+   "highlights": [
+    "基于 SQLite/FTS5 的中英词法检索，支持缩写、驼峰与蛇形命名别名，默认摄取与召回不调用模型",
+    "以书/章/节/原始页的结构存储会话，提供标题/问题/目录索引搜索及带引用地址的后续页读取",
+    "支持 Claude Code、Codex、Gemini 等客户端经 MCP 共享同一存档，可绑定精确项目 ID，提供在线备份与快照导出"
+   ],
+   "use_cases": [
+    "会话结束或更换客户端后恢复工程任务中的决策、修正、约束与失败尝试记录",
+    "多个相似代码库项目并存时，按项目命名空间隔离各自的任务记录",
+    "在本地离线环境中为 AI 编码客户端提供可引用证据页的会话历史检索"
+   ]
+  },
+  "sha": "79f89adac41e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb8781778ca6": {
+  "identity": {
+   "one_liner": "pi 编码代理的插件集，含数据库接入与 SSH 远程运维扩展",
+   "review": "pi-plugins 是 pi 编码代理的插件集合，包含 db 与 ssh 两个 npm 包。db 插件采用方言化架构，支持 PostgreSQL、MySQL、Oracle、达梦、Redis、Elasticsearch、MongoDB、Neo4j、Hive、Spark 十种数据库，提供查询、表结构读取、扫描建连等工具；ssh 插件提供 SSH/SFTP/FTP 远程运维工具与 /ssh 管理面板。通过 pi install 命令从 npm 安装，仓库采用 pnpm workspace 管理，代码以 TypeScript 直接加载、无构建产物。适用于在 pi 中接入数据库操作与远程运维能力的开发者。",
+   "highlights": [
+    "db 插件以方言化架构支持 PostgreSQL/MySQL/Oracle/达梦/Redis/Elasticsearch/MongoDB/Neo4j/Hive/Spark 十种数据库，提供查询、表结构、扫描建连工具",
+    "ssh 插件包含 13 个 ssh_* 工具与 /ssh 管理面板，含危险命令分级确认、JSONL 审计、known_hosts 校验及 release+软链部署与自动回滚",
+    "db 1.3.8 的只读模式改为白名单判定，拦截 COPY/GRANT/SET/VACUUM/DO/EXPLAIN ANALYZE 等写语句；生产连接写审计先落盘再执行"
+   ],
+   "use_cases": [
+    "在 pi 编码代理中通过自然语言执行多类型数据库的查询与表结构查看",
+    "通过 AI 代理进行远程服务器运维（SSH/SFTP/FTP），需要命令确认与审计机制的场景",
+    "基于 packages/ 目录结构扩展新的 pi 插件，遵循零 pi 运行时依赖的 core/dialects 分层约定"
+   ]
+  },
+  "sha": "eb8781778ca6",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

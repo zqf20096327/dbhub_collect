@@ -3744,5 +3744,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bfeeb837c006": {
+  "identity": {
+   "one_liner": "SaaS 全栈站点模板：TanStack Start + Cloudflare Workers 的网站、工作台与管理后台",
+   "review": "该仓库包含 SaaSy Land 网站、客户工作区与管理后台源码，基于 TanStack Start、React、TypeScript、Bun 与 Cloudflare Workers 构建，使用 Better Auth、Drizzle + D1、Polar 计费、Resend 邮件，并提供九种语言的 MDX 本地化内容。适合需要参考 SaaS 应用部署到 Cloudflare Workers 方式的开发者；部分管理界面为 UI 演示，未全部接入持久化后端流程。",
+   "highlights": [
+    "集成认证（邮箱验证、GitHub/Google 登录、TOTP）、Polar 结算与许可证管理、课程视频流（HLS + R2 签名链接）于单一 TanStack Start 应用",
+    "提供本地化 MDX 文档与博客、双确认订阅邮件，站点支持多语言并支持构建时预渲染",
+    "通过 /api/cli/v1 提供许可证读取、机器激活/释放与模板包下载 API，密钥校验基于 D1，模板包经 R2 短时效签名 URL 分发"
+   ],
+   "use_cases": [
+    "需要将全栈 SaaS 应用（营销站点、认证、计费、课程内容）部署到 Cloudflare Workers 的开发者参考",
+    "需要基于 D1/Drizzle 管理用户、许可证、订单与课程数据的后台管理场景",
+    "需要维护多语言文档、博客与本地化法律页面的内容站点"
+   ]
+  },
+  "sha": "bfeeb837c006",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "849ebe432fca": {
+  "identity": {
+   "one_liner": "Docker Compose 封装的 FreePBX 17 + Asterisk 21 容器化 IP-PBX 方案",
+   "review": "该项目以 Docker Compose 将 FreePBX 17、Asterisk 21、PHP 8.2 与独立 MariaDB 容器化运行，提供 SIP 呼叫所需的 PBX 环境，包含数据持久化、日志轮转、邮件通知与 Fail2ban 配置。适用于需要以容器方式部署 FreePBX 的使用者；需注意不支持 DAHDI 通道，RTP 端口需通过宿主机 iptables 手动暴露，容器启动时安装安全更新期间 PBX 不可用。",
+   "highlights": [
+    "提供 FreePBX 17、Asterisk 21、PHP 8.2、MariaDB 10.11 与 Apache 2.4 的多容器组合，支持数据持久化",
+    "从源码构建时以 digest 固定 Debian 基础镜像并校验安全更新包的 SHA-256，校验不通过则终止构建",
+    "支持 Let's Encrypt DNS challenge 的 TLS 配置，run.sh 负责构建镜像、配置 iptables 及可自定义的 RTP 端口范围"
+   ],
+   "use_cases": [
+    "需要通过 Docker Compose 部署和管理 SIP 呼叫 PBX 系统的环境",
+    "希望镜像版本固定、安全更新包经校验后安装的可重复构建场景",
+    "需要配置 HTTPS 管理界面与邮件通知的 FreePBX 运行环境"
+   ]
+  },
+  "sha": "849ebe432fca",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bd958dc810fa": {
+  "identity": {
+   "one_liner": "自托管的 webhook 收件箱服务，将表单提交转发到多种通知渠道",
+   "review": "HookForms 是一个接收 HTML 表单 POST 提交并转发通知的自托管服务，适合想为静态网站或自有表单接入通知能力的开发者。0.2.0 版本用 Rust 重写为单容器、单 SQLite 文件架构，取代了 0.1 的四容器（API、worker、Postgres、Redis）方案；提供 import-postgres 命令迁移旧数据，API 保持兼容。需设置 ADMIN_API_KEY 才能启动。",
+   "highlights": [
+    "支持将提交转发到 Discord、Slack、Teams、Telegram、ntfy、电子邮件及任意 webhook URL，可根据 URL 自动识别渠道类型",
+    "包含 Turnstile 机器人校验、SSRF 防护、API 密钥 PBKDF2-SHA256 哈希存储、按 IP 限流和事件保留期（默认 30 天）等机制",
+    "通过 Docker Compose 或 Rust 工具链运行，镜像发布于 linux/amd64 与 linux/arm64，数据存于卷中的 SQLite 文件"
+   ],
+   "use_cases": [
+    "为静态站点或自建 HTML 表单提供提交接收端点，并将提交消息推送到即时通讯渠道或邮箱",
+    "从 0.1 Python 版迁移：使用 import-postgres 将 Postgres 数据一次性导入 SQLite",
+    "需要多渠道并行通知、多邮箱服务商（Gmail OAuth、Resend、SendGrid、SMTP）配置的表单后端场景"
+   ]
+  },
+  "sha": "bd958dc810fa",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "04792592675f": {
+  "identity": {
+   "one_liner": "单 Go 二进制的自托管社区聊天服务器，含文字频道与音视频通话",
+   "review": "Mnema Talk 是一个自托管的单一社区聊天服务器，提供文字频道、语音/摄像头通话和最高 4K/60FPS 的屏幕共享。面向朋友、社团、公会或小团队等需要独立空间的群体。部署由一个 Go 二进制加 PostgreSQL 和 S3 兼容存储（默认 SeaweedFS）组成，支持 linux/amd64 与 arm64。音视频经 MLS 派生密钥端到端加密，文字消息不由服务端加密；桌面客户端为 Beta 且未签名。",
+   "highlights": [
+    "单个 Go 二进制内建 Web 应用，配合 PostgreSQL 与 S3 兼容存储（默认 SeaweedFS）即可运行，支持 amd64 与 arm64",
+    "麦克风、摄像头与屏幕共享在浏览器中以 MLS 派生密钥加密；SFU 基于 Pion 转发 RTP 数据包，不做转码",
+    "文字聊天支持 Discord 风格 Markdown、线程、投票、论坛频道、Wiki、事件、定时消息、离线发件箱与斜杠命令"
+   ],
+   "use_cases": [
+    "在 NAS、树莓派或小型 VPS 上为小团队或兴趣社群自托管聊天与通话服务",
+    "需要屏幕共享（最高 4K/60FPS、多质量层）进行协作或演示的场景",
+    "对媒体端到端加密与可关闭的外连（遥测、STUN、发布检查）有要求的环境"
+   ]
+  },
+  "sha": "04792592675f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "64906a014167": {
+  "identity": {
+   "one_liner": "Rust 编写的原生数据库客户端，含桌面应用、CLI 与只读 MCP 服务器",
+   "review": "Dbento 是一个用 Rust 编写、基于 GPUI 通过 GPU 渲染的数据库客户端，提供桌面应用、命令行和 MCP 服务器三种形态。它通过各数据库自身的语言连接 Postgres、SQLite、MySQL、SQL Server、DuckDB 及 MongoDB、SurrealDB、Redis、DynamoDB。连接配置存于 dbento.toml、保存查询为纯文本文件，便于纳入 git；只读由数据库端强制执行，MCP 写操作需人工逐次批准。",
+   "highlights": [
+    "支持 Postgres、SQLite、MySQL/MariaDB、SQL Server、DuckDB（SQL/T-SQL）与 MongoDB、SurrealDB、Redis/Valkey、DynamoDB（各自语言），DuckDB/MongoDB/SurrealDB/Redis/DynamoDB 为可开关的 Cargo 特性",
+    "结果流式写入虚拟化网格，行上限可选 1k/10k/100k/1M 或仅设内存预算；复制为 TSV/CSV/JSON/Markdown/INSERT，导出为 CSV/TSV/JSON",
+    "MCP 服务器提供十个工具，query 默认只读（默认 100 行、上限 1000 行、默认 30 秒超时），execute 需在桌面应用中逐次批准"
+   ],
+   "use_cases": [
+    "需要在同一工具中用各数据库原生语言查询多种 SQL 与 NoSQL 数据库",
+    "团队将连接配置（不含密码）与保存查询以纯文本文件形式纳入 git 评审",
+    "让 AI 客户端通过 MCP 以只读方式访问数据库，写操作由人工逐次批准"
+   ]
+  },
+  "sha": "64906a014167",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

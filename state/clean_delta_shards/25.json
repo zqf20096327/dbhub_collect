@@ -23292,5 +23292,1670 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "e62deb542882+2": {
+  "fn": "DejavuMoe/sani",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "CI",
+     "Release",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "Documentation · Releases · 中文说明"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    14,
+    10,
+    11,
+    [
+     " The Sani dashboard: the box for new links and the 30-day click trend at the top, the list of short links below."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    17,
+    11,
+    14
+   ],
+   [
+    "replace",
+    17,
+    18,
+    14,
+    15,
+    [
+     "- **Fast where it matters.** Redirects are served from memory: about 130,000 requests per second with sub-millisecond median latency on an 8-core laptop, with every click counted (numbers below)."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    29,
+    15,
+    26
+   ],
+   [
+    "replace",
+    29,
+    30,
+    26,
+    27,
+    [
+     "Sani is designed for a single running instance and one administrator, not multi-user hosting or active-active replicas. The 2.x series follows the compatibility policy; v2.0.0 removes ARMv7 and FreeBSD release artifacts while preserving schema 7 and existing APIs and links. Read the release notes before upgrading. For public service, configure HTTPS, persistent storage and a separate files domain when needed, then rehearse a complete backup and restore. Repository tests and published benchmarks do not certify your deployment’s capacity or availability."
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    27,
+    28
+   ],
+   [
+    "replace",
+    31,
+    32,
+    28,
+    29,
+    [
+     "The documentation, in English and Chinese, lives in docs/: guides for deployment and operations, the configuration, HTTP API and command line references, and how Sani works inside. It's a VitePress site; `make install docs-dev` serves it on `127.0.0.1:5174`, and its deploy page has a config builder that writes the deployment files for your domain. Every build checks the docs against the source, so the settings, endpoints, error codes and commands they list are the ones the code has."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    45,
+    29,
+    42
+   ],
+   [
+    "replace",
+    45,
+    46,
+    42,
+    43,
+    [
+     "Open `http://127.0.0.1:8080/admin/` and choose the admin password. The first visit also asks for the setup code Sani prints to its log (`docker logs sani`), so nobody else can claim a fresh instance; when `SANI_BASE_URL` is set, the log line includes a link with the code already filled in. Set `SANI_PASSWORD` instead to skip this step. Put a TLS reverse proxy in front of it; deploy/ has Caddy, nginx and systemd examples."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    43,
+    44
+   ],
+   [
+    "replace",
+    47,
+    48,
+    44,
+    45,
+    [
+     "The v2.0.0 image for `ghcr.io/dejavumoe/sani` uses digest-pinned `gcr.io/distroless/static-debian13:nonroot` for `linux/amd64` and `linux/arm64`. It runs as UID/GID `65532:65532`, has no shell or package manager, and keeps data in the `/data` volume. The amd64 source-built image is about 32 MB uncompressed (measured 2026-11-17). Check Releases before deploying: this source tree may prepare a version whose artifacts are not published yet."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    45,
+    46
+   ],
+   [
+    "replace",
+    49,
+    50,
+    46,
+    47,
+    [
+     "The template pins `v2.0.0`; image tags include `v`, exactly like Git tags and Releases. Use a published version and change the pin explicitly when upgrading. Data is bound from `./sani-data` beside the Compose file to `/data`. The `install` command above is required: it creates the directory with ownership `65532:65532` for the container to write. If an earlier start created a root-owned directory, repair its permissions."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    53,
+    47,
+    50
+   ],
+   [
+    "replace",
+    53,
+    54,
+    50,
+    51,
+    [
+     "Every release has archives for Linux, macOS and Windows, with `SHA256SUMS` and build provenance:"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    64,
+    51,
+    61
+   ],
+   [
+    "replace",
+    64,
+    65,
+    61,
+    62,
+    [
+     "Server configuration uses environment variables; creation defaults can also be saved in Settings and survive restarts. Each field uses built-in defaults → saved settings → explicit environment values. Leave creation variables empty to keep their Settings controls editable. See .env.example and the configuration reference."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    62,
+    63
+   ],
+   [
+    "replace",
+    66,
+    67,
+    63,
+    64,
+    [
+     "|Variable|Default|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    64,
+    65
+   ],
+   [
+    "replace",
+    68,
+    87,
+    65,
+    84,
+    [
+     "|`SANI_LISTEN`|`:8080`|Address to listen on.|",
+     "|`SANI_DATA_DIR`|`data`|Directory for `sani.db` and shared files (`files/`).|",
+     "|`SANI_BASE_URL`|—|Public origin of your short links, e.g. `https://s.example.com`. Without it, short links use the address you're visiting; you can also set it in Settings.|",
+     "|`SANI_PASSWORD`|—|Fixed admin password (at least 8 Unicode code points, at most 1,024 UTF-8 bytes). Without it, you choose one on first visit.|",
+     "|`SANI_SETUP_CODE`|random|The code the first visit asks for. By default a new one is generated at each start, until a password exists, and printed to the log.|",
+     "|`SANI_ROOT_REDIRECT`|—|Where the bare domain `/` goes. Defaults to the admin app.|",
+     "|`SANI_TRUST_PROXY`|`false`|Honor `X-Forwarded-*` and `X-Real-IP`; the client address is the last `X-Forwarded-For` entry. Enable only behind a proxy that sets them.|",
+     "|`SANI_SLUG_LENGTH`|`5`|Generated URL slug length (integer 3–32). By default uses `23456789abcdefghjkmnpqrstuvwxyz`, excluding 0/o and 1/l/i.|",
+     "|`SANI_TEXT_SLUG_LENGTH`|`10`|Generated text/code share slug length (integer 3–32), independent of URL and file lengths; always excludes look-alikes.|",
+     "|`SANI_FILE_SLUG_LENGTH`|`10`|Generated file share slug length (integer 3–32), independent of URL and text lengths; always excludes look-alikes.|",
+     "|`SANI_EXCLUDE_CONFUSABLE`|`true`|Exclude 0/o and 1/i/l from generated URL slugs.|",
+     "|`SANI_META_PROXY`|—|Optional HTTP/HTTPS/SOCKS5 metadata proxy override; otherwise configure it in Settings.|",
+     "|`SANI_FETCH_META`|`true`|Fetch the page title and icon for new links. Private and loopback addresses are never fetched.|",
+     "|`SANI_FORWARD_QUERY`|`true`|Append the visitor's query string to the destination (`/gh?utm_source=x`).|",
+     "|`SANI_CACHE_SIZE`|`100000`|Redirect targets kept in memory.|",
+     "|`SANI_FILES_URL`|—|A second domain, such as `https://f.example.com`, pointed at the same Sani, that serves shared files and raw text. Sharing files needs it.|",
+     "|`SANI_MAX_FILE_MB`|`99`|Whole-file default: 99 decimal MB; explicit values remain MiB (1–4096).|",
+     "|`SANI_LOG_LEVEL` / `SANI_LOG_FORMAT`|`info` / `text`|`debug`…`error`; `text` or `json`.|",
+     "|`TZ`|system|Time zone the daily statistics use.|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    98,
+    84,
+    95
+   ],
+   [
+    "replace",
+    98,
+    99,
+    95,
+    96,
+    [
+     "**API.** API routes changed in v0.9.5; when upgrading from v0.9.4 or earlier, update scripts using the current API reference. The API archive documents those older versions. Save a fixed sharing domain and create a token in Settings, then:"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    107,
+    96,
+    104
+   ],
+   [
+    "replace",
+    107,
+    108,
+    104,
+    105,
+    [
+     "The API reference covers every endpoint and error code."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    105,
+    106
+   ],
+   [
+    "replace",
+    109,
+    110,
+    106,
+    107,
+    [
+     "Sani resource operations use `/api/v1` and admin capabilities use `/api/admin/v1`, with consistent HTTP statuses and error shapes. Before upgrading, export JSON in the old admin app, stop cleanly, and snapshot the database, files and configuration. Run `sani preflight` with the new binary; upgrade in place without reimport. Rollback requires the full pre-upgrade snapshot and old binary/image. See the new API, v0.9.4 API archive and upgrade guide."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    113,
+    107,
+    110
+   ],
+   [
+    "replace",
+    113,
+    114,
+    110,
+    111,
+    [
+     "On the initial upgrade, missing share-length settings are saved as `max(10, legacy effective URL slug length)`, preserving longer legacy values. Later URL-length edits do not affect shares. Existing and manually chosen slugs stay unchanged; see the length settings."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    121,
+    111,
+    118
+   ],
+   [
+    "replace",
+    121,
+    122,
+    118,
+    119,
+    [
+     "`make load` runs bombardier against a release build: 128 connections for 15 seconds, on the same 8-core laptop (Intel Core Ultra 7 255H, WSL2) as the load generator."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    119,
+    120
+   ],
+   [
+    "replace",
+    123,
+    124,
+    120,
+    121,
+    [
+     "|Path|Requests/s|p50|p99|"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    121,
+    122
+   ],
+   [
+    "replace",
+    125,
+    128,
+    122,
+    125,
+    [
+     "|Cached redirect, click counted|141,972|0.75 ms|3.12 ms|",
+     "|Redirect with a visit limit|145,048|0.73 ms|3.00 ms|",
+     "|Unknown slug (404 page)|103,161|1.02 ms|4.15 ms|"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    138,
+    125,
+    135
+   ],
+   [
+    "replace",
+    138,
+    139,
+    135,
+    136,
+    [
+     "Performance in the docs has the method and the microbenchmarks."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    146,
+    136,
+    143
+   ],
+   [
+    "replace",
+    146,
+    153,
+    143,
+    144,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    155,
+    144,
+    146
+   ],
+   [
+    "replace",
+    155,
+    156,
+    146,
+    147,
+    [
+     "Security choices worth knowing (the security page has the details):"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    171,
+    147,
+    162
+   ],
+   [
+    "replace",
+    171,
+    176,
+    162,
+    163,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    178,
+    163,
+    165
+   ],
+   [
+    "replace",
+    178,
+    179,
+    165,
+    166,
+    [
+     "Development in the docs lists the rules a change has to keep, and CONTRIBUTING.md how to propose one. Security problems go through private reporting, not public issues."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    188,
+    166,
+    175
+   ],
+   [
+    "replace",
+    188,
+    189,
+    175,
+    176,
+    [
+     "For a complete backup including files, stop all writers before copying the database and `files/` together. Restore into an empty directory, without mixing in the old instance’s WAL or files; Operations has the paired backup, restore and upgrade steps. For a portable list of your links, use Settings → Data → Export (it leaves texts and files out)."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    191,
+    176,
+    178
+   ],
+   [
+    "replace",
+    191,
+    193,
+    178,
+    179,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "f860cc3d1e1a+2": {
+  "fn": "DerKezorm/nexpaper",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "equal",
+    0,
+    7,
+    0,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     " from Paperless: all of it waits in the inbox with the fields filled in, and one click files it."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    11,
+    9,
+    11,
+    [
+     " are read, edit or manage; single documents can also be shared with a person or, for somebody without an account, as a",
+     " link that ends."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     " checksum. The search understands parts of words and filters (`kind:invoice amount:>100`)."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     " change is a new version; nothing is overwritten."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    18,
+    16,
+    18,
+    [
+     " delivery note that goes with an invoice. Connected documents show each other, and a link to the outside or the",
+     " export can take them along."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    21,
+    19,
+    21,
+    [
+     " search can be saved to the side bar, a transfer code fills in the banking app, a note on a sender keeps the",
+     " customer number at hand, and a PDF with a password is opened once and read like any other."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    24,
+    22,
+    24,
+    [
+     " last day to cancel worked out from the notice period. nexpaper reminds the people who may edit the vault, by push, by",
+     " mail or in a weekly overview, each reminder once."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    24,
+    25
+   ],
+   [
+    "replace",
+    25,
+    27,
+    25,
+    27,
+    [
+     " in the archive under \"May go\". Nothing is deleted by itself; a kind can ask nexpaper to put its expired documents in",
+     " the trash once a day, at night (off from the start, they stay there for 30 days)."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     " changed what, and an export for the tax adviser (a ZIP with the PDFs and a list). No claim of GoBD compliance."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    31,
+    29,
+    31
+   ],
+   [
+    "replace",
+    31,
+    33,
+    31,
+    33,
+    [
+     " comes with a second factor from the start, passkeys, sign-in through your own provider and a checklist in the",
+     " settings. Everything the web app does goes through an open API (`/api/v1`) for your own tools."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    40,
+    33,
+    40
+   ],
+   [
+    "replace",
+    40,
+    46,
+    40,
+    41,
+    [
+     " The archive: documents by month, with sender, kind and amount"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    41,
+    42
+   ],
+   [
+    "replace",
+    47,
+    57,
+    42,
+    47,
+    [
+     " The inbox with proposals ",
+     " A document with its fields, notes and history ",
+     "",
+     " Vaults and who may do what ",
+     " The quick upload on a phone "
+    ]
+   ],
+   [
+    "equal",
+    57,
+    66,
+    47,
+    56
+   ],
+   [
+    "replace",
+    66,
+    85,
+    56,
+    57,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    99,
+    57,
+    71
+   ],
+   [
+    "replace",
+    99,
+    100,
+    71,
+    72,
+    [
+     "docker-compose.yml says how to change that). The first account you create there is the operator."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    118,
+    72,
+    90
+   ],
+   [
+    "replace",
+    118,
+    119,
+    90,
+    91,
+    [
+     " the proxy runs on the same host, or keep both on a Docker network without a published port. Send HSTS from the proxy."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    91,
+    92
+   ],
+   [
+    "replace",
+    120,
+    122,
+    92,
+    94,
+    [
+     " proxy's address or network; without it every sign-in seems to come from the proxy and the brake against guessing",
+     " cannot tell people apart) and `NEXPAPER_COOKIE_SECURE: \"on\"`."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    94,
+    95
+   ],
+   [
+    "replace",
+    123,
+    124,
+    95,
+    96,
+    [
+     " app, or a passkey) and keeps the recovery codes. The operator may switch the requirement off; do not."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    96,
+    97
+   ],
+   [
+    "replace",
+    125,
+    126,
+    97,
+    98,
+    [
+     " second factor, your own account with one, the brake, the server secrets, the cookies, the proxy and the backups."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    98,
+    99
+   ],
+   [
+    "replace",
+    127,
+    129,
+    99,
+    101,
+    [
+     " (`secret.key`) but **not the documents**: those are plain files in `/data/dokumente` and belong in the backup your",
+     " server makes anyway. Try a restore with \"Check\" now and then."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    101,
+    102
+   ],
+   [
+    "replace",
+    130,
+    133,
+    102,
+    105,
+    [
+     " opens them. Pin a version instead of `latest`, update on purpose, back up before. An upload request is the one way",
+     " in for somebody without an account that takes files: whoever holds its address can put up to its number of files",
+     " into one person's inbox, nothing else (see Inputs, and SECURITY.md)."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    105,
+    106
+   ],
+   [
+    "replace",
+    134,
+    137,
+    106,
+    109,
+    [
+     " one: the operator sends it (Settings, Accounts), or, where a mail server and the public address are set, the",
+     " person asks for it on the sign-in page. The link works once and for 24 hours. An operator without a mail server",
+     " who forgot their own password makes one in the container (below)."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    150,
+    109,
+    122
+   ],
+   [
+    "replace",
+    150,
+    152,
+    122,
+    124,
+    [
+     " up provider and application there and enters them here. The token is used for that run only and never stored. Who",
+     " would rather not hand out a token downloads the blueprint instead and enters client ID and secret by hand."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    124,
+    125
+   ],
+   [
+    "replace",
+    153,
+    156,
+    125,
+    128,
+    [
+     " `https://paper.example.com/api/v1/oidc/<short name>/callback`, fixed once made), the issuer, client ID and secret.",
+     " For Microsoft Entra ID the issuer is `https://login.microsoftonline.com/<tenant>/v2.0`, or `common` or",
+     " `organizations` for several tenants."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    128,
+    129
+   ],
+   [
+    "replace",
+    157,
+    159,
+    129,
+    131,
+    [
+     " links itself on its own page (Security, with its password); new people come in by invitation, or, where the operator",
+     " switches \"New people get an account\" on for a provider, as members. Everybody gets a vault of their own."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    160,
+    131,
+    132
+   ],
+   [
+    "replace",
+    160,
+    162,
+    132,
+    134,
+    [
+     " intake counts only for an address the person confirmed by the link nexpaper sends. An address 1.0.1 took from the",
+     " provider as confirmed waits for that link once after the update (My account, Profile); it needs the mail server."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    134,
+    135
+   ],
+   [
+    "replace",
+    163,
+    168,
+    135,
+    140,
+    [
+     " second factor in nexpaper is asked for its code after the provider. \"Require a second factor\" is for signing in with",
+     " a password: an account without a password, and whoever comes in through a provider whose entry has \"The provider",
+     " checks the second factor itself\" on, is not made to set one up (a change from 1.0.1). Device tokens and API keys of",
+     " an account with a password and no second factor of its own wait until it sets one up, also when it signs in through a",
+     " provider that checks one."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    206,
+    140,
+    178
+   ],
+   [
+    "replace",
+    206,
+    207,
+    178,
+    179,
+    [
+     "|Where|What|"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    179,
+    180
+   ],
+   [
+    "replace",
+    208,
+    214,
+    180,
+    186,
+    [
+     "|`nexpaper.db`|The SQLite database: accounts, settings, the filing, the recognised text and the search index.|",
+     "|`secret.key`|The server's own secret (the secrets of the sign-in providers, the mail password, the AI key and the like).|",
+     "|`backups/`, `logs/`, `locales/`|Backups, the log, extra languages as JSON files.|",
+     "|`dokumente/`|The documents themselves, as readable files (below). Readable without nexpaper.|",
+     "|`cache/`, `uploads/`, `exports/`|Pictures of pages (trimmed to a size you set), uploads in progress, ZIPs for the tax adviser.|",
+     "|`eingang/`|The intake folder, when it is switched on (Settings, Inputs): one subfolder per person.|"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    282,
+    186,
+    254
+   ],
+   [
+    "replace",
+    282,
+    283,
+    254,
+    255,
+    [
+     "|Variable|Default|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    284,
+    255,
+    256
+   ],
+   [
+    "replace",
+    284,
+    303,
+    256,
+    275,
+    [
+     "|`NEXPAPER_DATA_DIR`|`/data`|Database, logs, backups, secrets and the languages|",
+     "|`NEXPAPER_LOCALES_DIR`|`<data>/locales`|Extra languages, one JSON file each|",
+     "|`NEXPAPER_SECRET_KEY`|made on first start|Protects server-side secrets; when set, it wins over `secret.key`|",
+     "|`NEXPAPER_PUBLIC_URL`|from the request|The address people use, for invitation links and the redirect address of the sign-in providers. The setting in the interface wins|",
+     "|`NEXPAPER_TRUSTED_PROXIES`|none|Addresses or networks of reverse proxies whose `X-Forwarded-For` and `X-Forwarded-Proto` are believed, comma separated|",
+     "|`NEXPAPER_SETUP_TOKEN`|made at start|The code the first account needs|",
+     "|`NEXPAPER_OPERATOR_NETWORKS`|none|Networks the operator's settings may be changed from, comma separated|",
+     "|`NEXPAPER_SESSION_DAYS`|`30`|A session of \"stay signed in on this device\" ends after this many days without use|",
+     "|`NEXPAPER_COOKIE_SECURE`|`auto`|`on`, `off` or `auto` (from the request, or `X-Forwarded-Proto` of a trusted proxy)|",
+     "|`NEXPAPER_COOKIE_SUFFIX`|none|Appended to the cookie names; keeps two instances on one host apart|",
+     "|`NEXPAPER_LOG_LEVEL`|stored setting|`quiet`, `normal`, `detailed` or `trace`; overrides the setting|",
+     "|`NEXPAPER_DECODE_SLOTS`|`1`|How many pictures are unpacked at the same moment (each takes some 150 MB while open)|",
+     "|`NEXPAPER_UPDATE_URL`|GitHub|Where the update check asks for the newest release|",
+     "|`NEXPAPER_ARGON2_TIME`, `NEXPAPER_ARGON2_MEMORY_KIB`, `NEXPAPER_ARGON2_PARALLELISM`|`3`, `65536`, `2`|Cost of the password hash; only the tests lower it|",
+     "|`NEXPAPER_FRONTEND_DIST`|`/app/static`|Where the built interface lies (set by the image)|",
+     "|`NEXPAPER_DISABLE_BACKGROUND`|`false`|Switches off the background jobs (the log, backups, tidying up, the queue, checking the files, the inputs); for tests. The update check is none of them: it asks only when somebody opens the about page and the last answer is older than a day|",
+     "|`NEXPAPER_PORT`|`8000`|The port inside the container; only for host networking|",
+     "|`PUID`, `PGID`|`1000`|Owner of the files in the data directory|",
+     "|`TZ`||The time zone of the container's log. People's own time zones come from their browsers|"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    313,
+    275,
+    285
+   ],
+   [
+    "replace",
+    313,
+    315,
+    285,
+    287,
+    [
+     " would otherwise spend the short answer on its thoughts and give back nothing. A local server that does not know the",
+     " field is asked once more without it."
+    ]
+   ],
+   [
+    "equal",
+    315,
+    316,
+    287,
+    288
+   ],
+   [
+    "replace",
+    316,
+    317,
+    288,
+    289,
+    [
+     " that points elsewhere is refused, when it is saved and at every request. The API key is sealed and never shown again."
+    ]
+   ],
+   [
+    "equal",
+    317,
+    318,
+    289,
+    290
+   ],
+   [
+    "replace",
+    318,
+    319,
+    290,
+    291,
+    [
+     " in personal vaults stay away from it unless the operator lets them in."
+    ]
+   ],
+   [
+    "equal",
+    319,
+    320,
+    291,
+    292
+   ],
+   [
+    "replace",
+    320,
+    322,
+    292,
+    294,
+    [
+     " large delivery does not send every document, one request each, to a service that is paid for by the request. When it is",
+     " reached, the documents keep what the rules and the text gave them until the next day."
+    ]
+   ],
+   [
+    "equal",
+    322,
+    323,
+    294,
+    295
+   ],
+   [
+    "replace",
+    323,
+    324,
+    295,
+    296,
+    [
+     " with the fixed rules and change nothing in which fields are filled and how the answer is checked."
+    ]
+   ],
+   [
+    "equal",
+    324,
+    357,
+    296,
+    329
+   ],
+   [
+    "replace",
+    357,
+    358,
+    329,
+    330,
+    [
+     " currencies beside them, and how many have no amount. Only what you may see is counted."
+    ]
+   ],
+   [
+    "equal",
+    358,
+    359,
+    330,
+    331
+   ],
+   [
+    "replace",
+    359,
+    361,
+    331,
+    333,
+    [
+     " sets the kind, moves to another vault, connects with each other or moves to the trash, for up to 500 documents. What",
+     " you may not change is left out, and a line says how many and why. Moving and the trash ask first."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    362,
+    333,
+    334
+   ],
+   [
+    "replace",
+    362,
+    364,
+    334,
+    336,
+    [
+     " under \"Saved\", with the number of hits beside it. Up to 30 per person, each only its owner's, to rename, reorder and",
+     " delete."
+    ]
+   ],
+   [
+    "equal",
+    364,
+    365,
+    336,
+    337
+   ],
+   [
+    "replace",
+    365,
+    366,
+    337,
+    338,
+    [
+     " up to 20 per person and yours alone. Search words: `pinned:yes`, `pinned:no`."
+    ]
+   ],
+   [
+    "equal",
+    366,
+    392,
+    338,
+    364
+   ],
+   [
+    "replace",
+    392,
+    395,
+    364,
+    367,
+    [
+     " nexpaper works out the last day to cancel and shows it beside the field. Without a cancellation the end moves on by the",
+     " renewal after it has passed, once per end, with a line in the history. When a notice has to arrive is written in the",
+     " contract; nexpaper only does the sums."
+    ]
+   ],
+   [
+    "equal",
+    395,
+    396,
+    367,
+    368
+   ],
+   [
+    "replace",
+    396,
+    402,
+    368,
+    374,
+    [
+     " morning in their own time zone: an invoice 3 days ahead, the last day to cancel 14 days ahead, a warranty 30 days",
+     " ahead (each changeable), and once more on the day itself unless it is done. Way: push, mail, or a **weekly overview**",
+     " by mail on Mondays, only when something is coming up. A person can mute single vaults; somebody who may only read gets",
+     " nothing. Every reminder goes out once, a missed one is made up for two days, and at most 20 a day go to one person, the",
+     " rest in one message. It names the kind, the day and the title of the document, never the amount, the text or the notes.",
+     " Mail needs the mail server of the operator and a confirmed address."
+    ]
+   ],
+   [
+    "equal",
+    402,
+    403,
+    374,
+    375
+   ],
+   [
+    "replace",
+    403,
+    409,
+    375,
+    381,
+    [
+     " of the document date; no kind has one from the start. Setting it asks whether it also applies to the documents already",
+     " there (a date set by hand stays). Documents whose time is over are listed in the archive under the filter \"May go\"",
+     " (a table with the column \"Keep until\", boxes and \"Move to the trash\"; the overview of the archive says how many there",
+     " are) and on the Deadlines page, where you choose what goes to the trash (30 days, see Filing). The question when you set",
+     " a time always says what happens once it is over. The usual times shown beside the setting are a help and carry no",
+     " guarantee; nexpaper makes no claim of GoBD compliance or legal advice."
+    ]
+   ],
+   [
+    "equal",
+    409,
+    410,
+    381,
+    382
+   ],
+   [
+    "replace",
+    410,
+    417,
+    382,
+    389,
+    [
+     " a kind with a time, set by whoever sets the time). When it is on, nexpaper puts the filed documents of the kind whose",
+     " time is over in the trash once a day, at night (3 o'clock, server time; a night the server was off for is made up at",
+     " the next start), at most 500 a day, each document only once (one you restore stays), with a line in its history, in",
+     " the weekly overview and in a note on the archive. A date you set by hand counts like any other. Switching it on asks",
+     " first and says how many documents would go at once; a document filed later whose time is already over goes the next",
+     " night, and the document page and the inbox say so.",
+     " Nothing is deleted for good by it; the trash empties itself after 30 days as always."
+    ]
+   ],
+   [
+    "equal",
+    417,
+    418,
+    389,
+    390
+   ],
+   [
+    "replace",
+    418,
+    420,
+    390,
+    392,
+    [
+     " on the Deadlines page with a filter of its own and reminds on the day itself at 8, without a lead; the sentence",
+     " never goes into a reminder or the weekly overview."
+    ]
+   ],
+   [
+    "equal",
+    420,
+    421,
+    392,
+    393
+   ],
+   [
+    "replace",
+    421,
+    422,
+    393,
+    394,
+    [
+     " (`docs/api.md`)."
+    ]
+   ],
+   [
+    "equal",
+    422,
+    442,
+    394,
+    414
+   ],
+   [
+    "replace",
+    442,
+    443,
+    414,
+    415,
+    [
+     " phone until the person taps \"Upload\"."
+    ]
+   ],
+   [
+    "equal",
+    443,
+    444,
+    415,
+    416
+   ],
+   [
+    "replace",
+    444,
+    447,
+    416,
+    419,
+    [
+     " Apple, so nexpaper cannot ship the file: My account explains how to build it in four steps with a key that only",
+     " uploads, and the operator can share a finished one by an iCloud link",
+     " (docs/iphone-shortcut.md)."
+    ]
+   ],
+   [
+    "equal",
+    447,
+    448,
+    419,
+    420
+   ],
+   [
+    "replace",
+    448,
+    449,
+    420,
+    421,
+    [
+     " device gets a token of its own and stands with the signed-in devices, where it can be signed out."
+    ]
+   ],
+   [
+    "equal",
+    449,
+    456,
+    421,
+    428
+   ],
+   [
+    "replace",
+    456,
+    460,
+    428,
+    432,
+    [
+     " scanner or a share) with a subfolder per person. A file is taken once it lay still for 10 seconds, goes into that",
+     " person's inbox and leaves the folder; what is not taken (another kind of file, too large, empty) is moved to",
+     " `abgelehnt/` beside it with the reason. Files in the folder itself or in a subfolder nobody has go to the operator,",
+     " marked unknown. Links are not followed, hidden and temporary files are left alone."
+    ]
+   ],
+   [
+    "equal",
+    460,
+    461,
+    432,
+    433
+   ],
+   [
+    "replace",
+    461,
+    474,
+    433,
+    446,
+    [
+     " taken from the mails, also from forwarded ones; the mails themselves do not become documents, unless you switch on",
+     " \"Take mails without an attachment as a document\" (off from the start): then a mail without any attachment that comes",
+     " from a confirmed address of a person, and that your mail server says passed DMARC (`dmarc=pass` from the trusted",
+     " server, see SECURITY.md), becomes a PDF of its text (from, to, subject, date, then the text; HTML is read as text",
+     " only, nothing in it is loaded) in that person's inbox, titled with the subject. Never for unknown senders, never",
+     " through `paper+<account>@` alone, at most 50 a day per person and 200 KB of text each. Without such a verdict of your",
+     " mail server no text is taken. A mail belongs to the",
+     " person whose confirmed address it comes from (My account, Upload) or who is named in `paper+<account>@`; everything",
+     " else goes to the operator, marked unknown (or stays in the mailbox, if you choose so). Once every part was taken the",
+     " mail is marked read, moved to `nexpaper` or deleted; a mail with parts over the limits stays and is flagged. The first",
+     " start takes only the unread mails. TLS or STARTTLS is required (without it only for a server on the same machine), a",
+     " server in your own network must be allowed first, and switched off nothing connects. A stranger who knows the address",
+     " can send files into an inbox: nexpaper limits how much per run and day, see SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    474,
+    475,
+    446,
+    447
+   ],
+   [
+    "replace",
+    475,
+    482,
+    447,
+    454,
+    [
+     " tax office or the property manager, who drops files there. They land in your inbox in your own vault, from the name",
+     " you gave the request and marked unknown; nothing is filed by itself, and a rule may propose fields but never moves",
+     " such a document to another vault. A request lasts at most as long as a link, takes 10 files unless you say otherwise",
+     " (50 at most), and you withdraw it whenever you like (My account, Upload, or the dialog). **Off from the start**: the",
+     " operator switches them on under Settings, Sharing, and they need the public address of the server. The page behind",
+     " the address shows who asks, for whom, and how many files still go; never what arrived already. You get a notice (at",
+     " most one per request and hour) with the name of the request and the number of files, never a file name."
+    ]
+   ],
+   [
+    "equal",
+    482,
+    494,
+    454,
+    466
+   ],
+   [
+    "replace",
+    494,
+    495,
+    466,
+    467,
+    [
+     "operator sees none of them. A backup together with `secret.key` can open them, see SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    495,
+    499,
+    467,
+    471
+   ],
+   [
+    "replace",
+    499,
+    508,
+    471,
+    480,
+    [
+     " many documents, tags, correspondents and types, who owns what), choose a person here for each owner and whether each",
+     " document goes into the own vault of its person, everything into one vault, or a shared vault for each storage path",
+     " (named after it; a vault of that name that is here already is used, documents without a path go to the own vault of",
+     " their person). The documents come with the file as it",
+     " came, the searchable copy and the text Paperless recognised (nothing is read again), title, date, sender, kind, tags,",
+     " notes, custom fields (as a note) and the people they were shared with. It runs in the background, can be stopped and",
+     " goes on where it stopped, also after a restart; running it again takes only what is new. Office files (Word, Excel)",
+     " are not taken; when Paperless made a PDF of one, that PDF becomes the document and its history says so. What is",
+     " skipped is in the log with its reason. Paperless itself is only read."
+    ]
+   ],
+   [
+    "equal",
+    508,
+    509,
+    480,
+    481
+   ],
+   [
+    "replace",
+    509,
+    516,
+    481,
+    488,
+    [
+     " archive: the searchable PDFs, the originals if wanted, e-invoices as XML and a list as CSV (Excel opens it as it is),",
+     " in folders as on the disk. It is made and fetched in the browser, packed in the background, and a notice says when it",
+     " is ready. Instead of downloading",
+     " it, the ZIP can go to the tax adviser as a link without an account, valid as long as links are (Settings, Sharing);",
+     " it shows when it was opened and can be revoked. With \"Take the documents that go with them\" the delivery note comes",
+     " along with its invoice even outside the period (only what you see in your vaults), and the list names them in a",
+     " column of its own."
+    ]
+   ],
+   [
+    "equal",
+    516,
+    537,
+    488,
+    509
+   ],
+   [
+    "replace",
+    537,
+    538,
+    509,
+    510,
+    [
+     "docs/api.md says how to sign in."
+    ]
+   ],
+   [
+    "equal",
+    538,
+    542,
+    510,
+    514
+   ],
+   [
+    "replace",
+    542,
+    544,
+    514,
+    516,
+    [
+     " factor, the password alone opens nothing. A session ends after 30 days without use (`NEXPAPER_SESSION_DAYS`), or after",
+     " 12 hours when \"stay signed in\" was not ticked, and every device can be signed out on its own."
+    ]
+   ],
+   [
+    "equal",
+    544,
+    545,
+    516,
+    517
+   ],
+   [
+    "replace",
+    545,
+    548,
+    517,
+    520,
+    [
+     " wrong password. A device token never changes the way into the account (password, second factor, passkeys), never",
+     " reaches the operator's side (settings, accounts, backups, the log) and never pairs another device; a lost phone is",
+     " blocked in the list and stops at once."
+    ]
+   ],
+   [
+    "equal",
+    548,
+    549,
+    520,
+    521
+   ],
+   [
+    "replace",
+    549,
+    551,
+    521,
+    523,
+    [
+     " `SameSite`; the Content Security Policy only allows the app's own files. Only the worker that finds the edges of a page",
+     " in a photo may compile code at run time (OpenCV); it sees pixels and nothing else."
+    ]
+   ],
+   [
+    "equal",
+    551,
+    552,
+    523,
+    524
+   ],
+   [
+    "replace",
+    552,
+    553,
+    524,
+    525,
+    [
+     " resolved once, connected to exactly as checked, no redirect followed, never a metadata address."
+    ]
+   ],
+   [
+    "equal",
+    553,
+    554,
+    525,
+    526
+   ],
+   [
+    "replace",
+    554,
+    557,
+    526,
+    529,
+    [
+     " unpacking) and tried out on a scratch copy before a restore, and downloading, deleting, uploading and restoring one ask",
+     " for the operator's password again. A restore brings back devices, keys and links withdrawn after the backup; the trial",
+     " run counts them."
+    ]
+   ],
+   [
+    "equal",
+    557,
+    559,
+    529,
+    531
+   ],
+   [
+    "replace",
+    559,
+    560,
+    531,
+    532,
+    [
+     "How to report a problem: SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    560,
+    581,
+    532,
+    553
+   ],
+   [
+    "replace",
+    581,
+    587,
+    553,
+    554,
+    [
+     "AGPL-3.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

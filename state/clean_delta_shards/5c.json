@@ -16373,5 +16373,1055 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "8d5843f91751+2": {
+  "fn": "cubrid-lab/cubrid-mcp-server",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    1,
+    [
+     "cubrid-mcp-server icon (CUBRID Lab brand repository)"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    1,
+    4
+   ],
+   [
+    "replace",
+    8,
+    10,
+    4,
+    6,
+    [
+     "PyPI",
+     "coverage"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    12,
+    7,
+    8,
+    [
+     "A Model Context Protocol server for CUBRID, enabling LLMs to safely inspect schemas and execute read-only queries via pycubrid."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    8,
+    9
+   ],
+   [
+    "replace",
+    13,
+    14,
+    9,
+    10,
+    [
+     "Terminal recording: an MCP client lists the tools, calls all_table_names, and execute_query rejects DROP TABLE"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    10,
+    11
+   ],
+   [
+    "replace",
+    15,
+    18,
+    11,
+    12,
+    [
+     " Terminal recording of a real MCP stdio session (<code>demos/mcp_demo.py</code>, recorded with <code>demos/record_demo.sh</code>). "
+    ]
+   ],
+   [
+    "equal",
+    18,
+    21,
+    12,
+    15
+   ],
+   [
+    "replace",
+    21,
+    22,
+    15,
+    16,
+    [
+     "New to CUBRID or to MCP? Follow the Quick Start guide. It"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    29,
+    16,
+    23
+   ],
+   [
+    "replace",
+    29,
+    30,
+    23,
+    24,
+    [
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    24,
+    25
+   ],
+   [
+    "replace",
+    31,
+    43,
+    25,
+    37,
+    [
+     "|`all_table_names`|List every user table in the database|",
+     "|`filter_table_names`|Substring search over table names|",
+     "|`schema_definitions`|Column types, nullability, defaults, and primary key info|",
+     "|`describe_table`|Full metadata: columns, primary key, and indexes in one call|",
+     "|`list_indexes`|Indexes for a table with key columns and flags|",
+     "|`explain_query`|Execution plan/trace for a `SELECT`/`WITH` (via CUBRID `SHOW TRACE`)|",
+     "|`table_row_counts`|`COUNT(*)` for one or many tables|",
+     "|`list_serials`|CUBRID `SERIAL` sequences with current value and bounds|",
+     "|`list_class_hierarchy`|CUBRID `CLASS` inheritance relationships|",
+     "|`execute_query`|Run read-only SQL with automatic output truncation|",
+     "|`health_check`|Verify database connectivity on demand|",
+     "|`execute_write`|Run a single `INSERT`/`UPDATE`/`DELETE` in an atomic transaction (**only registered when opt-in write mode is enabled**)|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    37,
+    40
+   ],
+   [
+    "replace",
+    46,
+    47,
+    40,
+    41,
+    [
+     "Schema metadata is also exposed as read-only MCP Resources, so clients can discover and read schema context without a tool call. Resources reuse the same read-only catalog queries as the tools — no additional data access or write surface."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    41,
+    42
+   ],
+   [
+    "replace",
+    48,
+    49,
+    42,
+    43,
+    [
+     "|Resource URI|MIME type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    43,
+    44
+   ],
+   [
+    "replace",
+    50,
+    54,
+    44,
+    48,
+    [
+     "|`cubrid://agent-guide`|`text/markdown`|CUBRID agent guide: dialect, types, performance|",
+     "|`cubrid://guide/*`|`text/markdown`|4 topic guides: sql-dialect, types, performance, collections|",
+     "|`cubrid://schema`|`application/json`|Whole-schema index: every user table with its per-table resource URI|",
+     "|`cubrid://schema/{table}`|`application/json`|Per-table metadata (columns, primary key, indexes) — mirrors `describe_table`|"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    48,
+    49
+   ],
+   [
+    "replace",
+    55,
+    56,
+    49,
+    50,
+    [
+     "Schema resources always read the `default` connection (see Multi-Connection). The guides are static Markdown. Table names in `{table}` are percent-decoded by URI-template matching; an unknown or system table produces a resource-read error, matching the `describe_table` tool."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    67,
+    50,
+    61
+   ],
+   [
+    "replace",
+    67,
+    68,
+    61,
+    62,
+    [
+     "|Prompt|Arguments|Description|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    62,
+    63
+   ],
+   [
+    "replace",
+    69,
+    78,
+    63,
+    72,
+    [
+     "|`summarize_table`|`table`|Describe a table, then sample it with a bounded read-only query|",
+     "|`explain_query`|`sql`|Obtain and interpret a `SELECT`/`WITH` execution plan via `explain_query`|",
+     "|`inspect_schema`|_(none)_|Build a high-level overview of the whole schema from the read-only tools|",
+     "|`find_index_candidates`|`table`|Review a table's index coverage for potential review areas|",
+     "|`optimize_query`|`sql`|Analyze the execution plan and suggest CUBRID-specific optimizations|",
+     "|`migrate_from_mysql`|`sql`|Convert MySQL query syntax to valid CUBRID SQL|",
+     "|`explore_unknown_db`|_(none)_|Systematically explore an unfamiliar database|",
+     "|`safe_data_analysis`|`question`|Answer data questions using read-only queries|",
+     "|`write_cubrid_sql`|`natural_language`|Generate valid CUBRID SQL from natural language|"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    82,
+    72,
+    76
+   ],
+   [
+    "replace",
+    82,
+    84,
+    76,
+    78,
+    [
+     "Quick Start guide walks through the same settings with a",
+     "prepared lab, using the account `mcp_reader` from SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    89,
+    78,
+    83
+   ],
+   [
+    "replace",
+    89,
+    94,
+    83,
+    88,
+    [
+     " package does not install CUBRID; Quick Start",
+     " Step 1 starts a",
+     " disposable one.",
+     "- uv for `uvx`, or pipx",
+     " for `pipx run`."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    109,
+    88,
+    103
+   ],
+   [
+    "replace",
+    109,
+    110,
+    103,
+    104,
+    [
+     "|Variable|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    104,
+    105
+   ],
+   [
+    "replace",
+    111,
+    121,
+    105,
+    115,
+    [
+     "|`CUBRID_MCP_READONLY`|`1`|Enforce read-only SQL whitelist. `0` relaxes the whitelist only; `execute_query` still rejects write, DDL, transaction-control, `CALL`, `EVALUATE` and `KILL` statements (use `execute_write`)|",
+     "|`CUBRID_MCP_MAX_CHARS`|`4000`|Max characters in query output|",
+     "|`CUBRID_MCP_MAX_ROWS`|`1000`|Max rows returned by `execute_query` before truncation|",
+     "|`CUBRID_MCP_MAX_SQL_LENGTH`|`65536`|Max length (characters) of a submitted SQL statement|",
+     "|`CUBRID_MCP_QUERY_TIMEOUT`|`30`|Per-statement socket read timeout in seconds. If the server sends no data within this window the query is aborted and the connection is reset. This is a socket read timeout, not a true server-side statement timeout.|",
+     "|`CUBRID_MCP_CONNECT_TIMEOUT`|`10`|Timeout in seconds for opening a connection to the CUBRID broker (positive number). Raise it for slow or distant brokers.|",
+     "|`CUBRID_MCP_MAX_ROW_COUNT_TABLES`|`50`|Max tables `table_row_counts` counts in one call: the default call counts the first N user tables and a longer explicit list is rejected|",
+     "|`CUBRID_MCP_MAX_INLINE_BINARY_BYTES`|`256`|Binary values up to this many bytes are returned base64-encoded; larger ones are summarized as `<binary N bytes>`. `0` summarizes every non-empty binary value.|",
+     "|`CUBRID_MCP_AUDIT_LOG`|`0`|Opt-in audit logging. When enabled, emits one redaction-safe JSON record per executed statement (`execute_query`/`explain_query`/`execute_write`) to **stderr** — see Logging. Honoured per connection (`CUBRID_<NAME>_MCP_AUDIT_LOG`).|",
+     "|`CUBRID_MCP_WRITE`|`0`|Opt-in write mode. When enabled (`1`), registers the `execute_write` tool for single-statement DML. Honoured per connection (`CUBRID_<NAME>_MCP_WRITE`); the tool is registered when any connection enables it. Off by default.|"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    135,
+    115,
+    129
+   ],
+   [
+    "replace",
+    135,
+    151,
+    129,
+    130,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    157,
+    130,
+    136
+   ],
+   [
+    "replace",
+    157,
+    158,
+    136,
+    137,
+    [
+     " cannot appear in `CUBRID_CONNECTIONS`."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    137,
+    138
+   ],
+   [
+    "replace",
+    159,
+    161,
+    138,
+    140,
+    [
+     " etc. and the optional MCP tuning knobs at `CUBRID_<NAME>_MCP_*` (same suffixes as",
+     " the global ones). Named connections do **not** inherit values from the bare vars."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    163,
+    140,
+    142
+   ],
+   [
+    "replace",
+    163,
+    164,
+    142,
+    143,
+    [
+     " `CUBRID_<NAME>_MCP_READONLY` independently of the default."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    178,
+    143,
+    157
+   ],
+   [
+    "replace",
+    178,
+    179,
+    157,
+    158,
+    [
+     "Use `uvx` to run directly from PyPI:"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    210,
+    158,
+    189
+   ],
+   [
+    "replace",
+    210,
+    221,
+    189,
+    190,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    231,
+    190,
+    200
+   ],
+   [
+    "replace",
+    231,
+    242,
+    200,
+    201,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    252,
+    201,
+    211
+   ],
+   [
+    "replace",
+    252,
+    263,
+    211,
+    212,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    269,
+    212,
+    218
+   ],
+   [
+    "replace",
+    269,
+    270,
+    218,
+    219,
+    [
+     "Read-only mode also rejects `INCR`, `DECR`, serial advances (`NEXT_VALUE`, `NEXTVAL`, `SERIAL_NEXT_VALUE`) and the click counter `WITH INCREMENT FOR`: they change data inside a `SELECT`, the rollback does not undo them, and **a `SELECT`-only grant does not prevent them**. See the Security Model."
+    ]
+   ],
+   [
+    "equal",
+    270,
+    271,
+    219,
+    220
+   ],
+   [
+    "replace",
+    271,
+    272,
+    220,
+    221,
+    [
+     "> **The SQL keyword checks are a guardrail and defense-in-depth, not a security boundary.** The primary control is a dedicated least-privilege database account: **run the server as a CUBRID user that has `SELECT` only on the tables the model needs**, never reuse `dba` or the owner account, and keep the account to the minimum privileges required, with no DDL rights. See `SECURITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    272,
+    273,
+    221,
+    222
+   ],
+   [
+    "replace",
+    273,
+    274,
+    222,
+    223,
+    [
+     "For production use, also configure a read-only database user. See `SECURITY.md` for the recommended setup."
+    ]
+   ],
+   [
+    "equal",
+    274,
+    285,
+    223,
+    234
+   ],
+   [
+    "replace",
+    285,
+    286,
+    234,
+    235,
+    [
+     "- Enforcement is defense-in-depth; still run the server as a CUBRID user granted only the privileges it needs. See `SECURITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    297,
+    235,
+    246
+   ],
+   [
+    "replace",
+    297,
+    298,
+    246,
+    247,
+    [
+     "|Field|Description|"
+    ]
+   ],
+   [
+    "equal",
+    298,
+    299,
+    247,
+    248
+   ],
+   [
+    "replace",
+    299,
+    307,
+    248,
+    256,
+    [
+     "|`tool`|The MCP tool that ran the statement (`execute_query` / `explain_query` / `execute_write`).|",
+     "|`status`|`ok` or `error`.|",
+     "|`category`|The leading SQL keyword only (e.g. `SELECT`, `WITH`), read after comments and string literals are stripped — never the full statement.|",
+     "|`identifiers`|Table names extracted after `FROM`/`JOIN` via a strict identifier regex; anything that is not a bare identifier (values, literals, expressions) is dropped.|",
+     "|`sql_length`|Length of the submitted SQL, in characters.|",
+     "|`row_count`, `truncated`|Result size and whether output was truncated (success only).|",
+     "|`duration_ms`|Wall-clock duration of the call, in integer milliseconds.|",
+     "|`error_type`|On failure, the exception **class name only** (via the same sanitization as client-facing errors).|"
+    ]
+   ],
+   [
+    "equal",
+    307,
+    309,
+    256,
+    258
+   ],
+   [
+    "delete",
+    309,
+    310,
+    258,
+    258
+   ],
+   [
+    "equal",
+    310,
+    317,
+    258,
+    265
+   ],
+   [
+    "replace",
+    317,
+    337,
+    265,
+    266,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    340,
+    266,
+    269
+   ],
+   [
+    "replace",
+    340,
+    341,
+    269,
+    270,
+    [
+     "CONTRIBUTING.md describes each one."
+    ]
+   ],
+   [
+    "equal",
+    341,
+    356,
+    270,
+    285
+   ],
+   [
+    "replace",
+    356,
+    359,
+    285,
+    288,
+    [
+     "- pycubrid — Pure-Python DB-API 2.0 driver this server is built on",
+     "- sqlalchemy-cubrid — SQLAlchemy 2.0–2.1 dialect for CUBRID",
+     "- cubrid-cookbook-python — 68 runnable examples incl. one-command app templates that use this stack"
+    ]
+   ],
+   [
+    "equal",
+    359,
+    362,
+    288,
+    291
+   ],
+   [
+    "replace",
+    362,
+    364,
+    291,
+    292,
+    [
+     "> This project is part of CUBRID Lab, an independent open-source initiative for CUBRID developer tooling, and is not affiliated with, sponsored by, or endorsed by CUBRID Corporation or the official CUBRID project."
+    ]
+   ],
+   [
+    "equal",
+    364,
+    366,
+    292,
+    294
+   ],
+   [
+    "replace",
+    366,
+    368,
+    294,
+    295,
+    [
+     "MIT (see `LICENSE`)."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "7d474b99239b+2": {
+  "fn": "red1oon/bim-ootb",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    6,
+    3,
+    6,
+    [
+     "CI",
+     "License: MIT",
+     "Status: Alpha"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    11,
+    6,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "Beside it runs a full ERP kernel, folded from the Compiere → ADempiere → iDempiere lineage, that reproduces a real ERP's books **to the cent on every scenario compared against a live iDempiere** (what is and is not measured) — serverless, offline, in the same tab. The building becomes a procurement order. The order becomes accounts. All of it from one signed log you can replay and verify yourself."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    26,
+    12,
+    26
+   ],
+   [
+    "replace",
+    26,
+    30,
+    26,
+    30,
+    [
+     "- ▶️ Open the live app · Watch the film",
+     "- 🧭 What's landed vs the frontier",
+     "- 📜 How it got here — Federation → Compiler → Browser",
+     "- 🌱 Push it further (start here)"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    34,
+    30,
+    34
+   ],
+   [
+    "delete",
+    34,
+    36,
+    34,
+    34
+   ],
+   [
+    "equal",
+    36,
+    62,
+    34,
+    60
+   ],
+   [
+    "replace",
+    62,
+    63,
+    60,
+    61,
+    [
+     "- **BIM OOTB Film-Maker** (Alt+C) — a full cinematic film computed from the model's own room graph in under a second (dive → main hall → walk out a real door → exterior orbit), no camera path authored by hand; a drag-to-edit dialog lets you pivot or slide any leg before recording. I found no other BIM tool offering this. Watch the film"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    61,
+    62
+   ],
+   [
+    "replace",
+    64,
+    65,
+    62,
+    63,
+    [
+     "→ **Read the paper:** BIM OOTB Feature Paper"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    74,
+    63,
+    72
+   ],
+   [
+    "replace",
+    74,
+    75,
+    72,
+    73,
+    [
+     "- **Lens family** — over the one op-log: durable, drag-to-`SET_STATUS` **Kanban** (Odoo-marvel cards), chat-as-inbox **feed-fold**, **Pivot**, **Data Globe** graph, Accts-Posted ledger lens — one-tap Graph ⇆ Kanban; plus the standalone **uniCenta-style till and kitchen** (`erp/till.html`, `erp/kitchen.html`). Table of every lens, shipped vs concept"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    85,
+    73,
+    83
+   ],
+   [
+    "replace",
+    85,
+    88,
+    83,
+    84,
+    [
+     "→ **Read the paper:** Migrate & Compare — legacy ERP vs the WASM event-sourced browser"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    90,
+    84,
+    86
+   ],
+   [
+    "replace",
+    90,
+    106,
+    86,
+    87,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    116,
+    87,
+    97
+   ],
+   [
+    "replace",
+    116,
+    144,
+    97,
+    98,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    156,
+    98,
+    110
+   ],
+   [
+    "replace",
+    156,
+    157,
+    110,
+    111,
+    [
+     "See GH_DEPLOY.md for details."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    164,
+    111,
+    118
+   ],
+   [
+    "replace",
+    164,
+    168,
+    118,
+    119,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    172,
+    119,
+    123
+   ],
+   [
+    "replace",
+    172,
+    173,
+    123,
+    124,
+    [
+     "|Library|Version|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    174,
+    124,
+    125
+   ],
+   [
+    "replace",
+    174,
+    187,
+    125,
+    138,
+    [
+     "|Three.js|r184 ESM|3D rendering — BatchedMesh, DLOD, post-FX (EffectComposer/SSAO/Outline), WebGPU build|",
+     "|SQLite WASM (sql.js)|1.10.3 + FTS5|the database for **both** engines — BIM model + ERP Application Dictionary, in-browser|",
+     "|sql.js-httpvfs|bundled|range-read streaming of remote `.db` files (load only the pages you touch)|",
+     "|web-ifc|0.0.77|IFC parsing (IFC2x3 + IFC4), client-side|",
+     "|occt-wasm (OpenCascade) + planegcs|bundled|DAGeVu authoring — B-rep kernel (`ops → mesh`) + sketch constraint solver|",
+     "|Canvas 2D|native|2D plans, dimension chains, door arcs, grid overlay, clash/snag, print sheets, Time Machine|",
+     "|SheetJS / ExcelJS + FileSaver|0.20.3|Excel export|",
+     "|Chart.js|4.x|BOQ / cost charts|",
+     "|qrcode.js|bundled|QR share codes|",
+     "|bigdecimal.js|bundled|exact decimal GL math (no float money in the ERP ledger)|",
+     "|SimplexNoise|bundled|procedural ground / sky textures|",
+     "|Service Worker + Web App Manifest|—|PWA / offline-first|",
+     "|IndexedDB · Web Workers · BroadcastChannel|native|IFC import store · off-main-thread SQLite/import · cross-tab history sync|"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    190,
+    138,
+    141
+   ],
+   [
+    "replace",
+    190,
+    191,
+    141,
+    142,
+    [
+     "This project is the browser frontend of BIMCompiler — a BOM-based building compilation engine that began in **October 2025** (concept), became a **Java/Python compiler in January 2026** (21 buildings, 9 verification gates, 1000+ commits), and pivoted to browser-first at **S200 in April 2026** when the viewer outgrew the backend. That parent browser sprint (S200–S271, April 20 — May 23) produced 552 commits and 92 JS modules in 33 days."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    198,
+    142,
+    149
+   ],
+   [
+    "replace",
+    198,
+    199,
+    149,
+    150,
+    [
+     "||URL|"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    200,
+    150,
+    151
+   ],
+   [
+    "replace",
+    200,
+    211,
+    151,
+    162,
+    [
+     "|**Live viewer**|red1oon.github.io/bim-ootb|",
+     "|**Morpheus front door**|red1oon.github.io/bim-ootb/index2.html|",
+     "|**DAGeVu authoring modeller**|red1oon.github.io/bim-ootb/modeller/modeller.html|",
+     "|**Film — BIM and ERP, one engine**|youtu.be/hnLYNcRihzs|",
+     "|**BIM feature paper**|red1oon.github.io/BIMCompiler/FeatureComparison|",
+     "|**ERP migrate & compare paper**|red1oon.github.io/BIMCompiler/MigrateComparisonPaper|",
+     "|**Glassbowl** — ERP engine as data|red1oon.github.io/BIMCompiler/glassbowl.html|",
+     "|**Op-Log ERP abstract**|red1oon.github.io/BIMCompiler/OpLogERP|",
+     "|**Documentation**|red1oon.github.io/BIMCompiler|",
+     "|**Parent project**|github.com/red1oon/BIMCompiler|",
+     "|**OCI backup**|ootb-dev bucket|"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    213,
+    162,
+    164
+   ],
+   [
+    "replace",
+    213,
+    216,
+    164,
+    165,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    165,
+    166
+   ],
+   [
+    "delete",
+    217,
+    218,
+    166,
+    166
+   ],
+   [
+    "equal",
+    218,
+    219,
+    166,
+    167
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

@@ -2709,5 +2709,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5b459833a1aa": {
+  "identity": {
+   "one_liner": "本地优先的求职自动化应用，所有投递需用户逐一审批",
+   "review": "JobCtrl 是一款运行在用户本机的求职工具：查找职位、基于已存证据生成 1–10 匹配度评分、从已批准的措辞组装简历，并准备待审的申请材料。数据存于 ~/.jobctrl/，无账号无托管后端。签名版本仅支持 Apple 芯片 Mac（macOS 15+）；使用自带 LLM 账号，默认 LLM 日预算 25 美元；工作流运行在 Temporal 上。浏览器表单需用户自行填写提交，仅 Gmail 邮件可经批准自动发送。",
+   "highlights": [
+    "发现、匹配评分、简历准备与申请审核在本地完成，数据保存在 ~/.jobctrl/，无账号和托管后端",
+    "自动投递默认关闭；浏览器表单始终由用户填写提交，仅经批准的 Gmail 邮件可由其发送，且已确认的职位会阻止重复投递",
+    "发现与准备流程运行在 Temporal 工作流引擎上，中断后保持持久身份"
+   ],
+   "use_cases": [
+    "集中管理职位搜索、匹配评估、简历定制与申请记录的求职者",
+    "希望 LLM 调用走自己的 Codex/Claude/Google 账号并控制每日预算的个人",
+    "需要人工审批投递、关注数据离机范围与隐私边界的自动化求职流程"
+   ]
+  },
+  "sha": "5b459833a1aa",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f561bdef532e": {
+  "identity": {
+   "one_liner": "OceanBase 的 Go database/sql 驱动，支持 MySQL/Oracle 两种兼容模式",
+   "review": "go-oceanbase 实现了 OceanBase 数据库的 Go database/sql 驱动，支持 MySQL 和 Oracle 兼容模式，面向需要在 Go 应用中连接 OceanBase 的开发者。除标准库的查询、预编译语句和事务外，还通过 oceanbase 包提供批量执行、LOB、显式游标和 XA 分支事务。核心驱动无需 cgo 构建，需 Go 1.26 及以上，通过 DSN 或 NewConnector 连接，可直连或经 OBProxy 访问。",
+   "highlights": [
+    "支持 database/sql 标准接口，包括查询、预编译语句、事务和多结果集",
+    "提供批量执行、BLOB/LOB、显式游标和 XA 分布式事务分支操作",
+    "支持 TLS、URL 风格 DSN 配置，核心驱动无 cgo 构建"
+   ],
+   "use_cases": [
+    "Go 应用直连或经 OBProxy 访问 OceanBase MySQL/Oracle 兼容模式",
+    "需要 Oracle 兼容模式的命名参数、OUT/INOUT 参数和原生 LOB 的场景",
+    "配合应用侧持久化协调器实现 XA 分布式事务"
+   ]
+  },
+  "sha": "f561bdef532e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "375f1eb6bea3": {
+  "identity": {
+   "one_liner": "TiDB 上下文压缩与 Agent 记忆演示脚本，用单表自动嵌入与混合检索",
+   "review": "该项目是 pingcap.com 博客《Context Compaction》的可运行配套演示，用终端脚本对比两种场景：上下文压缩丢失日期，以及每条消息写入一张 TiDB 表后通过向量+全文混合检索召回。对话是脚本化的，无需 LLM 或 API 密钥，嵌入使用 TiDB Cloud 托管的免费 Amazon Titan 模型。适合想复现博客结论、了解单表记忆召回机制的读者，可运行于 Python 3.10+ 与 TiDB Cloud Starter（AWS 支持全文检索的区域）。",
+   "highlights": [
+    "每条消息以 INSERT 写入单个 agent_memory 表，TiDB 在插入时自动生成向量嵌入",
+    "召回运行向量与全文两种查询，并用倒数排名融合（1/(60+rank)）合并结果",
+    "查询按 user_id 与 session_id 过滤限定范围；对话为脚本化，无需 LLM 或 API key"
+   ],
+   "use_cases": [
+    "终端演示上下文压缩导致信息丢失、对比基于数据库的召回方案",
+    "以自定义问题测试混合检索并查看读回的 token 数",
+    "学习单表 + 自动嵌入 + RRF 融合的 Agent 记忆实现模式"
+   ]
+  },
+  "sha": "375f1eb6bea3",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

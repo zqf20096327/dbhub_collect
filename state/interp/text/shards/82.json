@@ -3270,5 +3270,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0d2f21a9a6d1": {
+  "identity": {
+   "one_liner": "离线粤语词典应用，聚合多部词典数据，支持粤语/国语多输入检索。",
+   "review": "Jyut Dictionary 是一款离线粤语词典程序，桌面端基于 Qt 6.8 与 SQLite，iOS 端用 SwiftUI 实现，运行于 macOS、Windows、Linux 和 iPhone。它聚合 CEDICT、CC-CANTO、words.hk、Unihan、Tatoeba 等数据源，构建前需通过网站下载或用 Python 脚本生成 dict.db 词典数据库，仓库本身因版权原因不含词典数据。",
+   "highlights": [
+    "支持繁体、简体、粤拼、拼音、英文五种输入方式检索，结果随输入实时显示并保存搜索历史",
+    "聚合 CC-CEDICT、CC-CANTO、words.hk 粵典、Unihan、Tatoeba 等数据源，含逾 20 万词条和 10 万例句，全部离线使用",
+    "界面提供英文、法语、繁简粤语、繁简中文本地化，并支持隐藏拼音、调整颜色等显示设置"
+   ],
+   "use_cases": [
+    "需要离线查询粤语词汇、粤拼或普通话对照的学习者与使用者",
+    "开发者基于 CEDICT/CC-CANTO 等词库自建词典数据库并参与桌面或 iOS 端开发",
+    "需要在 macOS、Windows、Linux 或 iPhone 上检索中文及粤语词条与 Tatoeba 例句的场景"
+   ]
+  },
+  "sha": "0d2f21a9a6d1",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f5b1667d22b7": {
+  "identity": {
+   "one_liner": "D 语言的数据库连接器库，提供类似 JDBC 的统一接口",
+   "review": "DDBC 是 D 语言的数据库连接器库，接口设计类似 JDBC。通过 dub 的 subConfigurations 选择驱动配置，支持 MySQL、PostgreSQL、SQLite、SQL Server、Oracle、ClickHouse，部分数据库有基于纯 D 实现的原生驱动（不依赖 C 库）。原生驱动可在普通线程与 vibe.d 协程两种模式下运行；libpq、ODBC、SQLite 依赖 C 库且始终阻塞。配套的 hibernated ORM 基于它实现。",
+   "highlights": [
+    "提供类似 JDBC 的统一接口，通过连接 URL 前缀选择已编译的驱动",
+    "PostgreSQL、SQL Server、Oracle、ClickHouse 提供纯 D 原生驱动配置，构建时无需 C 库",
+    "支持精确读写的 Decimal 类型（最多 76 位），以及 POD 结构体的自动 SELECT 映射"
+   ],
+   "use_cases": [
+    "在 D 语言应用中连接 MySQL、PostgreSQL、SQLite、SQL Server、Oracle 或 ClickHouse",
+    "构建 vibe.d 协程应用需要非阻塞数据库访问时，使用原生驱动",
+    "配合 hibernated ORM 或通过 ddbc.pods 按结构体读取查询结果"
+   ]
+  },
+  "sha": "f5b1667d22b7",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c202f2847a4e": {
+  "identity": {
+   "one_liner": "自托管的 Telegram 个人 AI 助手，基于 PostgreSQL + pgvector 实现持久记忆",
+   "review": "Syne 是一个部署在用户自己服务器上的 Telegram 聊天机器人，也可接入 WhatsApp 和 Discord，所有数据存储在自有的 PostgreSQL 中。它仅保存用户明确要求记住的内容，长期记忆通过 pgvector 语义检索和知识图谱查询实现，其余对话保留在历史记录中可搜索。记忆嵌入与规则评估由本地 Ollama 运行，聊天模型需用户自备 API key。适合希望数据留在自己服务器上、通过聊天管理助手行为的个人用户。",
+   "highlights": [
+    "仅存储用户明确要求记住的事实，通过 pgvector HNSW 索引做语义检索，辅以知识图谱进行实体关系查询",
+    "身份、行为规则和配置全部存于 PostgreSQL 表中，通过对话即可修改，无需编辑配置文件",
+    "记忆嵌入与规则检查器在本地 Ollama 上运行，聊天模型支持 Anthropic/Gemini/OpenAI/Groq 等多家提供商"
+   ],
+   "use_cases": [
+    "在自有服务器上运行个人 AI 助手，通过 Telegram/WhatsApp/Discord 进行跨设备对话",
+    "需要助手长期记住指定事实（如人物关系、偏好）并支持语义与实体关系检索的场景",
+    "低配置服务器部署：最低 1 vCPU / 2 GB RAM，Docker 运行 PostgreSQL 16 + pgvector，一条安装脚本完成部署"
+   ]
+  },
+  "sha": "c202f2847a4e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "22b079a622c8": {
+  "identity": {
+   "one_liner": "开源数据代理应用与 Python 库，通过查询与可视化规格处理多源数据。",
+   "review": "TabulaFlow 是 Megagon Labs 发布的开源数据代理应用和 Python 库，用于以自然语言查询、转换和可视化数据，数据源覆盖 SQL 数据库、Neo4j、SPARQL 端点、文件、Hugging Face 数据集与网页。其代理仅生成查询与可视化规格，数据解析、渲染和溯源由框架完成，核心 harness 不依赖 shell。库部分为异步实现，含数据连接器、ChatSession、结构化输出等组件；另附研究工具集，内置 BIRD-SQL、Spider 2.0 等基准加载器与评估指标。安装依赖 uv，使用需配置模型提供商 API key。",
+   "highlights": [
+    "通过统一异步接口连接 SQL 数据库、Neo4j、SPARQL 端点、文件和数据集，代理只输出查询与可视化规格，由框架处理数据解析、渲染与溯源",
+    "提供数据代理模式：text-to-query、数据绑定可视化、交互式仪表盘、非结构化内容抽取、逐行增强和跨源记录连接",
+    "作为 Python 库提供 core/data/output/agents 四层类型化组件，可脱离 LLM 使用；研究扩展内置 BIRD-SQL、Spider 2.0、CypherBench 等基准加载器、评估指标与实验管线，记录轨迹、token 用量和延迟"
+   ],
+   "use_cases": [
+    "用自然语言对数据库、文件、知识图谱等数据源进行分析、可视化与转换",
+    "构建带共享控件的交互式仪表盘或数据应用，无需 LLM 亦可运行",
+    "面向文本到 SQL 与数据代理方向的研究，运行基准评测并保存预测、评分与轨迹用于复现分析"
+   ]
+  },
+  "sha": "22b079a622c8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3cfecb75f101": {
+  "identity": {
+   "one_liner": "自包含轻量 CMS，内容存于单个 SQLite 文件，无需数据库服务器",
+   "review": "RamaSite 是基于 Laravel 与 Filament 构建的自包含 CMS，内容存于站点文件夹内的单个 SQLite 数据库文件，无需连接数据库服务器、命令行或配置文件。安装只需上传发布 zip 至支持 PHP 8.4+ 与 Apache mod_rewrite 的共享主机并完成设置页。后台提供 Markdown 页面与博客、主题设置、备份、重定向、站点地图与升级后自动数据库迁移。",
+   "highlights": [
+    "所有内容存于单个 SQLite 数据库文件，图片存于站点内 uploads 文件夹，安装无需外部数据库服务器、命令行或配置文件编辑",
+    "支持 Markdown 页面与博客、卡片/模块/滑块页面构建、文件库替换、表单与邮件通知、主题界面（logo、颜色、Google Fonts）等管理功能",
+    "内置备份下载、升级后自动数据库更新、自动站点地图、robots.txt、RSS、页面移动自动重定向，以及多管理员与可选两步登录"
+   ],
+   "use_cases": [
+    "在普通共享主机（Apache + cPanel）上部署 Markdown 站点与博客",
+    "需要备份、重定向、站点地图、分析统计等均在管理后台完成的站点运维",
+    "通过 Composer create-project 在自有 PHP 环境中进行本地开发与测试"
+   ]
+  },
+  "sha": "3cfecb75f101",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

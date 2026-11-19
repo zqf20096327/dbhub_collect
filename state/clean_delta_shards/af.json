@@ -32420,5 +32420,1573 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "5496cec4a3a9+2": {
+  "fn": "nikhishamudin-create/deadlock-counterpicker",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    3,
+    0,
+    1
+   ],
+   [
+    "delete",
+    3,
+    5,
+    1,
+    1
+   ],
+   [
+    "equal",
+    5,
+    8,
+    1,
+    4
+   ],
+   [
+    "replace",
+    8,
+    15,
+    4,
+    5,
+    [
+     "channel win ps-core setup rate"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    157,
+    5,
+    147
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "1de6441a8b6e+2": {
+  "fn": "ChrisVip001/Jeeves",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "English | 简体中文"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "CI",
+     "License: MIT",
+     "Release"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    14,
+    7,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "Jeeves Web workbench"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    18,
+    15,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "Jeeves runs on macOS and Linux (Windows through WSL2). After any install, the dashboard opens a three-step wizard that connects a model and sets permissions; see the getting started guide."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    42,
+    19,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "Prebuilt `jeeves` binaries for macOS and Linux (x86_64 and aarch64) are attached to each release. Without an API key, Ollama works offline (`JEEVES_PROVIDER=ollama`). The dashboard needs a build (`just dashboard-build`) when run from source."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    43,
+    46
+   ],
+   [
+    "replace",
+    46,
+    47,
+    46,
+    47,
+    [
+     "- **Converse** on the terminal, in the dashboard, or through chat gateways (WeChat, Lark; see docs/guide.md)"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    47,
+    48
+   ],
+   [
+    "replace",
+    48,
+    56,
+    48,
+    56,
+    [
+     "- **Remember**: semantic facts (FTS5, CJK-capable), dated episodes and procedural Skills, with a retrieval gate so memory is consulted only when relevant (docs/architecture.md)",
+     "- **Show its memory**: the dashboard's memory center opens the ledger, the memory library and the context meter; `/compact [focus]` compacts on demand (docs/operations.md)",
+     "- **Act**: 21 built-in tools (13 always on, 8 behind switches) plus MCP servers (docs/configuration.md)",
+     "- **Stay cheap**: the system prompt is a stable prefix plus a per-turn tail so the provider can cache it, and `JEEVES_TOOL_POLICY=deferred` keeps only the always-on tool schemas in the request (docs/configuration.md)",
+     "- **Grow on your say-so**: the capability center lists Skills, MCP connectors and scheduled jobs side by side; you add and delete your own, bundled ones are read-only (docs/guide.md)",
+     "- **Follow the project's rules**: `AGENTS.md` / `AGENTS.override.md` / `CLAUDE.md` are discovered upwards from the working directory and joined into the per-turn tail (docs/internals/06-app-server.md)",
+     "- **Finish what it starts**: when the step budget runs out with open todo items it continues, up to `JEEVES_AUTO_CONTINUE_MAX` times (docs/configuration.md)",
+     "- **Be examined**: deterministic and replay evals gate every release; a judge scores answer quality (docs/internals/08-quality.md)"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    59,
+    56,
+    59
+   ],
+   [
+    "replace",
+    59,
+    60,
+    59,
+    60,
+    [
+     "|Tool|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    60,
+    61
+   ],
+   [
+    "replace",
+    61,
+    80,
+    61,
+    80,
+    [
+     "|`memory`|`action` = save / forget / search / list / update / delete / delete_episode / create_skill|",
+     "|`send_message`|message drafts into the outbox; never actually sends|",
+     "|`search_web`|Parallel MCP first, bounded built-in fallback; source URLs and excerpts|",
+     "|`read_page`|read the full text behind a catalog line: a memory-library page or a skill's steps; on by default|",
+     "|`read_file`|read a text file, paginated with line numbers; on by default|",
+     "|`glob`|list a directory, or find files by name pattern; on by default|",
+     "|`grep`|search file contents, returning `path:line: text`; on by default|",
+     "|`fetch_url`|fetch a page: Parallel MCP extraction first, local HTTP fallback with public-target validation|",
+     "|`job`|read, list and stop background jobs (`action` = output / list / kill); needs `JEEVES_EXEC=1`|",
+     "|`todo_write`|keep a per-session todo list, re-injected every turn|",
+     "|`write_file` / `edit`|write a text file / one exact-match replacement; off unless `JEEVES_WRITE=1`, limited to the session's working directory plus `JEEVES_EXEC_WRITABLE_ROOTS`|",
+     "|`apply_patch`|apply a patch across files, all or nothing; same boundary and approval as `write_file`|",
+     "|`run_command`|sandboxed, allowlisted shell commands; off unless `JEEVES_EXEC=1` (SECURITY.md)|",
+     "|`delegate_task`|hand self-contained jobs to subagents; off unless `JEEVES_DELEGATE=1`|",
+     "|`browser_observe` / `browser_act`|optional task browser with once-only approval and human takeover; needs the browser components installed|",
+     "|`find_tools`|search the deferred tool shelf and open what it finds for this session; on by default|",
+     "|`schedule_job`|create or replace a scheduled job: name, five-field cron, one prompt; on by default|",
+     "|`list_schedules`|list declared jobs with cron and prompt; on by default|",
+     "|`cancel_schedule`|delete a file-declared job by name; on by default|"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    85,
+    80,
+    85
+   ],
+   [
+    "replace",
+    85,
+    86,
+    85,
+    86,
+    [
+     "Twelve LLM providers are pre-adapted (`jeeves-provider`), including local Ollama. `<home>/models-catalog.json` patches built-in defaults or adds a provider, and `scripts/gen_catalog.py` generates rows from models.dev (docs/configuration.md). In the REPL, `/model` lists configured profiles, `/model add ds deepseek deepseek-flash --env DEEPSEEK_API_KEY` adds one and `/model use ds` switches without a restart; the Web and desktop preferences have the same model menu. Keys resolve from the environment first, then the OS keychain, then `<home>/secrets.json` (0600, plaintext) when no keychain is usable (SECURITY.md). `JEEVES_OPS_HOST=0.0.0.0` requires `JEEVES_OPS_TOKEN` at startup (docs/operations.md)."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    89,
+    86,
+    89
+   ],
+   [
+    "replace",
+    89,
+    90,
+    89,
+    90,
+    [
+     "|Document|Content|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    90,
+    91
+   ],
+   [
+    "replace",
+    91,
+    101,
+    91,
+    101,
+    [
+     "|docs/guide.md|getting started: install, wizard, models, permissions, chat gateways, skills|",
+     "|docs/architecture.md|principles, crate dependency graph, one turn's data flow, design decisions|",
+     "|docs/protocol.md|the 65 JSON-RPC methods, notification sequence, error codes|",
+     "|docs/configuration.md|every `JEEVES_*` variable, mcp.json, settings.json|",
+     "|docs/operations.md|running every shape, backups, troubleshooting|",
+     "|docs/limitations.md|known boundaries, each with the file to open next|",
+     "|docs/internals/|the implementation tutorial, one chapter per layer|",
+     "|CONTRIBUTING.md|engineering discipline and commit rules|",
+     "|SECURITY.md|the security model: credentials, capability boundaries, OAuth|",
+     "|CHANGELOG.md|changelog|"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    104,
+    101,
+    104
+   ],
+   [
+    "replace",
+    104,
+    105,
+    104,
+    105,
+    [
+     "|Purpose|Name|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    105,
+    106
+   ],
+   [
+    "replace",
+    106,
+    113,
+    106,
+    113,
+    [
+     "|GitHub repository|`ChrisVip001/Jeeves`|",
+     "|Package name|`jeeves`|",
+     "|Rust crate prefix|`jeeves-`|",
+     "|CLI binary|`jeeves`|",
+     "|Persona|Jeeves|",
+     "|Env vars|`JEEVES_*`|",
+     "|State directory|`.jeeves/`|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    113,
+    114
+   ],
+   [
+    "replace",
+    114,
+    115,
+    114,
+    115,
+    [
+     "English | 简体中文 · Code is MIT."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "f3912ef371de+2": {
+  "fn": "andre-simplifica/oracle-apex-ai-skills",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "> Portuguese version: README.pt-BR.md"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    5,
+    [
+     " Vibe Coding for Oracle APEX"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    12,
+    6,
+    8,
+    [
+     " Stop turning every APEX change into another Page Designer treasure hunt. ",
+     " Give your AI agent the playbook it needs to inspect, generate, validate, and follow your project standards."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    22,
+    8,
+    18
+   ],
+   [
+    "replace",
+    22,
+    28,
+    18,
+    24,
+    [
+     "|The usual APEX grind|With these AI skills|",
+     "|---|---|",
+     "|Open Page Designer and copy settings by hand.|Ask the agent to inspect good examples and generate the change plan.|",
+     "|Hope you did not miss a Dynamic Action, process condition, or item setting.|Build validation, Session State, PL/SQL, exports, and runtime checks into the workflow.|",
+     "|Keep page, breadcrumb, help, menu, and dashboard standards in someone's head.|Version the standards in the project profile so every developer and agent follows them.|",
+     "|Treat exports as a last-minute backup.|Use readable exports and project profiles as context for safer AI-assisted APEX work.|"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    24,
+    27
+   ],
+   [
+    "replace",
+    31,
+    32,
+    27,
+    28,
+    [
+     " Totally Real Reviews From Definitely Qualified People "
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    28,
+    29
+   ],
+   [
+    "replace",
+    33,
+    34,
+    29,
+    32,
+    [
+     " \"If this doesn't become famous, I'm uninstalling my browser.\" ",
+     " ⭐⭐⭐⭐⭐ ",
+     " — An Anonymous Man Under Pressure "
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    32,
+    33
+   ],
+   [
+    "replace",
+    35,
+    73,
+    33,
+    36,
+    [
+     " \"I came for the AI skills and stayed for the emotional stability.\" ",
+     " ⭐⭐⭐⭐⭐ ",
+     " — A Surprisingly Balanced Programmer "
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    36,
+    37
+   ],
+   [
+    "replace",
+    74,
+    75,
+    37,
+    52,
+    [
+     " \"More inspiring than a motivational poster in a coworking space.\" ",
+     " ⭐⭐⭐⭐⭐ ",
+     " — A Totally Real Productivity Expert ",
+     "",
+     " \"The kind of thing that makes you stand up, nod slowly, and pretend you predicted it.\" ",
+     " ⭐⭐⭐⭐⭐ ",
+     " — A Tech Visionary, Allegedly ",
+     "",
+     " \"I don't know what happened, but I feel more senior now.\" ",
+     " ⭐⭐⭐⭐⭐ ",
+     " — Junior Developer ",
+     "",
+     " \"So good I briefly considered updating my LinkedIn headline.\" ",
+     " ⭐⭐⭐⭐⭐ ",
+     " — An Ambitious Professional "
+    ]
+   ],
+   [
+    "equal",
+    75,
+    92,
+    52,
+    69
+   ],
+   [
+    "replace",
+    92,
+    98,
+    69,
+    75,
+    [
+     "|Skill|Responsibility|",
+     "|---|---|",
+     "|`oracle-apex-ai-skills`|Main entry point, installation/update contract, and task router|",
+     "|`oracle-apex-dev`|Daily APEX, SQL, PL/SQL, REST, jobs, security, and runtime work|",
+     "|`oracle-apex-object-lock`|Cooperative locks for shared DEV database objects|",
+     "|`oracle-apex-export`|Inspection exports, first baseline, official snapshots, and release exports|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    75,
+    76
+   ],
+   [
+    "replace",
+    99,
+    100,
+    76,
+    77,
+    [
+     "The base kit works on its own. Branded report/help layouts, browser-rendered PDF, and spreadsheet output live in the separate Oracle APEX Brand Report Kit. Self-contained chart regions live in Oracle APEX ECharts. This kit can recommend those optional repositories, but never copies or updates them."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    103,
+    77,
+    80
+   ],
+   [
+    "replace",
+    103,
+    108,
+    80,
+    85,
+    [
+     "|Version|Status|",
+     "|---|---|",
+     "|Below APEX 24.2|Unsupported by this kit|",
+     "|APEX 24.2 through releases before 26.1|Supported; standard SQL split + readable YAML + monolithic SQL export|",
+     "|APEX 26.1 or later|Supported; 26.1 public APIs are version-gated and official application exports remain SQL split + monolithic SQL|"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    85,
+    86
+   ],
+   [
+    "replace",
+    109,
+    110,
+    86,
+    87,
+    [
+     "APEXlang is a product capability from APEX/SQLcl 26.1, but it is deliberately disabled here. This kit does not generate, export, parse, edit, validate, compile, or import APEXlang. See Oracle APEX version compatibility."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    123,
+    87,
+    100
+   ],
+   [
+    "replace",
+    123,
+    124,
+    100,
+    101,
+    [
+     "If you are already comfortable with GitHub, terminal scripts, and AI agent internals, start with the more technical docs: docs/technical-overview.md."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    142,
+    101,
+    119
+   ],
+   [
+    "replace",
+    142,
+    147,
+    119,
+    120,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    159,
+    120,
+    132
+   ],
+   [
+    "replace",
+    159,
+    170,
+    132,
+    133,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    172,
+    133,
+    135
+   ],
+   [
+    "replace",
+    172,
+    174,
+    135,
+    137,
+    [
+     "The optional target preflight",
+     "generates a read-only SQL check; the lock smoke test"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    177,
+    137,
+    140
+   ],
+   [
+    "replace",
+    177,
+    178,
+    140,
+    141,
+    [
+     "APEXlang kit."
+    ]
+   ],
+   [
+    "equal",
+    178,
+    185,
+    141,
+    148
+   ],
+   [
+    "replace",
+    185,
+    189,
+    148,
+    149,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    320,
+    149,
+    280
+   ],
+   [
+    "replace",
+    320,
+    321,
+    280,
+    281,
+    [
+     "- read SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    321,
+    342,
+    281,
+    302
+   ],
+   [
+    "replace",
+    342,
+    348,
+    302,
+    303,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    361,
+    303,
+    316
+   ],
+   [
+    "replace",
+    361,
+    365,
+    316,
+    320,
+    [
+     "- docs/install-codex.md",
+     "- docs/install-claude-code.md",
+     "- docs/technical-overview.md",
+     "- docs/adapt-to-your-project.md"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    376,
+    320,
+    331
+   ],
+   [
+    "replace",
+    376,
+    382,
+    331,
+    332,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    382,
+    390,
+    332,
+    340
+   ],
+   [
+    "replace",
+    390,
+    391,
+    340,
+    341,
+    [
+     "Use a freshly fetched upstream manager for `check` and `update`. Pass `--initialize-missing-project-files` only after reviewing the dry-run. Follow docs/update-and-contribute.md."
+    ]
+   ],
+   [
+    "equal",
+    391,
+    409,
+    341,
+    359
+   ],
+   [
+    "replace",
+    409,
+    411,
+    359,
+    360,
+    [
+     "MIT License. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "e1a37ef2edcc+2": {
+  "fn": "crajah/post-graph-rag",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     "CI",
+     "PyPI version",
+     "License: Apache 2.0",
+     "Python 3.11+",
+     "PostgreSQL 16+"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    14,
+    7,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "The graph layer underneath is post-graph, also usable on its own — more below."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    18,
+    15,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "Paper: arXiv:2608.24921."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    22,
+    19,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "On the full 500-question LongMemEval set — all six question types, nothing sampled — against the numbers Zep publish for Graphiti (arXiv:2501.13956):"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    23,
+    24
+   ],
+   [
+    "replace",
+    24,
+    30,
+    24,
+    30,
+    [
+     "||overall|multi-session|temporal|knowledge-update|",
+     "|:---|---:|---:|---:|---:|",
+     "|**post-graph-rag** · `gemini-3.6-flash`|**94.0%**|**90.2%**|**96.2%**|**94.9%**|",
+     "|Zep/Graphiti · gpt-4o|71.2%|57.9%|62.4%|83.3%|",
+     "|Zep/Graphiti · gpt-4o-mini|63.8%|40.6%|36.5%|76.9%|",
+     "|Full-context baseline · gpt-4o|60.2%|44.3%|45.1%|78.2%|"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    30,
+    31
+   ],
+   [
+    "replace",
+    31,
+    33,
+    31,
+    32,
+    [
+     "*Qualifications, so you can weigh them yourself: Zep judge with GPT-4o, this uses a three-model majority panel with the answering model excluded from its own jury; the generation models differ in cost class and vintage in a direction that cannot be signed; one question of 500 is excluded because neither extraction prompt could turn that session into triples. The harness, frozen config and every failing case ship in the repo — see the full write-up, which also documents the improvements that were tested and rejected.*"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    32,
+    35
+   ],
+   [
+    "replace",
+    36,
+    37,
+    35,
+    36,
+    [
+     "Chat memory is the easy register. ECT-QA is the hard one — earnings call transcripts, sixteen quarters per company, **every metric restated every quarter with only the date to tell the values apart.** A store that merely accumulates cannot answer these at all; it has four values for \"gross margin\" and no way to choose."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    36,
+    39
+   ],
+   [
+    "replace",
+    40,
+    46,
+    39,
+    45,
+    [
+     "||Correct ↑|",
+     "|:---|---:|",
+     "|**post-graph-rag** · `gemini-3.6-flash`|**0.807**|",
+     "|TG-RAG *(published)*|0.599|",
+     "|GraphRAG *(published)*|0.405|",
+     "|LightRAG *(published)*|0.406|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    69,
+    45,
+    68
+   ],
+   [
+    "replace",
+    69,
+    79,
+    68,
+    69,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    81,
+    69,
+    71
+   ],
+   [
+    "replace",
+    81,
+    84,
+    71,
+    72,
+    [
+     "**→ Seven runnable examples** · Neon & Supabase quickstart · Full installation · Configuration reference"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    87,
+    72,
+    75
+   ],
+   [
+    "replace",
+    87,
+    88,
+    75,
+    76,
+    [
+     "`post-graph-rag-mcp` exposes the engine over the Model Context Protocol (`stdio` and Streamable HTTP) so coding agents retire superseded architecture decisions instead of retrieving old and new conventions together. On the interactive path, the host IDE model supplies triples and keywords while local ONNX embeddings (`fastembed`) run in-process — no separate LLM API key is needed."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    95,
+    76,
+    83
+   ],
+   [
+    "replace",
+    95,
+    96,
+    83,
+    84,
+    [
+     "**Existing PostgreSQL, Docker, Neon, or Supabase** (Python 3.11–3.14):"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    101,
+    84,
+    89
+   ],
+   [
+    "replace",
+    101,
+    102,
+    89,
+    90,
+    [
+     "**→ MCP server documentation, Cursor config & Docker Compose**"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    90,
+    91
+   ],
+   [
+    "replace",
+    103,
+    108,
+    91,
+    92,
+    [
+     "## 🧱 The layer underneath: post-graph"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    118,
+    92,
+    102
+   ],
+   [
+    "replace",
+    118,
+    121,
+    102,
+    103,
+    [
+     "`pip install post-graph` · Apache 2.0 · 850 tests against real PostgreSQL"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    134,
+    103,
+    116
+   ],
+   [
+    "replace",
+    134,
+    143,
+    116,
+    125,
+    [
+     "|Capability|`post-graph-rag`|Graphiti / Zep|Mem0|LightRAG|MS GraphRAG|",
+     "|:---|:---:|:---:|:---:|:---:|:---:|",
+     "|**Storage stack**|**PostgreSQL + `pgvector` only**|Neo4j / FalkorDB|Vector DB + Graph DB|Custom / partial PG|Parquet / Vector DB|",
+     "|**Bi-temporal (`as_of` valid + `as_believed_at` audit)**|**Yes**|Yes|No|No|No|",
+     "|**Supersession from document order (backfill-safe)**|**Yes**|Partial (LLM-dated)|Overwrites / flat|No|No|",
+     "|**Controlled predicate vocabulary + negation flag**|**Yes**|No|No|No|No|",
+     "|**Hierarchical community detection & summaries**|**Yes**|No|No|No|Yes|",
+     "|**ACID transactions spanning graph & app tables**|**Yes**|No|No|No|No|",
+     "|**License**|**Apache 2.0**|Apache 2.0|Apache 2.0 (OSS subset)|MIT|MIT|"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    235,
+    125,
+    217
+   ],
+   [
+    "replace",
+    235,
+    239,
+    217,
+    221,
+    [
+     " tenant's own schema. pgvector's type lives there, and without it every vector read",
+     " fails with `type \"vector\" does not exist`, naming neither the privilege nor the",
+     " schema that is missing. A database whose `public` carries owner-only defaults —",
+     " what `CREATE DATABASE` leaves on PostgreSQL 15+ — gives a new role no `USAGE` on it."
+    ]
+   ],
+   [
+    "equal",
+    239,
+    240,
+    221,
+    222
+   ],
+   [
+    "replace",
+    240,
+    241,
+    222,
+    223,
+    [
+     " it opened itself."
+    ]
+   ],
+   [
+    "equal",
+    241,
+    349,
+    223,
+    331
+   ],
+   [
+    "replace",
+    349,
+    353,
+    331,
+    332,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    382,
+    332,
+    361
+   ],
+   [
+    "delete",
+    382,
+    384,
+    361,
+    361
+   ],
+   [
+    "equal",
+    384,
+    393,
+    361,
+    370
+   ],
+   [
+    "replace",
+    393,
+    403,
+    370,
+    371,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    403,
+    417,
+    371,
+    385
+   ],
+   [
+    "replace",
+    417,
+    452,
+    385,
+    386,
+    [
+     "…（35 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    452,
+    456,
+    386,
+    390
+   ],
+   [
+    "delete",
+    456,
+    458,
+    390,
+    390
+   ],
+   [
+    "equal",
+    458,
+    460,
+    390,
+    392
+   ],
+   [
+    "replace",
+    460,
+    461,
+    392,
+    393,
+    [
+     "Seven scripts in `examples/`, each one capability, all runnable:"
+    ]
+   ],
+   [
+    "equal",
+    461,
+    467,
+    393,
+    399
+   ],
+   [
+    "replace",
+    467,
+    479,
+    399,
+    409,
+    [
+     "||shows|",
+     "|:---|:---|",
+     "|`00_neon_supabase_quickstart.md`|Free-tier Neon & Supabase setup in 60 seconds (`post-graph-rag` + `post-graph-rag-mcp`)|",
+     "|`01_quickstart.py`|Three documents, one question that needs all three|",
+     "|`02_supersession.py`|A later filing closes an earlier fact; history stays queryable|",
+     "|`03_bitemporal_audit.py`|Reproduce what the system believed before a restatement|",
+     "|`04_multi_tenant_spaces.py`|Per-tenant isolation, plus deliberate cross-tenant views|",
+     "|`05_incremental_and_deltas.py`|Idempotent re-indexing and change polling|",
+     "|`06_communities_and_exploration.py`|Topic tree, corpus themes, coverage gaps|",
+     "|`07_retrieval_modes.py`|`local`, `global` and `mix` retrieval, same question|"
+    ]
+   ],
+   [
+    "equal",
+    479,
+    512,
+    409,
+    442
+   ],
+   [
+    "delete",
+    512,
+    514,
+    442,
+    442
+   ],
+   [
+    "equal",
+    514,
+    522,
+    442,
+    450
+   ],
+   [
+    "replace",
+    522,
+    565,
+    450,
+    451,
+    [
+     "…（43 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    565,
+    566,
+    451,
+    452
+   ],
+   [
+    "delete",
+    566,
+    568,
+    452,
+    452
+   ],
+   [
+    "equal",
+    568,
+    577,
+    452,
+    461
+   ],
+   [
+    "replace",
+    577,
+    588,
+    461,
+    462,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    588,
+    620,
+    462,
+    494
+   ],
+   [
+    "delete",
+    620,
+    624,
+    494,
+    494
+   ],
+   [
+    "equal",
+    624,
+    628,
+    494,
+    498
+   ],
+   [
+    "replace",
+    628,
+    667,
+    498,
+    537,
+    [
+     "|Option|Environment Variable|Default Value|Description|",
+     "|:---|:---|:---|:---|",
+     "|`api_base`|`OPENAI_API_BASE`|`http://localhost:4000/v1`|Base URL for OpenAI-compatible LLM endpoint|",
+     "|`api_key`|`OPENAI_API_KEY`|`EMPTY`|API key. `EMPTY` is the placeholder local servers accept|",
+     "|`model`|`RAG_MODEL`|`gemini-3.6-flash`|Default LLM for every role below that has no override|",
+     "|`extraction_model`|`RAG_EXTRACTION_MODEL`|falls back to `model`|Extraction, gleaning and contradiction detection — the index-time write path|",
+     "|`community_model`|`RAG_COMMUNITY_MODEL`|falls back to `model`|Community report synthesis|",
+     "|`auxiliary_model`|`RAG_AUXILIARY_MODEL`|falls back to `model`|Keyword extraction and query decomposition — small per-query calls|",
+     "|`synthesis_model`|`RAG_SYNTHESIS_MODEL`|falls back to `model`|Answering the question|",
+     "|`embedding_model`|`RAG_EMBEDDING_MODEL`|`gemini-embedding-001`|Model for vector embedding generation|",
+     "|`embedding_dim`|`RAG_EMBEDDING_DIM`|`1536`|Embedding width. Must match the model, and is fixed once tables exist|",
+     "|`embedding_batch_size`|`RAG_EMBEDDING_BATCH_SIZE`|`64`|Inputs per embedding request. Endpoints cap this and exceeding the cap is a non-retryable 400, so requests are split to stay under it|",
+     "|`db_uri`|`POSTGRES_URI`|`postgresql://localhost:5432/postgres`|PostgreSQL connection DSN|",
+     "|`realm`|`RAG_REALM`|`default`|Multi-tenant graph namespace|",
+     "|`space`|`RAG_SPACE`|`default`|Sub-grouping within a realm (`production`, `sandbox`, …)|",
+     "|`schema_per_realm`|`RAG_SCHEMA_PER_REALM`|`0`|Give each realm its own PostgreSQL schema. Recommended — see below|",
+     "|`embed_relations`|`RAG_EMBED_RELATIONS`|`1`|Embed relation edges so retrieval can find them by similarity as well as by traversal. Costs one embedding call per distinct triple at index time|",
+     "|`relation_seed_quota`|`RAG_RELATION_SEED_QUOTA`|`0.5`|Share of relation slots reserved for the similarity channel. `0` disables it|",
+     "|`allow_embedding_fallback`|`RAG_ALLOW_EMBEDDING_FALLBACK`|`0`|Use local/deterministic vectors when the embedding API fails|",
+     "|`fallback_models`|`RAG_FALLBACK_MODELS`|—|Comma-separated models to fail over to when the primary is rate-limited or out of credits|",
+     "|`max_retries`|`RAG_MAX_RETRIES`|`5`|Attempts per model before moving to the next|",
+     "|`gleaning_passes`|`RAG_GLEANING_PASSES`|`1`|Extra \"what did you miss?\" extraction passes. `0` halves LLM cost at the price of recall|",
+     "|`extraction_prompt`|—|`None`|Replace the extraction system prompt wholesale|",
+     "|`extraction_fn`|—|`None`|Supply triples from your own code instead of (or alongside) the LLM — see below|",
+     "|`extraction_fn_mode`|`RAG_EXTRACTION_FN_MODE`|`replace`|`replace` uses your function instead of the LLM; `merge` runs both and unions them|",
+     "|`validate_external_extraction`|`RAG_VALIDATE_EXTERNAL`|`1`|Put your function's records through the same gates as the LLM's|",
+     "|`entity_types`|`RAG_ENTITY_TYPES`|library defaults|Preferred entity type list|",
+     "|`predicate_vocabulary`|`RAG_PREDICATE_VOCABULARY`|—|Preferred predicates; extracted ones are snapped onto this list|",
+     "|`predicate_aliases`|—|`{}`|Explicit synonym map, e.g. `{\"collaborated_with\": \"worked_with\"}`|",
+     "|`drop_negated_relations`|`RAG_DROP_NEGATED`|`0`|Discard relations the text says do *not* hold, instead of flagging them|",
+     "|`min_relation_confidence`|`RAG_MIN_RELATION_CONFIDENCE`|`0.0`|Drop relations below this extraction confidence|",
+     "|`chunk_chars` / `chunk_overlap_chars`|`RAG_CHUNK_CHARS` / `RAG_CHUNK_OVERLAP`|`2000` / `200`|Default chunker sizing|",
+     "|`expand_chunks_via_mentions`|`RAG_EXPAND_VIA_MENTIONS`|`1`|Retrieve chunks that mention a matched entity, not only chunks matching the query vector|",
+     "|`context_entity_limit`|`RAG_CONTEXT_ENTITY_LIMIT`|`40`|Canonical names carried forward as extraction context|",
+     "|`community_min_size`|`RAG_COMMUNITY_MIN_SIZE`|`3`|Smallest cluster worth summarising|",
+     "|`community_resolution`|`RAG_COMMUNITY_RESOLUTION`|`1.0`|Higher yields more, smaller communities (Leiden only)|",
+     "|`max_communities`|`RAG_MAX_COMMUNITIES`|`64`|Cap per build; each community costs one LLM call|",
+     "|`community_report_prompt`|—|`None`|Replace the community report prompt|",
+     "|`negated_relation_weight`|`RAG_NEGATED_RELATION_WEIGHT`|`0.3`|Clustering weight for denied relations|"
+    ]
+   ],
+   [
+    "equal",
+    667,
+    755,
+    537,
+    625
+   ],
+   [
+    "delete",
+    755,
+    757,
+    625,
+    625
+   ],
+   [
+    "equal",
+    757,
+    788,
+    625,
+    656
+   ],
+   [
+    "replace",
+    788,
+    789,
+    656,
+    657,
+    [
+     " - The three token budgets default to `None` — **unlimited** — as of 1.11.1: everything retrieved reaches the model. Set an integer to cap context for cost or for a model with a small window."
+    ]
+   ],
+   [
+    "equal",
+    789,
+    819,
+    657,
+    687
+   ],
+   [
+    "replace",
+    819,
+    820,
+    687,
+    688,
+    [
+     "Database layer wrapping `post-graph`."
+    ]
+   ],
+   [
+    "equal",
+    820,
+    833,
+    688,
+    701
+   ],
+   [
+    "delete",
+    833,
+    835,
+    701,
+    701
+   ],
+   [
+    "equal",
+    835,
+    839,
+    701,
+    705
+   ],
+   [
+    "replace",
+    839,
+    849,
+    705,
+    713,
+    [
+     "|Table Name|Type|Key Columns|Description|",
+     "|:---|:---|:---|:---|",
+     "|`{realm}_documents`|Vertex Table|`id`, `payload`, `embedding` (`vector`)|Stores raw text chunks and `DocumentMetadata` payloads|",
+     "|`{realm}_entities`|Vertex Table|`id`, `payload`, `embedding` (`vector`)|Canonical entity nodes (`name`, `type`, `description`)|",
+     "|`{realm}_relations`|Edge Table|`from_id`, `to_id`, `relation_type`, `payload`|Directed edges representing entity-to-entity triples|",
+     "|`{realm}_doc_mentions`|Edge Table|`from_id`, `to_id`, `relation_type`|Directed edges connecting document chunks to mentioned entities|",
+     "|`{table}_audit`|Audit Table|`audit_id`, `action`, `changed_by`, `changed_at`|Automatic shadow audit logging for all graph mutations|",
+     "|`{table}_data`|History Table|`data_id`, `payload`, `timestamp`, `embedding`|Append-only historical records for vertices and edges|"
+    ]
+   ],
+   [
+    "equal",
+    849,
+    861,
+    713,
+    725
+   ],
+   [
+    "delete",
+    861,
+    863,
+    725,
+    725
+   ],
+   [
+    "equal",
+    863,
+    866,
+    725,
+    728
+   ],
+   [
+    "replace",
+    866,
+    867,
+    728,
+    729,
+    [
+     "CONTRIBUTING.md covers the parts that are specific to this"
+    ]
+   ],
+   [
+    "equal",
+    867,
+    871,
+    729,
+    733
+   ],
+   [
+    "replace",
+    871,
+    872,
+    733,
+    734,
+    [
+     "Issues tagged `good first issue` are real gaps rather than"
+    ]
+   ],
+   [
+    "equal",
+    872,
+    878,
+    734,
+    740
+   ],
+   [
+    "delete",
+    878,
+    880,
+    740,
+    740
+   ],
+   [
+    "equal",
+    880,
+    882,
+    740,
+    742
+   ],
+   [
+    "replace",
+    882,
+    883,
+    742,
+    743,
+    [
+     "This project is licensed under the Apache License 2.0 - see the LICENSE file for details."
+    ]
+   ],
+   [
+    "equal",
+    883,
+    885,
+    743,
+    745
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

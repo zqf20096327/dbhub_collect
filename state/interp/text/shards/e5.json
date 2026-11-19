@@ -2768,5 +2768,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1340dd483663": {
+  "identity": {
+   "one_liner": "本地运行的编码智能体编排器：拆分任务到多个沙箱，以隐藏考试验证并输出 PR",
+   "review": "TaskWing 是一个用 Go 编写的单二进制 CLI，用于编排用户已有的编码智能体（当前支持 Claude Code）。它将一个任务拆分为互不共享文件的多块，在各自沙箱（boat）中并行执行，由独立会话在开工前编写用户批准的隐藏测试，最终在干净沙箱中对合并结果运行考试，并由宿主机推送生成一个草稿 PR。项目处于早期阶段，沙箱提供商、更多智能体运行时等仍在计划中。",
+   "highlights": [
+    "一个任务输入、一个经过测试的 PR 输出：lead 智能体规划拆分，每块由独立沙箱中的智能体并行构建",
+    "隐藏考试机制：独立会话先行编写测试并对用户可见批准，lead 和 worker 均不可见测试，最终在干净沙箱中运行",
+    "沙箱内无 GitHub 登录，智能体本地提交，宿主机拉取、合并并推送；引擎自身不含模型代码，使用用户已有的智能体订阅"
+   ],
+   "use_cases": [
+    "需要将一个开发任务并行拆分给多个编码智能体执行并避免文件冲突的仓库",
+    "希望对智能体生成代码在合并前进行隐藏测试验证并人工审批的团队",
+    "偏好本地单二进制运行、复用现有 Claude Code 登录与订阅的开发者"
+   ]
+  },
+  "sha": "1340dd483663",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "611c56145b92": {
+  "identity": {
+   "one_liner": "JumpServer 数据库工作台，通过 Wisp 集成提供 SQL 查询与数据管理",
+   "review": "Chen 是 JumpServer 的数据库工作空间，通过 Luna 前端提供 SQL 查询、模式浏览、结果编辑和数据导入导出。Go 后端经 Wisp 与 JumpServer 集成实现认证、权限和审计，支持 MySQL、MariaDB、PostgreSQL 及 Db2。可托管模式接入 Core，也可脱离 JumpServer 以单机模式运行，但单机模式无 Core 认证。",
+   "highlights": [
+    "提供 SQL 查询、模式浏览、结果编辑和数据导入导出功能",
+    "托管模式下 API 位于 /chen/api/v1/ 并支持 SSE 流式输出，缓存结果集默认保留 10000 行",
+    "支持 --query-timeout 和 --max-result-bytes 参数控制查询超时与结果字节上限，Linux amd64/arm64 构建包含全部支持的数据库驱动"
+   ],
+   "use_cases": [
+    "已部署 JumpServer 的环境中通过 Wisp 集成实现带认证、权限和审计的数据库操作入口",
+    "脱离 JumpServer 以单机模式运行，通过 YAML 配置文件指定数据库连接进行 SQL 查询",
+    "通过 make package 生成的发布包在 Linux amd64/arm64 系统上部署数据库工作台"
+   ]
+  },
+  "sha": "611c56145b92",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f37ae8764c85": {
+  "identity": {
+   "one_liner": "基于 Flutter 客户端与 Node.js/PostgreSQL 后端的多模块零售餐饮 ERP 与 POS 系统",
+   "review": "Famalth Lynx 是一套面向零售、餐饮、多门店运营的 ERP 与 POS 系统，前端采用 Flutter，后端为 Node.js/Express 与 PostgreSQL。它包含餐厅桌面与厨房管理、零售库存与批次追踪、复式记账、人事薪资等模块，并附主 POS、骑手、顾客点单、供应商门户四个客户端入口。支持 Windows 本地离线运行与云端部署，通过环境变量配置数据库、Redis、S3 存储与邮件服务。",
+   "highlights": [
+    "包含餐厅 POS（桌面管理、KDS、KOT）、零售 POS（条码开单、批次/效期追踪、FEFO/FIFO）、复式记账（总账、凭证、财务报表）与 HR 薪资等模块",
+    "提供四个应用入口：主 POS 管理端、骑手端、顾客自点餐端与供应商门户",
+    "支持本地离线运行与 PostgreSQL 云端同步，可通过 Render.com 部署，并提供 S3/R2 备份、Redis 缓存与 Resend/Gmail/SMTP 邮件等环境变量配置"
+   ],
+   "use_cases": [
+    "混合业态零售门店的条码开单与多仓库库存调拨管理",
+    "餐厅的桌台管理、厨房显示（KDS）与外卖骑手派单场景",
+    "需要复式记账凭证、损益表与 GST 税务报表的门店财务管理"
+   ]
+  },
+  "sha": "f37ae8764c85",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ca2f7c0a6ecf": {
+  "identity": {
+   "one_liner": "用 TypeScript 从零实现的关系数据库引擎，含查询计划可视化与 B+树实验台。",
+   "review": "StrataDB 是一个以 TypeScript 从零编写的内存型关系数据库引擎，包含词法分析、递归下降解析器、规则式优化器、生成器实现的火山模型执行器与 B+tree 索引，并支持事务。它面向希望阅读源码理解数据库各层实现的学习者；局限为仅内存存储、单连接无隔离、不支持关联子查询、UNION、外键等。",
+   "highlights": [
+    "支持 SELECT/JOIN/GROUP BY/子查询/INSERT/UPDATE/DELETE、CREATE TABLE/INDEX 及 BEGIN/COMMIT/ROLLBACK 事务，并提供 EXPLAIN 与 EXPLAIN ANALYZE",
+    "内置查询计划可视化器与 B+tree 实验台，可查看算子树耗时与节点分裂、借用、合并过程；优化器实现谓词下推、索引选择与哈希连接",
+    "零运行时依赖，通过 undo log 实现语句级与事务级回滚，附 58 个测试，包括 B+tree 模型化测试与计划差分测试"
+   ],
+   "use_cases": [
+    "在浏览器 playground 中加载 30,000 行示例数据集，观察查询计划的算子执行与时间分布",
+    "通过 B+tree 实验台观察插入与删除时节点分裂、借用与合并过程",
+    "以 npm install 后 npm run dev 本地运行，或作为 TypeScript 库导入使用"
+   ]
+  },
+  "sha": "ca2f7c0a6ecf",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

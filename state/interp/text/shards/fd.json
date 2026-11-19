@@ -3488,5 +3488,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9d9fe59402eb": {
+  "identity": {
+   "one_liner": "Rust 编写的单二进制自托管在线状态监控与公开状态页引擎",
+   "review": "KeepUp 是一个用 Rust 编写的自托管在线状态监控引擎，通过 HTTP 探测记录响应时间到 SQLite（WAL 模式），并对外提供公开状态页与 SVG 徽章。面向需要自建服务可用性监控的运维者。无外部数据库依赖，空闲内存小于 15MB，启动低于 20ms；管理端为单管理员 JWT 认证，密码重置需通过本机 CLI 完成。",
+   "highlights": [
+    "支持 10s 至 3600s 可配置间隔的 HTTP/HTTPS 合成探测，结果写入本地 SQLite 时序日志",
+    "提供按 slug 路由的多租户状态页、P50/P95/P99 延迟百分位统计与可嵌入 SVG 徽章",
+    "支持 Discord/Slack/通用 Webhook 的状态变更告警、维护窗口抑制与 Handlebars 模板自定义"
+   ],
+   "use_cases": [
+    "自托管监控网站或 API 端点的可用性与响应延迟",
+    "向外部用户发布带 7 天历史与主题切换的公开状态页",
+    "在维护窗口期间自动抑制告警并公示计划维护公告"
+   ]
+  },
+  "sha": "9d9fe59402eb",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0debacddec5a": {
+  "identity": {
+   "one_liner": "面向小米 NAS 的自托管插件集合，提供只读设备监测插件。",
+   "review": "这是一个面向小米 NAS 的自托管插件集合仓库，当前包含设备管家插件 v1.0.2，用于只读监测 CPU、内存、温度、风扇、网络、存储池、Docker 和 systemd 状态。插件通过脚本安装，默认只监听宿主回环地址，页面经米家 plugin.cgi 登录链路访问；安装后需重启小米智能存储桌面客户端才能从全部应用打开。测试用 python unittest 运行，采用 MIT 许可证。",
+   "highlights": [
+    "只读采集 CPU、内存、温度、风扇、网络、存储池、Docker 和 systemd 状态",
+    "默认只监听宿主回环地址，页面通过米家原生 plugin.cgi 登录链路访问",
+    "提供一键安装脚本与 unittest 测试，插件按 plugins/<name>/ 目录约定组织"
+   ],
+   "use_cases": [
+    "为小米 NAS 增加只读的设备状态监测页面",
+    "通过米家桌面客户端查看 NAS 的系统与 Docker/服务运行信息",
+    "参照仓库中的插件开发规范和目录约定开发自托管 NAS 插件"
+   ]
+  },
+  "sha": "0debacddec5a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b23e02ad4b0a": {
+  "identity": {
+   "one_liner": "生成式AI与RPA结合的非结构化单据录入自动化平台",
+   "review": "DataQuill 是一个个人全栈项目，用于将收据、发票、交易邮件等非结构化文档进行结构化：通过 Gemini OCR+LLM 提取字段，经人工审核后，由 Playwright 机器人将数据输入 ERP 系统和 Excel 账簿。技术栈为 FastAPI + React + TiDB，支持 Docker 部署与 Render 托管，包含 30 个 pytest 测试和带有测试账号的演示站点。README 指出，定量准确度尚未测量，且 RPA 目前仅在演示 ERP 上进行了验证。",
+   "highlights": [
+    "通过分阶段提取（文本层 → Tesseract → Gemini 多模态）以 JSON 形式输出，并带有置信度评分，在人工审核前不允许进行 RPA 执行",
+    "Playwright 的自动输入通过检查 ERP 系统生成的凭证编号来确定成功，而 Excel 账簿则根据文档 ID 进行 upsert 操作，以防止重复行",
+    "支持 JWT 和 OAuth 登录，区分操作员/测试管理员/普通用户角色，并使用 paths-filter 仅构建和部署更改区域"
+   ],
+   "use_cases": [
+    "需要同时向 ERP 和 Excel 输入相同单据、希望通过一次提取并复用来减少重复手动工作的场景",
+    "扫描文档或没有 API 的旧版 ERP 屏幕，需要 OCR/AI 提取与屏幕自动化的场景",
+    "审查 FastAPI + Gemini + Playwright 管道实现结构的参考项目"
+   ]
+  },
+  "sha": "b23e02ad4b0a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

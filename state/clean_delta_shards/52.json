@@ -25450,5 +25450,1812 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "c98c17901c4a+2": {
+  "fn": "pgcentralfoundation/pgrx",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    12,
+    6,
+    11,
+    [
+     "GitHub Actions badge",
+     "crates.io badge",
+     "docs.rs badge",
+     "Twitter Follow",
+     "[Discord Chat][Discord]"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    19,
+    11,
+    18
+   ],
+   [
+    "replace",
+    19,
+    20,
+    18,
+    19,
+    [
+     " + **Please join our [Discord Server][Discord].**"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    19,
+    20
+   ],
+   [
+    "replace",
+    21,
+    22,
+    20,
+    21,
+    [
+     " + **We are also in need of financial sponsorship.**"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    21,
+    24
+   ],
+   [
+    "replace",
+    25,
+    34,
+    24,
+    33,
+    [
+     "- **A fully managed development environment with `cargo-pgrx`**",
+     " + `cargo pgrx new`: Create new extensions quickly",
+     " + `cargo pgrx init`: Install new (or register existing) PostgreSQL installs",
+     " + `cargo pgrx run`: Run your extension and interactively test it in `psql` (or `pgcli`)",
+     " + `cargo pgrx test`: Unit-test your extension across multiple PostgreSQL versions",
+     " + `cargo pgrx regress`: Run SQL regression tests and compare their output with expected files",
+     " + `cargo pgrx package`: Create installation packages for your extension, including RPM and DEB packages on Linux",
+     " + `cargo pgrx migrate`: Optionally build upgrade scripts from one small SQL file per change",
+     " + More in the `README.md`!"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    33,
+    34
+   ],
+   [
+    "replace",
+    35,
+    38,
+    34,
+    37,
+    [
+     " + Support from Postgres 15 to Postgres 19 from the same codebase",
+     " + Use Rust feature gating to use version-specific APIs",
+     " + Seamlessly test against all versions"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    37,
+    38
+   ],
+   [
+    "replace",
+    39,
+    43,
+    38,
+    42,
+    [
+     " + Implement extensions entirely in Rust",
+     " + Automatic mapping for many Rust types into PostgreSQL",
+     " + SQL schemas generated automatically (or manually via `cargo pgrx schema`)",
+     " + Include custom SQL with `extension_sql!` & `extension_sql_file!`"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    42,
+    43
+   ],
+   [
+    "replace",
+    44,
+    48,
+    43,
+    47,
+    [
+     " + During binding generation, pgrx transpiles nearly all of PostgreSQL's function-style C `#define` macros into Rust `macro_rules!` macros",
+     " + Call them through `pgrx::` with their original C names and `!`, such as `pgrx::VARSIZE_ANY!(ptr)`",
+     " + Their behavior follows the selected PostgreSQL installation, compiler flags, and target",
+     " + See Using PostgreSQL C macros for extension examples and the transpiler architecture for implementation details"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    47,
+    48
+   ],
+   [
+    "replace",
+    49,
+    54,
+    48,
+    53,
+    [
+     " + Translates Rust `panic!`s into Postgres `ERROR`s that abort the transaction, not the process",
+     " + Memory Management follows Rust's drop semantics, even in the face of `panic!` and `elog(ERROR)`",
+     " + `#[pg_guard]` procedural macro to ensure the above",
+     " + Postgres `Datum`s are `Option<T> where T: FromDatum`",
+     " - `NULL` Datums are safely represented as `Option::<T>::None`"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    53,
+    54
+   ],
+   [
+    "replace",
+    55,
+    59,
+    54,
+    58,
+    [
+     " + Annotate functions with `#[pg_extern]` to expose them to Postgres",
+     " + Return `pgrx::iter::SetOfIterator<'a, T>` for `RETURNS SETOF`",
+     " + Return `pgrx::iter::TableIterator<'a, T>` for `RETURNS TABLE (...)`",
+     " + Create trigger functions with `#[pg_trigger]`"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    58,
+    59
+   ],
+   [
+    "replace",
+    60,
+    66,
+    59,
+    65,
+    [
+     " + `#[derive(PostgresType)]` to use a Rust struct as a Postgres type",
+     " - By default, represented as a CBOR-encoded object in-memory/on-disk, and JSON as human-readable",
+     " - Supports `#[pg_binary_protocol]` to generate binary protocol send/recv functions",
+     " - Provide custom in-memory/on-disk/human-readable representations",
+     " + `#[derive(PostgresEnum)]` to use a Rust enum as a Postgres enum",
+     " + Composite types supported with the `pgrx::composite_type!(\"Sample\")` macro"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    65,
+    66
+   ],
+   [
+    "replace",
+    67,
+    69,
+    66,
+    68,
+    [
+     " + Safe access into SPI",
+     " + Transparently return owned Datums from an SPI context"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    68,
+    69
+   ],
+   [
+    "replace",
+    70,
+    77,
+    69,
+    76,
+    [
+     " + Safe access to Postgres' `MemoryContext` system via `pgrx::PgMemoryContexts`",
+     " + Executor/planner/transaction/subtransaction hooks",
+     " + Safely use Postgres-provided pointers with `pgrx::PgBox<T>` (akin to `alloc::boxed::Box<T>`)",
+     " + `#[pg_guard]` proc-macro for guarding `extern \"C-unwind\"` Rust functions that need to be passed into Postgres",
+     " + Access Postgres' logging system through `eprintln!`-like macros",
+     " + Direct `unsafe` access to large parts of Postgres internals via the `pgrx::pg_sys` module",
+     " + New features added regularly!"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    86,
+    76,
+    85
+   ],
+   [
+    "replace",
+    86,
+    88,
+    85,
+    87,
+    [
+     "target limits.",
+     "A cross build has further requirements; see Cross-compiling."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    92,
+    87,
+    91
+   ],
+   [
+    "replace",
+    92,
+    100,
+    91,
+    99,
+    [
+     " - Debian-likes: `apt install clang llvm libclang-dev`",
+     " - RHEL-likes: `yum install clang llvm`",
+     " - Windows: download installers from https://github.com/llvm/llvm-project/releases",
+     " - On Linux, pgrx's CI generates the C macros with every Clang major from 14 through 23, on x86_64 and aarch64, and requires those versions to generate the same macros. Other Clang versions are not tested on Linux.",
+     " - `pgrx-pg-sys` uses the driver to find the target's system headers, to check the C macro profile against the PostgreSQL headers and to compile its native support archive, including the `cshim` feature. Its major version must match `libclang`. pgrx uses `CLANG_PATH` when it is set; otherwise it uses the first match among the `CLANG` recorded in a `pg_config` program's `--configure` output, the `clang` installed with `libclang`, and `clang-<major>` or `clang` on `PATH`.",
+     " - The archiver is `llvm-ar` from the driver's LLVM release, or `llvm-lib` for Windows targets. pgrx looks for `llvm-ar-<major>` beside a `clang-<major>` driver, then `llvm-ar` beside the driver or beside its resolved path, such as Debian's `/usr/lib/llvm-<major>/bin/llvm-ar`. Without one, builds for Unix targets use the system `ar`, which works for native builds but may not index objects built for another target.",
+     " - A failure to generate the C macros stops the build with an error that names the cause.",
+     " - A driver that loads a default configuration file, as Gentoo's Clang does, is refused. Set `CLANG_NO_DEFAULT_CONFIG=1` to build without it."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    99,
+    100
+   ],
+   [
+    "replace",
+    101,
+    106,
+    100,
+    105,
+    [
+     " - Linux and macOS: a host C compiler, which builds the generator's SHA-256 backend",
+     " - Windows: MSVC, which Rust's MSVC targets need for linking",
+     "- PostgreSQL's build dependencies ‡",
+     " - Debian-likes: `sudo apt-get install build-essential libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache pkg-config libicu-dev`",
+     " - RHEL-likes: `sudo yum install -y bison-devel readline-devel zlib-devel openssl-devel wget ccache && sudo yum groupinstall -y 'Development Tools'`"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    120,
+    105,
+    119
+   ],
+   [
+    "replace",
+    120,
+    121,
+    119,
+    120,
+    [
+     "The Mac C compiler (clang) and related tools are bundled with Xcode."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    123,
+    120,
+    122
+   ],
+   [
+    "replace",
+    123,
+    124,
+    122,
+    123,
+    [
+     "For additional C libraries, it's easiest to use Homebrew. In particular,"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    142,
+    123,
+    141
+   ],
+   [
+    "replace",
+    142,
+    166,
+    141,
+    142,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    178,
+    142,
+    154
+   ],
+   [
+    "replace",
+    178,
+    183,
+    154,
+    155,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    197,
+    155,
+    169
+   ],
+   [
+    "replace",
+    197,
+    198,
+    169,
+    170,
+    [
+     " └── lib.rs"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    218,
+    170,
+    190
+   ],
+   [
+    "delete",
+    218,
+    219,
+    190,
+    190
+   ],
+   [
+    "equal",
+    219,
+    225,
+    190,
+    196
+   ],
+   [
+    "replace",
+    225,
+    261,
+    196,
+    197,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    280,
+    197,
+    216
+   ],
+   [
+    "replace",
+    280,
+    389,
+    216,
+    217,
+    [
+     "…（109 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    391,
+    217,
+    219
+   ],
+   [
+    "replace",
+    391,
+    399,
+    219,
+    227,
+    [
+     " --> pgrx/src/lib.rs:151:5",
+     " |",
+     "151 | / assert!(",
+     "152 | | same_slice(pg_sys::FMGR_ABI_EXTRA, b\"xPostgreSQL\\0\"),",
+     "153 | | \"Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?\",",
+     "154 | | );",
+     " | |_____^ the evaluated program panicked at 'Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?', pgrx/src/lib.rs:151:5",
+     " |"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    403,
+    227,
+    231
+   ],
+   [
+    "replace",
+    403,
+    450,
+    231,
+    232,
+    [
+     "…（47 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    450,
+    461,
+    232,
+    243
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "3ef01e27cef3+2": {
+  "fn": "marketcalls/openalgo",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    11,
+    2,
+    7,
+    [
+     "PyPI Downloads",
+     "PyPI Downloads",
+     "X (formerly Twitter) Follow",
+     "YouTube: Subscribe",
+     "Discord"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    20,
+    7,
+    16
+   ],
+   [
+    "replace",
+    20,
+    27,
+    16,
+    23,
+    [
+     "|Surface|Route|Who it's for|",
+     "|---|---|---|",
+     "|**Unified Broker API**|`/api/v1/`|External platforms: TradingView, Amibroker, ChartInk, Excel, Google Sheets, Python, Java, Go, .NET, Node.js, MetaTrader, GoCharting, N8N. One contract across 39 plugins, with optional operations varying by adapter.|",
+     "|**Python Strategy Host**|`/python`|Traders who code: paste any Python script into the in-browser CodeMirror editor, schedule it on IST start/stop times, run multiple strategies in parallel with process isolation, watch real-time logs. No external server, no Docker, no cron.|",
+     "|**Flow: No-Code Strategy Builder**|`/flow`|Traders who don't code: drag-and-drop nodes for market data, indicators, conditions, order execution, and notifications. Webhook triggers for TradingView and external signals built in. JSON import/export for sharing strategies.|",
+     "|**AI Agent**|`/agent`|Traders who would rather ask: a chat that reads your own market data through OpenAlgo's services, draws charts and payoff diagrams, computes indicators, marks up the `/trading` chart from a right-side panel, and can place orders only with your explicit approval on every single one. Bring your own model from any LiteLLM provider, or a ChatGPT Plus or Pro subscription, or run it locally against Ollama.|",
+     "|**Options & Portfolio Suite**|`/tools`|Options traders and investors: twenty built-in analytical tools. Options analytics (Strategy Builder with payoff diagrams & live Greeks, Option Chain, Option Greeks history, OI Tracker, OI Range, Max Pain, Straddle Chart, Straddle PnL simulator, Vol Surface, GEX dashboard, Strike Profile, Gamma Density, IV Smile, OI Profile, futures calendar-spread Arbitrage) plus portfolio and investment tools (Strategy Portfolio, Portfolio Backtester, SIP Backtester, Portfolio Analyzer, Sector Rotation). Live tools stream from your connected broker.|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    32,
+    23,
+    28
+   ],
+   [
+    "replace",
+    32,
+    33,
+    28,
+    29,
+    [
+     "OpenAlgo Explainer"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    29,
+    32
+   ],
+   [
+    "replace",
+    36,
+    41,
+    32,
+    36,
+    [
+     "- **Documentation**: docs.openalgo.in",
+     "- **Installation Guide**: Getting Started",
+     "- **Upgrade Guide**: Upgrade Instructions",
+     "- **Why OpenAlgo**: Why Build with OpenAlgo"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    48,
+    36,
+    43
+   ],
+   [
+    "replace",
+    48,
+    50,
+    43,
+    44,
+    [
+     " View All Supported Brokers "
+    ]
+   ],
+   [
+    "equal",
+    50,
+    89,
+    44,
+    83
+   ],
+   [
+    "delete",
+    89,
+    91,
+    83,
+    83
+   ],
+   [
+    "equal",
+    91,
+    122,
+    83,
+    114
+   ],
+   [
+    "replace",
+    122,
+    123,
+    114,
+    115,
+    [
+     "|Tool|Route|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    115,
+    116
+   ],
+   [
+    "replace",
+    124,
+    144,
+    116,
+    136,
+    [
+     "|**Strategy Builder**|`/strategybuilder`|Build multi-leg option strategies with live Greeks, payoff diagrams, what-if simulators, Strategy Chart, Multi Strike OI tabs, and basket order execution|",
+     "|**Strategy Portfolio**|`/strategybuilder/portfolio`|Saved strategies across MyTrades and Simulation watchlists|",
+     "|**Portfolio Backtester**|`/portfolio-backtester`|Backtest a weighted portfolio against an index with real delivery costs, rebalancing rules, crisis periods and a full tearsheet|",
+     "|**SIP Backtester**|`/sip-backtester`|Monthly, weekly or quarterly SIP returns: XIRR, rupee-cost averaging, start-date sensitivity and a lumpsum comparison|",
+     "|**Portfolio Analyzer**|`/portfolio-analyzer`|Grade the holdings you own: concentration, co-movement, drawdown resilience and behaviour in past crises|",
+     "|**Sector Rotation**|`/sector-rotation`|Which NSE sectors, stocks and indices are leading, weakening, lagging or improving against a benchmark, with daily or weekly trails|",
+     "|**Option Chain**|`/optionchain`|Real-time option chain with live Greeks, OI data, and quick order placement|",
+     "|**Option Greeks**|`/ivchart`|Historical IV, Delta, Theta, Vega, and Gamma charts for ATM options|",
+     "|**OI Tracker**|`/oitracker`|Open Interest analysis with CE/PE OI bars, PCR overlay, and ATM strike marker|",
+     "|**OI Range**|`/oirange`|Open Interest by strike for a custom range with ATM-relative quick selectors and optional 1-minute auto-refresh|",
+     "|**Max Pain**|`/maxpain`|Max Pain strike calculation with visual pain distribution across strikes|",
+     "|**Straddle Chart**|`/straddle`|Dynamic ATM Straddle chart with rolling strike, Spot, and Synthetic Futures overlay|",
+     "|**Straddle PnL**|`/straddlepnl`|Simulated intraday ATM straddle P&L with automated N-point adjustments and trade log|",
+     "|**Vol Surface**|`/volsurface`|3D Implied Volatility surface across strikes and expiries using live option chain data|",
+     "|**GEX Dashboard**|`/gex`|Gamma Exposure analysis with OI Walls, Net GEX per strike, and top gamma strikes|",
+     "|**Strike Profile**|`/strikeprofile`|GEX and DEX heatmap by strike and expiry with per-expiry peaks, gamma flip, call and put walls|",
+     "|**Gamma Density**|`/gammadensity`|Gamma x OI density and convexity zones with intraday and to-expiry views, ATM IV, and 1 and 2 sigma expected-move bands|",
+     "|**IV Smile**|`/ivsmile`|Implied Volatility smile with Call/Put IV curves, ATM IV, and skew analysis|",
+     "|**OI Profile**|`/oiprofile`|Futures candlestick with OI butterfly and daily OI change across strikes|",
+     "|**Arbitrage**|`/arbitrage`|Realtime futures calendar-spread scanner across NFO and MCX, ranked by executable bid/ask spread % with one-click two-leg orders|"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    156,
+    136,
+    148
+   ],
+   [
+    "replace",
+    156,
+    157,
+    148,
+    149,
+    [
+     "API Analyzer Documentation"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    165,
+    149,
+    157
+   ],
+   [
+    "replace",
+    165,
+    166,
+    157,
+    158,
+    [
+     "Action Center Documentation"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    215,
+    158,
+    207
+   ],
+   [
+    "replace",
+    215,
+    216,
+    207,
+    208,
+    [
+     "PnL Tracker Documentation"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    208,
+    209
+   ],
+   [
+    "replace",
+    217,
+    218,
+    209,
+    210,
+    [
+     "Traffic & Latency Monitor Documentation"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    307,
+    210,
+    299
+   ],
+   [
+    "replace",
+    307,
+    308,
+    299,
+    300,
+    [
+     "|Language / Platform|Repository|"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    309,
+    300,
+    301
+   ],
+   [
+    "replace",
+    309,
+    315,
+    301,
+    307,
+    [
+     "|Python|openalgo-python-library|",
+     "|Node.js|openalgo-node|",
+     "|Java|openalgo-java|",
+     "|Rust|openalgo-rust|",
+     "|.NET / C#|openalgo.NET|",
+     "|Go|openalgo-go|"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    328,
+    307,
+    320
+   ],
+   [
+    "replace",
+    328,
+    329,
+    320,
+    321,
+    [
+     "- **Documentation**: Comprehensive guides on Gitbook"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    347,
+    321,
+    339
+   ],
+   [
+    "replace",
+    347,
+    353,
+    339,
+    340,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    361,
+    340,
+    348
+   ],
+   [
+    "replace",
+    361,
+    362,
+    348,
+    349,
+    [
+     "For detailed installation instructions, deployment options (Docker, AWS, etc.), and configuration guides, visit docs.openalgo.in/installation-guidelines/getting-started"
+    ]
+   ],
+   [
+    "equal",
+    362,
+    365,
+    349,
+    352
+   ],
+   [
+    "replace",
+    365,
+    368,
+    352,
+    355,
+    [
+     "Start with the local documentation map and",
+     "registered API reference. The",
+     "2026-11-06 documentation audit"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    371,
+    355,
+    358
+   ],
+   [
+    "replace",
+    371,
+    373,
+    358,
+    360,
+    [
+     "- **API Documentation**: docs.openalgo.in/api-documentation/v1",
+     "- **Symbol Format**: docs.openalgo.in/symbol-format"
+    ]
+   ],
+   [
+    "equal",
+    373,
+    390,
+    360,
+    377
+   ],
+   [
+    "replace",
+    390,
+    391,
+    377,
+    378,
+    [
+     "Comprehensive documentation is available at docs.openalgo.in:"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    399,
+    378,
+    386
+   ],
+   [
+    "replace",
+    399,
+    411,
+    386,
+    387,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    411,
+    413,
+    387,
+    389
+   ],
+   [
+    "replace",
+    413,
+    417,
+    389,
+    393,
+    [
+     "- **Discord**: Join our community",
+     "- **Twitter/X**: @openalgoHQ",
+     "- **YouTube**: @openalgo",
+     "- **GitHub Issues**: Report bugs or request features"
+    ]
+   ],
+   [
+    "equal",
+    417,
+    419,
+    393,
+    395
+   ],
+   [
+    "replace",
+    419,
+    422,
+    395,
+    396,
+    [
+     "OpenAlgo is released under the **AGPL V3.0 License**. See License.md for details."
+    ]
+   ],
+   [
+    "equal",
+    422,
+    427,
+    396,
+    401
+   ],
+   [
+    "replace",
+    427,
+    430,
+    401,
+    404,
+    [
+     "- **Flask** - BSD License - Python web microframework",
+     "- **React** - MIT License - UI library for building user interfaces",
+     "- **SQLAlchemy** - MIT License - Python SQL toolkit and ORM"
+    ]
+   ],
+   [
+    "equal",
+    430,
+    434,
+    404,
+    408
+   ],
+   [
+    "replace",
+    434,
+    436,
+    408,
+    410,
+    [
+     "- **Agno** - Apache 2.0 - Agentic framework behind the `/agent` reasoning loop, tool calling, session persistence and image attachments",
+     "- **LiteLLM** - MIT License - Unified model layer giving one interface across every supported provider, plus the model catalogue and per-model metadata the agent's provider picker is built from"
+    ]
+   ],
+   [
+    "equal",
+    436,
+    438,
+    410,
+    412
+   ],
+   [
+    "replace",
+    438,
+    442,
+    412,
+    416,
+    [
+     "- **shadcn/ui** - MIT License - Beautifully designed components built with Radix UI and Tailwind CSS",
+     "- **Radix UI** - MIT License - Unstyled, accessible UI components",
+     "- **Tailwind CSS** - MIT License - Utility-first CSS framework",
+     "- **Lucide** - ISC License - Beautiful & consistent icon library"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    444,
+    416,
+    418
+   ],
+   [
+    "replace",
+    444,
+    447,
+    418,
+    421,
+    [
+     "- **OpenAlgo Charts** - Apache 2.0 - Financial charting engine behind every chart in the app",
+     "- **Plotly** - MIT License - Interactive charting library for options analytics and visualization",
+     "- **xyflow/React Flow** - MIT License - Highly customizable library for building node-based visual strategy editors"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    449,
+    421,
+    423
+   ],
+   [
+    "replace",
+    449,
+    451,
+    423,
+    425,
+    [
+     "- **CodeMirror** - MIT License - Versatile code editor for Python and JSON with syntax highlighting",
+     "- **@uiw/react-codemirror** - MIT License - CodeMirror React wrapper with themes"
+    ]
+   ],
+   [
+    "equal",
+    451,
+    453,
+    425,
+    427
+   ],
+   [
+    "replace",
+    453,
+    456,
+    427,
+    430,
+    [
+     "- **TanStack Query** - MIT License - Powerful asynchronous state management",
+     "- **Zustand** - MIT License - Lightweight state management",
+     "- **Axios** - MIT License - Promise-based HTTP client"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    458,
+    430,
+    432
+   ],
+   [
+    "replace",
+    458,
+    460,
+    432,
+    434,
+    [
+     "- **Socket.IO** - MIT License - Real-time bidirectional event-based communication",
+     "- **ZeroMQ** - LGPL License - High-performance asynchronous messaging"
+    ]
+   ],
+   [
+    "equal",
+    460,
+    462,
+    434,
+    436
+   ],
+   [
+    "replace",
+    462,
+    464,
+    436,
+    438,
+    [
+     "- **Argon2-CFFI** - MIT License - Argon2 password hashing (PHC winner)",
+     "- **Cryptography** - BSD/Apache License - Cryptographic recipes and primitives"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    466,
+    438,
+    440
+   ],
+   [
+    "replace",
+    466,
+    471,
+    440,
+    445,
+    [
+     "- **Vite** - MIT License - Fast frontend build tool",
+     "- **TypeScript** - Apache 2.0 - JavaScript with syntax for types",
+     "- **Biome** - MIT License - Fast formatter and linter",
+     "- **Vitest** - MIT License - Blazing fast unit testing",
+     "- **Playwright** - Apache 2.0 - End-to-end testing framework"
+    ]
+   ],
+   [
+    "equal",
+    471,
+    473,
+    445,
+    447
+   ],
+   [
+    "replace",
+    473,
+    479,
+    447,
+    453,
+    [
+     "- **React Router** - MIT License - Declarative routing for React",
+     "- **Sonner** - MIT License - Toast notifications",
+     "- **cmdk** - MIT License - Command palette component",
+     "- **next-themes** - MIT License - Theme switching",
+     "- **react-resizable-panels** - MIT License - Resizable panel layouts",
+     "- **html2canvas-pro** - MIT License - Screenshot generation"
+    ]
+   ],
+   [
+    "equal",
+    479,
+    482,
+    453,
+    456
+   ],
+   [
+    "replace",
+    482,
+    483,
+    456,
+    457,
+    [
+     "Alt"
+    ]
+   ],
+   [
+    "equal",
+    483,
+    490,
+    457,
+    464
+   ],
+   [
+    "delete",
+    490,
+    492,
+    464,
+    464
+   ],
+   [
+    "equal",
+    492,
+    493,
+    464,
+    465
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "074ac7270600+2": {
+  "fn": "a703201/Personal-Archive-Management-System",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    12,
+    5,
+    10,
+    [
+     "License",
+     "Backend",
+     "Frontend",
+     "Database",
+     "Tests"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    10,
+    12
+   ],
+   [
+    "replace",
+    14,
+    29,
+    12,
+    13,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    35,
+    13,
+    19
+   ],
+   [
+    "replace",
+    35,
+    36,
+    19,
+    20,
+    [
+     "3. **难共享** —— 给家人看一张房产证，不该等于把整个档案库开放。AMS 提供**条目级共享链接**（可选密码 + 失败上限 + 有效期）与**家庭组协作**（已落地 · FR-ACL-010 · 方案 B，见 docs/12（设计章节）/ 取舍见同文档（方案评估章节）），而不是\"要么全给、要么不给\"。"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    38,
+    20,
+    22
+   ],
+   [
+    "delete",
+    38,
+    40,
+    22,
+    22
+   ],
+   [
+    "equal",
+    40,
+    45,
+    22,
+    27
+   ],
+   [
+    "replace",
+    45,
+    48,
+    27,
+    30,
+    [
+     "|批次|规模|已实现|降级交付|未开始|台账|",
+     "|---|---|---|---|---|---|",
+     "|**P0/P1/P2** 需求落地|111|**111（100%）**|0（附件水印 / 缩略图 / OCR / 短信 / 图形验证码 5 项能力边界项已于 2026-11-07 全部转正）|0|docs/10|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    51,
+    30,
+    33
+   ],
+   [
+    "replace",
+    51,
+    58,
+    33,
+    40,
+    [
+     "|指标|数值|",
+     "|---|---|",
+     "|后端源码|135 个 `.cj` / 48,091 行；测试 43 个 `.cj` / 9,027 行|",
+     "|前端源码|47 个源文件（21 视图 / 7 组件 / composables、i18n、样式、api、router、config、入口等）|",
+     "|数据库迁移|28 个 SQL（编号 001–027，`007` 重号两个文件：`007_p1_foundation.sql` / `007_scheduler_ops.sql`；约 47 张表）|",
+     "|HTTP 路由|224 条声明（31 个 routes 文件）；OpenAPI 规范 224 个 operation / 177 个 path，静态门禁逐条断言 224/224 覆盖|",
+     "|单元测试|**561 passed / 0 failed**（后端全量 `test.sh`）；前端 typecheck / 23 例单测 / build 全绿|"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    64,
+    40,
+    46
+   ],
+   [
+    "delete",
+    64,
+    66,
+    46,
+    46
+   ],
+   [
+    "equal",
+    66,
+    109,
+    46,
+    89
+   ],
+   [
+    "replace",
+    109,
+    110,
+    89,
+    90,
+    [
+     "- **家庭组协作（FR-ACL-010）**：建组 → 生成一次性邀请码（8 位 / 40 bit 熵 / 默认 15 分钟 / 1 次）→ 家人输码入组 → 按「整个主体 / 某分类 / 单条条目」三级授权，**默认只读**。成员角色与全局 RBAC 完全隔离，入组不产生任何系统角色；移除成员或解散组会级联撤销全部授权。设计见 docs/12（设计章节），取舍见同文档（方案评估章节）"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    120,
+    90,
+    100
+   ],
+   [
+    "delete",
+    120,
+    122,
+    100,
+    100
+   ],
+   [
+    "equal",
+    122,
+    124,
+    100,
+    102
+   ],
+   [
+    "replace",
+    124,
+    133,
+    102,
+    111,
+    [
+     "|层|选型|说明|",
+     "|---|---|---|",
+     "|后端语言|**仓颉 Cangjie**（SDK 1.2.0）|静态编译、原生二进制；子包粒度手写构建脚本（`cjpm` 在本机 Windows 触发堆损坏，故本机构建走 `scripts/build.sh`，CI 用 `cjpm`）|",
+     "|密码学扩展|**stdx 1.2.0.1**|提供 SM3 / SM4；`bash scripts/verify-stdx.sh` 可一键复现 14 项国标向量校验|",
+     "|数据库|**openGauss**|通过自编译的 `tpc` 驱动接入（`tools/vendor/opengauss-driver`）|",
+     "|前端|**Vue 3.5 + TypeScript + Vite 7**|零 UI 框架依赖，手写设计系统（深浅色、四档响应式断点、Apple 质感动效）|",
+     "|状态管理|组合式 API + `AppStorage` 式信号|不引入 Pinia，规模未到需要|",
+     "|测试|仓颉 `std.unittest` + Vitest|后端全量 `test.sh` **419 通过 / 0 失败**，按包分层；前端 typecheck / test / build 全绿|",
+     "|媒体处理|**`ams.core.media`（纯仓颉）**|PNG 解码 / 编码（自写 CRC-32 / Adler-32）、`bmp.cj` BMP 解码、`jpeg.cj` baseline + 渐进式 JPEG 解码、`pdftext.cj` 文本型 PDF 抽文本 + `pdfimage.cj` 图像型扫描 PDF 图像流抽取、**三路 OCR**（5×7 印刷体 → CJK 416 字点阵 → 手写风格数字，返回实际命中引擎）、缩略图与像素水印；`scripts/gen-media-glyphs.py` 构建期用 Windows GDI 生成 `glyphdata.cj` 字模，运行时零依赖。全部在 `ams-server` 进程内完成，无外部进程 / 独立 worker|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    140,
+    111,
+    118
+   ],
+   [
+    "replace",
+    140,
+    154,
+    118,
+    119,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    157,
+    119,
+    122
+   ],
+   [
+    "delete",
+    157,
+    159,
+    122,
+    122
+   ],
+   [
+    "equal",
+    159,
+    164,
+    122,
+    127
+   ],
+   [
+    "replace",
+    164,
+    170,
+    127,
+    133,
+    [
+     "|能力|状态|说明|",
+     "|---|---|---|",
+     "|SM3 摘要 / HMAC-SM3|✅ 可用|与国标标准向量**逐字节一致**（`SM3(\"abc\")` = `66c7f0f4…8f4ba8e0`）|",
+     "|SM4 加密|✅ CBC / CTR|密文与国标测试向量一致|",
+     "|SM4-**GCM**|❌ 不可用|stdx 实测报 `create tag error`（OpenSSL 本身支持），故改用 **EtM 组合：CBC 加密 + HMAC-SM3 认证**|",
+     "|SM2 非对称|❌ 未落地|SDK 无实现；导出包签名改用 **HMAC-SM3**（共享密钥），非公钥签名|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    133,
+    134
+   ],
+   [
+    "replace",
+    171,
+    172,
+    134,
+    135,
+    [
+     "这三条不是\"以后再说\"，是已在 docs/08 与 docs/03 §4.0 留有实测记录的既定方案。"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    186,
+    135,
+    149
+   ],
+   [
+    "delete",
+    186,
+    188,
+    149,
+    149
+   ],
+   [
+    "equal",
+    188,
+    192,
+    149,
+    153
+   ],
+   [
+    "replace",
+    192,
+    199,
+    153,
+    160,
+    [
+     "|依赖|版本 / 说明|",
+     "|---|---|",
+     "|仓颉 SDK|1.2.0，`CANGJIE_HOME` 指向安装目录（或放 `tools/cangjie/`）|",
+     "|stdx|1.2.0.1，`bash scripts/install-stdx.sh` 安装，`bash scripts/verify-stdx.sh` 校验|",
+     "|openGauss|一个可连实例（本地开发常用容器，默认端口 `15432`）|",
+     "|Node.js|≥ 20（前端 Vite 7 / vue-tsc）|",
+     "|平台|本机已验证 Windows + Git Bash；CI 覆盖 Linux|"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    227,
+    160,
+    188
+   ],
+   [
+    "replace",
+    227,
+    228,
+    188,
+    189,
+    [
+     "关键环境变量（完整清单见 docs/09 §4.3）："
+    ]
+   ],
+   [
+    "equal",
+    228,
+    229,
+    189,
+    190
+   ],
+   [
+    "replace",
+    229,
+    241,
+    190,
+    202,
+    [
+     "|变量|默认|说明|",
+     "|---|---|---|",
+     "|`AMS_ENV`|`dev`|运行环境：`dev`（默认，可用本地开发默认值）/ `production`（生产，见下方 SEC-001）|",
+     "|`AMS_HTTP_HOST` / `AMS_HTTP_PORT`|`127.0.0.1` / `8080`|监听地址与端口（前端与接口共用）|",
+     "|`AMS_WEB_DIR`|`web`|前端静态目录；生产包内即为 `web/`|",
+     "|`AMS_TOKEN_SECRET`|本地开发默认值|令牌签名密钥，**生产必填**，≥ 32 字节|",
+     "|`AMS_EXPORT_SIGN_KEY`|回落 `AMS_TOKEN_SECRET`|导出包签名密钥|",
+     "|`AMS_DB_HOST` / `AMS_DB_NAME` / `AMS_DB_USER` / `AMS_DB_PASSWORD`|`127.0.0.1` / `ams` / `gaussdb` / 开发默认|数据库连接|",
+     "|`AMS_DB_APP_USER` / `AMS_DB_APP_PASSWORD`|空|指定后以**受限角色**连接（业务表 DML、审计表仅 SELECT/INSERT）|",
+     "|`AMS_LOG_LEVEL`|`info`|日志级别|",
+     "|`AMS_MEDIA_ENABLED`|`false`|媒体处理总开关；与 `AMS_OCR_CONSENT` 须**同时为 `true`** 才自动处理附件（OCR 隐私显式同意），默认关闭|",
+     "|`AMS_OCR_CONSENT`|`false`|OCR 隐私显式同意开关；默认关闭，附件明文只在 `ams-server` 进程内内存处理、不落临时文件|"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    267,
+    202,
+    228
+   ],
+   [
+    "replace",
+    267,
+    273,
+    228,
+    234,
+    [
+     "|请求|处理|",
+     "|---|---|",
+     "|`/api/...`|后端接口。未匹配的接口返回 **JSON 404**，不会回落到 HTML|",
+     "|`/assets/...`|前端资源，长缓存（`immutable`）|",
+     "|`/`、`/archive` 等无扩展名路径|回落 `index.html`，交给前端路由|",
+     "|`/x.js` 之类带扩展名但文件不存在|真正的 404（否则缺失 JS 会被 HTML 掩盖成语法错误）|"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    310,
+    234,
+    271
+   ],
+   [
+    "replace",
+    310,
+    312,
+    271,
+    273,
+    [
+     " 需要把数据库放到其他服务器时，在此填写连接 IP、端口、库名、用户名、密码，",
+     " 并可先「测试连接」。保存后重启服务生效。"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    313,
+    273,
+    274
+   ],
+   [
+    "replace",
+    313,
+    314,
+    274,
+    275,
+    [
+     " 首个账号自动获得 `owner` + `org_admin` 角色，无需手动授权。"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    315,
+    275,
+    276
+   ],
+   [
+    "replace",
+    315,
+    316,
+    276,
+    277,
+    [
+     " 用于找回密码时发送验证码；可跳过，之后随时在「系统运维 → 部署配置」中补充。"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    327,
+    277,
+    288
+   ],
+   [
+    "delete",
+    327,
+    329,
+    288,
+    288
+   ],
+   [
+    "equal",
+    329,
+    331,
+    288,
+    290
+   ],
+   [
+    "replace",
+    331,
+    348,
+    290,
+    305,
+    [
+     "|脚本|作用|",
+     "|---|---|",
+     "|`scripts/envsetup.sh`|装载仓颉环境变量（`source` 使用）|",
+     "|`scripts/build.sh`|子包粒度增量构建；`--clean` 全量重建；可指定顶层包如 `bash scripts/build.sh ams-core`|",
+     "|`scripts/test.sh`|全量单元测试；可指定包如 `bash scripts/test.sh ams-api`；`--verbose` 看编译输出|",
+     "|`scripts/build-driver.sh`|编译 openGauss 仓颉驱动（`build.sh` 缺产物时自动触发）|",
+     "|`scripts/verify-stdx.sh`|国密能力 14 项向量校验|",
+     "|`scripts/db.py`|数据库辅助：`exec <sql文件>` / `sql -s \"<SQL>\"` / `tables` / `count <表>`|",
+     "|`scripts/gen-gbk-table.py`|生成 GBK 码表（ZIP 中文文件名解码用）|",
+     "|`scripts/gen-media-glyphs.py`|**构建期字模生成器**：用 Windows GDI 字体渲染生成 `packages/ams-core/src/media/glyphdata.cj`（416 常用汉字 × 8 字体原型 + 10 手写风格数字 × 9 原型），供 CJK / 手写 OCR 运行时查表；运行时零依赖（不需字体 / GDI / Python / 外部进程）|",
+     "|`scripts/verify-audit-chain.py`|审计哈希链外部校验|",
+     "|`scripts/ci/verify-family.py`|家庭协作端到端验收（90 项断言：邀请闭环 + 失效语义 + 可见性 + 主体级授权与列表下推 + 条目级授权隔离 + 同端口静态托管）。自带启停服务，`AMS_VERIFY_PORT` 可换端口|",
+     "|`scripts/release.sh`|打包发布产物|",
+     "|`scripts/package.sh`|生成交付包（含前端构建 → `web/` 落包）|",
+     "|`scripts/ci/*`|CI 用：工具链准备、发布包可运行性校验|"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    355,
+    305,
+    312
+   ],
+   [
+    "replace",
+    355,
+    374,
+    312,
+    313,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    378,
+    313,
+    317
+   ],
+   [
+    "delete",
+    378,
+    380,
+    317,
+    317
+   ],
+   [
+    "equal",
+    380,
+    382,
+    317,
+    319
+   ],
+   [
+    "replace",
+    382,
+    400,
+    319,
+    337,
+    [
+     "|编号|文档|回答什么问题|",
+     "|---|---|---|",
+     "|—|docs/README.md|文档集总导航与关键设计决策 Top 12|",
+     "|01|产品需求文档|做什么？给谁做？做到什么程度算完成？|",
+     "|02|架构设计说明|系统怎么搭？语言怎么分工？多架构怎么交付？|",
+     "|03|安全设计专章|威胁是什么？怎么防？国密怎么落？审计怎么查？|",
+     "|04|开发规范|代码怎么写？怎么提交？测试覆盖到什么程度？|",
+     "|05|开发排期与里程碑|分几期做？每期交付什么？风险在哪？|",
+     "|06|数据模型设计|表怎么建？字段怎么定？分类模板与字典怎么管？|",
+     "|07|视觉与交互设计规范|界面长什么样？动效怎么动？深浅色如何切换？|",
+     "|08|SM4 方案变更说明|为什么不用 GCM？EtM 怎么构造？密钥如何分离？|",
+     "|09|部署与发布指南|怎么打包？怎么部署？环境变量有哪些？|",
+     "|10|实现状态核对（P0/P1/P2）|各优先级需求落地情况与证据（P0 54 / P1 34 / P2 23）|",
+     "|11|前端技术栈选型分析|为什么是 Vue 3？备选方案为何被否？|",
+     "|12|家庭成员邀请（设计 + 方案评估）|家庭协作安全设计（10 原则 / 14 威胁 / API 草案）与授权粒度·审批流·分批取舍（含推荐结论）|",
+     "|13|信创与国家密码标准参考|国密 GM/T·GB/T 对齐、已落地/未实现能力、信创适配现状|",
+     "|14|对外 API 规范（OpenAPI）|224 个 operation / 177 个 path 的 OpenAPI 3.1 基线；与后端 224 条路由声明一一对应，静态门禁强制 224/224 覆盖|",
+     "|15|架构演进路线（方案候选）|提炼通用框架 / SaaS·微服务化的 A/B/C 候选方案（已拍板，见 §三）|"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    401,
+    337,
+    338
+   ],
+   [
+    "replace",
+    401,
+    402,
+    338,
+    339,
+    [
+     "变更记录见 CHANGELOG.md。"
+    ]
+   ],
+   [
+    "equal",
+    402,
+    404,
+    339,
+    341
+   ],
+   [
+    "delete",
+    404,
+    406,
+    341,
+    341
+   ],
+   [
+    "equal",
+    406,
+    411,
+    341,
+    346
+   ],
+   [
+    "replace",
+    411,
+    426,
+    346,
+    359,
+    [
+     "|限制|原因|影响|",
+     "|---|---|---|",
+     "|**SM2 未实现**|SDK 无非对称国密实现|导出包签名用 HMAC-SM3（对称共享密钥），不是公钥签名，无法做到\"验签方不持有签名密钥\"|",
+     "|**SM4-GCM 不可用**，改用 CBC + HMAC-SM3|stdx 实测 `create tag error`|已是 EtM（先加密后认证）的正确构造，但非 AEAD，随机数管理需更小心|",
+     "|**像素水印仍不阻止截图 / 翻拍**|服务端已把访问者 / 时间 / 追踪号烧进 PNG 像素，但截图 / 翻拍发生在像素之外|PNG 由 `GET /api/attachments/:id/watermarked` 返回烧写图；PDF 与不支持格式仍走签票 + 审计 + 前端叠加|",
+     "|**OCR 有字体与版式边界**|内置 5×7 点阵字模面向等宽印刷体数字 / 大写字母；CJK / 手写为构建期字体点阵字典，非训练模型|PNG / BMP / baseline + 渐进式 JPEG / 文本型 PDF / 图像型扫描 PDF 的图像流均可处理（图像型 PDF 经 `pdfimage.cj` 抽图后走三路 OCR）；CJK 仅覆盖字典内 416 汉字且为字体点阵、手写仅 10 个近似手写风格数字；真实草书 / 生僻字 / 强倾斜 / 复杂排版 / 加密 PDF / CMYK 不支持，高精度识别仍需外部模型；阈值来自跨字体验收夹具，真实扫描件泛化未验证|",
+     "|**短信 / 图形验证码 / 图像格式边界**|网关需运维配置、path 轮廓仍可被专用 OCR 解析、图像格式有剩余边界|短信默认关闭，需运维配置 `SMS_*`；图形验证码 SVG 已改为**纯 path 轮廓**（内嵌点阵字模 + 旋转 / 倾斜 + 干扰线 / 噪点，不含 `<text>` / `aria-label` / `data-*` / 答案明文），但字符轮廓仍可被专用 OCR 解析，强对抗建议换图片 / 滑块，challenge TTL / 一次性 / 3 次尝试 / 单实例内存态不变；缩略图与像素水印支持 PNG / BMP / baseline + 渐进式 JPEG（其余格式与加密 PDF / CMYK 仍不支持）；E2E `devHint` 测试通道仅当 `AMS_ENV` 非 production/prod 且 `AMS_E2E_CAPTCHA_HINT=true` 时可用，生产环境恒不返回|",
+     "|**C++ 侧（ams-native）为空**|当前性能不构成瓶颈|纯仓颉实现；C++ 通道留作后续优化|",
+     "|**本机构建不走 `cjpm`**|`cjpm 1.0.5` 在本机 Windows 触发堆损坏（`0xC0000374`）|本地用 `scripts/build.sh`，CI 仍用 `cjpm`；两条路径都需保持通过|",
+     "|**家庭协作只读**|docs/12 §1.3 非目标：本期不做写协作|家庭成员可查看被授权条目，不能编辑 / 导出 / 再分享；无邀请审批流（组内有邀请权的人即可直接拉人）|",
+     "|**P2 已全部落地（23/23）**|见 docs/10（P2）|23/23 已实现；缩略图 / OCR / 短信 / 图形验证码 4 项能力边界项及 P1 像素水印均已于 2026-11-07 转正（详见 docs/10 §4（P2）、CHANGELOG）；FR-IMP-005（导入模板管理）已按方案 C（全量字段定义域）落地（详见 docs/10 §6（P2））|",
+     "|**本地开发默认值仅适用于 dev 环境**|SEC-001：`production` 下凭据必须显式提供，否则后端拒绝启动|内置的 `AMS_TOKEN_SECRET` / `AMS_KEK` / `AMS_DB_PASSWORD` 开发默认值仅在 `AMS_ENV=dev` 下生效；生产部署须通过环境变量或部署配置显式注入（compose 用 `:?` 必填），本地开发复制 `deploy/compose/.env.example` 为 `.env`|",
+     "|**npm audit 9 个漏洞已修复**|已 major 升级 `vite ^6.0.7→^7.3.7` / `@vitejs/plugin-vue ^5.2.1→^6.0.10` / `vitest ^2.1.9→^5.1.0` / `vue-tsc ^2.2.0→^3.3.14`（`version 1.2.0` 与 scripts 未动）|`npm audit` 已为 **0 vulnerabilities**；`AppSheet.vue` 因 vue-tsc 3 对模板 ref 不再计入使用而报的 TS6133 已用 `root.value` 守卫修正；历史「9 个漏洞未修」记录保留在 `CHANGELOG.md`，不改写|"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    429,
+    359,
+    362
+   ],
+   [
+    "replace",
+    429,
+    430,
+    362,
+    363,
+    [
+     "1. 读 docs/04-开发规范（命名、注释、错误处理、提交规范）"
+    ]
+   ],
+   [
+    "equal",
+    430,
+    437,
+    363,
+    370
+   ],
+   [
+    "delete",
+    437,
+    439,
+    370,
+    370
+   ],
+   [
+    "equal",
+    439,
+    440,
+    370,
+    371
+   ],
+   [
+    "replace",
+    440,
+    454,
+    371,
+    372,
+    [
+     "本项目采用 **Apache License 2.0**，全文见 LICENSE。"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

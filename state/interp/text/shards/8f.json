@@ -2928,5 +2928,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "338bd92b02db": {
+  "identity": {
+   "one_liner": "基于 SQLite+FTS5 的编码智能体踩坑记忆库，失败修复对自动转为可注入规则",
+   "review": "agent-immune（npm: dsh-immune-system）是一个零运行时依赖的工具，用于记录编码智能体的工具调用失败-修复过程：当一次调用失败且后续调用修复后，引擎提炼出 trigger→avoid→do 形式的规则存入本地 node:sqlite+FTS5，并在下次会话工具调用前注入。通过 connect 命令或 MCP/Hooks 接入 Claude Code、Cursor、Codex CLI 等多种智能体与 CI 环境，并提供规则评分门控（五维度 0-100 评分）、会话历史审计与本地回环 UI。",
+   "highlights": [
+    "提供 connect 一条命令接入 13 种智能体/CI 表面，含生命周期 Hooks、MCP Server、原生插件包与 3 行 GitHub Action 等集成方式",
+    "将失败后修复的工具调用提炼为带 0-100 五维度评分的规则，按 advice/tactic/quarantined 三级分类隔离存储",
+    "提供 audit 命令读取本地 ZCode、Codex、Claude Code、Antigravity 会话历史，以及 seed 命令安装 9 个预置规则包（54 条规则）"
+   ],
+   "use_cases": [
+    "为日常使用多种编码智能体的开发者在工具调用前注入历史踩坑规则，避免重复执行已修复过的失败调用",
+    "通过 immune audit 分析本地已有会话记录，识别重复失败模式并生成规则",
+    "在 PR 流程中用 GitHub Action 对 unified diff 做 pitfall 检查并输出行级注释"
+   ]
+  },
+  "sha": "338bd92b02db",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d5b55029e82d": {
+  "identity": {
+   "one_liner": "面向 Antigravity 的只读 Token 与上下文监控侧边面板插件",
+   "review": "agy-token-monitor 是运行在 Antigravity 右侧辅助面板的 Token 与上下文监控插件，以只读方式读取本地 SQLite 会话数据，不修改数据库与配置。它提供 tok/s 实时测速、上下文占用监控、会话费用与订阅对比、子代理活动跟踪等功能，支持中英双语与 USD/CNY 折算，通过将文件夹放入 Antigravity 插件目录安装，启用后即时生效。",
+   "highlights": [
+    "基于 SQLite 步骤完成时间戳计算最新 tok/s、加权均速、峰值与近 20 步趋势",
+    "显示上下文占用（input + cache read），支持自定义告警阈值并提供一键复制 /compact 命令",
+    "每日自动同步官方模型列表、单价与 USD/CNY 汇率，支持离线缓存回退与手动价格覆盖"
+   ],
+   "use_cases": [
+    "在 Antigravity 中监控会话生成速度、Token 消耗与上下文占用，及时执行对话压缩",
+    "按日/7天/30天/全部周期查看用量趋势并折算 API 等效费用，与订阅月费对比",
+    "跟踪多个子代理与 Swarm Worker 的活动状态，默认折叠展示最近活跃的 Top 5 节点"
+   ]
+  },
+  "sha": "d5b55029e82d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c93636ef5e56": {
+  "identity": {
+   "one_liner": "基于Streamlit与TiDB Cloud/MySQL的停车场管理系统Web演示",
+   "review": "这是一个越南PTIT数据库课程项目（第10组），用Streamlit构建Web端智能停车场管理系统，直连dbptit数据库，支持TiDB Cloud Serverless（SSL）与MySQL。包含6个越南语业务页面：车位总览、出入场事务处理、交易历史、月票管理、营收统计（Altair图表）及人员车辆管理，支持CSV导出与幂等样例数据初始化。",
+   "highlights": [
+    "通过同一transaction完成车辆入场的phuongtien、luotdo、vitrido、thexe状态更新",
+    "提供实时车位状态网格、5项KPI指标及Altair营收图表",
+    "支持TiDB Cloud Serverless（SSL）与MySQL两种数据库连接，凭据可经secrets.toml或环境变量配置"
+   ],
+   "use_cases": [
+    "数据库课程的教学演示项目",
+    "需要样例数据初始化与unittest测试流程的停车场业务场景",
+    "基于Streamlit + TiDB Cloud/MySQL的Web应用开发参考"
+   ]
+  },
+  "sha": "c93636ef5e56",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

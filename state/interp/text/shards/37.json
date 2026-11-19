@@ -3099,5 +3099,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "19083831510b": {
+  "identity": {
+   "one_liner": "企业 AI 资产与数字员工的自托管治理控制台，基于 cordis 插件树",
+   "review": "元冰可 AIOS 是一个面向企业的 AI 运行与治理平台，将 MCP 服务、Skill、模型渠道、应用、数字员工登记为组织名下的资产，提供目标-项目-任务派单、审批中心、用量计量、成本归账与审计日志。采用 Node 22 原生执行 TypeScript、内置 node:sqlite，实例为一棵 cordis 插件树（含 25 个插件清单）。不发布 npm 包，安装入口为 Docker Compose、dsh 插件接入或源码运行；当前存储形态面向单进程运行。",
+   "highlights": [
+    "支持资产确权与生命周期管理：MCP 服务、Skill、模型渠道、应用、数字员工均有归属组织、权限矩阵与发布/审批/下线流程",
+    "提供审批中心、幂等计量、部门×Agent×Skill 成本归账与审计日志，并声明 94 个权限点",
+    "提供 MCP 运维接口（POST /mcp）、REST 接口描述（/api/openapi.json）、llms.txt 与运维 Skill 索引"
+   ],
+   "use_cases": [
+    "企业需要将 AI 资产登记确权并管理其生命周期与审批流程的场景",
+    "需要对模型调用做用量计量、部门/Agent/Skill 成本归账与审计留痕的场景",
+    "已有 dsh 环境，将控制台与 API 作为 web profile 插件接入的场景"
+   ]
+  },
+  "sha": "19083831510b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9c1c8bfed298": {
+  "identity": {
+   "one_liner": "基于 Rust 与对象存储的无服务器事务型 SQL 数据库，供 AI Agent 与个人应用使用",
+   "review": "PonyDB 是一个以 SQLite 为内核、以 S3 兼容对象存储为后端的持久化数据库，通过 CLI、HTTP API 和 MCP 工具访问。数据实时写入对象存储桶，多客户端经乐观并发控制读写同一数据库，每个库对应一个轻量头文件。用户 SQL 不支持 ATTACH/PRAGMA、显式事务、FTS 等虚拟表；在线访问需网络连接。适用于为 AI Agent 保存记忆、任务等上下文，以及跨设备共享的个人数据。",
+   "highlights": [
+    "以 S3 兼容对象存储为后端，数据实时持久化，多设备可读写同一数据库，写入冲突采用乐观并发控制",
+    "提供 CLI、HTTP 服务和 MCP（HTTP 与 CLI stdio）三种接入方式，无需常驻数据库服务器",
+    "内置 SQLite 的 JSON/JSONB 与数学函数，支持表、索引、视图、触发器、外键和原子语句数组"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供持久化的记忆、任务、事实和工具结果存储",
+    "跨设备共享的个人应用数据集，如笔记、待办清单和财务数据",
+    "需要自托管对象存储且不想运行常驻数据库服务的本地与脚本化场景"
+   ]
+  },
+  "sha": "9c1c8bfed298",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

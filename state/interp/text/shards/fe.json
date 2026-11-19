@@ -3349,5 +3349,135 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "690918d8c4e9": {
+  "identity": {
+   "one_liner": "基于浏览器的《诡秘奇谈》LCG非官方规则实现，含多人对战与牌库导入。",
+   "review": "该项目以网页形式实现《诡秘奇谈：卡牌游戏》规则，支持最多4人联机、单人纸牌模式与塔罗占卜，可从 ArkhamDB 和 arkham.build 导入卡组。后端用 Haskell 编写，数据库为 PostgreSQL，前端采用 Vue.js。项目声明为粉丝作品，与 Fantasy Flight Games 无隶属关系；图片资源（约2.9 GB）不在仓库内，托管于 CDN。",
+   "highlights": [
+    "支持最多4人联机，含单人纸牌模式",
+    "第一章节全部内容已实现，含宣传卡与平行卡",
+    "支持从 ArkhamDB 和 arkham.build 导入卡组"
+   ],
+   "use_cases": [
+    "想在线游玩《诡秘奇谈》LCG 的玩家",
+    "想游玩社区自制战役与番外剧本的玩家",
+    "想开发自制战役、卡牌内容的贡献者"
+   ]
+  },
+  "sha": "690918d8c4e9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ce0b5c5b94cb": {
+  "identity": {
+   "one_liner": "自托管的 MCP 服务器，为 AI 代理提供长期共享记忆、文档检索与代码索引。",
+   "review": "Loom 是 ClickHouse 开源的 MCP 服务器，为 Claude Code、Codex、Cursor 等代理提供跨会话共享长期记忆、文档搜索（RAG）和仓库代码索引。记忆与代码文件、符号关联，在代理读取或编辑时浮现；支持命名空间、角色与令牌的多用户模式。默认 Docker 安装后运行于 localhost:7777，数据存储在 ClickHouse，可在首启时选用 Postgres。",
+   "highlights": [
+    "代理可通过 MCP、HTTP、Python 或 TypeScript SDK 接入，支持 Docker、Kubernetes Helm chart 自托管",
+    "记忆与代码文件及符号关联，在重构中跟随代码、在变更时被标记",
+    "支持 PDF、.docx、.pptx 文档抽取与带引用的文档检索；提供多代理任务收件箱与运行记录"
+   ],
+   "use_cases": [
+    "为编码代理提供跨会话共享的长期记忆与代码上下文",
+    "需要命名空间、角色与令牌隔离的多用户 MCP 记忆服务器",
+    "多代理工作流中的共享上下文、任务交接与工作记录审计"
+   ]
+  },
+  "sha": "ce0b5c5b94cb",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e1a3420c6905": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件，分层存储并可展开历史对话",
+   "review": "StrataGate 是面向 DeepSeek Harness 的跨会话记忆插件。对话按 Block 存为 L0–L5 六级视图，旧记忆逐步精简且保留原文可展开；重要事实记录为带来源的 Event，并组织成主题目录；另有每日笔记、可选知识图谱与语义检索。自动召回上限 4 个 Event、约 900 token。通过 dsh plugin 命令安装。",
+   "highlights": [
+    "对话记忆分 L0–L5 六级视图，旧对话精简显示且完整原文保留可展开",
+    "Event 记录带时间、范围和来源引用，主题目录按章节组织相关 Event",
+    "支持可选知识图谱、嵌入语义检索与重排序，提供证据充分性检查流程"
+   ],
+   "use_cases": [
+    "需要跨会话延续工作进度的 AI 代理开发与日常使用",
+    "长周期对话中查询历史决策、偏好及其来源",
+    "将其他 AI 的记忆导入并转为可追溯的长期 Event"
+   ]
+  },
+  "sha": "e1a3420c6905",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "993ba46972ac": {
+  "identity": {
+   "one_liner": "面向 OpenShift 的应用模板，含示例应用栈与 GitHub Actions CI/CD 流水线",
+   "review": "该仓库提供一个 OpenShift 部署模板，通过 GitHub Actions 实现基于 Pull Request 的部署流程，内置前端（React + Caddy/Coraza WAF）、后端（Nest.js）、Postgres 与 Flyway 迁移的示例应用栈。脚本 setup.sh 等默认预览变更，加 --apply 才执行。使用前需准备 GitHub 账号、OpenShift 命名空间（DEV/TEST/PROD，即 licence plate 如 abc123-dev）及 OC_SERVER/OC_TOKEN 等变量与密钥。",
+   "highlights": [
+    "提供 PR 流水线、ghcr.io 容器发布与 OpenShift 导入、Prometheus 指标导出、HPA 自动扩缩和零停机滚动更新",
+    "内置安全与漏洞扫描工具、OWASP ASVS Level 1 & 2 对齐声明、Renovate 依赖自动更新配置",
+    "scripts/ 下的安装脚本默认预览、仅以 --apply 执行，可重复运行且只改动有差异的部分"
+   ],
+   "use_cases": [
+    "BC Government OpenShift 平台（Silver/Gold 集群）上快速搭建带 DEV/TEST/PROD 命名空间的 Web 应用项目",
+    "需要 PR 触发部署、数据库迁移与容器化前后端栈的 Node.js/TypeScript 团队",
+    "希望以模板方式复用 OpenShift Templates、密钥配置与 CI/CD 工作流的项目初始化"
+   ]
+  },
+  "sha": "993ba46972ac",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bdc904f6d07c": {
+  "identity": {
+   "one_liner": "Node.js 自托管日志与遥测仪表板，零依赖、路径集成式观测",
+   "review": "TracerNest 是一个 npm 包（Apache 2.0），用于为 Node.js 应用提供自托管的日志、HTTP 请求/响应捕获、健康诊断与实时仪表板。中间件以路径方式挂载到现有应用（如 /tracernest），也可选独立监听端口；数据存入加密 SQLite 或 MySQL，运行时零 npm 依赖。日志通过 SSE 推送到浏览器，含环形缓冲与查询参数脱敏。",
+   "highlights": [
+    "零运行时依赖，仅使用 node:crypto、node:http、node:sqlite、node:net、node:tls 等原生模块",
+    "拦截 stdout/stderr 与 HTTP 请求/响应，支持 Express、Fastify 及原生 Node.js HTTP 服务器，日志经 SSE 实时推送，默认保留 5,000 条环形缓冲",
+    "内置 AES-256-GCM 加密存储、三级角色（Admin/Developer/Viewer）、SMTP 邮件与 Microsoft Teams Webhook 告警"
+   ],
+   "use_cases": [
+    "Node.js 后端应用的集中式日志与 API 请求/响应排查",
+    "容器化或受限网络环境中无需额外监控端口的路径集成观测",
+    "自托管场景下的健康检查、内存指标查看与事件告警通知"
+   ]
+  },
+  "sha": "bdc904f6d07c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d8c285cc260b": {
+  "identity": {
+   "one_liner": "2026 OceanBase数据库大赛 Seekdb 赛题项目仓库",
+   "review": "该仓库为 2026 OceanBase 数据库大赛 Seekdb 赛题的参赛项目。README 仅包含项目名称与赛题说明，未提供功能描述、安装步骤或使用方法，其具体实现内容需查阅代码后才能确认。",
+   "highlights": [
+    "项目与 2026 OceanBase 数据库大赛 Seekdb 赛题关联",
+    "README 提供赛题名称，未包含其他说明内容"
+   ],
+   "use_cases": [
+    "用于提交 2026 OceanBase 数据库大赛 Seekdb 赛题的参赛作品",
+    "供赛事评审者查看参赛代码"
+   ]
+  },
+  "sha": "d8c285cc260b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

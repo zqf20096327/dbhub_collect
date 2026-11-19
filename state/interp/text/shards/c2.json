@@ -3163,5 +3163,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3ac7c1cc7ac9": {
+  "identity": {
+   "one_liner": "Rust 编写的纯 Rust 嵌入式 SQL 数据库，内置 MVCC 事务与列式冷存储",
+   "review": "Stoolap 是一个用纯 Rust 实现的嵌入式 SQL 数据库，无外部服务器进程，面向低延迟事务负载与实时分析查询。它支持 MVCC 事务、AS OF 时间旅行查询、CTE/窗口函数、多类索引（B-tree、Hash、Bitmap、HNSW 向量索引），并采用热内存缓冲加不可变列式冷卷的存储架构。通过 Cargo 依赖引入即可使用，另提供 CLI REPL、桌面客户端和 Web 管理界面。",
+   "highlights": [
+    "支持 ACID 事务与 MVCC，提供 AS OF 时间旅行查询",
+    "索引支持 B-tree、Hash、Bitmap、多列及 HNSW 向量索引；VECTOR(N) 类型配合 semantic feature 可生成文本嵌入",
+    "存储采用热/冷卷架构：内存 MVCC 加 WAL、不可变列式文件（zone map、bloom filter、LZ4 压缩），支持崩溃恢复与后台自适应压缩"
+   ],
+   "use_cases": [
+    "需要在应用内嵌入、无需独立服务器进程的低延迟事务场景",
+    "结合事务数据与实时分析查询的混合负载",
+    "向量/语义检索（如嵌入存储与近似最近邻搜索）"
+   ]
+  },
+  "sha": "3ac7c1cc7ac9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41729db92e16": {
+  "identity": {
+   "one_liner": "自托管离线优先的餐厅 POS 与管理系统，运行于本地局域网服务器",
+   "review": "OrderRestro 是面向餐厅、咖啡馆、云厨房及多门店连锁的开源自托管管理系统，涵盖点餐、账单、后厨显示（KDS）、桌台预订、库存、考勤工资与会计等 20 个模块。整套栈由 Docker Compose 在一台局域网服务器上运行，断开外网后点餐、账单与打印仍可工作。技术栈为 NestJS/Next.js/Postgres，许可证为 AGPL v3。README 标注 20 个模块中部分仍处于规划状态，未全部完成。",
+   "highlights": [
+    "提供桌台与预订管理、KDS 后厨显示、菜单、库存、CRM 会员、员工考勤工资、会计报表等 20 个模块，其中多数已标记为完成，部分（如拆分账单支付、采购退货）仍在开发中",
+    "支持 UPI QR 收款、USB ESC/POS 直连打印、QR/NFC 桌台点餐（需店员开启的有效桌台码）、RBAC 权限、审计日志与两步验证登录",
+    "可通过 Docker Compose 部署于局域网服务器、VPS 或反向代理/隧道之后，并提供 CasaOS/ZimaOS 多架构镜像与 Windows WebView2 原生客户端打包"
+   ],
+   "use_cases": [
+    "餐厅、咖啡馆、快餐、美食广场、云厨房等门店的点餐开票、桌台与后厨流程管理",
+    "需要在不依赖外网的局域网环境运行收银与厨房显示系统的场景",
+    "多门店连锁的跨店库存调拨、分支管理与集中报表"
+   ]
+  },
+  "sha": "41729db92e16",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb0df443fcc4": {
+  "identity": {
+   "one_liner": "面向小初高中的学科无关 AI 教学平台，配置驱动覆盖教学练评管",
+   "review": "SmartKBS 是基于 FastAPI + React 的 AI 教学平台，供学校、教研组或任课教师使用，覆盖题库组卷、考试练习、课堂互动、学情分析等 60+ 功能点。学科、年级、题型、AI 提示词均由配置文件与主数据表驱动；AI 链路支持 RAG、百炼智能体、直连大模型三级降级，云端 DashScope/DeepSeek 与本地 Ollama 三档切换。数据存于本地 SQLite，可离线部署；内置学段仅小学至高中，幼儿与高校需自行扩展年级主数据。",
+   "highlights": [
+    "内置智能题库与组卷，题型含单选、多选、判断、填空、简答、作文，支持 LaTeX 公式渲染与 AI/手动配图；AI 生成试题经统一入库关口（体检、查重、事务写入）",
+    "课堂活动模块提供随堂测验、投票、抽问、闯关、抢答、分组讨论、协作白板、点名考勤与 12 级称号积分，SSE 与 WebSocket 支撑实时链路",
+    "支持云端（DashScope/DeepSeek）、混合、本地（Ollama）三种 AI 模式及 RAG 检索增强，数据全部落在本地 SQLite 与本地目录，可完全离线部署，提供 Electron 桌面版一键安装与 Git 部署在线增量升级"
+   ],
+   "use_cases": [
+    "中小学教师备课出题：生成课程大纲、AI 出题组卷并导出 Word、发布考试与作业批改",
+    "课堂互动教学：抢答、闯关、投票、分组讨论、协作白板等场景，学生可经手机浏览器免 App 参与作答",
+    "需本地化部署的学校环境：数据不出校、完全离线运行，由管理员配置学科、年级、班级与 AI 引擎"
+   ]
+  },
+  "sha": "bb0df443fcc4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7889bb38dcc4": {
+  "identity": {
+   "one_liner": "面向德国的自托管开源发票软件，支持XRechnung/ZUGFeRD电子发票与GoBD合规",
+   "review": "OpenInvoice Germany 是一款可自托管的开源发票软件（AGPL-3.0），用于生成符合德国规范的结构化电子发票（XRechnung 与 ZUGFeRD/Factur-X，基于 EN 16931 并经官方 Schematron 校验）。核心功能包含 GoBD 合规机制（草稿定稿后不可变、连续编号、审计哈希链、注销替代删除）、§ 14 UStG 必填字段校验、小企业（§ 19）等税制、报价/订阅/催款/SEPA、版本化 REST API 与 MCP AI 助手。核心本地运行，但通过云端 LLM 使用 MCP 功能时数据会发送给提供商，README 提示需自行评估 GDPR 合规；GoBD 合规还需用户自行编写流程文档。适合需要自托管且面向德国开票环境的自由职业者与中小企业。",
+   "highlights": [
+    "原生生成并校验 XRechnung（UBL）与 ZUGFeRD/Factur-X（PDF/A-3b 内嵌 CII）电子发票，基于官方 Schematron 规则",
+    "提供 GoBD 机制：定稿后不可变、无缺口编号、仅追加审计哈希链、注销替代删除、定期哈希链校验与审计导出",
+    "提供版本化 REST API（OpenAPI 文档、API 密钥鉴权）、HMAC 签名 webhooks 及 MCP 服务器接口"
+   ],
+   "use_cases": [
+    "德国 B2B/B2G 场景下开具与接收 XRechnung/ZUGFeRD 结构化电子发票",
+    "自托管管理报价、订阅/周期性发票、部分与预付发票、催款与记账等完整开票流程",
+    "通过 REST API 或 MCP 助手将开票流程集成到自有系统或本地 AI 工作流中"
+   ]
+  },
+  "sha": "7889bb38dcc4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d4f407c40429": {
+  "identity": {
+   "one_liner": "达梦数据库的 Debezium CDC 连接器，基于 JDBC 与 DBMS_LOGMNR 捕获行级变更",
+   "review": "这是一个针对达梦（Dameng）数据库的 Debezium 变更数据捕获连接器，通过 JDBC 和 DBMS_LOGMNR 读取已提交的行变更，支持初始/增量快照、模式历史与重启恢复，单连接器单任务。需 JDK 21+ 构建并向 Kafka Connect worker 的 plugin.path 部署插件包。当前目标为 Debezium 3.8.0-SNAPSHOT；交付语义为至少一次，默认快照模式为 no_data。",
+   "highlights": [
+    "通过 JDBC 和 DBMS_LOGMNR 捕获达梦数据库已提交的行变更，支持初始与增量快照、模式历史和重启恢复",
+    "兼容达梦兼容模式 0/2/4/7，模式解析基于 Debezium 的 AntlrDdlParser，DDL 模型变更在解析成功前暂存",
+    "提供 kafka2-compatible 构建配置以对齐 Kafka 3.9.1 worker，插件归档包含连接器、运行时依赖与 JDBC 驱动"
+   ],
+   "use_cases": [
+    "需要将达梦数据库的行级变更流入 Kafka Connect / Kafka 的数据管道场景",
+    "需要捕获达梦库中已存在数据（使用 initial 快照模式）或仅订阅增量变更的 CDC 集成",
+    "构建达梦兼容模式 0/2/4/7 环境下的变更捕获与模式历史恢复方案"
+   ]
+  },
+  "sha": "d4f407c40429",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

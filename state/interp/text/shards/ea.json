@@ -3189,5 +3189,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1bf1057285bb": {
+  "identity": {
+   "one_liner": "基于 nftables 的多节点多租户端口转发面板，含 server/agent 两个二进制",
+   "review": "该项目提供基于 nftables 的端口转发平台，由 nft-server 面板和 nft-agent 节点组成，agent 通过 WebSocket 反向连接面板。数据面支持内核态 DNAT 和用户态 split-TCP 两种模式，内置 SQLite 存储，支持多用户配额与多跳链路编排。仅支持 Linux，依赖 root 与 nftables，面板为单实例，限速仅限 egress 方向。",
+   "highlights": [
+    "数据面支持 nftables 内核态 DNAT（TCP/UDP）与用户态 split-TCP 两种模式，逐跳可选",
+    "agent 通过反向 WebSocket 连接面板，面板通过 Web 界面管理节点、用户配额与多跳组合节点",
+    "提供一键安装脚本、TUI 终端界面与带 sha256 校验和失败回滚的升级流程"
+   ],
+   "use_cases": [
+    "管理员集中管理多台 Linux 节点的端口转发规则并向用户分配配额",
+    "需要面板自动编排多跳转发链路并自动分配对齐端口的场景",
+    "单机场景下通过 TUI 免浏览器管理本机转发规则"
+   ]
+  },
+  "sha": "1bf1057285bb",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "744c302091a3": {
+  "identity": {
+   "one_liner": "基于 Tauri 与 Rust 的 PostgreSQL 桌面客户端，含 SQL 编辑、指标与隧道管理",
+   "review": "PgClient 是仅支持 PostgreSQL 的开源桌面客户端，采用 Tauri 与 Rust 构建，提供 SQL 编辑器、实时指标、阻塞会话视图与执行计划查看。服务器列表从 ~/.pgclient/servers.json 读取，支持 environment 标识与 kubectl port-forward 等隧道自动启停，密码可存于 ~/.pgpass 或 macOS Keychain。当前构建未经 Apple 签名，macOS 首次启动需手动放行。",
+   "highlights": [
+    "支持从 servers.json 文件声明服务器，可标记 local/dev/staging/prod 环境并按环境变色区分",
+    "支持 kubectl port-forward 等隧道，连接时自动启动、退出时停止，失效时按条件重启一次",
+    "编辑器一次加载表、列与外键元数据，可在 from/join/on 后自动弹出补全并列出外键连接条件"
+   ],
+   "use_cases": [
+    "需要通过 SSH/kubectl 隧道访问远程或 Kubernetes 内 PostgreSQL 的开发者",
+    "同时管理本地、开发、预发与生产多个 PostgreSQL 环境的团队",
+    "希望依赖 ~/.pgpass 或系统钥匙串管理凭据、避免明文密码的命令行用户"
+   ]
+  },
+  "sha": "744c302091a3",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a3363f2fc79c": {
+  "identity": {
+   "one_liner": "基于Django的用药提醒管理平台，集成Gemini视觉扫描处方。",
+   "review": "MediSmart AI 是一个基于 Django 的用药管理 Web 应用，用于组织药品计划、记录已服/漏服剂量、监控库存与效期，并支持按家庭成员归档药品。它通过 Gemini Vision 从上传的处方图片提取药品信息，用 Resend 发送邮箱 OTP 实现密码找回。本地用 SQLite，可切换 TiDB Cloud，附 Vercel 部署配置。README 注明浏览器提醒仅为演示，扫描结果可能不准确，不能替代医疗建议。",
+   "highlights": [
+    "提供药品增删改、每日日程看板、剂量已服/漏服记录及库存与效期预警",
+    "集成 Gemini Vision 从上传的处方或药品图片提取药品信息",
+    "支持 SQLite 本地开发与 TiDB Cloud 远程数据库，通过 USE_TIDB 环境变量切换，并含 Vercel 部署配置"
+   ],
+   "use_cases": [
+    "个人或家庭集中管理多名成员的药品计划与库存",
+    "通过上传处方图片自动录入药品信息，减少手动输入",
+    "作为 Django + Gemini + TiDB Cloud 的学习或演示项目进行部署运行"
+   ]
+  },
+  "sha": "a3363f2fc79c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

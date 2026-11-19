@@ -2501,5 +2501,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "074781d8fe3c": {
+  "identity": {
+   "one_liner": "DBHub 是面向多种数据库的轻量 MCP 服务器，默认仅加载两个工具。",
+   "review": "DBHub 是一个 MCP 服务器，使兼容 MCP 的客户端（如 Claude Code、Cursor）连接并探索 PostgreSQL、MySQL、MariaDB、SQL Server、Oracle、ClickHouse、SQLite 等数据库。默认仅加载 execute_sql 与 search_objects 两个工具以减少 token 占用；支持通过 TOML 配置多连接、只读模式、行数限制与查询超时，并提供 SSH 隧道和 SSL/TLS。运行需 Node.js ≥ 22.5.0，可通过 npx、Docker 或插件安装。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQL Server、Oracle、ClickHouse、SQLite 的单接口连接，且可经 TOML 配置同时连接多个数据库",
+    "默认加载 2 个 MCP 工具（execute_sql、search_objects），可选启用 explain_sql、health_check 及自定义参数化 SQL 工具",
+    "内置只读模式、行数限制、查询超时等防护，并支持 SSH 隧道与 SSL/TLS 加密访问"
+   ],
+   "use_cases": [
+    "在 Claude Code、VS Code、Cursor 等客户端中进行本地开发的模式探索、查询验证与数据调试",
+    "为非技术员工经 Claude Desktop 等提供只读数据视图",
+    "以只读模式和防护参数进行生产环境诊断排查"
+   ]
+  },
+  "sha": "074781d8fe3c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a417c2f3a444": {
+  "identity": {
+   "one_liner": "将 Notion 工作区镜像为本地 SQLite 归档与规范化 Markdown",
+   "review": "notcrawl 通过桌面缓存快照、官方 API 或 Notion MCP 三种来源同步 Notion 工作区，以 SQLite 为规范归档、Markdown 为可读导出，提供 FTS5 全文检索、三栏 TUI 浏览、CSV/TSV 数据库导出及基于 git 的归档共享。适合需要不依赖 Notion UI 搜索、查询或分发工作区内容的个人与代理。API 源需配置 NOTION_TOKEN，桌面缓存覆盖范围有限。",
+   "highlights": [
+    "支持 desktop、api、notion-mcp 三种同步来源，API 只读请求对瞬时失败最多重试四次",
+    "提供 FTS5 全文搜索、read-only SQL 查询、TUI 浏览及 Markdown/CSV/TSV 导出",
+    "git 共享模式发布压缩 JSONL 快照，订阅端无需 Notion 凭据即可搜索归档"
+   ],
+   "use_cases": [
+    "为个人或 AI 代理建立可离线搜索与 diff 的 Notion 工作区历史归档",
+    "通过 git publish/subscribe 在多台机器间共享归档",
+    "将已抓取的 Notion 数据库导出为 CSV/TSV 用于分析或备份"
+   ]
+  },
+  "sha": "a417c2f3a444",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ff8765c4df85": {
+  "identity": {
+   "one_liner": "opencode 服务器的独立 Rust 实现，复刻 v1/v2 HTTP 与 SSE API。",
+   "review": "ocserve 用 Rust 重新实现 opencode 服务器的 HTTP/SSE API，覆盖冻结于 1.19.5 的 v1 全部 188 个操作与 2.2.5 的 v2 全部 169 个操作，官方 TUI 与 Web 客户端可不经修改连接。它读取用户既有的 opencode 配置与认证文件（只读），数据存于 SQLite，提供增量 vacuum、会话导入与可选 systemd 服务安装。v2 独有操作需设置 OCSERVE_V2=1 才启用。",
+   "highlights": [
+    "实现 v1 全部 188 个操作与 v2 全部 169 个 /api/* 操作，均针对真实上游二进制做差异回放与 A/B 校验",
+    "内嵌与服务器版本匹配的 Web UI，可离线在 http://localhost:4096 直接访问",
+    "提供增量 vacuum 与保留策略，并支持从上游数据库导入会话（含 --bulk、--session、--force 等选项）"
+   ],
+   "use_cases": [
+    "在小型 VPS、旧笔记本等资源受限环境中运行长期驻留的 opencode 服务器",
+    "承载多并发会话与长期积累的历史记录，并回收数据库磁盘空间",
+    "为编写该 API 的自定义客户端提供本地服务器实现"
+   ]
+  },
+  "sha": "ff8765c4df85",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6580b00eba3f": {
+  "identity": {
+   "one_liner": "面向复杂软件开发的受治理 AI 工作流编排框架，基于专家角色协作与人工审批门控",
+   "review": "Kontrolled Kaos（原 Orchestra）是一个在兼容编程宿主上运行的 AI 辅助开发编排框架。它通过 Conductor 将任务路由给覆盖架构、实现、UI/UX、数据、安全、测试等领域的专家角色，进行证据验证与人工治理。它不是 AI 模型，需依赖宿主的入口命令调用，如 Claude Code 的 /kaos:conductor。",
+   "highlights": [
+    "按架构、实现、安全、测试等角色协调 AI 专家，由 Conductor 选择最小路由",
+    "提供基于证据的验证、安全审查与人工控制边界，工具访问与测试通过不等于权限或合并授权",
+    "包含自适应记忆、Scribe 文档生成、Cloak 视觉细化等可选组件"
+   ],
+   "use_cases": [
+    "多专家协作的 AI 辅助复杂软件开发",
+    "需要安全审查、人工审批门控的团队工作流",
+    "长期开发任务的执行连续性与证据保留"
+   ]
+  },
+  "sha": "6580b00eba3f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "86aca3854936": {
+  "identity": {
+   "one_liner": "自托管家庭物品清单应用，单容器 SQLite 存储，内置 REST API 与 MCP 服务器",
+   "review": "Ferret 是一个自托管的家庭物品清单系统，用于记录房产、房间、箱子中的物品，并管理照片、收据、保修、维护计划、库存与借出等。适合家庭共用，含房主、管理员、成员与只读角色。部署为单个 Docker 容器，使用 SQLite 存储，上传文件以每户密钥加密，需自行保管 FILES_KEY，否则无法读取上传文件。AI 功能可选，通过配置 Ollama 或 OpenAI 兼容服务器实现。",
+   "highlights": [
+    "单 Docker 容器部署，SQLite 存储，上传文件按户加密，支持夜间备份与整体导出",
+    "内置 REST API 与位于 /mcp 的 MCP 服务器，提供 55 个工具，API 密钥可设只读与过期",
+    "PWA 支持离线使用，内置条形码与二维码扫描，可为箱子打印二维码标签"
+   ],
+   "use_cases": [
+    "家庭物品定位与整理：搜索物品位置、为箱子贴二维码标签并扫码查看内容",
+    "保修与维护管理：跟踪保修到期、退货窗口、定期维护与召回信息",
+    "通过 Claude 等 MCP 客户端以自然语言查询物品位置、录入新物品、更新库存与生成购物清单"
+   ]
+  },
+  "sha": "86aca3854936",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "014a7fc188b2": {
+  "identity": {
+   "one_liner": "Android+iOS 双端 AI 陪伴应用，把人格建模成长期联系人",
+   "review": "YetAnotherPal（Yap）是一个开源 AI 陪伴应用，覆盖 Android（Kotlin/Compose/Room）与 iOS（Swift/SwiftUI/SQLite），两端共享数据模型、备份契约与 Agent 决策核心。提供聊天、长期记忆抽取、睡眠与主动行为、表情包、语音视频等能力，通过任意 OpenAI 兼容服务接入模型，默认本机决策、数据本地化。适合想在自有设备上运行个性化 AI 人格的用户；版本为 0.13.0 内测，采用 Apache-2.0 协议。",
+   "highlights": [
+    "支持结构化人格字段、行为参数、版本快照与长期记忆生命周期管理（ACTIVE/DORMANT/ARCHIVED）",
+    "接入任意 OpenAI 兼容服务，默认进程内本机决策（零网络），可切换远程 agentd 服务并自动回退",
+    "两端通过数据库 schema、备份格式（v5）与语言无关的 agent-core 用例三处契约保持一致"
+   ],
+   "use_cases": [
+    "在 Android/iOS 设备上运行具有长期记忆、睡眠与主动行为的 AI 联系人应用",
+    "使用本地参考服务（harness/server.mjs）在无真实 API Key 的情况下走通全链路联调",
+    "导出/导入备份（含图片与人格字段）在两端之间迁移数据"
+   ]
+  },
+  "sha": "014a7fc188b2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

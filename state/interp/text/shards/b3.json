@@ -3179,5 +3179,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "25d60fe5acd2": {
+  "identity": {
+   "one_liner": "基于 OpenTelemetry 的 AI 智能体观测与评测平台",
+   "review": "OpenLIT 是一个 Apache 2.0 开源项目，为 AI 智能体与编码智能体的运行环境提供追踪、评测、护栏、提示词管理和成本/GPU 监控。通过 pip/npm 安装 SDK 并调用 openlit.init() 即可自动采集 LLM 调用、工具调用等遥测数据，导出符合 GenAI 语义约定的 OTLP 格式，可自托管运行，也可接入已有的 OpenTelemetry 体系。",
+   "highlights": [
+    "自动采集 LLM 调用、工具调用、检索、智能体步骤等遥测数据，遵循 OpenTelemetry GenAI 语义约定，监听 OTLP :4317/:4318 端口",
+    "提供 LLM-as-a-Judge、程序化评测与 CI 门禁，内置幻觉、偏见、毒性等评测类型",
+    "包含 Prompt Hub、Rule Engine、Guardrails、Vault、OpenGround 及 NVIDIA/AMD/Intel GPU 监控等组件，宣称支持 70+ 集成（Claude Code、Cursor、Codex、LangGraph 等）"
+   ],
+   "use_cases": [
+    "对生产环境中的 LLM/智能体应用进行调用链追踪、成本核算与故障排查",
+    "对编码智能体（Claude Code、Cursor、Codex 等）的会话进行观测与记录",
+    "自托管场景下集中管理提示词版本、API 密钥并配置运行时护栏规则"
+   ]
+  },
+  "sha": "25d60fe5acd2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9be1bcc29722": {
+  "identity": {
+   "one_liner": "本机自托管的 OpenAI 兼容 API，用 CLI 登录态+SQLite 多账号路由转发请求",
+   "review": "CLI2API 是一个用 Go 编写的自托管服务，将用户自有 Qoder、WorkBuddy、Trae 等账号的登录态封装为本机 OpenAI 兼容 API，默认监听 127.0.0.1:3010。它提供 React 控制台管理账号就绪状态与额度，支持轮询和 FEFO（最早到期优先）调度。项目明确不提供账号或额度，兼容层不执行上游专属工具，上游协议变更可能影响兼容性。",
+   "highlights": [
+    "提供 OpenAI 兼容接口，客户端仅访问 127.0.0.1:3010，请求由 Qoder、WorkBuddy 或 Trae 登录态完成",
+    "支持 SQLite 多账号管理与两种调度策略：轮询（默认）与最早到期优先（fefo），可经控制台或 PATCH /api/system/settings 切换",
+    "提供 Web 控制台，显示账号登录方式、就绪状态与额度，Access 页可复制 Base URL 并做快速验证；支持签到功能（自动签到默认关闭）"
+   ],
+   "use_cases": [
+    "在本地将自有 CLI 账号登录态以 OpenAI 兼容 API 形式提供给开发工具调用",
+    "需要管理多个同供应商账号并按额度到期顺序调度的个人部署",
+    "配合 Docker 自托管，通过管理密钥与客户端密钥分离管理 /v1/* 访问"
+   ]
+  },
+  "sha": "9be1bcc29722",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d31ee17dbb44": {
+  "identity": {
+   "one_liner": "CVE 漏洞与 PoC 聚合索引，GitHub Actions 每日汇总多源漏洞数据",
+   "review": "该项目通过 GitHub Actions 每日聚合 CVEProject、Nuclei、Exploit-DB、Metasploit、Vulhub、CISA KEV 与 EPSS 等数据源，生成去重后的 CVE 及 PoC JSON 索引，MIT 协议开源。使用者通过 curl 拉取 JSON 文件并用本地工具查询，无需调用 API。README 中的统计数字与风险评分机制可查阅其数据文件和 docs/SCORING.md 核实。",
+   "highlights": [
+    "通过 GitHub Actions 每 24 小时聚合多个漏洞数据源并做归一化、去重处理",
+    "以压缩 JSON 架构发布数据索引，可用 curl 与标准命令行工具本地查询，无需 API 密钥",
+    "为每条 CVE 生成 0-100 风险分值，综合 KEV、EPSS、CVSS、PoC 证据与时间因素"
+   ],
+   "use_cases": [
+    "安全团队本地检索 CVE 的 PoC 与利用证据（KEV 状态、Exploit-DB/Nuclei 链接）",
+    "为 AI/LLM 漏洞分析流程提供可下载的 JSON 数据源",
+    "漏洞情报汇总与定期更新的订阅式数据参考"
+   ]
+  },
+  "sha": "d31ee17dbb44",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4c870e0aa250": {
+  "identity": {
+   "one_liner": "Google Protocol Buffers 的 Rust 实现，含代码生成器与运行时库",
+   "review": "该库提供 Rust 语言的 Protocol Buffers 实现，包含运行时库（含 CodedInputStream/CodedOutputStream）和从 .proto 文件生成 Rust 代码的工具。代码生成支持三种方式：通过 protoc-rust 调用 protoc、纯 Rust 解析生成器（alpha 阶段）、以及 protoc-gen-rust 插件。还可配合 bytes crate 启用零拷贝读取。适用于需要在 Rust 中处理 protobuf 数据的项目。",
+   "highlights": [
+    "纯 Rust 编写，提供运行时库与 CodedInputStream/CodedOutputStream 实现",
+    "支持从 .proto 文件生成 Rust 代码，可通过 protoc-rust、纯 Rust 生成器或 protoc-gen-rust 插件三种方式调用",
+    "支持 with-bytes 特性，配合 bytes crate 使 bytes/string 字段以原始 Bytes 子切片方式读取而不分配堆内存"
+   ],
+   "use_cases": [
+    "在 Rust 项目中序列化/反序列化 protobuf 消息",
+    "从 .proto 定义文件自动生成 Rust 结构体及编解码代码",
+    "需要减少字节字段内存分配的场景（如基于 grpc-rust 构建 gRPC 服务）"
+   ]
+  },
+  "sha": "4c870e0aa250",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

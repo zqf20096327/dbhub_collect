@@ -2993,5 +2993,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2db49d8f314a": {
+  "identity": {
+   "one_liner": "自托管的开源协作工作区，集文档、数据库、白板与日志于一体",
+   "review": "Flowplan 是一个开源（AGPL-3.0）的自托管协作平台，面向团队提供文档、数据库、白板、每日日志、项目管理、表单和闪卡等模块。单个容器即可运行（默认 SQLite，可切换 PostgreSQL 并以集群模式部署），支持 OIDC/LDAP 单点登录、两步验证、端到端加密空间及 Notion 等来源的数据导入。",
+   "highlights": [
+    "单容器部署，默认使用 SQLite，可选用 PostgreSQL、Redis 与 S3 以集群模式运行",
+    "支持从 Notion、Confluence、AppFlowy、Obsidian 等导入，可导出为 Markdown、CSV、PDF、Word",
+    "数据库提供 23 种属性类型及表格、看板、日历、时间线等多种视图，白板与实时协作编辑"
+   ],
+   "use_cases": [
+    "团队或个人自托管的知识库与文档协作",
+    "以看板、时间线和工单管理项目与迭代",
+    "数据可移植性要求高、需定期导出备份到 S3 或 Git 的场景"
+   ]
+  },
+  "sha": "2db49d8f314a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "661ef03637bf": {
+  "identity": {
+   "one_liner": "受 Microsoft.Extensions.VectorData 启发的 Go 轻量向量存储库，统一接口对接多种后端",
+   "review": "go-vectorstore 提供 backend-agnostic 的向量存储抽象，支持 PostgreSQL/pgvector、嵌入式 SQLite、Redis、Qdrant 快照与内存存储五种后端。通过 Go 结构体加 vectordata 标签实现类型化 CRUD、过滤检索与稠密/稀疏/二进制向量搜索，并跨后端共享契约测试。适合用 Go 构建语义搜索、RAG 流水线等检索系统的开发者。注意需 Go 1.25+，PostgreSQL 后端要求 16+ 且安装 pgvector 扩展。",
+   "highlights": [
+    "支持 PostgreSQL/pgvector、嵌入式 SQLite、Redis、Qdrant 快照和内存存储五种后端，共享统一接口与一致性测试",
+    "模型驱动 API 支持命名向量、生成键、float16/binary/sparse 向量、数组过滤与 PostgreSQL 混合搜索",
+    "SearchByVector 支持过滤、距离阈值、投影控制及 HNSW/IVFFlat 逐请求调参"
+   ],
+   "use_cases": [
+    "构建语义搜索应用，PostgreSQL 路线可启用原生列存储、索引与混合搜索",
+    "搭建 RAG 流水线（先从向量库检索、再交给 LLM 生成），离线场景可用 SQLite 无服务器运行",
+    "在自有数据上构建上下文感知助手，开发与契约测试可使用内存存储"
+   ]
+  },
+  "sha": "661ef03637bf",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5383b20d8ef4": {
+  "identity": {
+   "one_liner": "课堂考勤原型：轮换限时二维码签到，SQLite 存储，CSV 导出",
+   "review": "CampusFlow 是一个学生构建的课堂考勤演示原型：讲师启动会话后生成 25 秒有效期的轮换二维码，学生通过浏览器签到，服务端校验令牌、会话状态与名单归属，并借助数据库唯一约束防止重复签到，支持本地 SQLite 存储与 CSV 导出。项目明确声明仅用于演示，不含真实身份认证，不可用于正式考勤记录。",
+   "highlights": [
+    "提供 25 秒短时效的随机轮换二维码签到机制，新令牌签发后旧令牌即失效",
+    "使用 SQLite 在首次启动时创建本地数据库，会话历史可导出为 CSV 报告",
+    "运行流程无需学生端应用，签到页面在浏览器中打开；可选在同一 Wi-Fi 下启用手机扫码"
+   ],
+   "use_cases": [
+    "作为课堂考勤工作流的教学演示或概念验证",
+    "在可信局域网内演示二维码扫码签到与重复签到拦截",
+    "作为探讨低成本校园考勤方案本地化运行的原型参考"
+   ]
+  },
+  "sha": "5383b20d8ef4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

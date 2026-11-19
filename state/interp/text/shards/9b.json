@@ -2818,5 +2818,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f5d96218f535": {
+  "identity": {
+   "one_liner": "本地调试记忆层，将命令与修复记录存入 SQLite 并经 MCP 提供给编码代理。",
+   "review": "MemoryWhale 是面向开发者的本地调试记忆工具，记录命令、输出、失败及有效修复并存入本地 SQLite，通过 CLI、TUI、Web、桌面应用及 MCP 服务器提供检索。它支持 19 种编码代理接入，无账号、数据不上传。需注意它不是自主编码代理，自动捕获依赖客户端特定 hook，Rho hook 载荷缺少命令文本与 stdout。",
+   "highlights": [
+    "记录命令、环境、输出、失败与修复经验，存于本地 SQLite，支持 search/context 检索",
+    "通过 mw-mcp（stdio）与 mw-serve（HTTP）暴露六个记忆工具，兼容 Claude Code、Cursor、VS Code 等客户端",
+    "提供 mw-run、mw --live、mw integrate、mw doctor 等命令，支持 Linux x86_64/aarch64、macOS 预编译二进制、Cargo 与 Homebrew 安装"
+   ],
+   "use_cases": [
+    "调试构建、依赖、Git、环境或部署问题，希望失败与修复可被检索",
+    "跨会话或跨工具使用编码代理，需要在 SSH 或多台开发机间延续调试上下文",
+    "偏好本地存储而非托管记忆服务的开发者团队或个人"
+   ]
+  },
+  "sha": "f5d96218f535",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e23ecfa5bb4b": {
+  "identity": {
+   "one_liner": "将文档转换为可检索的 .vera SQLite 归档文件，支持关键词、语义与混合搜索",
+   "review": "VERA 是一个命令行工具与 Python 包，用于将 PDF、Office 文档和 Markdown 转换为包含文本、嵌入向量、关键词索引、引用和源文件的 SQLite 归档文件。归档文件可复制分享，无需运行数据库服务器。默认嵌入器为离线的 hashing 模式，语义搜索需通过 vera-doc[ml] 安装本地模型（如 MiniLM）或配置 OpenAI API 密钥；转换时写入的嵌入向量不能通过 --mode 切换更改。项目提供 MCP 服务、Agent Skill、Windows 桌面安装程序，部分桌面功能涉及订阅。",
+   "highlights": [
+    "将文本、嵌入向量、关键词索引和引用存储在单个 SQLite 归档文件中，无需数据库服务器",
+    "支持关键词、语义和混合三种搜索模式，并支持转换时写入的元数据过滤",
+    "提供 CLI、MCP、Agent Skill、Python API 和 Windows 桌面应用等多种使用方式，支持通过 entry-point 注册自定义嵌入提供程序"
+   ],
+   "use_cases": [
+    "将 PDF 或 Office 文档文件夹转换为可本地搜索的归档库，离线检索内容",
+    "为 AI 代理提供带引用和源文件定位的结构化检索结果",
+    "构建带元数据过滤的多文档库，在转换时按项目或类型缩小搜索范围"
+   ]
+  },
+  "sha": "e23ecfa5bb4b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2976,5 +2976,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e4c8b93d02c0": {
+  "identity": {
+   "one_liner": "用 Rust 实现的 PostgreSQL REST/GraphQL API 服务，方言对齐 PostgREST 与 Hasura",
+   "review": "Postrust 是一个以 Rust 编写的单二进制服务，读取 PostgreSQL schema 后自动生成 PostgREST 风格的 REST API 和 Hasura 方言的 GraphQL API，无需按表编写代码。需 PostgreSQL 12+ 与 Rust 1.94+ 构建，通过环境变量（如 DATABASE_URL）配置。支持以独立服务器、Docker、AWS Lambda 或 Cloudflare Workers（仅 REST）方式运行，并通过 JWT 结合数据库行级安全（RLS）控制访问。",
+   "highlights": [
+    "提供完整 CRUD、过滤、排序、分页、外键资源嵌入、全文搜索及 /rpc 存储过程调用",
+    "支持 JWT 认证并配合 PostgreSQL RLS 实现基于角色的访问控制，查询采用参数化方式构建",
+    "可在 Axum 独立服务器、AWS Lambda、Cloudflare Workers 部署，并提供 OpenAPI、Swagger UI、GraphQL Playground 等管理界面"
+   ],
+   "use_cases": [
+    "为现有 PostgreSQL 数据库快速暴露 REST/GraphQL 接口，无需编写后端表级代码",
+    "使用 Hasura 方言客户端的项目将其 GraphQL 端点指向该服务",
+    "Serverless 场景下通过 Lambda 或 Cloudflare Workers（经 Hyperdrive）访问 PostgreSQL"
+   ]
+  },
+  "sha": "e4c8b93d02c0",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9f574f47b83e": {
+  "identity": {
+   "one_liner": "来自官方车辆登记源的开源车辆品牌车型数据集，含稳定 ID 与多国可用性",
+   "review": "VehiclesDB 汇总 18 个国家官方车辆登记/认证目录的数据，提供 978 个品牌、16,440 个车型的结构化清单，覆盖轿车、摩托、轻便摩托、厢式车、卡车、客车六类。每条记录含 per-country 可用性证据和 popularity 分位，以 (kind, make_slug, model_slug) 作为永久稳定的复合 ID。发行 CSV、Parquet、JSON、SQLite 多格式，可直接导入 Postgres/MySQL/DuckDB 或以 Ruby gem 离线使用。收录标准为两个独立官方来源一致，或单一来源登记量排除录入噪声。",
+   "highlights": [
+    "包含 16,440 个车型、978 个品牌、6 种车辆类别、18 个国家的证据数据，每国记录官方数据源及许可证",
+    "提供 CSV、Parquet、JSON、SQLite 及 Ruby gem 多种分发格式，通过 GitHub Releases、jsDelivr CDN 和 Hugging Face 获取",
+    "ID 永久稳定：车型重命名或合并时旧 ID 写入 former_ids，自 2026.07.2 起 CSV 列只追加、不改名不重排"
+   ],
+   "use_cases": [
+    "构建带车型兼容性筛选的汽车配件目录",
+    "二手车/车辆交易平台的品牌车型选择器",
+    "车队管理、车库预约表单与车牌类应用"
+   ]
+  },
+  "sha": "9f574f47b83e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e7a60d64c62": {
+  "identity": {
+   "one_liner": "独立 Rust 实现的分析型 SQL 引擎，对标 DuckDB 1.5.6 兼容契约。",
+   "review": "roastedDuck 是用 Rust 编写的进程内分析型 SQL 引擎，面向 DuckDB 1.5.6 的 SQL、存储及部分客户端契约，提供 CLI、Python、Go、Swift、C API 和 ADBC 接口，内置 httpfs/aws/azure/icu/postgres_scanner/FTS/VSS 扩展。项目处于公开预览阶段，独立维护而非 DuckDB 官方发行版；Windows 与 Intel Mac 不在支持范围内，HNSW 索引仅存于内存。",
+   "highlights": [
+    "提供 CLI、Python、Go、Swift、C API 与 ADBC 多种客户端接入方式，Python 包兼容 duckdb 导入命名空间",
+    "内置 httpfs、aws、azure、icu、postgres_scanner、FTS、VSS 扩展的 Rust 实现，通过 LOAD 按名加载",
+    "基准记录显示在 TPC-H SF10 与 ClickBench 工作负载上峰值内存低 60–76%，执行时间延长 7–16%（对 C++ 参照实现）"
+   ],
+   "use_cases": [
+    "需要以 Python duckdb 导入接口运行 Rust 引擎的分析工作流",
+    "通过 httpfs/aws/azure 扩展读取 S3、Azure Blob、GCS 等远程文件",
+    "在普通持久化表上使用 FTS 全文检索与 VSS 向量检索（HNSW 仅内存）"
+   ]
+  },
+  "sha": "1e7a60d64c62",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

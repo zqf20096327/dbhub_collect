@@ -3022,5 +3022,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c72516efa108": {
+  "identity": {
+   "one_liner": "自托管 AI API 成本台账：按带日期的分层价格精确核算 token 支出",
+   "review": "该项目是一个自托管的 AI API 成本记录系统。应用方通过 POST /api/usage、TypeScript/Python 客户端或 OpenTelemetry 链路上报 token 数量，系统按带日期、含长文本分层的价格表精确计价（金额用十进制存储），并按项目、提供商、模型、客户等维度汇总，支持月度预算告警与账单核对。不采集提示词和响应内容。技术栈为 Next.js、PostgreSQL，支持 Docker Compose 或 Vercel 部署。",
+   "highlights": [
+    "分别按输入、缓存输入、缓存写入与输出 token 计价，支持长提示分层价格，金额以精确小数存储",
+    "价格表按生效日期版本化，价格变更不改写历史记录，未定价的用量不计入总额且不估算成本",
+    "支持月度预算与 80%/100% 告警（webhook/Slack/email），提供与 Anthropic、OpenAI、Google Cloud 账单的核对命令"
+   ],
+   "use_cases": [
+    "需要按项目、客户、功能等维度记录和查看 AI API 支出的自托管场景",
+    "需要在应用调用前预留预算、防止单次运行超支的成本控制流程",
+    "需要将记录的成本与提供商账单核对、生成 CSV/FOCUS 导出或 Stripe 草稿发票的团队"
+   ]
+  },
+  "sha": "c72516efa108",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7ec186530bea": {
+  "identity": {
+   "one_liner": "RikkaHub Desktop 的社区增强分支：LLM 桌面客户端，基于 SQLite、WebView2 与 MCP",
+   "review": "该项目是 RikkaHub Desktop 的社区分支，面向 Windows/Linux/Docker 自托管用户。在上游客户端基础上新增 WinForms+WebView2 原生壳、SQLite 本地存储（含 FTS5 全文索引）、会话绑定本地或 SSH 远程目录的工作区、stdio MCP 与容器部署。对话引擎来自 earendil-works/pi，源码需另行还原；macOS 不发布构建。",
+   "highlights": [
+    "存储层使用 SQLite（含 FTS5 全文索引），备份支持本地、WebDAV、S3 与 Kelivo 四类目标",
+    "工作区支持本地文件夹与 SSH 远程目录，模型工具含 read/write/edit/bash/grep，MCP 支持 Streamable HTTP 与本地 stdio 两种传输",
+    "内置 21 个供应商预设，并支持任意 OpenAI/Anthropic/Google 兼容端点；提供 Windows 低完整性令牌沙盒与容器只读根两种系统级写入边界"
+   ],
+   "use_cases": [
+    "Windows 便携版或 Linux NAS（Docker/compose）上自托管多供应商 LLM 桌面客户端",
+    "通过本地文件夹或 SSH 远程目录让模型执行文件读写与 shell 操作的智能体工作流",
+    "配合 QQ/微信机器人或 Kelivo 同步，在多端复用同一份本地会话数据"
+   ]
+  },
+  "sha": "7ec186530bea",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

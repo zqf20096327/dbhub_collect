@@ -2998,5 +2998,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5496cec4a3a9": {
+  "identity": {
+   "one_liner": "Windows 平台 Deadlock 英雄克制推荐工具，基于对局数据实时生成选人建议",
+   "review": "Deadlock Counterpicker 是一款面向 Deadlock（PC/Steam）玩家的选人辅助工具，运行于 Windows 10/11（需 PowerShell 5.1+，无需管理员权限）。它读取敌方阵容并按对局数据生成克制英雄与出装建议，通过本地悬浮窗展示；全部计算在本机完成，不读取游戏内存。配置通过根目录 config.toml 文件或设置面板调整。",
+   "highlights": [
+    "读取敌方阵容并按对局胜率差、线上压制等权重生成推荐英雄列表",
+    "提供 config.toml 配置文件与设置面板，支持推荐数量、风格、阈值、悬浮窗位置等参数调整",
+    "本地记录对局决策与结果，数据随版本补丁更新"
+   ],
+   "use_cases": [
+    "Deadlock 选人阶段需要基于敌方阵容获取英雄推荐时",
+    "希望按自身英雄池、难度下限和对局上下文过滤建议时",
+    "需在本地记录并回看自己选人决策与胜负结果时"
+   ]
+  },
+  "sha": "5496cec4a3a9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "87bda72ba7f2": {
+  "identity": {
+   "one_liner": "Zig 编写的内存型键值 NoSQL 数据库，事件驱动单线程运行时并提供 AOF 持久化。",
+   "review": "Rapto 是用 Zig 编写的实验性开源内存键值数据库，采用事件驱动的单线程运行时，通过 batch 协议原语将多个查询打包发送以摊销往返开销，并支持基于 glob 模式的多模式键扫描。数据以 AOF 追加日志持久化，可按时间戳加载。README 明确该项目尚不成熟，当前客户端仅提供 Zig 版本，构建依赖 zig build 工具链。",
+   "highlights": [
+    "提供单线程事件驱动（基于 epoll）的服务端，支持 batch 打包多查询发送",
+    "支持确定性字面键查询与多 glob 模式的非确定性键扫描，以及 Lock/CAS、Cursor 等派生结构",
+    "内置基于 AOF 的持久化与可配置的基准测试工具（可指定数据集大小、键值尺寸、并行客户端数等）"
+   ],
+   "use_cases": [
+    "需要通过 Zig 客户端访问的内存键值存储场景",
+    "需要将写入操作序列化到 AOF 并按时间戳回放加载的场景",
+    "对键空间执行多模式 glob 扫描或基于键锁实现 CAS 操作的场景"
+   ]
+  },
+  "sha": "87bda72ba7f2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4e7a9f7eb619": {
+  "identity": {
+   "one_liner": "基于 SQLite 的离线优先多实体 LLM 长期记忆 TypeScript 库",
+   "review": "Core LLM Wiki 是一组跨平台 TypeScript 包，为 LLM 应用提供基于 SQLite 的长期记忆：将对话日志和文档抽取为事实、任务与图边，支持语义搜索与记忆修剪。使用者需自行提供 generateText 与可选 embed 函数，运行于 Expo、React Native、浏览器或 Node.js，兼容 OKF v0.2 导入导出。",
+   "highlights": [
+    "事实、向量与图边存储于应用自有 SQLite 数据库的 llm_wiki_ 前缀表中，无需独立向量库或图数据库",
+    "语义搜索通过提供 embed() 启用，断网时回退到进程内关键词搜索；traverseGraph() 以单条递归 SQL 遍历图边",
+    "单库支持多个独立实体记忆，文档事实防改写、未审事实可存为草稿、forget({entryId}) 可即时从读取与导出中移除引用"
+   ],
+   "use_cases": [
+    "为 Expo/React Native 移动应用或浏览器端应用添加离线优先的持久化 Agent 记忆",
+    "在 Node.js 中为多用户/多实体 LLM 服务构建结构化知识库并配合 GraphRAG 检索",
+    "通过 prisma-outbox 与 MCP server 将端侧记忆同步至云端供编码代理调用"
+   ]
+  },
+  "sha": "4e7a9f7eb619",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0e8d09b32d45": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 本地文档知识库插件，提供混合检索与引用核验",
+   "review": "dsh-library 是面向 DeepSeek Harness 的社区插件，把本地 md/txt 文档经滑窗切片、嵌入后写入宿主 dsh_library 存储域（JSON 或 SQLite 后端），提供 library_add/remove/list/search/cite_check/diagnose 六个工具。检索采用 BM25+语义倒数排名融合、MMR 多样性重排、相关性过滤与首尾钉位；默认使用内置哈希嵌入，零模型下载、零网络请求，对改写表达的检索质量低于真实嵌入模型，可通过 Ollama 或外部命令后端替换。",
+   "highlights": [
+    "提供 library_add/remove/list/search/cite_check/diagnose 六个工具，检索结果带 [n] 来源标记，引用可逐条核验，删除后用确定性签名探测残留",
+    "默认嵌入为确定性哈希（零下载、零网络请求），支持 hash/command/ollama/openai 四种嵌入后端配置",
+    "检索管线包含 BM25+语义 RRF 融合、MMR 多样性重排、minRelevance 过滤与 lost-in-the-middle 首尾钉位，切片大小与结果预算均可配置"
+   ],
+   "use_cases": [
+    "在 DeepSeek Harness 中为 agent 提供本地 md/txt 文档的检索问答，回答带 [n] 引用",
+    "无网络或不想下载模型的环境下构建本地索引，需要时可切换 Ollama/外部嵌入获得更强语义",
+    "核查 agent 答案中的引用有效性，以及文档删除后验证索引是否清除干净"
+   ]
+  },
+  "sha": "0e8d09b32d45",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a64ac3396d5d": {
+  "identity": {
+   "one_liner": "运行在 BIRD 2.x 路由器上的单二进制 BGP 管理 Web UI，数据库建模并渲染整个 bird.conf",
+   "review": "birdy 是一个单 Go 静态二进制，运行在 BIRD 路由器本地，提供 BGP 会话实时仪表盘，并将数据库中的对等体、策略、前缀/AS 集模型渲染为完整 bird.conf，支持语法检查、diff、备份与自动回滚后应用。适用于新建或愿意在其中重建配置的路由器；它不导入或合并既有 bird.conf，README 标注为 beta 软件且不支持与保留手动配置共存。",
+   "highlights": [
+    "从 BIRD 控制套接字读取实时会话状态，提供路由浏览、looking glass、会话翻转时间线与路由数历史图表",
+    "在编辑器中实时预览生成的 BIRD 代码；应用前提供语法检查、lint、diff、备份及带自动回滚的 apply 流程",
+    "内置 RFC 8212 默认拒绝导出、bogon 过滤、RPKI ROV、RTBH、BFD 等策略建模；未建模内容以 raw block 原样追加"
+   ],
+   "use_cases": [
+    "在新建的 BIRD 2.x 路由器上通过 Web UI 管理对等体、导入/导出策略与配置下发",
+    "通过 --read-only 模式观测多台 BIRDy 路由器的 BGP 会话状态与路由变化",
+    "需要 Slack/Discord/邮件/webhook 告警、Prometheus /metrics 及 BIRD 不可达与配置漂移检测的场景"
+   ]
+  },
+  "sha": "a64ac3396d5d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2047debbdd8a": {
+  "identity": {
+   "one_liner": "开源自托管工时与考勤追踪应用，含 Solo/Team 双模式与 PWA",
+   "review": "OpenClockwork 是一个自托管的开源工时追踪与考勤系统，面向个人执业者（Solo 模式）和团队组织（Team 模式）。两者共享同一套 PostgreSQL、NestJS API 与响应式 PWA，界面提供德英双语。工作时长规则（目标、休息、假期）通过显式配置实现，与语言和地区解耦；API 在单一部署时区内计算工作日边界。发票与货币计费仍在路线图中。",
+   "highlights": [
+    "支持 Solo 与 Team 两种安装级运行模式，涵盖个人工时导出与员工考勤、请假、审批流程",
+    "提供 QR/PIN 平板终端打卡，支持可选 GPS 地理围栏与服务端半径校验",
+    "技术栈为 PostgreSQL、NestJS、React、OpenAPI、Socket.IO 与 Docker，界面含德英双语"
+   ],
+   "use_cases": [
+    "独立专业人士记录个人工时并导出客户/计费分类工时表",
+    "团队通过平板终端、经理与 HR 审批流程管理员工考勤与请假",
+    "需要自托管部署并按组织自身配置工时规则的场景"
+   ]
+  },
+  "sha": "2047debbdd8a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

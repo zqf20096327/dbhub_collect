@@ -2796,5 +2796,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e465691d1154": {
+  "identity": {
+   "one_liner": "将 pgBackRest 封装为 Docker 镜像，免系统包安装运行备份工具",
+   "review": "该项目提供包含 pgBackRest 的 Docker 镜像，基于 Ubuntu 或 Alpine 构建，发布于 Docker Hub 和 GitHub Registry，覆盖最近 5 个 pgBackRest 版本，另含支持 Greenplum 的 fork 版本标签（*-gpdb）。适用于不愿在专用备份仓库主机或 CI/CD 中通过 yum/apt 安装系统包的用户；PostgreSQL 服务器端仍需按 pgBackRest 文档配置。镜像内置 bash 补全脚本，通过环境变量配置运行用户 UID/GID、SSH/TLS 通信模式等，支持以 TLS 服务器模式前台或后台启动。",
+   "highlights": [
+    "提供 Ubuntu 和 Alpine 两种基础镜像，覆盖 pgBackRest 最近 5 个版本及含 Greenplum 支持的 fork 版本",
+    "通过环境变量配置运行用户/组（UID/GID）、时区及 SSH/TLS 仓库主机协议类型，支持以前台或后台方式启动 pgBackRest TLS 服务器",
+    "内置 pgbackrest-bash-completion 脚本，支持 Tab 键命令补全；提供 make 与 docker build 两种构建方式及 e2e 测试"
+   ],
+   "use_cases": [
+    "在专用备份仓库主机或 CI/CD 系统中运行 pgBackRest 而不安装系统包",
+    "通过 SSH 或 TLS 与本地/远程 PostgreSQL 服务器通信，执行备份与 WAL 归档",
+    "需要含 Greenplum 支持的 pgBackRest fork 镜像的场景"
+   ]
+  },
+  "sha": "e465691d1154",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2e72d2389845": {
+  "identity": {
+   "one_liner": "自托管 Go 网页爬虫，遵守 robots.txt 并按域名限速、断点续爬。",
+   "review": "这是一个用 Go 编写的自托管网页爬虫，面向需要无人值守抓取真实网站的场景。每个 URL 依次经过规范化、域名范围检查、robots.txt 校验、按域名令牌桶限速、带退避重试的抓取、HTML 链接提取和存储（元数据入 Postgres，正文存本地磁盘或 S3）。爬虫每 10 秒写检查点，崩溃或 SIGTERM 后可恢复；失败 URL 进入死信日志。配套 Next.js 仪表盘和 HTTP 控制 API 用于添加 URL、暂停/恢复、重试失败项。",
+   "highlights": [
+    "读取并缓存 robots.txt（含 TTL），支持 Crawl-delay 覆盖默认速率，按域名并发上限与令牌桶限速",
+    "带指数退避与抖动的重试（最多 4 次），每域名熔断器（连续 5 次失败后熔断 1 分钟），重定向循环检测与 10 跳上限",
+    "队列与已访问集合每 10 秒检查点持久化，支持崩溃/SIGTERM 后恢复；失败 URL 写入死信日志并可从仪表盘重试"
+   ],
+   "use_cases": [
+    "自托管部署，对多个域名进行遵守 robots.txt 的长时间无人值守抓取",
+    "需要断点续爬与失败 URL 可追溯、可重试的批量采集任务",
+    "通过 HTTP API 或仪表盘在运行中动态管理域名白名单、队列与失败重试"
+   ]
+  },
+  "sha": "2e72d2389845",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

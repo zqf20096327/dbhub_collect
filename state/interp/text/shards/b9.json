@@ -3187,5 +3187,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "db013eb00bad": {
+  "identity": {
+   "one_liner": "将十个编程工具上游渠道封装为 OpenAI/Anthropic 兼容 API 的自托管网关",
+   "review": "Coding2API 把 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo、Qoder、CodeArts、OfficeAce、小浣熊、灵犀等上游渠道封装为 OpenAI / Responses / Anthropic / Gemini SDK 兼容接口，提供公共凭证池、健康度调度、会话粘性与按人用量统计，基于 Python 3.12+/FastAPI 与 SQLite 部署。项目自述为逆向接口，未做安全审计，仅供学习研究；公网部署需自配反向代理、鉴权与 IP 白名单。",
+   "highlights": [
+    "提供 /v1/chat/completions、/v1/responses、/v1/messages、Gemini generateContent 等多种协议端点，任意 OpenAI 兼容客户端可直连",
+    "维护公共凭证池：加密入库、多账号切换、额度探测、每日签到、token 预刷新，调度按健康度、到期额度与权重排序",
+    "内置三角色（admin/operator/viewer）权限体系与审计日志，提供脱敏用量统计、月度账单导出与管理台"
+   ],
+   "use_cases": [
+    "自托管聚合多个编程工具渠道凭证，统一供 OpenAI 兼容客户端（Codex CLI、Claude Code 等）调用",
+    "团队共享凭证池并按人统计请求、token 与成本，生成月度账单",
+    "本地学习研究各上游渠道的接口协议与调度机制"
+   ]
+  },
+  "sha": "db013eb00bad",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "740e5384c83b": {
+  "identity": {
+   "one_liner": "面向乌兹别克斯坦中学生教育项目的 EdTech 平台，管理课表、学员与课程体系。",
+   "review": "AXV Nexsus 是为乌兹别克斯坦数字技术部下属“Muhammad Al-Xorazmiy Vorislari”项目开发的 EdTech 平台，面向 8–11 年级学生及其 IT 与外语导师，提供课表、学员、课程路线的集中管理。后端采用 Java 21 + Spring Boot 与 DDD 模块化单体架构，前端为 React 19 + TypeScript，通过 Docker Compose 可一键启动，支持手动录入或上传 Excel/CSV/PDF/截图由解析引擎生成课表。",
+   "highlights": [
+    "课表支持按年级和导师筛选，提供周日历网格与卡片两种视图，课程采用 80 分钟分段结构",
+    "支持手动录入与文件上传两种方式添加学员和课表，本地解析器离线运行，并可调用 Groq、Google Gemini 解析文档",
+    "内置 8–11 年级课程体系，学员可按姓名、ID、PINFL 检索并导出 CSV"
+   ],
+   "use_cases": [
+    "教育机构集中管理 8–11 年级学生分组、导师与每周课表",
+    "将 Excel/CSV/PDF 或课表截图批量导入并预览编辑后入库",
+    "通过 Docker Compose 或分模块方式在本地运行前后端与数据库环境"
+   ]
+  },
+  "sha": "740e5384c83b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d03fd99dd14b": {
+  "identity": {
+   "one_liner": "自托管多 Agent PR 审查工作台，审查留痕，远端写入与合并由维护者逐步确认。",
+   "review": "MergePilot 通过 GitHub App 与 Gitee 连接收取 PR 事件，运行 Reviewer/Fixer/Verifier/Leader 四类 Agent 角色产出静态规则与可选 LLM 的审查发现及验证证据，汇集到自托管 Console。评论、机器人提交修复与合并均需维护者「预览→确认」两步执行。给需要 AI 参与代码审查但保留人工终裁权、自托管部署的团队使用。当前为 Developer Beta，项目处于冻结维护状态，仅接受安全补丁；Beta 不含 SSO、PostgreSQL RLS、HA 等企业级能力。",
+   "highlights": [
+    "所有远端写入（发布评论、应用修复、确认合并）均经 preview→confirm 两步确认，绑定 expected_remote_head 与补丁摘要，远端结果不确定时进入对账端点幂等定案",
+    "合并资格门分页核验 GitHub Commit Statuses 与 Check Runs 双面状态，要求当前 head 审查完成且真实 CI 通过，读取失败时 fail-closed 阻断",
+    "LLM 出站经租户级策略与同意记录门控，上下文经正则与 Shannon 熵双通道凭据掩码，固定指令区与不可信数据信封隔离；默认 provider disabled 时不发起网络请求"
+   ],
+   "use_cases": [
+    "自托管部署场景下对 GitHub/Gitee PR 进行静态规则加可选 LLM 的两阶段审查，发现与验证证据集中留痕",
+    "维护者在 Console 内逐次确认机器人以自身身份向 PR 分支提交修复 commit，新 head 自动重审",
+    "需要受控合并流程的团队：高危发现逐条生成具名审批票，满足统一合并资格门后才放行合并确认"
+   ]
+  },
+  "sha": "d03fd99dd14b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

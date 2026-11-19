@@ -29017,5 +29017,1602 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "cea72c1f2806+2": {
+  "fn": "ydddp/mail-hub",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "GHCR",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    4,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "English | API 文档"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    42,
+    8,
+    42
+   ],
+   [
+    "replace",
+    42,
+    46,
+    42,
+    43,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    71,
+    43,
+    68
+   ],
+   [
+    "replace",
+    71,
+    72,
+    68,
+    69,
+    [
+     "|环境变量|必填|默认值|说明|"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    69,
+    70
+   ],
+   [
+    "replace",
+    73,
+    78,
+    70,
+    75,
+    [
+     "|`API_SECRET`|推荐|—|管理员密钥。留空则所有请求均为管理员（仅开发环境）|",
+     "|`PORT`|否|`3100`|服务端口|",
+     "|`HOST`|否|`0.0.0.0`|监听地址|",
+     "|`DB_PATH`|否|`./data/mail.db`|SQLite 数据库路径|",
+     "|`PROXY_URL`|否|—|出站代理，支持 http/https/socks5|"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    75,
+    76
+   ],
+   [
+    "replace",
+    79,
+    80,
+    76,
+    77,
+    [
+     "详见 .env.example。"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    85,
+    77,
+    82
+   ],
+   [
+    "replace",
+    85,
+    86,
+    82,
+    83,
+    [
+     "先装好 Tampermonkey，再从下面两处任选一处安装："
+    ]
+   ],
+   [
+    "equal",
+    86,
+    88,
+    83,
+    85
+   ],
+   [
+    "replace",
+    88,
+    89,
+    85,
+    86,
+    [
+     "- **从 GitHub 安装**：👉 点此一键安装。适合用别人的 Mail Hub、手里只有一个 API Key 的情况。第一次连接要自己填服务地址；以后从 GitHub 更新，跟随最新正式版本。"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    92,
+    86,
+    89
+   ],
+   [
+    "replace",
+    92,
+    93,
+    89,
+    90,
+    [
+     "详见 userscript/README.md。"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    100,
+    90,
+    97
+   ],
+   [
+    "replace",
+    100,
+    101,
+    97,
+    98,
+    [
+     "|渠道|默认|类型|保留时长|"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    98,
+    99
+   ],
+   [
+    "replace",
+    102,
+    112,
+    99,
+    109,
+    [
+     "|Mail.tm|✅|REST|数天|",
+     "|Mail.gw|✅|REST|8 天|",
+     "|TempMail.lol|✅|REST|1 小时|",
+     "|TempMail.ing|✅|REST|10 分钟|",
+     "|Temp-Mail.io|✅|REST|~24 小时|",
+     "|Maildrop.cc|✅|GraphQL|~24 小时（公开可读）|",
+     "|Catchmail.io|✅|REST|7 天|",
+     "|NiMail.cn|✅|REST|10 分钟|",
+     "|Guerrilla Mail|✅|REST|1 小时|",
+     "|Dropmail.me|❌|GraphQL|10 分钟。需在 dropmail.me/api 申请 token，编辑模板替换 `PASTE_YOUR_TOKEN_HERE` 后启用|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    119,
+    109,
+    116
+   ],
+   [
+    "replace",
+    119,
+    120,
+    116,
+    117,
+    [
+     "|渠道|类型|说明|"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    117,
+    118
+   ],
+   [
+    "replace",
+    121,
+    125,
+    118,
+    122,
+    [
+     "|Outlook|账号池|导入 Outlook 账号，自动识别 Microsoft Graph、Outlook REST 与 IMAP XOAUTH2（含 Thunderbird 公共 OAuth 令牌）；支持裸账号授权补全；1:1 分配，关闭后回池；可选 `+` 子地址别名；账号页可分开展示收件地址和到达时段，并加载更早邮件|",
+     "|YYDS Mail|API Key 池|导入 Key，按 key 轮转，单 Key 每日 20,000 次调用|",
+     "|IMAP 域名邮箱|账号池|连接自有域名邮箱（catch-all），一个邮箱支撑多个收件箱；生成人名形态地址，默认调度顺序排最前|",
+     "|iCloud 别名|地址池|用 iCloud+ 的隐藏邮件地址签发 `@icloud.com` 地址，转发到你自己的信箱后按收件人分拣；地址回收复用，后台按 Apple 的限速自动补货|"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    132,
+    122,
+    129
+   ],
+   [
+    "replace",
+    132,
+    136,
+    129,
+    133,
+    [
+     " - **两步创建 + Bearer** — Mail.tm 风格（先 POST 创建账号，再 POST 换 token）",
+     " - **API Key Header** — 全局认证头（如 `X-Api-Key`）",
+     " - **无认证** — 详情直接复用列表返回的 item",
+     " - **GraphQL POST + body** — Dropmail 风格（同 URL POST + `{query: \"...\"}`）"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    156,
+    133,
+    153
+   ],
+   [
+    "replace",
+    156,
+    194,
+    153,
+    154,
+    [
+     "…（38 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    198,
+    154,
+    158
+   ],
+   [
+    "replace",
+    198,
+    199,
+    158,
+    159,
+    [
+     "完整 API 文档：docs/API.md"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    202,
+    159,
+    162
+   ],
+   [
+    "replace",
+    202,
+    204,
+    162,
+    163,
+    [
+     "AGPL-3.0-or-later"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "2a97a2a147e6+2": {
+  "fn": "border-radius/chirkle",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# Chirkle"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "A small, fast, real-time group chat. One PocketBase binary is the whole backend"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    3,
+    8
+   ],
+   [
+    "replace",
+    8,
+    12,
+    8,
+    9,
+    [
+     " A room in Chirkle: the room list with unread counts on the left; messages with avatars, a reply, an @mention of you, a photo and emoji reactions on the right"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    9,
+    11
+   ],
+   [
+    "replace",
+    14,
+    17,
+    11,
+    14,
+    [
+     " with slow sends), or 300 chatting nonstop, and 1,000 reconnecting at once catch up within seconds; beyond that it",
+     " slows down but stays within its memory (measured, PERF.md §13,",
+     " §14)"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    26,
+    14,
+    23
+   ],
+   [
+    "replace",
+    26,
+    28,
+    23,
+    25,
+    [
+     " composer to pick someone. A message that mentions you is highlighted and notifies you like a reply, and rooms with",
+     " unread mentions or replies show an \"@\" by their count"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    25,
+    26
+   ],
+   [
+    "replace",
+    29,
+    30,
+    26,
+    27,
+    [
+     " messages, newest first; each opens its message in its room"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    32,
+    27,
+    29
+   ],
+   [
+    "replace",
+    32,
+    33,
+    29,
+    30,
+    [
+     " (as many different ones as you like), live for everyone"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    35,
+    30,
+    32
+   ],
+   [
+    "replace",
+    35,
+    36,
+    32,
+    33,
+    [
+     " loaded only when first used, so it adds nothing to the page's first load"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    39,
+    33,
+    36
+   ],
+   [
+    "replace",
+    39,
+    40,
+    36,
+    37,
+    [
+     " a room with unread messages opens at the first of them, under a \"New\" line"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    42,
+    37,
+    39
+   ],
+   [
+    "replace",
+    42,
+    43,
+    39,
+    40,
+    [
+     " member; it works for 1, 7 or 30 days and can be revoked or replaced at any time (web and Android)"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    40,
+    41
+   ],
+   [
+    "replace",
+    44,
+    45,
+    41,
+    42,
+    [
+     " unban people (a banned account can't log in); DMs and private rooms they aren't in stay out of their reach"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    42,
+    43
+   ],
+   [
+    "replace",
+    46,
+    47,
+    43,
+    44,
+    [
+     " time, no names (the admin can turn collecting them off)"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    44,
+    47
+   ],
+   [
+    "replace",
+    50,
+    52,
+    47,
+    49,
+    [
+     " that sets a new password and logs out every device",
+     "- Telegram bridge (optional): link rooms to Telegram groups through a bot; messages, replies, edits, files and (with the bot an admin) reactions go both ways (deletes from Chirkle to Telegram), Telegram people show under stand-in accounts with their names and pictures — see the Telegram bridge"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    49,
+    50
+   ],
+   [
+    "replace",
+    53,
+    55,
+    50,
+    52,
+    [
+     " server answers; unread rooms are fetched ahead. Attachment thumbnails are kept by the service worker, so going back",
+     " to a room (or reloading) doesn't download them again. All of it is cleared on logout"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    52,
+    53
+   ],
+   [
+    "replace",
+    56,
+    58,
+    53,
+    55,
+    [
+     " message in the rooms you choose from their menu: they come from the open tab's live connection (even in the",
+     " background), so no push service (Google, Mozilla, Apple) is involved"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    61,
+    55,
+    58
+   ],
+   [
+    "replace",
+    61,
+    62,
+    58,
+    59,
+    [
+     " the Android app"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    59,
+    60
+   ],
+   [
+    "replace",
+    63,
+    67,
+    60,
+    61,
+    [
+     " A collection in Chirkle: the private Moodboard"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    61,
+    62
+   ],
+   [
+    "replace",
+    68,
+    69,
+    62,
+    63,
+    [
+     "**Documentation: chirkle.com/docs**: installing and deploying, the user guide, administration, the"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    71,
+    63,
+    65
+   ],
+   [
+    "replace",
+    71,
+    72,
+    65,
+    66,
+    [
+     "Design: `docs/DESIGN.md` · Android app: `docs/ANDROID.md` · QA: `docs/QA.md` · Refactoring plan: `docs/REFACTOR.md` · Archived plans: MVP build, avatars, DMs, attachments"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    98,
+    66,
+    92
+   ],
+   [
+    "replace",
+    98,
+    99,
+    92,
+    93,
+    [
+     "(`npx chirkle --http=0.0.0.0:80`). Every setting is in the configuration reference. The package ships the server built for Linux and macOS (x64, arm64): no Go or PocketBase download"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    115,
+    93,
+    109
+   ],
+   [
+    "replace",
+    115,
+    116,
+    109,
+    110,
+    [
+     "|Script|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    110,
+    111
+   ],
+   [
+    "replace",
+    117,
+    132,
+    111,
+    126,
+    [
+     "|`npm start`|Production build, then the server (`scripts/start.mjs`, the package's `chirkle` command): PocketBase on http://127.0.0.1:8090 with `pb_data/`|",
+     "|`npm run dev`|Unminified watch build into `pb_public/` + `pocketbase serve --dev`|",
+     "|`npm run build`|Production build (hashed assets) into `pb_public/`; fails if over the size budget|",
+     "|`npm run release -- <version>`|Gives the npm package and the Android app the next version and starts the app's changelog; then publish a GitHub Release tagged `v<version>` (Releasing)|",
+     "|`npm run typecheck`|`tsc` (strict) for the frontend, tests and scripts, plus `pb_hooks/` + `pb_migrations/` against PocketBase's generated types (`types/pocketbase.d.ts`, written by `scripts/pb-types.sh`)|",
+     "|`npm run lint`|Biome: formatting, lint rules, import order (`npm run format` applies the fixes)|",
+     "|`npm run lint:sinks`|Fails if frontend code uses `innerHTML` & co. (XSS guard)|",
+     "|`npm test`|Unit tests (Vitest + happy-dom, no server) and component tests (views and services against a real, throwaway PocketBase)|",
+     "|`npm run test:unit`|Only the unit tests: no server, ~10 s|",
+     "|`npm run test:int`|Integration tests: schema, API rules, hooks, realtime, pagination|",
+     "|`npm run test:e2e`|Playwright end-to-end tests against the production build|",
+     "|`npm run schema:snapshot`|Rewrite `docs/schema.snapshot.json` (every collection's API rules, fields and indexes, and the rate limits) after a migration changes them; `test:int` fails while it is out of date|",
+     "|`npm run screenshots`|Rewrite the README screenshots (`docs/screenshot-*.png`, `docs/collections-*.png`): a throwaway server with made-up people, messages and collections, photographed in Chromium after `npm run build`|",
+     "|`npm run check`|typecheck + lint + lint:sinks + test + test:int + build (what CI runs before e2e)|",
+     "|`npm run doctor`|Is this machine ready for the tests? Go, the server binary, ffmpeg, versitygw, free space in `TMPDIR`, stray test servers, free e2e ports, and a browser that starts and draws text (`-- --browsers=chromium,firefox,webkit`). The e2e setup runs it first|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    143,
+    126,
+    137
+   ],
+   [
+    "replace",
+    143,
+    151,
+    137,
+    138,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    164,
+    138,
+    151
+   ],
+   [
+    "replace",
+    164,
+    172,
+    151,
+    159,
+    [
+     "- Run it on a server: the one-command install and its options, updating, uninstalling, and running the",
+     " server by hand",
+     "- Docker and Dokku, including running the image GitHub builds for every",
+     " commit on `master` and following it from cron",
+     "- Behind a reverse proxy: nginx and Caddy examples, and `TRUSTED_PROXY`",
+     "- Administration: branding, invite-only signups, moderators, anonymous rooms, email, backups and S3,",
+     " rate limits, link previews and video thumbnails, metrics",
+     "- Configuration reference: every environment variable, flag and setting in one place"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    178,
+    159,
+    165
+   ],
+   [
+    "replace",
+    178,
+    179,
+    165,
+    166,
+    [
+     "the Android app and for admins."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    190,
+    166,
+    177
+   ],
+   [
+    "replace",
+    190,
+    191,
+    177,
+    178,
+    [
+     "Design: `docs/ANDROID.md`. What it has of the web app's features: `android/PARITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    199,
+    178,
+    186
+   ],
+   [
+    "replace",
+    199,
+    200,
+    186,
+    187,
+    [
+     "`docs/ANDROID.md` §28.7."
+    ]
+   ],
+   [
+    "equal",
+    200,
+    205,
+    187,
+    192
+   ],
+   [
+    "replace",
+    205,
+    206,
+    192,
+    193,
+    [
+     "link the group to a room in the admin UI. Setup, options and limits: the Telegram bridge."
+    ]
+   ],
+   [
+    "equal",
+    206,
+    210,
+    193,
+    197
+   ],
+   [
+    "replace",
+    210,
+    211,
+    197,
+    198,
+    [
+     "Off by default. Setup, sharing, moderation and unpairing: linked servers."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    213,
+    198,
+    200
+   ],
+   [
+    "replace",
+    213,
+    215,
+    200,
+    201,
+    [
+     "GNU General Public License v3.0 or later."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "219c147245c3+2": {
+  "fn": "giuliodali/ha-db-storage-manager",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "DB Storage Manager icon"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " DB Storage Manager "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    10,
+    4,
+    6,
+    [
+     " See exactly where your Home Assistant database space goes, and safely get it back. ",
+     " A HACS integration with a sidebar panel, undo for everything it clears, and per-entity history retention."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    17,
+    7,
+    11,
+    [
+     " HACS Custom",
+     " Release",
+     " Validate",
+     " License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    11,
+    12
+   ],
+   [
+    "replace",
+    18,
+    21,
+    12,
+    13,
+    [
+     " Walkthrough: find a spike, filter to leftover history, clear it with a backup, set a retention rule, undo from History"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    42,
+    13,
+    34
+   ],
+   [
+    "replace",
+    42,
+    43,
+    34,
+    35,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    35,
+    36
+   ],
+   [
+    "replace",
+    44,
+    54,
+    36,
+    46,
+    [
+     "|**Overview**|Live database size, free space, unreferenced data, cleanup candidates, treemap by integration and type, largest entities, size over time with free space / undo data and long-term statistics stacked.|",
+     "|**Entities**|Search and faceted filters (Suggestion, Referenced In, Integration, Device, Type, Defined in, Retention, Status, Last update). Size bars split states from statistics.|",
+     "|**Referenced In**|Counts every place an entity is used: automations, scripts, scenes, dashboards (per view), helpers, Energy dashboard, YAML files (including `sql` and `command_line` definitions).|",
+     "|**Actions**|Disable, clear history, disable and clear, change retention. Each shows a preview first: what happens to each entity, how much it frees, and warnings.|",
+     "|**Undo**|Whole-batch undo from the History tab. Only missing rows are restored, so data recorded since is kept.|",
+     "|**Retention**|Per-entity limits on *state* history, enforced by a nightly job the integration schedules itself, followed by a repack to return the space.|",
+     "|**Inspector**|Browse the raw stored states (with collapsible JSON attributes), hourly and 5-minute statistics for any entity.|",
+     "|**Settings**|Hide automations; Home Assistant's default state retention as a slider with the predicted space freed or gained (saved to `recorder: purge_keep_days`); long-term statistics retention in 6-month steps, with a separate limit for Energy dashboard statistics.|",
+     "|**Reclaim**|Repack the database so freed space goes back to the disk, and watch the file shrink.|",
+     "|**Sensors, event, services**|Database size and free space, retention rules and last run, a `db_storage_manager_retention_run` event and a `db_storage_manager.run_retention` action for your own automations.|"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    46,
+    47
+   ],
+   [
+    "replace",
+    55,
+    61,
+    47,
+    50,
+    [
+     " Overview",
+     "",
+     " Entities filtered to Remove history"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    50,
+    53
+   ],
+   [
+    "replace",
+    64,
+    65,
+    53,
+    54,
+    [
+     "Open your Home Assistant instance and open this repository in HACS."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    70,
+    54,
+    59
+   ],
+   [
+    "replace",
+    70,
+    71,
+    59,
+    60,
+    [
+     " Open your Home Assistant instance and start setting up DB Storage Manager."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    60,
+    61
+   ],
+   [
+    "replace",
+    72,
+    73,
+    61,
+    62,
+    [
+     " (or **Settings → Devices & services → Add integration → DB Storage Manager**)."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    89,
+    62,
+    78
+   ],
+   [
+    "replace",
+    89,
+    90,
+    78,
+    79,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    79,
+    80
+   ],
+   [
+    "replace",
+    91,
+    99,
+    80,
+    88,
+    [
+     "|Getting started|Requirements, install, first scan, what each tab is for|",
+     "|Finding things|Search, filters, suggestions, Referenced In, the period drill-down, the inspector|",
+     "|Actions and undo|What each action does, previews, backups, undoing, History tab|",
+     "|Retention|Per-entity limits, how the nightly job runs, how to see and trace it|",
+     "|Settings|Hide automations, default state retention, long-term statistics retention|",
+     "|Options, sensors and services|Everything you can configure or automate against|",
+     "|How it stays safe|What it touches, what it never touches, where files live|",
+     "|Troubleshooting and FAQ|Common questions and fixes|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    113,
+    88,
+    102
+   ],
+   [
+    "replace",
+    113,
+    122,
+    102,
+    103,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "9e4134db5510+2": {
+  "fn": "Omerli-Faruk/yarmak-portfoy",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Yarmak"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    1,
+    6
+   ],
+   [
+    "delete",
+    8,
+    10,
+    6,
+    6
+   ],
+   [
+    "equal",
+    10,
+    12,
+    6,
+    8
+   ],
+   [
+    "replace",
+    12,
+    13,
+    8,
+    9,
+    [
+     "Portföy genel bakış"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    9,
+    10
+   ],
+   [
+    "replace",
+    14,
+    17,
+    10,
+    13,
+    [
+     "|Varlıklar|Piyasalar|Varlık detayı (koyu tema)|",
+     "|---|---|---|",
+     "|Varlıklar|Piyasalar|Varlık detayı|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    13,
+    14
+   ],
+   [
+    "replace",
+    18,
+    19,
+    14,
+    15,
+    [
+     " Görüntüler demo hesabından alınmıştır. "
+    ]
+   ],
+   [
+    "equal",
+    19,
+    33,
+    15,
+    29
+   ],
+   [
+    "replace",
+    33,
+    34,
+    29,
+    30,
+    [
+     "Gereken tek şey Docker (Docker Desktop ya da Docker Engine + Compose v2)."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    43,
+    30,
+    39
+   ],
+   [
+    "replace",
+    43,
+    48,
+    39,
+    44,
+    [
+     "||Adres|",
+     "|---|---|",
+     "|Arayüz|http://localhost:3000|",
+     "|API|http://localhost:8080/v1|",
+     "|Swagger|http://localhost:8080/swagger/index.html|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    81,
+    44,
+    77
+   ],
+   [
+    "replace",
+    81,
+    90,
+    77,
+    86,
+    [
+     "|Değişken|Varsayılan|Açıklama|",
+     "|---|---|---|",
+     "|`POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB`|`postgres` / `postgres` / `yarmak`|Veritabanı bilgileri|",
+     "|`DB_PORT` / `PORT` / `FRONTEND_PORT`|`5432` / `8080` / `3000`|Bilgisayarda açılan portlar. Veritabanı yalnızca `127.0.0.1` üzerinden erişilebilir.|",
+     "|`JWT_SECRET`|boş|Boşsa API her açılışta geçici bir anahtar üretir. Sunucuda `openssl rand -hex 32` ile kalıcı bir anahtar verin.|",
+     "|`ALLOWED_ORIGINS`|`http://localhost:3000,...`|API'nin kabul ettiği arayüz adresleri (CORS)|",
+     "|`COOKIE_SECURE`|`false`|HTTPS arkasında `true` olmalı|",
+     "|`ENABLE_SWAGGER`|`true`|Swagger arayüzünü kapatmak için `false`|",
+     "|`NEXT_PUBLIC_API_URL`|`http://localhost:8080/v1`|Tarayıcının API adresi. Derleme anında koda gömülür, değiştirince `docker compose up -d --build frontend` gerekir.|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    95,
+    86,
+    91
+   ],
+   [
+    "replace",
+    95,
+    96,
+    91,
+    92,
+    [
+     "Kod üzerinde çalışırken backend ve frontend doğrudan bilgisayarınızda çalışır; böylece değişiklikler her seferinde imaj derlemeden görünür. Gereksinimler: Go 1.25+, Node.js 22 ve goose."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    166,
+    92,
+    162
+   ],
+   [
+    "replace",
+    166,
+    177,
+    162,
+    173,
+    [
+     "|Grup|Uç noktalar|",
+     "|---|---|",
+     "|Hesap|`POST /register`, `POST /login`, `POST /refresh`, `POST /revoke`, `GET /me`|",
+     "|Varlıklar|`GET /assets`, `GET /assets/lookup`, `GET /assets/daily-changes`, `GET /assets/{id}/summary`, `GET /assets/{id}/price-history`, `POST /assets/{id}/backfill`|",
+     "|İşlemler|`GET/POST /transactions`, `PUT/DELETE /transactions/{id}`|",
+     "|Portföy|`GET /portfolio/holdings`, `GET /portfolio/summary`, `GET /portfolio/value-history`, `DELETE /portfolio/holdings/{symbol}`|",
+     "|Temettü|`GET/POST /dividends`, `PUT/DELETE /dividends/{id}`|",
+     "|Bölünmeler|`GET /assets/{id}/splits`|",
+     "|Alarmlar|`GET/POST /alerts`, `DELETE /alerts/{id}`|",
+     "|Yönetici|`POST /assets`, `POST /splits`|",
+     "|Sağlık|`GET /healthz`|"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    192,
+    173,
+    188
+   ],
+   [
+    "replace",
+    192,
+    215,
+    188,
+    189,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    235,
+    189,
+    209
+   ],
+   [
+    "replace",
+    235,
+    236,
+    209,
+    210,
+    [
+     "MIT"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    210,
+    211
+   ],
+   [
+    "replace",
+    237,
+    238,
+    211,
+    212,
+    [
+     " Yarmak bir yatırım tavsiyesi aracı değildir. Gösterilen fiyatlar gecikmeli veya hatalı olabilir."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "308d9fc4288d+2": {
+  "fn": "mem9-ai/tidb-agentspace",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "1. Open Home in Studio and sign in or choose **Try without an account**. A new Workspace prepares a default File System; temporary workspaces expire after 48 hours."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    21,
+    13,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "1. Open the Database tutorial in Studio and sign in."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    26,
+    22,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "For files, open the File System tutorial. Choose or create a File System and follow the steps to save, preview and query the sample CSV."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    30,
+    27,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "In Studio, open **Agents** for the setup guide, or **Access** to create a Workspace Key and select the actions and resources the agent needs. Save the revealed secret in the agent's secret store. Exchange it at the Global API for a short-lived Region access Token, then call the Region API with that Token. The API guide includes requests for discovery, exchange and renewal. Key administration uses Owner authentication."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    34,
+    31,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "Download a client and copy a list-resources example from Studio Developers. Both clients use a Workspace endpoint and a scoped API key."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    35,
+    36
+   ],
+   [
+    "replace",
+    36,
+    40,
+    36,
+    40,
+    [
+     "|Language|Source in this repository|Runtime|",
+     "|----------|---------------------------------------------------------------------------------------------------------------------------------|-----------------------------|",
+     "|JavaScript|TypeScript source · Single-file download source|Node.js 24+|",
+     "|Python|Single-file source|Python 3.9+, standard library|"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    43,
+    40,
+    43
+   ],
+   [
+    "replace",
+    43,
+    44,
+    43,
+    44,
+    [
+     "Install the pinned Rust toolchain and make `rustfs` 1.0.4, `curl` and `tar` available on your path. From the repository root:"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    54,
+    44,
+    54
+   ],
+   [
+    "replace",
+    54,
+    55,
+    54,
+    55,
+    [
+     "To use the optional React Console, install the Node and npm versions pinned in .node-version and package.json, then run:"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    61,
+    55,
+    61
+   ],
+   [
+    "replace",
+    61,
+    62,
+    61,
+    62,
+    [
+     "Open the local Console. A new local Workspace starts empty with local demo files enabled. To create real resources, configure `product.providers.postgresProvider` as `db9-anonymous` or `product.providers.filesProvider` as `drive9-anonymous` in the private `.data/meta-runtime/rust-api.json` before starting the stack. Creating a resource provisions a real trial. See PostgreSQL setup and limits and File System provisioning."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    70,
+    62,
+    70
+   ],
+   [
+    "replace",
+    70,
+    71,
+    70,
+    71,
+    [
+     "Rust generates the Agent, Owner and operator contracts. The API guide explains which contract and credentials to use. For contributor setup, acceptance tests and delivery checks, see CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    71,
+    72
+   ],
+   [
+    "replace",
+    72,
+    79,
+    72,
+    79,
+    [
+     "|Looking for|Start here|",
+     "|------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|",
+     "|API executable, local commands and deployment|Rust host · crate map · hosted Studio|",
+     "|HTTP handlers, OpenAPI and product operations|API · OpenAPI · product|",
+     "|Workspace permissions and metadata storage|Workspace · Meta · metadata architecture|",
+     "|Console and generated client|React application · API client|",
+     "|Product status, limitations and design decisions|start-here.md · architecture|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    82,
+    79,
+    82
+   ],
+   [
+    "replace",
+    82,
+    83,
+    82,
+    83,
+    [
+     "The repository is mem9-ai/tidb-agentspace. The service domain and existing API, SDK, skill URLs, and local helper identifiers remain unchanged. TiDB AgentSpace is the selected project name; potential confusion with Google’s historical Agentspace branding remains a consideration before broad launch. This implementation does not establish trademark clearance."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    85,
+    83,
+    85
+   ],
+   [
+    "replace",
+    85,
+    87,
+    85,
+    86,
+    [
+     "TiDB AgentSpace is licensed under the Apache License, Version 2.0. Third-party components retain their respective licenses."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

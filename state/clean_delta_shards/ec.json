@@ -31248,5 +31248,1369 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "c72516efa108+2": {
+  "fn": "Dominic6018/ai-api-cost-tracker",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "It complements LLM gateways (which route requests and cap spend) and tracing tools (which follow a request through an agent) rather than replacing them: it's the system of record for cost. Cost per customer, feature and agent run is next on the roadmap."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    10,
+    6,
+    7,
+    [
+     " Spend overview: two projects need attention, spend today, this month and over the last 30 days, and each project"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    7,
+    8
+   ],
+   [
+    "replace",
+    11,
+    15,
+    8,
+    9,
+    [
+     " Cost by customer for the Support Bot over 90 days: each customer"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    9,
+    10
+   ],
+   [
+    "replace",
+    16,
+    19,
+    10,
+    13,
+    [
+     "|Spend over time|Usage events|",
+     "|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|Daily spend over 90 days as a bar chart, with spend and tokens by provider|Filterable table of usage events with tokens, cost, customer, user, feature and run|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    13,
+    14
+   ],
+   [
+    "replace",
+    20,
+    21,
+    14,
+    15,
+    [
+     " Demo data from `npm run db:demo`, captured by CI on 3 November 2026, and shown in your GitHub theme. The breakdown shows cost per resolved ticket for the Support Bot, the project that resolves tickets. The demo sets budgets from the current month's spend, so they're small this early in a month. "
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    15,
+    16
+   ],
+   [
+    "replace",
+    22,
+    23,
+    16,
+    17,
+    [
+     "> **Status:** Milestones 0–9 are complete: exact, tier-aware pricing, authenticated ingestion, the dashboard, budgets with alerts, Docker deployment, demo data, rate limiting, the TypeScript and Python clients, OpenTelemetry intake, reconciliation with Anthropic, OpenAI and Google Cloud bills, cost by customer, feature, agent run, tag and outcome, CSV and FOCUS exports, a reporting API, budget notifications and checks, and audited price management. Milestone 10 added roles, an audit log, organizations and single sign-on. Milestone 12 rounded out the clients, and Milestone 13 has a billing ledger with plans, monthly usage charges, prepaid credit and plan usage limits; and a revenue minus AI API cost view, and optional draft invoicing through Stripe. See docs/ROADMAP.md, and docs/PRODUCT_UPGRADE_AUDIT.md for a verified list of what works and what doesn't."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    28,
+    17,
+    22
+   ],
+   [
+    "replace",
+    28,
+    29,
+    22,
+    23,
+    [
+     "- **One small API.** `POST /api/usage` with a per-project API key, or the TypeScript and Python clients, which read usage from OpenAI, Anthropic and Gemini responses, or OpenTelemetry traces with GenAI token attributes. Retries with the same `requestId` are safe; request IDs are unique per project."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    42,
+    23,
+    36
+   ],
+   [
+    "replace",
+    42,
+    48,
+    36,
+    37,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    50,
+    37,
+    39
+   ],
+   [
+    "replace",
+    50,
+    51,
+    39,
+    40,
+    [
+     "Open http://localhost:3000 and sign in. To record your first request and run the sample app, follow **docs/QUICKSTART.md**; for real usage, create an API key (Recording usage); remove the demo with `docker compose run --rm migrate npm run db:demo -- --remove`. For HTTPS, secrets and backups in production, see **docs/DEPLOYMENT.md**."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    40,
+    43
+   ],
+   [
+    "replace",
+    54,
+    55,
+    43,
+    44,
+    [
+     "What it doesn't do yet (the plan is in docs/PRODUCT_UPGRADE_PLAN.md):"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    57,
+    44,
+    46
+   ],
+   [
+    "replace",
+    57,
+    60,
+    46,
+    49,
+    [
+     "- **Usage is reported by your code**, through the API or the TypeScript and Python clients, or OpenTelemetry traces. Provider bills are compared with recorded costs (`npm run reconcile`), not imported as usage. The clients read usage from OpenAI, Anthropic and Gemini streams with `trackStream()` / `track_stream()`.",
+     "- **Budgets only hold for calls that ask first.** A reservation stops concurrent steps from overspending, but a provider call your app makes without reserving isn't stopped (see Reserving budget). The TypeScript and Python clients reserve with `reserveBudget()` / `reserve_budget()`.",
+     "- **Cost is broken down by project, provider, model, customer, user, feature, run and tag.** `metadata` is stored but not filterable. The billing ledger records what customers owe: plan fees and usage charges posted each month from the command line, adjustments, and prepaid credit applied against them. `/revenue` puts each customer's revenue next to their AI API cost. Draft invoices for it can be created in Stripe, in test mode by default; payments aren't recorded back yet."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    66,
+    49,
+    55
+   ],
+   [
+    "replace",
+    66,
+    76,
+    55,
+    65,
+    [
+     "|Layer|Choice|",
+     "|----------|---------------------------------------------|",
+     "|Framework|Next.js 16 (App Router), React 19|",
+     "|Language|TypeScript (strict)|",
+     "|Styling|Tailwind CSS v4|",
+     "|Database|PostgreSQL 17|",
+     "|ORM|Drizzle ORM + drizzle-kit migrations|",
+     "|Validation|Zod|",
+     "|Testing|Vitest|",
+     "|CI|GitHub Actions (lint, typecheck, test, build)|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    90,
+    65,
+    79
+   ],
+   [
+    "replace",
+    90,
+    101,
+    79,
+    80,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    105,
+    80,
+    84
+   ],
+   [
+    "replace",
+    105,
+    106,
+    84,
+    85,
+    [
+     "To run the whole stack in Docker instead, see the quick start. For production, including HTTPS, secrets, managed hosting (Vercel and hosted Postgres) and creating the first account, see **docs/DEPLOYMENT.md**."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    109,
+    85,
+    88
+   ],
+   [
+    "replace",
+    109,
+    130,
+    88,
+    109,
+    [
+     "|Script|Purpose|",
+     "|--------------------------|---------------------------------------------------------------------|",
+     "|`npm run dev`|Start the dev server|",
+     "|`npm run build`|Production build|",
+     "|`npm run lint`|ESLint|",
+     "|`npm run typecheck`|TypeScript type check|",
+     "|`npm test`|Run unit tests once|",
+     "|`npm run test:integration`|Run database integration tests (needs a migrated `DATABASE_URL`)|",
+     "|`npm run format:check`|Prettier check (`npm run format` to fix)|",
+     "|`npm run db:generate`|Generate a migration from `src/db/schema.ts`|",
+     "|`npm run db:migrate`|Apply pending migrations|",
+     "|`npm run db:seed`|Add sample data and model prices (safe to re-run; not for production)|",
+     "|`npm run db:demo`|Load demo projects and 90 days of usage (`-- --remove` deletes them)|",
+     "|`npm run api-key`|Create or revoke ingestion API keys (see Recording usage)|",
+     "|`npm run user`|Create, list and reset dashboard accounts (see Dashboard)|",
+     "|`npm run org`|Create and list organizations (see Dashboard)|",
+     "|`npm run billing`|Billing customers, plans, adjustments and reversals (docs/BILLING.md)|",
+     "|`npm run reprice`|Price usage that was stored without a price (see Recording usage)|",
+     "|`npm run reconcile`|Compare recorded costs with a provider's bill (see below)|",
+     "|`npm run budget-alerts`|Send budget notifications to a webhook, Slack or email (see below)|",
+     "|`npm run db:studio`|Open Drizzle Studio|"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    137,
+    109,
+    116
+   ],
+   [
+    "replace",
+    137,
+    207,
+    116,
+    117,
+    [
+     "…（70 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    219,
+    117,
+    129
+   ],
+   [
+    "replace",
+    219,
+    220,
+    129,
+    130,
+    [
+     "- **billing_customers** and **billing_ledger_entries**: who an organization bills, keyed by the usage `customerId`, and what they're billed, apart from provider cost. Entries are append-only: a trigger refuses updates and deletes, and corrections are reversing entries. See docs/BILLING.md."
+    ]
+   ],
+   [
+    "equal",
+    220,
+    227,
+    130,
+    137
+   ],
+   [
+    "replace",
+    227,
+    228,
+    137,
+    138,
+    [
+     "`npm run db:seed` loads prices from src/db/seed/data.ts. Each entry records its official source URL and the date it was checked. Both are stored with the price (`source_url`, `checked_on`) and shown on `/prices`. Re-running the seed fills them in for prices recorded before they were stored, without changing anything already recorded. Prices apply from the date they were checked, so earlier usage has no price. Claude Haiku 5.5 (over 100,000 tokens), Gemini 2.5 Pro (over 200K) and OpenAI's gpt-5.5, gpt-5.5-pro, gpt-5.4 and gpt-5.4-pro (over 272K, from 2026-11-08) are seeded with their long-prompt tiers. Gemini 2.5 Pro is deprecated: from 2026-12-01 Google routes its requests to Gemini 3.8 Flash and bills them at Gemini 3.8 Flash rates, so its price ends there and is followed by those rates (no long-prompt tier), including their 2027-01-01 rise. Claude models are seeded with their 5-minute and 1-hour cache-write rates, Anthropic's 50% Batch API price and its $10 per 1,000 web searches. Other providers' batch and web search prices aren't seeded, because they weren't verified, so their batch usage and web searches are kept unpriced until one is added. OpenAI's audio and realtime models (gpt-audio, gpt-audio-mini, gpt-realtime-2.1 and gpt-realtime-2.1-mini) are seeded with their text and audio rates, and its image models (gpt-image-2, gpt-image-1.5 and gpt-image-1-mini) with their text and image rates, from 2026-11-07. gpt-image-2 and gpt-image-1-mini list no text output rate, so their output rate is the image output rate. Flex and fast tiers are seeded as their own prices, from the day they were checked (2026-11-07): OpenAI Flex for gpt-5.4-mini and gpt-5.4-nano, OpenAI Fast for gpt-5.4-mini, gpt-4.1 and gpt-4o-mini, and Claude Opus 5.5 fast mode ($8 / $40, with the documented cache multipliers on top). OpenAI Flex is also seeded from 2026-11-08 for gpt-5.5, gpt-5.4 and gpt-5.4-pro, with their long-context rates; tiers that publish no long-context rate (Flex for gpt-5.5-pro, Fast for gpt-5.5 and gpt-5.4) aren't, so that usage is kept unpriced rather than billed at short rates. OpenAI's gpt-6 and gpt-5.6 models are seeded from 2026-11-08 at Standard, Flex and Fast, with long-context rates, 30-minute writes as the cache-write rate, 12-hour writes as the longer-lived rate and a 50% Batch price. Re-running the seed also fills in a missing 1-hour cache-write rate, batch multiplier or web search price on existing Claude prices, and a missing end date (such as Gemini 2.5 Pro's), never changing one already recorded. Re-running the seed never overwrites existing rows, so a database seeded before cache-write rates were added keeps its old rows; reset it, or add a new row with a later `effectiveFrom`, to pick them up."
+    ]
+   ],
+   [
+    "equal",
+    228,
+    238,
+    138,
+    148
+   ],
+   [
+    "replace",
+    238,
+    239,
+    148,
+    149,
+    [
+     "The usage is attributed too, so the cost breakdown has something to show:"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    245,
+    149,
+    155
+   ],
+   [
+    "replace",
+    245,
+    246,
+    155,
+    156,
+    [
+     "The Support Bot also records a `ticket_resolved` outcome per customer, one per three ticket replies, so the breakdown can show cost per resolved ticket."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    250,
+    156,
+    160
+   ],
+   [
+    "replace",
+    250,
+    251,
+    160,
+    161,
+    [
+     "- **Refuses to run when `NODE_ENV=production`** unless you pass `--allow-production` (see Deployment for a public demo)."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    273,
+    161,
+    183
+   ],
+   [
+    "replace",
+    273,
+    283,
+    183,
+    193,
+    [
+     "|Section|Pages|",
+     "|------------|--------------------------------------------------------------|",
+     "|Overview|`/overview`: spend today, this month and over 30 days|",
+     "|Usage|`/usage` events, `/spend` over time, `/breakdown` by attribute|",
+     "|Insights|`/changes` why spend changed, `/savings` savings estimates|",
+     "|Customers|`/revenue` revenue and AI API cost per customer|",
+     "|Budgets|`/projects`, with each project's budgets|",
+     "|Prices|`/prices`|",
+     "|Integrations|`/ingestion` ingestion health|",
+     "|Team|`/audit` audit log, for admins|"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    288,
+    193,
+    198
+   ],
+   [
+    "replace",
+    288,
+    293,
+    198,
+    203,
+    [
+     "|Role|Projects|Prices|",
+     "|--------|--------|----------------------------------|",
+     "|`admin`|Manage|Manage (default organization only)|",
+     "|`member`|Manage|Read|",
+     "|`viewer`|Read|Read|"
+    ]
+   ],
+   [
+    "equal",
+    293,
+    311,
+    203,
+    221
+   ],
+   [
+    "replace",
+    311,
+    320,
+    221,
+    230,
+    [
+     "|Effect|What it measures|",
+     "|------------------|---------------------------------------------------------------------------------------------------------------------------------|",
+     "|Volume|More or fewer requests, at the earlier mix of models and cost per request|",
+     "|Model mix|Requests moving between models, including models that started or stopped being used|",
+     "|Tokens per request|Longer or shorter requests on the same model, at its earlier cost per token|",
+     "|Input/output mix|On the same model, more or less of the tokens being output, which costs more than input|",
+     "|Cache rate|On the same model, more or less of the input read from or written to the prompt cache|",
+     "|Price|The model's rates in the price table at the end of each period|",
+     "|Other|What those rates don't model: long-prompt tiers, batch, audio, images, web searches, a price change during a period, and rounding|"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    327,
+    230,
+    237
+   ],
+   [
+    "replace",
+    327,
+    332,
+    237,
+    242,
+    [
+     "|Estimate|Assumption|",
+     "|-------------------------|------------------------------------------------------------------------------------------------------------|",
+     "|Batching|All of it went through the provider's Batch API, at the model's batch price; none for a model without one|",
+     "|Caching, per 10% of input|Each 10% of uncached input is read from the prompt cache instead, before the cost of writing it to the cache|",
+     "|Model choice|The same tokens on the cheapest other model from the same provider; no claim that it would do as well|"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    337,
+    242,
+    247
+   ],
+   [
+    "replace",
+    337,
+    338,
+    247,
+    248,
+    [
+     "`/revenue` shows, for a UTC month, each customer's revenue from the billing ledger, the AI API cost of their usage, and **revenue minus AI API cost**, with its share of revenue. That difference leaves out every other cost, so it's never called profit. Customers whose usage wasn't billed, and usage with no customer, are listed too, and unpriced usage is flagged. See Revenue and AI API cost."
+    ]
+   ],
+   [
+    "equal",
+    338,
+    367,
+    248,
+    277
+   ],
+   [
+    "replace",
+    367,
+    368,
+    277,
+    278,
+    [
+     " Each project's row also shows **this month's spend against its monthly budget**: the amount, the percentage used (rounded down, so it never shows 100% early), a meter, and how much is left or how far over it is. Projects without a budget show spend only. The budget arithmetic uses whole micro-dollars, so it's exact."
+    ]
+   ],
+   [
+    "equal",
+    368,
+    372,
+    278,
+    282
+   ],
+   [
+    "replace",
+    372,
+    373,
+    282,
+    283,
+    [
+     "- `/breakdown` groups spend **by customer, user, feature or run** over the last 7, 30 or 90 UTC days, for all projects or one. Each group shows its cost, share of the total, requests and average cost per request; grouped by run, that's the cost of a typical agent run. Usage sent without the field shows as **Not set**, and groups beyond the top 50 are summed into one **Other** row, so shares add up. Each group links to its usage events. Choose an outcome under **Cost per** (e.g. `ticket_resolved`) to add each group's outcome count and cost per outcome, and the overall cost per outcome; see Recording outcomes."
+    ]
+   ],
+   [
+    "equal",
+    373,
+    384,
+    283,
+    294
+   ],
+   [
+    "replace",
+    384,
+    385,
+    294,
+    295,
+    [
+     "The TypeScript and Python clients read usage from OpenAI, Anthropic and Gemini responses and report it for you, e.g. `tracker.track(openai.responses.create(...))`. Apps instrumented with OpenTelemetry can send their traces instead; see docs/OPENTELEMETRY.md. Anything else calls the API below. The quickstart has runnable scripts and a sample support agent that need no provider keys."
+    ]
+   ],
+   [
+    "equal",
+    385,
+    398,
+    295,
+    308
+   ],
+   [
+    "replace",
+    398,
+    399,
+    308,
+    309,
+    [
+     "Each key has a **scope**. `ingest`, the default, sends usage, outcomes and OpenTelemetry traces. `read` (`--scope read`) reads the reporting API and can send nothing. A key does only one, so a key embedded in an app that sends usage can't be used to read your cost data. Using a key in the wrong place returns a 403 `insufficient_scope`."
+    ]
+   ],
+   [
+    "equal",
+    399,
+    406,
+    309,
+    316
+   ],
+   [
+    "replace",
+    406,
+    418,
+    316,
+    317,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    418,
+    426,
+    317,
+    325
+   ],
+   [
+    "replace",
+    426,
+    427,
+    325,
+    326,
+    [
+     "Cached and cache-write tokens are part of `inputTokens`, so together they can't exceed it, and the longer-lived writes are part of the cache writes. Without `cacheWrite1hInputTokens`, every write is billed at the cache-write rate (5-minute for Anthropic, 30-minute for OpenAI). Batch usage for a model without a batch price is stored as unpriced (`no_batch_pricing`), never billed at the full price. Likewise, `flex` or `fast` usage for a model without a price for that tier is unpriced (`no_tier_pricing`), never billed at the standard price. Web searches for a model whose price has no web search rate are unpriced (`no_web_search_pricing`) rather than recorded as free, and audio tokens for a model whose price has no audio rates are unpriced (`no_audio_pricing`) rather than billed as text. See Unpriced usage. Uncached audio and image input together can't exceed the uncached input, cached audio and image the cached tokens, or audio and image output the output. Unknown fields, including `projectId`, are rejected. The cost is computed on the server with the price in effect at `occurredAt`."
+    ]
+   ],
+   [
+    "equal",
+    427,
+    430,
+    326,
+    329
+   ],
+   [
+    "replace",
+    430,
+    441,
+    329,
+    340,
+    [
+     "|Status|`error.code`|Meaning|",
+     "|------|---------------------|---------------------------------------------------------------------------------------|",
+     "|201||Stored; the body is `{ \"event\": { ..., \"costUsd\": \"0.006000\" }, \"replayed\": false }`|",
+     "|200||Retry of a stored request; returns the original event with `\"replayed\": true`|",
+     "|400|`invalid_json`|Body isn't valid JSON|",
+     "|400|`invalid_payload`|Validation failed; see `error.fieldErrors`|",
+     "|401|`unauthorized`|Missing, malformed, unknown or revoked API key|",
+     "|404|`project_not_found`|The key's project no longer exists|",
+     "|409|`request_id_conflict`|This `provider` and `requestId` were already used in this project for different usage|",
+     "|413|`payload_too_large`|Body is over 64 KB|",
+     "|429|`rate_limited`|Over 30 invalid API keys from this IP in 15 minutes; wait for the `Retry-After` seconds|"
+    ]
+   ],
+   [
+    "equal",
+    441,
+    478,
+    340,
+    377
+   ],
+   [
+    "replace",
+    478,
+    479,
+    377,
+    378,
+    [
+     "**Download FOCUS** on the usage page exports the same filtered events as FOCUS 1.4 Cost and Usage data, the FinOps Foundation's format for cost data, which FinOps tools import. Each request becomes one row per token type it used (input, cached input, cache writes, 1-hour cache writes, output), audio input, cached audio input, audio output, image input, cached image input and image output, plus one for its web searches if it ran any, priced at the rate in effect when it occurred."
+    ]
+   ],
+   [
+    "equal",
+    479,
+    482,
+    378,
+    381
+   ],
+   [
+    "replace",
+    482,
+    490,
+    381,
+    389,
+    [
+     "|Column|Value|Why|",
+     "|----------------------------------------|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`BilledCost`, `EffectiveCost`|`0`|FOCUS reserves them for amounts the invoicing provider bills, and requires 0 from anyone else, so a tool merging this file with the provider's own bill doesn't count the spend twice|",
+     "|`ListCost`|the estimate|`ListUnitPrice` × `PricingQuantity`, exactly: the stored per-million-token rate times the tokens in millions (`PricingUnit` `1000000 Tokens`). A request's rows add up to its recorded cost, which is rounded to the micro-dollar, so they can differ from it by less than $0.0000005|",
+     "|`ContractedCost`|`0`|No negotiated rate is known, so `ContractedUnitPrice` is left out, and FOCUS then requires `ContractedCost` to equal `BilledCost`|",
+     "|`BillingAccountId`, `BillingAccountName`|`unknown` placeholders|They name your account with the provider, which the tracker never sees|",
+     "|`SubAccountId`, `SubAccountName`|the project|`SubAccountType` is `Project`|",
+     "|`Tags`|attribution and tags|A JSON object of `customerId`, `userId`, `feature` and `runId`, where set, and the event's free-form tags|"
+    ]
+   ],
+   [
+    "equal",
+    490,
+    508,
+    389,
+    407
+   ],
+   [
+    "replace",
+    508,
+    509,
+    407,
+    408,
+    [
+     "The TypeScript and Python clients send outcomes too: `tracker.recordOutcome({ name, outcomeId })` and `tracker.record_outcome(name, outcome_id=...)`."
+    ]
+   ],
+   [
+    "equal",
+    509,
+    529,
+    408,
+    428
+   ],
+   [
+    "replace",
+    529,
+    545,
+    428,
+    429,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    545,
+    548,
+    429,
+    432
+   ],
+   [
+    "replace",
+    548,
+    549,
+    432,
+    433,
+    [
+     "- **The customer's plan:** with a `customerId`, `customer` checks the monthly usage limit of their billing plan against their spend and holds this UTC month in every project of the organization, with `plan` naming it. A customer with no plan, or a plan without a limit, is never denied by it. `customer` is `null` without a `customerId`."
+    ]
+   ],
+   [
+    "equal",
+    549,
+    551,
+    433,
+    435
+   ],
+   [
+    "replace",
+    551,
+    552,
+    435,
+    436,
+    [
+     "- **A check reserves nothing.** It sees recorded usage and unexpired reservations (reported as `heldUsd`), so steps checked at the same moment can each be allowed. To stop that, reserve instead."
+    ]
+   ],
+   [
+    "equal",
+    552,
+    553,
+    436,
+    437
+   ],
+   [
+    "replace",
+    553,
+    554,
+    437,
+    438,
+    [
+     "- **From the clients:** `tracker.checkBudget({ estimatedCostUsd, runId, customerId })` in TypeScript and `tracker.check_budget(estimated_cost_usd, run_id=..., customer_id=...)` in Python. A scoped tracker's run and customer IDs are used by default."
+    ]
+   ],
+   [
+    "equal",
+    554,
+    581,
+    438,
+    465
+   ],
+   [
+    "replace",
+    581,
+    585,
+    465,
+    466,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    585,
+    600,
+    466,
+    481
+   ],
+   [
+    "replace",
+    600,
+    608,
+    481,
+    482,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    608,
+    610,
+    482,
+    484
+   ],
+   [
+    "replace",
+    610,
+    611,
+    484,
+    485,
+    [
+     " `status` is `warning` at 80% and `over` at 100%. Amounts are exact decimal strings, and `usedPercent` is `null` for spend against a zero budget. With `BUDGET_ALERT_WEBHOOK_SECRET` set, an `x-cost-tracker-signature: t=<unix seconds>,v1=<hex>` header carries an HMAC-SHA256 of `<t>.<raw body>` under the secret. Compare it in constant time, and reject old timestamps to stop replays."
+    ]
+   ],
+   [
+    "equal",
+    611,
+    614,
+    485,
+    488
+   ],
+   [
+    "replace",
+    614,
+    615,
+    488,
+    489,
+    [
+     "- **Forecast over budget** (`spend.forecast_over_budget`): a project that isn't over its monthly budget yet, but whose month-end forecast reaches it. Sent once per project, month and destination, and not for a project with fewer than 7 full days of usage history, whose forecast isn't reliable yet. The body has `period` (the month), `spentUsd`, `projectedUsd`, `budgetUsd` and `lastDay`."
+    ]
+   ],
+   [
+    "equal",
+    615,
+    623,
+    489,
+    497
+   ],
+   [
+    "replace",
+    623,
+    624,
+    497,
+    498,
+    [
+     "Recorded costs are calculated from token counts and the stored prices. To check them against what Anthropic or OpenAI actually billed, compare them with the provider's cost report: Anthropic's cost report or OpenAI's costs API."
+    ]
+   ],
+   [
+    "equal",
+    624,
+    640,
+    498,
+    514
+   ],
+   [
+    "replace",
+    640,
+    641,
+    514,
+    515,
+    [
+     "Google Cloud has no billing API to call: it exports billing to BigQuery, which you set up on the billing account. Find the service your Gemini usage is billed under, since it depends on how you call it:"
+    ]
+   ],
+   [
+    "equal",
+    641,
+    653,
+    515,
+    527
+   ],
+   [
+    "replace",
+    653,
+    661,
+    527,
+    528,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    661,
+    677,
+    528,
+    544
+   ],
+   [
+    "replace",
+    677,
+    682,
+    544,
+    545,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    682,
+    683,
+    545,
+    546
+   ],
+   [
+    "replace",
+    683,
+    685,
+    546,
+    547,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "4f5336e595db+2": {
+  "fn": "Ranxy/metaxisdata",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "> **Language / 语言:** English | 中文"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    12,
+    1,
+    12
+   ],
+   [
+    "replace",
+    12,
+    14,
+    12,
+    14,
+    [
+     " searchable registry. Every table and column carries its DDL and a history of",
+     " what changed."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    17,
+    15,
+    17,
+    [
+     " materialized-view, and manual SQL, precise down to the column. Expand the",
+     " graph by depth, or follow a single column's trail."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     " Browse jobs, datasets, and events, with links back to Airflow."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     " the metadata you select, with caching."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    27,
+    22,
+    27,
+    [
+     " accepted values, ranges, regex, length, referential integrity, cross-column,",
+     " freshness, custom SQL, expressions, standard codes), scheduled and manual runs,",
+     " a problem ledger with inbox notifications, coverage and a quality score,",
+     " column profiles and semantic labels, LLM-assisted rule drafts and failure",
+     " explanations, and a weekly digest. (docs/data-quality.md)"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    30,
+    28,
+    30,
+    [
+     " channels — webhook, DingTalk, WeCom, Feishu and SMTP email — with quiet hours",
+     " and owner/team routing rules. (docs/notifications.md)"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    30,
+    31
+   ],
+   [
+    "replace",
+    31,
+    33,
+    31,
+    33,
+    [
+     " access-policy editor. Audited operations are recorded in an audit log that is",
+     " kept forever."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    33,
+    34
+   ],
+   [
+    "replace",
+    34,
+    38,
+    34,
+    38,
+    [
+     " (cli/README.md) gives an agent one JSON document per",
+     " command, stable exit codes, and device login. With MCP enabled, the registry",
+     " is also available as read-only tools behind an OAuth 2.1 authorization server",
+     " (docs/mcp.md)."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    63,
+    38,
+    63
+   ],
+   [
+    "replace",
+    63,
+    64,
+    63,
+    64,
+    [
+     " *Settings* → *General*, so only administrators can create users."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    64,
+    65
+   ],
+   [
+    "replace",
+    65,
+    67,
+    65,
+    67,
+    [
+     " in a reverse proxy in front of it, and set `METAXISDATA_TRUSTED_PROXIES` to",
+     " the proxy's address so the audit log records clients instead of the proxy."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    67,
+    68
+   ],
+   [
+    "replace",
+    68,
+    70,
+    68,
+    70,
+    [
+     " database dump alone cannot decrypt the credentials stored for your instances",
+     " — and keep that key safe: losing it leaves the stored credentials unreadable."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    70,
+    71
+   ],
+   [
+    "replace",
+    71,
+    73,
+    71,
+    73,
+    [
+     " — it requires the workspace external URL — then follow",
+     " docs/mcp.md."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    73,
+    76
+   ],
+   [
+    "replace",
+    76,
+    77,
+    76,
+    77,
+    [
+     "> yourself — is docs/deploy.md."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    77,
+    80
+   ],
+   [
+    "replace",
+    80,
+    81,
+    80,
+    81,
+    [
+     "docker-compose.yml starts PostgreSQL and the server"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    92,
+    81,
+    92
+   ],
+   [
+    "replace",
+    92,
+    93,
+    92,
+    93,
+    [
+     "docs/local-trial.md."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    97,
+    93,
+    97
+   ],
+   [
+    "replace",
+    97,
+    98,
+    97,
+    98,
+    [
+     "`metaxisdata_demo`, brings up a"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    113,
+    98,
+    113
+   ],
+   [
+    "replace",
+    113,
+    114,
+    113,
+    114,
+    [
+     "demo's own README."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    120,
+    114,
+    120
+   ],
+   [
+    "replace",
+    120,
+    121,
+    120,
+    121,
+    [
+     "Metadata browser: the table list of a synced database, with row counts, sizes, columns and indexes"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    125,
+    121,
+    125
+   ],
+   [
+    "replace",
+    125,
+    126,
+    125,
+    126,
+    [
+     "Lineage graph: a table's upstream and downstream edges, expanded down to column-level field trails"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    130,
+    126,
+    130
+   ],
+   [
+    "replace",
+    130,
+    132,
+    130,
+    132,
+    [
+     " single-page application embedded in the image — on port 8083. When MCP is",
+     " enabled, the MCP endpoint is served on the same port."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    132,
+    133
+   ],
+   [
+    "replace",
+    133,
+    134,
+    133,
+    134,
+    [
+     " startup, so a fresh database needs nothing but a connection URL."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    134,
+    135
+   ],
+   [
+    "replace",
+    135,
+    136,
+    135,
+    136,
+    [
+     " maintenance tasks."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    143,
+    136,
+    143
+   ],
+   [
+    "replace",
+    143,
+    152,
+    143,
+    144,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    167,
+    144,
+    159
+   ],
+   [
+    "replace",
+    167,
+    168,
+    159,
+    160,
+    [
+     "AGENTS.md."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    174,
+    160,
+    166
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

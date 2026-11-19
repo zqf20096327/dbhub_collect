@@ -3070,5 +3070,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5f1652dc39d9": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL+pgvector 的代码库索引与 RAG 问答开发者平台",
+   "review": "DevIntel AI 是一个代码智能平台，将 GitHub 代码库用 Tree-sitter 按语法单元切块、嵌入后存入 PostgreSQL（pgvector）做检索增强问答，并支持代码健康评分、Mermaid 架构图生成与 PR 自动审查。系统为 monorepo，含 FastAPI 后端、React 前端和 VS Code 扩展，面向需要查询和分析代码库的开发者。本地运行需 Python 3.11、Node.js 18+、PostgreSQL 16 及 Gemini 或 OpenAI API 密钥。",
+   "highlights": [
+    "AST 感知分块索引，支持 Python、TypeScript、Go、Rust、Java 等 11 种语言，解析失败时回退到按行切分",
+    "基于 PostgreSQL pgvector 的余弦相似度检索，可选结合 BM25 与 RRF 的混合检索，默认 Gemini 嵌入（768 维），可切换 OpenAI",
+    "通过 PostgreSQL 任务表加 SELECT FOR UPDATE SKIP LOCKED 实现异步索引（最多 3 个并发 worker），并提供 PR 结构化审查与带语法校验重试的自动修复补丁"
+   ],
+   "use_cases": [
+    "连接 GitHub 仓库后通过流式聊天或 VS Code 扩展对代码库进行检索问答与解释",
+    "生成仓库代码健康评分（复杂度、文档、可维护性、测试、安全等维度）与 Mermaid 架构依赖图",
+    "自动解析 PR diff 生成按严重级别分类的审查意见，并对健康问题生成补丁分支与 Pull Request"
+   ]
+  },
+  "sha": "5f1652dc39d9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

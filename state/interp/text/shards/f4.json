@@ -3195,5 +3195,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9463026650e5": {
+  "identity": {
+   "one_liner": "聚合加拿大联邦与 82 个地方开放数据门户的双语目录与只读 API",
+   "review": "CanQuery 将 open.canada.ca 与 82 个市/区域/地方开放数据门户的目录元数据聚合到一个英法双语网站和 API 中，收录超过 64,000 个数据集和 260,000 个文件。它把支持的 CSV/Excel 文件按需载入 PostgreSQL 供搜索、筛选、图表和导出，源页面与许可证保持挂接。技术栈为 Express 5、React 19、PostgreSQL 16 与 PostGIS，运行需 Node.js 22。该项目为独立开发，非加拿大政府官方服务。",
+   "highlights": [
+    "通过 CKAN、ArcGIS Hub、Socrata、Opendatasoft 等适配器同步 83 个门户的目录元数据，支持英法全文检索与多维过滤",
+    "将 CSV/XLSX 文件按需载入 PostgreSQL 快照供查询、图表与导出，图表由基于规则的引擎按列类型校验生成",
+    "提供无需密钥的 /api/v1 只读 API，以统一 JSON 结构返回数据集、行、聚合与地图要素，配有 OpenAPI 3.1 文档"
+   ],
+   "use_cases": [
+    "需要跨联邦与市级门户统一检索加拿大开放数据集的研究或数据分析场景",
+    "在浏览器或通过 API 对 CSV/Excel 文件做表格查询、筛选、图表与导出",
+    "浏览按 Statistics Canada 2021 SGC 地理单元组织的各地数据页面与主题指南"
+   ]
+  },
+  "sha": "9463026650e5",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3f2e47638d44": {
+  "identity": {
+   "one_liner": "专为 TiDB 编写的异步纯 Rust SQL 工具集，提供编译期查询检查",
+   "review": "tisqlx 是一个从零编写的 Rust SQL 工具包，专用于 TiDB，运行在 tokio 与 rustls 之上，面向使用 TiDB 8.5+ 的 Rust 开发者。它提供 query! 系列宏的编译期检查、TiDB 原生事务（悲观/乐观模式、stale read、写冲突自动重试）、记录 dirty 状态的非事务性 DDL 迁移、跨多 TiDB 服务器的连接池，以及按服务器包大小限制分批的 BulkInsert。旧版本或非 TiDB 服务器默认在连接时被拒绝，可用 require-tidb=false 绕过但未测试。",
+   "highlights": [
+    "提供 query!/query_as!/query_scalar! 等编译期检查宏，可对在线 TiDB 或 tisqlx prepare 生成的离线数据校验",
+    "支持 TiDB 原生事务：按事务指定悲观/乐观模式、stale read（AS OF TIMESTAMP）、因果一致性、写冲突与死锁时自动重试整个事务",
+    "连接池可分布在多个 TiDB 服务器上，按连接数最少选择服务器并跳过故障节点；BulkInsert 按数据包与事务大小限制分批写入"
+   ],
+   "use_cases": [
+    "使用 TiDB 8.5+ 作为数据库并需要编译期 SQL 校验的 Rust 项目",
+    "需要在多 TiDB 节点间分配连接并处理节点故障的部署环境",
+    "需要批量写入 TiDB 数据、或在事务中使用 stale read / 资源组等 TiDB 特性的场景"
+   ]
+  },
+  "sha": "3f2e47638d44",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

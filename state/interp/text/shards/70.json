@@ -3070,5 +3070,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bce954791d3b": {
+  "identity": {
+   "one_liner": "基于 database/sql 接口的 Go 语言 SQLite3 驱动",
+   "review": "go-sqlite3 是一个符合 Go 内置 database/sql 接口的 SQLite3 驱动。使用者是需要在 Go 应用中读写 SQLite 数据库的开发者。它是 CGO 包，构建时需设置 CGO_ENABLED=1 并具备 gcc 编译器。连接通过 DSN 字符串配置，支持 SQLite 原生 PRAGMA 及驱动附加选项；此外可通过构建标签（build tags）选择性启用 fts5、json1、icu 等编译期特性。",
+   "highlights": [
+    "符合 Go 内置 database/sql 接口，通过 go get 安装",
+    "支持 DSN 连接字符串，可配置 journal_mode、busy_timeout、外键、用户认证等选项",
+    "通过构建标签启用 fts5、json1、icu、math functions、preupdate hook 等编译期扩展"
+   ],
+   "use_cases": [
+    "在 Go 应用中通过 database/sql 标准接口读写 SQLite 数据库文件",
+    "使用 DSN 配置 WAL 日志模式、忙超时、事务锁行为等连接参数",
+    "按需构建包含全文检索（fts5）、JSON 函数、ICU 等特性的定制 SQLite 驱动"
+   ]
+  },
+  "sha": "bce954791d3b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "527925473fb0": {
+  "identity": {
+   "one_liner": "Ragnarok Online 3 私服模拟器，基于 C#/.NET，单文件启动服务器与游戏",
+   "review": "RO3Emu 是一个开源的《仙境传说3》服务器模拟器，采用 C#/.NET 10 编写，客户端通信使用 protobuf。它通过单个 RO3Emu.exe 定位游戏目录并启动服务器与游戏，支持 Windows 一键运行及 Linux/VPS 脚本托管；不提供游戏文件，需自备客户端或从 Genesis 更新服务器下载并校验签名。已实现世界探索、战斗、副本、公会、攻城战等功能，采用 GPL-3.0 协议。",
+   "highlights": [
+    "提供单文件 RO3Emu.exe，可定位游戏目录并启动服务器与游戏客户端，支持 host/join 命令进行联机",
+    "已实现世界地图、战斗与 Boss、剧情副本、角色成长、公会、Survivor Battle、War of Emperium 及网页面板",
+    "支持 Windows 与 Linux/VPS 托管，外部联机需转发 TCP 5380、20000、33100 端口，兼容 Genesis 客户端 2026.10.30.1"
+   ],
+   "use_cases": [
+    "在本地或局域网内自建 RO3 服务器，与朋友联机游玩",
+    "在 Linux VPS 或家庭服务器上托管数百人规模的私服",
+    "查阅未实现的机制在代码中的标注，用于客户端协议研究"
+   ]
+  },
+  "sha": "527925473fb0",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5bef299fd3fa": {
+  "identity": {
+   "one_liner": "自托管的 theCrag 攀岩日志分析仪表盘，基于 Docker 部署",
+   "review": "Crag Stats 是一个自托管的开源（AGPL-3.0）攀岩日志分析面板，读取用户 theCrag 日志并生成等级金字塔、CPR 时间线、训练负荷、Eddington 数字、徽章、世界地图等统计。数据存储在本机 SQLite，通过 theCrag API 或 CSV 导入同步。面向有 theCrag 账户的攀岩者；自动同步需要 supporter API key，无此权限可改用 CSV 导入。部署方式为 Docker（提供 amd64/arm64 镜像），支持可选密码访问与多语言界面。",
+   "highlights": [
+    "支持 theCrag API 每日全量同步（需 supporter Logbook Read API key），以及 CSV 手动导入作为替代",
+    "提供等级金字塔、CPR 时间线、训练负荷、Eddington 数字、首攀记录、徽章、天气条件、世界地图等分析卡片，仪表盘可自定义",
+    "提供 Docker 多架构镜像（amd64/arm64），基于 distroless 运行时，启动时自动执行数据库迁移；支持英语、德语、法语、西班牙语、意大利语界面"
+   ],
+   "use_cases": [
+    "在本地浏览器中查看和分析自己的 theCrag 攀岩日志统计",
+    "无 supporter API 权限的攀岩者通过 CSV 导入生成离线统计面板",
+    "生成可嵌入博客或论坛的 SVG 统计卡片，以及可离线查看的只读快照"
+   ]
+  },
+  "sha": "5bef299fd3fa",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d07ffa8a66bd": {
+  "identity": {
+   "one_liner": "Windows 桌面版 TikTok 下载器，经 TikWM 获取原画质无水印内容",
+   "review": "TikVortex 是基于 Ez-TikTok-Downloader 引擎的 Windows 桌面应用（GPL v3，Python 3.10+），用于下载 TikTok 视频、图片轮播和高光内容，通过 TikWM 服务获取原画质文件，原文件未就绪时回退到压缩版本。内置下载库、按小时到每天间隔检查新帖的监视列表，界面基于 PySide6 构建，支持便携式部署。",
+   "highlights": [
+    "支持粘贴链接、短链接、帖子 ID、@用户名、创作者分组及 .txt/.url 文件，支持拖放与并行下载、限速、暂停/恢复",
+    "内置下载库提供搜索、排序、筛选、多选批量操作；监视列表按设定间隔自动检查并下载新帖",
+    "所有文件存放在应用目录旁，设置、缓存与 profiles 文件夹随目录整体便携"
+   ],
+   "use_cases": [
+    "批量或定时保存 TikTok 视频、图片轮播与高光内容到本地",
+    "按创作者分组整理下载内容，并将发布日期写入 MP4/JPEG 元数据以便照片应用按时间排序",
+    "macOS/Linux 用户可从源码运行（python3 -m tikvortex），或使用命令行完成下载任务"
+   ]
+  },
+  "sha": "d07ffa8a66bd",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d34c22018bf0": {
+  "identity": {
+   "one_liner": "基于React/Laravel/Python NLP的药房管理与药物冲突检查系统",
+   "review": "PharmaHistory 是一个面向药房的全栈管理系统，将患者14位身份证号与其用药历史、过敏记录关联，通过 Python 微服务（TF-IDF 与余弦相似度）实时检测药物相互作用、成分重复与过敏冲突，并推荐同类替代药品。同时提供 POS 收银、电子开票与覆盖 25,000+ 埃及药品的库存目录管理，前端部署于 Vercel，数据库使用 TiDB Cloud。",
+   "highlights": [
+    "通过 Python NLP 微服务实时检测药物相互作用、成分重复与过敏冲突，并基于 TF-IDF 与余弦相似度推荐同类替代药品",
+    "以14位身份证号关联患者电子用药史，追踪慢性用药、过敏记录与副作用史",
+    "内置 POS 与电子开票功能，支持库存实时校验、自动扣减与低库存提醒"
+   ],
+   "use_cases": [
+    "药房日常配药前核对患者过敏史与药物相互作用",
+    "药店 POS 销售结算与电子收据打印",
+    "药品库存与目录管理、低库存监控"
+   ]
+  },
+  "sha": "d34c22018bf0",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

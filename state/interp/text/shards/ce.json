@@ -3361,5 +3361,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "510ad7f11681": {
+  "identity": {
+   "one_liner": "贝壳找房 DBA 团队开源的 MySQL ROW 格式 binlog 解析与 SQL 回滚生成工具",
+   "review": "lightning 是贝壳找房 DBA 团队用 Go 开发的 MySQL binlog 转换工具，可将 ROW 格式 binlog 转换为原始 SQL 或闪回 SQL，并支持统计分析与 lua 插件二次开发。要求 BINLOG_FORMAT 为 ROW 且 BINLOG_ROW_IMAGE 为 FULL；部分涉及旧列定义的 ALTER 闪回还原尚未实现。提供 Windows/Linux/Mac 二进制及源码编译两种安装方式，配置采用 YAML 格式。",
+   "highlights": [
+    "支持将 ROW 格式 binlog 转换为原始 SQL、闪回 SQL，并对 binlog 进行统计分析",
+    "支持 lua 定制插件进行二次开发，提供跨平台二进制文件，运行无其他依赖",
+    "提供 schema-file 表结构快照功能，可从本地文件加载库表信息而不必连接 MySQL"
+   ],
+   "use_cases": [
+    "DELETE/UPDATE 未加 WHERE 条件等误操作后需要生成回滚语句快速恢复数据",
+    "业务流量异常或从库同步延迟时，统计 binlog 排查哪些表更新频繁",
+    "主从切换后新主库丢失数据的修复，或从 binlog 中定位特定表数据修改时间"
+   ]
+  },
+  "sha": "510ad7f11681",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e4134db5510": {
+  "identity": {
+   "one_liner": "本地运行的土耳其BIST股票、TEFAS基金、黄金与外汇投资组合追踪应用",
+   "review": "Yarmak 是一个在个人电脑上通过 Docker 运行的投资组合追踪应用，覆盖 Borsa İstanbul 股票、TEFAS 基金、克黄金和外汇。用户手动录入交易，应用计算含佣金的加权平均成本、已实现/未实现盈亏、股息及组合价值历史。不连接银行或券商账户，数据存于本地 Docker volume；价格从 TEFAS、Yahoo Finance 等公开页面抓取，无官方 API 契约，源格式变更可能导致抓取失效。",
+   "highlights": [
+    "支持股票、基金、克黄金与外汇在同一组合内，计算含佣金加权平均成本、已实现/未实现盈亏与股息扣缴",
+    "后台定时更新价格：交易日工作时段每 5 分钟，TEFAS 基金每日三个时段；Next.js 服务端抓取 Yahoo Finance 与 Truncgil 数据并短时缓存",
+    "提供 /v1 REST API（HttpOnly Cookie 认证）、Swagger 文档、价格警报、TL/USD 视图与每日组合价值记录"
+   ],
+   "use_cases": [
+    "手动记录 BIST/TEFAS/黄金/外汇交易并本地追踪组合成本与盈亏的个人投资者",
+    "需要本地私有部署、不连接券商账户的组合记录与历史收益查看",
+    "通过 Swagger 记录的 API 进行二次开发或学习 Go+Next.js+PostgreSQL 全栈项目结构"
+   ]
+  },
+  "sha": "9e4134db5510",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

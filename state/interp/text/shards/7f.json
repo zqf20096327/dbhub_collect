@@ -2945,5 +2945,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9d5b2f6b16b5": {
+  "identity": {
+   "one_liner": "面向 AI 代理的开源数据库与工作区，写入以变更请求形式留痕",
+   "review": "Busabase 是 MIT 许可的开源数据库与工作区，供 AI 代理与人类共享结构化记录、文档、技能和应用。代理通过 Agent Skill、MCP、OpenAPI、CLI 或 SDK 连接，其写入以带字段级 diff 与历史记录的 Change Request 提交，权限决定立即合并或等待人工审核。本地版内嵌 PGlite，免账号即可运行，数据存于 ~/.busabase/data。",
+   "highlights": [
+    "单一工作树内包含 Bases（类型化记录）、Docs、Files、Skills、AirApps、Whiteboards、Workflows 等节点类型",
+    "代理写入以 Change Request 形式提交，包含消息、字段级 diff、作者与历史，权限控制是否需审核",
+    "支持 Agent Skill、MCP、OpenAPI/CLI、TypeScript 与 Python SDK、Email SDK 及 ACP 会话等多种连接方式"
+   ],
+   "use_cases": [
+    "本地自托管：npx busabase@latest server 启动，内嵌 PGlite 与本地文件存储，无需数据库或账号",
+    "跨代理共享记忆与技能：多个代理读写同一工作区的记录、文档和 SKILL.md 手册",
+    "通过 busabase-cli install 安装模板（含数据、应用与代理手册）搭建 CRM、内容管理、数据集标注等工作区"
+   ]
+  },
+  "sha": "9d5b2f6b16b5",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3694ad2c264c": {
+  "identity": {
+   "one_liner": "Neo4j 数据库迁移与重构工具，以受控可重复方式运行 Cypher 迁移脚本",
+   "review": "Neo4j-Migrations 是面向 Neo4j 的数据库迁移与重构工具集，设计受 Flyway 启发。它为应用、命令行和构建工具提供统一的接口，用于跟踪、管理和应用数据库变更；迁移历史以子图形式存储在数据库内。除 Cypher 脚本外，Core API 还支持以 Java 类定义迁移，并支持多数据库与身份模拟等企业特性。",
+   "highlights": [
+    "支持以 Cypher 脚本和 Java 类两种形式定义迁移，迁移历史以子图形式记录在数据库中",
+    "提供 CLI（含 macOS/Linux/Windows 原生二进制）、Maven 插件、Core API、Spring Boot Starter 和 Quarkus 扩展多种使用方式",
+    "构建于官方 Neo4j Java Driver 之上，支持 Neo4j 3.5、4.1–5 及 Aura 版本，仅依赖该驱动和 ClassGraph"
+   ],
+   "use_cases": [
+    "需要版本化跟踪和应用 Neo4j 图数据库 schema 变更的团队开发流程",
+    "通过 CLI 或 Maven 等构建工具在部署流水线中对一个或多个 Neo4j 数据库执行迁移",
+    "在 Spring Boot 或 Quarkus 应用中集成数据库迁移能力"
+   ]
+  },
+  "sha": "3694ad2c264c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb20622ac324": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件：写入经审批门落本地 SQLite，冻结快照注入下次会话",
+   "review": "这是面向 DeepSeek Harness 的社区插件，提供类型安全的 ctx.memory 接缝、零依赖 SQLite 提供方（node:sqlite、WAL、权限 0600）、memory 工具与只读 MCP 服务器。写入走 writePolicy 审批门并留审计行，快照在会话首次组装提示时冻结注入 systemPrompt。安装用 dsh plugin add，无构建步骤。注意：宿主兼容 dsh-v0.2.2-rc.4，检索默认为大小写不敏感子串匹配。",
+   "highlights": [
+    "每条写路径（add/replace/remove/seed）强制经过服务内部审批门，writePolicy 支持 ask/auto/off，被拒写入同样落审计行",
+    "user/agent 两轨 × user-global/workspace 两层 × 按 agentPreset 隔离，每轨每层有硬字符预算（默认 user 2000 / agent 4000），写满返回结构化错误而非截断",
+    "附带只读 stdio MCP 服务器 dsh-memento-mcp（NDJSON 承载 JSON-RPC 2.0），外部客户端可检索记忆库与统计"
+   ],
+   "use_cases": [
+    "需要让模型跨会话记住用户事实与环境约定，且每次写入需经人工审批并保留可重建审计链的场景",
+    "通过 /memory 命令或 Web 只读面板浏览、导出、导入条目，或用内置适配器转换 mem0、Hermes memory.md、CLAUDE.md 等外部格式",
+    "在 Claude、Codex 等 MCP 客户端中通过只读 MCP 服务器检索同一本地记忆库"
+   ]
+  },
+  "sha": "eb20622ac324",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dc0e441884ba": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的持久化记忆 MCP 服务器，仅含 5 个动词，本地 SQLite/可选 Postgres 存储。",
+   "review": "Krusch Context MCP 为 Cursor、Claude Code 等 MCP 客户端提供跨会话的持久记忆，用于存取架构决策、不变量与经验教训。核心机制包括 5 个规范动词（retrieve/remember/revise/nudge/health）、5 类封闭记忆分类、近似重复检测与基于 SHA-256 行区间的来源漂移校验。默认用 Node.js 22+ 内置 node:sqlite 本地运行，可选 PostgreSQL 16 + pgvector；README 自述的基准结果尚无第三方复现。",
+   "highlights": [
+    "提供 5 个 MCP 动词（retrieve/remember/revise/nudge/health），模式约占 350 个 token",
+    "记忆写入强制使用 decision/invariant/bug/lesson/blocker 五类封闭分类，相似度 ≥0.85 时提出 supersede 建议",
+    "支持 provenance SHA-256 行区间锚定，检索时校验代码漂移并自动修正或标记 [DRIFTED]"
+   ],
+   "use_cases": [
+    "为 Cursor、Claude Code、Windsurf、Antigravity 等编码代理跨会话保存项目规则与架构决策",
+    "提交前用 nudge 将待审 diff 对照活跃项目不变量进行检查",
+    "多机多代理协作时切换到 PostgreSQL + pgvector 集中持久化"
+   ]
+  },
+  "sha": "dc0e441884ba",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "77d89594cc28": {
+  "identity": {
+   "one_liner": "Go 编写的 WhatsApp LLM 机器人，带全局人物记忆与可编辑人设。",
+   "review": "wagoya 是用 Go 实现的 WhatsApp 机器人，通过 whatsmeow 以伴随设备方式接入，支持私聊与群内 @提及。核心机制是按 WhatsApp 身份（LID/号码）键控的全局人物档案：事实由模型经校验工具写入，带来源与信任等级，用 SQLite FTS5 加嵌入按需检索，另含人设版本历史、提醒任务、MCP 客户端与网络搜索。部署为无 CGO 的单静态二进制，私聊仅限白名单号码，模型支持 anthropic/openrouter/openai 兼容接口。",
+   "highlights": [
+    "以 WhatsApp LID/号码为键的全局人物记忆，事实带来源与信任等级，经 SQLite FTS5 与嵌入检索",
+    "单一全局人设存储于 SQLite 并带版本历史，由所有者以自然语言修改",
+    "支持 anthropic/openrouter/openai 兼容三种模型提供方，含 MCP 客户端与本地 web_search/read_page 工具"
+   ],
+   "use_cases": [
+    "将备用 WhatsApp 号码接入为群聊中被 @提及触发的问答/助手机器人",
+    "为白名单用户提供跨群的长期人物记忆、提醒与待办管理",
+    "通过 MCP 与 http_request 工具让模型调用外部 HTTP API 与工具服务"
+   ]
+  },
+  "sha": "77d89594cc28",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

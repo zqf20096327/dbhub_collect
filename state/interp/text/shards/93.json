@@ -3251,5 +3251,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7da1aeeac5fa": {
+  "identity": {
+   "one_liner": "将 API 映射为 Postgres 外部表的 Steampipe 外部数据包装器（FDW）",
+   "review": "这是一个 Postgres 扩展，通过 gRPC 调用 Steampipe 插件把云服务 API 转换成外部表，使 SQL 查询能直接读取 AWS、Azure、GCP 等服务数据。既随 Steampipe CLI 捆绑分发，也可用 make standalone 为指定插件编译成独立扩展安装到自有 Postgres（当前面向 PostgreSQL v14）。许可为 Apache 2.0，但 Steampipe 产品本身按 Turbot 商业条款分发。",
+   "highlights": [
+    "将 API 转换为 Postgres 外部表，查询经插件以 gRPC 标准格式返回数据",
+    "支持随 Steampipe CLI 使用，也可为单个插件编译为独立扩展运行在自有 PostgreSQL 实例",
+    "支持构建本地或第三方（非 Turbot 维护）插件，并可交叉编译 macOS 版本"
+   ],
+   "use_cases": [
+    "在 Postgres 中用 SQL 直接查询云服务（AWS/Azure/GCP 等）数据",
+    "为自有或第三方插件构建专属 FDW 扩展",
+    "在自建 PostgreSQL 数据库中集成 API 数据而无需单独 ETL 流程"
+   ]
+  },
+  "sha": "7da1aeeac5fa",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "efc4c7a3b4e1": {
+  "identity": {
+   "one_liner": "Go 编写的 PostgreSQL 及周边组件日志分析器，输出综合报告",
+   "review": "quellog 是一个用 Go 编写的命令行日志分析工具，读取 PostgreSQL、pgBackRest、Patroni 和 pgBouncer 的日志，支持 stderr、CSV、JSON、syslog 及多家云厂商格式，可实时解压 gzip/zstd/tar/zip/7z 归档，生成摘要、SQL 性能、锁与检查点等报告。面向 DBA 与运维人员，通过 Linux 包或源码编译安装。",
+   "highlights": [
+    "支持 stderr、CSV、JSON、syslog 及 AWS RDS、Cloud SQL、Azure、CNPG 等云厂商日志格式",
+    "分析 SQL 逐查询性能与 auto_explain 执行计划，提供锁等待、死锁检测和检查点统计",
+    "可将结果导出为 JSON、YAML、Markdown 或可交互的独立 HTML 报告，并支持实时跟踪模式"
+   ],
+   "use_cases": [
+    "对 PostgreSQL 及 pgBackRest、Patroni、pgBouncer 的历史日志进行批量离线分析",
+    "排查慢查询、锁等待、死锁与检查点频率等运行事件",
+    "按时间范围、数据库、用户或应用过滤后生成 HTML/JSON 报告用于巡检存档"
+   ]
+  },
+  "sha": "efc4c7a3b4e1",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

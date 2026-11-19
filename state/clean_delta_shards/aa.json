@@ -22070,5 +22070,600 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "c8c27ceca19d+2": {
+  "fn": "werbot/werbot",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Pre-release (v0.x): breaking changes are possible, see docs/upgrading.md."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    16,
+    7,
+    16
+   ],
+   [
+    "replace",
+    16,
+    23,
+    16,
+    17,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    25,
+    17,
+    19
+   ],
+   [
+    "replace",
+    25,
+    26,
+    19,
+    20,
+    [
+     "On a remote server the login over plain `http://<ip>:8080` does not work (the session cookie is `Secure`): use an SSH tunnel or a TLS proxy, see docs/install.md."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    20,
+    21
+   ],
+   [
+    "replace",
+    27,
+    28,
+    21,
+    22,
+    [
+     "Open http://localhost:8080 and create the first account. What runs, ports and volumes: docs/install.md."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    22,
+    25
+   ],
+   [
+    "replace",
+    31,
+    35,
+    25,
+    29,
+    [
+     "- Binary and systemd: docs/install.md.",
+     "- Gateway on another host: docs/gateway.md.",
+     "- Web UI on its own host and domain: docs/web.md.",
+     "- Several server replicas and gateway pools: docs/scaling.md."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    38,
+    29,
+    32
+   ],
+   [
+    "replace",
+    38,
+    39,
+    32,
+    33,
+    [
+     "Releases and images are signed with cosign (keyless) and ship SBOMs. Commands: docs/security.md."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    33,
+    36
+   ],
+   [
+    "replace",
+    42,
+    52,
+    36,
+    46,
+    [
+     "- install.md: Docker Compose, remote access, binary.",
+     "- gateway.md: pools, join tokens, instances, firewall, connections.",
+     "- web.md: the web UI on its own host (`werbot web`).",
+     "- configuration.md: every environment variable.",
+     "- upgrading.md: pre-1.0 policy, backup, upgrade order.",
+     "- security.md: reporting, release verification, threat model, join tokens.",
+     "- scaling.md: replicas, load balancing, PostgreSQL, Kubernetes, metrics, cluster example.",
+     "- failure-modes.md: what happens when a part fails.",
+     "- connectors.md: adding a target type.",
+     "- connect.md: the `werbot connect` client."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    46,
+    47
+   ],
+   [
+    "replace",
+    53,
+    54,
+    47,
+    48,
+    [
+     "Release notes (the changelog): GitHub Releases."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    57,
+    48,
+    51
+   ],
+   [
+    "replace",
+    57,
+    58,
+    51,
+    52,
+    [
+     "Report vulnerabilities privately: docs/security.md."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    73,
+    52,
+    67
+   ],
+   [
+    "replace",
+    73,
+    78,
+    67,
+    68,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    85,
+    68,
+    75
+   ],
+   [
+    "replace",
+    85,
+    86,
+    75,
+    76,
+    [
+     "- `server --with-gateway` also runs a gateway instance in the same process. Each replica joins the system pool `local` of the first organization (by creation time) with a system join token (max uses 1); before `Setup` it checks for an organization every 5s. It reaches its own server over loopback (`http://127.0.0.1:<WERBOT_HTTP_ADDR port>`, tunnel `https://127.0.0.1:<WERBOT_GATEWAY_ADDR port>`), so both addresses must accept connections on 127.0.0.1: leave the host empty (`:8080`) or use `0.0.0.0` or `127.0.0.1`, not a single non-loopback IP. It keeps its identity in `WERBOT_DATA_DIR/gateway` (or `WERBOT_GATEWAY_DATA_DIR`) and reads the other `WERBOT_GATEWAY_*` variables (docs/configuration.md); it refuses loopback, link-local (including cloud metadata), multicast and unspecified targets and the resolved addresses of the database host unless `WERBOT_LOCAL_POOL_ALLOW_LOOPBACK=true` (docs/configuration.md), so a same-host database needs that opt-in, while the host's LAN addresses stay reachable (this applies to `telnet`, `tcp` and `udp` sessions and to health probes; `ssh` resources keep their own dial, so a loopback `ssh` resource connects but its health shows `unhealthy`); its metrics go to the server's `/metrics`. Database and enrollment errors before the instance is enrolled are logged and retried (the wait doubles up to 5 minutes, a new system token each time); a busy SSH port or a failure after enrollment stops the server. On shutdown the gateway drains its sessions before the server closes the tunnel, so allow `WERBOT_GATEWAY_DRAIN_TIMEOUT` plus about 40s for the stop (compose: `stop_grace_period: 70s`)."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    91,
+    76,
+    81
+   ],
+   [
+    "replace",
+    91,
+    92,
+    81,
+    82,
+    [
+     "- `connect` opens local ports that reach `tcp`, `udp` and other port resources through a gateway (docs/connect.md)."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    113,
+    82,
+    103
+   ],
+   [
+    "replace",
+    113,
+    114,
+    103,
+    104,
+    [
+     "- `geoip.refresh` (on start, then daily at 04:00 UTC) downloads the monthly DB-IP Country Lite database from `download.db-ip.com`. The database is stored in Postgres (no files on disk), and every server loads it on start. Without it, country rules deny. IP geolocation by DB-IP."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    124,
+    104,
+    114
+   ],
+   [
+    "replace",
+    124,
+    125,
+    114,
+    115,
+    [
+     "Fill `.env` as in docs/install.md with `WERBOT_VERSION=dev`, then run `docker compose up -d --wait`."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    132,
+    115,
+    122
+   ],
+   [
+    "replace",
+    132,
+    139,
+    122,
+    123,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    147,
+    123,
+    131
+   ],
+   [
+    "replace",
+    147,
+    148,
+    131,
+    132,
+    [
+     "Stand description and the latest results: `test/load/README.md`. `make load` runs on Linux only (RSS and listening ports come from `/proc`; elsewhere it stops with `load tests need Linux (/proc)` before building anything) and needs docker, Go and `ulimit -n 65536`. Each test in `LOAD_TESTS` (default `L1 L2 L3 L4`) runs on a fresh `werbot-cluster` stand, removed after it; the stand logs of each failed test go to `test/cluster/compose.log`, under a `== <test>` line. L1: 5 000 SSH sessions through the pool, 1 KB/s each for 10 minutes, beside one `werbot connect` with 500 TCP connections at 1 KB/s (`-load.tcp`) and 100 UDP bindings on local ports `20000`+ at one datagram a second (`-load.udp`, one flow each); no errors (an echo missing for 10 s counts), connect p99 ≤ 1 s, spools empty and every session ended with its recording finished within 5 minutes, every recording verified. The mix ramps first and reaches steady state (every connection echoed once, bounded by mix size/`-load.rate` + 30 s; a timeout is a FAIL row) before the measured SSH ramp starts; the `mix ramp` row is a reference. The harness dials nginx on its bridge IP (`10.231.0.10`), not the docker-proxy published port. L2: 200 simulated gateway instances (tunnel stream only) enrolled by one join token in a pool of 10 000 resources, each bound to the user; a new binding reaches every instance within 30 s, p99 ≤ 5 s. L3: L1 with `server1` killed halfway; no session breaks. L4: 2 500 idle sessions per gateway for 5 minutes, each holding a gateway session slot; the gateways listen only on `2222` and `9090`. Every 5 s (L1 also through the drain) the test samples RSS against the budgets of 200 MB + 256 kB per active session (gateway; for every session kind, though a UDP session with 32 flows takes about 512 KiB) and 300 MB + 64 kB per tunnel stream (server), and Postgres connections per server replica (≤ `pool_max_conns` + 2). Each criterion prints a `RESULT | <load> | <metric> | <criterion> | <result> | PASS/FAIL` line. The SSH target and the TCP/UDP echo targets run in the test process and listen on the Docker bridge address (`host.docker.internal` of the gateways), so a host firewall must let the Docker networks reach it. A smaller run: `make load LOAD_ARGS='-load.sessions=100 -load.duration=1m -load.idle=1m -load.rate=50 -load.tcp=50 -load.udp=10 -load.instances=20 -load.resources=500'`. `go test -tags load -short ./test/load/` runs only the helper tests, on any OS; CI runs it with `-race` in the `go` job."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    154,
+    132,
+    138
+   ],
+   [
+    "delete",
+    154,
+    155,
+    138,
+    138
+   ],
+   [
+    "equal",
+    155,
+    156,
+    138,
+    139
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "1b16d6a1c19c+2": {
+  "fn": "p-arndt/doreg",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "doreg logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    11,
+    1,
+    9
+   ],
+   [
+    "replace",
+    11,
+    16,
+    9,
+    14,
+    [
+     "CI",
+     "Release",
+     "OCI distribution 1.1",
+     "Go",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     "Quick start · What you get · Configuration · Reverse proxy · Access · Storage · Webhooks · Garbage collection · Migrating · Development"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    26,
+    17,
+    18,
+    [
+     "doreg: repositories across projects with storage usage"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    47,
+    18,
+    39
+   ],
+   [
+    "replace",
+    47,
+    57,
+    39,
+    40,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    63,
+    40,
+    46
+   ],
+   [
+    "replace",
+    63,
+    66,
+    46,
+    49,
+    [
+     "`deploy/compose.yaml` has the full version with Traefik and SSO options;",
+     "`deploy/compose.s3.yaml` adds a bundled RustFS for S3 blob storage;",
+     "`deploy/compose.postgres.yaml` keeps the metadata in a bundled PostgreSQL."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    80,
+    49,
+    63
+   ],
+   [
+    "replace",
+    80,
+    81,
+    63,
+    64,
+    [
+     "> see reverse proxy for working configs."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    84,
+    64,
+    67
+   ],
+   [
+    "replace",
+    84,
+    85,
+    67,
+    68,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    68,
+    69
+   ],
+   [
+    "replace",
+    86,
+    95,
+    69,
+    78,
+    [
+     "|📦 **Speaks OCI 1.1**|Passes the official conformance suite. docker, buildx (multi-arch, SBOM and provenance), containerd, podman, crane and oras all just work. Manifests are served byte for byte as pushed.|",
+     "|🧹 **Online garbage collection**|Untagged manifests and orphaned layers go away while pushes and pulls keep running. Preview any run first: same code path, rolled back.|",
+     "|⏳ **Retention policies**|Keep the newest N, drop tags older than X days, per repository glob, with protected tags. Recently pulled digests survive, so pinned deployments stay safe.|",
+     "|🔐 **Projects and roles**|read, write and admin per project, for users or OIDC groups. Public projects and storage quotas.|",
+     "|🤖 **Robot accounts**|Credentials for CI: pull by default, push and delete if you say so, with expiry and secret rotation.|",
+     "|🪪 **Single sign-on**|Any OpenID Connect provider. `doreg login` logs docker in through the browser, no secret copying.|",
+     "|🔔 **Webhooks and audit log**|Signed, retried webhooks for pushes, pulls, deletes, quota hits and GC runs. Every change is in the audit log.|",
+     "|🚚 **Import**|Pull every repository of an existing registry (registry:2, Harbor, GHCR, ...) in from the UI. Digests stay the same, reruns skip what's done.|",
+     "|🪶 **Small**|One static binary or a 22 MB distroless image. SQLite (or PostgreSQL) plus blobs on disk or in any S3 bucket.|"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    78,
+    79
+   ],
+   [
+    "replace",
+    96,
+    108,
+    79,
+    86,
+    [
+     " A multi-arch image index with eight platforms ",
+     " Image layers with their share of the total size ",
+     " Robot accounts with scope, permissions and expiry ",
+     "",
+     " Garbage collection history ",
+     " Retention policies with protected tags ",
+     " Audit log of users, robots and the system "
+    ]
+   ],
+   [
+    "equal",
+    108,
+    111,
+    86,
+    89
+   ],
+   [
+    "replace",
+    111,
+    112,
+    89,
+    90,
+    [
+     "All pages, grouped by task: docs/."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    90,
+    91
+   ],
+   [
+    "replace",
+    113,
+    114,
+    91,
+    92,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    92,
+    93
+   ],
+   [
+    "replace",
+    115,
+    122,
+    93,
+    100,
+    [
+     "|Configuration|Every environment variable in one place, and which settings live in the UI.|",
+     "|Reverse proxy|Headers, body limits and timeouts, with Traefik, Caddy and nginx examples.|",
+     "|Access|Projects and roles, public repositories, robot accounts, single sign-on, `doreg login`.|",
+     "|Storage|Local disk or S3 for blobs, SQLite or PostgreSQL for metadata.|",
+     "|Webhooks and audit log|Events, payload, signature verification.|",
+     "|Garbage collection|Schedule, retention policies, why it is safe while pushes run.|",
+     "|Migrating|Import from registry:2, Harbor, GHCR or Docker Hub, in the UI or with `doreg import`.|"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    133,
+    100,
+    111
+   ],
+   [
+    "replace",
+    133,
+    134,
+    111,
+    112,
+    [
+     "`compose.yaml` holds only the dependencies, minisuite; doreg runs on the host. Sign in with SSO as `alice` (admin) or `bob` (normal user); the passwords are the same as the usernames. The overview page at localhost:9900 lists all URLs."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    152,
+    112,
+    130
+   ],
+   [
+    "replace",
+    152,
+    154,
+    130,
+    131,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

@@ -2707,5 +2707,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aebb03f56fd4": {
+  "identity": {
+   "one_liner": "基于 SQLAlchemy 2.0 与 Alembic 的配套库，提供仓库/服务层与迁移工具",
+   "review": "Advanced Alchemy 是构建在 SQLAlchemy 2.0+ 与 Alembic 1.12+ 之上的配套库，为 Python Web 项目提供同步/异步仓库、类型化服务层、声明式基类与混入、自定义列类型、读写副本路由及 Alembic 迁移命令。模型保持标准 SQLAlchemy 声明式类。通过 pip 或 uv 安装，面向需要在 Litestar、FastAPI、Flask 等框架中组织数据库访问层的开发者。",
+   "highlights": [
+    "提供同步与 asyncio 仓库，支持 CRUD、过滤、分页及 ON CONFLICT 与 MERGE 方言级批量 upsert",
+    "包含 UUIDBase、BigIntBase 等声明式基类与 SoftDeleteMixin、AuditBase 变体，兼容 SQLModel 与复合主键",
+    "内置 dialect 自适应列类型（GUID、DateTimeUTC、EncryptedString、Vector 等），并提供 alchemy CLI 与 JSON/JSONL/CSV fixture 种子填充"
+   ],
+   "use_cases": [
+    "为 Litestar、FastAPI、Flask、Starlette 或 Sanic 应用添加会话生命周期管理与依赖注入的 SQLAlchemy 集成",
+    "需要在 PostgreSQL、MySQL、Oracle、SQL Server、DuckDB、CockroachDB 等多种数据库后端间保持可移植的数据层",
+    "使用 Alembic 管理迁移并需要读写副本路由与 L2 查询缓存的多环境 Python 服务"
+   ]
+  },
+  "sha": "aebb03f56fd4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab69e8d0f4c9": {
+  "identity": {
+   "one_liner": "基于 SQLite 的漏洞分诊 TUI，集成多扫描器导入与安全工具编排",
+   "review": "Cerno 是 Ridgeback InfoSec 开源的终端 TUI 工具，用于分诊漏洞扫描结果：将 Nessus、nuclei 和 Burp Suite XML 报告导入本地 SQLite 数据库，也支持手工录入发现。用户可在 TUI 中按严重程度、主机过滤浏览，并针对受影响主机端口启动 nmap、NetExec、nuclei、Metasploit 或自定义命令，执行记录自动落库。它还通过 MCP server 暴露同一数据库与工具能力供 MCP 客户端调用。要求 Python 3.11+，Linux/macOS 支持较好，Windows 未测试；Claude 助手与 NetExec 集成等功能默认关闭需手动启用。",
+   "highlights": [
+    "导入 .nessus、nuclei JSON/JSONL 和 Burp Suite XML 报告到本地 SQLite 数据库（~/.cerno/cerno.db），支持跨数据集的主机风险对比",
+    "交互式 TUI 提供按严重程度/主机/可利用性过滤、CVE 提取、Metasploit 模块搜索与主机重叠分析",
+    "通过 MCP server 将数据库查询与命令生成暴露给 MCP 客户端（如 Claude CLI）"
+   ],
+   "use_cases": [
+    "渗透测试中对多扫描器（Nessus/nuclei/Burp）结果进行集中分诊与验证记录",
+    "在 TUI 内针对具体 host:port 一键启动 nmap、NetExec、Metasploit 等验证命令并留存执行历史",
+    "通过 MCP 客户端（如 Claude CLI）以编程方式查询发现并生成命令，驱动评估流程"
+   ]
+  },
+  "sha": "ab69e8d0f4c9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9d59895d993f": {
+  "identity": {
+   "one_liner": "Android 免写 SQL 的 SQLite 封装库，声明表结构后以单方法调用完成 CRUD",
+   "review": "EasiestSqlLibrary 是一个面向 Android 的 Java SQLite 封装库，支持多表操作。开发者通过 EasiestDB.init 初始化、addTableColumns 声明表和列、doneAddingTables 完成配置后，即可调用 addDataInTable、getAllDataFrom、searchInOneColumn、updateData、deleteRow 等方法执行增删改查，无需手写 SQL 语句。每个表自动附带自增 ID 主键列。通过 Jitpack 引入依赖，当前版本 1.0.0.2，采用 MIT 许可证。",
+   "highlights": [
+    "声明式建表：init、addTableColumns、doneAddingTables 三步完成初始化，表自动包含自增 ID 主键列",
+    "提供单方法 CRUD 接口，包括按列搜索 searchInOneColumn、多列匹配 searchValuesInMultipleColumns、按条件删行 deleteRowIfValuesMatchIn 等",
+    "查询结果返回 Android 原生 Cursor，支持 getAllDataOrderedBy 排序读取；Datum 同时支持按列名或列索引及 String/int/double 类型构造"
+   ],
+   "use_cases": [
+    "Android 应用中需要本地 SQLite 存储但希望避免手写 SQL 语句的场景",
+    "涉及多个数据表、需要增删改查、搜索与条件删除等操作的本地数据管理",
+    "如用户凭据校验这类多列值匹配查询（示例中 ID 与密码匹配）"
+   ]
+  },
+  "sha": "9d59895d993f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "40e0ff3c3139": {
+  "identity": {
+   "one_liner": ".NET 10 的 LINQ 风格链式多数据库 ORM，一套实体覆盖 19 家数据库。",
+   "review": "QuickSql 是面向 .NET 10 的多数据库 ORM，通过一套实体模型覆盖 SQL Server、MySQL、达梦、金仓等 19 家数据库。安装采用 Core、Providers、Generators 分包加应用侧自装驱动的方式，源生成器实现零反射物化。功能覆盖查询、写入、工作单元、事务、分库分表与 CodeFirst 同步，使用 MIT 协议，仓库提供 17 篇功能文档与设计规格。",
+   "highlights": [
+    "支持 19 家数据库，含达梦、人大金仓、openGauss、GBase、TDengine 等信创与国产库",
+    "提供查询（投影/分页/导航联表/分组聚合/子查询/流式读取）、写入（批量分块/upsert/自增键回填）、工作单元（ChangeTracker/脏列判定/乐观锁）、事务与保存点、分库分表与读写分离等能力",
+    "源生成器实现零反射物化，支持 AOT 注册路径，ToSql() 可离线生成 SQL"
+   ],
+   "use_cases": [
+    "需要在多种数据库（含信创国产库）间共用同一套实体模型的 .NET 应用",
+    "使用 .NET 10/AOT 部署、需要源生成器物化的项目",
+    "需要分库分表、读写分离或 CodeFirst 结构同步的数据库接入层"
+   ]
+  },
+  "sha": "40e0ff3c3139",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -32463,5 +32463,1629 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "45a129e59e4d+2": {
+  "fn": "hetao29/slightphp",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "官网 · 源码"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "6.x 提供 Session CSRF 防护，通过 Route 的 `csrf` 参数启用，支持自定义字段/请求头、`tokenInput()`、`tokenMeta()` 及公共配置。samples 提供三种表单写法与 Ajax、token 更新实验；接入见 CSRF 使用手册。"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "Tpl 默认启用上下文自动转义，已移除 `setContextMode()`、`getContextMode()` 及兼容编译分支。模板应传入原始数据，可信 HTML 用末尾 `|raw`；升级前需迁移手工编码、JSON 数据块和动态属性名，见 6.x 升级与迁移指南。"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "已有应用升级统一参阅 6.x 升级与迁移指南，按起始版本检查控制器签名、模板实例、调度异常、JSON/语言资源、插件类名、Cookie 及默认自动转义。6.0 至 6.7 的修改统一汇总在 6.x 更新记录。"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    14,
+    11,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "核心需要 PHP 8.0+。插件依赖通过 Composer 的 `suggest` 声明，默认不安装；使用 Db、Redis、Http、Csrf 或 Captcha 时，再按需安装对应扩展或 Composer 包，见插件依赖。"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "当前发布版本为 6.7.3，新增 `Csrf::tokenMeta()`，samples 的 Ajax 示例从 meta 标签读取 token 并发送请求头，见 6.7.3 修改说明。安装命令使用对应的包版本："
+    ]
+   ],
+   [
+    "equal",
+    17,
+    30,
+    17,
+    30
+   ],
+   [
+    "replace",
+    30,
+    45,
+    30,
+    31,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    53,
+    31,
+    39
+   ],
+   [
+    "replace",
+    53,
+    64,
+    39,
+    40,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    70,
+    40,
+    46
+   ],
+   [
+    "replace",
+    70,
+    71,
+    46,
+    47,
+    [
+     "控制器可使用 `Entry(\\SlightPHP\\Request $request, \\SlightPHP\\Response $response)`，通过 `$request->route` 读取完整路由分段，通过 `get/post/request/cookie/files/header/server` 读取请求数据，使用 Response 设置响应并输出。入口按 Request、Response 的顺序传入两个位置参数，参数名不限；原 `$inPath` 签名需要迁移，详见 Request 与 Response。"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    47,
+    48
+   ],
+   [
+    "replace",
+    72,
+    73,
+    48,
+    49,
+    [
+     "在控制器方法上添加 `#[\\SlightPHP\\Route(method: 'POST')]` 或 `#[\\SlightPHP\\Route(methods: ['POST', 'GET'])]` 可限制 HTTP 方法；不匹配时抛出异常，由入口返回 405 和 Allow。详见 Route 方法注解。"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    49,
+    50
+   ],
+   [
+    "replace",
+    74,
+    75,
+    50,
+    51,
+    [
+     "写操作可在 Route 注解中设置 `csrf: true`，例如 `#[\\SlightPHP\\Route(method: 'POST', csrf: true)]`：通过按需启动会话的 `Csrf::token()` 生成表单 `_csrf` 字段或 `X-CSRF-Token` 请求头的值，调度器在构造控制器前校验，失败抛出异常。应用可配置 `Csrf::$sessionHandler` 自定义启动，默认按需调用原生 `session_start()`。详见 Csrf 插件。"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    51,
+    52
+   ],
+   [
+    "replace",
+    76,
+    77,
+    52,
+    53,
+    [
+     "核心调度失败统一抛出 `SlightPHP\\Exception`，不再返回 `false` 或直接生成错误响应。已有入口及内部调用需按 核心异常与处理调整。"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    53,
+    56
+   ],
+   [
+    "replace",
+    80,
+    89,
+    56,
+    65,
+    [
+     "- 6.x 更新记录",
+     "- 6.x 升级与迁移指南",
+     "- 快速开始",
+     "- 核心调度和 API",
+     "- 自定义 URL 路由与 PHP / JSON 示例",
+     "- Request 与 Response",
+     "- 插件使用",
+     "- Tpl include / part 使用手册",
+     "- 示例与部署"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    65,
+    66
+   ],
+   [
+    "replace",
+    90,
+    91,
+    66,
+    67,
+    [
+     "本项目采用 MIT 许可证。"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "533af7cd0352+2": {
+  "fn": "DHURJATI-JS/podcast-qa-studio",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "Podcast Q&amp;A Studio: plan sharper interviews, nail your guest spot"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    1,
+    2
+   ],
+   [
+    "replace",
+    7,
+    11,
+    2,
+    4,
+    [
+     " An AI co-host that writes, checks and times your podcast questions, or interviews you and coaches every answer. ",
+     " Local-first AI · a soft Kokoro voice with lip-sync · one-click install on macOS and Windows"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    4,
+    5
+   ],
+   [
+    "replace",
+    12,
+    24,
+    5,
+    15,
+    [
+     " Python 3.13",
+     " FastAPI",
+     " PostgreSQL 17 + pgvector",
+     " Redis",
+     " Socket.IO",
+     " Tailwind CSS 4",
+     " Docker",
+     " 85 tests passing",
+     " Locust: 300 users",
+     " License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    15,
+    16
+   ],
+   [
+    "replace",
+    25,
+    35,
+    16,
+    24,
+    [
+     " Quick start ·",
+     " Two modes ·",
+     " Features ·",
+     " How the AI works ·",
+     " Security ·",
+     " Testing ·",
+     " Disclaimer ·",
+     " Licence"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    41,
+    24,
+    30
+   ],
+   [
+    "replace",
+    41,
+    42,
+    30,
+    31,
+    [
+     "> Read the full disclaimer."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    31,
+    32
+   ],
+   [
+    "replace",
+    43,
+    49,
+    32,
+    33,
+    [
+     " The home page: headline, sign-up buttons and an illustrated preview of Mira writing timed questions, flagging a repeat and scoring an answer"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    33,
+    36
+   ],
+   [
+    "replace",
+    52,
+    53,
+    36,
+    37,
+    [
+     "||Problem|How it's handled|"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    37,
+    38
+   ],
+   [
+    "replace",
+    54,
+    66,
+    38,
+    50,
+    [
+     "||**Redundant questions**, within an episode or across your earlier episodes|Meaning (pgvector on EmbeddingGemma embeddings) **and** wording checks; pairs too close to call get an **AI double-check** (97% accurate on held-out test pairs with local Gemma); AI-suggested repeats are skipped, and a repeated follow-up is retried once with the reason|",
+     "||**Running over or under time**|Target length, intro and outro, a time slot per question, a live run-time bar; new AI questions are sized to the time left|",
+     "||**Weak question craft**|Yes/no, double-barrelled, leading, too-long and too-short questions are flagged with a concrete tip|",
+     "||**The blank page**|A complete, ordered question flow from just a theme, guest and audience, streamed live|",
+     "||**Unprepared guests**|A mock interview with a 0-10 score, what worked, specific fixes and a stronger rewrite that only uses facts you gave|",
+     "||**Rambling answers**|Speaking-time estimate from your pace, a rehearsal stopwatch and timing feedback against the slot|",
+     "||**Telling the same story twice**|Answers that overlap one you already gave are detected, and Mira asks for a fresh angle|",
+     "||**Repeating yourself to the AI**|\"Mira remembers\": say \"avoid politics\" once and every AI action on that podcast follows it|",
+     "||**AI outages**|LAN gateway → local Docker Gemma → Claude → ChatGPT; if none can answer, you're told exactly why|",
+     "||**Double clicks and spam**|Idempotency keys, per-podcast AI locks, per-user AI quotas and rate limits|",
+     "||**Shared or stolen sessions**|One login per account: signing in elsewhere signs this device out, and it's told why|",
+     "||**Unsafe content**|Text is cleaned on the way in, escaped on the way out, under a strict nonce-based CSP|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    69,
+    50,
+    53
+   ],
+   [
+    "replace",
+    69,
+    95,
+    53,
+    55,
+    [
+     " Create questions for a podcast (host) ",
+     " Prepare for a podcast (guest) "
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    55,
+    56
+   ],
+   [
+    "replace",
+    96,
+    98,
+    56,
+    69,
+    [
+     " Describe the theme, guest and audience; Mira streams an ordered question flow sized to the time left. ",
+     " Change questions your way (\"shorter\", \"funnier\", \"more personal\" or any instruction), with undo. ",
+     " Repeats, yes/no, double-barrelled and leading questions are flagged as you go. ",
+     "",
+     " Mira predicts the questions you'll be asked and interviews you, out loud if you like. ",
+     " Every answer gets a score, what worked, specific fixes, a stronger rewrite and timing feedback. ",
+     " Rehearsal stopwatch, speaking-time estimate and the follow-up a real host would ask next. ",
+     "",
+     " Host workspace: run-time bar on track, the question list with a repeated question flagged at 97% and a yes/no tip, Mira, the AI provider list and standing instructions ",
+     " Guest practice in dark mode: the question, the spoken-style answer, a 7/10 score, what worked, what to improve and a stronger version ",
+     "",
+     " Screenshots use a fictional demo account. Every question, flag, score and rewrite in them was produced by the app",
+     "itself with the real AI gateway (Gemma); see <code>docs/capture_screenshots.py</code>. "
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    69,
+    72
+   ],
+   [
+    "replace",
+    101,
+    110,
+    72,
+    77,
+    [
+     " More screenshots : the account chooser and the phone layout ",
+     "",
+     " Sign-in page listing the accounts used on this device, Google-style, with ",
+     " &nbsp;",
+     " The home page on a phone in dark mode"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    113,
+    77,
+    80
+   ],
+   [
+    "replace",
+    113,
+    155,
+    80,
+    103,
+    [
+     " AI co-host ",
+     " Streamed question generation · rewrites on request with undo · follow-up and surprise questions · standing instructions applied to every suggestion",
+     "",
+     " Run-time planning ",
+     " Target length per episode · a time slot per question · live run-time bar · speaking-time estimates from your own pace",
+     "",
+     " Voice ",
+     " Kokoro TTS with a soft, warm female voice · lip-synced avatar · the browser's voice as a fallback · read any question or rewrite aloud",
+     "",
+     " Quality checks ",
+     " Repeat detection with pgvector · an AI double-check for close calls · \"asked before\" across your podcasts · yes/no, leading and double-barrelled flags · answer-overlap detection",
+     "",
+     " Real-time and parallel ",
+     " Socket.IO streaming · Redis Streams worker pool · parallel embeddings · PDF rendering in a separate process pool",
+     "",
+     " Accounts and security ",
+     " Google-style sign-in and account chooser · one login per account · CSP nonces, CSRF, Argon2id · rate limits and leak tests",
+     "",
+     " Export ",
+     " A PDF run-sheet with timings and coaching notes · stored in PostgreSQL · download any time",
+     "",
+     " Install and run ",
+     " One click on macOS or Windows · everything in Docker · dark and light mode · works with local AI only"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    161,
+    103,
+    109
+   ],
+   [
+    "replace",
+    161,
+    162,
+    109,
+    110,
+    [
+     "||macOS|Windows|"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    110,
+    111
+   ],
+   [
+    "replace",
+    163,
+    165,
+    111,
+    113,
+    [
+     "|Install and run|double-click **`Start-Mac.command`** (first time: right-click → *Open*)|double-click **`Start-Windows.bat`**|",
+     "|Stop (data is kept)|double-click **`Stop-Mac.command`**|double-click **`Stop-Windows.bat`**|"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    183,
+    113,
+    131
+   ],
+   [
+    "replace",
+    183,
+    184,
+    131,
+    132,
+    [
+     "|Setting|Default|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    132,
+    133
+   ],
+   [
+    "replace",
+    185,
+    195,
+    133,
+    143,
+    [
+     "|`AI_PROVIDER_ORDER`|`gateway,local,anthropic,openai`|Order in which AI providers are tried|",
+     "|`GATEWAY_BASE_URL` / `GATEWAY_API_KEY` / `GATEWAY_MODEL`|`http://192.168.0.226:8000/v1` / `change-me-gateway-key` / `gemma`|Your OpenAI-compatible AI gateway|",
+     "|`LOCAL_LLM_MODEL` / `LOCAL_EMBED_MODEL`|`gemma3:4b` / `embeddinggemma`|Local fallback model and embedding model (Ollama in Docker)|",
+     "|`ANTHROPIC_API_KEY` / `ANTHROPIC_MODEL`|empty / `claude-opus-5-5`|Claude fallback (off while the key is empty)|",
+     "|`OPENAI_API_KEY` / `OPENAI_MODEL`|empty / `gpt-5-mini`|ChatGPT fallback (off while the key is empty)|",
+     "|`EMBEDDING_ORDER`|`local,openai,hash`|Embeddings for repeat detection; `hash` always works offline|",
+     "|`TTS_ENABLED`|`true`|Kokoro voice (falls back to the browser's voice)|",
+     "|`SMTP_*`|empty|Email for password resets. Empty + `EMAIL_FALLBACK_TO_LOG=true` prints reset emails to the server log (single-user local installs only)|",
+     "|`APP_PORT`, `BASE_URL`, `ALLOWED_HOSTS`|`8080`, `http://localhost:8080`, `localhost`|Where the app listens and which host names it answers to (IP addresses always work)|",
+     "|`FORCE_HTTPS`|`false`|Set to `true` behind an HTTPS reverse proxy (HSTS, `Secure` + `__Host-` cookies)|"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    206,
+    143,
+    154
+   ],
+   [
+    "replace",
+    206,
+    210,
+    154,
+    155,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    213,
+    155,
+    158
+   ],
+   [
+    "replace",
+    213,
+    217,
+    158,
+    162,
+    [
+     " AI task tries providers in order; if one fails before answering, the next one is used silently; if one fails",
+     " *mid-stream*, the partial text is discarded and the next provider takes over. Failing providers are skipped briefly",
+     " (circuit breaker) and re-checked every few seconds. If none can answer, the message says exactly why, for example",
+     " \"AI Gateway: offline, Local Gemma: downloading model, Claude API: not configured, ChatGPT API: not configured\"."
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    162,
+    163
+   ],
+   [
+    "replace",
+    218,
+    220,
+    163,
+    165,
+    [
+     " (`WORKER_CONCURRENCY` tasks each; scale with `docker compose up -d --scale worker=3`). Each parsed question is",
+     " embedded *in parallel* with the ongoing stream and saved in order."
+    ]
+   ],
+   [
+    "equal",
+    220,
+    221,
+    165,
+    166
+   ],
+   [
+    "replace",
+    221,
+    223,
+    166,
+    168,
+    [
+     " embedder. Each vector records its model and is only compared with vectors from the same model; HNSW indexes back",
+     " the searches (repeats, \"asked before\", repeated stories, answer memory)."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    224,
+    168,
+    169
+   ],
+   [
+    "replace",
+    224,
+    229,
+    169,
+    174,
+    [
+     " 0.71 while different questions on the same topic scored up to 0.78. So \"Check quality & repeats\" sends pairs in that",
+     " band (0.68 to 0.80) to the AI, one pair per call at temperature 0, with one rule: two questions are the same only if",
+     " a full answer to one would also fully answer the other. Confirmed repeats are marked *Similar*. Each verdict is",
+     " stored for that exact pair of texts, so unchanged pairs are never asked about twice and editing either question",
+     " retires it."
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    174,
+    175
+   ],
+   [
+    "replace",
+    230,
+    231,
+    175,
+    176,
+    [
+     " instructions and (for feedback) your most relevant earlier answers, so anything you said once is taken into account."
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    176,
+    177
+   ],
+   [
+    "replace",
+    232,
+    233,
+    177,
+    178,
+    [
+     " rehearsal stopwatch; the AI is told the time left and the slot it is coaching for."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    178,
+    179
+   ],
+   [
+    "replace",
+    234,
+    236,
+    179,
+    181,
+    [
+     " female voices in Account settings. The avatar's lip-sync follows the audio (Web Audio analyser); with the browser",
+     " voice it follows word boundaries."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    181,
+    182
+   ],
+   [
+    "replace",
+    237,
+    238,
+    182,
+    183,
+    [
+     " characters are neutralised, and every AI output is cleaned before it is stored or shown."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    239,
+    183,
+    184
+   ],
+   [
+    "replace",
+    239,
+    241,
+    184,
+    185,
+    [
+     " What happens when you press \"Generate\" (sequence diagram) "
+    ]
+   ],
+   [
+    "equal",
+    241,
+    246,
+    185,
+    190
+   ],
+   [
+    "replace",
+    246,
+    260,
+    190,
+    191,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    260,
+    261,
+    191,
+    192
+   ],
+   [
+    "delete",
+    261,
+    263,
+    192,
+    192
+   ],
+   [
+    "equal",
+    263,
+    270,
+    192,
+    199
+   ],
+   [
+    "replace",
+    270,
+    274,
+    199,
+    201,
+    [
+     " Dashboard with the Google-style account menu open: email, avatar, ",
+     " A signed-out device sees: You"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    276,
+    201,
+    203
+   ],
+   [
+    "replace",
+    276,
+    281,
+    203,
+    208,
+    [
+     " post, API call and real-time connection compares the device's key with the database. On a mismatch the device is",
+     " signed out *before* the request is processed, so nothing changes. The device is told why at once (real-time notice)",
+     " and again on its next reload, for example \"your account signed in on another device (Chrome on Windows, 17 Nov 2026",
+     " at 06:14 UTC)\". Password resets and expired sessions get their own explanations, and simultaneous sign-ins are",
+     " serialised so exactly one device survives."
+    ]
+   ],
+   [
+    "equal",
+    281,
+    282,
+    208,
+    209
+   ],
+   [
+    "replace",
+    282,
+    284,
+    209,
+    211,
+    [
+     " in the Google-style account chip, menu and chooser is *fetched by user id* (Redis profile cache, then PostgreSQL).",
+     " Sessions rotate on sign-in and expire after 7 days idle or 30 days in total."
+    ]
+   ],
+   [
+    "equal",
+    284,
+    285,
+    211,
+    212
+   ],
+   [
+    "replace",
+    285,
+    286,
+    212,
+    213,
+    [
+     " generic errors and timing equalisation (no account enumeration); lockout after repeated failures."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    288,
+    213,
+    215
+   ],
+   [
+    "replace",
+    288,
+    289,
+    215,
+    216,
+    [
+     " open a Socket.IO connection, which additionally checks Origin and the session."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    290,
+    216,
+    217
+   ],
+   [
+    "replace",
+    290,
+    291,
+    217,
+    218,
+    [
+     " no `unsafe-eval`), `frame-ancestors 'none'`, `nosniff`, Referrer-Policy, Permissions-Policy, COOP/CORP, HSTS over HTTPS."
+    ]
+   ],
+   [
+    "equal",
+    291,
+    292,
+    218,
+    219
+   ],
+   [
+    "replace",
+    292,
+    294,
+    219,
+    221,
+    [
+     " characters removed) before it is stored; templates autoescape; the browser only uses `textContent`; PDF text is",
+     " XML-escaped; JSON embedded in pages is escaped."
+    ]
+   ],
+   [
+    "equal",
+    294,
+    295,
+    221,
+    222
+   ],
+   [
+    "replace",
+    295,
+    299,
+    222,
+    226,
+    [
+     " the owner's room; the voice cache is per account and lives on disk. Signing out, changing your password or revoking",
+     " sessions closes that account's live connections on every server process. HTML is never gzip-compressed (BREACH);",
+     " host-header allow-list (DNS-rebinding defence), body-size limit, open-redirect protection; access logs are off so",
+     " one-time tokens never land in logs."
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    226,
+    227
+   ],
+   [
+    "replace",
+    300,
+    302,
+    227,
+    228,
+    [
+     " One login per account (sequence diagram) "
+    ]
+   ],
+   [
+    "equal",
+    302,
+    307,
+    228,
+    233
+   ],
+   [
+    "replace",
+    307,
+    316,
+    233,
+    234,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    317,
+    234,
+    235
+   ],
+   [
+    "delete",
+    317,
+    319,
+    235,
+    235
+   ],
+   [
+    "equal",
+    319,
+    325,
+    235,
+    241
+   ],
+   [
+    "replace",
+    325,
+    326,
+    241,
+    242,
+    [
+     "|Limit|Value|"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    242,
+    243
+   ],
+   [
+    "replace",
+    327,
+    353,
+    243,
+    269,
+    [
+     "|Podcasts per account|200|",
+     "|Questions per podcast|60|",
+     "|Practice attempts kept per question|20 (oldest removed)|",
+     "|Undo history per question|20 (oldest removed)|",
+     "|Standing instructions per podcast|20 (300 characters each)|",
+     "|PDF exports kept per podcast|5 (oldest removed)|",
+     "|Signed-in devices per account|1 (signing in elsewhere signs this device out, with the reason)|",
+     "|Accounts remembered per device|5|",
+     "|Open real-time connections per account|10|",
+     "|Questions per AI generate / rewrite request|20 / 20|",
+     "|Concurrent AI tasks per account|3 (one per podcast question list, one per answered question)|",
+     "|Automatic retries when the AI repeats a question (follow-ups)|1|",
+     "|Question pairs per AI repeat check|20 (closest first; the rest on the next check)|",
+     "|AI repeat verdicts kept per podcast|300 (verdicts on edited questions are dropped)|",
+     "|Text sizes|title 120, theme 300, brief / bio / key messages 2,000, question 500, answer 5,000 characters|",
+     "|Voice text per request|800 characters|",
+     "|Request body|1 MB|",
+     "|AI task time limit|15 minutes|",
+     "|Sign-in|30 attempts / 15 min per IP; 5 failed attempts / 15 min per account|",
+     "|Password checks on account pages (change password, delete account)|10 / 15 min per account|",
+     "|Sign-up|5 / hour per IP (plus honeypot and minimum fill time)|",
+     "|Forgot password|10 / hour per IP, 3 / hour per email|",
+     "|AI requests|40 / hour and 300 / day per account|",
+     "|Voice requests|120 / 10 min per account|",
+     "|PDF exports|10 / 10 min per account|",
+     "|API writes|300 / min per account|"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    360,
+    269,
+    276
+   ],
+   [
+    "replace",
+    360,
+    378,
+    276,
+    277,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    378,
+    384,
+    277,
+    283
+   ],
+   [
+    "replace",
+    384,
+    391,
+    283,
+    284,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    399,
+    284,
+    292
+   ],
+   [
+    "replace",
+    399,
+    409,
+    292,
+    293,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    409,
+    412,
+    293,
+    296
+   ],
+   [
+    "replace",
+    412,
+    415,
+    296,
+    299,
+    [
+     " \"no AI\" messages, streaming jobs, repeat skipping, the follow-up retry and the AI repeat check, memory, rewrites and undo, feedback",
+     " parsing, double-submit and rate limits, CSRF/CSP/host/body-size checks, XSS cleaning, caps under concurrency, PDF",
+     " storage, the voice proxy and one login per account."
+    ]
+   ],
+   [
+    "equal",
+    415,
+    416,
+    299,
+    300
+   ],
+   [
+    "replace",
+    416,
+    419,
+    300,
+    303,
+    [
+     " each one with a victim's ids as another signed-in account, as an anonymous visitor and from the victim's own",
+     " signed-out device. Every call must be refused, none may reveal the victim's data, and the victim's data must be",
+     " unchanged afterwards. New routes are covered automatically."
+    ]
+   ],
+   [
+    "equal",
+    419,
+    420,
+    303,
+    304
+   ],
+   [
+    "replace",
+    420,
+    421,
+    304,
+    305,
+    [
+     " console errors or CSP violations."
+    ]
+   ],
+   [
+    "equal",
+    421,
+    422,
+    305,
+    306
+   ],
+   [
+    "replace",
+    422,
+    428,
+    306,
+    307,
+    [
+     " Load test chart: simulated users rise from 50 to 150, 250 and a 300-user spike, then recover at 100; requests per second follow the load and peak at 285."
+    ]
+   ],
+   [
+    "equal",
+    428,
+    434,
+    307,
+    313
+   ],
+   [
+    "replace",
+    434,
+    435,
+    313,
+    314,
+    [
+     "|Run 2, 17 Nov 2026 (latest)|Requests|p50|p95|p99|"
+    ]
+   ],
+   [
+    "equal",
+    435,
+    436,
+    314,
+    315
+   ],
+   [
+    "replace",
+    436,
+    443,
+    315,
+    322,
+    [
+     "|All requests (incl. AI round trips)|106,910|9 ms|820 ms|1.0 s|",
+     "|Read a podcast (`GET /api/podcasts/{id}`)|13,023|10 ms|71 ms|250 ms|",
+     "|Add a question (`POST …/questions`)|2,750|22 ms|210 ms|820 ms|",
+     "|Sign in (Argon2id)|2,231|120 ms|420 ms|950 ms|",
+     "|AI generate round trip (fake LLM)|1,157|870 ms|1.1 s|2.3 s|",
+     "|AI feedback round trip (fake LLM)|3,693|930 ms|1.2 s|1.9 s|",
+     "|Voice (Kokoro TTS)|351|2.6 s|9.9 s|11 s|"
+    ]
+   ],
+   [
+    "equal",
+    443,
+    445,
+    322,
+    324
+   ],
+   [
+    "replace",
+    445,
+    446,
+    324,
+    325,
+    [
+     " repeated follow-up is retried once automatically, telling the AI what to avoid."
+    ]
+   ],
+   [
+    "equal",
+    446,
+    447,
+    325,
+    326
+   ],
+   [
+    "replace",
+    447,
+    448,
+    326,
+    327,
+    [
+     " nothing, and 8,465 cross-account probes all returned 404."
+    ]
+   ],
+   [
+    "equal",
+    448,
+    449,
+    327,
+    328
+   ],
+   [
+    "replace",
+    449,
+    451,
+    328,
+    330,
+    [
+     " podcast, 5 PDFs, 20 attempts per question); no AI tasks overlapped on one podcast or question; no markup stored; no",
+     " account with two live sessions; an empty queue, no leftover locks, no Redis evictions."
+    ]
+   ],
+   [
+    "equal",
+    451,
+    452,
+    330,
+    331
+   ],
+   [
+    "replace",
+    452,
+    455,
+    331,
+    334,
+    [
+     " (178 req/s average, peak 285) with the database login-key check now on every request. Voice p95 fell from 60 s to",
+     " 9.9 s after adding a shared Kokoro concurrency limit, a per-account disk cache and a browser-voice fallback when",
+     " Kokoro is busy (83 requests used it)."
+    ]
+   ],
+   [
+    "equal",
+    455,
+    456,
+    334,
+    335
+   ],
+   [
+    "replace",
+    456,
+    457,
+    335,
+    336,
+    [
+     " one machine and are not performance guarantees.*"
+    ]
+   ],
+   [
+    "equal",
+    457,
+    461,
+    336,
+    340
+   ],
+   [
+    "replace",
+    461,
+    466,
+    340,
+    345,
+    [
+     " \"What first pulled you toward cold-chain technology?\" vs \"What originally drew you to cold-chain technology?\"); looser",
+     " ones go to the AI repeat check. Measured with local Gemma (gemma3:4b) on 32 held-out pairs written before testing,",
+     " the check caught 16/16 repeats and wrongly flagged 1 of 16 different pairs (97%); on the pairs the app would",
+     " actually send it, 19 of 20 were right (95%). The LAN gateway's larger model was unresponsive during that test and",
+     " hasn't been measured. Without any AI, only the meaning and wording checks run. Read your list before recording."
+    ]
+   ],
+   [
+    "equal",
+    466,
+    467,
+    345,
+    346
+   ],
+   [
+    "replace",
+    467,
+    469,
+    346,
+    348,
+    [
+     " one, and the AI's own timing remarks (for example \"about 175 words\") can be off. The word counts and speaking-time",
+     " estimates shown next to your answer are computed by the app from your text and pace, not by the AI."
+    ]
+   ],
+   [
+    "equal",
+    469,
+    472,
+    348,
+    351
+   ],
+   [
+    "replace",
+    472,
+    473,
+    351,
+    352,
+    [
+     "|Task|Command|"
+    ]
+   ],
+   [
+    "equal",
+    473,
+    474,
+    352,
+    353
+   ],
+   [
+    "replace",
+    474,
+    482,
+    353,
+    361,
+    [
+     "|Logs|`docker compose logs -f app worker`|",
+     "|Model download progress|`docker compose logs -f ollama-init`|",
+     "|Reset link without email|`docker compose exec app python -m app.cli reset-link you@example.com`|",
+     "|Back up the database|`docker compose exec db pg_dump -U podcastqa podcastqa > backup.sql`|",
+     "|Update after pulling new code|run the installer again (migrations run automatically)|",
+     "|Remove everything **including data**|`docker compose down -v`|",
+     "|Regenerate the README screenshots|run `docs/capture_screenshots.py` with Playwright against a **throwaway** stack|",
+     "|Redraw the load-test chart|`python docs/make_load_chart.py loadtest/results/<run>/stats_stats_history.csv docs`|"
+    ]
+   ],
+   [
+    "equal",
+    482,
+    486,
+    361,
+    365
+   ],
+   [
+    "replace",
+    486,
+    488,
+    365,
+    367,
+    [
+     " wait for `ollama-init` to finish downloading Gemma, or add a Claude or ChatGPT key to `.env`.",
+     "- **Gateway offline only inside Docker on macOS:** grant Docker *Local Network* access (see Quick start)."
+    ]
+   ],
+   [
+    "equal",
+    488,
+    492,
+    367,
+    371
+   ],
+   [
+    "replace",
+    492,
+    493,
+    371,
+    372,
+    [
+     " that wasn't you, sign in and change your password."
+    ]
+   ],
+   [
+    "equal",
+    493,
+    497,
+    372,
+    376
+   ],
+   [
+    "replace",
+    497,
+    498,
+    376,
+    377,
+    [
+     " including merchantability, fitness for a particular purpose, accuracy and non-infringement."
+    ]
+   ],
+   [
+    "equal",
+    498,
+    499,
+    377,
+    378
+   ],
+   [
+    "replace",
+    499,
+    501,
+    378,
+    380,
+    [
+     " speech may be inaccurate, incomplete, biased, offensive or otherwise inappropriate. Repeat checks, quality flags,",
+     " time estimates and scores are aids, not guarantees. Review and edit everything before relying on it."
+    ]
+   ],
+   [
+    "equal",
+    501,
+    502,
+    380,
+    381
+   ],
+   [
+    "replace",
+    502,
+    503,
+    381,
+    382,
+    [
+     " advice, and it is not a substitute for professional media training."
+    ]
+   ],
+   [
+    "equal",
+    503,
+    504,
+    382,
+    383
+   ],
+   [
+    "replace",
+    504,
+    505,
+    383,
+    384,
+    [
+     " copyright, defamation, platform rules and the law. Do not use the synthetic voice to impersonate real people."
+    ]
+   ],
+   [
+    "equal",
+    505,
+    506,
+    384,
+    385
+   ],
+   [
+    "replace",
+    506,
+    508,
+    385,
+    387,
+    [
+     " processed under their terms. The local models are downloaded from their publishers and are subject to their own",
+     " licences and terms of use, for example the Gemma Terms of Use for Gemma and EmbeddingGemma."
+    ]
+   ],
+   [
+    "equal",
+    508,
+    509,
+    387,
+    388
+   ],
+   [
+    "replace",
+    509,
+    511,
+    388,
+    390,
+    [
+     " **no liability** for any direct, indirect, incidental, special, consequential or exemplary damages, including loss",
+     " of data, revenue, reputation or opportunity, arising from the use of, or inability to use, this software."
+    ]
+   ],
+   [
+    "equal",
+    511,
+    512,
+    390,
+    391
+   ],
+   [
+    "replace",
+    512,
+    513,
+    391,
+    392,
+    [
+     " any content made with it, or for any episode, interview, publication or decision based on its output."
+    ]
+   ],
+   [
+    "equal",
+    513,
+    514,
+    392,
+    393
+   ],
+   [
+    "replace",
+    514,
+    515,
+    393,
+    394,
+    [
+     " review before offering the app to others."
+    ]
+   ],
+   [
+    "equal",
+    515,
+    516,
+    394,
+    395
+   ],
+   [
+    "replace",
+    516,
+    517,
+    395,
+    396,
+    [
+     " are illustrations, not performance or accuracy guarantees."
+    ]
+   ],
+   [
+    "equal",
+    517,
+    519,
+    396,
+    398
+   ],
+   [
+    "replace",
+    519,
+    520,
+    398,
+    399,
+    [
+     "DISCLAIMER.md; by using, copying or modifying this software you accept it."
+    ]
+   ],
+   [
+    "equal",
+    520,
+    522,
+    399,
+    401
+   ],
+   [
+    "replace",
+    522,
+    526,
+    401,
+    402,
+    [
+     "Released under the MIT License © 2026 DHURJATI-JS. You may use, copy, modify and distribute it freely; the"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

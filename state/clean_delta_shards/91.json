@@ -30324,5 +30324,1449 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "741fe20d8dcb+2": {
+  "fn": "sectasy0/zcached",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "zig",
+     "tests",
+     "build"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    25,
+    7,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "remain synchronous; see network architecture"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    48,
+    26,
+    48
+   ],
+   [
+    "replace",
+    48,
+    51,
+    48,
+    51,
+    [
+     " handshake). `.network.request_timeout_ms` limits how long an incomplete frame",
+     " can take to arrive, even if the client keeps sending fragments. `0` disables",
+     " either timeout."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    51,
+    52
+   ],
+   [
+    "replace",
+    52,
+    54,
+    52,
+    54,
+    [
+     " more pipelined requests. `0` disables the threshold. A single reply may exceed",
+     " it; it is not a hard cap on response size or allocated capacity."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    54,
+    55
+   ],
+   [
+    "replace",
+    55,
+    61,
+    55,
+    61,
+    [
+     " snapshots manual (`SAVE`); a positive value schedules periodic saves.",
+     " `.snapshot.keep_last = 0` keeps all files; a positive value keeps the newest",
+     " timestamped snapshots after a successful save. Use a dedicated directory.",
+     " If automatic snapshots and AOF are both enabled, startup replays **only",
+     " the AOF**; snapshots are backups and are not an automatic fallback for a",
+     " missing journal. Disable AOF to start from a snapshot."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    61,
+    62
+   ],
+   [
+    "replace",
+    62,
+    63,
+    62,
+    63,
+    [
+     " `.@\"error\"`). `log_network_payloads` separately controls payload logs."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    104,
+    63,
+    104
+   ],
+   [
+    "replace",
+    104,
+    105,
+    104,
+    105,
+    [
+     "Test cases live under `src/tests/`, grouped by subsystem and"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    149,
+    105,
+    149
+   ],
+   [
+    "replace",
+    149,
+    151,
+    149,
+    151,
+    [
+     " choosing an unused port. Use `.no` for the RAM run and `.always` for the",
+     " persistence run:"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    156,
+    151,
+    156
+   ],
+   [
+    "replace",
+    156,
+    165,
+    156,
+    157,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    168,
+    157,
+    160
+   ],
+   [
+    "replace",
+    168,
+    170,
+    160,
+    162,
+    [
+     " `/path/to/zcached/zig-out/bin/zcached --config-path config.zon --log-path log/zcached.log`.",
+     " From the repository root, run the matching benchmark:"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    186,
+    162,
+    178
+   ],
+   [
+    "replace",
+    186,
+    190,
+    178,
+    182,
+    [
+     " sends a batch, validates every ordered response, then starts the next batch.",
+     " Concurrent sending and receiving prevent bidirectional TCP buffer deadlock",
+     " for large mixed workloads. Pipelined clients use two additional I/O tasks,",
+     " so their scheduling overhead is included in the measurements."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    182,
+    183
+   ],
+   [
+    "replace",
+    191,
+    192,
+    183,
+    184,
+    [
+     " server's request-size and memory limits accommodate the chosen workload."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    204,
+    184,
+    196
+   ],
+   [
+    "replace",
+    204,
+    208,
+    196,
+    197,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    216,
+    197,
+    205
+   ],
+   [
+    "replace",
+    216,
+    217,
+    205,
+    206,
+    [
+     "tools/profile.zig runs the benchmark together with"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    273,
+    206,
+    262
+   ],
+   [
+    "replace",
+    273,
+    284,
+    262,
+    273,
+    [
+     "|Workload|Value|Pipeline 1|Pipeline 16|Pipeline 64|64 vs 1|",
+     "|---|---:|---:|---:|---:|---:|",
+     "|GET|20 B|204,306|2,113,790|5,517,224|27.00x|",
+     "|SET|20 B|199,245|1,743,117|3,116,189|15.64x|",
+     "|Mixed|20 B|180,281|1,399,882|3,113,672|17.27x|",
+     "|GET|1 KiB|200,279|2,068,076|4,303,742|21.49x|",
+     "|SET|1 KiB|194,747|1,384,021|2,079,200|10.68x|",
+     "|Mixed|1 KiB|180,730|1,238,136|2,483,707|13.74x|",
+     "|GET|16 KiB|170,974|642,889|665,172|3.89x|",
+     "|SET|16 KiB|165,363|349,173|387,050|2.34x|",
+     "|Mixed|16 KiB|153,040|308,058|367,082|2.40x|"
+    ]
+   ],
+   [
+    "equal",
+    284,
+    287,
+    273,
+    276
+   ],
+   [
+    "replace",
+    287,
+    292,
+    276,
+    281,
+    [
+     "|Workload|Pipeline 1|Pipeline 16|Pipeline 64|",
+     "|---|---:|---:|---:|",
+     "|GET|0.632|5.343|19.978|",
+     "|SET|0.763|4.456|14.859|",
+     "|Mixed|1.120|5.169|14.873|"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    301,
+    281,
+    290
+   ],
+   [
+    "replace",
+    301,
+    306,
+    290,
+    295,
+    [
+     "|Workload|Pipeline 1 ops/s|Pipeline 64 ops/s|64 vs 1|Batch P99, pipeline 64 (ms)|",
+     "|---|---:|---:|---:|---:|",
+     "|GET|211,711|5,789,001|27.34x|2.361|",
+     "|SET|206,454|2,884,063|13.97x|4.973|",
+     "|Mixed|195,473|3,403,556|17.41x|2.341|"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    322,
+    295,
+    311
+   ],
+   [
+    "replace",
+    322,
+    344,
+    311,
+    333,
+    [
+     "|Scenario|Clients|Requests|ops/s|P50 us|P95 us|P99 us|",
+     "|---|---:|---:|---:|---:|---:|---:|",
+     "|get|1|20000|45246|19.88|37.13|57.88|",
+     "|get|2|40000|68414|23.83|59.17|90.00|",
+     "|get|4|80000|86870|36.71|90.42|135.54|",
+     "|get|8|160000|104253|56.00|153.00|263.96|",
+     "|get|16|320000|158430|74.96|223.96|375.79|",
+     "|set|1|20000|48605|19.46|26.63|37.25|",
+     "|set|2|40000|82951|22.96|34.75|51.92|",
+     "|set|4|80000|112748|29.75|67.38|94.79|",
+     "|set|8|160000|104710|53.50|145.75|233.88|",
+     "|set|16|320000|145058|74.38|279.42|496.83|",
+     "|mixed|1|20000|49162|19.38|25.79|34.83|",
+     "|mixed|2|40000|63924|23.42|52.00|102.54|",
+     "|mixed|4|80000|99643|31.63|81.33|118.13|",
+     "|mixed|8|160000|97417|53.42|178.96|341.88|",
+     "|mixed|16|320000|129109|72.75|294.33|605.92|",
+     "|persistence|1|20000|34581|26.50|39.88|85.79|",
+     "|persistence|2|40000|59229|30.67|54.04|106.08|",
+     "|persistence|4|80000|65683|46.33|119.96|191.04|",
+     "|persistence|8|160000|70820|72.04|232.13|426.67|",
+     "|persistence|16|320000|68913|94.42|465.88|1386.96|"
+    ]
+   ],
+   [
+    "equal",
+    344,
+    354,
+    333,
+    343
+   ],
+   [
+    "replace",
+    354,
+    371,
+    343,
+    360,
+    [
+     "|Scenario|Clients|Requests|ops/s|P50 us|P95 us|P99 us|",
+     "|---|---:|---:|---:|---:|---:|---:|",
+     "|get|1|10000|48870|18.17|39.33|52.71|",
+     "|get|2|20000|85704|21.29|41.33|64.08|",
+     "|get|4|40000|141901|24.17|48.54|66.13|",
+     "|get|8|80000|167771|42.04|78.25|109.67|",
+     "|get|16|160000|201668|67.58|135.71|186.75|",
+     "|set|1|10000|53354|18.00|23.00|33.63|",
+     "|set|2|20000|90534|20.96|30.17|50.96|",
+     "|set|4|40000|140143|24.46|49.13|68.13|",
+     "|set|8|80000|170456|39.21|85.83|123.71|",
+     "|set|16|160000|202904|68.88|142.83|208.08|",
+     "|mixed|1|10000|53438|17.92|23.63|35.63|",
+     "|mixed|2|20000|91107|20.96|30.04|49.08|",
+     "|mixed|4|40000|140226|24.58|48.67|67.25|",
+     "|mixed|8|80000|165236|39.75|85.54|120.67|",
+     "|mixed|16|160000|202231|67.17|147.13|203.17|"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    415,
+    360,
+    404
+   ],
+   [
+    "replace",
+    415,
+    419,
+    404,
+    408,
+    [
+     "- For release history, see the release_history.md",
+     "- For building/installation process please refer to the installation.md",
+     "- For supported types and their encodings, see the types.md",
+     "- For supported commands, see the commands.md"
+    ]
+   ],
+   [
+    "equal",
+    419,
+    420,
+    408,
+    409
+   ],
+   [
+    "replace",
+    420,
+    421,
+    409,
+    410,
+    [
+     " see the network architecture."
+    ]
+   ],
+   [
+    "equal",
+    421,
+    423,
+    410,
+    412
+   ],
+   [
+    "replace",
+    423,
+    424,
+    412,
+    413,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "cfde8583cf2a+2": {
+  "fn": "ill-yes/steam-bee",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "CI CodeQL GitHub Release GitHub Release Date GitHub Last Commit License: AGPL-3.0-or-later"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Container: GHCR Platforms Buy Me a Coffee"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    12,
+    5,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "compliant. Review Product Context before using it."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    25,
+    13,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "**Quick links:** Screenshots · ✨ Features · 🚀 Quick Start · Deployment · Operations · Notifications · Development · 🔒 Security · ☕ Support"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    31,
+    26,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "SteamBee dashboard"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    32,
+    33
+   ],
+   [
+    "replace",
+    33,
+    43,
+    33,
+    36,
+    [
+     " SteamBee admin area",
+     "",
+     " SteamBee sign-in"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    36,
+    39
+   ],
+   [
+    "replace",
+    46,
+    74,
+    39,
+    67,
+    [
+     "|Feature|What it does|",
+     "|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|🛡️ **Admin setup**|One-time-token-protected admin setup with a cookie-based management UI.|",
+     "|👥 **Own accounts**|Multiple own Steam accounts in one container.|",
+     "|📱 **QR login**|QR login via `steam-session`.|",
+     "|🔑 **Credential fallback**|One-time username/password + Steam Guard fallback without password persistence.|",
+     "|🔐 **Token storage**|Encrypted refresh-token storage in `/data`.|",
+     "|🎮 **Game library**|Library import with manual AppID fallback.|",
+     "|⏯️ **Session controls**|Start, pause, resume, and stop per account.|",
+     "|👤 **Steam presence**|Persona state and optional custom game title.|",
+     "|📅 **Planning and history**|Presets, a weekly schedule timeline, playtime statistics, session history, and local logs.|",
+     "|🩺 **Recovery health**|Recovery health with last Steam contact, retry timing, error class, token expiry, and library-snapshot age.|",
+     "|🔄 **Session recovery**|Automatic recovery when another Steam session temporarily owns the account: two retries five minutes apart, then a 60-minute cooldown, repeated until Steam reports the account free. A restart begins a fresh retry cycle.|",
+     "|⏱️ **Safety limits**|Session safety limits with a fail-closed disconnect fallback; limits can pause but never start a session, and daily/weekly limits use explicit UTC calendar boundaries.|",
+     "|🗓️ **Schedule preview**|Seven-day schedule preview, overlap winners, skip-next, and pause-until.|",
+     "|🗂️ **Account groups**|Account groups with per-account bulk results for pause and stop only.|",
+     "|🔔 **Notifications and webhooks**|Local browser notifications and optional generic webhooks with private-network target blocking, bounded retries, and redacted payloads.|",
+     "|🎯 **Playtime goals**|Read-only playtime goals based on manually refreshed library snapshots.|",
+     "|💾 **Recovery exports**|Passphrase-encrypted recovery exports and a preflighted offline restore tool.|",
+     "|🔒 **Single-instance lease**|A single-instance lease that prevents two processes from operating the same `/data` directory.|",
+     "|📡 **Live updates**|SSE status/log updates.|",
+     "|🎁 **Free-game offers**|Temporary free-game offers with opt-in browser notifications and owned-game filtering.|",
+     "|🧭 **Account hub**|An account hub for games, inventory, card farming, offers, and account safety.|",
+     "|🃏 **Inventory and market**|Steam Community inventory shown as badge card sets with a sell basket, wallet-bound pricing strategies, a market listings table that follows Steam Mobile confirmations, confirmed bulk sales and cancellation, fee previews, progress, and a stop control.|",
+     "|🌾 **Card farming**|Optional two-phase card farming on a board of running, upcoming and skipped games, with selectable farming order (including card value), pinned games, license-based refund protection, resume after restarts, effective activity tracking, and the existing safety controls.|",
+     "|🎨 **Appearance**|Additional built-in themes and local font preferences, without custom backgrounds.|",
+     "|🐳 **Docker Compose**|Docker Compose setup for a VPS, Unraid, or any generic Docker host.|",
+     "|📦 **Prebuilt image**|Optional prebuilt image deployment through GitHub Container Registry.|"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    82,
+    67,
+    75
+   ],
+   [
+    "replace",
+    82,
+    83,
+    75,
+    76,
+    [
+     " see Deployment and Configuration."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    126,
+    76,
+    119
+   ],
+   [
+    "replace",
+    126,
+    127,
+    119,
+    120,
+    [
+     "Operations and Data for storage and backup guidance."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    130,
+    120,
+    123
+   ],
+   [
+    "replace",
+    130,
+    148,
+    123,
+    141,
+    [
+     "- Deployment and Configuration covers source builds,",
+     " image tags and verification, environment settings, and reverse proxies.",
+     "- Operations and Data covers runtime commands, persistent",
+     " storage, Unraid, backups, restores, and updates.",
+     "- Back Up and Restore links directly",
+     " to the recovery procedures.",
+     "- Security Policy documents supported deployment boundaries and",
+     " vulnerability reporting.",
+     "- Contributing covers repository hygiene, local checks, and",
+     " contribution licensing.",
+     "- Translations explains locale ownership and the",
+     " community-translation status.",
+     "- Steam Tools covers free offers, inventory, market actions,",
+     " card farming, and appearance preferences.",
+     "- Achievement Editor Feasibility explains the",
+     " currently unsupported write integration.",
+     "- Product Context and Design define the product",
+     " boundaries and visual system."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    179,
+    141,
+    172
+   ],
+   [
+    "replace",
+    179,
+    181,
+    172,
+    174,
+    [
+     "Read CONTRIBUTING.md for repository hygiene and local checks,",
+     "and CLA.md before opening a pull request."
+    ]
+   ],
+   [
+    "equal",
+    181,
+    184,
+    174,
+    177
+   ],
+   [
+    "replace",
+    184,
+    185,
+    177,
+    178,
+    [
+     "Read SECURITY.md before exposing SteamBee outside localhost."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    202,
+    178,
+    195
+   ],
+   [
+    "replace",
+    202,
+    203,
+    195,
+    196,
+    [
+     "> Steam Subscriber Agreement"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    206,
+    196,
+    199
+   ],
+   [
+    "delete",
+    206,
+    207,
+    199,
+    199
+   ],
+   [
+    "equal",
+    207,
+    208,
+    199,
+    200
+   ],
+   [
+    "delete",
+    208,
+    221,
+    200,
+    200
+   ],
+   [
+    "equal",
+    221,
+    226,
+    200,
+    205
+   ],
+   [
+    "replace",
+    226,
+    227,
+    205,
+    206,
+    [
+     "Buy Me a Coffee"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "1cc7ac1d219e+2": {
+  "fn": "alperrte/lobbytwozero",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "LobbyTwoZero (LTZ) — oyun odaklı sosyal platform"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    8,
+    2,
+    4,
+    [
+     " Oyuncuların keşfettiği, konuştuğu, arkadaş edindiği ve takım kurduğu tek lobi. ",
+     " 17 mikroservis · 5 oyuncu · 301 görev · tek bir dünya "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    4,
+    5
+   ],
+   [
+    "replace",
+    9,
+    12,
+    5,
+    6,
+    [
+     " Stage 01 — Story Mode: proje hakkında "
+    ]
+   ],
+   [
+    "equal",
+    12,
+    17,
+    6,
+    11
+   ],
+   [
+    "replace",
+    17,
+    25,
+    11,
+    19,
+    [
+     "|🎮 Karakter sınıfı|Bu dünyada ne yapar?|",
+     "|---|---|",
+     "|**Oyuncu**|Oyun keşfeder, kütüphanesini yönetir, inceleme yazar, arkadaş ve takım bulur|",
+     "|**Donanım meraklısı**|Bilgisayar profilini oluşturur, FPS ve sıcaklık ölçümlerini takip eder, yükseltme önerisi alır|",
+     "|**İçerik üreticisi**|Haber, rehber ve topluluk gönderileri paylaşır, etkinlik düzenler|",
+     "|**Oyun geliştiricisi**|Oyununu toplulukla buluşturur, geri bildirim toplar|",
+     "|**Moderatör / Admin**|Raporları inceler, içerik ve kullanıcı moderasyonu yapar|",
+     "|**Misafir**|Giriş yapmadan kataloğu ve herkese açık içerikleri gezer|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    19,
+    20
+   ],
+   [
+    "replace",
+    26,
+    27,
+    20,
+    21,
+    [
+     " Stage 02 — Abilities: özellikler "
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    21,
+    22
+   ],
+   [
+    "replace",
+    28,
+    29,
+    22,
+    23,
+    [
+     " LTZ özellik kartları: kimlik, oyun keşfi, kütüphane, inceleme, sosyal ve mesaj, takım bulma, topluluk ve etkinlik, donanım ve FPS, akıllı öneri"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    23,
+    24
+   ],
+   [
+    "replace",
+    30,
+    36,
+    24,
+    25,
+    [
+     " 🛡️ Kimlik & Hesap — auth · user · mail "
+    ]
+   ],
+   [
+    "equal",
+    36,
+    43,
+    25,
+    32
+   ],
+   [
+    "replace",
+    43,
+    47,
+    32,
+    33,
+    [
+     " 🕹️ Oyun Keşfi, Kütüphane & İnceleme — game · library · review "
+    ]
+   ],
+   [
+    "equal",
+    47,
+    53,
+    33,
+    39
+   ],
+   [
+    "replace",
+    53,
+    57,
+    39,
+    40,
+    [
+     " 💬 Sosyal, Mesajlaşma & Takım Bulma — social · messaging · lfp "
+    ]
+   ],
+   [
+    "equal",
+    57,
+    63,
+    40,
+    46
+   ],
+   [
+    "replace",
+    63,
+    67,
+    46,
+    47,
+    [
+     " 📅 Topluluk, İçerik & Etkinlik — community · content · event "
+    ]
+   ],
+   [
+    "equal",
+    67,
+    73,
+    47,
+    53
+   ],
+   [
+    "replace",
+    73,
+    77,
+    53,
+    54,
+    [
+     " 🖥️ Donanım, Performans & Akıllı Öneri — hardware · performance · recommendation "
+    ]
+   ],
+   [
+    "equal",
+    77,
+    83,
+    54,
+    60
+   ],
+   [
+    "replace",
+    83,
+    87,
+    60,
+    61,
+    [
+     " 🔔 Bildirim & Yönetim — notification · admin "
+    ]
+   ],
+   [
+    "equal",
+    87,
+    91,
+    61,
+    65
+   ],
+   [
+    "replace",
+    91,
+    92,
+    65,
+    66,
+    [
+     " Stage 03 — World Map: mimari "
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    66,
+    67
+   ],
+   [
+    "replace",
+    93,
+    100,
+    67,
+    68,
+    [
+     " LTZ mimarisi: Next.js istemcisi API Gateway üzerinden 17 mikroservise bağlanır, her servisin kendi PostgreSQL veritabanı vardır"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    103,
+    68,
+    71
+   ],
+   [
+    "replace",
+    103,
+    113,
+    71,
+    81,
+    [
+     "|Bölge|Servisler|Port aralığı|",
+     "|---|---|---|",
+     "|🟢 Kimlik & hesap|`auth` · `user` · `mail`|5081–5083|",
+     "|🟡 Oyun & katalog|`game` · `library` · `review`|5084–5086|",
+     "|🔴 Sosyal & iletişim|`social` · `messaging` · `lfp`|5087–5089|",
+     "|🩷 Topluluk & içerik|`community` · `content` · `event`|5090–5092|",
+     "|🟥 Donanım & performans|`hardware` · `recommendation` · `performance`|5093–5095|",
+     "|⚪ Paylaşılan|`admin` · `notification`|5096–5097|",
+     "|🏰 Kapı|`api-gateway`|5080|",
+     "|🏠 İstemci|`frontend` (Next.js)|5001|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    81,
+    82
+   ],
+   [
+    "replace",
+    114,
+    115,
+    82,
+    83,
+    [
+     "> Ayrıntılı topoloji, akışlar ve veri sahipliği için: architecture.md · database.md · er-diagram.md"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    83,
+    84
+   ],
+   [
+    "replace",
+    116,
+    117,
+    84,
+    85,
+    [
+     " Stage 04 — Inventory: tech stack "
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    85,
+    86
+   ],
+   [
+    "replace",
+    118,
+    119,
+    86,
+    87,
+    [
+     " Tech stack: Java 25, Spring Boot 4.1.1, Spring Cloud Gateway, Maven, springdoc OpenAPI, JJWT, PostgreSQL 17, Flyway, Hibernate/JPA, Next.js 16, React 19, TypeScript 5, Tailwind CSS 4, next-intl, JUnit, JaCoCo, Vitest, Playwright, ESLint, SonarQube, Docker Compose, Node.js, Git pre-push"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    87,
+    88
+   ],
+   [
+    "replace",
+    120,
+    123,
+    88,
+    89,
+    [
+     " Stage 05 — The Party: ekip "
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    89,
+    90
+   ],
+   [
+    "replace",
+    124,
+    125,
+    90,
+    91,
+    [
+     " LTZ ekibi: Alper Temiz, Nisa Camcı, Umut Yeşilyurt, Hamza Taşbay, Kerem Kalyoncu"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    91,
+    92
+   ],
+   [
+    "replace",
+    126,
+    127,
+    92,
+    99,
+    [
+     "|Oyuncu|Sınıf|Sorumlu olduğu bölge|Görev|",
+     "|---|---|---|---|",
+     "|**P1 · Alper Temiz**|Tech Oracle|hardware · recommendation · performance (+ web)|72|",
+     "|**P2 · Nisa Camcı**|Guild Master|community · content · event|64|",
+     "|**P3 · Umut Yeşilyurt**|Party Summoner|social · messaging · lfp|60|",
+     "|**P4 · Hamza Taşbay**|Lore Keeper|game · library · review|59|",
+     "|**P5 · Kerem Kalyoncu**|Gate Paladin|auth · user · mail|46|"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    99,
+    100
+   ],
+   [
+    "replace",
+    128,
+    131,
+    100,
+    101,
+    [
+     " `notification` ve `admin` servisleri ekibin ortak bölgesidir. "
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    101,
+    102
+   ],
+   [
+    "replace",
+    132,
+    145,
+    102,
+    103,
+    [
+     " Stage 06 — Quest Log: yol haritası "
+    ]
+   ],
+   [
+    "equal",
+    145,
+    150,
+    103,
+    108
+   ],
+   [
+    "replace",
+    150,
+    164,
+    108,
+    109,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    109,
+    111
+   ],
+   [
+    "replace",
+    166,
+    167,
+    111,
+    112,
+    [
+     " Stage 07 — Lore Library: dokümantasyon "
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    112,
+    113
+   ],
+   [
+    "replace",
+    168,
+    169,
+    113,
+    124,
+    [
+     "|📜 Parşömen|İçinde ne var?|",
+     "|---|---|",
+     "|architecture.md|Servis topolojisi, iletişim desenleri, akışlar|",
+     "|database.md|Veritabanı sahipliği, tablo kuralları, Flyway stratejisi|",
+     "|er-diagram.md|Her veritabanı için ER diyagramları|",
+     "|api.md|Tüm servislerin API kataloğu|",
+     "|SECURITY.md|Güvenlik kuralları|",
+     "|web-rules.md|Frontend, UX ve erişilebilirlik kuralları|",
+     "|folder-structure.md|Klasör yapısı ve \"ne nereye gider\" rehberi|",
+     "|decisions/migrations.md|Servis başına Flyway sürüm aralıkları|",
+     "|AGENTS.md · CLAUDE.md|Yapay zekâ ajanları için çalışma kuralları|"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    170,
+    124,
+    125
+   ],
+   [
+    "replace",
+    170,
+    181,
+    125,
+    126,
+    [
+     " Stage 08 — Co-op Mode: iletişim "
+    ]
+   ],
+   [
+    "equal",
+    181,
+    182,
+    126,
+    127
+   ],
+   [
+    "replace",
+    182,
+    183,
+    127,
+    128,
+    [
+     " Partiye katılmak, soru sormak ya da sadece selam vermek için oyunculara buradan ulaşabilirsin. "
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    128,
+    129
+   ],
+   [
+    "replace",
+    184,
+    185,
+    129,
+    134,
+    [
+     " P1 Alper Temiz — Tech Oracle ",
+     " Alper Temiz GitHub ",
+     " Alper Temiz LinkedIn ",
+     " Alper Temiz e-posta ",
+     " Alper Temiz CV"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    134,
+    135
+   ],
+   [
+    "replace",
+    186,
+    187,
+    135,
+    140,
+    [
+     " P2 Nisa Camcı — Guild Master ",
+     " Nisa Camcı GitHub ",
+     " Nisa Camcı LinkedIn ",
+     " Nisa Camcı e-posta ",
+     " Nisa Camcı CV"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    188,
+    140,
+    141
+   ],
+   [
+    "replace",
+    188,
+    227,
+    141,
+    146,
+    [
+     " P3 Umut Yeşilyurt — Party Summoner ",
+     " Umut Yeşilyurt GitHub ",
+     " Umut Yeşilyurt LinkedIn ",
+     " Umut Yeşilyurt e-posta ",
+     " Umut Yeşilyurt CV"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    146,
+    147
+   ],
+   [
+    "replace",
+    228,
+    229,
+    147,
+    152,
+    [
+     " P4 Hamza Taşbay — Lore Keeper ",
+     " Hamza Taşbay GitHub ",
+     " Hamza Taşbay LinkedIn ",
+     " Hamza Taşbay e-posta ",
+     " Hamza Taşbay CV"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    152,
+    153
+   ],
+   [
+    "replace",
+    230,
+    231,
+    153,
+    160,
+    [
+     " P5 Kerem Kalyoncu — Gate Paladin ",
+     " Kerem Kalyoncu GitHub ",
+     " Kerem Kalyoncu LinkedIn ",
+     " Kerem Kalyoncu e-posta ",
+     " Kerem Kalyoncu CV",
+     "",
+     " Stage 09 — New Game: hızlı başlangıç "
+    ]
+   ],
+   [
+    "equal",
+    231,
+    242,
+    160,
+    171
+   ],
+   [
+    "replace",
+    242,
+    243,
+    171,
+    172,
+    [
+     "> Ayrıntılar: ops/ops.md · pre-push/pre-push.md"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    244,
+    172,
+    173
+   ],
+   [
+    "replace",
+    244,
+    245,
+    173,
+    174,
+    [
+     " In development — LTZ aktif geliştirme aşamasında. Thanks for playing! "
+    ]
+   ],
+   [
+    "equal",
+    245,
+    248,
+    174,
+    177
+   ],
+   [
+    "replace",
+    248,
+    249,
+    177,
+    178,
+    [
+     "DevSecOps Foundation v1.0. GitHub üzerinde gerçek CI sonucu ve merge koruması henüz **NOT VERIFIED**."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

@@ -3469,5 +3469,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0c05b3ce7839": {
+  "identity": {
+   "one_liner": "在 TypeScript 中直接编写 SQL 并推导行与参数类型的查询库",
+   "review": "TypeSQL 在 TypeScript 类型检查器内解析 SQL，为查询行和参数提供类型，无需代码生成、数据库连接或构建步骤。支持 PostgreSQL、SQLite、MySQL 与 MariaDB，通过驱动适配器执行查询。需 TypeScript 7.1+，且 tsconfig 开启 strict（至少 strictNullChecks）。适用于在 TypeScript 项目中使用原生 SQL 的开发者。",
+   "highlights": [
+    "在类型检查器内解析 SQL，实现行与参数的即时类型推导，无需代码生成或数据库连接",
+    "支持 PostgreSQL、SQLite、MySQL、MariaDB，核心运行时小于 3 kB（minified + gzipped）且无依赖",
+    "DB schema 类型可从迁移文件、在线数据库生成，或取自 Kysely、Drizzle、Prisma，也可手写"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中编写原生 SQL 并获得行与参数的静态类型检查",
+    "已有 Kysely、Drizzle 或 Prisma schema 的项目复用现有 DB 类型定义",
+    "搭配 node-postgres、postgres.js、mysql2、better-sqlite3 等常见驱动执行参数化查询"
+   ]
+  },
+  "sha": "0c05b3ce7839",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8c68a866cd49": {
+  "identity": {
+   "one_liner": "连接 SQLAlchemy 与 DuckDB/MotherDuck 的方言，含迁移支持",
+   "review": "duckdb-sqlalchemy 是 SQLAlchemy 方言，使 Python 程序通过 create_engine() 访问本地 DuckDB（内存或文件）与 MotherDuck 云数仓，支持 Core/ORM、pandas/Arrow 读写、Parquet/CSV 查询及 Alembic 迁移。它 fork 自 Mause/duckdb_engine，两者均注册 duckdb:// 方言，不可同环境安装。连接 MotherDuck 需用 motherduck extra 并配置 MOTHERDUCK_TOKEN。支持 Python 3.10–3.15、SQLAlchemy 2.0+。",
+   "highlights": [
+    "支持 SQLAlchemy Core、ORM、pandas 与 Apache Arrow 工作流，通过 create_engine() 连接本地 DuckDB 与 MotherDuck",
+    "提供 Alembic 迁移支持，并可将表、视图、列、约束反射进 SQLAlchemy 元数据",
+    "包含 Parquet/CSV 表函数查询、批量插入与 COPY 辅助工具，以及连接池与读扩展配置"
+   ],
+   "use_cases": [
+    "在 Python 中以 SQLAlchemy Core/ORM 查询内存或文件型 DuckDB 分析数据",
+    "需要认证、attach、连接池与读扩展地连接 MotherDuck 云数仓",
+    "从 duckdb_engine 迁移，或在本地/云 DuckDB 上运行 Alembic schema 迁移"
+   ]
+  },
+  "sha": "8c68a866cd49",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3301,5 +3301,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ee89a3ed9236": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的纯本地 SQLite 跨会话长期记忆插件，基于记忆宫殿信息架构组织检索。",
+   "review": "dsh-engram 是 DeepSeek Harness（DSH）的跨会话长期记忆插件，数据存于本地 SQLite（user/project/shared 三层分库），嵌入推理用随包 WASM 引擎在本地运行，无外部服务与 API Key 依赖。面向 DSH 用户提供 23 个窄参数 engram_* 工具，覆盖保存、检索、复习、审计与导出，并通过 `dsh plugin add` 一条命令安装，默认零配置即用。",
+   "highlights": [
+    "提供 FTS5（含中文 2-gram 预切词）与本地向量（默认 384 维 MiniLM，q8）RRF 混合检索，嵌入下载失败自动降级纯关键词检索",
+    "每条记忆记录来源会话、轮次与 seq 三级溯源，配合取代链、矛盾边与 op_log 操作日志实现全链路审计",
+    "内置证据门（engram_assess 由代码强制三项条件齐备才判充足）、SM-2 间隔重复复习、入库脱密钥与提示注入防护协议标签"
+   ],
+   "use_cases": [
+    "需要编码 agent 在跨会话中保留用户画像、项目约定与技术选型决策的场景",
+    "需将记忆导出为 Markdown/JSON 或 Obsidian/Logseq 友好镜像目录以供人阅读与归档的场景",
+    "需对记忆来源、修改与遗忘操作做审计回查，或按 git origin 隔离多项目记忆数据的场景"
+   ]
+  },
+  "sha": "ee89a3ed9236",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "09b69be4dc33": {
+  "identity": {
+   "one_liner": "Rust 编写的本地 LLM 代理运行时，提供 tmux 持久会话与异步工具监督。",
+   "review": "Adapt 是一个用 Rust 实现的本地代理运行时，为语言模型提供 shell 执行、tmux 持久终端会话、后台任务交接与显式 <wait/> 等待机制，并包含 SQLite/JSONL 日志、语义记忆和可选 MCP 工具服务器。每个模型轮次仅执行一个工具动作。主要面向 Linux/WSL2 环境，开发者声明处于实验阶段，原生 Windows 不支持。",
+   "highlights": [
+    "支持 tmux 命名会话实现持久终端状态，含前台转后台执行与空闲唤醒机制",
+    "通过 config.toml 配置提供者、工具标签、安全规则等，兼容 OpenAI 兼容后端",
+    "提供 SQLite 工具日志、Markdown 记忆存储及可选 Bubblewrap 隔离"
+   ],
+   "use_cases": [
+    "需要持久会话的多步骤任务，如 Python REPL、调试器、数据库 shell、SSH 操作",
+    "长时间运行命令的后台监督场景，模型可在等待期间继续其他工作",
+    "本地推理模型需要调用远程工具服务器或 MCP 兼容工具的场景"
+   ]
+  },
+  "sha": "09b69be4dc33",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "faf1a4be9363": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的开源自托管 PDM/PLM 系统，管理 CAD 版本与变更流程",
+   "review": "TeamCraft 是用 Rust 编写的开源自托管 PDM/PLM 系统，使用 PostgreSQL 存储数据。它提供 CAD 文件的检出/检入、版本与生命周期管理、多级 BOM、变更请求与变更单、STEP 及网格模型的 3D 预览、仿真管理、REST API、MCP server 和桌面命令行工具。目标用户是早期硬件初创团队和学生工程组织。目前处于 0.x 开发阶段，尚无稳定版本，README 明确不建议用于生产数据。",
+   "highlights": [
+    "支持按修订版本进行排他锁定的检出/检入，基于过期版本的检入会被拒绝；每次上传生成新版本，可下载或回滚",
+    "提供服务端转换的浏览器 3D 预览，支持 STEP、NX、SOLIDWORKS、CATIA V5、Creo、Rhino、SketchUp、JT、点云等格式，识别 160+ 文件格式",
+    "提供多级 BOM（含质量与成本汇总、版本对比、CSV/Excel 导出）、变更请求与变更单流程、REST API、MCP server 及 Docker/桌面应用安装方式"
+   ],
+   "use_cases": [
+    "早期硬件初创团队管理 CAD 文件版本、发布评审与变更记录",
+    "成员众多、人员每年更替的学生工程团队（赛车、火箭、卫星、机器人等）留存工程交接记录",
+    "通过 REST API 或 MCP server 将 PDM 数据集成到其他工具链"
+   ]
+  },
+  "sha": "faf1a4be9363",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

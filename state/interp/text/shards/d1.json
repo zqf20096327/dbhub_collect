@@ -2699,5 +2699,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f44e78e0fe46": {
+  "identity": {
+   "one_liner": "基于现有数据库的 Go 后台任务队列，支持事务性入队",
+   "review": "goncordia 是 Go 语言的后台任务队列库，直接运行在应用已有的数据库上，支持 Postgres、MySQL、SQLite、MongoDB、Redis、Cassandra、ClickHouse、DynamoDB、Firestore 及内存后端。通过泛型 Driver[TTx] 接口对接各数据库驱动，EnqueueTx 实现事务性 outbox 模式；提供 futures 等待任务结果、重试、cron、保留清理与内嵌管理界面。要求 Go 1.26+；无事务能力的后端为 at-least-once 语义。",
+   "highlights": [
+    "提供 EnqueueTx 事务性入队，任务随业务事务原子提交或回滚，无需独立中继进程",
+    "支持 typed futures：可通过 future.Func.Call/Await 获取任务处理函数的返回值",
+    "包含重试退避、优先级队列、唯一任务去重、cron 调度、保留清理、内嵌 dashboard、Prometheus 端点与 OpenTelemetry"
+   ],
+   "use_cases": [
+    "Go 服务中的后台任务：邮件通知、webhook、报表与缩略图生成、外部 API 同步、周期清理",
+    "需要业务数据与任务入队保持原子性的事务性 outbox 场景",
+    "调用方需要获取后台任务返回结果、或需在无 Docker 环境下用内存驱动做单元测试的场景"
+   ]
+  },
+  "sha": "f44e78e0fe46",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6676186b24b4": {
+  "identity": {
+   "one_liner": "开源智能体记忆引擎，符号短期记忆加分层长期记忆，本地运行",
+   "review": "InfinityDB 是一个面向 AI 智能体的开源记忆引擎，采用符号短期记忆与分层长期记忆结构，写入和读取时不需要模型调用或网络请求，本地支持 SQLite 与 Postgres 存储。内置 MCP server（13 个工具），examples/ 提供 LangChain、CrewAI、LlamaIndex 适配器。事实提取依赖本地规则模式，模式外的自由文本不会自动更新替代；常见词查询在大量事实下仍需全表扫描。",
+   "highlights": [
+    "提供 MCP server，包含 recall_memory、entity_graph、contradictions、verify_proof 等 13 个工具，可通过 uvx 一条命令接入 Claude Code、Cursor 等 MCP 宿主",
+    "每条事实附带 SHA-256 哈希与源文片段摘要，支持导出离线可验证的审计包（hash chain），并提供 erase_with_receipt() 删除回执",
+    "支持时间性事实历史：add(ts=) 记录事件时间，recall(as_of=ts) 返回当时有效的事实；检索基于 SQLite FTS5 混合索引，可经 rerank=fn 接入本地 cross-encoder"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Windsurf 等 MCP 宿主中的智能体添加本地长期记忆",
+    "需要对智能体记忆事实进行审计、验证与合规删除（出具删除回执）的场景",
+    "通过时间点查询追踪事实历史变化（如用户地址、角色、雇主的更新）"
+   ]
+  },
+  "sha": "6676186b24b4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

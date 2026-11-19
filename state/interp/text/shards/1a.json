@@ -2878,5 +2878,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f25959b71dea": {
+  "identity": {
+   "one_liner": "PostgreSQL 线协议兼容缓存代理，用逻辑复制保持缓存与源库一致",
+   "review": "pgcache 是部署在应用与 PostgreSQL 之间的代理，缓存可缓存查询的结果，并通过订阅源库逻辑复制流（CDC）对每条已提交变更做就地应用或失效处理。应用只需改一条连接字符串，写入仍直达主库。依赖条件：源库需开启 logical replication，被缓存表必须有主键，另需一个带 pgcache_pgrx 扩展的专用缓存 PostgreSQL。",
+   "highlights": [
+    "以 PostgreSQL 线协议代理方式运行，支持 PostgreSQL 16/17/18，应用无需修改代码",
+    "通过逻辑复制流维护一致性：单表查询可就地应用变更，连接与复杂查询在需要回源取数时失效",
+    "提供 Fit Analyzer（WASM 浏览器端分析 pg_stat_statements 导出等真实查询的缓存命中率潜力）与 Docker/AWS AMI 部署方式"
+   ],
+   "use_cases": [
+    "读多写少、希望为主库分担热点读负载的 PostgreSQL 应用",
+    "不想引入 Redis 或手动失效逻辑、希望仅改连接字符串接入缓存读取的团队",
+    "接入前先用 Fit Analyzer 基于 pg_stat_statements 数据评估工作负载可缓存比例的场景"
+   ]
+  },
+  "sha": "f25959b71dea",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ae50fb97e52": {
+  "identity": {
+   "one_liner": ".NET 持久化后台任务库，作业以数据库行形式存储执行",
+   "review": "Acta 是面向 .NET 的后台任务与工作流库，支持重试、调度、持久步骤、子作业等，作业以行形式存于应用已有的 PostgreSQL、SQL Server 或 SQLite 数据库，无需独立消息代理或服务器。执行语义为 at-least-once，要求处理器的外部副作用可幂等。当前为 1.0.0-rc.14 候选版本，升级候选可能需要重建数据库。",
+   "highlights": [
+    "提供 PostgreSQL、SQL Server、SQLite 三个官方包（Acta.Postgres / Acta.SqlServer / Acta.Sqlite），通过连接字符串切换",
+    "作业、重试、调度、持久步骤、子作业及运维控制均以数据库行持久化，可通过 SQL 视图（jobs_view、events_view）查询",
+    "附带 Dashboard、CLI 与基于 OpenAPI 的 HTTP JSON API；运行时、Dashboard、CLI 与官方 SQL 提供程序采用 Apache-2.0 许可免费使用"
+   ],
+   "use_cases": [
+    "需要在进程崩溃后仍可恢复执行并可事后审计的后台作业",
+    "使用已有 PostgreSQL / SQL Server / SQLite 数据库、不想额外部署消息队列或独立服务器的 .NET 应用",
+    "包含最终失败、可重试失败、带超时等待、取消等场景的作业流程，需配套测试支持（开发者指南含测试章节）"
+   ]
+  },
+  "sha": "2ae50fb97e52",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fce275bf8e30": {
+  "identity": {
+   "one_liner": "自托管文档归档，含 GoBD 模式：邮件、电子发票、扫描件不可变保存",
+   "review": "Belegt 是面向德国企业的自托管文档归档应用（Beta，AGPL-3.0），收集邮件（IMAP/JMAP/Microsoft 365/Google/SMTP journal/PST）、电子发票（ZUGFeRD、XRechnung）、OCR 扫描件及任意文件并支持全文检索。GoBD 模式在 PostgreSQL 中实现印章与哈希链，按 §147 AO 计算保存期限，到期删除需第二人确认，并提供审计员访问与 Z3 数据载体导出。以 Docker/Podman 容器配合 PostgreSQL 运行。",
+   "highlights": [
+    "支持邮件归档（IMAP、JMAP、Microsoft 365、Google、SMTP journal、EML/MBOX/PST）与电子发票识别（ZUGFeRD、XRechnung，可选 KoSIT 校验器）",
+    "GoBD 相关机制：PostgreSQL 中的印章与哈希链、RFC 3161 时间戳、按 §147 AO 的保存期限与双人删除确认、审计员访问与 Z3 数据载体",
+    "提供 REST API（OpenAPI）、签名 Webhooks、MCP 接入、OpenID Connect 登录，可从 Paperless-ngx 迁移数据"
+   ],
+   "use_cases": [
+    "按德国 GoBD 要求长期保存发票、银行对账单、商业信函并应对税务审计",
+    "集中归档邮箱、扫描件与电子发票并全文检索",
+    "通过 MCP 或 REST API 让 AI 助手/自建程序检索与写入归档"
+   ]
+  },
+  "sha": "fce275bf8e30",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

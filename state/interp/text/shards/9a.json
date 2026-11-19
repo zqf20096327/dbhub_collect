@@ -3711,5 +3711,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fbdba3881d6a": {
+  "identity": {
+   "one_liner": "基于 Bun 的 Telegram CLI，本地 SQLite 缓存配合只读同步守护进程提供 MTProto 全量访问",
+   "review": "telegram-sync-cli 是一个运行于 Bun 的 TypeScript 命令行工具，通过 MTProto API 访问 Telegram。它将消息同步到本地 SQLite 缓存，支持 FTS5 全文搜索、只读 SQL 查询、多账号管理，并提供后台只读守护进程做实时同步与历史回填。面向需要在终端或脚本中操作 Telegram 的开发者与 AI agent，安装方式包括 Homebrew、bun/npm 及源码编译。",
+   "highlights": [
+    "提供只读后台守护进程进行实时同步、历史回填，支持大群组与频道的按需追赶同步",
+    "通过 tg api <method> 提供完整 MTProto API 访问，缓存读取支持 stale-while-revalidate 与 --fresh 绕过",
+    "默认 JSON 输出，含稳定错误模式、固定退出码、分页 next 指令及 skill manifest，供脚本与 agent 使用"
+   ],
+   "use_cases": [
+    "在终端或脚本中搜索、读取本地缓存的 Telegram 消息并进行只读 SQL 分析",
+    "为 AI agent 提供带只读模式与聊天白名单的 Telegram 命令行接口",
+    "通过 tg send 发送富文本 Markdown/HTML 消息及文件附件"
+   ]
+  },
+  "sha": "fbdba3881d6a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "064d7cb58af0": {
+  "identity": {
+   "one_liner": "自托管无 Cookie 网站分析平台，单个 Go 二进制加 PostgreSQL",
+   "review": "Supermetry 是一个开源（Apache-2.0）的自托管网站与产品分析平台，无需 Cookie 即统计访客、页面浏览、流量来源、目标与转化，数据保存在用户自己的 PostgreSQL 数据库中。除基础分析外，还包含漏斗、留存、用户路径、Web Vitals、热力图与会话回放。部署仅需一个 Go 二进制与 PostgreSQL（CI 使用 PostgreSQL 18），无需 Redis；不存储原始 IP，访客 ID 使用约 48 小时后删除的每日随机盐生成，并遵循 Do Not Track 与 Global Privacy Control。",
+   "highlights": [
+    "提供访客、页面浏览、跳出率、访问时长等基础指标，支持按页面、来源、渠道、UTM、国家、浏览器等多维度拆分与筛选",
+    "包含目标、漏斗、收入归因、留存队列、用户路径、Web Vitals（LCP/CLS/INP/FCP/TTFB）、热力图与会话回放，均随开源版本提供",
+    "提供 REST API、MCP 端点、CSV 导出，以及从 Google Analytics 4、Plausible、Umami、Mixpanel、Amplitude 导入数据"
+   ],
+   "use_cases": [
+    "自托管网站流量统计与访问行为分析",
+    "产品分析场景：自定义事件、漏斗、留存队列与收入归因",
+    "数据隐私合规要求较高、需要无 Cookie 且数据自持的站点监测"
+   ]
+  },
+  "sha": "064d7cb58af0",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a64a5e71d5f6": {
+  "identity": {
+   "one_liner": "用 Rust 从零编写的 SoulWorker GB/Steam 2.3.34.7 客户端服务端模拟器，单进程+SQLite。",
+   "review": "swemu 是一个面向 SoulWorker GB/Steam 2.3.34.7 客户端的开源服务端模拟器，用 Rust 实现并以单进程和 SQLite 运行，不依赖 Docker 或 MSSQL。它面向私服开发者与逆向研究社区，需自备客户端：仓库不含任何游戏数据，协议表和游戏数据由 Python 工具从用户自己的客户端文件生成。登录、城镇、副本、背包等功能有基础版本但均未完成，战斗模块存在缺陷并征集贡献；许可证为 AGPL-3.0。",
+   "highlights": [
+    "单进程 Rust 服务端，使用 SQLite 存储，无 Docker/MSSQL 依赖；登录端口 15001、游戏端口 10200",
+    "发送的数据包布局均通过 Unicorn 运行 2.3.34.7 客户端自带的数据包读取器验证，并提供 e2e 测试脚本以客户端加密跑通登录到副本战斗流程",
+    "协议表与游戏数据（tables.rs、gamedata.rs 等）由 Python 工具从用户自有客户端的 SoulWorker64.dll 及服务端 .res 表生成，仓库本身不含游戏文件"
+   ],
+   "use_cases": [
+    "在局域网内搭建 SoulWorker 2.3.34.7 客户端的私有测试服务器（客户端登录地址限制为 192.168/172.30 开头的 IP）",
+    "基于 Unicorn/Capstone 的客户端逆向分析与协议研究，docs 目录提供数据包布局与客户端函数地址记录",
+    "参与 Rust 服务端与私服模拟器开发的社区协作，战斗模块与技能公式、任务/组队/公会等功能等待实现"
+   ]
+  },
+  "sha": "a64a5e71d5f6",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

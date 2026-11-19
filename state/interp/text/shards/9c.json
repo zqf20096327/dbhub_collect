@@ -3544,5 +3544,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0b6b97050db4": {
+  "identity": {
+   "one_liner": "用 Rust 重写的 Postgres 兼容数据库，面向分析场景",
+   "review": "pgrust 是一个与 Postgres 18 线路协议和 SQL 方言兼容的数据库，用 Rust 重写，定位为对 Postgres 数据做快速分析。核心包括 Gravity 向量化 JIT 查询引擎、线程并发模型、查询调度器和统一内存预算管理器；提供 pgrcolumnar 列存表访问方法。README 给出性能数字为 ClickBench 分析查询最高 1,600 倍于 PostgreSQL（同一实例类型）。注意：版本为 v0.4-beta，官方目标 2027 年 Q1 达到生产就绪；不支持 PL/Python、PL/Perl、PL/Tcl，也不加载为 Postgres 编译的 C 扩展二进制。适合希望在 OLTP 数据库内直接做分析、避免额外数仓同步链路的团队试用。",
+   "highlights": [
+    "提供与 Postgres 18 线路协议和 SQL 方言的兼容性，现有驱动、ORM、psql 可直接使用",
+    "包含 Gravity 向量化 push-based JIT 查询引擎、线程并发模型、查询调度器与统一内存预算管理器",
+    "内置 pgvector、pg_cron、pg_stat_statements 等常用扩展及大部分 contrib，通过 CREATE EXTENSION 安装"
+   ],
+   "use_cases": [
+    "在同一数据库内对大表（pgrcolumnar 列存）做分析查询，不引入独立数仓",
+    "加速含大扫描、连接与聚合的慢查询，如报表和仪表盘",
+    "替代 Postgres 加 ClickHouse 或管道同步的双库架构，用一套库同时承载事务与分析"
+   ]
+  },
+  "sha": "0b6b97050db4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

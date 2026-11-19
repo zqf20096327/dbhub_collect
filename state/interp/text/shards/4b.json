@@ -2671,5 +2671,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "880f802d2c51": {
+  "identity": {
+   "one_liner": "将 SQLite 编译为 WebAssembly、在浏览器或 Node.js 中运行内存数据库的 JavaScript 库",
+   "review": "sql.js 使用 emscripten 将 SQLite 编译为 WebAssembly，使开发者可在浏览器中创建关系型数据库并执行 SQL 查询。数据库存储在内存中的虚拟文件里，不持久化修改，但支持导入现有 sqlite 文件并将数据库导出为 JavaScript 类型化数组。1.x 版本采用异步初始化 API，提供浏览器、Node.js（需 18.3+）及 Web Worker 多种构建。",
+   "highlights": [
+    "通过 emscripten 将 SQLite 编译为 WebAssembly，提供默认分离 .wasm 文件与单文件内嵌两种构建",
+    "支持导入现有 sqlite 文件、导出为类型化数组，提供 Web Worker API 和 BigInt 64 位整数选项",
+    "提供含 debug、browser、inline、worker 等 10 种构建产物，默认启用 SQLite 的数学函数与 legacy 扩展"
+   ],
+   "use_cases": [
+    "在浏览器中创建并查询内存中的关系型数据库，如在线 SQL 演示工具",
+    "让用户选择本地 sqlite 文件加载查询，或从服务器 fetch 数据库文件",
+    "在 Web Worker 中运行 SQL 查询以避免占用主线程"
+   ]
+  },
+  "sha": "880f802d2c51",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "71cf2782c119": {
+  "identity": {
+   "one_liner": "基于 WASM Component Model 的确定性工作流运行时，单二进制含 Web UI",
+   "review": "Obelisk 是一个用 Rust 编写的工作流运行时，以 WASM 组件与 WIT 接口运行确定性工作流、幂等活动和 Webhook 端点，执行步骤持久化到 SQLite 或 PostgreSQL，通过执行日志实现重放与崩溃恢复。面向需要编排周期任务、后台作业或 AI 辅助代码沙箱审计的开发者。当前处于 pre-release 阶段，CLI、REST API、WIT 与数据库 schema 可能变更；AGPL-3 许可（wit/ 目录为 MIT）。",
+   "highlights": [
+    "以 WASM Component Model 与 WIT IDL 生成 API 绑定，提供端到端类型安全",
+    "工作流由运行时保证确定性，执行日志持久化（SQLite/PostgreSQL）并支持重放",
+    "提供 CLI、REST API 与 Web UI，含执行跟踪、事件浏览与回放调试功能"
+   ],
+   "use_cases": [
+    "AI 辅助代码的沙箱化与审计",
+    "周期性检查与后台作业等需要重试和持久化的任务编排",
+    "端到端测试中逐步记录日志与执行痕迹"
+   ]
+  },
+  "sha": "71cf2782c119",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8d5843f91751": {
+  "identity": {
+   "one_liner": "面向 CUBRID 数据库的 MCP 服务器，经 pycubrid 供 LLM 检查模式并执行只读 SQL。",
+   "review": "该服务器实现 Model Context Protocol，通过 pycubrid 连接 CUBRID 10.2–11.4 broker，向 LLM 客户端提供模式检查与只读查询工具，另暴露模式类 MCP Resources 与提示词模板。默认启用 SQL 白名单（仅 SELECT/SHOW/DESC/WITH 等），写入需显式开启 execute_write。适用于需让 AI 客户端安全读取 CUBRID 数据库的开发与运维人员，支持多连接、输出截断与审计日志等可配置项。",
+   "highlights": [
+    "提供 11 个只读工具（表名、模式、索引、执行计划、行数、SERIAL、类继承等）及可选的 execute_write 单语句 DML 工具",
+    "默认启用代码级 SQL 白名单，仅放行 SELECT、SHOW、DESC、DESCRIBE、WITH，拒绝多语句及 INCR/DECR 等隐式写操作",
+    "支持多连接配置、按连接独立的只读开关、输出截断限制与 opt-in 审计日志"
+   ],
+   "use_cases": [
+    "让 Claude Desktop、Claude Code、Cursor 等 MCP 客户端检查 CUBRID 模式并执行只读查询",
+    "为不熟悉 CUBRID SQL 方言的开发者生成或迁移 MySQL 查询语句",
+    "通过 explain_query 查看查询执行计划以进行查询分析"
+   ]
+  },
+  "sha": "8d5843f91751",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5193000e32e6": {
+  "identity": {
+   "one_liner": "基于 k3s 的开源 PaaS 平台，用于在自有服务器上部署应用与服务。",
+   "review": "Pyo 是一个开源 PaaS 平台，运行在用户自有或租用的 Linux 服务器上，通过 k3s 调度服务，无需直接操作 Kubernetes。支持从 Git 仓库、镜像或模板部署应用，提供数据库、沙箱、域名 HTTPS 等功能，面向希望在自有硬件上运行服务的开发者。要求 x86-64 Linux、root 权限、至少 2 核 2 GB 内存，采用 Apache License 2.0。",
+   "highlights": [
+    "支持 Dockerfile 构建、零配置部署和任意容器镜像，数据库支持 Postgres、MySQL 和 Redis 兼容 KV，含自动故障转移与备份",
+    "沙箱以 Firecracker microVM 或 gVisor 运行，可通过 TypeScript SDK、MCP、CLI 或控制台操作",
+    "支持多服务器扩展（Tailscale 组网）、按 CPU 自动伸缩、滚动部署与一键回滚"
+   ],
+   "use_cases": [
+    "在自有 VPS、专用服务器或家用机器上部署 Web 应用与服务",
+    "为 AI agent、代码解释器、预览环境和 CI 创建隔离沙箱",
+    "通过 CLI 或 CI 环境变量（PYO_URL、PYO_API_KEY）实现自动化部署"
+   ]
+  },
+  "sha": "5193000e32e6",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

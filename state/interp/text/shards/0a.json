@@ -2439,5 +2439,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "82c749a5805e": {
+  "identity": {
+   "one_liner": "本地插件，将编码代理的工具输出存入SQLite索引，按需检索以减少上下文占用。",
+   "review": "Context Mode 是一个运行在本地的插件，供 Claude Code、Codex、Gemini CLI 等 11 个编码代理使用。它在本地沙箱中执行文件读取、命令运行和网页抓取等操作，将完整输出索引到 ~/.context-mode 下的 SQLite（FTS5）数据库，代理通过 ctx_execute/ctx_index/ctx_search 等 MCP 工具按需取回所需部分，或以 Code Mode 方式写脚本处理数据、只回传打印结果。插件源码开放，采用 ELv2 许可；另有独立的托管服务 Context Mode Gateway。依赖 Node 24.15.0+，Windows 需 Git Bash。",
+   "highlights": [
+    "支持 11 个编码代理，提供 9 个 MCP 工具及 hooks、skills 集成",
+    "在本地沙箱运行工具调用，输出索引到本机 SQLite FTS5 数据库，支持安装后离线使用",
+    "内置 doctor 检查命令与统计技能，可报告上下文字节节省情况"
+   ],
+   "use_cases": [
+    "需要代理读取大文件、执行长输出命令或抓取网页，而不希望全部内容进入上下文窗口的场景",
+    "对数据本地化有要求的开发环境：索引与使用数据均存于本机，无遥测",
+    "对 5000 条 JSON 记录等数据集做统计或筛选类查询，由代理在沙箱内运行脚本返回结果"
+   ]
+  },
+  "sha": "82c749a5805e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9d47ec2298da": {
+  "identity": {
+   "one_liner": "Exasol 官方支持的 Python 连接器，基于 WebSocket 协议",
+   "review": "PyExasol 是 Exasol 数据库的官方 Python 连接器，用于处理该 DBMS 常见的大规模数据读写。它基于 WebSocket 协议，通过 HTTP 传输与 pandas、parquet、polars 集成，并提供基于独立进程的多数据流并行读写 API。要求 Exasol >= 8、Python >= 3.11.5。适合需要在 Python 环境中访问 Exasol 数据库的开发者与数据工程场景。",
+   "highlights": [
+    "基于 WebSocket 协议，支持压缩以降低网络瓶颈",
+    "通过 HTTP 传输与 pandas、parquet、polars 集成",
+    "提供基于独立进程的多数据流并行读写 API"
+   ],
+   "use_cases": [
+    "Python 应用中连接和操作 Exasol 数据库",
+    "涉及 pandas、parquet 或 polars 的单进程数据读写",
+    "需要多进程并行传输数据的场景"
+   ]
+  },
+  "sha": "9d47ec2298da",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f1a36eb35f2a": {
+  "identity": {
+   "one_liner": "面向 AI 生成应用的数据库并发检查工具，用真实 PostgreSQL 竞态测试数据库规则",
+   "review": "VibeRaven 是一个 CLI 与 MCP 工具，用于检查 AI 构建应用的数据库配置：check 读取迁移、客户端代码和环境变量文件并指出问题位置；race 在单个 PGlite WebAssembly 实例中运行两个并发会话，枚举受限语句顺序并按字节重放损坏的订单。通过 MCP 连接器接入 ChatGPT、Claude、Codex、Cursor、Lovable。race 需 Node 24+，check 需 Node 20+；外部 I/O 和 HTTP 不在测试范围内。",
+   "highlights": [
+    "race 命令在真实 PostgreSQL 18.6 上加载迁移文件，用两个独立会话测试数据库规则，并逐字节重放失败顺序",
+    "check 命令读取仓库中的迁移、客户端代码和环境文件，对每个缺口标注文件与行号",
+    "提供本地 MCP 工具和托管 MCP 端点，可作为自定义连接器接入多种 AI 编码代理"
+   ],
+   "use_cases": [
+    "验证 Supabase 迁移中『每个活动最多 2 个预订』等数量约束在两个用户同时操作时是否保持成立",
+    "在聊天式编码代理（ChatGPT、Claude、Cursor 等）中通过 MCP 连接器发起数据库并发测试",
+    "修复并发缺陷后重新运行 race 并重放失败顺序，用退出码 0/1/2 判定结果"
+   ]
+  },
+  "sha": "f1a36eb35f2a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2280a375cc63": {
+  "identity": {
+   "one_liner": "一个监控 opencode 代理会话状态的动画终端 TUI 工具",
+   "review": "ocsky 是一个终端 TUI 工具，用于实时查看 opencode 代理的会话状态（工作中、等待、已完成），按目录分组显示并展示每个代理的当前活动。它以只读方式查询 opencode 的 SQLite 数据库，仅用 Python 标准库实现，无网络代码。需要 Python 3.9+ 和支持 24 位或 256 色的终端，可通过 uv 或 pipx 安装，并支持 --demo 模式生成演示数据库。",
+   "highlights": [
+    "提供三种视图：实时天空视图、按模型划分轨道的 24 小时时钟视图、单个会话的追踪视图",
+    "以只读方式打开 opencode 的 SQLite 数据库，仅查询会话表，不包含网络代码",
+    "纯 Python 标准库实现，无需第三方依赖，包含 Catppuccin、Dracula、Gruvbox 等多套配色"
+   ],
+   "use_cases": [
+    "在终端中监控多个 opencode 代理会话的运行、等待与完成状态",
+    "按会话追踪查看单个代理正在执行的任务内容",
+    "在本地离线环境下可视化 opencode 的会话数据（截图时需注意屏幕上会显示提示词与推理内容）"
+   ]
+  },
+  "sha": "2280a375cc63",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

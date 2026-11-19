@@ -3223,5 +3223,140 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2181f54f2ea5": {
+  "identity": {
+   "one_liner": "AI 编码代理控制平面，用 Rust+SQLite 并行运行多代理并共享任务板",
+   "review": "amux 用于在本地并行运行 Claude Code、Codex、Gemini CLI 等代理，代理间通过共享任务板与消息协作，并支持用量限制恢复与定时调度。需要 tmux 3.2+ 和至少一个代理 CLI，运行于 macOS 和 Linux；数据存于 ~/.amux。可自托管或使用付费的 amux Cloud，另有 iPhone/iPad/Mac 原生应用与网页面板。",
+   "highlights": [
+    "提供共享任务板，卡片认领为原子操作，避免多代理重复领取",
+    "支持用量限制命中后挂起投递、在重置时恢复，以及 daily/every 等定时调度",
+    "包含 Mac、iPhone、iPad 原生应用与浏览器面板，可通过 Tailscale 远程访问"
+   ],
+   "use_cases": [
+    "在同一台机器上并行运行多个编码代理并分配任务",
+    "夜间或定时运行任务，从手机或浏览器查看与批准代理操作",
+    "自托管场景下通过 Tailscale 从其他设备远程访问本地面板"
+   ]
+  },
+  "sha": "2181f54f2ea5",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "58fd555e880e": {
+  "identity": {
+   "one_liner": "仅面向 Android 的本地优先个人记账应用，账本存于本地 SQLite",
+   "review": "Veri Fin 是一款 Android 个人记账应用，基于 Flutter 与 SQLite 构建，账本数据保存在设备本地。项目不设账号与自有服务端，不包含广告与行为遥测；数据仅在用户主动导出、WebDAV 备份或使用 AI 功能时发送到指定目标。功能涵盖记账、多账本、预算与看板分析，支持加密备份与 CSV 导入导出，按 GPLv3+ 许可发布。",
+   "highlights": [
+    "支持支出、收入、转账记账，含多级分类、多标签、图片附件、退款与周期记账，并提供多账本隔离与多币种账户",
+    "本地账本支持 AES-GCM + PBKDF2 加密备份、WebDAV 同步、账单导入与 CSV 导出，可选接入用户自备的 OpenAI 兼容端点（AI 仅生成草稿）",
+    "提供桌面小组件、快捷磁贴、本地提醒、系统分享入口与应用锁等 Android 集成，技术栈为 Flutter 3.47.2 与 Dart 3"
+   ],
+   "use_cases": [
+    "希望账本数据保存在本地设备、不依赖账号与服务端的个人记账场景",
+    "需要多账本、多币种、预算管理与日常/月度/年度看板分析的个人财务管理",
+    "需要在离线环境下记账，并自行配置 WebDAV 备份或 AI 端点的使用方式"
+   ]
+  },
+  "sha": "58fd555e880e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4cb75d9c59bf": {
+  "identity": {
+   "one_liner": "将 PostgreSQL wire-protocol 协议转译为 Cloud Spanner PostgreSQL 接口协议的代理服务",
+   "review": "PGAdapter 是 Google 开源的代理服务器，读取 PostgreSQL wire-protocol 请求并将其转译为 Cloud Spanner PostgreSQL 接口的对应协议，使标准 PostgreSQL 驱动和工具（psql、JDBC、psycopg2/3 等）能够连接 Spanner 数据库。可运行于 Docker、独立进程、或以 JVM 进程内依赖方式嵌入。README 列明部分驱动与 ORM（如 npgsql、Ruby ActiveRecord）仅具实验性支持。",
+   "highlights": [
+    "支持 psql、JDBC、R2DBC、psycopg2/3、node-postgres、pgx 等多种 PostgreSQL 驱动与客户端",
+    "支持以 Docker 容器、独立 jar 进程、JVM 进程内服务器三种方式运行，并提供 sidecar、distroless 及内含 Spanner Emulator 的预构建镜像",
+    "支持 Hibernate、Spring Data JPA、Liquibase、SQLAlchemy、gorm、Prisma 等多个 ORM 与框架"
+   ],
+   "use_cases": [
+    "使用现有 PostgreSQL 驱动、CLI 工具或 ORM 访问 Cloud Spanner PostgreSQL 接口数据库",
+    "在 Kubernetes 中以 sidecar 代理方式为应用提供 Spanner 连接",
+    "本地通过 PGAdapter + Spanner Emulator 镜像启动并连接测试数据库，无需预先创建实例"
+   ]
+  },
+  "sha": "4cb75d9c59bf",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "421f7c182a78": {
+  "identity": {
+   "one_liner": "读取关系库真实负载，按查询模式评分并规划 AWS 专用引擎的迁移评估工具",
+   "review": "该工具读取关系数据库的模式与查询统计，对每条查询按 DynamoDB、DocumentDB、Aurora、OpenSearch、ElastiCache 等引擎评分并确定性分配，生成目标 schema、分波迁移路线与成本预测，输出高管/工程报告。面向已决定重构数据模型迁移到 AWS 专用库的团队；评估阶段无需 AWS 账号，依赖 Python 3.12+、uv 与 Claude Code，提供无模型的本地运行方式。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQL Server、Oracle 作为源库，采集脚本为只读 SQL 且不写入行数据",
+    "引擎分配由评分决定而非模型，可复现、可审计；schema 设计与高管摘要由模型生成",
+    "可运行于 Claude Code 或无模型脚本（run_assessment.py），产出 PDF、Markdown、JSON 交付物及本地 UI"
+   ],
+   "use_cases": [
+    "拆分单体关系库前确定各查询归属的 AWS 专用引擎及目标 schema",
+    "生成分波迁移路线、成本预测与工程报告，供团队审计和实施",
+    "在 AWS DMS 正式迁移前测试函数、存储过程、触发器等待迁移例程"
+   ]
+  },
+  "sha": "421f7c182a78",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cee63c00476f": {
+  "identity": {
+   "one_liner": "PurpleAir 传感器空气质量数据采集器，支持多存储后端与多语言绑定",
+   "review": "该项目通过云端或局域网 API 从 PurpleAir 传感器读取数据，写入 TimescaleDB PostgreSQL、SQLite3、CSV 或 Grafana Loki，并支持 Prometheus 指标导出和 Matter 1.5.1 JSON 格式输出。云端访问需向官方申请 API 密钥，局域网访问使用传感器 IPv4 地址。项目包含 C++17 遥测引擎、SWIG 4 多语言绑定及 CLI 与桌面/浏览器 GUI。",
+   "highlights": [
+    "支持将传感器数据写入 TimescaleDB PostgreSQL、SQLite3、CSV 文件和 Grafana Loki，并可导出为 Prometheus 指标",
+    "包含基于 C++17 的遥测引擎，通过 SWIG 4 提供 Python、JavaScript/Node.js、C#/.NET、Go 四种语言绑定",
+    "提供统一 JSON 配置驱动的 CLI 工具，以及 tkinter 桌面与浏览器两种 Studio GUI"
+   ],
+   "use_cases": [
+    "持续采集 PurpleAir 传感器的实时或历史空气质量数据并存入自有数据库",
+    "在智能家居环境中以 Matter 1.5.1 JSON 格式对外提供空气质量数据",
+    "通过 CLI 或 GUI 对单传感器、多传感器或本地网络传感器执行按需查询与轮询采集"
+   ]
+  },
+  "sha": "cee63c00476f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "468ef2ed7d81": {
+  "identity": {
+   "one_liner": "本地优先桌面电子宠物，纯本地模拟驱动，LLM 仅在关键时刻调用",
+   "review": "",
+   "highlights": [
+    "每 3 秒确定性本地模拟驱动行为，完全离线可运行，22 种精灵状态动画",
+    "SQLite + FTS5 记忆存储，按重要性×时效×置信度加权排序，支持导出 Markdown",
+    "沙箱文件访问：仅经逐文件确认后读取 inbox/ 内的 .txt/.md/.json，路径规范化校验"
+   ],
+   "use_cases": [
+    "希望宠物在无 LLM、无网络环境下离线运行的用户",
+    "本地部署 Ollama 并希望宠物进行简短角色化对话的场景",
+    "需要本地化保存、导出与删除宠物记忆数据的用户"
+   ],
+   "softened": [
+    "review:『显著』置空"
+   ]
+  },
+  "sha": "468ef2ed7d81",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

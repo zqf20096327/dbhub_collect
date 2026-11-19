@@ -2936,5 +2936,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7bd9e16e7091": {
+  "identity": {
+   "one_liner": "单二进制日志分析数据库，用 OpenSearch PPL 查询文件与持久化存储",
+   "review": "LynxDB 是用 Go 编写的单二进制日志分析数据库，以 schema-on-read 方式处理日志。它既可作为命令行工具通过 stdin、管道或本地文件直接运行 PPL 查询，也可作为持久化服务器按时间分区的列式存储摄入日志。查询语言采用 OpenSearch PPL，编译为与语言无关的 IR 并经规则优化器优化。项目处于活跃开发期，API、存储格式与查询行为可能在版本间变化。安装支持脚本、Homebrew、go install 与 Docker。",
+   "highlights": [
+    "支持 OpenSearch PPL 命令（where、eval、stats、timechart、rex、spath、join、lookup 等），每个命令与函数明确标注支持、受限支持或拒绝并给出原因",
+    "提供多种摄入接口：Elasticsearch _bulk、OpenTelemetry OTLP、Splunk HEC、syslog 及原始 HTTP",
+    "无服务器模式可直接查询 stdin/管道/本地文件，文本行在加载时提取时间戳、key=value 对及 combined/syslog 格式字段"
+   ],
+   "use_cases": [
+    "通过管道分析 kubectl 等命令输出的日志流，无需部署守护进程",
+    "以服务器模式集中摄入日志并反复执行 PPL 查询、timechart 时序统计",
+    "对接已有 Splunk HEC、Elasticsearch _bulk 或 OTLP 的日志采集链路"
+   ]
+  },
+  "sha": "7bd9e16e7091",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "97216b95e083": {
+  "identity": {
+   "one_liner": "Rust 异步 ActiveRecord ORM，声明式模型加流式查询构建器",
+   "review": "TideORM 是面向 Rust 开发者的异步 ActiveRecord 风格 ORM，通过 #[tideorm::model] 宏声明普通结构体模型，关系以字段形式声明，支持 PostgreSQL、MySQL、MariaDB、SQLite 及 CockroachDB 等兼容服务器。提供流式查询构建器、预加载、游标分页、字段加密与事务等能力，可按 feature flag 按需启用模块，适合使用 async/await 的 Rust 数据库应用。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite、CockroachDB、YugabyteDB、TiDB、Vitess 多种数据库后端",
+    "提供 HasOne/HasMany/BelongsTo/HasManyThrough 字段级关系声明、嵌套预加载与游标分页",
+    "支持可选的字段加密、脏追踪、实体管理器及附件、翻译、全文搜索等 feature 模块"
+   ],
+   "use_cases": [
+    "Rust 异步服务中的数据库读写与关系查询",
+    "需要多数据库或租户/副本多连接场景",
+    "需要对敏感列做加密存储的应用"
+   ]
+  },
+  "sha": "97216b95e083",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "486c7561cc26": {
+  "identity": {
+   "one_liner": "OpenCode 插件，用于调度和编排 AI 代理任务，支持 cron、DAG 流水线和矩阵构建",
+   "review": "这是面向 OpenCode（V1 ≥ 1.18.29 与 V2）的调度编排插件，供使用 OpenCode 的开发者管理定时或事件触发的 AI 代理任务。任务以工作流形式定义：支持 DAG 依赖、成功/错误链式调用、矩阵展开与质量门（命令通过才算成功）。cron 与一次性任务注册到系统原生调度器，重启后仍运行；文件、git 与 MCP 事件触发则需 OpenCode 保持运行。安装需 Node.js 22.22+，V2 可用 opencode plugin add 命令安装，V1 需手动配置 opencode.jsonc。",
+   "highlights": [
+    "提供 26 个代理工具，覆盖调度、流水线、运维、可观测性与管理；提供依赖 DAG、矩阵构建和质量门编排能力",
+    "cron 与一次性任务注册到系统原生调度器（Windows 任务计划、launchd、crontab），支持 IANA 时区、暂停/恢复与崩溃恢复",
+    "内置 SQLite 历史记录、JSONL 运行日志、Prometheus /metrics 与 OTLP 导出，并在 localhost 提供本地 Web 仪表盘"
+   ],
+   "use_cases": [
+    "定时执行 AI 代理任务，如每日定时生成 git 提交摘要报告并写入指定目录",
+    "跨多个仓库的矩阵式任务编排，按模板对 N 个仓库并行或串行执行并汇总结果",
+    "基于 git 提交、文件变更或 MCP 事件自动触发代理任务，配合质量门命令校验执行结果"
+   ]
+  },
+  "sha": "486c7561cc26",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "83cbfb1cd17e": {
+  "identity": {
+   "one_liner": "TiDB Link 官方 SDK 仓库，含 TypeScript 与 Python 两套客户端",
+   "review": "本仓库提供 TiDB Link 的官方 SDK，包含 TypeScript（Node.js 22.12+，基于平台 fetch，无运行时依赖）与 Python（3.11+，asyncio，开发中未发布至 PyPI）两种实现。覆盖组织/用户/密钥配置、模板发现、Agent 与会话管理、命令取消与检查点重试、会话历史、文件附件、调度器及用量读取等接口。适用于需要通过编程方式接入 TiDB Link 服务的开发者；API 处于 pre-1.0，各版本声明对应的服务基线。",
+   "highlights": [
+    "提供 TypeScript SDK（Node.js 22.12+，使用平台 fetch API，无运行时依赖）与 Python SDK（3.11+，asyncio API，开发中）",
+    "覆盖 Organization/End User/Key 配置、模板发现、Agent/会话管理、显式取消与检查点重试、会话历史、文件附件与下载、Schedulers、Realtime Model/Connection 准备、用量读取等能力",
+    "资源工作流支持以组织权限指定显式 End User，或使用现有 User API Key"
+   ],
+   "use_cases": [
+    "在 Node.js 或 Python（asyncio）环境中编程接入 TiDB Link 服务",
+    "管理组织、终端用户与密钥配置，以及个人 Agent 和会话",
+    "执行含取消、检查点重试与进度追踪的文本命令流程，处理文件附件与下载"
+   ]
+  },
+  "sha": "83cbfb1cd17e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2782,5 +2782,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "31783c55ac81": {
+  "identity": {
+   "one_liner": "自托管求职应用：单一档案生成定制简历与求职信并追踪申请",
+   "review": "Dossier 是一个自托管求职管理应用，用户将职业经历存为一份档案，粘贴职位描述后由 LLM 生成仅使用档案事实的定制简历与求职信，并在看板上追踪申请状态。面向个人用户在小服务器运行，支持 PostgreSQL 或 SQLite 存储，可通过 Ollama、LM Studio 使用本地模型或接入 OpenAI 兼容 API、Anthropic、Mistral。提供 Docker Compose、Node.js、CapRover 等多种安装方式，服务器建议至少 2 vCPU 和 2 GB 内存。",
+   "highlights": [
+    "基于档案事实生成定制简历、求职信与申请邮件，缺失技能以差距形式标示而非虚构",
+    "支持本地模型（Ollama、LM Studio）或托管 API（OpenAI 兼容、Anthropic、Mistral）作为 AI 提供方",
+    "提供职位聚合搜索、每日任务代理、MCP 连接器、Gmail 与 Google Calendar 集成，以及全量数据导出导入与夜间备份"
+   ],
+   "use_cases": [
+    "个人求职者在自有服务器或本机管理职业档案并按职位定制简历与求职信",
+    "通过看板、漏斗统计与日历追踪从草稿到录用的全部申请流程",
+    "通过 Ollama 或 LM Studio 运行本地模型，将档案与文档保留在自有硬件上"
+   ]
+  },
+  "sha": "31783c55ac81",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ad2ebd54ab4a": {
+  "identity": {
+   "one_liner": "基于 Postgres 和 PGMQ 的 Elixir 工作流引擎，支持 DAG 流、后台任务与 cron 调度。",
+   "review": "PgFlow 是 pgflow 的 Elixir 原生实现，在 PostgreSQL 中通过 pgmq 队列运行多步 DAG 流、一次性后台任务和 cron 定时任务，无需 Redis 等外部队列服务。基于 OTP 监督树构建，提供重试、可见性超时与 LISTEN/NOTIFY 派发，且与 TypeScript/Deno（Supabase）实现共用同一数据库模式。需要 Elixir 1.18+、PostgreSQL 17+ 及 pgmq 扩展，cron 功能依赖 pg_cron。",
+   "highlights": [
+    "支持多步 DAG 流定义，依赖允许时步骤并发执行，支持 map 扇出与条件步骤（if/if_not/when_unmet/when_exhausted）",
+    "失败步骤按指数退避自动重试，仅重试失败步骤；工作流状态存于 SQL 表中可查询",
+    "提供运行时 worker 缩放接口 scale_worker/check_worker，以及心跳健康检查 PgFlow.Workers.healthy?/2"
+   ],
+   "use_cases": [
+    "Elixir/Phoenix 应用中处理订单处理、导入等多步骤异步工作流",
+    "发送邮件、处理 webhook 等一次性后台任务队列",
+    "需要每日/每小时定时执行流或任务的 cron 场景（依赖 pg_cron 支持）"
+   ]
+  },
+  "sha": "ad2ebd54ab4a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

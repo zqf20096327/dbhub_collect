@@ -2926,5 +2926,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0926707d0b8f": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理长期记忆库，基于 Postgres+pgvector，通过 MCP 提供文档 RAG 与个人记忆",
+   "review": "HyperMnesia 是一个为 AI 编码代理（如 Claude Code 及任意 MCP 客户端）提供长期记忆的自托管存储系统，基于 Postgres + pgvector。它提供两部分能力：仓库文档的混合检索（dense + tsvector 经 RRF 融合，可选 cross-encoder 重排）和手写的组件→约束映射，可在编辑前由 Claude Code hook 注入适用的 must 规则；另有双时间线（事件时间/入库时间）、替换不覆盖的个人记忆。支持通过 Ollama、TEI 或 OpenAI /v1/embeddings 兼容接口的本地嵌入模型，可运行于笔记本、单机或 Kubernetes，MIT 许可，需 Python 3.14。",
+   "highlights": [
+    "文档检索采用 bge-m3 稠密向量（HNSW）与复合 tsvector 词法检索经 RRF 融合，可选 bge-reranker-v2-m3 交叉编码器重排",
+    "个人记忆为双时间线结构（事件时间与入库时间分离），采用替换不覆盖策略，包含观察者/被观察者视角及无环证据溯源图",
+    "支持通过 Ollama、TEI 或任何兼容 OpenAI /v1/embeddings API 的本地模型生成嵌入，无云依赖"
+   ],
+   "use_cases": [
+    "为使用 Claude Code 或其他 MCP 客户端的开发团队提供仓库文档检索与架构约束自动注入",
+    "跨会话保存与召回工作偏好、决策和事实，避免重复解释",
+    "在本地或自托管环境中（笔记本、单机、Kubernetes）部署不依赖云服务的代理记忆存储"
+   ]
+  },
+  "sha": "0926707d0b8f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5ce26a2b0667": {
+  "identity": {
+   "one_liner": "面向高校图书馆的全栈管理系统：Spring Boot REST API 加 React UI，PostgreSQL 存储并 Docker 部署。",
+   "review": "Libro 是为 ASU-CCS 图书馆开发的全栈管理系统，管理实体书籍副本、用户账户与借阅记录。后端为 Java 25 / Spring Boot REST API，前端为 React 19 / TypeScript 单页应用，数据库为 PostgreSQL，通过 Flyway 管理模式并经 Docker Compose 部署。核心规则包括 14 天借期、每人最多三笔在借、逾期禁借，以及四种角色的权限控制。面向需要实体副本级借阅追踪的中小型图书馆场景。",
+   "highlights": [
+    "每条目录记录对应一个实体副本，借阅历史按副本追踪；借阅采用行锁与活跃借阅唯一索引防止并发重复借出",
+    "提供四种角色（STUDENT、FACULTY、ADMINISTRATOR、LIBRARIAN），在路由与服务层强制执行；认证使用 HS256 JWT、BCrypt 密码及登录/注册的按 IP 限流",
+    "运维侧包含 Flyway 模式迁移、/livez 与 /readyz 健康探针、私有端口上的 Prometheus 指标、GitHub Actions CI/CD 与 Trivy 扫描"
+   ],
+   "use_cases": [
+    "高校或小型图书馆管理实体书籍副本目录、借阅与归还流程",
+    "作为 Spring Boot + React + PostgreSQL + Docker Compose 的全栈参考项目进行本地部署与演示",
+    "通过 JWT 保护的 REST API 接入其他客户端（Swagger UI 与 /v3/api-docs 可经环境变量开启）"
+   ]
+  },
+  "sha": "5ce26a2b0667",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "02e0ed5e2591": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 学习模式插件，将工作内容转为本地复习循环",
+   "review": "dsh-explain 是 DeepSeek Harness（DSH）的学习模式插件，把已完成的回答转化为结构化解释，并通过本地 SQLite 调度间隔复习。它使用独立的辅助模型调用与数据库，不改动主 agent；学习数据存储在 $DSH_HOME 本地，用户可查看、纠正或遗忘模型的推断。安装依赖 Node.js >=24.9，通过 dsh plugin 命令添加，支持多个 DSH 版本，采用 MIT 许可证。",
+   "highlights": [
+    "提供 /explain、选中文本、标记回答等入口生成可编辑解释草稿，不自动提交",
+    "实现本地间隔复习调度：概念按回忆、应用、区分三级推进，辅助模型按确定性间隔安排下次复习",
+    "学习数据存储于本地 SQLite，支持带版本导出（过滤常见凭据/路径格式）和输入 CLEAR 确认的原子清除"
+   ],
+   "use_cases": [
+    "将日常工作中遇到的概念沉淀为结构化解释并定期复习",
+    "检查并修正辅助模型对个人偏好和主题熟悉度的推断",
+    "在多个会话间维持单一学习线程，延续复习进度"
+   ]
+  },
+  "sha": "02e0ed5e2591",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e4480f96df62": {
+  "identity": {
+   "one_liner": "本地音频采样浏览索引器，为现有采样文件夹建立可搜索的 SQLite 目录",
+   "review": "SONICATOR 是一款运行于 macOS、Windows 和 Linux 的本地采样浏览器，用于扫描既有采样文件夹并建立包含名称、格式、音频特征、标签与元数据的索引数据库，原始音频文件只读不被移动。支持统一搜索语法、彩色标签、波形编辑与批量导出，并提供共享同一目录的 VST3/AU 插件。面向拥有大量本地采样文件的音频制作者。采用 C++20/JUCE 构建，AGPL-3.0 许可，Linux 版本标注为预览状态。",
+   "highlights": [
+    "递归扫描建立索引，支持暂停/取消、增量重扫、SHA-256 去重组与缺失文件跟踪，原始文件只读打开",
+    "搜索覆盖全目录，支持掩码、ext:/type:/key:/note: 等过滤语法及十条历史记录，All 模式采用虚拟化分块加载",
+    "读取 REX2、SoundFont 2、EXS24/NKI/SFZ、MOD/XM/S3M 等格式，提供波形编辑、按静音分割与批量处理导出"
+   ],
+   "use_cases": [
+    "为已积累的本地采样包、硬盘或老采样器合集建立可搜索目录并离线浏览预览",
+    "通过标签、收藏和智能 Type/BPM/Key 元数据整理大容量采样库",
+    "从库内或 DAW 中拖拽音频，或将选区经批量处理链导出为 WAV/AIFF/FLAC/MP3/OGG"
+   ]
+  },
+  "sha": "e4480f96df62",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

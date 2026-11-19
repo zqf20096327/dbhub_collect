@@ -3082,5 +3082,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1de6441a8b6e": {
+  "identity": {
+   "one_liner": "本地运行的 Rust 个人助理代理，以追加式账本记录每轮可查的记忆。",
+   "review": "Jeeves 是一个运行于用户本机的个人助理代理，执行规划、执行、恢复、验证等多步任务，支持终端 REPL、Web 仪表盘与聊天网关。核心机制是每轮对话写入一条追加式账本行，记忆库通过 ledger 标识回溯来源。基于 Rust 实现，需配置 LLM 提供商方可运行，文档标注了已知边界。",
+   "highlights": [
+    "内置 21 个工具（13 个默认开启），并支持接入 MCP 服务器；工具失败以文本返回模型，循环不中断",
+    "记忆包含语义事实（FTS5，支持 CJK）、按日期的事件与程序化 Skills，带检索门控，FTS5 索引可从账本重建",
+    "预适配 12 个 LLM 提供商含本地 Ollama，密钥依环境变量、OS 钥匙串、secrets.json 的顺序解析"
+   ],
+   "use_cases": [
+    "在 macOS/Linux（或 WSL2）本机运行多步个人任务代理，数据与 API 密钥保留在本机",
+    "通过 WeChat、Lark 等聊天网关或飞书 CLI 调用助理能力",
+    "需要查看、重建代理记忆与上下文来源（账本、记忆中心、/compact）的场景"
+   ]
+  },
+  "sha": "1de6441a8b6e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "094f2f033a4f": {
+  "identity": {
+   "one_liner": "本地优先渗透测试情报中心，代理、CLI 与桌面端共享同一 SQLite 记忆。",
+   "review": "Cortex 是面向授权渗透测试工作的本地情报库，以一个 SQLite 数据库为核心，同时向代理（stdio MCP 服务器，含 7 个工具）、终端用户（ctx CLI）和人类（Windows 桌面应用及内网 Web UI）提供读写接口。需要 Node.js ≥ 22.12，可通过 npm 安装；Web UI 无账户体系，仅限本机或可信内网使用。使用范围限定于自有或有书面授权的系统。",
+   "highlights": [
+    "通过 stdio MCP 服务器提供 7 个工具，ctx init 可为 Claude Code / DSH / Codex / Cursor 等代理自动写入 MCP 配置与技能",
+    "ctx web 以本地 HTTP 服务器提供与桌面端相同的 React UI，支持 --port / --db / --allow-intranet 等参数及只读模式",
+    "Web 访问采用每次启动重新生成的临时 token 登录，默认仅绑定 127.0.0.1，非回环绑定需显式 opt-in；CLI 所有命令支持 --json"
+   ],
+   "use_cases": [
+    "在授权测试项目中让 AI 代理与人类共用同一份本地 SQLite 渗透测试记录",
+    "通过 ctx web 在本机或可信内网以浏览器查看和操作测试数据",
+    "用 ctx init / ctx doctor 批量配置并校验各代理的 MCP 连接与数据库状态"
+   ]
+  },
+  "sha": "094f2f033a4f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

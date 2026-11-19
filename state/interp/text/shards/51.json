@@ -3102,5 +3102,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b5f541ad4555": {
+  "identity": {
+   "one_liner": "开源自托管 PaaS，可在自有服务器上部署应用、数据库与服务",
+   "review": "Coolify 是一个开源、可自托管的部署平台，用于在自有基础设施（VPS、裸金属、树莓派等，只需 SSH 连接）上部署应用、数据库和一键服务。配置保留在用户服务器上，停用后资源仍可继续运行。安装提供一条命令的脚本，另含托管版 Coolify Cloud。",
+   "highlights": [
+    "支持从 GitHub、GitLab、Bitbucket、Gitea 或 Docker 镜像部署任意技术栈，途径包括 Railpack、Dockerfile 与 Compose，含自动部署、PR 预览、webhook、滚动更新与回滚",
+    "支持部署 Postgres、MongoDB、Redis 等数据库及 360+ 一键服务；内置反向代理与自动 HTTPS",
+    "通过 SSH 管理多台服务器，提供实时指标、日志、Web 终端、健康检查、定时备份、REST API、CLI 与 MCP server"
+   ],
+   "use_cases": [
+    "在自有 VPS 或服务器上替代托管平台流程部署静态站点、全栈应用与数据库",
+    "团队内部搭建多服务器部署管理环境，含访问控制与环境变量/密钥管理",
+    "通过 webhook 与自动部署对接 Git 仓库实现持续部署，配合 PR 预览与回滚"
+   ]
+  },
+  "sha": "b5f541ad4555",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4d70adc46c3d": {
+  "identity": {
+   "one_liner": "基于Spring Boot的Web应用，用于在线生成数据库图表与文档",
+   "review": "SchemaCrawler Web Application是一个Spring Boot web应用，采用Bootstrap界面，可通过Maven或Docker构建运行，用于在线生成数据库ER图和文档。README显示其演示场景为生成SQLite数据库的crow's-foot ERD；运行前需安装Graphviz，并配置AWS S3相关环境变量（访问密钥与存储桶），服务器默认监听8080端口。",
+   "highlights": [
+    "提供基于Spring Boot与Bootstrap的Web界面，用于在线生成数据库图表和文档",
+    "支持通过Maven构建为jar包或Docker镜像运行，默认监听8080端口",
+    "内置GitHub Actions自动化构建、JaCoCo与Codecov测试覆盖率流程，并可部署Docker镜像到Heroku"
+   ],
+   "use_cases": [
+    "在浏览器中在线生成SQLite数据库的crow's-foot ERD图表",
+    "本地部署或以Docker容器方式自托管该Web应用",
+    "作为SchemaCrawler生态的Web入口，配合命令行工具与AI MCP Server使用"
+   ]
+  },
+  "sha": "4d70adc46c3d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "43888d383d91": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 微服务与 React 的学术数字资源管理平台",
+   "review": "Zyndex 是一个面向大学、校园图书馆、研究实验室和学术联盟的分布式学术学习与数字资源管理平台，采用 Java 21 + Spring Boot 3.4.2 微服务架构，配合 React 18 + Vite 6 前端、Netflix Eureka 服务注册与 Spring Cloud Gateway 网关。平台通过内存中 PDF 切片防止未验证用户获取完整文件，包含 UPI 支付对账流程和 15 秒心跳遥测机制；数据持久化使用 MySQL 8.4。",
+   "highlights": [
+    "微服务架构：Spring Cloud Gateway 边缘网关、Netflix Eureka 服务注册发现、JWT（HS256）访问令牌与 BCrypt 凭证哈希",
+    "PDF 保护机制：基于 Apache PDFBox 在堆内存中按需切片文档，未验证与评估层级不向客户端提供完整文件",
+    "运维能力：15 秒客户端心跳遥测聚合统计阅读时长与并发会话，UPI 结账含 QR/UTR 时间窗口与后台对账入口"
+   ],
+   "use_cases": [
+    "高校或校园图书馆的数字资源借阅与访问管理",
+    "需要分级访问控制的学术文档分发场景",
+    "包含 UPI 支付流程的资源订阅与计费管理"
+   ]
+  },
+  "sha": "43888d383d91",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "927927e586df": {
+  "identity": {
+   "one_liner": "单二进制 Go 服务，用于 TiDB 优化器 issue 分诊与 PR 状态跟踪。",
+   "review": "该项目是一个面向 TiDB SQL Optimizer 的 issue 分诊与 PR 阻塞状态跟踪工具，包含本地 Web 看板和 CLI。数据存储于 SQLite（WAL 模式），通过 GitHub GraphQL API 同步 issue 与 PR，提供 pending 导出、JSON 决策应用、乐观并发版本控制及 server/远程 worker 分离部署。默认匿名访问为只读，维护者权限由 token 或 GitHub OAuth 白名单控制。",
+   "highlights": [
+    "提供 serve、sync-issues、sync-prs、pending、triage、backup、status 等 CLI 子命令，支持本地与 --remote 两种工作方式",
+    "triage 决策采用 review/notes 双版本计数器实现乐观并发控制，支持 --dry-run 验证",
+    "支持 token 与 GitHub OAuth（PKCE、数字 ID 白名单）两种认证模式，浏览器会话 cookie 仅存哈希"
+   ],
+   "use_cases": [
+    "跟踪 TiDB 优化器 issue 的分诊状态与重分诊触发信号",
+    "维护者批量导出待分诊 issue、填写决策并验证后应用",
+    "轻量服务器承载 Web UI 与数据库，远程 worker 通过 HTTP 执行分诊任务"
+   ]
+  },
+  "sha": "927927e586df",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

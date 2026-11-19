@@ -3170,5 +3170,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "92c9fa72c4e0": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式时空数据库，采用热/冷状态分离架构",
+   "review": "Spatio 是用 Rust 编写的嵌入式时空数据库，面向需要追踪移动对象的应用。当前状态保存在内存的 R*-tree 空间索引中，历史轨迹持久化到带 CRC 校验的追加式日志。提供原生 Python、TypeScript、Go 绑定及可选 TCP 服务器；仅存储点数据，不使用 SQL。",
+   "highlights": [
+    "提供半径、2D/3D 包围盒、KNN、圆柱体等空间查询及轨迹查询 API",
+    "支持热/冷状态分离：内存 R*-tree 索引当前状态，追加式日志持久化历史轨迹",
+    "通过 PyO3 与 napi-rs 提供 Python 和 Node.js/TypeScript 绑定，含可选服务器模式"
+   ],
+   "use_cases": [
+    "配送与物流车队的位置追踪",
+    "无人机与空域监控（3D 与高度带查询）",
+    "基于多边形查询的地理围栏或围绕移动对象的附近搜索"
+   ]
+  },
+  "sha": "92c9fa72c4e0",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "35fe22f4d9e8": {
+  "identity": {
+   "one_liner": "评估 LLM 能否安全变更生产 Postgres 数据库的基准测试框架",
+   "review": "PGAIBench 用带陷阱的常规任务（加列、改配置、修数据）测试 AI 模型能否安全变更生产 Postgres。模型在单轮、无工具条件下输出变更请求或拒绝并升级；测试框架先在克隆库排练，再在带流复制备库的主库负载下真实执行，测量锁等待、p99 延迟、复制延迟、校验和等指标。v0.1 含 22 个评分场景（19 公开、3 保留），AAA 设计中仅测试 Analyst 角色。结果与预注册文档发布于 pgaibench.dev，仓库代码用 Bun 运行测试。",
+   "highlights": [
+    "实验室环境为专用 VM：Postgres 18 主库加流式热备库，开启 WAL 归档，运行 pgbench 负载，测量锁等待、p99 延迟、复制延迟、备库查询取消和表校验和",
+    "每个单元格取五次运行平均，基于任务与运行的 bootstrap 区间；预注册表格仅用 run 1 并按访问路径报告 Wilson 区间",
+    "包含 3 个不公开的 held-out 场景以避免公开数据训练影响结果，仓库文件带 canary GUID 声明禁止用于训练语料"
+   ],
+   "use_cases": [
+    "评估 LLM 在单轮生成 Postgres 变更请求（或拒绝并升级）时的安全性",
+    "为数据库变更类 AI 能力测试提供带参考门槛与证据分级的场景集",
+    "研究 AAA（Analyst-Auditor-Actor）自动化数据库操作设计中 Analyst 角色的行为"
+   ]
+  },
+  "sha": "35fe22f4d9e8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

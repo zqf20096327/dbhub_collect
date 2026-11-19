@@ -31077,5 +31077,734 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "125b171e7cb5+2": {
+  "fn": "LuciusChen/clutch",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "MELPA"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    3,
+    [
+     " Clutch"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    3,
+    4
+   ],
+   [
+    "replace",
+    9,
+    10,
+    4,
+    5,
+    [
+     " Query and browse databases—and stage SQL row edits—without leaving Emacs. "
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    5,
+    8
+   ],
+   [
+    "replace",
+    13,
+    14,
+    8,
+    9,
+    [
+     "Clutch query console with a result grid and XML value viewer"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    43,
+    9,
+    38
+   ],
+   [
+    "replace",
+    43,
+    44,
+    38,
+    39,
+    [
+     "For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and the user guide."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    51,
+    39,
+    46
+   ],
+   [
+    "replace",
+    51,
+    53,
+    46,
+    48,
+    [
+     "- **Compare table definitions:** use the table's object actions to compare DDL with a saved connection in Ediff. PostgreSQL comparison covers column definitions. Object workflow",
+     "- **See a table's relations:** navigate a clickable overview, inspect composite foreign keys, and save your own links in a Git-friendly file. ER guide"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    56,
+    48,
+    51
+   ],
+   [
+    "replace",
+    56,
+    57,
+    51,
+    52,
+    [
+     "- **Choose the backend path you need:** use native or pure-Elisp integrations when available, or the Java 17+ clutch-jdbc-agent for JDBC databases."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    52,
+    53
+   ],
+   [
+    "replace",
+    58,
+    59,
+    53,
+    54,
+    [
+     "Row editing stays within the row-editing boundaries: Clutch stages `UPDATE` and `DELETE` only when it can identify a stable source row."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    62,
+    54,
+    57
+   ],
+   [
+    "replace",
+    62,
+    63,
+    57,
+    58,
+    [
+     "|Backend|Support level|Requirements and notes|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    58,
+    59
+   ],
+   [
+    "replace",
+    64,
+    74,
+    59,
+    69,
+    [
+     "|MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11|",
+     "|PostgreSQL|Core SQL support|Requires `pgsql`, available from MELPA|",
+     "|XTDB|Basic SQL support over the PostgreSQL protocol|Requires `pgsql`; staged changes are submitted in Auto mode, and a column of mixed types, unless they are all numbers, is changed with SQL|",
+     "|SQLite|Core SQL support|Uses Emacs 29.1+ built-in `sqlite-*` functions; no external dependency|",
+     "|Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "|DuckDB|Core SQL model, generic JDBC entry|Uses a file-backed `jdbc:duckdb:...` URL and the DuckDB JDBC driver|",
+     "|MongoDB|Basic native document support; optional SQL Interface surface|Native use requires `mongodb.el`; SQL Interface uses `:surface sql-interface` and JDBC|",
+     "|Redis|Basic key/value support|Requires `redis.el`; includes command buffers, bounded key browsing, and type-aware values|",
+     "|Cassandra|Basic CQL support via JDBC|CQL console, bounded read-only results, and table and column browsing. Table definition actions are unavailable.|",
+     "|ClickHouse / Snowflake / Redshift / DB2 / generic JDBC|Basic SQL / query-first support|Backend-specific limits apply to editing, transactions, and dialect behavior|"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    69,
+    70
+   ],
+   [
+    "replace",
+    75,
+    76,
+    70,
+    71,
+    [
+     "See Backend support levels for the precise support policy and non-relational boundaries."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    81,
+    71,
+    76
+   ],
+   [
+    "replace",
+    81,
+    82,
+    76,
+    77,
+    [
+     "|Backend|Extra Emacs package|"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    77,
+    78
+   ],
+   [
+    "replace",
+    83,
+    90,
+    78,
+    85,
+    [
+     "|`:backend mysql`|mysql.el|",
+     "|`:backend pg`|pgsql.el|",
+     "|`:backend xtdb`|pgsql.el|",
+     "|`:backend mongodb`|mongodb.el|",
+     "|`:backend redis`|redis.el|",
+     "|`:backend sqlite`|None; Emacs 29.1+ provides SQLite|",
+     "|`:backend jdbc` / Oracle / SQL Server / ClickHouse / DB2 / DuckDB|None in Emacs; uses the bundled JDBC adapter|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    95,
+    85,
+    90
+   ],
+   [
+    "replace",
+    95,
+    96,
+    90,
+    91,
+    [
+     "JDBC support ships with Clutch and requires Java 17+, `clutch-jdbc-agent.jar`, and a database driver jar where applicable. Clutch pins agent 0.2.30 for bounded BLOB previews and ordered foreign-key metadata for ER views and composite-key navigation. On first connection, Clutch can prompt to download the agent and supported drivers. It verifies the configured agent jar against its SHA-256 before startup. See the JDBC backend guide for setup, supported drivers, connection examples, and transaction behavior."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    108,
+    91,
+    103
+   ],
+   [
+    "replace",
+    108,
+    109,
+    103,
+    104,
+    [
+     "Org-Babel integration lives in the separate ob-clutch package."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    121,
+    104,
+    116
+   ],
+   [
+    "replace",
+    121,
+    131,
+    116,
+    126,
+    [
+     "- User guide — saved connections, the query workflow and export, transactions, password management and encrypted profiles, SSH tunnels, TRAMP origins, SQL files, and everyday commands.",
+     "- Interactive client guide — key bindings, result workflows, object actions, REPL, transient menus, faces, timeouts, and customization.",
+     "- Backend support levels — support contracts for Core SQL, basic integrations, MongoDB SQL Interface, DuckDB, and Redis.",
+     "- Native backend guide — MySQL, PostgreSQL, XTDB, SQLite, MongoDB and Redis notes, TLS, timeouts, and native backend examples.",
+     "- MongoDB backend guide — supported helper syntax, document workflows, and native/SQL Interface boundaries. Collection discovery, field sampling and index warmup run asynchronously with a current `mongodb.el`.",
+     "- JDBC backend guide — driver setup, connection examples, Oracle and DuckDB notes, transactions, and generic JDBC URLs.",
+     "- Architecture guide — module layers, backend/surface ownership, connection flow, query/object flow, and JDBC runtime diagrams.",
+     "- Org-Babel guide — `ob-clutch` setup, source block examples, header arguments, and connection caching.",
+     "- JDBC agent protocol — sidecar RPC protocol and implementation notes.",
+     "- Product requirements — stable scope, required workflows, compatibility, and non-goals."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    126,
+    127
+   ],
+   [
+    "replace",
+    132,
+    133,
+    127,
+    128,
+    [
+     "For development, see CONTRIBUTING.md for local test targets, the code gate and live database runs, and AGENTS.md for project contracts and verification policy."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    135,
+    128,
+    130
+   ],
+   [
+    "replace",
+    135,
+    137,
+    130,
+    131,
+    [
+     "GPL-3.0-or-later. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "90bcfa4deec9+2": {
+  "fn": "ClickHouse/ClickStack-helm-charts",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "Artifact Hub",
+     "Build Status"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    12,
+    4,
+    12
+   ],
+   [
+    "replace",
+    12,
+    17,
+    12,
+    13,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    26,
+    13,
+    22
+   ],
+   [
+    "replace",
+    26,
+    27,
+    22,
+    23,
+    [
+     "For configuration, cloud deployment, ingress setup, and troubleshooting, see the official documentation."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    30,
+    23,
+    26
+   ],
+   [
+    "replace",
+    30,
+    32,
+    26,
+    28,
+    [
+     "- **`clickstack/clickstack-operators`** - Installs the MongoDB and ClickHouse operator controllers and CRDs. Must be installed first.",
+     "- **`clickstack/clickstack`** - Installs HyperDX, OpenTelemetry Collector, and operator custom resources."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    35,
+    28,
+    31
+   ],
+   [
+    "replace",
+    35,
+    36,
+    31,
+    32,
+    [
+     "The `clickstack` chart supports deploying arbitrary Kubernetes objects (NetworkPolicy, HPA, ServiceAccount, PodMonitor, ALB Ingress, etc.) alongside the chart's own resources via the `additionalManifests` value. See the Additional Manifests Guide for values-file constraints and examples, including AWS ALB example values."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    39,
+    32,
+    35
+   ],
+   [
+    "replace",
+    39,
+    40,
+    35,
+    36,
+    [
+     "Chart defaults are safe for development (Service `ClusterIP`, Ingress disabled). For production deployments — and especially for any deployment that exposes the OTLP gRPC receiver or fronts HyperDX with an HTTP/2-capable Ingress — see docs/SECURITY-HARDENING.md. Covers ingress controller version pinning (HTTP/2 bomb mitigation), NetworkPolicy examples, and recommended resource limits."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    45,
+    36,
+    41
+   ],
+   [
+    "replace",
+    45,
+    47,
+    41,
+    43,
+    [
+     "- **MongoDB Kubernetes Operator (MCK)** - Manages MongoDB Community replica sets via a `MongoDBCommunity` custom resource.",
+     "- **ClickHouse Operator** - Manages ClickHouse and Keeper clusters via `ClickHouseCluster` and `KeeperCluster` custom resources."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    43,
+    46
+   ],
+   [
+    "replace",
+    50,
+    51,
+    46,
+    47,
+    [
+     "- **OpenTelemetry Collector** - Deploys the ClickStack OTEL collector image via the official OpenTelemetry Collector Helm chart."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    62,
+    47,
+    58
+   ],
+   [
+    "replace",
+    62,
+    64,
+    58,
+    60,
+    [
+     "- MongoDB Kubernetes Operator docs",
+     "- ClickHouse Operator cleanup docs"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    67,
+    60,
+    63
+   ],
+   [
+    "replace",
+    67,
+    68,
+    63,
+    64,
+    [
+     "The Upgrade Guide lists what changes in each chart version and what to do before upgrading, including the migration from the inline-template chart (v1.x)."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    70,
+    64,
+    66
+   ],
+   [
+    "replace",
+    70,
+    73,
+    66,
+    67,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "5fc1f48bea4f+2": {
+  "fn": "finlynq/finlynq",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Two ways to use Finlynq: a free managed cloud at finlynq.com/cloud, or self-host with Docker."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "License: AGPL v3"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "delete",
+    10,
+    12,
+    10,
+    10
+   ],
+   [
+    "equal",
+    12,
+    14,
+    10,
+    12
+   ],
+   [
+    "replace",
+    14,
+    15,
+    12,
+    13,
+    [
+     "**finlynq.com/cloud** — click, register, import a CSV. No infra to manage."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    13,
+    14
+   ],
+   [
+    "replace",
+    16,
+    17,
+    14,
+    15,
+    [
+     "A public demo lives at finlynq.com/cloud?demo=1 (credentials pre-filled, resets nightly). Connect it to Claude by pasting `https://finlynq.com/mcp` into Claude → Customize → Connectors."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    25,
+    15,
+    23
+   ],
+   [
+    "replace",
+    25,
+    28,
+    23,
+    24,
+    [
+     "Before the first `up`, create a sibling `.env` file with three secrets, each generated with `openssl rand -hex 32`: `PF_JWT_SECRET`, `PF_PEPPER` (≥32 chars), and `PF_STAGING_KEY` (≥32 chars). Compose fails fast with a clear message if any is missing. Then open http://localhost:3000 and register. App + PostgreSQL run in Docker; sensitive fields are encrypted at rest with a per-user key derived from the account password. Change the default PostgreSQL password (`POSTGRES_PASSWORD` in `.env`) before exposing the container to anything but localhost. Full setup notes at finlynq.com/self-hosted."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    42,
+    24,
+    38
+   ],
+   [
+    "delete",
+    42,
+    44,
+    38,
+    38
+   ],
+   [
+    "equal",
+    44,
+    51,
+    38,
+    45
+   ],
+   [
+    "replace",
+    51,
+    55,
+    45,
+    49,
+    [
+     " endpoint and for the REST routes under `/api/`. Note that a `pf_*` key is unscoped and",
+     " does not expire until you regenerate it, so treat it as full access to your account; the",
+     " REST surface is what the web and mobile apps consume and its response shapes are not a",
+     " stability guarantee — MCP is the supported integration surface."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    49,
+    50
+   ],
+   [
+    "replace",
+    56,
+    59,
+    50,
+    51,
+    [
+     "Submitted to the Anthropic Connectors Directory on 2026-05-09. Full client setup, tool catalog, and the brokerage-statement recipe live in the Connect Your AI guide."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    61,
+    51,
+    53
+   ],
+   [
+    "replace",
+    61,
+    70,
+    53,
+    54,
+    [
+     "AGPL v3. If you run a modified version as a network service, you owe your users the source. The hosted offering at finlynq.com/cloud runs the same code as this repo."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    72,
+    54,
+    56
+   ],
+   [
+    "replace",
+    72,
+    79,
+    56,
+    63,
+    [
+     "- CHANGELOG.md — reverse-chronological log of every shipped change",
+     "- docs/getting-started.md — first-run setup walkthrough",
+     "- docs/faq.md — common questions",
+     "- docs/mobile-setup.md — connect the companion mobile app",
+     "- Connect Your AI guide — MCP architecture, tool catalog, and per-client setup",
+     "- CONTRIBUTING.md — branching, commit style, PR flow",
+     "- SECURITY.md — vulnerability disclosure"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

@@ -26911,5 +26911,145 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "d4f74967b459+2": {
+  "fn": "287852793/test-oceanbase-ora",
+  "clean_ver": "2",
+  "raw_lines": 15,
+  "ops": [
+   [
+    "equal",
+    0,
+    15,
+    0,
+    15
+   ],
+   [
+    "replace",
+    15,
+    22,
+    15,
+    16,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    26,
+    16,
+    20
+   ],
+   [
+    "replace",
+    26,
+    34,
+    20,
+    28,
+    [
+     "|项目|要求|",
+     "|---|---|",
+     "|操作系统|Linux（x86_64 或 ARM64）|",
+     "|Docker|已安装并运行，当前用户有执行 docker 的权限（或使用 sudo）|",
+     "|内存|建议 16GB 及以上；最低 8GB 时需调小 `conf/ob.env` 中的资源参数|",
+     "|磁盘|建议 30GB 及以上可用空间|",
+     "|端口|`HOST_PORT`（默认 2881）未被占用|",
+     "|网络|能访问 Docker Hub；不可达时可改用 quay.io / ghcr.io 镜像地址或提前导入镜像|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    127,
+    28,
+    121
+   ],
+   [
+    "replace",
+    127,
+    135,
+    121,
+    129,
+    [
+     "|命令|说明|",
+     "|---|---|",
+     "|`./run.sh`|启动容器并完成初始化（容器已存在时复用或启动）|",
+     "|`./run.sh --no-init`|仅启动容器，不等待、不初始化|",
+     "|`./log.sh`|实时查看容器日志（最近 200 行）|",
+     "|`./test.sh`|验证时区、Oracle 租户、业务用户与示例表|",
+     "|`./stop.sh`|停止容器，保留容器与数据|",
+     "|`./stop.sh --purge`|停止并删除容器，`volumes/` 数据仍保留|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    150,
+    129,
+    144
+   ],
+   [
+    "replace",
+    150,
+    154,
+    144,
+    148,
+    [
+     "|宿主机目录|容器目录|内容|",
+     "|---|---|---|",
+     "|`volumes/data/ob`|`/root/ob`|observer 数据文件、clog、运行日志|",
+     "|`volumes/conf/obd/cluster`|`/root/.obd/cluster`|obd 集群部署配置（`config.yaml` 等）|"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    168,
+    148,
+    162
+   ],
+   [
+    "replace",
+    168,
+    192,
+    162,
+    186,
+    [
+     "|变量|默认值|说明|",
+     "|---|---|---|",
+     "|`OB_IMAGE`|`oceanbase/oceanbase-ce:4.3.5-lts`|官方镜像，按需改为实际可用 tag|",
+     "|`CONTAINER_NAME`|`oceanbase-ora`|容器名|",
+     "|`HOST_PORT`|`2881`|宿主机映射端口（对外访问端口）|",
+     "|`TZ`|`Asia/Shanghai`|容器时区|",
+     "|`DOCKER_NETWORK`|`oceanbase-ora-net`|自定义网络名|",
+     "|`NETWORK_SUBNET`|`172.31.254.0/24`|网络子网，冲突时修改|",
+     "|`CONTAINER_IP`|`172.31.254.10`|固定容器内部 IP|",
+     "|`MODE`|`mini`|镜像部署规格|",
+     "|`OB_MEMORY_LIMIT`|`10G`|OceanBase 总内存|",
+     "|`OB_SYSTEM_MEMORY`|`2G`|系统预留内存|",
+     "|`OB_DATAFILE_SIZE`|`5G`|数据盘大小|",
+     "|`OB_LOG_DISK_SIZE`|`10G`|集群日志盘总容量；需容纳 sys 2G + test 2G + Oracle 2G，至少 6G|",
+     "|`OB_SYS_PASSWORD`|`root123456`|sys 租户 root 密码|",
+     "|`OB_TENANT_NAME`|`test`|镜像自带的 MySQL 模式租户名|",
+     "|`OB_TENANT_MIN_CPU` / `OB_TENANT_MEMORY_SIZE`|`1` / `2G`|自带租户规格（为 Oracle 租户预留资源）|",
+     "|`TEST_TENANT_MAX_CPU`|`1`|test 租户 CPU 上限，脚本启动时自动限制；设为 0 表示不限制|",
+     "|`ORA_TENANT`|`ora_tenant`|Oracle 模式租户名|",
+     "|`ORA_CPU` / `ORA_MEMORY` / `ORA_LOG_DISK`|`2` / `4G` / `2G`|Oracle 租户资源规格|",
+     "|`ORA_SYS_PASSWORD`|`oracle123456`|Oracle 租户 sys 用户密码|",
+     "|`APP_USER` / `APP_PASSWORD`|`appuser` / `app123456`|示例业务用户|",
+     "|`AUTO_INIT`|`true`|是否自动初始化|",
+     "|`BOOT_TIMEOUT`|`600`|等待启动超时（秒）|"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    293,
+    186,
+    287
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

@@ -3210,5 +3210,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7529c6a7a17a": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地优先 AI 代理记忆层，提供 remember/recall 接口与 MCP 服务",
+   "review": "Mnemosyne 是一个面向 AI 代理的记忆层，数据存储于单个 SQLite 文件，通过 pip 安装即可使用，无外部服务依赖。它以 MCP 服务器和 Python SDK 两种方式接入，支持 Cursor、Claude Code 等客户端。架构上包含工作记忆、情景记忆（sqlite-vec + FTS5 混合检索）和 TripleStore 时序知识图；向量采用二值化压缩存于 SQLite。注意：若启用远程 embedding，记忆文本会发送到 API 端点。",
+   "highlights": [
+    "提供 remember/recall Python API 与内置 MCP 服务器（stdio/SSE 传输），支持 Cursor、Claude Code、Codex、OpenWebUI 等多平台接入",
+    "记忆分三层：TTL 驱动的工作记忆、sqlite-vec + FTS5 混合检索的情景记忆、带版本链的 TripleStore 时序知识图",
+    "384 维向量经二值化压缩为 48 字节，Hamming 距离检索全部在 SQLite 内完成，不依赖外部向量数据库"
+   ],
+   "use_cases": [
+    "为运行在本地环境中的 AI 代理（Claude Code、Cursor、自定义 Python 代理等）持久化与检索会话记忆",
+    "需要自托管、无遥测且可选客户端加密同步的个人或桌面场景",
+    "通过 MCP 协议为任意 MCP 客户端一键接入记忆服务的集成开发"
+   ]
+  },
+  "sha": "7529c6a7a17a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c71bc8687c67": {
+  "identity": {
+   "one_liner": "自托管家用网络监控面板：Go 后端加 React PWA，经 SSE 实时呈现路由器与设备状态。",
+   "review": "NetPulse 是一个自托管的家用网络监控面板，服务端为单个静态 Go 二进制，数据存于 SQLite，前端为 React 19 的可安装 PWA。它通过部署在 OpenWrt/GL.iNet 路由器上的 agent 采集状态，经 SSE 每 5 秒更新路由器健康分、设备清单、WireGuard 对端和 AdGuard Home 统计，数据保留在局域网内。另可通过外部 pusher 集成 MikroTik、Asuswrt-Merlin、OPNsense、UniFi 及 SNMP 交换机。安装为一条脚本命令，需一台 Linux 主机和局域网内可 SSH 的路由器。",
+   "highlights": [
+    "提供 0-100 网络健康分、拓扑图、设备分类列表与告警流，数据经 SSE 每 5 秒实时更新",
+    "支持 WireGuard 对端流量、AdGuard Home 统计、WAN 测速（M-Lab/Ookla/Cloudflare/LibreSpeed）与固件升级",
+    "内置多用户（bcrypt、admin/viewer 角色）、i18n（ES/EN）、Web Push/ntfy/Telegram 告警通道及只读 MCP 服务器（默认关闭）"
+   ],
+   "use_cases": [
+    "用自托管面板集中监控多台 OpenWrt/GL.iNet 路由器的 CPU、内存、温度与流量",
+    "查看局域网设备清单、Wi-Fi 漫游事件与自动推断的网络拓扑",
+    "通过 MQTT 将网络状态接入 Home Assistant，或经 MCP 接口让 AI 助手查询网络状态"
+   ]
+  },
+  "sha": "c71bc8687c67",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ba3cb35465c5": {
+  "identity": {
+   "one_liner": "面向企业后端服务的 .NET 框架，含 AI 辅助与模块化能力包。",
+   "review": "CoreEx 是 Avanade 开源的 .NET 框架，为企业后端业务服务提供统一基础设施：语义化异常映射 HTTP 状态码、执行上下文、Result 类型、实体与 DDD 模式、验证框架、ADO.NET/EF Core/Cosmos DB 数据访问、事件发布订阅与 Azure Service Bus 集成等。采用模块化 NuGet 包组织，核心包加各能力包按需引用，MIT 协议发布，配套 Roslyn 代码生成与内置 AI 技能支持。",
+   "highlights": [
+    "提供分层能力包：CoreEx 核心运行时及 AspNetCore、Events、Database、Validation 等独立包，按需引用",
+    "数据层支持 ADO.NET 抽象、EF Core 与 Azure Cosmos DB，共享 IUnitOfWork 事务模型与事务性 outbox 中继",
+    "消息层实现 EventData 与 CloudEvents 格式转换、Azure Service Bus 发布订阅，含死信与 OpenTelemetry 指标"
+   ],
+   "use_cases": [
+    "构建需要统一错误响应、验证与事件发布模式的企业后端微服务",
+    "需要 SQL Server、PostgreSQL 或 Cosmos DB 数据访问并保证最终一致性的服务",
+    "结合 ASP.NET Core 开发 API，需 OpenAPI 规范生成、幂等键与分页查询翻译的场景"
+   ]
+  },
+  "sha": "ba3cb35465c5",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aba1408df4a0": {
+  "identity": {
+   "one_liner": "Rust 编写的结构化 JSON 日志存储，用 trie 存键集、值按列式压缩",
+   "review": "kibbr 是一个用 Rust 实现的单二进制日志存储，针对结构化 JSON 日志：每行的键集作为 shape 存入内存 trie，值追加写入磁盘上的类型化列，从而压缩体积并保持可查询。查询通过自带语言 TrieQL，可经 HTTP、CLI 或内置 Web 控制台（端口 7700）执行。项目定位在热搜索集群与冷归档之间的数天至数月区间；不支持自由文本搜索，键集频繁变化的日志体积可能超过原始大小。采用 AGPL-3.0 许可，仍处于开发阶段。",
+   "highlights": [
+    "键集存入内存 trie（每形状一次），值以类型化列追加写入磁盘，查询先走 trie 跳过不匹配的形状再只扫描相关列",
+    "提供自有查询语言 TrieQL，支持时间分桶、SINCE/BETWEEN 窗口、按字段过滤等，同一查询可经 HTTP、CLI 和内置 Web 控制台执行",
+    "/ingest 返回 200 表示已写入 write-ahead log 并 flush；提供 Docker 镜像、compaction 压缩已完成日期的数据"
+   ],
+   "use_cases": [
+    "存储数天至六个月区间的结构化 JSON 日志，介于热搜索集群与冷归档之间",
+    "需要压缩体积但保留按字段查询能力的服务端日志场景（如 MongoDB、PostgreSQL jsonlog）",
+    "通过 cargo install 或 Docker 快速搭建带 Web 控制台的日志查询端点"
+   ]
+  },
+  "sha": "aba1408df4a0",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

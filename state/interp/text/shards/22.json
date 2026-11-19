@@ -2968,5 +2968,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c6720e2a087b": {
+  "identity": {
+   "one_liner": "自托管媒体管理工具，以单容器集成搜索、下载与整理流程",
+   "review": "Mediarium 是一个运行于 Docker 的自托管媒体管理器，用于电影、剧集、音乐、电子书和有声书的搜索、下载、重命名和入库，供 Plex/Jellyfin/Emby 等媒体服务器读取。它将索引搜索、Usenet 与种子下载、修复解压等功能集成在一个容器中，支持 amd64/arm64。README 说明影视功能可用，音乐和书籍功能需手动开启，版本 4.1 仍存在未完善之处。",
+   "highlights": [
+    "单 Docker 镜像支持 amd64 与 arm64，内置 Usenet 与种子下载器、解压修复及 WireGuard VPN，端口 8264 提供设置向导",
+    "内置阅读器与有声书播放器，支持 Kindle 电子书、章节跳转和多设备进度同步，标签可同步为 Plex/Jellyfin/Emby 合集",
+    "提供从 Radarr、Sonarr、Prowlarr、SABnzbd 等应用的配置迁移（只读取不修改），并可模拟 SABnzbd/qBittorrent API 供 nzb360、LunaSea 等客户端连接"
+   ],
+   "use_cases": [
+    "在 NAS（Synology、Unraid、QNAP）或 64 位 Linux 服务器/树莓派上通过 Docker Compose 部署媒体库管理",
+    "为 Plex、Jellyfin、Emby 等媒体服务器自动化补充电影、剧集、音乐与图书资源并统一整理命名",
+    "家庭场景下使用带权限和请求审批的多账户，管理各成员可访问的媒体类型"
+   ]
+  },
+  "sha": "c6720e2a087b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b336e5f858be": {
+  "identity": {
+   "one_liner": "基于静态解析的 Django 与 SQLAlchemy 模型分析工具，提供 ER 图、N+1 检测与迁移风险检查。",
+   "review": "orm-lens 对 Django 模型/迁移与 SQLAlchemy 模型/Alembic 版本做静态分析，无需数据库或启动应用，生成 ER 图、检测 N+1 循环、迁移风险与 schema 漂移。提供 VS Code 扩展、CLI（17 个子命令）和 MCP 服务器三种形态，供编辑器用户、CI 流水线和 AI 编码代理使用。要求 Python 3.9+（MCP 服务器需 3.10+），MIT 许可。",
+   "highlights": [
+    "纯静态解析：不需要数据库连接、DJANGO_SETTINGS_MODULE 或可运行的虚拟环境",
+    "提供 ER 图（Mermaid，可导出 SVG）、N+1 检测、schema 漂移检查、迁移爆炸半径分析和 18 条内联 lint 规则（DOL001..DOL041）",
+    "三种分发形态：VS Code/Cursor 扩展、CLI（支持 SARIF 输出、pre-commit 钩子、GitHub Action、Docker 镜像）、面向 AI 代理的 14 个只读 MCP 工具"
+   ],
+   "use_cases": [
+    "在不启动 Django 的前提下浏览陌生项目的模型结构与应用归属（编辑器侧边栏树、悬停关系卡片）",
+    "在 CI 中运行 migration-risk、drift、blast-radius 等命令，输出 SARIF 或 PR 注释对迁移进行门禁",
+    "通过 MCP 服务器让 Cursor、Claude Code 等 AI 代理查询项目 schema 事实"
+   ]
+  },
+  "sha": "b336e5f858be",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b74cb29b6c3a": {
+  "identity": {
+   "one_liner": "面向台湾中小学的自架式排课与调代课系统，含 OR-Tools 自动排课引擎",
+   "review": "这是一个供台湾国小、国中、高中职单校自架的 Web 排课与调代课系统，围绕教学组长工作流程设计，覆盖学期资料建置、手动拖拉排课、OR-Tools CP-SAT 自动排课、请假代课调课、钟点统计与课表导出。通过 Docker Compose 部署，支持 x86-64 与 ARM64，界面为繁体中文。最低硬件需求为 2 核 4GB 内存，自动排课建议 4 核 8GB。采用 AGPL-3.0 授权（v1.4.1 起为 AGPL-3.0，此前为 MIT）。",
+   "highlights": [
+    "支持手动拖拉排课与基于 OR-Tools CP-SAT 的自动排课，硬约束 H1–H10 与软约束 S1–S8 加权，无解时以教务语言定位冲突",
+    "包含请假登记、代课推荐、调课验证、三角调课、站内与 Email 通知、月结钟点 Excel 统计",
+    "课表可导出 Excel / PDF（内嵌中文字型）/ PNG，支持每日自动备份与 RBAC 角色管理"
+   ],
+   "use_cases": [
+    "台湾国小、国中、高中职学校自架部署，处理学期排课与发布",
+    "学期中的请假、代课、调课登记与代课钟点结算",
+    "课表查询与班级/教师/场地课表批量导出打印"
+   ]
+  },
+  "sha": "b74cb29b6c3a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "728fab312d29": {
+  "identity": {
+   "one_liner": "Windows 桌面 AI 编程工具管理器，灵动岛常驻显示额度并支持自动续跑",
+   "review": "Jolu 是一个本机优先的桌面应用，用于统一管理 Claude Code、Codex、Gemini 等 AI 编程工具：通过桌面灵动岛常驻显示订阅额度与会话增量，提供用量统计、会话线程浏览、Skills 管理和一键签到。自动化任务在额度耗尽时保留进度、恢复后在原会话续跑；模型路由将多个来源收进一个本机回环地址。数据存于本机 SQLite，额度查询需联网。以 Windows 为主要平台，macOS/Linux 版未系统验证。",
+   "highlights": [
+    "灵动岛常驻桌面显示额度窗口、重置倒计时与会话 Token 增量，支持最多 8 个分身、贴边停靠和经典/胶囊两种样式",
+    "模型路由将官方订阅、官方 Key 与第三方 Key 收进同一本机地址，工具按“来源/模型”取用，含路由分组、会话上下文观察与协议转换",
+    "额度耗尽的自动化任务保留进度，额度恢复后在原会话续跑；统计记录保存在本机 SQLite，调用明细可导出 CSV"
+   ],
+   "use_cases": [
+    "多账号使用 AI 编程工具、需要常驻查看额度与重置时间的开发者",
+    "需要将多个模型来源统一接入 Claude Code、Codex 等工具的场景",
+    "需要定时或额度恢复后自动执行编程任务的场景"
+   ]
+  },
+  "sha": "728fab312d29",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "97e6debb625d": {
+  "identity": {
+   "one_liner": "自托管协作工作区，让小团队与其AI编程代理在同一台Linux服务器上共同开发。",
+   "review": "DevDash 是一个自托管的团队工作区，部署在一台用户自有的 Linux 服务器上，供小团队成员与 Claude Code、OpenCode 等 AI 编码代理协作构建软件。项目共享 git 检出，每个代理会话可在独立 git worktree 中并行工作；每位成员是独立的 Linux 用户，DevDash 自身不以 root 运行。采用 PolyForm Noncommercial 许可，仅限非商业用途免费。",
+   "highlights": [
+    "每个代理会话使用独立 git worktree，支持并行开发且互不冲突",
+    "支持 Claude Code 与 OpenCode 两种代理，后者可接入 Anthropic、OpenAI、Google、OpenRouter 及本地模型等多种提供商",
+    "内置个人代理 Hamasa 与规则分级（绿/黄/红）的 Autopilot 决策机制，代理以成员自身 Linux 用户身份运行"
+   ],
+   "use_cases": [
+    "小团队在同一台自托管服务器上与 AI 编码代理协作开发软件",
+    "需要从浏览器或手机启动、观察并共享代理会话的场景",
+    "希望按自定义规则让代理自动处理常规决策、人工处理敏感操作的团队"
+   ]
+  },
+  "sha": "97e6debb625d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

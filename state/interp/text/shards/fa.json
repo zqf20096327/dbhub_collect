@@ -3067,5 +3067,181 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ddd95952a908": {
+  "identity": {
+   "one_liner": "将链上行为特征编码为信号并在EVM合约层强制校验的行为验证协议",
+   "review": "TRION Protocol 是一套行为验证基础设施：Rust L0 引擎按区块提取八个归一化行为特征并计算一致性分数，信号打包为 256 位整数后经多签预言机上链，合约通过继承 Guard 基类并以修饰器门控敏感函数的执行。面向需要在 EVM 链（当前部署于 Arbitrum Sepolia）上做行为异常监测与执行门控的智能合约开发者。",
+   "highlights": [
+    "Rust L0 引擎每区块提取八个归一化行为特征，基于指数移动平均基线进行异常判定",
+    "信号以固定位域打包为 256 位整数，由多签验证人签名后经链上预言机仲裁发布",
+    "Guard 合约按调用上下文派生交易标识，默认 fail-closed，含时间与区块高度双重新鲜度检查"
+   ],
+   "use_cases": [
+    "对敏感合约函数施加行为一致性执行门控",
+    "链上行为异常的被动监测与信号发布",
+    "通过 TypeScript SDK 在链下工具中构造与解析信号"
+   ]
+  },
+  "sha": "ddd95952a908",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a31d942067ce": {
+  "identity": {
+   "one_liner": "自托管预约与门店管理平台，Preact + Hono + SQLite 本地运行",
+   "review": "OpenSalon 是面向美发店、水疗、纹身工作室等预约制业务的开源预约与门店管理系统，可自托管。它提供按员工分列的日视图、预约改期、客户与员工管理、服务目录、产品库存及 CSV 日程导出；后端为 Hono + SQLite，前端为 Preact/Tailwind v4/shadcn/ui。UI 支持人与 AI 代理两种模式，可通过 REST API 操作。需 Node.js 20+ 与 pnpm，数据存于本地 data.db。",
+   "highlights": [
+    "提供带员工分列的日历视图、预约创建/改期、多服务合并计价与时长自动计算，以及员工时段屏蔽",
+    "包含客户、员工、服务目录与产品库存管理，支持状态流转与仪表盘统计",
+    "提供 REST API 与 ?agent 代理优化界面，支持浏览器自动化与 Claude Code 调用"
+   ],
+   "use_cases": [
+    "美发店、水疗、纹身工作室、宠物美容等预约制业务的本地化排班与客户管理",
+    "需要自托管部署、将预约系统集成到自有 SaaS 产品的团队",
+    "通过 REST API 或 AI 代理自动执行预约管理操作的场景"
+   ]
+  },
+  "sha": "a31d942067ce",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a684727fea69": {
+  "identity": {
+   "one_liner": "基于离线 schema 快照的 PostgreSQL MCP 服务器与 CLI 工具",
+   "review": "dryrun 是一个 CLI 工具加 MCP 服务器的组合，用于 PostgreSQL schema 情报：CLI 连接数据库提取目录信息（表、视图、索引、约束、分区、触发器、RLS 等）写入本地快照文件，MCP 服务器读取该快照并向 AI 助手提供 schema 探索、查询验证、迁移检查、lint 等工具。分析离线进行，AI 助手无需数据库凭据；需 PostgreSQL 15 或更新版本，经 Homebrew、npm 或源码（Go 1.26+）安装。",
+   "highlights": [
+    "提供 20+ 约定 lint 规则和 13 条结构审计规则（重复索引、FK 覆盖、循环外键、vacuum 调参等）",
+    "支持迁移安全分析：锁类型、时长估计、表重写检测及每条 DDL 的替代方案；查询验证基于 libpg_query 解析并对照实际 schema",
+    "MCP 服务器通过 stdio 或 SSE 暴露 9 个工具，快照可 push/pull 共享，团队其他成员无需数据库凭据"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex、Zed 等 AI 编码助手提供 schema 上下文，供其编写 SQL 前查询结构、约束与索引",
+    "在 CI 或无凭据环境中离线执行 schema lint、迁移安全检查与查询验证",
+    "DBA 捕获快照并共享给团队，多人/多代理在不接触生产凭据的情况下获得 schema 信息"
+   ]
+  },
+  "sha": "a684727fea69",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4fe50a5a4ecf": {
+  "identity": {
+   "one_liner": "自托管网页应用，通过 SAIC iSmart API 读取并展示现代 MG 车辆数据。",
+   "review": "GarageStack 是一个自托管的 Docker 网页应用，登录 SAIC iSmart API（官方 MG iSmart 应用使用的同一后端），为 MG4、MG5、ZS EV、HS PHEV 等上汽产 MG 车提供实时仪表盘、行程记录、充电历史与地图展示。采用 C#/.NET 与 PostgreSQL 构建，支持 Home Assistant、MQTT、OpenID Connect 单点登录。仅适用于使用 iSmart 应用的车型；同一账号不能同时登录 iSmart 应用与本应用。",
+   "highlights": [
+    "通过 SAIC iSmart API 读取车辆遥测数据，仪表盘卡片可按 HEV/PHEV/BEV 车型自动显示或隐藏并自定义排序",
+    "自动保存行程并绘制路线图、热力图与限速对比，行程可标记用途并以电子表格按月或按年导出",
+    "支持 MQTT discovery 接入 Home Assistant，并可对接 Authentik、Authelia、Keycloak 等 OpenID Connect 提供商"
+   ],
+   "use_cases": [
+    "持有支持 iSmart 应用的现代 MG 车（HEV/PHEV/BEV）并自建 homelab 的车主",
+    "需要按月或按年导出含地址与里程表的税务行程日志（如荷兰 rittenregistratie）的用户",
+    "希望在 Home Assistant 仪表盘或 gethomepage.dev 中展示车辆状态的用户"
+   ]
+  },
+  "sha": "4fe50a5a4ecf",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9c91863db731": {
+  "identity": {
+   "one_liner": "自托管的单二进制定时任务面板，插件用 JS 编写，SQLite 存储",
+   "review": "一个运行在个人设备上的定时任务控制面板，用 Rust 编写并编译为单个静态 musl 二进制，数据存于 SQLite 文件，无需云服务或独立数据库。用户通过浏览器管理任务、脚本和插件；插件用 JavaScript 编写，可调用 host API 提供的日志、SQLite、HTTP、通知能力，网络出站有 SSRF 限制。支持五段 cron 与 @every 表达式、失败熔断、多渠道通知推送与备份恢复。当前版本为 0.6.3，仓库未附带开源许可证文件。",
+   "highlights": [
+    "提供浏览器界面管理定时任务、第三方脚本（sh/node/python3/php/二进制）及 JavaScript 插件",
+    "调度支持五段 cron、@every 表达式与抖动后缀，包含失败自动熔断机制",
+    "发布 aarch64-linux-musl、x86_64-linux-musl 与 Windows 产物，安装脚本强制校验 SHA256"
+   ],
+   "use_cases": [
+    "在树莓派、家庭小主机或低配 ARM 设备上长期运行定时签到、备份、清理等任务",
+    "用 JavaScript 插件将一组重复操作封装为带界面的按钮或定时任务",
+    "在局域网内通过手机或浏览器访问面板管理脚本与运行记录"
+   ]
+  },
+  "sha": "9c91863db731",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "176a5f58ab65": {
+  "identity": {
+   "one_liner": "纯 Go 标准库实现的嵌入式 SQL 引擎，带持久化与检索能力",
+   "review": "tinySQL 是一个用纯 Go 标准库编写的嵌入式 SQL 引擎，通过 go get 安装后可在 Go 程序中创建内存数据库并执行带绑定参数的 SQL。它提供 WAL、JSON、磁盘、SQLite 等多种存储模式，支持连接、递归 CTE、窗口函数、触发器、向量检索与 BM25，并附带 C、Python、Rust、Swift 绑定。README 明确列出限制：仅支持单写进程，不支持分片、自动故障转移与多主写入，部分复合键与 VACUUM 等特性缺失。",
+   "highlights": [
+    "仅依赖 Go 标准库实现 SQL 子集，支持连接、递归 CTE、UNION、窗口函数、视图、触发器与存储过程",
+    "提供内存、WAL、JSON、磁盘、索引及 SQLite 后端等多种存储模式，并支持向量检索（精确/IVF/HNSW）与 BM25 混合排序",
+    "提供 WebAssembly 构建，以及 C、Python、Rust、Swift 语言绑定和 CLI、HTTP/gRPC 服务器"
+   ],
+   "use_cases": [
+    "在 Go 应用中嵌入 SQL 引擎，实现带持久化或内存存储的数据查询",
+    "构建包含向量检索、BM25 与混合排序的 RAG 检索流程",
+    "在浏览器或 WASM 环境中运行 SQL 查询工作区"
+   ]
+  },
+  "sha": "176a5f58ab65",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dbe95f962cfc": {
+  "identity": {
+   "one_liner": "用 Rust 编写的 Meshtastic 网格网络实时监控与诊断工具",
+   "review": "Meshview Rust 从 MQTT broker 读取 Meshtastic 数据包写入 SQLite 或 PostgreSQL 数据库，并提供 Web 界面和 API，展示节点地图、数据包路径及统计信息。它是 Python 版 Meshview 的 Rust 重写，数据库、配置和 API 与 Python 版兼容，支持接管其数据库。发布为单个静态链接二进制，支持容器镜像部署和 Kubernetes。",
+   "highlights": [
+    "通过 MQTT（支持 TLS）摄取 Meshtastic 数据包，写入 SQLite 或 PostgreSQL，并在 Web 界面呈现节点地图、数据包路径与统计",
+    "以单个静态链接二进制发布，内置四种角色：run（摄取+服务）、ingest、serve、migrate，另有 backup 命令进行一致性备份",
+    "数据库格式、配置文件和 API 与 Python 版 Meshview 4.0 兼容，可接管既有数据库或与其并排运行"
+   ],
+   "use_cases": [
+    "为 Meshtastic 网格网络搭建实时监控与诊断面板，查看节点分布、数据包内容及传输路径",
+    "将 Python 版 Meshview 迁移或替换为 Rust 实现，沿用既有数据库与配置",
+    "通过分离 ingest 与 serve 角色，部署一个摄取端配合多个 Web 服务端，或在 Kubernetes/容器环境中运行"
+   ]
+  },
+  "sha": "dbe95f962cfc",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "89d925e644fc": {
+  "identity": {
+   "one_liner": "面向 DSH agent 的墨墨记忆卡插件，本地 SQLite 缓存加队列同步。",
+   "review": "该插件为 DeepSeek Harness（DSH）的 agent 提供墨墨记忆卡（Markji）读写能力：本地用单个 SQLite 文件维护卡组、章节和卡片缓存，读写先入队，再按拉取、三方合并、推送的顺序同步云端。仅依赖 Node 内置模块，需 Node >= 22.13 和 DSH 0.2.x 环境，支持 Windows/macOS/Linux，安装方式为从源码装为 DSH bundle。",
+   "highlights": [
+    "只注册 markji_decks、markji_cards、markji_sync、markji_file 四个按 action 组织的工具，无第三方依赖，日常搜索和阅读不请求 API",
+    "修改先写入本地队列，推送前先拉取远端变更并三方合并，冲突按卡片去重并逐条报告；进程崩溃后同步任务可用同一句柄续跑",
+    "create/update 入队前自动校验语法与媒体引用；API Key 以 AES-256-GCM 密文写入 cache.db，多进程通过文件锁共用缓存目录"
+   ],
+   "use_cases": [
+    "让 DSH agent 搜索、阅读、新建、修改、归档墨墨记忆卡，含批量操作（单次最多 50 项）",
+    "通过 JSON 条件树 filter 按纯文本、卡组名、更新时间等条件过滤列表",
+    "需要离线缓存回退、后台同步进度查看和冲突逐条解决的场景"
+   ]
+  },
+  "sha": "89d925e644fc",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

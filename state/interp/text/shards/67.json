@@ -2833,5 +2833,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ad39674db43e": {
+  "identity": {
+   "one_liner": "面向 ClickHouse 的模式感知实时 API 网关，单二进制提供摄取、查询与 SSE 推送。",
+   "review": "WaveHouse 是一个用 Go 编写的开源 API 网关，位于应用与 ClickHouse 之间，提供异步批量摄取（内嵌 NATS JetStream WAL）、结果缓存、SSE 实时推送以及基于 JWT 的行列级访问策略。部署方式包括 Docker Compose、容器镜像和 go install；运行时必需一个设置目录与可访问的 ClickHouse 实例。项目处于 alpha 阶段，接口和配置在版本间可能变化且无迁移路径。",
+   "highlights": [
+    "异步摄取：写入经 JetStream WAL 确认后按表后台批量刷入 ClickHouse，支持按 ID 去重与死信队列",
+    "实时推送：SSE 在刷盘前广播，JetStream 为重连/滞后客户端补齐数据缺口",
+    "安全与查询：按表按角色的列/行策略（JWT 模板），结果缓存与 singleflight 合并，提供 TypeScript 与 Go SDK"
+   ],
+   "use_cases": [
+    "为前端应用提供用户侧实时分析数据的摄取、查询与推送",
+    "替代自建 Kafka+消费者+缓存+鉴权的服务栈，以单二进制连接 ClickHouse",
+    "通过参数化 SQL 端点（named pipes）向客户端暴露受策略约束的查询"
+   ]
+  },
+  "sha": "ad39674db43e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec96849364b6": {
+  "identity": {
+   "one_liner": "内嵌 sing-box 的自托管代理面板，单 Go 二进制加 SQLite",
+   "review": "m-ui 是一个面向 Linux 的自托管代理面板，将 sing-box 数据面内嵌于一个 Go 二进制中，数据存于单个 SQLite 文件。它以「线路」抽象代替分别维护 inbound/outbound/route，保存前对整份配置执行 sing-box 干跑校验，失败不落库，应用失败自动回滚。支持一主多副服务器部署、订阅分发、代理分销、证书签发与备份。需 root 权限与 systemd，提供一键安装脚本。",
+   "highlights": [
+    "支持 Hysteria2、AnyTLS、TUIC、VLESS(Reality/Vision)、VMess、Shadowsocks 等协议线路，配置保存前先经 sing-box 干跑校验并支持回滚",
+    "一主多副架构：主机每 5 秒推送快照至副机并回收流量，配额、到期、设备数跨服务器统一判定，提供主机容灾与换主功能",
+    "订阅按 User-Agent 自动输出通用链接、Clash、sing-box 三种格式，支持证书签发续期、WARP、防火墙管理、Telegram 通知与外部 API"
+   ],
+   "use_cases": [
+    "个人或团队在一台服务器上自建代理节点并管理用户订阅",
+    "多台服务器的统一部署运维，含配置推送、流量回收与大陆连通检测",
+    "带代理分销模式的对外运营，代理有独立面板、额度与用户管理"
+   ]
+  },
+  "sha": "ec96849364b6",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a32c2cadda68": {
+  "identity": {
+   "one_liner": "Rust 库，解析并流式消费 PostgreSQL WAL 逻辑与物理复制协议",
+   "review": "pg-walstream 是一个用于解析和流式传输 PostgreSQL WAL 的 Rust 库，面向需要在 Rust 应用中消费复制流的开发者。它支持 pgoutput 协议 v1–v4（含大事务流式、两阶段提交）、物理复制与 BASE_BACKUP，提供 serde 类型化反序列化、初始快照衔接、LSN 反馈与重连机制。默认 rustls-tls 后端无需 libpq，亦可切换 libpq；支持 no_std 构建。当前版本 0.10。",
+   "highlights": [
+    "支持 pgoutput 协议 v1–v4（大事务流式、两阶段提交、并行流式）及物理 WAL 流与 BASE_BACKUP",
+    "提供 serde 类型化反序列化、初始快照无间隙衔接、LSN 反馈、指数退避重连与复制槽管理",
+    "默认 rustls-tls 纯 Rust 连接后端，支持 no_std + alloc 解析器构建以用于 wasm 与嵌入式目标"
+   ],
+   "use_cases": [
+    "构建消费 PostgreSQL 逻辑复制的变更数据捕获应用",
+    "使用 raw WAL 流和 BASE_BACKUP 实现备库与物理备份流程",
+    "通过 serde 二进制序列化在进程、队列或文件间分发变更事件"
+   ]
+  },
+  "sha": "a32c2cadda68",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b944621e3bbc": {
+  "identity": {
+   "one_liner": "基于 SQLite/Postgres/Redis 的 Python 后台任务与定时任务库，无需独立 broker。",
+   "review": "tinyjobs 是一个 Python 后台任务与 cron 库，任务队列直接存放在 SQLite、Postgres 或 Redis 中，不依赖独立 broker 或守护进程，通过 `tinyjobs worker` 命令运行。它提供 `django.tasks` 标准接口的 worker 实现，也可在 FastAPI 进程内运行。README 注明项目较新，使用前可查阅其 Status 文档；投递语义为 at-least-once，任务需可安全重复执行。",
+   "highlights": [
+    "同一套 API 支持 SQLite、Postgres 和 Redis 三种后端，SQLite 模式无额外安装依赖",
+    "支持重试（指数退避+抖动）、任务去重、并发与速率限制、跨任务依赖（after=）及事务性入队",
+    "提供崩溃恢复（租约与心跳）、`tinyjobs verify` 压测验证工具，以及可挂载于 WSGI/ASGI 的无依赖 dashboard"
+   ],
+   "use_cases": [
+    "需要后台执行任务或定时调度的 Python 应用（Django、FastAPI 等）",
+    "希望用 SQLite 文件作为队列、避免部署独立消息中间件的场景",
+    "需要对任务投递可靠性进行崩溃测试与审计的存储配置验证"
+   ]
+  },
+  "sha": "b944621e3bbc",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d0c497cfe81": {
+  "identity": {
+   "one_liner": "面向委内瑞拉五金店的POS系统，双币结算与分数化库存，CodeIgniter 4 + Vue 3 + Docker。",
+   "review": "FerrePOS 是一个销售点（POS）与库存管理系统，面向委内瑞拉五金店，提供美元/玻利瓦尔双币计价和按米、公斤等单位分数化销售。技术栈为 CodeIgniter 4 后端 API、Vue 3 前端 SPA、MySQL 8.0 与 Redis，通过 Docker Compose 编排。README 说明金额字段使用 DECIMAL 类型，库存操作采用事务与 FOR UPDATE 锁，发票冻结交易时点的汇率。部署需 Docker 环境，首次运行需执行迁移和数据种子命令。",
+   "highlights": [
+    "支持 USD/VES 双币计价，发票冻结交易时点的汇率记录（tasa_cambio_id、tasa_aplicada）",
+    "库存数量使用 DECIMAL(12,3)，支持按米、公斤、升等单位分数化销售，商品可配置购买单位到销售单位的转换因子",
+    "所有库存变动写入 movimientos_inventario 生成 Kardex 记录，含五种移动类型；收银支持多支付方式混合（现金、借记/贷记刷卡、Zelle、Binance、Pago Móvil）及双币找零"
+   ],
+   "use_cases": [
+    "五金零售店按整件或分数单位（米、公斤、升）销售商品并管理库存",
+    "需要以美元为锚定货币、按活跃汇率动态计算玻利瓦尔价格并出具双币发票的场景",
+    "需要多收银台、班次开闭与现金盘点审计的多收银员运营场景"
+   ]
+  },
+  "sha": "5d0c497cfe81",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

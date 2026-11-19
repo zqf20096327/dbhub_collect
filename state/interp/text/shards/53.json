@@ -3314,5 +3314,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e1022241d931": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，基于 BM25 排序的全文检索，采用 LSM 式分段索引。",
+   "review": "pg_textsearch 是 Timescale 开发的 PostgreSQL C 扩展（Postgres OSS 许可），在文本列上创建 BM25 索引，通过 `<@>` 运算符按相关性排序返回结果。面向需要排序全文检索的 PostgreSQL 用户，支持 PG17/18/19。需加入 shared_preload_libraries，索引通过 CREATE INDEX ... USING bm25 创建；支持布尔过滤、表达式/部分/分区索引、中文分词需 zhparser。布尔过滤与 BM25 排序组合尚未合并为单次索引扫描。",
+   "highlights": [
+    "提供 `<@>` 运算符进行 BM25 评分排序，k1、b 参数可配置",
+    "使用 Block-Max WAND 执行 top-k 查询，支持并行索引构建与分段压缩",
+    "支持表达式索引、部分索引、分区表索引，可配合 tsquery 语法做布尔过滤"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内对文本列做按相关性排序的检索查询（如文档、事件描述的 JSONB 字段）",
+    "多语言表的分语言索引检索，中文场景结合 zhparser 配置使用",
+    "大表初始加载后的批量索引构建与更新型负载下的索引压实维护"
+   ]
+  },
+  "sha": "e1022241d931",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17d414234bcd": {
+  "identity": {
+   "one_liner": "自托管开源备份软件，通过 Web 控制台与代理备份服务器、虚拟机、数据库及 Microsoft 365",
+   "review": "BackupZit 是 AGPLv3 许可的自托管备份软件，备份对象包括 Windows/Linux 机器、Proxmox VE、VMware ESXi、Hyper-V 虚拟机、SQL Server、PostgreSQL、MySQL、NAS 共享和 Microsoft 365。控制台运行在小型 Linux VM 上，代理直接将去重、压缩、加密后的备份写入所选存储，不依赖云服务。",
+   "highlights": [
+    "支持文件级增量、Windows 整盘镜像及裸机恢复（含不同硬件），Linux 可 P2V 转为 Proxmox VM",
+    "存储后端涵盖 SFTP、S3 兼容存储、Azure Blob、SMB、USB/本地磁盘及硬化仓库，支持 AES-256 加密、不可变备份与备份副本作业",
+    "提供基于证书指纹的代理信任机制、LDAP/SSO 登录、REST API（含 OpenAPI 规范）与 Prometheus 指标"
+   ],
+   "use_cases": [
+    "需要备份本地虚拟化平台（Proxmox VE、ESXi、Hyper-V 含故障转移集群）且不接入云服务的组织",
+    "需要对 SQL Server、PostgreSQL、MySQL 数据库进行时点恢复和日志备份的运维场景",
+    "需要备份 Microsoft 365 邮件、日历、联系人、OneDrive 与 SharePoint 数据的环境"
+   ]
+  },
+  "sha": "17d414234bcd",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3165,5 +3165,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "993fb9a8c526": {
+  "identity": {
+   "one_liner": "面向 SQL Server 与 Azure SQL 的 dbt 适配器，支持 pyodbc、mssql-python 与 adbc 后端",
+   "review": "dbt-sqlserver 是 dbt 连接 Microsoft SQL Server 与 Azure SQL 的适配器，适用于使用 dbt 做分析工程的数据团队。支持 dbt-core 1.12+，最低要求 SQL Server 2017，官方支持 Python 3.11–3.14。默认通过 pyodbc 连接，可切换 mssql-python 或实验性 adbc 后端，并提供 T-SQL 事务、类型扩展、schema 生成等可配置项。",
+   "highlights": [
+    "支持 SQL Server 2017–2025，兼容 Azure SQL Database 与 Azure SQL Managed Instance",
+    "提供 pyodbc（默认）、mssql-python、adbc（实验性）三种连接后端",
+    "提供事务边界、xact_abort、列类型扩展、schema 生成等可配置行为"
+   ],
+   "use_cases": [
+    "在 SQL Server 或 Azure SQL 上运行 dbt 模型与增量构建",
+    "需自定义连接后端（如无 ODBC 驱动的 mssql-python 或 Arrow 原生的 adbc）的部署环境",
+    "需要在 T-SQL 层控制事务回滚与批处理错误行为的项目"
+   ]
+  },
+  "sha": "993fb9a8c526",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "742bb7b0e88e": {
+  "identity": {
+   "one_liner": "基于 xeus 与 SOCI 的 SQL 数据库 Jupyter 内核",
+   "review": "xeus-sql 是一个面向 SQL 数据库的 Jupyter 内核，基于 xeus（Jupyter 协议的 C++ 原生实现）和 SOCI 数据库访问库构建。用户在 Jupyter Notebook 或 JupyterLab 中选择 xsql 内核即可运行 SQL 笔记本。它通过 SOCI 后端支持 DB2、Firebird、MySQL、Oracle、PostgreSQL、SQLite3 及通用 ODBC；包本身仅含 soci-core，各数据库后端需另装对应的 soci 扩展包，推荐用 mamba/conda 在独立环境中从 conda-forge 安装。",
+   "highlights": [
+    "基于 xeus（Jupyter 协议 C++ 原生实现）与 SOCI 数据库访问库构建",
+    "支持 DB2、Firebird、MySQL、ODBC（通用后端）、Oracle、PostgreSQL、SQLite3 等 SQL 实现",
+    "已发布至 conda-forge，可通过 mamba/conda 安装"
+   ],
+   "use_cases": [
+    "需要在 Jupyter Notebook 或 JupyterLab 中以 xsql 内核执行 SQL 语句",
+    "需要通过同一内核连接多种 SQL 数据库（如 SQLite、PostgreSQL、MySQL）或经 ODBC 访问数据库",
+    "希望用 mamba/conda 在隔离环境中部署 SQL 内核的教学或分析环境"
+   ]
+  },
+  "sha": "742bb7b0e88e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bcc1d53727e2": {
+  "identity": {
+   "one_liner": "自托管电动车数据记录器，运行于 Cloudflare Workers + D1 或 Docker",
+   "review": "EVBook 是一个开源（Apache-2.0）电动车日志应用，通过 Tesla Owner API、Volvo API 和 Škoda API（beta）读取车辆数据，记录行驶、充电、电池健康和费用。部署为单个 Cloudflare Worker 加 D1 数据库，或以 Docker 容器运行；内部采用每车一个 actor 的状态机架构，用 TypeScript、Hono 和 React 构建。适合想自持车辆数据、不愿运维完整服务器栈的车主。",
+   "highlights": [
+    "记录行驶路线、充电会话、电池健康趋势、费用统计和车辆状态时间线，支持 GPX 导出与全表 CSV 下载",
+    "提供 Cloudflare 一条命令部署（bun run setup）与 Docker Compose 两种部署方式，支持 Tesla、Volvo、Škoda（beta）三种品牌",
+    "每车一个状态机 actor 决定轮询与退避时机；内置 Tessie 和 TeslaMate 历史数据导入及 PWA 界面"
+   ],
+   "use_cases": [
+    "车主想在 Cloudflare 免费额度或自有 VPS 上自托管记录特斯拉、Volvo 或 Škoda 的行驶与充电历史",
+    "需要跟踪电池可用容量、衰减趋势、闲置损耗并按分时电价计算充电成本",
+    "从 TeslaMate 或 Tessie 迁移历史数据，或将车辆证件、保单等文件与车辆记录一并保存"
+   ]
+  },
+  "sha": "bcc1d53727e2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

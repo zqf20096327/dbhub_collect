@@ -3546,5 +3546,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "67327ae48d28": {
+  "identity": {
+   "one_liner": "读取服务器访问日志的自托管网络分析工具",
+   "review": "Skald 是一个自托管的网站分析工具，数据来源为 Web 服务器的访问日志而非浏览器端 JavaScript 脚本，因此可统计 AI 爬虫、搜索引擎、扫描器等不执行脚本的访问，并将全部请求划入五个互斥分组。它用独立审计流程对每项数字复核两次，不一致时当日数据不予展示；不使用 Cookie，支持 Docker 部署，另有托管测试版。许可证为 Elastic License 2.0，要求 Python 3.11+。",
+   "highlights": [
+    "将访问日志请求划分为 People、AI assistants、Search engines、Bots and scanners、自有流量五个分组，五组合计与日志完全对应",
+    "独立审计流程以自己的解析器复核每项数字，两数不一致时当天数据保留不展示；识别爬虫身份时对照其所有者公布的地址或 DNS 校验",
+    "无需 Cookie 和浏览器脚本；支持 Vercel/Netlify 日志、Cloudflare Worker、CloudFront/Fastly 日志等多种日志接入方式，提供 `skald doctor` 自检命令"
+   ],
+   "use_cases": [
+    "统计 AI 助手（GPTBot、ClaudeBot 等）抓取网站页面的频率、目的及由此带来的访客与转化",
+    "从访问日志中识别扫描器、探测 `.env`/登录接口等可疑请求并生成安全报表",
+    "无 Cookie 的自托管网站流量统计，含实时在线访客、来源分析与线索（leads）追踪"
+   ]
+  },
+  "sha": "67327ae48d28",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "20172c345b1c": {
+  "identity": {
+   "one_liner": "基于 Ollama 本地模型的多源联合 AI 问答引擎",
+   "review": "DeepEvil 是一个运行在本地的技术与学术问答引擎，通过 Ollama 运行 granite4.2-uncensored 模型（32K 上下文），聚合 DuckDuckGo、Wikipedia、OpenAlex、ArXiv、GitHub、HackerNews 等搜索源，经 Mozilla Readability 提取页面内容后以 SSE 流式生成带引用的回答。数据存储使用 SQLite WAL，可选接入 Qdrant 向量库。项目提供 Node.js 直接运行和 Docker Compose 两种启动方式，零配置即可运行。",
+   "highlights": [
+    "聚合 7 个地理节点的搜索源（US/CN/DE/JP/KR/RU/BR），含 OpenAlex 2.5 亿论文与 GitHub README 提取",
+    "支持多模型实时切换（任意本地 Ollama 模型或可选 Claude/OpenAI）、答案重生成（复用已提取源）、多语言翻译与 Markdown 报告导出",
+    "基于 SQLite WAL 存储，可选 Qdrant 向量库与 bge-m3 嵌入模型，声明零遥测"
+   ],
+   "use_cases": [
+    "需要本地运行、无 API 月费的文献与技术资料检索问答",
+    "跨多个国家/语言节点的开源项目与论文调研",
+    "结合本地知识库与网络搜索的混合检索场景"
+   ]
+  },
+  "sha": "20172c345b1c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

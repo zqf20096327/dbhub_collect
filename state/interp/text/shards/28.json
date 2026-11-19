@@ -3125,5 +3125,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "66e1ef4c3497": {
+  "identity": {
+   "one_liner": "面向上门服务行业的开源自托管现场服务软件，整合报价、排班、开票与客户门户。",
+   "review": "Crewtavo 是一个开源现场服务管理应用，面向草坪养护、铺装、屋顶、清洁、暖通等需要报价、排班、现场作业和收款的服务行业，包含排班、报价、销售看板、财务报表、设备维护、SOP 知识库和现场工人手机端。每个业务运行自己的实例，数据与文件由业务方持有，无按席位订阅。可通过 Railway 模板部署（约五个服务，含 Postgres），也可用 Docker 自托管，需 Node.js 20 生成密钥并自行保留 JWT_SECRET 等环境变量。",
+   "highlights": [
+    "提供报价（含价格表、卫星地图测量、在线客户批准签名）、按团队分道的日/周排班、销售看板与财务报表（可导出 CSV）",
+    "包含设备维护计划（按日期/小时/里程）、SOP 知识库（带修订历史与外部分享）、现场手机端（打卡、清单签名、照片标注）与客户门户",
+    "支持 Railway 一键部署与 Docker Compose 自托管，每晚自动备份数据库，可对接 QuickBooks、Zoho、Resend 邮件等外部服务（需配置 API key）"
+   ],
+   "use_cases": [
+    "需要报价、排班、现场 crew 管理和开票收款的服务型企业，如草坪养护、铺装、屋顶、清洁、HVAC 等",
+    "希望自行持有数据和实例、以 Railway 或自有服务器（Docker/VPS）部署而无按席位订阅的团队",
+    "需要 SOP 知识库、设备维护记录和现场工人手机端打卡/拍照/清单功能的多人工团队"
+   ]
+  },
+  "sha": "66e1ef4c3497",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a84f737470f2": {
+  "identity": {
+   "one_liner": "基于 Rust/Ratatui 的终端机会聚合器，收集、打分并整理各类机会信息",
+   "review": "SENTRI 是一个运行在终端的机会信息聚合工具，用 Rust 编写，将奖学金、黑客马拉松、课程、工作、志愿服务和开源项目等来源汇入统一 feed，按用户兴趣以规则方式打分并展示打分原因。数据存储于内嵌 SQLite，无需服务器或外部数据库，依赖 Rust stable 1.89+ 与 Linux，通过 cargo install 从源码构建，支持 `sentri collect` 收集和 `sentri daemon` 后台定期收集。",
+   "highlights": [
+    "连接 RSS/Atom、GitHub、Hacker News、Google News、Mastodon、Bluesky、YouTube 等来源，进行规范化与去重",
+    "基于规则的打分系统，权重和兴趣在 config.toml 中声明，每条推荐可通过 sentri show 查看解释",
+    "提供 TUI 与 CLI 两种操作方式，支持日历视图、交互历史（append-only）及数据库备份命令"
+   ],
+   "use_cases": [
+    "通过 SSH 在服务器或移动设备上浏览和筛选收集到的机会信息",
+    "希望数据保存在本地 SQLite、不依赖云端账号的个人信息管理场景",
+    "跟踪奖学金、黑客马拉松、工作等带截止日期的条目并安排日历"
+   ]
+  },
+  "sha": "a84f737470f2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "edb996df884b": {
+  "identity": {
+   "one_liner": "本机自托管的抖音续火控制台，按固定时刻给指定好友发每日消息",
+   "review": "基于 FastAPI、Playwright 与 SQLite 的自托管工具，用于每日定时向少量抖音好友或群聊发送消息以维持连续互动记录。数据、登录态与浏览器 Profile 均存于本机，无云端服务。面向单人低频使用场景，明确不支持群发与批量操作；平台页面结构变化后可能需更新选择器，README 亦提示浏览器自动化存在违反平台条款的账号风险。",
+   "highlights": [
+    "支持多账号管理，各账号使用独立浏览器 Profile 与调度，扫码登录并持久化登录态",
+    "每日同一好友仅发送一次，结果无法确认时标记待人工复核且不自动重发，接入 Bark 分级推送异常通知",
+    "提供只读会话扫描与五类对账、发送统计、自定义 DOM 定位规则热更新；数据存 SQLite，支持 JSON 导出备份"
+   ],
+   "use_cases": [
+    "个人用户每日定时向少量好友或群聊发送消息，维持连续互动记录",
+    "需要在本地保存登录态与业务数据、不使用云端服务的定时消息场景",
+    "有多个抖音账号需在同一台机器上分别独立调度发送的用户"
+   ]
+  },
+  "sha": "edb996df884b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "57d6a10aa4f2": {
+  "identity": {
+   "one_liner": "Java/Spring Boot 数据服务平台，将多类数据库数据发布为带治理能力的 HTTP API",
+   "review": "基于 Java 8 与 Spring Boot 2.7 的数据服务平台，把 GBase 8a、Oracle、OceanBase、MySQL、Redis、H2 中的数据通过向导式或 SQL 式方式发布为 HTTP API，内置 AppKey 签名鉴权、动态脱敏、订阅审批、配额计量与限流熔断。元数据库默认 H2，可切换 MySQL；限流与缓存为单机内存实现，多实例部署需扩展为 Redis 版。适合需要在内网离线环境对数据服务进行审批与计量管理的团队。",
+   "highlights": [
+    "支持 6 类数据源接入，通过 6 步向导或 SELECT/WITH SQL 语句（#{param} 占位参数）发布 API，统一入口 /dsapi/{path} 执行",
+    "包含发布/订阅/明文申请三类审批流（OWNER/SEC/DEV/ADMIN 多角色会签）、8 类敏感字段识别与 6 种动态脱敏方式、日月配额拦截与计量报表",
+    "提供服务器监控（纯 JDK 实现的 CPU/内存/GC 指标）、阈值告警、每 5 分钟服务探活，以及内置 H2 演示数据源与 79 项用例的端到端测试脚本"
+   ],
+   "use_cases": [
+    "内网离线环境中将多种关系型数据库及 Redis 的查询能力发布为带鉴权的 HTTP API",
+    "需要对 API 发布与订阅执行审批流程、字段级动态脱敏与调用配额计量的数据服务治理",
+    "企业内部搭建开发者门户，提供服务市场、自动接口文档生成与在线调试"
+   ]
+  },
+  "sha": "57d6a10aa4f2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

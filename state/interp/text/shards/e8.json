@@ -2890,5 +2890,114 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a47e18dcfec7": {
+  "identity": {
+   "one_liner": "基于 Kotlin 与 Ktor 的电商后端服务，覆盖账户、商品、订单、库存全流程",
+   "review": "这是一个用 Kotlin 和 Ktor 框架编写的电商后端项目，数据库层使用 Exposed，依赖管理采用 Koin，认证基于 JWT。功能覆盖多角色权限（客户/卖家/管理员）、商品与库存管理、购物车结算、订单与支付验证、优惠券、退款、审计日志及仪表盘统计。适合需要自建电商 API 服务的 Kotlin 开发者参考或部署，代码集成了 Ktlint 与 Detekt 静态分析。",
+   "highlights": [
+    "支持基于角色的访问控制，角色与权限存储于数据库，含平台级与店铺级权限范围",
+    "提供商品、购物车、订单、优惠券、退款等电商核心流程的 API，下单支持幂等键与库存原子操作",
+    "集成 JWT 认证、刷新令牌、登录限流与账户锁定机制，并通过 Ktlint 和 Detekt 进行静态检查"
+   ],
+   "use_cases": [
+    "为电商平台或多店铺系统提供后端 API 服务",
+    "作为学习 Ktor、Exposed、协程与 JWT 认证实践的参考项目",
+    "需要多角色权限、库存校验与审计日志的中小型电商场景"
+   ]
+  },
+  "sha": "a47e18dcfec7",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8d2798c2b3a8": {
+  "identity": {
+   "one_liner": "基于 Laravel 10 与 MySQL 的学校图书借阅管理系统",
+   "review": "这是一个面向学校场景的图书管理应用，记录学生、图书、出版社与借还信息，提供学生姓名、学号（NIS）、班级组与 rayon 等字段管理。基于 PHP 8.1、Laravel 10、Blade 与 Vite 构建，数据存储于 MySQL。项目为学习性质，未加入认证功能，README 提示勿公开部署。适合需要了解 Laravel CRUD 实现的开发者参考。",
+   "highlights": [
+    "通过 Laravel resource controllers 为学生、班级组、rayon、出版社、图书和借阅记录提供完整 CRUD 功能",
+    "借阅模块记录借阅人、书名、借出与归还日期及备注",
+    "提供标准安装流程：composer install、数据库迁移与 php artisan serve 启动"
+   ],
+   "use_cases": [
+    "学校图书室的图书与学生借阅信息登记",
+    "学生学习 Laravel 资源控制器、Blade 模板与 MySQL 迁移的参考项目"
+   ]
+  },
+  "sha": "8d2798c2b3a8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b506db38a97": {
+  "identity": {
+   "one_liner": "Cloudflare Workers 上的多租户 SaaS 起始套件，含 Hono API、React UI 与共享 zod 契约",
+   "review": "Rocketflare 是一个运行在 Cloudflare Workers 上的多租户 SaaS 起始模板仓库，定位为复制后改名的起点而非依赖库。技术栈为 Hono 4 API、React 19 + Vite UI、Postgres 17 + pgvector（Drizzle ORM），一个 Worker 同时导出 fetch、queue、scheduled，并包含 Durable Object 与 Workflow。本地首次运行不需要外部凭证，AI 层可通过 Workers AI binding 无 key 运行。适用于想基于 coding agent（Claude Code 提供的 /rf-setup 等命令）开发内部工具或 B2B 产品的团队。",
+   "highlights": [
+    "通过 TENANCY_MODE 支持多租户或单租户共用一套 schema，每行携带 tenant_id，并内置可选启用的行级安全策略与 CI 目录测试",
+    "包含 Hono API + zod 共享契约 + CASL 权限、React 19 UI、commander CLI、Queues/Workflows/Durable Object 实时推送、R2 文件存储与 AI 层（SSE 聊天、Workflow 上的 agents、pgvector 向量检索）",
+    "提供 /rf-setup、/rf-adapt、/rf-plugin、/rf-upgrade、/rf-security 等 Claude Code 命令及 curl 安装脚本；pnpm gate 统一 lint、typecheck、test、build"
+   ],
+   "use_cases": [
+    "需要租户、登录、角色权限、后台任务、实时通知等平台能力先行就绪的 B2B SaaS 产品起步",
+    "面向企业内部工具的开发，借助 AI agents、分析插件与 CLI 能力",
+    "由 coding agent 驱动迭代功能（契约 → schema → 路由 → 页面流程）的团队项目底座"
+   ]
+  },
+  "sha": "2b506db38a97",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ba4b2c4835a": {
+  "identity": {
+   "one_liner": "读取比亚迪 DiLink 5.0 车辆遥测数据的 Android 只读采集器",
+   "review": "BYD Collector 是一款 Android 应用，通过本机 ADB 与 app_process 读取比亚迪 DiLink 5.0 车辆数据，以 SQLite 本地存储并标准化车辆状态，支持导出到 MQTT/Home Assistant、InfluxDB v1 与 Telegram。主要在中国市场海狮 07 EV 2025 上测试，仅读取数据、不发送车辆控制指令，位置导出默认关闭。",
+   "highlights": [
+    "通过本地 ADB 安装的接口组件采集车辆状态，主采集与 All data 次采集相互独立",
+    "行程记录含 GPS 路线，基于 OpenStreetMap 展示，可按速度或能耗着色",
+    "支持 MQTT/Home Assistant 自动实体发现、InfluxDB v1 历史导出，及可选 Tailscale 加密连接"
+   ],
+   "use_cases": [
+    "将车辆电量、里程、温度等状态接入 Home Assistant 自动化",
+    "用 InfluxDB 与 Grafana 存储和查看历史遥测数据",
+    "记录行程与 GPS 路线用于能耗诊断分析"
+   ]
+  },
+  "sha": "4ba4b2c4835a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6e2a3b403b0f": {
+  "identity": {
+   "one_liner": "基于 Vue3 + Express + SQLite 的双色球/大乐透历史数据分析与号码推荐平台",
+   "review": "该平台面向双色球与大乐透彩种，提供官方开奖数据同步、走势热力图、三种策略号码推荐与统计报告，另含 FastAPI 机器学习服务（LSTM 训练/预测/回测）。需 Node.js ≥18 与 Python ≥3.10，数据库为空时自动抓取近1000期或写入示例数据。README 明确注明摇奖为独立随机事件，回测命中与随机基准相当。",
+   "highlights": [
+    "支持双色球与大乐透的历史数据同步、分页浏览、手动录入与 CSV 导出",
+    "提供均衡分布/热号加权/冷号回补三种推荐策略，并可经和值、奇偶、连号等条件过滤",
+    "内置 FastAPI 服务实现 LSTM 模型的训练、预测与 walk-forward 回测"
+   ],
+   "use_cases": [
+    "彩票开奖数据的本地化管理与统计报告生成",
+    "冷热号、遗漏走势的可视化查看与号码筛选",
+    "LSTM 预测模型的训练、回测与命中率对比实验"
+   ]
+  },
+  "sha": "6e2a3b403b0f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

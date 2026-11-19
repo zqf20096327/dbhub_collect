@@ -3366,5 +3366,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "446925447470": {
+  "identity": {
+   "one_liner": "Go 语言的 SQL 构建与执行库，通过表达式 DSL 生成 SQL 语句",
+   "review": "goqu 提供 Select/Insert/Update/Delete 数据集 API，将 Go 表达式编译为 SQL 文本与参数，内置参数插值、多方言（mysql/postgres/sqlite3/sqlserver）支持，并可将查询结果扫描到 struct 或原始值。它明确不做 ORM，不含关联或钩子功能；需要 go.mod 中声明的最低 Go 版本。",
+   "highlights": [
+    "通过 goqu.From/Insert/Update/Delete 等数据集方法生成 SELECT、INSERT（含多行）、UPDATE、DELETE 语句",
+    "内置 mysql、postgres、sqlite3、sqlserver 等方言，支持参数插值与预编译语句（Prepared）",
+    "支持将查询行扫描到 struct 或原始值，提供 db/goqu 结构体标签（skipinsert、skipupdate 等）"
+   ],
+   "use_cases": [
+    "在 Go 程序中以编程方式构造带 WHERE/IN 等条件的 SQL 查询",
+    "需要面向多数据库方言生成 SQL 而不引入完整 ORM 的场景",
+    "在需要时混合使用原生 database/sql 与结构体扫描的项目"
+   ]
+  },
+  "sha": "446925447470",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aa21accfecdc": {
+  "identity": {
+   "one_liner": "自托管的持久记忆 MCP 服务器与本地 AI 工作区，数据存于单个 SQLite 文件。",
+   "review": "SynaBun 是一个开源的本地 AI 工作区，核心是提供 remember/recall 等记忆工具的 MCP 服务器，把会话中的决定与说明存入本地 SQLite 文件，供下次会话检索。面向使用 Claude Code、Codex、OpenCode 等编码工具的开发者。需要 Node.js 22.19+，通过 npm 全局安装运行；语义搜索需额外下载本地模型，不装则仅支持关键词检索。",
+   "highlights": [
+    "提供基于 stdio 的 MCP 服务器，暴露 remember、recall、reflect、forget、restore 等记忆工具，任何 MCP 客户端均可连接",
+    "记忆存储于单个本地 SQLite 文件，同时支持关键词索引与本地模型驱动的语义检索，并保留修订历史、回收站与校验备份",
+    "包含 Neural Interface 本地 Web 界面（端口 3344），提供 3D 记忆图谱、终端、文件浏览器，并为 Claude Code、Codex、OpenCode 提供侧边面板"
+   ],
+   "use_cases": [
+    "在多个会话与项目之间保留编码决策和上下文，避免重复说明",
+    "通过 Neural Interface 浏览、编辑和删除 AI 工具保存的记忆",
+    "将任务保存为模板，以循环或定时方式自动化运行"
+   ]
+  },
+  "sha": "aa21accfecdc",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3c6729263863": {
+  "identity": {
+   "one_liner": "上传小说，用 LLM 抽取章节结构生成角色关系图谱、地图、时间线与百科的本地优先工具",
+   "review": "AI Reader V2 把整本小说逐章拆解为结构化 ChapterFact（人物、关系、地点层级、物品、组织、事件），聚合成可交互、可导出的知识库。采用 React + Tauri 桌面端、FastAPI + SQLite + ChromaDB 后端，支持 Ollama 本地模型与 10 家云端 OpenAI 兼容 API，数据默认存本机。当前版本 v0.86.0，README 提示分析结果需结合原文核对。",
+   "highlights": [
+    "从 TXT/Markdown 提取人物、地点、物品、组织、事件五类实体，关系图谱自动识别 70+ 种关系类型并做别名合并",
+    "支持 Ollama 本地模型与 DeepSeek、OpenAI、Claude 等 10 家 OpenAI 兼容云端 API，可溯源 RAG 问答",
+    "提供人工修正（别名合并/拆分、实体改名/隐藏）、独立二审、设定集导出（Markdown/Word/Excel/PDF）与每章成本统计"
+   ],
+   "use_cases": [
+    "网文或小说的世界观整理：自动梳理人物关系、地点层级与势力分布",
+    "文学阅读与研究：角色网络、时间线、空间层级的可视化探索与划线批注",
+    "创作与二创辅助：设定集导出、原著角色关系梳理、读书笔记"
+   ]
+  },
+  "sha": "3c6729263863",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "669cb5f702ae": {
+  "identity": {
+   "one_liner": "自托管健康仪表盘，从 Android Health Connect 经 webhook 同步数据到本地 SQLite 并可视化。",
+   "review": "HealthQuery 是一个自托管的个人健康数据仪表盘：通过 Real Life Dashboard Companion 应用从 Android Health Connect 经 HMAC 签名的 webhook 写入数据，存储在本地 SQLite（WAL 模式），浏览器经 TOTP 注册访问，展示步数、睡眠、生命体征等，并提供生成就医摘要的 Reports 和可选的自然语言问答 Ask。数据源目前仅支持该 Companion 应用；LLM 功能需自配 OpenAI 兼容端点。适合已有 Android 手机和可访问服务器的用户部署使用。",
+   "highlights": [
+    "通过 HMAC 签名 webhook 从 Health Connect 同步步数、心率、HRV、SpO2、睡眠分期、体重等数据",
+    "单容器同时提供仪表盘与 API，浏览器访问采用 TOTP 注册和 HttpOnly 会话 Cookie",
+    "可选接入任意 OpenAI 兼容 LLM 端点，并内置 MCP 服务器供 AI 助手读取数据"
+   ],
+   "use_cases": [
+    "在自有服务器上集中查看和追溯 Health Connect 的健康指标",
+    "就诊前按日期范围生成结构化健康摘要",
+    "通过 MCP 让 Claude Desktop 等 AI 助手读取本地健康数据"
+   ]
+  },
+  "sha": "669cb5f702ae",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2934bd0d3123": {
+  "identity": {
+   "one_liner": "基于 React、TypeScript 与 Supabase 的牙科诊所管理系统",
+   "review": "该项目是一个开源（MIT 许可）的牙科诊所全栈管理系统，使用 React 18、TypeScript、Vite 构建前端，后端依赖 Supabase（PostgreSQL、RLS、Edge Functions、实时订阅）与 Clerk 认证。功能覆盖患者档案、预约排班、费用跟踪、反馈管理和管理后台。部署需自行配置 Supabase 项目与 Clerk 密钥，管理员角色须通过 SQL 手动写入 user_roles 表。",
+   "highlights": [
+    "包含患者档案、预约排班、费用跟踪、反馈收集与管理后台模块，数据库含 patients、appointments、doctors、services 等 9 张表",
+    "通过 Clerk 实现 Admin、Doctor、Staff、Patient 四种角色的访问控制，数据层使用 Supabase 行级安全（RLS）",
+    "提供 Netlify、Vercel、GitHub Pages、Docker 及传统虚拟主机五种部署方式，并支持 PWA 与 PDF 记录生成"
+   ],
+   "use_cases": [
+    "牙科诊所用于管理患者记录、医生排班和预约状态跟踪",
+    "诊所管理员跟踪治疗费用、付款历史与欠款余额并生成财务报表",
+    "需要患者门户、反馈收集及 AI 聊天机器人应答患者咨询的场景"
+   ]
+  },
+  "sha": "2934bd0d3123",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

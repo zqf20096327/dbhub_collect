@@ -3086,5 +3086,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1ea620b40b7d": {
+  "identity": {
+   "one_liner": "为 AI Agent 提供带 Git 式版本控制的持久化记忆层",
+   "review": "Memoria 是面向 AI Agent 的持久化记忆层，由 MatrixOrigin 开发，是 Astra 的核心记忆组件，底层依赖 MatrixOne 的写时复制引擎。它通过 MCP 协议对外提供记忆存储、语义检索、快照、分支、合并与回滚等工具，记忆变更均带快照与溯源链。支持云托管与 Docker 自托管两种部署方式。",
+   "highlights": [
+    "提供快照、分支、合并、回滚等记忆版本控制操作，基于 MatrixOne 原生写时复制引擎实现",
+    "通过 MCP 提供约 20 个记忆工具，包括 memory_store、memory_search、memory_branch、memory_rollback 等，并提供 REST API",
+    "支持 vector + 全文混合检索，包含矛盾检测、低置信记忆隔离等治理工具，记忆分为 semantic、profile、procedural、working、episodic 五种类型"
+   ],
+   "use_cases": [
+    "为 Kiro、Cursor、Claude Code 等 MCP 兼容 Agent 提供跨会话持久记忆",
+    "在试验性记忆变更场景中通过分支隔离实验，验证后合并或回滚",
+    "需要对记忆变更保留审计与溯源链的合规性环境"
+   ]
+  },
+  "sha": "1ea620b40b7d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ce8dc24d0a4f": {
+  "identity": {
+   "one_liner": "单 Go 二进制的自托管后端，集成 SQL/文档/KV 库、云函数、定时任务与 AI 助手。",
+   "review": "SimpleBase 用一个 Go 二进制提供数据库、对象存储、云函数、定时任务、实时订阅与 LLM 网关等后端能力，自带 Vue 控制台和 CLI，面向自托管 SaaS 开发场景。项目数据落在单个 DuckDB 或 SQLite 文件中，本地用本地盘、生产切换 S3；副本数固定为 1，多实例写需显式开启写租约。",
+   "highlights": [
+    "支持 SQL、JSON 文档集合、KV（String/Hash/List/Set/ZSet/TTL）三种数据模型共存于同一单文件库",
+    "进程内 Go 云函数经自研 gofunction 解释器部署，支持版本、试跑与激活分离，并可用 simplebase.json 声明库、迁移、函数等实现本地开发、云端幂等重放",
+    "提供 OpenAI 兼容的 chat/completions、responses、models 端点及按模块分工的云助手，破坏性命令需确认，只读助手 fail-closed"
+   ],
+   "use_cases": [
+    "自托管 SaaS 后端：以单二进制承载业务数据、对象存储、云函数与定时任务",
+    "本地开发、云端部署：同一 simplebase.json 声明文件经 plan/apply 流程在两端重放",
+    "通过 AI 助手建表、写云函数、安排任务，以及经 LLM 网关接入 OpenAI 兼容调用"
+   ]
+  },
+  "sha": "ce8dc24d0a4f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b8a38bfa8d15": {
+  "identity": {
+   "one_liner": "用 MySQL 线协议模拟 OceanBase MySQL/Oracle 双租户的单二进制开发测试桩",
+   "review": "OBmock 是 Go 编写的单二进制工具，内嵌 SQLite 存储，通过 MySQL 线协议模拟 OceanBase 的 MySQL 租户与 Oracle 租户，供开发与 CI 场景使用。Oracle 线由 Oracle→SQLite 方言翻译层实现，存储过程等代码对象仅元数据级支持、调用执行报错；SQLite 单写者也限制了并发写仿真。行为基准取自真 OB 企业版实测。",
+   "highlights": [
+    "单二进制内嵌 SQL 引擎，通过 MySQL 线协议同时模拟 OceanBase MySQL 租户与 Oracle 租户，支持 user@tenant 解析、事务/SAVEPOINT、序列 NEXTVAL/CURRVAL 等 Oracle 方言特性",
+    "配套 obdump（schema 导出与双端归一化对比）与 obcheck（15 条规则三级分级的兼容性预检）工具，并提供 Go/Python/Java/Rust 四语言测试容器包装",
+    "仿真 OBE 错误码、user_/all_/dba_ 数据字典、DUAL、v$version banner；PL/SQL 仅元数据级支持（可建对象、查源码，调用执行报 OBE-00439）"
+   ],
+   "use_cases": [
+    "没有 OceanBase Oracle 租户（企业版专属）时的日常开发与单元测试",
+    "CI 流水线中替代真库执行建表、DML、迁移工具（如 Flyway 的建对象→校验流程）测试",
+    "迁移前用 obcheck 预检应用 SQL，或用 obdump 对比 mock 与真库的 schema 一致性"
+   ]
+  },
+  "sha": "b8a38bfa8d15",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3480,5 +3480,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4c5f333e7088": {
+  "identity": {
+   "one_liner": "纯 Python 无依赖的时间序列数据库，数据以 CSV 或内存存储",
+   "review": "TinyFlux 是 TinyDB 的时序版本，用纯 Python 实现，无外部依赖，支持 CPython 3.10–3.15。数据模型为 Point（含时间戳、measurement、tags、fields），提供内存与 CSV 文件两种存储，内置时间范围、标签和字段查询，自动维护索引。README 基准数据显示 CSV 写入约每秒 6,000 条，写入性能随数据量基本恒定，但查询性能随数据量增长下降明显，README 建议数据集控制在 10 万点以内。通过 pip install tinyflux 安装，适合小型分析流程和个人 IoT 数据记录场景。",
+   "highlights": [
+    "纯 Python 实现，零外部依赖，支持 CPython 3.10–3.15",
+    "提供内存与人类可读 CSV 两种存储方式，写入采用原子追加，README 基准显示 CSV 写入约 6,000+/秒",
+    "支持时间范围查询、标签查询和字段过滤，自动构建并维护索引（每 1 万点约 3–3.5MB 内存）"
+   ],
+   "use_cases": [
+    "小型分析工作流中的应用数据存储",
+    "家用 IoT 传感器等设备的时间序列数据记录",
+    "临时性或缓存类数据场景（配合 MemoryStorage）"
+   ]
+  },
+  "sha": "4c5f333e7088",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "120ab8567d51": {
+  "identity": {
+   "one_liner": "ioBroker 的 SQL 历史数据适配器，将状态记录存入多种 SQL 数据库",
+   "review": "ioBroker.sql 是 ioBroker 平台的历史数据存储适配器，把状态历史写入 PostgreSQL、MySQL、Microsoft SQL Server 或 SQLite。用户在实例设置中配置数据库连接、防抖时间、Blocktime、仅记录变化值、保留时长等参数，并可按数据点单独设置。数据库表结构（sources、datapoints、ts_number 等）在 README 中有说明，便于直接查询数据。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、Microsoft SQL Server 和 SQLite 四种数据库存储状态历史",
+    "提供防抖、Blocktime、仅记录变化值、最小差值、保留期、RAM 缓存等逐数据点记录控制选项",
+    "内置 Statistics 统计页，可查看数据库中每个 ID 的存储类型、数据量和时间范围，并经确认后执行清理"
+   ],
+   "use_cases": [
+    "为 ioBroker 中被记录的数据点保存历史数据，供后续查询与图表展示",
+    "在 Raspberry Pi 等使用 SD 卡的环境中通过 PostgreSQL 的 synchronous_commit=off 选项减少磁盘写入损耗",
+    "需要自定义 SQL 查询或与外部工具（如 phpMyAdmin）直接操作历史数据的场景"
+   ]
+  },
+  "sha": "120ab8567d51",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a9a77fcfcf6e": {
+  "identity": {
+   "one_liner": "自托管邮件服务，Go 后端与 Next.js 前端，面向多账户大规模邮箱工作流。",
+   "review": "RMS Mail 是一个自托管邮件客户端，将索引、同步与存储放在服务端，通过浏览器访问。它提供多账户统一收件箱、基于数据库引擎的本地全文检索、IMAP IDLE 同步、Telegram 集成和 MCP 服务器接口。提供 Mono（SQLite）、Mono Pro 与 Unified（PostgreSQL + Redis）三个版本，以 AGPLv3 许可发布源码，支持 46 种语言界面。",
+   "highlights": [
+    "使用原生数据库 FTS 做本地索引搜索，IMAP 同步按 500-UID 分批并带检查点，支持 10 万级邮件文件夹",
+    "内置 MCP 服务器与 Telegram 机器人，可通过 Cursor、Zed、Claude Desktop 等客户端搜索和操作邮箱，AI 供应商含 OpenAI、Anthropic、Ollama 等",
+    "IMAP 标志（\\Seen、\\Flagged、\\Answered）双向同步，支持跨账户批量操作、会话线程视图与 SSE 实时更新"
+   ],
+   "use_cases": [
+    "在 VPS 或家庭实验室上自托管邮件，通过浏览器或 PWA 从多设备访问集中管理的多个邮箱",
+    "代理、运营或支持类团队需要跨账户统一收件箱、跨账户搜索与批量操作的工作流",
+    "开发者通过 MCP 或 Telegram 将邮箱接入 AI 代理与 IDE 自动化流程"
+   ]
+  },
+  "sha": "a9a77fcfcf6e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ae27d26dc2b": {
+  "identity": {
+   "one_liner": "MuchoCore：基于 PHP 8.2+ 的 Geometry Dash 私人服务器核心",
+   "review": "MuchoCore 用于自建 Geometry Dash 私服，提供账号、关卡、音乐、Cloud Save 及 Web 管理面板。支持虚拟主机 ZIP、VPS 一键脚本安装，内置客户端补丁工具与迁移中心。需 PHP 8.2+ 与 MySQL；GD 2.209 客户端兼容性仍在验证中，PHP7 版为开发预览，游戏内通过需自建打补丁客户端。",
+   "highlights": [
+    "提供账号、关卡、音乐、Cloud Save 与 Web 管理面板，包含迁移中心与客户端补丁工具",
+    "支持虚拟主机 ZIP 与 VPS 一键安装脚本两种部署方式，源码采用 MIT 许可",
+    "提供测试目录与文档化的更新流程（mucho update / mucho doctor）"
+   ],
+   "use_cases": [
+    "为 Geometry Dash 玩家群体搭建私人服务器",
+    "将已有 GDPS 迁移到新的数据库环境",
+    "在 PHP 8.2+ 虚拟主机或 Linux VPS 上部署自托管游戏服务"
+   ]
+  },
+  "sha": "2ae27d26dc2b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a151fc07123d": {
+  "identity": {
+   "one_liner": "基于公开食品营养数据的个人饮食分析健康护理 Web 服务",
+   "review": "carepick 通过 GitHub Actions 每周批量采集韩国食药处食品营养成分数据库 API，将营养值统一换算为每 100g 基准后以 source_id 唯一键 upsert 入 TiDB。后端为 FastAPI（18 个端点），前端为 React 19 + Vite。用户输入身体数据后按 Mifflin-St Jeor 公式计算热量与三大营养素目标，记录饮食后生成对比报告。支持邮箱（Argon2）、Google/Naver/Kakao OAuth 登录及服务端 RBAC。含 10 个 pytest 测试，部署于 Netlify 与 Render；仓库未指定开源许可证。",
+   "highlights": [
+    "每周自动同步公开食品营养数据，5,000 行原始数据清洗后入库 1,095 条，upsert 保证幂等",
+    "基于 Mifflin-St Jeor 公式按年龄、性别、身高、体重、活动量计算个人营养目标",
+    "提供 18 个 API 端点，含 OAuth（state Cookie、一次性兑换码）与服务端 RBAC，附 10 个 pytest 测试"
+   ],
+   "use_cases": [
+    "记录每日饮食并查看相对个人目标的摄入进度与近 7 天热量图表",
+    "作为需要定期采集公开数据管道的 Python/FastAPI 项目参考",
+    "学习单仓库内前后端分离部署（Netlify/Render/GitHub Actions）的配置方式"
+   ]
+  },
+  "sha": "a151fc07123d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

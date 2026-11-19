@@ -2941,5 +2941,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "489b043846c9": {
+  "identity": {
+   "one_liner": "开源自托管的工作流、应用与AI代理平台，以Postgres为任务队列",
+   "review": "Windmill是一个开源（AGPLv3）代码优先平台，用于构建工作流、内部应用和AI代理。脚本用Python、TypeScript、Go、Bash等20余种语言编写，自动生成前端表单、HTTP端点和定时任务，并可编排为流程或应用。架构为Rust后端加Postgres队列，支持Docker Compose和Helm部署，适用于需要业务与工程团队协作的平台工程团队。",
+   "highlights": [
+    "支持Python、TypeScript、Go、Bash、SQL、Rust等20余种语言编写脚本，自动生成UI、API和cron任务",
+    "通过nsjail沙箱和PID命名空间隔离执行任务，按标签分组的worker可运行在不同网络",
+    "提供CLI、VS Code扩展、Git双向同步、MCP server和浏览器内AI session等开发方式"
+   ],
+   "use_cases": [
+    "将脚本编排为数据管道、定时任务和审批流，替代手工维护的DAG",
+    "为内部脚本快速生成表单、HTTP端点和完整前端应用",
+    "业务团队在workspace分支中用AI构建，工程师通过review和保护规则控制上线内容"
+   ]
+  },
+  "sha": "489b043846c9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "743cf5434908": {
+  "identity": {
+   "one_liner": "构建于 Postgres 之上的 AI 代理审计数据库，以因果链事件记录支持溯源与合规。",
+   "review": "ZizkaDB 是一个运行在 Postgres 上的开源数据库，用于记录 AI 代理的事件及其因果链。每个事件带 parent_id、SHA-256 校验和与哈希链，提供 db.why() 溯源、db.at() 历史重建、db.verify_chain() 校验与 db.context_for() 记忆检索。面向需要代理决策留痕与 EU AI Act 第 12 条记录的团队。注意：自托管版仅支持单个代理、单个 API key；许可证为 AGPL-3.0。",
+   "highlights": [
+    "每个事件携带 parent_id 并经 SHA-256 校验与哈希链接，verify_chain 可验证记录未被编辑、删除或重排",
+    "提供时间点状态重建（db.at）、会话逐步重放、代理基线漂移测量及按相关性排序的记忆上下文检索",
+    "提供 Python 与 TypeScript SDK、MCP 服务器、LangChain/LangGraph/CrewAI 等集成包，支持关键词搜索（无需 OpenAI key）与向量搜索"
+   ],
+   "use_cases": [
+    "溯源代理工具调用或回复的原因：从事件沿因果链回溯到用户消息或错误上下文",
+    "构建符合 EU AI Act Article 12 记录保存要求的防篡改决策日志",
+    "将代理历史作为可审计记忆注入下一次运行，或检测代理行为相对基线的漂移"
+   ]
+  },
+  "sha": "743cf5434908",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb8ae355c463": {
+  "identity": {
+   "one_liner": "D 语言 ORM 框架，机制与 Hibernate 类似",
+   "review": "HibernateD 是面向 D 语言的 ORM 框架，通过 DDBC 抽象层访问数据库，支持 SQLite、MySQL、Postgres 方言，可通过 ODBC 扩展支持 SQL Server 和 Oracle。README 给出示例代码，并支持用 @EmbeddedId 处理复合主键，但复合键的 schema 生成与部分关联映射尚未实现。适合在 D 语言项目中做数据库持久化的开发者。",
+   "highlights": [
+    "基于 DDBC 抽象层，支持 SQLite、MySQL、Postgres，ODBC 路线扩展至 SQL Server 与 Oracle",
+    "提供 @Embeddable 与 @EmbeddedId 注解用于映射复合主键",
+    "提供 updateDbSchema 函数用于生成数据库 schema"
+   ],
+   "use_cases": [
+    "D 语言应用的数据库持久化层",
+    "需要使用复合主键表的 D 语言项目（需注意现有限制）",
+    "基于 SQLite/MySQL/Postgres 的 DUB 包项目集成"
+   ]
+  },
+  "sha": "eb8ae355c463",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79051d2b4321": {
+  "identity": {
+   "one_liner": "基于 node:sqlite 的本地零云 AI 编码代理控制平面工具包",
+   "review": "krusch-stack 是面向 AI 编码代理（Claude Code、Cursor、Windsurf 等）的本地控制平面，提供跨会话持久记忆、AST 代码搜索、两阶段提交文件写入和自旋循环防护，状态存储在 Node 22 原生 node:sqlite 中。通过 npx 安装，按 memory-only 到 full 四档配置暴露 5-39 个 MCP 工具；各子系统亦以独立 ESM 子路径导出，可单独使用。支持 Docker 与 PostgreSQL 16 + pgvector 部署。",
+   "highlights": [
+    "提供 4 种配置档（memory-only/coding-agent/core/full），分别暴露 5/19/27/39 个 MCP 工具，schema 开销约 350-3100 token，支持 --defer-tools 压缩 schema token",
+    "文件写入采用两阶段提交（2PC）：先在 SQLite 暂存 unified diff，提交时经 write-ahead journal 与 POSIX 原子重命名，附带 SIGKILL 启动回滚",
+    "记忆系统以 SHA-256 校验锚定代码行跨度（VALID/HEALED_LINE_SHIFT/STALE_DRIFT），并通过 revise 跟踪显式替代谱系"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等编码代理接入跨会话持久记忆与约束规则（--profile memory-only）",
+    "需要代理文件编辑具备暂存、审计和崩溃回滚机制的场景",
+    "仅本地运行、使用 Ollama 等本地开源权重模型（12-48 GB VRAM）且不依赖云 API 的代理工作流"
+   ]
+  },
+  "sha": "79051d2b4321",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

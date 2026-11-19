@@ -3216,5 +3216,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ce4375400ef8": {
+  "identity": {
+   "one_liner": "基于 ODPI-C 实现 database/sql 驱动的 Oracle 数据库 Go 连接包",
+   "review": "godror 是一个实现 database/sql/driver.Driver 接口的 Go 包，用于连接 Oracle 数据库，底层通过 ODPI-C 封装 OCI。构建需 Go 1.23、CGO_ENABLED=1 和 C 编译器，运行时需安装 Oracle Client 库。支持调用带 OUT 参数的存储过程、PL/SQL 数组类型、游标和 LOB，但不支持 sql.NullString，NUMBER 以字符串传输以保证 38 位精度。",
+   "highlights": [
+    "实现 database/sql/driver.Driver 接口，通过 sql.Open(\"godror\", dsn) 连接，connectString 支持 Easy Connect 字符串和 (DESCRIPTION=...) 连接描述符",
+    "支持调用带 OUT 参数的存储过程、PL/SQL 数组类型（Exec 选项 godror.PlSQLArrays）、存储过程返回的游标（可用 godror.WrapRows 转为 *sql.Rows）",
+    "提供驱动内置会话池（poolMinSessions 等参数）、connect_timeout 连接超时，以及 Context 取消/超时时的 OCI Break 机制"
+   ],
+   "use_cases": [
+    "Go 应用通过标准 database/sql 访问 Oracle 数据库，执行查询、写入及调用存储过程",
+    "需要读写 LOB（CLOB/BLOB）或处理 38 位精度 NUMBER 数据的场景",
+    "需要会话池化管理 Oracle 连接的服务端程序"
+   ]
+  },
+  "sha": "ce4375400ef8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "19808b654c35": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Critter Stack 事件存储与文档数据库，复用 Marten API",
+   "review": "Fisher 是 JasperFx Critter Stack 中的组件，为 SQLite 提供事件溯源与文档存储，API 与 Marten 相同，数据库为进程内文件、无需服务器。已发布 1.0，API 稳定但相对 Marten 存在缺失项（如编译查询），且因 SQLite 单写者限制，并发追加行为与 Marten、Polecat 不同。",
+   "highlights": [
+    "支持文档存储（四种标识类型、软删除、用户声明索引、LINQ 含连接/分组/分页）、补丁、批量插入、五种投影形态及异步投影守护进程、订阅、事件重写和两种多租户方式",
+    "通过 JasperFx.Events.ComplianceTests 全部 68 套件 876 项测试，另含自身约 3,585 项测试",
+    "提供 AddFisher(...) DI 注册及 Fisher.AspNetCore、Fisher.EntityFrameworkCore、Fisher.Aspire.Hosting 伴随包"
+   ],
+   "use_cases": [
+    "希望在无需部署数据库服务器的 .NET 应用中以文件形式使用事件溯源和文档存储",
+    "已有 Marten/Polecat 使用经验、希望以相同 API 访问 SQLite 存储的团队",
+    "每个租户一个数据库文件的数据库级多租户场景"
+   ]
+  },
+  "sha": "19808b654c35",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4db9e5c60b7c": {
+  "identity": {
+   "one_liner": "通过 MCP 让多名成员的编码代理共享任务板与上下文的点对点协作工具",
+   "review": "Coopagents（原 Crewmesh）为使用 Claude Code、Codex 等编码代理的团队成员提供共享项目空间：代理经 MCP 发现彼此、互发请求、领取共享任务板任务，并将任务关联到 Git 分支、提交、PR 等交付凭证。支持代理托管的 P2P 模式（基于 iroh，无需服务器、公网 IP 或账号）与自托管团队服务两种运行方式。需 Python 3.11+，当前 1.0.0rc1 为预发布版本，最新稳定版为 0.9.0，macOS 与跨设备唤醒等场景尚未验证。",
+   "highlights": [
+    "通过 MCP 连接 Claude Code 与 Codex 等编码代理，提供共享任务板、请求收发与已读/处理/解决状态跟踪",
+    "支持 P2P 直连与加密中继回退，无需公网 IP、端口转发或托管账号；另提供带 Web 管理和 Git/GitHub 集成的自托管服务模式",
+    "人工权限操作（创建任务、批准协议、接受交接、变更成员）不通过普通代理 MCP 工具暴露，需用户以其独立凭证明确发起"
+   ],
+   "use_cases": [
+    "小团队各自在不同电脑上使用不同编码代理，需要共享项目上下文、任务与交接状态",
+    "跨代理向特定成员的代理直接提问并跟踪消息的读取与解决情况",
+    "将任务追踪到分支、提交、PR 与发布等 Git 对象以核对交付证据"
+   ]
+  },
+  "sha": "4db9e5c60b7c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

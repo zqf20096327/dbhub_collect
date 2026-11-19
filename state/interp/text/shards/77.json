@@ -3410,5 +3410,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "01006cf8f3c9": {
+  "identity": {
+   "one_liner": "自托管的 X/Twitter 媒体归档工具，基于后台任务队列实现批量下载",
+   "review": "open-Xdownload 是一个本地优先的 X/Twitter 媒体下载与归档工具，面向个人或家庭自建部署的用户。它通过 Web 界面支持单条推文、用户、列表和关注关系的批量媒体归档，任务在后台队列串行执行，数据保存于本地目录与 SQLite 数据库。用户、列表归档需导入 X 账号 Cookie；当前版本为单实例、单本地账号设计。",
+   "highlights": [
+    "支持单条推文、用户、列表、关注关系四类归档目标，单次批量最多 200 个任务并自动去重",
+    "提供定时归档计划（5 分钟至 30 天间隔）、失败队列重试和多账号 Cookie 轮换机制",
+    "媒体按类型和用户名存放于本地目录，内置推文归档阅读与媒体库界面，默认监听 127.0.0.1:8787"
+   ],
+   "use_cases": [
+    "通过 Docker Compose 或二进制在 NAS/服务器上部署个人媒体归档服务",
+    "对指定用户、列表或关注关系设置定时计划，自动增量归档媒体内容",
+    "在断网环境下浏览已归档的推文正文与图片、视频、GIF 媒体"
+   ]
+  },
+  "sha": "01006cf8f3c9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "48d5b828ceaf": {
+  "identity": {
+   "one_liner": "无宏的 Rust PostgreSQL/SQLite ORM，用类型状态在编译期校验 SQL",
+   "review": "Kova 是面向 Rust 的 PostgreSQL 与 SQLite ORM，通过类型状态机在编译期拒绝非法查询，不依赖查询宏或 trait 预导入。它支持用数据库原生 JSON/JSONB 聚合在单次往返中组装嵌套视图、闭包式事务管道，以及零驱动依赖的独立 models crate。PostgreSQL 客户端为异步，SQLite 为同步。",
+   "highlights": [
+    "通过 typestate 与能力守卫在编译期校验 SQL，编写查询无需宏和 trait 导入",
+    "利用数据库原生 JSON/JSONB 聚合函数（jsonb_agg、jsonb_group_array 等）在单条 SQL 中组装嵌套只读视图",
+    "支持闭包驱动的事务管道，RETURNING 结果可直接传入下一步查询，Ok 自动提交、错误自动回滚"
+   ],
+   "use_cases": [
+    "需要在编译期捕获 SQL 错误的 Rust 数据库应用",
+    "需要一次查询加载嵌套关联数据（如文章含作者与评论）的场景",
+    "多 crate workspace 中希望 models crate 不依赖数据库驱动的项目"
+   ]
+  },
+  "sha": "48d5b828ceaf",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2839,5 +2839,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "39d52b08f2b2": {
+  "identity": {
+   "one_liner": "读取代码库，将架构、历史与流水线写入单个 SQLite 快照的工具",
+   "review": "Archstats 用 tree-sitter 扫描多语言代码库，提取组件、单元、依赖、git 共同变更历史、复杂度与 CI/CD 管线，全部写入一个 SQLite 快照文件，供桌面应用、assert 规则检查和自定义 SQL 查询读取。适用于需要以数据方式查询代码架构的团队；构建需 Go 1.23 及以上加 C 编译器，Scala 仅以正则方式解析。",
+   "highlights": [
+    "支持 Java、Kotlin、C#、Go、Python、PHP、JavaScript/TypeScript（含 Vue 与 Svelte）、Swift、Objective-C、Dart 等语言，经 tree-sitter 解析单元与依赖并计算函数级认知复杂度",
+    "从 go.mod、Maven、npm workspaces、.csproj 等项目清单读取模块，从 GitHub Actions、GitLab、Jenkins、Dockerfile 等读取 CI/CD 管线",
+    "提供 archstats assert，用 YAML 中的 SQL 查询对快照断言规则，并可经 engine.Analyze 作为 Go 库调用，结果支持 csv/json/tsv 输出"
+   ],
+   "use_cases": [
+    "对代码库生成 SQLite 快照后，用 SQL 查询组件间耦合、不稳定度等指标",
+    "以 YAML 编写架构规则（如领域层不得依赖 Web 层），用 archstats assert 在检查中执行",
+    "作为 Go 库嵌入工具链，对扫描结果做自定义渲染或分析"
+   ]
+  },
+  "sha": "39d52b08f2b2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

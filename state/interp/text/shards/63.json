@@ -3281,5 +3281,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "48a0752235f3": {
+  "identity": {
+   "one_liner": "嵌入 PostgreSQL 的 Kafka broker 扩展，事件流与数据库事务耦合",
+   "review": "kafgres 是一个 pgrx 编写的 PostgreSQL 扩展，在 9092 端口实现 Kafka 协议，未改动的 Kafka 客户端（librdkafka、Java、Sarama、kcat 等）可直接连接，topic、分区、offset、消费组与日志数据存储于 Postgres。核心机制是 kafgres_produce() 与业务写入在同一事务内提交，无需 outbox 表；另提供基于逻辑解码输出插件的 CDC 映射。适用于希望消除双写不一致窗口、以 SQL 管理 CDC 映射的 Postgres 用户。采用 Elastic License 2.0，支持 PG 13–18。",
+   "highlights": [
+    "通过 Postgres 后台 worker 在 9092 端口服务 Kafka 协议，支持五大真实客户端的一致性测试套件（约 180 个场景，CI 中每次 PR 运行）",
+    "kafgres_produce() 与业务写事务原子提交；CDC 通过扩展自带逻辑解码输出插件实现，映射用 SQL 编写，支持 join、谓词过滤和 jsonb 构造",
+    "提供两种存储引擎：表引擎（日志存于 Postgres 表）与段引擎（日志存文件，默认，需配置 segment_archive_command），支持 SCRAM-SHA-256/mTLS 认证与 SQL 表管理的 ACL"
+   ],
+   "use_cases": [
+    "在同一 Postgres 实例中实现业务写入与事件发布的原子提交，替代 outbox + Debezium + Kafka Connect 链路",
+    "以 SQL 表达式（含 join 与过滤）定义表的变更到 topic 的 CDC 映射，无需额外 JVM 或网络跳数",
+    "用未改动的 Kafka 客户端和 kafka-*.sh 工具对存储于 Postgres 的日志执行生产、消费与管理操作"
+   ]
+  },
+  "sha": "48a0752235f3",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b3409d5c538d": {
+  "identity": {
+   "one_liner": "本地优先的 SQLite/PostgreSQL 桌面客户端，AI 写操作经预览、批准、可撤销",
+   "review": "LiteDB 是一个基于 Tauri + Rust + React 的桌面数据库客户端，支持 SQLite 与 PostgreSQL，供需要在数据库上使用 AI 代理的开发者使用。其核心机制是写入安全层：代理生成的 SQL 先编译、分类，执行前在应用内显示受影响行数并等待用户批准，写入记录于追加式审计日志且可撤销。限制：仅支持两种方言，不覆盖 MySQL、SQL Server 等其他数据库。",
+   "highlights": [
+    "内置 MCP 服务器，Claude Code、Cursor 等 AI 代理的写入操作需在应用内预览、批准并可撤销",
+    "支持 Text-to-SQL（默认使用 Ollama 本地模型）、SQL 编辑器、表编辑器与交互式 ERD 架构图导出",
+    "提供 pgvector 语义搜索，嵌入模型（如 all-MiniLM-L6-v2）本地运行，数据不发送外部 API；生产标签连接强制只读"
+   ],
+   "use_cases": [
+    "通过 MCP 让 Claude Code 或 Cursor 等代理访问数据库，同时要求写入经过人工批准",
+    "连接生产环境 PostgreSQL（含 Supabase），以只读标签防止意外修改",
+    "对 CSV/Excel/JSON 文件或 pgvector 数据进行 SQL 查询与语义搜索"
+   ]
+  },
+  "sha": "b3409d5c538d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32c7465624c4": {
+  "identity": {
+   "one_liner": "基于 Tauri+React+SQLite 的离线优先本地项目管理桌面应用",
+   "review": "Avenqor 是一款本地优先的项目管理应用，支持 Windows 10/11 和 Android（APK 侧载，无应用商店分发）。它以 Workspace→Project→Task 三层结构组织任务、清单、笔记、标签、文档和活动记录，数据存于单个 SQLite 文件，不做账号注册、不发起网络请求、不提供设备间同步。适合需要离线管理多项目的学生、独立开发者和小团队，跨设备迁移依赖 JSON 备份导出导入。",
+   "highlights": [
+    "提供看板（四列拖拽）、月历截止日期、任务清单/笔记/彩色标签、可搜索的纯文本文档与活动历史",
+    "数据存储为单一 SQLite 文件，应用运行时不发起网络请求，支持导出可读 JSON 备份并在恢复前完整校验文件",
+    "架构上前端组件不直接触库，SQL 仅由参数化的 Repository 层写入，活动历史由 SQLite 触发器原子记录；含 Ctrl+K 全局搜索"
+   ],
+   "use_cases": [
+    "无网络环境下管理小组作业、毕业项目等多项目任务与截止日期",
+    "独立开发者或内容创作者在个人电脑/手机上跟踪生产流程",
+    "需要在设备间迁移数据时通过备份文件手动同步（非自动同步）"
+   ]
+  },
+  "sha": "32c7465624c4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "faf7db40eb53": {
+  "identity": {
+   "one_liner": "Rust + egui 构建的原生桌面数据库工作台，支持 35 种数据源直连。",
+   "review": "Orvyn 是用 Rust 和 egui 编写的桌面数据库客户端，不依赖 Electron 或浏览器运行时。它面向需要同时操作多种数据库的开发者与运维人员，提供多标签 SQL 编辑、基于主键的行编辑、可视化 DDL 设计、流式导入导出，并为 Redis、MongoDB、搜索引擎提供专用工作区。厂商 ODBC 源需系统已装对应驱动，功能随引擎与权限不同而变化。",
+   "highlights": [
+    "支持 35 种数据源类型，覆盖 MySQL 协议、PostgreSQL 协议、分析引擎、文档/键值、搜索引擎与厂商 ODBC 六类",
+    "提供多标签 SQL 编辑器、可视化表设计器、主键行编辑，以及 CSV/JSON/TSV/XLSX 增量导出与 CSV 导入向导",
+    "内置 ChaCha20-Poly1305 连接凭据加密、五种 SSL 模式、只读连接模式与变更分阶段确认机制"
+   ],
+   "use_cases": [
+    "在 Windows、macOS 或 Linux 上集中管理 MySQL、PostgreSQL、ClickHouse 等多种数据库连接",
+    "浏览与编辑 Redis 键、MongoDB 文档及 Elasticsearch 索引等非 SQL 数据源",
+    "对大表进行带进度与取消的流式导出，或通过向导分批导入 CSV 数据"
+   ]
+  },
+  "sha": "faf7db40eb53",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

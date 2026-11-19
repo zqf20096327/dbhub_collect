@@ -3096,5 +3096,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9f1ae7b840fc": {
+  "identity": {
+   "one_liner": "基于 NestJS、Fastify 与 Nx 的 DDD/CQRS 单仓库项目脚手架。",
+   "review": "该仓库提供 NestJS 12 + Fastify 5 + Nx 23 单仓库模板，包含 api、worker、scheduler、migration 四个可运行应用，内置 Better Auth cookie 会话、GraphQL (Mercurius)、Socket.io、BullMQ、Prisma 7、PostgreSQL 与 Redis。面向需要在 Node 服务中预置模块边界、鉴权、可观测性与安全流水线的开发团队。运行需 Docker 24+、Node 24 与 pnpm，通过脚本生成环境后启动；部署接线需自行完成。",
+   "highlights": [
+    "REST (OpenAPI)、GraphQL (Mercurius) 与 Socket.io 运行在同一 Fastify 实例，通过 Redis pub/sub 支持跨节点广播",
+    "采用 Better Auth cookie 会话与 scrypt 哈希，WebSocket 会话经自定义 Socket.io 适配器复用",
+    "提供五层安全流水线（Gitleaks、OSV-Scanner、Semgrep、Trivy、Cosign），本地与 CI 均可运行，镜像含 SBOM 与 SLSA 证明"
+   ],
+   "use_cases": [
+    "需要预置 DDD/CQRS 目录结构与模块边界 lint 规则的 NestJS 单仓库起点",
+    "需要同时暴露 REST、GraphQL 与 WebSocket 三种接口并支持水平扩展的服务",
+    "需要开箱即用的 OpenTelemetry、Sentry、Prometheus 可观测性与容器签名发布流程的团队"
+   ]
+  },
+  "sha": "9f1ae7b840fc",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "69e69d79367d": {
+  "identity": {
+   "one_liner": "通过 Tor 归档指定 Dread 板块帖子到 SQLite 并支持离线全文检索的爬虫",
+   "review": "dread-scraper 是一个经 Tor 代理抓取指定 Dread 论坛板块的归档工具，将帖子及回复存入 SQLite 并建立 FTS5 全文索引，供离线检索，面向威胁情报研究和新闻工作等用途。它采用随机延迟、断点续传和去重机制；需要已登录的会话 Cookie，且 CSS 选择器依赖站点现有页面结构。",
+   "highlights": [
+    "随机化 5–10 秒请求间隔、指数退避重试与每板块页数上限；线程标记 completed 后重跑自动跳过，支持中断续传",
+    "按 (thread, author, date, text) 去重，可配合 cron 定期运行；search.py 支持 FTS5 语法（AND/OR/NOT、NEAR、前缀匹配 *）",
+    "内置 debug_fetch.py 诊断工具，输出状态码与响应前 2000 字符，用于排查 Cookie 过期、门禁页或页面结构变化"
+   ],
+   "use_cases": [
+    "对欺诈、carding 等板块的讨论内容进行长期离线归档与跟踪",
+    "在无网络环境下用 FTS5 语法检索归档帖子（短语、NEAR、前缀等）",
+    "在无界面服务器上以 tor 守护进程配合 cron 定期增量归档"
+   ]
+  },
+  "sha": "69e69d79367d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

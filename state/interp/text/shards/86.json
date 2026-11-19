@@ -3240,5 +3240,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bf594513be9c": {
+  "identity": {
+   "one_liner": "基于NestJS的开源参考项目，配套16章指南演示API从首个提交到生产的完整流程",
+   "review": "Prod Forge 的后端仓库，以 Todo 应用为业务载体，展示 API 从首个提交到上线的全过程，配套 16 章文档说明质量门禁、CI/CD、数据库迁移、可观测性与回滚等决策。面向希望了解生产化实践的开发者，技术栈为 NestJS + Prisma + PostgreSQL + Redis + Docker。明确排除身份提供方与游标分页。",
+   "highlights": [
+    "部署前通过一次性 ECS 任务执行 prisma migrate deploy，迁移失败则新版本不启动；回滚工作流可切换至最近三个任务版本之一",
+    "部署时追踪并排空在途请求，SIGTERM 期间 /health 返回 503；日志、Sentry 事件与 Tempo 链路共用同一 trace ID",
+    "包含 593 个单元测试（带覆盖率阈值）及基于 Testcontainers 的 PostgreSQL/Redis e2e 测试；OpenAPI 契约文件 docs/openapi.json 由代码生成"
+   ],
+   "use_cases": [
+    "学习后端 API 从开发到生产的部署、迁移与回滚流程",
+    "在本地搭建 Prometheus/Grafana/Loki/Tempo 可观测性栈并端到端验证",
+    "参考 CI/CD 质量门禁与测试基建（单元测试、Testcontainers e2e）的组织方式"
+   ]
+  },
+  "sha": "bf594513be9c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dd82a0a62814": {
+  "identity": {
+   "one_liner": "本地存档并分析 Garmin 健康数据的 Windows 应用，含 MCP 服务器。",
+   "review": "该项目是面向个人用户的 Windows 开源应用，通过 Garmin Connect API 同步近期数据，并从 Garmin GDPR 导出 ZIP 批量导入完整历史，以 JSON、Excel 等开放格式存储在本机。它提供 HTML 仪表盘、多格式导出（JSON/CSV/InfluxDB）及本地 MCP 服务器供 AI 查询。限制：GUI 与可执行文件仅支持 Windows，依赖 python-garminconnect。",
+   "highlights": [
+    "提供两种数据获取模式：live sync 经 API 拉取近期数据；Bulk Import 从 GDPR 导出 ZIP 装载完整每日历史及心率序列（FIT 文件），API 已有数据不被覆盖",
+    "内置四类仪表盘：健康分析（对照 90 天个人基线与年龄/体能调整参考区间）、可缩放时间序列、小时×日期热力图、每日汇总 Excel 表",
+    "包含本地 MCP 服务器用于 AI 辅助分析，支持 Ollama 本地模型或可选云后端；提供 180 天合成演示数据供无 Garmin 账户体验"
+   ],
+   "use_cases": [
+    "在本地永久保存 Garmin Connect 历史健康数据，避免依赖在线服务查看多年数据",
+    "结合 Open-Meteo（天气、花粉、空气质量）与 Bright Sky（DWD）数据为健康指标提供环境上下文",
+    "通过本地 MCP 服务器让本地 AI 模型查询分析个人健康数据，不将档案数据上传云端"
+   ]
+  },
+  "sha": "dd82a0a62814",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74620403ca01": {
+  "identity": {
+   "one_liner": "R包，通过解析、匹配与同义名解析实现跨数据源物种名标准化",
+   "review": "taxastand 是一个用于标准化物种学名的 R 包，面向需要合并多来源生物学数据的研究者。它将名称解析为属、种加词、种下等级、作者等部分，与用户选定的参考分类体系匹配（允许拼写差异），并把同义名解析为接受名。参考数据须符合 Darwin Core 标准，可通过 ts_load_ref() 加载 World Flora Online、ITIS、Catalogue of Life、GBIF backbone 等来源，或用户自备文件。",
+   "highlights": [
+    "支持将学名解析为属、种加词、种下等级、作者等组成部分，并在匹配时容忍加词与作者的拼写差异",
+    "ts_load_ref() 可加载 World Flora Online、PPG、ITIS、Catalogue of Life、GBIF backbone 等参考数据库，也支持用户自备的 Darwin Core 格式文件或 URL",
+    "匹配结果包含 resolved_name 与 match_type 字段，支持精确匹配及带容差的自动匹配类型"
+   ],
+   "use_cases": [
+    "将不同来源的生物分布或性状数据按统一接受名进行连接合并",
+    "以特定参考分类体系（如 PG 类群分类或 GBIF backbone）批量解析同义名",
+    "需要固定并版本化参考数据库以保证名称解析结果可复现的流程"
+   ]
+  },
+  "sha": "74620403ca01",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3d93d8043494": {
+  "identity": {
+   "one_liner": "用 Zig 编写、以 SQLite 存储的多智能体运行时，共享单个 Host 进程",
+   "review": "Rui 是一个本地编码智能体运行时，用 Zig 编写、状态存入 SQLite 或 MySQL，可在单一共享 Host 进程中运行多个会话而无需为每个智能体启动独立进程，通过 TypeScript 客户端连接工具、下发任务并收集结果。适合需要在 Node.js 22.6+ 应用或终端中托管多个智能体会话的开发者。注意：Bash 默认无沙箱且免审批运行；项目仍在开发中。",
+   "highlights": [
+    "单个共享 Host 进程可运行多个会话，README 引用的 Linux 基准数据显示 100 个等待智能体占用约 2.5 MB 私有内存",
+    "会话状态保存到 SQLite 或 MySQL，支持崩溃恢复、可复用会话与 Bash 审批设置",
+    "提供 npm 包（ruicode）与独立二进制安装方式，支持接入内置工具或 MCP 服务器"
+   ],
+   "use_cases": [
+    "在 Node.js 应用中集中托管多个智能体并收集其执行结果",
+    "在终端中以独立二进制方式运行编码智能体，选择 ChatGPT 账号或 OpenAI 兼容 API key 登录",
+    "需要会话状态持久化与崩溃恢复的本地智能体工作流"
+   ]
+  },
+  "sha": "3d93d8043494",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "77e5fcf16c20": {
+  "identity": {
+   "one_liner": "桌面端 SQLite 浏览与编辑器，内置 MCP 服务器供 AI 助手操作数据库",
+   "review": "Sequill Desktop 是基于 Tauri + Rust SQLite 引擎的桌面应用，前端为 React 19 + TypeScript。它直接打开 .sqlite/.db 文件原位编辑，不上传文件、完全离线运行。内置 MCP 服务器允许 Claude、Cursor 等 AI 助手读写这些数据库，读写权限默认关闭、由用户随时开关。开发需 Bun、Rust 稳定版及 Tauri 前置条件。",
+   "highlights": [
+    "提供表格网格、内联编辑、SQL 控制台、ER 图式 schema 可视化设计、CSV/TSV/JSON 导入导出等功能",
+    "内置 MCP 服务器，提供 8 个只读工具和约 15 个写入类工具，读取始终走只读连接，ATTACH 被禁用",
+    "每秒检查一次外部进程对数据库的更改并刷新界面，助手操作历史保留在本机且可配置保留时长"
+   ],
+   "use_cases": [
+    "在本地桌面环境浏览、编辑和管理 SQLite 数据库文件",
+    "让支持 MCP 的 AI 助手（Claude Desktop、Cursor、VS Code 等）查询或修改本地数据库",
+    "通过 ER 图界面设计表结构并预览生成的 SQL 后再提交"
+   ]
+  },
+  "sha": "77e5fcf16c20",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "308d9fc4288d": {
+  "identity": {
+   "one_liner": "为AI代理提供跨会话文件与数据持久工作空间的服务",
+   "review": "TiDB AgentSpace 是一个供 AI 代理使用的持久化工作空间服务，提供 PostgreSQL 兼容数据库、持久文件系统以及基于 Workspace Key 的资源/操作权限控制。用户可在 Studio 中管理资源，通过 API 接入 Codex CLI、Claude Code 等外部代理；Studio 与代理共用同一 Rust API。代理身份、托管执行、Runs 与 Memory 未实现；本地部署需固定版本 Rust 工具链。",
+   "highlights": [
+    "提供 PostgreSQL 兼容数据库与持久文件系统，通过 Workspace Key 实现作用域化的资源/操作权限",
+    "支持接入外部代理（Codex CLI、Claude Code、Pi 等），Studio 与代理使用同一 Rust API",
+    "提供 JavaScript 与 Python API 客户端，本地可通过 cargo 运行后端并可选运行 React Console"
+   ],
+   "use_cases": [
+    "让代理将分析报告、CSV 等文件保存到持久文件系统，供后续会话继续访问",
+    "为外部代理分配限定范围的数据库与文件访问权限并管理密钥",
+    "本地搭建后端进行 API 合同导出与开发测试"
+   ]
+  },
+  "sha": "308d9fc4288d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

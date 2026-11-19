@@ -2996,5 +2996,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "101fe2e90f40": {
+  "identity": {
+   "one_liner": "Jakarta Data 规范：基于 Repository 接口的多类型数据库数据访问 API",
+   "review": "Jakarta Data 是一套 Jakarta 生态的数据访问规范，面向 Java 开发者，提供覆盖关系型与 NoSQL 数据库的统一 Repository 编程模型。核心机制包括内置与自定义 Repository 接口、按方法名派生查询、静态元模型类型安全查询、JCQL 查询语言，以及支持 offset 与 cursor 两种分页方式。",
+   "highlights": [
+    "提供 DataRepository、CrudRepository、BasicRepository 等内置 Repository 接口，并支持通过 @Insert/@Update/@Delete/@Save 注解定义自定义仓库方法",
+    "提供静态元模型（如 _Product.price）实现编译期类型安全的查询构建，支持 offset 与 cursor 两种分页",
+    "支持以 @Query 注解执行 JCQL 查询语句（Select/Update/Delete），JCQL 兼容 JPQL 语法的子集"
+   ],
+   "use_cases": [
+    "Java 应用中为关系型与 NoSQL 数据存储构建统一的数据访问层",
+    "需要在编译期校验查询属性名、减少字符串拼写错误的持久层开发",
+    "需要基于 Repository 接口派生查询方法或以注解定义领域化操作的场景"
+   ]
+  },
+  "sha": "101fe2e90f40",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0017ea16ca29": {
+  "identity": {
+   "one_liner": "Rust 编写的 CLI 门控，拦截 AI 编码代理的 shell 命令，预览后果并备份",
+   "review": "Termaxa 是一个单二进制 Rust 工具，挂在 Claude Code、Codex、Cursor、Copilot CLI 的 hook 路径上，对代理执行的每条 shell 命令按仓库内 policy.yaml 判定放行、询问或拒绝，预览删除范围并先行备份以支持 rollback，同时写入哈希链日志。适合运行 AI 编码代理的个人与无人值守环境。无模型、无服务、无账号；它能解析路径与命令意图，但不能推断用户本意。",
+   "highlights": [
+    "按仓库内 YAML 策略逐条判定命令，复合命令按 && || ; | 等分段取最危险段裁决",
+    "预览命令后果（删除文件数、force push 丢失的提交、DROP 行数估算）并先备份，支持 termaxa rollback 回滚",
+    "跨命令拼写统计破坏性意图的熔断器（默认阈值 2），并提供 append-only 哈希链决策日志"
+   ],
+   "use_cases": [
+    "为 Claude Code / Codex / Cursor / Copilot CLI 等代理配置命令门控，无人值守运行前先以 observe 模式观察",
+    "用 replay 审计代理在本机已执行的历史命令，评估引入门控的影响",
+    "对含 git、Postgres 操作的项目拦截 reset --hard、force push、DROP TABLE 等破坏性命令并保留可回滚备份"
+   ]
+  },
+  "sha": "0017ea16ca29",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b7eb9b511112": {
+  "identity": {
+   "one_liner": "用于在 Jest 测试中启动本地 PostgreSQL 服务的预设（preset）",
+   "review": "@shelf/jest-postgres 是一个 Jest 预设包，用于在测试运行期间启动和停止本地 PostgreSQL 服务器并可选地应用种子文件，无需数据库 mock 或 Docker，也无需单独安装 PostgreSQL 包。使用者通过安装依赖、在 jest.config.js 中设置 preset、创建 jest-postgres-config.cjs 配置文件即可编写测试。默认服务器版本为 18，支持通过 Homebrew 或 apt 安装指定版本（includeInstallation），支持 monorepo 嵌套项目（通过 JEST_POSTGRES_CONFIG 环境变量指定配置路径）。自定义 jest.config.js 时需移除 testEnvironment 属性以避免冲突。",
+   "highlights": [
+    "以 Jest preset 形式提供，启动和停止本地 PostgreSQL 服务器并可应用可选种子文件",
+    "支持通过 includeInstallation 用 Homebrew 或 apt 安装指定 PostgreSQL 版本，debugMode 可输出命令日志",
+    "兼容 CommonJS 与 ESM，配置文件优先读取 .cjs 并回退 .js，monorepo 可用 JEST_POSTGRES_CONFIG 指定配置路径"
+   ],
+   "use_cases": [
+    "为依赖 PostgreSQL 的 Node.js 项目编写集成测试",
+    "monorepo 中多个嵌套 Jest 项目需要各自的 PostgreSQL 测试配置",
+    "不希望依赖 Docker 或数据库 mock 的测试流程"
+   ]
+  },
+  "sha": "b7eb9b511112",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

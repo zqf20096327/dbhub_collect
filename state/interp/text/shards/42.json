@@ -2707,5 +2707,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c8c27ceca19d": {
+  "identity": {
+   "one_liner": "开源访问网关，对人与AI代理的服务器和数据库命令逐条授权并录制会话。",
+   "review": "Werbot 是一个自托管的访问网关项目，用于对人及AI代理访问服务器、数据库的会话进行授权、代理和录制，全程不直接分发密码。部署需 Docker Compose，组件包括 server、gateway、web 和 connect 客户端，访问决策使用 Cedar 策略引擎。项目处于 v0.x 预发布阶段，升级时可能出现破坏性变更，服务器与网关需同步升级。",
+   "highlights": [
+    "支持 ssh、telnet、tcp、udp 等资源类型，通过绑定（binding）按用户/团队及标签选择器授权，可限制至最多16个端口范围",
+    "会话按 terminal、exec、stream、datagram 分类计数，录制为 asciicast v2 文件并经哈希链与签名校验（VerifyRecording）",
+    "策略支持网络、国家与UTC时间计划规则，决策使用 Cedar 且默认拒绝（fail closed）；网关实例通过 join token 加入资源池并按 rendezvous 哈希执行健康探测"
+   ],
+   "use_cases": [
+    "为团队提供对服务器和数据库的自托管共享访问入口，替代直接分发凭据",
+    "需要记录并回放（asciinema 格式）运维会话以满足审计需求的场景",
+    "多网关实例与多副本部署，或通过 connect 在本地映射远端 tcp/udp 资源端口"
+   ]
+  },
+  "sha": "c8c27ceca19d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e1ccf3061105": {
+  "identity": {
+   "one_liner": "基于 Laravel 的每周班级值日（piket）表查看 Web 应用",
+   "review": "Piketkuy 是 SMK Wikrama Bogor 学校的 PHP 课堂项目，用于查看每周班级值日安排。系统包含 admin 与 user 两种角色，由自定义 cekRole 中间件控制访问，首页按上学日列出各日值日学生表，管理员另有独立面板。技术栈为 PHP 8/Laravel 9、MySQL 与 Blade。README 标明这是学习项目，已不再活跃开发，种子账号仅用于本地开发。",
+   "highlights": [
+    "提供 admin/user 两种角色，通过自定义 cekRole 中间件实现基于角色的访问控制",
+    "按日展示值日表（/tabel/{day}），首页由 HariSeeder 预置上学日数据",
+    "提供标准 Laravel 安装流程：composer install、migrate --seed 后由 php artisan serve 启动"
+   ],
+   "use_cases": [
+    "学校班级查看每周值日学生分配",
+    "管理员维护值日安排并使用独立面板",
+    "作为 Laravel 路由、中间件、迁移与种子数据的学习示例"
+   ]
+  },
+  "sha": "e1ccf3061105",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b8e24e0d09e1": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 90 天六阶段 SQL 学习笔记与实践仓库",
+   "review": "该仓库记录作者从零基础到进阶的 SQL 学习过程，基于 PostgreSQL 18，配合 psql 与 pgAdmin 4 使用。内容按 90 天 6 阶段规划，含安装指南、每日笔记，后续计划加入练习查询、LeetCode 题目及三个项目。采用「预测输出—运行—对比」的学习方法，每个阶段设 70% 及格线的检查点，适合想跟练 SQL 的初学者参考。",
+   "highlights": [
+    "提供 PostgreSQL 18 的安装与验证指南及每日概念笔记，采用 MIT 许可证开源",
+    "按 90 天 6 阶段规划学习路线，涵盖从 SELECT 基础到窗口函数、事务、行级安全等内容",
+    "每个阶段设置检查点（70% 及格线），仓库计划收录练习、LeetCode 题目与图书馆、电商、安全日志三个项目"
+   ],
+   "use_cases": [
+    "初学者按 90 天计划循序渐进学习 SQL 与 PostgreSQL",
+    "参考「预测输出—运行—对比」的练习方法自学数据库概念",
+    "查阅基础 SQL 主题（数据类型、WHERE、NULL、排序等）的笔记与命令参考"
+   ]
+  },
+  "sha": "b8e24e0d09e1",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5b5376eed774": {
+  "identity": {
+   "one_liner": "为 AI 编码代理提供本地持久记忆的 Rust 单二进制工具，数据存于一个 SQLite 文件",
+   "review": "Omoikane 是一个面向 AI 编码代理的本地记忆工具：将代理会话中的经验保存为带类型的短记忆，存入本地 SQLite 文件，并通过钩子在后续会话中按相关度自动注入。它提供 10 个 MCP 工具，支持经 git 仓库的加密同步，Claude Code 用户可通过两条插件命令安装，也可经安装脚本或 cargo 获取二进制。",
+   "highlights": [
+    "单个 Rust 二进制，内置 SQLite（FTS5 与 sqlite-vec），无需 Python、Node 或 Docker，支持离线运行于 Windows、Linux 和 macOS",
+    "提供 10 个 MCP 工具，`omoi setup` 支持 Claude Code、Codex、Gemini CLI、Cursor、Copilot、OpenCode 等 15 个代理",
+    "支持 101 种语言的搜索；记忆含去重、历史、过期标记、密钥脱敏、回收站和每日数据库副本；可经加密 git 仓库在多台设备和团队成员间同步，并可导出为仓库内技能文件"
+   ],
+   "use_cases": [
+    "为 Claude Code 等 AI 编码代理在本地保存和自动回忆会话中积累的项目经验（如平台相关的坑、团队约定）",
+    "在多台设备或团队间通过私有 git 仓库共享加密的代理记忆，按空间隔离不同客户的记忆",
+    "在 CI、服务器或容器等无人值守环境中通过环境变量配置代理记忆"
+   ]
+  },
+  "sha": "5b5376eed774",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3167,5 +3167,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ded3df9265ca": {
+  "identity": {
+   "one_liner": "Hibernate ORM 的响应式 API，基于非阻塞数据库驱动实现响应式交互",
+   "review": "Hibernate Reactive 是 Hibernate ORM 的响应式 API，通过 Vert.x 响应式 SQL 客户端与非阻塞数据库驱动交互。可用于任意 Java 程序，主要面向 Quarkus、Vert.x 等响应式环境。支持 PostgreSQL、MySQL、MariaDB、Db2、CockroachDB、SQL Server、Oracle 七种数据库，兼容 Java 17–27 与 Hibernate ORM 8.0。基于 Panache 提供活动记录风格 API。仍存在若干限制，如不支持 @CollectionId 注解，Db2 下不支持自动 schema 更新与 @Lob。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、Db2、CockroachDB、SQL Server、Oracle 七种数据库，底层使用 Vert.x 响应式 SQL 客户端",
+    "提供响应式会话（reactive session）与无状态会话进行数据访问，examples 目录含 CRUD 与原生查询示例",
+    "提供 JBang 示例目录与针对各数据库的测试模板（JUnit 4、Vert.x Unit、Testcontainers），测试默认用 Testcontainers 启动 Docker 数据库实例"
+   ],
+   "use_cases": [
+    "在 Quarkus 或 Vert.x 等响应式环境中使用 Hibernate ORM 风格的实体模型与数据访问",
+    "需要以非阻塞方式访问 PostgreSQL、MySQL、MariaDB、Db2、CockroachDB、SQL Server 或 Oracle 的 Java 项目",
+    "通过 Panache Reactive 以活动记录风格编写响应式数据访问代码"
+   ]
+  },
+  "sha": "ded3df9265ca",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b39717a849f0": {
+  "identity": {
+   "one_liner": "将 Garmin Connect 健康数据下载为本地文件并载入 SQLite 的 Python CLI。",
+   "review": "这是一个 Python 命令行工具，通过 garmin auth 登录后用 garmin extract 将 Garmin Connect 的睡眠、心率、HRV、活动文件（FIT/TCX）等数据下载为本地文件并载入 SQLite 数据库。内含自带 SSO/MFA 登录的 Garmin 客户端，源自 OpenETL 的 Garmin 管道但无需 Airflow/PostgreSQL。支持多账号合库、断点续传、按日期/类型失败隔离；要求 Python 3.10+、SQLite 3.35+，pip 安装即可使用。",
+   "highlights": [
+    "单命令下载睡眠、HRV、压力、心率、VO2 max、月经周期及 FIT/TCX 活动文件并载入 SQLite，可用 --extract-only/--process-only 分离两个阶段",
+    "支持多账号写入同一数据库，内置 SSO/MFA 登录客户端，无第三方 Garmin 客户端库依赖；采用 ingest/process/storage/quarantine 四目录生命周期，支持自动续传与崩溃恢复",
+    "提供 garmin downsample 将逐秒传感数据聚合为时间桶、garmin prune 删除源行并收缩数据库文件以控制磁盘占用"
+   ],
+   "use_cases": [
+    "将个人 Garmin 健康与活动数据备份为本地文件并导入 SQLite 进行 SQL 分析",
+    "多 Garmin 账号（如家庭成员）数据汇总到同一数据库",
+    "为 AI agent 或量化自我分析提供结构化的健康数据源"
+   ]
+  },
+  "sha": "b39717a849f0",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2e2863f5cce8": {
+  "identity": {
+   "one_liner": "面向 Ktor 服务端的 Kotlin 多平台后端开发工具包",
+   "review": "KtKit 是一套 Kotlin 多平台工具库，整合 REST 处理器、依赖注入、TOML 配置、数据库访问与消息队列等组件，用于基于 Ktor 的服务端开发。它通过 Arrow 的 Raise 上下文参数处理错误，基于 sqlx4k 支持 PostgreSQL、MySQL 和 SQLite，并提供 RBAC 权限控制。项目处于早期阶段，README 明确说明版本间 API 可能出现破坏性变更。",
+   "highlights": [
+    "提供 Application 引导封装，管理 Ktor 生命周期、JSON 配置、Koin DI 容器并自动注册 REST 处理器",
+    "基于 sqlx4k 支持 PostgreSQL、MySQL/MariaDB、SQLite 的数据库访问与编译期代码生成的 @Repository，并提供基于 Postgres 的 PGMQ 消息队列模块",
+    "内置基于角色的权限控制与自定义谓词两层授权，错误响应遵循 RFC 9457，序列化使用 kotlinx.serialization 无反射实现"
+   ],
+   "use_cases": [
+    "使用 Ktor 构建服务端应用并希望统一处理引导配置、错误模型、日志追踪的 Kotlin 项目",
+    "需要基于 Postgres 的消息队列（PGMQ）和带审计字段的实体/仓库代码生成的后端服务",
+    "在 JVM 与 Native 目标上运行 Kotlin 多平台服务端程序，需要无反射序列化与多平台日志"
+   ]
+  },
+  "sha": "2e2863f5cce8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f0584f0e9622": {
+  "identity": {
+   "one_liner": "面向 Addax 离线引擎的 T+1 ODS 采集管理控制台，集调度、对账、告警于一体。",
+   "review": "Addax Admin 是为 Addax 离线 ETL 引擎提供的管理控制台，专注于 T+1 ODS 层数据落地，负责采集定义、调度执行、补数回补、数据对账、告警与审计，本身不执行采集，需单独部署 Addax 引擎。后端为 Java 21 + Spring Boot + PostgreSQL + Redis，前端为 Vue 3，提供 Docker Compose、发行包与源码三种部署方式。明确不支持实时 CDC、流式同步与通用 DAG 编排。",
+   "highlights": [
+    "支持批量创建数百到上千张采集表，并一键在 Hive 或关系型数据库目标端同步建表，支持平台托管与外部管理两种目标表模式",
+    "提供增量采集、按日历补数回补、基于读取/写入行数核对的数据对账，以及以近 7 天非零均值为基线的空采漏采识别",
+    "采用 DB 持久化队列 + Redis 选主 + 数据库租约的混合并发控制架构，支持多节点、节点权重与源级并发控制；内置企业微信、钉钉、飞书、Webhook 与邮件告警通道及三角色源级授权"
+   ],
+   "use_cases": [
+    "T+1 离线采集场景：将业务库、MongoDB、Elasticsearch 等源端数据按日落地到 Hive 或关系型数据库 ODS 层",
+    "需要历史日期补数回补、采集行数对账与空采漏采识别的日切数据运维",
+    "需要多节点调度高可用、源级用户授权与登录/配置变更审计记录的数据团队"
+   ]
+  },
+  "sha": "f0584f0e9622",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3378,5 +3378,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "afc8d33193ac": {
+  "identity": {
+   "one_liner": "Clarity 团队维护的《命运2》实时数据库",
+   "review": "这是由 Clarity 团队提供、由 @StardustD2 管理的《命运2》(Destiny 2) 游戏数据实时数据库仓库。README 说明外部使用其数据可能需要建立合作关系，具体规则见其 Partnerships 页面；项目通过 Ko-Fi 接受捐赠以维持免费提供。仓库内容主要由多名维护者和编辑以提交方式持续更新。",
+   "highlights": [
+    "提供《命运2》游戏数据，由 Clarity 团队提供并实时更新",
+    "由维护者 @StardustD2 与 @Ice-mourne 及编辑团队管理",
+    "通过 Ko-Fi 接受捐赠以支持项目免费维护"
+   ],
+   "use_cases": [
+    "需要获取《命运2》游戏数据的工具或应用开发者",
+    "希望引用该数据时了解合作与授权规则的团队",
+    "关注数据更新贡献记录的社区协作者"
+   ]
+  },
+  "sha": "afc8d33193ac",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e4e6d88d47f6": {
+  "identity": {
+   "one_liner": "基于 FastAPI 的电商后端 API，集成 Stripe 支付、ARQ 任务与可观测性栈",
+   "review": "这是一个面向生产场景的电商后端 REST API，提供商品目录、购物车、订单、订阅、支付等模块，面向需要自建电商服务的开发者。支付流程包含 webhook 签名验证、事件唯一索引去重、单事务提交与幂等键等机制；依赖 PostgreSQL、Redis 和 Elasticsearch，可经 Docker Compose 一键启动，测试通过 testcontainers 运行于真实 PostgreSQL 容器。",
+   "highlights": [
+    "支持 Stripe PaymentIntents 支付与订阅，webhook 验签、事件 ID 唯一索引去重及创建请求幂等键",
+    "采用 outbox 模式发布领域事件，ARQ worker 处理订阅续订、弃单召回、库存预约清理等后台任务",
+    "集成 OpenTelemetry 链路追踪、Prometheus 指标与 Loguru 结构化日志，Compose 附带 Grafana/Loki/Tempo 等组件"
+   ],
+   "use_cases": [
+    "搭建需要真实 Stripe 支付、多币种定价与订阅计费的电商后端",
+    "参考 FastAPI + SQLAlchemy 2.x + PostgreSQL 的分层项目结构与测试实践",
+    "学习支付一致性机制：事件单事务提交、幂等键与 outbox 模式的实现"
+   ]
+  },
+  "sha": "e4e6d88d47f6",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6377c8f55403": {
+  "identity": {
+   "one_liner": "Rust 实现的嵌入式多进程共享内存数据库，兼容 sqlite C API 并提供 MVCC 并发。",
+   "review": "MPEdb 是用 Rust 编写的嵌入式数据库，进程通过 mmap 共享文件访问，无需服务器。它通过 cdylib 提供 sqlite3 C API，可经 LD_PRELOAD 或 soname 替换接入 CPython sqlite3、Django、PHP 等既有程序；提供 Python 包 mpedb 和 CLI。并发采用写时复制 B+tree 上的 MVCC 快照，读不阻塞写；模式为强类型校验，可对 .db 文件以 delta 方式写入并 checkpoint 回写。README 披露不支持的特性以显式错误拒绝而非静默错答。",
+   "highlights": [
+    "通过 libmpedb_sqlite3.so 以 ABI 级替换方式接入任意 libsqlite3 消费者，无需改动代码",
+    "多进程 mmap 共享文件访问，任意进程被 SIGKILL 不损坏数据库，写入落盘到 delta 并支持 checkpoint 回写为 sqlite 文件",
+    "SQL 编译为内容哈希计划，热路径为零解析的 execute(hash, params)，计划携带预计算读写足迹"
+   ],
+   "use_cases": [
+    "在 Python/Django/PHP 等既有 sqlite3 调用代码上替换底层引擎而不改代码",
+    "多个本地进程并发读写同一数据库文件的场景",
+    "需要强制类型、NOT NULL/UNIQUE/CHECK 等刚性模式校验的本地存储"
+   ]
+  },
+  "sha": "6377c8f55403",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb5ae8ef8694": {
+  "identity": {
+   "one_liner": "用 C#/.NET 10 编写的教育性 MMO 服务端模拟器，用于研究客户端/服务端协议。",
+   "review": "该项目以 C#（.NET 10）实现本地 MMO 服务端模拟，覆盖登录、游戏与聊天服务器的 Photon UDP 传输、Protocol18 序列化与 DH/AES 加密握手，并实现世界模拟、战斗、PvE、社交与机器人等系统。它面向学习网络协议与游戏服务器架构的个人研究者，默认仅监听 127.0.0.1，需自行提供所拥有客户端的 GameData 文件且仅支持客户端版本 1.32.030.345319，不含游戏客户端与资源。",
+   "highlights": [
+    "实现 Photon UDP 传输、Protocol18 序列化与 DH/AES 加密握手，登录、游戏、聊天服务器分别监听 5055/5056/5057 端口",
+    "支持 SQLite 持久化与 schema 迁移、PBKDF2 密码账户、GM 等级与聊天命令系统，以及运行时构建和热加载的 C# 服务器模块系统",
+    "包含离线自测试（in-process client）、自有会话抓包解码工具（CapDecode）与 Web 管理面板"
+   ],
+   "use_cases": [
+    "研究 MMO 客户端/服务端协议（Photon UDP、加密握手、消息序列化）",
+    "在个人机器或局域网内进行游戏服务器架构学习与实验",
+    "使用离线自测试与抓包解码工具进行协议调试与分析"
+   ]
+  },
+  "sha": "bb5ae8ef8694",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

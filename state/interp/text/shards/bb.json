@@ -3131,5 +3131,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cf18d5a8900f": {
+  "identity": {
+   "one_liner": "管理 PostgreSQL 声明式分区的扩展，支持时间与数值分区集",
+   "review": "pg_partman 是一个 PostgreSQL 扩展，用于创建和管理基于时间与数值的表分区集。它基于内置声明式分区功能（5.0.1 起仅支持声明式），提供子表自动维护（按保留策略增删分区）、既有表与分区表互转，并内置后台工作进程免外部调度器。要求 PostgreSQL 14 及以上，无需超级用户即可运行，多角色共用需配合行级安全策略。",
+   "highlights": [
+    "支持时间与数值两种类型的分区集创建与管理",
+    "内置后台工作进程（BGW）自动执行分区维护，多数情况下无需外部调度器",
+    "提供现有表与分区表之间的双向转换功能"
+   ],
+   "use_cases": [
+    "需要按保留策略自动新增、删除分区子表的场景",
+    "将既有表迁移为分区表或迁移旧触发器分区到声明式分区",
+    "多角色/多租户共用一套数据库时的分区维护管理"
+   ]
+  },
+  "sha": "cf18d5a8900f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9240fe7ba149": {
+  "identity": {
+   "one_liner": "面向 IT 团队的自托管任务与项目追踪器，集成 CRM、工时与通信功能",
+   "review": "Nervion 是一个面向 IT 工作室和数字代理商的开源项目与任务追踪器，支持从交易管理到报表输出的客户项目流程。功能涵盖看板任务卡、CRM 销售管道、聊天、语音房间、内置邮件、知识库、工时统计和 Excel 报表导出。技术栈为 NestJS + Nuxt 3 + PostgreSQL，通过 Docker Compose 在自有服务器部署，代码采用 AGPLv3 许可证。",
+   "highlights": [
+    "提供看板、任务列表和周视图三种任务视图，支持 Story Points 估算与子任务关联",
+    "内置聊天、语音房间（WebRTC）、邮件、日历和知识库等团队通信功能",
+    "支持工时记录、项目预算对比、按周负载规划以及 Excel 报表导出"
+   ],
+   "use_cases": [
+    "IT 代理商和数字工作室管理客户项目全流程（从交易到报表）",
+    "需要账户经理在 CRM 中跟进交易并与项目任务关联的团队",
+    "需要自托管部署并对数据存储位置有要求的团队"
+   ]
+  },
+  "sha": "9240fe7ba149",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dbcbc22ea984": {
+  "identity": {
+   "one_liner": "自托管的应用构建平台，基于表定义生成REST API并管理前端部署",
+   "review": "Zeep Orbit 是一个用 Go 编写的开源自托管平台，供技术团队在单一仪表盘中构建和发布应用：后端应用通过定义表结构即时生成 PostgreSQL 模式与 CRUD REST API，支持RLS、JWT认证、文件存储；前端应用连接 GitHub 模板并部署到 Render。提供 Docker Compose、二进制和 Helm 三种安装方式，数据存储依赖外部 PostgreSQL。",
+   "highlights": [
+    "基于表定义自动生成带分页、过滤、排序的 CRUD REST API，支持外键、索引、软删除与行级安全（经 Postgres 原生 RLS 强制执行）",
+    "每个应用提供邮箱/Google 认证、JWT App Tokens、S3 兼容文件存储、Swagger 文档与 Prometheus 指标；支持前端应用从 GitHub 模板一键部署到 Render 并配置自定义域名",
+    "支持 Docker Compose、go install 二进制与 Kubernetes Helm 部署，提供 TypeScript/Go/Python/Rust/Java/PHP 六种 SDK 客户端及 MCP Server"
+   ],
+   "use_cases": [
+    "在自有基础设施上为多个应用快速搭建后端数据库与 REST API",
+    "需要自托管仪表盘管理应用用户、权限、审计日志与数据浏览的团队",
+    "从 GitHub 模板创建前端项目并部署到 Render 的应用开发流程"
+   ]
+  },
+  "sha": "dbcbc22ea984",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6f8ced69720a": {
+  "identity": {
+   "one_liner": "基于一致快照并行导出、加载、复制 MySQL/MariaDB/TiDB 数据的命令行工具",
+   "review": "quiver 是一个用 OxCaml 编写的命令行工具，用于对 MySQL、MariaDB 和 TiDB 执行导出、加载、复制和数据流传输。它自行实现 MySQL 协议客户端，将行数据解码为 Arrow 布局的列式批次，通过单一快照读取，支持 SQL/CSV/zstd 输出，dump 目录布局与 mydumper 兼容，myloader 可直接恢复。许可证为 AGPL-3.0，提供 Linux（x86_64/arm64）和 macOS 二进制及 apt/dnf/brew/Docker 安装方式。",
+   "highlights": [
+    "支持 dump、load、copy、mirror 等子命令：文件导出（SQL/CSV/zstd）、并行加载、服务器间无中间文件复制，以及从 TiKV 以单一 TSO 直读 TiDB 表并导入另一表",
+    "通过 FTWRL 或 MariaDB BACKUP STAGE 在一次锁往返内并行开启快照并记录 binlog 位置与 GTID；TiDB 经 tidb_snapshot 无锁读取；分块基于 EXPLAIN 估计做二分切分，可按 --ingest tablespace 在客户端构建 InnoDB 表空间文件",
+    "代理与收集器架构通过多条 TCP 流传输列式批次，按吞吐自动增减流数并调整 zstd 压缩级别，逐帧确认，连接中断时帧转移到其他流继续"
+   ],
+   "use_cases": [
+    "需要在单一一致快照下导出或备份 MySQL/MariaDB/TiDB 数据库，并保留 binlog/GTID 或 TiCDC 起始 TSO",
+    "服务器之间直接复制数据库（跨 MySQL、MariaDB、TiDB），包括目标端缺失排序规则的改名与不支持对象的预检",
+    "通过 agent-collector 模式跨低带宽高延迟链路传输或流式分发数据到多个目标"
+   ]
+  },
+  "sha": "6f8ced69720a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

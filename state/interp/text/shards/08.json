@@ -2992,5 +2992,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bd22b388bca5": {
+  "identity": {
+   "one_liner": "单文件嵌入式双时态图数据库，使用 Datalog 查询，支持 Rust/WASM/移动端嵌入",
+   "review": "Minigraf 是一个用 Rust 编写的单文件嵌入式图数据库，以 EAV 事实存储数据，用 Datalog 查询（含递归规则与窗口函数），并支持双时态时间回溯（事务时间+有效时间）。通过 cargo 添加依赖，`Minigraf::open(\"data.graph\")` 即可使用；另有 Python、Node、浏览器 WASM、Android/iOS 等绑定。设计上不做分布式与客户端-服务器，针对 100 万节点以内规模，文件库单条事实上限 4080 字节。",
+   "highlights": [
+    "双时态模型：每条事实同时记录事务时间与有效时间，可查询任一时点状态",
+    "Datalog 查询支持递归规则、窗口函数和 `$slot` 绑定令牌的预编译语句",
+    "单文件存储，零配置；提供 Rust 原生、Python、Node、浏览器 WASM（IndexedDB）、WASI、Android/iOS/Java/C 绑定"
+   ],
+   "use_cases": [
+    "为 AI 代理存储信念并保留修正历史，重放过去状态以审计决策",
+    "移动端离线优先存储，支持追溯性修正且保留原始记录",
+    "与向量库组合的 GraphRAG 模式：向量库回答相似性，Minigraf 回答关系与时点信念"
+   ]
+  },
+  "sha": "bd22b388bca5",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f77111770b27": {
+  "identity": {
+   "one_liner": "基于 Next.js 的 Discord 复刻应用，实现实时聊天、语音与社区功能",
+   "review": "该项目是一个模仿 Discord 的 Web 应用，基于 Next.js、TypeScript 与 Prisma/PostgreSQL 构建，提供实时文字聊天、视频会议与社区服务器功能。认证使用 Clerk，文件上传使用 UploadThing，音视频由 Livekit 支持，实时通信基于 Socket.io。适合希望学习 Next.js 全栈开发或搭建聊天社区平台的开发者。运行需配置 Clerk、Neon 数据库、UploadThing、Livekit 等多个服务的密钥，安装时需使用 --legacy-peer-deps 参数。",
+   "highlights": [
+    "提供实时文字聊天、一对一私聊与视频会议功能",
+    "集成 Clerk 身份验证、UploadThing 文件上传与 Livekit 音视频服务",
+    "基于 Socket.io 实现实时通信，使用 Prisma 与 PostgreSQL 存储数据"
+   ],
+   "use_cases": [
+    "学习 Next.js 全栈开发与实时通信实现的参考项目",
+    "需要搭建带语音视频的社区聊天平台的开发起点",
+    "作为 Next.js + Prisma + 多服务集成（Clerk/UploadThing/Livekit）的技术示例"
+   ]
+  },
+  "sha": "f77111770b27",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4f5336e595db": {
+  "identity": {
+   "one_liner": "自托管元数据治理平台，同步库表结构并从 SQL 与 OpenLineage 生成字段级血缘",
+   "review": "Metaxisdata 是一个自托管的数据治理与元数据平台，将 MySQL/TiDB、PostgreSQL 的 schema 同步到可搜索的元数据注册表，并从视图/物化视图 SQL 和 OpenLineage 事件推导表级与列级血缘。适合需要集中管理元数据、追踪数据流转的团队。唯一外部依赖是 PostgreSQL，单个 Go 二进制在 8083 端口同时服务 API 与 Vue 3 前端；容器默认 HTTP，需反向代理终止 HTTPS。",
+   "highlights": [
+    "同步 MySQL/TiDB 与 PostgreSQL schema 到统一注册表，每张表和列携带 DDL 与变更历史",
+    "从视图、物化视图与手工 SQL 及 OpenLineage 事件推导列级血缘，支持按深度展开图谱",
+    "提供数据质量规则（行数、空值、唯一性、正则等）、定时执行、问题台账与质量评分"
+   ],
+   "use_cases": [
+    "将多个 MySQL/TiDB、PostgreSQL 实例的表结构集中为可搜索的元数据目录",
+    "基于 SQL 与 OpenLineage 事件追踪表级与列级数据流转路径",
+    "通过规则引擎与调度执行对表和列进行数据质量检查"
+   ]
+  },
+  "sha": "4f5336e595db",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d4f74967b459": {
+  "identity": {
+   "one_liner": "基于 Docker 一键启动 OceanBase 4.3.x 并自动创建 Oracle 兼容模式租户的测试环境脚本集",
+   "review": "该项目通过 Docker 在 Linux 服务器上部署 OceanBase 社区版 4.3.x LTS，运行一条 ./run.sh 即完成拉镜像、启动容器、创建 Oracle 兼容模式租户、业务用户和示例表。数据与 obd 配置持久化于 volumes/ 目录，初始化幂等。仅用于测试验证 Oracle 兼容能力，README 明确不用于生产；建议 16GB 内存与 30GB 磁盘。",
+   "highlights": [
+    "单容器单机部署，./run.sh 完成镜像拉取、容器启动、Oracle 租户创建与示例数据初始化",
+    "数据与 obd 配置持久化在 volumes/ 目录，初始化脚本幂等，重复运行自动跳过已有资源",
+    "提供 run/log/test/stop 等管理脚本，支持自动限制 test 租户 CPU 与日志盘动态扩容"
+   ],
+   "use_cases": [
+    "搭建 OceanBase Oracle 兼容模式的本地测试与验证环境",
+    "为应用程序的 Oracle 租户连接（obclient/JDBC）提供可重复初始化的数据库实例",
+    "在单台 Linux 服务器上快速演示或调试 OceanBase 多租户资源与配置"
+   ]
+  },
+  "sha": "d4f74967b459",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

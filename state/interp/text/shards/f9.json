@@ -2689,5 +2689,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a41ca783ff9e": {
+  "identity": {
+   "one_liner": "为编码代理提供 SQLite 持久记忆层与 System One 证据检索框架",
+   "review": "unified-brain 是 DevLoops 发布的开源框架，面向 AI 辅助软件工程中的证据收集环节。它在任意 LLM 之外维护一个本地 SQLite 中间记忆层，通过 pplx-decider（Apache-2.0 27B）或 Jev 等判定模型执行 System One 式检索、过滤与判断，将发现与写作分离。代理通过 MCP 接入 Cursor、OpenCode、Claude Code 等工具运行。仓库 evals/ 目录含 xz 与 open62541 两个库的基准结果及各配置成本与耗时数据；README 未完整展示安装步骤。",
+   "highlights": [
+    "在任意用户选择的 LLM 之外，用本地 SQLite 存储仓库上下文，写入阶段独立运行",
+    "判定阶段支持 pplx-decider（Apache-2.0 开放权重）与 Jev 两种模型，每题使用 35–204 次 yes/no 判定调用",
+    "通过 MCP 在 Cursor、OpenCode、Claude Code 等环境中作为感知层运行，README 称其非 harness"
+   ],
+   "use_cases": [
+    "为接入 Cursor、Claude Code 等工具的编码代理补充持久化仓库记忆与检索",
+    "需要以较低 token 消耗对大型开源库进行代码级问答的场景",
+    "希望将证据检索与 LLM 写作分离、自行更换写作模型的工作流"
+   ]
+  },
+  "sha": "a41ca783ff9e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "23968fecbfd3": {
+  "identity": {
+   "one_liner": "多语言健身与营养追踪应用，集成 AI 聊天与食物识别，移动优先设计",
+   "review": "FitoGlobe 是一个由前端（React 19 + Vite）和后端（Node.js + Express + Prisma/PostgreSQL）组成的多语言健身与营养追踪应用，支持训练记录、卡路里追踪、AI 食物拍照识别与个性化教练对话，支持英/西/日/韩四种语言并按国家自动切换单位制。本地运行需自备 PostgreSQL 数据库及 Groq、Google OAuth 等第三方凭据，项目未提供自动化测试脚本，采用 MIT 许可证发布。",
+   "highlights": [
+    "支持训练日志（组数/次数/卡路里估算）、含肌群筛选的动作库、秒表计圈、连续打卡与活动热力图",
+    "提供 AI 功能：Groq 驱动的健身聊天、食物照片营养识别、AI 教练对话，以及按食物名称计算的宏量营养估算",
+    "界面支持英语、西班牙语、日语、韩语，并根据国家自动检测 kg/cm 或 lbs/ft 单位制"
+   ],
+   "use_cases": [
+    "在移动浏览器上记录训练、餐食与体重进度并查看统计可视化",
+    "通过食物拍照或名称输入获取营养与卡路里信息以追踪每日摄入目标",
+    "作为 React + Express + Prisma 全栈应用用于本地部署或二次开发（前端可部署于 Vercel，后端部署于 Render，数据库使用 Supabase）"
+   ]
+  },
+  "sha": "23968fecbfd3",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63081d6c8e58": {
+  "identity": {
+   "one_liner": "面向波兰卖家的自托管订单管理系统，Node.js + SQLite 实现",
+   "review": "Twój OMS 是一个开源的订单管理面板，面向波兰小型网店卖家，将 Allegro、ERLI、WooCommerce 渠道的订单汇总到一处，并连接 inFakt/Fakturownia/KSeF 开票和 DPD/InPost 发货。基于 Node.js 24、Fastify、SQLite，模块化架构，无外部数据库、无订阅费用。界面与文档为波兰语，规则（VAT、KSeF、WDT）针对波兰市场。项目源于一家波兰贸易公司的内部系统，MIT 许可，不提供担保与支持，建议首次接入真实密钥时用测试账户逐项验证集成。",
+   "highlights": [
+    "模块化结构（订单、渠道、发票、发货、退货、成本、报表、自动化等），每个模块可包含路由、视图、数据库迁移、权限与菜单",
+    "集成 Allegro、ERLI、WooCommerce、inFakt、Fakturownia、KSeF、DPD、InPost 等，均为可选项，需各自密钥；无密钥时以试验模式运行",
+    "提供带作用域密钥的 API v1（OpenAPI 描述），支持按标签页的角色权限、数据库加密密钥机制与备份/健康检查模块；数据库迁移仅做增量（additive）"
+   ],
+   "use_cases": [
+    "波兰小型电商卖家需要在一个面板中处理多渠道订单、开票与发货",
+    "需自托管、单台小型服务器运行、且可自行修改代码（或借助 AI 代理）以满足公司需求的场景",
+    "通过 API 密钥让外部程序（商店、表格、脚本、AI 代理）读写订单、形式发票、产品与库存数据"
+   ]
+  },
+  "sha": "63081d6c8e58",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

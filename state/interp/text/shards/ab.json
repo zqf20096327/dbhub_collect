@@ -2995,5 +2995,203 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "95c1896fa844": {
+  "identity": {
+   "one_liner": "面向AI逆向代理的开源蓝色防御MCP服务器与CLI工具",
+   "review": "BLA 提供命令行工具与 MCP 服务器，通过注入诱饵结构、触发分析器资源预算等手段处理 JS/TS、Electron ASAR、WASM、SQLite、GGUF/Safetensors、Android DEX 等构建产物，流程为 audit→protect→verify，输出写入 .bla-hardened/ 目录。面向软件作者和安全团队，仅用于保护自有发布物。README 承认多数分析预算可被调用方调高，且验证限于其自身基准环境。",
+   "highlights": [
+    "提供 CLI（harden/verify/setup）与 MCP 服务器两种接入方式，支持 Claude Code、Cursor、Codex 等宿主代理编排工具链",
+    "支持 Vite/Rollup/Webpack/esbuild 打包插件，可在构建期处理 JS 代码块并生成 VLQ v3 honey SourceMaps",
+    "内置 14 个基准目标，附带的 bla verify 检查 Counter-REA 结构性门槛并支持输入/输出等价测试"
+   ],
+   "use_cases": [
+    "软件作者在发布前加固自有构建产物（ASAR、WASM、SQLite、原生二进制等）",
+    "安全团队将 BLA 注册到编码代理中，由代理自动编排加固与验证闭环",
+    "在 Vite/Webpack 等构建流程中集成打包期防护与 SourceMaps 替换"
+   ]
+  },
+  "sha": "95c1896fa844",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4b0808f902d3": {
+  "identity": {
+   "one_liner": "自托管的好友群聊服务器，含文字/语音房间、文件分享与好友列表",
+   "review": "Linger 是一个自托管聊天应用：一人运行服务器（单二进制+SQLite+上传目录），好友通过邀请链接连接。提供文字与语音房间、私信、500MB 文件上传、屏幕共享（30/60fps）和好友列表，基于 Rust、Tauri 2 与 React 构建，运行于 Windows、Linux 和 Android。当前版本 0.5.4 处于朋友间测试阶段；未实现端到端加密，主机可读取服务器上的数据，语音跨网络场景仍在验证中。",
+   "highlights": [
+    "支持文字房间、语音房间、私信、文件上传（500MB）、语音消息、屏幕共享、投票、表情与消息搜索等功能",
+    "传输经 TLS 加密，不采集遥测或崩溃报告，上传的图片和视频会被剥离 EXIF（含 GPS）信息",
+    "支持完整导出：任何人可导出公开房间及自己的私信（含文件），在浏览器中直接打开"
+   ],
+   "use_cases": [
+    "小圈子好友间的自托管聊天与语音聚集场所",
+    "需要文件分享、媒体存档和屏幕共享的小型私人群组",
+    "希望数据保存在自控服务器上、由信任的人管理服务器的场景"
+   ]
+  },
+  "sha": "4b0808f902d3",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e27cc1edc031": {
+  "identity": {
+   "one_liner": "自托管工作室，将故事转为一致性AI插画漫画、条漫或旁白视频",
+   "review": "OpenManga 是一个自托管的AI漫画与旁白视频生产工具，面向漫画、条漫和视频创作者。它把故事解析为结构化状态（角色、世界观、章节、场景、分镜），用规范参考图锁定角色形象，支持 BYOK 自选生成服务商、本地 Kokoro TTS 语音合成、确定性排版与导出，支持 Docker 部署且无遥测上传。",
+   "highlights": [
+    "支持漫画页、16:9 叙事视频、竖向条漫三种格式，提供 PNG/JPG、PDF、PSD、CBZ、EPUB、MP4 等多种导出",
+    "提供角色设定集、世界观参考、故事圣经与连续性检查等一致性管理机制",
+    "语音合成支持本地 Kokoro-82M，也可导入外部录音并经本地 Whisper 对齐分段；无遥测与数据回传"
+   ],
+   "use_cases": [
+    "将小说或剧本转为结构化漫画/条漫章节并批量生成分镜",
+    "制作带 AI 旁白与配音的叙事视频并打包 YouTube 发布素材",
+    "本地化托管生产流程，使用自有服务商密钥与本地 TTS 控制数据流向"
+   ]
+  },
+  "sha": "e27cc1edc031",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6b791042cf53": {
+  "identity": {
+   "one_liner": "Python 磁盘缓存库，以 Rust 引擎加 SQLite 存储，兼容 diskcache API",
+   "review": "diskcache-oxide 是一个共享、持久的 Python 磁盘缓存库，保留 diskcache 的 API，底层改用 Rust 引擎与内置 SQLite 存储，支持多线程、多进程、fork() 及 free-threaded Python。值默认以 msgpack/JSON 存储而非 pickle；仅支持 CPython 3.14/3.15，提供 macOS、Linux、Windows 的预编译 wheel。适用于在同一台机器上运行的 Web 应用多 worker 场景。",
+   "highlights": [
+    "兼容 diskcache 5.6.3 的 Cache API，切换时仅需修改 import 行",
+    "值默认以 msgpack 或 JSON 存储，带类型标签，可通过 register_type() 注册自定义类型；pickle 需显式开启",
+    "提供 memoize、标签分组逐出、push/pull 工作队列、跨进程锁/信号量/限速器、transact() 事务及 FanoutCache 分片"
+   ],
+   "use_cases": [
+    "多 worker 部署（gunicorn 等）下共享缓存结果，避免每个进程各建独立字典",
+    "跨进程任务队列与分布式锁、信号量、限速场景",
+    "free-threaded Python（3.14t/3.15t）环境下的缓存需求"
+   ]
+  },
+  "sha": "6b791042cf53",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d16b109bbf55": {
+  "identity": {
+   "one_liner": "拦截MCP与Bash大输出，压缩摘要+SQLite全文检索供回查",
+   "review": "mcp-recall是一个Claude Code插件，通过PostToolUse钩子拦截MCP工具和Bash的大输出，将完整内容存入本地SQLite并建立全文索引，向模型交付压缩摘要，模型可经recall MCP服务器的11个工具检索原文。运行于Bun/TypeScript，亦支持pi、OpenCode和grok CLI；不覆盖内置Read/Grep/Glob工具的输出。需运行mcp-recall install写入Claude配置文件。",
+   "highlights": [
+    "PostToolUse钩子将大型MCP/Bash输出替换为摘要，全文与FTS索引存入本地SQLite",
+    "提供recall__search/recall__retrieve等11个recall__* MCP工具用于搜索和取回存储内容",
+    "支持Claude Code、pi、OpenCode与grok CLI，含SessionStart钩子注入固定项与笔记快照"
+   ],
+   "use_cases": [
+    "长时间会话依赖返回大量结构化输出的MCP工具（浏览器自动化、GitHub API等）的场景",
+    "希望此前会话的工具输出保持可搜索、可回查的开发流程",
+    "按token计费使用较小模型、需压缩上下文占用的运行环境"
+   ]
+  },
+  "sha": "d16b109bbf55",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1cc7ac1d219e": {
+  "identity": {
+   "one_liner": "游戏社交平台，采用Spring Boot微服务架构，由17个服务经API网关构成",
+   "review": "面向游戏玩家的社交平台，提供游戏发现、评分评价、个人库、好友与即时消息、组队（LFP）、社区帖子与活动、硬件配置与FPS监测及基于Python算法（非LLM）的推荐。后端为Java 25/Spring Boot 4.1.1共17个微服务，各服务独立PostgreSQL数据库，通过API网关路由；事件采用outbox→inbox异步模式。项目仍在开发阶段，CI验证未完成。",
+   "highlights": [
+    "17个微服务各持独立PostgreSQL数据库，经API网关按/api/v1/<服务>路由，同步调用用RestClient、异步事件用outbox→inbox模式",
+    "支持Steam/Google登录、邮箱验证码注册与2FA，JWT会话及玩家/版主/管理员角色权限",
+    "桌面客户端采集CPU/GPU温度、RAM/VRAM与FPS数据，推荐由Python算法生成而非LLM"
+   ],
+   "use_cases": [
+    "玩家进行游戏发现、管理个人游戏库、撰写评价并寻找队友（LFP公告）",
+    "硬件爱好者建立电脑档案、追踪FPS与温度测量并获取配置升级建议",
+    "内容创作者发布新闻、指南与社区活动，管理员进行举报与内容审核"
+   ]
+  },
+  "sha": "1cc7ac1d219e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "abb30cf10640": {
+  "identity": {
+   "one_liner": "Go 编写的 Linux 运维/开发自主 Agent，经 WhatsApp/Telegram 交互",
+   "review": "Félix 是一个用 Go 编写的自主 AI Agent 平台，面向 Linux 基础设施的远程管理、系统监控与自主软件开发，通过 WhatsApp 和 Telegram 交互。核心机制包括确定性状态图引擎（节点快照存于 SQLite WAL，支持回滚与恢复）、内置 AST 代码映射与 SEARCH/REPLACE 模糊补丁的开发工具集，以及 Git 沙箱分支执行代码变更。README 标注内存占用低于 35 MB RSS，仅支持 Linux，需 Go 1.22+。",
+   "highlights": [
+    "确定性状态图引擎：每次节点转换生成不可变快照，支持 Rollback 回滚、进程崩溃后 Resume 恢复，以及对敏感操作的异步 Human-in-the-Loop 暂停",
+    "内置 Go/Python/TypeScript 的 AST 仓库映射与基于 Levenshtein 距离（阈值 >90%）的 SEARCH/REPLACE 模糊补丁引擎，代码变更在 felix-sandbox 临时 Git 分支中执行",
+    "支持 WhatsApp（WhatsMeow/Signal 加密）与 Telegram 双通道并行、语音转写（Whisper）、MCP 协议接入及 39 项系统工具"
+   ],
+   "use_cases": [
+    "通过 WhatsApp/Telegram 远程管理 Linux 服务器：执行诊断、监控 systemd/PM2/Docker 服务、执行备份与日志轮转",
+    "以聊天消息驱动自主编码任务：AST 上下文分析、沙箱分支修改、运行测试后合并或丢弃",
+    "在嵌入式设备（如 Raspberry Pi 5）上以低内存常驻运行，需要回滚/断点恢复的长流程 Agent 任务"
+   ]
+  },
+  "sha": "abb30cf10640",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d82169a47877": {
+  "identity": {
+   "one_liner": "面向 Odoo Community 的 AI 代理插件，通过 JSON-2 API 读写 ERP 数据",
+   "review": "OdooTool 是运行在 AgentBridge 主机内的插件，使大语言模型经由 Odoo JSON-2 外部 API 对客户、订单、发票、库存等数据执行查询与增删改，共提供 13 个类型化方法。每次调用以配置的 Odoo 用户身份执行，访问权限、记录规则和字段级权限仍由 Odoo 服务端生效，插件不直接写数据库。安装脚本可一并部署 PostgreSQL、Odoo 20 Community 与 AgentBridge，支持 Windows 和 Linux/WSL，不支持 iOS。",
+   "highlights": [
+    "提供 13 个类型化工具方法：模型/字段发现、search、read、create、update、delete、call_method、read_group、菜单查询、连接检查",
+    "每次调用以配置的 Odoo 用户身份执行，Odoo 的访问权限、记录规则和字段权限仍生效，不直接写数据库",
+    "提供 install.bat/install.sh 一键安装 PostgreSQL、Odoo 20 Community、AgentBridge 及本插件，支持无人值守的环境变量配置"
+   ],
+   "use_cases": [
+    "用自然语言在本地自托管 Odoo 中执行日常操作，如创建报价单、查询逾期发票",
+    "接入 OpenAI 兼容端点（云端 API 或本地模型）驱动 Odoo 数据读写",
+    "作为基于 AIOrchestrator 库的主机（如 AIOffice）的可加载插件，桥接代理与 Odoo API"
+   ]
+  },
+  "sha": "d82169a47877",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4f053f3fd0c5": {
+  "identity": {
+   "one_liner": "面向记忆系统与Agent工作流的统一benchmark编排平台",
+   "review": "memory_bench_platform 为 LoCoMo、LongMemEval 等 benchmark 与 OpenClaw、OpenViking 等对象提供统一测试入口，通过目录型 Skill 插件承接差异逻辑，平台核心仅负责编排、资源采样、结果归档与 HTML 报告生成。安装后提供 memory-bench 与 locomo-test 两个 CLI 命令，当前 Memory backend 仅接入 OpenViking。",
+   "highlights": [
+    "以目录型 Skill（SKILL.md + manifest.yaml + scripts）作为插件边界，支持 benchmark、agent、memory backend、smoke 等类型，按 manifest 声明版本策略并归档到 run 中",
+    "每次 run 统一写入 run.json、records/、logs/、artifacts/monitor/ 等，生成 run_report.html、timing_report.html 与机器可读 analysis.json，含 CPU/内存/IO 采样",
+    "支持平台原生 workflow（$ref/$template 引用前序 step 输出）与外部 runner 结果导入两条执行路径，LoCoMo 评分默认使用 LLM Judge 并写入统一 JudgeResult 结构"
+   ],
+   "use_cases": [
+    "用同一套入口和结果结构对多个记忆系统/Agent 链路运行 LoCoMo、LongMemEval 等基准并生成诊断报告",
+    "在正式 benchmark 前通过 smoke gate 验证最小链路，阻断坏链路并采集写入/检索诊断证据",
+    "按 README 中三套接入流程（新建 Skill 目录、声明 manifest、实现校验/构建/评分脚本）接入新的 benchmark、Agent 或 memory backend"
+   ]
+  },
+  "sha": "4f053f3fd0c5",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

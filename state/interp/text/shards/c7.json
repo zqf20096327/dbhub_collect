@@ -3298,5 +3298,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "45a129e59e4d": {
+  "identity": {
+   "one_liner": "轻量级 PHP 框架，按请求路径映射命名空间控制器方法",
+   "review": "SlightPHP 是一个基于 PHP 8.0+ 的轻量框架，通过路径规则（如 /home/main/entry）加载命名空间控制器并调用公开方法，响应输出、权限和输入校验由应用负责。6.x 提供基于 Route 注解的 CSRF 防护、HTTP 方法限制及 Tpl 模板上下文自动转义；Db、Redis 等插件通过 Composer 按需安装。适合需要小核心、插件自选组合的 PHP Web 应用开发。",
+   "highlights": [
+    "按请求路径加载命名空间控制器并调用公开方法，路径深度默认最多 10 段，可通过 setMaxDepth 调整",
+    "支持 Route 注解限制 HTTP 方法（不匹配返回 405 和 Allow），并可开启 csrf 校验，支持自定义字段/请求头与 tokenInput/tokenMeta",
+    "Tpl 模板默认启用上下文自动转义，可信 HTML 可用 |raw 标记；核心插件通过 Composer 的 suggest 按需安装"
+   ],
+   "use_cases": [
+    "基于 PHP 8.0+ 开发中小型 Web 应用，通过 Composer 引入 hetao29/slightphp 快速搭建入口与控制器结构",
+    "需要 CSRF 防护的表单写操作场景，可用 Route 注解 csrf:true 配合表单字段或请求头 token",
+    "已使用旧版本的团队按 6.x 升级与迁移指南迁移控制器签名、模板转义与调度异常处理"
+   ]
+  },
+  "sha": "45a129e59e4d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "96529c895ad4": {
+  "identity": {
+   "one_liner": "PHP 8 的多引擎 ORM/ODM，基于 Cortex，统一 SQL 与 NoSQL 映射接口",
+   "review": "Cortex-Atomic 是面向 Fat-Free/Atomic 框架的 ActiveRecord 风格多引擎 ORM/ODM，由 GLOBUS.studio 维护，源自 ikkez 的 Cortex。它用一套 API 操作 SQLite、MySQL、MariaDB、PostgreSQL、MongoDB 和 Jig，SQL 语法查询可自动翻译为 Jig/Mongo 过滤器；原类被拆分为 5 个 trait，并内置 schema builder。SQL Server 处于预览状态，尚有 12 项集成测试未通过。",
+   "highlights": [
+    "统一 Mapper API 覆盖 SQL、Jig、MongoDB 引擎，SQL 语法查询自动翻译为 Jig/Mongo 过滤器",
+    "原 Cortex 类重构为 5 个 trait（SchemaBuilder、Cast、FieldAccess、Relation、Crud），并捆绑 fork 版 schema builder，无外部依赖",
+    "支持一对一/一对多/多对多关联、延迟与预加载、SQL Fluid Mode 自动建表加列，含 DT_JSON/DT_SERIALIZED 数组类型"
+   ],
+   "use_cases": [
+    "基于 Fat-Free Framework 或 Atomic Framework 的 PHP 8+ 应用数据层",
+    "需在 SQL 与 MongoDB/Jig 之间切换或同时支持多种数据库的项目",
+    "原型阶段使用 SQL Fluid Mode 免建表，或通过字段配置自动安装表结构的项目"
+   ]
+  },
+  "sha": "96529c895ad4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "01a2b2a672b4": {
+  "identity": {
+   "one_liner": "信封预算应用，全平台共用一个 Rust 记账引擎",
+   "review": "UrBudget 是一款信封式个人预算应用，覆盖 Windows、macOS、Linux、iPhone、iPad 和 Android。所有界面共用 crates/ 下的 Rust 引擎完成记账、SQLite 存储与同步合并；应用端按 AGPL v3 开源，端到端加密同步为可选付费功能。桌面端通过 npm ci 与 npm run desktop 运行，移动端分别在 Xcode 和 Android Studio 中构建。",
+   "highlights": [
+    "各端界面（Tauri/React、SwiftUI、Jetpack Compose）统一调用 Rust 引擎 urbudget-core 完成记账、SQLite 存储、导入、报表与同步合并",
+    "urbudget-services 实现账户、加密同步、密封保险库、银行与 YNAB 连接及助手功能",
+    "同步后端为单个 Cloudflare Worker（web/ 目录），提供账户、订阅与同步存储"
+   ],
+   "use_cases": [
+    "采用信封预算法管理个人收支的用户",
+    "需要在桌面与移动设备间通过端到端加密同步预算数据",
+    "从 YNAB 迁移预算数据的场景"
+   ]
+  },
+  "sha": "01a2b2a672b4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

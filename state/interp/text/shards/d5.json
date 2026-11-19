@@ -3045,5 +3045,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "056ad68b4f2d": {
+  "identity": {
+   "one_liner": "基于 Sub2API 的非官方衍生 AI API 网关，增加并发、回退与指纹扩展",
+   "review": "该项目是 Wei-Shaw/sub2api 的非官方分支，实现 AI API 网关功能，面向需要管理多账号与配额的用户。它在上游基础上增加了分组级每用户并发上限、API 密钥的同平台回退分组、单机多窗口 Codex 指纹等扩展，需从源码构建，上游官方镜像不包含这些功能。项目采用 LGPL-3.0 许可，README 提示使用可能违反上游服务商条款，风险由使用者自行承担。",
+   "highlights": [
+    "为每个分组提供可选的每用户并发上限，按用户和分组独立计数，保留原有用户级和账号级并发控制",
+    "支持 API 密钥配置同平台回退分组，主分组无可用账号时使用回退分组及其计价倍率与用量归属",
+    "提供单机多窗口 Codex 指纹，每账号有稳定设备标识，溢出请求以子代理形式呈现"
+   ],
+   "use_cases": [
+    "需要对分组内用户并发进行限制的多账号 API 网关部署",
+    "需要为 API 密钥配置主备分组故障转移的场景",
+    "在单机上运行多窗口 Codex 账号指纹的使用场景"
+   ]
+  },
+  "sha": "056ad68b4f2d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d3f68f166653": {
+  "identity": {
+   "one_liner": "面向 Ubuntu VPS 的开源主机控制面板，Web 面板经 Go agent 执行系统操作",
+   "review": "RAYXO 是一个面向 Ubuntu 24.04 VPS 的 Web 主机控制面板，采用 Laravel+React 面板（以非 root 用户运行）加 Go 编写的 root agent 架构，通过 Unix socket 的封闭动作清单通信。提供域名、SSL、MariaDB、邮件、DNS、FTP、备份与三级账户（Admin/Reseller/User）管理，目标用户为搭建和销售共享主机的人员。当前为 beta（v0.8.21），采用 AGPL-3.0 许可，需干净的 Ubuntu 24.04、FQDN 及相应开放端口。",
+   "highlights": [
+    "提供 Web、SSL（Let's Encrypt 含 wildcard）、MariaDB、邮件（Postfix/Dovecot/Rspamd/Roundcube）、DNS（PowerDNS）、FTP/SFTP/SSH 一体化管理",
+    "支持三级账户体系（Admin→Reseller→User），每账户为独立 Linux 用户并用 cgroups 限制 CPU/RAM/IO",
+    "提供备份到 SFTP/FTP/S3、cPanel 与 DirectAdmin 备份导入、WHMCS 模块和带登录 key 的 REST API"
+   ],
+   "use_cases": [
+    "在单台 Ubuntu VPS 上搭建并销售共享主机（含经销商分级与自定义品牌）",
+    "从 cPanel/DirectAdmin 迁移账户与备份",
+    "通过 WHMCS 模块对接自动化主机开通与账户管理"
+   ]
+  },
+  "sha": "d3f68f166653",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41d027f50e20": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 Vue3 的校园约球平台，含信誉分与小黑屋机制",
+   "review": "这是一个面向校园场景的约球平台 monorepo，后端用 FastAPI + SQLAlchemy 2.0 异步连接 MySQL/TiDB，前端为 Vue3 + Element Plus。核心机制包括 JWT 双令牌认证、球局冲突校验、签到惰性结算、缺席封禁到期惰性自动解封，以及可选 DeepSeek 的 AI 信誉画像（无 Key 时降级为本地加权规则）。提供 Vercel 双项目部署文档、演示账号、110 个 pytest 用例与端到端脚本。",
+   "highlights": [
+    "提供 JWT 双令牌认证与路由前置统一鉴权中间件，密码采用 bcrypt 存储",
+    "球局支持发起时场地/时间冲突校验、筛选分页、报名退出、候补补位与发起人签到核销",
+    "信誉画像在签到/缺席/退出时触发重算，DeepSeek 不可用时自动降级为本地加权规则版"
+   ],
+   "use_cases": [
+    "校园内组织羽毛球等球局报名、签到与缺席管理",
+    "通过信誉分与封禁机制约束报名者履约行为",
+    "作为 FastAPI + TiDB + Vercel Serverless 部署的参考实现运行"
+   ]
+  },
+  "sha": "41d027f50e20",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

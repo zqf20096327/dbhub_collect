@@ -3119,5 +3119,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d13329ef5af2": {
+  "identity": {
+   "one_liner": "Postgres 应用授权工具：策略文件编译为行级安全策略",
+   "review": "rowstile 将写在单个策略文件中的访问规则（共享、组、嵌套文件夹、租户）编译为 SQL 视图、RLS 策略及 authz.* 函数，以迁移形式交付到应用已有的迁移工具。适用于数据在单一 Postgres 库、行权限依赖其他行的应用。限制：不支持跨库授权、Supabase Data API 直连、多重树移动；当前为 0.1.0 beta，仅一位维护者，且未经外部审计。",
+   "highlights": [
+    "将策略文件编译为视图、触发器维护表、RLS 策略和应用函数，无需运行独立授权服务",
+    "策略变更以迁移形式输出，支持 Alembic、Prisma、Drizzle Kit、Flyway 等迁移工具",
+    "提供 Python 与 TypeScript SDK、编辑器扩展、策略评审 CI、浏览器 playground 及示例应用"
+   ],
+   "use_cases": [
+    "行级权限取决于所有者、团队成员、文件夹继承或租户的 Postgres 应用",
+    "手写行级安全策略难以测试和修改、需要策略文件与测试的团队",
+    "基于 Next.js、FastAPI、Prisma、Drizzle 等栈的多租户应用（托管或自建 Postgres 16-18）"
+   ]
+  },
+  "sha": "d13329ef5af2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a000ad505aee": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 行级安全的多租户 AI Agent 语义记忆服务",
+   "review": "adk-memshield 为 Google ADK 和 MCP 提供 Agent 语义记忆存储，核心机制是将租户隔离下沉到 PostgreSQL 的 FORCE ROW LEVEL SECURITY 与事务级身份绑定（set_config），过滤缺失时返回更少行而非他人数据；支持 clearance 与 compartments 的分级访问、可选的 HMAC/JWT 身份验证，启动时会校验 RLS 配置。适用于 Python 环境、需多租户记忆隔离的 Agent 部署。",
+   "highlights": [
+    "通过 PostgreSQL pgvector 与 FORCE ROW LEVEL SECURITY 在数据库层强制租户隔离，SELECT/INSERT/UPDATE/DELETE 四类命令均有策略管控",
+    "支持 clearance 分级与 compartments 横向划分，可选 HmacIdentityVerifier/JwtIdentityVerifier 绑定签名身份",
+    "提供框架中立的 MemShieldStore 核心、memshield-mcp MCP 服务器，以及只能收紧或阻止的 pre_write 钩子"
+   ],
+   "use_cases": [
+    "Google ADK 多租户多 Agent 应用的长期语义记忆存储",
+    "需要数据库层强制所有权门控的共享向量表部署",
+    "含不同权限等级子 Agent 的 Agent 集群记忆检索隔离"
+   ]
+  },
+  "sha": "a000ad505aee",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

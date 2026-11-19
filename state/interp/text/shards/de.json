@@ -3203,5 +3203,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "14aee370798c": {
+  "identity": {
+   "one_liner": "PostgreSQL 17+ 的原生 BM25 排序全文索引访问方法",
+   "review": "bm25_native 是一个用纯 C 基于 PGXS 编写的 PostgreSQL 扩展，实现 USING bm25_native 索引访问方法，提供 Okapi BM25 排序全文检索，不依赖外部搜索引擎或独立运行时。索引数据存于索引关系自身页面，继承内核的 WAL、崩溃恢复与物理复制。需要 PostgreSQL 17/18/19 及服务器开发头文件，通过 make 安装后 CREATE EXTENSION 启用。提供 @@@ 匹配与 &@@ 排序两个操作符及 bm25_score 评分访问函数。",
+   "highlights": [
+    "以原生索引访问方法实现 Okapi BM25 排序全文检索，索引驻留于索引关系自身页面，继承 WAL、崩溃恢复与物理复制",
+    "提供 @@@ 匹配操作符与 &@@ 排序操作符，支持字段限定、短语（含 ~n/~>n 间距语法）及基于函数构建的 jsonb 组合查询树",
+    "提供 bm25_score/bm25_score_key 评分访问器，支持行级与查询限定两种形式；磁盘格式自版本 6 起携带前后兼容契约"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 17+ 中对 text 列建立 BM25 排序全文索引，执行按相关度排序的 top-N 检索",
+    "通过 jsonb 查询树构建器（bm25_term/bm25_boolean/bm25_phrase 等）以值方式传入用户输入的组合查询",
+    "多字段索引上按字段限定进行匹配与排序，如 WHERE title @@@ 'body:…' ORDER BY title &@@ 'body:…'"
+   ]
+  },
+  "sha": "14aee370798c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aa77b7036aec": {
+  "identity": {
+   "one_liner": "自托管事件日志式记忆库：单 SQLite 事件表 + MCP 供智能体读写",
+   "review": "Open Brane 是一个自托管的项目记忆工具，把笔记、决策、会话检查点等全部归一化为一张 append-only 的 SQLite events 表，通过唯一写入路径 record_event.py 记录，并在其上提供全文检索、可重建视图和 MCP 工具接口。适合需要在多个会话与智能体之间保留工作上下文的个人用户。运行仅需 Python 3.11+ 或 Docker Compose，记录与全文搜索不需要 LLM 或向量库；语义检索需另行配置 Ollama 与 Qdrant。",
+   "highlights": [
+    "所有数据写入单一 append-only SQLite events 表，修正以追加新事件方式实现，视图（Obsidian 页面、搜索索引等）均可重建",
+    "提供 MCP 双接口（本地 stdio 与带 Bearer token 的 Streamable HTTP），智能体可用 workspace_overview、save_work_session、resume_work_session、search_events 等工具读写同一数据库",
+    "可选扩展三个 sidecar schema：事件治理（provenance 与 SQL CHECK 约束）、召回追踪、带衰减与时序有效性的推理边"
+   ],
+   "use_cases": [
+    "跨会话保存与恢复项目上下文：保存决策、阻塞项、来源和下一步行动，用 resume_work_session 取回",
+    "让多个本地智能体通过 MCP 读写同一份事件日志并执行全文检索",
+    "作为个人流水线的数据层：适配器写入源事件（支持 --dedupe-key 去重），仪表盘、导出等视图从 events.db 查询生成"
+   ]
+  },
+  "sha": "aa77b7036aec",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8edfb1ba478b": {
+  "identity": {
+   "one_liner": "终端中的键盘驱动 SQL 客户端，支持多种数据库并可经 SSH 连接",
+   "review": "squi 是一个运行于终端的 SQL 客户端，用 Go 编写，以单一静态二进制分发，Apache-2.0 许可。它连接 PostgreSQL、MySQL、MariaDB、ClickHouse、SQL Server/Azure SQL 和 SQLite，支持经 SSH 堡垒机与 ~/.ssh/config 别名连接且不开本地端口。面向需要在终端内浏览模式、编写带补全的 SQL、编辑行数据并查看执行计划的开发者和 DBA，尤其针对连生产库的场景提供只读连接、破坏性语句确认和默认 30 秒语句超时等机制。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、ClickHouse、SQL Server、Azure SQL 与 SQLite，纯 Go 实现使二进制为静态链接",
+    "提供 SSH 堡垒机、~/.ssh/config 别名与 ProxyJump 链连接，密码存于操作系统钥匙串",
+    "包含带语法高亮与上下文补全的多标签编辑器、流式结果网格、外键跳转、EXPLAIN 计划树、CSV/TSV/JSON/SQL 导入导出，以及 squi diff 的模式对比与 ALTER 脚本生成"
+   ],
+   "use_cases": [
+    "经 SSH 在服务器上或本地终端中浏览、查询和编辑多种数据库",
+    "以只读连接、语句确认和超时机制访问生产数据库",
+    "对比 staging 与 prod 的模式差异并生成对齐用的 ALTER 脚本"
+   ]
+  },
+  "sha": "8edfb1ba478b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

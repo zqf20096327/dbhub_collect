@@ -3099,5 +3099,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6ec5e2df9fbd": {
+  "identity": {
+   "one_liner": "本地桌面工作台，将多个 AI 编码代理的终端、PR、审批集中到一个窗口",
+   "review": "agentglass 是一个 Electron 桌面应用，用于在同一窗口管理本机运行的多个 AI 编码代理（Claude Code、Codex、Gemini CLI、OpenCode）。它附加到已有的 tmux 会话，提供实时成本与令牌统计、权限审批队列、diff 查看器、PR 面板、可由代理驱动的浏览器，并配有 Android 配套应用。数据存于本地 SQLite 文件，无账号和云端同步。依赖 git、Claude Code CLI、Python 3，按功能需要 tmux、GitHub CLI 或 Docker。",
+   "highlights": [
+    "附加到本机 tmux 会话并启动多个代理，以 git worktree 隔离任务避免冲突",
+    "提供审批队列：被设门禁的工具调用会暂存到磁盘，直到用户从桌面或手机放行",
+    "支持 orchestrator/worker 模式，可配置每个 worker 可触达的范围，推送与合并不在 worker 权限内"
+   ],
+   "use_cases": [
+    "在本机并行运行多个 AI 编码代理并统一查看成本、令牌与工具调用",
+    "通过手机远程处理等待中的权限审批或已完成的代理会话",
+    "在不切换窗口的情况下审查代理产生的 diff 和拉取请求"
+   ]
+  },
+  "sha": "6ec5e2df9fbd",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "be30b379b4e5": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 PyMongo 风格文档数据库 Python 封装库",
+   "review": "NeoSQLite 是纯 Python 库，为 SQLite 提供 PyMongo 风格的无模式文档 API，支持聚合管道、FTS5 索引、TTL、事务和 GridFS，并通过 nx-27017 服务器实现 MongoDB Wire Protocol。要求 Python 3.12+、SQLite 3.26+；JavaScript 操作符需外接受支持的 Node.js 运行时。legacy _id TEXT 数据库需用 neosqlite-migration 迁移。",
+   "highlights": [
+    "提供 PyMongo 风格 API 与 MongoDB Wire Protocol 服务器（nx-27017），支持文档存储、聚合、FTS5 全文检索、TTL 索引、SAVEPOINT 事务、Change Streams 和 GridFS",
+    "支持 $setWindowFields、$graphLookup、$fill、$jsonSchema 等聚合与查询操作符，可将数十种操作符翻译为原生 SQL，并缓存 SQL 翻译结果",
+    "JavaScript 操作符（$function、$where）在沙箱化 Node.js 进程中运行，仅接受受支持且已打补丁的 Node 版本"
+   ],
+   "use_cases": [
+    "希望以 PyMongo API 操作 SQLite 单文件数据库的 Python 项目",
+    "嵌入式或桌面应用中的文档型数据存储，无需部署 MongoDB 服务",
+    "为已有 SQLite 数据库提供聚合管道、全文检索与 TTL 过期能力"
+   ]
+  },
+  "sha": "be30b379b4e5",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d0fd3d56c279": {
+  "identity": {
+   "one_liner": "基于 Tauri v2 的桌面应用模板，预置无边框窗口、路由、托盘、多格式文件预览等能力",
+   "review": "WingHarness 是一个 Tauri v2 + React 19 + TypeScript 的桌面应用模板，提供已接线的原生层与外壳：无边框窗口与自定义标题栏、懒加载路由、主题与字体预设、系统托盘、全局快捷键、本地终端、Markdown 笔记及 Word/PDF/压缩包等多格式预览。面向想在 Tauri 上直接开发业务功能的开发者。限制：Tauri 命令需在四处命名否则运行时失败；部分功能指南描述的页面尚未进入本仓库。",
+   "highlights": [
+    "提供无边框窗口、自定义标题栏、系统托盘、全局快捷键与 i18n（英/中）等桌面基础设施",
+    "文件预览支持 Word、Excel、PDF、压缩包、PSD、音视频等格式，并提供独立的空格键预览窗口",
+    "内置本地伪终端（portable-pty）、Markdown 笔记与可配置数据目录"
+   ],
+   "use_cases": [
+    "作为 Tauri v2 桌面应用开发的起点模板，跳过窗口框架搭建",
+    "需要本地文件预览、终端、笔记等开发者工具的桌面应用",
+    "需集成 Git/SVN、SSH、数据库控制台等功能的本地工作台项目"
+   ]
+  },
+  "sha": "d0fd3d56c279",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

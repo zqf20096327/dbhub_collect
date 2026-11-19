@@ -3188,5 +3188,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e1a37ef2edcc": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Graph RAG 库，融合向量、图遍历与全文检索",
+   "review": "post-graph-rag 是运行在 PostgreSQL 上的 Graph RAG 库：用 LLM 抽取实体与关系构建属性图，与 pgvector 向量索引并存于同一数据库，检索时融合向量相似度、图遍历与全文搜索，并以后写文档关闭先前事实的方式处理时效信息。要求 Python 3.11+、PostgreSQL 16/18 且装有 pgvector，通过 pip 安装，也可经 MCP 供编码代理调用。",
+   "highlights": [
+    "在同一 PostgreSQL 实例中存储向量块、知识图谱三元组与文档元数据，事务可同时覆盖图与应用表",
+    "支持基于文档顺序的事实取代与双时间维度（as_of/as_believed_at）记录，显式否定的关系以 negated 标记存储",
+    "实体按 (realm, space, lower(name)) 唯一索引并通过别名解析；拒绝自环、空端点与代词实体，抽取失败抛出 ExtractionError"
+   ],
+   "use_cases": [
+    "需要在已有 PostgreSQL 上扩展检索增强生成、不引入独立向量库或图数据库的场景",
+    "文档随时间更替事实的语料（如财报、聊天记忆），需区分新旧取值与历史状态",
+    "为 Claude Code、Cursor 等编码代理提供基于 MCP 的知识检索接口"
+   ]
+  },
+  "sha": "e1a37ef2edcc",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

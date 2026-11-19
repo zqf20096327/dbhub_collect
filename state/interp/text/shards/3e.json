@@ -3347,5 +3347,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c920177011ae": {
+  "identity": {
+   "one_liner": "跨编码代理共享记忆的本地存储工具，以 SQLite 加 markdown 镜像存于仓库",
+   "review": "Hippo 为编码代理提供跨会话的共享记忆：`hippo init` 在项目内创建 `.hippo/` 存储，通过 SessionEnd 钩子捕获用户以 always/never/must 表述的规则，检索时按关键词加本地嵌入匹配最多 5 条相关记忆。支持 Claude Code、Codex、Cursor 及任意 MCP 客户端等 7 类代理。默认零运行时依赖、存取无需模型调用；嵌入器约 480 MB，可 `--no-embeddings` 跳过。README 中的基准数据注明测试局限。",
+   "highlights": [
+    "支持 Claude Code、Codex、Cursor、Pi、OpenClaw、OpenCode 及任意 MCP 客户端，从 ChatGPT、CLAUDE.md、.cursorrules、Slack、markdown 导入",
+    "默认存储路径不调用语言模型，SQLite 存储并生成可提交、可 grep 的 markdown 镜像",
+    "提供记忆弱化（outcome --bad）、替代（supersede）、合并休眠（sleep）、从 git 提交学习（learn --git）及本地 dashboard 等命令"
+   ],
+   "use_cases": [
+    "多代理切换时保留同一套规则与教训，避免每个代理重复纠正",
+    "团队将 markdown 记忆纳入版本控制，在 PR 中评审代理规则",
+    "在离线或无 API key 环境用本地嵌入器按语义召回记忆"
+   ]
+  },
+  "sha": "c920177011ae",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b8bde042095e": {
+  "identity": {
+   "one_liner": "面向红队的 C# MSSQL 后渗透工具，支持任意深度链接服务器链遍历与级联登录模拟",
+   "review": "MSSQLand 是一个用 .NET Framework 4.8 编写的 C# 命令行工具，面向红队操作人员，设计为在目标环境内通过 beacon 执行程序集方式运行。它实现链接服务器链遍历（-l 参数，OPENQUERY/EXEC AT 封装）、逐跳 EXECUTE AS LOGIN 级联模拟、SQL Browser/AD SPN/广播/TDS 端口扫描等发现功能，并包含 cm- 前缀的 ConfigMgr 数据库操作。哈希认证依赖 beacon 层令牌伪造而非内置 NTLM 实现。",
+   "highlights": [
+    "通过 -l 参数以分号分隔遍历任意深度的链接服务器链，自动处理 OPENQUERY/EXEC AT 封装",
+    "支持级联多用户模拟，每跳执行 EXECUTE AS LOGIN",
+    "提供 SQL Browser (UDP 1434)、LDAP SPN 枚举、广播与 TDS 协议握手端口扫描四种无需认证的发现方式"
+   ],
+   "use_cases": [
+    "红队评估中在 beacon 内通过 execute-assembly 横向遍历 MSSQL 链接服务器链",
+    "无凭据阶段枚举域内及子网内的 SQL Server 实例与端口",
+    "获取 ConfigMgr 数据库访问权限后的设备与基础设施侦察"
+   ]
+  },
+  "sha": "b8bde042095e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a30600f05b0c": {
+  "identity": {
+   "one_liner": "本地镜像加速 GitHub PR 审阅的桌面应用",
+   "review": "PR Cockpit 是一款面向 macOS 和 Linux 的桌面应用，用于审阅 GitHub 拉取请求。它通过 webhook 维护 PR 的本地镜像，队列、diff、检查日志和评论线程均从磁盘读取，支持全键盘操作，GitHub 仍是数据源头。附带 CLI 可供人和编码代理调用，通过 bootstrap 脚本安装，需要 Git 2.38 及以上，不支持 Windows。",
+   "highlights": [
+    "本地镜像存储 PR 数据，配合 webhook 保持更新，界面从磁盘渲染",
+    "提供 pr-cockpit CLI，供人和编码代理使用",
+    "支持全局快捷键唤起搜索、堆叠 PR 分组、待提交评论等审阅功能"
+   ],
+   "use_cases": [
+    "集中管理个人或多个仓库的 PR 审阅队列",
+    "在编辑器外快速查看和完成 PR 审阅流程",
+    "供编码代理通过 CLI 介入 PR 审阅工作流"
+   ]
+  },
+  "sha": "a30600f05b0c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0d561d0292ed": {
+  "identity": {
+   "one_liner": "Flock 是一个可自托管、支持端到端加密聊天与音视频通话的即时通讯服务端及多端客户端。",
+   "review": "Flock 提供自托管的聊天与通话服务，支持私聊、群组、频道、秘密聊天（端到端加密，服务器仅存密文）及会议链接。客户端覆盖 PWA、Android 与 Windows，后端基于 Node 和 PostgreSQL。安装脚本面向 Ubuntu/Debian 服务器，要求域名已解析；许可证为 source-available，禁止重新分发或改名。",
+   "highlights": [
+    "支持私信、群组、频道、邀请链接、回复、表情回应、文件分享与已读回执；秘密聊天采用端到端加密",
+    "支持一对一及群组音视频通话、屏幕共享、降噪，访客可通过浏览器加入会议链接无需账号",
+    "提供 Ubuntu/Debian 一键安装脚本与 flockctl 管理菜单，支持 Docker、Render、Railway 部署"
+   ],
+   "use_cases": [
+    "为朋友或团队自托管私有聊天与音视频通话服务",
+    "通过邀请链接或免账号会议链接组织群组和临时会议",
+    "在无外网部署条件时进行离线安装的自托管部署"
+   ]
+  },
+  "sha": "0d561d0292ed",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "13a7ebdcf326": {
+  "identity": {
+   "one_liner": "用 Rust 重写的 Moqui 业务应用框架，XML 定义实体/服务/界面并内置 Postgres",
+   "review": "MR Moqui 是 Moqui Java 框架的 Rust 重构版，用于构建业务应用：应用以 XML 编写实体、服务与屏幕，框架提供持久化、事务、安全、缓存、搜索、REST 与屏幕渲染等通用能力。脚本与模板使用 JavaScript（quickjs-oxide），构建为携带嵌入式 Postgres 的单一二进制。需注意 0.1.0 之前未发布，数据模型与存储布局不稳定，仅限开发环境使用。",
+   "highlights": [
+    "构建为单一二进制，未配置数据库时默认使用嵌入式 Postgres，也可配置外部 Postgres 或 MySQL；搜索默认基于 Postgres 全文与 JSON，OpenSearch 可选",
+    "同一屏幕定义可渲染为 Vue/Quasar 客户端、纯 HTML、终端 UI（含 SSH）、PDF、CSV 和 XLSX",
+    "组件可在 XML 之外加入 Rust 原生代码（服务、工具、资源方案、模板渲染器），由 ./moq build 链接进二进制"
+   ],
+   "use_cases": [
+    "基于 XML artifact 模型开发业务应用，可搭配 moqui 组织下的 Marble ERP、IronStone BOSS/PASS 等应用组件",
+    "从 Moqui Java 迁移部署或组件，沿用 XML artifacts 与 ExecutionContext/facade 结构",
+    "需要桌面客户端、Android 客户端、单服务器、容器或集群（经共享数据库协调）部署的业务系统"
+   ]
+  },
+  "sha": "13a7ebdcf326",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

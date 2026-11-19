@@ -3192,5 +3192,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ef17fd0e7ee4": {
+  "identity": {
+   "one_liner": "为 EF Core 数据库错误提供强类型异常的 .NET 库",
+   "review": "该库针对 Entity Framework Core 将数据库错误统一包装为 DbUpdateException、需解析错误码才能判断具体原因的问题，按数据库提供强类型异常，如 UniqueConstraintException、MaxLengthExceededException 等。开发者通过在 DbContext 配置 UseExceptionProcessor 即可捕获具体异常类型，支持 SQLServer、PostgreSQL、SQLite、Oracle、MySql，并提供 DbExceptionClassifier 包供纯 ADO.NET 场景使用。",
+   "highlights": [
+    "通过 UseExceptionProcessor 将数据库错误转换为 UniqueConstraintException、CannotInsertNullException、MaxLengthExceededException、NumericOverflowException、ReferenceConstraintException 等类型化异常",
+    "UniqueConstraintException 与 ReferenceConstraintException 提供 ConstraintName 和 ConstraintProperties 属性（SQLite 及索引不在 EF 模型中时不填充）",
+    "提供 DbExceptionClassifier 包，无需 EF Core 即可按统一 IDbExceptionClassifier 接口分类 ADO.NET 数据库异常"
+   ],
+   "use_cases": [
+    "EF Core 应用中需要按错误类型（唯一约束、非空、超长、数值溢出、外键）分支处理保存失败的场景",
+    "使用 Pomelo 等 MySqlConnector 系提供程序且无专用包的 EF Core 项目",
+    "不使用 EF Core、需直接对 ADO.NET 异常做类型化分类的 .NET 数据访问代码"
+   ]
+  },
+  "sha": "ef17fd0e7ee4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2041f8459e61": {
+  "identity": {
+   "one_liner": "自托管可观测性平台，接收 OpenTelemetry 与 Datadog 格式数据，存于 PostgreSQL 或 ClickHouse。",
+   "review": "DataCat 是运行于自有基础设施的可观测性平台，提供指标、日志、分布式追踪、仪表盘与告警功能，数据存储支持 PostgreSQL 或 ClickHouse。它同时接受 OpenTelemetry（OTLP/HTTP）和 Datadog 兼容 Agent 的数据接入，适合希望在自有服务器上运行监控并使用已有 Datadog Agent 或 OTel SDK 的团队。部署依赖 Node.js 22.15+ 与 PostgreSQL 14+，登录采用本地邮箱账号和单次邀请链接机制。",
+   "highlights": [
+    "提供指标浏览器、仪表盘、主机地图、日志检索（含 facet、live tail 和 trace 关联）以及 APM 服务目录和 trace 瀑布图",
+    "支持 OTLP/HTTP 的 /v1/traces、/v1/metrics、/v1/logs 端点，并兼容 Datadog Agent 的公共 intake API",
+    "单个生产进程同时提供 API、Web UI、安装器和下载服务；Agent 基于 OpenTelemetry Collector，附带 Node.js/Python 插桩库"
+   ],
+   "use_cases": [
+    "在自有基础设施上部署指标、日志与追踪的统一采集和查看平台",
+    "将现有 Datadog Agent 的上报流量接入自托管后端，无需更换 Agent",
+    "使用 webhook 或 Slack 通知配置基于指标、日志、trace 的监控告警"
+   ]
+  },
+  "sha": "2041f8459e61",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4191955e12f7": {
+  "identity": {
+   "one_liner": "单机自托管的智能体长期记忆服务，用钩子接入宿主实现记忆的注入与沉淀",
+   "review": "aiduMEI 是一个基于 Python/FastAPI 的单机长期记忆服务，通过钩子接入 Claude Code、Codex CLI、Hermes、DeepSeek Harness 等宿主：对话前注入相关记忆，对话后存入，会话结束提炼精华。数据以 SQLite 单库（含全文索引、向量、墓碑）形式保存在本机，提供 cloud/auto/local 三种运行挡位与 REST/MCP 接口。适合本地自托管使用，备份为明文且项目提示需自行加密持盘机器。",
+   "highlights": [
+    "native 单库内核：正文、FTS5 全文索引、向量、修改历史、墓碑、关系边写入同一 SQLite 文件，检索为 FTS5 bm25 与向量余弦两路 RRF 融合",
+    "一条命令 connect_host.py 自动识别并接入 Claude Code / Codex / Hermes，含写入-召回-清理的当场验收流程",
+    "提供 REST API（/add /search /update /delete 等）与 6 工具的 MCP Server，支持云/自动/本地三种运行挡位，local 挡零外呼"
+   ],
+   "use_cases": [
+    "为使用 Claude Code、Codex CLI、Hermes、DeepSeek Harness 等 CLI 智能体的开发者在本机部署跨会话长期记忆",
+    "需要在无外网、无 API Key 环境下运行记忆服务（local 挡仅全文检索）",
+    "需要记忆数据完全本机留存、可备份可恢复、误删可经墓碑找回的自托管场景"
+   ]
+  },
+  "sha": "4191955e12f7",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4be52adb2b17": {
+  "identity": {
+   "one_liner": "Windows 原生 PostgreSQL 客户端，提供 SSMS 风格的数据库管理与查询界面",
+   "review": "PGMS 是运行在 Windows 上的 PostgreSQL 图形客户端，用 C#/WPF 构建，面向熟悉 SQL Server Management Studio 的用户。提供对象资源管理器、F5 执行查询、执行计划、会话监控和备份恢复等功能，管理操作以可审查的 SQL 脚本形式提交。备份恢复依赖与服务器同主版本的 PostgreSQL 客户端工具，当前为早期 alpha 版本。",
+   "highlights": [
+    "提供数据库关系图、可视化查询设计器和上下文感知的 IntelliSense（JOIN 时根据外键生成完整连接条件）",
+    "支持 AI 生成 SQL，可接入 Anthropic、OpenAI 或本地 Ollama，发送内容可查看，表数据不被读取发送",
+    "支持图形化执行计划与缺失索引建议（以注释脚本形式给出，不自动执行）、Schema Compare、会话/阻塞监控及基于 pg_dump/pg_restore 的逻辑备份恢复"
+   ],
+   "use_cases": [
+    "从 SQL Server 迁移或习惯 SSMS 操作方式的开发者与 DBA 管理 PostgreSQL 数据库",
+    "需要图形化执行计划、会话阻塞监控等日常运维与查询调优工作",
+    "通过图表和导出 Markdown 的方式为 AI 代理提供数据库结构上下文"
+   ]
+  },
+  "sha": "4be52adb2b17",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "024f441617c9": {
+  "identity": {
+   "one_liner": "基于 ANTLR4 的 JVM 原生 SQL 血缘解析库，输出表/列级血缘模型",
+   "review": "LineSQL 是一个运行于 JVM 的 SQL 血缘解析库，基于 ANTLR4 构建，通过 Maven 依赖（io.github.jarredhj0214:linesql-all:1.3.0）引入，调用 LineSql.parse(sql) 即可解析 SQL 并返回表血缘、列血缘、子句级列使用与诊断信息的统一模型。它支持 Spark、Hive、Flink、StarRocks、MySQL、Oracle、SQL Server、PostgreSQL、OceanBase 等方言，自动检测方言，可解析含临时视图、调度变量或部分损坏语句的脚本。它不是 SQL 执行引擎或优化器，运行时目标为 Java 8 字节码，ANTLR 运行时版本为 4.9.3。",
+   "highlights": [
+    "支持多方言 SQL 解析与自动方言检测，包含表血缘、列血缘、子句级列使用及解析诊断的统一结果模型",
+    "可解析多语句脚本，遇到不支持或损坏的语句时保留部分血缘结果并返回警告",
+    "列血缘覆盖投影、插入、CTAS、视图、update、merge 等依赖（在支持的方言范围内）"
+   ],
+   "use_cases": [
+    "数据目录/元数据平台摄取：提取源表、目标表及解析诊断",
+    "影响分析：从 SQL 脚本提取下游表与列依赖",
+    "数据治理：获取过滤、分组、排序及 DML 谓词的子句级列使用"
+   ]
+  },
+  "sha": "024f441617c9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "787cb487134b": {
+  "identity": {
+   "one_liner": "MCP 数据库服务，通过显式持久连接与 SQL 会话连续性查询多数据库",
+   "review": "基于 Node.js 的 MCP 服务器，通过 stdio 运行，供 Codex、Claude Code 等 AI 客户端连接 MySQL、PostgreSQL、Oracle、Redis。以 databaseKey 建立独立会话并返回 sessionId，会话内保持变量、临时表与事务状态；写入需客户端交互审批，Redis 仅支持读取类命令。支持只读模式、自动配置重载及本地 Web 配置页。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、Oracle、Redis，并提供连接、事务管理、元数据检查、执行查询/语句/脚本等约 20 个工具",
+    "提供只读开关与交互审批机制，支持 dangerMode 与 codexAutoReview 选项（默认关闭）",
+    "配置支持自动重载与手动 reload_config，可选仅绑定 127.0.0.1 的 Web 配置界面"
+   ],
+   "use_cases": [
+    "让 AI 编码客户端（Codex/Claude Code）查询、检查和分析多个数据库",
+    "按会话执行含事务控制的 SQL 写操作与 MySQL 脚本",
+    "排查慢查询、阻塞会话、锁与执行计划"
+   ]
+  },
+  "sha": "787cb487134b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

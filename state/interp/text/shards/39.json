@@ -2923,5 +2923,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d3d515bf36da": {
+  "identity": {
+   "one_liner": "为AI编程代理跨会话记录并注入上下文的记忆插件",
+   "review": "claude-mem 是一个给 AI 编程代理（如 Claude Code、Codex、OpenCode 等）补充跨会话记忆的工具。它通过生命周期钩子运行旁路代理，把会话中的观察压缩存储在本地 ~/.claude-mem（SQLite + Chroma 混合检索），新会话开始时注入分层的上下文索引。支持 npx 一键安装或 Claude Code 插件市场安装，部分代理（如 Copilot CLI、Zed）仅支持记忆搜索，不记录会话；npm 全局安装仅提供 SDK，不含插件钩子。",
+   "highlights": [
+    "自动捕获会话观察并压缩存储，新会话按分层索引注入历史上下文",
+    "基于 SQLite FTS5 与 Chroma 向量库实现混合检索，支持三步式 mem-search 查询",
+    "支持 <private> 标签排除敏感内容，会话截图默认保存在本地 ~/.claude-mem/media-v1/"
+   ],
+   "use_cases": [
+    "多会话开发中让代理延续此前项目上下文，避免重复读取文件",
+    "通过 mem-search 或 Web 查看器检索历史会话中的决策、修复记录",
+    "团队内通过可选的 TeamBrain 共享工作区协作查阅工作记录"
+   ]
+  },
+  "sha": "d3d515bf36da",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b918c45ef508": {
+  "identity": {
+   "one_liner": "在 Visual Studio、VS Code 与 Rider 调试时查看 EF Core 查询执行计划的调试器可视化工具",
+   "review": "这是一个 EF Core 查询计划调试器可视化扩展，安装后在 Visual Studio、VS Code 或 JetBrains Rider 中调试时，可将鼠标悬停在查询变量上直接查看执行计划。支持 SQL Server、PostgreSQL、SQLite、MySQL、Oracle 五种数据库，要求 EF Core 7 及以上；Visual Studio 需 2022 17.14+，VS Code 需 1.90+，Rider 需 2026.2+。查看的是实际执行计划，会强制执行查询；VS Code 版本还提供复制含参数 SQL 的功能，并存在查询计划提取超时 5 秒等已知限制。",
+   "highlights": [
+    "在 Visual Studio、VS Code 和 Rider 中调试时悬停或点击查询变量即可查看查询计划，包含 Actual IO 统计、Outline 数据、投影与谓词等页面",
+    "支持 SQL Server、PostgreSQL、SQLite、MySQL、Oracle 五种数据库，要求 EF Core 7 或更新版本",
+    "VS Code 版提供 Refresh 与 Copy SQL（复制含参数的 SQL）按钮；Rider 版为每个变量单独开标签页并可在查询变化后重新查看新计划"
+   ],
+   "use_cases": [
+    "调试 EF Core 应用时需查看某条 LINQ 查询对应数据库执行计划的场景",
+    "需要在多数据库（SQL Server、PostgreSQL、SQLite、MySQL、Oracle）环境下分析查询计划的 EF Core 7+ 项目",
+    "在 Visual Studio、VS Code 或 Rider 中进行 C# 调试并希望直接从 Variables/Watch 窗口查看查询计划的开发流程"
+   ]
+  },
+  "sha": "b918c45ef508",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "daba2a680c2c": {
+  "identity": {
+   "one_liner": "本地优先的编码代理会话归档工具，聚合日志为可搜索的 SQLite 库并提供用量分析。",
+   "review": "Decant 读取 Claude Code、Codex、Gemini CLI 等多种编码代理在本机写入的会话日志和导入的 ATIF 轨迹，建为带全文索引的 SQLite 归档，通过本地 Web UI 或 CLI 提供会话检索、token/成本/耗时分析和导出。运行时不发出外呼，归档为未加密的 0600 文件，Windows 原生二进制暂缺。给需要查看本机代理会话记录的开发者使用。",
+   "highlights": [
+    "支持读取 Claude Code、Codex、Gemini CLI、OpenCode、Cursor CLI、GitHub Copilot CLI 等九种来源的日志，并提供 ATIF 导入导出，统一存入带全文索引的 SQLite 归档",
+    "提供按代理、模型、项目、仓库、结果和日期分组的 token、估算成本、上下文窗口与耗时分析，以及文件热点、工具和 MCP 使用统计",
+    "运行时默认不发外呼，归档以 owner-only（0600）权限写入本地；同时提供带 OpenAPI 3.1 契约的本地 HTTP API 和支持分页/截断读取长会话的 CLI"
+   ],
+   "use_cases": [
+    "检索历史代理会话内容：全文搜索提示词、响应、工具名和工具输入，或用 decant show 分页读取单条会话",
+    "分析代理使用情况：按项目、模型、日期等维度查看 token 消耗、估算成本与耗时",
+    "导出与共享：将会话导出为 Markdown、JSON、trajectory-v1、ATIF，或生成去除消息正文的分析 HTML 报告"
+   ]
+  },
+  "sha": "daba2a680c2c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fb006a51723d": {
+  "identity": {
+   "one_liner": "面向牙科诊所的开源管理系统，含病历、GST账单与远程诊疗",
+   "review": "DentalERP 是一个 MIT 许可的牙科诊所与医院管理系统，提供患者病历、FDI 牙位图、预约、处方、GST 发票、库存、员工管理及患者门户与视频问诊。技术栈为 Next.js 16 + Prisma + MySQL 8，以 Docker 镜像发布，支持自托管，数据保存在诊所自己的服务器上；内置 15 个可选 AI 助手，经 OpenRouter、Anthropic 或 AWS Bedrock 调用。",
+   "highlights": [
+    "包含临床、前台、账单、库存、员工、审计日志等模块，支持一套安装运行多家数据隔离的诊所",
+    "GST 发票支持 CGST/SGST 分解、金额大写，并可通过 Razorpay、PhonePe、Paytm 在线收款",
+    "提供 15 个 AI 助手（排程、爽约预测、现金流预测等），为可选项，不启用亦可运行"
+   ],
+   "use_cases": [
+    "印度及其他地区牙科诊所/多牙椅医院的自托管运营管理",
+    "需要 GST 合规账单、保险理赔与 EMI 分期追踪的收费场景",
+    "通过患者门户、短信提醒与 Jitsi/Daily.co 视频问诊开展远程诊疗"
+   ]
+  },
+  "sha": "fb006a51723d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e33bfa533b21": {
+  "identity": {
+   "one_liner": "基于 Tauri 的单机版开源算法交易平台，内置 API 与多经纪商连接。",
+   "review": "OpenAlgo Desktop 是 OpenAlgo web 的桌面版，在 Windows、macOS 和 Linux 上本地运行仪表盘、REST API、行情 WebSocket 与策略模块，连接 39 家经纪商。凭据在应用内录入并以密码锁定的密钥加密，无需服务器、Python 或 .env 配置。它需要图形桌面会话，不支持无头服务器、Docker 或后台服务运行，交易仅在应用开启时进行。",
+   "highlights": [
+    "监听与 OpenAlgo web 相同的本地地址（REST API 127.0.0.1:5000、WebSocket 8765），Python SDK、TradingView、Amibroker、Excel 及 MCP 客户端可直接接入",
+    "提供图表终端、剥头皮终端、多腿期权策略与统一风控引擎，以及 17 项期权工具和 AI 对话代理（下单需人工确认）",
+    "支持沙盒（分析器）模式，应用、API、webhook 和 MCP 的订单可先转入沙盒而非经纪商"
+   ],
+   "use_cases": [
+    "在本地桌面运行 OpenAlgo 而不搭建服务器，配合既有 OpenAlgo 生态工具（SDK、TradingView、Amibroker 等）",
+    "多腿期权策略、逐信号交易与键盘快速日内交易的执行与风控",
+    "接入 OpenAI、Anthropic、Gemini 或本地 Ollama 模型，通过对话方式读取账户与行情并经确认后下单"
+   ]
+  },
+  "sha": "e33bfa533b21",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2eff57ea0372": {
+  "identity": {
+   "one_liner": "逐模块构建的本地 ETF 投研 Agent 学习项目",
+   "review": "Open ETF Agent 是一个面向 Agent 开发者的可运行学习项目，用 JavaScript/Node.js 实现，按六层架构（输入、上下文、执行、工具、交付、界面）逐模块构建 ETF 投研 Agent。默认示例使用合成文档和脚本化 Gateway fixture，无需模型密钥，离线运行；每次运行在 runs/ 下生成 report.md、manifest.json 和 run.jsonl 供回溯。它不是实盘投研或投资建议服务，模型质量未经审核，插件亦无沙箱。",
+   "highlights": [
+    "提供六层架构的模块化实现，含 Session、Runtime、Gateway、Knowledge、Report 等模块",
+    "每次运行生成 report.md、manifest.json 与 run.jsonl，支持 --observe 命令回溯执行与来源",
+    "默认示例离线运行，无需模型密钥；v0.31+ 支持本地文本导入与 BM25 查询"
+   ],
+   "use_cases": [
+    "学习 Agent 架构并对照文章运行对应实现",
+    "在本地合成文档上练习检索、报告生成与来源回溯",
+    "按固定版本验证 Runtime、Knowledge 等模块的实际覆盖范围"
+   ]
+  },
+  "sha": "2eff57ea0372",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a21dcf2077cf": {
+  "identity": {
+   "one_liner": "基于 PHP 与 MySQL 的电子图书馆管理系统，含后台控制面板",
+   "review": "Maktabati 是一个用 PHP 和 MySQL 构建的电子图书馆管理网站，面向需要管理图书资源的管理员。它提供控制面板，支持对图书、作者和分类进行增删改，包含高级搜索、图书详情与评分查看，并可上传图书电子副本。技术栈为 PHP（>=8.2.4）、Apache、MySQL/MariaDB、Bootstrap 与 jQuery，部署需配置虚拟主机、hosts 解析并导入 maktabati.sql 数据库，另有配套移动端项目。",
+   "highlights": [
+    "通过控制面板对图书、作者和分类进行添加、删除和编辑",
+    "提供高级搜索功能以在馆藏中查找资源",
+    "支持上传图书电子副本，并可查看含评分的图书详情"
+   ],
+   "use_cases": [
+    "管理小型图书馆的图书、作者与分类数据",
+    "托管和查阅图书的电子副本",
+    "为 PHP 学习者提供可本地部署的图书馆管理项目示例"
+   ]
+  },
+  "sha": "a21dcf2077cf",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

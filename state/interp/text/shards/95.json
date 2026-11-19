@@ -3240,5 +3240,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9bbf55844a8e": {
+  "identity": {
+   "one_liner": "Rust 非官方扩展标准库，直接从源码引入包以降低供应链风险",
+   "review": "stdx 是一个 Rust 扩展标准库项目，受 Go 标准库模式启发，将 base64、crypto、cel、csv、markdown、postgres、s3 等多类功能包集合在一个仓库中。它不使用中心化包仓库，而是在 Cargo.toml 中以 git 源码方式直接引入包，并可按 commit 固定版本。多数包支持 no_std 环境，部分还可禁用 alloc 使用。适合希望减少依赖仓库数量的 Rust 开发者，采用 MIT 许可证，main 分支被视为稳定但可能出现少量破坏性变更。",
+   "highlights": [
+    "不使用中心化包仓库，通过 git 源码方式直接引入包，支持按 commit 固定版本",
+    "多数包默认可禁用 std 特性以支持 no_std 环境，部分包可禁用 alloc 特性",
+    "提供三级平台支持：Tier 1 覆盖 x86_64/aarch64 Linux、wasm32、aarch64 macOS 并经过测试"
+   ],
+   "use_cases": [
+    "Rust 项目希望以源码引入方式管理依赖并固定具体提交版本",
+    "面向 x86_64/aarch64 Linux、wasm32 等平台的开发，包括需要 no_std 环境的场景",
+    "需要 base64、CSV、加密、PostgreSQL、S3 等常用功能且倾向使用单一仓库统一维护的项目"
+   ]
+  },
+  "sha": "9bbf55844a8e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5ee96d8364c7": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的 AI 长期记忆库，带人工审核闸门与审计日志。",
+   "review": "memory-eternal 是一个为 AI Agent 提供长期记忆的 MCP 服务，知识卡存储在本地 SQLite 中。写入采用先审后入机制：新卡进入待审队列，人工批准后进入主库；状态变更记录在 SQLite 层强制执行的审计日志中。召回基于 FTS5/BM25，可选内置语义或 Ollama bge-m3 向量。支持多宿主接入，云端为可选独立组件。安装通过 npm 包 memory-eternal 提供，命令为 memory / mem / dsh-memory。",
+   "highlights": [
+    "写入路径包含人工审核闸门：Agent 只能写入隔离区（status=pending），批准/驳回须由人在 Web、TUI 或 CLI 完成；主库物理上只存已批准卡片",
+    "提供 5 个 MCP 工具（memory_recall / memory_capture / memory_stats / memory_audit_list / memory_revise），支持在 Claude Code、Codex、Cursor 等宿主配置文件中一键挂载",
+    "召回零模型调用（FTS5 + BM25），语义召回支持内置模式、本地 Ollama bge-m3 与 OpenAI 兼容在线 API 三种部署方式；云端功能默认关闭，可通过 MEMORY_CLOUD=1 启动"
+   ],
+   "use_cases": [
+    "为接入 MCP 的 Agent 客户端提供跨会话知识卡存储与检索",
+    "需要人工把关记忆入库、保留审计记录的团队或个人本地部署场景",
+    "通过内置记忆账本统计召回注入字符、蒸馏调用次数与有用率的 token 成本核算场景"
+   ]
+  },
+  "sha": "5ee96d8364c7",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "69e98e19bd7b": {
+  "identity": {
+   "one_liner": "基于 Godot 4.7.2 的补丁发行版，提供可用的 C# Web 导出、WASM 内存修复与 Web 体积压缩",
+   "review": "godot-enhanced 是在 Godot Engine 4.7.2-stable 之上叠加补丁的构建版本，上游历史保留。它提供原生 Godot 4 缺少的 C# (.NET 11) Web 导出，包含导出时 gzip 预压缩、GDScript 预编译字节码、基于 Emscripten 7.0.0 的 Web 模板、C# iOS/Android 裁剪以及韩文/日文输入修复。面向需要在浏览器中运行 C# 游戏的 Godot 开发者。部分能力（如 iOS 真机、Android 设备运行）README 标注未验证。",
+   "highlights": [
+    "提供 C# (.NET 11) Web 导出模板，Web/Android 默认启用 PublishTrimmed 裁剪，Android 托管 dll 总量由 29.8 MB 减至 5.0 MB",
+    "导出选项 compression/precompress 在导出时 gzip 压缩 .pck 与 .wasm，浏览器端用 DecompressionStream 解压，无需服务器配置；GDScript 模板 .wasm 由 36.4 MB 减至 9.3 MB",
+    "Web 模板基于 Emscripten 7.0.0 构建，支持 threads/dlink 与 GDExtension；GDScript prebuild（script_export_mode=3）使加载跳过 parse/analyze/compile"
+   ],
+   "use_cases": [
+    "需要在浏览器中部署 Godot C# 游戏且托管平台（如 itch.io）不支持自定义压缩头的场景",
+    "需要减小 Web 导出体积、加载 GDExtension（dlink）或多线程 Web 模板的 Godot 项目",
+    "需要在 iOS/Android 上导出 C# 项目并进行 GodotSharp 裁剪的场景（iOS 真机与 Android 设备运行未经作者验证）"
+   ]
+  },
+  "sha": "69e98e19bd7b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3217,5 +3217,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6f27ccb255f3": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Neon Postgres 的空气质量数据仓库仪表盘，含自然语言转 SQL 查询功能",
+   "review": "该项目为学术性数据工程课程构建，通过 GitHub Actions 每小时从 OpenWeather API 采集 9 个城市的空气质量数据，以星型模式存入 Neon 无服务器 Postgres。仪表盘本身不触发采集，仅读取仓库，页面为 Server Component，使用 Tremor 绘图，并提供将自然语言问题转换为经验证的只读 SELECT 的 Ask AI 接口。部署于 Vercel，需配置只读连接串与 Groq API 密钥。",
+   "highlights": [
+    "每小时 ETL 由 GitHub Actions 触发，采集 9 城市数据并以星型模式（dim_city/dim_time/fact_aqi）存储于 Neon Postgres",
+    "Ask AI 将自然语言问题转为 SQL，执行前经正则验证（仅限单条 SELECT、限定三张表、LIMIT 上限 500），并叠加数据库只读角色与 8 秒 statement_timeout 双重防线",
+    "Ask AI 响应以 NDJSON 流式返回，SQL 经校验后即显示；若 Postgres 拒绝查询且错误可修正，会将错误回传给模型重写 SQL"
+   ],
+   "use_cases": [
+    "作为数据工程课程或演示项目，展示 ETL 管道、星型模式建模与 serverless Postgres 的完整链路",
+    "查询和可视化 9 个城市的历史空气质量（AQI）数据，支持可过滤的数据浏览器、地图与相关性矩阵",
+    "以受控的只读方式通过自然语言探索数据仓库，适合教学演示 NL→SQL 的验证与安全机制"
+   ]
+  },
+  "sha": "6f27ccb255f3",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ea4d277c293": {
+  "identity": {
+   "one_liner": "Rust 编写的关系数据库引擎，可读写 SQLite 格式数据库文件",
+   "review": "InkDB 是用 Rust 从零实现的关系数据库引擎，可读写真实 SQLite 文件。查询走 SQL→Planner→Volcano 执行器→B-tree→Pager→磁盘路径，支持事务、索引、外排序。SQL 是 SQLite 子集，不含连接与子查询，单写者、回滚日志模式。适合学习存储引擎与查询执行原理的开发者。",
+   "highlights": [
+    "读写 SQLite 数据库文件，并提供自有 .inkdb 文件格式",
+    "采用 Volcano 风格执行模型，存储层使用 B-tree、Pager 与回滚日志，ORDER BY 使用外部归并排序",
+    "支持 CREATE/INSERT/SELECT/UPDATE/DELETE、事务语句、EXPLAIN、单列索引与 COUNT 聚合"
+   ],
+   "use_cases": [
+    "需要与 SQLite 文件互操作的单机 SQL 存储场景",
+    "学习数据库内核设计（SQL 编译、B-tree 存储、执行模型）的参考实现",
+    "通过 Rust 公共 API 运行示例工作负载（商店、索引、事务等）进行实验"
+   ]
+  },
+  "sha": "2ea4d277c293",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

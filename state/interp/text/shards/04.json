@@ -3097,5 +3097,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "39a8f429f5f8": {
+  "identity": {
+   "one_liner": "Python 编写的本地优先 Agent 框架，含工具循环、MCP 客户端与回退路由。",
+   "review": "uh-harness 是一个面向桌面的本地优先 Agent 运行框架，提供同步 run_turn 工具循环、MCP 客户端、SQLite 会话存储和 Ollama→云端的提供者回退链。首次启动无需账号与 API 密钥。运行时依赖 httpx，需 Python 3.10+，通过 pip 安装，可选 Web 界面由 FastAPI 提供。适合希望在本地组合模型、工具与记忆的 Python 用户。",
+   "highlights": [
+    "提供同步 run_turn Agent 循环，执行模型请求的工具并在 max_iterations 预算内停止",
+    "通过 config.toml 的 [[mcp.servers]] 挂载外部 MCP 服务器，工具以 mcp__<server>__<tool> 形式进入循环",
+    "会话存储于 SQLite FTS5，支持 list/show/search/delete/resume 子命令"
+   ],
+   "use_cases": [
+    "在本地 Ollama 模型上运行带工具调用的对话 Agent",
+    "为 Agent 接入文件系统等 MCP 服务器工具",
+    "需要本地会话检索与分 provider 密钥管理的桌面 LLM 使用场景"
+   ]
+  },
+  "sha": "39a8f429f5f8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "76734f0f0a31": {
+  "identity": {
+   "one_liner": "自托管的信用卡账单解析、还款登记与到期提醒 Web 工具",
+   "review": "面向个人自托管用户的信用卡账单管理工具，通过 IMAP 绑定邮箱自动同步并解析银行账单邮件，将账单、交易明细、还款登记和年费/到期提醒集中在统一界面。支持 Docker 或源码部署、MySQL 存储及 Bark/Telegram 等多渠道推送。解析器按银行邮件模板校准，部分外币与明细层级标注为待实样验证。",
+   "highlights": [
+    "通过 IMAP 每 2 小时增量同步账单邮件，按发件人、标题和模板特征匹配解析器，支持多银行、多卡合并账单与多币种",
+    "敏感卡信息使用环境主密钥加用户 PIN 双密钥 AES-256-GCM 加密，IMAP 同步不修改邮件状态",
+    "内置 Bark、ntfy、Telegram 等 9 类推送渠道及自定义 HTTP 推送，同一渠道当日提醒合并发送"
+   ],
+   "use_cases": [
+    "个人自托管部署，集中管理多银行信用卡账单、还款与年费提醒",
+    "需要按期处理房租、水电等固定或动态账单及证件到期等常规提醒",
+    "通过邮箱自动化替代手动查阅账单邮件，并经多渠道接收当日到期推送"
+   ]
+  },
+  "sha": "76734f0f0a31",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f4b314a52c1d": {
+  "identity": {
+   "one_liner": "Rust 实现的 Kafka 协议兼容事件流平台，内置 SQL、全文检索与向量查询",
+   "review": "Chronik Stream 是一个用 Rust 编写的单二进制事件数据平台，实现 Kafka 线协议（24 个 API），并按主题可选开启基于 DataFusion 的 SQL 查询、基于 Tantivy 的全文检索和 HNSW 向量检索。索引在写入确认后异步进行，写路径不受影响。集群模式使用 Raft 共识，最少 3 节点；README 标注其流式吞吐基准因旧版本复制缺陷已撤回，待重测。",
+   "highlights": [
+    "实现 24 个 Kafka 线协议 API，兼容现有 Kafka 客户端",
+    "按主题启用能力：SQL（DataFusion/Arrow/Parquet）、BM25 全文检索（Tantivy）、向量检索（HNSW），索引异步于写路径之后",
+    "支持 Raft 共识的多节点集群、自动复制与在线加节点；可选 MCP 工具服务器与本体层（默认关闭）"
+   ],
+   "use_cases": [
+    "通过 Kafka 协议写入事件后直接用 SQL 做运营分析查询",
+    "对事件流消息做全文检索",
+    "事件向量化后用于语义检索与 Agent 记忆场景"
+   ]
+  },
+  "sha": "f4b314a52c1d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "025fa1d6a636": {
+  "identity": {
+   "one_liner": "本地优先的大纲卡片笔记应用，基于 Tauri 2 与 SQLite 存储",
+   "review": "Folio 是一款本地优先的笔记应用，将日记、卡片、任务、查询块和白板整合在同一编辑器与数据体系中。数据以 SQLite 文件形式存储在用户设备上，支持离线使用与导出 Markdown/PDF。适用于偏好大纲与双链写作的桌面及 Android 用户；同步功能仍在开发中，构建版本尚未经 Apple/Microsoft 签名。",
+   "highlights": [
+    "提供 `[[` 链接、标签、块引用、反向链接与实时查询块，查询条件可点击调整或以文本语法书写",
+    "数据存储于本地 SQLite 文件，支持自动备份、加密副本、删除恢复及 Markdown/PDF 导出",
+    "白板中的卡片与卡片库为同一对象，可导出为 JSON Canvas 格式"
+   ],
+   "use_cases": [
+    "以大纲和卡片链接方式记录日记与项目笔记的桌面用户",
+    "在白板上拖拽卡片构建思维导图并保持内容同步编辑",
+    "在 Android 设备上快速捕获想法、勾选任务并阅读卡片"
+   ]
+  },
+  "sha": "025fa1d6a636",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "075a0733e638": {
+  "identity": {
+   "one_liner": "Windows 零依赖本地 PHP 开发面板，每项目独立 PHP、Composer 与 MariaDB",
+   "review": "PHP Station 是面向 Windows 的本地 PHP/Laravel 开发面板：为每个项目提供独立的 php.exe、Composer 与 MariaDB 实例，可并行运行不同 PHP 版本（7.4–8.5）。内置邮件捕获、dump()/dd() 展示、日志分组、基于 MariaDB binlog 的查询撤销与恢复点，支持从 GitHub 链接克隆并自动完成安装迁移。需 Windows 10/11 与 Node.js 18+，通过 ZIP 或 git clone 后运行 PHP-Station.bat 启动。",
+   "highlights": [
+    "每个项目拥有独立 PHP、Composer 与数据库服务器，可同时运行 PHP 7.4–8.5 与 MariaDB 10.4–12",
+    "基于 MariaDB binlog 记录 INSERT/UPDATE/DELETE，支持撤销单条查询和恢复点回滚",
+    "通过 auto_prepend_file 实现邮件捕获、dump() 树形展示与错误分组，无需修改 .env"
+   ],
+   "use_cases": [
+    "在同一台 Windows 机器上并行开发依赖不同 PHP 版本的多个 PHP/Laravel 项目",
+    "本地调试时需要拦截邮件、查看 dump() 输出与分组日志的场景",
+    "需要撤销误操作 SQL 或在执行 migrate 前创建数据库恢复点的团队/个人开发"
+   ]
+  },
+  "sha": "075a0733e638",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "12f789636e79": {
+  "identity": {
+   "one_liner": "Flutter 开发的离线健身应用，数据仅存本地，无登录无广告",
+   "review": "Offline Gym 是一款基于 Flutter 和 SQLite 的离线健身应用，用于规划训练、记录组数与重量、查看动作图解、追踪卡路里与步数。面向 Android 8.0+ 和 iOS 用户，通过 APK/IPA 分发，iOS 需 sideload 安装。数据存储在应用私有目录，支持 AES-256-GCM 加密备份及 Health Connect 集成，不依赖服务器账号。",
+   "highlights": [
+    "包含 2000+ 个动作的图解指南，约 85% 动作内置实拍动画，涵盖步骤、呼吸、防伤提示与每周推荐容量",
+    "按注册信息（性别、年龄、体重、身高）调整肌肉恢复时间、计划安排与营养目标（Mifflin-St Jeor 代谢估算）",
+    "支持 Health Connect 读取/写入步数、卡路里与体重，并可导入 Strong、Hevy 的 CSV 数据；备份采用 AES-256-GCM + Argon2id 加密"
+   ],
+   "use_cases": [
+    "在无网络环境的健身房记录训练组数、重量与休息计时",
+    "通过身体地图查看各肌群恢复百分比并生成周训练计划",
+    "记录饮食热量、步数与体重变化，并在本机生成 PDF/CSV 报告"
+   ]
+  },
+  "sha": "12f789636e79",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

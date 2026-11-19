@@ -2895,5 +2895,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "568731f0cdf4": {
+  "identity": {
+   "one_liner": "面向 SQLite 的轻量 ORM，提供 LINQ 式 IQueryable 查询并支持 AOT 发布",
+   "review": "该项目为 SQLite 提供 LINQ-to-SQL 能力，将 LINQ 查询翻译为 SQL，面向 .NET MAUI、Avalonia 等 AOT 发布的 .NET 8–11 应用。模型通过特性标注（如 [Key]、[Table]），提供 JSON、FTS5、R-Tree、窗口函数支持及四种 provider 包（含 SQLCipher 加密）。无生成器时 AOT 下查询使用反射。",
+   "highlights": [
+    "将 LINQ 的 join、group-by、子查询、投影翻译为 SQL，支持 FTS5、JSON/JSONB、R-Tree 与窗口函数",
+    "通过 SQLite.Framework.SourceGenerator 在构建期生成行到对象的代码，以适配 Native AOT 与裁剪",
+    "提供四个 provider 包（系统 SQLite、自带 SQLite 二进制、SQLCipher 加密、自选 SQLitePCLRaw），API 与程序集名一致可互换"
+   ],
+   "use_cases": [
+    "以 AOT 方式发布的 .NET 8/9/10/11 应用（如 .NET MAUI、Avalonia）中需要 IQueryable 查询的场景",
+    "需要对 SQLite 数据库进行加密的场景，可选用基于 SQLCipher 的 Cipher 包",
+    "模型类使用特性标注定义表结构，并需要版本化迁移的 SQLite 应用"
+   ]
+  },
+  "sha": "568731f0cdf4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6e103df3be0d": {
+  "identity": {
+   "one_liner": "运行于 RV1106 的动静变帧率录像方案，HLS 存储并配 Web 查看与 SQLite 事件记录",
+   "review": "面向 Luckfox Pico Pro Max（RV1106）的移动侦测录像方案：静止时以 1 fps 录制、检测到移动时切换约 30 fps，H.264 写为 SD 卡上的 HLS 分片，事件记入 SQLite，并通过 HTTP 提供 MJPEG 实时流与按日回放界面。C 进程负责 ISP/编码/IVS 管线，Go 进程经 unix socket 提供网络服务。作者声明未经安全审查，HTTP 无认证，仅宜用于受控局域网。",
+   "highlights": [
+    "自适应帧率：静止时 1 fps、检测到移动时约 30 fps，阈值、灵敏度与夜模式可配置",
+    "HLS 录制按日期目录组织，含每日事件数据库，剩余空间低于阈值时自动删除最早一天",
+    "通过 /api/stream 提供 MJPEG 实时流，/api/status 上报运行时间、内存、负载与 SoC 温度，录像与实时流均烧录 OSD 时间戳"
+   ],
+   "use_cases": [
+    "长时间静止、偶发数秒活动的场景记录，如储物柜、仓库通道、宿舍房间",
+    "在局域网内通过浏览器查看实时画面并按日期回放录像",
+    "基于 Luckfox Pico Pro Max 的嵌入式视频应用开发参考（随 Luckfox SDK 构建）"
+   ]
+  },
+  "sha": "6e103df3be0d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "711ef9041031": {
+  "identity": {
+   "one_liner": "Rust 原生多智能体共享知识服务，OKF Markdown 存储与 BM25 检索",
+   "review": "JBrain 以单个 Rust 原生服务为多个智能体提供共享知识库：知识以 OKF v0.2 Markdown（YAML frontmatter）存储，检索基于 SQLite FTS5/BM25 词法搜索，不依赖嵌入或本地模型；智能体通过 HTTP、MCP 或 CLI 访问，不直接操作数据库。可选 ask 工作流调用远程模型生成并验证答案。修订号实现并发更新控制，Git 记录每次变更并可推送远端。",
+   "highlights": [
+    "知识以 OKF v0.2 Markdown 文件存储，检索基于 SQLite FTS5/BM25，无需嵌入或本地模型服务",
+    "支持 HTTP、MCP、CLI 三种访问方式，写入带修订号与幂等 request-id，历史变更可提交 Git 并推送远端",
+    "ask 工作流规划、读取、计算并用独立验证步骤检查引用与源修订，模型配置由所有客户端共享"
+   ],
+   "use_cases": [
+    "为多个智能体进程提供集中式项目知识存储与检索",
+    "需要词法关键词搜索、修订引用证据查询的项目记忆库",
+    "通过 Git 远端备份或同步知识 Markdown 内容"
+   ]
+  },
+  "sha": "711ef9041031",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

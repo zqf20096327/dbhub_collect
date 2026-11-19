@@ -3595,5 +3595,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "69b48f2bc616": {
+  "identity": {
+   "one_liner": "pgRouting 的 Python 封装库，用于在 PostgreSQL 路由图上计算节点间路径",
+   "review": "psycopgr 是基于 Psycopg 3 的 Python 客户端，调用 PostgreSQL 中的 PostGIS 与 pgRouting 扩展，在边/顶点表构成的路由图上查询路径与通行成本。默认字段与 osm2pgrouting 2.x 对齐，支持经 osm2pgrouting 导入的 OSM 数据或自建图。坐标路由需边成本以秒为单位，不可达点对会被省略。适合已部署 pgRouting 数据库并需在 Python 中批量查询路径的开发者。",
+   "highlights": [
+    "提供 dijkstra()、dijkstra_cost() 和 astar() 方法，可直接使用顶点 ID 或 WGS84 经纬度坐标查询路径与成本",
+    "端点参数支持单个节点或节点可迭代对象，结果以 (起点,终点) 为键，每条路径含 path 与 cost",
+    "支持 schema 限定的自定义边表和顶点表名，可配置 SRID、是否有反向成本列等图结构参数"
+   ],
+   "use_cases": [
+    "在导入 OpenStreetMap 数据（经 osm2pgrouting）的 PostgreSQL 数据库上，用 Python 计算坐标点之间的路线与行程时间",
+    "对自己准备的边/顶点表路由图执行最短路径或 A* 查询",
+    "对既有路由数据库的备份做升级前后（PostgreSQL/扩展版本）的路径结果验证"
+   ]
+  },
+  "sha": "69b48f2bc616",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "af6092110043": {
+  "identity": {
+   "one_liner": "Trickster Online 韩 2014 客户端的服务器模拟器，在本机运行全套游戏服务端",
+   "review": "tPoseidon 用于在自有机器上模拟 Trickster Online KR 2014 客户端所需的服务端，包含登录、频道、主控、系统、游戏服务器。面向想自行架服的玩家。需 PostgreSQL 14+ 与用户自备的 2014.01.28 韩版客户端；提供 tposeidon 命令行完成安装、建库、启动与登录。当前为 beta，部分系统未实现，修改版禁止再分发。",
+   "highlights": [
+    "在本机运行游戏所需的全部服务器（登录、频道、主控、系统、游戏）",
+    "通过 tposeidon 命令行完成 setup、start、status、play、account 管理等操作",
+    "使用 PostgreSQL 存储账号与角色数据，提供独立 launcher 供其他玩家连接"
+   ],
+   "use_cases": [
+    "在本机或局域网/公网架设 Trickster Online KR 2014 私有服务器供自己和朋友游玩",
+    "为玩家创建独立账号、调整每账号角色栏位（1-8 个）并管理登录",
+    "使用独立 launcher 让朋友无需服务端包即可连接并自动更新客户端文件"
+   ]
+  },
+  "sha": "af6092110043",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d160c4ca7542": {
+  "identity": {
+   "one_liner": "基于 Python+SQLite FTS5 的 AI 智能体符号化持久记忆系统，采用混合检索机制",
+   "review": "BioRAG 是为 AI 智能体设计的持久化符号记忆引擎，用于解决跨会话的上下文丢失问题。它以 Python 和 SQLite FTS5 实现，检索路径不使用稠密向量、GPU 或外部 API，混合了 BM25、PPMI-SVD（100 维）、Hebbian 突触图、Concept Hubs 及重排机制，支持西班牙语与英语双语词干化处理。README 标注其当前分支为 v36.0，master 合并与打标尚待完成；基准结果限定于冻结快照语料，README 亦说明\"仿生\"仅为设计灵感而非对人脑的模拟。",
+   "highlights": [
+    "检索路径不依赖稠密向量、GPU 或外部 API，纯 Python + SQLite FTS5（WAL 模式）实现",
+    "包含模块化架构：core/memory/ 18 个子模块与 core/mcp_server/ 15 个子模块，并附带 MCP 配置安装器",
+    "内置 QA 套件（921 例：875 检索、40 负例、6 歧义），支持按快照数据库与固定种子重复评测"
+   ],
+   "use_cases": [
+    "需要跨会话保留和检索记忆的 AI 智能体应用",
+    "本地 CPU 环境下运行、不调用外部 embedding/API 的语义检索场景",
+    "西班牙语与英语混合语料的知识记忆与查询"
+   ]
+  },
+  "sha": "d160c4ca7542",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f1393d0f6961": {
+  "identity": {
+   "one_liner": "读取本机 Claude Code 会话记录的 macOS 用量分析应用",
+   "review": "Wake 是一款免费开源的 macOS 原生应用，读取本机 Claude Code 写入的会话记录文件，展示每个会话的提示词、命令、文件编辑和 token 消耗，并提供用量统计与成本估算。价格需用户按每百万 token 自行录入，应用本身不上网。仅支持 Apple silicon Mac，当前只支持 Claude Code（测试版本 2.1.119–2.1.292），Codex CLI 与 Gemini CLI 标记为计划支持。",
+   "highlights": [
+    "以时间线形式回放会话，包含提示词、回答、工具调用输出、文件编辑 diff 及嵌套的子代理记录",
+    "提供按日、项目、模型及操作类型（读文件、搜索、编辑、运行命令等）分组的 Usage 窗口，并估算每轮因重发上下文产生的携带成本（≈ carried）",
+    "支持跨全部会话的全局搜索、实时跟踪正在写入的会话，并可导出 Markdown 格式的报告与会话摘要"
+   ],
+   "use_cases": [
+    "分析 Claude Code 会话为何消耗大量 token，定位上下文从何时开始膨胀及开销最高的调用",
+    "查找历史会话中的某条提示词、回答或命令输出",
+    "导出 Markdown 任务清单或会话记录，粘贴到 issue 或提示词中交给代理处理"
+   ]
+  },
+  "sha": "f1393d0f6961",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3040,5 +3040,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9f2d5653bc41": {
+  "identity": {
+   "one_liner": "基于JSON配置的C++17 HTTP/WebSocket服务器，路由绑定QuickJS脚本处理请求",
+   "review": "Hhttp是一个C++17实现的HTTP/1.1、WebSocket与TLS服务器，网络层由Boost.Asio和OpenSSL支撑，业务逻辑以JavaScript脚本编写，脚本在QuickJS运行时中执行，每次请求重新加载、修改后无需重编译。通过JSON配置文件定义域名/路径路由表，支持分块与SSE流式响应、SNI多证书虚拟主机及脚本级文件与SQLite权限白名单，通过CMake构建，提供Windows与Linux平台的回归测试脚本。",
+   "highlights": [
+    "支持HTTP/1.1（Keep-Alive、chunked、SSE、大文件响应）与RFC 6455 WebSocket（握手、分片重组、Ping/Pong、Close）",
+    "路由按域名/路径匹配JSON配置，每个处理器可配置文件读写与SQLite访问白名单，含请求过滤器（IP黑名单、鉴权、限流）",
+    "支持TLS 1.2/1.3与SNI多证书虚拟主机，Windows（IOCP）与Linux（epoll）共用同一份源码，回归测试共127条"
+   ],
+   "use_cases": [
+    "需要用JavaScript编写业务逻辑、修改脚本即时生效且不引入npm依赖的轻量服务端开发",
+    "需要在单一服务上同时提供HTTP接口与WebSocket通信的内部工具或演示项目",
+    "需要按域名与路径划分虚拟主机、并用文件/SQLite白名单隔离脚本权限的场景"
+   ]
+  },
+  "sha": "9f2d5653bc41",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e0df130de4b9": {
+  "identity": {
+   "one_liner": "面向 HackerOne 的范围受控漏洞赏金自动化流水线，基于 Python 3.11+ 与本地 LLM",
+   "review": "bountybot 是一个用于 HackerOne 项目的授权类漏洞测量流水线，面向漏洞赏金研究人员。它以默认拒绝的谓词在解析后 URL 上判定每个请求是否在项目范围内，用双身份差分观测规则判定跨账号访问，证据在写入时脱敏并存储于 SQLite，报告为 H1 格式 markdown，提交环节仅打印 curl 载荷、不自动发送。README 包含 OWASP Juice Shop 实验环境上的测试数据；代码为 Python，含 136 项无网络测试。",
+   "highlights": [
+    "单一 HTTP 出口点在解析后 URL 上执行默认拒绝的范围谓词，记录每次允许/拒绝，支持 dry-run 与 DNS 解析校验",
+    "双角色 IDOR 判定规则及六类只读检查（未授权访问、CORS、暴露文件、GraphQL 内省、开放重定向等），证据写入时脱敏并哈希存储",
+    "人工审批队列管理报告，无自动提交代码路径，bb submit 仅打印 curl 载荷；bb stop 标记文件可停止所有请求"
+   ],
+   "use_cases": [
+    "在 HackerOne 项目范围内自动化检测授权与 IDOR 类缺陷",
+    "通过 HAR 导入与场景运行器构造多角色创建/跨修改测试流程",
+    "以本地 Ollama 润色报告草稿，经人工审批后手动提交"
+   ]
+  },
+  "sha": "e0df130de4b9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

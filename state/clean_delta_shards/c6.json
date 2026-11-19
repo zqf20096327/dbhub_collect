@@ -22866,5 +22866,651 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "a684727fea69+2": {
+  "fn": "boringSQL/dryrun",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "`dryrun` is part of the boringSQL suite alongside RegreSQL and Fixturize."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    14,
+    7,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "We've already seen where this leads: production databases wiped by AI agents, and SQL injection in MCP servers that were supposed to be read-only."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    32,
+    15,
+    32
+   ],
+   [
+    "replace",
+    32,
+    34,
+    32,
+    34,
+    [
+     "- **Query stats** - captures `pg_stat_statements` per node, collapses ORM query variants into shapes, diffs two captures to surface new or slowed queries",
+     "- **Multi-node stats** - per-replica statistics, seq_scan hotspots, routing imbalances"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    82,
+    34,
+    82
+   ],
+   [
+    "replace",
+    82,
+    83,
+    82,
+    83,
+    [
+     "The npm package wraps the same Go binary; every CLI command works identically. Commands like `lint` need a schema snapshot first — see Quickstart. Prebuilt binaries cover macOS (Apple Silicon + Intel), Linux (x64 + arm64), and Windows x64. On other platforms (Alpine/musl, Windows arm64), use Homebrew or build from source."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    83,
+    86
+   ],
+   [
+    "replace",
+    86,
+    87,
+    86,
+    87,
+    [
+     "Requires Go 1.26+. If you don't have it, install via go.dev/dl."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    106,
+    87,
+    106
+   ],
+   [
+    "replace",
+    106,
+    107,
+    106,
+    107,
+    [
+     "(Installed via npm or Homebrew but didn't clone the repo? You won't have `examples/demo` — jump to Quickstart to point `dryrun` at your own schema. The sample output below is what `lint` produces.)"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    112,
+    107,
+    112
+   ],
+   [
+    "replace",
+    112,
+    125,
+    112,
+    113,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    179,
+    113,
+    167
+   ],
+   [
+    "replace",
+    179,
+    184,
+    167,
+    168,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    188,
+    168,
+    172
+   ],
+   [
+    "replace",
+    188,
+    189,
+    172,
+    173,
+    [
+     "Without a snapshot the server still starts, and its tools answer that no schema is loaded. Capture one with `dryrun init --db \"$DATABASE_URL\"` or pull one a teammate pushed (`dryrun snapshot pull --from-path ./snapshots`, see Quickstart), and the server picks it up on the next tool call, without a restart."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    173,
+    174
+   ],
+   [
+    "replace",
+    190,
+    191,
+    174,
+    175,
+    [
+     "For projects with multiple databases, run one `dryrun mcp-serve` per database and add an entry per server in your client config. Native multi-database serving inside one MCP process is tracked in #7."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    192,
+    175,
+    176
+   ],
+   [
+    "replace",
+    192,
+    193,
+    176,
+    177,
+    [
+     "See the Tutorial for live database setup, SSE transport, and Claude Desktop configuration."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    206,
+    177,
+    190
+   ],
+   [
+    "replace",
+    206,
+    207,
+    190,
+    191,
+    [
+     "This creates `dryrun.toml` (with `[project] id` and default profile), the `.dryrun/` data directory, and captures the database into `.dryrun/history.db`. Snapshots are keyed by `(project_id, database_id)`; set `database_id` per profile when a project has multiple databases (e.g. `auth`, `billing`). See `docs/dryrun-toml.md` for the full config reference."
+    ]
+   ],
+   [
+    "equal",
+    207,
+    239,
+    191,
+    223
+   ],
+   [
+    "replace",
+    239,
+    240,
+    223,
+    224,
+    [
+     "Commands that read the stored snapshot warn when its newest data is older than `[history] stale_after` (default 72h, `\"0\"` disables), so an old copy does not read as current. See dryrun.toml."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    257,
+    224,
+    241
+   ],
+   [
+    "replace",
+    257,
+    258,
+    241,
+    242,
+    [
+     "The MCP `describe_table` (node breakdown) and `detect kind=anomalies` tools then expose per-node `idx_scan` so you can spot routing imbalances. See docs/multi-node-stats.md."
+    ]
+   ],
+   [
+    "equal",
+    258,
+    275,
+    242,
+    259
+   ],
+   [
+    "replace",
+    275,
+    282,
+    259,
+    260,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    282,
+    291,
+    260,
+    269
+   ],
+   [
+    "replace",
+    291,
+    292,
+    269,
+    270,
+    [
+     "See `docs/dryrun-toml.md` for all profile options."
+    ]
+   ],
+   [
+    "equal",
+    292,
+    295,
+    270,
+    273
+   ],
+   [
+    "replace",
+    295,
+    296,
+    273,
+    274,
+    [
+     "> **Note:** the MCP server is currently single-database. Using the default profile. Or the option is to run one `dryrun mcp-serve` process per database. Native multi-database support inside one MCP process is tracked in #7."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    346,
+    274,
+    324
+   ],
+   [
+    "replace",
+    346,
+    347,
+    324,
+    325,
+    [
+     "A remote that keeps its bundles stores one payload per schema hash, so it doesn't record a reverted migration as new. A fresh reader still lands on the current schema when newer stats point to it; a reader already on the superseded schema stays there until the hash changes. A writer that pushes to an empty location each run doesn't have this limit (details). `pull` warns if the source's newest capture is over 48 hours old."
+    ]
+   ],
+   [
+    "equal",
+    347,
+    355,
+    325,
+    333
+   ],
+   [
+    "replace",
+    355,
+    356,
+    333,
+    334,
+    [
+     "See `docs/dryrun-toml.md` for per-profile remotes and sharing one stream across projects."
+    ]
+   ],
+   [
+    "equal",
+    356,
+    359,
+    334,
+    337
+   ],
+   [
+    "replace",
+    359,
+    371,
+    337,
+    349,
+    [
+     "- **Tutorial** for offline, online, and multi-node workflows with full tool reference",
+     "- **Multi-node statistics** for cluster-wide stats collection, aggregation rules, and replica imbalance detection",
+     "- **Query stats** for `pg_stat_statements` capture, shape grouping, and diffing",
+     "- **Anonymized snapshots** for producing a snapshot you can hand to someone else: the PII mapping, masked capture, and what to check before sending",
+     "- **Configuration reference** for `dryrun.toml` profiles, conventions, remotes, and lint rules",
+     "- **CLI stability** for which commands are stable versus experimental",
+     "- **Security overview** for the CLI/MCP split and masking",
+     "- **boringSQL**, the blog and project home",
+     "- **dryrun project page**, overview and docs",
+     "- **Don't let AI touch your production database**, why most Postgres MCPs are unsafe and what `dryrun` does differently",
+     "- **RegreSQL**, SQL regression testing and **`dryrun`**'s companion tool",
+     "- **Fixturize**, subset and mask production data for dev/test"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    373,
+    349,
+    351
+   ],
+   [
+    "replace",
+    373,
+    375,
+    351,
+    352,
+    [
+     "BSD 2-Clause License"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "e3b78a47f800+2": {
+  "fn": "SUBHASHSUSHIL/SUBHASHSUSHIL",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Banner"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " Hi, I'm Sushil Thakur 👋 "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     " Software Engineer · API & Backend Specialist · ML & AI Enthusiast "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    5,
+    6
+   ],
+   [
+    "replace",
+    10,
+    21,
+    6,
+    13,
+    [
+     " Profile Views",
+     " <a href=\"https://www.linkedin.com/in/sushil-thakur-6529a72a2\" target=\"_blank\">",
+     " LinkedIn",
+     " </a>",
+     " <a href=\"https://github.com/SUBHASHSUSHIL\" target=\"_blank\">",
+     " GitHub",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    24,
+    13,
+    16
+   ],
+   [
+    "replace",
+    24,
+    25,
+    16,
+    17,
+    [
+     "I'm a **Software Engineer with 4+ years of professional experience** at CP Plus, focused on building scalable, high-performance backend systems and intelligent data pipelines."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    36,
+    17,
+    28
+   ],
+   [
+    "delete",
+    36,
+    38,
+    28,
+    28
+   ],
+   [
+    "equal",
+    38,
+    41,
+    28,
+    31
+   ],
+   [
+    "replace",
+    41,
+    46,
+    31,
+    36,
+    [
+     "C#",
+     "Python",
+     "JavaScript",
+     "HTML",
+     "CSS"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    48,
+    36,
+    38
+   ],
+   [
+    "replace",
+    48,
+    53,
+    38,
+    43,
+    [
+     ".NET",
+     "WPF",
+     "AvaloniaUI",
+     "React",
+     "Angular"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    55,
+    43,
+    45
+   ],
+   [
+    "replace",
+    55,
+    62,
+    45,
+    52,
+    [
+     "PyTorch",
+     "TensorFlow",
+     "Scikit-Learn",
+     "NumPy",
+     "Pandas",
+     "Matplotlib",
+     "Seaborn"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    64,
+    52,
+    54
+   ],
+   [
+    "replace",
+    64,
+    70,
+    54,
+    60,
+    [
+     "SQL Server",
+     "PostgreSQL",
+     "MySQL",
+     "InfluxDB",
+     "RabbitMQ",
+     "Vector DB"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    72,
+    60,
+    62
+   ],
+   [
+    "replace",
+    72,
+    76,
+    62,
+    66,
+    [
+     "Azure",
+     "Git",
+     "GitHub",
+     "Postman"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    78,
+    66,
+    68
+   ],
+   [
+    "replace",
+    78,
+    84,
+    68,
+    72,
+    [
+     "Visual Studio",
+     "VS Code",
+     "Rider",
+     "Jupyter"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    89,
+    72,
+    77
+   ],
+   [
+    "replace",
+    89,
+    94,
+    77,
+    80,
+    [
+     " <a href=\"https://www.linkedin.com/in/sushil-thakur-6529a72a2\" target=\"_blank\">",
+     " LinkedIn",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    80,
+    81
+   ],
+   [
+    "replace",
+    95,
+    100,
+    81,
+    82,
+    [
+     " \"Clean code always looks like it was written by someone who cares.\""
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

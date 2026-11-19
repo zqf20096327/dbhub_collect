@@ -3278,5 +3278,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4feb10cb5d39": {
+  "identity": {
+   "one_liner": "Oracle Graph 官方示例库，含属性图、RDF、知识图谱与 GraphRAG 样例。",
+   "review": "该仓库汇集 Oracle Graph 的官方示例，涵盖属性图（SQL:2023 语法与 19c 的 PGQL）、RDF 图（SPARQL 1.1）以及知识图谱与 GraphRAG 演示，附 80+ 图算法样例与 Jupyter notebooks。适用于已运行 Oracle AI Database 26ai 或 Oracle Database 19c 的用户；示例依赖启用的 Graph 组件及 SQLcl、Graph Studio 等客户端。",
+   "highlights": [
+    "包含 80+ 内置图算法样例，如 PageRank、Louvain、Dijkstra、介数中心性",
+    "支持 SQL:2023 属性图语法查询（19c 及更早版本使用 PGQL），并提供 RDF 图的完整 SPARQL 1.1 支持",
+    "提供 GraphRAG 示例，可结合 VECTOR_DISTANCE 语义搜索与图模式匹配，并从非结构化文本自动构建知识图谱"
+   ],
+   "use_cases": [
+    "在 Oracle Database 19c 或 Oracle AI Database 26ai 上学习属性图查询与图算法运行",
+    "构建 GraphRAG 应用或基于 SPARQL/RDFS/OWL 的语义推理与知识图谱工作流",
+    "使用 Graph Studio、Jupyter 或 VS Code 扩展进行图查询结果的可视化探索"
+   ]
+  },
+  "sha": "4feb10cb5d39",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d11fa183d224": {
+  "identity": {
+   "one_liner": "基于Raft与MVCC的.NET分布式服务器，提供锁、KV存储与有序ID序列",
+   "review": "Kahuna是一个MIT许可的开源服务器集群，为分布式系统提供三类能力：带fencing token与租约的分布式锁、支持事务与watcher的一致性键值存储、生成全局有序ID的序列器。数据按分区分片，每个分区有独立Raft组复制日志；事务结合2PC与MVCC，支持乐观与悲观两种并发控制模式。面向.NET开发者，客户端库目标.NET 10/11，提供Homebrew、dotnet tool安装及Kubernetes Operator（alpha）。",
+   "highlights": [
+    "提供分布式锁（fencing tokens与租约）、带事务和watcher的键值存储、全局有序ID序列器三项能力",
+    "每个分区使用独立Raft组复制数据，事务采用2PC结合MVCC，支持乐观/悲观两种并发控制",
+    "Kahuna.Client内置固定窗口、滑动窗口、令牌桶和并发限流器，预算集中存储使应用多副本共享一份配额"
+   ],
+   "use_cases": [
+    "为多节点/多进程访问同一资源提供同步，防止竞态条件",
+    "存储元数据、缓存或应用状态",
+    "为分布式数据库、消息队列和事件驱动系统生成有序ID"
+   ]
+  },
+  "sha": "d11fa183d224",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3dc6e78f7387": {
+  "identity": {
+   "one_liner": "用 Terraform 与 Ansible 部署管理多云、VM 与 Docker 上的 MongoDB 环境的沙箱工具",
+   "review": "该项目由 Percona 维护，通过 Terraform 提供基础设施、Ansible 配置软件，并附带 Go 编写的 Web UI，用于在 AWS、GCP、Azure、CHAOS、Docker 与 Libvirt/KVM 上创建 MongoDB 副本集和分片集群。支持 PSMDB、Community、Enterprise 包选项，可集成 PBM 备份、PMM 监控、PCSM 同步。功能可用性取决于部署目标、发行版与版本；Libvirt 目标不支持 Web UI，需手动运行 Ansible。",
+   "highlights": [
+    "支持副本集与分片集群部署，可在同一环境中配置多种拓扑，目标涵盖 AWS/GCP/Azure/CHAOS/Docker/Libvirt-KVM",
+    "可选集成 PBM 备份恢复、PMM 监控、PCSM 集群同步，并支持 TLS、审计日志、LDAP、Vault 静态加密等配置",
+    "Web UI 以 Go 编写且无第三方 Go 依赖，可在浏览器中配置、部署、停止/重启、扩展和销毁环境"
+   ],
+   "use_cases": [
+    "在本地 Docker 或虚拟机上搭建 MongoDB 副本集/分片集群进行部署演练或负载实验",
+    "需要跨云平台按 Terraform+Ansible 流程创建带备份与监控的 MongoDB 环境的场景",
+    "搭建含 TLS/LDAP/Vault 加密等配置的测试环境验证 PSMDB 特性"
+   ]
+  },
+  "sha": "3dc6e78f7387",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f50cd91767dd": {
+  "identity": {
+   "one_liner": "Next.js + Prisma + PostgreSQL 全栈单体应用模板仓库",
+   "review": "Monolith 是一个单体全栈启动模板，前端与 API 用 Next.js（pages router），数据层为 Prisma + PostgreSQL，集成 NextAuth 登录和 MUI 主题。README 提供两种初始化方式：运行 setup.sh 一键装依赖、启动 Docker 中的 Postgres 并执行迁移，或按步骤手动配置 .env.local。Google OAuth 可选，页面默认公开，可通过设置 requireAuth 标志要求登录。",
+   "highlights": [
+    "前端、API 与数据库 schema 位于同一仓库，作为一个单元部署",
+    "提供 setup.sh 脚本自动安装依赖、写入环境变量、启动 Postgres 并执行迁移",
+    "外观由 src/styles/theme.ts 顶部的令牌（品牌色、圆角、字体、灰阶）驱动，导航栏含深色模式切换"
+   ],
+   "use_cases": [
+    "快速启动包含数据层与登录功能的全栈 Web 应用原型",
+    "作为个人项目模板，按需保留或删除模块",
+    "部署到 Node 托管环境（如 Vercel）配合托管 Postgres 服务"
+   ]
+  },
+  "sha": "f50cd91767dd",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

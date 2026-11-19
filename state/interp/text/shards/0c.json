@@ -3597,5 +3597,91 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "95e589d6c8b9": {
+  "identity": {
+   "one_liner": "自托管数据库备份管理应用，通过 Web UI 调度并执行多种数据库的备份与恢复",
+   "review": "Databasement 是一个自托管的数据库备份管理应用，以 Web UI 调度、执行并恢复 MySQL、PostgreSQL、MariaDB、SQL Server、MongoDB、SQLite、Firebird、Redis/Valkey 的备份。通过调用各数据库自带 CLI 工具（mysqldump、pg_dump、mongodump 等）完成备份，支持 SSH 隧道与外联 agent，面向需要集中管理多数据库备份的自托管用户。Redis/Valkey 仅支持备份、不支持恢复。",
+   "highlights": [
+    "支持 8 种数据库引擎的备份，其中除 Redis/Valkey 外均支持恢复，备份经由各数据库原生 CLI 工具生成",
+    "支持定时备份（每日/每周间隔）、按天数或 GFS 的保留策略，以及 gzip/zstd/AES-256 加密压缩",
+    "提供 SSH 隧道、外联式远程 agent（无需入站端口），并支持 REST API、MCP Server、多租户 RBAC 与 OAuth/SSO 登录"
+   ],
+   "use_cases": [
+    "集中调度多个数据库实例的定时备份，将备份存入 S3 兼容存储、Azure Blob、SFTP、Samba 或本地磁盘",
+    "通过定时恢复功能定期将生产库最新快照回放到 staging 环境",
+    "通过 SSH 隧道或远程 agent 对私有网络/防火墙内无入站端口的数据库执行备份"
+   ]
+  },
+  "sha": "95e589d6c8b9",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "62524978db23": {
+  "identity": {
+   "one_liner": "基于 SQLite FTS5 与二跳耦合图的单二进制 Rust CLI，将仓库错误转化为项目本地本体",
+   "review": "MISTOLOGY 是一个 Rust 编写的单二进制 CLI 与 agent skill，用于把仓库中已验证的错误记录为 Git 跟踪的 Markdown 笔记（.mistology/notes/*.md），并通过可重建的 SQLite FTS5 与有向二跳耦合图索引提供搜索。面向使用 Claude Code、Codex、Cursor 等 AI 编码代理的开发者。写入笔记要求同时提供失败证据与验证证明；运行时无第三方依赖，采用 MIT 或 Apache-2.0 双许可。",
+   "highlights": [
+    "将 Git 跟踪的 Markdown 笔记索引为可随时删除重建的本地 SQLite FTS5 + 有向图数据库，删除 index.db 后可在下次搜索时自动重建",
+    "search -b 子命令提供包含一跳与二跳耦合链的预检简报，支持 camelCase 子词拆分、韩语助词词干化与裸文件名规范化",
+    "supersede 机制对过时修复做版本化标记，写入 new 笔记需同时具备失败 evidence 与 verified 证明"
+   ],
+   "use_cases": [
+    "在 AI 编码代理修改文件或修复错误前运行预检搜索，查看目标文件与符号相关的耦合模块及历史错误签名",
+    "从 Git 历史中筛选失败与耦合文件明确的 bugfix/revert 提交，批量生成已验证的错误笔记",
+    "通过 canon、impact、doctor 子命令登记标准入口点、审计 git diff 对双向耦合的影响并检查缺失文件"
+   ]
+  },
+  "sha": "62524978db23",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4d9c832f62eb": {
+  "identity": {
+   "one_liner": "基于 Flask+SQLAlchemy+TiDB Cloud 的纸杯蛋糕网店管理系统",
+   "review": "这是一个用 Python/Flask 实现的电子商务 Web 应用，包含商品展示、购物车、结账、订单跟踪和管理后台，采用 MVC 架构，数据层使用 TiDB Cloud（MySQL 兼容）或本地 SQLite。项目为 Cruzeiro do Sul 虚拟大学软件工程课程的课程作业，附带用户故事-代码-测试的追溯文档。需注意示例管理员密码公开，生产部署须修改。",
+   "highlights": [
+    "后端采用 Flask + SQLAlchemy 的 MVC 结构，业务规则隔离在 Model 层",
+    "包含 Flask-Login 认证、CSRF 防护（Flask-WTF）、HttpOnly/Secure Cookie 及环境变量管理密钥",
+    "内置 119 个测试（pytest 覆盖后端与 HTML，node --test 覆盖 JavaScript），测试使用内存 SQLite"
+   ],
+   "use_cases": [
+    "小型甜品/烘焙店铺的线上商品展示与订单管理",
+    "学习 Flask MVC 架构与 TiDB Cloud 部署的教学参考项目",
+    "作为包含认证、测试与部署流程的完整课程设计示例"
+   ]
+  },
+  "sha": "4d9c832f62eb",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e8d8349e3515": {
+  "identity": {
+   "one_liner": "2026 OceanBase数据库大赛PowerContext赛题的项目仓库",
+   "review": "该仓库为2026 OceanBase数据库大赛PowerContext赛题的项目。README仅包含标题与参赛说明，未描述具体功能、技术方案、安装运行方式或使用对象。除仓库描述外可验证信息有限，项目细节有待作者补充文档后进一步编目。",
+   "highlights": [
+    "面向2026 OceanBase数据库大赛PowerContext赛题",
+    "以独立仓库形式承载赛题开发内容"
+   ],
+   "use_cases": [
+    "参与2026 OceanBase大赛PowerContext赛题的开发协作",
+    "查阅该赛题项目的代码与进展"
+   ]
+  },
+  "sha": "e8d8349e3515",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

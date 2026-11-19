@@ -3122,5 +3122,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "808b3a4a7c64": {
+  "identity": {
+   "one_liner": "开源地理空间数据管理平台，含C++核心库与CLI",
+   "review": "DroneDB 是一个用于地理空间数据存储、可视化与分享的开源平台，由 C++ 核心库和 ddb 命令行工具组成，通过 SQLite/SpatiaLite 建立数据索引，并可推送数据集至 DroneDB Hub 协作。支持无人机影像、点云、3D 模型等格式的元数据提取与切片生成。可在 Windows 与 Linux 上运行，提供 .deb 安装包、安装程序及 Docker 镜像；采用 MPL-2.0 许可证。",
+   "highlights": [
+    "提供 init/add/search/build/cog/3dtiles 等命令行子命令，可生成瓦片、预览、COG、COPC 及 OGC 3D Tiles",
+    "自动从图像 EXIF、栅格数据（GDAL）、点云和矢量文件提取元数据，并支持导出 STAC 目录",
+    "支持 GeoTIFF、LAS/LAZ/E57、OBJ/glTF、GeoJSON/SHP/KML 等多种格式，提供 Web 端正射影像、点云、3D 模型与 360° 全景查看器"
+   ],
+   "use_cases": [
+    "无人机航拍数据（正射影像、点云、航迹）的索引、可视化与在线分享",
+    "地理空间数据集的格式转换，如生成 COG、COPC、3D Tiles 或 Gaussian Splat 压缩文件",
+    "通过 DroneDB Hub 进行团队间数据集的推送/拉取协作"
+   ]
+  },
+  "sha": "808b3a4a7c64",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "baa9e7511259": {
+  "identity": {
+   "one_liner": "独立运行的本机记忆服务，提供持久原话、后台整理与带出处的检索",
+   "review": "忆核大脑是一个独立运行的本地记忆服务，附带 DSH 适配器，其他宿主可通过同一 HTTP 协议接入。它把聊天原话持久保存为可检索的事实来源，异步生成摘要与派生事实，并提供控制面板与 3D 展示页。适用于 Windows 本机、个人低并发场景；语义索引与自动整理需另行配置模型，派生主张仍需结合原话核实。",
+   "highlights": [
+    "原话即刻入库并提供词法索引，可选语义索引与异步摘要/事实独立索引",
+    "检索经四路候选加关系候选、排序去重后回读原话证据，保留来源而非一律取最新",
+    "控制面板支持备份导出、用量统计、显式删除，及带来源的角色准则与生活规则管理"
+   ],
+   "use_cases": [
+    "为 DSH 等聊天宿主接入长期记忆与上下文压缩管理",
+    "需要保留原话出处并支持自然语言检索的个人记忆库",
+    "本地管理规则作息、待办、情绪信号与文本书进度记录"
+   ]
+  },
+  "sha": "baa9e7511259",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a2ea78aa4379": {
+  "identity": {
+   "one_liner": "基于 oncebox 的 Spring Boot 事务性 Inbox 示例服务集，用于 Kafka 消费去重",
+   "review": "该仓库包含一组 Spring Boot 示例服务（order-service、loyalty-service、notification-service），演示基于 oncebox 库的事务性 inbox/outbox：消费端将事件 id 与副作用在同一事务提交，识别并跳过重复投递；生产端通过 outbox 表在同一数据库事务中写入事件后发布。依赖 PostgreSQL、MySQL 或 Oracle 存储，配合 Kafka 或 RabbitMQ 使用。限制：生产者需为事件提供稳定 id，inbox 表需按 TTL 定期清理（已内置）。",
+   "highlights": [
+    "提供 effectively-once 与 at-most-once 两种消费模式，按注解 @TransactionalConsumer / @NonTransactionalConsumer 选择",
+    "outbox 轮询发送带重试与退避（最多 5 次），失败事件进入 DLQ，批处理使用 FOR UPDATE SKIP LOCKED 支持多实例并发运行",
+    "支持 PostgreSQL、MySQL、Oracle，支持 Kafka 与 RabbitMQ，错误以 RFC 9457 格式返回并通过 OpenAPI 描述 API"
+   ],
+   "use_cases": [
+    "消费者可能在提交 offset 前崩溃、rebalance 或重放导致 Kafka 同一事件多次投递的场景",
+    "需要事件与数据库副作用原子提交，或将事件记录先于邮件等不可回滚操作落库的场景",
+    "多个服务实例并行消费同一批 outbox 行的部署"
+   ]
+  },
+  "sha": "a2ea78aa4379",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

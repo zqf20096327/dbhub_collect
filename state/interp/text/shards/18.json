@@ -2732,5 +2732,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c664f90e4078": {
+  "identity": {
+   "one_liner": "多云资源发现服务，将阿里云和 AWS 资源转换为 Prometheus HTTP SD 目标。",
+   "review": "prometheus-cloud-sd 是用 Go 编写的 Prometheus HTTP Service Discovery 服务，从阿里云和 AWS 发现数据库、中间件与计算资源，并通过 /sd/redis、/sd/mysql、/sd/postgres、/sd/mongo、/sd/node 端点输出 http_sd_configs 目标组。供使用 Prometheus 监控云资源的运维团队使用。凭据经 STS 解析 account_id，v0.1.1 版本不含 UI、HTTP 认证与持久缓存。",
+   "highlights": [
+    "支持阿里云 Redis/Tair、RDS MySQL、RDS PostgreSQL、MongoDB、ECS 及 AWS ElastiCache、RDS/Aurora、DocumentDB、EC2 的发现",
+    "基于 YAML 配置，提供 cloud_sd_scope 与 cloud_sd_disable 标签过滤，各 Provider 适配器实现统一的 ResourceSource 接口",
+    "输出包含 vendor、account、region、group 等标签，附 Kubernetes 部署清单与 GHCR 镜像"
+   ],
+   "use_cases": [
+    "在 Kubernetes 中为 Prometheus 配置 http_sd_configs，自动发现阿里云/AWS 上的 Redis、MySQL、PostgreSQL、MongoDB 实例",
+    "通过 /sd/node 端点发现 ECS/EC2 主机并交给 Node Exporter 抓取",
+    "为接入华为云、CMDB 等新资源来源提供适配器扩展接口"
+   ]
+  },
+  "sha": "c664f90e4078",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

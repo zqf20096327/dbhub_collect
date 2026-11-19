@@ -22392,5 +22392,2668 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "51403cd0d004+2": {
+  "fn": "vfaner/jync",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "**简体中文** | English"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    14,
+    7,
+    14,
+    [
+     "License: MIT",
+     "Java 17+",
+     "Spring Boot 4.1",
+     "GitHub star",
+     "GitHub fork",
+     "Gitee star",
+     "Gitee fork"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "Jync 捷同 · 异构数据库实时同步工具"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    27,
+    16,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "|资源|地址|"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    28,
+    29
+   ],
+   [
+    "replace",
+    29,
+    34,
+    29,
+    34,
+    [
+     "|**下载**|Gitee 发行版（分卷） · GitHub Releases（完整 jar）|",
+     "|**文档**|官网 · 用户操作手册 · 部署与运维手册 · 产品介绍|",
+     "|**演示**|Bilibili · 14 分钟，从建连接到实时同步|",
+     "|**更新日志**|各版本发布说明|",
+     "|**源码**|GitHub · Gitee · AtomGit 镜像（代码与发布包同步，国内加速）|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    36,
+    34,
+    36
+   ],
+   [
+    "delete",
+    36,
+    38,
+    36,
+    36
+   ],
+   [
+    "equal",
+    38,
+    45,
+    36,
+    43
+   ],
+   [
+    "delete",
+    45,
+    47,
+    43,
+    43
+   ],
+   [
+    "equal",
+    47,
+    49,
+    43,
+    45
+   ],
+   [
+    "replace",
+    49,
+    50,
+    45,
+    46,
+    [
+     "|分类|能力|"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    46,
+    47
+   ],
+   [
+    "replace",
+    51,
+    66,
+    47,
+    60,
+    [
+     "|全量加载|主键 keyset 分块 + 单表内并行 + 结果集流式读取 + 逐块检查点；空表 INSERT-first、延迟二级索引；单表 20 万行/秒量级|",
+     "|增量同步|时间戳 / 行级 SCN / 自增列 / 全表比对自动选策略；一条游标区间查询；水位线安全回退；游标提交后推进|",
+     "|日志 CDC|MySQL binlog、Oracle LogMiner、达梦 LogMiner、PostgreSQL 系逻辑解码、SQL Server CDC、崖山 YStream；长驻线程流式回放，秒级延迟；源库 DDL 让目标缺列时流内裁剪并登记待办，任务不停摆；目标表被删时只重建并重灌这张表，位点不动（次数有上限）|",
+     "|Redis 缓存投影|实时同步的目标也可以是 Redis：按 CDC 把每一行投影成 `<前缀><表>:<主键>` 的 JSON 或 HASH，基线 + 回放 + 前缀清扫重建；只支持日志 CDC，缓存语义与边界见已知限制|",
+     "|结构同步|表、索引、视图、存储过程/函数；类型映射、函数转换、标识符引号、分页语法、DDL 覆盖|",
+     "|ETL|按客户取数 SQL 复制结果行；取数、预执行、后处理 SQL 与范围条件支持 `${name}` 变量和内置日期变量；7 种分析型引擎；多语句脚本；覆盖 / 追加 / 范围覆盖 / 主键更新；断点续跑；同源同目标的表可组成**批次**共享连接与调度|",
+     "|专属迁移|Elasticsearch / OpenSearch → Easysearch、MongoDB → MongoDB、MongoDB → KingbaseES 三种整库复制，连接模型独立于 JDBC；带预检，手动或 cron 运行，可取消并查看运行历史|",
+     "|数据加工|列清洗（13 种规则，含手机号/身份证/姓名/邮箱掩码与 SHA-256 哈希）、表名映射、只读数据预览、按需行数核对、任务克隆、批量建任务（按表大小分箱）|",
+     "|系统管理|配置包导出/导入（口令加密、可选运行状态、目标密钥重加密）、强制 HTTPS 页面开关、应用内 TLS 证书上传（PKCS#12 / JKS / PEM）|",
+     "|AI 辅助（可选）|模型起草存储过程/函数的候选 SQL，人工审阅后才落库；AI 永不参与同步|",
+     "|告警通知|Webhook 推送同步失败、轮询卡死、项目未运行、CDC 停摆、数据漂移、连接健康、PG slot 积压，以及「CDC 目标表已自动修复」；钉钉 / 企业微信 / 飞书 / 通用 JSON；冷却与恢复通知|",
+     "|可靠性与可观测|幂等 upsert、检查点续传、数据库租约锁、at-least-once；看板、变更 / 审计 / 系统日志、性能曲线、可选 Prometheus 指标端点|",
+     "|交付形态|jar / Docker / Kubernetes；中英双语、昼夜主题；响应式布局；本地账号与三种统一认证|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    71,
+    60,
+    65
+   ],
+   [
+    "replace",
+    71,
+    72,
+    65,
+    66,
+    [
+     "数据库能力地图与专属迁移链路"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    77,
+    66,
+    71
+   ],
+   [
+    "replace",
+    77,
+    80,
+    71,
+    72,
+    [
+     "- **专属迁移不走 JDBC**：三条链路由独立的「专属连接」与迁移任务完成，不进入 JDBC 能力矩阵；边界见已知限制。GaussDB 与 openGauss 的差异、TDSQL / PolarDB 分版本、HANA 的 CDC 限制见官网数据库页。"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    72,
+    75
+   ],
+   [
+    "replace",
+    83,
+    90,
+    75,
+    78,
+    [
+     " 看板 看板 · 资源、任务与 24h 趋势 ",
+     " 实时同步任务 实时同步任务 · 状态、上次同步与详情 ",
+     " 连接管理 连接管理 · 源 / 目标分栏 "
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    78,
+    79
+   ],
+   [
+    "replace",
+    91,
+    94,
+    79,
+    80,
+    [
+     "> 其余界面（日志 CDC、性能曲线、列清洗、告警、AI 起草、暗色主题等）见官网功能页。"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    108,
+    80,
+    94
+   ],
+   [
+    "replace",
+    108,
+    109,
+    94,
+    95,
+    [
+     "- **CDC 前提**（探测逐项检查）：MySQL `binlog_format=ROW`、`binlog_row_image=FULL`，账号具备 `REPLICATION SLAVE` / `REPLICATION CLIENT`；Oracle `ARCHIVELOG` 与库级 / 表级 `SUPPLEMENTAL LOG DATA (ALL) COLUMNS`（LogMiner）；达梦归档模式与 `RLOG_APPEND_LOGIC=2`；PostgreSQL 系 `wal_level=logical`；SQL Server 开启库级 CDC；崖山 YStream 需逐表补充日志。完整清单见配置与调优。"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    111,
+    95,
+    97
+   ],
+   [
+    "replace",
+    111,
+    116,
+    97,
+    98,
+    [
+     "容器单机基准（50 万行 Oracle 表）全量实测 **21.6 万行/秒**，日志 CDC 端到端延迟**秒级**。调优参数、调度规则与性能曲线见配置与调优与部署与运维手册。"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    119,
+    98,
+    101
+   ],
+   [
+    "replace",
+    119,
+    120,
+    101,
+    102,
+    [
+     "|项|要求|"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    102,
+    103
+   ],
+   [
+    "replace",
+    121,
+    125,
+    103,
+    107,
+    [
+     "|JDK|**17+**|",
+     "|端口|默认 `8080`|",
+     "|内存 / 磁盘|建议堆 ≥ 512MB，预留 1GB；大字段同步按最大单值放大堆|",
+     "|工作目录|必须固定：`./data`（元数据库与密钥）与 `./logs` 相对进程工作目录生成|"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    107,
+    108
+   ],
+   [
+    "replace",
+    126,
+    127,
+    108,
+    109,
+    [
+     "从 Gitee Releases 或 GitHub Releases 下载发布包（Gitee 为分卷，见下）；源码编译为 `mvn clean package -DskipTests`，产物 `target/jync.jar`。"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    140,
+    109,
+    122
+   ],
+   [
+    "replace",
+    140,
+    141,
+    122,
+    123,
+    [
+     "最小 `application.yml`（完整键见配置与调优）："
+    ]
+   ],
+   [
+    "equal",
+    141,
+    146,
+    123,
+    128
+   ],
+   [
+    "replace",
+    146,
+    151,
+    128,
+    129,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    153,
+    129,
+    131
+   ],
+   [
+    "replace",
+    153,
+    154,
+    131,
+    132,
+    [
+     "首次访问 `http://<服务器>:8080`，使用 `admin / 123456`（管理员）或 `view / 123456`（访客），**首次登录强制修改密码**（未修改前只能停留在改密页）。生产部署、外部元数据库、systemd、Docker / Kubernetes、反向代理与 HTTPS、升级备份见部署与运维手册、部署页与容器部署说明。HTTPS 有两种方式：前置反向代理终止 TLS（推荐），或直接在「系统管理 → 系统配置」上传 PKCS#12 / JKS 密钥库或 PEM 证书与私钥，由 Jync 自己监听 HTTPS，重启后生效；同一页还可开关强制 HTTPS、导出/导入配置包——细节见配置文档。"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    156,
+    132,
+    134
+   ],
+   [
+    "delete",
+    156,
+    158,
+    134,
+    134
+   ],
+   [
+    "equal",
+    158,
+    174,
+    134,
+    150
+   ],
+   [
+    "delete",
+    174,
+    176,
+    150,
+    150
+   ],
+   [
+    "equal",
+    176,
+    184,
+    150,
+    158
+   ],
+   [
+    "replace",
+    184,
+    188,
+    158,
+    159,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    193,
+    159,
+    164
+   ],
+   [
+    "delete",
+    193,
+    195,
+    164,
+    164
+   ],
+   [
+    "equal",
+    195,
+    197,
+    164,
+    166
+   ],
+   [
+    "replace",
+    197,
+    202,
+    166,
+    171,
+    [
+     "- **配置、调度与调优**：docs/configuration.md（`sync.*` / `sync.cdc.*` 键、调度规则、列清洗、CDC 前提与性能参数）",
+     "- **容器部署与运维**：docs/deploy-container.md（环境变量、TLS、多实例、升级与排障）",
+     "- **数据边界与离线部署**：docs/security-data-boundary.md（出网点清单、air-gap 关闭清单、字段加密/脱敏/国密的能力边界）",
+     "- **已知限制与边界**：docs/known-limitations.md（CDC 边界、无主键表、大字段、内容校验、过程转换）",
+     "- **真实数据库验证矩阵**：docs/verification-matrix.md（每个产品验证到哪一步：版本/镜像、驱动、策略、验证级别与运行命令）"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    211,
+    171,
+    180
+   ],
+   [
+    "delete",
+    211,
+    213,
+    180,
+    180
+   ],
+   [
+    "equal",
+    213,
+    215,
+    180,
+    182
+   ],
+   [
+    "replace",
+    215,
+    216,
+    182,
+    183,
+    [
+     "|渠道|账号|"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    183,
+    184
+   ],
+   [
+    "replace",
+    217,
+    222,
+    184,
+    189,
+    [
+     "|QQ|817094 / 2912167928|",
+     "|QQ 群|426669837 · 沐沐开源工坊|",
+     "|微信|qqmu66|",
+     "|邮箱|vfaner@88.com|",
+     "|官网|<https://jync.qqmu.com>|"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    227,
+    189,
+    194
+   ],
+   [
+    "replace",
+    227,
+    228,
+    194,
+    195,
+    [
+     "赞赏支持名单"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    231,
+    195,
+    198
+   ],
+   [
+    "delete",
+    231,
+    233,
+    198,
+    198
+   ],
+   [
+    "equal",
+    233,
+    234,
+    198,
+    199
+   ],
+   [
+    "replace",
+    234,
+    238,
+    199,
+    200,
+    [
+     "MIT License，商业与非商业用途均可。内置第三方 JDBC 驱动各自适用原厂许可证，见 THIRD_PARTY_LICENSES.md。"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "aa0accd083b8+2": {
+  "fn": "mtalavi/coolify-mirror",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Coolify Mirror: move Coolify apps between servers with one command"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    13,
+    2,
+    9,
+    [
+     " release",
+     " ci",
+     " go",
+     " coolify",
+     " platform",
+     " license",
+     " XERJ Corpus Hub contributor"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    9,
+    10
+   ],
+   [
+    "replace",
+    14,
+    19,
+    10,
+    13,
+    [
+     " Migrate Coolify to a new server: back up one domain, a few, or a whole Coolify server — then restore it on another Coolify by pasting one command. ",
+     " Projects, environments, env vars, secrets, volumes, files, images and proxy settings arrive intact and start through Coolify itself. ",
+     " New in 1.10: automatic off-site backups — every night to Google Drive, S3, SFTP or a folder; lost the server? back in minutes."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    13,
+    14
+   ],
+   [
+    "replace",
+    20,
+    26,
+    14,
+    15,
+    [
+     " <a href=\"https://coolify-mirror.pages.dev\"> "
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    15,
+    16
+   ],
+   [
+    "replace",
+    27,
+    39,
+    16,
+    18,
+    [
+     " Animated demo of a real move: on the old server one command installs coolify-mirror, a project is backed up and shared; on the new server the pasted command downloads, verifies and restores it, and the shop site answers from the new server",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    18,
+    19
+   ],
+   [
+    "replace",
+    40,
+    41,
+    19,
+    29,
+    [
+     " Website ·",
+     " Quick start ·",
+     " Off-site backups ·",
+     " Install ·",
+     " Walkthrough ·",
+     " How it works ·",
+     " CLI ·",
+     " Safety ·",
+     " Limitations ·",
+     " Changelog"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    57,
+    29,
+    45
+   ],
+   [
+    "replace",
+    57,
+    58,
+    45,
+    46,
+    [
+     "|Screen|What to do|"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    46,
+    47
+   ],
+   [
+    "replace",
+    59,
+    63,
+    47,
+    51,
+    [
+     "|*What do you want to do?*|**Back up apps** → `enter` &nbsp;(everything at once: *Back up the whole server*)|",
+     "|*Which project should be backed up?*|`↑` `↓` to the project → `enter` — everything in it comes along &nbsp;·&nbsp; several: `space` on each, then `enter`|",
+     "|*Ready to back up*|check the list → **Start the backup**|",
+     "|*How should the other server get this backup?*|**Share a link through Coolify's proxy on port 443**|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    66,
+    51,
+    54
+   ],
+   [
+    "replace",
+    66,
+    67,
+    54,
+    55,
+    [
+     "the command for the new server"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    78,
+    55,
+    66
+   ],
+   [
+    "replace",
+    78,
+    79,
+    66,
+    67,
+    [
+     "|Screen|What to do|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    67,
+    68
+   ],
+   [
+    "replace",
+    80,
+    84,
+    68,
+    72,
+    [
+     "|*Restore these resources into this Coolify?*|read the list → **Yes**|",
+     "|*Domains*|`enter` on each line keeps the domain — or type the new one|",
+     "|*Everything is running. Also rebuild the N app(s) from Git now?* (only for apps Coolify builds)|**No** (recommended): done, everything keeps running as it is · **Yes**: downloads the code from Git and builds it here once, to prove later deploys work (slow)|",
+     "|*Address of this Coolify panel* (whole-server restore only)|keep **this server's address** (recommended) — the old server's address only once its DNS points here|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    87,
+    72,
+    75
+   ],
+   [
+    "replace",
+    87,
+    88,
+    75,
+    76,
+    [
+     "restore complete"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    102,
+    76,
+    90
+   ],
+   [
+    "replace",
+    102,
+    104,
+    90,
+    91,
+    [
+     " Keys · if something goes wrong "
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    91,
+    92
+   ],
+   [
+    "replace",
+    105,
+    106,
+    92,
+    93,
+    [
+     "|Key|Does|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    93,
+    94
+   ],
+   [
+    "replace",
+    107,
+    113,
+    94,
+    100,
+    [
+     "|`↑` `↓`|move|",
+     "|`enter`|choose / continue|",
+     "|`space`|tick several lines|",
+     "|`/`|search a list|",
+     "|`esc`|back (in the main menu: quit)|",
+     "|`ctrl+c`|stop|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    100,
+    101
+   ],
+   [
+    "replace",
+    114,
+    115,
+    101,
+    102,
+    [
+     "|You see|Do this|"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    102,
+    103
+   ],
+   [
+    "replace",
+    116,
+    122,
+    103,
+    108,
+    [
+     "|the Coolify versions differ|upgrade the older Coolify to the same version, then run the same command again|",
+     "|the new server can't connect|port 443 of the old server is blocked. On the old server press `q`, then *Share a saved backup* → the same backup → *Share a link on port 8123* (the tool offers to open it in `ufw`), allow 8123 in your provider's firewall too, and run the **new** command it shows|",
+     "|SSH dropped during the download|keep the old server sharing and run the same command again — the download continues where it stopped|",
+     "|the new server has no GitHub access|use the second command the old server shows (*No GitHub access there?*)|",
+     "|*Restored, but NOT operational*|the reason is printed right above it; full log in `/data/coolify-mirror/logs/`|"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    125,
+    108,
+    111
+   ],
+   [
+    "replace",
+    125,
+    126,
+    111,
+    112,
+    [
+     "A backup that lives on the server it protects is gone with that server. Coolify Mirror can make a **whole-server backup every night**, send it **anywhere rclone reaches** (Google Drive, S3 and S3-compatible storage, SFTP, Dropbox, OneDrive, Backblaze B2… 70+) or to a folder, **check the copy, then delete it from the server** so it never fills the disk. If the server burns, a new one is running again in minutes — with **one key you keep yourself**."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    156,
+    112,
+    142
+   ],
+   [
+    "replace",
+    156,
+    157,
+    142,
+    143,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    143,
+    144
+   ],
+   [
+    "replace",
+    158,
+    166,
+    144,
+    150,
+    [
+     "|Encryption|each backup is encrypted to its own key **and** to the recovery key (age X25519); a stolen server or storage account cannot open it|",
+     "|Disk space|needs room for one backup while it uploads; deleted here only after the copy is checked (size + checksum via `rclone check`)|",
+     "|Cleaning|only this server's backups of the same kind are rotated — other servers sharing the folder, and backups you made by hand, are never touched|",
+     "|Schedule|a systemd timer: survives reboots, runs a missed time after the server starts again · `schedule list`, `schedule run NAME`, `schedule remove NAME`|",
+     "|Reports|email / Telegram on failure (or every run) · last result in the menu and `schedule list`|",
+     "|Iran|Google Drive and Telegram are blocked from servers inside Iran — use an S3 bucket or SFTP inside the country, and email|"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    171,
+    150,
+    155
+   ],
+   [
+    "replace",
+    171,
+    172,
+    155,
+    156,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    156,
+    157
+   ],
+   [
+    "replace",
+    173,
+    183,
+    157,
+    167,
+    [
+     "|🎯 **Pick by project**|A list like Coolify's dashboard: pick a project and everything in it — apps, databases, services, domains — moves together (space to tick several). One app only: the last line. A database in another project that an app uses (via `DATABASE_URL`, etc.) is found and added for you.|",
+     "|🔒 **Encrypted at rest and in transit**|The whole backup — `APP_KEY`, env vars, SSH keys, tokens, S3 keys, database passwords — is one age-encrypted file (passphrase, scrypt). It travels over **HTTPS with a pinned certificate**; the key and the pin live only in the link's `#fragment`.|",
+     "|🔗 **One share code**|The old server shares the backup over HTTPS for as long as you need, through Coolify's own proxy on port 443 (TLS passthrough) or a direct port, and prints one command with a short share code for the new server. Plain HTTP is never served.|",
+     "|🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.|",
+     "|🧾 **Coolify's own format inside**|Every backup also carries Coolify's official *Server Transfer* bundle (`schema_version 1`, made by Coolify's exporter) and the target validates it with Coolify's own validator.|",
+     "|⚡ **No rebuild**|The exact images your app runs are shipped. Dockerfile apps: Coolify logs *“Build step skipped”*. Docker Compose apps: started from those images without cloning or building (Coolify would rebuild them on every deploy).|",
+     "|🧰 **Host dependencies travel too**|Files on the host that custom build/start commands or helper files use (a build policy script under `/data/coolify/ops`, …) and named `docker buildx` builders are carried and restored; system files are checked on the target before anything changes. A selective restore keeps an identical file already on the target and never replaces a different one (it stops before changing anything).|",
+     "|✅ **SUCCESS means it really works**|A resource counts as running only when the services that ran on the source are up, stay healthy for 30 s without restarting, and each domain answers through the local Traefik. `--verify-redeploy` also rebuilds every app once on the target to prove later deploys work.|",
+     "|🌐 **Domains last**|Right before anything starts you can keep or change every domain.|",
+     "|♻️ **Preflight + rollback**|Exact-version check, conflict and domain detection, disk space, bundle validation and a trial import in a rolled-back transaction run **before** anything changes; a failure in the middle puts the target back the way it was.|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    188,
+    167,
+    172
+   ],
+   [
+    "replace",
+    188,
+    189,
+    172,
+    173,
+    [
+     "||Copying the server (tar over SSH)|Coolify Mirror|"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    173,
+    174
+   ],
+   [
+    "replace",
+    190,
+    200,
+    174,
+    182,
+    [
+     "|What moves|Everything, always|One project, a few resources or the whole server|",
+     "|Link between the servers|A root SSH key of the old server on the new one|A share code over HTTPS on port 443, no keys between servers|",
+     "|The new server|Files are unpacked over whatever is there|Merged into a Coolify already in use, its other resources untouched (a whole-server restore needs an empty Coolify)|",
+     "|Databases|Raw data files, consistent only with Docker stopped|Native dumps while they keep running|",
+     "|Coolify version|Not checked|The same version on both servers, the tool says which one to upgrade|",
+     "|Before anything changes|A connection test|Disk space, conflicts, domains and a trial import in a rolled-back transaction|",
+     "|At the end|Nothing is checked|SUCCESS only when every resource runs as on the source and its domains answer|",
+     "|If something fails|No way back|Rollback|"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    217,
+    182,
+    199
+   ],
+   [
+    "replace",
+    217,
+    218,
+    199,
+    200,
+    [
+     "The installer picks `amd64`/`arm64`, downloads the latest release, verifies its SHA-256 and installs `/usr/local/bin/coolify-mirror` (it retries GitHub hiccups). Pin a version with `… | sudo VERSION=v1.5.0 sh`, only install with `NO_RUN=1`."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    233,
+    200,
+    215
+   ],
+   [
+    "replace",
+    233,
+    235,
+    215,
+    216,
+    [
+     " Build from source "
+    ]
+   ],
+   [
+    "equal",
+    235,
+    242,
+    216,
+    223
+   ],
+   [
+    "delete",
+    242,
+    245,
+    223,
+    223
+   ],
+   [
+    "equal",
+    245,
+    254,
+    223,
+    232
+   ],
+   [
+    "replace",
+    254,
+    255,
+    232,
+    233,
+    [
+     "install and main menu"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    258,
+    233,
+    236
+   ],
+   [
+    "replace",
+    258,
+    259,
+    236,
+    237,
+    [
+     "pick the project"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    260,
+    237,
+    238
+   ],
+   [
+    "replace",
+    260,
+    261,
+    238,
+    239,
+    [
+     "**3 · Ready to back up.** Before anything starts you see exactly what goes into the backup, project by project, and the settings. **Start the backup** — or *Change the settings* first. **Recommended** pauses containers for the few seconds their data is copied and puts the app's image in the backup, so the new server doesn't build anything (other modes below)."
+    ]
+   ],
+   [
+    "equal",
+    261,
+    262,
+    239,
+    240
+   ],
+   [
+    "replace",
+    262,
+    263,
+    240,
+    241,
+    [
+     "ready to back up"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    241,
+    242
+   ],
+   [
+    "replace",
+    264,
+    266,
+    242,
+    243,
+    [
+     " One app only (the last line: Pick single apps instead ) "
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    243,
+    244
+   ],
+   [
+    "replace",
+    267,
+    268,
+    244,
+    245,
+    [
+     " The list then shows every resource on its own. A database the picked app uses through `DATABASE_URL` (also from another project) is found by itself — answer **Yes** and it comes along."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    269,
+    245,
+    246
+   ],
+   [
+    "replace",
+    269,
+    272,
+    246,
+    247,
+    [
+     "dependencies"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    275,
+    247,
+    250
+   ],
+   [
+    "replace",
+    275,
+    276,
+    250,
+    251,
+    [
+     "backup progress"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    279,
+    251,
+    254
+   ],
+   [
+    "replace",
+    279,
+    280,
+    254,
+    255,
+    [
+     "backup complete"
+    ]
+   ],
+   [
+    "equal",
+    280,
+    283,
+    255,
+    258
+   ],
+   [
+    "replace",
+    283,
+    284,
+    258,
+    259,
+    [
+     "share code"
+    ]
+   ],
+   [
+    "equal",
+    284,
+    289,
+    259,
+    264
+   ],
+   [
+    "replace",
+    289,
+    290,
+    264,
+    265,
+    [
+     "paste the command"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    293,
+    265,
+    268
+   ],
+   [
+    "replace",
+    293,
+    294,
+    268,
+    269,
+    [
+     "confirm the restore"
+    ]
+   ],
+   [
+    "equal",
+    294,
+    297,
+    269,
+    272
+   ],
+   [
+    "replace",
+    297,
+    298,
+    272,
+    273,
+    [
+     "restore and domains"
+    ]
+   ],
+   [
+    "equal",
+    298,
+    301,
+    273,
+    276
+   ],
+   [
+    "replace",
+    301,
+    302,
+    276,
+    277,
+    [
+     "restore complete"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    309,
+    277,
+    284
+   ],
+   [
+    "replace",
+    309,
+    310,
+    284,
+    285,
+    [
+     "saved files"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    313,
+    285,
+    288
+   ],
+   [
+    "replace",
+    313,
+    314,
+    288,
+    289,
+    [
+     "all backups"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    317,
+    289,
+    292
+   ],
+   [
+    "replace",
+    317,
+    318,
+    292,
+    293,
+    [
+     "confirm delete"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    319,
+    293,
+    294
+   ],
+   [
+    "replace",
+    319,
+    320,
+    294,
+    295,
+    [
+     "space freed"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    321,
+    295,
+    296
+   ],
+   [
+    "replace",
+    321,
+    322,
+    296,
+    297,
+    [
+     "|Kind|Where|What|Delete it when|"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    323,
+    297,
+    298
+   ],
+   [
+    "replace",
+    323,
+    329,
+    298,
+    304,
+    [
+     "|`backup`|old server|backups made here (`.cmb` + key) — the apps inside are named|the new server has restored it|",
+     "|`download`|new server|a downloaded backup whose restore did not finish (removed automatically after a successful one)|you won't restore it again|",
+     "|`unfinished`|both|interrupted backups / downloads (`.part`)|any time|",
+     "|`safety copy`|new server|`pre-restore-*` (previous Coolify database + `.env`), `replaced-*` (folders a restore replaced)|everything works|",
+     "|`old volume`|new server|`<name>.cm-old-<time>` — previous data of a volume that already existed|everything works|",
+     "|`logs`, `leftover`|both|logs of earlier runs, remains of interrupted runs|any time|"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    332,
+    304,
+    307
+   ],
+   [
+    "replace",
+    332,
+    334,
+    307,
+    308,
+    [
+     " The built-in guide ( How it works in the menu) "
+    ]
+   ],
+   [
+    "equal",
+    334,
+    335,
+    308,
+    309
+   ],
+   [
+    "replace",
+    335,
+    337,
+    309,
+    310,
+    [
+     "How it works"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    338,
+    310,
+    311
+   ],
+   [
+    "replace",
+    338,
+    341,
+    311,
+    312,
+    [
+     " Backup settings ( Change the settings ) "
+    ]
+   ],
+   [
+    "equal",
+    341,
+    342,
+    312,
+    313
+   ],
+   [
+    "replace",
+    342,
+    343,
+    313,
+    314,
+    [
+     "|Consistency|What happens|"
+    ]
+   ],
+   [
+    "equal",
+    343,
+    344,
+    314,
+    315
+   ],
+   [
+    "replace",
+    344,
+    347,
+    315,
+    318,
+    [
+     "|**Pause** *(default)*|Containers using a volume are paused for the seconds it takes to copy it. Databases are dumped live and never paused.|",
+     "|**Stop**|Stopped and started again — safest, a short downtime.|",
+     "|**Live**|Nothing is touched; databases may be copied mid-write.|"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    348,
+    318,
+    319
+   ],
+   [
+    "replace",
+    348,
+    349,
+    319,
+    320,
+    [
+     "|Images|What happens on the new server|"
+    ]
+   ],
+   [
+    "equal",
+    349,
+    350,
+    320,
+    321
+   ],
+   [
+    "replace",
+    350,
+    356,
+    321,
+    324,
+    [
+     "|**Application images** *(default)*|Apps built by Coolify start from the shipped image — no rebuild. Public images (postgres, wordpress…) are pulled.|",
+     "|**All images**|Everything is in the file — works without internet / Docker Hub. Bigger file.|",
+     "|**No images**|Smallest file; Coolify pulls everything and **rebuilds** apps from Git.|"
+    ]
+   ],
+   [
+    "equal",
+    356,
+    363,
+    324,
+    331
+   ],
+   [
+    "replace",
+    363,
+    380,
+    331,
+    332,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    390,
+    332,
+    342
+   ],
+   [
+    "replace",
+    390,
+    391,
+    342,
+    343,
+    [
+     "||Selective|Full|"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    392,
+    343,
+    344
+   ],
+   [
+    "replace",
+    392,
+    398,
+    344,
+    348,
+    [
+     "|Use it for|moving / cloning projects|moving a whole server|",
+     "|Target Coolify|any — merges, existing resources are kept|**fresh and empty only**|",
+     "|Logins|target's users|source's users, API tokens, settings|",
+     "|Same resource already there|restore as copy, or skip|—|"
+    ]
+   ],
+   [
+    "equal",
+    398,
+    407,
+    348,
+    357
+   ],
+   [
+    "replace",
+    407,
+    425,
+    357,
+    358,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    425,
+    427,
+    358,
+    360
+   ],
+   [
+    "replace",
+    427,
+    429,
+    360,
+    361,
+    [
+     " All flags "
+    ]
+   ],
+   [
+    "equal",
+    429,
+    430,
+    361,
+    362
+   ],
+   [
+    "replace",
+    430,
+    431,
+    362,
+    363,
+    [
+     "|Command|Flag|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    432,
+    363,
+    364
+   ],
+   [
+    "replace",
+    432,
+    460,
+    364,
+    389,
+    [
+     "|`backup`|`--project p,q` / `--domain a,b` / `--uuid u` / `--all` / `--full`|what to back up (`--project`: everything in the project; its name, `name/environment` or one of its domains)|",
+     "||`--no-deps`|don't add databases/services the apps depend on|",
+     "||`--consistency pause\\|stop\\|live`|see the table above|",
+     "||`--images apps\\|all\\|none`|see the table above|",
+     "||`--include-backups`|full: also `/data/coolify/backups`|",
+     "||`--output DIR`|default `/data/coolify-mirror/backups`|",
+     "||`--serve --mode proxy\\|direct --port 8123 --host IP --open-firewall`|share right after (HTTPS; proxy = port 443)|",
+     "||`--to DEST --keep-remote N --keep-local N --notify failure\\|always\\|never`|off-site: upload to an rclone remote (`name:folder`) or a folder, check it, keep N there (default 7) and N here (default 0)|",
+     "|`recovery-key`|`create [--email A] [--telegram ID]` · `show` · `add age1…` · `send KEY` · `remove`|the key that opens every new backup on any server|",
+     "|`schedule`|`add --at 03:30 [--name N] <backup flags with --to>` · `list` · `run NAME` · `remove NAME`|backups on a systemd timer|",
+     "|`notify`|`set --email A --telegram ID [--on failure\\|always\\|never] [--smtp-host …] [--telegram-token …]` · `test` · `show` · `off`|where reports and the recovery key go (Coolify's mail / Telegram settings by default)|",
+     "|`serve`|`--key`, `--mode`, `--port`, `--host`, `--open-firewall`, `--detach`, `--ttl 24h`|share an existing file|",
+     "|`restore`|`CODE` / link / file|a share code `HOST[:PORT]/xxxx-…`, a full link, or a `.cmb` file|",
+     "||`--key KEY`|for a file (or a link without `#key=`)|",
+     "||`--recovery-key KEY` / `--recovery-key-file F`|open a backup made with a recovery key; the source may be an rclone path (`gdrive:folder` = its newest backup), a folder or an `https://` address|",
+     "||`--yes`|no questions|",
+     "||`--on-conflict copy\\|skip`|resource already exists here|",
+     "||`--team ID`|target team (selective)|",
+     "||`--set-domain OLD=NEW`|change a domain; `NEW` = `-` removes it (repeatable)|",
+     "||`--no-start`|restore but don't start|",
+     "||`--verify-redeploy`|after starting, rebuild every app Coolify builds (same commit, no cache) and check it again|",
+     "||`--keep-download`|keep the downloaded file|",
+     "||`--panel-url keep\\|source\\|none\\|URL`|whole-server restore: the address of this Coolify panel (`keep` = this server's own, the default)|",
+     "|`repair-panel`|`[URL\\|-]`|after a whole-server restore made with a version before 1.9.7: this server's IPs and panel address back, Coolify rebuilds the panel's proxy route, then it checks the panel answers|",
+     "|`files`|`delete NAME…` / `--backups` / `--all` / `--yes`|list, or delete, saved backups, downloads, safety copies, old volumes, logs (`--backups`: every backup not in use)|"
+    ]
+   ],
+   [
+    "equal",
+    460,
+    478,
+    389,
+    407
+   ],
+   [
+    "delete",
+    478,
+    480,
+    407,
+    407
+   ],
+   [
+    "equal",
+    480,
+    486,
+    407,
+    413
+   ],
+   [
+    "replace",
+    486,
+    487,
+    413,
+    414,
+    [
+     "- **Every new Coolify release is tested automatically.** A daily workflow (`compat.yml`) installs it on two fresh servers, migrates real resources (a git compose app, Postgres with data, an image app with a volume and a domain) with a share code and compares everything (`lab/e2e.sh`). The result goes to `compat.json` on the `compat` branch; a failure opens an issue and a later pass closes it. A test whose servers could not even be prepared (Docker, install) publishes nothing and runs again the next day."
+    ]
+   ],
+   [
+    "equal",
+    487,
+    488,
+    414,
+    415
+   ],
+   [
+    "replace",
+    488,
+    489,
+    415,
+    416,
+    [
+     "- **It works:** Coolify 4.4 renamed containers and removed an internal method the tool used. The daily test caught it on 4.4.1 the day that version came out (#18), and 1.9.0 supports 4.4 two days after Coolify released it."
+    ]
+   ],
+   [
+    "equal",
+    489,
+    490,
+    416,
+    417
+   ],
+   [
+    "delete",
+    490,
+    492,
+    417,
+    417
+   ],
+   [
+    "equal",
+    492,
+    506,
+    417,
+    431
+   ],
+   [
+    "delete",
+    506,
+    508,
+    431,
+    431
+   ],
+   [
+    "equal",
+    508,
+    510,
+    431,
+    433
+   ],
+   [
+    "replace",
+    510,
+    511,
+    433,
+    434,
+    [
+     "**Coolify 4.7.5 / Mirror 1.10.4:** selective and full off-site recovery are verified on fresh Coolify installs, now including a MariaDB account added after the database's first start. Selective restores carry every destination linked to a database or volume backup schedule. The lab verifies the primary and secondary destinations, IPv6 SFTP settings and the full recovery of a legacy paused token. See the 4.7.5 validation report."
+    ]
+   ],
+   [
+    "equal",
+    511,
+    512,
+    434,
+    435
+   ],
+   [
+    "replace",
+    512,
+    513,
+    435,
+    436,
+    [
+     "**Coolify 4.7.3 / Mirror 1.10.2:** the existing real selective and off-site full-restore lab now also checks SFTP destination SSH-key dependencies, stored host pins, disabled database schedules, multiline values including their trailing newline, and resource vulnerability policies/ignores. See the 4.7.3 validation report for results and boundaries."
+    ]
+   ],
+   [
+    "equal",
+    513,
+    514,
+    436,
+    437
+   ],
+   [
+    "replace",
+    514,
+    515,
+    437,
+    438,
+    [
+     "**Coolify 4.6.0 / Mirror 1.10.1:** selective migration and whole-server recovery from SFTP on fresh Coolify installs, using the existing daily lab. The added checks compare database contents as well as row counts, decrypt HTTPS Git credentials through Laravel on the target, preserve locked environment variables, and verify that full restores keep scoped API tokens paused while selective restores do not copy source tokens. See the test report for commands, evidence and limits."
+    ]
+   ],
+   [
+    "equal",
+    515,
+    516,
+    438,
+    439
+   ],
+   [
+    "replace",
+    516,
+    519,
+    439,
+    440,
+    [
+     "The walkthrough is a real run of the released 1.9.1: the one-line installer on both servers, a whole project (two apps, Redis and Postgres) moved to a freshly installed Coolify 4.4.2 through port 443, verified and running in 2m30s, then every backup deleted with **ALL**. Automatically, for every new Coolify release: `lab/e2e.sh` (two fresh servers, official installer, a git compose app + Postgres + an image app with a volume and domains, backup → share code → restore, data compared through the proxy) — passing on 4.5.0, 4.4.7 and 4.3.24 (1.9.5), 4.4.7 and 4.3.24 (1.9.4), 4.4.6 (1.9.3), 4.4.2 (1.9.0) and on 4.3.23 (1.5.0 to 1.8.1; 1.9.0 was checked on 4.3.23 by hand: five resources in three projects, the compose app started without a build). On Coolify 4.4.2 by hand: a SQLite database connected to an app and an app reading its secrets from HashiCorp Vault, moved through port 443 (321 SQLite rows, the Vault secret resolved on the new server once its address was allowed — the tool named it before the restore), restored a second time as a copy (the secret manager reused), and a whole-server move of five resources onto a fresh 4.4.2 (the compose app started from the restored images, every row and secret identical). By hand on real Coolify 4.3.23 installs (lab in `lab/`): **a real migration with zero manual fixes** — healthy source → new backup → freshly installed Coolify → selective and full restore with `--verify-redeploy` (a multi-service compose app whose build uses a host policy script and a named buildx builder, a Dockerfile app, an image app, WordPress + MariaDB, Postgres): `SUCCESS`, the same secrets, volume data and database rows as the source, every domain answering through Traefik, and a full rebuild on the target; merge into an existing Coolify without touching its other resources; an app that exits and one that turns unhealthy after the restore reported as *NOT operational*; rollback leaving the target exactly as before; backups made by 1.2.0. Also: native Postgres/MariaDB dumps (identical row counts and checksums after restore), HTTPS share through Traefik passthrough with pin check (a wrong pin is refused, plain HTTP gets nothing), full restore refused on a non-empty Coolify and accepted on a fresh one, Postgres/MariaDB/Redis data, WordPress, compose apps, Git apps without rebuild, copies next to originals (a single-container app restored as a copy is checked under its new name), saved-file cleanup on both servers (all backups at once, some, or one; a backup shared in the background is unshared first; one shared from another window and a volume in use are refused), restore into a fresh never-used Coolify, full server restore with rollback (fault injection), interrupted backups, domain changes at the end, plus unit tests for Laravel encryption, the archive format, the import planner and resumable downloads."
+    ]
+   ],
+   [
+    "equal",
+    519,
+    522,
+    440,
+    443
+   ],
+   [
+    "replace",
+    522,
+    523,
+    443,
+    444,
+    [
+     "Every release with its binaries and checksums: Releases."
+    ]
+   ],
+   [
+    "equal",
+    523,
+    549,
+    444,
+    470
+   ],
+   [
+    "delete",
+    549,
+    551,
+    470,
+    470
+   ],
+   [
+    "equal",
+    551,
+    557,
+    470,
+    476
+   ],
+   [
+    "replace",
+    557,
+    563,
+    476,
+    477,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    563,
+    569,
+    477,
+    483
+   ],
+   [
+    "replace",
+    569,
+    570,
+    483,
+    484,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
+ },
+ "b3409d5c538d+2": {
+  "fn": "createdbyadham/LiteDB",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "equal",
+    0,
+    11,
+    0,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    14,
+    [
+     "Download for macOS",
+     "Download for Windows",
+     "Download for Linux"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    14,
+    15
+   ],
+   [
+    "replace",
+    13,
+    20,
+    15,
+    16,
+    [
+     "Claude Code asks to change 13 customers; LiteDB shows the rows and waits for Approve, the audit log names the agent, and Undo puts the rows back"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    16,
+    19
+   ],
+   [
+    "replace",
+    23,
+    24,
+    19,
+    20,
+    [
+     "the rows back. (Video version.)"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    29,
+    20,
+    25
+   ],
+   [
+    "replace",
+    29,
+    30,
+    25,
+    26,
+    [
+     "Download the installer for your platform from the latest release:"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    26,
+    27
+   ],
+   [
+    "replace",
+    31,
+    34,
+    27,
+    30,
+    [
+     "- **Windows:** LiteDB_2.6.0_x64-setup.exe, or the .msi",
+     "- **macOS:** Apple silicon or Intel",
+     "- **Linux:** AppImage, .deb or .rpm"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    44,
+    30,
+    40
+   ],
+   [
+    "replace",
+    44,
+    45,
+    40,
+    41,
+    [
+     " On Supabase, paste the connection string from the project's Connect panel and type the password. The panel shows `[YOUR-PASSWORD]` in its place. Prefer the Session pooler string (port 5432) for a desktop app. The direct connection (`db.<ref>.supabase.co`) is IPv6-only unless the project has the IPv4 add-on. The Transaction pooler (port 6543) works, but `SET` and temporary tables do not last between runs, and Cancel can only stop waiting, not stop the server."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    57,
+    41,
+    53
+   ],
+   [
+    "replace",
+    57,
+    59,
+    53,
+    55,
+    [
+     " - **Auto-Layout**: Automatically arranges tables to minimize crossing lines.",
+     " - **Export**: Save your schema diagram as **PNG or SVG** for documentation."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    55,
+    56
+   ],
+   [
+    "replace",
+    60,
+    63,
+    56,
+    59,
+    [
+     " - Settings → **AI**: OpenAI, Anthropic (Claude), Google Gemini, OpenAI-compatible (LM Studio, vLLM, GitHub Models, Azure, …), or Ollama. Default is Ollama.",
+     " - Same prompt the eval harness measures: schema + sample values (toggle), retrieved few-shot (K=3), one compile-repair pass.",
+     "- **MCP**: Settings → **Agents**, or the status-bar **MCP** chip. Claude Desktop / Claude Code / Cursor / OpenCode / VS Code follow the open connection, Connect an agent."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    59,
+    60
+   ],
+   [
+    "replace",
+    64,
+    71,
+    60,
+    67,
+    [
+     " - Read-only / guarded / unrestricted / YOLO modes, remembered per connection.",
+     " - Unqualified `DELETE`/`UPDATE`, `DROP` and `TRUNCATE` intercepted.",
+     " - Approval shows the **exact affected-row count**, not just a warning.",
+     " - Generated SQL is **compiled before you see it**, so the model fixes its own",
+     " unknown columns and syntax errors, writes included.",
+     " - Append-only audit log of every statement that ran, including edits, inserts, deletes and imports made in the grid, and who authorised it.",
+     " - An agent's writes wait for **your Approve in the LiteDB window**, with the rows they change, and can be **undone** from the audit log."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    76,
+    67,
+    72
+   ],
+   [
+    "replace",
+    76,
+    77,
+    72,
+    73,
+    [
+     "LiteDB's Text-to-SQL agent ships with a public benchmark in `evals/`"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    82,
+    73,
+    78
+   ],
+   [
+    "replace",
+    82,
+    86,
+    78,
+    82,
+    [
+     "||Overall|Held-out|",
+     "|---|---:|---:|",
+     "|Schema context + execution-guided repair|77.3%|67.6%|",
+     "|\\+ retrieved few-shot exemplars|**85.6%**|**76.5%**|"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    96,
+    82,
+    92
+   ],
+   [
+    "replace",
+    96,
+    97,
+    92,
+    93,
+    [
+     "Six experiments are documented in `evals/README.md`,"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    100,
+    93,
+    96
+   ],
+   [
+    "replace",
+    100,
+    101,
+    96,
+    97,
+    [
+     "That score is also the argument for the write-safety layer:"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    110,
+    97,
+    106
+   ],
+   [
+    "replace",
+    110,
+    124,
+    106,
+    120,
+    [
+     "||LiteDB|TablePlus|Beekeeper Studio|DBeaver|",
+     "|---|:---:|:---:|:---:|:---:|",
+     "|SQLite + PostgreSQL|✓|✓|✓|✓|",
+     "|MySQL, SQL Server, and the rest|,|✓|✓|✓|",
+     "|SSH tunnel / jump host|✓|✓|✓|✓|",
+     "|ERD|✓|paid|plugins|✓|",
+     "|Text-to-SQL (local or cloud)|✓|,|,|Pro AI|",
+     "|Write-safety (classify, row-count approval, audit)|✓|,|,|,|",
+     "|MCP server through those guardrails|✓|,|,|,|",
+     "|An agent's write waits for Approve in the app, with the rows it changes|✓|,|,|,|",
+     "|Undo for an agent's write|✓|,|,|,|",
+     "|pgvector semantic search in the app|✓|,|,|,|",
+     "|JDBC / every obscure driver|,|,|,|✓|",
+     "|Native polish / years of query UX|,|✓|,|,|"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    142,
+    120,
+    138
+   ],
+   [
+    "replace",
+    142,
+    153,
+    138,
+    149,
+    [
+     "1. **Semantic Search**: Find similar rows based on vector embeddings.",
+     " * **Search by Row ID**: Find rows that are semantically similar to a specific record.",
+     " * **Search by Text**: Enter natural language queries to find relevant records using local embedding models.",
+     "2. **Local Embedding Models**: Run embedding models locally in your browser/app using Transformers.js.",
+     " * Supported models: `all-MiniLM-L6-v2`, `bge-base-en-v1.5`, `bge-large-en-v1.5`.",
+     " * Privacy-first: No data is sent to external APIs for embedding generation.",
+     "3. **Distance Metrics**: Support for multiple distance metrics to suit your data:",
+     " * **Cosine Distance** (`<=>`): Best for normalized vectors.",
+     " * **L2 Distance** (`<->`): Euclidean distance.",
+     " * **Inner Product** (`<#>`): Dot product (negative).",
+     "4. **Visual Feedback**: Color-coded similarity bars to quickly identify the most relevant results."
+    ]
+   ],
+   [
+    "equal",
+    153,
+    158,
+    149,
+    154
+   ],
+   [
+    "replace",
+    158,
+    163,
+    154,
+    159,
+    [
+     "1. **Schema Extraction**: On connection, the app introspects tables, foreign keys, and types.",
+     "2. **Dynamic Context Injection**: That metadata goes into the system prompt, dialect-specific (Postgres vs SQLite).",
+     "3. **Sample values** (on by default, toggle in Settings): a few distinct values from short enum-like columns so `\"Germany\"` can match stored `'DE'`. Emails, keys, and PII-looking columns are skipped.",
+     "4. **Retrieved few-shot (K=3)**: worked examples from an unrelated employees schema. Same default as `npm run eval`.",
+     "5. **Compile-repair**: if generated SQL does not compile, the engine error goes back to the model once. Writes included, it uses `EXPLAIN`, not a dry run."
+    ]
+   ],
+   [
+    "equal",
+    163,
+    167,
+    159,
+    163
+   ],
+   [
+    "replace",
+    167,
+    168,
+    163,
+    164,
+    [
+     "benchmark in `evals/` rather than asserted. It scores **execution"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    188,
+    164,
+    184
+   ],
+   [
+    "replace",
+    188,
+    189,
+    184,
+    185,
+    [
+     "See `evals/README.md` for the methodology, the comparison"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    204,
+    185,
+    200
+   ],
+   [
+    "replace",
+    204,
+    212,
+    200,
+    208,
+    [
+     "|Kind|Meaning|",
+     "|---|---|",
+     "|`read`|returns rows, changes nothing|",
+     "|`session`|transaction control, `SET`, `PRAGMA` writes|",
+     "|`ddl`|creates or alters a schema object without destroying data|",
+     "|`write`|changes rows, bounded by a predicate|",
+     "|`destructive`|unbounded row change, or removal of an object|",
+     "|`unknown`|unrecognised, **gated as destructive**|"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    217,
+    208,
+    213
+   ],
+   [
+    "replace",
+    217,
+    219,
+    213,
+    215,
+    [
+     " the statement it claims to be explaining. Treating every `EXPLAIN` as a read",
+     " is a data-loss bug."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    215,
+    216
+   ],
+   [
+    "replace",
+    220,
+    221,
+    216,
+    217,
+    [
+     " leading with a harmless-looking `WITH`."
+    ]
+   ],
+   [
+    "equal",
+    221,
+    222,
+    217,
+    218
+   ],
+   [
+    "replace",
+    222,
+    224,
+    218,
+    220,
+    [
+     " The only `WHERE` belongs to the subquery, so it rewrites every row. A",
+     " substring search for `where` calls this bounded; it is not."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    231,
+    220,
+    227
+   ],
+   [
+    "replace",
+    231,
+    237,
+    227,
+    233,
+    [
+     "|Mode|Reads|Your writes|Generated writes|",
+     "|---|---|---|---|",
+     "|**Read-only**|run|refused|refused|",
+     "|**Guarded** *(default)*|run|ask first|ask first|",
+     "|**Unrestricted**|run|run|**still ask**|",
+     "|**YOLO**|run|run|run, unreviewed|"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    274,
+    233,
+    270
+   ],
+   [
+    "replace",
+    274,
+    277,
+    270,
+    273,
+    [
+     " the same predicate that counts what it will hit, so `DELETE FROM t WHERE p`",
+     " is previewed with `SELECT COUNT(*) FROM t WHERE p`. That is a measurement,",
+     " not an estimate, and the self-test checks it against a real database."
+    ]
+   ],
+   [
+    "equal",
+    277,
+    278,
+    273,
+    274
+   ],
+   [
+    "replace",
+    278,
+    282,
+    274,
+    278,
+    [
+     " means the table holds at least 200, the probe stops there, because a plain",
+     " `COUNT(*)` on a large table is a full scan and the dialog would sit waiting on",
+     " it. A capped total is never promoted to an exact one: an unbounded `DELETE`",
+     " reports \"affects every row\", not a number the probe never reached."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    283,
+    278,
+    279
+   ],
+   [
+    "replace",
+    283,
+    284,
+    279,
+    280,
+    [
+     " `EXPLAIN ANALYZE`, for the reason above."
+    ]
+   ],
+   [
+    "equal",
+    284,
+    285,
+    280,
+    281
+   ],
+   [
+    "replace",
+    285,
+    287,
+    281,
+    283,
+    [
+     " predicate bounding them. Requiring it for every write would train the habit",
+     " of typing the word without reading the sentence above it."
+    ]
+   ],
+   [
+    "equal",
+    287,
+    298,
+    283,
+    294
+   ],
+   [
+    "replace",
+    298,
+    303,
+    294,
+    299,
+    [
+     "|Generated SQL|Caught as|",
+     "|---|---|",
+     "|`UPDATE orders SET nonexistent_col = 1 WHERE id = 1`|`no such column: nonexistent_col`|",
+     "|`SELECT nope FROM orders`|`no such column: nope`|",
+     "|`SELEC * FROM orders`|`near \"SELEC\": syntax error`|"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    352,
+    299,
+    348
+   ],
+   [
+    "replace",
+    352,
+    353,
+    348,
+    349,
+    [
+     "Connect an agent."
+    ]
+   ],
+   [
+    "equal",
+    353,
+    373,
+    349,
+    369
+   ],
+   [
+    "replace",
+    373,
+    378,
+    369,
+    370,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    378,
+    393,
+    370,
+    385
+   ],
+   [
+    "replace",
+    393,
+    394,
+    385,
+    386,
+    [
+     "ship as `litedb-mcp` on npm (Node 22.5+): set"
+    ]
+   ],
+   [
+    "equal",
+    394,
+    412,
+    386,
+    404
+   ],
+   [
+    "replace",
+    412,
+    413,
+    404,
+    405,
+    [
+     "`mcp/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    413,
+    489,
+    405,
+    481
+   ],
+   [
+    "replace",
+    489,
+    496,
+    481,
+    488,
+    [
+     " - Reads run immediately. Anything that changes the database opens an",
+     " approval dialog first, showing how many rows each statement will affect,",
+     " see Write safety. Switch the connection to",
+     " **Unrestricted** in the status bar to skip the prompt for statements you",
+     " typed yourself.",
+     " - With **Transaction** on, a script runs all or nothing. A `BEGIN` you type yourself stays open until you commit; the editor shows it and offers *Commit* and *Roll back*.",
+     " - Results stop at the row limit in the toolbar (1,000 by default). **Cancel** stops a query that runs too long."
+    ]
+   ],
+   [
+    "equal",
+    496,
+    498,
+    488,
+    490
+   ],
+   [
+    "replace",
+    498,
+    501,
+    490,
+    493,
+    [
+     " - Each pause sends the statement you are writing, your table names and the columns of the tables it reads to the provider, capped to a few hundred tokens. A connection tagged production never sends anything.",
+     " - On Ollama the request is fill-in-the-middle, with the text after the cursor sent separately. A FIM-trained model such as `qwen2.5-coder:1.5b` completes best and fastest; set it as the model for suggestions to keep a larger model for Text to SQL. Models that refuse fill-in-the-middle, and the other providers, are asked through chat.",
+     " - Accepting a suggestion marks the tab as AI-written, as Text to SQL output is, so its writes ask first even in **Unrestricted**."
+    ]
+   ],
+   [
+    "equal",
+    501,
+    512,
+    493,
+    504
+   ],
+   [
+    "replace",
+    512,
+    518,
+    504,
+    505,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    518,
+    551,
+    505,
+    538
+   ],
+   [
+    "replace",
+    551,
+    557,
+    538,
+    539,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    557,
+    567,
+    539,
+    549
+   ],
+   [
+    "replace",
+    567,
+    568,
+    549,
+    550,
+    [
+     "Tauri and network imports, so the eval harness in `evals/` exercises"
+    ]
+   ],
+   [
+    "equal",
+    568,
+    574,
+    550,
+    556
+   ],
+   [
+    "replace",
+    574,
+    586,
+    556,
+    557,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    586,
+    589,
+    557,
+    560
+   ],
+   [
+    "replace",
+    589,
+    596,
+    560,
+    561,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    596,
+    597,
+    561,
+    562
+   ],
+   [
+    "replace",
+    597,
+    599,
+    562,
+    563,
+    [
+     "This project is licensed under the MIT License - see the LICENSE file for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-19"
  }
 }

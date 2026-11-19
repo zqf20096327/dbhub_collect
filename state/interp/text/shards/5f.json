@@ -3147,5 +3147,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "77c08e3e67f8": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的持久化记忆系统，单 Go 二进制加 SQLite 实现",
+   "review": "Engram 用单个 Go 二进制为 AI 编码代理提供跨会话的持久化记忆，数据存于本地 SQLite（FTS5 全文检索），默认目录 ~/.engram。通过 MCP、HTTP API、CLI 和 TUI 四种方式访问，官方提供 14 种代理的一键 setup 命令，无需 Node.js、Python 或 Docker。记忆按项目隔离，支持 Git Sync 导出与可选的 Engram Cloud 复制。",
+   "highlights": [
+    "单个 Go 二进制，本地 SQLite + FTS5 全文检索，无 Node.js/Python/Docker 依赖",
+    "提供 MCP、HTTP API、CLI、TUI 四种访问方式，支持 14 个代理的 setup 命令",
+    "记忆默认本地存储、按项目隔离，支持 Git Sync 导出与可选 Cloud 复制"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 MCP 兼容代理添加跨会话记忆",
+    "在终端浏览和检索代理保存的记忆（engram tui）",
+    "通过 Git Sync 或 Cloud 在多台机器间共享项目记忆"
+   ]
+  },
+  "sha": "77c08e3e67f8",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "505555733ee2": {
+  "identity": {
+   "one_liner": "基于 go-ha 驱动的 PocketBase 主从/无主高可用集群方案",
+   "review": "pocketbase-ha 将 PocketBase 扩展为多实例集群，通过 NATS 在节点间复制数据，支持 leader 或 leaderless 两种模式。默认冲突策略为 last-writer-wins，可通过配置集群 leader 将写请求集中到单节点。提供 gRPC 远程数据库访问与事务回滚命令，可通过 Go 安装、Docker 镜像或 Helm 部署，需要 Go 1.25 及以上版本构建环境。",
+   "highlights": [
+    "支持以 leader 或 leaderless 模式运行多个 PocketBase 实例，并经由 NATS 同步数据",
+    "提供嵌入或外部 NATS 服务器、gRPC 远程数据库访问（可用 token 认证）以及 UNDO 事务回滚命令",
+    "可通过环境变量配置冲突解决策略（lww 或按列）、行识别策略及流历史保留时长"
+   ],
+   "use_cases": [
+    "需要运行多节点 PocketBase 集群并跨节点复制数据的部署",
+    "需要严格写入一致性时，配置 leader 节点集中处理写请求、读请求分发到副本节点",
+    "需要通过终端或 DBeaver 等客户端远程执行 SQL 访问数据库，或回滚已提交事务"
+   ]
+  },
+  "sha": "505555733ee2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dadcbe1a4ddb": {
+  "identity": {
+   "one_liner": "Rust+egui 桌面数据工作台，惰性解析浏览超大 JSON/NDJSON",
+   "review": "Thoth 是用 Rust 和 egui 构建的桌面数据浏览工具，用于打开 GB 级 JSON/NDJSON 文件：仅解析用户查看的部分（惰性加载），存储文件偏移并用 LRU 缓存节点。支持 JSONPath 与正则并行搜索；通过沙箱化 WASM 插件扩展 CSV 加载、REST 调用及 PostgreSQL/MySQL 查询（Seshat 插件），并可作 MCP 服务器供 AI 助手调用。macOS 构建未签名，首次启动需手动移除隔离属性。",
+   "highlights": [
+    "惰性解析 GB 级 JSON/JSON 数组/NDJSON，支持自动格式检测，只解析当前查看的节点",
+    "提供 JSONPath 查询与正则搜索，基于 Rayon 并行并后台扫描",
+    "提供 WASM 插件系统（thoth-plugin-sdk），内置 CSV 加载、REST 调用与 PostgreSQL/MySQL 数据浏览插件"
+   ],
+   "use_cases": [
+    "在本地桌面浏览和检索单个巨型 JSON/NDJSON 数据文件",
+    "连接 PostgreSQL/MySQL 浏览 schema、执行 SQL 并查看带查询计划的结果",
+    "为 AI 助手（Claude、Cursor 等）提供本地数据读取与 JSONPath 查询的 MCP 服务"
+   ]
+  },
+  "sha": "dadcbe1a4ddb",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "05deb935f6cc": {
+  "identity": {
+   "one_liner": "面向 PostgreSQL v15+ 实例的监控管理系统，结合 MCP Server 与 AI 代理",
+   "review": "pgEdge AI DBA Workbench 是一个 PostgreSQL 监控与管理系统，支持 v15 及以上实例（含 Supabase、Amazon RDS），由 Collector、Server、Alerter、Client 四个组件组成。Server 提供 MCP 工具与资源，可通过自然语言查询集群，LLM 可切换云端模型（如 Claude）或 Ollama 本地模型，适用于离线环境。提供二进制、源码构建、Docker 及包管理四种安装方式。",
+   "highlights": [
+    "包含 Collector（采集指标）、Server（提供 MCP 工具与资源）、Alerter（阈值与 AI 异常检测）、Client（Web 界面）四个组件",
+    "支持在云端 LLM（如 Claude）与 Ollama 本地模型之间切换，适用于隔离环境",
+    "支持二进制、源码构建、Docker 容器和 pgEdge 仓库包四种安装部署方式"
+   ],
+   "use_cases": [
+    "监控 PostgreSQL v15+ 实例，包括 Supabase 和 Amazon RDS",
+    "通过自然语言查询、分析和管理分布式集群指标",
+    "在离线或安全环境中使用本地模型进行数据库监控与诊断"
+   ]
+  },
+  "sha": "05deb935f6cc",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d1c5a574f5c2": {
+  "identity": {
+   "one_liner": "基于 ADO.NET 扩展方法的 SQL 执行库，以流式命令封装连接、参数与行映射。",
+   "review": "Open.Database.Extensions 是一组面向 .NET 的 ADO.NET 工具与抽象，供使用 ADO.NET 编写 SQL 的开发者简化数据访问代码。它通过连接工厂与表达型命令封装打开连接、添加参数、执行、映射行和释放资源等步骤，支持任意 ADO.NET 提供程序，提供 Map<T>() 按名称映射列到属性，并可经由 Channels/Dataflow 包流式输出行。11 版本为发布候选（rc.8），目标 netstandard2.0/2.1 及 net10/11。",
+   "highlights": [
+    "在 DbConnection、DbCommand、DbDataReader 等 ADO.NET 类型上提供扩展方法，默认遵循打开晚、关闭早、未提交即回滚等实践",
+    "Map<T>() 按名称匹配列与公共可写属性/构造参数（忽略大小写与下划线），支持 records、init 属性与 required 属性，可用 RowMap<T> 声明列重命名映射",
+    "提供 Channel、Dataflow、MSSqlClient 等附加包；各执行终端有 Async 版本，支持存储过程调用"
+   ],
+   "use_cases": [
+    "以手写 SQL 为主、希望减少连接/参数/映射样板代码的 .NET 应用",
+    "需要与任意 ADO.NET 提供程序（如 Microsoft.Data.Sqlite、Microsoft.Data.SqlClient）配合并兼容 DI 注册连接工厂的项目",
+    "需将查询结果按行流式送入 System.Threading.Channels 或 TPL Dataflow 管道的场景"
+   ]
+  },
+  "sha": "d1c5a574f5c2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "323a9b299883": {
+  "identity": {
+   "one_liner": "以人格为中心的 AI 伴侣运行时，持久保存记忆与版本化身份。",
+   "review": "PCAR 是一个运行于 Windows 的人格导向 AI 伴侣运行时，把人格、经历与长期记忆保存在模型调用之外，支持人物与关系版本、会话历史、记忆召回及从双人私聊记录生成人设草稿。面向想在本地承载自定义人格的用户，当前处于早期研发阶段，v0.2 桌面包需配置自有模型服务。",
+   "highlights": [
+    "提供人物与关系版本管理、会话历史、长期记忆与召回功能",
+    "支持导入双人私聊记录（Markdown），自动生成两份可编辑人设草稿",
+    "已验证 Windows 11 x64，v0.2 支持从 v0.1 原机升级，人物与聊天数据保存在本机"
+   ],
+   "use_cases": [
+    "在 Windows 桌面运行具备持久记忆的 AI 伴侣角色",
+    "从 QQ 等应用的私聊导出记录还原人物性格与说话方式",
+    "搭建连接 DeepSeek 等模型服务的本地人格工作台"
+   ]
+  },
+  "sha": "323a9b299883",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3bf24396ff4f": {
+  "identity": {
+   "one_liner": "自托管的代码变更评审服务：AI 代理发布变更报告，人类基于证据给出判定",
+   "review": "verifair 是一个自托管的 Web 服务，编码代理以 JSON API 推送 Markdown 变更评审报告，人类通过选中文本发表评论并给出批准或要求修改的判定。它自身不运行 AI，代理在本地机器或 CI 上运行。包含签名前置、按版本保留的判定、阻塞式评论线程和可选的先评审计划流程。运行依赖 Python 与 Postgres 16+，提供 Docker Compose 快速启动，支持本地与共享两种模式。",
+   "highlights": [
+    "提供每个变更一页报告的模板，包含 Intent、Design、Verification、Rollback、Security impact 等章节，后三项默认必填",
+    "支持选中文本发起评论线程（默认阻塞）、按版本保留签名与判定、通过 JSON API 长轮询获取反馈，并附带可用 npx skills 安装的代理技能",
+    "基于 FastAPI、Jinja 与 htmx 实现，无 JavaScript 构建步骤，状态存于 Postgres，支持 Mermaid 图渲染、执行证据标签页和可选的 Slack 通知"
+   ],
+   "use_cases": [
+    "团队需要在代理生成代码变更后，由人类评审意图与证据而非逐行阅读 diff",
+    "需要先评审并批准实现前的方案计划，再关联到同一评审的实施报告",
+    "自托管部署供个人或团队使用，支持通过 Google 或 OpenID Connect 登录的共享模式"
+   ]
+  },
+  "sha": "3bf24396ff4f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

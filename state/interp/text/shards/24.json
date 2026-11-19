@@ -2980,5 +2980,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8ce755483861": {
+  "identity": {
+   "one_liner": "每30分钟自动生成的DMR用户数据库，提供多机型格式文件",
+   "review": "该项目生成并发布DMR用户ID数据库，每30分钟自动重建，面向Ailunce、Anytone、Tytera及Pi-Star设备用户提供各自格式的下载文件，BETA版收录新注册用户但数据可能不完整，README还给出将数据库接入Pi-Star的SSH修改步骤及MD-2017仅支持10万条等格式限制。",
+   "highlights": [
+    "每30分钟自动生成更新，包含318023条用户记录",
+    "为Ailunce、Anytone、Tytera MD-380/390、MD-2017及Pi-Star提供对应格式的数据库文件",
+    "提供Pi-Star接入的SSH配置操作步骤"
+   ],
+   "use_cases": [
+    "为DMR数字电台更新呼号显示数据",
+    "替换Pi-Star默认的DMRIds.dat数据源",
+    "需要包含最新注册用户的数据库场景"
+   ]
+  },
+  "sha": "8ce755483861",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7f6fb4bcdd7": {
+  "identity": {
+   "one_liner": "Bun 上的 Always-on Agent SDK，以 SQLite 实现 Inbox+Worker 常驻运行",
+   "review": "aoa 是在 Bun 上构建常驻 Agent 的 TypeScript SDK。Agent 按 Inbox + Worker 模式 24x7 运行：事件进 inbox，Worker 开 run 交给 runtime（内置 pi、零依赖 loop 或外部 harness 如 Codex/DeepSeek），高风险工具调用转为审批请求等人答复，全部状态存于一个 SQLite 文件，进程被杀后可从 inbox 恢复。适合需要在 Bun 环境中搭建带审批与崩溃恢复的 LLM agent 应用的开发者。仅支持 Bun ≥ 1.3，0.x 阶段接口可能有破坏性改动。",
+   "highlights": [
+    "提供 Inbox、Worker、Timers、Memory、Outbox、Permissions 六个原语，状态持久化在单个 SQLite 文件，含去重、认领有效期、死信与重试机制",
+    "工具调用按规则和风险等级裁决，高风险延后为 deferred tool call，仅 agent.answer 或可信 user_message 可作为审批答复",
+    "支持 pi 内置 runtime、零第三方依赖的 loop runtime 及外部 HarnessRuntime，多 agent 通过 send_to 经 inbox 互发事件"
+   ],
+   "use_cases": [
+    "需要后台常驻、进程被杀后可恢复的编码 agent（如 examples/tui、apps/aoa 命令）",
+    "涉及高风险工具操作、需要人工审批流程的 agent 应用",
+    "多个 agent 协作的场景，agent 间通过 inbox 事件通信"
+   ]
+  },
+  "sha": "a7f6fb4bcdd7",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

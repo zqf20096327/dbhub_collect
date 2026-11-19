@@ -2671,5 +2671,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dffa0f3f102a": {
+  "identity": {
+   "one_liner": "用 Rust 实现的 Postgres 兼容运行时，单进程托管数千个短生命周期隔离数据库",
+   "review": "PGBoxDB 是面向 AI agent、CI、PR 和测试场景的 Postgres 兼容数据库运行时。单个进程通过 sealed 模板以写时复制方式（如 ZFS 块克隆）在毫秒级创建隔离数据库，按命名约定连接即自动创建（mint-on-connect），会话结束后由 janitor 自动清理。使用 Postgres 线协议，Rails、Prisma 等框架无需改动。限制包括：fsync=off 非崩溃安全、单进程为单一崩溃域、不支持 C 扩展，v0.1 仅适用于可丢弃数据库而非生产数据。",
+   "highlights": [
+    "单进程内托管上千个隔离数据库，空闲数据库约占 70 KB 内存，支持按名称/角色/连接数隔离",
+    "从 sealed 模板写时复制分支数据库，ZFS 块克隆下 10 GB 模板的分支约 674 ms 就绪、起始约 13.6 MB 自有存储",
+    "使用 Postgres 线协议与 SQL 方言，支持事务性 DDL、savepoint、临时表及内置 contrib 模块（含 pgvector）"
+   ],
+   "use_cases": [
+    "为 AI agent 会话及子 agent 分配独立数据库分支，会话结束自动销毁",
+    "CI 流水线与每个 PR 的临时数据库、测试与预览环境",
+    "从生产库脱敏副本派生的短期开发/调试数据库"
+   ]
+  },
+  "sha": "dffa0f3f102a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f1554f6165c7": {
+  "identity": {
+   "one_liner": "Python 代理轮换库，内置多策略轮换与自动抓取代理池",
+   "review": "ProxyWhirl 是一个基于 Python 3.10+ 的代理轮换系统，提供轮换策略、代理源抓取、健康检查与自愈机制，可作为 HTTP 客户端嵌入 Python 代码使用。它提供 Python API、CLI、REST API 和 MCP 服务器四种接口，支持同步与异步调用，需要 Python 3.10 及以上版本，以 MIT 协议发布，适合需要管理代理池的采集与自动化开发者使用。",
+   "highlights": [
+    "提供 9 种轮换策略，包括 round-robin、weighted、performance-based、geo-targeted、session-persistence 等，可运行时切换",
+    "内置 70 个代理源，在池为空时懒加载自动抓取并校验，含失效剔除、熔断与恢复机制",
+    "支持 Python API（同步/异步）、CLI、REST API（docker-compose 部署）及 MCP 服务器多种接入方式"
+   ],
+   "use_cases": [
+    "为数据采集脚本嵌入轮换代理的 HTTP 客户端",
+    "通过 CLI 抓取、校验代理源并查看代理池健康状态",
+    "部署 REST API 或 MCP 服务器集中管理代理池"
+   ]
+  },
+  "sha": "f1554f6165c7",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e1d3abad0b6": {
+  "identity": {
+   "one_liner": "包含 Nextcloud、MariaDB、Redis、Collabora、Talk 后端等容器的 Docker Compose 模板",
+   "review": "这是一个 Docker Compose 编排模板，用于部署 Nextcloud 及其配套服务，包含 MariaDB、Redis、Collabora、cron 任务、白板 WebSocket 服务与 Talk signaling/TURN 容器，并含依赖启动顺序控制。作者注明模板按原样提供、不提供支持，且反向代理需另行部署，Talk 后端默认通过 compose profile 关闭。适用于使用 Nginx Proxy Manager 等反向代理自托管 Nextcloud 的环境。",
+   "highlights": [
+    "提供 Nextcloud、MariaDB 11.5.2、Redis、Collabora、cron 任务、appapi-harp、白板 WebSocket 服务器和 Talk 后端共八个容器的编排配置",
+    "包含自定义 Dockerfile，构建带有 ffmpeg 的 nextcloud 镜像，供 Recognize 和 Memories 应用使用",
+    "Talk 后端通过 COMPOSE_PROFILES=talk-hpb 环境变量启用或停用，默认关闭"
+   ],
+   "use_cases": [
+    "搭配 Nginx Proxy Manager 或 Traefik 自托管 Nextcloud 的 Home Lab 环境",
+    "需要 Collabora 在线文档协作及白板实时协作的场景",
+    "部署 Nextcloud Talk 并需 signaling 服务器与 TURN/STUN 服务的部署"
+   ]
+  },
+  "sha": "1e1d3abad0b6",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

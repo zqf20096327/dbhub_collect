@@ -2700,5 +2700,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "daa205f2ea0a": {
+  "identity": {
+   "one_liner": "基于 Java Records 与反射约定映射的轻量级 ORM 框架",
+   "review": "Yorm 是一个面向 Java Records 的 ORM 类框架，无需生成类或添加注解，通过反射将 Record 组件与数据库字段按约定匹配（主键 id、外键 table_id、驼峰/下划线互转）并缓存映射。提供 save/insert/update/find 及 fluent 查询 API。要求 Java 25 以上，经测试支持 MySQL、PostgreSQL，Snowflake 需特定条件。适用于数据库结构简单、以基本 CRUD 为主的微服务场景。",
+   "highlights": [
+    "无需生成类或注解，基于约定通过反射将 Java Record 方法与数据库字段匹配并缓存映射",
+    "提供 save/insert/update/find、批量插入以及基于 Benjiql 思路的 fluent 条件查询 API",
+    "依赖精简（HikariCP、Slf4j 等），只需传入 javax.sql.DataSource 即可创建实例运行"
+   ],
+   "use_cases": [
+    "使用 Java Records、以基本 CRUD 为主的微服务开发",
+    "涉及 REST 端点的简单数据库读写操作",
+    "包含自增主键、结构简单的 MySQL/PostgreSQL 关系型数据库访问"
+   ]
+  },
+  "sha": "daa205f2ea0a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0b89c0b53ff0": {
+  "identity": {
+   "one_liner": "基于 PySide6 的桌面 Text2SQL 工具，读取真实表结构生成并执行 SQL",
+   "review": "沐问 MuAsk 是一款基于 PySide6 与 SQLAlchemy 的开源桌面客户端，用于将中文自然语言转换为 SQL 并执行。它自动读取数据库中真实的表名、字段、主外键与中文注释，AI 在真实表结构内生成 SQL，经本地预检后可人工修改再执行。内置 14 类数据库驱动（含达梦、金仓等），支持 OpenAI 与 Anthropic 双协议及 Ollama 本地模型，面向开发、测试、运维与数据分析人员，MIT 协议，提供 Windows/macOS/Linux 安装包，无需 Python 环境。",
+   "highlights": [
+    "内置 14 类数据库驱动（MySQL、Oracle、SQL Server、达梦、人大金仓、OceanBase、TiDB 等），安装包开箱直连，无需另装驱动",
+    "自动读取表、列、主外键与中文注释作为 AI 生成 SQL 的上下文，表多时按问题相关性筛选",
+    "支持 OpenAI 兼容与 Anthropic 兼容双协议，可配置多份 AI 配置一键切换，并支持 Ollama 本地模型"
+   ],
+   "use_cases": [
+    "接手缺少文档、含大量表的老项目数据库，需要快速查询和取数",
+    "信创数据库环境（达梦、金仓、瀚高、海量、GBase 等）需要一个驱动内置的桌面查询客户端",
+    "数据隐私敏感场景，通过 Ollama 本地模型生成 SQL，查询不出内网"
+   ]
+  },
+  "sha": "0b89c0b53ff0",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "692887fd4a1d": {
+  "identity": {
+   "one_liner": "Flume-ng 的 SqlSource 扩展插件，通过 JDBC 查询从数据库读取数据",
+   "review": "该项目是 Flume-ng 的数据库数据源扩展，实现基于 SQL/JDBC 查询的 source 和 sink 组件：支持 MySQL、Oracle、PG 等关系库作为 source（0.0.1 版），MongoDB 作为 sink（0.0.1 版）。同步机制包含时间戳增量、主键或字段增量、字段修改标记三种方式。项目已停止维护，作者建议迁移至 whaleal-dev/rds-sync 和 mongo-sync。依赖 alibaba fastjson-1.2.49 及数据库驱动，MySQL 日志级别同步未完成。",
+   "highlights": [
+    "提供 RDB（MySQL/Oracle/PG）的 source 组件，通过 JDBC SQL 查询读取数据",
+    "提供 MongoDB 的 sink 组件（0.0.1 版）",
+    "支持时间戳增量、主键或字段增量、字段修改后标记三种同步机制，通过 Maven 构建后将 jar 放入 FLUME_HOME/lib 使用"
+   ],
+   "use_cases": [
+    "将关系型数据库中的数据通过 JDBC 查询方式采集进 Flume 数据流",
+    "以时间戳或主键增量方式定期同步数据库表数据",
+    "向 MongoDB 写入采集到的数据"
+   ]
+  },
+  "sha": "692887fd4a1d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

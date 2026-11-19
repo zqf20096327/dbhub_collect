@@ -3234,5 +3234,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0287bd8c1552": {
+  "identity": {
+   "one_liner": "Postgres 扩展，用三种引擎在同一 pgvector 列上执行 Pinecone 向量搜索",
+   "review": "pg_pinecone 是 Pinecone 开源的 PostgreSQL 扩展（Apache 2.0，基于 pgrx 用 Rust 构建），把向量搜索引入 Postgres。表保留原有行和 pgvector 列，可按表选择 pgvector、native（默认，本地执行、支持过滤）或 remote（同步到 Pinecone serverless 索引）三种引擎，且切换无需修改查询语句、可随时回退。面向已运行 Postgres 并使用 pgvector 的团队。",
+   "highlights": [
+    "同一向量索引背后提供 pgvector、native、remote 三种引擎，按表切换且不需改写查询",
+    "native 引擎在 Postgres 内部执行带过滤条件（如 tenant ID）的搜索，无需账号或网络访问",
+    "支持全文本搜索：将 Pinecone 索引与表保持同步，通过 SQL 运行 BM25、向量或混合搜索"
+   ],
+   "use_cases": [
+    "已部署 Postgres 17/18 并安装 pgvector、希望保留现有 SQL 查询的应用",
+    "需要按租户等条件过滤的向量搜索场景",
+    "表数据规模超出单个 Postgres 服务器时，可将搜索迁移到 Pinecone serverless 索引"
+   ]
+  },
+  "sha": "0287bd8c1552",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ed27db9633b4": {
+  "identity": {
+   "one_liner": "开源 macOS 活动记录工具，自动记录应用、窗口、文件与网页使用时长。",
+   "review": "Trace 是一个运行在菜单栏的 macOS 自动时间记录应用，每两秒采样前台应用、窗口标题、文件路径与网页地址，数据存于本地 SQLite 文件。它无需手动计时，支持标签规则、项目分组、报告与 CSV 导出。需 macOS 14 及以上，授权辅助功能后才能读取窗口与 URL 信息。",
+   "highlights": [
+    "自动记录前台应用、窗口、文件与网页，数据默认存储于本地 SQLite 文件，无网络连接与账号",
+    "支持基于应用、路径、URL 或窗口标题的标签规则，并提供每日目标、专注会话与周期报告",
+    "可选 iCloud 或同步文件夹实现多机记录合并，支持 CSV 导出，界面提供英语、简体中文和俄语"
+   ],
+   "use_cases": [
+    "在 Mac 上自动统计每天在各应用、文件和网页上的时间分布",
+    "按 git 仓库或文件夹维度查看各项目的耗时，并设置标签的每日目标",
+    "在多台登录同一 iCloud 账号的 Mac 之间合并查看活动记录"
+   ]
+  },
+  "sha": "ed27db9633b4",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a22d5c108583": {
+  "identity": {
+   "one_liner": "本地源代码搜索引擎，用 Lucene.NET 索引文本文件并查询",
+   "review": "Doxie 是一款运行在本机的源代码搜索工具，基于 .NET、WPF 和 Lucene.NET 构建，索引数据存储在 SQLite 格式的 .doxidx 单文件中。用户通过包含/排除规则和文件扩展名配置对本地目录建立索引，查询结果用 Monaco Editor 展示源码及高亮命中。注意索引不存储源文件内容，查询需源文件留在原路径。可作 .NET 库引用，附 Doxie.Cli 示例。",
+   "highlights": [
+    "索引以单个 .doxidx 文件（SQLite 格式）保存，支持复制、拖拽或命令行方式打开",
+    "支持基于 Lucene 查询语法的检索，可用 path 和 ext 字段及通配符、AND 等操作符",
+    "查询结果以 Monaco Editor 展示，含语法着色、minimap 及命中项导航"
+   ],
+   "use_cases": [
+    "在本地大量源码目录中按词、路径或扩展名检索文件",
+    "为多目录建立带包含/排除规则的可移植文本索引",
+    "作为 .NET 库引用开发自定义索引/检索工具（参考 Doxie.Cli）"
+   ]
+  },
+  "sha": "a22d5c108583",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6050954b13d2": {
+  "identity": {
+   "one_liner": "本地 MCP 记忆服务器，为多个 AI 代理提供共享且带版本的记忆库",
+   "review": "Make0 Brain 是一个运行在本地的 MCP 记忆服务器，用单个 SQLite 文件存储数据，供 Claude Code、Cursor、Codex 等代理通过同一套 7 个工具读写共享记忆。每次修改保存版本记录，冲突时以新版本覆盖并归档旧版。首次需下载约 50 MB 本地模型，之后可离线运行，无需 API key。MIT 许可，支持导入 41 个编码代理的历史会话及 Markdown 笔记，并可在浏览器查看记忆内容。",
+   "highlights": [
+    "通过 MCP 提供 7 个统一工具（search_brain、add_memory、update_memory 等），多个代理读写同一记忆库",
+    "每次编辑保留版本记录，包含写入者与时间；记忆矛盾时新版生效、旧版归档",
+    "支持从 41 个编码代理导入会话摘要，以及 Obsidian/Markdown 目录、剪贴板内容导入，凭据在保存前脱敏"
+   ],
+   "use_cases": [
+    "在多个 AI 编码工具间共享项目偏好、技术栈与历史决策，避免逐个重复说明",
+    "将已有编码代理的会话历史集中导入，供后续会话检索",
+    "本地离线管理个人或项目级记忆数据，并导出为 Markdown"
+   ]
+  },
+  "sha": "6050954b13d2",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

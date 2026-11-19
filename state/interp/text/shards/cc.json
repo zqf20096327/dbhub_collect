@@ -2999,5 +2999,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d7a6e409448e": {
+  "identity": {
+   "one_liner": "基于知识图谱、以单个 SQLite 文件存储的本地优先 AI 编程代理记忆库",
+   "review": "CortexDB 是一个用 Go 编写的本地优先代理记忆库，用于在 Claude Code、Codex 等编码代理之间共享偏好、决策和项目事实。数据存储于单个 SQLite 文件，支持通过 gRPC 服务器多机共享，并提供网页视图查看图谱与召回记录。可独立于嵌入模型运行，也可接入模型实现语义搜索。",
+   "highlights": [
+    "提供 Remember/Recall 接口，在工作过程中捕获偏好、决策和项目事实，并在下一次提示前召回",
+    "内置知识图谱，支持 SPARQL、Cypher 查询、本体约束、推理与历史记录",
+    "无需嵌入模型即可运行，接入模型后支持语义搜索与全文搜索"
+   ],
+   "use_cases": [
+    "多个编码代理（Claude Code、Codex 等）或多台机器共享同一份记忆",
+    "在会话之间持久化用户偏好与项目决策",
+    "通过网页实时视图查看图谱结构和召回过程"
+   ]
+  },
+  "sha": "d7a6e409448e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8c41ece8164a": {
+  "identity": {
+   "one_liner": "Postgres 只读副本替代品，以 Node.js 进程将查询改写至 DuckDB 列式引擎",
+   "review": "Mason 是一个单进程 Node.js 应用，从 Postgres 同步选定的表和列，以 Postgres 协议对外提供查询，并将 SQL 改写到 DuckDB 列式引擎上执行。同步支持按需、轮询与逻辑复制三种方式，配套用户与角色级访问控制及 MCP 支持。需要 Node 22.13+；逻辑复制要求 wal_level=logical，且无主键表不可用该模式。",
+   "highlights": [
+    "通过配置文件选择要同步的表和列，支持按需、轮询（1s–24h）和逻辑复制三种同步方式",
+    "将 Postgres 查询改写后在 DuckDB 列式引擎上执行，提供 Postgres 协议接口",
+    "内置按表、列、行粒度的角色访问控制（RBAC），每个用户只读，并记录每条查询，支持 MCP"
+   ],
+   "use_cases": [
+    "为 BI 工具提供分析查询的只读数据源，避免分析查询直接跑在生产 Postgres 上",
+    "为 AI 代理提供受限的 SQL/MCP 数据访问，每个代理一个用户并按角色限制可读范围",
+    "将现有 Postgres 客户端工具的连接指向同步副本而无需迁移 SQL 方言"
+   ]
+  },
+  "sha": "8c41ece8164a",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0d5ed469b095": {
+  "identity": {
+   "one_liner": "数字记忆工程：AstrBot 插件形式的记忆基座与引擎集合",
+   "review": "该项目由数字记忆基座（事件、证据、来源、租约/回执/连续水位）、记忆引擎（候选召回、证据准入、重评、上下文与渲染）及统一 AstrBot 插件组成，插件提供实时采集、旧数据迁移、备份/恢复与管理页。当前版本 0.8.0-dev.3 仅用于隔离验收，README 明确不接入 V1 生产。适合 AstrBot 用户在测试环境安装验证。安装通过 pip 安装依赖并运行仓库自带构建工具完成。",
+   "highlights": [
+    "包含 OFF/COLLECT/ASSIST 三种运行模式：COLLECT 默认实时采集与同步历史但不注入，ASSIST 按证据与 Token 预算注入临时记忆块",
+    "版本由仓库根 VERSION 单一来源管理，交付集合含插件 ZIP、源码 ZIP、发布 JSON 与 SHA256 校验文件",
+    "附带 407 项源码回归脚本与验收记录（suites、证据索引）"
+   ],
+   "use_cases": [
+    "在隔离验收环境中测试 AstrBot 记忆采集与注入流程",
+    "迁移旧基座数据并执行备份/恢复与撤回操作",
+    "通过管理 API 与管理页维护已有记忆数据"
+   ]
+  },
+  "sha": "0d5ed469b095",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

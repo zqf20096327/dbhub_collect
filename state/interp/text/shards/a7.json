@@ -2965,5 +2965,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "52cdd3c1949c": {
+  "identity": {
+   "one_liner": "自托管媒体服务器，索引本地影视库并流式播放",
+   "review": "Oblecto 是一个运行在家庭服务器上的自托管媒体服务器，用于索引用户已有的电影和剧集文件，从 TMDb、TVDB、fanart.tv 获取元数据与海报，并通过自带 Web 应用和兼容 Jellyfin 的 API（端口 8096）串流播放。支持 FFmpeg 实时转 HLS，数据库可用 SQLite 或 MariaDB/MySQL，服务器间可选联邦互联。需 Node.js 24+、FFmpeg 和 guessit；计划中的功能包括手动编辑元数据、字幕文件与音乐支持。",
+   "highlights": [
+    "提供兼容 Jellyfin 的 API（端口 8096），Jellyfin 客户端可登录、浏览、收藏并播放",
+    "支持直接播放，以及通过 FFmpeg 实时转码为 HLS 流；兼容的 H.264 视频可原样复制",
+    "支持 SQLite 或 MariaDB/MySQL 存储库数据，服务器之间可选联邦配对与库同步"
+   ],
+   "use_cases": [
+    "在家庭服务器上集中索引和播放本地已有的电影与剧集文件",
+    "通过手机、电视或桌面上的 Jellyfin 应用访问同一媒体库",
+    "多账户场景下按用户区分观看进度、偏好与权限管理"
+   ]
+  },
+  "sha": "52cdd3c1949c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8183fe6f262d": {
+  "identity": {
+   "one_liner": "面向编码代理的数据分析技能，提供探索、转换、维护三类命令",
+   "review": "Dex 是 Exmergo 开发的 Agent Skills 工具，让 Claude Code、Codex 等编码代理连接数据库与数据仓库，执行探索（列画像、ER 图、个人数据标记）、转换（以可审查的 diff 编写 dbt 模型与语义层）和维护（检测 schema 漂移）三类任务。源数据只读、构建在 dev 目标运行、查询先报价后执行。需要 uv 环境，不支持 claude.ai 聊天。可通过 npx 安装或 Python 包 dex init 初始化。",
+   "highlights": [
+    "提供 Explore/Transform/Maintain 三项技能：探索表结构与连接关系、以可审查计划构建 dbt 模型与语义层、检测 schema/体积/粒度/指标定义漂移",
+    "内置守护机制：源数据只读、SELECT-only 查询、按连接器计量成本（如 BigQuery 扫描字节、Snowflake warehouse-seconds）并记录本地账本",
+    "支持 Snowflake、BigQuery、Databricks、Redshift、Postgres、DuckDB、ClickHouse、Trino 八个连接器，可配置 dbt、Cube 等语义层"
+   ],
+   "use_cases": [
+    "在数仓中定位相关表、验证连接关系并查询数据（含个人数据防火墙拦截）",
+    "创建、重构 dbt 模型、测试、文档与指标，变更以 diff 形式供审查",
+    "数据源变更后对比快照，查看受影响的模型与指标并审查修复建议"
+   ]
+  },
+  "sha": "8183fe6f262d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6dadb34b6c74": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 原生解析器的迁移 SQL 检查工具，在合并前拦截不安全 DDL。",
+   "review": "MigrationPilot 是一个针对 PostgreSQL 迁移脚本的静态检查 CLI，内置编译的 Postgres 解析器，按 112 条规则分析锁与风险，退出码可接入 CI。面向需要管理数据库 schema 变更的开发团队。支持 --pg-version 适配 PG 9-18，通过 GitHub Action、pre-commit、GitLab CI 及 MCP 服务器集成；无数据库连接时表大小等锁成本信息受限。",
+   "highlights": [
+    "使用 PostgreSQL 原生解析器，包含 112 条规则（34 条 critical、78 条 warning），其中 20 条可 --fix 自动修复",
+    "规则按 --pg-version（9 至 18）适配，提供 GitHub Action（含 SARIF 输出与 PR 评论）、pre-commit、GitLab CI 集成",
+    "提供 MCP 服务器（7 个工具）、24 个命令，包括 simulate（PGlite 内嵌 PG 18 运行）、plan-fix、drift、sequence 跨文件分析"
+   ],
+   "use_cases": [
+    "在 CI 或 pre-commit 中检查迁移 SQL，对含 critical 违规的提交以非零退出码阻止合并",
+    "为 AI 编码代理提供 MCP/插件门禁，使其在写入或执行 DDL 前调用 check_before_apply 校验",
+    "分析现有迁移的锁行为与执行时长，生成 expand-contract 方案或回滚 DDL"
+   ]
+  },
+  "sha": "6dadb34b6c74",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1b16d6a1c19c": {
+  "identity": {
+   "one_liner": "自托管 OCI 容器镜像仓库，单二进制+SQLite，内置 Web UI 与在线垃圾回收",
+   "review": "doreg 是一个用 Go 编写的自托管 OCI 容器镜像仓库，通过 Docker 容器或单二进制部署，元数据存 SQLite 或 PostgreSQL，镜像层存本地磁盘或 S3。面向需要 Web UI、项目权限与镜像清理的团队。它实现 OCI distribution 1.1，支持在线垃圾回收（无需只读模式）、保留策略、OIDC 单点登录、机器人账号与从 registry:2/Harbor/GHCR 导入；需置于 TLS 终止的反向代理后使用。",
+   "highlights": [
+    "实现 OCI distribution 1.1，通过官方一致性测试，支持 docker/buildx/containerd/podman/crane/oras",
+    "垃圾回收与保留策略可在推送拉取持续进行时在线运行，支持按仓库 glob、保护标签与最近拉取摘要保留",
+    "支持项目角色（read/write/admin）、OIDC 单点登录、带过期与密钥轮换的机器人账号、签名重试 Webhooks、审计日志与存储配额"
+   ],
+   "use_cases": [
+    "团队或 CI 需要带 Web UI、机器人账号与权限管理的自托管镜像仓库",
+    "需要在不停服的情况下定期清理未标签 manifest 与孤立层",
+    "需从 registry:2、Harbor、GHCR 或 Docker Hub 迁移现有镜像仓库内容"
+   ]
+  },
+  "sha": "1b16d6a1c19c",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

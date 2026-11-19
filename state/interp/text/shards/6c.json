@@ -3327,5 +3327,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "39458926cb2f": {
+  "identity": {
+   "one_liner": "基于 performance_schema 的 MySQL/MariaDB 终端实时负载监控工具",
+   "review": "ps-top 是一个类似 top 的终端程序，读取 MySQL 5.6+/MariaDB 10.6+ 的 performance_schema 数据并以实时视图展示服务器负载，按表、文件、用户、互斥锁、SQL 阶段等维度拆分读写与 I/O 活动。通过 go install 安装，需数据库开启 performance_schema 且账号具备 SELECT（及部分视图所需的 UPDATE、PROCESS）权限。提供 7 种视图，默认每秒刷新。",
+   "highlights": [
+    "提供 table_io_latency、table_io_ops、file_io_latency、table_lock_latency、user_latency、mutex_latency、stages_latency 共 7 种视图，默认每秒刷新",
+    "支持 defaults-file、命令行参数、socket 及 MYSQL_DSN 环境变量等多种连接方式，可用 ~/.pstoprc 合并相似表名",
+    "可通过快捷键切换显示模式、调整轮询间隔、相对/绝对统计并重置计数器"
+   ],
+   "use_cases": [
+    "实时查看 MySQL/MariaDB 服务器按表或文件维度的读写负载分布",
+    "排查用户连接活动、互斥锁等待及 SQL 阶段耗时情况",
+    "在终端环境中以类似 top 的交互方式监控 performance_schema 数据"
+   ]
+  },
+  "sha": "39458926cb2f",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "045a17b3bd95": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 AI 代理知识库，经 MCP 提供文档、表格与文件的 URI 图谱式读写。",
+   "review": "AKB 是一个面向 AI 代理的组织知识库，以 PostgreSQL 为存储核心，通过 MCP 协议（HTTP 与 stdio 代理）对外提供文档 CRUD、表格 SQL、混合检索与权限管理工具，兼容 Claude Code、Cursor 等 MCP 客户端。文档采用 Markdown 加 YAML frontmatter，frontmatter 中的关系字段构成显式知识图谱；vault 隔离由 PostgreSQL ACL 强制执行。许可证为 BSL 1.1，可用 Docker Compose 或 Kubernetes 自托管。",
+   "highlights": [
+    "提供 MCP 协议接入，支持 Streamable HTTP 与 stdio 两种方式，并包含多版本协议适配",
+    "混合检索一次调用融合稠密向量与 BM25（RRF 融合），并提供字面 grep 与章节级检索工具",
+    "vault 级权限隔离由 PostgreSQL 角色与 ACL 实现，支持每用户/每组织的授权工具与公开发布"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Windsurf 等 MCP 客户端提供可读写的组织文档与会议/会话知识库",
+    "构建代理的长期记忆存储，通过插件（akb-sessions、akb-claude-code）记录会话笔记与学习内容",
+    "需要跨库隔离与版本历史的多租户团队知识管理，自托管于 Docker Compose 或 Kubernetes"
+   ]
+  },
+  "sha": "045a17b3bd95",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "be96c6a76e57": {
+  "identity": {
+   "one_liner": "自托管漏洞赏金范围追踪器，聚合四大平台项目与范围变更历史。",
+   "review": "HuntDeck 是用 Go 编写、以单个 Docker 容器运行的自托管工具，面向漏洞赏金猎人，通过用户自己的凭据从 HackerOne、Bugcrowd、Intigriti 和 YesWeHack 拉取项目（含私有邀请），将范围与历史存入本地数据库。提供 15-30 分钟轮询、HuntScore 评分、词级 diff、recon 导出和 REST API。无登录机制，官方文档要求仅通过 127.0.0.1 或私有网络访问，不可暴露到公网；部分平台通过非官方网站接口读取，可能随站点变更失效。",
+   "highlights": [
+    "支持 HackerOne、Bugcrowd、Intigriti、YesWeHack 四平台及自定义 JSON 来源，含私有邀请，其中三平台可在界面内接受邀请",
+    "记录范围增删改、政策与赏金表的词级 diff、项目启动/暂停/重开的完整历史",
+    "提供纯文本目标列表、Burp/ZAP/Caido 范围文件、CSV、Atom 订阅、subfinder 输出的范围匹配接口及带 OpenAPI 描述的 REST API"
+   ],
+   "use_cases": [
+    "聚合多个赏金平台的项目范围并追踪最近 7/14/30 天的新增攻击面",
+    "将 subfinder 等 recon 工具输出通过 API 过滤出范围内主机，接入现有侦察流水线",
+    "通过 Discord、Telegram 或 webhook 接收新邀请、新范围和赏金上调的通知"
+   ]
+  },
+  "sha": "be96c6a76e57",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "44690cbe0f6b": {
+  "identity": {
+   "one_liner": "单二进制 Web 框架：内置 HTTP 服务器、SQLite 与 Wren 脚本语言",
+   "review": "Bialet 是一个用 C17 编写的单二进制 Web 框架，将 HTTP 服务器、SQLite 数据库和 Wren 脚本语言集成在一个可执行文件中，无包管理器、配置文件和构建步骤。应用由 .wren 文件构成，文件名即路由，每个文件是一个返回响应体的处理器。适用于构建数据驱动的小型 Web 应用；限制包括每进程单 worker、仅 HTTP/1.1 且无原生 TLS、无 WebSockets 支持。可通过 PPA、安装脚本或源码编译安装。",
+   "highlights": [
+    "单个可执行文件包含 HTTP 服务器、SQLite 数据库和 Wren 脚本运行时，Linux x86_64 二进制为 3.7 MB",
+    "路由基于文件系统，每个 .wren 文件对应一个处理器，无需路由配置",
+    "支持 SQLite 迁移、WAL 模式（-w 参数）、内存与 CPU 限额（-m/-M/-c/-C）"
+   ],
+   "use_cases": [
+    "数据驱动的小型 Web 应用（如示例中的留言、投票应用）",
+    "希望无包管理器、无构建步骤、单文件部署的项目",
+    "多核并发场景下配合 nginx/Caddy 反向代理的多实例部署"
+   ]
+  },
+  "sha": "44690cbe0f6b",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3086,5 +3086,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ebee110dadbe": {
+  "identity": {
+   "one_liner": "用 Rust 标准库从零实现的 SQL 数据库，按分层 crate 推进",
+   "review": "onyxdb 是一个以 Rust 标准库从零编写的 SQL 数据库项目，目标是提供类 SQLite 的 SQL、崩溃安全的存储、事务和多客户端协议。项目拆分为 vfs、pagefile、bufpool、wal 等多个 crate，按里程碑逐步实现，当前 M1（可承受 kill -9 的键值存储）进行中，SQL、网络、MVCC 等仍处于 planned 状态。项目依赖纯标准库、禁用 unsafe，分层单向依赖；适合想阅读数据库内部实现（WAL、缓冲池、B+树）的用户，尚处早期开发阶段。",
+   "highlights": [
+    "分层 crate 架构：vfs、pagefile、bufpool、wal 已完成或部分完成，kv 进行中，btree/lsm/mvcc/sql 等为 planned",
+    "仅依赖 Rust 标准库，无 unsafe 代码，所有文件 I/O 经 vfs trait，支持模拟崩溃、撕裂写入和 fsync 失败",
+    "构建与测试通过 cargo test、clippy、fmt、doc 完成，CI 在每次推送时运行相同检查"
+   ],
+   "use_cases": [
+    "学习数据库内部机制：WAL、缓冲池、slotted pages、B+树、LSM、MVCC 等分 crate 附带设计说明",
+    "需要可承受进程崩溃（kill -9）的嵌入式键值存储场景（对应进行中的 M1）",
+    "基于自身 wire 协议的多客户端 SQL 数据库服务（按里程碑规划逐步实现）"
+   ]
+  },
+  "sha": "ebee110dadbe",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "65696cea191e": {
+  "identity": {
+   "one_liner": "C++ 从零实现的图数据库，含缓冲池、B+ 树与 Cypher 子集查询",
+   "review": "smollerGraph 是一个用 C++ 从零编写的图数据库，也是配套视频系列的产物，每个步骤以 tag 形式保留在仓库中。它将图存储在固定大小记录与 4 KiB 页组成的文件夹里，用缓冲池管理内存、B+ 树按名称查找节点，并提供 Cypher 子集查询、FastRP 嵌入、JSONL/CSV 导出及 Web UI。构建需 CMake 3.28+、Ninja 和 C++20 编译器，MIT 许可。",
+   "highlights": [
+    "以 4 KiB 页、缓冲池、B+ 树索引和记录链实现图的磁盘存储，标签与关系类型以 token 形式保存",
+    "支持 Cypher 子集查询（MATCH/WHERE/RETURN、shortestPath、加权最短路径）及 FastRP 节点嵌入与余弦相似度查询",
+    "提供 HTTP Web UI（D3 力导向画布）、Emscripten 编译的纯浏览器运行模式，以及可导出 JSONL/CSV 训练 GraphSAGE 模型的流水线"
+   ],
+   "use_cases": [
+    "通过逐步 tag 代码学习图数据库存储引擎（页面、缓冲池、B+ 树）的构建过程",
+    "加载 Wikidata 分类等事实数据后进行路径查找、Cypher 查询和图可视化浏览",
+    "导出图为 JSONL/CSV，用 PyTorch 训练图神经网络并将预测结果回写图中查询"
+   ]
+  },
+  "sha": "65696cea191e",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

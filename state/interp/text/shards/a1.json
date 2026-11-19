@@ -3017,5 +3017,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "80ee7f6a3470": {
+  "identity": {
+   "one_liner": "自托管 VPN 面板：双 Go 二进制加 SQLite，管理节点与订阅",
+   "review": "Mistgate 是一个自托管面板，用于在小范围（家人、朋友、社区或小团队）运行自己的 VPN 服务器。面板部署在一台服务器上，通过 SSH 从浏览器添加节点，支持 Hysteria2、VLESS REALITY 和 AmneziaWG 协议，为每人生成一条订阅链接，并每 5 分钟以客户端方式检查节点健康。项目处于 beta 阶段，1.0 前接口和配置可能变动；依赖 systemd、域名和 80/443 端口。",
+   "highlights": [
+    "支持 Hysteria2、VLESS（REALITY/XHTTP/TLS）、AmneziaWG 3.1 与 2.0 及实验性 MTProto，协议通过插件契约接入",
+    "每 5 分钟进行客户端视角健康检查，节点 doctor 提供 22 项主机检查与十种需确认的修复，支持 Telegram 告警与节点中继",
+    "无需 Docker 和数据库服务器，面板空闲内存 16-20 MiB；支持 SSH 固定主机密钥添加节点、金丝雀分批更新与自动回滚、内置 MCP 服务器供 AI 代理读取和规划变更"
+   ],
+   "use_cases": [
+    "为家人、朋友或小团队共享自建 VPN 服务器，每人一条订阅链接",
+    "通过面板 SSH 添加节点并集中管理多台服务器的配置与健康",
+    "通过 MCP 让 AI 代理读取节点状态、测试路径并规划变更"
+   ]
+  },
+  "sha": "80ee7f6a3470",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e9e09c812ae": {
+  "identity": {
+   "one_liner": "Node.js API 慢因诊断工具，一条命令定位 N+1、事件循环阻塞等问题",
+   "review": "TracePerf 用于诊断 Node.js API 的慢请求原因，包括 N+1 查询、可并行化的 await、事件循环阻塞、连接池耗尽和缺失索引。它通过 npx 运行，启动应用并发送流量后给出原因报告，无需修改代码；--baseline 模式按每请求查询数比较，可在 CI 中使新增查询的 PR 失败。支持 Express、Fastify、NestJS 等框架及 pg、mysql2、Mongoose、Prisma 等数据库客户端。",
+   "highlights": [
+    "traceperf run 一条命令启动应用、发送并发流量并报告慢因：N+1 查询、阻塞事件循环的函数名、连接池等待、缺失索引（Postgres/MySQL 的 EXPLAIN 全表扫描检测）",
+    "通过 V8 CPU 采样命名阻塞函数，比较客户端等待与应用内部计时以报告 socket 排队时间",
+    "内置采样与 p50/p95/p99 有界统计，输出 Chrome/Perfetto trace、OpenTelemetry span、JSON lines，--baseline 按查询计数（非计时）做 CI 回归检查"
+   ],
+   "use_cases": [
+    "在本地或 CI 中用 npx traceperf run server.js --routes 对 API 路由发送并发流量，定位 N+1 查询、事件循环阻塞、连接池耗尽、缺失索引等慢因",
+    "在 CI 流水线中用 --baseline 比较每请求查询数，使引入更多查询的 PR 失败，GitHub Action 评论变更内容",
+    "用 traceperf test 包装现有测试套件（Jest/Vitest/Mocha/node:test），统计每路由查询数而非依赖合成流量"
+   ]
+  },
+  "sha": "9e9e09c812ae",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8a7b83f1f84d": {
+  "identity": {
+   "one_liner": "Android 离线全盘文件与文档正文搜索引擎，基于 SQLite FTS5 CJK N-gram 索引",
+   "review": "Pinpoint 是面向 Android 的离线文件名与文档正文检索引擎，使用 SQLite FTS5 存储索引，通过自研 CjkTokenizer（1-gram/2-gram 混合分词）支持中文子串、短语、通配符与正则查询。提供普通、Shizuku、Root 三级扫描权限，支持 .txt/.md/.docx/.pdf 正文抽取。需 Android 8.0+，Shizuku/Root 模式需额外配置。",
+   "highlights": [
+    "基于 SQLite FTS5 与 CJK 1-gram/2-gram 混合分词实现本地全文检索，支持布尔逻辑、短语、通配符、正则及 name/path/content/ext/type/size/dm 字段限定语法",
+    "提供 Normal（MANAGE_EXTERNAL_STORAGE）、Shizuku（穿透 /Android/data 与 /Android/obb）、Root（libsu 全盘扫描，lstat 跳过软链接与重复挂载）三级权限模式",
+    "内置 QuickLook 预览（文本编码探测、PDF 逐页渲染、压缩包浏览、音视频首帧）及 SAF DocumentsProvider / ACTION_GET_CONTENT 系统选文入口"
+   ],
+   "use_cases": [
+    "在 Android 设备本地检索文件名及 .txt/.md/.docx/.pdf 文档正文内容",
+    "需访问 /Android/data、/Android/obb 等受限目录时通过 Shizuku 或 Root 模式扫描",
+    "在外部应用（微信、浏览器等）选文时经系统文件选择器调用全盘搜索与筛选"
+   ]
+  },
+  "sha": "8a7b83f1f84d",
+  "source": "readme",
+  "generated_at": "2026-11-19",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
