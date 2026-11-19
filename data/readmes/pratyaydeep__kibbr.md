@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/img/logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="docs/img/logo-light.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/pratyaydeep/kibbr/raw/HEAD/docs/img/logo-dark.svg?sanitize=true">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/pratyaydeep/kibbr/raw/HEAD/docs/img/logo-light.svg?sanitize=true">
     <img alt="kibbr" src="docs/img/logo-light.svg" width="220">
   </picture>
 </p>
@@ -16,8 +16,8 @@
 For example, 69.6 GB of real MongoDB server logs take 366 MB.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/img/console-results.png">
-  <source media="(prefers-color-scheme: light)" srcset="docs/img/console-results-light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/pratyaydeep/kibbr/raw/HEAD/docs/img/console-results.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/pratyaydeep/kibbr/raw/HEAD/docs/img/console-results-light.png">
   <img alt="The kibbr web console showing a query, its matches over time and the log rows" src="docs/img/console-results.png">
 </picture>
 
@@ -46,7 +46,7 @@ kibbr is for the months between a hot search cluster and an archive nobody can q
 ## Try it in a minute
 
 ```sh
-$ cargo install kibbr        # needs Rust 1.96.1 or newer
+$ cargo install --locked kibbr        # needs Rust 1.96.1 or newer
 
 $ kibbr gen-logs --profile farm --lines 10000 --seed 42 > day.ndjson
 $ kibbr serve --data-dir kibbr-data
@@ -60,7 +60,7 @@ $ curl -s -X POST -d '{"q": "COUNT LOG {\"event\": \"login_ok\"}"}' http://127.0
 
 Open **http://127.0.0.1:7700/** for the built-in web console.
 
-There is also a [Docker image](docs/container.md), and [compaction](docs/compact.md) shrinks a finished day.
+There is also a [Docker image](deploy/README.md), and [compaction](docs/compact.md) shrinks a finished day.
 
 ## Queries
 
@@ -103,7 +103,25 @@ An application emits thousands of lines but only dozens of shapes. kibbr keeps e
 
 ## Docs
 
-More in [docs/](docs), starting with [docs/serve.md](docs/serve.md). Website: **https://pratyaydeep.github.io/kibbr/**. Crate API: [docs.rs](https://docs.rs/kibbr).
+More in [docs/](docs/README.md), starting with [docs/serve.md](docs/serve.md). Website: **https://pratyaydeep.github.io/kibbr/**. The engine's own tour: [docs.rs](https://docs.rs/kibbr).
+
+## Layout
+
+```
+src/engine/             the library: the database, with no HTTP and no flags
+src/server.rs  server/  the HTTP server over the engine
+src/cli.rs  cli/        the commands: serve, load, compact, query, stats, ...
+src/main.rs             the binary: the server and the command line
+tests/                  the end-to-end tests, one binary; tests/data/ is their data
+crates/kibbr-devtools/  kibbr-bench, the speed bench; not published
+fuzz/                   the fuzz targets
+scripts/                check, fault and measure scripts; the release scripts; bench/
+web/                    the console's source, built into one HTML file
+deploy/                 the container image, and Kubernetes manifests
+docs/                   how to use kibbr
+```
+
+[ARCHITECTURE.md](ARCHITECTURE.md) is the map of the code, and [docs/glossary.md](docs/glossary.md) has kibbr's own words.
 
 ## Status
 

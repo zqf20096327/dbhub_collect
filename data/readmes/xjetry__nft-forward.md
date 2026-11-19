@@ -11,7 +11,7 @@
 | **数据面** | 用户态 relay | 用户态 relay + 协议栈 | 调用 iptables/realm | nftables 内核态 DNAT **或** 用户态 split-TCP，逐跳可选 |
 | **多节点管理** | 无 | 无 | 有，节点需开端口 | agent 反向 WebSocket 连入面板，节点零端口暴露 |
 | **多跳链路** | 手动逐节点配置 | 转发链配置复杂 | 需手动对齐端口 | 面板自动编排：选跳 + 填出口，端口全自动分配对齐 |
-| **多租户** | 无 | 无 | 有，粗粒度 | 节点级授权 + 规则配额 + 流量配额（全局 / per-node）+ 到期 + 周期重置 |
+| **多租户** | 无 | 无 | 有，粗粒度 | 节点级授权 + 规则数上限 + 流量配额（全局 / per-node）+ 到期 + 周期重置 |
 | **预连接** | 无 | 无 | 无 | userspace 模式内置 TCP 预连接池，多跳省握手 RTT |
 | **TUI** | 无 | 无 | 无 | 内置终端 TUI，单机免浏览器 |
 
@@ -34,7 +34,7 @@ curl -fsSL ... | sudo bash -s agent --panel-url https://panel.example.com --toke
 curl -fsSL ... | sudo bash -s tui
 ```
 
-> 仅支持 amd64 Linux；需 root + nftables。
+> 支持 amd64 / arm64 Linux，安装脚本按 `uname -m` 自动选择对应架构的产物；需 root + nftables。
 
 ### install.sh 模式
 
@@ -43,7 +43,7 @@ curl -fsSL ... | sudo bash -s tui
 | `tui` | 单机 TUI（装 nft-agent，自动启动 daemon） |
 | `server` | 控制面板（装 nft-server + nft-agent，含 daemon） |
 | `agent` | 远程节点（daemon 反向 dial 面板 WebSocket） |
-| `update` | 拉 latest 二进制原子替换 + restart + 失败自动回滚 |
+| `update` | 拉 latest 二进制原子替换 + restart；失败自动回滚（二进制与数据一并还原） |
 | `update-script` | 更新本地 install.sh（不动二进制） |
 | `uninstall <角色>` | 卸载指定角色（`server` / `agent` / `daemon` / `all`） |
 | `reset-password` | 重置面板 admin 密码 |
@@ -109,7 +109,7 @@ nftables DNAT，零拷贝，吞吐接近线速。支持 TCP / UDP / TCP+UDP。
 
 ### 用户配额
 
-- **规则配额**：最大转发规则数
+- **规则数上限**：账号最多可创建的规则数
 - **流量配额**：全局流量上限（GB），可设周期自动重置（如每 30 天）
 - **到期时间**：支持快捷延期（+1天/+7天/+30天/+1年）
 - **per-node 流量配额**：单节点独立限额
@@ -117,16 +117,16 @@ nftables DNAT，零拷贝，吞吐接近线速。支持 TCP / UDP / TCP+UDP。
 
 ### 节点授权
 
-管理员将节点授权给用户，附带 per-node 规则上限。支持批量授权/撤销。
+管理员将节点授权给用户，附带 per-node 规则数上限。支持批量授权/撤销。
 
 ---
 
 ## 组合节点与多跳链路
 
-管理员将多个单点节点编排为**组合节点**（如 `上海 → 日本`），指定跳序、节点间各段的模式（内核态/用户态）和流量倍率。用户在组合节点上创建规则，系统自动展开多跳、分配端口、对齐上下游。
+管理员将多个单点节点编排为**组合节点**（如 `上海 → 日本`），指定跳序、相邻节点之间的转发模式（内核态/用户态）和流量倍率。用户在组合节点上创建规则，系统自动展开多跳、分配端口、对齐上下游。
 
 - 拖拽调整跳序，端口保持稳定
-- 节点间各段独立选内核态或用户态；出口段（最后一跳 → 目标）的模式由创建规则的用户选择
+- 相邻节点之间各自独立选内核态或用户态；出口模式（最后一跳 → 目标）由创建规则的用户选择
 - 出口支持域名（daemon 侧 DNS 定期刷新）
 - 连通性探测：每跳独立测延迟，结果逐跳显示
 
@@ -136,7 +136,7 @@ nftables DNAT，零拷贝，吞吐接近线速。支持 TCP / UDP / TCP+UDP。
 
 管理员为用户配置**落地节点来源**：
 
-- 支持订阅地址（Remnawave 等面板的订阅链接）
+- 支持订阅地址（订阅内容是代理 URI 列表，base64 编码或纯文本均可）
 - 支持手动 URI（vless://、trojan:// 等）
 - 订阅与手动 URI 可组合
 - 解析出的节点可标记为「落地」「直连」或「未配置」
@@ -149,7 +149,7 @@ nftables DNAT，零拷贝，吞吐接近线速。支持 TCP / UDP / TCP+UDP。
 ### 管理员
 
 - 节点管理：创建/编辑/禁用/删除/隐藏节点，设中继地址（IPv4 / IPv6）、端口范围、倍率
-- 组合节点：创建多跳序列，拖拽排序，节点间各段模式与倍率（出口段模式归规则）
+- 组合节点：创建多跳序列，拖拽排序，相邻节点之间的转发模式与倍率（出口模式归规则）
 - 用户管理：创建/编辑/禁用/删除用户，统一表单设置配额/到期/备注
 - 规则管理：查看/编辑/删除所有规则
 - 节点推送升级：一键推送 agent 二进制到远程节点并重启
@@ -214,7 +214,11 @@ sudo nft-forward-upgrade
 sudo bash install.sh update
 ```
 
-拉 latest → sha256 校验 → 备份 → 原子替换 → 重启 → health-check → 失败自动回滚。
+拉 latest → sha256 校验 → 快照 → 原子替换 → 重启 → health-check → 失败自动回滚。
+
+快照收的是 update 会改动的全部文件：二进制、daemon 单元、节点身份文件、`state.json`，装了面板的机器再加上 `panel.db`（拍快照期间面板短暂停止，转发不受影响）。health-check 同时检查 daemon 与面板；任何一步失败，脚本都会把这些文件还原到 update 之前再重新启动服务。新版面板启动时会迁移 `panel.db`，迁移过的库旧版面板无法使用，所以回滚必须连库一起还原。
+
+要让这套回滚生效，执行 update 的得是新版脚本：已装机器上的 `nft-forward-upgrade` 是上一次安装或 `update-script` 时保存的那一份，先运行 `sudo nft-forward-upgrade update-script` 再 update。
 
 ---
 
@@ -227,18 +231,23 @@ git clone <repo> && cd nft-forward
 go test ./...
 go vet ./...
 
-# 编译面板（含前端）
-cd web && npm run build && cd ..
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" \
-    -o build/nft-server ./cmd/nft-server
+# 构建全部发版产物到 build/：amd64 + arm64 各一套 nft-server / nft-agent（amd64 另有
+# 同内容的 -amd64 别名）与 SHA256SUMS
+# （含前端构建、UPX 压缩、ELF 架构校验，并在两种架构的容器里各试跑一次）
+scripts/build-release.sh
 
-# 编译节点（可复现构建，版本标签独立于二进制）
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -buildvcs=false \
-    -ldflags="-s -w" -o build/nft-agent ./cmd/nft-agent
-upx -9 --lzma build/nft-agent
+# 只编单个二进制（GOARCH 取 amd64 或 arm64）
+cd web && npm run build && cd ..          # 面板 embed web/dist，先构建前端
+CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -trimpath -ldflags="-s -w" \
+    -o build/nft-server-arm64 ./cmd/nft-server
+# 节点用 -buildvcs=false 做可复现构建，版本标签独立于二进制
+CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -trimpath -buildvcs=false \
+    -ldflags="-s -w" -o build/nft-agent-arm64 ./cmd/nft-agent
 ```
 
-依赖：Go ≥ 1.24，Node.js（前端构建），无 CGO。运行时需 nftables + iproute2（仅 Linux）。
+依赖：Go ≥ 1.24，Node.js（前端构建），无 CGO；`scripts/build-release.sh` 另需 upx 与 docker。运行时需 nftables + iproute2（仅 Linux）。
+
+release 里 amd64 的资产名不带后缀（`nft-server` / `nft-agent`），arm64 带 `-arm64` 后缀。amd64 的这一套另以 `nft-server-amd64` / `nft-agent-amd64` 的名字再发布一遍，内容与不带后缀的完全相同，方便按架构名手工下载；安装脚本和面板只取不带后缀的名字。
 
 ```
 nft-forward/
@@ -260,6 +269,7 @@ nft-forward/
 │   ├── portutil/           端口范围解析
 │   └── sysdeps/            系统依赖检查
 ├── web/                    React + Tailwind 前端（vite 构建，embed 进 server）
+├── scripts/                build-release.sh（发版构建）及数据迁移脚本
 └── install.sh              一键安装/升级/卸载脚本
 ```
 

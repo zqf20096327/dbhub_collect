@@ -21,6 +21,17 @@ OBmock 单二进制进程 ──┤                └─→ Oracle 租户桩（
 `.github/workflows/ci.yml`：单元测试、mock 启动、三语言包装自测、obcheck 自校一键执行；
 双跑对比（需真 OB）留 self-hosted runner 挂载位（`vars.OB_REAL_RUNNER` 启用）。
 
+## Schema 导出（obdump）
+
+```bash
+go build -o obdump ./cmd/obdump
+obdump -target "-h172.20.214.44 -P2881 -usys@oratest -pAAli88@@1688" -out real_dump.sql
+obdump -target "-h127.0.0.1 -P13307 -usys@oratest -pAAli88@@1688" -out mock_dump.sql
+obdump compare real_dump.sql mock_dump.sql   # 归一化双端一致性校验
+```
+
+输出按依赖序：对象清单 → 表(含约束) → 索引 → 序列 → 视图 → 同义词 → PL 源码(注释)。
+
 ## 兼容性预检（obcheck）
 
 ```bash
@@ -59,8 +70,8 @@ let mut conn = mock.conn()?;
 
 ```bash
 # 源码运行
-go build -o bin/oracle-sim ./cmd/oracle-sim
-./bin/oracle-sim -listen 0.0.0.0:13306 -data ./data -password secret
+go build -o bin/obmock ./cmd/obmock
+./bin/obmock -listen 0.0.0.0:13306 -data ./data -password secret
 
 # Docker
 docker build -t obmock .
@@ -177,7 +188,7 @@ DBMS_LOB.SUBSTR/GETLENGTH/INSTR、ARG_MAX/ARG_MIN/GROUPING 聚合、
 ## 目录结构
 
 ```
-cmd/oracle-sim/          入口
+cmd/obmock/          入口
 internal/dialect/        Oracle→SQLite 方言翻译（tokenizer+重写 pass+函数注册+序列注册表）
 internal/engine/sqlite/  内嵌存储（modernc.org/sqlite 纯 Go、会话事务、元数据、错误映射）
 internal/server/mysql/   MySQL 线协议 listener（go-mysql server 包适配）

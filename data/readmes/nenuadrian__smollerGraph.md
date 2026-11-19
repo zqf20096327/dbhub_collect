@@ -47,6 +47,21 @@ embeddings point most nearly the same way as a node's, by their cosine:
 ./build/sg similar wikidata.sg "Blue whale" 10
 ```
 
+`sg export` writes a graph into a folder for programs outside the database, such as a script that
+trains a model on it: `nodes.jsonl`, a line of JSON for each node, with its id, name, label and
+properties, and `relationships.csv`, the ids of the nodes each relationship joins, and its type.
+`tools/gnn.py` trains a small graph neural network on it, a GraphSAGE of four layers in PyTorch,
+which learns which species are threatened from their weights and from what's known of their
+relatives, and writes the risk it gives the species it didn't learn from as facts, which `sg load`
+adds to the graph, for Cypher to ask about:
+
+```bash
+./build/sg export wikidata.sg export
+uv run --with torch --with numpy python tools/gnn.py export predictions.txt
+./build/sg load wikidata.sg predictions.txt
+./build/sg query wikidata.sg "MATCH (s:Species) WHERE s.status = 'least concern' AND s.risk > 70 RETURN s.name, s.risk"
+```
+
 `sg query` answers a small subset of [Cypher](https://opencypher.org): a pattern of nodes, with a
 label and properties to match, joined by relationships of one type that go right, `-[:EATS]->`,
 left, `<-[:EATS]-`, or either way, `-[:EATS]-`, for one hop or `*N`, then an optional `WHERE` of
@@ -90,6 +105,23 @@ Then open http://localhost:8474. Or, with Docker, `docker compose up` loads the 
 gives them their embeddings and serves them there, and `docker compose -f compose.yaml -f compose.friends.yaml up` serves the
 friends from the benchmarks, with their weights, which the page draws on each relationship.
 
+## In a browser
+
+The UI also runs in a browser on its own, without a server. Built with
+[Emscripten](https://emscripten.org) (`brew install emscripten`), the library is WebAssembly, and the
+page builds the graph of mammals and birds, with their embeddings, from the Wikidata facts each time
+it opens, in its own memory, and keeps nothing:
+
+```bash
+emcmake cmake -S . -B build-web -G Ninja
+cmake --build build-web
+ctest --test-dir build-web
+python3 -m http.server -d build-web/explorer 8475
+```
+
+Then open http://localhost:8475. CI publishes it with the API docs, at
+[nenuadrian.github.io/smollerGraph/explorer](https://nenuadrian.github.io/smollerGraph/explorer/).
+
 ## Deploying
 
 `deploy.sh` copies the committed code to a server over SSH, and builds and runs it there with
@@ -109,6 +141,31 @@ the graph, so there's nothing to change through it.
 ctest --test-dir build --output-on-failure
 ```
 
+## API docs
+
+The comments in the headers are the API docs. With [Doxygen](https://www.doxygen.nl) installed
+(`brew install doxygen graphviz`, or `apt install doxygen graphviz`), the `docs` target writes them
+to `build/docs/html`:
+
+```bash
+cmake --build build --target docs
+open build/docs/html/index.html
+```
+
+CI publishes them at [nenuadrian.github.io/smollerGraph](https://nenuadrian.github.io/smollerGraph/),
+from each push to the public repository's main.
+
+Doxygen reads comments written its own ways, such as with three slashes, and ours start with two,
+as Google's style guide writes them, so the build passes each header through a filter that gives
+them their third.
+
+## Decisions
+
+Why smollerGraph is built the way it is, a short record for each choice that would be costly to
+undo, with what else was weighed and what it costs, is in
+[docs/decisions](docs/decisions/README.md), with how to propose one. The API docs publish them
+too.
+
 ## Benchmarks
 
 `make_friends` writes a social graph of made-up people, who each know ten others, with a weight on
@@ -126,6 +183,10 @@ parses and plans each query as well as running it. It writes the medians to `ben
 uv run --with kuzu --with neo4j python bench/compare.py
 ```
 
+Episodes 3, 5 and 11 measured changes this way. From episode 12, the series stopped racing Neo4j
+and Kùzu, as [decision 18](docs/decisions/0018-vanilla-versions-not-races.md) says, so
+`compare.py` and `sg bench` are as episode 11 left them.
+
 `bench/ui.py` measures how many frames a second Chromium paints while the page's layout moves a
 made-up graph, from 500 nodes to 20,000, drawn with SVG, drawn on a canvas, and not drawn at all,
 with `sg serve` serving `ui/bench.html`, and writes them to `bench/ui.json`. It opens a window, as
@@ -142,6 +203,12 @@ The same build and tests on a clean Ubuntu, as CI runs them on each push:
 
 ```bash
 docker build --target test .
+```
+
+And the API docs, with the explorer in `explorer/`, as CI publishes them, written to `site/`:
+
+```bash
+docker build --target docs --output site .
 ```
 
 ## Licence

@@ -42,192 +42,128 @@
 
 # Alternate - Local Caller ID Detector
 
-A privacy-focused React Native app that helps you identify unknown callers without cluttering your device's main contact list. Perfect for temporary number storage when you need to know who's calling but don't want the number to appear in WhatsApp, Telegram, or other messaging apps.
+A privacy-focused Android app that tells you who is calling without adding them to your phone's contact list. Perfect for numbers you only need to recognise for a while (delivery drivers, repair services, one-off business contacts), because nothing you save here shows up in WhatsApp, Telegram or any other app.
+
+> **Version 3** is a ground-up rewrite in native Kotlin. It installs over 2.x and keeps your contacts, PIN and theme. The old React Native (Expo) app lives on the [`legacy-expo`](https://github.com/BioHazard786/Alternate/tree/legacy-expo) branch.
 
 ## Features
 
-- **Local Caller ID Detection**: Identify incoming calls using your private database
-- **Temporary Number Storage**: Save numbers locally without affecting your main contacts
-- **Privacy Protection**: Numbers won't appear in WhatsApp, Telegram, or other messaging apps
-- **Phone Number Validation**: Smart phone number input with country selection
-- **Custom Native Module**: Built-in caller ID functionality using Android's native capabilities
-- **Country Selector**: Beautiful bottom sheet country picker with search
-- **Material Design**: Modern UI following Material Design 3 principles
-- **Offline Storage**: All data stored locally using Android's native SQLite database
+- **Caller ID popup**: a Material 3 card over incoming and outgoing calls with the contact's name, appointment, location and number. Drag it, minimise it to a chip, or dismiss it
+- **Private by design**: contacts live only in this app's database. They never reach the system contacts, messaging apps or the cloud
+- **Dialer integration**: shows your saved names in the Google Phone app's call screen where the system supports it
+- **Several numbers per contact**, each with a label (Mobile, Work, or your own) and a country, or saved as typed with no country code (toll-free numbers, STD landlines)
+- **Save from recent calls**: pick someone from your call log in the + menu and their number is filled in, no copy and paste
+- **Groups and favorites**: organise people into groups like Family or Work, and pin favorites to the top
+- **Fast search**: finds names, nicknames, numbers, notes and groups, with the match highlighted
+- **Quick scrolling**: a Niagara-style A-Z scrubber with a favorites shortcut
+- **Material 3 Expressive**: dynamic color, light, dark and AMOLED themes, and a contact avatar in one of twelve shapes
+- **Bulk actions**: select, share, copy, star, group or delete many contacts at once
+- **Import and export**: vCard (.vcf) files, including photos and groups
+- **App lock**: PIN with optional fingerprint unlock and auto-lock
+- **Fully offline**: the app has no `INTERNET` permission
 
-## Use Case
+## Upgrading from 2.x
 
-When you receive calls from unknown numbers but don't want to save them to your main contact list:
+Install the 3.x APK over the old app. The package name and signing key are unchanged, so Android updates in place and your contacts, PIN and theme are carried over on first launch.
 
-- **Delivery drivers** - Know who's calling without adding to contacts
-- **Service providers** - Temporary contractors, repair services, etc.
-- **Business contacts** - People you interact with briefly
-- **Privacy protection** - Keep your main contact list clean while still identifying callers
+## How It Works
+
+1. **Save numbers locally**: add a name, numbers and any details in the app
+2. **Recognise calls**: when a call starts, the app looks the number up in its own database and shows the popup
+3. **Stay separate**: nothing is written to your device's contacts, so there is nothing for other apps to sync
+
+## Permissions
+
+| Permission | Why |
+| --- | --- |
+| Phone state, Call log | Notice when a call starts and which number is calling, and let you pick a recent caller to save |
+| Display over other apps | Draw the caller popup on top of the dialer |
+| Wake lock, Dismiss keyguard | Show the popup on a locked or sleeping screen |
+| Biometrics | Optional fingerprint unlock for the app lock |
+
+You can also give Alternate the call screening role during setup, which makes caller detection more reliable on recent Android versions. No contacts, location or network permissions are used.
 
 ## Tech Stack
 
-- **React Native** with **Expo**
-- **TypeScript** for type safety
-- **React Native Paper** for Material Design components
-- **Room** for local data storage
+- **Kotlin** with **Jetpack Compose** and **Material 3 Expressive**; the call popup uses plain Views and spring animations so it starts instantly from a broadcast
+- **Room** for contacts and groups, **DataStore** for settings
+- **Coil** for photos, **androidx.biometric** for fingerprint unlock
+- minSdk 24 (Android 7.0), target SDK 36
 
 ## Screenshots
 
 <p align="center">
-  <img src="./mockups/image1.png" alt="Home Screen" width="200" style="margin:10px;" />
-  <img src="./mockups/image2.png" alt="Add Contact" width="200" style="margin:10px;" />
-  <img src="./mockups/image3.png" alt="Country Picker" width="200" style="margin:10px;" />
+  <img src="./mockups/image1.png" alt="Contacts and favorites" width="200" style="margin:10px;" />
+  <img src="./mockups/image2.png" alt="Fast A-Z scrubber" width="200" style="margin:10px;" />
+  <img src="./mockups/image3.png" alt="Contact details" width="200" style="margin:10px;" />
 </p>
 <p align="center">
-  <img src="./mockups/image4.png" alt="Caller Popup" width="200" style="margin:10px;" />
-  <img src="./mockups/image5.png" alt="Directory Support" width="200" style="margin:10px;" />
+  <img src="./mockups/image4.png" alt="Edit contact" width="200" style="margin:10px;" />
+  <img src="./mockups/image5.png" alt="Country picker" width="200" style="margin:10px;" />
+  <img src="./mockups/image6.png" alt="Caller popup" width="200" style="margin:10px;" />
 </p>
 
-<!-- ## Download -->
-
-## Installation
+## Building
 
 ### Prerequisites
 
-- Node.js (v18 or later)
-- npm or yarn
-- Expo CLI
-- Android Studio (for Android development)
-- Xcode (for iOS development, macOS only)
+- JDK 17 or later (the release workflow uses 21)
+- Android SDK with the API 37 platform. Android Studio installs everything needed
 
-### Setup
-
-1. Clone the repository:
+### Debug build
 
 ```bash
 git clone https://github.com/BioHazard786/Alternate.git
 cd Alternate
+./gradlew assembleDebug
 ```
 
-2. Install dependencies:
+The APK is written to `app/build/outputs/apk/debug/`.
+
+### Signed release build
+
+Create `keystore.properties` in the project root (it is git-ignored):
+
+```properties
+storeFile=release.jks        # relative to app/
+storePassword=...
+keyAlias=...
+keyPassword=...
+```
+
+Then run `./gradlew assembleRelease`. The universal APK is written to `app/build/outputs/apk/release/`. Without `keystore.properties` the release APK is left unsigned.
+
+### Tests
 
 ```bash
-npm install
+./gradlew testDebugUnitTest          # JVM unit tests
+./gradlew connectedDebugAndroidTest  # needs a device or emulator (database migration test)
 ```
 
-3. Start the development server:
+### Releasing
 
-```bash
-npx expo start
-```
+1. Bump `versionCode` and `versionName` in `app/build.gradle.kts`
+2. Add `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`
+3. Push a tag equal to `v<versionName>`; GitHub Actions builds, signs and publishes the release
 
-## Building APK
-
-### Development Build
-
-To build a development APK:
-
-```bash
-npx expo run:android
-```
-
-### Production Build with EAS
-
-1. Install EAS CLI:
-
-```bash
-npm install -g eas-cli
-```
-
-2. Configure EAS:
-
-```bash
-npx eas build:configure
-```
-
-3. Build for Android:
-
-```bash
-npx eas build --platform android
-```
-
-### Local Production Build
-
-To build a production APK locally without EAS:
-
-#### Method 1: Quick Build (Debug-Signed)
-
-For development and testing purposes:
-
-1. Install dependencies:
-
-```bash
-npm ci
-```
-
-2. Build for Android:
-
-```bash
-cd android
-./gradlew assembleRelease
-```
-
-**Note:** This creates a release APK but signed with debug keystore. The APK will be generated at `android/app/build/outputs/apk/release/`
-
-#### Method 2: Properly Signed APK (Recommended for Distribution)
-
-For production distribution, use Android Studio to create a properly signed APK:
-
-1. **Open the project in Android Studio**:
-
-   - Open Android Studio
-   - Select "Open an existing Android Studio project"
-   - Navigate to the `android` folder in your project
-   - Click "OK"
-
-2. **Generate Signed APK**:
-
-   - Go to `Build` → `Generate Signed Bundle / APK`
-   - Select "APK" and click "Next"
-   - Choose "Create new..." to generate a new keystore or "Choose existing..." if you have one
-   - Fill in the keystore details (store this information securely!)
-   - Click "Next"
-   - Select "release" build variant
-   - Click "Create"
-
-3. **Locate the signed APK**:
-   - The signed APK will be generated in `android/app/release/`
-   - This APK is properly signed and ready for distribution
-
-**Important Notes:**
-
-- Debug-signed APKs (from `./gradlew assembleRelease`) are fine for development and testing
-- For Play Store or distribution to users, always use properly signed APKs from Android Studio
-- APKs signed with different keystores cannot update each other on Android devices
+See [ANDROID_RELEASE_SETUP.md](ANDROID_RELEASE_SETUP.md) for the required secrets.
 
 ## Project Structure
 
 ```
-├── app/                    # Main app screens
-├── components/            # Reusable components
-├── constants/            # App constants
-├── hooks/               # Custom hooks
-├── lib/                 # Utility functions and types
-├── modules/             # Custom native modules
-│   └── caller-id/       # Caller ID native module with SQLite integration
-├── store/               # State management
-└── assets/              # Images and other assets
+app/src/main/java/com/lulu786/alternate/
+├── MainActivity.kt, AlternateApp.kt, AppContainer.kt
+├── data/       # Room database, DAO, repository, DataStore settings, import of 2.x data
+├── callerid/   # Call receiver and screening service, popup overlay, system dialer directory
+├── ui/         # Compose screens (contacts, detail, edit, groups, settings, lock, setup),
+│               # shared components and theme
+└── util/       # vCard import/export, search index, phone formatting, country list
 ```
 
-## How It Works
+## Branches
 
-1. **Add Numbers Locally**: Save phone numbers with names in your private database
-2. **Caller ID Detection**: When calls come in, the app checks against your local database
-3. **Privacy Maintained**: Numbers remain completely separate from your device's contact list
-4. **No Sync Issues**: Won't interfere with messaging apps or cloud contact syncing
-
-## Benefits
-
-- **Clean Contact List**: Keep your main contacts organized
-- **Privacy Control**: Numbers stay private to this app only
-- **No Messaging App Clutter**: Saved numbers won't appear in WhatsApp, Telegram, etc.
-- **Temporary Storage**: Perfect for short-term contact needs
-- **Offline Functionality**: Works completely offline with local SQLite storage
+- `main`: the native Kotlin app (3.x and later)
+- `legacy-expo`: the original React Native (Expo) app, up to 2.4.7. No longer developed
 
 ## Contributing
 
@@ -249,8 +185,8 @@ Project Link: [https://github.com/BioHazard786/Alternate](https://github.com/Bio
 
 ## Acknowledgments
 
-- Thanks To dmkvsk for native module inspiration [Repo](https://github.com/dmkvsk/react-native-detect-caller-id)
-- Thanks To SimpleNexus for call directory implementation [Repo](https://github.com/SimpleNexus/simplecallerid)
+- Thanks to dmkvsk for the caller ID inspiration in the original React Native version [Repo](https://github.com/dmkvsk/react-native-detect-caller-id)
+- Thanks to SimpleNexus for the call directory implementation [Repo](https://github.com/SimpleNexus/simplecallerid)
 
 ---
 

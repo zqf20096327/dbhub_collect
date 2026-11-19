@@ -30,6 +30,16 @@
 
 > **Project status:** The application, deployment automation, and operational tooling are implemented. A live production launch is **not yet qualified**: staging verification, provider-specific checks, and a restore rehearsal still need to be completed. See [Project Status & Limitations](#project-status--limitations) before deploying with real documents.
 
+### Choose your path
+
+| If you want to… | Start here |
+|---|---|
+| Try the complete application locally | [Quick Start](#quick-start) |
+| Change the frontend or backend | [Local Development](#local-development) and [Contributing](#contributing--developer-workflow) |
+| Integrate with the service | [API at a Glance](#api-at-a-glance) and [API Reference](docs/API.md) |
+| Operate a hosted instance | [Production Deployment](#production-deployment) and [Operations & Troubleshooting](#operations--troubleshooting) |
+| Assess current release readiness | [Project Status & Limitations](#project-status--limitations) |
+
 <details>
 <summary><strong>Contents</strong></summary>
 
@@ -39,9 +49,14 @@
 - [System Architecture](#system-architecture)
 - [Trust & Security Guarantees](#trust--security-guarantees)
 - [Quick Start](#quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Your first document](#your-first-document)
 - [Local Development](#local-development)
 - [API at a Glance](#api-at-a-glance)
+  - [Minimal authenticated API flow](#minimal-authenticated-api-flow)
+- [Configuration & Secrets](#configuration--secrets)
 - [Operations & Troubleshooting](#operations--troubleshooting)
+  - [First-response checklist](#first-response-checklist)
 - [Production Deployment](#production-deployment)
 - [Observability & Recovery](#observability--recovery)
 - [Essential Technology Stack](#essential-technology-stack)
@@ -116,8 +131,7 @@ The DocuMind workspace is a dark-mode Next.js application featuring an interacti
 
 </div>
 
-> [!NOTE]
-> **Screenshot Status:** Genuine product screenshots require a running local stack. When launching locally via `docker compose up`, capture views at `http://localhost:3000` to populate `docs/assets/` (`workspace-library.png`, `workspace-preview.png`, `workspace-chat.png`).
+> **Screenshots:** Product UI screenshots are not currently included. The SVGs in `docs/assets/` illustrate the workflow, architecture, and citation model. When adding UI screenshots, use synthetic documents and remove personal or account data before committing them.
 
 ---
 
@@ -248,6 +262,8 @@ This is a practical boundary map, not a certification or penetration-test report
 
 Launch the complete 7-service DocuMind stack locally with Docker Compose.
 
+> **Local-only stack:** `docker-compose.yml` publishes service ports for development convenience. Run it only on a trusted machine/network; do not expose it directly to the internet or process real private documents. The production overlay removes public data-service ports and routes traffic through Caddy.
+
 ### Prerequisites
 
 - [Docker Desktop](https://www.docker.com/) (version 24+) and Docker Compose v2.
@@ -280,6 +296,21 @@ GEMINI_API_KEY=your_gemini_api_key_here
 docker compose up --build -d
 ```
 
+Apply the database schema before creating an account. The production overlay has a one-shot migration service; the local development Compose file leaves migrations explicit:
+
+```bash
+docker compose exec backend alembic upgrade head
+```
+
+Check startup before opening the UI:
+
+```bash
+docker compose ps
+curl --fail http://localhost:8000/api/v1/ready
+```
+
+The first build and model initialization can take several minutes. If readiness does not pass, inspect `docker compose logs --tail=100 backend worker` and resolve the reported dependency or resource issue before uploading a sample.
+
 Docker Compose boots seven coordinated services:
 - `postgres` — Relational database on port `5432`
 - `redis` — Celery broker and rate limit store on port `6379`
@@ -305,6 +336,16 @@ To verify deployment integrity, run the authenticated smoke test:
 ```bash
 python scripts/smoke_test.py
 ```
+
+### Your first document
+
+1. Open the workspace and create a local account.
+2. Upload a small, non-sensitive sample in one of the supported formats.
+3. Wait for the status to become `ready`; inspect the parsed preview and any extracted tables.
+4. Ask a question whose answer appears in the document. Review the returned citation against the source.
+5. Export the parsed content or remove the sample document when finished.
+
+The first run may take longer while containers and the embedding model are initialized. Chat requires `GEMINI_API_KEY`; the rest of the local document flow can be explored without it.
 
 ### Stop, Inspect, and Reset
 
@@ -353,6 +394,14 @@ The API's `/api/v1/health` endpoint checks that the process responds. `/api/v1/r
 | Chat returns no evidence | Rephrase around document wording, verify indexing completed, and review `RETRIEVAL_MIN_SCORE` |
 | Production validation fails | Run `scripts/validate_production_config.py` against the selected environment file and fix every reported issue |
 
+### First-response checklist
+
+1. Note the time, affected flow, environment, and any API `request_id` returned in an error.
+2. Capture service status and the relevant backend, worker, scheduler, and proxy logs.
+3. Check readiness and dependent services before retrying an upload, deletion, migration, or deployment.
+4. Preserve logs and backup identifiers; do not remove Docker volumes or re-run migrations as a diagnostic shortcut.
+5. Follow the release rollback or recovery runbook if data integrity, authentication, or cross-user isolation may be affected.
+
 Avoid disabling ownership checks, CORS validation, rate limiting, or network isolation to work around an error. For deeper procedures, see the [production runbook](docs/DEPLOYMENT-PRODUCTION.md) and [configuration reference](docs/CONFIGURATION.md).
 
 ---
@@ -363,6 +412,18 @@ The supported production baseline is a single Linux host running Docker Compose,
 
 Before pointing real users or private documents at a host, prepare DNS and firewall rules, private encrypted object storage, independent staging resources, monitoring credentials, and a verified backup plan. Production requires private S3-compatible storage, secure refresh cookies, an HTTPS-only CORS origin, non-template secrets, and an authenticated Qdrant service.
 
+### Host planning notes
+
+| Resource | Planning guidance |
+|---|---|
+| Worker memory | Allocate at least 4 GB to the Celery worker for intensive Docling parsing workloads |
+| Persistent disk | Budget separately for PostgreSQL, Redis, Qdrant, model cache, Caddy state, and temporary backup space |
+| Object storage | Use a private S3-compatible bucket with scoped credentials, server-side encryption, and a tested recovery path |
+| Network ingress | Publish only SSH administration as restricted by policy and HTTPS ingress on ports 80/443; keep data services private |
+| External egress | Allow access to Gemini when chat is enabled and to the model source when model artifacts need to be fetched |
+
+These are service-planning notes rather than a universal instance size. Measure CPU, memory, disk growth, and restore time with representative synthetic documents in staging before sizing production.
+
 The repository includes a production environment template and a validation command:
 
 ```bash
@@ -371,9 +432,10 @@ chmod 600 .env.production
 python scripts/validate_production_config.py --env-file .env.production
 ```
 
-For a release candidate, set the two image variables to the exact GHCR images tagged with the same full Git SHA, then run the stronger preflight. It validates production settings, immutable image tags, and the effective Compose port exposure before deployment:
+Check out the release candidate commit first. Set `GIT_SHA` to that full commit SHA and use the matching GHCR images, then run the stronger preflight. It validates production settings, immutable image tags, and the effective Compose port exposure before deployment:
 
 ```bash
+GIT_SHA=$(git rev-parse HEAD)
 export DOCUMIND_BACKEND_IMAGE=ghcr.io/yashrajagawane/documind-backend:$GIT_SHA
 export DOCUMIND_FRONTEND_IMAGE=ghcr.io/yashrajagawane/documind-frontend:$GIT_SHA
 
@@ -485,7 +547,14 @@ Testing & Tooling      Pytest · Vitest · Testing Library · Docker Compose · 
 
 ## Local Development
 
-Docker Compose is the simplest way to run the whole application. For faster iteration, you can also run the frontend and backend from their own folders while keeping PostgreSQL, Redis, and Qdrant in Compose.
+Docker Compose is the recommended way to run the whole application. The native development option below runs only PostgreSQL and Qdrant in Compose, then starts the backend and frontend as local processes. Do not start the full Compose stack and native processes at the same time; both modes use ports `3000` and `8000`.
+
+Start the infrastructure dependencies from the repository root:
+
+```bash
+cp .env.example .env
+docker compose up -d postgres qdrant
+```
 
 ### Backend
 
@@ -496,11 +565,22 @@ cd backend
 python -m venv .venv
 # Activate the virtual environment for your shell, then:
 python -m pip install -e ".[dev,processing,indexing,rag]"
+cp ../.env.example .env
 ```
 
-Set the environment values from the root `.env.example` for your local services, then run:
+In `backend/.env`, use the PostgreSQL password set in the root `.env` and set these local-process values:
+
+```env
+DATABASE_URL=postgresql+asyncpg://documind:<your-postgres-password>@localhost:5432/documind
+JOB_QUEUE_BACKEND=inprocess
+QDRANT_URL=http://localhost:6333
+RATE_LIMIT_BACKEND=memory
+```
+
+Run migrations once, then start the API:
 
 ```bash
+alembic upgrade head
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
@@ -514,7 +594,7 @@ npm ci
 npm run dev
 ```
 
-The development server opens at `http://localhost:3000`. For complete service wiring, migrations, background jobs, and document parsing, prefer the [Docker Compose quick start](#quick-start).
+The development server opens at `http://localhost:3000`; the API client defaults to `http://localhost:8000/api/v1`. With `JOB_QUEUE_BACKEND=inprocess`, processing jobs run inside the API process, so this mode is for development only. For durable worker processing and the complete service set, use the [Docker Compose quick start](#quick-start).
 
 ---
 
@@ -541,6 +621,18 @@ curl --fail http://localhost:8000/api/v1/health
 ```
 
 See the [complete API reference](docs/API.md) for request schemas, response examples, authentication details, and error codes. Use `/ready` for dependency readiness; `/health` is a basic liveness check.
+
+### Client handling guide
+
+| Response | Meaning | Suggested client action |
+|---|---|---|
+| `401 Unauthorized` | Access token is absent, invalid, or expired | Attempt the refresh-cookie flow once, then return the user to sign-in |
+| `404 Not Found` | Resource is missing or not owned by the current account | Show a generic unavailable message; do not probe guessed IDs |
+| `409 Conflict` | Requested operation is not valid for the document's current state | Refresh document state and retry only when the state permits it |
+| `413 Payload Too Large` / `415 Unsupported Media Type` | Upload exceeds the configured cap or uses a disallowed format | Explain the upload limit and supported formats before retry |
+| `429 Too Many Requests` / `503 Service Unavailable` | Rate limit or required dependency is unavailable | Back off and show a recoverable error; avoid rapid retry loops |
+
+The API returns structured error details; avoid displaying internal traces or logging tokens in frontend telemetry.
 
 ### Minimal authenticated API flow
 
@@ -633,20 +725,13 @@ DocuMind is an actively developed open-source project with deployment and operat
 
 The implementation plan and evidence templates live in the [deployment completion plan](docs/DEPLOYMENT-COMPLETION-PLAN.md), [staging qualification report](docs/STAGING-QUALIFICATION-REPORT.md), and [production launch report](docs/PRODUCTION-LAUNCH-REPORT.md). Do not treat the repository checklist or CI result as production approval.
 
-Current operational and product limitations:
+Operational and product limitations that remain relevant regardless of phase status:
 
-- **Deployment Qualification** — Phase 0 decisions and the Phase 1 repository baseline are complete; live staging qualification, provider-specific firewall/storage validation, and restore rehearsal remain outstanding. See the [deployment decision](docs/DEPLOYMENT-DECISION.md) and [production runbook](docs/DEPLOYMENT-PRODUCTION.md).
-- **Release Automation** — CI builds commit-pinned images and GitHub Actions includes protected staging/production deployment workflows. Configure the repository environments and host secrets using the [production runbook](docs/DEPLOYMENT-PRODUCTION.md); no live environment has been configured yet.
-- **Staging Qualification** — The release workflow runs authenticated health checks after staging deploy; the optional document lifecycle smoke run and RAG report require a staging host and test credentials. Use the [qualification report](docs/STAGING-QUALIFICATION-REPORT.md) to record evidence.
-- **Operations and Recovery** — Repository tooling now includes Prometheus/Grafana, alert rules, encrypted PostgreSQL backups, disposable restore, and Qdrant rebuild. Live alert delivery and restore rehearsal remain pending; see the [production runbook](docs/DEPLOYMENT-PRODUCTION.md).
-- **Production Launch** — Protected deployment runs authenticated smoke checks and saves a sanitized release record. The live launch and 24-hour observation window have not been completed.
-
-- **S3 Storage Live Qualification** — The S3 storage adapter is fully implemented with Boto3 and AES-256 SSE, but requires qualification in your target production environment.
-- **Worker Memory Footprint** — IBM Docling layout models require at least 4 GB of RAM allocated to the Celery worker container during intensive parsing tasks.
-- **Monitoring Dashboards** — Prometheus metrics are exported at `/api/v1/metrics`, but production Grafana dashboards and alerting rules are deployment-specific.
-- **Security Audit** — While designed with defensive security controls (JWT in memory, CSRF/XSS mitigations, fail-closed rate limits), DocuMind has not undergone an independent third-party commercial penetration audit.
-- **External Model Processing** — Embeddings are computed locally, but grounded chat sends retrieved evidence and the user question to the configured Gemini API. Review the provider's data handling terms and configure the service accordingly before processing sensitive documents.
-- **Single-Host Baseline** — The production Compose path is a single-host deployment, not a highly available multi-region architecture. PostgreSQL, Redis, and Qdrant need separately managed persistence, monitoring, and capacity planning.
+- **Resource profile** — Intensive Docling parsing needs at least 4 GB RAM allocated to the worker; size using representative workloads rather than a generic host recommendation.
+- **External model processing** — Embeddings run locally, while grounded chat sends the user question and retrieved evidence to Gemini. Review provider data-handling terms before processing sensitive documents.
+- **Single-host baseline** — The production Compose path is not a highly available or multi-region architecture; capacity, persistence, and monitoring need operator planning.
+- **Independent security review** — The project has not undergone an independent third-party penetration test or commercial security audit.
+- **Provider qualification** — The S3 adapter, alert delivery, host firewall, and restore path still require live qualification in the selected environment.
 
 ### Frequently asked questions
 
@@ -672,17 +757,19 @@ Check the document status and backend/worker/scheduler logs, verify available me
 Contributions are welcome! Please follow these steps for local development:
 
 ```bash
-# Backend linting and unit testing
+# Backend static checks and tests
 cd backend
-pip install -e ".[dev]"
+python -m pip install -e ".[dev]"
 ruff check .
 pytest
 
-# Frontend typechecking and unit testing
+# Frontend quality checks and production build
 cd ../frontend
-npm install
+npm ci
+npm run lint
 npm run typecheck
 npm test
+npm run build
 ```
 
 Please ensure all tests pass and code compiles before submitting a pull request. Refer to the [Architecture Decision Records](docs/ARCHITECTURE-DECISIONS.md) before proposing significant architectural changes.

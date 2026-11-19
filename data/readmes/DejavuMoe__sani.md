@@ -16,10 +16,10 @@ A self-hosted link shortener with text and file sharing, for one administrator. 
 Paste a long URL, press Enter, and the short link is already on your clipboard. Sani fetches the page title and icon so you can recognize links later, counts clicks without slowing redirects down, and stays out of the way otherwise.
 
 - **Fast where it matters.** Redirects are served from memory: about 130,000 requests per second with sub-millisecond median latency on an 8-core laptop, with every click counted ([numbers below](#performance)).
-- **Quick to use.** Paste a link anywhere on the page, or drop one in. Custom slugs are checked as you type, the whole dashboard works from the keyboard, and deleting offers undo instead of a confirmation dialog.
+- **Quick to use.** Paste a link, text snippet or file anywhere on the page, or drop one in. Custom slugs are checked as you type, the whole dashboard works from the keyboard, editing guards unsaved changes, and deleting offers undo instead of a confirmation dialog.
 - **Simple statistics.** Total and daily clicks, top referrers, last visit. Clicks from crawlers, link previews, prefetches and your own dashboard are not counted.
 - **Tags for organization.** Assign colored tags to links, texts and files while creating or editing them, then filter by a tag or find untagged items. Tags stay private to the administrator.
-- **Per-link controls.** Expiry dates, visit limits, temporary or permanent redirects, and an off switch. You can edit the destination and the change applies immediately.
+- **Per-link controls.** Expiry, visit limits, access passwords, temporary or permanent redirects, and an off switch. You can edit the destination and the change applies immediately.
 - **Texts and files, too.** Share a note up to 1 MB, a config snippet (monospace, with line numbers) or a file up to 99 MB by default at `/p/…`, with the same expiry, visit limit and statistics. File uploads and raw downloads require a separate files hostname.
 - **Works with what you use.** A bookmarklet, the Android share sheet (install it as an app), API tokens for scripts and Shortcuts, and import from Shlink or Sani CSV/JSON.
 - **Unicode slugs.** `s.example.com/简历` works. Slugs match case-insensitively.
@@ -27,7 +27,7 @@ Paste a long URL, press Enter, and the short link is already on your clipboard. 
 
 ## Documentation
 
-Sani is designed for a single running instance and one administrator, not multi-user hosting or active-active replicas. The 1.x series follows the [compatibility policy](docs/en/project/versioning.md). Read the release notes before upgrading. For public service, configure HTTPS, persistent storage and a separate files domain when needed, then rehearse a complete [backup and restore](docs/en/guide/operations.md). Repository tests and published benchmarks do not certify your deployment’s capacity or availability.
+Sani is designed for a single running instance and one administrator, not multi-user hosting or active-active replicas. The 2.x series follows the [compatibility policy](docs/en/project/versioning.md); v2.0.0 removes ARMv7 and FreeBSD release artifacts while preserving schema 7 and existing APIs and links. Read the release notes before upgrading. For public service, configure HTTPS, persistent storage and a separate files domain when needed, then rehearse a complete [backup and restore](docs/en/guide/operations.md). Repository tests and published benchmarks do not certify your deployment’s capacity or availability.
 
 The documentation, in English and Chinese, lives in [docs/](docs/): guides for [deployment](docs/en/guide/deploy.md) and [operations](docs/en/guide/operations.md), the [configuration](docs/en/reference/configuration.md), [HTTP API](docs/en/reference/api.md) and [command line](docs/en/reference/cli.md) references, and how Sani works inside. It's a VitePress site; `make install docs-dev` serves it on `127.0.0.1:5174`, and its deploy page has a config builder that writes the deployment files for your domain. Every build checks the docs against the source, so the settings, endpoints, error codes and commands they list are the ones the code has.
 
@@ -45,20 +45,20 @@ docker compose up -d
 
 Open `http://127.0.0.1:8080/admin/` and choose the admin password. The first visit also asks for the setup code Sani prints to its log (`docker logs sani`), so nobody else can claim a fresh instance; when `SANI_BASE_URL` is set, the log line includes a link with the code already filled in. Set `SANI_PASSWORD` instead to skip this step. Put a TLS reverse proxy in front of it; [deploy/](deploy/) has Caddy, nginx and systemd examples.
 
-The image, `ghcr.io/dejavumoe/sani`, is built `FROM scratch` for `linux/amd64`, `linux/arm64` and `linux/arm/v7`: about 25 MB, running as an unprivileged user, with the data in the `/data` volume.
+The v2.0.0 image for `ghcr.io/dejavumoe/sani` uses digest-pinned `gcr.io/distroless/static-debian13:nonroot` for `linux/amd64` and `linux/arm64`. It runs as UID/GID `65532:65532`, has no shell or package manager, and keeps data in the `/data` volume. The amd64 source-built image is about 32 MB uncompressed (measured 2026-11-17). Check [Releases](https://github.com/DejavuMoe/sani/releases) before deploying: this source tree may prepare a version whose artifacts are not published yet.
 
-The template pins `v1.0.4`; image tags include `v`, exactly like Git tags and Releases. Use a published version and change the pin explicitly when upgrading. Data is bound from `./sani-data` beside the Compose file to `/data`. The `install` command above is required: it creates the directory with ownership `65532:65532` for the container to write. If an earlier start created a root-owned directory, [repair its permissions](docs/en/guide/deploy.md#data-permissions).
+The template pins `v2.0.0`; image tags include `v`, exactly like Git tags and Releases. Use a published version and change the pin explicitly when upgrading. Data is bound from `./sani-data` beside the Compose file to `/data`. The `install` command above is required: it creates the directory with ownership `65532:65532` for the container to write. If an earlier start created a root-owned directory, [repair its permissions](docs/en/guide/deploy.md#data-permissions).
 
 ### A single binary
 
-Every [release](https://github.com/DejavuMoe/sani/releases/latest) has archives for Linux, macOS, Windows and FreeBSD, with `SHA256SUMS` and build provenance:
+Every [release](https://github.com/DejavuMoe/sani/releases/latest) has archives for Linux, macOS and Windows, with `SHA256SUMS` and build provenance:
 
 ```sh
-curl -fsSL https://github.com/DejavuMoe/sani/releases/download/v1.0.4/sani-linux-amd64.tar.gz | tar -xz sani
+curl -fsSL https://github.com/DejavuMoe/sani/releases/download/v2.0.0/sani-linux-amd64.tar.gz | tar -xz sani
 SANI_BASE_URL=https://s.example.com ./sani
 ```
 
-The binary embeds the admin app and needs nothing else at runtime. To build it yourself, `make install build` (Go 1.27+, Node 24 and pnpm) produces `./bin/sani`. `sani passwd` resets the password and signs out every session (with Docker: `docker exec -it sani /sani passwd`).
+The binary embeds the admin app and needs nothing else at runtime. To build it yourself, `make install build` (Go 1.27+, Node 26 LTS and pnpm) produces `./bin/sani`. `sani passwd` resets the password and signs out every session (with Docker: `docker exec -it sani /sani passwd`).
 
 ## Configuration
 
@@ -90,13 +90,13 @@ The admin app lives at `/admin/`, the API at `/api/` and shared texts and files 
 
 ## Everyday use
 
-**Keyboard.** `N` new link · `/` search · `J`/`K` move · `Enter` open · `C` copy · `E` edit · `Del` (or `⌘⌫` on a Mac) delete, with undo · `X` check several links to turn them on, off or delete them at once · `Esc` close · `?` all shortcuts. Paste a URL anywhere on the page to start shortening it.
+**Keyboard.** `N` new · `/` search · `J`/`K` move · `Enter` open · `C` copy · `E` edit · `Ctrl`+`Enter` (or `⌘`+`Enter` on Mac) save · `Del` (or `⌘⌫` on a Mac) delete, with undo · `X` check several items to turn them on, off or delete them at once · `Esc` close/clear · `?` all shortcuts. Paste a URL, text snippet or file anywhere on the page to start.
 
 **Bookmarklet.** Settings → Shortcuts → drag “Shorten this page” to your bookmarks bar. Clicking it opens a small window with the page URL and title filled in. Review them and click “Shorten” to create a link or reuse an existing one, then copy the result.
 
 **Phone.** Install Sani on Android using a browser that supports Web Share Target. Sharing a URL from another app prefills it for review; click “Shorten” to submit. Support depends on the browser and operating system.
 
-**API (v1.0.4).** API routes changed in v0.9.5; when upgrading from v0.9.4 or earlier, update scripts using the [current API reference](docs/en/reference/api.md). The [API archive](docs/en/reference/api-archive.md) documents those older versions. Save a fixed sharing domain and create a token in Settings, then:
+**API.** API routes changed in v0.9.5; when upgrading from v0.9.4 or earlier, update scripts using the [current API reference](docs/en/reference/api.md). The [API archive](docs/en/reference/api-archive.md) documents those older versions. Save a fixed sharing domain and create a token in Settings, then:
 
 ```sh
 curl -X POST https://s.example.com/api/v1/links \
@@ -141,7 +141,7 @@ How it gets there:
 ## How it's built
 
 ```
-cmd/sani            entry point: serve, passwd, backup, healthcheck, version
+cmd/sani            entry point: serve, passwd, backup, preflight, healthcheck, version
 internal/server     HTTP: redirects, JSON API, embedded app, visitor pages
 internal/cache      redirect cache with negative caching and a write-race guard
 internal/clicks     in-memory click aggregation, flushed in batches

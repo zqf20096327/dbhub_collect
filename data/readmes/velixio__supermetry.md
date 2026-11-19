@@ -134,6 +134,12 @@ docker compose -f deploy/docker-compose.yml --profile bundled-db up -d --build
 
 Docker serves the dashboard on `http://localhost:8787/app`; see [Docker Compose](deploy/README.md#docker-compose-by-hand) for an external database.
 
+**One-click deploy** to a hosted platform with a managed PostgreSQL ([details](deploy/README.md#one-click-deploy)), or use the [Helm chart](deploy/helm/supermetry) on Kubernetes:
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/supermetry) <!-- TODO: replace with the published Railway template URL, see deploy/railway/README.md -->
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/velixio/supermetry)
+[![Deploy to DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/velixio/supermetry/tree/main)
+
 Open `<your URL>/app` and create your admin account. Then add the tracking script to your site. Copy the exact snippet from **Settings, Installation** in the dashboard. It looks like this:
 
 ```html
@@ -188,6 +194,8 @@ Yes. It measures visitors, pageviews, sources, goals and conversions without coo
 <summary><b>How is it different from Plausible or Umami?</b></summary>
 
 Plausible's self-hosted edition needs ClickHouse next to PostgreSQL, and Umami runs on Node.js. Supermetry is a single Go binary and PostgreSQL only, and it includes funnels, revenue, retention, session replay and heatmaps in the open-source release.
+
+Switching keeps your history: see [Migrate from Plausible](docs/guide/migrate-from-plausible.md) and [Migrate from Umami](docs/guide/migrate-from-umami.md).
 </details>
 
 <details>
@@ -232,10 +240,12 @@ An EU-hosted Cloud is open: [start free](https://app.supermetry.com/signup?utm_s
 - [Ad blockers](docs/guide/ad-blockers.md): proxy through your own domain, or send events from your server
 - [Desktop and mobile apps](docs/guide/apps.md): rules for sending events and failure reports from apps
 - App Health client kits: [TypeScript](sdk/typescript/README.md) and [Python](sdk/python/README.md), MIT licensed, no dependencies
+- [Migrate from Plausible](docs/guide/migrate-from-plausible.md) and [Migrate from Umami](docs/guide/migrate-from-umami.md): import your history and swap the script
 - [Tracking and privacy](docs/tracking-privacy.md)
 - [API](docs/api.md) and [API authentication](docs/api-auth.md)
 - [Authorization](docs/authorization.md)
 - [Notifications](docs/guide/notifications.md)
+- [Stripe revenue](docs/guide/stripe.md)
 - Full docs at [supermetry.com/docs](https://supermetry.com/docs/?utm_source=github&utm_medium=readme&utm_campaign=supermetry-repo&utm_content=docs-link)
 
 ## Build from source

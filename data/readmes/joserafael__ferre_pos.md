@@ -19,8 +19,14 @@ Sistema integral de Punto de Venta (POS), control de inventario con soporte de u
    - Tasas de cambio (`tasa_ves`, `tasa_aplicada`): `DECIMAL(12,4)`.
    - Cantidades e inventario (`stock_actual`, `stock_minimo`, `factor_conversion`, `cantidad`): `DECIMAL(12,3)` para soportar ventas fraccionadas (metros, kilogramos, litros).
    - Transacciones ACID (`$db->transStart()` / `$db->transComplete()`) con bloqueo pesimista (`FOR UPDATE`) en operaciones de inventario, compras, ajustes y ventas.
-4. **Frontend (`ferre_pos_web` - Vue 3 + Vite)**:
-   - Vue 3 con Composition API (`<script setup>`), Pinia para gestión de estado reactivo, Vue Router y Axios.
+4. **Caché en Memoria, Concurrencia y Seguridad (Redis 6+)**:
+   - Manejador de caché primario en CodeIgniter 4 (`ext-redis`) centralizado en `RedisService`.
+   - Caché sub-milisegundo para la tasa activa, categorías, unidades, métodos de pago y páginas del catálogo de productos, con invalidación automática al modificar inventario o tasas.
+   - Reservas temporales de stock multi-caja y cerrojos atómicos distribuidos (Mutex `SET NX EX` + scripts Lua) durante el checkout de ventas.
+   - Control de tráfico mediante `RateLimitFilter` (15 req/min en login, 180 req/min en API) y lista negra (Blacklist) de tokens JWT para logout y revocación inmediata de sesiones.
+5. **Frontend (`ferre_pos_web` - Vue 3 + Vite)**:
+   - Vue 3 con Composition API (`<script setup>`), Pinia (`auth`, `tasa`, `pos`, `caja`), Vue Router y Axios.
+   - Buscador **Autocomplete** en tiempo real en el POS (con soporte de teclado y lector de código de barras), paginación de servidor en todas las tablas (`PaginationBar`) y selector inteligente de productos (`ProductAutocomplete`).
    - Visualización simultánea de precios, subtotales, impuestos, pagos mixtos y vueltos en USD y VES calculados en tiempo real según la tasa de cambio activa.
 
 ## Reglas de Negocio Principales
@@ -54,6 +60,11 @@ Sistema integral de Punto de Venta (POS), control de inventario con soporte de u
   - `ZELLE` (USD - requiere referencia)
   - `PAGO_MOVIL` (VES - requiere referencia)
 - Una misma factura admite múltiples pagos combinando USD y VES, calculando el monto equivalente en USD de cada abono y registrando el vuelto entregado en USD y/o VES.
+
+### 5. Apertura, Arqueo y Cierre de Caja Bimonetario (`caja_sesiones`)
+- Todo operador debe abrir su turno de caja (registrando su fondo inicial en efectivo USD y VES) antes de poder emitir facturas en el POS.
+- Durante el turno se calcula en vivo el efectivo esperado en gaveta (`Fondo Inicial + Ventas en Efectivo - Vueltos entregados`) y el desglose por cada método de pago.
+- Al finalizar el turno, el cajero registra el conteo físico en USD y Bs. para generar el comprobante de arqueo y auditar cualquier sobrante o faltante.
 
 ## Capturas de Pantalla e Interfaz del Sistema
 
@@ -102,21 +113,22 @@ ferre_pos/
 │       └── default.conf        # Configuración de Nginx para el Backend API
 ├── ferre_pos_api/              # Backend RESTful API en CodeIgniter 4
 │   ├── app/
-│   │   ├── Controllers/Api/    # Controladores REST (Auth, TasaCambio, Producto, Inventario, Venta, etc.)
+│   │   ├── Controllers/Api/    # Auth, Caja, Cajero, Catalogo, Categoria, Cliente, Dashboard, Inventario, Pos, Producto, TasaCambio, Venta
 │   │   ├── Database/
-│   │   │   ├── Migrations/     # Esquema completo MySQL 8 InnoDB (CreateFerrePosSchema)
+│   │   │   ├── Migrations/     # Esquema completo MySQL 8 InnoDB (incluye clientes y caja_sesiones)
 │   │   │   └── Seeds/          # Datos iniciales (InitialFerrePosSeeder)
-│   │   ├── Filters/            # Filtros JWT y CORS
-│   │   ├── Libraries/          # Librería JwtLib (HS256)
-│   │   └── Models/             # Modelos de datos
+│   │   ├── Filters/            # Filtros JWT (con blacklist Redis), CORS y RateLimitFilter
+│   │   ├── Libraries/          # JwtLib (HS256) y RedisService
+│   │   └── Models/             # Modelos de datos y paginación
 │   └── .env                    # Variables de entorno del Backend
 ├── ferre_pos_web/              # Frontend SPA en Vue 3 + Vite + Pinia
 │   ├── src/
+│   │   ├── components/         # Componentes reutilizables (PaginationBar, ProductAutocomplete)
 │   │   ├── layouts/            # Layout principal con barra superior de tasa BCV activa
 │   │   ├── router/             # Rutas protegidas de la aplicación
 │   │   ├── services/           # Cliente HTTP Axios con interceptores JWT
-│   │   ├── stores/             # Stores de Pinia (auth, tasa, catálogos)
-│   │   └── views/              # Vistas: PosView, ProductosView, InventarioView, VentasView, TasasView, etc.
+│   │   ├── stores/             # Stores de Pinia (auth, tasa, pos, caja)
+│   │   └── views/              # PosView, CajaView, ProductosView, CategoriasView, InventarioView, VentasView, CajerosView, DashboardView
 │   └── vite.config.js          # Configuración de Vite y proxy hacia el API
 ├── Dockerfile.php              # Imagen PHP 8.5-FPM con extensiones mysqli, pdo_mysql, redis, intl, bcmath, gd
 ├── Dockerfile.web              # Imagen Node 20 Alpine para el servidor de desarrollo de Vue 3
@@ -133,9 +145,11 @@ El esquema relacional en `ferre_pos_db` está compuesto por las siguientes tabla
 - `unidades_medida`: Unidades enteras y fraccionadas (`permite_decimales`).
 - `metodos_pago`: Formas de cobro en `USD` y `VES` y exigencia de número de referencia.
 - `productos`: Catálogo con `unidad_compra_id`, `unidad_venta_id`, `factor_conversion`, costos/precios en USD, alícuota de IVA y stock fraccionado.
+- `clientes`: Registro de clientes por Cédula/RIF con datos opcionales de contacto.
+- `caja_sesiones`: Turnos de apertura y cierre de caja, fondos iniciales, efectivo esperado, conteo físico y diferencias de arqueo.
 - `entradas_inventario` y `entrada_detalles`: Cabecera y renglones de compras a proveedores en USD o VES.
 - `movimientos_inventario`: Kardex inmutable con saldo anterior, cantidad, saldo resultante y costos unitarios en ambas monedas.
-- `ventas`, `venta_detalles` y `venta_pagos`: Facturas emitidas, detalle de artículos vendidos y desglose de pagos mixtos recibidos.
+- `ventas`, `venta_detalles` y `venta_pagos`: Facturas emitidas (vinculadas a `caja_sesion_id`), detalle de artículos vendidos y desglose de pagos mixtos recibidos.
 
 ## Ejecución con Docker
 
@@ -184,19 +198,21 @@ Una vez ejecutado el seeder `InitialFerrePosSeeder`, puede iniciar sesión en `h
 
 > Se incluye una colección lista para importar en [docs/FerrePOS_API.postman_collection.json](file:///Users/joserafaelcamejo/Codigos/ferre_pos/docs/FerrePOS_API.postman_collection.json) con todos los endpoints clasificados por carpetas, variables de entorno y captura automática de token JWT tras el login.
 
-- `POST /api/auth/login`: Autenticación de usuario y emisión de token JWT junto con la tasa activa.
-- `GET /api/auth/me`: Datos del usuario autenticado.
+- `POST /api/auth/login` | `GET /api/auth/me` | `POST /api/auth/logout`: Autenticación JWT, consulta de sesión y revocación inmediata en blacklist Redis.
+- `GET /api/caja/actual` | `POST /api/caja/abrir` | `POST /api/caja/cerrar` | `GET /api/caja/historial` | `GET /api/caja/{id}`: Gestión completa de apertura, arqueo bimonetario y cierre de caja.
+- `POST /api/pos/reservar-stock` | `POST /api/pos/liberar-stock` | `GET /api/pos/stock-disponible/{id}`: Reservas temporales y disponibilidad en tiempo real multi-caja en Redis.
 - `GET /api/dashboard`: Resumen de indicadores (ventas del día en USD/VES, alertas de stock bajo, tasa actual y últimas facturas).
-- `GET /api/tasas/activa`: Consulta pública de la tasa de cambio vigente.
+- `GET /api/tasas/activa`: Consulta pública de la tasa de cambio vigente (cacheada en Redis).
 - `GET /api/tasas` | `POST /api/tasas`: Historial y publicación de nueva tasa de cambio USD/VES.
-- `GET /api/categorias` | `POST /api/categorias` | `PUT /api/categorias/{id}` | `DELETE /api/categorias/{id}`: CRUD de categorías.
+- `GET /api/categorias` | `POST /api/categorias` | `PUT /api/categorias/{id}` | `DELETE /api/categorias/{id}`: CRUD de categorías (soporta `?page=&per_page=&q=`).
 - `GET /api/unidades-medida` | `POST /api/unidades-medida`: Catálogo de unidades de medida.
 - `GET /api/metodos-pago`: Catálogo de métodos de pago activos.
-- `GET /api/productos` | `GET /api/productos/{id}` | `POST /api/productos` | `PUT /api/productos/{id}` | `DELETE /api/productos/{id}`: Gestión de productos.
-- `GET /api/inventario/entradas` | `GET /api/inventario/entradas/{id}` | `POST /api/inventario/entradas`: Registro y consulta de compras a proveedores con conversión de unidades.
+- `GET /api/productos` | `GET /api/productos/{id}` | `POST /api/productos` | `PUT /api/productos/{id}` | `DELETE /api/productos/{id}`: Gestión de productos con paginación y caché por página en Redis (`?page=&per_page=&q=&categoria_id=`).
+- `GET /api/inventario/entradas` | `GET /api/inventario/entradas/{id}` | `POST /api/inventario/entradas`: Registro y consulta paginada de compras a proveedores con conversión de unidades.
 - `POST /api/inventario/ajustes`: Ajustes positivos y negativos de inventario.
-- `GET /api/inventario/kardex`: Consulta del Kardex inmutable con filtros por producto y tipo de movimiento.
-- `GET /api/ventas` | `GET /api/ventas/{id}` | `POST /api/ventas` | `POST /api/ventas/{id}/anular`: Emisión de facturas POS bimonetarias con multipago y anulación con reverso automático de stock en el Kardex.
+- `GET /api/inventario/kardex`: Consulta paginada del Kardex inmutable con filtros por producto, tipo y búsqueda (`?page=&per_page=&q=`).
+- `GET /api/ventas` | `GET /api/ventas/{id}` | `POST /api/ventas` | `POST /api/ventas/{id}/anular`: Emisión de facturas POS bimonetarias con multipago, bloqueo distribuido Redis y anulación con reverso automático en Kardex.
+- `GET /api/cajeros` | `POST /api/cajeros` | `PUT /api/cajeros/{id}` | `GET /api/cajeros/{id}/ventas` | `POST /api/cajeros/{id}/revocar-sesiones`: Gestión de operadores, histórico y revocación masiva de sesiones JWT.
 
 ## Comandos Útiles de Mantenimiento
 

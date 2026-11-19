@@ -1,9 +1,8 @@
 # Yorm
 ## _Yet another ORM_
 
-![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)
 [![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&logo=apache-maven&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Forg%2Fyorm%2Fyorm%2Fmaven-metadata.xml)](https://mvnrepository.com/artifact/org.yorm/yorm)
-![Supported JVM Versions](https://img.shields.io/badge/JVM-17-success.svg?style=flat&logo=Java)
+![Supported JVM Versions](https://img.shields.io/badge/JVM-25-success.svg?style=flat&logo=Java)
 [![License](https://img.shields.io/github/license/naynecoder/yorm?style=flat&logo=apache&color=success)](https://www.apache.org/licenses/LICENSE-2.0)
 
 Yorm is a basic ORM-alike framework designed to work with Java Records, without class generation, neither annotations.
@@ -11,7 +10,7 @@ In the world of microservices, there is a tendency to have very contained logic 
 and hence reduced databases, that in many cases are simply no more than several tables with not that many fields.
 Java Records usually are a perfect fit for basic CRUD operations, and here is where Yorm shines.
 
-**Yorm** needs at least Java 17, although it works of newer versions as well.
+**Yorm** needs at least Java 25, although it works with newer versions as well.
 
 **Yorm** might be for you in case:
 

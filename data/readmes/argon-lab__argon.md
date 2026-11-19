@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://argonlabs.tech">
-    <img src=".github/assets/hero.png" alt="Argon — MongoDB sandboxes for AI agents: give every agent run its own database and review what to merge" width="100%">
+    <img src=".github/assets/hero.png" alt="Argon — MongoDB sandboxes for AI agents. Git for MongoDB underneath: branch, diff, merge, undo." width="100%">
   </a>
 </p>
 
@@ -15,8 +15,8 @@
 [![mcp.market](https://mcp.market/badge/argon-lab-argon.svg)](https://mcp.market/server/argon-lab-argon)
 
 **Give every agent run its own real MongoDB database, forked from your data.
-Review what it changed, merge what you want, discard the rest. Git-style
-branching, time travel and merge underneath. Any driver, real mongod.**
+Review what it changed, merge what you want, discard the rest. Git for MongoDB
+underneath: branch, diff, merge, time travel and undo. Any driver, real mongod.**
 
 Three ideas, thirty seconds:
 
@@ -29,7 +29,8 @@ Three ideas, thirty seconds:
    merge.
 3. **Underneath, it is Git for MongoDB** — a branch is a pointer created with a
    metadata write; checkout separately materializes the data. Diff, merge, undo
-   and pins work within the configured retention and capture guarantees.
+   and pins work within the configured retention and capture guarantees. The
+   commands are [side by side with Git](#git-for-mongodb) below.
 
 ## Install
 
@@ -61,7 +62,8 @@ your data ──sandbox──▶ mongodb://…  ← the agent, any driver
 ```
 
 ```bash
-# 0 · Bring your data in once. Stop source writers and DDL for the import — or: argon projects create myapp
+# 0 · Bring your data in once, from a database nobody is writing to — or: argon projects create myapp
+#     (a database that is in use: see "A database that is in use" below)
 argon import database --uri mongodb://localhost:27017 --database myapp --project myapp --source-quiesced
 
 # 1 · In terminal A, a sandbox: fork + checkout + TTL + capture in one command.
@@ -85,6 +87,67 @@ minute. `--watch` needs 2.3.0 or newer; on older versions run
 `argon watch -p myapp -b <sandbox> --actor agent:run-1` after creating the sandbox.
 Long-lived branches work the same way with `argon branches create` and
 `argon checkout`, and `argon restore reset` rewinds a branch to an earlier time.
+
+### A database that is in use
+
+Online import and the `argon source` commands, introduced in 2.6.0, are now
+available by default. You can import a replica-set database while writers
+keep running, then follow its changes on the project's `main`. The experimental
+options `--write-back`, `--auto-resync` and `--enable-source-images` are off
+by default and each requires `ARGON_EXPERIMENTAL_SOURCE=1`. For known
+issues and limits, see
+[the operations guide](docs/OPERATIONS.md#following-a-source-database).
+
+```bash
+export ARGON_SOURCE_URI="mongodb://…"     # read per command, never stored
+argon import preview --database myapp --online
+argon import database --database myapp --project myapp --online
+argon source follow -p myapp              # main tracks the source; leave it running
+
+argon sandbox create -p myapp --ttl 1h --watch --actor agent:run-1
+argon merge preview -p myapp -b <sandbox>
+ARGON_EXPERIMENTAL_SOURCE=1 argon merge apply <plan-id> --write-back
+```
+
+The import copies ordinary collections at one cluster time, which it prints.
+Add `--dry-run` to the import command to check the source and its change stream
+and see the estimated copy without writing anything.
+Following ignores changes to views. JSON preview and plan listing preserve
+BSON types with canonical Extended JSON. An empty write-back completes in
+metadata. A nonempty write-back checks capture health in the transaction
+that claims the plan, then writes in one source transaction. It checks
+every affected document against the plan's
+before-image and aborts the transaction if one has changed. The metadata
+deployment must acknowledge the plan claim with majority write concern
+before the source transaction starts.
+Write-back and `--enable-source-images`
+require importing with a user allowed to run `replSetGetConfig`, such as one
+with the `clusterMonitor` role. Use `argon source status` to see which identity
+check applies. The MCP server and REST API do not offer write-back. Argon
+never drops, renames or rewrites a source database. See
+[the operations guide](docs/OPERATIONS.md#following-a-source-database).
+
+If a plan stays `writing_back`, check the affected documents on the source,
+let following catch up, and run `argon merge preview` again for the sandbox.
+
+Run `argon source status -p myapp` to see whether `main` is verified at its
+saved source cluster time. A clean stop at an exact checkpoint exits zero,
+as does `restarting` while a live follower reopens its stream from that checkpoint.
+An open catch-up range, a stored capture error or an expired owner exits
+nonzero even when the state says `stopped`. Table and JSON output give the
+reason and next action. `argon status` and `argon doctor` report the same
+health. Write-back preflight requires `exact`. See the
+[source status table](docs/OPERATIONS.md#what-argon-source-status-reports-and-what-to-do).
+
+Each project can run one follower or resync at a time. Restart following
+after lease loss and let the replacement verify its checkpoint.
+`argon source follow --auto-resync` completes an unfinished resync or repairs
+a source stream gap. The option checks `ARGON_EXPERIMENTAL_SOURCE=1` at startup.
+
+Operators can enable `changeStreamPreAndPostImages` directly on MongoDB
+or use `--enable-source-images` on online import or follow. When requested,
+`source follow --enable-source-images` checks the lease before altering each
+collection. An error after a change lists the affected collections.
 
 Prefer clicking? `argon console` serves a local web console (UI + REST API),
 supervises capture, reaps expired sandboxes every minute, and opens your browser.
@@ -129,6 +192,28 @@ To keep a person in the loop, withhold tools from the MCP server:
 tools that inspect state.
 
 The full agent workflow: [docs/AGENTS.md](docs/AGENTS.md).
+
+## Git for MongoDB
+
+Underneath the sandbox, Argon does for MongoDB documents what Git does for
+files. Side by side:
+
+| In Git | In Argon | What it does to your data |
+|---|---|---|
+| `git branch` | `argon branches create` | adds a pointer into shared history; no documents are copied |
+| `git worktree add` | `argon sandbox create` | gives a new branch its own working copy: a real MongoDB database, with a TTL |
+| `git diff` | `argon diff` | lists the documents a branch would add, change or remove |
+| `git merge` | `argon merge preview`, then `argon merge apply` | saves the change as a plan to review, then applies exactly that plan |
+| `git checkout <commit>` | `argon time-travel query` | reads the data as it was at an earlier position in retained history |
+| `git revert` | `argon undo` | reverses earlier writes with a new change; history is not rewritten |
+| `git tag` | `argon pin create` | names one fixed state and protects its history while the pin exists |
+
+Where it differs from Git: there is no commit step, because a running capture
+process records each document change. A merge goes from a branch into its
+parent and compares whole documents. Checking out a branch copies its data, so
+it takes time and storage that depend on the dataset. Documents are versioned;
+indexes and collection options are not. History older than the retention
+window can be reclaimed unless a pin protects it.
 
 ## What you get
 
@@ -178,6 +263,8 @@ model, stated honestly: [ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Community
 
+[Jake Wang](https://jakewang.io/about/) maintains Argon.
+
 [Issues](https://github.com/argon-lab/argon/issues) ·
 [Discussions](https://github.com/argon-lab/argon/discussions) ·
 [Contributing](CONTRIBUTING.md) ·
@@ -187,8 +274,8 @@ model, stated honestly: [ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 Thank you to everyone who has made Argon better.
 
-<a href="https://github.com/argon-lab/argon/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=argon-lab/argon" alt="Argon contributors">
+<a href="https://argonlabs.tech/about#contributors">
+  <img src="https://argonlabs.tech/contributors.svg" alt="Argon contributors" height="64">
 </a>
 
 What each person shipped, and the release it shipped in, is listed at

@@ -1,150 +1,140 @@
-# 忆织 MemWeave
+# MemWeave
 
-**忆织 MemWeave（dsh-mem-weave） —— 把记忆编织进人格（记忆 × 人格一体 DSH 插件）**
+[中文](./README.zh-CN.md) · English
 
-忆织是 DeepSeek Harness（DSH）的记忆与人格插件。
+**v1.0.2** · MIT · Node ≥ 22.13 · a memory and persona plugin for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
 
-装上以后，AI 会记住你是谁、你们在做什么项目、它踩过什么坑、答应过你什么事。开新会话不用重新认识你。用得越久，它越了解你，每轮消耗的 token 却不会越来越多。
+MemWeave is what gives DSH a memory. Install it once, and the AI remembers who you are, what you are working on, the mistakes it has made, and the promises it made to you. A new session no longer starts from zero.
 
-## 亮点
+## Screenshots
 
-- **越用越久，token 不涨**：每轮注入有固定上限，只带这一轮用得上的记忆。
-- **像人一样遗忘**：不常用的慢慢淡出，常用的越记越牢，你本人的信息永远不会忘。
-- **你说了算**：AI 只能写记忆、提建议，改人格、改规则、处理冲突、永久删除都只能由你来做。
-- **改错能撤销**：写入、修改、合并、整理都能在 24 小时内一键撤回，全程有审计记录。
-- **不乱记**：密钥、令牌、密码会被直接拦下；重复的会自动合并；互相矛盾的会先冻结，等你判断。
-- **有人格**：自称、称呼、性格、语气都能设置，内置两套原创人格。
-- **记得约定和日子**：到期的约定、生日、纪念日、农历节日都会提前想起来。
-- **数据在本机**：一个 SQLite 文件，不联网、不上传，可以一键备份。
-- **轻**：没有运行时依赖，安装包约 170 KB。
+<p align="center">
+  <img src="./docs/images/overview.png" width="32%" alt="Overview: health, pending items and memory layers">
+  <img src="./docs/images/persona.png" width="32%" alt="Persona: model slots, presets and live preview">
+  <img src="./docs/images/advanced.png" width="32%" alt="Advanced: recall weights and quality switches">
+</p>
 
-## 它是怎么做到的
+## Highlights
 
-### 每轮只带一小部分
+- **Only what the turn needs**: injection is capped per section, so a bigger memory store does not mean a bigger prompt.
+- **Forgetting that feels human**: rarely used memories fade in ranking, frequently used ones stay sharp, and facts about you never retire.
+- **You stay in control**: the AI can propose memories; editing the persona, changing rules, resolving conflicts and permanent deletion are human-only.
+- **Mistakes are reversible**: writes, edits, merges and consolidation can be undone within 24 hours, all with an audit trail.
+- **Nothing gets written blindly**: secrets are blocked, duplicates merge, contradictions freeze until you decide.
+- **Promises and dates**: due promises, birthdays, anniversaries and lunar festivals surface ahead of time.
+- **Local by default**: one SQLite file, no uploads, no account, and no external service unless you configure an embedding provider; backup is one click and can be encrypted.
+- **Works after install**: zero runtime dependencies — the package ships the sqlite-vec extension for five platforms, the local inference runtime (transformers + onnxruntime) and vectra; about 70 MB. Model weights download on first use.
 
-记忆库可以一直变大，但每轮注入的上限不变：
+## How it works
 
-| 时机 | 注入内容 | 默认上限 |
-| --- | --- | --- |
-| 会话第一轮 | 人格 + 记忆快照（你是谁、规则、关系、项目） | 4000 字 |
-| 之后每轮 | 新增或改动的记忆 | 1200 字 |
-| 之后每轮 | 和当前话题相关的记忆 | 900 字 |
+### Forgetting, without losing data
 
-没轮到的记忆不会丢，下次话题对上了照样能找回来。上限可以在界面里调。
+Ranking changes; nothing is deleted.
 
-### 像人一样遗忘
+- **Half-life per layer**: topics 30 days, facts 90 days, projects 180 days, facts about you and lessons 365 days, rules never decay.
+- **Use reinforces**: memories that keep getting hit can extend their half-life up to 8×.
+- **No echo chamber**: a memory recalled over and over in a short window is ranked down to make room for others.
+- **Tidying up**: long-unused scattered memories are merged into a summary, projects finished six months ago are archived, and every original can be recovered.
 
-遗忘只影响记忆排第几，不删数据。
+### What must never be forgotten
 
-- **会淡忘**：记忆按层设置半衰期，话题 30 天，事实 90 天，项目 180 天，你本人的信息和教训 365 天。
-- **越用越牢**：经常用到的记忆，半衰期最多延长到 8 倍。
-- **不翻来覆去**：同一条记忆短时间内被反复想起，排名会往后放，给别的记忆让位置。
-- **会收拾**：
-  - 很久没用过的零散记忆，合并成一条摘要。
-  - 做完放了半年的项目，整个收起来。
-  - 收起来的原文都能找回。
+- **Who you are**: preferences, habits, identity, rules and relationships go into every session start and are never archived.
+- **Live projects**: while a project is active, none of its agreements are archived.
+- **Pending promises and anniversaries**: kept until the day arrives, then surfaced.
 
-### 该记住的不会忘
+### How recall works
 
-- **你是谁**：偏好、习惯、身份、规则、关系每次开会话都会带上，永远不会被收起来。
-- **在做的项目**：只要项目还在推进，它的约定一条都不会被收起来。
-- **没到期的约定和纪念日**：一直保留，到日子就会想起来。
+```
+FTS5 prefilter → keyword (BM25) + semantic + link expansion → RRF fusion
+              → time decay (with floor) → diversity → rumination damping → top-k
+```
 
-## 安装
+Every hit carries its reason and decay factor, visible in the UI. The semantic route needs vector search enabled (`recall.vector.enabled`) plus an embedding service; without one, recall stays keyword-only. On startup MemWeave only probes Ollama / LM Studio on local `127.0.0.1`, which `MEMWEAVE_EMBEDDING_DISCOVERY=0` disables entirely. Vector backends are layered as `sqlite-vec → vectra → builtin`, and any failure falls back to keyword recall instead of breaking retrieval.
 
-需要 DSH，不用另装 Node.js，DSH 自带的就能跑。
+## Installation
 
-在 [Releases](https://github.com/QuaonY/dsh-mem-weave/releases) 页面找到最新的版本，把下面命令里的 `<版本>` 换成它（页面上标着 `v0.7.12` 的话，就填 `0.7.12`）：
+DSH is required. You do not need a separate Node.js — DSH brings its own (Node ≥ 22.13).
 
 ```bash
-dsh plugin --profile desktop add https://github.com/QuaonY/dsh-mem-weave/releases/download/v<版本>/dsh-mem-weave-<版本>.tgz
+dsh plugin --profile desktop add https://github.com/QuaonY/dsh-mem-weave/releases/download/v1.0.2/dsh-mem-weave-1.0.2.tgz
 ```
 
-`--profile` 填你在用的 profile，桌面端一般是 `desktop`，网页版是 `web`。tgz 已经下载到本地的话，也可以直接填文件路径：
+`--profile` is the profile you use — usually `desktop` for the desktop app, `web` for the web app. If you already downloaded the tgz, pass the path instead:
 
 ```bash
-dsh plugin --profile desktop add file:<tgz 的完整路径>
+dsh plugin --profile desktop add file:<full path to the tgz>
 ```
 
-装完重启 DSH，默认配置就能用。卸载把 `add` 换成 `remove dsh-mem-weave`。
+Restart DSH afterwards; the default configuration works out of the box. To uninstall, replace `add` with `remove dsh-mem-weave`.
 
-记忆库默认放在 `$DSH_HOME/memweave/memweave.db`，可以在界面「备份 → 存储位置」里迁移。
+The repository is also mirrored on CNB: <https://cnb.cool/QuaonY/dsh-mem-weave>.
 
-## 用起来
+The memory database lives at `$DSH_HOME/memweave/memweave.db` by default and can be moved via **Backup → Storage location** in the UI.
 
-### 界面
+## Usage
 
-DSH 里有八个页面：
+- **Nine pages**: Overview, Persona, Memory, User Profile, Candidates & conflicts, Injection & budget, Governance & audit, Backup, Advanced. After each turn, a small card reports what was remembered.
+- **Two original personas**: Xiaoman (tsundere, talkative) and Lin He · Night-Shift Repair Shop (quiet, terse). Editable, previewable, versioned, and replaceable with presets.
+- **22 `weave_*` tools** for writing, recalling, consolidating, governance and profiles; anything touching persona, rules or adjudication is read-only or rejected.
+- **In-conversation commands**: `/weave status | reload | preset <id> | strict on|off | dream`, costing no tokens.
+- **Configuration**: plugin settings in `$DSH_HOME/config.json`; every key has a safe default.
 
-| 页面 | 用途 |
-| --- | --- |
-| 总览 | 状态、待办、最近动作 |
-| 人格 | 编辑人格、应用预设、回滚版本 |
-| 记忆 | 浏览、搜索、编辑记忆，设置约定和纪念日 |
-| 候选与冲突 | 确认 AI 想写的内容，处理冲突 |
-| 注入与预算 | 调整上限，查看每轮实际注入了什么 |
-| 治理与审计 | 撤销操作、查看记录 |
-| 备份 | 备份、恢复、导入导出 |
-| 高级 | 遗忘、召回、敏感词等细项 |
+UI walkthrough, the full key table, environment variables, tool details and FAQ: [docs/USAGE.md](./docs/USAGE.md). Layers and injection internals: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
-每轮对话结束后，对话里会显示一张小卡片，告诉你这轮记了什么。
+## Security and privacy
 
-### 内置人格
+- Writes, adjudication and settings are human-only in the UI; AI calls always run as `agent` and get `E_PERM` when they overreach.
+- This boundary relies on the host preventing the AI or other plugins from calling this plugin's remote interface directly.
+- Credentials are blocked on write; eight kinds of sensitive data (phone, email, ID card, credit card, secrets, IP, address, …) are masked field-by-field before injection and never enter the vector index.
+- Database, log and mirror locations can only be changed in the configuration file, not through the UI or remote calls.
+- Injected text strips special brackets and newlines to prevent forged sections; logs never contain memory bodies.
+- Backups can be encrypted (AES-256-GCM + scrypt); tampering or a wrong passphrase fails immediately.
 
-- **小满（大肥鱼）**：傲娇、话多、贪吃的鲸鱼娘助手。
-- **林禾·夜班修理铺**：安静、话少的夜班修理铺店主。
+Details and known limits: [docs/PRIVACY.md](./docs/PRIVACY.md).
 
-两套人格都讲究活人感：说话有节奏、有主见，不说客套话。她们不会编造自己的经历，你认真问身份时，会如实说自己是 AI。
-
-### 记忆分层
-
-| 层 | 放什么 |
-| --- | --- |
-| soul | 关系状态 |
-| user | 你的偏好、习惯、身份 |
-| rules | 必须遵守的规则（只能由人写） |
-| project | 项目约定和进展 |
-| fact | 客观事实 |
-| lesson | 踩过的坑、被纠正的做法 |
-| topic | 话题、整理出来的摘要 |
-
-### 给 AI 的工具
-
-插件给 AI 提供 20 个 `weave_*` 工具，用来记忆、检索、整理和提建议。AI 只能调用权限范围内的，涉及人格、规则和裁决的操作会被拒绝。
-
-对话里也可以直接输入命令，不消耗 token：
-
-```
-/weave status | reload | preset <id> | strict on|off | dream
-```
-
-## 开发
+## Development
 
 ```bash
-pnpm build          # 构建 lib/
-pnpm typecheck      # 类型检查
-pnpm test           # 运行测试
-pnpm pack           # 打成本地 tgz，用来自己安装
-pnpm weave status   # 命令行运维
+pnpm install
+pnpm build          # build lib/ (includes lib/native and lib/vendor)
+pnpm typecheck
+pnpm test:coverage  # tests with the coverage gate
+pnpm test:scale     # scale benchmark (1k / 10k, needs local datasets)
+pnpm conformance    # factory-state zero-injection self-check
+pnpm bench:guard    # retrieval guardrails (needs local datasets)
+pnpm weave status   # command-line operations
+npm pack            # build a local tgz
 ```
 
-| 目录 | 内容 |
+| Directory | Contents |
 | --- | --- |
-| `src/core` | 渲染、分词、打分、日历 |
-| `src/store` | 数据库、写入把关、整理 |
-| `src/host` | 插件入口、服务、AI 工具 |
-| `src/client` | 界面 |
-| `src/presets` | 内置人格 |
-| `test` / `bench` | 测试、召回基准 |
+| `src/core` | Rendering, tokenization, scoring, calendar |
+| `src/store` | Database, write governance, retrieval, consolidation, backup |
+| `src/host` | Plugin entry, service, AI tools |
+| `src/client` | UI |
+| `src/privacy` | Sensitive detection and redaction |
+| `src/presets` | Built-in personas |
+| `test` / `bench` | Tests and recall benchmarks |
 
-## 安全说明
+Bundled dependency versions are pinned in `scripts/vendor-pins.mjs`. Releases run through `.github/workflows/release.yml`, and the tag must match the `package.json` version.
 
-- 界面里的写入、裁决、设置操作只允许人来做，AI 调用时固定以 `agent` 身份执行。
-- 这条限制依赖宿主不让 AI 或其他插件直接调用本插件的远程接口。
-- 数据库、日志、镜像等目录只能在配置文件里改，界面和远程调用改不了。
-- 注入内容会清理特殊括号和换行，防止伪造段落。
-- 日志不记录记忆正文。
+## Documentation
 
-## 许可
+| Document | Contents |
+| --- | --- |
+| [docs/USAGE.md](./docs/USAGE.md) | Install, full config table, env vars, UI, tools, CLI, FAQ |
+| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Layers, three-section injection, recall pipeline, write governance, data layout |
+| [docs/PRIVACY.md](./docs/PRIVACY.md) | Sensitive data handling, permission boundary, encrypted backup, known limits |
+| [CHANGELOG.md](./CHANGELOG.md) | Release notes (current version only) |
+| [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) | Third-party components and licenses |
 
-[MIT](LICENSE) © 2026 Quaon
+## Links
+
+- **DeepSeek Harness (official)** — <https://github.com/deepseek-ai/deepseek-harness>
+- **This project** — [GitHub](https://github.com/QuaonY/dsh-mem-weave) · [CNB mirror](https://cnb.cool/QuaonY/dsh-mem-weave)
+- **Issues** — <https://github.com/QuaonY/dsh-mem-weave/issues>
+- **Author** — Quaon
+
+## License
+
+[MIT](./LICENSE) © 2026 Quaon

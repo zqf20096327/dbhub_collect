@@ -18,7 +18,7 @@ flowchart LR
     end
     pluggy["Pluggy<br/>api.pluggy.ai"]
     bcb["Banco Central<br/>api.bcb.gov.br<br/>olinda.bcb.gov.br"]
-    cot["Yahoo Finance e brapi<br/>query1.finance.yahoo.com<br/>brapi.dev"]
+    cot["Yahoo Finance<br/>query1.finance.yahoo.com"]
     mb["Mercado Bitcoin<br/>api.mercadobitcoin.net"]
     gh["GitHub<br/>api.github.com<br/>github.com"]
     not["Notícias (só com o módulo ligado)<br/>g1.globo.com, feeds.bbci.co.uk<br/>www.tabnews.com.br"]
@@ -132,7 +132,7 @@ Os outros, com mais detalhe: [Problemas comuns](docs/PROBLEMAS-COMUNS.md).
 - [CONTRIBUINDO.md](CONTRIBUINDO.md): branches, commits, versão e pull requests.
 - [Arquitetura](docs/ARQUITETURA.md), [Banco de dados](docs/BANCO-DE-DADOS.md) e as [decisões (ADRs)](docs/adr/README.md).
 - [UI/UX](docs/UI-UX.md): as referências (Nielsen, WCAG 2.2, Shneiderman) e os padrões de tela que o site segue.
-- [CHANGELOG.md](CHANGELOG.md): o que mudou em cada versão.
+- [CHANGELOG.md](CHANGELOG.md): o que mudou em cada versão publicada; o que ainda não saiu fica em [`changelog.d/`](changelog.d/LEIA-ME.md), um arquivo por PR.
 
 Front-end em Angular, back-end em Go e banco SQLite. O back-end era em .NET e passou para Go um assunto de cada vez ([ADR 0049](docs/adr/0049-back-end-em-go-trocado-aos-poucos-atras-do-dotnet.md)); o .NET saiu na versão 3.2 (#86). Tudo publicado junto, um executável só, como serviço do sistema.
 

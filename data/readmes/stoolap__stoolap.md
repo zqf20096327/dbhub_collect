@@ -54,7 +54,7 @@ Stoolap is designed around practical embedded database needs:
 
 ```toml
 [dependencies]
-stoolap = "0.4"
+stoolap = "0.5"
 ```
 
 Build from source:
@@ -114,6 +114,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 # Persistent database
 ./stoolap --db "file://./mydb"
 ```
+
+## Stoolap Desktop
+
+[Stoolap Desktop](https://github.com/stoolap/stoolap-desktop) is a native database client for macOS, Linux and Windows with the engine linked in: a SQL editor, schema browser, data grid, vector search, backup/restore, and a SQL assistant that writes and runs Stoolap SQL in your editor. Download it from the [latest release](https://github.com/stoolap/stoolap-desktop/releases/latest).
+
+<img src="docs/assets/img/desktop/desktop-light.png#gh-light-mode-only" alt="Stoolap Desktop" width="100%">
+<img src="docs/assets/img/desktop/desktop-dark.png#gh-dark-mode-only" alt="Stoolap Desktop" width="100%">
 
 ## Stoolap Studio
 
@@ -202,11 +209,11 @@ ORDER BY dist
 LIMIT 10;
 ```
 
-For built-in semantic text embeddings, enable the `semantic` feature:
+For built-in semantic text embeddings, enable the `semantic` feature (it needs Rust 1.94 or newer; the rest of the crate builds on 1.88):
 
 ```toml
 [dependencies]
-stoolap = { version = "0.4", features = ["semantic"] }
+stoolap = { version = "0.5", features = ["semantic"] }
 ```
 
 ```sql

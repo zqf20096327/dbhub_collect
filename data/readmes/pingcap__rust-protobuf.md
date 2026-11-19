@@ -1,66 +1,92 @@
-# rust-protobuf
+rust-protobuf
+=============
 
-<!-- https://travis-ci.org/stepancheg/rust-protobuf.png -->
-[![crates.io version][crates-io-shields]][crates-io]
-[![docs.rs][docs-rs-shields]][docs-rs]
-[![GitHub Workflow Status][actions-shields]][actions]
-[![License][license-shields]][license]
-
-[crates-io]: https://crates.io/crates/protobuf
-[crates-io-shields]: https://img.shields.io/crates/v/protobuf.svg
-[docs-rs]: https://docs.rs/protobuf
-[docs-rs-shields]: https://img.shields.io/badge/docs.rs-rustdoc-green.svg
-[actions]: https://github.com/stepancheg/rust-protobuf/actions?query=workflow%3ACI
-[actions-shields]: https://img.shields.io/github/workflow/status/stepancheg/rust-protobuf/CI
-[license]: https://github.com/stepancheg/rust-protobuf/blob/master/LICENSE.txt
-[license-shields]: https://img.shields.io/crates/l/protobuf.svg
+[![CI](https://github.com/pingcap/rust-protobuf/actions/workflows/ci.yml/badge.svg)](https://github.com/pingcap/rust-protobuf/actions/workflows/ci.yml)
+[![crates.io version](https://img.shields.io/crates/v/protobuf.svg)](https://crates.io/crates/protobuf)
+[![License](https://img.shields.io/crates/l/protobuf.svg)](https://github.com/stepancheg/rust-protobuf/blob/master/LICENSE.txt)
 
 [Protobuf](https://developers.google.com/protocol-buffers/docs/overview) implementation in [Rust](https://www.rust-lang.org/).
 
 * Written in pure rust
-* Generates rust code
-* Has runtime library support for generated code
+* Generate rust code
+* Has runtime library for generated code
   (Coded{Input|Output}Stream impl)
-* Supports both Protobuf versions 2 and 3
-* and more
 
-## Where is documentation
+## How to generate rust code
 
-Documentation is [hosted on docs.rs](https://docs.rs/protobuf).
+There are several ways to generate rust code from `.proto` files
 
-## Versions and branches
+### Invoke protoc programmatically with protoc-rust crate (recommended)
 
-### Version 3
+Have a look at readme in [protoc-rust crate](https://github.com/stepancheg/rust-protobuf/tree/master/protoc-rust).
 
-Version 3 is current stable version. Compared to version 2 it implements:
-* runtime reflection
-* JSON and text format parsing and printing
-* dynamic messages (messages which can be created from `.proto` file on the fly
-  without code generation)
+### Use pure rust protobuf parser and code generator (alpha)
 
-### Version 2
+Readme should be in
+[protobuf-codegen-pure crate](https://github.com/stepancheg/rust-protobuf/tree/master/protobuf-codegen-pure).
 
-Version 2 is previous stable version. Only most critical bugfixes will be applied
-to 2.x version, otherwise it won't be maintained.
+### Use protoc-gen-rust plugin
 
-### Help
+Readme is [here](https://github.com/stepancheg/rust-protobuf/tree/master/protobuf-codegen).
 
-The crate **needs help**:
-* **a new maintainer**, but also
-* testing
-* documentation
-* examples to be used as documentation
-* feedback on API design
-* feedback on implementation
-* pull requests
+## Generated code
 
-## Changelog
+Have a look at generated files, used internally in rust-protobuf:
 
-See [CHANGELOG.md](CHANGELOG.md) for a list of changes and compatility issues between versions.
+* [descriptor.rs](https://github.com/stepancheg/rust-protobuf/blob/master/protobuf/src/descriptor.rs)
+  for [descriptor.proto](https://github.com/stepancheg/rust-protobuf/blob/master/proto/google/protobuf/descriptor.proto)
+  (that is part of Google protobuf)
+
+## Rustdoc
+
+docs.rs hosts [rustdoc for protobuf](https://docs.rs/protobuf/*/protobuf/).
+
+## Copy-on-write
+
+Rust-protobuf can be used with [bytes crate](https://github.com/carllerche/bytes).
+
+To enable `Bytes` you need to:
+
+1. Enable `with-bytes` feature in rust-protobuf:
+
+```
+[dependencies]
+protobuf = { version = "~2.0", features = ["with-bytes"] }
+```
+
+2. Enable bytes option
+
+with Customize when codegen is invoked programmatically:
+
+```
+protoc_rust::run(protoc_rust::Args {
+    ...
+    customize: Customize {
+        carllerche_bytes_for_bytes: Some(true),
+        carllerche_bytes_for_string: Some(true),
+        ..Default::default()
+    },
+ });
+ ```
+
+or in `.proto` file:
+
+```
+import "rustproto.proto";
+
+option (rustproto.carllerche_bytes_for_bytes_all) = true;
+option (rustproto.carllerche_bytes_for_string_all) = true;
+```
+
+With these options enabled, fields of type `bytes` or `string` are
+generated as `Bytes` or `Chars` respectively. When `CodedInputStream` is constructed
+from `Bytes` object, fields of these types get subslices of original `Bytes` object,
+instead of being allocated on heap.
 
 ## Related projects
 
-* [prost](https://github.com/tokio-rs/prost) — another protobuf implementation in Rust, also has gRPC implementation
 * [quick-protobuf](https://github.com/tafia/quick-protobuf) — alternative protobuf implementation in Rust
+* [prost](https://github.com/danburkert/prost) — another protobuf implementation in Rust
+* [serde-protobuf](https://github.com/dflemstr/serde-protobuf)
+* [grpc-rust](https://github.com/stepancheg/grpc-rust) — implementation of gRPC based on this library
 * [grpc-rs](https://github.com/pingcap/grpc-rs/) — another gRPC implementation for Rust
-* [grpc-rust](https://github.com/stepancheg/grpc-rust) — incomplete implementation of gRPC based on this library

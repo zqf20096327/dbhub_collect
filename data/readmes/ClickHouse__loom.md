@@ -57,7 +57,8 @@ into one place.
   [Multi-user mode](./docs/getting-started/quickstart.md#start-in-multi-user-mode) ·
   [Namespaces and sharing](./docs/features/namespaces-and-sharing.md)
 - **A code index of your repositories** that coding agents query for definitions,
-  callers and change impact. [Code index](./docs/use-cases/code-intelligence.md)
+  callers and change impact. [Code index](./docs/use-cases/code-intelligence.md) ·
+  [Language support and limits](./docs/features/code-index/overview.md#language-support)
 - **Memories linked to the code they are about**, which follow it through refactors, are
   flagged when it changes and appear when an agent reads or edits it.
   [Memory linked to code](./docs/use-cases/memory-linked-to-code.md)
@@ -73,6 +74,15 @@ into one place.
   session briefs to resume from, runs with their goals, outcomes and model costs when
   supplied, and PR and tracker history.
   [Runs and PR history](./docs/use-cases/runs-and-pr-history.md)
+
+**Memory for a software factory.** Loom gives implementation and review agents shared
+lessons, issue context and source provenance across sessions. Scope each principal's
+access with tokens, await required writes and task handoffs in your application, and
+recheck code-linked lessons against the current source before review. The same service
+supports multi-agent workflows and autonomous bots; your orchestration runs the agents,
+tests and approvals. Offering a tool does not guarantee the model uses it.
+[Multi-agent workflow](./docs/use-cases/multi-agent.md) ·
+[Autonomous-agent memory](./docs/use-cases/autonomous-agents.md)
 
 Every use case, and when another tool fits better: [use cases](./docs/use-cases/index.md).
 
@@ -241,8 +251,9 @@ tokens in **Settings → Tokens**. Cursor and other MCP clients, and
   corrections traceable, and a namespace can be rolled back to any point in time.
   [Memory](./docs/concepts/memory.md)
 - **Code intelligence with evidence.** Find definitions, callers, change impact and
-  relevant tests; connect code to commits, pull requests and issues. Results identify
-  their revision, source location and completeness. [Code index](./docs/features/code-index/overview.md)
+  relevant tests; connect code to commits, pull requests and issues. Use source
+  locations, completeness signals and per-tier freshness to check a result.
+  [Code index](./docs/features/code-index/overview.md)
 - **Grounded retrieval.** Search permitted memories, documents, conversations and
   tracker records. Answers cite their sources; low-confidence retrieval can abstain.
   [Retrieval](./docs/concepts/retrieval-and-ranking.md)
@@ -258,7 +269,7 @@ tokens in **Settings → Tokens**. Cursor and other MCP clients, and
 | Integration                                                                                                                                                                                                                                                                                   | What it connects                                                              |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | [Claude Code](./docs/features/integrations/claude-code.md), [Codex](./docs/features/integrations/codex.md), [Cursor](./docs/features/integrations/cursor.md) and [other MCP clients](./docs/features/integrations/mcp-clients.md) ([all integrations](./docs/features/integrations/index.md)) | Memory and code intelligence in your existing agent workflow.                 |
-| [Python](./docs/reference/python-sdk.md), [TypeScript](./docs/reference/typescript-sdk.md) and [HTTP](./docs/reference/operations.md)                                                                                                                                                         | Your own agents and applications.                                             |
+| [Python](./docs/reference/python-sdk.md), [TypeScript](./docs/reference/typescript-sdk.md), [Rust](./sdk/rust/README.md) and [HTTP](./docs/reference/operations.md)                                                                                                                           | Your own agents and applications.                                             |
 | [Langfuse](./docs/features/integrations/langfuse.md)                                                                                                                                                                                                                                          | Request traces, model costs, retrieval scores and prompt-version attribution. |
 | [ClickStack / HyperDX](./docs/features/integrations/clickstack.md)                                                                                                                                                                                                                            | OpenTelemetry traces, logs and metrics in ClickHouse.                         |
 

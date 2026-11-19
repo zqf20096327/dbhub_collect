@@ -2,7 +2,7 @@
 
 ![xdatabase-proxy banner](static/images/banner-en.jpeg)
 
-A small, dependency-light PostgreSQL connection router. Clients connect to one endpoint and the proxy picks the backend from the **username**, terminating TLS itself. It runs in Kubernetes, containers, VMs and bare metal.
+A small, dependency-light database connection router for PostgreSQL (and compatibles), Redis, ClickHouse, MongoDB and any TLS-first protocol. Clients connect to one endpoint and the proxy picks the backend from the **username** in the login or from the **TLS server name (SNI)**. It runs in Kubernetes, containers, VMs and bare metal.
 
 ```
 postgresql://user.<deployment>[.pool]@proxy:5432/db
@@ -10,11 +10,11 @@ postgresql://user.<deployment>[.pool]@proxy:5432/db
 
 - `user.db-prod` → service of deployment `db-prod` (direct)
 - `user.db-prod.pool` → the pooled service (pgbouncer, odyssey, …) of the same deployment
-- Plain `user` with TLS host `db-prod.pool.example.com` → the same pooled service, chosen by SNI (also works with PostgreSQL 17 `sslnegotiation=direct`)
+- Plain `user` with TLS host `db-prod.pool.example.com` → the same pooled service, chosen by SNI when the Service allows it (`xdatabase-proxy-routing: sni` or `all`; also works with PostgreSQL 17 `sslnegotiation=direct`)
 
 The proxy strips the routing suffix before forwarding, so the backend sees plain `user`. If `database` is empty or equals the full login (psql's default), it becomes `postgres`.
 
-Full documentation: https://hasirciogluhq.github.io/xdatabase-proxy/ (sources in [docs/](docs)).
+Full documentation: https://hasirciogluhq.github.io/xdatabase-proxy/ (sources in [docs/](docs)): [getting started](docs/getting-started.md), per-database guides for [PostgreSQL](docs/databases/postgresql.md), [Redis](docs/databases/redis.md), [ClickHouse](docs/databases/clickhouse.md) and [MongoDB/TLS](docs/databases/mongodb.md), [configuration](docs/configuration.md), [upgrading](docs/upgrading.md).
 
 ## Supported databases
 
@@ -23,8 +23,8 @@ Full documentation: https://hasirciogluhq.github.io/xdatabase-proxy/ (sources in
 | PostgreSQL | `postgresql` | Login `user.deployment[.pool]`, TLS terminated by the proxy | ✅ Supported |
 | PostgreSQL-compatible: CockroachDB, YugabyteDB, TimescaleDB, Citus, Greenplum, QuestDB, CrateDB (Aurora/AlloyDB PostgreSQL need nothing special) | `postgresql` or the product name (`cockroachdb`, `yugabytedb`, `timescaledb`, `citus`, `greenplum`, `questdb`, `cratedb`) | Same as PostgreSQL | ✅ Same code path. Wire handling is covered by tests; not yet run against the real products |
 | Redis | `redis` | Login `user.deployment[.pool]` in `AUTH`/`HELLO … AUTH`, and/or TLS SNI passthrough | ✅ Supported, e2e-tested with real Redis |
-| ClickHouse (native protocol) | `clickhouse` | Login in the Hello packet, and/or TLS SNI passthrough | ✅ Supported, tested with in-process fakes only |
-| MongoDB, any TLS-first protocol | `mongodb`, `tls` | TLS SNI `deployment[.pool].your-domain`, passed through to the backend | ✅ Supported, tested with a generic TLS backend |
+| ClickHouse (native protocol) | `clickhouse` | Login in the Hello packet, and/or TLS SNI passthrough | ✅ Supported, e2e-tested with real ClickHouse |
+| MongoDB, any TLS-first protocol | `mongodb`, `tls` | TLS SNI `deployment[.pool].your-domain`, passed through to the backend | ✅ Supported, e2e-tested with real MongoDB 8 (passthrough and terminate) |
 | MySQL / MariaDB | – | The server speaks first and the password scramble is bound to the backend | 📋 Planned, hardest |
 
 One proxy instance serves one `DATABASE_TYPE`. Which routing strategy (username or SNI) may reach a route is chosen by the cluster administrator with the Service label `xdatabase-proxy-routing: username | sni | all`; without it each type has a default. Details: [Routing strategies](docs/routing-strategies.md).
@@ -45,12 +45,14 @@ Next up: MySQL / MariaDB (the hardest one, since the server speaks first and the
 
 | Concern | Implementation |
 | --- | --- |
-| Wire protocol | [`pgx/pgproto3`](https://github.com/jackc/pgx) |
+| PostgreSQL wire protocol | [`pgx/pgproto3`](https://github.com/jackc/pgx) |
+| Redis / ClickHouse login | Small bounded readers for the first `AUTH`/`HELLO` command and the native Hello packet |
+| SNI | ClientHello peeked with `crypto/tls`, then passed through or terminated |
 | Kubernetes | `client-go` shared informer with a route index (no polling, O(1) lookup) |
 | Logging | `log/slog` (JSON) |
 | TLS | `crypto/tls`, self-signed ECDSA P-256 generated on demand, TLS ≥ 1.2 |
 
-Layout: `pkg/` holds reusable pieces (`proxy` TCP server/pipe, `tlsutil`); `cmd/proxy/internal/` holds project-specific code (`config`, `discovery`, `tlsstore`, `postgres`, `health`).
+Layout: `pkg/` holds reusable pieces (`proxy` TCP server/pipe, `tlsutil`); `cmd/proxy/internal/` holds project-specific code (`config`, `route`, `discovery`, `postgres`, `gateway`, `protocol`, `tlsstore`, `health`).
 
 ## Deployment
 
@@ -69,13 +71,13 @@ kubectl apply -k kubernetes/production/nodeport          # or .../daemonset-host
 kubectl apply -k kubernetes/development && kubectl apply -n xdatabase-proxy -f kubernetes/test/postgresql.yaml
 ```
 
-Pin the image to a version tag or digest in production. Images are multi-arch, distroless, non-root, and published with SBOM and provenance attestations.
+Pin the image to a version tag (`2.2.0`, `2.2`; image tags have no `v`) or digest in production. Images are multi-arch, distroless, non-root, and published with SBOM and provenance attestations.
 
 **Container / VM** (static routing, no Kubernetes needed):
 
 ```bash
 docker run -p 5432:5432 -e STATIC_BACKENDS="db1=10.0.0.5:5432,db1.pool=10.0.0.5:6432" \
-  ghcr.io/hasirciogluhq/xdatabase-proxy:latest
+  ghcr.io/hasirciogluhq/xdatabase-proxy:2.2.0
 ```
 
 For Kubernetes discovery outside a cluster set `KUBECONFIG` (and optionally `KUBE_CONTEXT`).
@@ -87,17 +89,20 @@ Label a Service and it becomes routable:
 | Label | Meaning |
 | --- | --- |
 | `xdatabase-proxy-enabled: "true"` | opt in |
-| `xdatabase-proxy-database-type: postgresql` | protocol |
+| `xdatabase-proxy-database-type: postgresql` | protocol, must equal the proxy's `DATABASE_TYPE` (`postgresql`, `redis`, `clickhouse`, `mongodb`, `tls`) |
 | `xdatabase-proxy-deployment-id: <id>` | routing key |
 | `xdatabase-proxy-pooled: "true"` | pooled endpoint (default `false`) |
-| `xdatabase-proxy-destination-port: <port or name>` | optional, defaults to the first port |
+| `xdatabase-proxy-destination-port: <port or name>` | optional, defaults to the first port; a value matching no port is an error |
+| `xdatabase-proxy-routing: username \| sni \| all` | optional, which strategies may reach the Service; default depends on the database type |
 
-If several Services share a route, the one with the lowest `namespace/name` wins.
+If several Services share a route, the one with the lowest `namespace/name` wins and the proxy logs one warning naming every candidate.
 
 ## Configuration
 
 | Variable | Default | Description |
 | --- | --- | --- |
+| `DATABASE_TYPE` | `postgresql` | `postgresql` (or a compatible product name), `redis`, `clickhouse`, `mongodb`, `tls` |
+| `SNI_TLS_MODE` | `passthrough` | `passthrough` or `terminate` for SNI routes (not for `postgresql`); `terminate` needs `TLS_ENABLED=true` |
 | `PROXY_START_PORT` | `5432` | Listener port |
 | `HEALTH_SERVER_PORT` | `8080` | `/health` (liveness), `/ready` (readiness) |
 | `DEBUG` | `false` | Debug logging |
@@ -109,7 +114,7 @@ If several Services share a route, the one with the lowest `namespace/name` wins
 | `CLUSTER_DOMAIN` | `cluster.local` | Used to build service DNS names |
 | `KUBECONFIG`, `KUBE_CONTEXT` | – | Kubernetes access outside a pod |
 | `NAMESPACE` | pod namespace | Namespace of the TLS secret |
-| `TLS_ENABLED` | `true` | Offer TLS to clients (`SSLRequest`) |
+| `TLS_ENABLED` | `true` | Offer TLS to clients; forced off for `mongodb`/`tls` in passthrough mode |
 | `TLS_MODE` | auto | `file` (if `TLS_CERT_FILE`), `kubernetes` (if `TLS_SECRET_NAME`), else `memory` |
 | `TLS_CERT_FILE`, `TLS_KEY_FILE` | – | Certificate files |
 | `TLS_SECRET_NAME` | – | `kubernetes.io/tls` Secret (created if missing) |
@@ -121,7 +126,8 @@ Certificates are re-checked every 6 hours and hot-swapped, so cert-manager rotat
 ## Hardening
 
 - Startup packets are size-limited by `pgproto3` (10 kB), startup has a 10 s deadline, negotiation attempts are capped (no recursion).
-- Connection cap, graceful shutdown (drains for 25 s on SIGTERM), health goes unready first.
+- Redis/ClickHouse logins and TLS ClientHellos are read with fixed size limits and a 10 s deadline.
+- Connection cap, graceful shutdown: on SIGTERM the listener closes and sessions get 25 s to finish.
 - Startup parameters and passwords are never logged.
 - Minimal dependency set, `go mod verify`, `govulncheck` and Trivy in CI, Dependabot for Go modules, actions and base image.
 - Pods run non-root with a read-only filesystem and all capabilities dropped.
@@ -135,7 +141,7 @@ scripts/dev-run.sh          # proxy on :6432 → postgres on localhost:5432
 scripts/local-deploy.sh     # build, load and deploy to a local cluster
 ```
 
-CI (`.github/workflows/ci.yaml`): format, vet, race tests, govulncheck, manifest rendering, image build + scan, and an end-to-end `psql` run against a real PostgreSQL. Pushing a `v*` tag runs `publish.yaml`: multi-arch image, SBOM + provenance, GitHub release from `CHANGELOG.md`.
+CI (`.github/workflows/ci.yaml`): format, vet, race tests, govulncheck, manifest rendering, image build + scan, and `scripts/e2e.sh` as a matrix job against real PostgreSQL, Redis, ClickHouse and MongoDB. Pushing a `v*` tag runs `publish.yaml`: multi-arch image, SBOM + provenance, GitHub release from `CHANGELOG.md`.
 
 ## License
 

@@ -64,7 +64,7 @@ the connection string to switch your app to. Then:
 
 ```bash
 curl -fsSL https://pgcache.com/try.sh | bash -s -- status   # live hit rate
-curl -fsSL https://pgcache.com/try.sh | bash -s -- stop     # remove the container
+curl -fsSL https://pgcache.com/try.sh | bash -s -- stop     # stop it, clean up the origin
 ```
 
 The script is plain bash, so [read it](https://pgcache.com/try.sh) before you run it if you
@@ -137,6 +137,14 @@ origin otherwise.
 > PostgreSQL (with `pgcache_pgrx` already preloaded) and wraps all of the above behind a
 > single `--upstream postgres://…` flag. The try script above runs this same image;
 > [Deploy → Docker](https://www.pgcache.com/docs/docker/) covers Compose, TLS, and production settings.
+
+## Telemetry
+
+pgcache sends anonymous telemetry once at startup and every 24 hours: a random per-start ID,
+the pgcache and PostgreSQL versions, OS and architecture, and a few cache counters. It never
+sends queries, schema, data or credentials. It is on by default. Turn it off with
+`PGCACHE_TELEMETRY=off`, `telemetry = false` in the TOML file, `--telemetry_off`, or
+`--no-telemetry` on the try script. [What is collected](https://www.pgcache.com/docs/telemetry/).
 
 ## Talk to us
 
@@ -215,3 +223,11 @@ generation-based garbage collector.
 ## License
 
 pgcache is source-available under the [Elastic License 2.0](LICENSE.txt).
+
+## Export controls and sanctions
+
+pgcache is developed by PgCache, Inc., a US company, and is subject to US export control
+and sanctions laws. We do not provide pgcache, support or any other services to anyone in
+a country or region under comprehensive US sanctions, or to anyone on a US government
+restricted-party list. If you download, build or redistribute pgcache, you are responsible
+for complying with the laws that apply to you. This notice does not change the license.

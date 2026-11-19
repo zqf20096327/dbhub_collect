@@ -45,7 +45,22 @@
 
 ## 快速开始
 
-在线体验无需安装：[demo.ybkkasi.com](https://demo.ybkkasi.com/)。
+先选一条路。**只想看效果的话不用装任何东西**；想在本机跑起来，最短的是 Docker 一条命令。
+
+| 你的目的 | 入口 | 说明 |
+| --- | --- | --- |
+| 先看控制台长什么样 | [demo.ybkkasi.com](https://demo.ybkkasi.com/) | 免登录只读演示，0 安装 |
+| 本机拉起只读演示实例 | `docker compose up -d`（见下） | 一条命令，自动构建镜像，需已装 Docker |
+| 作为 dsh 插件接入 | `dsh plugin --profile web add github:01men/ybkkasi` | 需已有 dsh `web` profile |
+| 源码跑独立实例（开发 / 二次开发） | `npm ci && npm start` | 需 Node.js ≥ 22.6 |
+
+> **本仓库不发布到 npm，这是刻意选择，不是遗漏。** `package.json` 里设了 `private: true`，
+> `installMode` 是 `source`：运行需要 Node ≥ 22.6（原生执行 TypeScript，无构建步骤）、
+> 内置 `node:sqlite`、并装配 30 个 cordis 插件。发包只解决「registry 上有没有」，
+> 不解决「装完能不能跑」，反而会造出一个能 `npm i`、起不来的包。
+> 因此安装入口只有上表四条。副作用是 Glama / mcp.so / Smithery / npm 这些靠「自助验证到包」
+> 收录的 MCP 目录无法建立条目——完整的原因、影响与取舍见
+> [98 个 MCP 工具，四个 MCP 目录里一个都搜不到](https://ybkkasi.com/blog/mcp-directory-404/)。
 
 本地使用 Docker Compose 启动一个只读演示实例：
 
@@ -137,9 +152,19 @@ AI 原生组织需要在五个方面重塑生产关系，平台在每一项下�
 - **权限与凭据**：按需授予最小权限，妥善保管令牌、接入码和密钥；审计和审批以实际配置及操作权限为准。
 - **模型与工具**：真实调用需要配置相应服务和凭据；演示数据及演示执行结果不代表生产调用。
 
+## 与同类框架的关系
+
+一句话：Dify/n8n 一类解决「怎么搭 AI 应用」，AI Gateway/ThinkWatch 一类解决「调用怎么安全地过」，**ybkkasi 解决「这些 AI 能力归谁、谁能调、用了多少、谁签字、结果怎么验」**——企业 AI 资产与数字员工的控制面。
+
+- 不与应用/工作流平台竞争：资产登记后仍可在 Dify、n8n、Flowise、Langflow 里调用；
+- 与模型/MCP 网关重叠最多：差异在资产确权、生命周期与组织归属，以及数字员工任务闭环；
+- 与研发交付工作台（如 LoopForge）互补：我们提供组织级资产与审批底座。
+
+分层对照、适用/不适用场景与公开信息来源见 [docs/compare.md](docs/compare.md)（**公开资料评估，未做同环境实测，不做排名**）。
+
 ## 文档与社区
 
-[架构说明](docs/ARCHITECTURE.md) · [企业部署](docs/deploy-enterprise.md) · [更新记录](CHANGELOG.md) · [贡献指南](CONTRIBUTING.md) · [i18n 治理](docs/i18n/README.md) · [English](docs/i18n/en/README.md) · [日本語](docs/i18n/ja/README.md) · [Agent](README.agent.md)
+[架构说明](docs/ARCHITECTURE.md) · [与同类框架的关系](docs/compare.md) · [企业部署](docs/deploy-enterprise.md) · [更新记录](CHANGELOG.md) · [贡献指南](CONTRIBUTING.md) · [i18n 治理](docs/i18n/README.md) · [English](docs/i18n/en/README.md) · [日本語](docs/i18n/ja/README.md) · [Agent](README.agent.md)
 
 ## 技术笔记
 
@@ -155,6 +180,8 @@ AI 原生组织需要在五个方面重塑生产关系，平台在每一项下�
 | [两个月 6 万行代码换来 0 star，问题出在第一句话](https://ybkkasi.com/blog/zero-star-first-sentence/) | README 第一屏写的是「我做了什么」，不是「你有什么问题」。六个错误和各自的改法。[Discussion #34](https://github.com/01men/ybkkasi/discussions/34) |
 | [30 插件 / 94 权限点 / 499 路由：把六类 AI 资产做成一本台账](https://ybkkasi.com/blog/six-asset-types-plugin-tree/) | 插件树不是网关。路由统计要同时扫两种注册形态，458 是 499 的子集，不能相减。[Discussion #35](https://github.com/01men/ybkkasi/discussions/35) |
 | [为什么我们把 6 类 AI 资产统一成一套模型](https://ybkkasi.com/blog/six-asset-model-cost/) | 只投影 11 个可跨类问的字段。代价是 Agent/Skill/NAS 三类成本恒为 0，假 0 会污染所有基于 0 的查询。[Discussion #36](https://github.com/01men/ybkkasi/discussions/36) |
+| [98 个 MCP 工具，四个 MCP 目录里一个都搜不到](https://ybkkasi.com/blog/mcp-directory-404/) | `package.json` 里一个 `private: true` 让整条分发链在第一步就死掉，而症状出现在第 3、4 步。附 SPA 站点「200 = 页面存在」验证方法失效的修法。[Discussion #37](https://github.com/01men/ybkkasi/discussions/37) |
+| [企业 AI 资产成熟度自测：你的团队在第几级？](https://ybkkasi.com/blog/ai-asset-maturity/) | 五级判据 + 四条可跑自测。卡点几乎总在 L1→L2：清单必然腐烂，台账必须从系统出而不是人填。[Discussion #38](https://github.com/01men/ybkkasi/discussions/38) |
 
 ## 联系我们
 

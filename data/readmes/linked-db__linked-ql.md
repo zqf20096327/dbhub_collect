@@ -57,7 +57,7 @@ Universal database contract for applications and agents.
 
 <div align="left">
 
-LinkedQL brings:
+LinkedQL is a superset of SQL, with:
 
 + live queries, streaming, subscriptions, and sync
 + direct relationship traversal via an object-relational syntax
@@ -66,17 +66,23 @@ LinkedQL brings:
 
 → All in just `~100 KiB` (min+zip)  
 
-LinkedQL works across dialects:
+LinkedQL supports multiple dialects:
 
 + PostgreSQL, MySQL/MariaDB  
 
-across environments:
+can be run from any environment:
 
 + server, browser, edge, worker – via EdgeClient
 
 and ships with an embeddable local database:
 
 + FlashQL  
+
+---
+
+https://github.com/user-attachments/assets/402c2918-36f1-4785-97ec-0bacc4ab179e
+
+---
 
 **[See What's LinkedQL ↗](https://linked-ql.netlify.app/overview)** for the conceptual overview.  
 **[Go to the playground ↗](https://github.com/webqit/playground)** to run *live queries* and *sync* demos on your own database.  

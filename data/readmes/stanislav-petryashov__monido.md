@@ -6,15 +6,13 @@
 
 Track your net worth and cash flow, on your own or as a family. Self-hosted, entered by hand, no bank connections.
 
-[![Latest release](https://img.shields.io/github/v/release/stanislav-petryashov/monido)](https://github.com/stanislav-petryashov/monido/releases/latest) [![CI](https://img.shields.io/github/actions/workflow/status/stanislav-petryashov/monido/docker.yml?branch=master&label=CI)](https://github.com/stanislav-petryashov/monido/actions/workflows/docker.yml) [![License: MIT](https://img.shields.io/github/license/stanislav-petryashov/monido)](LICENSE) [![Last commit](https://img.shields.io/github/last-commit/stanislav-petryashov/monido)](https://github.com/stanislav-petryashov/monido/commits/master)
-
-[![Docker image](https://img.shields.io/badge/docker-ghcr.io-2496ED?logo=docker&logoColor=white)](https://github.com/stanislav-petryashov/monido/pkgs/container/monido) [![Live demo](https://img.shields.io/badge/demo-live-5B4BE0)](https://demo.monido.dev) [![MCP Registry](https://img.shields.io/badge/MCP-registry-black)](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.stanislav-petryashov/monido)
+[![Latest release](https://img.shields.io/github/v/release/stanislav-petryashov/monido)](https://github.com/stanislav-petryashov/monido/releases/latest) [![License: MIT](https://img.shields.io/github/license/stanislav-petryashov/monido)](LICENSE) [![Live demo](https://img.shields.io/badge/demo-live-5B4BE0)](https://demo.monido.dev)
 
 [Website](https://monido.dev) · [Live demo](https://demo.monido.dev) · [Help build Monido](CONTRIBUTING.md) · [Releases](https://github.com/stanislav-petryashov/monido/releases)
 
 [Try the live demo](https://demo.monido.dev): a fictional family in a private copy for 15 minutes, nothing to install; the sign-in screen shows the password.
 
-![The Overview page in the light and the dark theme](docs/assets/screenshot.png)
+![Everything you own and owe. One number. Accounts, investments, property and loans of the whole family, in every currency.][Screens/en-US/hero]
 
 ## Questions Monido answers
 
@@ -36,23 +34,25 @@ docker compose up -d
 
 Open http://127.0.0.1:8080 within 15 minutes and set the family password. Server settings (port, address) go in an optional `.env` ([`.env.example`](.env.example), [the full guide](docs/deploy-docker.md#installation)). To update: `docker compose pull`, then `docker compose up -d`. Something not working? [Troubleshooting](docs/deploy-docker.md#troubleshooting).
 
+**On a server or from other devices:** the port is published on `127.0.0.1` only, so the address above works on the machine running Docker and nowhere else. To reach Monido from another computer, your phone or the internet, put a reverse proxy with HTTPS in front of it (Caddy, nginx, Traefik). [Reverse proxy and HTTPS](docs/deploy-docker.md#reverse-proxy-and-https) has a Caddy example and the settings a proxy needs (`APP_URL`, `CLIENT_IP_HEADER`).
+
 **What it needs:** one container (Node and SQLite, no separate database server) for amd64 and arm64, so a Raspberry Pi or a NAS will do; under 60 MB of memory when idle (`docker stats` on the demo and a home installation, versions 1.2 to 1.4) and a 250 MB image.
 
 The data is kept in a Docker volume named after the folder (`monido_data`); `docker compose down -v` would delete it, so never add `-v`. The demo has no Claude advisor or Telegram reminders and cannot download its database; your own installation has them.
 
 ## Screens
 
-**Close month**: once a month, saved as you type
+![Once a month, a balance per account. The wizard checks that every account is filled in, then adds the month to the dashboard. Saved as you type.][Screens/en-US/close]
 
-![Close month: the month's balances, income and expenses, account by account](docs/assets/gallery/close-month.png)
+![When you reach each goal. Dates from what the family actually saves, and what would move them.][Screens/en-US/goals]
 
-**Goals**: dates from what you actually save, and what would move them
+![Was this month a usual one? Income, expenses and savings against your own typical month.][Screens/en-US/cashflow]
 
-![Goals: what the family saves a month and when each goal is reached](docs/assets/gallery/goals.png)
+![What the family owns, and whose it is. By type, owner and currency, with what changed over the month.][Screens/en-US/assets]
 
-**Financial health**: each figure with its threshold and its formula
+![How solid are we? Emergency fund, debt load and savings rate, each with its threshold and formula.][Screens/en-US/health]
 
-![Financial health: indicators with their zones](docs/assets/gallery/health.png)
+![The same numbers on your phone. Every page works on a small screen, in light and dark.][Screens/en-US/phone]
 
 **Advisor** (optional): a decision with its consequences, voted on by the family
 
@@ -82,7 +82,7 @@ Your data stays in the SQLite database on your server. The server itself sends o
 
 ## Project status
 
-Monido is young: its public history starts in November 2026, it has one maintainer, and it is released often (see [Releases](https://github.com/stanislav-petryashov/monido/releases) and the [changelog](CHANGELOG.md)). Updates keep your data: an existing database is checked on every start and never changed behind your back, and you can [download a copy](docs/deploy-docker.md#backup-and-restore) before updating. Five of the seven languages are machine translations awaiting review. What comes next is on the [roadmap](https://github.com/stanislav-petryashov/monido/discussions/27).
+Monido is young: its public history starts in November 2026, it has one maintainer, and it is released often (see [Releases](https://github.com/stanislav-petryashov/monido/releases) and the [changelog](CHANGELOG.md)). Most of the code is written with Claude Code; the maintainer directs and reviews the changes. Nothing is merged unless the full check passes in CI (lint, dead-code check, the test suite, build and size budgets), and every formula is written down in [Finance rules](docs/finance-rules.md) with [worked examples](docs/use-cases/README.md) you can check by hand. Updates keep your data: an existing database is checked on every start and never changed behind your back, and you can [download a copy](docs/deploy-docker.md#backup-and-restore) before updating. Five of the seven languages are machine translations awaiting review. What comes next is on the [roadmap](https://github.com/stanislav-petryashov/monido/discussions/27).
 
 ## Where to get it
 
@@ -127,3 +127,53 @@ Login, sessions, throttling, the Content-Security-Policy and how to report a vul
 ## License
 
 [MIT](LICENSE).
+
+[screens/en-US/hero]: docs/assets/screens/en-US/hero.webp
+[screens/en-US/close]: docs/assets/screens/en-US/close.webp
+[screens/en-US/goals]: docs/assets/screens/en-US/goals.webp
+[screens/en-US/cashflow]: docs/assets/screens/en-US/cashflow.webp
+[screens/en-US/assets]: docs/assets/screens/en-US/assets.webp
+[screens/en-US/health]: docs/assets/screens/en-US/health.webp
+[screens/en-US/phone]: docs/assets/screens/en-US/phone.webp
+[screens/ru-RU/hero]: docs/assets/screens/ru-RU/hero.webp
+[screens/ru-RU/close]: docs/assets/screens/ru-RU/close.webp
+[screens/ru-RU/goals]: docs/assets/screens/ru-RU/goals.webp
+[screens/ru-RU/cashflow]: docs/assets/screens/ru-RU/cashflow.webp
+[screens/ru-RU/assets]: docs/assets/screens/ru-RU/assets.webp
+[screens/ru-RU/health]: docs/assets/screens/ru-RU/health.webp
+[screens/ru-RU/phone]: docs/assets/screens/ru-RU/phone.webp
+[screens/de-DE/hero]: docs/assets/screens/de-DE/hero.webp
+[screens/de-DE/close]: docs/assets/screens/de-DE/close.webp
+[screens/de-DE/goals]: docs/assets/screens/de-DE/goals.webp
+[screens/de-DE/cashflow]: docs/assets/screens/de-DE/cashflow.webp
+[screens/de-DE/assets]: docs/assets/screens/de-DE/assets.webp
+[screens/de-DE/health]: docs/assets/screens/de-DE/health.webp
+[screens/de-DE/phone]: docs/assets/screens/de-DE/phone.webp
+[screens/es-ES/hero]: docs/assets/screens/es-ES/hero.webp
+[screens/es-ES/close]: docs/assets/screens/es-ES/close.webp
+[screens/es-ES/goals]: docs/assets/screens/es-ES/goals.webp
+[screens/es-ES/cashflow]: docs/assets/screens/es-ES/cashflow.webp
+[screens/es-ES/assets]: docs/assets/screens/es-ES/assets.webp
+[screens/es-ES/health]: docs/assets/screens/es-ES/health.webp
+[screens/es-ES/phone]: docs/assets/screens/es-ES/phone.webp
+[screens/fr-FR/hero]: docs/assets/screens/fr-FR/hero.webp
+[screens/fr-FR/close]: docs/assets/screens/fr-FR/close.webp
+[screens/fr-FR/goals]: docs/assets/screens/fr-FR/goals.webp
+[screens/fr-FR/cashflow]: docs/assets/screens/fr-FR/cashflow.webp
+[screens/fr-FR/assets]: docs/assets/screens/fr-FR/assets.webp
+[screens/fr-FR/health]: docs/assets/screens/fr-FR/health.webp
+[screens/fr-FR/phone]: docs/assets/screens/fr-FR/phone.webp
+[screens/pt-BR/hero]: docs/assets/screens/pt-BR/hero.webp
+[screens/pt-BR/close]: docs/assets/screens/pt-BR/close.webp
+[screens/pt-BR/goals]: docs/assets/screens/pt-BR/goals.webp
+[screens/pt-BR/cashflow]: docs/assets/screens/pt-BR/cashflow.webp
+[screens/pt-BR/assets]: docs/assets/screens/pt-BR/assets.webp
+[screens/pt-BR/health]: docs/assets/screens/pt-BR/health.webp
+[screens/pt-BR/phone]: docs/assets/screens/pt-BR/phone.webp
+[screens/zh-CN/hero]: docs/assets/screens/zh-CN/hero.webp
+[screens/zh-CN/close]: docs/assets/screens/zh-CN/close.webp
+[screens/zh-CN/goals]: docs/assets/screens/zh-CN/goals.webp
+[screens/zh-CN/cashflow]: docs/assets/screens/zh-CN/cashflow.webp
+[screens/zh-CN/assets]: docs/assets/screens/zh-CN/assets.webp
+[screens/zh-CN/health]: docs/assets/screens/zh-CN/health.webp
+[screens/zh-CN/phone]: docs/assets/screens/zh-CN/phone.webp

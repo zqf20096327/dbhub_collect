@@ -51,7 +51,7 @@ The statistics, trip log, route editor, charge history, maintenance list, climat
 - [Push notifications](#push-notifications)
 - [Trip log](#trip-log), [Charge history](#charge-history), [Climate schedules](#climate-schedules) and [Maintenance](#maintenance)
 - [Dutch registration (RDW)](#dutch-registration-rdw)
-- [Homepage dashboard widget](#homepage-dashboard-widget) and [Read-only API tokens](#read-only-api-tokens)
+- [Homepage dashboard widget](#homepage-dashboard-widget), [Read-only API tokens](#read-only-api-tokens) and [Calendar feed](#calendar-feed)
 - [Directions to the car](#directions-to-the-car) and [Map overlays](#map-overlays)
 - [Security defaults](#security-defaults), [HTTPS](#https) and [What leaves your network](#what-leaves-your-network)
 - [Documentation](#documentation)
@@ -74,9 +74,11 @@ The statistics, trip log, route editor, charge history, maintenance list, climat
 - **Homepage widget** -- A read-only API endpoint for the [gethomepage.dev](https://gethomepage.dev) Custom API widget, exposing key vehicle stats at a glance, along with the APK days left, open recalls, the maintenance due next and the last trip.
 - **Log viewer** -- The Logs page shows the entries of the API's and the Worker's log files, newest first and older ones loading as you scroll, filtered by service, level and text, with exceptions folded open on request and a live mode that adds what was written every ten seconds. The files themselves stay on the server, one per day (`LOG_RETAINED_FILES`).
 - **Full data export** -- Settings > Data & API > Your data downloads everything GarageStack keeps as one zip: per car its trips, maintenance, schedules, places and every telemetry reading (as CSV), and your notifications and settings.
-- **Read-only API tokens** -- Make a token under Settings > Data & API > API tokens and let a script, a dashboard or a watch read what the app shows, without signing in. A token can only read: it cannot send commands or change anything, and the full data export and the logs stay with a signed-in session.
+- **Diagnostics for a bug report** -- Settings > Data & API > Diagnostics downloads a small anonymized zip to attach to an issue: the version, which parts are on and healthy, the car's type and configuration codes, the last week of readings without positions, and the last week of warnings from the logs. VINs become car-1, car-2, and plates, email and IP addresses, URLs and coordinates are taken out.
+- **Calendar feed** -- Subscribe to the APK expiry date, maintenance due dates and the coming climate schedules in Google Calendar, Apple Calendar, Outlook or any other calendar app. See [Calendar feed](#calendar-feed).
+- **Read-only API tokens** -- Make a token under Settings > Data & API > API tokens and let a script, a dashboard or a watch read what the app shows, without signing in. A token can only read: it cannot send commands or change anything, and the full data export, the logs and the diagnostics stay with a signed-in session.
 - **Home Assistant** -- Your car appears in Home Assistant automatically through MQTT discovery, sharing GarageStack's broker and MG session instead of needing a second integration. GarageStack adds sensors of its own to the car: the APK and its days left, open recalls, the maintenance due next and the last trip. See [`HOME_ASSISTANT.md`](documentation/HOME_ASSISTANT.md).
-- **Progressive Web App (PWA)** -- Installable on mobile or desktop for a native app-like experience, complete with a home screen icon and push notification support. Where the browser allows it, GarageStack offers to install itself, and the offer can be turned down for good. Installing and push need HTTPS, see [HTTPS](#https).
+- **Progressive Web App (PWA)** -- Installable on mobile or desktop for a native app-like experience, complete with a home screen icon and push notification support. Where the browser allows it, GarageStack offers to install itself, and the offer can be turned down for good. It also opens without a connection, in an underground car park for instance: the dashboard and the map then show the car as that device last loaded it, and the dashboard says so and when the car was last seen, and the directions dialog still offers the coordinates and a `geo:` link for a map app with offline maps. The dashboard's map card keeps the streets around the car too: the app keeps the map tiles it has shown (up to about 150 tiles, for a month), so the area around where the car was last seen with a signal is there offline. It never downloads areas you have not looked at, which OpenStreetMap's tile policy forbids. The saved copy and the kept tiles are forgotten on signing out. Installing and push need HTTPS, see [HTTPS](#https).
 - **Charging stations** -- Overlay nearby EV charging stations on the map, sourced from the [Open Charge Map](https://openchargemap.org) database. Station data is cached in the database for 7 days; on page load the map immediately shows all stations within 100 km of your car that are already cached. Markers show operational status; clicking a marker displays the station name, operator, address, and available connector types with power ratings. Requires a free OCM API key (`OPENCHARGEMAP_API_KEY`). Unlike fuel stations and service areas, charging station tiles are loaded on demand as you browse the map and are not pre-populated by the background Worker.
 - **Fuel stations** -- Overlay nearby petrol and diesel stations on the map (HEV and PHEV only; not shown for BEV). Sourced from OpenStreetMap via the Overpass API -- no API key required. POI data is cached in the database for 7 days and pre-populated by the Worker for a 100 km radius around the car's last known position so the overlay is instant on first view.
 - **Motorway service areas** -- Overlay motorway service areas and rest stops on the map (all vehicle types). Same DB-backed cache and Worker pre-cache as fuel stations; useful for BEV drivers who often find fast chargers at service areas.
@@ -113,7 +115,7 @@ Cards are shown or hidden automatically based on vehicle type (HEV / PHEV / BEV)
 | Find My Car | Horn + lights to locate the car | All |
 | Lights | Main beam, low beam, sidelights | All |
 | Daily Distance | Distance driven today | All |
-| Daily Energy | Energy used today (kWh), or fuel burned today (L) on an HEV | All |
+| Daily Energy | Energy used today (kWh), or fuel burned today (L) on an HEV. On a PHEV the kWh show once `HV_BATTERY_CAPACITY_KWH` is set | All |
 | Since Charge | Distance since last charge session | PHEV, BEV |
 | Efficiency | Energy consumption in the chosen unit, or fuel consumption (L/100 km) on an HEV | All |
 | Speed | Current vehicle speed | All (off by default) |
@@ -209,7 +211,7 @@ See [`docker/all-in-one/README.md`](docker/all-in-one/README.md) for the volume 
 
 ### Option B: Docker Compose
 
-Separate containers for each service. More flexible -- you can use your own PostgreSQL server instead of the bundled one, and containers update independently.
+Separate containers for each service. More flexible -- you can use your own PostgreSQL server instead of the bundled one, and containers update independently. GarageStack itself runs from the published images (`ghcr.io/joszz/garagestack-api`, `garagestack-worker` and `garagestack-frontend`), so nothing is built on your machine; the clone supplies the compose file and the broker's configuration.
 
 #### 1. Clone the repository
 
@@ -256,19 +258,24 @@ docker compose up -d
 
 The frontend is served on port `8080` by default (configurable via `FRONTEND_PORT` in `.env`).
 
+**Image tags:** the compose file runs `latest`, the newest release. Set `GARAGESTACK_TAG` in `.env` to pin a version (`0.19.2`) or to follow `main` with `edge`, as described under the all-in-one quick start. To build GarageStack from the clone instead (your own basemap, your own changes), see [Building from source](documentation/CONFIGURATION.md#building-from-source).
+
 ---
 
 ## Updating
 
 Read the release notes first: anything an upgrade needs from you is listed under **Upgrade Notes** at the top. Database migrations run automatically on startup and only forwards, so to go back to an older version, restore the backup you took before upgrading (see [Backup and restore](#backup-and-restore)). A new PostgreSQL major version is never installed by an update: moving from 18 to the next one means a `pg_dump` from the old version and a restore into a fresh volume on the new one, step by step in [Moving to a new PostgreSQL major version](docker/all-in-one/README.md#moving-to-a-new-postgresql-major-version).
 
-**Docker Compose** builds GarageStack from the cloned source, so update the source and rebuild. `docker compose pull` fetches the gateway, Postgres and Mosquitto images:
+**Docker Compose** runs the published images, so pull the new ones. `git pull` first brings the compose file up to date with them:
 
 ```bash
 git pull
 docker compose pull
-docker compose up -d --build
+docker compose up -d
 ```
+
+> [!IMPORTANT]
+> **Up to v0.19.2 the compose file built GarageStack from the clone; since v0.20.0 it pulls the release images.** Drop `--build` from your update routine. The volumes, the project name and `.env` stay the same, so your data does too. If you build on purpose (your own basemap or code changes), add `docker-compose.build.yml` as described in [Building from source](documentation/CONFIGURATION.md#building-from-source).
 
 **The Compose project name is fixed to `garagestack`.** Compose puts it in front of every volume (`garagestack_postgres_data`), and `docker-compose.yml` sets it, so the folder you run from no longer decides which database you get. An install that started in a folder with another name has its data under that name instead: before you update, run `docker compose ls`, and if the name there is not `garagestack`, add it to `.env`:
 
@@ -286,7 +293,7 @@ docker stop garagestack && docker rm garagestack
 # Re-run your original docker run command
 ```
 
-When a newer release is out, the footer (on a phone, the bottom of the menu) says so and links to its release notes. GarageStack asks GitHub once a day; set `UPDATE_CHECK_ENABLED=false` to stop it. A Compose build only knows its own version when you pass one, so build with `APP_VERSION=$(git describe --tags) docker compose up -d --build` to get the notice.
+When a newer release is out, the footer (on a phone, the bottom of the menu) says so and links to its release notes. GarageStack asks GitHub once a day; set `UPDATE_CHECK_ENABLED=false` to stop it. An image built from source only knows its own version when you pass one (`APP_VERSION`, see [Building from source](documentation/CONFIGURATION.md#building-from-source)).
 
 ### Monitoring
 
@@ -379,7 +386,7 @@ GarageStack checks your vehicle's state every 5 minutes and sends both a browser
 | Door left open | Any door, boot, or bonnet open while engine is off |
 | Window left open | Any window open while engine is off |
 | Moved while parked | The car reports a position more than 1.5 km from where it parked, with the engine off: towed, lifted onto a truck, or taken on a ferry. Sent once per parking, with the car's first report after the move (a sleeping car only reports now and then) |
-| Arrived home or at work | The car parks at a home or work place with **Notify on arrival and departure** switched on (Trip log > Home and work), judged by the position of the poll it parked in. Not sent for a drive that never left the place it started in |
+| Arrived home or at work | The car parks at a home or work place with **Notify on arrival and departure** switched on (Settings > Vehicle > Home and work), judged by the position of the poll it parked in. Not sent for a drive that never left the place it started in |
 | Left home or work | The car drives out of such a place: sent on its first position outside the place's radius, so starting the engine to warm the car up sends nothing |
 | Charging complete | Charging stops while the cable is still connected (plug-in vehicles) |
 | Charging interrupted | Charging stops because of a fault the car names: the charger, an overheating port, a plug not fully in, or a voltage mismatch (plug-in vehicles; unplugging mid-charge sends nothing) |
@@ -392,6 +399,13 @@ GarageStack checks your vehicle's state every 5 minutes and sends both a browser
 | Scheduled climate | A climate schedule ran: climate started, the car refused, or it did not answer (nothing is sent for a run skipped because the car was in use or the day was mild) |
 
 Push notifications require VAPID keys to be configured (`VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY`). Without them, alerts still appear in the in-app notification panel. While GarageStack is open in a browser that allowed notifications but is not subscribed to push, the same alerts show up as system notifications too; a subscribed browser gets them through push instead, so nothing arrives twice.
+
+Two alerts carry a button, on Android and in desktop Chrome and Edge (Safari on iOS shows no notification buttons, and tapping the notification opens the app as before):
+
+- **Car left unlocked** has **Lock**, which locks the car without opening the app.
+- **Maintenance due soon** and **overdue** have **Mark as done**, which logs the service today at the odometer the car reports at that moment, as **Log a service** on the Maintenance page would. A service logged by mistake can be removed from the item's history there.
+
+The notification then says the command was sent or the service logged. When it could not be done (no connection, signed out, the car busy with another command), the app opens instead. The button sends its request from your browser like the app's own buttons, so `CORS_ORIGIN` must match the address you use, as for every command.
 
 Settings > Notifications has a push switch for the device you are on and a per-type checklist for these alerts, which offers only the types the car's drivetrain can produce: the plug-in alerts (low EV battery, charging complete, charging interrupted) are left out for a plain hybrid, low fuel for a full electric car, and the RDW type (APK, recalls and insurance) wherever `RDW_ENABLED` is off. Both are kept per device: a type switched off on your phone still reaches your laptop, and still shows up in the notification panel. Only the switch turns push on or off; the checklist never asks the browser for permission.
 
@@ -421,19 +435,20 @@ Note: "keys left in the car" is not currently supported because the SAIC MQTT ga
 
 ## Trip log
 
-**Trip log** in the sidebar lists the saved trips for a month or a whole year. For each trip it shows the date and times, the addresses it left from and arrived at, and the odometer at either end.
+**Trip log** in the sidebar lists the saved trips for a month or a whole year, picked under **Filters** at the top right; the period shows under the title. For each trip it shows the date and times, the addresses it left from and arrived at, and the odometer at either end.
 
 - **Purpose.** Mark a trip as business, commute or private. Choosing the same purpose again clears it. When trips in the period have no purpose yet, one button gives them all the same one; trips that already have a purpose keep it.
-- **Home and work.** Set your home and work places once (**Home and work** at the top, or click a trip's start or end address to use it). A car has one home and can have several work places. Every trip between home and a work place is marked as a commute: the trips already in the log, and each new one as soon as it is saved. A trip counts as ending at a place when it ends within its radius (250 m unless you change it), so parking down the street or in the office garage still counts. Trips you classified yourself, or deliberately left unclassified, are never changed; an automatic commute shows "Automatic", and choosing another purpose overrides it. Moving or removing a place updates the automatic ones. Business and private stay yours to choose. The places are kept per car in GarageStack's own database.
+- **Home and work.** Set your home and work places once (under **Settings > Vehicle > Home and work**, or click a trip's start or end address to use it). A car has one home and can have several work places. Every trip between home and a work place is marked as a commute: the trips already in the log, and each new one as soon as it is saved. A trip counts as ending at a place when it ends within its radius (250 m unless you change it), so parking down the street or in the office garage still counts. Trips you classified yourself, or deliberately left unclassified, are never changed; an automatic commute shows "Automatic", and choosing another purpose overrides it. Moving or removing a place updates the automatic ones. Business and private stay yours to choose. The places are kept per car in GarageStack's own database.
 - **Arriving and leaving.** Switch on **Notify on arrival and departure** for a place, and the car parking there, or driving away from it, sends a notification (see [Push notifications](#push-notifications)). It is off for every place until you switch it on, and each device can still leave those two types out.
 - **Notes.** Record anything a trip log should say, such as who you visited or why you took another route. Notes save when you leave the field.
-- **Hide a trip.** A trip the GPS got wrong, or one that should not count, can be hidden: it leaves the map, the statistics, the dashboard, the totals and the export, and is listed only under **Show hidden trips**, where **Show again** brings it back. Nothing is deleted.
+- **Hide a trip.** A trip the GPS got wrong, or one that should not count, can be hidden: it leaves the map, the statistics, the dashboard, the totals and the export, and is listed only once **Show hidden trips** is switched on under **Filters**, where **Show again** brings it back. Nothing is deleted.
 - **Join two trips.** A short stop, such as filling up on the way to work, splits one drive into two trips. **Join with next trip** (tap twice) makes them one, from the first one's start to the second one's end, with both notes kept. A purpose you chose for either is kept; otherwise it is labelled again from the new ends, so home to the fuel station to work becomes a commute. A join cannot be undone.
-- **Edit the route.** When the car reported its first position some way down the road, or the line cuts through places you never drove, **Edit route** (in a trip's details, or under the selected trip on the map) opens the trip on a map of its own. Move the start or the end by tapping the map or dragging the marker, use the parking spot before or after the trip with one tap, and add or remove points in between. Every step can be undone, and **Reset to recorded** goes back to the route as the car reported it. The car's own positions are never moved, only added to, and points you placed are drawn dashed. Saving updates the map, the addresses and the speeds; the distance in the log stays the one the odometer counted. Leaving with unsaved changes asks first.
-- **Totals.** The distance per purpose for the period is shown at the top. On a phone only the total shows until you open **Show purposes and driving figures**.
+- **Edit the route.** When the car reported its first position some way down the road, or the line cuts through places you never drove, **Edit route** (the pen on a trip's route preview in the trip log, or under the selected trip on the map) opens the trip on a map of its own. Move the start or the end by tapping the map or dragging the marker, use the parking spot before or after the trip with one tap, and add or remove points in between. Every step can be undone, and **Reset to recorded** goes back to the route as the car reported it. The car's own positions are never moved, only added to, and points you placed are drawn dashed. Saving updates the map, the addresses and the speeds; the distance in the log stays the one the odometer counted. Leaving with unsaved changes asks first.
+- **Totals.** The distance per purpose for the period is shown at the top. On a phone only the total shows until you open **Show the purposes**. Click **All trips** for the driving time, the average and longest trip and the average speed.
+- **Trip details.** On a computer the selected trip's details stand beside the list and never reach past the bottom of the window; what does not fit scrolls inside them. On a phone or tablet a trip opens its details in a dialog.
 - **Distance.** A trip counts for the distance on its odometer when the car reported a reading at both ends. Otherwise it counts for the distance along its GPS fixes, which is a little short because the fixes cut corners.
 - **Addresses** are looked up once through the same OpenStreetMap geocoder as the map, and then kept with the trip for good, so a log exported next year still shows them. With place names switched off (Settings > Map, or `GEOCODING__ENABLED=false`), ends show as coordinates and no lookups are made.
-- **Export CSV** saves the period, hidden trips left out, as a spreadsheet: date, departure and arrival time, from and to address, odometer start and end, distance, purpose and notes. The file follows the interface language: comma-separated in English, and semicolon-separated with decimal commas in Dutch, Spanish and Portuguese, so it opens in columns in Excel either way.
+- **Export.** **Settings > Data & API > Trip log** saves a month or a year, hidden trips left out, as a spreadsheet: date, departure and arrival time, from and to address, odometer start and end, distance, purpose and notes. The file follows the interface language: comma-separated in English, and semicolon-separated with decimal commas in Dutch, Spanish and Portuguese, so it opens in columns in Excel either way. Addresses that were never looked up are looked up before the file is saved, which can take a while the first time a whole year is exported.
 
 Only trips the Worker has saved can be logged, so the trip being driven, and one finished in the last few minutes, appear once the car has been parked for a while.
 
@@ -489,6 +504,18 @@ GarageStack has a read-only endpoint for the [gethomepage.dev](https://gethomepa
 
 ---
 
+## Calendar feed
+
+Under **Settings > Data & API > Calendar feed**, **Make a calendar link** gives an address a calendar app can subscribe to. **Add to calendar** opens it in the calendar app of the device you are on; elsewhere, paste the link where the app adds a calendar from a URL (Google Calendar: *Other calendars > From URL*). The calendar holds:
+
+- the APK expiry date, as a whole-day event, when [RDW lookups](#the-dutch-registration-rdw) are on and the car has a plate;
+- each maintenance item's due date, for items with an interval in months (an item due by distance alone has no date to show);
+- every climate schedule run of the next two weeks.
+
+The calendar app fetches the feed itself, every few hours or as often as it chooses (Google Calendar can take up to a day), so a change shows up there with that delay. The events are in the language the app was in when the link was made.
+
+The link carries a token that opens this calendar and nothing else: it is no API token and reads nothing more, but anyone who has the link can read these dates, and calendar apps keep it on their own servers. It is shown once. **New link** replaces it (the old one stops working, so re-subscribe with the new one) and **Stop** ends it. If GarageStack sits behind a sign-in proxy (Authelia, oauth2-proxy and the like), let `/api/calendar/feed.ics` through without it: a calendar app cannot sign in.
+
 ## Read-only API tokens
 
 To read GarageStack's data from a script, a dashboard or a watch, make a token under **Settings > Data & API > API tokens**. It is shown once: copy it then. Send it with every request:
@@ -497,7 +524,7 @@ To read GarageStack's data from a script, a dashboard or a watch, make a token u
 curl -H "Authorization: Bearer gs_..." https://garagestack.example.com/api/vehicles
 ```
 
-A token reads as the account that made it, through the same endpoints the app uses, and it can only read: any request that would change something, send a command or make another token is refused with `403`. The full data export and the server logs are refused too: they hold the car's whole history and the services' diagnostics, so they need a signed-in session. The list under Settings shows when each token was last used; revoking one stops it at once. GarageStack keeps only a hash of each token, so a lost one cannot be shown again: revoke it and make a new one.
+A token reads as the account that made it, through the same endpoints the app uses, and it can only read: any request that would change something, send a command or make another token is refused with `403`. The full data export, the server logs and the diagnostics download are refused too: they hold the car's whole history and the services' own records, so they need a signed-in session. The list under Settings shows when each token was last used; revoking one stops it at once. GarageStack keeps only a hash of each token, so a lost one cannot be shown again: revoke it and make a new one.
 
 **The API reference** is at `/api/reference/` on the address you use for GarageStack once `API_REFERENCE_ENABLED=true` is set, and is then also linked under the token list: every endpoint, what it takes and what it answers, and a *Test Request* button that sends a request with your signed-in session. The same description is always at `/api/openapi/v1.json` as an OpenAPI document, readable with the token like any other endpoint, for code generators and other tools:
 
@@ -520,7 +547,7 @@ A few things to know before building on a token:
 
 Click the directions icon beside the full-map icon in the top-right corner of the dashboard map, or **Directions to car** in the car marker's popup. Both open the same dialog with map options and information about the car's last known location. The first option opens walking directions on [OpenStreetMap](https://www.openstreetmap.org/directions) to the selected car's last known telemetry coordinates, on a phone or desktop, routed by FOSSGIS's OSRM foot router. The map provider uses or asks for your starting location; GarageStack does not ask your browser for it, wake the car or send a command.
 
-The dialog also offers Google Maps and Apple Maps walking directions, a `geo:` link for compatible installed map apps (Organic Maps, OsmAnd and others) and coordinate copying. Apple Maps availability depends on the device, browser and region. A `geo:` link needs a compatible app and may open a pin rather than walking navigation. If automatic copying is unavailable, for example on a plain HTTP LAN page, select and copy the displayed coordinates by hand.
+The dialog also offers Google Maps and Apple Maps walking directions, a `geo:` link for compatible installed map apps (Organic Maps, OsmAnd and others) and coordinate copying. Apple Maps availability depends on the device, browser and region. A `geo:` link needs a compatible app and may open a pin rather than walking navigation. If automatic copying is unavailable, for example on a plain HTTP LAN page, select and copy the displayed coordinates by hand. Where the browser has a share sheet (most phones, and Chrome and Edge on desktop), **Share location** sends an OpenStreetMap link with a marker on the car to whoever you pick, while the car is parked.
 
 The coordinates are the car's own telemetry, not a phone fix or a historical trip endpoint. They may be old or inaccurate. A displayed vehicle update time is not the time of the GPS fix, which can be older. Directions are unavailable when the car appears to be moving or on an active trip, and until valid coordinates for the selected vehicle are available.
 

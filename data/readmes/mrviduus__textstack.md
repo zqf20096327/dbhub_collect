@@ -12,7 +12,7 @@ Free reader for real books. Look up and explain what you don't understand, discu
 
 ## Get TextStack
 
-- **Web**: [textstack.app](https://textstack.app). Sample chapters open without signup.
+- **Web**: [textstack.app](https://textstack.app). No signup needed: you start as a guest.
 - **Android**: [Google Play](https://play.google.com/store/apps/details?id=app.textstack.mobile).
 - **Self-host**: see [Run locally](#run-locally).
 
@@ -20,7 +20,7 @@ Free reader for real books. Look up and explain what you don't understand, discu
 
 | Feature | Description |
 |---|---|
-| **Library and uploads** | Browse the catalog, or upload your own EPUB / PDF and read it after parsing. |
+| **Library and uploads** | Upload your own EPUB, MOBI, AZW3, FB2, CBZ or PDF and read it at once. |
 | **Kindle-like reader** | Themes, fonts, fullscreen, keyboard shortcuts, bookmarks, highlights, reading stats. |
 | **Explain and translate** | Select a phrase and get a short explanation or translation that takes the book's context into account. |
 | **Vocabulary review** | Words you look up are saved with their sentence and reviewed with spaced repetition. |
@@ -42,10 +42,40 @@ Setup, tools and auth: [docs/reference/mcp.md](docs/reference/mcp.md).
 
 From a clone to a book open in the reader, in about 20 minutes: [docs/start/run-locally.md](docs/start/run-locally.md).
 
+## Project map
+
+```text
+apps/
+  web/                 Web app
+  mobile/              Android app
+  browser-extension/   Chrome article clipper
+  admin/               Admin shell (retained for now)
+backend/               API and background worker
+database/              SQL schema and migrations
+packages/
+  reader/              Shared book renderer and reader protocol
+  shared/              API client, types and other shared logic
+tools/
+  docs-site/           Documentation website builder
+  checks/              Repository checks and changelog generation
+  dependencies/        Dependency updates and drift reports
+  import/              Book import helpers
+infra/
+  nginx/               Server configuration
+  scripts/             Deployment, backups and operational helpers
+tests/                 Backend tests
+docs/                  Documentation
+```
+
+Start with the web reader's [page](apps/web/src/pages/V2ReaderPage.tsx) and
+[host](apps/web/src/components/reader/V2ReaderHost.tsx). Its shared renderer lives in
+[`packages/reader`](packages/reader/README.md); mobile storage and sync stay in
+`apps/mobile/src/lib/v2reader/`. Tool commands: [`tools/README.md`](tools/README.md).
+
 ## Documentation
 
 - [Docs index](docs/README.md) and [architecture](docs/architecture/index.md)
-- [Deployment](internal/ops/deployment.md), [backup and restore](internal/ops/backup.md), [incident runbook](internal/ops/incident-runbook.md)
+- [Deployment](docs/internal/ops/deployment.md), [backup and restore](docs/internal/ops/backup.md), [incident runbook](docs/internal/ops/incident-runbook.md)
 - [Changelog](CHANGELOG.md)
 
 ## Contributing
@@ -58,6 +88,6 @@ Bug reports, ideas and PRs are welcome. Read [CONTRIBUTING.md](.github/CONTRIBUT
 
 A commercial license is available for organizations that cannot use AGPL (proprietary forks, hosted commercial services). Contact: mrviduus@gmail.com.
 
-- Standard Ebooks corpus in seed data: CC0 / public domain
+- Typography rules ported from the [Standard Ebooks tools](https://github.com/standardebooks/tools) (GPL v3)
 - Edge TTS: used under Microsoft's Edge Read Aloud terms
 - Third-party dependencies: their respective licenses

@@ -1,14 +1,28 @@
 # goncordia
 
 [![CI](https://github.com/kirimatt/goncordia/actions/workflows/ci.yml/badge.svg)](https://github.com/kirimatt/goncordia/actions/workflows/ci.yml)
-[![Go Reference](https://pkg.go.dev/badge/github.com/kirimatt/goncordia.svg)](https://pkg.go.dev/github.com/kirimatt/goncordia)
+[![codecov](https://codecov.io/gh/kirimatt/goncordia/graph/badge.svg)](https://codecov.io/gh/kirimatt/goncordia)
+[![Go Reference](https://pkg.go.dev/badge/github.com/kirimatt/goncordia/v2.svg)](https://pkg.go.dev/github.com/kirimatt/goncordia/v2)
 [![GitHub release](https://img.shields.io/github/v/tag/kirimatt/goncordia?label=version)](https://github.com/kirimatt/goncordia/releases)
+[![Go version](https://img.shields.io/github/go-mod/go-version/kirimatt/goncordia)](go.mod)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-[Changelog](CHANGELOG.md)
+[Documentation](https://goncordia.docs7.io) · [Changelog](CHANGELOG.md) · [API reference](https://pkg.go.dev/github.com/kirimatt/goncordia/v2) · [Migrating to v2](MIGRATING_TO_V2.md) · [Who uses it](ADOPTERS.md)
 
-A job queue engine for Go that works with the database you already have.
+**A background job queue for Go that runs on the database you already have.**
+Enqueue jobs in the same transaction as your data, process them with retries,
+schedules, and priorities, and await a job's typed result when you need it —
+on Postgres, MySQL, MariaDB, SQLite, MongoDB, Redis, Cassandra, ClickHouse,
+DynamoDB, Firestore, or in memory. No new broker to run.
 
-One `Driver[TTx]` interface parameterized by your library's native transaction type covers Postgres, MySQL, SQLite, MongoDB, Redis, Cassandra, ClickHouse, DynamoDB, Firestore, and in-memory — without forcing you to adopt a new dependency.
+Use it for the jobs a Go service sends to the background: emails and
+notifications, webhooks, report and thumbnail generation, syncing with
+external APIs, and periodic cleanups. It covers the role of Sidekiq or Celery
+in Go, plus the transactional outbox pattern.
+
+One `Driver[TTx]` interface, parameterized by your database library's native
+transaction type (`pgx.Tx`, `*sql.Tx`, `*gorm.DB`, `bun.Tx`, `*mongo.Session`,
+…), connects the client and workers to storage without an adapter layer.
 
 `EnqueueTx` implements the [transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html): the job is written inside your existing transaction and becomes visible to workers only after commit. If the transaction rolls back, the job disappears — no separate relay process, no dual-write risk.
 
@@ -34,6 +48,8 @@ tx.Commit(ctx)  // job and order appear atomically
 - **Fair multi-queue scheduling** — weighted round-robin with per-queue concurrency and composable local/global execution rate limits
 - **Payload evolution** — versioned payloads with ordered upcasters and permanent decode failures
 - **Batch enqueue** — shared options or independent per-item options, with transactional variants
+- **Futures** — enqueue a job and `Await` the value its handler returns, with local wake-up and polling fallback; `Call` runs a one-shot job like a function call
+- **Retention by default** — old completed, cancelled, and discarded jobs and future results are pruned under a leader lease
 - **Queue pause/resume** — drain a queue without stopping workers
 - **Push notifications** — LISTEN/NOTIFY (Postgres), Change Streams (MongoDB), Pub/Sub (Redis); polling fallback elsewhere
 - **SKIP LOCKED** — lock-free concurrent fetching on Postgres and MySQL
@@ -48,10 +64,11 @@ tx.Commit(ctx)  // job and order appear atomically
 | Driver | Package | Tx type | Atomic insert | Notes |
 |---|---|---|---|---|
 | PostgreSQL (pgx v5) | `driver/pgxv5` | `pgx.Tx` | ✅ | LISTEN/NOTIFY, lease leadership, SKIP LOCKED |
-| PostgreSQL / MySQL / SQLite | `driver/stdlib` | `*sql.Tx` | ✅ | pgx stdlib, go-sql-driver/mysql, modernc sqlite |
+| PostgreSQL / MySQL / MariaDB / SQLite | `driver/stdlib` | `*sql.Tx` | ✅ | pgx stdlib, go-sql-driver/mysql (MySQL 8, MariaDB 10.6+), modernc sqlite |
 | gorm | `driver/gorm` | `*gorm.DB` | ✅ | thin adapter over stdlib |
 | bun | `driver/bun` | `bun.Tx` | ✅ | thin adapter over stdlib |
-| MongoDB 4.0+ | `driver/mongodb` | `mongo.SessionContext` | ✅ | replica set required |
+| MongoDB 4.0+ | `driver/mongodbv2` | `*mongo.Session` (mongo-driver v2) | ✅ | replica set required |
+| MongoDB 4.0+ (deprecated) | `driver/mongodb` | `mongo.SessionContext` (mongo-driver v1) | ✅ | use `driver/mongodbv2` |
 | Redis | `driver/redis` | `NoTx` | ❌ | at-least-once; Pub/Sub notifications |
 | Cassandra 3.11+ | `driver/cassandra` | `NoTx` | ❌ | LWT claiming; ScyllaDB / DSE compatible |
 | ClickHouse 23+ | `driver/clickhouse` | `NoTx` | ❌ | ReplacingMergeTree; at-least-once |
@@ -73,9 +90,11 @@ tx.Commit(ctx)  // job and order appear atomically
 | Priority queues | ✅ | ✅ | ✅ | ❌ |
 | Push notifications | ✅ LISTEN/NOTIFY, Change Streams, Pub/Sub | ✅ LISTEN/NOTIFY | ✅ Pub/Sub | ❌ polling |
 | Web UI | ✅ embeddable | ✅ (River UI, Pro) | ✅ (asynqmon) | ❌ |
+| Await a job's typed result | ✅ `future.Func.Call` / `Await` | ❌ | stores results, no await | ✅ `AsyncResult.Get` |
+| Unit tests without Docker | ✅ in-memory driver + `gontest` | needs Postgres | needs Redis | needs a broker |
 | Workflow primitives (chains, chords) | ❌ | ❌ | ❌ | ✅ |
 
-**Choose goncordia** when you want the transactional outbox pattern and don't want to introduce Redis or a dedicated Postgres instance — it works with whatever database your application already uses.
+**Choose goncordia** when you want the transactional outbox pattern and don't want to introduce Redis or a dedicated Postgres instance — it works with whatever database your application already uses. It also fits when a caller needs the value a background job returns (`future.Func.Call`), or when you want unit tests of enqueue and worker code without Docker.
 
 **Choose River** if you're on Postgres and want a mature, battle-tested library with a polished UI and a professional support tier.
 
@@ -87,49 +106,49 @@ tx.Commit(ctx)  // job and order appear atomically
 
 ## Installation
 
-Requires Go 1.25 or newer.
+Requires Go 1.26 or newer.
 
 ```bash
-go get github.com/kirimatt/goncordia@v1.0.0
+go get github.com/kirimatt/goncordia/v2@v2.7.2
 ```
 
 Pick a driver:
 
 ```bash
 # PostgreSQL via pgx v5
-go get github.com/kirimatt/goncordia/driver/pgxv5@v1.0.0
+go get github.com/kirimatt/goncordia/driver/pgxv5/v2@v2.7.1
 
-# PostgreSQL / MySQL / SQLite via database/sql
-go get github.com/kirimatt/goncordia/driver/stdlib@v1.0.0
+# PostgreSQL / MySQL / MariaDB / SQLite via database/sql
+go get github.com/kirimatt/goncordia/driver/stdlib/v2@v2.7.2
 
 # gorm adapter
-go get github.com/kirimatt/goncordia/driver/gorm@v1.0.0
+go get github.com/kirimatt/goncordia/driver/gorm/v2@v2.7.2
 
 # bun adapter
-go get github.com/kirimatt/goncordia/driver/bun@v1.0.0
+go get github.com/kirimatt/goncordia/driver/bun/v2@v2.7.2
 
 # MongoDB (replica set required)
-go get github.com/kirimatt/goncordia/driver/mongodb@v1.0.0
+go get github.com/kirimatt/goncordia/driver/mongodbv2/v2@v2.6.0
 
 # Redis
-go get github.com/kirimatt/goncordia/driver/redis@v1.0.0
+go get github.com/kirimatt/goncordia/driver/redis/v2@v2.7.1
 
 # Cassandra / ScyllaDB
-go get github.com/kirimatt/goncordia/driver/cassandra@v1.0.0
+go get github.com/kirimatt/goncordia/driver/cassandra/v2@v2.7.1
 
 # ClickHouse
-go get github.com/kirimatt/goncordia/driver/clickhouse@v1.0.0
+go get github.com/kirimatt/goncordia/driver/clickhouse/v2@v2.7.0
 
 # Amazon DynamoDB
-go get github.com/kirimatt/goncordia/driver/dynamodb@v1.0.0
+go get github.com/kirimatt/goncordia/driver/dynamodb/v2@v2.7.1
 
 # Cloud Firestore
-go get github.com/kirimatt/goncordia/driver/firestore@v1.0.0
+go get github.com/kirimatt/goncordia/driver/firestore/v2@v2.7.1
 ```
 
 The root v1 module intentionally does not download every database SDK. Driver,
 OpenTelemetry, and testing dependencies arrive only when their submodule is
-selected. See [Migrating to v1](MIGRATING_TO_V1.md) for upgrade commands.
+selected. See [Migrating to v2](MIGRATING_TO_V2.md) for upgrade commands.
 
 ---
 
@@ -139,9 +158,9 @@ selected. See [Migrating to v1](MIGRATING_TO_V1.md) for upgrade commands.
 
 ```go
 import (
-    "github.com/kirimatt/goncordia"
-    "github.com/kirimatt/goncordia/core"
-    pgxdriver "github.com/kirimatt/goncordia/driver/pgxv5"
+    "github.com/kirimatt/goncordia/v2"
+    "github.com/kirimatt/goncordia/v2/core"
+    pgxdriver "github.com/kirimatt/goncordia/driver/pgxv5/v2"
     "github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -190,32 +209,39 @@ tx.Commit(ctx)  // job and order are atomic
 
 ```go
 import (
-    mongodriver "github.com/kirimatt/goncordia/driver/mongodb"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
+    mongodriver "github.com/kirimatt/goncordia/driver/mongodbv2/v2"
+    "go.mongodb.org/mongo-driver/v2/mongo"
+    "go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
-client, _ := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGO_URI")))
+client, _ := mongo.Connect(options.Client().ApplyURI(os.Getenv("MONGO_URI")))
 defer client.Disconnect(ctx)
 d, err := mongodriver.New(ctx, client, "myapp")  // fails if not a replica set
 d.Migrate(ctx)
 
 mqClient := mongodriver.NewClient(d, goncordia.ClientConfig{})
 
-// Transactional insert via mongo.SessionContext
-mongoClient.UseSession(ctx, func(sc mongo.SessionContext) error {
-    sc.StartTransaction()
-    db.Collection("orders").InsertOne(sc, order)
-    mqClient.EnqueueTx(sc, sc, SendConfirmationArgs{OrderID: order.ID}, nil)
-    return sc.CommitTransaction(sc)
+// Transactional insert: the transaction type is *mongo.Session
+session, _ := client.StartSession()
+defer session.EndSession(ctx)
+_, err = session.WithTransaction(ctx, func(ctx context.Context) (any, error) {
+    if _, err := db.Collection("orders").InsertOne(ctx, order); err != nil {
+        return nil, err
+    }
+    return mqClient.EnqueueTx(ctx, session, SendConfirmationArgs{OrderID: order.ID}, nil)
 })
 ```
+
+`driver/mongodb` is the same driver on the deprecated mongo-driver v1, with
+`mongo.SessionContext` as the transaction type. Both use the same collections
+and document format, so you can switch processes one by one: replace the
+import, connect with mongo-driver v2, and pass the session to `EnqueueTx`.
 
 ### gorm
 
 ```go
 import (
-    gormdriver "github.com/kirimatt/goncordia/driver/gorm"
+    gormdriver "github.com/kirimatt/goncordia/driver/gorm/v2"
     "gorm.io/gorm"
 )
 
@@ -235,7 +261,7 @@ db.Transaction(func(tx *gorm.DB) error {
 
 ```go
 import (
-    bundriver "github.com/kirimatt/goncordia/driver/bun"
+    bundriver "github.com/kirimatt/goncordia/driver/bun/v2"
     "github.com/uptrace/bun"
 )
 
@@ -254,14 +280,14 @@ tx.Commit()
 
 ```go
 import (
-    redisdriver "github.com/kirimatt/goncordia/driver/redis"
+    redisdriver "github.com/kirimatt/goncordia/driver/redis/v2"
     "github.com/redis/go-redis/v9"
 )
 
 rdb := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
 defer rdb.Close()
 d := redisdriver.New(rdb)
-d.Migrate(ctx)  // verifies connectivity and backfills the admin index
+d.Migrate(ctx)  // verifies connectivity, rejects allkeys-* eviction, backfills the admin index
 
 client := redisdriver.NewClient(d, goncordia.ClientConfig{})
 client.Enqueue(ctx, SendEmailArgs{To: "user@example.com", Subject: "Welcome"}, nil)
@@ -270,11 +296,25 @@ client.Enqueue(ctx, SendEmailArgs{To: "user@example.com", Subject: "Welcome"}, n
 // there is no rollback guarantee. Use Enqueue (post-commit pattern) instead.
 ```
 
+Jobs and results are Redis keys without a TTL. Under an `allkeys-*`
+`maxmemory-policy`, Redis may evict them under memory pressure, silently
+dropping pending jobs and stored results, so `Migrate` fails with
+`redisdriver.ErrEvictionPolicy`. Use `noeviction` (writes fail loudly when
+memory is full) or a `volatile-*` policy, which never touches keys without a
+TTL. `redisdriver.WithAllowEviction()` disables the check; when `CONFIG` is
+blocked, as on some managed services, the check is skipped. If a result is
+evicted anyway, `Await` returns `future.ErrResultLost` rather than the
+misleading `future.ErrNoResult`.
+
+`Migrate` also builds the retention indexes for jobs written before v2.5.0.
+During a rolling upgrade, older instances keep finalizing jobs without
+indexing them, so run `Migrate` once more after every instance is upgraded.
+
 ### Cassandra / ScyllaDB
 
 ```go
 import (
-    cassandradriver "github.com/kirimatt/goncordia/driver/cassandra"
+    cassandradriver "github.com/kirimatt/goncordia/driver/cassandra/v2"
     "github.com/gocql/gocql"
 )
 
@@ -297,7 +337,7 @@ client.Enqueue(ctx, SendEmailArgs{To: "user@example.com", Subject: "Welcome"}, n
 
 ```go
 import (
-    clickhousedriver "github.com/kirimatt/goncordia/driver/clickhouse"
+    clickhousedriver "github.com/kirimatt/goncordia/driver/clickhouse/v2"
     "github.com/ClickHouse/clickhouse-go/v2"
 )
 
@@ -323,14 +363,14 @@ client.Enqueue(ctx, SendEmailArgs{To: "user@example.com", Subject: "Welcome"}, n
 import (
     "github.com/aws/aws-sdk-go-v2/config"
     "github.com/aws/aws-sdk-go-v2/service/dynamodb"
-    dynamodbdriver "github.com/kirimatt/goncordia/driver/dynamodb"
+    dynamodbdriver "github.com/kirimatt/goncordia/driver/dynamodb/v2"
 )
 
 cfg, _ := config.LoadDefaultConfig(ctx)
 svc := dynamodb.NewFromConfig(cfg)
 
 d := dynamodbdriver.New(svc)
-d.Migrate(ctx)  // creates goncordia_jobs + goncordia_uniq + goncordia_queues + goncordia_leaders (idempotent)
+d.Migrate(ctx)  // creates goncordia_jobs, _uniq, _queues, _leaders, _schedule_cursors, _job_results (idempotent)
 
 client := dynamodbdriver.NewClient(d, goncordia.ClientConfig{})
 client.Enqueue(ctx, SendEmailArgs{To: "user@example.com", Subject: "Welcome"}, nil)
@@ -345,14 +385,15 @@ client.Enqueue(ctx, SendEmailArgs{To: "user@example.com", Subject: "Welcome"}, n
 ```go
 import (
     "cloud.google.com/go/firestore"
-    firestoredriver "github.com/kirimatt/goncordia/driver/firestore"
+    firestoredriver "github.com/kirimatt/goncordia/driver/firestore/v2"
 )
 
 fsClient, _ := firestore.NewClient(ctx, "my-gcp-project")
 defer fsClient.Close()
 d := firestoredriver.New(fsClient)
-// Migrate is a no-op; create composite index in Firebase console:
+// Migrate is a no-op; create two composite indexes in Firebase console:
 //   collection: goncordia_jobs, fields: queue (ASC), state (ASC), run_at (ASC)
+//   collection: goncordia_jobs, fields: state (ASC), finalized_at (ASC)   // retention
 d.Migrate(ctx)
 
 client := firestoredriver.NewClient(d, goncordia.ClientConfig{})
@@ -370,7 +411,7 @@ fsClient.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction
 ```go
 import (
     _ "modernc.org/sqlite"
-    stdlibdriver "github.com/kirimatt/goncordia/driver/stdlib"
+    stdlibdriver "github.com/kirimatt/goncordia/driver/stdlib/v2"
 )
 
 db, _ := sql.Open("sqlite", "./jobs.db")
@@ -522,8 +563,7 @@ coordinate all pools that share the same backend, queue name, and rule. Global
 permits use an O(1) compare-and-swap cursor and return an exact retry time.
 Waiting jobs retain and heartbeat their claims, consume at most one execution
 slot per rate-limited queue, and yield without entering the handler during
-shutdown. The deprecated `RateLimit`/`RatePeriod` fields remain compatible and
-behave as a local rule whose burst equals its limit.
+shutdown.
 
 ClickHouse is rejected for global rate limits and distributed pipelines because
 it cannot provide the required linearizable CAS/lease guarantees.
@@ -576,6 +616,105 @@ one `WorkerPool`. Set `DistributedPipelines: true` to extend the guarantee acros
 worker processes sharing the same driver. The pool renews an ownership-fenced
 lease while the handler runs and cancels the handler context if renewal is lost.
 
+### Futures: waiting for a job's result
+
+The `future` package lets a producer enqueue a job and wait for the value its
+handler returns. Declare a `Task` once to tie the job arguments to the result
+type; workers register a handler for it, and application code gets a bound
+`Func` that it calls without type parameters. The value is JSON-encoded and
+stored before the job is marked completed.
+
+**Contract** — shared by producers and workers:
+
+```go
+import "github.com/kirimatt/goncordia/v2/future"
+
+type ResizeArgs struct{ ImageID string }
+
+func (ResizeArgs) Kind() string { return "resize" }
+
+var Resize = future.Define[ResizeArgs, Thumbnail]()
+```
+
+**`main`** — wiring only:
+
+```go
+m, err := future.New(d, future.Config{PollInterval: 500 * time.Millisecond})
+
+registry := core.NewRegistry()
+Resize.Register(registry, m, resizeHandler, core.WorkerOpts{}) // func(ctx, *core.Job[ResizeArgs]) (Thumbnail, error)
+
+wp := pgxdriver.NewWorkerPool(d, registry, goncordia.WorkerConfig{
+    // Wakes local Await calls the moment a job finishes.
+    Observer: goncordia.WorkerObservers(instrumentation, m),
+})
+go wp.Start(ctx)
+
+client := pgxdriver.NewClient(d, goncordia.ClientConfig{})
+gallery := &Gallery{resize: future.Bind(m, client, Resize)}
+```
+
+**Application code** — knows only the bound task:
+
+```go
+type Gallery struct {
+    resize *future.Func[ResizeArgs, Thumbnail]
+}
+
+func (g *Gallery) Thumbnail(ctx context.Context, id string) (Thumbnail, error) {
+    return g.resize.Call(ctx, ResizeArgs{ImageID: id}) // enqueue, wait, delete the job
+}
+
+f, err := g.resize.Enqueue(ctx, args)                        // *Future[Thumbnail], wait later
+f, err := g.resize.With(&core.InsertOpts{Queue: "images"}).Enqueue(ctx, args)
+thumb, err := f.Await(ctx)        // blocks until completed, discarded, or cancelled
+thumb, done, err := f.TryGet(ctx) // one non-blocking check
+later := g.resize.Of(f.ID())      // follow a job enqueued elsewhere
+```
+
+`Call` is for one-shot calls: after it returns a value, it deletes the job and
+its result, since nobody else knows the job ID. Unique jobs (other callers may
+share them) and failed jobs stay for [retention](#retention); set
+`future.Config.KeepCalledJobs` to keep every job. Jobs from `Enqueue` stay
+until retention removes them.
+
+To enqueue inside a transaction, bind with `future.BindTx`; the result also
+has `EnqueueTx(ctx, tx, args)`. Call `Await` only after the transaction
+commits. If the transaction rolls back, the job never exists, and `Await`
+returns `future.ErrNotFound` immediately instead of waiting.
+Awaiting before the commit, or after the job was deleted, gives the same
+error, because storage cannot tell these cases apart.
+
+The handler can live in the same package as the calling code when
+API and workers run in one binary; when they are separate binaries, keep the
+contract in a shared package and the handler in the worker. The lower-level
+`future.Enqueue[R]`, `EnqueueTx[R]`, `RegisterWorker`, and `Of[R]` remain
+available.
+
+`Await` returns the handler value, or an error you can classify with
+`errors.Is`: `future.ErrDiscarded` and `future.ErrCancelled` (both carry a
+`*future.JobError` with the last handler error), `future.ErrNoResult` for a job
+completed by a plain worker, `future.ErrResultLost` for a completed job whose
+stored value disappeared without being deleted (Redis eviction), and `future.ErrNotFound` (also matches
+`driver.ErrNotFound`) for a job that does not exist. Use
+`EnqueueTx` the same way, and call `Await` only after the transaction commits.
+
+Futures work with every driver. Job state is read through the portable
+`JobGetByID`, and every built-in driver implements `driver.JobResultStore`, so
+results live next to the jobs: a `goncordia_job_results` table (SQL, Cassandra,
+ClickHouse, DynamoDB — run `Migrate` after upgrading), collection (MongoDB,
+Firestore), or key (Redis). Deleting a job deletes its result. Set
+`future.Config.Store` to keep results elsewhere, for example jobs in Postgres
+and results in your own Redis-backed `JobResultStore`. When producer
+and worker pool share a `Manager` in one process, `Await` wakes immediately.
+Across processes it polls every `PollInterval` on the injected clock. Delivery
+stays at-least-once: the last stored value wins if a handler runs twice.
+
+Runnable examples: [`future/example_test.go`](future/example_test.go) runs the
+whole flow on the in-memory driver with a `clock.Manual`, and
+[`driver/pgxv5/example_future_test.go`](driver/pgxv5/example_future_test.go)
+enqueues with `BindTx` inside a Postgres transaction and awaits the result.
+
 ### Versioned payloads
 
 Version 1 remains plain legacy JSON. A type may declare a newer version and the
@@ -604,7 +743,7 @@ schedule. `InsertOpts.PayloadVersion` can override the type-provided version.
 ## Admin dashboard, health, and metrics
 
 ```go
-import "github.com/kirimatt/goncordia/admin"
+import "github.com/kirimatt/goncordia/v2/admin"
 
 handler := admin.New(d,
     admin.WithReadOnly(false),
@@ -639,6 +778,32 @@ return `admin.ErrUnauthenticated` for HTTP 401 and any other error for HTTP 403.
 checks that the backing driver can answer a query and returns HTTP 503 when it
 cannot. Metrics are buffered until all queue statistics have been collected, so
 a collection failure returns 503 without a misleading partial Prometheus body.
+
+To serve futures metrics from the same endpoint, aggregate them with
+`future.NewMetrics` and pass it to `admin.WithMetrics` (any value with
+`WritePrometheus(io.Writer) error` works):
+
+```go
+futureMetrics := future.NewMetrics(nil) // or the clock.Manual used in tests
+m, err := future.New(d, future.Config{
+    Observer: future.Observers(futureMetrics, otelgoncordia.NewFutureInstrumentation()),
+})
+handler := admin.New(d, admin.WithMetrics(futureMetrics))
+```
+
+| Metric | Type | Labels |
+|---|---|---|
+| `goncordia_future_awaits_in_flight` | gauge | — |
+| `goncordia_future_await_duration_seconds` | histogram | `kind`, `outcome` |
+| `goncordia_future_await_polls_total` | counter | `kind` |
+| `goncordia_future_await_wakeups_total` | counter | `kind` |
+| `goncordia_future_store_duration_seconds` | histogram | `kind`, `status` |
+| `goncordia_future_result_size_bytes` | histogram | `kind` |
+
+These values describe the process that runs the `Manager`: awaits are counted
+where producers wait, stores where workers run. Expose the admin handler in
+each instance and let Prometheus aggregate. Queue gauges, by contrast, come
+from storage and are the same in every instance.
 The embedded dashboard serves script and style assets separately under a strict
 Content Security Policy.
 
@@ -678,12 +843,6 @@ maintenance := goncordia.NewMaintenance(d, goncordia.MaintenanceConfig{
     Clock: appClock,
 })
 
-result, err := maintenance.Prune(ctx, goncordia.RetentionPolicy{
-    Completed: 30 * 24 * time.Hour,
-    Discarded: 90 * 24 * time.Hour,
-    Cancelled: 7 * 24 * time.Hour,
-})
-
 cancelled, err := maintenance.BulkCancel(ctx, jobIDs)
 retried, err := maintenance.BulkRetry(ctx, jobIDs, time.Time{}) // now via Clock
 deleted, err := maintenance.BulkDelete(ctx, jobIDs)
@@ -694,8 +853,114 @@ replayed, err := maintenance.DeadLetterReplay(ctx, jobIDs, time.Time{})
 
 Bulk operations preserve partial progress in `BulkResult`; their returned error
 joins per-job failures, so `errors.Is` still recognizes typed driver errors.
-Dead-letter replay first verifies that each job is still discarded. Retention
-durations of zero disable that state, and negative durations are rejected.
+Dead-letter replay first verifies that each job is still discarded.
+
+### Retention
+
+Every worker pool prunes old jobs by default, on every driver. Pools share a
+leader lease, so only one instance prunes at a time, and another takes over
+if it stops. The default `goncordia.DefaultRetentionPolicy` keeps:
+
+| What | Kept for |
+|---|---|
+| completed jobs | 24 hours |
+| cancelled jobs | 24 hours |
+| discarded jobs (dead letters) | 7 days |
+| future results of completed jobs | 1 hour |
+
+Override any field in `WorkerConfig`; zero fields keep the default, and
+`goncordia.KeepForever` turns a state off. A negative `RetentionInterval`
+disables retention in that pool:
+
+```go
+wp := goncordia.NewWorkerPool(d, registry, goncordia.WorkerConfig{
+    Retention: goncordia.RetentionPolicy{
+        Completed: 7 * 24 * time.Hour,
+        Discarded: goncordia.KeepForever,
+    },
+    RetentionInterval: 10 * time.Minute, // default 5 minutes
+})
+```
+
+Futures results expire earlier than the jobs. Storage cannot know whether
+some process will still call `Await` (waiters live in other processes'
+memory, and `future.Of` can follow a job later), so results expire by age, not
+by waiter count; after that, `Await` returns `future.ErrNoResult`. `Func.Call`
+does not wait for retention: its job ID never leaves the call, so it deletes
+the job and result as soon as it returns a value (see
+[Futures](#futures-waiting-for-a-jobs-result)). `Manager.Forget` drops a result
+you have read.
+
+Without a worker pool, for example in a separate maintenance process, run the
+same loop yourself, or call `Prune` once:
+
+```go
+go maintenance.RunRetention(ctx, goncordia.RetentionRunConfig{
+    Policy:   goncordia.DefaultRetentionPolicy,
+    Interval: 10 * time.Minute,
+    OnPrune: func(r goncordia.PruneResult, err error) {
+        slog.Info("retention", "deleted", r.Deleted, "results", r.ResultsDeleted, "err", err)
+    },
+})
+
+result, err := maintenance.Prune(ctx, goncordia.RetentionPolicy{
+    Completed: 30 * 24 * time.Hour,
+    Results:   time.Hour,
+})
+```
+
+Zero durations in `Prune` and `RunRetention` skip that state; negative ones
+other than `KeepForever` are rejected.
+
+How a pass finds expired jobs depends on the driver:
+
+| Driver | How retention finds expired jobs |
+|---|---|
+| pgxv5, stdlib (Postgres, MySQL, SQLite), gorm, bun, MongoDB, Redis | index on state and finalization time, batched deletes (`driver.JobPruner`) |
+| DynamoDB | sparse GSI `gsi_retention` on terminal jobs, sharded 16 ways; created by `Migrate` |
+| Firestore | composite index `state ASC, finalized_at ASC` on `goncordia_jobs` (create it yourself, like the fetch index); results use the automatic `updated_at` index |
+| Cassandra | lookup tables `goncordia_jobs_finalized` and `goncordia_results_written`, read from a stored watermark so deleted rows' tombstones are not rescanned |
+| ClickHouse | data-skipping indexes on `state`, `finalized_at`, `id`, and result `updated_at`; expired rows are removed physically with lightweight `DELETE`, including rows that `JobDelete` only marked deleted |
+| memory | scans in process memory |
+
+On SQL and MongoDB, `Migrate` creates the retention indexes
+(`idx_goncordia_jobs_finalized`, `idx_goncordia_job_results_updated`). Building
+an index on a large Postgres table blocks writes to it while the index is
+built. To avoid that, create the indexes yourself before upgrading; `Migrate`
+then skips them:
+
+```sql
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_goncordia_jobs_finalized ON goncordia_jobs (state, finalized_at);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_goncordia_job_results_updated ON goncordia_job_results (updated_at);
+```
+
+#### Retention metrics
+
+`goncordia.NewRetentionMetrics()` counts passes and deletions. Use it as the
+pool's observer and serve it from the admin `/metrics` endpoint:
+
+```go
+retention := goncordia.NewRetentionMetrics()
+wp := goncordia.NewWorkerPool(d, registry, goncordia.WorkerConfig{
+    Observer: goncordia.WorkerObservers(futureManager, retention),
+})
+handler := admin.New(d, admin.WithMetrics(futureMetrics, retention))
+```
+
+| Metric | Type | Labels |
+|---|---|---|
+| `goncordia_retention_passes_total` | counter | `status` (`ok`, `error`) |
+| `goncordia_retention_jobs_deleted_total` | counter | — |
+| `goncordia_retention_results_deleted_total` | counter | — |
+| `goncordia_retention_last_success_timestamp_seconds` | gauge | — |
+| `goncordia_retention_last_pass_duration_seconds` | gauge | — |
+
+Only the instance holding the lease runs passes, so sum across instances.
+Alert on `time() - max(goncordia_retention_last_success_timestamp_seconds)`
+growing past a few intervals. `otelgoncordia.NewInstrumentation` records the
+same data as `goncordia.retention.passes`, `goncordia.retention.deleted`, and
+`goncordia.retention.duration`. A custom `WorkerObserver` receives passes by
+implementing `goncordia.RetentionObserver`.
 
 ---
 
@@ -704,7 +969,7 @@ durations of zero disable that state, and negative durations are rejected.
 `CronScheduler` enqueues jobs on a schedule. Pair it with a `WorkerPool` that processes them.
 
 ```go
-import "github.com/kirimatt/goncordia/core"
+import "github.com/kirimatt/goncordia/v2/core"
 
 cs := goncordia.NewCronScheduler(d, []goncordia.PeriodicJob{
     {
@@ -800,36 +1065,12 @@ return core.RetryAfter(30*time.Second, err)
 return core.RetryAt(nextWindow, err)
 
 // Custom
-import "github.com/kirimatt/goncordia/clock"
+import "github.com/kirimatt/goncordia/v2/clock"
 
 type MyPolicy struct{}
 func (MyPolicy) NextRetryAt(attempt int, err error, clk clock.Clock) time.Time {
     return clk.Now().Add(time.Duration(attempt) * time.Minute)
 }
-```
-
----
-
-## Testing
-
-Use the in-memory driver — no database, no Docker, deterministic time:
-
-```go
-import (
-    "github.com/kirimatt/goncordia/clock"
-    "github.com/kirimatt/goncordia/driver/memory"
-)
-
-clk := clock.NewManual(time.Now())
-d   := memory.New(memory.WithClock(clk))
-
-client := goncordia.NewClient[memory.NoTx](d, goncordia.ClientConfig{Clock: clk})
-wp     := goncordia.NewWorkerPool[memory.NoTx](d, registry, goncordia.WorkerConfig{Clock: clk})
-
-go wp.Start(ctx)
-clk.Advance(time.Hour)  // trigger scheduled jobs instantly
-
-jobs := d.AllJobs()  // inspect state without a real database
 ```
 
 ---
@@ -849,7 +1090,7 @@ func (d *MyDriver) Listener() driver.Listener          { return nil } // nil = p
 func (d *MyDriver) Close() error                       { return nil }
 ```
 
-See [`driver/driver.go`](driver/driver.go) for the full core interface and optional rescue/admin capabilities, and [`driver/memory/memory.go`](driver/memory/memory.go) for a reference implementation. Driver authors can reuse `driver/drivertest.Run` for the base contract and `driver/drivertest.RunScheduled` with an injected `clock.Manual` for scheduled-job conformance. The base contract includes opaque job/queue pagination, deterministic ordering, invalid-cursor classification, fencing, and typed stale-claim behavior.
+See [`driver/driver.go`](driver/driver.go) for the full core interface and optional rescue/admin capabilities, and [`driver/memory/memory.go`](driver/memory/memory.go) for a reference implementation. Every `Executor` also implements `driver.JobResultStore` (`JobResultPut`, `JobResultGet`, `JobResultDelete`; `JobDelete` removes the result too), which `driver/drivertest.RunResults` verifies. Driver authors can reuse `driver/drivertest.Run` for the base contract and `driver/drivertest.RunScheduled` with an injected `clock.Manual` for scheduled-job conformance. The base contract includes opaque job/queue pagination, deterministic ordering, invalid-cursor classification, fencing, and typed stale-claim behavior.
 
 ---
 
@@ -928,7 +1169,7 @@ Cassandra's high per-operation latency comes from Lightweight Transaction consen
 `gontest` makes it easy to test workers and enqueue assertions without a real database.
 
 ```bash
-go get github.com/kirimatt/goncordia/gontest@v1.0.0
+go get github.com/kirimatt/goncordia/gontest/v2@v2.2.0
 ```
 
 **Assert that business logic enqueues the right jobs:**
@@ -947,9 +1188,8 @@ func TestPlaceOrder_EnqueuesConfirmationEmail(t *testing.T) {
 }
 ```
 
-Use `gontest.JobsE[T]` when payload corruption must fail the test explicitly.
-The legacy `Jobs[T]` helper remains available but intentionally discards its
-decode error for source compatibility.
+`gontest.Jobs[T]` returns every enqueued job of kind T and an error for the
+first payload that cannot be decoded.
 
 **Unit-test a worker function without a database or pool:**
 
@@ -983,11 +1223,31 @@ clk.Advance(25 * time.Hour)
 // now start the pool — the job will be picked up immediately
 ```
 
+**Drive the in-memory driver directly** — no database, no Docker, deterministic time:
+
+```go
+import (
+    "github.com/kirimatt/goncordia/v2/clock"
+    "github.com/kirimatt/goncordia/v2/driver/memory"
+)
+
+clk := clock.NewManual(time.Now())
+d   := memory.New(memory.WithClock(clk))
+
+client := goncordia.NewClient[memory.NoTx](d, goncordia.ClientConfig{Clock: clk})
+wp     := goncordia.NewWorkerPool[memory.NoTx](d, registry, goncordia.WorkerConfig{Clock: clk})
+
+go wp.Start(ctx)
+clk.Advance(time.Hour)  // trigger scheduled jobs instantly
+
+jobs := d.AllJobs()  // inspect state without a real database
+```
+
 **Run an end-to-end flow in memory:**
 
 ```go
 registry := core.NewRegistry()
-core.RegisterWorker(registry, emailWorker, core.WorkerOpts{Queue: "default"})
+core.RegisterWorker(registry, emailWorker, core.WorkerOpts{})
 
 client, tracker := gontest.NewClient(t)
 pool := tracker.NewWorkerPool(registry, goncordia.WorkerConfig{
@@ -998,7 +1258,7 @@ runCtx, cancel := context.WithCancel(ctx)
 defer cancel()
 go pool.Start(runCtx)
 // enqueue and wait for processed.Load() >= 1 ...
-pool.Stop()
+_ = pool.Shutdown(context.Background())
 ```
 
 ---
@@ -1006,11 +1266,11 @@ pool.Stop()
 ## Observability (OpenTelemetry)
 
 ```bash
-go get github.com/kirimatt/goncordia/otel@v1.0.0
+go get github.com/kirimatt/goncordia/otel/v2@v2.6.0
 ```
 
 ```go
-import otelgoncordia "github.com/kirimatt/goncordia/otel"
+import otelgoncordia "github.com/kirimatt/goncordia/otel/v2"
 
 instrumentation := otelgoncordia.NewInstrumentation(
     otelgoncordia.WithTracerProvider(tp),
@@ -1052,11 +1312,64 @@ The instrumentation produces:
 - **Counter** `goncordia.job.finished` — selected durable outcomes
 - **Counter** `goncordia.job.heartbeat.count` — heartbeat outcomes (`ok`/`stale`/`error`)
 - **Counter** `goncordia.job.lease_rescued` — expired claims returned to queues
+- **Counter** `goncordia.retention.passes` — retention passes by `status`
+- **Counter** `goncordia.retention.deleted` — jobs and results deleted, by `what` (`jobs`/`results`)
+- **Histogram** `goncordia.retention.duration` (seconds) — retention pass duration by `status`
 - **Counter** `goncordia.job.count` — labelled by kind, queue, status (`ok` / `error`)
 
 Panics are recovered, converted to errors, recorded on the span, and persisted
 with their stack trace in `driver.AttemptError.Trace` before retry/discard. The
 worker pool always stays alive.
+
+### Futures
+
+`NewFutureInstrumentation` implements `future.Observer`:
+
+```go
+m, err := future.New(d, future.Config{
+    Observer: otelgoncordia.NewFutureInstrumentation(
+        otelgoncordia.WithTracerProvider(tp), otelgoncordia.WithMeterProvider(mp),
+    ),
+})
+```
+
+| Signal | Name | Attributes |
+|---|---|---|
+| span | `goncordia.future.await` | job id, kind, queue, state, outcome, polls, wakeups, result bytes |
+| span | `goncordia.future.store` | job id, kind, queue, attempt, result bytes; child of `goncordia.process` |
+| histogram (s) | `goncordia.future.await.duration` | kind, outcome, blocking |
+| counter | `goncordia.future.await.polls` | kind |
+| counter | `goncordia.future.await.wakeups` | kind |
+| histogram (By) | `goncordia.future.result.size` | kind |
+| histogram (s) | `goncordia.future.store.duration` | kind, status |
+
+Combine it with the Prometheus-text `future.Metrics` through
+`future.Observers` to serve the same signals from the admin `/metrics`
+endpoint (see [Admin dashboard](#admin-dashboard-health-and-metrics)).
+
+Outcomes are `completed`, `discarded`, `cancelled`, `no_result`, `not_found`,
+`pending` (TryGet only), `abandoned` (caller context ended), and `error`.
+Few wakeups relative to polls mean producers and workers run in different
+processes, and await latency is bounded by `PollInterval`.
+
+### Custom observers
+
+`WorkerConfig.Observer` receives every worker lifecycle event: claim, handler
+start and finish, rate-limit wait, heartbeat, and rescue. Embed
+`goncordia.NopWorkerObserver` to handle only the events you need, and combine
+observers with `goncordia.WorkerObservers`:
+
+```go
+type slowJobs struct{ goncordia.NopWorkerObserver }
+
+func (slowJobs) JobFinished(ctx context.Context, e goncordia.JobFinishedEvent) {
+    if e.FinishedAt.Sub(e.StartedAt) > time.Minute {
+        slog.WarnContext(ctx, "slow job", "kind", e.Job.Kind, "id", e.Job.ID)
+    }
+}
+
+Observer: goncordia.WorkerObservers(instrumentation, futures, slowJobs{}),
+```
 
 You can also add your own middleware for logging or custom metrics:
 
@@ -1099,14 +1412,16 @@ goncordia/
 │   ├── stdlib/            # PostgreSQL + MySQL + SQLite via database/sql
 │   ├── gorm/              # gorm adapter (wraps stdlib)
 │   ├── bun/               # bun adapter (wraps stdlib)
-│   ├── mongodb/           # MongoDB 4.0+ replica set
+│   ├── mongodbv2/         # MongoDB 4.0+ replica set (mongo-driver v2)
+│   ├── mongodb/           # same, on the deprecated mongo-driver v1
 │   ├── redis/             # Redis (at-least-once; Pub/Sub notifications)
 │   ├── cassandra/         # Cassandra 3.11+ / ScyllaDB (LWT claiming; at-least-once)
 │   ├── clickhouse/        # ClickHouse 23+ (ReplacingMergeTree; at-least-once)
 │   ├── dynamodb/          # Amazon DynamoDB (conditional writes; at-least-once)
 │   └── firestore/         # Cloud Firestore (RunTransaction; ACID inserts)
+├── future/                # Future[R]: enqueue a job and Await its handler's value
 ├── gontest/               # test helpers (Tracker, WorkerHelper, MockClock)
-└── otel/                  # OpenTelemetry middleware (spans + metrics)
+└── otel/                  # OpenTelemetry middleware, worker and future instrumentation
 ```
 
 ---
@@ -1129,6 +1444,8 @@ goncordia/
 
 ## Community and security
 
+- Using goncordia? Add yourself to [ADOPTERS.md](ADOPTERS.md) with a pull
+  request or the [adopter form](https://github.com/kirimatt/goncordia/issues/new?template=adopter.yml).
 - Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request.
 - Follow the [Code of Conduct](CODE_OF_CONDUCT.md) in all project spaces.
 - Report vulnerabilities privately according to [SECURITY.md](SECURITY.md).

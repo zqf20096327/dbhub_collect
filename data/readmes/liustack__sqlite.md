@@ -33,38 +33,38 @@ The pure Go drivers paid for that in speed. modernc translates SQLite's C into G
 Time per operation, lower is better, the median of 6 runs. The best of a row is in bold when its 95% confidence interval overlaps no other driver's. WAL, `synchronous=NORMAL`, the same settings checked on every driver.
 
 <!-- bench:readme-linux-amd64 -->
-**linux/amd64** (AMD EPYC 7B13, Go 1.27.2, commit `bc87680`):
+**linux/amd64** (AMD EPYC 7B13, Go 1.27.4, commit `18a2707`):
 
 | Workload | liustack/sqlite | [mattn](https://github.com/mattn/go-sqlite3) (cgo) | [modernc](https://gitlab.com/cznic/sqlite) | [ncruces](https://github.com/ncruces/go-sqlite3) |
 | :-- | --: | --: | --: | --: |
-| Insert one row | **18.5 µs** | 19.5 µs | 22.9 µs | 21.0 µs |
-| Insert 1000 rows in a transaction | **1.30 ms** | 1.46 ms | 1.95 ms | 1.65 ms |
-| Read one row by key | **3.61 µs** | 6.69 µs | 8.32 µs | 6.53 µs |
-| Read 100k rows | **34.4 ms** | 72.0 ms | 71.3 ms | 50.7 ms |
-| Join and group | 2.87 ms | **2.62 ms** | 4.50 ms | 4.34 ms |
-| Find a user with 400 comments | **514 µs** | 836 µs | 1.01 ms | 755 µs |
-| Read 100 rows of 200 KB text | 7.23 ms | **6.77 ms** | 7.89 ms | 7.81 ms |
-| Read by key, 8 threads | 1.69 µs | 2.31 µs | 2.25 µs | 2.09 µs |
-| Insert, 8 goroutines at once | **9.56 µs** | 19.3 µs | 24.7 µs | 21.8 µs |
-| Insert, 64 goroutines at once | **3.60 µs** | 20.3 µs | 27.6 µs | 26.6 µs |
-| Insert, 64 goroutines, `synchronous=FULL` | **21.3 µs** | 2.29 ms | 4.26 ms | 1.10 ms |
+| Insert one row | 22.8 µs | 23.3 µs | 26.6 µs | 24.6 µs |
+| Insert 1000 rows in a transaction | **1.38 ms** | 1.69 ms | 2.22 ms | 1.95 ms |
+| Read one row by key | **3.86 µs** | 7.56 µs | 9.44 µs | 7.13 µs |
+| Read 100k rows | **34.5 ms** | 79.9 ms | 85.5 ms | 52.7 ms |
+| Join and group | 2.86 ms | 2.88 ms | 5.02 ms | 4.88 ms |
+| Find a user with 400 comments | **523 µs** | 880 µs | 1.16 ms | 829 µs |
+| Read 100 rows of 200 KB text | 8.78 ms | 8.31 ms | 9.57 ms | 9.32 ms |
+| Read by key, 4 threads | **1.78 µs** | 3.02 µs | 3.92 µs | 2.82 µs |
+| Insert, 8 goroutines at once | **10.7 µs** | 20.9 µs | 27.0 µs | 24.0 µs |
+| Insert, 64 goroutines at once | **3.52 µs** | 22.3 µs | 30.6 µs | 29.3 µs |
+| Insert, 64 goroutines, `synchronous=FULL` | **30.3 µs** | 4.01 ms | 6.73 ms | 1.47 ms |
 <!-- /bench:readme-linux-amd64 -->
 
 <!-- bench:readme-darwin-arm64 -->
-**darwin/arm64** (Apple M4, Go 1.27.2, commit `92ec4bf`, other work ran on the machine: read differences under 30% as noise):
+**darwin/arm64** (Apple M4, Go 1.27.2, commit `4b44e15`):
 
 | Workload | liustack/sqlite | [mattn](https://github.com/mattn/go-sqlite3) (cgo) | [modernc](https://gitlab.com/cznic/sqlite) | [ncruces](https://github.com/ncruces/go-sqlite3) |
 | :-- | --: | --: | --: | --: |
-| Insert one row | 6.28 µs | 5.93 µs | 7.40 µs | 6.92 µs |
-| Insert 1000 rows in a transaction | 479 µs | 556 µs | 739 µs | 570 µs |
-| Read one row by key | **1.15 µs** | 1.93 µs | 2.78 µs | 2.06 µs |
-| Read 100k rows | **14.2 ms** | 30.0 ms | 29.8 ms | 20.4 ms |
-| Join and group | 1.34 ms | **1.14 ms** | 2.62 ms | 1.85 ms |
-| Find a user with 400 comments | **226 µs** | 367 µs | 553 µs | 341 µs |
-| Read 100 rows of 200 KB text | 3.39 ms | 3.36 ms | 3.73 ms | 3.62 ms |
-| Read by key, 10 threads | **1.17 µs** | 1.49 µs | 1.74 µs | 2.37 µs |
-| Insert, 8 goroutines at once | **3.09 µs** | 6.86 µs | 8.15 µs | 36.8 µs |
-| Insert, 64 goroutines at once | **1.16 µs** | 10.0 µs | 5.65 ms | 81.1 µs |
+| Insert one row | 6.29 µs | **5.96 µs** | 7.30 µs | 6.97 µs |
+| Insert 1000 rows in a transaction | **473 µs** | 555 µs | 750 µs | 582 µs |
+| Read one row by key | **1.08 µs** | 1.92 µs | 2.75 µs | 2.07 µs |
+| Read 100k rows | **13.7 ms** | 29.7 ms | 29.8 ms | 20.5 ms |
+| Join and group | 1.25 ms | **1.14 ms** | 2.63 ms | 1.86 ms |
+| Find a user with 400 comments | **212 µs** | 369 µs | 559 µs | 342 µs |
+| Read 100 rows of 200 KB text | 3.41 ms | 3.38 ms | 3.75 ms | 3.56 ms |
+| Read by key, 10 threads | **1.12 µs** | 1.50 µs | 1.77 µs | 2.35 µs |
+| Insert, 8 goroutines at once | **3.12 µs** | 6.84 µs | 8.27 µs | 44.5 µs |
+| Insert, 64 goroutines at once | **1.16 µs** | 9.78 µs | 3.42 ms | 85.8 µs |
 <!-- /bench:readme-darwin-arm64 -->
 
 Where another driver still wins: work that stays inside SQLite (the join), where this driver runs the same C but as Go assembly, and reading large text values. Why reads and many writers are faster, the versions of each driver, and how to run it all again are in [docs/benchmarks.md](docs/benchmarks.md).
@@ -180,6 +180,7 @@ The driver registers as `sqlite`, as modernc.org/sqlite and glebarez/go-sqlite d
 | [Group commit](docs/group-commit.md) | You want to know which concurrent writes merge, and what error each gets when one fails |
 | [Statement cache](docs/query-cache.md) | You want to know which statements the driver keeps for you, and why a kept one never reads something stale |
 | [Replication](docs/replication.md) | You want a copy of the database in S3, R2 or MinIO, or to restore one |
+| [When every core is busy](docs/busy-cores.md) | A read or a write waits tens of milliseconds or more now and then, or you run on one core or two |
 | [Upstream](docs/upstream.md) | You want to know which SQLite it is, or how it moves to a new one |
 | [Testing](docs/testing.md), [Commits](docs/commit.md) | You are about to change the code |
 

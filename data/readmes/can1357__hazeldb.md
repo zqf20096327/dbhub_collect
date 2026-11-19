@@ -29,7 +29,8 @@ db.close()?;
   [Async](#async).
 - **Ordered keys, optional.** A concurrent B+tree next to the hash index serves
   forward and backward range scans, without slowing down point reads.
-- **Small.** About 6k lines of Rust and eight dependencies.
+- **Small.** About 6k lines of Rust and eight dependencies, plus `libc` on Unix or
+  `windows-sys` on Windows.
 
 ## Usage
 
@@ -108,8 +109,8 @@ let db = hazeldb::Db::open(opts)?;
 | `storage` | `devices` | `dir/data` | Data files; records are striped over them by key |
 | | `device_size` | 4 GiB | Size of each data file (preallocated sparse, ≤ 2 TiB) |
 | | `write_block_size` | 1 MiB | Unit of writes and defrag; also the largest record |
-| | `read_cache` | 256 MiB | Recently written blocks kept in memory per file |
-| | `direct_io` | off | Bypass the page cache (`O_DIRECT` / `F_NOCACHE`) |
+| | `read_cache` | 256 MiB | With `direct_io`: recently written blocks kept in memory per file |
+| | `direct_io` | off | Bypass the page cache (`O_DIRECT` / `F_NOCACHE` / `FILE_FLAG_NO_BUFFERING`) |
 | `write` | `flush_delay` | 1 s | Longest a write stays in memory only |
 | | `max_unflushed` | 64 MiB | Backpressure: writers wait beyond this |
 | | `sync` | off | Return from each write only once it is durable |
@@ -120,8 +121,11 @@ let db = hazeldb::Db::open(opts)?;
 | `recovery` | `fast_restart` | on | Save the index on close and load it on open |
 | | `index_dir` | `dir/index` | Where the index is saved |
 | | `threads` | one per core | Threads that scan the data files after a crash |
+| | `checkpoint_interval` | 30 s | How often a running store checkpoints its index, so a crash replays only what was written since; `None` scans every data file instead |
 | `index` | `sprig_bits` | 20 | log2 of the number of index trees |
 | | `stage_entries` | 2^20 | Index growth unit (64 bytes per entry) |
+| | `memory` | `Memory::Budget(64 MiB)` | Memory for the index; the rest goes to `index/runs` and, in an ordered store, `index/pages`. `Memory::Unbounded` keeps it all in memory |
+| | `partition_bits` | 12 | log2 of the units flushed from memory into `index/runs` |
 
 The layout fields (`devices`, `device_size`, `write_block_size`) and `ordered` are
 fixed once a store exists; opening it with different values returns
@@ -133,8 +137,10 @@ fixed once a store exists; opening it with different values returns
   within `write.flush_delay` (1 s by default); from then on it survives a process
   crash.
 - `Db::sync` makes every completed write survive power loss. With `write.sync`, each
-  write does so before returning; concurrent writers share each sync. On macOS this
-  uses `F_FULLFSYNC`, since a plain `O_DSYNC` write only reaches the drive's cache.
+  write does so before returning; concurrent writers share each sync. Data files are
+  then opened write-through (`O_DSYNC`, or `FILE_FLAG_WRITE_THROUGH` on Windows); on
+  macOS, where such a write only reaches the drive's cache, each sync uses
+  `F_FULLFSYNC`.
 - Deletes write tombstones, so deleted keys stay deleted after a crash. A tombstone is
   dropped only once no older version of its key remains on disk.
 - A block is reused only after the writes that replaced its records are on disk, in
@@ -229,7 +235,15 @@ flowchart LR
   spot.
 - **The index** keeps 64 bytes per key in memory-mapped arenas, split over 2^20 small
   red-black trees ("sprigs"). Each sprig sits behind a sequence lock: writers take it,
-  readers traverse optimistically and retry if a writer intervened.
+  readers traverse optimistically and retry if a writer intervened. Under its
+  memory budget it keeps only recently written keys in memory: past the budget,
+  partitions (ranges of sprigs) are flushed as immutable sorted runs of 48-byte
+  entries to `index/runs`. Each partition's runs form a log-structured merge tree
+  with lazy leveling: full levels merge into the next, and the deepest merge takes
+  the partition's base run along while that run is at most ten times larger. Every
+  run but the base has a Bloom filter in memory, so a lookup reads about one page
+  through the memory map. A put that misses memory does not read the runs; the
+  version it replaced is released when its partition is next flushed.
 - **Storage** is a set of preallocated files cut into write blocks. Records are
   appended to the open write buffer of the writer's core; a flusher per file writes
   full blocks, and partial ones after the flush delay. Recently written blocks stay in
@@ -239,16 +253,26 @@ flowchart LR
   first, by moving their live records to a separate buffer.
 - **Tombstones** are collected in the background once no older version of their key
   remains on disk, so a full scan after a crash can never resurrect a deleted key.
-- **Recovery.** After a clean close, the index (and the B+tree) is reloaded from disk.
+- **Recovery.** After a clean close, the index is reloaded from disk (a bounded index
+  just reopens its runs) and the B+tree reopens its page file, reading nodes in as
+  scans and writes reach them.
   Otherwise the data files are scanned in parallel and the highest sequence number of
   each key wins; per-key sequence numbers come from the record lock stripes, so there is
   no global counter.
 - **Ordered keys.** Ordered stores also write each key into its record and keep a
-  B+tree from keys to index entries. It changes only when a key appears or disappears:
-  overwrites and point reads never touch it. Nodes are 4 KiB pages with prefix
-  truncation, 8-byte key heads and search hints; concurrency uses optimistic lock
-  coupling, so scans never block writers. Range scans fetch values in batches to
-  overlap their memory misses.
+  B+tree of the keys. It changes only when a key appears or disappears: overwrites and
+  point reads never touch it. Nodes are 4 KiB pages with prefix truncation, 8-byte key
+  heads and search hints; concurrency uses optimistic lock coupling, so scans never
+  block writers. Range scans fetch values in batches to overlap their memory misses.
+  Nodes live in the frames of a buffer pool, found through a page table (vmcache's, in
+  software). Under the index's memory budget, a cleaner thread keeps a reserve of free frames
+  by evicting cold nodes to `index/pages` (a clock sweep), and descents read them back
+  through a mapping of that file. Writers never write the file themselves: concurrent
+  writes to one file serialize in the kernel, while mapped reads scale. Inserts into a
+  leaf that is not in memory go to a change buffer, as in InnoDB, and the leaf takes
+  them when it is next read in; the pool remembers each evicted leaf's free space and
+  buffers only what fits, so applying the buffer never splits a leaf. Rebuilding the
+  tree after a crash sorts its keys through temporary files.
 
 ## Performance
 
@@ -286,9 +310,29 @@ cargo run --release --example bench -- --threads 16 --keys 1000000 --value 100 -
 
 ## Limitations
 
-- Unix only (Linux, macOS). Developed and tested on macOS; Linux builds but has seen
-  less testing.
-- The index lives in memory: about 64 bytes per key, plus the B+tree in ordered stores.
+- Linux, macOS and Windows. Developed on macOS; the test suites of the library and of
+  `search` also pass on Windows 10 (NTFS); Linux builds but has seen less testing.
+  The `examples/redis` server is Unix only.
+- The index takes its budget (`index.memory`, 64 MiB by default) plus 1 to 2 bytes
+  per key: measured on an M4 Max with one writer and 41-byte keys, an ordered store
+  with a 128 MiB budget peaked at 160, 186 and 319 MiB at 10, 40 and 160 million keys,
+  and an unordered one at 422 MiB at 160 million. The write buffers come on top: one
+  write block per core plus `write.max_unflushed`. `Memory::Unbounded` keeps the whole
+  index in memory instead: about 64 bytes per key, plus about 30 per 8-byte key for an
+  ordered store's B+tree.
+- The OS caches `index/runs` (48 bytes per key) as memory allows. Each put costs
+  index writes that grow with the logarithm of keys ÷ entries the budget holds: 134,
+  266 and 300 bytes at 60, 250 and 900 keys per entry (250 is a billion keys under
+  256 MiB). A lookup that misses memory read 1.01 to 1.04 pages. A budget under about
+  100 entries per partition (26 MiB with the default 4,096) fills its pages poorly:
+  lower `partition_bits` with it.
+- An ordered store's B+tree keeps its budget's worth of pages in memory. Inserts
+  into leaves on disk go to a change buffer, so they cost about as much CPU as with
+  the whole tree in memory; scans and removals pay for reading leaves back. Keys
+  that arrive in order within a few thousand places (logs, time-ordered ids) cost
+  about 60 bytes of `index/pages` per insert at any size. Keys in random order dilute
+  the buffer as the tree grows: 171, 856 and 1,824 bytes per insert at 10, 24 and 40
+  million keys under a 128 MiB budget, on the way to one 4 KiB page each.
 - A record (key, value and 58 bytes of header) must fit in a write block: just under
   1 MiB with the defaults, at most 8 MiB.
 - No transactions, multi-key atomicity or snapshots. Writes to one key are

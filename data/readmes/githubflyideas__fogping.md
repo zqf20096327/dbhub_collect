@@ -4,7 +4,7 @@
 > *🚫 No Perl. No RRDtool. No Web Server. No Config Files.*
 
 
-<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/dbc7a184-c25b-4e34-9c58-9ac355d4bd63" />
+<img width="1280" height="720" alt="fogping — a SmokePing-like network latency tool. One binary, embedded SQLite, Web UI." src="docs/images/fogping-hero.gif" />
 
 
 
@@ -13,7 +13,7 @@
 One command (Linux x86-64) — downloads, unpacks and starts fogping:
 
 ```bash
-mkdir -p ~/fogping && cd ~/fogping && curl -L https://github.com/githubflyideas/fogping/releases/download/v1.3.5/fogping-v1.3.5-linux-amd64.tar.gz | tar --no-same-owner -xz && ./fogping --edit user=admin passwd=change-me
+mkdir -p ~/fogping && cd ~/fogping && curl -L https://github.com/githubflyideas/fogping/releases/download/v1.3.8/fogping-v1.3.8-linux-amd64.tar.gz | tar --no-same-owner -xz && ./fogping --edit user=admin passwd=change-me
 ```
 
 Or with Docker (amd64 / arm64 / armv7):

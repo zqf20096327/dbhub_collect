@@ -8,7 +8,9 @@
 
 Mixed transactional and analytical workloads, with native AI retrieval.
 
-[Download](https://github.com/yzsind/mydb/releases/tag/v1.2.1) · [Why MyDB](docs/why-mydb.md) · [Performance evaluation](#performance-evaluation) · [Quick Start](#quick-start) · [Built for AI Agents](#built-for-ai-agents) · [Documentation](docs/README.md) · [MySQL Compatibility](docs/mysql80-compatibility.md)
+[English](README.md) · [简体中文](readme_cn.md)
+
+[Download](https://github.com/yzsind/mydb/releases/tag/v1.0.1) · [Why MyDB](docs/why-mydb.md) · [Performance evaluation](#performance-evaluation) · [Testing](#testing) · [Quick Start](#quick-start) · [Built for AI Agents](#built-for-ai-agents) · [Documentation](docs/README.md) · [MySQL Compatibility](docs/mysql80-compatibility.md)
 
 </div>
 
@@ -26,7 +28,7 @@ interfaces give services and agents direct access to the same engine. Automatic
 Zone Maps, online schema changes, and directly queryable backups reduce the
 work needed to tune access, evolve data structures, and inspect earlier data.
 
-MyDB 1.2.1 is a public-preview release intended for feature validation and controlled-environment evaluation. It is not yet a production-grade MySQL replacement, and on-disk formats are not guaranteed to be backward compatible.
+MyDB 1.0.1 is a public-preview release intended for feature validation and controlled-environment evaluation.
 
 | Core advantage | What it gives you |
 | --- | --- |
@@ -40,40 +42,76 @@ the linked references describe each capability's supported scope.
 
 ## Performance evaluation
 
-**MyDB vs. MySQL 8.0** :
+**Over 1 million QPS on 16 CPU cores** — sysbench, November 16, 2026:
+
+| Workload | MyDB QPS | P95 latency |
+| --- | ---: | ---: |
+| `oltp_point_select` | **1,327,407.37** | **0.55 ms** |
+
+The November 16, 2026 MyDB snapshot ran on a 16-core CPU VM, with 100M rows
+across 10 tables, 300 client threads on a separate host over the private network, and one
+300-second run using sysbench's `special` access distribution. No errors or
+reconnects were recorded. See the [full benchmark report](docs/sysbench-100m-300clients-2026-11-16.md)
+for configuration, methodology, and complete results.
+
+**MyDB vs. MySQL 8.0**, measured November 17, 2026:
 
 | Workload | MyDB | MySQL | Advantage |
+| --- | --- | --- | --- |
+| Point queries · 100M rows, 20 clients | 295,724 queries/s | 184,108 queries/s | **1.61x throughput** |
+| Read-only transactions · 100M rows, 20 clients | 13,522 transactions/s | 7,477 transactions/s | **1.81x throughput** |
+| TPC-H-derived analytics · SF=10, 22 query medians summed | 50.636 s | 1,205.299 s | **23.80x speedup** |
+| TPC-DS-derived analytics · SF=10, 84/99 matching on MyDB and MySQL | 92.427 s | 4,468.101 s | **48.34x speedup on that subset** |
+| Bulk import · TPC-H SF=10, `LOAD DATA LOCAL INFILE` | 37.281 s | 374.490 s | **10.04x speedup** |
+
+Same 16-vCPU host, 10 GiB database memory limits, and durable commits.
+TPC-DS reports only matching MyDB/MySQL files; its subset differs from the
+historical three-engine subset. TPC-derived results are unaudited. See the
+[detailed comparison](docs/performance-comparison.md) for results, test
+conditions, result differences, and limitations.
+
+**Cohere 1M HNSW**, November 14, 2026, 768-dimensional FLOAT32 cosine top-100:
+
+| Measurement | MyDB | PostgreSQL 18.6 + pgvector 0.8.7 | Advantage |
 | --- | ---: | ---: | ---: |
-| Point queries · 100M rows, 20 clients | 316,968 queries/s | 174,566 queries/s | **1.82x throughput** |
-| Read-only transactions · 100M rows, 20 clients | 14,323 transactions/s | 7,294 transactions/s | **1.96x throughput** |
-| TPC-H-derived analytics · SF=10, 22 query medians summed | 57.727 s | 882.784 s | **15.29x speedup** |
-| TPC-DS-derived analytics · SF=10, 55 matching query files | 113.968 s | 2,576.552 s | **22.61x speedup on that subset** |
-| Bulk import · TPC-H SF=10, `LOAD DATA LOCAL INFILE` | 25.708 s | 357.495 s | **13.91x speedup** |
+| Search, 1 client | 670 queries/s | 179 queries/s | **3.7x throughput** |
+| Search, 16 clients | 5,200 queries/s | 1,954 queries/s | **2.7x throughput** |
+| Search p99 latency, 16 clients | 5.6 ms | 14.7 ms | **2.6x lower latency** |
+| Recall@100 | 94.8% | 94.4% | Comparable (+0.4 pp) |
+| HNSW build | 53 s | 118 s | **2.2x speedup** |
 
-Same 16-vCPU host, 10 GiB database memory limits, and durable commits; results
-cover different development builds and TPC-derived results are unaudited. See
-the [detailed comparison](docs/performance-comparison.md) for all results, test
-conditions, and limitations.
+The reported search throughput ratio is 2.7x at 16 clients. Both engines used
+the same 16-vCPU host,and durable commits. Sources, exact settings, and
+reporting limits are documented in the
+[November 14 Cohere 1M result record](docs/vector-cohere-1m-hnsw-benchmark-2026-11-14.md).
 
-**Cohere 1M HNSW**, November 12, 2026, 768-dimensional FLOAT32 cosine top-100:
+## Testing
 
-| Measurement | MyDB, candidate memo OFF | PostgreSQL 18.6 + pgvector 0.8.7 |
-| --- | ---: | ---: |
-| Search, 16 clients, median of three rounds | 3,005.3 queries/s | 1,968.5 queries/s |
-| Recall@100 | 94.283% | 94.341% |
-| HNSW build, one run | 92.017 s | 258.007 s |
+**Over 12,000 automated regression tests and one million fuzz input executions.**
+The main and Safety CI runs below are from November 17, 2026, at commit
+[`1316cbf4`](https://github.com/yzsind/mydb/commit/1316cbf40cad563a3c3da0c86cfa3233e820cebf).
 
-The measured search throughput ratio is 1.53x. Both configured ef=200; MyDB's
-resolved ef was 400. These are warm repeated-query measurements on one 16-vCPU
-host, with no per-engine cgroup cap. See the [full report](docs/vector-cohere-1m-hnsw-benchmark-2026-11-12.md)
-for source/build identity, candidate memo ON results, loading precision differences
-and reproducibility. They are historical development measurements, not a current
-release performance guarantee.
+| Test area | Verified scope and results | Evidence |
+| --- | --- | --- |
+| Automated regressions | **12,077 passed** across three test partitions. | [CI](https://github.com/yzsind/mydb/actions/runs/44028187611) |
+| SQL functions | **450 function names**, including aliases, have associated tests; 430 names have **1,294 fixture cases**, with dedicated integration tests for the other 20. | [CI](https://github.com/yzsind/mydb/actions/runs/44028187611) |
+| Fuzz testing with AddressSanitizer | **1,065,432 input executions; 14/14 selected targets passed**, out of 15 declared targets. Covers protocol decoding, storage, SQL parsing and expression execution. | [Safety CI and artifacts](https://github.com/yzsind/mydb/actions/runs/44028187290) |
+| Concurrency and fault recovery | **4 Jepsen workloads, 8 crash/COMMIT-disconnect recovery cases and 16 I/O fault combinations passed**, alongside native replication and semi-sync checks. | [Safety CI](https://github.com/yzsind/mydb/actions/runs/44028187290) |
+
+Fault tests check that acknowledged commits survive, unfinished transactions
+leave no partial writes, and recovery preserves consistent data. They use local
+processes and injected network or I/O faults. See the [Jepsen](tests/jepsen/README.md)
+and [fuzz](tests/fuzz/README.md) guides for scope and reproduction.
+
+Counts are a snapshot, not line or branch coverage percentages. Function cases
+are included in the regression suite; fuzz executions are not unique test cases.
+This short fuzz run excluded `sql_execution_differential`, which failed in a
+separate [November 17 scheduled run in the predecessor repository](https://github.com/yzsind/mydb-archive/actions/runs/43998686452).
 
 ## Quick Start
 
 Download prebuilt packages for macOS ARM64, Linux x86_64, and Windows x64 from the
-[1.2.1 release page](https://github.com/yzsind/mydb/releases/tag/v1.2.1), which also
+[1.0.1 release page](https://github.com/yzsind/mydb/releases/tag/v1.0.1), which also
 includes SHA256 checksums and platform validation details.
 
 ### Run a downloaded binary
@@ -142,18 +180,6 @@ database. This account accepts only loopback connections. `MYDB_ROOT_PASSWORD`
 sets the initial password on first start; it does not change existing accounts.
 The default protocol port is `8738`; override it with `--port`.
 
-The default authentication plugin is `caching_sha2_password`. TLS is available
-without certificate configuration: the server generates a temporary self-signed
-certificate. The MySQL 8.0 client negotiates TLS by default when the server offers
-it, so the commands above need no explicit TLS option. For a local JDBC
-connection, use `jdbc:mysql://127.0.0.1:8738/test`; no TLS or
-`allowPublicKeyRetrieval` setting is needed with the server's default TLS
-configuration. Connector/J defaults to
-`sslMode=PREFERRED`, which negotiates TLS when available without verifying server
-identity. For remote connections, configure a trusted certificate and use
-`sslMode=VERIFY_IDENTITY`; see [TLS configuration](docs/configuration.md#tls)
-and the [runnable client examples](examples/README.md).
-
 Try a write, an aggregate, and a window function:
 
 ```sql
@@ -175,31 +201,6 @@ FROM orders
 GROUP BY region
 ORDER BY revenue_rank, region;
 ```
-
-Exit with `quit`, then stop the server with **Ctrl+C**. Restarting with the same
-data directory reopens the data, so the CREATE and INSERT statements only need to
-run once; `/tmp/mydb/data` is temporary storage and may be removed by the OS.
-
-### Persistent data and configuration
-
-For a separate, persistent instance, write a config file (data directory,
-durability mode, `memory_target`) and start with `--config`; the server reads a
-config file only when `--config` is supplied, and the Docker entrypoint supplies
-its default config automatically. `strict` (the default durability mode)
-synchronizes WAL before acknowledging a commit, and `memory_target` is a
-working-set target — not a hard process memory limit — defaulting to 50% of
-detected effective memory. See [configuration](docs/configuration.md) and
-[hardware and OS requirements](docs/hardware-and-os-requirements.md) for all
-settings, durability modes, and sizing.
-
-### Application connections and TLS
-
-TLS is advertised by default with an ephemeral self-signed certificate when none
-is configured; for remote deployments, configure a trusted certificate and verify
-the server identity (see [TLS configuration](docs/configuration.md#tls)).
-Runnable [Java, Python, Go, C++, and Rust examples](examples/README.md) cover
-connections, typed queries, DDL/DML, batches, transactions, and stored procedure
-calls, including JDBC URLs for local evaluation.
 
 ### Docker
 

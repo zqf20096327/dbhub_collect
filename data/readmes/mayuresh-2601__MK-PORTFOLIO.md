@@ -69,7 +69,7 @@ The project is designed to demonstrate the engineering practices behind a real p
 - **Production database** on TiDB Cloud, with a MySQL-compatible schema and seed data.
 - **Docker Compose stack** that runs the entire application locally, including the database.
 - **Seven-job GitHub Actions pipeline** that lints, tests, builds, deploys, and smoke-tests the live system.
-- **Live server telemetry** on `/system` showing real CPU, memory, uptime, runtime, and environment data.
+- **Live server telemetry** on `/system` showing real CPU, memory, uptime, AI availability, and deployment state.
 - **Optional integrations** for Gmail notifications, Cloudinary uploads, and Google Gemini AI.
 
 ### At a glance
@@ -78,13 +78,13 @@ The project is designed to demonstrate the engineering practices behind a real p
 |---|---|
 | Frontend | React 18, Vite 6, React Router 7, Tailwind CSS 4, Axios, Lucide |
 | Backend | Node.js 22, Express 5, MySQL2, bcryptjs, Helmet, CORS |
-| Database | TiDB Cloud / MySQL 8, `utf8mb4`, four relational tables |
+| Database | TiDB Cloud / MySQL 8, `utf8mb4`, five relational tables |
 | Auth | Single admin identity, bcrypt password, HttpOnly cookie session, CSRF protection, optional TOTP MFA |
 | Uploads | Cloudinary, in-memory Multer buffer, 5 MB image limit |
 | Email | Gmail API over HTTPS (Render-compatible) or Gmail SMTP |
 | AI | Google Gemini `gemini-3.5-flash-lite` |
 | Local stack | Docker Compose: React + Nginx, Express, MySQL |
-| Delivery | GitHub Actions -> Render REST API + Vercel Git integration |
+| Delivery | GitHub Actions -> Render deploy hook + Vercel Git integration |
 | Documentation | README, deployment guide, email setup, fixes, restore notes, SECURITY_OPERATIONS.md |
 
 ---
@@ -102,6 +102,8 @@ The project is designed to demonstrate the engineering practices behind a real p
 | Database | TiDB Cloud | Private endpoint, TLS on port `4000` |
 
 > **Free-tier note:** the Render API may take 30-60 seconds to wake after a period of inactivity. The frontend uses a 60-second request timeout and shows a clear loading state while the API starts.
+>
+> **Last verified:** 18 November 2026 - seven CI jobs green, Render and Vercel healthy, all public pages and assets returning `200`, admin cookie-session login working, and a Gmail API notification confirmed in production.
 
 ---
 
@@ -141,6 +143,7 @@ All screenshots are captured from the live production deployment at **1440 x 900
 
 - **Seven routes** - Home, About, Skills, Projects, Certificates, System, and Contact.
 - **Database-driven content** - project cards, skill levels, certificate artwork, and the contact form all use the API, not hardcoded arrays.
+- **Shareable pagination** - projects, skills, and certificates page through the API nine items at a time; the current page lives in `?page=` so links and browser history work.
 - **Kinetic Brutalism design** - acid/ink/pink palette, hard borders, offset shadows, marquee, count-up statistics, and scroll reveals.
 - **Responsive layout** - desktop, tablet, and mobile navigation with a full-screen menu.
 - **Accessibility-minded UI** - skip-to-content link, semantic headings, keyboard-trapped dialogs, visible focus states, and `prefers-reduced-motion` support.
@@ -158,7 +161,7 @@ All screenshots are captured from the live production deployment at **1440 x 900
 
 ### Live System panel
 
-- **Real telemetry, not mocked values** - CPU load, memory usage, host uptime, platform, Node.js version, and Docker/bare-Node detection.
+- **Real telemetry, not mocked values** - CPU load, memory usage, API uptime, AI availability, and deployment commit when configured. The public payload is intentionally minimal: no hostnames, environment variables, stack details, or infrastructure metadata.
 - **Five-second refresh** - the page polls the live API while it is open.
 - **Terminal-style server log** - appends real metric lines as they arrive.
 - **Deployment proof** - the panel is intentionally public so recruiters can see the running backend rather than a claim on a resume.
@@ -243,7 +246,7 @@ flowchart LR
 
     GH["GitHub push to main"] -->|"Vercel Git integration"| V
     GH --> CI["GitHub Actions<br/>7-job CI/CD"]
-    CI -->|"Render REST API"| R
+    CI -->|"Render deploy hook"| R
 
     U -->|HTTPS| V
     A -->|HTTPS| V
@@ -366,9 +369,11 @@ DB_PASSWORD=your-db-password
 DB_NAME=portfolio
 DB_SSL=true
 
-ADMIN_PASSWORD_HASH= bcrypt hash generated with `npm run hash-password`
 ADMIN_EMAIL=your-admin@example.com
-ADMIN_PASSWORD=replace-with-a-strong-password
+ADMIN_PASSWORD='replace-with-a-long-unique-password'
+# Preferred in production: generate a bcrypt hash with
+#   npm run hash-password -- "your-password"
+# and set ADMIN_PASSWORD_HASH instead of ADMIN_PASSWORD.
 ```
 
 Create the schema and load the baseline content:
@@ -452,7 +457,7 @@ The project uses **three separate environment files**. Keeping them separate pre
 | Variable group | Local development | Local Docker | Render API | Vercel frontend |
 |---|---|---|---|---|
 | `DB_*` | `server/.env` | Root `.env` + Compose overrides | Render Environment | - |
-| `ADMIN_PASSWORD_HASH` | Preferred | `server/.env` | Render Environment | - |
+| `ADMIN_*` | `server/.env` | `server/.env` | Render Environment | - |
 | Gmail variables | `server/.env` | `server/.env` | Render Environment | - |
 | Cloudinary variables | `server/.env` | `server/.env` | Render Environment | - |
 | `GEMINI_API_KEY` | `server/.env` | `server/.env` | Render Environment | - |
@@ -491,11 +496,15 @@ Only `VITE_*` variables are public. Vite embeds them in the browser bundle, so t
 | `DB_NAME` | Yes | Database name. |
 | `DB_SSL` | Yes | `true` for TiDB Cloud, `false` for the local Docker MySQL container. |
 | `DB_CONNECTION_LIMIT` | No | Pool size. Defaults to `10`; capped at `20`. |
-| `ADMIN_PASSWORD_HASH` | Preferred | bcrypt hash, generated with `npm run hash-password`. Wins when both password options are set. |
-| `ADMIN_TOTP_SECRET` | Optional | Base32 secret; when set, password alone cannot create a session. Generated with `npm run mfa:setup`. |
 | `ADMIN_EMAIL` | Yes | The single admin email allowed to log in. |
-| `ADMIN_PASSWORD` | Yes* | Plain-text admin password, 12+ characters. |
-| `ADMIN_PASSWORD_HASH` | No | bcrypt hash generated with `npm run hash-password`. Wins when both password options are set. |
+| `ADMIN_PASSWORD_HASH` | Preferred | bcrypt hash generated with `npm run hash-password`. Wins when both password options are set. |
+| `ADMIN_PASSWORD` | Fallback | Plain-text admin password, 12+ characters. Use only when a hash is not available. |
+| `ADMIN_TOTP_SECRET` | No | Base32 secret; when set, password alone cannot create a session. Generated with `npm run mfa:setup`. |
+| `SESSION_TTL_MINUTES` | No | Absolute session lifetime, 5-1440 minutes. Defaults to `120`. |
+| `SESSION_IDLE_MINUTES` | No | Idle timeout, 5-1440 minutes and no longer than the absolute lifetime. Defaults to `30`. |
+| `SESSION_RETENTION_DAYS` | No | Days to keep expired/revoked session rows before cleanup. Defaults to `7`. |
+| `SESSION_COOKIE_SECURE` | No | Defaults to `true` in production. Secure cookies require HTTPS. |
+| `SESSION_COOKIE_SAMESITE` | No | Defaults to `none` in production; `lax` is safe when cookies are first-party. |
 | `EMAIL_USER` | No | Gmail account that sends notifications. |
 | `GMAIL_CLIENT_ID` | No | Google OAuth Desktop client ID. |
 | `GMAIL_CLIENT_SECRET` | No | Google OAuth Desktop client secret. |
@@ -506,8 +515,13 @@ Only `VITE_*` variables are public. Vite embeds them in the browser bundle, so t
 | `CLOUD_API_KEY` | No | Cloudinary API key. |
 | `CLOUD_API_SECRET` | No | Cloudinary API secret. |
 | `GEMINI_API_KEY` | No | Google Gemini API key. AI endpoints return `502` until configured. |
+| `AI_ENABLED` | No | Set `false` to disable the AI endpoints. Defaults to `true`. |
+| `AI_DAILY_LIMIT` | No | Per-IP daily AI budget. Defaults to `50`; counters are in-memory and reset on restart. |
+| `AI_GLOBAL_DAILY_LIMIT` | No | Global daily AI budget. Defaults to `500`; counters are in-memory and reset on restart. |
+| `CLAMAV_HOST` | No | Optional ClamAV host. When set, uploads fail closed if the scanner is unreachable. |
+| `CLAMAV_PORT` | No | ClamAV port. Defaults to `3310`. |
 
-\* Set either `ADMIN_PASSWORD` or `ADMIN_PASSWORD_HASH`. At least one is required.
+\* `ADMIN_PASSWORD_HASH` is preferred. Set `ADMIN_PASSWORD` only as a fallback; at least one is required.
 
 ---
 
@@ -713,10 +727,13 @@ Response:
 ```json
 {
   "success": true,
+  "message": "Login successful.",
   "csrfToken": "<64-hex-chars>",
   "expiresAt": 1760000000000,
-  "admin": {
-    "email": "admin@example.com"
+  "mfaEnabled": false,
+  "user": {
+    "email": "admin@example.com",
+    "role": "admin"
   }
 }
 ```
@@ -776,7 +793,7 @@ curl -X POST https://mk-portfolio-api.onrender.com/api/auth/logout-all \
 
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| `GET` | `/api/system` | Public | Live CPU, memory, uptime, runtime, Git, and Docker telemetry |
+| `GET` | `/api/system` | Public | Minimal live telemetry: CPU, memory, uptime, AI availability, deployment commit |
 
 ### Rate limits
 
@@ -802,6 +819,7 @@ The relational schema lives in [`server/database/schema.sql`](server/database/sc
 | `skills` | Skill name and proficiency level |
 | `certificates` | Certificate title, issuer, date, credential URL, image |
 | `messages` | Contact form submissions, including subject and timestamps |
+| `admin_sessions` | Opaque admin sessions: token hash, CSRF token, expiry, revocation |
 
 All tables use `utf8mb4` and `utf8mb4_unicode_ci`.
 
@@ -844,7 +862,7 @@ The pipeline runs on every push and pull request to `main`, plus manual dispatch
 | 3 | **Client Lint & Build** | ESLint and a production Vite build |
 | 4 | **Lint Dockerfiles** | All three Dockerfiles pass Hadolint |
 | 5 | **Build & Test Full Stack** | Builds the compose stack, starts MySQL/API/Nginx, verifies schema and seed data, tests API/auth/update endpoints, and serves the frontend |
-| 6 | **Deploy API to Render** | Triggers a Render deploy through the REST API and waits for it to go live |
+| 6 | **Deploy API to Render** | Triggers a Render deploy hook for the pushed commit and waits for `/api/system` to report it live |
 | 7 | **Production Smoke Tests** | Checks Render health/readiness, public endpoints, CORS, admin auth, Vercel routes, security headers, `robots.txt`, and `sitemap.xml` |
 
 The Docker job also proves the SQL files are database-name independent by applying them to a second database (`portfolio_alt`) and checking the row counts.
@@ -855,13 +873,12 @@ Add this repository secret under **Settings -> Secrets and variables -> Actions*
 
 | Name | Type | Purpose |
 |---|---|---|
-| `RENDER_API_KEY` | Secret | Render API key used to trigger deploys |
+| `RENDER_DEPLOY_HOOK_URL` | Secret | Render deploy hook used to trigger deploys |
 
 Optional repository variables (defaults are already set in the workflow):
 
 | Name | Default |
 |---|---|
-| `RENDER_SERVICE_ID` | `srv-dbpcjf6gekts73aoovng` |
 | `PRODUCTION_API_URL` | `https://mk-portfolio-api.onrender.com` |
 | `PRODUCTION_SITE_URL` | `https://mk-portfolio-phi-silk.vercel.app` |
 
@@ -1008,8 +1025,13 @@ GEMINI_API_KEY is not configured - AI endpoints return 502.
 
 | Document | Contents |
 |---|---|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design, request flow, and module boundaries |
+| [docs/API.md](docs/API.md) | Full endpoint reference and response shapes |
+| [docs/AUTHENTICATION.md](docs/AUTHENTICATION.md) | Cookie sessions, CSRF, MFA, and session lifecycle |
 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Step-by-step Vercel, Render, TiDB, and GitHub Actions setup |
 | [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md) | Gmail API OAuth, Cloudinary, Gemini, and deployment integrations |
+| [docs/SECURITY_OPERATIONS.md](docs/SECURITY_OPERATIONS.md) | Secret rotation, incident response, and operational checks |
+| [docs/DEBUGGING.md](docs/DEBUGGING.md) | Common failures, logs, and Gmail-specific errors |
 | [docs/FINAL_PRODUCTION_AUDIT.md](docs/FINAL_PRODUCTION_AUDIT.md) | Production audit evidence, fixes, and remaining warnings |
 | [docs/PROJECT_SETUP.md](docs/PROJECT_SETUP.md) | Local setup, environment files, and verification |
 | [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) | Delivered phases and implementation status |

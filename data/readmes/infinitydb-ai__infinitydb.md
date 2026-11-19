@@ -28,6 +28,104 @@
 
 ---
 
+## Give your agent memory in one command
+
+InfinityDB is an MCP server first: Claude Code, Cursor, Windsurf and any MCP host
+get local long-term memory with no clone, no API key and no service to run.
+
+```bash
+# Claude Code
+claude mcp add infinitydb -- uvx --from infinitydb-ai infinitydb-mcp
+```
+
+`uvx` fetches the package into an ephemeral environment and runs the console
+script, so there is no virtualenv to keep in sync. It exposes 13 tools, including
+`recall_memory` (scoped by session, entity, point-in-time and token budget),
+`entity_graph`, `contradictions` and `verify_proof`. Any other host needs one
+`mcpServers` entry: [docs/MCP_SERVER.md](docs/MCP_SERVER.md) has the copy-paste
+JSON for Claude Desktop and Cursor, plus the `Stop`-hook that captures a
+transcript incrementally.
+
+Measured cost of adoption (same page): 0 third-party packages, ~2 ms p50 per
+recall through the transport, 19.8 MB peak RSS.
+
+---
+
+## Try it in one command
+
+```bash
+pip install infinitydb-ai && python -m infinitydb.demo
+```
+
+That writes three turns, extracts facts, and answers three questions — in memory, with no
+model call and no network.
+
+<p align="center">
+  <img src="assets/demo.svg" alt="Terminal session: python -m infinitydb.demo prints ingest timings, then answers 'where does the user live', 'what do they do for work' and 'what is the budget' with the extracted facts, then shows stored facts, proofs, backend and total recall time." width="820"/>
+</p>
+
+<p align="center"><sub>Animated SVG, generated from an actual run by <code>scripts/make_demo_svg.py</code> — no GIF host, no screenshot drift. A test fails if it stops matching the demo.</sub></p>
+
+**Coming from mem0 or another memory layer?** Their export imports directly — no SDK,
+no emulation, no network:
+
+```bash
+infinitydb-migrate mem0-export.json --db memory.db --user alice --dry-run   # report only
+infinitydb-migrate mem0-export.json --db memory.db --user alice             # import
+```
+
+Handles mem0's `get_all()` JSON, generic JSON, JSONL chat logs and plain text; keeps
+`created_at` as event time, so temporal recall survives the move. Re-runs are idempotent.
+Formats, field mapping and what deliberately does *not* come across:
+[docs/MIGRATE.md](docs/MIGRATE.md).
+
+**Give the same memory to an agent over MCP** (Claude Code, Cursor, Windsurf), no clone needed:
+
+```bash
+claude mcp add infinitydb -- uvx --from infinitydb-ai infinitydb-mcp
+```
+
+Or copy [`.mcp.json`](.mcp.json) into a project and open it. 13 tools, 7 lines of config,
+zero dependencies. See [docs/MCP_SERVER.md](docs/MCP_SERVER.md) for scopes and hosts.
+
+The benchmark table further down is checked by `./scripts/verify.sh`; `python
+benchmarks/arena/arena.py verify` re-derives the arena metrics from the committed
+per-question rows and fails if any of them disagree.
+
+---
+
+## What no other memory layer gives you
+
+A **portable, tamper-evident audit bundle**: every fact your agent remembered, with
+a proof hash, the digest of the passage it came from, and a hash chain over the
+whole record — exportable as JSON, verifiable offline by someone who does not trust
+you, on their machine, with no access to your database.
+
+```python
+from infinitydb import InfinityDB, audit
+
+db = InfinityDB("memory.db")
+bundle = audit.export_bundle(db, user_id="alice")   # self-contained JSON
+audit.verify_bundle(bundle)                          # -> {"ok": True, "checked": 42}
+audit.verify_bundle(bundle, anchor=recorded_digest)  # proves it hasn't changed since
+```
+
+Anchor the `digest` somewhere the operator cannot rewrite — a git commit, an
+append-only log, an email to the client — and a later bundle that no longer matches
+proves the record was edited or deleted. `erase_with_receipt()` does the same for
+deletion requests: it erases a tenant and returns a receipt naming the pre-erasure
+digest and per-layer counts.
+
+From the shell, with no Python: `infinitydb-audit export --db memory.db --user
+alice --out audit.json`, then `infinitydb-audit verify audit.json [--anchor DIGEST]`.
+
+The guarantee is stated precisely, including its limit: an *anchored* bundle is
+edit- and deletion-evident; an unanchored one is self-consistent, and history
+rewritten before the first export is undetectable. Details, threat model and
+measured cost: [docs/AUDIT.md](docs/AUDIT.md).
+
+---
+
 ## Why InfinityDB
 
 Most memory systems compress history into an opaque vector pile. When recall fails, you are left guessing. InfinityDB builds a structured, verifiable semantic pyramid.
@@ -37,7 +135,7 @@ Most memory systems compress history into an opaque vector pile. When recall fai
 *   **Temporal Fact History:** `add(..., ts=)` records when something happened. A newer single-valued fact (location, role, employer, identity, budget) automatically supersedes the older one, and `recall(..., as_of=ts)` returns what was current at that time. Multi-valued facts (preferences, relations) are never superseded automatically, and the engine does not infer contradictions between free-text facts; use `supersede_fact()` for those.
 *   **Cryptographic Proof Chain:** Every fact contains an immutable SHA-256 hash linking to its exact source slice in the raw log.
 *   **Tenant-Scoped Guardrails (L4 Policies):** Combines global baseline policies with tenant-specific SOPs; a tenant's private policies are excluded from other tenants' recall.
-*   **Indexed Hybrid Retrieval:** SQLite FTS5 (porter-stemmed) narrows keyword candidates; strong terms from the best few hits are fed back into the query (light pseudo-relevance feedback), which recovers paraphrases such as "job" for "work"; importance weighting and Ebbinghaus time-decay rank the retrieved facts. A cross-encoder reranker can be plugged in through `recall(..., rerank=fn)` if you want the last few percent and can pay for it. Latency depends on dataset, hardware, and workload.
+*   **Indexed Hybrid Retrieval:** SQLite FTS5 (porter-stemmed) narrows keyword candidates; strong terms from the best few hits are fed back into the query (light pseudo-relevance feedback), which recovers paraphrases such as "job" for "work"; importance weighting and Ebbinghaus time-decay rank the retrieved facts. A local cross-encoder can be plugged in through `recall(..., rerank=fn)` (`infinitydb-ai[onnx]`): measured at a matched token budget it beats Mem0's zero-LLM recall (76.80% at 406 tokens vs 74.40% at 419) for ~1.3 s of extra search latency. Latency depends on dataset, hardware, and workload.
 
 ---
 
@@ -58,13 +156,23 @@ Limits: the update-tracking test only uses facts the built-in rules can parse ("
 
 ## Benchmark status
 
+Every number below has a script behind it. Every clause of the project brief — including the ones that are **not** built yet, such as the Rust core, the ONNX models and the background consolidation workers — is tracked in [docs/SPEC_CONFORMANCE.md](docs/SPEC_CONFORMANCE.md), which is the page to read before believing any performance sentence on this one.
+
 A reproducible head-to-head harness now runs **actual memory systems** on the public LoCoMo dataset, with pinned versions and per-question raw outputs: see [benchmarks/arena](benchmarks/arena/README.md). It replaces the earlier architecture emulators, which must not be read as product comparisons.
 
 Measured 2026-11-10 on one 8-vCPU CPU-only host, all 10 conversations, 1,986 questions, top-10 retrieval, no LLM at write or read time:
 
 | System | evidence recall@10 | answer in context | context tokens | ingest | search p50 |
 | --- | --- | --- | --- | --- | --- |
-| **InfinityDB** | **0.780** | **0.545** | 711 | **7.5 s** | **10.7 ms** |
+| **InfinityDB** | **0.8480** | **0.5935** | 1426 | **7.5 s** | **13.1 ms** |
+
+Read the token column with the recall column. Per returned memory the engine packs
+more usable turns than before, so quality that used to need 20 memories now fits in
+12: 0.8841 at 1,659 tokens against 0.8795 at 1,852 for the previous chunking. At a
+fixed ten slots this row is the comparable number, and the full frontier — including
+where the gain is context rather than retrieval — is in
+[Phase 2k-2l](docs/SELF_IMPROVEMENT.md).
+
 | **InfinityDB**, `dense=` (local MiniLM fusion) | 0.787 | 0.549 | **652** | 8.0 s | 29.0 ms |
 | **InfinityDB**, `budget_tokens=320` | 0.696 | 0.479 | 325 | 8.4 s | 10.8 ms |
 | mem0 2.2.1 OSS (`infer=False`) | 0.678 | 0.386 | **321** | 544.3 s | 152.1 ms |
@@ -85,6 +193,8 @@ rank fusion (k=60), all local. It does not beat mem0 here — fusing the two
 signals does not fix what a bag-of-words index and one embedding lose — and it
 costs mem0-class ingest time.
 
+**At Mem0's token budget, the opt-in local reranker is ahead.** `pip install "infinitydb-ai[onnx]"` builds a CPU cross-encoder (no key, ~80 MB) for `recall(..., rerank=fn)`. On the 584-question local harness at `budget_tokens=420`: **76.80% evidence recall@10 at 406.0 tokens against Mem0 `infer=False`'s 74.40% at 418.7 tokens** (2.40 points ahead on 3% fewer tokens), paired per question at 81 fixed vs 36 broken, p = 3.9e-5. The same call without the model scores 69.07%. It costs **1.3 s p50 search** (30 ms lexical) and leaves ingest untouched at 29 ms; dense fusion adds almost nothing on top (77.15%) and is documented as not worth it. Details, the full 320–1750-token curve and the negative results: [benchmarks/README.md](benchmarks/README.md).
+
 The `dense=` row is not the default configuration: it needs an embedding model you supply yourself. The arena used `fastembed` with `sentence-transformers/all-MiniLM-L6-v2` — one ~90 MB download, no API key. The engine bundles no model and declares no runtime dependencies, so enabling it means installing an embedder yourself (`pip install fastembed`), running `db.index_dense(embedder, "minilm")`, then calling `recall(..., dense=(embedder, "minilm", 1.0))`.
 
 What these numbers do and do not say:
@@ -99,9 +209,9 @@ Two further measurements, same host, same scoring code:
 
 - **Scoped recall under contamination.** Every row above gives each conversation
   its own database, which is not how an agent runs. Pooling all ten conversations
-  into one store with unscoped recall drops evidence recall@10 from 0.780 to
+  into one store with unscoped recall drops evidence recall@10 from 0.8480 to
   **0.733**; the same store recalled with `session_id=<conversation>` returns
-  **0.780** — identical to ten separate databases, at 40 ms p50 across a 10×
+  **0.8480** — identical to ten separate databases, at 40 ms p50 across a 10×
   larger corpus. Scoping computes corpus statistics inside the scope; without
   that, it recovers only 68% of the loss.
 - **LongMemEval (`longmemeval_s`), the dataset MemPalace publishes against.**
@@ -147,11 +257,24 @@ That runs the test suite, an engine smoke test, the published LoCoMo baseline, a
 the competitor readiness check. The full claim inventory — what is measured, what
 is not, and the known gaps ranked — is in [docs/DILIGENCE.md](docs/DILIGENCE.md).
 
+If you would rather audit an install than a source tree:
+
+```bash
+infinitydb-evidence              # demo, latency, audit, migration, MCP — PASS/FAIL on your machine
+infinitydb-evidence --with-arena  # recompute the benchmark table too
+```
+
+It exits non-zero when a check fails, and prints the project's known limits after the
+results — including the multi-hop result where plain retrieval beat our own mechanism.
+The objections worth raising, and which of them we cannot answer, are in
+[docs/OBJECTIONS.md](docs/OBJECTIONS.md).
+
 ## Installation
 
 ### Python
 ```bash
 pip install infinitydb-ai
+python -m infinitydb.demo    # writes 3 turns, answers 3 questions, exits
 ```
 
 Local development:

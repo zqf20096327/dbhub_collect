@@ -1,3 +1,5 @@
+
+
 # prometheus-cloud-sd
 
 [![Go](https://img.shields.io/badge/Go-1.25+-00ADD8?logo=go&logoColor=white)](go.mod)
@@ -79,6 +81,8 @@ export AWS_SECRET_ACCESS_KEY="your-secret-access-key"
 
 go run ./cmd/prometheus-cloud-sd -config examples/config.yaml
 ```
+
+The example config leaves the `aws` section commented out, so AWS discovery is disabled until you uncomment it.
 
 Check the service:
 

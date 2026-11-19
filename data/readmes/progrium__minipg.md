@@ -1,6 +1,6 @@
 # minipg
 
-PostgreSQL as a single executable. No install, no Docker, and a `.pgdb` folder that holds the whole database: `minipg app.pgdb` opens a shell on it.
+PostgreSQL as a single executable. No server setup, no Docker, and a `.pgdb` folder that holds the whole database: `minipg app.pgdb` opens a shell on it.
 
 ```sh
 minipg app.pgdb                          # psql shell (creates app.pgdb if missing)

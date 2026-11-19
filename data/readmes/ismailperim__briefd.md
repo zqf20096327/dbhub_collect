@@ -179,16 +179,16 @@ when the agent runs on the machine that holds the checkout.
 |---|---|
 | `compile_bundle(task_description, max_tokens?, scopes?, paths?, issue?)` | One deduplicated context block within the budget, ordered domain → conventions → project, with a source line per section and a `bundle_id`. Deterministic and cached. With Jira configured, `issue: "PAY-123"` puts the ticket on top and lets its text choose the rules. |
 | `search_context(query, max_tokens?, scopes?, top_k?, paths?)` | Ranked sections that fit the budget, for inspection. `paths` (code paths being edited) pull the documents whose `refs` cover them to the top. |
-| `get_document(doc_path, scopes?)` | One document in full. |
+| `get_document(doc_path, scopes?)` | One document in full: readable content, plus the complete source file and its `content_hash` for editing. |
 | `list_scopes()` | Scopes with document/section counts. |
-| `propose_update(doc_path, change_description, new_content)` | Creates branch `briefd/proposal-<id>` (+ pull request when configured). Never touches the index. |
+| `propose_update(doc_path, change_description, new_content, base_content_hash?)` | Creates branch `briefd/proposal-<id>` (+ pull request when configured). Never touches the index. Refused if the file changed since `get_document` returned `base_content_hash`, or if the edit drops the front matter ([ADR-0013](docs/adr/0013-get-document-returns-the-source-file.md)). |
 | `report_usage(bundle_id, useful_chunk_ids)` | Optional feedback: which sections helped. An empty list marks the question as a knowledge gap. |
 | `suggest_links(doc_path?, limit?)` | Links the knowledge base is missing (a document names another without linking it) and broken links — for an agent tidying the knowledge base via `propose_update`. |
 | `confluence_search(query, spaces?, limit?, max_tokens?)`, `confluence_page(id, max_tokens?)` | *Optional.* Live Confluence Cloud search and page reads, converted to compact Markdown within the budget. Listed only when Confluence is configured; see below. |
 | `jira_search(text?, projects?, status?, type?, assignee?, open_only?, limit?, max_tokens?)`, `jira_issue(key, comments?, max_tokens?)` | *Optional.* Live Jira Cloud issue search and issue reads (description, acceptance criteria, related issues, linked Confluence pages, comments) within the budget. Listed only when Jira is configured; see below. |
 
 The same operations are available over REST (`/api/search`, `POST /api/bundle`, `/api/docs/{path}`,
-`/api/scopes`, `POST /api/proposals`, `POST /api/usage`, `/api/gaps`, `/api/health`, `/api/stats`)
+`/api/scopes`, `POST /api/proposals`, `POST /api/proposals/{id}/close`, `POST /api/usage`, `/api/gaps`, `/api/health`, `/api/stats`)
 behind the same bearer token.
 
 ## Your knowledge repo
@@ -303,6 +303,10 @@ jira:
   projects: [PAY]                             # BRIEFD_JIRA_PROJECTS; empty = every project the account sees
   fields: [customfield_10035]                 # BRIEFD_JIRA_FIELDS; extra fields to include, e.g. acceptance criteria
   # email / token: optional service account; empty = the Confluence one (same Atlassian account)
+  # scoped_token: true marks the service-account token as scoped (BRIEFD_JIRA_SCOPED_TOKEN)
+
+atlassian:
+  cloud_id: ""                                # BRIEFD_ATLASSIAN_CLOUD_ID; only for scoped tokens, empty = looked up
 ```
 
 Each person can use their own Atlassian account, so they only see what Jira and Confluence let them
@@ -315,6 +319,14 @@ claude mcp add --transport http briefd https://briefd.example.com/mcp \
 ```
 
 (The `X-Confluence-Email` / `X-Confluence-Token` headers from v0.7 still work, for Jira too.)
+
+**Scoped API tokens.** Atlassian's API tokens with scopes are made for one product, so send one per
+product instead of `X-Atlassian-Token`:
+`--header "X-Atlassian-Jira-Token: $ATLASSIAN_JIRA_TOKEN" --header "X-Atlassian-Confluence-Token: $ATLASSIAN_CONFLUENCE_TOKEN"`
+(with `X-Atlassian-Email`). briefd sends them through the Atlassian API gateway. Read-only scopes:
+`read:jira-work` for Jira; `search:confluence`, `read:page:confluence` and `read:space:confluence`
+for Confluence ([ADR-0012](docs/adr/0012-scoped-atlassian-tokens.md)). The dashboard's Instance page
+shows each product's health: requests, failures, the last error and whether the site answers.
 
 With Jira configured, an agent can start a ticket with one call: `compile_bundle(issue: "PAY-123")`
 returns the issue (cut to at most a third of the budget) followed by the team rules its summary and

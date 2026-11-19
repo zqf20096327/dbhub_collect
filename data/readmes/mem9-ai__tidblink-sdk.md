@@ -6,7 +6,13 @@ The TypeScript SDK lives in [`typescript/`](typescript/README.md). It targets No
 22.12 or newer, uses the platform `fetch` API, and has no
 runtime dependencies.
 
+The Python SDK lives in [`python/`](python/README.md). It follows the TypeScript
+SDK's features and design with an asyncio API for Python 3.11 or newer. It is
+in development and not yet published to PyPI.
+
 - [TypeScript quick start](typescript/README.md#quick-start)
+- [Python quick start](python/README.md#quick-start)
+- [Examples by scenario and language](examples/README.md)
 - [Contributing](CONTRIBUTING.md)
 - [Release process](RELEASING.md)
 - [Changelog](CHANGELOG.md)
@@ -30,6 +36,8 @@ and excluded capabilities.
 npm install
 npm test
 ```
+
+For the Python SDK, see [`python/README.md`](python/README.md#development).
 
 ## License
 

@@ -21,10 +21,10 @@ según tus intereses y te deja decidir qué hacer con cada uno.
 
 </div>
 
-![Vista de la TUI de SENTRI: barra lateral, feed de oportunidades y panel de detalles](docs/assets/dashboard.svg)
+![Recorrido por SENTRI: primer arranque, dashboard, Discover, Tech News, comunidades peruanas y calendario](docs/assets/demo/sentri.gif)
 
 <p align="center">
-  <sub>Vista ilustrativa de la TUI · tema Gruvbox Dark · usable por SSH sin Nerd Fonts</sub>
+  <sub>Capturas reales de la TUI · tema Gruvbox Dark · usable por SSH sin Nerd Fonts</sub>
 </p>
 
 ---
@@ -56,6 +56,14 @@ personal para decidir **qué oportunidad merece tu tiempo**.
 - **Contenido externo no confiable.** Cliente HTTP con protección anti-SSRF,
   límites de tamaño, saneamiento de texto y secretos solo por variables de
   entorno.
+
+## En acción
+
+| Primer arranque | Dashboard |
+|---|---|
+| ![Al abrir por primera vez, SENTRI recolecta de todas las fuentes y el feed se llena en vivo](docs/assets/demo/01-first-run.gif) | ![Dashboard con contadores, gráficos, recomendaciones, próximas fechas y noticias](docs/assets/demo/02-dashboard.gif) |
+| **Ecosistema peruano** | **Calendario** |
+| ![Comunidades y Call for Speakers de Perú](docs/assets/demo/07-peru-communities.gif) | ![Calendario con vistas de mes, semana, día y agenda](docs/assets/demo/08-calendar.gif) |
 
 ## Características
 

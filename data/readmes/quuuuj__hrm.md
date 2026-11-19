@@ -7,8 +7,7 @@
 | 项目 | 地址 |
 | :--- | :--- |
 | 系统入口 | <https://hrm.qiujie.net.cn> |
-| 接口文档（Swagger UI） | <https://hrm.qiujie.net.cn/api/swagger-ui.html> |
-| 健康检查 | <https://hrm.qiujie.net.cn/api/actuator/health> |
+
 
 **演示账号**：`admin` / `123456`
 
@@ -271,7 +270,7 @@ hrm/
 │           ├── permission/         # 角色与菜单权限管理
 │           ├── performance/        # 考勤表现、加班明细、请假审批
 │           ├── money/              # 薪资明细、五险一金比例与参保城市
-│           ├── kb/                 # 智能问答（chat）与知识库（knowledge）
+│           ├── kb/                 # 智能问答（chat）与知识库文档（document）
 │           └── login/              # 登录页
 └── hrm-server/                     # 后端工程 (Spring Boot 3.4 + Java 17)
     ├── src/main/java/com/qiujie/
@@ -282,7 +281,7 @@ hrm/
     │   ├── util/                   # 通用工具（Excel、验证码、日期等）
     │   ├── auth/                   # 登录、验证码与令牌刷新
     │   ├── chat/                   # 智能问答：意图闸门、混合检索、证据评估与会话
-    │   ├── knowledge/              # 知识库：文档 ETL、切块、向量化与生命周期
+    │   ├── document/               # 知识库文档：实体/接口/摄入管道（独立于文件中心）
     │   ├── docs/                   # 文件中心接口与服务
     │   ├── filetask/               # 异步文件任务、分片上传、任务产物存储
     │   ├── notification/           # 站内通知（落库 + SSE 推送 + 过期清理）
@@ -422,8 +421,8 @@ npm run serve
 | 配置键 | 说明 |
 | :--- | :--- |
 | `llm.*` | 对话 / Embedding / 重排模型的凭据、端点与模型名，来自 `.env` 的 `LLM_*` 变量 |
-| `knowledge.enabled` | 知识库模块总开关 |
-| `knowledge.chunk.*` | 文档切块长度与重叠字符数 |
+| `kb.enabled` | 知识库模块总开关 |
+| `kb.chunk.*` | 文档切块长度与重叠字符数 |
 | `chat.retrieval.*` | 向量/关键词召回条数、RRF 融合参数、重排开关与候选池大小 |
 | `chat.qa.*` | 问答证据充分度分级阈值 |
 | `chat.window-max-chars` / `chat.max-context-chars` | 会话窗口与检索上下文长度预算 |

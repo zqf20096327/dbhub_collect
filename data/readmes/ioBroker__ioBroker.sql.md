@@ -94,6 +94,20 @@ Pay attention to the authentication method. The new encryption algorithm in MySQ
 
 ![Windows](img/WindowsMySQLinstaller.png)
 
+#### Emojis and upper/lower case in an existing database
+
+Tables that the adapter creates now store every character (also emojis) and keep IDs apart that differ only in upper/lower case (`alias.0.Licht` and `alias.0.licht`). Tables that already exist are not changed automatically, because converting a large table takes a while and blocks it.
+
+If you want this for an existing database: stop the SQL instance, make a backup of the database, and run these three commands, e.g. in phpMyAdmin (replace `iobroker` with the name of your database):
+
+```sql
+ALTER TABLE `iobroker`.datapoints MODIFY name TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+ALTER TABLE `iobroker`.sources MODIFY name TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+ALTER TABLE `iobroker`.ts_string MODIFY val TEXT CHARACTER SET utf8mb4;
+```
+
+Then start the instance again. Without this, everything keeps working as before; only values with emojis cannot be stored.
+
 ## Structure of the DBs
 The default Database name is `iobroker`, but it can be changed in the configuration.
 ### Sources
@@ -650,8 +664,9 @@ sendTo('sql.0', 'getEnabledDPs', {}, function (result) {
 -->
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 4.5.1 (2026-11-17)
 * (@Schimi1983) "Clean up" no longer deletes the history of datapoints that are logged under an alias name, and stops with an error instead of deleting everything when the object database cannot be read (#587)
+* (@Schimi1983) MySQL/MariaDB: new tables use `utf8mb4`, so values, IDs and sources with emojis are stored instead of failing, and the names compare case-sensitively (`utf8mb4_bin`), also in a database created by a hoster. Existing tables are not changed; the README explains how to convert them (#588)
 
 ### 4.5.0 (2026-11-10)
 * (@Schimi1983) The database password is stored encrypted (`encryptedNative`). A password saved with an older version is encrypted once on the first start, the instance then restarts by itself. Note: after going back to 4.4.1 or older, enter the password in the instance settings again (#587)
@@ -693,9 +708,6 @@ sendTo('sql.0', 'getEnabledDPs', {}, function (result) {
 * (@Schimi1983) README: the reinstall hint for SQLite uses `iobroker rebuild sqlite3` instead of `npm install` (#583)
 * (@Schimi1983) CI: the job with the unit and SQLite tests is named `adapter-tests`, as the repository checker expects, and also runs on Node.js 26 (#583)
 * (@GermanBluefox) Updated packages, `@iobroker/aggregate` 1.1.0
-
-### 4.2.1 (2026-10-13)
-* (@GermanBluefox) The error of a failed save or delete in the data browser is no longer hidden by the reload of the table
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

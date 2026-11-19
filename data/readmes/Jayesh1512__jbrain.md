@@ -14,6 +14,17 @@ A shared knowledge service for multiple agents. Knowledge lives in [Open Knowled
 
 The installer checks your machine and picks **Docker** when it is usable (daemon running, `docker compose` present) or a **native** cargo build otherwise (`--docker` / `--native` force a choice). It generates an access token, writes `.env` (mode 600), builds, starts the service, waits for `/health`, and prints the MCP command for your agents. It also asks, optionally, whether to **push every update to a GitHub repository** (see [GitHub sync](#github-sync)). Re-running it offers to keep your existing `.env`.
 
+After setup, load the generated configuration before using the native CLI from a new shell:
+
+```sh
+set -a
+. ./.env
+set +a
+./target/release/jbrain health
+```
+
+Run this from the repository directory. The binary reads environment variables; it does **not** load `.env` automatically. Loading it supplies the generated token and the correct service URL, including a custom port. With a Docker installation, use `docker compose exec jbrain jbrain health` to check the service without building a host binary. A fresh brain contains no project knowledge; add your first concept with [Write and read](#write-and-read).
+
 ## Run
 
 Build with **Rust 1.89+** on macOS or Linux. The resulting binary runs without Rust, Bun, Node, a separate database server or containers. SQLite is bundled. Git is needed unless you set `JBRAIN_HISTORY=off`. Keep storage on a local filesystem.
@@ -123,6 +134,32 @@ Concept IDs are lowercase paths without `.md`, for example `people/alice` or `pr
 
 Agents should send 2-5 distinctive keywords (names, terms, dates) and search once per fact. A non-empty result is not proof that an answer exists: unanswerable queries can now return weak matches, so check the `score` and `snippet`. Typos and paraphrases that share no word with the note are still missed; there is no synonym or typo handling and no embeddings. Because the index is unchanged, no reindex is needed when upgrading.
 
+## Questions and answers
+
+Use `jbrain search` to find notes by keyword. Use `jbrain query` to retrieve revision-cited evidence for a question with local, deterministic planning. Both work without model credentials. Query results expose the interpreted plan and its coverage: `plan_satisfied` only describes that plan, while `complete` and `answer_supported` always remain `false`. Read the sources before treating retrieved material as an answer. See [the query contract](docs/QUERY_RETRIEVAL.md) for caller-supplied plans and retrieval limits.
+
+Use `jbrain ask` when you want the daemon to generate an answer, check its citations and source revisions, and run a separate model verification step. All agents share the daemon's model configuration. For a manually started native service, load your service environment, then configure the model and an existing private key file before starting it:
+
+```sh
+export JBRAIN_MODEL=your-model-id
+export JBRAIN_API_KEY_FILE=/absolute/path/to/private/provider-key
+# Optional: use a different model for verification.
+# export JBRAIN_VERIFIER_MODEL=your-verifier-model-id
+./target/release/jbrain serve
+```
+
+Replace the model and path placeholders with your configuration. Stop an existing service before starting its replacement against the same data directory. You can supply `OPENAI_API_KEY` instead of a key file; when both are set, the file takes precedence. Configuration is read at startup, so changing a client's environment does not reconfigure the running daemon. For Docker, the supplied Compose file forwards `JBRAIN_MODEL` and `OPENAI_API_KEY` from `.env`; apply changes with `docker compose up -d`.
+
+Once configured, clients can ask through the same service:
+
+```sh
+./target/release/jbrain ask "What storage decision did the project make?"
+```
+
+The answer depends on knowledge you have stored. Inspect `status`, `complete`, `claims`, `unresolved` and `verification` in the response. `status: retryable` means evidence changed during the workflow; ask again against the current revisions. An HTTP success alone does not mean the question was answered. `MODEL_NOT_CONFIGURED` means the daemon needs a model and credentials; `ASK_BUSY` means its two model workflow slots are occupied. Verification does not establish an accuracy guarantee; see [the accuracy workflow](docs/ACCURACY_WORKFLOW.md) for budgets, provider configuration and measured limitations.
+
+Agents that manage their own reasoning can use `jbrain evidence <tool> --file arguments.json` (or MCP `brain_evidence`) to call the native `catalog`, `find`, `read`, `compute`, `links` and `neighbors` tools without a model. The file contains the chosen tool's JSON arguments. Exact computations operate on a declared scope of stored documents rather than aggregating a top-k search result.
+
 ## Multiple agents and consistency
 
 | Situation | Contract |
@@ -182,6 +219,8 @@ See [the agent protocol](docs/AGENT_PROTOCOL.md) for the read/merge/write workfl
 | `GET /v1/concept?id=project/memory` | Markdown, metadata, revision and extracted links. |
 | `GET /v1/search?q=agent+memory&limit=20` | Lexical BM25 search, up to 100 results. See [Search behavior](#search-behavior). |
 | `POST /v1/query` | Automatic question planning and revision-cited evidence; optional caller plan. |
+| `POST /v1/ask` | Model-generated answer with citation/revision checks and separate model verification; requires daemon model configuration. |
+| `POST /v1/evidence` | Native evidence tools without a model; body contains `tool` and `arguments`. |
 | `GET /v1/browse?prefix=project/&limit=30` | Filtered metadata catalog with pagination. |
 | `GET /v1/neighbors?id=project/memory&limit=12` | Bounded resolved links with kind/period/entity filters and link context. |
 | `GET /v1/links?id=project/memory` | Outgoing links and backlinks. |

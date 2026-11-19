@@ -86,7 +86,7 @@ Prebuilt packages for all platforms are also available on
 
 | Platform | Packages                                      |
 | -------- | --------------------------------------------- |
-| Linux    | AppImage / deb (glibc 2.35 or later)          |
+| Linux    | AppImage / deb (glibc 2.28 or later)          |
 | Windows  | Microsoft Store / Installer (NSIS) / portable |
 | macOS    | dmg / zip (Apple silicon, macOS 13 or later)  |
 
@@ -550,8 +550,8 @@ unlocks nothing and changes nothing about the app; it just helps keep it going.
 Meguri is **privacy-first**: everything stays on your machine.
 
 - **No telemetry, no analytics.** Meguri contains no usage-tracking mechanism
-  such as Google Analytics, crash reporters, or any other third-party
-  measurement SDK.
+  such as Google Analytics, crash reporting services, or any other
+  third-party measurement SDK.
 - **Your data never leaves your machine.** The app never sends file names,
   paths, tags, search queries, playback history, or anything else about your
   library to any external server. Your files are streamed to the app window
@@ -565,6 +565,12 @@ Meguri is **privacy-first**: everything stays on your machine.
   while GitHub cannot be reached), and when you click **Check now** in the settings or **Check for
   Updates…** in the tray menu. To turn the automatic check off, open
   **Settings → App → Updates** and turn off **Check automatically**.
+- **Crash reports stay local.** When Meguri crashes or does not exit
+  normally, the next launch offers a plain-text report you can read, copy and,
+  if you want, paste into a GitHub issue. Nothing is sent automatically, and
+  the crash dumps are never part of the report: it only summarizes them
+  (where the crash happened and the names and versions of the loaded
+  libraries), without their memory contents.
 - **Fully offline.** All features work without an internet connection.
 
 ## Architecture

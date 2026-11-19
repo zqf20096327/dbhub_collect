@@ -8,9 +8,9 @@
 
 <p align="center"><strong>每月 10 分钟盘一次家底，算清还要上几年班。</strong></p>
 
-<p align="center"><a href="https://github.com/CoderJackZhu/Thingary/releases/tag/v0.1.0"><strong>下载 0.1.0</strong></a> · <a href="https://thingary.jackzhu.top/">产品主页</a> · <a href="https://thingary.jackzhu.top/quickstart/">快速上手</a> · <a href="https://gitee.com/CoderJackZhu/thingary/releases">国内镜像</a> · <a href="https://github.com/CoderJackZhu/Thingary/issues/new?template=usage_feedback.yml">使用反馈</a></p>
+<p align="center"><a href="https://github.com/CoderJackZhu/Thingary/releases/tag/v0.1.1"><strong>下载 0.1.1</strong></a> · <a href="https://thingary.jackzhu.top/">产品主页</a> · <a href="https://thingary.jackzhu.top/quickstart/">快速上手</a> · <a href="https://gitee.com/CoderJackZhu/thingary/releases">国内镜像</a> · <a href="https://github.com/CoderJackZhu/Thingary/issues/new?template=usage_feedback.yml">使用反馈</a></p>
 
-[![0.1.0 中文桌面界面的高清预览：总览、账户盘点、目标、存钱目标、区间回顾与物品](docs/images/walkthrough.gif)](docs/images/readme-desktop/overview.png)
+[![中文桌面界面的高清预览：总览、账户盘点、目标、存钱目标、区间回顾与物品](docs/images/walkthrough.gif)](docs/images/readme-desktop/overview.png)
 
 桌面端中文界面，21 秒循环，使用虚构样例（浏览器预览）。点击动图可查看无损原图。
 
@@ -32,24 +32,24 @@
 
 ## 安卓端界面
 
-总览看家底，财富页盘账户，规划页看目标。以下为 Android 15 模拟器中的中文界面，使用虚构样例；点击图片可查看原图。
+总览看家底，财富页盘账户，规划页看目标。以下为 Android 16 真机中的中文界面，使用独立预览身份与完整虚构样例；点击图片可查看原图。
 
 | 总览 | 账户与盘点 | 目标与测算 |
 |:---:|:---:|:---:|
-| <a href="docs/images/android/overview.png"><img src="docs/images/android/overview.png" width="260" alt="安卓版中文总览：金融净资产与退休规划，虚构样例"></a> | <a href="docs/images/android/accounts.png"><img src="docs/images/android/accounts.png" width="260" alt="安卓版中文财富页：金融净资产、待确认付款与净资产趋势，虚构样例"></a> | <a href="docs/images/android/planning.png"><img src="docs/images/android/planning.png" width="260" alt="安卓版中文规划页：退休目标与测算结果，虚构样例"></a> |
+| <a href="docs/images/android/overview.png"><img src="docs/images/android/overview.png" width="260" alt="安卓版中文总览：金融净资产、退休规划与物品日均成本，虚构样例"></a> | <a href="docs/images/android/accounts.png"><img src="docs/images/android/accounts.png" width="260" alt="安卓版中文财富页：金融净资产、净资产趋势与资产结构，虚构样例"></a> | <a href="docs/images/android/planning.png"><img src="docs/images/android/planning.png" width="260" alt="安卓版中文规划页：退休目标、资金曲线与计算条件，虚构样例"></a> |
 
 ## 下载与安装
 
-**0.1.0 公开测试版**，提供 Mac、Windows 和安卓安装包。GitHub 下载不便时，可用 [Gitee 国内镜像](https://gitee.com/CoderJackZhu/thingary/releases/tag/v0.1.0)。
+**0.1.1 公开测试版**，提供 Mac、Windows 和安卓安装包。GitHub 下载不便时，可用 [Gitee 国内镜像](https://gitee.com/CoderJackZhu/thingary/releases/tag/v0.1.1)。
 
 | 平台 | 下载 | 安装提示 |
 |---|---|---|
-| macOS 14+ · Apple Silicon / Intel | [Mac 通用版 DMG](https://github.com/CoderJackZhu/Thingary/releases/download/v0.1.0/Thingary-0.1.0-universal.dmg) | 拖入「应用程序」。未经过 Apple 公证，首次打开可能需要在「隐私与安全性」允许打开 |
-| Windows 10 1809+ / 11 · x64 | [Windows 安装程序](https://github.com/CoderJackZhu/Thingary/releases/download/v0.1.0/Thingary_0.1.0_x64-setup.exe) | 运行 EXE；缺少 WebView2 时需联网安装。安装包未签名，可能出现 SmartScreen 提示 |
-| Android 10+ · 64 位 ARM | [安卓预览版 APK](https://github.com/CoderJackZhu/Thingary/releases/download/v0.1.0/Thingary-0.1.0-android.apk) | 按系统提示允许下载来源「安装未知应用」，装好后可收回权限 |
+| macOS 14+ · Apple Silicon / Intel | [Mac 通用版 DMG](https://github.com/CoderJackZhu/Thingary/releases/download/v0.1.1/Thingary-0.1.1-universal.dmg) | 拖入「应用程序」。未经过 Apple 公证，首次打开可能需要在「隐私与安全性」允许打开 |
+| Windows 10 1809+ / 11 · x64 | [Windows 安装程序](https://github.com/CoderJackZhu/Thingary/releases/download/v0.1.1/Thingary_0.1.1_x64-setup.exe) | 运行 EXE；缺少 WebView2 时需联网安装。安装包未签名，可能出现 SmartScreen 提示 |
+| Android 10+ · 64 位 ARM | [安卓预览版 APK](https://github.com/CoderJackZhu/Thingary/releases/download/v0.1.1/Thingary-0.1.1-android.apk) | 按系统提示允许下载来源「安装未知应用」，装好后可收回权限 |
 | iPhone | 暂无公开安装包，尚未上架 App Store | 开发者可[自行构建](docs/DEVELOPMENT.md#ios-开发) |
 
-Mac 已在 Apple Silicon、Windows 已在 Windows 11 x64 使用；Intel、macOS 14、Windows 10 和安卓真机尚未验证。Windows ARM 设备需通过系统模拟运行 x64 版。
+Mac 已在 Apple Silicon、Windows 已在 Windows 11 x64 使用。Android 界面在 Android 16 真机上用隔离预览身份与虚构资料验收；正式签名包另在真机完成安装与 0.1.0 → 0.1.1 覆盖升级验证，验证期间未打开正式资料库。Intel、macOS 14、Windows 10 仍未验证。Windows ARM 设备需通过系统模拟运行 x64 版。
 
 安装遇到拦截时，按[安装指南](https://thingary.jackzhu.top/guide/#download)处理。请从本项目 Release 或镜像下载，附件中的 `SHA256SUMS.txt` 可核对文件完整性。**升级前先做完整备份**，旧版本可能无法读取升级后的资料和备份。
 

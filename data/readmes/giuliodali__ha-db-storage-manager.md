@@ -36,7 +36,7 @@ costing you space, **whether anything uses it**, or let you **take it back** if 
 - **Clear it with a safety net.** Everything an action removes is saved to one compressed backup first. One click on **Undo** puts it all back.
 - **Keep it small automatically.** Give a noisy sensor its own retention (1, 3, 5 or 7 days of detailed states) instead of shortening history for the whole house. Long-term statistics for graphs and Energy are never touched.
 - **Find what caused a spike.** Drag across the size-over-time chart to see which entities wrote data in that period.
-- **Nothing hidden.** The nightly job is a normal automation you can read, run and trace.
+- **Nothing hidden.** Every nightly retention run is logged on the History tab, in two sensors and as an event; turn the schedule off and call `db_storage_manager.run_retention` from your own automation if you want a trace.
 
 ## Features
 
@@ -47,8 +47,9 @@ costing you space, **whether anything uses it**, or let you **take it back** if 
 | **Referenced In** | Counts every place an entity is used: automations, scripts, scenes, dashboards (per view), helpers, Energy dashboard, YAML files (including `sql` and `command_line` definitions). |
 | **Actions** | Disable, clear history, disable and clear, change retention. Each shows a preview first: what happens to each entity, how much it frees, and warnings. |
 | **Undo** | Whole-batch undo from the History tab. Only missing rows are restored, so data recorded since is kept. |
-| **Retention** | Per-entity limits on *state* history, enforced nightly by an automation named "DB Storage: nightly retention", followed by a repack to return the space. |
+| **Retention** | Per-entity limits on *state* history, enforced by a nightly job the integration schedules itself, followed by a repack to return the space. |
 | **Inspector** | Browse the raw stored states (with collapsible JSON attributes), hourly and 5-minute statistics for any entity. |
+| **Settings** | Hide automations; Home Assistant's default state retention as a slider with the predicted space freed or gained (saved to `recorder: purge_keep_days`); long-term statistics retention in 6-month steps, with a separate limit for Energy dashboard statistics. |
 | **Reclaim** | Repack the database so freed space goes back to the disk, and watch the file shrink. |
 | **Sensors, event, services** | Database size and free space, retention rules and last run, a `db_storage_manager_retention_run` event and a `db_storage_manager.run_retention` action for your own automations. |
 
@@ -61,9 +62,15 @@ costing you space, **whether anything uses it**, or let you **take it back** if 
 
 ## Install (via HACS)
 
-1. HACS → ⋮ → **Custom repositories** → add `https://github.com/giuliodali/ha-db-storage-manager`, category **Integration**.
-2. Download **DB Storage Manager**, then restart Home Assistant.
-3. **Settings → Devices & services → Add integration → DB Storage Manager**.
+[![Open your Home Assistant instance and open this repository in HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=giuliodali&repository=ha-db-storage-manager&category=integration)
+
+1. Click the button above (or search for **DB Storage Manager** in HACS), then **Download**.
+2. Restart Home Assistant.
+3. Add the integration:
+
+   [![Open your Home Assistant instance and start setting up DB Storage Manager.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=db_storage_manager)
+
+   (or **Settings → Devices & services → Add integration → DB Storage Manager**).
 4. Open **DB Storage** in the sidebar (administrators only).
 
 Take a backup first (Settings → System → Backups). The integration only changes what you ask it to, and backs that up, but a backup is cheap.
@@ -85,7 +92,8 @@ More in the docs below.
 | [Getting started](docs/getting-started.md) | Requirements, install, first scan, what each tab is for |
 | [Finding things](docs/entities.md) | Search, filters, suggestions, Referenced In, the period drill-down, the inspector |
 | [Actions and undo](docs/actions-and-undo.md) | What each action does, previews, backups, undoing, History tab |
-| [Retention](docs/retention.md) | Per-entity limits, the maintained automation, how to see and trace it |
+| [Retention](docs/retention.md) | Per-entity limits, how the nightly job runs, how to see and trace it |
+| [Settings](docs/settings.md) | Hide automations, default state retention, long-term statistics retention |
 | [Options, sensors and services](docs/options-and-services.md) | Everything you can configure or automate against |
 | [How it stays safe](docs/safety.md) | What it touches, what it never touches, where files live |
 | [Troubleshooting and FAQ](docs/troubleshooting.md) | Common questions and fixes |
@@ -98,7 +106,7 @@ More in the docs below.
 ## Limits worth knowing
 
 - "Referenced In" matches literal entity ids. It can't see dynamic references (`expand()`, `states.sensor`, built-up ids, area or label targets) or anything outside Home Assistant. Entities in a domain used by such templates are flagged "+N dynamic". Suggestions are advice, not verdicts.
-- It never deletes entities themselves. Disabling keeps the registry entry, which is what stops an integration re-creating the entity. It also does not edit `configuration.yaml`.
+- It never deletes entities themselves. Disabling keeps the registry entry, which is what stops an integration re-creating the entity. It edits `configuration.yaml` only to save the default state retention you set on the Settings page.
 - Size figures for single entities are estimates scaled to the real table sizes. Rankings are reliable.
 - Nightly retention runs are a rolling window and are not backed up. The first clean-up when you create a rule is.
 

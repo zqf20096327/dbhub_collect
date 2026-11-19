@@ -1,27 +1,23 @@
-# SlightPHP 6.5.3
+# SlightPHP 6.x
 
 SlightPHP 是一个轻量 PHP 框架，按照请求路径加载命名空间控制器并调用公开方法。应用负责响应输出、状态码、权限和输入校验。
 
 [官网](https://slightphp.com/) · [源码](https://github.com/hetao29/slightphp)
 
-6.5.3 将 Language 语言文件改为 JSON/JSONC，并完善官网的简体、繁体、英文、多语言实验、完整文档与自动主题。已有 INI 语言文件需按 [6.5.3 迁移说明](docs/migration-6.5.md#language-语言文件改为-jsonjsonc653)转换。
+6.x 提供 Session CSRF 防护，通过 Route 的 `csrf` 参数启用，支持自定义字段/请求头、`tokenInput()`、`tokenMeta()` 及公共配置。samples 提供三种表单写法与 Ajax、token 更新实验；接入见 [CSRF 使用手册](docs/csrf.md)。
 
-6.5.2 新增请求类型前缀校验：候选方法名以已配置类型开头时，`Request-Type` 必须匹配，否则抛出 405；显式 URL 与内部调用均适用。已有带类型前缀的入口调用及 405 响应处理需按 [升级说明](docs/migration-6.5.md#请求类型前缀校验652)调整。
+Tpl 默认启用上下文自动转义，已移除 `setContextMode()`、`getContextMode()` 及兼容编译分支。模板应传入原始数据，可信 HTML 用末尾 `|raw`；升级前需迁移手工编码、JSON 数据块和动态属性名，见 [6.x 升级与迁移指南](CHANGELOG.md#6x-升级与迁移指南)。
 
-6.5.1 移除 `SlightPHP\Json` 插件，改用 PHP 原生 JSON 函数；Route 文件配置改为 JSON/JSONC 数组；插件依赖改为 Composer `suggest`，由应用按需安装。已有 JSON 调用、路由配置和插件依赖需按 [6.5 迁移指南](docs/migration-6.5.md)调整。
-
-6.5.0 新增 Route 方法注解和结构化调度异常，完善 PHP / INI 自定义路由，并优化候选查找、目录校验和请求内注解缓存。核心失败不再返回 `false`，已有入口与内部调用需要按 [6.5 迁移指南](docs/migration-6.5.md)调整。
-
-6.4.0 将 Tpl 模板变量及 `assign()`、`fetch()` 改为实例级，升级前请阅读 [6.4 迁移指南](docs/migration-6.4.md)。
-
-6.3.0 引入 `SlightPHP\Request` 和 `SlightPHP\Response`，替换控制器构造函数和入口方法原有的 `$inPath` 数组传参。这是不兼容变更，升级前请阅读 [6.3 迁移指南](docs/migration-6.3.md)。从较早版本升级还需留意 6.2.1 的数据库自动重试移除及 [6.2 升级说明](docs/migration-6.2.md)中的配置、验证码和日志变化。完整记录见 [Changelog](CHANGELOG.md)。
+已有应用升级统一参阅 [6.x 升级与迁移指南](CHANGELOG.md#6x-升级与迁移指南)，按起始版本检查控制器签名、模板实例、调度异常、JSON/语言资源、插件类名、Cookie 及默认自动转义。6.0 至 6.7 的修改统一汇总在 [6.x 更新记录](CHANGELOG.md#版本更新记录)。
 
 ## 安装
 
-核心需要 PHP 8.0+。插件依赖通过 Composer 的 `suggest` 声明，默认不安装；使用 Db、Redis、Http 或 Captcha 时，再按需安装对应扩展或 Composer 包，见[插件依赖](docs/plugins.md#按需安装依赖)。
+核心需要 PHP 8.0+。插件依赖通过 Composer 的 `suggest` 声明，默认不安装；使用 Db、Redis、Http、Csrf 或 Captcha 时，再按需安装对应扩展或 Composer 包，见[插件依赖](docs/plugins.md#按需安装依赖)。
+
+当前发布版本为 6.7.3，新增 `Csrf::tokenMeta()`，samples 的 Ajax 示例从 meta 标签读取 token 并发送请求头，见 [6.7.3 修改说明](CHANGELOG.md#673--2026-11-19)。安装命令使用对应的包版本：
 
 ```bash
-composer require hetao29/slightphp:^6.5.3
+composer require hetao29/slightphp:^6.7.3
 ```
 
 ## 创建应用
@@ -76,16 +72,14 @@ class MainController
 
 在控制器方法上添加 `#[\SlightPHP\Route(method: 'POST')]` 或 `#[\SlightPHP\Route(methods: ['POST', 'GET'])]` 可限制 HTTP 方法；不匹配时抛出异常，由入口返回 405 和 Allow。详见 [Route 方法注解](docs/framework.md#route-方法注解)。
 
-从 6.5.0 起，核心调度失败统一抛出 `SlightPHP\Exception`，不再返回 `false` 或直接生成错误响应。已有入口及内部调用需按 [核心异常与迁移](docs/exceptions.md)调整。
+写操作可在 Route 注解中设置 `csrf: true`，例如 `#[\SlightPHP\Route(method: 'POST', csrf: true)]`：通过按需启动会话的 `Csrf::token()` 生成表单 `_csrf` 字段或 `X-CSRF-Token` 请求头的值，调度器在构造控制器前校验，失败抛出异常。应用可配置 `Csrf::$sessionHandler` 自定义启动，默认按需调用原生 `session_start()`。详见 [Csrf 插件](docs/plugins.md#csrf)。
+
+核心调度失败统一抛出 `SlightPHP\Exception`，不再返回 `false` 或直接生成错误响应。已有入口及内部调用需按 [核心异常与处理](docs/exceptions.md)调整。
 
 ## 文档
 
-- [更新记录](CHANGELOG.md)
-- [6.5 升级与迁移说明](docs/migration-6.5.md)
-- [6.4 升级与迁移说明](docs/migration-6.4.md)
-- [6.3 升级与迁移说明](docs/migration-6.3.md)
-- [6.2 升级说明](docs/migration-6.2.md)
-- [6.0 迁移与不兼容事项](docs/migration-6.0.md)
+- [6.x 更新记录](CHANGELOG.md#6x)
+- [6.x 升级与迁移指南](CHANGELOG.md#6x-升级与迁移指南)
 - [快速开始](docs/getting-started.md)
 - [核心调度和 API](docs/framework.md)
 - [自定义 URL 路由与 PHP / JSON 示例](docs/routes.md)

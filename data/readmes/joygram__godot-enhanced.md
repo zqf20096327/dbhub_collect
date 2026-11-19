@@ -1,6 +1,202 @@
-# godot-enhanced — Godot 4.7.2 with Korean IME fix, Web (WASM) memory patch and C# web export
+# godot-enhanced — Godot 4.7.2 with smaller web downloads, Web (WASM) memory patch, C# web export, Korean IME fix and verified Japanese input
 
-Patched build of [Godot Engine](https://github.com/godotengine/godot) `4.7.2-stable`. Upstream history kept intact; three patches on top.
+Patched build of [Godot Engine](https://github.com/godotengine/godot) `4.7.2-stable`. Upstream history kept intact; patches on top.
+
+## 🐱 Showcase — a Unity game moved to godot-enhanced C#, almost untouched
+
+Same game, two engines. YangVil (cat-raising RPG) ported from Unity to godot-enhanced C# (.NET 11).
+
+- Unity: [joygram/YangVil](https://github.com/joygram/YangVil) · play: https://yangvil.deuklab.workers.dev
+- **godot-enhanced C#**: [joygram/yangvil-godot-csharp](https://github.com/joygram/yangvil-godot-csharp) · play: https://yangvil-godot-csharp.deuklab.workers.dev
+- Web build of the Godot version = built with godot-enhanced `dotnet-web-4.7.2-0.3.0`
+
+**1. Easy Unity migration**
+- Game rules C#: copied as-is (9 of 702 lines changed, save JSON only)
+- Art + data tables: same 28 images + 26 tables, unchanged
+- UI: engine API mapped 1:1 to Godot nodes, **−25% code**
+
+**2. No license burden**
+- Engine = Godot (MIT) + godot-enhanced patches: no runtime fee, royalty or seat cost
+- Game code = MIT, full engine source open
+
+**3. Easy C# web deploy**
+- C# web export that stock Godot 4 lacks
+- One command: latest engine → web build → compress → Cloudflare deploy
+- **−44% download** vs Unity (12.2 MB vs 21.8 MB)
+- .NET 11, latest C# and standard library
+
+**Measured side by side** (same PC, headless Chrome, no cache)
+
+| Web build (median of 3) | Unity WebGL | C# stock template | C# AOT template |
+|---|---|---|---|
+| Transfer size | 21.8 MB | **12.2 MB (−44%)** | 14.6 MB |
+| First screen | **3.10 s** | 4.44 s | 4.70 s |
+| Memory (Chrome total) | **650 MB** | 758 MB | 788 MB |
+
+- AOT template = game AOT output linked via `mono_wasm_aot_dir=` (agent test `dotnet-web-aot`)
+- AOT gives no startup gain: startup = wasm compile + engine init; AOT helps C# run time
+- Reproduce: `node scripts/web/compare.mjs 3` in yangvil-godot-csharp
+
+## 🔧 0.3.1 — Fix: GDScript prebuild crashed on web (bytecode made on 64-bit, run on wasm32)
+
+| Prebuild (`script_export_mode=3`) on web | 0.3.0 | **0.3.1** |
+|---|---|---|
+| Boot | crash | **✔** |
+
+- Error: `Index p_op = 156 is out of bounds (Variant::OP_MAX = 25)`, `RuntimeError: operation does not support unaligned accesses`
+- Cause: `OPCODE_OPERATOR` cache size followed pointer size (2 slots on 64-bit editor, 1 on wasm32) → instruction length mismatch
+- Fix: cache fixed at 2 slots on every platform (`GDScriptFunction::OPERATOR_CACHE_SLOTS`), prebuild format 2 (old prebuilds fall back to tokens)
+
+## 🚀 0.3.0 — GDScript prebuild ships everywhere, all web on Emscripten 7.0.0 (C# too)
+
+| 0.3.0 release | Contents | Status |
+|---|---|---|
+| `editor-4.7.2-0.3.0` | editors ×6 + export_templates.tpz | ✔ 5 runners verified |
+| `web-template-4.7.2-0.3.0` | threads / nothreads × static / dlink | ✔ Emscripten 7.0.0 |
+| `dotnet-web-4.7.2-0.3.0` | C# kits Linux · macOS · Windows | ✔ Emscripten 7.0.0 |
+
+**GDScript prebuild in every release** (`script_export_mode=3`)
+- Editor + templates from the same release → prebuilt bytecode loads, no parse · analyze · compile
+- Template folder `4.7.2.stable.enhanced-0.3.0` keeps editor and templates paired
+
+**C# web on Emscripten 7.0.0**
+
+| C# web template link | 6.0.2 pin | **0.3.0 (7.0.0)** |
+|---|---|---|
+| release / debug × threads / nothreads | needed old toolchain | **✔ 4 of 4 linked** |
+
+- Error: `undefined symbol: _Unwind_CallPersonality` (`libmono-wasm-eh-wasm.a`)
+- Cause: .NET 11 runtime pack prebuilt by Emscripten 6; LLVM 23 renamed it `__gxx_wasm_personality_v0`
+- Fix: old name forwards to the new one ([gd_mono_wasm_unwind.cpp](modules/mono/mono_gd/gd_mono_wasm_unwind.cpp))
+
+**Cleanup**
+- Removed broken releases `web-template-4.7.2-0.1.9`, `0.2.0` (threads + dlink crash at startup)
+
+## 🔧 0.2.1 — Fix: Emscripten 7.0.0 (latest), web threads + GDExtension work again
+
+- Fix, not a new feature: stock Godot already supports web threads + GDExtension
+- Emscripten 7.0.0 (latest) supported, multithreaded web included
+- Resolved: 0.2.0 threads + dlink template crashed at startup
+
+| Web template | 0.2.0 (Emscripten 6.0.2) | **0.2.1 (7.0.0)** |
+|---|---|---|
+| threads + dlink (GDExtension) | ✘ crash at startup | **✔ boots** |
+| real game (SQLite GDExtension, threads) | ✘ stalls 49% | **✔ boot 10 s, 0 errors** |
+
+- Web templates (GDScript): Emscripten 6.0.2 → **7.0.0**, set in `misc/scripts/emscripten-version`
+- Error: `setting 'sig'`, then GL `LinkError`
+- Cause: 6.0.2 bound GL aliases to wasm exports before instantiation
+- GDExtension web builds: rebuild with 7.0.0 (6.0.2 side modules → `resolved is not a function`)
+
+## ⚡ 0.2.0 — GDScript prebuild, export templates locked to the release
+
+**GDScript prebuild** (`script_export_mode=3`)
+- Export stores compiled classes + bytecode; load skips parse · analyze · compile
+- Mismatch or unsupported content → falls back to binary tokens (mode 2)
+- Baseline to beat (400 scripts, mode 2): analyze 142 ms, compile 40 ms, parse 23 ms
+- Check: agent test `gdscript-prebuild` runs feature scripts in mode 2 and 3, compares output
+- Design: [patches/gdscript-prebuild.md](patches/gdscript-prebuild.md)
+
+**Export templates locked**
+- Template folder: `4.7.2.stable` → **`4.7.2.stable.enhanced-0.2.0`**
+- Editor exports only with templates from its own release; stock Godot or another release never picked up
+- Applies to: export lookup, template manager, C# export
+- Install: put release templates in `export_templates/4.7.2.stable.enhanced-<version>/`
+
+## ✂️ 0.1.9 — C# iOS: GodotSharp trimming works, binary −63% (opt-in)
+
+| `ios-arm64` NativeAOT, sample C# project | Default | **`GodotTrimGodotSharp=true`** |
+|---|---|---|
+| `Game.dylib` | 18.6 MB | **6.8 MB (−63%)** |
+| Simulator app (Debug) | 139.9 MB | **111.6 MB** |
+| Simulator run | ✔ `trim ok 3` | ✔ `trim ok 3` |
+
+- 0.1.7 trimmed build failed at runtime: `instance_create(): native_name == StringName()`
+- Cause: NativeAOT removed `NativeName`, which Godot reads by reflection
+- Fix: keep list [`GodotSharp.TrimRoots.xml`](modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk/Sdk/GodotSharp.TrimRoots.xml), only those fields kept
+- Turn on: `<GodotTrimGodotSharp>true</GodotTrimGodotSharp>` in the `.csproj`
+- Opt-in: verified on one sample project only
+
+## 🍎 0.1.8 — C# on iOS runs again (.NET 11), verified in the simulator
+
+> With .NET 11, Godot C# iOS exports built but the game had no C#: "`.NET: Failed to load hostfxr`". Fixed and run-tested.
+
+| iOS Simulator (iOS 27.2), sample C# project | Before | **0.1.8** |
+|---|---|---|
+| Export | "project assembly not found" | **OK** |
+| App start | `.NET: Failed to load hostfxr` | **C# `_Ready` runs, `[Export]` array intact** |
+
+- Cause: .NET 11 NativeAOT names the library `libGame.dylib`; Godot looks for `Game.dylib`
+- Fix: export plugin drops the `lib` prefix after publish and sets the install name
+- Test: [`ios-sim-csharp.sh`](misc/scripts/agent_tests/ios-sim-csharp.sh) — export → `xcodebuild` → `simctl` run → log `trim ok 3`
+- Not verified: physical device
+
+## 🧩 0.1.6 — GDExtension web builds pre-compressed too (side module −76%)
+
+> Web games with GDExtensions (dlink) load a ~43 MB `.side.wasm`. 0.1.3 compression skipped it; now it's covered.
+
+| dlink web export (`extensions_support`) | Before | **0.1.6** | |
+|---|---|---|---|
+| `.side.wasm` (engine side module) | 42.8 MB | **10.1 MB** | **−76%** |
+| `.wasm` (main module) | 1.3 MB | **0.5 MB** | **−58%** |
+
+- `.side.wasm` now fetched by the Godot preloader → gzip inflate + loading bar progress
+- Handed to Emscripten as a blob URL; no server config
+- Verified: headless Chrome, static and dlink exports, 0 errors, heap 38.4 MB both
+- Test: [`web-memory.sh`](misc/scripts/agent_tests/web-memory.sh) runs both variants when a dlink template exists
+
+## 📱 0.1.5 — C# Android: managed code −83%, trimmed by default
+
+> Godot C# Android exports ship the whole .NET framework and `GodotSharp`. godot-enhanced trims them, same rule as the web.
+
+| `android-arm64` publish (sample C# project) | Before | **0.1.5** | |
+|---|---|---|---|
+| Managed `.dll` total | 29.8 MB | **5.0 MB** | **−83%** |
+| `GodotSharp.dll` | 5.9 MB | **2.8 MB** | **−52%** |
+| Publish folder (with native runtime) | 100.1 MB | **74.9 MB** | **−25%** |
+
+- `PublishTrimmed` on by default for Web and Android; game assembly kept whole (scripts found by reflection)
+- One rule in `Sdk.targets` for both platforms. iOS unchanged (NativeAOT)
+- Opt out: `<PublishTrimmed>false</PublishTrimmed>`, or keep more with `TrimmerRootAssembly`
+- Measured: Linux agent, .NET 11, test [`dotnet-trim.sh`](misc/scripts/agent_tests/dotnet-trim.sh), 2026-11-17
+- Not yet verified: running on an Android device
+
+## 🇯🇵 0.1.4 — Japanese input on Linux, verified (日本語入力 OK)
+
+> "Godot won't take Japanese on Linux" — tested on X11 and Wayland with fcitx5 + Mozc, now checked on every agent run.
+
+| Session | Switch | Result |
+|---|---|---|
+| X11 + fcitx5 | tray / `fcitx5-remote` | `にほんご` ✔ |
+| X11 + fcitx5 | `Ctrl+Space` | `にほんご` ✔ |
+| Wayland (sway) + fcitx5 | tray / `fcitx5-remote` | `にほんご` ✔, preedit shown |
+| Wayland (sway) + fcitx5 | `Ctrl+Space` | `にほんご` ✔, preedit shown |
+
+- Engine unchanged: X11 (XIM) and Wayland (`text-input-v3`) both work
+- `Ctrl+Space` reaches fcitx5, not swallowed
+- First key right after the first Mozc use may come out Latin → Mozc start-up, same in a plain Xlib app
+- Not verified: KDE KWin (headless KWin can't inject keys)
+- Setup tips, method, raw results: [patches/linux-ime-japanese.md](patches/linux-ime-japanese.md)
+- Tests: [`ime-linux.sh`](misc/scripts/agent_tests/ime-linux.sh), [`ime-wayland.sh`](misc/scripts/agent_tests/ime-wayland.sh)
+
+## 🗜️ 0.1.3 — web download up to −75%, no server setup
+
+> Godot web games are big, and most hosts (itch.io, game portals) don't let you set compression headers. godot-enhanced compresses at export and unpacks in the browser.
+
+| Web download | Before | **Pre-compressed** | |
+|---|---|---|---|
+| Engine `.wasm`, GDScript template | 36.4 MB | **9.3 MB** | **−75%** |
+| Engine `.wasm`, C# template | 39.3 MB | **10.4 MB** | **−73%** |
+| Game `.pck` (rpg2d) | 36.5 MB | **22.9 MB** | **−38%** |
+| **rpg2d total** (wasm + pck) | 72.9 MB | **32.2 MB** | **−56%** |
+
+- Export option **`compression/precompress`** (Web preset, default off) → `.pck` and `.wasm` gzipped in place
+- Loader sees the gzip signature → inflates with the browser's `DecompressionStream`. No server config
+- File names unchanged → no double-decompress if the host also gzips
+- Loading bar counts downloaded (compressed) bytes
+- Measured: gzip -6 on existing exports, 2026-11-17
+- Verified: headless Chrome boots a pre-compressed export (wasm 9.7 MB on disk), 0 errors, heap unchanged (38.4 MB)
+- dlink `.side.wasm`: covered from 0.1.6. Not yet: C# runtime files (loaded outside the Godot preloader)
 
 ## 🚀 0.1.1 — C# on the web, and it's light
 
@@ -69,8 +265,8 @@ Patched build of [Godot Engine](https://github.com/godotengine/godot) `4.7.2-sta
 
 - Measured: Windows, headless Chrome, debug = release
 - Reference: official Godot empty GDScript web = 55.4 MB WASM heap
-- Version `<godot>-<enhanced>` → `4.7.2-0.1.2`, source [`ENHANCED_VERSION`](ENHANCED_VERSION)
-- Engine build name: `enhanced-0.1.2`
+- Version `<godot>-<enhanced>` → `4.7.2-0.3.0`, source [`ENHANCED_VERSION`](ENHANCED_VERSION)
+- Engine build name: `enhanced-0.3.0`
 
 **Keywords:**
 - Godot 4 C# web export, Godot 4.7 C# HTML5, "C# projects cannot be exported to the web" fix
@@ -79,12 +275,27 @@ Patched build of [Godot Engine](https://github.com/godotengine/godot) `4.7.2-sta
 - Godot memory optimization, Godot performance optimization, Godot web game too big
 - Godot web export memory, WASM heap out of memory, GDScript parser memory leak
 - Godot SQLite web, GDExtension web export, GDExtension without dlink, SharedArrayBuffer COOP COEP
+- Godot web export threads crash fix, Godot web threads dlink startup error
+- "Cannot set properties of undefined (setting 'sig')", "function import requires a callable" Godot
+- Godot Emscripten 7, Godot Emscripten 7.0.0 web template, GDExtension rebuild Emscripten 7
+- GDScript prebuild, GDScript precompile export, Godot compiled GDScript bytecode, script_export_mode
+- Godot C# web Emscripten 7, "undefined symbol: _Unwind_CallPersonality", __gxx_wasm_personality_v0
 - Godot web game itch.io Poki CrazyGames, Godot AdSense web, Godot Safari iOS web
 - Godot ARM64 Windows Linux, Apple Silicon Godot
+- Godot web export size, Godot web build too large, Godot HTML5 gzip brotli compression, itch.io Godot loading slow
 - Godot Korean IME, Godot 한글 입력 버그, Godot Hangul input, CJK input, LineEdit / TextEdit caret
+- Godot GDExtension web size, Godot side.wasm too big, Godot dlink web export slow loading
+- Godot C# iOS export failed to load hostfxr, Godot .NET 11 iOS, Godot C# iOS simulator
+- Godot C# iOS app size, Godot NativeAOT iOS binary too big, Godot mono iOS export size
+- Godot C# Android APK size, Godot C# Android trimming, Godot mono Android too big, Godot .NET mobile export size
+- Godot 일본어 입력, Godot 일본어 IME 리눅스, Godot Japanese input not working
+- Godot Japanese IME Linux, Godot Mozc fcitx5 ibus, Godot Wayland text-input-v3 IME
+- Godot 日本語入力, Godot 日本語入力 できない, Godot IME 変換 できない, Godot Linux Mozc fcitx5, Godot Wayland 日本語, Godot LineEdit 日本語
 
 | Patch | Platform | Fixes |
 |---|---|---|
+| [Linux Japanese input check](patches/linux-ime-japanese.md) | Linux X11 + Wayland | Mozc via fcitx5 verified, automated tests |
+| Web pre-compression | Web | Big `.pck` / `.wasm` downloads, no server gzip |
 | [Windows IME queued key](patches/windows-ime-queued-key.md) | Windows editor + game | Korean (Hangul) typing loses caret advance after a syllable is committed |
 | [GDScript parser release](patches/gdscript-parser-release.md) | All, aimed at Web / WASM | Syntax trees of mutually dependent scripts stay alive after compile → high peak memory at boot |
 | [C# (.NET) web export](patches/dotnet-web-export.md) | Web + C# editor | Export C# projects to the web (Mono on WebAssembly). Experimental. Taken from upstream PR #106125 and ComplexRobot's rebase |
@@ -122,10 +333,12 @@ Apply all three (as above), or only the ones you need — each patch also applie
 ## Prebuilt Web export template
 
 - GitHub Actions ([enhanced_web_template.yml](.github/workflows/enhanced_web_template.yml)) builds the Web template from this branch and publishes it on [Releases](https://github.com/joygram/godot-enhanced/releases).
-- Assets: `godot.web.template_release.wasm32.nothreads.dlink.zip` (GDExtension support), `godot.web.template_release.wasm32.nothreads.zip`.
+- Assets: 4 zips, threads / nothreads × static / dlink (`godot.web.template_release.wasm32[.nothreads][.dlink].zip`)
+- dlink = GDExtension support; threads = server must send COOP / COEP
 - Use: Web export preset → Custom Template → Release → the zip.
-- Emscripten 6.0.2 (GDScript and C# alike). With dlink, your GDExtension web builds must use the same version.
-- These are the GDScript templates (no threads). C# web projects need the separate `.mono` templates below.
+- Emscripten 7.0.0 (`misc/scripts/emscripten-version`), GDScript and C# alike.
+- With dlink, your GDExtension web builds must use the same version.
+- These are the GDScript templates. C# web projects need the separate `.mono` templates below.
 - GDExtension without dlink: build the template with `static_gdextensions=<name>` (list: [misc/static_gdextensions.json](misc/static_gdextensions.json)).
 
 ## C# (.NET) web export
@@ -162,7 +375,157 @@ git cherry-pick 4.7.2-stable..origin/main
 
 ## 한국어 안내
 
-Godot 4.7.2 공식 소스에 패치 세 개를 더한 빌드입니다. 업스트림 커밋 이력은 그대로 유지합니다.
+Godot 4.7.2 공식 소스에 패치를 더한 빌드입니다. 업스트림 커밋 이력은 그대로 유지합니다.
+
+### 🔧 0.3.1 — 수정: 웹 GDScript 사전 빌드 시작 오류 (64비트에서 만든 바이트코드를 wasm32 가 읽음)
+
+| 웹 사전 빌드 (`script_export_mode=3`) | 0.3.0 | **0.3.1** |
+|---|---|---|
+| 시작 | 오류로 멈춤 | **✔** |
+
+- 오류: `Index p_op = 156 is out of bounds (Variant::OP_MAX = 25)`, `RuntimeError: operation does not support unaligned accesses`
+- 원인: `OPCODE_OPERATOR` 캐시 칸 = 포인터 크기 (64비트 편집기 2칸, wasm32 1칸) → 명령 길이 어긋남
+- 수정: 캐시 칸 전 플랫폼 2칸 고정 (`GDScriptFunction::OPERATOR_CACHE_SLOTS`), 사전 빌드 포맷 2 (옛 사전 빌드는 토큰으로 대체)
+
+### 🚀 0.3.0 — GDScript 사전 빌드 전 릴리스 탑재, 웹 전부 Emscripten 7.0.0 (C# 포함)
+
+| 0.3.0 릴리스 | 내용 | 상태 |
+|---|---|---|
+| `editor-4.7.2-0.3.0` | 편집기 6종 + export_templates.tpz | ✔ 러너 5종 검증 |
+| `web-template-4.7.2-0.3.0` | 스레드·스레드 없음 × 정적·dlink | ✔ Emscripten 7.0.0 |
+| `dotnet-web-4.7.2-0.3.0` | C# 키트 Linux·macOS·Windows | ✔ Emscripten 7.0.0 |
+
+**GDScript 사전 빌드 전 릴리스 탑재** (`script_export_mode=3`)
+- 같은 릴리스 편집기·템플릿 → 사전 빌드 바이트코드 적용, 파싱·분석·컴파일 생략
+- 템플릿 폴더 `4.7.2.stable.enhanced-0.3.0` 으로 편집기·템플릿 짝 고정
+
+**C# 웹 Emscripten 7.0.0**
+
+| C# 웹 템플릿 링크 | 6.0.2 고정 | **0.3.0 (7.0.0)** |
+|---|---|---|
+| release·debug × 스레드·스레드 없음 | 구 툴체인 필요 | **✔ 4종 모두 링크** |
+
+- 오류: `undefined symbol: _Unwind_CallPersonality` (`libmono-wasm-eh-wasm.a`)
+- 원인: .NET 11 런타임 팩 = Emscripten 6 컴파일, LLVM 23 이 이름을 `__gxx_wasm_personality_v0` 로 바꿈
+- 수정: 옛 이름 → 새 함수로 넘김 ([gd_mono_wasm_unwind.cpp](modules/mono/mono_gd/gd_mono_wasm_unwind.cpp))
+
+**정리**
+- 결함 릴리스 폐기: `web-template-4.7.2-0.1.9`, `0.2.0` (멀티스레드 + dlink 시작 오류)
+
+### 🔧 0.2.1 — 수정: Emscripten 7.0.0(최신) 지원, 웹 멀티스레드 + GDExtension 다시 동작
+
+- 새 기능 아님: 공식 Godot 도 웹 멀티스레드 + GDExtension 지원
+- 최신 Emscripten 7.0.0 지원, 웹 멀티스레드 포함
+- 해소: 0.2.0 멀티스레드 + dlink 템플릿 시작 오류
+
+| 웹 템플릿 | 0.2.0 (Emscripten 6.0.2) | **0.2.1 (7.0.0)** |
+|---|---|---|
+| 멀티스레드 + dlink (GDExtension) | ✘ 시작 즉시 오류 | **✔ 부팅** |
+| 실제 게임 (SQLite GDExtension, 멀티스레드) | ✘ 49% 멈춤 | **✔ 10초 부팅, 오류 0** |
+
+- 웹 템플릿 Emscripten 6.0.2 → **7.0.0**, 버전은 `misc/scripts/emscripten-version`
+- 오류: `setting 'sig'`, GL `LinkError`
+- 원인: 6.0.2 가 GL 별칭을 인스턴스 전에 wasm export 로 묶음
+- GDExtension 웹 빌드: 7.0.0 으로 재빌드 필요 (6.0.2 모듈 → `resolved is not a function`)
+- 서버: 멀티스레드 = COOP·COEP 헤더 필요 (SharedArrayBuffer)
+
+### ⚡ 0.2.0 — GDScript 사전 빌드, 내보내기 템플릿을 릴리스에 고정
+
+**GDScript 사전 빌드** (`script_export_mode=3`)
+- 내보낼 때 컴파일된 클래스·바이트코드 저장, 실행 시 파싱·분석·컴파일 건너뜀
+- 버전 불일치·미지원 내용 → 바이너리 토큰(모드 2)으로 대체
+- 넘을 기준선 (스크립트 400개, 모드 2): 분석 142 ms, 컴파일 40 ms, 파싱 23 ms
+- 검사: 에이전트 검사 `gdscript-prebuild` — 기능 스크립트를 모드 2·3 으로 실행해 출력 비교
+- 설계: [patches/gdscript-prebuild.md](patches/gdscript-prebuild.md)
+
+**내보내기 템플릿 고정**
+- 템플릿 폴더: `4.7.2.stable` → **`4.7.2.stable.enhanced-0.2.0`**
+- 편집기는 자기 릴리스 템플릿으로만 내보냄; 공식 Godot·다른 릴리스 템플릿 안 씀
+- 적용: 내보내기 템플릿 찾기, 템플릿 관리자, C# 내보내기
+- 설치: 릴리스 템플릿 → `export_templates/4.7.2.stable.enhanced-<버전>/`
+
+### ✂️ 0.1.9 — C# iOS: GodotSharp 트리밍 동작, 바이너리 −63% (선택)
+
+| `ios-arm64` NativeAOT, 표본 C# 프로젝트 | 기본 | **`GodotTrimGodotSharp=true`** |
+|---|---|---|
+| `Game.dylib` | 18.6 MB | **6.8 MB (−63%)** |
+| 시뮬레이터 앱 (Debug) | 139.9 MB | **111.6 MB** |
+| 시뮬레이터 실행 | ✔ `trim ok 3` | ✔ `trim ok 3` |
+
+- 0.1.7 트리밍 빌드는 실행 시 실패: `instance_create(): native_name == StringName()`
+- 원인: Godot 가 리플렉션으로 읽는 `NativeName` 을 NativeAOT 가 지움
+- 수정: 보존 목록 [`GodotSharp.TrimRoots.xml`](modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk/Sdk/GodotSharp.TrimRoots.xml), 그 필드만 남김
+- 켜기: `.csproj` 에 `<GodotTrimGodotSharp>true</GodotTrimGodotSharp>`
+- 선택 옵션: 표본 프로젝트 하나로만 검증
+
+### 🍎 0.1.8 — C# iOS 다시 동작 (.NET 11), 시뮬레이터 실행 검증
+
+| iOS 시뮬레이터 (iOS 27.2), 표본 C# 프로젝트 | 전 | **0.1.8** |
+|---|---|---|
+| 내보내기 | "project assembly not found" | **정상** |
+| 앱 시작 | `.NET: Failed to load hostfxr` | **C# `_Ready` 실행, `[Export]` 배열 정상** |
+
+- 원인: .NET 11 NativeAOT 가 `libGame.dylib` 로 만듦, Godot 는 `Game.dylib` 를 찾음
+- 수정: 내보내기 플러그인이 publish 뒤 `lib` 접두 제거·install name 맞춤
+- 검사: [`ios-sim-csharp.sh`](misc/scripts/agent_tests/ios-sim-csharp.sh) — 내보내기 → `xcodebuild` → `simctl` 실행 → 로그 `trim ok 3`
+- 미검증: 실기기
+
+### 🧩 0.1.6 — GDExtension 웹 빌드도 미리 압축 (side module −76%)
+
+| dlink 웹 내보내기 (`extensions_support`) | 전 | **0.1.6** | |
+|---|---|---|---|
+| `.side.wasm` (엔진 side module) | 42.8 MB | **10.1 MB** | **−76%** |
+| `.wasm` (main module) | 1.3 MB | **0.5 MB** | **−58%** |
+
+- `.side.wasm` 을 Godot 프리로더가 받음 → gzip 해제·진행률 반영
+- Emscripten 에 blob URL 로 넘김, 서버 설정 불필요
+- 검증: headless Chrome, 정적·dlink 내보내기 모두 오류 0, 힙 38.4 MB
+- 검사: [`web-memory.sh`](misc/scripts/agent_tests/web-memory.sh), dlink 템플릿 있으면 두 변형 모두
+
+### 📱 0.1.5 — C# Android: 관리 코드 −83%, 기본 트리밍
+
+| `android-arm64` publish (표본 C# 프로젝트) | 전 | **0.1.5** | |
+|---|---|---|---|
+| 관리 `.dll` 합계 | 29.8 MB | **5.0 MB** | **−83%** |
+| `GodotSharp.dll` | 5.9 MB | **2.8 MB** | **−52%** |
+| publish 폴더 (네이티브 런타임 포함) | 100.1 MB | **74.9 MB** | **−25%** |
+
+- 웹·Android `PublishTrimmed` 기본 켬, 게임 어셈블리는 통째 유지
+- 규칙 한 곳 `Sdk.targets`, 두 플랫폼 공용. iOS 그대로 (NativeAOT)
+- 끄기: `<PublishTrimmed>false</PublishTrimmed>`, 더 남기기: `TrimmerRootAssembly`
+- 실측: Linux 에이전트, .NET 11, 검사 [`dotnet-trim.sh`](misc/scripts/agent_tests/dotnet-trim.sh), 2026-11-17
+- 미검증: Android 기기 실행
+
+### 🇯🇵 0.1.4 — Linux 일본어 입력(Mozc) 검증, 자동 검사
+
+| 세션 | 전환 | 결과 |
+|---|---|---|
+| X11 + fcitx5 | 트레이 / `fcitx5-remote` | `にほんご` ✔ |
+| X11 + fcitx5 | `Ctrl+Space` | `にほんご` ✔ |
+| Wayland (sway) + fcitx5 | 트레이 / `fcitx5-remote` | `にほんご` ✔, 조합 중 글자 표시 |
+| Wayland (sway) + fcitx5 | `Ctrl+Space` | `にほんご` ✔, 조합 중 글자 표시 |
+
+- 엔진 수정 없음: X11(XIM)·Wayland(`text-input-v3`) 정상
+- `Ctrl+Space` 가로채기 없음 → fcitx5 로 전달
+- Mozc 첫 사용 직후 첫 키 라틴 샘 → Mozc 기동 지연, Xlib 단독 앱도 같음
+- 미검증: KDE KWin (headless KWin 키 주입 불가)
+- 설정 팁·방법·원 결과: [patches/linux-ime-japanese.md](patches/linux-ime-japanese.md)
+
+### 🗜️ 0.1.3 — 웹 다운로드 최대 −75%, 서버 설정 없음
+
+| 웹 다운로드 | 전 | **미리 압축** | |
+|---|---|---|---|
+| 엔진 `.wasm`, GDScript 템플릿 | 36.4 MB | **9.3 MB** | **−75%** |
+| 엔진 `.wasm`, C# 템플릿 | 39.3 MB | **10.4 MB** | **−73%** |
+| 게임 `.pck` (rpg2d) | 36.5 MB | **22.9 MB** | **−38%** |
+| **rpg2d 합계** (wasm + pck) | 72.9 MB | **32.2 MB** | **−56%** |
+
+- 웹 프리셋 옵션 **`compression/precompress`** (기본 꺼짐) → `.pck`·`.wasm` gzip 압축
+- 로더가 gzip 서명 보고 브라우저 `DecompressionStream` 으로 풂. itch.io 등 서버 설정 불필요
+- 파일명 유지 → 호스트가 또 gzip 해도 이중 해제 없음
+- 실측: 기존 내보내기에 gzip -6, 2026-11-17
+- 검증: 미리 압축한 내보내기(디스크 wasm 9.7 MB) headless Chrome 부팅, 오류 0, 힙 변화 없음(38.4 MB)
+- dlink `.side.wasm`: 0.1.6 부터 포함. 아직 안 됨: C# 런타임 파일
 
 ### 🚀 0.1.1 — C#이 웹에서 돌아가고, 가볍다
 
@@ -231,7 +594,7 @@ Godot 4.7.2 공식 소스에 패치 세 개를 더한 빌드입니다. 업스트
 - 전체 수치·조건: [BENCHMARKS.md](BENCHMARKS.md)
 
 - 측정: Windows, headless Chrome, debug·release 템플릿 동일 결과. 참고값: 공식 Godot 빈 GDScript 웹 = WASM 힙 55.4 MB
-- 버전: `<Godot>-<enhanced>` → `4.7.2-0.1.2`. 기준 파일 [`ENHANCED_VERSION`](ENHANCED_VERSION). 엔진 빌드 이름 `enhanced-0.1.2`
+- 버전: `<Godot>-<enhanced>` → `4.7.2-0.2.0`. 기준 파일 [`ENHANCED_VERSION`](ENHANCED_VERSION). 엔진 빌드 이름 `enhanced-0.2.0`
 
 | 패치 | 플랫폼 | 해결하는 문제 |
 |---|---|---|
@@ -271,11 +634,11 @@ git apply patches/godot-4.7.2-windows-ime-queued-key.patch
 ### 미리 빌드된 웹 템플릿
 
 - GitHub Actions가 이 브랜치로 웹 내보내기 템플릿을 빌드해 [Releases](https://github.com/joygram/godot-enhanced/releases)에 올립니다.
-- `godot.web.template_release.wasm32.nothreads.dlink.zip`: GDExtension을 쓰는 프로젝트용
-- `godot.web.template_release.wasm32.nothreads.zip`: 일반 프로젝트용
+- zip 4종: 스레드·스레드 없음 × 정적·dlink (`godot.web.template_release.wasm32[.nothreads][.dlink].zip`)
+- dlink = GDExtension 사용, 스레드 = 서버 COOP·COEP 헤더 필요
 - 웹 내보내기 프리셋의 Custom Template → Release에 zip 파일을 지정하면 됩니다.
-- Emscripten 6.0.2로 빌드합니다(GDScript·C# 공통). dlink 템플릿을 쓴다면 GDExtension 웹 빌드도 같은 버전이어야 합니다.
-- 위 템플릿은 GDScript용(스레드 없음)입니다. C# 웹 프로젝트는 아래의 별도 `.mono` 템플릿이 필요합니다.
+- Emscripten 7.0.0 (`misc/scripts/emscripten-version`), GDScript·C# 공통. dlink 면 GDExtension 웹 빌드도 같은 버전
+- 위 템플릿은 GDScript용입니다. C# 웹 프로젝트는 아래의 별도 `.mono` 템플릿이 필요합니다.
 - dlink 없이 GDExtension: 템플릿을 `static_gdextensions=<이름>`으로 빌드 (목록: [misc/static_gdextensions.json](misc/static_gdextensions.json))
 
 ### C#(.NET) 웹 내보내기
@@ -309,6 +672,10 @@ git cherry-pick 4.7.2-stable..origin/main
 - 고도 메모리 최적화, 고도 성능 최적화, 고도 메모리 성능 최적화
 - 고도 웹 빌드 메모리, Godot WASM 메모리 부족, 고도 웹게임 용량 줄이기
 - 고도 SQLite 웹, GDExtension 웹 빌드, 고도 웹게임 광고 애드센스, 고도 사파리 아이폰 웹
+- 고도 웹 멀티스레드 오류 해결, 고도 웹 시작 오류, 고도 웹 스레드 dlink 오류
+- 고도 Emscripten 7, 고도 Emscripten 7.0.0 웹 템플릿, GDExtension Emscripten 7 재빌드
+- 고도 GDScript 사전 빌드, 고도 스크립트 미리 컴파일, GDScript 바이트코드 내보내기
+- 고도 C# 웹 Emscripten 7, 고도 C# 웹 링크 오류 _Unwind_CallPersonality
 - 고도 ARM64, 애플 실리콘 고도
 - 고도 엔진 한글 입력, Godot 한글 IME, 한글 입력 시 커서 안 움직임, 한글 씹힘, LineEdit·TextEdit 한글
 

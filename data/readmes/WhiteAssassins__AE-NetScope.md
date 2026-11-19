@@ -30,7 +30,7 @@ AE NetScope is in early public preview and is not production ready yet.
 
 Do not use it with sensitive production network data at this stage. APIs, database schema, permission boundaries, security controls, and deployment guidance may change before v1.0.
 
-Current prerelease notes are available in `RELEASE_NOTES_v0.3.3-alpha.md`. See `CHANGELOG.md` for release history. The latest stable release is `v0.3.0`.
+Current prerelease notes are available in `RELEASE_NOTES_v0.3.4-alpha.md`. See `CHANGELOG.md` for release history. The latest stable release is `v0.3.0`.
 
 ## Current Status
 
@@ -251,7 +251,7 @@ These Docker instructions describe the container installation path for local tes
 
 AE NetScope includes an early production-style container path. The public image serves the built Vite web app and FastAPI API from one HTTP port, starts with PostgreSQL and Redis, and runs Alembic migrations on startup.
 
-Version 0.3.3-alpha uses the prerelease channel. The latest stable release is 0.3.0. The project remains an early public preview; deployment validation and the precautions below still apply.
+Version 0.3.4-alpha uses the prerelease channel. The latest stable release is 0.3.0. The project remains an early public preview; deployment validation and the precautions below still apply.
 
 Use `compose.yaml` for local HTTP container testing. Running the image directly with `docker run` uses the image defaults and requires explicit environment variables for the target deployment. For real HTTPS production, set `APP_ENV=production`, `APP_URL=https://...`, `SESSION_COOKIE_SECURE=true`, and `SECURITY_HSTS_ENABLED=true`.
 
@@ -266,7 +266,7 @@ Before a pending startup migration runs, the container creates an AES-256-GCM en
 Public image:
 
 ```text
-ghcr.io/whiteassassins/ae-netscope:v0.3.3-alpha
+ghcr.io/whiteassassins/ae-netscope:v0.3.4-alpha
 ```
 
 From the project root:
@@ -313,6 +313,14 @@ http://127.0.0.1:8080/api/health/ready
 ```
 
 `/api/health/live` and `/api/health/ready` are intentionally minimal and public. Detailed database and Redis diagnostics under `/api/health/status` require an authenticated user.
+
+### Behind a Reverse Proxy
+
+When AE NetScope runs behind a reverse proxy such as Nginx Proxy Manager, Traefik, or Caddy, set `FORWARDED_ALLOW_IPS` to the address of the proxy as seen by the AE NetScope container, for example `FORWARDED_ALLOW_IPS=172.18.0.5` or a Docker network such as `172.18.0.0/16`. Without it, the app sees every request as coming from the proxy, so all users share the sign-in rate limits and sessions and audit records show the proxy address.
+
+- The default, `127.0.0.1`, trusts only a proxy on the same host or in the same container.
+- Never set `*` on a port that clients can reach directly, because any client could then choose the address recorded for its requests.
+- On TrueNAS SCALE, add `FORWARDED_ALLOW_IPS` as an additional environment variable of the app when you publish it through a reverse proxy. Direct access needs no change.
 
 ### Docker Smoke Checklist
 
@@ -406,7 +414,7 @@ The image creates a non-root `ae-netscope` user. Build args `AE_NETSCOPE_UID` an
 To build the image manually:
 
 ```bat
-docker build -t ghcr.io/whiteassassins/ae-netscope:v0.3.3-alpha .
+docker build -t ghcr.io/whiteassassins/ae-netscope:v0.3.4-alpha .
 ```
 
 Container images are published to GitHub Container Registry when a GitHub Release is published.

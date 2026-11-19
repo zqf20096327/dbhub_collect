@@ -25,5 +25,3 @@ A note on naming: mero is the Guarani word for melon.
 ### Contributing
 
 Pull requests are welcome! Feel free to contact me if you need help, or would like to know more about PureScript.
-
-See [CONTRIBUTING](CONTRIBUTING.md) for how to get started and [ARCHITECTURE](ARCHITECTURE.md) for a high level overview of the project.

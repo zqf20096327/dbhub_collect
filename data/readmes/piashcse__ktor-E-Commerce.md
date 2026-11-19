@@ -38,9 +38,13 @@
 
 ### 1. Role-Based Access Control
 
-- **Customer Role**: Shoppers with basic access to browse and make purchases.
-- **Seller Role**: Vendors can list products and manage their inventory.
-- **Admin Role**: Administrators have full control over the platform.
+- **Account Types**: Customer, Seller and Admin. `SUPER_ADMIN` is a legacy value mapped to the platform super-admin role.
+- **Database-Backed Roles**: Create custom roles, assign permission bundles and edit permissions without a deploy.
+- **Scoped Permissions**: Platform (`GLOBAL`) and shop (`SHOP`) roles using `resource:action` codes such as `order:manage`.
+- **Seller Staff**: Shop memberships, invitations and role-based staff access.
+- **Effective Permissions**: `GET /api/v1/me/permissions` exposes roles, memberships and resolved permissions.
+- **Least Privilege**: Admin route groups require explicit permissions; mixed customer/seller/admin routes guard admin access separately.
+- **Auditable Changes**: Role, permission and membership changes are audited and bump `authz_version` to invalidate cached permissions.
 
 ### 2. User Accounts and Authentication
 
@@ -59,7 +63,11 @@
 - **Shopping Cart**: Add and remove products, update quantities, and calculate totals.
 - **Checkout Summary**: Retrieve detailed checkout summary with subtotal, shipping, tax, and discount breakdown.
 - **Checkout**: Streamline the checkout process with consolidated shipping address and method selection.
-- **Stock Validation**: Automatic stock validation during checkout using effective inventory levels.
+- **Stock Validation**: Automatic stock validation during checkout using effective
+
+[...截断...]
+
+ inventory levels.
 - **Price Validation**: Order totals validated against database prices to prevent tampering.
 - **Cart Clearing**: Automatic cart clearing after successful order placement.
 
@@ -68,11 +76,7 @@
 - **Order Processing**: Handle order creation, status updates, and order history.
 - **Order Status History**: Comprehensive audit trail for every status transition (Placed, Confirmed, Shipped, etc.).
 - **Automatic Taxation**: Configurable tax calculation (default 5%) applied automatically during checkout.
-- **Order Cancellation**: Customers can cancel PENDING/CONFIRMED orders with aut
-
-[...截断...]
-
-omatic stock restoration.
+- **Order Cancellation**: Customers can cancel PENDING/CONFIRMED orders with automatic stock restoration.
 - **Seller Orders**: Sellers can view and manage orders from their shop.
 - **Admin Orders**: Admins can view all orders with advanced filters (status, date range).
 - **Human-Readable Order Numbers**: Date-prefixed order numbers in `ORD-YYYYMMDD-XXXX-XXXXXXXX` format (random suffix guarantees uniqueness under concurrency).
@@ -129,19 +133,4 @@ omatic stock restoration.
 
 - **Ktlint**: Automated Kotlin linting to ensure consistent code style.
 - **Detekt**: Static code analysis for finding potential bugs and code smells.
-- **Pre-commit Hooks**: Enforce quality standards before code is even committed.
-
-### 13. Testing & Coverage
-
-- **Unit + route tests**: `./gradlew test` (no database required)
-- **PostgreSQL integration tests**: Flyway migrations, repositories, order/payment/refund/payout
-  lifecycles and concurrency guards
-- **Coverage gate**: JaCoCo overall + per-package rules; CI enforces the integration-backed target
-- **Current baseline**: 430 tests, **54.3% instruction / 25.7% branch / 59.3% line**
-
-```bash
-./gradlew test jacocoTestReport
-# report: build/reports/jacoco/test/html/index.html
-```
-
-See [Testing & Coverage](docs/test
+- **Pre-commit Hooks*

@@ -26,6 +26,42 @@ reactor; its connections run as cooperative fibers, not individual OS threads.
 remain synchronous; see [network architecture](docs/internals/network_architecture.md)
 for ownership, copying, cancellation, and platform requirements.
 
+Storage uses `Memory -> Fabric -> Shard`. Fabric hashes keys onto
+`.memory.shard_count` shards (default 16); each shard owns a separate heap,
+map, and reader/writer lock. `.memory.default_capacity` (default 64) is the
+initial number of entries per shard. The shard count must be positive and
+is fixed for the lifetime of the store.
+
+`.memory.limit` limits live requested bytes across all shards, including
+map capacities but excluding allocator metadata. Zero falls back to the legacy
+`.max_memory`; both default to zero (unlimited). As before, writes are rejected
+once the current usage reaches the limit, so an accepted write can exceed it.
+AOF recovery temporarily bypasses the limit to replay historical writes without
+dropping data. The limit applies again to new writes after recovery.
+COPY and RENAME lock both shards in index order and copy data into the
+destination's allocator before committing. FLUSH, key enumeration, snapshots,
+and AOF rewrites coordinate all shards for a consistent view. Iterators hold
+shared shard locks and must be released with `deinit()`, even on early exit.
+
+### Operational settings
+
+- `.network.idle_timeout_ms` limits the wait for incoming bytes (and for a TLS
+  handshake). `.network.request_timeout_ms` limits how long an incomplete frame
+  can take to arrive, even if the client keeps sending fragments. `0` disables
+  either timeout.
+- `.network.max_pending_response_bytes` flushes queued replies before processing
+  more pipelined requests. `0` disables the threshold. A single reply may exceed
+  it; it is not a hard cap on response size or allocated capacity.
+- `.snapshot.path` defaults to `./persist`. `.snapshot.interval_secs = 0` leaves
+  snapshots manual (`SAVE`); a positive value schedules periodic saves.
+  `.snapshot.keep_last = 0` keeps all files; a positive value keeps the newest
+  timestamped snapshots after a successful save. Use a dedicated directory.
+  If automatic snapshots and AOF are both enabled, startup replays **only
+  the AOF**; snapshots are backups and are not an automatic fallback for a
+  missing journal. Disable AOF to start from a snapshot.
+- `.log.level` filters operational messages (`.debug`, `.info`, `.warning`,
+  `.@"error"`). `log_network_payloads` separately controls payload logs.
+
 ## Usage
 While `zcached` lacks a CLI, you can utilize nc (netcat) from the terminal to send commands to the server.
 
@@ -57,16 +93,31 @@ Returns `PONG`. This command is often used to test if a connection is still aliv
 echo "*1\r\n\$4\r\nPING\r\n\x03" | netcat -N localhost 7556
 ```
 
+#### Key expiration
+
+Use `SET key value EX 60` for a 60-second lifetime or `SET key value PX 500`
+for 500 ms. For an existing key, use `EXPIRE key 60` to set its lifetime,
+`TTL key` to read the remaining seconds, or `PERSIST key` to remove its expiry.
+`TTL` returns `-1` for a key without expiry and `-2` for a missing or expired
+key. Expiration deadlines survive snapshot and AOF restores.
+
 ## Running Tests
+Test cases live under [`src/tests/`](src/tests/), grouped by subsystem and
+kept separate from implementation files.
+
 Run the tests using `zig` in the root directory of the project:
 ```bash
 zig build test
 ```
-This prints individual test results and a final summary. A failing test makes the
-command exit with a non-zero status.
+This runs the server, native I/O, benchmark, and profiler tests in one suite
+with a single final summary. A failing test makes the command exit with a
+non-zero status. Use `zig build test-io` to run only the native I/O tests.
 Test-runner arguments can be passed after `--`, for example
 `zig build test -- --seed=0x1234`. Zig 0.17's build run steps forward these
 arguments directly.
+
+Run `zig build e2e` to exercise the wire protocol on port 7556 over plaintext
+and TLS, including key expiry and snapshot/AOF recovery across server restarts.
 
 ## Benchmark
 
@@ -145,7 +196,7 @@ not full wire traffic or memory bandwidth. Protocol/key overhead is excluded.
 For pipelining, compare throughput and batch tail latency together.
 
 For a heavier matrix, use the dedicated 8-worker RAM instance described above
-with `.log_network_payloads = false` and `.max_memory = 0`:
+with `.log_network_payloads = false` and `.memory = .{ .limit = 0 }`:
 
 ```bash
 for size in 20 1024 16384; do
@@ -161,11 +212,55 @@ Repeat the matrix at least three times, varying order, and compare medians.
 The load generator runs on the same host and competes with the server for CPU;
 this measures local end-to-end capacity, not isolated server capacity.
 
+### Profiling on macOS
+
+[tools/profile.zig](tools/profile.zig) runs the benchmark together with
+Apple Instruments **Time Profiler**. It requires macOS and Xcode with a working
+`xcrun xctrace` (check with `xcrun xctrace list templates`).
+
+```bash
+zig build profile -Doptimize=ReleaseFast -- --duration 30 --clients 32 --requests 2000000 --pipeline 64 --value-size 20
+```
+
+The build step compiles the server, benchmark, and profiling tool before
+recording. The tool starts its own isolated RAM server: 8 workers by default,
+an automatically selected localhost port, unlimited memory, TLS off, payload
+logging off, and AOF `.no`. It waits for server readiness, attaches to that
+server's PID, and waits for the profiler's Darwin recording-start notification
+before launching the benchmark. It never attaches to an existing server.
+
+Results are retained in a new `zig-out/profile-<timestamp>/` directory:
+
+- `profile.trace`: open with `open /path/to/profile.trace` in Instruments.
+- `benchmark.txt`: throughput and whole-batch latency results.
+- `profiler.log`, `server.log`, `server-output.log`: diagnostic logs.
+- `config.zon`: the generated server configuration.
+
+After both profiling and benchmarking finish successfully, the profiler
+automatically opens `profile.trace` in Instruments.
+
+Use `--output /path/to/new-directory` to choose another destination; existing
+directories are rejected, not overwritten. `--workers` and `--port` override
+server settings; an occupied port fails without stopping its existing owner.
+`--timeout` sets the whole-run deadline in seconds (default 600, must exceed
+`--duration`). Run `zig build profile -- --help` for all options.
+The tool cleans up only its own child processes on completion, failure,
+timeout, or handled SIGINT/SIGTERM; diagnostic files are retained.
+
+`--duration` controls recording time, not benchmark duration. The tool waits
+for both to finish; short workloads can leave an idle recording tail, while
+long workloads can continue after profiling stops. The benchmark runs GET,
+SET, then mixed: select the corresponding active time interval in Instruments
+rather than treating the entire trace as a GET-only profile. In Call Tree,
+enable **Separate by Thread** and **Invert Call Tree**; initially leave system
+libraries visible to see `recvmsg`, `sendmsg`, and `kevent`. Profiler overhead
+can affect throughput, so compare clean benchmark runs separately.
+
 ### Pipelining stress results
 
 Measured on 2026-11-16, Apple M2 (8 cores, 24 GiB), macOS 27.0.1,
 Zig 0.17.1, ReleaseFast client/server, localhost TCP, 8 server workers,
-TLS off, payload logging off, `.max_memory = 0`, AOF `.no`.
+TLS off, payload logging off, `.memory = .{ .limit = 0 }`, AOF `.no`.
 Each client used a separate key and 20,000 requests per workload.
 The tables show medians of three runs per configuration; the main matrix
 order was shuffled with seed 95617. A 2,000-request-per-client warmup at
@@ -314,9 +409,8 @@ are reset after each request. Network reads copy storage values under the read
 lock before encoding, so concurrent mutations cannot invalidate their payloads.
 ReleaseFast/ReleaseSmall use Zig's SMP allocator; Debug/ReleaseSafe retain debug
 allocation and leak checks.
-When `.max_memory = 0` (unlimited), storage uses the base allocator directly,
-without allocation tracking or the tracing allocator's mutex. A nonzero limit
-enables allocation tracking and the existing memory-limit checks.
+With no memory limit, writes skip Fabric's limit check and its mutex. Each
+shard still uses its own allocator.
 
 ## Documentation
 - For release history, see the [release_history.md](docs/release_history.md)

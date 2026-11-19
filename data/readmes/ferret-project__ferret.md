@@ -8,6 +8,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7c4a2d" alt="MIT license"></a>
   <a href="https://hub.docker.com/r/ferretproject/ferret"><img src="https://img.shields.io/docker/pulls/ferretproject/ferret?label=docker&color=7c4a2d&logo=docker&logoColor=white" alt="Docker image"></a>
   <a href="https://discord.gg/XSkKyP2pdg"><img src="https://img.shields.io/badge/chat-Discord-7c4a2d?logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://buymeacoffee.com/ferretproject"><img src="https://img.shields.io/badge/support-Buy%20me%20a%20coffee-7c4a2d?logo=buymeacoffee&logoColor=white" alt="Buy me a coffee"></a>
   <a href="https://glama.ai/mcp/servers/ferret-project/ferret"><img src="https://glama.ai/mcp/servers/ferret-project/ferret/badges/score.svg" alt="Ferret MCP server – quality and maintenance score on Glama"></a>
 </p>
 
@@ -195,6 +196,13 @@ by the people who use Ferret, on [Weblate](https://hosted.weblate.org/projects/f
 To make text translatable, wrap it with Lingui's macros: `` t`Add to cart` `` (`@lingui/core/macro`) or
 `<Trans>Add to cart</Trans>` (`@lingui/react/macro`). Write the English only; `pnpm test` fails on text that isn't
 wrapped, and CI sends the new text to the translations repository by itself. More in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Support Ferret
+
+Ferret is free and open source, and every feature is in the app you run yourself. If it helps you keep track of your
+things, you can buy the project a coffee. Starring the repository and telling a friend help too.
+
+<a href="https://buymeacoffee.com/ferretproject"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="48" alt="Buy me a coffee"></a>
 
 ## License
 

@@ -15,7 +15,7 @@ development.
 [![Latest build](https://img.shields.io/github/v/release/MuaraAI/FluxCode?display_name=tag&label=latest%20build)](https://github.com/MuaraAI/FluxCode/releases/latest)
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
 
-<a href="assets/screenshots/agent-workspace.png"><img src="assets/screenshots/agent-workspace.png" width="100%" alt="The agent filling the window: saved chats on the left, the conversation in the middle, the files it changed on the right, as floating glass columns over the ocean background."></a>
+<a href="assets/screenshots/agent-workspace.png"><img src="assets/screenshots/hero.jpg" width="100%" alt="A 16 MB code editor with AI agents built in: the title over a dusk sky, and below it FluxCode with the agent filling the window, rising out of a bank of clouds. Saved chats on the left, the conversation in the middle, the files it changed on the right."></a>
 
 The agent's full-screen workspace: your chats on the left, the conversation in the middle
 and the files it changed on the right, each a floating glass column over an animated

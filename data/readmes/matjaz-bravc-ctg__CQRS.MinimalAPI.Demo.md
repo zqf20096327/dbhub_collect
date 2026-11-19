@@ -26,10 +26,45 @@ It’s easier to ensure that only the right domain entities are performing write
 Application queries can avoid complex joins by storing a materialized view in the read database.
 
 # Implementation
-This simple demo is based on the use of **Minimal API** pattern, using the **MediatR** library, **SQLite** database and **EFCore7** as an ORM framework.
+This simple demo is based on the use of **Minimal API** pattern, using the **MediatR** library, **SQLite** database and **Entity Framework Core 10** as an ORM framework.
 **Minimal API** is the simple way to build small microservices and HTTP APIs in ASP.NET Core. It hooks into ASP.NET Core's hosting and routing capabilities and allow you to build fully functioning APIs with just a few lines of code.  
  
 **Note: this does not replace building APIs with MVC, if you are building complex APIs or prefer MVC, you can keep using it as you always have.**
+
+## How a request flows
+1. An **endpoint** (`Endpoints/Students/<Operation>/Endpoint.cs`) receives the HTTP request. Request bodies (`CreateStudentRequest`, `UpdateStudentRequest`) are validated from their data annotations by the built-in Minimal API validation (`AddValidation()`) before the endpoint runs; invalid requests get a `400` with the errors per field.
+2. The endpoint sends a **command** or **query** (`Mediator/Commands`, `Mediator/Queries`) through MediatR's `ISender`.
+3. Its **handler** (`Mediator/Handlers`) works with the EF Core `DataContext` directly:
+   - **command handlers** change data through tracked `Student` entities (the write model);
+   - **query handlers** read without change tracking and project straight into `StudentResponse` (the read model).
+4. The endpoint returns a typed result (`200`, `404`, ...). Errors are returned as RFC 9457 problem details, never with exception details.
+
+The SQLite database (`Data/Students.db`) is not part of the repository: it is created, migrated and seeded with five demo students when the application starts.
+
+## Endpoints
+| Method | Route | Result |
+|--------|-------|--------|
+| `GET` | `/student/get-all` | All students, ordered by name |
+| `GET` | `/student/get-by-id?id=1` | The student, or `404` |
+| `GET` | `/student/get-by-name?name=Alan%20Ford` | All students with that name (names are not unique), or `404` |
+| `POST` | `/student/create` | The created student, or `400` with validation errors |
+| `PUT` | `/student/update` | The updated student, `400` with validation errors, or `404` |
+| `DELETE` | `/student/delete?id=1` | `200`, or `404` |
+| `GET` | `/health` | `Healthy` when the database is reachable |
+
+`/` redirects to the Swagger UI.
+
+## Running
+```bash
+dotnet run --project src/CQRS.MinimalAPI.Demo
+```
+Then open http://localhost:5182.
+
+## Testing
+```bash
+dotnet test --solution CQRS.MinimalAPI.Demo.sln
+```
+The tests (xUnit v3) run the real API in memory with `WebApplicationFactory`, each test class on its own temporary SQLite database. They cover every endpoint, validation, error responses, and check that the EF Core migrations match the model.
 
 # Summary
 At the end, we split the responsibility into **Command** and **Query**, and we use an **ORM** (Entity Framework Core) for the **Command** side. To improve the benefits, we can synchronize the data into a **NoSQL** database to be consumed from the read side and implement **Event Sourcing**.
@@ -37,14 +72,15 @@ At the end, we split the responsibility into **Command** and **Query**, and we u
 
 Enjoy!
 
-- [Visual Studio](https://www.visualstudio.com/vs/community) 2022 17.2.6 or greater
-- [.NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
+## Prerequisites
+- [Visual Studio](https://visualstudio.microsoft.com/vs/) 2026 or greater (or any editor with the .NET SDK)
+- [.NET SDK 10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
 
 ## Tags & Technologies
-- [.NET 8](https://github.com/dotnet/core/blob/main/release-notes/8.0)
+- [.NET 10](https://github.com/dotnet/core/blob/main/release-notes/10.0)
 - [SQLite](https://sqlite.org/index.html)
-- [MediatR](https://github.com/jbogard/MediatR)
-- [Entity Framework Core 8.x](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/whatsnew)
+- [MediatR](https://github.com/jbogard/MediatR) 12.x (the last Apache-2.0 release line)
+- [Entity Framework Core 10](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-10.0/whatsnew)
 
 ## Licence
 Licenced under [MIT](http://opensource.org/licenses/mit-license.php).

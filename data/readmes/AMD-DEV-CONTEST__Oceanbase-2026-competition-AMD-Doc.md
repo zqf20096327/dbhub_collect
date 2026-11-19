@@ -154,6 +154,12 @@ git merge-base --is-ancestor 634888d9b037153fa143d2c913ba4b25503e1d62 HEAD
 
 请访问 [AMD 提测系统进度查询](https://zzstar101.github.io/oceanbase-live-board/)。
 
+### 新版 AMD 开发者计划页面中，Radeon Cloud 入口在哪里？
+
+登录 [AMD 开发者计划](https://developer.amd.com.cn/login?source=0u9Eqno7R) 后，展开顶部导航栏的「开发空间」，选择「Radeon Cloud」进入算力平台。
+
+![新版 AMD 开发者计划页面中的 Radeon Cloud 入口](assets/new_ui.png)
+
 ### 首次启动时出现资源池或模板分配提示，怎么办？
 
 请先确认已完成注册、验证和登记，等待约 30–60 分钟后，刷新页面检查 Credits。若仍未到账或无法启动，请通过下方收集表提交完整报错截图。其他启动报错不一定属于正常等待，请勿反复创建实例。

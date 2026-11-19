@@ -179,19 +179,21 @@ Every entity in `.codeexplorer/graph.db` belongs to a 5-layer schema (interactiv
   </a>
 </p>
 
-Tree-sitter grammars, SQL/HCL parsers, and framework analyzers extract architectural semantics across 10 ecosystems (see [code-explorer.app/architectures](https://code-explorer.app/architectures)):
+Tree-sitter grammars, SQL/HCL parsers, and framework analyzers extract architectural semantics across 12 ecosystems (see [code-explorer.app/architectures](https://code-explorer.app/architectures)):
 
 | Language | Maturity | Files & Manifests | Representative Frameworks & Semantics |
 | :--- | :--- | :--- | :--- |
 | **C# / .NET** | Stable | `.cs`, `.csproj`, `.sln`, `.slnx` | ASP.NET Core, Minimal APIs, gRPC, HttpClient, EF Core, Dapper, MassTransit, Wolverine, Hangfire, MediatR |
-| **TypeScript / JS** | Stable | `.ts`, `.tsx`, `.js`, `.jsx`, `package.json` | NestJS (REST, GraphQL, DI), Next.js, Express, Fastify, Hono, tRPC, Prisma, TypeORM, Kysely, BullMQ |
+| **TypeScript / JS** | Stable | `.ts`, `.tsx`, `.js`, `.jsx`, `package.json` | NestJS (REST, GraphQL, DI, `@Module` cycles), Next.js, Express, Fastify, Hono, tRPC, Prisma, TypeORM, Kysely, BullMQ |
 | **Go** | Stable | `.go`, `go.mod` | Gin, Fiber, Echo, `net/http`, gRPC, Watermill, Asynq, Kafka-Go, GORM, `sqlx`, `sqlc`, Ent |
 | **Java** | Stable | `.java`, `pom.xml`, `build.gradle` | Spring Boot/Cloud, Quarkus, Micronaut, Dubbo, Kafka, JPA/Hibernate, MyBatis, jOOQ, OpenFeign |
 | **Kotlin & Android** | Stable | `.kt`, `.kts`, `AndroidManifest.xml` | Spring, Ktor, Exposed, Room, SQLDelight, Coroutines, Retrofit/OkHttp, Hilt/Koin, Jetpack Compose |
 | **Python** | Stable | `.py`, `pyproject.toml`, `requirements.txt` | FastAPI, Litestar, Django, Flask, SQLAlchemy, Celery, Dramatiq, FastStream, Temporal |
 | **Rust** | Stable | `.rs`, `Cargo.toml` | Axum, Actix Web, Tonic gRPC, Reqwest, SQLx, SeaORM, Diesel, Tokio |
+| **PHP** | Stable | `.php`, `.phtml`, `.inc`, `composer.json` | Symfony, Zend Framework 1 (PSR-0 & PSR-4), Kirby CMS, Doctrine ORM/DBAL, Nette Database, PDO, Smarty/Twig, PHP 8 upgrade risk markers |
+| **Perl** | Stable | `.pl`, `.pm`, `.t`, `cpanfile`, `Makefile.PL` | Packages, cron/CLI entrypoints, `DBI` SQL & heredoc lineage, `Switch`, `LWP::UserAgent`, `Mail::Sendmail` |
 | **SQL** | Stable | `.sql` & embedded SQL strings | PostgreSQL, T-SQL, MySQL, SQLite, ClickHouse, BigQuery DDL & `READS_FROM` / `WRITES_TO` lineage |
-| **Terraform / HCL** | Stable | `.tf`, `.tfvars` | Resources, modules, variables, data sources, outputs, provider & infrastructure links |
+| **Terraform / HCL** | Stable | `.tf`, `.tfvars`, `terragrunt.hcl` | Resources, modules, variables, data sources, outputs, Terragrunt hierarchy, provider & infrastructure links |
 | **ColdFusion** | Beta | `.cfc`, `.cfm` | Components, functions, `cfquery` SQL lineage, outbound HTTP calls |
 
 ---
@@ -203,6 +205,7 @@ Reproducible benchmarks across brownfield feature tasks, multi-hop architectural
 <!-- BEGIN:md.root_summary_table -->
 | Case Study | Codebase | Baseline | Speed & Tokens | Recall & Governance |
 | :--- | :--- | :--- | :--- | :--- |
+| **[Case 09: Zero-Spoiler Coding Suite](./benchmarks/09-zero-spoiler-context-pack-vs-bare-agent/README.md)** | `twentyhq/twenty` (`36.5k` files, TS/NestJS) | `ripgrep` + `read_file` | **`1.43×` faster** (`19m 38s` vs `28m 02s`) · **`2.24×` fewer tokens** (`3.08M` vs `6.90M`) | **`15/15` Jest specs & `21/21` SIG gates** (`55` vs `104` file reads; `20` vs `41` cmds) |
 | **[Case 08: 4-Task Feature Suite](./benchmarks/08-multi-task-architecture-suite-on-twenty/README.md)** | `twentyhq/twenty` (`24.5k` files, TS/NestJS) | `CBM` | **`1.29×` faster** (`34m 14s` vs `44m 6s`) · `9.75M` vs `10.03M` tokens | **`0/4` vs `4/4` violated tasks** (`14/14` unit tests pass; gates caught & fixed `4/4` copied legacy leaks) |
 | **[Case 01: Monorepo Deep Audit](./benchmarks/01-agent-audit-ce-vs-cbm-on-twenty/README.md)** | `twentyhq/twenty` (`24.5k` files, TS/NestJS) | `CBM` | **`6.0×` faster** (`1m 33s` vs `9m 15s`) · **`7.0×` fewer tokens** (`242K` vs `1.68M`) | **`100%` vs `3.4%` native graph recall** (`381/381` from `graph.db`, `0` file reads) |
 | **[Case 02: 324-Service Audit](./benchmarks/02-enterprise-microservices-deep-audit/README.md)** | Multi-Repo (`324` services, `13.8k` files) | `ripgrep` + Python | **`7.00×` faster** (`4m 16s` vs `29m 52s`) · **`25.07×` fewer tokens** (`686K` vs `17.19M`) | **`100%` vs `82%` recall** (`18` vs `285` turns; `rg` missed `9` services) |

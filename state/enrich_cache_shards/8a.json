@@ -4,7 +4,7 @@
   "commit_90d": 177,
   "rel_ver": "v3.2.1",
   "rel_pub": "2026-05-15",
-  "rel_days": 186,
+  "rel_days": 187,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -15,7 +15,7 @@
    "GHSA-mhcv-h7gf-57cf(CVE-2026-8467,critical)"
   ],
   "contrib_n": 111,
-  "enriched_at": "20261117",
+  "enriched_at": "20261118",
   "lang": {
    "Elixir": 80,
    "TypeScript": 14,
@@ -26,7 +26,7 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261117",
-   "release": "20261117",
+   "release": "20261118",
    "security": "20261114"
   },
   "rel_notes": [
@@ -47,14 +47,14 @@
    }
   ],
   "etag": {
-   "release": "W/\"7c016e61be600ba53b87da22e26f2d5b9b0bcb1e130966662c3bea91619c1536\"",
+   "release": "W/\"99d27ed5907536aeaf0ba3f091c29f4124255b0a9ae1357147cdf6f485a9afa6\"",
    "security": "W/\"c193b44b017f0b365a5cabbada8b99a71106e794c373e81178fa0d1878167c15\""
   },
   "rel_dates": []
  },
  "dhax/go-base": {
   "commit_90d": 4,
-  "commit_7d": 3,
+  "commit_7d": 1,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 2,
@@ -70,22 +70,24 @@
    "HTML": 2,
    "Dockerfile": 1
   },
-  "enriched_at": "20261114",
+  "enriched_at": "20261119",
   "dim_ts": {
    "security": "20261114",
-   "commit": "20261104",
-   "release": "20261104"
+   "commit": "20261119",
+   "release": "20261119"
   },
   "etag": {
-   "security": "W/\"bad5009bdb8eef3daded907acc26e6e371292d2a1f7602b82be4c11d4b8c5736\""
-  }
+   "security": "W/\"bad5009bdb8eef3daded907acc26e6e371292d2a1f7602b82be4c11d4b8c5736\"",
+   "release": "\"3d7a2811ccf01dc15e3300f73eb934b5d4743e21a0d2d050c125dadf550233e6\""
+  },
+  "rel_dates": []
  },
  "manami-project/anime-offline-database": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "latest",
   "rel_pub": "2025-06-20",
-  "rel_days": 515,
+  "rel_days": 516,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -135,7 +137,7 @@
   "commit_7d": 0,
   "rel_ver": "tag_v3",
   "rel_pub": "2021-07-26",
-  "rel_days": 1940,
+  "rel_days": 1941,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -156,7 +158,7 @@
   "commit_7d": 0,
   "rel_ver": "2.0.0",
   "rel_pub": "2021-05-08",
-  "rel_days": 2019,
+  "rel_days": 2020,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -186,7 +188,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2017-10-21",
-  "rel_days": 3314,
+  "rel_days": 3315,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -269,7 +271,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.28.0",
   "rel_pub": "2026-07-27",
-  "rel_days": 113,
+  "rel_days": 114,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -314,7 +316,7 @@
   "commit_7d": 0,
   "rel_ver": "0.9.0",
   "rel_pub": "2021-06-01",
-  "rel_days": 1995,
+  "rel_days": 1996,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -350,7 +352,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.8.8",
   "rel_pub": "2026-10-23",
-  "rel_days": 25,
+  "rel_days": 27,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -366,11 +368,42 @@
    "Lex": 4,
    "M4": 3
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261119",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261119",
+   "release": "20261119"
+  },
+  "etag": {
+   "release": "W/\"0efb59a3781189fe15fe5b3a6861b51c741cdabb96ec195d03748c10434d689f\""
+  },
+  "rel_dates": [
+   "2026-10-23",
+   "2026-10-04",
+   "2026-09-24",
+   "2026-09-23"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.8.8",
+    "d": "2026-10-23",
+    "n": "- Dumps made with `mariadb-dump --skip-create-options` (also part of `--skip-opt`) were rejected with a parsing error: table definitions ending with `);`, without `ENGINE=...`, are now accepted (#68).\n- With multi-line INSERT statements, every INSERT after the first one of a table was copied without anonymization. `mariadb-dump` writes multi-line INSERTs and splits big tables (about 1 MB) into several statements, so most of a big table could be left as is. The C version was not affected. If you use the Rust"
+   },
+   {
+    "t": "v0.8.7",
+    "d": "2026-10-04",
+    "n": "- `INSERT IGNORE` written with a single space, as dumped by MySQL 9.3+ and MariaDB, was not anonymized. Thanks to @yblake for the report (#62).\n- `INSERT DELAYED`, as dumped by MariaDB with `--delayed-insert`, was not anonymized (#62)."
+   },
+   {
+    "t": "v0.8.6",
+    "d": "2026-09-24",
+    "n": "## Bug fixes\n\n- Values longer than 65535 characters returned by a pydef were truncated. Thanks to @gross-nvs (#59).\n- JSON string values longer than 1026 characters were truncated (#60).\n- A pydef in a JSON path returning a long value could crash myanon (#60).\n- Fixed a memory leak on malformed JSON values (#60).\n\n## Rust port\n\n- Non-ASCII characters in JSON values were double-encoded (e.g. \"José\" became \"JosÃ©\"), and hashes of such values differed from the C version.\n- pydef is now supported in JSON pat"
+   },
+   {
+    "t": "v0.8.5",
+    "d": "2026-09-23",
+    "n": "Both are reachable from an untrusted `mysqldump` fed to myanon:\n- Fix a global buffer overflow when a table name reaches the maximum MySQL identifier length in the dump scanner."
+   }
+  ]
  },
  "fportantier/vulpy": {
   "commit_90d": 0,
@@ -396,7 +429,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2014-05-16",
-  "rel_days": 4568,
+  "rel_days": 4569,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -435,7 +468,7 @@
  "agriya/burrow": {
   "rel_ver": "v1.0b1",
   "rel_pub": "2018-05-29",
-  "rel_days": 3094,
+  "rel_days": 3095,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -456,7 +489,7 @@
  "utPLSQL/utPLSQL-SQLDeveloper": {
   "rel_ver": "v2.0.1",
   "rel_pub": "2026-06-16",
-  "rel_days": 154,
+  "rel_days": 155,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -561,7 +594,7 @@
  "jojje/imdb-sqlite": {
   "rel_ver": "2.1.0",
   "rel_pub": "2026-02-05",
-  "rel_days": 285,
+  "rel_days": 286,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -596,7 +629,7 @@
  "midagedev/gadak": {
   "rel_ver": "v0.24.0",
   "rel_pub": "2026-09-18",
-  "rel_days": 60,
+  "rel_days": 61,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -617,7 +650,7 @@
  "dev-cloverlab/carpenter": {
   "rel_ver": "v0.6.0",
   "rel_pub": "2018-07-05",
-  "rel_days": 3057,
+  "rel_days": 3058,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -635,7 +668,7 @@
  "nyx-sec/nyx": {
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-08-13",
-  "rel_days": 96,
+  "rel_days": 97,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -670,7 +703,7 @@
  "tornede/py_experimenter": {
   "rel_ver": "v1.4.2",
   "rel_pub": "2024-06-13",
-  "rel_days": 887,
+  "rel_days": 888,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -703,7 +736,7 @@
  "eurostat/restatapi": {
   "rel_ver": "0.25.0",
   "rel_pub": "2026-03-30",
-  "rel_days": 232,
+  "rel_days": 233,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -749,7 +782,7 @@
  "PgOutput2Json/PgOutput2Json": {
   "rel_ver": "v2.0.0-rc.1",
   "rel_pub": "2026-09-15",
-  "rel_days": 63,
+  "rel_days": 64,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -798,7 +831,7 @@
  "bcgov/quickstart-openshift": {
   "rel_ver": "v3.0.0",
   "rel_pub": "2026-05-15",
-  "rel_days": 186,
+  "rel_days": 187,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -852,7 +885,7 @@
  "thorstenfoltz/octa": {
   "rel_ver": "0.20.0",
   "rel_pub": "2026-09-27",
-  "rel_days": 51,
+  "rel_days": 52,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -873,7 +906,7 @@
  "jdrumgoole/pymongo-transactions": {
   "rel_ver": "V1.3.1-2-Aug-2018",
   "rel_pub": "2018-08-02",
-  "rel_days": 3029,
+  "rel_days": 3030,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -952,7 +985,7 @@
  "Taiizor/Valir": {
   "rel_ver": "v0.1.3",
   "rel_pub": "2026-03-03",
-  "rel_days": 259,
+  "rel_days": 260,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -999,7 +1032,7 @@
  "Keyoku-ai/keyoku-engine": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-06-13",
-  "rel_days": 157,
+  "rel_days": 158,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1034,7 +1067,7 @@
  "garutilorenzo/mysql-ha-docker": {
   "rel_ver": "v1.0",
   "rel_pub": "2021-10-13",
-  "rel_days": 1861,
+  "rel_days": 1862,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1052,7 +1085,7 @@
  "turbot/steampipe-plugin-prometheus": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2025-10-13",
-  "rel_days": 400,
+  "rel_days": 401,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1222,7 +1255,7 @@
  "marcizhu/Cereal": {
   "rel_ver": "v1.2.1",
   "rel_pub": "2019-03-02",
-  "rel_days": 2817,
+  "rel_days": 2818,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1257,7 +1290,7 @@
  "tushar2704/Everyday_Python": {
   "rel_ver": "v1.1",
   "rel_pub": "2024-03-03",
-  "rel_days": 989,
+  "rel_days": 990,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1289,7 +1322,7 @@
  "StratoKit/strato-db": {
   "rel_ver": "v3.11.1",
   "rel_pub": "2026-02-17",
-  "rel_days": 273,
+  "rel_days": 274,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1351,7 +1384,7 @@
  "OrleansContrib/Orleans.StorageProviders.SimpleSQLServerStorage": {
   "rel_ver": "1.5.15",
   "rel_pub": "2018-01-25",
-  "rel_days": 3218,
+  "rel_days": 3219,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1368,7 +1401,7 @@
  "gh0st-work/python_redis_orm": {
   "rel_ver": "v0.4.2",
   "rel_pub": "2021-09-17",
-  "rel_days": 1887,
+  "rel_days": 1888,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1399,7 +1432,7 @@
  "dmolik/julius": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2024-03-17",
-  "rel_days": 975,
+  "rel_days": 976,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1461,7 +1494,7 @@
  "thecodemonkey86/qt_oci_driver": {
   "rel_ver": "qoci_driver_6.7.2",
   "rel_pub": "2024-06-23",
-  "rel_days": 877,
+  "rel_days": 878,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1597,7 +1630,7 @@
  "viets-software-club/truffle-ai": {
   "rel_ver": "v0.0.26",
   "rel_pub": "2024-06-20",
-  "rel_days": 880,
+  "rel_days": 881,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1649,7 +1682,7 @@
  "TaskerIt/BetWaves": {
   "rel_ver": "v1.1",
   "rel_pub": "2019-11-15",
-  "rel_days": 2559,
+  "rel_days": 2560,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1684,7 +1717,7 @@
  "albar965/navdatareader": {
   "rel_ver": "v1.2.4",
   "rel_pub": "2025-11-20",
-  "rel_days": 362,
+  "rel_days": 363,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1710,7 +1743,7 @@
  "smashdata/ThePlayerDatabase": {
   "rel_ver": "v2024.06.23",
   "rel_pub": "2024-06-24",
-  "rel_days": 876,
+  "rel_days": 877,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1884,7 +1917,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.2",
   "rel_pub": "2026-08-27",
-  "rel_days": 82,
+  "rel_days": 83,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -2709,7 +2742,7 @@
  "IvanSytnik/Universal-Media-Downloader": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-21",
-  "rel_days": 27,
+  "rel_days": 28,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2756,7 +2789,7 @@
  "caspianchan31/openmuse-standalone": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-11",
-  "rel_days": 37,
+  "rel_days": 38,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2826,7 +2859,7 @@
  "cardleforall/cardlakeforall": {
   "rel_ver": "v2026.11.01",
   "rel_pub": "2026-11-01",
-  "rel_days": 16,
+  "rel_days": 17,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2887,7 +2920,7 @@
   },
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-11-13",
-  "rel_days": 4,
+  "rel_days": 5,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,

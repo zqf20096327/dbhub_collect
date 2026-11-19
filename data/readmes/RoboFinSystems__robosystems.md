@@ -2,7 +2,7 @@
 
 **Finance AI that ties to the books.** RoboSystems is an open-source knowledge graph that gives your AI agents your general ledger and public companies' filings as structured, traceable data, on your infrastructure, with the model you choose.
 
-Three kinds of graph on one platform: your ledger, the public filings, and graphs you model yourself, from your own schema, loaded from Parquet and queried with Cypher. One ontology underneath: the RoboSystems graph model, labelled in XBRL's standard terms wherever XBRL has one. Every graph runs on it in LadybugDB, and reports leave as a holon (RDF), XBRL 2.1 or Tavi. Subgraphs give your AI a workspace it extends over MCP, and semantic memory carries its work between sessions.
+Three kinds of graph on one platform. Your ledger and the public filings share the RoboSystems ontology, labelled in XBRL's standard terms wherever XBRL has one, so your numbers and a public company's line up. Graphs you model yourself take your own schema instead: define it, load it from Parquet, query it with Cypher. All three run on LadybugDB. Ledger reports use rs-gaap, the RoboSystems reporting taxonomy, and leave as XBRL 2.1 or a holon (RDF). Subgraphs give your AI a workspace it extends over MCP, and semantic memory carries its work between sessions.
 
 [RoboLedger](https://roboledger.ai), the general ledger built on it, is in [roboledger-app](https://github.com/RoboFinSystems/roboledger-app): a full accounting system in its own right, every number traced to the entry. Our own companies' books are kept on it. [RoboInvestor](https://roboinvestor.ai) runs on it too: equity research on public companies, your fund's positions with their terms, and the reports your portfolio companies share from RoboLedger.
 
@@ -10,14 +10,14 @@ Built by an inactive CPA and ex-Workiva knowledge engineer. Open source (Apache 
 
 **Run it yourself:** [on one server](https://robosystems.ai/docs/technical/self-hosting-on-a-server) · [in your AWS account](https://robosystems.ai/docs/technical/bootstrap-guide) · [with open-weight models](https://robosystems.ai/docs/technical/self-hosted-ai-models). Or let us run it: [robosystems.ai](https://robosystems.ai).
 
-**Every tenant gets their own graph.** Not a row-level slice of a shared table — a dedicated graph database on its own instance, with a dedicated OLTP schema behind it. Your ontology, your taxonomies, and your calculation structures live in it as artifacts you can read, export, and take with you.
+**Every tenant gets their own graph.** Not a row-level slice of a shared table — a dedicated graph database on its own instance, with a dedicated OLTP schema behind it. Your schema, your taxonomies, and your calculation structures live in it as artifacts you can read, export, and take with you.
 
 ## Platform
 
 The platform provides the core infrastructure that all extensions build on:
 
 - **Dedicated Infrastructure**: Tiered LadybugDB graph infrastructure with dedicated instances and configurable memory allocation
-- **AI Operator System**: AI Operators (Claude/MCP executors) with automatic credit tracking and SSE progress streaming.
+- **AI Operator System**: AI Operators (model-driven executors over the MCP tools) with automatic credit tracking and SSE progress streaming.
 - **Shared Repositories**: SEC XBRL filings knowledge graph for comparison and benchmarking
 - **Document Management**: Upload, index, and search documents with full-text and semantic search via OpenSearch
 - **Credit-Based Billing**: Flexible credits for AI operations based on token usage
@@ -53,16 +53,16 @@ Built on the blocks:
 - **Reporting** — multi-period reports rendered from shared facts through a Reporting Style; a report lifecycle (draft → under_review → filed → archived) with publish lists for distribution
 - **Forecasting** — operating-plan scenarios projected through the same statement structures: rule-driven forecasts, per-line growth trajectories, and manual line assertions, with forecast periods returned alongside actuals on statement reads
 - **Analytical operations** — `live-financial-statement` renders a statement straight from the OLTP ledger (no materialization required); `build-fact-grid` and `financial-statement-analysis` query the materialized XBRL hypercube in the graph
-- **Serialization** — reports publish as a **holon** (dataset-form JSON-LD, the stored anchor and the one form that carries the whole report), with an XBRL International **Tavi** compiled model and a filing-grade **XBRL 2.1** package (Arelle-validated) built on first download, all three projections of the same assembled report
+- **Serialization** — reports publish as a **holon** (dataset-form JSON-LD, the stored anchor and the one form that carries the whole report), with a compiled JSON model and a filing-grade **XBRL 2.1** package (Arelle-validated) built on first download, all three projections of the same assembled report
 - **Pipelines & data** — QuickBooks ELT via dbt/Dagster with a configurable `write_policy`, and SEC XBRL financial reporting
 
 Dedicated frontend app: [`roboledger-app`](https://github.com/RoboFinSystems/roboledger-app).
 
 ### [RoboInvestor](https://roboinvestor.ai)
 
-Portfolio management and investment tracking extension — tracks holdings in private companies and links them back to the businesses that issued them.
+The portfolio extension — a fund's positions with their terms, linked back to the businesses that issued them.
 
-- **Portfolio Blocks** — the same molecule discipline as RoboLedger: a portfolio plus its positions and securities are validated and written as one envelope, with cost basis and current value held as integer cents and dollar totals computed at the boundary. Positions move through an active / disposed / archived lifecycle; reads expose `portfolios`, `positions`, `holdings` (rolled up by issuer), and the assembled `portfolioBlock`.
+- **Portfolio Blocks** — the same molecule discipline as RoboLedger: a portfolio plus its positions and securities are validated and written as one envelope, with cost basis and current value held as integer cents and dollar totals computed at the boundary. A position is active until it is disposed, which keeps the row with its disposition date; reads expose `portfolios`, `positions`, `holdings` (rolled up by issuer), and the assembled `portfolioBlock`.
 - **Securities** — register and maintain ownership instruments (common stock, warrants, convertible notes, …) with an extensible `terms` blob for instrument-specific detail (strike price, liquidation preference, vesting)
 - **Cross-graph research** — a security can point at the graph of the company that issued it, when that company also runs on the platform. The investor records the issuer's `source_graph_id` up front as a pre-association; when the issuer later shares a published report into the investor's graph, the issuer's entity is materialized there and any securities waiting on that `source_graph_id` link to it. A holding then traverses through to the issuer's own reported facts — `Portfolio → Position → Security → Entity → Report → Fact` — with authorization enforced at the report-sharing boundary, not the OLTP layer.
 
@@ -256,7 +256,7 @@ Details: [Enterprise SSO & SCIM](https://robosystems.ai/docs/technical/enterpris
 
 ### Model Context Protocol (MCP)
 
-- **Financial Analysis**: Natural language queries across enterprise data and public benchmark data
+- **Financial Analysis**: Natural language queries across your own graph and public benchmark data
 - **Cross-Database Queries**: Compare user graph data against SEC shared repository data
 - **Tools**: Rich toolkit for graph queries, schema introspection, fact discovery, financial analysis, document search, and AI memory operations
 - **Handler Pool**: Managed MCP handler instances with resource limits
@@ -270,7 +270,7 @@ Details: [Enterprise SSO & SCIM](https://robosystems.ai/docs/technical/enterpris
 
 ### Credit System
 
-- **AI Operations Only**: Credits are consumed exclusively by AI Operator calls (Anthropic Claude via AWS Bedrock)
+- **AI Operations Only**: Credits are consumed exclusively by AI Operator calls (a frontier model on the managed platform; the model you choose when you host it yourself)
 - **Token-Based Billing**: Credits based on actual token usage and model cost
 - **MCP Tool Access**: No credits consumed for MCP calls or database operations
 

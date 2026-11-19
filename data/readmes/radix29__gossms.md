@@ -164,8 +164,9 @@ method does not use are greyed out.
 Sessions appear on the server as `goSSMS`, `goSSMS - Query` and
 `goSSMS - Activity Monitor`.
 
-Connections whose hostname ends in `datawarehouse.fabric.microsoft.com` use
-a Fabric Data Warehouse tree layout: only **Databases** and **Security** at the
+Connections to a Fabric Data Warehouse (the engine reports EngineEdition 11
+and the host is not an Azure Synapse serverless endpoint) use a Fabric tree
+layout: only **Databases** and **Security** at the
 server root. Server **Security** contains only **Logins** and **Server Roles**.
 **Tables** lists user tables without System Tables, FileTables, External Tables,
 or Graph Tables folders; individual tables omit Constraints, Triggers, and Indexes.
@@ -189,6 +190,20 @@ If Fabric rejects the `ACE-Cardinality` header with error 16542, Details shows
 the statistic's identity and an explanatory note instead of an error.
 Unavailable DMV counters in General properties appear as `n/a`; DBCC-backed
 Details, Histogram, and Density Vector pages remain available.
+
+Fabric Database Properties omits Files, Filegroups, Query Store, Extended
+Properties, Scoped Configurations, and Resource Governance. Unavailable
+optional size and backup values in Database General, and row counts, space,
+and partitions in Table General/Storage, show `n/a` while the remaining
+properties load. Connection failures and cancellations still report an error.
+
+Actual Execution Plan and Live Query Statistics are disabled for Fabric DW
+query windows because `SET STATISTICS XML` is unsupported. If those global
+options were enabled on another connection, Fabric queries run normally without
+plan capture and report the limitation in Messages. Other connections retain
+their plan settings and behavior. Without an active query connection, these
+controls follow the selected Object Explorer connection. Estimated Execution
+Plan remains available for query windows.
 
 Always On peer discovery uses each replica's registered connection: one you
 have connected to through **File > Connect** or the prompt below. A unique
@@ -221,7 +236,8 @@ select the row; right-click the blank cell above the row numbers (or any cell,
 or use File > Export Results) to export the result set on screen, in the order
 shown, to a CSV, tab-separated, JSON or XML file. Show Value on a `varbinary`/`image` cell that holds a picture
 (PNG, JPEG, GIF, BMP, TIFF or WebP) opens it in its own tab as terminal art,
-with fit, zoom, pan and Save; pictures render in Unicode block sextants, with
+as does File > Open of a picture file (recognized by its content, not its
+extension), with fit, zoom, pan and Save; pictures render in Unicode block sextants, with
 an ASCII mode for fonts that lack them. Right-click any text field — a dialog's
 input box, the query editor, the Log Viewer's filter — for Cut, Copy, Paste and
 Select All; on read-only text (Messages, Results to Text, a plan's XML, a
@@ -435,9 +451,14 @@ authentication or encryption settings by hand invalidates its saved password.
 - [Report an issue](https://github.com/radix29/gossms/issues)
 - [Discord server](https://discord.gg/7YVKzB3vZ) — questions, feedback and release announcements
 
+## Contributors
+
+- [Jovan Popovic](https://www.linkedin.com/in/jovan-popovic/) — Microsoft
+  Fabric Data Warehouse support
+
 ## License
 
-goSSMS is © 2026 radix29 and licensed under
+goSSMS is © 2026 Radu Colceriu and licensed under
 [GPL-3.0-or-later](LICENSE). The bundled
 [sp_WhoIsActive](https://github.com/amachanic/sp_whoisactive) is © 2007–2026
 Adam Machanic and retains its own GPL-3.0 copyright.

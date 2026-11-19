@@ -51,7 +51,7 @@
 | 项目信息 | 说明 |
 |---|---|
 | 项目定位 | 面向开发、测试、运维、数据分析的桌面 Text2SQL 客户端 |
-| 最新版本 | **v1.4.1**（2026-10-07） |
+| 最新版本 | **v1.5.0**（2026-11-18） |
 | 运行环境 | Windows x64 / macOS (Apple Silicon) / Linux x86_64，安装包**无需 Python** |
 | 数据库支持 | 14 类数据库内置驱动，含达梦、人大金仓、瀚高、海量、OceanBase、TiDB、GBase 8a 等信创库 |
 | AI 支持 | OpenAI 兼容 `/chat/completions` 与 Anthropic 兼容 `/messages` 双协议，支持 Ollama 本地模型 |
@@ -254,6 +254,8 @@ python main.py
 | DB2 | ibm_db + ibm-db-sa（IBM 官方，wheel 自带 clidriver） | DB2 协议（50000） | ✅ 内置 | ✅ 内置 |
 | 其他（自定义） | 自备 | 「连接参数」中填 `{"url": "..."}` | 自行安装驱动 | 自行安装驱动 |
 
+> **SQL Server 命名实例**：在数据源页填写「实例名」（如 `SQLEXPRESS`、`PC`）并留空端口，程序会通过 SQL Browser 自动解析动态端口；默认实例才使用 1433。若服务器未启动「SQL Server Browser」服务、或防火墙不放行 UDP 1434，可在「端口」栏直接填写该实例的 TCP 端口（SQL Server 配置管理器 → SQL Server 网络配置 → TCP/IP → IP 地址 中查看），此时会跳过 Browser 解析。SQL Server 2008 R2 等老版本若连接协商失败，可在「连接参数」填 `{"tds_version": "7.3"}`。
+
 > **神通（ShenTong）/ 崖山 YashanDB / H2 未列入内置类型**：神通官方仅发布 JDBC / ODBC 驱动；崖山官方 Python 驱动不通过 PyPI 分发；H2 是纯 Java 引擎，必须本机装有 JVM 和 `h2.jar` 才能经 JDBC 桥接入——都与「开箱直连」目标冲突。需要连接时请选「其他（自定义）」，自行安装桥接驱动并提供 SQLAlchemy 连接串。OceanBase 的 **Oracle 租户**同理（MySQL 租户已内置）。
 
 ### 常见连接字符串（自定义数据源参考）
@@ -262,7 +264,8 @@ python main.py
 - PostgreSQL / OpenGauss / 瀚高 HighGo / 海量 Vastbase：`postgresql+psycopg2://user:pwd@host:5432/db`（HighGo 默认 5866）
 - 人大金仓（PG 协议兜底写法）：`postgresql+psycopg2://user:pwd@host:54321/db`
 - Oracle：`oracle+oracledb://user:pwd@host:1521/?service_name=ORCL`（或用 SID：`…/XE`）
-- SQL Server：`mssql+pymssql://user:pwd@host:1433/db`
+- SQL Server（默认实例）：`mssql+pymssql://user:pwd@host:1433/db`
+- SQL Server（命名实例）：`mssql+pymssql://user:pwd@host\instance/db`（不要写端口，由 SQL Browser 解析）
 - DB2：`ibm_db_sa://user:pwd@host:50000/db`
 - 达梦：`dm+dmpython://user:pwd@host:5236/DAMENG`
 - 自定义：在数据源的「连接参数」中填入 `{"url": "your+dialect://..."}`。
@@ -438,7 +441,7 @@ macOS 必须打成 `.app` 而不是裸可执行文件：Gatekeeper **不给**未
 
 ## 🗺️ 版本与维护
 
-- **当前版本**：v1.4.1（2026-10-07）—— 修复 Ollama 本地模型免 Key 使用、SQL Server 分页、连接串转义与 SQL 预检误判，并精简安装包体积。
+- **当前版本**：v1.5.0（2026-11-18）—— 新增 SQL Server 命名实例支持与连接复用/批量反射等性能优化，修复切换数据源后旧结果串台、退出卡死等问题，「关于我们」新增沐优 MuOpt、MuRig、智能客服推荐。
 - **更新日志**：每次发版均在 [GitHub Releases](https://github.com/vfaner/muask/releases) / [Gitee Releases](https://gitee.com/super_rgh/muask/releases) 附完整说明；[官网更新日志](https://muask.qqmu.com/changelog.html) 同步维护。
 - **维护状态**：项目活跃维护中，问题反馈与 Pull Request 会持续处理。
 - **迭代方向**（按实际需求调整，非承诺）：更多数据库与国产数据库适配、表结构筛选与提示词优化、查询结果导出、更完善的错误诊断与使用文档。

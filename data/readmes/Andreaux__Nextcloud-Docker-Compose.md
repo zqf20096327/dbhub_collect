@@ -1,17 +1,18 @@
-Stack version 3.3
+Stack version 3.4
 
-# Nextcloud docker-compose template with MariaDB, Redis, Nextcloud, Nextcloud-cronjobs, Collabora, HaRP and WebSocket server
+# Nextcloud docker-compose template with MariaDB, Redis, Nextcloud, Nextcloud-cronjobs, Collabora, HaRP, WebSocket server and Talk High-performance backend
 
 This is my Nextcloud Docker-Compose "almost-all-in-one" template.
 
 The stack features separate containers for:
 - MariaDB (mariadb:11.5.2)
 - redis (redis:alpine)
-- nextcloud (nextcloud:35.0.2)
+- nextcloud (nextcloud:35.0.3)
 - collabora (collabora/code:latest)
 - nextcloud cron jobs (rcdailey/nextcloud-cronjob)
-- appapi-harp (ghcr.io/nextcloud/nextcloud-appapi-harp)
+- appapi-harp (ghcr.io/nextcloud/nextcloud-appapi-harp:release)
 - WebSocket Server for Real-time Collaboration (ghcr.io/nextcloud/whiteboard:stable)
+- Talk High-performance backend (ghcr.io/nextcloud-releases/aio-talk:latest)
 
 The stack also includes dependencies to make sure the DB and Memcache (Redis) are available before the other containers are started.
 
@@ -22,22 +23,6 @@ My Home Lab runs Ubuntu Virtual Machines to host my Docker Projects where I run 
 NOTE:
 This docker-compose file doesn't contain the reverse proxy, if you need one, you will have to get it up and running separately. I have a stack that includes Traefik and Traefik Labels for all services, read on if interested.
 If you need help setting up Nginx Proxy Manager from Docker to support this stack, let me know!
-
-## Important note regarding PHP CVE-2026-109618 and CVE-2026-109619
-
-If you are building a **new installation** of Nextcloud using this version of my docker compose stack, you're fine, continue to the next section. Nextcloud silently updated the existing 35.0.2 image without changing the tag.
-
-For **existing installations**, you need to re-build your 35.0.2 image with the following commands:
-
-```bash
-docker compose build --pull nextcloud
-docker compose up -d
-```
-After the restart, you can confirm you're running PHP 8.5.12 using these commands:
-
-```bash
-docker exec nextcloud php -v   # should report PHP 8.5.12
-```
 
 ## Building the nextcloud-custom image
 
@@ -85,6 +70,65 @@ proxy_read_timeout 86400;
 proxy_send_timeout 86400;
 client_max_body_size 20M;
 ```
+
+## Talk High-performance backend
+
+The `talk-hpb` service runs the Nextcloud Talk High-performance backend (HPB) using the official Nextcloud AIO Talk image on its own. It bundles the signaling server, the Janus media server, NATS and the eturnal TURN/STUN server in one container. Without it, Talk calls only work well with 2-3 participants.
+
+### Enabling / disabling
+
+The HPB is **optional and disabled by default**. It uses a Docker Compose [profile](https://docs.docker.com/compose/how-tos/profiles/), so you never need to edit `docker-compose.yml` to turn it on or off.
+
+To **enable** it, add this line to your `.env` and redeploy the stack (`docker compose up -d`):
+
+```bash
+COMPOSE_PROFILES=talk-hpb
+```
+
+To **disable** it again:
+
+1. Remove the High-performance backend, TURN and STUN entries under **Administration settings → Talk**. Otherwise Talk keeps trying to reach a backend that no longer exists and calls will fail.
+2. Remove or comment out the `COMPOSE_PROFILES` line in `.env`.
+3. Stop and remove the container. Disabling the profile doesn't stop a container that is already running:
+
+```bash
+docker compose rm -sf talk-hpb
+```
+
+### 1. Secrets
+
+Add the three `TALK_*` secrets to your `.env` (see `EXAMPLE.env`). Generate each one with:
+
+```bash
+openssl rand -hex 32
+```
+
+### 2. DNS and Nginx Proxy Manager
+
+The HPB needs two hostnames, because signaling goes through NPM while TURN must reach the Docker host directly:
+
+- `signaling.<DOMAINNAME>` → your **NPM** IP, like your other hostnames (HTTPS signaling)
+- `turn.<DOMAINNAME>` → the **Docker host** running this stack (TURN/STUN on port 3478). If NPM runs on the same IP as the Docker host, both records point to the same address.
+
+Add a Proxy Host in NPM for `signaling.<DOMAINNAME>`:
+
+- Scheme `http`, Forward Hostname = the Docker host IP, Forward Port `8081`. If port 8081 is already in use on the host, set `TALK_SIGNALING_PORT` in `.env` to a free port and use that port here instead. (If NPM runs in Docker on the `proxy` network, you can use `talk-hpb` with port `8081` instead and remove the port mapping from `docker-compose.yml`.)
+- Enable **Websockets Support**
+- SSL: use your certificate for the host, Force SSL on
+
+### 3. TURN port
+
+Port `3478` TCP and UDP is published directly on the Docker host and must **not** go through NPM. Make sure nothing else on the host uses port 3478. If your Nextcloud is reachable from the internet, forward 3478 TCP/UDP from your router to the Docker host. For a LAN/VPN-only setup (e.g. Tailscale with a subnet router), nothing needs forwarding.
+
+### 4. Talk settings in Nextcloud
+
+Under **Administration settings → Talk**:
+
+- **STUN servers:** replace the default with `turn.<DOMAINNAME>:3478`
+- **TURN servers:** add `turn:` only, server `turn.<DOMAINNAME>:3478`, secret = `TALK_TURN_SECRET`, protocols **UDP and TCP**
+- **High-performance backend:** URL `https://signaling.<DOMAINNAME>`, "Validate SSL certificate" on, shared secret = `TALK_SIGNALING_SECRET`
+
+Each section has a test button. The HPB should show as connected with its version. Calls with the HPB rely on the TURN server, so make sure the TURN test passes too.
 
 ## Support this project
 

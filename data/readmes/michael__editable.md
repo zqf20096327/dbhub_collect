@@ -76,7 +76,7 @@ From here on, `git push` saves your work to your own repo. To bring in Editable 
 
 ### Styling
 
-With the development server running, open the [design system](http://localhost:5173/design-system) in your browser to explore typography, spacing, buttons, and editor pills. Inspect its [source code](src/routes/design-system/+page.svelte) for the corresponding markup and styles.
+With the development server running, open the [design system](http://localhost:5173/design-system) in your browser to explore typography, spacing, buttons, and editor pills. Inspect its source in `src/routes/design-system/+page.svelte` for the corresponding markup and styles.
 
 When customizing your Editable site, ideally update the design system first, then apply those changes to the actual site components. This gives you a concrete visual reference to work from and helps keep the site consistent, whether you build it with an agent or edit the code manually.
 
@@ -341,7 +341,7 @@ For ordinary content components, the vocabulary is small:
 - `MediaProperty` is Editable's ready-made `CustomProperty` for images and videos.
 - `SizableViewbox` optionally adds editor-controlled sizing around media.
 
-The first four come from `svedit`; the last two live in `src/app/components`. Components such as `Display`, `ButtonGroup`, and `SupportingMedia` are useful compositions of these pieces, not additional editing primitives. System components such as node gaps, carets, and selection markers are wired into the editor shell and normally do not appear in your content components.
+The first four come from `svedit`; the last two live in `src/app/components`. Components such as `ButtonGroup` and `SupportingMedia` are useful compositions of these pieces, not additional editing primitives. System components such as node gaps, carets, and selection markers are wired into the editor shell and normally do not appear in your content components.
 
 ## Content model
 
@@ -443,7 +443,7 @@ code_block { layout: narrow-left | narrow-center | narrow-right | wide,
              content: text } // monospaced, preserves whitespace, no marks
 ```
 
-Code blocks are placed with `layout`, like prose, and always keep their text left-aligned. Their `language` and `wrap_lines` are set in a popover above the block, which appears while the caret is in the block or the block is selected. `plain` (the default) leaves highlighting off. Long lines scroll sideways unless `wrap_lines` is on. A copy button sits beside the first line, in a column of its own, so it never covers code. Twinkleplop highlights selected languages in both view and edit mode. Language grammars load on demand, and the native range painter loads only when editing. View rendering awaits its grammar during server rendering and hydration; editing stays plain until the grammar loads. Editing uses native CSS highlight ranges without changing Svedit’s text DOM. Updates are batched to animation frames and pause during IME composition. Blocks exceeding 50,000 UTF-16 code units or 4,000 syntax ranges use plain text editing to keep highlighting work bounded; they still highlight in view mode. Highlighting resumes automatically when the block is shortened. Browsers without the CSS Custom Highlight API retain plain text editing. Supported language ids are listed in [src/app/code_languages.ts](src/app/code_languages.ts). Markdown imports preserve supported fence languages and common aliases such as `js`, `ts`, and `sh`. Existing preformatted nodes migrate to plain code blocks.
+Code blocks are placed with `layout`, like prose, and always keep their text left-aligned. Their `language` and `wrap_lines` are set in a popover above the block, which appears while the caret is in the block or the block is selected. `plain` (the default) leaves highlighting off. Long lines scroll sideways unless `wrap_lines` is on. A copy button sits beside the first line, in a column of its own, so it never covers code. Twinkleplop highlights selected languages in both view and edit mode. Language grammars load on demand, and the native range painter loads only when editing. View rendering awaits its grammar during server rendering and hydration; editing stays plain until the grammar loads. Editing uses native CSS highlight ranges without changing Svedit’s text DOM. Updates are batched to animation frames and pause during IME composition. Blocks exceeding 50,000 UTF-16 code units or 4,000 syntax ranges use plain text editing to keep highlighting work bounded; they still highlight in view mode. Highlighting resumes automatically when the block is shortened. Browsers without the CSS Custom Highlight API retain plain text editing. Supported language ids are listed in `src/app/code_languages.ts`. Markdown imports preserve supported fence languages and common aliases such as `js`, `ts`, and `sh`. Existing preformatted nodes migrate to plain code blocks.
 
 **Media** — `image` and `video` share one shape and are interchangeable wherever media is allowed:
 
@@ -462,7 +462,7 @@ image, video {
 
 figure { layout: wide | narrow-left | narrow-center | narrow-right | flush | full-bleed,
          href, target, media: image | video }
-captioned_figure { href, target, media: image | video, caption: text }   // caption marks: strong, emphasis, strikethrough, code, highlight, link
+captioned_figure { layout: caption-below | caption-right | caption-left, href, target, media: image | video, caption: text }   // caption marks: strong, emphasis, strikethrough, code, highlight, link
 supporting_media {
 	href, target
 	media_max_width: integer      // 0 = no maximum
@@ -479,8 +479,8 @@ gallery { layout: mixed | alternating | portraits | squares-2-columns | squares-
           gallery_items: [gallery_item] }
 gallery_item { href, target, media: image | video }
 
-titled_gallery { layout: cards | outlined | cards-2-columns | outlined-2-columns | compact |
-                         carousel | carousel-2-columns,
+titled_gallery { layout: cards-3-columns | outlined-3-columns | cards-2-columns | outlined-2-columns | compact |
+                         carousel-3-columns | carousel-2-columns | carousel-compact,
                  items: [titled_gallery_item] }
 titled_gallery_item {
 	href, target
@@ -488,8 +488,8 @@ titled_gallery_item {
 	title: text          // single line; marks: emphasis, highlight
 }
 
-descriptive_gallery { layout: cards | outlined | cards-2-columns | outlined-2-columns | compact |
-                              carousel | carousel-2-columns,
+descriptive_gallery { layout: cards-3-columns | outlined-3-columns | cards-2-columns | outlined-2-columns | compact |
+                              carousel-3-columns | carousel-2-columns | carousel-compact,
                       items: [descriptive_gallery_item] }
 descriptive_gallery_item {
 	href, target
@@ -525,15 +525,16 @@ accordion { layout: narrow-left | narrow-center | narrow-right | full-width | tw
             items: [accordion_item] }
 accordion_item {
 	title: text          // single line; marks: emphasis, highlight
-	body: [rich content without headings]
+	body: [rich content without headings or eyebrows]
 }
 
 feature { layout: image-right | image-left | outlined-image-right | outlined-image-left, href, target, media: image | video, body: [rich content] }
 double_feature { layout: plain | outlined, start: double_feature_item, end: double_feature_item }
 double_feature_item { href, target, media: image | video, body: [rich content] }
 
-button_group { buttons: [button] }
-button { layout: primary | primary-accent | secondary | link, href, target, label: text }
+button_group { layout: tight | regular | loose, buttons: [button | media_button] }
+button { layout: primary | primary-accent | secondary | link (each also -small), href, target, label: text }
+media_button { layout: regular | small | tiny, href, target, media: image | video }   // e.g. social media icons
 ```
 
 **Marks and annotations** — both attach a separate node to a half-open range using the same shape. For text, offsets address character positions; for node arrays, they address child-node positions. `start_offset` is included and `end_offset` is excluded:
@@ -598,6 +599,10 @@ export const MAX_VIDEO_FILESIZE = 100 * 1000 * 1000; // hard ceiling in bytes (1
 ```
 
 Automatic processing accepts inputs up to 2 GiB (about 2.15 GB); transcoding requires a known duration and one video track. Browser codec support determines which files can be processed, and even unchanged videos need decoding support for their poster. Audio is preserved or converted; unsupported audio causes an error rather than being silently dropped. Compatible transparent WebM is kept unchanged within the size limit; oversized transparent video needs manual optimization.
+
+### Other files
+
+Uploads take images and videos only. To offer other downloads, such as a PDF or a zip, add the file to `static/` in your repo and link to its path, like `/downloads/price-list.pdf`. Turn on **Open in new tab** for such links: in the same tab, the site treats the path as a page and shows "Page not found".
 
 ## Create a custom node type
 
@@ -751,7 +756,7 @@ From here it's just iteration: add calls to action, give editors control over th
 
 Deploy your local site to a public URL in a few steps.
 
-Editable runs on any VPS — all you need is Node.js, and the included `Dockerfile` works with any platform that supports Docker (see [Deploy to a VPS](#deploy-to-a-vps-experimental)). The repository ships ready-made for [Fly.io](https://fly.io), which remains the recommended default: machines scale to zero and wake in well under a second, so a personal site costs next to nothing to run. Install [flyctl](https://fly.io/docs/flyctl/install/), then sign in (opens your browser; creates a free account if you don't have one):
+Editable runs on any VPS — all you need is Node.js, and the included `Dockerfile` works with any platform that supports Docker (see [Deploy to a VPS](#deploy-to-a-vps-experimental)). The repository ships ready-made for [Fly.io](https://fly.io), which remains the recommended default: a machine can suspend when idle (`auto_stop_machines = "suspend"` in `fly.toml`) and wakes in well under a second, so a personal site costs next to nothing to run. Install [flyctl](https://fly.io/docs/flyctl/install/), then sign in (opens your browser; creates a free account if you don't have one):
 
 ```sh
 fly auth login
@@ -779,9 +784,9 @@ Set the secrets. `ORIGIN` must be your app's public URL, so canonical links and 
 
 ```sh
 fly secrets set \
-  ORIGIN="https://my-site.fly.dev" \
-  BODY_SIZE_LIMIT='100M' \
-  ADMIN_PASSWORD='pick-a-strong-password'
+	ORIGIN="https://my-site.fly.dev" \
+	BODY_SIZE_LIMIT='100M' \
+	ADMIN_PASSWORD='pick-a-strong-password'
 ```
 
 Set your site's language in `fly.toml` under `[env]`, such as `LANGUAGES = "de"`. It's not a secret, so it lives with the app's configuration.
@@ -883,7 +888,7 @@ Create the server with your ssh key installed, point your domain's A record at i
 pnpm vps:deploy root@203.0.113.10 my-site.example.com
 ```
 
-The first run provisions the server — Docker, [Caddy](https://caddyserver.com) as the TLS-terminating reverse proxy, swap on machines with less than 2 GB RAM — asks you for an admin password, builds the Docker image locally, streams it over ssh, and starts the site. The server never needs access to your git repository or the memory to run a build. Your content lives in `/data` on the server — the same path Fly.io mounts and the same path inside the container; deploys replace the container and never touch that folder.
+The first run provisions the server — Docker, [Caddy](https://caddyserver.com) as the TLS-terminating reverse proxy, swap on machines with less than 2 GB RAM — copies `LANGUAGES` from your local `.env` (it stops if that is unset), asks you for an admin password, builds the Docker image locally, streams it over ssh, and starts the site. The server never needs access to your git repository or the memory to run a build. Your content lives in `/data` on the server — the same path Fly.io mounts and the same path inside the container; deploys replace the container and never touch that folder.
 
 After the first deploy, add one line to your **local** `.env` — this is your checkout's deployment identity, playing the role `fly.toml` plays for Fly.io. Everything else (container name, data path) is read from the server:
 
@@ -1026,11 +1031,11 @@ Then `fly deploy`. That's it — the presence of the `BUCKET_NAME` secret enable
 
 ```sh
 fly secrets set \
-  BUCKET_NAME='my-site-backup' \
-  AWS_ENDPOINT_URL_S3='https://...' \
-  AWS_REGION='auto' \
-  AWS_ACCESS_KEY_ID='...' \
-  AWS_SECRET_ACCESS_KEY='...'
+	BUCKET_NAME='my-site-backup' \
+	AWS_ENDPOINT_URL_S3='https://...' \
+	AWS_REGION='auto' \
+	AWS_ACCESS_KEY_ID='...' \
+	AWS_SECRET_ACCESS_KEY='...'
 ```
 
 Use one bucket per site. The bucket is append-only: local asset cleanup is never mirrored to it, so unlike volume-local rollbacks, restores from the bucket are not bounded by `ASSET_GRACE_PERIOD_DAYS` — every asset ever uploaded is still there. Replication runs as a supervised sidecar: if it ever fails, your site stays up and the logs say so loudly.
@@ -1186,13 +1191,13 @@ pnpm migration:create reconcile-heading --after 20261009T120000000Z_editable_sit
 
 A migration that must run before another is placed right after the one preceding that. This works because migrations that arrive together are all pending when a site upgrades. One dated before a migration a site already ran still runs, but later, and the log warns about it.
 
-Editable's own migrations use the `editable` source name; `custom` migrations belong to your project. The timestamp-first filenames keep both sources in one chronological list without a central registry or sequence-number conflicts. Because order across versions follows timestamps rather than when a migration arrived, prefer tolerant migrations, "create if missing" rather than "create", which safely do nothing when their source shape is absent.
+Editable's own migrations use the `editable` namespace; `custom` migrations belong to your project. The timestamp-first filenames keep both namespaces in one chronological list without a central registry or sequence-number conflicts. Because order across versions follows timestamps rather than when a migration arrived, prefer tolerant migrations, "create if missing" rather than "create", which safely do nothing when their source shape is absent.
 
 ## Translations (experimental)
 
 Publish your website in multiple languages.
 
-`LANGUAGES` names your site's language as a BCP 47 tag, such as `de`, which its pages declare to browsers, screen readers, and search engines. Every site with a backend sets it. To translate, list several tags in `.env` or your deployment environment, the original language first; each tag is a separate content variant:
+`LANGUAGES` names your site's language as a BCP 47 tag, such as `de`, which its pages declare to browsers, screen readers, and search engines. Every site sets it. To translate, list several tags in `.env` or your deployment environment, the original language first; each tag is a separate content variant:
 
 ```dotenv
 LANGUAGES="en,de"
@@ -1294,7 +1299,7 @@ export const MARKDOWN_SOURCES = [
 - `pathname` — absolute single-segment URL the page is served at (nested paths are not supported yet)
 - `toc` (optional) — generate a table of contents from the file's headings
 
-With `MARKDOWN_SOURCES = []` the feature is inert. A configured pathname wins over a database page with the same slug, and is reserved: a page you create called "Manual" gets the slug `manual-2` when `/manual` is a markdown page, and typing `manual` into the Page URL dialog is rejected. Configuration errors — unknown fields, duplicate pathnames, missing content — fail the dev server or production build immediately.
+By default, `MARKDOWN_SOURCES` is empty and the feature is inert. A configured pathname wins over a database page with the same slug, and is reserved: a page you create called "Manual" gets the slug `manual-2` when `/manual` is a markdown page, and typing `manual` into the Page URL dialog is rejected. Configuration errors — unknown fields, duplicate pathnames, missing content — fail the dev server or production build immediately.
 
 Mapping a pathname that an existing page already occupies is the one case the reservation cannot prevent. That page becomes _shadowed_: the markdown page serves the URL, the page keeps its slug and reappears the moment the markdown entry is removed. Shadowed pages are listed in a startup warning and carry a `URL TAKEN` badge in the page browser, where you can give them a different Page URL.
 

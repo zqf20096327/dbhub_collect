@@ -24,6 +24,10 @@
 </p>
 
 <p align="center">
+  <b>Black Friday:</b> <a href="https://www.datapeek.dev/#pricing">Pro is 40% off</a> until 1 Dec, applied at checkout.
+</p>
+
+<p align="center">
   <a href="https://www.datapeek.dev">
     <img src="apps/web/public/motion/hero.webp" alt="A SQL query types itself in data-peek and returns 8 rows in 38 ms, then the view pulls back through the schema's tables into the data-peek logo" width="100%" />
   </a>
@@ -111,6 +115,7 @@ More clips (command palette, ER diagrams, the AI assistant, inline editing) are 
 
 - Inline editing with a preview of the generated `INSERT`/`UPDATE`/`DELETE` before you commit
 - Smart filters and sorting on results without re-running the query
+- Spreadsheet-style cell selection with live sum and average, find across every page of a result (`Cmd/Ctrl+F` in the grid), and copy a selection as TSV, CSV, JSON, or Markdown
 - Foreign key navigation, a JSON/JSONB editor, and one-click column statistics
 - Export to CSV, JSON, SQL `INSERT`s, or Markdown, or share a result as an image
 - CSV import with column mapping and type inference, PostgreSQL `.sql` dump import, and an FK-aware fake data generator
@@ -142,11 +147,13 @@ More clips (command palette, ER diagrams, the AI assistant, inline editing) are 
 
 ### AI and agents
 
+<a href="https://www.datapeek.dev/#ai"><img src="apps/web/public/motion/ask-ai.webp" alt="data-peek picks Claude from the Choose AI menu, answers a plain-English question with SQL that runs on its own and draws a chart, then stops a write at Run it" width="100%" /></a>
+
 - **Ask** is the default tab (`Cmd/Ctrl+T`). One input takes a question or SQL. SQL runs directly. A question goes to your AI, which writes the SQL, runs it when it only reads, and explains what came back with a table, chart, or number. Writes wait for you to click Run, and a failed query has a one-click fix. The plain SQL editor is `Cmd/Ctrl+Shift+T`.
 - Ask from anywhere: type a question into `Cmd/Ctrl+K`, pick **Ask about this table** in the schema tree, or click **Fix with AI** on a failed query
 - In the SQL editor, `Cmd/Ctrl+I` rewrites the query or the selection from a sentence and shows the change as a diff to accept or reject
 - AI assistant that turns plain English into SQL and builds charts from results. It knows your schema.
-- Bring your own key (OpenAI, Anthropic, Google, Groq, or local Ollama models), or bring your own agent: point it at your installed Claude Code, Codex, or Antigravity CLI and use the subscription you already have
+- Runs on the Claude Code, Codex, or Antigravity subscription you already have: data-peek finds the installed CLI and one click puts it to work. Or bring your own key (OpenAI, Anthropic, Google, Groq, DeepSeek, Mistral, xAI, or GLM), or run a local Ollama model
 - A built-in [MCP server](https://docs.datapeek.dev/docs/features/mcp-server) (off by default) that exposes your connections to AI agents. Reads are capped and run read-only, and every write needs your approval in the app.
 
 ### Connections and security
@@ -211,6 +218,8 @@ Built with Electron, React 19, TypeScript, Tailwind CSS 4, shadcn/ui, Zustand, a
 - [GitHub Issues](https://github.com/Rohithgilla12/data-peek/issues) for bugs and feature requests
 - [GitHub Sponsors](https://github.com/sponsors/Rohithgilla12) to support development
 - [@gillarohith](https://x.com/gillarohith) on X
+
+**Also by the maker:** [Float](https://float.gilla.fun/?utm_source=datapeek&utm_medium=readme), a floating scratchpad for macOS.
 
 <p align="center">
   <br />

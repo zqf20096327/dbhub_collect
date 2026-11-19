@@ -9,7 +9,7 @@ A lightweight Go vector-store library inspired by `Microsoft.Extensions.VectorDa
 
 Scope:
 - Go 1.25+
-- PostgreSQL + `pgvector`, embedded SQLite, standalone Redis snapshots and in-memory model storage
+- PostgreSQL + `pgvector`, embedded SQLite, standalone Redis, bounded Qdrant snapshots and in-memory model storage
 - Model-driven collections with typed/native keys, named vectors, struct tags, and optional embeddings
 - Shared model contracts and conformance tests across providers
 - Original Record API and custom codecs remain supported
@@ -26,16 +26,20 @@ require it. Use current stable Go for up-to-date standard-library security fixes
 
 - Go 1.25+
 - PostgreSQL provider: PostgreSQL 16+ with `pgvector` extension
+- Qdrant provider: standalone Qdrant 1.20.2 with explicit snapshot/receipt limits ([scope](docs/qdrant.md))
 - SQLite provider: a writable database file; no database server or C toolchain required
-- Redis provider: standalone Redis; whole-collection snapshots and Go exact search ([limits](docs/redis.md))
-- Docker (optional, for integration tests and sample compose flows)
+- Redis provider: standalone snapshots with Go exact search; opt-in HNSW/FLAT, scalar and string full-text indexes ([limits](docs/redis.md))
+- Docker (optional, for integration tests and Aspire sample services)
+- Aspire CLI 17.0.0 and Go 1.26+ for sample orchestration
 
 ## Project layout
 
 - `vectordata`: backend-agnostic core interfaces, record model, filters, typed wrapper
 - `stores/postgres`: Postgres implementation with `pgxpool`
-- `stores/sqlite`: durable SQLite model collections with exact search
-- `stores/redis`: atomic Redis model snapshots with dense exact search
+- `stores/sqlite`: durable SQLite model collections with exact search and opt-in scalar indexes
+- `stores/sqlitevec`: optional scalar L1 extension execution with exact Go ranking over the same SQLite format
+- `stores/redis`: atomic snapshots/hash generations, dense exact search and opt-in HNSW/FLAT
+- `stores/qdrant`: bounded standalone snapshots and exact Go search ([scope and limits](docs/qdrant.md))
 - `stores/memory`: transient model collections for development and contract tests
 - `samples`: runnable demos (see `samples/README.md`)
 - `docs`: architecture and implementation notes
@@ -77,7 +81,8 @@ For the PostgreSQL semantic-search example:
 1. Start local Postgres + `pgvector` from the repository root:
 
 ```bash
-docker compose up -d postgres
+aspire start --apphost samples/aspire-services/apphost.go
+aspire wait postgres --apphost samples/aspire-services/apphost.go
 ```
 
 2. Export your OpenAI key and run the semantic sample:
@@ -90,7 +95,7 @@ go run ./samples/semantic-search -q "how can I reduce cloud costs?"
 3. Stop local services when done:
 
 ```bash
-docker compose down
+aspire stop --apphost samples/aspire-services/apphost.go --force
 ```
 
 ## Model-driven API
@@ -149,7 +154,9 @@ uses native predicates for indexed native arrays.
 
 See the [provider and .NET parity checklist](docs/parity.md), [SQLite guide](docs/sqlite.md),
 [upgrade guide](docs/upgrading.md), and [changelog](CHANGELOG.md).
-Original `Record`/`Collection` callers remain compatible.
+Model callers can use `InsertOne`/`UpsertOne`/`DeleteOne` and `TryGet` for
+[single-record workflows](samples/recipes/README.md). Batch operations remain
+available for bulk writes. Original `Record`/`Collection` callers remain compatible.
 Bulk PostgreSQL writes automatically use binary vector parameters to reduce
 serialization allocations; see [the measured transport comparison](docs/performance.md#binary-vector-ingestion-and-copy-comparison).
 
@@ -342,14 +349,19 @@ Notes:
 - Optional override: set `PGVECTOR_TEST_DSN` to use an existing Postgres instance instead of starting a container
 - Set `PGVECTOR_TEST_IMAGE=pgvector/pgvector:pg18` to test a different PostgreSQL image (the default is `pgvector/pgvector:pg16`)
 
-## Docker Compose (optional)
+## Aspire local development (optional)
 
-`docker-compose.yml` at the repository root is kept for manual local runs.
+The [shared Go AppHost](samples/aspire-services/README.md) manages persistent local
+PostgreSQL and Redis services, the semantic-search/RAG examples, and the local
+documentation agent. Aspire owns readiness, dependency ordering, logs and terminals.
 
-- Use root `docker-compose.yml` when you want a persistent local Postgres+pgvector instance outside tests
-- Use Testcontainers (`go test -tags=integration ./...`) for integration tests
-- Sample apps have their own compose files at `samples/semantic-search/docker-compose.yml` and `samples/ragrimosa/docker-compose.yml`
-- Sample Dockerfiles build with `golang:1.27-alpine`; the library minimum is Go 1.25
+Use Aspire CLI 17.0.0, Go 1.26+ and Docker. The root library remains Go 1.25+;
+AppHosts and their generated SDKs live in isolated modules. Ordinary AppHost stops
+retain persistent services; `--force` removes those containers while preserving
+data volumes. Integration tests still use Testcontainers for disposable databases.
+
+For a browser-based vector/hybrid search demo with traces, logs and metrics, run
+the separate [Aspire vector-search sample](samples/aspire-vector-search/README.md).
 
 ## Release Automation
 
@@ -382,12 +394,14 @@ git push origin "v${RELEASE_VERSION}"
 ## Samples
 
 - Overview and entry points: [`samples/README.md`](samples/README.md)
-- Local agent with Ollama and SQLite: [`local-doc-agent`](samples/local-doc-agent/README.md) (Docker Compose, separate module)
+- Local agent with Ollama and SQLite: [`local-doc-agent`](samples/local-doc-agent/README.md) (Aspire, separate module)
 - Redis model snapshots and exact retrieval: [`redis-store`](samples/redis-store/README.md)
 - Typed semantic search and RAG: [`typed-search`](samples/typed-search/README.md), [`typed-rag`](samples/typed-rag/README.md)
 - Focused model workflows: [`recipes`](samples/recipes/README.md)
 - Model-driven collections (no API key): [`samples/model-store`](samples/model-store/README.md)
 - Persistent SQLite and optional vectors (no API key): [`samples/sqlite-store`](samples/sqlite-store/README.md)
+- Optional SQLite scalar L1 execution: [`samples/sqlitevec-store`](samples/sqlitevec-store/README.md)
+- Reproducible SQLite workload measurements: [`samples/sqlite-workload`](samples/sqlite-workload/README.md) (small default, explicit larger matrix)
 - Semantic search sample app: `samples/semantic-search`
 - RAG sample app (`RAGrimosa`): `samples/ragrimosa`
 
@@ -406,6 +420,7 @@ git push origin "v${RELEASE_VERSION}"
 - Connector development guide: [`docs/connector-development.md`](docs/connector-development.md)
 - Model-driven API: [`docs/model-api.md`](docs/model-api.md)
 - SQLite provider: [`docs/sqlite.md`](docs/sqlite.md)
+- Opt-in sqlite-vec and precision proof: [`docs/sqlitevec.md`](docs/sqlitevec.md)
 - Redis provider: [`docs/redis.md`](docs/redis.md)
 
 - Provider and .NET parity: [`docs/parity.md`](docs/parity.md)
@@ -414,9 +429,16 @@ git push origin "v${RELEASE_VERSION}"
 - Changelog: [`CHANGELOG.md`](CHANGELOG.md)
 - Benchmarks and performance notes: [`docs/performance.md`](docs/performance.md)
 
-Redis defaults to compatible snapshot storage. Opt-in hash generations and an
-explicit storage upgrade expose indexable fields while keeping atomic batches;
-native query/index execution is a later increment.
+Redis defaults to compatible snapshot storage. Opt-in RedisJSON uses immutable
+JSON documents with precise canonical payloads and explicit snapshot/hash conversion.
+Opt-in native indexing supports HNSW/FLAT vector search on immutable HASH/JSON
+generations, preserving atomic batches. Both layouts accelerate supported scalar
+filters and create TEXT fields from string full-text hints. Native dense hybrid
+fuses plain-text keyword/vector ranks with RRF from one guarded generation.
+Unsupported filters keep exact Go evaluation. KeywordTerms lists OR plain-text
+AND groups; native mode advertises HybridKeywordTerms.
+Native indexing requires Redis Search and database zero; writes rebuild the generation's index.
+See [native support and fallback rules](docs/redis.md#native-indexes-and-search).
 
 ## License
 

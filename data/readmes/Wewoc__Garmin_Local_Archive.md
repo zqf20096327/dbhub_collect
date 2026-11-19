@@ -7,7 +7,9 @@
 [![Tests](https://github.com/Wewoc/Garmin_Local_Archive/actions/workflows/test-suite.yml/badge.svg)](https://github.com/Wewoc/Garmin_Local_Archive/actions/workflows/test-suite.yml)
 [![Garmin Local Archive MCP server – quality and maintenance score on Glama](https://glama.ai/mcp/servers/Wewoc/Garmin_Local_Archive/badges/score.svg)](https://glama.ai/mcp/servers/Wewoc/Garmin_Local_Archive)
 
-**Archive and analyze your Garmin Health data local.**
+**Archive and analyze your Garmin Health data locally.**
+
+Garmin Local Archive is a free, open-source Windows app (full Python source included) that keeps a complete, permanent copy of your Garmin Connect data on your own computer. It pulls recent days from Garmin Connect, imports your full history from the Garmin data export, and stores everything in open formats (JSON, Excel). On top of the archive you get dashboards, several export formats (JSON, CSV, InfluxDB) and an MCP server for AI analysis.
 
 *Privacy first — inspired by European principles.*
 
@@ -15,13 +17,16 @@
 
 ## A look at the app
 
-<a href="src/screenshots/GUI-Page_1.jpg"><img src="src/screenshots/GUI-Page_1.jpg" width="150" title="Home tab — fixed top area with connection status, archive stats by device, and Daily Actions (Sync / Mirror / Timer); dashboard viewer below."></a>
-<a href="src/screenshots/GUI-Page_2.jpg"><img src="src/screenshots/GUI-Page_2.jpg" width="150" title="Files tab — in-app XLSX viewer with date, steps, resting HR, body battery, sleep duration and quality per day."></a>
-<a href="src/screenshots/GUI-Page_3.jpg"><img src="src/screenshots/GUI-Page_3.jpg" width="150" title="Settings tab — two-column layout: credentials, paths, and sync config on the left; sync controls, timer, mirror, and output options on the right."></a>
-<a href="src/screenshots/GUI-Page_4.jpg"><img src="src/screenshots/GUI-Page_4.jpg" width="150" title="Chat tab — chat against a local Ollama model or a Cloud LLM (Anthropic/OpenAI), with optional live tool-calling against your archive via the MCP server for questions the daily summary alone can't answer. Chat sessions can be saved and resumed."></a>
-<a href="src/screenshots/GUI-Page_5.jpg"><img src="src/screenshots/GUI-Page_5.jpg" width="150" title="MCP Server tab — backend, port and headless-mode selection, Save Settings and Start MCP Server buttons."></a>
+<a href="src/screenshots/GUI-Page_1.jpg"><img src="src/screenshots/GUI-Page_1.jpg" width="800" alt="Garmin Local Archive — Home tab" title="Home tab — fixed top area with connection status, archive stats by device, and Daily Actions (Sync / Mirror / Timer); dashboard viewer below."></a>
+<br><sub>Home — connection status, archive stats by device and Daily Actions (Sync / Mirror / Timer); the dashboard viewer below.</sub>
 
-<sub>Home · Files · Settings · Chat · MCP Server — click any tab to view full size.</sub>
+<a href="src/screenshots/GUI-Page_2.jpg"><img src="src/screenshots/GUI-Page_2.jpg" width="200" alt="Garmin Local Archive — Files tab" title="Files tab — in-app XLSX viewer with date, steps, resting HR, body battery, sleep duration and quality per day."></a>
+<a href="src/screenshots/GUI-Page_3.jpg"><img src="src/screenshots/GUI-Page_3.jpg" width="200" alt="Garmin Local Archive — Settings tab" title="Settings tab — two-column layout: credentials, paths, and sync config on the left; sync controls, timer, mirror, and output options on the right."></a>
+<a href="src/screenshots/GUI-Page_4.jpg"><img src="src/screenshots/GUI-Page_4.jpg" width="200" alt="Garmin Local Archive — Chat tab" title="Chat tab — chat against a local Ollama model or a Cloud LLM (Anthropic/OpenAI), with optional live tool-calling against your archive via the MCP server for questions the daily summary alone can't answer. Chat sessions can be saved and resumed."></a>
+<a href="src/screenshots/GUI-Page_5.jpg"><img src="src/screenshots/GUI-Page_5.jpg" width="200" alt="Garmin Local Archive — MCP Server tab" title="MCP Server tab — backend, port and headless-mode selection, Save Settings and Start MCP Server buttons."></a>
+<a href="src/screenshots/GUI-Page_6.jpg"><img src="src/screenshots/GUI-Page_6.jpg" width="200" alt="Garmin Local Archive — Diary tab" title="Diary tab — a calendar with a dot on every day that has content, a note per day, and your own fields (numbers with units, yes/no, text, optional time, alternatives such as steps or distance) typed by hand; History, Restore from backup and a search in the notes."></a>
+
+<sub>Files · Settings · Chat · MCP Server · Diary — click any picture to view full size.</sub>
 
 ---
 
@@ -137,7 +142,7 @@ The **Bulk Import** feature fills in the rest: request your full data export fro
 
 The import dialog offers two parts: **Daily values (JSON)** and, since v1.7.6, **Heart-rate series (FIT files)** — the heart-rate curve over the day from the FIT files of the export. Both are stored in their own folder, `garmin_data/bulk/`, next to the archive, not in `raw/`: `raw/` holds only what came from the Garmin API. A **Preview** shows what would be imported without writing anything, for both parts. AI queries (MCP) and the dashboards use the stored series for days that have no heart-rate series from the live sync, and since v1.7.6.1 the time per day in the four stress zones (rest, low, medium, high) from the export is available as well. Existing API data is never overwritten (the quality log gets a marker per imported day); since v1.7.6.2 the folder is part of the backup (`backup/bulk/`) and of the mirror.
 
-**Export Scan** (v1.7.7): before or after an import, the window "📂 Export Scan" (Settings → Data Collection) shows what your own export holds and how complete it is — by topic, as a table or a graph, down to one field (by month or year, its numbers over time or as a distribution) and the heart rate of any single day. It reads only and shows no file name; values stay in memory and are not written to any report or log. A short guide opens from its Help button (`src/docs/README_EXPORT_SCAN.md`).
+**Export Scan** (v1.7.7, v1.7.7.1): before or after an import, the window "📂 Export Scan" (Settings → Data Collection) shows what your own export holds and how complete it is — by topic, as a table or a graph, down to one field (by month or year, its numbers over time or as a distribution), up to 12 fields side by side by date (a table, or one chart per number column) and the heart rate of any single day. It reads only and shows no file name; values stay in memory and are not written to any report or log. A short guide opens from its Help button (`src/docs/README_EXPORT_SCAN.md`).
 
 ---
 
@@ -193,6 +198,12 @@ after each sync.
 
 <img src="src/screenshots/export_data.jpg" width="800" alt="Garmin Local Archive — Export Data">
 <br><sub>Export Data — per-adapter grid for Health/Context/Metadata, JSON/CSV/InfluxDB.</sub>
+
+---
+
+### Diary
+
+The **Diary** tab (v1.7.8) keeps what you type by hand: a note per day and your own values — blood pressure, hydration, weight, medication, cycle, anything you define — with numbers, yes/no or text, an optional time and alternatives such as steps or distance. The values sit next to the Garmin values and never replace them. Earlier days can be changed (the state before is kept in a history you can put back), the notes can be searched, a backup copy of the diary is kept (and restored when a file is damaged), and the mirror container carries it too. Nothing of the diary is visible to the MCP server or a cloud model. Reference: [`src/docs/REFERENCE_DIARY.md`](src/docs/REFERENCE_DIARY.md).
 
 ---
 
@@ -319,7 +330,7 @@ The diagram above shows how the layers connect. Each module is self-contained an
 
 The desktop app includes a **Background Timer** — once started, it automatically repairs failed/incomplete days, upgrades bulk-imported days within its 180-day retry window, fills missing days, keeps a raw API-response backup current, retroactively adds newly supported data fields (like step count) to already-archived days, and re-fetches bulk-imported days for the handful of data fields the official Garmin export never contains at all (HRV, SpO2, Body Battery, respiration, training status, race predictions, max metrics) — regardless of how old the day is, since that gap has nothing to do with intraday resolution — with no further manual steps in between. The timer must be started manually and only runs while the app is open — it does not resume automatically after a restart.
 
-Data is stored in two root folders:
+Data is stored in three root folders:
 
 ```
 garmin_data/
@@ -334,6 +345,10 @@ context_data/
 ├── pollen/summary|raw/  – daily / hourly pollen archive (Open-Meteo Air Quality)
 ├── brightsky/summary|raw/    – daily / hourly weather archive (Brightsky DWD)
 └── airquality/summary|raw/   – daily / hourly air quality archive (Open-Meteo Air Quality)
+
+diary_data/
+├── fields.json  – the fields of your diary (v1.7.8)
+└── days/        – one file per day with a note, entries or a history
 ```
 
 ---
@@ -353,6 +368,8 @@ python tests/test_local.py                    # Garmin pipeline — cross-module
 python tests/test_<module>.py                 # Garmin pipeline — one file per module of src/garmin/ (31 files, e.g. test_writer.py, test_quality.py, test_collector.py; shared setup in tests/gla_testenv.py)
 python tests/test_prop_*.py  tests/test_fuzz_parsers.py   # Property tests and parser fuzzing with generated inputs (hypothesis)
 python tests/test_local_context.py            # Context pipeline (external APIs mocked)
+python tests/test_diary.py                    # Diary — model, writer, reader, history, search, backup, restore (no Qt)
+pytest tests/test_diary_panel.py              # Diary tab and its dialogs
 python tests/test_dashboard.py                # Dashboard pipeline
 python tests/test_broker.py                   # Broker layer (health_map / gateway_map routing, metadata_map)
 python tests/test_mcp.py                      # MCP layer (mcp_map protocol translation)

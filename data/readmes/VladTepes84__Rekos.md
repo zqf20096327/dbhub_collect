@@ -348,6 +348,10 @@ git diff --check
 - Better import/export interoperability
 - Optional UI views while keeping the CLI and local-first storage as the core
 
+## Support this project
+
+REKOS is free and open source. If it helps your public-source investigation workflows, you can [sponsor the maintainer on GitHub](https://github.com/sponsors/VladTepes84) to support maintenance, documentation and future development. Sponsorship is entirely optional.
+
 ## License
 
 MIT License. See [LICENSE](LICENSE).

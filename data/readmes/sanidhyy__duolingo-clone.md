@@ -257,7 +257,7 @@ Useful resources and dependencies that are used in Lingo.
 - [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress): ^1.2.1
 - [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.2.0
 - [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.5.0
-- [@types/node](https://www.npmjs.com/package/@types/node): ^26.6.5
+- [@types/node](https://www.npmjs.com/package/@types/node): ^26.6.6
 - [@types/react](https://www.npmjs.com/package/@types/react): ^19.3.0
 - [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): ^19.3.0
 - [@vercel/config](https://www.npmjs.com/package/@vercel/config): ^0.13.0
@@ -270,11 +270,11 @@ Useful resources and dependencies that are used in Lingo.
 - [eslint](https://www.npmjs.com/package/eslint): ^9
 - [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.4.5
 - [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier): ^10.1.8
-- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.70.0
+- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.73.0
 - [next](https://www.npmjs.com/package/next): ^16.4.3
 - [pg](https://www.npmjs.com/package/pg): ^8.23.1
 - [postcss](https://www.npmjs.com/package/postcss): ^8
-- [prettier](https://www.npmjs.com/package/prettier): ^3.9.10
+- [prettier](https://www.npmjs.com/package/prettier): ^3.10.1
 - [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss): ^0.8.0
 - [ra-data-simple-rest](https://www.npmjs.com/package/ra-data-simple-rest): ^5.15.3
 - [react](https://www.npmjs.com/package/react): ^19.3.0

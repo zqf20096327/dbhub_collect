@@ -13,7 +13,7 @@ AI Team OS is a shared operating layer for **Claude Code and Codex**. Keep tasks
 
 <!-- Keep the Codex compatibility note above across releases. For each release, replace the current-release announcement with that version's verified summary. Keep historical details in CHANGELOG.md. -->
 
-> ⚡ **v1.16.0 - OS data gets its own directory, and every path follows your Claude Code and Codex config folders.** Data moves from inside the Claude Code config folder to `~/.aiteam` (`AITEAM_DATA_DIR` overrides it); an update you start moves it only after seven safety checks pass, and otherwise leaves it in place with a notice. `CLAUDE_CONFIG_DIR` and `CODEX_HOME` are respected throughout, and `aiteam paths` shows what a shell resolves. Codex pricing adds the Ultrafast tier, and `codex exec` launches from Claude Code are recorded with the tier they requested. Close other Claude Code and Codex sessions before updating; afterwards restart the API and reopen every session; see the changelog.
+> ⚡ **v1.17.1 - Source install fixed on Homebrew and Debian/Ubuntu system Python.** On a Python marked as externally managed (PEP 668), a fresh `python3 install.py` used to report success without installing the `aiteam` package, so the MCP server could not start. The installer now retries past the refusal and checks the package the way the MCP server loads it; updates also refresh pip's record and the `aiteam` command. Nothing else changed since v1.17.0, which brought feedback straight to GitHub and opt-in multi-host sync; see the changelog.
 >
 > Full version history: [CHANGELOG.md](CHANGELOG.md)
 
@@ -24,7 +24,7 @@ AI Team OS is a shared operating layer for **Claude Code and Codex**. Keep tasks
 [![MCP](https://img.shields.io/badge/MCP-Protocol-orange)](https://modelcontextprotocol.io)
 [![Stars](https://img.shields.io/github/stars/CronusL-1141/AI-company?style=flat)](https://github.com/CronusL-1141/AI-company)
 
-**118** MCP tools · **242** REST endpoints · **24** dashboard pages · **25** agent templates · **42** ecosystem research tools · **30** machine-checked invariants
+**126** MCP tools · **274** REST endpoints · **25** dashboard pages · **25** agent templates · **42** ecosystem research tools · **33** machine-checked invariants
 
 ---
 
@@ -85,7 +85,7 @@ Surfaces: MCP `memory_add` / `memory_list` / `memory_invalidate` / `memory_searc
 Choose the MCP surface for each client instead of loading every capability into every session.
 
 - **alwaysLoad dynamic rotation**: at session start a single SQL recomputes the hot-tool whitelist by **7-day real call frequency** (>=2-day span gate against bursty spikes + 20% hysteresis, hard cap <=5), and CC skips ToolSearch for them. Not additive, not hand-tuned; any stats failure silently degrades to all-defer, and every whitelist is logged for audit.
-- **`AITEAM_TOOLSETS` group switch**: 17 capability-domain toolsets; a startup env var decides which modules register. `default` core profile = task/team/memory/infra/reports/notices (30 tools, hard cap <=50), with incremental `default,ecosystem` - fits non-CC clients that cap tool counts.
+- **`AITEAM_TOOLSETS` group switch**: 19 capability-domain toolsets; a startup env var decides which modules register. `default` core profile = task/team/memory/infra/reports/notices (30 tools, hard cap <=50), with incremental `default,ecosystem` - fits non-CC clients that cap tool counts.
 - **`AITEAM_READONLY` read-only profile**: an orthogonal overlay that strips every write tool by explicit allowlist and keeps only read tools — ideal for audit / observer sessions.
 - **6 Claude Code templates declare least privilege**: meeting-facilitator / debate advocate & critic / technical-writer / project-manager / tech-lead carry `disallowedTools` entries for destructive OS tools (delete project, delete team, restart API). Claude Code 2.1.281 enforces them for both project- and user-level definitions (verified 2026-09-25); older versions may treat them as declarations only. Codex uses its own native permission controls rather than interpreting CC template fields.
 
@@ -276,7 +276,7 @@ The database holds project-scoped tasks, memory, reports, channels and observati
 ### Five-Layer Technical Architecture
 
 ```
-Layer 5: Web Dashboard    — React 19 + TypeScript + Shadcn UI (24 pages)
+Layer 5: Web Dashboard    - React 19 + TypeScript + Shadcn UI (25 pages)
 Layer 4: CLI + REST API   — Typer + FastAPI
 Layer 3: Team Orchestrator — LangGraph StateGraph (optional extra — CLI graph execution only)
 Layer 2: Memory Manager   — SQLite-backed store + pure-Python BM25 retrieval
@@ -468,7 +468,7 @@ The MCP server can expose the full tool inventory or a smaller set for each clie
 
 **`AITEAM_READONLY=1`** - orthogonal overlay that strips every write tool (create/update/delete/apply/send/... plus `os_restart_api`) after registration, keeping only read tools. Handy for audit/observer sessions.
 
-The 17 groups (default groups marked *):
+The 19 groups (default groups marked *):
 
 | Group | Tools | Group | Tools | Group | Tools |
 |---|---|---|---|---|---|
@@ -477,7 +477,8 @@ The 17 groups (default groups marked *):
 | memory * | 6 | meeting | 10 | task_analysis | 2 |
 | infra * | 8 | briefing | 4 | watchdog | 1 |
 | reports * | 3 | analytics | 4 | workflows | 3 |
-| notices * | 2 | ecosystem | 42 | | |
+| notices * | 2 | ecosystem | 42 | assets | 4 |
+| feedback | 4 | | | | |
 
 ```bash
 # Example: lean core + ecosystem, read-only
@@ -629,7 +630,7 @@ With the updated API and SessionStart hooks installed, Codex and Claude Code can
 ## MCP Tools
 
 <details>
-<summary>Expand to see the tool map (118 MCP tools across 18 modules)</summary>
+<summary>Expand to see the tool map (126 MCP tools across 20 modules)</summary>
 
 > The tables below are a curated selection — the full inventory lives in `src/aiteam/mcp/tools/` and is machine-counted by `scripts/check_readme_numbers.sh`.
 
@@ -705,7 +706,7 @@ See [the external execution guide](src/aiteam/data/USAGE.external-exec.md).
 project/reader/sender-scoped inbox, then returns persisted message bodies on an
 event. It does not schedule model turns or start a daemon. A completed Desktop
 turn cannot be restarted by this tool. The default wait is 45 seconds (maximum
-300). `io_timeout_seconds` independently budgets connection, subscription ACK,
+7200, so an idle session can hold one call for up to two hours). `io_timeout_seconds` independently budgets connection, subscription ACK,
 and each HTTP read (default 10 seconds, maximum 60). Set the client request
 timeout above `timeout_seconds + 4 * io_timeout_seconds + 5`.
 A client must send MCP cancellation or close the session to cancel
@@ -800,6 +801,24 @@ Error responses do not claim a delivery source.
 |------|-------------|
 | `notice_list` | List the notices OS shows the user (summary rows; pass `key` for one notice in full) |
 | `notice_dismiss` | Dismiss a notice for good, or snooze it for some hours |
+
+### Workflow Asset Backup
+
+| Tool | Description |
+|------|-------------|
+| `asset_backup_status` | Enrolled config folders, what each has backed up and what not (secret-scan holds, oversize), pending scan hits |
+| `asset_root_enroll` | Enroll this session's Claude Code config folder into a profile (backed up at once and on every session boundary and file write), or ignore it; macOS only |
+| `asset_backup_run` | Compare an enrolled folder now and back up what changed |
+| `asset_scan_resolve` | The user's answer to a secret-scan hit, in their own words (audited): allow that content, or exclude the file |
+
+### Feedback to the Maintainers
+
+| Tool | Description |
+|------|-------------|
+| `feedback_draft` | Draft a bug report (a GitHub Issue) or an idea (Discussions, Ideas) for the AI Team OS maintainers: secrets refused, personal paths and names rewritten, private terms refused; returns the exact text, similar posts and a content hash |
+| `feedback_submit` | Publish a draft once the user confirms it in the client's own dialog; without gh, the user authorizes OS's GitHub App in a second dialog (issues and discussions of the feedback repository only); without a dialog, hands the user a prefilled GitHub page instead |
+| `feedback_account` | Which way feedback goes (the user's gh or OS's GitHub App authorization) and as whom; sign the App authorization out |
+| `feedback_list` | The feedback filed from this machine: kind, title, status, GitHub number and link |
 
 ### Reports (Database-backed)
 
@@ -946,8 +965,8 @@ events; the total limit remains five.
 - [x] 8 structured meeting templates with keyword auto-select
 - [x] 25 professional Agent templates (23 base + 2 debate roles) with recommendation engine
 - [x] 4-layer defense rule system (37 rules) + behavioral enforcement
-- [x] Dashboard Command Center (React 19) — 24 pages including the `/workflows` swimlane, Workflow detail, the Ecosystem suite, `/usage` token attribution, `/usage/accounts` plan capacity, and Settings with model governance
-- [x] 118 MCP tools across 18 modules
+- [x] Dashboard Command Center (React 19) - 25 pages including the `/workflows` swimlane, Workflow detail, the Ecosystem suite, `/usage` token attribution, `/usage/accounts` plan capacity, and Settings with model governance
+- [x] 126 MCP tools across 20 modules
 - [x] CC Workflow observability layer (auto-tracking + /workflows dashboard + workflow_list / workflow_get / workflow_reconcile)
 - [x] Knowledge layer — zero-LLM reference graph + unified 3-arm RRF search (v1.8.0)
 - [x] Claude Code model governance - transcript-based discovery and startup defaults (v1.8.1)
@@ -999,14 +1018,14 @@ events; the total limit remains five.
 ```
 ai-team-os/
 ├── src/aiteam/
-│   ├── api/           - FastAPI REST endpoints (242 routes)
+│   ├── api/           - FastAPI REST endpoints (274 routes)
 │   ├── mcp/
 │   │   ├── server.py  — MCP server entry point
-│   │   └── tools/     - 18 tool modules (118 MCP tools)
-│   │       ├── agent.py, analytics.py, briefing.py, channels.py,
-│   │       ├── ecosystem.py, external_exec.py, infra.py, links.py, meeting.py,
-│   │       ├── memory.py, notices.py, project.py, reports.py, task.py,
-│   │       ├── task_analysis.py, team.py, watchdog.py, workflows.py
+│   │   └── tools/     - 20 tool modules (126 MCP tools)
+│   │       ├── agent.py, analytics.py, assets.py, briefing.py, channels.py,
+│   │       ├── ecosystem.py, external_exec.py, feedback.py, infra.py, links.py,
+│   │       ├── meeting.py, memory.py, notices.py, project.py, reports.py,
+│   │       ├── task.py, task_analysis.py, team.py, watchdog.py, workflows.py
 │   │       └── __init__.py  — Toolset registration entry
 │   ├── loop/          - Task wall engine + watchdog + frozen failure analysis
 │   ├── meeting/       — Meeting system
@@ -1020,7 +1039,7 @@ ai-team-os/
 │   ├── agents/        - 25 Claude Code Agent templates (.md)
 │   ├── harness/codex/ - Independent Codex adapter, hook manifest and helpers
 │   └── .claude-plugin/ - Claude Code plugin manifest
-├── dashboard/         — React 19 frontend (24 pages)
+├── dashboard/         - React 19 frontend (25 pages)
 ├── scripts/           — preflight + machine-checked invariants (incl. README number check)
 ├── docs/              — Design documents + ecosystem recipes
 ├── tests/             - Unit, integration and end-to-end checks

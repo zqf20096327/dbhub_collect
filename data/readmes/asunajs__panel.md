@@ -9,7 +9,7 @@
 - 用 JavaScript 写插件，把一组重复操作做成按钮或定时任务
 - 只想跑一段 Shell / Python / PHP / 二进制程序，不想为它写完整插件
 
-当前版本：**0.4.3**。设置页可以直接看到正在运行的面板版本。
+当前版本见 `Cargo.toml`（现在是 **0.6.3**）。设置页与 `/api/update/check` 也能看到正在运行的面板版本。
 
 ---
 
@@ -323,7 +323,9 @@ cargo test                      # 全部单测（含引擎 / 调度 / 网络层�
 bash scripts/check-pitfalls.sh  # 踩过的坑要有守卫盯着
 bash scripts/check-docs.sh      # 文档内链与篇幅
 bash scripts/check-plugin-boundary.sh  # 面板仓不放插件产物
-node --check web/app.js         # 前端零构建，改完刷新浏览器即可
+node --check web/app.js         # 语法自检（源文件）
+cd tools/web && node build.mjs  # 改了 web/ 下源文件之后重建压缩产物（否则页面跑旧产物）
+bash scripts/check-web-build.sh # 守卫：产物与源文件是否同步
 ```
 
 前端在 `web/`，没有构建步骤。日常部署用 `scripts/deploy-daily.sh`。

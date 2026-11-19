@@ -9,7 +9,7 @@
 
 **把本地 md/txt 文档变成带引用编号、可逐条核验的检索库。**
 
-面向 DeepSeek Harness 的本地文档知识库：按路径导入、滑窗切片、本地嵌入，混合检索返回带 `[n]` 标记的结果页，引用和删除都有可验证的落点。
+面向 DeepSeek Harness 的本地文档知识库：按路径导入、滑窗切片、本地嵌入，混合检索返回带 `dsh-v0.2.2-rc.4`（2026-11-18）；`[n]` 标记的结果页，引用和删除都有可验证的落点。
 
 [安装](#三步上手) · [配置](#配置) · [FAQ](#faq) · [简体中文](README.md) · [English](README.en.md) · [Español](README.es.md) · [Português](README.pt.md) · [हिन्दी](README.hi.md)
 
@@ -271,7 +271,7 @@ profile patch 覆盖示例：
 
 | 方面 | 状态 |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.2.1-alpha.1`（2026-09-24 核验：双 typecheck 尺子 + 108 项测试 + self-contained/artifacts 门；peer 三段式 `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0 \|\| >=0.1.7-0 <0.2.0`）。全族唯一已实跑 alpha.2 宿主冒烟的仓（2026-09-11）。 |
+| Harness | DeepSeek Harness `dsh-v0.2.2-rc.4`（2026-11-18 核验：双 typecheck 尺子 + 108 项测试 + self-contained/artifacts 门；peer 三段式 `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0 \|\| >=0.1.7-0 <0.2.0 \|\| >=0.2.2-0 <0.3.0`）。全族唯一已实跑 alpha.2 宿主冒烟的仓（2026-11-18）。 |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | 存储 | 任意 storage-domain 后端（JSON 或 SQLite）；索引存放在宿主的存储域中 |
 | 模型 | 无需任何模型——内置嵌入为确定性哈希（零下载） |

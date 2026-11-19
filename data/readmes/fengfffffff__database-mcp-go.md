@@ -1,5 +1,7 @@
 # database-mcp-go
 
+中文 | [English](README.en.md)
+
 > 把 MySQL、MariaDB、TiDB、OceanBase、KingbaseES、PostgreSQL、SQL Server、SQLite、MongoDB 与 Redis 以 MCP 工具暴露给 AI 客户端. 连接凭证留在服务端, 客户端只用实例别名加库名调用; 数据源可存文件或库表; 单个静态二进制自带管理页.
 
 ---
@@ -14,7 +16,7 @@
 | 事务语义 | SQL 类库多条语句同事务, 失败整体回滚 |
 | 双存储 | file 零依赖; mysql 密码加密落库 |
 | 配置热生效 | 增删改后缓存失效, 下次访问回源 |
-| 内嵌管理页 | `/admin` 提供搜索、分页、批量删除、状态开关、列设置 |
+| 内嵌管理页 | `/admin` 提供搜索、分页、批量删除、状态开关、列设置, 界面中英文切换, 默认中文 |
 | 中文错误 | 错误类别、错误码、SQLSTATE 与修正建议 |
 | 单文件交付 | 纯 Go 无 cgo, 复制二进制与配置即可运行 |
 | 日志 | 按天切分, 超期自动清理 |
@@ -106,7 +108,7 @@ file 模式编辑 `datasources.json`, 其余字段见第三章 file 模式一节
 curl http://127.0.0.1:47319/healthz
 ```
 
-启动前先填好 `config.yaml` 里的 `admin.username` 与 `admin.password`, 或用 `${ADMIN_PASSWORD}` 从环境变量注入密码, 缺一项进程会直接退出. 管理页始终开启, 访问 `http://127.0.0.1:47319/admin`, 支持类型统计、四条件筛选、分页、批量删除、状态开关、详情、列设置与重载.
+启动前先填好 `config.yaml` 里的 `admin.username` 与 `admin.password`, 或用 `${ADMIN_PASSWORD}` 从环境变量注入密码, 缺一项进程会直接退出. 管理页始终开启, 访问 `http://127.0.0.1:47319/admin`, 支持类型统计、四条件筛选、分页、批量删除、状态开关、详情、列设置与重载, 界面在右上角切换中英文, 默认中文.
 
 ### (5)、接入 MCP 客户端
 

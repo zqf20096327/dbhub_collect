@@ -6,116 +6,134 @@ checkout, acompanhamento de pedidos e painel administrativo.
 Projeto desenvolvido como parte do **Projeto Integrador Transdisciplinar em Engenharia de
 Software II** — Cruzeiro do Sul Virtual.
 
+- **Site publicado:** <https://doce-encanto-cupcakes.onrender.com> (o primeiro acesso pode levar ~1 min)
+- **Documentação completa (S1, S2, S3):** [`docs/`](docs/README.md)
+- **Manual de uso:** [`docs/S2-desenvolvimento/manual-de-uso.md`](docs/S2-desenvolvimento/manual-de-uso.md)
+- **Vídeo 1 – Demonstração do sistema (narrado, 5:04):** <https://youtu.be/H0iX2982atU>
+- **Vídeo 2 – Modificações após os testes (4:56):** <https://youtu.be/YTJZzke5LDA>
+
 ## Stack técnico
 
 - **Back-end:** Python 3 + Flask, padrão MVC (Model = SQLAlchemy, View = templates Jinja2,
   Controller = blueprints de rotas)
-- **Banco de dados:** MySQL (produção) / SQLite (desenvolvimento local, automático)
+- **Banco de dados:** TiDB Cloud, compatível com MySQL (produção) / SQLite (desenvolvimento local, automático)
 - **Autenticação:** Flask-Login, senhas com hash (Werkzeug)
-- **Front-end:** HTML + Bootstrap 5 (via CDN) + Jinja2
-- **Testes:** Pytest (10 testes cobrindo cadastro, login, carrinho e controle de acesso admin)
+- **Segurança:** proteção CSRF (Flask-WTF), cookies HttpOnly/Secure, segredos em variáveis de ambiente
+- **Front-end:** HTML + Bootstrap 5 (CDN) + Jinja2 + JavaScript
+- **Testes:** pytest (back-end e HTML) + `node --test` (JavaScript): **119 testes**
+- **Hospedagem:** Render (plano gratuito)
 
 ## Estrutura do projeto (MVC)
 
 ```
 cupcake_app/
 ├── app/
-│   ├── __init__.py          # Factory da aplicação (cria e configura o Flask app)
-│   ├── models.py            # MODEL — Cliente, Categoria, Produto, Pedido, ItemPedido
-│   ├── routes/               # CONTROLLER — um blueprint por área
+│   ├── __init__.py          # Factory da aplicação, CSRF, filtros e páginas de erro
+│   ├── models.py            # MODEL — Cliente, Categoria, Produto, Pedido, ItemPedido + regras de negócio
+│   ├── routes/              # CONTROLLER — um blueprint por área
 │   │   ├── main.py          # vitrine e detalhe de produto
 │   │   ├── auth.py          # cadastro, login, logout
 │   │   ├── cart.py          # carrinho, checkout, pedidos do cliente
 │   │   └── admin.py         # CRUD de produtos e gestão de pedidos (admin)
-│   ├── templates/            # VIEW — templates Jinja2
-│   │   └── admin/
-│   └── static/css/
-├── tests/
-│   └── test_app.py           # suíte de testes automatizados (pytest)
-├── config.py                 # configuração (lê variáveis de ambiente)
-├── run.py                    # ponto de entrada da aplicação
-├── seed.py                   # popula o banco com categorias/produtos/admin de exemplo
-├── schema.sql                # script DDL físico do banco (MySQL)
+│   ├── templates/           # VIEW — templates Jinja2
+│   ├── static/              # CSS, JavaScript (checkout.js) e imagens
+│   ├── formatacao.py        # filtros de exibição (R$ e horário de Brasília)
+│   └── seguranca.py         # validação de redirecionamentos
+├── certs/isrgrootx1.pem     # certificado PÚBLICO para o TLS do TiDB Cloud
+├── docs/                    # documentação por situação-problema (S1, S2, S3) + roteiro do vídeo
+├── tests/                   # testes automatizados (pytest) e tests/js (Node)
+├── config.py                # configuração (lê variáveis de ambiente / .env)
+├── run.py                   # ponto de entrada da aplicação
+├── seed.py                  # popula o banco com categorias/produtos/admin de exemplo
+├── verificar_banco.py       # diagnóstico SOMENTE LEITURA da conexão com o banco
+├── definir_senha_admin.py   # troca a senha do administrador
+├── schema.sql               # script DDL físico do banco (MySQL/TiDB)
+├── .env.example             # modelo do arquivo .env (o .env real não vai para o Git)
 └── requirements.txt
 ```
 
-## Como rodar localmente
+## Como rodar localmente (Windows / PowerShell)
 
-```bash
-# 1. Criar e ativar um ambiente virtual (opcional, mas recomendado)
-python3 -m venv venv
-source venv/bin/activate      # Windows: venv\Scripts\activate
+```powershell
+# 1. Criar o ambiente virtual e instalar as dependências
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
 
-# 2. Instalar dependências
-pip install -r requirements.txt
+# 2. Criar o arquivo de configuração local
+copy .env.example .env
+#    (deixe DATABASE_URL vazio para usar SQLite; preencha SECRET_KEY)
 
-# 3. Popular o banco com dados de exemplo (usa SQLite por padrão, nenhuma configuração extra)
-python seed.py
+# 3. Popular o banco com dados de exemplo
+.venv\Scripts\python.exe seed.py
 
 # 4. Rodar a aplicação
-python run.py
+.venv\Scripts\python.exe run.py
 ```
 
 Acesse **http://127.0.0.1:5000**.
 
-**Login de administrador de exemplo (criado pelo seed.py):**
-- E-mail: `admin@doceencanto.com`
-- Senha: `admin12345`
+**Administrador de exemplo (apenas no banco local):** `admin@doceencanto.com` / `admin12345`.
+Essa senha é pública: **em produção, troque-a** (veja abaixo).
 
 ## Rodando os testes
 
-```bash
-pytest tests/ -v
+```powershell
+.venv\Scripts\python.exe -m pytest tests -v
 ```
 
-## Usando MySQL em vez de SQLite
+Os testes usam um banco SQLite em memória: nunca alteram o banco local nem o TiDB.
+Detalhes no [plano de testes](docs/S3-testes-e-validacao/01-plano-de-testes.md).
 
-Por padrão, a aplicação usa SQLite (arquivo local, zero configuração) para facilitar o
-desenvolvimento. Para usar MySQL:
+## Variáveis de ambiente
 
-1. Crie o banco executando o script `schema.sql` no seu MySQL:
-   ```bash
-   mysql -u seu_usuario -p < schema.sql
-   ```
-2. Defina a variável de ambiente `DATABASE_URL` antes de rodar a aplicação:
-   ```bash
-   export DATABASE_URL="mysql+pymysql://usuario:senha@localhost/doce_encanto"
-   python seed.py     # cria os dados iniciais no MySQL
-   python run.py
-   ```
+| Variável | Obrigatória | Descrição |
+|---|---|---|
+| `DATABASE_URL` | Em produção | `mysql+pymysql://USUARIO:SENHA@HOST:4000/doce_encanto`. Vazia = SQLite local |
+| `SECRET_KEY` | Em produção | Chave aleatória do Flask. Gere com `python -c "import secrets; print(secrets.token_hex(32))"`. Sem ela, o app **não inicia** no Render |
+| `DB_SSL_CA` | Não | Caminho de outro certificado CA (padrão: `certs/isrgrootx1.pem`) |
+| `ADMIN_SENHA` | Não | Senha do admin criado pelo `seed.py` |
 
-## Deploy gratuito no PythonAnywhere (sugestão simples)
+Localmente, coloque-as no arquivo `.env` (nunca envie esse arquivo para o GitHub).
+No Render, cadastre-as em **Environment** no painel do serviço.
 
-O [PythonAnywhere](https://www.pythonanywhere.com) oferece, no plano gratuito, hospedagem
-para aplicações Flask **e** um banco de dados MySQL no mesmo painel — sem precisar configurar
-dois serviços diferentes.
+## Banco de dados TiDB Cloud
 
-Passo a passo resumido:
+- O script físico está em [`schema.sql`](schema.sql). O dicionário de dados está em
+  [`docs/S1-planejamento/05-dicionario-de-dados.md`](docs/S1-planejamento/05-dicionario-de-dados.md).
+- A conexão usa TLS validado pelo certificado `certs/isrgrootx1.pem`.
+- O TiDB vem com `tidb_enable_check_constraint` desligado (ignora `CHECK`). Por isso
+  todas essas regras também são validadas na aplicação.
+- Para conferir a conexão **sem alterar nada**: `python verificar_banco.py`.
 
-1. Crie uma conta gratuita em pythonanywhere.com.
-2. Na aba **Consoles**, abra um console Bash e clone o repositório:
-   ```bash
-   git clone <link-do-seu-repositorio-github>
-   cd cupcake_app
-   pip install --user -r requirements.txt
-   ```
-3. Na aba **Databases**, crie um banco MySQL gratuito (o painel já fornece host, usuário e senha).
-4. Execute o `schema.sql` na aba **Databases** (console MySQL do próprio painel) para criar as tabelas.
-5. Na aba **Web**, crie uma nova Web App, escolha "Manual configuration" + Python 3.10,
-   e aponte o WSGI file para importar `run.app` (ajuste o caminho do projeto).
-6. Configure a variável `DATABASE_URL` apontando para o MySQL criado no passo 3, no arquivo WSGI
-   (antes do `from app import create_app`), ou usando um arquivo `.env`.
-7. Rode `python seed.py` novamente no console para popular o MySQL de produção.
-8. Clique em **Reload** na aba Web. A aplicação estará em `https://seuusuario.pythonanywhere.com`.
+## Trocar a senha do administrador
+
+Com o `.env` apontando para o banco desejado:
+
+```powershell
+.venv\Scripts\python.exe definir_senha_admin.py
+```
+
+O script pede a nova senha duas vezes (ela não aparece enquanto você digita) e altera
+somente a senha do usuário `admin@doceencanto.com`.
+
+## Deploy no Render
+
+1. Serviço **Web Service** ligado a este repositório (branch `main`).
+2. **Build command:** `pip install -r requirements.txt`
+3. **Start command:** `gunicorn run:app`
+4. **Environment:** `DATABASE_URL` (TiDB Cloud) e `SECRET_KEY`.
+5. Cada `git push` na `main` gera um novo deploy automaticamente.
 
 ## Padrão MVC adotado
 
-- **Model** (`app/models.py`): representa os dados e regras de negócio (ex.: `Produto.disponivel()`,
-  `Cliente.checar_senha()`), isolado de HTTP e de apresentação.
-- **View** (`app/templates/`): templates Jinja2 responsáveis apenas pela apresentação, sem lógica de negócio.
-- **Controller** (`app/routes/`): recebe a requisição HTTP, aciona o Model, decide qual View renderizar.
+- **Model** (`app/models.py`): dados e regras de negócio (ex.: `Produto.tem_estoque_para()`,
+  `Pedido.cancelar()`, `Cliente.checar_senha()`), isolados de HTTP e de apresentação.
+- **View** (`app/templates/`, `app/static/`): apresentação, sem regra de negócio.
+- **Controller** (`app/routes/`): recebe a requisição, valida a entrada, aciona o Model e
+  escolhe a View.
 
 ## Rastreabilidade com as User Stories
 
-Cada rota do sistema traz no docstring a referência à história de usuário que implementa
-(ex.: `US01`, `US07`, `US17`), mantendo a rastreabilidade entre o backlog ágil e o código.
+Cada rota traz no docstring a história de usuário que implementa (ex.: `US01`, `US07`,
+`US17`). A matriz completa (história → código → teste) está em
+[`docs/S1-planejamento/02-user-stories.md`](docs/S1-planejamento/02-user-stories.md).

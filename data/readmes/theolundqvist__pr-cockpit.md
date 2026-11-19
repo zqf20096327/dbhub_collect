@@ -149,11 +149,12 @@ pr-cockpit owner/repo#123                   # state, checks, and review threads
 pr-cockpit owner/repo#123 --diff            # cached unified diff
 pr-cockpit owner/repo#123 --file src/app.ts # file contents at the PR head
 pr-cockpit owner/repo#123 --jobs            # queued, running, and completed jobs
-pr-cockpit owner/repo#123 --logs            # cached failed and cancelled job logs
+pr-cockpit owner/repo#123 --logs            # failed and cancelled job logs with check annotations
 pr-cockpit owner/repo#123 --logs verify --run 987 --attempt 2
+pr-cockpit runs owner/repo --run 987 --logs  # a run on a branch without a PR
 ```
 
-`--run` selects a cached run even after the PR head advances; `--attempt` selects its rerun attempt. Without these selectors, jobs and logs use the current head.
+`--run` selects a cached run even after the PR head advances; `--attempt` selects its rerun attempt. Without these selectors, jobs and logs use the current head. A log missing from the cache is fetched once more when you ask for it. If GitHub refuses to refresh Actions data, for example while quota is exhausted, reads print the reason and serve the cached rows.
 
 **Waiting on CI or a review? Listen instead of polling.**
 
@@ -161,13 +162,13 @@ pr-cockpit owner/repo#123 --logs verify --run 987 --attempt 2
 pr-cockpit listen owner/repo#123
 ```
 
-`listen` waits for substantive cached state changes—a push, check result, review, comment, or merge conflict—then prints what changed and exits. It returns at once when the PR already has failing checks, open comments, or merge conflicts, but never from a snapshot older than known webhook activity: it waits for revalidation first. `--ci-only`, `--comments-only`, and `--conflicts-only` narrow the wake signal.
+`listen` waits for substantive cached state changes—a push, check result, review, comment, or merge conflict—then prints what changed and exits. It returns at once when the PR already has failing checks, open comments, or merge conflicts, but never from a snapshot older than known webhook activity: it waits for revalidation first. `--next-change` skips those current blockers and waits for the next change. `--ci-only`, `--comments-only`, and `--conflicts-only` narrow the wake signal; `--ci-only` waits for pending CI to settle or fail.
 
-`pr-cockpit listen owner/repo#123 --run 987` waits for a specific run and reconciles it about every 30 seconds at the default interval, so missed webhooks cannot leave completion unobserved. A failed reconciliation exits with an error.
+`pr-cockpit listen owner/repo#123 --run 987` waits for a specific run and reconciles it about every 30 seconds at the default interval, so missed webhooks cannot leave completion unobserved. GitHub failures during the wait are printed and retried; a finished run is delivered even when GitHub withholds some of its logs. Runs on branches without a PR use the repository instead: `pr-cockpit cache-run owner/repo 987` and `pr-cockpit listen owner/repo --run 987`.
 
 CI completeness is durable for the observed head; an expired Actions viewing lease does not turn settled jobs back into pending work. Checks use the latest result per job name within each workflow/App, so metadata-only workflows with different names do not erase earlier required checks on that head. Skipped and neutral jobs retain their displayed state but satisfy required checks, [as on GitHub](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks); missing checks, incomplete pages, and unobserved jobs remain pending.
 
-The CLI also supports comments, reviews, thread resolution, edits, and merges through Cockpit's mutation queue. Run **`pr-cockpit --help`** for commands and options, including `--body-file` for exact multiline text and `--json` for machine-readable status. The installer separately asks before adding Cockpit instructions to supported coding assistants.
+The CLI also supports comments, reviews, thread resolution, edits, base retargeting, reopening, and merges through Cockpit's mutation queue. A queued merge lands only the head Cockpit had when it was queued; a later push fails it for another review. Run **`pr-cockpit --help`** for commands and options, including `--body-file` for exact multiline text and `--json` for machine-readable status. The installer separately asks before adding Cockpit instructions to supported coding assistants.
 
 Built-in agents launch from Cockpit's cached PR brief without spending GitHub API quota, and clone through Git rather than GitHub's API. They use `pr-cockpit` for PR reads and mutations; remote API operations still need available quota. With OMP, Opus uses the `opus` alias and Sonnet uses `anthropic/claude-sonnet-5-5`.
 
@@ -195,7 +196,7 @@ Keys are detected from `$XDG_CONFIG_HOME/.env` (or `~/.config/.env`), then `~/.e
 
 `/api/quota` and `/api/github-usage` also expose `userFallbacks`: always-on, bounded process-lifetime counts by repository/account scope, access reason, operation, and source, with the most recent attempt time. They contain no tokens or request bodies and do not require REST recording.
 
-For extra quota, choose **Settings → Workspace → Live updates → Connect GitHub App**, or **Add GitHub App** in a quota warning, then approve creation and repository installation on GitHub. Settings shows each repository's last successful App read and current problems; configuration alone never counts as working. Installed repositories use the App first for reads, including searches, Actions, comments, review threads, merge preflights, and post-write refreshes. Non-authored maintenance actions also use the App: labels, assignees, requested reviewers, PR title/body edits, close/draft/ready state, thread resolution, code-scanning dismissals, and Actions failed-job reruns. User fallback is allowed only for missing App repository access or permissions and is logged and counted, never for App quota exhaustion or connection errors. Secondary rate limits pause all identities and APIs.
+For extra quota, choose **Settings → Workspace → Live updates → Connect GitHub App**, or **Add GitHub App** in a quota warning, then approve creation and repository installation on GitHub. Settings shows each repository's last successful App read and current problems; configuration alone never counts as working. Installed repositories use the App first for reads, including searches, Actions, comments, review threads, merge preflights, and post-write refreshes. Non-authored maintenance actions also use the App: labels, assignees, requested reviewers, PR title/body/base edits, close/reopen/draft/ready state, thread resolution, code-scanning dismissals, and Actions failed-job reruns. User fallback is allowed only for missing App repository access or permissions and is logged and counted, never for App quota exhaustion or connection errors. Secondary rate limits pause all identities and APIs.
 
 Comments, reviews, reactions, commit-producing actions, and merges retain your user identity. GitHub [attributes installation requests to the App](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation), and the [merge endpoint](https://docs.github.com/en/rest/pulls/pulls#merge-a-pull-request) cannot override the merger's identity; a squash commit's author is not its “merged by” actor. Read-quota exhaustion does not disable merging, but an exhausted User REST budget still cannot pay for the attributed merge PUT. Identity-only reads (your login, account repository discovery, and user-specific review state) cannot be replaced with an installation's identity.
 
@@ -213,7 +214,7 @@ Cockpit is a client for your existing GitHub workflow, not a second place to mai
 - **Keeping it current:** the hosted relay is enabled by default. It receives GitHub webhooks and delivers compact change markers and Actions run/job state, including runner assignment—not full PR contents or job logs—to Cockpit. Cockpit never sends the relay your GitHub token; it proves read access to each repository with commit data only readers can look up, and that proof rotates daily. Branch pushes refresh open PRs whose head or base matches, including recently viewed PRs outside the inbox. A direct GitHub poller repairs missed events.
 - **Your relay, if you prefer:** you can configure a different relay URL. See [Self-hosting](docs/self-host-relay.md) for deployment and connection instructions.
 
-Local caching does **not** mean the app makes no external connections. Besides GitHub and the relay, the backend has [Sentry error reporting enabled by default](server/sentry.ts) and sends [usage statistics](#usage-statistics).
+Local caching does **not** mean the app makes no external connections. Besides GitHub and the relay, Cockpit sends [usage statistics](#usage-statistics) and, only if you turn it on, [error reports](#error-reports).
 
 <details>
 <summary><strong>Updates, diagnostics, and configuration</strong></summary>
@@ -254,6 +255,10 @@ Cockpit counts how it is found, installed, and used. These statistics are not an
 - **Turning it off:** **Settings → Usage**, or `COCKPIT_USAGE_STATS=0` or `DO_NOT_TRACK=1` in the server's environment, which keeps it off regardless of the setting.
 
 prcockpit.com counts visits, where they came from (`utm_source` or the referring site), the OS family, and which of its links and buttons are pressed and whether the install command is copied, per browser tab without cookies; it honours Do Not Track and Global Privacy Control. The install script reports when it starts, finishes, or fails, with the failed stage, under a random run id; `DO_NOT_TRACK=1` or `COCKPIT_USAGE_STATS=0` turns that off.
+
+### Error reports
+
+Error reports are off until you turn on **Send error reports** in **Settings → Usage**. While off, the backend never initializes its [Sentry](server/sentry.ts) client and the installer sends nothing. While on, server errors go to the maintainer's Sentry with their messages and stack traces, and a failed install or update sends its stage and a redacted log tail. Messages can name repositories or file paths. An empty `COCKPIT_SENTRY_DSN` in the server's environment keeps reports off regardless of the setting.
 
 ## Contribute
 

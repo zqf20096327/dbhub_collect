@@ -5,7 +5,7 @@
 
 DeepSeek Harness 插件：**多数据源**数据库查询。在「设置 → 数据库」里添加、编辑、删除数据源，模型通过工具直接用它们；默认只读，写入逐条问你。
 
-支持 **海量 Vastbase / openGauss**、PostgreSQL、MySQL、SQLite。
+支持 **海量 Vastbase / openGauss**、**达梦 DM8**、PostgreSQL、MySQL、SQLite。
 
 ## 为什么海量要单独处理
 
@@ -56,7 +56,8 @@ npm install
    SQLite 的只读表函数（`SELECT * FROM pragma_table_info('t')`）仍然可用。
 2. **会话级只读**：`db_query` / `db_schema` 走**独立的只读连接**，即使数据源本身是可写的也一样——
    连接后 `SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY`（MySQL 用
-   `SET SESSION TRANSACTION READ ONLY`，SQLite 用只读句柄 + `PRAGMA query_only`），
+   `SET SESSION TRANSACTION READ ONLY`，达梦每条查询包一个 `SET TRANSACTION READ ONLY` 事务、查完回滚，
+   SQLite 用只读句柄 + `PRAGMA query_only`），
    写不进去是数据库说的，不靠插件自觉。
 3. **界面开关**：只读数据源上 `db_exec` 直接拒绝；改成可写只能由你点，模型改不了。
 
@@ -67,7 +68,7 @@ npm install
 
 ## 已知限制
 
-- **只支持 PostgreSQL 协议系与 MySQL/SQLite**；Oracle、SQL Server 未接。
+- **只支持 PostgreSQL 协议系、MySQL、达梦 DM8 与 SQLite**；Oracle、SQL Server 未接。
 - **结果以文本返回**：单元格统一转字符串（NULL 显示 `NULL`），单次最多 `maxRows` 行；暂不支持导出 CSV。
 - **同一条数据源上的查询串行执行**，慢查询会挡住后面的查询。
 - **`db_schema` 不列外键、索引、触发器**。

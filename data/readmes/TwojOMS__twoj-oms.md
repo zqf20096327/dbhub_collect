@@ -61,10 +61,15 @@ node scripts/instalacja-otworz.mjs --katalog "$HOME/oms-demo" --port 39151
 ```
 
 Katalog musi być podany ścieżką bezwzględną (stąd `$HOME`) i leżeć poza repozytorium — trafiają do niego pliki
-z hasłem (`proba.env`, `administrator-proby.env`), których `.gitignore` nie pomija. Ostatnia komenda uruchamia panel pod
+z hasłem i kluczem (`proba.env`, `administrator-proby.env`, `klucz.env`) oraz baza. Ostatnia komenda uruchamia panel pod
 `http://127.0.0.1:39151/login` i działa, dopóki jej nie przerwiesz (Ctrl+C); login i hasło administratora
 leżą w `~/oms-demo/administrator-proby.env`. Zobaczysz trzy zmyślone zamówienia. Szczegóły
 i ograniczenia: [docs/instalacja-klienta.md](docs/instalacja-klienta.md).
+
+W tym samym katalogu instalator zakłada `klucz.env` — klucz, którym OMS szyfruje w bazie hasła i tokeny
+integracji. W próbie leży obok bazy, więc kopia całego katalogu zawiera jedno i drugie. Na serwerze klucz
+leży osobno, poza katalogiem danych ([docs/instalacja-docker.md](docs/instalacja-docker.md), rozdział
+„Klucz poświadczeń”). Nie kasuj go: bez niego OMS nie wstanie, a nowy klucz nie odczyta zapisanych poświadczeń.
 
 ## Instalacja na serwerze
 
@@ -88,8 +93,9 @@ npm run typy        # tylko kontrola typów
 npx vitest run tests/moduly/zwroty   # testy jednego modułu
 ```
 
-Część testów PDF potrzebuje programu `pdftotext` (pakiet Poppler) w `PATH`: bez niego jedne się pomijają,
-inne kończą błędem. CI tego repozytorium instaluje Popplera. Pełna bramka trwa kilkadziesiąt
+Do testów PDF potrzebny jest Poppler z `pdftotext` w `PATH` (`apt install poppler-utils`); bez niego testy
+odczytu PDF się pomijają, a na początku przebiegu pojawia się ostrzeżenie z liczbą pominiętych plików.
+CI tego repozytorium instaluje Popplera. Pełna bramka trwa kilkadziesiąt
 minut; w trakcie pracy uruchamiaj testy dotkniętego modułu. Zasady zmian i mapa kodu dla agenta:
 [AGENTS.md](AGENTS.md), [docs/dla-agenta/](docs/dla-agenta/).
 

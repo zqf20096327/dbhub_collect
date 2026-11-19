@@ -12,8 +12,6 @@
 对标 [db-k](https://github.com/Kuangcp/DB-K) 的数据库客户端（Go + mygo）。
 **已完成与后续规划见 [`Roadmap.md`](Roadmap.md)**
 
-![](/docs/snapshots/Snipaste_2026-11-07_18-05-53.webp)
-
 ## 为什么选 DB-G
 
 **一个可执行文件，四个数据源，键盘上一路到底。**
@@ -28,6 +26,32 @@ DB-G 是本地优先的桌面数据库客户端：不装运行时、不连云端
 - **大库不卡**：对象按页加载 + 24 小时磁盘缓存，几万个对象也只查当前需要的那一页。
 - **结果能干活**：结果钉住对比、单元格编辑单事务提交、JSON 树查看、CSV / JSON / SQL INSERT 导出。
 - **数据留在本机**：连接密码 AES-256-GCM 本机加密，日志自动脱敏，无遥测、无账号。
+
+## 截图
+
+<p align="center">
+  <a href="docs/snapshots/Snipaste_2026-11-19_00-45-07.png">
+    <img src="docs/snapshots/Snipaste_2026-11-19_00-45-07.png"
+         alt="DB-G 主界面：左侧数据源与对象树，中间 SQL 编辑器，下方结果表格与数据库状态栏" width="100%">
+  </a>
+</p>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/snapshots/Snipaste_2026-11-19_00-45-47.png">
+        <img src="docs/snapshots/Snipaste_2026-11-19_00-45-47.png"
+             alt="DB-G 设置窗口：外观、字体、AI 助手与同步等分区" width="100%">
+      </a>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/snapshots/Snipaste_2026-11-19_00-46-04.png">
+        <img src="docs/snapshots/Snipaste_2026-11-19_00-46-04.png"
+             alt="DB-G AI 助手：右侧对话面板，结合当前连接与 SQL 上下文" width="100%">
+      </a>
+    </td>
+  </tr>
+</table>
 
 ## 下载与运行
 
@@ -105,7 +129,9 @@ Release 页面提供安装包（GitHub / Gitee 均可）：
       新执行时 pinned Tab 保留在左、新结果追加到右；切控制台各自保留，重启消失（内存态）；
       **刷新查询**：查询结果工具条最左侧的刷新按钮用该结果对应的 SQL 在原结果 Tab 里重跑，
       写语句/DDL 等无结果集的执行不显示；
-      **结果区底栏**：显示当前数据库名、数据源版本（连接后异步读取）与数据源标签；
+      **常驻状态栏**（结果区底栏；Alt+D 隐藏结果、执行计划下也保留）：显示当前数据库名、
+      数据源版本（连接后异步读取）、数据源标签，以及最近一次执行的耗时
+      （查询区分「执行 / 读取」两段；驱动在读行时同时上报进度）；
       每个数据源最多 3 个彩色标签，在连接弹窗里输入后 Enter 添加（可模糊搜索复用已有标签），
       标签右侧 × 移除，点色块循环换色；
       **SQL 历史**（每个数据源一个 `history/<connectionID>.jsonl`，最多保留 5000 条，

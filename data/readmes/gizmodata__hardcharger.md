@@ -30,6 +30,26 @@
 
 <h3 align="center">Fast, secure, remote DuckDB. Every feature included.</h3>
 
+<p align="center">The quickest start: fully managed, nothing to install.</p>
+<p align="center">
+  <a href="https://gizmodata.com/cloud"><img src="docs/assets/gizmodata-cloud-badge.png" alt="Run it on GizmoData Cloud" height="48"></a>
+</p>
+<h3 align="center">
+  <a href="https://docs.hardcharger.gizmodata.com">📖 Documentation</a>
+  &nbsp;·&nbsp;
+  <a href="https://gizmodata.com/hardcharger/install">⬇️ Install it yourself</a>
+</h3>
+<p align="center">Or try it on your phone or tablet:</p>
+<p align="center">
+  <a href="https://apps.apple.com/us/app/hardcharger/id6824900180"><img src="docs/assets/app-store-badge.svg" alt="Download
+
+[...截断...]
+
+ on the App Store" height="40"></a>
+  &nbsp;
+  <a href="https://play.google.com/store/apps/details?id=com.gizmodata.hardcharger"><img src="docs/assets/google-play-badge.png" alt="Get it on Google Play" height="40"></a>
+</p>
+
 ---
 
 ## 🏎️ What is Hardcharger?
@@ -43,11 +63,7 @@ It is the successor to [GizmoSQL](https://github.com/gizmodata/gizmosql), rebuil
 scratch for DuckDB 2.0, and it is free: no editions, no license keys. Everything that was
 Enterprise in GizmoSQL is in every Hardcharger build.
 
-- 🦆 **DuckDB 2.0 inside.** A standalone server on D
-
-[...截断...]
-
-uckDB's v2 C API, not an extension.
+- 🦆 **DuckDB 2.0 inside.** A standalone server on DuckDB's v2 C API, not an extension.
 - ⚡ **Chargewire on the wire.** A query and its first rows come back in one HTTP round trip.
   Large results stream as Arrow IPC, compressed with LZ4 or zstd when asked, and can be resumed. Bulk ingest
   streams Arrow straight into a table.
@@ -59,6 +75,9 @@ uckDB's v2 C API, not an extension.
 - 🧩 **Configured your way.** Flags, `HARDCHARGER_*` environment variables, or a YAML file.
 - 🌐 **Ready to scale out.** Results are already described as partitions with locations,
   so distributed query execution can arrive without a protocol change.
+
+📖 **[The documentation](https://docs.hardcharger.gizmodata.com)** covers installing, connecting
+from every client, security, operations and the full reference.
 
 ## 🖥️ Desktop app (v2.1.0+)
 
@@ -94,18 +113,4 @@ settings import/export, and the difference between closing and quitting.
   <img src="docs/assets/web-ui-query-dark.png" alt="Hardcharger's web UI, dark theme" width="49%">
 </p>
 
-Hardcharger has a web UI compiled into the server binary: nothing extra to install, and it is
-served on the server's own port and TLS certificate. It is off by default; `--web-ui` turns it on
-(or `HARDCHARGER_WEB_UI=true`, or `web_ui: true` in the YAML file).
-
-```bash
-openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -nodes -days 30 -subj /CN=localhost -addext subjectAltName=DNS:localhost -keyout server.key -out server.pem
-HARDCHARGER_ADMIN_PASSWORD='change-me' hardcharger-server --web-ui --tls-cert server.pem --tls-key server.key --database demo.duckdb
-# open https://localhost:31337/ui and sign in as hardcharger / change-me (the certificate is self-signed)
-```
-
-- ✍️ **SQL editor**: up to 20 tabs, each with its own session (its own transaction, temporary
-  tables and settings). Ctrl/⌘+Enter runs the statement at the cursor (a bar in the margin
-  marks it) or exactly the selection; ⇧ runs all, with a result tab per result set and
-  Messages. Cancel stops the statement on the server and says how far a script got. An open
-  or failed tran
+Hardcharger has a web UI compiled into the server 

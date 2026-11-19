@@ -2,11 +2,11 @@
  "valkey-io/valkey": {
   "commit_7d": 36,
   "commit_90d": 379,
-  "rel_ver": "9.2.0-rc2",
-  "rel_pub": "2026-11-04",
-  "rel_days": 13,
-  "rel_n90": 11,
-  "rel_pre": true,
+  "rel_ver": "9.1.4",
+  "rel_pub": "2026-11-18",
+  "rel_days": 0,
+  "rel_n90": 16,
+  "rel_pre": false,
   "rel_none": false,
   "sec_n": 13,
   "sec_worst": "high",
@@ -22,7 +22,7 @@
    "GHSA-p876-p7q5-hv2m(CVE-2025-67733,high)"
   ],
   "contrib_n": 382,
-  "enriched_at": "20261117",
+  "enriched_at": "20261118",
   "lang": {
    "C": 63,
    "Tcl": 28,
@@ -33,14 +33,19 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261117",
-   "release": "20261117",
+   "release": "20261118",
    "security": "20261115"
   },
   "etag": {
-   "release": "W/\"8fe7c8abc4ea79ad12a899fc3b8d16f76db81fca44ae0cc96bce91db95bd2b4f\"",
+   "release": "W/\"e5128d802223c294a1554d18abebdf4afdea0f7cbfcdf49c1894894f94c2daaa\"",
    "security": "W/\"d3ac958842c25cf11cf0f39e9600b763527f056daed921ea2635d10ac2ca4176\""
   },
   "rel_dates": [
+   "2026-11-18",
+   "2026-11-18",
+   "2026-11-18",
+   "2026-11-18",
+   "2026-11-18",
    "2026-11-04",
    "2026-10-26",
    "2026-10-27",
@@ -54,6 +59,31 @@
    "2026-08-31"
   ],
   "rel_notes": [
+   {
+    "t": "9.1.4",
+    "d": "2026-11-18",
+    "n": "* FUNCTION LOAD no longer aborts the server when a library calls `server.log()` at its top level, including when loading from RDB or AOF by @madolson (#5114)\n* Fix an active defrag crash when a database is replaced by an async `FLUSHDB`/`FLUSHALL`, `SWAPDB` or a replica full sync while a large key is being defragmented by @taham0 (#4968)"
+   },
+   {
+    "t": "9.0.8",
+    "d": "2026-11-18",
+    "n": "* Fix active defrag crash when a database's keyspace is replaced (async `FLUSHDB`/`FLUSHALL`, `SWAPDB`, replica full sync) while a large key is being defragmented by @taham0 (#4968)"
+   },
+   {
+    "t": "8.1.12",
+    "d": "2026-11-18",
+    "n": "* Fix a crash in active defrag when a database's keyspace is replaced mid-scan by `FLUSHDB ASYNC`, `FLUSHALL ASYNC`, `SWAPDB` or a replica's flush before full sync by @taham0 (#4968)"
+   },
+   {
+    "t": "8.0.13",
+    "d": "2026-11-18",
+    "n": "* Fix a crash in active defrag when a database's keyspace is replaced mid-scan, for example by `FLUSHDB ASYNC`, `SWAPDB`, or a replica's flush before a full sync by @taham0 (#4968)"
+   },
+   {
+    "t": "7.2.16",
+    "d": "2026-11-18",
+    "n": "Valkey 7.2.16  -  Released Wed 18 November 2026\n-----------------------------------------------\n\nUpgrade urgency SECURITY: This release includes security fixes we recommend you apply as soon as possible.\n\n### Security Fixes\n* CVE-2026-130822: Fix a use-after-free crash in client eviction when maxmemory-clients is enabled by @nadav-levanoni (#5435)\n\n### Bug Fixes\n* Fix crashes, hangs, and duplicate set members when a key name or collection member reaches 2 GiB, including a crash when eviction samples a 2 GiB"
+   },
    {
     "t": "9.2.0-rc2",
     "d": "2026-11-04",
@@ -78,31 +108,6 @@
     "t": "8.0.12",
     "d": "2026-10-26",
     "n": "Valkey 8.0.12  -  Released Mon 26 October 2026\n----------------------------------------------\n\nUpgrade urgency SECURITY: This release includes security fixes we recommend you apply as soon as possible.\n\n### Security Fixes\n* GHSA-f4q9-j22m-xqq9: Fix a heap buffer overflow in cluster Pub/Sub message construction that could allow an authenticated client to potentially execute arbitrary code by publishing an oversized message by @roshkhatri (#5030)\n\n### Bug Fixes\n* Fix stream commands that mutate consumer-group"
-   },
-   {
-    "t": "7.2.15",
-    "d": "2026-10-26",
-    "n": "* Harden stream validation on RDB load and RESTORE so crafted payloads can no longer crash the server on later commands by @madolson (#3922)\n* Fix an ACL bypass where duplicate STORE/STOREDIST options let GEORADIUS write or delete keys outside the user's permitted patterns by @tjade273 (#3971)\n* Listpacks are now always validated on RDB load and RESTORE, preventing deferred assertion crashes; `sanitize-dump-payload` and its ACL flags become no-ops by @jjuleslasarte (#3721)"
-   },
-   {
-    "t": "9.2.0-rc1",
-    "d": "2026-09-16",
-    "n": "* Add forkless RDB snapshots, opt-in via the new `forkless-infrastructure-enabled` and `bgsave-default-method` configs, with new INFO persistence fields reporting the save method and progress by @JimB123 (#4460)\n* Support whole-stream LZ4 compression of RDB files via the new `rdbcompression lz4` option; the default per-string LZF behavior is unchanged by @sarthakaggarwal97 (#3531)\n* `MOVE` accepts a new optional `REPLACE` argument to overwrite an existing key in the destination database by @bandalgomsu (#29"
-   },
-   {
-    "t": "9.0.6",
-    "d": "2026-09-01",
-    "n": "* Always deep-validate payloads on RDB load and RESTORE, preventing deferred assertion crashes; sanitize-dump-payload is now a deprecated no-op by @jjuleslasarte (#3721)\n* Reject invalid slot import ranges when loading an RDB, preventing corrupted files from creating bad migration state by @enjoy-binbin (#4229)\n* Fix a crash when COPY ends with a bare DB token during slot migration, and block cross-DB COPY regardless of option order by @madolson (#4301)\n* Reject RDB slot-import records with an invalid job n"
-   },
-   {
-    "t": "9.1.2",
-    "d": "2026-09-01",
-    "n": "* Reject invalid slot import ranges when loading an RDB, so corrupted files can no longer create bad migration jobs by @enjoy-binbin (#4229)\n* MOVE and COPY now check ACL access to the current database, so users can no longer exfiltrate keys from an unauthorized DB by @cjx-zar (#4155)\n* Harden stream validation on RDB load and RESTORE so crafted payloads can no longer crash the server on later commands by @madolson (#3922)\n* Fix a crash on COPY with a trailing DB option during slot migration, and block cros"
-   },
-   {
-    "t": "8.1.10",
-    "d": "2026-08-31",
-    "n": "* Always validate listpacks on RDB load and RESTORE to prevent deferred crashes; `sanitize-dump-payload` and the related ACL flags are now deprecated no-ops by @jjuleslasarte (#3721)\n* Fix an ACL bypass where duplicate STORE/STOREDIST options in GEORADIUS commands escaped key write permission checks by @tjade273 (#3971)\n* Reject crafted stream RESTORE/RDB payloads with inconsistent lengths or negative field counts that could crash the server by @madolson (#3922)"
    }
   ]
  },
@@ -111,7 +116,7 @@
   "commit_90d": 458,
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-11-12",
-  "rel_days": 5,
+  "rel_days": 6,
   "rel_n90": 21,
   "rel_pre": false,
   "rel_none": false,
@@ -222,7 +227,7 @@
   "commit_90d": 345,
   "rel_ver": "v0.27.1",
   "rel_pub": "2026-10-31",
-  "rel_days": 17,
+  "rel_days": 18,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -275,7 +280,7 @@
   "commit_90d": 192,
   "rel_ver": "2.2.0",
   "rel_pub": "2026-10-29",
-  "rel_days": 19,
+  "rel_days": 20,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -337,9 +342,9 @@
   "commit_90d": 268,
   "commit_7d": 12,
   "rel_ver": "early-access-release",
-  "rel_pub": "2026-11-16",
+  "rel_pub": "2026-11-18",
   "rel_days": 1,
-  "rel_n90": 14,
+  "rel_n90": 15,
   "rel_pre": true,
   "rel_none": false,
   "sec_n": 0,
@@ -354,17 +359,22 @@
    "FreeMarker": 1,
    "Python": 0
   },
-  "enriched_at": "20261117",
+  "enriched_at": "20261119",
   "dim_ts": {
    "commit": "20261117",
-   "release": "20261117",
+   "release": "20261119",
    "security": "20261027"
   },
   "rel_notes": [
    {
     "t": "early-access-release",
-    "d": "2026-11-16",
-    "n": "SchemaCrawler early access release at last commit 0626ffa08165ce604627c258eb8724942cc6bc1a"
+    "d": "2026-11-18",
+    "n": "SchemaCrawler early access release at last commit ac3585602df01082d38a5a154a4fd404e194acb4"
+   },
+   {
+    "t": "v18.0.3",
+    "d": "2026-11-17",
+    "n": "* Bump com.clickhouse:clickhouse-jdbc from 0.11.0 to 0.11.1 by @dependabot[bot] in https://github.com/schemacrawler/SchemaCrawler/pull/2559"
    },
    {
     "t": "v18.0.2",
@@ -405,18 +415,14 @@
     "t": "v17.15.3",
     "d": "2026-09-20",
     "n": "* Upgrade SQL Server driver by @sualeh in https://github.com/schemacrawler/SchemaCrawler/pull/2492"
-   },
-   {
-    "t": "v17.15.2",
-    "d": "2026-09-11",
-    "n": "SchemaCrawler  release at last commit d034efffaffdf6e8729fe9484f4ea60d3f4ea3c7\nSee the change history at https://www.schemacrawler.com/changes-report.html\n\n\n## What's Changed\n* Prepare for the next release by @sualeh in https://github.com/schemacrawler/SchemaCrawler/pull/2488\n\n\n**Full Changelog**: https://github.com/schemacrawler/SchemaCrawler/compare/v17.15.1...v17.15.2"
    }
   ],
   "etag": {
-   "release": "W/\"80b0b6bee29964a39ec6171401522311f2abcfbcabebd9ab75f5379187437dac\""
+   "release": "W/\"257d41c287151a690738c31ef15c6a75017ac3271694875c399cd62f9c49354a\""
   },
   "rel_dates": [
-   "2026-11-16",
+   "2026-11-18",
+   "2026-11-17",
    "2026-11-10",
    "2026-10-30",
    "2026-10-14",
@@ -437,7 +443,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2022-05-26",
-  "rel_days": 1636,
+  "rel_days": 1637,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -462,7 +468,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.8.2",
   "rel_pub": "2022-01-29",
-  "rel_days": 1753,
+  "rel_days": 1754,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -484,7 +490,7 @@
   "commit_7d": 0,
   "rel_ver": "tokudb-7.1.6",
   "rel_pub": "2014-05-09",
-  "rel_days": 4575,
+  "rel_days": 4576,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -507,7 +513,7 @@
   "commit_7d": 0,
   "rel_ver": "1.14.0",
   "rel_pub": "2026-06-19",
-  "rel_days": 151,
+  "rel_days": 152,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -539,7 +545,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.7.4",
   "rel_pub": "2022-10-31",
-  "rel_days": 1478,
+  "rel_days": 1479,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -579,7 +585,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.60.1",
   "rel_pub": "2026-10-12",
-  "rel_days": 36,
+  "rel_days": 37,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -711,7 +717,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.0.0",
   "rel_pub": "2025-07-26",
-  "rel_days": 479,
+  "rel_days": 480,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -738,7 +744,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.9.0",
   "rel_pub": "2017-10-13",
-  "rel_days": 3322,
+  "rel_days": 3323,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -760,8 +766,8 @@
   "commit_7d": 0,
   "rel_ver": "v1.100.0",
   "rel_pub": "2026-10-27",
-  "rel_days": 21,
-  "rel_n90": 9,
+  "rel_days": 22,
+  "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -817,7 +823,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0-alpha.20180407",
   "rel_pub": "2018-04-07",
-  "rel_days": 3146,
+  "rel_days": 3147,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -857,7 +863,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-09-30",
-  "rel_days": 48,
+  "rel_days": 49,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -930,7 +936,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1.0",
   "rel_pub": "2017-09-26",
-  "rel_days": 3339,
+  "rel_days": 3340,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -949,7 +955,7 @@
   "commit_7d": 2,
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-07",
-  "rel_days": 71,
+  "rel_days": 72,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -1160,7 +1166,7 @@
  "domsen123/mrx-nuxt-template": {
   "rel_ver": "v0.1.5",
   "rel_pub": "2025-09-04",
-  "rel_days": 439,
+  "rel_days": 440,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1210,7 +1216,7 @@
  "mhernesniemi/kide-cms": {
   "rel_ver": "v0.29.3",
   "rel_pub": "2026-09-18",
-  "rel_days": 60,
+  "rel_days": 61,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1259,7 +1265,7 @@
  "stackernews/booger": {
   "rel_ver": "v0.0.3-sigma",
   "rel_pub": "2023-06-27",
-  "rel_days": 1239,
+  "rel_days": 1240,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1295,7 +1301,7 @@
  "sakurawwwxh/qq-agent-plus": {
   "rel_ver": "v0.9.16",
   "rel_pub": "2026-11-15",
-  "rel_days": 2,
+  "rel_days": 3,
   "rel_n90": 18,
   "rel_pre": false,
   "rel_none": false,
@@ -1397,7 +1403,7 @@
  "oracle/oci-powershell-modules": {
   "rel_ver": "v143.0.0",
   "rel_pub": "2026-09-22",
-  "rel_days": 56,
+  "rel_days": 57,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1415,7 +1421,7 @@
  "IARC-CSU/CanReg5": {
   "rel_ver": "v5.00.44i",
   "rel_pub": "2023-01-27",
-  "rel_days": 1390,
+  "rel_days": 1391,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1436,7 +1442,7 @@
  "muhammadhanif/crud-application-using-flask-and-mysql": {
   "rel_ver": "v1.0",
   "rel_pub": "2019-06-19",
-  "rel_days": 2708,
+  "rel_days": 2709,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1482,7 +1488,7 @@
  "brian-emarquez/Python-Course": {
   "rel_ver": "1.6.1",
   "rel_pub": "2026-09-24",
-  "rel_days": 54,
+  "rel_days": 55,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1516,7 +1522,7 @@
  "dhamith93/csv-sql": {
   "rel_ver": "v1.1.1",
   "rel_pub": "2021-06-13",
-  "rel_days": 1983,
+  "rel_days": 1984,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1533,7 +1539,7 @@
  "terraform-providers/terraform-provider-opc": {
   "rel_ver": "v1.3.6",
   "rel_pub": "2019-05-09",
-  "rel_days": 2749,
+  "rel_days": 2750,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1579,7 +1585,7 @@
  "JointOps/hitlimit-monorepo": {
   "rel_ver": "v1.5.0",
   "rel_pub": "2026-05-18",
-  "rel_days": 183,
+  "rel_days": 184,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1597,7 +1603,7 @@
  "eduardocornelsen/full-funnel-ai-analytics": {
   "rel_ver": "v0.9.1",
   "rel_pub": "2026-05-21",
-  "rel_days": 180,
+  "rel_days": 181,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1719,7 +1725,7 @@
  "voltade/cnpg-supabase": {
   "rel_ver": "cnpg-cluster-0.4.4",
   "rel_pub": "2026-02-03",
-  "rel_days": 287,
+  "rel_days": 288,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1739,7 +1745,7 @@
  "griffin-php/griffin": {
   "rel_ver": "1.0.0",
   "rel_pub": "2021-04-24",
-  "rel_days": 2033,
+  "rel_days": 2034,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1812,7 +1818,7 @@
  "studiomado/query-bundle": {
   "rel_ver": "v3.0.0-dev",
   "rel_pub": "2022-10-04",
-  "rel_days": 1505,
+  "rel_days": 1506,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1873,7 +1879,7 @@
  "SammyTourani/evestack": {
   "rel_ver": "@evestack/dashboard@0.4.0",
   "rel_pub": "2026-08-11",
-  "rel_days": 98,
+  "rel_days": 99,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1911,7 +1917,7 @@
  "darkterminal/libsql-driver-laravel": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2024-05-24",
-  "rel_days": 907,
+  "rel_days": 908,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1978,7 +1984,7 @@
  "chdb-io/chdb-cli": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-08-10",
-  "rel_days": 1195,
+  "rel_days": 1196,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1993,7 +1999,7 @@
  "Wildboar-Software/directory": {
   "rel_ver": "v4.0.0-rc1",
   "rel_pub": "2026-02-08",
-  "rel_days": 282,
+  "rel_days": 283,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2074,7 +2080,7 @@
  "robertjkeller/PyARINC424": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2025-05-07",
-  "rel_days": 559,
+  "rel_days": 560,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2141,7 +2147,7 @@
  "CleverTap/stormdb": {
   "rel_ver": "1.2.0",
   "rel_pub": "2020-09-03",
-  "rel_days": 2266,
+  "rel_days": 2267,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2262,7 +2268,7 @@
  "simonw/sqlite-chronicle": {
   "rel_ver": "0.6.1",
   "rel_pub": "2026-02-15",
-  "rel_days": 275,
+  "rel_days": 276,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2285,7 +2291,7 @@
  "yuanrui/CodeGenerator": {
   "rel_ver": "v1.3.2507.11",
   "rel_pub": "2025-07-11",
-  "rel_days": 494,
+  "rel_days": 495,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2431,7 +2437,7 @@
  "Olipro/ZomboidDB": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2022-01-12",
-  "rel_days": 1770,
+  "rel_days": 1771,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3019,7 +3025,7 @@
   "commit_7d": 0,
   "rel_ver": "release-1.13-1.3.1.2",
   "rel_pub": "2026-05-18",
-  "rel_days": 183,
+  "rel_days": 184,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3174,7 +3180,7 @@
  "matttsys/RayZen-Pilot": {
   "rel_ver": "v5.0.0-alpha.2",
   "rel_pub": "2026-10-19",
-  "rel_days": 29,
+  "rel_days": 30,
   "rel_n90": 4,
   "rel_pre": true,
   "rel_none": false,
@@ -3199,7 +3205,7 @@
  "asifletzshop/letzcontrol": {
   "rel_ver": "v1.1.26",
   "rel_pub": "2026-10-23",
-  "rel_days": 25,
+  "rel_days": 26,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3225,7 +3231,7 @@
  "ahmershahdev/zovita": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-03",
-  "rel_days": 45,
+  "rel_days": 46,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3353,7 +3359,7 @@
  "likvp/AgeCMS": {
   "rel_ver": "v1.10.0",
   "rel_pub": "2026-11-06",
-  "rel_days": 11,
+  "rel_days": 12,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3400,7 +3406,7 @@
   },
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-11-13",
-  "rel_days": 4,
+  "rel_days": 5,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3432,6 +3438,89 @@
    "security": "20261117",
    "contrib": "20261117",
    "lang": "20261117"
+  }
+ },
+ "baiwumm/better-admin": {
+  "etag": {
+   "release": "W/\"7beac71f1bfbcb2e5b803f821c2668de013d7d05805ee2217bbb64bdf60912ed\"",
+   "security": "\"3d7a2811ccf01dc15e3300f73eb934b5d4743e21a0d2d050c125dadf550233e6\""
+  },
+  "rel_ver": "v1.2.1",
+  "rel_pub": "2026-11-18",
+  "rel_days": 1,
+  "rel_n90": 8,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_dates": [
+   "2026-11-18",
+   "2026-11-18",
+   "2026-11-04",
+   "2026-10-14",
+   "2026-09-26",
+   "2026-09-25",
+   "2026-09-23",
+   "2026-08-28"
+  ],
+  "rel_notes": [
+   {
+    "t": "v1.2.1",
+    "d": "2026-11-18",
+    "n": "## v1.2.1（2026-11-18）\n\n共 6 个提交（[v1.2.0...v1.2.1](https://github.com/baiwumm/better-admin/compare/v1.2.0...v1.2.1)）。\n\n### ✨ 新增功能\n\n- feat(website): 重做回到顶部浮钮的视觉与入场动画\n- feat(website): 顶栏 Logo 与站名放大到参考站尺寸\n\n### ♻️ 重构\n\n- refactor(website): 对齐进度条改用 HeroUI Meter 并清理无引用主题别名\n\n### 💄 格式\n\n- style(website): 页脚品牌标识同步为 28px\n- style(website): 文档区侧栏 Logo 与首页"
+   },
+   {
+    "t": "v1.2.0",
+    "d": "2026-11-18",
+    "n": "## v1.2.0（2026-11-18）\n\n共 31 个提交（[v1.1.1...v1.2.0](https://github.com/baiwumm/better-admin/compare/v1.1.1...v1.2.0)）。\n\n### ✨ 新增功能\n\n- feat(website): 首页重构为 HeroUI 暗色终端风格\n- feat: 补 AI 搜索发现与 FAQ 结构化数据\n- feat: 文档页补可见面包屑与 BreadcrumbList\n- feat: 文档站补结构化数据与更新时间\n\n### 🐛 修复\n\n- fix: 重新上传宣传片附件修复 README 视频无法播放\n- fix: 修正文档站 OG/Twitter 元数据与图片 M"
+   },
+   {
+    "t": "v1.1.1",
+    "d": "2026-11-04",
+    "n": "## v1.1.1（2026-11-04）\n\n共 20 个提交（[v1.1.0...v1.1.1](https://github.com/baiwumm/better-admin/compare/v1.1.0...v1.1.1)）。\n\n### ✨ 新增功能\n\n- feat(playground): 四端 number-flow meta 回填 usedIn 指向控制台\n- feat(react,vue): 两端接入 @vercel/analytics 2.0.1 站点分析\n\n### 🐛 修复\n\n- fix(a11y): 四端命令面板 Esc 关闭与进度条 aria 播报\n- fix(website): 清理既有 lint 告警\n- fix(nuxt): 契约冒烟脚本凭据失效修复——缺省回退 demo-login\n- fix("
+   },
+   {
+    "t": "v1.1.0",
+    "d": "2026-10-14",
+    "n": "## v1.1.0（2026-10-14）\n\n共 13 个提交（[v1.0.2...v1.1.0](https://github.com/baiwumm/better-admin/compare/v1.0.2...v1.1.0)）。\n\n### ✨ 新增功能\n\n- feat(nest): auth 接口接入 @nestjs/throttler 按 IP 限流（契约 v1.14.1）\n- feat(website): 首页主视觉改用真实渲染的宣传片，新增回到顶部进度钮\n- feat(website): 首页卡片统一 TiltCard 交互并移除 card-premium 悬停效果\n\n### 🐛 修复\n\n- fix(nest): trust proxy 定值 3 跳——线上取证 XFF 链为 clien"
+   },
+   {
+    "t": "v1.0.2",
+    "d": "2026-09-26",
+    "n": "- fix(nest): e2e 补 rbac 用户自建与连接重试，CI 改自托管 TLS postgres 容器\n- ci: nest e2e 独立 job（TEST_DATABASE_URL + 库内自建 e2e schema）"
+   },
+   {
+    "t": "v1.0.1",
+    "d": "2026-09-25",
+    "n": "## v1.0.1（2026-09-25）\n\n共 20 个提交（[v1.0.0...v1.0.1](https://github.com/baiwumm/better-admin/compare/v1.0.0...v1.0.1)）。\n\n### ✨ 新增功能\n\n- feat(website): 首页导航精简、对齐卡入口收敛、技术栈卡片内置线上站点按钮\n- feat(nuxt): theme-switch-animation 升级 0.4.0，演示场适配反向揭开与 15 种动画类型\n- feat: Nuxt 端语言包补文档站快捷链接词条\n- feat: 侧栏快捷链接新增文档站入口并排在 GitHub 之上\n\n### ♻️ 重构\n\n- r"
+   },
+   {
+    "t": "v1.0.0",
+    "d": "2026-09-23",
+    "n": "- fix(vue,ci): 显式标注两处回调参数类型（CI TS7006）+ CI 构建期占位 DATABASE_URL（next build page data 收集）\n- fix: Nuxt 端 db client 补齐事务池防护四项（对齐 Next 端）"
+   },
+   {
+    "t": "v0.1.0",
+    "d": "2026-08-28",
+    "n": "本版本完成 **React（Hero UI）+ NestJS + PostgreSQL** 的第一套完整全栈系统（Phase 1–3），\n### NestJS 后端（Drizzle ORM + PostgreSQL / Supabase）"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "TypeScript": 70,
+   "Vue": 24,
+   "CSS": 3,
+   "JavaScript": 1,
+   "MDX": 1
+  },
+  "enriched_at": "20261119",
+  "dim_ts": {
+   "release": "20261119",
+   "security": "20261119",
+   "contrib": "20261119",
+   "lang": "20261119"
   }
  }
 }

@@ -48,6 +48,7 @@ Make0 Brain is one memory that all of them share:
 
 - **Tell one agent, every agent knows.** A fact saved from Cursor is found by Claude Code in the next session.
 - **Nothing is overwritten silently.** Every edit, from any agent, is kept as a version with who wrote it and when.
+- **Contradictions are resolved.** When a new memory reverses an older one, the newer one wins and the older one is archived, on every install with no key. Connect a local or hosted LLM and it gets better: it also catches reworded updates and changed values, and merges duplicates. See [Context stays consistent](#context-stays-consistent).
 - **It stays yours.** One SQLite file on your machine, MIT licensed, exportable to plain Markdown.
 
 <p align="center">
@@ -218,8 +219,9 @@ Every memory an app retrieves or writes is counted per app and per brain, with a
 
 ### Context stays consistent
 
-- **Contradictions replace older facts.** If Cursor saves "I don't like dark mode in my editor" after Claude saved "I like dark mode in my editor", the newer memory wins and the older one is archived, with its history intact.
-- **Duplicates merge (with an API key or a local model).** An LLM judge compares close matches and merges restatements into one memory. The merged text may only use words from the two originals, so it cannot invent facts. Without one, duplicates are kept rather than guessed at.
+- **Contradictions replace older facts.** If Cursor saves "I don't like dark mode in my editor" after Claude saved "I like dark mode in my editor", the newer memory wins and the older one is archived, with its history intact. The archived memory records which memory replaced it: the recycle bin shows the replacement, and an open memory lists what it replaced in its History timeline, with a Recover link. Editing a memory with `update_memory` is checked the same way.
+- **Without an LLM, only clear reversals are replaced.** The two memories must say the same thing with opposite polarity, so "I like dark mode" and "I dislike light mode" both stay. A memory saved as a correction replaces the one memory it matches most closely. A changed value, such as "I live in Pune" then "I live in Bangalore", is kept as two memories.
+- **Changed values and duplicates are handled with an API key or a local model.** An LLM judge compares the closest memories, found by meaning as well as by shared words, so "I'm based in Bangalore now" is compared with "My home city is Pune". It replaces contradictions and merges restatements into one memory. The merged text may only use words from the two originals, so it cannot invent facts.
 - **Related memories are linked.** Similar memories get links automatically, and search follows them up to two hops, so asking about a project also surfaces the decisions tied to it.
 
 Switch a brain to **3D** to orbit and zoom through it: categories branch from the center, and each memory sits on its category.
@@ -258,7 +260,7 @@ Search results include `versionCount`. When it is greater than 1, an agent can c
 | Action                                   | What happens                                           |
 | ---------------------------------------- | ------------------------------------------------------ |
 | `update_memory` or an edit in the viewer | A new current version. Older versions stay.            |
-| A contradicting or merged memory         | The older memory is archived with all its versions.    |
+| A contradicting or merged memory         | The older memory is archived with all its versions, and records what replaced it. |
 | `delete_memory`                          | Archived: hidden from search and reads, versions kept. |
 | Re-import of an edited note              | A new version of that memory, not a duplicate.         |
 | Re-import of a note you deleted          | Skipped. Deleted stays deleted.                        |
@@ -379,7 +381,7 @@ The Markdown export imports back in. The JSON bundle includes archived memories 
 
 ## Optional API key or local model
 
-Nothing needs a key. With one, Make0 Brain also merges duplicate memories, picks better categories, filters search results with an LLM, and can `import --extract`. A model running on your own machine can do the same work without a key.
+Nothing needs a key. With one, Make0 Brain resolves more memory contradictions (reworded updates and changed values, not only clear reversals), merges duplicate memories, picks better categories, filters search results with an LLM, and can `import --extract`. A model running on your own machine can do the same work without a key.
 
 Copy `.env.example` to `.env` in this folder, or to `~/.make0/.env` so every app shares one file:
 
@@ -399,6 +401,8 @@ MAKE0_BRAIN_LLM_SEARCH=0       # keep search on the local reranker
 
 Point `MAKE0_BRAIN_LLM_BASE_URL` at a server on `localhost` and no key is needed. Nothing leaves your computer.
 
+A server on another machine on your network works the same way, such as a Strix Halo mini PC or a desktop GPU at `http://192.168.1.50:8080/v1`. Private addresses (`10.x`, `172.16`–`31.x`, `192.168.x`, Tailscale's `100.64`–`127.x`, IPv6 `fc00::/7` and `fe80::/10`) and `.local`, `.lan`, `.home.arpa`, and `.internal` names are recognized. Memories go to that server and nowhere else. For a hostname Brain cannot place, such as a tunnel, set `MAKE0_BRAIN_LLM_LOCAL=1`; set `0` to treat a private address as a hosted API.
+
 ```bash
 ollama pull llama3.2
 ```
@@ -408,7 +412,7 @@ MAKE0_BRAIN_LLM_BASE_URL=http://localhost:11434/v1   # Ollama; LM Studio is http
 MAKE0_BRAIN_LLM_MODEL=llama3.2                       # default llama3.2 on localhost
 ```
 
-A local URL wins over a hosted key set in the same environment. A local model is slower than a hosted API, so its calls get five times longer to answer, and search stays on the fast local reranker unless you set `MAKE0_BRAIN_LLM_SEARCH=1`. Servers that reject OpenAI's JSON mode are asked again without it. A model of 7B parameters or more gives noticeably better merges and extractions than a 1B to 3B one.
+A local or network URL wins over a hosted key set in the same environment, and that key is never sent to it. A local model is slower than a hosted API, so its calls get five times longer to answer, and search stays on the fast local reranker unless you set `MAKE0_BRAIN_LLM_SEARCH=1`. Servers that reject OpenAI's JSON mode are asked again without it. A model of 7B parameters or more gives noticeably better merges and extractions than a 1B to 3B one.
 
 `MAKE0_BRAIN_BASE_URL`, the name before 0.3, still works.
 
@@ -427,6 +431,7 @@ Make0 Brain reads `./.env`, then `.env` in the data folder (`MAKE0_BRAIN_HOME`, 
 | With an API key: search (`MAKE0_BRAIN_LLM_SEARCH` not `0`) | The query and candidate memories, to filter results    | Your provider                         |
 | With an API key: `import --extract`           | The full text of the imported files (for `--sessions`, the redacted digest) | Your provider                 |
 | With a localhost `MAKE0_BRAIN_LLM_BASE_URL`   | The same as with an API key, but to a server on this machine     | Nothing leaves the machine            |
+| With a private-network `MAKE0_BRAIN_LLM_BASE_URL` | The same as with an API key, but to a server on your network | That server only                      |
 | `import --sessions` without `--extract`       | Nothing                                                          |                                       |
 | `MAKE0_BRAIN_EMBEDDINGS=api`                  | The text of every memory and every query, to embed it            | Your provider                         |
 
@@ -476,7 +481,7 @@ A memory is text, and an agent can read it as an instruction. A web page or a fi
 
 ### Backups
 
-Make0 Brain does not back up your database by itself. Copy one of these somewhere safe, and do it before you upgrade:
+Make0 Brain backs up your database only when an upgrade changes its format (see [Upgrades](#upgrades)). For a regular backup, copy one of these somewhere safe:
 
 ```bash
 npx @make0-ai/brain export --json ~/make0-brain-backup.json   # every memory, version, and link
@@ -487,7 +492,9 @@ Copy `brain.db` directly only when no app is running, or you may miss recent wri
 
 ### Upgrades
 
-Upgrading does not need a new `init`. Agents run the server through `npx`, so they pick up a new release the next time they start. If you moved to a fixed global install (see [What leaves your machine](#what-leaves-your-machine)), nothing updates until you install a newer version yourself. If `npx @make0-ai/brain --version` shows an old version, a global install is shadowing npx: `npm install -g @make0-ai/brain@latest`. On first open, a new version migrates `brain.db` in place, one transaction per step, so a failed step leaves the database as it was. Migrations add tables and columns and fill in new fields; they do not remove your memories. Older versions are not tested against a migrated database, so back up before upgrading if you might go back.
+Upgrading does not need a new `init`. Agents run the server through `npx`, so they pick up a new release the next time they start. If you moved to a fixed global install (see [What leaves your machine](#what-leaves-your-machine)), nothing updates until you install a newer version yourself. If `npx @make0-ai/brain --version` shows an old version, a global install is shadowing npx: `npm install -g @make0-ai/brain@latest`. On first open, a new version migrates `brain.db` in place, one transaction per step, so a failed step leaves the database as it was. Migrations add tables and columns and fill in new fields; they do not remove your memories.
+
+Before a migration runs, Make0 Brain copies the database to a file next to it, named for the old format and the time, such as `~/.make0/brain.pre-upgrade-v7-20261117-101530.db`, and prints one line saying it is upgrading and where the copy is. In an agent, that line goes to the MCP server log. If the copy cannot be written, the database is not upgraded and the command stops with an error. The copies are never deleted for you, so remove old ones when you no longer need them. Older versions are not tested against a migrated database: to go back, stop your apps and copy the backup over `~/.make0/brain.db`.
 
 ### Requirements and status
 
@@ -565,8 +572,9 @@ If `init` doesn't cover your app, add a stdio server and paste the custom instru
 | `MAKE0_BRAIN_HOME`                                              | `~/.make0`                                  | Data folder: database, models, `.env`.  |
 | `MAKE0_BRAIN_DB`                                                | `$MAKE0_BRAIN_HOME/brain.db`                | Database file.                          |
 | `OPENAI_API_KEY` / `OPENROUTER_API_KEY` / `MAKE0_BRAIN_API_KEY` | unset                                       | Turns on the optional LLM features.     |
-| `MAKE0_BRAIN_LLM_BASE_URL`                                      | OpenAI, or OpenRouter for an OpenRouter key | OpenAI-compatible endpoint. A localhost one needs no key. Formerly `MAKE0_BRAIN_BASE_URL`. |
-| `MAKE0_BRAIN_LLM_MODEL`                                         | `gpt-6-luna`; `llama3.2` on localhost       | Chat model.                             |
+| `MAKE0_BRAIN_LLM_BASE_URL`                                      | OpenAI, or OpenRouter for an OpenRouter key | OpenAI-compatible endpoint. Needs no key; one on localhost or a private network counts as a model server you run. Formerly `MAKE0_BRAIN_BASE_URL`. |
+| `MAKE0_BRAIN_LLM_LOCAL`                                         | detected from the URL                       | `1` treats the base URL as a model server you run; `0` as a hosted API. |
+| `MAKE0_BRAIN_LLM_MODEL`                                         | `gpt-6-luna`; `llama3.2` for a model server | Chat model.                             |
 | `MAKE0_BRAIN_EMBEDDINGS`                                        | `local`                                     | `local` (MiniLM) or `api`.              |
 | `MAKE0_BRAIN_EMBEDDING_MODEL`                                   | `text-embedding-3-small`                    | Embedding model when `api`.             |
 | `MAKE0_BRAIN_LLM_SEARCH`                                        | on with a key, off with a local model       | `0` keeps search on the local reranker; `1` sends it to a local model. |

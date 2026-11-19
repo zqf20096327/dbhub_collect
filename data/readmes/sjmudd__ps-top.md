@@ -1,6 +1,6 @@
 # ps-top - a top-like program for MySQL
 
-ps-top is a program which collects information from MySQL 5.6+'s
+ps-top is a program which collects information from MySQL 5.6+ and MariaDB 10.6+'s
 performance_schema database and uses this information to display
 server load in real-time. Data is shown by table or filename and
 the metrics also show how this is split between select, insert,
@@ -87,18 +87,30 @@ So please check your settings. Simply configure in `/etc/my.cnf`:
 If you change this setting you'll need to restart MariaDB for it to take
 effect.
 
+## Tested versions
+
+| Server  | Versions             |
+|---------|----------------------|
+| MySQL   | 8.0, 8.4, 9.7, 26.10 |
+| MariaDB | 10.6, 11.8, 12.3     |
+
+See `test/integration/README.md` for the Docker test harness.
+
 ## Grants
 
 `ps-top` needs `SELECT` grants to access `performance_schema`
 tables. It will not run if access is not available.
 
-`setup_instruments`: To view `mutex_latency` or `stages_latency`
-`ps-top` will try to change the configuration if needed and if you
-have grants to do this. If the server is `--read-only` or you do not
+`UPDATE` on `performance_schema.setup_instruments`: To view `mutex_latency`
+or `stages_latency` `ps-top` will try to change the configuration if needed
+and if you have grants to do this. If the server is `--read-only` or you do not
 have sufficient grants to change these tables these views may be empty.
-Pior to stopping `ps-top` will restore the `setup_instruments` configuration
+Prior to stopping `ps-top` will restore the `setup_instruments` configuration
 back to its original settings if it had successfully updated the table
 when starting up.
+
+`PROCESS`: needed by the Activity by Username view to see other users'
+connections. Without it only `ps-top`'s own connection is shown.
 
 ## Views
 

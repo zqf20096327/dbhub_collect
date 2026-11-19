@@ -20,7 +20,7 @@ It complements LLM gateways (which route requests and cap spend) and tracing too
 
 <sub>Demo data from `npm run db:demo`, captured by CI on 3 November 2026, and shown in your GitHub theme. The breakdown shows cost per resolved ticket for the Support Bot, the project that resolves tickets. The demo sets budgets from the current month's spend, so they're small this early in a month.</sub>
 
-> **Status:** Milestones 0–9 are complete: exact, tier-aware pricing, authenticated ingestion, the dashboard, budgets with alerts, Docker deployment, demo data, rate limiting, the TypeScript and Python clients, OpenTelemetry intake, reconciliation with Anthropic, OpenAI and Google Cloud bills, cost by customer, feature, agent run, tag and outcome, CSV and FOCUS exports, a reporting API, budget notifications and checks, and audited price management. Milestone 10 added roles, an audit log, organizations and single sign-on. Milestone 12 rounded out the clients, and Milestone 13 has a [billing ledger](docs/BILLING.md) with plans, monthly usage charges, prepaid credit and plan usage limits; and a revenue minus AI API cost view; invoicing and Stripe are not built. See [docs/ROADMAP.md](docs/ROADMAP.md), and [docs/PRODUCT_UPGRADE_AUDIT.md](docs/PRODUCT_UPGRADE_AUDIT.md) for a verified list of what works and what doesn't.
+> **Status:** Milestones 0–9 are complete: exact, tier-aware pricing, authenticated ingestion, the dashboard, budgets with alerts, Docker deployment, demo data, rate limiting, the TypeScript and Python clients, OpenTelemetry intake, reconciliation with Anthropic, OpenAI and Google Cloud bills, cost by customer, feature, agent run, tag and outcome, CSV and FOCUS exports, a reporting API, budget notifications and checks, and audited price management. Milestone 10 added roles, an audit log, organizations and single sign-on. Milestone 12 rounded out the clients, and Milestone 13 has a [billing ledger](docs/BILLING.md) with plans, monthly usage charges, prepaid credit and plan usage limits; and a revenue minus AI API cost view, and optional draft invoicing through Stripe. See [docs/ROADMAP.md](docs/ROADMAP.md), and [docs/PRODUCT_UPGRADE_AUDIT.md](docs/PRODUCT_UPGRADE_AUDIT.md) for a verified list of what works and what doesn't.
 
 ## Features
 
@@ -57,7 +57,7 @@ What it doesn't do yet (the plan is in [docs/PRODUCT_UPGRADE_PLAN.md](docs/PRODU
 - **Unpriced usage isn't estimated.** Usage with no stored price is kept as unpriced and left out of totals, budgets and exports until a price is added and `npm run reprice` runs; the tracker never guesses a cost.
 - **Usage is reported by your code**, through the API or the [TypeScript](clients/typescript/README.md) and [Python](clients/python/README.md) clients, or OpenTelemetry traces. Provider bills are compared with recorded costs (`npm run reconcile`), not imported as usage. The clients read usage from OpenAI, Anthropic and Gemini streams with `trackStream()` / `track_stream()`.
 - **Budgets only hold for calls that ask first.** A reservation stops concurrent steps from overspending, but a provider call your app makes without reserving isn't stopped (see [Reserving budget](#reserving-budget)). The TypeScript and Python clients reserve with `reserveBudget()` / `reserve_budget()`.
-- **Cost is broken down by project, provider, model, customer, user, feature, run and tag.** `metadata` is stored but not filterable. The [billing ledger](docs/BILLING.md) records what customers owe: plan fees and usage charges posted each month from the command line, adjustments, and prepaid credit applied against them. [`/revenue`](docs/BILLING.md#revenue-and-ai-api-cost) puts each customer's revenue next to their AI API cost. There are no invoices or payment collection yet.
+- **Cost is broken down by project, provider, model, customer, user, feature, run and tag.** `metadata` is stored but not filterable. The [billing ledger](docs/BILLING.md) records what customers owe: plan fees and usage charges posted each month from the command line, adjustments, and prepaid credit applied against them. [`/revenue`](docs/BILLING.md#revenue-and-ai-api-cost) puts each customer's revenue next to their AI API cost. Draft invoices for it can be created in [Stripe](docs/BILLING.md#invoicing-through-stripe), in test mode by default; payments aren't recorded back yet.
 - **Prices are token prices (with audio and image tokens at their own rates) plus web search**, seeded and managed at `/prices`. OpenAI's Ultrafast tier isn't tracked.
 - **Organizations are managed from the command line**, as accounts are. An account is in one organization, and prices are shared across the install.
 - **Days are UTC days** for "today", "this month" and the charts.
@@ -142,6 +142,7 @@ src/
     spend/        Daily spend chart and provider/model breakdown
     usage/        Usage events table with filters and pagination
     changes/      Why spend changed between two periods
+    savings/      Savings estimates from batching, caching and model choice
     projects/     Projects list, create and edit pages (server actions)
   db/
     schema.ts     Drizzle schema (projects, model_pricing, usage_events)
@@ -163,6 +164,7 @@ src/
     billing-plans.ts  Billing plans and month-by-month subscriptions
     billing-charges.ts  A month's usage cost per customer, and posting monthly charges
     billing-credits.ts  Prepaid credit: grants, applying it to what's owed, refunds
+    billing-stripe.ts  Draft Stripe invoices for ledger entries, once each
     scripts/      `npm run api-key`, `user`, `db:demo`, `reconcile` and `budget-alerts` commands
     seed/         Sample project and dated model prices (`npm run db:seed`)
     demo/         Deterministic demo data generator and loader (`npm run db:demo`)
@@ -184,7 +186,8 @@ src/
     email.ts      Sends plain-text email over SMTP
     audit.ts      Audit entries: what's recorded and how it reads
     budget-check.ts  Budget check payloads and the exact allow/deny rule
-    forecast.ts   Month-end forecast from the 7-full-day pace
+    forecast.ts   Month-end forecast from the 7-full-day pace, its range and data check
+    navigation.ts The dashboard's sections and pages, by role
     spike.ts      Spending spike rule, against the same 7-day pace
     spend-signals.ts  Forecast and spike notifications: planning and messages
     prices.ts     Price list: current, scheduled and ended prices; stale checks
@@ -266,6 +269,21 @@ npm run user -- reset-password --email you@example.com < password.txt
 npm run user -- revoke-sessions --email you@example.com     # sign out everywhere
 ```
 
+Every dashboard page has the same navigation bar, with the account and **Sign out**:
+
+| Section      | Pages                                                          |
+| ------------ | -------------------------------------------------------------- |
+| Overview     | `/overview`: spend today, this month and over 30 days          |
+| Usage        | `/usage` events, `/spend` over time, `/breakdown` by attribute |
+| Insights     | `/changes` why spend changed, `/savings` savings estimates     |
+| Customers    | `/revenue` revenue and AI API cost per customer                |
+| Budgets      | `/projects`, with each project's budgets                       |
+| Prices       | `/prices`                                                      |
+| Integrations | `/ingestion` ingestion health                                  |
+| Team         | `/audit` audit log, for admins                                 |
+
+The current section and page are marked, and a section's pages show beneath it. Sections an account's role can't open aren't shown.
+
 Each account has a role, and every role can read the whole dashboard. Add `--role` to `create` to choose one; without it, a new account is an `admin`, and accounts from before roles existed are admins too. A new role applies on the next request, without signing the user out. The server checks the role on every change, not only by hiding links.
 
 | Role     | Projects | Prices                             |
@@ -303,6 +321,18 @@ Prices are shared by the whole install, so only the install's owners, the admins
 
 Each driver is swapped from the earlier period to the later one in that order, holding the others (a chained substitution), so the effects add up to the change exactly, overall and per model; a different order would give somewhat different amounts, and the page says so. The last four split the change in a model's cost per token: its tokens of each kind (uncached and cached input, cache writes, output) are repriced at the model's standard rates in the price table at the end of each period. Whatever that repricing doesn't explain is **other**, which is zero when every request was billed at those plain rates; a model without a price in both periods has all of its cost-per-token change there. Each step is rounded once to the micro-dollar. Only priced requests count, and unpriced ones in either period are flagged.
 
+### Savings estimates
+
+`/savings` estimates what the last 30 full UTC days of standard-tier usage, for all projects or one, would have cost in three other ways, at the price table's current rates. They're labelled as estimates on the page, with their assumption beside each, and they overlap, so they aren't added up:
+
+| Estimate                  | Assumption                                                                                                   |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Batching                  | All of it went through the provider's Batch API, at the model's batch price; none for a model without one    |
+| Caching, per 10% of input | Each 10% of uncached input is read from the prompt cache instead, before the cost of writing it to the cache |
+| Model choice              | The same tokens on the cheapest other model from the same provider; no claim that it would do as well        |
+
+Tokens are repriced by kind at each model's standard rates, without long-prompt tiers, audio or image rates. None of them knows whether your prompts repeat, whether the work can wait a day, or whether a cheaper model is good enough, and another model may use a different number of tokens for the same text. Unpriced usage and usage already at another tier are left out and counted. A model with no current price gets no estimate.
+
 ### Revenue
 
 `/revenue` shows, for a UTC month, each customer's revenue from the [billing ledger](docs/BILLING.md), the AI API cost of their usage, and **revenue minus AI API cost**, with its share of revenue. That difference leaves out every other cost, so it's never called profit. Customers whose usage wasn't billed, and usage with no customer, are listed too, and unpriced usage is flagged. See [Revenue and AI API cost](docs/BILLING.md#revenue-and-ai-api-cost).
@@ -337,7 +367,7 @@ The sign-in page then shows **Sign in with …** above the password form; withou
 - `/overview` is the page you land on after signing in. It shows total spend **today**, **this month** and over the **last 30 days**, overall and per project. Totals are summed in SQL as exact decimals. Today and this month start at midnight **UTC**. The last 30 days is a rolling window of 30 × 24 hours ending now. Usage counts by its `occurredAt`, not when it was received.
   Each project's row also shows **this month's spend against its monthly budget**: the amount, the percentage used (rounded down, so it never shows 100% early), a meter, and how much is left or how far over it is. Projects without a budget show spend only. The budget arithmetic uses whole micro-dollars, so it's exact.
 - **Budget alerts.** A project at or above **80%** of its monthly budget shows **Nearing budget**. At or above **100%** it shows **Over budget**, or **Budget used up** when spend equals the budget exactly. A zero budget with any spend is over. Alerts appear as a summary at the top of the overview and the projects list, and next to each project's meter and spend. The thresholds are set once, in `BUDGET_THRESHOLDS` in `src/lib/budget.ts`. Status colors are reserved for alerts, and every alert shows an icon and a label, so it never relies on color alone.
-- **Month-end forecast.** The overview projects each project's spend, and the total, to the end of the UTC month: this month's spend so far plus the average daily spend of the **last 7 full UTC days** (today's partial day is left out) for the time left, counted to the millisecond. It's exact, in micro-dollars, and deliberately simple: no seasonality or trend fitting, so a new project or a quiet week forecasts low. A project whose forecast reaches its monthly budget, by the same rule as **Over budget**, but isn't over yet is marked **Forecast over budget**, with an icon and label. The logic is in `src/lib/forecast.ts`.
+- **Month-end forecast.** The overview projects each project's spend, and the total, to the end of the UTC month: this month's spend so far plus the average daily spend of the **last 7 full UTC days** (today's partial day is left out) for the time left, counted to the millisecond. It's exact, in micro-dollars, and deliberately simple: no seasonality or trend fitting. Each forecast shows its **horizon** (the month's last day and the days left) and a **range**: the same projection at the quietest and at the busiest of those 7 days. It needs **7 full days of usage history**: with fewer, it shows **Not enough data** and how many days there are, rather than averaging over days before the usage began and forecasting low. A project whose forecast reaches its monthly budget, by the same rule as **Over budget**, but isn't over yet is marked **Forecast over budget**, with an icon and label. The logic is in `src/lib/forecast.ts`.
 - **Spending spikes.** A project whose spend today (UTC, so far) is at least **$1** and at least **3×** the average daily spend of the same last 7 full days shows **Spending spike** under its Today amount, with an icon, a label and the multiple (e.g. "5.2× usual", rounded down). The comparison is exact (`today × 7 ≥ last 7 days × 3`). The $1 floor keeps small amounts quiet; after a week without spend, any day of $1 or more counts, since an idle project suddenly spending is worth a look. The rule is in `SPIKE_RULES` in `src/lib/spike.ts`.
 - `/spend` charts daily spend over the last **7, 30 or 90** days (UTC days, ending today) for all projects or one project. Hover or focus a bar to see its value, or open the table view. Below the chart, tables break spend down **by provider** and **by model**, with input, cached input and output tokens and request counts. The range and project filters apply to everything on the page and are kept in the URL (`?range=30&project=<id>`).
 - `/breakdown` groups spend **by customer, user, feature or run** over the last 7, 30 or 90 UTC days, for all projects or one. Each group shows its cost, share of the total, requests and average cost per request; grouped by run, that's the cost of a typical agent run. Usage sent without the field shows as **Not set**, and groups beyond the top 50 are summed into one **Other** row, so shares add up. Each group links to its usage events. Choose an outcome under **Cost per** (e.g. `ticket_resolved`) to add each group's outcome count and cost per outcome, and the overall cost per outcome; see [Recording outcomes](#recording-outcomes).
@@ -582,7 +612,7 @@ Run it on a schedule, for example every 15 minutes from cron or a Kubernetes Cro
 
 The same command sends the overview's two **early warnings** to the same destinations, signed and retried the same way:
 
-- **Forecast over budget** (`spend.forecast_over_budget`): a project that isn't over its monthly budget yet, but whose [month-end forecast](#dashboard) reaches it. Sent once per project, month and destination. The body has `period` (the month), `spentUsd`, `projectedUsd`, `budgetUsd` and `lastDay`.
+- **Forecast over budget** (`spend.forecast_over_budget`): a project that isn't over its monthly budget yet, but whose [month-end forecast](#dashboard) reaches it. Sent once per project, month and destination, and not for a project with fewer than 7 full days of usage history, whose forecast isn't reliable yet. The body has `period` (the month), `spentUsd`, `projectedUsd`, `budgetUsd` and `lastDay`.
 - **Spending spike** (`spend.spike`): today's spend is at least $1 and 3× the average daily spend of the last 7 full UTC days. Sent once per project, **UTC day** and destination, so a project spiking again tomorrow notifies again. The body has `period` (the day), `todayUsd`, `dailyAverageUsd` and `multiple` (`null` after a week without spend).
 
 Both bodies also carry `type` (the event name, as in the `x-cost-tracker-event` header), `project` and `sentAt`. They're recorded in `spend_signal_notifications`. A spike is noticed when the command next runs, so run it often enough for that to matter.

@@ -5,14 +5,14 @@
 [![License: MIT](https://img.shields.io/github/license/RobbsLuo/Coding2API)](LICENSE)
 [![Image](https://img.shields.io/badge/image-ghcr.io%2Frobbsluo%2Fcoding2api-blue)](https://github.com/RobbsLuo/Coding2API/pkgs/container/coding2api)
 
-十路渠道——**CodeBuddy**（国内 + 国际，两个独立渠道）、**TRAE SOLO**、**OpenCode Zen**、**Kilo**、**Qoder**、**CodeArts**、**OfficeAce**、**小浣熊**、**灵犀**——封装成 OpenAI 兼容 API：公共凭证池、统一模型名与调度、按人用量统计。
+十路渠道——**CodeBuddy**（国内 + 国际，两个独立渠道）、**TRAE SOLO**、**OpenCode Zen**、**Kilo**、**Qoder**、**CodeArts**、**OfficeAce**、**小浣熊**、**灵犀**，外加可选的**通用 OpenAI 兼容上游**——封装成 OpenAI 兼容 API：公共凭证池、统一模型名与调度、按人用量统计。
 
 > [!WARNING]
 > 逆向接口，仅供学习研究，未做安全审计；公网部署需反向代理 + 鉴权 + IP 白名单。
 
 ## 特性
 
-- **OpenAI 兼容出口**：`/v1/chat/completions`（流式 / 非流式）、`/v1/responses`（Codex CLI）、`/v1/messages`（Claude Code）、`/v1/models`（含单模型查询）、`/v1/user/balance`。
+- **OpenAI 兼容出口**：`/v1/chat/completions`（流式 / 非流式）、`/v1/responses`（Codex CLI）、`/v1/messages`（Claude Code）、`/v1beta/models/{m}:generateContent`（Gemini SDK）、`/v1/models`（含单模型查询）、`/v1/user/balance`。
 - **统一调度**：扁平名按健康度选号；`模型@渠道` 强制。优先级：免费渠道 → 在途最少 → 到期额度 → 健康度 + 分级冷却 → 余额多者。管理员可给凭证设**权重**（`-1000..1000`）：只在同一健康档内重排（正数优先、负数当备用），不会把冷却/耗尽的号顶上来。目录里的 x0 会被最近 24h 的实测扣费校准（上游改计费不改目录时不至于永远占住免费档）。模型级限流只避让该模型；多轮对话粘同一凭证，出错才轮换。
 - **到期额度优先**：主窗口（默认 36h）先烧将过期额度；打平再比 7 天窗口。单位统一积分。
 - **模型列表按凭证加载**：只列有可用凭证的渠道 → 无幽灵模型。
@@ -66,13 +66,13 @@ APP_SECRET="换成你自己的随机字符串" uv run python -m src.main
 
 开 <http://127.0.0.1:8000> 登录；加人走「用户管理」页。
 
-> 用 `python -m src.main` 而不是 `uvicorn src.main:build_app`：前者读 `.env` 的 `HOST`/`PORT`，并持有单实例锁（`data/.instance.lock`）。同一 `DATA_DIR` 只能起一个进程——两个实例会各自跑后台任务、重复探测凭证并互相覆盖统计。第二个实例会打印「另一个实例已在使用 data（PID xxx）」后干净退出。
-
-`scripts/create_user.py` 直写 SQLite（`--db` 或 `DATA_DIR`；默认 `data/c
+> 用 `python -m src.main` 而不是 `uvicorn src.main:build_app`：前者读 `.env` 的 `HOST`/`PORT`，并持有单实例锁（`data/.instance.lock`）。同一 `DATA_DIR` 只能起一个进程——两个实例会各自跑后台任务、重复探测凭证并互相覆盖统计。第二个实例会打印「另一个实例已在使用 data（PID xxx）」
 
 [...截断...]
 
-oding2api.sqlite3`）。老部署 `secrets/users.txt` 启动导入一次，不覆盖已存在。
+后干净退出。
+
+`scripts/create_user.py` 直写 SQLite（`--db` 或 `DATA_DIR`；默认 `data/coding2api.sqlite3`）。老部署 `secrets/users.txt` 启动导入一次，不覆盖已存在。
 
 Docker：
 
@@ -129,6 +129,7 @@ echo "$PASSWORD" | python3 scripts/create_user.py alice --role admin --password-
 - 只收本进程 `logging`；不读文件、不 tail。多进程各看各的。
 - **脱敏是硬前提**：每行发出前过白名单。命中 `token` / `secret` / `authorization` / `cookie` / `password` / `api_key`、`sk-…` 形状或 `Bearer <值>` → 整行丢弃。
 - 缓冲 `LOG_BUFFER_LINES`（默认 500，可热更），环形覆盖最旧。`0` 关整页（两端点 404）。
+- **落库** `LOG_PERSIST_LINES`（默认 2000，可热更）：同一批行再写一份到 SQLite `log_events` 环形表，**重启后仍能回看**，并支持按 `request_id` 回溯（`GET /api/logs?request_id=…`、`?since=<epoch>`、`?level=ERROR`）。`0` = 只留内存环。容量按「最近 N 行」裁剪，不按时间。写库失败不上抛（日志处理器不能炸业务），只告警一次。
 - 单行上限 4000 字符；每行带 `seq`、时间、级别、logger、`request_id`。**点行尾的 `#前8位`** 即按该 request_id 过滤，收起一次请求的全部日志（executor 每次换号 / 冷却 / 降级都带同一个 ID）；也可以直接把响应头 `X-Request-ID` 粘进关键字框。stdout / journald / launchd 文件同样带 `[request_id]`（后台任务为 `-`）。订阅者上限 4，超限 429 + `Retry-After`。
 
 ## 使用
@@ -158,11 +159,5 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 每个模型三个字段：
 
 1. **原代号**（`raw_id`）：渠道真发的 key，永不改动。各渠道不同（Qoder `kmodel_latest` = TRAE `kimi-k3-1`），可带命名空间前缀（Kilo `kilo-auto/free`）。
-2. **归一键**：剥免费档标记（`-free` / `free` 路径段）与命名空间前缀 → slug 化，如 `kilo-auto`。模型列表按它判同模型、合并。
-3. **展示名**（`name`）：清洗后可读文本，如 `LongCat 2.5 Preview`。上游给就用，否则从原代号派生；品牌写法从官方（`DeepSeek` / `MiMo` / `GLM` / `GPT`）。
-
-`GET /v1/models` 的 `id` 全是归一键；转发自动换回原代号，`by_provider.{渠道}.raw_id` 可见。**三种写法都能直接请求**。同渠道内归一键重复 → 退回原代号。
-
-**价格与档位**：条目可选带 `cost {input, output, cache_read}`（USD / 百万 token，与成本估算同价表）与 `reasoning_efforts`（该渠道生效档位）。有才给；缺价不带。
-
-**自定义别名**（`MODEL_ALIASES`，可热更）：`对外名=模型@渠道;对外名2=模型`，`@
+2. **归一键**：剥免费档标记（`-free` / `free` 路径段）与命名空间前缀（含小浣熊的 `sn-`）→ slug 化，如 `kilo-auto`。模型列表按它判同模型、合并。
+3. **展示名**（`name`）：清洗后可读文本，如 `LongCat 2.5 Preview`。上游给就用，否则从原代号派生；品牌写法从官方

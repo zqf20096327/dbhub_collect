@@ -8,7 +8,7 @@
 **A local-first project manager for Windows and Android.**
 Organize workspaces, projects, tasks, deadlines, and documents in one place, on your own computer or phone, with no account and no internet.
 
-![Version](https://img.shields.io/badge/version-1.1.0-4a3de0)
+![Version](https://img.shields.io/badge/version-1.1.1-4a3de0)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Android-0078D6)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 ![Tauri](https://img.shields.io/badge/Tauri-2-24C8DB)
@@ -22,7 +22,7 @@ Organize workspaces, projects, tasks, deadlines, and documents in one place, on 
   <img src="docs/screenshots/dashboard.png" alt="Avenqor Dashboard" width="860">
 </p>
 
-> **Version 1.1.0** adds the **Android version** to the Windows program of version 1.0.0. The Windows features below were tested by the developer on Windows 10; the Android version was tested by the developer on one Android phone (see [docs/MOBILE.md](docs/MOBILE.md)). The dated test logs are in [docs/DEVELOPMENT_STATUS.md](docs/DEVELOPMENT_STATUS.md) and [docs/MOBILE.md](docs/MOBILE.md). Avenqor is a one-person project, so expect rough edges and please report them as [issues](https://github.com/andra-gs/Avenqor/issues).
+> **Version 1.1** added the **Android version** to the Windows program of version 1.0. **Version 1.1.1** fixes the notification icon on Android, adds an adaptive app icon, and makes the texts fit the phone. The Windows features below were tested by the developer on Windows 10; the Android version was tested by the developer on one Android phone (see [docs/MOBILE.md](docs/MOBILE.md)). The dated test logs are in [docs/DEVELOPMENT_STATUS.md](docs/DEVELOPMENT_STATUS.md) and [docs/MOBILE.md](docs/MOBILE.md). Avenqor is a one-person project, so expect rough edges and please report them as [issues](https://github.com/andra-gs/Avenqor/issues).
 
 ## Contents
 
@@ -42,17 +42,17 @@ All downloads are on the **[latest release page](https://github.com/andra-gs/Ave
 
 ### Windows
 
-File named like `Avenqor_1.1.0_x64-setup.exe`.
+File named like `Avenqor_1.1.1_x64-setup.exe`.
 
 1. Run the downloaded file. It installs Avenqor for your Windows user only, so no administrator password is needed.
-2. Windows may show **"Windows protected your PC"** (SmartScreen). Click **More info**, then **Run anyway**. You can compare the file's SHA-256 checksum, given on the release page, with the result of `Get-FileHash .\Avenqor_1.1.0_x64-setup.exe` in PowerShell.
+2. Windows may show **"Windows protected your PC"** (SmartScreen). Click **More info**, then **Run anyway**. You can compare the file's SHA-256 checksum, given on the release page, with the result of `Get-FileHash .\Avenqor_1.1.1_x64-setup.exe` in PowerShell.
 3. Start Avenqor from the Start menu. Your data is saved on your computer (see [Your data stays with you](#your-data-stays-with-you)).
 
 Requirements: Windows 10 (version 1803 or later) or Windows 11, 64-bit. **Uninstalling** keeps your data unless you tick the option to delete the application data. To move to another computer, use **Settings, Backup and restore**.
 
 ### Android
 
-File named like `Avenqor_1.1.0_android-arm64.apk`. It is not in the Google Play Store.
+File named like `Avenqor_1.1.1_android-arm64.apk`. It is not in the Google Play Store.
 
 1. Download the file on the phone, or copy it there from a computer.
 2. Open it. Android asks you to allow installing apps from this source (the browser or the file manager you used): allow it. This setting is "Install unknown apps" in the phone's settings.
@@ -276,7 +276,7 @@ There is no automated test suite yet. Features are tested by hand and the result
 
 **Version 1.0** (Windows) is Phase 4 plus release preparation. **Version 1.1** adds the Android version (same code base, recorded in [docs/MOBILE.md](docs/MOBILE.md)). After that, a bigger update: documents as files and folders, and a whiteboard for each workspace (details in [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)). GitHub and online features are later phases.
 
-Known limitations today: no subtasks, no templates, reminders only while the app is open, and single-user only. The database folder on Windows is in Roaming (see Known issues in the status file). On Android: the icon in the status bar for notifications may still show the old icon, dragging a board card by touch was not tried (use the arrow buttons), and iOS is not supported.
+Known limitations today: no subtasks, no templates, reminders only while the app is open, and single-user only. The database folder on Windows is in Roaming (see Known issues in the status file). On Android: it was tested on one phone only, and iOS is not supported.
 
 ## Documentation
 

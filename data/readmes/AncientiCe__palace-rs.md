@@ -43,6 +43,11 @@ Agent:  [palace_search → wing my_api, room decisions, filed 2026-09-03]
         The benchmark you ran is in the same drawer.
 ```
 
+**Using Palace? Tell me.** One line in
+[Show and tell](https://github.com/AncientiCe/palace-rs/discussions/categories/show-and-tell)
+about which agents you use it with and what it remembers for you helps more
+than a star. Prefer email? Write to contact@palacememory.com.
+
 ---
 
 ## 🧭 Why Palace
@@ -91,6 +96,8 @@ irm https://raw.githubusercontent.com/AncientiCe/palace-rs/main/scripts/install.
 
 The scripts download the matching GitHub Release binary, verify its SHA-256
 checksum, and install it. To upgrade later, run the same command again.
+The Linux binary needs glibc 2.39 or newer (Ubuntu 24.04+, Debian 13+);
+on an older system, build from source.
 
 **Homebrew (macOS Apple Silicon / Linux)**
 
@@ -124,7 +131,7 @@ cargo build --release   # binary at target/release/palace
 
 | Platform | Status |
 |---|---|
-| Linux x86_64 | Supported |
+| Linux x86_64 | Supported (glibc 2.39 or newer) |
 | macOS Apple Silicon | Supported |
 | Windows x86_64 | Supported |
 | macOS Intel | Not supported (no ONNX Runtime build) |
@@ -426,6 +433,17 @@ palace remote status    # mode, endpoint, masked key
 palace local            # back to the local palace
 ```
 
+<p align="center">
+  <a href="docs/images/palace-handoff-demo.mp4">
+    <img src="docs/images/palace-handoff-demo.gif" alt="90-second shared-memory handoff: Dev B asks what was already ruled out on this ticket, and Palace answers with the source" width="100%">
+  </a>
+</p>
+
+Try this with one teammate and one ticket. Give both agents access to the
+same investigation on your own infrastructure. The team trial includes 10
+seats for 60 days, with no credit card:
+[Start the team trial](https://palacememory.com/trial?utm_source=github&utm_medium=readme&utm_campaign=team_trial_14d).
+
 ---
 
 ## 🧰 CLI reference
@@ -658,6 +676,7 @@ Settings load in this order: environment variables, then
 | `PALACE_PROJECT` | auto | Project name used for gain attribution |
 | `PALACE_SOURCE_DIR` | `~/Desktop/transcripts` | Default source for `palace split` |
 | `PALACE_MINE_TRACE` | off | `1` prints per-stage mining timings |
+| `PALACE_BUSY_TIMEOUT_MS` | `10000` | How long to wait, in milliseconds, for another palace process that is writing to the database. `0` turns waiting off (fail at once); it does not mean "no limit" |
 | `PALACE_MCP_MODE` | `local` | `local` or `remote` |
 | `PALACE_EMBEDDING_MODEL` | `minilm-l6-v2-q8` | Embedding model for new palaces (see [embedding models](#embedding-models)) |
 | `PALACE_EMBEDDING_LATENCY_BUDGET_MS` | 2x current p95 | Query-latency budget for `palace embeddings verify` |

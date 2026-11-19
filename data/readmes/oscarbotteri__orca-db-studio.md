@@ -60,6 +60,7 @@ Keep a query by moving the file out of `.db-studio/` (a folder Git ignores on it
 **Connections**
 
 - PostgreSQL, MySQL/MariaDB and SQLite, from a form or a pasted connection string (`postgres://`, `mysql://`).
+- Connect to managed PostgreSQL such as Neon over SSL: `sslmode` in a pasted connection string or a worktree `.env` turns it on, and `sslmode=disable` turns it off. The connection is encrypted, but the server certificate is not verified yet, so `verify-ca` and `verify-full` behave like `require`.
 - Test, edit and delete saved connections.
 - SQLite files saved as connections from the same form, picked from those found in your workspaces or pasted by path.
 - Tag a saved connection with an environment (local, dev, staging, prod). Its query documents show a colored band and a badge in the toolbar, and the panel row names it. Worktree connections cannot be tagged.
@@ -75,6 +76,7 @@ Keep a query by moving the file out of `.db-studio/` (a folder Git ignores on it
 - SQL editor with dialect-aware highlighting ([CodeMirror 6](docs/adr/0001-sql-editor-codemirror.md)).
 - Autocomplete for tables, columns and keywords from the live schema.
 - Run the statement under the cursor or the selection.
+- Start a blank query from Orca's palette (<kbd>Cmd/Ctrl</kbd>+<kbd>J</kbd>) with "DB Studio: New Query". It opens an empty document in `.db-studio/` and asks for its connection; when it cannot tell which workspace to use, the panel asks.
 - Cancel a running query. It stops in the database, not only in the UI.
 - Configurable timeout (30 s by default, 110 s at most).
 

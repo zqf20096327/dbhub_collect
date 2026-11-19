@@ -1,4 +1,4 @@
-# Spring Boot Plugin for Claude Code (v1.3.0)
+# Spring Boot Plugin for Claude Code (v1.3.1)
 
 A Claude Code plugin with production-ready skills and agents for building Spring Boot 4.x / Java 21+ applications. Install the plugin and start generating your app — the skills and agents guide Claude to follow best practices for REST APIs with Problem Details errors, JPA, Flyway database migrations, security, testing, cloud-native deployment, and Kubernetes.
 
@@ -87,6 +87,7 @@ Specialized agents that Claude Code can invoke for specific tasks:
 | Agent | Purpose |
 |-------|---------|
 | `spring-boot-engineer` | Build Spring Boot 4.x apps with layered architecture and Problem Details errors; adds the OpenAPI contract rules when the API is built for a UI |
+| `architect` | Turns a GitHub issue labeled `architect` into up to 8 small, ordered issues with implementation plans (uses `gh`, runs unattended, read-only on code) |
 | `code-reviewer` | Read-only review of a diff or branch: fixes the scope, loads the `conventions` and `code-quality` skills, reports cited findings by severity |
 | `kubernetes-specialist` | K8s deployments, probes, ConfigMap/Secret, Prometheus, Skaffold |
 | `devops-engineer` | CI/CD pipelines, Paketo Buildpacks, Skaffold |
@@ -129,7 +130,7 @@ The plugin enforces these rules via the `conventions` skill:
 
 The `cloud.md` reference covers:
 
-- Spring Cloud (Config Server, Eureka, Gateway, Resilience4j, LoadBalancer)
+- Spring Cloud (Config Server, Eureka, Gateway, LoadBalancer) and built-in `@Retryable`/`@ConcurrencyLimit`
 - Distributed tracing with OpenTelemetry (OTLP) and Micrometer Observation API
 - Virtual Threads, HTTP Interface Clients (`@HttpExchange`), GraalVM Native Image
 - Kubernetes: ConfigMap/Secret with `envFrom`, Prometheus annotations, startup/liveness/readiness probes, `preStop` hook, graceful shutdown

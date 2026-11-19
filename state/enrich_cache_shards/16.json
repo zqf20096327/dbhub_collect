@@ -2,9 +2,9 @@
  "dolthub/dolt": {
   "commit_7d": 141,
   "commit_90d": 1251,
-  "rel_ver": "v2.7.4",
-  "rel_pub": "2026-11-16",
-  "rel_days": 1,
+  "rel_ver": "v2.7.5",
+  "rel_pub": "2026-11-18",
+  "rel_days": 0,
   "rel_n90": 18,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 144,
-  "enriched_at": "20261117",
+  "enriched_at": "20261118",
   "lang": {
    "Go": 80,
    "Shell": 19,
@@ -24,10 +24,15 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261117",
-   "release": "20261117",
+   "release": "20261118",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v2.7.5",
+    "d": "2026-11-18",
+    "n": "* [10692](https://github.com/dolthub/dolt/issues/10692): Server permanently unresponsive after client crash during CREATE/DROP DATABASE\n* [4175](https://github.com/dolthub/go-mysql-server/pull/4175): Log authenticated user and client IP on new SQL connections\n* [4163](https://github.com/dolthub/go-mysql-server/pull/4163): Support aggregate FILTER clauses\n* [4155](https://github.com/dolthub/go-mysql-server/pull/4155): Add a nulls not distinct option for unique indexes\n* [11166](https://github.com/dolthub/dol"
+   },
    {
     "t": "v2.7.4",
     "d": "2026-11-16",
@@ -72,17 +77,13 @@
     "t": "v2.5.1",
     "d": "2026-10-20",
     "n": "When combined with https://github.com/dolthub/go-mysql-server/pull/4011, this would have resulted in pruning the columnSet for DOLT_LOG without pruning the schema, which would result in incorrect offset cacluation during assignExecOffsets. This change prevents that interaction.\n* [11934](https://github.com/dolthub/dolt/pull/11934): Expose PostgreSQL session settings through Dolt sessions"
-   },
-   {
-    "t": "v2.5.0",
-    "d": "2026-10-17",
-    "n": "* [4021](https://github.com/dolthub/go-mysql-server/pull/4021): Do not remove GroupBy node when replacing sorted MIN/MAX aggregates\n* [4015](https://github.com/dolthub/go-mysql-server/pull/4015): Support conditional column drops in ALTER TABLE plans\n* [4008](https://github.com/dolthub/go-mysql-server/pull/4008): Make Handler.doQuery start and end the root query span. Remove Context.RootSpan and deprecate WithRootSpan.\nThis adds support for concurrent GC runs against different databases on the same server. E"
    }
   ],
   "etag": {
-   "release": "W/\"2e4fce182bf566705f925fa647daba12dc1f6e58b26ae4e9520919634191ecc9\""
+   "release": "W/\"bcf8982f18cccc5b050c7aefe22f8625aadd982ede9464a170a78d50058068b9\""
   },
   "rel_dates": [
+   "2026-11-18",
    "2026-11-16",
    "2026-11-11",
    "2026-11-05",
@@ -99,17 +100,16 @@
    "2026-09-16",
    "2026-09-14",
    "2026-09-09",
-   "2026-09-02",
-   "2026-08-19"
+   "2026-09-02"
   ]
  },
  "go-sql-driver/mysql": {
-  "commit_7d": 5,
-  "commit_90d": 34,
-  "rel_ver": "v1.10.1",
-  "rel_pub": "2026-09-02",
-  "rel_days": 76,
-  "rel_n90": 1,
+  "commit_7d": 8,
+  "commit_90d": 38,
+  "rel_ver": "v1.10.2",
+  "rel_pub": "2026-11-17",
+  "rel_days": 2,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -117,17 +117,22 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 158,
-  "enriched_at": "20261117",
+  "enriched_at": "20261119",
   "lang": {
    "Go": 100
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261115",
-   "release": "20261117",
+   "commit": "20261119",
+   "release": "20261119",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v1.10.2",
+    "d": "2026-11-17",
+    "n": "Changes since v1.10.1.\r\n\r\n### Security fixes\r\n\r\n* Return `ErrMalformPkt` instead of panicking on truncated initial handshake\r\n  packets, including the greeting received before TLS negotiation.\r\n  (GHSA-9qjq-77h9-895w, #1850)\r\n\r\n* Discard connections after a failed `LOAD DATA LOCAL INFILE`, including reader\r\n  `Close()` errors, so unread results from a multi-statement batch cannot be\r\n  returned to a later caller. Preserve the server's response status and avoid\r\n  retrying the batch after an upload write fai"
+   },
    {
     "t": "v1.10.1",
     "d": "2026-09-02",
@@ -145,9 +150,10 @@
    }
   ],
   "etag": {
-   "release": "W/\"3a674c81b02ec0818a299183df2512d69c20d8c1bde670584e8a2646824ef723\""
+   "release": "W/\"6706c23b6fc6dd00095ffcef64004305e822b34a78f7c4c680325d821653da5f\""
   },
   "rel_dates": [
+   "2026-11-17",
    "2026-09-02"
   ]
  },
@@ -156,7 +162,7 @@
   "commit_90d": 173,
   "rel_ver": "v6.1.0",
   "rel_pub": "2026-10-06",
-  "rel_days": 42,
+  "rel_days": 43,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -208,7 +214,7 @@
   "commit_90d": 29,
   "rel_ver": "5.9.1",
   "rel_pub": "2026-11-02",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -261,7 +267,7 @@
   "commit_7d": 0,
   "rel_ver": "0.4-2",
   "rel_pub": "2025-12-15",
-  "rel_days": 337,
+  "rel_days": 338,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -285,7 +291,7 @@
   "commit_7d": 14,
   "rel_ver": "v7.5.8",
   "rel_pub": "2026-09-17",
-  "rel_days": 61,
+  "rel_days": 63,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -300,10 +306,10 @@
    "Makefile": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261117",
+  "enriched_at": "20261119",
   "dim_ts": {
    "commit": "20261117",
-   "release": "20261117",
+   "release": "20261119",
    "security": "20261027"
   },
   "rel_notes": [
@@ -324,7 +330,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"ca0ebcbee2c84fc7354de7632b0026655db7432cd58b97d6846057c854b30eec\""
+   "release": "W/\"19fc519c75bc8eec4d8de349145507f60a713d68f93efcb05e707bbc46853da1\""
   },
   "rel_dates": [
    "2026-09-17",
@@ -336,7 +342,7 @@
   "commit_7d": 13,
   "rel_ver": "v1.3.1",
   "rel_pub": "2026-11-03",
-  "rel_days": 14,
+  "rel_days": 15,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -379,10 +385,10 @@
  },
  "oracle/oraclejet": {
   "commit_90d": 2,
-  "commit_7d": 0,
-  "rel_ver": "21.0.0",
-  "rel_pub": "2026-08-17",
-  "rel_days": 92,
+  "commit_7d": 2,
+  "rel_ver": "21.1.0",
+  "rel_pub": "2026-11-17",
+  "rel_days": 2,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -392,7 +398,24 @@
   "sec_ids": [],
   "contrib_n": 2,
   "lang": {},
-  "enriched_at": "20260927"
+  "enriched_at": "20261119",
+  "etag": {
+   "release": "W/\"6983ac2e5b788f75e57cd9fc10e2cd14181caa8d707caefd9aefa30f051279f4\""
+  },
+  "rel_dates": [
+   "2026-11-17"
+  ],
+  "rel_notes": [
+   {
+    "t": "21.1.0",
+    "d": "2026-11-17",
+    "n": "Release 21.1.0"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261119",
+   "release": "20261119"
+  }
  },
  "alloyteamzy/vue2_blog": {
   "commit_90d": 0,
@@ -417,7 +440,7 @@
   "commit_7d": 0,
   "rel_ver": "2.5",
   "rel_pub": "2024-06-12",
-  "rel_days": 888,
+  "rel_days": 889,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -469,7 +492,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2022-10-24",
-  "rel_days": 1485,
+  "rel_days": 1486,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -528,7 +551,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.4",
   "rel_pub": "2021-02-22",
-  "rel_days": 2094,
+  "rel_days": 2095,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -565,7 +588,7 @@
   "commit_7d": 154,
   "rel_ver": "v0.15.0",
   "rel_pub": "2026-11-10",
-  "rel_days": 7,
+  "rel_days": 8,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -660,7 +683,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.2",
   "rel_pub": "2026-04-07",
-  "rel_days": 224,
+  "rel_days": 225,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -702,7 +725,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.0.0",
   "rel_pub": "2025-12-11",
-  "rel_days": 341,
+  "rel_days": 342,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -721,7 +744,7 @@
   "commit_7d": 2,
   "rel_ver": "v1.9.1",
   "rel_pub": "2026-10-16",
-  "rel_days": 32,
+  "rel_days": 33,
   "rel_n90": 19,
   "rel_pre": false,
   "rel_none": false,
@@ -873,7 +896,7 @@
  "frkdrgt/ferox": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-08",
-  "rel_days": 70,
+  "rel_days": 71,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -891,7 +914,7 @@
  "VladimirBalun/RacingWorld": {
   "rel_ver": "0.1.0",
   "rel_pub": "2019-03-04",
-  "rel_days": 2815,
+  "rel_days": 2816,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -962,7 +985,7 @@
  "3c7/yaramanager": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2022-11-02",
-  "rel_days": 1476,
+  "rel_days": 1477,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -980,7 +1003,7 @@
  "oracle/rwloadsim": {
   "rel_ver": "v3.3.0",
   "rel_pub": "2026-07-06",
-  "rel_days": 134,
+  "rel_days": 135,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1001,7 +1024,7 @@
  "reliefsupports/reliefsupports.org-v1": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2017-06-04",
-  "rel_days": 3453,
+  "rel_days": 3454,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1022,7 +1045,7 @@
  "kevinmartintech/sp_CRUDGen": {
   "rel_ver": "v3.02.05",
   "rel_pub": "2022-02-27",
-  "rel_days": 1724,
+  "rel_days": 1725,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1039,7 +1062,7 @@
  "malaria-atlas-project/malariaAtlas": {
   "rel_ver": "V0.0.2",
   "rel_pub": "2018-09-11",
-  "rel_days": 2989,
+  "rel_days": 2990,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1056,7 +1079,7 @@
  "LeChatErrant/API-template": {
   "rel_ver": "1.1.3",
   "rel_pub": "2021-12-23",
-  "rel_days": 1790,
+  "rel_days": 1791,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1076,7 +1099,7 @@
  "caiobarroso/react-native-nativescope": {
   "rel_ver": "v1.4.1",
   "rel_pub": "2026-08-12",
-  "rel_days": 97,
+  "rel_days": 98,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1097,7 +1120,7 @@
  "sabertaz/notes": {
   "rel_ver": "v1.5.1",
   "rel_pub": "2026-09-15",
-  "rel_days": 63,
+  "rel_days": 64,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1163,7 +1186,7 @@
  "UznetDev/Aiogram-Bot-Template": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2024-08-15",
-  "rel_days": 824,
+  "rel_days": 825,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1194,7 +1217,7 @@
  "dsa0x/go-social-network": {
   "rel_ver": "v1",
   "rel_pub": "2022-04-14",
-  "rel_days": 1678,
+  "rel_days": 1679,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1244,7 +1267,7 @@
  "stidges/laravel-fk-migration": {
   "rel_ver": "1.1.0",
   "rel_pub": "2014-06-25",
-  "rel_days": 4528,
+  "rel_days": 4529,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1368,7 +1391,7 @@
  "MeltanoLabs/tap-postgres": {
   "rel_ver": "v0.10.0",
   "rel_pub": "2026-07-27",
-  "rel_days": 113,
+  "rel_days": 114,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1412,7 +1435,7 @@
  "leo-aa88/PetitePass": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-09-13",
-  "rel_days": 65,
+  "rel_days": 66,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1430,7 +1453,7 @@
  "internetarchive/arklet": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2026-02-25",
-  "rel_days": 265,
+  "rel_days": 266,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1447,7 +1470,7 @@
  "sprklai/zenii": {
   "rel_ver": "app-v0.2.6",
   "rel_pub": "2026-06-03",
-  "rel_days": 167,
+  "rel_days": 168,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1495,7 +1518,7 @@
  "edwig/CXHibernate": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2025-04-09",
-  "rel_days": 587,
+  "rel_days": 588,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1515,7 +1538,7 @@
  "OUIsolutions/DoTheWorld": {
   "rel_ver": "11.2.1",
   "rel_pub": "2026-02-14",
-  "rel_days": 276,
+  "rel_days": 277,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1565,7 +1588,7 @@
  "bolajiwahab/pgrubic": {
   "rel_ver": "3.1.0",
   "rel_pub": "2026-09-26",
-  "rel_days": 52,
+  "rel_days": 53,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1584,7 +1607,7 @@
  "adorsys/encrypt-down": {
   "rel_ver": "v2.1.2",
   "rel_pub": "2020-11-07",
-  "rel_days": 2201,
+  "rel_days": 2202,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1703,7 +1726,7 @@
  "memloom/memloom": {
   "rel_ver": "v0.10.0",
   "rel_pub": "2026-08-13",
-  "rel_days": 96,
+  "rel_days": 97,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1780,7 +1803,7 @@
  "Dani3lSun/apex-plugin-extend_ig_menu": {
   "rel_ver": "v1.1.3",
   "rel_pub": "2018-01-15",
-  "rel_days": 3228,
+  "rel_days": 3229,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1883,7 +1906,7 @@
  "MatissJanis/knex-serverless-mysql": {
   "rel_ver": "1.1.0",
   "rel_pub": "2021-04-26",
-  "rel_days": 2031,
+  "rel_days": 2032,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2038,7 +2061,7 @@
  "Oreoxmt/tidbcloudy": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2023-10-08",
-  "rel_days": 1136,
+  "rel_days": 1137,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2165,7 +2188,7 @@
  "datasette/datasette-litestream": {
   "rel_ver": "0.2a0",
   "rel_pub": "2026-01-20",
-  "rel_days": 301,
+  "rel_days": 302,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2214,7 +2237,7 @@
  "EliaTolin/remote_caching": {
   "rel_ver": "v1.0.16",
   "rel_pub": "2026-01-23",
-  "rel_days": 298,
+  "rel_days": 299,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2241,7 +2264,7 @@
  "zendbit/katabase": {
   "rel_ver": "v0.1.29",
   "rel_pub": "2025-06-02",
-  "rel_days": 533,
+  "rel_days": 534,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2303,7 +2326,7 @@
  "vbgate/opencode-supertask": {
   "rel_ver": "v0.1.41",
   "rel_pub": "2026-07-19",
-  "rel_days": 121,
+  "rel_days": 122,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2346,7 +2369,7 @@
  "lodilorenzo/teatro": {
   "rel_ver": "0.19.6_beta",
   "rel_pub": "2026-09-17",
-  "rel_days": 61,
+  "rel_days": 62,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -2564,7 +2587,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.1",
   "rel_pub": "2024-01-22",
-  "rel_days": 1030,
+  "rel_days": 1031,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2590,7 +2613,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-08-13",
-  "rel_days": 461,
+  "rel_days": 462,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3086,7 +3109,7 @@
  "AwesomeDog/soma": {
   "rel_ver": "v0.10.6",
   "rel_pub": "2026-10-13",
-  "rel_days": 35,
+  "rel_days": 36,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -3112,7 +3135,7 @@
  "devcristianlopez/lemoria": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-29",
-  "rel_days": 49,
+  "rel_days": 50,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3139,7 +3162,7 @@
  "KarakoramDev/Karakoram": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-26",
-  "rel_days": 22,
+  "rel_days": 23,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -3276,7 +3299,7 @@
   },
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-11-12",
-  "rel_days": 5,
+  "rel_days": 6,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3317,7 +3340,7 @@
   },
   "rel_ver": "v1.1.3",
   "rel_pub": "2026-02-10",
-  "rel_days": 280,
+  "rel_days": 281,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,

@@ -202,7 +202,8 @@ Options go after `sh -s --`:
 
 | Option | Effect |
 |---|---|
-| `--version 0.49.0` | install this release instead of the newest |
+| `--version 0.50.0` | install this release instead of the newest |
+| `--source URL` | download from a mirror laid out like `https://github.com/Max-Zit/backupzit/releases` (the default), or from a local folder with the release files |
 | `--db postgres://user:pw@host:5432/db` | use an existing PostgreSQL database |
 | `--hosts backup.example.local,10.0.0.10` | names and addresses for the console's certificate |
 | `--no-auto-updates` | leave automatic security updates as they are |
@@ -256,6 +257,8 @@ The initial `admin` password is in `/var/lib/backupzit/initial-admin-password.tx
 set -a; . /etc/backupzit/server.env; set +a
 backupzit-server --set-admin-password 'NEW-PASSWORD'
 ```
+
+Lost the authenticator app and the recovery codes? `backupzit-server --reset-two-factor USER` (same environment) turns two-factor sign-in off for that user and signs the user out; it is recorded in the audit log.
 
 **Just trying it out?** This runs a private PostgreSQL in the data folder and serves the console over plain HTTP on localhost (Windows or Linux, no installation):
 

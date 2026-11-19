@@ -332,11 +332,11 @@ Useful resources and dependencies that are used in Canva Clone.
 - [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.4
 - [drizzle-zod](https://www.npmjs.com/package/drizzle-zod): ^0.8.3
 - [eslint](https://www.npmjs.com/package/eslint): ^10
-- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.4.3
+- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.4.6
 - [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier): ^10.0.1
 - [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier): ^5.5.7
 - [fabric](https://www.npmjs.com/package/fabric): 7.4.0
-- [hono](https://www.npmjs.com/package/hono): ^4.13.17
+- [hono](https://www.npmjs.com/package/hono): ^4.13.18
 - [lodash.debounce](https://www.npmjs.com/package/lodash.debounce): ^4.0.8
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.51.0
 - [material-colors](https://www.npmjs.com/package/material-colors): ^1.2.6
@@ -344,7 +344,7 @@ Useful resources and dependencies that are used in Canva Clone.
 - [next-auth](https://www.npmjs.com/package/next-auth): ^5.0.0-beta.32
 - [next-themes](https://www.npmjs.com/package/next-themes): ^0.4.6
 - [onnxruntime-web](https://www.npmjs.com/package/onnxruntime-web): 1.30.0
-- [openai](https://www.npmjs.com/package/openai): ^7.15.0
+- [openai](https://www.npmjs.com/package/openai): ^7.57.0
 - [pg](https://www.npmjs.com/package/pg): ^8.18.0
 - [postcss](https://www.npmjs.com/package/postcss): ^8
 - [prettier](https://www.npmjs.com/package/prettier): ^3.9.10

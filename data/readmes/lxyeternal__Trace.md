@@ -86,7 +86,7 @@ Sync is optional and off by default. Turn on **Sync with iCloud** in Settings an
 
 ### Made for the Mac
 
-Native SwiftUI, light and dark appearance, English and Simplified Chinese (switchable without restarting), and launch at login. The menu bar panel shows today's total, the app in front, and what else is going on: a call, sound, windows on screen and apps open out of sight. Closing the window leaves Trace recording in the menu bar.
+Native SwiftUI, light and dark appearance, English, Simplified Chinese and Russian (switchable without restarting), and launch at login. The menu bar panel shows today's total, the app in front, and what else is going on: a call, sound, windows on screen and apps open out of sight. Closing the window leaves Trace recording in the menu bar.
 
 <p align="center">
   <img src="docs/screenshots/menu.png" width="300" alt="The menu bar panel">

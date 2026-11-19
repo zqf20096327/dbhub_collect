@@ -8,47 +8,87 @@
 [![Python](https://img.shields.io/pypi/pyversions/tabulaflow.svg)](https://pypi.org/project/tabulaflow/)
 [![CI](https://github.com/megagonlabs/tabulaflow/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/megagonlabs/tabulaflow/actions/workflows/ci.yml)
 
-TabulaFlow is an open-source data agent built on a modular Python library.
+TabulaFlow is an open-source data agent application, as well as a library for building data agents.
 See the [documentation](https://megagonlabs.github.io/tabulaflow/).
 
 Think of it as Claude Code for data: describe in natural language what you want
 to analyze, visualize, or transform. It works with all kinds of data, including
 SQL and graph databases, files, Hugging Face datasets, Wikidata, and web pages.
+You can also browse data directly without an LLM or use it like a coding agent to write code
+or handle everyday tasks.
 
-Unlike existing coding-agent harnesses, which are built around files and the
-shell, TabulaFlow treats tables as first-class citizens, as its name suggests:
-
-- **Agent ergonomics.** The agent writes only queries and visualization
-  specifications. TabulaFlow handles data resolution and rendering, so the
-  agent never wastes tokens handcrafting data values or HTML to create visual
-  artifacts.
-  [See the comparison](https://megagonlabs.github.io/tabulaflow/#how-does-tabulaflow-work)
-- **Human ergonomics.** Data provenance is automatically tracked: each
-  visualization exposes its underlying data table, and each table exposes the
-  query that produced it.
-- **Shell-independent.** The core harness remains fully functional for data work
-  even when shell and filesystem access are disabled (e.g., when building
-  hosted applications).
-
-Like a general-purpose coding agent, TabulaFlow can also write code, run shell
-commands, and browse the web.
+Unlike existing coding-agent harnesses that are built around files and the
+shell, TabulaFlow treats tables as first-class citizens, as its name suggests.
+The agent writes only queries and visualization specifications, while TabulaFlow
+handles data resolution, rendering, and provenance tracking. Its core harness is
+**shell-independent**, making it particularly suitable for building data applications without requiring sandboxes.
+[Compare token efficiency](https://megagonlabs.github.io/tabulaflow/#how-does-tabulaflow-work)
 
 [**Use the data agent**](#get-started) ·
 [**Build a data application**](#tabulaflow-as-a-python-library) ·
 [**Run text-to-query experiments**](#tabulaflow-for-researchers)
 
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <a href="https://megagonlabs.github.io/tabulaflow/#demo-disambiguation"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/demos/structured-disambiguation-poster.jpg" alt="Interactive disambiguation demo" width="100%"></a>
+      <br><small>Interactive disambiguation</small>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://megagonlabs.github.io/tabulaflow/#demo-research"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/demos/find-research-papers-poster.jpg" alt="Deep research demo" width="100%"></a>
+      <br><small>Deep research</small>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://megagonlabs.github.io/tabulaflow/#demo-travel"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/demos/plan-a-trip-on-a-map-poster.jpg" alt="Plan a trip on a map demo" width="100%"></a>
+      <br><small>Plan a trip on a map</small>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="https://megagonlabs.github.io/tabulaflow/#demo-database"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/demos/chat-to-a-database-poster.jpg" alt="Analyze a bioinformatics mysql db demo" width="100%"></a>
+      <br><small>Analyze a bioinformatics mysql db</small>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://megagonlabs.github.io/tabulaflow/#demo-wikidata"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/demos/query-wikidata-poster.jpg" alt="Wikidata and graphs demo" width="100%"></a>
+      <br><small>Wikidata and graphs</small>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://megagonlabs.github.io/tabulaflow/#demo-hugging-face"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/demos/explore-a-multimodal-hugging-face-dataset-poster.jpg" alt="Browse media in tables demo" width="100%"></a>
+      <br><small>Browse media in tables</small>
+    </td>
+  </tr>
+</table>
 
+## Data agent patterns
 
-https://github.com/user-attachments/assets/ac975684-afcc-4702-a325-d015fb89665d
+<table>
+  <tr>
+    <td width="60%"><strong>Text-to-query</strong><br>Turn natural-language requests into query-backed data tables.</td>
+    <td align="center" width="40%"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/patterns/text-to-query.png" alt="Natural-language request to SQL query to data table" width="378"></td>
+  </tr>
+  <tr>
+    <td width="60%"><strong>Data-bound visualization</strong><br>Turn data tables into charts, maps, and graphs that stay linked to their data.</td>
+    <td align="center" width="40%"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/patterns/data-bound-visualization.png" alt="Data table to visualization specification to chart, map, and graph" width="314"></td>
+  </tr>
+  <tr>
+    <td width="60%"><strong>Interactive dashboard</strong><br>Create tables and visualizations with shared controls that update their data, including <a href="https://arxiv.org/pdf/2610.09396">structured disambiguation</a> for ambiguous questions.</td>
+    <td align="center" width="40%"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/patterns/interactive-dashboard.png" alt="Shared controls updating tables and visualizations" width="349"></td>
+  </tr>
+  <tr>
+    <td width="60%"><strong>Extraction</strong><br>Add rows by extracting many structured records from unstructured content that far exceeds an LLM's context window.</td>
+    <td align="center" width="40%"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/patterns/extraction.png" alt="Unstructured documents to structured table rows" width="250"></td>
+  </tr>
+  <tr>
+    <td width="60%"><strong>Row-wise enrichment</strong><br>Add columns to very large tables using subagents that can browse pages and click buttons. The nested version is an instance of <a href="https://arxiv.org/pdf/2512.24601">recursive language models</a>.</td>
+    <td align="center" width="40%"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/patterns/row-wise-enrichment.png" alt="Row subagents adding structured columns to a table" width="263"></td>
+  </tr>
+  <tr>
+    <td width="60%"><strong>Cross-source join</strong><br>Connect records across sources, even when names differ.</td>
+    <td align="center" width="40%"><img src="https://raw.githubusercontent.com/megagonlabs/tabulaflow/main/docs/assets/patterns/cross-source-join.png" alt="SQL and Neo4j records resolved into a joined table" width="245"></td>
+  </tr>
+</table>
 
-
-
-**More demos:**
-[Get Precise Data via Interactive Disambiguation](https://megagonlabs.github.io/tabulaflow/#demo-disambiguation) ·
-[Build a Research Paper Database](https://megagonlabs.github.io/tabulaflow/#demo-research) ·
-[Chat to a Bioinformatics MySQL db](https://megagonlabs.github.io/tabulaflow/#demo-database) ·
-[Explore a Multimodal Hugging Face Dataset](https://megagonlabs.github.io/tabulaflow/#demo-hugging-face) ·
-[Query and Visualize Graphs](https://megagonlabs.github.io/tabulaflow/#demo-wikidata)
+[Explore data agent patterns ↗](https://megagonlabs.github.io/tabulaflow/#data-agent-patterns)
 
 ## Get started
 
@@ -156,9 +196,9 @@ async def load_sample_data(sales: SQLConnector, support: SQLConnector) -> None:
 
 async def main() -> None:
     async with DataConnectorRegistry() as registry:
-        sales = await SQLConnector.from_url_async("sqlite+aiosqlite:///:memory:", read_only=False)
+        sales = await SQLConnector.from_url_async("sqlite:///:memory:", read_only=False)
         registry.register("sales", sales)
-        support = await SQLConnector.from_url_async("sqlite+aiosqlite:///:memory:", read_only=False)
+        support = await SQLConnector.from_url_async("sqlite:///:memory:", read_only=False)
         registry.register("support", support)
         await load_sample_data(sales, support)
 
@@ -202,7 +242,7 @@ from tabulaflow.data import SQLConnector
 
 
 async def main() -> None:
-    stock = await SQLConnector.from_url_async("sqlite+aiosqlite:///:memory:", read_only=False)
+    stock = await SQLConnector.from_url_async("sqlite:///:memory:", read_only=False)
     async with stock:
         await stock.write_dataframe_async(
             pd.DataFrame(

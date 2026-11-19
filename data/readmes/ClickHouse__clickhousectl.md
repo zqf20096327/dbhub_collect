@@ -15,7 +15,7 @@
 [![Follow on X](https://img.shields.io/badge/X-Follow_ClickHouseDB-000000)](https://x.com/ClickHouseDB)
 [![YouTube videos](https://img.shields.io/badge/YouTube-Watch_ClickHouseDB-FF0000)](https://www.youtube.com/@ClickHouseDB)
 
-`clickhousectl` (`chctl`) is the official CLI for ClickHouse, from local development to ClickHouse Cloud.
+`clickhousectl` (`chctl`) is the official CLI for ClickHouse and Postgres, from local development to ClickHouse Cloud.
 
 
 ## What can the CLI do?
@@ -147,7 +147,7 @@ clickhousectl cloud postgres get <postgres-id>
 clickhousectl cloud postgres certs get <postgres-id> --output ca.pem
 ```
 
-Save any initial password and connection string, wait for `state=running`, then connect with `psql` using verified TLS. The [ClickHouse Managed Postgres guide](docs/guides/managed-postgres.md) covers that flow, configuration changes, read-only OAuth queries, and recovery. ClickHouse Managed Postgres commands are beta.
+Save any initial password and connection string, wait for `state=running`, then connect with `psql` using verified TLS. The [ClickHouse Managed Postgres guide](docs/guides/managed-postgres.md) covers that flow, configuration changes, read-only OAuth queries, and recovery.
 
 ### Ingest with ClickPipes
 

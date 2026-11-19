@@ -54,9 +54,8 @@ cd santi
 docker compose up -d
 ```
 
-Open <http://localhost:8080>, choose **Create account**, then **New project**. The image is
-`linux/amd64`; on Apple Silicon or other ARM hosts, run
-`docker pull --platform linux/amd64 ghcr.io/emersonjds/santi:latest` before `docker compose up -d`.
+Open <http://localhost:8080>, choose **Create account**, then **New project**. The image runs on
+`linux/amd64` and `linux/arm64` (Apple Silicon, Graviton).
 
 **Docker with your own PostgreSQL 17:**
 
@@ -101,9 +100,9 @@ vulnerabilities as described in [SECURITY.md](SECURITY.md).
 
 ## Pricing and sustainability
 
-santi is free and open source, and every feature ships in the open code. Self-hosting is free with
-no user or project limits; hosting and services fund the work, never features locked out of the
-code. Plans and prices: [docs/pricing.md](docs/pricing.md).
+santi is free and open source, and every feature ships in the open code. Self-hosting and the
+hosted Free plan have no user or project limits; hosting, enterprise add-ons and services fund the
+work, never features locked out of the code. Plans and prices: [docs/pricing.md](docs/pricing.md).
 
 ## License
 

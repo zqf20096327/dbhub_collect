@@ -4,7 +4,7 @@
 Handle database errors easily when working with Entity Framework Core and ADO.NET. Supports SQLServer, PostgreSQL, SQLite, Oracle and MySql
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square&logo=Apache)](License.md)
-[![Target](https://img.shields.io/static/v1?label=target&message=net10.0&color=512bd4&logo=.net&style=flat-square)](https://dotnet.microsoft.com/en-us/)
+[![Target](https://img.shields.io/static/v1?label=target&message=net11.0&color=512bd4&logo=.net&style=flat-square)](https://dotnet.microsoft.com/en-us/)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Giorgi/EntityFramework.Exceptions/dotnet.yml)
 [![Coverage Status](https://img.shields.io/coveralls/github/Giorgi/EntityFramework.Exceptions?logo=coveralls&style=flat-square)](https://coveralls.io/github/Giorgi/EntityFramework.Exceptions)
 [![Ko-Fi](https://img.shields.io/static/v1?style=flat-square&message=Support%20the%20Project&color=success&style=plastic&logo=ko-fi&label=$$)](https://ko-fi.com/U6U81LHU8)
@@ -52,7 +52,7 @@ to do is to configure `DbContext` by calling `UseExceptionProcessor` and handle 
 In case of `UniqueConstraintException` and `ReferenceConstraintException` you can get the name of the associated constraint with **`ConstraintName`** property. The **`ConstraintProperties`** will contain the properties that are part of the constraint. 
 
 > [!WARNING]
-> `ConstraintName` and `ConstraintProperties` will be populated only if the index is defined in the Entity Framework Model. These properties will not be populated if the index exists in the database but isn't part of the model or if the index is added with [MigrationBuilder.Sql](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.migrations.migrationbuilder.sql?view=efcore-10.0) method.
+> `ConstraintName` and `ConstraintProperties` will be populated only if the index is defined in the Entity Framework Model. These properties will not be populated if the index exists in the database but isn't part of the model or if the index is added with [MigrationBuilder.Sql](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.migrations.migrationbuilder.sql?view=efcore-11.0) method.
 
 > [!WARNING]
 > `ConstraintName` and `ConstraintProperties` will not be populated when using SQLite. 
@@ -184,7 +184,7 @@ The same approach works for any other ADO.NET provider: check the provider's exc
 #### MySqlConnector-based providers
 
 There is no dedicated package for EF Core providers built on [MySqlConnector](https://mysqlconnector.net/), such as
-Pomelo.EntityFrameworkCore.MySql and its forks (for example Microting.EntityFrameworkCore.MySql for EF Core 10). You don't need to write a classifier for them:
+Pomelo.EntityFrameworkCore.MySql and its forks such as Microting.EntityFrameworkCore.MySql. You don't need to write a classifier for them:
 the `DbExceptionClassifier.MySqlConnector` package already has one for MySqlConnector.
 
 ```

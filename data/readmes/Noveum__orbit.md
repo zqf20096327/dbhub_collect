@@ -116,7 +116,9 @@ yourself and never depend on us at all.
 
 ## Quick start
 
-You need [Bun](https://bun.sh) 1.3 or newer and Docker. That is the whole list.
+You need [Bun](https://bun.sh) 1.3 or newer, [Node.js](https://nodejs.org) 24.x
+on your PATH, and Docker. The tests and `bun run verify` use Node for fresh
+server-runtime import checks; Bun remains the package manager and test runner.
 
 ```bash
 git clone https://github.com/Noveum/orbit.git
@@ -277,6 +279,8 @@ context files, [`CLAUDE.md`](CLAUDE.md) and [`AGENTS.md`](AGENTS.md), so your
 editor picks up the conventions without you explaining them each time.
 
 ## Contributors
+
+Repository maintainers: [Shashank Agarwal](https://www.linkedin.com/in/shashankagarwal2/) and [@pulkitxm](https://github.com/pulkitxm). See [CODEOWNERS](.github/CODEOWNERS) for code review ownership.
 
 <a href="https://github.com/Noveum/orbit/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Noveum/orbit" alt="Contributors" />

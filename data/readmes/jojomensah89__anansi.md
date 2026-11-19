@@ -2,35 +2,47 @@
 
 # 🕸️ Anansi
 
-**Open-source, local-first web memory you control, for people and AI agents.**
+**Open-source, self-hosted web memory you control, for people and AI agents.**
 
-Anansi captures X bookmarks, Reddit saves, GitHub stars, and web pages or Chrome bookmarks from the browser sessions you already use, stores them in a searchable library you control, and lets compatible AI agents search and retrieve those saved references through eight read-focused MCP tools.
+Anansi captures X bookmarks, Reddit saves, GitHub stars, TikTok favorites, and web pages or Chrome bookmarks from the browser sessions you already use, stores them in a searchable library you control, and lets compatible AI agents search and retrieve those saved references through nine read tools and four optional write tools. It is free and MIT-licensed.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-purple)](https://modelcontextprotocol.io)
 [![Repo](https://img.shields.io/badge/GitHub-jojomensah89%2Fanansi-black?logo=github)](https://github.com/jojomensah89/anansi)
 [![Stars](https://img.shields.io/github/stars/jojomensah89/anansi?style=social)](https://github.com/jojomensah89/anansi)
-[![Issues](https://img.shields.io/github/issues/jojomensah89/anansi)](https://github.com/jojomensah89/anansi/issues)
-[![Last commit](https://img.shields.io/github/last-commit/jojomensah89/anansi)](https://github.com/jojomensah89/anansi/commits)
-[![CI](https://github.com/jojomensah89/anansi/actions/workflows/ci.yml/badge.svg)](https://github.com/jojomensah89/anansi/actions/workflows/ci.yml)
+[![Follow on X](https://img.shields.io/badge/Follow-jojomensah89-black?logo=x&logoColor=white)](https://x.com/jojomensah89)
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/jojomensah89)
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2Fjojomensah89%2Fanansi)
 
-[Follow the build](https://github.com/jojomensah89/anansi) · [Get Started](#-quickstart) · [Supported Sources](#-supported-sources) · [Ask it from your agent](#-ask-it-from-your-agent-mcp) · [Report a bug](https://github.com/jojomensah89/anansi/issues/new?template=bug_report.yml)
+[Website](https://anansi.jojomensah.com) · [Get Started](#-quickstart) · [Supported Sources](#-supported-sources) · [Ask it from your agent](#-ask-it-from-your-agent-mcp) · [Report a bug](https://github.com/jojomensah89/anansi/issues/new?template=bug_report.yml)
 
 <img src="./apps/web/public/anansi-logo.png" width="420" alt="Anansi logo showing a spider organizing saved web references" />
 
 </div>
 
+## Sponsors
+
+<a href="https://github.com/sponsors/jojomensah89">
+  <img src="./docs/assets/sponsor-placeholders.svg" width="900" height="300" alt="Six available sponsor slots in a three-column, two-row grid. Sponsor Anansi on GitHub." />
+</a>
+
+<p align="center">
+  <a href="https://github.com/sponsors/jojomensah89"><img src="https://img.shields.io/badge/Become_a_sponsor-%2419%2Fmonth-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Become a sponsor - $19/month" /></a>
+</p>
+
 ## ✨ What Anansi does
 
 Anansi does the following:
 
-- 📥 **Captures supported saves** — X bookmarks, Reddit saves, GitHub stars, and Web pages
+- 📥 **Captures supported saves** — X bookmarks, Reddit saves, GitHub stars, TikTok favorites, and Web pages
 - 🔖 **Mirrors Chrome bookmarks** — optional Chrome bookmark capture is stored as Web items
 - 🔍 **Searches the library** — saved text, authors, sources, tags, and recency
-- 💾 **Keeps the library under your control** — run locally with SQLite or use the repository's own-account Cloudflare deployment path
-- 🧠 **Exposes saved references to agents** — eight read-focused MCP tools search, retrieve, list, and summarize the library
+- 💾 **Keeps the library under your control** — self-host on your own Cloudflare account; local operation is for development and testing
+- 🗂️ **Organizes with shelves and topics** — shelves hold hand-picked saves, a filter rule, or both; optional AI tagging assigns topics you can edit
+- 🧠 **Exposes saved references to agents** — nine read tools and four optional write tools search, retrieve, list, and summarize the library
+- 🔑 **Signs in with passkeys** — add passkeys in Settings; `ANANSI_SECRET` stays as the recovery key
+- 📤 **Exports your data** — one JSON file, restorable into an empty library
 - 🔁 **Recovers from interruptions** — queued capture, retry, and resumable imports survive restarts and rate limits
 - 🔒 **Uses bounded access** — explicit capture, bearer-auth ingest, no `<all_urls>`, no `cookies` permission, and no GitHub OAuth or PAT
 
@@ -45,49 +57,55 @@ Anansi does the following:
 | <img src="./docs/assets/source-icons/web.svg" width="16" height="16" alt=""> Chrome bookmarks (web submode) | Optional mirroring into Web pages & bookmarks | Supported |
 | <img src="./docs/assets/source-icons/tiktok.svg" width="16" height="16" alt=""> TikTok favorites | Signed-in browser import | Browser capture restored; authenticated acceptance pending |
 
-> GitHub capture is extension-only. It reads the signed-in GitHub stars pages in your browser, includes repositories visible to that account — including visible private repositories — and needs no GitHub OAuth or personal access token.
+GitHub and Reddit imports use the signed-in browser session without opening tabs. X uses a page tab; TikTok scrolls Favorites in a focused window. TikTok is opt-in and does not store video files. The popup has separate source switches for X, Reddit, GitHub and TikTok, plus optional Chrome bookmark mirroring. Disabling a source does not delete its history.
 
-Live saves are delivered immediately for sources with extension capture. Anansi also performs one daily incremental catch-up for sources that support history import, covering changes made while Chrome or the extension was inactive. GitHub and Reddit import via background session requests without opening tabs. Anansi closes only tabs it created. If a provider session is missing, the popup asks you to sign in — use the explicit **Sign in** button, then retry. Network and rate-limit failures keep the resume cursor. TikTok's browser importer observes its signed-in Favorites responses; its authenticated behavior still needs an end-to-end browser check.
+Opening the library requests on-demand sync; the extension checks the owner's server every two minutes for requests from other devices. Recent checks are skipped for five minutes unless Sync now is used. There is no daily platform catch-up timer. Public GitHub stars can also be checked by the Worker after the owner enters a username. Private stars need the browser. Browser sync needs a running desktop browser and signed-in provider sessions. Bounded catch-up may require a full import after a large gap.
+
+Code supports these five sources; signed-in side-by-side acceptance remains pending. See [owner test](release/side-by-side-test.md).
 
 ## 🚀 Quickstart
 
-Two paths, same library: run it locally or host it in your own Cloudflare account.
+Host your library in your own Cloudflare account. The local path below is for development and testing.
 
-### A. Local
+### A. Local development
 
-Requirements: [Bun](https://bun.sh/) 1.3+, Chromium-based browser. SQLite DB is created automatically.
+Requirements: [Bun](https://bun.sh/) 1.4.2+ and a Chromium browser (Chrome, Brave, Edge or Arc). The local Worker uses emulated D1/R2; `bun run dev` applies local SQL migrations and starts the Vite dev server with hot reload.
 
 ```bash
 bun install
-cp .dev.vars.example .dev.vars
-# Edit .dev.vars and set your master secret:
+cp .env.example .env
+# Edit .env and set your master secret:
 #   ANANSI_SECRET=your-random-secret
 bun run dev
 ```
 
 Open `http://127.0.0.1:8787`. This is the one public local origin: the library is at `/`, JSON endpoints are under `/api`, and MCP is at `/mcp`.
 
-Build the extension:
+`bun run dev` first applies the SQL migrations, then starts Vite with the Cloudflare and TanStack plugins, so edits hot-reload. Local D1 and R2 use `.wrangler/state` at the repository root. This Worker development path does not read the older `data/anansi.db` SQLite library. To apply local migrations separately, run `bun run db:migrate:local`. `bun run dev:prod` builds the app and runs the compiled Worker exactly like production; use it before releases.
+
+Use `.env` for this local setup. If `.dev.vars` exists, Wrangler uses it instead of `.env`; keep its secret aligned or remove that duplicate secrets file.
+
+Build the extension. It is free and MIT-licensed. It is not on the Chrome Web Store yet, so for now you build it with Bun and load it unpacked. A store version is coming and will be free too.
 
 ```bash
 bun run --cwd apps/extension build
 ```
 
-Open `chrome://extensions` → enable **Developer mode** → **Load unpacked** → choose `apps/extension/.output/chrome-mv3`. Click the Anansi icon in the toolbar, enter your local Worker URL (`http://127.0.0.1:8787` or hosted URL) and `ANANSI_SECRET`, and click **Connect**. The extension validates the connection and saves your bookmarks seamlessly. (You can also pre-bake secrets in `.env` for private builds).
+Open your browser's extensions page (`chrome://extensions`, `brave://extensions` or `edge://extensions`) → enable **Developer mode** → **Load unpacked** → choose `apps/extension/.output/public/chrome-mv3`. Click the Anansi icon, enter your local Worker URL (`http://127.0.0.1:8787` or hosted URL) and `INGEST_TOKEN` if configured (otherwise `ANANSI_SECRET`), and click **Connect**. Public builds contain no deployment credentials. Configured owner-only builds require the explicit `build:private` command; never distribute them.
 
 GitHub first import: sign in to GitHub in the same browser profile → popup → **Import** beside GitHub. It walks your stars pages in the worker (no tabs open), persists the pagination cursor, and resumes after interruptions. Unstarring hides from current-star view without deleting history; re-starring restores it.
 
-TikTok favorites: sign in to TikTok in the same browser and press **Import** in the extension's TikTok row. Anansi opens your profile, selects Favorites, and observes TikTok's own list responses. The live path is enabled in this build but still needs an authenticated browser acceptance check. It keeps Favorites separate from Likes and does not store video files.
+TikTok favorites: sign in to TikTok in the same browser and press **Import** in the extension's TikTok row. Anansi opens a focused window and scrolls the rendered Favorites list. The live path is enabled in this build but still needs an authenticated browser acceptance check. It keeps Favorites separate from Likes and does not store video files.
 
-Library data backup: use **Saved views → Download library data (no media files)**. On a new, empty Anansi installation, choose **Restore into an empty library** in the same menu and select that JSON file. Restore validates the file before starting and uploads records in resumable batches; choose the same file after an interruption. It restores item and collection data, tags and manual tag decisions, highlights, media metadata, and Chrome bookmark links. It does not contain R2 or local media bytes; those must be fetched again where their origin is still available. A permanently rejected chunk after partial progress requires a fresh empty installation for recovery. Browser restore accepts files up to 100 MB.
+Library data backup: open **Settings → Data** and use **Export library** (one JSON file, no media files). On a new, empty Anansi installation, use **Restore from an export** in the same section and choose that file. Restore validates the file before starting and uploads records in resumable batches; choose the same file after an interruption. It restores item and collection data, shelf contents, AI topics, tags and manual tag decisions, highlights, media metadata, and Chrome bookmark links. It does not contain R2 or local media bytes; those must be fetched again where their origin is still available. A permanently rejected chunk after partial progress requires a fresh empty installation for recovery. Browser restore accepts files up to 100 MB.
 
 ### AI Tagging & Semantic Search
 
 Anansi leverages Cloudflare Workers AI and Vectorize:
 
-- **Automatic Tagging**: Powered by `@cf/clef-flash-9b` to assign concise, consistent topic tags to saves as they are captured.
+- **Automatic Tagging**: Powered by `@cf/cloudflare/clef-flash` to assign concise, consistent topic tags to saves as they are captured.
 - **Semantic Search**: Powered by `@cf/baai/bge-small-en-v1.5` and Cloudflare Vectorize to find items by concept and meaning alongside BM25 keyword search.
-- Both features are optional and can be toggled on/off in **Settings** (`/settings`).
+- Both features are off by default. Turn either on or off in **Settings → AI** (`/settings/ai`), where the topic list is also editable.
 
 ### B. Cloudflare — one-click self-hosting
 
@@ -112,21 +130,13 @@ directory; the first hosted library starts empty. Keep the local copy as a
 backup if you need those captures, because this deployment path does not
 include a local-to-cloud import.
 
-In Cloudflare's deploy form, set the Vectorize index to **384 dimensions** and
-the **cosine** metric. Anansi's default hosted embedding model,
-`@cf/baai/bge-small-en-v1.5`, returns 384-dimensional vectors. The Deploy form
-does not infer these fixed index settings from Wrangler, so this is a required
-resource-setup value; using a different dimension or metric will break semantic
-search. The model and Vectorize index are only used after semantic search is
-enabled in Settings.
-
-During setup, enter your master secret when Cloudflare prompts for it:
-
-- `ANANSI_SECRET` — master secret protecting library sign-in, Chrome extension ingestion, and MCP clients. (Legacy `LIBRARY_TOKEN`, `INGEST_TOKEN`, and `MCP_TOKEN` remain supported if configured individually).
-
-Generate with `openssl rand -hex 32`. Both Cloudflare AI features start off; enable
-Semantic search or Automatic tags from `/settings` only when you want to use
-your account's AI quota.
+In the deploy form, keep the repository root and default resource names. Enter
+`ANANSI_SECRET` (generate with `openssl rand -hex 32`), Vectorize dimensions
+**384**, and metric **cosine**. Wrangler cannot encode these two index creation
+settings. These are the Anansi-specific inputs beyond the standard account and
+repository choices. D1 and R2 are provisioned automatically. Both AI features
+start off; missing AI bindings leave capture, keyword search, export and restore
+available.
 
 #### Hosted semantic search
 
@@ -143,7 +153,7 @@ title/capture-text chunks, offsets, hashes, and model/chunker generation;
 Vectorize stores the corresponding vectors under stable IDs. Search combines
 keyword and vector candidates, applies the same library filters, collapses
 chunk matches to one saved item, and shows the best-matching chunk excerpt.
-MCP search remains keyword/BM25.
+MCP uses the same hybrid search coordinator, with keyword fallback when AI is off, unavailable or at its cap.
 
 Hosted indexing and query embeddings share a per-library monthly cap of 10,000
 app credits by default. One credit counts each started 1,000 characters sent in
@@ -152,23 +162,24 @@ At the cap, Anansi sends no more embedding requests; captures still save, and
 search requests that cannot be embedded fall back to keyword results. You can
 change the cap in Settings.
 
-After the first successful deploy, open the Worker project’s **Settings → Build
-→ Build Variables and Secrets** and add `BUN_VERSION=1.3.1` for subsequent
-builds. The first button build uses Cloudflare's default Bun version and must
-pass the clean-account acceptance check before this button is announced as
-ready.
+Workers Builds honors the root `packageManager: bun@1.4.2`; no manual
+`BUN_VERSION` is needed. Accept the detected `bun run build` and `bun run deploy`
+commands. Deploy applies pending D1 SQL migrations before publishing.
+Cloudflare deployment has been verified by the project owner (confirmed 2026-11-18).
+See the [deployment verification record](docs/deploy-acceptance.md) for the confirmation and detailed regression checklist.
 
 After deployment returns `https://<worker>.workers.dev`:
 
-1. Open the URL and sign in with `ANANSI_SECRET`.
-2. In the Chrome extension (either from the Chrome Web Store or unpacked build), click the Anansi icon in the toolbar.
-3. Enter your deployed Worker URL and `ANANSI_SECRET`, and click **Connect**.
+1. Open the URL and sign in with `ANANSI_SECRET`. Then add a passkey in **Settings → Security**. Passkeys need a hostname, so use `localhost` rather than `127.0.0.1` for local development.
+2. Build and load the extension unpacked as described above, then click the Anansi icon in the toolbar.
+3. In the signed-in library, use **Connect extension**, grant the exact origin in the popup and paste the single-use code. Pasting a capture key remains a fallback.
 4. Sign into each provider (X, GitHub, Reddit, TikTok) in the same Chrome profile before its first import.
-5. Add the Worker URL and `ANANSI_SECRET` to any remote MCP client you want to use (`Authorization: Bearer <ANANSI_SECRET>`).
+5. Open the MCP setup page to connect an OAuth app or create a named API key.
 
 The Worker is the only public origin: the library is `/`, the API is `/api/*`,
 and MCP is `/mcp`. New schema changes start with `packages/db/src/schema.ts`
-and `bun run db:generate`; review and commit the new SQL migration, then push
+and hand-written SQL migrations in `packages/db/drizzle` with corresponding
+`meta/_journal.json` entries; review the new migration, then push
 to the connected repository. Workers Builds applies pending D1 migrations
 before publishing the Worker.
 
@@ -183,11 +194,11 @@ bun run deploy
 ```
 
 `bun run deploy` applies remote D1 migrations and publishes the Worker output created by `bun run build`.
-Local development runs through `bun run dev` (powered by Wrangler with local D1 emulation).
+Local development runs through `bun run dev` (hot-reloading Vite with the Cloudflare plugin, local D1 migrations, and a fixed `http://127.0.0.1:8787` origin).
 
 ## 🧠 Ask it from your agent (MCP)
 
-Streamable HTTP MCP server at `http://127.0.0.1:8787/mcp` locally (or `https://<worker>.workers.dev/mcp` when hosted). Bearer auth with `ANANSI_SECRET` (or legacy `MCP_TOKEN`) when configured. The web `/mcp` setup page uses a literal `<YOUR_ANANSI_SECRET>` placeholder and never prints the secret.
+Streamable HTTP MCP is at your deployment's `/mcp`. Use OAuth sign-in for compatible apps, or a named, revocable API key for CLI tools and scripts. Connected clients are read-only by default. The owner can grant write access in Connected clients; revocation and permission changes apply on the next request. Legacy shared credentials are migration-only and can be retired.
 
 | Tool | Purpose |
 | --- | --- |
@@ -199,15 +210,18 @@ Streamable HTTP MCP server at `http://127.0.0.1:8787/mcp` locally (or `https://<
 | `list_author_saves` | Items from one author |
 | `list_tags` | Visible tag vocabulary and usage counts |
 | `library_stats` | Visible library and media statistics |
+| `list_shelves` | The owner's shelves with save counts; pass a shelf id to `list_saved` or `search_saved` |
 
 The optional `source` filter accepts visible `x`, `reddit`, `github`, `web`, and `tiktok` items.
+
+Write-enabled clients also receive `add_tag`, `remove_tag`, `set_note` and `save_link`: 13 tools total, nine for read-only clients. No delete tool exists. Agent searches request Reddit/GitHub sync by default; X/TikTok require the separate owner opt-in.
 
 ### Connecting your agent
 
 **Claude Code**:
 
 ```bash
-claude mcp add --transport http anansi http://127.0.0.1:8787/mcp --header "Authorization: Bearer <YOUR_ANANSI_SECRET>"
+claude mcp add --transport http anansi http://127.0.0.1:8787/mcp --header "Authorization: Bearer <YOUR_NAMED_API_KEY>"
 ```
 
 **Cursor / Windsurf / Codex (HTTP MCP)**:
@@ -218,7 +232,7 @@ claude mcp add --transport http anansi http://127.0.0.1:8787/mcp --header "Autho
     "anansi": {
       "url": "http://127.0.0.1:8787/mcp",
       "headers": {
-        "Authorization": "Bearer <YOUR_ANANSI_SECRET>"
+        "Authorization": "Bearer <YOUR_NAMED_API_KEY>"
       }
     }
   }
@@ -229,7 +243,7 @@ claude mcp add --transport http anansi http://127.0.0.1:8787/mcp --header "Autho
 
 ```mermaid
 flowchart LR
-  B[Browser extension<br/>session capture + queue] -->|POST /api/ingest<br/>ANANSI_SECRET| S[Web Worker<br/>validate + parse]
+  B[Browser extension<br/>session capture + queue] -->|POST /api/ingest<br/>capture-only key| S[Web Worker<br/>validate + parse]
   S --> D[(Cloudflare D1<br/>meta + text + search)]
   S --> R[(Cloudflare R2<br/>accepted image copies)]
   S --> AI[(Workers AI<br/>Clef tagging + embeddings)]
@@ -251,7 +265,6 @@ packages/db/       D1/SQLite schema, migrations, search, and item operations
 packages/mcp/      Transport-independent MCP server and tool definitions
 packages/sources/  Shared capture contracts and source parsers
 packages/ui/       Shared UI components and styles
-packages/env/      Typed runtime environment bindings
 wrangler.jsonc    Cloudflare Worker bindings and deployment configuration
 ```
 
@@ -260,9 +273,10 @@ GET  /api/stats   GET /api/items   GET /api/items/:id   GET /api/search?q=...
 GET  /api/recent  GET /api/authors?handle=...           GET /api/creators
 GET  /api/sources GET/PATCH /api/ai POST /api/ingest POST /api/extension/heartbeat
 GET  /api/extension/config
+GET/POST /api/shelves   GET /api/tags   GET /api/export   POST /api/restore/*
 ```
 
-`POST /api/ingest` and heartbeat require `ANANSI_SECRET` (or `INGEST_TOKEN`). Ingest is closed when no secret is configured.
+`POST /api/ingest` and heartbeat accept per-browser capture keys; shared credentials remain only until legacy access is retired. Ingest is closed when no secret is configured.
 
 </details>
 
@@ -276,7 +290,7 @@ GET  /api/extension/config
 
 ## 🛠️ Development
 
-[![Bun](https://img.shields.io/badge/Bun-%3E%3D1.3-black?logo=bun)](https://bun.sh)
+[![Bun](https://img.shields.io/badge/Bun-%3E%3D1.4.2-black?logo=bun)](https://bun.sh)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](./package.json)
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-orange)](./wrangler.jsonc)
 
@@ -292,8 +306,7 @@ Covers queue recovery, retries, parser fixtures, authenticated ingest, GitHub im
 ## 🗺️ Roadmap
 
 - [ ] 🔍 Cloudflare AI-enrichment acceptance — Workers AI Clef tagging and Vectorize semantic search clean-account acceptance
-- [ ] 🗂️ Collections v2 — curated hand-picked lists alongside today's saved filter views
-- [ ] First clean-account deploy: install → migrate → first capture → search → export → restore against Cloudflare
+- [x] Cloudflare deployment verified by the project owner (confirmed 2026-11-18; see [verification record](docs/deploy-acceptance.md))
 - [ ] Measured free-tier usage + media-host allowlist published here
 - [ ] Synthetic demo library
 - [ ] Pinterest capture — add a browser-session importer and live-save path
@@ -309,11 +322,10 @@ Useful early contributions include clearer setup docs, scrubbed source fixtures,
 
 ## 📄 License
 
-MIT © 2026 Jojo Mensah — see [LICENSE](./LICENSE).
+MIT © 2026 Jojo Mensah — see [LICENSE](./LICENSE). The Anansi name and logo are trademarks and are not covered by the MIT licence.
 
 ---
 
 Built by Jojo Mensah · Follow along for demos and changelogs
 
-<a href="https://buymeacoffee.com/jojomensahh"><img src="https://img.shields.io/badge/Buy_me_a_coffee-FFDD00?logo=buy-me-a-coffee&logoColor=black" alt="Buy me a coffee" height="20" align="middle" /></a>
-<a href="https://x.com/jojomensah89"><img src="https://shieldcn.dev/x/follow/jojomensah89.svg?variant=branded&size=xs&theme=zinc" alt="X Follow" height="20" align="middle" /></a>
+<a href="https://github.com/sponsors/jojomensah89">Sponsor on GitHub</a> · <a href="https://x.com/jojomensah89"><img src="https://shieldcn.dev/x/follow/jojomensah89.svg?variant=branded&size=xs&theme=zinc" alt="X Follow" height="20" align="middle" /></a>

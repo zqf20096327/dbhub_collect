@@ -26,7 +26,7 @@ The idea behind it: persistent intent may matter more than persistent memory.
 
 *A friend's goal selling his old audio gear stops to ask for condition notes and his floor price instead of guessing.*
 
-Start with `/goal-new`: pick a ready-made goal (unsubscribe from mailing lists, a weekly job scan with your CV, tidy Downloads, inbox triage, keep your GitHub profile current, fix failing CI, triage new GitHub issues, refine new GitHub issues, work on new GitHub issues, review pull requests) or type your own. Schedules can be plain words: "30d", "weekdays at 9", "the first of every month".
+Start with `/goal-new`: pick a ready-made goal (maintain my repo, which sets up all the GitHub goals below at once, unsubscribe from mailing lists, a daily news digest, a weekly job scan with your CV, tidy Downloads, inbox triage, keep your GitHub profile current, fix failing CI, triage new GitHub issues, refine new GitHub issues, work on new GitHub issues, review pull requests) or type your own. Schedules can be plain words: "30d", "weekdays at 9", "the first of every month".
 
 ## Example: from issue to merged PR
 
@@ -70,7 +70,7 @@ It's an **MCP server** (the tools agents use) and two **Claude Code plugins**: `
 
 ## Persistent goals
 
-A goal is an objective that never finishes. Type `/goal-new` alone to start from a ready-made goal (unsubscribe from mailing lists, a weekly job scan, tidy your Downloads, inbox triage, keep your GitHub profile current, fix failing CI, work on new GitHub issues, review pull requests), each with its rules and schedule (or, for the GitHub ones, a watch) set. Or create your own with `/goal-new <name>: <objective>` (it works in the session's directory, and asks how often it should run, suggesting a schedule from the objective), or from the web app's home page (**+ New goal**) with standing instructions too. A goal can also be a **one-off**: it runs once and, when nothing is left open, moves to the pane's **Done** section.
+A goal is an objective that never finishes. Type `/goal-new` alone to start from a ready-made goal (unsubscribe from mailing lists, a daily news digest, a weekly job scan, tidy your Downloads, inbox triage, keep your GitHub profile current, fix failing CI, work on new GitHub issues, review pull requests), each with its rules and schedule (or, for the GitHub ones, a watch) set. Or create your own with `/goal-new <name>: <objective>` (it works in the session's directory, and asks how often it should run, suggesting a schedule from the objective), or from the web app's home page (**+ New goal**) with standing instructions too. A goal can also be a **one-off**: it runs once and, when nothing is left open, moves to the pane's **Done** section.
 
 The pane also keeps **your to-do list** for the project (`/todo <text>`, or ask Claude to add something): a backlog for working with Claude on a codebase. The ideas and decisions you put off along the way stay beside the chat, outside the conversation, where a `/clear` or a context compaction can't lose them. Any to-do can be brought back into the conversation with **Ask…** (a question, nothing changed), **Plan** (plan mode, for you to review) or **Start**. A list can hold anything, not only code work.
 
@@ -101,6 +101,8 @@ The tools for building plans by hand (`create_plan`, `provision_tasks`, `next_ta
 | `get_goal_brief` | Start of a run: everything a fresh agent needs, in one call |
 | `add_item` | Add a work item (deduplicated by `external_ref`); actions are proposed, recorded or refused per the goal's autonomy |
 | `remember` / `forget` | Add a fact, rule or preference to the goal's memory; deactivate one an agent added |
+| `recall` | Read in full the memories the brief only lists (`memory_index`) |
+| `propose_curation` | A memory curation run's one proposal (merge, reword, retire, unpin, add), which the server applies if you approve it |
 | `end_run` | Finish a run with a summary for the next one |
 | `run_goal` | Queue a run now |
 

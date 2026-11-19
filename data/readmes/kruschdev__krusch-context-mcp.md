@@ -1,11 +1,12 @@
 # Krusch Context MCP
 
-![Krusch Context MCP — DolphinBench 91.17% Queued (UUID c047b063) & 90.67% Clean-Room Grounded v0.3, LoCoMo (90.26%), ICLR 2026 BEAM (93.00% 10M IE Recall)](docs/assets/banner.png)
+![Krusch Context MCP: Persistent 5-Verb Agent Memory, SHA-256 Span Provenance & LoCoMo 90.26%](docs/assets/banner.png)
 
-> Local MCP server: five tools to store, retrieve, and retire project decisions. SQLite by default — powering the `$0.00` Zero-LLM Raw-RAG + 4-Way RRF memory substrate behind **`91.17%` (`547/600` @ `$24.54`, `Gemini 4 Argon Low` — uploaded `dolphinbench.ai` submission `UUID c047b063`, `status: "queued"` awaiting leaderboard acceptance; exceeds current `70.67%` published leaderboard entry in independent `600/600` evaluation)**, **`90.67%` (`544/600` @ `$30.54`, `Argon Low + Grounded v0.3` — self-run clean-room evaluation with highest `Riley` slice `181/200 = 90.50%` and published SHA-256 audit logs; `98.33%` `Global Oracle@28`)**, and **`57.33%` (`344/600` @ `$0.00`, Wave-6 `krush420/gemma4-31b-sre-lora` + `Grounded` — highest open-weights score in self-run 28-run evaluation; `54.17%` [`325/600`] stock submission `UUID 288671ad` uploaded & queued on `dolphinbench.ai`)** across `28` Official `DolphinBench` runs (`16,800` traces), **`90.26%` (`1,390/1,540`, `92.66%` `Oracle@2`, `95.77%` recall, `182 ms`)** on `Snap LoCoMo` (ACL 2024), and **`93.00%` `10M`-token IE recall** on ICLR 2026 `BEAM`.
+> **Persistent working memory for AI coding agents in 5 MCP verbs (`~350` schema tokens), backed by built-in `node:sqlite` WAL + Porter `FTS5` + local `1024d` embeddings (`PostgreSQL 16 + pgvector` optional).** Stores architectural decisions and invariants with SHA-256 line-span drift detection and `$0.00` zero-LLM `Raw-RAG` indexing, scoring **`90.26%` accuracy and `95.77%` evidence recall** across `1,540` ACL 2024 Snap `LoCoMo` questions (`81.50%` @ `$1.35` on model-matched `GPT 5.6 Luna` across `600` `DolphinBench` tasks; `91.17%` uploaded submission `UUID c047b063` queued; all self-run in my lab with raw SHA-256 logs published, no third-party reproduction yet).
 
 [![Node.js 22+](https://img.shields.io/badge/Node.js-22+-green.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Tests: 155 Passed](https://img.shields.io/badge/Tests-155%20Passed-brightgreen.svg)](#5-minute-external-engineer-verification-zero-docker-zero-api-keys)
 [![MCP: 5 Verbs](https://img.shields.io/badge/MCP-5%20Core%20Verbs-blue.svg)](docs/TOOL_REFERENCE.md)
 [![Storage: SQLite-First](https://img.shields.io/badge/Storage-SQLite--First%20(zero--Docker)-lightgrey.svg)](docs/ARCHITECTURE.md)
 [![DolphinBench Queued Submission](https://img.shields.io/badge/DolphinBench-91.17%25%20Queued%20(UUID%20c047b063)-00e5ff.svg)](https://krusch.dev/articles/return-on-memory-dolphinbench)
@@ -18,7 +19,7 @@
 [![HOL Guard Catalog](https://img.shields.io/badge/HOL_Guard-Catalog_Listed-0B0F17?logo=shield&logoColor=00F5D4)](https://hol.org/guard/extension-studio?extension=mcp.krusch-context-mcp)
 [![M8ven Score](https://m8ven.ai/badge/mcp/kruschdev/krusch-context-mcp)](https://m8ven.ai/mcp/kruschdev/krusch-context-mcp?s=readme)
 
-> 📖 **Read the Systems & Benchmark Deep Dives**: Read [**Paper #27 — Return on Memory (`91.17%` Queued `dolphinbench.ai` Submission `UUID c047b063` & `90.67%` Clean-Room Grounded v0.3)**](https://krusch.dev/articles/return-on-memory-dolphinbench) ([**PDF**](https://krusch.dev/papers/return-on-memory-dolphinbench.pdf)), [**Paper #26 — What DolphinBench Taught Me About Local AI (Highest Open-Weights Score `57.33%` Wave-6 / `56.67%` Stock+Grounded / `54.17%` Queued Stock `UUID 288671ad` `Gemma 4 31B` @ `$0.00`)**](https://krusch.dev/articles/what-dolphinbench-taught-me-about-local-ai), and [**Beyond Flat Vector RAG: What Makes krusch-context-mcp Special**](https://krusch.dev/articles/what-makes-krusch-context-mcp-special) ([`docs/WHAT_MAKES_IT_SPECIAL.md`](docs/WHAT_MAKES_IT_SPECIAL.md)).
+> 📖 **Architecture & Benchmark Papers**: [**Beyond Flat Vector RAG: What Makes `krusch-context-mcp` Special**](https://krusch.dev/articles/what-makes-krusch-context-mcp-special) ([`docs/WHAT_MAKES_IT_SPECIAL.md`](docs/WHAT_MAKES_IT_SPECIAL.md)) · [**Paper #27: Return on Memory (`DolphinBench` & `LoCoMo`)**](https://krusch.dev/articles/return-on-memory-dolphinbench) ([**PDF**](https://krusch.dev/papers/return-on-memory-dolphinbench.pdf)) · [**Paper #26: Open-Weights Memory Ablations (`$0.00`)**](https://krusch.dev/articles/what-dolphinbench-taught-me-about-local-ai).
 
 **Krusch Context MCP** gives AI coding agents (Cursor, Claude Code, Windsurf, Antigravity) persistent working memory across sessions. It captures architectural decisions, invariants, lessons, and bug diagnoses, warns on near-duplicate memories, maintains temporal lineage when facts are superseded or invalidated, and audits diffs against active constraints.
 
@@ -43,7 +44,13 @@
 
 ## ⚡ 30-Second Quickstart
 
-Requires **Node.js >= 22.0.0**. Run once inside your project repository:
+Ask your coding agent (Claude Code, Codex, Cursor, Windsurf, or Antigravity):
+
+```text
+Read https://raw.githubusercontent.com/kruschdev/krusch-context-mcp/main/INSTALL.md and set up krusch-context-mcp on this machine.
+```
+
+Or run once inside your project repository (requires **Node.js >= 22.0.0**):
 
 ```bash
 npx krusch-context-mcp init
@@ -55,6 +62,27 @@ This command will:
 3. Create your project `.env` with sensible defaults.
 4. Seed initial project context and run a diagnostic health check.
 5. Print copy-paste JSON configurations for Cursor, Claude Code, and Claude Desktop.
+
+---
+
+## 🔬 5-Minute External Engineer Verification (Zero Docker, Zero API Keys)
+
+Verify the production SQLite engine, all `155` unit and contract tests, and the cryptographic zero-leakage benchmark verifiers locally in under a minute with zero external services or API keys:
+
+```bash
+git clone https://github.com/kruschdev/krusch-context-mcp.git
+cd krusch-context-mcp
+npm ci
+
+# 1. Run all 155 unit & contract tests on built-in node:sqlite (zero Docker, zero API keys)
+npm test
+
+# 2. Run the 5-part static engine, JS Proxy oracle-trap, and SHA-256 audit-log verifiers
+npm run bench:beam:verify
+npm run bench:beam:verify:long
+```
+
+> Full dataset-level reproduction steps (including frozen `0o444` SQLite manifests and raw SHA-256 receipts) are documented in [`benchmarks/LOCOMO_EMPIRICAL_REPORT.md`](benchmarks/LOCOMO_EMPIRICAL_REPORT.md) and [`benchmarks/BEAM_EMPIRICAL_REPORT.md`](benchmarks/BEAM_EMPIRICAL_REPORT.md).
 
 ---
 
@@ -111,7 +139,7 @@ To prevent memory hallucination and database pollution:
 2. **Near-Duplicate Detection**: If a proposed memory matches an existing active record ($\ge 0.85$ cosine similarity), the memory is saved with a warning proposing `revise(action: 'supersede', target_id: ...)`. This protects contrasting rules (e.g., "Allow CORS" vs "Do not allow CORS") while flagging twin facts.
 3. **Compulsory Invalidation Reasons**: Calling `revise(action: 'invalidate')` strictly requires a non-empty `reason`.
 4. **Focused Audits**: `nudge` caps findings at 3 with concrete evidence, rejecting `every_turn` triggers to eliminate auditor nagware.
-5. **Span-Grounded Provenance & Drift Self-Healing**: Passing `provenance: { file, locator, quoted_sentence }` to `remember` computes a normalized SHA-256 `anchor_hash` and line range (`start_line..end_line`). On subsequent `retrieve(include_state: true)` calls, the engine verifies the span on disk—automatically healing line numbers when code shifts above it, or flagging `[DRIFTED]` when the underlying code changes.
+5. **Span-Grounded Provenance & Drift Self-Healing**: Passing `provenance: { file, locator, quoted_sentence }` to `remember` computes a normalized SHA-256 `anchor_hash` and line range (`start_line..end_line`). On subsequent `retrieve(include_state: true)` calls, the engine verifies the span on disk, automatically healing line numbers when code shifts above it, or flagging `[DRIFTED]` when the underlying code changes.
 
 ---
 
@@ -125,7 +153,7 @@ To prevent memory hallucination and database pollution:
 
 ## 🐘 When Do You Need PostgreSQL?
 
-* **Use SQLite (Default)**: Perfect for single developers, local IDE sessions, and projects with thousands of decisions—featuring compact `Float32Array` binary vector blobs (`4 KB`/row) and an external-content Porter-stemmed `FTS5` lexical index. Zero Docker, zero setup.
+* **Use SQLite (Default)**: Perfect for single developers, local IDE sessions, and projects with thousands of decisions, featuring compact `Float32Array` binary vector blobs (`4 KB`/row) and an external-content Porter-stemmed `FTS5` lexical index. Zero Docker, zero setup.
 * **Use PostgreSQL (`STORAGE_MODE=postgres`)**: Required only when scaling to multi-agent swarms across different machines needing centralized persistence and server-side pgvector HNSW indexing.
 
 ---
@@ -199,11 +227,11 @@ claude mcp add krusch-context -- npx -y krusch-context-mcp
 
 ## 📊 External Benchmarks & 3-Category Verification Taxonomy
 
-> **Ecosystem Verification Taxonomy**: Evaluated across 335,000+ traces and 14 external benchmark suites, with published SHA-256 audit logs and reproducible evaluation artifacts, separating (1) **Maintainer-Reviewed & Merged Upstream (`github-actions[bot]` CI-Verified)** such as [`RouteWorks/RouterArena` PR #169](https://github.com/RouteWorks/RouterArena/pull/169#issuecomment-6779650408) (merged by `@yl231` into [`main @ 844e93b`](https://github.com/RouteWorks/RouterArena/commit/844e93b547e6278b01994720de39bfc32ffd18bc); `0.7263` CI score across `8,400/8,400` live receipts, leaderboard table row queued for next batch ranking refresh), (2) **Uploaded & Queued Leaderboard Submissions** on `dolphinbench.ai` (`status: "queued"` awaiting leaderboard acceptance, led by `UUID c047b063` at `91.17%` [`547/600` @ `$24.54`] and open-weights stock `UUID 288671ad` at `54.17%` [`325/600` @ `$0.00`]), and (3) **Independently Reproducible Clean-Room Evaluations** with SHA-256-pinned audit logs in [`krush420/sovereign-g4-benchmarks`](https://huggingface.co/datasets/krush420/sovereign-g4-benchmarks).
+> **Ecosystem Verification Taxonomy**: Evaluated across 335,000+ traces and 14 external benchmark suites in my lab, with published SHA-256 audit logs and reproducible evaluation artifacts, separating (1) **Maintainer-Reviewed & Merged Upstream (`github-actions[bot]` CI-Verified)** such as [`RouteWorks/RouterArena` PR #169](https://github.com/RouteWorks/RouterArena/pull/169#issuecomment-6779650408) (merged by `@yl231` into [`main @ 844e93b`](https://github.com/RouteWorks/RouterArena/commit/844e93b547e6278b01994720de39bfc32ffd18bc); `0.7263` CI score across `8,400/8,400` live receipts, leaderboard table row queued for next batch ranking refresh), (2) **Uploaded & Queued Leaderboard Submissions** on `dolphinbench.ai` (`status: "queued"` awaiting leaderboard acceptance, led by `UUID c047b063` at `91.17%` [`547/600` @ `$24.54`] and open-weights stock `UUID 288671ad` at `54.17%` [`325/600` @ `$0.00`]), and (3) **Self-Run Clean-Room Evaluations (Published SHA-256 Audit Logs; Third-Party Reproduction: None Yet)** in [`krush420/sovereign-g4-benchmarks`](https://huggingface.co/datasets/krush420/sovereign-g4-benchmarks). No outside party has re-run the `LoCoMo`, `DolphinBench`, or `BEAM` evaluations yet; reproduction issues are welcome.
 
-### Official DolphinBench (`91.17%` Queued `UUID c047b063` @ `$24.54`, `90.67%` Clean-Room Grounded v0.3 @ `$30.54` & `57.33%` Open-Weights @ `$0.00`) — *Return on Memory*
+### Official DolphinBench (`91.17%` Queued `UUID c047b063` @ `$24.54`, `90.67%` Clean-Room Grounded v0.3 @ `$30.54` & `57.33%` Open-Weights @ `$0.00`): *Return on Memory*
 
-Evaluating all **`600/600` multi-app workspace tasks** across **`13,539` conversational sessions (`1,500,265` `o200k_base` tokens)** under the official `openai/gpt-5.6-sol` judge (**`28` official `600`-task evaluations = `16,800` official `openai/gpt-5.6-sol` traces across `6` model families: `8` uploaded & queued on `dolphinbench.ai` + `20` clean-room controls = `28/28` `submission.validate` passed**), my **byte-identical `0o444` read-only frozen Zero-LLM Raw-RAG (`256/32`-token windows) + Porter-FTS5 BM25 + `snowflake-arctic-embed2` (`1024d`) 4-Way RRF `node:sqlite` store (`$0.00` ingestion)** achieves **`91.17%` (`547/600` @ `$24.54`, `Gemini 4 Argon Low` — uploaded `dolphinbench.ai` submission `UUID c047b063`, `status: "queued"` awaiting leaderboard acceptance; exceeds current `70.67%` published leaderboard entry in independent `600/600` evaluation)**, **`90.67%` (`544/600` @ `$30.54`, `Argon Low + Grounded v0.3` — self-run clean-room evaluation with highest `Riley` slice `181/200 = 90.50%` and published SHA-256 audit logs; `Argon Low Oracle@2 = 94.67%` [`568/600`], `Argon Oracle@4 = 96.83%` [`581/600`], `Global Oracle@28 = 98.33%` [`590/600`])**, **`81.50%` (`489/600` @ `$1.35`, `1.57x` faster, `+10.83 pp` > published `70.67%` `Mem0` entry @ `71.1x` lower cost)** model-matched on `OpenAI GPT 5.6 Luna (High + Grounded)` (`81.33%` Std.), and **`57.33%` (`344/600` @ `$0.00`, Wave-6 [`krush420/gemma4-31b-sre-lora`](https://huggingface.co/krush420/gemma4-31b-sre-lora) + `Grounded` — highest open-weights score in self-run 28-run evaluation; `56.67%` Stock + Grounded; `54.17%` [`325/600`] stock submission `UUID 288671ad` uploaded & queued on `dolphinbench.ai`; `$0.00` Open-Weights `Oracle@17 = 83.17%` [`499/600`])**:
+Evaluating all **`600/600` multi-app workspace tasks** across **`13,539` conversational sessions (`1,500,265` `o200k_base` tokens)** under the official `openai/gpt-5.6-sol` judge (**`28` official `600`-task evaluations = `16,800` official `openai/gpt-5.6-sol` traces across `6` model families: `8` uploaded & queued on `dolphinbench.ai` + `20` clean-room controls = `28/28` `submission.validate` passed**), my **byte-identical `0o444` read-only frozen Zero-LLM Raw-RAG (`256/32`-token windows) + Porter-FTS5 BM25 + `snowflake-arctic-embed2` (`1024d`) 4-Way RRF `node:sqlite` store (`$0.00` ingestion)** achieves **`91.17%` (`547/600` @ `$24.54`, `Gemini 4 Argon Low`, uploaded `dolphinbench.ai` submission `UUID c047b063`, `status: "queued"` awaiting leaderboard acceptance; exceeds current `70.67%` published leaderboard entry in independent `600/600` evaluation)**, **`90.67%` (`544/600` @ `$30.54`, `Argon Low + Grounded v0.3`, self-run clean-room evaluation with highest `Riley` slice `181/200 = 90.50%` and published SHA-256 audit logs; `Argon Low Oracle@2 = 94.67%` [`568/600`], `Argon Oracle@4 = 96.83%` [`581/600`], `Global Oracle@28 = 98.33%` [`590/600`])**, **`81.50%` (`489/600` @ `$1.35`, `1.57x` faster, `+10.83 pp` > published `70.67%` `Mem0` entry @ `71.1x` lower cost)** model-matched on `OpenAI GPT 5.6 Luna (High + Grounded)` (`81.33%` Std.), and **`57.33%` (`344/600` @ `$0.00`, Wave-6 [`krush420/gemma4-31b-sre-lora`](https://huggingface.co/krush420/gemma4-31b-sre-lora) + `Grounded`, highest open-weights score in self-run 28-run evaluation; `56.67%` Stock + Grounded; `54.17%` [`325/600`] stock submission `UUID 288671ad` uploaded & queued on `dolphinbench.ai`; `$0.00` Open-Weights `Oracle@17 = 83.17%` [`499/600`])**:
 
 | Agent Reader + Memory Substrate | Overall (`600`) | Persona Breakdown (`Morgan` / `Alex` / `Riley`) | Checks / Key Delta | Total Cost |
 | :--- | :--- | :--- | :--- | :--- |
@@ -227,7 +255,7 @@ Evaluating all **`600/600` multi-app workspace tasks** across **`13,539` convers
 
 * Zero-gaming, clean-room evaluation across all **`10` multi-month conversations (`5,882` turns, `1,515` `256/32`-token Raw-RAG windows)** and **`1,540/1,540` standard Category 1–4 QA probes** (`snap-research/locomo` SHA-256 `79fa87e9...ea698ff4`) using the unmodified `SovereignMemoryStore` (`0o444` read-only frozen SQLite stores, `$0.00` / `0`-LLM ingestion via local `snowflake-arctic-embed2` `1024d` + Porter FTS5 4-Way RRF) and verbatim `mem0ai/mem0@aae5989e` `ANSWER_PROMPT_ZEP` + `ACCURACY_PROMPT` (`gpt-4o-mini` `temperature=0.0` judge):
   * **`argon_matched` (`9,983` mean `cl100k` tokens, `3.01×` compression)**: **`90.26%` (`1,390/1,540`)** judged accuracy (`94.17%` Single-Hop, `92.83%` Temporal, `84.04%` Multi-Hop, `65.62%` Open-Domain), **`95.77%` ground-truth `dia_id` evidence recall** (`98.87%` Single-Hop, `97.98%` Temporal), **`63.97%` official Porter-stemmed token F1**, **`181.8 ms` median local retrieval**, and **`+19.86 pp`** over LivingBrain / SuperLocalMemory V3.3's zero-LLM mode (`70.4%`) (`trace_argon_matched.jsonl` SHA-256 `68363e5f7c6cf733b42681c6e73911b129e71a43a41ac385cf56daf96a80d70d`).
-  * **`argon_tight` (`4,465` mean `cl100k` tokens, `6.73×` compression — `<0.5×` peer token budget)**: **`89.68%` (`1,381/1,540`)** judged accuracy, **`91.05%` `dia_id` recall** (`96.37%` Single-Hop, `95.25%` Temporal), **`63.11%` official F1**, **`186.4 ms` median retrieval**, and **`92.66%` (`1,427/1,540`) `Oracle@2`** across both frozen runs (`trace_argon_tight.jsonl` SHA-256 `e48f3cc00f690eda2d8345283fc822f05527eb95844aa923001f74a2b82f87f1`; `5/5` zero-leakage & `BlindMappingGuard` checks passed; [full report](benchmarks/LOCOMO_EMPIRICAL_REPORT.md)).
+  * **`argon_tight` (`4,465` mean `cl100k` tokens, `6.73×` compression, `<0.5×` peer token budget)**: **`89.68%` (`1,381/1,540`)** judged accuracy, **`91.05%` `dia_id` recall** (`96.37%` Single-Hop, `95.25%` Temporal), **`63.11%` official F1**, **`186.4 ms` median retrieval**, and **`92.66%` (`1,427/1,540`) `Oracle@2`** across both frozen runs (`trace_argon_tight.jsonl` SHA-256 `e48f3cc00f690eda2d8345283fc822f05527eb95844aa923001f74a2b82f87f1`; `5/5` zero-leakage & `BlindMappingGuard` checks passed; [full report](benchmarks/LOCOMO_EMPIRICAL_REPORT.md)).
 
 ### Official ICLR 2026 BEAM (`100K`–`10M` Tokens, `2,000/2,000` Probes)
 
@@ -245,7 +273,7 @@ Evaluating all **`600/600` multi-app workspace tasks** across **`13,539` convers
 * **[Changelog](CHANGELOG.md)**: Version release notes.
 * **[Official Snap LoCoMo Empirical Report](benchmarks/LOCOMO_EMPIRICAL_REPORT.md)**: Clean-room `1,540/1,540`-probe ACL 2024 evaluation (`90.26%` matched / `89.68%` tight / `92.66%` `Oracle@2`, `95.77%` `dia_id` recall, `$0.00` zero-LLM ingest) and JSON receipts ([`benchmarks/locomo/`](benchmarks/locomo/)).
 * **[Official ICLR 2026 BEAM Empirical Report](benchmarks/BEAM_EMPIRICAL_REPORT.md)**: Full `100`-conversation (`~178.34M`-token), `2,000/2,000`-probe methodology, per-ability tables, and `10/10` zero-leakage verification gates.
-* **[Official DolphinBench Whitepapers & Clean-Room Audit Logs](https://krusch.dev/articles/return-on-memory-dolphinbench)**: [**Paper #27 (HTML)**](https://krusch.dev/articles/return-on-memory-dolphinbench), [**Paper #27 (PDF)**](https://krusch.dev/papers/return-on-memory-dolphinbench.pdf), [**Paper #26**](https://krusch.dev/articles/what-dolphinbench-taught-me-about-local-ai), and all **`28` Official `DolphinBench` runs (`16,800` official `gpt-5.6-sol` traces across `6` model families, `8` uploaded & queued on `dolphinbench.ai` + `20` clean-room controls = `28/28` `submission.validate` passed** — led by `91.17%` [`547/600` @ `$24.54`] uploaded `dolphinbench.ai` submission `UUID c047b063-822c-49fb-8b36-27c3763d6ca7` [`status: "queued"` awaiting leaderboard acceptance; exceeds current `70.67%` published leaderboard entry in independent `600/600` evaluation], `90.67%` [`544/600` @ `$30.54`] self-run clean-room `Argon Low + Grounded v0.3` [highest `Riley` slice `181/200 = 90.50%`, published SHA-256 audit logs], `89.17%` `Argon Medium` queued `UUID 29389157-b01b-42b5-8193-17d9a496f580`, & `57.33%` [`344/600` @ `$0.00`] Wave-6 `krush420/gemma4-31b-sre-lora` + `Grounded` [highest open-weights score in self-run 28-run evaluation; `56.67%` Stock+Grounded; `54.17%` (`325/600`) stock submission `UUID 288671ad-afe0-40a3-93af-b834c9bbd306` uploaded & queued on `dolphinbench.ai`]; `Global Oracle@28 = 98.33%`, `$0.00` `Oracle@17 = 83.17%`; `49` SHA-256 Hugging Face audit logs across `64` files) in [`krush420/sovereign-g4-benchmarks`](https://huggingface.co/datasets/krush420/sovereign-g4-benchmarks).
+* **[Official DolphinBench Whitepapers & Clean-Room Audit Logs](https://krusch.dev/articles/return-on-memory-dolphinbench)**: [**Paper #27 (HTML)**](https://krusch.dev/articles/return-on-memory-dolphinbench), [**Paper #27 (PDF)**](https://krusch.dev/papers/return-on-memory-dolphinbench.pdf), [**Paper #26**](https://krusch.dev/articles/what-dolphinbench-taught-me-about-local-ai), and all **`28` Official `DolphinBench` runs (`16,800` official `gpt-5.6-sol` traces across `6` model families, `8` uploaded & queued on `dolphinbench.ai` + `20` clean-room controls = `28/28` `submission.validate` passed**, led by `91.17%` [`547/600` @ `$24.54`] uploaded `dolphinbench.ai` submission `UUID c047b063-822c-49fb-8b36-27c3763d6ca7` [`status: "queued"` awaiting leaderboard acceptance; exceeds current `70.67%` published leaderboard entry in independent `600/600` evaluation], `90.67%` [`544/600` @ `$30.54`] self-run clean-room `Argon Low + Grounded v0.3` [highest `Riley` slice `181/200 = 90.50%`, published SHA-256 audit logs], `89.17%` `Argon Medium` queued `UUID 29389157-b01b-42b5-8193-17d9a496f580`, & `57.33%` [`344/600` @ `$0.00`] Wave-6 `krush420/gemma4-31b-sre-lora` + `Grounded` [highest open-weights score in self-run 28-run evaluation; `56.67%` Stock+Grounded; `54.17%` (`325/600`) stock submission `UUID 288671ad-afe0-40a3-93af-b834c9bbd306` uploaded & queued on `dolphinbench.ai`]; `Global Oracle@28 = 98.33%`, `$0.00` `Oracle@17 = 83.17%`; `49` SHA-256 Hugging Face audit logs across `64` files) in [`krush420/sovereign-g4-benchmarks`](https://huggingface.co/datasets/krush420/sovereign-g4-benchmarks).
 * **[Evaluation Baseline Notes](evals/README.md)**: Preliminary benchmark fixtures and token-budget metrics.
 
 ---
@@ -253,7 +281,7 @@ Evaluating all **`600/600` multi-app workspace tasks** across **`13,539` convers
 ## 🧪 Testing
 
 ```bash
-# Run full unit & contract test suite (100% SQLite, zero Docker)
+# Run full unit & contract test suite (155 tests, 100% SQLite, zero Docker)
 npm test
 
 # Check storage and memory health

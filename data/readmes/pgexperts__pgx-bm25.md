@@ -17,11 +17,11 @@ replication from core.
 
 ## Requirements
 
-- **PostgreSQL 17 or 18**, with the matching server development headers
+- **PostgreSQL 17, 18 or 19**, with the matching server development headers
   (`postgresql-server-dev-NN` on Debian/Ubuntu, or a source/`pg_config`-visible
-  install). CI builds and tests against both majors. A non-blocking CI leg also
-  builds and tests against PostgreSQL 19 pre-GA (currently 19beta4); PG19 is
-  tested but not yet a supported major.
+  install). CI builds and tests against all three majors, and every one of them
+  gates. Until PostgreSQL 19.0 is released, the PG19 legs run its newest
+  release candidate.
 - A C toolchain (`gcc`/`clang`, `make`) and `pg_config` for the target install.
 
 Minimum PostgreSQL 17 — PG16 is not supported (its planner cannot order-then-tiebreak
@@ -903,8 +903,8 @@ The TAP suites under `t/` (`PostgreSQL::Test::Cluster`-based: crash recovery,
 replica equality, crash-orphan reclamation) need the `PostgreSQL::Test` Perl
 modules, which an installation built without `--enable-tap-tests` does not ship;
 they run locally against a PostgreSQL source tree's `src/test/perl` (see the TAP
-note in `ARCHITECTURE.md`). CI runs them via `pg_virtualenv` on both supported majors (PG 17 and
-18; CI is triggered manually with `gh workflow run CI --ref main`, not by pushes or
+note in `ARCHITECTURE.md`). CI runs them via `pg_virtualenv` on every supported major (PG 17, 18
+and 19; CI is triggered manually with `gh workflow run CI --ref main`, not by pushes or
 pull requests, see `docs/adr/0106-ci-runs-on-manual-dispatch.md`), and compiles with `COPT=-Werror` so a warning fails the build instead of
 scrolling past. Before building, the same job runs cheap static checks —
 packaging identity, 7-bit ASCII sources, the C source house style
@@ -916,10 +916,10 @@ TAP tier the job fails if `prove` ran fewer files than `t/` holds, and the TAP
 suites fail on a `TRAP`, `PANIC`, crashed process, bad page or UBSan report in any
 node's log. A separate **hardening** job additionally runs the full
 `installcheck` (SQL + TAP) against a source-built **cassert + UBSan**
-PostgreSQL 17 and 18, catching the assert / undefined-behavior / misaligned-access class
+PostgreSQL 17, 18 and 19, catching the assert / undefined-behavior / misaligned-access class
 the release-package build cannot see (see `docs/adr/0008-cassert-ubsan-ci.md`), with
 `wal_consistency_checking` on and the SQL run replayed by a streaming standby.
-An **asan** job, on the same two majors, repeats that `installcheck` with the extension built under
+An **asan** job, on the same three majors, repeats that `installcheck` with the extension built under
 AddressSanitizer, which catches stack-array overruns and reads past a
 `malloc`'d block that neither UBSan nor cassert can see. PostgreSQL poisons no
 palloc-chunk or shared-buffer boundary for ASan, so an overrun that stays
@@ -940,13 +940,10 @@ and is report-only until it has been observed green on `main` in a manual run (s
 check whose result depends on which plan the planner picks — a stats-less
 table plans differently from one autovacuum has analyzed — cannot pass only
 because CI's default autovacuum-on run happened to plan around a bug (see
-`docs/adr/0103-score-accessor-call-site-attribution.md`). A non-blocking
-**build-and-test (19, experimental)** leg builds and tests against PostgreSQL
-19 pre-GA the same way as the 17/18 legs; a pre-GA beta can regress for
-reasons unrelated to this extension, so it never fails the required-checks
-gate. (`sql/70_distance_volatility` used to fail on it, because PG19 added an
-error position to a message the suite pins; the suite now renders that message
-through `pg_temp.err_of()`, which is identical on every major.) A
+`docs/adr/0103-score-accessor-call-site-attribution.md`). (On PG19,
+`sql/70_distance_volatility` used to fail, because PG19 added an error position
+to a message the suite pins; the suite now renders that message through
+`pg_temp.err_of()`, which is identical on every major.) A
 **bench** job runs the `bench/` scripts, scaled down, on every CI run (CI is triggered manually,
 `gh workflow run CI --ref main`, once a block of work has landed), and
 uploads their CSVs as a build artifact; a **coverage** job builds with `lcov`
@@ -957,9 +954,9 @@ against a stored baseline -- because a shared runner is not where a trustworthy
 performance or coverage number comes from; see `bench/README.md` and
 `docs/adr/0098`. Only the static checks, build, SQL regression, TAP, the
 hardening job, the asan job, the folding-collation job and the autovacuum-off
-job gate CI. ("Gate" here means the job fails the workflow run; `main` carries
-no branch-protection rule that would block a merge on a red run.) The
-`build-and-test (19, experimental)` leg never gates it.
+job gate CI, on every major they run against. ("Gate" here means the job fails
+the workflow run; `main` carries no branch-protection rule that would block a
+merge on a red run.)
 
 ## Documentation
 
@@ -970,6 +967,14 @@ no branch-protection rule that would block a merge on a red run.) The
   reclamation model.
 - **[docs/adr/](docs/adr/)** — the architecture decision log: one record per
   design decision, with context, alternatives considered, and consequences.
+
+## Repository and releases
+
+The public repository, [pgexperts/pgx-bm25](https://github.com/pgexperts/pgx-bm25),
+receives one squashed commit per release; development happens in a separate private
+repository ([ADR 0127](docs/adr/0127-public-releases-are-squashed-commits-in-a-separate-repository.md)).
+Issue and pull-request numbers such as `#289` that appear in code comments, tests and
+ADRs refer to that private tracker.
 
 ## License
 

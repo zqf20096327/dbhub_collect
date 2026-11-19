@@ -2,7 +2,9 @@
 
 # Entity Framework Core Query Plan Visualizer
 
-View Entity Framework Core query plan directly inside Visual Studio.
+View Entity Framework Core query plan directly inside Visual Studio, VS Code and JetBrains Rider.
+
+**Jump to:** [Visual Studio](#usage) · [VS Code](#visual-studio-code) · [JetBrains Rider](#jetbrains-rider)
 
 [![Visual Studio Marketplace Version](https://badgen.net/vs-marketplace/v/GiorgiDalakishvili.EFCoreVisualizer?label=Download%20Now&color=purple)](https://marketplace.visualstudio.com/items?itemName=GiorgiDalakishvili.EFCoreVisualizer)
 [![Visual Studio Marketplace Downloads](https://badgen.net/vs-marketplace/d/GiorgiDalakishvili.EFCoreVisualizer)](https://marketplace.visualstudio.com/items?itemName=GiorgiDalakishvili.EFCoreVisualizer)
@@ -61,12 +63,28 @@ The query plan includes Actual IO stats, Outline data, Projections, and Predicat
 ![Oracle Plan](doc/OraclePlan1.png)
 ![Oracle Plan](doc/OraclePlan2.png)
 
-## Known Issues:
+## Visual Studio Code
+
+[![VS Code Marketplace Version](https://badgen.net/vs-marketplace/v/GiorgiDalakishvili.vscode-efcore-visualizer?label=Download%20Now&color=purple)](https://marketplace.visualstudio.com/items?itemName=GiorgiDalakishvili.vscode-efcore-visualizer)
+
+Install the [EFCore Visualizer extension](https://marketplace.visualstudio.com/items?itemName=GiorgiDalakishvili.vscode-efcore-visualizer) from the Visual Studio Marketplace, or search for "EFCore Visualizer" in VS Code's Extensions view. While you debug with Microsoft's C# extension, hover over a query in **Variables** or **Watch** and click the **Visualize Query Plan** button at the end of its row, or right-click the query and choose **Visualize Query Plan**. The plan opens in a tab beside the editor, with the same plan pages as in Visual Studio. The tab's title bar has a **Refresh** button and a **Copy SQL** button, which copies the query's SQL with its parameters. It requires **VS Code 1.90 or newer** and supports **EF Core 7 or newer**.
+
+![A SQL Server execution plan in a VS Code tab, beside the C# code of the paused app](src/EFCore.Visualizer.VSCode/images/sqlserver-plan.png)
+
+See the VS Code extension's [README](src/EFCore.Visualizer.VSCode/README.md) for details.
+
+## JetBrains Rider
+
+The visualizer is also available for Rider. While you debug, click **Visualize Query Plan** at the end of a query's row in **Variables**, **Watches** or the editor's hover popup. The same command is on the Variables toolbar and in the right-click menu. The plan opens in an editor tab, with the same plan pages as in Visual Studio. Each variable gets its own tab, and visualizing it again shows the new plan when the query changed. It requires **Rider 2026.2 or newer** and supports **EF Core 7 or newer**.
+
+See the Rider plugin's [README](src/EFCore.Visualizer.Rider/README.md) for details.
+
+## Known Issues (Visual Studio):
 
  - If query plan extraction takes more than 5 seconds, you will get [Evaluation timed out error](https://github.com/Giorgi/EFCore.Visualizer/issues/25)
  - If your project uses Application Insights, you might get [Cannot evaluate expression since the function evaluation requires all threads to run.](https://github.com/Giorgi/EFCore.Visualizer/issues/28) when viewing query plan. **Workaround** - disable Application Insights when running your project with a debugger attached.
 
 ## Credits
 
-This extension uses [pev2](https://github.com/dalibo/pev2/), [html-query-plan](https://github.com/JustinPealing/html-query-plan) and 
-[Treeflex](https://dumptyd.github.io/treeflex/) to display query plans.
+This extension uses [pev2](https://github.com/dalibo/pev2/), [html-query-plan](https://github.com/JustinPealing/html-query-plan) (built from [Rudi Bruchez's fork](https://github.com/rudi-bruchez/query-plan)) and 
+[Treeflex](https://dumptyd.github.io/treeflex/) to display query plans, and [highlight.js](https://highlightjs.org/) to highlight SQL.

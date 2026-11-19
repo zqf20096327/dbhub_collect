@@ -28,13 +28,15 @@
             |                  |    |              |    |                  |
             |  Claude Code     +--->+              +--->+    SQL Server    |
             |                  |    |              |    |                  |
-            |  Cursor          +--->+    DBHub     +--->+    Oracle        |
+            |  Codex           +--->+    DBHub     +--->+    Oracle        |
             |                  |    |              |    |                  |
-            |  VS Code         +--->+              +--->+    SQLite        |
+            |  Cursor          +--->+              +--->+    SQLite        |
             |                  |    |              |    |                  |
-            |  Copilot CLI     +--->+              +--->+    MySQL         |
+            |  VS Code         +--->+              +--->+    MySQL         |
             |                  |    |              |    |                  |
-            |                  |    |              +--->+    MariaDB       |
+            |  Copilot CLI     +--->+              +--->+    MariaDB       |
+            |                  |    |              |    |                  |
+            |                  |    |              +--->+    ClickHouse    |
             |                  |    |              |    |                  |
             +------------------+    +--------------+    +------------------+
                  MCP Clients           MCP Server             Databases
@@ -43,7 +45,7 @@
 DBHub is a minimal MCP server: token-efficient, zero-dependency, and just two tools by default with opt-in extras. This lightweight gateway allows MCP-compatible clients to connect to and explore different databases:
 
 - **Minimal**: Zero dependency, token efficient with a minimal set of MCP tools to maximize context window
-- **Multi-Database**: PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, and SQLite through a single interface
+- **Multi-Database**: PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, ClickHouse, and SQLite through a single interface
 - **Multi-Connection**: Connect to multiple databases simultaneously with TOML configuration
 - **Guardrails**: Read-only mode, row limiting, and query timeout to prevent runaway operations
 - **Secure Access**: SSH tunneling and SSL/TLS encryption
@@ -52,13 +54,13 @@ DBHub is a minimal MCP server: token-efficient, zero-dependency, and just two to
 
 ## Token Efficiency
 
-DBHub loads just 2 tools by default at **1.4k tokens** — 13-14x fewer than alternatives — keeping the context window open for your actual work.
+DBHub loads just 2 tools by default at **0.5k tokens** — 16-25x fewer than alternatives — keeping the context window open for your actual work.
 
 | MCP Server | Default Config | Default Tools |
 |------------|---------------|--------------|
-| **DBHub** | **1.4k** | 2 (`execute_sql`, `search_objects`) |
-| MCP Toolbox | 19.0k | 28 |
-| Supabase MCP | 19.3k | all |
+| **DBHub** | **0.5k** | 2 (`execute_sql`, `search_objects`) |
+| MCP Toolbox | 7.7k | 29 |
+| Supabase MCP | 11.6k | 36 |
 
 ## Use Cases
 
@@ -67,9 +69,11 @@ DBHub loads just 2 tools by default at **1.4k tokens** — 13-14x fewer than alt
 - **Multi-Database Consolidation**: Replace separate MCP servers for each database with a single DBHub process
 - **Production Troubleshooting**: Read-only diagnostics with guardrails against runaway queries
 
+> Read-only mode is a guardrail, not a permission boundary. Always connect with a least-privilege, read-only database user. See [Read-Only Mode](https://dbhub.ai/config/read-only-mode).
+
 ## Supported Databases
 
-PostgreSQL, MySQL, SQL Server, MariaDB, Oracle, and SQLite.
+PostgreSQL, MySQL, SQL Server, MariaDB, Oracle, ClickHouse, and SQLite.
 
 ## MCP Tools
 
@@ -93,13 +97,58 @@ DBHub includes a [built-in web interface](https://dbhub.ai/workbench/overview) f
 npx @bytebase/dbhub@latest --transport http --port 8080 --dsn "postgres://user:password@localhost:5432/dbname?sslmode=disable"
 ```
 
+For Claude Code, install the [plugin](https://dbhub.ai/claude-code-plugin):
+
+```
+/plugin marketplace add bytebase/dbhub
+/plugin install dbhub@dbhub
+```
+
+For Codex, install the [plugin](https://dbhub.ai/codex-plugin) (reads the connection string from `DBHUB_DSN`):
+
+```bash
+codex plugin marketplace add bytebase/dbhub
+codex plugin add dbhub@dbhub
+```
+
 Also available as:
 
 - [Docker image](https://dbhub.ai/installation#docker)
 - [MCP Bundle](https://dbhub.ai/mcpb) (one-click install, read-only)
-- [Claude Code plugin](https://dbhub.ai/claude-code-plugin)
 
 See the [Installation Guide](https://dbhub.ai/installation) for all options, [Command-Line Options](https://dbhub.ai/config/command-line) for parameters, and [Multi-Database Configuration](https://dbhub.ai/config/toml) for connecting several databases at once.
+
+## Replacing `@modelcontextprotocol/server-postgres`
+
+The reference PostgreSQL MCP server, `@modelcontextprotocol/server-postgres`, is archived and marked deprecated on npm ("Archived and unmaintained; no security guarantees"). DBHub is a maintained replacement. Swap the package and pass the connection string with `--dsn`; an existing `postgresql://` URL works unchanged.
+
+Before:
+
+```json
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://localhost/mydb"]
+    }
+  }
+}
+```
+
+After:
+
+```json
+{
+  "mcpServers": {
+    "dbhub": {
+      "command": "npx",
+      "args": ["-y", "@bytebase/dbhub@latest", "--dsn", "postgresql://localhost/mydb"]
+    }
+  }
+}
+```
+
+The old server only ran read-only queries. With `--dsn` alone, DBHub's `execute_sql` can also write. To keep it read-only, point `--config` at a TOML file that sets `readonly = true`. The [replacement guide](https://dbhub.ai/blog/modelcontextprotocol-server-postgres-alternative) has that config and the other differences.
 
 ## Development
 

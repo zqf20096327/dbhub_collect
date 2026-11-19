@@ -1,0 +1,159 @@
+<p align="center">
+  <img src="https://mkennedy-shared.nyc3.digitaloceanspaces.com/github/diskcache-oxide-slogan.jpg" alt="diskcache-oxide: Python cache. Rust engine. SQLite storage." width="850">
+</p>
+
+# diskcache-oxide
+
+**A shared, durable cache for Python apps, rebuilt in Rust for many cores, many processes and free-threaded Python.**
+
+Every Python web app arrives at the same situation. A query that was fine at launch is now the slowest thing on the page, so you cache its result in a dict. Then gunicorn starts four workers and there are four dicts, each warming up alone and forgetting everything on restart. So you reach for Redis, and now there's a server to deploy, secure and monitor, to remember the answer to one query. [python-diskcache](https://github.com/grantjenks/python-diskcache) showed the third way: a cache that is just a directory, shared by every thread and process on the machine, still there after a restart. But diskcache has had no commits since 2023, and its issues and pull requests go unanswered. diskcache-oxide keeps diskcache's API and rebuilds everything underneath it: a Rust engine, SQLite storage, and the thinnest possible Python layer.
+
+**Docs: <https://mkennedy.codes/docs/diskcache-oxide/>**
+
+Every worker opens the same directories and sees the same entries. The cache makes the slow query cheap, and `add()` picks exactly one worker to run the hourly job:
+
+```python
+import os
+
+from diskcache_oxide import Cache
+
+cache = Cache('/tmp/my-app-cache', durable=True)  # rebuildable data: an outage is a miss
+# Claims get their own plain cache: durable can drop a write, and a claim must not be dropped silently.
+claims = Cache('/tmp/my-app-claims', eviction_policy='none')
+
+popular = cache.get('episodes:popular')
+if popular is None:
+    popular = ['ep-501', 'ep-500']  # stand-in for a slow query
+    cache.set('episodes:popular', popular, expire=300)
+
+# Only one worker runs the hourly job: add() is atomic across processes.
+if claims.add('job:refresh-feeds', os.getpid(), expire=3600):
+    print('this worker refreshes the feeds')
+
+
+@cache.memoize(expire=600)
+def episode(number: int) -> dict:
+    return {'number': number}  # stand-in for a database read
+
+
+cache.close()  # at shutdown
+claims.close()
+```
+
+## Why diskcache-oxide
+
+- **[Fast.](https://mkennedy.codes/docs/diskcache-oxide/user-guide/performance.html)** A cached `get` takes about 0.8 µs, half of diskcache's time, which is cheap enough to call from the event loop. With 8 threads at a 99:1 read/write mix on a GIL build, diskcache's per-thread connections pile into each other and its throughput falls to a trickle, while oxide's stays flat, 38× ahead.
+- **[Safe for threads, processes and `fork()`](https://mkennedy.codes/docs/diskcache-oxide/user-guide/concurrency-and-forks.html)**, including free-threaded Python (3.14t, 3.15t). A fork copies whatever SQLite lock a thread held at that instant, and in diskcache a child born that way stalls on its first write for up to a minute. Here a fork barrier makes sure no child is born holding half a transaction.
+- **[No pickle by default.](https://mkennedy.codes/docs/diskcache-oxide/user-guide/serialization.html)** Values are stored as msgpack (or JSON), with exact type tags for tuples, sets, datetimes, dates, Decimals, big ints and NaN. You register your own types, and a library's, once (`register_type(ObjectId, name='bson.ObjectId', encode=str, decode=ObjectId)`; a dataclass needs only a name), and they're read back only where the name is registered. `pickle=True` is opt-in, and a cache without it refuses to unpickle anything it finds, however it got there.
+- **[Correct under pressure.](https://mkennedy.codes/docs/diskcache-oxide/user-guide/divergences.html)** `clear()` keeps writes that land while it runs, a read during an overwrite never misses, and a queue never hands one worker another queue's items. Running one test suite against both libraries turned up 19 diskcache bugs, each with a standalone repro in the repository's [upstream/](https://github.com/mikeckennedy/diskcache-oxide/tree/main/upstream) folder. diskcache-oxide has none of them but one, which it keeps on purpose for compatibility.
+- **[Nothing to schedule.](https://mkennedy.codes/docs/diskcache-oxide/user-guide/storage-and-wal.html#background-maintenance)** An entry is gone the moment it expires, for every read, `len()` and iteration, and its space comes back on its own: a small thread in each process looks after every open cache every 5 minutes, removing expired entries, trimming a cache that's over its size limit and keeping the write-ahead log small, with the workers taking turns so they don't all do the same work. `maintenance_interval` sets how often, and 0 turns it off.
+- **[Bounded memory and predictable disk use.](https://mkennedy.codes/docs/diskcache-oxide/user-guide/storage-and-wal.html)** Each cache directory uses at most `max_connections` SQLite connections, each with a page cache of `sqlite_cache_size` pages (1 MiB by default). The write-ahead log trims itself back to `wal_size_limit / 2` (32 MiB by default) whenever it resets, and `checkpoint()` truncates it on demand. For a cache that must never drop a live entry, `eviction_policy='none'` turns eviction off.
+- **[More than get and set.](https://mkennedy.codes/docs/diskcache-oxide/user-guide/coordination.html)** `memoize` caches a function's results. Tags group entries so `evict(tag)` removes them in one call. `push` and `pull` make a [work queue](https://mkennedy.codes/docs/diskcache-oxide/recipes/work-queues.html) that hands each item to exactly one worker. Locks, semaphores and rate limits hold across every process on the machine. [`transact()`](https://mkennedy.codes/docs/diskcache-oxide/user-guide/transactions.html) lands several writes together, or none of them.
+- **[Sharding for many writers.](https://mkennedy.codes/docs/diskcache-oxide/user-guide/fanoutcache.html)** A plain cache has one write lock per file, like a shop with one checkout lane. `FanoutCache` spreads keys over several databases, so eight worker processes keep their rate instead of queueing: about 1.1 million operations a second at 8 processes, 4× a plain `Cache` and 1.15× diskcache's `FanoutCache`, and 1.7× a plain `Cache` for 8 threads on free-threaded Python, for about 10 MiB more memory per process, behind the same API and in one directory.
+- **Typed, with errors you can act on.** Type hints are included (`py.typed`), with `CacheLike` for code that accepts any cache, and the [errors page](https://mkennedy.codes/docs/diskcache-oxide/user-guide/errors.html) says what each exception means and what to do about it.
+
+## Using it in an app
+
+Most apps keep two kinds of things in a cache directory, and they need opposite settings:
+
+- **Cache:** rendered pages, API responses, anything you can rebuild from somewhere else. An outage should be a miss and a slower request, never an error page. These go in a `Caches` registry with `durable=True`, which turns a busy lock or a full disk into a logged miss. You register each cache once at startup; a lookup by name opens it on first use and returns the same object after that. If a cache can't open, the lookup returns a [`NullCache`](https://mkennedy.codes/docs/diskcache-oxide/user-guide/null-cache.html) instead of raising, so requests carry on without it while the error is logged, and the registry tries again every 10 seconds.
+- **State:** sessions, job claims, locks and work queues. Here a write that silently didn't happen is a bug: a login that doesn't stick, a job that runs twice. These are plain `Cache`s, opened directly, not durable, with eviction off, so a failure raises and the app can say so. [State isn't cache](https://mkennedy.codes/docs/diskcache-oxide/user-guide/caches.html#state-isnt-cache) explains why.
+
+```python
+from pathlib import Path
+
+from diskcache_oxide import Cache, Caches
+
+ROOT = Path('/var/lib/my-app')  # /var/lib, not /var/cache: sessions and queues must survive a cache wipe
+
+# Rebuildable data: durable, so an outage is a miss. timeout=1.0 keeps a busy lock from holding a request.
+caches = Caches(ROOT / 'cache', durable=True, timeout=1.0)
+caches.register('pages', size_limit=1 * 2**30)
+caches.register('api', size_limit=256 * 2**20)
+
+# State: plain caches, opened directly, not durable, never evicted for size.
+sessions = Cache(ROOT / 'state' / 'sessions', timeout=3.0, eviction_policy='none')
+coordination = Cache(ROOT / 'state' / 'coordination', timeout=3.0, eviction_policy='none')
+
+html = caches['pages'].get('/about')  # opens on first use, the same object after that
+sessions.set('session:9f2c', {'user': 42}, expire=3600)
+
+caches.disable('pages')  # a load test without the page cache: no call site changes
+for name, stat in caches.stats().items():  # for an admin page
+    print(name, stat.count, stat.volume, stat.error)
+
+caches.close_all()  # at shutdown
+sessions.close()
+coordination.close()
+```
+
+Talk Python runs its eight caches this way. [Web workers](https://mkennedy.codes/docs/diskcache-oxide/recipes/web-workers.html#the-recommended-setup) has the full setup with startup and shutdown for FastAPI, Flask, Django, Celery and pre-forking servers, [Named caches](https://mkennedy.codes/docs/diskcache-oxide/user-guide/caches.html) covers the registry, and [One typed module for your caches](https://mkennedy.codes/docs/diskcache-oxide/recipes/site-caches.html) wraps it in a `site_caches` module with one function per cache, so your editor and type checker know every cache the app has. The [example app](examples/webapp) is this setup in a whole FastAPI app, with gunicorn, a background worker and Docker Compose. Every page shows which cache reads served it.
+
+Close every cache in your framework's shutdown hook. A process that dies without closing loses nothing, but closing returns the cache's SQLite connections and, when the write-ahead log is large, copies it back into the database and truncates it, waiting at most a second.
+
+## Switching from diskcache
+
+diskcache-oxide is API compatible with diskcache 5.6.3's `Cache`, and deliberately not data compatible. For most apps the switch is the import line:
+
+```python
+# from diskcache import Cache, Timeout
+from diskcache_oxide import Cache, Timeout
+```
+
+What you'll notice afterwards:
+
+- **The cache starts cold.** Data lives in `diskcache-oxide.sqlite`, never in diskcache's `cache.db`, and the old database is never opened or converted. The two can share a directory without seeing each other's data.
+- **Values that can't round-trip exactly raise `TypeError` at `set()`**, unless the type is registered with `register_type()` or that cache was opened with `pickle=True`. This is the change most apps hit first.
+- **Keys and tags are never pickled.** They can be `str`, `bytes`, `int`, `float`, `bool`, `None` or tuples of those, compared by exact type, so `1`, `1.0` and `True` are three keys.
+- **Some arguments are keyword-only:** `retry=` and `tag=` everywhere, and `FanoutCache`'s `shards=`, so `FanoutCache(path, 4)` is a 4-second timeout here, not 4 shards. `directory` is required, and `size_limit` must be at least 1 MiB.
+- **`Timeout` is a `TimeoutError`**, and `bool(cache)` is always True.
+- **Some of diskcache isn't here.** `Deque` and `Index` wait until someone asks for them, and reading a large value as a file (`read=`) is folded into a later large-file cache. Least-recently-used and least-frequently-used eviction aren't coming: diskcache implements them by writing to the database on every `get`, and reads that never write are what let many processes read at once. Custom `disk=` classes aren't coming either, because `serializer=` and `register_type()` cover what they were for.
+
+[Switching from python-diskcache](https://mkennedy.codes/docs/diskcache-oxide/user-guide/switching-from-diskcache.html) has the full comparison table, and [Divergences](https://mkennedy.codes/docs/diskcache-oxide/user-guide/divergences.html) gives the reason for each difference.
+
+## Install
+
+```bash
+uv pip install diskcache-oxide
+```
+
+- **Python:** CPython 3.14 or 3.15, including the free-threaded builds (3.14t and 3.15t). Older Pythons aren't supported.
+- **Platforms:** macOS, Linux and Windows. Windows has no `fork()`, so the fork guarantees are Unix-only; threads and processes are safe everywhere. On Windows a cache directory can't be deleted while any process has the cache open, and excluding cache directories from real-time antivirus scanning can make them faster.
+- **Wheels:** macOS on Apple Silicon, Linux (glibc) on x86_64 and aarch64, and Windows on x86_64, for each of those four Pythons. Anywhere else pip builds from source, which needs the latest stable Rust toolchain.
+- **Dependencies:** none at runtime. SQLite is bundled and compiled in, so your system's SQLite version doesn't matter.
+- **Upgrading:** before 1.0, a release that changes the on-disk format bumps the minor version and says so first in its changelog entry. A release that meets a cache in another format opens a new, empty one in a subdirectory named for its format (`diskcache-oxide-format-3`) and logs a warning, so old and new workers run side by side; `remove_old_formats()` removes the old cache once the old workers are gone. A release that keeps the format keeps your caches warm.
+
+[Getting started](https://mkennedy.codes/docs/diskcache-oxide/user-guide/getting-started.html) walks through the everyday operations and what changes once several processes share a cache.
+
+## Status
+
+diskcache-oxide runs in production at [Talk Python](https://talkpython.fm), [Python Bytes](https://pythonbytes.fm) and [Talk Python Training](https://training.talkpython.fm). Before each release it passes the same conformance suite run against diskcache 5.6.3 itself (apart from the [documented divergences](https://mkennedy.codes/docs/diskcache-oxide/user-guide/divergences.html)), a sanitizer pass over the whole codebase (Miri, ThreadSanitizer including a free-threaded CPython, AddressSanitizer and LeakSanitizer), and a 24-hour soak that throws processes, threads, forks and `SIGKILL` at one directory.
+
+It's being built in three stages:
+
+1. **A better diskcache:** done. diskcache's `Cache` and `FanoutCache`, safe across processes and forks, faster, and fixed where diskcache goes wrong.
+2. **The complete local caching toolkit:** mostly done. Keys of every native type, `memoize`, tags, `transact()`, work queues, `retry=`, `stats()`, `check()`, and the coordination recipes (`Lock`, `RLock`, `BoundedSemaphore`, `throttle`, `barrier`, `Averager` and `memoize_stampede`) are all in. Next come a Django cache backend, free-threaded scaling and `AsyncCache`.
+3. **A cache server:** the same Rust engine served over the network, a Redis-style central cache with SQLite underneath.
+
+[Vision and roadmap](https://mkennedy.codes/docs/diskcache-oxide/user-guide/roadmap.html) has the detail.
+
+## For AI coding agents
+
+The docs publish an [agent skill](https://mkennedy.codes/docs/diskcache-oxide/skill.md) with the rules of the package (what raises, what a `NullCache` does to `add()`, when to use `FanoutCache`), plus [llms.txt](https://mkennedy.codes/docs/diskcache-oxide/llms.txt) and [llms-full.txt](https://mkennedy.codes/docs/diskcache-oxide/llms-full.txt). Install the skill with `npx skills add https://mkennedy.codes/docs/diskcache-oxide/`.
+
+## Learn more
+
+- [User guide](https://mkennedy.codes/docs/diskcache-oxide/user-guide/getting-started.html): a [primer for anyone new to caching](https://mkennedy.codes/docs/diskcache-oxide/user-guide/new-to-caching.html), getting started, serialization, `FanoutCache`, transactions, coordination (locks, semaphores, throttles), concurrency and forks, and storage and the WAL.
+- [Named caches (`Caches`)](https://mkennedy.codes/docs/diskcache-oxide/user-guide/caches.html) and [`NullCache`](https://mkennedy.codes/docs/diskcache-oxide/user-guide/null-cache.html): several caches in one app, and turning caching off.
+- [Upgrading across a format change](https://mkennedy.codes/docs/diskcache-oxide/recipes/upgrading.html) and [Monitoring](https://mkennedy.codes/docs/diskcache-oxide/recipes/monitoring.html).
+- [Recipes](https://mkennedy.codes/docs/diskcache-oxide/recipes/): caching expensive calls, stale-while-revalidate, upstream HTTP responses, invalidating groups (by prefix or by tag), your own types, run-once jobs, rate limiting, counters, work queues, single-use keys, sessions, one typed module for your caches, web workers, Docker and Compose, asyncio, monitoring and testing.
+- [Example app](examples/webapp): a FastAPI app built the way the docs recommend, with Docker Compose and tests.
+- [API reference](https://mkennedy.codes/docs/diskcache-oxide/reference/): every class, method and exception.
+- [Errors and what to do about them](https://mkennedy.codes/docs/diskcache-oxide/user-guide/errors.html) and [Troubleshooting](https://mkennedy.codes/docs/diskcache-oxide/user-guide/troubleshooting.html).
+- Questions and bug reports: [GitHub issues](https://github.com/mikeckennedy/diskcache-oxide/issues).
+
+To work on diskcache-oxide itself, see the [repository](https://github.com/mikeckennedy/diskcache-oxide), whose [CLAUDE.md](https://github.com/mikeckennedy/diskcache-oxide/blob/main/CLAUDE.md) has the layout, the build and test commands, and the project's conventions.
+
+## License
+
+MIT. See [LICENSE](https://github.com/mikeckennedy/diskcache-oxide/blob/main/LICENSE).

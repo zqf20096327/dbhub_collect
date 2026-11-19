@@ -1,0 +1,267 @@
+= Jakarta Data
+:toc: auto
+
+== Introduction
+
+The Jakarta Data specification provides an API for easier data access to various database types, such as relational and NoSQL. A Java developer can access those repositories in several ways, including composing custom query methods on a Repository interface.
+
+Jakarta Data’s goal is to provide a familiar and consistent, Jakarta-based programming model for data access while still retaining the particular traits and strengths of the underlying data store.
+
+=== Repository
+
+Jakarta Data provides repository abstractions designed to streamline the development of data access layers for various persistent stores, eliminating the need for extensive boilerplate code. These repository abstractions are broadly classified into two categories:
+
+* *Built-in Repository Interfaces*: Jakarta Data offers a hierarchy of built-in repository interfaces. The root of this hierarchy is the `DataRepository` interface, which includes several specialized interfaces like `CrudRepository`, `BasicRepository`, and more. These interfaces are designed to handle common data access operations and provide an extensible foundation for your data layer.
+
+[source,java]
+----
+@Repository
+public interface CarRepository extends BasicRepository<Car, Long> {
+
+  List<Car> findByType(CarType type);
+
+  Optional<Car> findByName(String name);
+
+}
+----
+
+
+[source,java]
+----
+@Inject
+CarRepository repository;
+...
+Car ferrari = Car.id(10L).name("Ferrari").type(CarType.SPORT);
+repository.save(ferrari);
+----
+
+* *Custom Repository Interfaces*: Besides the built-in repository interfaces, Jakarta Data enables you to create custom repository interfaces tailored to your domain requirements. These custom interfaces serve as a bridge between your domain's semantics and the underlying database operations. With annotations like `Insert`, `Update`, `Delete`, and `Save`, you can define expressive and domain-specific repository methods that align seamlessly with your application's needs.
+
+[source,java]
+----
+@Repository
+public interface Garage {
+
+  @Insert
+  Car park(Car car);
+
+}
+----
+
+
+[source,java]
+----
+@Inject
+Garage garage;
+...
+Car ferrari = Car.id(10L).name("Ferrari").type(CarType.SPORT);
+repository.park(ferrari);
+----
+
+Whether you use built-in repository interfaces or create custom repositories, Jakarta Data empowers you to write more concise and expressive data access layers while reducing the need for boilerplate code.
+
+
+==== Pagination
+
+Jakarta Data supports two types of Pagination: offset and cursor-based Pagination.
+
+- **Offset Pagination**: Offset-based pagination computes pages relative to a positional offset from the beginning of the dataset given the requested page number and page size.
+
+- **Cursor-based Pagination**: Cursor-based Pagination aims to reduce missed and duplicate results across pages by querying relative to the observed values of entity properties that constitute the sorting criteria. This method uses a cursor, a pointer to a specific position in the dataset, to navigate the dataset.
+
+Example code using both pagination methods:
+
+[source,java]
+----
+@Repository
+public interface CarRepository extends BasicRepository<Car, Long> {
+
+ Page<Car> findByTypeOrderByName(CarType type, PageRequest pageRequest);
+
+ @Find
+ @OrderBy(_Car.NAME)
+ @OrderBy(_Car.VIN)
+ CursoredPage<Car> type(CarType type, PageRequest pageRequest);
+
+}
+----
+
+== Type-safe Access to Entity Attributes
+
+Writing queries using plain strings — like `"price"` or `"name"` — is fragile. These strings cannot be validated by the compiler, so even minor typos or refactorings lead to errors which are not discovered until runtime.
+
+Jakarta Data solves this with a static metamodel, offering type-safe, fluent, and IDE-friendly access to entity attributes. The static metamodel enables you to write both static and programmatically composed queries that are validated at compile time.
+
+Dynamic queries may be expressed without loss of type safety — enabling robust refactoring, smarter code completion, and easier testing.
+
+Consider the following entity:
+
+[source,java]
+----
+@Entity
+public class Product {
+  public long id;
+  public String name;
+  public float price;
+}
+----
+
+You can leverage Jakarta Data's static metamodel to access entity attributes in a type-safe manner, offering several advantages:
+
+- **Compile-time Safety:** By accessing entity attributes through the static metamodel (_Product), you gain compile-time safety. Any errors or mismatches in attribute names or types are detected at compile time, reducing the likelihood of runtime errors and enhancing code reliability.
+- **Refactoring Support:** Type-safe access to entity attributes facilitates seamless refactoring. When renaming or changing attributes in entity classes, the static metamodel ensures that all references to these attributes in your codebase are updated automatically, minimizing the risk of introducing bugs during refactoring.
+- **Reduced Magic Strings:** Accessing entity attributes via the static metamodel eliminates the need for using magic strings (e.g., "price", "name") directly in your code. Instead, you reference attributes using generated constants (e.g., _Product.price, _Product.name), making your code more readable, maintainable, and less error-prone.
+- **Enhanced Documentation:** Type-safe access to entity attributes enhances code documentation and self-documenting code practices. When reviewing code, developers can easily understand which attributes are accessed and manipulated, promoting better code understanding and collaboration.
+- **Fluent Query Construction:** The metamodel provides a fluent API for building restrictions dynamically. Developers can define reusable query fragments, conditionally apply filters, and construct criteria programmatically — all without sacrificing type safety.
+
+
+By embracing type-safe access to entity attributes with Jakarta Data's static metamodel, developers can write more robust, maintainable, and error-resistant code, leading to improved software quality and developer productivity.
+
+[source,java]
+----
+List<Product> found = products.findAll(
+    Restrict.all(
+        _Product.type.equalTo(ProductType.PHYSICAL),
+        _Product.price.greaterThan(10.00f),
+        _Product.name.contains("Jakarta")
+    ),
+    Order.by(
+        _Product.price.desc(),
+        _Product.name.asc()
+    )
+);
+----
+
+== Jakarta Common Query Language (JCQL)
+
+A query language for relational and non-relational data, Jakarta Common Query Language (JCQL), is defined by the Jakarta Query specification. Jakarta Data repository methods can be annotated `@Query` to indicate that the method runs a given JCQL query upon invocation of the method.
+
+JCQL is conceptualized as a subset of the Jakarta Persistence Query Language (JPQL). It inherits its syntax and functionality while being specifically tailored to accommodate the broad spectrum of data storage technologies supported by Jakarta Data. This design approach ensures that JCQL remains compatible with JPQL yet simplifies its implementation across diverse data stores.
+
+[source,java]
+----
+@Repository
+public interface BookRepository extends BasicRepository<Book, UUID> {
+
+  // Find books with titles matching a specific pattern
+  @Query("where title like :titlePattern")
+  List<Book> booksMatchingTitle(String titlePattern);
+
+  // Select books by a specific author and sort them by title
+  @Query("where author.name = :author order by title")
+  List<Book> findByAuthorSortedByTitle(String author);
+}
+----
+
+*JCQL* supports three primary types of statements, reflecting the core operations typically required for data manipulation and retrieval in applications:
+
+* *Select Statements*: Facilitate data retrieval from a data store, allowing for the specification of criteria to filter results.
+* *Update Statements*: This option enables the modification of existing records in the data store based on specified criteria.
+* *Delete Statements*: Allow for removing records from the data store that meet certain conditions.
+
+This streamlined query language empowers developers to efficiently perform data access operations with minimal complexity, aligning with Jakarta Data's objective of simplifying data access across various storage technologies.
+
+==  Stateful Repository Operations
+
+Jakarta Data includes the concept of stateful repositories that manage entities according to a persistence context. A complete definition of a persistence context can be found in the Jakarta Persistence specification. Stateful repositories have their own lifecycle annotations that provide fine-grained control over entity state transitions such as persisting, merging, refreshing, detaching, and removing entities. Lifecycle annotations for stateful operations must not be intermixed with lifecycle annotations for stateless operations. Consequently, each repository is either stateful or or stateless.
+An example of a stateless repository follows:
+
+[source,java]
+----
+@Repository
+public interface Products extends DataRepository<Product, String> {
+
+    @Persist
+    void add(Product product);
+
+    @Merge
+    Product merge(Product product);
+
+    @Remove
+    void remove(Product product);
+
+    @Refresh
+    void reload(Product product);
+
+    @Detach
+    void detach(Product product);
+}
+----
+
+[cols="2,8"]
+|===
+| Annotation | Description
+| `@Persist`
+| Specifies that the repository method should insert a new instance into the data store,
+which might happen immediately or when the persistence context is flushed.
+| `@Merge`
+| Specifies that the repository method should merge the state of the given entity into the data store,
+which can happen later when the persistence context is flushed.
+If the entity does not exist in the data store, it is inserted.
+| `@Remove`
+| Specifies that the repository method should delete the corresponding entity instance from the data store.
+| `@Refresh`
+| Specifies that the repository method should reload the state of the given entity from the data store,
+overwriting any local changes that have not been saved.
+| `@Detach`
+| Specifies that the repository method should detach the given entity from the current persistence context.
+After detachment, changes to the entity are no longer tracked.
+|===
+
+=== Maven
+
+To start to use Jakarta Data, add the API as a Maven dependency:
+
+[source,xml]
+----
+<dependency>
+    <groupId>jakarta.data</groupId>
+    <artifactId>jakarta.data-api</artifactId>
+    <version>1.0.1</version>
+</dependency>
+----
+
+== Testing Guideline
+
+This project has a testing guideline that will help you understand Jakarta Data's testing practices.
+Please take a look at the link:TESTING-GUIDELINE.adoc[TESTING-GUIDELINE file].
+
+== Code of Conduct
+
+This project is governed by the Eclipse Foundation Community Code of Conduct. By participating, you are expected to uphold this code of conduct. Please report unacceptable behavior to mailto:codeofconduct@eclipse.org[codeofconduct@eclipse.org].
+
+== Getting Help
+
+Having trouble with Jakarta Data? We'd love to help!
+
+Report Jakarta Data bugs at https://github.com/jakartaee/data/issues.
+
+== Building from Source
+
+You don't need to build from source to use the project, but you can do so with Maven and Java 21 or higher.
+
+[source, Bash]
+----
+mvn package
+----
+
+== How to publish a new release
+
+Open a new issue using the link:https://github.com/jakartaee/data/issues/new?template=release.yml[release issue template]
+which has a checklist of pipelines and updates that need to happen in order to publish a new release.
+
+== Meetings
+
+=== Calendar
+* Europe: 
+link:++https://calendar.google.com/calendar/u/0/embed?src=eclipse-foundation.org_e9ki8t2gc75sh07qdh95c8ofvc@group.calendar.google.com&ctz=Europe/Athens++[Eastern],
+link:++https://calendar.google.com/calendar/u/0/embed?src=eclipse-foundation.org_e9ki8t2gc75sh07qdh95c8ofvc@group.calendar.google.com&ctz=Europe/Berlin++[Central],
+link:++https://calendar.google.com/calendar/u/0/embed?src=eclipse-foundation.org_e9ki8t2gc75sh07qdh95c8ofvc@group.calendar.google.com&ctz=Europe/Lisbon++[Western]
+
+* America: 
+link:++https://calendar.google.com/calendar/u/0/embed?src=eclipse-foundation.org_e9ki8t2gc75sh07qdh95c8ofvc@group.calendar.google.com&ctz=America/Toronto++[Eastern],
+link:++https://calendar.google.com/calendar/u/0/embed?src=eclipse-foundation.org_e9ki8t2gc75sh07qdh95c8ofvc@group.calendar.google.com&ctz=America/Chicago++[Central],
+link:++https://calendar.google.com/calendar/u/0/embed?src=eclipse-foundation.org_e9ki8t2gc75sh07qdh95c8ofvc@group.calendar.google.com&ctz=America/Denver++[Mountain],
+link:++https://calendar.google.com/calendar/u/0/embed?src=eclipse-foundation.org_e9ki8t2gc75sh07qdh95c8ofvc@group.calendar.google.com&ctz=America/Los_Angeles++[Pacific]
+
+* https://docs.google.com/document/d/1MQbwPpbEBHiAHes1NaYTJQzEBGUYXxaJYw5K-yj053U/edit[Meeting Notes]

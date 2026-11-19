@@ -38,7 +38,7 @@
 - [At a glance](#at-a-glance)
 - [Quick start](#quick-start) · [Deploy](#deploy)
 - [Features](#features) · [Screenshots](#screenshots) · [How Flowplan compares](#how-flowplan-compares) · [Private by design](#private-by-design)
-- A closer look: [Write](#write-and-think) · [Databases](#organise-with-databases) · [AI](#ai-optional) · [Whiteboards and journal](#whiteboards-and-a-journal) · [Handwriting](#handwriting-and-notebooks) · [Home page](#a-home-page-of-your-own) · [Together](#together-everywhere)
+- A closer look: [Write](#write-and-think) · [Databases](#organise-with-databases) · [Flashcards](#learn-with-flashcards) · [AI](#ai-optional) · [Whiteboards and journal](#whiteboards-and-a-journal) · [Handwriting](#handwriting-and-notebooks) · [Home page](#a-home-page-of-your-own) · [Together](#together-everywhere)
 - [For admins and integrations](#for-admins-and-integrations): [architecture](#architecture), [system requirements](#system-requirements), [security](#security)
 - [FAQ](#faq)
 - [Development](#development)
@@ -47,7 +47,7 @@
 
 ## At a glance
 
-- **Everything in one page tree** – documents, databases with ten views, whiteboards, notebooks for handwriting, a daily journal, projects with tickets and sprints, surveys and workflows.
+- **Everything in one page tree** – documents, databases with eleven views, whiteboards, notebooks for handwriting, a daily journal, projects with tickets and sprints, surveys, workflows and flashcards.
 - **Completely open source** under the AGPL-3.0 – no closed enterprise edition, no features behind a licence key.
 - **One container with SQLite** – nothing else to run, no external search service. For larger teams optionally [PostgreSQL](https://docs.flowplan.org/en/postgresql) and a [cluster](https://docs.flowplan.org/en/cluster) of several instances. Or hosted in Germany at [app.flowplan.org](https://app.flowplan.org).
 - **Optional AI** – off by default; admins switch it on per feature and per person, completely local with [Ollama](https://ollama.com) or with a key for OpenAI, Anthropic, Gemini or any OpenAI-compatible service. You decide which pages it may read.
@@ -113,7 +113,7 @@ docker compose up -d
 - **Kubernetes:** the Helm chart in [`deploy/helm/flowplan`](deploy/helm/flowplan/README.md) (one pod with a volume, as SQLite needs; several pods in [cluster mode](https://docs.flowplan.org/en/cluster#kubernetes-helm)).
 - **Single sign-on:** register a confidential web client at your OIDC provider with the redirect URI `https://<your-domain>/api/auth/callback` ([Sign-in](https://docs.flowplan.org/en/sign-in)).
 
-- **Larger teams:** instead of SQLite, Flowplan can use [PostgreSQL](https://docs.flowplan.org/en/postgresql) (with `pgvector` for semantic search) – and with PostgreSQL, Redis and S3, several instances behind a load balancer in [cluster mode](https://docs.flowplan.org/en/cluster). An existing instance [switches between SQLite and PostgreSQL](https://docs.flowplan.org/en/database-migration) in both directions; [Sizing](https://docs.flowplan.org/en/sizing) says which setup fits how many people.
+- **Larger teams:** instead of SQLite, Flowplan can use [PostgreSQL](https://docs.flowplan.org/en/postgresql) (with `pgvector` for semantic search) – and with PostgreSQL, Redis and S3, several instances behind a load balancer in [cluster mode](https://docs.flowplan.org/en/cluster). An existing instance [switches between SQLite and PostgreSQL](https://docs.flowplan.org/en/database-migration) in both directions; [Sizing](https://docs.flowplan.org/en/sizing) says which setup fits how many people. For **high availability**, run two servers active/passive or several instances in cluster mode behind a load balancer – [High availability](https://docs.flowplan.org/en/high-availability) explains both, with a complete Hetzner example in [`deploy/compose/hetzner`](deploy/compose/hetzner).
 
 All data lives in the volume on `/app/data`. With SQLite, run **exactly one** container per data directory.
 
@@ -128,7 +128,7 @@ ghcr.io/yannicschuller/flowplan:1.2.3      # a fixed release (also :1.2 and :1)
 ghcr.io/yannicschuller/flowplan:beta       # the latest manual build, not for production
 ```
 
-Images are built only for a release or by hand: **Actions → Docker image → Run workflow** builds `:beta` from the chosen branch (with a version, it rebuilds that release instead). Every `:beta` image can be rolled out on Coolify automatically: set the repository secrets `COOLIFY_WEBHOOK` (the resource's deploy webhook) and `COOLIFY_TOKEN` (an API token with deploy permission), and let the Coolify resource use the `:beta` image. A release that is newer than the current `:beta` (its commit not yet contained in it) is tagged `:beta` as well and rolled out the same way; an older release leaves it alone. See [Coolify and reverse proxies](https://docs.flowplan.org/en/coolify-and-proxy).
+Images are built only for a release or by hand: **Actions → Docker image → Run workflow** builds `:beta` from the chosen branch (with a version, it rebuilds that release instead). Two Coolify resources can follow the images automatically, with the secrets of the environment `production` and `COOLIFY_TOKEN` (an API token with deploy permission): a beta instance on the `:beta` image (`COOLIFY_BETA_WEBHOOK`, its deploy webhook) is rolled out with every beta build, a production instance on `:latest` (`COOLIFY_WEBHOOK`) with every release. A release that is newer than the current `:beta` (its commit not yet contained in it) is tagged `:beta` as well, so the beta instance runs it from its next rollout on; an older release leaves `:beta` alone. See [Coolify and reverse proxies](https://docs.flowplan.org/en/coolify-and-proxy).
 
 </details>
 
@@ -176,6 +176,9 @@ Step by step: [Deploy in one click](https://docs.flowplan.org/en/one-click-deplo
   </tr>
   <tr>
     <td colspan="3" valign="top">🔀 <b><a href="https://docs.flowplan.org/en/workflows">Workflows</a></b><br>Flows of nodes on a canvas, without code: a trigger – a record, page, form, schedule, mention, webhook or e-mail – then conditions, loops, waits and approvals, and actions on records and pages, notifications, AI and HTTP. Test runs, run history, versions, templates and an AI builder; a workflow never does more than the person who activated it.</td>
+  </tr>
+  <tr>
+    <td colspan="3" valign="top">🧠 <b><a href="https://docs.flowplan.org/en/flashcards">Flashcards</a></b><br>Any database becomes a deck, scheduled with FSRS: front and back, cloze, typed answers, multiple choice and image occlusion, a focus mode with keys and swipes, statistics, import from Anki, Quizlet and CSV, optional AI-made cards with a review step, a widget, push reminders, studying offline and a public link to practise without an account.</td>
   </tr>
 </table>
 
@@ -232,7 +235,7 @@ A fair comparison is hard – every tool here is good at something. This is our 
 | **Open source** | ✅ | ❌ | ❌ | ✅ | ✅ | ⚠️ source-available |
 | **Licence** | AGPL-3.0 | proprietary | proprietary | MIT (Community Edition)² | AGPL-3.0 | BSL 1.1 |
 | **Works offline** | ✅³ | ⚠️ pages saved for offline | ❌ | ✅ local-first | ✅ local-first | ❌ |
-| **Databases** | ✅ 10 views | ✅ | ⚠️ newer, Cloud only | ⚠️ database blocks | ✅ | ❌ |
+| **Databases** | ✅ 11 views | ✅ | ⚠️ newer, Cloud only | ⚠️ database blocks | ✅ | ❌ |
 | **Whiteboards** | ✅ | ❌ embeds only | ✅ Cloud | ✅ edgeless mode | ⚠️ not built in, as far as we know | ❌ |
 | **Journal** | ✅ | ⚠️ templates | ⚠️ templates | ✅ | ⚠️ templates | ⚠️ templates |
 | **End-to-end encryption** | ⚠️ encrypted spaces, documents only⁴ | ❌ | ❌ | ⚠️ local data only, as far as we know | ⚠️ status unclear | ❌ |
@@ -301,6 +304,20 @@ Table, board, calendar, timeline, gallery, list, feed, chart, form and sprint vi
 - Import from CSV, Jira and Trello; Markdown with YAML frontmatter in both directions (Obsidian-friendly)
 
 </details>
+
+## Learn with flashcards
+
+Turn any database into a deck: Flowplan plans the reviews with [FSRS](https://github.com/open-spaced-repetition), the algorithm Anki uses, and every person keeps their own learning state.
+
+- **Card types** – front and back (also reversed), cloze in text and documents, type the answer, multiple choice and image occlusion with a mask editor
+- **Focus mode** – keys or swipes, undo, limits per deck, a study overview across all decks, a widget for the home page and the apps
+- **Statistics** – streak, heatmap, forecast and true retention; studied cards show up in the journal
+- **Your own memory model** – from 1,000 reviews, fit FSRS to your own review log in the browser, see whether it predicts better, and take a recommended retention
+- **In and out** – import from Anki (`.apkg` with media and, if you like, the learning state), Quizlet and CSV; export as an Anki package or CSV
+- **Optional AI** – cards from a page, a selection, a PDF or pasted text, checked by you before they are added
+- **Anywhere** – push reminders, studying without a connection, and a public link to browse or practise without an account (progress stays in the browser)
+
+[Flashcards in the docs →](https://docs.flowplan.org/en/flashcards)
 
 ## AI, optional
 
@@ -526,9 +543,11 @@ Development mode also offers **Open local workspace**, a shared local example ac
 | `npm run typecheck` | TypeScript |
 | `npm test` | Core tests (Node test runner, temporary data directories that are removed afterwards) |
 | `npm run test:e2e` | Browser tests (Playwright, desktop and mobile); start a server with its own `FLOWPLAN_DATA_DIR` and set `TEST_BASE_URL` |
+| `npm run build:e2e` | Production build for the browser tests in `.next-e2e` (its server takes the demo sign-in; never in an image). Then `TEST_SERVERS=3 FLOWPLAN_DATA_DIR=/tmp/flowplan-inline-e2e.local npm run test:e2e` starts 3 servers of it, one per worker |
 | `npm run check:standalone` | Runs the standalone build like the container and checks health, persistence and restore |
 | `npm run quality` | Accessibility and performance budgets on the production build: sign-in and a seeded workspace at 1280 and 390 px – no serious axe findings, nothing focusable inside `aria-hidden`, no horizontal scrolling, JavaScript (gzip) and LCP within budget |
 | `npm run test:visual` | Screenshots of key screens against the baselines in `tests/visual/__screenshots__` (`npm run test:visual:update` writes new ones); not part of `npm test` |
+| `npm run gallery` | The UI gallery: every page, dialog, menu and popover as screenshots on one page (desktop and phone, light and dark). Rebuilt every night from main at [gallery.flowplan.org](https://gallery.flowplan.org), with what changed since the night before; see [CONTRIBUTING.md](CONTRIBUTING.md#ui-gallery) |
 
 Stack: Next.js 16 (App Router), React 19, TypeScript, SQLite (`node:sqlite`) or PostgreSQL (`pg`), TipTap/ProseMirror with Yjs, Zod and Playwright. The documentation lives in [flowplan-docs](https://github.com/yannicschuller/flowplan-docs) (docs.flowplan.org), the website in [flowplan-website](https://github.com/yannicschuller/flowplan-website) (flowplan.org), the desktop apps in [flowplan-desktop](https://github.com/yannicschuller/flowplan-desktop); this repository contains the app, the Helm chart (`deploy/helm`) and the n8n node (`integrations/n8n`).
 
@@ -553,12 +572,15 @@ Flowplan speaks German and English natively; every other language is a JSON cata
 <!-- i18n:start -->
 | Language | Code | Translated | Coverage |
 | --- | --- | ---: | --- |
-| 🇩🇪 Deutsch (in the code) | `de` | 8,921 / 8,921 | ![100 %](https://img.shields.io/badge/100%25-2ea44f?style=flat-square) |
-| 🇬🇧 English (in the code) | `en` | 8,921 / 8,921 | ![100 %](https://img.shields.io/badge/100%25-2ea44f?style=flat-square) |
-| 🇫🇷 Français | `fr` | 8,921 / 8,921 | ![100 %](https://img.shields.io/badge/100%25-2ea44f?style=flat-square) |
-| 🇨🇳 简体中文 | `zh` | 8,620 / 8,921 | ![96 %](https://img.shields.io/badge/96%25-a3c51c?style=flat-square) |
+| 🇩🇪 Deutsch (in the code) | `de` | 12,573 / 12,573 | ![100 %](https://img.shields.io/badge/100%25-2ea44f?style=flat-square) |
+| 🇬🇧 English (in the code) | `en` | 12,573 / 12,573 | ![100 %](https://img.shields.io/badge/100%25-2ea44f?style=flat-square) |
+| 🇺🇸 English (US) (in the code) | `en-US` | 12,573 / 12,573 | ![100 %](https://img.shields.io/badge/100%25-2ea44f?style=flat-square) |
+| 🇫🇷 Français | `fr` | 12,307 / 12,573 | [![Français](https://translate.flowplan.org/api/badge?component=flowplan-web&lang=fr)](https://translate.flowplan.org/c/flowplan-web/fr) |
+| 🇨🇳 简体中文 | `zh` | 12,307 / 12,573 | [![简体中文](https://translate.flowplan.org/api/badge?component=flowplan-web&lang=zh)](https://translate.flowplan.org/c/flowplan-web/zh) |
 
-<sub>Generated from `locales/` with `npm run i18n:readme`.</sub>
+Help translate on [translate.flowplan.org](https://translate.flowplan.org) – sign in with GitHub; every change arrives as a pull request.
+
+<sub>Generated from `locales/` with `npm run i18n:readme`; the badges show the current state on translate.flowplan.org.</sub>
 <!-- i18n:end -->
 
 ### Contributors

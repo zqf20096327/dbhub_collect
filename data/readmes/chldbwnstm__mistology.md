@@ -1,19 +1,30 @@
-<div align="center">
-
 <img src="./assets/hero.svg" alt="MISTOLOGY — Project-Local Mistake Ontology for Coding Agents" width="100%" />
 
 <br />
 
 [![Language: Rust](https://img.shields.io/badge/Rust-2021_Edition-F74C00?style=flat-square&logo=rust&logoColor=white)](./Cargo.toml)
 [![Engine: SQLite FTS5 + 2-Hop Graph](https://img.shields.io/badge/Index-SQLite_FTS5_%2B_2--Hop_Graph-0284C7?style=flat-square&logo=sqlite&logoColor=white)](./src/index.rs)
-[![Evals: 52/52 + 23 Unit](https://img.shields.io/badge/Tests-75%2F75_%28100%25%29-10B981?style=flat-square)](./tests/hardening_evals.rs)
+[![Evals: 52/52 + 26 Unit](https://img.shields.io/badge/Tests-78%2F78_%28100%25%29-10B981?style=flat-square)](./tests/hardening_evals.rs)
 [![OSS Benchmark: 3x-297x](https://img.shields.io/badge/vs_OSS_Memory-3x--297x_Win-0EA5E9?style=flat-square)](#open-source-agent-memory-benchmark-3x-win)
 [![Runtime Deps: Zero](https://img.shields.io/badge/Runtime_Deps-Zero_%28Single_Binary%29-7C3AED?style=flat-square)](./Cargo.toml)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT_OR_Apache--2.0-F59E0B?style=flat-square)](./LICENSE-MIT)
 
 **English** · [**한국어 (Korean)**](./README.ko.md)
 
-</div>
+---
+
+<br />
+
+<p align="center">
+  <strong>
+    “AI-generated changes may each look reasonable on their own,<br />
+    yet as they accumulate, code can be duplicated or components can clash.<br />
+    As this decoherence grows, changing even a single feature<br />
+    takes more and more time just to verify that nothing else broke.”
+  </strong>
+</p>
+
+<br />
 
 ---
 
@@ -21,13 +32,9 @@
 
 Instead of maintaining a monolithic `MISTAKES.md` that coding agents re-read from top to bottom on every prompt, MISTOLOGY stores small Git-tracked Markdown notes (`.mistology/notes/*.md`), indexes their explicit code relationships (`files`, `symbols`, `coupled`) in a disposable SQLite FTS5 + directed graph database, and surfaces **ultra-compact preflight briefings (`search -b`) or summary cards**—including **1-hop and 2-hop coupled hazards** across neighboring modules.
 
-<p align="center">
-  <a href="https://github.com/chldbwnstm/mistology/releases/latest/download/mistology-intro-en.mp4"><img src="./assets/mistology-intro-en.webp" width="100%" alt="MISTOLOGY 1-Minute Intro — Auto-playing overview (click for 1080p60 MP4 with audio)" /></a>
-</p>
-<p align="center">
-  <a href="https://github.com/chldbwnstm/mistology/releases/latest/download/mistology-intro-en.mp4"><strong>▶ Watch 1-Min Intro in 1080p60 with Audio (MP4)</strong></a> &nbsp; · &nbsp;
-  <a href="./README.ko.md">한국어 소개 · 영상 보기</a>
-</p>
+<a href="https://github.com/chldbwnstm/mistology/releases/latest/download/mistology-intro-en.mp4"><img src="./assets/mistology-intro-en.webp" width="100%" alt="MISTOLOGY 1-Minute Intro — Auto-playing overview (click for 1080p60 MP4 with audio)" /></a>
+
+[**▶ Watch 1-Min Intro in 1080p60 with Audio (MP4)**](https://github.com/chldbwnstm/mistology/releases/latest/download/mistology-intro-en.mp4) &nbsp; · &nbsp; [한국어 소개 · 영상 보기](./README.ko.md)
 
 <br />
 
@@ -45,6 +52,7 @@ Instead of maintaining a monolithic `MISTAKES.md` that coding agents re-read fro
 | **Blind Multi-Hop Regressions** — Editing `currency.py` silently breaks `settlement.py`, which in turn breaks `csv_export.py` two layers downstream. | **Monotonic Directed 2-Hop Graph (`--coupled`)** — Querying `currency.py` traverses `1-hop` and `2-hop` coupling chains in a single ~4 ms call while blocking sibling U-turns and hub leaks. |
 | **Stale & Contradictory Advice** — Old workarounds (`v1`, `v2`) sit next to current fixes (`v3`), poisoning agents into repeating deprecated patches. | **Versioned Evolution (`supersede`)** — New fixes append `v3`, `v4` in place; superseded attempts are isolated as anti-polarity `Avoid` warnings and never ranked as active advice. |
 | **Hallucinated Lessons** — Auto-capturing every debugging guess pollutes future sessions with false root causes. | **Verified-Only Gate** — Writing requires both raw failure `evidence` and `verified` proof, deduplicating active error `signatures`. |
+| **Silent Duplicate Helpers & First-Time Contract Clashes** — Later sessions re-implement existing helpers with subtle bugs or forget coupled files before committing. | **Proactive Coherence (`canon` · `impact` · `doctor`)** — `mistology canon` registers verified SSOT entrypoints (`★표준`), `mistology impact` audits `git diff` against bidirectional 1-hop couplings, and `doctor` flags missing repo files. |
 
 ---
 
@@ -84,9 +92,10 @@ Skill files alone only run when an agent remembers to invoke them. Paste this pr
 ```text
 Configure this repository so coding agents always use `mistology` without skipping:
 1. Inspect existing project rule files (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, etc.) without overwriting existing rules, and add a concise Always-On MISTOLOGY rule:
-   - Preflight: before editing files, run `mistology search -b "<target files, symbols, and task>"` and check coupled modules (`← ...`).
+   - Preflight: before editing files or writing shared helpers, run `mistology search -b "<target files, symbols, and functional intent>"` and check canonical rules (`★표준`) and coupled modules (`← ...`).
    - On error: when a build/lint/test command fails, run `mistology search -b "<exact error>"` before guessing a fix.
-   - Verified write: only when both a real mistake/failure and a verified fix are confirmed, run `mistology new` (or `mistology supersede <id>`) with `--file`, `--symbol`, and `--coupled`.
+   - Pre-completion check: before finishing or committing edits, run `mistology impact` to verify coupled targets and contracts.
+   - Verified write: record verified mistakes via `mistology new`, reusable SSOT entrypoints/contracts via `mistology canon`, and evolved rules via `mistology supersede <id>` with `--file`, `--symbol`, and `--coupled`.
 2. If this project uses Claude Code, merge lightweight project-local hooks into `.claude/settings.json` (preserving existing hooks and never touching global `~/.claude/settings.json`): inject a MISTOLOGY reminder on `SessionStart` and `SubagentStart` so coding subagents also follow it, and run `mistology search -b` automatically on `UserPromptSubmit` and `PostToolUseFailure` (suppressing empty `관련 오답노트 없음` output and never blocking on non-zero exit).
 3. If subagents work inside git worktrees while `.mistology` is shared at a parent workspace root rather than committed per branch, pin the hook/command directory to that shared root so notes never fragment across worktrees.
 ```
@@ -205,6 +214,27 @@ mistology supersede 2026-11-11-003 \
 
 If a module is deleted and a note no longer applies, change `status: active` to `status: retired` in its frontmatter.
 
+#### Register Canonical SSOT Contracts (`canon`) & Verify Diff Blast Radius (`impact`)
+
+Prevent duplicate helpers and first-time contract clashes proactively, and audit `git diff` before committing:
+
+```bash
+# Register a verified canonical entrypoint / cross-module contract (requires existing --file & --symbol)
+mistology canon \
+  --intent "Normalize repo-relative paths and strip host root prefixes" \
+  --contract "Always reuse rebase_cwd_paths in src/note.rs for path rebasing" \
+  --verified "cargo test --test mistology passed" \
+  --forbid "Do not write ad-hoc strip_prefix path normalizers per module" \
+  --signature "rebase_cwd_paths repo_root_prefixes" \
+  --file src/note.rs \
+  --symbol rebase_cwd_paths \
+  --coupled src/lib.rs
+
+# Check bidirectional 1-hop coupled targets for uncommitted Git changes (or against a base ref)
+mistology impact
+mistology impact --base HEAD~1
+```
+
 #### Diagnostics & Bug Triage (`--explain` · `doctor` · `events.jsonl`)
 
 ```bash
@@ -250,7 +280,7 @@ Four isolated coding agents solved the exact same 4-part ticket (`VND/KWD/OMR` m
 
 ---
 
-## Reproducible Evaluation Suites (`52 / 52` + `23` Unit Tests)
+## Reproducible Evaluation Suites (`52 / 52` + `26` Unit Tests)
 
 MISTOLOGY ships with **3 polyglot validation projects** ([`evals/shopcore`](./evals/shopcore) Python 12-module backend, [`evals/webmono`](./evals/webmono) TypeScript/Next.js monorepo, and [`evals/rustkv`](./evals/rustkv) Rust Cargo workspace) and **52 quantitative scenarios** across [`tests/evals.rs`](./tests/evals.rs) and [`tests/hardening_evals.rs`](./tests/hardening_evals.rs):
 
@@ -276,9 +306,10 @@ python3 -B -m unittest discover -s evals/shopcore/tests -t evals/shopcore -v
 ├── assets/                   # Custom vector SVGs & auto-playing overview WebPs
 ├── src/
 │   ├── main.rs               # Binary entrypoint
-│   ├── lib.rs                # CLI subcommands (search, new, supersede, setup, doctor) & monorepo rebasing
-│   ├── diag.rs               # 256 KiB rotating flight recorder (events.jsonl) & privacy-safe doctor
-│   ├── note.rs               # Markdown + frontmatter parser, conflict guards, version evolution
+│   ├── lib.rs                # CLI subcommands (search, new, canon, supersede, impact, setup, doctor)
+│   ├── impact.rs             # Git (-z) change collector & bidirectional 1-hop impact verifier
+│   ├── diag.rs               # 256 KiB rotating flight recorder, path redaction & file-drift doctor
+│   ├── note.rs               # Markdown + frontmatter parser (mistake/canon), conflict guards, evolution
 │   └── index.rs              # SQLite WAL + FTS5 + directed 1/2-hop ontology graph, --explain & formatters
 ├── skills/mistology/
 │   └── SKILL.md              # Agent skill specification (Claude, Codex, Gemini/AGY, Cursor)
@@ -288,7 +319,7 @@ python3 -B -m unittest discover -s evals/shopcore/tests -t evals/shopcore -v
 │   ├── webmono/              # TypeScript/Next.js monorepo + 6 ontology notes
 │   └── rustkv/               # Rust Cargo workspace + 6 ontology notes
 └── tests/
-    ├── mistology.rs          # Unit, diagnostics & edge-case regression tests (23 tests)
+    ├── mistology.rs          # Unit, coherence (canon/impact/drift) & diagnostics tests (26 tests)
     ├── evals.rs              # Core 6-category retrieval & token benchmark (24 scenarios)
     └── hardening_evals.rs    # Polyglot, stacktrace, conflict, sandbox & concurrency benchmark (28 scenarios)
 ```
