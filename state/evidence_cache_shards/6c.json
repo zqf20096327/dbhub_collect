@@ -536,15 +536,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:20:03Z",
+  "collected_at": "2026-11-19T04:25:45Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
-  "stars": 247,
+  "pushed_at": "2026-11-17",
+  "stars": 248,
   "tree": {
-   "sha": "2cb24d358a6075016ccccae98775f0bab254737d",
-   "etag": "W/\"d095ae49d78df71a8cbbec01d7ff9210e7dcb589b0bae4b215909e22d3fe42a0\"",
+   "sha": "9351292bcdda360fb32593a9489e64213cc6080f",
+   "etag": "W/\"9b9405cd4c89b191b24ca64acf3b6703664815806930c56835244880dfe77f6f\"",
    "truncated": false,
-   "path_count": 8854,
+   "path_count": 9377,
    "matched": [
     "Cargo.toml",
     "fuzz/Cargo.toml",
@@ -581,6 +581,7 @@
     ".github/workflows/ci.yml",
     ".github/workflows/codeql-suppress.yml",
     ".github/workflows/codeql.yml",
+    ".github/workflows/docker-source-build.yml",
     ".github/workflows/fuzz.yml",
     ".github/workflows/labels.yml",
     ".github/workflows/release-prepare.yml",
@@ -595,9 +596,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "5a87a92728d6473f0544e980c96f1132435a246d",
+    "blob_sha": "53f380c6713d9ab21cb2845baae2680716e3bb80",
     "ecosystem": "cargo",
-    "bytes": 11889
+    "bytes": 12434
    },
    {
     "path": "fuzz/Cargo.toml",
@@ -623,14 +624,13 @@
    {
     "path": "nodedb-array/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "46f59838201b83f99161b572c54b899c73275057",
+    "blob_sha": "fbf97c4efd41e5ce3d3232bf0155e0740675d2f4",
     "ecosystem": "cargo",
-    "bytes": 1086,
+    "bytes": 1162,
     "names": [
      "nodedb-types",
      "nodedb-crs",
      "nodedb-codec",
-     "nodedb-spatial",
      "serde",
      "zerompk",
      "thiserror",
@@ -643,7 +643,8 @@
      "web-time"
     ],
     "dev": [
-     "serde_json"
+     "serde_json",
+     "nodedb-crs"
     ]
    },
    {
@@ -668,9 +669,9 @@
    {
     "path": "nodedb-client-tests/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "850be729b375f368f7640d043705ca3c9ed2067d",
+    "blob_sha": "7c61b545a4693239c4737d2ab650db8a5499348a",
     "ecosystem": "cargo",
-    "bytes": 967,
+    "bytes": 1051,
     "dev": [
      "nodedb",
      "nodedb-client",
@@ -678,6 +679,7 @@
      "nodedb-types",
      "tokio",
      "tokio-postgres",
+     "bytes",
      "tempfile",
      "serde_json",
      "sonic-rs",
@@ -688,9 +690,9 @@
    {
     "path": "nodedb-client/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ba0ba399bd92b42c0005f0b04b1e10783fc9abbf",
+    "blob_sha": "031991b89cf10eada568d738a6654d5506abb48e",
     "ecosystem": "cargo",
-    "bytes": 1540,
+    "bytes": 1726,
     "names": [
      "nodedb-types",
      "async-trait",
@@ -701,6 +703,8 @@
      "tokio",
      "serde_json",
      "rust_decimal",
+     "base64",
+     "bytes",
      "sonic-rs",
      "zerompk",
      "tokio-rustls",
@@ -801,13 +805,12 @@
    {
     "path": "nodedb-codec/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "dba0c82a58b2907ef7677b15475c37e02ca7f689",
+    "blob_sha": "882ea78b15432ce59b81e0858a325e5cac62dec0",
     "ecosystem": "cargo",
-    "bytes": 1246,
+    "bytes": 1212,
     "names": [
      "thiserror",
      "serde",
-     "serde_json",
      "sonic-rs",
      "zerompk",
      "lz4_flex",
@@ -846,9 +849,9 @@
    {
     "path": "nodedb-crdt/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b1279cbca5877fe0b69f90846004b10e7dc48075",
+    "blob_sha": "d83b7df32ddbaff01f5b9a51bebcd6b51896a4b7",
     "ecosystem": "cargo",
-    "bytes": 1035,
+    "bytes": 1149,
     "names": [
      "thiserror",
      "tracing",
@@ -866,28 +869,30 @@
     ],
     "dev": [
      "tokio",
-     "serde_json"
+     "serde_json",
+     "nodedb-crs"
     ]
    },
    {
     "path": "nodedb-crs/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9d2be1fcfcaa172becc9875db2a9559b0c4effaa",
+    "blob_sha": "c010c8b82b321b5390e00e50cf1eb98b87426406",
     "ecosystem": "cargo",
-    "bytes": 708,
+    "bytes": 1343,
     "names": [
      "nodedb-srid",
      "thiserror",
      "serde",
-     "zerompk"
+     "zerompk",
+     "ruzstd"
     ]
    },
    {
     "path": "nodedb-fts/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "565314f0fc4c5e73fe72e22753175e2e30faa003",
+    "blob_sha": "437ccbe761d76e243d0cad74342c6e73958626b9",
     "ecosystem": "cargo",
-    "bytes": 1381,
+    "bytes": 1317,
     "names": [
      "nodedb-types",
      "nodedb-mem",
@@ -899,28 +904,24 @@
      "tracing",
      "thiserror",
      "crc32c",
-     "arc-swap",
      "lindera",
-     "icu_segmenter",
-     "whatlang"
+     "icu_segmenter"
     ]
    },
    {
     "path": "nodedb-graph/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "50b09aaa19f59cb4d2ab9bff680f819a7f0e29f7",
+    "blob_sha": "1c14f3fe43fc76a16d4651b0c080bf3dd7b07fba",
     "ecosystem": "cargo",
-    "bytes": 922,
+    "bytes": 862,
     "names": [
      "nodedb-types",
      "nodedb-mem",
      "serde",
-     "rmpv",
      "zerompk",
      "rkyv",
      "tracing",
-     "thiserror",
-     "arc-swap"
+     "thiserror"
     ],
     "dev": [
      "serde_json",
@@ -948,28 +949,30 @@
    {
     "path": "nodedb-physical/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "988659859887a50c3c8d38de4dc2ddff4209b961",
+    "blob_sha": "f477e8fa828aa19a15d906c582eed99e637f7a68",
     "ecosystem": "cargo",
-    "bytes": 798,
+    "bytes": 898,
     "names": [
      "nodedb-array",
      "nodedb-crs",
      "nodedb-graph",
      "nodedb-query",
-     "nodedb-sql",
      "nodedb-types",
      "rust_decimal",
      "serde",
      "thiserror",
      "zerompk"
+    ],
+    "dev": [
+     "nodedb-crs"
     ]
    },
    {
     "path": "nodedb-query/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "33f51e32a65181b2232bf456970a7d2f8648dc56",
+    "blob_sha": "5a738c3fb590e227c83345b7dd03bb61a68d7133",
     "ecosystem": "cargo",
-    "bytes": 1046,
+    "bytes": 1160,
     "names": [
      "nodedb-types",
      "nodedb-crs",
@@ -984,14 +987,17 @@
      "rust-stemmers",
      "unicode-normalization",
      "hex"
+    ],
+    "dev": [
+     "nodedb-crs"
     ]
    },
    {
     "path": "nodedb-raft/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "4c99eed5d2ea5c3f76db593f2bd398db68a05996",
+    "blob_sha": "ac30a756ccbb8aa16c407011b573fdb18e9e6e2c",
     "ecosystem": "cargo",
-    "bytes": 1351,
+    "bytes": 1253,
     "names": [
      "nodedb-types",
      "serde",
@@ -1002,11 +1008,9 @@
      "rkyv",
      "zerompk",
      "rand",
-     "crc32c",
-     "tokio"
+     "crc32c"
     ],
     "dev": [
-     "tokio",
      "tracing-subscriber"
     ]
    },
@@ -1024,9 +1028,9 @@
    {
     "path": "nodedb-raster/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "6c63b3b03cd4e7a3cb7068cb5fa0bdf0a9afbb98",
+    "blob_sha": "fa83905844abb476817d73d10c84397b15d5a22f",
     "ecosystem": "cargo",
-    "bytes": 913,
+    "bytes": 1027,
     "names": [
      "nodedb-types",
      "nodedb-crs",
@@ -1038,15 +1042,16 @@
      "lerc-rs"
     ],
     "dev": [
-     "tiff"
+     "tiff",
+     "nodedb-crs"
     ]
    },
    {
     "path": "nodedb-spatial/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "1fe42691ed8ef6805d6d7a7e3acebc40f2d573d7",
+    "blob_sha": "c22c2a4a460b768b8869ab6f62527093283bb0be",
     "ecosystem": "cargo",
-    "bytes": 1009,
+    "bytes": 1123,
     "names": [
      "nodedb-types",
      "nodedb-crs",
@@ -1062,15 +1067,16 @@
      "geo"
     ],
     "dev": [
-     "rand"
+     "rand",
+     "nodedb-crs"
     ]
    },
    {
     "path": "nodedb-sql/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "02f192479e5dcf4a47904306cf0e9f98984e6bd8",
+    "blob_sha": "0954f1cc98d96b04aac72f07e1a32be4ac0b91a7",
     "ecosystem": "cargo",
-    "bytes": 853,
+    "bytes": 1018,
     "names": [
      "nodedb-types",
      "nodedb-crs",
@@ -1081,7 +1087,11 @@
      "chrono",
      "sonic-rs",
      "rust_decimal",
-     "hex"
+     "hex",
+     "zerompk"
+    ],
+    "dev": [
+     "nodedb-crs"
     ]
    },
    {
@@ -1157,9 +1167,9 @@
    {
     "path": "nodedb-types/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "66901e170acb7de8a54a23e89380fedb406ced27",
+    "blob_sha": "ca2c1672aad2b22675f9d7c23d3128513c88243b",
     "ecosystem": "cargo",
-    "bytes": 1481,
+    "bytes": 1561,
     "names": [
      "serde",
      "serde_json",
@@ -1192,20 +1202,19 @@
    {
     "path": "nodedb-vector-gpu/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c5e123e8535e3cc31df107468f5605ef16a59529",
+    "blob_sha": "e1448699c69a2a3589ae954f25c08eb27878e5a9",
     "ecosystem": "cargo",
-    "bytes": 758,
+    "bytes": 721,
     "names": [
-     "nodedb-vector",
      "thiserror"
     ]
    },
    {
     "path": "nodedb-vector/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7e509960b87fee95d832940651b82dc0d4ee0e0b",
+    "blob_sha": "c5fd43374bdf82e616bd193ed59a958c8d9c41bf",
     "ecosystem": "cargo",
-    "bytes": 1803,
+    "bytes": 1771,
     "names": [
      "nodedb-types",
      "nodedb-codec",
@@ -1218,8 +1227,7 @@
      "roaring",
      "bytemuck",
      "half",
-     "crc32c",
-     "arc-swap"
+     "crc32c"
     ],
     "dev": [
      "rand",
@@ -1258,9 +1266,9 @@
    {
     "path": "nodedb/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c1aaf9416dda97d80368caa45089c7acac895ca3",
+    "blob_sha": "62d26b647579003e93c4c0329ef0d5f32b79b1e6",
     "ecosystem": "cargo",
-    "bytes": 6430,
+    "bytes": 6522,
     "names": [
      "nodedb-types",
      "nodedb-crs",
@@ -1313,6 +1321,7 @@
      "nexar",
      "memmap2",
      "rustc-hash",
+     "hashbrown",
      "loro",
      "wasmtime",
      "sha2",
@@ -1340,8 +1349,7 @@
      "bytes",
      "tokio-rustls",
      "rustls-pemfile",
-     "x509-parser",
-     "pem"
+     "x509-parser"
     ],
     "dev": [
      "tokio",
@@ -1362,10 +1370,10 @@
    {
     "path": "Dockerfile",
     "kind": "image",
-    "blob_sha": "24fbbdc70255a06ccdfd63574918cc384f03b0af",
+    "blob_sha": "f185ade7ab32633a9e653bd7f733a35f22c32d74",
     "bytes": 3455,
     "images": [
-     "rust:1.95-bookworm",
+     "rust:1.96-bookworm",
      "chef",
      "cgr.dev/chainguard/glibc-dynamic:latest"
     ]
@@ -1398,10 +1406,16 @@
     "bytes": 984
    },
    {
+    "path": ".github/workflows/docker-source-build.yml",
+    "kind": "ci",
+    "blob_sha": "0eadf43e78fdad859f62cceb0b3fc56a5df37bfd",
+    "bytes": 1542
+   },
+   {
     "path": ".github/workflows/fuzz.yml",
     "kind": "ci",
-    "blob_sha": "4d175a1e71b5a3de58f990578eb74bc71f06f1ec",
-    "bytes": 5182
+    "blob_sha": "3bcfe768ae994d6fbeb63639773008df60b2f12c",
+    "bytes": 6006
    },
    {
     "path": ".github/workflows/labels.yml",
@@ -1442,8 +1456,8 @@
    {
     "path": ".github/workflows/test.yml",
     "kind": "ci",
-    "blob_sha": "b54c1869f41ad2614051c367749c0889572740c5",
-    "bytes": 10154
+    "blob_sha": "e54c49fa6d7e2ea611d4bc8c4728f3627ad5d0e5",
+    "bytes": 11599
    }
   ],
   "clues": {
@@ -1470,22 +1484,27 @@
     "nodedb/src/control/planner/catalog_adapter/mod.rs",
     "nodedb/src/control/planner/catalog_adapter/sequence_access.rs",
     "nodedb/src/control/planner/catalog_adapter/sql_catalog_impl.rs",
+    "nodedb/src/control/planner/catalog_adapter/text_index_fields.rs",
     "nodedb/src/control/planner/catalog_adapter/type_convert.rs",
     "nodedb/src/control/planner/sql_plan_convert/visitor/adapter.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/barrier.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/config.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/helpers.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/mod.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/returning_transcripts.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/staged_returning.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/types.rs",
     "nodedb/src/control/server/dispatch_utils/submit_write/funnel/driver.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/apply_result.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/catch_up.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/caught_up.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/commit_redo.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/completion_route.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/cut_marker.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/deferred.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/drop_dispatch.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/halt.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/handover.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/install_gate.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/intake.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/metadata_hold.rs",
@@ -1501,17 +1520,22 @@
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/read_timeout.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/redo_applied.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/redo_propose.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/redo_stream.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/request.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/resolve_turn.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/restage.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/role.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/role_fixtures.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/routing.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/run_loop.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/scheduler.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/stage_images.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/staged_vote.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/test_proposer.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/test_support.rs",
     "nodedb/src/control/server/shared/ddl/neutral/convert/driver.rs",
+    "nodedb/src/data/executor/handlers/transaction/redo_apply/stream_validate/driver.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/commit_resolve/cast_vote.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/commit_resolve/drop_tail.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/commit_resolve/mod.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/commit_resolve/verdict.rs",
@@ -1527,6 +1551,15 @@
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/owed/entry.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/owed/mod.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/owed/retry.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/returning_eval/evals.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/returning_eval/evaluate.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/returning_eval/fixtures.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/returning_eval/frozen_cleanup.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/returning_eval/frozen_entry.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/returning_eval/mod.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/returning_eval/rounds.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/returning_eval/sequence_send.rs",
+    "nodedb/src/control/cluster/calvin/scheduler/driver/core/returning_eval/vote_hook.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/sequencer_proposer/mod.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/sequencer_proposer/raft.rs",
     "nodedb/src/control/cluster/calvin/scheduler/driver/core/sequencer_proposer/seam.rs",
@@ -1594,13 +1627,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:26:39Z",
+  "collected_at": "2026-11-19T04:32:12Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-17",
   "stars": 133,
   "tree": {
    "sha": "e35febde78593d0318ef788dc01ec711157f3af7",
-   "etag": "W/\"d3b45ad7a317344e8f871216471220bfdae2d7440a25ad672470b8355d830c12\"",
+   "etag": "W/\"247b8109b715a1fd1c756ceddad92a22ab0eed130ab01fa166fce426c3aae58c\"",
    "truncated": false,
    "path_count": 1770,
    "matched": [
@@ -4830,13 +4863,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T06:02:38Z",
+  "collected_at": "2026-11-19T05:10:32Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-18",
   "stars": 10,
   "tree": {
    "sha": "cbe1726d18afd0d59b0e8c09824d950465759ec8",
-   "etag": "W/\"dd64b63dbee7a9bb622d6d35ea783aa1fa1f28f428d7415f44c669406b15dff3\"",
+   "etag": "W/\"98dd86900526344899f2031c8d82685bd21ae26ecfafaac1c04257596f39bbcd\"",
    "truncated": false,
    "path_count": 799,
    "matched": [
@@ -7491,13 +7524,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:04:06Z",
+  "collected_at": "2026-11-19T04:21:35Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-13",
+  "pushed_at": "2026-11-18",
   "stars": 405,
   "tree": {
    "sha": "74c75b0e7b863bf3b8f2e04339536488ffc24d68",
-   "etag": "W/\"0214a88cd26c0f96c4ec503d72e9d1ca8ef092e030d63ea112c4185e6f15c009\"",
+   "etag": "W/\"1daf8b5678fdc484cde96d7eb8e32fd808793ad64757203105da3e92e04a3705\"",
    "truncated": false,
    "path_count": 140,
    "matched": [
@@ -9562,19 +9595,20 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-16T00:09:12Z",
+  "collected_at": "2026-11-19T04:51:40Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
-  "stars": 30,
+  "pushed_at": "2026-11-18",
+  "stars": 31,
   "tree": {
-   "sha": "f5cd2fe99047f09fd6b459fa53bbd525fdb7e1dd",
-   "etag": "W/\"3e7d39f5c72cce0115ca9ecdedc1291e7bd85740812cb1371d4aa2c1d0c8da3b\"",
+   "sha": "02f6a6d192b5ed60ec4fcda1155e7d27dc6a1821",
+   "etag": "W/\"f52141af30cc23d70ec40e11134f5b655e146816d3cfc3de2985ba593b400db0\"",
    "truncated": false,
-   "path_count": 977,
+   "path_count": 1009,
    "matched": [
     "docs/requirements.txt",
     "src/PgNimbus.App/PgNimbus.App.csproj",
     "src/PgNimbus.Core/PgNimbus.Core.csproj",
+    "src/PgNimbus.Strings.Generator/PgNimbus.Strings.Generator.csproj",
     "tests/PgNimbus.App.Tests/PgNimbus.App.Tests.csproj",
     "tests/PgNimbus.Benchmarks/PgNimbus.Benchmarks.csproj",
     "tests/PgNimbus.Core.Tests/PgNimbus.Core.Tests.csproj",
@@ -9588,6 +9622,7 @@
     ".github/workflows/ci.yml",
     ".github/workflows/credential-stores.yml",
     ".github/workflows/docs.yml",
+    ".github/workflows/l10n-review.yml",
     ".github/workflows/release.yml",
     ".github/workflows/screenshots.yml"
    ]
@@ -9623,13 +9658,23 @@
    {
     "path": "src/PgNimbus.Core/PgNimbus.Core.csproj",
     "kind": "dep",
-    "blob_sha": "26ebcd963f9ea9f57ea66547bdfdccb82294be84",
+    "blob_sha": "0045e20024805a02ffca3670134a3084bd719213",
     "ecosystem": "csproj",
-    "bytes": 1267,
+    "bytes": 2327,
     "names": [
      "Npgsql",
      "System.Security.Cryptography.ProtectedData",
      "SSH.NET"
+    ]
+   },
+   {
+    "path": "src/PgNimbus.Strings.Generator/PgNimbus.Strings.Generator.csproj",
+    "kind": "dep",
+    "blob_sha": "ab00539306f15a51f4c73c21a01fbfb306e043d7",
+    "ecosystem": "csproj",
+    "bytes": 1337,
+    "names": [
+     "Microsoft.CodeAnalysis.CSharp"
     ]
    },
    {
@@ -9733,8 +9778,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "94cf2132f9e379195bea2d39f1569cf6d91168e7",
-    "bytes": 7650,
+    "blob_sha": "fcb4460c3cb43329e355c1597193226732395c64",
+    "bytes": 7743,
     "images": [
      "postgres:17"
     ]
@@ -9750,6 +9795,12 @@
     "kind": "ci",
     "blob_sha": "cd2296f71746fa1f2fd8624a0b3423979e229f8d",
     "bytes": 3097
+   },
+   {
+    "path": ".github/workflows/l10n-review.yml",
+    "kind": "ci",
+    "blob_sha": "5bfbcb80143416cb81f6f73d5a099a7a438759d2",
+    "bytes": 11812
    },
    {
     "path": ".github/workflows/release.yml",
@@ -12713,15 +12764,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:53:32Z",
+  "collected_at": "2026-11-19T05:00:32Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 18,
   "tree": {
-   "sha": "1b1be9ff1f9f9539fef38a5b4fcb96e4590c636e",
-   "etag": "W/\"95475463eb60973ab8550fbb101fc81bbf550fc50395ad2733602241e8cd62e9\"",
+   "sha": "2d79d2a32b0fd5be65c93b37e5522d5f14599d52",
+   "etag": "W/\"10ee03f53f128e0093cedcbe3207505148df38b27c3b99c30d9299e4a7e6cdbb\"",
    "truncated": false,
-   "path_count": 2494,
+   "path_count": 2502,
    "matched": [
     "go.mod",
     "package.json",
@@ -13723,15 +13774,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:54:20Z",
+  "collected_at": "2026-11-19T05:01:34Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-18",
   "stars": 16,
   "tree": {
-   "sha": "526bb8c3de1a98be0107b085e6342dcd786563b4",
-   "etag": "W/\"8afde3c208bf24201bfda33d92973709c467aec02dcdd39e4f650c1cca138e22\"",
+   "sha": "cd0e72d6bcbdab169b53807cbbf4c2696b2138a6",
+   "etag": "W/\"16efe8d3335aefbaba4a80e05e308beab23125febe72383ecad068dd87db8990\"",
    "truncated": false,
-   "path_count": 761,
+   "path_count": 779,
    "matched": [
     "package.json",
     "build/build.csproj",
@@ -13800,7 +13851,7 @@
    {
     "path": "smoke/aot-consumer/AotConsumer.csproj",
     "kind": "dep",
-    "blob_sha": "d23ca11bc94892a9b245af914994c8c51e1b1018",
+    "blob_sha": "e0275914f82d068c3de81a40fa3ed35cab8de105",
     "ecosystem": "csproj",
     "bytes": 2684,
     "names": [
@@ -15401,15 +15452,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:40:01Z",
+  "collected_at": "2026-11-19T05:08:09Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-13",
-  "stars": 10,
+  "pushed_at": "2026-11-18",
+  "stars": 11,
   "tree": {
-   "sha": "ae5d4b5cc0d4431a5402ad3079b21d8c225676ed",
-   "etag": "W/\"0846d57c9d2e9cd0d80be197437d20bd0db903e8bd8911e52fb0ed3a7eab38c7\"",
+   "sha": "6bac2861acd04c1604f892c94cfa39e6c8d4d04d",
+   "etag": "W/\"9c55fa6eb4ec4e94a009b830ab5d2df7617b8c3bbfcc4347bbda98c8cfddeebb\"",
    "truncated": false,
-   "path_count": 112,
+   "path_count": 116,
    "matched": [
     "Cargo.toml",
     ".github/workflows/ci.yml",
@@ -15421,9 +15472,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "8d3fa63f803262798225bc23b084e7942c326183",
+    "blob_sha": "c4327e964852122cc752db4d55821349f5266c74",
     "ecosystem": "cargo",
-    "bytes": 2363,
+    "bytes": 2322,
     "names": [
      "clap",
      "serde",
@@ -15438,7 +15489,7 @@
      "anyhow",
      "thiserror",
      "ignore",
-     "chrono",
+     "jiff",
      "blake3",
      "directories",
      "regex",
@@ -15462,8 +15513,8 @@
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "401254c4728777c6d8f60021a2850e59ce94229a",
-    "bytes": 10571
+    "blob_sha": "21dffa5a89e4cd7d2c61565bbc818a4519826ef2",
+    "bytes": 11373
    },
    {
     "path": ".github/workflows/update-homebrew.yml",
@@ -17440,13 +17491,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T02:42:13Z",
+  "collected_at": "2026-11-19T05:14:09Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-01",
-  "stars": 3,
+  "pushed_at": "2026-11-18",
+  "stars": 4,
   "tree": {
    "sha": "f054381dd5a7a628667b1a2595698fb5b32fe9bd",
-   "etag": "W/\"bccb54ddde1a8ddb382f8b65e3422e979388250261d956345a15fbc9246e0ea4\"",
+   "etag": "W/\"72a8a030a87db77d3fe8a1d3f50bd8b3c06a98f9b4398b1949f44b1a9ec09aaa\"",
    "truncated": false,
    "path_count": 2997,
    "matched": [
@@ -18551,13 +18602,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T06:09:03Z",
+  "collected_at": "2026-11-19T05:17:41Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 0,
   "tree": {
    "sha": "1f6046ff4ea947af516e44d3b0eff7c2507748b6",
-   "etag": "W/\"95fec1e9b2f081546ef2b700c00f7aea9db2e374d5df85e0142ef153e94fa3a8\"",
+   "etag": "W/\"79d77971efa786d4d077f4c484a7295ec6d06b17b94d67022b5359947a895683\"",
    "truncated": false,
    "path_count": 245,
    "matched": [
@@ -18891,13 +18942,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T04:44:44Z",
+  "collected_at": "2026-11-19T05:17:05Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-17",
   "stars": 0,
   "tree": {
    "sha": "f61d3352e5ea45b5f32fde0578f9150e3639b60a",
-   "etag": "W/\"10c27ef6eca662b19e1c0faef2bee532d966d2e3a676f796e8c0b35bc51d44cb\"",
+   "etag": "W/\"61e57237faab57e330e03dc727905f4cd2649a654a82c2c205a564c80a672d9e\"",
    "truncated": false,
    "path_count": 135,
    "matched": [

@@ -4,13 +4,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T13:20:05Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-19T04:27:35Z",
   "default_branch": "master",
-  "pushed_at": "2026-09-14",
+  "pushed_at": "2026-11-17",
   "stars": 201,
   "tree": {
    "sha": "0c5b096db5832c57974e530d00fdde705b6db11d",
-   "etag": "W/\"b3d8b4a49946aa05463195ec5d487232cfcd1e7cf7f089d41c323c6aac8bf58a\"",
+   "etag": "W/\"cfffe88fd13b7f9b75be509f63a6a85ac5f57b350646c23978e6582f55cb5c1d\"",
    "truncated": false,
    "path_count": 10,
    "matched": [
@@ -1261,18 +1262,19 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T23:44:25Z",
+  "collected_at": "2026-11-19T04:12:13Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
-  "stars": 1360,
+  "pushed_at": "2026-11-18",
+  "stars": 1368,
   "tree": {
-   "sha": "a099f718a0cab253c3cd9f7a4dc610c8060588fa",
-   "etag": "W/\"c70ec81f0a5711ffb7127ab473de004d16dd5cc8a05818bc07d426fef10646ca\"",
+   "sha": "471eb5d73c4d182c24daff37ba3e6216a37ea47e",
+   "etag": "W/\"2948d903bed8039ad47315063cd61786677afca4e36fab6d230337ad79d3998d\"",
    "truncated": false,
-   "path_count": 3583,
+   "path_count": 3661,
    "matched": [
     "Cargo.toml",
     "crates/common-build-info/Cargo.toml",
+    "crates/common-clock/Cargo.toml",
     "crates/common-config/Cargo.toml",
     "crates/common-domain/Cargo.toml",
     "crates/common-eventbus/Cargo.toml",
@@ -1330,7 +1332,6 @@
     "modules/meteroid/crates/meteroid-testkit/Cargo.toml",
     "modules/meteroid/crates/meteroid-workers/Cargo.toml",
     "modules/meteroid/crates/mollie-client/Cargo.toml",
-    "modules/meteroid/crates/pennylane-client/Cargo.toml",
     "k8s/meteroid/values.yaml",
     "modules/metering/Dockerfile",
     "modules/web/web-app/Dockerfile",
@@ -1348,9 +1349,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "4207b567bc3f44e528e0ce5cb9aaa46224860797",
+    "blob_sha": "a3ea14b438171f8e010d96701e710112f73e900e",
     "ecosystem": "cargo",
-    "bytes": 13730
+    "bytes": 13803
    },
    {
     "path": "crates/common-build-info/Cargo.toml",
@@ -1359,6 +1360,17 @@
     "ecosystem": "cargo",
     "bytes": 313,
     "names": [
+     "workspace-hack"
+    ]
+   },
+   {
+    "path": "crates/common-clock/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "c7180c77495a9e4eb1c5b08b1e3b36aaa6dbbadd",
+    "ecosystem": "cargo",
+    "bytes": 430,
+    "names": [
+     "chrono",
      "workspace-hack"
     ]
    },
@@ -1378,9 +1390,9 @@
    {
     "path": "crates/common-domain/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "6042f8fe948ed30104cc99d831facd629e925662",
+    "blob_sha": "54796ec7e62f18ed7e2ca4fc2481680964dd2323",
     "ecosystem": "cargo",
-    "bytes": 1267,
+    "bytes": 1185,
     "names": [
      "serde",
      "serde_json",
@@ -1950,9 +1962,9 @@
    {
     "path": "modules/meteroid/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "4e9367d8e067526361b5dc02ebb19e5ae1559323",
+    "blob_sha": "d38d3239fc913f25fdc41e6eca40684705d61ead",
     "ecosystem": "cargo",
-    "bytes": 3857,
+    "bytes": 3893,
     "names": [
      "meteroid-grpc-mapping.workspace",
      "meteroid-rest-common.workspace",
@@ -2021,6 +2033,7 @@
      "meteroid-app",
      "http-client-tracing",
      "meteroid-testkit.workspace",
+     "common-clock",
      "rstest",
      "tokio-postgres.workspace",
      "testcontainers",
@@ -2333,11 +2346,14 @@
    {
     "path": "modules/meteroid/crates/billing-core/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "56386e0a70760235bf84483cff3f095b84c3c3e2",
+    "blob_sha": "2fdc6f9014b347f4345398e47e2895d88385638c",
     "ecosystem": "cargo",
-    "bytes": 533,
+    "bytes": 638,
     "names": [
      "chrono",
+     "common-domain",
+     "common-utils",
+     "ordermap",
      "rust_decimal",
      "sha2",
      "uuid",
@@ -2351,9 +2367,9 @@
    {
     "path": "modules/meteroid/crates/diesel-models/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c8da484883ea1e1a9e9d4e735b66ffbbd40d744f",
+    "blob_sha": "0f39b6bf5cc9b3b1295cf6aef5202e86bc052660",
     "ecosystem": "cargo",
-    "bytes": 1282,
+    "bytes": 1318,
     "names": [
      "chrono",
      "diesel",
@@ -2367,6 +2383,7 @@
      "rust_decimal",
      "tap.workspace",
      "itertools.workspace",
+     "common-clock",
      "common-domain",
      "diesel-derive-newtype.workspace",
      "serde",
@@ -2442,9 +2459,9 @@
    {
     "path": "modules/meteroid/crates/meteroid-api/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "e896aa5741b8e59f32efac5ad8cc78585f7886de",
+    "blob_sha": "6204173bf9cea4751bb947d4e41e265d5db5cfe8",
     "ecosystem": "cargo",
-    "bytes": 2750,
+    "bytes": 2786,
     "names": [
      "meteroid-grpc-mapping.workspace",
      "meteroid-rest-common.workspace",
@@ -2484,6 +2501,7 @@
      "metering-grpc",
      "meteroid-oauth",
      "meteroid-tax",
+     "common-clock",
      "common-domain",
      "common-eventbus",
      "common-utils",
@@ -2511,9 +2529,9 @@
    {
     "path": "modules/meteroid/crates/meteroid-app/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "a2cedd02dea8d7344043c967ab494d62edcc3b2e",
+    "blob_sha": "e762b8cdf2bed65e7c7aa0f114b94e59d5813975",
     "ecosystem": "cargo",
-    "bytes": 3261,
+    "bytes": 3297,
     "names": [
      "http-client-tracing",
      "meteroid-rest-common.workspace",
@@ -2558,6 +2576,7 @@
      "metering-grpc",
      "meteroid-oauth",
      "meteroid-tax",
+     "common-clock",
      "common-domain",
      "common-eventbus",
      "object_store",
@@ -2591,9 +2610,9 @@
    {
     "path": "modules/meteroid/crates/meteroid-grpc-mapping/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "26ff8ecbc85dc50dc9b8f04b6e4ef3187238ff42",
+    "blob_sha": "cc7bc4772dbe7f04c07e485ed26ea87a3873c4ea",
     "ecosystem": "cargo",
-    "bytes": 1392,
+    "bytes": 1428,
     "names": [
      "meteroid-app.workspace",
      "error-stack.workspace",
@@ -2610,6 +2629,7 @@
      "base64.workspace",
      "secrecy.workspace",
      "rust_decimal",
+     "common-clock",
      "common-domain",
      "common-utils",
      "meteroid-store.workspace",
@@ -2808,14 +2828,15 @@
    {
     "path": "modules/meteroid/crates/meteroid-rest-common/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "32dd91d84135ea1a65686fc6f71fd552db82e640",
+    "blob_sha": "7bbd744ebe2236b78c92bcb02376f7d6477534c9",
     "ecosystem": "cargo",
-    "bytes": 985,
+    "bytes": 1099,
     "names": [
      "async-trait.workspace",
      "axum",
      "axum-valid",
      "chrono",
+     "common-clock",
      "common-domain",
      "common-grpc",
      "http",
@@ -2832,15 +2853,16 @@
      "workspace-hack"
     ],
     "dev": [
-     "utoipa-config.workspace"
+     "utoipa-config.workspace",
+     "tokio"
     ]
    },
    {
     "path": "modules/meteroid/crates/meteroid-rest/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "cb03c058a472030fafed900f5355704f466cca20",
+    "blob_sha": "420f810655206439524cfb2dab87fbf0978a7637",
     "ecosystem": "cargo",
-    "bytes": 2282,
+    "bytes": 2284,
     "names": [
      "meteroid-rest-common.workspace",
      "meteroid-app.workspace",
@@ -2866,6 +2888,7 @@
      "rust_decimal",
      "metering-grpc",
      "meteroid-oauth",
+     "common-clock",
      "common-domain",
      "common-utils",
      "bytes.workspace",
@@ -2881,7 +2904,6 @@
      "strum",
      "o2o.workspace",
      "validator",
-     "axum-valid",
      "common-grpc-error-as-tonic-macros",
      "workspace-hack"
     ],
@@ -2933,9 +2955,9 @@
    {
     "path": "modules/meteroid/crates/meteroid-store/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "caa0833ad7cac9094f0d9d65a8b57be030e3a6ab",
+    "blob_sha": "408448182b644725a28f601ebf6d83e317bb2bff",
     "ecosystem": "cargo",
-    "bytes": 3186,
+    "bytes": 3526,
     "names": [
      "billing-core.workspace",
      "common-eventbus.workspace",
@@ -2992,6 +3014,7 @@
      "gocardless-client",
      "stancer-client",
      "mollie-client",
+     "common-clock",
      "common-domain",
      "metering-grpc",
      "prost-types",
@@ -3045,9 +3068,9 @@
    {
     "path": "modules/meteroid/crates/meteroid-testkit/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "0f5ea9ffb0688124e5354757ffadddda7c3ff67e",
+    "blob_sha": "c861c710c1ad39c4ddff22abf7214e96667a1e38",
     "ecosystem": "cargo",
-    "bytes": 2233,
+    "bytes": 2473,
     "names": [
      "meteroid-app.workspace",
      "meteroid",
@@ -3059,12 +3082,15 @@
      "chrono",
      "clickhouse",
      "common-config",
+     "common-clock",
      "common-domain",
      "common-grpc",
      "common-logging",
      "diesel",
      "diesel-async",
+     "diesel_migrations",
      "diesel-models.workspace",
+     "billing-core.workspace",
      "envconfig.workspace",
      "error-stack.workspace",
      "http",
@@ -3092,6 +3118,7 @@
      "sha2.workspace",
      "testcontainers",
      "tokio",
+     "tokio-postgres.workspace",
      "tokio-util",
      "tonic.workspace",
      "tonic-health.workspace",
@@ -3104,9 +3131,9 @@
    {
     "path": "modules/meteroid/crates/meteroid-workers/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7e84ae4e52efe440ea177f2da235390a4256f66d",
+    "blob_sha": "e4c338c9b3d32e18e411300cc5ad79be8db8dae2",
     "ecosystem": "cargo",
-    "bytes": 2239,
+    "bytes": 2275,
     "names": [
      "meteroid-rest-common.workspace",
      "meteroid-kit.workspace",
@@ -3133,6 +3160,7 @@
      "metering-grpc",
      "meteroid-oauth",
      "meteroid-tax",
+     "common-clock",
      "common-domain",
      "common-eventbus",
      "common-utils",
@@ -3181,37 +3209,10 @@
     ]
    },
    {
-    "path": "modules/meteroid/crates/pennylane-client/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "82142f0bf0928233f40db8733c216f576fd5aaa4",
-    "ecosystem": "cargo",
-    "bytes": 1016,
-    "names": [
-     "governor",
-     "serde",
-     "secrecy",
-     "thiserror",
-     "reqwest",
-     "reqwest-retry",
-     "reqwest-middleware",
-     "async-trait",
-     "nonzero_ext",
-     "meteroid-middleware",
-     "http-client-tracing",
-     "bytes",
-     "chrono",
-     "rust_decimal",
-     "serde_json",
-     "serde_with",
-     "rust_decimal_macros",
-     "workspace-hack"
-    ]
-   },
-   {
     "path": "k8s/meteroid/values.yaml",
     "kind": "image",
-    "blob_sha": "2e75b836dabae0b5508070ef4160a99787956a99",
-    "bytes": 5506,
+    "blob_sha": "7a7ff051d5f988dba12d53dd5015eb35882c1dae",
+    "bytes": 5944,
     "images": [
      "pullPolicy:"
     ]
@@ -3219,8 +3220,8 @@
    {
     "path": "modules/metering/Dockerfile",
     "kind": "image",
-    "blob_sha": "2578c0435c78e64ca7d0facf934639089c1effa2",
-    "bytes": 3393,
+    "blob_sha": "6dfe92a39d8c024692e9e80865c8dd14fbfbf45d",
+    "bytes": 3008,
     "images": [
      "lukemathwalker/cargo-chef:latest-rust-1.96.0-bookworm",
      "chef",
@@ -3253,8 +3254,8 @@
    {
     "path": ".github/workflows/ci-rust.yaml",
     "kind": "ci",
-    "blob_sha": "8f014d3754393da1e9ed87e27526b98f9cec7a31",
-    "bytes": 9564,
+    "blob_sha": "96ee1dc7a87fcc29c343248024819a7ab8891af4",
+    "bytes": 10068,
     "images": [
      "ghcr.io/meteroid-oss/meteroid-postgres:18.3-standard"
     ]
@@ -3277,8 +3278,8 @@
    {
     "path": ".github/workflows/oss-images.yaml",
     "kind": "ci",
-    "blob_sha": "bd4a15e1b05d5d186e79fd27018d2b5e85341ad2",
-    "bytes": 7246,
+    "blob_sha": "188da4e0de76fe3412fa91555b5a42f129710e76",
+    "bytes": 7139,
     "images": [
      "-",
      "${{"
@@ -3790,13 +3791,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:41:05Z",
+  "collected_at": "2026-11-19T04:47:50Z",
   "default_branch": "1.5",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 39,
   "tree": {
    "sha": "6b8665b6a4bb0ecf8aabce8ed70c92a4a5eb53af",
-   "etag": "W/\"bca8f4598862a47566d4b2b2b01e46d63cb1e80e3635ee872c6fa6831b06b7fb\"",
+   "etag": "W/\"afc37e7007918386b7546cee56b5ed3cb5a91abad77f2a5a688f09dd59ecb4ed\"",
    "truncated": false,
    "path_count": 256,
    "matched": [
@@ -4836,15 +4837,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T04:49:14Z",
+  "collected_at": "2026-11-19T03:54:57Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
-  "stars": 30520,
+  "pushed_at": "2026-11-18",
+  "stars": 30778,
   "tree": {
-   "sha": "c21f1562993afa381c5b50e3e4f707982b483b18",
-   "etag": "W/\"4f99752f20bcc7229f02a78fff0d6da28c3edabfcd68334b103d356e1945341e\"",
+   "sha": "58e62fe49e9f8c7c5f2dda014c32dd411575d809",
+   "etag": "W/\"540d31f3f08a42ff2c79f7fba053c38426290b16f38bf1384e6eff3f67afb30e\"",
    "truncated": false,
-   "path_count": 8370,
+   "path_count": 8481,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -4951,9 +4952,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "a59a0ed3d6f2089d0be2f916189d58914d263c3d",
+    "blob_sha": "179fbe009ea52f77c93b15d9d9f89e8def60f2d2",
     "ecosystem": "cargo",
-    "bytes": 4269
+    "bytes": 4388
    },
    {
     "path": "package.json",
@@ -5109,9 +5110,9 @@
    {
     "path": "src-tauri/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "45ba2e30f011385912903ad5b4cc7de4c86b8323",
+    "blob_sha": "b43ed9c8b97af7c40f34f54799003b9e9a9cac4f",
     "ecosystem": "cargo",
-    "bytes": 4957,
+    "bytes": 5055,
     "names": [
      "serde",
      "serde_json",
@@ -5151,6 +5152,7 @@
      "minisign-verify",
      "semver",
      "sha2",
+     "dirs",
      "russh",
      "csv",
      "calamine",
@@ -6739,15 +6741,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T03:35:17Z",
+  "collected_at": "2026-11-19T05:16:48Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-10",
+  "pushed_at": "2026-11-18",
   "stars": 1,
   "tree": {
-   "sha": "9de4a8da02a990ba93e09f0fa7387fc3eef68b4e",
-   "etag": "W/\"37b8da0ff3aca05712210215598b6703d287b1b18bada70bfcbcb5995954d634\"",
+   "sha": "e4d59d6a8bedebe286cf1c5f3d828a6e1a6a036a",
+   "etag": "W/\"84d50dab22b80a91827ceb8eb49abf0edd428379c2c2c724413a305e52be5436\"",
    "truncated": false,
-   "path_count": 57,
+   "path_count": 58,
    "matched": [
     "pom.xml",
     ".github/workflows/commit-signoff-check.yml",
@@ -7190,13 +7192,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T04:54:46Z",
+  "collected_at": "2026-11-19T04:00:06Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
-  "stars": 8725,
+  "pushed_at": "2026-11-18",
+  "stars": 8735,
   "tree": {
    "sha": "a0a800f5d15648a25afcc4dd20da22e6d286f3ab",
-   "etag": "W/\"b0ffedab6b16e8704313f48e500b5bc5137d6c4ba512bf088f7b0703ca4f8331\"",
+   "etag": "W/\"0cffb21595d29c136b025e6cd0c92dc0dc92691bf32eef1bd6c130935e3c658f\"",
    "truncated": false,
    "path_count": 977,
    "matched": [
@@ -8949,13 +8951,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:25:40Z",
+  "collected_at": "2026-11-19T04:31:20Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
-  "stars": 140,
+  "pushed_at": "2026-11-18",
+  "stars": 141,
   "tree": {
-   "sha": "9764fe71c21c259af67302ace505a57f3d05b05f",
-   "etag": "W/\"f7a39b625e9355d0eb07991bcea74f3b1b9eff8825b732e859a46daf40e50393\"",
+   "sha": "2d1a7b789912b6bb07f3bfb0ea2de28481419b80",
+   "etag": "W/\"c46f312eec41493dc00dee88d65142f3ab397d505f47c43f603c662af46695fd\"",
    "truncated": false,
    "path_count": 946,
    "matched": [
@@ -11038,13 +11040,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:45:33Z",
+  "collected_at": "2026-11-19T04:52:30Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 30,
   "tree": {
-   "sha": "3433700fb29867bfa99ed42919eace1e64e03565",
-   "etag": "W/\"f9a2d76613b4df0064d37c800b54f3b799894a877d328950c75f416f75062b3f\"",
+   "sha": "ae24ea693601d1af3cf899dc8c2da684cd6c9f6f",
+   "etag": "W/\"4ebd6dccec17449ed5a5a0fa1dfb05f34da222574e5f5a383b377025868ce883\"",
    "truncated": false,
    "path_count": 212,
    "matched": [
@@ -11080,37 +11082,37 @@
    {
     "path": "build.gradle.kts",
     "kind": "dep",
-    "blob_sha": "697aba57e6a6c697bad6a6a151becb8a2a3d976f",
+    "blob_sha": "66e1260e43b96e73bf00e0461dbb6223a461c654",
     "ecosystem": "gradle",
-    "bytes": 3526
+    "bytes": 4269
    },
    {
     "path": "flink-connector-clickhouse-1.17/build.gradle.kts",
     "kind": "dep",
-    "blob_sha": "41219fc38710da4fdb31a3cd51d5c103dcc1351c",
+    "blob_sha": "cd7725ec2db23c5134534925e3afc2c005e5eb91",
     "ecosystem": "gradle",
-    "bytes": 9292
+    "bytes": 9097
    },
    {
     "path": "flink-connector-clickhouse-2.0.0/build.gradle.kts",
     "kind": "dep",
-    "blob_sha": "ea8cde8ecf4fd6bbb693ef83d80313f2243a6b53",
+    "blob_sha": "55698fbd478558aa0372ef7f25eff3d9ec5c84b2",
     "ecosystem": "gradle",
-    "bytes": 12015
+    "bytes": 11820
    },
    {
     "path": "flink-connector-clickhouse-base/build.gradle.kts",
     "kind": "dep",
-    "blob_sha": "bd89505b699f609a854175cb24974785b0e622c7",
+    "blob_sha": "63868232fd92671649ba9f45adb813c6d77d63eb",
     "ecosystem": "gradle",
-    "bytes": 3167
+    "bytes": 3151
    },
    {
     "path": "flink-connector-clickhouse-integration/build.gradle.kts",
     "kind": "dep",
-    "blob_sha": "4501972be84c65d2f5d5a30e547933cdc6045abd",
+    "blob_sha": "36f9b7a5c4fa8759122646ef36d11a78cf0a7204",
     "ecosystem": "gradle",
-    "bytes": 2054
+    "bytes": 2038
    },
    {
     "path": "flink-connector-clickhouse-table/build.gradle.kts",
@@ -11222,8 +11224,8 @@
    {
     "path": ".github/workflows/build-and-publish-connector.yaml",
     "kind": "ci",
-    "blob_sha": "e60d76dc28a1f6820fbe70163ff85168e95c5f56",
-    "bytes": 1178
+    "blob_sha": "bd7a5544842a9998ea6c56d497a92b62657829c5",
+    "bytes": 1173
    },
    {
     "path": ".github/workflows/integration-tests-cloud.yaml",
@@ -11234,14 +11236,14 @@
    {
     "path": ".github/workflows/integration-tests-scala-cloud.yaml",
     "kind": "ci",
-    "blob_sha": "9678bcf500d30207114e29d046575e6f253781e9",
-    "bytes": 3939
+    "blob_sha": "a0eaa523ba158b505d1d3d60b8495d788751b3fd",
+    "bytes": 3962
    },
    {
     "path": ".github/workflows/integration-tests-scala.yaml",
     "kind": "ci",
-    "blob_sha": "173805ce284088ad30655255ac921701e9b41327",
-    "bytes": 1716
+    "blob_sha": "97d014cc99ec0471d094fef406e56cea11ae5728",
+    "bytes": 1739
    },
    {
     "path": ".github/workflows/integration-tests-schema-evolution-cloud.yaml",
@@ -11276,8 +11278,8 @@
    {
     "path": ".github/workflows/tests-nightly.yaml",
     "kind": "ci",
-    "blob_sha": "e5f7cf24a3fce68875d18c194a8d123fa5a913ea",
-    "bytes": 3310
+    "blob_sha": "57d399a737fe249dbb412dd83ee8bff8672082f0",
+    "bytes": 3727
    },
    {
     "path": ".github/workflows/tests-scala-cloud.yaml",
@@ -11294,8 +11296,8 @@
    {
     "path": ".github/workflows/tests.yaml",
     "kind": "ci",
-    "blob_sha": "54ab4c21b5b7df11e6430049db28e86848dd7e4b",
-    "bytes": 3733
+    "blob_sha": "e1da1549cecb768c83f94d5fe3b953af365ac928",
+    "bytes": 4332
    },
    {
     "path": ".github/workflows/update-version-and-create-GH-release.yml",
@@ -11844,13 +11846,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:45:37Z",
+  "collected_at": "2026-11-19T04:52:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-17",
   "stars": 30,
   "tree": {
    "sha": "e7d114a80b9eeb643685d43ab1ca14cd44875dd0",
-   "etag": "W/\"eb51c6a9b5ef7cbddadff552cc0a446bf9950145f372e8bd6942e55c186a4a27\"",
+   "etag": "W/\"0bd728b47c0ecd4105fc7ef2dd00d75c18618ab281cf91f195b29e5edda6eca5\"",
    "truncated": false,
    "path_count": 3139,
    "matched": [
@@ -13318,13 +13320,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:27:59Z",
+  "collected_at": "2026-11-19T04:52:41Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-13",
-  "stars": 27,
+  "pushed_at": "2026-11-18",
+  "stars": 30,
   "tree": {
-   "sha": "ec961871331bedc6062751eb3bc88a017b444e22",
-   "etag": "W/\"322a653ac733c8496c5f447112f1720937964c93538d5b19ffcd99358c0a70c2\"",
+   "sha": "d83ed98197e40fc7a5d414a2fda1071726fe2299",
+   "etag": "W/\"37cbec1dcbbdd397c97d58267635cf984b5a4034af65f5e03654a49d964b4416\"",
    "truncated": false,
    "path_count": 93,
    "matched": [
@@ -13340,7 +13342,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "ae522d341e1000c9da9688285c1cd29d1f50341d",
+    "blob_sha": "fec591cd3f39fea5ccf6af2a8e3fe038db205042",
     "ecosystem": "npm",
     "bytes": 6766,
     "names": [
@@ -17291,13 +17293,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:09:08Z",
+  "collected_at": "2026-11-19T04:14:39Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 897,
   "tree": {
    "sha": "e152b5cab59d80c3e199a38de8231ff64cc35b2a",
-   "etag": "W/\"f93a5d7f2df0cb2dfeed9a2fcd8de483cf8dbf3361bdeb9b8cdfd2bbcc448db6\"",
+   "etag": "W/\"29bd57b7074674630d1fb31d6b24701faa2b13031b71999c9dcc16ebd682b3ad\"",
    "truncated": false,
    "path_count": 2627,
    "matched": [
@@ -18157,15 +18159,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:14:45Z",
+  "collected_at": "2026-11-19T04:35:13Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-13",
-  "stars": 104,
+  "pushed_at": "2026-11-18",
+  "stars": 107,
   "tree": {
-   "sha": "7bfba7d144a496332abea6d1d5fddda587316f43",
-   "etag": "W/\"9517326d8329adb15fb964fec6374fe4c849eff04864361b7cf0f750d3a92f84\"",
+   "sha": "bcc66ba984a6ec81bf756ea5ee185360ad986b95",
+   "etag": "W/\"8fd4c88da69cc5e69148b419008e81efb6fdb3ac7da7456d31c70080e6e492df\"",
    "truncated": false,
-   "path_count": 1302,
+   "path_count": 1288,
    "matched": [
     "go-zero-admin-react/package.json",
     "go-zero-admin/go.mod",
@@ -19294,6 +19296,233 @@
     "docs/guides/DATABASE_BACKUP.md",
     "docs/prd/test-matrix.md"
    ],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "chideat/valkey-operator": {
+  "fn": "chideat/valkey-operator",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-19T03:49:37Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-17",
+  "stars": 29,
+  "tree": {
+   "sha": "f15138be35d25d70df7752ba2a6482108410231e",
+   "etag": "W/\"0f3a17d7283ea65b2a77500ccfdcefd789a60c921cbc575a058ce93ef40a1e21\"",
+   "truncated": false,
+   "path_count": 435,
+   "matched": [
+    "go.mod",
+    "hack/docs/requirements.txt",
+    "Dockerfile",
+    "Dockerfile.e2e",
+    "charts/valkey-operator/values.yaml",
+    ".github/workflows/branch-pipeline.yaml",
+    ".github/workflows/chart-release.yaml",
+    ".github/workflows/docs.yaml",
+    ".github/workflows/e2e.yaml",
+    ".github/workflows/pr-pipeline.yaml",
+    ".github/workflows/release-pipeline.yaml"
+   ]
+  },
+  "files": [
+   {
+    "path": "go.mod",
+    "kind": "dep",
+    "blob_sha": "f42b73987f24d3b9214d46a40a518d7cda968296",
+    "ecosystem": "go",
+    "bytes": 5897,
+    "names": [
+     "github.com/Masterminds/semver/v3",
+     "github.com/alicebob/miniredis/v2",
+     "github.com/cert-manager/cert-manager",
+     "github.com/fsnotify/fsnotify",
+     "github.com/go-logr/logr",
+     "github.com/gomodule/redigo",
+     "github.com/google/go-cmp",
+     "github.com/onsi/ginkgo/v2",
+     "github.com/onsi/gomega",
+     "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring",
+     "github.com/rafaeljusto/redigomock/v3",
+     "github.com/samber/lo",
+     "github.com/stretchr/testify",
+     "github.com/urfave/cli/v2",
+     "github.com/valkey-io/valkey-go",
+     "go.uber.org/zap",
+     "gotest.tools/v3",
+     "k8s.io/api",
+     "k8s.io/apiextensions-apiserver",
+     "k8s.io/apimachinery",
+     "k8s.io/client-go",
+     "k8s.io/utils",
+     "sigs.k8s.io/controller-runtime",
+     "sigs.k8s.io/json",
+     "sigs.k8s.io/yaml"
+    ],
+    "dev": [
+     "cel.dev/expr",
+     "github.com/antlr4-go/antlr/v4",
+     "github.com/beorn7/perks",
+     "github.com/blang/semver/v4",
+     "github.com/cenkalti/backoff/v5",
+     "github.com/cespare/xxhash/v2",
+     "github.com/cpuguy83/go-md2man/v2",
+     "github.com/davecgh/go-spew",
+     "github.com/emicklei/go-restful/v3",
+     "github.com/evanphx/json-patch/v5",
+     "github.com/felixge/httpsnoop",
+     "github.com/fxamacker/cbor/v2",
+     "github.com/go-logr/stdr",
+     "github.com/go-logr/zapr",
+     "github.com/go-openapi/jsonpointer",
+     "github.com/go-openapi/jsonreference",
+     "github.com/go-openapi/swag",
+     "github.com/go-openapi/swag/cmdutils",
+     "github.com/go-openapi/swag/conv",
+     "github.com/go-openapi/swag/fileutils",
+     "github.com/go-openapi/swag/jsonutils",
+     "github.com/go-openapi/swag/loading",
+     "github.com/go-openapi/swag/mangling",
+     "github.com/go-openapi/swag/netutils",
+     "github.com/go-openapi/swag/pools",
+     "github.com/go-openapi/swag/stringutils",
+     "github.com/go-openapi/swag/typeutils",
+     "github.com/go-openapi/swag/yamlutils",
+     "github.com/go-task/slim-sprig/v3",
+     "github.com/google/cel-go",
+     "github.com/google/gnostic-models",
+     "github.com/google/pprof",
+     "github.com/google/uuid",
+     "github.com/gorilla/websocket",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/inconshreveable/mousetrap",
+     "github.com/json-iterator/go",
+     "github.com/moby/spdystream",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/munnerz/goautoneg",
+     "github.com/pmezard/go-difflib",
+     "github.com/prometheus/client_golang",
+     "github.com/prometheus/client_model",
+     "github.com/prometheus/common",
+     "github.com/prometheus/procfs",
+     "github.com/russross/blackfriday/v2",
+     "github.com/spf13/cobra",
+     "github.com/spf13/pflag",
+     "github.com/stretchr/objx",
+     "github.com/x448/float16",
+     "github.com/xrash/smetrics",
+     "github.com/yuin/gopher-lua",
+     "go.opentelemetry.io/auto/sdk",
+     "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp",
+     "go.opentelemetry.io/otel",
+     "go.opentelemetry.io/otel/exporters/otlp/otlptrace",
+     "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc",
+     "go.opentelemetry.io/otel/metric",
+     "go.opentelemetry.io/otel/sdk",
+     "go.opentelemetry.io/otel/trace",
+     "go.opentelemetry.io/proto/otlp",
+     "go.uber.org/multierr",
+     "go.yaml.in/yaml/v2",
+     "go.yaml.in/yaml/v3",
+     "golang.org/x/exp",
+     "golang.org/x/mod",
+     "golang.org/x/net",
+     "golang.org/x/oauth2",
+     "golang.org/x/sync",
+     "golang.org/x/sys",
+     "golang.org/x/term",
+     "golang.org/x/text",
+     "golang.org/x/time",
+     "golang.org/x/tools",
+     "gomodules.xyz/jsonpatch/v2",
+     "google.golang.org/genproto/googleapis/api",
+     "google.golang.org/genproto/googleapis/rpc",
+     "google.golang.org/grpc",
+     "google.golang.org/protobuf"
+    ]
+   },
+   {
+    "path": "hack/docs/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "f22a49ed8aaeb273980d5ded4a7d0e1f58c1a235",
+    "ecosystem": "pypi",
+    "bytes": 102,
+    "names": [
+     "mkdocs-material"
+    ]
+   },
+   {
+    "path": "Dockerfile",
+    "kind": "image",
+    "blob_sha": "d3da3c69e8c56e0e74c010b44cad692e61a662be",
+    "bytes": 1673,
+    "images": [
+     "golang:1.26",
+     "alpine:latest"
+    ]
+   },
+   {
+    "path": "Dockerfile.e2e",
+    "kind": "image",
+    "blob_sha": "1a1abb64bc12e408baa556040487548470da72ef",
+    "bytes": 939,
+    "images": [
+     "golang:1.26-alpine",
+     "alpine:3.21"
+    ]
+   },
+   {
+    "path": "charts/valkey-operator/values.yaml",
+    "kind": "image",
+    "blob_sha": "9417c9dc0db03d81da813a5135538189d43c6acf",
+    "bytes": 5320
+   },
+   {
+    "path": ".github/workflows/branch-pipeline.yaml",
+    "kind": "ci",
+    "blob_sha": "94a0b63900a0868f824753b464823f4e16c3c455",
+    "bytes": 5154
+   },
+   {
+    "path": ".github/workflows/chart-release.yaml",
+    "kind": "ci",
+    "blob_sha": "134166a278fc057a18b12eb42321675d8857a74d",
+    "bytes": 4957
+   },
+   {
+    "path": ".github/workflows/docs.yaml",
+    "kind": "ci",
+    "blob_sha": "9364d4f7721cd8e682ba53edbc2cf8cb146d99a8",
+    "bytes": 1818
+   },
+   {
+    "path": ".github/workflows/e2e.yaml",
+    "kind": "ci",
+    "blob_sha": "7823a81ea884b27d22bed6800b970e272b232baa",
+    "bytes": 9949
+   },
+   {
+    "path": ".github/workflows/pr-pipeline.yaml",
+    "kind": "ci",
+    "blob_sha": "75dd9f22e7be146e66f839f576a154521939411c",
+    "bytes": 4018
+   },
+   {
+    "path": ".github/workflows/release-pipeline.yaml",
+    "kind": "ci",
+    "blob_sha": "21be1e0bb75c2498ff921f17a72d209158a25b6a",
+    "bytes": 3736
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
    "paths": []
   },
   "fail_count": 0

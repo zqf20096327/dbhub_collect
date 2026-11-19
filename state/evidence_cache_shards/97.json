@@ -1129,15 +1129,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T04:59:11Z",
+  "collected_at": "2026-11-19T04:04:53Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-16",
-  "stars": 4009,
+  "pushed_at": "2026-11-18",
+  "stars": 4008,
   "tree": {
-   "sha": "3139f71159a93553ca20154d478251140de195ce",
-   "etag": "W/\"43862c3281b4307f392e3ac67b0c75e86e35c9d3524f77c92773c9a7c6514f14\"",
+   "sha": "a7adf29cce80116e72a1553d7b69d28114fd1918",
+   "etag": "W/\"195155fad87d2e9d151a03b26c0335aee7703893d645de66366657675ffedc53\"",
    "truncated": false,
-   "path_count": 3375,
+   "path_count": 3379,
    "matched": [
     "build.gradle",
     ".github/workflows/gradle.yml"
@@ -1898,15 +1898,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T01:04:54Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-19T04:56:04Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-17",
+  "pushed_at": "2026-11-17",
   "stars": 25,
   "tree": {
-   "sha": "1e23671cbe6e1d425cd2ad32cfaa81d6e136a373",
-   "etag": "W/\"78dbe4f0c5574d9c55eb7091e6d8dbfffcb518dcab8e9e7580e7e07a7674b181\"",
+   "sha": "d00fe794d86ef08fb59abdc22883c4764f345279",
+   "etag": "W/\"960c03a1df96175c0db10319add93a42752205a50c4b9a06b4ce85a6b3118748\"",
    "truncated": false,
-   "path_count": 701,
+   "path_count": 826,
    "matched": [
     "pyproject.toml",
     "web/package.json",
@@ -1915,6 +1916,7 @@
     "docker-compose.yml",
     "deploy/helm/values.yaml",
     ".github/workflows/ci.yml",
+    ".github/workflows/deploy-validate.yml",
     ".github/workflows/generate-proxies.yml",
     ".github/workflows/release.yml",
     ".github/workflows/security.yml",
@@ -1925,9 +1927,9 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "f0cba1bccf3c69a79147a9d6292ac990ebe6af7f",
+    "blob_sha": "266f79f03e667c89c2d7f2943e5f33ca6ba1bcb5",
     "ecosystem": "pyproject",
-    "bytes": 9903,
+    "bytes": 10049,
     "names": [
      "httpx",
      "pydantic",
@@ -1965,9 +1967,9 @@
    {
     "path": "web/package.json",
     "kind": "dep",
-    "blob_sha": "fc4f07cf1bf39bbf09226ccc7119616a4a579d6e",
+    "blob_sha": "7de835827b01f22d93c4a5c91269f32bb97b9bc4",
     "ecosystem": "npm",
-    "bytes": 2228,
+    "bytes": 2315,
     "names": [
      "@radix-ui/react-dialog",
      "@radix-ui/react-dropdown-menu",
@@ -1996,6 +1998,7 @@
      "topojson-client"
     ],
     "dev": [
+     "@axe-core/playwright",
      "@eslint/eslintrc",
      "@next/eslint-plugin-next",
      "@playwright/test",
@@ -2018,50 +2021,47 @@
      "tailwindcss",
      "tailwindcss-animate",
      "typescript",
+     "vite",
      "vitest"
     ]
    },
    {
     "path": "Dockerfile",
     "kind": "image",
-    "blob_sha": "b82adf4ceb6ced1e59b94209a321217bd7daf984",
-    "bytes": 2469,
+    "blob_sha": "d14c785331a5f4eeb60d3fa7d80256b7a7bb5603",
+    "bytes": 2926,
     "images": [
-     "python:3.11-slim",
+     "python:3.11.15-slim-bookworm@sha256:d29f48a31a8b408ed19272ca1e7b10ebae13b240a27e862d3d4217c528e2e0c3",
      "builder"
     ]
    },
    {
     "path": "docker-compose-staging.yml",
     "kind": "image",
-    "blob_sha": "2116f646911cbf73d6879b4b55596ea6cce53bc4",
-    "bytes": 1757,
+    "blob_sha": "3e56a4014a8566a1307819f82eb62f1968a52ad8",
+    "bytes": 1111,
     "images": [
-     "postgres:15-alpine",
-     "redis:7-alpine",
-     "prom/prometheus:latest",
-     "grafana/grafana:latest"
+     "proxywhirl-api:0.4.0rc1"
     ]
    },
    {
     "path": "docker-compose.yml",
     "kind": "image",
-    "blob_sha": "d7085ec9f0d935985df3a824abc082e859e4f7e3",
-    "bytes": 4969,
+    "blob_sha": "1c1b19abb61b8f18e4087b43cdaecc0897eb434e",
+    "bytes": 5398,
     "images": [
-     "proxywhirl-api:latest",
-     "redis:7-alpine",
-     "postgres:16-alpine",
-     "prom/prometheus:latest",
-     "grafana/grafana:latest",
-     "jaegertracing/all-in-one:latest"
+     "proxywhirl-api:0.4.0rc1",
+     "redis:8.8.0-alpine@sha256:9d317178eceac8454a2284a9e6df2466b93c745529947f0cd42a0fa9609d7005",
+     "prom/prometheus:v3.12.0@sha256:69f5241418838263316593f7274a304b095c40bcf22e57272865da91bd60a8ac",
+     "grafana/grafana:13.1.0@sha256:121a7a9ece6dc10b969f1f96eed64b4f07dfac0d0b8abc070f7cb83bbde86f63",
+     "jaegertracing/all-in-one:1.76.0@sha256:ab6f1a1f0fb49ea08bcd19f6b84f6081d0d44b364b6de148e1798eb5816bacac"
     ]
    },
    {
     "path": "deploy/helm/values.yaml",
     "kind": "image",
-    "blob_sha": "b4268ec6063229202d721ea7a5fcde546d4658c9",
-    "bytes": 1148,
+    "blob_sha": "a8782c8de00b47b75c208030943bb35cdb8d2724",
+    "bytes": 1443,
     "images": [
      "repository:"
     ]
@@ -2069,32 +2069,38 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "103af74874cee158053fe5c588c9f5e85bd0da3f",
-    "bytes": 11362
+    "blob_sha": "5650db67f53e3d80a9120ead1408dd0a22fcfd65",
+    "bytes": 13456
+   },
+   {
+    "path": ".github/workflows/deploy-validate.yml",
+    "kind": "ci",
+    "blob_sha": "ce72d6a63437fa2334a671af8176b510462ce4ac",
+    "bytes": 8286
    },
    {
     "path": ".github/workflows/generate-proxies.yml",
     "kind": "ci",
-    "blob_sha": "aafa6f33e12b14b926ab1cb15460fdaa32854d07",
-    "bytes": 7363
+    "blob_sha": "dfdffe4091b26bc501fcc04d10b1de5ca4d4886b",
+    "bytes": 8052
    },
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "c68d8b708e5f7299a0437d337384baed50be6b48",
-    "bytes": 5721
+    "blob_sha": "8c3156c8aab0a22b2cadc2768ab3e0b77cb6c4ec",
+    "bytes": 7563
    },
    {
     "path": ".github/workflows/security.yml",
     "kind": "ci",
-    "blob_sha": "b4a3847a5599008afa361ee82a7e40df4bf6d8e7",
-    "bytes": 5032
+    "blob_sha": "a73a26791b7f00e87dd4f31716336bf81a3dfb32",
+    "bytes": 10520
    },
    {
     "path": ".github/workflows/validate-sources.yml",
     "kind": "ci",
-    "blob_sha": "9ba0d2294129c9201a04005757137c90029d7f0b",
-    "bytes": 3675
+    "blob_sha": "ddfb056fd09727e2b1f8741dbb58e8eca8d8f7c7",
+    "bytes": 4045
    }
   ],
   "clues": {
@@ -8221,15 +8227,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:27:07Z",
+  "collected_at": "2026-11-19T04:32:37Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-18",
   "stars": 129,
   "tree": {
-   "sha": "520fc2670884f951ee9f1348330581ae1c0fd8bf",
-   "etag": "W/\"0ab242a2afb43961c24418525f27de98693c537494eb4fa77fd7186659f56cb4\"",
+   "sha": "57c4656ad3c55f80c9dd1c02581bdd017b78b23a",
+   "etag": "W/\"44c495928e7dbb022a9f9dbf9c3acd898c0a9e7675ebd0f087f81f1c87a3fb74\"",
    "truncated": false,
-   "path_count": 1418,
+   "path_count": 1400,
    "matched": [
     "pyproject.toml",
     "trackinizer/web/package.json",
@@ -8242,9 +8248,9 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "35b0a1e858eac08955f38c2c1e37f65eca435bb7",
+    "blob_sha": "0e67d0e16fda80b7424c60cb7d3b0cadb6c7da1a",
     "ecosystem": "pyproject",
-    "bytes": 39345,
+    "bytes": 39112,
     "names": [
      "treekle",
      "websockets",
@@ -8557,15 +8563,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:27:08Z",
+  "collected_at": "2026-11-19T04:32:39Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-18",
   "stars": 129,
   "tree": {
-   "sha": "49d5a10908a565ecc8f6f3409e73e4250e89909c",
-   "etag": "W/\"0dad9ee1c3d95723d080eab3326b2beee328514a3c5aa355827c8f28527a258b\"",
+   "sha": "adcb9d2f47edf0e3046d3b92eaa91a7d29359c40",
+   "etag": "W/\"a30ea39f48847eee1677c8d06e8ea4d5212df7c99cd15ed31f2b07552e894b1b\"",
    "truncated": false,
-   "path_count": 4540,
+   "path_count": 4547,
    "matched": [
     "go.mod",
     "cloud/go.mod",
@@ -9076,8 +9082,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "bb61d1e8c4c734f90525e54541ea1bd4f67c2a4c",
-    "bytes": 7010
+    "blob_sha": "3244f57ab6e73b1406d1ed2a33ec834097dd434d",
+    "bytes": 7134
    },
    {
     "path": ".github/workflows/release.yml",
@@ -11359,13 +11365,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:40:31Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-19T04:47:29Z",
   "default_branch": "main",
-  "pushed_at": "2026-03-01",
+  "pushed_at": "2026-11-18",
   "stars": 40,
   "tree": {
-   "sha": "0dcd9df1be98059ccc8863b609d5807c7b22bea5",
-   "etag": "W/\"09773afe909965e3ee059502a0788a86d50530e5cc487bdb673ec85176812d3c\"",
+   "sha": "b7b349aee018fb0c43288164e6600c601b9ba056",
+   "etag": "W/\"c6fe9fe3176be63bb92f43568ca9820aa995f67c3c5dae68dda2398482ccbdc6\"",
    "truncated": false,
    "path_count": 38,
    "matched": [
@@ -11376,10 +11383,11 @@
    {
     "path": "pom.xml",
     "kind": "dep",
-    "blob_sha": "3d905f4667729679b0ee470b53545281fd6b4242",
+    "blob_sha": "d9859b5fdebe9995e26abf01a1246ab98dc3979c",
     "ecosystem": "maven",
-    "bytes": 4892,
+    "bytes": 5301,
     "names": [
+     "org.apache.commons:commons-compress",
      "org.slf4j:slf4j-api",
      "org.apache.logging.log4j:log4j-slf4j2-impl",
      "org.slf4j:slf4j-simple",
@@ -11388,7 +11396,7 @@
      "org.junit.jupiter:junit-jupiter-api",
      "org.testcontainers:testcontainers",
      "com.zaxxer:HikariCP",
-     "mysql:mysql-connector-java",
+     "com.mysql:mysql-connector-j",
      "org.postgresql:postgresql",
      "org.testcontainers:mysql",
      "org.testcontainers:postgresql"
@@ -11403,7 +11411,7 @@
    "docs_matrix": [],
    "paths": [],
    "matrix_urls": [
-    "https://img.shields.io/badge/JVM-17-success.svg?style=flat&logo=Java"
+    "https://img.shields.io/badge/JVM-25-success.svg?style=flat&logo=Java"
    ]
   },
   "fail_count": 0
@@ -12697,18 +12705,20 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-16T00:11:56Z",
+  "collected_at": "2026-11-19T04:56:37Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
+  "pushed_at": "2026-11-18",
   "stars": 23,
   "tree": {
-   "sha": "d73e3d168c16413f1ebd8a4fe35bdfdec9e8200a",
-   "etag": "W/\"572cefd970db4e9f85d63e5ac76fb6bb91f08dc852c2ec874c3d6e21299ceca7\"",
+   "sha": "a6e33673674c72844a6bb5cb3a936be3ff629599",
+   "etag": "W/\"b53de26ccf93c2247f87823e026cefb383864e0208a3af0c6c14c46fab8cb9c5\"",
    "truncated": false,
-   "path_count": 626,
+   "path_count": 722,
    "matched": [
+    "desktop/package.json",
     "server/package.json",
     "web/package.json",
+    "desktop/src-tauri/Cargo.toml",
     "docker-compose.dbhost.yml",
     "docker-compose.traefik.yml",
     "docker-compose.www.yml",
@@ -12718,15 +12728,28 @@
     "web/Dockerfile",
     "web/Dockerfile.dev",
     ".github/workflows/ci.yml",
+    ".github/workflows/desktop-build.yml",
+    ".github/workflows/desktop-release.yml",
+    ".github/workflows/desktop-store.yml",
     ".github/workflows/publish-images.yml",
     ".github/workflows/release-discord.yml"
    ]
   },
   "files": [
    {
+    "path": "desktop/package.json",
+    "kind": "dep",
+    "blob_sha": "5facf177a568d2448c458fcfb5f47e1b5e2fa498",
+    "ecosystem": "npm",
+    "bytes": 425,
+    "dev": [
+     "@tauri-apps/cli"
+    ]
+   },
+   {
     "path": "server/package.json",
     "kind": "dep",
-    "blob_sha": "1f50787e29ebee1c33683b82fbe5dcbfffd62418",
+    "blob_sha": "4a698739292a36caffb4202d4eb4abafa3507254",
     "ecosystem": "npm",
     "bytes": 1658,
     "names": [
@@ -12760,7 +12783,7 @@
    {
     "path": "web/package.json",
     "kind": "dep",
-    "blob_sha": "8f9335ef255a1867855d9af97b3c6cac65f0f8be",
+    "blob_sha": "264d0a13e18a3ed59b216c5b8fe2d4579e3709f6",
     "ecosystem": "npm",
     "bytes": 1948,
     "names": [
@@ -12805,6 +12828,33 @@
     ]
    },
    {
+    "path": "desktop/src-tauri/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "922ea156ee1dfd55eb3e581dcecddf855948f67e",
+    "ecosystem": "cargo",
+    "bytes": 799,
+    "names": [
+     "tauri",
+     "tauri-plugin-clipboard-manager",
+     "tauri-plugin-global-shortcut",
+     "tauri-plugin-notification",
+     "tauri-plugin-opener",
+     "tauri-plugin-single-instance",
+     "serde",
+     "serde_json",
+     "regex",
+     "dirs",
+     "url",
+     "sys-locale",
+     "tauri-plugin-updater",
+     "tokio",
+     "tauri-plugin-autostart"
+    ],
+    "dev": [
+     "tauri-build"
+    ]
+   },
+   {
     "path": "docker-compose.dbhost.yml",
     "kind": "image",
     "blob_sha": "58bb709df7852bf0cbf695f09ee968e94928f4e2",
@@ -12825,8 +12875,8 @@
    {
     "path": "docker-compose.yml",
     "kind": "image",
-    "blob_sha": "bb41e16075eddb47d27ac887649cfeaf733cfe95",
-    "bytes": 5326,
+    "blob_sha": "7d267c67b66980cece45eb2edf91cac7b10a8040",
+    "bytes": 5378,
     "images": [
      "postgres:16-alpine",
      "ghcr.io/gquantrill/nexum-server:${NEXUM_TAG:-latest}",
@@ -12854,8 +12904,8 @@
    {
     "path": "web/Dockerfile",
     "kind": "image",
-    "blob_sha": "323eabc585ae6c3b05e74e7cf38072f57db890c3",
-    "bytes": 1495,
+    "blob_sha": "b105180f5528f23d02cc92726ce5d5dd618efa63",
+    "bytes": 1502,
     "images": [
      "node:20-alpine",
      "nginx:alpine"
@@ -12878,6 +12928,24 @@
     "images": [
      "postgres:16"
     ]
+   },
+   {
+    "path": ".github/workflows/desktop-build.yml",
+    "kind": "ci",
+    "blob_sha": "7819d3f51eabe871a81750e17e39440e06f378fa",
+    "bytes": 2369
+   },
+   {
+    "path": ".github/workflows/desktop-release.yml",
+    "kind": "ci",
+    "blob_sha": "1cfba2488f55a74df05535854623376647d2186c",
+    "bytes": 5755
+   },
+   {
+    "path": ".github/workflows/desktop-store.yml",
+    "kind": "ci",
+    "blob_sha": "caccf1b79bab86a449e2e30206cb5e52a8ad8eae",
+    "bytes": 5833
    },
    {
     "path": ".github/workflows/publish-images.yml",
@@ -12910,15 +12978,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:50:05Z",
+  "collected_at": "2026-11-19T04:57:20Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-17",
   "stars": 22,
   "tree": {
-   "sha": "aa8006eee50d97ad5ed39c672108a595e5fda8ea",
-   "etag": "W/\"430832bd440c73a91ed34433d8d0707518996939a60a1f39f5815bc1cb5bc244\"",
+   "sha": "de62d21d7b800158d2faa37316fcd3544bcb9c76",
+   "etag": "W/\"49aef2edfcd6afa9097abc7901e756242ce789254104d04eb92b3314850631b3\"",
    "truncated": false,
-   "path_count": 273,
+   "path_count": 274,
    "matched": [
     "pyproject.toml",
     "requirements.txt",
@@ -13925,13 +13993,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:43:06Z",
+  "collected_at": "2026-11-19T04:49:50Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 34,
   "tree": {
-   "sha": "e33134686ee786a05e62058382fff6b2e658f6b8",
-   "etag": "W/\"b44eb522500f87021e836c469400c18b8c8722dac2b91b9264c855c1843d8ce2\"",
+   "sha": "c12d08290b551b9ebfdc4b938ab8e032091752fb",
+   "etag": "W/\"c72e687c91b889c97a24c62bdf40e11c4973756b190b333edc1340c57ab0e190\"",
    "truncated": false,
    "path_count": 77,
    "matched": [
@@ -17320,13 +17388,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:40:14Z",
+  "collected_at": "2026-11-19T04:46:46Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 42,
   "tree": {
    "sha": "351f2fa1449c67c88edd0a790c7f4ddf1064fe26",
-   "etag": "W/\"50e6561fa536f809ec3f55930af73d44f19be78269cf9309f328bfd08e0faa2f\"",
+   "etag": "W/\"bea8c5212a76b1df10b47e442df69ca415bc49164b1b97ecee236b1e1af4b3d0\"",
    "truncated": false,
    "path_count": 3243,
    "matched": [

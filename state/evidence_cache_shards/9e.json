@@ -482,13 +482,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T04:47:36Z",
+  "collected_at": "2026-11-19T03:53:18Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-16",
-  "stars": 62533,
+  "pushed_at": "2026-11-18",
+  "stars": 62720,
   "tree": {
    "sha": "18caf808a3af3fcabeeba7d1e8473f1367bff2d4",
-   "etag": "W/\"3a8fa9695758a02104ef3e9d0e77cb3efb3d1bd265da156112ddd788f3ae85ab\"",
+   "etag": "W/\"3b676f4e349872e73a40a85c4e09f46c6569348ff4cb5a989ab3dfa3dd2c6ac6\"",
    "truncated": false,
    "path_count": 5188,
    "matched": [
@@ -2027,22 +2027,24 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T23:49:14Z",
+  "collected_at": "2026-11-19T04:28:21Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-14",
-  "stars": 191,
+  "pushed_at": "2026-11-18",
+  "stars": 193,
   "tree": {
-   "sha": "46f767f8c5befeb7da091267f2b19052f3cba8d9",
-   "etag": "W/\"470291f4e86284ab835050a0d91a4bf662f87cdcec135fecf8e97dfda2543ce9\"",
+   "sha": "04a9bcb656c82202c63e073dfda2ce9f74867535",
+   "etag": "W/\"bd252fd1e056cb88229d618dbcd70432eba49f0691424d895daca6ab04b6e4e6\"",
    "truncated": false,
-   "path_count": 993,
+   "path_count": 1278,
    "matched": [
     "Cargo.toml",
     "package.json",
     "pyproject.toml",
     "fuzz/Cargo.toml",
     "crates/triviumdb-cli/Cargo.toml",
+    "crates/triviumdb-migrate/Cargo.toml",
     "crates/triviumdb-server/Cargo.toml",
+    "crates/triviumdb-migrate/source/Cargo.toml",
     ".github/workflows/benchmark-reports.yml",
     ".github/workflows/ci.yml",
     ".github/workflows/fault-injection.yml",
@@ -2056,9 +2058,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "fdb48f85920a28142ce4169107ca4b2e98006af5",
+    "blob_sha": "593561938eaa310eceef04976c49de1c5d2099cc",
     "ecosystem": "cargo",
-    "bytes": 6595,
+    "bytes": 6018,
     "names": [
      "serde",
      "serde_json",
@@ -2098,7 +2100,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "3fee56726852137dacd50ce9d20f1301753ee4e0",
+    "blob_sha": "8000a407c685c2b537daa30f073ad974caf7fadb",
     "ecosystem": "npm",
     "bytes": 1363,
     "dev": [
@@ -2109,9 +2111,9 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "c08ebaaeb402b2eb22d2c5d7d58c2e59981d215b",
+    "blob_sha": "7d3ffcf1d17270284af7d1a672c2658c7001ec75",
     "ecosystem": "pyproject",
-    "bytes": 806
+    "bytes": 793
    },
    {
     "path": "fuzz/Cargo.toml",
@@ -2127,15 +2129,17 @@
    {
     "path": "crates/triviumdb-cli/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c488d2642ac8f8a1a304ee65d6f9785f463c1017",
+    "blob_sha": "1e93f07ffceb950b3cdaf22a3165e512b9b65a93",
     "ecosystem": "cargo",
-    "bytes": 1113,
+    "bytes": 1131,
     "names": [
      "triviumdb",
      "serde",
      "serde_json",
      "toml",
      "half",
+     "same-file",
+     "tempfile",
      "clap",
      "colored",
      "tabled",
@@ -2146,15 +2150,37 @@
      "crossterm"
     ],
     "dev": [
-     "tempfile",
      "assert_cmd",
      "predicates"
     ]
    },
    {
+    "path": "crates/triviumdb-migrate/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "ab422499c973c9a8a695ad7761b1c5582a1eaefa",
+    "ecosystem": "cargo",
+    "bytes": 620,
+    "names": [
+     "triviumdb",
+     "legacy",
+     "serde",
+     "serde_json",
+     "sha2",
+     "fs2",
+     "half",
+     "uuid",
+     "rayon",
+     "crc32fast"
+    ],
+    "dev": [
+     "tempfile",
+     "bytemuck"
+    ]
+   },
+   {
     "path": "crates/triviumdb-server/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d9695273084e6bfd443d0ab1392e81e4bf361fdd",
+    "blob_sha": "93ee2fde922f0e4a5908147288e7500a61147238",
     "ecosystem": "cargo",
     "bytes": 1084,
     "names": [
@@ -2179,6 +2205,42 @@
     ]
    },
    {
+    "path": "crates/triviumdb-migrate/source/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "d75b75f97455225559eca6e5d0616a844b106a44",
+    "ecosystem": "cargo",
+    "bytes": 1728,
+    "names": [
+     "target",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "bincode",
+     "rayon",
+     "memmap2",
+     "pyo3",
+     "napi",
+     "napi-derive",
+     "half",
+     "bytemuck",
+     "crc32fast",
+     "sha2",
+     "roaring",
+     "fs2",
+     "same-file",
+     "uuid",
+     "tracing",
+     "tracing-subscriber",
+     "aho-corasick",
+     "libloading",
+     "chrono",
+     "usearch",
+     "pulldown-cmark",
+     "html5gum",
+     "rpds"
+    ]
+   },
+   {
     "path": ".github/workflows/benchmark-reports.yml",
     "kind": "ci",
     "blob_sha": "0e593fff795124351c4ea113972b84983763f76d",
@@ -2187,8 +2249,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "0828ac9dd9a64b9915b0a651a92095e96c0a71ea",
-    "bytes": 26123
+    "blob_sha": "0461ae7e227f7e6739b3274790e9393d13116844",
+    "bytes": 26841
    },
    {
     "path": ".github/workflows/fault-injection.yml",
@@ -3296,13 +3358,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:40:41Z",
+  "collected_at": "2026-11-19T04:47:07Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-17",
   "stars": 41,
   "tree": {
    "sha": "0211bd529333fbf0d29931bf726c7edba0d5cc2a",
-   "etag": "W/\"851dda4198fe810c11a3ce5871ea272001e4874cc048da15b09f99967f332ab7\"",
+   "etag": "W/\"41606c8be08ece5614ea1efc2bf8a0707ced266f19e2c2dec8440f39afb898e0\"",
    "truncated": false,
    "path_count": 106,
    "matched": [
@@ -5682,13 +5744,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T06:09:39Z",
+  "collected_at": "2026-11-19T05:18:42Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-17",
   "stars": 0,
   "tree": {
    "sha": "ce6da96ffae03710f13e6031b72a08b91a5b3fe1",
-   "etag": "W/\"85c134cfdbf8d65e944761534e3a7cf6f77968aa02e8fee1c4ee96b27c902b4f\"",
+   "etag": "W/\"2dd91aad69d5dc0ecd8d0f0eeb4d6b2e598823de2cba1aaa4b85dad080dd8f40\"",
    "truncated": false,
    "path_count": 1235,
    "matched": [
@@ -5997,15 +6059,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T04:58:29Z",
+  "collected_at": "2026-11-19T04:04:04Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
-  "stars": 4500,
+  "pushed_at": "2026-11-18",
+  "stars": 4502,
   "tree": {
-   "sha": "feb14084333d1af0c9ce4d800650f9329b14309f",
-   "etag": "W/\"69f3643d30b5f3b201f7e5df02ef472aba4bf84bda2ec610ac851806b5021d31\"",
+   "sha": "ab2d4fd801db3d5a417cd10ed60d959a792bc006",
+   "etag": "W/\"498839b28104b649e50e29b51e10acb16c30874e0fdf9a3952d7cd6d10af0626\"",
    "truncated": false,
-   "path_count": 955,
+   "path_count": 956,
    "matched": [
     ".github/workflows/ghcr-prune.yml",
     ".github/workflows/lock-thread.yml",
@@ -6050,8 +6112,8 @@
    {
     "path": ".github/workflows/test-compile.yml",
     "kind": "ci",
-    "blob_sha": "3ed85eef8c50127b3ec0b2fd6319a67574bad548",
-    "bytes": 6726
+    "blob_sha": "2a9ed95660bfdf2394dbf992736baeff00f9236a",
+    "bytes": 6718
    },
    {
     "path": ".github/workflows/test-dist.yml",
@@ -6422,15 +6484,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:05:37Z",
+  "collected_at": "2026-11-19T04:11:30Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 1497,
   "tree": {
-   "sha": "31de9eb1c37d4f572e1cbc0fe84c976a297c4bc2",
-   "etag": "W/\"16a5580a5e93b24281a1af3202faa9ed8f6fd2860aad10104d8c1bacbf82e13f\"",
+   "sha": "b75e306622018bd60029f561386fc2538c4979c5",
+   "etag": "W/\"b22d097fc8136223f566cbdb1c56cfc7a272c657934c6153cbd4601fe3e76484\"",
    "truncated": false,
-   "path_count": 554,
+   "path_count": 555,
    "matched": [
     "package.json",
     ".github/workflows/ci.yml",
@@ -11279,13 +11341,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T07:18:36Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-19T04:51:51Z",
   "default_branch": "master",
-  "pushed_at": "2026-09-11",
+  "pushed_at": "2026-11-17",
   "stars": 31,
   "tree": {
    "sha": "990dd8ce078436bdb6c9ffe280dfdc97c516802b",
-   "etag": "W/\"96b31adab0c5f0f5d68c604105064c9fcdba78159113b6dce0d1f8521b4a8198\"",
+   "etag": "W/\"fb425f65fe96ffd8b6a2bb79be93fc844a29080e2688c061f5e7b155b551be21\"",
    "truncated": false,
    "path_count": 71,
    "matched": [
@@ -11576,13 +11639,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:49:09Z",
+  "collected_at": "2026-11-19T04:56:16Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 24,
   "tree": {
    "sha": "eeebeec38adac16e767718d5658d2afc3e88323f",
-   "etag": "W/\"ac2661009c5164d6d105c2dd244ba8ddb39a4ef335cedb7f8e17a9d6bb8b057b\"",
+   "etag": "W/\"6eb531f4b5bd7c2f509bf59ca0e84a97077bd2931606ab165548ef486fc2262d\"",
    "truncated": false,
    "path_count": 798,
    "matched": [
@@ -12550,22 +12613,22 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T00:13:43Z",
+  "collected_at": "2026-11-19T05:02:03Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-14",
-  "stars": 15,
+  "pushed_at": "2026-11-18",
+  "stars": 16,
   "tree": {
-   "sha": "4b60d7a55b6b142eb57f2076053fd46311e231e2",
-   "etag": "W/\"f232bbcd4f254906942cf6f92f7dc48c583cb05eba0517103f36fa4b527523f5\"",
+   "sha": "d8db9ce2ab8a619655c6eb97f4947b505c80ede9",
+   "etag": "W/\"39c1819b9d1910c099ff06e0e3450ed1274fe96a64c09ff7e253d351ca22d3fe\"",
    "truncated": false,
-   "path_count": 224,
+   "path_count": 233,
    "matched": [
-    "Current/MSVCLast/pyenv/pyproject.toml"
+    "Current/MSVC/stock/pyenv/pyproject.toml"
    ]
   },
   "files": [
    {
-    "path": "Current/MSVCLast/pyenv/pyproject.toml",
+    "path": "Current/MSVC/stock/pyenv/pyproject.toml",
     "kind": "dep",
     "blob_sha": "e9d6d8574e1ffd42370d22040eceb1ec0948bcd3",
     "ecosystem": "pyproject",
@@ -15327,15 +15390,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:22:49Z",
+  "collected_at": "2026-11-19T04:28:34Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-18",
   "stars": 190,
   "tree": {
-   "sha": "04965aaf9d8b0b7f11350e3c903a4fc5b391b3a9",
-   "etag": "W/\"a4275d02f56b0790da92b73da002ec015ec73029b7754cb5c89646d338b0b892\"",
+   "sha": "8ce5f37b08118dcf1d0372bf10cdaf3dcd2951c7",
+   "etag": "W/\"00c461250a01068d33ef1e6e38db66eb066d205ac8870e7280071673c81ac802\"",
    "truncated": false,
-   "path_count": 1182,
+   "path_count": 1208,
    "matched": [
     "Cargo.toml",
     "rust/dialog-baseline/Cargo.toml",
@@ -15365,6 +15428,7 @@
     "rust/dialog-repository/Cargo.toml",
     "rust/dialog-search-tree/Cargo.toml",
     "rust/dialog-soak/Cargo.toml",
+    "rust/dialog-stack/Cargo.toml",
     "rust/dialog-storage/Cargo.toml",
     "rust/dialog-ucan-core/Cargo.toml",
     "rust/dialog-ucan/Cargo.toml",
@@ -15386,9 +15450,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c1b70bbed4d2bd5600c46a6ac5a876eec69d8602",
+    "blob_sha": "6986628db00115ad947b5de59b81d918c1a68be1",
     "ecosystem": "cargo",
-    "bytes": 8695
+    "bytes": 8956
    },
    {
     "path": "rust/dialog-baseline/Cargo.toml",
@@ -15872,15 +15936,16 @@
    {
     "path": "rust/dialog-query/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ddda0ee9b593404801e5313223b1f6b976554e84",
+    "blob_sha": "134659f9b8870c88d876fa347b11d5afa13b804e",
     "ecosystem": "cargo",
-    "bytes": 3852,
+    "bytes": 3885,
     "names": [
      "tracing",
      "tracing-subscriber",
      "serde",
      "serde_json",
      "serde_ipld_dagcbor",
+     "ipld-core",
      "blake3",
      "base58",
      "dialog-number",
@@ -16174,6 +16239,23 @@
     "bytes": 1673,
     "names": [
      "dialog-common"
+    ]
+   },
+   {
+    "path": "rust/dialog-stack/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "985ae45023d6309fbf54840821d6c845a06d797e",
+    "ecosystem": "cargo",
+    "bytes": 895,
+    "names": [
+     "dialog-repository"
+    ],
+    "dev": [
+     "anyhow",
+     "dialog-common",
+     "dialog-corpus",
+     "dialog-query",
+     "serde_json"
     ]
    },
    {
@@ -16988,13 +17070,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:33:42Z",
+  "collected_at": "2026-11-19T04:39:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-17",
   "stars": 71,
   "tree": {
-   "sha": "d2721ec1aae72b3bdc5d8b435ff6326e6a905985",
-   "etag": "W/\"3be02366ef765701fa2cb51407be7458405fb5450171c2ff7d01fa1db882f734\"",
+   "sha": "605bd76c0dd9c5098ec001770a8ee7a63e5df3a6",
+   "etag": "W/\"bd72d63675d056cd790422a4f56d551adfa4e66a2db06e8d49c7c34f9b0797a3\"",
    "truncated": false,
    "path_count": 66,
    "matched": [
@@ -17036,25 +17118,25 @@
    {
     "path": ".github/workflows/lint.yml",
     "kind": "ci",
-    "blob_sha": "14e75949ec403d67afa2592d6b7ac39be1f2c793",
+    "blob_sha": "655ed6cba583ac793a1b88fc2bdbef876b8723dc",
     "bytes": 751
    },
    {
     "path": ".github/workflows/pypi-publish.yaml",
     "kind": "ci",
-    "blob_sha": "19e2eba69bbb7652826ee371f4b7a4e75cbbf9a7",
+    "blob_sha": "e147848e0000cc80b37d3d6ab5b9a1b36fda4215",
     "bytes": 499
    },
    {
     "path": ".github/workflows/spellcheck.yml",
     "kind": "ci",
-    "blob_sha": "ca51d6cae9fd02c91edc44af712b8f11dc3a2cb3",
+    "blob_sha": "f838cb2c11e8a237d21d24d7e50a65717edbcc83",
     "bytes": 484
    },
    {
     "path": ".github/workflows/test.yml",
     "kind": "ci",
-    "blob_sha": "b47ac544e8deba36311c8429b9d0bc059cec061f",
+    "blob_sha": "82b999ce508c555fec0f31674dc45dddf3b7cc3f",
     "bytes": 4315,
     "images": [
      "falkordb/falkordb:${{"

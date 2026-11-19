@@ -4512,15 +4512,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:21:08Z",
+  "collected_at": "2026-11-19T04:26:44Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-16",
-  "stars": 216,
+  "pushed_at": "2026-11-18",
+  "stars": 217,
   "tree": {
-   "sha": "7d6073b24db332ea346f18f14f57418581a114ba",
-   "etag": "W/\"d84c6fde1e91704c12a0241007be7716a5ed050dcf6bec03b7399f61df0e4401\"",
+   "sha": "480c47fdfeedc1acc847945825bf33103781e334",
+   "etag": "W/\"5073e39da8e604bedff89afed806380f760ca300d81f87460c44aca539741c16\"",
    "truncated": false,
-   "path_count": 24223,
+   "path_count": 24417,
    "matched": [
     "client/package.json",
     "services/Cargo.toml",
@@ -4570,11 +4570,13 @@
     ".agents/skills/rust-best-practices/evals/bevy-arena-regen/files/Cargo.toml",
     ".agents/skills/rust-review/evals/review-bevy-arena/files/Cargo.toml",
     "deploy/Dockerfile.client",
+    "deploy/Dockerfile.embedding",
     "deploy/Dockerfile.imaging",
     "deploy/Dockerfile.imaging.dockerignore",
     "deploy/Dockerfile.operator",
     "deploy/Dockerfile.postgres",
     "deploy/Dockerfile.tms",
+    "deploy/export-runner/Dockerfile",
     "dev/mail-sim/Dockerfile",
     "dev/samsara-sim/Dockerfile",
     "deploy/helm/trenova-operator/values.yaml",
@@ -4584,6 +4586,8 @@
     ".github/workflows/assay-select.yml",
     ".github/workflows/capture-manifest.yml",
     ".github/workflows/dependency-scan.yml",
+    ".github/workflows/embedding-image.yml",
+    ".github/workflows/export-runner-image.yml",
     ".github/workflows/go-build-cache.yml",
     ".github/workflows/helm.yml",
     ".github/workflows/native-capture.yml",
@@ -4847,12 +4851,13 @@
    {
     "path": "services/operator/go.mod",
     "kind": "dep",
-    "blob_sha": "a5e2974f66cfc9aa72c0de67ded171772cfda1e4",
+    "blob_sha": "6d9e9e4d3170684d7933538be74f14331b630f76",
     "ecosystem": "go",
-    "bytes": 9152,
+    "bytes": 9023,
     "names": [
      "github.com/aws/aws-sdk-go-v2",
      "github.com/bytedance/sonic",
+     "github.com/cenkalti/backoff/v5",
      "github.com/google/go-containerregistry",
      "github.com/google/uuid",
      "github.com/oapi-codegen/runtime",
@@ -4863,6 +4868,7 @@
      "k8s.io/apimachinery",
      "k8s.io/cli-runtime",
      "k8s.io/client-go",
+     "k8s.io/metrics",
      "sigs.k8s.io/yaml"
     ],
     "dev": [
@@ -4878,11 +4884,9 @@
      "github.com/apapsch/go-jsonmerge/v2",
      "github.com/asaskevich/govalidator",
      "github.com/aws/smithy-go",
-     "github.com/blang/semver",
      "github.com/blang/semver/v4",
      "github.com/bytedance/gopkg",
      "github.com/bytedance/sonic/loader",
-     "github.com/cenkalti/backoff/v5",
      "github.com/cespare/xxhash/v2",
      "github.com/chai2010/gettext-go",
      "github.com/cloudflare/circl",
@@ -4943,9 +4947,11 @@
      "github.com/klauspost/cpuid/v2",
      "github.com/lann/builder",
      "github.com/lann/ps",
-     "github.com/letsencrypt/boulder",
      "github.com/lib/pq",
-     "github.com/liggitt/tabwriter"
+     "github.com/liggitt/tabwriter",
+     "github.com/mattn/go-colorable",
+     "github.com/mattn/go-isatty",
+     "github.com/mattn/go-runewidth"
     ]
    },
    {
@@ -5906,6 +5912,16 @@
     ]
    },
    {
+    "path": "deploy/Dockerfile.embedding",
+    "kind": "image",
+    "blob_sha": "fbb2193b284c7a3180eeff69c4368b179147c6e4",
+    "bytes": 4662,
+    "images": [
+     "ollama/ollama:${OLLAMA_VERSION}@${OLLAMA_DIGEST}",
+     "ollama"
+    ]
+   },
+   {
     "path": "deploy/Dockerfile.imaging",
     "kind": "image",
     "blob_sha": "4eac03acb6afd9958fa4d0803debe94ff7b252e8",
@@ -5956,6 +5972,15 @@
     ]
    },
    {
+    "path": "deploy/export-runner/Dockerfile",
+    "kind": "image",
+    "blob_sha": "09524b4cc5d188f91ae8c6c64b1015982116dbac",
+    "bytes": 2435,
+    "images": [
+     "${POSTGRES_IMAGE}"
+    ]
+   },
+   {
     "path": "dev/mail-sim/Dockerfile",
     "kind": "image",
     "blob_sha": "6759c3d65fb7cccd44762edd63c53c821b6ab08b",
@@ -5978,8 +6003,8 @@
    {
     "path": "deploy/helm/trenova-operator/values.yaml",
     "kind": "image",
-    "blob_sha": "45f6d0e5246376bad88ecd72fd47e8ae603c80f9",
-    "bytes": 3289,
+    "blob_sha": "28ee835d9d3e9bdf6322404e3abd5491609eff72",
+    "bytes": 4265,
     "images": [
      "repository:"
     ]
@@ -5987,8 +6012,8 @@
    {
     "path": "deploy/helm/trenova/values.yaml",
     "kind": "image",
-    "blob_sha": "73d5e595f7790a79d392098aa96e22a68e2fb4ea",
-    "bytes": 22765,
+    "blob_sha": "bf10b68154f509482f70964a6630c7e3021e7c59",
+    "bytes": 26994,
     "images": [
      "repository:"
     ]
@@ -6020,8 +6045,20 @@
    {
     "path": ".github/workflows/dependency-scan.yml",
     "kind": "ci",
-    "blob_sha": "be709aed226b9eee13fa770fdfef392de34272dc",
-    "bytes": 2059
+    "blob_sha": "c72c4d8030d408dc17ad03154a079b8290b972b2",
+    "bytes": 2401
+   },
+   {
+    "path": ".github/workflows/embedding-image.yml",
+    "kind": "ci",
+    "blob_sha": "bad86d8fa84cc6cd444ec88383802d71ac3c8bbc",
+    "bytes": 4116
+   },
+   {
+    "path": ".github/workflows/export-runner-image.yml",
+    "kind": "ci",
+    "blob_sha": "892447d76f91580e4e4baeb0d83dadad5c9fd69d",
+    "bytes": 4976
    },
    {
     "path": ".github/workflows/go-build-cache.yml",
@@ -6032,8 +6069,8 @@
    {
     "path": ".github/workflows/helm.yml",
     "kind": "ci",
-    "blob_sha": "07c4140ef1d6003b9876a794d3f44d8abd35b6ad",
-    "bytes": 12360
+    "blob_sha": "2638b2e914f8fd8c0cdc7a62a8b885e4cf807e63",
+    "bytes": 15547
    },
    {
     "path": ".github/workflows/native-capture.yml",
@@ -6044,14 +6081,14 @@
    {
     "path": ".github/workflows/operator.yml",
     "kind": "ci",
-    "blob_sha": "933b277cf54fb03a0f8abc3dab84e2a3b7584e73",
-    "bytes": 13361
+    "blob_sha": "d9abc273f5c5a0b42636f9c0219b0df5b9d0c81b",
+    "bytes": 13458
    },
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "20300dce7bf4540c39d71937487ef7792a4caea7",
-    "bytes": 22521
+    "blob_sha": "ab267a4eb3b6104ebfb23bca219abde2b7bb80f5",
+    "bytes": 23186
    },
    {
     "path": ".github/workflows/rust.yml",
@@ -6077,8 +6114,8 @@
    {
     "path": ".github/workflows/test-tms.yml",
     "kind": "ci",
-    "blob_sha": "6f758907f0539d79cccbeecc700164369c885a8a",
-    "bytes": 28012,
+    "blob_sha": "d0292047f6e36a8a6fb8807f889b1395f211d88f",
+    "bytes": 28160,
     "images": [
      "redis:8",
      "postgis/postgis:18-3.6-alpine"
@@ -6247,7 +6284,6 @@
     "services/tms/internal/modules/agent/adapters/postgres/airetrievalrepository/indexentry.go",
     "services/tms/internal/modules/agent/adapters/postgres/airetrievalrepository/repository.go",
     "services/tms/internal/modules/agent/adapters/postgres/airetrievalrepository/settings.go",
-    "services/tms/internal/modules/agent/adapters/postgres/airetrievalrepository/settings_integration_test.go",
     "services/tms/internal/modules/agent/adapters/postgres/airetrievalrepository/storage_integration_test.go",
     "services/tms/internal/modules/agent/adapters/postgres/aituneuprepository/aituneup.go",
     "services/tms/internal/modules/agent/adapters/postgres/aiusagemeter/aiusagemeter.go",
@@ -6291,7 +6327,8 @@
     "services/tms/internal/modules/agent/adapters/postgres/conversationrepository/pagethreads.go",
     "services/tms/internal/modules/agent/adapters/postgres/conversationrepository/threadcursor.go",
     "services/tms/internal/modules/agent/adapters/postgres/conversationrepository/threadcursor_test.go",
-    "services/tms/internal/modules/agent/adapters/postgres/conversationschedulerepository/render_test.go"
+    "services/tms/internal/modules/agent/adapters/postgres/conversationschedulerepository/render_test.go",
+    "services/tms/internal/modules/agent/adapters/postgres/conversationschedulerepository/repository.go"
    ]
   },
   "fail_count": 0
@@ -8031,15 +8068,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:37:47Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-19T04:47:09Z",
   "default_branch": "master",
-  "pushed_at": "2026-07-29",
+  "pushed_at": "2026-11-18",
   "stars": 41,
   "tree": {
-   "sha": "7f72ceb459b9e4870707b8d9eda59de55bd8476b",
-   "etag": "W/\"cfc72b2bbc365a2c3a6665efcc12169a1ea8df24b2c308b6fcc76cf527b50287\"",
+   "sha": "3d6bde376ce3a8620caef8f78d67f1a53ca9c22b",
+   "etag": "W/\"7c35efb029abd2bd922aee85f05d3ee667d8355ed16c6dadbc45c134775612b7\"",
    "truncated": false,
-   "path_count": 115,
+   "path_count": 118,
    "matched": [
     ".github/workflows/ci.yaml"
    ]
@@ -8048,8 +8086,8 @@
    {
     "path": ".github/workflows/ci.yaml",
     "kind": "ci",
-    "blob_sha": "70db1d11518eefc539139386c1b6f2795d280fa0",
-    "bytes": 28108
+    "blob_sha": "241fec65ef2c072f86a1e0151c3ef875bbf9dd62",
+    "bytes": 28343
    }
   ],
   "clues": {
@@ -8066,15 +8104,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:22:59Z",
+  "collected_at": "2026-11-19T04:46:53Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-13",
+  "pushed_at": "2026-11-18",
   "stars": 42,
   "tree": {
-   "sha": "9fba314fc869e89d59e32915b3054b0c693f0315",
-   "etag": "W/\"10b6f74f5a2280a60ad4aebeff1e3aaf51ce1c7e3299790d94ef971531dc91f2\"",
+   "sha": "4fe8f612d401bc1656e6ece6aa371fbe2fc31fb8",
+   "etag": "W/\"936acef7518aa20033cb3b11039fd97422ec0b41b70415b71930544e921cc832\"",
    "truncated": false,
-   "path_count": 173,
+   "path_count": 174,
    "matched": [
     "test/Gemfile",
     "packaging/rpm/Dockerfile.build",
@@ -8120,42 +8158,44 @@
    {
     "path": ".github/workflows/format-check.yml",
     "kind": "ci",
-    "blob_sha": "f107c7a1f79ab6b3d613fe718a3956436f98607d",
+    "blob_sha": "f8185bfed7bd5102cd234f8cec086baf9b8d0757",
     "bytes": 495
    },
    {
     "path": ".github/workflows/make-build.yml",
     "kind": "ci",
-    "blob_sha": "16c2d18e03b0dc325b43d435d4b2add54ce7c988",
+    "blob_sha": "211c47d645c1d2ab5585bac9b24ec02675acddf1",
     "bytes": 1840
    },
    {
     "path": ".github/workflows/meson-build.yml",
     "kind": "ci",
-    "blob_sha": "e80e24a94eff5dafce3a461ee958c8eb06541688",
+    "blob_sha": "435199ea6882d6b3d657b015558cc5946bca5850",
     "bytes": 2047
    },
    {
     "path": ".github/workflows/pgdg-build.yml",
     "kind": "ci",
-    "blob_sha": "c3a0ec4f1109c59e178b0d85848393de95e6b265",
+    "blob_sha": "180a540cac8625c90b5278513bc44d3478fbbbec",
     "bytes": 6252
    },
    {
     "path": ".github/workflows/pgxs-build.yml",
     "kind": "ci",
-    "blob_sha": "2c44d5678037868b2dcd7f836e5322e7285deb26",
+    "blob_sha": "cb6bf4f8a6b7bd8ad23b83742cd2d34e5a8aa44e",
     "bytes": 1816
    },
    {
     "path": ".github/workflows/rpm-build.yml",
     "kind": "ci",
-    "blob_sha": "9c45cf78db6e71bb388be075fa8053732a6f3d17",
-    "bytes": 2038
+    "blob_sha": "053e890581ea7db2086480a2e93761c820f22d7a",
+    "bytes": 1905
    }
   ],
   "clues": {
-   "changelog": [],
+   "changelog": [
+    "CHANGELOG.md"
+   ],
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
@@ -9164,13 +9204,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:48:43Z",
+  "collected_at": "2026-11-19T04:55:55Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 25,
   "tree": {
    "sha": "05cb5105c520e8f4e7a4b1b3bf06e01fe9389de2",
-   "etag": "W/\"d205eb833611962b343a15aabea43cd388e04c0d8a1c086b6c3f1adfd0b8a807\"",
+   "etag": "W/\"213770f10bc6fca6accbb394884291c3ee50a6d69018b99d8b57fed4a7abb70d\"",
    "truncated": false,
    "path_count": 97,
    "matched": [
@@ -12940,13 +12980,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T23:49:24Z",
+  "collected_at": "2026-11-19T04:21:03Z",
   "default_branch": "canary",
-  "pushed_at": "2026-11-15",
+  "pushed_at": "2026-11-18",
   "stars": 441,
   "tree": {
    "sha": "d85f9b8b0a8b1be1da4135e2101c3d9a81b042bd",
-   "etag": "W/\"f019ca8a054fd37484acf387f0ae242e51ce2830b4cc443d19ecbc6a8dac3310\"",
+   "etag": "W/\"5222ed2f2fc241786698de051d7eef5e3a344a6272d746bcb03eecf53868063c\"",
    "truncated": false,
    "path_count": 42,
    "matched": [
@@ -13282,22 +13322,36 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:49:47Z",
+  "collected_at": "2026-11-19T04:56:49Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-17",
   "stars": 23,
   "tree": {
-   "sha": "77fd8de32ef5cd52d1a1eb2cd2b5e3bcdd0391c1",
-   "etag": "W/\"5adc0789fe67c2e7f41bfdef6d873c175bd73bfede9b7c401580aec0b31fb531\"",
+   "sha": "935ae695a3d25f70834d63c1e1f5d90e4c352c99",
+   "etag": "W/\"fa70c8007178a6c4b67270f6878dc4b773d147d9aa8334914a261228a24e4fc4\"",
    "truncated": false,
-   "path_count": 483,
+   "path_count": 561,
    "matched": [
+    "Benchmarks/Live/drivers/dotnet/LiveDriver.DotNet.csproj",
     ".github/workflows/benchmarks.yml",
     ".github/workflows/documentation.yml",
+    ".github/workflows/live-benchmarks-tests.yml",
+    ".github/workflows/live-benchmarks.yml",
     ".github/workflows/swift-build-testing.yml"
    ]
   },
   "files": [
+   {
+    "path": "Benchmarks/Live/drivers/dotnet/LiveDriver.DotNet.csproj",
+    "kind": "dep",
+    "blob_sha": "12c409391e96a5a87e1cccc2190c596be1c44132",
+    "ecosystem": "csproj",
+    "bytes": 1129,
+    "names": [
+     "KurrentDB.Client",
+     "HdrHistogram"
+    ]
+   },
    {
     "path": ".github/workflows/benchmarks.yml",
     "kind": "ci",
@@ -13309,6 +13363,18 @@
     "kind": "ci",
     "blob_sha": "e0fde464c3fd717d7e371bef9b0e3a23c96f719b",
     "bytes": 9171
+   },
+   {
+    "path": ".github/workflows/live-benchmarks-tests.yml",
+    "kind": "ci",
+    "blob_sha": "5d0c2b0286c77be39fd5322c859b37e0dfdeb05c",
+    "bytes": 1922
+   },
+   {
+    "path": ".github/workflows/live-benchmarks.yml",
+    "kind": "ci",
+    "blob_sha": "f73e79ae9131703e7e2c24f943d00741ff74b4d3",
+    "bytes": 11507
    },
    {
     "path": ".github/workflows/swift-build-testing.yml",
@@ -13324,7 +13390,29 @@
    "changelog": [],
    "readme_i18n": [],
    "docs_matrix": [],
-   "paths": []
+   "paths": [
+    "Benchmarks/Live/config/drivers.local.json",
+    "Benchmarks/Live/docs/driver-contract.md",
+    "Benchmarks/Live/orchestrator/GhzAdapter.swift",
+    "Benchmarks/Live/Sources/LiveBenchCore/DriverContract.swift",
+    "Benchmarks/Live/Tests/LiveBenchCoreTests/DriverContractTests.swift",
+    "Benchmarks/Live/Tests/LiveOrchestratorTests/GhzAdapterTests.swift",
+    "Benchmarks/Live/Tests/LiveOrchestratorTests/SwiftDriverLiveTests.swift",
+    "Benchmarks/Live/drivers/dotnet/Contract.cs",
+    "Benchmarks/Live/drivers/dotnet/LiveDriver.DotNet.csproj",
+    "Benchmarks/Live/drivers/dotnet/OpenLoop.cs",
+    "Benchmarks/Live/drivers/dotnet/Program.cs",
+    "Benchmarks/Live/drivers/dotnet/Scenarios.cs",
+    "Benchmarks/Live/drivers/dotnet/packages.lock.json",
+    "Benchmarks/Live/drivers/ghz/append.json",
+    "Benchmarks/Live/drivers/ghz/read.json",
+    "Benchmarks/Live/drivers/swift/Append.swift",
+    "Benchmarks/Live/drivers/swift/Rebuild.swift",
+    "Benchmarks/Live/drivers/swift/Subscriptions.swift",
+    "Benchmarks/Live/drivers/swift/Trial.swift",
+    "Benchmarks/Live/drivers/swift/main.swift",
+    "Benchmarks/Live/Tests/LiveOrchestratorTests/Support/DriverHarness.swift"
+   ]
   },
   "fail_count": 0
  },

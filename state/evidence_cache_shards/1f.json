@@ -160,13 +160,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:43:38Z",
+  "collected_at": "2026-11-19T04:50:25Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 34,
   "tree": {
    "sha": "5f2155cfbb84fc5ca5c9c7ea701c8a152a5babc9",
-   "etag": "W/\"9c06e69d2a1d3fa700111c5244de8aa016e4ec1189179573a610304e4fc2871d\"",
+   "etag": "W/\"c8675a2097de139cb3c41939795d50fdc79cdac185aab650105912d74901f284\"",
    "truncated": false,
    "path_count": 117,
    "matched": [
@@ -1010,15 +1010,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T04:53:38Z",
+  "collected_at": "2026-11-19T03:58:57Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-17",
-  "stars": 10664,
+  "pushed_at": "2026-11-18",
+  "stars": 10668,
   "tree": {
-   "sha": "10afd135834cf9774bd6aea777586bc0457b19e5",
-   "etag": "W/\"3cbceac45f2ebff527319653dfdc869351a9dbf36efc25b58d8ac54751f470d3\"",
+   "sha": "a8ff0738517876d47744e0063ec681fa1ce74193",
+   "etag": "W/\"5dc89c2dedc885901bd7e4f219b8b2d7294c7ea5a82e8b3886474bf9aa2cdbd7\"",
    "truncated": false,
-   "path_count": 34635,
+   "path_count": 34840,
    "matched": [
     "requirements.txt",
     "docs/go.mod",
@@ -1063,6 +1063,7 @@
     "src/postgres/third-party-extensions/pg_duckdb/requirements.txt",
     "src/postgres/third-party-extensions/pg_parquet/Cargo.toml",
     "src/postgres/third-party-extensions/pgrx/Cargo.toml",
+    "src/postgres/third-party-extensions/postgresql_anonymizer/Cargo.toml",
     "src/postgres/third-party-extensions/documentdb/pg_documentdb_gw/Cargo.toml",
     "src/postgres/third-party-extensions/documentdb/pg_documentdb_gw_host/Cargo.toml",
     "src/postgres/third-party-extensions/hypopg/docs/requirements.txt",
@@ -1077,9 +1078,8 @@
     "src/postgres/third-party-extensions/pgrx/pgrx-tests/Cargo.toml",
     "src/postgres/third-party-extensions/pgrx/pgrx-unit-tests/Cargo.toml",
     "src/postgres/third-party-extensions/pgrx/pgrx/Cargo.toml",
-    "src/postgres/third-party-extensions/postgresql_anonymizer/pg_dump_anon/go.mod",
-    "src/postgres/third-party-extensions/postgresql_anonymizer/python/requirements.txt",
     "src/postgres/third-party-extensions/documentdb/pg_documentdb_gw/documentdb_macros/Cargo.toml",
+    "src/postgres/third-party-extensions/mage/drivers/golang/go.mod",
     ".claude/Dockerfile",
     ".cursor/Dockerfile",
     ".devcontainer/Dockerfile",
@@ -1118,6 +1118,7 @@
     ".github/workflows/pr-lint.yml",
     ".github/workflows/pr-title.yml",
     ".github/workflows/pr-upgrade.yml",
+    ".github/workflows/sync-operator-crds.yml",
     ".github/workflows/yugabyted-test.yml"
    ]
   },
@@ -1628,7 +1629,7 @@
    {
     "path": "managed/ui/package.json",
     "kind": "dep",
-    "blob_sha": "ed127835fc255cd3ac6406cb9ec49646f99e0a78",
+    "blob_sha": "76db325d99c5546e58a1b80fbb8d40483581b714",
     "ecosystem": "npm",
     "bytes": 6211,
     "names": [
@@ -2093,7 +2094,7 @@
    {
     "path": "managed/client/java/v1/pom.xml",
     "kind": "dep",
-    "blob_sha": "cd41fbec031d2fbcdba6b19f10719eee4af85b95",
+    "blob_sha": "158016fcbebd1bfa898286412146caa88b5c31f7",
     "ecosystem": "maven",
     "bytes": 14066,
     "names": [
@@ -2115,7 +2116,7 @@
    {
     "path": "managed/client/java/v2/pom.xml",
     "kind": "dep",
-    "blob_sha": "e6402dc65467763cd8b5e2a966416b01740990b7",
+    "blob_sha": "f4bbf0952df77f59cb36cc4c81c253c720b6d0ca",
     "ecosystem": "maven",
     "bytes": 17445,
     "names": [
@@ -2242,6 +2243,30 @@
     "blob_sha": "dd52efda1c521bbf31f936f51a84fa7a87782594",
     "ecosystem": "cargo",
     "bytes": 3085
+   },
+   {
+    "path": "src/postgres/third-party-extensions/postgresql_anonymizer/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "df1e84548039fd7ca08dac53e95b808568c2e49e",
+    "ecosystem": "cargo",
+    "bytes": 1090,
+    "names": [
+     "c_str_macro",
+     "chrono",
+     "fake",
+     "fastrand",
+     "image",
+     "md-5",
+     "paste",
+     "pgrx",
+     "rand",
+     "regex",
+     "serde",
+     "serde_json"
+    ],
+    "dev": [
+     "pgrx-tests"
+    ]
    },
    {
     "path": "src/postgres/third-party-extensions/documentdb/pg_documentdb_gw/Cargo.toml",
@@ -2560,36 +2585,29 @@
     ]
    },
    {
-    "path": "src/postgres/third-party-extensions/postgresql_anonymizer/pg_dump_anon/go.mod",
-    "kind": "dep",
-    "blob_sha": "cfbe0960a2c383b7184d3901c0bb6d6b78d60668",
-    "ecosystem": "go",
-    "bytes": 309,
-    "names": [
-     "github.com/lib/pq",
-     "golang.org/x/crypto"
-    ],
-    "dev": [
-     "golang.org/x/sys",
-     "golang.org/x/term"
-    ]
-   },
-   {
-    "path": "src/postgres/third-party-extensions/postgresql_anonymizer/python/requirements.txt",
-    "kind": "dep",
-    "blob_sha": "9d7f6e827a1b0642ec33fa74781249cdf0729da0",
-    "ecosystem": "pypi",
-    "bytes": 6,
-    "names": [
-     "faker"
-    ]
-   },
-   {
     "path": "src/postgres/third-party-extensions/documentdb/pg_documentdb_gw/documentdb_macros/Cargo.toml",
     "kind": "dep",
     "blob_sha": "fbcdff057d1aec2e6ba065ef9a58e176ad3172ca",
     "ecosystem": "cargo",
     "bytes": 160
+   },
+   {
+    "path": "src/postgres/third-party-extensions/mage/drivers/golang/go.mod",
+    "kind": "dep",
+    "blob_sha": "95628d9f2929d3ef8b212406d2edc57980e8953d",
+    "ecosystem": "go",
+    "bytes": 1282,
+    "names": [
+     "github.com/antlr/antlr4/runtime/Go/antlr/v4",
+     "github.com/lib/pq",
+     "github.com/stretchr/testify"
+    ],
+    "dev": [
+     "github.com/davecgh/go-spew",
+     "github.com/pmezard/go-difflib",
+     "golang.org/x/exp",
+     "gopkg.in/yaml.v3"
+    ]
    },
    {
     "path": ".claude/Dockerfile",
@@ -2654,8 +2672,8 @@
    {
     "path": "managed/byoc-api-proxy/docker/Dockerfile",
     "kind": "image",
-    "blob_sha": "9803de4d1fc1eed5edf0ab618671c95e3cd369c3",
-    "bytes": 1853,
+    "blob_sha": "8d5f8ba31052f2dfc1d1e593f4cd373ce4f2cd2a",
+    "bytes": 1887,
     "images": [
      "${BASE_IMAGE}"
     ]
@@ -2891,6 +2909,12 @@
     "kind": "ci",
     "blob_sha": "03c7344fee1831d736dced4d732c085d575e1c58",
     "bytes": 892
+   },
+   {
+    "path": ".github/workflows/sync-operator-crds.yml",
+    "kind": "ci",
+    "blob_sha": "c4f944064e0bbef44f90683621cf845710379457",
+    "bytes": 8519
    },
    {
     "path": ".github/workflows/yugabyted-test.yml",
@@ -3132,15 +3156,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:11:31Z",
+  "collected_at": "2026-11-19T04:17:21Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
-  "stars": 638,
+  "pushed_at": "2026-11-18",
+  "stars": 639,
   "tree": {
-   "sha": "bc92d09be03f70ea6c0535890535917d99ab1c94",
-   "etag": "W/\"cb7ce4de4941b503e4ebab246ee17bbfd826f3eb5267c54d1efaa56d27231ae5\"",
+   "sha": "91e39e143c53961bcbabb0f8eea859602728e703",
+   "etag": "W/\"50b0e26294685f92ff88d6123c5bcb1b08cb6b9763ef822bc5f963df0d2d5098\"",
    "truncated": false,
-   "path_count": 2087,
+   "path_count": 2069,
    "matched": [
     "glib/Gemfile",
     "java/pom.xml",
@@ -3247,7 +3271,7 @@
    {
     "path": "java/pom.xml",
     "kind": "dep",
-    "blob_sha": "6898b7c8375eb72cdcef593472041f254e1ad736",
+    "blob_sha": "dfecf5be99bac1d22a37381acd5a4e99a081edb3",
     "ecosystem": "maven",
     "bytes": 12077,
     "names": [
@@ -3386,7 +3410,7 @@
    {
     "path": "go/driver/go.mod",
     "kind": "dep",
-    "blob_sha": "f105a4843cabfd4c4135d5fac7b640b55edec8ae",
+    "blob_sha": "a79951cfbf41dcfef1111b89df5f3d22ab8cd958",
     "ecosystem": "go",
     "bytes": 3481,
     "names": [
@@ -4069,8 +4093,8 @@
    {
     "path": "compose.yaml",
     "kind": "image",
-    "blob_sha": "90ffbb526573149d318389dd8c92fa12316e4905",
-    "bytes": 18575,
+    "blob_sha": "665613b1de3ab61637c53f3d20319b9d54cf6d75",
+    "bytes": 17982,
     "images": [
      "mcr.microsoft.com/dotnet/sdk:10.0",
      "${REPO}:${ARCH}-cpp-clang-latest-adbc",
@@ -4080,8 +4104,6 @@
      "${ARCH}/maven:${MAVEN}-eclipse-temurin-${JDK}",
      "${REPO}:${ARCH}-python-${PYTHON}-wheel-manylinux-${MANYLINUX}-vcpkg-${VCPKG}-adbc",
      "${ARCH}/python:${PYTHON}",
-     "condaforge/linux-anvil-cos7-x86_64",
-     "condaforge/mambaforge",
      "${REPO}:${ARCH}-python-debug-adbc",
      "ghcr.io/apache/arrow-adbc:manylinux${MANYLINUX}-go${GO}-python${PYTHON}-vcpkg${VCPKG}",
      "ghcr.io/apache/arrow-adbc:python${PYTHON}",
@@ -4194,7 +4216,7 @@
    {
     "path": ".github/workflows/java.yml",
     "kind": "ci",
-    "blob_sha": "3005d7da6fb7c459da5269462bd13873e1deaa99",
+    "blob_sha": "937a0da1326f30274dc4c7bbfbb540fbf78f0150",
     "bytes": 15553
    },
    {
@@ -4236,8 +4258,8 @@
    {
     "path": ".github/workflows/packaging.yml",
     "kind": "ci",
-    "blob_sha": "2a9c5a4953e1a8ce9a067fc38d762f8dc7b5492b",
-    "bytes": 53928
+    "blob_sha": "822b05de1f95901040c975c07ea24551decdc730",
+    "bytes": 47674
    },
    {
     "path": ".github/workflows/r-basic.yml",
@@ -9777,13 +9799,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T04:55:07Z",
+  "collected_at": "2026-11-19T04:00:27Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
-  "stars": 8276,
+  "pushed_at": "2026-11-18",
+  "stars": 8295,
   "tree": {
    "sha": "7ebeb145c561bc510624376141020d2df6fad8ab",
-   "etag": "W/\"89b6909ce853b69655730d1b9c99002d73f43f01f72b492803ff710e6e9694fc\"",
+   "etag": "W/\"e90a7b55bc1f4f753d6ccb38ad1c8715405e1d9f75cc9990adc9ef2152eb0483\"",
    "truncated": false,
    "path_count": 984,
    "matched": [
@@ -14546,13 +14568,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:43:10Z",
+  "collected_at": "2026-11-19T04:49:53Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-18",
   "stars": 34,
   "tree": {
    "sha": "b719d9acd89be85c032ef909b4171f5bdf817cb4",
-   "etag": "W/\"fa0872bc53390fd1d11147c00124b9a89c4adc8e32bd5d2cd8ee71ed6c3a0d65\"",
+   "etag": "W/\"e63a80247e1666976e91d23fa829bf1e1dd77adbcffa7a7fed2e9bae5a9964a5\"",
    "truncated": false,
    "path_count": 701,
    "matched": [
@@ -17238,15 +17260,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:57:01Z",
+  "collected_at": "2026-11-19T05:04:46Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 14,
   "tree": {
-   "sha": "f143ed68744f83fda8c7e6665836cb11da0925a3",
-   "etag": "W/\"a2c98f0b591c8a26ad9bb569c3e7cf78727a93a781411a22095065c1d6a8f209\"",
+   "sha": "ed110ca4720b5c6552caa99c2e0b33420bc30cdb",
+   "etag": "W/\"e8b30aff3d4025b77a73b3acd56dd84680f95fe9f55878898864af32c3666d0c\"",
    "truncated": false,
-   "path_count": 88,
+   "path_count": 91,
    "matched": [
     "package.json",
     ".github/workflows/build-and-release.yml",
@@ -17257,9 +17279,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "259f6740bed8114140d3e1217f2470ae6403133d",
+    "blob_sha": "a957a55c0ff12d935071cb82c0d944b5129cb1a3",
     "ecosystem": "npm",
-    "bytes": 3416,
+    "bytes": 3467,
     "names": [
      "@react-native-async-storage/async-storage",
      "@react-navigation/native",
@@ -17351,9 +17373,11 @@
    "docs_matrix": [],
    "paths": [],
    "matrix_urls": [
+    "https://p32929.github.io/share/?repo=let",
+    "https://p32929.github.io/readme/footer-share-dark.svg",
+    "https://p32929.github.io/readme/footer-share-light.svg",
     "https://p32929.github.io/support/",
-    "https://p32929.github.io/readme/support-dark.svg",
-    "https://p32929.github.io/readme/support-light.svg"
+    "https://p32929.github.io/readme/footer-support-dark.svg"
    ]
   },
   "fail_count": 0
@@ -17829,13 +17853,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T06:01:19Z",
+  "collected_at": "2026-11-19T05:09:21Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-18",
   "stars": 11,
   "tree": {
    "sha": "ba250925fe3e1aa35388ee12c17727846cbdaace",
-   "etag": "W/\"c74a2e857f465a5140495773039f82445292896b1e790d02abac2e2ab7f75065\"",
+   "etag": "W/\"4422278bea8a4f7652f87b1c25b96a7afba46c0c070f24a00bdfc6f10a216fdb\"",
    "truncated": false,
    "path_count": 106,
    "matched": [
@@ -19528,13 +19552,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:56:06Z",
+  "collected_at": "2026-11-19T05:03:35Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 15,
   "tree": {
    "sha": "0ddf0b877b187edc3a7aad70e4972a17f21120e1",
-   "etag": "W/\"a1d20783f6ead9eef1a4d931f1c451eeb0ab9053b1686d31b799ef9f96eb14fe\"",
+   "etag": "W/\"01b3527712b15bdeabf36a97eaacac631b7c3d069386e02f8af5a5307f1ff539\"",
    "truncated": false,
    "path_count": 1883,
    "matched": [
@@ -19747,13 +19771,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:08:55Z",
+  "collected_at": "2026-11-19T04:14:34Z",
   "default_branch": "6.x",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-18",
   "stars": 918,
   "tree": {
    "sha": "37ba39428e6f6de4224b7620fc8a87c92c184ff5",
-   "etag": "W/\"913e5c6be378f0437d6c5f375935710c56f3b82fe2b32becc064aa90090b4ed7\"",
+   "etag": "W/\"734a7d4eda31c431b79356460ae2b2019af26f24c4cffadcc72c686c83031237\"",
    "truncated": false,
    "path_count": 821,
    "matched": [
