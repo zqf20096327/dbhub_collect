@@ -13,7 +13,7 @@
 from __future__ import annotations
 
 import sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -111,7 +111,10 @@ def test_security_cadence() -> None:
     check("安全分档：tail 有史 30 天", enrich._security_days({}, "tail", {"sec_n": 1}) == 30)
     check("安全分档：零历史走基础值（30/90/180）",
           [enrich._security_days({}, t, {}) for t in ("head", "mid", "tail")] == [30, 90, 180])
-    rec = {"dims": {"security": "20261020"}}          # 18 天前采过
+    # due_dims/_needs_refresh 读真实钟（无 today 注入口），夹具须相对今天取数，
+    # 写死日期会在零历史 TTL(30) 边界那天翻车（2026-11-19 事故：硬编码 20261020）
+    d18 = (date.today() - timedelta(days=18)).strftime("%Y%m%d")
+    rec = {"dims": {"security": d18}}                  # 18 天前采过
     check("安全分档：有史仓 18 天已到期",
           "security" in enrich.due_dims(rec, "head", False, {"sec_n": 1}))
     check("安全分档：零历史仓 18 天未到期",
