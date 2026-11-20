@@ -1,3 +1,5 @@
+# DocuMind
+
 <div align="center">
 
 <img src="docs/assets/hero.svg" alt="DocuMind - Document Intelligence Pipeline: Ingest, Parse, Embed, Retrieve, Answer" width="100%"/>
@@ -5,6 +7,10 @@
 <br/>
 
 **Private Documents. Structural Understanding. Verifiable Answers.**
+
+<img src="docs/assets/processing-loop.svg" alt="Animated flow from document upload to structure-aware parsing to cited answers" width="90%"/>
+
+*The self-hosted illustration uses a gentle loop, includes a static visual fallback, and honors reduced-motion preferences in viewers that support SVG motion preferences.*
 
 *An open-source workspace that turns complex documents into structured, searchable knowledge — with layout-aware parsing, local semantic vector search, and grounded answers backed by server-verified citations.*
 
@@ -115,6 +121,8 @@ DocuMind is designed for private, single-host deployments and portfolio-scale us
 
 These are implementation goals and controls, not a guarantee of perfect extraction, answer accuracy, or uninterrupted availability. Verify important source material directly in the document preview.
 
+<p align="right"><a href="#documind">↑ Back to top</a></p>
+
 ---
 
 ## Product Workspace
@@ -132,6 +140,8 @@ The DocuMind workspace is a dark-mode Next.js application featuring an interacti
 </div>
 
 > **Screenshots:** Product UI screenshots are not currently included. The SVGs in `docs/assets/` illustrate the workflow, architecture, and citation model. When adding UI screenshots, use synthetic documents and remove personal or account data before committing them.
+
+<p align="right"><a href="#documind">↑ Back to top</a></p>
 
 ---
 
@@ -173,6 +183,8 @@ The default upload cap is 25 MB. Parsing quality depends on the source file; che
 | `failed` | Processing exhausted or encountered a non-recoverable error | Review the error, correct the source/configuration if needed, then retry |
 
 The worker uses a bounded attempt policy. A retry requeues a failed document through the API; repeated rapid retries do not repair invalid input or a missing dependency. See the [processing architecture](docs/ARCHITECTURE.md) for leases, recovery, and job ownership details.
+
+<p align="right"><a href="#documind">↑ Back to top</a></p>
 
 ---
 
@@ -216,6 +228,8 @@ flowchart LR
 
 The browser talks to the web/API edge only. Data stores and the worker are internal services in the production Compose network. Gemini is an outbound provider call made by the backend after retrieval; only the question and selected evidence are sent for answer generation.
 
+<p align="right"><a href="#documind">↑ Back to top</a></p>
+
 ---
 
 ## Trust & Security Guarantees
@@ -255,6 +269,18 @@ LLMs frequently hallucinate page numbers, section titles, and source quotations 
 | Operations access | Metrics token and loopback-bound observability ports | Rotate credentials, restrict dashboard access, and rehearse incident response |
 
 This is a practical boundary map, not a certification or penetration-test report. The system has not had an independent third-party security audit.
+
+### Data handling summary
+
+| Data | Where it is handled | External processing or cleanup |
+|---|---|---|
+| Original document | Private local storage in development, or the configured private S3-compatible bucket | Deleting a document removes its stored object through the authenticated API |
+| Parsed content and lifecycle metadata | PostgreSQL | Included in PostgreSQL backup and restore procedures |
+| Embedding vectors and chunk payloads | Qdrant, filtered by account and document | Derived index can be rebuilt; document deletion removes that document's points |
+| Chat question and retrieved evidence | Sent from the backend to the configured Gemini API when chat is used | Review provider terms for your account and region before using sensitive data |
+| Access credentials | Access token in frontend memory; refresh token in an HttpOnly cookie | Never include tokens in logs, screenshots, issues, or shared API examples |
+
+<p align="right"><a href="#documind">↑ Back to top</a></p>
 
 ---
 
@@ -362,6 +388,8 @@ docker compose down --volumes
 
 The final command deletes local database, Qdrant, and uploaded-file data. Use it only when you intend to reset the development instance.
 
+<p align="right"><a href="#documind">↑ Back to top</a></p>
+
 ---
 
 ## Operations & Troubleshooting
@@ -403,6 +431,8 @@ The API's `/api/v1/health` endpoint checks that the process responds. `/api/v1/r
 5. Follow the release rollback or recovery runbook if data integrity, authentication, or cross-user isolation may be affected.
 
 Avoid disabling ownership checks, CORS validation, rate limiting, or network isolation to work around an error. For deeper procedures, see the [production runbook](docs/DEPLOYMENT-PRODUCTION.md) and [configuration reference](docs/CONFIGURATION.md).
+
+<p align="right"><a href="#documind">↑ Back to top</a></p>
 
 ---
 
@@ -474,6 +504,8 @@ flowchart LR
 
 The release gate is evidence-based: passing CI builds the candidate, while staging qualification and protected approval determine whether it can proceed to production.
 
+<p align="right"><a href="#documind">↑ Back to top</a></p>
+
 ---
 
 ## Observability & Recovery
@@ -500,6 +532,8 @@ Operational assets include:
 These are recorded planning targets, not measured service guarantees. Record actual restore duration, data verification, and any gaps during staging qualification; revise the targets if the chosen host or storage service cannot meet them.
 
 Record backup retention, encryption key custody, restore duration, and the result of a rehearsal in the deployment record. Follow the [production runbook](docs/DEPLOYMENT-PRODUCTION.md) for exact host commands and the [production launch report](docs/PRODUCTION-LAUNCH-REPORT.md) for sign-off evidence.
+
+<p align="right"><a href="#documind">↑ Back to top</a></p>
 
 ---
 
@@ -531,6 +565,8 @@ Record backup retention, encryption key custody, restore duration, and the resul
 | `redis` | Queue broker and distributed rate limit state | Operational state, configured separately from PostgreSQL |
 | `proxy` | TLS termination and routing in production | Caddy certificate and configuration volumes |
 
+<p align="right"><a href="#documind">↑ Back to top</a></p>
+
 ---
 
 ## Essential Technology Stack
@@ -542,6 +578,8 @@ Data & Storage         PostgreSQL 16 · Redis 7.4 · Celery 5.6 + Beat · Privat
 Document AI & Search   IBM Docling 2.129 · Sentence Transformers (all-MiniLM-L6-v2) · Qdrant 1.15 · Gemini 3.8 Flash
 Testing & Tooling      Pytest · Vitest · Testing Library · Docker Compose · Ruff
 ```
+
+<p align="right"><a href="#documind">↑ Back to top</a></p>
 
 ---
 
@@ -595,6 +633,8 @@ npm run dev
 ```
 
 The development server opens at `http://localhost:3000`; the API client defaults to `http://localhost:8000/api/v1`. With `JOB_QUEUE_BACKEND=inprocess`, processing jobs run inside the API process, so this mode is for development only. For durable worker processing and the complete service set, use the [Docker Compose quick start](#quick-start).
+
+<p align="right"><a href="#documind">↑ Back to top</a></p>
 
 ---
 
@@ -666,6 +706,8 @@ curl --fail --silent --show-error -X POST "$API/documents/$DOC_ID/chat" \
 
 Registration sets a refresh cookie as well as returning the access token. For browser clients, let the application manage cookie credentials and token lifecycle; avoid storing access tokens in browser persistent storage.
 
+<p align="right"><a href="#documind">↑ Back to top</a></p>
+
 ---
 
 ## Configuration & Secrets
@@ -684,6 +726,8 @@ Start from [`.env.example`](.env.example) for local Compose and [`.env.productio
 | `METRICS_TOKEN` | Empty | Set a strong value before enabling Prometheus scraping |
 
 The complete variable list, defaults, and validation rules are in [Configuration Reference](docs/CONFIGURATION.md). Never paste secrets into issue reports, terminal transcripts, release records, or screenshots. `GEMINI_API_KEY` is optional for local parsing and indexing, but grounded chat requires it.
+
+<p align="right"><a href="#documind">↑ Back to top</a></p>
 
 ---
 
@@ -707,6 +751,8 @@ Detailed implementation guides, design records, and API contracts are available 
 | [Architecture Decisions (ADRs)](docs/ARCHITECTURE-DECISIONS.md) | Accepted ADRs (ADR-001 through ADR-008) governing technology and design choices |
 | [Design System](docs/DESIGN.md) | Dark-mode design tokens, typography, component states, and accessibility standards |
 | [Project Roadmap](docs/ROADMAP.md) | Product direction and future capabilities; pair with Implementation Progress for current status |
+
+<p align="right"><a href="#documind">↑ Back to top</a></p>
 
 ---
 
@@ -750,6 +796,8 @@ The documented baseline targets one host and one Compose deployment. Scaling req
 **Where should I start if a document fails?**
 Check the document status and backend/worker/scheduler logs, verify available memory and dependencies, then retry only after addressing the cause. See [Operations & Troubleshooting](#operations--troubleshooting).
 
+<p align="right"><a href="#documind">↑ Back to top</a></p>
+
 ---
 
 ## Contributing & Developer Workflow
@@ -788,8 +836,12 @@ Security workflows add CodeQL analysis, dependency review, and secret scanning. 
 - Update relevant docs when configuration, APIs, deployment steps, or recovery behavior change.
 - Include a concise summary and verification evidence in the pull request.
 
+<p align="right"><a href="#documind">↑ Back to top</a></p>
+
 ---
 
 ## License
 
 DocuMind is open-source software licensed under the [MIT License](LICENSE).
+
+<p align="right"><a href="#documind">↑ Back to top</a></p>

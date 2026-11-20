@@ -6,6 +6,8 @@
 <a href="https://godoc.org/github.com/fulldump/inceptiondb"><img src="https://godoc.org/github.com/fulldump/inceptiondb?status.svg" alt="GoDoc"></a>
 </p>
 
+[![Lines of code](https://cloc.hola.cloud/github.com/fulldump/inceptiondb)](https://cloc.hola.cloud/github.com/fulldump/inceptiondb)
+
 A durable in-memory database to store JSON documents.
 
 Write operations are stored into an append-only journal file. The state (documents and indexes) is maintained in memory.

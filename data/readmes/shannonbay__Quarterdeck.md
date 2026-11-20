@@ -4,9 +4,26 @@
 
 **Quarterdeck keeps Claude on top of things for you.**
 
+One prompt, `/goal-new Sell my birdcage on Facebook Marketplace`, and it sold for the asking price the next day. Claude wrote and posted the listing, answered five buyers and lined up the pick-up, and every message waited for my OK first.
+
+![The birdcage sale: the /goal-new prompt, the listing waiting for approval in the Goals pane, the listing live on Facebook, approved replies to buyers, two buyers wanting it at once, the sale confirmed, and the listing marked out of stock](docs/birdcage-sale.gif)
+
+*[How the sale went](#example-selling-a-birdcage) · [the whole sale on video](https://www.youtube.com/watch?v=ufErT8vSRDw) (2 min) · [an agent fixing issues on this repo](https://www.youtube.com/watch?v=okKu9MnWZ5Y) (80 s). Buyers' names are changed and older chats blurred; the opening was re-created with a cleaner prompt, and the rest is screenshots from the real sale.*
+
+Install it in two commands (you need Claude Code and Node.js 22.13+), then type `/goal-new` in Claude Code:
+
+```bash
+claude plugin marketplace add shannonbay/Quarterdeck#release
+claude plugin install quarterdeck-goals@quarterdeck --scope user
+```
+
+More in the [Quickstart](#quickstart).
+
+## What it is
+
 It's a Claude Code plugin that turns Claude into a personal assistant: it keeps looking after the things you hand it, asks before it does anything you haven't allowed, and remembers what you decided.
 
-You give it **goals**, things you want kept true: "fix new issues on my repo and open pull requests", "tell me when the fixes I'm waiting on land in the projects I use", "find me the three best new job ads each week", "unsubscribe me from mailing lists I never read", "clear old installers out of Downloads". Each goal runs on its own schedule in the background of your Claude Code session, on your Claude plan. When it wants to act, it proposes, and you approve or reject from the **Goals pane** beside your chat, or from your phone.
+You give it **goals**: "sell my birdcage on facebook marketplace", "fix new issues on my repo", "find me the three best new job ads each week", "turn NZ$200 into more by flipping Marketplace bargains", "clear old installers out of Downloads". Each goal runs on its own schedule in the background of your Claude Code session, on your Claude plan. When it wants to act, it proposes, and you approve or reject from the **Goals pane** beside your chat, or from your phone.
 
 The idea behind it: persistent intent may matter more than persistent memory.
 
@@ -14,11 +31,11 @@ The idea behind it: persistent intent may matter more than persistent memory.
 
 ## What it's like
 
-- **It asks first.** "Unsubscribe from Chess.com (13 messages in 60 days, none opened) and bin its mail?" waits under **Needs you** until you approve. Rejected with "too formal"? That feedback becomes memory, and later runs follow it.
+- **It asks first.** A buyer offers $30 for your $50 birdcage, and the reply countering at $40 waits under **Needs you** until you approve it. Nothing goes to a buyer before that. Rejected with "too formal"? That feedback becomes memory, and later runs follow it.
 - **It reaches you when you're away.** With Remote Control connected, a new proposal or question pushes to the Claude app on your phone. Reply "approve" and it's done.
-- **It asks when it's stuck.** When a run needs something only you can give (which job sites, signing in to `gh`), it asks under Needs you instead of guessing, and carries on with your answer.
-- **It earns trust one kind of action at a time.** Each kind of action (send mail, delete a file, archive) is *off*, *propose* or *auto*. After 10 approvals in a row, the pane offers to switch that kind to auto.
-- **It remembers.** Each goal keeps its own memory, its open items (never handling the same email twice) and its run history, outside any one conversation.
+- **It asks when it's stuck.** When a run needs something only you can give (your lowest price, when buyers can pick up), it asks under Needs you instead of guessing, and carries on with your answer.
+- **It earns trust one kind of action at a time.** Each kind of action (message a buyer, buy, delete a file) is *off*, *propose* or *auto*. After 10 approvals in a row, the pane offers to switch that kind to auto.
+- **It remembers.** Each goal keeps its own memory, its open items (never assessing the same listing twice) and its run history, outside any one conversation.
 - **It works on Quarterdeck too.** [PR #30](https://github.com/shannonbay/Quarterdeck/pull/30), watches that fire when a state changes, was written and opened by a Quarterdeck goal from [issue #29](https://github.com/shannonbay/Quarterdeck/issues/29); I tested it live and merged it. [How that works](#example-from-issue-to-merged-pr).
 - **You see what it costs.** Each run shows its tokens and time, e.g. `· 48k tokens · 2m`.
 
@@ -26,7 +43,29 @@ The idea behind it: persistent intent may matter more than persistent memory.
 
 *A friend's goal selling his old audio gear stops to ask for condition notes and his floor price instead of guessing.*
 
-Start with `/goal-new`: pick a ready-made goal (maintain my repo, which sets up all the GitHub goals below at once, unsubscribe from mailing lists, a daily news digest, a weekly job scan with your CV, tidy Downloads, inbox triage, keep your GitHub profile current, fix failing CI, triage new GitHub issues, refine new GitHub issues, work on new GitHub issues, review pull requests) or type your own. Schedules can be plain words: "30d", "weekdays at 9", "the first of every month".
+Start with `/goal-new`: pick a ready-made goal (maintain my repo, which sets up all the GitHub goals below at once, unsubscribe from mailing lists, a daily news digest, a weekly job scan with your CV, tidy Downloads, inbox triage, keep your GitHub profile current, fix failing CI, triage new GitHub issues, refine new GitHub issues, work on new GitHub issues, review pull requests, flip items on Facebook Marketplace) or type your own. Schedules can be plain words: "30d", "weekdays at 9", "the first of every month".
+
+## Example: selling a birdcage
+
+It started with one prompt: `/goal-new Sell my as-new (unused) birdcage on Facebook Marketplace. I live in Tawa, Wellington. The photos are the two newest pictures in my Pictures folder. Price $50, pick-up only.` The GIF at the top shows it.
+
+1. The first run found the two photos, wrote the listing (dimensions in centimetres, category, condition) and proposed posting it. Nothing went up until I approved it in the Goals pane.
+2. Approved, the next run filled in Facebook's form through Claude in Chrome, published the listing and turned down Facebook's offer to boost it for a fee.
+3. It asked me once for my lowest price and when buyers could pick up, then checked the Marketplace inbox every few hours. Five people got in touch. For each one it drafted a reply and waited for my OK. One offered $30, and it proposed countering at $40 rather than dropping straight to my floor.
+4. The next morning two buyers wanted it: one that afternoon, one on Saturday. It laid out both, suggested the sooner one with Saturday as a backup, and let me choose. It sent my address only after I gave it the address to send.
+5. Once I confirmed the buyer had collected it and paid, it marked the listing sold and sent the other four a short note.
+
+It sold for the asking price the day after the prompt. My part was approving each reply, choosing the buyer and giving the address; the agent never messaged anyone on its own. And no, it didn't give buyers a recipe for cake.
+
+The whole sale on video (2 minutes, with sound and captions):
+
+[![I created a Claude Code agent to sell my birdcage from a single prompt (video)](https://img.youtube.com/vi/ufErT8vSRDw/maxresdefault.jpg)](https://www.youtube.com/watch?v=ufErT8vSRDw)
+
+### A goal that never finishes: Flipper
+
+Selling one thing is a one-off goal, which moves to **Done** once nothing is left open. The Flipper goal is the standing kind: grow a NZ$200 budget by buying underpriced things on Facebook Marketplace and Trade Me and reselling them for a profit. Watches on Marketplace's free, furniture and appliance listings and on Trade Me start a run when something new is listed. Each run sorts the new titles by name and price alone, opens at most five, looks at every photo, and skips anything that needs a repair, like a freezer whose lid doesn't seal. A deal worth proposing comes with comparable sales, a resale estimate, the fuel for the round trip, the expected profit, a suggested offer and a pick-up time that fits my week. A ledger in its memory keeps the capital, the stock and each flip.
+
+Every message to a seller, offer and purchase waits for my approval. Its first buy was a dryer for NZ$80 on Trade Me that should resell for NZ$150-180, and I pressed Buy Now myself: Claude in Chrome asks a person to confirm a purchase, and a background run has no one to ask.
 
 ## Example: from issue to merged PR
 
@@ -58,7 +97,7 @@ Here's another one on video, from a to-do in the pane to the feature working liv
 ## How it differs
 
 - **From Claude Code's scheduled tasks (`/schedule`):** scheduled tasks run in Anthropic's cloud, so they keep going with your laptop closed. They suit clear-cut work, like reviewing every PR. A Quarterdeck goal is for ongoing jobs where you want a say: it proposes and waits for you, keeps memory and items between runs, and asks when it's unsure. Its guard holds a run to what you've allowed, outside the model, rather than only asking in the prompt.
-- **From OpenClaw:** OpenClaw is a self-hosted, always-on assistant you message from WhatsApp, Telegram and other chat apps, with broad system access and a large community skills marketplace. Quarterdeck is much smaller: no gateway or server to run, and no marketplace of its own. A goal's run is a Claude Code subagent, so it can use the skills, plugins, MCP servers and connectors you've chosen to install in Claude Code (a job-search goal can use your job-search skill, an inbox goal your Gmail connector), on your Claude plan. It works through goals you can see and change, item by item.
+- **From OpenClaw:** OpenClaw is a self-hosted, always-on assistant you message from WhatsApp, Telegram and other chat apps, with broad system access and a large community skills marketplace. Quarterdeck is much smaller: no gateway or server to run, and no marketplace of its own. A goal's run is a Claude Code subagent, so it can use the skills, plugins, MCP servers and connectors you've chosen to install in Claude Code (a job-search goal can use your job-search skill, a selling goal Claude in Chrome), on your Claude plan. It works through goals you can see and change, item by item.
 
 ## Limits
 
@@ -70,17 +109,17 @@ It's an **MCP server** (the tools agents use) and two **Claude Code plugins**: `
 
 ## Persistent goals
 
-A goal is an objective that never finishes. Type `/goal-new` alone to start from a ready-made goal (unsubscribe from mailing lists, a daily news digest, a weekly job scan, tidy your Downloads, inbox triage, keep your GitHub profile current, fix failing CI, work on new GitHub issues, review pull requests), each with its rules and schedule (or, for the GitHub ones, a watch) set. Or create your own with `/goal-new <name>: <objective>` (it works in the session's directory, and asks how often it should run, suggesting a schedule from the objective), or from the web app's home page (**+ New goal**) with standing instructions too. A goal can also be a **one-off**: it runs once and, when nothing is left open, moves to the pane's **Done** section.
+A goal is an objective that never finishes. Type `/goal-new` alone to start from a ready-made goal (unsubscribe from mailing lists, a daily news digest, a weekly job scan, tidy your Downloads, inbox triage, keep your GitHub profile current, fix failing CI, work on new GitHub issues, review pull requests, flip items on Facebook Marketplace with every buy, message and listing approved by you), each with its rules and schedule (or, for the GitHub ones, a watch) set. Or create your own with `/goal-new <name>: <objective>` (it works in the session's directory, and asks how often it should run, suggesting a schedule from the objective), or from the web app's home page (**+ New goal**) with standing instructions too. A goal can also be a **one-off**: it runs once and, when nothing is left open, moves to the pane's **Done** section.
 
 The pane also keeps **your to-do list** for the project (`/todo <text>`, or ask Claude to add something): a backlog for working with Claude on a codebase. The ideas and decisions you put off along the way stay beside the chat, outside the conversation, where a `/clear` or a context compaction can't lose them. Any to-do can be brought back into the conversation with **Ask…** (a question, nothing changed), **Plan** (plan mode, for you to review) or **Start**. A list can hold anything, not only code work.
 
 - **Runs.** Each run is a fresh background subagent in your Claude Code session, with its own context: it doesn't interrupt your conversation, and its report goes to the Goals pane, not your chat. It calls `get_goal_brief` — objective, instructions, memory, your decisions since the last run, open items, recent run summaries, latest health — handles what's new, and ends with `end_run` and a summary for the next run.
 - **Triggers.** Every N minutes (with optional active hours), a cron expression, **Run now**, a **webhook** with a per-goal secret, a failing **health check**, or a **watch**: a command that lists what is there now (open issues, feed entries, files), checked every few minutes, where a line it hasn't printed before starts a run that is told what is new. For mail and other connector-only sources, a watch calls a read-only connector tool instead.
-- **Work items.** Each thing the agent handles is an item, deduplicated by an external ID (e.g. an email's ID) so it's never handled twice. Resolved items are hidden after 7 days.
-- **Autonomy per action category** (e.g. `email.archive`, `email.send`): *off*, *propose* (the agent asks first — the default), or *auto*. Proposals wait under **Needs you**; approve and the next run carries the action out; reject with feedback and the feedback becomes **memory** later runs follow. After 10 approvals in a row, the page suggests switching that category to *auto*.
-- **Enforcement.** With tool rules (`mcp__gmail__send*` → `email.send`), the **quarterdeck-guard** plugin blocks a run's tool call that the goal's autonomy doesn't allow, e.g. sending mail without an approved proposal. A run also can't approve its own proposals or change the goal's settings.
+- **Work items.** Each thing the agent handles is an item, deduplicated by an external ID (e.g. a listing's ID) so it's never handled twice. Resolved items are hidden after 7 days.
+- **Autonomy per action category** (e.g. `marketplace.message`, `marketplace.buy`): *off*, *propose* (the agent asks first — the default), or *auto*. Proposals wait under **Needs you**; approve and the next run carries the action out; reject with feedback and the feedback becomes **memory** later runs follow, and a run is queued to redo the proposal or drop it. After 10 approvals in a row, the page suggests switching that category to *auto*.
+- **Enforcement.** With tool rules (`mcp__claude-in-chrome__form_input` → `browser.act`), the **quarterdeck-guard** plugin blocks a run's tool call that the goal's autonomy doesn't allow, e.g. typing a message to a seller without an approved proposal. A run also can't approve its own proposals or change the goal's settings.
 - **Quarterdeck refuses; Claude Code allows.** The guard never lets a call through on its own. *auto* (or an approved proposal) means Quarterdeck doesn't object, and the call then goes through Claude Code's own permission rules like any other: an allow rule, auto mode's safety review, or a prompt. For a run to act unattended, allow those tools in Claude Code too; an expanded goal in the pane lists the allow rules its *auto* tools need, and Claude can add them for you.
-- **Health.** A command that exits 0 while the goal is being met; the last number it prints is charted (e.g. unread mail older than a day). A failure can start a run.
+- **Health.** A command that exits 0 while the goal is being met; the last number it prints is charted (e.g. installers left in Downloads). A failure can start a run.
 - **Memory.** Rules, facts and preferences — written by you, learned by the agent, or taken from your feedback. Pin what must always be included.
 
 Goals run while Claude Code is open with both plugins installed. With several sessions open, one at a time runs them, so after updating the plugins, reload them in every open session. `npm run doctor` tells you when they can't run. Design: [`specs/persistent-goals.md`](specs/persistent-goals.md).
@@ -100,13 +139,13 @@ The tools for building plans by hand (`create_plan`, `provision_tasks`, `next_ta
 | `list_goals` | Persistent goals with open items and items waiting for review |
 | `get_goal_brief` | Start of a run: everything a fresh agent needs, in one call |
 | `add_item` | Add a work item (deduplicated by `external_ref`); actions are proposed, recorded or refused per the goal's autonomy |
-| `remember` / `forget` | Add a fact, rule or preference to the goal's memory; deactivate one an agent added |
+| `remember` / `forget` | Add a fact, rule or preference to the goal's memory; forget one an agent added (it stays as inactive memory, which you can restore) |
 | `recall` | Read in full the memories the brief only lists (`memory_index`) |
 | `propose_curation` | A memory curation run's one proposal (merge, reword, retire, unpin, add), which the server applies if you approve it |
 | `end_run` | Finish a run with a summary for the next one |
 | `run_goal` | Queue a run now |
 
-The plugins also use `goals_overview`, `goals_tick` (one scheduler pass), `decide_item`, `cancel_run`, `set_goal_status`, `create_goal`, `delete_memory`, `attach_agent`, `fail_run` and `guard_check`. The guard plugin refuses the person's actions among them (approving, cancelling, pausing...) to agents and to Claude.
+The plugins also use `goals_overview`, `goals_tick` (one scheduler pass), `decide_item`, `cancel_run`, `set_goal_status`, `create_goal`, `delete_memory`, `restore_memory`, `restore_goal`, `purge_goal`, `attach_agent`, `fail_run` and `guard_check`. The guard plugin refuses the person's actions among them (approving, cancelling, pausing...) to agents and to Claude.
 
 **Goal items**
 
@@ -184,8 +223,8 @@ Open [http://localhost:3000](http://localhost:3000) for goal pages and webhooks.
 
 ### Your first goal
 
-1. Give your Claude Code session the tools the goal needs (e.g. a mail MCP server for an inbox goal). Runs are subagents of that session, so they get the same tools.
-2. In the goal's directory, type `/goal-new` and pick a ready-made goal, or run `/goal-new Inbox: keep my inbox under 20 unread` and pick how often it runs (it suggests one: hourly, for an inbox). The first run starts within a minute. Change it later with `/goal-schedule inbox every 6h`. In the web app you can also give it standing instructions.
+1. Give your Claude Code session the tools the goal needs (e.g. Claude in Chrome for a Marketplace goal). Runs are subagents of that session, so they get the same tools.
+2. In the goal's directory, type `/goal-new` and pick a ready-made goal, or run `/goal-new Birdcage: sell my birdcage on Facebook Marketplace for $50, pick-up only` and pick how often it runs (it suggests one from the objective). The first run starts within a minute. Change it later with `/goal-schedule birdcage every 3h`. In the web app you can also give it standing instructions.
 3. Set each action category to *off*, *propose* or *auto* (in the web app's goal **Settings**). Keep anything irreversible at *propose* or *off* to start. Unlisted categories are *propose*.
 4. Optional: add **tool rules** (tool name → category) so the guard plugin blocks actions the goal doesn't allow, and a **health check** command to chart how the goal is doing.
 5. Approve or reject what the Goals pane shows under **Needs you** (`/goals`). Your rejections become memory, so the agent improves run by run.
@@ -272,6 +311,7 @@ The packages use Vitest with `QUARTERDECK_DB=:memory:` so tests are isolated and
 | `QUARTERDECK_TOOLS` | goals | MCP server: `all` also lists the plan tools (hidden by default) |
 | `QUARTERDECK_REQUIRE_DECOMPOSE` | off | MCP server, plan tools: `1` blocks activating a task with no sub-tasks unless `state.atomic` is true |
 | `QUARTERDECK_STRICT_COMPLETE` | off | MCP server, plan tools: `1` blocks completing a task while any child is unresolved (otherwise a warning) |
+| `QUARTERDECK_DELETED_RETENTION_DAYS` | 30 | MCP server: days a deleted goal can be restored before the scheduler erases it for good; `0` keeps deleted goals until you delete them permanently |
 | `QUARTERDECK_ALLOWED_HOSTS` | — | Web server: extra `host:port` values to accept besides localhost (comma-separated) |
 
 The MCP server gets Claude Code's environment, so set its variables where Claude Code starts, or under `env` in `~/.claude/settings.json`.

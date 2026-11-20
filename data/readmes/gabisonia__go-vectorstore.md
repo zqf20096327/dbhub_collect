@@ -51,8 +51,9 @@ go get github.com/gabisonia/go-vectorstore@latest
 ```
 
 Use the [release list](https://github.com/gabisonia/go-vectorstore/releases) to
-check available tags and pin the resolved version in go.mod. This checkout
-prepares v0.4.1; its tag becomes available after release publication. See the
+check available tags and pin the resolved version in go.mod. Published
+[v0.5.0](https://github.com/gabisonia/go-vectorstore/releases/tag/v0.5.0) is available.
+Master can include later changes; use a matching tag for a released checkout. See the
 [upgrade guide](docs/upgrading.md) and [compatibility policy](docs/releases.md).
 
 ## Quick Start (Local)
@@ -375,7 +376,7 @@ any publishing job runs. Existing tags must point to the checked-out, tested
 commit; the workflow will not move a tag to another commit. Prerelease versions
 are published as GitHub prereleases.
 
-`VERSION` selects the source version being prepared or tagged (`0.4.1`). It does
+`VERSION` selects the source version being prepared or tagged (`0.5.0`). It does
 not establish that the tag has been published. Choose an unused version and update
 `VERSION` and the changelog in a reviewed PR before publishing from master. Published tags are immutable; documentation updates after
 a release do not change the source stored under that tag.
@@ -398,6 +399,7 @@ git push origin "v${RELEASE_VERSION}"
 - Redis model snapshots and exact retrieval: [`redis-store`](samples/redis-store/README.md)
 - Typed semantic search and RAG: [`typed-search`](samples/typed-search/README.md), [`typed-rag`](samples/typed-rag/README.md)
 - Focused model workflows: [`recipes`](samples/recipes/README.md)
+- Generated typed filters and ordering: [`typed-fields`](samples/typed-fields/README.md)
 - Model-driven collections (no API key): [`samples/model-store`](samples/model-store/README.md)
 - Persistent SQLite and optional vectors (no API key): [`samples/sqlite-store`](samples/sqlite-store/README.md)
 - Optional SQLite scalar L1 execution: [`samples/sqlitevec-store`](samples/sqlitevec-store/README.md)

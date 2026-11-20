@@ -31,7 +31,7 @@ run on any of the supported databases. Read about the project's history in
   plain property access
 - **`include` instead of an ORM**: fetch related rows as nested arrays or
   objects inside the query builder, no relations setup required
-- **Auto-migrations**: diff your schema against the database and update it
+- **Schema push**: diff your schema against the database and update it
   anywhere, including the browser
 - **Zero dependencies, small bundle**: `rado` + the PostgreSQL utilities
   bundle to roughly 8.5 kB gzipped
@@ -99,7 +99,7 @@ The full documentation lives in [docs](docs/README.md). A map of the territory:
 | [The sql tag](docs/queries/sql.md)                                  | Raw SQL escape hatches, safely                                                                                                                                                            |
 | [Transactions & batch](docs/runtime/transactions-and-batch.md)      | Atomic operations, rollbacks, batching                                                                                                                                                    |
 | [Prepared statements](docs/runtime/prepared-statements.md)          | Placeholders, `prepare`, inspecting generated SQL                                                                                                                                         |
-| [Migrations](docs/runtime/migrations.md)                            | `db.create`, `db.migrate` and how diffing works                                                                                                                                           |
+| [Schema push](docs/runtime/push.md)                                 | `db.create`, `push` and how diffing works                                                                                                                                                 |
 | [Universal queries](docs/runtime/universal-queries.md)              | One query, three databases                                                                                                                                                                |
 | [Coming from Drizzle](docs/drizzle.md)                              | Side-by-side comparison and migration notes                                                                                                                                               |
 
@@ -114,19 +114,23 @@ import {connect} from 'rado/driver/better-sqlite3'
 const db = connect(new Database('app.db'))
 ```
 
-| Database   | Package                                                                            | Import                       | Sync/async |
-| ---------- | ---------------------------------------------------------------------------------- | ---------------------------- | ---------- |
-| PostgreSQL | [pg](https://www.npmjs.com/package/pg)                                             | `rado/driver/pg`             | async      |
-| PostgreSQL | [@electric-sql/pglite](https://www.npmjs.com/package/@electric-sql/pglite)         | `rado/driver/pglite`         | async      |
-| PostgreSQL | [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless) | `rado/driver/pg`             | async      |
-| PostgreSQL | [@vercel/postgres](https://www.npmjs.com/package/@vercel/postgres)                 | `rado/driver/pg`             | async      |
-| SQLite     | [better-sqlite3](https://www.npmjs.com/package/better-sqlite3)                     | `rado/driver/better-sqlite3` | sync       |
-| SQLite     | `node:sqlite`                                                                      | `rado/driver/node-sqlite`    | sync       |
-| SQLite     | `bun:sqlite`                                                                       | `rado/driver/bun-sqlite`     | sync       |
-| SQLite     | [sql.js](https://www.npmjs.com/package/sql.js)                                     | `rado/driver/sql.js`         | sync       |
-| SQLite     | [@libsql/client](https://www.npmjs.com/package/@libsql/client)                     | `rado/driver/libsql`         | async      |
-| SQLite     | Cloudflare D1                                                                      | `rado/driver/d1`             | async      |
-| MySQL      | [mysql2](https://www.npmjs.com/package/mysql2)                                     | `rado/driver/mysql2`         | async      |
+| Database   | Package                                                                                          | Import                       | Sync/async |
+| ---------- | ------------------------------------------------------------------------------------------------ | ---------------------------- | ---------- |
+| PostgreSQL | [pg](https://www.npmjs.com/package/pg)                                                           | `rado/driver/pg`             | async      |
+| PostgreSQL | [@electric-sql/pglite](https://www.npmjs.com/package/@electric-sql/pglite)                       | `rado/driver/pglite`         | async      |
+| PostgreSQL | [postgres](https://www.npmjs.com/package/postgres)                                               | `rado/driver/postgres`       | async      |
+| PostgreSQL | [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless)               | `rado/driver/pg`             | async      |
+| PostgreSQL | `neon()` from [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless) | `rado/driver/neon-http`      | async      |
+| PostgreSQL | [@vercel/postgres](https://www.npmjs.com/package/@vercel/postgres)                               | `rado/driver/pg`             | async      |
+| SQLite     | [better-sqlite3](https://www.npmjs.com/package/better-sqlite3)                                   | `rado/driver/better-sqlite3` | sync       |
+| SQLite     | `node:sqlite`                                                                                    | `rado/driver/node-sqlite`    | sync       |
+| SQLite     | `bun:sqlite`                                                                                     | `rado/driver/bun-sqlite`     | sync       |
+| SQLite     | [sql.js](https://www.npmjs.com/package/sql.js)                                                   | `rado/driver/sql.js`         | sync       |
+| SQLite     | [@libsql/client](https://www.npmjs.com/package/@libsql/client)                                   | `rado/driver/libsql`         | async      |
+| SQLite     | Cloudflare D1                                                                                    | `rado/driver/d1`             | async      |
+| SQLite     | Cloudflare Durable Objects                                                                       | `rado/driver/durable-object` | sync       |
+| MySQL      | [mysql2](https://www.npmjs.com/package/mysql2)                                                   | `rado/driver/mysql2`         | async      |
+| Any        | `Bun.sql`                                                                                        | `rado/driver/bun-sql`        | async      |
 
 Synchronous drivers give you a fully synchronous database. No `await`
 required, although awaiting queries still works. See
@@ -209,15 +213,17 @@ const names = await db.select(User.name).from(User)
 
 More in [Universal queries](docs/runtime/universal-queries.md).
 
-### Auto-migrations
+### Schema push
 
 ```ts
+import {push} from 'rado/sqlite/push'
+
 // Compares the defined schema to the actual database and applies the diff
-await db.migrate(User, Post)
+await push(db, User, Post)
 ```
 
 Works in Node.js, Bun, Deno and the browser. It is powerful and a little
-direct, so read [Migrations](docs/runtime/migrations.md) before pointing it at
+direct, so read [Schema push](docs/runtime/push.md) before pointing it at
 production.
 
 ## Coming from Drizzle?

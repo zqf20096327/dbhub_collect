@@ -34,8 +34,8 @@ closely; the differences are listed below.
   *Help > Report a bug* opens this repository's issues.
 - The start screen has no links to LichtFeld Studio's community, donations or sponsors.
 - Interface in English and Spanish only.
-- Settings, plugins, logs and caches live in `%USERPROFILE%\.opengaussian`, so it does not share them with an
-  installed LichtFeld Studio.
+- Settings, plugins, logs and caches live in `%LOCALAPPDATA%\Open3D\OpenGaussian`, with the other Open3D apps,
+  so it does not share them with an installed LichtFeld Studio.
 - GPU JPEG decoding works without installing the CUDA Toolkit (nvJPEG ships with the program).
 
 ## Requirements
@@ -54,7 +54,9 @@ and kept for later.
 Download `opengaussian-<version>-windows-x64.zip` from the
 [releases](https://github.com/carlesllavata/OpenGaussian/releases), unzip it anywhere and run
 `bin\OpenGaussian.exe`. Keep the folders together: the program needs them. To uninstall, delete the folder.
-Your settings in `%USERPROFILE%\.opengaussian` are kept; delete that folder to remove them too.
+Your settings in `%LOCALAPPDATA%\Open3D\OpenGaussian` are kept; delete that folder to remove them too. Version
+0.1.0 kept them in `%USERPROFILE%\.opengaussian`: the first start of a newer version copies them to the new
+folder and leaves the old one as it was, so that one can go too.
 
 The [Open3D launcher](https://github.com/carlesllavata/Open3D) will install, update and uninstall OpenGaussian
 once it lists it; it is not in the launcher yet.

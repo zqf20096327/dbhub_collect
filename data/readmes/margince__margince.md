@@ -78,6 +78,8 @@ disagree.
 Each AI task can use a model on your own machines (Ollama or vLLM) or a cloud provider. A task that uses
 a cloud provider sends the text it reads to that provider. The `sovereign` profile refuses every cloud
 provider. [docs/reference/ai-egress.md](docs/reference/ai-egress.md) lists, for each task, what can leave.
+Each model and each AI tool a user can connect has a test score in
+[docs/reference/which-ai-you-can-use.md](docs/reference/which-ai-you-can-use.md).
 
 ## What is not here yet
 
@@ -109,8 +111,7 @@ accept [CLA.md](CLA.md) to send code.
 - Each release becomes Apache 2.0 no later than two years after it ships.
 
 Without a license token, a production install runs a 14-day trial and then stops working until a token is
-set up. For up to 3 seats, ask for a free token with the
-[free license form](https://dist.margince.com/free-license). It lasts one year. If this blocks you, please say so
-in an issue.
+set up. To ask for a token, use the [contact form](https://margince.com/contact/). If this blocks you, please
+say so in an issue.
 
 Prices are on [margince.com](https://margince.com). Margince is built by [Gradion](https://gradion.com).

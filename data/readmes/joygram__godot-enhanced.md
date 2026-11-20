@@ -2,6 +2,55 @@
 
 Patched build of [Godot Engine](https://github.com/godotengine/godot) `4.7.2-stable`. Upstream history kept intact; patches on top.
 
+## ⚡ Install / update — one command
+
+GDScript (editor + web export templates):
+
+```bash
+# Linux · macOS
+curl -fsSL https://raw.githubusercontent.com/joygram/godot-enhanced/main/install.sh | bash
+```
+
+```powershell
+# Windows (PowerShell)
+irm https://raw.githubusercontent.com/joygram/godot-enhanced/main/install.ps1 | iex
+```
+
+C# / .NET 11 (C# editor + C# web templates + NuGet):
+
+```bash
+# Linux · macOS
+curl -fsSL https://raw.githubusercontent.com/joygram/godot-enhanced/main/install.sh | bash -s -- csharp
+```
+
+```powershell
+# Windows (PowerShell)
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/joygram/godot-enhanced/main/install.ps1))) csharp
+```
+
+- Update = same command again → latest release, installed releases skipped
+- Run: `godot-enhanced` (added to PATH)
+- Location: `~/.godot-enhanced/<release>`, templates in `export_templates/4.7.2.stable.enhanced-<version>`
+- Pin: `GODOT_ENHANCED_TAG=editor-4.7.2-0.3.3` (or `dotnet-web-…`) before the command
+- C#: [.NET 11 SDK](https://dotnet.microsoft.com/download) first; project `net11.0` + kit `Program.cs`
+- Project shortcut: `package.json` `"engine:update": "curl -fsSL <install.sh URL> | bash"` → `npm run engine:update`
+
+| Platform | GDScript editor | C# kit |
+|---|---|---|
+| Windows | x86_64, arm64 | x86_64 |
+| Linux | x86_64, arm64 | x86_64 |
+| macOS | universal | arm64 |
+
+Build from source instead: `npm run build` (checks and installs the toolchain) → [BUILDING.md](BUILDING.md)
+
+🇰🇷 설치·업데이트
+- 위 명령 한 줄. GDScript = 기본, C# = `csharp`
+- 소스 빌드 = `npm run build` → [BUILDING.md](BUILDING.md)
+- 다시 실행 = 최신으로 업데이트 (받은 릴리스는 건너뜀)
+- 실행 = `godot-enhanced`
+
+🇰🇷 [한국어 안내](#한국어-안내) · [Patches](#patches) · [Prebuilt Web template](#prebuilt-web-export-template) · [C# web export](#c-net-web-export) · [Releases](https://github.com/joygram/godot-enhanced/releases)
+
 ## 🐱 Showcase — a Unity game moved to godot-enhanced C#, almost untouched
 
 Same game, two engines. YangVil (cat-raising RPG) ported from Unity to godot-enhanced C# (.NET 11).
@@ -36,6 +85,25 @@ Same game, two engines. YangVil (cat-raising RPG) ported from Unity to godot-enh
 - AOT template = game AOT output linked via `mono_wasm_aot_dir=` (agent test `dotnet-web-aot`)
 - AOT gives no startup gain: startup = wasm compile + engine init; AOT helps C# run time
 - Reproduce: `node scripts/web/compare.mjs 3` in yangvil-godot-csharp
+
+## 🔧 0.3.3 — Fix: static web templates expose `Module.FS` and `Module.GL`
+
+- 0.3.2 static templates: `Module.FS` undefined → custom loaders mounting lazy files crash (`Cannot read properties of undefined (reading 'cwd')`)
+- dlink builds exported them through `MAIN_MODULE`; static builds now list `FS`, `GL` in `EXPORTED_RUNTIME_METHODS`
+
+## 🗄️ 0.3.2 — SQLite built into the web template (no dlink side module)
+
+| rpg2d web (threads) | 0.3.1 dlink | **0.3.2 static** |
+|---|---|---|
+| Engine wasm files | `index.wasm` + `index.side.wasm` 42 MB + `libgdsqlite` | **`index.wasm` only** |
+| `variant/extensions_support` | on | **off** |
+
+- New module `modules/sqlite` = [godot-sqlite](https://github.com/2shady4u/godot-sqlite) linked into the engine, same `SQLite` class and API
+- Off by default; web static templates (`web_release.zip`, `web_nothreads_release.zip`) build with `module_sqlite_enabled=yes`
+- dlink templates and editors unchanged (keep using the godot-sqlite GDExtension)
+- Why: iOS Safari stalled at boot loading the dlink side module
+- Use 0.3.3 or later (0.3.2 static templates miss `Module.FS`)
+- Design: [patches/sqlite-module.md](patches/sqlite-module.md)
 
 ## 🔧 0.3.1 — Fix: GDScript prebuild crashed on web (bytecode made on 64-bit, run on wasm32)
 
@@ -265,8 +333,8 @@ Same game, two engines. YangVil (cat-raising RPG) ported from Unity to godot-enh
 
 - Measured: Windows, headless Chrome, debug = release
 - Reference: official Godot empty GDScript web = 55.4 MB WASM heap
-- Version `<godot>-<enhanced>` → `4.7.2-0.3.0`, source [`ENHANCED_VERSION`](ENHANCED_VERSION)
-- Engine build name: `enhanced-0.3.0`
+- Version `<godot>-<enhanced>` → `4.7.2-0.3.3`, source [`ENHANCED_VERSION`](ENHANCED_VERSION)
+- Engine build name: `enhanced-0.3.3`
 
 **Keywords:**
 - Godot 4 C# web export, Godot 4.7 C# HTML5, "C# projects cannot be exported to the web" fix
@@ -292,10 +360,14 @@ Same game, two engines. YangVil (cat-raising RPG) ported from Unity to godot-enh
 - Godot Japanese IME Linux, Godot Mozc fcitx5 ibus, Godot Wayland text-input-v3 IME
 - Godot 日本語入力, Godot 日本語入力 できない, Godot IME 変換 できない, Godot Linux Mozc fcitx5, Godot Wayland 日本語, Godot LineEdit 日本語
 
+## Patches
+
 | Patch | Platform | Fixes |
 |---|---|---|
 | [Linux Japanese input check](patches/linux-ime-japanese.md) | Linux X11 + Wayland | Mozc via fcitx5 verified, automated tests |
 | Web pre-compression | Web | Big `.pck` / `.wasm` downloads, no server gzip |
+| [GDScript prebuild](patches/gdscript-prebuild.md) | All, aimed at Web / WASM | Ships compiled bytecode, no compile at boot (0.2.0) |
+| [SQLite engine module](patches/sqlite-module.md) | Web static templates | SQLite without dlink side module (0.3.2) |
 | [Windows IME queued key](patches/windows-ime-queued-key.md) | Windows editor + game | Korean (Hangul) typing loses caret advance after a syllable is committed |
 | [GDScript parser release](patches/gdscript-parser-release.md) | All, aimed at Web / WASM | Syntax trees of mutually dependent scripts stay alive after compile → high peak memory at boot |
 | [C# (.NET) web export](patches/dotnet-web-export.md) | Web + C# editor | Export C# projects to the web (Mono on WebAssembly). Experimental. Taken from upstream PR #106125 and ComplexRobot's rebase |
@@ -376,6 +448,27 @@ git cherry-pick 4.7.2-stable..origin/main
 ## 한국어 안내
 
 Godot 4.7.2 공식 소스에 패치를 더한 빌드입니다. 업스트림 커밋 이력은 그대로 유지합니다.
+
+바로가기: [0.3.3](#-033--수정-정적-웹-템플릿이-modulefsmodulegl-내보냄) · [0.3.2 SQLite 내장](#️-032--sqlite-를-웹-템플릿에-내장-dlink-사이드-모듈-없이) · [0.3.1](#-031--수정-웹-gdscript-사전-빌드-시작-오류-64비트에서-만든-바이트코드를-wasm32-가-읽음) · [0.3.0 사전 빌드](#-030--gdscript-사전-빌드-전-릴리스-탑재-웹-전부-emscripten-700-c-포함) · [패치 목록](#patches) · [English](#godot-enhanced--godot-472-with-smaller-web-downloads-web-wasm-memory-patch-c-web-export-korean-ime-fix-and-verified-japanese-input)
+
+### 🔧 0.3.3 — 수정: 정적 웹 템플릿이 `Module.FS`·`Module.GL` 내보냄
+
+- 0.3.2 정적 템플릿: `Module.FS` 없음 → 지연 마운트 로더 부팅 실패 (`Cannot read properties of undefined (reading 'cwd')`)
+- 정적 빌드 `EXPORTED_RUNTIME_METHODS` 에 `FS`, `GL` 추가 (dlink 는 `MAIN_MODULE` 로 이미 내보냄)
+
+### 🗄️ 0.3.2 — SQLite 를 웹 템플릿에 내장 (dlink 사이드 모듈 없이)
+
+| rpg2d 웹 (멀티스레드) | 0.3.1 dlink | **0.3.2 정적** |
+|---|---|---|
+| 엔진 wasm 파일 | `index.wasm` + `index.side.wasm` 42 MB + `libgdsqlite` | **`index.wasm` 하나** |
+| `variant/extensions_support` | 켬 | **끔** |
+
+- 새 모듈 `modules/sqlite` = [godot-sqlite](https://github.com/2shady4u/godot-sqlite) 엔진 내장, `SQLite` 클래스·API 동일
+- 기본 끔, 웹 정적 템플릿만 `module_sqlite_enabled=yes` 로 빌드
+- dlink 템플릿·편집기 그대로 (godot-sqlite GDExtension 사용)
+- 이유: iOS Safari 가 dlink 사이드 모듈 로딩에서 부팅 멈춤
+- 0.3.3 이상 사용 (0.3.2 정적판 `Module.FS` 누락)
+- 설계: [patches/sqlite-module.md](patches/sqlite-module.md)
 
 ### 🔧 0.3.1 — 수정: 웹 GDScript 사전 빌드 시작 오류 (64비트에서 만든 바이트코드를 wasm32 가 읽음)
 

@@ -36,15 +36,16 @@
 - **Small, transparent scope.** Rizzbase is a local file library, not a
   realtime cloud platform. Queries scan a Lobby in memory; there are no indexes.
 
-V1 includes the Go engine and CLI, TypeScript/Node.js and Python SDKs,
-Project/Lobby/Yap operations, in-memory filters and ordering, and JSON
-export/restore. The React product UI is a preview and is not connected to
-local database files.
+V1 includes the Go engine and CLI, official TypeScript/Node.js, Python, and Go
+SDKs, Project/Lobby/Yap operations, append-only Events, in-memory filters and
+ordering, and JSON export/restore. See [Events](docs/events.md) for SDK usage.
+The React product UI is a preview and is not connected to local database files.
 
 ## Technology stack
 
 <p>
   <img src="https://img.shields.io/badge/Go-engine-0B0F0E?style=for-the-badge&logo=go&logoColor=00ADD8" alt="Go engine" />
+  <img src="https://img.shields.io/badge/Go-Official%20SDK-0B0F0E?style=for-the-badge&logo=go&logoColor=00ADD8" alt="Official Go SDK" />
   <img src="https://img.shields.io/badge/Node.js-SDK-0B0F0E?style=for-the-badge&logo=nodedotjs&logoColor=5FA04E" alt="Node.js SDK" />
   <img src="https://img.shields.io/badge/TypeScript-typed%20API-0B0F0E?style=for-the-badge&logo=typescript&logoColor=3178C6" alt="TypeScript SDK" />
   <img src="https://img.shields.io/badge/Python-SDK-0B0F0E?style=for-the-badge&logo=python&logoColor=FFD43B" alt="Python SDK" />
@@ -55,7 +56,7 @@ local database files.
 </p>
 
 - **Core:** Go engine and CLI; encrypted Projects use AES-256-GCM.
-- **SDKs:** Node.js with TypeScript, plus Python.
+- **SDKs:** Node.js with TypeScript, Python, and the official Go process client.
 - **Desktop:** Wails app with a React interface.
 - **Web preview:** React, Vite, and Tailwind CSS; it uses sample data and
   cannot access local `.rizz` files.
@@ -95,6 +96,13 @@ using the instructions in [Engine installation](docs/installation.md), or
 
 ### 2. Install an SDK
 
+For Go, use the official engine-native API:
+
+```sh
+go get rizzbase/engine/core
+```
+See the [Go SDK guide](docs/go-sdk.md).
+
 For Node.js:
 
 ```sh
@@ -113,21 +121,23 @@ python -m pip install rizzbase
 
 See [engine installation](docs/installation.md) for version pinning, manual
 binary downloads, and platform details. Binary selection is configurable in
-each SDK: Node.js uses `binaryPath`, Python uses `binary_path`, then both check
-`RIZZBASE_BINARY` and `PATH`.
+each SDK: Node.js uses `binaryPath`, Python uses `binary_path`, and Go uses
+`WithBinaryPath`; all fall back to `RIZZBASE_BINARY` and `PATH`.
 
 ### Supported languages
 
+- **Go** — official engine-native API; import `rizzbase/engine/core`.
 - **Node.js / TypeScript** — Node.js 20+, install with `npm install rizzbase`.
 - **Python** — Python 3.10+, install with `python -m pip install rizzbase`.
+- **Go** — Go 1.24+, install with `go get github.com/pazti/Rizz-Base/sdk/go`.
 
-The SDKs never download the engine automatically; provide it using the
-constructor option, `RIZZBASE_BINARY`, or `PATH`. See the [Node.js guide](docs/node-sdk.md),
-[Python SDK guide](python/README.md), [installers and conformance details](docs/installation.md),
+[SDKs](docs/sdks.md) never download the engine automatically; provide it using
+the constructor option, `RIZZBASE_BINARY`, or `PATH`. See the [Node.js guide](docs/node-sdk.md),
+[Python SDK guide](python/README.md), [Go SDK guide](sdk/go/README.md), [installers and conformance details](docs/installation.md),
 [conformance fixtures](conformance/README.md), and [runnable examples](examples/README.md).
 
-> **What's new since 1.1.0:** checksum-verifying engine installers, a Python
-> SDK, and safer engine discovery and compatibility checks. The SDKs still
+> **What's new since 1.1.0:** checksum-verifying engine installers, Python and
+> Go SDKs, and safer engine discovery and compatibility checks. The SDKs still
 > require an engine you install or build yourself.
 
 ## 60-second quick start
@@ -215,8 +225,10 @@ browser preview remains separate and cannot access local `.rizz` files.
 
 The [Microsoft Store packaging guide](studio/store/README.md) covers MSIX
 generation and Partner Center setup. The public
-[privacy policy](https://rizz-base.vercel.app/privacy/) describes data handling
-for Studio, the SDKs, command-line tools, and website.
+[privacy policy](https://rizzbase.tech/privacy/) describes data handling
+for Studio, the SDKs, command-line tools, and website. For general or privacy
+questions, email [hello@rizzbase.tech](mailto:hello@rizzbase.tech); for direct
+contact, reach [Paul](mailto:paul@rizzbase.tech).
 
 ## Reopen an existing Project
 
@@ -324,8 +336,9 @@ npx tsc --noEmit --strict --target ES2022 --module Node16 \
 Go 1.24+ and Node.js 20+ are required. The SDK's tests build the local Go CLI
 and exercise it using temporary encrypted projects. Binary releases build six
 OS/architecture variants when a matching version tag is pushed. The latest
-engine release is `v1.2.0`; Node.js and Python SDK packages remain on their
-independent `1.1.0` version line.
+engine release is `v1.3.0`; the official Go SDK follows the engine module,
+while Node.js and Python SDK packages remain on their independent `1.1.0`
+version line.
 
 See [SDK guide](docs/node-sdk.md), [file format and Go API](doc/FORMAT-legacy.md),
 [contributing](CONTRIBUTING.md) and [security](SECURITY.md). Rizzbase is

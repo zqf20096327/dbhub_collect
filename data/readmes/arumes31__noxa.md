@@ -31,7 +31,7 @@
 **noXa** combines voice channels, camera and screen sharing, direct and group
 conversations, and channel forums in a desktop client and an installable web app. Its Go server uses a
 framed control protocol, a **Pion WebRTC SFU**, PostgreSQL for persistent state,
-and optional Redis pub/sub. Named roles control access and moderation.
+and an optional Redis readiness dependency (one server process; Redis carries no fan-out). Named roles control access and moderation.
 
 The published desktop binary targets **Windows x64**. The Wails source also has
 Linux/macOS platform code; CI exercises Windows and Linux, but does not publish
@@ -70,12 +70,12 @@ system permissions determine the available voice, camera and notification tools.
 </details>
 
 > [!NOTE]
-> **Encryption boundaries** (details in [Encryption](#encryption)): direct
-> messages and private groups 
+> **Encryption boundaries** (details in [E
 
 [...截断...]
 
-are end-to-end encrypted with Olm (vodozemac),
+ncryption](#encryption)): direct
+> messages and private groups are end-to-end encrypted with Olm (vodozemac),
 > and channel voice, video and screen sharing are end-to-end encrypted with a
 > key shared by the channel's members. Private calls (direct and group) are
 > end-to-end encrypted with per-call keys sent over Olm. Channel/global chat
@@ -138,5 +138,4 @@ app:
 
 **Channel voice, video and screen sharing (`noxa-media-e2ee-v1`).** On a
 server that advertises this capability, every channel microphone, camera,
-screen and screen-audio frame is encrypted on the sending device before it
-reaches the server's media relay
+screen and screen-audio frame is encrypted o

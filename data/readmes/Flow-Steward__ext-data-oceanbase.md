@@ -8,7 +8,7 @@ Configure the host, port, database and user and store a nonempty password in sec
 
 ## Runtime and operation requirements
 
-Connect **OceanBase** datasets and run parameterized workflow writes. This repository contains one installable OceanBase extension, version **1.3.12**, with separate Linux AMD64 and ARM64 archives. No other database can be selected or installed from this package.
+Connect **OceanBase** datasets and run parameterized workflow writes. This repository contains one installable OceanBase extension, version **1.3.14**, with separate Linux AMD64 and ARM64 archives. No other database can be selected or installed from this package.
 
 ## Set up a OceanBase connection
 
@@ -33,7 +33,11 @@ Datasets support connection testing, typed schema introspection, saved SQL, visu
 
 The host resolves matching project configuration and secrets, account/project scope, execution context and a durable external-effect claim. Test mode suppresses writes before a driver starts. Writes execute once; uncertain dispatched failures return `retryable: false` and require checking the database before a manual retry. Workflow writes do not make dataset queries writable.
 
-The bounded SQL subset refuses raw dollar characters and backslashes in read SQL; write SQL also refuses raw dollar characters. Put those values in bound parameters. A top-level read LIMIT accepts one integer literal with an optional integer OFFSET. The existing SQL safety guards are unchanged; 1.3.0 adds database-specific settings validation and preserves native payloads.
+The bounded SQL subset refuses raw dollar characters and backslashes in read SQL; write SQL also refuses raw dollar characters. Put those values in bound parameters. A top-level read LIMIT accepts one integer literal with an optional integer OFFSET.
+
+Saved Dataset reads support a single SELECT over named tables, with column expressions, filters, explicit joins, grouping and ordering. Use the exact spelling recorded by introspection and backticks for quoted identifiers. Give output aliases with AS. Use base columns or expressions in GROUP BY and HAVING. ORDER BY also supports standalone output aliases and output positions. Rework saved reads that use nested queries, set operations, implicit join columns or dialect-specific syntax outside this subset. Discovery lists the configured database. If a saved dataset has an ambiguous table identity, refresh the connection schema and select the table again. Use a connection configured for that database when selecting a table from another database.
+
+Dataset reads can use up to three distinct table sources with explicit join conditions. OceanBase receives a per-statement execution deadline of at most five seconds and a statement-level concurrency limit. Database resource groups govern aggregate work across distinct queries or application hosts.
 
 ## Upgrade compatibility
 
@@ -63,14 +67,14 @@ Pushes to `main` and pull requests run the shared extension build workflow. The 
 After the versioned release commit is on `main`, publish by pushing its version tag:
 
 ```sh
-git tag v1.3.12
-git push origin v1.3.12
+git tag v1.3.14
+git push origin v1.3.14
 ```
 
 The release workflow runs the shared checks, builds the target archives and publishes the GitHub release and checksums. Do not move an existing tag. To rerun a release for an existing tag, dispatch the same workflow:
 
 ```sh
-gh workflow run release.yml --repo Flow-Steward/ext-data-oceanbase --ref main -f tag=v1.3.12
+gh workflow run release.yml --repo Flow-Steward/ext-data-oceanbase --ref main -f tag=v1.3.14
 ```
 
 The manifest, descriptor (when present), package version and tag must identify the same release. Release publication uses the workflow token; no additional repository secret is required by these callers.

@@ -49,7 +49,7 @@ costing you space, **whether anything uses it**, or let you **take it back** if 
 | **Undo** | Whole-batch undo from the History tab. Only missing rows are restored, so data recorded since is kept. |
 | **Retention** | Per-entity limits on *state* history, enforced by a nightly job the integration schedules itself, followed by a repack to return the space. |
 | **Inspector** | Browse the raw stored states (with collapsible JSON attributes), hourly and 5-minute statistics for any entity. |
-| **Settings** | Hide automations; Home Assistant's default state retention as a slider with the predicted space freed or gained (saved to `recorder: purge_keep_days`); long-term statistics retention in 6-month steps, with a separate limit for Energy dashboard statistics. |
+| **Settings** | Hide automations; Home Assistant's default state retention as a slider with the predicted space freed or gained (shows the `recorder: purge_keep_days` value to set in your YAML); long-term statistics retention in 6-month steps, with a separate limit for Energy dashboard statistics. |
 | **Reclaim** | Repack the database so freed space goes back to the disk, and watch the file shrink. |
 | **Sensors, event, services** | Database size and free space, retention rules and last run, a `db_storage_manager_retention_run` event and a `db_storage_manager.run_retention` action for your own automations. |
 

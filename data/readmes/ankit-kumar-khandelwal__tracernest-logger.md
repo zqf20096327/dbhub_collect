@@ -12,6 +12,7 @@
 
 [![npm version](https://img.shields.io/npm/v/tracernest-logger)](https://www.npmjs.com/package/tracernest-logger)
 [![npm downloads](https://img.shields.io/npm/dm/tracernest-logger)](https://www.npmjs.com/package/tracernest-logger)
+[![Socket Security](https://socket.dev/api/badge/npm/package/tracernest-logger)](https://socket.dev/npm/package/tracernest-logger)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-10B981.svg?style=flat-square)](LICENSE)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-0-10B981.svg?style=flat-square)](package.json)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-38BDF8.svg?style=flat-square)](package.json)
@@ -39,10 +40,14 @@ import { TracerNestLogger } from 'tracernest-logger';
 const app = express();
 const tracer = new TracerNestLogger({ path: '/tracernest' });
 
-// Mounts dashboard and telemetry interception on your existing HTTP app
+// 1. MUST BE FIRST: Mount TracerNest at the top of your middleware stack
+// (before CORS, body parsers, and application routes)
 app.use(tracer.middleware());
 
-// Your normal application routes
+// 2. Application middleware (CORS, body-parser, etc.)
+app.use(express.json());
+
+// 3. Application routes
 app.get('/api/users', (req, res) => res.json({ status: 'ok' }));
 
 app.listen(3000, () => {
@@ -74,6 +79,9 @@ app.listen(3000, () => {
   - [2. Fastify](#2-fastify)
   - [3. Native Node.js HTTP Server](#3-native-nodejs-http-server)
   - [4. Dedicated Standalone Port (Optional)](#4-dedicated-standalone-port-optional)
+  - [5. Docker Container Deployment](#5-docker-container-deployment)
+  - [6. MySQL Database & Connection Pool Integration](#6-mysql-database--connection-pool-integration)
+  - [7. Laravel 13 Telemetry Integration](#7-laravel-13-telemetry-integration)
 - [Configuration Reference](#configuration-reference)
 - [Security & Privacy](#security--privacy)
   - [Production Security Checklist](#production-security-checklist)
@@ -290,15 +298,21 @@ When a production-only bug occurs, TracerNest enables rapid triage:
 
 ### 1. Express.js
 
+#### Middleware Ordering Rule
+
+> [!IMPORTANT]
+> **Always register `app.use(tracer.middleware())` at the VERY TOP of your middleware pipeline:**
+> 1. **Mount BEFORE CORS:** If your `cors` middleware restricts origins (such as a domain whitelist), visiting the dashboard via your server's public or Elastic IP (`https://<elastic-ip>/api/tracernest`) will be rejected by CORS with `Origin not allowed`, causing Express to return a 500 Internal Server Error. Placing TracerNest before CORS avoids this conflict.
+> 2. **Mount BEFORE Application Routes:** Express runs middleware sequentially. To capture and log incoming HTTP request bodies, status codes, and latency, TracerNest must wrap the request *before* it reaches your route controllers.
+> 3. **Never Mount AFTER Error Handlers:** Placing TracerNest below `app.use((err, req, res, next) => ...)` prevents it from receiving requests whenever any error occurs in your application.
+
 ```typescript
 import express from 'express';
+import cors from 'cors';
 import { TracerNestLogger } from 'tracernest-logger';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Body parsers (optional, TracerNest captures bodies with or without them)
-app.use(express.json());
 
 // Initialize TracerNest
 const tracer = new TracerNestLogger({
@@ -308,10 +322,22 @@ const tracer = new TracerNestLogger({
   dataDir: './.tracernest'          // Storage directory
 });
 
-// Register TracerNest middleware before application routes
+// ============================================================
+// 1. MUST BE FIRST: TracerNest Logger Middleware
+// ============================================================
+// Captures all incoming API traffic & serves the dashboard
 app.use(tracer.middleware());
 
-// Application routes
+// ============================================================
+// 2. Application Middleware (CORS, Body Parsers, Cookies)
+// ============================================================
+app.use(cors({ origin: ['https://mydomain.com'], credentials: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ============================================================
+// 3. Application Routes
+// ============================================================
 app.get('/api/users', (req, res) => {
   console.log('[Users] Fetching user directory');
   res.json([{ id: 1, name: 'Alice' }]);
@@ -320,6 +346,13 @@ app.get('/api/users', (req, res) => {
 app.post('/api/checkout', (req, res) => {
   console.warn('[Checkout] Processing payment');
   res.status(200).json({ status: 'confirmed' });
+});
+
+// ============================================================
+// 4. LAST: Global Error Handling Middleware
+// ============================================================
+app.use((err, req, res, next) => {
+  res.status(500).json({ error: 'Internal Server Error' });
 });
 
 app.listen(PORT, () => {
@@ -378,6 +411,244 @@ tracer.listen(8001, '127.0.0.1', () => {
 });
 ```
 
+### 5. Docker Container Deployment
+
+When running in containerized environments (Docker, Kubernetes, AWS ECS, Google Cloud Run):
+
+> [!IMPORTANT]
+> **MANDATORY IN CONTAINERS: Pass `masterKey` During Initialization**
+>
+> TracerNest is an npm library package and does not fetch or parse `.env` files directly.
+>
+> In containerized deployments, container filesystems are **ephemeral**. If no `masterKey` is passed into the constructor, TracerNest generates a random local key file (`.master.key`) inside the container directory, which is permanently lost whenever a container is recreated, restarted on a new node, or redeployed during CI/CD.
+>
+> **You MUST pass `masterKey` explicitly in the initialization options (`new TracerNestLogger({ masterKey: '...' })`).**
+>
+> Passing `masterKey` during initialization ensures:
+> 1. **Persistence When Containers Are Created Newly**: When a new container is deployed or replaced, it initializes with the exact same key without breaking existing encrypted data.
+> 2. **Continuous Decryption of Alert Secrets**: Encrypted Slack/Teams webhooks and SMTP email passwords remain decryptable across all container lifecycles.
+> 3. **Consistent Multi-Pod Clustering**: Multiple horizontally scaled containers/pods share the identical cryptographic secret.
+> 4. **Zero Session Disruption**: Existing operator sessions and stateless HMAC tokens remain valid without forcing administrators to re-authenticate.
+
+#### Initialization in `app.js` / `server.ts`
+
+```typescript
+import { TracerNestLogger } from 'tracernest-logger';
+
+const tracer = new TracerNestLogger({
+  // Mandatory in containers: pass persistent 32+ char key to ensure it stays across container recreations
+  masterKey: 'c8f1e4a7b2d5e8f3a1b4c7d0e3f6a9b2c5d8e1f4a7b0c3d6e9f2a5b8c1d4e7f0',
+  
+  // Custom storage directory (optional, default: './.tracernest')
+  folder: './.tracernest',
+
+  // Database dialect ('sqlite' or 'mysql')
+  dialect: 'mysql',
+  mysql: {
+    pool: dbPool
+  }
+});
+```
+
+#### Dockerfile & Docker Compose Example
+
+```dockerfile
+FROM node:22-alpine
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY . .
+
+# Ensure data directory has write permissions for SQLite WAL & encryption keys
+RUN mkdir -p /app/.tracernest && chown -R node:node /app/.tracernest
+VOLUME ["/app/.tracernest"]
+
+USER node
+EXPOSE 3000
+
+CMD ["node", "dist/server.js"]
+```
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      # Persistent volume for local SQLite database & keys
+      - tracernest_data:/app/.tracernest
+
+volumes:
+  tracernest_data:
+```
+
+> [!TIP]
+> **Docker Staging Checklist:**
+> - Ensure Node.js `>= 22.5.0` is used for native SQLite (`node:sqlite`).
+> - **Mandatory:** Pass a persistent 32+ character `masterKey` in initialization options so encryption keys persist across container recreations.
+> - Mount a volume to `/app/.tracernest` so SQLite databases, audit trails, and journals persist if not using MySQL.
+> - For multi-replica/auto-scaled deployments, point `dialect: 'mysql'` to your shared database so all pods share identical telemetry and user sessions.
+
+### 6. MySQL Database & Connection Pool Integration
+
+For multi-instance, auto-scaled clusters, Kubernetes pods, or PM2 cluster mode, point TracerNest to a shared MySQL database. Because TracerNest strictly maintains **zero runtime dependencies**, it connects directly using your application's existing `mysql2` connection pool without forcing additional driver installations.
+
+#### Option A: Passing an Existing `mysql2` Connection Pool (Recommended)
+
+Pass your application's existing `mysql2` connection pool directly into `mysql.pool`. TracerNest will reuse your existing database connections, minimizing connection overhead:
+
+```typescript
+import mysql from 'mysql2/promise'; // or 'mysql2'
+import { TracerNestLogger } from 'tracernest-logger';
+
+// 1. Create your application's standard MySQL connection pool
+const dbPool = mysql.createPool({
+  host: process.env.DB_HOST || '127.0.0.1',
+  port: Number(process.env.DB_PORT) || 3306,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
+
+// 2. Pass the existing pool into TracerNest
+const tracer = new TracerNestLogger({
+  path: '/tracernest',
+  dialect: 'mysql',
+  mysql: {
+    pool: dbPool // Reuses your existing connection pool
+  },
+  tablePrefix: 'tracenest_' // Optional custom prefix (default: 'tracenest_')
+});
+
+app.use(tracer.middleware());
+```
+
+#### Option B: Standalone MySQL Credentials
+
+If you prefer TracerNest to manage its own database connection:
+
+```typescript
+const tracer = new TracerNestLogger({
+  path: '/tracernest',
+  dialect: 'mysql',
+  mysql: {
+    host: process.env.DB_HOST || '127.0.0.1',
+    port: 3306,
+    user: process.env.DB_USER || 'tracernest_user',
+    password: process.env.DB_PASSWORD || 'SecretPassword!',
+    database: process.env.DB_NAME || 'production_logs',
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: true } : false
+  },
+  tablePrefix: 'prod_telemetry_'
+});
+```
+
+> [!TIP]
+> **Automatic SQLite-to-MySQL Migration & Zero-Config Upgrades**:
+> - **Seamless Auto-Migration**: If you change the initialization in `app.js` from SQLite to MySQL (`dialect: 'mysql'`), TracerNest automatically detects your existing SQLite database and migrates all data—including user accounts, encrypted alert integrations, audit logs, and historical terminal & HTTP logs—directly into MySQL.
+> - **Automatic SQLite Cleanup with Master Key Preservation**: Once migration to MySQL completes successfully, all SQLite files (`.sqlite`, `.sqlite-wal`, `.sqlite-shm`, `.sql`) are safely deleted to prevent outdated files from lingering in your project or container. **The persistent master key (`.master.key`) is strictly preserved** so your AES-256-GCM encryption tokens and secrets remain intact.
+> - **Continuous Schema Auto-Updates**: When new versions of TracerNest are installed, any newly added tables or columns (`ALTER TABLE ... ADD COLUMN ...`) are automatically applied upon startup with zero manual migration scripts or maintenance downtime.
+
+### 7. Laravel 13 Telemetry Integration (No Extra Ports Required)
+
+TracerNest mounts directly inside **Laravel 13** (and Laravel 12 / 11) on the **exact same port** (e.g. `http://localhost:8000/tracernest` or `https://myapp.com/tracernest`). **No extra ports, second servers, or background processes are required.**
+
+```bash
+# In your Laravel 13 project root
+npm install tracernest-logger
+```
+
+#### Step 1: Copy Packaged Bridge Files
+
+```bash
+# 1. Copy Middleware
+mkdir -p app/Http/Middleware
+cp node_modules/tracernest-logger/integrations/laravel/TracerNestMiddleware.php app/Http/Middleware/
+
+# 2. Copy Controller
+mkdir -p app/Http/Controllers
+cp node_modules/tracernest-logger/integrations/laravel/TracerNestController.php app/Http/Controllers/
+```
+
+#### Step 2: Register in Laravel 13
+
+1. **In `routes/web.php`**, add one line to mount the dashboard on your existing Laravel port:
+```php
+require base_path('node_modules/tracernest-logger/integrations/laravel/routes.php');
+```
+
+2. **In `bootstrap/app.php`**, register the telemetry middleware:
+```php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withRouting(
+        web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
+    )
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->append(\App\Http\Middleware\TracerNestMiddleware::class);
+    })
+    ->create();
+```
+
+#### Step 3: Open Your Dashboard
+
+Start your standard Laravel server (`php artisan serve` or access via Laravel Herd / Docker / Nginx):
+
+Navigate in your browser to: **`http://localhost:8000/tracernest`**
+
+- **Zero new ports opened.**
+- **Zero extra servers or background daemons.**
+- Intercepts all incoming API requests and visualizes execution times, status codes, and payloads live in real time.
+
+*For complete setup options, Monolog 3 integration, and Docker examples, see [docs/laravel.md](docs/laravel.md).*
+
+---
+
+## Storage Folder Initialization Options
+
+You can specify where TracerNest initializes its storage files (SQLite database, synchronized mirrors, and the persistent `.master.key` encryption file) using any of the following configuration aliases:
+
+```typescript
+const tracer = new TracerNestLogger({
+  folder: './my-telemetry-storage', // Primary option: custom directory path
+  // Aliases supported:
+  // storageDir: './my-telemetry-storage',
+  // initFolder: './my-telemetry-storage',
+  // dataDir: './my-telemetry-storage',
+});
+```
+
+All database files and the persistent encryption key `.master.key` (with restricted permissions `0600`) will be cleanly initialized inside this folder.
+
+---
+
+## Log Persistence & Restart Recovery
+
+By default, **all terminal logs (`process.stdout`, `process.stderr`, `console.log`, `console.error`) and intercepted HTTP request/response logs are automatically persisted** to your database (`SQLite` or `MySQL`).
+
+- **Persistence Across Restarts**: When your Node.js server restarts (or restarts in PM2, Docker, or Kubernetes), TracerNest automatically reloads the most recent historical logs into memory on startup so your telemetry timeline remains continuous without losing any past logs.
+- **Dual-Tier Performance**: High-frequency logs are appended to an in-memory circular ring buffer for sub-millisecond SSE streaming and instant dashboard rendering, while asynchronously persisting indexed records to SQLite/MySQL.
+- **Configurable Retention**: Historical logs are automatically bounded by `maxPersistedLogs` (default: 50,000) and TTL policies (e.g. auto-purging debug or 2xx logs after configured durations).
+
+```typescript
+const tracer = new TracerNestLogger({
+  persistLogs: true,        // Enabled by default (set false for memory-only mode)
+  maxPersistedLogs: 50000,  // Max historical logs to retain in database (default: 50,000)
+  bufferSize: 5000,         // In-memory hot buffer capacity (default: 5,000)
+  dataDir: './.tracernest'  // SQLite database and encryption key directory
+});
+```
+
 ---
 
 ## Configuration Reference
@@ -385,16 +656,31 @@ tracer.listen(8001, '127.0.0.1', () => {
 ```typescript
 const tracer = new TracerNestLogger({
   path: '/tracernest',              // Dashboard mount path (default: '/tracernest')
+  apiPrefix: '/api',                // Optional gateway prefix (e.g. '/api' for Nginx reverse proxies)
+  publicPath: '/api/tracernest',    // Optional external browser path (auto-detected if omitted)
   title: 'Production Telemetry',    // Dashboard browser tab title
   bufferSize: 5000,                 // Circular in-memory buffer capacity
-  dataDir: './.tracernest',         // SQLite database & encryption key folder
-  masterKey: process.env.KEY,       // 32+ char AES-256-GCM master encryption key
+  persistLogs: true,                // Persist terminal logs (stdout/stderr) & HTTP logs across server restarts
+  maxPersistedLogs: 50000,          // Maximum historical logs retained in SQLite/MySQL
+  folder: './.tracernest',          // Dedicated initialization folder (aliases: storageDir, initFolder, dataDir)
+  initialAdmin: {                   // Optional pre-seeded admin (eliminates interactive web setup)
+    username: 'admin',
+    password: 'MasterPassword123!'
+  },
+  disableSetupApi: false,           // Set true to disable POST /api/auth/setup in production
+  encryptionKey: 'your-32-character-payload-encryption-key', // 32+ char AES-256-GCM key to encrypt HTTP request & response payloads
+  masterKey: 'your-32-character-master-encryption-key',     // MANDATORY in containers: 32+ char master key (ensures key persists on recreation)
   dialect: 'sqlite',                // 'sqlite' | 'mysql'
+  mysql: {                          // Optional MySQL configuration (when dialect is 'mysql')
+    pool: dbPool                    // Existing mysql2 connection pool (or host, port, user, password, database)
+  },
+  tablePrefix: 'tracenest_',        // Persistent SQL table name prefix (default: 'tracenest_')
   trustProxy: false,                // Reverse proxy trust (false | true | string[] | CIDR)
   maxHttpBodyBytes: 524288,         // Max request/response body capture (512 KB)
   interceptStdout: true,            // Intercept console.log
   interceptStderr: true,            // Intercept console.error
   interceptHttp: true,              // Intercept HTTP request & response payloads
+  encryptPayloads: true,            // Encrypt shared request/response payloads in telemetry (auto-enabled by default)
   sensitiveHeaders: ['x-secret'],   // Custom header names to redact
   sensitiveFieldKeys: ['card_no'],  // Custom JSON keys to redact
   excludeRoutes: ['/healthz'],      // Routes excluded from HTTP logging
@@ -409,6 +695,7 @@ const tracer = new TracerNestLogger({
 ## Security & Privacy
 
 TracerNest is hardened against common web and API attack vectors:
+- **AES-256-GCM Payload Encryption:** All captured HTTP request and response bodies are encrypted using the initialization `encryptionKey` (or `masterKey`/`secret`). Ciphertext payloads remain encrypted across RAM buffers, exports, and SSE streams, decryptable on-demand via the dashboard or `POST /api/logs/decrypt`.
 - **Scrypt Password Hashing:** Credentials protected by native `crypto.scrypt` with unique salts.
 - **Timing-Safe Verification (SEC-01):** Constant-time hash verification via `crypto.timingSafeEqual`.
 - **Token Invalidation (SEC-02):** Immediate token revocation on user role modification.
@@ -417,9 +704,28 @@ TracerNest is hardened against common web and API attack vectors:
 - **Dual Login Throttling (SEC-10):** Independent IP-level and account-level rate limiting on login attempts.
 - **Content Security Policy (CSP):** Embedded dashboard serves strict CSP headers.
 
+### Socket.dev & Supply-Chain Security Verification
+
+TracerNest maintains a top-tier security rating on [Socket.dev](https://socket.dev/npm/package/tracernest-logger):
+- **Zero Runtime Dependencies (`dependencies: {}`):** Zero attack surface for nested dependency takeovers, malicious typosquats, or prototype pollutions.
+- **Zero Telemetry / No Phone-Home:** TracerNest transmits zero telemetry, metrics, or diagnostic data to third-party cloud servers. All logs remain 100% on your host machine.
+- **Declared Capabilities:** Static scanners flag `networkAccess` and `fsAccess`. These are core, intentional architectural primitives:
+  - `networkAccess`: Required for passive HTTP request/response interception (`node:http`), mounting the local `/tracernest` router, and dispatching operator-configured incident alerts (webhooks / SMTP).
+  - `fsAccess`: Required for local encrypted SQLite database storage and WAL journal locking.
+
+For organizations running **Socket.dev CI** gates, whitelist TracerNest in your root `socket.yml`:
+```yaml
+# socket.yml
+project:
+  ignore:
+    - package: "tracernest-logger"
+      issue: "networkAccess"
+      reason: "Self-hosted HTTP observability dashboard requiring local HTTP interception and dashboard routing."
+```
+
 ### Production Security Checklist
 
-- [ ] Set a strong `masterKey` passphrase (32+ characters) via environment variable.
+- [ ] **MANDATORY for Containers / Docker:** Pass a static 32+ character `masterKey` in TracerNest initialization options so it stays consistent across container recreations.
 - [ ] Configure `trustProxy` to match your reverse proxy CIDR (or leave `false` for direct connections).
 - [ ] Restrict access to the dashboard path (`/tracernest`) via VPN or reverse proxy allowlists where appropriate.
 - [ ] Review `excludeRoutes` to omit sensitive authentication endpoints (`/api/auth/login`) from payload capture.
@@ -439,6 +745,7 @@ Complete architectural guides and deep dives are available in the [`docs/`](docs
 - [**Health & Diagnostics**](docs/health-monitoring.md) &mdash; Dual-tier health probes and system metrics.
 - [**Security & Privacy**](docs/security.md) &mdash; Threat models, remediations, and production checklists.
 - [**Production Deployment**](docs/deployment.md) &mdash; Docker, Kubernetes, Nginx, and multi-instance clusters.
+- [**Laravel 13 Integration**](docs/laravel.md) &mdash; Native telemetry flight recorder for Laravel 13, 12 & 11.
 - [**Troubleshooting Guide**](docs/troubleshooting.md) &mdash; Solutions to common operational edge cases.
 - [**Architecture Deep Dive**](docs/architecture.md) &mdash; Internal component topology and memory lifecycles.
 - [**Production Debugging Playbook**](docs/production-debugging.md) &mdash; Step-by-step incident response playbook.
@@ -452,7 +759,7 @@ TracerNest Logger follows [Semantic Versioning (SemVer)](https://semver.org/):
 - **Minor (1.X.0):** New features, performance enhancements, and backward-compatible additions.
 - **Patch (1.0.X):** Bug fixes, security hardening, and documentation updates.
 
-Current Release: **`1.7.3`**
+Current Release: **`1.8.6`**
 
 ---
 

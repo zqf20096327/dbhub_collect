@@ -11,7 +11,9 @@
 
 不是截图或概念稿。仓库里的指标都能用下面的命令复现，限制也会在文档和界面里明确写出来。
 
-## 项目一览
+## Features · 功能特性
+
+Three runnable projects, each focused on one engineering concern: traceable RAG, reproducible prompt evaluation, and guarded NL2SQL analytics. Every demo runs offline by default.
 
 | 项目 | 定位 | 核心工程问题 | 测试 | 可查看产物 |
 | --- | --- | --- | --- | --- |
@@ -19,20 +21,26 @@
 | [PromptLens](promptlens/) | 轻量 · LLM 评测 | 不可变提示词版本、可复现实验、失败隔离与重试、成本估算、重复运行稳定性 | 39 | [对比报告](promptlens/artifacts/report.html) |
 | [DataChat BI](datachat_bi/) | 轻量 · AI + 数据安全 | 自然语言到只读 SQL 的完整安全边界，含受控多表 JOIN | 58 | [图表报告](datachat_bi/datachat_report.html) |
 
-## 快速开始
+## Installation · 安装
 
-要求 Python 3.13。三个离线演示只使用标准库；Web UI 与 API 需要 FastAPI、uvicorn 和 httpx。
+Requires Python 3.13. Install the dependencies with pip:
 
 ```bash
 python -m pip install -r requirements.txt
+```
 
-# 一键启动两个 Web 服务并打开展示页：
+- FastAPI + uvicorn：两个 Web 服务。
+- httpx：仅 API 测试使用。
+- PromptLens 与三个项目的核心演示均零第三方依赖。
+
+## Usage · 使用
+
+Start both web services and open the dashboard:
+
+```bash
 # InsightRAG   http://127.0.0.1:8001
 # DataChat BI  http://127.0.0.1:8002
 python start_all.py
-
-# 127 项自动化测试 + 三个离线演示，任一失败即返回非零
-python verify_all.py
 ```
 
 也可以单独运行任一项目：
@@ -43,9 +51,16 @@ cd promptlens   && python demo.py
 cd datachat_bi  && python demo.py
 ```
 
-`start_all.py` 只监听 `127.0.0.1`，启动前检查端口与依赖，退出时只清理自己拉起的进程。`verify_all.py` 会重新生成评测 JSON、PromptLens 对比报告和 DataChat 图表报告。
+`start_all.py` 只监听 `127.0.0.1`，启动前检查端口与依赖，退出时只清理自己拉起的进程。
 
-## 项目详情
+## Demo · 演示
+
+- 本地打开作品集展示页 [index.html](index.html)，或访问 GitHub Pages 部署版：<https://8hjkkwikl8.github.io/ai-portfolio/>。
+- 运行 `python start_all.py` 后访问两个本地 Web 演示：InsightRAG 的知识库问答界面与 DataChat BI 的中文分析界面。
+- 运行 `python verify_all.py` 会重新生成评测 JSON、PromptLens 对比报告和 DataChat 图表报告，产物均可用浏览器或编辑器离线查看。
+- 全部演示默认离线运行，不需要账号或 API Key。
+
+## Project Details · 项目详情
 
 ### InsightRAG · 可追溯的中文知识库问答
 
@@ -87,15 +102,21 @@ cd datachat_bi  && python demo.py
 
 演示数据为 48 行确定性订单与两张维度表，覆盖 9 类问题、8 幅图表；总销售额 612,360.0，销量最高品类为智能家居，销量最高渠道为天猫，JOIN 问法可按产品线与渠道类型汇总销售额。详见 [datachat_bi/README.md](datachat_bi/README.md)。
 
-## 共同的设计原则
+## Testing · 测试
 
-**离线优先，而不是离线伪装智能。** 核心链路在无网络、无密钥时可运行；规则、哈希方法和 mock 都如实标注，真实模型作为可替换适配器，而不是演示的必需品。
+127 automated tests plus three offline demos; any test or demo failure makes the verifier exit non-zero.
 
-**不可信输出必须经过边界。** 模型回答不能创造来源，候选 SQL 不能绕过守护，实验参数不能覆盖已审计请求。每个项目都把“模型输出”当作不可信输入处理。
+```bash
+python verify_all.py
+```
 
-**结果可复现，也可被反驳。** 保留原文偏移、数据哈希、运行清单和逐条输出；指标口径与限制同时展示。演示数据小是刻意选择：让每条结果都能人工核对。
+- 测试分布：InsightRAG 30、PromptLens 39、DataChat BI 58，全部基于 `unittest`。
+- 单独运行某个项目：`cd insightrag && python -m unittest discover -s tests -q`（其余项目同理）。
+- GitHub Actions 在 `ubuntu-latest` 与 `windows-latest`、Python 3.13 上运行同一套验证，见 [ci.yml](.github/workflows/ci.yml)。
 
-## 目录结构
+## Architecture · 架构与目录
+
+三个项目共享“不可信模型输出必须经过边界”的结构：检索证据可回放、生成回答逐句校验引用、模型 SQL 经过多层守护后只读执行；每条指标都保留可复核的输入与哈希。目录结构：
 
 ```text
 ai-portfolio/
@@ -108,14 +129,28 @@ ai-portfolio/
 └─ datachat_bi/            # 轻量：受守护的 NL2SQL 分析
 ```
 
-## 真实性边界
+## Deployment · 部署
+
+- 静态展示页 `index.html` 通过 GitHub Pages 发布：<https://8hjkkwikl8.github.io/ai-portfolio/>。
+- 两个 FastAPI 服务仅用于本机演示，未提供公网托管版本；仓库不包含账号、鉴权或生产部署配置。
+- CI 只运行测试与离线演示，不自动部署。
+
+## Design Principles · 共同的设计原则
+
+**离线优先，而不是离线伪装智能。** 核心链路在无网络、无密钥时可运行；规则、哈希方法和 mock 都如实标注，真实模型作为可替换适配器，而不是演示的必需品。
+
+**不可信输出必须经过边界。** 模型回答不能创造来源，候选 SQL 不能绕过守护，实验参数不能覆盖已审计请求。每个项目都把“模型输出”当作不可信输入处理。
+
+**结果可复现，也可被反驳。** 保留原文偏移、数据哈希、运行清单和逐条输出；指标口径与限制同时展示。演示数据小是刻意选择：让每条结果都能人工核对。
+
+## Honesty Boundaries · 真实性边界
 
 - InsightRAG 的语料是 3 篇演示文档，Recall/MRR 不能外推到生产知识库；引用编号合法率只校验编号，不代表语义忠实度。人工忠实度只覆盖 6 条人工审阅的离线快照，未标注或指纹失效记 N/A，不代表在线生成或生产语义忠实度。
 - PromptLens 的示例指标来自 mock provider，只验证流水线，不构成模型质量提升证据。
 - DataChat BI 的 48 行订单与规则问法用于演示安全边界，JOIN 仅限白名单维度关系，不是通用自然语言理解；离线模式会拒绝未覆盖的问法。
 - 三个项目都是单机演示，不含账号体系、权限管理、分布式索引或生产级可观测性。
 
-## 环境与依赖
+## Environment and Dependencies · 环境与依赖
 
 - Python 3.13（代码使用现代类型标注，未在更低版本验证）。
 - FastAPI + uvicorn：两个 Web 服务。
@@ -123,7 +158,7 @@ ai-portfolio/
 - PromptLens 与三个项目的核心演示均零第三方依赖。
 - 无外部前端资源；页面、报告和图表均离线可打开。
 
-## 可选：接入真实模型
+## Optional: Connect Real Models · 可选：接入真实模型
 
 三个项目都通过 OpenAI 兼容接口扩展，默认不联网：
 
@@ -135,6 +170,6 @@ export OPENAI_MODEL="your-model"
 
 InsightRAG 在查询请求中显式传 `"online": true` 才会调用在线生成；PromptLens 将运行配置的 `provider` 改为 `openai_compatible`；DataChat BI 检测到 `OPENAI_API_KEY` 与 `OPENAI_MODEL` 后启用 LLM 规划器，但候选 SQL 仍必须通过同一套守护与只读执行层。InsightRAG 的向量通道可通过 `INSIGHTRAG_EMBEDDING_BASE_URL`、`INSIGHTRAG_EMBEDDING_MODEL`、`INSIGHTRAG_EMBEDDING_API_KEY` 切换到远程嵌入服务，三项缺一即保持离线哈希向量。
 
-## 贡献与许可证
+## Contributing and License · 贡献与许可证
 
 欢迎提交可复现、边界清晰的改进。开始前请阅读[贡献指南](CONTRIBUTING.md)与[行为准则](CODE_OF_CONDUCT.md)。本项目采用 [MIT License](LICENSE)。

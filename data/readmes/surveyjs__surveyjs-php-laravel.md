@@ -1,0 +1,247 @@
+# SurveyJS + PHP: the Server Integration examples on Laravel
+
+This is the PHP code behind [Integrate SurveyJS with PHP](https://surveyjs.io/documentation/backend-integration-php-laravel), as a Laravel application you can run step by step. Each step of that page has a page here that runs the real SurveyJS component against these routes, with a short "Try this" list, a live request log, a "What the server stored" panel and the code that just ran. SurveyJS has no backend of its own, so treat these as starting points for your own app.
+
+- Live catalog: [surveyjs-php.demos.surveyjs.io](https://surveyjs-php.demos.surveyjs.io)
+- The docs: [surveyjs.io/documentation/backend-integration-php-laravel](https://surveyjs.io/documentation/backend-integration-php-laravel)
+- SurveyJS demos: [app.demos.surveyjs.io](https://app.demos.surveyjs.io)
+- Backend integration examples on the SurveyJS website: [surveyjs.io/backend-integration/examples](https://surveyjs.io/backend-integration/examples)
+- The same examples for other platforms: [ASP.NET Core](https://github.com/surveyjs/surveyjs-aspnet-core), [Node.js (Express)](https://github.com/surveyjs/surveyjs-nodejs-express), [Python (FastAPI)](https://github.com/surveyjs/surveyjs-python-fastapi), [Next.js](https://github.com/surveyjs/surveyjs-nextjs), [Java (Spring Boot)](https://github.com/surveyjs/surveyjs-java-spring-boot)
+
+## Run it
+
+You need PHP 8.3 or later (with `pdo_sqlite` and `fileinfo`), Composer, and Node.js 22 or later (see [Prerequisites](#prerequisites)).
+
+```bash
+git clone https://github.com/surveyjs/surveyjs-php-laravel.git
+cd surveyjs-php-laravel
+composer setup     # install, .env for the private keys, app key, SQLite database with demo data, npm install, npm run build
+composer start     # http://localhost:8000, serving the built assets
+```
+
+While you work on the code, run `composer dev` instead of `composer start`: it starts the server, Vite with hot reload and both relays.
+
+- **Fill Forms Together** and **Edit Forms Together** need the WebSocket relays, two long-running processes: `composer relay` (port 8081) and `composer edit-relay` (port 8082). `composer dev` starts them for you.
+- **Run Server-Side Workflows** (validate, lint, PDF, extract) needs the SurveyJS service, which runs in Docker: `docker compose up -d surveyjs` publishes it on `http://localhost:3010`. Then set `VALIDATE_RESPONSES` and `LINT_DEFINITIONS` to `true` in `config/surveyjs.php` (or in the environment) to switch Validate Responses and Lint JSON Schemas on.
+- Everything in containers: `docker compose up --build` runs the app on port 8000, both relays, the scheduler and the service (see [Docker](#docker)).
+
+`composer start` runs `php artisan surveyjs:serve`, and `composer dev` uses the same command for its server. It checks that the port is free, prints the folder it serves and its `<branch>@<commit>`, and starts PHP's built-in server with upload limits that fit 5 MB files (`php artisan serve` starts a child process that doesn't inherit `-d` flags; see `server.php`).
+
+### Prerequisites
+
+- PHP 8.3 or later with the `pdo_sqlite` and `fileinfo` extensions: `composer install` names a missing one. Use at least 8.3.36, 8.4.27 or 8.5.12: earlier releases are open to remote code execution (CVE-2026-109618, CVE-2026-109619).
+- Composer.
+- Node.js 22 or later: `npm install` refuses an older one (`engines` in `package.json`, `engine-strict` in `.npmrc`).
+- Docker, only for Run Server-Side Workflows.
+
+On Windows:
+
+- PHP for Windows is a zip from [windows.php.net](https://windows.php.net/download/) (the x64 Non Thread Safe build). Unzip it to `C:\php`, copy `php.ini-development` to `php.ini`, and in `php.ini` enable `extension_dir = "ext"` and the extensions `curl`, `fileinfo`, `mbstring`, `openssl`, `pdo_sqlite` and `zip` (Composer needs `openssl` and `zip`). Add `C:\php` to your user `PATH`. Composer's Windows installer adds `composer` to `PATH` and finds PHP there.
+- After changing `PATH`, restart your editor, not only its terminal: VS Code's terminals inherit VS Code's environment. To refresh the current PowerShell terminal instead:
+
+  ```powershell
+  $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')
+  ```
+
+- Check with `php -v`, `php -m` (it must list `pdo_sqlite` and `fileinfo`), `composer --version` and `node -v`.
+- Windows has no `pcntl` or `posix`. The relays don't need them: Workerman runs one process per relay there.
+
+Every port can be changed: the app `8000` (`APP_PORT`), the fill relay `8081` (`RELAY_PORT`), the edit relay `8082` (`EDIT_RELAY_PORT`), the SurveyJS service `3010` (`docker-compose.override.yml`) and the AI stub of the contract test `3020` (`AI_STUB_PORT`). On Windows, a second server can start on a port that is already in use and report success while the first one keeps answering, so `composer start`, `composer dev`, `composer relay` and `composer edit-relay` check first and stop with "Port 8000 is already in use. Another copy of this app (another checkout or branch?) may be running. Stop it, or set APP_PORT."
+
+### Stop everything
+
+`Ctrl+C` in each terminal, and `docker compose down` for the service. To find a server left running in another terminal or checkout:
+
+```powershell
+Get-NetTCPConnection -LocalPort 8000,8081,8082 -State Listen | Select-Object LocalPort, OwningProcess
+Stop-Process -Id <OwningProcess>
+```
+
+```bash
+lsof -i :8000 -i :8081 -i :8082
+kill <PID>
+```
+
+### Run a branch or a PR
+
+- Check the branch out in its own folder, with `git worktree add ../surveyjs-php-laravel-pr <branch>` (for a pull request, `git fetch origin pull/<number>/head:pr-<number>` first) or a second clone, and run `composer setup` there. `vendor/`, `node_modules/`, `.env`, `database/database.sqlite` and `public/build/` belong to each checkout. Git checks a branch out in one folder at a time, so the PR runs from its own folder, not from the main one.
+- Run one checkout on the default ports at a time: stop the other one first, or set `APP_PORT`, `RELAY_PORT` and `EDIT_RELAY_PORT` (and `APP_URL`) in the shell that starts the second checkout. `npm run test:browser` reads `APP_PORT` from the shell too.
+- The SurveyJS service is shared: `docker-compose.yml` has a fixed project name (`surveyjs-php`), so every checkout manages the same containers.
+- The page says which checkout answered: "Running `<branch>@<commit>`" under the catalog's footer buttons and at the end of every example's Description panel.
+
+## Docker
+
+The image runs with `APP_ENV=production`, `APP_DEBUG=false` and logs to `docker compose logs` (`LOG_CHANNEL=stderr`). These are environment variables, so they win over the defaults in `config/` and the `.env` the container copies from `.env.example` (only the app key, which it generates). PHP's built-in server runs 4 workers (`PHP_CLI_SERVER_WORKERS`, read from the process environment, not from `.env`), so a long extraction doesn't hold up other visitors. That is enough for the demo; for your own production, serve Laravel with FrankenPHP or nginx + php-fpm. The `scheduler` service runs `php artisan schedule:work` for `demo:prune`.
+
+The image follows `php:8.5-cli` and refuses to build on a release older than 8.5.12. Run `docker compose build --pull` (or `docker compose up -d --build --pull always`) after each PHP security release so a cached base image doesn't keep an old PHP.
+
+### Behind a proxy
+
+The app trusts `X-Forwarded-*` headers, so behind a TLS proxy (Traefik, nginx, Cloudflare) its URLs, assets and cookies use `https`. To serve the relays on the same host, route their paths to them and set `RELAY_URL` and `EDIT_RELAY_URL` to that origin. For Traefik, next to your entry point and TLS labels:
+
+```yaml
+services:
+    app:
+        labels:
+            - traefik.http.routers.surveyjs.rule=Host(`example.com`)
+            - traefik.http.services.surveyjs.loadbalancer.server.port=8000
+    relay:
+        labels:
+            - traefik.http.routers.surveyjs-relay.rule=Host(`example.com`) && PathPrefix(`/ws/rooms/`)
+            - traefik.http.services.surveyjs-relay.loadbalancer.server.port=8081
+    edit-relay:
+        labels:
+            - traefik.http.routers.surveyjs-edit-relay.rule=Host(`example.com`) && PathPrefix(`/ws/forms/`)
+            - traefik.http.services.surveyjs-edit-relay.loadbalancer.server.port=8082
+```
+
+```bash
+RELAY_URL=wss://example.com EDIT_RELAY_URL=wss://example.com docker compose up -d --build
+```
+
+## Configuration
+
+Every setting has its default in `config/`, which is committed: the SurveyJS ones in `config/surveyjs.php`, Laravel's in `config/app.php` and the rest. Change a default there, or override it in the environment. `.env` is git-ignored and holds only the private keys: `APP_KEY`, `SURVEYJS_LICENSE_KEY`, `AI_API_KEY`, `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` (`composer setup` copies `.env.example` to it and generates `APP_KEY`). Variables set in the environment win over `.env`. `docker compose` can't read `config/`: it passes the private keys in, and the SurveyJS service's `SURVEYJS_AI_*` from the shell or `.env`. The SurveyJS settings:
+
+| Variable | Default | What it does |
+|---|---|---|
+| `SURVEYJS_LICENSE_KEY` | empty | Calls `setLicenseKey()` on every page. Without it, the commercial components (Dashboard, Creator) show a licence banner. |
+| `SURVEYJS_SERVICE_URL` | `http://localhost:3010` | The SurveyJS service for Run Server-Side Workflows. Docker Compose sets `http://surveyjs:3000`. |
+| `VALIDATE_RESPONSES` | `false` | Validate Responses: `routes/examples/validate-response.php` replaces `save-response.php`. |
+| `LINT_DEFINITIONS` | `false` | Lint JSON Schemas: `routes/examples/lint-definition.php` replaces the PUT in `creator-load-save.php`. |
+| `SURVEYJS_AI_PROVIDER`, `SURVEYJS_AI_MODEL`, `SURVEYJS_OLLAMA_BASE_URL`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | empty | Extract Responses from Documents: the AI provider the service extracts with (`openai`, `anthropic` or `ollama`). Docker Compose passes them to the service. |
+| `AI_BASE_URL`, `AI_API_KEY`, `AI_MODEL` | OpenAI, empty, `gpt-4o-mini` | Translate with AI: any OpenAI-compatible `/chat/completions` endpoint for machine translation. Without a key, `/api/translate` answers `501`. |
+| `APP_PORT` | `8000` | Where `composer start` and `composer dev` serve the app. |
+| `RELAY_PORT`, `EDIT_RELAY_PORT` | `8081`, `8082` | Where the relays listen. |
+| `RELAY_URL`, `EDIT_RELAY_URL` | empty | The relay origin the pages use when a proxy serves the relays, for example `wss://example.com`: the pages add `/ws/rooms/<id>` and `/ws/forms/<id>`. Empty means this host on the ports above. |
+| `DEMO_MODE` | `false` | The hosted demo's visitor sandboxes (below). |
+| `SURVEYJS_BUILD` | set by `surveyjs:serve` | The `<branch>@<commit>` the pages show as "Running …". Hosted demos set it at deploy; unset, the line is left out. |
+
+Code reads these through `config/surveyjs.php`, never with `env()`, so `php artisan config:cache` works.
+
+## The steps
+
+<!-- steps:start (generated by `composer readme` from surveyjs-integration.json) -->
+| Step | Run | Server | Client | Page | Licence |
+|---|---|---|---|---|---|
+| [Save Responses](https://surveyjs.io/documentation/backend-integration-php-laravel#save-responses) | [/examples/save-response](https://surveyjs-php.demos.surveyjs.io/examples/save-response) | [`routes/examples/save-response.php`](routes/examples/save-response.php) | [`shared/client/save-response.js`](shared/client/save-response.js) | [`resources/views/examples/save-response.blade.php`](resources/views/examples/save-response.blade.php) | MIT |
+| [Load JSON Schemas, Variables, and Answers](https://surveyjs.io/documentation/backend-integration-php-laravel#load-json-schemas-variables-and-answers) | [/examples/load-definition-variables-data](https://surveyjs-php.demos.surveyjs.io/examples/load-definition-variables-data) | [`routes/examples/load-definition-variables-data.php`](routes/examples/load-definition-variables-data.php) | [`shared/client/load-definition-variables-data.js`](shared/client/load-definition-variables-data.js) | [`resources/views/examples/load-definition-variables-data.blade.php`](resources/views/examples/load-definition-variables-data.blade.php) | MIT |
+| [Resume Progress](https://surveyjs.io/documentation/backend-integration-php-laravel#resume-progress) | [/examples/resume-progress](https://surveyjs-php.demos.surveyjs.io/examples/resume-progress) | [`routes/examples/resume-progress.php`](routes/examples/resume-progress.php) | [`shared/client/resume-progress.js`](shared/client/resume-progress.js) | [`resources/views/examples/resume-progress.blade.php`](resources/views/examples/resume-progress.blade.php) | MIT |
+| [Store Files Separately](https://surveyjs.io/documentation/backend-integration-php-laravel#store-files-separately) | [/examples/store-files](https://surveyjs-php.demos.surveyjs.io/examples/store-files) | [`routes/examples/store-files.php`](routes/examples/store-files.php) | [`shared/client/store-files.js`](shared/client/store-files.js) | [`resources/views/examples/store-files.blade.php`](resources/views/examples/store-files.blade.php) | MIT |
+| [Load Choices from Web](https://surveyjs.io/documentation/backend-integration-php-laravel#load-choices-from-web) | [/examples/choices-from-web](https://surveyjs-php.demos.surveyjs.io/examples/choices-from-web) | [`routes/examples/choices-from-web.php`](routes/examples/choices-from-web.php) | [`shared/client/choices-from-web.js`](shared/client/choices-from-web.js) | [`resources/views/examples/choices-from-web.blade.php`](resources/views/examples/choices-from-web.blade.php) | MIT |
+| [Async Calculations and Validation](https://surveyjs.io/documentation/backend-integration-php-laravel#async-calculations-and-validation) | [/examples/async-functions](https://surveyjs-php.demos.surveyjs.io/examples/async-functions) | [`routes/examples/async-functions.php`](routes/examples/async-functions.php) | [`shared/client/async-functions.js`](shared/client/async-functions.js) | [`resources/views/examples/async-functions.blade.php`](resources/views/examples/async-functions.blade.php) | MIT |
+| [Use Relational Storage](https://surveyjs.io/documentation/backend-integration-php-laravel#use-relational-storage) | [/examples/relational-storage](https://surveyjs-php.demos.surveyjs.io/examples/relational-storage) | [`routes/examples/relational-storage.php`](routes/examples/relational-storage.php) | [`shared/client/relational-storage.js`](shared/client/relational-storage.js) | [`resources/views/examples/relational-storage.blade.php`](resources/views/examples/relational-storage.blade.php) | MIT |
+| [Fill Forms Together](https://surveyjs.io/documentation/backend-integration-php-laravel#fill-forms-together) | [/examples/fill-together](https://surveyjs-php.demos.surveyjs.io/examples/fill-together) | [`app/Relay/FillRelay.php`](app/Relay/FillRelay.php) | [`shared/client/fill-together.js`](shared/client/fill-together.js) | [`resources/views/examples/fill-together.blade.php`](resources/views/examples/fill-together.blade.php) | MIT |
+| [Analyze Results with Dashboard](https://surveyjs.io/documentation/backend-integration-php-laravel#analyze-results-with-dashboard) | [/examples/dashboard](https://surveyjs-php.demos.surveyjs.io/examples/dashboard) | [`routes/examples/dashboard.php`](routes/examples/dashboard.php) | [`shared/client/dashboard.js`](shared/client/dashboard.js) | [`resources/views/examples/dashboard.blade.php`](resources/views/examples/dashboard.blade.php) | Commercial client |
+| [Load and Save Form JSON Schemas](https://surveyjs.io/documentation/backend-integration-php-laravel#load-and-save-form-json-schemas) | [/examples/creator-load-save](https://surveyjs-php.demos.surveyjs.io/examples/creator-load-save) | [`routes/examples/creator-load-save.php`](routes/examples/creator-load-save.php) | [`shared/client/creator-load-save.js`](shared/client/creator-load-save.js) | [`resources/views/examples/creator-load-save.blade.php`](resources/views/examples/creator-load-save.blade.php) | Commercial client |
+| [Upload Files](https://surveyjs.io/documentation/backend-integration-php-laravel#upload-files) | [/examples/creator-uploads](https://surveyjs-php.demos.surveyjs.io/examples/creator-uploads) | — | [`shared/client/creator-uploads.js`](shared/client/creator-uploads.js) | [`resources/views/examples/creator-uploads.blade.php`](resources/views/examples/creator-uploads.blade.php) | Commercial client |
+| [Translate with AI](https://surveyjs.io/documentation/backend-integration-php-laravel#translate-with-ai) | [/examples/ai-translation](https://surveyjs-php.demos.surveyjs.io/examples/ai-translation) | [`routes/examples/ai-translation.php`](routes/examples/ai-translation.php) | [`shared/client/ai-translation.js`](shared/client/ai-translation.js) | [`resources/views/examples/ai-translation.blade.php`](resources/views/examples/ai-translation.blade.php) | Commercial client, needs an AI provider |
+| [Variable Presets](https://surveyjs.io/documentation/backend-integration-php-laravel#variable-presets) | [/examples/variable-presets](https://surveyjs-php.demos.surveyjs.io/examples/variable-presets) | [`routes/examples/variable-presets.php`](routes/examples/variable-presets.php) | [`shared/client/variable-presets.js`](shared/client/variable-presets.js) | [`resources/views/examples/variable-presets.blade.php`](resources/views/examples/variable-presets.blade.php) | Commercial client |
+| [Edit Forms Together](https://surveyjs.io/documentation/backend-integration-php-laravel#edit-forms-together) | [/examples/edit-together](https://surveyjs-php.demos.surveyjs.io/examples/edit-together) | [`app/Relay/EditRelay.php`](app/Relay/EditRelay.php) | [`shared/client/edit-together.js`](shared/client/edit-together.js) | [`resources/views/examples/edit-together.blade.php`](resources/views/examples/edit-together.blade.php) | Commercial client |
+| [Validate Responses](https://surveyjs.io/documentation/backend-integration-php-laravel#validate-responses) | [/examples/validate-response](https://surveyjs-php.demos.surveyjs.io/examples/validate-response) | [`routes/examples/validate-response.php`](routes/examples/validate-response.php) | [`shared/client/validate-response.js`](shared/client/validate-response.js) | [`resources/views/examples/validate-response.blade.php`](resources/views/examples/validate-response.blade.php) | MIT |
+| [Lint JSON Schemas](https://surveyjs.io/documentation/backend-integration-php-laravel#lint-json-schemas) | [/examples/lint-definition](https://surveyjs-php.demos.surveyjs.io/examples/lint-definition) | [`routes/examples/lint-definition.php`](routes/examples/lint-definition.php) | [`shared/client/lint-definition.js`](shared/client/lint-definition.js) | [`resources/views/examples/lint-definition.blade.php`](resources/views/examples/lint-definition.blade.php) | MIT |
+| [Generate PDFs](https://surveyjs.io/documentation/backend-integration-php-laravel#generate-pdfs) | [/examples/server-pdf](https://surveyjs-php.demos.surveyjs.io/examples/server-pdf) | [`routes/examples/server-pdf.php`](routes/examples/server-pdf.php) | [`shared/client/server-pdf.js`](shared/client/server-pdf.js) | [`resources/views/examples/server-pdf.blade.php`](resources/views/examples/server-pdf.blade.php) | Commercial |
+| [Extract Responses from Documents](https://surveyjs.io/documentation/backend-integration-php-laravel#extract-responses-from-documents) | [/examples/extract-from-paper](https://surveyjs-php.demos.surveyjs.io/examples/extract-from-paper) | [`routes/examples/extract-from-paper.php`](routes/examples/extract-from-paper.php) | [`shared/client/extract-from-paper.js`](shared/client/extract-from-paper.js) | [`resources/views/examples/extract-from-paper.blade.php`](resources/views/examples/extract-from-paper.blade.php) | MIT, needs an AI provider |
+<!-- steps:end -->
+
+## Where each step lives
+
+Each step is two or three files you can read on their own:
+
+- `routes/examples/<slug>.php`: the step's routes, the server code the page shows. `routes/examples.php` loads them in page order. They run in the stateless `api` group, so `fetch()` needs no CSRF token.
+- `shared/client/<slug>.js`: the step's client code, a plain ES module. Vite bundles it as an entry point (`vite.config.js`).
+- `resources/views/examples/<slug>.blade.php`: the step page: its description, the "Try this" list and the component. The full explanation is in [the docs](#the-steps).
+- The relays are `app/Relay/FillRelay.php` (Fill Forms Together) and `app/Relay/EditRelay.php` (Edit Forms Together), started by `php artisan relay:fill` and `relay:edit`.
+- `app/Integration/`: small helpers some routes call, so the code the page shows stays about SurveyJS. They aren't demo code:
+  - `StoredJson` (`save-response`, `load-definition-variables-data`, `resume-progress`, `relational-storage`, `creator-load-save`, `variable-presets`, `validate-response`, `lint-definition`): stores and returns JSON exactly as it arrived.
+  - `SurveyJsService` (Run Server-Side Workflows): calls the SurveyJS service and maps a refused connection or a timeout to `503` or `504`, and an answer it doesn't recognize to `502`.
+  - `AiTranslation` (Translate with AI): the call to your OpenAI-compatible provider.
+
+  To copy one of those steps, copy its route file and the helpers it imports (`use App\Integration\…`).
+
+The code the Server Integration docs show is cut from these files between `// #region sjs:<slug>.server` (or `.client`) and `// #endregion`. `surveyjs-integration.json` lists every step's files and regions; `composer check` verifies them, and `composer contract` runs the shared contract test (`shared/contract-tests/run.mjs`) against a fresh database, the app and both relays. `composer smoke` runs a faster check per step (`shared/smoke/run.mjs`), which also works against a deployed copy. Both take `SERVICE=off|on|in-process` and `AI=off|stub`; this app uses `off` or `on`, and `in-process` is for the platforms that run the SurveyJS libraries in the app (nodejs, nextjs). `npm run test:browser` runs the step pages in Chromium with Playwright (`npx playwright install chromium` once): the specs every platform shares (`shared/browser-tests/`) and any that only this app can run (`tests/browser/`, none at the moment). When nothing answers on `APP_PORT` (default 8000), it seeds a fresh `database/browser-tests.sqlite` and starts the app with `composer start`; with `BASE_URL` it tests an app that is already running.
+
+### Shared files
+
+`shared/` holds what every platform repository uses byte for byte: the step modules in `shared/client/`, the form definitions, samples and seed data, the page UI (`shared/ui/`), and the contract, smoke and browser tests. It is edited only here: `shared/UPSTREAM` reads `source: surveyjs/surveyjs-php-laravel`. The other platform repositories copy it from `master` when `shared/CONTRACT` names the contract they implement (`server-integration-v4`), write the commit they copied to their own `shared/UPSTREAM`, and send any fix back here. After changing a file in `shared/`, run `php artisan surveyjs:check --write-sums` to update `shared/SHA256SUMS` (it refuses in a copy). Once other repositories have copied `shared/`, a change to it or to the endpoint shapes comes with a new contract id in `shared/CONTRACT`.
+
+### Editing example descriptions
+
+Edit `@section('description')` in `resources/views/examples/<slug>.blade.php` to set the text shown below the example title in the Description panel. Each section contains a short feature summary and can include multiple paragraphs, links, and other HTML or Blade markup:
+
+```blade
+@section('description')
+    <p>Your custom description.</p>
+    <p>More details with <strong>formatting</strong>.</p>
+@endsection
+```
+
+The shared layout (`resources/views/layouts/example.blade.php`) renders this section. When adding an example, include a `description` section in its view. The catalog cards still use `need` from `surveyjs-integration.json` for their short "Use when" text.
+
+### Storing JSON exactly as it arrives
+
+A response, a definition, saved progress and variable presets are each one JSON document, stored as text and returned as stored. Laravel changes request bodies in two ways by default, and the examples turn both off:
+
+- The global `TrimStrings` and `ConvertEmptyStringsToNull` middleware skip `/api/*` (`bootstrap/app.php`), so `"  a "` and `""` survive.
+- The routes decode the raw body with `json_decode($request->getContent())`, which keeps `{}` as an object. `$request->input()` would turn it into a PHP array and save `[]`.
+
+`App\Integration\StoredJson` writes it back with the flags that keep it as it arrived (`JSON_UNESCAPED_UNICODE`, `JSON_UNESCAPED_SLASHES`, `JSON_PRESERVE_ZERO_FRACTION`, so `1.0` stays `1.0`) and inserts responses with a `created_at` in ISO 8601 UTC.
+
+The step tables use the query builder (`DB::table()`), so "a response is one JSON document" stays visible. An Eloquent model with `protected $casts = ['data' => 'array']` works as well, with the same `{}` caveat (cast to `'object'` to keep it).
+
+## How data works in the demo
+
+Locally, everyone shares one SQLite database, `database/database.sqlite` (`php artisan migrate:fresh --seed` resets it).
+
+On the hosted demo (`DEMO_MODE=true`), each visitor gets a private copy of the seeded database and uploads folder, chosen by a `demo_sid` cookie, and kept until it has been unused for 24 hours (`php artisan demo:prune`, scheduled hourly). The "Open a second window" link in Fill Forms Together and Edit Forms Together carries that id (`?join=`), so whoever opens it works in the same copy and the same relay rooms. This is demo-only: none of it is in the step code.
+
+## Not on Laravel?
+
+The routes only use the request, the database and the response, so they port in a few lines. Save Responses in a Symfony controller:
+
+```php
+#[Route('/api/responses', methods: ['POST'])]
+public function saveResponse(Request $request, Connection $db): JsonResponse
+{
+    $body = json_decode($request->getContent(), flags: JSON_THROW_ON_ERROR);   // keeps {} as {}
+    $db->insert('responses', [
+        'form_id' => $body->formId,
+        'data' => json_encode($body->data, JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION),
+        'created_at' => gmdate('Y-m-d\TH:i:s\Z'),
+    ]);
+
+    return new JsonResponse(['id' => (int) $db->lastInsertId()], 201);
+}
+```
+
+And in Slim:
+
+```php
+$app->post('/api/responses', function (Request $request, Response $response) use ($pdo) {
+    $body = json_decode((string) $request->getBody(), flags: JSON_THROW_ON_ERROR);   // not getParsedBody(): keeps {} as {}
+    $pdo->prepare('INSERT INTO responses (form_id, data, created_at) VALUES (?, ?, ?)')
+        ->execute([$body->formId, json_encode($body->data, JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION), gmdate('Y-m-d\TH:i:s\Z')]);
+    $response->getBody()->write(json_encode(['id' => (int) $pdo->lastInsertId()]));
+
+    return $response->withStatus(201)->withHeader('Content-Type', 'application/json');
+});
+```
+
+## Front end
+
+Tailwind CSS and Vite, as in any new Laravel app; the step pages are Blade views styled with Tailwind utility classes. SurveyJS comes from npm (`survey-core`, `survey-js-ui`, `survey-creator-js`, `survey-analytics`…, pinned to the version in `shared/surveyjs-version.json`). The forms use the SurveyJS Tailwind adapter that survey-core ships (`survey-core/themes/adapters/tailwind4.css`), which maps Tailwind's theme variables to SurveyJS's tokens and takes the demo's colours from the `@theme static` block in `shared/ui/theme.css`, which `resources/css/app.css` imports; `resources/css/survey.css` loads it. No page calls `applyTheme()`: its inline styles would override the adapter. Creator and the Dashboard keep SurveyJS's own themes. The step modules in `shared/client/` are plain ES modules with no Laravel or Tailwind in them, so they also work in Livewire, Inertia or a page that isn't Laravel at all; the other platform repositories load the same files through an import map.
+
+## Disclaimer
+
+These examples must not be used as a real service as they are. They don't cover authentication, authorization, user management, access levels and other security aspects of a real survey service; your framework's documentation covers those. The places where real checks go are marked:
+
+- `Gate::define('edit-forms')` and `Gate::define('read-file')` in `app/Providers/AppServiceProvider.php`: who may save definitions and presets, and who may read an uploaded file.
+- `app/Http/Middleware/DemoUser.php`: the demo-user switch stands in for your session guard or Sanctum. The relays check the same cookie in `FillRelay::user()` and `EditRelay::editor()`.
+
+When you copy a step into your app, leave out the demo-only files: `app/Http/Middleware/DemoUser.php`, `DemoSandbox.php` and `DemoCacheHeader.php` (and their lines in `bootstrap/app.php`), `app/Support/Demo.php`, `app/Support/Sandbox.php`, `app/Relay/RoomKey.php`'s sandbox helpers, `app/Console/Commands/DemoPrune.php`, `routes/web.php`, `resources/views/`, `shared/ui/` (the page frame, its tabs and highlighting, the fonts and site images), and `shared/client/host.js` (its `mountSurvey()` is one line: `renderSurvey(survey, element)` from `survey-js-ui`). The Tailwind adapter is optional: an app without Tailwind leaves out the `survey-core/themes/adapters/tailwind4.css` imports in `resources/css/survey.css`, `creator.css` and `dashboard.css` and, with them, the demo's own layer that `resources/css/survey.css` imports from `shared/ui/survey-overrides.css`.
+
+## Licence
+
+The code in this repository is available under the [MIT licence](LICENSE).
+
+The steps use SurveyJS Form Library, which is MIT-licensed as well. The steps marked "Commercial" in the Licence column above also use SurveyJS Survey Creator, Dashboard or PDF Generator, which are commercial products. You can integrate them and evaluate their functionality without a licence. Production use requires a developer licence for each developer who works with the SurveyJS APIs or implements the integration. See the [SurveyJS Licensing FAQ](https://surveyjs.io/faq#licensing) and the [End-User License Agreement](https://surveyjs.io/Developer-License-Agreement.pdf).

@@ -1,5 +1,5 @@
 # presidentielle2027
-![Sondages agrégés](https://img.shields.io/badge/sondages_agrégés-409-blue)
+![Sondages agrégés](https://img.shields.io/badge/sondages_agrégés-424-blue)
 
 Compilation des sondages d'intention de vote à l'occasion des élections présidentielles 2027 en France.
 
@@ -102,6 +102,8 @@ Une fois mergé, `presidentielle2027.csv` est mis à jour automatiquement.
 ## 🔗 Projets qui utilisent ces données
 
 - **[Ballottage](https://ballottage.com)** : un jeu gratuit de pronos sur la présidentielle 2027, entre potes et sans argent. Il lit ces sondages via [rolling-2027](https://github.com/EnzoSim/rolling-2027), un fork de ce dépôt.
+- **[Sondage Présidentielle](https://sondage-presidentielle.fr/)** : les intentions de vote au premier tour de la présidentielle 2027, par candidat et par institut, avec leur moyenne.
+- **[Candidator](https://www.candidator.fr/presidentielle2027/sondages.html)** : Candidator vous aide à choisir votre candidat en 3 minutes !
 
 ## 📜 Licence
 

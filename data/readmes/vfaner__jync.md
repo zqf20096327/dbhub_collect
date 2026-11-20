@@ -1,11 +1,11 @@
 # Jync 捷同 · 异构数据库实时同步工具
 
-> **Jync**，读作 "sync" —— **J** 代表 Java；**捷同**：敏捷同步，两库皆同。
+> **Jync**：**J** 代表 Java，**ync** 是 sync（同步）的缩写；中文名 **捷同**，寓意敏捷同步、两库皆同。
 > 单 JAR 交付的异构数据库同步引擎：**分块并行的全量、只读零侵入的增量、秒级的日志 CDC**，外加按 SQL 取数的 ETL 与 Webhook 告警。
 
 **简体中文** | [English](README_EN.md)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Java 17+](https://img.shields.io/badge/Java-17%2B-orange.svg)](https://openjdk.org/)
 [![Spring Boot 4.1](https://img.shields.io/badge/Spring%20Boot-4.1-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![GitHub star](https://img.shields.io/github/stars/vfaner/jync?label=GitHub%20star)](https://github.com/vfaner/jync)
@@ -15,7 +15,7 @@
 
 ![Jync 捷同 · 异构数据库实时同步工具](docs/images/jync.webp)
 
-在**异构数据库**之间持续同步**结构与数据**的开箱即用 Web 应用：单个 jar 启动，浏览器点选即可在内置的 **34 种数据库（另支持自定义类型）** 之间建立同步或 ETL 链路；搜索与文档型数据另有三条不走 JDBC 的**专属迁移**链路（Elasticsearch / OpenSearch → Easysearch、MongoDB → MongoDB、MongoDB → KingbaseES）。不需要 Kafka、Flink、ZooKeeper，也不需要编写一行作业代码。
+在**异构数据库**之间持续同步**结构与数据**的开箱即用 Web 应用：单个 jar 启动，浏览器点选即可在内置的 **35 种数据库（另支持自定义类型）** 之间建立同步或 ETL 链路；搜索与文档型数据另有三条不走 JDBC 的**专属迁移**链路（Elasticsearch / OpenSearch → Easysearch、MongoDB → MongoDB、MongoDB → KingbaseES）。不需要 Kafka、Flink、ZooKeeper，也不需要编写一行作业代码。
 
 - **零外部依赖**：Spring Boot 单体 + Thymeleaf 服务端渲染 + Quartz + H2 内嵌元数据库，内网离线可用。
 - **全量不是批量查询导入**：主键 keyset 分块、单表内并行、结果集流式读取、逐块提交与检查点，单表吞吐可达 **20 万行/秒量级**。
@@ -24,6 +24,7 @@
 - **可靠续传**：停机、断网、进程被杀都能从检查点继续，写入全部幂等，停机期间源库的变更重启后自动补齐。
 - **另有专属迁移**：三条不走 JDBC 的整库复制链路，使用独立的连接模型，与实时同步、ETL 互不影响。
 - **出了问题会通知你**：同步失败、CDC 停摆、数据漂移等七类故障可推送到钉钉、企业微信、飞书或自定义 Webhook。
+- **内置 AI 运维助手（可选）**：接入大模型后，在悬浮窗里用自然语言查任务状态、数据库性能、当前告警与最近失败记录，变更日志断流时逐项自检；描述停摆或数据不一致时，同步任务、ETL 任务与专属迁移分别有一次性诊断（含最近运行历史，「是否看到变更 / 是否写成功」「运行正常但无新数据 / 一直失败」可直接区分），按「结论 → 依据 → 建议 → 可执行项」作答，可执行项以确认卡供用户选择；启动 / 停止 / 立即同步 / 重建 CDC 基线、启停或立即运行 ETL / 启停、运行或取消专属迁移等变更只出确认卡，不直接执行，建任务只出草稿。
 
 | 资源 | 地址 |
 |---|---|
@@ -41,7 +42,7 @@
 
 政企系统从 MySQL、Oracle、SQL Server 迁移到达梦、金仓、OceanBase 等国产数据库时，迁移往往不是一次性搬完：新旧系统双轨运行、分批割接、历史库只读共存，都要求两个库在数周甚至数月里**持续保持一致**。
 
-现成方案总有一步对不上。商业同步工具按节点授权，采购周期长、成本高；Debezium、Flink CDC 能力强，但要先搭 Kafka、Flink 与作业编排；DataX、Kettle 擅长一次性搬运，长期增量、结构同步与断点续传通常需要自己编排。**Jync 把这些逻辑做成一个可交付的软件**：一个 jar，实施人员用浏览器完成建连接、选表、配置调度、启动同步。MIT 协议开源，可完全私有化部署。
+现成方案总有一步对不上。商业同步工具按节点授权，采购周期长、成本高；Debezium、Flink CDC 能力强，但要先搭 Kafka、Flink 与作业编排；DataX、Kettle 擅长一次性搬运，长期增量、结构同步与断点续传通常需要自己编排。**Jync 把这些逻辑做成一个可交付的软件**：一个 jar，实施人员用浏览器完成建连接、选表、配置调度、启动同步。Apache-2.0 协议开源，可完全私有化部署。
 
 ---
 
@@ -54,12 +55,14 @@
 | 日志 CDC | MySQL binlog、Oracle LogMiner、达梦 LogMiner、PostgreSQL 系逻辑解码、SQL Server CDC、崖山 YStream；长驻线程流式回放，秒级延迟；源库 DDL 让目标缺列时流内裁剪并登记待办，任务不停摆；目标表被删时只重建并重灌这张表，位点不动（次数有上限） |
 | Redis 缓存投影 | 实时同步的目标也可以是 Redis：按 CDC 把每一行投影成 `<前缀><表>:<主键>` 的 JSON 或 HASH，基线 + 回放 + 前缀清扫重建；只支持日志 CDC，缓存语义与边界见[已知限制](docs/known-limitations.md) |
 | 结构同步 | 表、索引、视图、存储过程/函数；类型映射、函数转换、标识符引号、分页语法、DDL 覆盖 |
-| ETL | 按客户取数 SQL 复制结果行；取数、预执行、后处理 SQL 与范围条件支持 `${name}` 变量和内置日期变量；7 种分析型引擎；多语句脚本；覆盖 / 追加 / 范围覆盖 / 主键更新；断点续跑；同源同目标的表可组成**批次**共享连接与调度 |
+| ETL | 按客户取数 SQL 复制结果行；取数、预执行、后处理 SQL 与范围条件支持 `${name}` 变量，内置日期、年月、任务名、目标表与运行序号 `${runIndex}`；7 种分析型引擎；多语句脚本；覆盖 / 追加 / 范围覆盖 / 主键更新（UPSERT）；断点续跑；同源同目标的表可组成**批次**共享连接与调度 |
 | 专属迁移 | Elasticsearch / OpenSearch → Easysearch、MongoDB → MongoDB、MongoDB → KingbaseES 三种整库复制，连接模型独立于 JDBC；带预检，手动或 cron 运行，可取消并查看运行历史 |
 | 数据加工 | 列清洗（13 种规则，含手机号/身份证/姓名/邮箱掩码与 SHA-256 哈希）、表名映射、只读数据预览、按需行数核对、任务克隆、批量建任务（按表大小分箱） |
-| 系统管理 | 配置包导出/导入（口令加密、可选运行状态、目标密钥重加密）、强制 HTTPS 页面开关、应用内 TLS 证书上传（PKCS#12 / JKS / PEM） |
+| 系统管理 | 配置包导出/导入（口令加密、可选运行状态、目标密钥重加密）、强制 HTTPS 页面开关、应用内 TLS 证书（上传 PKCS#12 / JKS / PEM，或填服务器路径原地续期）、应用内检查更新与一键升级（GitHub / Gitee 双源，可关闭） |
+| 角色与归属 | 系统管理员 / 运维 / 访客三种角色；运维可查看全部资源，但新建、编辑、删除、运行只作用于自己名下的资源，访客只读；外部认证可配置管理员与运维用户名名单 |
 | AI 辅助（可选） | 模型起草存储过程/函数的候选 SQL，人工审阅后才落库；AI 永不参与同步 |
-| 告警通知 | Webhook 推送同步失败、轮询卡死、项目未运行、CDC 停摆、数据漂移、连接健康、PG slot 积压，以及「CDC 目标表已自动修复」；钉钉 / 企业微信 / 飞书 / 通用 JSON；冷却与恢复通知 |
+| AI 运维助手（可选） | 内嵌悬浮窗（ADMIN/OPS）：流式回答任务状态、源目标行数、数据库指标与同步速度，可读当前告警、最近失败记录与 ETL 结果、自检变更日志前提；停摆与数据不一致时对同步任务、ETL 与专属迁移分别做一次性诊断（含最近运行历史），按「结论 → 依据 → 建议 → 可执行项」作答，可执行项以确认卡供选择；产品用法来自随包知识库；启动/停止/立即同步/重建 CDC 基线、启停或立即运行 ETL、启停/运行/取消专属迁移只生成确认卡，建任务只生成草稿，均由人工确认 |
+| 告警通知 | Webhook 推送同步失败、轮询卡死、项目未运行、CDC 停摆、数据漂移、连接健康、PG slot 积压，以及「CDC 目标表已自动修复」「CDC DDL 被跳过」；钉钉 / 企业微信 / 飞书 / 通用 JSON；冷却与恢复通知 |
 | 可靠性与可观测 | 幂等 upsert、检查点续传、数据库租约锁、at-least-once；看板、变更 / 审计 / 系统日志、性能曲线、可选 Prometheus 指标端点 |
 | 交付形态 | jar / Docker / Kubernetes；中英双语、昼夜主题；响应式布局；本地账号与三种统一认证 |
 
@@ -67,13 +70,13 @@
 
 ## 支持的数据库
 
-内置 **34 种**预设类型，其中 25 种驱动随包内置。下图是官网的数据库能力地图：上半部分是 JDBC 的实时同步 / ETL 矩阵，底部是独立的**专属迁移**链路；点图可看完整说明。
+内置 **35 种**预设类型，其中 25 种驱动随包内置。下图是官网的数据库能力地图：上半部分是 JDBC 的实时同步 / ETL 矩阵，底部是独立的**专属迁移**链路；点图可看完整说明。
 
 [![数据库能力地图与专属迁移链路](docs/images/jync_dbmaps.webp)](https://jync.qqmu.com/database.html)
 
 - **自定义数据库**：JDBC URL + 驱动类名 + 驱动 jar 路径，运行时用独立 `URLClassLoader` 加载，可选方言家族。
-- **需自备驱动**：GBase、神通 Oscar、华为 GaussDB、SAP HANA、ClickHouse、Hive、Impala、Elasticsearch、MongoDB（Atlas SQL）的构件不可再分发，需自备 jar；驱动类名与预设不同时可在同一张卡片覆盖。
-- **分析型 / 搜索型引擎**：Doris、ClickHouse、Hive、Impala、Elasticsearch、MongoDB 没有日志 CDC，**只作实时同步的源**（轮询 / 全表比对）；ETL 中除 Elasticsearch 与 MongoDB 外都可写入。
+- **需自备驱动**：GBase、神通 Oscar、华为 GaussDB、SAP HANA、ClickHouse、Hive、Impala、TDengine、Elasticsearch、MongoDB（Atlas SQL）的构件不可再分发，需自备 jar；驱动类名与预设不同时可在同一张卡片覆盖。TDengine 必须使用官方 `taos-jdbcdriver-3.10.0-dist.jar`（`-dist` 包已含 Netty 等依赖），走 WebSocket 端口 6041，连接必须写明数据库名，且只作同步源与 ETL 目标。
+- **分析型 / 搜索型引擎**：Doris、ClickHouse、Hive、Impala、TDengine、Elasticsearch、MongoDB 没有日志 CDC，**只作实时同步的源**（轮询 / 全表比对）；ETL 中除 Elasticsearch 与 MongoDB 外都可写入。
 - **Redis 是同步目标，不是数据库**：在项目页选「目标类型 = Redis」，连接管理里单独维护 Redis 目标（单机或 Cluster，不支持 Sentinel）；源端仍是数据库连接，且必须走日志 CDC。它不是 `DatabaseType`，不出现在数据库能力矩阵与 ETL 引擎列表里。
 - **专属迁移不走 JDBC**：三条链路由独立的「专属连接」与迁移任务完成，不进入 JDBC 能力矩阵；边界见[已知限制](docs/known-limitations.md)。GaussDB 与 openGauss 的差异、TDSQL / PolarDB 分版本、HANA 的 CDC 限制见[官网数据库页](https://jync.qqmu.com/database.html)。
 
@@ -90,6 +93,25 @@
 </table>
 
 > 其余界面（日志 CDC、性能曲线、列清洗、告警、AI 起草、暗色主题等）见[官网功能页](https://jync.qqmu.com/features.html)。
+
+---
+
+## AI 能力（可选）
+
+AI 在 Jync 里只做**助手**，不参与同步链路：没有启用供应商时不产生任何外部请求，`sync.ai.enabled=false` 可整体移除。
+
+<table>
+  <tr>
+    <td align="center"><a href="docs/images/jync_ai_kefu.png" target="_blank" rel="noopener"><img src="docs/images/jync_ai_kefu.png" alt="AI 运维助手" width="100%"></a><br><sub><b>AI 运维助手</b> · 自然语言查任务状态、数据库性能与告警；启动 / 停止等变更以确认卡交给你点「确认执行」</sub></td>
+  </tr>
+</table>
+
+- **问状态，不用翻页面**：任务状态、进度与吞吐、源 / 目标行数、数据库性能（会话、QPS、缓存命中、锁）、当前告警、ETL 最近一次结果，都有对应的**只读工具**；参数里的 id 由列表工具实时获取，不猜。
+- **排障成体系**：变更日志断流时逐项自检前提（连接、权限、位点、跳过计数；这一步会连源库，按对话限额）；排障顺序固定为「告警 → 任务 → 日志流 → 自检 → 文档」，回答会注明依据来自哪个工具。
+- **变更要人确认，且有预算**：启动 / 停止 / 立即同步 / 重建 CDC 基线、启停或立即运行 ETL、启停 / 运行 / 取消专属迁移都只生成**确认卡**，点「确认执行」后服务端按当前账号的角色与资源归属再校验一次才生效；助手不能执行 SQL、改配置或删除任务，要建任务只生成**草稿**，由人打开表单核对后保存。工具结果有大小上限，每次对话有轮数与耗时预算。
+- **知识库随包**：产品用法、参数前提与已知限制来自随包文档，不联网检索；文档里没有就直说没查到，不编造。
+- **结构转换 AI 起草**：存储过程 / 函数的候选 SQL 由模型起草，人工审阅、可编辑后才落库。
+- **接入任意模型**：OpenAI 兼容（含多数国产端点与自建服务）、Anthropic、Ollama（原生 / 兼容层）；密钥加密存储，页面不回显。
 
 ---
 
@@ -151,7 +173,17 @@ sync:
   crypto-salt: ""
 ```
 
-首次访问 `http://<服务器>:8080`，使用 `admin / 123456`（管理员）或 `view / 123456`（访客），**首次登录强制修改密码**（未修改前只能停留在改密页）。生产部署、外部元数据库、systemd、Docker / Kubernetes、反向代理与 HTTPS、升级备份见[部署与运维手册](https://jync.qqmu.com/docs/jync-ops-guide.pdf)、[部署页](https://jync.qqmu.com/deploy.html)与[容器部署说明](docs/deploy-container.md)。HTTPS 有两种方式：前置反向代理终止 TLS（推荐），或直接在「系统管理 → 系统配置」上传 PKCS#12 / JKS 密钥库或 PEM 证书与私钥，由 Jync 自己监听 HTTPS，重启后生效；同一页还可开关强制 HTTPS、导出/导入配置包——细节见[配置文档](docs/configuration.md)。
+首次访问 `http://<服务器>:8080`，使用内置账号 `admin / 123456`（系统管理员）、`ops / 123456`（运维）或 `view / 123456`（访客），**首次登录强制修改密码**（未修改前只能停留在改密页）。三种角色的权限见下表；从旧版本升级时若不需要 `ops` 账号，用 SQL 删除即可，重启不会重建。
+
+| 账号 | 角色 | 能做什么 |
+|---|---|---|
+| `admin` | 系统管理员 | 全部资源与系统配置：连接、项目、ETL、迁移、AI、外部认证、告警、审计、升级 |
+| `ops` | 运维 | 查看全部资源；新建、编辑、删除、运行只限于自己名下的资源；不能进入系统配置、外部认证、告警、审计、AI 配置与配置包 |
+| `view` | 访客 | 只读：可看全部资源与进程指标，所有写请求被拒 |
+
+> 归属按创建者账号记录。升级前创建的连接与项目没有归属（系统所有），运维只读且不能在新任务里引用；管理员不受影响。
+
+生产部署、外部元数据库、systemd、Docker / Kubernetes、反向代理与 HTTPS、升级备份见[部署与运维手册](https://jync.qqmu.com/docs/jync-ops-guide.pdf)、[部署页](https://jync.qqmu.com/deploy.html)与[容器部署说明](docs/deploy-container.md)。HTTPS 有两种方式：前置反向代理终止 TLS（推荐），或直接在「系统管理 → 系统配置」上传 PKCS#12 / JKS 密钥库或 PEM 证书与私钥，由 Jync 自己监听 HTTPS，重启后生效；同一页还可开关强制 HTTPS、导出/导入配置包——细节见[配置文档](docs/configuration.md)。
 
 > 🔐 升级前备份 `./data`（连同 `<库名>.key`）、`./logs` 与 `application.yml`。密钥丢失后，已保存的连接密码、AI 密钥与告警地址将无法解密。
 
@@ -205,7 +237,7 @@ com.qqmu.jync
 mvn test
 ```
 
-5300+ 单元测试，覆盖方言与 SQL 改写、全量与续传、六类 CDC 前提与位点纪律、Redis 投影与专属迁移、ETL 与告警、安全（加密存储、访客 POST 全拒、CSRF）、页面国际化，以及升级双通道兜底。
+6400+ 单元测试，覆盖方言与 SQL 改写、全量与续传、六类 CDC 前提与位点纪律、Redis 投影与专属迁移、ETL 变量与告警、角色与资源归属、AI 助手、安全（加密存储、访客 POST 全拒、CSRF）、页面国际化，以及升级双通道兜底。
 
 真实库集成测试（`*IT`，默认不进套件，需 Docker）：Oracle 23ai 并行全量与 `ROWDEPENDENCIES`；MySQL 8 binlog 基线 → 流式、崩溃重跑、十万行一致与故障注入。运行加 `-Dapi.version=1.44`（Docker Engine ≥ 29）。
 
@@ -233,6 +265,6 @@ Jync 全部能力免费开源。如果它帮到了你，欢迎点上面的按钮
 
 ## 许可证
 
-[MIT License](LICENSE)，商业与非商业用途均可。内置第三方 JDBC 驱动各自适用原厂许可证，见 [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)。
+[Apache License, Version 2.0](LICENSE)，商业与非商业用途均可。内置第三方 JDBC 驱动各自适用原厂许可证，见 [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)。
 
 项目由沐沐开源工坊维护：GitHub [@vfaner](https://github.com/vfaner)、Gitee [@super_rgh](https://gitee.com/super_rgh)、AtomGit [@vfaner](https://atomgit.com/vfaner)。唯一的请求是不要把「Jync / 捷同」名称、logo 与作者署名替换成自己的，详见 [TRADEMARK.md](TRADEMARK.md)。

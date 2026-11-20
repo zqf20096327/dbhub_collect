@@ -25,7 +25,7 @@
 - **准点发送**：账号级与好友级固定时刻；到点抢租约、真实发送，并以终态确认结果。
 - **每日防重复**：同一天同一好友只发一次；结果无法确认时记为「待人工复核」，**绝不自动重发**。
 - **自动调度**：后台每分钟对齐整分钟派发；失败重试、连续失败熔断、登录失效自动停。
-- **异常通知**：接入 Bark，按 `critical` / `timeSensitive` / `active` 分级推送登录失效、待人工复核与已启用好友火花告急只读提醒，支持在控制台一键测试连通性。
+- **异常通知**：接入 Bark，按 `critical` / `timeSensitive` / `active` 分级推送登录失效、待人工复核与已启用好友火花告急只读提醒；支持在「系统与调度」页面直接配置（脱敏回显、不进备份）与一键测试连通性。
 - **会话扫描与对账**：只读扫描官方火花状态用于展示，产出状态变化 / 无火花 / 新会话 / 未观察到 / 无变化五类对账，删除与导入都要你手动确认。
 - **可观测与防改版热修**：侧边栏后台任务栈实时展示发送与扫描进度，诊断截图按天保留；内置零副作用页面结构体检，支持将自定义 DOM 定位规则持久化至 `data` 卷在线热生效。
 
@@ -71,7 +71,30 @@ flowchart LR
 - 不保证在平台改版后立即可用；选择器与页面结构变化时可能需要更新。
 - 不提供云托管；没有多租户、计费或远程访问。
 
-## 快速开始（Docker，约 1 分钟）
+## 快速开始 · Windows 桌面端（免 Docker，下载安装即用）
+
+适合平时在 Windows 电脑上使用、不想装 Docker / Python / Node 的用户：
+
+1. 在 [GitHub Releases](https://github.com/oinzc/flame-contractor/releases) 下载最新的 Windows 安装包（`Flame Contractor_*_x64-setup.exe`），双击安装即可（无需管理员权限；首次运行如遇 Windows SmartScreen 提示，点「更多信息 → 仍要运行」）。
+2. 双击桌面图标直接进入独立软件窗口（单机免登，由桌面壳每次生成随机握手令牌保护 `127.0.0.1` 本地接口，自动复用本机 Microsoft Edge 或 Chrome，无需配置 `.env`）。
+3. 按首屏 3 步引导完成：添加抖音号并弹窗扫码 → 扫描会话勾选好友 → 绑定模板与时刻；在「系统与调度」里可直接开启开机自启与填写 Bark 手机通知地址。
+4. 点击窗口关闭 `×` 会最小化到右下角系统托盘继续准点续火（右键托盘选「彻底退出」才停止后端）；数据库、抖音登录态与日志保存在 `%LOCALAPPDATA%\FlameContractor`，升级或重装软件不丢数据。
+
+> 电脑休眠或关机期间无法定时发送；需要 24 小时关电脑也续火的场景，推荐使用下方 Docker 部署。
+
+### 本地自行构建 Windows 安装包
+
+需要 Node 22、Python 3.12、Rust 工具链与 MSVC Build Tools：
+
+```powershell
+cd frontend && npm ci && npm run build && cd ..
+backend\.venv\Scripts\python.exe -m pip install -r backend\requirements-desktop.txt
+backend\.venv\Scripts\python.exe scripts\build_desktop_backend.py
+cd desktop && npm ci && npm run build
+# 安装包输出在 desktop/src-tauri/target/release/bundle/nsis/
+```
+
+## 快速开始 · Docker（服务器 / 24 小时常驻）
 
 需要 Docker Desktop（Windows/macOS）或 Docker Engine + Compose（Linux）。官方预构建镜像 `ghcr.io/oinzc/flame-contractor:latest` 同时支持 `linux/amd64` 与 `linux/arm64`，容器内自带 Chromium，宿主机不需要装浏览器或下载源码。
 
@@ -216,8 +239,9 @@ npm run build    # tsc --noEmit && vite build
 ## 目录结构
 
 ```text
-backend/    FastAPI + SQLModel + SQLite + Alembic + APScheduler + Playwright
+backend/    FastAPI + SQLModel + SQLite + Alembic + asyncio 调度 + Playwright
 frontend/   React + TypeScript + Vite 控制台
+desktop/    Tauri v2 Windows 独立窗口桌面壳与 NSIS 打包配置
 docs/       PRD、技术设计、API 文档、数据库 Schema、Docker 部署
 ```
 

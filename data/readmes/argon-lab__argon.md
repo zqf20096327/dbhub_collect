@@ -92,10 +92,13 @@ Long-lived branches work the same way with `argon branches create` and
 
 Online import and the `argon source` commands, introduced in 2.6.0, are now
 available by default. You can import a replica-set database while writers
-keep running, then follow its changes on the project's `main`. The experimental
-options `--write-back`, `--auto-resync` and `--enable-source-images` are off
-by default and each requires `ARGON_EXPERIMENTAL_SOURCE=1`. For known
-issues and limits, see
+keep running, then follow its changes on the project's `main`. Write-back is
+also available by default. Review the plan in CLI JSON and pass its digest
+when applying it to the source. The experimental options `--auto-resync`
+and `--enable-source-images` are off by default and each requires
+`ARGON_EXPERIMENTAL_SOURCE=1`. Write-back tests have not covered Atlas,
+deployments with access control, multi-member elections, sharded sources or
+MongoDB versions other than 7.0. For known issues and limits, see
 [the operations guide](docs/OPERATIONS.md#following-a-source-database).
 
 ```bash
@@ -105,27 +108,53 @@ argon import database --database myapp --project myapp --online
 argon source follow -p myapp              # main tracks the source; leave it running
 
 argon sandbox create -p myapp --ttl 1h --watch --actor agent:run-1
-argon merge preview -p myapp -b <sandbox>
-ARGON_EXPERIMENTAL_SOURCE=1 argon merge apply <plan-id> --write-back
+argon merge preview -p myapp -b <sandbox> --output json
+argon merge apply <plan-id> --write-back --approve <approval_digest>
 ```
 
 The import copies ordinary collections at one cluster time, which it prints.
 Add `--dry-run` to the import command to check the source and its change stream
 and see the estimated copy without writing anything.
-Following ignores changes to views. JSON preview and plan listing preserve
-BSON types with canonical Extended JSON. An empty write-back completes in
-metadata. A nonempty write-back checks capture health in the transaction
-that claims the plan, then writes in one source transaction. It checks
-every affected document against the plan's
-before-image and aborts the transaction if one has changed. The metadata
-deployment must acknowledge the plan claim with majority write concern
-before the source transaction starts.
+Following ignores changes to views. New merge plans save ordered BSON. CLI
+JSON preview and list show the order apply writes, preserve BSON types with
+canonical Extended JSON, identify literal documents with dollar-prefixed
+fields and show exact bytes wherever JSON loses a BSON distinction. For a
+pending plan targeting a followed database, inspect this output and pass its
+`approval_digest` to `--approve`. To inspect a saved plan, run
+`argon merge list -p myapp --output json`. Before approving, run
+`argon merge check <plan-id>` to report unique-index collisions against the
+source and within the plan. Plans saved by older versions
+require a fresh preview. Write-back
+requires a verified, saved before-image for every replacement or delete and
+a verified after-image for every insert or replacement. An empty plan
+completes in metadata. For a nonempty plan, Argon checks capture health and
+claims the plan with majority acknowledgment, then checks existing documents
+byte for byte and insert keys for absence in one source transaction. Before
+commit, it reads each affected key again to verify the exact stored BSON or
+confirm deletion. A mismatch rolls back the batch and returns the plan to
+pending. A top-level zero BSON timestamp outside `_id` must be changed on the
+editable branch before write-back. Detach refuses while a recent claim is
+unsettled and reports older unsettled plans for inspection.
 Write-back and `--enable-source-images`
 require importing with a user allowed to run `replSetGetConfig`, such as one
 with the `clusterMonitor` role. Use `argon source status` to see which identity
 check applies. The MCP server and REST API do not offer write-back. Argon
 never drops, renames or rewrites a source database. See
 [the operations guide](docs/OPERATIONS.md#following-a-source-database).
+
+Write-back refuses capped collections and byte-identical replacements
+before claiming a plan. Ordinary merge also checks the
+inner length of deprecated BSON binary subtype 2 when decoding stored images.
+
+An older delete can refer to either an empty subtype-2 `_id` or four zero
+bytes. Reads that depend on it report the key. If GC removed the relevant
+WAL and subtype-2 ID evidence survives, reads that need the old snapshot
+report the unknown LSN range. For a followed branch, stop the follower and
+run `argon source resync -p myapp --force`. On an ordinary branch, fork
+from an earlier readable LSN with `argon restore branch` or rewind its
+head with `argon restore reset`. With `argon import database`, the copy
+goes into a new project and the existing branch keeps its history. See
+[upgrade and recovery details](docs/OPERATIONS.md#upgrading-older-snapshots).
 
 If a plan stays `writing_back`, check the affected documents on the source,
 let following catch up, and run `argon merge preview` again for the sandbox.
@@ -190,6 +219,12 @@ To keep a person in the loop, withhold tools from the MCP server:
 `argon mcp --disable-tools argon_merge_apply` leaves applying a merge plan to
 `argon merge apply <plan-id>`, and `argon mcp --read-only` offers only the
 tools that inspect state.
+
+Agent-written code that runs in a code sandbox can write to an Argon sandbox
+through a MongoDB user made for one run:
+[examples/boxd-sandbox](examples/boxd-sandbox/) does that with an isolated
+[boxd](https://boxd.sh/) machine, and boxd's documentation has
+[a page for the integration](https://docs.boxd.sh/use-cases/oss-integrations/argon).
 
 The full agent workflow: [docs/AGENTS.md](docs/AGENTS.md).
 

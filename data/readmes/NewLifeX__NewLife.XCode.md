@@ -1,7 +1,6 @@
 # NewLife.XCode - Data Middleware / Super ORM
 
 ![GitHub top language](https://img.shields.io/github/languages/top/newlifex/newlife.xcode?logo=github)
-
 ![GitHub License](https://img.shields.io/github/license/NewLifeX/NewLife.XCode?logo=github)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/NewLife.XCode?logo=nuget)
 ![NuGet](https://img.shields.io/nuget/v/NewLife.XCode?logo=nuget)
@@ -16,11 +15,50 @@
 🌐 [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [日本語](README.ja.md) | [Français](README.fr.md) | [Português](README.pt.md) | [Русский](README.ru.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
 <!-- lang:end -->
 
-**NewLife.XCode** is a high-performance .NET data middleware focused on "CRUD + extreme performance + massive data". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL / SQLite / SqlServer / Oracle / PostgreSQL / TDengine / InfluxDB / DaMeng / KingBase / HighGo / DB2 / ClickHouse / DuckDB / MongoDB / Hana (SAP HANA) / IRIS (InterSystems) / VastBase / Network virtual database / NovaDb / SonnetDB and more. Production deployments reach tens of billions of rows per table, and query throughput can reach billions of QPS (with caching strategies).
+**NewLife.XCode** is a high-performance .NET data middleware focused on "CRUD + extreme performance + massive data". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL / SQLite / SqlServer / Oracle / PostgreSQL / TDengine / InfluxDB / DaMeng / KingBase / HighGo / DB2 / ClickHouse / DuckDB / MongoDB / Hana (SAP HANA) / IRIS (InterSystems) / VastBase / Network virtual database / NovaDb / SonnetDB / Presto / Trino / Firebird / Snowflake / Vertica / SAP ASE / Teradata / YashanDB / MonetDB / Google Cloud Spanner and more; MySQL and PostgreSQL protocol-compatible engines (TiDB / Doris / StarRocks / openGauss / Redshift and others) reuse those providers. Production deployments reach tens of billions of rows per table, and query throughput can reach billions of QPS (with caching strategies).
 
 Docs: https://newlifex.com/xcode   Community QQ groups: 1600800 / 1600838
 
 **Contents**: [Quick Start](#quick-start) · [Why XCode](#why-xcode) · [Main Features](#main-features) · [Ecosystem Map](#ecosystem-map) · [Documentation](#documentation) · [Contributing](#contributing) · [Team](#team) · [License](#license)
+
+## Supported Databases
+
+XCode reaches every database through a separate ADO.NET driver package. Install the package that matches your database; when a driver is missing, the error message also names the package to add. **30 built-in providers** are supported today — relational, embedded, time-series, columnar, document, federated and cloud data warehouses — plus **19 protocol-compatible aliases** that reuse the MySQL or PostgreSQL provider.
+
+| Database | Provider | NuGet driver package | Type |
+| --- | --- | --- | --- |
+| SQL Server | `SqlServer` | `System.Data.SqlClient` | Relational |
+| MySQL / MariaDB | `MySql` | `NewLife.MySql` | Relational |
+| PostgreSQL | `PostgreSQL` | `Npgsql` | Relational |
+| Oracle | `Oracle` | `Oracle.ManagedDataAccess.Core` | Relational |
+| SQLite | `SQLite` | `Microsoft.Data.Sqlite` | Embedded |
+| Firebird | `Firebird` | `FirebirdSql.Data.FirebirdClient` | Relational |
+| DB2 | `DB2` | `IBM.Data.DB2.Core` | Relational |
+| SAP ASE (Sybase) | `Ase` | `AdoNetCore.AseClient` | Relational |
+| DaMeng | `DaMeng` | `dmdbms.DmProvider` | Relational |
+| Kingbase | `KingBase` | `Kdbndp` | Relational |
+| HighGo | `HighGo` | `Nhgdb` | Relational |
+| VastBase | `VastBase` | `Npgsql` | Relational |
+| YashanDB | `YashanDB` | `Yashandb.Data.YashandbClient` | Relational |
+| Hana | `Hana` | `Sap.Data.Hana` | In-memory |
+| IRIS | `IRIS` | `InterSystems.Data.IRISClient` | Multi-model |
+| ClickHouse | `ClickHouse` | `ClickHouse.Client` | Columnar |
+| Vertica | `Vertica` | `Vertica.Data` | Columnar |
+| MonetDB | `MonetDB` | `MonetDb.Mapi` | Columnar |
+| DuckDB | `DuckDB` | `DuckDB.NET.Data` | Embedded OLAP |
+| Snowflake | `Snowflake` | `Snowflake.Data` | Cloud DW |
+| Teradata | `Teradata` | `Teradata.Client.Provider` | Cloud DW |
+| Google Cloud Spanner | `Spanner` | `Google.Cloud.Spanner.Data` | Cloud |
+| TDengine | `TDengine` | Built-in | Time-series |
+| InfluxDB | `InfluxDB` | Built-in | Time-series |
+| MongoDB | `MongoDB` | `MongoDB.Driver` | Document |
+| Presto | `Presto` | `NReco.PrestoAdo` | Federated |
+| Trino | `Trino` | `Trino.Data.ADO` | Federated |
+| NovaDb | `NovaDb` | `NewLife.NovaDb` | Embedded / network |
+| SonnetDB | `SonnetDB` | `SonnetDB` | Embedded / remote |
+| Network | `Network` | Built-in | Virtual |
+
+MySQL- and PostgreSQL-protocol engines reuse those providers through 19 built-in aliases: TiDB, Doris, StarRocks, OceanBase (MySQL mode), SingleStore, PolarDB, TDSQL, GoldenDB, GreatDB, Databend, openGauss, GaussDB, Greenplum, Amazon Redshift, CockroachDB, YugabyteDB, TimescaleDB and QuestDB; MariaDB is covered by the MySQL provider. The Access and SqlCe providers are retained but disabled.
 
 ## Quick Start
 
@@ -351,7 +389,7 @@ NewLife is a layered ecosystem of independently versioned open-source projects. 
 | --- | --- | --- |
 | **Foundation** | | |
 | [NewLife.Core](https://github.com/NewLifeX/X) | Logging, configuration, caching, networking, serialization, scheduling and APM tracing. | [![NuGet](https://img.shields.io/nuget/dt/NewLife.Core?style=flat-square&logo=nuget&label=downloads)](https://www.nuget.org/packages/NewLife.Core) |
-| [NewLife.XCode](https://github.com/NewLifeX/NewLife.XCode) | Data middleware: single tables at the tens-of-billions scale, automatic sharding, read-write splitting, 10+ databases. | [![NuGet](https://img.shields.io/nuget/dt/NewLife.XCode?style=flat-square&logo=nuget&label=downloads)](https://www.nuget.org/packages/NewLife.XCode) |
+| [NewLife.XCode](https://github.com/NewLifeX/NewLife.XCode) | Data middleware: single tables at the tens-of-billions scale, automatic sharding, read-write splitting, 30 databases. | [![NuGet](https://img.shields.io/nuget/dt/NewLife.XCode?style=flat-square&logo=nuget&label=downloads)](https://www.nuget.org/packages/NewLife.XCode) |
 | [NewLife.Net](https://github.com/NewLifeX/NewLife.Net) | High-performance network library: 1.77M pps / 14.5 Gbps on a single machine (TCP 1KB, 2026-10), 4M long-lived TCP connections. | [![NuGet](https://img.shields.io/nuget/dt/NewLife.Net?style=flat-square&logo=nuget&label=downloads)](https://www.nuget.org/packages/NewLife.Net) |
 | [NewLife.Remoting](https://github.com/NewLifeX/NewLife.Remoting) | Protocol communication and RPC framework for client/server applications and IoT devices. | [![NuGet](https://img.shields.io/nuget/dt/NewLife.Remoting?style=flat-square&logo=nuget&label=downloads)](https://www.nuget.org/packages/NewLife.Remoting) |
 | [NewLife.Agent](https://github.com/NewLifeX/NewLife.Agent) | Installs .NET applications as OS daemons: Windows services and Linux systemd. | [![NuGet](https://img.shields.io/nuget/dt/NewLife.Agent?style=flat-square&logo=nuget&label=downloads)](https://www.nuget.org/packages/NewLife.Agent) |
@@ -398,6 +436,7 @@ NewLife is a layered ecosystem of independently versioned open-source projects. 
 - [XCode documentation navigation](Doc/XCode文档导航.md): complete document index grouped by module
 - [XCode user manual](Doc/XCode使用手册.md): end-to-end usage walkthrough
 - [Architecture design](Doc/架构设计.md): layering, components and key design decisions
+- [Database support matrix](Doc/数据库支持矩阵.md): supported engines, ADO.NET drivers, capability boundaries
 - [Multi-language localization](Doc/多语言本地化.md): message model, language tables and runtime overrides
 - Online documentation: https://newlifex.com/xcode
 - [ChangeLog.md](ChangeLog.md): version history

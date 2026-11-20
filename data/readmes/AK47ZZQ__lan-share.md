@@ -9,10 +9,10 @@
   <p>没有公网 IP 也能用。不用买 NAS。照片不进任何云厂商的机房。</p>
 
   [![CI](https://github.com/AK47ZZQ/lan-share/actions/workflows/ci.yml/badge.svg)](https://github.com/AK47ZZQ/lan-share/actions/workflows/ci.yml)
-  ![server](https://img.shields.io/badge/server-v4.0.2-2563eb)
-  ![app](https://img.shields.io/badge/app-v4.0.2%2B134-2563eb)
+  ![server](https://img.shields.io/badge/server-v4.0.19-2563eb)
+  ![app](https://img.shields.io/badge/app-v4.1.10%2B150-2563eb)
   ![platform](https://img.shields.io/badge/platform-Windows%20%C2%B7%20Web%20%C2%B7%20Android-64748b)
-  ![tests](https://img.shields.io/badge/tests-729%20passed-16a34a)
+  ![tests](https://img.shields.io/badge/tests-1333%20passed-16a34a)
   ![license](https://img.shields.io/badge/license-PolyForm--Noncommercial-orange)
 </div>
 
@@ -69,7 +69,7 @@ Web 那套是给自己管东西用的，App 才是家人每天打开的那个。
 
 照片按 EXIF 拍摄时间归月，三列瀑布流，可以切照片和视频，右上角能直接跳日历找某个月。
 
-改密码、WebDAV 独立密码、配对码、恢复码、验证器、应用锁，都堆在"账号与安全"一个页面里，不用到处翻。
+改密码、配对码、恢复码、验证器、应用锁，都堆在"账号与安全"一个页面里，不用到处翻。
 
 手机和 Web 是同一个后端、同一份权限。手机上删的东西，网页刷新就没了。
 
@@ -158,7 +158,7 @@ check.bat                                     # 动了后端，跑一遍
 |---|---|---|
 | Web 全站（Vue 3） | `https://<IP>:8765` | 应用层登录 |
 | 公网（隧道） | `https://<你的隧道域名>:<端口>` | 一样，功能没有阉割 |
-| WebDAV | `https://<IP>:8765/dav/` | Basic（成员账号） |
+| WebDAV | — | 暂时关闭：`/dav` 入口返回 404，代码与接口保留，需要时可在 Caddyfile 删除拦截块恢复 |
 | 健康探针 | `/healthz` | 免认证，只有局域网能到 |
 
 探针故意不暴露到公网。它报的是内部状态，不该让别人扫得到。隧道怎么配见 [docs/OPERATIONS.md](docs/OPERATIONS.md)。

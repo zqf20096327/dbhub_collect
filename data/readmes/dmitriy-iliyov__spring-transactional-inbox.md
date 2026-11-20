@@ -344,6 +344,7 @@ The inbox and outbox meters come from oncebox (`oncebox-metrics`); the business 
 | `orders_placed_total`, `orders_cancelled_total` | `order-service` | orders committed together with their event |
 | `loyalty_points_accrued_total`, `loyalty_points_reverted_total` | `loyalty-service` | points, counted when the inbox transaction commits |
 | `notifications_sent_total`, `notifications_failed_total` | `notification-service` | confirmations the mail server accepted or refused |
+| `notifications_send_duration_seconds{outcome}` | `notification-service` | how long one SMTP send takes, as a histogram: `sent` for accepted mails, `failed` for refused ones; only the SMTP call is timed |
 
 Business counters move only on commit, so a rolled back attempt that Kafka redelivers is counted once. The share
 of redeliveries a consumer sees is `rate(inbox_events_total{type="rejected_duplicates"}[5m])` against

@@ -28,10 +28,10 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT%20(Exclusive%20Attribution)-yellow?style=flat-square" alt="License" /></a>
-  <a href="SECURITY.md"><img src="https://img.shields.io/badge/Security-Cryptographic%20OTP%20%26%20JWT-2ea44f?style=flat-square" alt="Security" /></a>
-  <a href="ACCESSIBILITY.md"><img src="https://img.shields.io/badge/Accessibility-WCAG%202.1%20AA%20%26%20Section%20508-blue?style=flat-square" alt="Accessibility" /></a>
+  <a href=".github/SECURITY.md"><img src="https://img.shields.io/badge/Security-Cryptographic%20OTP%20%26%20JWT-2ea44f?style=flat-square" alt="Security" /></a>
+  <a href=".github/ACCESSIBILITY.md"><img src="https://img.shields.io/badge/Accessibility-WCAG%202.1%20AA%20%26%20Section%20508-blue?style=flat-square" alt="Accessibility" /></a>
   <img src="https://img.shields.io/badge/Build%20Status-Passing%20(0%20Errors)-brightgreen?style=flat-square" alt="Build Status" />
-  <img src="https://img.shields.io/badge/Deployment-Render%20Cloud%20Native-46E3B7?style=flat-square" alt="Deployment" />
+  <img src="https://img.shields.io/badge/Deployment-Oracle%20Cloud%20Infrastructure%20(OCI)-F80000?style=flat-square&logo=oracle&logoColor=white" alt="Deployment" />
 </p>
 
 <p align="center">
@@ -51,11 +51,11 @@
 
 **Zyndex** is a production-grade, distributed academic learning and digital resource management platform designed for universities, campus libraries, research labs, and academic consortia. The platform eliminates content redistribution risks and resolves fragmented student entitlements through:
 
-- **Strict Cryptographic Perimeter**: Dynamic 4-digit TLS-relayed OTP authentication, multi-device session management with real-time active session monitoring, 24-hour trusted device recognition with daily midnight IST reset, single-session token version enforcement (`session_token_version`), and stateless H
+- **Strict Cryptographic Perimeter**: Dynamic 4-digit TLS-relayed OTP authentication, multi-device session management with real-time active session monitoring, 24-hour trusted device recognition with daily midnight IST reset, single-session token ve
 
 [...截断...]
 
-MAC-SHA256 JWT access tokens.
+rsion enforcement (`session_token_version`), and stateless HMAC-SHA256 JWT access tokens.
 
 - **Zero-Leakage In-Memory PDF Slicing**: Proprietary academic documents are sliced on-the-fly in heap memory via Apache PDFBox for unverified and evaluation tiers, preventing client-side retrieval of complete files.
 
@@ -130,9 +130,3 @@ flowchart TD
     CONTENT --> DB
     ACCESS --> DB
     USAGE --> DB
-    SUB --> DB
-```
-
----
-
-## 💎 Production Benchmarks & Archit

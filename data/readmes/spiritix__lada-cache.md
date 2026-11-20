@@ -2,6 +2,20 @@
 
 A **Redis-based**, fully automated, and scalable query cache layer for Laravel.
 
+## 📣 Maintainers wanted
+
+> [!IMPORTANT]
+> **Help keep Lada Cache going.**
+>
+> After more than 10 years, I no longer have the time to actively maintain this project. I’m looking for experienced **Laravel / PHP developers** to take over maintenance, review contributions, and manage releases.
+>
+> **Interested? [Get in touch →](mailto:mi@matthias-isler.com?subject=Lada%20Cache%20%E2%80%94%20Maintainer)**  
+> Please include a short introduction, your experience with Laravel and Redis, and how you’d like to contribute.
+>
+> Until new maintainers are in place, **regular updates, pull request reviews, and support cannot be guaranteed.**
+
+---
+
 [![Tests](https://github.com/spiritix/lada-cache/actions/workflows/tests.yml/badge.svg)](https://github.com/spiritix/lada-cache/actions/workflows/tests.yml)
 [![Coverage](https://codecov.io/gh/spiritix/lada-cache/branch/master/graph/badge.svg)](https://codecov.io/gh/spiritix/lada-cache)
 [![Downloads](https://poser.pugx.org/spiritix/lada-cache/d/total.svg)](https://packagist.org/packages/spiritix/lada-cache)

@@ -27,6 +27,8 @@ For 16.9.0 to 16.10.0, run the following scripts in order for your provider. [Po
 7. `9.owner-presentation.sql` transfers the owner name and description.
 8. `10.owner-oidc.sql` creates OIDC storage and the Data Protection key table required for local sign-in and antiforgery tokens. Run it even if you use only local sign-in.
 
+For 16.10.0 to 16.11.0, run `11.owner-oidc-binding-only.sql` after the earlier upgrades. It removes the OIDC enable/disable switch. Existing bindings are preserved, including previously disabled bindings, which resume allowing third-party sign-in.
+
 For databases older than 16.9.0, run the applicable category ID and PostgreSQL naming upgrades (`1` and `2`) first. Keep access restricted until any required owner setup is complete. [First run](#first-run)
 
 ### Quick Local Deployment (Docker)
@@ -58,6 +60,8 @@ In PowerShell, `./start.ps1` uses the Development launch profile. Open `https://
 ### First Run
 
 Restrict access until setup is complete. Anyone who reaches an uninitialized site can claim it at `/auth/setup-account`. Enter the owner's email and password and verify the authenticator code when TOTP is required. Setup signs the owner in.
+
+Passwords must contain at least 8 printable ASCII characters, including an English letter and a digit. Uppercase/lowercase combinations and symbols are optional; all printable ASCII symbols are accepted. Spaces and other whitespace are not allowed. Account setup, password changes, and authenticator resets use the same rule.
 
 Pending setup redirects page requests to the setup page and returns HTTP 503 for business APIs, feeds, and protocol endpoints. Setup assets and health endpoints remain available. Hosts cache confirmed setup, so stop all hosts before restoring or replacing the database.
 
@@ -94,7 +98,7 @@ In **Account Settings**, email changes require the current password and revoke a
 
 Data Protection stores keys in `DataProtectionKeys` (`data_protection_keys` on PostgreSQL). The stable `Moonglade` application name lets cookies, antiforgery tokens, and temporary proofs work across container replacements and replicas sharing the database. Sign in again after the first upgrade from container-local keys.
 
-Under **Account Settings > Third-party sign-in**, configure one public HTTPS OpenID Connect provider, register the site's `/signin-oidc` callback, and confirm the owner binding. Choose a provider that honors `prompt=login` for reauthentication on each sign-in. Disabling, unbinding, or deleting the provider revokes its Moonglade sessions.
+Under **Account Settings > Third-party sign-in**, configure one public HTTPS OpenID Connect provider, register the site's `/signin-oidc` callback, and confirm the owner binding. Choose a provider that honors `prompt=login` for reauthentication on each sign-in. Third-party sign-in is available while an account is bound. Unbinding the account or deleting the provider revokes its Moonglade sessions. Unbinding retains the provider configuration for binding another account.
 
 Preserve the key table when backing up or restoring the database. It also holds the keys needed to decrypt the OIDC client secret under `Moonglade.OidcCredentials`. If the OIDC key is lost, save the client secret again in Account Settings. Restrict database and backup access and use encryption at rest to protect the stored keys.
 

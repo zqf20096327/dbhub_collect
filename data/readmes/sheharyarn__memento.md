@@ -11,13 +11,13 @@
     <img alt="CI Status" src="https://github.com/sheharyarn/memento/actions/workflows/ci.yml/badge.svg" />
   </a>
   <a href="https://hexdocs.pm/memento">
-    <img alt="Coverage" src="https://inch-ci.org/github/sheharyarn/memento.svg?branch=master" />
+    <img alt="Coverage" src="https://inch-ci.org/github/sheharyarn/memento.svg?branch=main" />
   </a>
   <a href="https://hex.pm/packages/memento">
     <img alt="Version" src="https://img.shields.io/hexpm/v/memento.svg" />
   </a>
   <a href="https://hex.pm/packages/memento">
-    <img alt="Version" src="https://img.shields.io/hexpm/dt/memento.svg" />
+    <img alt="Downloads" src="https://img.shields.io/hexpm/dt/memento.svg" />
   </a>
   <a href="./LICENSE">
     <img alt="License" src="https://img.shields.io/hexpm/l/memento.svg" />
@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <b>Simple but Powerful Elixir interface to the Erlang Mnesia Database</b></br>
+  <b>Fast, distributed and transactional storage in Elixir with Mnesia.</b></br>
   <sub>Mnesia. Memento. <a href="https://www.imdb.com/title/tt0209144/">Get it?</a></sub>
 </p>
 
@@ -50,11 +50,10 @@
 
 
 
-**Memento** is an extremely easy-to-use and powerful wrapper in Elixir that makes it intuitive to work with
-[Mnesia][mnesia], the Erlang Distributed Realtime Database. The original Mnesia API in Erlang is convoluted, unorganized
-and combined with the complex `MatchSpec` and `QLC` query language, is hard to work with in Elixir, especially for
-beginners. Memento attempts to define a simple API to work with schemas, removing the majority of complexity associated
-with it.
+**Memento** is an easy-to-use Elixir wrapper around [Mnesia][mnesia], Erlang's distributed, real-time database. It provides an
+idiomatic API for defining schemas, running transactions and querying data while remaining compatible with Mnesia.
+Memento simplifies Mnesia's API and its `MatchSpec` and `QLC` query tools so you can use its distributed storage without
+taking on the underlying complexity.
 
 <br/>
 
@@ -95,7 +94,7 @@ environment (You can add `.mnesia` to your `.gitignore`):
 ```elixir
 # config/config.exs
 config :mnesia,
-  dir: '.mnesia/#{Mix.env}/#{node()}'        # Notice the single quotes
+  dir: ~c'.mnesia/#{Mix.env}/#{node()}'        # Notice the ~c sigil
 ```
 
 <br/>
@@ -156,9 +155,9 @@ Memento.transaction! fn ->
 end
 
 # => [
-#  %Blog.Author{username: :sye,     fullname: "Sheharyar Naseer"},
-#  %Blog.Author{username: :jeanne,  fullname: "Jeanne Bolding"},
-#  %Blog.Author{username: :pshore,  fullname: "Paul Shore"},
+#  %Blog.Author{username: :sye,     fullname: "Sheharyar"},
+#  %Blog.Author{username: :jeanne,  fullname: "Jeanne"},
+#  %Blog.Author{username: :pshore,  fullname: "Paul"},
 # ]
 ```
 
@@ -243,51 +242,7 @@ function or mix task that does this for you. You can see a [sample implementatio
 
 
 
-## Roadmap
-
- - [x] Memento
-    - [x] start/stop
-    - [x] info
-    - [x] system_info
-    - [ ] Application
-    - [ ] Config Vars
- - [x] Memento.Table
-    - [x] Create/Delete helpers
-    - [x] clear_table
-    - [x] table_info
-    - [x] wait
-    - [ ] Ecto-like DSL
-    - [ ] Migration Support
- - [x] Memento.Query
-    - [x] Integration with Memento.Table
-    - [x] match/select
-    - [x] read/write/delete
-    - [ ] first/next/prev/all_keys
-    - [ ] test matchspec
-    - [ ] continue/1 for select continuations
-    - [x] autoincrement
-    - [ ] Helper use macro
- - [x] Memento.Transaction
-    - [x] Simple/Synchronous
-    - [x] Bang versions
-    - [x] inside?
-    - [x] abort
-    - [ ] Lock Helpers
- - [x] Memento.Schema
-    - [x] create/delete
-    - [x] print (schema/1)
- - [ ] Memento.Collection
-    - [ ] Easy Helpers
-    - [ ] Custom DSL
-  - [ ] Mix Tasks
-
-<br/>
-
-
-
-
 ## FAQ
-
 
 
 #### 1. Why Memento/Mnesia?
@@ -350,30 +305,28 @@ This package is available as open source under the terms of the [MIT License][li
 
 
 
+[logo]:                 media/logo.png
+[shield-version]:       https://img.shields.io/hexpm/v/memento.svg
+[shield-license]:       https://img.shields.io/hexpm/l/memento.svg
+[shield-downloads]:     https://img.shields.io/hexpm/dt/memento.svg
+[shield-travis]:        https://img.shields.io/travis/sheharyarn/memento/main.svg
+[shield-inch]:          https://inch-ci.org/github/sheharyarn/memento.svg?branch=main
 
-  [logo]:                 media/logo.png
-  [shield-version]:       https://img.shields.io/hexpm/v/memento.svg
-  [shield-license]:       https://img.shields.io/hexpm/l/memento.svg
-  [shield-downloads]:     https://img.shields.io/hexpm/dt/memento.svg
-  [shield-travis]:        https://img.shields.io/travis/sheharyarn/memento/master.svg
-  [shield-inch]:          https://inch-ci.org/github/sheharyarn/memento.svg?branch=master
+[travis-ci]:            https://travis-ci.org/sheharyarn/memento
+[inch-ci]:              https://inch-ci.org/github/sheharyarn/memento
 
-  [travis-ci]:            https://travis-ci.org/sheharyarn/memento
-  [inch-ci]:              https://inch-ci.org/github/sheharyarn/memento
+[license]:              ./LICENSE
+[mnesia]:               http://erlang.org/doc/man/mnesia.html
+[hexpm]:                https://hex.pm/packages/memento
+[imdb-memento]:         https://www.imdb.com/title/tt0209144/
+[que]:                  https://github.com/sheharyarn/que
+[amnesia]:              https://github.com/meh/amnesia
 
-  [license]:              ./LICENSE
-  [mnesia]:               http://erlang.org/doc/man/mnesia.html
-  [hexpm]:                https://hex.pm/packages/memento
-  [imdb-memento]:         https://www.imdb.com/title/tt0209144/
-  [que]:                  https://github.com/sheharyarn/que
-  [amnesia]:              https://github.com/meh/amnesia
+[docs]:                 https://hexdocs.pm/memento
+[docs-transaction]:     https://hexdocs.pm/memento/Memento.Transaction.html
+[docs-table]:           https://hexdocs.pm/memento/Memento.Table.html
+[docs-query]:           https://hexdocs.pm/memento/Memento.Query.html
+[docs-query-select]:    https://hexdocs.pm/memento/Memento.Query.html#select/3
 
-  [docs]:                 https://hexdocs.pm/memento
-  [docs-transaction]:     https://hexdocs.pm/memento/Memento.Transaction.html
-  [docs-table]:           https://hexdocs.pm/memento/Memento.Table.html
-  [docs-query]:           https://hexdocs.pm/memento/Memento.Query.html
-  [docs-query-select]:    https://hexdocs.pm/memento/Memento.Query.html#select/3
-
-  [github-fork]:          https://github.com/sheharyarn/memento/fork
-  [que-persistence]:      https://github.com/sheharyarn/que/blob/dc3764a27f8ce3e28b15a7bfafbca604fb424ecb/lib/que/persistence/mnesia/mnesia.ex#L90-L108
-
+[github-fork]:          https://github.com/sheharyarn/memento/fork
+[que-persistence]:      https://github.com/sheharyarn/que/blob/dc3764a27f8ce3e28b15a7bfafbca604fb424ecb/lib/que/persistence/mnesia/mnesia.ex#L90-L108

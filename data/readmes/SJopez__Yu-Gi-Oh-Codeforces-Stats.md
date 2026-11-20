@@ -118,7 +118,7 @@ The app includes a dedicated section that displays the world top lists: a leader
   <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" style="margin-right:6px;" />
 </p>
 
-Backend attribution — This backend was implemented by the other project collaborator [10Y6](https://github.com/10Y6). 
+Backend attribution — This backend was implemented by the other project collaborator [amnesiac-ds](https://github.com/amnesiac-ds). 
 
 This section documents the backend API and core data flow. The backend collects data from the Codeforces API and from per-user profile scraping, enriches and persists user records in a local SQLite database, maintains lightweight JSON caches for top lists under `app/cache/`, and exposes endpoints consumed by the frontend.
 
@@ -275,10 +275,10 @@ Calls to `update_database` originate in the enrichment flow inside `backend/app/
 <table border="0" cellpadding="0" cellspacing="0" style="border:none;">
   <tr>
     <td valign="middle" style="border:none; padding:0 12px 0 0;">
-      <img src="https://github.com/10Y6.png" alt="10Y6" width="64" height="64" style="border-radius:8px;" />
+      <img src="https://github.com/amnesiac-ds.png" alt="amnesiac-ds" width="64" height="64" style="border-radius:8px;" />
     </td>
     <td valign="middle" style="border:none; padding:0;">
-      <strong><a href="https://github.com/10Y6" target="_blank" rel="noopener noreferrer">10Y6</a></strong><br/>
+      <strong><a href="https://github.com/amnesiac-ds" target="_blank" rel="noopener noreferrer">amnesiac-ds</a></strong><br/>
       Co-author / Data Scientist
     </td>
   </tr>

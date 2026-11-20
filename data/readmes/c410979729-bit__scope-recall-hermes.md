@@ -17,6 +17,7 @@ the package-index command above selects a published release. An unpublished whee
 | Claude Code | [Setup](docs/install/claude-code.md) |
 | Codex | [Setup and hook review](docs/install/codex.md) |
 | Hermes | [Setup and local identity](docs/install/hermes.md) |
+| Cherry Studio | [Connect a read-only MCP entry](docs/install/cherry-studio.md) |
 | WorkBuddy | [Setup and MCP approval](docs/install/workbuddy.md) |
 | DeepSeek Harness | [Setup and plugin check](docs/install/dsh.md) |
 

@@ -4,7 +4,7 @@
 
 Karakoram is a multi-platform, self-hosted control plane for database and stateful-service orchestration inside your infrastructure, without [Kubernetes](https://kubernetes.io/) or a hosted coordinator. A [Go](https://go.dev/) control plane provides a REST API, `karactl` CLI and web UI; providers supply infrastructure, while you operate the installation, credentials, data and recovery procedures. [Zerops](https://zerops.io/) is the reference provider; Karakoram's maintainer works at Zerops (see [Acknowledgements](#acknowledgements)). [Dokploy](https://dokploy.com/) and [Nomad](https://developer.hashicorp.com/nomad) are also available; see [Providers](docs/providers.md) for their status.
 
-**Status:** pre-1.0. The current release is [v0.4.9](https://github.com/KarakoramDev/Karakoram/releases/tag/v0.4.9); read its [known issues](https://github.com/KarakoramDev/Karakoram/releases/tag/v0.4.9#known-issues) and the [limitations](docs/limitations.md) before you rely on it. Dokploy and Nomad are experimental for every engine, and several engines are experimental on every provider ([engine availability](docs/providers.md#engine-availability)). The `main` branch, and the documentation on it, can describe changes that are not released yet.
+**Status:** pre-1.0. The current release is [v0.4.11](https://github.com/KarakoramDev/Karakoram/releases/tag/v0.4.11); read its [known issues](https://github.com/KarakoramDev/Karakoram/releases/tag/v0.4.11#known-issues) and the [limitations](docs/limitations.md) before you rely on it. Dokploy and Nomad are experimental for every engine, and several engines are experimental on every provider ([engine availability](docs/providers.md#engine-availability)). The `main` branch, and the documentation on it, can describe changes that are not released yet.
 
 ## Engines
 
@@ -24,7 +24,7 @@ Release status and provider-specific availability are centralized in [engine ava
 | OpenBao | OpenBao 2.7.1 | 1/3/5 members; integrated Raft or bound PostgreSQL storage | Raft snapshots to S3; PostgreSQL storage uses source recovery; no PITR for Raft | [OpenBao](docs/openbao/README.md) |
 | Temporal | Temporal 1.32.1 (also 1.31.4); ui-server 2.56.0 | Combined server; split stateless roles on bound PostgreSQL; Dokploy/Nomad only, not Zerops | Source PostgreSQL backup plus cluster-state manifest; requires binding service | [Temporal](docs/temporal/README.md) |
 | MySQL | Percona Server for MySQL 8.4.11-11 default; majors 8.4/8.0 | Single; Group Replication single-primary (3/5); ProxySQL | XtraBackup full/incremental and GTID-based PITR | [MySQL](docs/mysql/README.md) |
-| Percona XtraDB Cluster | PXC 8.4.11-11.1 default; majors 8.4/8.0; separate `pxc` engine driver | Galera cluster (3/5); one ProxySQL-routed writer | Separate PXC backup provenance; full/incremental and PITR | [PXC](docs/mysql/README.md) |
+| Percona XtraDB Cluster | PXC 8.4.11-12.1 default; majors 8.4/8.0; separate `pxc` engine driver | Galera cluster (3/5); one ProxySQL-routed writer | Separate PXC backup provenance; full/incremental and PITR | [PXC](docs/mysql/README.md) |
 | Neo4j Community | Neo4j 2026.09.0 / 2026.10.0 (default); Temurin Java 21 | Single member only | Offline system + graph dumps; full outage; no PITR | [Neo4j](docs/neo4j/README.md) |
 
 ## Providers

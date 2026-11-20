@@ -71,7 +71,7 @@ Press **🛟 Help** at the top of the panel to write what's wrong and attach up 
 3. Settings → Devices & services → Add integration → **Database Doctor**.
 4. Open **Database Doctor** in the sidebar.
 
-Languages: English, Danish, German, Swedish and Dutch. Early version – feedback is welcome in [issues](https://github.com/Clahen86/ha-database-doctor/issues).
+Languages: English, Danish, German, Swedish, Dutch and French. Early version – feedback is welcome in [issues](https://github.com/Clahen86/ha-database-doctor/issues).
 
 ---
 

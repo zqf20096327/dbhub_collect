@@ -227,8 +227,8 @@ var pool = try zqlite.Pool.init(allocator, .{
     .on_first_connection = null,
 });
 
-const c1 = pool.acquire();
-defer c1.release();
+const c1 = pool.acquire(io);
+defer c1.release(io);
 c1.execNoArgs(...);
 ```
 

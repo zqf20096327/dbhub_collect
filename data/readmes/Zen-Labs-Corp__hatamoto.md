@@ -6,7 +6,7 @@
 
 <p align="center">
 The batteries-included CMS for the agentic era: builder, SEO, caching, forms, redirects,
-AI analytics and MCP in one Go binary plus Postgres.<br>
+AI analytics, auto linking, entities, schema, Media optimizer and MCP in one Go binary plus Postgres.<br>
 Open source, no plugin stack, no PHP, no Node, install stats on by default, one switch to turn them off.
 </p>
 
@@ -77,7 +77,7 @@ with undo, history and keyboard shortcuts. [Page editor](docs/site/admin/page-ed
 
 ### See who reads your site, people and AI
 
-The overview shows what changed this week and what needs a look. Analytics are cookieless and count AI
+The overview shows what changed this week and what needs a review. Analytics are cookieless and count AI
 assistants as a channel of their own. The crawler report shows which AI agents fetch which pages, checks that
 each one is who it claims to be, and lets you allow or block a whole purpose (training, search, user fetches).
 [AI and SEO](docs/site/ai-seo/index.md), [Crawler analytics](docs/site/ai-seo/crawler-analytics.md)
@@ -94,7 +94,7 @@ each one is who it claims to be, and lets you allow or block a whole purpose (tr
 ### Let agents publish through MCP
 
 Hatamoto is an MCP server. An agent connects with an API key and gets tools for content, the page builder,
-media, SEO and analytics, limited to the scopes on its key. This session is real: the agent drafts a post,
+media, SEO and analytics, limited to the scopes on its key as set by the admin. This session is real: the agent drafts a post,
 publishes it, and the page is live. [MCP](docs/site/ai-seo/mcp.md), [Connect an AI agent](docs/site/ai-seo/connect-an-ai-agent.md)
 
 <table>

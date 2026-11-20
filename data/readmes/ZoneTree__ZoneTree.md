@@ -44,7 +44,7 @@ ZoneTree gives you the core pieces expected from a serious storage engine:
 * Configurable durability/performance trade-offs
 * Forward and reverse iterators
 * Seekable range scans
-* Atomic read-modify-write operations
+* Key locks for read-modify-write operations
 * Serializable and snapshot transactions with range reads
 * Custom serializers
 * Custom comparers
@@ -115,41 +115,30 @@ while (iterator.Next())
 
 ---
 
-## Atomic add or update
+## Update a key from its current value
 
-ZoneTree provides atomic operations for read-modify-write scenarios across LSM-tree segments.
+Lock the key around the read and the write. No other caller that locks the key can write it in between.
 
 ```csharp
-zoneTree.TryAtomicAddOrUpdate(
-    key: 42,
-    valueToAdd: 1,
-    valueUpdater: (ref int value) =>
-    {
-        value++;
-        return true;
-    },
-    result: (in int value, long opIndex, OperationResult result) =>
-    {
-        Console.WriteLine($"{result}: {value} at {opIndex}");
-    });
+using (zoneTree.Lock(42))
+{
+    zoneTree.TryGet(42, out var count);
+    zoneTree.Upsert(42, count + 1);
+}
 ```
 
-For mutable reference values, assigning a new object in the updater is the safest pattern. Add/update delegates may be retried, so in-place mutations should be idempotent and side effects should be repeatable.
-
-Plain `Upsert` is the fastest write path. Atomic methods are synchronized with other atomic methods and are intended for operations that must read, decide, and write as one logical action.
-
-For normal concurrent writes, use the regular write APIs. They are designed for high-throughput use. Choose atomic methods only when the new value depends on the existing value.
+`LockMany(key1, key2)` locks several keys in a fixed order, so callers do not deadlock, and `LockAsync` can hold the lock across `await`. See [key locks](https://zonetree.dev/docs/usage/key-locks/) for timeouts and the rules.
 
 | Need | Use |
 | --- | --- |
 | Set or replace a value | `Upsert` |
-| Add only if the key does not exist | `TryAdd` |
+| Add only if the key does not exist | `TryAdd`, under the key lock when callers race for the key |
 | Delete a key if it exists | `TryDelete` |
 | Write a deletion marker without checking existence | `ForceDelete` |
-| Increment, append, compare-and-set, or update from the current value | Atomic methods |
-| Coordinate changes across multiple keys | Transactions |
+| Increment, append, compare-and-set, or update from the current value | `Lock` around `TryGet` and `Upsert` |
+| Change several keys together, all or nothing | Transactions |
 
-You can mix these write modes in the same ZoneTree. For example, hot counter keys can use atomic read-modify-write operations, while ordinary records continue to use fast `Upsert`. This lets each workflow pay only for the coordination it needs.
+You can mix these write modes in the same ZoneTree. For example, hot counter keys can take their key locks, while ordinary records continue to use fast `Upsert`. This lets each workflow pay only for the coordination it needs.
 
 ---
 
@@ -175,9 +164,9 @@ foreach (var (key, value) in snapshot.Range(1, 2))
     Console.WriteLine($"{key} = {value}");
 ```
 
-Transactions are multi-version and optimistic: reads never block, and a commit fails only when another transaction committed or prepared a conflicting write after this one began; `Execute` retries it. `Serializable`, the default, also protects the keys and ranges a transaction read; `Snapshot` checks only the keys it wrote or read with `TryGetForUpdate`. `Commit()` makes a transaction visible at once. `ExecuteDurableAsync` and `tx.CommitDurableAsync()` sync the WAL before making their commits visible, so readers cannot observe those commits before they are durable. Alternatively, `zoneTree.SyncWALAsync()` makes earlier ordinary commits durable after they have become visible. These durability guarantees require WAL to be enabled.
+Transactions are multi-version and optimistic: reads never block, and a commit fails only when another transaction committed or prepared a conflicting write after this one began; `Execute` retries it. `Serializable`, the default, also protects the keys and ranges a transaction read; `Snapshot` checks only the keys it wrote or read with `TryGetForUpdate`. `Commit()` makes a transaction visible at once. `ExecuteDurableAsync` and `tx.CommitDurableAsync()` sync the WAL before making their commits visible, so readers cannot observe those commits before they are durable. Alternatively, `zoneTree.SyncWalAsync()` makes earlier ordinary commits durable after they have become visible. These durability guarantees require WAL to be enabled.
 
-With the built-in WAL provider, transactional factories promote `Sync` and `SyncCompressed` to `Shared`, and `AsyncCompressed` to `AsyncShared`, so recovery preserves commit order across segments. Compression settings, explicit shared modes and `None` are retained. Custom providers and provider factories keep their configured modes and supply their own transaction recovery guarantees.
+With the built-in WAL provider, transactional factories promote `Private` to `Shared`, and `AsyncPrivate` to `AsyncShared`, so recovery preserves commit order across segments. Compression settings, explicit shared modes and `None` are retained. Custom providers and provider factories keep their configured modes and supply their own transaction recovery guarantees.
 
 Use transactions when your data model requires coordination across multiple keys. For simple high-throughput writes, the non-transactional API is usually the better path.
 
@@ -263,39 +252,38 @@ For read-heavy workloads, memory is mostly shaped by cache behavior and the acti
 
 ZoneTree persists data through disk segments and write-ahead logs. Recent writes enter the mutable segment and are protected according to the configured WAL mode. Maintenance later moves and merges data into disk segments.
 
-Ordinary trees default to `AsyncCompressed`; transactional trees default to `AsyncShared`. Both keep WAL protection enabled while moving serialization and logging to a background writer.
+Ordinary trees default to `AsyncPrivate`; transactional trees default to `AsyncShared`. Both keep WAL protection enabled while moving serialization and logging to a background writer.
 
 | Need | Consider |
 | --- | --- |
-| Recommended high-throughput persistent WAL mode | Async compressed WAL |
-| Plain synchronous WAL write path | Sync WAL |
-| Compressed WAL with a synchronous caller write path, where each returned write survives a process crash | Sync compressed WAL |
+| Recommended high-throughput persistent WAL mode | Async private WAL (`WriteAheadLogMode.AsyncPrivate`) |
+| One WAL per memory segment, with caller-side writes, where each returned write survives a process crash | Private WAL (`WriteAheadLogMode.Private`) |
 | One ordered recovery prefix across memory segments, with caller-side writes | Shared WAL (`WriteAheadLogMode.Shared`) |
 | One ordered recovery prefix across memory segments, with queued writes | Async shared WAL (`WriteAheadLogMode.AsyncShared`) |
 | Intentional no-WAL boundary for cache/temp/rebuildable data | No WAL |
 
-Ordinary record appends do not request a disk sync per write. When an ordinary write must survive a power loss before you acknowledge it, await `zoneTree.SyncWALAsync()`. Durable transaction methods sync before publishing their commits to readers. Concurrent callers share disk syncs.
+Ordinary record appends do not request a disk sync per write. When an ordinary write must survive a power loss before you acknowledge it, await `zoneTree.SyncWalAsync()`. Durable transaction methods sync before publishing their commits to readers. Concurrent callers share disk syncs.
 
-Shared modes keep one ordered journal per tree, split into physical chunks. Recovery stops at the first incomplete record or block across all chunks. Transactions recover a prefix of commits, including every commit covered by a successful sync; incomplete transactions remain invisible. The existing per-segment modes can recover unsynced writes independently across segments.
+Shared modes keep one ordered journal per tree, split into physical chunks. Recovery stops at the first incomplete record or block across all chunks. Transactions recover a prefix of commits, including every commit covered by a successful sync; incomplete transactions remain invisible. The existing private modes can recover unsynced writes independently across segments.
 
 ```csharp
 var zoneTree = new ZoneTreeFactory<int, string>()
     .SetDataDirectory("data")
     .ConfigureWriteAheadLogOptions(wal =>
     {
-        wal.WriteAheadLogMode = WriteAheadLogMode.AsyncShared;
+        wal.Mode = WriteAheadLogMode.AsyncShared;
         wal.SharedModeOptions.MaximumChunkSize = 64L * 1024 * 1024;
     })
     .OpenOrCreate();
 ```
 
-Both shared modes reuse compressed-block storage and its version 1 tail format. Compression can be disabled with `CompressionMethod.None`. Memory-segment rotation does not sync the shared journal; a merge syncs it before publishing a disk checkpoint. Whole obsolete chunks are deleted after checkpoint publication. Chunk size is an uncompressed target, and a record can exceed it. An old live segment can keep earlier chunks from being reclaimed.
+Both shared modes use the same block storage and tail format as the private modes. Compression can be disabled with `CompressionMethod.None`. Memory-segment rotation does not sync the shared journal; a merge syncs it before publishing a disk checkpoint. Whole obsolete chunks are deleted after checkpoint publication. Chunk size is an uncompressed target, and a record can exceed it. An old live segment can keep earlier chunks from being reclaimed.
 
 Physical chunk rotation releases completed chunks' file handles and mappings even while the async queue stays busy. It copies the remaining tail to the main file without a disk sync; later syncs flush closed main files one at a time.
 
 On POSIX systems, shared WALs sync directory metadata when publishing a manifest or acknowledging new chunk files. Custom file-stream providers must implement `SyncDirectory`; providers with immediately durable metadata can implement it as a no-op. Providers that cannot supply this contract reject shared WALs before reclamation can remove fallback files.
 
-Selecting a shared mode when opening an existing database migrates its live WALs, including WALs and tails from 2.0.8 and earlier. Each migrated segment snapshot is synced before its old files are deleted. Subsequent opens detect the shared journal and retain its stored mode even when the factory uses default WAL options.
+Selecting a shared mode when opening an existing database moves its live private WALs into the shared journal. Each moved segment snapshot is synced before its old files are deleted. Subsequent opens detect the shared journal and retain its stored mode even when the factory uses default WAL options.
 
 Disk segments can also use compression and different segment layouts. These options help tune disk space, read patterns, merge behavior, and file-size boundaries.
 
@@ -346,6 +334,8 @@ Official documentation:
 * [Docs home](https://zonetree.dev/docs/)
 * [Getting started](https://zonetree.dev/docs/getting-started/)
 * [Reads and writes](https://zonetree.dev/docs/usage/reads-and-writes/)
+* [Key locks](https://zonetree.dev/docs/usage/key-locks/)
+* [Transactions](https://zonetree.dev/docs/usage/transactions/)
 * [Value mutability](https://zonetree.dev/docs/concepts/value-mutability/)
 * [Memory usage](https://zonetree.dev/docs/storage/memory-usage/)
 * [WAL modes](https://zonetree.dev/docs/durability/wal-modes/)

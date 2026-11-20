@@ -3,10 +3,10 @@
 **Documentação:** [API e exportação — JSON, NDJSON, XML, TXT, DIF e EDIFACT](docs/API_E_EXPORTACAO.md) · [Rede e intercâmbio](docs/INTERCAMBIO_INSTANCIAS.md) · [Histórico](CHANGELOG.md)
 
 
-Configuração atual: só `RADAR_CONF` seleciona o arquivo. Banco, logs, tokens,
-chaves, fila e cache ficam dentro de `[dados] dir`; `banco = radar.sqlite3`
-é apenas o nome do arquivo. A configuração não contém usuário/grupo e a
-instalação transfere os agendamentos do Radar ao crontab do `www-data`.
+O `radar.conf` fica junto da API. `RADAR_CONF` pode indicar outro arquivo.
+`[dados] dir` reúne os arquivos operacionais do Radar e `[dados] motor`
+seleciona a configuração em `[postgres]` ou `[sqlite]`. A instalação
+transfere os agendamentos do Radar ao crontab do `www-data`.
 
 A instalação com `radar.conf` junto aos scripts e caminhos relativos está
 descrita em [Migração para a raiz web](docs/MIGRACAO_RAIZ_WEB.md). A migração
@@ -24,6 +24,20 @@ descrita em [Migração para a raiz web](docs/MIGRACAO_RAIZ_WEB.md). A migraçã
 > **🤖 Autoria:** este repositório — código, documentação e este README — foi **feito pelo Jarvis**, o assistente de IA (OpenClaw). Detalhes na seção [Autoria e proveniência](#autoria-e-proveniência), no fim.
 >
 > **🌐 No ar:** a consulta pública roda em <https://servidor3.lucas.inf.br/openclaw/radar/> (mapa e raio por localização); a API responde em <https://servidor3.lucas.inf.br/openclaw/radar/api.pse>.
+
+### Uso da instância pública
+
+O servidor público é destinado a consultas individuais. Empresas, entidades
+com fins lucrativos e integrações de outros sistemas, comerciais ou não,
+devem operar sua própria instância do Bunda de Urso, conforme a licença do
+software. Isso mantém a capacidade do servidor disponível para quem consulta o mapa.
+
+Raspagem, cópia automatizada por paginação e redistribuição sem atribuição podem
+levar à limitação ou ao bloqueio de acesso. Para conversar sobre acesso, use o
+canal de contato. A compilação de dados continua sob CC BY 4.0, com atribuição
+ao Bunda de Urso e respeito às condições das fontes originais.
+
+[Política de uso](https://servidor3.lucas.inf.br/openclaw/radar/politica-de-uso.html) · [Contato](https://servidor.lucas.inf.br/site/contato) · [Licença dos dados](LICENSE-DATA.md)
 
 ## Por que “Bunda de Urso”?
 
@@ -102,7 +116,7 @@ https://servidor3.lucas.inf.br/openclaw/radar/api.pse?rota=/api/v1/radares&lat=-
 
 Resumindo: **nginx + fcgiwrap + Python** executando um arquivo `.pse`. Nada mais exótico que isso.
 
-O esquema é **SQL canônico, sem ORM** — nada de SQLAlchemy por aqui. São **78 tabelas no esquema base** (T01..T77 + EXECUCAO_ARTEFATO) definidas uma única vez em `core/manutencao/build_schema.py` (o comando `tools/build_schema.py` encaminha a geração pela API), que gera as duas DDLs gêmeas (`sql/schema.sqlite.sql` e `sql/schema.postgres.sql`), com chaves primárias/estrangeiras, `CHECK`, `UNIQUE` e índices, incluindo equipamentos, pontos, instalações, faixas, órgãos, fontes, documentos, verificações, operações, evidências e candidatos geográficos. O banco padrão é SQLite, sem PostGIS. A compatibilidade efetiva com outros SGBDs requer homologação específica.
+O esquema é **SQL canônico, sem ORM** — nada de SQLAlchemy por aqui. São **81 tabelas no esquema base** (T01..T80 + EXECUCAO_ARTEFATO) definidas uma única vez em `core/manutencao/build_schema.py` (o comando `tools/build_schema.py` encaminha a geração pela API), que gera as duas DDLs gêmeas (`sql/schema.sqlite.sql` e `sql/schema.postgres.sql`), com chaves primárias/estrangeiras, `CHECK`, `UNIQUE` e índices, incluindo equipamentos, pontos, instalações, faixas, órgãos, fontes, documentos, verificações, operações, evidências e candidatos geográficos. O banco padrão é SQLite, sem PostGIS. O [migrador SQLite → PostgreSQL](docs/MIGRACAO_POSTGRES.md) transfere o esquema e o histórico e pode ativar o PostgreSQL para a API, os coletores e os crons.
 
 ## Como a coleta funciona
 

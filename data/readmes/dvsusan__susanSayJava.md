@@ -6,6 +6,10 @@ Spring Boot、Spring Cloud、MySQL、Redis、消息队列、分库分表、高�
   
 > ⭐ 点右上角给一个 Star，鼓励技术人输出更多干货，爱了 ！
 
+- 📖 完整网站（题库 + 场景设计 + 项目源码）：https://www.susan.net.cn
+- 🚀 项目实战（13 个可写进简历的企业级项目）：https://www.susan.net.cn/project/
+- 🤖 AI 教程（Spring AI / RAG / Agent）：https://www.susan.net.cn/ai/   
+
 这里有面试八股文，面试真题，工作经验分享，踩坑日记，学习路线，还有个人成长经历等。
 
 作者苏三浪迹过几家大厂，掘金优秀创作者，阿里云专家博主，腾讯云年度潜力作者，CSDN万粉博主。
@@ -34,6 +38,8 @@ Spring Boot、Spring Cloud、MySQL、Redis、消息队列、分库分表、高�
 
 ## AI相关
 
+- [Loop Engineering 实战指南](https://mp.weixin.qq.com/s/sPx6x1At4M4dWtrqvrZpEA)
+- [3 分钟掌握 Codex 97% 的功能，超实用教程！](https://mp.weixin.qq.com/s/HEyakskFlLZAvXKlPwlJmQ)
 - [Hermes Agent 保姆级教程](https://mp.weixin.qq.com/s/tGs8XH2A1dIwNpF1azqIoQ)
 - [Spring AI 从入门到实战](https://mp.weixin.qq.com/s/MCGmJ1GsVcpWAcO395TuYg)
 - [为什么越来越多人用 Magpie？](https://mp.weixin.qq.com/s/7TRnRgwnNZc4ObFMatbH0w)
@@ -332,6 +338,7 @@ Spring Boot、Spring Cloud、MySQL、Redis、消息队列、分库分表、高�
 - [继PHP之后，Java也爆出了重大安全漏洞！](https://mp.weixin.qq.com/s/17imsGCoXhy_dqpFgB9taw)
 
 ## 项目推荐
+- [推荐一个牛逼开源的OCR工具](https://mp.weixin.qq.com/s/XrgpmBXzeefwLkI2QFIS7g)
 - [推荐14个牛逼的SpringBoot项目](https://mp.weixin.qq.com/s/7qSxQvO8yEZ_5NjHvmwlEg)  
 - [阿里开源了一个神级Agent项目](https://mp.weixin.qq.com/s/horzvWx2tUUQdkKlaq2Kzg)
 - [推荐一个牛逼的RAG+KAG双引擎系统](https://mp.weixin.qq.com/s/FLHcS7T6RvUNDFLD8B3qNQ)
@@ -357,9 +364,6 @@ Spring Boot、Spring Cloud、MySQL、Redis、消息队列、分库分表、高�
 3. 当你想学习AI Agent开发的时候。
 4. 当你职业发展很迷茫不知道该如何选择的时候。
 
-- 📖 完整网站（题库 + 场景设计 + 项目源码）：https://www.susan.net.cn
-- 🚀 项目实战（13 个可写进简历的企业级项目）：https://www.susan.net.cn/project/
-- 🤖 AI 教程（Spring AI / RAG / Agent）：https://www.susan.net.cn/ai/   
 
 或许 [苏三的知识星球](https://mp.weixin.qq.com/s/7qSxQvO8yEZ_5NjHvmwlEg)：【[Java突击队](https://mp.weixin.qq.com/s/7qSxQvO8yEZ_5NjHvmwlEg)】真的可以帮到你。
 

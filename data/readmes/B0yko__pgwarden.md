@@ -564,8 +564,8 @@ uv run ruff check && uv run ruff format --check && uv run mypy --strict src/
 
 Stack tests need `docker compose up`; the MCP Inspector check also needs `npx` and
 `uv run playwright install chromium`. `uv run python devtools/screenshots/run.py` regenerates
-the screenshots against a running stack, and `devtools/screenshots/brand.py` the banner and
-the social preview. See [CONTRIBUTING.md](CONTRIBUTING.md).
+the screenshots against a running stack, and `devtools/screenshots/brand.py` the light and
+dark brand banners. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Directory listings
 
@@ -573,6 +573,7 @@ pgwarden is listed in these third-party MCP directories:
 
 - [MCPServers.org](https://mcpservers.org/servers/b0yko/pgwarden)
 - [mcpHQ / awesome-mcp-servers](https://github.com/mcpHQ/awesome-mcp-servers#databases-and-storage)
+- [Glama](https://glama.ai/mcp/servers/@B0yko/pgwarden)
 
 These listings do not imply an official MCP Registry listing, a security audit or endorsement.
 

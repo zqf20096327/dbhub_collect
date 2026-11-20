@@ -53,6 +53,22 @@ When `sslmode` is `verify-ca` or `verify-full`, the `rustls-tls` backend loads *
 postgresql://user:pass@host/db?sslmode=verify-full&sslrootcert=/etc/ssl/certs/corporate-ca.pem
 ```
 
+### Client certificates
+
+For a server that authenticates by certificate (`hostssl ... cert`), the `rustls-tls` backend presents the pair named by `sslcert` and `sslkey`, much as libpq does:
+
+```text
+postgresql://cdc@host/db?sslmode=verify-full&sslrootcert=/etc/ssl/ca.pem&sslcert=/etc/ssl/cdc.crt&sslkey=/etc/ssl/cdc.key
+```
+
+- Both are PEM files and both are required: libpq's default `~/.postgresql/postgresql.{crt,key}` is never read, `sslcert` without `sslkey` is a configuration error, and a lone `sslkey` is ignored. Put intermediate certificates after the leaf in the `sslcert` file and the whole chain is sent.
+- The key may be PKCS#8, PKCS#1 (`RSA PRIVATE KEY`) or SEC1 (`EC PRIVATE KEY`) in PEM, not DER; RSA, ECDSA (P-256 and P-384) and Ed25519 keys authenticate. An encrypted key is refused by name (`sslpassword` is not supported): decrypt it first, or use the `libpq` backend.
+- The certificate must be X.509 v3. `openssl x509 -req` without `-extfile` issues a v1 certificate, which rustls refuses to present, so the handshake fails with `UnsupportedCertVersion`.
+- Both files are read again on every connect, so a rotated pair is used by the next reconnect. A `sslcert` that does not exist means no certificate is sent, as in libpq, so a stale path does not break a connection that never needed one. A certificate that exists but cannot be used, a missing or encrypted key, or a pair that does not match is a connection error under every `sslmode`, `prefer` and `allow` included: it is never answered by retrying in plaintext. These errors are retried like any connection failure (five attempts by default, about 15 s) and then returned with the file and the reason; each attempt logs them too. If `connection_timeout` is shorter than the retries take, the error you get back is a `Timeout` instead. With `sslmode=disable` both options are ignored.
+- The pair is offered in every `sslmode`, but `require`, `prefer` and `allow` do not verify the server, so there the certificate goes to whatever answers; use `verify-ca` or `verify-full` to know who receives it.
+- `sslcertmode=disable` keeps the pair off the wire. `sslcertmode=require` is refused here, because this backend does not check that the server asked for a certificate.
+- Unlike libpq, the key file's permissions are not checked, and the `PGSSLCERT`, `PGSSLKEY` and `PGSSLCERTMODE` environment variables are not read (nor is any environment variable but `PGPASSWORD`).
+
 ## Quick Start
 
 ```rust
@@ -100,6 +116,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | [`typed-deserialization`](examples/typed-deserialization) | INSERT/UPDATE/DELETE events into your own structs via `serde` |
 | [`derive-router`](examples/derive-router) | `#[derive(WalTable)]` and `WalRouter` table inference (`derive` feature) |
 | [`binary-serde`](examples/binary-serde) | Ship `ChangeEvent`s between processes in five formats (no database needed) |
+| [`stream-metrics`](examples/stream-metrics) | Read `stream.metrics()` from other tasks: rates, lag and unconfirmed bytes, reconnects, a Prometheus text endpoint |
 | [`raw-xlogdata`](examples/raw-xlogdata) | Undecoded pgoutput payload via `next_raw_event()` |
 | [`binary-column-access`](examples/binary-column-access) | Lossless zero-copy `BYTEA` access via `PgResult::get_bytes` |
 | [`pg-basebackup`](examples/pg-basebackup) | Physical backup tool using `BASE_BACKUP` with tar extraction and progress |
@@ -197,6 +214,38 @@ To shorten the wait without a code change, shorten `wal_sender_timeout` for the 
 | Server | `wal_sender_timeout = '4s'` in `postgresql.conf` |
 
 The trade-off is that the same value is how long the stream may go without answering before the server disconnects it. Choose `T = 2 × the delay you accept`, and keep it above the longest pause your consumer takes between reads (a handler that blocks, a slow downstream write). A disconnected stream is recovered by `next_event_with_retry`, which reconnects and resumes from the last confirmed position, but it costs a reconnect and a replay of the unconfirmed transactions. Measured on PostgreSQL 17 with the native backend: `T` of 4, 10 and 20 s reported an idle acknowledgement after 2, 5 and 10 s, and a 10 s pause between reads disconnected the stream at `T = 4 s` but not at `T = 20 s`.
+
+## Metrics
+
+`stream.metrics()` (also on `EventStream`) returns a cloneable handle any task can read while the stream is polled. `snapshot()` returns a `Copy` struct of totals, so a rate is the difference of two snapshots; counters include replays after a reconnect.
+
+```rust
+let metrics = stream.metrics(); // before `into_stream`, or `event_stream.metrics()`
+tokio::spawn(async move {
+    loop {
+        let m = metrics.snapshot();
+        println!("{} msgs, {} reconnects, {} B unacked", m.wal_messages, m.reconnects, m.lag_bytes());
+        tokio::time::sleep(std::time::Duration::from_secs(10)).await;
+    }
+});
+```
+
+| Watch | Fields |
+|---|---|
+| Data flowing | `wal_messages`, `wal_bytes`, `commits`, `keepalives`, `last_server_time` |
+| Work in flight (read, not yet acknowledged) | `lag_bytes()` |
+| Consumer behind | not visible to the client; on the server, `pg_wal_lsn_diff(pg_current_wal_lsn(), confirmed_flush_lsn)` from `pg_replication_slots` |
+| Server hearing from the consumer | `unconfirmed_bytes()`, `feedback_sent`, `feedback_failures` |
+| Connection health | `reconnects`, `reconnect_attempts`, `reconnect_failures`, `recovering`, `last_error` |
+| Raw positions and times | `received_lsn`, `flushed_lsn`, `applied_lsn`, `sent_flushed_lsn`, `last_commit_time`, `last_feedback_time` |
+
+- **`lag_bytes()`**: WAL distance from the last data frame to the consumer's `applied_lsn`: the work in flight, such as the open transaction when you acknowledge at each commit. Keepalives are excluded, so an idle stream does not drift. It is the consumer's own progress, not how far behind the consumer is: the stream reads on demand, so a consumer that falls behind leaves its backlog in the socket and on the server, where this does not see it. Watch the message rate and `last_server_time`, and the slot on the server.
+- **`unconfirmed_bytes()`**: distance from the server's latest position (keepalives included) to the flushed position the last status update reported. On an idle stream it grows with writes elsewhere in the database; an acknowledgement moves its start to the position the consumer acknowledged, not to the server's latest.
+- **`feedback_sent`** standing still is normal on an idle stream: a periodic update is skipped while the positions it would report have not changed. A growing `feedback_failures` is the sign that updates are not getting through.
+- **`last_error`** stays set after the stream recovers: alert on it changing, not on it being set, and read it with `reconnects`.
+- **`last_server_time`** is the server's clock: compare it with itself over time, not with `now`.
+
+The client cannot see what the server retains for the slot or whether it was invalidated: query `pg_replication_slots` (`wal_status = 'lost'` is final and works on every supported version). Prefer the metrics above to the `*_lag` columns of `pg_stat_replication`, which for a logical slot are sampled only at transaction ends and go stale. Every field is documented on `MetricsSnapshot`; [`examples/stream-metrics`](examples/stream-metrics) adds a Prometheus text endpoint.
 
 ## Initial Snapshot
 

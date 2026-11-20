@@ -34,7 +34,15 @@ Construido para operar de forma continua, silenciosa y con una huella de memoria
 * **Ruta Rápida de Latencia Cero (Fast-Path < 5ms):** Consultas determinísticas de telemetría (uptime, memoria, CPU, interfaces de red, servicios) respondidas al instante sin consumir tokens.
 * **Subagentes Concurrentes Especializados:** Delegación de tareas pesadas en segundo plano (`researcher`, `coder`, `sysadmin`, `auditor`) con semáforo de concurrencia y reportes estructurados en Markdown.
 * **Protocolo MCP (Model Context Protocol):** Integración nativa de servidores MCP externos vía STDIO y JSON-RPC 2.0.
-* **Catálogo de 39 Herramientas de Sistema:** Incluye `harness_develop`, `git_tool`, `docker`, `sqlite_inspector`, `exec`, `web_search`, `browser` headless, `doc_engine` y control de servicios.
+* **Catálogo de 40 Herramientas de Sistema:** Incluye `bot_factory`, `harness_develop`, `git_tool`, `docker`, `sqlite_inspector`, `exec`, `web_search`, `browser` headless, `doc_engine` y control de servicios.
+
+### 5. Motor Nativo de Bots Especializados y Comerciales (`internal/botfactory`)
+* **Generación Nativa de Bots de Atención:** Creación, ejecución y administración de bots para casos de uso de alta demanda (pizzerías y gastronomía, agendamiento de turnos médicos/estéticos, llamadas y demos, soporte FAQ).
+* **Toma de Pedidos con Aritmética Determinista:** Cálculo exacto de subtotales y totales según catálogo oficial de precios en SQLite, eliminando alucinaciones aritméticas del modelo de lenguaje.
+* **Agendamiento con Prevención de Colisiones:** Asignación de turnos y citas validando solapamientos temporales sobre SQLite antes de confirmar.
+* **Grounding Estricto Anti-Alucinación:** Respuestas estrictamente delimitadas a la base de conocimiento y catálogo oficial; declinación explícita ante consultas fuera de dominio.
+* **Exportador a Microservicios Go Standalone:** Generación automática de proyectos Go independientes listos para compilar (`go build -o bot .`) con servidor HTTP y almacenamiento SQLite integrado.
+* **API REST Nativa:** Endpoints HTTP integrados en el puerto de salud (`/api/bots`, `/api/bots/{id}/chat`, `/api/bots/{id}/orders`, `/api/bots/{id}/appointments`, `/api/bots/{id}/export`).
 
 ---
 
@@ -58,7 +66,7 @@ sudo apt update && sudo apt install -y golang ffmpeg build-essential git
 
 ### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/armajedon1/felix-agent.git
+git clone https://github.com/m-leiva/felix-agent.git
 cd felix-agent
 ```
 
@@ -132,6 +140,46 @@ Los comandos directos son procesados por el enrutador rápido con respuesta inst
 | `/voz [on\|off]` | Modo manos libres: respuestas narradas por notas de voz Opus. |
 | `/clear` | Reinicio de la memoria conversacional activa de la sesión. |
 | `/clean` | Purga inmediata de archivos temporales y descargas antiguas. |
+
+---
+
+## Modo Consola y Administracion CLI (`felix <subcomando>`)
+
+Felix incluye una interfaz de linea de comandos (CLI) nativa para administracion, diagnostico y operacion directa desde la terminal:
+
+```bash
+# Estado en tiempo real, canales, inferencia LLM y metricas
+felix status
+
+# Inspeccion y seguimiento en vivo de logs (tail -f)
+felix logs -n 50 -f
+
+# Listar sesiones de conversacion almacenadas en SQLite
+felix conv list
+
+# Leer el historial completo de una conversacion
+felix conv show 5491153402646 -n 30
+
+# Buscar mensajes especificos en todas las conversaciones
+felix conv search "presupuesto"
+
+# Consultar o modificar parametros de configuracion de forma atomica
+felix config get model
+felix config set model gemini-2.5-flash
+
+# Motor de bots: listar, inspeccionar, replicar, chatear y exportar
+felix bots list
+felix bots show pizzeria-napoli
+felix bots create --template pizzeria --id pizzeria-roma --name "Pizzeria Roma"
+felix bots replicate mosiah-community mosiah-varela --name "MosIAh Varela"
+felix bots chat pizzeria-napoli
+felix bots orders pizzeria-napoli
+felix bots appointments peluqueria-estilo
+felix bots export pizzeria-napoli /opt/pizzeria-bot
+
+# Consola interactiva REPL de Felix por terminal o ejecucion directa
+felix chat "Verifica el consumo de disco y memoria"
+```
 
 ---
 

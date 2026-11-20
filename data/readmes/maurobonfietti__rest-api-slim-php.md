@@ -8,8 +8,7 @@ You can also read this [README IN SPANISH](README_SPANISH.md).
 
 
 [![Software License][ico-license]](LICENSE.md)
-[![Build Status](https://travis-ci.org/maurobonfietti/rest-api-slim-php.svg?branch=master)](https://travis-ci.org/maurobonfietti/rest-api-slim-php)
-[![Code Quality](https://scrutinizer-ci.com/g/maurobonfietti/api-rest-slimphp/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/maurobonfietti/api-rest-slimphp/?branch=master)
+[![Code Quality](https://scrutinizer-ci.com/g/maurobonfietti/api-rest-slimphp/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/maurobonfietti/api-rest-slimphp/?branch=main)
 [![Test Coverage](https://codeclimate.com/github/maurobonfietti/api-rest-slimphp/badges/coverage.svg)](https://codeclimate.com/github/maurobonfietti/api-rest-slimphp/coverage)
 [![Packagist Version](https://img.shields.io/packagist/v/maurobonfietti/rest-api-slim-php)](https://packagist.org/packages/maurobonfietti/rest-api-slim-php)
 
@@ -21,7 +20,7 @@ You can also read this [README IN SPANISH](README_SPANISH.md).
 
 The leading technologies used in this project are:
 
-- PHP 8.5
+- PHP 8.6
 - Slim 3
 - MySQL
 - Redis
@@ -35,7 +34,6 @@ The leading technologies used in this project are:
 Also, I use other additional tools like:
 
 - Docker & Docker Compose
-- Travis CI
 - Swagger
 - Code Climate
 - Scrutinizer
@@ -52,7 +50,7 @@ Also, I use other additional tools like:
 
 - Git
 - Composer
-- PHP >= 8.5
+- PHP >= 8.6
 - MySQL/MariaDB
 - Redis (Optional)
 - or Docker
@@ -168,13 +166,13 @@ Run all PHPUnit tests with `composer test`.
 ```bash
 $ composer test
 > phpunit
-PHPUnit 9.5.28 by Sebastian Bergmann and contributors.
+PHPUnit 9.6.38 by Sebastian Bergmann and contributors.
 
-........................................................          56 / 56 (100%)
+............................................................      60 / 60 (100%)
 
-Time: 00:00.697, Memory: 18.00 MB
+Time: 00:00.821, Memory: 16.00 MB
 
-OK (56 tests, 343 assertions)
+OK (60 tests, 364 assertions)
 ```
 
 

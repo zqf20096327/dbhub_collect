@@ -39,7 +39,7 @@ pgNimbus reached 1.0 on September 29, 2026, its 33rd release in the three months
 
 Before tagging 1.0, the whole codebase was read the way an attacker would read it, and the way a DBA connecting to production would. That review found 18 problems. The worst were a query that could run twice, a statement a DBA had just killed being sent again after a reconnect, and SSH host keys that were never checked. All of them are fixed in 1.0. The review was done in house, with the same Claude Code agents that write most of the code, so it isn't a third-party audit.
 
-Since then 1.1 made large databases quick to move around in, 1.2 added backing up and restoring a database, a schema or a single table through PostgreSQL's own `pg_dump` and `pg_restore`, 1.2.1 made a connection marked Production open with writes off until you allow them in one window, and 1.3 added Query Lab, which saves EXPLAIN plans and compares any two of them, for example before and after an index. [See what's in the latest release.](https://github.com/Shman4ik/pgNimbus/releases/latest)
+Since then 1.1 made large databases quick to move around in, 1.2 added backing up and restoring a database, a schema or a single table through PostgreSQL's own `pg_dump` and `pg_restore`, 1.2.1 made a connection marked Production open with writes off until you allow them in one window, 1.3 added Query Lab, which saves EXPLAIN plans and compares any two of them, for example before and after an index, and 1.4 put the interface in Russian, Simplified Chinese, German, French and Spanish. [See what's in the latest release.](https://github.com/Shman4ik/pgNimbus/releases/latest)
 
 ## 🎯 Why pgNimbus?
 
@@ -69,7 +69,7 @@ Where it sits among the alternatives: pgAdmin and DBeaver are powerful but heavy
 | --- | --- |
 | Windows (recommended) | **[Microsoft Store](https://apps.microsoft.com/detail/9N6SZT42XJ24)**, signed and self-updating, or `winget install pgNimbus --source msstore` |
 | Windows (portable) | `pgNimbus-<version>-win-x64.zip`, or `-win-arm64.zip` for Windows on Arm, from [Releases](https://github.com/Shman4ik/pgNimbus/releases). Unzip anywhere and run `PgNimbus.App.exe`; no installer, no admin rights. Unsigned, so SmartScreen warns on first run. |
-| macOS (beta) | `pgNimbus-<version>-macos-arm64.dmg`, Apple Silicon only, macOS 12 or later. Ad-hoc signed and not notarized: the first launch needs **Open Anyway**, and an update can leave saved passwords unreadable until you delete the old `pgNimbus` Keychain items (see the installation guide). |
+| macOS (beta) | `pgNimbus-<version>-macos-arm64.dmg`, Apple Silicon only, macOS 14 or later. Ad-hoc signed and not notarized: the first launch needs **Open Anyway**, and an update can leave saved passwords unreadable until you delete the old `pgNimbus` Keychain items (see the installation guide). |
 | Linux (beta) | AppImage, `.deb` or `.tar.gz` for x64 and arm64 from [Releases](https://github.com/Shman4ik/pgNimbus/releases). Needs glibc 2.35 or newer: Ubuntu 22.04, Debian 12 or later. |
 
 The [installation guide](https://shman4ik.github.io/pgNimbus/docs/getting-started/installation/) has the step-by-step for each platform, the macOS Gatekeeper dialogs, and where pgNimbus keeps its files. Every release asset carries signed build provenance, so you can check where a download came from. Pass `--signer-workflow` and `--source-ref`, or the check also accepts an attestation from any other workflow or ref in the repo:

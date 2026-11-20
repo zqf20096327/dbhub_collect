@@ -116,7 +116,7 @@ curl -fsSL https://raw.githubusercontent.com/susomejias/rembric/main/install.sh 
 
 Pick **Server → install**: it generates `REMBRIC_ADMIN_TOKEN` and, if Docker is present and you confirm, runs `docker compose up -d` for you. Then pick **Plugins** to install the plugin for your agent. Pin a release for reproducibility with `--ref=<tag>` where the backend supports it. Hermes uses its native plugin manager and rejects explicit refs/local sources; [copied-install migration and native ownership](./apps/plugin/.hermes-plugin/README.md#transition-from-a-copied-installation) require explicit operator review.
 
-Docker is the canonical distribution: the image bundles Node 22, the native modules (`better-sqlite3`, `sqlite-vec`, `onnxruntime-node`) and the embedding model, pre-built for `linux/amd64` and `linux/arm64` — the only requirement on your host is Docker and ~1 GB of RAM (2 GB recommended; the in-process embedder is why — see [docs/embeddings.md](./docs/embeddings.md)).
+Docker is the canonical distribution: the image bundles Node 22, the native modules (`better-sqlite3`, `sqlite-vec`, `onnxruntime-node`) and the embedding model, pre-built for `linux/amd64` and `linux/arm64` — the only requirement on your host is Docker with at least 2 vCPUs and 2 GB of RAM, 3–4 GB recommended (the in-process embedder and reranker are why — see [docs/embeddings.md](./docs/embeddings.md)).
 
 MCP at `http://<host>:8787/mcp`, dashboard at `http://<host>:8787/dashboard` (replace `<host>` with `127.0.0.1` if running on the same host as your agent, or the LAN/Tailscale hostname of the box hosting Rembric otherwise).
 
@@ -227,6 +227,7 @@ All config via environment variables. With Docker, these live in `.env` and are 
 | `REMBRIC_DATA_DIR`     | `~/.rembric` (`/data` in Docker)  | Where the SQLite file lives. Pinned to `/data` inside the container; bind-mount `./data:/data` in compose.                                                                                                                                                  |
 | `LOG_LEVEL`            | `info`                            | `debug` / `info` / `warn` / `error`.                                                                                                                                                                                                                        |
 | `REMBRIC_UPDATE_CHECK` | `on`                              | `off` disables the daily release check (no badge, no modal, no GitHub API call). See [docs/updates.md](./docs/updates.md).                                                                                                                                  |
+| `REMBRIC_RERANK`       | `on`                              | `off` keeps the reranker from loading: `memory.search` and `memory.context` serve the plain order, with about 0.45 GB less memory and no reranking CPU. For hosts shared with other workloads.                                                              |
 | `REMBRIC_PUBLIC_URL`   | _unset_                           | Set to the public https issuer (`http://localhost` allowed for local testing) to enable the OAuth 2.1 authorization server, so OAuth clients (Claude Code, ChatGPT) connect without a static token. Off when unset. See [docs/agents.md](./docs/agents.md). |
 
 <details>
@@ -236,9 +237,19 @@ All config via environment variables. With Docker, these live in `.env` and are 
 
 ### Hardware requirements
 
-**Minimum 1 GB RAM; 2 GB recommended.** The server embeds its semantic engine in-process — `gte-multilingual-base` (Apache 2.0, ONNX q8, 768 dims), loaded at boot (~1.1 s from the baked image; a broken model fails the boot instead of degrading silently), ~730 MB total process RSS measured under embedding load, ~14 ms per embedding on CPU. That requirement buys the entire trade: **no external services, no API keys, no network calls** — semantic candidate detection (including cross-language matching) works out of the box on an air-gapped box. Disk: the image carries the model (+~300 MB). The full pipeline is diagrammed in [docs/embeddings.md](./docs/embeddings.md).
+**Minimum 2 vCPU and 2 GB RAM; 3–4 GB recommended.** Below that minimum Rembric is not supported: it may start, but slow or failing searches and saves are the expected result, not a bug. The server runs its semantic engine in-process: an embedding model (`hs-embed-1`, MIT, int8 ONNX, 384 dims, reads at most 1024 tokens per memory) on the request thread and a cross-encoder reranker (`hs-rerank-1`, MIT) in its own worker thread. Reranking is on by default; `REMBRIC_RERANK=off` turns it off. Measured on that minimum (Docker limited to `--cpus=2 --memory=2g`) over a real corpus of a few thousand memories:
 
-The engine is code, not configuration: there is no model selector, no threshold knob, no off switch. The model class is pinned (≤350M params, ≤800 MB RSS); changing it is a breaking architectural change.
+| Measurement                              | Value                             |
+| ---------------------------------------- | --------------------------------- |
+| Process memory, idle / under search load | ~1.45 GB                          |
+| Peak while re-embedding the whole corpus | ~1.45 GB (no out-of-memory kill)  |
+| Full re-embed after an upgrade           | ~8 min, at most half the CPU time |
+| `memory.search` p50, 1 / 4 / 8 at once   | ~230 / ~390 / ~450 ms             |
+| `memory.save` p50                        | ~55 ms                            |
+
+The 2 GB minimum is for Rembric itself; the operating system and anything else on the host need their own share, which is why 3–4 GB is the recommendation. Reranking reorders the top 10 candidates of `memory.search` and `memory.context`; a search it cannot finish within 300 ms serves the plain order instead, so slower CPUs lose the reranking rather than wait for it. Once the embedding backlog is empty, the server times a full rerank: on a CPU that cannot meet that deadline the reranker stands down and searches serve the plain order without waiting (it is timed again every 15 minutes and comes back once it fits), and on one that can, a search that could not clear the queue ahead of it in time is served the plain order at once. That requirement buys the entire trade: **no external services, no API keys, no network calls** — semantic search and candidate detection (including cross-language matching) work out of the box on an air-gapped box. Disk: the image carries both models (~380 MB). The full pipeline is diagrammed in [docs/embeddings.md](./docs/embeddings.md).
+
+The engine is code, not configuration: there is no model selector and no threshold knob. The one switch is `REMBRIC_RERANK=off`, for a host shared with other workloads: the reranker then never loads (about 0.45 GB less, no reranking CPU) and searches keep the plain order, still from the same embedder. The model class is pinned (at most two models, ≤350M parameters in total, ≤2.5 GB process memory under load); changing it is a breaking architectural change.
 
 ### Consolidation sweep
 
@@ -280,6 +291,10 @@ Applied to every bearer-authenticated surface (`/mcp`, `/api`, `/healthz`, `/adm
 | Variable                   | Default    | Description                                                                                                                                                    |
 | -------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SESSION_ABANDON_AFTER_MS` | `86400000` | At server startup, sessions with `status='active'` whose `started_at` is older than this are flipped to `abandoned`. Default 24h; floor 1min, ceiling 30 days. |
+
+### Reranking
+
+`memory.search` and the relevance channel of `memory.context` reorder their top 10 candidates with an in-process cross-encoder (`hs-rerank-1`) running in its own worker thread. A call the worker cannot answer within 300 ms, or any reranker failure, serves the unreranked order instead of an error. Per-turn recall hints and file recall never rerank. See [`docs/embeddings.md`](docs/embeddings.md#5-reranking-memorysearch-and-memorycontext).
 
 ### Candidate detection (save-time judgment)
 
@@ -542,7 +557,7 @@ It deliberately does **not** contribute a stream to the hybrid RRF fusion: in it
    │  └──────────────────────────────▲──────────────────────────────────┘  │
    │  ┌──────────────────────────────┴──────────────────────────────────┐  │
    │  │  In-process background work (no external services)              │  │
-   │  │   embedder: gte-multilingual-base, ONNX q8, loaded at boot       │  │
+   │  │   embedder: hs-embed-1, int8 ONNX, 384 dims, loaded on first use │  │
    │  │   embedding drain worker      → fills memory_vec                 │  │
    │  │   entity backfill worker      → fills entities/memory_entities   │  │
    │  │   deterministic sweep: decay · deadline · stale drain (no LLM)   │  │

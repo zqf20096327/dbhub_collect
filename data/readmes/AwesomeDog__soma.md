@@ -291,7 +291,7 @@ soma server --port 8080
 |---|---|
 | `GET /` | Single-file built-in web interface: search, projects, status, documents |
 | `GET /health` | Health check (`{"status":"UP","uptime":12}`) |
-| `GET /assets/{project}/{path}` | Serves a raw file under a project root for the web UI |
+| `GET /assets/{project}/{path}` | Serves an indexed document under a project root for the web UI |
 | `POST /api/run` | JSON RPC that mirrors a strict subset of the CLI |
 
 ```bash

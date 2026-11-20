@@ -2,6 +2,9 @@
 
 A small, lightweight, private forum for work discussions and friendly chats.
 
+Soliloquy is made for long-form discussion: long posts, long replies and deep
+threads should be comfortable to write and to read.
+
 <a href="docs/images/front-page.png"><img src="docs/images/front-page.png" alt="Soliloquy front page" width="400"></a>
 
 - Invite-only. Any member can invite others, and everyone can see who invited whom.
@@ -9,13 +12,19 @@ A small, lightweight, private forum for work discussions and friendly chats.
   threads and search without an account. Visitors cannot post, vote or comment.
 - Admins can rename the forum.
 - Threads with nested comments, like Hacker News and Reddit.
-- New comments and notifications appear live, with no page reload.
+- Every comment has its own page that shows the comment and its replies at full
+  width, so a deep thread stays readable. Click the time of a comment to open
+  it.
+- New comments, edits, deletes, vote counts and notifications appear live, with
+  no page reload.
 - RSS feeds for new threads, all new comments and your own notifications, with
   a secret link per member so feeds work on a private forum.
 - A small read-only JSON API for threads and comments.
 - Notifications outside the forum: desktop alerts in the browser, and phone
   pushes through [ntfy](https://ntfy.sh/).
-- Markdown, upvotes, @mentions, full-text search and dark mode.
+- Markdown, upvotes, emoji reactions, @mentions, full-text search and dark mode.
+- Drafts. Text you have not posted yet stays in your browser, so a closed tab
+  or a failed post does not lose it.
 - One Go binary and one SQLite file, taking up 5 MB of RAM, to make Sam Altman livid.
   Put a reverse proxy in front of it and you are done.
 
@@ -93,6 +102,7 @@ environment variable.
 | `-db` | `SOLILOQUY_DB_PATH` | `soliloquy.db` | Path of the SQLite file. |
 | `-base-url` | `SOLILOQUY_BASE_URL` | `http://localhost:8080` | The public URL of the forum. |
 | `-allow-any-origin` | `SOLILOQUY_ALLOW_ANY_ORIGIN` | `false` | Turn off the `Origin` check. This turns off CSRF protection. Use it only on QA and debugging servers. |
+| — | `SOLILOQUY_METRICS_TOKEN` | empty | Bearer token for `/metrics`. Read from the environment only, so it does not show up in the process list. Empty turns the endpoint off. |
 
 The base URL must be the exact URL that users type into their browser. The
 app uses it to build invite and reset links. It also rejects any form post
@@ -162,8 +172,12 @@ Members can find the full API reference, with their own tokenized links, at
 ### Notifications
 
 Members get an in-app notification for a reply to their comment, a top-level
-comment on their thread, and an @mention. In the "notifications" section of
-the account page they can also:
+comment on their thread, and an @mention. They can also follow a thread with
+the "follow" button in the line under its title. A followed thread sends one
+notification for each new comment, at any depth, through the same channels as
+the other notifications. Following is opt-in: posting a thread or a comment
+never follows it. In the "notifications" section of the account page they can
+also:
 
 - Turn on desktop alerts. The browser shows an alert for each new notification
   while a forum tab is open in the background. This setting is per browser.
@@ -171,6 +185,47 @@ the account page they can also:
   each new notification, and optionally for each new thread. A push has the
   author and the thread title, but not the comment text. Anyone who knows the
   topic name can read it, so use a name that is hard to guess.
+
+### Metrics
+
+The app exposes Prometheus metrics at `GET /metrics` on the main listener, in
+the Prometheus text format. The endpoint is off unless
+`SOLILOQUY_METRICS_TOKEN` is set: with no token it returns 404. When a token is
+set, requests must send it as `Authorization: Bearer <token>`; a missing or
+wrong token gets a 401. The token is read from the environment only, so it
+never appears in the process list. Use a long random token: `/metrics` is on
+the public site, and the token is the only thing that protects the data.
+
+The HTTP route labels are the matched route patterns, such as
+`GET /threads/{id}`, never the requested URL. The metrics are:
+
+- `soliloquy_http_requests_total`: requests by matched route, method and code.
+- `soliloquy_http_request_duration_seconds`: duration by route, except `GET /events`.
+- `soliloquy_sse_connections`: open live-update streams.
+- `soliloquy_logins_total`: login attempts by result (`success`, `failure`, `throttled`).
+- `soliloquy_outbound_deliveries_total`: delivery attempts by target and result.
+- `soliloquy_users`: accounts by state (`active`, `disabled`).
+- `soliloquy_active_users`: users active in the last 1, 7 or 30 days (an estimate).
+- `soliloquy_threads`, `soliloquy_comments`: items that are not deleted.
+- `soliloquy_db_size_bytes`: the SQLite file size, including the write-ahead log.
+- The standard Go runtime and process metrics (`go_*`, `process_*`).
+
+The HTTP metrics count every request that reaches the router, including static
+files and the favicon. They do not count requests stopped earlier: a `POST`
+rejected by the `Origin` check, a request the session check turns away (the
+login redirect, or a refused feed or API read), and `/metrics` itself.
+
+A minimal Prometheus scrape configuration:
+
+```yaml
+scrape_configs:
+  - job_name: soliloquy
+    scheme: https
+    static_configs:
+      - targets: ["forum.example.com"]
+    authorization:
+      credentials: "<token>"
+```
 
 ## Reverse proxy
 

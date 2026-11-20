@@ -18,14 +18,11 @@ This repository provides maintenance scripts for generating
 
 | Version | Release Date | EOL        |
 |:-------:|:------------:|:----------:|
+|    19   | 2026-11-19   | 2031-11-19 |
 |    18   | 2025-09-25   | 2030-11-14 |
 |    17   | 2024-09-26   | 2029-11-08 |
 |    16   | 2023-09-14   | 2028-11-09 |
 |    15   | 2022-10-13   | 2027-11-11 |
-|    14   | 2021-09-30   | 2026-11-12 |
-|    13   | 2020-09-24   | 2025-11-13 |
-
-In addition, PostgreSQL 19 RC 2 is provided for testing purposes only.
 
 These images are designed to serve as operands of the
 [CloudNativePG (CNPG) operator](https://cloudnative-pg.io) in Kubernetes
@@ -102,6 +99,9 @@ following additional features:
 
 - PGAudit
 - Postgres Failover Slots
+  - For PostgreSQL 18 and earlier: included
+  - From PostgreSQL 19 onwards: not included, as the package is not
+    available
 - pgvector
 - All Locales
 - LLVM JIT support

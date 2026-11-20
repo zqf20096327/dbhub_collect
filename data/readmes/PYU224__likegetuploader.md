@@ -42,6 +42,28 @@ uploader.jp のようなリスト式アップローダー。
 - スマホではカード型に切り替わるレスポンシブデザイン、ダークモード対応
 - ファビコン・OGP（X/Discord等にURLを貼った時のカード表示）対応。ファイルページはファイル名とコメントがカードに出ます
 
+## 1.4.0 への更新
+
+1. 更新前に `config.php` と `data/` をバックアップする
+2. アップロードの受付を止めてから（サイトを一時的にメンテナンス表示にするなど）、ファイルをまとめて差し替える
+3. 管理画面に入り直す（ログイン状態の仕組みが変わったため、一度ログアウトされます）
+4. 管理画面の「設定状況」で「訪問者IPの判定」と、Cloudflare経由かどうかを確認する
+5. 「セキュリティ」タブで2段階認証を設定する（推奨）
+
+既存の `config.php` はそのまま使えます（新しい設定は既定値で動きます）。データベースの列は初回アクセス時に自動で追加されます。
+`behind_cloudflare => true` は `proxy => 'auto'` と同じ扱いになり、偽装されたヘッダーは無視されるようになります。
+
+### 一時データの片付け
+
+途中で止まったアップロードの一時データや、削除に失敗したファイルの再試行は、**cron を設定しなくてもアクセスのついでに10分ごと自動で**行います。
+アクセスが少ないサイトや、確実に回したい場合は cron でも実行できます（その時は `auto_cleanup` を `false` にしても構いません）。
+
+```cron
+*/10 * * * * /usr/bin/php /path/to/likegetuploader/tools/cleanup_uploads.php
+```
+
+WebのPHPと同じユーザーで実行してください。S3を使う場合は、バケット側でも「未完了のマルチパートアップロードを数日で削除」する設定を有効にしておくと安心です。
+
 ## 必要なもの
 
 ### PHP のバージョン
@@ -81,6 +103,53 @@ Apache（同梱の `.htaccess` を使用）または nginx（`nginx.conf.sample`
 5. **`https://あなたのサイト/data/uploader.sqlite` を開いて 403 になることを必ず確認**（中身が見えたらサーバー設定の誤りです）
 
 `/download/123` 形式のURLが使えない環境では、`config.php` の `pretty_urls` を `false` にしてください。
+
+## セキュリティ設定
+
+Cloudflare を使う場合も使わない場合も、**そのままで安全側に動く**ようにしてあります。構成に合わせて、次のどれかを選んでください。
+
+### 最低限（どの構成でも）
+
+1. `config.php` の `admin_password` と `secret` を必ず変更する（`secret` は設置ごとに違う長いランダム文字列）
+2. 管理画面の「セキュリティ」タブで **2段階認証** を有効にする（Google Authenticator・Microsoft Authenticator・1Password などのアプリを使います）
+3. 管理パスワードは `php tools/hash_password.php` で作ったハッシュに置き換える（平文のままでも動きます）
+4. メール通知（`mail`）を設定しておくと、ログインのロック発動や、いつもと違う場所からのログインが届きます
+
+### Cloudflare を使う場合
+
+- `proxy` は既定の `auto` のままでOKです。アクセスが本当に Cloudflare から来た時だけ、Cloudflare が付ける訪問者のIPを使います。Cloudflare を通さない直接アクセスでIPを偽っても無視されるので、回数制限や投稿禁止をすり抜けられません
+- Cloudflare の IP 範囲は同梱しています。`php tools/update_cloudflare_ips.php` を月1回ほど実行すると最新版に更新できます
+- 管理画面の「設定状況」で、今のアクセスが Cloudflare 経由か、あなたのIPがどう判定されているかを確認できます
+
+### 自前のリバースプロキシ（nginx など）を前に置く場合
+
+`trusted_proxies` にそのプロキシのIPを書くと、`X-Forwarded-For` から訪問者のIPを読みます。
+
+### さらに固める
+
+- `admin_allow_ips` で管理画面に入れるIPを限定する（それ以外からは「ページが見つかりません」になります）
+- `security_log` を `true` にすると、ログイン失敗などを `data/security.log` に記録します（Fail2ban などで利用できます）
+
+### 管理ログインの守り
+
+| 仕組み | 既定 | 設定 |
+|---|---|---|
+| 同じIPからの連続失敗でロック | 5回で15分 | `admin_ip_fail_limit` / `admin_ip_fail_window` |
+| IPに関係なく全体の失敗回数でロック（IPを変えながらの総当たり対策） | 1時間に30回で60分 | `admin_global_fail_limit` / `admin_global_lock_minutes` |
+| 操作がないまま放置でログアウト | 12時間 | `admin_session_lifetime` |
+| 2段階認証・予備コード8個 | 無効 | 管理画面の「セキュリティ」タブ |
+
+全体のロックは、攻撃者にわざと発動させられる可能性もあります。自分が入れなくなった時は、サーバーで次を実行してください。
+
+```
+php tools/admin_unlock.php               # ログイン停止の解除
+php tools/admin_unlock.php --reset-2fa   # 2段階認証の解除（スマホをなくした時）
+php tools/admin_unlock.php --logout-all  # 全端末のログインを終了
+```
+
+### 大量アクセスについて
+
+1秒に数千回のような大量アクセスは、PHP が動く前にサーバーが詰まるため、アプリ単体では防げません。Cloudflare を使うか、サーバーの Fail2ban などで遮断してください。
 
 ## 設定
 
@@ -170,6 +239,16 @@ php tools/import.php ./保存先フォルダ
 
 `data/` フォルダを丸ごとコピーすればすべてです（DB・ファイル・設定テキスト）。S3保存の場合は、ファイル本体があるバケットも合わせてバックアップしてください。
 
+## 開発者向け：回帰テスト
+
+Python 3と、必要な拡張機能を有効にしたPHP CLIで実行します。Linux/macOSの一時ディレクトリ内に複数の設置先を作成し、ループバックでPHPサーバーとS3の模擬サーバーを起動します。本番の設定・データ・外部ストレージは使用しません。S3の実サービスに対する署名・権限設定の検証は別途必要です。
+
+```sh
+python3 tools/security_regression.py
+# PHPの実行ファイルを指定する場合:
+PHP_BIN=/usr/bin/php8.3 python3 tools/security_regression.py
+```
+
 ## ファイル構成
 
 ```
@@ -181,10 +260,11 @@ contact.php      お問い合わせ
 admin.php        管理画面
 rules.php        利用規約
 adstxt.php       /ads.txt
-inc/             共通処理（s3.php / mail.php / turnstile.php など）
+inc/             共通処理（net.php = 訪問者IPの判定 / admin_auth.php = 管理ログイン・2段階認証 / uploads.php / s3.php / mail.php など）
+assets/vendor/   QRコード表示（qrcode.js・MITライセンス）
 assets/          CSS・JavaScript
 data/            DB・ファイル・設定テキスト（外部から見えない）
-tools/           uploader.jp バックアップ・取り込み・S3移行ツール
+tools/           uploader.jp バックアップ・取り込み・S3移行・片付け・管理者用ツール・回帰テスト
 ```
 
 ## 変更履歴

@@ -7,26 +7,22 @@ The name is **PKV Sync**: **PKV** is the initialism of **Personal Knowledge Vaul
 [![CI](https://github.com/cyberkurry/pkv-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/cyberkurry/pkv-sync/actions/workflows/ci.yml)
 [![License: AGPL-3.0-only](https://img.shields.io/badge/license-AGPL--3.0--only-blue.svg)](./LICENSE)
 
-Document version: v1.10.0.
+Document version: v1.10.2.
 
 English · [简体中文](./README.zh-CN.md) · [繁體中文](./README.zh-Hant.md) · [日本語](./README.ja.md) · [한국어](./README.ko.md)
 
 ## Status
 
-PKV Sync 1.10.0 adds a one-click connect flow. The admin settings page
-shows an `obsidian://pkv-connect` link with a QR code, and the plugin opens an
-explicit confirmation naming the host before it saves anything, so a link from
-any web page cannot connect silently. The plugin also gains two safety
-mechanisms: a scan that lists zero files against a populated index holds the
-deletions instead of broadcasting a whole-vault wipe, and a file the server
-refuses by name is reported and withheld instead of wedging every sync.
-
-MCP `search` no longer fails on large vaults: the 5000-file cap reports
-`tree_capped` with a `next_after` cursor, and both `search` and `link_graph`
-prune their tree walks to the requested prefix. Server-side, tree listings read
-blob headers instead of contents, the blob-pointer guard now covers the
-auto-merge path too, and MCP write tools refuse hidden paths like every other
-tool. See the release history for the complete list.
+PKV Sync 1.10.2 ships its MCP Registry metadata under the canonical
+GitHub namespace case (`io.github.CyberKurry/pkv-sync`), which is the name
+the registry's OCI ownership check compares against. The product content
+matches 1.10.1: an edit made while a pull is downloading a file becomes a
+visible conflict instead of being pushed over the other device's committed
+version; a file the server refuses is reported on every pass instead of
+turning the status bar green, and one per-file rejection no longer wedges
+the rest of the vault; moving a note with a non-ASCII name keeps its
+Markdown links intact; and an interrupted self-update restores the previous
+plugin build. Upgrade the server and plugin together.
 
 ## Features
 
@@ -50,7 +46,7 @@ tool. See the release history for the complete list.
 - **AI-readable vaults.** MCP exposes read/write tools over stdio or the
   embedded `/mcp` route on `pkvsyncd serve` (default on), and a ready-to-use
   [MCP Registry entry](./mcp/server.json) ships with every release
-  (`io.github.cyberkurry/pkv-sync`).
+  (`io.github.CyberKurry/pkv-sync`).
 - **Built for LLM-maintained wikis.** Beyond reading and writing, an agent can
   search by frontmatter, page through results exactly, lint a layer's links,
   find the pages whose sources went stale, and write behind a dry run plus

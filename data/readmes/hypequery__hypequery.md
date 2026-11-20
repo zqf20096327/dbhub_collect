@@ -7,6 +7,8 @@
 
 <p align="center"><strong>Embedded analytics on ClickHouse.</strong></p>
 
+<p align="center">A <a href="https://clickhouse.com/docs/integrations/connectors/data-visualization/community-integrations/hypequery-and-clickhouse">ClickHouse</a> community integration.</p>
+
 Define your metrics once, in the codebase you already have. Dashboards, APIs, and AI agents all answer from that one definition. Run it in your own backend today. A hosted option, hypequery cloud, is coming soon.
 
 hypequery is an open-source embedded analytics toolkit for ClickHouse that runs inside your own application. You define datasets in TypeScript or Python (beta), with their dimensions, measures, metrics, and tenant rules, then query them by name and serve them as authenticated HTTP endpoints with OpenAPI, typed React hooks, and MCP tools for AI agents. The TypeScript SDK also includes a type-safe ClickHouse query builder. It is for engineers building dashboards, APIs, and agent tools on their own ClickHouse. hypequery is not a hosted BI tool, not a database, and not a separate semantic-layer server: it is a set of Apache 2.0 libraries you install and deploy with your backend.
@@ -106,12 +108,14 @@ See the [Python docs](https://hypequery.com/docs/python) and [`python/hypequery`
 
 ## ClickHouse MCP server
 
-[`@hypequery/mcp`](./packages/mcp-server) is a governed ClickHouse MCP server for Claude Code, Cursor, Codex and other agents. Agents call `list_datasets`, `get_dataset_schema`, `query_metric` and `query_dataset` against the datasets and metrics you define; there is no raw SQL tool. To try it against the public ClickHouse playground in five minutes, install the packages, save the `mcp-config.mjs` from the [quickstart](https://hypequery.com/clickhouse-mcp#quickstart), and add the server to your agent:
+[`@hypequery/mcp`](./packages/mcp-server) is a governed ClickHouse MCP server for Claude Code, Cursor, Codex and other agents. Agents call `list_datasets`, `get_dataset_schema`, `query_metric` and `query_dataset` against the datasets and metrics you define; there is no raw SQL tool. To try it against the public ClickHouse playground in five minutes, install the packages, save the `mcp-config.mjs` from the [Claude Code guide](https://hypequery.com/blog/clickhouse-mcp-claude-code), and add the server to your agent:
 
 ```bash
 npm install @hypequery/mcp @hypequery/datasets @hypequery/clickhouse
 claude mcp add clickhouse -- npx -y @hypequery/mcp --config "$PWD/mcp-config.mjs"
 ```
+
+Setup for Claude Desktop, Cursor and Codex, and how it compares with ClickHouse's own MCP servers, is on [hypequery.com/clickhouse-mcp](https://hypequery.com/clickhouse-mcp).
 
 ## Built for product analytics
 

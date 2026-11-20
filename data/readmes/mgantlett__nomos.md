@@ -4,7 +4,7 @@
 
 # Nomos (Νόμος)
 
-**Agents guess; Git cannot. Zero-token AST & Git guardrails powered by your coding agent.**
+**Agents guess; Git cannot. The Apache 2.0 Go execution substrate beneath any coding agent (0 LLM tokens).**
 
 [![CI](https://github.com/mgantlett/nomos/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/mgantlett/nomos/actions/workflows/ci.yaml)
 [![Release](https://img.shields.io/github/v/release/mgantlett/nomos?color=0EA5E9)](https://github.com/mgantlett/nomos/releases/latest)
@@ -27,13 +27,13 @@
 **Nomos** is a single `~20 MB` static Go binary (`Apache 2.0`, `0` LLM tokens, zero cloud account) between your coding agent (**Claude Code**, **Cursor**, **OpenCode**, **Codex**, **Gemini CLI**, **Antigravity**, **Windsurf**, or **Aider**) and Git. Run `nomos init` once (or paste 1 prompt into your agent) - Nomos blocks skipped tests, hollow stubs, and leaked secrets in `24ms`, your agent fixes its own mess mid-turn, and your `feat/*` workflow never changes:
 
 ```text
-You            -> Same plain-English prompts, same IDE, normal feat/* PRs (0 new commands to learn)
+You             -> Same plain-English prompts, same IDE, normal feat/* PRs (0 new commands to learn)
   |
-Coding Agent   -> Claude Code · Cursor · OpenCode · Codex · Gemini CLI · Antigravity · Windsurf
+Coding Agent    -> Claude Code · Cursor · OpenCode · Codex · Gemini CLI · Antigravity · Windsurf
   |
-Nomos Harness  -> Invisible ~4ms hooks + 42 AST gates + Day-0 debt ratchet (0 LLM tokens)
+Nomos Substrate -> Invisible ~4ms hooks + 42 AST gates + Day-0 debt ratchet (0 LLM tokens)
   |
-Git            -> main stays read-only & verified; shortcuts fail closed before commit
+Git             -> main stays read-only & verified; shortcuts fail closed before commit
 ```
 
 > **Initialize once, then forget `nomos` exists.** Nomos supplies `0`-token repository physics; **your coding agent supplies the intelligence** to self-correct before ending its turn. Use `nomos xray .` anytime you want a 5-second codebase health scan.
@@ -102,14 +102,18 @@ curl -fsSL https://sophialabs.ca/install | bash
 # macOS & Linux (Homebrew):
 brew install --cask mgantlett/tap/nomos
 
+# Zero-install Node.js / Cloud Agent Sandbox Launcher (SHA-256 verified):
+npx --yes @mgantlett/nomos xray .
+
 # Arch Linux / Omarchy (verified PKGBUILD):
 (tmp="$(mktemp -d)" && cd "$tmp" && curl -fsSLO https://raw.githubusercontent.com/mgantlett/nomos/main/packaging/aur/PKGBUILD && makepkg -si && rm -rf "$tmp")
 
 # Build from source (Go 1.26+; GOTOOLCHAIN=auto fetches Go 1.26+ automatically):
 GOTOOLCHAIN=auto CGO_ENABLED=0 go install github.com/mgantlett/nomos/substrate/cmd/nomos@main
 
-# Agent Skill & Claude Code Plugin Catalogs (Thin Binary Bootstrapper):
+# Agent Skill, Remote HTTP MCP & Claude Code Plugin Catalogs (Thin Binary Bootstrapper):
 npx skills add mgantlett/nomos
+claude mcp add --transport http nomos https://sophialabs.ca/mcp
 # Or inside Claude Code: /plugin marketplace add mgantlett/nomos && /plugin install nomos
 ```
 
@@ -136,7 +140,7 @@ nomos init --worktrees
 # Enforce zero-trust PR mutation proofs in GitHub Actions:
 - uses: actions/checkout@v4
   with: { fetch-depth: 0 }
-- uses: mgantlett/nomos@v4.26.0
+- uses: mgantlett/nomos@v4.27.1
   with: { base-ref: origin/main, mutate-diff: 'true' }
 ```
 

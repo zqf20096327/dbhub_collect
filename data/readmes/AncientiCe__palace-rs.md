@@ -492,7 +492,7 @@ Run `palace <command> --help` for every flag.
 | `palace repair` | Re-embed drawers that are missing vectors |
 | `palace upgrade-embeddings` | Re-embed everything with the active model (`--refresh-preferences` for preference spans) |
 | `palace embeddings …` | List, estimate, migrate to, verify, cut over to, or roll back [embedding models](#embedding-models) |
-| `palace migrate <db>` | Copy drawers from another palace database |
+| `palace migrate [path]` | Import Python MemPalace (default `~/.mempalace`) or another palace database ([migrating](docs/migrating.md)) |
 | `palace compress` | Compress drawers to the AAAK dialect |
 
 **Servers**
@@ -557,7 +557,12 @@ palace gain - last 30d (my_project)
   Diary recalls      : 8
   Repeat Qs avoided  : 19
   p95 latency        : 41 ms
+  Prompt recall      : 230 prompts (96 with past sessions or decisions, 71 code only, 63 nothing found)
 ```
+
+`Prompt recall` counts what the prompt hook injected, apart from MCP tool
+calls. Many "code only" or "nothing found" prompts mean agents work without
+the earlier sessions in front of them.
 
 Usage metadata stays in your local `palace.db`. Set `PALACE_GAIN_DISABLED=1`
 to turn recording off.
@@ -673,7 +678,7 @@ Settings load in this order: environment variables, then
 | `PALACE_ENTITY_LANGUAGES` | `en` | Comma-separated languages for entity detection |
 | `PALACE_GAIN_DISABLED` | off | `1` turns off usage recording |
 | `PALACE_FEEDBACK_DISABLED` | off | `1` stops the feedback-link hint in `palace_session_context` |
-| `PALACE_PROJECT` | auto | Project name used for gain attribution |
+| `PALACE_PROJECT` | auto | Project name used for gain attribution when a call names no `project_path` or project wing |
 | `PALACE_SOURCE_DIR` | `~/Desktop/transcripts` | Default source for `palace split` |
 | `PALACE_MINE_TRACE` | off | `1` prints per-stage mining timings |
 | `PALACE_BUSY_TIMEOUT_MS` | `10000` | How long to wait, in milliseconds, for another palace process that is writing to the database. `0` turns waiting off (fail at once); it does not mean "no limit" |
@@ -996,21 +1001,9 @@ it. See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and
 
 ## 🚚 Coming from another memory tool
 
-Palace does not import another tool's store. Many keep summaries,
-extracted "facts", or compressed text rather than what was actually said,
-and Palace keeps text verbatim. Mine the originals instead, and every drawer
-cites the file it came from:
-
-```bash
-palace init ~/my-project --yes --auto-mine   # your code and docs
-palace split --source ~/Desktop/transcripts  # only for concatenated Claude Code transcripts
-palace mine-convos ~/Desktop/transcripts     # Claude Code, Codex, Claude.ai, ChatGPT, Slack exports
-palace status
-```
-
-Once your history is in Palace, remove the old tool's MCP server and hooks
-from your agent so the two don't compete. `palace install` sets up Palace's
-own.
+Python MemPalace imports in one command, `palace migrate`: drawers, diaries,
+the knowledge graph and tunnels. For other tools, mine the originals. See
+[docs/migrating.md](docs/migrating.md).
 
 ---
 

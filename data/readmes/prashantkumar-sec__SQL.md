@@ -25,7 +25,6 @@ Folders added as the course progresses:
 | `queries/` | Practice queries by topic | Planned |
 | `practice/` | Exercises and solutions | Planned |
 | `projects/` | Library, E-commerce, and security-log capstone projects | Planned |
-| `LeetCode-SQL-Practice/` | Leetcode PracticeQuestions | Planned |
 
 ## How to Use This Repo
 

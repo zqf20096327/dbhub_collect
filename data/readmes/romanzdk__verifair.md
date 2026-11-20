@@ -9,6 +9,8 @@
 
 **Review the evidence, not the diff.** A self-hosted place where coding agents publish change reports and people judge them.
 
+**[Try the demo review →](https://romanzdk.github.io/verifair/demo/r/demo-currency-rounding.html)** (a static copy: you can read it, but not comment)
+
 <sub>How to say it: **verifier** (/ˈvɛrɪfaɪər/, like the word) or **veri-fair** (/ˈvɛrifɛər/, “very fair”). Both are fine.</sub>
 
 [![CI](https://github.com/romanzdk/verifair/actions/workflows/ci.yml/badge.svg)](https://github.com/romanzdk/verifair/actions/workflows/ci.yml)
@@ -30,9 +32,12 @@ Agents now write most of the code. A person cannot read every diff they make, an
 
 verifair is a small web service where agents push markdown change-review reports and humans read them, comment by selecting text, and give a verdict. Agents already handle code review. A human should judge the intent and the evidence: is this the right change, and does the proof hold up? verifair gives them one page per change to do that.
 
+When the agent writes the code, the prompts are the part a person wrote. With [prompt coaching](docs/prompt-coaching.md), authors can share them on the same page, so the team learns from each other how to work with agents.
+
 ## Features
 
 - **One report per change.** Intent, the design shown with a before/after and a diagram, edge cases, verification with commands, results and links, what was not verified, rollback, security impact, a summary of the agent reviews, the questions only a human can answer, and one row per merge request. See [the report](#the-report).
+- **Prompt coaching.** Other tools let you see the prompts behind a change. verifair lets teammates comment on each one, right where they review the change. An author can add the prompts they typed to the review, and teammates suggest clearer ones: missing context, a vague goal, no way to check the result. Opt-in, previewed and trimmed by the author before anything is shared, and never blocking. The export is automatic for Claude Code, local Codex and OpenCode sessions; with other agents, paste the prompts by hand ([#56](https://github.com/romanzdk/verifair/issues/56)). See [prompt coaching](docs/prompt-coaching.md).
 - **A human signs first.** The person who asked for the change reads the agent's report and signs it. Only then does the team get asked to review. The signer or an admin can unsign while nobody has given a verdict.
 - **Comment on any text.** Select a sentence to start a thread. Threads are blocking by default; a reviewer can mark one as a suggestion. [Conventional Comments](https://conventionalcomments.org) label buttons (`issue:`, `nitpick:`, `question:` and more) set the label and whether the thread blocks.
 - **Verdicts with rules.** Approve or request changes. Approve is refused while a blocking thread is open, and the signer cannot approve their own version. Unapprove or withdraw a verdict if you change your mind.
@@ -88,8 +93,10 @@ You need Docker with Compose.
 ```bash
 git clone https://github.com/romanzdk/verifair.git
 cd verifair
-docker compose up --build
+docker compose up
 ```
+
+This runs the latest release image, not the code you cloned. To run your checkout, see [Run from source](docs/deployment.md#run-from-source).
 
 Open http://localhost:8000. The agent token is `change-me`. Set `VERIFAIR_API_TOKEN` before you start to use another one. Users set a display name (kept in a cookie). The author signs a version, reviewers select text to comment, then approve or request changes.
 
@@ -99,13 +106,15 @@ In a second terminal, load the demo reviews (it needs only Python 3):
 VERIFAIR_API_TOKEN=change-me python3 scripts/demo.py
 ```
 
-It adds four reviews by "Alice": a high-risk change, one with an execution trace, a plan waiting for review, and one already at version 2. Running it again skips what is already there.
+It adds five reviews by "Alice" and "Bob", each in a different state: a high-risk change Alice has not signed yet, one with an execution trace and the author's prompts that waits for Bob, an approved plan that waits for its implementation, one Bob approved at version 2 after asking for changes, and one by Bob that waits for Alice's review. Running it again skips what is already there; to load them fresh, run `docker compose down -v` and start again.
 
-Set your name to Alice, the demo author, and sign a review. Then open the same page in a private window with another name to comment and approve it.
+The [static demo](https://romanzdk.github.io/verifair/demo/) shows these reviews from Alice's side. In your own browser you are a new person: set your name, sign the high-risk change, then open the same page in a private window with another name to comment and approve it.
 
 The compose passwords and token are for local use. Change them for any shared setup.
 
 This is local mode. For a team, use shared mode. See [docs/access.md](docs/access.md).
+
+To let your coding agent set it up, locally or on Kubernetes, paste the prompt from [Deploy with your agent](docs/deployment.md#deploy-with-your-agent).
 
 ## Screenshots
 
@@ -122,6 +131,10 @@ This is local mode. For a team, use shared mode. See [docs/access.md](docs/acces
 | Agent tokens (shared mode) | Members (shared mode) |
 | --- | --- |
 | ![Agent tokens page with active and revoked tokens](docs/images/tokens.png) | ![Members page with roles](docs/images/members.png) |
+
+| Prompt coaching | Prompt coaching, dark |
+| --- | --- |
+| ![The Prompts section of a review: the author's numbered prompts, and a teammate's non-blocking suggestion on a vague one](docs/images/prompts.png) | ![Prompts section in dark theme](docs/images/prompts-dark.png) |
 
 | Execution trace | Execution trace, dark |
 | --- | --- |
@@ -154,7 +167,7 @@ This is local mode. For a team, use shared mode. See [docs/access.md](docs/acces
 
 ## Agent skill
 
-[skills/verifair-review/SKILL.md](skills/verifair-review/SKILL.md) teaches a coding agent to write the report in this template, push it, and wait for and answer review feedback. It never signs or gives verdicts. The agent needs `VERIFAIR_URL` and `VERIFAIR_API_TOKEN` (your own agent token in shared mode).
+[skills/verifair-review/SKILL.md](skills/verifair-review/SKILL.md) teaches a coding agent to write the report in this template, push it, and wait for and answer review feedback. It never signs or gives verdicts. On request it can also add the author's own prompts for [prompt coaching](docs/prompt-coaching.md). The agent needs `VERIFAIR_URL` and `VERIFAIR_API_TOKEN` (your own agent token in shared mode).
 
 Install it with [skills](https://github.com/vercel-labs/skills), which works for Claude Code, Codex, Cursor and many other agents:
 
@@ -194,10 +207,11 @@ Full reference: [docs/api.md](docs/api.md) (push, read, comments, wait, errors).
 | --- | --- |
 | [docs/api.md](docs/api.md) | Push a report, read it, read and answer comments, wait for feedback, archive, get the agent skill, errors, required sections, provenance |
 | [docs/reviewing.md](docs/reviewing.md) | Inbox and personal views, plan-first reviews, signing and undo, blocking threads, Conventional Comments, archive and delete |
+| [docs/prompt-coaching.md](docs/prompt-coaching.md) | Share the prompts behind a change, give useful feedback on prompts, privacy and limits |
 | [docs/tracing.md](docs/tracing.md) | Optional execution evidence, supported capture versions, local conversion, submission and privacy limits |
 | [docs/access.md](docs/access.md) | Local and shared mode, sign-in with Google and other providers, members and admins, agent tokens, report ownership, moderation, switching from local to shared |
 | [docs/configuration.md](docs/configuration.md) | All environment variables |
-| [docs/deployment.md](docs/deployment.md) | Run from source, Docker, deploying behind HTTPS, Postgres, backup and restore, upgrading an HTTP deployment |
+| [docs/deployment.md](docs/deployment.md) | Run from source, Docker, Kubernetes, deploying behind HTTPS, Postgres, backup and restore, upgrading an HTTP deployment |
 | [docs/report-template.md](docs/report-template.md) | The report layout, as a full example |
 | [CHANGELOG.md](CHANGELOG.md) | What changed in each version |
 
@@ -229,7 +243,7 @@ Details: [docs/configuration.md](docs/configuration.md).
 
 verifair needs Postgres 16 or newer, and HTTPS for any browser access outside `localhost`. For a team, run it in shared mode: verifair signs people in itself with Google or another OpenID Connect provider, so no auth proxy is needed.
 
-- [Run from source](docs/deployment.md#run-from-source) and [Docker](docs/deployment.md#docker)
+- [Run from source](docs/deployment.md#run-from-source), [Docker](docs/deployment.md#docker) and [Kubernetes](docs/deployment.md#kubernetes) (Kustomize manifests in [deploy/kustomize](deploy/kustomize))
 - [Deploying](docs/deployment.md#deploying): sign-in, TLS, Postgres, replicas, probes, backup and restore
 - [Set up shared mode](docs/access.md#set-up-shared-mode) and [switch from local to shared mode](docs/access.md#switching-from-local-to-shared-mode)
 
@@ -246,13 +260,14 @@ verifair reviews the change report, not the diff.
 Issues and pull requests are welcome. Keep changes small and the language plain.
 
 ```bash
-docker compose up -d db
+docker run -d --rm --name verifair-dev-db -e POSTGRES_USER=verifair -e POSTGRES_PASSWORD=verifair \
+  -p 127.0.0.1:5432:5432 postgres:18
 uv sync
 uv run pytest
 uv run ruff check . && uv run ruff format --check .
 ```
 
-Each test gets its own schema in that database and drops it at the end. Set `VERIFAIR_TEST_DATABASE_URL` to use another Postgres. To reset everything, including the data, run `docker compose down -v`. `tests/test_js.py` runs the browser anchor code with Node and is skipped when `node` is not installed.
+Each test gets its own schema in that database and drops it at the end. If port 5432 is taken, publish another port and set `VERIFAIR_TEST_DATABASE_URL` to match. `docker stop verifair-dev-db` removes the database and its data. `tests/test_js.py` runs the browser anchor code with Node and is skipped when `node` is not installed. `tests/test_browser.py` opens the demo reviews in headless Chromium at phone, laptop and desktop widths and checks the layout; run `uv run playwright install chromium` once, or it is skipped (in CI it fails instead).
 
 ## License
 

@@ -1,12 +1,11 @@
+<p align="center">
+  <img src=".github/social-preview.png" alt="wellbrief: answers from your well files, quoted word for word" width="880">
+</p>
+
 # wellbrief
 
 Offline retrieval-augmented answers and pre-spud offset-well risk briefs over a field's own
 drilling reports, with no network access required at any point.
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/hero-dark.svg">
-  <img alt="wellbrief overview: well files on the left, the offline wellbrief engine in the centre, a cited answer and a pre-spud risk brief on the right" src="docs/images/hero-light.svg">
-</picture>
 
 [![CI](https://github.com/B0yko/wellbrief/actions/workflows/ci.yml/badge.svg)](https://github.com/B0yko/wellbrief/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
@@ -199,7 +198,7 @@ flowchart TD
 
 | # | Check | Result |
 | --- | --- | --- |
-| 1 | Original harness (17 cases, ported from the prototype) | 17/17, 312/312 citations verbatim |
+| 1 | Original harness (17 cases) | 17/17, 312/312 citations verbatim |
 | 2 | Extended suite (52 cases, 9 categories) | 52/52, mean P@8 1.000 |
 | 3 | Robustness across seeds (`20260731`, `7`, `42`) | 52/52 extended on all three seeds |
 | 4 | Retrieval ablation (planner filters vs. bare rankers) | P@8 1.000 vs. 0.42–0.45 |
@@ -221,16 +220,17 @@ exact git SHA and a `dirty: false` flag), all on the default synthetic corpus (s
 from the generator's own `_truth.json` loaded into a separate, in-memory database that the
 product's own code never touches, so a case cannot pass by asking the product to grade itself.
 
-#### 1. Original harness (17 cases, ported from the prototype)
+#### 1. Original harness (17 cases)
 
 | Point | Result |
 | --- | --- |
-| Prototype import commit (tag `prototype-import`, `33392f8`) | 9/17 — every retrieval case fails |
+| Initial import commit (`33392f8`) | 9/17, every retrieval case fails |
 | Wiring fix (`a850d7e`) | 17/17 |
 | Current (`cd843fa`) | 17/17, 312/312 citations verbatim and resolving (100%) |
 
-Reproduce: `git checkout prototype-import`, `uv sync --python 3.12`, then `wellbrief build` and
-`wellbrief eval` in a scratch `WELLBRIEF_HOME`; current: `wellbrief eval --suite original`.
+Reproduce: `git checkout 33392f8`, `uv sync --python 3.12`, then `wellbrief build` and
+`wellbrief eval` with `WELLBRIEF_DATA_DIR` pointing at an empty scratch directory (that commit
+predates `WELLBRIEF_HOME`); current: `wellbrief eval --suite original`.
 
 - At the import commit, all 8 retrieval cases failed with "cited document was not in the
   evidence pack" — even though retrieval found the right documents.
@@ -323,11 +323,11 @@ not gated).
 - The risk filters (minimum lift, minimum affected-well support, the unavoidable-code exclusion)
   roughly double precision on both fields by cutting background noise codes (cementing,
   materials, weather) that clear a looser bar but are not one of the four planted patterns.
-- For comparison, the tool this project started from listed 8 risks for the same field's
-  original corpus, of which about 5 were the planted patterns; at the commit that only renamed
-  the corpus's fictional identifiers (before any of this project's own fixes), the same command
-  lists 4 of 8 planted: `git checkout prototype-import && wellbrief build && wellbrief risk
-  --field Orrindale --well ORD-NEXT --td 3100`.
+- For comparison, an earlier version of the tool listed 8 risks for the same field's original
+  corpus, of which about 5 were the planted patterns; at the initial import commit, before the
+  fixes listed above, the same command lists 4 of 8 planted: `git checkout 33392f8`, then
+  `wellbrief build` and `wellbrief risk --field Orrindale --well ORD-NEXT --td 3100` (with
+  `WELLBRIEF_DATA_DIR` set to a scratch directory).
 - Classifier accuracy (the practice/failure/neutral sentence classifier the mitigation miner
   uses, against every candidate sentence's truth label): **357/357 (100%)**, practice precision
   100% (targets 90% / 95%). Its phrase lists were written against this synthetic corpus's own 81
@@ -364,16 +364,12 @@ other two rows).
 
 - The cloud model was the cheapest stable non-reasoning instruct model in the Qwen/DeepSeek
   families on OpenRouter at the time of the run ($0.10 / $0.20 per million input/output tokens).
-  Total measured spend for the whole comparison was **$0.012**, against a $10 budget and an
-  expected cost under $2.
+  Total measured spend for the whole comparison was **$0.012**.
 - It is expected, and the point of the egress guard and the verifier, that a model this small
   falls back more often than the larger cloud model: a fallback means the guard caught an
   unverifiable answer before it reached anyone, not that the tool failed.
-- Downloads this measurement needed, recorded in full: the `mlx-lm` Python package and its
-  dependencies (334 MB, standalone virtual environment, never a project dependency), the model
-  weights and tokenizer (335 MB, within the 0.5 GB local-model budget), the `python:3.12-slim`
-  base image (205 MB, for the Docker checks below) and `actionlint` (5 MB, lints the GitHub
-  Actions workflows) — all outside the project.
+- The local row needs the `mlx-lm` package (installed in a standalone virtual environment, never
+  a project dependency) and the 4-bit model weights (about 335 MB).
 
 #### 8. Performance
 
@@ -446,7 +442,10 @@ selfcheck: PASS
   synthetic corpus's own sentence templates, not measured accuracy on a real field report's
   prose.
 - The tool is single-user, has no authentication, and binds to loopback by default; `serve`
-  prints a warning if told to bind anywhere else.
+  prints a warning if told to bind anywhere else. The API also refuses a request whose `Host`
+  header is not a loopback name or the configured `--host`, and a `POST` without a matching
+  `Origin` or without `Content-Type: application/json`, so a web page open in the same browser
+  cannot drive it.
 - Tiny local language models mostly fall back to the offline narrator (see
   [Narrator comparison](#7-narrator-comparison)) — by design: the verifier would rather show a
   grounded deterministic answer than an ungrounded fluent one.
@@ -605,7 +604,7 @@ a fresh eval, and each has its own regression test.
 <details>
 <summary><b>What hardening found (10 defects, each with a regression test)</b></summary>
 
-**Found hardening the prototype:**
+**Defects found in the first version:**
 
 1. **Wiring bug — evidence pack incomplete.** At import, every retrieval case failed with
    "cited document was not in the evidence pack", even though retrieval found the right
@@ -636,7 +635,7 @@ a fresh eval, and each has its own regression test.
    overlap cases. Fixed: an equipment-owned event is now removed from its interval candidate
    first, and what remains is re-tested. Guarded by three tests in `tests/test_analytics.py`.
 
-**Found hardening this rebuild:**
+**Defects found in later testing:**
 
 7. Re-ingesting an unchanged folder silently doubled NPT totals instead of replacing them.
 8. The mitigation miner re-parsed a document with the *workspace's* report-template settings
@@ -705,3 +704,5 @@ configuration decisions.
 ## Licence
 
 Apache-2.0. Copyright 2026 Andrii Boiko. See [LICENSE](LICENSE).
+
+Built by [Andrii Boiko](https://boiko.ai/) · [LinkedIn](https://www.linkedin.com/in/andriyboyko/) · [Project overview](https://boiko.ai/work/wellbrief/).

@@ -135,7 +135,7 @@ Most memory systems compress history into an opaque vector pile. When recall fai
 *   **Temporal Fact History:** `add(..., ts=)` records when something happened. A newer single-valued fact (location, role, employer, identity, budget) automatically supersedes the older one, and `recall(..., as_of=ts)` returns what was current at that time. Multi-valued facts (preferences, relations) are never superseded automatically, and the engine does not infer contradictions between free-text facts; use `supersede_fact()` for those.
 *   **Cryptographic Proof Chain:** Every fact contains an immutable SHA-256 hash linking to its exact source slice in the raw log.
 *   **Tenant-Scoped Guardrails (L4 Policies):** Combines global baseline policies with tenant-specific SOPs; a tenant's private policies are excluded from other tenants' recall.
-*   **Indexed Hybrid Retrieval:** SQLite FTS5 (porter-stemmed) narrows keyword candidates; strong terms from the best few hits are fed back into the query (light pseudo-relevance feedback), which recovers paraphrases such as "job" for "work"; importance weighting and Ebbinghaus time-decay rank the retrieved facts. A local cross-encoder can be plugged in through `recall(..., rerank=fn)` (`infinitydb-ai[onnx]`): measured at a matched token budget it beats Mem0's zero-LLM recall (76.80% at 406 tokens vs 74.40% at 419) for ~1.3 s of extra search latency. Latency depends on dataset, hardware, and workload.
+*   **Indexed Hybrid Retrieval:** SQLite FTS5 (porter-stemmed) narrows keyword candidates; strong terms from the best few hits are fed back into the query (light pseudo-relevance feedback), which recovers paraphrases such as "job" for "work"; importance weighting and Ebbinghaus time-decay rank the retrieved facts. A local cross-encoder can be plugged in through `recall(..., rerank=fn)` (`infinitydb-ai[onnx]`): measured at a matched token budget it beats Mem0's zero-LLM recall (75.60% at 412 tokens vs 74.40% at 419, or 76.80% at 406 for the uncapped pass) for 135–616 ms of extra search latency. Latency depends on dataset, hardware, and workload.
 
 ---
 
@@ -193,7 +193,9 @@ rank fusion (k=60), all local. It does not beat mem0 here — fusing the two
 signals does not fix what a bag-of-words index and one embedding lose — and it
 costs mem0-class ingest time.
 
-**At Mem0's token budget, the opt-in local reranker is ahead.** `pip install "infinitydb-ai[onnx]"` builds a CPU cross-encoder (no key, ~80 MB) for `recall(..., rerank=fn)`. On the 584-question local harness at `budget_tokens=420`: **76.80% evidence recall@10 at 406.0 tokens against Mem0 `infer=False`'s 74.40% at 418.7 tokens** (2.40 points ahead on 3% fewer tokens), paired per question at 81 fixed vs 36 broken, p = 3.9e-5. The same call without the model scores 69.07%. It costs **1.3 s p50 search** (30 ms lexical) and leaves ingest untouched at 29 ms; dense fusion adds almost nothing on top (77.15%) and is documented as not worth it. Details, the full 320–1750-token curve and the negative results: [benchmarks/README.md](benchmarks/README.md).
+**At Mem0's token budget, the opt-in local reranker is ahead.** `pip install "infinitydb-ai[onnx]"` builds a CPU cross-encoder (no key, ~80 MB) for `recall(..., rerank=fn)`. On the 584-question local harness at `budget_tokens=420`: **76.80% evidence recall@10 at 406.0 tokens against Mem0 `infer=False`'s 74.40% at 418.7 tokens** (2.40 points ahead on 3% fewer tokens), paired per question at 81 fixed vs 36 broken, p = 3.9e-5. The same call without the model scores 69.07%. It costs **616 ms p50 search** (30 ms lexical) and leaves ingest untouched at 30 ms.
+
+**The affordable version of that win:** `recall(rerank_top_k=8)` with `local_reranker(quantize=True)` cross-encodes eight candidates in INT8 instead of thirty in fp32, and returns **75.60% at 411.8 tokens for 135.5 ms p50 search** — 1.20 points ahead of Mem0 on 2% fewer tokens, 4.5× cheaper than the full pass and statistically indistinguishable from it (10 questions fixed vs 17 broken on the same 584, p = 0.25). Dense fusion adds almost nothing on top of either (77.15%) and is documented as not worth it. Details, the token curve, the negative results and both latency rows: [benchmarks/README.md](benchmarks/README.md).
 
 The `dense=` row is not the default configuration: it needs an embedding model you supply yourself. The arena used `fastembed` with `sentence-transformers/all-MiniLM-L6-v2` — one ~90 MB download, no API key. The engine bundles no model and declares no runtime dependencies, so enabling it means installing an embedder yourself (`pip install fastembed`), running `db.index_dense(embedder, "minilm")`, then calling `recall(..., dense=(embedder, "minilm", 1.0))`.
 
@@ -398,6 +400,60 @@ WAL settings.
 
 ---
 
+## Storage backends (SQLite · PostgreSQL + pgvector)
+
+The default install is SQLite and stays dependency-free. Deployments that need a
+shared database can use the same storage contract on PostgreSQL 14+ with the
+`vector` extension:
+
+```bash
+pip install "infinitydb-ai[postgres]"
+```
+
+```python
+from infinitydb.storage import open_backend
+
+store = open_backend(dsn="postgresql://user@host/infinitydb")
+store.append_turns([...])
+store.insert_atoms([...])
+```
+
+Both backends implement `StorageBackend` from `infinitydb/storage/base.py`: L0
+turns, L1 atoms with the L6 SHA-256 chain assigned inside the write transaction,
+L2 edge traversal, FTS5 / tsvector lexical search, pgvector HNSW dense search,
+L3 persona state, L4 policies, L5 reinforcement and per-user erasure. Every
+operation is scoped to one `(tenant_id, user_id)`; on PostgreSQL each transaction
+binds the tenant with `SET LOCAL` and Row-Level Security is enabled and forced.
+
+The engine is wired to both. `InfinityDB(db_path=...)` is the dependency-free
+default and the path every published number was measured on;
+`InfinityDB(dsn=..., tenant_id=...)` runs the same extraction, turn-window
+scoring, chunk assembly, budget packing, persona resolution and provenance code
+on PostgreSQL:
+
+```python
+from infinitydb import InfinityDB
+
+db = InfinityDB(dsn="postgresql://user@host/infinitydb", tenant_id="acme")
+db.add("Caroline: I work at the hospital.", user_id="caroline", ts=1_700_000_000)
+db.recall("where does Caroline work", n=10, user_id="caroline")
+```
+
+Measured on LoCoMo (4 conversations, 99 sessions, 584 questions, `k=10`,
+[backend-parity-results.json](benchmarks/arena/backend-parity-results.json)):
+evidence recall@10 **87.97% SQLite vs 88.14% PostgreSQL**; per-question agreement
+573/582 (PostgreSQL gained 5, lost 4); at `budget_tokens=420` both score
+**69.07%**, with 9 gains and 9 losses. Returned payloads are not byte-identical
+(84/584) because FTS5 and tsvector order borderline candidates differently.
+Search p50/p95 is 64/103 ms on PostgreSQL against 16/23 ms on SQLite (local
+socket, pgserver 16.2, one connection): this is a deployment choice, not a
+latency win. SQLite is single-tenant per file; on PostgreSQL each tenant gets its
+own schema selected by the connection's `search_path`, so the engine's table
+names stay tenant-local even for a superuser that bypasses Row-Level Security.
+See [docs/STORAGE.md](docs/STORAGE.md).
+
+---
+
 ## Resource lifecycle (Python)
 
 Close persistent and in-memory database handles when the application is finished with
@@ -432,7 +488,31 @@ The legacy `benchmarks/benchmark.py` and `benchmarks/run_benchmark.py` commands 
 
 ## Integrations
 
-Example adapters for leading agent frameworks live in [`examples/`](examples/) in this repository. They are **not** packaged in the PyPI wheel: `pip install infinitydb-ai` gives you the engine and the MCP server, so clone the repo if you want these adapters. No cloud required.
+Example adapters for leading agent frameworks live in [`examples/`](examples/) in this repository. They are **not** packaged in the PyPI wheel: `pip install infinitydb-ai` gives you the engine and the MCP server, so clone the repo if you want these adapters. No cloud required. The exception is the LangGraph store below, which ships in the wheel behind an optional extra.
+
+### LangGraph
+A drop-in `langgraph.store.base.BaseStore`, so any LangGraph agent that takes a
+`store=` gets InfinityDB's ranking instead of an in-memory dict.
+`put`/`aput` ingest deterministically (no LLM call: 32.9 ms p50 per session on
+SQLite, 2.20 ms p50 per `add()` across the 100k-atom PostgreSQL run), and
+`search`/`asearch` call `recall()`, optionally with a token budget or the local
+ONNX reranker.
+```bash
+pip install "infinitydb-ai[langgraph]"
+```
+```python
+from infinitydb.integrations.langgraph import InfinityDBStore
+
+store = InfinityDBStore(db_path="agent_memory.db")
+# or, multi-tenant: InfinityDBStore(dsn="postgresql://...", tenant_id="acme")
+
+store.put(("acme", "alice", "preferences"), "diet", {"rule": "vegetarian"})
+store.search(("acme", "alice"), query="dietary restrictions", limit=5)
+```
+Namespaces map to engine `user_id`s, so recall never crosses a namespace.
+`GetOp`, `PutOp`, `SearchOp` and `ListNamespacesOp` are implemented for both
+`batch()` and `abatch()`, including metadata filters, TTL expiry/refresh and
+namespace prefix/suffix/depth queries.
 
 ### LangChain
 Compatible with LangChain chains and agents.

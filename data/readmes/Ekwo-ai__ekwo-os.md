@@ -85,6 +85,10 @@ level security decides who sees what.
   `ekwo init`, so one installation keeps companies in any of these countries.
   The version and review status of each are in
   [`docs/packs.md`](docs/packs.md#the-packs-of-this-checkout).
+  A pack may carry more than one chart of accounts — for companies, for
+  associations and foundations, for small entities — and the chart is chosen
+  when a company is created; `ekwo pack describe <cc>` and the MCP tool
+  `describe_pack` list them with their audience.
 - **Statutory files.** The French FEC, XBRL annual accounts, Peppol UBL and
   Factur-X invoices, recapitulative statements — written from the accounts by the
   format libraries.

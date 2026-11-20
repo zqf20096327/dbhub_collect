@@ -1,0 +1,358 @@
+<div align="center">
+
+<img src="docs/brand/logo-light.svg" alt="OpenLicensd" width="400">
+
+<h3>Open source license server for creating and validating license keys</h3>
+
+<sub><em>Self-hosted. Single binary. PostgreSQL-backed.</em></sub>
+
+<br>
+
+[![CI](https://github.com/alvarorg14/openlicensd/actions/workflows/ci.yml/badge.svg)](https://github.com/alvarorg14/openlicensd/actions/workflows/ci.yml)
+[![SDK CI](https://github.com/alvarorg14/openlicensd/actions/workflows/sdk-ci.yml/badge.svg)](https://github.com/alvarorg14/openlicensd/actions/workflows/sdk-ci.yml)
+[![codecov](https://codecov.io/gh/alvarorg14/openlicensd/graph/badge.svg)](https://codecov.io/gh/alvarorg14/openlicensd)
+[![Vulnerability Scan](https://github.com/alvarorg14/openlicensd/actions/workflows/vuln.yml/badge.svg)](https://github.com/alvarorg14/openlicensd/actions/workflows/vuln.yml)
+[![CodeQL](https://github.com/alvarorg14/openlicensd/actions/workflows/codeql.yml/badge.svg)](https://github.com/alvarorg14/openlicensd/actions/workflows/codeql.yml)
+[![Trivy](https://github.com/alvarorg14/openlicensd/actions/workflows/trivy.yml/badge.svg)](https://github.com/alvarorg14/openlicensd/actions/workflows/trivy.yml)
+[![Release](https://github.com/alvarorg14/openlicensd/actions/workflows/release.yml/badge.svg)](https://github.com/alvarorg14/openlicensd/actions/workflows/release.yml)
+[![Latest Release](https://img.shields.io/github/v/release/alvarorg14/openlicensd)](https://github.com/alvarorg14/openlicensd/releases)
+[![License](https://img.shields.io/github/license/alvarorg14/openlicensd)](https://github.com/alvarorg14/openlicensd/blob/main/LICENSE)
+[![GHCR](https://img.shields.io/badge/GHCR-ghcr.io%2Falvarorg14%2Fopenlicensd-blue)](https://github.com/alvarorg14/openlicensd/pkgs/container/openlicensd)
+[![Helm OCI](https://img.shields.io/badge/Helm-oci%3A%2F%2Fghcr.io%2Falvarorg14%2Fcharts%2Fopenlicensd-0F1689)](https://github.com/alvarorg14/openlicensd/pkgs/container/charts%2Fopenlicensd)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/alvarorg14/openlicensd/pulls)
+
+<br>
+
+[![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://go.dev/)
+[![Vue](https://img.shields.io/badge/Vue-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org/)
+[![Nuxt](https://img.shields.io/badge/Nuxt-00DC82?style=for-the-badge&logo=nuxt.js&logoColor=white)](https://nuxt.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Helm](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white)](https://helm.sh/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+
+<br>
+
+[Documentation](https://alvarorg14.github.io/openlicensd/) · [Quick Start](#-quick-start) · [API](#-api) · [Configuration](#%EF%B8%8F-configuration) · [Contributing](#-contributing)
+
+</div>
+
+---
+
+## 📋 Table of Contents
+
+- [🔑 OpenLicensd](#-openlicensd)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [📖 Overview](#-overview)
+  - [🤔 Why OpenLicensd?](#-why-openlicensd)
+  - [⚖️ Comparison](#️-comparison)
+  - [✨ Features](#-features)
+  - [🚀 Quick Start](#-quick-start)
+  - [📡 API](#-api)
+  - [⚙️ Configuration](#️-configuration)
+  - [🔧 How It Works](#-how-it-works)
+  - [🐳 Harbor Registry Credentials](#-harbor-registry-credentials)
+  - [🔐 OIDC SSO](#-oidc-sso)
+  - [💻 Local Development](#-local-development)
+  - [🤝 Contributing](#-contributing)
+  - [🔒 Security](#-security)
+  - [📄 License](#-license)
+
+---
+
+<!-- #region site -->
+## 📖 Overview
+
+**OpenLicensd** is a self-hosted license server for creating, managing, and validating license keys. It ships as a single Go binary with an embedded Nuxt admin UI and stores data in PostgreSQL.
+
+Use it to gate access to your software, issue time-limited keys, track validation usage, and optionally provide short-lived Harbor registry credentials to licensed clients.
+
+<!-- #endregion site -->
+<div align="center">
+  <img src="docs/screenshots/admin-ui-licenses.png" alt="OpenLicensd admin UI licenses list" width="900">
+</div>
+<!-- #region site -->
+
+## 🤔 Why OpenLicensd?
+
+- **Self-hosted** — no third-party license service dependency
+- **Single binary** — API and admin UI in one deployable artifact
+- **Simple API** — public validation endpoint for client applications
+- **Harbor integration** — optional short-lived registry credentials for container image distribution
+- **OIDC SSO** — optional single sign-on via any standards-compliant identity provider
+- **Kubernetes-ready** — Helm chart with Ingress, External Secrets, and health probes
+
+## ⚖️ Comparison
+
+How OpenLicensd compares to [Keygen](https://keygen.sh/), [Cryptlex](https://cryptlex.com/), and
+[LicenseSpring](https://licensespring.com/). See [docs/comparison.md](docs/comparison.md) for the
+full breakdown with source links.
+
+| | OpenLicensd | Keygen | Cryptlex | LicenseSpring |
+|---|---|---|---|---|
+| **License** | Apache 2.0 (fully OSS) | Fair Core (source-available) | Proprietary | Proprietary |
+| **Managed SaaS** | No | Yes (Keygen Cloud) | Yes | Yes |
+| **Self-host option** | Yes (only model) | Yes (CE free, EE paid) | Yes (Enterprise) | Yes (Enterprise) |
+| **Cost model** | Free (your infra) | CE free; EE + Cloud paid | Subscription tiers | Subscription tiers |
+| **Self-host runtime** | Single binary + PostgreSQL | Rails + PostgreSQL + Redis | Multi-service platform | Vendor platform + on-prem server |
+
+**Choose OpenLicensd when** you want a fully open-source, single-binary, self-hosted license server
+with no per-seat fees, a simple validation API, Harbor credential integration, and Kubernetes-ready
+deployment.
+
+**Consider an alternative when** you need managed SaaS, offline/signed licenses, entitlements,
+webhooks, floating seats with heartbeats, a customer self-service portal, release distribution,
+built-in billing, or client SDKs beyond Go.
+
+## ✨ Features
+
+- Admin UI with sidebar navigation for licenses, products, and policies
+- **Products** — scope licenses to an application (identified by a unique `code`)
+- **Policies** — per-product expiration rules (duration, basis, grace period)
+- License creation requires a product and policy; expiration is derived from the policy
+- Optional manual expiration override per license
+- Usage tracking (`last_validated_at` and `validation_count`)
+- **Max activations** — limit concurrent machines per license key (policy default, per-license override)
+- Machine activation tracking with admin release and rename
+- Public validation endpoint with optional product scoping, machine fingerprint, and grace period support
+- Human-readable Crockford Base32 key format (`XXXXX-XXXXX-XXXXX-XXXXX-XXXXX`); validation accepts case- and dash-insensitive Crockford variants
+- Optional Harbor registry credentials endpoint (short-lived robot accounts)
+- Optional OIDC SSO for admin login (Google, Entra ID, Keycloak, Okta, GitLab, and other providers)
+- **API tokens** — scoped, revocable Bearer credentials for CI, Terraform, and other automation
+- **Audit log** — append-only record of admin mutations (who, what, when, IP) for compliance
+- Single binary distribution with embedded UI (published releases: Linux amd64/arm64; see [docs/deployment.md](docs/deployment.md#platforms))
+- PostgreSQL storage with automatic migrations
+- Prometheus metrics on a dedicated listener (`/metrics` on `:9090` by default)
+- Helm chart for Kubernetes deployment
+
+## 🚀 Quick Start
+
+> **New here?** See [QUICKSTART.md](QUICKSTART.md) for a step-by-step get-running guide.
+
+Container images are published to `ghcr.io/alvarorg14/openlicensd` on release (image tags: `X.Y.Z`, `X.Y`, `latest`; git tags: `vX.Y.Z`). The Helm chart is published to `oci://ghcr.io/alvarorg14/charts/openlicensd`.
+
+```bash
+helm install openlicensd oci://ghcr.io/alvarorg14/charts/openlicensd \
+  --version X.Y.Z \
+  --namespace openlicensd \
+  --create-namespace
+```
+
+Try the published image with Docker Compose (pin with `OPENLICENSD_IMAGE_TAG=X.Y.Z` for production):
+
+```bash
+make stack-up
+```
+
+Open http://localhost:8080 and sign in with `admin@example.com` / `admin`.
+
+For local development:
+
+```bash
+make dev-db
+cp .env.example .env
+make dev-server   # terminal 1
+make dev-ui       # terminal 2
+```
+
+Open http://localhost:3000 and sign in with `admin` / `admin`.
+
+## 📡 API
+
+The HTTP API is specified in [docs/openapi.yaml](docs/openapi.yaml) (OpenAPI 3.1). That file is the source of truth for paths, schemas, and status codes. See [docs/api.md](docs/api.md) for authentication, roles, and curl examples.
+
+**Public** (no auth; rate limited per client IP): `POST /api/v1/validate` and, when Harbor is enabled, `POST /api/v1/registry-credentials`.
+
+**Admin** (session or Bearer; rate limited per user or API token): all other `/api/v1/*` routes except login/OIDC callback and `GET /auth/providers`.
+
+**Admin** (session cookie or `Authorization: Bearer`; CSRF on session writes): products, policies, licenses, machines, users, API tokens, and audit events. Token management (`/api/v1/api-tokens`) requires an admin session.
+
+**Health**: `GET /healthz` (liveness), `GET /readyz` (readiness, PostgreSQL ping).
+
+## Client SDKs
+
+Official client libraries for integrating license validation into your applications:
+
+| Language | Package | Docs |
+|----------|---------|------|
+| Go | [`github.com/alvarorg14/openlicensd/sdk/go`](https://pkg.go.dev/github.com/alvarorg14/openlicensd/sdk/go) | [docs/sdk/go.md](docs/sdk/go.md) |
+
+```go
+import openlicensd "github.com/alvarorg14/openlicensd/sdk/go"
+
+fp, _ := openlicensd.Fingerprint("my-cli")
+client, _ := openlicensd.New(
+    "https://licenses.example.com",
+    "acme-widget",
+    openlicensd.WithFingerprint(fp),
+)
+result, _ := client.Validate(ctx, licenseKey)
+```
+
+## ⚙️ Configuration
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `OPENLICENSD_ADDR` | `:8080` | HTTP listen address |
+| `OPENLICENSD_DATABASE_HOST` | *(required)* | PostgreSQL host |
+| `OPENLICENSD_DATABASE_PORT` | `5432` | PostgreSQL port |
+| `OPENLICENSD_DATABASE_USER` | *(required)* | PostgreSQL user |
+| `OPENLICENSD_DATABASE_PASSWORD` | — | PostgreSQL password |
+| `OPENLICENSD_DATABASE_NAME` | *(required)* | PostgreSQL database name |
+| `OPENLICENSD_DATABASE_SSLMODE` | `require` | PostgreSQL `sslmode` |
+| `OPENLICENSD_DATABASE_MAX_CONNS` | `0` | Maximum pool connections (`0` = pgx default) |
+| `OPENLICENSD_DATABASE_MIN_CONNS` | `0` | Minimum pool connections (`0` = pgx default) |
+| `OPENLICENSD_DATABASE_MAX_CONN_IDLE_MINUTES` | `0` | Idle connection lifetime in minutes (`0` = pgx default) |
+| `OPENLICENSD_DATABASE_STATEMENT_TIMEOUT_SECONDS` | `0` | PostgreSQL statement timeout in seconds (`0` = server default) |
+| `OPENLICENSD_BOOTSTRAP_ADMIN_EMAIL` | — | Email for first admin (required on empty database) |
+| `OPENLICENSD_BOOTSTRAP_ADMIN_PASSWORD_HASH` | — | Bcrypt hash for bootstrap admin password |
+| `OPENLICENSD_SESSION_TTL_HOURS` | `24` | Session lifetime in hours |
+| `OPENLICENSD_REQUEST_TIMEOUT_SECONDS` | `30` | Per-request context deadline in seconds (`0` disables) |
+| `OPENLICENSD_REQUEST_BODY_MAX_BYTES` | `1048576` | Maximum HTTP request body size in bytes |
+| `OPENLICENSD_SESSION_CLEANUP_INTERVAL_MINUTES` | `60` | Interval for deleting expired/revoked sessions (`0` disables) |
+| `OPENLICENSD_AUDIT_RETENTION_DAYS` | `0` | Delete audit events older than this many days (`0` disables; requires cleanup interval > 0) |
+| `OPENLICENSD_AUDIT_CLEANUP_INTERVAL_MINUTES` | `1440` | Interval for audit retention pruning when retention days > 0 (`0` disables the background job) |
+| `OPENLICENSD_LOG_LEVEL` | `info` | Log level: `debug`, `info`, `warn`, or `error` |
+| `OPENLICENSD_LOG_FORMAT` | `json` | Log output format: `json` or `text` |
+| `OPENLICENSD_METRICS_ENABLED` | `true` | Enable Prometheus `/metrics` on a dedicated listener |
+| `OPENLICENSD_METRICS_ADDR` | `:9090` | Metrics listen address (must differ from `OPENLICENSD_ADDR`) |
+| `OPENLICENSD_COOKIE_SECURE` | `true` | Set `Secure` flag on session cookies and enable HSTS headers (`false` for local HTTP) |
+
+Rate limiting, metrics, database pool, and trusted-proxy variables (`OPENLICENSD_RATE_LIMIT_*`, including optional `OPENLICENSD_RATE_LIMIT_BACKEND=postgres` for multi-replica deployments, `OPENLICENSD_METRICS_*`, `OPENLICENSD_DATABASE_*`, `OPENLICENSD_TRUSTED_PROXIES`) are documented in [docs/configuration.md](docs/configuration.md). See [docs/metrics.md](docs/metrics.md) for the Prometheus metric catalog, [docs/scaling.md](docs/scaling.md) for HA and multi-replica guidance, and [docs/troubleshooting.md](docs/troubleshooting.md) for common failure diagnosis.
+
+Generate a password hash:
+
+```bash
+make hash-password PASSWORD=yourpassword
+```
+
+## 🔧 How It Works
+
+```mermaid
+flowchart LR
+  subgraph admin [Admin]
+    ui[Admin UI]
+  end
+
+  subgraph openlicensd [OpenLicensd]
+    api[API Server]
+    store[(PostgreSQL)]
+  end
+
+  subgraph clients [Clients]
+    app[Application]
+    docker[Docker CLI]
+  end
+
+  ui -->|session cookie| api
+  app -->|POST /validate| api
+  docker -->|POST /registry-credentials| api
+  api --> store
+```
+
+1. Admins manage licenses through the embedded UI or the REST API.
+2. Client applications validate license keys via the public `/validate` endpoint.
+3. When Harbor integration is enabled, licensed clients can obtain short-lived registry credentials.
+4. License keys are stored as SHA-256 hashes; only the key prefix is retained for display.
+
+See [docs/architecture.md](docs/architecture.md) for component details and data flows.
+
+## 🐳 Harbor Registry Credentials
+
+When `OPENLICENSD_HARBOR_ENABLED=true`, licensed clients can exchange a valid license key for short-lived Harbor robot account credentials with pull access to configured projects.
+
+```bash
+curl -s -X POST https://licenses.example.com/api/v1/registry-credentials \
+  -H "Content-Type: application/json" \
+  -d '{"key":"X4F9K-7QP2M-3RH8N-BW6TG-YZ2CD"}'
+```
+
+See [docs/harbor-registry-credentials.md](docs/harbor-registry-credentials.md) for setup, configuration, and troubleshooting.
+
+## 🔐 OIDC SSO
+
+When `OPENLICENSD_OIDC_ENABLED=true`, admins can sign in through any standards-compliant OIDC identity provider (Google, Entra ID, Keycloak, Okta, GitLab, and others). Users are provisioned on first login when the IdP issues `email_verified: true`; roles are managed locally in the admin UI.
+
+Register this redirect URI with your IdP:
+
+```
+https://<your-host>/api/v1/auth/oidc/callback
+```
+
+See [docs/oidc-sso.md](docs/oidc-sso.md) for setup, configuration, and troubleshooting.
+
+## 💻 Local Development
+
+Requires Go 1.27+, Node.js 24+, and Docker (for local PostgreSQL).
+
+Run `make help` to list all available targets:
+
+```bash
+make dev-db        # Start PostgreSQL
+make dev-db-reset  # Reset dev PostgreSQL volume
+make dev-server    # Run API server (loads .env)
+make dev-ui        # Run Nuxt dev server
+make stack-up      # Start Postgres + openlicensd from GHCR image
+make stack-down    # Stop full stack (ARGS=-v to drop data)
+make stack-logs    # Tail full stack logs
+make build         # Build UI + binary
+make test          # Run Go tests
+make lint          # go vet + golangci-lint + ESLint (same as CI)
+```
+
+A plain `go build` embeds a placeholder admin page; run `make build` (or `make ui` first) for the full admin UI.
+
+See [AGENTS.md](AGENTS.md) for architecture details and AI assistant guidelines.
+
+## 🤝 Contributing
+
+Contributions are welcome! Issues and pull requests help make this project better for everyone.
+
+- See [ROADMAP.md](ROADMAP.md) for the path to v1.0 and open work
+- Read [CHANGELOG.md](CHANGELOG.md) for server version history
+- Read [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow
+- Read [SUPPORT.md](SUPPORT.md) for support channels and version guidance
+- Read [COMPATIBILITY.md](COMPATIBILITY.md) for API stability and deprecation policy (from v1.0.0)
+- Follow our [Code of Conduct](CODE_OF_CONDUCT.md)
+- See [AGENTS.md](AGENTS.md) if you're an AI assistant or want deeper architecture context
+
+## 🔒 Security
+
+If you discover a security vulnerability, please report it via a private GitHub security advisory. Do **not** open a public issue.
+
+See [SECURITY.md](SECURITY.md) for the full security policy, including [which versions receive security patches](SECURITY.md#supported-versions).
+
+For production deployment hardening and go-live checklists, see [docs/security-hardening.md](docs/security-hardening.md) and [docs/production-checklist.md](docs/production-checklist.md).
+
+**Dependency maintenance:** Renovate batches non-major Go module, npm, Docker, and GitHub Actions updates into weekly pull requests per ecosystem. Major upgrades stay in separate PRs. Install the [Renovate GitHub App](https://github.com/apps/renovate) on this repository to enable it.
+
+**Vulnerability scanning:** A separate Vulnerability Scan workflow runs govulncheck weekly, on demand, and on pull requests (non-blocking) to detect known vulnerabilities in Go dependencies.
+
+**Static analysis:** A CodeQL workflow runs on push, pull requests, and weekly to scan Go (server and SDK) and TypeScript (admin UI) source for security issues. Results appear in the repository [Security tab](https://github.com/alvarorg14/openlicensd/security/code-scanning).
+
+**Container scanning:** A Trivy workflow scans the OpenLicensd container image on pull requests (built from `Dockerfile`), after server releases (published GHCR tag), and weekly on `ghcr.io/alvarorg14/openlicensd:latest`. Results appear in the repository [Security tab](https://github.com/alvarorg14/openlicensd/security/code-scanning).
+
+**SBOMs:** Server releases attach SPDX JSON Software Bill of Materials files generated by [Syft](https://github.com/anchore/syft) — one per linux archive and one per GHCR image platform. Download them from the [Releases](https://github.com/alvarorg14/openlicensd/releases) page alongside binaries and checksums.
+
+**Image signing and provenance:** Published GHCR container images are signed with keyless [Cosign](https://github.com/sigstore/cosign) and include a GitHub Artifact Attestation with SLSA build provenance. Verify a release image with:
+
+```bash
+cosign verify \
+  --certificate-identity-regexp 'https://github.com/alvarorg14/openlicensd/\.github/workflows/release\.yml@.*' \
+  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+  ghcr.io/alvarorg14/openlicensd@sha256:<digest>
+
+gh attestation verify oci://ghcr.io/alvarorg14/openlicensd:X.Y.Z -R alvarorg14/openlicensd
+```
+
+Replace `X.Y.Z` with the image tag (semver without the `v` prefix) and `<digest>` with the image SHA-256 digest.
+
+## 📄 License
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
+Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
+<!-- #endregion site -->
+
+---
+
+<sub>Made with ❤️ using Go, Vue, and PostgreSQL</sub>

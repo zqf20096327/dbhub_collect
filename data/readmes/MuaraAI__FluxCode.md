@@ -19,7 +19,7 @@ development.
 
 The agent's full-screen workspace: your chats on the left, the conversation in the middle
 and the files it changed on the right, each a floating glass column over an animated
-pixel background. Beside the code, the same agent stays a compact panel (`Ctrl+L`).
+background. Beside the code, the same agent stays a compact panel (`Ctrl+L`).
 
 ## Benchmark
 
@@ -108,55 +108,108 @@ check off.
 
 ## A closer look
 
-<p align="center">
-  <a href="assets/screenshots/token-saver.png"><img src="assets/screenshots/token-saver.png" width="49%" alt="The token saver panel over the chat: Caveman on at the Full level, Lean code off, Quiet tools on, about 36 percent fewer output tokens."></a>
-  <a href="assets/screenshots/usage-limit.png"><img src="assets/screenshots/usage-limit.png" width="49%" alt="A banner above the message box: Usage limit reached, resets 15.45 in 2 hours, with a Resume at reset checkbox and a Continue now button."></a>
-</p>
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/token-saver.png"><img src="assets/screenshots/token-saver.png" width="100%" alt="The token saver panel over the chat: Caveman on at the Full level, Lean code off, Quiet tools on, about 36 percent fewer output tokens."></a>
+      <br><sub><b>Token saver</b></sub>
+    </td>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/usage-limit.png"><img src="assets/screenshots/usage-limit.png" width="100%" alt="A banner above the message box: Usage limit reached, resets 15.45 in 2 hours, with a Resume at reset checkbox and a Continue now button."></a>
+      <br><sub><b>When a usage limit is reached</b></sub>
+    </td>
+  </tr>
+</table>
 
 The token saver (the leaf under the message box) asks the agent for shorter answers,
 diffs instead of whole files and quieter tool use. When a plan's limit is reached, a banner
 says when it resets: Continue now sends the message again, Resume at reset does it for you.
 
-<p align="center">
-  <a href="assets/screenshots/side-bars-search.png"><img src="assets/screenshots/side-bars-search.png" width="49%" alt="Search moved to the right side bar, with the Explorer on the left: typing right_view lists 23 results in 4 files as you type, each match tinted, long files folded to six lines."></a>
-  <a href="assets/screenshots/extensions-marketplace.png"><img src="assets/screenshots/extensions-marketplace.png" width="49%" alt="The Extensions view searching the VS Code Marketplace for prettier: 256 results with icons, installs, ratings and Install buttons, and Prettier's page with its details and README."></a>
-</p>
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/side-bars-search.png"><img src="assets/screenshots/side-bars-search.png" width="100%" alt="Search moved to the right side bar, with the Explorer on the left: typing right_view lists 23 results in 4 files as you type, each match tinted, long files folded to six lines."></a>
+      <br><sub><b>Search in either side bar</b></sub>
+    </td>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/extensions-marketplace.png"><img src="assets/screenshots/extensions-marketplace.png" width="100%" alt="The Extensions view searching the VS Code Marketplace for prettier: 256 results with icons, installs, ratings and Install buttons, and Prettier's page with its details and README."></a>
+      <br><sub><b>The whole VS Code Marketplace</b></sub>
+    </td>
+  </tr>
+</table>
 
 Any view can sit in the left or the right side bar: right-click its icon. Find in files
 searches while you type. Extensions search the whole VS Code Marketplace and install from
 the list.
 
-<p align="center">
-  <a href="assets/screenshots/settings-backgrounds.png"><img src="assets/screenshots/settings-backgrounds.png" width="49%" alt="Settings, Appearance: Liquid glass on, Animated background with None, Ocean, River, Beach, Mountains and Anime, Background animation on, and Background visibility."></a>
-  <a href="assets/screenshots/backgrounds.png"><img src="assets/screenshots/backgrounds.png" width="49%" alt="The five animated backgrounds as pixel art: a moonlit ocean, a river between hills and trees, a beach at sunset, mountain ridges with fog, and an anime dusk with a city skyline."></a>
-</p>
+<a href="assets/screenshots/backgrounds.png"><img src="assets/screenshots/backgrounds.png" width="100%" alt="The twelve animated backgrounds in the FluxDark theme, drawn live: Clouds at dusk, a moonlit Ocean, Mountains in fog, an Aurora over snowy ridges, a pine Forest with fireflies, a Lake between hills, a Beach at sunset, Dunes under a low sun, a City skyline with lit windows, Rain, Snow, and a Galaxy with a ringed planet."></a>
 
-Liquid glass turns the panels translucent with floating cards. Five animated pixel
-backgrounds (ocean, river, beach, mountains, anime dusk) play behind them, or none.
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/settings-backgrounds.png"><img src="assets/screenshots/settings-backgrounds.png" width="100%" alt="Settings, Appearance: Animated background as a grid of twelve live previews (Clouds, Ocean, Mountains, Aurora, Forest, Lake, Beach, Dunes, City, Rain, Snow, Galaxy), each drawn in the FluxSky theme's colors, with Clouds chosen; Background animation and Background visibility below."></a>
+      <br><sub><b>Twelve backgrounds, previewed live</b></sub>
+    </td>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/backgrounds-themes.png"><img src="assets/screenshots/backgrounds-themes.png" width="100%" alt="The Mountains background in four themes: FluxDark, FluxRed and FluxMuara Dark at night, FluxCream as a pale day scene."></a>
+      <br><sub><b>One scene in four themes</b></sub>
+    </td>
+  </tr>
+</table>
 
-<p align="center">
-  <a href="assets/screenshots/python-error.png"><img src="assets/screenshots/python-error.png" width="49%" alt="A Python run fails with ModuleNotFoundError. The Output panel shows a card with the file and line, the code line, a hint, and a Fix button that runs py -m pip install tabulate."></a>
-  <a href="assets/screenshots/sqlite.png"><img src="assets/screenshots/sqlite.png" width="49%" alt="A SQLite database opened as text: each table and view with its CREATE statement and row count, under a line saying the view is read-only."></a>
-</p>
+Twelve animated backgrounds play behind the panels: clouds, ocean, mountains, aurora,
+forest, lake, beach, dunes, city, rain, snow and a galaxy. They are drawn live in the theme's
+own colors, so a theme change recolors the scene at once (light themes turn it to day), and
+they fit any window size. Nothing is downloaded. They stand still by default (no CPU
+at all); Background animation makes them move, after checking what your PC can take.
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/python-error.png"><img src="assets/screenshots/python-error.png" width="100%" alt="A Python run fails with ModuleNotFoundError. The Output panel shows a card with the file and line, the code line, a hint, and a Fix button that runs py -m pip install tabulate."></a>
+      <br><sub><b>A Python error as a card</b></sub>
+    </td>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/sqlite.png"><img src="assets/screenshots/sqlite.png" width="100%" alt="A SQLite database opened as text: each table and view with its CREATE statement and row count, under a line saying the view is read-only."></a>
+      <br><sub><b>SQLite opened as text</b></sub>
+    </td>
+  </tr>
+</table>
 
 A Python error becomes a card with the file, the line and a hint; for a missing module, Fix
 installs it. A SQLite database opens as its tables, SQL and row counts, like Word, Excel,
 PDF and ZIP files do, instead of an error.
 
-<p align="center">
-  <a href="assets/screenshots/source-control.png"><img src="assets/screenshots/source-control.png" width="49%" alt="Source Control after git init in a game server folder: 2801 untracked files, with the folders holding most of them listed first, each with an Ignore button."></a>
-  <a href="assets/screenshots/go-to-file.png"><img src="assets/screenshots/go-to-file.png" width="49%" alt="Go to File in the FluxMono theme: typing wbench finds workbench.rs in the src folder."></a>
-</p>
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/source-control.png"><img src="assets/screenshots/source-control.png" width="100%" alt="Source Control after git init in a game server folder: 2801 untracked files, with the folders holding most of them listed first, each with an Ignore button."></a>
+      <br><sub><b>Thousands of new files</b></sub>
+    </td>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/go-to-file.png"><img src="assets/screenshots/go-to-file.png" width="100%" alt="Go to File in the FluxMono theme: typing wbench finds workbench.rs in the src folder."></a>
+      <br><sub><b>Go to File</b></sub>
+    </td>
+  </tr>
+</table>
 
 Source Control stays fast with thousands of new files and offers to ignore the folders
 that hold them. Go to File (`Ctrl+P`) finds a file from a few letters of its name.
 
-<p align="center">
-  <a href="assets/screenshots/themes.png"><img src="assets/screenshots/themes.png" width="49%" alt="Settings: six color themes as cards (FluxDark, FluxCream, FluxMono, FluxRed, FluxMuara, FluxMuara Dark), then language and interface size."></a>
-  <a href="assets/screenshots/update-indonesian.png"><img src="assets/screenshots/update-indonesian.png" width="49%" alt="The FluxCream theme with the interface in Bahasa Indonesia. A card in the corner offers a newer build, with its notes and a button to update and restart."></a>
-</p>
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/themes.png"><img src="assets/screenshots/themes.png" width="100%" alt="Settings, Appearance: seven color themes as cards (FluxDark, FluxCream, FluxMono, FluxRed, FluxMuara, FluxMuara Dark and FluxSky, active), over the FluxSky clouds."></a>
+      <br><sub><b>Seven color themes</b></sub>
+    </td>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/update-indonesian.png"><img src="assets/screenshots/update-indonesian.png" width="100%" alt="The FluxCream theme with the interface in Bahasa Indonesia. A card in the corner offers a newer build, with its notes and a button to update and restart."></a>
+      <br><sub><b>Bahasa Indonesia and the update card</b></sub>
+    </td>
+  </tr>
+</table>
 
-Six color themes, three interface sizes and your own background image. The interface
+Seven color themes, three interface sizes and your own background image. The interface
 also comes in Bahasa Indonesia, shown here with the update card in the FluxCream theme.
 
 ## What makes it different
@@ -353,9 +406,13 @@ FluxCode opens it drawn, with Preview and Source above it.
   (from [`changelog.flux`](changelog.flux), in the interface language). Help > What's New
   opens it again.
 - OpenCode 2 is the registry's native OpenCode build from opencode.ai, which FluxCode
-  installs and checks against its SHA-256. A copy of OpenCode on your PATH is no longer
-  used, and an existing OpenCode choice moves to OpenCode 2 with its settings.
-- The color theme's name in the status bar opens the six themes, each shown as a small
+  installs and checks against its SHA-256. An OpenCode 2 you already installed (npm's
+  `@opencode/cli`, or the opencode.ai installer) is used as it is instead; OpenCode 1 is
+  not. An existing OpenCode choice moves to OpenCode 2 with its settings.
+- Agents already on your PC are found the way Windows finds programs: on the PATH as
+  Windows has it now and in the folders installers use (npm, pnpm, bun, Scoop, WinGet,
+  `~/.local/bin`), so nothing is downloaded twice.
+- The color theme's name in the status bar opens the seven themes, each shown as a small
   editor in its colors.
 - Markdown files draw themselves: a README opens as text, and an eye icon above it
   turns it into the drawn page GitHub shows (headings, tables, lists, local images,
@@ -381,9 +438,11 @@ FluxCode opens it drawn, with Preview and Source above it.
   Continue now sends the cut-off message again; Resume at reset does it by itself once the
   limit window has reset.
 - **Liquid glass and animated backgrounds.** Panels can turn translucent over the system's
-  blur, with floating glass cards. Five looping pixel backgrounds play behind them (ocean,
-  river, beach, mountains, anime dusk); each is downloaded once (0.4 to 3.3 MB), plays at
-  10 frames a second, and Background animation turns it into a still picture.
+  blur, with floating glass cards. Twelve animated backgrounds play behind them, drawn
+  live in the theme's colors (no video and no download). They stand still by default;
+  Background animation makes them move 24 frames a second while the window is in front
+  (about 10 to 15% of one CPU core) and a few behind other windows, and turning it on
+  first measures what your PC can take.
 
 ## FluxCode, Zed and VS Code
 
@@ -458,8 +517,7 @@ Extensions download nothing by themselves: Add Gradle wrapper asks services.grad
 the current version and fetches the wrapper from Gradle's GitHub repository, and an
 Install button on an extension's page runs `winget` in the Terminal, only when you click.
 The Extensions view asks marketplace.visualstudio.com for the list while it is open, and
-downloads an extension's VSIX only when you click Install. An animated background is
-downloaded from this repository on GitHub the first time you pick it.
+downloads an extension's VSIX only when you click Install.
 
 ## Shortcuts
 

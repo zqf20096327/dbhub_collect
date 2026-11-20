@@ -51,6 +51,11 @@
 
 ## What's new
 
+- **2.56.0: a Cloudflare Worker's bursts are no longer refused and refused posts are shown; a log holding a CDN's addresses is said and counted right; Next.js scanners and image checkers are bots; unknown addresses say No such page; each browser-seen step shows its time** ([changelog](CHANGELOG.md#2560-2026-11-20)).
+- **2.55.0: saves work on a site before its first build; a person named on several new sites gets all of them; People shows which sites each member sees** ([changelog](CHANGELOG.md#2550-2026-11-19)).
+- **2.54.1: a visitor joined from Chrome's prefetch proxy keeps their own country on a log with no country; every audit road counts the join** ([changelog](CHANGELOG.md#2541-2026-11-19)).
+- **2.54.0: Add a site says why an address can't be added at its first step; an invite limited to some sites lands on one of them; Google visitors on Android Chrome are counted again** ([changelog](CHANGELOG.md#2540-2026-11-19)).
+- **2.53.1: Recorded journeys in the visitor drawer answers again; a log sender's hang-up is one line in the server log** ([changelog](CHANGELOG.md#2531-2026-11-19)).
 - **2.53.0: Back starts afresh from the left menu, "(all others)" stays the last row, clearer AI answers, Right now says how often it is counted, and Leads & sales says why it opens on 7 days** ([changelog](CHANGELOG.md#2530-2026-11-18)).
 - **2.52.0: the weekly mail's Top pages count every read; "What changed" says which window each line covers; no empty uptime row** ([changelog](CHANGELOG.md#2520-2026-11-18)).
 - **2.51.0: the site switcher scrolls inside the window, and with seven sites or more a Find a site box narrows it as you type** ([changelog](CHANGELOG.md#2510-2026-11-18)).

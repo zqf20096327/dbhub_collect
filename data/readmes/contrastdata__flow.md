@@ -1,10 +1,10 @@
 <p align="center">
-  <a href="https://embrasure.ai">
-    <img src="docs/assets/embrasure-banner.svg" alt="Embrasure Flow" width="100%">
+  <a href="https://contrastdb.com">
+    <img src="docs/assets/contrast-banner.svg" alt="Contrast Flow" width="100%">
   </a>
 </p>
 
-<h1 align="center">Embrasure Flow</h1>
+<h1 align="center">Contrast Flow</h1>
 
 <p align="center">
   Stream PostgreSQL changes into Apache Iceberg. Written in Rust.
@@ -13,8 +13,8 @@
 <p align="center"><strong>Status: beta.</strong> See <a href="#support-and-status">support and status</a>.</p>
 
 <p align="center">
-  <a href="https://github.com/EmbrasureAI/flow/actions/workflows/ci.yml"><img src="https://github.com/EmbrasureAI/flow/actions/workflows/ci.yml/badge.svg?branch=main" alt="Rust CI"></a>
-  <a href="https://github.com/EmbrasureAI/flow/actions/workflows/services.yml"><img src="https://github.com/EmbrasureAI/flow/actions/workflows/services.yml/badge.svg?branch=main" alt="Service integration"></a>
+  <a href="https://github.com/contrastdata/flow/actions/workflows/ci.yml"><img src="https://github.com/contrastdata/flow/actions/workflows/ci.yml/badge.svg?branch=main" alt="Rust CI"></a>
+  <a href="https://github.com/contrastdata/flow/actions/workflows/services.yml"><img src="https://github.com/contrastdata/flow/actions/workflows/services.yml/badge.svg?branch=main" alt="Service integration"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-2C2721" alt="License: Apache-2.0"></a>
 </p>
 
@@ -23,8 +23,16 @@
   <a href="demo/README.md">Quickstart</a> ·
   <a href="docs/performance.md">Benchmarks</a> ·
   <a href="CONTRIBUTING.md">Contributing</a> ·
-  <a href="https://github.com/EmbrasureAI/flow/issues">Issues</a>
+  <a href="https://github.com/contrastdata/flow/issues">Issues</a>
 </p>
+
+<p align="center"><sub>
+  We like building things for the data community, and Flow is one of them. If
+  it's useful to you, star the repo so more people find it. We post what we're
+  working on at <a href="https://contrastdb.com">contrastdb.com</a>, on
+  <a href="https://x.com/contrastdata">X</a> and on
+  <a href="https://www.linkedin.com/company/embrasure/">LinkedIn</a>.
+</sub></p>
 
 Flow copies existing PostgreSQL rows, then continuously replicates inserts,
 updates and deletes into standard Iceberg tables. Query the tables directly
@@ -49,7 +57,7 @@ Run the local demo with Git, Docker and Docker Compose. It includes PostgreSQL,
 MinIO, an Iceberg REST catalog, Trino and Flow:
 
 ```sh
-git clone https://github.com/EmbrasureAI/flow.git
+git clone https://github.com/contrastdata/flow.git
 cd flow
 docker compose -f demo/compose.yaml up --build -d
 ```
@@ -73,7 +81,7 @@ example configuration:
 
 ```sh
 cargo build --locked --release -p flow-daemon
-./target/release/embrasure-flow --config examples/flow.toml check
+./target/release/contrast-flow --config examples/flow.toml check
 ```
 
 On GNU/Linux, add `--features jemalloc` to enable process-wide allocation and
@@ -88,16 +96,16 @@ measurement details and limits.
 The [Dockerfile](Dockerfile) builds a minimal image from this checkout:
 
 ```sh
-docker build -t embrasure-flow .
+docker build -t contrast-flow .
 docker run --rm --env-file flow.env \
   -v "$PWD/flow.toml:/etc/flow.toml:ro" -v flow-state:/data \
-  embrasure-flow --config /etc/flow.toml init
+  contrast-flow --config /etc/flow.toml init
 docker run --env-file flow.env \
   -v "$PWD/flow.toml:/etc/flow.toml:ro" -v flow-state:/data \
-  embrasure-flow
+  contrast-flow
 ```
 
-The image runs `embrasure-flow --config /etc/flow.toml run` by default as an
+The image runs `contrast-flow --config /etc/flow.toml run` by default as an
 unprivileged user. Mount the configuration at `/etc/flow.toml`, set
 `state_dir = "/data"` in it and mount a persistent volume there (or configure
 [remote durability](docs/remote-durability.md)), and pass the
@@ -109,10 +117,10 @@ environment variables your configuration names for credentials (here through
 Follow [Getting started](docs/getting-started.md). In short:
 
 ```sh
-embrasure-flow --config flow.toml check --source   # read-only PostgreSQL preflight
-embrasure-flow --config flow.toml discover >> flow.toml   # generate [[tables]]
-embrasure-flow --config flow.toml init             # slot + initial copy
-embrasure-flow --config flow.toml run              # stream changes
+contrast-flow --config flow.toml check --source   # read-only PostgreSQL preflight
+contrast-flow --config flow.toml discover >> flow.toml   # generate [[tables]]
+contrast-flow --config flow.toml init             # slot + initial copy
+contrast-flow --config flow.toml run              # stream changes
 ```
 
 Flow needs persistent disk for its transaction journal and RocksDB row index.
@@ -161,8 +169,14 @@ Supported today:
   changes. Mutable tables need a primary key and `REPLICA IDENTITY DEFAULT` or
   `FULL`; see [replica identity](docs/getting-started.md#replica-identity).
   Tables without a primary key replicate append-only.
-- Unpartitioned Iceberg v2 (position deletes) and v3 (deletion vectors) tables
-  through an Iceberg REST catalog on S3-compatible storage.
+- Iceberg v2 (position deletes) and v3 (deletion vectors) tables through an
+  Iceberg REST catalog on S3-compatible storage, unpartitioned or with a
+  declared partition spec: change epochs stay unpartitioned and compaction
+  rewrites them into the table's partitions. See
+  [partitioned tables](docs/partitioning.md).
+- Optional distinct-value statistics for Trino and Spark planners: compaction
+  sketches each data file's columns as it writes them, and maintenance
+  publishes Iceberg statistics files. See [table statistics](docs/statistics.md).
 - The [type mappings](docs/postgres-types.md); JSON and JSONB replicate as
   normalized JSON text.
 - Automatic schema evolution for nullable column additions and compatible
@@ -198,7 +212,7 @@ Browse the [documentation index](docs/README.md) for the full set of guides.
 
 Bug reports, documentation improvements and code contributions are welcome.
 Read [Contributing](CONTRIBUTING.md) for development setup, checks and review
-expectations. Open an [issue](https://github.com/EmbrasureAI/flow/issues) to discuss
+expectations. Open an [issue](https://github.com/contrastdata/flow/issues) to discuss
 substantial changes or report a bug with reproduction steps. Participation is
 governed by the [code of conduct](CODE_OF_CONDUCT.md). Report security issues
 privately as described in [SECURITY.md](SECURITY.md), not in public issues.

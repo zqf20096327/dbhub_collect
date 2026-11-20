@@ -139,7 +139,7 @@ You, your team and your platform lead read the same store.
 
 | Agent | What hippo adds |
 |---|---|
-| Claude Code | `CLAUDE.md` + 8 hooks |
+| Claude Code | `CLAUDE.md` + 9 hooks |
 | Codex | `AGENTS.md` + 2 hooks |
 | Cursor | reads `AGENTS.md` |
 | Pi | reads `AGENTS.md` |

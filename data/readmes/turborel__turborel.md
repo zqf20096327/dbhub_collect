@@ -7,7 +7,10 @@
 
 > Turborel is in alpha, meaning, version 0.0.0. Anything may change
 > from one build to the next, SQL, API, protocol and files alike. See
-> [VERSIONING.md](VERSIONING.md).
+> [VERSIONING.md](VERSIONING.md). The latest alpha is built for Linux,
+> macOS and Windows as the pre-release
+> [nightly](https://github.com/turborel/turborel/releases/tag/nightly),
+> and as the image `ghcr.io/turborel/turborel:nightly`.
 
 Turborel (TUR-boh-rel) is a relational database system written in
 Rust. Embed it as a library, or run it as a server, `turboreld`, for
@@ -23,26 +26,68 @@ behind it, and each can be replaced or added to.
 ## What it has
 
 - Standard SQL as one language, from SQL-86 through SQL:2023. See
-  [CONFORMANCE.md](CONFORMANCE.md).
+  [CONFORMANCE.md](CONFORMANCE.md), whose claimed features SQL_FEATURES shows.
 - Transactions at READ COMMITTED by default, or up to SERIALIZABLE, that run
   on many threads at once and survive a crash with multi-version concurrency
   control, a write-ahead log, checkpoints and recovery.
 - Savepoints, with SAVEPOINT, RELEASE SAVEPOINT and ROLLBACK TO SAVEPOINT
   at the savepoint levels of routines and ATOMIC blocks.
-- Row and columnar storage, chosen per table.
+- [Data change delta tables](doc/sql/24-delta-tables.md), OLD, NEW and
+  FINAL TABLE of INSERT, UPDATE, DELETE and MERGE.
+- Row and columnar storage, chosen per table, the columnar store's filters
+  judged in place and its other columns decoded of the rows kept alone.
+- DISTINCT set functions computed by two groupings, read by batches.
+- Batches of vectors with null bitmaps, dates and truth values among them,
+  filtered by pluggable kernels, and parallel morsels read by batch.
+- Expressions compiled once and evaluated a vector at a time, CASE by the
+  rows each WHEN keeps.
+- [Partitioned tables](doc/sql/23-partitioning.md) by RANGE, LIST, HASH
+  or a strategy a plug-in registers, many levels deep, attached and
+  detached, rows routed and moved, reads pruned and merged in order, joins
+  routed by each probe, global indexes holding keys across partitions,
+  and every index method made on each partition.
 - Large objects up to 4G, stored, logged, read and sent a chunk at a
   time, and reached by locators.
 - Indexes as plug-ins. B-link trees, linear hash tables and R-trees over
-  points and rectangles are built in. Any other method registers with its
+  points and rectangles are built in, R-trees packed when built and their
+  emptied nodes reclaimed up to the root. Any other method registers with its
   own options, and a cost-based planner chooses among them for filters
   and inner joins. Zone maps and Bloom filters skip what a scan cannot
-  match.
+  match, and a row-store COUNT(*) is summed from its settled zones.
+- [Join ordering](doc/sql/06-queries.md#how-joins-are-planned-extension)
+  by dynamic programming, DPccp and DPhyp, outer joins reordered where
+  sound, hash, merge and index joins chosen with the order, adaptive to
+  queries of a hundred tables.
+- Correlated subqueries of every form unnested into joins, and SQL
+  functions that return one value inlined, so each is computed once
+  rather than once for each row.
+- Joins removed on unique and foreign keys, filters and FETCH FIRST moved
+  into set operations and below windows, and parts of conditions that can
+  raise computed on the table they read, so joins over them are reordered.
+- [SQL/XML](doc/sql/19-xml.md): an XML type kept in tables, in arrays,
+  multisets, rows and distinct and structured types too, its values parsed
+  from XML 1.0 and 1.1 text and serialized back, XMLDOCUMENT, XMLCAST, IS
+  DOCUMENT and IS CONTENT, and XML published from SQL values, arrays and
+  multisets too, by
+  XMLELEMENT, XMLFOREST, XMLAGG, XMLCONCAT, XMLCOMMENT, XMLPI and XMLTEXT
+  with namespaces and XMLBINARY of a query, a statement or a definition,
+  tables, schemas and the catalog mapped to XML and XML Schema by
+  XMLMAP, identifiers and XML Names mapped by XMLNAME_TO_IDENTIFIER and
+  IDENTIFIER_TO_XMLNAME, and queried in XQuery 1.0 by XMLQUERY, XMLEXISTS
+  and XMLTABLE, statically typed on request, importing library modules
+  registered by CREATE XQUERY MODULE, written in-house with no
+  dependency, its modifiers shown in the
+  Information Schema, XML indexes of its paths and values, and XML
+  Schemas registered by CREATE XML SCHEMA, values validated by them with
+  XMLVALIDATE, IS VALID and XQuery's validate and kept in columns of
+  their XMLSCHEMA types, USAGE on them and their Information Schema views.
 - [SQL/MM Spatial](doc/sql/10-spatial.md), its 27 geometry types in 2D
   and 3D with every constructor and mutator, exact relationships and
   set operations, reference systems, angles, directions and vectors,
   CHECK constraints over geometries,
   and [R-tree spatial queries](doc/data/02-spatial.md), distance searches
-  and joins, outer joins too,
+  and joins, outer joins too, priced by geometry statistics, spilled past
+  memory or through two trees at once,
   serializable over the windows they read, and Simple feature access's
   SQL option with GEOMETRY_COLUMNS, SPATIAL_REF_SYS, unprefixed names and
   annotation text.
@@ -55,6 +100,9 @@ behind it, and each can be replaced or added to.
   block-compressed postings.
 - [SQL/MM Full-Text](doc/sql/08-fulltext.md), its FULLTEXT type, CONTAINS
   patterns and thesauri, ranked by BM25 or a ranking of your own.
+- [Full text in 43 languages](doc/sql/08-fulltext.md#languages), stemmed by
+  Snowball's own stemmers, with CJK and Thai read as character bigrams,
+  and more served by plug-ins, as dictionary segmenters.
 - Collations, from binary order through case-insensitive to the Unicode
   Collation Algorithm and CLDR's tailorings for 48 languages, so text sorts
   and compares as its readers expect.
@@ -64,11 +112,16 @@ behind it, and each can be replaced or added to.
   once a majority of servers holds it, so three servers survive losing one.
   Backups serve reads and elect a new primary within seconds, and a lost
   server catches up when it rejoins.
+- [Backups](doc/operator/10-backups.md), full and incremental, taken
+  online by BACKUP DATABASE, verified and restored offline, and recovery
+  to a point in time through an archive of the log, to pluggable targets.
 - Analytic SQL, with window functions, grouping sets, recursive queries
   with SEARCH and CYCLE, row pattern recognition (MATCH_RECOGNIZE), and
   the statistical set functions and math functions of T621.
 - Arrays, row types, distinct types, DECFLOAT, regular expressions,
   sequences and identity columns.
+- [UUIDs](doc/sql/02-data-types.md#uuids), with UUID_V4() and time-ordered
+  UUID_V7().
 - SQL/JSON's JSON_VALUE, JSON_QUERY and JSON_EXISTS, with the SQL/JSON
   path language, strict and lax, and its filters; IS JSON, JSON_OBJECT,
   JSON_ARRAY, JSON_OBJECTAGG and JSON_ARRAYAGG.
@@ -88,6 +141,38 @@ behind it, and each can be replaced or added to.
   top-k by RRF or weighted scores.
 - Embedding models, pipelines that chunk and embed text, and columns
   embedded after commit.
+- [External plug-ins](doc/client/04-plugins.md): functions, metrics,
+  models and more from programs of other parties, run as processes of their
+  own, installed from signed package files, with a starter project and
+  `pack` for authors and licenses told.
+- [Every plug-in kind external](doc/client/04-plugins-kinds.md), types,
+  collations, storage engines and index methods among them, with an SDK.
+- [Host plug-ins](doc/client/04-plugins-host.md) beneath the database,
+  its encodings, log, clock, files, keys and listeners among them.
+- [Replication and archive plug-ins](doc/client/04-plugins-replication.md):
+  a replica's transport, journal, state transfer and consensus, and a
+  backup's archive, served by host plug-ins that fail stop.
+- [Plug-in settings](doc/client/04-plugins.md#settings) declared by
+  manifests and set as built-in ones, and a buffer eviction policy a
+  host plug-in programs.
+- [Optimizer rules and statistics as plug-ins](doc/client/04-plugins-planner.md):
+  rules that rewrite a stable plan form, and statistics both ways.
+- [Property graphs](doc/sql/20-property-graphs.md) over tables or
+  queries' rows, queried by GRAPH_TABLE's path patterns through adjacency
+  indexes, LINE_GRAPH among them.
+- Native graph tables, CREATE TABLE ... AS NODE and AS EDGE, with hidden
+  identities, CONNECTION constraints and each schema's SYS_GRAPH.
+- [Graph compatibility syntax](doc/sql/22-graph-compatibility.md):
+  SQL Server's MATCH, Oracle's identity functions and hints, PGQL and
+  Cypher queries, as GRAPH_TABLE.
+- [GQL](doc/sql/statements/execute-gql.md) by EXECUTE GQL, GQL_TABLE or
+  a GQL session, over property graphs and typed or open graphs.
+- [Graph algorithms](doc/sql/21-graph-algorithms.md) such as PAGERANK,
+  WCC, LOUVAIN and SSSP over a property graph or a table of edges, in
+  parallel, with INTO PROPERTY.
+- Graph plans that join rigid patterns, Expand edges and take a
+  worst-case optimal join of cycles, with label and reachability
+  indexes and graph statistics.
 - Multisets, with MULTISET UNION, EXCEPT and INTERSECT, MEMBER,
   SUBMULTISET and IS A SET, and COLLECT, FUSION and INTERSECTION.
 - Structured types with attributes, methods and subtypes, typed tables
@@ -108,13 +193,30 @@ behind it, and each can be replaced or added to.
 - Triggers before, after and instead of a change, for each row or
   statement, and roles with privileges granted and revoked.
 - Domains, assertions, temporary tables, scrollable cursors and dynamic SQL.
-- Columns renamed in place, without copying their rows.
+- Columns renamed in place, without copying their rows, and tables renamed.
+- A column's NOT NULL set or dropped and its data type widened, the rows
+  checked or copied a row at a time.
 - Import of CSV and tab-separated files through the client.
+- A command-line client with line editing, completion, describe commands,
+  variables, scripting and seven output formats ([guide](doc/client/05-turborel-commands.md)).
 - Library, embedded modes
 - A server over TCP, Unix sockets or Windows named pipes, with TLS,
-  users and passwords, prepared statements and cancellation.
+  users and passwords, prepared statements, pipelined requests whose
+  replies share a write, and cancellation.
+- A [native protocol](doc/client/05-protocol.md) that grows by
+  negotiated capabilities: structured errors and notices, row counts,
+  generated keys and server time in each completion, bulk copy,
+  compression, session status, columns' declared types, and reads
+  after a commit on replicas, with sample frames for every message.
+- A [client library](doc/client/02-library-connections.md) that pipelines
+  requests, pools connections, fails over across servers, and takes its
+  settings from a URI, the environment, a service file or a password file.
+- [CALL](doc/sql/statements/call.md) prepared with `?` for OUT and INOUT
+  parameters, their values returned as a row over the protocol.
 - Bounded memory with one budget over every cache, with sorts, joins and
-  grouping that spill to disk.
+  grouping granted their share of it and spilling to disk past it.
+- [Parallel queries](doc/operator/04-settings.md#parallel-queries) run by
+  morsels on a shared pool of workers, the same rows on any number of threads.
 
 ## Quick start
 

@@ -1,7 +1,9 @@
+<!-- GitLab ignores <source> and shows the <img>, so that one is on a white tile to read on its light and dark themes -->
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/brand/crewtavo-logo-dark.png">
-    <img src="docs/brand/crewtavo-logo.png" alt="Crewtavo" width="300">
+    <source media="(prefers-color-scheme: light)" srcset="docs/brand/crewtavo-logo.png">
+    <img src="docs/brand/crewtavo-logo-tile.png" alt="Crewtavo" width="300">
   </picture>
 </p>
 
@@ -245,9 +247,7 @@ to the **crewtavo** service's variables on Railway, or to `.env.instance` when s
       the property and leave, or starts their clock there itself and moves it to driving as they
       leave, while Crewtavo is open on the phone. It never takes anyone off the clock by itself: on
       the visits-only clock it asks first. It installs like an app on Android and iPhone, keeps working with no signal and
-      catches up when the connection is back. Each crew member can use it in Spanish: their day,
-      the clock, chat, guides, timesheets and the notifications they get, while the office stays in
-      English.</p>
+      catches up when the connection is back.</p>
       <p><strong>For your clients.</strong> The Client Hub, with no account to create: approve
       quotes, pay invoices (with an optional tip), see the next visit, ask for changes, request
       work and message the office. A booking form on your website, or its link, lets people pick a

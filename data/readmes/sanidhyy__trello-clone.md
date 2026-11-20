@@ -235,7 +235,7 @@ Useful resources and libraries that are used in My Portfolio
 - Thanks to CodeWithAntonio: https://codewithantonio.com/
 <!--- DEPENDENCIES_START --->
 - [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^4.31.5
-- [@hello-pangea/dnd](https://www.npmjs.com/package/@hello-pangea/dnd): ^16.6.0
+- [@hello-pangea/dnd](https://www.npmjs.com/package/@hello-pangea/dnd): ^18.0.1
 - [@prisma/client](https://www.npmjs.com/package/@prisma/client): ^5.22.0
 - [@radix-ui/react-accordion](https://www.npmjs.com/package/@radix-ui/react-accordion): ^1.2.12
 - [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.1.11
@@ -256,7 +256,7 @@ Useful resources and libraries that are used in My Portfolio
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [date-fns](https://www.npmjs.com/package/date-fns): ^4.1.0
 - [eslint](https://www.npmjs.com/package/eslint): ^8
-- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 14.0.3
+- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 15.5.29
 - [lodash](https://www.npmjs.com/package/lodash): ^4.17.23
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^0.574.0
 - [next](https://www.npmjs.com/package/next): 15.5.24
@@ -274,7 +274,7 @@ Useful resources and libraries that are used in My Portfolio
 - [unsplash-js](https://www.npmjs.com/package/unsplash-js): ^7.0.20
 - [usehooks-ts](https://www.npmjs.com/package/usehooks-ts): ^3.1.1
 - [zod](https://www.npmjs.com/package/zod): ^4.3.6
-- [zustand](https://www.npmjs.com/package/zustand): ^5.0.11
+- [zustand](https://www.npmjs.com/package/zustand): ^5.1.0
 
 <!--- DEPENDENCIES_END --->
 

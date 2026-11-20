@@ -151,6 +151,12 @@ claude plugin marketplace add hesedcasa/sdkck
 claude plugin install sidekick@cli
 ```
 
+- Or install the `sidekick` skill with the [skills CLI](https://github.com/vercel-labs/skills) to use with Cursor, Codex, OpenCode, and [40+ other agents](https://github.com/vercel-labs/skills#supported-agents):
+```bash
+npx skills add hesedcasa/sdkck --skill sidekick
+```
+See [Install skill](https://hesedcasa.github.io/sdkck/installation#install-skill) for the global (`-g`) and per-agent (`-a cursor|codex|opencode`) flags, and for the `extract-api` skill.
+
 - Or simply add this instruction to your AGENT.md or CLAUDE.md file
 ```
 Before any tool call run `sdkck commands | grep <keywords>` to find the available tools in sdkck, e.g.: `sdkck commands | grep -i "\|atlassian\|issue"`
@@ -230,7 +236,7 @@ $ npm install -g sdkck
 $ sdkck COMMAND
 running command...
 $ sdkck (--version)
-sdkck/0.37.4 linux-x64 node-v22.23.3
+sdkck/0.37.5 linux-x64 node-v24.22.2
 $ sdkck --help [COMMAND]
 USAGE
   $ sdkck COMMAND
@@ -317,7 +323,7 @@ EXAMPLES
   $ sdkck api auth add petstore --type none
 ```
 
-_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.1/src/commands/api/auth/add.ts)_
+_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.2/src/commands/api/auth/add.ts)_
 
 ## `sdkck api auth delete API`
 
@@ -342,7 +348,7 @@ EXAMPLES
   $ sdkck api auth delete petstore -p prod
 ```
 
-_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.1/src/commands/api/auth/delete.ts)_
+_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.2/src/commands/api/auth/delete.ts)_
 
 ## `sdkck api auth list API`
 
@@ -362,7 +368,7 @@ EXAMPLES
   $ sdkck api auth list petstore
 ```
 
-_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.1/src/commands/api/auth/list.ts)_
+_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.2/src/commands/api/auth/list.ts)_
 
 ## `sdkck api auth profile API`
 
@@ -387,7 +393,7 @@ EXAMPLES
   $ sdkck api auth profile petstore --default prod
 ```
 
-_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.1/src/commands/api/auth/profile.ts)_
+_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.2/src/commands/api/auth/profile.ts)_
 
 ## `sdkck api auth update API`
 
@@ -424,7 +430,7 @@ EXAMPLES
   $ sdkck api auth update petstore --type bearer --token sk-... --base-url https://api.prod.example.com -p prod
 ```
 
-_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.1/src/commands/api/auth/update.ts)_
+_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.2/src/commands/api/auth/update.ts)_
 
 ## `sdkck api call NAME OPERATIONID`
 
@@ -462,7 +468,7 @@ EXAMPLES
   $ sdkck api call petstore listPets --query limit=10 --header X-Trace=abc
 ```
 
-_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.1/src/commands/api/call.ts)_
+_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.2/src/commands/api/call.ts)_
 
 ## `sdkck api config NAME`
 
@@ -494,7 +500,7 @@ EXAMPLES
   $ sdkck api config petstore --title "My Petstore" --description "A pet store API"
 ```
 
-_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.1/src/commands/api/config.ts)_
+_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.2/src/commands/api/config.ts)_
 
 ## `sdkck api import SOURCE`
 
@@ -545,7 +551,7 @@ EXAMPLES
   $ sdkck api import ./api.yaml --auth-type basic --username user --password pass
 ```
 
-_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.1/src/commands/api/import.ts)_
+_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.2/src/commands/api/import.ts)_
 
 ## `sdkck api list [NAME]`
 
@@ -567,7 +573,7 @@ EXAMPLES
   $ sdkck api list petstore
 ```
 
-_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.1/src/commands/api/list.ts)_
+_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.2/src/commands/api/list.ts)_
 
 ## `sdkck api remove NAME`
 
@@ -587,7 +593,7 @@ EXAMPLES
   $ sdkck api remove petstore
 ```
 
-_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.1/src/commands/api/remove.ts)_
+_See code: [@hesed/api2cli](https://github.com/hesedcasa/api2cli/blob/v0.5.2/src/commands/api/remove.ts)_
 
 ## `sdkck commands`
 
@@ -616,7 +622,7 @@ DESCRIPTION
   List all sdkck commands.
 ```
 
-_See code: [@oclif/plugin-commands](https://github.com/oclif/plugin-commands/blob/5.0.4/src/commands/commands.ts)_
+_See code: [@oclif/plugin-commands](https://github.com/oclif/plugin-commands/blob/5.0.9/src/commands/commands.ts)_
 
 ## `sdkck help [COMMAND]`
 
@@ -636,7 +642,7 @@ DESCRIPTION
   Display help for sdkck.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/7.0.4/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/7.0.10/src/commands/help.ts)_
 
 ## `sdkck permission allow PATTERN`
 
@@ -849,7 +855,7 @@ EXAMPLES
   $ sdkck plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/5.5.2/src/commands/plugins/index.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/7.0.17/src/commands/plugins/index.ts)_
 
 ## `sdkck plugins add PLUGIN`
 
@@ -923,7 +929,7 @@ EXAMPLES
   $ sdkck plugins inspect myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/5.5.2/src/commands/plugins/inspect.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/7.0.17/src/commands/plugins/inspect.ts)_
 
 ## `sdkck plugins install PLUGIN`
 
@@ -972,7 +978,7 @@ EXAMPLES
     $ sdkck plugins install someuser/someplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/5.5.2/src/commands/plugins/install.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/7.0.17/src/commands/plugins/install.ts)_
 
 ## `sdkck plugins link PATH`
 
@@ -1003,7 +1009,7 @@ EXAMPLES
   $ sdkck plugins link myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/5.5.2/src/commands/plugins/link.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/7.0.17/src/commands/plugins/link.ts)_
 
 ## `sdkck plugins remove [PLUGIN]`
 
@@ -1044,7 +1050,7 @@ FLAGS
   --reinstall  Reinstall all plugins after uninstalling.
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/5.5.2/src/commands/plugins/reset.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/7.0.17/src/commands/plugins/reset.ts)_
 
 ## `sdkck plugins uninstall [PLUGIN]`
 
@@ -1072,7 +1078,7 @@ EXAMPLES
   $ sdkck plugins uninstall myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/5.5.2/src/commands/plugins/uninstall.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/7.0.17/src/commands/plugins/uninstall.ts)_
 
 ## `sdkck plugins unlink [PLUGIN]`
 
@@ -1116,7 +1122,7 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/5.5.2/src/commands/plugins/update.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/7.0.17/src/commands/plugins/update.ts)_
 
 ## `sdkck search QUERY`
 
@@ -1214,5 +1220,5 @@ FLAG DESCRIPTIONS
     Additionally shows the architecture, node version, operating system, and versions of plugins that the CLI is using.
 ```
 
-_See code: [@oclif/plugin-version](https://github.com/oclif/plugin-version/blob/2.2.49/src/commands/version.ts)_
+_See code: [@oclif/plugin-version](https://github.com/oclif/plugin-version/blob/3.0.10/src/commands/version.ts)_
 <!-- commandsstop -->

@@ -1,0 +1,142 @@
+# Moneyhelper
+
+Self-hosted finance software that keeps the books for you. Write one sentence — it books the entry, reconciles the bank, closes the month, and answers with figures that come from code rather than from a language model.
+
+[English](README.md) · [简体中文](README.zh.md) · [Docs](docs/index.md) · [CLI](docs/cli.md) · [Deploy](docs/DEPLOY.en.md)
+
+[![CI](https://github.com/badhope/moneyhelper/actions/workflows/ci.yml/badge.svg)](https://github.com/badhope/moneyhelper/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+<p align="center">
+  <img src="docs/screenshots-v4.16/desktop-01-overview.jpg" width="100%" alt="Overview: net worth, concentration risk, prioritized actions" />
+</p>
+<p align="center">
+  <img src="docs/screenshots-v4.16/desktop-02-procurement.jpg" width="49%" alt="Procurement to payables to payment" />
+  <img src="docs/screenshots-v4.16/desktop-04-gl.jpg" width="49%" alt="Double-entry ledger: journals, periods, trial balance" />
+</p>
+
+---
+
+## The one idea
+
+Almost every "AI finance" product asks the model to produce the numbers. That is the part where finance cannot afford to be creative.
+
+Here the split is the other way round: a deterministic calculation engine fills in every figure, and the model is only allowed to phrase the answer. It has no channel for inventing a number — no arithmetic in prompts, no estimates dressed up as results. When a sample is too small, the API returns `null` with a reason instead of a figure that merely looks plausible.
+
+```
+question → intent routing → tool call → calculations (pure functions)
+                                              ↓
+                              numbers filled in → model writes prose
+```
+
+Every figure carries a provenance record: which tool, which arguments, which code path produced it.
+
+---
+
+## What it does
+
+**Personal.** One sentence becomes several entries — `lunch 45, taxi 28` is two transactions, not one. WeChat Pay, Alipay, bank CSV, PDF statements, invoice QR codes and OCR import natively. Positions, concentration risk, rebalancing, backtests and monthly reports sit in the same ledger.
+
+**Enterprise.** Multiple tenants, departments and memberships. A real double-entry general ledger: chart of accounts, periods, journals, draft → post → reverse, trial balance, period lock. Expense claims with applicant ≠ approver. Procurement that walks vendor → purchase order → payable → payment, each step creating the correct voucher. Bank reconciliation by account, amount and direction, with statement-versus-book balance and a sign-off gate.
+
+Both sides share one engine, so a family ledger and a company ledger obey the same accounting rules — one installation can hold your household and your business without mixing them.
+
+**Automation that runs unattended.** Month-end close posts the drafts and locks the period on a schedule. Recurring imports, anomaly scans and the morning digest do not wait for a click. Long-running work — a report, a paper, a small web app — runs as a staged task with resumable artifacts.
+
+**Everything is addressable by your own agent.** The same capabilities are exposed through MCP, so Claude, Codex or any MCP client can drive the books with your permission.
+
+---
+
+## Quick start
+
+```bash
+# Docker
+docker compose up -d            # → http://localhost:8787
+
+# From source (Python 3.10+, Node 20.19+)
+scripts/dev.sh --prod           # venv + deps + frontend build, serves on :8788
+
+# CLI
+pip install -e .
+moneyhelper add "lunch 45, taxi 28"
+```
+
+Prebuilt installers and single-file binaries are attached to [Releases](https://github.com/badhope/moneyhelper/releases). Data lives in a local SQLite file: no account, no telemetry, no cloud round-trip.
+
+---
+
+## What it deliberately does not do
+
+- **No live trading.** Pre-trade checks produce a confirmation token; live orders generate a handoff sheet. The default broker is a dry-run stub.
+- **No tax advice.** It applies published formulas and labels the output an estimate.
+- **No forecasts sold as facts.** Backtests state their assumptions and the conditions under which they break.
+- **No silent failure.** Optional capabilities (OCR, PDF parsing, broker SDKs) degrade with an install hint rather than pretending to work.
+
+---
+
+## Why it is safe to run unattended
+
+It is local-first, and built so the program cannot quietly rewrite itself:
+
+- Changing permission modes, agent roles, system prompts, model endpoints, MCP servers or backup restore requires the instance administrator.
+- A path guard refuses to point the data directory at source code, `.git` or dependency manifests.
+- `stdio` MCP servers are disabled unless explicitly enabled; working directories inside the source tree are rejected.
+- Backup restore brings back preferences only — never permission modes, prompts, endpoints or API keys.
+- The hooks that audit write operations cannot be disabled or deleted.
+
+---
+
+## Verify it yourself
+
+```bash
+bash scripts/verify-all.sh                          # static guards + backend + frontend + build
+bash scripts/verify-all.sh --with-e2e                # + Playwright: every page, every settings section
+bash scripts/verify-all.sh --with-e2e --with-live    # + real-model acceptance (needs LLM_API_KEY)
+```
+
+A green unit test proves a function works, not that a user can reach it. So there are three separate gates: every HTTP endpoint is probed for server errors and checked for readable failure text, the MCP surface is exercised through a real protocol client, and seeded hostile data (very long names, infinity, epoch dates) is rendered to catch layout breaks.
+
+---
+
+## Architecture
+
+```mermaid
+flowchart LR
+  UI[React + Vite] --> API[FastAPI]
+  API --> CALC[calculations<br/>pure functions]
+  API --> DB[(SQLite)]
+  API --> AGENT[LangGraph supervisor]
+  AGENT --> TOOLS[tool registry]
+  TOOLS --> CALC
+  AGENT --> LLM[LiteLLM<br/>OpenAI / Anthropic / DeepSeek / Qwen]
+  API --> MCP[MCP server]
+  MCP --> CALC
+```
+
+```
+backend/app/
+  calculations/    deterministic engine — no I/O, testable in isolation
+  routes/          HTTP layer: parameter cleaning and assembly only
+  db/              domain-split SQLite access, migrations, undo snapshots
+  import_parsers/  WeChat / Alipay / generic CSV / PDF / invoice decoders
+  agents/          supervisor + bookkeeping + portfolio + research
+moneyhelper/       stable facade packages (core / server / cli / mcp)
+frontend/src/      React UI, lazy-loaded per section
+```
+
+Detail: [architecture.md](docs/architecture.md) · [module-map.md](docs/module-map.md) · [MCP guide](docs/mcp-guide.md)
+
+---
+
+## Documentation
+
+| Start here | |
+|---|---|
+| [docs/index.md](docs/index.md) | Documentation map |
+| [DEVELOPMENT.en.md](docs/DEVELOPMENT.en.md) | Local setup and conventions |
+| [DEPLOY.en.md](docs/DEPLOY.en.md) | Deployment and configuration |
+| [cli.md](docs/cli.md) | Command line |
+| [mcp-guide.md](docs/mcp-guide.md) | Driving the books from an MCP client |
+| [ARCHITECTURE-detail.md](docs/ARCHITECTURE-detail.md) | Why the layers are split this way |
+
+MIT License · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Changelog](CHANGELOG.md)

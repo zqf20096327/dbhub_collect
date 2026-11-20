@@ -2,6 +2,8 @@
 
 **English** | [日本語](README.ja.md)
 
+Documentation for **0.2.0**. See the [migration and release notes](docs/releases/v0.2.0.md).
+
 A SQLite subset written in MoonBit for browsers and Node.js. Run SQL in memory, or execute predefined statements with IndexedDB persistence for offline use. Add the separate `@mizchi/litestream` package for synchronization.
 
 ## Features
@@ -25,13 +27,54 @@ pnpm add @mizchi/sqlike
 pnpm add @mizchi/litestream
 ```
 
-Archives are also available from [GitHub Releases](https://github.com/mizchi/sqlike/releases/tag/v0.1.2).
+Archives are also available from [GitHub Releases](https://github.com/mizchi/sqlike/releases).
+
+In 0.2.0, the default entry is a baseline with CRUD, JOINs, indexes, FK and STRICT. Use `@mizchi/sqlike/full` for all implemented SQL features, including JSON, CTEs, triggers and window functions. [`@mizchi/sqlike/aot`](docs/native-aot.md) runs prepared named statements without the SQL parser on JS / Wasm GC; `/aot/native` offers a JS-only values fast path. [Build targets](docs/build-targets.md) cover MoonBit source output, custom builds and dependency checks. Choose one prebuilt engine per app to avoid duplicated runtimes.
+
+The baseline also supports integer/string `format` and `printf` conversions and unambiguous single-MIN/MAX representatives. Ambiguous aggregate outputs, empty format strings with different SQLite-version behavior, and unsupported conversions are rejected.
+
+### Upgrade from 0.1.2
+
+If your application uses JSON, CTEs, triggers or windows through the default import, move it to `/full`:
+
+```diff
+- import { openDatabase } from '@mizchi/sqlike';
++ import { openDatabase } from '@mizchi/sqlike/full';
+```
+
+MoonBit users make the equivalent change to `mizchi/sqlike/full`. Each MoonBit entry has its own connection/statement types. Existing valid catalogs and saved data retain their formats; schema changes still require an application-managed migration. [Migration details](docs/releases/v0.2.0.md#upgrade-from-012).
+
+The optional [incremental page exporter](docs/incremental-pager.md) updates SQLite pages after rowid-preserving writes and can atomically save an LTX outbox in IndexedDB. Select it explicitly with `sqlitePages` and `@mizchi/sqlike/pager`; structural changes use the full exporter. The repository’s durable AOT adapter connects it to `checkpoint()`, logical recovery, upload retries and ACK-driven outbox cleanup. Providers supporting differential checkpoints reuse unchanged row chunks during logical compaction and avoid building a whole-database JSON image.
+
+When its pending LTX outbox reaches the limit (128 files by default), the durable adapter defers checkpoint generation while continuing to save SQL locally. Reconnecting drains verified ACKs before checkpointing and sending the latest changes. [Checkpoint deferral and sync](docs/incremental-pager.md#existing-durable-checkpoint-adapter).
 
 ## Bundle size
 
+0.2.0 source engines. These are engine-only sizes; host wrappers, catalog data and Litestream are separate.
+
+| Engine | Minified JS | Brotli |
+| --- | ---: | ---: |
+| SELECT-only AOT, no tables | 262.90 KiB | 53.51 KiB |
+| Vite SELECT-only AOT, default plugin options | 281.95 KiB | 56.86 KiB |
+| Execute-only CRUD AOT | 333.26 KiB | 66.16 KiB |
+| Minimal CRUD AOT, standard APIs | 358.84 KiB | 69.74 KiB |
+| Vite CRUD AOT, default plugin options | 364.08 KiB | 71.32 KiB |
+| CRUD AOT, primary-key index and optimizers enabled | 389.52 KiB | 74.95 KiB |
+| Baseline | 565.36 KiB | 106.16 KiB |
+| AOT, all SQL execution features | 665.25 KiB | 122.52 KiB |
+| Full, including the SQL parser | 769.08 KiB | 141.28 KiB |
+
+Measured November 20, 2026 (JST), with OXC minification and Brotli quality 11. 1 KiB = 1,024 bytes. The SELECT-only catalog runs one bound SELECT without tables. The CRUD catalog contains INSERT, primary-key SELECT, UPDATE and DELETE on one table. The minimal SELECT-only and minimal CRUD profiles disable the optional primary-key index and optimizers; primary-key constraints still apply. Execute-only exports four functions and retains statement atomicity. The Vite rows keep the plugin's default index and optimizers with the execute-only API. Standard CRUD builds also retain snapshot, restore, clone, delta and prepared-handle APIs. The all-features AOT row omits SQLite/LTX output.
+
+Select `apiCapabilities: []` and inject the generated runtime with `openAotExecutor` from `@mizchi/sqlike/aot/core` for execute-only use. [Public API selection](docs/build-targets.md#aotの公開apiを選ぶ) covers optional capabilities. The execute-only CRUD JS engine plus its host is **335.00 KiB / Brotli 66.85 KiB**, excluding catalog data.
+
+[Minimum JS comparison](measurements/aot-minimum-current.json) · [CRUD measurements](measurements/sqlike-crud-size-current.json) · [Entry measurements](measurements/sqlike-entrypoints-current.json) · [Wasm sizes and build options](docs/internal/sqlike-build-contract.md#エンジン単体のサイズ). Reproduce with `just explore-aot-size`, `just measure-crud-size` and `just measure-entrypoints`.
+
+### Browser bundle comparison
+
 Sizes include the browser entry's JS loader, split chunks, emitted workers, and Wasm. JS is minified with Oxc; Wasm uses release output. Brotli quality 11 is applied to each file before summing. 1 KiB = 1,024 bytes.
 
-SQLike measurements use the source checkout including unreleased changes after 0.1.2. [Staged compatibility work](docs/internal/staged-sqlite-compatibility.md) records the additions and their size cost.
+SQLike measurements use the 0.2.0 source. Both dynamic SQL rows use the full engine; JSON, CTE and window execution are verified on JS and Wasm. [Staged compatibility work](docs/internal/staged-sqlite-compatibility.md) records the additions and their size cost.
 
 [![Bundle sizes for ten builds. Blue shows Brotli size; gray shows minified, uncompressed size. Smaller is better.](docs/images/bundle-size.png)](docs/images/bundle-size.png)
 
@@ -45,14 +88,14 @@ The horizontal axis is logarithmic: each tick doubles the size. Labels show KiB.
 <!-- bundle-size:start -->
 | Build | minified, uncompressed | Brotli |
 | --- | ---: | ---: |
-| SQLike 0.1.2 (source) / SQL / JS | 635.49 KiB | 119.08 KiB |
-| SQLike 0.1.2 (source) / SQL / Wasm GC | 560.73 KiB | 176.11 KiB |
-| SQLike 0.1.2 (source) / Predefined, all execution features / JS | 520.41 KiB | 102.88 KiB |
-| SQLike 0.1.2 (source) / Predefined, all execution features / Wasm GC | 461.52 KiB | 147.91 KiB |
-| SQLike 0.1.2 (source) / Predefined, no JSON/date/window / JS | 480.59 KiB | 95.08 KiB |
-| SQLike 0.1.2 (source) / Predefined, no JSON/date/window / Wasm GC | 432.06 KiB | 137.18 KiB |
-| SQLike 0.1.2 (source) / Predefined, primary-key index only / JS | 459.16 KiB | 90.74 KiB |
-| SQLike 0.1.2 (source) / Predefined, primary-key index only / Wasm GC | 413.66 KiB | 131.69 KiB |
+| SQLike 0.2.0 (source) / Full SQL / JS | 773.74 KiB | 142.52 KiB |
+| SQLike 0.2.0 (source) / Full SQL / Wasm GC | 688.12 KiB | 211.73 KiB |
+| SQLike 0.2.0 (source) / Predefined, all execution features / JS | 669.19 KiB | 127.06 KiB |
+| SQLike 0.2.0 (source) / Predefined, all execution features / Wasm GC | 598.61 KiB | 185.83 KiB |
+| SQLike 0.2.0 (source) / Predefined, no JSON/date/window / JS | 636.09 KiB | 120.55 KiB |
+| SQLike 0.2.0 (source) / Predefined, no JSON/date/window / Wasm GC | 571.48 KiB | 177.10 KiB |
+| SQLike 0.2.0 (source) / Predefined, primary-key index only / JS | 526.39 KiB | 101.86 KiB |
+| SQLike 0.2.0 (source) / Predefined, primary-key index only / Wasm GC | 477.92 KiB | 149.66 KiB |
 | sqlite-wasm 3.54.1-build1 | 1313.74 KiB | 462.33 KiB |
 | Turso 0.8.3 | 11709.66 KiB | 2675.96 KiB |
 <!-- bundle-size:end -->
@@ -71,6 +114,8 @@ The comparison uses [@sqlite.org/sqlite-wasm](https://www.npmjs.com/package/@sql
 
 ### Catalog-selected runtimes
 
+These catalog engines were measured from the current 0.2.0 source. Their engine-only totals are separate from the browser distribution above.
+
 When the schema and queries are fixed, AOT and predefined builds retain only the implementations required by the catalog. AOT reads JSON program definitions; `defined` reads binary definitions. Each comparison uses the same semantic features, exports, and primary-key index setting.
 
 [![Defined JavaScript runtime sizes for six catalogs. Gray is the manual feature profile; blue is catalog-selected. The panels show minified and Brotli sizes.](docs/images/catalog-runtime-size.png)](docs/images/catalog-runtime-size.png)
@@ -85,18 +130,18 @@ These are **engine files only**, excluding the host, IndexedDB wrappers, schema/
 <!-- catalog-runtime-size:start -->
 | Catalog / mode | Minified JS | JS Brotli | Release Wasm | Wasm Brotli |
 | --- | ---: | ---: | ---: | ---: |
-| Read only / AOT | 408.02 KiB | 76.55 KiB | 367.28 KiB | 114.05 KiB |
-| Read only / defined | 378.63 KiB | 73.81 KiB | 338.25 KiB | 108.20 KiB |
-| GLOB + char / AOT | 410.79 KiB | 76.92 KiB | 370.24 KiB | 114.70 KiB |
-| GLOB + char / defined | 381.40 KiB | 74.28 KiB | 341.26 KiB | 108.88 KiB |
-| JSON construction / AOT | 414.31 KiB | 77.40 KiB | 371.79 KiB | 115.74 KiB |
-| JSON construction / defined | 384.87 KiB | 74.79 KiB | 342.66 KiB | 109.49 KiB |
-| Nested JSON / AOT | 419.04 KiB | 78.08 KiB | 376.31 KiB | 116.84 KiB |
-| Nested JSON / defined | 389.53 KiB | 75.57 KiB | 347.37 KiB | 110.91 KiB |
-| Recursive CTE + JSON aggregate / AOT | 427.48 KiB | 79.64 KiB | 385.93 KiB | 119.20 KiB |
-| Recursive CTE + JSON aggregate / defined | 397.97 KiB | 77.02 KiB | 357.37 KiB | 113.26 KiB |
-| Notes CRUD / AOT | 438.35 KiB | 82.17 KiB | 392.26 KiB | 122.33 KiB |
-| Notes CRUD / defined | 408.70 KiB | 79.48 KiB | 363.41 KiB | 116.45 KiB |
+| Read only / AOT | 361.14 KiB | 69.88 KiB | 327.07 KiB | 104.12 KiB |
+| Read only / defined | 355.31 KiB | 69.42 KiB | 318.56 KiB | 102.40 KiB |
+| GLOB + char / AOT | 338.92 KiB | 66.73 KiB | 308.25 KiB | 98.62 KiB |
+| GLOB + char / defined | 332.74 KiB | 66.38 KiB | 299.75 KiB | 96.88 KiB |
+| JSON construction / AOT | 343.13 KiB | 67.51 KiB | 311.05 KiB | 99.35 KiB |
+| JSON construction / defined | 336.95 KiB | 66.87 KiB | 302.31 KiB | 97.80 KiB |
+| Nested JSON / AOT | 347.87 KiB | 68.18 KiB | 314.86 KiB | 100.55 KiB |
+| Nested JSON / defined | 341.71 KiB | 67.67 KiB | 306.38 KiB | 98.70 KiB |
+| Recursive CTE + JSON aggregate / AOT | 397.89 KiB | 76.11 KiB | 360.78 KiB | 113.39 KiB |
+| Recursive CTE + JSON aggregate / defined | 391.92 KiB | 75.83 KiB | 352.15 KiB | 111.75 KiB |
+| Notes CRUD / AOT | 422.78 KiB | 80.75 KiB | 381.22 KiB | 120.25 KiB |
+| Notes CRUD / defined | 413.75 KiB | 80.46 KiB | 369.08 KiB | 118.21 KiB |
 <!-- catalog-runtime-size:end -->
 
 </details>
@@ -106,6 +151,8 @@ The catalogs cover primary-key reads, GLOB/char, JSON construction, nested JSON,
 [Catalog measurements](measurements/catalog-profiles-current.json) · [Build instructions and limitations](docs/catalog-build.md). Refresh measurements with `just catalog-profiles`, then update these figures and tables with `just readme-charts`.
 
 ## SQLite performance comparison
+
+These general-workload charts use the 0.2.0 source. Earlier focused measurements cover [IN SELECT](docs/internal/in-select-performance.md) and [UPDATE FROM](docs/internal/update-from.md), including 100,000-row inputs.
 
 Results are **μs per operation** on a 5,000-row table, using the median of seven samples after warmup. Ordinary SQL paths parse or prepare on each call; the prepared column reuses SQLite statements.
 
@@ -121,18 +168,18 @@ Each panel starts at zero and uses its own scale. Bars show medians; whiskers sh
 <!-- sqlite-benchmark:start -->
 | Workload | SQLike JS, SQL | SQLike Wasm GC, SQL | SQLite WASM, SQL | SQLite WASM, prepared |
 | --- | ---: | ---: | ---: | ---: |
-| Primary-key lookup | 25.97 | 6.06 | 3.74 | 1.43 |
-| Missing primary key | 25.85 | 5.43 | 2.58 | 0.45 |
-| Indexed range · 10 rows | 44.02 | 11.85 | 14.49 | 10.76 |
-| ORDER BY id · LIMIT 10 | 38.20 | 9.00 | 12.50 | 9.57 |
-| SUM + COUNT · 5,000 rows | 91.55 | 49.80 | 106.08 | 103.09 |
-| Fetch all 5,000 rows | 1,696.55 | 1,867.86 | 4,516.67 | 4,466.67 |
-| Indexed UPDATE + range read | 63.88 | 17.23 | 19.17 | 12.18 |
+| Primary-key lookup | 36.84 | 11.34 | 4.03 | 1.61 |
+| Missing primary key | 33.42 | 10.22 | 2.73 | 0.51 |
+| Indexed range · 10 rows | 50.83 | 13.88 | 15.61 | 11.16 |
+| ORDER BY id · LIMIT 10 | 45.53 | 10.65 | 13.14 | 10.05 |
+| SUM + COUNT · 5,000 rows | 98.51 | 57.31 | 116.28 | 112.42 |
+| Fetch all 5,000 rows | 1,814.29 | 1,988.00 | 4,840.00 | 4,763.64 |
+| Indexed UPDATE + range read | 71.89 | 19.67 | 20.15 | 12.96 |
 <!-- sqlite-benchmark:end -->
 
 </details>
 
-Measured on November 17, 2026, with an Apple M5, macOS arm64, and Chromium 158.0.8127.18. SQLike source including unreleased changes after 0.1.2, built with MoonBit release output (JS before minification), and SQLite WASM 3.54.1 run in memory on the same page.
+Measured on November 20, 2026 (JST), with an Apple M5, macOS arm64, and Chromium 158.0.8127.18. SQLike 0.2.0 source, built with MoonBit release output (JS before minification), and SQLite WASM 3.54.1 run in memory on the same page.
 
 Primary-key and secondary indexes are warm. The update workload alternates indexed values and includes the following range read. Timings cover engine API calls, including typed result conversion and decoding. They exclude host wrappers, startup, Wasm compilation, IndexedDB, and networking. Results and update effects are checked against expectations from native SQLite before and after timing.
 
@@ -140,10 +187,12 @@ Parsing and the host boundary add overhead to ordinary SQL calls; small lookups 
 
 [Raw data, queries, and all samples](measurements/sqlite-speed-current.json). Reproduce with `just sqlite-bench --profiles=false`.
 
-[100,000-row results](docs/internal/sqlite-large-benchmark.md) compare eight execution paths with a shorter sampling budget, including SQLike's optional statement cache.
+[Historical 100,000-row results](docs/internal/sqlite-large-benchmark.md), recorded on November 17 before the entry split, compare eight execution paths with a shorter sampling budget, including SQLike's optional statement cache.
+
+[Focused IN and cursor benchmark snapshots](docs/internal/in-list-performance.md) compare optimizer settings at 5,000 and 100,000 rows, with native SQLite results and the minified/Brotli cost of each build.
 
 <details>
-<summary>100,000-row chart · 8 execution paths</summary>
+<summary>Historical 100,000-row chart · 8 execution paths</summary>
 
 [![100,000-row SQLite comparison across ten workloads and eight execution paths. Shorter bars are faster; whiskers show the observed range of three samples.](docs/images/sqlite-large-benchmark.png)](docs/images/sqlite-large-benchmark.png)
 
@@ -180,7 +229,24 @@ db.close();
 
 [SQL coverage and value handling (Japanese)](docs/sql.md)
 
-The unreleased source also offers an opt-in cache for repeated SQL: `openDatabase(undefined, { statementCache: { capacity: 32 } })`. Each connection bounds retained statements and SQL text, and re-prepares after schema changes. [Usage and measurements](docs/internal/dynamic-sql-prepare.md).
+Connections offer an opt-in cache for repeated SQL: `openDatabase(undefined, { statementCache: { capacity: 32 } })`. Each connection bounds retained statements and SQL text, and re-prepares after schema changes. [Usage and measurements](docs/internal/dynamic-sql-prepare.md).
+
+## Compile SQL files with Vite
+
+Use `sqlikeAot` from `@mizchi/sqlike/vite` to scan SQL files and build a catalog-selected JS engine:
+
+```ts
+// vite.config.ts
+import { sqlikeAot } from '@mizchi/sqlike/vite';
+export default {
+  plugins: [sqlikeAot({
+    include: 'src/client/**/*.sql',
+    schemaFiles: 'src/schema.sql',
+  })],
+};
+```
+
+Import `openDatabase` and `queries` from `@mizchi/sqlike/aot` in the browser. SQL changes, additions and deletions rebuild the catalog; function and feature requirements determine the generated runtime. The default executor exposes `execute` / `close`; `api: 'connection'` adds prepared handles, images and transactions. Mixing dynamic SQL or another prebuilt engine into this AOT build is an error. Build-time MoonBit sources and the compiler stay outside browser entries. [SQL syntax, generated types, size reports and caching](docs/vite-aot.md).
 
 ## Persist to IndexedDB
 
@@ -245,10 +311,10 @@ Applications can decide whether to apply, defer, reject, or replace a conflictin
 The two Mooncakes modules can be used independently.
 
 ```sh
-moon add mizchi/sqlike@0.1.2
-moon add mizchi/litestream@0.1.2
+moon add mizchi/sqlike@0.2.0
+moon add mizchi/litestream@0.2.0
 ```
 
-API documentation (Japanese): [SQLike](packages/sqlike/README.md) / [Litestream](packages/litestream/README.md)
+API documentation: [SQLike](packages/sqlike/README.md) / [Litestream](packages/litestream/README.md)
 
-MIT License. [Releases](https://github.com/mizchi/sqlike/releases) / [User guides (Japanese)](docs/README.md) / [Developer documentation (Japanese)](docs/internal/README.md)
+MIT License. [Releases](https://github.com/mizchi/sqlike/releases) / [User guides](docs/README.md) / [Developer documentation (Japanese)](docs/internal/README.md)

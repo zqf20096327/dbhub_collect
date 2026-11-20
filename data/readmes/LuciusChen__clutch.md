@@ -47,12 +47,12 @@ For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with [Installation Deta
 
 - **Keep query context visible:** execute a region or statement without leaving the SQL buffer; results refresh in a split grid, the statement Clutch picks at point flashes, a statement that runs without blocking Emacs keeps a background until it finishes, and the last executed statement stays marked in the fringe on graphical displays or the left margin in terminals.
 - **Inspect wide or structured results:** navigate a single-page table, scroll horizontally, open record and full-value views, and preview truncated JSON, XML, text, or BLOB values after a brief pause without dragging the preview across cells during navigation. Press `x` in a BLOB viewer to switch between text and hexadecimal when bytes are available.
-- **Edit supported SQL results with guardrails:** stage inserts, updates, and deletes locally, inspect the execution preview, and submit only after validation and confirmation.
+- **Edit supported SQL results with guardrails:** stage inserts, updates, and deletes locally, inspect Preview SQL in the result menu, and submit only after validation and confirmation.
 - **Navigate with database context:** complete scoped tables and columns, inspect Eldoc and object definitions, follow foreign keys, and reuse cache-first metadata without blocking point motion. Native PostgreSQL and MySQL refresh schema, columns, comments, keys and objects through their asynchronous query APIs when available.
 - **Compare table definitions:** use the table's object actions to compare DDL with a saved connection in Ediff. PostgreSQL comparison covers column definitions. [Object workflow](docs/interactive-client.org#compare-table-definitions)
 - **See a table's relations:** navigate a clickable overview, inspect composite foreign keys, and save your own links in a Git-friendly file. [ER guide](docs/interactive-client.org#er-view-clutch-er-mode-key-bindings)
 - **Read a plan:** show a statement's PostgreSQL, MySQL or SQLite plan as a tree, with each step's own share of the cost, or of the measured time under `EXPLAIN ANALYZE`.
-- **Refine and export results:** apply server-side `WHERE` and `ORDER BY`, use client-side substring filtering, copy selections as TSV, CSV, or Org tables, and export complete pageable results as CSV or TSV with consistent Transient controls for optional headers and clipboard/file destinations.
+- **Refine and export results:** apply server-side `WHERE` and `ORDER BY`, use client-side substring filtering, copy selections as TSV, CSV, or Org tables, and export complete pageable results as CSV or TSV with consistent Transient controls for optional headers and clipboard/file destinations. JDBC fetches export rows in the background.
 - **See connection state where it matters:** keep separate query consoles, reconnect from preserved parameters, and view schema-refresh, transaction, timeout, and diagnostic state in the relevant buffers.
 - **Choose the backend path you need:** use native or pure-Elisp integrations when available, or the Java 17+ [clutch-jdbc-agent](https://github.com/LuciusChen/clutch-jdbc-agent) for JDBC databases.
 
@@ -93,7 +93,7 @@ If a configured native backend package is missing, Clutch reports it when connec
 
 `nerd-icons` is optional: without it, Clutch uses text symbols and backend names instead of icons. Its availability is checked once per Emacs session, including when it is missing; restart Emacs after installing it during a running session.
 
-JDBC support ships with Clutch and requires Java 17+, `clutch-jdbc-agent.jar`, and a database driver jar where applicable. Clutch pins agent 0.2.30 for bounded BLOB previews and ordered foreign-key metadata for ER views and composite-key navigation. On first connection, Clutch can prompt to download the agent and supported drivers. It verifies the configured agent jar against its SHA-256 before startup. See the [JDBC backend guide](docs/jdbc-backend.org) for setup, supported drivers, connection examples, and transaction behavior.
+JDBC support ships with Clutch and requires Java 17+, `clutch-jdbc-agent.jar`, and a database driver jar where applicable. Clutch pins agent 0.2.31, which supports cancelling requests before execution, bounded BLOB previews, and ordered foreign-key metadata for ER views and composite-key navigation. On first connection, Clutch can prompt to download the agent and supported drivers. It verifies the configured agent jar against its SHA-256 before startup. See the [JDBC backend guide](docs/jdbc-backend.org) for setup, supported drivers, connection examples, and transaction behavior.
 
 For source checkouts, add Clutch and each native protocol checkout you use to `load-path`:
 

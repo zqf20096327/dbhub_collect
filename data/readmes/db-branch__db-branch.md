@@ -36,7 +36,7 @@ Test a migration, let an AI agent loose, or give every pull request its own copy
 
 ## Use cases
 
-- **AI agent sandboxes.** The built-in MCP server lets an LLM agent create a branch, run a risky query or migration on it, and delete the branch, so production data is never touched.
+- **AI agent sandboxes.** The built-in MCP server lets an LLM agent create a branch, run a risky query or migration on it, and delete the branch, so production data is never touched. For sensitive data, mask at the base snapshot stage rather than after branching (see [Design notes and trade-offs](#design-notes-and-trade-offs)).
 - **A database per pull request.** Each CI run or PR gets its own copy of a large database, ready in seconds, and removed by `--ttl` when it is no longer needed.
 - **Version-upgrade checks.** Run a major-version upgrade (for example MySQL 8.0 to 8.4) on one branch first, with `branch upgrade --check-only` to see what it would run into, before touching the base.
 
@@ -92,6 +92,13 @@ db-branch branch upgrade feature-x --runtime mysql@8.4.13                   # mo
 
 A base is a ZFS dataset holding a loaded database. A branch is a ZFS clone of a base snapshot, so creating one copies nothing, and each branch runs its own database server on its own port. Optionally, ProxySQL routes client connections to the right branch by user name (or by a `/*db_branch='name'*/` query comment). Several nodes form a Raft cluster that shares bases, branches, settings and users.
 
+### Design notes and trade-offs
+
+- **Disposable by design (no merge or rebase).** Branches are block-level ZFS copy-on-write clones, not hooks into the database engine's MVCC. Divergent writes across concurrent branches cannot be merged or rebased back into a base or another branch like Git. db-branch is built for disposable sandboxes (AI agents, CI runs, migration tests) that you reset or throw away.
+- **Clean-shutdown vs. live snapshots.** Because PostgreSQL and MySQL (InnoDB) are crash-consistent, an atomic ZFS snapshot of a running instance (with data files and WAL/redo logs on the same volume) does work—and db-branch uses crash-consistent live snapshots for running-branch checkpoints. However, starting a branch from a live snapshot triggers crash recovery (WAL/redo log replay), which added about 10 s of startup latency in our MySQL testing. Base snapshots are therefore taken after a clean shutdown to keep branch creation sub-second / a few seconds.
+- **Mask at the base, not after branching.** Branches isolate writes from production, but an AI agent or user with access to a branch can still *read* everything in it. If you load unmasked production data, sensitive records remain exposed to `SELECT` queries. Mask data when creating the base snapshot (using a masked dump or the `greenmask`, `greenmask-mysql`, or `anon` modules) rather than relying on post-branch masking.
+- **ZFS `recordsize` tuning.** ZFS's default `recordsize` (128K) does not match database page sizes, causing double copy-on-write / `fsync` write amplification and hurting random I/O. Matching `recordsize` to the engine's page size—`16K` for MySQL/InnoDB and `8K` for PostgreSQL—avoids this overhead. (`db-branch` automatically sets `recordsize=16K` on base datasets, matching InnoDB; for PostgreSQL workloads sensitive to random I/O, `8K` is the page-matched setting, trading some `lz4` compression efficiency.)
+
 ## Editions
 
 - **Core (this repository), Apache-2.0:** branches, bases, runtimes, clustering, CLI, API, web console, MCP, monitoring, notifications, anonymous (no sign-in) branches with limits, scheduled base refresh, backup of cluster state.
@@ -103,7 +110,7 @@ There is no hosted or cloud version of db-branch.
 ## Documentation
 
 - [docs/README.md](docs/README.md): index of the design and reference documents (written in Japanese)
-- English user documentation: <https://db-branch.com/docs/>
+- English user documentation: <https://db-branch.com/docs/getting-started/>
 - Website: <https://db-branch.com> (English), <https://db-branch.com/ja/> (Japanese)
 - [api/openapi.yaml](api/openapi.yaml): machine-readable REST API definition
 - [CHANGELOG.md](CHANGELOG.md)

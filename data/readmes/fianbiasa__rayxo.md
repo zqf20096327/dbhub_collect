@@ -25,7 +25,7 @@
   <img src=".github/screenshots/admin-dashboard.png" alt="Dashboard admin RAYXO" width="900">
 </p>
 
-> **Status:** beta, versi terbaru [v0.8.21](https://github.com/fianbiasa/rayxo/releases/latest). Lihat juga [Berikutnya](#berikutnya).
+> **Status:** beta, versi terbaru [v0.8.30](https://github.com/fianbiasa/rayxo/releases/latest). Lihat juga [Berikutnya](#berikutnya).
 
 ## Instalasi
 
@@ -68,7 +68,7 @@ Dengan syarat itu terpenuhi, `setup.sh` otomatis memasang **SSL Let's Encrypt** 
 <details>
 <summary><strong>Pilihan instalasi, email panel, dan lupa password</strong></summary>
 
-`setup.sh` dari sebuah rilis otomatis mengunduh paket rilis yang sama dari GitHub dan memverifikasi checksum-nya. Versi tertentu: `--version 0.8.21`. Versi PHP untuk website (default 7.4 sampai 8.5): `--php-versions "8.2 8.3 8.4"`; versi yang sudah terpasang tidak dihapus. `setup.sh` aman dijalankan ulang kalau berhenti di tengah. Pilihan lengkap: `bash setup.sh --help`.
+`setup.sh` dari sebuah rilis otomatis mengunduh paket rilis yang sama dari GitHub dan memverifikasi checksum-nya. Versi tertentu: `--version 0.8.30`. Versi PHP untuk website (default 7.4 sampai 8.5): `--php-versions "8.2 8.3 8.4"`; versi yang sudah terpasang tidak dihapus. `setup.sh` aman dijalankan ulang kalau berhenti di tengah. Pilihan lengkap: `bash setup.sh --help`.
 
 **Email panel** (verifikasi, reset password) dikirim lewat Postfix di server itu sendiri (port 587 dengan login `rayxo@<hostname>`) dan ditandatangani DKIM oleh OpenDKIM. Di akhir instalasi, `setup.sh` menampilkan rekaman DNS yang perlu dipasang beserta statusnya (✔/✘), dan menyimpannya di `/etc/rayxo/dns-records.txt`:
 
@@ -100,9 +100,9 @@ Password baru ditampilkan sekali, dan semua session lama akun itu dikeluarkan.
 
 ## Yang sudah bisa dipakai
 
-- **Web:** domain, subdomain, alias, pointer, redirect; Nginx → Apache → PHP-FPM per akun dengan PHP 7.4–8.5 per domain dan ionCube Loader opsional; pengaturan per website (halaman error, folder berpassword, proteksi hotlink, tipe MIME, CGI, batas bandwidth dan disk); log dan laporan GoAccess.
+- **Web:** domain, subdomain, alias, pointer, redirect; Nginx → Apache → PHP-FPM per akun dengan PHP 7.4–8.5 per domain dan ionCube Loader opsional; pengaturan per website (halaman error, folder berpassword, proteksi hotlink, tipe MIME, CGI, batas bandwidth dan disk); log dan laporan GoAccess. Aplikasi Node.js: jalankan sebuah domain sebagai app Node.js (Node 22) yang kamu build sendiri lewat SSH — panel menjalankannya sebagai service milik akun dan Nginx mengarahkan domain ke app itu.
 - **SSL:** Let's Encrypt otomatis termasuk wildcard dan `mail.<domain>`, sertifikat sendiri, CSR, dan self-signed.
-- **Database:** MariaDB dengan phpMyAdmin sekali klik, import/export, periksa dan perbaiki tabel, akses dari luar server per IP.
+- **Database:** MariaDB dengan phpMyAdmin sekali klik, import/export, periksa dan perbaiki tabel, akses dari luar server per IP. PostgreSQL juga tersedia: database dan role per akun dengan detail koneksi siap pakai, plus import/export dump.
 - **Email:** Postfix, Dovecot, Rspamd, dan Roundcube; forwarder, catch-all, autoresponder, filter, filter spam, DKIM/SPF/DMARC otomatis, batas kirim, antrean email, dan konfigurasi otomatis aplikasi email.
 - **DNS:** PowerDNS dengan template zone (juga template sendiri per reseller), editor record, dan nameserver sendiri per reseller.
 - **File & akses:** file manager, FTP/FTPS, SFTP, SSH dalam jail dengan SSH key, cron job.
@@ -110,8 +110,8 @@ Password baru ditampilkan sekali, dan semua session lama akun itu dikeluarkan.
 - **Batas & statistik:** kuota disk dan inode, grafik harian bandwidth, disk, CPU, dan RAM, batas CPU/RAM/proses/IO per akun (cgroups, untuk PHP, cron job, dan SSH), alamat IP sendiri per akun (shared atau dedicated).
 - **Backup & pindahan:** backup dan restore mandiri oleh pelanggan, backup terjadwal semua akun, backup manual dan pemulihan akun yang terhapus oleh admin dan reseller, backup panel itu sendiri untuk dipulihkan di server baru, salinan backup ke SFTP, FTP/FTPS, atau S3, transfer akun dari server RAYXO lain, serta impor backup cPanel dan DirectAdmin.
 - **WHMCS:** modul server yang membuat, men-suspend, mengaktifkan lagi, menghapus, dan mengganti paket atau password akun, login ke panel tanpa password dari WHMCS, dan sinkron pemakaian disk dan bandwidth. Unduh di [rayxopanel.com/download](https://rayxopanel.com/download/).
-- **Operasional:** REST API dengan login key, notifikasi email dan Telegram, tiket bantuan dengan lampiran, pesan massal, monitor layanan dengan watchdog, process monitor, editor file konfigurasi, riwayat login, task, dan audit log.
-- **Keamanan akun:** setiap akun hosting adalah user Linux sendiri; login panel dengan 2FA atau passkey; monitor brute-force (fail2ban) yang memblokir percobaan login beruntun ke SSH, FTP, email, dan panel, diatur dari panel (lihat blokir, buka blokir, whitelist IP); firewall (nftables) yang kamu kelola dari panel, mati sampai dinyalakan, dengan masa coba yang otomatis dikembalikan supaya kamu tidak terkunci.
+- **Operasional:** REST API dengan login key, notifikasi email dan Telegram, tiket bantuan dengan lampiran, pesan massal, monitor layanan dengan watchdog, process monitor, editor file konfigurasi, riwayat login, task, dan audit log; update panel satu-klik dari panel (pilihan channel stable/beta, log langsung); deteksi config drift yang membandingkan konfigurasi yang dikelola panel dengan isi di server dan menawarkan tulis ulang.
+- **Keamanan akun:** setiap akun hosting adalah user Linux sendiri; login panel dengan 2FA atau passkey; monitor brute-force (fail2ban) yang memblokir percobaan login beruntun ke SSH, FTP, email, dan panel, diatur dari panel (lihat blokir, buka blokir, whitelist IP); firewall (nftables) yang kamu kelola dari panel, mati sampai dinyalakan, dengan masa coba yang otomatis dikembalikan supaya kamu tidak terkunci; antivirus ClamAV yang kamu nyalakan dari panel untuk memindai lampiran email, file saat diakses, terjadwal, dan sesuai permintaan, mati sampai dinyalakan karena database signature-nya besar di memori; web application firewall ModSecurity dengan OWASP Core Rule Set yang kamu nyalakan dari panel (mode mati / deteksi-saja / aktif, bisa di-override per website, dengan log audit per domain), mati sampai dinyalakan.
 
 <details>
 <summary><strong>Screenshot lainnya</strong></summary>

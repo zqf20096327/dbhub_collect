@@ -1,12 +1,31 @@
 # [WhereToLive.LA](https://wheretolive.la)
 
 ```text
- _       ____                 ______      __    _              __    ___ 
-│ │     ╱ ╱ ╱_  ___  ________╱_  __╱___  ╱ ╱   (_)   _____    ╱ ╱   ╱   │
-│ │ ╱│ ╱ ╱ __ ╲╱ _ ╲╱ ___╱ _ ╲╱ ╱ ╱ __ ╲╱ ╱   ╱ ╱ │ ╱ ╱ _ ╲  ╱ ╱   ╱ ╱│ │
-│ │╱ │╱ ╱ ╱ ╱ ╱  __╱ ╱  ╱  __╱ ╱ ╱ ╱_╱ ╱ ╱___╱ ╱│ │╱ ╱  __╱ ╱ ╱___╱ ___ │
-│__╱│__╱_╱ ╱_╱╲___╱_╱   ╲___╱_╱  ╲____╱_____╱_╱ │___╱╲___(_)_____╱_╱  │_│   
-```                                                                            
+                               |
+                               |
+                               |       .---.
+                            _.-|       [===]
+                          .':::|      /|:::|\   _____
+                         /_____|  ____||:::||  |_____]
+                 _______ |====|# |===/||:::||\ |#||||]
+                |:::::|#||----|# |===|||:::||| |#|||______
+                |:::::|___====|# |===|||:::||| |/  /|::::|#|
+                |:::::/___|--____|===|||:::||| /__/||::::|#|
+        .----.  |:::::|ii|#=|____|\==|||:::|___|==|##::::|#|
+        |====|\ |:::::|ii|#-|: :|____|||:::/___|==|##::::|#|
+        |: :|## |:___:|ii|#=|: :|::::|||:::|===|==|##::::|#_^_ ______
+        |: :|## ||===||ii|#-|: :|::::|||:::|===|==|##::::|/___|----|#
+  ____  |: :|## _|===||ii|#=|: :|::::|||:::|===|==|##::__||iii|----|#  ____
+ |:::|# |: :|__|_|===||ii|#-|:___::::||____|===|==|##:|::||i___----|# |::::
+ |:::|# |: :|o o||===||ii|#=_|___|:::||: :|#===|==|##:|::|_|___|_--|# |::::
+ |:::|# |: :|o o||===||ii|#|o o o|:::||: :|#===|==|##:|::|_i_i_i_|-|# |::::
+===========================================================================
+
+    __      ___                  _____      _    _           _      _
+    \ \    / / |_  ___ _ _ ___  |_   _|__  | |  (_)_ _____  | |    /_\
+     \ \/\/ /| ' \/ -_) '_/ -_)   | |/ _ \ | |__| \ V / -_)_| |__ / _ \
+      \_/\_/ |_||_\___|_| \___|   |_|\___/ |____|_|\_/\___(_)____/_/ \_\
+```
 
 ## Table of contents
 
@@ -35,9 +54,15 @@ This is an interactive map based on /u/WilliamMcCarty's and /u/TannerBeyer's wee
 
 Some additional capabilities are offered, such as a featured MLS photo for the property and a link to the associated MLS listing page (if available).
 
-You can click the toggle buttons next to the title to switch between For Rent and For Sale listings:
+On desktop, use **For Rent** and **For Sale** in the sidebar to switch maps.
 
-![image](https://github.com/user-attachments/assets/0d58d43a-0722-4bd2-9914-786b0f5e0dcf)
+![Desktop sidebar with For Rent and For Sale links](docs/images/map-navigation-desktop.png)
+
+On phones, use **Rent** and **Buy** in the map toolbar.
+
+![Phone map toolbar with Rent and Buy links](docs/images/map-navigation-mobile.png)
+
+[Open the rental map](https://wheretolive.la/) or [open the for-sale map](https://wheretolive.la/buy).
 
 
 **⚠ This website is mobile-friendly but I highly recommend using an actual computer or tablet for the best experience**
@@ -63,28 +88,37 @@ Dash's initialization-based `2025-11-25` transport for legacy clients.
 [I made a post detailing my idea, progress, challenges, etc.](hhttps://automateordie.dev/wheretolivedotla/)
 
 ## How to Build and Run
-1. Clone the repo `git clone https://github.com/perfectly-preserved-pie/larentals.git`
-2. `cd` into the new directory
-3. Run `uv run wheretolive-la`. `uv` will install the project into its managed environment and expose the configured CLI commands from `pyproject.toml`.
+
+Clone the repository and run the commands below from the project directory.
+
+```bash
+git clone https://github.com/perfectly-preserved-pie/larentals.git
+cd larentals
+```
 
 ### Docker
 
-Build the app image:
+With Docker running, build the app image.
 
 ```bash
 docker build -t larentals .
 ```
 
-Run the app container:
+Start the container.
 
 ```bash
 docker run --rm -p 8080:8080 larentals
 ```
 
+Open [http://localhost:8080](http://localhost:8080).
+
 ### Non-Docker
 
-Run the Dash app directly:
+With `uv` installed, start the Dash development server. The project uses Python
+3.13, and `uv` installs the project and its dependencies into `.venv`.
 
 ```bash
 uv run wheretolive-la
 ```
+
+Open [http://127.0.0.1:8050](http://127.0.0.1:8050).

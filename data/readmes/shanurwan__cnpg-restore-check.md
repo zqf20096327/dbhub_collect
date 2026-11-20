@@ -59,7 +59,9 @@ The only way to know is to restore. This makes that routine and measured.
      gives the **data age** (your real recovery point).
 5. Fails the run on a failed check, a failed recovery, a timeout, or a missed
    objective, then records the result in status, Events and Prometheus metrics
-   and deletes the temporary cluster.
+   and deletes the temporary cluster. Each result names the backup it restored,
+   the timeline recovery replayed and the LSN where it stopped, so a run answers
+   "was the backup from last Tuesday restorable, and up to where?"
 
 ## Try it
 
@@ -156,6 +158,10 @@ A restore test must never write into the backups it is testing.
   CloudNativePG Clusters. `watchNamespaces` limits it to chosen namespaces.
 - Runs have a timeout (default 2h), and `maxConcurrentRuns` (default 1) bounds
   how many restored instances exist at once.
+- A due run waits while a Cluster in the namespace is bootstrapping by recovery
+  from the same ObjectStore, so a check never competes with a real recovery for
+  object store bandwidth. The RestoreCheck shows a `RunDeferred` condition
+  naming that Cluster until it has a primary.
 
 A restored cluster holds production data. Run checks where the same people and
 policies already have access, and restrict port 5432 there to the controller.
@@ -200,6 +206,12 @@ Alerts (`prometheusRule.enabled=true`), each with a [runbook](docs/runbooks.md):
 | `keepFailedClusters` | false | keep the cluster of a failed run until the next run |
 | `suspend` | false | stop scheduled runs |
 
+Each run in `status.lastRun` and `status.history` records `backupID` (read from
+the restored backup label), `timeline` and `recoveryEndLSN` (from the history
+file of the timeline the restore promoted to), next to `recoveryDuration`,
+`dataAge` and the check results. `kubectl get restorechecks -o wide` shows the
+backup and end LSN.
+
 Failure reasons in `status.lastRun.reason`: `RecoveryFailed`, `Timeout`,
 `CheckFailed`, `ObjectiveMissed`, `InvalidSpec`, `ClusterLost`.
 
@@ -217,11 +229,15 @@ Failure reasons in `status.lastRun.reason`: `RecoveryFailed`, `Timeout`,
   - a standby backup of a quiet database (plugin-barman-cloud#652) misses a 3m
     recovery objective while its last WAL segment is unarchived, and passes in
     under a minute after a WAL switch on the primary;
+  - each run records the restored backup ID, timeline and end LSN, and the WAL
+    gap restore's end LSN is at the missing segment;
+  - a check waits with `RunDeferred` while another Cluster recovers from the
+    same ObjectStore, and runs once that recovery is gone;
   - a wrong server name fails with `RecoveryFailed`;
   - an ObjectStore that the source writes to is refused before anything is created.
 
   Last local run, on k3s v1.35 with CloudNativePG 1.30.1 and plugin-barman-cloud
-  v0.16.0: all pass. The healthy restore took 56 s with data 10 s old; the WAL
+  v0.16.0: the healthy restore took 56 s with data 10 s old; the WAL
   gap restore took 55 s with data 1h0m11s old; the quiet standby backup took
   6m55s to restore, against 54 s after the WAL switch. CI runs the same suite on kind.
 

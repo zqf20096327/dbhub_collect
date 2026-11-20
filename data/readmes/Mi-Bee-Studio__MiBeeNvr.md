@@ -107,7 +107,7 @@ Self-measured across three hardware tiers — methodology, judging criteria, and
 | Any (idle) | — | 38 MB RSS, 122 ms cold start |
 | x86 desktop (i5-12600KF) | 68 cams · 226 Mbps recording, +32 concurrent viewers | 24% CPU, API p50 < 11 ms, zero failures |
 | RK3399 NAS (low tier) | 28 cams recording | 20–23% CPU (storage-bound, eMMC) |
-| Banana Pi M5 (production) | 18 cams, 80% iowait storm | health API p50 13.5 ms |
+| Low-power ARM SBC (representative) | 18 cams, 80% iowait storm | health API p50 13.5 ms |
 
 ## Observability
 
@@ -158,7 +158,7 @@ Version numbers, configuration syntax, and CLI flags are authoritative **only** 
 2. Web SPA: Node 22, `cd web && npm run build && npm run test`
 3. Write clear commit messages
 
-Project layout — `cmd/mibee-nvr/` CLI entry, `internal/` core packages, `web/` Svelte 5 SPA, `deploy/` service files, `docs/` bilingual documentation, `tests/` + `e2e-tests/` integration and Playwright tests. Details in the [architecture overview](docs/en/architecture.md).
+Project layout — `cmd/mibee-nvr/` CLI entry, `internal/` core packages, `web/` Svelte 5 SPA, `deploy/` service files, `docs/` bilingual documentation, `tests/` cross-package integration tests. Details in the [architecture overview](docs/en/architecture.md).
 
 Thanks to everyone who has contributed:
 

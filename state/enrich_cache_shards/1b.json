@@ -1,10 +1,10 @@
 {
  "thedotmack/claude-mem": {
-  "commit_7d": 498,
-  "commit_90d": 2307,
-  "rel_ver": "v16.0.0",
-  "rel_pub": "2026-11-18",
-  "rel_days": 0,
+  "commit_7d": 229,
+  "commit_90d": 2403,
+  "rel_ver": "v16.0.1",
+  "rel_pub": "2026-11-19",
+  "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 143,
-  "enriched_at": "20261118",
+  "enriched_at": "20261120",
   "lang": {
    "TypeScript": 46,
    "JavaScript": 40,
@@ -23,11 +23,16 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261117",
-   "release": "20261118",
+   "commit": "20261120",
+   "release": "20261120",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v16.0.1",
+    "d": "2026-11-19",
+    "n": "- **`/api/health` publishes probe state only** (#6309, thanks @DeryFerd). It no longer shows the auth method, the Redis queue descriptor, absolute install paths or the last interaction to unauthenticated callers.\n- **Search falls back to SQLite instead of failing when Chroma is slow** (#6327, thanks @REI-330, closes #6323). The MCP client gives a search 30 s, while each Chroma read waited up to 60 s, so a slow query was still running when the caller gave up and the SQLite/FTS5 fallback never ran. A search n"
+   },
    {
     "t": "v16.0.0",
     "d": "2026-11-18",
@@ -72,17 +77,13 @@
     "t": "v15.18.1",
     "d": "2026-11-12",
     "n": "- **The worker no longer fails to start when the database is busy at startup** (#6041). If the My Work refresh record was left as \"running\" by a restart and the database was locked at that moment, the repair write threw and took down the worker's whole startup, so memory stayed off until the next restart. The repair failure is now logged, and the next scheduled check tries again (whether or not scheduled refresh is on)."
-   },
-   {
-    "t": "v15.18.0",
-    "d": "2026-11-12",
-    "n": "## eve agents get the same memory as Claude Code and Codex\n\n`claude-mem/eve` now gives an eve agent the full claude-mem memory loop through your cmem.ai account (#6042).\n\n- **Session context:** each turn starts with the recent timeline from your memory. It is refreshed every turn under one message id, so it replaces itself instead of piling up.\n- **Recall each turn:** one search before the turn, as before.\n- **Recording is now on by default.** After each completed turn the provider sends the prompt, one obs"
    }
   ],
   "etag": {
-   "release": "W/\"c9479d140b696c7e2fa1ac84f077d79fcf70277518823d7c89880ad62b4a1029\""
+   "release": "W/\"a0d2468fcac0c52d648410648d594a21ae1221ea9f000bf73facbccf3627d2d4\""
   },
   "rel_dates": [
+   "2026-11-19",
    "2026-11-18",
    "2026-11-17",
    "2026-11-17",
@@ -111,7 +112,6 @@
    "2026-11-02",
    "2026-11-02",
    "2026-11-02",
-   "2026-11-01",
    "2026-11-01"
   ]
  },
@@ -120,7 +120,7 @@
   "commit_90d": 84,
   "rel_ver": "v4.1.1",
   "rel_pub": "2026-11-11",
-  "rel_days": 7,
+  "rel_days": 9,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -194,20 +194,20 @@
   }
  },
  "ydb-platform/ydb": {
-  "commit_7d": 454,
-  "commit_90d": 6001,
-  "rel_ver": "26.3.1.16",
-  "rel_pub": "2026-09-21",
-  "rel_days": 59,
-  "rel_n90": 2,
-  "rel_pre": true,
+  "commit_7d": 472,
+  "commit_90d": 6095,
+  "rel_ver": "26.2.1.16",
+  "rel_pub": "2026-11-20",
+  "rel_days": 0,
+  "rel_n90": 3,
+  "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 233,
-  "enriched_at": "20261119",
+  "enriched_at": "20261120",
   "lang": {
    "C++": 53,
    "C": 25,
@@ -217,15 +217,20 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261117",
-   "release": "20261119",
+   "commit": "20261120",
+   "release": "20261120",
    "security": "20261027"
   },
   "rel_notes": [
    {
+    "t": "26.2.1.16",
+    "d": "2026-11-20",
+    "n": "Release notes: https://ydb.tech/docs/en/changelog-server?version=v26.2#26-2-1-16"
+   },
+   {
     "t": "26.3.1.16",
     "d": "2026-09-21",
-    "n": "Release notes: https://ydb.tech/docs/en/changelog-server?version=v26.3#26-3-rc"
+    "n": "Release notes: https://ydb.tech/docs/en/changelog-server?version=v26.3#26-3-1-16-rc"
    },
    {
     "t": "26.2.1.14",
@@ -239,9 +244,10 @@
    }
   ],
   "etag": {
-   "release": "W/\"5f0917718e1f9fa5712cede49af8601b38b1019c168ab770c5df93d8d7c5f0cd\""
+   "release": "W/\"0c8ce3db0556a855a569b92bc93bfea34da32be281db1d9772b556354b42e19c\""
   },
   "rel_dates": [
+   "2026-11-20",
    "2026-09-21",
    "2026-09-17"
   ]
@@ -251,7 +257,7 @@
   "commit_90d": 0,
   "rel_ver": "v0.5.41",
   "rel_pub": "2025-07-11",
-  "rel_days": 495,
+  "rel_days": 497,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -303,7 +309,7 @@
  },
  "adamchainz/django-mysql": {
   "commit_90d": 17,
-  "commit_7d": 1,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -354,7 +360,7 @@
   "commit_7d": 0,
   "rel_ver": "v4.0",
   "rel_pub": "2023-09-06",
-  "rel_days": 1169,
+  "rel_days": 1171,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -394,7 +400,7 @@
   "commit_7d": 8,
   "rel_ver": "v2.2.2",
   "rel_pub": "2026-11-04",
-  "rel_days": 14,
+  "rel_days": 16,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -606,7 +612,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.9",
   "rel_pub": "2025-03-19",
-  "rel_days": 609,
+  "rel_days": 611,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -625,7 +631,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.2",
   "rel_pub": "2017-08-05",
-  "rel_days": 3392,
+  "rel_days": 3394,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -692,7 +698,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-04-02",
-  "rel_days": 230,
+  "rel_days": 232,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -713,7 +719,7 @@
   "commit_7d": 3,
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-10-18",
-  "rel_days": 1127,
+  "rel_days": 1129,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -748,7 +754,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.9",
   "rel_pub": "2023-11-08",
-  "rel_days": 1106,
+  "rel_days": 1108,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -791,7 +797,7 @@
  "simonw/markdown-to-sqlite": {
   "rel_ver": "1.0",
   "rel_pub": "2021-06-13",
-  "rel_days": 1984,
+  "rel_days": 1986,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -839,7 +845,7 @@
  "kkrisz1/staruml-reverse-db": {
   "rel_ver": "v2.1.8",
   "rel_pub": "2023-08-27",
-  "rel_days": 1179,
+  "rel_days": 1181,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -857,7 +863,7 @@
  "dan-kimani/mysql-mongo-etl": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2020-03-29",
-  "rel_days": 2425,
+  "rel_days": 2427,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -890,7 +896,7 @@
  "truenormis/savvy": {
   "rel_ver": "v1.3.1",
   "rel_pub": "2026-09-08",
-  "rel_days": 71,
+  "rel_days": 73,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -924,7 +930,7 @@
  "daobab-projects/daobab-core": {
   "rel_ver": "Daobab",
   "rel_pub": "2023-11-29",
-  "rel_days": 1085,
+  "rel_days": 1087,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1032,7 +1038,7 @@
  "tikv/migration": {
   "rel_ver": "br-v1.0.2",
   "rel_pub": "2025-04-17",
-  "rel_days": 580,
+  "rel_days": 582,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1101,7 +1107,7 @@
  "epost/purescript-node-postgres": {
   "rel_ver": "v4.1.0",
   "rel_pub": "2017-12-16",
-  "rel_days": 3259,
+  "rel_days": 3261,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1120,7 +1126,7 @@
  "go-fries/fries": {
   "rel_ver": "v4.2.0",
   "rel_pub": "2026-09-14",
-  "rel_days": 65,
+  "rel_days": 67,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1167,7 +1173,7 @@
  "majiayu000/remem": {
   "rel_ver": "v0.6.98",
   "rel_pub": "2026-09-27",
-  "rel_days": 52,
+  "rel_days": 54,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1188,7 +1194,7 @@
  "datreant/MDSynthesis": {
   "rel_ver": "0.6.1",
   "rel_pub": "2016-05-17",
-  "rel_days": 3837,
+  "rel_days": 3839,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1392,7 +1398,7 @@
  "kowala-tech/kcoin": {
   "rel_ver": "3.0.0",
   "rel_pub": "2018-10-04",
-  "rel_days": 2967,
+  "rel_days": 2969,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1503,7 +1509,7 @@
  "elky84/light": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-01-02",
-  "rel_days": 1781,
+  "rel_days": 1783,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1536,7 +1542,7 @@
  "oracle-quickstart/oci-elastic": {
   "rel_ver": "v2.0",
   "rel_pub": "2022-02-01",
-  "rel_days": 1751,
+  "rel_days": 1753,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1554,7 +1560,7 @@
  "nativeapptemplate/nativeapptemplateapi": {
   "rel_ver": "v1.0.0-with-nfc",
   "rel_pub": "2026-04-23",
-  "rel_days": 209,
+  "rel_days": 211,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1575,7 +1581,7 @@
  "ozankasikci/global-agent-memory": {
   "rel_ver": "v0.1.7",
   "rel_pub": "2026-08-31",
-  "rel_days": 79,
+  "rel_days": 81,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1609,7 +1615,7 @@
  "Dani3lSun/apex-plugin-videoplayer": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2016-02-24",
-  "rel_days": 3920,
+  "rel_days": 3922,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1652,7 +1658,7 @@
  "claranet/ansible-role-patroni": {
   "rel_ver": "1.1.0",
   "rel_pub": "2026-07-24",
-  "rel_days": 117,
+  "rel_days": 119,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1671,7 +1677,7 @@
  "HenryJi529/OpenMorningstar": {
   "rel_ver": "v0.2.14",
   "rel_pub": "2024-03-04",
-  "rel_days": 989,
+  "rel_days": 991,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1736,7 +1742,7 @@
  "oceanbase/spark-connector-oceanbase": {
   "rel_ver": "v1.5",
   "rel_pub": "2026-07-22",
-  "rel_days": 119,
+  "rel_days": 121,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1760,7 +1766,7 @@
  "gz08/database": {
   "rel_ver": "v1.0-final",
   "rel_pub": "2026-06-20",
-  "rel_days": 151,
+  "rel_days": 153,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1783,7 +1789,7 @@
  "huaweicloud-samples/database-dify-gaussdb": {
   "rel_ver": "v1.16.1-gaussdb",
   "rel_pub": "2026-08-15",
-  "rel_days": 95,
+  "rel_days": 97,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1849,7 +1855,7 @@
  "Linuxndroid/WhatsApp-Viewer": {
   "rel_ver": "v.1.0",
   "rel_pub": "2025-10-23",
-  "rel_days": 391,
+  "rel_days": 393,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1900,7 +1906,7 @@
   "commit_7d": 0,
   "rel_ver": "flink-connector-jdbc-dameng_20250331_(适用于v3.3及以上版本)",
   "rel_pub": "2025-03-31",
-  "rel_days": 597,
+  "rel_days": 599,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2704,7 +2710,7 @@
  "macolszewski/dbeast_manager": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 31,
+  "rel_days": 33,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2751,7 +2757,7 @@
  "Paul0Franca/lurkqvd": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-24",
-  "rel_days": 25,
+  "rel_days": 27,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2817,7 +2823,7 @@
    "release": "W/\"7177ba5862f9a0c637b636b6639cb3c47c1a919a9feddd6c8374275dc96706a6\""
   },
   "rel_pub": "2026-11-15",
-  "rel_days": 3,
+  "rel_days": 5,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_dates": [
@@ -2889,7 +2895,7 @@
  "BalianWang/busytok": {
   "rel_ver": "v0.0.16",
   "rel_pub": "2026-07-15",
-  "rel_days": 126,
+  "rel_days": 128,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2933,7 +2939,7 @@
  "EnriqueMuhammad/Zephix-DBStudio": {
   "rel_ver": "v0.3.2",
   "rel_pub": "2026-11-01",
-  "rel_days": 17,
+  "rel_days": 19,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -3032,7 +3038,7 @@
   },
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-10-07",
-  "rel_days": 42,
+  "rel_days": 44,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -3076,7 +3082,7 @@
   },
   "rel_ver": "v2.12.0",
   "rel_pub": "2026-11-10",
-  "rel_days": 8,
+  "rel_days": 10,
   "rel_n90": 17,
   "rel_pre": false,
   "rel_none": false,
@@ -3244,7 +3250,7 @@
   },
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-11-13",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3285,7 +3291,7 @@
   },
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-29",
-  "rel_days": 20,
+  "rel_days": 22,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -3362,7 +3368,7 @@
   },
   "rel_ver": "v0.10.1",
   "rel_pub": "2026-11-14",
-  "rel_days": 5,
+  "rel_days": 6,
   "rel_n90": 16,
   "rel_pre": false,
   "rel_none": false,
@@ -3454,6 +3460,154 @@
    "security": "20261119",
    "contrib": "20261119",
    "lang": "20261119"
+  }
+ },
+ "pocketonehq/pocketone": {
+  "etag": {
+   "release": "W/\"e2d9f1201000dccb1cc9c7f083395947998819c3921360096123bcb2d1f35bb9\"",
+   "security": "\"7a33920d2530592992c402861467081e4f66544720ee98521c0fd1920cd6eb4c\""
+  },
+  "rel_ver": "v0.0.1-alpha.9",
+  "rel_pub": "2026-11-19",
+  "rel_days": 1,
+  "rel_n90": 8,
+  "rel_pre": true,
+  "rel_none": false,
+  "rel_dates": [
+   "2026-11-19",
+   "2026-11-19",
+   "2026-11-17",
+   "2026-11-16",
+   "2026-11-16",
+   "2026-11-16",
+   "2026-11-16",
+   "2026-11-16"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.0.1-alpha.9",
+    "d": "2026-11-19",
+    "n": "- **A fix for multisite hosts running Pocker.** On alpha.8, every Pocker instance that had API tokens failed to start: the API Tokens rename hit a bug in the sandbox's database driver, which also broke renaming any collection on a Pocker instance. Both work again. A single app (`pocketone serve`) never had the bug ([Sandbox](https://github.com/pocketonehq/pocketone/blob/v0.0.1-alpha.9/ext/sandbox/CHANGELOG.md)).\n- [Sandbox](https://github.com/pocketonehq/pocketone/blob/v0.0.1-alpha.9/ext/sandbox/CHANGELOG.m"
+   },
+   {
+    "t": "v0.0.1-alpha.8",
+    "d": "2026-11-19",
+    "n": "- [Sandbox](https://github.com/pocketonehq/pocketone/blob/v0.0.1-alpha.8/ext/sandbox/CHANGELOG.md#002-2026-11-18) 0.0.1 → 0.0.2"
+   },
+   {
+    "t": "v0.0.1-alpha.7",
+    "d": "2026-11-17",
+    "n": "## Install or upgrade\n\n**New install:**\n\n```bash\nbrew install pockethost/tap/pocketone\n```\n\nHomebrew on macOS or Linux; the formula comes from [pockethost/homebrew-tap](https://github.com/pockethost/homebrew-tap). Or download the zip for your platform below and run `./pocketone serve`.\n\n**Upgrade:**\n\n```bash\nbrew upgrade pocketone\n```\n\nOr, if you didn't install with Homebrew, run `pocketone upgrade` (it keeps the old executable as `pocketone-<version>`) or download the zip below. Check the **Upgrading** sec"
+   },
+   {
+    "t": "v0.0.1-alpha.6",
+    "d": "2026-11-16",
+    "n": "- **jsvm, sandbox:** a hook can no longer pin a CPU with an Array method on a huge sparse array or array-like (`new Array(1e9).join(\"x\")`, `[].indexOf.call({ length: 2 ** 53 - 1 }, 1)`), which QuickJS ran without checking the time limit. Array methods that walk every index, and passing an array to a Go function, now throw a `RangeError` past `MemoryLimit / 16` elements (4,194,304 at the default 64 MiB), a length no dense array fits in that memory.\n- **sandbox:** `MaxCallStackSize` and `MaxConcurrent` are go"
+   },
+   {
+    "t": "v0.0.1-alpha.4",
+    "d": "2026-11-16",
+    "n": "## Install or upgrade\n\n**New install:**\n\n```bash\nbrew install pockethost/tap/pocketone\n```\n\nHomebrew on macOS or Linux; the formula comes from [pockethost/homebrew-tap](https://github.com/pockethost/homebrew-tap). Or download the zip for your platform below and run `./pocketone serve`.\n\n**Upgrade:**\n\n```bash\nbrew upgrade pocketone\n```\n\nOr, if you didn't install with Homebrew, run `pocketone upgrade` (it keeps the old executable as `pocketone-<version>`) or download the zip below. Check the **Upgrading** sec"
+   },
+   {
+    "t": "v0.0.1-alpha.3",
+    "d": "2026-11-16",
+    "n": "## Install or upgrade\n\n**New install:**\n\n```bash\nbrew install pockethost/tap/pocketone\n```\n\nHomebrew on macOS or Linux; the formula comes from [pockethost/homebrew-tap](https://github.com/pockethost/homebrew-tap). Or download the zip for your platform below and run `./pocketone serve`.\n\n**Upgrade:**\n\n```bash\nbrew upgrade pocketone\n```\n\nOr, if you didn't install with Homebrew, run `pocketone upgrade` (it keeps the old executable as `pocketone-<version>`) or download the zip below. Check the **Upgrading** sec"
+   },
+   {
+    "t": "v0.0.1-alpha.2",
+    "d": "2026-11-16",
+    "n": "## Install or upgrade\n\n**New install:**\n\n```bash\nbrew install pockethost/tap/pocketone\n```\n\nHomebrew on macOS or Linux; the formula comes from [pockethost/homebrew-tap](https://github.com/pockethost/homebrew-tap). Or download the zip for your platform below and run `./pocketone serve`.\n\n**Upgrade:**\n\n```bash\nbrew upgrade pocketone\n```\n\nOr, if you didn't install with Homebrew, run `pocketone upgrade` (it keeps the old executable as `pocketone-<version>`) or download the zip below. Check the **Upgrading** sec"
+   },
+   {
+    "t": "v0.0.1-alpha.1",
+    "d": "2026-11-16",
+    "n": "## Install\n\n```bash\nbrew install pockethost/tap/pocketone\n```\n\nHomebrew on macOS or Linux; the formula comes from [pockethost/homebrew-tap](https://github.com/pockethost/homebrew-tap). Or download the zip for your platform below and run `./pocketone serve`.\n\n## PocketOne v0.0.1-alpha.1\n\nThe first alpha of PocketOne, a community fork of PocketBase (first published as v0.0.1). Built on PocketBase v0.41.1.\n\nPocketOne is not affiliated with or endorsed by Gani Georgiev or the PocketBase project. For PocketBase "
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 47,
+  "lang": {
+   "Go": 76,
+   "JavaScript": 16,
+   "CSS": 5,
+   "Assembly": 1,
+   "Rust": 0
+  },
+  "enriched_at": "20261120",
+  "dim_ts": {
+   "release": "20261120",
+   "security": "20261120",
+   "contrib": "20261120",
+   "lang": "20261120"
+  }
+ },
+ "Ralirael/dsh-life-planner": {
+  "etag": {
+   "release": "W/\"261575857d10c0031de997ec69dfa96d2160c8e6d1cf886d16c2bee3fcaae6a3\"",
+   "security": "\"7a33920d2530592992c402861467081e4f66544720ee98521c0fd1920cd6eb4c\""
+  },
+  "rel_ver": "v0.9.37",
+  "rel_pub": "2026-11-19",
+  "rel_days": 1,
+  "rel_n90": 1,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_dates": [
+   "2026-11-19"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.9.37",
+    "d": "2026-11-19",
+    "n": "## 0.9.37 — 2026-11-16 日历折叠不再遮挡任务区\n\n- 折叠时不再停在 `scrollTop=48` 的\"半格\"位置（64px 吸顶栏 - 48px 滚动 = 日期标题被压在栏下），\n  改为**折叠后停在 `scrollTop=0`**：吸顶栏在上、当日任务从栏下开始，与正常折叠一致。\n- 删除为滚动锚点服务的 `.lp-cal-spacer`（它让内容额外增高，正是\"过度折叠\"的帮凶）。\n- 展开：列表回到顶部后再向上滚动累计 ≥90 展开；折叠条右侧「展开日"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "JavaScript": 100
+  },
+  "enriched_at": "20261120",
+  "dim_ts": {
+   "release": "20261120",
+   "security": "20261120",
+   "contrib": "20261120",
+   "lang": "20261120"
+  }
+ },
+ "SaulSells/boxloft": {
+  "etag": {
+   "release": "\"7a33920d2530592992c402861467081e4f66544720ee98521c0fd1920cd6eb4c\"",
+   "security": "\"7a33920d2530592992c402861467081e4f66544720ee98521c0fd1920cd6eb4c\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Python": 69,
+   "TypeScript": 29,
+   "JavaScript": 1,
+   "CSS": 0,
+   "HTML": 0
+  },
+  "enriched_at": "20261120",
+  "dim_ts": {
+   "release": "20261120",
+   "security": "20261120",
+   "contrib": "20261120",
+   "lang": "20261120"
   }
  }
 }

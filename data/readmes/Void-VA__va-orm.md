@@ -196,7 +196,7 @@ directional. All correctness probes matched direct calls.
 
 **Peak memory:** va-orm ~240 MB vs ~310–350 MB for the other ORMs.
 
-**Benchmark build:** Results were collected from the source tree that became 0.1.1:
+**Benchmark build:** Results were collected from the source tree that became 0.1.2:
 
 - Scalar column projection
 - Parallel include branches

@@ -37,13 +37,13 @@ account and nothing uploaded.
 > demonstrate the mechanism, not a field study; see
 > [how it was measured](benchmarks/README.md).
 
-**MemoryWhale 0.28.0: Stopped Before It Fails · November 17, 2026.**
-The CLI, web UI, and desktop app share product version 0.28.0; the reusable
-Rust core is version 0.13.0. See the [release notes](https://github.com/wuisabel-gif/MemWhale/blob/v0.28.0/docs/releases/0.28.0.md)
+**MemoryWhale 0.29.0: A Head Start · November 19, 2026.**
+The CLI, web UI, and desktop app share product version 0.29.0; the reusable
+Rust core is version 0.13.0. See the [release notes](https://github.com/wuisabel-gif/MemWhale/blob/v0.29.0/docs/releases/0.29.0.md)
 for the upgrade guide. Opening a store migrates it from schema 10 to 17.
 
 <p align="center">
-  <img src="assets/proactive-recall.gif" alt="An agent's make fails with an xcrun error; the capture hook answers that this error was seen once and the fix was xcode-select --install." width="820" />
+  <img src="assets/stopped-before-it-runs.gif" alt="A lesson is saved with mw remember; when an agent is about to run a command containing that text, the pre-run hook stops it and gives the lesson as the reason." width="820" />
 </p>
 
 **Want to contribute?** Start with the [Start here issue](https://github.com/wuisabel-gif/MemWhale/issues/317).

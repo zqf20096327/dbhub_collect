@@ -3,7 +3,7 @@
 [![Latest release](https://img.shields.io/github/v/release/addlayer-io/dbine?label=release)](https://github.com/addlayer-io/dbine/releases/latest)
 [![License: Apache 2.0](https://img.shields.io/github/license/addlayer-io/dbine)](LICENSE)
 ![Platforms: macOS · Windows · Linux](https://img.shields.io/badge/platforms-macOS%20%C2%B7%20Windows%20%C2%B7%20Linux-informational)
-[![Downloads](https://img.shields.io/github/downloads/addlayer-io/dbine/total)](https://github.com/addlayer-io/dbine/releases)
+[![Downloads of the app (installers and updates, not drivers)](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Faddlayer-io%2Fdbine%2Fbadges%2Fdownloads.json)](https://github.com/addlayer-io/dbine/releases)
 [![Homebrew: brew install --cask addlayer-io/tap/dbine](https://img.shields.io/badge/homebrew-brew%20install%20--cask%20addlayer--io%2Ftap%2Fdbine-FBB040?logo=homebrew&logoColor=white)](https://github.com/addlayer-io/homebrew-tap)
 [![Security: open findings (OSV-Scanner, Trivy, CodeQL, claude-security)](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Faddlayer-io%2Fdbine%2Fsecurity-status%2Fstatus.json)](https://github.com/addlayer-io/dbine/blob/security-status/STATUS.md)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/addlayer-io/dbine/badge)](https://scorecard.dev/viewer/?uri=github.com/addlayer-io/dbine)
@@ -302,6 +302,11 @@ and queries are organized inside each database.
 - **Data subset:** copies some rows of a table to another database, with the
   parent rows they need, and masks personal data. Details:
   [`docs/data-subset.md`](docs/data-subset.md).
+- **Vectors (embeddings):** reads, edits, indexes, compares and moves vector
+  columns and vector indexes in the engines that have them, from pgvector and
+  MongoDB Atlas to Oracle, SQL Server, Elasticsearch, Redis and more, and keeps
+  them through migration, clone and compare. Details:
+  [`docs/vectors.md`](docs/vectors.md).
 
 ### Administration
 
@@ -645,6 +650,8 @@ Documentation:
 - [`docs/migration.md`](docs/migration.md) and
   [`docs/schema-conversion.md`](docs/schema-conversion.md): migrating to
   another engine and how types are converted.
+- [`docs/vectors.md`](docs/vectors.md): vectors (embeddings) in every engine
+  that has them.
 - [`docs/ai-assistant.md`](docs/ai-assistant.md),
   [`docs/library.md`](docs/library.md) and
   [`docs/sync.md`](docs/sync.md): the AI assistant, the script library and

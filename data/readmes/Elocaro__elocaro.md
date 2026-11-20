@@ -1,0 +1,99 @@
+<p align="center"><img src="docs/bilder/logo.svg" width="96" height="96" alt="Elocaro-Logo"></p>
+
+# Elocaro
+
+[![CI](https://github.com/Elocaro/elocaro/actions/workflows/ci.yml/badge.svg)](https://github.com/Elocaro/elocaro/actions/workflows/ci.yml)
+[![Lizenz: AGPL-3.0](https://img.shields.io/github/license/Elocaro/elocaro)](LICENSE)
+[![Version](https://img.shields.io/github/v/tag/Elocaro/elocaro?label=Version)](https://github.com/Elocaro/elocaro/releases)
+
+**Die Vermieterverwaltung, die dir gehört.** Elocaro ist eine selbst betriebene Verwaltung für private Vermieter: Objekte, Mieter und Verträge, Mieteingänge, Nebenkosten- und Heizkostenabrechnung, Steuerunterlagen und ein Mieterportal. Alle Daten liegen bei dir, jederzeit vollständig exportierbar, ohne Abo und ohne Module hinter einer Bezahlschranke.
+
+*In English: Elocaro is a free, self-hosted property management system for private landlords (leases, rent collection, German utility and heating cost statements, tax documents, tenant portal). The interface and documentation are currently German only and tailored to German rental law; see [#165](https://github.com/Elocaro/elocaro/issues/165) for internationalization.*
+
+![Haus heute: Wohnungen, WG-Zimmer und Belegung auf einen Blick](docs/bilder/haus-belegung.png)
+
+## Was Elocaro kann
+
+- **Bestand:** Objekte, Wohnungen, WG-Zimmer als eigene Einheiten, Personen, Verträge (Standard-, Staffel-, Indexmiete), Eigentümer mit Anteilen.
+- **Geld:** Mieterkonto mit automatischen Sollstellungen, Bankabgleich per Kontoauszug (CSV, CAMT, MT940) oder FinTS, Zuordnungsvorschläge mit Begründung, Mahnwesen mit Freigabe.
+- **Abrechnung:** Betriebskostenabrechnung nach BetrKV und Heizkostenabrechnung nach HeizkostenV samt CO₂-Kostenaufteilung, geführter Assistent mit Fristwarnung, Plausibilitätsprüfungen vor dem Versand.
+- **Steuer:** Anlage V je Objekt und Eigentümer, Abschreibung, Darlehen, Erhaltungsaufwand, DATEV-Export.
+- **Kommunikation:** Mieterportal (Dokumente, Nachrichten, Schadensmeldungen, Verbrauch), Aushänge, Tickets für Hausmeister und Handwerker, Fristenkalender.
+- **Dokumente:** Mietvertrag, Mieterhöhung, Übergabeprotokoll, Schreiben aus Vorlagen als PDF.
+- **Betrieb:** Zwei-Faktor-Anmeldung, Audit-Log, nächtliche Datensicherung, Vollexport (JSON/CSV/Dateien), Handy-Oberfläche und installierbare Web-App.
+
+| Objekt mit Einheiten | Umsätze zuordnen | Handy |
+|---|---|---|
+| ![Objekt mit Wohnungen, WG-Zimmern und Mietern](docs/bilder/objekt-uebersicht.png) | ![Umsätze zuordnen](docs/bilder/umsaetze-zuordnen.png) | ![Belegung auf dem Handy](docs/bilder/handy-belegung.png) |
+
+## Technik
+
+**Stack:** .NET 11 · Blazor (Interactive Server und Static SSR) · PostgreSQL (EF Core) · Quartz · Gotenberg · Docker Compose
+
+- **Architektur:** Modularer Monolith in vier Projekten (`Domain`, `Application`, `Infrastructure`, `Web`) mit klarer Abhängigkeitsrichtung; Architekturtests sichern Schichten, Modulgrenzen und den Zugriff auf Seiten und Endpunkte ab.
+- **Tests:** Rechenkerne mit Golden-Master-Fällen (Nebenkosten, Heizkosten, CO₂, AfA, Index), Integrationstests mit Testcontainers, Web-Tests mit bUnit und Playwright, Architekturtests.
+- **Entscheidungen:** nachvollziehbar in [Architektur](docs/architektur.md) und in den [Architekturentscheidungen (ADR)](docs/adr/).
+- **Betrieb:** Docker Compose mit Caddy (TLS), nächtlichem Backup (restic) und CI mit GitHub Actions.
+
+## Für wen ist das?
+
+- **Gut geeignet:** private Vermieter mit etwa 3 bis 50 Einheiten, WG-Vermieter, Eigentümergemeinschaften, alle, die ihre Daten nicht in einer fremden Cloud haben wollen.
+- **Voraussetzung:** ein eigener Server (VPS mit Docker, ab 2 GB RAM) und eine Domain. Die [Installation](docs/installation.md) dauert mit dem Skript wenige Minuten.
+- **Nicht gedacht für:** Hausverwaltungen mit vielen Mandanten, Gewerbe mit Umsatzsteuer, Wohnungseigentümergemeinschaften (WEG-Verwaltung).
+
+## Ausprobieren
+
+Ohne Installation: die **[Demo](https://demo.elocaro.de)** mit erfundenen Beispieldaten. Auf der Anmeldeseite eine Rolle wählen (Administrator, Verwalter, Hausmeister, Handwerker, Eigentümer, Mieter); sie wird jede Nacht zurückgesetzt.
+
+Auf dem eigenen Rechner oder Server:
+
+```bash
+git clone https://github.com/Elocaro/elocaro.git && cd elocaro
+./deploy/install.sh --lokal      # Probelauf auf https://localhost
+./deploy/install.sh              # echte Installation mit Domain und Let's Encrypt
+```
+
+Der erste Aufruf führt durch die Ersteinrichtung (Einrichtungscode aus der Skriptausgabe, Administrator-Konto, Zwei-Faktor-Anmeldung, Einrichtungsassistent). Alle Wege (Server, von Hand, NAS, Raspberry Pi, Azure) stehen in der [Installationsanleitung](docs/installation.md).
+
+## Grenzen
+
+Elocaro ist **keine Rechts- und keine Steuerberatung**. Vorlagen und Rechenwerte sind Arbeitshilfen; bitte vor dem Einsatz prüfen. Hilfe gibt es über die [Issues](https://github.com/Elocaro/elocaro/issues).
+
+## Dokumentation
+
+- [Website](https://elocaro.de)
+- [Anwenderhandbuch](docs/handbuch.md): erste Schritte und die häufigsten Aufgaben für Vermieter (auch in der Anwendung unter „Hilfe“)
+- [Installation](docs/installation.md): alle Wege im Überblick (Probelauf, Server mit Skript, von Hand, NAS und Plattformen) mit Checkliste und Fehlersuche
+- [Betrieb](docs/betrieb.md): Konfiguration auf einem VPS, Update, Backup & Restore, Vollexport, Sicherheit
+- [KI-Zugriff über MCP](docs/mcp.md): Elocaro lesend in Claude, GitHub Copilot, Cursor u. a. nutzen (Rechte, Zugriffstoken, Anleitungen)
+- [Installation auf anderen Plattformen](docs/installation-plattformen.md): Portainer, Coolify, Synology, Unraid, Proxmox, ARM
+- [Fachlichkeit & Anforderungen](docs/fachlichkeit.md): Rollen, Fachmodell und Festlegungen
+- [Architektur](docs/architektur.md): Technologie und Struktur
+- [Entwicklung](docs/entwicklung.md): lokale Umgebung, Migrationen, Konventionen, Tests
+- [UI-Leitfaden](docs/ui.md)
+- [Mitarbeiten](CONTRIBUTING.md): Ablauf, CI, Releases · [Änderungen](https://github.com/Elocaro/elocaro/releases) · [Sicherheit melden](SECURITY.md)
+- [Banking & FinTS-Registrierung](docs/banking-fints.md)
+- [Architekturentscheidungen (ADR)](docs/adr/)
+
+## Entwicklung
+
+```bash
+dotnet build && dotnet test   # Integrationstests brauchen Docker
+dotnet run --project src/Elocaro.Web
+```
+
+Details zu lokaler Datenbank, Migrationen und Konventionen stehen in [docs/entwicklung.md](docs/entwicklung.md).
+
+## Unterstützen
+
+Elocaro bleibt frei nutzbar. Fehlerberichte und Erfahrungen helfen am meisten, weitere Wege stehen in [docs/foerderung.md](docs/foerderung.md).
+
+## Lizenz
+
+Copyright (C) 2026 Andreas Hahn
+
+Elocaro ist freie Software: Du kannst sie unter den Bedingungen der [GNU Affero General Public License](LICENSE), wie von der Free Software Foundation veröffentlicht, weitergeben und/oder verändern, entweder gemäß Version 3 der Lizenz oder (nach deiner Wahl) jeder späteren Version (`AGPL-3.0-or-later`).
+
+Elocaro wird in der Hoffnung verbreitet, dass es nützlich ist, aber **ohne jede Gewährleistung**, auch ohne die implizite Gewährleistung der Marktreife oder der Eignung für einen bestimmten Zweck. Details stehen in der Lizenz. Der Name „Elocaro“ und das Logo sind nicht Teil der Lizenz.
+
+Beiträge anderer stehen unter derselben Lizenz und unter der [Beitragsvereinbarung (CLA)](CLA.md), siehe [Mitarbeiten](CONTRIBUTING.md#lizenz-und-beitragsvereinbarung-cla). Drittanbieter-Komponenten und ihre Lizenzen: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Version, Lizenz und Quellcode-Link zeigt auch die Seite „Über Elocaro“ (`/ueber`).

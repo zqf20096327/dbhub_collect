@@ -24,7 +24,7 @@
 
 **Orvyn is a high-performance database workbench built in Rust with egui.** Write SQL, edit rows, design schemas, inspect Redis keys, query MongoDB documents, explore search indexes, and export large tables from one native application.
 
-From production databases to local DuckDB analytics, Orvyn brings a broad data stack into a focused workspace. Native protocol drivers, HTTP integrations, and vendor ODBC bridges connect 35 data source types. SQLite is bundled, and desktop packages include DuckDB 1.5.4.
+From production databases to local DuckDB analytics, Orvyn brings a broad data stack into a focused workspace. Native protocol drivers, HTTP integrations, and vendor ODBC bridges connect 35 data source types. SQLite is bundled. DuckDB 1.5.4 is optional: choose a package with `-duckdb` in its filename for DuckDB support; standard packages omit the engine.
 
 **Native execution. Virtualized grids. Streaming exports. Five interface languages. Built to keep you moving.**
 
@@ -139,9 +139,9 @@ Download the latest packages from **[GitHub Releases](https://github.com/dbx192/
 | Platform | Release workflow package |
 | --- | --- |
 | **Windows · x86_64** | Inno Setup installer; per-user installation without administrator elevation. |
-| **Linux · x86_64 / amd64** | `.deb` package with the DuckDB shared library included. |
-| **macOS · Intel x86_64** | `.app` bundle in a `.dmg`, with DuckDB included. |
-| **macOS · Apple Silicon aarch64** | `.app` bundle in a `.dmg`, with DuckDB included. |
+| **Linux · x86_64 / amd64** | `.deb` package; DuckDB is included only in the `-duckdb` variant. |
+| **macOS · Intel x86_64** | `.app` bundle in a `.dmg`, DuckDB included only in the `-duckdb` variant. |
+| **macOS · Apple Silicon aarch64** | `.app` bundle in a `.dmg`, DuckDB included only in the `-duckdb` variant. |
 
 The Linux packaging and DuckDB preparation scripts also handle ARM64 hosts; the current release workflow publishes Linux x86_64 packages.
 
@@ -160,29 +160,39 @@ Requires **Rust stable** (workspace minimum: 1.88; current CI toolchain: 1.96.1)
 | Linux | `build-essential pkg-config unixodbc-dev libgtk-3-dev libxcb-shape0-dev libxcb-xfixes0-dev libxkbcommon-dev libwayland-dev` |
 | macOS | Xcode command line tools and `brew install unixodbc`. |
 
-From the repository root, prepare DuckDB and launch the desktop app:
+From the repository root, launch the standard app (no DuckDB library required):
+
+```sh
+cargo run -p orvyn --release --locked
+```
+
+To enable DuckDB, prepare the runtime and enable its Cargo feature:
 
 ```sh
 python packaging/prepare-duckdb.py
-cargo run -p orvyn --release --locked
+cargo run -p orvyn --release --locked --features duckdb
 ```
+
+Standard packages hide DuckDB from the new-connection list and retain existing connection profiles. To use those profiles, install the DuckDB variant; copying a library into the standard installation does not enable the feature.
 
 Run the workspace checks:
 
 ```sh
-cargo test --workspace --locked
-cargo clippy --workspace --all-targets --locked -- -D warnings
+cargo test -p orvyn -p app-core --locked
+# Full workspace checks require DuckDB preparation:
+cargo test --workspace --all-features --locked
+cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
 ```
 
 DuckDB preparation downloads version **1.5.4** through `https://gh-proxy.org/` by default and places the libraries in `packaging/duckdb-download/local/1.5.4/`. Set `ORVYN_GITHUB_PROXY` to an empty string for direct GitHub downloads, or to another proxy prefix.
 
-Packaging entry points:
+Packaging entry points (standard by default; add `-WithDuckDB` on Windows or `--with-duckdb` on Linux/macOS for the DuckDB variant):
 
 - [Windows installer](packaging/windows/build-installer.ps1) — requires Inno Setup 6.
 - [Linux package](packaging/linux/package.sh).
 - [macOS bundle and DMG](packaging/macos/package.sh).
 
-The [release workflow](.github/workflows/ci.yml) runs on `v*` tags: native tests and strict Clippy on Windows, Linux, and macOS; PostgreSQL, MySQL, Redis, and Elasticsearch integration tests; then four platform/architecture builds and GitHub release publication.
+The [release workflow](.github/workflows/ci.yml) runs on `v*` tags: native tests and strict Clippy on Windows, Linux, and macOS; PostgreSQL, MySQL, Redis, and Elasticsearch integration tests; then standard and DuckDB variants for each of the four platform/architecture combinations and GitHub release publication.
 
 ## Configuration
 

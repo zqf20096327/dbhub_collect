@@ -64,15 +64,17 @@ MySQL 8 and MariaDB 10.11, and 5 CI workflows (measured on `4dfe404`; commands i
 - [docs/EXTENDING.md](docs/EXTENDING.md) — adding or removing entities, routes, migrations and modules.
 - [docs/CONCURRENCY.md](docs/CONCURRENCY.md) — lock order and retry rule for multi-table writes.
 - [docs/AUTHORIZATION.md](docs/AUTHORIZATION.md) — permission catalogue, system-role matrix, custom roles and the phase 2 sign-in design note.
+- [docs/user-guide/permissions-access/overview.md](docs/user-guide/permissions-access/overview.md) — administrator guide to roles, permissions and single sign-on (OpenID Connect, with a Microsoft Entra ID walk-through).
 
 Three things catch most first runs from source (`cp .env.example .env`, then `go run ./cmd` or
 `make run`):
 
 - **Replace the example `JWT_SECRET`.** The placeholder is refused at startup, so a copied
-  `.env.example` does not start until the secret is replaced (`internal/config/config.go:267-277`).
+  `.env.example` does not start until the secret is replaced (`Load` (`internal/config/config.go`)).
 - **Set `CORS_ALLOWED_ORIGINS`** for any cross-origin UI other than localhost on 5173, 3000 or 8080
-  (`internal/middleware/cors.go:14-20`). An unlisted origin looks like a failed login.
-- **Public registration ships off** (`internal/models/configuration.go:323-330`). Create the first
+  (`defaultAllowedOrigins` (`internal/middleware/cors.go`)). An unlisted origin looks like a failed login.
+- **Public registration ships off** (the `security.allow_public_registration` entry of
+  `DefaultConfigurations` (`internal/models/configuration.go`)). Create the first
   admin with `make build-tools && make create-admin`.
 
 ## Features
@@ -96,7 +98,7 @@ Three things catch most first runs from source (`cp .env.example .env`, then `go
 - 📝 **Forms**: Build contact, quote-request and lead-capture forms in the CRM and embed them on any website with one script tag — submissions land in the CRM, create leads, and can require double opt-in email confirmation before delivering gated content; layered spam protection (honeypot, time trap, rate limits, optional invisible reCAPTCHA v3). A double opt-in form can instead open a support ticket for the customer whose email matches the confirmed address (fixed ticket text, no submitted value), deduplicated by an `idempotency_key` that API clients send with the submission (the embed script sends one key per rendered form on every submission of the render: the hosted view's per-render key, or one it generates)
 - 🎨 **Modern UI**: React TypeScript frontend with Material-UI
 - 📊 **Dashboard**: Analytics and activity overview
-- 👤 **Role-Based Access**: four system roles (Admin, Sales, Support, Customer) plus custom roles built from the permission catalogue through the role API ([docs/AUTHORIZATION.md](docs/AUTHORIZATION.md))
+- 👤 **Role-Based Access**: four system roles (Admin, Sales, Support, Customer) plus custom roles built from the permission catalogue through the role API ([docs/AUTHORIZATION.md](docs/AUTHORIZATION.md)); administrator guide: [docs/user-guide/permissions-access/overview.md](docs/user-guide/permissions-access/overview.md)
 - 🔌 **RESTful API**: Clean architecture with comprehensive endpoints
 
 </details>
@@ -458,14 +460,44 @@ It spends real credit, so it is never part of CI. Test cases: `docs/testing/11-a
 
 ## Integrations: webhooks
 
-Integrations no longer need to poll for new records. An admin registers an HTTPS endpoint with
-`POST /api/v1/webhooks/endpoints` and picks any of three event types:
+Integrations no longer need to poll for new records. An admin registers an HTTPS endpoint in
+**Settings > Webhooks** (`/settings/webhooks`) or with `POST /api/v1/webhooks/endpoints` and picks
+any of nine event types:
 
 | Event | Sent when |
 |---|---|
 | `lead.created` | a lead is created through the API, or a form creates a new lead (a repeat enquiry to an existing lead sends nothing) |
 | `customer.created` | a customer is created through the API or by converting a lead |
 | `ticket.created` | a ticket is created through the API, or a confirmed form submission opens one (a duplicate key sends nothing) |
+| `lead.updated` | `PUT /api/v1/leads/{id}` changed at least one stored value of the lead, or `POST /api/v1/leads/bulk/status` changed its status (one event per lead) |
+| `customer.updated` | `PUT /api/v1/customers/{id}` changed at least one stored value of the customer |
+| `ticket.updated` | `PUT /api/v1/tickets/{id}` changed at least one stored value of the ticket, or `POST /api/v1/tickets/bulk/status` changed its status (one event per ticket) |
+| `lead.deleted` | `DELETE /api/v1/leads/{id}`, and every erasure that reaches the lead: erasing the customer it was converted into, or that customer's login (`DELETE /api/v1/customers/{id}`, `DELETE /api/v1/users/{id}`) |
+| `customer.deleted` | `DELETE /api/v1/customers/{id}`, and the erasure of a lead converted into the customer or of the customer's login (`DELETE /api/v1/leads/{id}` by an admin, `DELETE /api/v1/users/{id}`) |
+| `ticket.deleted` | `DELETE /api/v1/tickets/{id}` |
+
+An update that sends only the values already stored answers 200 and sends nothing. The updated
+events come from those three `PUT` routes and the two bulk status endpoints only: deleting or
+erasing a record, converting a lead (still `customer.created` alone), assigning a lead or a
+customer, a ticket comment, a repeat form enquiry, an automation rule step and a company delete
+that unlinks its records send no updated event. The event says that the record changed, not what
+changed: fetch the record to see its current state.
+
+A deleted event goes only to the endpoints that received a created or updated event for that
+record (an endpoint subscribed to `lead.deleted` alone hears of no lead), and only while that
+delivery is still in the log: finished deliveries are pruned after 30 days, and an endpoint that
+was deleted and registered again starts with an empty log, so either gets no deleted event for an
+older record. An erasure sends the same deleted event as a delete, with no reason and no personal
+data: one event per lead or customer the erasure removed, cascades included, and none for a record
+that had already been deleted.
+
+**Settings > Webhooks.** The screen lists the endpoints with their events and active flag, and
+creates, edits, activates, deactivates and deletes them. It is shown to users whose role holds the
+`webhooks.manage` permission (the admin role, unless a custom role is given it). The signing secret
+of a new endpoint is shown once, right after it is created, with a copy button: it is not kept in
+the browser and neither the screen nor the API can show it again, so store it then. Deleting an
+endpoint removes its delivery log with it. The URL rules are checked by the server, and the form
+shows its refusal as is.
 
 **Thin payloads.** The body is exactly
 `{"id":"evt_<32 hex>","type":"lead.created","occurred_at":"2026-11-20T09:30:00.123Z","record_id":42}`:
@@ -473,17 +505,40 @@ no name, address or other personal data. Fetch the record through the API with y
 credentials; visibility and erasure apply at that moment, so nothing personal leaves after a
 person is erased.
 
-**Delivery.** The event row is written in the same transaction as the record, so a create that
-rolls back sends nothing. A background sender delivers committed events about every 5 seconds as a
+**Delivery.** The event row is written in the same transaction as the record, so a create, an
+update or a delete that rolls back sends nothing. A background sender delivers committed events about every 5 seconds as a
 `POST` with `Content-Type: application/json` and `User-Agent: GopherCRM-Webhooks/1`. Any 2xx answer
 is success. A non-2xx answer, a redirect (never followed), a timeout (10 seconds), a connection
 failure or a refused destination is retried after 1, 2, 4, … minutes (at most 6 hours apart) until
 10 attempts have been made (about 8.5 hours); the event is then marked failed. Delivery is at least
 once and unordered: deduplicate on `webhook-id`.
 
+**Test ping.** `POST /api/v1/webhooks/endpoints/:id/test` sends one signed request to the endpoint
+at once, active or not, and answers with the outcome: `{"event_id":"evt_…","outcome":"succeeded",
+"http_status":200,"error_code":null}`, or `outcome` `failed` with the error code of a delivery
+(`http_status`, `redirect`, `timeout`, `connection_failed`, `destination_refused`) or
+`secret_unavailable`, and `http_status` null when no answer arrived. Its body is
+`{"id":"evt_<32 hex>","type":"webhook.ping","occurred_at":"…"}`, without `record_id`, signed like a
+delivery. It follows the same egress rules, 10-second timeout and no-redirect rule, is never
+retried, and is not written to the delivery log. `webhook.ping` is not an event type an endpoint
+can subscribe to.
+
+**Rotating the signing secret.** `POST /api/v1/webhooks/endpoints/:id/rotate-secret` generates a
+new secret and answers 200 with the endpoint, the new `secret` (shown this once) and
+`previous_secret_expires_at`, 24 hours from now. Until then the replaced secret keeps signing next
+to the new one: every delivery, retry, redelivery and test ping carries two signatures,
+`webhook-signature: v1,<new> v1,<previous>`, so a consumer can switch to the new secret at any
+moment in that window without refusing a request. From `previous_secret_expires_at` on only the
+new signature is sent, and the next delivery clears the replaced secret. A second rotation inside
+the window replaces the previous secret: at most two secrets ever sign. Rotation works on an
+inactive endpoint and never reads the stored secrets, so it also repairs an endpoint whose secret
+became unreadable. It is API-only for now: the Settings screen has no rotate control.
+
 **Verifying the signature** (Standard Webhooks). Each request carries `webhook-id` (the event id),
-`webhook-timestamp` (Unix seconds of this attempt; a retry is re-signed) and `webhook-signature`
-(`v1,<base64>`). Recompute it with the secret returned when the endpoint was created:
+`webhook-timestamp` (Unix seconds of this attempt; a retry is re-signed) and `webhook-signature`:
+one `v1,<base64>` value, or two space-separated ones (`v1,<new> v1,<previous>`) during a rotation
+window. Recompute it with your secret and accept the request when any value matches; the example
+below does:
 
 ```python
 import base64, hashlib, hmac, time
@@ -504,11 +559,17 @@ string or fragment. Every connection resolves the host again and refuses private
 unique-local, link-local, metadata, multicast and unspecified addresses; proxy variables are
 ignored. The AEO egress allowlists do not apply to webhooks. The secret is stored encrypted with
 `API_KEY_SECRET` (or `JWT_SECRET`); changing that secret makes existing endpoints fail with
-`secret_unavailable` until they are re-created.
+`secret_unavailable` until they are re-created or their secret rotated.
 
-**Delivery log.** `GET /api/v1/webhooks/deliveries` shows each event per endpoint with its status
-(`pending`, `sending`, `succeeded`, `failed`), attempts, last HTTP status, error code and next
-attempt. Finished rows are deleted 30 days after their last change. The routes are listed under
+**Delivery log.** The "Delivery log" tab of Settings > Webhooks lists each event per endpoint,
+newest first, with its event type, record id, status, attempts, last attempt time and last
+response code, and filters by endpoint, status and event type. `GET /api/v1/webhooks/deliveries`
+returns the same rows (status `pending`, `sending`, `succeeded` or `failed`) and adds the error
+code and the next attempt. Finished rows are deleted 30 days after their last change.
+`POST /api/v1/webhooks/deliveries/:id/redeliver` sends a `succeeded` or `failed` delivery again:
+the same row goes back to `pending` with 0 attempts, due at once, and keeps its event id
+(`webhook-id`), so a consumer that deduplicates sees a repeat; a `pending` or `sending` delivery,
+or one whose endpoint is deleted or inactive, is refused with 409. The routes are listed under
 [API Documentation](#webhooks-admin-only-sales-support-and-customer-get-403).
 
 ## Privacy: deleting a person erases their data
@@ -532,7 +593,8 @@ statuses, totals and history, but the text staff typed into them can name the cl
 transaction overwrites it: deal titles become `[redacted]` and their notes and lost reasons are
 emptied, quote titles become `[redacted]` and their notes are emptied whatever the quote status,
 quote line descriptions are reset to the product names, and notifications about those deals are
-deleted (#245). Ticket and task text is kept; see `docs/DEVELOPMENT.md` for the ticket redaction
+deleted (#245). A client response link mailed for a quote of an erased customer stops working
+(#395). Ticket and task text is kept; see `docs/DEVELOPMENT.md` for the ticket redaction
 procedure.
 
 Two consequences:
@@ -632,8 +694,13 @@ client generator. The list below is the overview.
   under Settings > Configuration). **Always creates a `customer`**; a
   client-supplied role is ignored. Password policy: min 10 chars with upper, lower, digit and
   special character. A duplicate email returns `409`.
-- `GET /api/v1/auth/registration` - Report whether public registration is currently open
-  (`{"enabled": bool}`), for the login/register screens; no authentication required.
+- `GET /api/v1/auth/registration` - Report whether public registration is currently open and
+  whether single sign-on is on (`{"enabled": bool, "sso_enabled": bool}`), for the
+  login/register screens; no authentication required.
+- `POST /api/v1/auth/oidc/start` - Start an OpenID Connect sign-in: returns the issuer's
+  `authorization_url` (404 while single sign-on is off).
+- `POST /api/v1/auth/oidc/callback` - Finish it with `{code, state}` from the issuer's redirect;
+  returns the same tokens and user as `POST /auth/login`. The SPA's `/auth/callback` page calls it.
 - `POST /api/v1/auth/login` - User login. Returns an access token and a rotating refresh token.
 - `POST /api/v1/auth/refresh` - Exchange a refresh token for a new token pair. Rotation is strict:
   the presented token is revoked, replaying it returns `401`. The revocation is a single-use claim
@@ -682,7 +749,9 @@ authentication and live on the moderate tier:
 - `DELETE /api/v1/users/:id` - **Erase** user *(admin; cannot delete yourself; a customer-role user takes its customer records along; for a custom role, erasing a customer login with a linked customer record also needs `customers.delete`)*
 
 ### Leads *(entire group requires admin or sales)*
-- `GET /api/v1/leads` - List leads (`page`, `limit`, `search`, `sort_by`, `sort_order`, `classification`;
+- `GET /api/v1/leads` - List leads (`page`, `limit`, `search`, `sort_by`, `sort_order`, `classification`,
+  `status` (one of `new`, `contacted`, `qualified`, `unqualified`, `converted`; a sales user's list is
+  narrowed to its own leads);
   `external_id` returns the leads with that exact external id the caller may see, overriding the
   others; hidden leads are left out rather than refused)
 - `POST /api/v1/leads` - Create new lead (the owner must be an active admin or sales user)
@@ -821,10 +890,10 @@ authentication and live on the moderate tier:
 - `GET /api/v1/quotes/:id/pdf` - Download the quote as a PDF file *(admin and sales, the same
   refusals as `GET /quotes/:id`; the raw file with `Content-Type: application/pdf` and
   `Content-Disposition: attachment; filename="Quote-Q-000042.pdf"`, printed by a headless
-  Chrome or Chromium on the server in at most 15 seconds; 503 `PDF_UNAVAILABLE` when PDF output
+  browser (`chrome-headless-shell`, Chrome or Chromium) on the server in at most 15 seconds; 503 `PDF_UNAVAILABLE` when PDF output
   is off (`QUOTE_PDF_CHROME_PATH` empty or not an executable file), 503 `PDF_RENDER_FAILED`
-  when the render fails or runs out of time; `GET /configurations/ui` reports
-  `quotes.pdf_available`)*
+  when the render fails or runs out of time; the file and every error answer carry
+  `Cache-Control: no-store`; `GET /configurations/ui` reports `quotes.pdf_available`)*
 - `POST /api/v1/quotes/:id/email` - Email a sent or accepted quote as plaintext to the linked
   customer's current address, with the quote's PDF attached (`Quote-Q-000042.pdf`) when PDF
   output is on; when it is off or the render fails the mail goes out as text only and the call
@@ -839,21 +908,25 @@ authentication and live on the moderate tier:
   the `valid_until` day. An accepted quote and a sent quote past `valid_until` get no link. The
   link opens the web application's public page `/quote-response`, where the client sees the
   quote and accepts or declines it without an account)*
-- `GET /api/v1/quotes/public/response?token=` - **No authentication.** Show the quote behind a
-  client response link *(number, status, currency, `valid_until`, lines and totals only; never
-  spends the token; any unusable token is 400 "Invalid or expired quote link"; strict rate
-  tier)*
+- `GET /api/v1/quotes/public/response` - **No authentication.** Show the quote behind a
+  client response link; the token goes in the `X-Quote-Token` request header *(number, status,
+  currency, `valid_until`, lines and totals only; never spends the token; a token sent only in
+  the query string is not read; any unusable token is 400 "Invalid or expired quote link";
+  strict rate tier)*
 - `POST /api/v1/quotes/public/response` - **No authentication.** Answer the quote
   `{token, decision}` with `accept` or `decline` *(single use: claims the token and moves the
   quote sent→accepted or sent→rejected with one history row in one transaction; the history row
-  names the quote owner; the deal is not changed; an invalid body is 400 `VALIDATION_ERROR`, any
+  has no user and `source` `client`; the deal is not changed; an invalid body is 400 `VALIDATION_ERROR`, any
   unusable token the same generic 400; strict rate tier. The web application's `/quote-response`
-  page calls both routes without a bearer token)*
+  page reads the token from the link once, removes it from the address bar with a replace
+  navigation and calls both routes without a bearer token. All three `/quotes/public` routes
+  answer with `Cache-Control: no-store`)*
 - `POST /api/v1/quotes/public/render` - **No authentication.** The read the PDF render page
   (`APP_BASE_URL/quote-render`) makes while the server prints a quote `{token}` *(the token is
   the credential of one running render: it returns that one quote as `GET /quotes/:id` does,
-  plus `product_name`, writes nothing, and is refused with the generic 400 "Invalid or expired
-  render link" once the render is over; generous rate tier)*
+  plus `product_name`, writes nothing, works once, and is refused with the generic 400 "Invalid
+  or expired render link" on a second redemption, which also fails that render, and once the
+  render is over; generous rate tier)*
 - `GET /api/v1/deals/:id/quotes` - The deal's quotes, paginated *(sales: its own deals and its own quotes only)*
 - `GET /api/v1/customers/:id/quotes` - The customer's quotes, paginated *(sales sees only its own)*
 
@@ -879,7 +952,9 @@ authentication and live on the moderate tier:
   automation events, origin `bulk`, in the batch transaction)*
 
 ### Tasks
-- `GET /api/v1/tasks` - List tasks *(non-admins see their own)*
+- `GET /api/v1/tasks` - List tasks (`page`, `limit`, `search`, `sort_by`, `sort_order`, `label_id`,
+  `status` (one of `pending`, `in_progress`, `completed`, `cancelled`) and `priority` (one of `low`,
+  `medium`, `high`)) *(non-admins see their own; the filters narrow only their own tasks)*
 - `POST /api/v1/tasks` - Create new task *(admin, support, sales; non-admins may only assign to themselves)*
 - `GET /api/v1/tasks/my` - Get current user's tasks
 - `GET /api/v1/tasks/upcoming` - Tasks due within `days` (1-90, default 7) *(non-admins see their
@@ -1008,13 +1083,22 @@ expired, or if its owner has been deactivated or erased.
 - `GET /api/v1/webhooks/endpoints` - Registered endpoints, paginated (`sort_by` `id`, `created_at`
   or `updated_at`); never the secret
 - `POST /api/v1/webhooks/endpoints` - Register `{url, event_types, is_active?}`; the 201 carries the
-  signing `secret`, shown only here
+  signing `secret`, shown only here (`rotate-secret` returns a new one, once)
 - `GET /api/v1/webhooks/endpoints/:id` - One endpoint
-- `PUT /api/v1/webhooks/endpoints/:id` - Change `url`, `event_types` or `is_active` (the secret
-  never changes)
+- `PUT /api/v1/webhooks/endpoints/:id` - Change `url`, `event_types` or `is_active` (never the
+  secret; `rotate-secret` replaces it)
 - `DELETE /api/v1/webhooks/endpoints/:id` - Delete the endpoint and its delivery log
+- `POST /api/v1/webhooks/endpoints/:id/test` - Send one signed `webhook.ping` to the endpoint (active
+  or not) and answer `{event_id, outcome, http_status, error_code}`; not written to the delivery
+  log and not retried
+- `POST /api/v1/webhooks/endpoints/:id/rotate-secret` - Replace the signing secret; the 200 carries
+  the new `secret`, shown only here, and `previous_secret_expires_at` (now + 24 h), until which
+  every request is signed under both secrets (`v1,<new> v1,<previous>`)
 - `GET /api/v1/webhooks/deliveries` - The delivery log, newest first, filtered by `endpoint_id`,
   `status` and `event_type`; see [Integrations: webhooks](#integrations-webhooks)
+- `POST /api/v1/webhooks/deliveries/:id/redeliver` - Queue a `succeeded` or `failed` delivery
+  again (same row and event id, 0 attempts, due at once); 409 for a `pending` or `sending` delivery
+  or a deleted or inactive endpoint
 
 ### Bulk operations
 
@@ -1107,6 +1191,7 @@ gophercrm/
 | [docs/FEATURES.md](docs/FEATURES.md) | Feature and test-coverage matrix with known issues |
 | [docs/datamodel.md](docs/datamodel.md) | Entity model and relationships |
 | [docs/AUTHORIZATION.md](docs/AUTHORIZATION.md) | Permission catalogue, system-role matrix, custom roles, role-change rules and the phase 2 sign-in design note |
+| [docs/user-guide/permissions-access/overview.md](docs/user-guide/permissions-access/overview.md) | Administrator guide: roles and permissions, single sign-on, a Microsoft Entra ID walk-through and an FAQ |
 | [docs/ADMIN_TESTING.md](docs/ADMIN_TESTING.md) | Admin E2E page objects and fixtures |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Ideas that are not implemented yet |
 | [CHANGELOG.md](CHANGELOG.md) | Notable changes |
@@ -1134,10 +1219,12 @@ gophercrm/
   ticket comment mail (`email_customer`) are the exception: each delivery is recorded `log_only`,
   not `sent`. Fine for development, useless in production.
 - **Quote PDF output needs a browser on the server.** The PDF of a quote (download and email
-  attachment) is printed by a headless Chrome or Chromium named by `QUOTE_PDF_CHROME_PATH`.
+  attachment) is printed by a headless browser named by `QUOTE_PDF_CHROME_PATH`
+  (`chrome-headless-shell`, or a full Chrome or Chromium).
   Without it, and in the two development Compose stacks, PDF output is off: the quote email is
-  text only and the download answers 503 `PDF_UNAVAILABLE`. The Docker image ships Chromium and
-  a font; the limits of the renderer are listed in `docs/ROADMAP.md`.
+  text only and the download answers 503 `PDF_UNAVAILABLE`. The Docker image ships
+  `chrome-headless-shell` and a font; a full Chrome or Chromium is accepted as well. The limits
+  of the renderer are listed in `docs/ROADMAP.md`.
 - **Form mail is retried by hand only.** Every form mail (confirmation, follow-up, one notification
   per address) is recorded and shown on the submission and in `GET /api/v1/forms/deliveries`;
   admin and sales retry a failed, log-only or stuck one with
@@ -1166,7 +1253,9 @@ gophercrm/
   not apply. Any future cookie session must ship with session-bound CSRF protection (see #261).
 - **Rate limiting does not distinguish reads from writes on authenticated routes.**
   `RateLimitModerate` (120/min, burst 30) is applied once to the whole protected group in
-  `setupDependencies` (`cmd/main.go`) and covers reads and writes alike.
+  `setupDependencies` (`cmd/main.go`) and covers reads and writes alike. It is charged before
+  authentication (#466), so requests with refused or missing credentials on protected routes
+  are charged too.
   `RateLimitStrict` (10/min, burst 5) guards the `/auth`
   group and, via `SetupFormPublicRoutes`, the public form submit and confirm routes;
   `RateLimitGenerous` (240/min, burst 40) is applied only to the public form *reads*
@@ -1185,6 +1274,11 @@ gophercrm/
   permanently at that age, at boot and then every 24 hours, so the first boot removes the existing
   backlog. Until a separate frontend task merges, the form-delete dialogs still say "Collected
   submissions are retained", which is wrong for those rows.
+- **Sign-in audit rows are kept for `AUTH_AUDIT_RETENTION_DAYS`.** Every password sign-in, single
+  sign-on callback and refresh writes one `auth_audit_log` row, and refused API keys are counted
+  in one row per reason, account, client network and minute (`attempts`, #466); rows are kept 90
+  days by default (#454). The rows hold no email, name, subject or full IP address, and erasure leaves them
+  to age out.
 - **Erasure does not reach logs or issued tokens.** Service logs omit email, name, title and
   search fields; shared helpers omit argument/result/response payloads, and HTTP logs omit query
   strings. Quoted values in logged errors are redacted, and SMTP errors retain only the protocol

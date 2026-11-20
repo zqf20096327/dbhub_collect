@@ -67,6 +67,25 @@ It is a good fit if you can run a container on a home server, a NAS or a VPS, th
 
 It is not a daily ledger, an envelope budget or a portfolio tracker with live prices, and it never connects to a bank or moves money. For a transaction-by-transaction ledger or budgets, look at Firefly III or Actual Budget; for live investment prices, at Ghostfolio.
 
+How Monido compares with Kubera, the closest hosted net worth tracker, and with Actual Budget and Ghostfolio:
+
+| | Monido | Kubera | Actual Budget | Ghostfolio |
+| --- | --- | --- | --- | --- |
+| Price and licence | Free, MIT | $250 a year (Essentials), $2,500 (Black) | Free, MIT | Free to self-host, AGPLv3; paid cloud plan |
+| Self-hosted, open source | ✓ | ✗ hosted service | ✓ | ✓ |
+| Bank sync | ✗ by design: nothing connects to your bank; month-end balances take a few minutes, statements can go through Claude | ✓ Plaid, Yodlee, MX, Mastercard | ✓ SimpleFIN, Enable Banking, GoCardless, Akahu, Pluggy.ai | ✗ |
+| Multi-currency | ✓ | ✓ | ✗ | ✓ |
+| Per family member, ownership | ✓ an owner for every account, sign-in per person | Partial: ownership tags in Black only | ✗ shared budget files | ✗ a portfolio per user |
+| Investment performance | Partial: yearly return per account, no live prices | ✓ IRR | ✗ | ✓ live prices, benchmarks |
+| Loans and early repayment | ✓ schedules, early payments compared | Partial: debts, Fast Forward scenarios | Partial: balances | Partial: liabilities |
+| Real estate | ✓ valuations, equity | ✓ valued by address | Partial: an off-budget account | Partial: a manual asset |
+| Financial-health indicators | ✓ with thresholds and formulas | ? | ✗ | Partial: portfolio risk rules, emergency fund |
+| AI assistant | Optional: your own Claude, family vote in Telegram | ✓ Claude, ChatGPT, Grok | ✗ community MCP servers only | ✓ MCP, experimental |
+| Import and export | ✓ CSV export, history import, statements through Claude | ✓ file import, spreadsheet export | ✓ QIF, OFX, QFX, CAMT.053, CSV; export | ✓ activities |
+| Mobile | Installable web app (PWA) | Installable web app (PWA) | Installable web app (PWA); iOS app in beta | Installable web app (PWA) |
+
+Competitor features as of November 2026, from their own websites and documentation; a correction is welcome as an [issue](https://github.com/stanislav-petryashov/monido/issues/new/choose).
+
 ## Features
 
 - **Net worth and cash flow:** monthly history, allocation by owner, currency and asset type, income and expense categories, savings rates; balances alone are enough to start.

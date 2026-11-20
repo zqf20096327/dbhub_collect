@@ -22,7 +22,7 @@ tlswatch watches the TLS certificates that are actually served on your hostnames
 - **Certificate Transparency watching**: every certificate publicly issued for your domains, matched against what the targets serve; one that no target serves is a finding, a renewal on its way is not.
 - Roles (viewer, operator, admin), local accounts with optional TOTP (required per role if you like), single sign-on through Google or any OpenID Connect provider (Entra ID, Keycloak, Authentik, Okta) with groups mapped to roles, an audit log.
 - **Configured in the browser**: SMTP relays, Telegram bots, Slack (Mattermost, Rocket.Chat) and Discord webhooks, ntfy topics, your own webhooks, Google and OpenID Connect sign-in, thresholds and the public URL all live under Settings.
-- **REST API** under `/api/v2` with personal API tokens (role-capped, hashed, revocable), described by a generated OpenAPI document at `/api/v2/openapi.json`.
+- **REST API** under `/api/v2` with personal API tokens (role-capped, hashed, revocable), described by a generated OpenAPI document at `/api/v2/openapi.json`, with a copy in [`docs/openapi.json`](docs/openapi.json).
 - **Config as code**: export targets and domain watches as YAML and import them back through Add many, with a diff before anything is saved; CSV imports too.
 - Encrypted backup and restore from the UI, also from the setup screen of a new installation.
 - Optional Prometheus metrics at `/metrics`, behind a bearer token.
@@ -37,6 +37,7 @@ tlswatch watches the TLS certificates that are actually served on your hostnames
 - **Uptime monitors** such as Uptime Kuma check the certificate of an HTTPS monitor as a side effect: one port, one address, expiry only. tlswatch probes every address behind a name on any port, including STARTTLS, and also checks the chain, the hostname and the server's TLS configuration.
 - **Certificate Transparency monitors** such as certspotter tell you what was issued for your domains, not what your servers serve. tlswatch does both and matches the two, so a certificate nobody serves stands out and a renewal on its way does not.
 - **Hosted certificate monitors** probe from the internet, so internal hosts are out of reach and your inventory lives with them. tlswatch runs on your own machine, and nodes reach the networks it cannot.
+- **Renewal automation** such as certbot, cert-manager or the ACME client built into your proxy renews certificates; tlswatch checks the result independently, the way a client sees it, on every address and port the certificate should be on. It recognises ACME renewals so they do not alert, and tells you when a renewal did not arrive somewhere: a server that was not reloaded, a node behind a load balancer still on the old certificate, a copy on a mail server or appliance that nobody updated.
 
 ## Quick start
 
@@ -87,6 +88,16 @@ tlswatch check 10.0.0.5:443 -servername portal.example.nl -ca-file internal-ca.p
 
 `check` prints JSON, including the old TLS versions and weak cipher suites each address still accepts and the grade that follows (`-no-config-test` skips that test).
 
+Or a whole network: `scan` finds every TLS endpoint in a range, checks each one the same way and writes a report, an HTML page in the style of the UI plus CSV and JSON, still without a server:
+
+```sh
+tlswatch scan 10.20.0.0/24                       # ports 443, 8443, 636, 993, 995, 465, 587, 5061
+tlswatch scan 10.20.0.0/24 192.168.10.5 -ports 443,8443 -ca-file internal-ca.pem -o intake
+docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/out" ghcr.io/sjoerd305/tlswatch:latest scan 10.20.0.0/24 -o /out/scan
+```
+
+Only scan networks you own or are allowed to scan. To keep watching what it found, run the server and add the endpoints under Targets › Discover.
+
 ## Configuration
 
 Everything an operator changes is in the UI. The process itself needs at most these environment variables, all optional:
@@ -121,6 +132,7 @@ tlswatch backup PATH                 write a consistent copy of the database
 tlswatch healthcheck                 exit 0 when the running server's /healthz is OK
 tlswatch rotate-key                  re-encrypt stored credentials under a new secret key
 tlswatch check HOST[:PORT] [flags]   probe one endpoint, print JSON, exit 0/1/2 by severity
+tlswatch scan RANGE... [flags]       scan ranges, check every TLS endpoint, write HTML, CSV and JSON
 tlswatch node [flags]                run as a probe node inside another network (enrol, uninstall)
 tlswatch version                     print the version
 ```
