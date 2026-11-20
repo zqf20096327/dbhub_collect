@@ -2759,5 +2759,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7546101c1985": {
+  "identity": {
+   "one_liner": "Rust 动态 SQL 查询构建器，以 AST 方式生成 MySQL、Postgres、SQLite 语句",
+   "review": "SeaQuery 是 Rust 语言的动态 SQL 查询构建器，用于以抽象语法树形式构造表达式、查询和 schema 语句，并输出到 MySQL、Postgres、SQLite 三种后端。它提供参数绑定序号管理、运行时动态拼装查询、Iden 标识符派生宏，以及建表、外键、索引等 schema 语句构建。所有依赖均为可选，也是 SeaORM 的底层基础。MS SQL Server 支持需通过 SeaORM X 提供。",
+   "highlights": [
+    "通过统一接口支持 MySQL、Postgres、SQLite 三种后端，查询语句可输出为 SQL 字符串与绑定参数",
+    "提供 raw_query! 宏，支持命名参数、嵌套字段访问、数组和元组展开",
+    "支持 SELECT/INSERT/UPDATE/DELETE 查询语句及建表、改表、外键、索引等 schema 语句构建，全部 workspace crate 禁用 unsafe 代码"
+   ],
+   "use_cases": [
+    "需要在运行时根据用户输入动态拼装 SQL 条件的 Rust 应用",
+    "需要以同一套查询逻辑面向多种数据库后端生成 SQL 的项目",
+    "为 SQLx、postgres、rusqlite 等驱动提供查询构建与参数绑定层"
+   ]
+  },
+  "sha": "7546101c1985",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1eb5a6d8375e": {
+  "identity": {
+   "one_liner": "自托管的 Git 原生 Obsidian 库同步服务器",
+   "review": "PKV Sync 是一个自托管同步服务器，用于在手机、平板和桌面设备间同步 Obsidian 仓库。核心实现为单一二进制程序加 SQLite 元数据库，每个仓库对应一个裸 git 仓库，Git 作为数据源头，支持多用户多仓库、实时推送和冲突文件生成。需注意 1.0 尚未内置端到端加密，服务器可读取仓库内容。许可证为 AGPL-3.0。",
+   "highlights": [
+    "提供基于 Server-Sent Events 的实时推送和轮询回退，支持多用户、多仓库及按仓库的推送锁与幂等重试",
+    "以每个仓库一个裸 git 仓库为数据源头，在插件与管理面板中提供文件历史、统一 diff 和单文件还原",
+    "内置 MCP 接口（默认挂载于主服务端口 /mcp，亦支持 stdio），暴露读写、按 frontmatter 搜索、链接 lint、dry-run 写入等工具"
+   ],
+   "use_cases": [
+    "在自有服务器上多设备同步 Obsidian 笔记库的个人用户",
+    "通过管理面板管理用户、设备令牌、仓库与邀请的自托管运维场景",
+    "以 LLM/Agent 通过 MCP 读写、检索并维护 Markdown wiki 的工作流"
+   ]
+  },
+  "sha": "1eb5a6d8375e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cc93a1be878f": {
+  "identity": {
+   "one_liner": "基于 Java Swing 与 MSSQL 的药房库存与销售管理桌面系统",
+   "review": "这是一个 Java Swing 桌面应用，连接 Microsoft SQL Server 存储数据，用于药房库存与销售管理。系统按批次记录库存并按 FEFO（先到期先出）扣减库存，包含 OWNER 与 CASHIER 两种角色的登录认证、处方药核对标记、账单取消与库存回退、有效期预警及 .txt 收据生成。需要 JDK 17+、SQL Server Express 与 SSMS，先执行 curoDB.sql 建库，再配置 db.properties 后通过 run.bat 或 IDE 运行。",
+   "highlights": [
+    "按批次（batch_number、stock_date、exp_date）追踪库存，出库时从最早的未过期批次开始扣减",
+    "基于角色的认证区分 OWNER 与 CASHIER，账单取消需 Owner 权限并在 SQL 事务中将数量回退至原批次",
+    "通过 NotificationManager 触发 7 个月提前到期预警，并依据 7 天销售速度执行补货阈值提示；支持导出 .txt 格式收据"
+   ],
+   "use_cases": [
+    "药房日常销售开单（POS）与多批次库存扣减管理",
+    "处方药核对流程与 Owner 权限下的免单、账单取消操作",
+    "临期库存预警与基于销售速度的低库存补货提醒"
+   ]
+  },
+  "sha": "cc93a1be878f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

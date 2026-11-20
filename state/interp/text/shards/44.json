@@ -3059,5 +3059,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "df9af010e35c": {
+  "identity": {
+   "one_liner": "基于 SQLite 分片存储、兼容 Redis 协议的 Rust 二进制大对象（blob）存储服务器",
+   "review": "Blobasaur 是用 Rust 编写的 blob 存储服务器，数据按一致性哈希分布到多个 SQLite 数据库分片，并实现 Redis 协议，可直接用 redis-cli 或任意 Redis 客户端访问。支持 GET/SET/DEL 及 HGET/HSET 等命令、TTL 过期、命名空间、压缩和 Redis Cluster 协议，通过 config.toml 配置，提供 Prometheus 指标端点；分片迁移需停服进行。",
+   "highlights": [
+    "实现 Redis 协议，支持 GET/SET/DEL/EXISTS/TTL/EXPIRE 及 HGET/HSET/HSETEX/HDEL/HEXISTS 命令",
+    "每个分片使用独立的 SQLite 数据库，数据按多探针一致性哈希分布，提供 shard migrate/vacuum 命令调整分片数",
+    "支持可配置的落盘压缩（Gzip/Zstd/Lz4/Brotli）、TTL 过期与后台清理、命名空间、Prometheus 指标和 Redis Cluster 协议"
+   ],
+   "use_cases": [
+    "需要持久化存储二进制大对象、同时沿用现有 Redis 客户端接入的系统",
+    "需要以 SQLite 文件为后端、单二进制或 Docker 部署的存储服务",
+    "需要调整分片数量并带校验地迁移既有数据的存储部署"
+   ]
+  },
+  "sha": "df9af010e35c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "72e0e8b82cf8": {
+  "identity": {
+   "one_liner": "在 Blazor WebAssembly 中通过 OPFS 与 Web Worker 运行真 SQLite，提供完整 EF Core 支持",
+   "review": "该项目将官方 sqlite-wasm 引擎运行在 Web Worker 中，通过 OPFS 同步访问句柄实现文件系统级持久化，并提供完整 ADO.NET provider 与 EF Core 集成，数据在刷新和重启后保留。适用于需要浏览器端本地持久化数据库的 Blazor WebAssembly 应用。查询必须使用异步 API；项目当前处于维护模式，仅修复 bug，新功能开发已转向 Rust 后继项目。",
+   "highlights": [
+    "官方 sqlite-wasm 引擎运行于 Web Worker，通过 OPFS 同步访问句柄实现持久化，提供完整 ADO.NET provider 与 EF Core 支持（含迁移、LINQ、关系）",
+    "支持 FTS5 搜索、多数据库与跨库引用、worker 侧批量导入/导出、流式传输大文件及查询取消",
+    "可选加密扩展包：每 4096 字节页用 ChaCha20-Poly1305 加密，密钥经 WebAuthn PRF 从 passkey 派生"
+   ],
+   "use_cases": [
+    "需要离线可用、数据在刷新后保留的 Blazor WebAssembly PWA 应用",
+    "希望在不写服务端的情况下使用 EF Core 迁移与 LINQ 的浏览器端数据存储",
+    "需要在移动设备上导入/导出数百兆级 SQLite 数据库文件的场景"
+   ]
+  },
+  "sha": "72e0e8b82cf8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "604ef53e5572": {
+  "identity": {
+   "one_liner": "面向 iOS/macOS 的原生 Swift AI Agent SDK，支持 ChatGPT 登录与持久化。",
+   "review": "CodexKit 是一个 Swift 编写的 AI Agent SDK，用于在 iOS 17+ 和 macOS 14+ 应用中实现流式对话、应用自定义工具、SQLite 或 Realm 会话持久化及可选本地记忆。推理请求发送至 ChatGPT Codex 服务，依赖用户 ChatGPT 账户登录，无需开发者配置 API key；需网络访问。它不是 OpenAI 官方 SDK，账户资格与用量受提供方限制。通过 Swift Package 集成，提供核心库、SwiftUI 辅助库及两种持久化适配器。",
+   "highlights": [
+    "提供 ChatGPT 账户登录（设备码与浏览器流程，macOS 可复用本地 Codex 会话），无需 API key",
+    "支持流式响应、结构化输出、应用自定义工具及审批控制",
+    "提供 SQLite（GRDB）或 RealmSwift 两种持久化适配器，以及可选本地记忆与上下文压缩"
+   ],
+   "use_cases": [
+    "在 iOS/macOS 应用中集成基于用户 ChatGPT 账户的 AI 对话功能",
+    "构建需读取应用数据或执行受控操作、带审批机制的 Agent 应用",
+    "需要跨启动保存会话、恢复线程并持久化对话历史的应用"
+   ]
+  },
+  "sha": "604ef53e5572",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d0d6eb9350b0": {
+  "identity": {
+   "one_liner": "pi 编码代理的插件集合，提供数据库接入与 SSH 远程运维扩展",
+   "review": "pi-plugins 是面向 pi 编码代理的插件仓库，包含 db 和 ssh 两个 npm 包。db 插件以方言化架构接入 PostgreSQL、MySQL、Oracle、达梦、Redis、Elasticsearch、MongoDB、Neo4j、Hive、Spark 十种数据库，提供查询、表结构、扫描建连等工具；ssh 插件提供 13 个 SSH/SFTP/FTP 工具与 /ssh 管理面板。通过 pi install 从 npm 安装，采用 pnpm workspace 管理，MIT 许可。",
+   "highlights": [
+    "db 插件以方言化架构支持十种数据库（PostgreSQL/MySQL/Oracle/达梦/Redis/Elasticsearch/MongoDB/Neo4j/Hive/Spark），提供查询/表结构/扫描建连工具",
+    "ssh 插件包含 13 个 ssh_* 工具与 /ssh 管理面板，含危险命令分级确认、JSONL 审计、known_hosts 校验、部署与自动回滚",
+    "零 pi 运行时依赖的 core/dialects 分层，无构建产物，TypeScript 由 pi/tsx 直接加载"
+   ],
+   "use_cases": [
+    "让 pi 编码代理通过自然语言查询和管理多种数据库",
+    "通过 AI 代理执行远程 SSH/SFTP/FTP 运维与部署操作",
+    "作为模板开发新的 pi 插件（放入 packages/ 并遵循分层约定）"
+   ]
+  },
+  "sha": "d0d6eb9350b0",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

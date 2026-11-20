@@ -3219,5 +3219,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d0bde67f7d01": {
+  "identity": {
+   "one_liner": "基于 Next.js 16.3 Instant Navigations 的 Goodreads 两百万图书目录浏览应用。",
+   "review": "NextBooks 使用 Goodreads 数据集（超过 200 万条图书记录）构建图书目录站点，技术栈为 Next.js 16.3、Drizzle、PostgreSQL 与 Instant Navigations。导航通过 'use cache' 缓存查询、部分预取 App Shell、按链接优先级预取与 Fast Link 按压触发导航实现。支持无数据库时运行小型预览目录，数据源为 UCSD Book Graph。",
+   "highlights": [
+    "提供 Cache Components（'use cache' 与 cacheLife）、Partial Prefetching、逐链接预取与 Fast Link 四类导航加速机制",
+    "支持通过 pnpm db:seed-books/db:seed-authors 导入压缩的 Goodreads gzip 数据文件，保留原 ID 并支持导入断点",
+    "数据库 schema 使用 PostgreSQL unaccent 扩展实现忽略重音符号的书名搜索，可生成封面图 thumbhash 占位"
+   ],
+   "use_cases": [
+    "浏览和检索大规模 Goodreads 图书数据集（含书名、作者与封面图）",
+    "作为 Next.js App Router 下 Instant Navigations、Cache Components 与 RSC 相关机制的示例项目",
+    "本地开发运行预览目录，或配置 POSTGRES_URL 加载完整 UCSD 数据集"
+   ]
+  },
+  "sha": "d0bde67f7d01",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8ee029cb980f": {
+  "identity": {
+   "one_liner": "单机自托管的 AI 智能体长期记忆服务，基于 SQLite native 内核实现存储与检索。",
+   "review": "aiduMEI 是运行在本机的长期记忆服务，面向 Claude Code、Codex CLI、Hermes、DeepSeek Harness、OpenChamber 等 AI 宿主：对话前注入召回记忆、对话后写入原话、会话结束提炼精华。f0.9 版本采用自研 SQLite 单库内核（正文、FTS5 全文索引、向量、墓碑同库存储），支持 cloud/auto/local 三种挡位，local 档零外呼、只需全文检索。数据落本机目录，提供备份、恢复与墓碑机制。归并功能默认关闭，其完整 A/B 测试尚未完成。",
+   "highlights": [
+    "native 单库内核将正文、FTS5 trigram 全文索引、向量、修改历史、墓碑与关系边写入同一 memory.db，检索为全文（bm25）与向量余弦两路经 RRF 融合",
+    "提供 scripts/connect_host.py 一条命令接入宿主并当场验收，另有 DeepSeek Harness 与 OpenChamber 的原生接入脚本",
+    "删除操作附带墓碑快照，可通过 POST /tombstone/restore 恢复，快照默认保留 30 天；local 挡位下 LLM、云嵌入与重排不发外呼请求"
+   ],
+   "use_cases": [
+    "为个人在本机运行的 AI 编码/对话宿主补充跨会话长期记忆",
+    "需要数据全部留在本地、可备份可恢复的记忆管理场景",
+    "无云端 Key 环境下以 local 挡位仅靠全文检索运行记忆服务"
+   ]
+  },
+  "sha": "8ee029cb980f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "55e5861d2986": {
+  "identity": {
+   "one_liner": "本地优先的语义搜索引擎，混合 BM25、向量与 HyDE 检索本地文件。",
+   "review": "Soma 是一个运行在本地的知识库搜索引擎，对用户选定的文件夹建立索引，数据存于本地 SQLite。它通过 llama.cpp 运行本地模型实现混合检索：BM25 词法、稠密向量与 HyDE，经 RRF 融合并由本地 LLM 重排。支持 PDF、Office、图片 OCR、音视频转录等提取。通过 CLI、内置 Web UI 或 HTTP API 使用；HTTP 服务无鉴权，仅监听 127.0.0.1。",
+   "highlights": [
+    "提供混合（BM25 + 向量 + HyDE）、纯词法、纯向量三种检索模式，支持前缀匹配、短语与排除语法",
+    "支持 PDF、Office/EPUB、图片（OCR + 视觉模型描述）、音频/视频（Whisper 转录）等多种文件类型的提取索引",
+    "以单个 GraalVM 原生二进制分发，覆盖 Windows x64、macOS ARM64、Linux x64，支持 ZIP 导出的离线/气隙安装"
+   ],
+   "use_cases": [
+    "在本地笔记、文档、PDF 等文件中用自然语言或精确关键词检索",
+    "通过 JSON/CSV/Markdown 输出与 HTTP API 接入脚本或本地 RAG 流程",
+    "在无网络环境的机器上部署使用（离线导入模型与工具包）"
+   ]
+  },
+  "sha": "55e5861d2986",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8fe26307390e": {
+  "identity": {
+   "one_liner": "Ballerina 的 CDC 模块，基于 Debezium 实时捕获数据库变更事件",
+   "review": "该模块是 Ballerina 扩展库的一部分，提供监听器以实时捕获 MySQL、SQL Server 等数据库的插入、更新、删除变更事件。开发者通过导入 cdc 模块及对应数据库驱动、配置 CdcListener、定义 cdc:Service 处理函数来使用，用 bal run 运行。构建源码需 JDK 25、Docker 及 GitHub token。",
+   "highlights": [
+    "基于 Debezium 框架，支持 MySQL、Microsoft SQL Server 等数据库的实时变更捕获",
+    "通过定义 cdc:Service 中的 onRead、onInsert、onUpdate、onDelete 等远程函数以编程方式处理变更事件",
+    "README 提供与 Gmail、Redis 连接器集成的示例（欺诈检测、缓存同步）"
+   ],
+   "use_cases": [
+    "捕获数据库变更以触发事件驱动应用逻辑",
+    "同步 Redis 等缓存与数据库表数据",
+    "监听金融数据库交易变更并发送告警通知"
+   ]
+  },
+  "sha": "8fe26307390e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

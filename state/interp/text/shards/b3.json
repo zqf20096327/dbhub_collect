@@ -3267,5 +3267,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "75d24763cc38": {
+  "identity": {
+   "one_liner": "Malloy 的开源分析引擎，以单一数据模型经 MCP 和 REST 提供服务",
+   "review": "Publisher 是 Malloy 语言的运行服务器：读取用 Malloy 编写的数据包（包含数据源、连接、度量与访问控制），通过 MCP 供 Claude、Cursor、Codex 等代理查询，通过 REST 供应用和 BI 工具调用，内置 DuckDB 读取 CSV、Parquet、JSON、Excel 本地文件，也可连接 BigQuery、Snowflake、Postgres 等数据库。依赖 Node.js 20+，可用 npx、Docker 或 Compose 运行；服务器本身无鉴权，访问控制依赖前置网关。",
+   "highlights": [
+    "以 MCP 端点（提供 get_context、execute_query、search_database_schema、compile_model 等工具）和 REST API（含 OpenAPI 规范）提供同一数据模型",
+    "内置 DuckDB，读取 CSV、Parquet、JSON、换行分隔 JSON 和 Excel；支持按连接接入 BigQuery、Snowflake、Postgres、Databricks、MotherDuck 等",
+    "支持 #@ persist / #@ preaggregate 注解将查询物化为表或预聚合，按需或按计划重建；模型编辑可无重启验证"
+   ],
+   "use_cases": [
+    "让 AI 代理基于 Malloy 模型组合查询而非从零写 SQL，用于数据探索与分析",
+    "以带 artifact 标签的 .malloy 文件发布报告或无需构建的 HTML 数据应用",
+    "通过 #(authorize)、#(access_filter) 等标注在自有网关后实施行级访问控制"
+   ]
+  },
+  "sha": "75d24763cc38",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

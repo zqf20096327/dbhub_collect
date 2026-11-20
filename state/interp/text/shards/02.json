@@ -3129,5 +3129,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "74ae0600e323": {
+  "identity": {
+   "one_liner": "基于 etcd/Consul/Patroni 状态管理 PostgreSQL 虚拟 IP 的工具",
+   "review": "vip-manager 监控 DCS（etcd、Consul）或 Patroni REST API 中指定键的状态，当值匹配时在本机注册虚拟 IP，不匹配时注销，用于 Patroni 集群主节点的 VIP 切换；也可通过 Hetzner API 管理路由。本地注册需超级用户权限，PostgreSQL 需配置通配 listen_addresses 或开启 ip_nonlocal_bind。",
+   "highlights": [
+    "支持 etcd、Consul、Patroni REST API 三种状态源，不可达的 etcd/Consul 端点自动跳转到下一个",
+    "通过 viper 库支持命令行 flag、环境变量（VIP_ 前缀）、YAML 文件三种配置方式并定义优先级",
+    "提供 basic（本地网卡注册/注销 VIP）与 hetzner（API 路由）两种 manager-type"
+   ],
+   "use_cases": [
+    "Patroni PostgreSQL 高可用集群中为主节点绑定虚拟 IP",
+    "云环境中通过 Hetzner Robot/Cloud API 管理浮动 IP 路由",
+    "作为 systemd 服务运行以实现 VIP 状态的持续检查与切换"
+   ]
+  },
+  "sha": "74ae0600e323",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "83a1158227e0": {
+  "identity": {
+   "one_liner": "构建在 Postgres 上的 AI Agent 审计数据库，以因果链条与哈希链记录决策",
+   "review": "ZizkaDB 是一个运行于 Postgres 上的数据库，用于记录 AI Agent 的事件并维护因果链（每个事件携带 parent_id）。它提供 SHA-256 校验与哈希链验证、时间点重建与会话回放、基于关键词或向量的记忆检索以及 Agent 基线漂移评分，README 称其面向 EU AI Act 第 12 条记录保存场景。提供 Python/TypeScript SDK 与 MCP 集成；单容器自托管模式仅支持单 Agent，多 Agent 需使用其云服务；许可证为 AGPL-3.0。",
+   "highlights": [
+    "事件经 SHA-256 校验并按哈希链连接，提供 db.verify_chain() 验证历史未被修改；db.why() 与 db.at() 支持因果回溯和时间点重建",
+    "db.context_for() 按相关性、重要性、时近度返回历史记忆，无 OpenAI 密钥时可用关键词检索",
+    "提供 Python/TypeScript SDK、MCP 服务器、LangChain/LangGraph/CrewAI/LiveKit 集成包及 Prometheus 指标"
+   ],
+   "use_cases": [
+    "需要保留 Agent 决策记录以应对 EU AI Act 第 12 条等合规审计要求的团队",
+    "调试 Agent 行为：回溯某次工具调用或回复的成因，或回放会话过程",
+    "需要将历史上下文注入 Agent 后续运行，或监测 Agent 行为相对基线的漂移"
+   ]
+  },
+  "sha": "83a1158227e0",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

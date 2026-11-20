@@ -2883,5 +2883,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e90285f7fa53": {
+  "identity": {
+   "one_liner": "将 Codeforces 用户数据生成游戏王风格卡片数据的 Web 应用",
+   "review": "该应用读取用户的 Codeforces 解题与比赛数据，将其转换为游戏王风格卡片：攻击力取自最高 rating，防御力按解题数开方缩放，卡面颜色与类型由段位决定。前端为 React/TypeScript/Vite，后端为 FastAPI+SQLite，通过 Codeforces API 与网页抓取补全数据。本地运行需将前端固定在 localhost:5173 以符合后端 CORS 规则。",
+   "highlights": [
+    "将用户统计映射为卡片数值：攻击力=最高 rating×1.25，防御力=min(√解题数×36.5, 4000)，等级按最高段位映射 1-12 级",
+    "后端使用 FastAPI 与 SQLModel/SQLite 持久化用户数据，配合 curl_cffi 抓取档案页补全 API 缺失的段位信息，并用加权欧氏距离从 YGOPRODeck API 匹配真实怪兽卡",
+    "支持卡片截图下载（html2canvas）、统计面板展示解题类型分布，以及包含 rating 与贡献度世界 Top5 的排行榜区块"
+   ],
+   "use_cases": [
+    "生成自己的 Codeforces 游戏王卡片并截图分享",
+    "查看解题类型分布等个人档案统计",
+    "浏览世界 rating 与贡献度排行榜"
+   ]
+  },
+  "sha": "e90285f7fa53",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

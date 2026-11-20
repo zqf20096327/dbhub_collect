@@ -2944,5 +2944,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "052352ce9db1": {
+  "identity": {
+   "one_liner": "单命令行数据摄取工具，用 URI 标志在数据库间复制数据",
+   "review": "ingestr 是一个命令行工具，通过 source-uri/dest-uri 等标志即可在数据库、文件和 SaaS 平台之间复制表数据，无需编写代码；亦提供 pip 包和 Python SDK，Python 数据经 Arrow IPC 流传输。支持 append、merge、delete+insert 三种增量加载模式，部分数据库支持 CDC。许可证为 FSL 1.1，禁止用于构建竞争性摄取类产品。",
+   "highlights": [
+    "通过单一 CLI 命令（--source-uri/--dest-uri 等）从源复制表到目标，支持数据库、本地文件（CSV/Parquet/JSON 等）及众多 SaaS 平台作为源或目标",
+    "提供 append、merge、delete+insert 三种增量加载模式；Postgres、MySQL、MongoDB、SQL Server 等支持 CDC",
+    "pip 包可嵌入 Python 使用，行/生成器/DataFrame 经 Arrow IPC 流发送，另有 mmap 传输与 CLI 直通接口"
+   ],
+   "use_cases": [
+    "在数据库与数据仓库（如 Postgres 到 BigQuery）之间迁移或同步表数据",
+    "将 SaaS 平台（Stripe、HubSpot、Google Ads 等）数据定期加载进仓库",
+    "在 Python 代码中把 DataFrame、生成器或行数据写入 DuckDB 等目标库"
+   ]
+  },
+  "sha": "052352ce9db1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51ba33f51a38": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 微服务的高校学术资源与数字图书馆平台",
+   "review": "Zyndex 是一个面向大学、校园图书馆、研究实验室与学术联盟的学术学习与数字资源管理平台，采用 Java 21 / Spring Boot 3.4.2 微服务架构，配合 Netflix Eureka 服务发现与 Spring Cloud Gateway，前端为 React 18 + Vite 6 单页应用，持久层使用 MySQL 8.4。其机制包括 4 位 OTP 认证、HMAC-SHA256 JWT 访问令牌、基于 PDFBox 的内存切片分发，以及 15 秒心跳的实时遥测。README 未包含完整安装步骤，集群启动部分在截断后不可见。",
+   "highlights": [
+    "提供动态 OTP 认证、多设备会话管理与 HMAC-SHA256 无状态 JWT 访问令牌",
+    "通过 Apache PDFBox 在堆内存中实时切片 PDF，未验证与评估层用户仅能获取分片内容",
+    "包含 15 秒心跳聚合的实时遥测，统计阅读时长、独立读者数与并发会话数"
+   ],
+   "use_cases": [
+    "高校或校园图书馆向学生分发受控访问的学术文档",
+    "需要 UPI 支付、UTR 核对与发票查看的订阅或付费资源管理",
+    "搭建带 Eureka 服务发现与 API 网关的微服务全栈学习与开发环境"
+   ]
+  },
+  "sha": "51ba33f51a38",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cddd8366822d": {
+  "identity": {
+   "one_liner": "面向孟加拉国的双语岗位/实习/奖学金公告聚合与可解释资格核查平台",
+   "review": "这是一个面向孟加拉国求职者、雇主和审核人员的 monorepo 应用，聚合经过核验的招聘、实习与奖学金公告，提供 Bangla/English 双语界面。核心机制包括确定性的资格核查引擎（逐条列出未满足的条件）、带追踪 ID 的申请流程，以及基于透明活动权重的推荐。技术栈为 Next.js 15 + Fastify + TiDB + TypeScript，采用 pnpm workspaces 组织，含员工与管理员门户（TOTP 双因素）。注意：尚无许可证，作者保留所有权利；邮件验证、文件上传等功能未实现。",
+   "highlights": [
+    "提供双语（/bn、/en）公告搜索、资格核查与申请追踪，申请获得追踪 ID 并可通过公开 Track 页面查询状态",
+    "资格核查引擎给出确定性结果并逐条列出缺失或未满足的条件；推荐基于透明的活动权重（查看 1、收藏 3、追踪 4、申请 5）而非训练模型",
+    "实现角色分权门户：雇主门户 /employer（帖子需员工核验后方可发布）、员工门户 /admin（TOTP 双因素、审计日志），并支持拒绝默认的路由权限守卫、Argon2id 密码与 CSRF 防护"
+   ],
+   "use_cases": [
+    "求职者查找并核验孟加拉国的岗位、实习与奖学金公告，进行资格自查并提交和追踪申请",
+    "雇主发布职位与实习信息并管理收到的申请，帖子经员工对照官方来源核验后发布",
+    "本地部署开发与研究：通过 Docker 运行 TiDB、pnpm 安装迁移种子数据即可启动 Web 与 API"
+   ]
+  },
+  "sha": "cddd8366822d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

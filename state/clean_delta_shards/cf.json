@@ -23113,5 +23113,2465 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "d8c675c1ae3e+2": {
+  "fn": "cybertec-postgresql/pg_permissions",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    6,
+    1,
+    5
+   ],
+   [
+    "delete",
+    6,
+    7,
+    5,
+    5
+   ],
+   [
+    "equal",
+    7,
+    10,
+    5,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     " CREATE EXTENSION pg_permissions SCHEMA public;"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    19,
+    9,
+    17
+   ],
+   [
+    "replace",
+    19,
+    31,
+    17,
+    29,
+    [
+     " INSERT INTO public.permission_target",
+     " (role_name, permissions,",
+     " object_type, schema_name)",
+     " VALUES",
+     " ('appuser', '{SELECT,INSERT,UPDATE,DELETE}',",
+     " 'TABLE', 'appschema');",
+     " INSERT INTO public.permission_target",
+     " (role_name, permissions,",
+     " object_type, schema_name)",
+     " VALUES",
+     " ('appuser', '{SELECT,INSERT,UPDATE,DELETE}',",
+     " 'VIEW', 'appschema');"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    34,
+    29,
+    32
+   ],
+   [
+    "replace",
+    34,
+    40,
+    32,
+    38,
+    [
+     " INSERT INTO public.permission_target",
+     " (role_name, permissions,",
+     " object_type, schema_name)",
+     " VALUES",
+     " ('appuser', '{USAGE}',",
+     " 'SCHEMA', 'appschema');"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    44,
+    38,
+    42
+   ],
+   [
+    "replace",
+    44,
+    50,
+    42,
+    48,
+    [
+     " INSERT INTO public.permission_target",
+     " (role_name, permissions,",
+     " object_type, schema_name, object_name)",
+     " VALUES",
+     " ('appuser', '{USAGE}',",
+     " 'SEQUENCE', 'appschema', 'appseq');"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    54,
+    48,
+    52
+   ],
+   [
+    "replace",
+    54,
+    57,
+    52,
+    55,
+    [
+     " SELECT * FROM public.permission_diffs()",
+     " ORDER BY missing, role_name, object_type, schema_name, object_name,",
+     " column_name, permission;"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    55,
+    56
+   ],
+   [
+    "replace",
+    58,
+    63,
+    56,
+    61,
+    [
+     " missing | role_name | object_type | schema_name | object_name | column_name | permission",
+     " ---------+-----------+-------------+-------------+-------------+-------------+------------",
+     " f | laurenz | VIEW | appschema | appview | | SELECT",
+     " t | appuser | TABLE | appschema | apptable | | DELETE",
+     " (2 rows)"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    72,
+    61,
+    70
+   ],
+   [
+    "replace",
+    72,
+    77,
+    70,
+    75,
+    [
+     " SELECT object_type, role_name, schema_name, object_name, column_name,",
+     " permission, granted",
+     " FROM schema_permissions",
+     " WHERE role_name = 'appuser' AND schema_name = 'appschema'",
+     " ORDER BY permission;"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    75,
+    76
+   ],
+   [
+    "replace",
+    78,
+    83,
+    76,
+    81,
+    [
+     " object_type | role_name | schema_name | object_name | column_name | permission | granted",
+     " -------------+-----------+-------------+-------------+-------------+------------+---------",
+     " SCHEMA | appuser | appschema | | | USAGE | t",
+     " SCHEMA | appuser | appschema | | | CREATE | f",
+     " (2 rows)"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    85,
+    81,
+    83
+   ],
+   [
+    "delete",
+    85,
+    86,
+    83,
+    83
+   ],
+   [
+    "equal",
+    86,
+    108,
+    83,
+    105
+   ],
+   [
+    "replace",
+    108,
+    109,
+    105,
+    106,
+    [
+     " `ALTER DEFAULT PRIVILEGES` (read-only; see below)"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    111,
+    106,
+    108
+   ],
+   [
+    "replace",
+    111,
+    112,
+    108,
+    109,
+    [
+     " object type, schema and privilege (see below)"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    117,
+    109,
+    114
+   ],
+   [
+    "replace",
+    117,
+    118,
+    114,
+    115,
+    [
+     " `FUNCTION`, `SCHEMA` or `DATABASE`)"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    121,
+    115,
+    118
+   ],
+   [
+    "replace",
+    121,
+    123,
+    118,
+    120,
+    [
+     " `DELETE`, `TRUNCATE`, `REFERENCES`, `TRIGGER`, `USAGE`, `CREATE`,",
+     " `EXECUTE`, `CONNECT`, `TEMPORARY` or `MAINTAIN`"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    125,
+    120,
+    122
+   ],
+   [
+    "replace",
+    125,
+    127,
+    122,
+    124,
+    [
+     " `role:<name>` when it is inherited through role membership; NULL when the",
+     " privilege is not granted"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    134,
+    124,
+    131
+   ],
+   [
+    "replace",
+    134,
+    135,
+    131,
+    132,
+    [
+     "schemas), `role_name`, `permission` and `granted`. `permission_diff_summary`"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    148,
+    132,
+    145
+   ],
+   [
+    "replace",
+    148,
+    149,
+    145,
+    146,
+    [
+     "appropriate `GRANT` or `REVOKE` command to be executed. `default_acl_permissions`"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    158,
+    146,
+    155
+   ],
+   [
+    "replace",
+    158,
+    161,
+    155,
+    158,
+    [
+     " CREATE ROLE appuser LOGIN;",
+     " CREATE ROLE reporting LOGIN;",
+     " CREATE ROLE auditor LOGIN;"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    162,
+    158,
+    159
+   ],
+   [
+    "replace",
+    162,
+    172,
+    159,
+    169,
+    [
+     " CREATE SCHEMA appschema;",
+     " CREATE TABLE appschema.invoice (",
+     " id integer PRIMARY KEY,",
+     " customer text NOT NULL,",
+     " amount numeric NOT NULL",
+     " );",
+     " CREATE VIEW appschema.invoice_v AS SELECT id, customer FROM appschema.invoice;",
+     " CREATE SEQUENCE appschema.invoice_id_seq;",
+     " CREATE FUNCTION appschema.total() RETURNS numeric LANGUAGE sql",
+     " AS 'SELECT sum(amount) FROM appschema.invoice';"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    169,
+    170
+   ],
+   [
+    "replace",
+    173,
+    181,
+    170,
+    178,
+    [
+     " GRANT USAGE ON SCHEMA appschema TO appuser, reporting, auditor;",
+     " GRANT SELECT, INSERT, UPDATE, DELETE ON appschema.invoice TO appuser;",
+     " GRANT SELECT ON appschema.invoice TO reporting;",
+     " GRANT SELECT ON appschema.invoice_v TO reporting;",
+     " GRANT SELECT (customer) ON appschema.invoice TO auditor;",
+     " GRANT USAGE ON SEQUENCE appschema.invoice_id_seq TO appuser;",
+     " REVOKE EXECUTE ON FUNCTION appschema.total() FROM PUBLIC;",
+     " GRANT EXECUTE ON FUNCTION appschema.total() TO reporting;"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    184,
+    178,
+    181
+   ],
+   [
+    "replace",
+    184,
+    187,
+    181,
+    184,
+    [
+     " SELECT object_type, role_name, schema_name, permission, granted",
+     " FROM schema_permissions",
+     " WHERE schema_name = 'appschema' AND role_name IN ('appuser', 'reporting');"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    188,
+    184,
+    185
+   ],
+   [
+    "replace",
+    188,
+    194,
+    185,
+    191,
+    [
+     " object_type | role_name | schema_name | permission | granted",
+     " -------------+-----------+-------------+------------+---------",
+     " SCHEMA | appuser | appschema | USAGE | t",
+     " SCHEMA | appuser | appschema | CREATE | f",
+     " SCHEMA | reporting | appschema | USAGE | t",
+     " SCHEMA | reporting | appschema | CREATE | f"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    198,
+    191,
+    195
+   ],
+   [
+    "replace",
+    198,
+    202,
+    195,
+    199,
+    [
+     " SELECT role_name, object_name, permission, granted",
+     " FROM table_permissions",
+     " WHERE schema_name = 'appschema' AND role_name IN ('appuser', 'reporting')",
+     " ORDER BY role_name, permission;"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    203,
+    199,
+    200
+   ],
+   [
+    "replace",
+    203,
+    221,
+    200,
+    218,
+    [
+     " role_name | object_name | permission | granted",
+     " -----------+-------------+------------+---------",
+     " appuser | invoice | SELECT | t",
+     " appuser | invoice | INSERT | t",
+     " appuser | invoice | UPDATE | t",
+     " appuser | invoice | DELETE | t",
+     " appuser | invoice | TRUNCATE | f",
+     " appuser | invoice | REFERENCES | f",
+     " appuser | invoice | TRIGGER | f",
+     " appuser | invoice | MAINTAIN | f",
+     " reporting | invoice | SELECT | t",
+     " reporting | invoice | INSERT | f",
+     " reporting | invoice | UPDATE | f",
+     " reporting | invoice | DELETE | f",
+     " reporting | invoice | TRUNCATE | f",
+     " reporting | invoice | REFERENCES | f",
+     " reporting | invoice | TRIGGER | f",
+     " reporting | invoice | MAINTAIN | f"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    226,
+    218,
+    223
+   ],
+   [
+    "replace",
+    226,
+    230,
+    223,
+    227,
+    [
+     " SELECT role_name, object_name, permission, granted",
+     " FROM view_permissions",
+     " WHERE schema_name = 'appschema' AND role_name = 'reporting'",
+     " ORDER BY permission;"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    231,
+    227,
+    228
+   ],
+   [
+    "replace",
+    231,
+    241,
+    228,
+    238,
+    [
+     " role_name | object_name | permission | granted",
+     " -----------+-------------+------------+---------",
+     " reporting | invoice_v | SELECT | t",
+     " reporting | invoice_v | INSERT | f",
+     " reporting | invoice_v | UPDATE | f",
+     " reporting | invoice_v | DELETE | f",
+     " reporting | invoice_v | TRUNCATE | f",
+     " reporting | invoice_v | REFERENCES | f",
+     " reporting | invoice_v | TRIGGER | f",
+     " reporting | invoice_v | MAINTAIN | f"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    238,
+    239
+   ],
+   [
+    "replace",
+    242,
+    243,
+    239,
+    240,
+    [
+     "`column_permissions` reports column level privileges. Note that `granted` is"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    247,
+    240,
+    244
+   ],
+   [
+    "replace",
+    247,
+    251,
+    244,
+    248,
+    [
+     " SELECT role_name, object_name, column_name, permission, granted",
+     " FROM column_permissions",
+     " WHERE schema_name = 'appschema' AND object_name = 'invoice' AND role_name = 'auditor'",
+     " ORDER BY column_name, permission;"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    252,
+    248,
+    249
+   ],
+   [
+    "replace",
+    252,
+    266,
+    249,
+    263,
+    [
+     " role_name | object_name | column_name | permission | granted",
+     " -----------+-------------+-------------+------------+---------",
+     " auditor | invoice | amount | SELECT | f",
+     " auditor | invoice | amount | INSERT | f",
+     " auditor | invoice | amount | UPDATE | f",
+     " auditor | invoice | amount | REFERENCES | f",
+     " auditor | invoice | customer | SELECT | t",
+     " auditor | invoice | customer | INSERT | f",
+     " auditor | invoice | customer | UPDATE | f",
+     " auditor | invoice | customer | REFERENCES | f",
+     " auditor | invoice | id | SELECT | f",
+     " auditor | invoice | id | INSERT | f",
+     " auditor | invoice | id | UPDATE | f",
+     " auditor | invoice | id | REFERENCES | f"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    270,
+    263,
+    267
+   ],
+   [
+    "replace",
+    270,
+    274,
+    267,
+    271,
+    [
+     " SELECT role_name, object_name, permission, granted",
+     " FROM sequence_permissions",
+     " WHERE schema_name = 'appschema' AND role_name IN ('appuser', 'reporting')",
+     " ORDER BY role_name, permission;"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    275,
+    271,
+    272
+   ],
+   [
+    "replace",
+    275,
+    283,
+    272,
+    280,
+    [
+     " role_name | object_name | permission | granted",
+     " -----------+----------------+------------+---------",
+     " appuser | invoice_id_seq | SELECT | f",
+     " appuser | invoice_id_seq | UPDATE | f",
+     " appuser | invoice_id_seq | USAGE | t",
+     " reporting | invoice_id_seq | SELECT | f",
+     " reporting | invoice_id_seq | UPDATE | f",
+     " reporting | invoice_id_seq | USAGE | f"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    284,
+    280,
+    281
+   ],
+   [
+    "replace",
+    284,
+    285,
+    281,
+    282,
+    [
+     "`function_permissions` reports the `EXECUTE` privilege on functions. Keep in"
+    ]
+   ],
+   [
+    "equal",
+    285,
+    288,
+    282,
+    285
+   ],
+   [
+    "replace",
+    288,
+    292,
+    285,
+    289,
+    [
+     " SELECT role_name, object_name, permission, granted",
+     " FROM function_permissions",
+     " WHERE schema_name = 'appschema' AND role_name IN ('appuser', 'reporting')",
+     " ORDER BY role_name;"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    293,
+    289,
+    290
+   ],
+   [
+    "replace",
+    293,
+    297,
+    290,
+    294,
+    [
+     " role_name | object_name | permission | granted",
+     " -----------+-------------+------------+---------",
+     " appuser | total() | EXECUTE | f",
+     " reporting | total() | EXECUTE | t"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    302,
+    294,
+    299
+   ],
+   [
+    "replace",
+    302,
+    306,
+    299,
+    303,
+    [
+     " SELECT role_name, permission, granted",
+     " FROM database_permissions",
+     " WHERE role_name IN ('appuser', 'reporting')",
+     " ORDER BY role_name, permission;"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    307,
+    303,
+    304
+   ],
+   [
+    "replace",
+    307,
+    315,
+    304,
+    312,
+    [
+     " role_name | permission | granted",
+     " -----------+------------+---------",
+     " appuser | CREATE | f",
+     " appuser | CONNECT | t",
+     " appuser | TEMPORARY | t",
+     " reporting | CREATE | f",
+     " reporting | CONNECT | t",
+     " reporting | TEMPORARY | t"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    316,
+    312,
+    313
+   ],
+   [
+    "replace",
+    316,
+    317,
+    313,
+    314,
+    [
+     "`all_permissions` is the union of all of the above. Filtering on"
+    ]
+   ],
+   [
+    "equal",
+    317,
+    319,
+    314,
+    316
+   ],
+   [
+    "replace",
+    319,
+    324,
+    316,
+    321,
+    [
+     " SELECT object_type, role_name, object_name, column_name, permission",
+     " FROM all_permissions",
+     " WHERE granted AND role_name IN ('appuser', 'reporting', 'auditor')",
+     " AND coalesce(schema_name, 'appschema') = 'appschema'",
+     " ORDER BY object_type, role_name, object_name, column_name, permission;"
+    ]
+   ],
+   [
+    "equal",
+    324,
+    325,
+    321,
+    322
+   ],
+   [
+    "replace",
+    325,
+    345,
+    322,
+    342,
+    [
+     " object_type | role_name | object_name | column_name | permission",
+     " -------------+-----------+----------------+-------------+------------",
+     " TABLE | appuser | invoice | | SELECT",
+     " TABLE | appuser | invoice | | INSERT",
+     " TABLE | appuser | invoice | | UPDATE",
+     " TABLE | appuser | invoice | | DELETE",
+     " TABLE | reporting | invoice | | SELECT",
+     " VIEW | reporting | invoice_v | | SELECT",
+     " COLUMN | auditor | invoice | customer | SELECT",
+     " SEQUENCE | appuser | invoice_id_seq | | USAGE",
+     " FUNCTION | reporting | total() | | EXECUTE",
+     " SCHEMA | appuser | | | USAGE",
+     " SCHEMA | auditor | | | USAGE",
+     " SCHEMA | reporting | | | USAGE",
+     " DATABASE | appuser | | | CONNECT",
+     " DATABASE | appuser | | | TEMPORARY",
+     " DATABASE | auditor | | | CONNECT",
+     " DATABASE | auditor | | | TEMPORARY",
+     " DATABASE | reporting | | | CONNECT",
+     " DATABASE | reporting | | | TEMPORARY"
+    ]
+   ],
+   [
+    "equal",
+    345,
+    364,
+    342,
+    361
+   ],
+   [
+    "replace",
+    364,
+    365,
+    361,
+    362,
+    [
+     "cannot be entered twice, and the role must exist. `MAINTAIN` is rejected"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    368,
+    362,
+    365
+   ],
+   [
+    "replace",
+    368,
+    369,
+    365,
+    366,
+    [
+     "new objects should receive; see Default privileges."
+    ]
+   ],
+   [
+    "equal",
+    369,
+    375,
+    366,
+    372
+   ],
+   [
+    "replace",
+    375,
+    376,
+    372,
+    373,
+    [
+     "|Function|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    376,
+    377,
+    373,
+    374
+   ],
+   [
+    "replace",
+    377,
+    385,
+    374,
+    382,
+    [
+     "|`permission_diffs()`|compare `permission_target` with the actual grants|",
+     "|`default_acl_diffs()`|compare `default_acl_target` with `pg_default_acl`|",
+     "|`permission_fix_sql()`|the `GRANT`/`REVOKE` statements that would resolve every diff|",
+     "|`permission_apply(dry_run)`|execute those statements, or just return them|",
+     "|`permission_target_snapshot(role, schema)`|adopt the current grants as the baseline|",
+     "|`permission_source(role, type, oid, attnum, permission)`|why a privilege is held|",
+     "|`role_drop(role, new_owner, drop_role)`|reassign ownership, revoke privileges and drop a role|",
+     "|`role_dependencies(role)`|what still depends on a role|"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    404,
+    382,
+    401
+   ],
+   [
+    "replace",
+    404,
+    405,
+    401,
+    402,
+    [
+     "scope described by the desired state, not the whole cluster. Privileges on"
+    ]
+   ],
+   [
+    "equal",
+    405,
+    409,
+    402,
+    406
+   ],
+   [
+    "replace",
+    409,
+    410,
+    406,
+    407,
+    [
+     "from them, are examined. A role that is not managed at all is out of scope;"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    414,
+    407,
+    411
+   ],
+   [
+    "replace",
+    414,
+    415,
+    411,
+    412,
+    [
+     "Default privileges."
+    ]
+   ],
+   [
+    "equal",
+    415,
+    419,
+    412,
+    416
+   ],
+   [
+    "replace",
+    419,
+    420,
+    416,
+    417,
+    [
+     "while `reporting` should only be allowed to read them. We record that as the"
+    ]
+   ],
+   [
+    "equal",
+    420,
+    422,
+    417,
+    419
+   ],
+   [
+    "replace",
+    422,
+    425,
+    419,
+    422,
+    [
+     " INSERT INTO permission_target (role_name, permissions, object_type, schema_name)",
+     " VALUES ('appuser', '{SELECT,INSERT,UPDATE,DELETE}', 'TABLE', 'appschema'),",
+     " ('reporting', '{SELECT}', 'TABLE', 'appschema');"
+    ]
+   ],
+   [
+    "equal",
+    425,
+    429,
+    422,
+    426
+   ],
+   [
+    "replace",
+    429,
+    431,
+    426,
+    428,
+    [
+     " GRANT SELECT, INSERT, UPDATE ON appschema.invoice TO appuser;",
+     " GRANT SELECT, INSERT ON appschema.invoice TO reporting;"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    434,
+    428,
+    431
+   ],
+   [
+    "replace",
+    434,
+    437,
+    431,
+    434,
+    [
+     " SELECT * FROM permission_diffs()",
+     " WHERE role_name IN ('appuser', 'reporting')",
+     " ORDER BY missing, role_name, permission;"
+    ]
+   ],
+   [
+    "equal",
+    437,
+    438,
+    434,
+    435
+   ],
+   [
+    "replace",
+    438,
+    442,
+    435,
+    439,
+    [
+     " missing | role_name | object_type | schema_name | object_name | column_name | permission",
+     " ---------+-----------+-------------+-------------+-------------+-------------+------------",
+     " f | reporting | TABLE | appschema | invoice | | INSERT",
+     " t | appuser | TABLE | appschema | invoice | | DELETE"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    444,
+    439,
+    441
+   ],
+   [
+    "replace",
+    444,
+    445,
+    441,
+    442,
+    [
+     "`reporting` holds a surplus `INSERT` privilege (`missing` is `f`). Because the"
+    ]
+   ],
+   [
+    "equal",
+    445,
+    448,
+    442,
+    445
+   ],
+   [
+    "replace",
+    448,
+    452,
+    445,
+    449,
+    [
+     " -- grant the missing privilege",
+     " UPDATE table_permissions SET granted = true",
+     " WHERE role_name = 'appuser' AND schema_name = 'appschema'",
+     " AND object_name = 'invoice' AND permission = 'DELETE';"
+    ]
+   ],
+   [
+    "equal",
+    452,
+    453,
+    449,
+    450
+   ],
+   [
+    "replace",
+    453,
+    457,
+    450,
+    454,
+    [
+     " -- revoke the surplus privilege",
+     " UPDATE table_permissions SET granted = false",
+     " WHERE role_name = 'reporting' AND schema_name = 'appschema'",
+     " AND object_name = 'invoice' AND permission = 'INSERT';"
+    ]
+   ],
+   [
+    "equal",
+    457,
+    466,
+    454,
+    463
+   ],
+   [
+    "replace",
+    466,
+    468,
+    463,
+    465,
+    [
+     " -- everything the role currently holds",
+     " SELECT permission_target_snapshot('appuser');"
+    ]
+   ],
+   [
+    "equal",
+    468,
+    469,
+    465,
+    466
+   ],
+   [
+    "replace",
+    469,
+    471,
+    466,
+    468,
+    [
+     " -- or only what it holds in one schema",
+     " SELECT permission_target_snapshot('appuser', 'appschema');"
+    ]
+   ],
+   [
+    "equal",
+    471,
+    473,
+    468,
+    470
+   ],
+   [
+    "replace",
+    473,
+    474,
+    470,
+    471,
+    [
+     "exist, and ignores the extension's own tables and views. The usual workflow"
+    ]
+   ],
+   [
+    "equal",
+    474,
+    482,
+    471,
+    479
+   ],
+   [
+    "replace",
+    482,
+    486,
+    479,
+    483,
+    [
+     " SELECT role_name, permission, granted, source",
+     " FROM table_permissions",
+     " WHERE schema_name = 'appschema' AND object_name = 'invoice'",
+     " AND role_name = 'reporting';"
+    ]
+   ],
+   [
+    "equal",
+    486,
+    487,
+    483,
+    484
+   ],
+   [
+    "replace",
+    487,
+    491,
+    484,
+    488,
+    [
+     " role_name | permission | granted | source",
+     " -----------+------------+---------+----------------",
+     " reporting | SELECT | t | role:readers",
+     " reporting | INSERT | t | direct"
+    ]
+   ],
+   [
+    "equal",
+    491,
+    501,
+    488,
+    498
+   ],
+   [
+    "replace",
+    501,
+    503,
+    498,
+    500,
+    [
+     " SELECT missing, role_name, object_name, permission, sql",
+     " FROM permission_fix_sql();"
+    ]
+   ],
+   [
+    "equal",
+    503,
+    504,
+    500,
+    501
+   ],
+   [
+    "replace",
+    504,
+    508,
+    501,
+    505,
+    [
+     " missing | role_name | object_name | permission | sql",
+     " ---------+-----------+-------------+------------+----------------------------------------",
+     " t | appuser | invoice | DELETE | GRANT DELETE ON appschema.invoice TO appuser",
+     " f | reporting | invoice | INSERT | REVOKE INSERT ON appschema.invoice FROM reporting"
+    ]
+   ],
+   [
+    "equal",
+    508,
+    512,
+    505,
+    509
+   ],
+   [
+    "replace",
+    512,
+    514,
+    509,
+    511,
+    [
+     " SELECT permission_apply(); -- review",
+     " SELECT permission_apply(false); -- execute"
+    ]
+   ],
+   [
+    "equal",
+    514,
+    517,
+    511,
+    514
+   ],
+   [
+    "replace",
+    517,
+    518,
+    514,
+    515,
+    [
+     "One target row can produce thousands of diff rows. `permission_diff_summary`"
+    ]
+   ],
+   [
+    "equal",
+    518,
+    520,
+    515,
+    517
+   ],
+   [
+    "replace",
+    520,
+    521,
+    517,
+    518,
+    [
+     " SELECT * FROM permission_diff_summary ORDER BY objects DESC;"
+    ]
+   ],
+   [
+    "equal",
+    521,
+    522,
+    518,
+    519
+   ],
+   [
+    "replace",
+    522,
+    526,
+    519,
+    523,
+    [
+     " missing | role_name | object_type | schema_name | permission | objects",
+     " ---------+-----------+-------------+-------------+------------+---------",
+     " t | appuser | TABLE | appschema | SELECT | 412",
+     " f | reporting | TABLE | appschema | INSERT | 3"
+    ]
+   ],
+   [
+    "equal",
+    526,
+    529,
+    523,
+    526
+   ],
+   [
+    "replace",
+    529,
+    530,
+    526,
+    527,
+    [
+     "`PUBLIC` is not a row in `pg_roles`, but it is a grantee like any other. The"
+    ]
+   ],
+   [
+    "equal",
+    530,
+    533,
+    527,
+    530
+   ],
+   [
+    "replace",
+    533,
+    535,
+    530,
+    532,
+    [
+     " INSERT INTO permission_target (role_name, permissions, object_type, schema_name)",
+     " VALUES ('PUBLIC', '{SELECT}', 'TABLE', 'appschema');"
+    ]
+   ],
+   [
+    "equal",
+    535,
+    537,
+    532,
+    534
+   ],
+   [
+    "replace",
+    537,
+    538,
+    534,
+    535,
+    [
+     "granted for every role as well. Targeting `PUBLIC` is the way to express"
+    ]
+   ],
+   [
+    "equal",
+    538,
+    542,
+    535,
+    539
+   ],
+   [
+    "replace",
+    542,
+    543,
+    539,
+    540,
+    [
+     "`permission_diffs()` understands role membership. If `reporting` is a member"
+    ]
+   ],
+   [
+    "equal",
+    543,
+    545,
+    540,
+    542
+   ],
+   [
+    "replace",
+    545,
+    546,
+    542,
+    543,
+    [
+     "granted directly. A direct grant to `reporting` is still reported."
+    ]
+   ],
+   [
+    "equal",
+    546,
+    548,
+    543,
+    545
+   ],
+   [
+    "replace",
+    548,
+    549,
+    545,
+    546,
+    [
+     "from them, are examined. A role that is not managed at all is out of scope;"
+    ]
+   ],
+   [
+    "equal",
+    549,
+    554,
+    546,
+    551
+   ],
+   [
+    "replace",
+    554,
+    555,
+    551,
+    552,
+    [
+     "production setups it is where the real policy lives. It is modelled"
+    ]
+   ],
+   [
+    "equal",
+    555,
+    557,
+    552,
+    554
+   ],
+   [
+    "replace",
+    557,
+    560,
+    554,
+    557,
+    [
+     " INSERT INTO default_acl_target",
+     " (for_role_name, schema_name, object_type, role_name, permissions)",
+     " VALUES ('appowner', NULL, 'TABLE', 'appuser', '{SELECT,INSERT}');"
+    ]
+   ],
+   [
+    "equal",
+    560,
+    563,
+    557,
+    560
+   ],
+   [
+    "replace",
+    563,
+    564,
+    560,
+    561,
+    [
+     "`appuser` by default. `object_type` must be `TABLE`, `SEQUENCE` or"
+    ]
+   ],
+   [
+    "equal",
+    564,
+    577,
+    561,
+    574
+   ],
+   [
+    "replace",
+    577,
+    578,
+    574,
+    575,
+    [
+     "they are readable by `PUBLIC` but not writable by it. Only the extension"
+    ]
+   ],
+   [
+    "equal",
+    578,
+    580,
+    575,
+    577
+   ],
+   [
+    "replace",
+    580,
+    584,
+    577,
+    581,
+    [
+     " GRANT INSERT, UPDATE, DELETE ON permission_target TO compliance_admin;",
+     " GRANT USAGE ON SEQUENCE permission_target_id_seq TO compliance_admin;",
+     " GRANT INSERT, UPDATE, DELETE ON default_acl_target TO compliance_admin;",
+     " GRANT USAGE ON SEQUENCE default_acl_target_id_seq TO compliance_admin;"
+    ]
+   ],
+   [
+    "equal",
+    584,
+    587,
+    581,
+    584
+   ],
+   [
+    "replace",
+    587,
+    588,
+    584,
+    585,
+    [
+     "`GRANT` and `REVOKE` as the invoking user. Granting `UPDATE` on a view to"
+    ]
+   ],
+   [
+    "equal",
+    588,
+    590,
+    585,
+    587
+   ],
+   [
+    "replace",
+    590,
+    591,
+    587,
+    588,
+    [
+     "A target whose role does not exist is rejected when it is inserted. If the"
+    ]
+   ],
+   [
+    "equal",
+    591,
+    594,
+    588,
+    591
+   ],
+   [
+    "replace",
+    594,
+    597,
+    591,
+    594,
+    [
+     " DELETE FROM permission_target",
+     " WHERE role_name <> 'PUBLIC'",
+     " AND role_name NOT IN (SELECT rolname FROM pg_roles);"
+    ]
+   ],
+   [
+    "equal",
+    597,
+    603,
+    594,
+    600
+   ],
+   [
+    "replace",
+    603,
+    604,
+    600,
+    601,
+    [
+     " SELECT * FROM role_drop('olduser', 'newuser');"
+    ]
+   ],
+   [
+    "equal",
+    604,
+    605,
+    601,
+    602
+   ],
+   [
+    "replace",
+    605,
+    610,
+    602,
+    607,
+    [
+     " step | statement",
+     " ----------------+------------------------------------------",
+     " reassign owned | REASSIGN OWNED BY olduser TO newuser",
+     " drop owned | DROP OWNED BY olduser",
+     " drop role | DROP ROLE olduser"
+    ]
+   ],
+   [
+    "equal",
+    610,
+    613,
+    607,
+    610
+   ],
+   [
+    "replace",
+    613,
+    614,
+    610,
+    611,
+    [
+     "entries; `DROP ROLE` then removes the role. Without a successor the owned"
+    ]
+   ],
+   [
+    "equal",
+    614,
+    616,
+    611,
+    613
+   ],
+   [
+    "replace",
+    616,
+    617,
+    613,
+    614,
+    [
+     " SELECT * FROM role_drop('olduser');"
+    ]
+   ],
+   [
+    "equal",
+    617,
+    619,
+    614,
+    616
+   ],
+   [
+    "replace",
+    619,
+    620,
+    616,
+    617,
+    [
+     "shared objects such as databases and tablespaces). If the role owns objects"
+    ]
+   ],
+   [
+    "equal",
+    620,
+    622,
+    617,
+    619
+   ],
+   [
+    "replace",
+    622,
+    624,
+    619,
+    621,
+    [
+     " -- in every database that contains objects owned by olduser",
+     " SELECT * FROM role_drop('olduser', 'newuser', false);"
+    ]
+   ],
+   [
+    "equal",
+    624,
+    625,
+    621,
+    622
+   ],
+   [
+    "replace",
+    625,
+    627,
+    622,
+    624,
+    [
+     " -- once nothing depends on it any more",
+     " SELECT * FROM role_drop('olduser', 'newuser', true);"
+    ]
+   ],
+   [
+    "equal",
+    627,
+    630,
+    624,
+    627
+   ],
+   [
+    "replace",
+    630,
+    631,
+    627,
+    628,
+    [
+     " SELECT * FROM role_dependencies('olduser');"
+    ]
+   ],
+   [
+    "equal",
+    631,
+    632,
+    628,
+    629
+   ],
+   [
+    "replace",
+    632,
+    637,
+    629,
+    634,
+    [
+     " database | kind | object",
+     " ----------+-------------+------------------------",
+     " postgres | default acl | TABLE (all schemas)",
+     " postgres | relation | invoice",
+     " otherdb | relation |"
+    ]
+   ],
+   [
+    "equal",
+    637,
+    647,
+    634,
+    644
+   ],
+   [
+    "delete",
+    647,
+    648,
+    644,
+    644
+   ],
+   [
+    "equal",
+    648,
+    653,
+    644,
+    649
+   ],
+   [
+    "replace",
+    653,
+    654,
+    649,
+    650,
+    [
+     "Make sure that `pg_config` is on your `PATH`. Then type"
+    ]
+   ],
+   [
+    "equal",
+    654,
+    655,
+    650,
+    651
+   ],
+   [
+    "replace",
+    655,
+    656,
+    651,
+    652,
+    [
+     " make install"
+    ]
+   ],
+   [
+    "equal",
+    656,
+    661,
+    652,
+    657
+   ],
+   [
+    "replace",
+    661,
+    662,
+    657,
+    658,
+    [
+     " CREATE EXTENSION pg_permissions;"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    666,
+    658,
+    662
+   ],
+   [
+    "replace",
+    666,
+    672,
+    662,
+    668,
+    [
+     " ALTER EXTENSION pg_permissions UPDATE TO '1.1';",
+     " ALTER EXTENSION pg_permissions UPDATE TO '1.2';",
+     " ALTER EXTENSION pg_permissions UPDATE TO '1.3';",
+     " ALTER EXTENSION pg_permissions UPDATE TO '1.4';",
+     " ALTER EXTENSION pg_permissions UPDATE TO '1.5';",
+     " ALTER EXTENSION pg_permissions UPDATE TO '1.6';"
+    ]
+   ],
+   [
+    "equal",
+    672,
+    679,
+    668,
+    675
+   ],
+   [
+    "replace",
+    679,
+    680,
+    675,
+    676,
+    [
+     "were missing, so a database created with 1.2 can be upgraded again. The"
+    ]
+   ],
+   [
+    "equal",
+    680,
+    691,
+    676,
+    687
+   ],
+   [
+    "replace",
+    691,
+    692,
+    687,
+    688,
+    [
+     " pg_config --sharedir"
+    ]
+   ],
+   [
+    "equal",
+    692,
+    696,
+    688,
+    692
+   ],
+   [
+    "replace",
+    696,
+    697,
+    692,
+    693,
+    [
+     " copy pg_permissions.control *.sql \"C:\\Program Files\\PostgreSQL\\18\\share\\extension\""
+    ]
+   ],
+   [
+    "equal",
+    697,
+    701,
+    693,
+    697
+   ],
+   [
+    "delete",
+    701,
+    702,
+    697,
+    697
+   ],
+   [
+    "equal",
+    702,
+    708,
+    697,
+    703
+   ],
+   [
+    "replace",
+    708,
+    709,
+    703,
+    704,
+    [
+     "|Obligation|How the extension supports it|"
+    ]
+   ],
+   [
+    "equal",
+    709,
+    710,
+    704,
+    705
+   ],
+   [
+    "replace",
+    710,
+    715,
+    705,
+    710,
+    [
+     "|Least privilege|`permission_target` records the intended entitlements; `permission_diffs()` reports every privilege that is held but not intended (`missing = false`).|",
+     "|Periodic review|`permission_diffs()` and `default_acl_diffs()` return a machine-readable result set that can be scheduled, diffed between runs, and attached to a ticket.|",
+     "|Auditability|`all_permissions` is a complete, queryable snapshot of the current state; `permission_target` is the recorded intent, and both are ordinary tables and views that can be exported with `COPY`.|",
+     "|Segregation of duties|The desired state is readable by `PUBLIC` but writable only by explicitly authorised roles, so the person who reviews access need not be the person who can change the baseline.|",
+     "|Provisioning drift|`default_acl_target` and `default_acl_diffs()` cover `ALTER DEFAULT PRIVILEGES`, which is where most production policies actually live.|"
+    ]
+   ],
+   [
+    "equal",
+    715,
+    720,
+    710,
+    715
+   ],
+   [
+    "replace",
+    720,
+    722,
+    715,
+    717,
+    [
+     " -- 1. capture the current state as evidence",
+     " \\copy (SELECT * FROM all_permissions ORDER BY 1, 2, 3, 4, 5, 6, 7, 8) TO 'access-review-2026-Q4.csv' WITH (FORMAT csv, HEADER)"
+    ]
+   ],
+   [
+    "equal",
+    722,
+    723,
+    717,
+    718
+   ],
+   [
+    "replace",
+    723,
+    725,
+    718,
+    720,
+    [
+     " -- 2. list every deviation from the recorded intent",
+     " \\copy (SELECT * FROM permission_diffs() ORDER BY 1, 2, 3, 4, 5, 6, 7) TO 'access-diffs-2026-Q4.csv' WITH (FORMAT csv, HEADER)"
+    ]
+   ],
+   [
+    "equal",
+    725,
+    726,
+    720,
+    721
+   ],
+   [
+    "replace",
+    726,
+    728,
+    721,
+    723,
+    [
+     " -- 3. the same for default privileges",
+     " \\copy (SELECT * FROM default_acl_diffs() ORDER BY 1, 2, 3, 4, 5, 6) TO 'default-acl-diffs-2026-Q4.csv' WITH (FORMAT csv, HEADER)"
+    ]
+   ],
+   [
+    "equal",
+    728,
+    733,
+    723,
+    728
+   ],
+   [
+    "replace",
+    733,
+    734,
+    728,
+    729,
+    [
+     "the approved baseline. A non-empty result is the work list: each row can be"
+    ]
+   ],
+   [
+    "equal",
+    734,
+    743,
+    729,
+    738
+   ],
+   [
+    "replace",
+    743,
+    744,
+    738,
+    739,
+    [
+     " that access to financial data is restricted and periodically reviewed."
+    ]
+   ],
+   [
+    "equal",
+    744,
+    746,
+    739,
+    741
+   ],
+   [
+    "replace",
+    746,
+    748,
+    741,
+    743,
+    [
+     " cardholder data on a business need-to-know basis and reviewing it at least",
+     " every six months."
+    ]
+   ],
+   [
+    "equal",
+    748,
+    750,
+    743,
+    745
+   ],
+   [
+    "replace",
+    750,
+    752,
+    745,
+    747,
+    [
+     " personal data to be limited to what is necessary, and Article 30 records of",
+     " processing activities, for which the permission snapshot is useful input."
+    ]
+   ],
+   [
+    "equal",
+    752,
+    754,
+    747,
+    749
+   ],
+   [
+    "replace",
+    754,
+    756,
+    749,
+    751,
+    [
+     " (§ 164.312(a)) for electronic protected health information, and the",
+     " audit-control standard (§ 164.312(b))."
+    ]
+   ],
+   [
+    "equal",
+    756,
+    758,
+    751,
+    753
+   ],
+   [
+    "replace",
+    758,
+    759,
+    753,
+    754,
+    [
+     " control 5.15 and following) covering formal entitlement and periodic review."
+    ]
+   ],
+   [
+    "equal",
+    759,
+    761,
+    754,
+    756
+   ],
+   [
+    "replace",
+    761,
+    762,
+    756,
+    757,
+    [
+     " logical access, in particular CC6.1 and CC6.3."
+    ]
+   ],
+   [
+    "equal",
+    762,
+    764,
+    757,
+    759
+   ],
+   [
+    "replace",
+    764,
+    765,
+    759,
+    760,
+    [
+     " requirements for financial entities."
+    ]
+   ],
+   [
+    "equal",
+    765,
+    767,
+    760,
+    762
+   ],
+   [
+    "replace",
+    767,
+    769,
+    762,
+    764,
+    [
+     " privilege) controls, which call for reviewing and reconciling accounts and",
+     " privileges."
+    ]
+   ],
+   [
+    "equal",
+    769,
+    772,
+    764,
+    767
+   ],
+   [
+    "replace",
+    772,
+    773,
+    767,
+    768,
+    [
+     "It reports and reconciles; it does not enforce. A `GRANT` issued outside the"
+    ]
+   ],
+   [
+    "equal",
+    773,
+    774,
+    768,
+    769
+   ],
+   [
+    "replace",
+    774,
+    775,
+    769,
+    770,
+    [
+     "`permission_diffs()` runs. It also does not cover every object type: row-level"
+    ]
+   ],
+   [
+    "equal",
+    775,
+    777,
+    770,
+    772
+   ],
+   [
+    "replace",
+    777,
+    778,
+    772,
+    773,
+    [
+     "`pg_hba.conf` authentication rules are outside its scope. Default privileges"
+    ]
+   ],
+   [
+    "equal",
+    778,
+    783,
+    773,
+    778
+   ],
+   [
+    "delete",
+    783,
+    784,
+    778,
+    778
+   ],
+   [
+    "equal",
+    784,
+    789,
+    778,
+    783
+   ],
+   [
+    "delete",
+    789,
+    793,
+    783,
+    783
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "fbb4790605a8+2": {
+  "fn": "Ralirael/dsh-life-planner",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "equal",
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    "delete",
+    9,
+    11,
+    9,
+    9
+   ],
+   [
+    "equal",
+    11,
+    13,
+    9,
+    11
+   ],
+   [
+    "replace",
+    13,
+    14,
+    11,
+    12,
+    [
+     "|目录|包名|提供什么|只装它会出现什么|"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    12,
+    13
+   ],
+   [
+    "replace",
+    15,
+    17,
+    13,
+    15,
+    [
+     "|`plugin/`|`@local/dsh-life-planner`|宿主逻辑、规划页、学习页、43 个工具|能打开页面，但**新建会话里没有「学习模式」预设**|",
+     "|`study-preset/`|`@local/dsh-study-preset`|**「学习模式」会话预设（`study-teach`）**|能看到「学习模式」，但没有页面与工具，对话会报工具不存在|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    19,
+    15,
+    17
+   ],
+   [
+    "delete",
+    19,
+    21,
+    17,
+    17
+   ],
+   [
+    "equal",
+    21,
+    34,
+    17,
+    30
+   ],
+   [
+    "replace",
+    34,
+    35,
+    30,
+    31,
+    [
+     " （`link:` 指向两个目录）。"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    47,
+    31,
+    43
+   ],
+   [
+    "replace",
+    47,
+    49,
+    43,
+    45,
+    [
+     "- 详细检查表：docs/安装与排查.md；差异分析：",
+     " docs/audit/2026-11-16-macOS兼容分析.md。"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    57,
+    45,
+    53
+   ],
+   [
+    "delete",
+    57,
+    59,
+    53,
+    53
+   ],
+   [
+    "equal",
+    59,
+    74,
+    53,
+    68
+   ],
+   [
+    "replace",
+    74,
+    78,
+    68,
+    72,
+    [
+     " - **列表库 `list`**（原 `word-bank`）：单词/术语卡片，选择题带干扰项；",
+     " - **知识树 `tree`**（原 `outline`）：章节 → 知识点；",
+     " - **题库 `bank`**（原 `outline-bank`）：知识树 + 题目库，题目按覆盖的知识点分类，答题同时推进知识点。",
+     " - 另有 `custom`；旧模板 id 自动归一。"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    90,
+    72,
+    84
+   ],
+   [
+    "delete",
+    90,
+    92,
+    84,
+    84
+   ],
+   [
+    "equal",
+    92,
+    108,
+    84,
+    100
+   ],
+   [
+    "replace",
+    108,
+    109,
+    100,
+    101,
+    [
+     "|配置|说明|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    101,
+    102
+   ],
+   [
+    "replace",
+    110,
+    112,
+    102,
+    104,
+    [
+     "|`studyMode`|学习工具总体开关（关闭后隐藏全部 `study_*` 工具）|",
+     "|`studyPanel`|学习页面开关（关闭后学习写操作返回 403，读取返回空结构）|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    114,
+    104,
+    106
+   ],
+   [
+    "delete",
+    114,
+    116,
+    106,
+    106
+   ],
+   [
+    "equal",
+    116,
+    134,
+    106,
+    124
+   ],
+   [
+    "replace",
+    134,
+    135,
+    124,
+    125,
+    [
+     "更多细节见 docs/README.md。"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    142,
+    125,
+    132
+   ],
+   [
+    "replace",
+    142,
+    146,
+    132,
+    133,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    158,
+    133,
+    145
+   ],
+   [
+    "replace",
+    158,
+    160,
+    145,
+    146,
+    [
+     "MIT，见 LICENSE。"
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

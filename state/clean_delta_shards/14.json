@@ -24112,5 +24112,1655 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "dba0d34abffd+2": {
+  "fn": "tada5hi/typeorm-extension",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "typeorm-extension logo: a sky-blue extension piece clicking into a slate database piece"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " typeorm-extension "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    10,
+    4,
+    6,
+    [
+     " Create, migrate, check, lock and seed TypeORM databases on every driver, from code or the CLI. ",
+     " Stop writing per-dialect <code>CREATE DATABASE</code> scripts, hand-rolled advisory locks and driver error-code switches."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    18,
+    7,
+    12,
+    [
+     " npm version",
+     " codecov",
+     " CI",
+     " Known Vulnerabilities",
+     " Conventional Commits"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    12,
+    13
+   ],
+   [
+    "replace",
+    19,
+    32,
+    13,
+    22,
+    [
+     " Why ·",
+     " Installation ·",
+     " CLI ·",
+     " Database ·",
+     " Locks ·",
+     " Errors ·",
+     " Seeding ·",
+     " API ·",
+     " Docs"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    40,
+    22,
+    30
+   ],
+   [
+    "replace",
+    40,
+    41,
+    30,
+    31,
+    [
+     "|Concern|Without it|With it|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    31,
+    32
+   ],
+   [
+    "replace",
+    42,
+    50,
+    32,
+    40,
+    [
+     "|**The database exists**|Connect to a server-level database and run each dialect's own `CREATE DATABASE` (postgres needs an initial database, better-sqlite3 is a file).|`createDatabase()` or `db create`. Skips an existing database, then runs the migrations or `synchronize()`.|",
+     "|**Several replicas migrate**|Each replica runs the migrations at boot, or you hand-roll `pg_advisory_lock` / `GET_LOCK` and their different return values.|`withDatabaseLock(queryRunner, 'migrations', fn)`: one session at a time, released also when `fn` throws.|",
+     "|**Migrations drift from the entities**|Noticed when the next generated migration suddenly contains unrelated changes.|`assertSchemaMatchesMetadata()` or `db drift` fails the deploy and lists the reconciling statements.|",
+     "|**Repair migrations**|Rename statements differ per dialect, and a half-applied migration fails on the rerun.|`renameIndex`, `renameForeignKey`, `changeColumnType` check the current state first and return `false` when already applied.|",
+     "|**Read-modify-write races**|Two requests read the same row, both pass the check, both write.|`withLockedEntity()` reads the row with a write lock (`FOR UPDATE`, `UPDLOCK` on mssql) inside a transaction.|",
+     "|**A failed write**|Read `code`, `number` or `errorNum`, on the error or on its `driverError`, depending on the driver.|`isDatabaseUniqueViolationError(e)` and its siblings know where each driver puts the vendor code.|",
+     "|**Development and test data**|Ad-hoc scripts that insert rows and break on the second run.|Seeder classes and factories, run by `seed run`, optionally tracked so each seeder runs once.|",
+     "|**Finding the DataSource**|Every script imports and initializes its own instance.|`data-source.ts` is discovered, and `useDataSource()` initializes it lazily, per alias.|"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    57,
+    40,
+    47
+   ],
+   [
+    "replace",
+    57,
+    82,
+    47,
+    48,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    85,
+    48,
+    51
+   ],
+   [
+    "replace",
+    85,
+    117,
+    51,
+    52,
+    [
+     "（目录 32 行略）"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    133,
+    52,
+    68
+   ],
+   [
+    "replace",
+    133,
+    134,
+    68,
+    69,
+    [
+     "use faker (`npm install @faker-js/faker`)."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    137,
+    69,
+    72
+   ],
+   [
+    "replace",
+    137,
+    138,
+    72,
+    73,
+    [
+     "To read the docs, visit https://typeorm-extension.tada5hi.net"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    158,
+    73,
+    93
+   ],
+   [
+    "replace",
+    158,
+    162,
+    93,
+    94,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    164,
+    94,
+    96
+   ],
+   [
+    "replace",
+    164,
+    165,
+    96,
+    97,
+    [
+     "Read the Seeding Configuration section to find out how to specify the path,"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    169,
+    97,
+    101
+   ],
+   [
+    "replace",
+    169,
+    170,
+    101,
+    102,
+    [
+     "|Option|Commands|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    102,
+    103
+   ],
+   [
+    "replace",
+    171,
+    182,
+    103,
+    114,
+    [
+     "|`--root` or `-r`|`db create`, `db drift`, `db drop`, `seed create`, `seed run`|`process.cwd()`|Root directory of the project.|",
+     "|`--tsconfig` or `-tc`|`db create`, `db drift`, `db drop`, `seed run`|`tsconfig.json`|Name (or relative path incl. name) of the tsconfig file.|",
+     "|`--dataSource` or `-d`|`db create`, `db drift`, `db drop`, `seed run`|`data-source`|Name (or relative path incl. name) of the data-source file.|",
+     "|`--synchronize` or `-s`|`db create`|`yes`|Synchronize the database schema after database creation. Options: `yes` or `no`.|",
+     "|`--initialDatabase`|`db create`, `db drop`|`undefined`|Specify the initial database to connect to. This option is only relevant for the `postgres` driver, which must always connect to a database. If no database is provided, the database name will be equal to the connection user name.|",
+     "|`--skipWithoutMigrations`|`db drift`|`false`|Report no drift if the data-source has no migrations registered.|",
+     "|`--name` or `-n`|`seed create` (required), `seed run` (optional)|`undefined`|Name (or relative path incl. name) of the seeder. Required on `seed create`; on `seed run` restricts execution to the matching seeder.|",
+     "|`--timestamp` or `-t`|`seed create`|`Date.now()`|Custom timestamp used in the generated seeder filename.|",
+     "|`--javascript` or `-j`|`seed create`|`false`|Generate a seeder file for JavaScript instead of TypeScript.|",
+     "|`--preserveFilePaths`|`db create`, `db drift`, `db drop`, `seed run`|`false`|This option indicates if file paths should be preserved and treated as if the just-in-time compilation environment is detected.|",
+     "|`--log-level`|`db create`, `db drift`, `db drop`, `seed create`, `seed run`|`info`|Logger verbosity. One of `silent`, `info`, `debug`.|"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    223,
+    114,
+    155
+   ],
+   [
+    "replace",
+    223,
+    238,
+    155,
+    156,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    245,
+    156,
+    163
+   ],
+   [
+    "replace",
+    245,
+    262,
+    163,
+    164,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    283,
+    164,
+    185
+   ],
+   [
+    "delete",
+    283,
+    284,
+    185,
+    185
+   ],
+   [
+    "equal",
+    284,
+    285,
+    185,
+    186
+   ],
+   [
+    "replace",
+    285,
+    286,
+    186,
+    187,
+    [
+     "createDatabase"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    295,
+    187,
+    196
+   ],
+   [
+    "replace",
+    295,
+    309,
+    196,
+    197,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    309,
+    316,
+    197,
+    204
+   ],
+   [
+    "replace",
+    316,
+    328,
+    204,
+    205,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    350,
+    205,
+    227
+   ],
+   [
+    "replace",
+    350,
+    351,
+    227,
+    228,
+    [
+     "dropDatabase"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    361,
+    228,
+    238
+   ],
+   [
+    "replace",
+    361,
+    365,
+    238,
+    239,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    376,
+    239,
+    250
+   ],
+   [
+    "replace",
+    376,
+    377,
+    250,
+    251,
+    [
+     "checkDatabase"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    391,
+    251,
+    265
+   ],
+   [
+    "replace",
+    391,
+    399,
+    265,
+    266,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    412,
+    266,
+    279
+   ],
+   [
+    "replace",
+    412,
+    418,
+    279,
+    280,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    418,
+    435,
+    280,
+    297
+   ],
+   [
+    "replace",
+    435,
+    468,
+    297,
+    298,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    468,
+    498,
+    298,
+    328
+   ],
+   [
+    "replace",
+    498,
+    503,
+    328,
+    329,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    503,
+    510,
+    329,
+    336
+   ],
+   [
+    "replace",
+    510,
+    511,
+    336,
+    337,
+    [
+     "|Option|Type|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    511,
+    512,
+    337,
+    338
+   ],
+   [
+    "replace",
+    512,
+    514,
+    338,
+    340,
+    [
+     "|`timeout`|`number`|unset|How long to wait for the lock, in milliseconds. `0` tries once, unset waits until the lock is free.|",
+     "|`strict`|`boolean`|`true`|Throw a `DriverError` on a driver without advisory locks. `false` runs `fn` without a lock there (e.g. sqlite in tests).|"
+    ]
+   ],
+   [
+    "equal",
+    514,
+    529,
+    340,
+    355
+   ],
+   [
+    "replace",
+    529,
+    538,
+    355,
+    356,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    538,
+    545,
+    356,
+    363
+   ],
+   [
+    "replace",
+    545,
+    546,
+    363,
+    364,
+    [
+     "|Option|Type|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    546,
+    547,
+    364,
+    365
+   ],
+   [
+    "replace",
+    547,
+    549,
+    365,
+    367,
+    [
+     "|`onLocked`|`'nowait'`|wait for the row|Fail at once with the driver's error (recognized by `isDatabaseLockConflictError`). Not supported on mssql.|",
+     "|`strict`|`boolean`|`true`|Throw a `DriverError` on a driver without row locks. `false` runs `fn` without a lock there (e.g. sqlite in tests).|"
+    ]
+   ],
+   [
+    "equal",
+    549,
+    560,
+    367,
+    378
+   ],
+   [
+    "replace",
+    560,
+    568,
+    378,
+    379,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    568,
+    570,
+    379,
+    381
+   ],
+   [
+    "replace",
+    570,
+    571,
+    381,
+    382,
+    [
+     "|Function|True for|"
+    ]
+   ],
+   [
+    "equal",
+    571,
+    572,
+    382,
+    383
+   ],
+   [
+    "replace",
+    572,
+    575,
+    383,
+    386,
+    [
+     "|`isDatabaseUniqueViolationError`|a duplicate unique key or primary key (`23505`, `ER_DUP_ENTRY`, mssql `2627` / `2601`, `ORA-00001`, mongodb `11000`)|",
+     "|`isDatabaseForeignKeyViolationError`|a missing referenced row, or the delete of a row which is still referenced|",
+     "|`isDatabaseLockConflictError`|a deadlock victim, a serialization failure or a lock wait that gave up (also `onLocked: 'nowait'`)|"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    580,
+    386,
+    391
+   ],
+   [
+    "replace",
+    580,
+    581,
+    391,
+    392,
+    [
+     "documentation."
+    ]
+   ],
+   [
+    "equal",
+    581,
+    600,
+    392,
+    411
+   ],
+   [
+    "replace",
+    600,
+    602,
+    411,
+    413,
+    [
+     "- setDataSource",
+     "- useDataSource"
+    ]
+   ],
+   [
+    "equal",
+    602,
+    613,
+    413,
+    424
+   ],
+   [
+    "replace",
+    613,
+    623,
+    424,
+    425,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    623,
+    626,
+    425,
+    428
+   ],
+   [
+    "replace",
+    626,
+    628,
+    428,
+    430,
+    [
+     "- setDataSource",
+     "- setDataSourceOptions"
+    ]
+   ],
+   [
+    "equal",
+    628,
+    646,
+    430,
+    448
+   ],
+   [
+    "replace",
+    646,
+    647,
+    448,
+    449,
+    [
+     "Check out the glob documentation for other supported pattern features."
+    ]
+   ],
+   [
+    "equal",
+    647,
+    676,
+    449,
+    478
+   ],
+   [
+    "replace",
+    676,
+    686,
+    478,
+    479,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    686,
+    694,
+    479,
+    487
+   ],
+   [
+    "replace",
+    694,
+    708,
+    487,
+    488,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    708,
+    718,
+    488,
+    498
+   ],
+   [
+    "replace",
+    718,
+    735,
+    498,
+    499,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    735,
+    742,
+    499,
+    506
+   ],
+   [
+    "replace",
+    742,
+    743,
+    506,
+    507,
+    [
+     "factory file. The examples use faker (`npm install @faker-js/faker`)."
+    ]
+   ],
+   [
+    "equal",
+    743,
+    749,
+    507,
+    513
+   ],
+   [
+    "replace",
+    749,
+    758,
+    513,
+    514,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    758,
+    771,
+    514,
+    527
+   ],
+   [
+    "replace",
+    771,
+    772,
+    527,
+    528,
+    [
+     "A seeder class must implement the Seeder interface, and could look like this:"
+    ]
+   ],
+   [
+    "equal",
+    772,
+    777,
+    528,
+    533
+   ],
+   [
+    "replace",
+    777,
+    809,
+    533,
+    534,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    809,
+    823,
+    534,
+    548
+   ],
+   [
+    "replace",
+    823,
+    839,
+    548,
+    549,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    839,
+    847,
+    549,
+    557
+   ],
+   [
+    "replace",
+    847,
+    865,
+    557,
+    558,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    865,
+    870,
+    558,
+    563
+   ],
+   [
+    "replace",
+    870,
+    872,
+    563,
+    565,
+    [
+     "Its successor is @rapiq/adapter-typeorm, the dedicated",
+     "TypeORM adapter of the rapiq v2 monorepo. The query pipeline is now fully"
+    ]
+   ],
+   [
+    "equal",
+    872,
+    877,
+    565,
+    570
+   ],
+   [
+    "replace",
+    877,
+    878,
+    570,
+    571,
+    [
+     "The monorepo hosts more than the TypeORM adapter: adapters for"
+    ]
+   ],
+   [
+    "equal",
+    878,
+    891,
+    571,
+    584
+   ],
+   [
+    "replace",
+    891,
+    928,
+    584,
+    585,
+    [
+     "…（37 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    928,
+    937,
+    585,
+    594
+   ],
+   [
+    "replace",
+    937,
+    960,
+    594,
+    595,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    960,
+    969,
+    595,
+    604
+   ],
+   [
+    "replace",
+    969,
+    980,
+    604,
+    605,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    980,
+    983,
+    605,
+    608
+   ],
+   [
+    "replace",
+    983,
+    984,
+    608,
+    609,
+    [
+     "the result onto the query builder. It is shown here with express,"
+    ]
+   ],
+   [
+    "equal",
+    984,
+    990,
+    609,
+    615
+   ],
+   [
+    "replace",
+    990,
+    1029,
+    615,
+    616,
+    [
+     "…（39 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1029,
+    1032,
+    616,
+    619
+   ],
+   [
+    "replace",
+    1032,
+    1034,
+    619,
+    621,
+    [
+     "Express + TypeORM recipe; the client side is covered by the",
+     "frontend recipe."
+    ]
+   ],
+   [
+    "equal",
+    1034,
+    1036,
+    621,
+    623
+   ],
+   [
+    "replace",
+    1036,
+    1037,
+    623,
+    624,
+    [
+     "https://rapiq.tada5hi.net/guide/migration-typeorm-extension"
+    ]
+   ],
+   [
+    "equal",
+    1037,
+    1040,
+    624,
+    627
+   ],
+   [
+    "replace",
+    1040,
+    1041,
+    627,
+    628,
+    [
+     "> rapiq documentation is the canonical reference."
+    ]
+   ],
+   [
+    "equal",
+    1041,
+    1044,
+    628,
+    631
+   ],
+   [
+    "replace",
+    1044,
+    1045,
+    631,
+    632,
+    [
+     "Everything below is exported from `typeorm-extension`. The API reference on the"
+    ]
+   ],
+   [
+    "equal",
+    1045,
+    1047,
+    632,
+    634
+   ],
+   [
+    "replace",
+    1047,
+    1048,
+    634,
+    635,
+    [
+     "|Area|Exports|Reference|"
+    ]
+   ],
+   [
+    "equal",
+    1048,
+    1049,
+    635,
+    636
+   ],
+   [
+    "replace",
+    1049,
+    1058,
+    636,
+    645,
+    [
+     "|Database|`createDatabase`, `dropDatabase`, `checkDatabase`, `synchronizeDatabaseSchema`, `generateMigration`|Database|",
+     "|Schema|`getSchemaDrift`, `assertSchemaMatchesMetadata`, `renameIndex`, `renameForeignKey`, `changeColumnType`, `withForeignKeyChecksDisabled`|Database|",
+     "|Locks|`withDatabaseLock`, `withLockedEntity`, `isRowLockSupported`|Database|",
+     "|Error classification|`isDatabaseUniqueViolationError`, `isDatabaseForeignKeyViolationError`, `isDatabaseLockConflictError`, `readDatabaseErrorCode`|Database|",
+     "|Data source|`setDataSource`, `useDataSource`, `hasDataSource`, `unsetDataSource`, `setDataSourceOptions`, `useDataSourceOptions`, `buildDataSourceOptions`, `findDataSource`, `findDataSourceOptions`, `hasEnvDataSourceOptions`, `assertEnvDataSourceOptions`|DataSource|",
+     "|Seeding|`runSeeder`, `runSeeders`, `Seeder`, `setSeederFactory`, `useSeederFactory`, `useSeederFactoryManager`, `resetSeederFactoryManager`, `resolveSeederConfig`|Seeding|",
+     "|Environment|`useEnv`, `resetEnv` (reads the `TYPEORM_*` / `DB_*` variables)||",
+     "|Entity helpers (experimental)|`getEntityName`, `getEntityMetadata`, `getEntityPropertyNames`, `validateEntityJoinColumns`, `isEntityUnique`|Entity|",
+     "|Errors|`TypeormExtensionError`, `DriverError`, `OptionsError`, `SchemaDriftError`, `SchemaAlterationError`, `DatabaseLockError`, `EntityMetadataError`, `EntityRelationLookupError`|Database|"
+    ]
+   ],
+   [
+    "equal",
+    1058,
+    1062,
+    645,
+    649
+   ],
+   [
+    "replace",
+    1062,
+    1064,
+    649,
+    651,
+    [
+     " `CREATE DATABASE`, so two replicas starting at the same moment can both try to create it. Create the database from one",
+     " place (a deploy step, `db create`) or tolerate the second attempt."
+    ]
+   ],
+   [
+    "equal",
+    1064,
+    1065,
+    651,
+    652
+   ],
+   [
+    "replace",
+    1065,
+    1067,
+    652,
+    654,
+    [
+     " seeders run, and the seeders write through a third. Tracking records a seeder after it finished, so a seeder that",
+     " writes and then throws runs again on the next start: keep seeders safe to repeat."
+    ]
+   ],
+   [
+    "equal",
+    1067,
+    1068,
+    654,
+    655
+   ],
+   [
+    "replace",
+    1068,
+    1070,
+    655,
+    657,
+    [
+     " but they lock nothing, so `withDatabaseLock` refuses it with a `DriverError`, like every other driver. Pass",
+     " `strict: false` to run the callback without a lock instead."
+    ]
+   ],
+   [
+    "equal",
+    1070,
+    1071,
+    657,
+    658
+   ],
+   [
+    "replace",
+    1071,
+    1072,
+    658,
+    659,
+    [
+     " typeorm ignores there."
+    ]
+   ],
+   [
+    "equal",
+    1072,
+    1073,
+    659,
+    660
+   ],
+   [
+    "replace",
+    1073,
+    1074,
+    660,
+    661,
+    [
+     " nested `withDatabaseLock` and carries on runs without the lock."
+    ]
+   ],
+   [
+    "equal",
+    1074,
+    1075,
+    661,
+    662
+   ],
+   [
+    "replace",
+    1075,
+    1076,
+    662,
+    663,
+    [
+     " postgres, cockroachdb, mysql and mariadb. `changeColumnType` falls back to typeorm's `changeColumn()` there."
+    ]
+   ],
+   [
+    "equal",
+    1076,
+    1077,
+    663,
+    664
+   ],
+   [
+    "replace",
+    1077,
+    1078,
+    664,
+    665,
+    [
+     " existing once the connection succeeds."
+    ]
+   ],
+   [
+    "equal",
+    1078,
+    1079,
+    665,
+    666
+   ],
+   [
+    "replace",
+    1079,
+    1082,
+    666,
+    669,
+    [
+     " `seed run`. Seeders found by a glob pattern run in alphabetical order of their file names.",
+     "- **The `Query` section is temporary.** It will be removed in v5; the rapiq documentation is",
+     " the reference."
+    ]
+   ],
+   [
+    "equal",
+    1082,
+    1084,
+    669,
+    671
+   ],
+   [
+    "replace",
+    1084,
+    1089,
+    671,
+    672,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1089,
+    1090,
+    672,
+    673
+   ],
+   [
+    "delete",
+    1090,
+    1091,
+    673,
+    673
+   ],
+   [
+    "equal",
+    1091,
+    1092,
+    673,
+    674
+   ],
+   [
+    "delete",
+    1092,
+    1094,
+    674,
+    674
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "473656f7b36f+2": {
+  "fn": "ZG-Customs/ZG-Customs",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "ZG Customs razvija šesteročlani studentski tim u sklopu kolegija Programsko inženjerstvo na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu, u akademskoj godini **2026./2027.** Projekt se temelji na zadanoj temi **AutoServis**, autorice Ede Jovičić."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    14,
+    5,
+    14
+   ],
+   [
+    "replace",
+    14,
+    20,
+    14,
+    20,
+    [
+     "|Uloga u aplikaciji|Planirane mogućnosti|",
+     "|---|---|",
+     "|**Vlasnik vozila**|Evidencija vlastitih vozila, zahtjev za termin, praćenje statusa, prihvaćanje ili odbijanje dodatnih radova, pregled računa i povijesti, preuzimanje potvrde te ocjenjivanje servisa.|",
+     "|**Serviser**|Profil sa specijalizacijom i pripadnošću autoservisu, pregled dodijeljenih zahtjeva, evidencija radova, dijelova, vremena i napomena, izrada dodatnih ponuda te unos konačnog troška.|",
+     "|**Voditelj autoservisa**|Upravljanje serviserima i rasporedom, dodjela zahtjeva, pregled servisne povijesti unutar vlastitog autoservisa i statistike poslovanja.|",
+     "|**Administrator platforme**|Upravljanje korisnicima i autoservisima, deaktivacija korisničkih računa, određivanje cijene pretplate i pregled osnovnih podataka o korištenju platforme.|"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    33,
+    20,
+    33
+   ],
+   [
+    "replace",
+    33,
+    36,
+    33,
+    34,
+    [
+     "Detaljan opseg, zahtjevi, obrasci uporabe, arhitektura i rezultati ispitivanja vodit će se u projektnoj dokumentaciji. Dokumentacija se postupno dopunjuje i usklađuje s implementacijom; preostale predloške tim treba prilagoditi projektu."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    39,
+    34,
+    37
+   ],
+   [
+    "replace",
+    39,
+    40,
+    37,
+    38,
+    [
+     "**Status:** početna React stranica, backend i baza javno su postavljeni na Azure Ubuntu serveru preko Caddyja i HTTPS-a. Automatizacija svakih pet minuta provjerava `main` i objavljuje novu inačicu nakon uspješnog CI-ja. Javni pristup i aktivna inačica provjereni su **27. 10. 2026.**; zapis provjere navodi provjereni commit."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    38,
+    39
+   ],
+   [
+    "replace",
+    41,
+    47,
+    39,
+    45,
+    [
+     "|Podatak|Trenutačno stanje|",
+     "|---|---|",
+     "|Domena|zgcustoms.duckdns.org|",
+     "|Platforma za hosting|Microsoft Azure, Ubuntu 24.04 LTS i Docker Compose.|",
+     "|Pristup demonstraciji|Javna naslovna stranica i popis vrsta servisa; korisnička prijava još nije implementirana.|",
+     "|Ograničenja postavljene inačice|Naručivanje, radni nalozi i ostale poslovne funkcionalnosti još nisu implementirani.|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    45,
+    48
+   ],
+   [
+    "replace",
+    50,
+    53,
+    48,
+    49,
+    [
+     "Detalji infrastrukture, konfiguracije i objave opisani su u vodiču za postavljanje, instalaciju i konfiguraciju."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    72,
+    49,
+    68
+   ],
+   [
+    "replace",
+    72,
+    73,
+    68,
+    69,
+    [
+     "Upute za lokalni razvoj, Windows, SSH tunel, bazu i Azure postavljanje opisuju konfiguraciju, migracije, testiranje i nadogradnje. Za Java razvoj izvan containera koristi se Java 21 i uključeni Maven Wrapper. React, Vite i javna domena opisuje frontend razvoj uz Node.js 24 i razliku između razvojnog poslužitelja i objave aplikacije."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    80,
+    69,
+    76
+   ],
+   [
+    "replace",
+    80,
+    88,
+    76,
+    84,
+    [
+     "|Predložena tehnologija ili alat|Uloga u projektu|Razlog razmatranja|",
+     "|---|---|---|",
+     "|**Java / Spring Boot**|Poslužiteljski dio, poslovna pravila i API aplikacije.|Većina tima najbolje poznaje Javu; prikladna je za objektno oblikovanje domene vozila, servisnih zahtjeva i ponuda.|",
+     "|**React / TypeScript**|Korisničko sučelje za vlasnike vozila, zaposlenike autoservisa i administratora.|Omogućuje organizaciju obrazaca, popisa i prikaza statusa kroz ponovno uporabive komponente.|",
+     "|**PostgreSQL**|Pohrana korisnika, vozila, autoservisa, zahtjeva i servisne povijesti.|Domenski podaci imaju jasne odnose i zahtijevaju dosljednost povezanih zapisa.|",
+     "|**Docker / Docker Compose**|Ujednačeno pokretanje aplikacije i baze podataka.|Olakšava usklađivanje razvojnog okruženja članova tima i poslužitelja.|",
+     "|**Microsoft Azure / Ubuntu**|Javno postavljanje aplikacije.|Omogućuje zasebno poslužiteljsko okruženje; tim treba preuzeti konfiguraciju i održavanje.|",
+     "|**GitHub Actions**|Automatizirani testovi i izgradnja aplikacije.|Provjerava backend na stvarnoj testnoj bazi, gradi frontend i backend te provjerava cijelu aplikaciju kroz Caddy. Server zasebno postavlja odobreni `main` nakon uspješnog CI-ja.|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    95,
+    84,
+    91
+   ],
+   [
+    "delete",
+    95,
+    97,
+    91,
+    91
+   ],
+   [
+    "equal",
+    97,
+    101,
+    91,
+    95
+   ],
+   [
+    "replace",
+    101,
+    109,
+    95,
+    103,
+    [
+     "|#|Ime i prezime|GitHub|Glavna uloga ili doprinos|",
+     "|---|---|---|---|",
+     "|1|Rino Bago|@rinobagoFER|Voditelj tima + full stack developer|",
+     "|2|Ivan Bartol|@slanacexe|DevOps, Git, CI/CD, postavljanje aplikacije + full stack pripomoć|",
+     "|3|Jagor Jureković|@jj56894|Full stack developer + vanjske integracije i pretplate|",
+     "|4|Potjeh Jureković|@potjehjurekovic1|Backend developer za servisne zahtjeve i poslovne procese autoservisa|",
+     "|5|Marijan Smiljanić|@msmilj|Frontend developer za sučelje autoservisa i zaposlenika|",
+     "|6|Juraj Sviličić|@sleepless-jura|Frontend developer za sučelje vlasnika vozila|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    112,
+    103,
+    106
+   ],
+   [
+    "replace",
+    112,
+    113,
+    106,
+    107,
+    [
+     "Uloge se mogu mijenjati tijekom projekta. Stvarni doprinosi prate se kroz zadatke, povijest promjena i pregled aktivnosti grupe."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    125,
+    107,
+    119
+   ],
+   [
+    "replace",
+    125,
+    128,
+    119,
+    120,
+    [
+     "Projektna dokumentacija održava se u direktoriju `docs/`, a PDF inačice službenih predaja pohranjivat će se u `docs/deliverables/`."
+    ]
+   ],
+   [
+    "equal",
+    128,
+    133,
+    120,
+    125
+   ],
+   [
+    "replace",
+    133,
+    134,
+    125,
+    126,
+    [
+     "Postojeća datoteka `LICENSE` odnosi se na dokumentacijski predložak kolegija autora Vlade Sruka, pod licencom **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**. Ona ne određuje automatski licencu studentske aplikacije."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    137,
+    126,
+    129
+   ],
+   [
+    "delete",
+    137,
+    139,
+    129,
+    129
+   ],
+   [
+    "equal",
+    139,
+    141,
+    129,
+    131
+   ],
+   [
+    "replace",
+    141,
+    142,
+    131,
+    132,
+    [
+     "Pri radu na projektu primjenjuju se FER-ova pravila o primjerenoj uporabi umjetne inteligencije."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    147,
+    132,
+    137
+   ],
+   [
+    "replace",
+    147,
+    150,
+    137,
+    138,
+    [
+     "Tim prije objave treba provjeriti točnost opisa i usklađenost sa stvarnim stanjem projekta. Daljnja uporaba alata i provjera rezultata bilježit će se u projektnoj dokumentaciji."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    153,
+    138,
+    141
+   ],
+   [
+    "replace",
+    153,
+    154,
+    141,
+    142,
+    [
+     "Od članova tima očekuju se konstruktivna komunikacija, odgovorno izvršavanje dogovorenih obveza te pridržavanje Kodeksa ponašanja studenata FER-a i Etičkog kodeksa IEEE-a."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    155,
+    142,
+    143
+   ],
+   [
+    "replace",
+    155,
+    156,
+    143,
+    144,
+    [
+     "Repozitorij sadrži `CODE_OF_CONDUCT.md`, koji treba dopuniti kontaktom za prijavu problema."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    159,
+    144,
+    147
+   ],
+   [
+    "replace",
+    159,
+    162,
+    147,
+    148,
+    [
+     "README je prilagođen predlošku kolegija Programsko inženjerstvo FER-a autora Vlade Sruka, licenciranom pod CC BY-NC-SA 4.0. Opis planirane aplikacije temelji se na zadatku *AutoServis*, Eda Jovičić, listopad 2026. Aplikaciju razvija studentski tim **ZG Customs**."
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

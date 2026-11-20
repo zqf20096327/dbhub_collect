@@ -3252,5 +3252,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "358eb0c9629d": {
+  "identity": {
+   "one_liner": "基于 WebAssembly 在浏览器中运行 DuckDB 的进程内 SQL OLAP 数据库",
+   "review": "DuckDB-Wasm 将 DuckDB（进程内 SQL OLAP 数据库管理系统）编译为 WebAssembly，使其在浏览器与 Node.js 中运行。项目提供 TypeScript API 与 React Hooks，可直接 ATTACH 远程 DuckDB 数据库文件。需注意：默认单线程（多线程为实验性）、运行于沙箱中、扩展按需延迟加载，首次访问约需传输 3.2 MB 压缩 Wasm 文件。",
+   "highlights": [
+    "读取 Parquet、CSV、JSON 文件及 Filesystem API 或 HTTP 请求提供的数据源，与 Arrow 互操作",
+    "支持读取 DuckDB 数据库文件，可通过 ATTACH 直接挂载远程 .db 文件",
+    "支持加载 core、community 等扩展（如 spatial、icu、h3、sqlite_scanner），扩展在首次 LOAD 时延迟获取"
+   ],
+   "use_cases": [
+    "在 Chrome、Firefox、Safari 浏览器中执行 SQL 分析查询（可在 shell.duckdb.org 在线试用）",
+    "在 Node.js 环境中使用 SQL OLAP 数据库",
+    "构建需嵌入数据库功能的 Web 应用，项目提供 TypeScript API、React Hooks 与 Web 应用示例"
+   ]
+  },
+  "sha": "358eb0c9629d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6f7f01fe695b": {
+  "identity": {
+   "one_liner": "基于 Wails(Go)+React 构建的多数据源桌面数据库客户端，支持 AI 与 MCP 接入。",
+   "review": "GoNavi 是一个基于 Go + Wails + React 的跨平台数据库客户端，供开发者连接查询多种数据源。内置支持 MySQL、PostgreSQL、Redis、Kafka、Milvus 等数据源，另可通过可选驱动代理连接 SQLite、ClickHouse 等。提供 AI 生成 SQL、MCP 连接、数据编辑、导出与审计日志；安装包约 20–26MB，也提供 Web Server 模式与 Docker 打包。",
+   "highlights": [
+    "内置支持 MySQL、PostgreSQL、Oracle、Redis、向量库、消息队列等多类数据源，并可经可选驱动代理扩展",
+    "支持接入 OpenAI、Gemini、Claude 及 OpenAI 兼容 API，可附加表结构生成 SQL，并提供 MCP 连接本地或远程 Agent",
+    "提供虚拟化数据表格、就地编辑、事务提交/回滚、CSV/XLSX/JSON/Markdown 导出、SSH 隧道、SQL 审计与执行日志"
+   ],
+   "use_cases": [
+    "开发者在同一桌面工具中查询与编辑关系型数据库、缓存、消息队列和向量库",
+    "借助 AI 助手与 MCP 将结构化数据库上下文提供给编码 Agent，同时密钥保留在本机",
+    "需要 SQL 审计、执行日志及 Docker/K8s/Web Server 部署形态的团队环境"
+   ]
+  },
+  "sha": "6f7f01fe695b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5a088007538f": {
+  "identity": {
+   "one_liner": "为 AI agent 提供可分支、diff、合并的 MongoDB 沙箱数据库",
+   "review": "Argon 是一个用 Go 编写的 MongoDB 沙箱工具：为每次 agent 运行从既有数据 fork 出真实的 MongoDB 数据库，agent 写入的内容以 diff 形式记录，可审查、合并（数据 PR）、撤销或丢弃，底层的分支机制类似 Git。用户通过 CLI、MCP 服务器、REST API 或 Python SDK 使用；合并写回源库前需校验前后镜像并在事务中核验。写回尚未覆盖 Atlas、分片源及 7.0 以外版本。",
+   "highlights": [
+    "支持从分支或固定数据集一键创建带 TTL 的真实 MongoDB 沙箱，兼容 pymongo、mongoose、mongosh 等驱动与索引、聚合、事务",
+    "提供 diff、merge（preview/apply 两步）、undo、time-travel query 等命令，分支以元数据指针实现，不复制文档",
+    "支持 MCP 集成（13 个工具）、--disable-tools/--read-only 模式保留人工审批，以及在线导入与变更跟随（2.6.0 起默认可用）"
+   ],
+   "use_cases": [
+    "为每次 AI agent 运行提供隔离的真实 MongoDB 数据库，运行结束后审查并按需合并或丢弃变更",
+    "对 MongoDB 数据做分支、diff、时间点查询与撤销等类 Git 操作",
+    "通过 LangGraph 适配器或 boxd 隔离环境让 agent 代码通过一次性 MongoDB 用户写入沙箱"
+   ]
+  },
+  "sha": "5a088007538f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cfa3f7fb58e0": {
+  "identity": {
+   "one_liner": "本地运行的实验室数据可视化桌面工具，含数据质检与出版级图表导出",
+   "review": "LabViz 是一个在本地运行的桌面应用，读取 CSV、Excel 等表格数据，在导入前提供预览，并标记缺失值、重复行、类型冲突和离群点，由用户决定保留或排除。它绘制线图、散点、热图、3D 曲面等图表，支持多面板组合与 PNG/SVG/PDF 导出。README 说明其暂未做代码签名，安装包未在干净机器和读屏场景下验收，图表是否达到期刊要求需用户自行核对。适合需要在本地处理实验表格数据的研究人员。",
+   "highlights": [
+    "支持读取 CSV、TSV、TXT、JSON 和 XLSX，导入前提供预览；缺失值、重复行、类型冲突和离群点会被标记，排除项保留原因且可撤销",
+    "绘制折线、散点、柱状、直方、箱线、热图和 3D 曲面图，另有分组原始点、配对变化图和小提琴图，最多支持六个面板的网格或马赛克组合（V2.4 预览版）",
+    "可导出 PNG、SVG 和 PDF，并将图表与各面板的源数据、参数和修订历史一同保存；全部功能在本地运行，无需账号、数据库服务器或在线服务"
+   ],
+   "use_cases": [
+    "将实验室 CSV/Excel 表格数据在本地检查质量后绘制成图表",
+    "生成带拟合方程、置信区间等元素的多面板组合图并导出为 PNG/SVG/PDF 用于论文排版",
+    "在无网络、无账号环境下保存和恢复工作区，并追踪图表的源数据与参数版本"
+   ]
+  },
+  "sha": "cfa3f7fb58e0",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17613315c2b4": {
+  "identity": {
+   "one_liner": "面向马拉加市民城市事件上报与处置全流程的管理平台，含移动端与 Web 端。",
+   "review": "UrbanPulse 用于管理市民上报的城市事件：市民通过 React Native 移动应用在地图上提交事件并添加照片，市政人员通过 React Web 应用分类、指派、解决与分析。后端为 Java Spring Boot 单体，数据存于 PostgreSQL/PostGIS，事件按固定生命周期流转并记录审计历史。项目仍在开发中，通过 Docker Compose 一键运行。采用 Apache 2.0 许可证。",
+   "highlights": [
+    "提供市民移动端（React Native/Expo）与市政人员 Web 端（React/Vite）两类应用，事件状态在两端间流转",
+    "后端为 Java Spring Boot 单体服务，REST API 以 OpenAPI 3.1 契约优先设计，数据由 Flyway 迁移管理的 PostgreSQL/PostGIS 存储",
+    "每次状态变更记录操作者、时间与原因，包含审计日志与并发修改检测（冲突时要求重新加载）"
+   ],
+   "use_cases": [
+    "市政部门收集、分类、指派并跟踪市民上报的城市事件直至关闭或重开",
+    "技术员接受指派的事件并附处理说明解决，分析师按周期生成运营报表（屏幕或 CSV）",
+    "开发者通过 Docker Compose 在本地运行完整系统，使用 demo 用户与示例数据试用"
+   ]
+  },
+  "sha": "17613315c2b4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

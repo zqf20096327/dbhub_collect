@@ -3227,5 +3227,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bd728d20e34f": {
+  "identity": {
+   "one_liner": "开源有声书元数据库，JSON 数据以 Git 仓库存储并编译为 SQLite。",
+   "review": "该项目以 GitHub 仓库本身作为数据库，用纯 JSON pack 文件存储有声书作品、录音、人员与系列数据（CC0 许可），贡献者通过 PR 或 issue 表单编辑，CI 中 Go 工具做校验后编译成单个 SQLite 制品，由只读 API 服务 metaserve 提供 FTS 搜索、ASIN/ISBN 查询及 LibriVox 兼容 feed。角色与章节（旁白者、录音、章节）为一等数据模型。需要 Go 1.26+ 构建，服务端无写入账户。",
+   "highlights": [
+    "数据模型将作品、录音、人员、系列区分开，录音包含旁白者、时长、章节与多区域 ASIN/ISBN",
+    "提供 metacheck/metafmt/metabuild/metaserve 等 Go 工具链，CI 对每个 PR 做 schema 与引用完整性校验",
+    "metaserve 提供 /api/v1 下的只读 JSON API，含 FTS 搜索、 LibriVox 兼容 feed 与 Audiobookshelf 元数据端点"
+   ],
+   "use_cases": [
+    "为 Audiobookshelf 等播放器提供有声书元数据源",
+    "需要旁白者、录音版本与章节结构的有声书目录应用",
+    "通过修改 LibriVox base URL 复用现有 LibriVox 客户端的场景"
+   ]
+  },
+  "sha": "bd728d20e34f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fc5bb523acf7": {
+  "identity": {
+   "one_liner": "以 posit 模型保留冲突事实及其来源、时间与历史的嵌入式实验性数据库",
+   "review": "Positorium 是用 Rust 编写的嵌入式证据数据库，不将冲突断言合并为单一当前值，而是保留来源、确定性、出现时间与断言时间。它提供 Traqula 查询语言、只追加存储、Rust/Python 嵌入接口、本地 HTTP 服务与 WASM 测试环境，当前为 0.3.1-beta.6 版本，定位为与现有系统并存的证据层而非替代品。",
+   "highlights": [
+    "提供不可变的 Things/Roles/posits/断言信封模型，冲突断言可共存，精确录入字面量在原生存储、HTTP、SSE 与 WASM 结果中保留",
+    "Traqula 语言支持连接、并集、安全 not exists、快照、类型化谓词、in effect 查询、参数与排序限制，含 EXPLAIN 与增量查询",
+    "提供只追加持久存储（可检测已提交损坏）、原子持久变更批次与确定性重放恢复，以及 Rust、Python 3.9+ 嵌入绑定和可信本地 HTTP 服务"
+   ],
+   "use_cases": [
+    "合规证据留存与调查取证等证据持续累积并被修订的场景",
+    "存在冲突记录的主数据管理，需保留各来源主张及其确定性",
+    "作为与现有业务系统并行的嵌入式证据层，通过 Rust/Python 嵌入或本地 HTTP 服务访问"
+   ]
+  },
+  "sha": "fc5bb523acf7",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

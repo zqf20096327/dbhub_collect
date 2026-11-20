@@ -3528,5 +3528,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0799fded32b8": {
+  "identity": {
+   "one_liner": "轻量级PHP框架，按请求路径加载命名空间控制器并调用方法",
+   "review": "SlightPHP 是一个基于 PHP 8.0+ 的轻量 Web 框架，通过请求路径映射到命名空间控制器的公开方法实现调度。路由、HTTP 方法限制和 CSRF 校验通过 Route 注解配置，Tpl 模板默认启用上下文自动转义。插件（Db、Redis、Session 等）经 Composer 按需安装，采用 MIT 许可证。",
+   "highlights": [
+    "支持 #[\\SlightPHP\\Route] 注解限制 HTTP 方法及启用 CSRF 校验，不匹配时返回 405",
+    "Tpl 模板默认启用上下文自动转义，可信 HTML 可用 |raw 标记",
+    "Request/Response 对象提供 route 分段及 get/post/cookie/files/header/server 数据读取"
+   ],
+   "use_cases": [
+    "按路径约定组织控制器的 PHP Web 应用开发",
+    "需要 CSRF 防护的表单及 Ajax 提交场景",
+    "通过 Composer 按需引入 Db、Redis、Captcha 等插件的模块化项目"
+   ]
+  },
+  "sha": "0799fded32b8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c650492773aa": {
+  "identity": {
+   "one_liner": "Money Manager Ex 的数据库接口，含表结构与初始化数据",
+   "review": "该仓库为 Money Manager Ex 提供数据库定义：tables.sql 中包含 schema，README 提供截至 v19 的 ER 图与初始化分类层级。部分表间关系未在 SQL 层实现，REFID/LINKRECORDID 等字段依赖类型字段动态确定指向。PocketBase schema 共享 v21 表与字段基线，但 ID、规则、索引与存储语义与 SQLite 不同。适用于需要直接读取或处理 MMEX 数据库结构的开发者。",
+   "highlights": [
+    "提供 tables.sql 文件形式的数据库 schema",
+    "提供截至 v19 的 ER 图，并标注未在 SQL 层实现的关系",
+    "包含 Bills、Food、Automobile 等初始分类/子分类层级数据"
+   ],
+   "use_cases": [
+    "开发者直接读取或写入 MMEX 的 SQLite 数据库",
+    "基于 MMEX v21 基线构建 PocketBase 后端并导入集合数据",
+    "查阅表结构与字段关系以编写报表或数据迁移工具"
+   ]
+  },
+  "sha": "c650492773aa",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c541689386e2": {
+  "identity": {
+   "one_liner": "面向钻井工程师的离线 RAG 工具，提供逐字引用核验的问答与开钻前邻井风险简报",
+   "review": "wellbrief 用于在本地钻井报告中进行检索问答和生成开钻前风险简报，面向钻井工程师使用。它读取 .txt/.md/.pdf/.docx/.csv 文件，采用结构化过滤加 BM25 与哈希嵌入融合排序，数值通过 SQL 从 NPT 台账计算而非语言模型生成，验证器在展示前逐字核对引用与数字。启动时安装进程级网络拦截，非回环主机需显式环境变量放通，可通过 uvx 或 Docker 运行。README 数据为合成数据，定位为决策支持而非工程建议。",
+   "highlights": [
+    "支持逐字核验引用：验证器对照证据包检查文档 id、数字和井/字段名，失败时回退到确定性离线叙述器并显示提示横幅",
+    "风险简报不经过检索步骤，直接从 NPT 台账读取字段风险模式，缓解措施仅取自未发生该类事件井的 practice 句或同代码事故报告的纠正措施",
+    "内置进程级出站连接拦截（netguard.py），记录每次外联尝试并写入 egress.jsonl，支持按 WELLBRIEF_BUDGET_USD 预算上限拒绝调用"
+   ],
+   "use_cases": [
+    "在无网络或受限网络的现场环境中查询油田日报、完井报告与事故报告",
+    "开钻前基于邻井 NPT 台账生成按日费率计价的风险排序简报与缓解措施",
+    "通过 ingest 命令接入自有报告归档，配合 wellbrief.toml 适配不同报告模板"
+   ]
+  },
+  "sha": "c541689386e2",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

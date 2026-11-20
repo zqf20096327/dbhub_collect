@@ -3086,5 +3086,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "61b267511f3c": {
+  "identity": {
+   "one_liner": "基于 FastMCP 的 CUBRID 数据库 MCP 服务器，供 LLM 检查模式并执行只读 SQL。",
+   "review": "该项目为 CUBRID 数据库提供 MCP 服务器，通过 pycubrid 连接 broker，向 LLM 客户端暴露表名、模式、索引、执行计划等工具及只读 SQL 执行。默认启用 SQL 白名单（仅 SELECT/SHOW/DESC/WITH），写入模式需显式开启；支持多连接、审计日志、输出截断与超时配置。面向需要让 LLM 访问 CUBRID 10.2–11.4 数据库的用户，需 Python 3.11+ 并自行安装 CUBRID。",
+   "highlights": [
+    "提供 12 个 MCP 工具（如 schema_definitions、explain_query、execute_query）及模式元数据只读 Resources 和 9 个 Prompt 模板",
+    "默认只读：SQL 白名单仅允许 SELECT/SHOW/DESC/WITH，拒绝多语句、DDL、CALL/EVALUATE/KILL 及 SELECT 内改数据的语句",
+    "支持多连接（CUBRID_CONNECTIONS）、单条 DML 的可选写入模式（execute_write）、审计日志与输出行数/字符数截断"
+   ],
+   "use_cases": [
+    "让 Claude Desktop、Claude Code、Cursor 等 MCP 客户端以只读方式检查 CUBRID 数据库模式并查询数据",
+    "通过 explain_query（SET TRACE ON）获取 SELECT/WITH 的执行计划进行分析",
+    "通过 migrate_from_mysql、write_cubrid_sql 等 Prompt 模板辅助生成 CUBRID SQL"
+   ]
+  },
+  "sha": "61b267511f3c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

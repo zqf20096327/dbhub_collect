@@ -3144,5 +3144,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4975c09b3e28": {
+  "identity": {
+   "one_liner": "逐模块构建的 ETF 投研 Agent 学习项目，提供可运行代码与可追溯执行路径。",
+   "review": "这是一个面向 Agent 开发者的可运行学习项目，按六层架构（输入、上下文、执行、工具、发布、界面）逐模块实现一个基于合成文档生成研究报告的 Agent。默认示例使用脚本化 Gateway fixture，无需模型密钥即可离线运行；真实模型需经项目入口显式授权。项目明确声明不构成实盘投研、交易或投资建议服务。",
+   "highlights": [
+    "提供 CLI 演示入口，每次运行在 runs/ 目录生成 report.md、manifest.json 与 run.jsonl，并支持 --observe 命令回查来源与执行记录",
+    "实现模块化架构：包含 Runtime/Gateway 执行路径、上下文压缩、Project Memory 生命周期、本地 Knowledge（BM25 与 E5 查询）、原生 PDF 表格引用等能力",
+    "版本记录附带验证证据与边界说明，文章到代码提供固定版本覆盖映射"
+   ],
+   "use_cases": [
+    "学习 Agent 执行架构：从单一工作流入手，阅读文章并运行对应实现，将报告回溯至来源与代码",
+    "离线研究自有文档：通过 Research Project 入口导入材料、提交任务并生成可读回的报告",
+    "核查文章实际实现范围：通过固定版本覆盖记录与证据索引对照代码"
+   ]
+  },
+  "sha": "4975c09b3e28",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2be06f29f607": {
+  "identity": {
+   "one_liner": "自托管短链接服务，单个 Go 二进制加一个 SQLite 文件即可运行",
+   "review": "Sani 是面向单管理员的短链接服务，同时支持文本（≤1 MB）与文件（默认 ≤99 MB）分享。重定向目标缓存在内存中，元数据存 SQLite，上传文件存本地目录；用 Docker Compose 或单个二进制部署，配置经环境变量设置。README 说明其设计为单实例运行，不支持多用户或主主复制。",
+   "highlights": [
+    "重定向目标缓存于内存（默认 100,000 条），URL/文本/文件 slug 长度均可配置（3–32 字符），支持 Unicode slug 且不区分大小写",
+    "提供单链接控制：过期时间、访问次数上限、访问密码、临时或永久重定向及停用开关，并记录总点击量、每日点击量与来源统计，爬虫和预取不计入",
+    "包含管理面板 /admin/、HTTP API /api/v1 与 /api/admin/v1、书签脚本、Android 分享接入，以及从 Shlink 或 CSV/JSON 的导入"
+   ],
+   "use_cases": [
+    "个人自托管短链接跳转，通过 Docker Compose 或单二进制部署，前置 TLS 反向代理",
+    "分享代码片段、配置文本或文件（需另配独立文件域名 SANI_FILES_URL）",
+    "通过 API token 从脚本或快捷指令批量创建短链，或迁移 Shlink 现有数据"
+   ]
+  },
+  "sha": "2be06f29f607",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

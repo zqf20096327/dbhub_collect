@@ -25371,5 +25371,638 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "25c1a1f797dc+2": {
+  "fn": "mokevnin/dbcleaner",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    5,
+    3,
+    5,
+    [
+     "Ruby's DatabaseCleaner, built on",
+     "go-txdb. It knows nothing about your ORM: it hands"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    10,
+    5,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "|Engine|`New(…)`|URL|Template databases|"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    15,
+    12,
+    15,
+    [
+     "|PostgreSQL|`postgres.Dialect()`|`postgres://…` or a key=value DSN|`postgres.WithTemplate`|",
+     "|SQLite|`sqlite.Dialect()`|a path or `file:…`|no: a file per process is `t.TempDir()`|",
+     "|MySQL, MariaDB|`mysql.Dialect()`|the driver's DSN, `root@tcp(127.0.0.1:3306)/app_test`|no|"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    27,
+    15,
+    27
+   ],
+   [
+    "replace",
+    27,
+    32,
+    27,
+    32,
+    [
+     " is nothing to clean, and it costs almost nothing: a rollback is far cheaper than",
+     " recreating data. This is the default almost everywhere:",
+     " Rails (`use_transactional_tests`), Django (`TestCase`), Laravel (`RefreshDatabase`,",
+     " `DatabaseTransactions`), Spring (`@Transactional` tests roll back by default) and Elixir's",
+     " Ecto (`SQL.Sandbox`)."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    32,
+    33
+   ],
+   [
+    "replace",
+    33,
+    38,
+    33,
+    38,
+    [
+     " committed, so a second connection can see it. This is what those same frameworks fall back",
+     " to when a test cannot share one connection: Django's `TransactionTestCase`, Laravel's",
+     " `DatabaseTruncation`, and the `:truncation` and `:deletion` strategies of Ruby's",
+     " DatabaseCleaner, which this package",
+     " is modeled on."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    38,
+    39
+   ],
+   [
+    "replace",
+    39,
+    40,
+    39,
+    40,
+    [
+     " far longer than a rollback."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    46,
+    40,
+    46
+   ],
+   [
+    "replace",
+    46,
+    47,
+    46,
+    47,
+    [
+     "go-txdb solves the hard part of the first approach: it"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    59,
+    47,
+    59
+   ],
+   [
+    "replace",
+    59,
+    65,
+    59,
+    65,
+    [
+     "|Strategy|How a test is undone|Use when|",
+     "|---------------|---------------------------------------------|-------------------------------------------------------------------|",
+     "|`Transaction()`|the whole test runs in one rolled-back tx|the default; the test uses the `*sql.DB` it is given|",
+     "|`Truncation()`|`TRUNCATE … RESTART IDENTITY CASCADE` after|another connection must see the rows (a server in another process)|",
+     "|`Deletion()`|`DELETE` after, children before parents|few tables touched, or no `TRUNCATE` privilege|",
+     "|`Null()`|nothing|you clean by hand|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    79,
+    65,
+    79
+   ],
+   [
+    "replace",
+    79,
+    86,
+    79,
+    80,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    97,
+    80,
+    91
+   ],
+   [
+    "replace",
+    97,
+    140,
+    91,
+    92,
+    [
+     "…（43 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    180,
+    92,
+    132
+   ],
+   [
+    "replace",
+    180,
+    181,
+    132,
+    133,
+    [
+     "|Engine|Lock|"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    182,
+    133,
+    134
+   ],
+   [
+    "replace",
+    182,
+    185,
+    134,
+    137,
+    [
+     "|PostgreSQL|`pg_advisory_lock` on a connection of its own|",
+     "|MySQL, MariaDB|`GET_LOCK('dbcleaner:<sha1 of the database name>')`|",
+     "|SQLite|an exclusive file lock on `<database file>-dbcleaner` (none for a database in memory)|"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    201,
+    137,
+    153
+   ],
+   [
+    "replace",
+    201,
+    202,
+    153,
+    154,
+    [
+     "loading part we recommend testfixtures: YAML"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    209,
+    154,
+    161
+   ],
+   [
+    "replace",
+    209,
+    228,
+    161,
+    162,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    234,
+    162,
+    168
+   ],
+   [
+    "replace",
+    234,
+    235,
+    168,
+    169,
+    [
+     "table without a primary key), we recommend schemalens:"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    250,
+    169,
+    184
+   ],
+   [
+    "replace",
+    250,
+    251,
+    184,
+    185,
+    [
+     "pgtestdb migrator: pgtestdb ships one for goose,"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    259,
+    185,
+    193
+   ],
+   [
+    "replace",
+    259,
+    265,
+    193,
+    194,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    268,
+    194,
+    197
+   ],
+   [
+    "replace",
+    268,
+    269,
+    197,
+    198,
+    [
+     "whichever process comes first and under an advisory lock; and `<name>_w `, the workers. A"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    294,
+    198,
+    223
+   ],
+   [
+    "replace",
+    294,
+    300,
+    223,
+    229,
+    [
+     "|Approach|Per test|Grows with|",
+     "|-----------------------------------|--------|---------------------------------|",
+     "|`Transaction()`|~3.6 ms|nothing (mostly one connection)|",
+     "|`Deletion()`|~1.8 ms|tables and rows left behind|",
+     "|`Truncation()`|~39 ms|the number of tables|",
+     "|`CREATE DATABASE … TEMPLATE` + drop|~78 ms|the size of the template database|"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    311,
+    229,
+    240
+   ],
+   [
+    "replace",
+    311,
+    312,
+    240,
+    241,
+    [
+     "testcontainers is not an alternative to any of these: it"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    318,
+    241,
+    247
+   ],
+   [
+    "replace",
+    318,
+    319,
+    247,
+    248,
+    [
+     "Tools are pinned by mise. The suite needs a PostgreSQL server whose"
+    ]
+   ],
+   [
+    "equal",
+    319,
+    330,
+    248,
+    259
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "2bff64e83fd4+2": {
+  "fn": "bellgrell/Migrator-",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**English** | 中文 | Русский"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    23,
+    3,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "|Mode|Source|Target|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    24,
+    25
+   ],
+   [
+    "replace",
+    25,
+    38,
+    25,
+    38,
+    [
+     "|`mysql2pg`|MySQL|PostgreSQL|full load + verification|",
+     "|`mysql2og`|MySQL|openGauss|full load + verification|",
+     "|`pg2mysql`|PostgreSQL|MySQL|full load + verification|",
+     "|`pg2og`|PostgreSQL|openGauss|full load + verification|",
+     "|`og2pg`|openGauss|PostgreSQL|full load + verification|",
+     "|`og2mysql`|openGauss|MySQL|full load + verification|",
+     "|`mysql2mysql`|MySQL|MySQL|full load + verification|",
+     "|`mysql2mssql`|MySQL|SQL Server|`bcp` channel|",
+     "|`mssql2mysql`|SQL Server|MySQL|full load|",
+     "|`mssql2mssql`|SQL Server|SQL Server|`bcp` channel|",
+     "|`mysql2oracle`|MySQL|Oracle|`sqlldr` channel|",
+     "|`oracle2mysql`|Oracle|MySQL|full load|",
+     "|`oracle2oracle`|Oracle|Oracle|`sqlldr` channel|"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    71,
+    38,
+    71
+   ],
+   [
+    "replace",
+    71,
+    72,
+    71,
+    72,
+    [
+     "`MIG_SQLLDR`). See docs/dependencies.md."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    95,
+    72,
+    95
+   ],
+   [
+    "replace",
+    95,
+    96,
+    95,
+    96,
+    [
+     "|Target|Channel|Time|Throughput|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    96,
+    97
+   ],
+   [
+    "replace",
+    97,
+    101,
+    97,
+    101,
+    [
+     "|SQL Server|`bcp`|35.8 s|8.8 MB/s|",
+     "|SQL Server|INSERT fallback|233 s|1.3 MB/s|",
+     "|Oracle|`sqlldr`|133.7 s|2.4 MB/s|",
+     "|Oracle|INSERT ALL fallback|1285 s|0.2 MB/s|"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    111,
+    101,
+    111
+   ],
+   [
+    "replace",
+    111,
+    115,
+    111,
+    112,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    122,
+    112,
+    119
+   ],
+   [
+    "replace",
+    122,
+    123,
+    119,
+    120,
+    [
+     "|Parameter|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    120,
+    121
+   ],
+   [
+    "replace",
+    124,
+    135,
+    121,
+    132,
+    [
+     "|`--mode`|`sim`|migration mode (table above)|",
+     "|`--source` / `--target`|—|DSN: `host=;port=;user=;password=;db=`|",
+     "|`--batch`|1000|rows per batch|",
+     "|`--commit`|10|commit every N batches|",
+     "|`--workers`|1|parallel workers and PK-range parallelism|",
+     "|`--truncate`|off|drop target tables before loading|",
+     "|`--no-verify`|off|skip row-count and checksum verification|",
+     "|`--resume` / `--resume-dir`|off|continue from a primary-key watermark|",
+     "|`--cdc`|off|keep applying changes after the full load|",
+     "|`--with-views`|off|migrate views where supported|",
+     "|`--port`|8123|web dashboard port|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    138,
+    132,
+    135
+   ],
+   [
+    "replace",
+    138,
+    140,
+    135,
+    137,
+    [
+     "- docs/usage.md - full parameter reference and recipes",
+     "- docs/dependencies.md - drivers, bulk loaders, troubleshooting"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    146,
+    137,
+    143
+   ],
+   [
+    "replace",
+    146,
+    147,
+    143,
+    144,
+    [
+     " restrict access to the host"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    151,
+    144,
+    148
+   ],
+   [
+    "replace",
+    151,
+    153,
+    148,
+    149,
+    [
+     "See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

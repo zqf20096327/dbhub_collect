@@ -2766,5 +2766,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fcf46396c5f6": {
+  "identity": {
+   "one_liner": "开源自托管电话交换机，由 AI 代理接听并操作通话。",
+   "review": "DeskVoice 是一个运行在自有 VPS 上的开源自托管电话系统（PBX），由 AI 语音代理接听来电，可在通话中执行工具、向人工请求批准、转接，并在通话结束后运行后续任务。面向需要自托管语音代理系统的团队。README 标注各能力经模拟或真实安装验证的程度，部分功能（如真实运营商通话）尚待实测；支持 Node 22、Docker 部署，MIT 许可。",
+   "highlights": [
+    "提供一键安装脚本，自动生成密钥、启动服务并创建首个用户，SIP 中继、号码与 AI 密钥可通过网页面板配置，无需 SSH",
+    "支持 Gemini 与 OpenAI 语音模型密钥，通话中可执行工具、请求人工批准，通话后生成摘要与跟进任务",
+    "内置无密钥无运营商的模拟语音引擎演示（需 Docker 与 Postgres），并附通话时间线、成本上限等控制功能"
+   ],
+   "use_cases": [
+    "在自有 VPS 上搭建由 AI 代理接听的电话系统，接入自有 SIP 中继号码",
+    "无 SIP 中继和 AI 密钥时，本地运行模拟通话以了解系统流程",
+    "需要通话记录、人工审批介入及通话后自动任务的电话服务场景"
+   ]
+  },
+  "sha": "fcf46396c5f6",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6795d15c4cfc": {
+  "identity": {
+   "one_liner": "Docker 化的定时备份服务，自动导出运行中的数据库容器转储文件",
+   "review": "该项目以 Docker 服务形式运行，通过 Docker API 发现带有 jan-di.database-backup 标签的数据库容器，对 Postgres（≤18）、MariaDB、MySQL 执行定时转储。支持 cron 表达式或间隔调度、gzip/zstd 压缩、AES 加密、保留策略清理及 OpenMetrics 监控端点，需挂载 docker.sock 或配置 TCP/TLS 连接。",
+   "highlights": [
+    "支持 Postgres（≤18）、MariaDB、MySQL 三类数据库，通过容器标签 enable/type/username/password 等逐容器配置",
+    "支持 cron 表达式或秒数间隔调度、RUN_AT_STARTUP 启动即备份，以及 none/simple/all 三种保留策略自动清理转储文件",
+    "提供 gzip/zstd 压缩、AES 加密及配套解密命令，内置 OpenMetrics HTTP 端点（默认端口 9639，可选 Bearer Token 鉴权）和 Healthchecks.io 集成"
+   ],
+   "use_cases": [
+    "在同一 Docker 引擎上运行多个数据库容器、需统一定时导出 SQL 转储的运维环境",
+    "需要按数量或年龄自动清理旧备份、并保留带时间戳的多份转储文件的场景",
+    "需要对转储文件进行 AES 加密或接入 OpenMetrics/Healthchecks.io 监控备份执行情况的部署"
+   ]
+  },
+  "sha": "6795d15c4cfc",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8e75e17337e3": {
+  "identity": {
+   "one_liner": "Rust 编写的 AI 治理控制平面库，集成身份、模型网关、MCP 与审计。",
+   "review": "SystemPrompt Core 是一个 Rust 库，实现用于 agentic 系统的控制平面，提供身份认证（OAuth2/OIDC）、模型网关、受治理的 MCP 工具执行和 PostgreSQL 审计记录。面向需要自行运营运行时的团队，通过扩展契约在编译期注册路由、工具和任务。Core 采用 BSL-1.1 许可，生产使用需商业授权，运行时依赖 PostgreSQL 18+。",
+   "highlights": [
+    "提供 OAuth2/OIDC 身份管理、Anthropic 兼容的 /v1/messages 模型网关及可配置的上游路由",
+    "对受治理的工具调用执行范围检查、凭据模式检测、黑名单和速率限制，并在 PostgreSQL 中记录关联审计数据",
+    "通过 inventory 在编译/链接期注册扩展，可贡献 API 路由、模型与工具提供者、定时任务、迁移和角色"
+   ],
+   "use_cases": [
+    "为接入 AI 客户端的组织搭建带身份与审计的 MCP 工具网关",
+    "以 Rust 扩展方式编译包含自有路由、提供者和持久化的运行时",
+    "在私有网络或气隙环境中部署模型与工具调用运行时"
+   ]
+  },
+  "sha": "8e75e17337e3",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b29bae1370b3": {
+  "identity": {
+   "one_liner": "Rust 编写的 macOS/Linux 磁盘用量分析器，SQLite 索引与 MCP 服务器",
+   "review": "duscope 是面向 macOS 和 Linux 的磁盘用量分析工具，用 Rust 编写。它并行扫描目录树一次，将结果存入带预计算子树合计的 SQLite 索引，后续查询以毫秒级返回。提供 treemap 展示（终端/SVG/PNG）、最大目录、陈旧大文件、按类型统计、可再生成缓存等查询，支持只读 SQL 和两次扫描的 diff。v0.3.0 起通过 stdio 提供 MCP 服务器（默认 11 个只读工具，--allow-delete 增加移入废纸篓的第 12 个）。安装途径含 GitHub Releases 预编译二进制、Homebrew tap、.deb 包与 cargo install（需 Rust 1.89+ 和 C 编译器）。",
+   "highlights": [
+    "将每次扫描存入 SQLite 索引并预计算子树合计，查询返回毫秒级，支持只读 SQL、扫描对比（diff）与导出为 ncdu/GrandPerspective/QDirStat/CSV 格式",
+    "统计删除可释放的空间：硬链接全平台只计一次，macOS 计入 APFS 克隆与 firmlink，Linux 计入子卷与 bind mount；duscope explain --clones 可测量 reflink 共享量",
+    "以 stdio MCP 服务器向客户端提供 11 个只读工具（扫描、summary、top、stale、caches、SQL 等），访问范围限定在 --roots 指定的目录内，输出统一的版本化 JSON 信封"
+   ],
+   "use_cases": [
+    "清理磁盘前分析空间去向：找最大目录/文件、数月未动的大文件、可再生成缓存（如 node_modules）及删除某路径可释放的字节数",
+    "为脚本或 AI agent 提供结构化输出：--json/--plain 输出、MCP 只读工具，以及 duscope agent --skill 生成的技能文件",
+    "对比两次保存的扫描（diff）查看目录树在一段时间内的增减变化，或用只读 SQL 对扫描索引做自定义统计"
+   ]
+  },
+  "sha": "b29bae1370b3",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

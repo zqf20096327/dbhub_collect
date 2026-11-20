@@ -3306,5 +3306,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ce615f228296": {
+  "identity": {
+   "one_liner": "单 JAR 部署的异构数据库实时同步 Web 应用，内置全量、增量轮询与日志 CDC",
+   "review": "Jync 是一个在异构数据库间同步结构与数据的 Web 应用，面向数据库迁移实施人员。单个 jar 启动后经浏览器配置任务，内置 35 种数据库预设与自定义 JDBC 类型，支持 keyset 分块全量加载、只读游标增量轮询、六类源库日志 CDC 与按 SQL 取数的 ETL，依赖 H2、Quartz 等组件，内网离线运行。分析型引擎仅可作同步源，部分驱动需自备 jar。",
+   "highlights": [
+    "全量同步采用主键 keyset 分块、单表并行与流式读取，逐块提交并写检查点；增量默认轮询模式只需只读账号，六类源库可切换日志 CDC",
+    "自动建表/索引/视图/存储过程并做类型映射与函数转换，支持停机断网后从检查点续传、幂等写入",
+    "内置列清洗、表名映射、钉钉/企业微信/飞书/Webhook 告警、三种角色权限，可经 jar/Docker/Kubernetes 部署并支持本地账号与三种统一认证"
+   ],
+   "use_cases": [
+    "政企系统从 MySQL、Oracle、SQL Server 迁移至达梦、金仓、OceanBase 等数据库时，新旧系统双轨运行期间持续保持结构与数据一致",
+    "内网离线环境下需要无 Kafka/ZooKeeper 外部组件的数据库同步链路部署",
+    "Elasticsearch/OpenSearch 至 Easysearch、MongoDB 至 MongoDB 或 KingbaseES 的整库复制，以及按客户取数 SQL 的定时 ETL 场景"
+   ]
+  },
+  "sha": "ce615f228296",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fbef91a1bffc": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 侧车索引表的 PHP/Symfony 容错全文搜索层。",
+   "review": "Fuzzphony 是运行于 PostgreSQL 之上的 PHP/Symfony 全文搜索库，提供容错拼写、忽略重音、排序打分、过滤和查询语法，索引存放在数据表旁的 sidecar 表中，不修改原表结构。要求 PHP 8.4+、PostgreSQL 15+（含 pg_trgm 和 unaccent 扩展），通过 Composer 安装，支持 trigger/queue 两种同步模式及多租户字段授权。仅支持 PostgreSQL，不用于向量或语义搜索。",
+   "highlights": [
+    "提供拼写容错（trigram）、重音折叠及 28 种语言的词干化全文搜索，含 AND/OR/排除/短语/前缀/字段限定等查询语法",
+    "索引存于 sidecar 表，通过 trigger 或队列同步，trigger 模式下索引与数据在同一事务中变更；支持租户隔离和字段级授权",
+    "提供 schema 生成、向导、doctor 自检、可恢复重建索引等命令行工具，提供基于 50 万条数据的 Docker 演示应用"
+   ],
+   "use_cases": [
+    "为运行 PostgreSQL 的 PHP/Symfony 应用（后台管理、CRM、支持工具）替换 LIKE 查询实现搜索功能",
+    "表结构不可修改的场景（遗留系统、ERP、他团队维护的表），或希望搜索数据保持在同一备份与权限体系下",
+    "共享 schema 的多租户 SaaS，需要租户过滤、搜索限流及字段可见性控制"
+   ]
+  },
+  "sha": "fbef91a1bffc",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3267b9272c82": {
+  "identity": {
+   "one_liner": "基于XML清单生成DTO/Model/DAO数据访问层代码的IDE插件",
+   "review": "SQL DAL Maker 通过 XML 清单描述待生成的 DTO、Model 和 DAO 类及其 SQL，翻译为不含 PDO/JDBC/DB-API 直接调用的源码，数据库访问统一收在用户自有的 DataStore 接口之后。以 Java 实现，作为 Eclipse 与 IntelliJ 平台插件运行，另有命令行工具 sdmc 可在 CI 中使用。生成时需连接数据库以读取元数据。",
+   "highlights": [
+    "支持 PHP、Java、Python、Go 等语言的数据访问层代码生成",
+    "提供逆向工程生成清单初稿，并在翻译时读取 JDBC 元数据解析未决内容",
+    "清单可持久化，模式变更后可重复再生成；提供 sdmc 命令行版本用于 CI"
+   ],
+   "use_cases": [
+    "在 Eclipse 或 IntelliJ 系 IDE 中为已有数据库生成 DTO 和 DAO 代码",
+    "通过 sdmc 在 CI 流程中生成 Go/Python 代码（支持 PostgreSQL、MySQL、SQLite）",
+    "配合 Flask、FastAPI、DRF、gorm 等框架的 Demo 项目学习集成方式"
+   ]
+  },
+  "sha": "3267b9272c82",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d58e77d1c2b8": {
+  "identity": {
+   "one_liner": "Rust 编写的 PostgreSQL 逻辑/物理复制协议解析与 WAL 流式消费库",
+   "review": "pg-walstream 是一个 Rust 库，用于解析并流式消费 PostgreSQL 的 WAL，支持逻辑复制（pgoutput 协议 1-4 版）与物理复制（含 BASE_BACKUP）。提供类型化反序列化、初始快照衔接、按表路由、断线重连与复制槽管理，并可通过 serde 将事件序列化为多种二进制格式。面向需要在 Rust 程序中直接接入 PostgreSQL 复制流的开发者。",
+   "highlights": [
+    "支持 pgoutput 协议版本 1-4，含大事务流式传输（v2+）、两阶段提交（v3+）与并行流式传输（v4+）",
+    "提供逻辑与物理两种复制：物理复制支持原始 WAL 流、带进度的 BASE_BACKUP 与热备反馈",
+    "默认纯 Rust 连接后端（rustls-tls，无需 libpq/OpenSSL），也可选用 libpq 后端；ChangeEvent 支持 JSON、CBOR、MessagePack、postcard、bincode 序列化"
+   ],
+   "use_cases": [
+    "在 Rust 服务中消费 PostgreSQL 逻辑复制流，按表路由变更事件并反序列化为自定义结构体",
+    "从已有数据出发做增量同步：先复制快照再无缝接续变更流，或按目标 LSN 进行有界回放",
+    "执行物理备份或为备库/PITR 建立原始 WAL 流，或需要 no_std/wasm/嵌入式环境的协议解析"
+   ]
+  },
+  "sha": "d58e77d1c2b8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2a04afc7acea": {
+  "identity": {
+   "one_liner": "面向 Odoo Community 的 AI 代理插件，通过 JSON-2 API 让 LLM 读写业务数据",
+   "review": "OdooTool 是运行在 AgentBridge 宿主内的插件，为大型语言模型提供 13 个类型化工具方法（模型/字段发现、搜索、读写、删除、聚合等），用于操作 Odoo Community 的客户、订单、发票、库存等数据。每次调用以配置的 Odoo 用户身份执行，沿用 Odoo 自身的访问权限与记录规则。需 Odoo 暴露 JSON-2 外部 API，iOS 不支持。",
+   "highlights": [
+    "提供 13 个类型化工具方法：模型与字段发现、搜索、读取、创建、更新、删除、call_method、分组聚合、菜单、连接检查",
+    "通过 HTTPS + bearer token 调用 Odoo JSON-2 外部 API，调用以配置的 Odoo 用户身份执行，权限、记录规则和字段级权限仍由 Odoo 强制",
+    "支持 Windows 与 Linux/WSL 一键脚本安装 PostgreSQL、Odoo 20 Community、AgentBridge 与本插件，支持环境变量实现无人值守安装"
+   ],
+   "use_cases": [
+    "以自然语言让 AI 代理在本地自托管的 Odoo 实例中执行日常业务操作，如创建报价单、查询逾期发票",
+    "在企业内网或本地硬件上部署私有 ERP 自动化，唯一出站流量为所配置的 LLM 端点",
+    "基于 AGPL-3.0 许可、无需 Odoo Enterprise 许可证或订阅账户的社区版 Odoo 集成场景"
+   ]
+  },
+  "sha": "2a04afc7acea",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c96a0e7172be": {
+  "identity": {
+   "one_liner": "2026 OceanBase 大赛初赛与加赛项目的可复现复现归档仓库",
+   "review": "该仓库收录 2026 OceanBase 数据库大赛初赛 11 题（总分 620/620）与加赛 MiniVectorDB 的复现入口，来自东北大学队伍。内核类题目通过固定上游提交加源码补丁还原，生态类项目按各自目录运行；各题页面注明构建要求、命令与验证范围，平台记分与账号配置等原始记录不在此仓库内。",
+   "highlights": [
+    "收录初赛 11 题和加赛 MiniVectorDB 的复现入口，内核项目使用固定上游提交与源码补丁还原",
+    "MiniVectorDB 支持在仓库根目录用 CMake 或 Docker 构建，通过 JSON Lines 执行 SQL 和向量检索",
+    "各题附运行方式与验证结果，如补丁校验、公开用例测试及固定随机种子实验"
+   ],
+   "use_cases": [
+    "需要复现 2026 OceanBase 大赛参赛项目运行结果的参赛者或研究者",
+    "希望按补丁与固定提交还原内核类题目构建过程的开发者",
+    "需要以 CMake 或 Docker 构建并测试 MiniVectorDB 的 SQL 与向量检索功能的使用者"
+   ]
+  },
+  "sha": "c96a0e7172be",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2795,5 +2795,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a599b4a7d249": {
+  "identity": {
+   "one_liner": "聚合 CVE 漏洞 PoC 与利用信息的零 API 数据索引仓库",
+   "review": "该仓库通过 GitHub Actions 每 24 小时从 CVEProject/cvelistV5、ExploitDB、Nuclei、Metasploit、Vulhub、CISA KEV、FIRST EPSS 等来源聚合并去重 CVE 数据，生成包含 157,288 条记录的 JSON 索引，覆盖 1999 至 2027 年。使用方式为 curl 拉取 JSON 后配合 jq 等本地工具查询，无需 API 密钥；采用 MIT 许可证。README 中的统计数字与风险评分由其自身管道计算，具体口径见 docs/SCORING.md。",
+   "highlights": [
+    "通过 GitHub Actions 每 24 小时聚合 cvelistV5、ExploitDB、Nuclei、Metasploit、Vulhub、CISA KEV、EPSS 等来源数据并去重",
+    "提供压缩格式的 JSON 索引文件，可通过 curl 与 jq 等本地命令行工具直接查询，不依赖 API 密钥",
+    "为每条 CVE 计算 0-100 的风险评分，综合 KEV 状态、EPSS、CVSS、PoC 证据与时间因素（评分方法见 docs/SCORING.md）"
+   ],
+   "use_cases": [
+    "查询特定 CVE 是否存在公开 PoC 或利用模板（Exploit-DB ID、Nuclei yaml、Metasploit 模块、Vulhub 复现环境）",
+    "安全团队检索 CISA KEV 在列漏洞及 EPSS 数据以辅助漏洞处置排序",
+    "将 JSON 索引导入本地脚本或 RAG 流程用于漏洞情报批量处理"
+   ]
+  },
+  "sha": "a599b4a7d249",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b171f75c1578": {
+  "identity": {
+   "one_liner": "面向 JavaScript 的模块化分布式数据库，基于 CRDT 与区块链日志实现本地优先同步",
+   "review": "GlobalStorage 是 Metarhia 团队提供的 JavaScript 分布式数据同步引擎，供 Node.js 22+ 与浏览器环境使用。它将记录表示为 CRDT 状态（Register、Counter、Set、Map），Replica 组件记录增量日志并持久化到 fs/OPFS，SyncService 与 Uplink 通过 metacom 协议在副本间拉取和推送增量。客户端与服务端使用同一套 API，支持 Metaschema 验证与自定义校验函数。",
+   "highlights": [
+    "提供 delta-state CRDT 同步，支持 Register、Counter、Set、Map 四种值类型及 merge/diff/materialize 等 API",
+    "Replica 支持内存与持久化两种模式，日志按 256 条增量分段存储并在打开时并行读取回放",
+    "通过 SyncService 与 Uplink 在 metacom/WebSocket/WebRTC 连接上实现双向增量同步，支持游标与 clear 跟随"
+   ],
+   "use_cases": [
+    "本地优先应用：离线写入本地存储，联网后通过 CRDT 合并增量",
+    "实时协作工具与 P2P 分布式系统的多副本数据同步",
+    "基于 Metarhia 技术栈与 Impress 应用服务器的全栈 JavaScript 项目"
+   ]
+  },
+  "sha": "b171f75c1578",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

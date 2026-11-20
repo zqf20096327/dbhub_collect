@@ -3131,5 +3131,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f9db4a2fd5d6": {
+  "identity": {
+   "one_liner": "MySQL 备份与 PITR 守护进程，基于 XtraBackup 和云对象存储",
+   "review": "MyHoard 是一个用于创建、管理和恢复 MySQL 备份的守护进程，面向多节点主备环境。内部调用 Percona XtraBackup 执行全量和增量备份，近实时上传二进制日志，恢复时通过 relay log 索引分批回放 binlog，实现时间点恢复且本地磁盘占用少。仅支持 Linux，需 MySQL 8.x+、ROW 格式 binlog、GTID 及 InnoDB。",
+   "highlights": [
+    "支持周期性全量/增量备份与近实时二进制日志备份，存储于 AWS S3、Google Cloud Storage、Azure 等对象存储",
+    "通过将备份 binlog 以 relay log 方式分批由 SQL 线程回放，实现时间点恢复（PITR）",
+    "提供 HTTP API 进行模式切换与状态上报，支持 statsd 指标、Sentry 异常报告及基于数量/年龄的备份自动清理"
+   ],
+   "use_cases": [
+    "主节点可能频繁切换的多节点 MySQL 环境中维护连续的备份事务流",
+    "需要将新服务器从对象存储恢复到指定时间点的场景",
+    "希望以守护进程方式自动调度备份和 binlog 上传、并通过 HTTP API 控制备份/提升流程的运维环境"
+   ]
+  },
+  "sha": "f9db4a2fd5d6",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b0c1c71ead3": {
+  "identity": {
+   "one_liner": "开源的早晚赞词结构化数据库，提供阿拉伯语与英语多格式数据",
+   "review": "该项目以 JSON 为主数据源（ar.json 与 en.json），收录晨昏赞词的文本、翻译、音译、重复次数、出处及音频链接等字段，并通过脚本与 GitHub Action 自动生成 CSV、SQL、SQLite 格式。适用于需要结构化赞词数据的开发者与应用作者；贡献时仅可编辑 JSON 源文件，生成文件不可手动修改。项目采用 MIT 许可证。",
+   "highlights": [
+    "提供阿拉伯语和英语双语数据，包含 order、content、translation、transliteration、count、fadl、source、type、audio 等字段",
+    "以 JSON 文件为唯一主数据源，通过 scripts 目录脚本及 GitHub Action 自动生成 CSV、SQL、SQLite 等格式",
+    "数据来源包含《穆斯林堡垒》等书籍及相关网站"
+   ],
+   "use_cases": [
+    "为伊斯兰主题桌面或移动应用提供结构化赞词数据源",
+    "用于数据分析或导入 SQLite/SQL 数据库的场景",
+    "面向需要赞词音频链接及英译、音译内容的应用开发"
+   ]
+  },
+  "sha": "2b0c1c71ead3",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "093348417d36": {
+  "identity": {
+   "one_liner": "ParadeDB 官方的 Drizzle ORM 集成库",
+   "review": "该仓库是 ParadeDB 官方提供的 Drizzle 集成，用于在 Node.js/TypeScript 环境中通过 Drizzle ORM 使用 ParadeDB 的 PostgreSQL 全文搜索、向量检索与聚合能力。README 要求 Node 22.12+、Drizzle 1.0+、PostgreSQL 15+、pgvector 0.7.0+ 及 ParadeDB/pg_search 0.27.0+，采用 MIT 许可证。",
+   "highlights": [
+    "作为 ParadeDB 的官方 Drizzle ORM 集成提供",
+    "支持 PostgreSQL 15+，并通过 pgvector 0.7.0+ 提供向量类型以配合 ParadeDB 原生向量搜索",
+    "要求 ParadeDB/pg_search 0.27.0+，采用 MIT 许可证开源"
+   ],
+   "use_cases": [
+    "在 Node.js/TypeScript 项目中通过 Drizzle ORM 使用 Postgres 进行全文搜索",
+    "结合 pgvector 在同一 PostgreSQL 实例中实现向量检索",
+    "将应用数据、搜索与聚合统一运行在单一 PostgreSQL 数据库上的场景"
+   ]
+  },
+  "sha": "093348417d36",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "551a9cdbcf81": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理监督的终端优先 Linux 桌面工作区，基于 Electron。",
+   "review": "LiteEditorAI 是一个以终端为核心的桌面工作区，供使用 Claude Code、Codex、Gemini CLI 等代理的开发者使用。它提供实时代理状态指示灯、自命名标签页、内置 IDE 代码查看器与 Git 图，并包含 20 多个工具模块（任务、审计、上下文管理等）。项目处于 alpha 阶段，提供 deb、Linux 便携包和源码运行（Node.js 22+）三种方式，支持英语、俄语、简体中文界面。",
+   "highlights": [
+    "实时显示终端中代理状态：工作中、等待回答、完成、未开始，Claude Code 与 Antigravity CLI 通过 hooks / OSC 7501 获取代理自报状态",
+    "内置轻量 IDE 查看器：文件树自动刷新、35+ 语言语法高亮、side-by-side diff vs HEAD 与逐 hunk 回退、本地文件历史回滚，以及彩色 Git 分支图",
+    "包含 Tasks、Audit、Context（CLAUDE.md 分节管理与记忆）等 20+ 模块，Tasks 模块内置 MCP 服务器 lite-tasks"
+   ],
+   "use_cases": [
+    "同时监督运行于多个项目中的 AI 编码代理，跟踪哪些代理在等待回复",
+    "审查代理修改的代码：diff、blame、作者层与提交前回滚",
+    "管理代理上下文文件（CLAUDE.md、.claude 目录）并从会话历史中提炼规则"
+   ]
+  },
+  "sha": "551a9cdbcf81",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7fb0f3d69d0c": {
+  "identity": {
+   "one_liner": "人和各自的 AI 在同一群組內接卡、回報、交接的自架協作平台",
+   "review": "Aigile-Switch 是一個協作平台，讓團隊成員與各自的 AI（如 Claude Code、Codex、opencode）在同一個群組裡收訊息、接工作卡、回報進度與交接。透過 Docker 一行指令即可自架，資料存於本機 SQLite，適合需要人機混合協作的團隊。需注意公開部署前必須設定 ADMIN_PASSWORD，否則預設帳號密碼為 admin/admin。",
+   "highlights": [
+    "提供群組訊息、工作看板、卡片交接與驗收機制，AI 與人類成員以相同流程協作",
+    "支援 Docker 一行啟動、Node 直接執行，以及部署到 Cloudflare Workers（含 D1 與 R2）",
+    "提供 AI 接入文字（不含 Token，經一次性連結下載設定）、15 種角色範本與技能庫分發功能"
+   ],
+   "use_cases": [
+    "團隊想讓成員各自的 AI 代理在同一群組中接收任務、回報進度並交接工作",
+    "需要在公司內網或自有伺服器上自架、資料保存於本地的協作環境",
+    "需要以看板方式管理工作卡（負責人、狀態、交接紀錄）並集中處理 AI 提問與決策事項"
+   ]
+  },
+  "sha": "7fb0f3d69d0c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

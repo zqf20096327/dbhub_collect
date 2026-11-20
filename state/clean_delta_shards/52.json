@@ -27257,5 +27257,443 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "e3e435724d14+2": {
+  "fn": "EdiWang/Moonglade",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "Deploy a published release at the URL root with HTTPS and HTTP/2. Behind a reverse proxy, set `ForwardedHeaders:KnownProxies` to the trusted proxy addresses so the app receives the public scheme and client IP. Releases"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    13,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "Fresh installations create the schema and seed initial data automatically. For upgrades, stop all Moonglade hosts, back up the database, test the required scripts on a restored copy, and apply them before starting the new version. Database execution guide"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "For 16.9.0 to 16.10.0, run the following scripts in order for your provider. PostgreSQL scripts · SQL Server scripts"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    31,
+    19,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "For databases older than 16.9.0, run the applicable category ID and PostgreSQL naming upgrades (`1` and `2`) first. Keep access restricted until any required owner setup is complete. First run"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    35,
+    32,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "Copy the environment template to a local `.env`, set `POSTGRES_PASSWORD`, and run the command below. Environment template"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    41,
+    36,
+    41
+   ],
+   [
+    "replace",
+    41,
+    42,
+    41,
+    42,
+    [
+     "Compose starts PostgreSQL and configures the web container. Keep the database volume and both image volumes when replacing containers. Open `http://localhost:8080` for owner setup. First run"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    57,
+    42,
+    57
+   ],
+   [
+    "replace",
+    57,
+    58,
+    57,
+    58,
+    [
+     "In PowerShell, `./start.ps1` uses the Development launch profile. Open `https://localhost:10210`. Test commands · Engineering reference"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    69,
+    58,
+    69
+   ],
+   [
+    "replace",
+    69,
+    70,
+    69,
+    70,
+    [
+     "Configure host options in the settings file or with environment variables (`:` becomes `__`). Manage blog preferences at `/admin/settings` and the owner account at `/admin/account`. Host settings"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    75,
+    70,
+    75
+   ],
+   [
+    "replace",
+    75,
+    83,
+    75,
+    83,
+    [
+     "|Setting|When it takes effect|",
+     "|---|---|",
+     "|Rendering, theme, and feed options|On subsequent requests, subject to external cache lifetimes.|",
+     "|FOAF and sitemap switches|On subsequent requests. Disabled endpoints return HTTP 404.|",
+     "|Watermark and original-image retention|On future uploads.|",
+     "|Notification switches|On future enqueue decisions. Queued email retains its recipient and content.|",
+     "|Notification sender display name|On subsequent delivery attempts, including for queued email.|",
+     "|Scheduled publishing|Saving wakes the worker. In-flight publishing completes.|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    108,
+    83,
+    108
+   ],
+   [
+    "replace",
+    108,
+    112,
+    108,
+    112,
+    [
+     "|Host option|Default behavior|",
+     "|---|---|",
+     "|`CommentRateLimit`|Allows five submissions per client IP and post in a ten-minute fixed window.|",
+     "|`CommentSubmissionGuard`|Checks a honeypot and rejects forms submitted before three seconds or after 240 minutes. Set `MaxFormAgeMinutes` to `0` to disable the age limit.|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    119,
+    112,
+    119
+   ],
+   [
+    "replace",
+    119,
+    123,
+    119,
+    123,
+    [
+     "|Option|Purpose|",
+     "|---|---|",
+     "|`ImageStorage:FileSystemPath`|Public processed images served at `/image/{filename}`. Compose mounts `/app/images`.|",
+     "|`ImageStorage:OriginalFileSystemPath`|Private originals when retention is enabled. Compose mounts `/app/images-origin`.|"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    123,
+    126
+   ],
+   [
+    "replace",
+    126,
+    127,
+    126,
+    127,
+    [
+     "With CDN delivery enabled, posts and feeds use CDN URLs and `/image/{filename}` redirects to the CDN. Expose only the public root, preserve filenames and media types, and publish only complete files. The owner avatar is served from account storage at `/avatar`. Cloudflare R2 mount example"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    138,
+    127,
+    138
+   ],
+   [
+    "replace",
+    138,
+    144,
+    138,
+    144,
+    [
+     "|Option|Purpose|",
+     "|---|---|",
+     "|`Enabled`|Enables email capability by default. Set to `false` to disable it explicitly.|",
+     "|`SmtpServer`, `SmtpPort`|SMTP endpoint. Port 465 uses implicit TLS. On other ports, `EnableSsl=true` requires STARTTLS and `false` uses STARTTLS when offered and otherwise allows an unencrypted connection.|",
+     "|`SmtpUserName`, `SmtpPassword`|SMTP credentials. Supply the password through deployment secrets, for example `Email__SmtpPassword`.|",
+     "|`SmtpSenderAddress`|Bare email address used in the sender headers and SMTP envelope. Blank values use `SmtpUserName`.|"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    149,
+    144,
+    149
+   ],
+   [
+    "replace",
+    149,
+    156,
+    149,
+    156,
+    [
+     "|Endpoint|Purpose|",
+     "|---|---|",
+     "|`/rss`, `/atom`, `/opml`|Feeds and subscriptions|",
+     "|`/opensearch`|OpenSearch discovery|",
+     "|`/foaf.xml`|FOAF profile|",
+     "|`/webmention`|Webmention reception|",
+     "|`/sitemap.xml`, `/robots.txt`|Crawler discovery and directives|"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    163,
+    156,
+    163
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "fd073e75b823+2": {
+  "fn": "StellarHyperion/stellarhyperion-backend",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "App | Public API health | Contracts and deployment evidence"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    49,
+    3,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "The `hyperion-backend` Vercel project serves stellarhyperion-backend.vercel.app. Configure its production `DATABASE_URL` through Vercel environment variables with a managed PostgreSQL connection and TLS. Keep the value server-side. Redis and signing keys are unnecessary while `KEEPER_ENABLED=false`."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    50,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "`vercel.json` includes the deployment metadata in the API function. Production indexing runs in the testnet indexer workflow, independently of requests to the API. Store the same database connection as the repository Actions secret `HYPERION_DATABASE_URL`. Each run applies pending SQL migrations and runs the real indexer and bridge pollers for 150 seconds, with graceful shutdown and a persisted PostgreSQL cursor. The concurrency group prevents overlapping hosted jobs. No signer is configured."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    182,
+    52,
+    182
+   ],
+   [
+    "replace",
+    182,
+    192,
+    182,
+    192,
+    [
+     " `GET /health` reports hosting environment, database role, a stable public configuration digest",
+     " (`configDigest`) and effective-setting provenance (`configProvenance`). The report uses selected",
+     " deployment routers and per-chain commits, with safe names for conflicting overrides.",
+     " `DEPLOYMENT_REVISION` is an expected Git commit and never replaces the selected deployment",
+     " record. Endpoints are reported only as omitted values and their source; database credentials,",
+     " signer material, host/path/process identity and arbitrary metadata are excluded. The digest",
+     " covers public effective settings and selected deployment identities, excluding endpoint",
+     " credentials, diagnostic-only overrides and tuning for disabled workers. Equivalent explicit",
+     " defaults and reordered JSON targets therefore share a digest. Provider health does not",
+     " establish destination delivery."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    193,
+    192,
+    193
+   ],
+   [
+    "replace",
+    193,
+    195,
+    193,
+    195,
+    [
+     " also include an opaque `nextCursor`; pass it back with the same filters for stable keyset",
+     " pagination. Cursors are scoped to the descending transfer-id order and reject mismatched filters."
+    ]
+   ],
+   [
+    "equal",
+    195,
+    216,
+    195,
+    216
+   ],
+   [
+    "replace",
+    216,
+    217,
+    216,
+    217,
+    [
+     "As of October 29, 2026, the public API and scheduled indexer use persistent Neon PostgreSQL. The verified database retained 10 delivered testnet transfers. The successful indexer run advanced its stored Stellar cursor and preserved transfer history after shutdown. These are recorded verification results; current freshness is available through `/v1/metrics`."
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    217,
+    218
+   ],
+   [
+    "replace",
+    218,
+    219,
+    218,
+    219,
+    [
+     "Signed source transactions and independently checked destination payments are published in the contracts repository's paid ITS evidence, XLM conversion evidence and CCTP evidence for all three destinations."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    219,
+    220
+   ],
+   [
+    "replace",
+    220,
+    221,
+    220,
+    221,
+    [
+     "The October 29 CI run passed formatting, lint, types, the production build and all 220 tests. `npm audit` reported zero known vulnerabilities after compatible locked HTTP redirect and test-tooling patches. These results cover dependency and regression checks; they are not a formal security audit."
+    ]
+   ],
+   [
+    "equal",
+    221,
+    469,
+    221,
+    469
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

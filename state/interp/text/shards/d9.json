@@ -3328,5 +3328,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a1ed61862052": {
+  "identity": {
+   "one_liner": "本地代码库智能 CLI 与 MCP 服务器，为 AI 编码代理提供 SQLite 代码图索引与检查工具。",
+   "review": "roam-code 是运行于本地的 Python CLI（PyPI 包，Apache 2.0），为 AI 编码代理构建 SQLite 代码图索引并提供 288 个命令与 259 个 MCP 工具（默认 core 预设 17 个）。需 Python 3.11+、Git 2.24+，通过 pip/pipx/uv 安装后执行 roam init 建索引。本地分析不调用模型、不需 API key，随代码变化需用 roam index 刷新。",
+   "highlights": [
+    "构建本地 SQLite 代码图索引，支持 28 种语言，分析不依赖模型调用或 API key",
+    "提供 288 个 CLI 命令与 259 个 MCP 工具（8 个预设可选，默认 core 含 17 个工具），39 个命令支持 --sarif 输出用于 CI 集成",
+    "提供 roam preflight/critique/verify --auto/guard-pr 等变更影响分析与检查证据收集命令，支持 GitHub、GitLab、Jenkins、Azure、Bitbucket 的 CI 配置生成"
+   ],
+   "use_cases": [
+    "为接入 MCP 的 AI 编码代理（如 Claude Code）提供符号搜索、依赖追踪、变更影响分析等本地工具调用",
+    "在 CI/CD 流水线中运行代码健康检查并以 SARIF 2.1.0 上传结果，或用 roam guard-pr 汇总 PR 审查记录",
+    "开发者用 roam understand/context/retrieve 等核心命令探索代码库、追踪登录流程等依赖路径"
+   ]
+  },
+  "sha": "a1ed61862052",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1ddac98ee13f": {
+  "identity": {
+   "one_liner": "纯 PHP 自托管多用户 AI 对话站点，SQLite 存储，上传虚拟主机即可运行。",
+   "review": "TinyChat 是一个自托管的 AI 对话站点系统，面向想在自有主机上搭建多用户 AI 服务的站长。它用纯 PHP 实现，数据存于 SQLite，无需 MySQL、Composer 或常驻进程；支持 OpenAI、Anthropic 及兼容接口的多模型切换，内置用户注册、额度计费、兑换码和管理后台，另有群聊、文生图、生视频与 AI 笔记模块。",
+   "highlights": [
+    "纯 PHP（7.4+）实现，数据存 SQLite，不需要 Composer、Node、MySQL 或常驻进程，首次访问自动运行环境自检",
+    "支持 OpenAI、Anthropic 及 OpenAI 兼容接口的多模型切换，提供群聊（2–8 成员、四种模式）、文生图/图生图、视频生成与 Markdown 笔记工作台",
+    "内置用户注册登录、TOTP 两步验证、额度套餐与按次/按 token 计费、兑换码、用户组模型授权及管理后台统计看板"
+   ],
+   "use_cases": [
+    "在共享虚拟主机或宝塔面板上部署一个供团队/朋友注册使用的多用户 AI 站点",
+    "以自有供应商 API Key 运营带账号体系、额度控制与兑换码发放的小型 AI 服务",
+    "需要对接本地 Ollama/LM Studio 等无鉴权上游，或通过开放 API（sk-tc- 密钥）供第三方客户端接入"
+   ]
+  },
+  "sha": "1ddac98ee13f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "54a87e498f1b": {
+  "identity": {
+   "one_liner": "开源 TypeScript 订阅电商包集合，提供续订、催款与支付恢复引擎",
+   "review": "OpenLup 是一组面向实物商品订阅电商的 Apache-2.0 TypeScript npm 包，包含 @openlup/core、@openlup/outbox 和 @openlup/platform 三个模块。应用保留品牌、目录与策略，包提供可复用的续订订单、催款重试等引擎；需 Node 24，数据库用 PostgreSQL 或 Supabase，每个部署服务一家店铺。README 说明其来源自 Velipet 的一方使用经验，并声明不构成生产就绪认证。",
+   "highlights": [
+    "提供 @openlup/core（商务契约与纯引擎）、@openlup/outbox（事务性入队与分发）、@openlup/platform（服务端基础设施）三个包",
+    "支持订阅与一次性购买、续订重试时间计算等策略由应用方提供的纯函数接口",
+    "参考 UI 使用 React、Vite 和 Tailwind CSS，Core 不依赖该前端栈；可运行于便携 PostgreSQL 或托管 Supabase"
+   ],
+   "use_cases": [
+    "在自有 TypeScript 应用中构建实物商品的周期性订单、支付与配送流程",
+    "D2C 订阅商店的续订、催款与客户自助管理功能开发",
+    "配合 AI 代理进行开发，利用显式领域边界、类型化端口与可执行契约检查"
+   ]
+  },
+  "sha": "54a87e498f1b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b171ca460597": {
+  "identity": {
+   "one_liner": "基于 Kotlin 的桌面支出与预算管理应用，数据存于本地 SQLite。",
+   "review": "这是一个用于管理个人支出和预算的 Kotlin 桌面应用，数据保存在本地 SQLite 数据库（默认位于 ~/.expense-tracker/expenses.db），并通过 JDBC 访问。它提供 Java Swing 图形界面，也支持以 --cli 参数在终端运行，且可指定自定义数据库路径；通过 Gradle Wrapper 构建，需 JDK 17 及以上。",
+   "highlights": [
+    "提供 Swing 图形界面与 --cli 命令行两种启动方式，参数可组合使用",
+    "支出与预算数据存储于本地 SQLite 数据库，支持自定义数据库文件路径",
+    "支持将支出数据导出为 CSV 文件"
+   ],
+   "use_cases": [
+    "在本地桌面环境中记录和管理个人支出与预算",
+    "通过命令行界面在终端中操作支出与预算数据",
+    "将支出数据导出为 CSV 文件用于备份或其他用途"
+   ]
+  },
+  "sha": "b171ca460597",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

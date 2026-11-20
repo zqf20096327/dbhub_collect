@@ -3799,5 +3799,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a6bcd88bb877": {
+  "identity": {
+   "one_liner": "自托管 AI 代理管理系统：以版本化 JSON 配置代理，含审批与审计",
+   "review": "EDDI 是一个可自托管的 AI 代理管理系统，基于 Java/Quarkus 构建，以 Apache-2.0 协议发布。代理由版本化 JSON 配置定义，通过一个 Docker 镜像提供 REST API、管理界面和聊天 UI。支持人工审批门控、仅追加审计台账、秘密保险库，可作为 MCP 服务器/客户端并兼容 A2A 与 OpenAI API。需要 Docker 环境及至少一个模型 API 密钥或本地 Ollama。",
+   "highlights": [
+    "以版本化 JSON 配置定义代理，支持差异对比、ZIP 导出与实例间同步",
+    "支持 19 个模型提供商，提供 RAG、持久化用户记忆与多代理群组讨论",
+    "MCP 服务器（120 个工具）与客户端、A2A、OpenAI 兼容 API（默认关闭），HMAC 签名的仅追加审计台账"
+   ],
+   "use_cases": [
+    "在自有服务器上运行代理并对工具调用、回合或群组阶段设置人工审批",
+    "通过 Claude、Cursor 等 MCP 客户端创建、测试和修改代理配置",
+    "为面向终端用户的代理部署提供管理后台、嵌入聊天 UI 与 Slack 接入"
+   ]
+  },
+  "sha": "a6bcd88bb877",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "042b6d04182e": {
+  "identity": {
+   "one_liner": "为 Kysely 提供基于 Postgres.js 与 Bun SQL 的 PostgreSQL 方言",
+   "review": "kysely-postgres-js 是一个 Kysely 方言包，让 Kysely 查询构建器通过 Postgres.js 客户端（≥3.4，含 4.x）或 Bun ≥1.2 的 SQL 原生绑定连接 PostgreSQL。支持 Node.js、Deno、Bun 安装，实现 AbortSignal 中止查询（cancel query/kill session），并提供 controlPostgres 配置避免饱和连接池下控制查询阻塞。由 Kysely 核心团队成员维护。",
+   "highlights": [
+    "支持 Postgres.js（≥3.4 含 4.x）与 Bun ≥1.2 的 SQL 原生绑定两种驱动",
+    "实现 Kysely 的 AbortSignal 集成，支持在数据库侧取消查询（'cancel query'/'kill session'）",
+    "提供 controlPostgres 配置项，可为控制查询指定独立的连接实例"
+   ],
+   "use_cases": [
+    "在 Bun 运行时中使用 Kysely 操作 PostgreSQL（利用 Bun 的 SQL 原生绑定）",
+    "偏好 Postgres.js 客户端而非 pg 的 Node.js/Deno 项目",
+    "需要在数据库侧中止长时间运行查询的应用"
+   ]
+  },
+  "sha": "042b6d04182e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "abe54a8f715b": {
+  "identity": {
+   "one_liner": "扩展 EF Core 的功能库，提供临时表批量操作等 SQL 增强",
+   "review": "Thinktecture.EntityFrameworkCore 是一组针对 Entity Framework Core 的扩展包，按数据库分为 SQL Server、PostgreSQL、MySQL、SQLite 等独立 NuGet 包。它提供基于临时表的批量插入、更新与 Upsert、清空表、窗口函数、位聚合等特性，并提供嵌套事务、运行时切换默认 schema 等能力。MySQL 批量操作默认使用多行 INSERT，可切换为 MySqlBulkCopy。适合需要在 EF Core 中执行批量数据操作的开发者。",
+   "highlights": [
+    "支持基于临时表的 Bulk-Insert、Bulk-Update、Bulk-Upsert 与 Truncate Tables，覆盖 SQL Server、PostgreSQL、MySQL、SQLite 四种数据库",
+    "支持窗口函数（RowNumber、Sum、Average、Min、Max 等），MySQL 批量插入可通过 useBulkCopy 切换为 MySqlBulkCopy（需开启 local_infile）",
+    "提供嵌套（虚拟）事务、SQL Server 表提示与跨库查询、运行时更改默认 schema、迁移中的 If-Exists 检查及 include-columns/identity 列等迁移扩展"
+   ],
+   "use_cases": [
+    "需要在 EF Core 中对大量数据执行批量插入、更新或 Upsert 的应用",
+    "SQL Server 或 PostgreSQL 项目中需要窗口函数、位聚合或跨库查询等 SQL 能力的场景",
+    "需要迁移扩展（include-columns、identity 列、非聚集主键）或运行时切换默认 schema 的项目"
+   ]
+  },
+  "sha": "abe54a8f715b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3aa2de9ac31c": {
+  "identity": {
+   "one_liner": "开源免费扑克数据追踪器与HUD，将牌局历史导入本地数据库",
+   "review": "fpdb-3 是一个用 Python 3.11+ 编写的免费开源扑克追踪与 HUD 工具，支持从 26 个牌室的牌局历史导入到本地数据库（默认 SQLite，可配 PostgreSQL、MySQL/MariaDB），并在牌桌上叠加实时 HUD。数据保留在本机，无账号、无上传、无遥测。提供报告、牌局回放、比赛 ICM、Study Explorer 与 Research Browser 分析工具，附带 PT4/HM3 导入功能。适用平台为 Linux、macOS、Windows。",
+   "highlights": [
+    "从 26 个扑克牌室导入牌局历史，支持 SQLite、PostgreSQL、MySQL/MariaDB 后端及跨后端迁移",
+    "实时 HUD 覆盖层，含多块可拖拽统计面板、FastHUD 快速弃牌桌模式与自动笔记",
+    "Study Explorer 与 Research Browser 提供约 40+ 查询预设、位置矩阵、牌面热图、13×13 范围网格及 EV 调整盈利分析，并支持锦标赛 ICM"
+   ],
+   "use_cases": [
+    "在本地汇总多个牌室的牌局历史并生成报告、图表与统计泄露检测",
+    "在牌桌上方叠加实时 HUD 查看对手历史数据，包括快速弃牌桌的 FastHUD 模式",
+    "使用 Study Explorer 比较自己与玩家池的频率差异，或通过 Research Browser 用 40+ 预设构建自定义查询"
+   ]
+  },
+  "sha": "3aa2de9ac31c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0977f3525a35": {
+  "identity": {
+   "one_liner": "基于 Baileys 的 WhatsApp 群组 AI 机器人，带人格对话、游戏、经济与管理系统",
+   "review": "ClaudIA 是一个运行于 WhatsApp 群组的机器人，以 SawBot-MD（基于 GataBot-MD）为起点修改而成，面向一个乌拉圭朋友群。它提供里约普拉特西班牙语风格的 AI 对话（Gemini 级联并支持 Groq、OpenRouter 等备选）、游戏与赌场、UruCoins 经济系统、群管理与审核工具。README 记载 WhatsApp 曾因消息量封禁过其号码，使用需注意消息频率限制。",
+   "highlights": [
+    "支持多 AI 提供商：Gemini 级联为主，Groq、OpenRouter、NVIDIA、Cerebras 作为备份",
+    "包含游戏、赌场（轮盘、二十一点、德州扑克等）、UruCoins 经济系统和商店",
+    "提供群组管理功能：角色权限、警告与黑名单、不活跃成员处理、入群审批"
+   ],
+   "use_cases": [
+    "西班牙语（里约普拉特方言）WhatsApp 朋友群或社区群的娱乐与活跃",
+    "需要游戏、积分经济和月度排行机制的群组运营",
+    "需要审核工具（警告、黑名单、防链接、不活跃清理）的群组管理"
+   ]
+  },
+  "sha": "0977f3525a35",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

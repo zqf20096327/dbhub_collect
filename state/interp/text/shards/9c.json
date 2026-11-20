@@ -3566,5 +3566,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b4bd58d7e1c9": {
+  "identity": {
+   "one_liner": "本地开源小型网络安全监视器，读取路由器API做只读检测",
+   "review": "LANwatch 是一个面向家庭和小型网络的本地监控工具（Python 3.11+，GPLv3），通过路由器适配器（Xiaomi MiWiFi、实验性 OpenWrt ubus）以只读方式获取网络快照，检测新设备、DNS 变更、WAN 中断等事件，结果展示于终端与仅监听 127.0.0.1 的本地 Web 面板。功能受限于路由器 API 提供的数据，非 SIEM 或全流量分析器，不声称检测恶意软件。",
+   "highlights": [
+    "检测新增/消失设备、WAN 可用性、DNS 变更、路由器重启与固件更换，历史存于本地 SQLite",
+    "事件可导出 JSONL/syslog/CEF 供本地导入 SIEM（含 Wazuh localfile 示例），Web 面板仅监听 127.0.0.1",
+    "运行于只读模式：无 root 要求，ARP 缓存为被动读取，OUI 厂商识别基于本地 IEEE 数据库"
+   ],
+   "use_cases": [
+    "家庭或小型局域网监控接入设备与 DNS/WAN 变化",
+    "将事件导出到本地 Wazuh 等 SIEM 进行集中记录",
+    "OpenWrt 或 Xiaomi MiWiFi 路由器的只读配置审计"
+   ]
+  },
+  "sha": "b4bd58d7e1c9",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fcf483290d8d": {
+  "identity": {
+   "one_liner": "Node.js 自托管日志与遥测包，以路径挂载提供内嵌运维仪表盘",
+   "review": "TracerNest 是一个面向 Node.js 应用的日志与遥测包，以中间件方式嵌入现有应用（Express、Fastify、原生 HTTP），在同一端口按路径挂载仪表盘与遥测接口，也提供可选独立监听端口。运行时零依赖，数据存入加密 SQLite 或 MySQL。安装方式为 npm install tracernest-logger，Apache 2.0 许可。",
+   "highlights": [
+    "拦截 stdout/stderr 及 HTTP 请求响应，捕获载荷、延迟与查询参数（含脱敏），支持 SSE 实时日志流与环形缓冲",
+    "运行时零依赖，仅使用 Node.js 内置模块，日志兼容 Winston、Pino、Bunyan 级别映射",
+    "提供内存、运行时、数据库健康诊断，AES-256-GCM 加密存储，三级 RBAC，支持 SMTP 邮件与 Teams Webhook 告警"
+   ],
+   "use_cases": [
+    "Node.js 后端应用的集中日志查看与 HTTP 请求排查",
+    "需要自托管、不暴露额外监控端口的容器化环境",
+    "Kubernetes 存活探针与负载均衡健康检查场景"
+   ]
+  },
+  "sha": "fcf483290d8d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "efa511116aab": {
+  "identity": {
+   "one_liner": "面向AI代理的技能文档集，规范Node.js后端、Go DLL与Supabase开发。",
+   "review": "该项目收录 Jonathan Roque 为AI代理编写的多份技能指南，以 SKILL.md 形式存放于各子目录，覆盖 Node.js/Express 后端、Go 与供 Excel 调用的 C-shared DLL、API 端点及 PostgreSQL/Supabase 表结构与 RLS 设计。README 未给出统一安装步骤，使用者需查阅各技能文件；其中 npm-roque 技能尚未收录。",
+   "highlights": [
+    "包含 go-feature-architecture、apis-roque、esquema-roque 等四个技能目录，各含完整 SKILL.md",
+    "Roque-stack 为 TypeScript CLI，用于生成 Express 项目与按 feature 划分的模块",
+    "支持绘制西班牙语 Go 流程图（Excalidraw 风格）与 SUNAT 集成相关 API 开发"
+   ],
+   "use_cases": [
+    "让AI代理按既定约定创建或修改 Go 功能与 C-shared DLL",
+    "设计 PostgreSQL/Supabase 的表、函数、RLS 及相应图表",
+    "创建、修改或调试 Node.js 后端 API 端点，尤其涉及 SUNAT 集成时"
+   ]
+  },
+  "sha": "efa511116aab",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

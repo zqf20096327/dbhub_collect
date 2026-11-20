@@ -3415,5 +3415,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6899ce1897c1": {
+  "identity": {
+   "one_liner": "Swift 编写的 Apple Mail MCP 服务器，提供 59 个工具与 SQLite 毫秒级邮件搜索",
+   "review": "che-apple-mail-mcp 是一个用 Swift 编写的 Apple Mail MCP 服务器，提供 59 个工具，通过 SQLite 索引实现对 25 万+ 封邮件的毫秒级搜索，并包含 .emlx 解析器、批量 markdown 导出和撰写工具。推荐通过 Claude 插件市场安装（含签名二进制、归档命令与安全规则），也可自行构建；需要手动授予完全磁盘访问权限。适用于 macOS 上让 MCP 客户端读写邮件的场景。",
+   "highlights": [
+    "提供 59 个工具，覆盖撰写、账户、邮箱、分类、附件等操作，SQLite 搜索支持主题/发件人/收件人/日期字段",
+    "读取路径以 SQLite 为主并在失败时回退到 AppleScript，全部 8 个 SQLite 优先读取工具具备回退一致性",
+    "撰写工具不经 AppleScript 注入正文，避免引用块包装；二进制经 Developer ID 签名并公证"
+   ],
+   "use_cases": [
+    "让 MCP 客户端（如 Claude）在 macOS 上搜索、分类、归档大量 Apple Mail 邮件",
+    "批量导出邮件为 markdown，或解析 .emlx 文件读取附件与原始头",
+    "撰写、回复、转发邮件并管理草稿签名，无需 UI 自动化注入正文"
+   ]
+  },
+  "sha": "6899ce1897c1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2bff64e83fd4": {
+  "identity": {
+   "one_liner": "C++17 实现的五数据库异构数据迁移工具，支持全量、校验与 CDC 增量同步",
+   "review": "mini-migrator 用 C++17 编写，在 MySQL、PostgreSQL、openGauss、SQL Server、Oracle 五种数据库间迁移数据，内置 13 种原生迁移方向，其余组合可通过 --source-type/--target-type 指定。提供行数与 checksum 校验、基于主键水位的断点续传，以及依托 MySQL binlog 和 PostgreSQL 逻辑复制的 CDC 增量同步。SQL Server 与 Oracle 通过 ODBC 接入，可调用 bcp/sqlldr 批量装载。面向需要在异构数据库间做数据搬迁与持续同步的使用者。",
+   "highlights": [
+    "提供 13 种原生迁移模式，并通过 --source-type/--target-type 支持任意源/目标组合",
+    "实现行数加 checksum 双重校验（FNV 或 mmv 摘要）、主键水位续传与主键范围并行",
+    "支持 MySQL binlog 与 PostgreSQL 逻辑复制的 CDC 增量同步，可选 DDL 同步；配套 Web 面板、doctor 自检与 Debian 包、Docker 镜像"
+   ],
+   "use_cases": [
+    "MySQL、PostgreSQL、openGauss 之间的全量数据迁移及迁移后校验",
+    "SQL Server、Oracle 通过 bcp/sqlldr 批量装载通道执行大批量数据搬迁",
+    "基于 binlog 或逻辑复制位点对源库变更进行持续增量同步"
+   ]
+  },
+  "sha": "2bff64e83fd4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

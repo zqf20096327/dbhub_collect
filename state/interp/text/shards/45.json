@@ -3235,5 +3235,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bf2baaa12c37": {
+  "identity": {
+   "one_liner": "自托管的域名与网络资产集中管理应用，基于 PHP 与 MySQL。",
+   "review": "DomainMOD 是一个用 PHP 和 MySQL 编写的开源自托管应用，用于集中管理域名、SSL 证书和虚拟主机等网络资产。它内置 Data Warehouse 框架，可导入 Web 服务器数据并查看、导出和生成报告，当前仅支持运行 WHM/cPanel 的服务器。适合需要集中记录域名资产的个人或团队，支持 Docker、zip 包、Git 和 Softaculous 四种安装方式，需配置 cron 定时任务以启用任务调度功能。",
+   "highlights": [
+    "支持管理域名、SSL 证书、虚拟主机等网络资产，并提供域名与 SSL 证书到期邮件通知",
+    "内置 Data Warehouse 框架，可导入 WHM/cPanel 服务器的账户等数据，用于查看、导出和报告",
+    "提供 Docker、.zip、Git、Softaculous 四种安装方式，PHP 8.2-8.5 与 MariaDB/MySQL 环境运行"
+   ],
+   "use_cases": [
+    "集中记录和跟踪多个域名及 SSL 证书的到期信息",
+    "导入 WHM/cPanel 服务器数据并生成报告或导出",
+    "在自有服务器上自托管部署网络资产管理工具"
+   ]
+  },
+  "sha": "bf2baaa12c37",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3ea3846d1ec4": {
+  "identity": {
+   "one_liner": "基于 Redis 的 Laravel 自动化数据库查询缓存层",
+   "review": "Lada Cache 通过注册 Lada-aware 连接子类拦截 Laravel 的数据库查询，自动生成缓存键、读写 Redis 并在写入操作时按行或表级标签失效缓存，无需修改业务代码。面向使用 Eloquent 和 Query Builder 的 Laravel 应用，需引入 trait 并依赖 Redis。注意通过 DB::select 执行的原生 SQL 不缓存，复杂 SQL 构造回退到表级失效。",
+   "highlights": [
+    "自动缓存 Eloquent 与 Query Builder 查询，写入操作时按行级或表级标签自动失效",
+    "支持通过 withoutCache() 按查询绕过缓存，并可配置全局开关与表级包含/排除",
+    "提供 Artisan 命令（如 lada-cache:flush）和 Laravel Debugbar 集成，可在 Debugbar 中查看缓存命中、未命中与失效情况"
+   ],
+   "use_cases": [
+    "查询重复度高、数据库负载较大的 Laravel Eloquent 应用",
+    "需要分布式缓存且希望失效逻辑自动处理的场景",
+    "需要对特定表启用/排除缓存或按查询跳过缓存的精细化控制"
+   ]
+  },
+  "sha": "3ea3846d1ec4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a76e8ddcfba6": {
+  "identity": {
+   "one_liner": "基于 Modal 的分布式 SQLite，本地 SQL 文件与云上 SyncServer 显式推拉同步",
+   "review": "sqlite-modal 在 Modal 工作区中创建命名数据库，本地 SQL 直接读写本机文件，通过 push/pull 显式同步到 eu-west 的 SyncServer，服务器退出时由 Volume 持久化远程文件，同步使用 Turso SDK。适合已有 Modal 账号、需在本地 SQLite 与云端保存副本的开发者。限制：每个名称仅一个容器，同步 URL 无鉴权，冲突采用 last-push-wins。",
+   "highlights": [
+    "本地 SQL 读写本机文件，push/pull 显式同步到 Modal 工作区的 SyncServer，由 Volume 在服务器退出时持久化",
+    "README 给出本地基准：读 0.01 ms p50（121k reads/s）、写 0.09 ms p50（9.3k writes/s），暖同步 push 158 ms / pull 79 ms p50",
+    "提供 examples/notes（单命名库）与 examples/multi（两个 App、两个名称）示例"
+   ],
+   "use_cases": [
+    "需要本地 SQLite 低延迟读写并在 Modal 工作区保留远程副本的 Python 应用",
+    "在 eu-west 区域部署单个命名数据库并按需 push/pull 同步",
+    "作为 Modal 生态下的 SQLite 同步模式参考实现（Apache 2.0，PyPI 尚未发布）"
+   ]
+  },
+  "sha": "a76e8ddcfba6",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

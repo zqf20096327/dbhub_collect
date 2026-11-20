@@ -2994,5 +2994,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a8c82dab300f": {
+  "identity": {
+   "one_liner": "自托管开源 CRM，内置 MCP 服务器供 AI 代理读写客户数据",
+   "review": "Relaticle 是一个开源 CRM，管理公司、联系人、商机、任务和笔记，面向无销售团队、面向固定客户名单销售的用户。它内置 MCP 服务器和带完整 CRUD 的 REST API，可接入 Claude、ChatGPT 等代理读写数据；支持自定义字段与逐字段加密、多工作区隔离。通过 Docker Compose 部署，含六个容器（应用、队列、调度器、WebSocket、PostgreSQL、Redis），要求 PHP 8.5+、PostgreSQL 17+，采用 AGPL-3.0 许可（packages/Cloud 除外）。",
+   "highlights": [
+    "提供 MCP 服务器与带完整 CRUD、模式访问和活动历史的 REST API，支持 OAuth 2.1 或个人访问令牌认证",
+    "支持文本、日期、货币、下拉等自定义字段及记录间关联，逐字段加密，无需数据库迁移",
+    "支持多工作区数据隔离与基于角色的权限，提供英语、德语、西班牙语和法语界面"
+   ],
+   "use_cases": [
+    "无专职销售团队的团队通过 AI 代理管理固定名单客户的商机、任务与笔记",
+    "通过 Docker 自托管 CRM 并将数据保留在自有服务器上",
+    "通过 REST API 将 CRM 数据集成到其他业务系统中"
+   ]
+  },
+  "sha": "a8c82dab300f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b96359d66042": {
+  "identity": {
+   "one_liner": "基于 Flask + SQLite 的多用户文件收集与分享 Web 应用，专为飞牛 fnOS 设计",
+   "review": "文件收集器是运行在飞牛 fnOS 上的文件收集与分享应用，管理员可创建带独立通行证、有效期和自定义短链接的收集页与分享页，访问者通过网页上传或下载文件。支持 TUS 断点续传上传（单文件上限 64 GB），并在本地渲染 Office/PDF/图片/音视频/TXT 预览。仅提供 .fpk 原生包安装，不支持 Docker；默认账号 admin/admin123，安装后需立即修改。",
+   "highlights": [
+    "支持收集页/分享页双模式链接，各自可独立设置密码通行证、有效期与自定义短链接 ID",
+    "采用 TUS 协议分片上传，支持断点续传，单文件大小上限可在 0.01-64 GB 间配置",
+    "Office 文档基于 OnlyOffice WASM、PDF 基于 PDF.js 在浏览器本地渲染预览，媒体与 TXT 亦可在线预览"
+   ],
+   "use_cases": [
+    "教师创建收集链接让学生填写姓名上传作业，分享页按上传者分组查看",
+    "团队资料汇总与集中下载，支持大文件上传",
+    "设置独立通行证与有效期，用于客户文件交接或文件分发"
+   ]
+  },
+  "sha": "b96359d66042",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7f091c44241": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理记忆层，单 Docker 镜像加单 SQLite 文件，MCP 原生。",
+   "review": "Rembric 为支持 MCP 或 HTTP 的 AI 编码代理提供自托管的记忆、会话与管理面板，数据存储于单个 SQLite 文件。服务器在进程内运行嵌入模型与重排序器，配置通过环境变量完成，凭证类文本在存储时替换为 [REDACTED:<kind>] 占位符，镜像内无 shell，备份需经面板或宿主机执行。",
+   "highlights": [
+    "以 MCP 服务（http://<host>:8787/mcp）和仪表盘（/dashboard）形式提供，兼容 Claude Code、Codex CLI、opencode、Pi、ChatGPT（OAuth 2.1）及任意 MCP 客户端",
+    "进程内运行嵌入模型 hs-embed-1（384 维，最多读取 1024 token）与重排序器 hs-rerank-1，均可通过环境变量开关",
+    "提供会话生命周期钩子、按项目路径隔离、<private> 段的客户端侧脱敏，以及每日更新检查与面板内一键升级回滚流程"
+   ],
+   "use_cases": [
+    "为多个 MCP 客户端提供共享的自托管记忆存储与审计轨迹",
+    "在 LAN 或 Tailscale 内网环境中部署远程记忆服务，通过 Bearer token 与反向代理控制访问",
+    "需要可回滚版本、WAL 在线备份与本地 SQLite 数据文件的代理运维场景"
+   ]
+  },
+  "sha": "a7f091c44241",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6074a1381994": {
+  "identity": {
+   "one_liner": "面向 API-only Ruby 应用的类 Rails 框架，编译为单个原生二进制。",
+   "review": "Snails 提供 Rails 式约定的 API 框架，通过 Spinel AOT 编译器将应用、框架与 HTTP 服务器编译为单个原生二进制。它移除视图层与 Active Record，支持 SQLite 与 PostgreSQL，进程内多线程运行。CLI 提供 new/dev/test 等命令，支持 Linux amd64/arm64 与 macOS，MIT 许可，文档位于 manual/。",
+   "highlights": [
+    "保留 Rails 约定并移除视图层与 Active Record，将应用、框架和 HTTP 服务器编译为一个原生二进制",
+    "支持 SQLite 与 PostgreSQL，提供迁移、模型、认证、后台任务、邮件等手册章节",
+    "CLI 支持 Linux amd64/arm64 与 macOS Apple Silicon/Intel，可通过 install.sh 或 mise 安装"
+   ],
+   "use_cases": [
+    "需要类 Rails 约定的 API-only Ruby 应用开发",
+    "希望将应用编译为原生二进制分发的场景",
+    "从 Rails 迁移 API 应用的团队（手册含 Coming from Rails 指南）"
+   ]
+  },
+  "sha": "6074a1381994",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

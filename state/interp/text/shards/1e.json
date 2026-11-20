@@ -3040,5 +3040,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a689b648f972": {
+  "identity": {
+   "one_liner": "自托管的 LLM 多智能体自主渗透测试平台，以双图谱与证据链驱动",
+   "review": "ARTEX 是一个自托管的渗透测试平台，由 Go 单二进制与内嵌 Next.js UI 组成，依赖 PostgreSQL。规划器将目标拆解为意图，worker 执行真实工具调用，结果写回资产图谱与探索图谱；MITM 代理与浏览器扩展捕获流量作为证据，任务受范围规则、审批门与 token/回合预算约束。需配置 LLM 端点（Anthropic/OpenAI 兼容或本地 Ollama），Docker 镜像从本地构建。适用于需留存审计记录的授权测试场景。",
+   "highlights": [
+    "双图谱架构：跨任务共享的资产图谱与每任务探索图谱通过锚点关联，支持资产测试覆盖统计",
+    "录制型 MITM 代理与浏览器扩展捕获请求/响应，发现项绑定原始证据并支持复测与报告导出",
+    "多 LLM 配置链支持 worker 轮换与故障转移，任务与意图级别的 token/回合预算控制"
+   ],
+   "use_cases": [
+    "授权范围内漏洞赏金与渗透测试任务的自动化执行与证据留存",
+    "需要人机协作审批工具调用的安全测试流程管理",
+    "自托管环境中对已认证目标的流量捕获与漏洞复测验证"
+   ]
+  },
+  "sha": "a689b648f972",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "48055c6db7ac": {
+  "identity": {
+   "one_liner": "微软官方 SQL Server 的 PHP 扩展驱动，含 SQLSRV 与 PDO_SQLSRV 两个扩展",
+   "review": "该项目提供 SQLSRV 与 PDO_SQLSRV 两个 PHP 扩展，用于在 PHP 脚本中读写 SQL Server 数据，覆盖 SQL Server 2012 及以上各版本（含 Azure SQL DB），底层依赖 Microsoft ODBC Driver 处理通信。5.14.0 版本仅支持 PHP 8.4–8.6，发布渠道已从 PECL 改为 PIE，采用 MIT 许可并接受 PR（需提交到 dev 分支）。",
+   "highlights": [
+    "提供 SQLSRV（过程式接口）和 PDO_SQLSRV（实现 PHP Data Objects）两个扩展",
+    "支持 SQL Server 2012 及以上（Windows）与 2016 及以上（Linux），包括 Azure SQL DB",
+    "自 5.14.0 起通过 PIE 发布，支持 Windows、Linux、macOS，并提供预编译二进制"
+   ],
+   "use_cases": [
+    "在 PHP 应用中连接并读写 SQL Server 或 Azure SQL DB 数据",
+    "在 IIS/Apache 等 Web 服务器环境下部署 PHP + SQL Server 的数据访问层",
+    "需要通过 PIE 安装或自行编译扩展（线程安全/非线程安全、32/64 位）的场景"
+   ]
+  },
+  "sha": "48055c6db7ac",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4b2e39329dd8": {
+  "identity": {
+   "one_liner": "zqlite.zig：封装 SQLite C API 的轻量级 Zig 数据库包装库",
+   "review": "zqlite.zig 是 Zig 语言的 SQLite 包装库，为 SQLite C API 提供薄封装。面向使用 Zig 0.16.0 的开发者，经 SQLite3 3.53.0 测试。它提供 Conn 连接类型、参数化查询、行迭代器、类型化取值接口及线程安全的 Pool 连接池。默认静态编译捆绑的 SQLite amalgamation，也可通过 system_sqlite3 选项动态链接系统 SQLite。使用时需在 build.zig 中链接 libc。",
+   "highlights": [
+    "提供 row/rows/exec/execNoArgs 等查询与执行接口，支持参数化绑定与事务（含 exclusiveTransaction）",
+    "Row 提供类型化取值方法，支持 i64、f64、bool、text、blob 等及其 nullable 版本；非 nullable 版本省去一次 sqlite3_column_type 调用",
+    "包含线程安全的 Pool 连接池，支持固定连接数与 on_connection/on_first_connection 回调"
+   ],
+   "use_cases": [
+    "在 Zig 项目中读写 SQLite 数据库",
+    "多线程应用中通过连接池复用 SQLite 连接",
+    "需要静态或动态链接 SQLite 的 Zig 程序构建场景"
+   ]
+  },
+  "sha": "4b2e39329dd8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "418be6c14e67": {
+  "identity": {
+   "one_liner": "用 Rust 编写、以 SQLite 为存储的 DynamoDB 模拟器，支持多种运行形态。",
+   "review": "Dynoxide 是一个基于 SQLite 的 DynamoDB 模拟器，提供单文件二进制、npm 包、Docker 镜像和 GitHub Action 等安装方式。它实现 DynamoDB API，包括事务、PartiQL、Streams、TTL、GSI/LSI，并通过公开的 Parity Suite 一致性测试矩阵对照 AWS 真实服务进行验证。面向本地开发、测试和 CI 场景，明确不用于生产。",
+   "highlights": [
+    "支持 HTTP 服务器、MCP 服务器、嵌入式 Rust 库和 WebAssembly 浏览器构建四种运行方式",
+    "实现 DynamoDB API，涵盖表、条目、查询扫描、批处理、事务、PartiQL、Streams、TTL、GSI/LSI 及表达式语法",
+    "通过公开的 Parity Suite 测试矩阵对 AWS 真实 DynamoDB 持续进行一致性验证"
+   ],
+   "use_cases": [
+    "在本地开发环境中模拟 DynamoDB，供任意 AWS SDK 或 DynamoDB 客户端通过 HTTP 端点调用",
+    "在集成测试和 CI 流水线中启动本地 DynamoDB 服务",
+    "在 Rust 或 iOS 应用中嵌入运行内存数据库实例，用于无需 HTTP 层的测试"
+   ]
+  },
+  "sha": "418be6c14e67",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "04cdd04234d1": {
+  "identity": {
+   "one_liner": "基于 Calico 缓冲池增强 pgvector 向量检索性能的 PostgreSQL 扩展",
+   "review": "pgvectorfast 是面向 PostgreSQL 18/19 的扩展，基于 pgvector 构建，通过以 Calico 缓冲池替换默认共享缓冲管理器来加速向量相似度检索与分析扫描。安装方式包括 Docker、Debian APT 包、PGXN 与源码编译；需预加载 vectorfast 并在重启后执行 calico.activate()。限制包括仅支持 Linux x86-64、依赖非 LTO 构建及调试符号。",
+   "highlights": [
+    "保留 pgvector 的数据类型、距离算符与索引类型兼容性，在未修改的 PostgreSQL 18/19 上以标准扩展运行",
+    "替换共享缓冲管理器为 Calico 缓冲池，采用数组式页转换、无锁乐观读取与 HNSW 邻居组预取三项机制",
+    "提供 Docker 镜像、Debian APT 包、PGXN 和源码四种安装方式，并公开 benchmark 配置"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中运行 HNSW/IVFFlat 向量相似度搜索",
+    "构建 RAG 或 Agentic AI 应用的向量检索层",
+    "对包含向量列的表执行分析性扫描与连接查询"
+   ]
+  },
+  "sha": "04cdd04234d1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d3177151c02": {
+  "identity": {
+   "one_liner": "1Panel 官方容器镜像仓库，构建发布代理、运行时、推理与数据库主从镜像。",
+   "review": "该仓库构建并发布供 1Panel 使用的容器镜像，涵盖 AI 代理、Node/PHP/Java 语言运行时、vLLM/ComfyUI 模型推理，以及 MySQL、PostgreSQL、Redis 主从复制镜像。通过 GitHub Actions 工作流完成多架构构建与发布，checks/ 目录提供九个离线与容器行为校验脚本；PHP 镜像包含 EOL 版本的安全回溯补丁。面向 1Panel 用户与运维人员。",
+   "highlights": [
+    "提供 deepseek-harness、hermes-agent、openclaw 等 AI 代理镜像及 vLLM、ComfyUI 推理镜像",
+    "提供 MySQL/PostgreSQL/Redis 主从复制镜像，支持 amd64 与 arm64 双架构及版本别名标签",
+    "PHP 镜像支持 5.6 至 8.5 多版本构建，含 EOL 分支的 SHA256 校验源码补丁与校验脚本"
+   ],
+   "use_cases": [
+    "为 1Panel v2.6 及以上版本部署数据库主从复制环境",
+    "在 NVIDIA GPU 节点运行 DeepSeek 模型推理或 ComfyUI 图像生成",
+    "搭建多版本 PHP/Node/Java 应用运行时环境"
+   ]
+  },
+  "sha": "5d3177151c02",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "16aba52f7943": {
+  "identity": {
+   "one_liner": "基于 Supabase 的跨境电商全链路演示项目，涵盖 ERP、多语言独立站与仓库 App。",
+   "review": "该项目为虚构品牌「Wavely」构建跨境电商全链路演示，包含 ERP 后台、5 语言独立站、Flutter 仓库 App、1688 采集 Chrome 插件与 AI 助手，后端运行在 Supabase 上，演示数据每天自动重置。代码由 AI 辅助生成，适合用于浏览跨境业务流程演示、体验角色权限与审批流，或 Fork 后接自己的 Supabase 后端进行二次开发。",
+   "highlights": [
+    "ERP 支持多平台订单统一管理、SPU/SKU 多仓库存、按 SKU×仓库生成补货建议、采购审批流与数据库层 require_role 权限控制",
+    "提供 Chrome/Edge 插件采集 1688 商品信息，并通过 translate_products 函数将商品名、规格与描述翻译为中英德日西五语",
+    "支持导出 Shopify CSV 及 Amazon、Shopee、TikTok Shop 批量上架模板，附缺译文、缺 EAN 等上架前检查"
+   ],
+   "use_cases": [
+    "体验跨境电商从 1688 采集、本地化、上架到订单发货的完整演示流程",
+    "作为 Supabase RLS、数据库函数级 RBAC 与审计日志的参考实现进行学习或 Fork 自部署",
+    "运行 Flutter 仓库 App 演示扫码收货入库与逐件拣货发货流程"
+   ]
+  },
+  "sha": "16aba52f7943",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

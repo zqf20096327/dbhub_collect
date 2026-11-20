@@ -3200,5 +3200,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "421d25602906": {
+  "identity": {
+   "one_liner": "自托管的现代MG汽车监控面板与行程/充电记录Web应用",
+   "review": "GarageStack 是一个开源 Web 应用，通过登录 SAIC iSmart API 获取 MG（如 MG4、MG5、ZS EV、HS PHEV）车辆遥测数据，提供实时仪表盘、行程地图、充电历史、远程控制和保养提醒等功能。面向拥有 SAIC 产 MG 车辆并使用 iSmart 应用的车主。部署方式为 Docker（单容器或 Compose），数据存储于 PostgreSQL；限制是同一账号不能同时登录 GarageStack 和官方 MG 应用，且不兼容 SAIC 收购前的经典 MG 车型。",
+   "highlights": [
+    "实时仪表盘显示油量、电池、胎压、门窗和空调，卡片按 HEV/PHEV/BEV 车型自动适配并可自定义排序",
+    "行程在车辆停车数分钟后自动存入数据库，按道路绘制轨迹并支持热力图、限速对比和电子表格导出",
+    "支持远程指令（空调预热、锁车、开关充电等）并回报车辆执行结果与拒绝原因"
+   ],
+   "use_cases": [
+    "需要保存行程日志用于税务申报（如荷兰 rittenregistratie），按公务/通勤/私人分类并导出报表",
+    "在家庭服务器自托管环境中集成 Home Assistant、单点登录和 homepage 面板查看车辆状态",
+    "跟踪充电历史、能耗统计和保养周期，并接收胎压异常、车辆未锁等推送通知"
+   ]
+  },
+  "sha": "421d25602906",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63974e82b0d2": {
+  "identity": {
+   "one_liner": "自托管开源许可证服务器，单 Go 二进制内嵌 Nuxt 管理界面，PostgreSQL 存储。",
+   "review": "OpenLicensd 是一个自托管许可证服务器，用于创建、管理和验证许可证密钥，面向需要为自有软件发放有时效密钥的开发团队。它以单个 Go 二进制分发并内嵌 Nuxt 管理界面，数据存于 PostgreSQL；密钥以 SHA-256 哈希存储，验证走公开的 /validate 端点，支持按 IP 限流、机器激活上限与宽限期。客户端 SDK 目前仅提供 Go 版本。",
+   "highlights": [
+    "单一 Go 二进制包含 API 与内嵌 Nuxt 管理界面，发布 Linux amd64/arm64 版本，支持 Docker 镜像与 Helm OCI 图表部署",
+    "公开验证端点 /api/v1/validate 支持产品范围限定、机器指纹、宽限期与 Crockford Base32 密钥格式（大小写和连字符不敏感）；许可证密钥存储为 SHA-256 哈希",
+    "可选集成 Harbor 短期 robot 凭据端点、OIDC SSO 管理员登录、可撤销的 API Token、追加式审计日志与 Prometheus 指标（默认 :9090 /metrics）"
+   ],
+   "use_cases": [
+    "为自己的软件产品发放带到期策略、宽限期和并发机器数上限的许可证密钥，并通过公开 API 在客户端应用中验证",
+    "在 Kubernetes 集群中通过 Helm 图表部署许可证服务，配合 Prometheus 指标、健康探针和 Postgres 后端限流实现多副本运行",
+    "向持有有效许可证的客户端分发短期 Harbor 镜像仓库拉取凭据，或通过 OIDC 对接企业身份提供者（Google、Entra ID、Keycloak 等）实现管理员单点登录"
+   ]
+  },
+  "sha": "63974e82b0d2",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0ed453bef1a1": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的 MCP 服务器，为多个 AI 代理同步项目上下文",
+   "review": "Project-M 是一个本地优先的 MCP 服务器，通过 SQLite 维护四层记忆（状态卡、ADR 台账、任务接力图、原始记录冷存储），向 Claude Desktop、Codex、Antigravity 等代理提供编译后的项目状态摘要。提供 8 个 FastMCP 工具、FTS5 全文检索和 CLI/REPL。需 Python 3.12+ 与 uv，运行于本地 SQLite WAL 模式，不依赖云端服务。",
+   "highlights": [
+    "提供 8 个 MCP 工具，包括状态卡读取、ADR 记录、任务更新与 FTS5/BM25 历史检索",
+    "四层记忆结构：Tier 1 状态卡（<450 tokens）、ADR 台账、任务接力图、带哈希的原始会话冷存储",
+    "附带交互式 REPL 与 CLI，支持 /setup 自动写入 Claude Desktop、Antigravity、Codex 配置"
+   ],
+   "use_cases": [
+    "在多个 AI 代理间切换时读取统一的项目状态卡与任务分配",
+    "用 ADR 台账记录架构决策供各代理查询",
+    "离线检索历史会话内容（词干匹配与 BM25 排序）"
+   ]
+  },
+  "sha": "0ed453bef1a1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

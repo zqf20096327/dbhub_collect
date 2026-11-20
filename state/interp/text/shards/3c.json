@@ -3367,5 +3367,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1ed36d7e7109": {
+  "identity": {
+   "one_liner": "纯 JavaScript 实现的流式异步 SQL 只读查询引擎",
+   "review": "Squirreling 是一个用纯 JavaScript 编写的只读 SQL 查询引擎，面向浏览器环境设计，也可通过 npm 安装。核心机制是单元格级惰性求值：行以 AsyncGenerator 流式输出，单元格为异步 thunk，仅在实际出现在查询结果时才执行，适合涉及网络请求等延迟开销的数据源。SQL 覆盖 SELECT、JOIN、CTE、窗口函数等，UDF 可为异步函数。注意排序等阻塞操作仍会占用额外内存。",
+   "highlights": [
+    "以 AsyncGenerator 流式返回行，单元格惰性求值，仅物化结果中实际出现的单元格；支持通过 AbortSignal 停止执行",
+    "支持异步 UDF 与自定义数据源，数据源可实现过滤、LIMIT/OFFSET 下推并在 ScanResults 中标记是否已应用",
+    "内置聚合、窗口、字符串、数学、日期、JSON、数组、正则及 ST_ 前缀空间函数等函数集"
+   ],
+   "use_cases": [
+    "在浏览器中直接查询来自 API、网络源或内存数据的表格数据，逐行处理避免全量加载",
+    "结合 LIMIT/WHERE 使用调用 API 或模型的异步 UDF，使昂贵操作仅在需要物化的单元格上执行",
+    "接入实现 AsyncDataSource/ScannableDataSource 接口的自定义数据源，并利用下推过滤与分页"
+   ]
+  },
+  "sha": "1ed36d7e7109",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0d41c18a63b7": {
+  "identity": {
+   "one_liner": "单二进制 Go 原生数据库 GUI，支持多种 SQL 数据库与 Redis 客户端",
+   "review": "DGopher 是一个用 Go 编写的桌面数据库客户端，覆盖 Linux、macOS 和 Windows，支持 PostgreSQL、MySQL、SQL Server、Oracle、ClickHouse、SQLite、DuckDB 等 SQL 数据库及 Redis。无 Electron 或 webview，单个二进制分发。内置生产连接防护（写入确认、危险语句需输入连接名）、AI 辅助写 SQL、Git 化项目文件与审计日志。项目尚未发布 1.0，macOS/Windows 安装包未签名。",
+   "highlights": [
+    "以单个 Go 二进制运行，无 Electron、webview 或 JVM，支持 Linux、macOS、Windows",
+    "支持 PostgreSQL、MySQL、SQL Server、Oracle、ClickHouse、SQLite、DuckDB、Redis 等多种数据库连接",
+    "提供查询计划可视化（树/火焰图）、结果网格编辑、仪表盘、Notebook、ER 图、CSV/Parquet/JSON 导入导出与 Redis 键浏览"
+   ],
+   "use_cases": [
+    "需要在同一工具中连接多种 SQL 数据库和 Redis 的开发与运维人员",
+    "需对生产数据库执行写操作防护和操作审计的团队",
+    "将连接配置、查询文件、仪表盘纳入 Git 仓库进行版本管理的协作场景"
+   ]
+  },
+  "sha": "0d41c18a63b7",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e29a3d002993": {
+  "identity": {
+   "one_liner": "Go 编写的运行于 Linux 的自主智能体，经 WhatsApp/Telegram 管理基础设施与开发任务",
+   "review": "Félix 是用 Go 实现的自主智能体平台，通过 WhatsApp 与 Telegram 接收指令，用于 Linux 远程管理、系统监控和自主软件开发。核心机制包括确定性状态图引擎、SQLite WAL 快照持久化（支持回滚与断点恢复）、基于 AST 的代码仓库映射与 SEARCH/REPLACE 模糊补丁，以及沙箱 git 分支。要求 Go 1.22+，内存占用低于 35 MB RSS，仅支持 Linux。",
+   "highlights": [
+    "状态图引擎在 SQLite WAL 中为每次节点转换保存不可变快照，支持 Rollback 回退与进程崩溃后 Resume 恢复，并提供 ErrSuspend 异步 human-in-the-loop 暂停",
+    "内置开发套件：go/parser 及 Python/TypeScript 分析器生成仓库 AST 映射（<1500 tokens），Levenshtein 距离容差（>90% 阈值）的 SEARCH/REPLACE 补丁引擎，以及 felix-sandbox 临时分支上的逐步原子提交",
+    "经 WhatsApp（WhatsMeow/Signal 加密）与 Telegram（Bot API long-polling）双通道运行，多模态管线处理语音（Whisper 转写）、图像与文档；含 OpenAI 兼容代理端口 8055 与密钥池 429 轮换"
+   ],
+   "use_cases": [
+    "通过聊天消息远程监控与管理 Linux 服务器（CPU/内存/网络/服务状态、SQLite 备份、日志轮转）",
+    "在 WhatsApp/Telegram 会话中触发自主编码任务，代码变更在沙箱分支提交，测试失败可整体丢弃",
+    "用 bot_factory 生成客服类机器人（点餐、预约等），基于 SQLite 目录做确定性算术与时段冲突校验，并可导出为独立 Go 微服务"
+   ]
+  },
+  "sha": "e29a3d002993",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

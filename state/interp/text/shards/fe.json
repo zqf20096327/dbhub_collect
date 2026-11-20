@@ -3479,5 +3479,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6a5729251a57": {
+  "identity": {
+   "one_liner": "基于 ZFS 克隆为 MySQL/PostgreSQL 创建秒级写时复制数据库分支的自托管工具",
+   "review": "db-branch 在自托管 Ubuntu 服务器上基于 ZFS 快照克隆创建 MySQL/PostgreSQL 数据库分支，创建时零字节拷贝，支持重置、checkpoint、按分支升级版本和 TTL 自动删除，提供 CLI、REST API、Web 控制台与 MCP 服务器四套统一接口，可单机或 Raft 集群部署。适用于需要大量一次性数据库副本、且分支无需合并回主干的场景；当前为 Beta，部分模块闭源付费。",
+   "highlights": [
+    "分支基于 ZFS 克隆实现写时复制，创建时零字节拷贝，其测试集群上 PostgreSQL 约 0.5 秒、MySQL 约 3 秒就绪",
+    "提供 CLI、REST API、Web 控制台与 MCP 服务器，MCP 供 LLM 代理自行创建、查询和删除分支",
+    "支持按分支升级数据库版本（--check-only 预检、失败自动回滚）、checkpoint/restore、--ttl 自动过期，多个节点可组成 Raft 集群并可选 ProxySQL 路由"
+   ],
+   "use_cases": [
+    "为 AI 代理提供一次性数据库沙箱，在分支上执行高风险查询或迁移而不触及生产数据",
+    "为每个 PR 或 CI 运行分配独立数据库副本，用完由 --ttl 自动删除",
+    "在单个分支上先做主版本升级演练（如 MySQL 8.0→8.4）再应用于基础库"
+   ]
+  },
+  "sha": "6a5729251a57",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "30a78c3df755": {
+  "identity": {
+   "one_liner": "Go+SQLite 七通道支付接入实验室，含教程与mock演示",
+   "review": "一个 Go 编写的支付接入教学项目，统一演示微信支付、Stripe、Allscale、MoonPay、Alchemy Pay、Transak、Ramp 七种通道的建单、收银台、Webhook 验签、主动查单与异常恢复流程。默认 demo 模式无需真实密钥即可本地运行，真实商户 API 尚未经过公网交易验收。项目不包含扣点、退款发起、出款与拒付处理。",
+   "highlights": [
+    "支持七种支付通道的统一订单流程，包含 Webhook 验签、幂等键去重、主动查单与回调丢失/重复/乱序等异常恢复演练",
+    "内置逐步教程并嵌入 Go 二进制，提供 /guides/ 离线页面与命令行演示脚本",
+    "提供 SQLite 订单账本、定时对账 Worker、隔离队列与管理端对账查询接口"
+   ],
+   "use_cases": [
+    "学习或开发支付网关接入时在本地演练建单、验签、幂等与对账流程",
+    "对比微信支付、Stripe 与四家法币买币通道的签名与回调机制差异",
+    "作为支付集成教学或团队培训的演示环境"
+   ]
+  },
+  "sha": "30a78c3df755",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

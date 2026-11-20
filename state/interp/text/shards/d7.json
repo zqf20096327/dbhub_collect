@@ -3401,5 +3401,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a9064e8c0e41": {
+  "identity": {
+   "one_liner": "Elixir 编写的 Mnesia 分布式事务存储封装库",
+   "review": "Memento 是对 Erlang 内置分布式数据库 Mnesia 的 Elixir 封装，提供定义表结构、事务操作与查询的 API。读写删除须在 Memento.Transaction 内调用，查询基于简化版 MatchSpec 和 QLC。适用于数据轻量、随应用重启持久或跨节点复制的场景；若需代码与数据库解耦，README 建议改用其他存储。",
+   "highlights": [
+    "基于 Erlang 内置 Mnesia 模块实现，无外部依赖",
+    "支持磁盘与内存持久化，以及多节点数据复制",
+    "提供简化版 MatchSpec 的 select 查询，并将操作分组为原子事务"
+   ],
+   "use_cases": [
+    "希望不引入外部数据库程序、保持项目轻量的 Elixir 应用数据存储",
+    "需要数据跨应用重启持久或跨多节点复制的场景",
+    "基于 Mnesia 的后台任务库（如 Que）等 OTP 项目的存储层"
+   ]
+  },
+  "sha": "a9064e8c0e41",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7df52b9327f6": {
+  "identity": {
+   "one_liner": "自托管工作区，Node.js 单进程加 SQLite，集页面、数据库与可选 AI。",
+   "review": "Litpage 是一个可自托管的开源工作区，用户在块编辑器中写页面，用带多种视图的数据库跟踪任务，并通过页面级和字段级权限共享内容。AI 功能需在服务端配置自己的密钥，未配置密钥时其余功能仍可运行。整个应用是一个 Node.js 进程加一个 SQLite 文件，通过 Docker 或源码方式安装。",
+   "highlights": [
+    "支持 41 种块类型的块编辑器、11 种数据库视图（表格、看板、日历、时间线、图表等）、实时多人协作、版本历史与字段级权限",
+    "AI 功能（聊天、自定义代理、AI 块、自动填充）通过服务端配置的 OpenAI 或 Anthropic 兼容端点运行，密钥不发送到浏览器",
+    "提供 REST API、HMAC-SHA256 签名的 Webhooks 和 MCP 端点，界面含英文和韩文"
+   ],
+   "use_cases": [
+    "在自有服务器或笔记本上运行团队知识库，将文档与任务数据库放在同一页面树中",
+    "通过 REST API 或 MCP 端点将页面、数据库与搜索集成到外部工具或 AI 客户端",
+    "用 NC_DEMO_MODE 发布带限制的公开演示工作区，供访客临时试用"
+   ]
+  },
+  "sha": "7df52b9327f6",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a9bb0e59d174": {
+  "identity": {
+   "one_liner": "基于 JDBC 驱动连接 ClickHouse 的 Tableau 连接器扩展",
+   "review": "该连接器是 Tableau Desktop / Server / Prep Builder 的扩展，用于连接 ClickHouse 数据库。它通过 JDBC 驱动实现连接，并针对 SQL 查询做调优以支持 Tableau 的多表 JOIN、集合等功能。要求 Tableau 2020.4+ 与 ClickHouse 20.7+，安装时需放置 JDBC 驱动 jar 和 .taco 文件。大整数类型默认以字符串显示，需用 STR() 显式转换才能进行字符串操作。",
+   "highlights": [
+    "支持 Tableau Desktop、Tableau Server 和 Tableau Prep Builder 三种环境的安装与连接",
+    "在 Live 模式下提供扩展的计算字段函数，包括 SUM_IF/AVG_IF 等聚合组合器、BAR()、COUNTD_UNIQ()、DATE_BIN()、FORMAT_READABLE_QUANTITY() 等",
+    "MEDIAN() 和 PERCENTILE() 映射到 ClickHouse 的 quantile() 函数，并提供 MEDIAN_EXACT()/PERCENTILE_EXACT() 用于精确计算"
+   ],
+   "use_cases": [
+    "在 Tableau 中通过 Live 或 Extract 模式分析 ClickHouse 中的数据",
+    "需要使用 ClickHouse 特有函数（如 uniq、toStartOfInterval、formatReadableQuantity）进行计算字段分析的场景",
+    "将 ClickHouse 大整数类型（UInt64、Int128、(U)Int256）字段作为维度或唯一值计数使用的场景"
+   ]
+  },
+  "sha": "a9bb0e59d174",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f21252547236": {
+  "identity": {
+   "one_liner": "为 AI 代理提供跨会话持久记忆层的 MCP 认知引擎，含语义记忆与巩固机制",
+   "review": "cortex-engine 是一个为 AI 代理提供持久记忆的 TypeScript 服务，通过 MCP 协议向 Claude Code、Cursor 等客户端暴露 60 个认知工具，支持语义记忆、信念追踪和梦境巩固。默认本地 SQLite 存储，可切换 Firestore 或 JSON 后端；LLM 与嵌入提供方可插拔。依赖 MIT 许可，默认配置需本地运行 ollama 与 NLI 服务。",
+   "highlights": [
+    "通过 Model Context Protocol 提供 60 个认知工具，包括 query、observe、believe、dream、goal_set 等",
+    "支持 SQLite（默认）、Firestore、JSON 三种存储后端，共享统一 CortexStore 接口，并提供跨后端迁移命令",
+    "LLM 与嵌入提供方可插拔，内置支持 Ollama、OpenAI、Vertex AI、Gemini、DeepSeek 等 OpenAI 兼容 API"
+   ],
+   "use_cases": [
+    "为基于 MCP 协议的代理客户端（如 Claude Code、Cursor、Windsurf）添加跨会话记忆",
+    "多代理场景下通过命名空间隔离各自记忆，共享同一存储",
+    "本地优先部署（SQLite + Ollama），也可通过 Firestore 与 Cloud Run 以云服务方式运行"
+   ]
+  },
+  "sha": "f21252547236",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "be0e7697f968": {
+  "identity": {
+   "one_liner": "以 JSON/SQLite 分发、每条记录强制带出处的中华历史结构化数据库",
+   "review": "该项目收录中华历史人物、事件、年号、朝代与馆藏文物，以 JSON 文件分发并可构建 SQLite 单文件数据库，面向开发者与 AI Agent。其关键机制包括：sources 为空的记录无法通过 CI 校验、学术争议以 disputed[] 多值并存、AI 生成数据在 _meta 中记录模型与 prompt 版本。README 明确说明全部记录由 AI 流水线生成，尚无逐条人工核验，使用者需自行核对出处。",
+   "highlights": [
+    "包含 370 位人物、162 个事件、551 个年号、49 个朝代/政权及 3327 件馆藏文物（主要来自大都会与克利夫兰博物馆 CC0 藏品），94% 人物已对齐 Wikidata QID",
+    "每条记录强制携带 sources 出处并经 CI 校验，支持时间双轨（史料原文纪年 + 归一化公历）与 disputed[] 争议多值并存",
+    "提供 validate.py 校验器、build_sqlite.py 构建器与在线静态 demo；人物/事件/文物/地名通过可读 slug + UUID 双标识互引"
+   ],
+   "use_cases": [
+    "在应用或 AI Agent 中直接读取结构化历史数据，如按人物关联事件、按年号换算公历纪年",
+    "构建帝王世系树、历史时间轴或文物画廊等可视化产品",
+    "以带出处的开放数据（事实 CC0、描述 CC BY-SA）替代爬取百科内容的数据来源"
+   ]
+  },
+  "sha": "be0e7697f968",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3159,5 +3159,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f67f87aa24ce": {
+  "identity": {
+   "one_liner": "自托管访问网关：对人与 AI 代理的命令逐条授权、录屏审计，不分发明文密码。",
+   "review": "Werbot 是一个用 Go 编写的访问网关，用于管理用户与 AI 代理对服务器、数据库及 TCP/UDP/SSH/Telnet 资源的连接。其核心机制包括基于 Cedar 策略的访问决策、ed25519 签名的会话录像验证（哈希链）以及网关实例池。该项目当前处于 v0.x 预发布阶段，存在破坏性变更；升级时需将服务器与网关同步至相同版本，远程访问需通过 SSH 隧道或 TLS 代理进行。",
+   "highlights": [
+    "提供基于绑定的访问控制，支持按标签选择器授权用户或团队，可限制端口范围，决策使用 Cedar 策略引擎且默认拒绝",
+    "记录会话并生成 asciicast v2 录像，通过哈希链与签名校验完整性，Web 界面内置播放器查看",
+    "支持网关实例池、加入令牌、健康探测（rendezvous 哈希选节点）、多副本与 Kubernetes 部署，发布物带 cosign 签名和 SBOM"
+   ],
+   "use_cases": [
+    "为团队提供服务器、数据库和应用的共享访问入口，成员凭绑定访问资源而无需知晓密码",
+    "对人及 AI 代理执行的终端、exec、流、数据报会话进行授权与录像审计",
+    "需要网关多实例部署、按网络/国家/时间策略控制访问的环境"
+   ]
+  },
+  "sha": "f67f87aa24ce",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "90d69e80cc8d": {
+  "identity": {
+   "one_liner": "自托管于个人 AWS 账户的 AI 代理长期记忆存储，通过 MCP 提供带来源的检索",
+   "review": "Memrain 是一个面向日常使用 AI 代理的开发者和小团队的长期记忆服务，将笔记、决策、代码与聊天记录存入用户自己的 AWS 账户中的 Postgres 数据库，通过统一的 /mcp 端点供 Claude Code、ChatGPT、Codex 等 MCP 客户端检索，每条结果附带来源指针。运行需 AWS 账户、Terraform、AWS CLI 及 Bedrock 访问权限，本地可用 Docker 运行仅关键词搜索的版本。",
+   "highlights": [
+    "检索结果附带来源指针；默认语义搜索每次仅消耗一次 embedding 调用",
+    "支持 TypeScript、Python、Go 代码理解，Bash 与 SQL 文件可搜索；可导入 ChatGPT 和 Claude 历史",
+    "按人分配密钥与每日支出上限，存储前脱敏 API 密钥、令牌与数据库密码"
+   ],
+   "use_cases": [
+    "让多个 AI 代理共享团队记忆，回答带来源引用的问题（如某决策的出处）",
+    "代码影响分析：查询函数定义、调用方及修改影响范围",
+    "团队协作：为每个成员提供私有来源、可单独吊销密钥并执行离场导出与清除"
+   ]
+  },
+  "sha": "90d69e80cc8d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

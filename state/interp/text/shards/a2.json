@@ -3188,5 +3188,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3f6a08f2b80b": {
+  "identity": {
+   "one_liner": "开源自托管协作平台：文档、数据库、白板与日志集成于一容器。",
+   "review": "Flowplan 是一个以 AGPL-3.0 许可发布的自托管协作工具，将块编辑器文档、支持多种视图的数据库、白板、每日日志、项目管理票务与工作流整合在单一页面树中。默认以单容器加 SQLite 运行，较大团队可切换 PostgreSQL、Redis 并以集群模式多实例部署，亦支持 OIDC/SCIM 单点登录与加密备份。适合需要自主托管数据的团队。",
+   "highlights": [
+    "单容器部署（SQLite 内置），可选 PostgreSQL、Redis、S3 组成多实例集群，并提供 Helm chart",
+    "数据库支持 23 种属性类型及表格、看板、日历、时间线、图表等视图；文档编辑器含 Mermaid、公式与版本历史",
+    "数据导入自 Notion、Confluence、AppFlowy、Obsidian 等，导出为 Markdown、CSV、PDF 或 Word；AI 功能默认关闭，可经 Ollama 本地运行或配置 OpenAI/Anthropic/Gemini 密钥"
+   ],
+   "use_cases": [
+    "团队通过 Docker 自托管文档与知识库，支持 OIDC/LDAP 单点登录",
+    "个人或团队用数据库视图做看板与日历管理，配合带燃尽图的票务与冲刺管理项目",
+    "需要离线可用的 Web/桌面/移动端应用访问同一工作区的场景"
+   ]
+  },
+  "sha": "3f6a08f2b80b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4bcd90ba3ebd": {
+  "identity": {
+   "one_liner": "Rust+GPUI 编写的原生代码编辑器，内置 AI 代理面板与只读文件查看器",
+   "review": "FluxCode 是用 Rust 和 GPUI 绘制的原生代码编辑器，提供 AI 代理面板（ACP 协议，支持 OpenCode 等）、Python 友好终端、内置 Git 源码控制，以及二进制/PDF/Office/ZIP/SQLite 文件的只读查看。面向 Windows、macOS 和 Linux 用户，安装无需管理员权限，声明不收集遥测数据。项目仍在开发中，尚无调试器、扩展系统和语言服务器。",
+   "highlights": [
+    "支持 ACP 协议的 AI 代理面板，可配合 OpenCode 等代理使用",
+    "内置 Git 源码控制、Python 友好终端，以及 PDF/Office/ZIP/SQLite/二进制文件的只读查看",
+    "界面布局与快捷键沿用 VS Code 方案，扩展可搜索并安装 VS Code Marketplace 内容，界面支持英语与印尼语"
+   ],
+   "use_cases": [
+    "需要无遥测、单进程轻量编辑器进行日常代码编辑与 Git 操作的场景",
+    "通过 ACP 面板配合 AI 代理（如 OpenCode）进行对话式代码修改",
+    "直接以只读方式查看 SQLite 数据库、PDF、Office、ZIP 等非文本文件内容"
+   ]
+  },
+  "sha": "4bcd90ba3ebd",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bd5dde59684b": {
+  "identity": {
+   "one_liner": "自托管的访问日志网站分析工具，按五类分组统计真人、AI 助手与爬虫流量",
+   "review": "Skald 读取 Web 服务器访问日志生成分析报表，覆盖 JavaScript 统计工具无法记录的 AI 助手与爬虫请求。全部请求归入真人、AI 助手、搜索引擎、机器人与自有流量五组，每项数字由独立审计进程复算。访客浏览器无需脚本和 Cookie，数据保存在自有服务器。面向需要了解网站真实访问者及扫描行为的站长与运营者。",
+   "highlights": [
+    "每个数字由独立解析器二次审计，不一致时该日数据不予展示",
+    "爬虫身份通过 DNS 或官方地址段验证，伪造身份单独归类",
+    "支持 Vercel、Netlify、Cloudflare Worker、CloudFront、Fastly 等日志接入，提供 skald doctor 自检命令"
+   ],
+   "use_cases": [
+    "统计 AI 助手（GPTBot、ClaudeBot 等）抓取网站的频率、页面与成本",
+    "将 AI 引荐来源中无 referrer 的直接访问标注为疑似助手带来的访客",
+    "从访问日志识别针对 .env、登录接口等的扫描与攻击行为"
+   ]
+  },
+  "sha": "bd5dde59684b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "327499871867": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 记忆服务器，跨会话持久存储 AI 编码助手的项目记忆",
+   "review": "sessionmem 是一个 MCP 服务器，将 AI 编码助手的决策、警告和项目上下文以记忆形式跨会话存储在本地单个 SQLite 文件中。默认检索使用 SQLite FTS5 BM25 与实体重叠，可选本地 MiniLM 模型提供语义候选，查询不发起网络请求。通过 npm 全局安装后运行 sessionmem install 即可注册到 Claude Code、Cursor、Codex、Cline、Windsurf 等主机；要求 Node.js 22.13 及以上。Claude Code 通过安装的 hooks 自动捕获和加载记忆，其他主机依赖其 MCP 工具与安装的指令；内置密钥脱敏（默认开启）与可配置的保留清理策略。",
+   "highlights": [
+    "支持 Claude Code、Cursor、Codex、Cline、Windsurf 等 MCP 兼容主机，数据存储在本机 ~/.sessionmem/memories.db 单个 SQLite 文件",
+    "默认离线检索基于 SQLite FTS5 BM25 与实体重叠，可选本地 MiniLM 模型增加语义候选；默认启用密钥脱敏与 90 天保留窗口",
+    "提供 install、doctor、autostart、uninstall、run、ui 等 CLI 命令，watch 捕获支持 Claude Code、Codex CLI、Cursor 的会话记录且无需 API 密钥"
+   ],
+   "use_cases": [
+    "在 Claude Code 等工具中开启新会话时自动加载此前会话总结的决策、警告与项目事实",
+    "多个 AI 编码工具共用同一份本地记忆库，团队可经共享文件夹（网络盘、同步目录）实现可选共享",
+    "无网络或不愿使用云服务、账号的环境下离线运行记忆检索与基准评估（npm run benchmark，LoCoMo 语料）"
+   ]
+  },
+  "sha": "327499871867",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3934475b67df": {
+  "identity": {
+   "one_liner": "自托管的软件许可证服务端，含管理后台、客户门户与 REST 校验 API",
+   "review": "FXCRUX License Engine 是一个自托管许可证服务端，面向桌面应用、插件和命令行工具的发行方。由 NestJS API、Next.js 管理后台与客户门户组成，数据存于部署方自己的 PostgreSQL。支持产品目录、手动签发/续期/吊销许可证、设备绑定校验（POST /licenses/validate）。首个发布版定位为本地评估，生产部署需自行规划迁移与 HTTPS。",
+   "highlights": [
+    "提供管理后台、客户门户和许可证校验 API 三个应用，许可证数据存储在自托管的 PostgreSQL 数据库中",
+    "支持按产品签发、延长和吊销许可证，校验时核对产品、有效期、吊销状态和设备安装 ID",
+    "包含 .NET SDK 客户端库以及 Node.js、PowerShell 示例，通过 Docker Compose 提供本地 PostgreSQL 16 配置"
+   ],
+   "use_cases": [
+    "为桌面应用、插件或命令行工具提供许可证签发与联网校验",
+    "通过管理后台手动签发评估密钥或处理无在线支付渠道的销售",
+    "让客户在门户中查看许可证、下载有权限的产品版本并提交支持请求"
+   ]
+  },
+  "sha": "3934475b67df",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cabf555e7ead": {
+  "identity": {
+   "one_liner": "本地运行的网站安全评估桌面应用，人工核验结果并生成报告",
+   "review": "AIVERA Lite 是单机桌面 Web 应用，供获得授权的测试者评估网站：定义允许的主机范围并确认权限后执行扫描，对发现项逐条人工确认或拒绝，仅将确认结果输出为可打印报告。基于 React、Express 与 SQLite，Nmap/ZAP 与本地 AI 为可选组件；不提供托管服务与用户账户。",
+   "highlights": [
+    "扫描覆盖安全配置与 HTTPS、认证与登录、会话 Cookie、信息泄露、暴露文件目录五类检查，托管站点仅接收被动请求",
+    "按可能性与影响相乘计算严重等级，发现项需人工记录决策与验证备注，被拒绝项保留为误报历史",
+    "发送给 AI 前对密钥、Cookie、令牌与邮箱进行脱敏，Activity 页记录发送与返回文本，AI 输出不作为确认依据"
+   ],
+   "use_cases": [
+    "对已获书面授权的网站执行单人次安全评估并产出报告",
+    "在本地 localhost 副本上运行包括 Nmap 与暴露文件检查在内的完整检查",
+    "需将扫描结果人工核验、评级后整理为可打印 PDF 报告的场景"
+   ]
+  },
+  "sha": "cabf555e7ead",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d2a9b7a20294": {
+  "identity": {
+   "one_liner": "带四级写权限与审计的 JDBC 数据库 MCP 网关",
+   "review": "jdbc-mcp-guard 是一个面向任意 JDBC 数据库的 MCP 服务器，供 AI 代理或人员通过 MCP/CLI 执行查询与写入。它按连接配置实现读、DML、DDL、破坏性操作四级权限（默认全关），强制 UPDATE/DELETE/MERGE 带 WHERE，DML 默认 dry-run 回滚，写入超过 maxAffected 行数自动回滚，所有写入（含被拒绝的）记录到 audit.jsonl。防护为词法级检查，不能替代数据库侧权限。",
+   "highlights": [
+    "支持 11 个驱动族/26 个方言别名，或通过 url + driverClass 接入任意 JDBC 数据库",
+    "写入按 allowWrite/allowDdl/allowDestructive 三级配置，默认关闭；DML 默认 dry-run，超过 maxAffected（默认 1000）行自动回滚",
+    "所有写入操作（含被拒绝的）追加写入 $JMG_HOME/audit.jsonl，支持按大小轮转"
+   ],
+   "use_cases": [
+    "让支持 MCP 的 AI 代理（如 Claude Desktop、Cursor）在权限受控下查询和修改数据库",
+    "通过 CLI 对数据库执行需要审计记录的修复或数据订正操作",
+    "接入达梦、人大金仓、MySQL、PostgreSQL 等多种数据库的统一 MCP 访问入口"
+   ]
+  },
+  "sha": "d2a9b7a20294",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

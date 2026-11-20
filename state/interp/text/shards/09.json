@@ -3402,5 +3402,52 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "979215eecb49": {
+  "identity": {
+   "one_liner": "SQLite 灾难恢复工具，追踪 WAL 增量复制到本地或远程存储。",
+   "review": "",
+   "highlights": [
+    "后台追踪 SQLite WAL 变更，增量复制到本地文件或远程存储后端",
+    "复制时在源数据库创建 _litestream_lock 表用于协调 WAL checkpoint 同步",
+    "对 SIGINT/SIGTERM 执行有界关闭，shutdown-timeout 默认 30 秒，可配置"
+   ],
+   "use_cases": [
+    "需要为 SQLite 数据库持续保留远程副本以做灾难恢复的环境",
+    "以单文件数据库运行的服务器应用的备份方案",
+    "部署于 systemd 或 Kubernetes 等环境中后台运行的复制进程"
+   ],
+   "softened": [
+    "review:『优雅』置空"
+   ]
+  },
+  "sha": "979215eecb49",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "27f5aef7a0eb": {
+  "identity": {
+   "one_liner": "自托管的变更评审服务，编码代理发布报告，人类签署并裁决",
+   "review": "verifair 是一个供编码代理发布 Markdown 变更评审报告、由人类阅读并裁决的 Web 服务。代理通过 JSON API 推送报告，作者先签署，评审人选取文本逐句评论，最终给出通过或要求修改的结论。基于 FastAPI 与 Postgres 构建，提供本地与共享两种模式，支持 Docker Compose 部署。",
+   "highlights": [
+    "代理通过 JSON API 推送、读取和回复报告与评论线程，支持长轮询获取反馈，随附可用 npx skills 安装的代理技能和 /docs API 浏览器",
+    "报告按版本管理，签署与裁决按版本保留；评论默认为阻塞线程，阻塞线程未解决时拒绝通过操作",
+    "技术栈为 FastAPI、Jinja、htmx 与 Postgres 16+，无 JavaScript 构建步骤，状态存于 Postgres，支持多副本运行"
+   ],
+   "use_cases": [
+    "团队需要人类对编码代理产生的变更阅读报告、按句评论并给出通过/要求修改的裁决",
+    "团队希望在评审页面上对变更背后的提示词进行协作式建议（提示词教练功能）",
+    "需要先评审实施前计划（plan_first 工作流），或将签署、评论、裁决等数据自托管在本地环境"
+   ]
+  },
+  "sha": "27f5aef7a0eb",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

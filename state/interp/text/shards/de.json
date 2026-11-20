@@ -3269,5 +3269,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b8a78f1d33a4": {
+  "identity": {
+   "one_liner": "为 Hermes Agent 提供的本地自组织记忆系统，SQLite 存储、无 LLM 调用",
+   "review": "Limbic 是一个面向 Hermes Agent 的本地记忆插件，实现上游 MemoryProvider ABC，将事实存入单个 SQLite 文件（limbic.db）。它通过使用驱动的信任评分、衰减与淘汰机制组织记忆，召回无相关结果时返回 no_confident_match。使用约 1GB ONNX 本地模型做嵌入与 NLI，无需 GPU；支持多用户桶隔离与遗忘/导出等运维命令。提供 remember、recall、forget 三个代理工具，运维仅见一个数据库文件。",
+   "highlights": [
+    "全流程本地运行：SQLite 存储 + 本地 ONNX 嵌入（约 17–19ms/次）+ 写时 NLI 矛盾检测，不调用任何 LLM，无需 GPU",
+    "自组织机制：信任评分按使用自适应调节衰减半衰期与相关性阈值；相似记忆竞争取代、被否定和长期未用的记忆逐步衰减并由后台清理移除",
+    "多用户隔离：每个平台账号按 user_id 解析到独立记忆桶，支持 users.yaml 清单定义 guardian 写入权与 scope 标签；提供按 ID 删除事实、按用户导出等运维命令，删除留哈希化墓碑回执"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 提供跨会话的长期记忆存储与相关性召回",
+    "单个代理实例服务多个用户/平台账号，需要按人隔离记忆并保留数据删除/导出能力",
+    "无 GPU 的低资源服务器上运行本地记忆（每 profile 约 700MB 内存 + 约 1GB 共享模型缓存）"
+   ]
+  },
+  "sha": "b8a78f1d33a4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ed71b63be4c7": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core 与 SQL Server 的炸鸡店 POS 网页应用",
+   "review": "ChickenPOS 是一个面向炸鸡店的网页版 POS 应用，支持堂食与店内点单、菜品转交厨房、收银结账、菜单与原料库存管理及营收查看。运行需 Windows 64 位、PowerShell 和 SQL Server Express LocalDB，首次启动自动建库并预置管理、销售、收银、厨房四个本地账号。数据存储在本机数据库，各机器数据相互独立。",
+   "highlights": [
+    "提供堂食与店内点单、厨房出餐协调、收银、菜单与原料库存管理及营收跟踪功能",
+    "包含管理、销售、收银、厨房四个本地账号，支持通过 DemoPassword 环境变量自定义初始密码",
+    "提供 PowerShell 脚本完成安装、启动、停止与集成测试（tests/integration.py，需 Python 3.10+，运行于 5081 端口）"
+   ],
+   "use_cases": [
+    "炸鸡店的单机门店运营：点单、后厨协调与收银",
+    "演示或开发环境中的餐饮 POS 流程测试与集成验证",
+    "基于 ASP.NET Core + SQL Server 的餐饮管理系统开发参考"
+   ]
+  },
+  "sha": "ed71b63be4c7",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

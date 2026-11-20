@@ -3702,5 +3702,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3b115748c8fd": {
+  "identity": {
+   "one_liner": "ParadeDB 官方 Django 集成，通过 ORM 提供全文与向量搜索接口",
+   "review": "这是 ParadeDB 的官方 Django 集成库，用于在 Django ORM 中使用 ParadeDB 的全文搜索、向量检索与聚合能力。要求 Python 3.10+、Django 4.2+、PostgreSQL 15+，并依赖 pgvector 0.7.0+ 提供向量类型及 ParadeDB/pg_search 0.27.0+。README 未包含安装命令与用法示例，需查阅官方 setup guide。",
+   "highlights": [
+    "在 Django 中以 ORM 方式接入 ParadeDB 的全文搜索、向量搜索与聚合功能",
+    "通过 pgvector 0.7.0+ 提供向量类型支持",
+    "采用 MIT 许可证"
+   ],
+   "use_cases": [
+    "使用 Django 并在 PostgreSQL 上运行全文搜索的应用",
+    "需要在 ORM 中使用向量检索的场景",
+    "基于单 PostgreSQL 实例承载应用数据、搜索与聚合的项目"
+   ]
+  },
+  "sha": "3b115748c8fd",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "31e4b6304647": {
+  "identity": {
+   "one_liner": "汇总2027年法国总统选举民调数据的CSV/JSON数据仓库",
+   "review": "该项目汇总2027年法国总统选举投票意向民调，提供合并后的CSV与JSON数据文件，并附候选人列表、民调机构、样本量等元数据。贡献者按规范在polls.csv及逐条结果文件中录入民调，GitHub Actions自动校验格式与数据一致性并生成合并文件。适用于需要读取该民调数据的开发者与研究人员。",
+   "highlights": [
+    "提供合并后的民调CSV文件与JSON数据流，包含民调机构、调查起止日期、样本量、轮次等元数据",
+    "支持通过Pull Request提交新民调，GitHub Actions自动校验CSV格式、数据一致性并更新合并文件",
+    "附带candidats.csv与hypotheses.csv等结构化文件，定义候选人标识与参选假设场景"
+   ],
+   "use_cases": [
+    "以CSV/JSON格式读取2027年法国总统选举各机构民调数据",
+    "按统一数据格式向仓库提交新的民调记录，经自动校验后合并",
+    "作为其他应用的数据源，README列出Ballottage、Candidator等项目读取这些数据"
+   ]
+  },
+  "sha": "31e4b6304647",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "07778d92aeb0": {
+  "identity": {
+   "one_liner": "Go 密码管理器 Sesame 的服务端，含自托管程序与管理门户",
+   "review": "本仓库包含 Sesame 密码管理器的服务端：托管服务（Go API、账户门户、管理门户，运行于 PostgreSQL）与自托管程序 sesame-server（单程序、SQLite、浏览器控制台）。服务器不接收保险库密码、加密密钥或未加密保险库，Sync 开启时仅存储加密快照。本地运行需 Node 与 Docker Compose，注册默认仅限邀请。",
+   "highlights": [
+    "服务器不接收保险库密码、加密密钥、TOTP 种子、恢复套件或未加密保险库",
+    "包含两个互不共享数据的服务端：usesesame.app 托管服务与可自托管的 sesame-server",
+    "API 不自行执行数据库迁移，schema 过期时退出，由 migrate 服务先行迁移"
+   ],
+   "use_cases": [
+    "自托管同步服务器，用于桌面端配对并可选同步加密保险库",
+    "通过管理门户管理账户注册模式与邀请",
+    "本地 Compose 环境开发托管服务（账户门户、管理门户、API、邮件收件箱）"
+   ]
+  },
+  "sha": "07778d92aeb0",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1ed95bdd69f1": {
+  "identity": {
+   "one_liner": "基于大语言模型的自然语言数据库查询与分析工作台，含NL2SQL与MCP服务",
+   "review": "SmartDBChat 是一个前后端分离（React 19 + FastAPI）的自然语言查询数据库工作台：用户用中文提问，系统通过 Schema 图谱生成经 sqlglot AST 校验的只读 SQL，并提供流式解读、Recharts 可视化、语义层配置与 MCP 服务接入。数据支持 MySQL 或内置 SQLite 沙箱，模型接入 OpenAI 兼容接口或本地 Ollama。采用 MIT 许可证，首个注册用户为管理员，用户数据保存在服务端 SQLite。",
+   "highlights": [
+    "构建表-列-外键 SchemaGraph 以发现跨表 JOIN 路径，生成的 SQL 经 sqlglot AST 解析拦截写操作、注入与高危函数，并自动钳位 LIMIT",
+    "内置支持 STDIO/SSE/Streamable HTTP 传输的 MCP Server，暴露 list_tables、ask_database 等 6 个工具，可生成 Cursor / Claude Desktop 接入配置",
+    "通过 OpenAI 兼容协议支持 DeepSeek、智谱、OpenAI、Qwen、Gemini、OpenRouter 及本地 Ollama；提供基于黄金用例的离线评测脚本输出 JSON/Markdown 报告"
+   ],
+   "use_cases": [
+    "业务人员通过自然语言查询 MySQL 或内置教务沙箱数据，无需编写 SQL",
+    "将数据库以 MCP 工具形式接入 Cursor、Claude Desktop 等 AI 客户端",
+    "通过离线评测脚本（reference / mock 模式）统计执行准确率与安全拦截率指标"
+   ]
+  },
+  "sha": "1ed95bdd69f1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

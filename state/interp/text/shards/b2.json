@@ -3342,5 +3342,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a29b9d6817d0": {
+  "identity": {
+   "one_liner": "Rails ERD 生成 gem，输出单文件离线 Mermaid HTML 图。",
+   "review": "该 gem 读取 Rails 应用的 schema（表、列、键、注释、关系），运行 rake 任务后生成一个约 4 MB 的自包含 HTML 文件，内联 Tailwind、Mermaid 与 Vue，可离线打开，也可通过 mermaid_erd:print 将 erDiagram 源码输出到 stdout。面向 Rails 开发团队，需在 Gemfile 以 development 组引入并在 Rakefile 中 require。CI 覆盖 Rails 5.2–8.1 与 Ruby 2.7–4.0；生成的文件包含 schema 内容，共享时需按 schema 的保密级别处理。",
+   "highlights": [
+    "运行 `rails mermaid_erd` 生成单个自包含 HTML 文件，前端依赖内联，无需额外 gem 或服务即可离线查看",
+    "浏览器中可选择模型、切换列显示（全部/仅键/隐藏）、添加注释与关系标签，导出 Mermaid/Markdown 代码、SVG 或 PNG",
+    "提供 mermaid_erd:print 任务将完整 erDiagram 源码打印到 stdout，可管道给 mmdc 等工具；支持通过 config/mermaid_erd.yml 配置输出路径、ignore_tables 正则与 viewer_defaults"
+   ],
+   "use_cases": [
+    "为 Rails 项目生成数据库 ER 图并交付给无 Rails 环境的成员，或托管到 web 服务器以 URL 共享",
+    "在无 CDN 访问的离线环境或企业代理后查看数据库 schema 图",
+    "通过 CI 自动生成 ERD，或将 Mermaid 源码管道到 mmdc 等工具生成 SVG"
+   ]
+  },
+  "sha": "a29b9d6817d0",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "354b6b230dc3": {
+  "identity": {
+   "one_liner": "面向 PostgreSQL 的零配置种子数据生成器，读取 schema 后按外键依赖生成确定性假数据。",
+   "review": "SeedGen 是一个 Rust 编写的命令行工具，通过 information_schema 读取表结构、列和外键，用 Kahn 算法排序依赖后按列名与类型匹配生成器填充数据，同一 seed 经 ChaCha8 PRNG 产生相同输出。支持场景模板、生命周期模拟与基于聚合统计的生产画像。当前仅支持 PostgreSQL 12–17，MySQL/SQLite 尚未实现。",
+   "highlights": [
+    "读取 information_schema 解析表、列与外键，按拓扑排序插入，循环外键采用两阶段写入",
+    "基于 seed 的确定性生成（ChaCha8 PRNG），支持直接插入或输出 SQL 文件",
+    "profile 命令仅读取聚合统计（含查询白名单、敏感列跳过、离线模式等安全机制）用于生成形似生产的合成数据"
+   ],
+   "use_cases": [
+    "为集成测试或开发环境填充结构一致、外键合法的 PostgreSQL 种子数据",
+    "在 CI 中通过 GitHub Action 以固定 seed 生成可复现的测试数据",
+    "基于生产库聚合统计生成不包含行级数据的合成数据集，可按 --scale 缩放规模"
+   ]
+  },
+  "sha": "354b6b230dc3",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

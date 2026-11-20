@@ -2861,5 +2861,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1b1253d3ef9f": {
+  "identity": {
+   "one_liner": "个人 RSS 新闻阅读器，带训练式过滤与自托管部署",
+   "review": "NewsBlur 是一个 RSS 阅读器兼社交新闻网络，可在线使用（免费版最多 64 个订阅源）或通过 Docker Compose 自托管。后端为 Django，使用 PostgreSQL、MongoDB、Redis，可选 Elasticsearch；提供 Web、iOS、Android 客户端，并内置 MCP 服务器供 AI 代理操作订阅源，采用 MIT 许可证。",
+   "highlights": [
+    "支持实时 RSS 推送、原站视图、训练式高亮/隐藏故事及全文搜索",
+    "提供 Web、iOS、macOS、Android 多端客户端，并支持 Reeder 等第三方应用",
+    "内置 MCP 服务器，允许 AI 客户端读取订阅源、标记已读、保存故事和管理分类器"
+   ],
+   "use_cases": [
+    "个人或团队自托管 RSS 阅读服务，掌控自己的订阅数据",
+    "通过共享 blurblog 与他人分享和讨论新闻故事",
+    "将订阅源与故事接入 MCP 兼容的 AI 客户端进行摘要与整理"
+   ]
+  },
+  "sha": "1b1253d3ef9f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5846b7646b5a": {
+  "identity": {
+   "one_liner": "FQLite：Java 编写的 SQLite 删除记录取证与恢复工具，提供图形界面。",
+   "review": "FQLite 是用 Java 与 JavaFX 编写的开源工具，用于在 SQLite 数据库文件中查找并恢复被标记为删除的记录，同时支持正常记录浏览。它支持 UTF-8/UTF-16 数据库、freelist 页与未分配空间扫描、WAL 与回滚日志、sqlcipher 加密库，并可导出 CSV/TSV、HTML 及新 SQLite 库。项目提供官网与用户手册，另有介绍其技术背景与 AI 辅助 SQL 查询生成的论文。",
+   "highlights": [
+    "扫描并恢复数据库中标记为删除的记录，包括 freelist 页、未分配空间、被删除的表，支持 UTF-8/UTF-16BE/UTF-16LE 编码及溢出页",
+    "支持 Rollback-Journal 与 WAL 存档、sqlcipher 加密数据库，提供内置十六进制查看器与 SQL 分析器",
+    "可导出 CSV/TSV、HTML 格式，并将恢复数据写入新的 SQLite 数据库"
+   ],
+   "use_cases": [
+    "对 SQLite 数据库文件进行取证式检查，查找并显示已删除记录",
+    "浏览数据库内容并导出为 CSV/TSV、HTML 或新 SQLite 数据库",
+    "查看 WAL 与回滚日志存档中的数据，以及查看数据库 PRAGMA 值"
+   ]
+  },
+  "sha": "5846b7646b5a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "698afdcdb179": {
+  "identity": {
+   "one_liner": "Node.js 本地优先加密数据库，数据存于 AES-256-GCM 加密的 .rizz 文件",
+   "review": "Rizzbase 是一个本地优先的加密数据库，将数据存储为单个便携 .rizz 文件，核心为 Go 引擎，提供 Node.js/TypeScript、Python 和 Go SDK。数据模型为 Project/Lobby/Yap 三层，查询将 Lobby 读入内存做过滤排序，V1 无索引，文件上限 64 MiB。无口令恢复机制，需自行保管。",
+   "highlights": [
+    "使用 AES-256-GCM 加密，密钥由用户口令经 PBKDF2-HMAC-SHA256（600,000 次迭代）派生",
+    "提供 Node.js、Python、Go 三种 SDK，SDK 不自动下载引擎，需单独安装并通过 binaryPath、RIZZBASE_BINARY 或 PATH 指定",
+    "支持 append-only Events、内存过滤排序查询（==, !=, >, >=, <, <= 操作符）及 JSON 导出/导入备份"
+   ],
+   "use_cases": [
+    "需要数据保存在本地设备、不依赖托管数据库或账户服务的 Node.js/Python/Go 应用",
+    "存储含敏感信息的 JSON 文档并需要加密单文件备份与口令轮换迁移",
+    "通过桌面应用 Rizzbase Studio（Go 引擎已内嵌）创建、浏览本地项目并导出 JSON 备份"
+   ]
+  },
+  "sha": "698afdcdb179",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e2cc61d6eb89": {
+  "identity": {
+   "one_liner": "本地运行的 3D 办公室，AI 代理在 Ollama 上分阶段执行任务",
+   "review": "这是一个本地单用户应用：用户以 3D 办公楼中的 AI 代理员工布置任务，代理按计划、网络调研、起草、自检等阶段在 Ollama 本地模型上执行，结果进入审核队列。前端为 Next.js 15 + React Three Fiber，后端为 FastAPI 与 PostgreSQL，场景渲染均来自数据库真实状态而非脚本动画，支持 SearXNG 网络调研与 Adzuna/Reed 求职工具。",
+   "highlights": [
+    "任务分阶段执行（计划→网络调研→起草→自检），结果为带编号来源的版本化 Markdown，可暂停、恢复、取消和从失败阶段重试",
+    "通过本地 SearXNG 搜索并经带防护的 fetcher 读取公开网页；求职代理查询 Adzuna 与 Reed 官方 API 并在代码中硬过滤不合格职位",
+    "数据库为唯一状态源：`GET /api/v1/state` 提供快照，运动轨迹为纯函数，`npm run check:layout` 校验 47 条不变量"
+   ],
+   "use_cases": [
+    "在本地单机上以可视化方式观察和学习 LLM 工作流（队列、重试、工具调用、恢复）",
+    "需要分阶段生成带来源引用的 Markdown 文稿并在人工审核队列中处理结果",
+    "查询职位信息并依赖代码级硬过滤排除涉及安全审查或居住年限要求的空缺"
+   ]
+  },
+  "sha": "e2cc61d6eb89",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

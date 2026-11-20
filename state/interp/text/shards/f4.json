@@ -3239,5 +3239,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4804c19f00da": {
+  "identity": {
+   "one_liner": "纯 Java 实现的 JDBC 驱动，用于读写 Microsoft Access（.accdb/.mdb）数据库",
+   "review": "UCanAccess 是一个开源纯 Java JDBC 驱动，用于通过 JDBC 接口读写 Microsoft Access 的 .mdb 和 .accdb 数据库文件，无需本机 Windows 库。底层基于 Jackcess 与 HSQLDB 实现，要求 Java 11 及以上，通过 Maven 或 Gradle 引入依赖即可使用，并附带交互式 SQL 控制台。适用于 Java 程序以及 OpenOffice、LibreOffice、Matlab、SQuirreL 等客户端连接 Access 数据库。",
+   "highlights": [
+    "支持 SELECT、INSERT、UPDATE、DELETE 及 ALTER TABLE 等 DDL 操作，内置 IIf、Nz、PMT、PV 等 Access 函数",
+    "依赖 Jackcess 5.2.0 和 HSQLDB 2.7.4，可选 Jackcess Encrypt 以访问加密数据库",
+    "提供 uber jar 交互式 SQL 控制台，支持执行语句和 export 命令导出 CSV；默认拒绝数据库中的网络/UNC 路径链接表，可通过 allowRemoteLinks 属性开启"
+   ],
+   "use_cases": [
+    "Java 11+ 项目需通过 JDBC 直接读写 .accdb/.mdb 文件",
+    "OpenOffice、LibreOffice、Matlab、SQuirreL 等客户端连接 Access 数据库",
+    "用 SQL 控制台查看 Access 数据或将表导出为 CSV"
+   ]
+  },
+  "sha": "4804c19f00da",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c103384331e8": {
+  "identity": {
+   "one_liner": "官方自托管 MCP 服务器，通过只读模式等安全控制连接 AI 代理操作 Couchbase 数据。",
+   "review": "Couchbase 官方提供的 MCP 服务器，让 Claude Desktop、Cursor、VS Code 等 MCP 客户端连接并操作 Capella 或自管 Couchbase 集群数据。包含操作型与 Operational Insights 两个服务器，前者提供 52 个工具，覆盖集群健康、模式发现、KV 操作、SQL++ 查询、索引、全文与向量搜索；默认开启只读模式，写工具不加载。通过 uvx、Docker 或源码安装，支持 STDIO 与 Streamable HTTP 传输及 OAuth 2.1。",
+   "highlights": [
+    "操作型服务器提供 52 个工具，涵盖集群健康、模式发现、KV 操作、SQL++ 查询、索引管理、全文与向量搜索、查询性能分析",
+    "默认只读模式：写工具不加载且数据修改查询被阻止，可单独禁用工具或要求用户确认",
+    "支持 STDIO 与 Streamable HTTP 传输，HTTP 模式提供可选 OAuth 2.1（任意 JWKS 发布 IdP）、健康检查与审计日志，支持多 worker；认证支持用户名密码或 mTLS 客户端证书"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor、Windsurf、VS Code、JetBrains AI Assistant 等客户端中以自然语言查询 Couchbase 数据、集群健康与慢查询",
+    "通过 LLM 执行文档增删改、创建 scope/collection、创建或删除索引（需关闭只读模式）",
+    "将 Capella 或自管 Couchbase 集群接入 AI 代理工作流，利用 Couchbase 用户的 RBAC 作为安全边界"
+   ]
+  },
+  "sha": "c103384331e8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a35c83a5998d": {
+  "identity": {
+   "one_liner": "以人格为中心的 AI 伴侣运行时，持久保存人格、记忆与经历。",
+   "review": "PCAR 是一个面向 Windows 的 AI 伴侣运行时，将人格、关系、经历和长期记忆保存在模型调用之外，配合持久化存储按话题召回。v0.2 公开桌面版支持角色创建、会话历史、记忆整理，并支持从双人私聊记录生成角色卡与历史接续。需自配模型服务，已在 Windows 11 x64 验证，代码采用 AGPL-3.0-only 许可。",
+   "highlights": [
+    "人格与经历持久保存在模型调用之外，支持长期记忆整理与按当前话题取回",
+    "支持从双人私聊 Markdown 生成角色卡，并可引用历史原话接续聊天",
+    "v0.2 公开桌面版包含本地检索模型，支持从 v0.1 原机升级"
+   ],
+   "use_cases": [
+    "在 Windows 桌面端与自定义人格角色进行带记忆的持续对话",
+    "从已有双人私聊记录还原人物并接续以前的对话",
+    "为 AI 伴侣社区的人格连续性研究提供可参与共建的开源材料"
+   ]
+  },
+  "sha": "a35c83a5998d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "45cbf0b2f307": {
+  "identity": {
+   "one_liner": "基于 JayDeBeApi 和达梦 JDBC 驱动实现的 macOS 版 dmPython 兼容层",
+   "review": "该包通过 JayDeBeApi 调用达梦 JDBC 驱动，在 macOS 上实现 dmPython 的 DBAPI 子集，import 名保持 dmPython，业务代码无需修改；在非 macOS 平台则将导入转发给官方驱动。运行依赖 Python ≥3.12 和 JDK，JDBC 驱动已打包进 wheel。适用于官方 dmPython 无 macOS wheel 导致 dmSQLAlchemy 无法安装的环境。",
+   "highlights": [
+    "实现 connect、execute、fetchone/fetchmany/fetchall、commit、rollback、ping 等 DBAPI 接口，支持 dmAsync==1.0.0 的连接与游标接口",
+    "提供 uv override-dependencies 与 .pth 钩子方案，使 dmSQLAlchemy 在 macOS 上跳过官方 dmpython 依赖",
+    "发行名为 dmpython-jdbc，import 名为 dmPython，非 darwin 平台将导入转发给已安装的官方驱动"
+   ],
+   "use_cases": [
+    "在 macOS 上使用 dm+dmPython:// SQLAlchemy 方言连接达梦数据库进行 ORM CRUD 开发",
+    "跨平台项目中按 sys_platform 条件安装：Linux/Windows 用官方 dmpython，macOS 用本包",
+    "在 macOS 上作为 dmAsync 的 dmPython 后端运行异步数据库操作"
+   ]
+  },
+  "sha": "45cbf0b2f307",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

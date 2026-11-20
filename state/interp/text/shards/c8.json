@@ -3187,5 +3187,70 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f368965e79d9": {
+  "identity": {
+   "one_liner": "面向 Agent 的 Telegram CLI，以本地 SQLite 缓存与只读同步守护进程提供 MTProto 访问",
+   "review": "telegram-sync-cli（命令名 tg）是基于 Bun 和 mtcute 的 Telegram 命令行工具，面向终端用户和编码 Agent。它通过只读守护进程实时同步并回填消息到本地 SQLite 缓存，提供 FTS5 全文搜索、只读 SQL、消息收发与文件下载，输出默认为 JSON 并带固定退出码。部分编辑/转发等操作需经 tg api 调用；支持配置只读模式和聊天白名单。",
+   "highlights": [
+    "提供只读守护进程实现实时同步、重启后追赶与历史回填，支持多账号，每账号独立缓存",
+    "提供 FTS5 全文搜索与只读 SQL（tg sql），缓存优先读取，--fresh 可绕过缓存",
+    "JSON 输出、稳定错误模式（含 retryable/suggestion）、固定退出码，并提供面向 Claude Code、Codex 等的 Agent skill"
+   ],
+   "use_cases": [
+    "在终端离线检索和 SQL 查询已缓存的 Telegram 消息",
+    "让编码 Agent 通过 shell 与 JSON 接口读取未读消息、搜索缓存并执行只读查询",
+    "通过脚本或管道（如 jq/grep）处理消息列表，并使用 Markdown/HTML 发送富文本消息"
+   ]
+  },
+  "sha": "f368965e79d9",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6378bd2f456e": {
+  "identity": {
+   "one_liner": "自托管的净资产与现金流追踪应用，按月手工录入，支持多人与多币种。",
+   "review": "Monido 是一个 MIT 许可的自托管财务面板，用于记录家庭净资产与现金流：每月录入各账户月末余额及收入支出，应用据此计算净资产、储蓄率、应急基金等指标。数据存于本地 SQLite，不连接银行。适合能在 NAS、家用服务器或 VPS 上运行 Docker 容器、资产分散于多银行多币种的用户。它不是逐笔记账或预算工具，投资无实时价格。",
+   "highlights": [
+    "提供净资产时间序列、按成员/币种/资产类型的配置、贷款计划与房产估值，所有公式在 Finance rules 中列明",
+    "支持 Docker Compose 单容器部署（含 SQLite，amd64/arm64 镜像），数据存于 Docker 卷并可导出 CSV",
+    "提供可选的 Claude 顾问（经 MCP 连接用户自己的 Claude 账户）、Telegram 提醒与家庭投票、七种语言界面"
+   ],
+   "use_cases": [
+    "家庭按月记录多银行、多币种账户、房产与贷款，查看合并后的净资产及其变化",
+    "计算应急基金月数、储蓄率与目标达成日期等财务指标",
+    "在 NAS、树莓派、家用服务器或 VPS 上自托管运行，数据保留在本地 SQLite"
+   ]
+  },
+  "sha": "6378bd2f456e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8463b29eef5d": {
+  "identity": {
+   "one_liner": "连接达梦数据库并将空间数据表导入 QGIS 显示的插件",
+   "review": "这是一个基于 QGIS Plugin Builder 构建的 QGIS 插件，面向达梦数据库用户。插件用于连接 Dameng 数据库，将选定的空间数据表导入 QGIS 作为临时图层显示，并支持对所选表设置过滤条件，包括 SRID、数据类型和 ROWNUM。README 未说明安装方式与许可协议。",
+   "highlights": [
+    "连接达梦数据库并导入选定的空间数据表至 QGIS，作为临时图层显示",
+    "支持对所选空间数据表设置过滤条件，包括 SRID、数据类型和 ROWNUM",
+    "基于 QGIS Plugin Builder 构建"
+   ],
+   "use_cases": [
+    "需要在 QGIS 中查看达梦数据库中的空间数据表",
+    "导入空间数据前按 SRID、数据类型、ROWNUM 过滤数据"
+   ]
+  },
+  "sha": "8463b29eef5d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

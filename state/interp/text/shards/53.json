@@ -3358,5 +3358,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "392391824b62": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Critter Stack 事件存储与文档数据库，复用 Marten API。",
+   "review": "Fisher 是 Critter Stack 中以 SQLite 为存储的事件溯源与文档数据库，采用与 Marten 相同的 API，数据库以文件形式存在于进程内，无需安装服务器。给需要嵌入式存储的 .NET 开发者使用。README 明确其与 Marten/Polecat 仅保证 API 可移植而非行为一致，缺少消息总线与编译查询，且每个数据库文件仅支持单个写入者。",
+   "highlights": [
+    "提供与 Marten 相同 API 的事件溯源与文档存储，支持 LINQ（含 join、分组、分页）、patching、批量插入、软删除、自然键等能力",
+    "通过 AddFisher(...) 注册 DI，配套提供 Fisher.AspNetCore 与 Fisher.EntityFrameworkCore 包，后者可在 Fisher 事务内运行 DbContext",
+    "通过 JasperFx.Events.ComplianceTests 共享套件的全部 69 个套件 884 项测试，另有自身约 3837 项测试"
+   ],
+   "use_cases": [
+    "希望以单文件 SQLite 获得事件溯源与文档存储、且不部署数据库服务器的 .NET 应用",
+    "已有 Marten/Polecat 代码，需在 SQLite 存储上以相同 API 运行的场景（需参考迁移指南了解行为差异）",
+    "database-per-tenant 多租户架构，以每租户一个文件换取隔离性"
+   ]
+  },
+  "sha": "392391824b62",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32d160f5e547": {
+  "identity": {
+   "one_liner": "将 bal persist 模型实体以 HTTP/GraphQL 服务形式暴露的 Ballerina 库",
+   "review": "该包配合 bal persist，将持久化模型中的实体暴露为 HTTP 服务，无需手写服务代码。通过 @dataservice:Expose 注解选择实体及允许的操作，配合字段级注解控制读写，并包含编译期注解检查与协议无关运行时。适用于在 Ballerina 集成项目中由 persist 模型生成数据服务的开发者。",
+   "highlights": [
+    "提供 @dataservice:Expose 注解选择暴露的实体、允许的操作及其 scopes",
+    "提供 @dataservice:ReadOnly、@dataservice:Immutable、@dataservice:Internal 注解控制字段处理方式",
+    "包含协议无关运行时，支持过滤、排序、分页、fields、关联读取、值转换与错误体"
+   ],
+   "use_cases": [
+    "基于 bal persist 模型生成并暴露 REST/GraphQL 数据服务",
+    "在不手写服务代码的情况下为数据库实体提供 HTTP API",
+    "从源码构建或以远程调试方式开发该库"
+   ]
+  },
+  "sha": "32d160f5e547",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5ff342817b70": {
+  "identity": {
+   "one_liner": "基于 oncebox 的 Spring Boot 事务性 Inbox/Outbox 示例服务集",
+   "review": "该项目是一组 Spring Boot 服务，演示基于 oncebox 库的事务性收件箱与发件箱机制：order-service 通过事务性 outbox 向 Kafka 发布事件，loyalty-service 以 effectively-once 模式消费积分事件，notification-service 以 at-most-once 模式发送邮件。消费事件 ID 记录于收件箱表实现去重，重试失败事件进入 DLT。依赖 PostgreSQL/MySQL/Oracle 存储收件箱记录，需为事件提供稳定 ID。",
+   "highlights": [
+    "记录消费事件 ID 实现去重，重复事件以跳过处理；支持 effectively-once 与 at-most-once 两种消费模式",
+    "事务性 outbox 将业务写入与事件记录置于同一数据库事务，轮询发布支持退避重试与死信表，多实例用 FOR UPDATE SKIP LOCKED 锁批次",
+    "收件箱记录支持按 TTL 定时清理；错误响应采用 RFC 9457 格式，API 以 OpenAPI 描述"
+   ],
+   "use_cases": [
+    "Kafka 消费者需要在崩溃、重平衡或重放后安全处理同一事件重复投递的场景",
+    "需要对不可回滚的外部副作用（如发送邮件）防止重复执行的消息处理",
+    "需要保证数据库变更与事件发布原子性的事件驱动架构"
+   ]
+  },
+  "sha": "5ff342817b70",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

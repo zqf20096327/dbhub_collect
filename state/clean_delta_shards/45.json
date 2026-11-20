@@ -35245,5 +35245,2425 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "d58e77d1c2b8+2": {
+  "fn": "isdaniel/pg-walstream",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    6,
+    [
+     "Crates.io Version",
+     "Crates.io Downloads (recent)",
+     "Crates.io Total Downloads",
+     "docs.rs",
+     "codecov",
+     "CodSpeed"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    19,
+    6,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "- **Binary serialization**: `ChangeEvent` round-trips through JSON, CBOR, MessagePack, postcard and bincode (guide)."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    38,
+    20,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "|Feature|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    39,
+    40
+   ],
+   [
+    "replace",
+    40,
+    44,
+    40,
+    44,
+    [
+     "|`std`|Yes|Standard library. Without it (`default-features = false`) you get a `no_std` + `alloc` build of the protocol parser, encoder and types, which compiles for wasm and embedded targets.|",
+     "|`rustls-tls`|Yes|Pure-Rust backend: `rustls` with `aws-lc-rs`. Implies `std`.|",
+     "|`libpq`|No|libpq via FFI, bound by `pq-sys` (pre-generated bindings, no libclang). Implies `std`.|",
+     "|`derive`|No|`#[derive(WalTable)] #[wal(table = \"...\")]` and the one-line `#[wal_table(\"...\")]`, enabling `WalRouter::on_insert_of::<T>` / `on_update_of` / `on_delete_of`.|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    49,
+    44,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "When `sslmode` is `verify-ca` or `verify-full`, the `rustls-tls` backend loads **only** the CAs in `sslrootcert` if it is set, and otherwise the Mozilla CA bundle shipped via `webpki-roots`. The OS trust store is **not** consulted, so a server signed by a corporate CA that lives only there needs `sslrootcert` pointed at it:"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    77,
+    50,
+    77
+   ],
+   [
+    "replace",
+    77,
+    103,
+    77,
+    78,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    105,
+    78,
+    80
+   ],
+   [
+    "replace",
+    105,
+    106,
+    80,
+    81,
+    [
+     "`ReplicationStreamConfig` has `with_*` methods for the rest (protocol version, feedback interval, retry policy and more). The `examples/` directory has runnable programs:"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    81,
+    82
+   ],
+   [
+    "replace",
+    107,
+    108,
+    82,
+    83,
+    [
+     "|Example|Description|"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    83,
+    84
+   ],
+   [
+    "replace",
+    109,
+    123,
+    84,
+    98,
+    [
+     "|`basic-streaming`|`futures::Stream` API with combinators (`filter`, `take_while`)|",
+     "|`polling`|Manual `next_event()` loop for custom integration|",
+     "|`initial-snapshot`|Copy existing rows, then stream changes with no gap and no duplicate|",
+     "|`safe-transaction-consumer`|Production-grade, transaction-aware consumer with ordered commits and safe LSN feedback|",
+     "|`rate-limited-streaming`|Rate-limited consumption with `tokio_stream::StreamExt::throttle`|",
+     "|`tokio-spawn-streaming`|Producer/consumer across tasks with an `mpsc` channel (`Send` safety)|",
+     "|`typed-deserialization`|INSERT/UPDATE/DELETE events into your own structs via `serde`|",
+     "|`derive-router`|`#[derive(WalTable)]` and `WalRouter` table inference (`derive` feature)|",
+     "|`binary-serde`|Ship `ChangeEvent`s between processes in five formats (no database needed)|",
+     "|`stream-metrics`|Read `stream.metrics()` from other tasks: rates, lag and unconfirmed bytes, reconnects, a Prometheus text endpoint|",
+     "|`raw-xlogdata`|Undecoded pgoutput payload via `next_raw_event()`|",
+     "|`binary-column-access`|Lossless zero-copy `BYTEA` access via `PgResult::get_bytes`|",
+     "|`pg-basebackup`|Physical backup tool using `BASE_BACKUP` with tar extraction and progress|",
+     "|`arbitrary-fuzzing`|Property-based fuzzing of all protocol types with `arbitrary`|"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    132,
+    98,
+    107
+   ],
+   [
+    "replace",
+    132,
+    141,
+    107,
+    108,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    153,
+    108,
+    120
+   ],
+   [
+    "replace",
+    153,
+    154,
+    120,
+    121,
+    [
+     "`ChangeEvent` implements serde's `Serialize` and `Deserialize`, so an event can go to another process, a queue or a file in a serde format. JSON, CBOR, MessagePack, postcard and bincode 2 are tested; other formats are not. Use JSON when the bytes must stay readable or outlive a release, and a compact format when size and speed matter. Sizes for one 6-event transaction (BEGIN, INSERT, UPDATE, DELETE, a logical message, COMMIT) from the `binary-serde` example:"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    155,
+    121,
+    122
+   ],
+   [
+    "replace",
+    155,
+    156,
+    122,
+    123,
+    [
+     "|Format|Crate|Transaction|Read across versions|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    123,
+    124
+   ],
+   [
+    "replace",
+    157,
+    162,
+    124,
+    129,
+    [
+     "|JSON|`serde_json`|1174 B (100%)|yes, bytes are unchanged|readable, any language; the one to store long-term|",
+     "|CBOR|`ciborium`|933 B (79%)|no, see Upgrading|self-describing, writes field names|",
+     "|MessagePack|`rmp-serde`|498 B (42%)|no, see Upgrading|`to_vec` writes fields as an array, `to_vec_named` keeps field names|",
+     "|postcard|`postcard`|349 B (30%)|same version on both ends|smallest, `no_std` friendly, Rust to Rust|",
+     "|bincode 2|`bincode`|361 B (31%)|same version on both ends|Rust to Rust; the crate is unmaintained, so prefer postcard in new code|"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    179,
+    129,
+    146
+   ],
+   [
+    "replace",
+    179,
+    180,
+    146,
+    147,
+    [
+     "The `binary-serde` example needs no database. It encodes a small transaction in all five formats, checks that each reads the same events back, and shows framing, envelopes and a decode of hostile bytes (`cd examples/binary-serde && cargo run`)."
+    ]
+   ],
+   [
+    "equal",
+    180,
+    189,
+    147,
+    156
+   ],
+   [
+    "replace",
+    189,
+    195,
+    156,
+    157,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    209,
+    157,
+    171
+   ],
+   [
+    "replace",
+    209,
+    210,
+    171,
+    172,
+    [
+     "|Where|How|"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    172,
+    173
+   ],
+   [
+    "replace",
+    211,
+    214,
+    173,
+    176,
+    [
+     "|Connection string|`...?replication=database&options=-c%20wal_sender_timeout%3D4s`|",
+     "|Role|`ALTER ROLE cdc SET wal_sender_timeout = '4s'`|",
+     "|Server|`wal_sender_timeout = '4s'` in `postgresql.conf`|"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    225,
+    176,
+    187
+   ],
+   [
+    "replace",
+    225,
+    230,
+    187,
+    188,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    232,
+    188,
+    190
+   ],
+   [
+    "replace",
+    232,
+    233,
+    190,
+    191,
+    [
+     "|Watch|Fields|"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    191,
+    192
+   ],
+   [
+    "replace",
+    234,
+    240,
+    192,
+    198,
+    [
+     "|Data flowing|`wal_messages`, `wal_bytes`, `commits`, `keepalives`, `last_server_time`|",
+     "|Work in flight (read, not yet acknowledged)|`lag_bytes()`|",
+     "|Consumer behind|not visible to the client; on the server, `pg_wal_lsn_diff(pg_current_wal_lsn(), confirmed_flush_lsn)` from `pg_replication_slots`|",
+     "|Server hearing from the consumer|`unconfirmed_bytes()`, `feedback_sent`, `feedback_failures`|",
+     "|Connection health|`reconnects`, `reconnect_attempts`, `reconnect_failures`, `recovering`, `last_error`|",
+     "|Raw positions and times|`received_lsn`, `flushed_lsn`, `applied_lsn`, `sent_flushed_lsn`, `last_commit_time`, `last_feedback_time`|"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    247,
+    198,
+    205
+   ],
+   [
+    "replace",
+    247,
+    248,
+    205,
+    206,
+    [
+     "The client cannot see what the server retains for the slot or whether it was invalidated: query `pg_replication_slots` (`wal_status = 'lost'` is final and works on every supported version). Prefer the metrics above to the `*_lag` columns of `pg_stat_replication`, which for a logical slot are sampled only at transaction ends and go stale. Every field is documented on `MetricsSnapshot`; `examples/stream-metrics` adds a Prometheus text endpoint."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    257,
+    206,
+    215
+   ],
+   [
+    "replace",
+    257,
+    281,
+    215,
+    216,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    289,
+    216,
+    224
+   ],
+   [
+    "replace",
+    289,
+    300,
+    224,
+    225,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    302,
+    225,
+    227
+   ],
+   [
+    "replace",
+    302,
+    303,
+    227,
+    228,
+    [
+     "A complete, runnable version, including a row inserted *during* the handoff window to prove it arrives exactly once, is in `examples/initial-snapshot`."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    316,
+    228,
+    241
+   ],
+   [
+    "replace",
+    316,
+    340,
+    241,
+    242,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    340,
+    353,
+    242,
+    255
+   ],
+   [
+    "replace",
+    353,
+    354,
+    255,
+    256,
+    [
+     "|Option|Unit|Bounds|"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    355,
+    256,
+    257
+   ],
+   [
+    "replace",
+    355,
+    358,
+    257,
+    260,
+    [
+     "|`connect_timeout`|seconds|Only the TCP connect. On the native backend TLS negotiation and startup/auth are **not** covered; libpq bounds the whole handshake with each address, then tries the next host.|",
+     "|`keepalives_idle` / `_interval` / `_count`|seconds|An **idle** connection. Defaults `120`/`10`/`3`: roughly 150 s to notice a peer that vanished while nothing was in flight.|",
+     "|`tcp_user_timeout`|**milliseconds**|An unacknowledged **write**. This is the only one that bounds a blocking round-trip, including the `DROP_REPLICATION_SLOT` that snapshot cleanup runs from `Drop`. Linux-family only; `0` (the default) disables it.|"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    386,
+    260,
+    288
+   ],
+   [
+    "replace",
+    386,
+    390,
+    288,
+    289,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    394,
+    289,
+    293
+   ],
+   [
+    "replace",
+    394,
+    395,
+    293,
+    294,
+    [
+     "|Option|Description|PG Version|"
+    ]
+   ],
+   [
+    "equal",
+    395,
+    396,
+    294,
+    295
+   ],
+   [
+    "replace",
+    396,
+    401,
+    295,
+    300,
+    [
+     "|`temporary`|Temporary slot (not persisted to disk, dropped on disconnect)|14+|",
+     "|`two_phase`|Enable two-phase commit for logical slots|14+|",
+     "|`reserve_wal`|Reserve WAL immediately for physical slots|14+|",
+     "|`snapshot`|Snapshot behavior: `\"export\"`, `\"use\"`, or `\"nothing\"`|14+|",
+     "|`failover`|Enable slot synchronization to standbys for HA|16+|"
+    ]
+   ],
+   [
+    "equal",
+    401,
+    406,
+    300,
+    305
+   ],
+   [
+    "replace",
+    406,
+    407,
+    305,
+    306,
+    [
+     "The parser handles every pgoutput message: `BEGIN`, `COMMIT`, `ORIGIN`, `RELATION`, `TYPE`, `INSERT`, `UPDATE`, `DELETE`, `TRUNCATE` and `MESSAGE` (protocol v1); `STREAM_START`, `STREAM_STOP`, `STREAM_COMMIT` and `STREAM_ABORT` (v2+); `BEGIN_PREPARE`, `PREPARE`, `COMMIT_PREPARED`, `ROLLBACK_PREPARED` and `STREAM_PREPARE` (v3+). The formats are in Logical Replication Message Formats."
+    ]
+   ],
+   [
+    "equal",
+    407,
+    421,
+    306,
+    320
+   ],
+   [
+    "replace",
+    421,
+    422,
+    320,
+    321,
+    [
+     "|`sslmode`|rustls-tls|libpq|Ratio|"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    423,
+    321,
+    322
+   ],
+   [
+    "replace",
+    423,
+    425,
+    322,
+    324,
+    [
+     "|`disable` (no TLS)|5,859|6,262|**0.98x, a tie**|",
+     "|`require` (TLS)|3,817|1,693|**2.22x rustls-tls**|"
+    ]
+   ],
+   [
+    "equal",
+    425,
+    426,
+    324,
+    325
+   ],
+   [
+    "replace",
+    426,
+    427,
+    325,
+    326,
+    [
+     "The gap is OpenSSL's per-call bookkeeping, not crypto: with TLS, libpq spends about 20% of process CPU in OpenSSL, of which 0.84% is AES-GCM, and the cost scales with message count because pg-walstream issues one `PQgetCopyData` per WAL message. So on a TLS link (any managed PostgreSQL) prefer the default `rustls-tls`; with TLS terminated elsewhere the backends tie, so choose on operational grounds (libpq needs `libpq-dev` at runtime; `rustls-tls` is pure Rust with native SCRAM). Per-scenario results, throughput and the host tuning used are in `load-tests/README.md`; a comparison across PostgreSQL 16 and 18 with different optimizations is in the Load Test Comparison Report."
+    ]
+   ],
+   [
+    "equal",
+    427,
+    438,
+    326,
+    337
+   ],
+   [
+    "replace",
+    438,
+    441,
+    337,
+    340,
+    [
+     "- PostgreSQL Logical Replication Documentation",
+     "- Logical Replication Message Formats",
+     "- Replication Protocol"
+    ]
+   ],
+   [
+    "equal",
+    441,
+    444,
+    340,
+    343
+   ],
+   [
+    "replace",
+    444,
+    445,
+    343,
+    344,
+    [
+     "Contributions are welcome; see CONTRIBUTING.md. This project is licensed under the BSD 3-Clause License."
+    ]
+   ],
+   [
+    "equal",
+    445,
+    447,
+    344,
+    346
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "ce6bff626177+2": {
+  "fn": "aiyou178/pg_pinyin",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "pg_pinyin logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    1,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     "中文说明 | Logo assets"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    18,
+    5,
+    16
+   ],
+   [
+    "replace",
+    18,
+    25,
+    16,
+    23,
+    [
+     "|PostgreSQL major|Minimum version|",
+     "|---|---|",
+     "|15|15.20|",
+     "|16|16.16|",
+     "|17|17.12|",
+     "|18|18.7|",
+     "|19|19.0 or later, core|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    94,
+    23,
+    92
+   ],
+   [
+    "replace",
+    94,
+    117,
+    92,
+    93,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    135,
+    93,
+    111
+   ],
+   [
+    "replace",
+    135,
+    142,
+    111,
+    112,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    156,
+    112,
+    126
+   ],
+   [
+    "replace",
+    156,
+    164,
+    126,
+    134,
+    [
+     "|Mode|Input|Plain term patterns|",
+     "|---|---|---|",
+     "|`full`|`xi an` or `xi'an`|`xi`, `an`|",
+     "|`initials`|`whh`|`w.*`, `h.*`, `h.*`|",
+     "|`initials`|`zh ch sh`|`zh.*`, `ch.*`, `sh.*`|",
+     "|`autocomplete`|`xi a`|`xi`, `a.*`|",
+     "|`auto`|`xi a` / `xi ang` / `whh`|`xi`, `a.*` / `xi`, `ang` / `w.*`, `h.*`, `h.*`|",
+     "|`compat`|`xi an` or `xi'an`|Original prefix patterns `xi.*`, `an.*`|"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    218,
+    134,
+    188
+   ],
+   [
+    "replace",
+    218,
+    219,
+    188,
+    189,
+    [
+     "The SQL parser specification records the"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    225,
+    189,
+    195
+   ],
+   [
+    "replace",
+    225,
+    232,
+    195,
+    202,
+    [
+     "|Mode|Pattern Time Reduction|Client Search Time Reduction|",
+     "|---|---:|---:|",
+     "|compat|14.6%|4.4%|",
+     "|full|17.3%|11.3%|",
+     "|initials|2.0%|-2.1% (slower)|",
+     "|autocomplete|14.9%|18.3%|",
+     "|auto|22.3%|10.2%|"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    239,
+    202,
+    209
+   ],
+   [
+    "replace",
+    239,
+    241,
+    209,
+    211,
+    [
+     "See the report, raw evidence",
+     "and retained first-pass trial."
+    ]
+   ],
+   [
+    "equal",
+    241,
+    284,
+    211,
+    254
+   ],
+   [
+    "replace",
+    284,
+    285,
+    254,
+    255,
+    [
+     "pg_search default of 50."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    304,
+    255,
+    274
+   ],
+   [
+    "replace",
+    304,
+    313,
+    274,
+    275,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    367,
+    275,
+    329
+   ],
+   [
+    "replace",
+    367,
+    379,
+    329,
+    330,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    379,
+    398,
+    330,
+    349
+   ],
+   [
+    "replace",
+    398,
+    408,
+    349,
+    350,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    408,
+    428,
+    350,
+    370
+   ],
+   [
+    "replace",
+    428,
+    445,
+    370,
+    371,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    445,
+    499,
+    371,
+    425
+   ],
+   [
+    "replace",
+    499,
+    501,
+    425,
+    427,
+    [
+     "See the data pipeline, data attribution,",
+     "and the P0/P1/P2 specification."
+    ]
+   ],
+   [
+    "equal",
+    501,
+    526,
+    427,
+    452
+   ],
+   [
+    "replace",
+    526,
+    530,
+    452,
+    453,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    530,
+    573,
+    453,
+    496
+   ],
+   [
+    "replace",
+    573,
+    578,
+    496,
+    497,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    578,
+    603,
+    497,
+    522
+   ],
+   [
+    "replace",
+    603,
+    618,
+    522,
+    523,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    618,
+    621,
+    523,
+    526
+   ],
+   [
+    "replace",
+    621,
+    622,
+    526,
+    527,
+    [
+     "official PG19 GA tag is published,"
+    ]
+   ],
+   [
+    "equal",
+    622,
+    632,
+    527,
+    537
+   ],
+   [
+    "replace",
+    632,
+    633,
+    537,
+    538,
+    [
+     "The PG18 test image inherits ParadeDB 0.27.0 on PG18"
+    ]
+   ],
+   [
+    "equal",
+    633,
+    637,
+    538,
+    542
+   ],
+   [
+    "replace",
+    637,
+    638,
+    542,
+    543,
+    [
+     "ParadeDB has not released PG19 support."
+    ]
+   ],
+   [
+    "equal",
+    638,
+    662,
+    543,
+    567
+   ],
+   [
+    "replace",
+    662,
+    663,
+    567,
+    568,
+    [
+     "The platform benchmark compares PG19.0"
+    ]
+   ],
+   [
+    "equal",
+    663,
+    670,
+    568,
+    575
+   ],
+   [
+    "replace",
+    670,
+    671,
+    575,
+    576,
+    [
+     "The 2026-11-13 report compares three release builds on"
+    ]
+   ],
+   [
+    "equal",
+    671,
+    677,
+    576,
+    582
+   ],
+   [
+    "replace",
+    677,
+    687,
+    582,
+    592,
+    [
+     "|Workload|pgrx 0.19.3|0.20.0 dependency only|0.20.0 final|",
+     "|---|---:|---:|---:|",
+     "|Character conversion, 20k rows|238.471|214.129|228.624|",
+     "|Word conversion, 20k rows|246.098|235.852|228.094|",
+     "|Token-array conversion, 20k rows|229.665|235.293|230.198|",
+     "|Document batches of 512, 20k rows|27.603|26.510|26.547|",
+     "|Dynamic pattern parsing, 20k rows|16.479|17.043|16.759|",
+     "|Constant pattern parsing, 20k rows|11.305|11.625|5.343|",
+     "|COPY with stored pinyin and BM25, 20k rows|395.751|346.390|384.251|",
+     "|Ranked Top-10 search, 2k queries|1345.264|1586.252|1393.960|"
+    ]
+   ],
+   [
+    "equal",
+    687,
+    698,
+    592,
+    603
+   ],
+   [
+    "replace",
+    698,
+    699,
+    603,
+    604,
+    [
+     "upgrade spec for compatibility and validation limits."
+    ]
+   ],
+   [
+    "equal",
+    699,
+    722,
+    604,
+    627
+   ],
+   [
+    "replace",
+    722,
+    724,
+    627,
+    629,
+    [
+     "The 2026-10-13 report and",
+     "raw JSON use PG19 beta 4 / pg_search 0.26.1,"
+    ]
+   ],
+   [
+    "equal",
+    724,
+    728,
+    629,
+    633
+   ],
+   [
+    "replace",
+    728,
+    734,
+    633,
+    639,
+    [
+     "|Path|Actual query construction, 20,000 inputs|Full indexed queries, 2,000 inputs|Query p95|",
+     "|---|---:|---:|---:|",
+     "|Rust full regex|49.321|366.692|0.222|",
+     "|Rust native phrase|45.005|282.677|0.181|",
+     "|SQL full regex|5,560.614|1,037.258|0.651|",
+     "|SQL native phrase|5,530.890|869.343|0.523|"
+    ]
+   ],
+   [
+    "equal",
+    734,
+    771,
+    639,
+    676
+   ],
+   [
+    "replace",
+    771,
+    773,
+    676,
+    678,
+    [
+     "The 2026-10-14 tradeoff report and",
+     "raw JSON (gzip) use PG19 beta 4 / pg_search"
+    ]
+   ],
+   [
+    "equal",
+    773,
+    776,
+    678,
+    681
+   ],
+   [
+    "replace",
+    776,
+    780,
+    681,
+    685,
+    [
+     "|Backend|Default prefix regex|Full regex control|Native phrase|Native elapsed reduction vs default|",
+     "|---|---:|---:|---:|---:|",
+     "|Rust|1,292.054|380.906|286.320|77.84%|",
+     "|SQL|1,464.892|981.670|871.142|40.53%|"
+    ]
+   ],
+   [
+    "equal",
+    780,
+    791,
+    685,
+    696
+   ],
+   [
+    "replace",
+    791,
+    797,
+    696,
+    702,
+    [
+     "|Intent|Default FDR|Native FDR|Default recall|Native recall|",
+     "|---|---:|---:|---:|---:|",
+     "|Complete syllables|22.22%|0.00%|100.00%|100.00%|",
+     "|Initials|9.09%|n/a (no matches)|100.00%|0.00%|",
+     "|Final completion|8.89%|0.00%|100.00%|39.02%|",
+     "|Normalized spelling|40.00%|0.00%|35.29%|100.00%|"
+    ]
+   ],
+   [
+    "equal",
+    797,
+    832,
+    702,
+    737
+   ],
+   [
+    "replace",
+    832,
+    834,
+    737,
+    739,
+    [
+     "The 2026-10-13 report and",
+     "raw JSON use PostgreSQL 19 beta 4 / pg_search"
+    ]
+   ],
+   [
+    "equal",
+    834,
+    836,
+    739,
+    741
+   ],
+   [
+    "replace",
+    836,
+    844,
+    741,
+    749,
+    [
+     "|Method|Conversion|Fresh INSERT|",
+     "|---|---:|---:|",
+     "|P1 snapshot scalar|300.489|321.993|",
+     "|Current scalar|258.099|296.844|",
+     "|P1 snapshot token array|623.978|649.027|",
+     "|Native token array|261.685|277.513|",
+     "|Batch 128 documents|25.482|41.774|",
+     "|Batch 512 documents|23.418|41.592|"
+    ]
+   ],
+   [
+    "equal",
+    844,
+    882,
+    749,
+    787
+   ],
+   [
+    "replace",
+    882,
+    884,
+    787,
+    789,
+    [
+     "The 2026-10-14 Auto report and",
+     "raw JSON (gzip) use release-mode code on PG19 beta 4 /"
+    ]
+   ],
+   [
+    "equal",
+    884,
+    891,
+    789,
+    796
+   ],
+   [
+    "replace",
+    891,
+    899,
+    796,
+    804,
+    [
+     "|Input|Backend|Default regex|Auto|Exact phrase|",
+     "|---|---|---:|---:|---:|",
+     "|Complete|Rust|1,238.865|320.533|278.477|",
+     "|Complete|SQL|1,393.908|984.145|858.965|",
+     "|Initials|Rust|1,509.097|1,554.047|Not timed|",
+     "|Initials|SQL|2,105.065|2,710.942|Not timed|",
+     "|Completion|Rust|1,286.653|467.457|Not timed|",
+     "|Completion|SQL|1,483.978|1,040.014|Not timed|"
+    ]
+   ],
+   [
+    "equal",
+    899,
+    922,
+    804,
+    827
+   ],
+   [
+    "replace",
+    922,
+    928,
+    827,
+    833,
+    [
+     "|Intent|Default FDR|Auto FDR|Exact phrase FDR|Exact phrase recall|",
+     "|---|---:|---:|---:|---:|",
+     "|Complete|22.22%|11.39%|0.00%|100.00%|",
+     "|Initials|9.09%|9.09%|n/a|0.00%|",
+     "|Completion|8.89%|0.00%|0.00%|39.02%|",
+     "|Normalization|40.00%|5.56%|0.00%|100.00%|"
+    ]
+   ],
+   [
+    "equal",
+    928,
+    960,
+    833,
+    865
+   ],
+   [
+    "replace",
+    960,
+    966,
+    865,
+    866,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    966,
+    969,
+    866,
+    869
+   ],
+   [
+    "replace",
+    969,
+    970,
+    869,
+    870,
+    [
+     "remaining candidates are recorded in the improvement roadmap."
+    ]
+   ],
+   [
+    "equal",
+    970,
+    971,
+    870,
+    871
+   ],
+   [
+    "replace",
+    971,
+    973,
+    871,
+    873,
+    [
+     "The 2026-10-14 report and",
+     "lossless raw JSON cover 90 timed samples on"
+    ]
+   ],
+   [
+    "equal",
+    973,
+    978,
+    873,
+    878
+   ],
+   [
+    "replace",
+    978,
+    985,
+    878,
+    885,
+    [
+     "|Method|Existing BM25 index|Build BM25 after load|",
+     "|---|---:|---:|",
+     "|Pipelined per-document INSERT, generated pinyin|660.910|611.119|",
+     "|COPY, generated pinyin|510.890|506.850|",
+     "|COPY staging, scalar conversion|566.583|573.578|",
+     "|COPY staging, 512-document batch conversion|307.486|308.075|",
+     "|Precomputed pinyin COPY, conversion excluded|168.097|182.993|"
+    ]
+   ],
+   [
+    "equal",
+    985,
+    1007,
+    885,
+    907
+   ],
+   [
+    "replace",
+    1007,
+    1008,
+    907,
+    908,
+    [
+     "replace a generated column. The reference staging SQL and adoption limits"
+    ]
+   ],
+   [
+    "equal",
+    1008,
+    1014,
+    908,
+    914
+   ],
+   [
+    "replace",
+    1014,
+    1016,
+    914,
+    916,
+    [
+     "The separate P1 report and",
+     "raw JSON record the 2026-10-13 PG19 beta 4"
+    ]
+   ],
+   [
+    "equal",
+    1016,
+    1028,
+    916,
+    928
+   ],
+   [
+    "replace",
+    1028,
+    1034,
+    928,
+    934,
+    [
+     "|Mode|Rust warm constructor|SQL warm constructor|Rust full query batch|SQL full query batch|",
+     "|---|---:|---:|---:|---:|",
+     "|`compat`|12.152|1,878.998|1,378.673|1,576.698|",
+     "|`full`|13.902|5,729.506|400.313|1,167.757|",
+     "|`initials`|12.593|4,251.153|2,059.790|2,457.391|",
+     "|`autocomplete`|14.346|5,373.237|788.271|1,440.392|"
+    ]
+   ],
+   [
+    "equal",
+    1034,
+    1063,
+    934,
+    963
+   ],
+   [
+    "replace",
+    1063,
+    1064,
+    963,
+    964,
+    [
+     "The dedicated P0 report separates targeted exact"
+    ]
+   ],
+   [
+    "equal",
+    1064,
+    1078,
+    964,
+    978
+   ],
+   [
+    "replace",
+    1078,
+    1086,
+    978,
+    986,
+    [
+     "|Metric|v0.0.8 data|Corrected data|",
+     "|---|---:|---:|",
+     "|Phrase dictionary keys|157,702|196,188; no old keys missing|",
+     "|Curated exact readings|33/55|55/55|",
+     "|Curated Rust Recall@10 / MRR|0.6000 / 0.4606|1.0000 / 0.8273|",
+     "|Rust text romanization, warm median|333.270 ms|292.435 ms (-12.25%)|",
+     "|Rust full-query batch, median|1,841.729 ms|1,867.646 ms (+1.41%)|",
+     "|BM25 index bytes|3,309,568|3,309,568|"
+    ]
+   ],
+   [
+    "equal",
+    1086,
+    1149,
+    986,
+    1049
+   ],
+   [
+    "replace",
+    1149,
+    1154,
+    1049,
+    1054,
+    [
+     "|Scenario|Cold|Warm|Speedup vs SQL (`cold` / `warm`)|",
+     "|-------------------------------------------------------------------------------------------------|---------:|---------:|--------------------------------:|",
+     "|SQL baseline (`characters2romanize`)|`8291.975`|`8072.434`|`1.0x / 1.0x`|",
+     "|Rust (`pinyin_char_romanize`)|`90.025`|`32.087`|`92.1x / 251.6x`|",
+     "|Rust + suffix (`pinyin_char_romanize(name, '_bench')`)|`176.412`|`33.863`|`47.0x / 238.4x`|"
+    ]
+   ],
+   [
+    "equal",
+    1154,
+    1157,
+    1054,
+    1057
+   ],
+   [
+    "replace",
+    1157,
+    1163,
+    1057,
+    1063,
+    [
+     "|Scenario|Cold|Warm|Speedup vs SQL (`cold` / `warm`)|",
+     "|-------------------------------------------------------------------------------------------------|---------:|---------:|--------------------------------:|",
+     "|SQL baseline (`icu_romanize(name::pdb.icu::text[])`)|`255.649`|`249.832`|`1.0x / 1.0x`|",
+     "|Rust (`pinyin_word_romanize(name::pdb.icu::text[])`)|`332.474`|`71.259`|`0.8x / 3.5x`|",
+     "|Rust + suffix (`pinyin_word_romanize(name::pdb.icu::text[], '_bench')`)|`788.152`|`69.230`|`0.3x / 3.6x`|",
+     "|Rust plain text (`pinyin_word_romanize(name)`)|`334.510`|`36.570`|`0.8x / 6.8x`|"
+    ]
+   ],
+   [
+    "equal",
+    1163,
+    1166,
+    1063,
+    1066
+   ],
+   [
+    "replace",
+    1166,
+    1176,
+    1066,
+    1076,
+    [
+     "|Scenario|Cold-ish / Best|Warm / Best|Notes|",
+     "|-------------------------------------------------------------------------------------------------|--------------:|----------:|-----|",
+     "|SQL backend tokens (`sql_pinyin_regex_phrase_patterns`)|`1555.603` ms|`1572.450` ms|PostgreSQL SQL helper from `sql/word.sql`|",
+     "|Rust backend tokens (`pinyin_regex_phrase_patterns`)|`41.784` ms|`43.334` ms|PostgreSQL UDF path, includes `text[]` return overhead|",
+     "|Rust backend generated-pinyin tokens (`pinyin_regex_phrase_patterns(query, true)`)|-|`44.439` ms|PostgreSQL UDF path|",
+     "|Rust backend `pg_search` query (`pinyin_regex_phrase`)|-|`60.588` ms|Public helper exported by `CREATE EXTENSION pg_pinyin`|",
+     "|Rust backend slope/max (`pinyin_regex_phrase(query, 2, 4096)`)|-|`57.838` ms|Public helper exported by `CREATE EXTENSION pg_pinyin`|",
+     "|SQL backend + `pg_search` query (`sql_pinyin_regex_phrase`)|-|`1611.476` ms|Builds `pdb.query`|",
+     "|SQL backend + slope/max (`sql_pinyin_regex_phrase(query, 2, 4096)`)|-|`1607.444` ms|Builds `pdb.query`|",
+     "|SQL backend generated-pinyin query (`sql_pinyin_regex_phrase(query, NULL, NULL, true)`)|-|`1568.413` ms|Builds `pdb.query`|"
+    ]
+   ],
+   [
+    "equal",
+    1176,
+    1179,
+    1076,
+    1079
+   ],
+   [
+    "replace",
+    1179,
+    1183,
+    1079,
+    1083,
+    [
+     "|Scenario|Best|Median|Best per row|Checksum|",
+     "|--------|---:|-----:|-----------:|-------:|",
+     "|Rust standalone|`3.538` ms|`3.581` ms|`0.177` us|`219996`|",
+     "|Python standalone|`33.353` ms|`33.631` ms|`1.668` us|`219996`|"
+    ]
+   ],
+   [
+    "equal",
+    1183,
+    1186,
+    1083,
+    1086
+   ],
+   [
+    "replace",
+    1186,
+    1190,
+    1086,
+    1090,
+    [
+     "|Scenario|Execution Time|Notes|",
+     "|--------|-------------:|-----|",
+     "|Rust parser in PostgreSQL + `pg_search`, memoize enabled|`1027.056` ms|Query mix has 9 distinct queries; PostgreSQL memoizes repeated LATERAL results|",
+     "|Rust parser in PostgreSQL + `pg_search`, memoize disabled and JIT off|`5739.186` ms|Executes 20,000 BM25 lookups|"
+    ]
+   ],
+   [
+    "equal",
+    1190,
+    1193,
+    1090,
+    1093
+   ],
+   [
+    "replace",
+    1193,
+    1197,
+    1093,
+    1097,
+    [
+     "|Scenario|Best|Median|Best per query|Checksum|",
+     "|--------|---:|-----:|-------------:|-------:|",
+     "|Python client parse + `text[]` patterns + `pg_search`|`7439.585` ms|`7503.080` ms|`371.979` us|`1337644`|",
+     "|Rust in-Postgres parse + `pg_search`|`7529.758` ms|`7530.354` ms|`376.488` us|`1337644`|"
+    ]
+   ],
+   [
+    "equal",
+    1197,
+    1211,
+    1097,
+    1111
+   ],
+   [
+    "replace",
+    1211,
+    1222,
+    1111,
+    1122,
+    [
+     "|Scenario|Cold / Cold-ish|Warm|Notes|",
+     "|---|---:|---:|---|",
+     "|SQL char tokenizer|`80726.375`|`2943.466`|Cold result is an outlier under host memory pressure|",
+     "|Rust char tokenizer|`346.601`|`296.710`|`9.9x` faster than SQL when warm|",
+     "|SQL word tokenizer (`pdb.icu` input)|`3373.882`|`3340.056`|Same tokenizer input as Rust below|",
+     "|Rust word tokenizer (`pdb.icu` input)|`773.751`|`635.176`|`5.3x` faster than SQL when warm|",
+     "|Rust word tokenizer (plain text)|`402.054`|`241.737`|Input mode without `pdb.icu` conversion|",
+     "|SQL regex token UDF|`1896.137`|`1815.796`|20,000 queries|",
+     "|Rust regex token UDF|`6.552`|`6.323`|`287x` faster than SQL when warm|",
+     "|SQL `pdb.query` builder|-|`1929.006`|`sql_pinyin_regex_phrase(query)`|",
+     "|Rust `pdb.query` builder|-|`22.151`|`pinyin_regex_phrase(query)`|"
+    ]
+   ],
+   [
+    "equal",
+    1222,
+    1225,
+    1122,
+    1125
+   ],
+   [
+    "replace",
+    1225,
+    1229,
+    1125,
+    1129,
+    [
+     "|Scenario|Best|Median|Checksum|",
+     "|---|---:|---:|---:|",
+     "|Rust|`3.489`|`3.533`|`219996`|",
+     "|Python|`34.677`|`35.724`|`219996`|"
+    ]
+   ],
+   [
+    "equal",
+    1229,
+    1232,
+    1129,
+    1132
+   ],
+   [
+    "replace",
+    1232,
+    1236,
+    1132,
+    1136,
+    [
+     "|Scenario|Best|Median|Best per query|Result checksum|",
+     "|---|---:|---:|---:|---:|",
+     "|Python client parse + `text[]` patterns|`11420.440`|`12274.454`|`571.022` us|`13336444`|",
+     "|Rust in-Postgres parse|`11549.828`|`12339.904`|`577.491` us|`13336444`|"
+    ]
+   ],
+   [
+    "equal",
+    1236,
+    1240,
+    1136,
+    1140
+   ],
+   [
+    "replace",
+    1240,
+    1248,
+    1140,
+    1141,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1248,
+    1262,
+    1141,
+    1155
+   ],
+   [
+    "replace",
+    1262,
+    1263,
+    1155,
+    1156,
+    [
+     "- CN115905297A: 一种支持拼音检索和排序的方法及系统"
+    ]
+   ],
+   [
+    "equal",
+    1263,
+    1270,
+    1156,
+    1163
+   ],
+   [
+    "replace",
+    1270,
+    1275,
+    1163,
+    1164,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1275,
+    1279,
+    1164,
+    1168
+   ],
+   [
+    "replace",
+    1279,
+    1282,
+    1168,
+    1171,
+    [
+     "- Character readings: mozillazg/pinyin-data.",
+     "- Boundary-preserving phrases: mozillazg/phrase-pinyin-data and CC-CEDICT contributors / MDBG. See data notices.",
+     "- Historical pre-P0 joined word data came from tsroten/dragonmapper; it is only a coverage baseline. Restoration uses pinned raw CC-CEDICT syllables, not guessed segmentation of this joined data."
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "16a221f71262+2": {
+  "fn": "jarredhj0214/linesql",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    9,
+    4,
+    9,
+    [
+     "Maven",
+     "Maven Central",
+     "License",
+     "Java",
+     "ANTLR4"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    24,
+    9,
+    24
+   ],
+   [
+    "replace",
+    24,
+    30,
+    24,
+    25,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    60,
+    25,
+    55
+   ],
+   [
+    "replace",
+    60,
+    69,
+    55,
+    56,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    77,
+    56,
+    64
+   ],
+   [
+    "replace",
+    77,
+    84,
+    64,
+    65,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    110,
+    65,
+    91
+   ],
+   [
+    "replace",
+    110,
+    118,
+    91,
+    99,
+    [
+     "|Use case|What LineSQL provides|",
+     "|---|---|",
+     "|Data catalog ingestion|Source tables, target tables, affected tables, and parser diagnostics|",
+     "|Column-level lineage|Projection, insert, CTAS, view, update, and merge dependencies where supported|",
+     "|Impact analysis|Downstream table and column dependencies from SQL scripts|",
+     "|Data governance|Clause-level usages for filters, grouping, ordering, and DML predicates|",
+     "|SQL inventory|Statement type, dialect, parse warnings, and unsupported SQL visibility|",
+     "|Migration assessment|Dialect detection and case-backed compatibility checks|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    133,
+    99,
+    114
+   ],
+   [
+    "replace",
+    133,
+    139,
+    114,
+    120,
+    [
+     "|Project type|Primary goal|Best fit|LineSQL difference|",
+     "|---|---|---|---|",
+     "|Query planner and optimizer|Validate, transform, and optimize relational plans|Engines, optimizers, federated query layers|LineSQL avoids planning and focuses on practical lineage output|",
+     "|General SQL parser|Parse SQL syntax into generic AST structures|SQL editors, simple analyzers, generic tooling|LineSQL returns a lineage model directly instead of only AST nodes|",
+     "|SQL transpiler|Convert SQL across dialects|Migration and dialect conversion|LineSQL focuses on source-to-target lineage, diagnostics, and production scripts|",
+     "|LineSQL|Extract table and column lineage from platform SQL|Catalogs, governance, quality, metadata, impact analysis|JVM-native, multi-dialect, lineage-first, case-backed|"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    144,
+    120,
+    125
+   ],
+   [
+    "replace",
+    144,
+    145,
+    125,
+    126,
+    [
+     "Current version: 1.4.0"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    154,
+    126,
+    135
+   ],
+   [
+    "replace",
+    154,
+    157,
+    135,
+    138,
+    [
+     "Detailed compatibility is case-backed and tracked in Supported Scenarios.",
+     "Grammar-domain coverage and development priorities are tracked in Grammar Coverage Matrix.",
+     "Case coverage and benchmark methodology are tracked in Benchmark and Coverage."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    138,
+    139
+   ],
+   [
+    "replace",
+    158,
+    169,
+    139,
+    150,
+    [
+     "|Dialect|Status|Auto Detection|Table Lineage|Column Lineage|Column Usage|",
+     "|---|---|---|---|---|---|",
+     "|Spark|Active parser|Yes|Broad production SQL coverage|Positional writes, recursive CTEs, correlated projections, windows, and dynamic SQL from literal session values|Predicate, join, merge, grouping, ordering, and named/inline window usages|",
+     "|MySQL|Active parser|Yes|Broad SELECT, DML, DDL, transaction, account, admin, and lifecycle statement coverage|Direct mappings, recursive CTEs, correlated projections, and directional JOIN USING keys|Common predicate and clause usages|",
+     "|Hive|Active parser|Yes|SELECT, DML, multi-insert, Iceberg time travel and maintenance, view/materialized-view lifecycle, metadata/control, storage/layout DDL, constraints, maintenance, lateral view, sampling, grouping, and named-window coverage|Direct mappings, branch-specific multi-insert mappings, view/CTAS mappings, lateral-view generated columns, collections, aggregates, and common expressions|Predicate, merge, sampling, grouping, ordering, named window, table-model, and layout usages|",
+     "|Flink|Active parser|Yes|SELECT, TABLE queries, DML, default/Hive-compatible DDL, connector/CDC DDL, materialized table, SQL Client utility, temporal join, window TVF, and MATCH_RECOGNIZE coverage|Direct mappings, common expressions, TVF generated columns, window TVF sink mappings, named CTAS ordering, merged JOIN USING keys, and pattern measures|Common predicate, grouping, window descriptor, temporal join, pattern, and clause usages|",
+     "|StarRocks|Active parser|Yes|Broad SELECT, DML, DDL, temporary partitions, recursive CTEs, load, `FILES`, `native_query`, warehouse, lifecycle, proc-path, and vertical-output metadata statement coverage|Direct mappings and common expressions, including configured catalog and schema through CTEs, and external table-function alias-column load mappings|Predicate, clause, metadata/statistics, index, and table-model usages|",
+     "|Oracle|Active parser|Yes|Common SELECT, recursive factoring, vector search and schema, data dictionary views, TABLE(function)/JSON_TABLE/XMLTABLE sources, MATCH_RECOGNIZE, Oracle Text search, DML, DDL, ALTER TABLE maintenance, locking read/control, synonym/DBLink/directory object references, table privilege grants, routine/package lifecycle, DBMS_STATS metadata calls, and PL/SQL block envelope coverage|Direct mappings, common expressions, and MATCH_RECOGNIZE measures|Common predicate, text-search predicate, clause, window, and pattern usages|",
+     "|SQL Server|Active parser|Yes|Common SELECT, temporal-table reads, recursive CTEs, vector search, embeddings, DML, table variables, table-valued/external query functions, external table/data-source/file-format objects, OPENJSON/OPENXML schema columns, DML OUTPUT capture, PIVOT/UNPIVOT relation and generated-column lineage, transaction/session control, backup/restore utilities, DBCC and `sp_*` metadata handling, privilege DDL, synonym object references, sequence/routine/trigger lifecycle with static routine-body table references, and index option coverage|Direct mappings, common expressions, sequence generated values, PIVOT aggregate columns, OPENJSON/OPENXML derived columns, and UNPIVOT generated columns|Common predicate, full-text predicate, and clause usages|",
+     "|PostgreSQL|Active parser|Yes|SELECT, DML, EXPLAIN wrappers, CTAS, VIEW, `ON CONFLICT`, `RETURNING`, `MERGE`, result limiting/pagination, natural and lateral joins, generated columns, table constraints, partition/inheritance DDL, ALTER TABLE column/constraint maintenance, schema/routine/trigger/extension DDL, privilege/default-privilege statements, foreign data wrapper objects, table maintenance/locking, routine, notification, and session control, SQL/XML and JSON/array expressions, and pgvector operators|Direct mappings, generated column expressions, recursive traversal, DML row images, common expressions, `DISTINCT ON`, aggregate `FILTER`, ordered-set aggregates, grouping extensions, lateral derived columns, window frames, named windows|Predicate, merge, grouping, window, table-model, and clause usages|",
+     "|OceanBase|Compatibility-mode parser|Yes|MySQL-mode and Oracle-mode SELECT, DML, DDL, constraints, DBLink, directory, sequence, synonym, package/block envelopes, flashback query, OUTFILE export, locking read, transaction control, EXPLAIN, outline, partition, set-operation, CTE, aggregate, window, hint, MERGE, resource, tenant, tablegroup, cluster zone/server, backup/restore control, and proxy-control coverage|Direct mappings and common expressions through compatibility modes|Predicate, join, merge, DBLink, flashback, and compatibility-mode clause usages|"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    172,
+    150,
+    153
+   ],
+   [
+    "replace",
+    172,
+    173,
+    153,
+    154,
+    [
+     "The regression corpus covers all nine dialects. SQL case files and manifest expectations live under each dialect module. The benchmark table reports the current counts."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    176,
+    154,
+    157
+   ],
+   [
+    "replace",
+    176,
+    190,
+    157,
+    171,
+    [
+     "|Module|Description|",
+     "|---|---|",
+     "|`linesql-all`|Aggregate dependency for core plus all bundled dialect parsers|",
+     "|`linesql-core`|Public model, facade API, parser SPI, statement splitter, dialect detector, diagnostics|",
+     "|`linesql-dialect-spark`|Spark SQL parser and lineage visitor|",
+     "|`linesql-dialect-mysql`|MySQL parser module|",
+     "|`linesql-dialect-hive`|Hive parser module|",
+     "|`linesql-dialect-flink`|Flink parser module|",
+     "|`linesql-dialect-starrocks`|StarRocks parser module|",
+     "|`linesql-dialect-oracle`|Oracle parser module|",
+     "|`linesql-dialect-sqlserver`|SQL Server parser module|",
+     "|`linesql-dialect-postgresql`|PostgreSQL parser for common lineage, DML, DDL, maintenance, routine, and control SQL|",
+     "|`linesql-dialect-oceanbase`|OceanBase MySQL/Oracle compatibility-mode parser module|",
+     "|`linesql-cli`|Command-line JSON output|"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    209,
+    171,
+    190
+   ],
+   [
+    "replace",
+    209,
+    217,
+    190,
+    191,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    238,
+    191,
+    212
+   ],
+   [
+    "replace",
+    238,
+    243,
+    212,
+    213,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    251,
+    213,
+    221
+   ],
+   [
+    "replace",
+    251,
+    257,
+    221,
+    222,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    257,
+    265,
+    222,
+    230
+   ],
+   [
+    "replace",
+    265,
+    275,
+    230,
+    231,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    283,
+    231,
+    239
+   ],
+   [
+    "replace",
+    283,
+    292,
+    239,
+    240,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    298,
+    240,
+    246
+   ],
+   [
+    "replace",
+    298,
+    310,
+    246,
+    258,
+    [
+     "|Field|Meaning|",
+     "|---|---|",
+     "|`version`|Output model version|",
+     "|`dialect`|Selected SQL dialect|",
+     "|`dialectConfidence`|Auto-detection confidence|",
+     "|`dialectDetectionReason`|Why the dialect was selected|",
+     "|`statementType`|Statement category such as `SELECT`, `INSERT`, `CREATE_TABLE`, `CREATE_SCHEMA`, `CREATE_ROUTINE`, `CONTROL`|",
+     "|`inputTables`|Source tables|",
+     "|`outputTables`|Target or affected tables|",
+     "|`columnLineage`|Projection lineage edges from source columns to target columns|",
+     "|`columnUsages`|Non-projection column usages such as `WHERE`, `GROUP_BY`, `HAVING`, `ORDER_BY`, `READ_METADATA`, `INDEX`, `TABLE_MODEL`|",
+     "|`diagnostics`|Parser warnings and errors|"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    317,
+    258,
+    265
+   ],
+   [
+    "replace",
+    317,
+    372,
+    265,
+    266,
+    [
+     "…（55 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    418,
+    266,
+    312
+   ],
+   [
+    "replace",
+    418,
+    419,
+    312,
+    313,
+    [
+     "When adding a scenario, update both the manifest and Supported Scenarios."
+    ]
+   ],
+   [
+    "equal",
+    419,
+    421,
+    313,
+    315
+   ],
+   [
+    "replace",
+    421,
+    432,
+    315,
+    316,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    432,
+    442,
+    316,
+    326
+   ],
+   [
+    "replace",
+    442,
+    450,
+    326,
+    334,
+    [
+     "- Architecture Vision",
+     "- Benchmark and Coverage",
+     "- Supported Scenarios",
+     "- Spark Stage 1",
+     "- Development",
+     "- Launch and Community Notes",
+     "- License Policy",
+     "- Third-party Notices"
+    ]
+   ],
+   [
+    "equal",
+    450,
+    452,
+    334,
+    336
+   ],
+   [
+    "replace",
+    452,
+    457,
+    336,
+    337,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    457,
+    458,
+    337,
+    338
+   ],
+   [
+    "replace",
+    458,
+    460,
+    338,
+    339,
+    [
+     "LineSQL is released under the Apache License 2.0. Third-party grammar and dependency provenance is tracked in Third-party Notices and License Policy."
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "da846ca35f43+2": {
+  "fn": "powertime-org/pgdeclare",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Why we built it: Your Database Schema Should Be Code You Can Read."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    12,
+    5,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "A diff cannot infer everything, such as a rename or a backfill. For those you write small imperative `@migrate-before` / `@migrate-after` blocks next to the DDL they belong to. Each runs once per database and is recorded in a hash ledger, so an edit after it ran is refused rather than silently ignored. Destructive changes on tables that hold data need an explicit `@drop` directive. Migrations that have run can be pruned so they don't pile up. History still exists, in git, where history belongs."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "The schema files are built into a scratch plan database and introspected. Pending @migrate-before blocks run on the live database, which is then introspected. The two are diffed, the difference is applied, @migrate-after and DO blocks run, and a second diff must come back empty."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "Status: **0.3.0.** The engine has run the production schema of Powertime since it went into service on 10 December 2025. Backwards compatibility may not be preserved until 1.0."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    55,
+    17,
+    55
+   ],
+   [
+    "replace",
+    55,
+    61,
+    55,
+    56,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    69,
+    56,
+    64
+   ],
+   [
+    "replace",
+    69,
+    74,
+    64,
+    65,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    82,
+    65,
+    73
+   ],
+   [
+    "replace",
+    82,
+    93,
+    73,
+    74,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    97,
+    74,
+    78
+   ],
+   [
+    "replace",
+    97,
+    98,
+    78,
+    79,
+    [
+     "Every command, flag and exit code is in docs/cli.md; the library API is in docs/python.md."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    79,
+    82
+   ],
+   [
+    "replace",
+    101,
+    107,
+    82,
+    88,
+    [
+     "- Command line: flags, exit codes, `--prove`.",
+     "- Python API: the library entry points and their errors.",
+     "- Schema files: directory layout, `@migrate-before` / `@migrate-after`, `@drop`, `DO` blocks.",
+     "- Coverage: every object kind pgdeclare manages, how, and what it leaves alone.",
+     "- Configuration: every `PgDeclareConfig` field.",
+     "- Safety: previews, `--prove`, online/offline/blocked changes, quoting, masking, and the supported PostgreSQL versions (14 to 18)."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    109,
+    88,
+    90
+   ],
+   [
+    "replace",
+    109,
+    112,
+    90,
+    91,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    91,
+    92
+   ],
+   [
+    "replace",
+    113,
+    117,
+    92,
+    93,
+    [
+     "Apache License 2.0. See LICENSE and NOTICE."
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

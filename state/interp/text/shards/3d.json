@@ -3774,5 +3774,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7cdbebd21eac": {
+  "identity": {
+   "one_liner": "本地运行的 MongoDB MCP 服务器，通过自然语言执行查询、聚合与运维操作",
+   "review": "MongoDB Lens 是一个实现 Model Context Protocol 的本地服务器，连接 MongoDB 数据库，供 Claude Desktop、Cursor 等 MCP 客户端以自然语言执行查询、聚合、索引管理和性能分析。提供 40 余个工具、12 类资源和 14 个提示模板，破坏性操作需两步确认，支持 NPX、Docker 及源码方式运行。",
+   "highlights": [
+    "提供 40 余个 MCP 工具，涵盖文档查询、聚合管道、索引管理、事务、GridFS、地理与全文检索等操作",
+    "内置两步确认机制保护删除文档、删除集合等破坏性操作，并支持可配置的查询限制",
+    "可通过 NPX、Docker Hub 或源码运行，兼容 Node.js v18.x 以上及新旧 MongoDB 版本"
+   ],
+   "use_cases": [
+    "通过 MCP 客户端用自然语言查询和操作 MongoDB 数据库",
+    "使用 explain、schema 分析与查询模式分析等工具辅助查询调优",
+    "以 JSON 或 CSV 导出查询结果，或通过 SQL 转聚合管道的提示模板迁移查询"
+   ]
+  },
+  "sha": "7cdbebd21eac",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "60862420e196": {
+  "identity": {
+   "one_liner": "单 Go 二进制的 MySQL CDC 工具，解析 binlog 并同步到 MySQL/Kafka/RocketMQ",
+   "review": "gocdc-mysql 是用 Go 编写的 MySQL 变更数据捕获工具，通过解析 binlog 将行变更写入 MySQL、Kafka 或 RocketMQ。单进程支持最多 64 个 MySQL 源，依赖 etcd 实现 leader 选举与位点存储，内置全量快照加增量追平、DDL 审批流程、字段脱敏和内嵌 Web 控制台。部署为一个进程，需 Go 1.24+ 与外部 etcd；提供 at-least-once 投递，依赖 event_id 去重。",
+   "highlights": [
+    "提供全量一致性快照（FTWRL / LOCK INSTANCE FOR BACKUP）加 binlog 增量追平的一体化同步",
+    "基于 etcd leader 选举实现主备切换，位点与快照标记存储于 etcd",
+    "支持 pause/auto 白名单/ignore 三种 DDL 处理模式，DROP/RENAME 类 DDL 始终需要审批"
+   ],
+   "use_cases": [
+    "将行变更为 JSON 事件发布到 Kafka/RocketMQ，供下游服务按主键有序消费",
+    "多源 MySQL 到单一目标库的聚合复制，含幂等 upsert 写入",
+    "近零停机迁移：快照加增量追平后运行采样对账 API 验证一致性"
+   ]
+  },
+  "sha": "60862420e196",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

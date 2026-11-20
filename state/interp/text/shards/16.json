@@ -3683,5 +3683,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ee9cdb79cb0d": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的分析工程技能集，通过 exmergo-dex-core 引擎执行 explore/transform/maintain 循环",
+   "review": "Dex 是由 Exmergo 开发的 Agent Skills 集合，让 Claude Code、Codex 等代理探索数据库、编写 dbt 模型与语义层定义，并在数据源变化时检测漂移。其底层为 exmergo-dex-core 引擎，源数据只读、构建限定 dev target、查询前先报价费用，变更以可审查 diff 形式写入仓库。需 uv 0.13.4+ 且依赖本地 shell，不支持 claude.ai 聊天环境。",
+   "highlights": [
+    "支持 Snowflake、BigQuery、Databricks、Redshift、Postgres、DuckDB、ClickHouse、Trino 八种连接器，每次扫描先估算费用并设上限，凭证不进入代理上下文",
+    "提供三个技能：explore（列画像、PII 标记、ER 图、带个人数据防火墙的查询）、transform（以审查计划生成模型/测试/指标）、maintain（对比快照检测 schema、体量、粒度、指标定义漂移）",
+    "提供 --mode demo 模式，在无网络与云账号条件下生成含预置缺陷（重复加载、混合 id 格式、虚假连接键等）的 DuckDB 演示仓库"
+   ],
+   "use_cases": [
+    "在 Claude Code 或 Codex 中让代理针对现有数仓探索表结构与连接关系并编写 dbt 模型",
+    "数据源 schema 变更后，对受影响的模型与指标定义进行漂移检测并审查建议修改",
+    "通过 demo 模式在离线环境中演示或测试代理驱动的分析工程流程"
+   ]
+  },
+  "sha": "ee9cdb79cb0d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7429431ee2c8": {
+  "identity": {
+   "one_liner": "Rust 编写的低延迟分布式缓存，兼容 RESP3/Redis 客户端协议",
+   "review": "Ember 是一个用 Rust 编写的分布式内存缓存服务器，实现 RESP3 协议，可直接使用 redis-cli 和现有 Redis 客户端连接。面向需要缓存服务的场景，内置集群模式（16384 哈希槽、SWIM gossip）、AOF 与快照持久化、Prometheus 指标及可选的 TLS 与静态加密。未实现 Lua 脚本、Streams、多数据库和 Bitfield，跨分片 RENAME 会返回错误，事务仅在单分片内原子。",
+   "highlights": [
+    "实现 RESP3 协议与字符串、列表、哈希、集合、有序集合、位图等 Redis 命令子集，支持 MULTI/EXEC 事务和 ACL 用户权限控制",
+    "集群模式将键分布在 16384 个哈希槽上，使用 SWIM gossip 传播成员与槽所有权，支持 MOVED/ASK 重定向和在线槽迁移",
+    "提供 AOF 与快照持久化、可选 AES-256-GCM 静态加密（--features encryption）、可选 HNSW 向量相似度搜索（--features vector）和 gRPC 端口"
+   ],
+   "use_cases": [
+    "作为缓存服务替代现有 Redis 客户端接入，使用 redis-cli 或兼容客户端读写键值数据",
+    "需要多节点分布式部署时，通过 3 节点集群（make cluster）将键按哈希槽分布并获得故障转移",
+    "需要持久化与监控的场景：启用 AOF/快照保存数据，通过 --metrics-port 暴露 Prometheus 指标，配合 SLOWLOG 排查慢命令"
+   ]
+  },
+  "sha": "7429431ee2c8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "06a939282c5b": {
+  "identity": {
+   "one_liner": "基于浏览器 Cookie 的 X 媒体下载器，媒体与元数据统一存入 SQLite 画廊数据库",
+   "review": "xdl 是一个 Python CLI 工具，通过 auth_token 和 ct0 两个浏览器 Cookie 登录 X，无需开发者账号或 API Key，下载用户媒体、喜欢列表及单条/批量推文中的图片、GIF 和视频。当前版本仅支持 SQLite 单文件存储，媒体以 BLOB 形式保存在 .db 中，需用 export 命令导出普通文件；可选安装 AI 扩展后提供 CLIP 语义搜索和重复检测。要求 Python 3.10+。",
+   "highlights": [
+    "支持用户时间线/Media 标签、喜欢列表、单条与批量推文下载，默认增量扫描并支持中断续传，可按媒体类型、日期范围、转推与引用过滤",
+    "媒体、用户、推文、缩略图、游标与去重数据集中存于单个 SQLite 数据库，可导出普通文件夹或只读 .xgal 画廊",
+    "提供 Vue Web 画廊（本机监听 127.0.0.1）、SHA-256/dHash/CLIP 三级重复检测，以及 CLIP 文搜图与以图搜图"
+   ],
+   "use_cases": [
+    "归档指定 X 账号或喜欢列表中的图片、GIF 与视频，并增量同步更新",
+    "在本机浏览、搜索、收藏和管理已下载的 X 媒体库，或导出 .xgal 便携分享",
+    "批量清理重复媒体，或通过 CLIP 语义搜索检索已存档的图片内容"
+   ]
+  },
+  "sha": "06a939282c5b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ca511311b047": {
+  "identity": {
+   "one_liner": "本机优先的抖音续火控制台，按固定时刻自动发送每日消息",
+   "review": "Flame Contractor 是一个部署在本机的抖音定时消息工具，用于每日向指定好友或群聊发送一条消息以维持连续互动记录。基于 FastAPI、Playwright 与 SQLite 构建，支持多账号、扫码登录与模板文案。适用于单人少量好友的低频发送场景，README 明确其非群发或营销工具，并提示浏览器自动化可能违反平台服务条款。",
+   "highlights": [
+    "支持多账号管理，各账号拥有独立浏览器 Profile 与调度，扫码登录态持久化在本地",
+    "每日同一好友仅发送一次，结果无法确认时标记待人工复核且不自动重发",
+    "接入 Bark 分级推送登录失效、待复核等异常；提供只读会话扫描与五类对账"
+   ],
+   "use_cases": [
+    "单人维护少量抖音好友的每日连续互动消息",
+    "Windows 桌面安装包免 Docker 使用，或 Docker 常驻实现 24 小时定时发送",
+    "通过只读演示实例在无抖音账号的情况下查看界面功能"
+   ]
+  },
+  "sha": "ca511311b047",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

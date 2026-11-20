@@ -32588,5 +32588,1787 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "8a5c1dfbc8f6+2": {
+  "fn": "ralforion/orionbelt-analytics",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    1,
+    [
+     "OrionBelt Logo"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    1,
+    2
+   ],
+   [
+    "replace",
+    5,
+    6,
+    2,
+    3,
+    [
+     " OrionBelt® Analytics "
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    3,
+    4
+   ],
+   [
+    "replace",
+    7,
+    8,
+    4,
+    5,
+    [
+     " The Ontology-based MCP server for your Text-2-SQL convenience. "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    5,
+    6
+   ],
+   [
+    "replace",
+    9,
+    14,
+    6,
+    11,
+    [
+     "Version 2.3.1",
+     "Python 3.13+",
+     "License: BUSL-1.1",
+     "FastMCP 4.0.5+",
+     "RDF/OWL"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    11,
+    12
+   ],
+   [
+    "replace",
+    15,
+    23,
+    12,
+    20,
+    [
+     "BigQuery",
+     "PostgreSQL",
+     "Snowflake",
+     "ClickHouse",
+     "Dremio",
+     "Databricks",
+     "DuckDB",
+     "MySQL"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    20,
+    21
+   ],
+   [
+    "replace",
+    24,
+    27,
+    21,
+    24,
+    [
+     "Docker Hub",
+     "Docker pulls",
+     "Image size"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    32,
+    24,
+    29
+   ],
+   [
+    "replace",
+    32,
+    38,
+    29,
+    35,
+    [
+     "|Project|Purpose|",
+     "|------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|",
+     "|**OrionBelt Analytics** (this)|Schema analysis, ontology generation, GraphRAG, Text-to-SQL|",
+     "|**OrionBelt Semantic Layer**|Declarative YAML models compiled into dialect-specific, fan-trap-free SQL|",
+     "|**OrionBelt Ontology Builder**|Visual OWL ontology editor with reasoning and graph visualization (live demo)|",
+     "|**OrionBelt Chat**|AI chat UI for Analytics + Semantic Layer (Chainlit, multiple LLM providers)|"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    43,
+    35,
+    40
+   ],
+   [
+    "replace",
+    43,
+    46,
+    40,
+    41,
+    [
+     " OrionBelt Analytics Architecture"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    49,
+    41,
+    44
+   ],
+   [
+    "replace",
+    49,
+    50,
+    44,
+    45,
+    [
+     "- **GraphRAG** -- graph traversal (up to 12 hops) + ChromaDB vector embeddings for semantic schema discovery, run locally; a multilingual option lets questions in other languages find the schema (German *\"Umsatz\"* finds a column named *\"Net revenue\"*)"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    55,
+    45,
+    50
+   ],
+   [
+    "replace",
+    55,
+    56,
+    50,
+    51,
+    [
+     "- **MCP sampling** -- when the connected client supports sampling (e.g. OrionBelt Chat), `suggest_semantic_names` asks the host LLM to pre-fill rename suggestions for cryptic identifiers via `sampling/createMessage`, collapsing the previous review-then-apply flow into a single tool call. Clients without sampling support (e.g. Claude Desktop) silently fall back to the manual review path"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    63,
+    51,
+    58
+   ],
+   [
+    "replace",
+    63,
+    72,
+    58,
+    67,
+    [
+     "|Check|What it catches|",
+     "|---------------------------|-------------------------------------------------------------------------------------------------|",
+     "|**Table existence**|References to tables that don't exist in the schema|",
+     "|**Column existence**|References to columns not present in their table, ambiguous unqualified columns|",
+     "|**Join validity**|Missing join conditions (Cartesian products), join columns that don't match declared foreign keys|",
+     "|**Copies of a schema**|Joins from one prefixed copy of a schema into another (`OLD_ROOMS` to `NEW_BUILDING`)|",
+     "|**Type compatibility**|WHERE/ON comparisons between incompatible types (e.g. string vs. integer)|",
+     "|**Aggregation correctness**|SELECT columns missing from GROUP BY when aggregates are used|",
+     "|**Fan-trap detection**|Aggregations across multiple one-to-many joins that silently multiply results|"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    76,
+    67,
+    71
+   ],
+   [
+    "replace",
+    76,
+    77,
+    71,
+    72,
+    [
+     "2. When `execute_sql_query` is called, OBQC parses the SQL with sqlglot and validates every table, column, join, and aggregation against the ontology's schema model."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    79,
+    72,
+    74
+   ],
+   [
+    "replace",
+    79,
+    80,
+    74,
+    75,
+    [
+     "OBQC is fully deterministic -- no LLM calls, no probabilistic reasoning. It acts as a safety net that complements the LLM's SQL generation with hard structural guarantees. Errors **block query execution**; warnings are attached to the response for the LLM to act on. See OBQC documentation for the full rule reference, severity behavior, and annotation requirements."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    91,
+    75,
+    86
+   ],
+   [
+    "replace",
+    91,
+    92,
+    86,
+    87,
+    [
+     "> Requires **Python 3.13+** and **uv**."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    101,
+    87,
+    96
+   ],
+   [
+    "replace",
+    101,
+    102,
+    96,
+    97,
+    [
+     "See docs/configuration.md for all environment variables, transport options, and troubleshooting."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    121,
+    97,
+    116
+   ],
+   [
+    "replace",
+    121,
+    131,
+    116,
+    117,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    154,
+    117,
+    140
+   ],
+   [
+    "replace",
+    154,
+    155,
+    140,
+    141,
+    [
+     "OrionBelt works with LangChain, OpenAI Agents SDK, CrewAI, Google ADK, Vercel AI SDK, n8n, and ChatGPT Custom GPTs. See docs/integrations.md for setup examples."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    162,
+    141,
+    148
+   ],
+   [
+    "replace",
+    162,
+    171,
+    148,
+    157,
+    [
+     "|Tool|Description|",
+     "|-------------------|----------------------------------------------------------------------|",
+     "|`connect_database`|Connect to any supported database using `.env` credentials|",
+     "|`list_databases`|List the databases configured on the server, by name and description|",
+     "|`list_schemas`|List available schemas in the connected database|",
+     "|`reset_cache`|Clear cached schema and ontology data for the current session|",
+     "|`discover_schema`|Analyze schema structure with automatic GraphRAG + ontology generation|",
+     "|`get_table_details`|Get detailed column, key, and constraint info for a specific table|",
+     "|`cleanup_workspace`|Delete all workspace files for the current connection and start fresh|"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    174,
+    157,
+    160
+   ],
+   [
+    "replace",
+    174,
+    182,
+    160,
+    168,
+    [
+     "|Tool|Description|",
+     "|------------------------|---------------------------------------------------------------------|",
+     "|`generate_ontology`|Generate RDF/OWL ontology from schema with SQL mapping annotations|",
+     "|`suggest_semantic_names`|Detect abbreviations and cryptic names for business-friendly renaming|",
+     "|`apply_semantic_names`|Apply LLM-suggested semantic names and descriptions to ontology|",
+     "|`load_my_ontology`|Load a custom `.ttl` ontology file from an import folder|",
+     "|`validate_relationship`|Check a relationship against the data and record the verdict in the ontology|",
+     "|`download_artifact`|Download ontology or R2RML mapping as a Turtle file|"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    185,
+    168,
+    171
+   ],
+   [
+    "replace",
+    185,
+    190,
+    171,
+    176,
+    [
+     "|Tool|Description|",
+     "|-------------------|--------------------------------------------------------------------------|",
+     "|`sample_table_data`|Preview table data with row limit and injection protection|",
+     "|`execute_sql_query`|Execute SQL with OBQC validation, security checks, and fan-trap detection|",
+     "|`generate_chart`|Generate Plotly charts (bar, line, scatter, heatmap) with MCP-UI rendering|"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    193,
+    176,
+    179
+   ],
+   [
+    "replace",
+    193,
+    201,
+    179,
+    187,
+    [
+     "|Tool|Description|",
+     "|-------------------------|-------------------------------------------------------------------------|",
+     "|`graphrag_search`|Semantic search + schema overview (auto-initialized by `discover_schema`)|",
+     "|`graphrag_query_context`|Get optimized context for SQL generation (85-95% token reduction)|",
+     "|`graphrag_find_join_path`|Discover join paths between tables via graph traversal|",
+     "|`reachable_from`|Dimension-capable tables for an anchor grain (many-to-one closure)|",
+     "|`measurable_from`|Measure-capable tables for an anchor grain (one-to-many closure)|",
+     "|`plan_composite_query`|Advise a fan-trap-safe Composite Fact Layer (UNION ALL) decomposition|"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    204,
+    187,
+    190
+   ],
+   [
+    "replace",
+    204,
+    209,
+    190,
+    195,
+    [
+     "|Tool|Description|",
+     "|-----------------------|---------------------------------------------------------------|",
+     "|`store_ontology_in_rdf`|Persist ontology in Oxigraph for SPARQL access|",
+     "|`query_sparql`|Execute SPARQL queries (SELECT, ASK, CONSTRUCT — auto-detected)|",
+     "|`add_rdf_knowledge`|Add custom metadata triples to the RDF store|"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    212,
+    195,
+    198
+   ],
+   [
+    "replace",
+    212,
+    217,
+    198,
+    203,
+    [
+     "|Tool|Description|",
+     "|----------------------|----------------------------------------------------------|",
+     "|`save_semantic_model`|Save a semantic model (e.g., OBML YAML) to the workspace|",
+     "|`get_semantic_model`|Retrieve a stored semantic model by name|",
+     "|`list_semantic_models`|List all stored semantic models for the current connection|"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    203,
+    204
+   ],
+   [
+    "replace",
+    218,
+    219,
+    204,
+    205,
+    [
+     "For full parameter details, return values, and examples, see docs/tools-reference.md."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    251,
+    205,
+    237
+   ],
+   [
+    "replace",
+    251,
+    252,
+    237,
+    238,
+    [
+     "`mypy` are the gates. The Development guide has the full"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    268,
+    238,
+    254
+   ],
+   [
+    "replace",
+    268,
+    278,
+    254,
+    264,
+    [
+     "|Document|Contents|",
+     "|--------------------------------------------------|-----------------------------------------------------------------------------|",
+     "|Tools Reference|Full parameter docs, return values, and usage examples|",
+     "|Configuration|Environment variables, transport setup, troubleshooting|",
+     "|GraphRAG|Graph-based schema intelligence and OBML workflow|",
+     "|OBQC Overview|Short explanation of how OBQC works inside OrionBelt Analytics|",
+     "|OBQC|Validation rules, severity levels, blocking behavior, annotation requirements|",
+     "|Fan-Trap Prevention|The fan-trap problem, detection, and safe SQL patterns|",
+     "|Integrations|LangChain, OpenAI, CrewAI, Google ADK, Vercel, n8n, ChatGPT|",
+     "|Development|Project structure, testing, contributing|"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    280,
+    264,
+    266
+   ],
+   [
+    "replace",
+    280,
+    289,
+    266,
+    267,
+    [
+     "Copyright 2025-2026 RALFORION d.o.o."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    291,
+    267,
+    269
+   ],
+   [
+    "replace",
+    291,
+    292,
+    269,
+    270,
+    [
+     "OrionBelt Analytics builds on open source. `THIRD_PARTY_NOTICES.md` lists every bundled dependency with its licence, and calls out the few that carry obligations beyond attribution (psycopg2's LGPL, wordfreq's CC-BY-SA data, the MPL-2.0 components)."
+    ]
+   ],
+   [
+    "equal",
+    292,
+    295,
+    270,
+    273
+   ],
+   [
+    "replace",
+    295,
+    296,
+    273,
+    276,
+    [
+     " <a href=\"https://ralforion.com\">",
+     " RALFORION d.o.o.",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    276,
+    277
+   ],
+   [
+    "replace",
+    297,
+    307,
+    277,
+    279,
+    [
+     " Copyright © 2026 RALFORION d.o.o. ",
+     " OrionBelt® is a registered trademark of RALFORION d.o.o."
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "ea07c986fb28+2": {
+  "fn": "IkhyeonJo/Maroik",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "|Role|Email|Password|Seeded by|"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    8,
+    6,
+    8,
+    [
+     "|Admin|`admin@maroik.com`|`demoO12!!`|`Debugging/Init.sql`|",
+     "|User (public demo)|`demo@maroik.com`|`demoO12!!`|`Debugging/Init.sql`, then `SeedDemo.sql`|"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    19,
+    8,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "1"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    20,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    25,
+    23,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    26,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    31,
+    29,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    34,
+    32,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    37,
+    35,
+    37
+   ],
+   [
+    "replace",
+    37,
+    39,
+    37,
+    39,
+    [
+     "image",
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    41,
+    39,
+    41
+   ],
+   [
+    "replace",
+    41,
+    42,
+    41,
+    42,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    44,
+    42,
+    44
+   ],
+   [
+    "replace",
+    44,
+    45,
+    44,
+    45,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    54,
+    45,
+    54
+   ],
+   [
+    "replace",
+    54,
+    55,
+    54,
+    55,
+    [
+     "|Choice|What it deploys|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    55,
+    56
+   ],
+   [
+    "replace",
+    56,
+    59,
+    56,
+    59,
+    [
+     "|`1` / `local` — build here|The source in the clone as it is (a clone on any branch, or source copied by hand). Builds the three app images on the server (release build, as CI does), asks how the site is reached (below) and starts the stack for it. No GitHub, no ghcr.io, no CI check; does not install `AutoDeploy.sh` (and removes it from the cron jobs).|",
+     "|`2` / `github` — GitHub|The newest `main` whose CI `publish` job succeeded: checks it out, pulls its three images from ghcr.io, starts the stack and installs `AutoDeploy.sh`, so merged changes reach production by themselves.|",
+     "|`3` — quit|Nothing.|"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    63,
+    59,
+    63
+   ],
+   [
+    "replace",
+    63,
+    64,
+    63,
+    64,
+    [
+     "|Answer|What runs|Arguments|"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    64,
+    65
+   ],
+   [
+    "replace",
+    65,
+    68,
+    65,
+    68,
+    [
+     "|No domain|The website on a port of this server (default 80) over plain HTTP — for a home network: passwords and sessions travel unencrypted. Also asks the address the mails link to (default `http://<LAN IP>[:port]/`).|`local nodomain [port] [address]`|",
+     "|Domain, Cloudflare Tunnel|cloudflared, no port opened (as choice 2). Needs `TUNNEL_TOKEN`.|`local tunnel <domain>`|",
+     "|Domain, port forwarding|Caddy on 80 / 443 with a Let's Encrypt certificate for `<domain>` and `www.<domain>` (asks the e-mail Let's Encrypt writes to). The router forwards 80 / 443 here and the domain's DNS points at the public IP.|`local portforward <domain> <e-mail>`|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    75,
+    68,
+    75
+   ],
+   [
+    "replace",
+    75,
+    76,
+    75,
+    76,
+    [
+     "|Item|What it is|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    76,
+    77
+   ],
+   [
+    "replace",
+    77,
+    80,
+    77,
+    80,
+    [
+     "|`.env.prod`|Passwords and settings: copy `.env.prod.example` and fill in the database, RabbitMQ and SMTP credentials, `TUNNEL_TOKEN` (Cloudflare Zero Trust > Networks > Tunnels > connector token; the tunnel only), `EXTERNAL_DRIVE_UUID` (`sudo blkid`), `EXTERNAL_DRIVE_MOUNT` (the folder the drive is mounted on) and `BACKUP_BASE_DIR`.|",
+     "|`Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql`|The database the stack starts from: a backup's `pg_dump`, or `Debugging/Init.sql` (same schema, demo data) on a new server. `SQL_Init_Script/SeedDemo.sql` (tracked, shared by both compose files) runs right after it and puts the demo account back to its sample data; other accounts are not touched.|",
+     "|`Maroik.FileStorage/upload/`|Uploaded attachments. Empty is allowed only on a new server: `Deploy.sh` asks first (`ALLOW_EMPTY_UPLOAD=1` skips the question).|"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    96,
+    80,
+    96
+   ],
+   [
+    "replace",
+    96,
+    104,
+    96,
+    97,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    114,
+    97,
+    107
+   ],
+   [
+    "replace",
+    114,
+    118,
+    107,
+    108,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    131,
+    108,
+    121
+   ],
+   [
+    "replace",
+    131,
+    144,
+    121,
+    122,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    160,
+    122,
+    138
+   ],
+   [
+    "replace",
+    160,
+    161,
+    138,
+    139,
+    [
+     " administrator sets (0 GB by default)"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    173,
+    139,
+    151
+   ],
+   [
+    "replace",
+    173,
+    174,
+    151,
+    152,
+    [
+     " worker through the mail queue"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    194,
+    152,
+    172
+   ],
+   [
+    "replace",
+    194,
+    195,
+    172,
+    173,
+    [
+     " totals, 30 free rows, columns A..Z (B..M months, N the year total, O..Z free)"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    196,
+    173,
+    174
+   ],
+   [
+    "replace",
+    196,
+    197,
+    174,
+    175,
+    [
+     " formula bar that colors references, matches parentheses and suggests functions"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    200,
+    175,
+    178
+   ],
+   [
+    "replace",
+    200,
+    201,
+    178,
+    179,
+    [
+     " `#REF!`, a circular reference `#CYCLE!`"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    179,
+    180
+   ],
+   [
+    "replace",
+    202,
+    203,
+    180,
+    181,
+    [
+     " cannot be stale); the Excel download writes the calculated values"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    224,
+    181,
+    202
+   ],
+   [
+    "replace",
+    224,
+    230,
+    202,
+    208,
+    [
+     " suggested class under the field; it is applied only when the user clicks it. A per-account text model — character",
+     " n-grams weighted by TF-IDF and a logistic regression over all classes (ML.NET) — learns from the user's own records (no data",
+     " leaves the server). The worker trains it when the records change (asked through RabbitMQ) and stores it in the file storage;",
+     " the web server only reads it, keeping a bounded number of models in memory. Measured with monthly retraining on the",
+     " newest records it was right 98.5 % (expenditures) and 98.4 % (incomes) of the time; naive Bayes reached 91 %, and a",
+     " \"same content as before\" rule in front of the model added nothing, so it was dropped."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    231,
+    208,
+    209
+   ],
+   [
+    "replace",
+    231,
+    232,
+    209,
+    210,
+    [
+     " currency (the box-plot rule on log amounts, groups of at least 8): 1.9 % of the records, against 4.8 % on raw amounts."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    210,
+    211
+   ],
+   [
+    "replace",
+    233,
+    234,
+    211,
+    212,
+    [
+     " is not a known code keeps every stored decimal."
+    ]
+   ],
+   [
+    "equal",
+    234,
+    246,
+    212,
+    224
+   ],
+   [
+    "replace",
+    246,
+    248,
+    224,
+    226,
+    [
+     " a binder, a tree-walking evaluator and a dependency graph (Tarjan / Kahn) in the Domain project. User text is never",
+     " compiled to code: it can only build a closed set of nodes and call the `FormulaFunctions` catalog."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    226,
+    227
+   ],
+   [
+    "replace",
+    249,
+    252,
+    227,
+    230,
+    [
+     " templates) are checked over every source with the Roslyn parser; memory-safety, security, culture and banned-API",
+     " (direct clock reads, sync-over-async) analyzers are build errors; one .NET SDK is pinned for `global.json`, every",
+     " Dockerfile and CI."
+    ]
+   ],
+   [
+    "equal",
+    252,
+    253,
+    230,
+    231
+   ],
+   [
+    "replace",
+    253,
+    256,
+    231,
+    234,
+    [
+     " time-ordered train / test splits and monthly retraining for the classifier, an exact significance test between close",
+     " candidates — and only what won was built. The measurements, the alternatives not taken and the known",
+     " limits are written down next to the code (`.claude/rules/finance.md`)."
+    ]
+   ],
+   [
+    "equal",
+    256,
+    263,
+    234,
+    241
+   ],
+   [
+    "replace",
+    263,
+    264,
+    241,
+    242,
+    [
+     "|When|Milestone|"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    242,
+    243
+   ],
+   [
+    "replace",
+    265,
+    297,
+    243,
+    275,
+    [
+     "|2021-05|Project starts as *MyLaboratory*: ASP.NET Core (2.1 → .NET 5) with MariaDB, run under docker-compose from the first week|",
+     "|2021-06|AdminLTE 3 layout, NonFactors MVC grid|",
+     "|2021-07|Excel export, registration with e-mail confirmation, password reset, separate admin / user dashboards, English / Korean localization (resx)|",
+     "|2021-08|Account book: assets, income, expenditure, fixed income / expenditure with deposit-day notices|",
+     "|2021-12|MariaDB 10.6|",
+     "|2022-07|User dashboard backend and charts for income and expenditure|",
+     "|2022-08|Public anonymous dashboard and landing pages; role-based navigation menu (Admin / User / Anonymous) stored in the database|",
+     "|2022-09|.NET 6|",
+     "|2022-10|Renamed to **Maroik**; Free Forum with Summernote editor and HTML sanitizing|",
+     "|2022-11|Forum comments, locked and notice posts; security headers|",
+     "|2023-03|.NET 7|",
+     "|2023-04|Income and expenditure statistics|",
+     "|2023-08|Global AJAX error handling; debugging docker-compose in VS Code|",
+     "|2024-02|.NET 8; dashboard breakdowns of each income / expenditure class|",
+     "|2024-04 – 09|Calendar (FullCalendar): calendars, events, reminders, sharing, browsing others' calendars|",
+     "|2024-05|Private notes, per-account time zones, default monetary unit, dashboard year / month selection|",
+     "|2024-09|Maroik.FileStorage service|",
+     "|2025-01|Attachments and inline images for forum posts, calendar events and private notes; server resource monitoring on the admin dashboard; Let's Encrypt certificates renewed automatically with Certbot|",
+     "|2025-03|.NET 9|",
+     "|2025-04|MariaDB → PostgreSQL|",
+     "|2025-05|DNS moved from AWS Route 53 to Cloudflare; ClamAV virus scanning of uploads; public demo account|",
+     "|2025-07|Database transactions for account-book writes|",
+     "|2025-08|BCrypt password hashing|",
+     "|2025-11|.NET 10; data access split into repositories and clients|",
+     "|2025-12|Project split into Core layers (Repository, Service, Client, PostgreSQL)|",
+     "|2026-04|Maroik.Core.Contract; first unit tests|",
+     "|2026-05 – 08|DDD + Clean Architecture refactor, ending with the Maroik.Core.Domain project; CI/CD with a coverage gate; Serilog|",
+     "|2026-07|Valkey (replacing Redis), RabbitMQ and the Maroik.Worker mail service|",
+     "|2026-09|Client scripts migrated to TypeScript; repository and E2E tests on real PostgreSQL (Testcontainers); a series of whole-solution reviews fixing race conditions and security gaps; strict TDD and logging rules; mutation testing (Domain 78 % → 92 %)|",
+     "|2026-09-28|Moved from the private repository to this public repository, where all development continues; the private repository's cleaned history was merged here in 2026-11 and the private repository deleted|",
+     "|2026-10|Service mutation score 70 % → 96 %; TLS ended at Cloudflare through a Cloudflare Tunnel; RSA replaced with ASP.NET Core Data Protection; memory-safety, logging-template, security and banned-API analyzers as build errors; admin and menu safeguards against locking administrators out; GitHub Actions CI (coverage gate, isolated E2E run), release-only minified client scripts, semver from Conventional Commits, images published to GHCR and pulled by the server; calendar reminders delivered by e-mail (scheduled by the domain, sent once a minute by the worker through the mail queue); one pinned .NET SDK with a weekly bump pull request; personal Kanban board; personal File Manager (chunked uploads, quotas, background virus scan, download progress); Income and Expenditure Budget sheets with an Excel-compatible formula engine; `Deploy.sh` hosting modes (Cloudflare Tunnel, port forwarding behind Caddy, no domain)|",
+     "|2026-11|Income and expenditure class suggestion with ML.NET (logistic regression on character n-grams, chosen over naive Bayes on the author's own records; trained by the worker, stored in the file storage); unusual-amount marks in the expenditure list; amounts shown in each currency's own decimals|"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    317,
+    275,
+    295
+   ],
+   [
+    "replace",
+    317,
+    338,
+    295,
+    296,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    341,
+    296,
+    299
+   ],
+   [
+    "replace",
+    341,
+    345,
+    299,
+    303,
+    [
+     " (finance class taxonomies, amounts and history, asset usage, reminder limits and schedules, calendar access, fixed",
+     " schedules, passwords, nicknames, sessions, admin and menu safeguards, uploads, File Manager quotas and names, Kanban",
+     " lanes) and the budget formula engine. It calls no other project, logs nothing, never reads the clock (the current time is passed in) and reports every error through",
+     " `DomainError`, so the outer layers can translate it."
+    ]
+   ],
+   [
+    "equal",
+    345,
+    346,
+    303,
+    304
+   ],
+   [
+    "replace",
+    346,
+    348,
+    304,
+    306,
+    [
+     " the transaction (each write that runs in one spells out `BeginAsync` / `CommitAsync` / `RollbackAsync`), maps to DTOs and logs. It",
+     " calls Repository and Client only through their Contract interfaces."
+    ]
+   ],
+   [
+    "equal",
+    348,
+    349,
+    306,
+    307
+   ],
+   [
+    "replace",
+    349,
+    351,
+    307,
+    309,
+    [
+     " Contract interfaces. Website controllers and views never call them; the Worker calls the SMTP client itself and",
+     " FileStorage calls the ClamAV client itself."
+    ]
+   ],
+   [
+    "equal",
+    351,
+    352,
+    309,
+    310
+   ],
+   [
+    "replace",
+    352,
+    353,
+    310,
+    311,
+    [
+     " JSON reply; views only render. The navigation menu doubles as the access-control list (`AuthorizationFilter`)."
+    ]
+   ],
+   [
+    "equal",
+    353,
+    354,
+    311,
+    312
+   ],
+   [
+    "replace",
+    354,
+    355,
+    312,
+    313,
+    [
+     " from a domain policy serialized into the page, and the server re-validates every write."
+    ]
+   ],
+   [
+    "equal",
+    355,
+    370,
+    313,
+    328
+   ],
+   [
+    "replace",
+    370,
+    381,
+    328,
+    329,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    381,
+    411,
+    329,
+    359
+   ],
+   [
+    "replace",
+    411,
+    414,
+    359,
+    362,
+    [
+     " - Improved performance",
+     " - Enhanced routing",
+     " - Better dependency injection"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    416,
+    362,
+    364
+   ],
+   [
+    "replace",
+    416,
+    419,
+    364,
+    367,
+    [
+     " - Improved query performance",
+     " - Better async support",
+     " - Enhanced change tracking"
+    ]
+   ],
+   [
+    "equal",
+    419,
+    420,
+    367,
+    368
+   ],
+   [
+    "replace",
+    420,
+    423,
+    368,
+    371,
+    [
+     " - Multi-stage builds",
+     " - Container orchestration",
+     " - Environment isolation"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    424,
+    371,
+    372
+   ],
+   [
+    "replace",
+    424,
+    426,
+    372,
+    374,
+    [
+     " - Session Authentication",
+     " - Role-based access control"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    438,
+    374,
+    386
+   ],
+   [
+    "replace",
+    438,
+    445,
+    386,
+    393,
+    [
+     " - The custom client scripts are authored in TypeScript at `Maroik.Website/TypeScripts/{admin,anonymous,user}/custom/**/site.ts` and compiled 1:1 by `tsc` to `Maroik.Website/wwwroot/**/custom/**/site.js` (no bundler, no Babel). The release build (`npm run build`, used by the Docker image) then minifies each `site.js` in place with terser; `npm run build:debug` leaves it readable with a source map.",
+     " - Compiled under `--strict`; each file is an IIFE-wrapped global script (no `import`/`export`).",
+     " - Scripts keep only DOM wiring, widget init, AJAX transport, and notifications — business logic lives in `Maroik.Core.*` (DDD + Clean Architecture). Client-side rule checks are UX mirrors; the server always re-validates.",
+     " - `wwwroot/**/site.js` is build output and git-ignored. Docker Compose builds generate it in the Dockerfile's Node stage; running the site on the host, or running the client-script tests, needs Node 22 + `npm ci` in `Maroik.Website/`.",
+     " - MSBuild runs `tsc` on `dotnet build` when `node_modules/` is present; Docker builds run it in a dedicated `node:22-alpine` stage.",
+     " - Unit-tested with Vitest + jsdom in `Maroik.Website/TypeScripts.Tests/` (one `*.test.ts` per script, exercising the compiled `site.js`).",
+     " - Details: `Maroik.Website/TypeScripts/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    445,
+    472,
+    393,
+    420
+   ],
+   [
+    "replace",
+    472,
+    473,
+    420,
+    421,
+    [
+     " code, and the log entries a use case must write are asserted like any other result."
+    ]
+   ],
+   [
+    "equal",
+    473,
+    474,
+    421,
+    422
+   ],
+   [
+    "replace",
+    474,
+    477,
+    422,
+    425,
+    [
+     " with the production schema and seed data (Testcontainers, one throwaway database per test class); messaging against",
+     " a real RabbitMQ 4; mail against an in-process SMTP server; controllers through `WebApplicationFactory` against a real",
+     " database; and the whole site in a real browser with Playwright."
+    ]
+   ],
+   [
+    "equal",
+    477,
+    478,
+    425,
+    426
+   ],
+   [
+    "replace",
+    478,
+    479,
+    426,
+    427,
+    [
+     " (`BeginAsync` / `CommitAsync` / `RollbackAsync`), the exact error code / key / type, and every `catch`'s log entry."
+    ]
+   ],
+   [
+    "equal",
+    479,
+    480,
+    427,
+    428
+   ],
+   [
+    "replace",
+    480,
+    482,
+    428,
+    430,
+    [
+     " (`ModelMatchesSchemaTests`); every message key a controller can receive must exist in its `en-US` and `ko-KR`",
+     " resources (`ServiceErrorKeyResxTests`); every localized text a page script reads must be rendered by its view."
+    ]
+   ],
+   [
+    "equal",
+    482,
+    483,
+    430,
+    431
+   ],
+   [
+    "replace",
+    483,
+    484,
+    431,
+    432,
+    [
+     " fail the build when broken."
+    ]
+   ],
+   [
+    "equal",
+    484,
+    485,
+    432,
+    433
+   ],
+   [
+    "replace",
+    485,
+    487,
+    433,
+    435,
+    [
+     " script, against fixtures that carry what the real views and replies carry. Guard tests keep `any` and type",
+     " assertions out of the TypeScript, and a compile probe proves that untyped library values are rejected."
+    ]
+   ],
+   [
+    "equal",
+    487,
+    488,
+    435,
+    436
+   ],
+   [
+    "replace",
+    488,
+    490,
+    436,
+    438,
+    [
+     " elements each of the site's own CSS rules targets on the real pages, after the AdminLTE / Bootstrap / FullCalendar",
+     " stylesheets they override, so a rule that is removed, outranked or no longer loaded fails a test."
+    ]
+   ],
+   [
+    "equal",
+    490,
+    491,
+    438,
+    439
+   ],
+   [
+    "replace",
+    491,
+    493,
+    439,
+    441,
+    [
+     " testing with Stryker.NET (Domain 96 %, Service 96 %, measured 2026-10-13 — the survivors left are equivalent mutants",
+     " or ones the MTP runner miscounts inside static field initializers)."
+    ]
+   ],
+   [
+    "equal",
+    493,
+    497,
+    441,
+    445
+   ],
+   [
+    "replace",
+    497,
+    498,
+    445,
+    446,
+    [
+     "|Tests|What they cover|Needs Docker|"
+    ]
+   ],
+   [
+    "equal",
+    498,
+    499,
+    446,
+    447
+   ],
+   [
+    "replace",
+    499,
+    509,
+    447,
+    457,
+    [
+     "|`Maroik.Core.Domain.Tests`, `Maroik.Core.Contract.Tests`|entities, policies, value objects, DTOs, the layering / package-reference architecture rules|no|",
+     "|`Maroik.Core.Service.Tests`|use-case orchestration (mocked repositories)|no|",
+     "|`Maroik.Core.Repository.Tests`|EF Core repositories against a real PostgreSQL 17 loaded from `Maroik.DB/.../Debugging/Init.sql`|yes|",
+     "|`Maroik.Core.PostgreSQL.Tests`|the EF model against the real schema of both init scripts (tables, columns, keys, foreign keys, indexes)|yes|",
+     "|`Maroik.Core.Client.Tests`|mail (in-process SMTP server), file storage, ClamAV, RabbitMQ publisher and health check (real RabbitMQ)|yes|",
+     "|`Maroik.Worker.Tests`|the e-mail consumer and the worker host, against a real RabbitMQ and an SMTP relay|yes|",
+     "|`Maroik.FileStorage.Tests`|the file-storage service|no|",
+     "|`Maroik.Website.Tests`|controllers, filters, views and start-up through `WebApplicationFactory` against a real PostgreSQL|yes|",
+     "|`Maroik.Website/TypeScripts.Tests`|every client script (Vitest + jsdom), run with `npm test` in `Maroik.Website/`|no|",
+     "|`Maroik.E2E.Tests`|the running site in a real browser (Playwright), including the computed styles of the site's own stylesheets over the vendor CSS|yes|"
+    ]
+   ],
+   [
+    "equal",
+    509,
+    528,
+    457,
+    476
+   ],
+   [
+    "replace",
+    528,
+    529,
+    476,
+    477,
+    [
+     "2. Open Maroik.slnx and build the solution; restart Rider when it asks (see Rider settings)"
+    ]
+   ],
+   [
+    "equal",
+    529,
+    556,
+    477,
+    504
+   ],
+   [
+    "replace",
+    556,
+    561,
+    504,
+    505,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    561,
+    566,
+    505,
+    510
+   ],
+   [
+    "replace",
+    566,
+    570,
+    510,
+    514,
+    [
+     " suite, every .NET test project one after another, then the E2E suite on its own (run side by side, the other projects'",
+     " Testcontainers change the Docker network under the browser), and the coverage gate (line >= 80 %, branch >= 65 %). It",
+     " also builds the Dockerfile's client-script stage both ways, so a pull request that breaks the image build fails before",
+     " it is merged: the release build must ship minified `site.js` without source maps, the debug build the opposite."
+    ]
+   ],
+   [
+    "equal",
+    570,
+    571,
+    514,
+    515
+   ],
+   [
+    "replace",
+    571,
+    573,
+    515,
+    517,
+    [
+     " FileStorage and Worker images with that version stamped into the assemblies, checks that the website image ships",
+     " minified scripts and no source maps, pushes the images to GHCR and tags the commit."
+    ]
+   ],
+   [
+    "equal",
+    573,
+    574,
+    517,
+    518
+   ],
+   [
+    "replace",
+    574,
+    575,
+    518,
+    519,
+    [
+     "**Versioning.** Semantic Versioning from Conventional Commits since the last"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    588,
+    519,
+    532
+   ],
+   [
+    "replace",
+    588,
+    597,
+    532,
+    533,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    597,
+    598,
+    533,
+    534
+   ],
+   [
+    "replace",
+    598,
+    600,
+    534,
+    535,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    600,
+    601,
+    535,
+    536
+   ],
+   [
+    "replace",
+    601,
+    603,
+    536,
+    537,
+    [
+     "This project is licensed under the MIT License - see the LICENSE file for details."
+    ]
+   ],
+   [
+    "equal",
+    603,
+    605,
+    537,
+    539
+   ],
+   [
+    "replace",
+    605,
+    606,
+    539,
+    540,
+    [
+     " (`TUNNEL_TOKEN`); `.env.prod.example` lists every setting with dummy values."
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

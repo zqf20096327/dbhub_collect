@@ -3214,5 +3214,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1d685e2bab0a": {
+  "identity": {
+   "one_liner": "S2 持久流 API 的仓库，含 CLI、可自托管服务端 s2-lite 与 Rust SDK",
+   "review": "该仓库实现了 S2 持久流（Durable Streams）API，包含 s2-cli 命令行工具、s2-lite 可自托管服务端和 Rust SDK。s2-lite 以 SlateDB 为存储引擎，数据持久化到对象存储或本地磁盘，也可纯内存运行用作集成测试模拟器；为单节点二进制，无其他外部依赖。适合需要在自有环境运行流式追加/读取服务的开发者。",
+   "highlights": [
+    "支持三种存储模式：S3 兼容桶、本地目录（--local-root）或纯内存运行，WAL 可与主存储分离配置",
+    "指向对象存储时，数据在确认写入和返回给读取方之前已持久化；提供 /health 与 Prometheus 格式的 /metrics 端点",
+    "提供 basins、streams、records 的 REST API，附 OpenAPI、Protobuf 与 S2S 流式会话协议规范，并有 TypeScript/Go/Rust/Python SDK"
+   ],
+   "use_cases": [
+    "通过对象存储（如 AWS S3、Tigris、R2）自托管持久流服务，按 basin/stream 追加和读取记录",
+    "以内存模式运行 S2 模拟器，用于集成测试",
+    "通过 Helm chart 部署 s2-lite 到 Kubernetes，使用 s2 bench 进行基准测试或流式会话演示"
+   ]
+  },
+  "sha": "1d685e2bab0a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9c080a9867c6": {
+  "identity": {
+   "one_liner": "基于 DuckDB 的本地优先数据工作台，整合文件导入、跨源 SQL 与 AI 问数",
+   "review": "DuckQuery 是一个基于 DuckDB 的本地优先数据工作台，面向临时对账、跨源核查和数据探索场景。它支持导入 CSV/Excel/Parquet/JSON 等文件，连接 MySQL/PostgreSQL/SQLite/Oracle 等数据库，在一条 SQL 中做跨源关联；提供可视化 JOIN/透视、图表、异步任务与导出。AI 功能需自配模型服务与 API Key，MCP 服务可接入 Claude Code 等工具。提供桌面版（Windows/macOS）、Docker 与浏览器演示，暂无 Linux 桌面包。",
+   "highlights": [
+    "支持本地文件（CSV/Excel/Parquet/JSON/JSONL）与 MySQL/PostgreSQL/SQLite/DuckDB/Oracle 远端库跨源关联查询",
+    "提供 text-to-SQL 智能体、SQL 解释与报错修复、图表建议，并支持 MCP 接入 Claude Code/Codex/Cursor 等客户端（read-only/normal/full 三种权限模式）",
+    "查询任务支持异步执行、转后台、取消与重试；结果可导出为 CSV/Excel/JSON/Parquet 或保存为 DuckDB 本地表"
+   ],
+   "use_cases": [
+    "用本地 Excel/CSV 与业务库数据做临时对账与跨源核查",
+    "通过可视化关联/透视或 AI 问数进行数据探索，减少手写 SQL",
+    "通过 MCP 让 AI 编程工具在限定权限下查询本地与远端数据"
+   ]
+  },
+  "sha": "9c080a9867c6",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5835cc50a8ed": {
+  "identity": {
+   "one_liner": "本地化 WHOOP 4.0 手环数据工具：逆向 BLE 协议采集，API 归档，本地仪表盘",
+   "review": "OpenVitals 是一套针对 WHOOP 4.0 手环的本地数据系统，通过逆向工程的 BLE 协议实时读取心率与 HRV，从手环存储补齐历史数据，并通过官方 OAuth API 拉取云端评分作归档；数据存入本地 SQLite，提供离线 localhost 仪表盘和加密备份。面向拥有该设备、用 Mac 的个人用户；协议可能随固件更新失效，Strain/Sleep/Recovery 为估算值，安装依赖 macOS launchd，不支持 WHOOP 5.0/MG。",
+   "highlights": [
+    "通过逆向 BLE 协议实现实时心率/HRV 流式读取，手环每秒自录数据，断连后由 daemon 自动补齐",
+    "通过官方 WHOOP API（OAuth）下载云端评分历史，按日历归档",
+    "提供离线 localhost 仪表盘、加密本地/云备份（Cloudflare D1/R2）、Telegram 通知和附带 agent skill 的安装流程"
+   ],
+   "use_cases": [
+    "在本地持续采集并备份自己 WHOOP 4.0 手环的心率、HRV、睡眠等数据",
+    "无需会员登录手环侧，查看实时心率与当日指标",
+    "通过 Claude Code 等 AI 编码代理按 skill 引导完成从零部署"
+   ]
+  },
+  "sha": "5835cc50a8ed",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a8026a770960": {
+  "identity": {
+   "one_liner": "C++ 从零编写的 MMORPG，配 YouTube 系列逐集讲解工程实现",
+   "review": "nanoMMO 是配合 YouTube 系列《Building an MMO: The Engineering Series》开发的 MMORPG，包含 C++ 服务端与 raylib 客户端。每集代码对应一个 git tag。架构上使用 MySQL 存账号、Redis 管登录与玩家存档、Consul 注册世界服务器、TLS 加密通信、protobuf 定义协议，Docker Compose 编排部署。文档按模块分页，涵盖网络、存档、监控、基准测试等主题。适合想了解 MMO 各环节实现的学习者。",
+   "highlights": [
+    "服务端与客户端均为 C++，客户端基于 raylib，协议通过 protobuf 定义，客户端可经 Emscripten 编译为浏览器 WebGL 2 版本",
+    "使用 MySQL、Redis、Consul、Flyway、Docker Compose 组成存储、登录、世界注册与部署基础设施，通信走 TLS",
+    "docs/ 目录按模块提供文档，每集代码以 git tag（如 ep001/end）标记，另含 Prometheus/Grafana 监控与 ClickHouse 分析"
+   ],
+   "use_cases": [
+    "按集学习 MMO 服务端、客户端与周边设施的具体实现步骤",
+    "搭建并运行一个包含登录、世界、存档、监控的完整游戏服务端环境",
+    "查阅各模块（网络、TLS、迁移、部署等）的实现文档与设计决策记录"
+   ]
+  },
+  "sha": "a8026a770960",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

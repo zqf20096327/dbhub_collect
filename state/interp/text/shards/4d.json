@@ -3037,5 +3037,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6c13e72d25f1": {
+  "identity": {
+   "one_liner": "面向 .NET 的 ADO.NET 扩展库，用流式命令简化 SQL 数据访问与对象映射",
+   "review": "Open.Database.Extensions (ODX) 提供 .NET 下的 ADO.NET 扩展方法与流式命令 API，用于简化连接管理、参数添加、行映射等数据访问代码，适合直接书写 SQL 的 .NET 开发者。核心机制是基于连接工厂的表达式命令、按名称匹配列与属性的 Map<T>() 映射，以及向 Channel/Dataflow 输送行数据的扩展包。版本 11 目前为 release candidate（11.0.0-rc.9），目标框架含 netstandard2.0/2.1 及 net10.0/net11.0。",
+   "highlights": [
+    "提供对任意 ADO.NET provider 的扩展方法与基于连接工厂的表达式命令，终态操作含 ExecuteNonQuery、ExecuteScalar、ToArray/ToList/FirstOrDefault",
+    "Map<T>() 按名称（忽略大小写与下划线）将列匹配到公共可写属性和构造函数参数，支持 RowMap<T> 声明列重命名映射",
+    "附带 Channel 与 Dataflow 扩展包，可将查询行流入 Channel<T> 或 TPL Dataflow 块；支持异步 API 与 stored procedure 调用"
+   ],
+   "use_cases": [
+    "在 .NET 项目中直接书写 SQL，希望由库处理连接开闭、参数与行到对象映射的场景",
+    "需要将数据库查询结果以异步流（IAsyncEnumerable）、Channel 或 Dataflow 方式消费的数据管道场景",
+    "使用存储过程或需控制事务开闭时机的 ADO.NET 数据访问代码"
+   ]
+  },
+  "sha": "6c13e72d25f1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "88f335712e12": {
+  "identity": {
+   "one_liner": "基于 Node.js/Express 与 PostgreSQL（Prisma ORM）的角色化人事管理系统",
+   "review": "这是一个用 Node.js、Express、PostgreSQL 与 Prisma ORM 构建的人事管理系统，提供 Admin、HR、Employee 三种角色及公告面板。项目仓库标签写的是 MySQL/jugglingdb，但 README 正文描述的数据库为 PostgreSQL+Prisma。支持 Docker Compose 部署与本地运行（Node 22+、PostgreSQL 16+），需先建会话表并执行种子数据；密码以 bcrypt 存储，登录名不唯一（同名最多 10 个账号可登录）。",
+   "highlights": [
+    "提供 Admin、HR、Employee 三种用户角色，分别对应管理 HR 用户、管理员工、查看个人信息与公告的能力",
+    "支持通过 Docker Compose 或本地 npm 方式运行，并提供建表、会话表创建、种子数据等 npm 脚本",
+    "密码使用 bcrypt 哈希存储（@node-rs/bcrypt），支持明文密码自动升级哈希，并提供登录频率限制与会话存入 PostgreSQL 的机制"
+   ],
+   "use_cases": [
+    "需要区分管理员、HR、员工三类角色权限的人事信息管理",
+    "向员工广播通知、更新或公告",
+    "通过 Docker 快速搭建带 PostgreSQL 后端的 Web 人事系统演示或部署环境"
+   ]
+  },
+  "sha": "88f335712e12",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f8d0bc7ee070": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Stream Video 的 AI 聊天助手与会议摘要应用",
+   "review": "meet-ai 是一个集成 OpenAI、Stream 视频与聊天、Polar 订阅付费的 Web 应用项目，提供会议通话、聊天与摘要功能，供需要自建 AI 会议助手服务的开发者部署使用。技术栈包含 Next.js、TypeScript、Drizzle ORM 与 Neon PostgreSQL、tRPC、Inngest，认证基于 Better Auth 并支持 GitHub/Google OAuth。运行需配置 GetStream、Polar、UploadThing 等多个外部服务的密钥。",
+   "highlights": [
+    "使用 Stream Video 与 Stream Chat 提供视频通话和聊天功能，并通过 Webhook 接收消息、参与者与通话事件通知",
+    "集成 OpenAI 与 @inngest/agent-kit，用于聊天助手与会议摘要处理",
+    "支持 Better Auth 认证（GitHub/Google OAuth）、Polar 订阅付费、UploadThing 文件上传，数据存储于 Neon PostgreSQL（Drizzle ORM 迁移）"
+   ],
+   "use_cases": [
+    "搭建带有视频会议与实时聊天功能的 AI 助手 Web 应用",
+    "作为学习 Next.js 15、tRPC、Drizzle ORM 与第三方服务集成的参考项目",
+    "在 Vercel 上部署并接入 Polar 订阅计费的 SaaS 原型开发"
+   ]
+  },
+  "sha": "f8d0bc7ee070",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

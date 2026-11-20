@@ -3172,5 +3172,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fdcf0991e8cd": {
+  "identity": {
+   "one_liner": "基于 Symfony 的 Pinba 数据聚合展示面板，实时监控 PHP 应用性能",
+   "review": "Pinboard 是一个读取 Pinba MySQL 存储引擎数据的 Web 管理面板，按 15 分钟周期聚合 PHP 请求的耗时、内存、CPU 与错误数据并以图表展示。面向运行 PHP 应用的运维与开发团队，通过 Docker Compose 或 PHP ≥ 8.4 环境部署，用户认证支持文件或数据库两种来源。",
+   "highlights": [
+    "读取 pinba_engine 的 UDP 统计数据，生成请求耗时直方图、内存曲线、错误率与慢请求日志",
+    "提供 Docker 镜像与 Compose 快速部署，聚合任务可通过 cron 或手动执行 bin/console aggregate 触发",
+    "支持配置聚合周期、原始数据保留时长、慢请求阈值与邮件通知开关"
+   ],
+   "use_cases": [
+    "部署 pinba PHP 扩展后集中查看多台 PHP 服务器的请求性能统计",
+    "排查超过设定阈值的慢请求及其日志",
+    "为 Pinba 引擎 fork（MySQL 8.0/8.4、MariaDB 10.11/11.8）提供配套可视化界面"
+   ]
+  },
+  "sha": "fdcf0991e8cd",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d8c675c1ae3e": {
+  "identity": {
+   "one_liner": "以一组视图查看 PostgreSQL 数据库对象权限的扩展",
+   "review": "pg_permissions 是一个 PostgreSQL 扩展，通过 CREATE EXTENSION 安装后，提供一组视图展示数据库、模式、表、视图、列、函数、序列等对象的当前权限。用户可在 permission_target 表中写入期望权限，调用 permission_diffs() 比对缺失与多余的授权。适用于需要集中查看和核对数据库权限的 PostgreSQL 数据库管理员。限制：不覆盖 Toast 表与系统目录，视图中不显示超级用户。",
+   "highlights": [
+    "提供 database/schema/table/view/column/function/sequence 等多类权限视图及汇总的 all_permissions 视图",
+    "通过 permission_target 表与 permission_diffs() 函数比对期望权限与实际授权的差异",
+    "permission 视图的 granted 列可更新，更新时自动执行相应的 GRANT 或 REVOKE 命令"
+   ],
+   "use_cases": [
+    "审计或检查数据库中各角色在对象上的实际授权情况",
+    "按 permission_target 中定义的目标权限配置，生成缺失与多余权限的差异报告",
+    "通过更新视图 granted 列批量执行 GRANT/REVOKE 授权变更"
+   ]
+  },
+  "sha": "d8c675c1ae3e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "42d3b83248c5": {
+  "identity": {
+   "one_liner": "MoonBit 编写的浏览器/Node.js SQLite 子集，支持 IndexedDB 离线持久化与 LTX 同步",
+   "review": "SQLike 是用 MoonBit 实现的 SQLite 子集数据库，运行于浏览器和 Node.js（ESM，Node 24+，运行时无需 MoonBit 编译器）。它提供内存 SQL 执行和基于 IndexedDB 的预定义语句持久化，配合 @mizchi/litestream 包实现同步。版本 0.2.0 通过 /full、/aot 等多入口划分功能范围：默认入口不含 JSON、CTE、触发器和窗口函数，需迁移到 /full；AOT 入口执行预编译命名语句，不包含 SQL 解析器。",
+   "highlights": [
+    "实现 CRUD、JOIN、聚合、RETURNING、事务、索引、外键和基本触发器",
+    "预定义模式与命名语句可存入 IndexedDB，重开连接或刷新页面后恢复",
+    "支持 SQLite 镜像导出与 LTX v3 生成/应用，配合 Litestream 包实现重试、去重和应用定义的冲突策略"
+   ],
+   "use_cases": [
+    "浏览器离线应用，需要本地 SQL 持久化并在页面重载后恢复数据",
+    "模式与查询固定、可通过预编译语句目录裁剪运行时体积的前端应用",
+    "需要将本地 SQLite 变更以 LTX 格式同步到服务端的离线优先应用"
+   ]
+  },
+  "sha": "42d3b83248c5",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c714cc2fe3d4": {
+  "identity": {
+   "one_liner": "前后端分离的 Markdown 笔记系统，左侧编辑右侧生成公众号内联样式排版并一键复制。",
+   "review": "MarkNote 是一个前后端分离的 Markdown 笔记项目，前端 Vue 3 + Vite，后端 Spring Boot 3 + MySQL 8 + MinIO，使用 JWT 鉴权。它实现三段式编辑布局：左侧笔记列表、中间源码、右侧公众号预览；复制时将计算样式全量内联并转换 pre 等标签以适配公众号编辑器。支持历史版本快照、图片上传（MinIO 优先、本地磁盘兜底）、自动保存与回收站。依赖 JDK 17、Node 18，可通过 docker compose 启动 MySQL 与 MinIO，微信剪贴板功能需用 localhost 或 https 访问。",
+   "highlights": [
+    "复制公众号 HTML 时对节点执行 getComputedStyle 全量内联样式、去 class、pre 转 section、KaTeX 降级，并通过 ClipboardItem 写富文本剪贴板",
+    "支持停笔 1.2s 自动落库、每次保存写入 note_history 快照并 version+1 回滚（默认保留最近 50 条）",
+    "图片上传支持工具栏选图、拖拽、粘贴截图与外链，MinIO 不可用时自动落盘到 uploads/ 目录"
+   ],
+   "use_cases": [
+    "撰写需要粘贴到公众号后台、且希望保留排版格式的 Markdown 文章",
+    "自托管笔记数据：笔记存 MySQL、图片存 MinIO，可备份可迁移",
+    "需要历史版本回滚、回收站恢复与多主题公众号排版切换的写作流程"
+   ]
+  },
+  "sha": "c714cc2fe3d4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

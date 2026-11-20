@@ -3301,5 +3301,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d37fb02e1ca7": {
+  "identity": {
+   "one_liner": "面向汽修车间的预约与工单调度管理系统，前后端分离仪表盘。",
+   "review": "ARSM（Appointment and Resource Scheduling Management）是为汽修服务团队提供的车间预约与运营应用，供技师和管理员使用，功能涵盖预约登记、月历/日视图、领单派单、报价流程（Draft→Sent→Accepted/Rejected）、配件与工时目录、客户车辆维修历史及月度经营统计。后端为 .NET 10/ASP.NET Core + EF Core + PostgreSQL，前端为 React 19 + TypeScript + Vite，通过 .NET Aspire 编排本地启动。需注意其许可证为自定义版权与学术使用政策，非 MIT。",
+   "highlights": [
+    "支持预约登记、月历与日视图、领单/派单流程及 SSE 实时更新",
+    "支持按车辆生成报价单，含配件与工时明细、状态流转、PDF 生成与邮件发送",
+    "提供技师与管理员角色、账户锁定、CSRF 与速率限制；本地由 .NET Aspire 一键启动 PostgreSQL、RustFS、API 与 Vite 开发服务器"
+   ],
+   "use_cases": [
+    "汽修车间排班与工单进度的日常管理",
+    "为车辆创建报价单并生成 PDF 发送给客户",
+    "按月/年查看公司经营结果（需管理员角色）"
+   ]
+  },
+  "sha": "d37fb02e1ca7",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "139d2f55edc6": {
+  "identity": {
+   "one_liner": "面向 .NET/EF Core 的数据库迁移风险静态分析 CLI，基于 Roslyn 与 SQL AST 规则检测并生成缓解 SQL",
+   "review": "MigrationSentinel 是一个 .NET 全局 CLI 工具与类库，用于在数据库迁移进入生产前检测破坏性 schema 变更与锁表 DDL。它通过 Roslyn 解析 EF Core C# 迁移、用方言感知解析器处理 SQL Server 与 PostgreSQL 脚本，内置 MS001–MS014 共 14 条规则，可生成缓解 SQL，并支持 SARIF 2.1.0 报告与 OpenAI/Ollama 可选 AI 审查。运行需 .NET 8 SDK。",
+   "highlights": [
+    "通过 Roslyn AST 解析 EF Core 迁移，并递归解析 migrationBuilder.Sql() 内嵌 SQL；支持 SQL Server 与 PostgreSQL 方言感知 SQL 解析",
+    "内置 14 条规则（MS001–MS014），覆盖 DROP TABLE/DROP COLUMN、无 CONCURRENTLY/ONLINE 建索引、缺 WHERE 的 DELETE/UPDATE 等，输出缓解 SQL（如 CREATE INDEX CONCURRENTLY、NOT VALID + VALIDATE CONSTRAINT）",
+    "支持 Git diff 扫描（--base/--staged）、可配置严重级退出码、Markdown/JSON/SARIF 2.1.0 输出，以及可选的 OpenAI 或本地 Ollama AI 审查"
+   ],
+   "use_cases": [
+    "在 GitHub Actions 等 CI 中对 PR 分支执行 migration-sentinel diff 门禁，并将 SARIF 结果上传至 GitHub Security 标签页",
+    "扫描 EF Core Migrations 目录或 .sql 脚本，导出方言对应的 expand-and-contract 安全上线 SQL",
+    "将 MigrationSentinel.Core 作为库嵌入内部开发者平台、CI 机器人或测试流程，以编程方式调用 AST 解析器与风险规则"
+   ]
+  },
+  "sha": "139d2f55edc6",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

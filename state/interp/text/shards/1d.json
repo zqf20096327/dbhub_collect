@@ -2923,5 +2923,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5a13b2cd41cc": {
+  "identity": {
+   "one_liner": "为编码代理提供本地记忆的 Rust MCP 服务器，单 SQLite 文件加本地嵌入",
+   "review": "Palace 是一个用 Rust 编写的 MCP 服务器，为 Claude Code、Codex、Cursor 等编码代理提供跨会话记忆。它以原样文本存入单个 SQLite 文件，用 ONNX Runtime 在本地 CPU 生成嵌入，检索融合 BM25 与余弦相似度并按意图加权。数据按 wing/room/drawer 组织，附知识图谱与代理日志；结果带来源引用。模型切换时自动召回验证，不达标不切换。嵌入模型约 23MB 首次使用时从 Hugging Face 下载。",
+   "highlights": [
+    "单二进制 + 单 SQLite 文件运行，嵌入由 all-MiniLM-L6-v2 在本地 ONNX Runtime CPU 上生成，默认无 API 密钥、无云端依赖",
+    "检索融合 BM25 关键词评分与本地嵌入余弦相似度，含意图分类加权和可选的本地交叉编码器重排（--rerank）",
+    "嵌入模型可迁移：migrate 基于本宫 200 条已知探针验证 recall@5 与 p95 延迟后才切换，支持 rollback"
+   ],
+   "use_cases": [
+    "为多个编码代理（Claude Code、Codex、Cursor、Gemini CLI 等）提供跨会话的决策、修复、命令与偏好记忆",
+    "在本地/CPU 环境下进行代码库、笔记、会议记录的语义搜索，需来源可验证的场景",
+    "非软件项目的本地知识管理，如世界观构建、小说、个人笔记（creative/personal 配置）"
+   ]
+  },
+  "sha": "5a13b2cd41cc",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "827658b320ed": {
+  "identity": {
+   "one_liner": "基于Python+SQLite FTS5的AI代理持久化符号记忆系统，混合PPMI+SVD检索",
+   "review": "BioRAG为AI代理提供跨会话的持久化符号记忆，采用Python与SQLite FTS5实现，检索路径不依赖稠密embedding、GPU或外部API。系统包含PPMI-SVD 100维向量、13轴语义空间、Hebb突触图、ACT-R激活与共形校准，支持西班牙语和英语双语词干化。README明确此为DEV开发仓库，稳定版发布于MemoryBioRAG-Stable。",
+   "highlights": [
+    "混合检索：SQLite FTS5全文+PPMI-SVD（100维）向量搜索，纯CPU运行，搜索路径无GPU与外部API调用",
+    "支持西英双语词干化、WordNet符号扩展与Concept Hubs，附921案例QA套件（含Recall@5、Recall@1、MRR、假阳性等指标）",
+    "模块化架构：18个core/memory子模块+15个mcp_server子模块，支持MCP客户端配置安装与~/.biorag/共享皮层"
+   ],
+   "use_cases": [
+    "需要跨会话保留记忆的AI代理（通过MCP服务器接入）",
+    "仅限本地CPU、不依赖稠密embedding或外部LLM API的语义检索场景",
+    "西班牙语与英语混合的知识记忆与检索应用"
+   ]
+  },
+  "sha": "827658b320ed",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "70ee3f324c0a": {
+  "identity": {
+   "one_liner": "自托管数据库与有状态服务编排控制平面，基于 Go 提供 REST API、CLI 与 Web UI。",
+   "review": "Karakoram 是一个运行在用户自有基础设施上的控制平面，用于编排数据库和有状态服务，无需 Kubernetes 或托管协调器，通过 Go 实现的 REST API、karactl CLI 和 Web UI 进行操作。支持 Zerops（参考提供者）、Dokploy、Nomad 三种基础设施提供者，以及 MongoDB、PostgreSQL、MySQL、Elasticsearch、RabbitMQ 等十余种引擎。当前为 pre-1.0 阶段（v0.4.11），Dokploy 与 Nomad 路径为实验性，README 提示生产使用前需查阅已知限制，例如副本数不保证独立主机、控制平面为单副本。适用于需要在自有基础设施上运行数据库集群、备份恢复与监控的运维场景。",
+   "highlights": [
+    "支持 MongoDB（含分片与 PBM 备份/PITR）、PostgreSQL（含 Patroni HA 与 Citus）、MySQL、Elasticsearch、RabbitMQ、Weaviate、Keycloak、OpenBao、Temporal、Neo4j 等引擎的目录驱动创建与集群操作",
+    "提供 S3 兼容备份存储、调度与恢复、备份演练验证、控制平面备份恢复",
+    "包含多项目命名空间、OIDC 与本地账户、命名空间级 RBAC、API 令牌、监控日志、审计记录及 Webhook/Slack/邮件通知"
+   ],
+   "use_cases": [
+    "在 Zerops、Dokploy 管理的 Docker Swarm 或 Nomad 集群上自托管运行 MongoDB、PostgreSQL、MySQL 等数据库集群",
+    "对多个引擎实施统一的备份调度、PITR 恢复与定期恢复演练",
+    "需要多项目命名空间、RBAC 和审计能力的数据库运维团队"
+   ]
+  },
+  "sha": "70ee3f324c0a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a02f97c44d3c": {
+  "identity": {
+   "one_liner": "Rust + egui 编写的原生桌面数据库客户端，直连 35 类数据源",
+   "review": "Orvyn 是基于 Rust 与 egui 构建的桌面数据库工作台，通过原生协议驱动、HTTP 集成与厂商 ODBC 桥接连接 35 类数据源，覆盖 MySQL/PostgreSQL 协议族、SQLite/DuckDB、MongoDB、Redis 及搜索引擎等，面向需要在单一桌面应用中管理多类数据库的开发者与 DBA。DuckDB 支持需选用 -duckdb 变体包；ODBC 数据源需系统预装兼容驱动。提供 Windows 安装包、Linux .deb 与 macOS .dmg，也可用 Rust 1.88+ 从源码构建。",
+   "highlights": [
+    "支持 35 类数据源：MySQL 协议 8 种、PostgreSQL 协议 11 种、SQLite/DuckDB/SQL Server/ClickHouse 等、MongoDB/Redis/D1、4 种搜索引擎及 4 种厂商 ODBC 源",
+    "提供多标签 SQL 编辑器、可视化表设计与 DDL 管理、基于主键的行编辑，导出支持 CSV/JSON/TSV/XLSX 且 MySQL/PostgreSQL 走流式路径",
+    "连接凭据以 ChaCha20-Poly1305 加密保存，支持五种 SSL 模式与只读连接模式；界面提供五种语言与深浅主题"
+   ],
+   "use_cases": [
+    "在同一桌面工作区中跨 MySQL 协议族与 PostgreSQL 协议族多种分支数据库执行 SQL、管理对象与设计表结构",
+    "浏览和编辑 Redis 键值、MongoDB 文档及 Elasticsearch 等搜索引擎索引",
+    "将大表数据流式导出为 CSV/JSON/TSV/XLSX，或通过导入向导批量写入 CSV 数据"
+   ]
+  },
+  "sha": "a02f97c44d3c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

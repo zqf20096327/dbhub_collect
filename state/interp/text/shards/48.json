@@ -3068,5 +3068,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2f700654e7f2": {
+  "identity": {
+   "one_liner": "本地 SQLite 调试记忆库，通过 MCP 为开发者及编码代理提供持久化记录与检索",
+   "review": "MemoryWhale 是一款 Rust 编写的 CLI 工具（MIT 许可），将调试过程中的命令、输出、错误和有效修复记录到本地 SQLite，并经 stdio/HTTP MCP 服务（mw-mcp、mw-serve）供多个编码代理读写同一记忆。数据完全本地存储，无需账号。注意 MCP 仅提供记忆访问，自动捕获需客户端钩子支持，Rho 当前钩子不含命令文本与 stdout。",
+   "highlights": [
+    "将命令、输出、失败与修复经验存入本地 SQLite，提供 mw search、mw context 等检索命令",
+    "提供 mw-mcp stdio MCP 服务器（六个记忆工具）与 mw-serve HTTP MCP（POST /mcp），非回环访问需 token",
+    "提供 mw integrate 集成与 mw doctor 自检，附带 TUI、Web dashboard 和桌面应用界面"
+   ],
+   "use_cases": [
+    "在多个会话或多种编码代理之间复用同一份调试记忆",
+    "通过 SSH 或多台开发机工作时保留可检索的故障与修复记录",
+    "调试构建、依赖、Git、环境或部署问题并希望留存经验教训"
+   ]
+  },
+  "sha": "2f700654e7f2",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2e82a93a8ec4": {
+  "identity": {
+   "one_liner": "用于在系统上安装和配置 PostgreSQL 的 Ansible 角色",
+   "review": "这是一个 Ansible 角色（role），通过角色变量（defaults/main.yml）实现 PostgreSQL 的安装与配置，可在 playbook 中以任务方式调用。README 提供示例 playbook，并说明在 CI 中借助 molecule（prepare.yml/converge.yml）进行测试。要求安装 requirements.txt 中的 pip 包，且需先运行 bootstrap、buildtools、epel、python_pip 等准备角色（或自行准备系统）。适用于使用 Ansible 进行自动化部署的用户；Ansible-core 最低版本要求为 2.20。",
+   "highlights": [
+    "提供 defaults/main.yml 中的默认角色变量用于配置 PostgreSQL",
+    "附带 molecule 测试示例（converge.yml 与 prepare.yml），并在每次 push、pull request 和 release 时运行测试",
+    "在 Alpine、EL 9、Debian、Fedora、Ubuntu 容器镜像上完成测试，要求 ansible-core 最低版本 2.20"
+   ],
+   "use_cases": [
+    "在 Alpine、EL、Debian、Fedora、Ubuntu 等系统上通过 Ansible playbook 自动化安装 PostgreSQL",
+    "集成到 molecule 测试流程或 CI 流水线中验证系统配置",
+    "与 robertdebock 系列角色（bootstrap、buildtools、epel、python_pip 等）组合构建系统准备与部署流程"
+   ]
+  },
+  "sha": "2e82a93a8ec4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bc12a71f53b2": {
+  "identity": {
+   "one_liner": "Rust 编写的原生数据库客户端，含 GPUI 桌面端、CLI 和默认只读的 MCP 服务器。",
+   "review": "Dbento 是一个用 Rust 编写、基于 GPUI 在 GPU 上渲染、不依赖 Electron 的数据库客户端，支持 Postgres、SQLite、MySQL、SQL Server、DuckDB 等关系库，以及 MongoDB、SurrealDB、Redis、DynamoDB 等 NoSQL。连接保存在 dbento.toml、查询为纯文本文件，便于纳入 git；MCP 服务器默认只读，写操作需在桌面端逐条批准。SQL Server、DynamoDB 等引擎的只读保障依赖账号权限，README 有具体限制说明。",
+   "highlights": [
+    "桌面端基于 GPUI 由 GPU 渲染，结果流入虚拟化表格，支持按行数上限（1k 至 1M）截断并以 TSV/CSV/JSON/Markdown/INSERT 复制和导出 CSV/TSV/JSON",
+    "支持九种数据库：SQL 类用 SQL/T-SQL/PartiQL，MongoDB 用 mongosh 子集，SurrealDB 用 SurrealQL，Redis 用命令行，Postgres 与 SQLite 支持分阶段表格编辑",
+    "MCP 服务器通过 stdio 提供十个工具，query 默认只读且限 1000 行、30 秒超时，execute 写操作须在桌面端人工批准，连接变更后旧批准失效"
+   ],
+   "use_cases": [
+    "在桌面端浏览和查询多种 SQL 与 NoSQL 数据库，查看表结构、索引、触发器及对象定义",
+    "将连接配置 dbento.toml 与保存查询文件纳入 git，供团队审阅（不写入密码）",
+    "通过 MCP 让 AI 客户端以只读方式访问数据库，写操作经人工批准后执行"
+   ]
+  },
+  "sha": "bc12a71f53b2",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2906,5 +2906,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a7984c1dee64": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的记忆数据库，单 Rust 进程融合语义/词法/实体图检索",
+   "review": "Brain 是用 Rust 编写的记忆数据库，存储 Memory、Entity、Statement、Relation 四类记录，附带来源、置信度与双时间戳，检索融合语义（HNSW）、词法（BM25）与实体图三路结果。以 CBOR 二进制协议提供服务，提供 Rust/Python/TypeScript SDK；镜像内置嵌入与抽取模型（约 720MB），仅支持 Linux，Apache-2.0 许可，当前版本 0.4.0。",
+   "highlights": [
+    "存储四类记录（Memory/Entity/Statement/Relation），写入路径内置三层抽取管道（模式→GLiNER→LLM），模型随镜像捆绑",
+    "检索由 HNSW 语义、BM25 词法与实体图三路结果经倒数排名融合排序",
+    "通过二进制线路协议（CBOR 载荷、168 个操作码）提供服务，支持命名空间/空间两级硬隔离，每个空间的数据落在单一分片上"
+   ],
+   "use_cases": [
+    "为 AI Agent 应用持久化带来源与时间有效性的记忆记录",
+    "需要同时进行相似度、关键词与实体关系检索的知识库场景",
+    "多租户部署中按命名空间和空间隔离各 Agent/用户记忆数据"
+   ]
+  },
+  "sha": "a7984c1dee64",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0be4827e4392": {
+  "identity": {
+   "one_liner": "面向 Ubuntu VPS 的开源主机控制面板，经 root agent 管理站点、邮件、DNS 等服务",
+   "review": "RAYXO 是运行于 Ubuntu 24.04 LTS 的免费开源（AGPL-3.0）虚拟主机控制面板，当前为 beta（v0.8.30）。面向在单台服务器上运营共享主机的管理员，提供 Admin/Reseller/User 三级账户体系。架构上为 Laravel+React 面板以非 root 用户运行，通过 Unix socket 调用 Go 编写的 root agent rayxod，其操作限定在封闭动作列表内。安装脚本从 GitHub 下载发布包并校验 checksum，服务器无需 Composer/Node/Go。支持导入 cPanel/DirectAdmin 备份及 WHMCS 模块。",
+   "highlights": [
+    "支持域名管理、Let's Encrypt SSL（含 wildcard）、多版本 PHP（7.4–8.5）、MariaDB 与 PostgreSQL、Postfix/Dovecot/Rspamd/Roundcube 邮件、PowerDNS DNS 服务器",
+    "内置三级账户体系（Admin/Reseller/User）、套餐 overselling、reseller 自定义品牌与 nameserver、cgroups 资源限制、每个托管账户对应独立 Linux 用户",
+    "提供备份至 SFTP/FTP/S3、cPanel 与 DirectAdmin 备份导入、WHMCS 模块、REST API、SSH/SFTP/FTP、面板一键更新与配置漂移检测"
+   ],
+   "use_cases": [
+    "在单台 Ubuntu 24.04 VPS 上搭建并出售共享虚拟主机（含 reseller 分销层级）",
+    "从 cPanel/DirectAdmin 迁移账户备份至自托管面板",
+    "需要集成 WHMCS 自动开通/暂停账户的主机销售流程"
+   ]
+  },
+  "sha": "0be4827e4392",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3282,5 +3282,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0c3d5ab1ce66": {
+  "identity": {
+   "one_liner": "本地 GPU 流水线，自动检测、OCR、LLM 翻译并排版漫画文本。",
+   "review": "该项目提供本地化漫画翻译流水线，含前端（Next.js）、后端（Go/Fiber + PostgreSQL + Redis + Asynq）和 Python AI Worker 三个模块。流程为 YOLO 检测气泡、MangaOCR 识别竖排日文、Qwen 2.5 7B（GGUF，经 llama.cpp）翻译、OpenCV inpainting 去字并排版回图。需 NVIDIA GPU（6GB+ VRAM）、CUDA 12.x、Python 3.10–3.12，模型需另行下载；全流程不经外部 API。",
+   "highlights": [
+    "AI Worker 使用 YOLOv8（Manga109 微调）检测气泡、MangaOCR 识别竖排文本、Qwen 2.5 7B GGUF 模型做上下文翻译，全程本地运行、不调用外部 API",
+    "支持掩膜 inpainting 去字、像素级文字换行排版、垂直气泡合并，以及 .zip 批量处理（解压→翻译→重打包）",
+    "后端提供 SSE 实时进度、Redis pub/sub、ZIP 嵌套目录支持；一键启动脚本可拉起 Docker 服务、Go worker 并打开浏览器"
+   ],
+   "use_cases": [
+    "在本地 GPU 机器上批量翻译日文漫画页或整本 ZIP 压缩包",
+    "需要不依赖外部翻译 API 的私有化部署场景",
+    "作为 Go + Python 子进程 + Redis 队列 + SSE 的微服务架构参考实现"
+   ]
+  },
+  "sha": "0c3d5ab1ce66",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b4364005e38": {
+  "identity": {
+   "one_liner": "将文档转换为含向量与关键词索引的 SQLite 归档文件 .vera 的本地检索工具",
+   "review": "VERA 把 PDF、Office、Markdown 文档转换为单个 .vera 文件，内含文本、嵌入向量、关键词索引、引文与原始来源，基于 SQLite 实现，无需数据库服务器。检索支持 keyword、semantic、hybrid 三种模式，默认嵌入器为离线 hashing，语义检索需本地神经模型或 OpenAI API。面向需要在本地管理可检索文档库的个人与 AI agent。",
+   "highlights": [
+    "每个 .vera 文件将文本、嵌入向量、关键词索引、引文和原始来源存于单个 SQLite 归档，搜索无需运行数据库服务器",
+    "支持 keyword/semantic/hybrid 三种检索模式，可自定义元数据过滤（--where）与嵌入提供方（hashing、sentence-transformers、OpenAI 或插件）",
+    "提供 CLI、MCP 服务器（vera mcp）、Agent Skill、Python API 及 Windows 桌面应用多种使用方式；PDF 自动 OCR（内置英文数据）"
+   ],
+   "use_cases": [
+    "本地离线检索 PDF 手册与文档库，通过关键词或语义搜索定位段落并获取页码与标题路径引文",
+    "为可运行 shell 命令或 MCP 的 AI agent 提供带结构化 JSON 输出与引用的文档检索后端",
+    "对文档目录打元数据标签后按条件过滤检索，如按项目、类型缩小结果范围"
+   ]
+  },
+  "sha": "2b4364005e38",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29c21da213aa": {
+  "identity": {
+   "one_liner": "基于 PHP + MySQL 的开源车辆事务跟踪面板，含邮件提醒。",
+   "review": "CARLOG 是一个免费的 PHP + MySQL 车辆事务跟踪面板，用于管理车辆年检、保险、维保、轮胎、罚款与费用等事项，可在面板中查看即将到期事项并发送每日摘要邮件。模块可在设置中启用或关闭；新增模块只需在 app/moduller/ 目录添加定义文件，列表、表单与报告由此自动生成，无需修改数据库。安装需要 PHP 8.1+、MySQL 5.7+/MariaDB 10.2+，支持 cPanel 安装向导，也可用 php -S 本地试运行。",
+   "highlights": [
+    "提供年检、交通保险、车损险、维保（按日期和公里数）、轮胎、罚款、费用、驾驶员与文档等模块，可在设置中逐个启用或关闭，关闭后记录保留",
+    "提供即将到期列表（逾期、7 天、30 天内），并支持每日摘要邮件提醒，逾期事项每周重复提醒，提醒天数可配置",
+    "提供按日期范围的车辆和模块费用报表（CSV 下载）、明暗主题与移动端界面；模块通过 app/moduller/ 单一定义文件扩展，无需数据库变更"
+   ],
+   "use_cases": [
+    "企业车队的事务集中跟踪：年检、保险、保养、轮胎、罚款与驾驶员证件到期管理",
+    "通过 cPanel 托管环境快速部署，无需 Composer、Node 或 SSH，适合虚拟主机运维",
+    "需要邮件提醒和 CSV 费用报表的小型车辆管理场景，或基于现有模块定义文件扩展自定义跟踪项"
+   ]
+  },
+  "sha": "29c21da213aa",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b510d0bafbe4": {
+  "identity": {
+   "one_liner": "基于 PHP PDO + MySQL 的图书馆管理系统，实现馆藏、会员与借还业务流程管理",
+   "review": "LibraryMS 是一个 Web 端图书馆管理应用，为数据库课程项目开发，供授权馆员管理图书、作者、分类、会员、借阅与归还。数据库遵循第三范式并含外键与唯一约束；借出/归还使用数据库事务并强制业务规则（如成员不可重复借同一书、超期按每天 $0.50 计费）。安装依赖 XAMPP，通过导入 SQL 文件建库，README 提示部署生产环境前需更改内置演示账号密码。",
+   "highlights": [
+    "实现基于角色的登录与员工会话管理，密码经 password_hash() 存储并用 PDO 预处理语句防 SQL 注入",
+    "支持 14 天借期借书与归还流程，事务中校验可借数量与重复借阅，自动计算超期天数与罚金",
+    "提供图书、会员、借阅记录的 CSV 导出，以及 database/queries.sql 中的多组统计查询"
+   ],
+   "use_cases": [
+    "图书馆工作人员日常管理图书、会员及借还记录",
+    "作为数据库课程的教学示例，展示三范式、外键、事务与业务规则约束的实现",
+    "在 XAMPP/Apache 本地环境中部署运行并分析借阅数据报表"
+   ]
+  },
+  "sha": "b510d0bafbe4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3218,5 +3218,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bc417f692160": {
+  "identity": {
+   "one_liner": "连接 MySQL/MariaDB、PostgreSQL、SQLite 的单二进制 MCP 服务器，内置 PII 脱敏与写保护。",
+   "review": "dbmcp 是一个以单个约 7 MB 二进制分发的 MCP 服务器，用于将 AI 助手（如 Claude Desktop、Cursor、VS Code 等 MCP 客户端）接入 MySQL/MariaDB、PostgreSQL 或 SQLite 数据库。它提供模式发现（列出库/表/视图/触发器/函数/存储过程）、读写查询、explain 等工具，支持 stdio 与 HTTP 两种传输、SSH 隧道，并通过 DBMCP_* 环境变量、env 文件和 YAML 配置文件分层配置。默认只读模式开启，可隐藏写入类工具；绑定非回环地址且未设置 HTTP 认证令牌时拒绝启动。",
+   "highlights": [
+    "以单个约 7 MB 二进制运行，无需 Python/Node/Docker 运行时依赖；也可通过 npm（npx -y @haymon-ai/dbmcp）安装启动",
+    "提供 MCP 工具集：模式发现（listDatabases、listTables、listViews 等）、readQuery/writeQuery、DDL（createDatabase/dropDatabase/dropTable）及 explainQuery；只读模式会隐藏写入类工具",
+    "支持 stdio 与 HTTP 两种传输、可选 bearer token 认证，以及内置 SSH 客户端隧道（密码或密钥认证、known_hosts 校验、自动重连），SSH 隧道仅支持 MySQL/MariaDB/PostgreSQL"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor、VS Code 等支持 MCP 的客户端中连接本地或远程 SQL 数据库进行查询",
+    "通过 SSH 堡垒机访问内网 MySQL/MariaDB/PostgreSQL 数据库",
+    "以默认只读模式让 AI 助手浏览数据库模式与数据，需要时再按后端启用写操作工具"
+   ]
+  },
+  "sha": "bc417f692160",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "af01f789512d": {
+  "identity": {
+   "one_liner": "自托管的产品规格平台，AI 客户端经 MCP 从代码生成结构化规格",
+   "review": "Lyriks Community Edition 是一个自托管平台，用于从代码库生成并维护产品规格（功能、规则、界面、数据），各元素与代码相互链接，冲突会被标记。AI 编码客户端通过 MCP 写入规格，用户在浏览器中审阅。采用 AGPL-3.0 许可，社区版限一个用户和一个活跃项目；镜像仅支持 x86-64，Linux on ARM 不支持。",
+   "highlights": [
+    "提供自托管工作区，以图结构保存功能、规则、界面与数据，元素链接到代码和外部参考文档",
+    "支持 Claude Code、Cursor、Copilot 等 MCP 客户端经 /mcp 端点读取代码并写入规格",
+    "本地运行且不收集遥测数据，Docker Compose 与源码（Node 22、pnpm 10.6.3、PostgreSQL 16）两种方式均可部署"
+   ],
+   "use_cases": [
+    "从现有代码库逆向生成产品规格，并链接行为到源代码证据",
+    "为 AI 编码代理提供结构化的项目记忆和规格上下文",
+    "在本地环境中审阅 AI 客户端生成的规格，检查缺口与矛盾"
+   ]
+  },
+  "sha": "af01f789512d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

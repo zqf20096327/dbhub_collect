@@ -3229,5 +3229,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d12a2a5e3bd0": {
+  "identity": {
+   "one_liner": "基于 Next.js 16 与 Payload CMS 的数学在线课程搭建与销售平台",
+   "review": "这是一个全栈 Next.js 16 项目，用于管理和销售数学在线课程，课程内容包含视频、测验、LaTeX 公式与 Desmos 交互图表。技术栈含 BetterAuth 认证、Stripe 支付、PostgreSQL（Drizzle ORM）与 MongoDB（Payload CMS），并通过内置 MCP 服务器支持 AI 客户端编辑课程内容。适合作为课程平台参考实现或全栈学习项目，本地开发依赖 Docker 运行双数据库。",
+   "highlights": [
+    "集成 Payload CMS 管理课程、章节与媒体，支持草稿、版本历史及基于 QStash 的定时发布",
+    "课程以 Markdown 编写，支持 LaTeX 数学公式、Desmos 交互图表、Mermaid 图与自定义 callout 块",
+    "内置 MCP 服务器，允许 Claude 等 AI 客户端通过 API Key 直接起草和编辑 CMS 中的课程内容"
+   ],
+   "use_cases": [
+    "搭建需要视频课、测验与数学公式展示的在线课程销售站点",
+    "作为 Next.js App Router、BetterAuth、Stripe 与 Payload CMS 集成的参考项目",
+    "通过 MCP 接入 AI 客户端，辅助撰写和审校课程内容"
+   ]
+  },
+  "sha": "d12a2a5e3bd0",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "27fd409687bb": {
+  "identity": {
+   "one_liner": "进程内确定性上下文压缩器，为 AI 编码代理削减工具与终端输出 token 占用",
+   "review": "trimtok 是一个 Python 3.10+ 库，用于压缩 AI 编码代理的工具输出与终端日志：对测试结果、源码、traceback、JSON、网页抓取等做确定性折叠，原始字节写入本地 SQLite WAL + Zstandard 存储库，代理可凭 #ref 标记检索原文切片。压缩过程不调用 LLM、无后台进程、无开放端口，支持 MCP 与 11 种客户端接入。包含数字敏感载荷默认直通不压缩。",
+   "highlights": [
+    "确定性进程内压缩，无 LLM 参与、无后台守护进程、无开放端口，凭 #ref 可检索字节级原文",
+    "提供 AST 代码骨架化（支持 JS/TS、Go、Rust、Java、C/C++ 等多种语言的 Tree-sitter 扩展）与无损 TOON v2 JSON 表格压缩",
+    "通过 stdio MCP 接入 Claude Code、Cursor、Codex CLI、Gemini CLI 等 11 种客户端，并附带本地可复现的评测脚本"
+   ],
+   "use_cases": [
+    "AI 编码代理运行 pytest/cargo test 等重复测试产生大量冗长输出时的上下文压缩",
+    "代理读取大文件、grep 结果或抓取网页时保留关键结构并压缩呈现给模型的内容",
+    "需要按预算管理 MCP 工具 schema 与系统提示词占用的多客户端环境"
+   ]
+  },
+  "sha": "27fd409687bb",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6126d7e82d83": {
+  "identity": {
+   "one_liner": "本地代码知识图谱工具：tree-sitter 解析 8 种语言，SQLite 存储，混合检索",
+   "review": "code-graph 用 tree-sitter 解析 PHP、Python、JavaScript/TypeScript、Go、Dart、Java、Swift 和 SQLite SQL，将声明、调用与引用图存入单个 SQLite 文件，并提供 FTS5/BM25 与图扩展、RRF 融合的混合搜索。面向使用 Codex 或 Claude Code 等 coding agent 的开发者，通过 CLI、本地 dashboard、MCP 服务器（15 个工具）或 skill 四种方式调用。索引与搜索均在本地运行，不运行项目代码、不调用模型；不支持以反射、字符串注册路由或依赖注入为主的代码。",
+   "highlights": [
+    "支持 8 种语言与 SQLite SQL 的声明、调用、引用提取，未解析或歧义的情况会记录而非猜测",
+    "混合搜索在 SQLite 内组合 BM25 词法排名与调用图扩展（默认深度 2、500 节点/1000 边上限），用 RRF 融合，无需 embedding 或模型",
+    "提供影响分析（调用方、触达该符号的测试）、带 SHA-256 哈希与字符预算的源码窗口，以及 15 个 MCP 工具"
+   ],
+   "use_cases": [
+    "数百文件以上或非本人编写的代码库中，让 agent 定位修改点并获取文件/行引用",
+    "变更前查看调用方与可达测试，生成测试计划",
+    "agent 会话中反复执行 who calls X / where is Y 类查询"
+   ]
+  },
+  "sha": "6126d7e82d83",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

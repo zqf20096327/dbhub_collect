@@ -3732,5 +3732,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1dbac4669d6e": {
+  "identity": {
+   "one_liner": "自托管的 MCP 服务器，为 AI 编码代理提供共享长期记忆与代码索引",
+   "review": "ClickHouse Loom 是一个开源（Apache-2.0）的自托管 MCP 服务器，为 Claude Code、Codex、Cursor 及自建代理提供跨会话共享的长期记忆、文档检索（RAG）与代码索引。记忆关联到具体文件与符号，代码变更时标记并在代理读取/编辑时呈现。支持命名空间、角色与令牌的多用户部署，数据存于 ClickHouse，可选 Postgres，通过 Docker 或 Helm 安装。默认单用户模式无密钥即可启动，LLM 与嵌入模型需在仪表盘中配置。",
+   "highlights": [
+    "记忆与代码符号关联，重构时跟随并在代理编辑相关文件时呈现",
+    "提供 MCP 协议接入及 Python、TypeScript SDK，支持 Docker 与 Helm/Kubernetes 部署",
+    "代码索引支持查询定义、调用方与变更影响，并转换 PDF、docx、pptx 文档用于带引文检索"
+   ],
+   "use_cases": [
+    "为编码代理团队提供跨会话共享的教训、议题上下文与来源记录",
+    "为多代理工作流提供共享记忆、任务收件箱与决策记录",
+    "为面向用户的代理应用提供按用户的长期记忆存储"
+   ]
+  },
+  "sha": "1dbac4669d6e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0a61661e5dc": {
+  "identity": {
+   "one_liner": "自托管的持久记忆 MCP 服务器与本地 AI 工作区，数据存于单个 SQLite 文件",
+   "review": "SynaBun 为 Claude Code、Codex CLI、Gemini CLI、OpenCode 及其他 MCP 客户端提供跨会话、跨项目的持久记忆，数据存于本地单个 SQLite 文件，无需账号或云服务。内置 Neural Interface 本地 Web 应用（端口 3344）用于浏览、编辑记忆并以 3D 地图展示，还可并排运行编码代理、调度自动化任务和浏览器工具。需 Node.js 22.19+，不包含模型访问。",
+   "highlights": [
+    "通过 MCP 服务器提供 remember、recall、reflect、forget、restore 等记忆工具，支持关键词与语义双重检索，语义检索依赖本地运行的嵌入模型",
+    "记忆保留修订历史、回收站与校验备份，同步功能可标记源文件已变更的记忆",
+    "Neural Interface 提供 3D 记忆地图、终端、文件浏览器、白板，以及 SynaBun Assistant 任务分派、WhatsApp 链接、浏览器工具与定时自动化"
+   ],
+   "use_cases": [
+    "在多个 AI 编码工具和项目之间保持会话上下文，避免重复说明决策与约定",
+    "需要在本地查看、编辑或删除 AI 工具所存记忆内容的场景",
+    "将任务模板化为循环或定时执行的自动化工作流"
+   ]
+  },
+  "sha": "c0a61661e5dc",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6897275be8e7": {
+  "identity": {
+   "one_liner": "提供 CVE/KEV/EPSS 等安全数据查询的 REST API 与 MCP 服务器，用 C 编写",
+   "review": "ContrastAPI 是一个安全情报查询服务，以 REST API 和 MCP 服务器两种形式响应，供 AI 代理和人使用。它汇总 NVD、CISA KEV、FIRST EPSS、OSV、MITRE 等公开来源数据，支持 CVE、软件包、域名、IP 查询及监控。服务器用 C 编写，数据存于 PostgreSQL。多数端点无需 API key，有每小时免费额度；监控和保存第三方 key 需 Pro key。它不扫描漏洞、不运行 exploit，数据新鲜度取决于源同步时间。",
+   "highlights": [
+    "以 REST API 和 MCP 服务器两种方式提供 CVE、CISA KEV、EPSS、软件包、域名、IP 等查询，多数端点免 API key",
+    "支持依赖检查（npm、PyPI、Maven、Go 等 9 个生态）、域名 DNS/TLS/邮件认证检查、子域名枚举、密码哈希泄露查询（SHA-1）等工具",
+    "可将 CVE、软件包、域名、IP 加入监控列表并以事件读取变更（需 Pro key）；提供 Python/Node SDK 及 Claude Desktop、VS Code 扩展"
+   ],
+   "use_cases": [
+    "AI 代理通过 MCP 协议调用工具查询 CVE 详情、风险评分、公开 exploit 引用或依赖版本公告",
+    "检查域名的 DNS、SPF/DKIM/DMARC、TLS 配置、安全响应头和 WHOIS 信息",
+    "对关注的 CVE、软件包、域名或 IP 设置监控，读取变更事件"
+   ]
+  },
+  "sha": "6897275be8e7",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "82f0bd69deff": {
+  "identity": {
+   "one_liner": "配置驱动、领域无关的应用工程平台，将业务定义转化为API等服务",
+   "review": "该仓库是一个配置驱动的领域无关应用平台，用于将业务/数据定义转换为可复用的API、仪表盘、ETL、报表、RBAC及Swagger文档服务。技术栈含NodeJS/Fastify、PostgreSQL、Redis、Sequelize、Socket.io与JWT，测试采用Mocha。README主体为AI驱动的应用工程路线图：以本地Qwen推理引擎执行业务理解、需求分析、建模、Backlog分解与工程蓝图五个阶段，其中应用生成、自动化测试评估等阶段标注为长期愿景，尚未实现。",
+   "highlights": [
+    "支持基于配置生成API、仪表盘、ETL、报表、RBAC与Swagger文档服务",
+    "提供AI工程阶段流程：业务知识工程、需求分析、功能建模（用例/BPMN/时序图等九类）、Agile Backlog分解与工程蓝图",
+    "技术栈包含NodeJS、PostgreSQL、Redis、Sequelize、Socket.io、JWT与Mocha，提供.sh安装脚本"
+   ],
+   "use_cases": [
+    "需要通过配置生成API与数据服务、不绑定特定业务领域的B2B/B2C/移动应用开发",
+    "将业务构想转化为需求文档、功能图与Backlog等工程产物的分析场景",
+    "基于PostgreSQL与NodeJS搭建带RBAC和接口文档的应用服务"
+   ]
+  },
+  "sha": "82f0bd69deff",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

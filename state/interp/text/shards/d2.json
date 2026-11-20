@@ -3189,5 +3189,92 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fa0ee6818443": {
+  "identity": {
+   "one_liner": "全栈可观测性平台，每秒采集指标、日志、追踪并内置异常检测",
+   "review": "Netdata 是一个全栈可观测性平台，由开源的 Netdata Agent（GPL v3+）、Netdata Cloud 和 Netdata UI 三部分组成，覆盖基础设施、APM、网络、数据库、日志与云服务监控。Agent 在数据产生处按秒采集并存储，通过机器学习对每个指标做异常检测；Parent 节点与 Cloud 将多个节点汇聚为统一视图。README 称其可扩展至 10 万+ 节点，约每样本 0.6 字节存储成本。适用于需要实时监控服务器、容器与分布式基础设施的运维与开发团队。",
+   "highlights": [
+    "支持 2000+ 集成，覆盖指标、日志、追踪、网络流、SNMP、OpenTelemetry 等数据源",
+    "Agent 每秒采集并对每个指标进行机器学习异常检测，内置 MCP server 供 AI 助手调用",
+    "采用分布式架构，数据留在本地节点，由 Parents 与 Netdata Cloud 统一关联，支持 100,000+ 节点"
+   ],
+   "use_cases": [
+    "服务器、容器与 Kubernetes 集群的实时基础设施监控与告警",
+    "应用性能监控：追踪查询、服务地图、延迟百分位与错误分析",
+    "网络设备（SNMP/NetFlow）与云服务（AWS/Azure/GCP）的性能监控"
+   ]
+  },
+  "sha": "fa0ee6818443",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "13e730227e09": {
+  "identity": {
+   "one_liner": "通过共享内存全局标志将 PostgreSQL 集群全部数据库设为只读的扩展",
+   "review": "pg_readonly 是一个 PostgreSQL 扩展，用于在 SQL 层将整个集群设为只读。它通过 shared_preload_libraries 在服务器启动时加载，提供 set/unset/get_cluster_readonly 三个函数管理共享内存中的全局标志。只读状态不持久化，重启后需重新设置。已验证支持 PostgreSQL 9.5 至 19。",
+   "highlights": [
+    "提供 set_cluster_readonly、unset_cluster_readonly、get_cluster_readonly 三个 SQL 函数管理集群级只读标志",
+    "只读模式下禁止全部 DML、DDL（含 TRUNCATE）及 GRANT/REVOKE 语句，仅允许不调用写入函数的 SELECT",
+    "支持 PGXS 或 PostgreSQL 源码树两种编译安装方式，并提供 make check/installcheck 测试"
+   ],
+   "use_cases": [
+    "需要临时将整个集群所有数据库切换为只读模式的运维操作",
+    "通过 SQL 函数动态控制只读状态并在完成后恢复读写"
+   ]
+  },
+  "sha": "13e730227e09",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d0b3f5480893": {
+  "identity": {
+   "one_liner": "面向端侧 AI Agent 的嵌入式持久化执行引擎，以步骤日志实现崩溃恢复",
+   "review": "LarkX 是一个嵌入式、本地优先的持久化执行引擎，用 TypeScript 编写工作流，将模型调用与工具调用作为持久化步骤记录到本地存储（内存或 SQLite），崩溃后通过重放已提交步骤结果恢复运行。面向在手机等边缘设备上运行 AI Agent 的开发者。当前处于早期实现阶段，仅支持本地步骤执行，混合调度、npm 发布和移动端真机验证均未完成，依赖 Node.js 22.13+ 与 pnpm，需从源码检出使用。",
+   "highlights": [
+    "以步骤为恢复边界：已提交步骤重放时返回存储结果，不重复执行 handler；pure/idempotent 步骤可重试，non-idempotent 步骤中断后转为 BLOCKED 待 reconcile",
+    "支持 Node.js 22.13+（SQLite 存储、进程终止测试）与 React Native/Expo SDK 58 适配器，附带 Cactus 1.13.1 模型适配器",
+    "内置 Agent API（@larkx/agent）：Agent 即工作流，模型与工具调用按步持久化，重放返回已提交决策不再调用模型或工具"
+   ],
+   "use_cases": [
+    "在手机等边缘设备上构建需要跨进程终止与断网存续的 AI Agent 工作流",
+    "需要崩溃恢复与步骤级副作用边界控制的本地自动化流程",
+    "基于 Cactus 等端侧推理引擎的模型调用编排与重放"
+   ]
+  },
+  "sha": "d0b3f5480893",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "260945297811": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL LISTEN/NOTIFY 为 Django 提供服务器推送事件（SSE）的应用",
+   "review": "django-pg-sse 在 Django 中通过 PostgreSQL 的 LISTEN/NOTIFY 与事件表实现服务器推送事件（SSE），把任意进程生成的 HTML 或 JSON 推送到打开的浏览器页面，支持断线后按 Last-Event-ID 重放。它面向使用 htmx 4 hx-sse 的 Django 项目，也可供其他 SSE 客户端使用。要求 Python 3.12+、Django 5.2+、psycopg 3.3.9+，且需在 ASGI 服务器上运行，runserver 的 WSGI 模式无法流式响应。不依赖 Redis 或独立消息代理。",
+   "highlights": [
+    "事件经事务提交后写入数据库表并 NOTIFY，NOTIFY 仅携带 id 与主题，不受 8000 字节载荷限制",
+    "支持断线重连后按 Last-Event-ID 重放未读事件，事件 id 经 SECRET_KEY 签名绑定用户、会话与主题",
+    "提供 CAN_SUBSCRIBE 策略函数、close_streams() 主动关闭流、stream_opened/stream_closed 信号及可选 presence 在线状态应用"
+   ],
+   "use_cases": [
+    "htmx 页面接收服务端渲染的 HTML 片段并实时更新页面区域",
+    "聊天室、在线列表等需要向多个浏览器推送消息或状态的 Django 应用",
+    "客户端代码通过 EventSource 接收 JSON 事件（如在线人数）而无需引入消息代理"
+   ]
+  },
+  "sha": "260945297811",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

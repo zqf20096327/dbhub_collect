@@ -3152,5 +3152,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2d8a36d6657c": {
+  "identity": {
+   "one_liner": "日式餐厅发现到预约全流程服务的 Spring Modulith 模块化单体后端",
+   "review": "HASHI Server 是为 HASHI 服务提供的后端，功能覆盖日式餐厅的搜索与推荐、预约、基于预约的点评、积分，以及 Kakao OAuth 登录和图片上传。项目采用 Spring Modulith 将餐厅、预约、点评、积分等领域划分为模块，通过公开 Port 进行模块间调用，并通过验证测试检查边界和循环依赖。架构包含 MySQL/Flyway、Redis、S3 Presigned URL 上传以及基于 Prometheus/Loki/Grafana 的监控。",
+   "highlights": [
+    "提供餐厅搜索/推荐、预约、点评、积分、Kakao OAuth 登录和 S3 图片上传功能",
+    "以 Spring Modulith 模块化单体构建，通过 ApplicationModules.verify() 验证模块边界",
+    "通过 Actuator/Micrometer/Prometheus/Loki/Grafana 收集和可视化指标与日志"
+   ],
+   "use_cases": [
+    "需要同时提供搜索、预约、点评等连贯流程的餐饮服务后端参考",
+    "参考在保持单体部署的同时按领域分离代码的模块化单体结构",
+    "参考使用 Flyway、Redis Token 存储、S3 Presigned URL 等基础设施配置的实际案例"
+   ]
+  },
+  "sha": "2d8a36d6657c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8fe500965a7d": {
+  "identity": {
+   "one_liner": "自托管的 OpenAI 兼容网关，单 Node 进程加 SQLite 实现路由与负载均衡。",
+   "review": "SmolRouter 部署在 OpenAI 兼容客户端与一个或多个上游服务商之间，提供模型别名路由、密钥池轮换、故障转移、TPS 感知路由、响应缓存、预算与遥测等功能。面向需要自托管网关的团队，通过网关密钥按模型别名访问。运行要求 Node.js 22.13 以上，无运行时 npm 依赖与构建步骤，管理界面用原生 HTML/CSS/ES 模块实现，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供 OpenAI 兼容接口，支持模型别名、优先级分层路由及 round-robin、least-used、缓存感知三种负载均衡策略",
+    "实现上游密钥池轮换、认证失败自动隔离、带冷却与恢复探测的故障转移，以及带有效 TPS 下限的 TPS 感知路由",
+    "提供逐请求遥测、Prometheus 指标、密钥预算规则、SQLite 备份与恢复工具，管理界面以单个管理员页面运行"
+   ],
+   "use_cases": [
+    "在多个上游服务商或密钥之间做路由与故障转移的自托管接入层",
+    "需要按模型别名管理客户端密钥、预算与用量统计的团队网关",
+    "部署环境无外部数据库服务器、希望以单 Node 进程运行网关的场景"
+   ]
+  },
+  "sha": "8fe500965a7d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

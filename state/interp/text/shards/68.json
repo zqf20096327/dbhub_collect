@@ -3142,5 +3142,114 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3a3691254876": {
+  "identity": {
+   "one_liner": "ParadeDB 官方 SQLAlchemy 集成库，用于在 ORM 中使用其检索功能",
+   "review": "该项目是 ParadeDB 的官方 SQLAlchemy 集成库。ParadeDB 定位为基于 PostgreSQL 的数据库，将应用数据、全文检索、向量检索与聚合放在同一个 Postgres 实例中。本库面向使用 Python 与 SQLAlchemy 的开发者，需配合 SQLAlchemy 2.0.32+、PostgreSQL 15+、pgvector 0.7.0+ 及 ParadeDB/pg_search 0.27.0+ 使用。README 未详述具体 API，入门需参阅 setup guide，采用 MIT 许可证。",
+   "highlights": [
+    "支持 Python 3.10+ 与 SQLAlchemy 2.0.32+",
+    "依赖 PostgreSQL 15+ 与 pgvector 0.7.0+（提供向量类型）",
+    "要求 ParadeDB / pg_search 0.27.0+，采用 MIT 许可证"
+   ],
+   "use_cases": [
+    "在 SQLAlchemy ORM 应用中接入 ParadeDB 的全文检索",
+    "配合 pgvector 在同一 Postgres 中进行向量检索",
+    "将应用数据、搜索与聚合统一运行于单个 Postgres 实例的项目"
+   ]
+  },
+  "sha": "3a3691254876",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63ed133eaa96": {
+  "identity": {
+   "one_liner": "Home Assistant 侧边栏面板，分析并瘦身 recorder 数据库、修正能源仪表盘数值",
+   "review": "这是面向 Home Assistant 用户的 HACS 集成，在侧边栏添加一个面板。功能包括：按分组查看数据库占用与增长预测、修复电表尖峰/缺口导致的能源统计错误、按设备查看数据占用、通过 Zigbee2MQTT throttle 降低保存频率。数据修改仅使用 recorder 自带功能（Adjust sum、purge 等），不执行原始 SQL，修复可撤销。0.8 版本前名为 Energy Doctor。",
+   "highlights": [
+    "提供数据库占用分析、增长预测与健康检查（SD 卡、recorder 设置、上次备份等）",
+    "使用 Home Assistant 自带的 Adjust sum、统计导入和 purge 修正能源尖峰、负数小时与数据缺口，且可撤销",
+    "读取 YAML（含 !include 与 packages）判断实体真实用途，仅图表、energy dashboard、statistics 等读取历史的用途保留历史"
+   ],
+   "use_cases": [
+    "排查数据库过大导致启动、备份缓慢的问题并安全清理",
+    "修复电表重置、掉线造成的能源仪表盘异常数值",
+    "降低 Zigbee2MQTT 传感器的记录频率以控制数据库增长"
+   ]
+  },
+  "sha": "63ed133eaa96",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fbb4790605a8": {
+  "identity": {
+   "one_liner": "DSH Desktop 的任务计划与学习模式插件，数据存本机 SQLite。",
+   "review": "该插件为 DSH Desktop 提供任务树、日历、看板与学习工作区，支持三种知识库、错题集、习惯追踪和 43 个 study_* 工具。数据存于本机 SQLite，不发起网络请求。安装需同时装 plugin 与 study-preset 两个 bundle 并重启 DSH，要求 DSH ≥ 0.2.1-rc.4、Node ≥ 22.5，学习日按凌晨 04:00 切分。",
+   "highlights": [
+    "提供任务树、日历、看板、归档四种视图，支持批量操作、拖拽改期与按工作日/周末时段的提醒扫描",
+    "学习模式包含列表库、知识树、题库三种知识库，新学与复习分段计目标，熟练度 0–10 制度并维护错题集",
+    "所有数据存本机 SQLite，插件不发起网络请求，支持设置内导出/导入备份"
+   ],
+   "use_cases": [
+    "在 DSH Desktop 中集中管理任务、日历与看板的本地计划",
+    "借助学习预设会话进行单词/知识树/题库的出题、批改与复习进度记录",
+    "需要数据完全离线存储并支持备份迁移的本地学习与习惯管理"
+   ]
+  },
+  "sha": "fbb4790605a8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "48a5e074372b": {
+  "identity": {
+   "one_liner": "开源 agent 记忆引擎，提供符号化短期记忆与分层长期记忆，基于 SQLite/Postgres 本地运行。",
+   "review": "InfinityDB 是面向 AI agent 的记忆引擎，通过 MCP server 接入 Claude Code、Cursor 等宿主，也提供 Python/Node 包。它以本地规则提取原子事实（无 LLM 调用），记录带时间戳的事实历史，支持 as_of 时点检索；写入读取均不需 API key 或网络调用。提供审计包导出与离线验证、租户级策略隔离，支持 mem0 导出数据的迁移导入。",
+   "highlights": [
+    "事实带 SHA-256 哈希链与源文切片关联，支持导出自包含 JSON 审计包并在离线环境验证",
+    "recall 支持按会话、实体、时间点（as_of）与 token 预算限定范围，单值新事实自动取代旧值",
+    "混合检索基于 SQLite FTS5 关键词过滤，结合重要性权重与时间衰减排序，可通过 recall(rerank=fn) 接入本地 cross-encoder"
+   ],
+   "use_cases": [
+    "为 MCP 宿主（Claude Code、Cursor、Windsurf 等）中的 agent 添加本地长期记忆",
+    "需要对 agent 记忆做可验证审计或删除凭证（erase_with_receipt）的合规场景",
+    "从 mem0 或其他记忆层迁移已有导出数据，保留事件时间以支持时点检索"
+   ]
+  },
+  "sha": "48a5e074372b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b6a37d55f6af": {
+  "identity": {
+   "one_liner": "华为云示例项目索引库，编目各团队孵化中的示例仓",
+   "review": "该仓库以表格形式汇总华为云各孵化中的示例项目，按 application-intelligence、cloud-native、automotive 等前缀分类，涵盖 AI 应用、云原生安全、可观测性等场景。每个条目附仓库链接、描述、所属团队与状态，标签含 database、gaussdb、python。README 未提供统一的安装与运行说明，各示例需进入对应子仓库查看。",
+   "highlights": [
+    "以索引表形式编目约 30 个孵化状态（incubating）的示例仓库，含描述、团队与状态字段",
+    "覆盖 AI 应用（RAG、MCP、推荐、语音转写）、云原生（安全、可观测、GPU 诊断）、汽车等主题",
+    "涉及 GaussDB、RDS MySQL、OBS、FunctionGraph、ModelArts、CCE 等华为云服务的组合使用"
+   ],
+   "use_cases": [
+    "查找华为云特定场景（AI 应用、云原生、数据库审计等）的参考示例仓库入口",
+    "了解华为云各团队孵化中示例的整体布局与分类结构"
+   ]
+  },
+  "sha": "b6a37d55f6af",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

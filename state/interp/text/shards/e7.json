@@ -3441,5 +3441,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bad34425f5ac": {
+  "identity": {
+   "one_liner": "LLM 驱动的小说结构化分析工具，生成关系图谱、地图、时间线与百科",
+   "review": "AI Reader V2 读取 TXT/Markdown 小说，用 LLM 将各章内容拆解为 ChapterFact 结构化数据，聚合生成人物关系图谱、分层地图、时间线与实体百科，并提供可溯源的 RAG 问答与设定集导出。前端 React、桌面端 Tauri，后端 FastAPI + SQLite + ChromaDB，支持本地 Ollama 或 10 家云端 OpenAI 兼容 API。数据存于本机；README 提示分析结果需结合原文核对。",
+   "highlights": [
+    "每章生成结构化数据（人物、关系、地点层级、物品、组织、事件），关系带证据 span，自动合并实体别名",
+    "支持本地 Ollama 与云端 OpenAI 兼容 API；数据以 SQLite + ChromaDB 形式存储于本机",
+    "包含实体预扫描（jieba 分词）、独立二审、人工修正（别名合并/拆分、改名/隐藏）及 1764 个后端测试与金标回归"
+   ],
+   "use_cases": [
+    "网文/小说世界观整理：自动梳理人物关系、地点层级与势力分布",
+    "文学研究：对角色网络、叙事结构、空间层级进行可视化探索",
+    "创作辅助：导出设定集（Markdown/Word/Excel/PDF）、检查世界观一致性"
+   ]
+  },
+  "sha": "bad34425f5ac",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2298bee10b2a": {
+  "identity": {
+   "one_liner": "Riftbound TCG 全卡牌机器可读数据库，抓取官方卡库生成 JSON/CSV/SQLite",
+   "review": "该项目通过 Playwright 抓取官方 Card Gallery 与勘误页面，将 Riftbound: The League of Legends TCG 的卡牌规范化为 JSON、CSV 和 Prisma 管理的 SQLite 三种格式，每日 06:00 UTC 自动发布带日期快照。数据约 1080 张卡牌，覆盖 5 个系列，保留原始与勘误后能力文本。适合需要卡牌数据的工具开发者使用。项目为非商业性质，不受 Riot Games 背书，不包含对局环境统计数据。",
+   "highlights": [
+    "提供 JSON、CSV、SQLite 三种格式导出，勘误后 abilityCorrected 与原文 abilityOriginal 并列保留",
+    "GitHub Actions 每日 06:00 UTC 自动抓取并 diff，仅在有变更时发布带日期标签的快照，另有 Hugging Face 数据集镜像",
+    "支持手动 errata CSV 覆盖层，可不经改码修正自动抓取的勘误；artwork URL 去除缩放参数以提供 744×1039 原图"
+   ],
+   "use_cases": [
+    "为 Riftbound 卡牌查询、组卡或收藏管理工具提供结构化数据源",
+    "需要按日期锁定快照以保证可复现性的数据分析流水线",
+    "通过 load_dataset 一行代码加载 Hugging Face 镜像用于机器学习或数据探索场景"
+   ]
+  },
+  "sha": "2298bee10b2a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "07c54ce4c6fa": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理长期记忆工具，通过单一 MCP 工具 recall 查询本地 SQLite 记忆库",
+   "review": "Rolling-Memory 为 Claude Code、Cursor、Cline 等 AI 编码代理提供本地长期记忆：将支持的会话来源与挂载文件索引到本地 SQLite 库，代理经唯一的 MCP 工具 recall 检索原始终录及文件坐标。纯本地模式（local_plain）不做向量化、无后台 LLM 调用，记忆层零网络请求；README 自述词法检索存在局限。非商业用途免费（PolyForm-NC-1.0.0），安装脚本可自动接入编码助手。",
+   "highlights": [
+    "以本地 SQLite 文件存储原始终录，用词法与统计信号索引，不使用向量嵌入，记忆层零网络请求",
+    "编译为单一零依赖 Go 二进制（CGO_ENABLED=0），支持通过 install.sh 接入多种编码助手，可用 --mcp-only 仅安装纯 MCP 工具",
+    "内置 USB 便携模式（实验性）与可关闭的评估钩子、评估卡片及 ROI 面板"
+   ],
+   "use_cases": [
+    "长上下文编码会话中回溯历史决策、修复记录与文件坐标，减少盲目的 grep/find 轮次",
+    "个人开发者、学生或小团队在无云订阅、无后台 LLM 开销的本地环境运行代理记忆",
+    "需要在可移动介质上携带工具与记忆库（同一项目跨机器）的便携使用场景"
+   ]
+  },
+  "sha": "07c54ce4c6fa",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

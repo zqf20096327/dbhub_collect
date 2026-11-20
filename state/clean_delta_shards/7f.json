@@ -28359,5 +28359,661 @@
    ]
   ],
   "at": "2026-11-17"
+ },
+ "b171f75c1578+2": {
+  "fn": "metarhia/globalstorage",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "NPM Version",
+     "NPM Downloads/Month",
+     "NPM Downloads"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    22,
+    5,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "- **Built-in integration** with Impress Application Server"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    36,
+    23,
+    36
+   ],
+   [
+    "replace",
+    36,
+    37,
+    36,
+    37,
+    [
+     "- **TypeScript** types for development are maintained in `globalstorage.d.ts`."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    46,
+    37,
+    46
+   ],
+   [
+    "replace",
+    46,
+    52,
+    46,
+    52,
+    [
+     "|Value|Shape|Join|`materialize`|",
+     "|--------|--------------------------------------------|--------------------------|-----------------------|",
+     "|Register|`{ $lww: { value, time, replica } }`|later `time`, then replica|`value`, `null` removes|",
+     "|Counter|`{ $counter: { inc: { r1: 3 }, dec: { } } }`|maximum for each replica|sum of `inc` - `dec`|",
+     "|Set|`[1, 'a', true]` primitives|sorted union|array|",
+     "|Map|`{ key: value }` of values above|join for each key|object|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    60,
+    52,
+    60
+   ],
+   [
+    "replace",
+    60,
+    65,
+    60,
+    61,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    67,
+    61,
+    63
+   ],
+   [
+    "replace",
+    67,
+    77,
+    63,
+    73,
+    [
+     "|Function|Result|",
+     "|-----------------------------------------|--------------------------------------------|",
+     "|`merge(state, delta)`|Joined state, `state` itself when unchanged|",
+     "|`apply(state, deltas)`|State after merging deltas in order|",
+     "|`diff(source, target)`|Delta of what `target` adds to `source`|",
+     "|`materialize(state)`|Plain JSON value of a state|",
+     "|`assign(fields, { time, replica })`|Delta with a register for each field|",
+     "|`increment(state, path, amount, replica)`|Delta raising this replica's counter entry|",
+     "|`latestTime(state)`|Latest register time, for a hybrid clock|",
+     "|`isDelta(value)`|Whether a value from network is a CRDT delta|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    101,
+    73,
+    97
+   ],
+   [
+    "replace",
+    101,
+    117,
+    97,
+    113,
+    [
+     "|Member|Description|",
+     "|------------------------------------------|-----------------------------------------------|",
+     "|`open()`|Loads a stored replica, required before changes|",
+     "|`id`|Replica id, used for own registers and counters|",
+     "|`position`|Log length|",
+     "|`get(target)`, `keys(entity?)`, `size`|Materialized records, ids of an entity|",
+     "|`state(target)`|CRDT state of a record|",
+     "|`assign(entity, target, fields)`|Own write of registers, returns the delta|",
+     "|`increment(entity, target, path, amount?)`|Own counter change, returns the delta|",
+     "|`merge(deltas, origin?)`|Applies deltas from elsewhere, returns fresh|",
+     "|`since(position, limit?)`|`{ deltas, position }` for other replicas|",
+     "|`origin(position)`|Where a logged delta came from|",
+     "|`getLink(name)`, `setLink(name, link)`|Stored `{ source, pulled, pushed }` cursors|",
+     "|`clear()`|Removes data and takes a new replica id|",
+     "|`cleared`|Ids of logs cleared on purpose, the latest last|",
+     "|`save()`|Waits for pending writes|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    124,
+    113,
+    120
+   ],
+   [
+    "replace",
+    124,
+    125,
+    120,
+    121,
+    [
+     "`SyncService` serves a replica as a metacom"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    134,
+    121,
+    130
+   ],
+   [
+    "replace",
+    134,
+    142,
+    130,
+    131,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    144,
+    131,
+    133
+   ],
+   [
+    "replace",
+    144,
+    150,
+    133,
+    139,
+    [
+     "|Call|Result|",
+     "|----------------------------|------------------------------------------------|",
+     "|`subscribe()`|Caller's `context.client` receives `<unit>/log`|",
+     "|`pull({ source, position })`|`{ source, deltas, position, more, cleared }`|",
+     "|`push({ deltas })`|`{ source, position, applied }` after merge|",
+     "|event `log`|`{ source, deltas, position }` with fresh deltas|"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    186,
+    139,
+    175
+   ],
+   [
+    "replace",
+    186,
+    190,
+    175,
+    179,
+    [
+     " - server-side storage engine",
+     " - client-side storage engine (multiple implementations for different platforms including mobile, desktop and browser)",
+     " - sharding for distributed storage of large data amounts, geo-distribution, save backup copies, access load balancing",
+     " - allows user to exchange data in P2P mode"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    193,
+    179,
+    182
+   ],
+   [
+    "replace",
+    193,
+    194,
+    182,
+    183,
+    [
+     "- Global data structures unification for applications working with Metarhia technological stack and Impress application server"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    199,
+    183,
+    188
+   ],
+   [
+    "replace",
+    199,
+    201,
+    188,
+    189,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "e29a3d002993+2": {
+  "fn": "armajedon1/felix-agent",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "delete",
+    5,
+    7,
+    5,
+    5
+   ],
+   [
+    "equal",
+    7,
+    46,
+    5,
+    44
+   ],
+   [
+    "delete",
+    46,
+    48,
+    44,
+    44
+   ],
+   [
+    "equal",
+    48,
+    53,
+    44,
+    49
+   ],
+   [
+    "replace",
+    53,
+    56,
+    49,
+    52,
+    [
+     " * `ffmpeg` (para codificación de audio Opus en notas de voz).",
+     " * `git` (para versionado y sandbox).",
+     " * `build-essential` (para extensiones de compilación si aplica)."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    61,
+    52,
+    57
+   ],
+   [
+    "delete",
+    61,
+    63,
+    57,
+    57
+   ],
+   [
+    "equal",
+    63,
+    77,
+    57,
+    71
+   ],
+   [
+    "delete",
+    77,
+    79,
+    71,
+    71
+   ],
+   [
+    "equal",
+    79,
+    110,
+    71,
+    102
+   ],
+   [
+    "delete",
+    110,
+    112,
+    102,
+    102
+   ],
+   [
+    "equal",
+    112,
+    124,
+    102,
+    114
+   ],
+   [
+    "delete",
+    124,
+    126,
+    114,
+    114
+   ],
+   [
+    "equal",
+    126,
+    130,
+    114,
+    118
+   ],
+   [
+    "replace",
+    130,
+    144,
+    118,
+    130,
+    [
+     "|Comando|Descripción|",
+     "|:---|:---|",
+     "|`/help`|Guía interactiva de comandos disponibles.|",
+     "|`/status`|Diagnóstico completo en vivo: CPU, memoria, almacenamiento, red y servicios.|",
+     "|`/config`|Panel de configuración interactiva de inferencia y parámetros del agente.|",
+     "|`/services`|Estado en tiempo real de servicios monitoreados (PM2, systemd, Docker).|",
+     "|`/sub <id>`|Lectura de reportes generados por subagentes en segundo plano.|",
+     "|`/backup`|Respaldo atómico inmediato de bases SQLite (`VACUUM INTO`).|",
+     "|`/logs [rotate]`|Diagnóstico de consumo de logs y rotación preventiva.|",
+     "|`/voz [on\\|off]`|Modo manos libres: respuestas narradas por notas de voz Opus.|",
+     "|`/clear`|Reinicio de la memoria conversacional activa de la sesión.|",
+     "|`/clean`|Purga inmediata de archivos temporales y descargas antiguas.|"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    153,
+    130,
+    139
+   ],
+   [
+    "replace",
+    153,
+    181,
+    139,
+    140,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    182,
+    140,
+    141
+   ],
+   [
+    "delete",
+    182,
+    184,
+    141,
+    141
+   ],
+   [
+    "equal",
+    184,
+    191,
+    141,
+    148
+   ],
+   [
+    "replace",
+    191,
+    228,
+    148,
+    149,
+    [
+     "…（37 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    229,
+    149,
+    150
+   ],
+   [
+    "delete",
+    229,
+    231,
+    150,
+    150
+   ],
+   [
+    "equal",
+    231,
+    249,
+    150,
+    168
+   ],
+   [
+    "delete",
+    249,
+    251,
+    168,
+    168
+   ],
+   [
+    "equal",
+    251,
+    253,
+    168,
+    170
+   ],
+   [
+    "replace",
+    253,
+    254,
+    170,
+    171,
+    [
+     "Félix cuenta con una suite nativa de evaluación de rendimiento y telemetría concurrente de hardware (`cmd/benchmark/main.go`) para validar la latencia y el consumo de recursos en hardware embebido (Raspberry Pi 5 / Debian arm64):"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    255,
+    171,
+    172
+   ],
+   [
+    "replace",
+    255,
+    260,
+    172,
+    177,
+    [
+     "|Subsistema Evaluado|Carga / Operaciones|Tiempo Total|Rendimiento|Latencia Promedio|",
+     "|:---|:---|:---|:---|:---|",
+     "|**Motor StateGraph (LangGraph en Go)**|500 corridas (1.000 transiciones + SQLite WAL)|`97,90 ms`|**10.213 pasos/seg**|**97,90 µs** / paso|",
+     "|**Arnés de Desarrollo (`harness_develop`)**|Ciclo E2E completo (AST $\\rightarrow$ Sandbox $\\rightarrow$ Patch $\\rightarrow$ Test $\\rightarrow$ Merge)|`1,41 s`|**1 ciclo E2E completo**|**1,41 s** (con `go test` real)|",
+     "|**Compuerta de Ejecución (*Execution Gate*)**|200.000 evaluaciones semánticas (confirmación/hesitación)|`642,08 ms`|**311.484 ops/seg**|**3,21 µs** / evaluación|"
+    ]
+   ],
+   [
+    "equal",
+    260,
+    263,
+    177,
+    180
+   ],
+   [
+    "replace",
+    263,
+    266,
+    180,
+    181,
+    [
+     "* **Metodología y Reproducción:** Consulte `BENCHMARKS.md` para el desglose detallado de pruebas, telemetría y comandos de ejecución."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    273,
+    181,
+    188
+   ],
+   [
+    "replace",
+    273,
+    286,
+    188,
+    201,
+    [
+     "|Característica / Métrica|Félix Agent|OpenClaw|Antigravity CLI (`agy`)|Claude Code CLI|Frameworks Python (LangGraph / CrewAI)|",
+     "|:---|:---|:---|:---|:---|:---|",
+     "|**Lenguaje y Runtime**|**Go nativo** (binario estático único ~33 MB)|Node.js / TypeScript (V8 runtime + pnpm)|Go / Python / Node (motor híbrido con sidecars)|Node.js / TypeScript (npm / runtime V8)|Python 3.10+ (intérprete + PyPI)|",
+     "|**RAM en Reposo (RSS)**|**16 - 25 MB**|180 - 320 MB|150 - 350 MB|220 - 450 MB|250 - 600 MB|",
+     "|**RAM bajo Carga / Compilación**|**18 - 35 MB** (pico medido: 18,36 MB)|350 - 650 MB|300 - 800 MB|450 - 900 MB|500 - 1.200 MB|",
+     "|**Tiempo de Arranque (Cold Start)**|**< 15 ms**|~1.200 - 2.500 ms|~350 - 800 ms|~800 - 1.800 ms|~1.500 - 3.500 ms|",
+     "|**Canales de Mensajería Nativos**|**WhatsApp E2E (WhatsMeow) + Telegram** (simultáneos o independientes)|WhatsApp (gateway Baileys)|Solo terminal CLI / IDE (sin chat móvil directo)|Solo terminal interactiva (CLI)|Ninguno out-of-the-box (requiere armar API/bot)|",
+     "|**Arnés SWE Integrado**|**Nativo en binario** (AST `repomap`, fuzzy patcher Levenshtein, Git sandbox efímero, REPL)|Delegación a scripts bash y utilidades externas|Arnés completo de desarrollo con sandboxing|Edición de archivos por búsqueda/reemplazo en CLI|Sin arnés nativo (framework genérico de grafos)|",
+     "|**Persistencia y Time-Travel**|**SQLite WAL nativo** con Time-Travel (rollback/resume transaccional)|JSON / SQLite simple|Checkpoints en SQLite de sesión|Historial JSONL en disco|Requiere configurar SQLiteSaver o Postgres|",
+     "|**Resiliencia de Inferencia**|**Fast-Failover (20s) + Grace Period desacoplado (35s) + Degradación elegante**|Reintento lineal simple ante errores|Manejo de cuotas y switching de modelos|Reintento sobre endpoint único de Anthropic|Depende de la implementación manual del usuario|",
+     "|**Ruta Rápida (Fast-Path)**|**< 5 ms** (telemetría, RAM, disco, PM2 sin coste de tokens)|Interceptores regex básicos|No aplicable (todo consume tokens o slash commands)|Comandos fijos en consola|No disponible out-of-the-box|",
+     "|**Notas de Voz y Multimodal**|**Opus bidireccional** (Whisper nativo + TTS)|Notas de voz vía ffmpeg externo|Solo texto / imágenes en terminal|Solo texto / terminal|Requiere integración de librerías externas|",
+     "|**Idoneidad en Hardware Edge / Embebido**|**Excelente** (ideal para Raspberry Pi, VPS de 512 MB - 2 GB)|Regular (overhead elevado de memoria en placas chicas)|Moderado (diseñado para estaciones de trabajo)|Regular (intensivo para servidores desatendidos)|Baja (consumo masivo de RAM y ciclos de CPU)|"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    290,
+    201,
+    205
+   ],
+   [
+    "replace",
+    290,
+    291,
+    205,
+    206,
+    [
+     " Al compilarse directamente a código máquina nativo, Félix no requiere una máquina virtual V8 ni un intérprete de Python en memoria constante. Con un consumo en reposo inferior a 25 MB de RAM, coexiste pacíficamente en servidores que ya ejecutan bases de datos, aplicaciones web y servicios contenerizados sin disputar recursos."
+    ]
+   ],
+   [
+    "equal",
+    291,
+    293,
+    206,
+    208
+   ],
+   [
+    "replace",
+    293,
+    294,
+    208,
+    209,
+    [
+     " Mientras otras herramientas delegan la edición y prueba de código en llamadas externas pesadas o editores interactivos de terminal, Félix incorpora internamente el motor de análisis sintáctico AST (`repomap` que resume repositorios en < 1.500 tokens), el motor de parcheo difuso tolerante a discrepancias de sangría y el sandbox atómico en ramas efímeras de Git."
+    ]
+   ],
+   [
+    "equal",
+    294,
+    296,
+    209,
+    211
+   ],
+   [
+    "replace",
+    296,
+    297,
+    211,
+    212,
+    [
+     " A diferencia de agentes que abortan abruptamente con errores de timeout cuando una herramienta previa demora o cuando la API principal agota cuota, Félix implementa Fast-Failover a los 20 segundos con desacoplamiento de contexto (`context.WithoutCancel`) y 35 segundos garantizados para el proveedor de respaldo, respaldado por degradación elegante (`summarizeExecutedTools`) para rescatar los resultados del turno."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    299,
+    212,
+    214
+   ],
+   [
+    "replace",
+    299,
+    302,
+    214,
+    215,
+    [
+     " Félix está diseñado para ser administrado desde el teléfono celular o la terminal a través de WhatsApp y Telegram, permitiendo dar órdenes en lenguaje natural o recibir reportes técnicos detallados estés donde estés, con autenticación RBAC y confidencialidad de usuarios."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    316,
+    215,
+    229
+   ],
+   [
+    "delete",
+    316,
+    318,
+    229,
+    229
+   ],
+   [
+    "equal",
+    318,
+    321,
+    229,
+    232
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

@@ -3210,5 +3210,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a19482f38893": {
+  "identity": {
+   "one_liner": "Rust 编写的可嵌入多模型 SQL 引擎，可对接多种存储后端。",
+   "review": "GlueSQL 是一个用 Rust 编写的可嵌入多模型 SQL 数据库引擎，负责 SQL 的解析、规划与执行，并提供 Rust Query Builder 作为补充查询接口。它通过存储适配器对接内存、嵌入式数据库、文件、对象存储等后端，也可通过实现 Store/StoreMut 接入自定义存储。可通过 cargo、npm 或 CDN 安装，适用于浏览器与 Node.js。采用 Apache 2.0 许可证。",
+   "highlights": [
+    "支持 SQL 与 Rust Query Builder 两种查询接口，均运行于同一引擎和存储后端",
+    "支持 schema-defined 与 schemaless 表并存，包含 MAP 和 LIST 值，且可在同一查询中联接",
+    "提供多种参考存储实现，并可通过实现 Store（读）与 StoreMut（写）特性创建自定义存储"
+   ],
+   "use_cases": [
+    "在不迁移数据的前提下，用 SQL 查询 MongoDB、Redis、CSV、JSON、Parquet 等既有数据",
+    "在浏览器或 Node.js 应用中嵌入 SQL 查询能力（内存、localStorage 或 OPFS 存储）",
+    "通过 Composite 存储跨多个存储后端执行查询，或为文件、数据库、API 编写自定义存储适配器"
+   ]
+  },
+  "sha": "a19482f38893",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eedcf2d22381": {
+  "identity": {
+   "one_liner": "Go 单二进制加 PostgreSQL 的自托管无 Cookie 网站分析平台",
+   "review": "Supermetry 是一个开源自托管的网站与产品分析平台，使用 Go 单二进制加 PostgreSQL 运行，无需 Redis。它无 Cookie、不存原始 IP，用约 48 小时后删除的每日随机盐统计访客。功能包含漏斗、留存、收入、热图、会话回放、Web Vitals 及 Sentry 兼容的错误监控，支持 REST API、CSV 导出与 GA4/Plausible/Umami 等数据导入，采用 Apache-2.0 许可证。",
+   "highlights": [
+    "单 Go 二进制加 PostgreSQL 即可运行，无需 Redis，提供 Linux/macOS/Windows 安装包及 amd64/arm64 二进制",
+    "无 Cookie、不存原始 IP，遵守 Do Not Track 与 Global Privacy Control，提供 anonymous 与 identified 两种隐私模式",
+    "开源版包含目标、漏斗、收入、留存、用户路径、Web Vitals、热图与会话回放，并提供 REST API、MPC 端点与 CSV 导出"
+   ],
+   "use_cases": [
+    "需要将分析数据保留在自己 PostgreSQL 数据库中的自托管部署",
+    "受 GDPR 或 Cookie 政策约束、希望减少同意弹窗依赖的网站统计",
+    "需要漏斗、留存、收入归因等产品分析能力的团队"
+   ]
+  },
+  "sha": "eedcf2d22381",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32f275de0d78": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的嵌入式属性图数据库，实现 openCypher 查询语言",
+   "review": "KyuGraph 是纯 Rust 编写的嵌入式属性图数据库，源自 Kùzu 的 C++ 分支 RyuGraph 的移植。它实现 openCypher 查询语言，采用列式存储、CSR 压缩邻接表、MVCC 事务和向量化执行，并提供 Python 与 Node.js 绑定。通过 Cargo feature 可裁剪 JIT、S3 存储、Arrow Flight 等组件，支持经 snapshot API 在无文件系统环境持久化。适合嵌入 Rust/Python/Node.js 应用处理分析型图查询的场景。",
+   "highlights": [
+    "实现 openCypher 查询语言，支持 CSV、Parquet、Arrow IPC、Kafka 等多格式 COPY FROM 导入",
+    "列式存储引擎配合 CSR 压缩邻接表与 MVCC 事务（WAL + 自动 checkpoint）",
+    "提供 Python (PyO3) 与 Node.js (NAPI-rs) 绑定，并通过 Cargo feature 支持裁剪 JIT/Flight/S3 组件"
+   ],
+   "use_cases": [
+    "在 Rust/Python/Node.js 应用中嵌入分析型图查询能力",
+    "构建知识图谱并配合全文搜索、向量相似度扩展（如项目自带 knowledge_graph 示例）",
+    "需要嵌入式持久化（snapshot API）或 S3 远程页存储的部署场景"
+   ]
+  },
+  "sha": "32f275de0d78",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4de78c271490": {
+  "identity": {
+   "one_liner": "Home Assistant 数据库空间分析与按实体历史清理的 HACS 集成",
+   "review": "这是一个面向 Home Assistant 管理员的 HACS 自定义集成，提供侧边栏面板，用于分析 recorder SQLite 数据库空间占用：按集成、设备、类型统计各实体的状态历史与长期统计体积，给出清理建议，并在执行禁用、清理历史等操作前写入可撤销的压缩备份。长期统计不受影响；不支持 MariaDB 和 PostgreSQL，面板仅管理员可用。",
+   "highlights": [
+    "按实体统计状态历史与长期统计的空间占用，支持搜索、多维过滤和大小随时间图表",
+    "清理操作前将数据保存为压缩备份，支持从 History 页整批撤销，只恢复缺失行",
+    "支持按实体设置 1-7 天的状态历史保留，由集成自定的夜间任务执行并随后重打包回收空间"
+   ],
+   "use_cases": [
+    "排查哪个实体占用数据库空间导致的备份变慢或磁盘占满",
+    "清理已删除或禁用实体残留的历史记录，并保留撤销能力",
+    "为高频写入的传感器单独设置较短的状态保留期"
+   ]
+  },
+  "sha": "4de78c271490",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

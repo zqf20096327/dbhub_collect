@@ -3195,5 +3195,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cc6c44c83ca6": {
+  "identity": {
+   "one_liner": "OpenCode 插件，用于调度与编排 AI 代理任务：cron、DAG、矩阵构建",
+   "review": "agent-steward 是 OpenCode V1/V2 的插件，将代理任务作为工作流调度：支持 cron、一次性运行、依赖 DAG、矩阵扇出、质量门和文件/git/MCP 事件触发。cron 与一次性任务注册到系统原生调度器（Windows Task Scheduler、launchd、crontab），重启后仍可运行；文件、git 与 MCP 事件触发则需 OpenCode 进程保持运行。历史记录存于 SQLite，并提供本地 Web 仪表盘。适用于使用 OpenCode 并需要定时或链式运行代理任务的本地开发者。",
+   "highlights": [
+    "支持 DAG 依赖、成功/错误链式任务与矩阵扇出（并行/串行、并发限制、按工作区覆盖）",
+    "cron 与一次性任务注册到 Windows/macOS/Linux 原生系统调度器，不依赖 OpenCode 常开；质量门以指定命令（如 npm test）通过与否判定任务成败",
+    "提供 SQLite 运行历史、Prometheus /metrics、OTLP 导出、本地 Web 仪表盘，以及 29 个代理工具和 webhook/Telegram/系统通知渠道"
+   ],
+   "use_cases": [
+    "定时运行代理任务，如每天 09:00 汇总 git 提交并生成报告",
+    "对多个仓库按同一模板批量执行任务（矩阵构建），并以质量门命令判定成功",
+    "基于 git 提交、文件变更、MCP 事件或 HMAC 签名 webhook 触发代理任务"
+   ]
+  },
+  "sha": "cc6c44c83ca6",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f4e02a2b411e": {
+  "identity": {
+   "one_liner": "小型全栈工单跟踪应用：React+Vite 前端、Express+TypeScript REST API、SQLite 存储。",
+   "review": "MSTT 是一个用于管理支持工单的全栈 Web 应用，支持创建、列表筛选、查看详情及 Open→In Progress→Resolved 状态流转。后端采用 routes→service→repository 分层并注入依赖，验证基于 zod 模式；前端通过相对路径 /api 访问 API。无认证功能，属明确范围外；删除为硬删除，分页为 limit/offset 方式且无总数返回。可通过 docker compose 或本地 Node 运行。",
+   "highlights": [
+    "提供 POST/GET/PATCH/DELETE 五个工单端点，列表支持 status、q、sort、limit、offset 服务端查询",
+    "SQLite 单文件数据库，启动时幂等建表，Schema CHECK 约束与 TypeScript 类型常量同源生成",
+    "包含 34 个 API 测试（supertest+内存 SQLite）、16 个前端单元测试及 Python 冒烟脚本；提供多阶段 Docker 镜像与 Compose 健康检查"
+   ],
+   "use_cases": [
+    "需要零数据库服务配置即可运行的本地工单管理场景",
+    "全栈 TypeScript 项目结构、分层架构与容器化部署的参考实现",
+    "REST API 设计（统一错误结构、服务端筛选分页）的学习样本"
+   ]
+  },
+  "sha": "f4e02a2b411e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2859,5 +2859,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e63d5799352d": {
+  "identity": {
+   "one_liner": "在系统上安装 OpenBao 的 Ansible 角色",
+   "review": "这是一个 Ansible 角色（ansible-role-openbao），用于在目标系统上安装 OpenBao。它提供示例 playbook（取自 molecule/converge.yml 并在 CI 中每次推送/PR/发布时测试）、可配置的角色变量（定义于 defaults/main.yml），并依赖 robertdebock.bootstrap 角色做系统准备。要求安装 requirements.txt 中列出的 pip 包；ansible-core 最低版本为 2.20。已在 Debian、EL 9、Fedora、Ubuntu（jammy、noble）容器镜像上测试。采用 Apache-2.0 许可证，作者是 robertdebock。",
+   "highlights": [
+    "通过 Ansible playbook 在系统上安装 OpenBao，示例经 molecule 在 CI 中测试",
+    "角色变量默认值定义于 defaults/main.yml，可按需调整",
+    "已在 Debian、EL 9、Fedora、Ubuntu（jammy/noble）容器镜像上验证兼容性"
+   ],
+   "use_cases": [
+    "使用 Ansible 在 Linux 服务器上自动化部署 OpenBao",
+    "纳入基于 molecule 的 CI 流程进行基础设施配置测试",
+    "配合 robertdebock 系列角色构建系统初始化与软件安装流水线"
+   ]
+  },
+  "sha": "e63d5799352d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f51cd03e182": {
+  "identity": {
+   "one_liner": "面向波兰卖家的自托管电商订单管理系统，Node.js+SQLite 单服务器架构",
+   "review": "Twój OMS 是一个自托管的订单管理面板，用于处理来自 Allegro、ERLI 和 WooCommerce 渠道的订单，并支持发票（inFakt/Fakturownia/KSeF）、物流（DPD/InPost）、退货、成本和报表功能。它采用 Node.js 24 与 SQLite 构建，使用 Fastify 和服务端渲染的 EJS，模块化组织（订单、渠道、发票、物流等），每个集成都是可选的，需要各自的密钥；提供带范围控制的 API v1。UI、文档和代码注释均为波兰语，针对单一贸易公司的规则（VAT/KSeF/WDT）定制。基于 MIT 许可证发布，不提供保证或支持。适用于运行自己的小型服务器并希望独立或与 AI 代理合作调整代码的波兰小型在线卖家。",
+   "highlights": [
+    "模块化结构：订单、渠道、发票（inFakt/Fakturownia/KSeF）、物流（DPD/InPost）、库存、退货、成本、报表、自动化、API 等，位于 src/moduly/",
+    "运行在单个服务器上，使用 Node.js 24 和 SQLite，无需外部数据库；所有集成都需要自己的密钥，试用模式 (OMS_TRYB=proba) 在检测到密钥时会拒绝启动",
+    "提供带范围控制密钥的 API v1、OpenAPI 描述、带有预防性停止点的 AI 代理安装场景，以及仅在编写时进行附加的数据库迁移"
+   ],
+   "use_cases": [
+    "将来自 Allegro、ERLI 和 WooCommerce 销售渠道的订单合并到一个面板中，包括开具发票并发送至 KSeF、创建包裹和物流跟踪",
+    "在本地服务器上自托管，无需订阅费，支持通过 API 由外部程序或 AI 代理操作",
+    "由想要在 MIT 许可证下修改和开发代码以适应其自身业务的波兰公司使用"
+   ]
+  },
+  "sha": "5f51cd03e182",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ca1bf26b162": {
+  "identity": {
+   "one_liner": "基于 LLM 的 ORM 层数据库查询分析工具，检测并修复 N+1 等问题",
+   "review": "Backend Friend 是一个面向后端开发者的数据库查询分析工具，在 ORM 层面扫描代码，检测 N+1 查询、缺失索引、过度取数等问题，并返回修复后的 ORM 代码和迁移脚本。它支持 8 种语言的主流 ORM，用户自带 API key（Meta/OpenAI/DeepSeek/Claude），key 在浏览器内经 RSA-4096 加密、服务端不存储。项目基于 Express + React，可自托管，需运行 npm install 并配置 BYOK_PRIVATE_KEY 环境变量。",
+   "highlights": [
+    "扫描 GitHub 仓库或本地文件夹，提取 ORM 查询块并返回按严重度排序的问题清单，含生成的 SQL、修复代码与索引迁移脚本",
+    "支持 Node.js、Python、Go、Java/Kotlin、Ruby、PHP、C#、Rust 共 8 种语言的多种 ORM 及 MongoDB、DynamoDB 客户端",
+    "采用 BYOK 模式，API key 经 RSA-OAEP 加密传输、仅在内存中解密使用、带 5 分钟防重放校验，全部 API 路由通过 SSE 流式响应"
+   ],
+   "use_cases": [
+    "提交前检测代码库中的 N+1 查询、缺失索引等 ORM 层性能问题",
+    "分析单条 ORM 查询，获取对应 SQL、严重度说明及修复代码",
+    "自托管部署，供团队在不使用服务端模型密钥的前提下自行分析项目"
+   ]
+  },
+  "sha": "4ca1bf26b162",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

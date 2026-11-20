@@ -2795,5 +2795,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d27173e91dfc": {
+  "identity": {
+   "one_liner": "ClickHouse 数据库备份工具，支持备份到 S3 兼容存储并从备份恢复。",
+   "review": "ch-backup 是 Yandex 开源的 Python 命令行工具，用于对 ClickHouse 数据库执行备份与恢复。它仅备份 MergeTree 系列表（这类表支持不停机的一致性快照），默认开启 part 级去重，可设置起始时间排除更早的备份参与去重。通过 make build 构建 wheel 包，用 pip 或 uv tool install 安装。恢复流程支持失败分片重试、复制表分片恢复等机制。",
+   "highlights": [
+    "将 MergeTree 系列表备份至 S3 兼容存储，并支持从备份恢复数据",
+    "支持 part 级去重（默认启用），可通过配置起始时间限定去重范围",
+    "支持备份复制到其他 S3 存储桶/端点，提供 --keep-going、--skip-cloud-storage、--schema-only 等恢复选项"
+   ],
+   "use_cases": [
+    "将 ClickHouse 表数据定期备份到 S3 兼容存储，在原始数据损坏时进行恢复",
+    "复制表的分片级恢复：在一个副本上恢复数据，其他副本使用 --schema-only 加速同步",
+    "将备份复制到另一个 S3 存储桶或端点用于异地保存"
+   ]
+  },
+  "sha": "d27173e91dfc",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ebb08972f4f8": {
+  "identity": {
+   "one_liner": "Rust 可恢复 agent 运行时，同一引擎支持内存运行与断点续跑。",
+   "review": "agent-rs 是一个 Rust agent 引擎，可在内存中运行或以持久化方式运行（每步提交，进程重启后继续）。面向需要在 Rust 中构建带工具调用、审批、等待与硬限制的 LLM agent 的开发者。通过实现 DurableStore 可更换存储后端；内置 SQLite 存储。需 Rust 1.89 与 Tokio 运行时，MIT 协议。",
+   "highlights": [
+    "支持持久化运行：每步提交，等待或中断的运行在进程重启后继续，默认提供 SQLite 存储，可实现 DurableStore 接入其他存储",
+    "工具为带类型参数的异步函数，支持失败上报、暂停等待、调用前审批，单轮工具调用可并行并有并行上限",
+    "Limits 可限制模型调用数、工具调用数、token、字节、并行度与时间；提供 ContextWindow 压缩上下文以适配模型窗口"
+   ],
+   "use_cases": [
+    "需要跨重启恢复的长时间运行 agent 流程（含审批、定时器、等待输入）",
+    "为 OpenAI Chat Completions / Responses 或本地 llama.cpp llama-server 构建带类型化工具的 agent",
+    "通过 MCP stdio 客户端或子 agent 将外部工具纳入 agent 执行链"
+   ]
+  },
+  "sha": "ebb08972f4f8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

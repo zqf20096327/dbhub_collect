@@ -3366,5 +3366,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b771386b0b5d": {
+  "identity": {
+   "one_liner": "Rust 编写的 Postgres 兼容运行时，单进程承载上千个一次性隔离数据库",
+   "review": "PGBoxDB 是用 Rust 实现的 Postgres 兼容数据库运行时，通过 Postgres 线协议对外服务。每个数据库从密封模板以写时复制方式在毫秒级创建，空闲时约占 70 KB 内存，会话结束后按宽限期自动删除。面向 AI agent 沙箱、CI、per-PR 与预览环境等短生命周期数据库场景。限制包括：非生产用途、fsync=off 不保证崩溃安全、不支持 PostgreSQL C 扩展，许可证为 AGPL-3.0。",
+   "highlights": [
+    "实现 Postgres 线协议与 SQL 方言，Rails、Django、Prisma、SQLAlchemy、node-postgres 可不经修改运行迁移、测试与 schema 变更流程",
+    "支持从密封模板以写时复制分支创建数据库：基于 ZFS 块克隆时 10 GB 模板的分支约 674 ms 就绪、起始占用约 13.6 MB；连接特定命名的数据库即自动从模板创建（mint-on-connect）",
+    "内置多层资源限制（会话、数据库、运行时及 Linux cgroup），内存超限返回 SQLSTATE 53200 错误；提供 pgboxdb agent 与 Claude Code Skill，按会话分配独立分支并自动清理"
+   ],
+   "use_cases": [
+    "为 AI agent 会话提供隔离的一次性 Postgres 数据库，每个 agent/子 agent 独立分支，会话结束后自动丢弃",
+    "CI 流水线与每个 PR 的临时测试数据库，通过迁移→测试→销毁的短生命周期运行",
+    "预览环境与基于生产脱敏副本的测试数据库分发（作为 PGRun branches 的底层引擎）"
+   ]
+  },
+  "sha": "b771386b0b5d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "caa9f5c34175": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Mux 的视频平台应用，集成认证、视频上传与 AI 工作流",
+   "review": "该项目是一个使用 Next.js、React、TypeScript 与 Tailwind CSS 构建的视频平台应用，通过 Mux 实现视频上传与播放，Clerk 负责用户认证，Neon PostgreSQL 存储数据，Upstash QStash 运行 AI 工作流，UploadThing 处理文件上传。适合希望本地运行或部署此类视频应用的开发者，README 提供从环境变量配置到 Vercel 部署的完整步骤，依赖多个第三方云服务账号。",
+   "highlights": [
+    "集成 Clerk 认证、Mux 视频上传与播放、UploadThing 文件上传",
+    "通过 Upstash QStash 实现异步 AI 工作流，数据存储于 Neon PostgreSQL",
+    "技术栈包含 Next.js、React 19、TypeScript、Tailwind CSS、tRPC 与 Drizzle ORM"
+   ],
+   "use_cases": [
+    "学习多服务（Mux/Clerk/Neon/QStash）集成的 Next.js 全栈项目结构",
+    "需要视频上传、播放列表与创作者主页功能的视频平台应用开发参考",
+    "作为模板部署到 Vercel 并按 README 配置各服务的 webhook 与密钥"
+   ]
+  },
+  "sha": "caa9f5c34175",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3cf219fe7754": {
+  "identity": {
+   "one_liner": "自托管家庭财富追踪器，通过 Enable Banking 聚合账户并提供 AI 建议邮件。",
+   "review": "Patrimoine 是一个面向家庭的自托管财富追踪工具，通过 Enable Banking 的 PSD2 API 只读聚合银行账户，提供按发薪周期的预算、储蓄目标、资产配置、税务限额跟踪，以及引用可验证数字的 AI 顾问和月度邮件摘要。基于 Docker Compose 部署，后端为 FastAPI 与 PostgreSQL，前端为 React。项目仍在开发中，无内置身份验证，需置于反向代理之后。",
+   "highlights": [
+    "通过 Enable Banking 的 PSD2 API 以只读方式聚合银行账户，银行凭据不存储在本系统中",
+    "数值计算由确定性服务完成，LLM 仅解读结果并引用数字，AI 建议的每条引述由服务器校验",
+    "支持多成员家庭视图（按账户配比分摊）、ntfy/Home Assistant 告警通知，以及月度邮件摘要和 Excel 报告"
+   ],
+   "use_cases": [
+    "希望在本机自行托管、集中查看全家银行账户、储蓄、投资与不动产的家庭",
+    "需要按发薪周期管理预算、跟踪储蓄目标和资产配置偏离的用户",
+    "希望定期通过邮件接收财务状况汇总与 AI 建议的个人用户"
+   ]
+  },
+  "sha": "3cf219fe7754",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

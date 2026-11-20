@@ -2975,5 +2975,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a512fe0f3d1b": {
+  "identity": {
+   "one_liner": "基于 FastAPI + PostgreSQL/pgvector 的文档问答型 RAG 流水线应用",
+   "review": "EnterpriseIQ 是一个面向研究场景的文档问答应用：用户上传 PDF/DOCX/TXT（单文件上限 20 MB），系统经文本提取、递归分块（默认 1000 字符、150 重叠）、768 维向量化后存入 PostgreSQL/pgvector，提问时按余弦距离检索 top-k 片段并约束生成模型仅依据上下文作答，返回来源与相似度信息。嵌入与生成模型可通过环境变量在 Gemini 与 Ollama 间切换。README 明确说明该项目为可运行的基础版本，引用校验尚不验证支撑关系，路线图中的高级功能未声称完成。",
+   "highlights": [
+    "支持 PDF（PyMuPDF 逐页提取并记录页码）、DOCX（python-docx 提取段落与表格行）、TXT（UTF-8/CP1252 回退）三种格式导入，以 SHA-256 内容哈希做重复检测",
+    "检索采用 PostgreSQL/pgvector 上的余弦距离最近邻搜索，top_k 限制在 1–10，响应包含文档 ID、块索引与相似度",
+    "嵌入与生成提供 Gemini 和 Ollama 两种可选实现，通过环境变量（如 EMBEDDING_PROVIDER）切换"
+   ],
+   "use_cases": [
+    "在业务或个人文档集上做自然语言问答，答案附带来源编号与相似度信息",
+    "作为 RAG 流水线各阶段（提取、分块、嵌入、检索、生成）可见且可替换的学习与研究基础",
+    "通过 Docker Compose + pgvector 镜像在本地运行，或部署于 Render/Vercel/Neon 环境验证 API 边界与云部署流程"
+   ]
+  },
+  "sha": "a512fe0f3d1b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3038,5 +3038,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7fb8b2c8baa2": {
+  "identity": {
+   "one_liner": "自托管社区平台：论坛、聊天、语音、白板与主页构建器一体化部署",
+   "review": "Nodyx 是一个 AGPL-3.0 许可的自托管社区平台，将论坛、实时聊天、语音频道、协作白板、任务看板、活动投票和拖拽式主页构建器整合在同一实例中。后端采用 TypeScript/Fastify，前端为 SvelteKit，数据层使用 PostgreSQL 16 与 Redis 7，语音基于 WebRTC 并通过 Rust 编写的 relay 支持内网部署。适用于希望在自有硬件（VPS 到树莓派）上运行社区的管理者，需 Ubuntu/Debian 系统，大型语音房间仍需可公网访问的 SFU。",
+   "highlights": [
+    "提供论坛（含结构化数据、sitemap 与全文搜索）、实时聊天、端到端加密私信、语音频道与屏幕共享",
+    "内置协作白板、看板任务板、活动、投票及 12 栅格拖拽主页构建器，扩展经 Extension SDK 以沙箱方式运行",
+    "提供 Rust relay 使实例在无公网端口的家宽环境下获得公网地址，安装脚本自动部署 Node.js、PostgreSQL、Redis、Caddy、PM2 并支持 Cloudflare Tunnel 等隧道模式"
+   ],
+   "use_cases": [
+    "在自有 VPS 或 Raspberry Pi 上为单个社区搭建包含论坛、聊天与语音的一站式站点",
+    "家庭网络环境（无公网端口）下通过 Nodyx Relay 自托管社区实例",
+    "需要可被搜索引擎索引的公开论坛内容，同时配合拖拽主页、活动与投票运营社区"
+   ]
+  },
+  "sha": "7fb8b2c8baa2",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9063bb1b9231": {
+  "identity": {
+   "one_liner": "多语言香水结构化数据库，CSV 关系文件加 Parquet UGC 数据集与按条计费 API",
+   "review": "FragDB 提供香水行业结构化数据：六个以竖线分隔的 UTF-8 CSV 文件（香水、品牌、调香师、香调、香调组合及翻译词表），经唯一 ID 关联，标签等字段覆盖 23 种语言。随附三个 Apache Parquet 数据集，包含用户评论、编辑文章与社区回帖，需付费订阅获取；仓库内含免费样本与字段文档，支持 pandas、csv-parse、PostgreSQL COPY 导入等方式读取。",
+   "highlights": [
+    "六张 CSV 共 16 万余条记录，通过唯一 ID 关联，含香调金字塔、评分与投票字段，标签覆盖 23 种语言",
+    "三个 Parquet 数据集合计 530 万行：506 万条多语言用户评论、26,139 篇编辑文章（2008–2026）与 282,443 条带回复标记的社区评论",
+    "提供按条计费的 HTTP API，以 ?level=list|basic|full 控制返回字段粒度，索引文件可免费下载（每日五次）"
+   ],
+   "use_cases": [
+    "用 pandas、csv-parse 或 PostgreSQL 构建香水数据表并做关联查询",
+    "基于多语言评论文本进行情感分析、推荐系统训练或多语言 NLP 语料研究",
+    "通过按条 API 在应用中按 ID 读取单条香水、品牌、香调记录"
+   ]
+  },
+  "sha": "9063bb1b9231",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c331c2f5bcc8": {
+  "identity": {
+   "one_liner": "查询 MySQL/TiDB、Redis 与 gRPC 数据源的 CLI，命令输出单行 JSON。",
+   "review": "TapRoot 是一个 TypeScript 编写的 CLI 工具，用于查询 MySQL/TiDB、Redis 和 gRPC 数据源，每条命令输出单行 JSON，README 说明其面向 AI agent 使用场景。需 Node.js 20+，部分数据源依赖 redis-cli、tsh 或 kubectl 等外部客户端。凭据存入 OS keychain（可选 keytar）或加密文件，支持 Teleport 和 kubectl port-forward 访问，schema 目录默认缓存 24 小时。",
+   "highlights": [
+    "每条命令输出单行 JSON，支持 MySQL/TiDB、Redis、gRPC 三类数据源",
+    "凭据通过可选 keytar 依赖写入 OS keychain，keytar 不可用时写入 ~/.taproot/ 下的加密文件",
+    "支持 Teleport（tsh）与 kubectl port-forward 访问方式，并提供 skills/taproot/ 供 Claude Code 等 agent 引用"
+   ],
+   "use_cases": [
+    "为 AI agent（如 Claude Code）提供结构化 JSON 输出的数据源查询入口",
+    "通过 Teleport 或 kubectl port-forward 访问受管控环境中的 MySQL 数据库",
+    "需要凭据进 keychain、schema 目录缓存、日期范围告警等防护机制的数据查询工作流"
+   ]
+  },
+  "sha": "c331c2f5bcc8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

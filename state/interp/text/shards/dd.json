@@ -3091,5 +3091,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cc2deecedb7f": {
+  "identity": {
+   "one_liner": "为 Claude Code 和 Codex 提供可查证、可更正的跨会话共享记忆",
+   "review": "Cairn.ink Memory 是一个面向 Claude Code 和 Codex 的跨会话记忆工具，以 MCP 服务器形式注册，通过 npx 安装，要求 Node 22.16+。每条记忆保存其来源文本（Source Receipt），可检索、更正、停用；支持本地 SQLite 或 cairn.ink 云端两种存储模式，二者不可混用。目前处于开发者预览阶段，存在已知平台与版本限制。",
+   "highlights": [
+    "提供记忆保存、关键词检索、来源查看、更正与停用等工具（remember/correct/forget/inspect 等）",
+    "本地模式使用明文 SQLite 数据库存储，无需账号；云模式通过一次浏览器登录在多台设备共享记忆",
+    "保存对话与关键词检索不调用模型；配置 OPENAI_API_KEY 后可启用语义检索"
+   ],
+   "use_cases": [
+    "让 Claude Code 与 Codex 会话之间共享用户偏好与项目决定",
+    "需要追溯记忆来源文本、更正或删除过时记忆的场景",
+    "多代理并发运行的 harness 环境中按文档配置避免工作进程加载记忆服务器"
+   ]
+  },
+  "sha": "cc2deecedb7f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "10a324e5a557": {
+  "identity": {
+   "one_liner": "原生 macOS 应用，通过 Metal 管线实现最高 120 FPS 的 Android 投屏与控制",
+   "review": "AndOnMac 是一款 MIT 协议的开源 macOS 应用，用于将 Android 设备投屏、控制和文件互传，支持 USB-C 与 Wi-Fi/热点/蓝牙 PAN 连接。它内置 Apple Vision OCR、SQLite FTS5 屏幕历史检索和绑定本机回环地址的 MCP 服务器，供 AI Agent 通过 A* UI 路由操作 Android。需要 macOS 14+，依赖 adb，应用未签名需清除 Gatekeeper 隔离。",
+   "highlights": [
+    "硬件解码 HEVC（含 H.264 回退），通过 CAMetalLayer + CADisplayLink 渲染，支持最高 120 FPS、自适应码率与音频转发",
+    "支持 USB-C、Android 11+ QR/Bonjour Wi-Fi 配对、USB 到 Wi-Fi 自动切换，以及热点/蓝牙 PAN 备用连接",
+    "内置 MCP 服务器与 DroidPath UI 路由：Kotlin daemon 绑定 127.0.0.1，经 ADB TCP 流式更新 Shadow DOM 图谱，支持 A* 寻路、付款步骤确认机制与三色 Agentic HUD"
+   ],
+   "use_cases": [
+    "在 macOS 上以最高 120 FPS 投屏并触控操作 Android 设备，进行文件拖放和剪贴板同步",
+    "让 AI Agent 通过 MCP 接口自动化操作 Android 应用界面，支持人类确认关键步骤",
+    "使用 Vision OCR 抓取不可选中文本，并用 FTS5 检索本地屏幕历史记录"
+   ]
+  },
+  "sha": "10a324e5a557",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

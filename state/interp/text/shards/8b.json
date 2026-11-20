@@ -2849,5 +2849,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3d11e64e9337": {
+  "identity": {
+   "one_liner": "基于 AI 预审的多数据库 SQL 变更治理与审核平台",
+   "review": "Yearning 是面向 MySQL、PostgreSQL、TiDB、OceanBase、PolarDB 的 SQL 审核与数据库变更治理平台，v4 采用 Go 单体二进制加 React 19 前端和 PostgreSQL 元数据库构建。核心机制包括 AI 两阶段预检（SQL 指纹归并脱敏）、提交时加密冻结的多级审批流、内置 gh-ost 在线 DDL、基于前置镜像的免 binlog 回滚，以及带列掩码的只读查询工作台。适用于 DBA、平台团队等需要结构化变更流程的组织。",
+   "highlights": [
+    "提供确定性加 AI 的两阶段 SQL 预检，支持指纹归并、内存内脱敏及本地自托管模型（vLLM/Ollama）接入",
+    "内置进程内 gh-ost 在线 DDL，并实现基于 AST 与前置镜像的 MySQL/PostgreSQL 跨引擎回滚",
+    "提供审批制的只读查询工作台，包含服务端敏感列掩码、流式导出与 Top SQL 诊断图表"
+   ],
+   "use_cases": [
+    "DBA 与平台团队对生产数据库的 DDL/DML 变更实施多级审批与审计",
+    "开发与分析人员按授权申请限时只读查询权限，避免直接分发数据库凭据",
+    "工程组织通过 /api/v4/* 接口将 AI coding agent 与数据库变更流程集成"
+   ]
+  },
+  "sha": "3d11e64e9337",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f6ab4f66c24d": {
+  "identity": {
+   "one_liner": "面向新加坡SkillsFuture培训生态的自托管LMS/TMS系统",
+   "review": "这是一个面向新加坡SkillsFuture培训生态的LMS/TMS全栈Web应用，用于课程创建、排期、报名、进度跟踪、考核与证书发放。技术栈为Next.js、TypeScript、PostgreSQL，以Docker部署于Coolify并支持多租户。集成SSG API、QuickBooks，提供7种角色的专用界面。证书仅在课程结束且出勤达标后发放。",
+   "highlights": [
+    "支持SSG/TPGateway集成，覆盖课程运行、报名、考核、资助与申领",
+    "提供7种角色（学员、培训师、管理员、开发者、财务、薪资、培训机构）的分角色仪表盘，支持多租户Docker部署",
+    "提供电子考勤功能，含每节课QR签到、SSG签到同步与手动点名记录"
+   ],
+   "use_cases": [
+    "新加坡培训机构的课程运营、报名与SSG考勤管理",
+    "培训机构财务与薪资场景中的QuickBooks发票、资助计算与申领跟踪",
+    "学员在线浏览课程、上传考核文件、下载结业证书与个人课表管理"
+   ]
+  },
+  "sha": "f6ab4f66c24d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "833aa8142ac8": {
+  "identity": {
+   "one_liner": "基于列式引擎 DuckDB 的 Postgres 只读副本，用 Postgres 协议提供分析查询。",
+   "review": "Mason 是一个单进程 Node.js 程序，从 Postgres 同步指定表和列，将 Postgres SQL 查询改写后在 DuckDB 列式引擎上执行，任何 Postgres 客户端均可连接查询。适合需要分析查询、BI 工具或 AI agent 数据访问的团队。同步方式支持按需、轮询和逻辑复制，所有用户均为只读。需要 Node 22.13+，逻辑复制要求 wal_level=logical 及复制权限。",
+   "highlights": [
+    "通过 Postgres 协议提供服务，同步的表可从任意 Postgres 客户端以原 SQL 方言查询",
+    "支持三种同步方式：按需（off）、轮询（poll 1s–24h）和逻辑复制（replication），可指向只读副本",
+    "提供基于角色的访问控制（按表、列、行限定），每用户只读、查询有日志，并原生支持 MCP"
+   ],
+   "use_cases": [
+    "为 BI 工具（如 Metabase）提供大表上的 COUNT/SUM/GROUP BY 类分析查询",
+    "为 AI agent 分配独立只读用户，用 RBAC 限定可读的表、列和行，并通过 SQL 或 MCP 访问数据",
+    "用轮询或逻辑复制保持选定表更新，避免分析负载直接运行在生产 Postgres 上"
+   ]
+  },
+  "sha": "833aa8142ac8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

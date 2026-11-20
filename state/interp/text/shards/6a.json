@@ -3139,5 +3139,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4fe0031b3c32": {
+  "identity": {
+   "one_liner": "Go database/sql 包的 MySQL 驱动，纯 Go 实现",
+   "review": "该仓库为 Go 的 database/sql 接口提供 MySQL 驱动实现，导入后即可使用标准 database/sql API，通过 DSN 字符串配置连接参数。支持 MySQL 8.0+ 与 MariaDB 10.11+（维护者支持），TiDB 由 PingCAP 支持；Percona Server、CloudSQL 等不在维护者支持范围。要求 Go 1.25+，通过 go get 安装。README 提示需设置 SetConnMaxLifetime 等连接池参数。",
+   "highlights": [
+    "纯 Go 实现，无 C 绑定，支持 TCP/IPv4、TCP/IPv6、Unix domain socket 连接",
+    "支持超过 16MB 的查询、LOAD DATA LOCAL INFILE（带文件白名单与 io.Reader 支持）、zlib 与可选 zstd 压缩",
+    "提供 DSN 参数配置，包括 charset/collation、interpolateParams、连接活跃性检查等"
+   ],
+   "use_cases": [
+    "在 Go 应用中通过 database/sql 标准接口访问 MySQL 或 MariaDB 数据库",
+    "需要通过 Unix socket 或自定义协议连接数据库服务、或需要连接压缩的场景",
+    "使用预编译语句处理 LONG DATA 或大查询（>16MB）的应用"
+   ]
+  },
+  "sha": "4fe0031b3c32",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "efc164ff422e": {
+  "identity": {
+   "one_liner": "自托管个人文档知识库，提供接收、整理、检索与报告生成的确定性流程",
+   "review": "StruInfo 是一个自托管的个人文档知识库工作区，用于接收资料、整理文档、检索内容和生成报告，面向单所有者的个人知识管理场景。文档经审核、拆分、标注后确认发布，原文、草稿和确认版本分别保存。使用 Docker Compose 与 PostgreSQL 18 运行，AI、自动接收、联网等功能按配置启用；PDF 导入需要文本层。",
+   "highlights": [
+    "提供文档审核、拆分、标注与确认发布的流程，原文、草稿和确认版本分别保存",
+    "包含分类搜索、知识库问答、联网研究、报告生成，报告支持站内发布、Markdown 导出和打印 PDF",
+    "AI、自动接收、联网与定时功能按配置启用，手动操作与 AI 共用接口"
+   ],
+   "use_cases": [
+    "自托管个人知识管理：接收 RSS 等来源资料并整理归档",
+    "基于自有文档进行分类搜索与知识库问答",
+    "从已整理文档生成报告并导出 Markdown 或 PDF"
+   ]
+  },
+  "sha": "efc164ff422e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8b3e283fc9ef": {
+  "identity": {
+   "one_liner": "从邮件和会议自动填充记录的源码可得 CRM，AI 代理经 MCP/REST 在同一引擎内工作。",
+   "review": "Margince 是一个 CRM，将连接账户中的邮件和会议转为联系人、公司与商机记录。它采用 source-available 模式（BUSL 1.1）而非开源许可。后端为 Go，前端为 React，API 契约由 crm.yaml 生成两端代码。用户通过 Docker Compose 运行副本，无许可令牌时为 14 天试用；AI 代理以用户护照接入，权限随用户移除而终止。",
+   "highlights": [
+    "支持通过 MCP 或 REST 接入 AI 代理，代理权限受所绑定用户的席位与权限约束",
+    "提供自定义运行模式，可用 Ollama 或 vLLM 在本地机器上运行模型，`sovereign` 配置拒绝云服务商",
+    "从本仓库 `make dev` 启动含 Postgres、Redis、API 与 Web 应用的完整开发栈，每个 git worktree 有独立数据库与端口"
+   ],
+   "use_cases": [
+    "销售团队需要一个从邮件和会议记录自动生成联系人、公司与商机数据的 CRM",
+    "希望在自己的服务器或私有云上以 Docker 自托管部署，且单一安装服务一家公司的场景",
+    "需要让 AI 代理在同一权限体系内读写 CRM 数据并保留可审计操作日志的团队"
+   ]
+  },
+  "sha": "8b3e283fc9ef",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "84c646e2749d": {
+  "identity": {
+   "one_liner": "Go 语言 DCB 事件溯源库，含 PostgreSQL 事件存储实现",
+   "review": "Collie 是 Dynamic Consistency Boundaries（DCB）事件溯源模式的 Go 实现。它不使用固定聚合与流，而是维护一条全局事件日志，事件携带标签，决策通过查询声明依赖事件，并以 AppendCondition 保证追加一致性，冲突时返回 ErrAppendConditionViolated 并可重试。提供 memory 与 postgres 两种 Store 实现，附 command、reactor、encryption 等包。作者标注为个人实验性实现，接口可能变更。",
+   "highlights": [
+    "无聚合/流设计：全局事件日志，事件携带 key-value 标签，决策用查询命名依赖事件并在追加时校验位置条件",
+    "command 包封装读取-决策-追加循环及可选重试（WithMaxAttempts），Registry 可按名称从 JSON 分发命令",
+    "提供 memory 与 postgres 两种存储实现，以及 snapshot、KeyedProjection、reactor、envelope、encryption、attachments 等扩展包"
+   ],
+   "use_cases": [
+    "需要在多个业务对象间动态划定一致性边界、避免 saga 的 Go 事件溯源系统",
+    "基于 PostgreSQL 的事件存储后端，通过 store.Migrate() 建表后即可运行",
+    "需按 key 读取读模型、或以 crypto-shredding 处理个人数据删除（GDPR）的项目"
+   ]
+  },
+  "sha": "84c646e2749d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

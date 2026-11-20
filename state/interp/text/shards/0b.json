@@ -2838,5 +2838,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7fcee73b4505": {
+  "identity": {
+   "one_liner": "在应用内运行的 ClickHouse 嵌入式分析工具包，以代码定义指标并提供 API 与 MCP 工具。",
+   "review": "hypequery 是一组 Apache-2.0 开源库，用于在自有后端中定义 ClickHouse 数据集（维度、度量、指标、租户规则），并按名称生成经认证的 HTTP 端点、OpenAPI、类型化 React hooks 与 MCP 工具。提供 TypeScript SDK 和 beta 版 Python SDK，二者共享同一语义与部署约定；它不是托管 BI 工具、数据库或独立语义层服务。",
+   "highlights": [
+    "提供 TypeScript 与 Python（beta）SDK，可在代码中以 dataset 形式定义维度、度量、指标与租户作用域",
+    "包含类型安全的 ClickHouse 查询构建器，支持 FINAL、LIMIT BY、百分位、argMax、数组、CTE、流式读取与窗口表达式",
+    "提供 @hypequery/mcp MCP 服务器，暴露 list_datasets、get_dataset_schema、query_metric、query_dataset 等工具，不含原始 SQL 工具"
+   ],
+   "use_cases": [
+    "在自己后端中为 ClickHouse 构建带认证的分析 API、OpenAPI 端点与仪表盘",
+    "为 Claude Code、Cursor、Codex 等 AI 代理提供受治理的指标查询 MCP 工具",
+    "需要多租户分析且租户过滤在运行时强制执行的应用场景"
+   ]
+  },
+  "sha": "7fcee73b4505",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b598323e9b0b": {
+  "identity": {
+   "one_liner": "桌面本地优先日志笔记应用，Markdown 存于 SQLite，支持双向链接。",
+   "review": "Zorite 是一款桌面日志笔记应用，以 Logseq 式日期流组织内容，但采用文档式编辑而非大纲。笔记以 Markdown 存于本地 SQLite 数据库，使用 Rust 与 GPUI 框架实现，支持 wiki 链接、PDF 标注、白板与 LaTeX 公式。无云端与账号，数据全部留在本机；可选 SQLCipher 加密，并提供 Obsidian/Logseq 导入器。",
+   "highlights": [
+    "支持 [[wiki-links]]、反链、块引用与实时嵌入笔记，页面以命名空间树组织",
+    "内置 PDF 查看器支持虚拟化分页、高亮标注、AcroForm 表单填写；白板为无限画布并含思维导图连接线",
+    "全文搜索基于 trigram 索引随输入更新，支持笔记加密、Markdown 导出与多笔记本数据切换"
+   ],
+   "use_cases": [
+    "桌面端每日日志与双向链接笔记管理",
+    "阅读并标注 PDF、绘制白板与流程图",
+    "从 Obsidian 或 Logseq 导入现有笔记库并本地管理"
+   ]
+  },
+  "sha": "b598323e9b0b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "50688499907f": {
+  "identity": {
+   "one_liner": "DuckDB 扩展，自动对 SQL 聚合查询注入隐私保护机制",
+   "review": "privacy 是一个 DuckDB 扩展，通过改写聚合查询计划对结果加噪，用于保护个体数据。用户先用 PRIVACY_KEY、PRIVACY_LINK、PROTECTED 三种 DDL 声明隐私结构，再经 SET privacy_mode 选择机制：PAC（默认，经验性抗成员推断攻击并提供互信息界）、dp_elastic（行级 (ε,δ) 差分隐私）、dp_standard、dp_sass 等。查询语法无需改动；本分支面向 DuckDB v2.0.0，可经 community 安装或以 WASM 在浏览器运行。",
+   "highlights": [
+    "支持 pac、dp_standard、dp_elastic、dp_sass、dp_filterless 五种模式，改写查询计划且不改变查询语法",
+    "提供 PRIVACY_KEY / PRIVACY_LINK / PROTECTED DDL，隐私属性可经外键链在 JOIN 中传播",
+    "PAC 模式支持 SUM、COUNT、AVG、MIN、MAX、COUNT(DISTINCT)；CTAS 自动传播隐私元数据；提供 privacy_seed 等参数并可做加噪前后结果对比"
+   ],
+   "use_cases": [
+    "对含个体数据的表执行聚合分析时限制查询输出的隐私泄露",
+    "需要形式化 (ε,δ) 差分隐私保证的行级或用户级统计发布",
+    "通过 WASM 在浏览器 shell.duckdb.org 中试用或复现论文实验"
+   ]
+  },
+  "sha": "50688499907f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2784,5 +2784,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4b081d1b7439": {
+  "identity": {
+   "one_liner": "DeepORG（前身为 GraphJin），一个跨数据库、API、文件与代码的 AI 代理",
+   "review": "DeepORG 是一个开源 AI 代理，用于以自然语言查询和修改组织内的数据库、数据仓库、API、文件和源代码。其底层引擎将查询编译为单条数据库查询，并兼作 GraphQL API 服务器和 Go 库。访问受访问规则约束，默认变更需人工批准。支持 PostgreSQL、MySQL、MongoDB 等多种数据源，可通过 MCP 接入 Claude 等客户端。",
+   "highlights": [
+    "将查询编译为单条数据库查询，同时提供 GraphQL API 服务器和 Go 库",
+    "支持 PostgreSQL、MySQL、SQLite、MongoDB、SQL Server、Snowflake、BigQuery、S3 等数据源",
+    "通过 MCP 协议供 Claude、Codex 等客户端调用，提供 npm、Homebrew、Scoop、Docker 等安装方式"
+   ],
+   "use_cases": [
+    "以自然语言查询和变更组织内多个数据源中的数据",
+    "基于自身系统生成带校验的任务，用于评测或以强化学习训练代理",
+    "将代理作为 MCP 服务器接入 Claude、Codex 等客户端"
+   ]
+  },
+  "sha": "4b081d1b7439",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "26da14bd423b": {
+  "identity": {
+   "one_liner": "中国人社/电子政务后端的参考实现，5 个 Spring MVC+MyBatis 模块",
+   "review": "Mestudy 是一个多模块 Maven 工程，收录某省级社保与网上政务平台的多个后端服务，实现社保缴费查询、社保卡生命周期、就业服务、医院挂号、人脸验证、电子签章与草稿式网上申办等业务流程，面向需构建或维护同类架构（Servlet 容器 + XML Spring + MyBatis/Oracle + Redis 会话 + Axis SOAP 对接）的工程师。五个模块打包为 war，约 358 个 HTTP 端点共用统一 Result 响应封装；各模块独立携带 common/util 副本，无共享构件。构建需 JDK 8、Maven 3.2+，mvn -B test 可在无 Oracle/Redis 环境下运行公开模块单元测试。",
+   "highlights": [
+    "五个 Maven 模块（含河南省级网关变体），统一 groupId 打包为 war，约 358 个 HTTP 端点共用 Result/ResultVerify 响应封装",
+    "集成模式涵盖 c3p0 多数据源 + MyBatis、Jedis/Redis 字典缓存与会话、Axis 1.x SOAP 存根对接省级网关与 HIS，以及带心跳自续期的 token 鉴权客户端 SDK（IFaceHttpsClient，classifier=client）",
+    "全部模块可从公共依赖公开构建并纳入默认 reactor；SpringContextLoadTest 加载真实上下文校验数据源 URL 与 mapper 语句，CI 对 WAR 与 Surefire 报告执行 verify_public_build.py"
+   ],
+   "use_cases": [
+    "为需要在 Servlet 容器上用 XML Spring + MyBatis + Oracle 构建或维护同类政务后端的工程师提供参考架构",
+    "对接多个异构遗留政务系统（SOAP 网关、HIS 系统）时的集成模式参考（如 HangTianHisController 的 SOAP→REST 适配）",
+    "需要 token 鉴权 HTTP 客户端 SDK 供自助终端等下游设备调用的场景参考"
+   ]
+  },
+  "sha": "26da14bd423b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5363c920ff08": {
+  "identity": {
+   "one_liner": "为 AI 编码代理提供本地持久化决策记忆，以实体为键存储与检索",
+   "review": "Selvedge 是一个面向 AI 编码代理的持久化决策记录工具，用 SQLite 将所选方案、被否决思路及前提约束保存到项目的 .selvedge/ 目录，并以函数、数据库列、API 路由或依赖等实体路径作为查询键。兼容代理可通过本地 stdio MCP 或 CLI 接入，数据不依赖托管账户。限制：仅能召回显式保存的记录，不验证其真实性，也不保证代理一定会查阅。",
+   "highlights": [
+    "通过本地 stdio MCP 或 CLI 连接代理，记录以函数、列、路由、依赖等实体为键，存于 .selvedge/ 下的本地 SQLite",
+    "支持 changeset 标签聚合跨实体决策，以及 agent-trace 格式的导入导出",
+    "核心存取不调用 LLM，无需托管账户；提供 watch、doctor、status、diff 等命令行工具"
+   ],
+   "use_cases": [
+    "个人开发者在新会话中找回此前项目会话里记录的决策理由",
+    "团队在不同会话与编码工具间传递已记录的设计决策",
+    "在编辑前查询某函数或表结构变更背后的原因与曾被否决的方案"
+   ]
+  },
+  "sha": "5363c920ff08",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "03258064e3b8": {
+  "identity": {
+   "one_liner": "自托管 AI 代码审查平台，建全库索引并机器复核 PR 审查发现",
+   "review": "Revora 是开源、自托管的 AI 代码审查平台，面向愿意自部署并提供至少一个 LLM API key 的 GitHub 用户。每个 PR 触发时克隆仓库、构建全库索引（17 个检测器、8 类代码图），检索与 diff 相关文件交给所选 LLM，再由验证引擎复核发现并在 PR 评论中标记 Machine Verified。需 Docker Compose 部署、创建 GitHub App，索引当前为 regex 实现，语义解析仍在开发中。",
+   "highlights": [
+    "每次 PR 构建全仓库索引，含 17 个检测器和 import/call/dependency 等代码图，检索 diff 相关文件后送入 LLM 提示",
+    "验证引擎将 AI 发现与代码库比对、确定性打分，并通过 Server-Sent Events 向仪表盘流式展示审查进度",
+    "支持多 provider 路由（LiteLLM），用户自带 API key，密钥以 Fernet 加密存储"
+   ],
+   "use_cases": [
+    "需要在 PR 审查中结合自身代码库上下文的 GitHub 团队",
+    "希望自托管、自带 LLM key 且不使用托管 bot 的开发者",
+    "需持久化审查历史、成本与 token 用量记录的场景"
+   ]
+  },
+  "sha": "03258064e3b8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

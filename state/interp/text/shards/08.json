@@ -3080,5 +3080,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a1c42f5f0d0a": {
+  "identity": {
+   "one_liner": "Go 实现的嵌入式 SQL 数据库，采用列式存储与 JIT 编译执行查询",
+   "review": "musql 是用 Go 编写的嵌入式 SQL 数据库，提供 .musq 列式存储格式并在运行时将受支持的查询路径编译为本地机器码。可通过 database/sql 驱动、musql 命令行 shell 或 musqld 服务端（兼容 Turso/libSQL 协议）使用；提供 musql-convert 在 SQLite 与 .musq 间互导，支持 CRDT 或 leader 模式复制、S3 备份还原。纯 Go 无 CGo，需 Go 1.27+；每次 Exec/Query 仅执行一条语句。",
+   "highlights": [
+    "纯 Go 实现（无 CGo），驱动注册为 sqlite/musql，可与 database/sql 集成",
+    "支持连接、窗口函数、触发器、JSON、全文搜索、R-tree 索引及 libSQL 向量函数",
+    "提供 musql-convert 工具实现 SQLite 与 .musq 格式互导；musqld 支持 Turso 协议并可用 Docker 运行"
+   ],
+   "use_cases": [
+    "Go 应用中的嵌入式数据库，通过 database/sql 驱动使用",
+    "导入既有 SQLite 数据并运行扫描/聚合类读取查询",
+    "通过 musqld 向 libSQL/Turso 客户端提供 SQL 服务，或跨节点部署复制数据库"
+   ]
+  },
+  "sha": "a1c42f5f0d0a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1d4806bd9683": {
+  "identity": {
+   "one_liner": "本地优先的密码管理器，单主密码加密，无账户无云同步",
+   "review": "CipherMoth 是一款运行在 macOS、Windows 和 Linux 桌面端的本地密码管理器，数据保存在本地单个加密文件中，不含账户、云同步和遥测。它提供 Chrome/Firefox 浏览器扩展按需填充登录信息，也可用 Docker 自托管为 Web 应用。主密码无法重置，遗忘且无恢复码将导致保险库永久丢失；项目尚未经独立安全审计。",
+   "highlights": [
+    "保险库为单个加密文件，全部字段（含条目名、2FA 密钥、附件）用 AES-256-GCM 加密，主密码经 Argon2id 拉伸",
+    "支持 FIDO2 安全密钥、离线恢复码、Touch ID 等附加锁定方式，可生成密码、显示实时 2FA 码并本地检测弱/重复密码",
+    "提供 Chrome 和 Firefox 浏览器扩展，仅在用户触发时填充，并支持 CSV 导入（Chrome、Bitwarden、KeePass、Proton Pass）及 Docker 自托管版本"
+   ],
+   "use_cases": [
+    "希望在本地离线保存密码、不使用账户和云同步服务的个人用户",
+    "需要通过浏览器扩展手动触发填充登录凭据的场景",
+    "愿意自行保管备份和恢复码、可接受自托管 Web 版本的用户"
+   ]
+  },
+  "sha": "1d4806bd9683",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1d3f1b748a6e": {
+  "identity": {
+   "one_liner": "Linux 下的键盘优先 SQLite 图形客户端与 SQL 编辑器",
+   "review": "Omasql 是用 Qt 6 和 C++ 编写的 SQLite 数据库浏览器与 SQL 编辑器，面向 Linux 用户，主要面向 Omarchy 和 Hyprland 环境，也可在任意 Wayland 或 X11 桌面上运行。它提供自动补全、模式浏览、结果过滤、外键跳转和 CSV/JSON 等格式导出，并内置查询计划查看与危险语句确认。Arch 系可通过 pacman 安装打包包，其他环境需自行从源码构建。",
+   "highlights": [
+    "编辑器支持 SQL 高亮、自动缩进，输入时补全表名、列名（含别名后的列）、关键字和函数",
+    "结果网格支持逐字过滤（Ctrl+F）、块选复制、点击排序，外键值可通过 Ctrl+点击跳转至对应行",
+    "支持查看查询执行计划、导出 CSV/JSON/Markdown 表格/SQL INSERT 语句，无 WHERE 的 DELETE/UPDATE 会先请求确认"
+   ],
+   "use_cases": [
+    "在 Arch Linux 或 Omarchy/Hyprland 桌面上浏览和查询本地 SQLite 数据库",
+    "以键盘为主的工作流编辑 SQL、执行查询并检查行数据（含 JSON 缩进与 blob 十六进制显示）",
+    "导出查询结果为 CSV、JSON、Markdown 表格或 SQL INSERT 语句"
+   ]
+  },
+  "sha": "1d3f1b748a6e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

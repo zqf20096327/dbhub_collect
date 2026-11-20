@@ -3053,5 +3053,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c8e28e484880": {
+  "identity": {
+   "one_liner": "把十个编码渠道凭证池化并封装为 OpenAI/Anthropic 兼容 API 的网关",
+   "review": "该项目将 CodeBuddy（国内/国际）、TRAE SOLO、OpenCode Zen、Kilo、Qoder、CodeArts、OfficeAce、小浣熊、灵犀等渠道封装为 OpenAI / Responses / Anthropic / Gemini 兼容接口。核心机制包括公共凭证池、健康度调度、会话粘性与到期额度优先策略。基于 FastAPI 与 SQLite 构建，支持 uv 或 Docker 部署，提供 admin/operator/viewer 三角色管理与审计日志。README 声明其为逆向接口，仅供学习研究，未做安全审计，公网部署需自行配置鉴权。",
+   "highlights": [
+    "提供 /v1/chat/completions、/v1/responses、/v1/messages、Gemini generateContent 等多协议出口，支持流式与非流式",
+    "实现公共凭证池与健康度调度，支持 模型@渠道 强制指定、多轮对话凭证粘性与到期额度优先",
+    "包含三角色权限体系、审计日志、按人用量统计、月度账单导出与 Prometheus /metrics"
+   ],
+   "use_cases": [
+    "用统一的 OpenAI 兼容客户端访问多个编码渠道的模型",
+    "团队内共享凭证池并按人统计用量与成本",
+    "本地或内网部署用于学习研究上游接口协议"
+   ]
+  },
+  "sha": "c8e28e484880",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "990718429245": {
+  "identity": {
+   "one_liner": "Go 轻量向量存储库，支持多后端与模型驱动集合",
+   "review": "go-vectorstore 是一个受 Microsoft.Extensions.VectorData 启发的 Go 向量存储库，提供 PostgreSQL+pgvector、SQLite、Redis、Qdrant 快照与内存等多种后端。开发者可通过 Go 结构体标签定义集合，实现类型化 CRUD、过滤检索与稠密/稀疏/二进制向量搜索。要求 Go 1.25+；PostgreSQL 后端需 16+ 并安装 pgvector 扩展。",
+   "highlights": [
+    "支持 PostgreSQL+pgvector、嵌入式 SQLite、Redis、Qdrant 快照和内存存储等多后端，并跨后端提供共享模型契约与一致性测试",
+    "模型驱动 API 支持结构体标签、生成键、多命名向量、可选嵌入、稠密（L1/L2/内积/余弦）、稀疏与二进制向量搜索",
+    "SearchByVector 支持过滤、距离阈值和投影控制，PostgreSQL 后端提供模式迁移规划、混合搜索与 HNSW/IVFFlat 参数调优"
+   ],
+   "use_cases": [
+    "构建语义搜索系统",
+    "搭建 RAG 流水线（从向量库检索后交由 LLM 生成）",
+    "基于自有数据构建上下文感知的助手应用"
+   ]
+  },
+  "sha": "990718429245",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

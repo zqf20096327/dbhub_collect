@@ -2765,5 +2765,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ace1537cf2f8": {
+  "identity": {
+   "one_liner": "自托管的通用收藏品管理服务，用于追踪各类实体收藏。",
+   "review": "Koillection 是一个基于 PHP/Symfony 的自托管收藏管理服务，用于记录书籍、DVD、邮票、游戏等各类实体收藏。它不内置元数据下载功能，但支持用户自定义 HTML 抓取器或自由添加元数据。项目采用 MIT 许可证发布，支持 MySQL/PostgreSQL 数据库，并提示用户在升级前备份数据库。",
+   "highlights": [
+    "支持管理任意类型的收藏，以实体收藏品为主",
+    "可自定义 HTML 抓取器或自由手动添加元数据",
+    "提供多种语言翻译（英文、法文 100%，简体中文等 11 种语言 87-89%）"
+   ],
+   "use_cases": [
+    "个人自托管管理书籍、DVD、邮票、游戏等实体收藏",
+    "需要为特定收藏类型定制元数据抓取方案的用户",
+    "需要多语言界面记录收藏的团队或个人"
+   ]
+  },
+  "sha": "ace1537cf2f8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b5853eb823ab": {
+  "identity": {
+   "one_liner": "用 BNF 文法随机生成 SQL 的数据库模糊测试 QA 工具",
+   "review": "go-randgen 是 MySQL RQG/randgen 的 Go 语言实现，用于按 BNF 文法随机生成 SQL 以做数据库模糊测试。通过 zz 文件（Lua 脚本）定义表结构与数据、yy 文件定义 SQL 文法，可在不连接数据库的情况下生成语句；exec 子命令可将生成的 SQL 在两个 DSN 上执行并输出结果不一致的语句。导出函数无状态，可作为库调用。注意 yy 兼容性不含内嵌 Perl 代码，凭据推荐用 secret 文件或环境变量提供。",
+   "highlights": [
+    "内置 zz 文法文件，仅提供 yy 文件即可生成 SQL，也可通过 --skip-zz 跳过 DDL 生成",
+    "提供 gentest、gendata、gensql、exec 四个子命令，exec 支持在两个 DSN 上执行 SQL 并转储结果不一致的语句，默认无序比较，可用 --order 逐字节有序比较",
+    "yy 语法与 MySQL randgen 兼容（不含 Perl 代码时），并以内嵌 Lua 代码块替代 Perl 代码块；除 cmd 包外导出函数无状态，可作为库调用"
+   ],
+   "use_cases": [
+    "为数据库生成随机 SQL 压力/模糊测试用例（如窗口函数、函数类测试）",
+    "在两个数据库实例上执行同一批 SQL 并对比执行结果，捕获不一致行为",
+    "作为 Go 库嵌入测试程序，按 yy 文法迭代生成 SQL 语句"
+   ]
+  },
+  "sha": "b5853eb823ab",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "748d10ecdfcd": {
+  "identity": {
+   "one_liner": "为 Rails 应用生成配套 Go API 服务的脚手架 CLI",
+   "review": "Bogie 是一个 Go CLI 工具，用于生成 API-only、仅支持 Postgres 的 Go 服务，组件固定为 Gin、sqlc、goose、River、Kamal。生成器在写入文件的同时完成路由等注册（因 Go 无 autoload）。生成的应用不导入 Bogie 本身，删除该工具后应用仍可运行。需要 Docker Compose v2 与 Go 1.26+，默认服务监听 :8080，Postgres 运行在 :5440。",
+   "highlights": [
+    "提供 g/d 命令对：生成 controller、scaffold、model、job、config、policy、authentication 等代码并在写入时完成注册，销毁命令可整体移除",
+    "生成的应用不依赖 Bogie 包，sqlc 与 goose 以 Go tool 依赖固定在 go.mod 中，无需全局安装",
+    "自带 bin/ci 流水线（sqlc diff、gofmt、vet、golangci-lint、构建、测试）、加密凭据文件与 Kamal 2 部署配置"
+   ],
+   "use_cases": [
+    "为已有 Rails 应用生成配套的 Go API 服务",
+    "团队需要技术选型已确定的 Go API 项目起点",
+    "需在开发与部署容器间使用同一套命令的应用结构"
+   ]
+  },
+  "sha": "748d10ecdfcd",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

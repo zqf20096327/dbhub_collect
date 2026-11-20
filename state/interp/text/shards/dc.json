@@ -2583,5 +2583,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "28de187323cc": {
+  "identity": {
+   "one_liner": "VideoDB 服务端视频基础设施的 Python SDK，支持上传、索引与检索",
+   "review": "该 SDK 提供 VideoDB 无服务器视频基础设施的编程访问，支持将视频作为结构化数据处理：语义搜索、场景提取、转录生成与多模态内容生成。面向构建 AI 应用（含 agent、RAG）的开发者。安装仅需 pip install videodb，要求 Python 3.8+ 并需从 VideoDB Console 获取 API key，首次 50 次上传免费；核心检索流程分为 Understand → Index → Retrieve 三个原语。",
+   "highlights": [
+    "提供 understand() 分析器机制，内置 spoken_words、vlm、object_detection、ocr、brand_detection 等类型，生成带时间戳的可复用工件",
+    "支持从分析工件创建索引，含 semantic、filter、aggregate、sort 字段分组，并可索引自定义时间戳记录",
+    "包含多轨视频编辑器（Assets/Clips/Tracks/Timeline 四层架构），支持转场、LUT 调色、关键帧动效与实时流、桌面录屏、会议录制等能力"
+   ],
+   "use_cases": [
+    "构建需要对视频内容进行语义搜索与问答的 AI 应用或 RAG 系统",
+    "以编程方式批量上传媒体、生成转录、字幕与缩略图并管理集合",
+    "多轨视频合成、配音翻译、转码及直播流的实时场景处理"
+   ]
+  },
+  "sha": "28de187323cc",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "45c609ffc6d9": {
+  "identity": {
+   "one_liner": "将 psql 的 \\d 描述类反斜杠命令由 C 自动翻译为 JavaScript 的库",
+   "review": "该项目通过 XSLT 样式表把 PostgreSQL 19 中 psql 的 command.c、describe.c 等 C 源码自动翻译进手写的 JS 运行时，实现 \\d、\\dt、\\z、\\h、\\sf 等反斜杠命令。调用方传入 describe 命令字符串、数据库名和一个返回 node-postgres rowMode:'array' 格式结果的异步查询函数即可使用。发布于 npm，被 Neon SQL Editor 用于实现反斜杠命令。限制包括文本表格仅支持 psql 默认格式，不支持其他样式。",
+   "highlights": [
+    "支持 \\d 系列描述命令及 \\sf、\\sv、\\lo_list、\\z、\\?、\\h，输出经与 PostgreSQL 14 至 19 的 psql 对比测试",
+    "提供 describeDataToString 与 describeDataToHtml 函数，将结果格式化为与 psql CLI 一致的纯文本表格或 HTML 表格",
+    "支持取消执行、多条命令解析、余码（remainder）返回，以及 echoHidden、serverVersion 等选项"
+   ],
+   "use_cases": [
+    "为 Web 端 PostgreSQL 查询编辑器（如 Neon SQL Editor）实现 psql 风格的反斜杠命令",
+    "在 Node.js 应用中以编程方式描述数据库对象并获取文本或 HTML 表格输出",
+    "将用户输入中的反斜杠命令与剩余 SQL 分离，分别执行"
+   ]
+  },
+  "sha": "45c609ffc6d9",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fdb1630a8ee6": {
+  "identity": {
+   "one_liner": "基于 Rust 引擎与 SQLite 的 Python 磁盘缓存库，兼容 diskcache API",
+   "review": "diskcache-oxide 用 Rust 引擎和内置 SQLite 重建 Python 磁盘缓存，保留 diskcache 5.6.3 的 Cache API。面向需在多线程、多进程、fork() 及自由线程 Python（3.14t/3.15t）间共享缓存的应用。值默认以 msgpack/JSON 存储而非 pickle，可注册自定义类型；支持 memoize、标签批量删除、push/pull 工作队列、跨进程锁及 FanoutCache 分片。仅支持 CPython 3.14/3.15，未实现 Deque、Index 及 LRU/LFU 淘汰策略。",
+   "highlights": [
+    "提供 get/set、memoize、标签、push/pull 队列、跨进程锁、信号量、速率限制和 transact() 事务",
+    "值默认以 msgpack 或 JSON 存储，支持通过 register_type() 注册自定义类型，pickle 为可选开启",
+    "FanoutCache 将键分布到多个数据库文件，README 记录 8 进程下约 110 万操作/秒；无运行时依赖，SQLite 编译内置"
+   ],
+   "use_cases": [
+    "多 worker（gunicorn 等）部署中在进程间共享查询结果缓存",
+    "需要持久化状态（会话、任务认领、锁、工作队列）的 Python 应用",
+    "作为 Django 缓存后端（diskcache_oxide.DjangoCache）支撑逐视图缓存与会话"
+   ]
+  },
+  "sha": "fdb1630a8ee6",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3620db171c8e": {
+  "identity": {
+   "one_liner": "基于 oclif 的面向 AI Agent 的插件化 CLI，按需搜索并调用各类工具",
+   "review": "sdkck（Sidekick）是一个供 AI Agent 调用的 CLI 工具，设计为不预加载全部工具定义，而是由 Agent 通过 sdkck search 按需查找命令。它基于 oclif，支持从 OpenAPI/Swagger、Postman 集合或 GraphQL schema 导入生成命令，内置 Jira、Bitbucket、Sentry、MySQL、PostgreSQL、Supabase、Confluence 等官方插件，并提供权限规则和 Agent Vault 凭据代理机制。面向使用 Claude Code、Cursor 等代理工具的开发者，可通过 npm、Claude 插件、skills CLI 或 MCP server 方式接入。",
+   "highlights": [
+    "从 OpenAPI/Swagger 规范、Postman 集合或 GraphQL schema 导入接口并生成 CLI 命令，支持 bearer、API key、basic 等认证配置",
+    "提供 sdkck search 语义/模糊搜索命令，插件首次使用时自动安装，且兼容任意 oclif 插件",
+    "实现权限规则（allow/disallow、导入导出）和 Agent Vault 凭据代理，凭据占位符存储于磁盘，无凭据时命令拒绝执行"
+   ],
+   "use_cases": [
+    "让 Claude Code、Cursor 等 AI Agent 通过命令行操作 Jira、Sentry、Confluence、数据库等外部工具",
+    "将已有 OpenAPI 或 Postman 描述的内部 API 快速封装为 CLI 命令供 Agent 或脚本调用",
+    "在企业环境中通过权限规则和凭据代理控制 Agent 可执行的命令范围，避免向 Agent 暴露真实密钥"
+   ]
+  },
+  "sha": "3620db171c8e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "934a6f4e19ac": {
+  "identity": {
+   "one_liner": "记忆系统与Agent工作流的benchmark编排平台，统一Skill插件、执行归档与报告。",
+   "review": "memory_bench_platform 是一个面向记忆系统和 Agent 工作流的测试底座，提供统一的编排、Skill 装载、执行归档、资源采样和 HTML 报告能力，用于让 LoCoMo、LongMemEval 等基准与 OpenClaw 等 Agent、OpenViking 等记忆后端通过同一入口接入。平台核心保持轻量，benchmark/Agent/记忆系统的差异通过目录型 Skill 描述与脚本实现，支持原生 workflow 和外部 runner 导入两类执行路径。安装方式为根目录 pip install -e .，提供 memory-bench 命令行入口。",
+   "highlights": [
+    "提供 Skill 插件体系，benchmark、Agent、memory backend 的差异通过目录型 Skill（SKILL.md、manifest.yaml、scripts）描述和脚本实现",
+    "统一 Run/Case/Step/Trace/Metric/JudgeResult 执行对象，一次 run 归档原始日志、结构化结果、资源采样、评分结果、analysis.json 和 HTML 报告",
+    "支持平台原生 workflow（含 $ref/$template 输入引用、LLM Judge）与外部 runner 结果导入两条执行路径，并采集 CPU、进程级内存和 IO 资源数据"
+   ],
+   "use_cases": [
+    "需要将 LoCoMo、LongMemEval 等记忆类 benchmark 与指定 Agent、记忆后端组合运行并生成统一诊断报告的测试场景",
+    "接入新的 benchmark、Agent 或 memory backend 时，按 Skill 目录结构编写 manifest 和脚本以复用统一的执行、归档与评分入口",
+    "正式测试前运行 smoke gate 验证链路，以及对已有 run 目录执行 analyze-run 生成分析 JSON 和 HTML 报告"
+   ]
+  },
+  "sha": "934a6f4e19ac",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b6e4e035f45e": {
+  "identity": {
+   "one_liner": "GaussDB/openGauss 诊断智能体的 Kubernetes 容器化交付项目",
+   "review": "该项目将 opencode 与 GaussDB/openGauss DBA 技能集容器化部署到 Kubernetes：每个用户对应一个无状态 Agent Pod，会话与知识库状态存于 NAS（RWX PVC）。提供诊断、知识库导入、前端、标准知识库等多个镜像，包含 Top SQL、健康检查、WDR、死锁日志解析等技能，通过 GRMP 中间件（SM2/SM3 签名）访问数据库。面向行内 DBA 与实施团队，附部署、接入手册与离线交付包。",
+   "highlights": [
+    "每用户一个无状态 runtime Pod，状态全部存 NAS，SQL 白名单控制取数（132–138 条）",
+    "提供诊断、知识库导入、前端、标准知识库四个及以上镜像，支持 x86_64/aarch64 离线交付包",
+    "支持 Top SQL、时段体检、WDR、死锁日志解析、存储过程 ADM_SOURCE 兜底取源码等诊断技能；含固定池化、凭据代理与 openFuyao 沙箱模式（预览）"
+   ],
+   "use_cases": [
+    "GaussDB/openGauss 环境的 SQL 诊断、慢 SQL 分析与健康检查",
+    "内网隔离环境的知识库建设与网页剪藏导入",
+    "容器化/离线环境下的 DBA 智能体交付与运维"
+   ]
+  },
+  "sha": "b6e4e035f45e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

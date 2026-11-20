@@ -3238,5 +3238,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7ddba1bdd585": {
+  "identity": {
+   "one_liner": "自托管记账软件：一句话生成凭证，数值由确定性引擎计算",
+   "review": "Moneyhelper 是自托管的个人与企业记账系统，支持复式总账、银行对账、期末结账与费用报销、采购付款流程。核心机制是确定性计算引擎负责全部数值，LLM 仅用于生成表述；数据存于本地 SQLite。通过 Docker Compose 可一键启动，默认端口 8787。",
+   "highlights": [
+    "提供个人与企业双模式：多租户、部门、科目表、凭证草稿→过账→冲销、试算平衡与期间锁定",
+    "支持微信、支付宝、银行 CSV、PDF、发票二维码及 OCR 导入，能力经 MCP 暴露给外部客户端",
+    "每个数值携带溯源记录（工具、参数、代码路径），样本不足时返回 null 及原因"
+   ],
+   "use_cases": [
+    "家庭与企业账目共存于同一安装实例但相互隔离的个人/小微企业记账",
+    "月末自动过账草稿凭证并锁定期间的无人工结账流程",
+    "通过 MCP 客户端（如 Claude、Codex）驱动账务查询与录入"
+   ]
+  },
+  "sha": "7ddba1bdd585",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6f963ed7eb34": {
+  "identity": {
+   "one_liner": "将波兰电子日志 EduVulcan.pl 数据接入 Home Assistant 的插件，以无头浏览器或移动 API 采集数据",
+   "review": "Vultron 是一个 Home Assistant 附加组件（也支持 Docker 运行），通过 Selenium 无头浏览器（默认，每 40-60 分钟）或可选的移动 API（每 15 分钟）读取 EduVulcan 电子日志，为家长和学生生成成绩、课表、消息、考勤、幼儿园等传感器与 Lovelace 卡片，数据存于 SQLite。README 明确声明使用该项目违反 EduVulcan.pl 服务条款；安装前需先在网页端登录并完成新条款确认。",
+   "highlights": [
+    "支持多学生账户自动检测，每个孩子生成独立传感器集合，含学校与幼儿园两类账户路径",
+    "提供默认浏览器抓取与可选移动 API（RSA 设备注册、签名请求）两种数据获取方式，另支持 GPE 格但斯克供应商",
+    "内置采集调度机制：工作日 40-60 分钟随机间隔、周末固定时段、01:00-05:59 停止活动，并自动注册 Lovelace JavaScript 卡片"
+   ],
+   "use_cases": [
+    "家长在 Home Assistant 中查看子女的成绩、考勤、消息、活动日程等电子日志信息",
+    "幼儿园账户场景下查看出勤记录（月历及进出时间）、菜单含成分与过敏原、缴费等信息",
+    "通过 Docker 部署在无 Home Assistant 附加组件支持的环境中运行采集进程"
+   ]
+  },
+  "sha": "6f963ed7eb34",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8b015b9f989a": {
+  "identity": {
+   "one_liner": "面向定制软件与AI咨询销售的B2B CRM，React+Express+SQLite全栈实现",
+   "review": "LeadHub 是为销售定制软件、AI 方案与技术咨询服务团队设计的 B2B CRM，覆盖线索录入、10 阶段管道、商机跟进到提案成交流程。技术栈为 React/TypeScript/Vite 前端加 Node/Express 后端，数据层支持本地 SQLite 或 Turso(libSQL)，可选接入 Claude API 提供线索摘要与邮件草稿等建议。支持 Docker 与 Render 部署，管理员与销售代表两种角色。",
+   "highlights": [
+    "提供 10 阶段管道看板，拖拽变更阶段并记录历史，丢单须填写原因，加权管道按商机价值×概率计算",
+    "包含资质评分（需求、匹配度、预算、时间线、决策人接触），评分映射 Hot/Warm/Cold，管理员可调整标准与权重",
+    "支持公开咨询表单，提交自动创建公司、联系人、线索并分配跟进任务；可选 Claude API 辅助生成摘要与邮件草稿"
+   ],
+   "use_cases": [
+    "销售定制软件、AI 解决方案或技术咨询服务的小型团队管理线索与商机管道",
+    "通过网站公开表单收集潜在客户咨询并自动分配跟进",
+    "本地或 Docker/Render 部署，用于需要线索去重、任务提醒与跟进记录的销售流程"
+   ]
+  },
+  "sha": "8b015b9f989a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

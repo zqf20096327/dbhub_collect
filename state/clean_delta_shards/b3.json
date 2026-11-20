@@ -31162,5 +31162,1429 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "26da14bd423b+2": {
+  "fn": "zengyunhua/Mestudy",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    10,
+    4,
+    10,
+    [
+     "Java",
+     "Spring",
+     "MyBatis",
+     "Build",
+     "CI",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    14,
+    11,
+    12,
+    [
+     "For maintainers preparing an open-source programme application, see the application readiness and independent-reproduction guide."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    36,
+    12,
+    34
+   ],
+   [
+    "replace",
+    36,
+    44,
+    34,
+    42,
+    [
+     "|Pattern|Where to look|",
+     "|---|---|",
+     "|Token-authenticated client SDK with self-renewing heartbeat|`IFaceHttpsClient`|",
+     "|Uniform response envelope shared by ~350 endpoints|`Result`|",
+     "|Multi-datasource wiring with c3p0 + MyBatis|`applicationContext.xml`|",
+     "|SOAP (Axis) → REST adapter for a legacy HIS system|`HangTianHisController`|",
+     "|Draft / submit / audit state machine for online services|`DraftsController`|",
+     "|Startup-time resource bootstrapping|`StartupListener`|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    47,
+    42,
+    45
+   ],
+   [
+    "replace",
+    47,
+    54,
+    45,
+    52,
+    [
+     "|Module|Artifact|What it does|Size|",
+     "|---|---|---|:---:|",
+     "|`IFaceSuportService`|`sisp_IFaceSuportService`|Core interface service. Social-insurance queries, card services, employment, hospital, face verification, SMS, WeChat, bank/fee channels. Also ships the reusable **client SDK** jar (`classifier=client`).|284 Java files|",
+     "|`NetworkOfficeService`|`sisp_NetworkOfficeService`|Online government-service portal. Application drafts, submission, audit trail, electronic signature (PDF stamping), area/administrative division data.|129 Java files|",
+     "|`IFaceSuperService_hn`|`sisp_IFaceSuperService_hn`|Province-specific (Henan) variant of the interface service: card + social-insurance controllers against the provincial gateway.|60 Java files|",
+     "|`InterfaceFunction`|`sisp_InterfaceFunction`|Platform security administration: users, roles, function/permission trees, login.|49 Java files|",
+     "|`NetPortalManagement`|`sisp_NetPortalManagement`|Lightweight portal administration: portal users, policy documents, external web-connection registry. Uses standard JDBC and Jersey with a configurable API-token filter.|16 Java files|"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    71,
+    52,
+    69
+   ],
+   [
+    "replace",
+    71,
+    107,
+    69,
+    70,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    112,
+    70,
+    75
+   ],
+   [
+    "replace",
+    112,
+    114,
+    75,
+    77,
+    [
+     " `StartupListener`, which initialises the Redis pool (`DataBase.init()`) and the",
+     " shared thread pool (`ThreadPoolUtil.init()`) before the first request is served."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    77,
+    78
+   ],
+   [
+    "replace",
+    115,
+    116,
+    78,
+    79,
+    [
+     " `com.tecsun.sisp.iface.server.controller`."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    79,
+    80
+   ],
+   [
+    "replace",
+    117,
+    119,
+    80,
+    82,
+    [
+     " `data`) or a `ResultVerify` for paged payloads. `statusCode` is `\"200\"` on success and",
+     " `\"0\"` on failure — see API overview."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    82,
+    83
+   ],
+   [
+    "replace",
+    120,
+    121,
+    83,
+    84,
+    [
+     " `src/main/resources/mappings/` and is bound in `applicationContext.xml`."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    84,
+    85
+   ],
+   [
+    "replace",
+    122,
+    124,
+    85,
+    87,
+    [
+     " Jersey/`HttpClient` helpers, and are wrapped so a downstream outage degrades into a",
+     " `Result` with a failure code rather than a 500."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    127,
+    87,
+    90
+   ],
+   [
+    "replace",
+    127,
+    140,
+    90,
+    103,
+    [
+     "|Concern|Choice|Notes|",
+     "|---|---|---|",
+     "|Language / runtime|Java 8 (source/target 1.8)|Level is set once in the root POM via `maven.compiler.source`/`target`; modules must not override it|",
+     "|Web framework|Spring MVC 4.0.8.RELEASE|XML configuration, no Spring Boot|",
+     "|Persistence|MyBatis 3.2.4 and JDBC|Mapper interfaces + XML in the Spring modules; parameterized JDBC repositories in portal administration|",
+     "|Connection pool|c3p0 (`ComboPooledDataSource`) where configured|`NetworkOfficeService` uses `DriverManagerDataSource`; `NetPortalManagement` opens scoped JDBC connections|",
+     "|Database|Oracle 10g/11g|Multiple schemas per module|",
+     "|Cache / session|Redis via Jedis|Dictionary cache, interface token, channel state|",
+     "|SOAP|Apache Axis 1.x|Generated stubs for provincial gateway / HIS|",
+     "|HTTP client|Apache HttpClient 4.1 + Jersey 1.15|Client SDK and inter-service calls|",
+     "|JSON|Gson + `net.sf.json`|Both are in use; new code should prefer Gson|",
+     "|Logging|SLF4J + Log4j 1.2|`log4j.properties` / `log4j.xml` per module|",
+     "|Packaging|`war`|Servlet 2.5 descriptor|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    146,
+    103,
+    109
+   ],
+   [
+    "replace",
+    146,
+    148,
+    109,
+    111,
+    [
+     " the sources but warns that source/target 8 is obsolete; JDK 11+ will need `--add-opens`",
+     " workarounds for Axis and c3p0"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    158,
+    111,
+    121
+   ],
+   [
+    "replace",
+    158,
+    167,
+    121,
+    122,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    195,
+    122,
+    150
+   ],
+   [
+    "replace",
+    195,
+    196,
+    150,
+    151,
+    [
+     "troubleshooting."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    202,
+    151,
+    157
+   ],
+   [
+    "replace",
+    202,
+    209,
+    157,
+    164,
+    [
+     "|Module|Public build|In default reactor|Blocking dependency|",
+     "|---|---|:---:|---|",
+     "|`IFaceSuportService`|yes|yes|—|",
+     "|`IFaceSuperService_hn`|yes|yes|—|",
+     "|`InterfaceFunction`|yes|yes|— (the private coordinates it declared were unused and are gone)|",
+     "|`NetworkOfficeService`|yes|yes|— (one missing entity class was reconstructed)|",
+     "|`NetPortalManagement`|yes|yes|Oracle JDBC, external platform proxy for photo/log endpoints, and a configured API token|"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    224,
+    164,
+    179
+   ],
+   [
+    "replace",
+    224,
+    225,
+    179,
+    180,
+    [
+     "`BanjianVo.java`"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    235,
+    180,
+    190
+   ],
+   [
+    "replace",
+    235,
+    236,
+    190,
+    191,
+    [
+     "in the CHANGELOG."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    249,
+    191,
+    204
+   ],
+   [
+    "replace",
+    249,
+    250,
+    204,
+    205,
+    [
+     "> docs/GETTING_STARTED.md."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    257,
+    205,
+    212
+   ],
+   [
+    "replace",
+    257,
+    262,
+    212,
+    213,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    264,
+    213,
+    215
+   ],
+   [
+    "replace",
+    264,
+    265,
+    215,
+    216,
+    [
+     "Port `8080` is only an example: use the Tomcat HTTP connector port and configure Oracle, Redis and all required data sources before deploying. A successful WAR build does not verify runtime behaviour. See the deployment guide."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    275,
+    216,
+    226
+   ],
+   [
+    "replace",
+    275,
+    290,
+    226,
+    227,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    295,
+    227,
+    232
+   ],
+   [
+    "replace",
+    295,
+    296,
+    232,
+    233,
+    [
+     "single target server per JVM**. See docs/CLIENT_SDK.md for the"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    309,
+    233,
+    246
+   ],
+   [
+    "replace",
+    309,
+    310,
+    246,
+    247,
+    [
+     "module guide."
+    ]
+   ],
+   [
+    "equal",
+    310,
+    311,
+    247,
+    248
+   ],
+   [
+    "replace",
+    311,
+    320,
+    248,
+    257,
+    [
+     "|Key group|Purpose|",
+     "|---|---|",
+     "|`jdbc.<name>.*`|Driver, URL, credentials and pool sizing per datasource|",
+     "|`redis_core_database`|Redis endpoint as `host_port`|",
+     "|`redis_iface_expx`|Token / cache TTL in **minutes** (multiplied by 60 internally)|",
+     "|`platform_context_path`|Deployed context path, default `/sisp`|",
+     "|`inner_proxy_ip` / `inner_proxy_port`|Internal proxy used for inter-service calls|",
+     "|`biometrics.*`|Face-verification gateway endpoint and credentials|",
+     "|`signpdf.*`|Electronic-signature service endpoint, font and template paths|"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    321,
+    257,
+    258
+   ],
+   [
+    "replace",
+    321,
+    322,
+    258,
+    259,
+    [
+     "Full reference: docs/CONFIGURATION.md."
+    ]
+   ],
+   [
+    "equal",
+    322,
+    342,
+    259,
+    279
+   ],
+   [
+    "replace",
+    342,
+    347,
+    279,
+    280,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    351,
+    280,
+    284
+   ],
+   [
+    "replace",
+    351,
+    352,
+    284,
+    285,
+    [
+     "endpoint index lists them by controller."
+    ]
+   ],
+   [
+    "equal",
+    352,
+    359,
+    285,
+    292
+   ],
+   [
+    "replace",
+    359,
+    361,
+    292,
+    294,
+    [
+     " See maintenance progress for the current hardening batch",
+     " and CSSP migration for the new session requirement."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    362,
+    294,
+    295
+   ],
+   [
+    "replace",
+    362,
+    364,
+    295,
+    297,
+    [
+     " resolve from public dependencies; `NetPortalManagement` still needs Oracle and a",
+     " configured platform proxy for meaningful runtime checks."
+    ]
+   ],
+   [
+    "equal",
+    364,
+    365,
+    297,
+    298
+   ],
+   [
+    "replace",
+    365,
+    372,
+    298,
+    305,
+    [
+     " requires a valid WAR without container/test libraries and at least one passing test",
+     " per module, and CI runs it after",
+     " `mvn -B verify`: the November 19 local clean run passed 81 tests (42/8/7/9/15),",
+     " none skipped. Public CI must still be verified for the eventual commit. The portal module's tests stop at the",
+     " boundary — `AppConfig` resolution order, `ApiTokenFilter` rejection and the upload",
+     " resource's HTTP method; none of which needs a database. The JDBC repository remains",
+     " uncovered and needs an Oracle-compatible fixture."
+    ]
+   ],
+   [
+    "equal",
+    372,
+    373,
+    305,
+    306
+   ],
+   [
+    "replace",
+    373,
+    375,
+    306,
+    308,
+    [
+     " Spring 4 / XML style intact so the patterns stay readable. The language level is",
+     " Java 8 (raised from 7) and that is as far as it goes — no framework upgrade."
+    ]
+   ],
+   [
+    "equal",
+    375,
+    382,
+    308,
+    315
+   ],
+   [
+    "replace",
+    382,
+    385,
+    315,
+    318,
+    [
+     " packages all five modules, but portal queries, policy BLOBs and visit statistics still",
+     " require an authorized Oracle schema. Photo/log endpoints also call the configured",
+     " platform proxy."
+    ]
+   ],
+   [
+    "equal",
+    385,
+    386,
+    318,
+    319
+   ],
+   [
+    "replace",
+    386,
+    394,
+    319,
+    327,
+    [
+     " `.example` templates instead of tracked local `config.properties` / `ds.xml`, but",
+     " Git history still contains credential-, payment-signing-key- and identity-shaped",
+     " values. Their provenance and real-world use are unverified. The",
+     " security review records a category-only inventory and",
+     " the evidence/approval process. If a value was provisioned, its owner must revoke",
+     " or rotate it with the provider (especially payment signing material) before any",
+     " coordinated history cleanup. Do not assume every match identifies a real person",
+     " or a live secret; do not paste historical values into public channels."
+    ]
+   ],
+   [
+    "equal",
+    394,
+    395,
+    327,
+    328
+   ],
+   [
+    "replace",
+    395,
+    403,
+    328,
+    336,
+    [
+     " `CommUtil`, `AESUtil`. 53 class names exist in more than one module, and 51 of those",
+     " 53 have drifted apart — only `DevBean` and `SecretKeyBean` are still byte-identical",
+     " (between `IFaceSuportService` and `IFaceSuperService_hn`). The spread is wide:",
+     " `Constants` exists in four copies of 895, 69, 31 and 30 lines; `BaseController` in",
+     " five. Consolidating them into a shared artifact is the single most valuable refactor",
+     " available here, but it is not a mechanical merge — the smallest copy is usually the",
+     " only one a given module actually calls, so every divergence has to be resolved by",
+     " reading its callers."
+    ]
+   ],
+   [
+    "equal",
+    403,
+    404,
+    336,
+    337
+   ],
+   [
+    "replace",
+    404,
+    407,
+    337,
+    340,
+    [
+     " startup/shutdown helpers have focused assertion-based tests, but most business flows",
+     " are not covered. Legacy HTTP smoke tests require a",
+     " running service and local fixtures, so they are excluded from default tests."
+    ]
+   ],
+   [
+    "equal",
+    407,
+    408,
+    340,
+    341
+   ],
+   [
+    "replace",
+    408,
+    412,
+    341,
+    345,
+    [
+     " and described in CHANGELOG.md, but the per-module artifact versions in",
+     " the POMs still carry their original internal numbers (`V1.0.0.150630`,",
+     " `V1.0.0.190107`). The public-build and portal-port work since `v1.1.0` is in",
+     " Unreleased."
+    ]
+   ],
+   [
+    "equal",
+    412,
+    414,
+    345,
+    347
+   ],
+   [
+    "replace",
+    414,
+    432,
+    347,
+    348,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    432,
+    434,
+    348,
+    350
+   ],
+   [
+    "replace",
+    434,
+    448,
+    350,
+    364,
+    [
+     "|Document|Contents|",
+     "|---|---|",
+     "|docs/GETTING_STARTED.md|Zero-to-running in ~15 minutes|",
+     "|docs/ARCHITECTURE.md|Layering, contexts, request lifecycle, cross-cutting concerns|",
+     "|docs/CONFIGURATION.md|Every configuration key, with defaults|",
+     "|docs/API_OVERVIEW.md|Response envelope, error codes, endpoint index|",
+     "|docs/CLIENT_SDK.md|Using `IFaceHttpsClient` from a Java consumer|",
+     "|docs/TROUBLESHOOTING.md|Build failures, encoding issues, Oracle/Redis gotchas|",
+     "|docs/ROADMAP.md|Where this is going|",
+     "|docs/SECURITY_REVIEW.md|Category-only inventory of historical sensitive-looking values and the remediation process|",
+     "|docs/MODULE_REVIEW_IFACESUPORTSERVICE.md|Code review of the core interface module|",
+     "|docs/OPEN_SOURCE_APPLICATION_GUIDE.md|What a reviewer can verify today, and how to reproduce it independently|",
+     "|docs/RELEASE_CHECKLIST.md|Reproducible release, tagging and publication checklist|",
+     "|Per-module READMEs|Linked from the module map|"
+    ]
+   ],
+   [
+    "equal",
+    448,
+    450,
+    364,
+    366
+   ],
+   [
+    "replace",
+    450,
+    463,
+    366,
+    367,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    463,
+    465,
+    367,
+    369
+   ],
+   [
+    "replace",
+    465,
+    466,
+    369,
+    370,
+    [
+     "Do not open a public issue for a vulnerability. See SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    466,
+    468,
+    370,
+    372
+   ],
+   [
+    "replace",
+    468,
+    476,
+    372,
+    373,
+    [
+     "Apache License 2.0."
+    ]
+   ],
+   [
+    "equal",
+    476,
+    485,
+    373,
+    382
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "0b966bff4848+2": {
+  "fn": "yuuki/shawk",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "AI Generated",
+     "CI",
+     "Security",
+     "Release",
+     "License",
+     "Go version"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    20,
+    8,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     " or protocol, cron jobs and third-party software included."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    25,
+    22,
+    25,
+    [
+     " at connection state changes (unless wire protocols are classified, below),",
+     " so the agent can always run and does not sample: a job that runs once a",
+     " month is still seen."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     " are recorded, so \"not used\" can be told apart from \"not observed\"."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    36,
+    28,
+    36,
+    [
+     " sockets (a local PostgreSQL, php-fpm, Docker, munge), without their",
+     " traffic; so \"not used\" means \"no TCP, UDP or Unix stream connection\".",
+     " Datagram Unix sockets (syslog, journald) are not traced. RDMA verbs",
+     " (InfiniBand, RoCE) bypass the sockets: the RDMA",
+     " transports of MPI (UCX) and NCCL, Lustre o2ib, GPFS verbs and NFS over",
+     " RDMA are not seen, even when their control connections over TCP are; TCP",
+     " over IPoIB is. See packaging/README.md",
+     " for HPC clusters."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    36,
+    37
+   ],
+   [
+    "replace",
+    37,
+    42,
+    37,
+    42,
+    [
+     " a new TCP connection sends tells its protocol: the version of TLS, HTTP/1",
+     " or HTTP/2 in clear text, SSH, PostgreSQL and MySQL with or without a",
+     " request of TLS, Redis or Slurm, kept in PostgreSQL, so that clients still",
+     " on TLS 1.0 or in clear text are found. Its program runs on every TCP",
+     " send, so it is off by default."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    42,
+    43
+   ],
+   [
+    "replace",
+    43,
+    45,
+    43,
+    45,
+    [
+     " way OBI (OpenTelemetry eBPF Instrumentation) names them, so shawk's",
+     " dependencies and OBI's application metrics share the same `job`."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    49,
+    45,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "The design is in docs/design.md."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    50,
+    51
+   ],
+   [
+    "replace",
+    51,
+    55,
+    51,
+    52,
+    [
+     " On every host, eBPF programs in the kernel trace the sockets of all processes, and the shawk agent sends the bundled flows as OTLP metrics every 15 seconds to an OpenTelemetry Collector with the shawk connector. The connector writes dependencies, listeners and observation segments to PostgreSQL and metrics per service without addresses to Prometheus; Grafana shows both. OBI can send application-layer metrics to the same collector."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    52,
+    53
+   ],
+   [
+    "replace",
+    56,
+    57,
+    53,
+    54,
+    [
+     "|component|role|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    54,
+    55
+   ],
+   [
+    "replace",
+    58,
+    63,
+    55,
+    60,
+    [
+     "|`shawk agent`|runs on every host; sends its dependencies as OTLP metrics every 15 s; no database, no open port|",
+     "|shawk connector|an OpenTelemetry Collector component; writes PostgreSQL, names the peer of every dependency, forwards metrics without addresses to Prometheus|",
+     "|PostgreSQL|whether a dependency exists and when (views of the schema `shawk_v1`)|",
+     "|Prometheus|how much flows: connections, failures, bytes, RTT, connect time, retransmissions|",
+     "|Grafana|dashboards and alerts|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    67,
+    60,
+    64
+   ],
+   [
+    "replace",
+    67,
+    76,
+    64,
+    73,
+    [
+     " upstream 5.14 or later. Unix sockets need BPF trampolines (fentry,",
+     " fexit), which arm64 has only since 6.0 (Rocky Linux 9.8); without them",
+     " they are not traced, and UDP is traced with kprobes, at about twice the",
+     " cost per datagram. Wire protocols (`-classify-protocols`) need them too;",
+     " without them they are not classified. The tested kernels",
+     " are listed in",
+     " design §3.5.",
+     " The agent runs as root with the capabilities that",
+     " its systemd unit grants."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    78,
+    73,
+    75
+   ],
+   [
+    "replace",
+    78,
+    79,
+    75,
+    76,
+    [
+     " accepts OTLP metrics."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    101,
+    76,
+    98
+   ],
+   [
+    "replace",
+    101,
+    102,
+    98,
+    99,
+    [
+     "(packaging/)."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    116,
+    99,
+    113
+   ],
+   [
+    "replace",
+    116,
+    117,
+    113,
+    114,
+    [
+     "packaging/ has the configuration of the collector,"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    119,
+    114,
+    116
+   ],
+   [
+    "replace",
+    119,
+    120,
+    116,
+    117,
+    [
+     "CHANGELOG."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    125,
+    117,
+    122
+   ],
+   [
+    "replace",
+    125,
+    126,
+    122,
+    123,
+    [
+     "(design §5.4)."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    134,
+    123,
+    131
+   ],
+   [
+    "replace",
+    134,
+    135,
+    131,
+    132,
+    [
+     " of each dependency, with its first and last seen times."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    132,
+    133
+   ],
+   [
+    "replace",
+    136,
+    138,
+    133,
+    135,
+    [
+     " the selected services, and failures and connect time by peer host; with",
+     " `networks`, the networks the connections use."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    140,
+    135,
+    137
+   ],
+   [
+    "replace",
+    140,
+    141,
+    137,
+    138,
+    [
+     " the same service."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    147,
+    138,
+    144
+   ],
+   [
+    "replace",
+    147,
+    148,
+    144,
+    145,
+    [
+     "The dependency map: ~external to haproxy on lb-01, to storefront on web-01 and web-02, to catalog, memcached, redis-server, recommend and postgres; order-worker to postgres, redis-server and payment-gateway; legacy-cron, nightly-report and ~unresolved to postgres"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    145,
+    146
+   ],
+   [
+    "replace",
+    149,
+    150,
+    146,
+    147,
+    [
+     "The dependency details of storefront: connections, connection failure ratio, request and response bytes, mean RTT, retransmitted segments and open connections per dependency over the hour, with a red band where cache-01 was not observed"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    151,
+    147,
+    148
+   ],
+   [
+    "replace",
+    151,
+    153,
+    148,
+    149,
+    [
+     " Fleet and Changes "
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    149,
+    150
+   ],
+   [
+    "replace",
+    154,
+    155,
+    150,
+    151,
+    [
+     "The fleet: 9 agents alive, 0 silent, 9 without UDP tracing, 15 new dependencies today; the agents, the observation gap of cache-01 and the dependencies that appeared today"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    151,
+    152
+   ],
+   [
+    "replace",
+    156,
+    159,
+    152,
+    153,
+    [
+     "The changes: nightly-report to postgres appeared and disappeared, recommend to redis-server and storefront to redis-server and recommend appeared, storefront to memcached and legacy-cron to postgres disappeared"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    166,
+    153,
+    160
+   ],
+   [
+    "replace",
+    166,
+    182,
+    160,
+    161,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    200,
+    161,
+    179
+   ],
+   [
+    "replace",
+    200,
+    204,
+    179,
+    180,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    208,
+    180,
+    184
+   ],
+   [
+    "replace",
+    208,
+    209,
+    184,
+    185,
+    [
+     "test/harness, which also lists the variables each"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    218,
+    185,
+    194
+   ],
+   [
+    "replace",
+    218,
+    221,
+    194,
+    197,
+    [
+     "The other targets are described in the Makefile; see",
+     "CONTRIBUTING.md, AGENTS.md and",
+     "SECURITY.md. The compiled"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    226,
+    197,
+    202
+   ],
+   [
+    "replace",
+    226,
+    228,
+    202,
+    204,
+    [
+     "docs/proposals/ holds designs not implemented yet, and",
+     "docs/research/ background research that is not"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    233,
+    204,
+    209
+   ],
+   [
+    "replace",
+    233,
+    234,
+    209,
+    210,
+    [
+     "cccc on pull requests and pushes to `main`"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    210,
+    211
+   ],
+   [
+    "replace",
+    235,
+    236,
+    211,
+    212,
+    [
+     "octocov as custom metrics: the number of"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    250,
+    212,
+    226
+   ],
+   [
+    "replace",
+    250,
+    251,
+    226,
+    227,
+    [
+     "(IOTS 2019) and was"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    254,
+    227,
+    230
+   ],
+   [
+    "replace",
+    254,
+    261,
+    230,
+    231,
+    [
+     "Apache License 2.0. The eBPF programs"
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

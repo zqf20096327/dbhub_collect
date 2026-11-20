@@ -35246,5 +35246,1823 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "9f60bc7f57a3+2": {
+  "fn": "MuzeAnisichael/minimal-local-agent",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "equal",
+    0,
+    11,
+    0,
+    11
+   ],
+   [
+    "replace",
+    11,
+    26,
+    11,
+    26,
+    [
+     "|能力|说明|",
+     "|---|---|",
+     "|任务规划|先生成结构化计划；校验失败时带着失败原因重新执行（`planning.max_replans`）；模型可用 `update_plan` 更新步骤状态|",
+     "|统一工具协议|内置文件工具、MCP 工具、子任务、控制工具都是同一个 `Tool`，经同一个执行入口，超时、取消、重试、审批、账本只实现一次|",
+     "|上下文预算|按 token 估算裁剪历史，以“步骤”为单位丢弃，保留一条摘要和当前计划；可选用模型做摘要|",
+     "|调用预算|请求数、工具调用数、输出 token、成本四项上限；子任务从父任务预留额度，用完结算回父任务|",
+     "|产物校验|文件内容、包含、缺失、哈希、回答包含、命令退出码；校验结果也记入事件轨迹|",
+     "|模型切换|按角色（plan / act / summarize）配置模型链，前一个失败自动换下一个|",
+     "|MCP 接入|官方 `mcp` SDK，支持 stdio 和 Streamable HTTP；只暴露白名单工具，并标注读 / 写|",
+     "|受控子任务|`run_subtask`：独立预算、工具只能是父任务可见工具的子集、不能再派生子任务|",
+     "|幂等与恢复|每次工具调用有幂等键；中断后按账本对账（已写入 / 未写入 / 部分写入 / 被外部改动），不会重复写也不会丢写|",
+     "|补偿|失败或取消时按逆序撤销本任务（含子任务）的文件写入；被别人改过的文件记为冲突，不覆盖|",
+     "|取消与超时|取消信号同时写进状态库，另一个进程里 `mla cancel` 也能生效；工具超时可自动重试|",
+     "|事件轨迹|`mla trace` 打印事件树，`mla trace --artifact 路径` 从产物回溯到工具调用、模型调用、步骤和任务输入|",
+     "|评测|按任务族划分的评测集，固定模型与预算，对比基础循环、记忆、恢复策略的成功率、故障恢复率和每成功任务成本|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    52,
+    26,
+    52
+   ],
+   [
+    "replace",
+    52,
+    62,
+    52,
+    62,
+    [
+     "|命令|作用|",
+     "|---|---|",
+     "|`mla run GOAL [--checks F] [--yes] [--events] [--json]`|执行一个任务|",
+     "|`mla resume TASK_ID`|从最近的检查点继续一个中断的任务|",
+     "|`mla cancel TASK_ID`|请求取消（对另一个进程中的任务也有效），取消后自动补偿|",
+     "|`mla tasks` / `mla show TASK_ID`|列出任务 / 查看结果和工具账本|",
+     "|`mla trace TASK_ID`|打印事件树|",
+     "|`mla trace --artifact PATH`|从产物回溯完整来源链|",
+     "|`mla undo TASK_ID`|手动补偿：撤销任务写入的文件|",
+     "|`mla eval [--offline] [--strategies ...] [--no-faults] [--repeat N] [--out F]`|运行评测|"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    76,
+    62,
+    76
+   ],
+   [
+    "replace",
+    76,
+    82,
+    76,
+    82,
+    [
+     "|策略|恢复|重新规划|记忆|",
+     "|---|---|---|---|",
+     "|baseline（基础循环）|关|0|none|",
+     "|memory（记忆）|关|0|episodic|",
+     "|recovery（恢复）|开|2|none|",
+     "|full（记忆+恢复）|开|2|episodic|"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    90,
+    82,
+    90
+   ],
+   [
+    "replace",
+    90,
+    96,
+    90,
+    96,
+    [
+     "|策略|成功率|故障恢复率|每成功任务 tokens|",
+     "|---|---|---|---|",
+     "|基础循环|50%|11%|3139|",
+     "|记忆|56%|11%|2673|",
+     "|恢复|94%|100%|2239|",
+     "|记忆+恢复|100%|100%|2077|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    101,
+    96,
+    101
+   ],
+   [
+    "replace",
+    101,
+    111,
+    101,
+    111,
+    [
+     "|模型|策略|成功率|故障恢复率|每成功任务 tokens|",
+     "|---|---|---|---|---|",
+     "|DeepSeek（deepseek-chat）|基础循环|61%|33%|14748|",
+     "||记忆|61%|33%|15211|",
+     "||恢复|94%|100%|13135|",
+     "||记忆+恢复|94%|100%|11866|",
+     "|OpenRouter（qwen/qwen3-coder）|基础循环|56%|33%|21732|",
+     "||记忆|50%|22%|24775|",
+     "||恢复|83%|100%|15140|",
+     "||记忆+恢复|83%|89%|17471|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    116,
+    111,
+    116
+   ],
+   [
+    "replace",
+    116,
+    117,
+    116,
+    117,
+    [
+     "完整示例见 `agent.example.toml`。所有配置项都有默认值，未知字段会报错。"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    121,
+    117,
+    121
+   ],
+   [
+    "replace",
+    121,
+    124,
+    121,
+    124,
+    [
+     "- 架构说明：模块划分、任务状态机、账本与恢复、事件模型、评测设计",
+     "- 更新日志",
+     "- 安全说明"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    131,
+    124,
+    131
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "3baf8bf00352+2": {
+  "fn": "B0yko/pgwarden",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "pgwarden: give AI your database, not the keys"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    12,
+    2,
+    8,
+    [
+     " CI",
+     " Latest release",
+     " Container image on GHCR",
+     " Postgres 16 and 18",
+     " Python 3.12",
+     " Apache-2.0 licence"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    8,
+    9
+   ],
+   [
+    "replace",
+    13,
+    22,
+    9,
+    14,
+    [
+     " Quickstart &nbsp;·&nbsp;",
+     " How it works &nbsp;·&nbsp;",
+     " Results &nbsp;·&nbsp;",
+     " Limitations &nbsp;·&nbsp;",
+     " Docs "
+    ]
+   ],
+   [
+    "equal",
+    22,
+    33,
+    14,
+    25
+   ],
+   [
+    "replace",
+    33,
+    34,
+    25,
+    26,
+    [
+     "> (General Analysis, 2025). Guards"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    36,
+    26,
+    28
+   ],
+   [
+    "replace",
+    36,
+    37,
+    28,
+    29,
+    [
+     "> (Datadog Security Labs, 2025)."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    29,
+    30
+   ],
+   [
+    "replace",
+    38,
+    42,
+    30,
+    33,
+    [
+     "|133 / 133|0|1.98 ms|565 req/s|",
+     "|:---:|:---:|:---:|:---:|",
+     "|attacks blocked, oracle-verified|leaked rows or unapproved writes, 60 LLM episodes|gateway overhead per key lookup, p50|20 identities, p95 94.8 ms|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    33,
+    34
+   ],
+   [
+    "replace",
+    43,
+    45,
+    34,
+    35,
+    [
+     " MacBook Air M5, 24 GB, Docker via colima with 4 CPUs / 6 GB · the commands and caveats are under Results "
+    ]
+   ],
+   [
+    "equal",
+    45,
+    48,
+    35,
+    38
+   ],
+   [
+    "replace",
+    48,
+    55,
+    38,
+    45,
+    [
+     "||One shared credential|pgwarden||",
+     "|---|---|---|:---:|",
+     "|**Who the database sees**|one role for every user|the person's own login role, mapped from your IdP|ADR&#8209;0002|",
+     "|**What a person can read**|the union of everyone's access|their grants, RLS keyed on `session_user`, masking views|ADR&#8209;0005|",
+     "|**Read-only**|as strong as the wrapper around the SQL|a read-only transaction and one statement per call; no SQL parsing|ADR&#8209;0001|",
+     "|**Writes**|whatever the role may do|proposed, checked by `EXPLAIN`, approved by a named person, run once|ADR&#8209;0006|",
+     "|**Record**|whatever the server logs|append-only, hash-chained, verified independently of the code that wrote it|ADR&#8209;0007|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    80,
+    45,
+    70
+   ],
+   [
+    "replace",
+    80,
+    87,
+    70,
+    77,
+    [
+     "|Sign in as|Postgres role|What the database lets you do|",
+     "|---|---|---|",
+     "|`alice`|`pw_u_alice`|read every region, with PII masked|",
+     "|`bob`|`pw_u_bob`|read EU rows only, with raw PII; propose writes|",
+     "|`dana`|`pw_u_dana`|read US rows only, with raw PII; propose writes|",
+     "|`carol`|none|approve writes (the email arrives in Mailpit, <http://localhost:8025>) and open `/admin`|",
+     "|`mallory`|none|sign in, then be refused: the identity is not mapped to a role|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    95,
+    77,
+    85
+   ],
+   [
+    "replace",
+    95,
+    96,
+    85,
+    86,
+    [
+     "To put it in front of your own Postgres 16+, follow docs/own-database.md."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    103,
+    86,
+    93
+   ],
+   [
+    "replace",
+    103,
+    129,
+    93,
+    96,
+    [
+     " pgwarden consent screen: MCP Inspector asks to query Postgres on the user",
+     " Consent first. Before any sign-in, pgwarden names the application, where it",
+     " sends you back to, and the resource."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    96,
+    97
+   ],
+   [
+    "replace",
+    130,
+    131,
+    97,
+    110,
+    [
+     " MCP Inspector showing the result of a query as alice: names reduced to initials and email addresses masked as e***@example.net",
+     " Masked by the database. alice's role can only read the masked view, so",
+     " <code>SELECT full_name, email FROM customers</code> comes back masked.",
+     "",
+     " Mailpit showing the approval request email sent to the approver: a one-line summary of the proposed update and a signed review link, with no SQL in the message",
+     " A write waits for a person. The approver gets a summary and a signed link; the",
+     " statement is shown only on the review page, after sign-in.",
+     "",
+     " pgwarden admin audit page filtered to alice: the masked query with outcome ok, a raw-table read refused with SQLSTATE 42501 and a write refused with SQLSTATE 25006",
+     " Everything is on the record. A raw-table read refused by Postgres",
+     " (<code>42501</code>) and a write refused by the read-only transaction (<code>25006</code>).",
+     "",
+     " Made by `devtools/screenshots/run.py`: headless Chromium, a fixed 1440x900 viewport,"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    110,
+    111
+   ],
+   [
+    "replace",
+    132,
+    133,
+    111,
+    112,
+    [
+     "connected; it is development tooling, not part of the wheel or the image. "
+    ]
+   ],
+   [
+    "equal",
+    133,
+    140,
+    112,
+    119
+   ],
+   [
+    "replace",
+    140,
+    161,
+    119,
+    120,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    171,
+    120,
+    130
+   ],
+   [
+    "replace",
+    171,
+    173,
+    130,
+    132,
+    [
+     "The decisions behind it are in docs/adr/, the threats and their tests in",
+     "docs/threat-model.md."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    180,
+    132,
+    139
+   ],
+   [
+    "replace",
+    180,
+    192,
+    139,
+    140,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    200,
+    140,
+    148
+   ],
+   [
+    "replace",
+    200,
+    215,
+    148,
+    149,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    221,
+    149,
+    155
+   ],
+   [
+    "replace",
+    221,
+    222,
+    155,
+    156,
+    [
+     "tables from the JSON in docs/results/, and CI fails if they drift."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    231,
+    156,
+    165
+   ],
+   [
+    "replace",
+    231,
+    243,
+    165,
+    176,
+    [
+     "|Category|Attacks|Blocked (oracle-verified)|Observed primary blocking layer|",
+     "|---|---:|---:|---|",
+     "|A. Stacked statements|13|13|protocol|",
+     "|B. Writes on the read path|18|18|approval, privileges, protocol, read_only_transaction|",
+     "|C. Privilege escalation|13|13|privileges, read_only_transaction, rls|",
+     "|D. Crossing RLS|13|13|privileges, rls|",
+     "|E. Bypassing masking|12|12|masking_view, privileges|",
+     "|F. Resource exhaustion|13|13|rate_limit, timeout_or_cap|",
+     "|G. Canary exfiltration|11|11|privileges|",
+     "|H. Approval abuse|20|20|approval|",
+     "|I. OAuth and session|20|20|oauth|"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    246,
+    176,
+    179
+   ],
+   [
+    "replace",
+    246,
+    248,
+    179,
+    180,
+    [
+     " Run: 2026-09-28; commit `9f60c13`; Postgres 16.15; MacBook Air M5, 24 GB, Docker via colima with 4 CPUs / 6 GB; config `pgwarden.yaml` (sha256 b5c902f5656f70cd); 2 other containers running on the machine during the run. "
+    ]
+   ],
+   [
+    "equal",
+    248,
+    254,
+    180,
+    186
+   ],
+   [
+    "replace",
+    254,
+    256,
+    186,
+    187,
+    [
+     " Reproduce "
+    ]
+   ],
+   [
+    "equal",
+    256,
+    274,
+    187,
+    205
+   ],
+   [
+    "delete",
+    274,
+    276,
+    205,
+    205
+   ],
+   [
+    "equal",
+    276,
+    278,
+    205,
+    207
+   ],
+   [
+    "replace",
+    278,
+    279,
+    207,
+    208,
+    [
+     "The evidence for ADR-0001: the SQL-bearing"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    281,
+    208,
+    210
+   ],
+   [
+    "replace",
+    281,
+    282,
+    210,
+    211,
+    [
+     "sqlglot version are in docs/baselines.md."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    283,
+    211,
+    212
+   ],
+   [
+    "replace",
+    283,
+    289,
+    212,
+    217,
+    [
+     "|Baseline|Attacks it would let through|Benign queries it would wrongly block|",
+     "|---|---:|---:|",
+     "|keyword/regex blocklist|56 / 90|3 / 29|",
+     "|sqlglot SELECT-only allowlist|56 / 90|2 / 29|",
+     "|**pgwarden (database-enforced)**|**0 / 90**|**0 / 29**|"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    292,
+    217,
+    220
+   ],
+   [
+    "replace",
+    292,
+    294,
+    220,
+    221,
+    [
+     " Run: 2026-09-28; commit `9f60c13`. "
+    ]
+   ],
+   [
+    "equal",
+    294,
+    303,
+    221,
+    230
+   ],
+   [
+    "replace",
+    303,
+    309,
+    230,
+    235,
+    [
+     "|Query|Direct p50 / p95|Direct + wrapper p50 / p95|Via pgwarden p50 / p95|Overhead p50 / p95 (ms)|",
+     "|---|---:|---:|---:|---:|",
+     "|primary-key lookup (1 row)|0.06 / 0.08 0.05-0.07 / 0.07-0.32|0.46 / 0.57 0.46-0.48 / 0.50-0.75|2.04 / 2.90 1.95-2.38 / 2.55-4.02|1.98 / 2.82 1.88-2.32 / 2.23-3.95|",
+     "|30-row filtered select (30 rows)|0.13 / 0.14 0.12-0.15 / 0.14-0.19|0.60 / 0.71 0.58-0.63 / 0.63-0.88|2.40 / 4.09 2.16-2.56 / 2.66-4.24|2.28 / 3.95 2.03-2.41 / 2.52-4.10|",
+     "|monthly aggregate over orders (24 rows)|12.6 / 14.9 12.1-13.5 / 13.5-16.6|13.1 / 15.8 12.7-13.4 / 14.0-15.8|15.8 / 20.5 15.4-17.6 / 19.5-24.8|3.27 / 5.61 3.27-4.13 / 2.96-9.95|"
+    ]
+   ],
+   [
+    "equal",
+    309,
+    314,
+    235,
+    240
+   ],
+   [
+    "replace",
+    314,
+    316,
+    240,
+    241,
+    [
+     " Server-Timing spans and the cold first query "
+    ]
+   ],
+   [
+    "equal",
+    316,
+    319,
+    241,
+    244
+   ],
+   [
+    "replace",
+    319,
+    324,
+    244,
+    249,
+    [
+     "|Query|auth|ratelimit|db|audit|",
+     "|---|---:|---:|---:|---:|",
+     "|primary-key lookup|0.20|0.20|0.50|0.30|",
+     "|30-row filtered select|0.20|0.20|0.60|0.40|",
+     "|monthly aggregate over orders|0.30|0.20|13.5|0.40|"
+    ]
+   ],
+   [
+    "equal",
+    324,
+    327,
+    249,
+    252
+   ],
+   [
+    "replace",
+    327,
+    331,
+    252,
+    253,
+    [
+     " Run: 2026-09-28; commit `6edd97f`; Postgres 16.15; MacBook Air M5, 24 GB, Docker via colima with 4 CPUs / 6 GB; config `pgwarden.bench.yaml` (sha256 fb713f1da5d24904); 2 other containers running on the machine during the run. Audit chain verified after the latency run: OK, chain intact through seq 80715. "
+    ]
+   ],
+   [
+    "equal",
+    331,
+    340,
+    253,
+    262
+   ],
+   [
+    "replace",
+    340,
+    354,
+    262,
+    275,
+    [
+     "|Measure|Result|",
+     "|---|---|",
+     "|Identities|20 machine identities (bench-01 to bench-20)|",
+     "|Concurrency|20|",
+     "|Duration|60.1 s, mix `pk:60,filter:30,agg:10`|",
+     "|Total requests|33962 (0 rate-limited)|",
+     "|Requests/s|565.3|",
+     "|Latency p50 / p95 / p99|26.7 / 94.8 / 160.0 ms|",
+     "|Error rate (rate-limited calls excluded)|0.00% (0 errors)|",
+     "|Peak Postgres connections (pgwarden roles, `pg_stat_activity`)|20|",
+     "|Gateway peak CPU (`docker stats`, percent of one core)|102.1% (mean 81.2%, 122 samples)|",
+     "|Gateway peak RSS|95.5 MiB (171 samples)|",
+     "|`pgwarden audit verify` after the run|OK: chain intact through seq 114881, head seq 114881|"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    357,
+    275,
+    278
+   ],
+   [
+    "replace",
+    357,
+    359,
+    278,
+    279,
+    [
+     " Run: 2026-09-28; commit `6edd97f`; Postgres 16.15; MacBook Air M5, 24 GB, Docker via colima with 4 CPUs / 6 GB; config `pgwarden.bench.yaml` (sha256 fb713f1da5d24904); 2 other containers running on the machine during the run. "
+    ]
+   ],
+   [
+    "equal",
+    359,
+    364,
+    279,
+    284
+   ],
+   [
+    "replace",
+    364,
+    366,
+    284,
+    285,
+    [
+     " Reproduce latency and load "
+    ]
+   ],
+   [
+    "equal",
+    366,
+    376,
+    285,
+    295
+   ],
+   [
+    "replace",
+    376,
+    391,
+    295,
+    296,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    409,
+    296,
+    314
+   ],
+   [
+    "delete",
+    409,
+    411,
+    314,
+    314
+   ],
+   [
+    "equal",
+    411,
+    419,
+    314,
+    322
+   ],
+   [
+    "replace",
+    419,
+    424,
+    322,
+    326,
+    [
+     "|Model|Episodes|Solved|Injection attempts / exposures|Blocked|Rows beyond privilege|Writes without approval|Exfil in answer|USD|",
+     "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
+     "|deepseek/deepseek-v4-flash-0731|30|30|6 / 6|6|0|0|0|0.0053|",
+     "|qwen/qwen3.7-flash|30|30|0 / 0|0|0|0|0|0.0045|"
+    ]
+   ],
+   [
+    "equal",
+    424,
+    429,
+    326,
+    331
+   ],
+   [
+    "replace",
+    429,
+    431,
+    331,
+    332,
+    [
+     " Run: 2026-09-28; commit `c6cb29a`; MacBook Air M5, 24 GB, Docker via colima with 4 CPUs / 6 GB; config `pgwarden.llm.yaml` (sha256 3f55c698a58e6159). "
+    ]
+   ],
+   [
+    "equal",
+    431,
+    436,
+    332,
+    337
+   ],
+   [
+    "replace",
+    436,
+    438,
+    337,
+    338,
+    [
+     " Reproduce "
+    ]
+   ],
+   [
+    "equal",
+    438,
+    443,
+    338,
+    343
+   ],
+   [
+    "replace",
+    443,
+    450,
+    343,
+    344,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    450,
+    460,
+    344,
+    354
+   ],
+   [
+    "delete",
+    460,
+    462,
+    354,
+    354
+   ],
+   [
+    "equal",
+    462,
+    464,
+    354,
+    356
+   ],
+   [
+    "replace",
+    464,
+    470,
+    356,
+    362,
+    [
+     "|Check|Result|",
+     "|---|---|",
+     "|Fresh clone to the first `whoami`|about 16 s with images cached; `docker compose up -d --wait` alone 12 s|",
+     "|Production image|73.8 MB, amd64 and arm64, non-root (uid 10001), no mock IdP or test suite|",
+     "|Postgres versions|16.15 for every recorded run; CI tests 16 and 18 (the newest stable major; 19 is in beta)|",
+     "|Terraform|`fmt`, `validate`, 4 `terraform test` runs, `tflint` and `trivy config`: 0 findings, one accepted exception; validated and scanned, **not applied in v0.1**|"
+    ]
+   ],
+   [
+    "equal",
+    470,
+    471,
+    362,
+    363
+   ],
+   [
+    "replace",
+    471,
+    473,
+    363,
+    364,
+    [
+     " How these were measured "
+    ]
+   ],
+   [
+    "equal",
+    473,
+    475,
+    364,
+    366
+   ],
+   [
+    "replace",
+    475,
+    482,
+    366,
+    373,
+    [
+     " ports with newly generated secrets: 1 s clone, 12 s `docker compose up -d --wait`, 2 s for",
+     " the `uv` environment, 1 s for login and the call. The Postgres, Python and Mailpit images,",
+     " the build layers and the `uv` cache were already on the machine. Building the gateway and",
+     " mock-IdP images with `docker build --no-cache` took 11 s and 5 s more; pulling the three",
+     " public images depends on your network and was not measured. `pgwarden redteam run` on",
+     " that stack passed at 131 / 131 attacks and 32 / 32 benign controls (the corpus has grown",
+     " since; see the table above)."
+    ]
+   ],
+   [
+    "equal",
+    482,
+    483,
+    373,
+    374
+   ],
+   [
+    "replace",
+    483,
+    485,
+    374,
+    376,
+    [
+     " 344 MB unpacked. It carries the `redteam` and `bench` subcommands but no mock IdP,",
+     " screenshot script or tests."
+    ]
+   ],
+   [
+    "equal",
+    485,
+    486,
+    376,
+    377
+   ],
+   [
+    "replace",
+    486,
+    491,
+    377,
+    380,
+    [
+     " never authenticates to a cloud. The accepted exception is `AVD-GCP-0017`, a public Cloud",
+     " SQL address with no authorized networks, reasoned in",
+     " deploy/terraform/.trivyignore."
+    ]
+   ],
+   [
+    "equal",
+    491,
+    494,
+    380,
+    383
+   ],
+   [
+    "replace",
+    494,
+    502,
+    383,
+    391,
+    [
+     "|Client or provider|Status|",
+     "|---|---|",
+     "|MCP Inspector 2.8.0|✅ verified live: OAuth and tool calls in headless Chromium against the compose stack (test); the screenshots come from the same script|",
+     "|Plain HTTP|✅ verified live: the red-team suite and the end-to-end tests drive the OAuth, MCP, approval and admin flows|",
+     "|Claude Code, Cursor|⚪ not yet verified live; the landing page prints the connect commands, and reports from real sessions are welcome|",
+     "|ChatGPT, claude.ai connectors|⚪ expected by design, not verified: they need a public HTTPS URL|",
+     "|In-repo mock OIDC provider|✅ verified live: it runs every test, the red-team suite and the screenshots|",
+     "|Generic OIDC, Google, Microsoft Entra ID, GitHub|⚪ tested only against hand-written, recorded discovery documents and token responses; not against a real tenant in v0.1|"
+    ]
+   ],
+   [
+    "equal",
+    502,
+    505,
+    391,
+    394
+   ],
+   [
+    "replace",
+    505,
+    514,
+    394,
+    403,
+    [
+     "|Guide|What it covers|",
+     "|---|---|",
+     "|Run it on your own database|bundle roles and RLS, `pgwarden.yaml`, the minimal admin privileges, `db init`, `roles sync`, `masking apply`, `doctor` and `serve`; CI runs every block in it|",
+     "|Identity providers|generic OIDC, Google, Microsoft Entra ID and GitHub|",
+     "|Configuration reference|every setting and environment variable, generated from the code|",
+     "|Architecture decisions|eleven ADRs, from letting the database decide to the MCP SDK|",
+     "|Threat model|the OWASP LLM, Agentic and MCP Top 10, mapped to layers and tests|",
+     "|Deploy on Cloud Run|Terraform for Cloud Run and Cloud SQL (ADR-0008)|",
+     "|Recorded results|the JSON behind every table above|"
+    ]
+   ],
+   [
+    "equal",
+    514,
+    518,
+    403,
+    407
+   ],
+   [
+    "replace",
+    518,
+    519,
+    407,
+    408,
+    [
+     " within that person's privileges."
+    ]
+   ],
+   [
+    "equal",
+    519,
+    523,
+    408,
+    412
+   ],
+   [
+    "replace",
+    523,
+    524,
+    412,
+    413,
+    [
+     " login) unless the person is suspended or removed from config."
+    ]
+   ],
+   [
+    "equal",
+    524,
+    526,
+    413,
+    415
+   ],
+   [
+    "replace",
+    526,
+    527,
+    415,
+    416,
+    [
+     " hash that `pgwarden audit verify` prints to somewhere the superuser cannot write."
+    ]
+   ],
+   [
+    "equal",
+    527,
+    529,
+    416,
+    418
+   ],
+   [
+    "replace",
+    529,
+    530,
+    418,
+    419,
+    [
+     " to `query` and to write proposals, not to `whoami`, `list_tables` or `describe_table`."
+    ]
+   ],
+   [
+    "equal",
+    530,
+    532,
+    419,
+    421
+   ],
+   [
+    "replace",
+    532,
+    534,
+    421,
+    423,
+    [
+     " the next call (the gateway checks the state database on every request), but a person",
+     " removed only at the identity provider keeps working until their refresh-token family ends."
+    ]
+   ],
+   [
+    "equal",
+    534,
+    535,
+    423,
+    424
+   ],
+   [
+    "replace",
+    535,
+    537,
+    424,
+    426,
+    [
+     " If the gateway crashes after an approved write was claimed, the proposal stays `executing`",
+     " and never re-runs, so it has to be proposed again."
+    ]
+   ],
+   [
+    "equal",
+    537,
+    538,
+    426,
+    427
+   ],
+   [
+    "replace",
+    538,
+    541,
+    427,
+    430,
+    [
+     " endpoints) are unsupported, because the per-person session state pgwarden relies on does",
+     " not survive them; `pgwarden doctor` detects them. Connect directly or through a",
+     " session-mode pooler."
+    ]
+   ],
+   [
+    "equal",
+    541,
+    543,
+    430,
+    432
+   ],
+   [
+    "replace",
+    543,
+    548,
+    432,
+    433,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    548,
+    553,
+    433,
+    438
+   ],
+   [
+    "replace",
+    553,
+    554,
+    438,
+    439,
+    [
+     "demo/sql/."
+    ]
+   ],
+   [
+    "equal",
+    554,
+    567,
+    439,
+    452
+   ],
+   [
+    "replace",
+    567,
+    568,
+    452,
+    453,
+    [
+     "dark brand banners. See CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    568,
+    573,
+    453,
+    458
+   ],
+   [
+    "replace",
+    573,
+    576,
+    458,
+    461,
+    [
+     "- MCPServers.org",
+     "- mcpHQ / awesome-mcp-servers",
+     "- Glama"
+    ]
+   ],
+   [
+    "equal",
+    576,
+    580,
+    461,
+    465
+   ],
+   [
+    "replace",
+    580,
+    584,
+    465,
+    466,
+    [
+     "Apache-2.0. Copyright 2026 Andrii Boiko. See LICENSE and NOTICE."
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "480bc1a0fbfe+2": {
+  "fn": "cruxible-ai/cruxible",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "replace",
+    0,
+    8,
+    0,
+    5,
+    [
+     "<a href=\"https://cruxible.ai\">",
+     "",
+     " Cruxible",
+     "",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    23,
+    5,
+    20
+   ],
+   [
+    "replace",
+    23,
+    24,
+    20,
+    21,
+    [
+     "Windows, use WSL2. Install and start."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    37,
+    21,
+    34
+   ],
+   [
+    "replace",
+    37,
+    46,
+    34,
+    35,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    64,
+    35,
+    53
+   ],
+   [
+    "replace",
+    64,
+    65,
+    53,
+    54,
+    [
+     "saved query the shop wrote (Lines and automation):"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    70,
+    54,
+    59
+   ],
+   [
+    "replace",
+    70,
+    77,
+    59,
+    60,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    100,
+    60,
+    83
+   ],
+   [
+    "replace",
+    100,
+    101,
+    83,
+    84,
+    [
+     "LongMemEval (ICLR 2025), storing only the"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    103,
+    84,
+    86
+   ],
+   [
+    "replace",
+    103,
+    104,
+    86,
+    87,
+    [
+     "In MemoryAgentBench, when a later"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    116,
+    87,
+    99
+   ],
+   [
+    "replace",
+    116,
+    119,
+    99,
+    102,
+    [
+     " set. When a source changes, the fact is updated or flagged, and a fact whose",
+     " evidence is older than the window you set reads as stale instead of passing",
+     " as current."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    102,
+    103
+   ],
+   [
+    "replace",
+    120,
+    122,
+    103,
+    105,
+    [
+     " session and every agent until its evidence moves; work goes where the world",
+     " changed."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    105,
+    106
+   ],
+   [
+    "replace",
+    123,
+    127,
+    106,
+    110,
+    [
+     " instead of overwriting each other's notes. Every change is a proposal,",
+     " checked against the rules you declared; your approval policy decides what",
+     " lands at once and what waits for a second agent's signed review, and what a",
+     " pipeline may write on its own is granted explicitly and expires."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    110,
+    111
+   ],
+   [
+    "replace",
+    128,
+    131,
+    111,
+    114,
+    [
+     " proposed by whom, approved by whom and when. Accepted state is a signed Git",
+     " ledger, each fact keeps its own history, and any earlier value can be read",
+     " back as it stood."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    114,
+    115
+   ],
+   [
+    "replace",
+    132,
+    133,
+    115,
+    116,
+    [
+     " and judge; Cruxible applies declared rules deterministically."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    135,
+    116,
+    118
+   ],
+   [
+    "replace",
+    135,
+    136,
+    118,
+    119,
+    [
+     "watchmakers"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    188,
+    119,
+    171
+   ],
+   [
+    "replace",
+    188,
+    189,
+    171,
+    172,
+    [
+     "The security walkthrough goes through all of"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    209,
+    172,
+    192
+   ],
+   [
+    "replace",
+    209,
+    210,
+    192,
+    193,
+    [
+     "owner approve everything. The Quickstart continues from"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    217,
+    193,
+    200
+   ],
+   [
+    "replace",
+    217,
+    218,
+    200,
+    201,
+    [
+     " registry listing). See MCP tools."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    220,
+    201,
+    203
+   ],
+   [
+    "replace",
+    220,
+    222,
+    203,
+    205,
+    [
+     " vocabulary into typed Python, as in the example at the top. See the",
+     " SDK reference."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    227,
+    205,
+    210
+   ],
+   [
+    "replace",
+    227,
+    228,
+    210,
+    211,
+    [
+     "The plugin for Claude Code and Codex adds five general"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    231,
+    211,
+    214
+   ],
+   [
+    "replace",
+    231,
+    232,
+    214,
+    215,
+    [
+     "For AI agents covers how an agent should read and"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    237,
+    215,
+    220
+   ],
+   [
+    "replace",
+    237,
+    243,
+    220,
+    226,
+    [
+     " under a ClaimType that says what the value may be and what may back it: the",
+     " author's own words, a cited passage of a file, or a Capture (the slice of a",
+     " source's response a fact rests on) under a declared contract. Agents extend",
+     " the vocabulary as they learn, and queries follow the links between things.",
+     " Evidence and admission,",
+     " asking questions."
+    ]
+   ],
+   [
+    "equal",
+    243,
+    244,
+    226,
+    227
+   ],
+   [
+    "replace",
+    244,
+    246,
+    227,
+    229,
+    [
+     " and accepted under your approval policy with signed approvals. Accepted",
+     " state is a signed Git ledger. Review and governance."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    247,
+    229,
+    230
+   ],
+   [
+    "replace",
+    247,
+    257,
+    230,
+    240,
+    [
+     " in the loop. It is a reviewed, typed sequence of steps that reads accepted",
+     " state, calls tools through declared interfaces (parse a dependency list,",
+     " read a scanner's report, query an API), turns the results into typed",
+     " records, and writes them back as facts, proposals or inbox items. The",
+     " security kit's Procedures import an SBOM, match it against three",
+     " vulnerability sources and flag the unjudged exposures worth attention. Runs",
+     " are deterministic and replayable: each tool is pinned to an exact build,",
+     " inputs and outputs are checked against contracts, and nothing reads the",
+     " clock. A Procedure does only what it has been granted: observe, propose for",
+     " review, or settle named fields on its own."
+    ]
+   ],
+   [
+    "equal",
+    257,
+    258,
+    240,
+    241
+   ],
+   [
+    "replace",
+    258,
+    263,
+    241,
+    246,
+    [
+     " and an authority ceiling, on Triggers (a schedule, a new capture, an",
+     " accepted change), once you enable it. Agents author new ones as they find",
+     " sources worth watching. `next` lists what needs attention; `cruxible link`",
+     " attaches notes to Subjects and review guidance to ClaimTypes.",
+     " Lines and automation."
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    246,
+    247
+   ],
+   [
+    "replace",
+    264,
+    266,
+    247,
+    249,
+    [
+     " instances as a kit, installed and upgraded as one reviewed change.",
+     " Kits."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    249,
+    250
+   ],
+   [
+    "replace",
+    267,
+    268,
+    250,
+    251,
+    [
+     "The concepts guide explains all of this in order."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    273,
+    251,
+    256
+   ],
+   [
+    "replace",
+    273,
+    274,
+    256,
+    257,
+    [
+     "Who acts."
+    ]
+   ],
+   [
+    "equal",
+    274,
+    277,
+    257,
+    260
+   ],
+   [
+    "replace",
+    277,
+    289,
+    260,
+    272,
+    [
+     "- Quickstart and the",
+     " security walkthrough",
+     "- Concepts",
+     "- For AI agents",
+     "- Asking questions,",
+     " evidence and admission,",
+     " review and governance,",
+     " lines and automation,",
+     " kits",
+     "- CLI reference, MCP tools,",
+     " Python SDK",
+     "- Upgrading, data and network"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    299,
+    272,
+    282
+   ],
+   [
+    "replace",
+    299,
+    300,
+    282,
+    283,
+    [
+     "See CONTRIBUTING.md for the provider-runtime tests, lint,"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    303,
+    283,
+    286
+   ],
+   [
+    "delete",
+    303,
+    305,
+    286,
+    286
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

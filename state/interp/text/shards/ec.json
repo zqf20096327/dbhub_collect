@@ -3153,5 +3153,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "64b9c660b0f9": {
+  "identity": {
+   "one_liner": "在 Postgres 内运行 Kafka broker 的 pgrx 扩展，Kafka 客户端直连 9092 端口",
+   "review": "kafgres 是一个基于 pgrx 的 PostgreSQL 扩展，在 Postgres 进程内实现 Kafka broker，Kafka 客户端（librdkafka、Java、Sarama 等）可直接连接 9092 端口。它提供 kafgres_produce() 使写表与发事件在同一事务内原子提交，并支持用 SQL 定义 CDC 映射、通过逻辑复制槽发布表变更。安装提供 Docker 镜像（PG 13–18）、Pigsty 包和 tarball，许可为 Elastic License 2.0。",
+   "highlights": [
+    "kafgres_produce() 与外层事务原子提交，无需 outbox 表或双写窗口；kafgres_read() 将 topic 记录按行返回供 SQL 过滤和连接",
+    "支持 CDC：SQL 编写映射表（可 join、谓词过滤、构建 jsonb），后台 worker 经自带输出插件读取逻辑复制槽并产生事件",
+    "支持 SCRAM-SHA-256 与 mTLS 认证、SQL 管理的 ACL、保留与压缩、副本提升时截断消费者到新日志末端"
+   ],
+   "use_cases": [
+    "需要在同一事务内写表并发布事件、避免双写不一致的场景",
+    "用 SQL 直接订阅表变更（CDC），替代独立的 Kafka Connect/Debezium 部署",
+    "用标准 Kafka 客户端读写存于 Postgres 的事件日志，并在 SQL 中按 offset 或时间范围过滤查询记录"
+   ]
+  },
+  "sha": "64b9c660b0f9",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3089,5 +3089,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "87c8d3c2ed40": {
+  "identity": {
+   "one_liner": "基于 Rust 的终端数据库工作区，支持 MCP 与 Neovim 集成",
+   "review": "LazyDB 是用 Rust 编写的终端 TUI 数据库客户端，提供模式浏览、SQL 编辑控制台、Redis/MongoDB 文档查看与备份恢复功能，并内置 MCP 服务器和 SQL 语言服务器供编码代理与 Neovim 调用。项目处于 beta 阶段，功能因数据库类型而异，Oracle 和 DuckDB 需额外运行时。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、TiDB、Oracle、ClickHouse、Snowflake、BigQuery、SQLite、DuckDB、Redis、MongoDB、Elasticsearch 等多种数据源",
+    "提供 Vim 风格编辑、基于目录的补全、事务控制及 SSH 隧道连接",
+    "内置本地 MCP 服务器与 JSON CLI，可向 Claude Code 等编码代理暴露数据库配置，MCP 写操作默认拒绝"
+   ],
+   "use_cases": [
+    "在终端中浏览和管理多种数据库的模式、表数据与键值/文档数据",
+    "通过 SSH 隧道连接私有环境数据库并进行备份恢复",
+    "让编码代理或 Neovim 通过 MCP 与 SQL 语言服务器访问数据库连接与补全"
+   ]
+  },
+  "sha": "87c8d3c2ed40",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49a7ba2344a5": {
+  "identity": {
+   "one_liner": "基于多云平台 API 管理云上 OceanBase 资源的 Terraform Provider",
+   "review": "该项目实现一个 Terraform Provider，通过 OceanBase 多云平台 API 在云环境中管理 OceanBase 资源，包含集群、租户、连接端点、PrivateLink 服务与安全组等 resource。使用前需用 Go 1.22 执行 make build，并在 .terraformrc 中配置 dev_overrides 指向本地二进制；资源示例位于 example 目录。文档说明节点数须为 3 到 60 之间 3 的倍数，变更按前一项完成后再提交，超时需按记录 ID 检查并重跑 terraform plan。",
+   "highlights": [
+    "支持通过 Terraform 管理 oceanbase_cluster、oceanbase_tenant 等多云资源",
+    "支持 PrivateLink 服务创建与云厂商端点连接、安全组 IP 白名单配置",
+    "变更按顺序提交，前一项到达目标状态后再提交下一项"
+   ],
+   "use_cases": [
+    "用 Terraform 声明式创建和变更云上 OceanBase 集群与租户",
+    "通过 PrivateLink 和安全组管理租户的网络连接与访问控制",
+    "结合 example 目录配置批量管理 OceanBase 云资源生命周期"
+   ]
+  },
+  "sha": "49a7ba2344a5",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2887,5 +2887,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a5f0d7ccf841": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，以事实台账防止编造，数据留在本机",
+   "review": "ResumeForge 是一个本地优先的 AI 求职简历编辑器（Apache-2.0，v2.1.0），覆盖从解析职位描述、匹配分析、简历生成到导出投递、模拟面试的流程。其核心机制是将事实与措辞分离：生成内容中的学校、公司、项目名逐条与 Profile 库比对，不符则触发防编造警告，含未填【待补】标记时阻止导出。无账号登录，数据存储在本机，适合在意数据归属的求职者。",
+   "highlights": [
+    "简历工作台提供排版与字号参数控制、页数概览与分页报告，A4 预览以精确模式渲染导出的 PDF 本身，参数变更同步更新三栏",
+    "Profile 库包含 13 个内置分区，支持自定义分区与字段、Paper placement 指定、Plan 机制（仅记录分区参与，不复制数据），任何分区可单独隐藏并恢复",
+    "职位管理支持批量粘贴 JD 自动解析与逐条确认、逐行匹配分析返回五种判定类型（不含百分比）、批量与 AI 职位对比分析并保存至分析历史"
+   ],
+   "use_cases": [
+    "需要精细控制简历排版并直接预览导出 PDF 的求职材料制作",
+    "将职位描述、简历版本、投递进度集中管理，替代分散在书签和笔记中的求职记录",
+    "使用大模型润色简历措辞同时需防止模型生成不实内容的场景"
+   ]
+  },
+  "sha": "a5f0d7ccf841",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6be4b944d9fc": {
+  "identity": {
+   "one_liner": "sqly 是在内存 SQLite 上对 CSV/TSV/JSON/Excel 等文件执行 SQL 的命令行工具",
+   "review": "sqly 将 CSV、TSV、LTSV、JSON、Parquet、Excel、ACH、Fedwire 等文件载入内存 SQLite 数据库后执行 SQL，供需要在命令行查询本地文件的用户使用。文件名即表名，支持跨格式 JOIN、窗口函数与 CTE，透明读取多种压缩格式，可通过 --dialect 使用 MySQL/PostgreSQL/GoogleSQL 语法，并提供交互式 shell 与 .save 写回功能。会话仅在内存中运行，不支持事务控制等部分 SQLite 语句。",
+   "highlights": [
+    "将多种格式文件载入内存 SQLite3 数据库，文件名作为表名，无需声明 schema 或导入步骤",
+    "支持跨格式 JOIN、CTE、窗口函数、json_extract()，并可透明读取 .gz、.bz2、.lz4 等压缩文件",
+    "提供交互式 shell（tab 补全、历史记录、dot-commands）、.save 写回原文件（保留格式与压缩），以及 --inspect 输出文件结构信息"
+   ],
+   "use_cases": [
+    "对日志、数据文件执行 SQL 查询、聚合或窗口函数分析",
+    "不同格式文件之间的 JOIN 查询与格式转换（如 CSV 转 Excel/JSON）",
+    "通过管道将查询结果交给 jq、awk、sort 等工具进一步处理，或交互式探索未知结构的数据文件"
+   ]
+  },
+  "sha": "6be4b944d9fc",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1ed77671fdd6": {
+  "identity": {
+   "one_liner": "自托管的单人 AI 智能体，集成网页研究、实时浏览器与操作审批机制",
+   "review": "Amuse 是一个运行在个人电脑上的自托管 AI 智能体，使用 TypeScript 编写，通过 Docker Compose 或源码方式部署，依赖 OpenAI API 密钥和 PostgreSQL 数据库。它提供网页研究、可视化浏览器、提醒监控、目标追踪和小型应用生成等功能，采用审批卡机制在发送、提交、支付等敏感操作前征求用户确认。该项目面向希望在本地运行个人助手的单用户场景，无登录机制，仅监听 127.0.0.1。",
+   "highlights": [
+    "通过实时浏览器填写表单并导航网站，用户可观看、接管或停止操作",
+    "提供审批卡机制，在发送、表单提交、支付等操作前征求确认，支持 once/task/site/always 四种授权范围",
+    "凭证存储于加密保险库，模型只能看到替身令牌"
+   ],
+   "use_cases": [
+    "在本地运行个人 AI 助手，进行带来源的网页研究与信息监控",
+    "需要人工确认敏感操作（如支付、表单提交）的自动化任务",
+    "通过对话生成并持续使用带数据存储的小型应用"
+   ]
+  },
+  "sha": "1ed77671fdd6",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1d4c1572b371": {
+  "identity": {
+   "one_liner": "Android 离线全盘文件与中文正文检索引擎，基于 SQLite FTS5",
+   "review": "Pinpoint 是一款 Android 应用，用于在本地对文件名、路径及文档正文建立索引并检索，支持布尔运算、通配符、正则、字段限定与大小/日期筛选。它提供普通、Shizuku、Root 三种权限模式，普通模式需授予所有文件访问权限，Shizuku 模式可访问 /Android/data 等目录，Root 模式从 / 全盘扫描。系统要求 Android 8.0 以上，以 GPLv3 协议开源。",
+   "highlights": [
+    "基于 SQLite FTS5 实现文件名、路径与中文文档正文的本地全文检索，支持 Everything 风格查询语法",
+    "提供普通 / Shizuku / Root 三级权限接入，覆盖公开存储、/Android/data、/obb 及全盘扫描",
+    "包含空间透视功能：矩形树图、目录树排序、大文件榜与已卸载应用残留识别，统计结果持久化至 SQLite 物化缓存"
+   ],
+   "use_cases": [
+    "在手机上离线检索文件名或文档正文片段（如合同、PDF 中的关键词）",
+    "分析存储空间占用、查找大文件与已卸载应用残留并安全删除",
+    "在微信、浏览器等外部应用调用系统文件选择器时检索并回传文件"
+   ]
+  },
+  "sha": "1d4c1572b371",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "18cdeb03e1f5": {
+  "identity": {
+   "one_liner": "巴西交通电子执法测速设备的全国开放登记库，含采集器与 Python API",
+   "review": "该项目构建巴西全国范围的雷达/交通电子执法设备公开登记库，采集官方来源（DNIT、PRF、DER、Detran 等）数据并保留来源文件哈希、URL 与采集日期以供追溯。实现为 Python 3 纯标准库：独立采集器负责下载、解析、校验并写入关系数据库（默认 SQLite，可迁移 PostgreSQL），API 读取本地库，支持 JSON、XML、NDJSON、TXT、DIF、EDIFACT 输出。限制：公共实例仅供个人查询，商业或系统集成需自建实例；未定位到精确坐标的记录仅标注候选位置与确信度。",
+   "highlights": [
+    "采集器与 API 分离：采集器抓取官方文档并入库，API 仅读本地数据库，无外部依赖（仅 Python 3 标准库，无需 pip）",
+    "数据来源文件以 SHA-256 哈希、URL、采集日期存档，冲突记录保持可追溯；81 张表的基础 schema 同时生成 SQLite 与 PostgreSQL 两套 DDL",
+    "API 按需经 nginx + fcgiwrap 执行，支持 JSON、XML、TXT、NDJSON、EDIFACT、DIF 六种输出格式，按经纬度与半径查询"
+   ],
+   "use_cases": [
+    "为导航、地图与出行类应用提供带来源的雷达设备位置与限速数据查询",
+    "研究者或审计者核查设备的存在性、运行状态与官方文件出处",
+    "企业和系统集成方按许可要求自建实例并导入 SQLite/PostgreSQL 数据库"
+   ]
+  },
+  "sha": "18cdeb03e1f5",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

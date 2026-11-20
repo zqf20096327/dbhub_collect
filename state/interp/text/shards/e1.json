@@ -3082,5 +3082,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "38c63b2b6b53": {
+  "identity": {
+   "one_liner": "支持多种数据库与Redis后端的.NET分布式工作队列库",
+   "review": "DotNetWorkQueue 是一个面向 .NET 应用的工作队列类库，目标框架为 .NET 8.0、.NET 10.0 和 netstandard2.0，采用生产者/分布式消费者模式。它提供 POCO 出入队、编译后的 LINQ 表达式队列、基于 cron 的周期任务调度器，以及在 SQL Server/PostgreSQL 上支持事务性 outbox 模式。后端以独立 NuGet 包形式提供 SQL Server、PostgreSQL、Redis、SQLite、LiteDB 及内存传输。适用于需要在 .NET 应用中实现任务队列与调度的开发者；LINQ 消费者要求所有引用类型可解析，内存传输不支持重试、回滚等功能。",
+   "highlights": [
+    "通过独立 NuGet 包提供 SQL Server、PostgreSQL、Redis、SQLite、LiteDB 和内存六种传输后端",
+    "支持队列 POCO 与编译后的 LINQ 表达式，并内置基于 cron 表达式（Cronos 解析，支持 5/6 字段）的周期任务调度器",
+    "在 SQL Server/PostgreSQL 上实现事务性 outbox 模式，并通过 System.Diagnostics.Metrics 提供内置指标，配套 Dashboard API/UI 及 Docker 镜像"
+   ],
+   "use_cases": [
+    "在 .NET 应用中构建基于 SQL Server、PostgreSQL、Redis、SQLite 或 LiteDB 的分布式任务队列",
+    "使用 cron 表达式调度周期性作业，由 LINQ 消费者处理执行",
+    "部署 Dashboard API/UI 监控队列状态、消息、错误与消费者心跳指标"
+   ]
+  },
+  "sha": "38c63b2b6b53",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f8c2bfe17e9b": {
+  "identity": {
+   "one_liner": "Amazon ElastiCache（Valkey/Memcached/Redis OSS）示例、教程与文档集合",
+   "review": "该仓库收录使用 Amazon ElastiCache 的代码示例、动手教程与基础设施模板，面向需要在 AWS 上部署缓存、会话存储或特征存储的开发者。内容覆盖数据库查询缓存、会话管理、多租户隔离等场景，并提供 TypeScript 编写的 CDK 部署模板。README 未说明这些教程的运行成本与所依赖的 AWS 权限，使用前需另行确认。",
+   "highlights": [
+    "包含面向数据库缓存、会话存储、特征存储等场景的动手教程",
+    "提供 AWS CDK（TypeScript）部署模板，覆盖 ElastiCache Serverless 与集群模式等配置",
+    "采用 MIT-0 许可证开源"
+   ],
+   "use_cases": [
+    "学习在 RDS MySQL 前部署 ElastiCache 查询缓存的部署流程",
+    "为 Web 应用搭建分布式会话存储并了解节点配置",
+    "使用 CDK 基础设施即代码方式部署 ElastiCache 环境"
+   ]
+  },
+  "sha": "f8c2bfe17e9b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d03026c58264": {
+  "identity": {
+   "one_liner": "Go 的 PostgreSQL schema 迁移库，仅依赖标准库",
+   "review": "go-pg-migrate 是用于 Go 项目的 PostgreSQL schema 迁移工具，仅依赖标准库，可配合任意 database/sql 驱动。每次迁移与账本记录在同一事务中提交，通过 advisory lock 支持多副本同时执行 Up 且每个迁移只运行一次；支持 NoTx 迁移以运行 CREATE INDEX CONCURRENTLY。需要 Go 1.25 及以上版本，通过 go get 安装。",
+   "highlights": [
+    "迁移与账本记录在同一事务提交，失败时不留下半应用变更",
+    "使用 advisory lock，任意数量副本启动时运行 Up，每个迁移只执行一次",
+    "支持 Up、UpTo、Down、Status、Baseline、Resolve 方法及 NoTx 迁移"
+   ],
+   "use_cases": [
+    "Go 服务启动时执行数据库迁移，含多副本部署场景",
+    "需要通过 PgBouncer 事务模式连接池执行迁移的环境",
+    "使用 coding agents 编写迁移、需统一规则文档的团队"
+   ]
+  },
+  "sha": "d03026c58264",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "78d22474574c": {
+  "identity": {
+   "one_liner": "位于编码代理与 Git 之间的 Go 运行时，用 AST 检查与钩子拦截违规提交",
+   "review": "Nomos 是一个约 20 MB 的静态 Go 二进制，运行于 Claude Code、Cursor 等编码代理与 Git 之间，不调用 LLM。它在 feat/* 分支提交时执行 42 项多语言 AST 检查，拦截跳过的测试、空实现与泄露的密钥，并将修复建议回传给代理；支持 nomos xray 代码扫描、基线冻结（仅约束改动文件）及可选 CI 变异证明与 worktree 隔离。安装通过官方脚本完成。",
+   "highlights": [
+    "提供 42 项覆盖 Go、TypeScript、Python、Rust、Java 等 11 种语言的 AST 检查，检测跳过的测试、空桩、超长函数、架构边界违规与密钥泄露",
+    "通过 nomos.baseline.json 冻结存量代码基线，仅对触碰文件做增量约束，支持 --local 模式将配置登记在 .git/info/exclude",
+    "提供 nomos xray 只读扫描、pre-tool 安全钩子（屏蔽敏感路径与 SSRF 目标）、经提交验证后写入的 SQLite 经验库（mneme.db / nomos mcp），以及 --ci 和 --worktrees 可选功能"
+   ],
+   "use_cases": [
+    "在遗留仓库中为编码代理设置增量质量门槛，避免存量代码触发全量失败",
+    "阻断代理直接写 main 分支、修改配置/钩子或读取 ~/.ssh、~/.aws 等敏感路径",
+    "在 CI 中以 SARIF 2.1.0 输出 PR 变异验证结果，或在多代理并行时使用 git worktree 沙箱与 INT/SUB 任务分离"
+   ]
+  },
+  "sha": "78d22474574c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3126,5 +3126,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2f0d608ecf81": {
+  "identity": {
+   "one_liner": "面向 AI 原生应用的运行时，以清单声明的能力边界执行 Lua/JS/WASM",
+   "review": "Hull 是一个运行时基础设施，用于执行 Lua、JavaScript 与 WASM 代码，应用通过清单声明可访问的文件、环境变量、外联主机与数据库资源，由运行时实施边界约束。内置 SQLite 存储，支持 htmx 脚手架、测试、签名校验等 30 余个子命令，构建产物为单一静态可执行文件。使用者是需要分发可信执行环境的 AI 原生应用开发者。",
+   "highlights": [
+    "应用在清单中声明文件、环境变量、外联主机、数据库资源等能力，运行时据此执行边界约束",
+    "hull build 生成单一静态可执行文件（小于 10 MB），支持 Linux、macOS、Windows、FreeBSD、OpenBSD、NetBSD",
+    "提供 Ed25519 签名与完整性校验（verify/verify-self/sign-release）、SBOM 输出（CycloneDX 1.5 / SPDX 2.3）及能力审计日志"
+   ],
+   "use_cases": [
+    "将代码、schema、静态资源、测试与签名打包为单文件可执行应用进行分发",
+    "运行 AI 生成代码前，按清单限制其可访问的资源范围，并可通过 --audit 记录能力调用",
+    "开发 HTMX 超媒体应用：hull init --profile htmx 提供 HTMX 2 + Pico CSS、CSP nonce、CSRF、会话等脚手架"
+   ]
+  },
+  "sha": "2f0d608ecf81",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ced929808817": {
+  "identity": {
+   "one_liner": "自托管文档归档，含德国 GoBD 模式、哈希链与留存期限管理",
+   "review": "Belegt 是一个自托管的德英文文档归档应用，面向德国企业归档邮件、电子发票（ZUGFeRD、XRechnung）、OCR 扫描件及任意文件。它通过 PostgreSQL 中的签章与哈希链、可选 S3 Object Lock 和 RFC 3161 时间戳实现留存期内的不可变性，按 §147 AO 计算期限，到期后需第二人确认方可删除。目前为 Beta，升级前需备份且迁移不可回滚；许可证为 AGPL-3.0。",
+   "highlights": [
+    "支持从 IMAP、JMAP、Microsoft 365、Google、SMTP 日志、EML/MBOX/PST 及 FTP 扫描仪等多种来源采集文档，并提供 PDF、Office、邮件与扫描件的全文检索",
+    "按 §147 AO 计算留存期限并在到期前锁定文档，删除需第二人确认并保留证明；支持审计员访问（Z1）与审计数据载体导出（Z3）",
+    "提供 REST API（OpenAPI）、签名 Webhook、MCP 接口、OpenID Connect 登录，并支持从 Paperless-ngx 迁移"
+   ],
+   "use_cases": [
+    "德国企业按法定期限归档发票、银行对账单与商业信函等须留存的文件",
+    "应对税务审计：生成审计报告、按描述标准导出数据载体、为审计员开设限时访问",
+    "归档 Outlook/企业邮箱邮件、电子发票与纸质扫描件，并支持分类规则与 AI 辅助归类（需自建模型服务器）"
+   ]
+  },
+  "sha": "ced929808817",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

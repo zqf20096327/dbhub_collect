@@ -3371,5 +3371,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fd073e75b823": {
+  "identity": {
+   "one_liner": "Stellar 测试网 Hyperion 事件索引器与 Fastify API，PostgreSQL 持久化历史",
+   "review": "该项目索引 Stellar 路由器合约事件与 EVM 侧 Hyperion 路由器，记录跨链转账与 claim 状态，通过 Fastify 提供公开查询 API；路由覆盖 Axelar ITS 与 Circle CCTP 至 Ethereum Sepolia、Base Sepolia 等测试网。需 Node 22.13+ 与 PostgreSQL，迁移需显式执行，启动时校验 schema 版本；API 连接限定只读角色，serverless 环境须关闭后台进程。",
+   "highlights": [
+    "索引 Stellar 与 EVM 路由器事件，提供转账/claim 历史查询与指标接口，公开读支持跨域 GET",
+    "对已支付的 ITS 与 CCTP 目的地回执做独立验证，含接收方、代币、金额、终态与确认数",
+    "支持 Vercel serverless 与容器部署；每五分钟调度一次的索引工作流带预算分段的追赶运行与租约防重"
+   ],
+   "use_cases": [
+    "为 Stellar 测试网跨链转账提供公开历史与状态查询 API",
+    "以定时任务或常驻容器方式运行测试网索引与 rail 轮询",
+    "需要只读凭据、租约控制与健康探针的多副本 API 部署"
+   ]
+  },
+  "sha": "fd073e75b823",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7b94fdf00e0f": {
+  "identity": {
+   "one_liner": "JSON-native 的 TypeScript ORM，查询为纯 JSON 并由编译器检查",
+   "review": "UQL 是一个面向 TypeScript 的 ORM，查询以纯 JSON 表达并由编译器按键检查，实体类或 defineEntity 声明即充当 schema，无需代码生成。支持 PostgreSQL、MySQL、MongoDB 等多种数据库，可运行于 Node、Bun、Workers 及浏览器。安装仅需 npm install uql-orm 加对应驱动包，无需 reflect-metadata；迁移通过 uql-migrate CLI 生成并应用。",
+   "highlights": [
+    "查询为纯 JSON，字段键在编译期对照实体检查，含关系与 JSON/JSONB 点路径，无需代码生成",
+    "单一包内包含多种数据库方言，零运行时依赖，支持 Node、Bun、Workers、Lambda 及浏览器运行环境",
+    "内置迁移 CLI、行级策略、软删除、流式读取及 sql() 原生 SQL 插入点"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中以类型检查的 JSON 查询访问 SQL 数据库或 MongoDB",
+    "部署到 Cloudflare Workers、AWS Lambda、Bun 等 edge/无原生二进制环境",
+    "需要从实体定义生成并应用数据库迁移（uql-migrate generate:entities / up）"
+   ]
+  },
+  "sha": "7b94fdf00e0f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "316afac49f1c": {
+  "identity": {
+   "one_liner": "面向转售商和小型3PL的仓库应用，用命名箱子与只增库存账本管理扫码出入库",
+   "review": "Boxloft 是一个自托管的仓库管理应用，供转售商和小型3PL使用：将商品扫码收入按市场命名的箱子（A/E/W/L 对应 Amazon、eBay、Walmart、本地），维护一条只增库存账本，并通过 SP-API 同步 Amazon、eBay 订单。支持并发保存冲突检测、条码/照片识别、库存审计和标签打印。需要 Python 3.11+ 与 Node 20+，可用 Docker 部署；仅支持美国站点，不含运费标签购买与 listing 编辑。",
+   "highlights": [
+    "提供命名箱子与只增库存账本，保存时检测并发修改并拒绝旧数据写入",
+    "通过 Amazon SP-API 与 eBay 每 15 分钟同步订单，Walmart 订单支持 CSV 导入",
+    "支持 UPC 扫码收货、照片识物（需 AI 密钥）、按 ASIN 的库存审计及 4x6/2x1 标签打印"
+   ],
+   "use_cases": [
+    "转售商对扫描入库的 Amazon/eBay/Walmart 商品进行分箱存放与拣货打包",
+    "小型 3PL 用货架位置、收货单与库存审计跟踪多栋建筑中的库存",
+    "对账场景：按 ASIN 比对已购、已退、已售数量与实际货架库存"
+   ]
+  },
+  "sha": "316afac49f1c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f030b544e41d": {
+  "identity": {
+   "one_liner": "浏览器端像素风survivor网页游戏，SaaS分层架构，进度存服务器",
+   "review": "这是一个浏览器运行的像素风survivor游戏：玩家选择马德里竞技历史球员，抵御波次敌人和首领，可签约、训练球员并参与排名。项目为软件工程课程的个人作业（类似毕业设计），采用分层SaaS结构，包含用户账户（注册、邮件确认、本地与Google登录）、角色管理、PostgreSQL持久化及CI/CD部署至Cloud Run。Sprint 1构建账户与部署基础，Sprint 2实现游戏逻辑，无官方俱乐部授权，美术音乐均为原创。",
+   "highlights": [
+    "提供用户账户体系：注册、邮件确认、本地与Google OAuth2登录、角色与管理面板",
+    "游戏进度存储于服务器端PostgreSQL，含球员签约、训练、成就与排名功能",
+    "包含GitHub Actions持续集成与Google Cloud Run部署，及DoneTonic项目管理文档"
+   ],
+   "use_cases": [
+    "在浏览器中游玩像素风survivor闯关游戏，挑战波次敌人与四种决赛首领",
+    "作为软件工程课程流程（sprint、PBIs、CI/CD、文档）的完整实践示例",
+    "管理端查看与维护用户账户、角色和账号状态"
+   ]
+  },
+  "sha": "f030b544e41d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

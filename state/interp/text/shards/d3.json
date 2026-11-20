@@ -3085,5 +3085,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cb0a47ddfeea": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，基于 BM25 排序的全文检索，采用 C 实现",
+   "review": "pg_textsearch 是 Timescale 发布的 PostgreSQL 扩展，为文本列提供 BM25 相关性排序搜索。通过 `USING bm25` 索引和 `<@>` 操作符查询，支持 PostgreSQL 17/18/19，需加入 shared_preload_libraries 后重启。支持表达式索引、部分索引、分区表、tsquery 布尔过滤，及 Block-Max WAND top-k 查询和并行索引构建。注意布尔过滤与排序尚未合并为单次索引扫描，部分索引需显式指定索引名。",
+   "highlights": [
+    "BM25 排序，支持 k1/b 参数配置",
+    "Block-Max WAND 实现快速 top-k 查询",
+    "支持表达式索引、部分索引、分区索引和并行索引构建"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内对文档表做 BM25 相关性排序检索",
+    "JSONB 字段或表达式的全文搜索",
+    "多语言表按语言建部分索引（含中文场景）"
+   ]
+  },
+  "sha": "cb0a47ddfeea",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0e1647e18f33": {
+  "identity": {
+   "one_liner": "开源自托管建筑 ERP，覆盖 BOQ、BIM/CAD 算量与 5D 成本建模",
+   "review": "OpenConstructionERP 是一个 AGPL-3.0 许可的建筑业 ERP，提供工程量清单、IFC/Revit/DWG/PDF 算量、4D 进度、5D 成本与招投标功能，面向建筑估算与项目管理场景。支持 pip 或桌面安装，本地运行无需 Docker 或数据库，内置 12 万+ 造价条目、45 种语言界面和模块化市场。",
+   "highlights": [
+    "支持从 IFC、Revit、DWG、PDF 模型与图纸提取工程量，数量与构件关联",
+    "内置 9 个造价数据库，覆盖 40+ 市场、120,000+ 估价条目",
+    "提供 240+ 模块的插件式架构、REST API，界面支持 45 种语言"
+   ],
+   "use_cases": [
+    "基于 BIM/CAD 模型或图纸进行工程算量与估价",
+    "搭建工程量清单并导出 GAEB XML、Excel、PDF",
+    "自托管环境下的项目成本控制与招投标管理"
+   ]
+  },
+  "sha": "0e1647e18f33",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "61ef7d18c48d": {
+  "identity": {
+   "one_liner": "开源自托管可视化页面构建器，单 Docker 容器内建 SQLite 运行",
+   "review": "OrbitPage 是一个自托管的可视化页面构建工具，用于创建个人主页、作品集、场馆菜单和活动页面。用户通过仪表盘编辑内容、主题、菜单与子页面，页面数据存储在本机 SQLite 和本地目录。部署方式包括 Docker、Debian/Ubuntu 安装脚本、Proxmox LXC 安装器或从源码以 Node.js 运行，默认监听 8080 端口。",
+   "highlights": [
+    "以单个 Docker 容器运行，使用 SQLite 与本地存储保存数据，提供 Docker Hub 与 GHCR 两种镜像来源",
+    "仪表盘包含内容编辑、主题、发布（二维码、站点地图）、备份、分析、隐私同意、Newsletter、团队角色等 15 个工作区",
+    "页面自适应手机与桌面，内置 SEO 元数据、QR 码、基于知情同意的访问统计及可选 GA4 接入"
+   ],
+   "use_cases": [
+    "在自有服务器或家庭实验室上搭建个人链接页、作品集或服务介绍页",
+    "为场馆生成菜单页面，或为活动创建含地图、联系方式的公开页",
+    "需要内置 Newsletter（SMTP）和数字商品售卖（Stripe 支付）功能的自托管站点"
+   ]
+  },
+  "sha": "61ef7d18c48d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "21b8ff1487f1": {
+  "identity": {
+   "one_liner": "自托管电动车充电记录仪表盘，通过车企API自动同步充电与车辆数据",
+   "review": "这是一个用 Flask + SQLite 构建的自托管充电追踪应用，运行在本地笔记本、NAS 或树莓派上，数据不出本机。它通过 API 连接 15 个品牌（Kia、Hyundai、Tesla、VW 集团等）自动填充充电记录，提供成本/kWh/CO2 统计、ENTSO-E 电网碳强度、AC/DC/PV 分账、驾驶日志、OBD 电池读取与 PDF 报告，支持多车与 6 种语言。README 注明项目以 AI 辅助编写，按爱好项目提供、无任何担保，远程控制功能默认关闭，成本与 CO2 数值为估算值。",
+   "highlights": [
+    "通过车企 API 连接 15 个品牌，自动填充 SoC、里程表与充电状态，Kia/Hyundai 配额为每车每日 200 次",
+    "记录 AC/DC/PV 三类充电并分别计价，自动获取 ENTSO-E 每小时 CO2 强度并回填缺失值",
+    "支持 CSV/XLSX 导出导入（含预览与撤销）、THG 配额追踪、OBD/ELM327 单体电压读取及自生成电池健康 PDF"
+   ],
+   "use_cases": [
+    "想在本地数据库中长期保存充电历史（车厂 App 通常仅保留 30–90 天）的车主",
+    "需要区分 AC/DC/PV 成本与 CO2、追踪德国 THG 配额付款的车主",
+    "在树莓派/NAS 上自建家庭服务器、管理多辆车或小型车队并记录保养与行程的用户"
+   ]
+  },
+  "sha": "21b8ff1487f1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

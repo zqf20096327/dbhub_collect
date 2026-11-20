@@ -3437,5 +3437,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e0be4d35fc8a": {
+  "identity": {
+   "one_liner": "Go 语言的 SQL 构建与执行库，通过表达式 DSL 生成多方言 SQL",
+   "review": "goqu 是一个面向 Go 开发者的 SQL 生成与执行库，提供查询构建器、参数插值、INSERT/UPDATE/DELETE 支持，并可将查询结果扫描到结构体或原始值。它支持 mysql、postgres、sqlite3、sqlserver 等方言，通过 go.mod 引入，MIT 许可发布。README 明确说明它不提供关联、钩子等 ORM 特性。",
+   "highlights": [
+    "提供查询构建器和参数插值能力，支持生成与执行 SQL",
+    "支持 Insert、Multi Insert、Update、Delete 语句生成",
+    "支持将查询行扫描到结构体或原始值，并支持 mysql、postgres、sqlite3、sqlserver 等方言"
+   ],
+   "use_cases": [
+    "在 Go 项目中以编程方式构建 SELECT/INSERT/UPDATE/DELETE 语句",
+    "需要按方言（如 postgres、mysql、sqlserver）生成 SQL 而非使用 ORM 的场景",
+    "需要将查询结果扫描进结构体或原始值并配合原生 database/sql 使用的场景"
+   ]
+  },
+  "sha": "e0be4d35fc8a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e4b16c33f85": {
+  "identity": {
+   "one_liner": "纯 Go 移植的 Yjs CRDT 库，与 yjs 线上格式字节级互通",
+   "review": "Ygo 是协作编辑 CRDT 框架 Yjs 的纯 Go 实现，被收录于 Yjs 文档端口页。它按字节实现 Yjs V1/V2 更新格式，通过 533 个由 yjs@13.6.33 生成的跨语言 fixture 双向验证。提供 Map/Array/Text 等共享类型、UndoManager、快照、子文档与观察者；附带 yserve WebSocket 服务器（SQLite 持久化）和 Go 客户端。无 CGO，可经 gomobile 产出 Android AAR 与 iOS xcframework；SQLite 存储在部分平台不可用。",
+   "highlights": [
+    "以 533 个跨语言 fixture 场景双向验证与 yjs@13.6.33 的 V1/V2 线格式字节级兼容，例外为 Go 侧设置的全数浮点数及 V1 嵌入/格式值中的孤立代理对",
+    "提供 Map、Array、Text（富文本、Quill deltas、embeds）、XML 类型、Awareness、UndoManager、快照与子文档；未实现 XmlHook、XmlFragment/XmlElement 观察者及 Text.ObserveDeep",
+    "无 CGO，可在 go tool dist list 的全部 47 个目标（含 js/wasm、wasip1/wasm）编译；gomobile 可产出 Android AAR 与 iOS xcframework"
+   ],
+   "use_cases": [
+    "为 y-websocket 或 Hocuspocus 客户端提供 Go 语言的协作后端服务器（yserve 或嵌入 http.Handler）",
+    "开发需要离线优先同步的机器人、CLI 工具或服务端代理",
+    "通过 gomobile 将 Yjs 协同编辑能力嵌入 Swift/Kotlin 移动应用"
+   ]
+  },
+  "sha": "9e4b16c33f85",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "300a28e4347b": {
+  "identity": {
+   "one_liner": "自托管单用户基础设施费用面板，经主机商 API 自动同步账单并生成分析预测",
+   "review": "这是一个面向自托管基础设施持有者的单用户费用记录面板，覆盖 VPS、独立服务器、域名、CDN、对象存储与许可证等开销。系统通过 API 从 Timeweb Cloud、Hetzner Cloud、Vultr、Yandex Cloud 等约 30 家主机商拉取余额、资源列表与扣费日期，按日留存余额快照；无 API 的服务商可手动记录。技术栈为 NestJS + PostgreSQL + React，以单个 Docker 镜像部署，须配合 TLS 反向代理才能登录。",
+   "highlights": [
+    "支持约 30 家带 API 的主机商自动同步余额、服务列表与扣费日期，并按日生成余额快照；部分服务商可导入支付流水",
+    "提供月度/年度费用分析、按服务商/国家/类型/货币的维度拆分、未来扣费预测与临近扣费提醒",
+    "支持多币种与基准货币换算（俄央行汇率或手动汇率）、Telegram 出站通知，并在 /api/mcp 提供 MCP 服务器与 Bearer token 的 REST API（只读或完全访问）"
+   ],
+   "use_cases": [
+    "同时使用多家 VPS/云服务商、需要集中汇总各账户余额与到期扣费的个人或小型团队",
+    "需要按服务商、国家、资源类型或货币维度查看基础设施支出并预估未来费用的场景",
+    "希望从外部脚本或 MCP 客户端程序化读取/写入账单数据的自托管环境"
+   ]
+  },
+  "sha": "300a28e4347b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

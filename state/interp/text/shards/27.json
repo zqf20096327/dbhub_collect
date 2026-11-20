@@ -3046,5 +3046,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a5c70c376111": {
+  "identity": {
+   "one_liner": "Rust+GPUI 编写的原生桌面工作区，整合数据库、服务器与 AI 工具。",
+   "review": "Navop 是一个原生桌面工作区，将数据库客户端、SSH/SFTP 终端、远程桌面和 AI 代理整合在同一窗口中。它使用 Rust 2024 编写，基于 Zed 的 GPUI 框架进行 GPU 加速渲染，不依赖 WebView 或 Electron。支持 macOS、Windows、Linux 平台，提供完整版以及聚焦于 Shell（SSH/终端）和 Data（SQL/Redis/MongoDB）的精简版。许可为 Apache-2.0 加附加条款，限制商业转售等用途。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、SQLite、ClickHouse、Oracle、SQL Server 等多种数据库，国产数据库（达梦、人大金仓、OceanBase 等）通过扩展驱动接入",
+    "包含本地与远程终端（分屏、广播输入、会话录制）、SFTP/FTP 远程编辑、端口转发、RDP/VNC 远程桌面",
+    "内置 SQL 生成与分析、ACP 代理（Codex、Claude Code）、Public MCP 服务器（仅绑定回环端口并使用令牌认证）"
+   ],
+   "use_cases": [
+    "需要在同一窗口中同时管理多种数据库连接和 SQL 操作的数据库开发与运维",
+    "通过 SSH/SFTP 管理远程服务器、使用终端和远程桌面的系统管理",
+    "希望在数据库工具中使用 AI 代理与 MCP 客户端（如 Codex、Claude）的自动化场景"
+   ]
+  },
+  "sha": "a5c70c376111",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "90a9346e2984": {
+  "identity": {
+   "one_liner": "基于 Tauri (Rust) 的跨平台 SQL 数据库桌面客户端，内置 AI 代理，支持 70+ 数据库",
+   "review": "SqlKit 是一款桌面 SQL 数据库管理客户端，基于 Tauri v2 与 Vue 3 构建，提供 SQL 编辑（Monaco）、模式浏览、查询历史、结果导出及跨引擎数据传输。通过原生驱动、PG/MySQL 协议兼容、JDBC 与 HTTP 四类桥接策略连接 70 余种数据库。社区版（Apache 2.0）免费；AI 代理、MCP 服务器、批量导入导出等为付费订阅功能。",
+   "highlights": [
+    "支持 70+ 数据库，通过原生 Rust 驱动、PG/MySQL 线协议兼容、JDBC 桥接和 HTTP 桥接四种适配策略实现连接",
+    "内置 AI 代理：自然语言生成 SQL、SQL 优化、执行计划可视化与错误修复，支持 OpenAI、Anthropic、DeepSeek、Ollama（自带密钥）",
+    "基于 Tauri v2（Rust）与 Monaco 编辑器，提供多标签编辑、模式树浏览、DDL 查看和 CSV/JSON/Markdown 结果导出"
+   ],
+   "use_cases": [
+    "在 macOS、Windows 或 Linux 桌面环境中统一管理多种数据库连接与 SQL 操作",
+    "在支持引擎之间迁移数据（如 PostgreSQL 到 ClickHouse、MySQL 到 BigQuery），含自动类型映射（付费功能）",
+    "通过自然语言驱动代理完成查询编写、SQL 优化与执行计划分析（自带 LLM 密钥或本地 Ollama）"
+   ]
+  },
+  "sha": "90a9346e2984",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d65495a1b22b": {
+  "identity": {
+   "one_liner": "无 CGO 的 Go database/sql SQLite 驱动，将 SQLite C 代码编译为 Go 汇编",
+   "review": "这是 Go 语言 database/sql 接口的 SQLite 驱动，通过将 SQLite 的 C 代码用 LLVM 编译为 Go 汇编实现，无需 CGO 即可构建，支持交叉编译与 scratch 镜像部署。内置向 S3、Cloudflare R2 或 MinIO 的近实时备份与恢复，并可将多个 goroutine 的自动提交写语句合并为单事务。当前版本 v0.1，API 在 v1 前可能变动；支持 linux/darwin（amd64、arm64）与 windows amd64，Go 版本要求 1.26.6 至 1.27。",
+   "highlights": [
+    "以 CGO_ENABLED=0 构建，支持跨平台交叉编译，产物可在 scratch 镜像中运行",
+    "内置实时复制到 S3/R2/MinIO，写入不等待上传，支持按时间点恢复，且副本布局与 Litestream 兼容",
+    "支持注册 Go 编写的 SQL 函数、聚合、排序规则与虚拟表，内置 FTS5、R*Tree、math、regexp、uuid、hash、csv、series、vec 等扩展"
+   ],
+   "use_cases": [
+    "需要以单静态二进制部署 Go + SQLite 应用且不引入 C 编译器环境的场景",
+    "需要将 SQLite 数据持续备份到 S3 兼容对象存储并支持在新机器恢复的场景",
+    "并发写入较多的单机 VPS 应用，希望合并提交减少写等待"
+   ]
+  },
+  "sha": "d65495a1b22b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eee017268044": {
+  "identity": {
+   "one_liner": "忆织 MemWeave：基于 SQLite 的 DSH 记忆与人格一体化插件",
+   "review": "MemWeave 是 DeepSeek Harness（DSH）的记忆与人格插件，用单个 SQLite 文件在本机存储用户身份、项目、承诺等信息，检索走 FTS5 预筛、关键词 BM25 与语义召回的 RRF 融合，并按层设置半衰期实现淡忘。安装需 DSH 环境（Node ≥ 22.13）；语义召回需额外配置 embedding 提供方，否则仅关键词检索；人格写入与冲突裁决仅限人工操作。",
+   "highlights": [
+    "分层半衰期淡忘机制：主题 30 天到规则不衰减不等，高频使用可将半衰期延长至 8 倍，数据只降权不删除",
+    "检索管线为 FTS5 预筛 → BM25 + 语义 + 链接扩展 → RRF 融合 → 时间衰减与多样性排序，向量后端按 sqlite-vec → vectra → 内置分层回退",
+    "内置 22 个 weave_* 工具、9 页管理 UI 与 /weave 会话命令，写入与裁决设人工权限边界，备份支持 AES-256-GCM 加密"
+   ],
+   "use_cases": [
+    "为 DSH 上的 AI 伴侣或长期助手维护跨会话的用户身份、项目与承诺记忆",
+    "需要记忆可控编辑、可撤销写入与审计记录的个人本机部署场景",
+    "本地优先、希望数据不出机器的记忆管理（含敏感信息掩码注入）需求"
+   ]
+  },
+  "sha": "eee017268044",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e37908197884": {
+  "identity": {
+   "one_liner": ".NET 学习笔记库：C#/ASP.NET Core/EF Core/SQL Server 笔记、可运行示例与 DSA 解答",
+   "review": "这是一个由 MNS University of Agriculture, Multan 的计算机科学学生 Daim Ali 维护的个人学习日志仓库，采用 MIT 许可证。内容包含 213 篇按 csharp/aspnet/efcore/sql/dsa 目录组织的概念笔记，以及可直接放入控制台项目或 C# 脚本运行器运行的 C# 示例代码，主题覆盖 DSA（双指针、线段树、Bellman-Ford 等）与后端技术。适合学习相同技术栈的人参考。",
+   "highlights": [
+    "包含 213 篇笔记，按 notes/csharp、notes/aspnet、notes/efcore、notes/sql、notes/dsa 目录组织",
+    "examples/ 目录提供可运行的 C# 代码，涵盖双指针、滑动窗口、二分查找、LINQ、图遍历、线段树、Bellman-Ford 等主题，可放入控制台项目或 C# 脚本运行器执行",
+    "作者在 LeetCode 和 CodeChef 上完成 200+ 道题"
+   ],
+   "use_cases": [
+    "学习 C#、ASP.NET Core、EF Core 或 SQL Server 时查阅单个概念的简短笔记",
+    "将 examples/ 中的 C# 文件放入控制台项目运行以练习 DSA 题目",
+    "跟随同一技术栈学习者的进度记录进行对照学习"
+   ]
+  },
+  "sha": "e37908197884",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3539,5 +3539,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "65bcb2674abd": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的科研数据采集框架：MCP 接口 + 断点续传 + 六层完整性校验",
+   "review": "ResearchDataHub 是一个运行于 Python 3.12+ 的科研数据采集与同步框架，面向使用 Codex/Claude Code 等 Coding Agent 的气候与地球科学研究者。它通过 MCP Server（18 个工具）接收自然语言需求，执行数据源发现、请求契约校验、审批令牌签发、多链路下载与断点续传，以 SQLite 记录任务状态，并经六层完整性校验（含 SHA-256 与 NetCDF 科学语义检查）后将数据交付到用户指定目录并生成 Manifest。当前 CDS 与 NCAR GDEX 平台已完成真实取数实测，NASA Earthdata 与 Copernicus Data Space 的真实下载标记为 UNVERIFIED；项目不包含数据分析、清洗与可视化功能。",
+   "highlights": [
+    "提供 MCP Server（stdio）与 18 个工具，作为外部 Coding Agent 的执行接口，配 4 个 Agent Skills",
+    "实现 HTTP Range 断点续传（.part 文件三重自证）、staging→raw 原子提交、坏文件隔离区，任务状态以 SQLite 为唯一事实来源",
+    "实现六层完整性校验（存在/大小/SHA-256/格式/NetCDF/科学语义）与 Manifest 交付清单，凭据仅以 env/file/keyring 引用出现，副作用操作需 HMAC 审批令牌"
+   ],
+   "use_cases": [
+    "需要通过自然语言指令向 AI Agent 获取 ERA5、NCAR GDEX 等气候/地球科学数据集的研究人员",
+    "需要长时间大批量下载任务具备断点续传、重试与完整性证明的场景",
+    "要求采集过程可审计、可复现（Manifest、校验报告、状态机记录）的数据交付流程"
+   ]
+  },
+  "sha": "65bcb2674abd",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d83e4e4c94a8": {
+  "identity": {
+   "one_liner": "基于 Godot 4.7.2 的补丁发行版，提供 C#/.NET 11 Web 导出与 WASM 内存修补",
+   "review": "该项目是 Godot Engine 4.7.2-stable 的补丁构建版本，在上游历史之上叠加补丁。核心功能包括可运行的 C#（.NET 11）Web 导出、Web 模板 WASM 压缩与内存修补、GDScript 预编译字节码、SQLite 内置模块，以及韩文 IME 输入修复。通过一条命令脚本安装，编辑器与导出模板按发布版本配对锁定。面向需要在浏览器端运行 Godot C# 项目的开发者。未验证真机 iOS 导出；GDExtension Web 侧模块需用同版本工具链重新编译。",
+   "highlights": [
+    "提供 C#/.NET 11 的 Web 导出模板与 GDScript 编辑器，支持 Windows/Linux/macOS 的 x86_64、arm64 构建",
+    "Web 模板基于 Emscripten 7.0.0 链接，支持 threads/nothreads 与 static/dlink 四种变体",
+    "实现 GDScript 预编译导出（script_export_mode=3），加载时跳过解析、分析与编译步骤"
+   ],
+   "use_cases": [
+    "需要在浏览器中部署 Godot C# 游戏的 Web 导出流程",
+    "Web 端使用 SQLite 或 GDExtension 的 Godot 项目",
+    "需要在 Web 导出中使用韩文输入法（IME）的场景"
+   ]
+  },
+  "sha": "d83e4e4c94a8",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

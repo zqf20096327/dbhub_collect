@@ -3384,5 +3384,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ce6bff626177": {
+  "identity": {
+   "one_liner": "将中文按字或按词转换为拼音的 PostgreSQL 扩展",
+   "review": "pg_pinyin 提供 SQL 与 Rust（基于 pgrx）双实现的中文转拼音函数，包含按字/按词罗马化、批量转换，以及配合 pg_search 的拼音正则短语查询助手。适用于在 PostgreSQL 中存储、检索拼音字段的应用。新版本要求 PG15 及以上特定小版本，需通过迁移 SQL 升级；查询助手须先启用 pg_search，否则安装为错误占位。",
+   "highlights": [
+    "提供 pinyin_char_romanize 与 pinyin_word_romanize 系列 API，支持单条与批量（text[]）转换",
+    "提供 pinyin_regex_phrase 等 pg_search 查询助手，支持 full/initials/autocomplete/auto/compat 显式查询模式，可用撇号作为硬音节边界",
+    "核心 Rust 模式函数标记为 IMMUTABLE、STRICT、PARALLEL SAFE；升级迁移保留现有词典与存储的生成值"
+   ],
+   "use_cases": [
+    "为中文姓名/文本生成拼音列并配合 pg_trgm 或 pg_search 建立索引",
+    "构建拼音首字母缩写（如 whh）或自动补全式（xi a→xi a.*）的检索查询",
+    "处理带声调或 ü/lv/v 等输入的音节规范化检索，需先启用 pg_search"
+   ]
+  },
+  "sha": "ce6bff626177",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

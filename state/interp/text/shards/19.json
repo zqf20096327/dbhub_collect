@@ -3368,5 +3368,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f26b7075e6c1": {
+  "identity": {
+   "one_liner": "基于 Tauri v2 的桌面应用模板，预置窗口、路由、托盘等原生骨架。",
+   "review": "WingHarness 是一个 Tauri v2 + React 19 + TypeScript 的桌面应用模板，预置无边框窗口与自定义标题栏、懒加载路由、系统托盘、全局快捷键、i18n、本地终端、笔记和多种格式文件预览等功能骨架，面向想在已有原生管线上直接开发功能的开发者。模板不绑定特定产品；持久化状态集中在一个可配置的数据目录下，Tauri 命令需在四处登记否则运行时报错。",
+   "highlights": [
+    "提供无边框透明圆角窗口、自定义标题栏、pathname 路由与按需加载页面",
+    "内置系统托盘、可在运行时修改并跨重启保留的全局快捷键、基于 i18next 的中英双语支持",
+    "支持 Word、Excel、PDF、压缩包等格式在 webview 内预览，并集成 portable-pty 本地终端"
+   ],
+   "use_cases": [
+    "基于 Tauri v2 快速搭建带有托盘、快捷键和主题切换的 Windows 桌面应用",
+    "作为参考实现学习无边框窗口、多窗口路由、pty 终端等原生能力的接线方式",
+    "以模板为起点开发包含文件预览、Markdown 笔记、Git/SVN 等功能的开发者工具"
+   ]
+  },
+  "sha": "f26b7075e6c1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b550448a8025": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展：为运行中查询提供实时成本加权进度百分比，可在 psql 内渲染或跨会话查看。",
+   "review": "pg_query_progress 是一个 PostgreSQL 扩展（支持 PG 15–18），通过在 ExecutorStart 阶段包装各执行节点的元组循环、按规划器成本模型换算进度比例，写入共享内存。它以 NOTICE 帧在当前 psql 会话渲染进度条，并通过 pg_query_progress 视图供其他会话轮询。库须经 shared_preload_libraries 在服务器启动时加载，进度为估计值而非精确测量。",
+   "highlights": [
+    "支持 SELECT、INSERT、UPDATE、DELETE、MERGE 顶层查询的进度跟踪，结果发布到共享内存供任意会话通过视图读取",
+    "使用规划器成本模型对节点行数做成本加权计算进度，并支持并行计划（worker 计数经 seqlock 保护的共享表合并）",
+    "进度条帧默认以 500 ms 节流、支持 ANSI 单行原地重绘，并提供 track、bar、bar_ansi、bar_interval_ms 等多个 GUC 配置项"
+   ],
+   "use_cases": [
+    "长时间运行的聚合、大表扫描或批量 INSERT ... SELECT 期间，在本会话内实时查看执行进度与 ETA",
+    "DBA 或监控工具从其他会话轮询 pg_query_progress 视图，获取运行中查询的进度、节点计数与元组处理量",
+    "通过 Docker 镜像或 PGXS 源码构建，在 PostgreSQL 15–18 环境下部署用于查询执行过程的观测"
+   ]
+  },
+  "sha": "b550448a8025",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

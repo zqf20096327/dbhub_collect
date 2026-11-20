@@ -3062,5 +3062,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f20d8e331bdf": {
+  "identity": {
+   "one_liner": "基于 node-postgres 驱动的 Node.js PostgreSQL 客户端，强调类型安全与手写 SQL",
+   "review": "Slonik 是一个 Node.js PostgreSQL 客户端，底层继续使用 node-postgres 驱动，从工具集合发展为抽象重复代码模式的框架。它提倡手写原生 SQL、不鼓励临时动态拼接 SQL，提供运行时校验、断言与类型检查、安全连接与事务处理、值插值防护及详细日志，面向 Node.js/TypeScript 开发者。",
+   "highlights": [
+    "提供运行时校验、断言与类型安全",
+    "支持事务嵌套、事务事件、事务与查询重试",
+    "内置安全连接处理、安全值插值与详细日志、中间件、ESLint 插件"
+   ],
+   "use_cases": [
+    "需要在 Node.js/TypeScript 中执行带类型校验的 PostgreSQL 查询",
+    "需要托管连接与事务（嵌套、重试、事件）的数据库访问层",
+    "需要详细日志与异步堆栈解析来调试 SQL 查询"
+   ]
+  },
+  "sha": "f20d8e331bdf",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "35c211383bff": {
+  "identity": {
+   "one_liner": "脚手架工具，生成含 Next.js 聊天界面与 EVE 代理运行时的 AI 应用",
+   "review": "ChatJS 是一个 AI 应用脚手架，通过 npx 命令生成包含 Next.js、TypeScript、shadcn/ui 聊天应用的代码库，内置 EVE 持久化代理运行时、Better Auth 认证和 PostgreSQL 存储。面向想拥有完整源码的 AI 应用开发者。README 注明 1.0 处于 alpha 阶段，API 与生成代码可能变更。",
+   "highlights": [
+    "CLI 交互式脚手架生成聊天应用，支持流式响应、会话保存与 Better Auth 认证",
+    "EVE 运行时持久化执行状态、处理审批，客户端可重连进行中的响应",
+    "支持 Vercel AI Gateway、OpenRouter、OpenAI、LiteLLM 及 OpenAI 兼容端点，可选 MCP 连接器、网页搜索、代码执行等插件"
+   ],
+   "use_cases": [
+    "以自有代码为基础搭建可定制的 LLM 聊天应用",
+    "构建需要持久化执行状态与人工审批的代理工作流",
+    "部署到 Vercel、Docker 或 Node.js 自托管，或用 Electron 打包桌面应用"
+   ]
+  },
+  "sha": "35c211383bff",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d8677931de9d": {
+  "identity": {
+   "one_liner": "本地优先的桌面算法练习记录器，自带 JSONL 题目录，SQLite 存储",
+   "review": "LeetCode Tracker 是一款基于 Tauri 的本地优先桌面应用，用于管理算法练习计划、计时记录、进度统计和 Markdown 笔记。用户需自备 JSONL 格式题目录，不内置题库数据。它打包 React、Fastify、SQLite 与 Node 运行时，提供 Windows 11 x64 与 Apple Silicon macOS 安装包；AI 功能为可选项，需自行配置 Gemini、OpenAI 或 DeepSeek 密钥。",
+   "highlights": [
+    "提供学习计划、内置计时器、365 天活动热力图与主题洞察等练习管理功能",
+    "支持 Markdown 笔记编辑、CommonMark/GFM 预览，可导出 Markdown、Obsidian ZIP 或 Notion CSV",
+    "采用 Snapshot Bundle v5 实现 Windows 与 macOS 间的一次性数据迁移，不包含 API 密钥"
+   ],
+   "use_cases": [
+    "需要按周计划刷题并记录每题用时、完成结果的个人练习者",
+    "想在本地管理算法笔记并导出至 Obsidian 或 Notion 的开发者",
+    "希望跨 Windows 与 macOS 迁移练习数据的用户"
+   ]
+  },
+  "sha": "d8677931de9d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "252cf818bf93": {
+  "identity": {
+   "one_liner": "CVE-2026-116366 ClickHouse 未认证 RCE 的 PoC、容器化实验与根因分析",
+   "review": "该仓库针对 ClickHouse Server 因捆绑的 Brotli 解码器 v1.2.0 越界写入引发的漏洞（CVE-2026-116366），提供概念验证代码、容器化漏洞/修复版本对照实验环境及根因分析。漏洞通过 HTTP 接口的 Content-Encoding: br 在认证前触发，可导致解码器死循环与内存泄漏；RCE 转化依赖堆布局。面向安全研究人员与运维人员，用于漏洞检测、复现与升级验证，附差异检测工具 poc.py。",
+   "highlights": [
+    "包含容器化漏洞版（26.10.2.103）与修复版（26.10.3.7）对照实验环境，通过 lab.sh 启动、检测与关闭",
+    "提供 poc.py 差异检测工具（exit 1 判定存在漏洞，exit 0 判定已修复）与 DoS 验证脚本，仅依赖 Python 标准库",
+    "文档化根因：DecodeBlockTypeAndLength 的失败返回与\"需要更多输入\"不可区分，以及 v1.2.1 修复方案（引入错误码 -17）"
+   ],
+   "use_cases": [
+    "验证 ClickHouse Server 部署是否受 CVE-2026-116366 影响",
+    "在隔离容器网络中复现与学习 Brotli 解码器状态损坏类漏洞机制",
+    "验证升级至 26.3.62.3-lts / 26.8.36.3-lts / 26.9.27.3-stable / 26.10.3.7-stable 后的修复效果"
+   ]
+  },
+  "sha": "252cf818bf93",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3594,5 +3594,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "61e70ae78336": {
+  "identity": {
+   "one_liner": "基于 Pharo 的面向对象数据库，支持 ACID 事务与索引",
+   "review": "Soil 是运行在 Pharo 中的面向对象数据库，以事务为基础并提供 ACID 保证，包含 SkipList 与 BTree+ 索引用于二分查找。通过 Metacello 在 64 位 Pharo 11–14 中加载，最新发布版为 v6，Windows 支持已合入 main 分支。项目处于早期阶段，目前作为 ApptiveGrid 的持久化数据库使用，适合需要在 Pharo 环境内直接持久化对象 Graph 的开发者。",
+   "highlights": [
+    "提供基于事务的 ACID 事务支持",
+    "包含 SkipList 和 BTree+ 索引，支持二分查找",
+    "支持通过 Metacello 加载 v1 至 v6 各发布版本"
+   ],
+   "use_cases": [
+    "在 Pharo 应用中直接持久化对象而无需对象关系映射",
+    "作为 ApptiveGrid 的数据持久化后端",
+    "面向需要 ACID 事务和索引查询的 Pharo 小型项目"
+   ]
+  },
+  "sha": "61e70ae78336",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0eb1dfe9e3d3": {
+  "identity": {
+   "one_liner": "DocForum 医疗平台的后端模块化单体，基于 TypeScript + Express + Prisma/PostgreSQL。",
+   "review": "该仓库实现 DocForum 医疗平台的后端：涵盖认证、用户、医生、患者、可约时段、预约、转诊、问诊、处方、检验单、机构、通知与支付等模块，供前端 docforum-web 与本仓库 API 交互使用。每个模块拥有独立目录并仅通过服务接口互访；Prisma schema（每模块一个文件）为数据模型权威来源。预约采用数据库级条件更新防双重预约，转诊创建时快照问诊记录。 payments 是唯一允许导入 @docforum/escrow-sdk 的模块。部分文档标注的 Docker Compose 路径未经作者在本环境验证。",
+   "highlights": [
+    "14 个后端模块各自包含 routes/controllers/services/repositories，仅通过服务接口跨模块访问",
+    "预约写入使用数据库级条件更新/事务实现防重复预约，并提供自建临时 Postgres 的集成测试（端口 5433）",
+    "处方与检验单签发后不可变，更正通过 supersedes_*_id 新建记录；转诊创建时快照问诊笔记，不读取实时数据"
+   ],
+   "use_cases": [
+    "作为 DocForum 平台后端运行，支撑患者搜索医生、预约时段、接收转诊、获取处方或检验单并由合作机构完成的端到端流程",
+    "需要 PHI 数据集中管理且其他服务不直接访问数据库的组织架构部署",
+    "基于 modular monolith 模式、需按模块划分 routes/controllers/services/repositories 的 Node.js/TypeScript 后端开发参考"
+   ]
+  },
+  "sha": "0eb1dfe9e3d3",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ece4248009bd": {
+  "identity": {
+   "one_liner": "GaussDB 数据库智能体后端，基于 opencode 技能并在 K8s 中按用户隔离运行",
+   "review": "该项目是 GaussDB/openGauss 数据库智能体的后端，包含接入网关、每用户隔离的诊断环境与知识库导入环境，状态存于 NAS。交付形式为两个技能包分支（diag、kbimport），配合 5 个 Docker 镜像部署进 K8s，附带发版台与部署/验收文档。适用于需要面向 DBA 提供对话式诊断的企业内网部署场景。代码维护在测试仓库，本仓库分支由转化脚本生成。",
+   "highlights": [
+    "diag 分支包含 17 个诊断技能、132 条白名单 DML 及分版本升级增量 SQL",
+    "提供按需建 Pod、固定池化槽位、Fuyao 沙箱（预览）三种运行模式，通过 RUNTIME_MODE 配置切换",
+    "提供发版台容器支持资源扫描、变更预览、按槽位在线替换与回滚"
+   ],
+   "use_cases": [
+    "在 K8s 集群中为多个工号部署隔离的 GaussDB 诊断智能体环境",
+    "知识库管理员导入官方文档集、网页剪藏与扫描件 PDF 等资料",
+    "按部署上线方案从源码构建镜像到完成升级、验收与回滚"
+   ]
+  },
+  "sha": "ece4248009bd",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3365,5 +3365,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a65ce46b66c3": {
+  "identity": {
+   "one_liner": "基于位置位图的 PostgreSQL LIKE/ILIKE 模式匹配索引扩展",
+   "review": "Biscuit 是 PostgreSQL 16+ 的索引访问方法扩展，通过记录每个字符在各字符串中的位置位图并求交集来评估 LIKE、ILIKE、~、!~ 匹配，支持多列索引与可化简为 glob 的正则。面向读多写少的分析型负载，写操作会产生大量 WAL，且每个连接持有内存副本，不适合持续写入的 OLTP 场景。",
+   "highlights": [
+    "LIKE/ILIKE/~ /!~ 查询无需回表复核（xs_recheck = false）",
+    "支持前缀、后缀、_ 通配位置、定长谓词及多列索引，提供按大小写模式细分的操作符类",
+    "索引状态经 WAL 记录，参与崩溃恢复、时间点恢复与物理复制"
+   ],
+   "use_cases": [
+    "读多写少的分析型负载中执行锚定模式、含 _ 通配符或长度谓词的模式匹配查询",
+    "ILIKE 密集的工作负载，无需 lower() 表达式索引即可做大小写不敏感的锚定搜索",
+    "与 pg_trgm GIN 索引并存，由规划器按查询形态选择访问路径"
+   ]
+  },
+  "sha": "a65ce46b66c3",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "11248c797e5e": {
+  "identity": {
+   "one_liner": "本地 CLI，把孤立的 Claude/Codex 会话组织为具名任务并支持无人值守运行",
+   "review": "flow 是一个本地命令行工具，为 Claude Code 和 Codex 会话提供任务命名、简报、日期笔记和邮箱机制，数据以 SQLite 和 markdown 存于 ~/.flow。用户通过自然语言指示代理运行 flow，实现会话恢复、任务拆分为子会话、会话间消息传递和 Slack 通知。面向每天运行多个代理会话的个人开发者；README 自述处于 alpha 阶段，存在无头运行失败率、令牌开销等已知限制。",
+   "highlights": [
+    "为每项工作生成名称、简报、会话、日期笔记和邮箱，数据以 SQLite 与 markdown 存储在 ~/.flow",
+    "支持任务拆分为无头子会话、会话间通信、按名称恢复，以及通过 Slack 联系用户",
+    "配合 Claude Code 与 Codex 作为会话框架，支持 iTerm、Warp、tmux 等终端及 headless 模式"
+   ],
+   "use_cases": [
+    "多个代理会话并行时按名称恢复工作现场并读取上次笔记",
+    "将任务拆分为多个子会话并行执行并合并结果",
+    "夜间或无人值守运行任务，需要决策时通过 Slack 通知用户"
+   ]
+  },
+  "sha": "11248c797e5e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3778b73aacbd": {
+  "identity": {
+   "one_liner": "Oracle NoSQL 数据库的 Spring Data 接入模块，实现实体映射与仓库访问",
+   "review": "该 SDK 提供 Spring Data 实现模块，用于连接 Oracle NoSQL Database 集群或 Oracle NoSQL Cloud Service，要求 Java 17 及以上。使用方式为定义 NosqlDbConfig 配置 bean、实体类和继承 NosqlRepository 的仓库接口；支持云端、云模拟器、本地（代理）等多种配置，可通过 Maven 依赖或 GitHub 下载安装。",
+   "highlights": [
+    "支持连接 Oracle NoSQL Database 集群、Oracle NoSQL Cloud Service 和云模拟器",
+    "提供 SignatureProvider、InstancePrincipal、StoreAccessTokenProvider 等多种认证方式配置",
+    "可通过 Maven 依赖引入，或从 GitHub 下载含运行库、示例和 API 文档的归档包"
+   ],
+   "use_cases": [
+    "在 Spring Boot 应用中以 Spring Data 仓库模式访问 Oracle NoSQL 数据",
+    "本地开发时通过 kvlite 实例和 http 代理运行与调试示例代码",
+    "以 onprem、onprem-secure、cloudsim 等服务器类型运行单元测试"
+   ]
+  },
+  "sha": "3778b73aacbd",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3844,5 +3844,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d3f978986c15": {
+  "identity": {
+   "one_liner": "本地运行的外贸 AI 助手，内嵌 Hermes Agent 提供 45 项贸易技能",
+   "review": "这是一个面向外贸业务员的桌面 AI 助手，以 Hermes Agent 为底层引擎，提供客户背调、开发信生成、B2B 平台诊断、招标监控等 45 项技能。数据默认存于本地 ~/.trade/，服务绑定 127.0.0.1。运行需 Python 3.14、LLM API Key（README 推荐 DeepSeek）及 Tavily 搜索 Key；采用 AGPL v3 许可，含 30 天试用与付费激活机制。",
+   "highlights": [
+    "提供客户背调 6 层验证（邮箱检测、WHOIS、制裁名单、技术栈、LinkedIn 等）与 15 维客户画像生成",
+    "支持文档分析（PDF/Word/Excel/PPT）与报价单、PI、合同等商务文档生成（DOCX/XLSX/PPTX）",
+    "服务默认绑定 127.0.0.1，业务数据存储在本地，支持多公司数据隔离与升级前自动备份"
+   ],
+   "use_cases": [
+    "外贸业务员生成开发信、回复询盘并管理客户分级资料",
+    "定时任务自动化：每日简报（汇率/行情/跟进提醒）、社媒内容日历、招标信息监控",
+    "投标流程处理：招标邮件归档、附件批量下载、询价单 Excel 生成"
+   ]
+  },
+  "sha": "d3f978986c15",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2a3666aff839": {
+  "identity": {
+   "one_liner": "异步代码智能平台：索引代码库至 pgvector，提供 RAG 问答与 PR 审查",
+   "review": "DevIntel AI 是一个基于 FastAPI 的代码智能平台，将 GitHub 代码库用 Tree-sitter 分块、生成向量嵌入存入 PostgreSQL（pgvector），提供 RAG 代码问答、代码健康评分、Mermaid 架构图生成和 PR 自动审查与自动修复。包含 React 前端与 VS Code 扩展，运行需 Python 3.11、Node 18+、PostgreSQL 16 及 Gemini 或 OpenAI API 密钥。",
+   "highlights": [
+    "基于 Tree-sitter 的 AST 分块索引，支持 Python、TypeScript、Go、Rust、Java 等 11 种语言，解析失败时回退为按行切分",
+    "检索在 PostgreSQL 内完成，默认使用 Gemini 嵌入（768 维）与 pgvector 余弦距离，可选结合 BM25 与 RRF 的混合检索",
+    "后台任务使用 PostgreSQL 表加 SELECT FOR UPDATE SKIP LOCKED 实现队列，最多 3 个并发 worker 处理索引与健康分析"
+   ],
+   "use_cases": [
+    "对已连接的 GitHub 仓库进行上下文检索式代码问答与解释",
+    "在 PR 审查中解析 diff、按严重级别输出结构化意见并生成搜索/替换补丁",
+    "生成仓库的 Mermaid 依赖图与多维度代码健康评分报告"
+   ]
+  },
+  "sha": "2a3666aff839",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "16321286b49c": {
+  "identity": {
+   "one_liner": "Go 数据库一致性检查工具，比对 ORM 模型与实际 schema 并输出结构化发现",
+   "review": "schemalens 是面向 agent 的 Go 命令行工具，通过适配器读取 ent、gorm、bun 等模型定义，与已迁移的在线数据库 schema 比对，将不一致处以规则编号、修复建议、源码位置的结构化条目报告。核心也是 Go 库，输出默认 JSON，另支持 text 和 SARIF 2.1.0；可通过 manifest 文件在无 ORM 依赖下使用。",
+   "highlights": [
+    "支持 ent、gorm、bun 适配器及自定义 manifest 文件，核心模块不依赖任何 ORM",
+    "输出 JSON（默认）、text 和 SARIF 2.1.0 三种格式，供脚本、终端和代码扫描使用",
+    "提供 Go 库 API（Check、Baseline、Explain、Report.WriteSARIF 等），CLI 是其薄封装"
+   ],
+   "use_cases": [
+    "在 CI 中检查已迁移数据库与 Go 模型之间的字段/可空性等不一致",
+    "接入 Claude Code、Codex、Cursor 等编码 agent，配合 skill 和基线机制管理存量发现",
+    "作为 Go 库嵌入程序，获取与 CLI 相同的检查结果与 SARIF 报告"
+   ]
+  },
+  "sha": "16321286b49c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "34246617acfe": {
+  "identity": {
+   "one_liner": "按计划将 CloudNativePG 备份恢复到临时集群进行验证的 Kubernetes 控制器",
+   "review": "cnpg-restore-check 是一个社区项目，不属于 CloudNativePG 本体。它通过 RestoreCheck CRD 按调度从 plugin-barman-cloud 的对象存储恢复备份到临时单实例集群，运行 amcheck、SQL 断言和新鲜度检查，测量恢复时长与数据年龄，并将结果写入 status、Events 和 Prometheus 指标。恢复出的集群包含生产数据，需在同等访问控制的环境中运行。",
+   "highlights": [
+    "支持按 cron 调度或 run-now 注解触发恢复检查，目标可为最新备份、backupID 或 targetTime",
+    "提供恢复时长（RTO）与数据年龄（RPO）测量，支持 recoveryTime、dataAge、successAge 目标并导出 Prometheus 指标与告警规则",
+    "安全机制包含临时集群不配置 WAL 归档与备份、拒绝复用源集群写入的 ObjectStore、运行超时和 maxConcurrentRuns 并发限制"
+   ],
+   "use_cases": [
+    "定期验证使用 plugin-barman-cloud（S3、GCS、Azure Blob）备份的 CloudNativePG 集群是否可恢复",
+    "检测 WAL 归档缺失、时间线切换恢复失败等不会表现为备份失败的问题",
+    "在 Kubernetes 环境中对备份恢复建立带指标和告警的例行演练"
+   ]
+  },
+  "sha": "34246617acfe",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2945,5 +2945,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3ab997cb61de": {
+  "identity": {
+   "one_liner": "本地运行的个人 AI 助理，以逐轮追加账本记录记忆与工具执行。",
+   "review": "Jeeves 是一个运行在用户本机（macOS/Linux/WSL2）的个人助理，支持终端 REPL、Web 仪表盘和桌面应用。核心机制是每轮对话写入一条 append-only 账本行，记录工具调用、所用模型与成本；记忆含语义事实、情景与技能，用 FTS5 索引并可重建。Rust 实现代理循环与工具，TypeScript 负责共享客户端与浏览器适配器。对话数据与 API 密钥保留在本机，可通过 Ollama 离线运行。",
+   "highlights": [
+    "内置 23 个工具（15 个默认开启、8 个需开关），并支持接入 MCP 服务器与自定义连接器",
+    "预适配 12 个 LLM 提供商，含本地 Ollama，可在不重启的情况下通过 /model 切换模型配置",
+    "每轮写入一条 append-only 账本，记录工具执行、模型与成本，FTS5 索引可从账本重建"
+   ],
+   "use_cases": [
+    "需要在本机检查助理记忆、工具调用与成本记录的用户",
+    "通过终端、仪表盘或微信/飞书/Telegram 网关进行日常对话与任务委托",
+    "无 API 密钥时用 Ollama 离线运行本地助理"
+   ]
+  },
+  "sha": "3ab997cb61de",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a3e7795288e2": {
+  "identity": {
+   "one_liner": "面向 VastBase/openGauss/PostgreSQL 的离线数据应急恢复工具，直接解析数据文件提取数据",
+   "review": "vbdul 是一款以二进制包分发的 VastBase 数据库应急数据恢复工具，也支持 PostgreSQL 10~17。它在数据库无法启动、误删表或无备份的场景下，直接读取磁盘数据文件提取数据；提供表导出、空闲页扫描恢复、ProBackup 时间点回退和 WAL 日志挖掘等功能。需申请 license 后使用，仅支持 Heap 行存引擎。",
+   "highlights": [
+    "支持离线解析数据文件、扫描文件系统空闲页面还原被 DROP/TRUNCATE 释放的数据，损坏页面自动跳过",
+    "提供 logminer 功能，从 WAL 段名或 LSN 区间挖掘 INSERT/DELETE/UPDATE，支持按表、事务 ID、时间过滤",
+    "以只读方式访问原始数据文件，unload 生成 COPY 文本格式导出，imp 生成 psql 导入脚本"
+   ],
+   "use_cases": [
+    "数据库无法启动、系统表损坏且无备份时，离线解析数据文件抢救数据",
+    "误执行 DROP TABLE/TRUNCATE 后无备份，扫描未被覆写的空闲页面还原表数据",
+    "误删或误改数据行时，通过 WAL 日志挖掘定位误操作事务并恢复对应数据"
+   ]
+  },
+  "sha": "a3e7795288e2",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

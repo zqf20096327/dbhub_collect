@@ -3130,5 +3130,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "80171186f4e5": {
+  "identity": {
+   "one_liner": "Go 编写的自托管 CMS，单二进制加 Postgres，内置签名 WASM 插件与 MCP 服务",
+   "review": "Hatamoto 是用 Go 实现的开源 CMS，Apache-2.0 许可。站点、管理后台、JSON API、MCP 端点、后台任务和插件运行时运行在同一进程，数据存储使用 Postgres。插件与主题为签名的 WebAssembly 包，支持带健康检查的自动更新和失败回滚。README 注明状态为 v1，插件 SDK 处于 v0，其 minor 版本间仍可能变动。",
+   "highlights": [
+    "提供可视化页面构建器、博客编辑器、表单、重定向、缓存与 SEO 功能，全部包含在一个 Go 二进制中，仅依赖 Postgres",
+    "作为 MCP 服务器运行，AI 代理可通过 API key 连接并获得内容、页面构建、媒体、SEO 和分析等受权限范围限制的工具",
+    "插件、主题与更新均为签名 WebAssembly 包，更新在维护窗口安装，健康检查失败时自动回滚"
+   ],
+   "use_cases": [
+    "通过 Docker Compose 或 Linux/macOS 二进制自托管网站，指向自己的 Postgres 数据库",
+    "从 WordPress 迁移站点：导入器在执行前生成审计报告，保留旧 permalink 并为迁移地址生成永久重定向",
+    "让 AI 代理通过 MCP 创建、发布内容，或使用 AI 爬虫分析查看哪些 AI 代理抓取了哪些页面并按用途允许或阻止"
+   ]
+  },
+  "sha": "80171186f4e5",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3baf8bf00352": {
+  "identity": {
+   "one_liner": "面向 MCP 客户端的 Postgres 网关，按用户身份映射数据库角色并记录审计",
+   "review": "pgwarden 是一个 MCP 网关，让 Claude、Cursor 等 MCP 客户端以提问者本人的 Postgres 角色查询数据库：用户经 OIDC 登录，网关以对应角色建连，权限由数据库的 grants、行级安全与脱敏视图决定。读取以只读事务实现，写入需经指定审批人确认，所有操作写入哈希链式审计日志。适用于需将 AI 助手接入自有 Postgres 的团队，要求 Postgres 16+ 与 OIDC 提供方。",
+   "highlights": [
+    "以用户自身登录角色连接 Postgres，权限由 grants、行级安全（RLS）与脱敏视图控制",
+    "读取经只读事务与单语句扩展协议执行，不做 SQL 解析；写入需指定审批人签署确认",
+    "包含仅追加、哈希链式审计日志，及 133 项分类攻击的红队测试套件（CI 运行）"
+   ],
+   "use_cases": [
+    "让 AI 编程助手在保留个人权限边界的前提下查询生产/开发 Postgres",
+    "需要 PII 脱敏、行级隔离的团队数据访问场景",
+    "对写入操作要求人工审批与可验证审计留痕的合规环境"
+   ]
+  },
+  "sha": "3baf8bf00352",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0239896c4321": {
+  "identity": {
+   "one_liner": "VideoDB 的 Node.js/TypeScript SDK，用于上传、理解、搜索和编辑视频",
+   "review": "该 SDK 供 Node.js 和 TypeScript 开发者在应用中接入 VideoDB 服务，通过 npm install videodb 安装并使用 API key 连接。它提供视频上传、理解索引、搜索、问答、时间线编辑与数字人生成等接口。注意安装时会下载 Capture 二进制，服务器和 CI 环境可通过环境变量跳过；搜索依赖已建立的索引，无索引时返回空结果和警告。",
+   "highlights": [
+    "支持通过 YouTube 链接、公开 URL、S3 链接上传，也支持本地文件上传，返回 Video、Audio 或 Image 对象",
+    "提供理解流程生成索引（如 spoken_words 转录、vlm 视觉分析），search 和 ask 可跨集合内所有视频工作",
+    "包含 EditorTimeline 时间线编辑（调色、运动、特效、关键帧）、talking avatar 生成，错误统一继承 VdbBaseError 并携带 HTTP 状态和 jobId"
+   ],
+   "use_cases": [
+    "在 Node.js 后端为 AI 应用构建视频上传、索引与语义搜索流程",
+    "通过代码对视频片段进行时间线剪辑和特效处理",
+    "生成带口型同步的数字人视频或对视频内容做问答"
+   ]
+  },
+  "sha": "0239896c4321",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "02ee93a7cfb4": {
+  "identity": {
+   "one_liner": "自托管 Go 编写的 TLS/SSL 证书到期监控工具，单二进制加 SQLite 存储。",
+   "review": "tlswatch 用 Go 编写，用于监控主机名与 IP 地址上实际提供的 TLS 证书，检查到期时间、信任链、主机名匹配与 TLS 配置，并通过邮件、Telegram、Slack、Discord、ntfy 或 webhook 发送提醒。它面向自托管场景，部署为单个二进制加一个 SQLite 文件，支持 Docker 运行；还提供证书透明度日志匹配、Prometheus 指标、REST API 与浏览器内配置。许可证为 MIT。",
+   "highlights": [
+    "支持任意端口、隐式 TLS 与 STARTTLS 协议（SMTP、IMAP、POP3、FTP、PostgreSQL），并探测主机名背后的每个地址",
+    "提供证书透明度日志监控，将公开签发的证书与目标实际提供的内容进行匹配",
+    "包含证书清单（可导出 CSV）、REST API、YAML 配置导入导出、加密备份与可选 Prometheus 指标"
+   ],
+   "use_cases": [
+    "持续监控服务器证书到期与 TLS 配置（如老旧协议版本、弱密码套件），到期前接收多渠道提醒",
+    "检测内部网络中负载均衡后未更新证书的节点或未重新加载的服务器",
+    "对自有网段执行 TLS 端点扫描并生成 HTML/CSV/JSON 报告"
+   ]
+  },
+  "sha": "02ee93a7cfb4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7d4ef649709c": {
+  "identity": {
+   "one_liner": "面向 AI 代理协作的任务控制平面，以不可变契约驱动隔离 Git worktree 执行",
+   "review": "AgentHub Core 是一个供决策者与执行者两类 AI 代理协作的控制平面：决策者发布包含目标、验收标准和允许路径的不可变任务契约，执行者在各自独立的 Git worktree 中认领任务并返回提交或阻塞证据。运行时仅依赖 Python 标准库，需 Python 3.10+ 与支持 worktree 的 Git；状态存于 SQLite（schema 5），业务源码与凭据留在仓库历史之外。",
+   "highlights": [
+    "提供 decision/post/claim/submit/review/close 等覆盖任务全生命周期的命令，所有输出为统一 JSON 信封，支持 --dry-run 与 --rollback",
+    "每任务独立 worktree 与分支，支持会话绑定、租约上报、检查点与跨设备 handoff，执行器默认单任务可通过配置放宽至 32",
+    "部署前逐文件哈希校验并保留上一代文件，schema 4 首次打开时自动迁移至 schema 5 并写入备份"
+   ],
+   "use_cases": [
+    "需要多个 AI 代理按角色权限协作并留下可审计决策与提交证据的团队",
+    "多设备/多会话环境下需要任务认领、检查点续作与设备交接的工作流",
+    "希望在隔离 worktree 中运行代理任务、由权威主机统一管理 SQLite 状态与仓库的项目"
+   ]
+  },
+  "sha": "7d4ef649709c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

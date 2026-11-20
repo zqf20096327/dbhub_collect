@@ -3513,5 +3513,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d3ec46f63e77": {
+  "identity": {
+   "one_liner": "SurveyJS 与 ASP.NET Core 后端集成示例集，含 18 个可运行示例",
+   "review": "该仓库提供 18 个可运行的 ASP.NET Core 后端示例，演示 SurveyJS 表单组件与后端的集成，涵盖响应保存与恢复、文件上传、WebSocket 实时协作、仪表盘、PDF 生成及 AI 翻译与数据提取。技术栈为 Minimal API、Razor Pages、EF Core 与 SQLite。需 .NET 10 SDK，四个服务端工作流示例还需 Docker 运行 SurveyJS 服务。作者定位其为自建应用起点，SurveyJS 本身无后端。",
+   "highlights": [
+    "包含 18 个后端示例：保存/恢复响应、文件上传、WebSocket 实时协作、仪表盘、PDF 生成、AI 翻译与文档数据提取",
+    "使用 Minimal API、Razor Pages、EF Core 与 SQLite，首次启动自动执行迁移并填充种子数据",
+    "附带 xUnit 单元测试、契约测试与 Playwright 浏览器测试，支持 Docker Compose 一键运行"
+   ],
+   "use_cases": [
+    "为 ASP.NET Core 应用集成 SurveyJS 表单的后端功能提供可运行的参考起点",
+    "本地演示表单响应存储、文件上传、多人协同填写等后端流程",
+    "跨平台对照其他后端实现（PHP/Laravel、Node.js/Express、Python/FastAPI、Java/Spring Boot）"
+   ]
+  },
+  "sha": "d3ec46f63e77",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ac5056181bf5": {
+  "identity": {
+   "one_liner": "面向 MCP 客户端的笔记记忆服务器，以 wikilink 为图、SQLite 为存储实现检索",
+   "review": "该项目为拥有 markdown 笔记库（如 Obsidian vault）的 Claude Code、Cursor、Codex 等 MCP 客户端提供记忆检索层：对笔记建立向量索引，检索时返回 DIRECT 与 ASSOCIATIVE 两类结果，后者通过 [[wikilink]] 关联到问题未点名的笔记。以 SQLite 为唯一存储，首次建索引需下载约 1.1 GB 模型，检索片段会进入对话从而触达客户端的模型提供商。",
+   "highlights": [
+    "sgm-index 建立索引，增量重建时仅重新嵌入新增或变更笔记",
+    "检索输出 DIRECT（向量）与 ASSOCIATIVE（向量+图）两组结果，图结果以 <== +graph 标注",
+    "提供 sgm-doctor 自检命令，通过退出码区分通过、步骤未完成与嵌入栈/索引损坏"
+   ],
+   "use_cases": [
+    "让编码助手回答问题时不依赖笔记名，经由 wikilink 找到相关笔记",
+    "将 Obsidian 或 markdown 笔记库接入 MCP 客户端作为检索层",
+    "对笔记库运行增量索引更新，无需每次全量重建"
+   ]
+  },
+  "sha": "ac5056181bf5",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c6607352e4aa": {
+  "identity": {
+   "one_liner": "TUI 编码助手的本地持久化记忆与知识库插件",
+   "review": "total-recall 为 TUI 编码助手（Claude Code、Copilot CLI、OpenCode、Cline、Cursor 等）提供跨会话、跨工具的持久记忆与知识库。新记忆存入 warm 层，用关键词与向量混合检索；有用条目升至 hot 层，手动标记的 sticky 优先注入；ingest 的文件进入 cold 层知识库。默认本地运行：SQLite 存储、内置本地嵌入模型、无 API 密钥；团队可配置 Postgres 或 Cortex 后端。需 Node.js 20+，支持 Linux x64/arm64、macOS Apple Silicon、Windows x64。",
+   "highlights": [
+    "分层记忆模型（warm/hot/sticky/cold），支持关键词与向量混合检索，嵌入模型随二进制本地运行",
+    "提供 pin、ingest、search、forget 等子命令，`/develop` 技能可从想法生成 GitHub issue 再生成 PR",
+    "支持 MCP 客户端接入，提供本地 Web UI 查看记忆、知识库、token 用量与检索情况"
+   ],
+   "use_cases": [
+    "为多工具切换的开发者在各助手间共享修正、偏好与项目决策记录",
+    "将项目文档 ingest 为知识库供会话中按相关性检索",
+    "团队通过 Postgres 或 Cortex 后端共享同一记忆存储"
+   ]
+  },
+  "sha": "c6607352e4aa",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17407af8da03": {
+  "identity": {
+   "one_liner": "为 golang-migrate 提供纯 Go 数据库驱动（Oracle/DM8/GaussDB/openGauss/OceanBase）及配套 CLI。",
+   "review": "该项目为 golang-migrate/migrate 提供额外的纯 Go 数据库驱动，覆盖 Oracle、DM8、GaussDB、openGauss 与 OceanBase（MySQL/Oracle 租户），复用上游迁移引擎与 API，仅通过实现上游 database.Driver 接口并注册来扩展。附带的 CLI 保留上游命令与参数，并以 CGO_ENABLED=0 编译。需 Go 1.26+；各数据库服务器的实际验证尚未完成，集成测试需显式配置一次性 schema。",
+   "highlights": [
+    "提供 Oracle、DM8、GaussDB、openGauss、OceanBase（MySQL/Oracle 租户）五个纯 Go 驱动，实现上游 database.Driver 接口并注册到上游 registry",
+    "CLI 保留上游命令与参数，编译时静态纳入所选驱动，支持 -lock-timeout 控制原生驱动的初始化锁等待；Oracle 驱动使用可在 DDL 提交后存续的会话锁",
+    "全程 CGO_ENABLED=0 构建与测试，CI 覆盖 Linux/Windows/macOS，含 CodeQL 扫描与 Dependabot 模块检查"
+   ],
+   "use_cases": [
+    "应用使用 golang-migrate 上游 API，需要以纯 Go 方式连接 Oracle、DM8、GaussDB、openGauss 或 OceanBase 执行数据库迁移",
+    "命令行用户安装 migrate-plus CLI，沿用上游 migrate 命令与参数管理上述数据库的迁移版本",
+    "构建自定义二进制：blank-import 自选驱动并调用 cli.Main 组合命令层"
+   ]
+  },
+  "sha": "17407af8da03",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

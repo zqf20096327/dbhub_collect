@@ -2999,5 +2999,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "00e304e280b9": {
+  "identity": {
+   "one_liner": "面向 24/7 常驻 Agent 的中立控制平面，跨会话保存目标与证据",
+   "review": "LoopX 是一个面向 24/7 常驻 Agent 的持久状态控制平面，为 Codex、Claude Code、DeepSeek Harness 等运行时保存目标、决策、证据与租约信息，使长时间任务可跨会话续接。它提供本地 SQLite 存储并可扩展至 PostgreSQL，通过心跳、权限门控与渐进式上下文投递管理多周运行；发布、生产写入等敏感操作仍由人工审批。适用于多日工程、研究任务及多 Agent 协作团队。",
+   "highlights": [
+    "在本地 SQLite 存储中持久化目标、验收标准、决策、所有权与证据，跨会话和重启保留",
+    "提供 Guarded Heartbeat、daily-triage 等预设定时器及 owner/safety/publication/private-data 门控",
+    "通过 compaction-cycle 渐进式视图（README 报告 32.5% 视图字节）在多次模型唤醒间压缩控制面数据"
+   ],
+   "use_cases": [
+    "需要跨会话续接的多日工程、研究、基准或实验目标",
+    "带权限门控的工作流：发布、生产写入、私有数据访问需人工批准的项目",
+    "多 Agent 对等协作团队中的所有权、租约与任务移交管理"
+   ]
+  },
+  "sha": "00e304e280b9",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "315e59f5df35": {
+  "identity": {
+   "one_liner": "自托管的A股/债券市场传闻聚合嗅探器，基于FastAPI+SQLite单进程与规则引擎加可选LLM。",
+   "review": "TT_Sniffer是一个自托管的市场传闻（小作文）情报聚合工具，面向关注中国A股与债券市场的用户。它聚合20多个公开二级传播源（快讯、股吧、Telegram公开频道等），用两级传闻词库规则引擎分类打分，通过SimHash做同源聚类并与辟谣对撞，支持可选LLM翻译与摘要。仅采集公开来源，不触及私聊。需Python 3.11+，前端已预构建，运行python -m app.main后访问8787端口。",
+   "highlights": [
+    "聚合20+公开来源（快讯、RSS、股吧、Telegram公开频道、预测市场、宏观数据），支持YAML声明式订阅源并热加载",
+    "两级传闻词库加市场相关性门槛分类，SimHash同内容聚类与辟谣对撞，盘口异动与传闻联动加分",
+    "可选接入OpenAI兼容端点实现自动翻译、锐评、摘要与预筛，三通道独立配置key池轮换"
+   ],
+   "use_cases": [
+    "7×24跟踪市场传闻在公开平台的二次传播，分钟级获取信息",
+    "将传闻与官方快讯、辟谣声明交叉核对，浏览情绪与利率预期图表",
+    "通过Webhook将高置信度传闻推送至办公IM工具"
+   ]
+  },
+  "sha": "315e59f5df35",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9b78e3ceda17": {
+  "identity": {
+   "one_liner": "React+Vite 前端与 Node/Express API 构成的全栈个人作品集应用",
+   "review": "这是一个全栈开发者个人作品集应用：前端用 React 18/Vite 构建七个页面，后端为 Express 5 REST API，内容存储于 MySQL 兼容的 TiDB 数据库而非硬编码。管理端采用 HttpOnly Cookie 会话加 CSRF 保护实现内容 CRUD 与 Cloudinary 图片上传，并集成 Gemini AI 讲解、服务器遥测面板、Docker Compose 本地栈与七任务 GitHub Actions 流水线，前后端分别部署到 Vercel 和 Render。",
+   "highlights": [
+    "公开内容（项目、技能、证书、联系表单）全部通过 API 从 TiDB/MySQL 数据库读取，支持 ?page= 分页",
+    "管理端提供 Cookie 会话登录（bcrypt、可选 TOTP MFA、CSRF 保护）及项目/技能/证书的完整 CRUD 与 Cloudinary 图片上传",
+    "包含 Gemini AI 技能与证书讲解、问答面板，/system 页面每 5 秒轮询真实 CPU、内存、运行时长等遥测数据，AI 接口限速每 IP 每分钟 10 次"
+   ],
+   "use_cases": [
+    "全栈开发者展示个人项目、技能与证书的个人作品集站点",
+    "需要真实后端 API、数据库与 CI/CD 部署流程作为工程实践演示的项目",
+    "本地通过 Docker Compose 运行完整前端+后端+数据库环境进行开发或学习"
+   ]
+  },
+  "sha": "9b78e3ceda17",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3165,5 +3165,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "61fac73e4c08": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的嵌入式 SQL 数据库，内置 MVCC 事务与列式存储。",
+   "review": "Stoolap 是一个以 Rust 实现的嵌入式 SQL 数据库，无需外部服务器进程，面向低延迟事务负载与实时分析查询。它提供 MVCC 事务、AS OF 时间旅行查询、多类索引（B-tree、Hash、Bitmap、HNSW 向量索引），采用热/冷双层存储：内存 MVCC 加 WAL 处理活动写入，冷卷为不可变列式文件。通过 cargo 依赖引入使用，另提供 CLI REPL、桌面应用与 Web 管理界面。",
+   "highlights": [
+    "支持 ACID 事务与 MVCC，并发读写带事务隔离，并提供 AS OF 时间旅行查询",
+    "支持 VECTOR(N) 数据类型与基于 HNSW 的近似最近邻搜索，可选 semantic feature 生成文本嵌入",
+    "采用热/冷卷存储架构，冷卷为含 zone map、布隆过滤器、字典编码与 LZ4 压缩的不可变列式文件，后台线程自适应合并"
+   ],
+   "use_cases": [
+    "在 Rust 应用中嵌入运行 SQL 数据库，处理事务型与分析型混合查询",
+    "需要对向量数据做近似最近邻搜索或语义文本检索的应用",
+    "通过 CLI、桌面端或 Web 端（Stoolap Studio）管理本地数据并浏览 schema 与数据"
+   ]
+  },
+  "sha": "61fac73e4c08",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d77f19eaa8ed": {
+  "identity": {
+   "one_liner": "以 op-sqlite 为存储后端的 React Native 版 PouchDB 适配器",
+   "review": "该项目实现基于 op-sqlite 的 PouchDB 存储适配器，供 React Native 应用使用。v4.0.0 起不再依赖 websql-core，直接调用 op-sqlite。安装需配置 crypto/buffer shim 与 Metro 配置，支持 location、encryptionKey（SQLCipher）、onOpen（可执行 PRAGMA）选项。使用时需注意 Hermes 引擎下设计文档函数须写成字符串字面量。",
+   "highlights": [
+    "基于 op-sqlite 作为底层存储实现 PouchDB 适配器（adapter: 'react-native-sqlite'）",
+    "提供 encryptionKey 选项支持 SQLCipher 加密，onOpen 回调可执行自定义 PRAGMA 或复用连接",
+    "支持附件（attachments），需在 metro.config.js 中强制 pouchdb-binary-utils 与 pouchdb-md5 使用 Node 构建"
+   ],
+   "use_cases": [
+    "在 React Native 应用中通过 PouchDB API 本地持久化文档数据",
+    "需要 SQLite 数据库文件加密（SQLCipher）的移动端本地存储",
+    "在 Hermes 引擎环境下使用 PouchDB 设计文档视图与过滤器（以字符串字面量编写）"
+   ]
+  },
+  "sha": "d77f19eaa8ed",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d9193eb95954": {
+  "identity": {
+   "one_liner": "基于 TanStack Start + Prisma/SQLite 的教育计算机化考试应用",
+   "review": "CBT-MAN 是面向教育场景的开源计算机化考试（CBT）系统，采用 MIT 许可证。技术栈为 TanStack Start、React 19、TypeScript、Prisma 与 SQLite，支持选择题、判断题、简答题等多种题型，提供考试配置、监考检测与成绩报告功能。当前生产环境为 SQLite 单节点，若需高可用则计划迁移至 PostgreSQL。通过 npm 安装迁移和种子数据后即可运行。",
+   "highlights": [
+    "题库按「模块 → 主题 → 题目」组织，支持选择题、多选、判断、简答题四种题型",
+    "考试配置包含时长、评分、token、随机化、全屏模式与切屏检测；简答题由管理员/操作员手动评分",
+    "通过 Prisma 持久化到 SQLite，运行时启用 WAL 与 busy_timeout"
+   ],
+   "use_cases": [
+    "学校或培训机构组织上机考试",
+    "需要监考功能（切屏检测、全屏模式）的在线测验场景",
+    "需要成绩、排名与实时监控报告的教学评估场景"
+   ]
+  },
+  "sha": "d9193eb95954",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b013cabefb45": {
+  "identity": {
+   "one_liner": "TypeScript ORM，Schema-first + Prisma 风格语法，无 query-engine 二进制",
+   "review": "VA-ORM 是一个面向 PostgreSQL、MySQL、SQLite 的 TypeScript ORM，采用 Prisma 风格的 schema 文件（va.schema），通过 CLI 完成 push、generate、migrate、db pull 等操作。项目提供 NestJS 适配器与 SQL over HTTP 驱动，用于无 TCP 连接的 serverless 环境；当前处于 0.1.x 版本，API 尚在稳定过程中。SQLite 在 Bun 下使用内置驱动零依赖运行。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite，数据库驱动以可选 peer 依赖安装",
+    "提供 CLI：validate、generate、migrate up/down/status、db push --dry-run、db pull",
+    "包含原始 SQL、事务、聚合、关系查询、cursor/keyset 分页，@updatedAt 字段写入时自动刷新"
+   ],
+   "use_cases": [
+    "使用 Prisma 风格 schema 定义与迁移工作流管理 PostgreSQL/MySQL/SQLite 数据库的 TypeScript 项目",
+    "无法建立数据库 TCP 连接的 serverless 部署环境，可改用 HTTP 传输层",
+    "NestJS 应用中通过 VaModule.forRoot 集成同一客户端"
+   ]
+  },
+  "sha": "b013cabefb45",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

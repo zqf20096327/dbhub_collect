@@ -3435,5 +3435,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ff1fcb87d8c5": {
+  "identity": {
+   "one_liner": "基于 SQLite/Postgres/Redis 的 Python 后台任务与定时任务库",
+   "review": "tinyjobs 是一个 Python 后台任务与 cron 库，队列存储在 SQLite、Postgres 或 Redis 中，无需额外 broker 或守护进程。通过 pip 安装，Python 3.12+，提供同步/异步任务、重试、限流、事务入队、崩溃恢复等能力，可独立运行 worker，也提供 Django 与 FastAPI 集成，附 `verify`/`check` 等自检命令。README 注明投递语义为 at-least-once，任务需可安全重复执行。",
+   "highlights": [
+    "支持 SQLite、Postgres、Redis 三种后端，同一套 API，SQLite 后端无额外依赖",
+    "提供异步与同步任务、指数退避重试、cron 定时（含时区与 DST）、去重键、任务依赖、并发与速率限制",
+    "提供 `tinyjobs verify` 与 `tinyjobs check` 命令用于对存储做崩溃测试与配置审计"
+   ],
+   "use_cases": [
+    "为 Django 项目运行 `django.tasks` 标准接口的后台任务 worker",
+    "在 FastAPI 进程内运行后台任务与 cron，随服务生命周期退出",
+    "需要将队列存于单个 SQLite 文件并在事务内提交/回滚入队的 Python 应用"
+   ]
+  },
+  "sha": "ff1fcb87d8c5",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3079,5 +3079,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "487c3a220a3b": {
+  "identity": {
+   "one_liner": "基于 Raft 的高可用协作式限流服务，按复制状态节流 MySQL 写入",
+   "review": "freno 是一个协作式限流服务，客户端在写入前通过 HTTP check 请求咨询是否可写，freno 本身不代理流量。当前实现可对多个 MySQL 集群按复制延迟阈值节流，支持静态或经 haproxy 动态获取探测主机列表，并能强制节流指定应用。节点通过 Raft 选主，仅 leader 采集指标并服务客户端。适用于批量写入任务按小块执行前检查的场景，由 GitHub Engineering 开发，MIT 许可。",
+   "highlights": [
+    "通过 HTTP check 接口以 200/404/417/429/500 状态码回答客户端是否可写，支持 HEAD 请求",
+    "采集每个 MySQL 集群的复制延迟，超过预设阈值时对协作客户端节流，主机列表支持静态配置或经 haproxy 动态解析",
+    "基于 Raft 共识协议实现高可用，仅 leader 节点采集指标并服务客户端"
+   ],
+   "use_cases": [
+    "批量加载、归档、schema 迁移、大规模更新等任务分块执行前咨询是否可写，避免复制延迟过高",
+    "通过查询实际复制延迟判断副本数据有效性，缓解主写从读场景的写后读问题",
+    "在多个应用共用数据库时，按需强制节流某些应用以让高优先级任务完成"
+   ]
+  },
+  "sha": "487c3a220a3b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3f1e5450a3a0": {
+  "identity": {
+   "one_liner": "Go 编写的自托管 NVR，单静态二进制、内嵌 Web UI，支持多协议接入与自适应录像。",
+   "review": "MiBee NVR 是一个用 Go 实现的网络视频录像机（NVR），以单个静态二进制分发，内嵌 Svelte Web UI，使用 SQLite 存储。它接入 RTSP/ONVIF/GB28181/Xiaomi/WHIP 等来源，提供 WebRTC/HLS/FLV 播放和浏览器端 AI 检测。安装提供一键脚本、Docker 与预编译二进制（AMD64/ARM64/ARMv7）三种方式。README 称其面向 512MB 内存预算的低功耗 ARM 设备，性能数据为项目自测结果。许可证为 AGPL-3.0。",
+   "highlights": [
+    "支持 RTSP、ONVIF、GB/T 28181、Xiaomi（CS2/TUTK）、WHIP、SRT/RTMP 推流等多种接入协议，输出 WebRTC (WHEP)、HLS/LL-HLS、HTTP-FLV，并可经 RTSP/RTMP 中继推送",
+    "自适应录像：基于压缩域 P 帧尺寸分析（不解码），静默场景降至 timelapse 级基线，遇码率尖峰、响亮音频、像素域 CV、ONVIF 移动事件或语义触发 API 恢复全帧率",
+    "提供约 100 项 Prometheus 指标、Grafana 仪表盘、结构化 slog 日志及可选 OpenTelemetry 追踪"
+   ],
+   "use_cases": [
+    "在树莓派等低功耗 ARM 设备或 NAS（unRAID/群晖/QNAP 等）上自托管多摄像头录像",
+    "需要 GB/T 28181 国标设备接入与 SIP 门铃（Doorbird/Akuvox/Hikvision）对讲的监控场景",
+    "与 Prometheus/Grafana、Home Assistant、MQTT 集成的可观测性与家庭自动化联动部署"
+   ]
+  },
+  "sha": "3f1e5450a3a0",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bdd7612ae50c": {
+  "identity": {
+   "one_liner": "面向中小 PHP/MySQL 应用的轻量级 MVC 框架，附 Codex 插件",
+   "review": "Pair 是一个用于构建服务端渲染、可维护 PHP/MySQL 应用程序的轻量级框架，面向中小型项目。它实现显式 MVC 响应、ActiveRecord 风格 ORM、CRUD 与 OpenAPI 工具，并提供表单验证、CSRF、ACL、Passkey 认证及渐进增强/PWA 支持。通过 Composer 安装，提供脚手架与代码生成器；当前稳定版为 Pair 4.1.15，要求 PHP 8.4+ 与 MySQL 8.0+，采用 MIT 许可。",
+   "highlights": [
+    "提供显式控制器、类型化页面状态及页面/片段/JSON/文本/空等多种响应类型",
+    "内置 ActiveRecord 持久化、表单验证、CSRF、认证、ACL，以及带 OpenAPI 契约的 API 与 CRUD 生成工具",
+    "支持渐进增强、PWA、推送与 Passkey，无需强制前端构建，并提供 iOS/Android 原生辅助"
+   ],
+   "use_cases": [
+    "开发以服务端渲染为主、不需重前端工具链的中小型 PHP/MySQL 业务应用",
+    "需要模块、API、CRUD 代码生成器与数据库迁移工具的应用开发",
+    "使用 Codex 等 AI 辅助工作流进行开发的团队，可配合官方 Codex 插件使用"
+   ]
+  },
+  "sha": "bdd7612ae50c",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

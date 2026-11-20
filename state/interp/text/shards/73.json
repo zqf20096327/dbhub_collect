@@ -3267,5 +3267,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "170ff3f5c8ae": {
+  "identity": {
+   "one_liner": "在 Emacs 内查询和浏览多种数据库并暂存 SQL 行编辑的交互客户端",
+   "review": "Clutch 是一个 Emacs 数据库客户端，将查询保持在可编辑 SQL 缓冲区中，以交互网格显示结果，并支持对 MySQL、PostgreSQL、SQLite、MongoDB、Redis 等数据库的行变更暂存预览后执行。SQLite 路径依赖 Emacs 29.1+ 内置函数无需外部依赖；JDBC 后端需 Java 17+ 与 clutch-jdbc-agent.jar。面向在 Emacs 中操作数据库的用户，采用 GPL-3.0-or-later 许可。",
+   "highlights": [
+    "提供查询缓冲区、结果网格、行编辑暂存（UPDATE/DELETE 需可稳定识别源行）以及执行计划树、DDL 对比、ER 关系图等能力",
+    "支持 MySQL、PostgreSQL、XTDB、SQLite、MongoDB、Redis 原生路径，并经 JDBC（Java 17+ agent）访问 Oracle、SQL Server、ClickHouse、DuckDB 等",
+    "结果支持服务端 WHERE/ORDER BY、客户端过滤，可复制为 TSV/CSV/Org 表格或导出完整分页结果"
+   ],
+   "use_cases": [
+    "在 Emacs 中对 MySQL/PostgreSQL/SQLite 运行查询并浏览宽表或 JSON/XML/BLOB 结构化结果",
+    "对支持的 SQL 结果暂存插入、更新、删除，经 Preview SQL 校验确认后提交",
+    "通过 JDBC 连接 Oracle、SQL Server、Snowflake、Cassandra 等数据库进行查询浏览"
+   ]
+  },
+  "sha": "170ff3f5c8ae",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0b966bff4848": {
+  "identity": {
+   "one_liner": "用 eBPF 追踪主机进程网络依赖，存 PostgreSQL 并出指标与仪表盘",
+   "review": "shawk 通过内核中的 eBPF 程序记录每台主机上进程与 TCP/UDP 服务及 Unix socket 服务的依赖关系及流量时长。架构为 agent 采集后每 15 秒发送 OTLP 到 OpenTelemetry Collector，connector 写入 PostgreSQL 与 Prometheus，Grafana 展示。记录观测时段以区分「未使用」与「未观测」。运行需带 BTF 的 Linux（约 5.14+）、PostgreSQL 14+ 与开启 OTLP 接收的 Prometheus 3。可选协议分类默认关闭。",
+   "highlights": [
+    "无需对各进程插桩即可覆盖任意语言或协议的进程，包括 cron 任务与第三方软件",
+    "记录每台主机的观测时段与 agent 丢弃流的时段，可区分「未被使用」与「未被观测」",
+    "支持 TCP、UDP 及 Unix 流 socket 连接的观测；可选 -classify-protocols 识别 TLS、HTTP、SSH、PostgreSQL、MySQL、Redis、Slurm 等协议"
+   ],
+   "use_cases": [
+    "系统变更前排查依赖：确认还有哪些进程在使用某数据库或主机",
+    "部署后追踪新增或消失的依赖，并识别仍在使用明文或旧版 TLS 的客户端",
+    "在大规模主机群（含 HPC/Slurm 集群）中持续采集服务依赖地图并配合告警"
+   ]
+  },
+  "sha": "0b966bff4848",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

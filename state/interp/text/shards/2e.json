@@ -3281,5 +3281,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8a5c1dfbc8f6": {
+  "identity": {
+   "one_liner": "基于本体的 MCP 服务器，分析数据库模式生成 RDF/OWL 本体以支持 Text-to-SQL",
+   "review": "OrionBelt Analytics 是一个 MCP 服务器，连接 PostgreSQL、Snowflake、ClickHouse、Dremio 等 8 种数据库，分析关系模式并生成带 SQL 映射的 RDF/OWL 本体。它通过 OBQC 规则在 SQL 执行前校验表列存在性、连接条件与 fan-trap，并提供 GraphRAG 模式发现与 Plotly 图表。需 Python 3.13+ 与 uv，通过任何 MCP 兼容客户端（如 Claude Desktop、LangChain）调用其 26 个工具。",
+   "highlights": [
+    "支持 8 种数据库连接器（PostgreSQL、MySQL、Snowflake、ClickHouse、Dremio、BigQuery、DuckDB/MotherDuck、Databricks SQL），生成含 oba: 命名空间标注和 W3C R2RML 映射的 RDF/OWL 本体",
+    "OBQC 校验器以确定性规则（sqlglot 解析）检查表/列存在性、连接有效性、类型兼容性、聚合正确性与 fan-trap，错误级问题阻止查询执行",
+    "内置 GraphRAG（图遍历最多 12 跳 + ChromaDB 本地向量嵌入）与基于 Oxigraph 的 SPARQL 1.1 查询接口，共暴露 26 个 MCP 工具"
+   ],
+   "use_cases": [
+    "通过 MCP 兼容 AI 客户端对已配置凭据的数据库进行关系感知的 Text-to-SQL 查询",
+    "从现有数据库模式生成本体文件与 R2RML 映射（Turtle 格式），供语义层或本体编辑器等项目使用",
+    "多模式分析与会话恢复场景：同时分析多个 schema 并在重连后还原上次工作区状态"
+   ]
+  },
+  "sha": "8a5c1dfbc8f6",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0c37a7d73463": {
+  "identity": {
+   "one_liner": "运行于 Postgres/Supabase 的开源复式记账核心，国家规则以数据形式存在",
+   "review": "Ekwo OS 是一个部署在自有 Supabase 项目上的复式记账核心，采用 AGPL-3.0 协议，包含数据库 schema、CLI 工具 ekwo、MCP 服务器及各类模块。借贷平衡与锁定期间由数据库触发器强制执行，各国税率、科目表和申报格式作为版本化国家包数据提供。适用于希望自持账目数据的公司、代账机构和需要记账核心的开发者。",
+   "highlights": [
+    "复式记账规则由数据库触发器强制执行，不平衡交易无法记录，锁定期间在触发器层拒绝写入",
+    "提供 CLI（npx ekwo-os init）与 MCP 服务器，支持 AI 代理在用户自身的行级安全控制下操作账目数据",
+    "覆盖约 170 个国家的国家包，每个包含科目表、税码、申报栏目与财务报表；支持固定资产、预算、企业所得税、电子发票等按公司启用的模块"
+   ],
+   "use_cases": [
+    "公司或创始人在自有数据库中记账，并通过 financial_analysis() 从交易数据读取现金天数、净利率等聚合指标",
+    "会计事务所在同一套安装中管理多家公司账目",
+    "开发者需要一个以数据而非代码承载税收规则的复式记账核心"
+   ]
+  },
+  "sha": "0c37a7d73463",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

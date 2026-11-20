@@ -3476,5 +3476,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "93d470f129d1": {
+  "identity": {
+   "one_liner": "本地运行的桌面数据查看与查询工具，支持多种格式读写及 DuckDB SQL。",
+   "review": "Octa 是一款面向 Linux、macOS 与 Windows 的本地桌面应用，用于打开、编辑、查询与转换数据文件，无需注册账号。它以表格形式展示 Parquet、CSV、Excel、SQLite 等多种格式内容，支持 DuckDB SQL 查询、表格比较与格式转换；同一引擎也可作为命令行工具和 MCP 服务器运行，供 AI 代理调用。源码以 Rust 编写，采用 MIT 许可证，可从源码构建，也提供 AUR、Microsoft Store、AppImage 及 Docker 等分发方式。",
+   "highlights": [
+    "读取 Parquet、CSV、Excel、SQLite、GeoJSON、Jupyter notebook 等多种文件格式，并可连接 S3、GCS、Postgres、Snowflake、BigQuery 等数据源",
+    "内置 DuckDB SQL 查询，并可作为 CLI 工具与 MCP 服务器运行",
+    "支持表格编辑、去重、文件与 schema diff、图表及 HTML 报告等分析与清理功能"
+   ],
+   "use_cases": [
+    "在本地打开并查询超出内存大小的 Parquet、CSV 等数据文件",
+    "在表格界面中连接数据库或对象存储，浏览、编辑并转换数据格式",
+    "通过 MCP 服务器让 AI 代理对同一份数据执行查询"
+   ]
+  },
+  "sha": "93d470f129d1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "da846ca35f43": {
+  "identity": {
+   "one_liner": "基于 SQL 声明式文件的 Postgres 模式差异比对与迁移工具",
+   "review": "pgdeclare 将 Postgres 模式以纯 SQL 声明文件维护，每表一条 CREATE TABLE。它把声明文件在临时 plan 库中构建并通过 pg_catalog 与线上库 diff，自动应用差异；重命名、回填等场景需编写 @migrate-before/@migrate-after 块，经哈希账本记录防止重复执行，含数据表的破坏性变更需显式 @drop。适用于以 Git 管理模式的 Postgres 团队。需 Python 3.12+、PostgreSQL 14-18，Apache 2.0 协议，当前版本 0.3.0，1.0 前不保证向后兼容。",
+   "highlights": [
+    "在临时 plan 数据库中执行声明 SQL 并通过 pg_catalog 内省后与线上库 diff，支持 diff 预览与 apply 应用",
+    "提供 @migrate-before / @migrate-after 块与 @drop 指令，迁移以哈希账本记录，已执行的块被修改后会被拒绝",
+    "语句按 retry-until-stable 顺序重试执行，无需手动维护依赖顺序；提供 CLI 与 Python API"
+   ],
+   "use_cases": [
+    "以 SQL 文件形式在版本库中维护数据库当前模式的团队",
+    "需要将线上库与声明文件比对并生成变更 SQL 的工作流",
+    "包含重命名、数据回填等需要一次性命令式迁移步骤的模式变更"
+   ]
+  },
+  "sha": "da846ca35f43",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e72e12358b2": {
+  "identity": {
+   "one_liner": "基于 Postgres 的版本化知识图谱平台，通过 MCP 向 AI 智能体提供受治理的读写访问。",
+   "review": "Lorebase 是一个开源知识图谱与本体平台，将企业知识建模为带类型的 Record，支持 schema 与数据的分支、三方合并和冲突处理，读取结果附带 Revision 标记。后端运行在 Postgres 上，通过 Keeper REST API 和 Herald MCP 服务器对外提供服务，读取路径中不运行模型。项目提供 Docker compose 快速启动、CLI、Python 客户端和 Web 应用。当前为 pre-alpha（v0.5.0），接口在 1.0 之前可能变更。",
+   "highlights": [
+    "支持 schema 和数据一起进行分支、三方合并，冲突通过记录式决议处理而非静默覆盖",
+    "提供 MCP 服务器（Herald，PyPI 可装）、REST API、Python 客户端和 CLI；智能体读取返回带 Revision 哈希的typed结果，写入仅通过受治理的 Operations 和 Proposals",
+    "包含 Scribe 组件处理 Sources、文档抽取和嵌入，示例配置可经 `make up` 在本机 Docker 环境约一分钟内启动"
+   ],
+   "use_cases": [
+    "数据与平台团队需要对企业知识（如供应商、零件、合同）进行类型化、评审和版本管理，且分歧来源进入对账队列",
+    "智能体开发者需要带来源标记的typed记录，并让智能体经由 MCP 读取版本化知识库、通过受治理操作写入",
+    "需要将 nightly 数据源（如 ERP）与人工分析分支合并并处理冲突的场景"
+   ]
+  },
+  "sha": "9e72e12358b2",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

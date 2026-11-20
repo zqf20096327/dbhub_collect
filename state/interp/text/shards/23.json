@@ -3130,5 +3130,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "58a26e939269": {
+  "identity": {
+   "one_liner": "面向 .NET 的 LSM-tree 有序键值存储引擎，支持事务与 WAL 持久化",
+   "review": "ZoneTree 是一个 MIT 许可的 .NET 存储引擎，实现有序键值存储，可作键值数据库或更高层系统的存储基础使用。提供写前日志、可序列化/快照事务、前后向迭代器、键锁及后台合并维护。默认 WAL 为异步模式，普通写入需手动调用 SyncWalAsync 才能保证掉电前持久。",
+   "highlights": [
+    "提供可序列化与快照事务，多版本乐观并发控制，读取不阻塞",
+    "支持前向/反向迭代器、Seek 定位范围扫描、键锁与自定义序列化器/比较器",
+    "通过磁盘段与写前日志持久化，可在内存与磁盘两种模式下运行"
+   ],
+   "use_cases": [
+    "在 .NET 中构建索引、搜索系统、队列、事件存储等数据系统",
+    "需要范围扫描与有序遍历的时序或前缀布局数据模型",
+    "数据集大于内存、需控制写侧内存占用的持久化键值存储"
+   ]
+  },
+  "sha": "58a26e939269",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fa25145f170d": {
+  "identity": {
+   "one_liner": "CloudDM：Web 控制台的团队数据库管理工具，含权限、工单与 SQL 变更流程",
+   "review": "CloudDM 是开源的团队数据库管理工具，通过单一 Web 控制台提供数据查询、访问管理与经审核的数据库变更。支持 RBAC 权限（可细到表级）、LDAP/OIDC 认证集成、SQL 工单审批、数据库 CI/CD（可对接 Git 仓库触发发布），支持 44 种数据源，提供单机与集群部署，Docker 启动后经 8222 端口初始化。适用于需要 SQL 审核流程与权限管控的团队。",
+   "highlights": [
+    "支持 44 种数据源类型，提供 RBAC、SQL 执行前规则检查与数据脱敏",
+    "提供工单审批流程（内置审批引擎，可对接钉钉/飞书/企业微信）与数据库 CI/CD（Git push、webhook、HTTP API 触发发布）",
+    "支持 Standalone 与 Cluster（Console + Sidecar）两种部署模式，可运行于安装包、Docker、Kubernetes"
+   ],
+   "use_cases": [
+    "需要按实例/库/schema/表级分配权限并管理临时授权的团队数据访问管理",
+    "通过工单审批执行 SQL 变更并支持定时或手动执行",
+    "以 Git 仓库为变更源、通过 webhook/API 触发的数据库 CI/CD 流水线"
+   ]
+  },
+  "sha": "fa25145f170d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a0a8105f5eab": {
+  "identity": {
+   "one_liner": "终端中的 AI 编码工具用量浏览器，读取本地会话记录并交互展示",
+   "review": "OpenTab 是一个 Python 编写的本地终端工具（TUI，另有 opentab web 浏览器模式），读取 Claude Code、Codex、OpenCode、Copilot 等工具在本机的会话记录，汇总展示 token、时间与费用，支持下钻到子代理、回合、工具调用和上下文构成。零第三方依赖、无遥测、只读访问原文件；订阅费用无记录时以 API 牌价估算并明确标注。适合使用多个 AI 编码代理、想核查本地用量明细的开发者。",
+   "highlights": [
+    "自动发现并汇总 OpenCode、Claude Code、Codex、GitHub Copilot、pi-agent、Gemini CLI 等多个工具的本地记录，也可读取自定义 CSV/JSONL 日志",
+    "提供从日/周/月趋势、热力图下钻到单个会话的子代理、回合、工具调用、文件改动和上下文窗口构成的浏览路径，并支持按所选模型牌价对比同一 token 用量的成本",
+    "仅用 Python 标准库运行（Windows 额外装 windows-curses），支持 pipx/brew/脚本安装、HTML 单文件导出、SSH 拉取多机摘要及本地 MCP/JSON 接口"
+   ],
+   "use_cases": [
+    "查看某个项目或会话的 token 构成、缓存占比与费用明细，定位花费最多的回合或工具",
+    "在订阅制计费下以 API 等价价格估算 token 用量，或对比若改用其他模型牌价的成本",
+    "通过关键词（需显式开启索引）、标签、书签和 CSV 导出检索与整理跨工具的历史会话"
+   ]
+  },
+  "sha": "a0a8105f5eab",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ddc08653469": {
+  "identity": {
+   "one_liner": "SurveyJS 后端集成示例集：Next.js 16 App Router + SQLite，含 18 个可运行示例",
+   "review": "该仓库以 Next.js 16 App Router 应用形式提供 18 个可逐个运行的 SurveyJS 后端集成示例，覆盖响应保存/恢复、文件上传、WebSocket 实时协同、仪表盘、PDF 生成、AI 翻译与文档数据提取。仅需 Node.js 24+，通过自定义 server.ts 与内置 SQLite 数据库运行，也可用 Docker Compose 部署，适合需要在自建后端接入 SurveyJS 的开发者参考。需注意应用需要持久磁盘与 WebSocket 支持，README 指出其不能部署到 Vercel。",
+   "highlights": [
+    "提供 18 个后端集成示例，含响应保存与恢复、文件上传、实时协同编辑、PDF 生成与 AI 数据提取",
+    "WebSocket 中继（/ws/rooms、/ws/forms）与应用内服务端工作流均随应用自身运行，无需额外启动服务",
+    "支持 npm 脚本、Docker Compose 两种运行方式，并附带 node --test 单元测试、契约测试与 Playwright E2E 测试"
+   ],
+   "use_cases": [
+    "为 Next.js 应用接入 SurveyJS 表单的后端保存、恢复与文件上传功能时参考示例代码",
+    "需要多人同时填写或编辑表单的实时协同场景",
+    "在服务端执行表单校验、JSON Schema lint、PDF 生成或从文档中提取问卷响应数据"
+   ]
+  },
+  "sha": "6ddc08653469",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "194f6ebea42a": {
+  "identity": {
+   "one_liner": "自托管语音视频屏幕共享与聊天：Go 服务端、Windows 客户端、PWA",
+   "review": "noXa 是一个自托管的通信系统，提供语音频道、摄像头与屏幕共享、私信与群聊及频道论坛。服务端用 Go 编写，基于 Pion WebRTC SFU 转发媒体，PostgreSQL 持久化状态，可选 Redis 依赖；桌面客户端通过 Wails 构建，发布二进制仅面向 Windows x64，另有可安装的移动/网页 PWA。私信与私群经 Olm 端到端加密，频道聊天与论坛正文尚未端到端加密。",
+   "highlights": [
+    "提供语音、视频、屏幕共享和聊天功能，支持桌面客户端与可安装 PWA 两种客户端",
+    "Go 服务端使用帧控制协议和 Pion WebRTC SFU，以 PostgreSQL 持久化状态，Redis 为可选依赖",
+    "私信与私群消息采用 Olm（vodozemac）端到端加密，频道语音/视频/屏幕共享在支持该能力的服务器上按频道密钥端到端加密"
+   ],
+   "use_cases": [
+    "需要自行部署语音视频聊天服务器的团队或社区",
+    "Windows 桌面端与移动端 PWA 混合使用的通信场景",
+    "需要端到端加密私信与私群消息的自托管环境"
+   ]
+  },
+  "sha": "194f6ebea42a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

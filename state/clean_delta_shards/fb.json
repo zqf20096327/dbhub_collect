@@ -34087,5 +34087,1855 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "620f0f2c807c+2": {
+  "fn": "leandro-cervelin/cf_api_net_core",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Build & Test .NET 11.0 CodeQL .NET 11.0"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    10,
+    1,
+    10
+   ],
+   [
+    "replace",
+    10,
+    16,
+    10,
+    13,
+    [
+     "（目录 4 行略）",
+     "- Going further: local development without Docker, authentication details, deployment and",
+     " hardening"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    13,
+    16
+   ],
+   [
+    "replace",
+    19,
+    20,
+    16,
+    17,
+    [
+     "You need Docker (with Linux containers). That's all: Docker"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    35,
+    17,
+    32
+   ],
+   [
+    "replace",
+    35,
+    37,
+    32,
+    34,
+    [
+     " The sample values are fine for trying the app on your own machine. Replace them with your own random values",
+     " before running it anywhere else. `.env` is gitignored, so it won't be committed."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    44,
+    34,
+    41
+   ],
+   [
+    "replace",
+    44,
+    46,
+    41,
+    43,
+    [
+     " The first run takes a few minutes while the images download. When you see the API log that it's listening,",
+     " it's ready at **http://localhost:8888**."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    53,
+    43,
+    50
+   ],
+   [
+    "replace",
+    53,
+    54,
+    50,
+    51,
+    [
+     "(see Local development) and use the interactive docs page at"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    97,
+    51,
+    94
+   ],
+   [
+    "replace",
+    97,
+    105,
+    94,
+    102,
+    [
+     "|Endpoint|What it does|Who can call it|",
+     "|---|---|---|",
+     "|`POST /api/v1/customer`|sign up|anyone|",
+     "|`POST /api/v1/auth/token`|log in, returns a token|anyone|",
+     "|`GET /api/v1/customer/{id}`|read a customer|that customer, or an admin|",
+     "|`PUT /api/v1/customer/{id}`|update a customer|that customer, or an admin|",
+     "|`DELETE /api/v1/customer/{id}`|delete a customer|that customer, or an admin|",
+     "|`GET /api/v1/customer`|list and search customers|admins only|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    102,
+    103
+   ],
+   [
+    "replace",
+    106,
+    107,
+    103,
+    104,
+    [
+     "Admins are explained in Authentication in detail."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    116,
+    104,
+    113
+   ],
+   [
+    "replace",
+    116,
+    123,
+    113,
+    114,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    133,
+    114,
+    124
+   ],
+   [
+    "replace",
+    133,
+    145,
+    124,
+    136,
+    [
+     "1. **`CustomerController`** (Api) receives the HTTP request,",
+     " checks the caller is allowed to see customer 1, and calls the facade.",
+     "2. **`CustomerFacade`** (Application) uses",
+     " `CustomerMapper` to turn the request DTO into a domain",
+     " filter, and calls the service.",
+     "3. **`CustomerService`** (Domain) applies the business rules,",
+     " such as page size limits, unique emails and password hashing, and asks the repository for the data. The rules",
+     " for a single customer (a valid email, a strong enough password) are methods on the",
+     " `Customer` entity itself.",
+     "4. **`CustomerRepository`** (Infrastructure)",
+     " queries SQL Server through EF Core's",
+     " `CustomerContext`."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    136,
+    137
+   ],
+   [
+    "replace",
+    146,
+    147,
+    137,
+    138,
+    [
+     " fields like the password hash never leave the API."
+    ]
+   ],
+   [
+    "equal",
+    147,
+    149,
+    138,
+    140
+   ],
+   [
+    "replace",
+    149,
+    150,
+    140,
+    141,
+    [
+     "`ExceptionFilter` turns it into a `400` (or `404`) response. That filter is"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    153,
+    141,
+    144
+   ],
+   [
+    "replace",
+    153,
+    154,
+    144,
+    145,
+    [
+     "`AddCustomerCore`."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    157,
+    145,
+    148
+   ],
+   [
+    "replace",
+    157,
+    158,
+    148,
+    149,
+    [
+     "`CF.ConsoleApp` is a second entry point that uses the same core, registered with"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    160,
+    149,
+    151
+   ],
+   [
+    "replace",
+    160,
+    161,
+    151,
+    152,
+    [
+     "Running the console app to run it."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    164,
+    152,
+    155
+   ],
+   [
+    "replace",
+    164,
+    171,
+    155,
+    162,
+    [
+     "- `Program.cs`: how the API starts, in about 40 lines.",
+     "- `Customer.cs`: the entity and its validation rules.",
+     "- `CustomerService.cs`: the business rules that need the",
+     " database, such as \"the email isn't taken\".",
+     "- `CustomerController.cs`: the HTTP endpoints.",
+     "- `CustomerServiceTest.cs`: how the rules are",
+     " tested."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    172,
+    162,
+    163
+   ],
+   [
+    "replace",
+    172,
+    173,
+    163,
+    164,
+    [
+     "Skip `Startup/ProductionSetup.cs` at first. It holds the production"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    174,
+    164,
+    165
+   ],
+   [
+    "replace",
+    174,
+    175,
+    165,
+    166,
+    [
+     "Going further."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    181,
+    166,
+    172
+   ],
+   [
+    "replace",
+    181,
+    189,
+    172,
+    180,
+    [
+     "|Layer|Add|",
+     "|---|---|",
+     "|Domain|`Entities/Address.cs` with its validation rules; `Repositories/IAddressRepository.cs` extending `IRepositoryBase<Address>`; `Services/AddressService.cs` and its interface|",
+     "|Infrastructure|a `DbSet<Address>` and its table mapping in `CustomerContext`; `Repositories/AddressRepository.cs`; registrations in `AddCustomerCore`|",
+     "|Application|the DTOs, an `AddressMapper`, and `AddressFacade` with its interface|",
+     "|Api|`Controllers/AddressController.cs`|",
+     "|Migrations|a new migration (see below)|",
+     "|Tests|the same kinds of tests that exist for `Customer`|"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    180,
+    181
+   ],
+   [
+    "replace",
+    190,
+    191,
+    181,
+    182,
+    [
+     "`RepositoryBase<T>` is what saves you work here."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    223,
+    182,
+    214
+   ],
+   [
+    "replace",
+    223,
+    224,
+    214,
+    215,
+    [
+     "You need the .NET 11 SDK. The test projects:"
+    ]
+   ],
+   [
+    "equal",
+    224,
+    226,
+    215,
+    217
+   ],
+   [
+    "replace",
+    226,
+    230,
+    217,
+    219,
+    [
+     "- `CF.IntegrationTest`: starts a real SQL Server in Docker with Testcontainers and",
+     " calls the real API, so Docker must be running."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    236,
+    219,
+    225
+   ],
+   [
+    "replace",
+    236,
+    238,
+    225,
+    227,
+    [
+     "Most of the deployment and hardening code is in `Startup/ProductionSetup.cs`,",
+     "and the authentication code is in `Authentication/`."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    241,
+    227,
+    230
+   ],
+   [
+    "replace",
+    241,
+    242,
+    230,
+    231,
+    [
+     "You need the .NET 11 SDK and a SQL Server you can connect to."
+    ]
+   ],
+   [
+    "equal",
+    242,
+    244,
+    231,
+    233
+   ],
+   [
+    "replace",
+    244,
+    245,
+    233,
+    234,
+    [
+     "with user-secrets, so no credential is committed."
+    ]
+   ],
+   [
+    "equal",
+    245,
+    280,
+    234,
+    269
+   ],
+   [
+    "replace",
+    280,
+    286,
+    269,
+    275,
+    [
+     "|Service|What it does|Database login|",
+     "|---|---|---|",
+     "|`db`|SQL Server, with data in the `mssql-data` volume. Reports healthy once it accepts connections.||",
+     "|`db-init`|Creates the `CF` database and the API's `cf_app` login (`init-app-login.sql`), then exits.|`sa`|",
+     "|`migrate`|Runs the EF Core migration bundle against `db`, then exits.|`sa`|",
+     "|`api`|Starts only after `migrate` has finished successfully. Listens on http://localhost:8888.|`cf_app`|"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    322,
+    275,
+    311
+   ],
+   [
+    "replace",
+    322,
+    323,
+    311,
+    312,
+    [
+     "The API logs with Serilog, configured in the `Serilog` section of `appsettings.json` and"
+    ]
+   ],
+   [
+    "equal",
+    323,
+    326,
+    312,
+    315
+   ],
+   [
+    "replace",
+    326,
+    327,
+    315,
+    316,
+    [
+     " left out, because filters such as `?email=` contain personal data."
+    ]
+   ],
+   [
+    "equal",
+    327,
+    328,
+    316,
+    317
+   ],
+   [
+    "replace",
+    328,
+    329,
+    317,
+    318,
+    [
+     " errors with their stack trace."
+    ]
+   ],
+   [
+    "equal",
+    329,
+    330,
+    318,
+    319
+   ],
+   [
+    "replace",
+    330,
+    331,
+    319,
+    320,
+    [
+     " because `Microsoft` is set to `Information` there."
+    ]
+   ],
+   [
+    "equal",
+    331,
+    380,
+    320,
+    369
+   ],
+   [
+    "replace",
+    380,
+    385,
+    369,
+    374,
+    [
+     "|Endpoint|Checks|Access|Rate limited|",
+     "|---|---|---|---|",
+     "|`/health/live`|the process is up|anonymous|no|",
+     "|`/health/ready`|the database is reachable|anonymous|no|",
+     "|`/health`|everything, as a detailed JSON report|admin token|yes|"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    394,
+    374,
+    383
+   ],
+   [
+    "replace",
+    394,
+    398,
+    383,
+    387,
+    [
+     " `db_datawriter` in `CF`). It can't change the schema or reach other databases, which limits the damage if the",
+     " app is ever compromised. Only the migration step uses a privileged login. Outside Compose, create an equivalent",
+     " login with the same script (run it as an admin with `sqlcmd -v AppLogin=... AppPassword=...`). Keep",
+     " `Database:MigrateOnStartup` off with such a login, since it can't apply migrations."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    399,
+    387,
+    388
+   ],
+   [
+    "replace",
+    399,
+    400,
+    388,
+    389,
+    [
+     " image and listen on port 8080. They log to stdout only, so the app folder doesn't need to be writable."
+    ]
+   ],
+   [
+    "equal",
+    400,
+    414,
+    389,
+    403
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "315e59f5df35+2": {
+  "fn": "TTDiang2/TT_Sniffer",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "English · 简体中文"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    15,
+    3,
+    15
+   ],
+   [
+    "replace",
+    15,
+    18,
+    15,
+    16,
+    [
+     " TT_Sniffer live feed"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    26,
+    16,
+    24
+   ],
+   [
+    "replace",
+    26,
+    27,
+    24,
+    25,
+    [
+     "chats — see Compliance), cross-checks them against"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    33,
+    25,
+    31
+   ],
+   [
+    "replace",
+    33,
+    34,
+    31,
+    32,
+    [
+     "|Layer|Sources|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    32,
+    33
+   ],
+   [
+    "replace",
+    35,
+    42,
+    33,
+    40,
+    [
+     "|CN fast wires|财联社 cls / 东财 em / 新浪 7x24 / 同花顺 / 华尔街见闻|30–60s polling, line-level fault tolerance|",
+     "|Global media RSS|Bloomberg ×5, WSJ ×4, MarketWatch, FT, CNBC, Reuters & AP via Google News|titles + summaries only, never bypasses paywalls|",
+     "|Street layer ⚠️|股吧 (guba) hot posts **with full-text detail enrichment**, 韭研公社 (SSR payload parsing + full-text fetch), Telegram public channels, crypto media RSS|`tier=street` — flagged unverified, never triggers intrusive alerts|",
+     "|Prediction markets|Polymarket (Gamma + CLOB + Data API)|emits a signal only when implied probability moves ≥ 5 pp|",
+     "|Market microstructure|盘口异动 (intraday order-flow anomalies) + 涨停池 limit-up pool|fuels the rumor ↔ price-action linkage bonus|",
+     "|Macro|calendar (nonfarm/CPI/FOMC/SEP…, CN + US), CME Fed-funds futures snapshot daily, auto-fetch of official FOMC SEP dot plots||",
+     "|Declarative feeds|`subscriptions/*.yaml` — drop a file, get a feed|hot-reloaded, validated, no code, no restart|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    46,
+    40,
+    44
+   ],
+   [
+    "replace",
+    46,
+    48,
+    44,
+    46,
+    [
+     " market-relevance gate: an item must touch a real market entity before it can",
+     " be classified as rumor — noise gets folded to near-zero."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    46,
+    47
+   ],
+   [
+    "replace",
+    49,
+    50,
+    47,
+    48,
+    [
+     " that co-occur with rumor text get an extra \"price moved first\" bonus."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    48,
+    49
+   ],
+   [
+    "replace",
+    51,
+    52,
+    49,
+    50,
+    [
+     " the downgrade (a debunk on a street channel is gold)."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    50,
+    51
+   ],
+   [
+    "replace",
+    53,
+    55,
+    51,
+    53,
+    [
+     " smoothing; the scatter/matrix use a continuous strength mapping",
+     " (tanh of vote count) so 1 vote ≠ 3 votes."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    53,
+    54
+   ],
+   [
+    "replace",
+    56,
+    58,
+    54,
+    56,
+    [
+     " reposts of the same rumor into \"N related items\", and pairs same-day rumors",
+     " with their debunk statements (辟谣对撞)."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    62,
+    56,
+    60
+   ],
+   [
+    "replace",
+    62,
+    64,
+    60,
+    62,
+    [
+     " the translation is rendered **inline in the feed** — a Bloomberg headline and",
+     " its 中文译文 sit in the same card (idle-time catch-up drains the backlog)."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    62,
+    63
+   ],
+   [
+    "replace",
+    65,
+    67,
+    63,
+    65,
+    [
+     " one-line snarky Chinese comment generated automatically — visible in the",
+     " reader dialog, written to poke at what's absurd while staying accurate."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    65,
+    66
+   ],
+   [
+    "replace",
+    68,
+    71,
+    66,
+    69,
+    [
+     " with one click — \"today's most notable rumors?\", \"summarize bull/bear under",
+     " the current filter\", \"which rumors were debunked?\" — streaming Markdown,",
+     " answer grounded in the day's collected items only (never the live web)."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    69,
+    70
+   ],
+   [
+    "replace",
+    72,
+    73,
+    70,
+    71,
+    [
+     " a confident non-rumor verdict blocks noisy alerts."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    71,
+    72
+   ],
+   [
+    "replace",
+    74,
+    78,
+    72,
+    76,
+    [
+     " own base_url, model and **key pool** (rotation, 60s cooldown, 401 → key",
+     " disabled, per-round budget caps) — channels can point at different vendors.",
+     " Scraped text is treated as data, never as instructions (prompt-injection",
+     " defense)."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    76,
+    77
+   ],
+   [
+    "replace",
+    79,
+    80,
+    77,
+    78,
+    [
+     "|Auto-commentary (锐评)|Auto-translation|"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    78,
+    79
+   ],
+   [
+    "replace",
+    81,
+    82,
+    79,
+    80,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    85,
+    80,
+    83
+   ],
+   [
+    "replace",
+    85,
+    88,
+    83,
+    84,
+    [
+     " Statistics view"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    90,
+    84,
+    86
+   ],
+   [
+    "replace",
+    90,
+    91,
+    86,
+    87,
+    [
+     " reconnect + catch-up after being offline."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    93,
+    87,
+    89
+   ],
+   [
+    "replace",
+    93,
+    96,
+    89,
+    92,
+    [
+     " toggle a whole group) / asset bucket / keyword regex / street-only /",
+     " collapse-clusters — all synced to the URL so a filtered view is shareable.",
+     " Save the current filter set as a template."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    92,
+    93
+   ],
+   [
+    "replace",
+    97,
+    98,
+    93,
+    94,
+    [
+     " keyboard-accessible, Markdown sanitized (XSS-hardened)."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    94,
+    95
+   ],
+   [
+    "replace",
+    99,
+    104,
+    95,
+    100,
+    [
+     " per-asset bull/bear votes, source donut, category mix, hot keywords,",
+     " order-flow anomaly direction, risk-appetite scatter with daily trajectory,",
+     " a **Fed-style rate dot plot** aggregated from daily rate commentary",
+     " (gold ring = consensus level), the **official FOMC SEP dot plot**, and a",
+     " 7-day asset × day sentiment matrix."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    100,
+    101
+   ],
+   [
+    "replace",
+    105,
+    106,
+    101,
+    102,
+    [
+     " month-grid views, pagination."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    102,
+    103
+   ],
+   [
+    "replace",
+    107,
+    109,
+    103,
+    105,
+    [
+     " 10Y — 8s TTL, per-symbol graceful degradation, snapshot persisted to disk so",
+     " a restart during an outage still shows the last good prices."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    105,
+    106
+   ],
+   [
+    "replace",
+    110,
+    111,
+    106,
+    107,
+    [
+     " throttling; street-tier items never buzz your phone."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    107,
+    108
+   ],
+   [
+    "replace",
+    112,
+    114,
+    108,
+    110,
+    [
+     " swipe gestures — the phone layout is a first-class citizen, not an",
+     " afterthought."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    110,
+    111
+   ],
+   [
+    "replace",
+    115,
+    118,
+    111,
+    112,
+    [
+     " Rate dot plot"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    112,
+    113
+   ],
+   [
+    "replace",
+    119,
+    120,
+    113,
+    114,
+    [
+     "|Mobile (390px, PWA)|AI summary of today's intel|"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    114,
+    115
+   ],
+   [
+    "replace",
+    121,
+    122,
+    115,
+    116,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    116,
+    117
+   ],
+   [
+    "replace",
+    123,
+    126,
+    117,
+    118,
+    [
+     " Macro calendar"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    184,
+    118,
+    176
+   ],
+   [
+    "replace",
+    184,
+    188,
+    176,
+    180,
+    [
+     " decryption, hooks, iPad protocols and bot farms are off the table",
+     " (account bans and criminal liability). The product works because rumors",
+     " *must* leak to public platforms to move prices — that public secondary layer",
+     " is enough."
+    ]
+   ],
+   [
+    "equal",
+    188,
+    189,
+    180,
+    181
+   ],
+   [
+    "replace",
+    189,
+    191,
+    181,
+    183,
+    [
+     " no proxy rotation to evade bans, no account pools, no resale of content,",
+     " no training models on scraped text (especially Xueqiu, which forbids it)."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    192,
+    183,
+    184
+   ],
+   [
+    "replace",
+    192,
+    194,
+    184,
+    186,
+    [
+     " failure cooldowns, 1 req/s detail enrichment, and a source that keeps",
+     " failing simply goes quiet instead of hammering."
+    ]
+   ],
+   [
+    "equal",
+    194,
+    201,
+    186,
+    193
+   ],
+   [
+    "replace",
+    201,
+    218,
+    193,
+    194,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    221,
+    194,
+    197
+   ],
+   [
+    "replace",
+    221,
+    230,
+    197,
+    198,
+    [
+     "Code: MIT. News, quotes and any third-party data belong to their"
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "07c54ce4c6fa+2": {
+  "fn": "rocareer/rolling-memory",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**English · 简体中文 · Official Website · Documentation Hub · Token Math & Falsification · FAQ · Benchmarks · Declaration & Disclaimer**"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "**Rolling Memory** is a source-available, local-first memory tool for AI coding agents — Claude Code, Codex, OpenCode, Cursor, Windsurf, Cline, ZCode, and more — built on the **Rolling Autonoetic Memory Engine**. It indexes supported conversation sources and mounted files locally for connected agents to query through one MCP tool: `recall`. See the integration guide for collection limits and manual import. **No cloud required, no vectors, no background LLM calls**; free for every noncommercial use."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Rolling Memory Live Console — local vault telemetry, MCP recall ledger and memory asset growth"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "> **Get started**: Run `curl -fsSL https://github.com/rocareer/rolling-memory/raw/main/install.sh | bash` (or `bash install.sh` from a local checkout) to wire your coding assistants, then just chat normally. Whenever you need to trace back history, ask something like *\"Where did we fix that bug last time?\"* See the Quick Start Guide for details."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    19,
+    11,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "- **Safe and private (no third party in the middle)**: Everything compiles to a single zero-dependency Go binary (`CGO_ENABLED=0`) and lives in one SQLite file on your machine, with zero network requests in the memory layer — **other than you and the agent actively working for you, no third-party memory service, embedding provider, or external server ever sees your code, file paths, or conversations.** One precise boundary: if your coding agent uses a remote LLM API, the passages `recall` returns travel to that model provider as part of your prompt (see docs/privacy.md §1);"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    28,
+    20,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "- **Built-in USB portable mode**: Because both the binary and the SQLite vault are self-contained files, we also included a USB portable mode (see `docs/usb-portable.md`) so you can put the tool and your memory vault onto a thumb drive and carry them around. It is still experimental and not thoroughly tested yet, and it comes with a real prerequisite: **for project-specific memories to be useful on another machine, you have to be working on the same project there**. If you are curious and like tinkering, feel free to try it out and tell us what works and what does not."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    29,
+    30
+   ],
+   [
+    "replace",
+    30,
+    33,
+    30,
+    31,
+    [
+     "> **About this release**: This repository ships **pure local mode (`local_plain`)**: recall, storage, and consolidation all run in the local vault, with no memory-plane network requests. The only outbound calls are the evaluation LLM endpoint you configure, the optional upstream benchmark-corpus download, and the optional update check. A separate **cloud memory service** — ciphertext-only by design and aimed at advanced and enterprise users — is offered by application and is not part of this repository; see DECLARATION.md for the release and license boundary and SUPPORT.md for how to get help."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    45,
+    31,
+    43
+   ],
+   [
+    "replace",
+    45,
+    46,
+    43,
+    44,
+    [
+     "👉 **How Local Memory Saves (or Costs) Tokens and Time: The Turn-Elimination Math (with Our 7-Day Real Usage Report)**"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    49,
+    44,
+    47
+   ],
+   [
+    "replace",
+    49,
+    50,
+    47,
+    48,
+    [
+     "> Extrapolating that 24-hour audited pace across a full week (**`× 7 days`**) projects to **`812` avoided blind turns per week** — or **`162.4M` gross tokens saved per week (`158.2M` practical net; `154.0M` strictest net, assuming every zero-turn card cost a full standalone `200k` turn)** at a conservative **`200k` tokens per turn**. At the latest official API pricing for **GPT-6 Astra, Claude Fable 5.2, and Gemini 4 Argon**, even after factoring in an 85% prompt-cache read ratio, that translates to roughly **`$74.7–$885/week`** in real blended savings on a single heavy developer machine (**`$325–$3,248/week`** at standard uncached input rates). Full breakdown and pricing table in `docs/token-economics.md` §6."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    52,
+    48,
+    50
+   ],
+   [
+    "delete",
+    52,
+    54,
+    50,
+    50
+   ],
+   [
+    "equal",
+    54,
+    60,
+    50,
+    56
+   ],
+   [
+    "replace",
+    60,
+    61,
+    56,
+    57,
+    [
+     " Our ironclad rule is simple: **history happened as it happened.** We do not rewrite, compress, or \"polish\" records, because every rewrite is a new opportunity to bake hallucination and factual error into your long-term memory. A passage retrieved today is the same as the one retrieved next year, ensuring an unshakeable chain of evidence."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    57,
+    60
+   ],
+   [
+    "delete",
+    64,
+    66,
+    60,
+    60
+   ],
+   [
+    "equal",
+    66,
+    71,
+    60,
+    65
+   ],
+   [
+    "replace",
+    71,
+    72,
+    65,
+    66,
+    [
+     "|Step|Where it runs|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    66,
+    67
+   ],
+   [
+    "replace",
+    73,
+    76,
+    67,
+    70,
+    [
+     "|**1. Store records**|Local SQLite file (default `~/.local/share/rolling-memory/memory.db`, directory `0700`, file `0600`)|Stores conversation turns, chunk offsets for mounted local files, timestamps, source identifiers, and content hashes. When mounting local code or doc folders, it records only file paths and byte offsets and reads files in place on demand, without duplicating your repository into the database.|",
+     "|**2. Index & retrieve**|Local index derived from the vault (rebuildable at any time)|Runs a deterministic, vector-free information-theoretic kernel over the local plaintext vault: a pure-substring tokenizer feeds a cluster-based ranker that combines three mechanisms: **(a) adaptive self-information & burst-clone folding** (rarity weights adapt directly to your live vault's distribution without relying on frozen external vocabularies, while near-duplicate logs pasted repeatedly on the same day are folded logarithmically so they never dilute rare terms); **(b) deterministic cross-form alignment** (bridging natural-language dates like `\"May 12, 2025\"` with ISO `\"2025-05-12\"`, morphological variants, compound identifiers, and inline number-unit pairs like `\"500ms\"` or `\"16GiB\"`); and **(c) dimensionless multi-cue coherence resonance** (amplifying candidate passages where multiple rare cues from the query co-occur within a tight temporal window). No external model, frozen vocabulary, or network call is involved.|",
+     "|**3. Read & judge**|Your host agent or you|The agent calls the single MCP tool `recall`, receives the matching source passages and provenance pointers, and reads them in the context of your current question.|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    78,
+    70,
+    72
+   ],
+   [
+    "delete",
+    78,
+    80,
+    72,
+    72
+   ],
+   [
+    "equal",
+    80,
+    87,
+    72,
+    79
+   ],
+   [
+    "replace",
+    87,
+    88,
+    79,
+    80,
+    [
+     "|Metric|ATM-Bench Main (1,013 questions)|ATM-Bench Hard (31 questions)|LoCoMo Full Set (1,540 questions)|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    80,
+    81
+   ],
+   [
+    "replace",
+    89,
+    96,
+    81,
+    88,
+    [
+     "|**Official `Recall@10` (per-question gold coverage mean)**|**82.85%**|**52.43%**|—|",
+     "|**Official `Recall@25` / `Recall@50`**|86.41% / 90.11%|60.14% / 70.62%|—|",
+     "|**Auxiliary `Any-Hit@10` (at least one gold item in Top-10)**|85.39% (865/1,013)|80.65% (25/31)|—|",
+     "|**Auxiliary `All-Hit@10` (every gold item in Top-10)**|80.16% (812/1,013)|29.03% (9/31)|—|",
+     "|**Answer Token Recall / Answer-in-Context (2026-11-08 reference run)**|—|—|72.93% / 53.96% (831/1,540)|",
+     "|**End-to-end judge accuracy (deepseek-v4.1-flash answerer + judge, 2026-11-16)**|—|—|**85.26%** (1313/1540 · cat1 70.57 / cat2 87.23 / cat3 71.88 / cat4 90.96)|",
+     "|**Per-query retrieval latency (recorded run; mean / P95)**|68.6 ms / 108.3 ms|107.9 ms / 651 ms|371 ms mean (P95 not recorded)|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    106,
+    88,
+    98
+   ],
+   [
+    "delete",
+    106,
+    108,
+    98,
+    98
+   ],
+   [
+    "equal",
+    108,
+    114,
+    98,
+    104
+   ],
+   [
+    "replace",
+    114,
+    117,
+    104,
+    105,
+    [
+     "5. **Provided \"AS IS\"**: This software is provided without warranty of any kind. See DECLARATION.md for the full disclaimer."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    131,
+    105,
+    119
+   ],
+   [
+    "replace",
+    131,
+    136,
+    119,
+    120,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    164,
+    120,
+    148
+   ],
+   [
+    "replace",
+    164,
+    170,
+    148,
+    149,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    184,
+    149,
+    163
+   ],
+   [
+    "replace",
+    184,
+    187,
+    163,
+    164,
+    [
+     "> **Early-stage default**: new installs follow the `dev` channel (`main`). Switch to `stable` or `beta` anytime with `rolling-memory config set update.channel stable` or the console's update dialog. See the full Installation & Upgrade Guide for channels, breaking changes, backups and rollback."
+    ]
+   ],
+   [
+    "equal",
+    187,
+    196,
+    164,
+    173
+   ],
+   [
+    "replace",
+    196,
+    204,
+    173,
+    174,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    206,
+    174,
+    176
+   ],
+   [
+    "replace",
+    206,
+    209,
+    176,
+    177,
+    [
+     "For tool parameters and response formats, see MCP Contract and the Multi-Harness Guide."
+    ]
+   ],
+   [
+    "equal",
+    209,
+    212,
+    177,
+    180
+   ],
+   [
+    "replace",
+    212,
+    213,
+    180,
+    181,
+    [
+     "The `rmem eval` runner verifies your corpus against the pinned `SHA-256` digests published in docs/benchmarks.md. **The benchmark corpora are not redistributed with this repository** — obtain them from the upstream projects, point the runner at your copy with `--eval-data <dir>`, then run retrieval evaluations completely offline and recompute metrics directly from the generated JSONL files. Both benchmarks support one-command acquisition (download from the pinned upstream revision, rebuild locally, verify the digests):"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    218,
+    181,
+    186
+   ],
+   [
+    "replace",
+    218,
+    227,
+    186,
+    187,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    229,
+    187,
+    189
+   ],
+   [
+    "replace",
+    229,
+    232,
+    189,
+    190,
+    [
+     "Each run uses an isolated evaluation scope so it never touches your personal memory database. Full instructions and verification steps are in docs/benchmarks.md."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    235,
+    190,
+    193
+   ],
+   [
+    "replace",
+    235,
+    236,
+    193,
+    194,
+    [
+     "|Document|Contents|Simplified Chinese|"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    194,
+    195
+   ],
+   [
+    "replace",
+    237,
+    249,
+    195,
+    205,
+    [
+     "|**Token Math & Falsification (`docs/token-economics.md`)**|How eliminating a blind search turn saves (or costs) tokens in long-context sessions, with break-even math and counterexamples|docs/zh-CN/token-economics.md|",
+     "|**`recall` & `Background` vs. `grep` (`docs/background-vs-grep.md`)**|Why use `recall` and `Background` mounts when your harness already has `grep` — boundaries, 4 things `grep` cannot do, and 3 reproducible proofs|docs/zh-CN/background-vs-grep.md|",
+     "|**FAQ (`docs/faq.md`)**|How this relates to `grep` / `ripgrep`, vector RAG, LLM extraction services, and static `AGENTS.md` files|docs/zh-CN/faq.md|",
+     "|**Benchmarks (`docs/benchmarks.md`)**|LoCoMo and Cambridge ATM-Bench reproduction commands, protocol pins, and raw JSONL recomputation|docs/zh-CN/benchmarks.md|",
+     "|**MCP Contract (`docs/mcp.md`)**|`recall` input parameters, output format, and background capture|docs/zh-CN/mcp.md|",
+     "|**Configuration Reference (`docs/configuration.md`)**|Config file location and precedence, common settings (delivery window, engine memory cap), environment variables, and the equivalent System → Memory Service console controls|docs/zh-CN/configuration.md|",
+     "|**Multi-Harness Guide (`docs/harness.md`)**|One-command setup across supported coding agents and `install --check`|docs/zh-CN/harness.md|",
+     "|**USB Portable Mode (`docs/usb-portable.md`)**|Running and safely ejecting a portable memory vault on removable drives|docs/zh-CN/usb-portable.md|",
+     "|**Web Console (`docs/plugin-console.md`)**|Built-in local web console for browsing memories, status monitoring, and running evaluations, plus a **preview** 3D Memory Graph (built-in LoCoMo sample)|docs/zh-CN/plugin-console.md|",
+     "|**Privacy & Local Data (`docs/privacy.md`)**|Local storage, file permissions, historical audience limitations, backup, and deletion|docs/zh-CN/privacy.md|"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    255,
+    205,
+    211
+   ],
+   [
+    "replace",
+    255,
+    256,
+    211,
+    212,
+    [
+     " Host auto-memory can depend on an agent writing a note, so details left out of that note may not be retained. Rolling Memory can index supported conversation sources locally for `recall` to retrieve; automatic collection does not cover all history, and other sources may require manual import."
+    ]
+   ],
+   [
+    "equal",
+    256,
+    257,
+    212,
+    213
+   ],
+   [
+    "replace",
+    257,
+    258,
+    213,
+    214,
+    [
+     " `AGENTS.md` and `MEMORY.md` can hold concise project rules. Hosts differ in when and how they load these files, and large files may consume more context. Imported history can instead be queried on demand with `recall`."
+    ]
+   ],
+   [
+    "equal",
+    258,
+    259,
+    214,
+    215
+   ],
+   [
+    "replace",
+    259,
+    260,
+    215,
+    216,
+    [
+     " Connected tools can query the same local SQLite vault, including records imported from supported sources. Connecting a tool does not itself import that tool's conversation history."
+    ]
+   ],
+   [
+    "equal",
+    260,
+    261,
+    216,
+    217
+   ],
+   [
+    "replace",
+    261,
+    264,
+    217,
+    218,
+    [
+     " Model-written summaries can contain mistakes. For imported records, `recall` can return source passages and provenance for you and your agent to check."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    267,
+    218,
+    221
+   ],
+   [
+    "replace",
+    267,
+    270,
+    221,
+    224,
+    [
+     "- **Contributing**: Issues, suggestions, and pull requests are very welcome — see CONTRIBUTING.md and SUPPORT.md. This project uses a \"human-defined invariants & acceptance criteria + AI-assisted implementation\" workflow; the full disclaimer is in DECLARATION.md.",
+     "- **License**: Released under the **PolyForm Noncommercial License 1.0.0** (SPDX: `PolyForm-Noncommercial-1.0.0`). Full source code — including the client SDK under `sdk/` (license copy) — is free to use, modify, and share **for any noncommercial purpose**; **commercial use and commercial distribution (including SaaS hosting and commercial embedding) require a separate written commercial license**. Third-party attributions are in NOTICE.",
+     "- **Acknowledgments**: The web administration console is a derivative of **AI GO ADMIN** (Apache-2.0; Go + Gin + Vue 3 admin framework — mirrors: Gitee · AtomGit), whose UI lineage traces back to **BuildAdmin** (Apache-2.0, © 妙码生花). The plugin catalog page is ported from BuildAdmin `v2.3.9`. Per-file attribution and modification notes are registered in NOTICE §2."
+    ]
+   ],
+   [
+    "equal",
+    270,
+    272,
+    224,
+    226
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

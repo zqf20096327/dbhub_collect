@@ -23493,5 +23493,450 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "88f335712e12+2": {
+  "fn": "uts58/HR-Management-System",
+  "clean_ver": "2",
+  "raw_lines": 19,
+  "ops": [
+   [
+    "equal",
+    0,
+    19,
+    0,
+    19
+   ],
+   [
+    "delete",
+    19,
+    21,
+    19,
+    19
+   ],
+   [
+    "equal",
+    21,
+    24,
+    19,
+    22
+   ],
+   [
+    "replace",
+    24,
+    25,
+    22,
+    23,
+    [
+     "- Docker and Docker Compose"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    38,
+    23,
+    36
+   ],
+   [
+    "replace",
+    38,
+    39,
+    36,
+    37,
+    [
+     " Edit `.env` and change `DB_PASS` and `SESSION_SECRET` to secure values."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    51,
+    37,
+    49
+   ],
+   [
+    "replace",
+    51,
+    55,
+    49,
+    53,
+    [
+     " Until the session table exists the app exits at startup with a message saying so, and",
+     " Docker restarts it (`restart: unless-stopped`). If that loop prevents `exec`, create the",
+     " table from the host instead:",
+     " `docker compose exec -T db psql -U hruser -d hrdb -v ON_ERROR_STOP=1 < prisma/legacy-session-table.sql`"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    53,
+    54
+   ],
+   [
+    "replace",
+    56,
+    61,
+    54,
+    59,
+    [
+     " Default credentials after seeding:",
+     "|Role|Username|Password|",
+     "|------|----------|----------|",
+     "|HR Admin|`admin`|`admin123`|",
+     "|Employee|`john`|`emp123`|"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    59,
+    60
+   ],
+   [
+    "replace",
+    62,
+    63,
+    60,
+    61,
+    [
+     "5. Open http://localhost:3000 in your browser."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    66,
+    61,
+    64
+   ],
+   [
+    "replace",
+    66,
+    67,
+    64,
+    65,
+    [
+     "|Variable|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    65,
+    66
+   ],
+   [
+    "replace",
+    68,
+    81,
+    66,
+    79,
+    [
+     "|`DB_NAME`|`hrdb`|Database name|",
+     "|`DB_USER`|`hruser`|Database user|",
+     "|`DB_PASS`|—|Database password **(required)**|",
+     "|`PORT`|`3000`|Application port|",
+     "|`SESSION_SECRET`|—|Session signing secret **(required; the app refuses to start in production without it)**|",
+     "|`COOKIE_SECURE`|`auto`|Session cookie `Secure` flag: `auto` (Secure when the request is HTTPS), `true`, `false`|",
+     "|`TRUST_PROXY`|unset|Number of reverse-proxy hops in front of the app. **In production behind a reverse proxy / load balancer, set the exact hop count (usually `1`). Never set it to `true`** (that trusts any client-supplied `X-Forwarded-For`, so clients can fake their IP and bypass the login rate limit; the app refuses to start with `true`). Leave unset only when clients connect directly. The app logs a warning in production when it is unset|",
+     "|`SESSION_SCHEMA`|`legacy_session`|Postgres schema for the session table|",
+     "|`SESSION_TABLE_AUTO_CREATE`|`false`|`true` lets the app create the session schema/table at startup (needs `CREATE` on the database). Otherwise create it before deploying (see below)|",
+     "|`SESSION_DATABASE_URL`|`DATABASE_URL`|Connection string for the session store only (see \"Database TLS\")|",
+     "|`SESSION_MAX_AGE_HOURS`|`8`|Session idle lifetime (rolling: renewed on each request)|",
+     "|`LOGIN_RATE_LIMIT_IP` / `LOGIN_RATE_LIMIT_USER`|`20` / `10`|Login attempts per 15 minutes per IP / per username from the same IP|",
+     "|`BCRYPT_ROUNDS`|`12`|bcrypt cost factor|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    87,
+    79,
+    85
+   ],
+   [
+    "replace",
+    87,
+    89,
+    85,
+    87,
+    [
+     " Existing plaintext passwords are upgraded automatically the next time each user logs in.",
+     " To hash all remaining plaintext passwords at once (optional, safe to re-run):"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    94,
+    87,
+    92
+   ],
+   [
+    "replace",
+    94,
+    95,
+    92,
+    93,
+    [
+     " same name (case-insensitive) against the password; an 11th same-named account could not log in."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    93,
+    94
+   ],
+   [
+    "replace",
+    96,
+    97,
+    94,
+    95,
+    [
+     " page. Only its hash is stored. Editing an employee never changes their login name."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    102,
+    95,
+    100
+   ],
+   [
+    "replace",
+    102,
+    104,
+    100,
+    102,
+    [
+     " `legacy_session.session`, outside the `public` schema so `prisma db push` never touches it.",
+     " Run once, as a role that may create schemas (idempotent):"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    108,
+    102,
+    106
+   ],
+   [
+    "replace",
+    108,
+    113,
+    106,
+    111,
+    [
+     " If the app connects as a different role, grant it `USAGE` on the schema and",
+     " `SELECT, INSERT, UPDATE, DELETE` on the table (see the end of the .sql file). The app",
+     " itself needs no `CREATE` privilege. At startup it only checks the table exists and exits",
+     " with a clear message if it does not (unless `SESSION_TABLE_AUTO_CREATE=true`). If the",
+     " database is unreachable at startup it logs a warning and starts anyway."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    116,
+    111,
+    114
+   ],
+   [
+    "replace",
+    116,
+    120,
+    114,
+    118,
+    [
+     " plaintext password to a bcrypt hash, and the old code can only compare plaintext. Once any",
+     " password is hashed, redeploying the old code locks those users out. Roll back only with a",
+     " database restore taken before the deploy (losing data written since), or by resetting the",
+     " affected passwords. Fix forward instead."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    118,
+    119
+   ],
+   [
+    "replace",
+    121,
+    122,
+    119,
+    120,
+    [
+     " every remaining plaintext password, after which a rollback would lock out everyone."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    128,
+    120,
+    126
+   ],
+   [
+    "replace",
+    128,
+    129,
+    126,
+    127,
+    [
+     "|`sslmode` in URL|Prisma 6|node-postgres 8 (`pg-connection-string` 2.x)|"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    127,
+    128
+   ],
+   [
+    "replace",
+    130,
+    134,
+    128,
+    132,
+    [
+     "|(none)|`prefer` (default): TLS if available|no TLS|",
+     "|`prefer`|TLS if available, else plaintext|TLS required **and** certificate + hostname verified (treated as `verify-full`)|",
+     "|`require`|TLS required; certificate not verified (`sslaccept` defaults to `accept_invalid_certs`)|TLS required **and** certificate + hostname verified (treated as `verify-full`)|",
+     "|`require&uselibpqcompat=true`|(Prisma does not document this parameter)|TLS required, certificate not verified (libpq semantics)|"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    139,
+    132,
+    137
+   ],
+   [
+    "replace",
+    139,
+    145,
+    137,
+    143,
+    [
+     " private CA), Prisma connects but the session store fails. Fix properly by making `pg` trust",
+     " the CA: `NODE_EXTRA_CA_CERTS=/abs/path/ca.pem`, or `sslrootcert=/abs/path/ca.pem` in the URL",
+     " (use an absolute path: Prisma resolves certificate paths relative to `./prisma`, `pg` relative",
+     " to the working directory). Prisma only verifies the certificate if you also add",
+     " `sslaccept=strict`. As a stopgap, set `SESSION_DATABASE_URL` to the same URL with",
+     " `&uselibpqcompat=true`, which matches Prisma's unverified behaviour."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    143,
+    144
+   ],
+   [
+    "replace",
+    146,
+    147,
+    144,
+    145,
+    [
+     " `sslmode` in production URLs."
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    145,
+    146
+   ],
+   [
+    "replace",
+    148,
+    151,
+    146,
+    147,
+    [
+     " (tested)."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    188,
+    147,
+    184
+   ],
+   [
+    "replace",
+    188,
+    191,
+    184,
+    185,
+    [
+     "6. Open http://localhost:3000 in your browser."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    194,
+    185,
+    188
+   ],
+   [
+    "replace",
+    194,
+    195,
+    188,
+    189,
+    [
+     "|Script|Description|"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    196,
+    189,
+    190
+   ],
+   [
+    "replace",
+    196,
+    205,
+    190,
+    197,
+    [
+     "|`npm start`|Start the application|",
+     "|`npm run db:push`|Push the Prisma schema to the database (no migration history)|",
+     "|`npm run db:seed`|Seed departments, positions, admin user, and sample employee|",
+     "|`npm run db:session-table`|Create the Postgres session schema/table (pre-deploy, idempotent)|",
+     "|`npm run db:hash-passwords`|Hash any remaining plaintext passwords (one-off, optional; only after the release is stable)|",
+     "|`npm run migrate`|Run Prisma migrations (development)|",
+     "|`npm run generate`|Regenerate the Prisma client after schema changes|"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    209,
+    197,
+    201
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

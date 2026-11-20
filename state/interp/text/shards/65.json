@@ -3029,5 +3029,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "108313dec853": {
+  "identity": {
+   "one_liner": "单二进制的日志分析数据库，使用 OpenSearch PPL 查询",
+   "review": "LynxDB 是一个以单个二进制文件分发的日志分析数据库，查询语言采用 OpenSearch PPL。它支持两种运行模式：本地直接查询文件或 stdin 管道输入，或启动常驻服务将日志存储到磁盘上的按时间分区的列式索引。项目处于活跃开发阶段，README 明确说明 API、存储格式和查询行为在版本间可能变化。构建需 Go 1.26 及以上。",
+   "highlights": [
+    "支持本地查询文件/stdin 与服务器存储两种模式，均使用 OpenSearch PPL",
+    "服务器默认监听 localhost:3100，以时间分区列式索引存储事件，token 过滤可跳过不匹配的数据块",
+    "摄取端点接受 NDJSON、Elasticsearch _bulk、OpenTelemetry logs、Splunk HEC 和 syslog"
+   ],
+   "use_cases": [
+    "在本地对 JSON 日志或 combined access log、syslog 等文本格式做聚合统计",
+    "收集来自多种 shipper 的日志并按索引持久化查询",
+    "部署单节点日志存储服务，通过 CLI 或 REST API 自动化查询与摄取"
+   ]
+  },
+  "sha": "108313dec853",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "04e7f84d25b4": {
+  "identity": {
+   "one_liner": "离线本地来电身份识别 Android 应用，号码只存于自身数据库",
+   "review": "Alternate 是一款本地来电识别应用，用于在不写入系统通讯录的前提下识别来电。用户将号码保存在应用自身的 Room 数据库中，来电时应用在自有库中查找并弹出显示姓名等信息的悬浮卡片。数据不进入系统联系人、消息应用或云端，且应用不申请 INTERNET 权限。适用对象为需要临时识别外卖、维修等号码的用户。构建需 JDK 17+ 与 Android SDK，支持 MIT 协议开源。",
+   "highlights": [
+    "来电时在自有数据库中查找号码，弹出可拖动、可最小化的 Material 3 显示卡片，支持来去电场景",
+    "联系人仅存于应用内数据库，不使用 INTERNET 权限，不写入系统通讯录",
+    "支持一人多号带标签、分组与收藏、vCard 导入导出、PIN 与指纹应用锁"
+   ],
+   "use_cases": [
+    "临时保存外卖员、维修服务等一次性号码并在来电时识别",
+    "将号码与系统通讯录隔离，避免其他应用读取或同步",
+    "在支持系统来电筛查角色的设备上接入 Google 电话的通话界面显示"
+   ]
+  },
+  "sha": "04e7f84d25b4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "94c1676e310b": {
+  "identity": {
+   "one_liner": "单二进制 Go 工具，在本地以 Docker 容器提供托管式 PostgreSQL 部署与运维",
+   "review": "ODDK 是一个 Go 编写的单二进制控制面，由守护进程加 CLI 管理 Linux 主机上以 Docker 容器运行的 PostgreSQL 实例，提供创建、参数组、定时快照并上传 S3、健康告警、还原及 dump/restore 大版本升级。面向在自有主机上自托管数据库的单操作者。限制：不含高可用/复制，API 仅绑定回环地址，需 Linux、Docker 与 systemd。",
+   "highlights": [
+    "以单一 Go 二进制实现实例创建、密码/用户管理、参数组和健康监控（Email/Slack/Telegram/Webhook 告警）",
+    "快照包含实例数据与自身配置，可定时执行并经加密后离站存储到 S3，支持单实例或整主机还原",
+    "通过 dump/restore 执行大版本升级，经测试支持 PostgreSQL 15–19 及 pgvector/postgis 等兼容镜像"
+   ],
+   "use_cases": [
+    "在自有 Linux 服务器上运行 PostgreSQL，获得连接字符串、定时备份与故障通知的托管式工作流",
+    "需要将加密快照离站保存到 S3，并能在主机损坏后从单个归档加主密钥重建部署的场景",
+    "开发/自托管环境中需以命令快速创建数据库及其属主用户，或在单机上进行大版本迁移"
+   ]
+  },
+  "sha": "94c1676e310b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7a2b359784eb": {
+  "identity": {
+   "one_liner": "本地优先的 Java/JavaFX 知识管理桌面应用，支持 Markdown 笔记与双链图谱。",
+   "review": "Jylos 是基于 Java 21 与 JavaFX 23 的本地优先桌面知识管理应用，提供 Markdown 编辑、wiki 链接、反向链接、知识图谱、Kanban、Canvas 画布、逐笔记 AES-256 加密及插件/主题系统。存储可选 SQLite 或纯 Markdown vault，可与 Obsidian 共用同一 vault。提供 Windows/Linux/macOS 预编译包，也可经 JBang 一条命令运行（需 Java 21）。",
+   "highlights": [
+    "支持 Markdown vault 或 SQLite 两种本地存储，无云后端、无账号、无遥测",
+    "内置 CodeMirror 6 编辑器、知识图谱、Kanban 看板、Canvas 画布与 Obsidian 兼容的 wiki 链接/反向链接",
+    "提供 AES-256-GCM 笔记体加密、外部插件（JAR）与主题加载"
+   ],
+   "use_cases": [
+    "在本地管理 Markdown 笔记并以图谱和双链组织知识",
+    "与 Obsidian 共用同一 vault 进行笔记编辑",
+    "以 Kanban 和 Canvas 管理任务与视觉化整理思路"
+   ]
+  },
+  "sha": "7a2b359784eb",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f0d52e4002a": {
+  "identity": {
+   "one_liner": "基于 Rust 和 Tauri 的开源桌面数据库客户端，支持多引擎直连与 AI SQL 辅助",
+   "review": "Dora 是一款 GPLv3 协议的开源桌面数据库工作台，用于连接 PostgreSQL、MySQL、MariaDB、CockroachDB、SQLite、libSQL/Turso、Cloudflare D1、DuckDB、Redis/Valkey 及 CSV/JSON/Parquet 文件。提供表格浏览与内联编辑、多标签 SQL 控制台、Drizzle/Prisma 查询支持与 schema 迁移对比生成。可通过 OAuth/API key 登录 Supabase、Neon 等托管平台自动填入连接配置；数据查询在本地直连执行，凭据经 AES-256-GCM 加密存于系统密钥链。",
+   "highlights": [
+    "支持十类数据源，包括 SSH 隧道连接、LISTEN/NOTIFY 实时更新（PostgreSQL）、TLS 与 cluster mode（Redis/Valkey）等按方言区分的能力",
+    "可通过 OAuth/API key 登录 Supabase、Neon、Turso、PlanetScale 等平台并列出数据库，或从连接字符串自动识别引擎、方言与 SSL 设置",
+    "支持 Drizzle/Prisma 原生查询编写、schema 与在线数据库的差异对比及迁移生成，破坏性语句需显式开关确认"
+   ],
+   "use_cases": [
+    "需要用桌面客户端浏览、编辑、导出多种关系型或键值数据库数据的开发者",
+    "需要在本地以 SQL 查询 CSV、JSON、Parquet 等文件并跨文件连接的分析场景",
+    "使用 Drizzle 或 Prisma 且需要对比 schema 与在线数据库、生成迁移语句的工作流"
+   ]
+  },
+  "sha": "8f0d52e4002a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5ff810df0817": {
+  "identity": {
+   "one_liner": "自托管的 PHP 单作者微博客平台，使用 SQLite 存储并支持 Micropub",
+   "review": "Lamb 是一个自托管 PHP 微博客程序，面向单作者博客，数据存于单个 SQLite 文件便于备份和迁移。内置全文搜索、草稿与定时发布、Markdown 导出以及来自 WordPress、Known 的导入。通过 Micropub 端点可从 iA Writer 等 IndieWeb 应用发文。安装文档发布于 release 分支。",
+   "highlights": [
+    "支持拖拽或粘贴图片发布，无需上传步骤和素材库管理",
+    "内置全文搜索、草稿、定时发布和一键 Markdown 导出",
+    "提供 Micropub 端点，兼容 IndieWeb 应用发布"
+   ],
+   "use_cases": [
+    "个人自托管微博客，单文件 SQLite 数据便于备份迁移",
+    "通过 Micropub 从 iA Writer、Ulysses 等应用发文",
+    "从 WordPress 或 Known 迁移内容到 Markdown 流水线"
+   ]
+  },
+  "sha": "5ff810df0817",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

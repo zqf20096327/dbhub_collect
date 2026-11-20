@@ -2957,5 +2957,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0ca28917ec0a": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的学习模式插件，将工作内容转为本地持续学习循环",
+   "review": "dsh-explain 是 DeepSeek Harness（DSH）的学习模式插件，通过独立的辅助模型调用和本地 SQLite 数据库，把已完成的回答转化为结构化解释，并按间隔重复算法安排复习。数据存储于 $DSH_HOME 本地目录，源材料压缩为有界摘要，主代理不受修改。适用于希望在 DSH 工作流中积累和复习概念的 DSH 用户；注意学习数据会发送到所配置的辅助模型提供方。",
+   "highlights": [
+    "支持捕获、复习、修正三个环节：可将已完成回答或选中文本生成可编辑的 /explain 草稿，按回忆、应用、辨析递进复习，并可检查或修正模型推断出的偏好",
+    "学习线程以 SQLite 存储，偏好优先级固定为显式偏好 → 用户修正 → 模型推断；导出备份排除私有源摘要并过滤常见凭据/路径格式",
+    "使用 DSH 第一方扩展点实现，无需修改 DSH 或其他插件；README 列出对 33 个 DSH 源版本各运行 108 项单元与集成测试"
+   ],
+   "use_cases": [
+    "在 DSH 会话中随工作积累概念解释，并通过 /review 按间隔重复安排复习",
+    "检查并修正模型对解释偏好和主题熟悉度的推断，或设置显式偏好",
+    "导出带版本的学习数据备份，或通过键入 CLEAR 确认原子性清除已学内容"
+   ]
+  },
+  "sha": "0ca28917ec0a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9fa4c7fa080d": {
+  "identity": {
+   "one_liner": "Go 单二进制工作区：文档、数据库与实时协作，数据存于单个 SQLite 文件",
+   "review": "form.md 是一个自托管工作区，提供文档编辑、数据库视图（表格、看板、日历等）与实时协作，页面以 CRDT 实现，人和 agent 的编辑可合并。数据保存在单个 SQLite 文件中，无需账号与外部服务。通过 MCP 服务器、REST API 和命令行操作同一工作区，供需要本地部署并让 AI agent 参与文档协作的用户使用。",
+   "highlights": [
+    "提供文档块编辑器与数据库视图（表格、看板、画廊、日历、时间线、表单、图表、热力图等），每行是一个页面",
+    "内置 MCP 服务器（stdio 与 HTTP）、REST API 和命令行，凭证可设为读写或只读并限定工作区；扩展在沙盒 iframe 中运行",
+    "静态 Go 二进制内嵌 Web 客户端，支持 XTS-AES-256 静态加密与 AES-256-GCM 上传加密，可导入导出 Markdown、HTML、CSV 等格式"
+   ],
+   "use_cases": [
+    "自托管团队或个人文档与结构化数据库协作，含评论、历史与六级访问控制",
+    "接入 Claude Code、Cursor 等 MCP 客户端，让 AI agent 以受控凭证读写工作区内容",
+    "通过 ./form-md mcp 或离线浏览器 demo（demo/、demos/views/、demos/publish/）本地运行和试用编辑器"
+   ]
+  },
+  "sha": "9fa4c7fa080d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

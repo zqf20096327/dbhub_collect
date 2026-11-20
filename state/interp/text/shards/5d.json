@@ -3019,5 +3019,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "12c73d6fcaae": {
+  "identity": {
+   "one_liner": "基于模型文件的开源动态核心，自动生成数据库、权限 API、审批流程与界面。",
+   "review": "DX-OS 是面向有审批流程场景的开源动态核心：部署者在单个模型文件中声明实体、角色、权限与流程，系统据此生成数据库、Keycloak 角色、带权限的 API、审批流程和 Web 界面，改业务即改文件不改代码。技术栈组合 APISIX、Keycloak、Spring Boot、PostgreSQL、SeaweedFS 等，通过安装脚本与 dxos start 两步部署，要求 Linux 或 WSL2 加 Docker，空闲内存约 1.8 GiB。",
+   "highlights": [
+    "从模型文件生成数据表、角色、API、审批流程与界面，支持预览变更影响并回退版本",
+    "提供行级权限控制、带校验链的历史审计，以及按日归档后可用 DuckDB 直接查询的存储",
+    "内置 10 个模板（如学生一站式服务、技术支持、设备借用等）并支持 Webhook 与 Slack/Mattermost 通知"
+   ],
+   "use_cases": [
+    "学校、院系或小型企业搭建请假、报修、借用等单据审批系统",
+    "多个业务流程复用同一登录、权限与留痕基础设施，避免重复开发",
+    "需数据完全自托管的环境，通过安装脚本在本机部署"
+   ]
+  },
+  "sha": "12c73d6fcaae",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3bec7c43839e": {
+  "identity": {
+   "one_liner": "TypeScript webhook 投递库，基于 PostgreSQL 与事务性 outbox 模式",
+   "review": "Good Webhooks 是一个 TypeScript 库：应用调用 publish() 将类型化事件与逐端点投递记录写入 PostgreSQL，独立 worker 负责签名、发送 Standard Webhooks 请求、重试并记录每次尝试；接收方调用 parseWebhook() 完成验证。运行需 Node.js 24+ 与 PostgreSQL 16–19，端点管理可独立使用或经 Better Auth 插件接入，适合需要自建 webhook 投递链路的 TypeScript 应用团队。",
+   "highlights": [
+    "提供 publish() 发布类型化事件，事件与投递记录存储于 PostgreSQL，worker 执行签名发送、失败重试并记录每次尝试",
+    "支持 Standard Webhooks 规范签名，接收方通过 parseWebhook() 一函数验证并获取类型化事件",
+    "端点管理支持独立运行、Better Auth 插件及自定义 sender 三种方式；parseWebhook() 兼容 Bun、Deno 和 Cloudflare Workers"
+   ],
+   "use_cases": [
+    "在 Node.js 应用中为业务事件（如订单、账单）建立带签名、重试与投递记录的 webhook 发送链路",
+    "使用 Better Auth 的项目让登录用户自行管理 webhook 端点并接收其范围内的事件",
+    "仅需在接收端验证并解析 webhook 的场景（支持多种运行时）"
+   ]
+  },
+  "sha": "3bec7c43839e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

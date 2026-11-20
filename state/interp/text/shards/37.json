@@ -3143,5 +3143,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1bbfc55e1f33": {
+  "identity": {
+   "one_liner": "在 PostgreSQL 中实现 Oracle 兼容函数与包的 C 扩展",
+   "review": "orafce 是一个 PostgreSQL 扩展，用 C 语言实现 Oracle 数据库中缺失或行为不同的部分函数和包，包括日期函数、oracle.date 数据类型、dual 表等，内置日期函数曾对照 Oracle 10 验证，日期范围为 1960 至 2070 年。它面向需要将 Oracle 应用迁移或移植到 PostgreSQL 的开发者。使用 oracle 模式下的函数需设置 search_path 包含 oracle 模式；1582-10-05 之前的 'J' 格式日期及 1100-03-01 之前的其他格式日期因 Oracle 本身的缺陷无法验证，默认会报错，可通过 GUC 关闭。",
+   "highlights": [
+    "提供 add_months、last_day、next_day、months_between、trunc、round、to_date、to_char 等兼容 Oracle 的日期函数",
+    "实现 oracle.date 数据类型及配套函数与加减日期运算符，支持 to_date 中 Oracle 特有的 RR/RRRR 格式元素",
+    "包含 oracle 模式下的 dual 表，可通过 orafce.nls_date_format 等 GUC 配置行为"
+   ],
+   "use_cases": [
+    "将基于 Oracle 的应用程序迁移或移植到 PostgreSQL",
+    "在 AWS Aurora（PostgreSQL 兼容版）或 Azure Database for PostgreSQL 上运行依赖 Oracle 函数的应用",
+    "需要 Oracle 风格日期处理（如 sysdate、months_between、dual 表查询）的 PostgreSQL 环境"
+   ]
+  },
+  "sha": "1bbfc55e1f33",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9c0809de4062": {
+  "identity": {
+   "one_liner": "自托管单作者博客引擎，数据存于两个 SQLite 文件，内置 MCP 服务器供 AI 代理运行。",
+   "review": "Quire Ink 是面向单人长期写作的自托管博客系统。文章以 Markdown 写入并存储于本地两个 SQLite 文件，由单进程服务，可部署在 VPS（Docker 一条命令）、Cloudflare Workers 或 NAS/Kubernetes 等环境。内置 MCP 服务器，AI 代理通过令牌连接后可起草、定时和发布文章、读取流量、清理垃圾评论；另支持从 WordPress、Ghost、Substack、Medium 导入。项目明确说明不面向需要角色与审批流程的团队。",
+   "highlights": [
+    "内置 MCP 服务器，AI 代理可执行草拟、定时发布、读取流量、清理垃圾评论、安装主题等操作，走与管理后台相同的校验",
+    "提供四种阅读主题、六组明暗调色板、四种阅读字体，以及双栏书页模式；主题为仅含 CSS、字体和图片的 zip 包",
+    "单进程加两个 SQLite 文件运行，README 称可在 256 MB 内存运行；发布推送会在每次代码提交时运行近 6000 个测试和 300 多个浏览器流程"
+   ],
+   "use_cases": [
+    "个人写作者在自租 VPS、Cloudflare 或 NAS 上长期运行自己的博客与订阅通讯",
+    "希望让 AI 代理（通过 MCP）代为草稿、发布文章、汇报流量和管理站点的用户",
+    "从 WordPress、Ghost、Substack 或 Medium 迁移文章并保留原有链接的场景"
+   ]
+  },
+  "sha": "9c0809de4062",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "10d17b1b11f4": {
+  "identity": {
+   "one_liner": "法语漫画标签与库管理工具，基于SQLite库从Bédéthèque抓取元数据",
+   "review": "BDneX 是一个面向法语漫画（BD）的标签与库管理 CLI 工具，用 Python 编写，将 .cbz/.cbr/.pdf 文件与 Bédéthèque 相册列表模糊匹配，元数据存入 SQLite 库，并可写入 ComicInfo.xml、按模板重命名整理文件。项目处于 1.0 之前的活跃开发期，命令与数据库结构可能随时破坏性变更；需要 Python 3.10–3.13，读取 CBR 需系统安装 unrar 等工具。",
+   "highlights": [
+    "提供 import、ls、write、move、mirror、serve 等子命令，支持模糊匹配、去重处理、SIFT 封面对比及后台多核匹配",
+    "支持从存储的相册页面离线重建库（import --reparse），页面可通过 FlareSolverr 或自定义 fetcher 函数获取",
+    "支持 ComicInfo.xml 写入、CBR/PDF 无损转 CBZ（替换前校验）及基于 YAML 配置的路径模板重命名"
+   ],
+   "use_cases": [
+    "整理本地法语漫画收藏：匹配元数据、写入 ComicInfo.xml、按模板重命名并归类到库目录树",
+    "通过 bdnex serve 网页浏览封面墙、查看系列缺卷、批量复核存疑匹配",
+    "在无终端环境下通过网页执行与命令行相同的任务，或用 bdnex ls 按系列/作者/年份等查询库"
+   ]
+  },
+  "sha": "10d17b1b11f4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "362de5a22265": {
+  "identity": {
+   "one_liner": "以 SKILL.md 格式组织的便携式 AI 技能库，供多种本地优先代理运行时读取",
+   "review": "该仓库是 ellmos 生态的可复用技能目录，包含流程技能、开发工作流、研究助手、基础设施手册和工具类技能，采用 Anthropic 兼容的 SKILL.md 格式，元数据写入 YAML frontmatter，无需中央注册表即可被 Claude Code、Codex、AGY/Gemini、BACH 等运行时读取。仓库提供 registry/components.json 机器可读目录、llms.txt 上下文文件与测试脚本，要求 Python >=3.10，许可证为 MIT。",
+   "highlights": [
+    "包含 142 个公开目录技能和 380 个跟踪技能，每个技能自带 YAML frontmatter 元数据",
+    "提供 registry/components.json 机器可读目录、llms.txt 上下文及六语言文档",
+    "内置 privacy_gate.py 隐私边界静态检查、skill_tester.py 测试脚本与 S/L/U 三层测试框架，CI 含 455 项 Pytest 测试"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、BACH 等代理运行时提供标准化技能文件",
+    "离线或隔离环境下以本地优先方式挂载开发与基础设施工作流手册",
+    "技能作者依据 docs/CONVENTIONS.md 模式规范编写和测试自定义技能"
+   ]
+  },
+  "sha": "362de5a22265",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

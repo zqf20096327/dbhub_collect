@@ -3032,5 +3032,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "24e71a96bc1d": {
+  "identity": {
+   "one_liner": "开源数据库基准测试工具，用于在嵌入式与网络化 SQL/NoSQL 数据库上运行 CRUD、扫描、索引、向量检索等工作负载。",
+   "review": "crud-bench 是一个用 Rust 编写的基准测试工具，支持对键值、嵌入式、关系型、文档和多模型数据库运行 Create、Read、Update、Scans、Delete 五类任务。它可在自动化测试中通过 Docker 启动被测数据库，也可连接远程实例；样本数、并发客户端、线程数、键类型、记录内容等参数均可配置。运行需要 Docker（自动化测试）或 Rust/Cargo（源码构建），并通过采样进程的 /proc 接口收集 CPU、内存和磁盘读写数据。",
+   "highlights": [
+    "支持 CRUD、扫描、过滤、索引、全文检索及向量检索（暴力 KNN、HNSW、DiskANN）等已实现工作负载，关系遍历等工作负载尚在规划中",
+    "样本数、并发客户端、并发线程、键类型、记录内容（含嵌套对象和数组）及扫描规格均可通过 CLI 或 TOML 配置文件指定",
+    "每 250ms 采样被测进程的 CPU、内存（RSS/PSS）和磁盘读写，结果输出为 JSON，并可通过本地 HTML 页面拖拽比较多个结果文件"
+   ],
+   "use_cases": [
+    "在本地 Docker 容器、远程端点或自建进程（通过 --pid 指定）上运行基准测试",
+    "以相同数据语料和统一评分方式对多个数据库引擎运行向量检索并计算 Recall@k",
+    "用于在 SurrealDB 功能开发过程中测试和监控变更对查询性能的影响"
+   ]
+  },
+  "sha": "24e71a96bc1d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a2b025efcaf2": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 行级安全（RLS）的多租户 AI Agent 语义记忆服务",
+   "review": "adk-memshield 用 PostgreSQL 的 pgvector 与 FORCE ROW LEVEL SECURITY 在数据库层强制执行记忆隔离：调用身份通过事务内 set_config 绑定，SELECT、INSERT、UPDATE、DELETE 四类命令均由策略约束，缺少过滤条件的查询只返回调用者有权访问的行。它为 Google ADK 提供记忆服务接入，并包含框架无关的核心库与 MCP 服务器。",
+   "highlights": [
+    "使用 PostgreSQL RLS 在数据库层执行租户隔离，支持基于 clearance 与 compartments 的访问控制",
+    "提供 Google ADK 集成、框架无关的 MemShieldStore 核心及 MCP 服务器（memshield-mcp）",
+    "启动时运行时校验 RLS 配置，检查角色权限、强制 RLS 与策略表达式，并支持可选的 HMAC/JWT 身份验证"
+   ],
+   "use_cases": [
+    "多租户多 Agent 部署中共享向量记忆表的隔离访问",
+    "需防止低权限子代理检索超出其 clearance 的共享记忆的场景",
+    "为 Google ADK 应用提供持久化长期语义记忆服务"
+   ]
+  },
+  "sha": "a2b025efcaf2",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

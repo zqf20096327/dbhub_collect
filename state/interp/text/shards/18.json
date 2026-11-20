@@ -2754,5 +2754,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8e7203ca1e00": {
+  "identity": {
+   "one_liner": "CloudNativePG 运算符专用的多版本 PostgreSQL 不可变容器镜像构建仓库",
+   "review": "该仓库维护用于生成 CloudNativePG 运算符所必需的 PostgreSQL 容器镜像的脚本。镜像基于 Debian（stable/oldstable）构建，覆盖 PostgreSQL 15-19 主版本，支持 linux/amd64 与 arm64 架构，每周一自动重建以跟进上游安全与缺陷修复。镜像设计为 CNPG 运算符的操作对象，README 明确不适用于独立部署。提供 minimal/standard/system 三种类型镜像，附 SBOM、来源元数据与 cosign 签名。",
+   "highlights": [
+    "提供 PostgreSQL 15 至 19 各主版本的不可变容器镜像，基于 Debian stable/oldstable，支持 linux/amd64 与 linux/arm64",
+    "镜像附 SBOM（in-toto SPDX）与 SLSA Provenance 构建 attestation，minimal 与 standard 镜像使用 cosign 签名",
+    "CI/CD 中运行 Dockle 配置检查与 Snyk 漏洞扫描，镜像每周一自动重建以纳入上游安全与缺陷修复"
+   ],
+   "use_cases": [
+    "在 Kubernetes 中通过 CloudNativePG 运算符运行 PostgreSQL 集群时，作为集群的 operand 镜像",
+    "需要通过 ClusterImageCatalog 清单管理多版本 PostgreSQL 镜像目录的组织",
+    "需要镜像签名验证或 SBOM 审计以符合供应链安全流程的环境"
+   ]
+  },
+  "sha": "8e7203ca1e00",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

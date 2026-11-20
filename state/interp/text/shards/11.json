@@ -3535,5 +3535,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "99386a18621f": {
+  "identity": {
+   "one_liner": "Rust 异步 ActiveRecord 风格 ORM，纯结构体模型加字段声明关系与流式查询构建器",
+   "review": "TideORM 是面向 Rust 开发者的异步 ORM，运行于 PostgreSQL、MySQL、MariaDB、SQLite 及 CockroachDB、TiDB 等 8 种后端。模型用 #[tideorm::model] 宏定义，关系（HasOne/HasMany/BelongsTo 等）以字段形式声明，并提供 with() 预加载、chunk 分块读取、游标分页、tideorm.toml 项目规则约束等机制。当前版本 0.18.2。",
+   "highlights": [
+    "通过 #[tideorm::model] 属性宏生成模型代码，关系以 HasOne/HasMany/BelongsTo/HasManyThrough 字段声明，query().with(...) 批量预加载嵌套关系以避免 N+1 查询",
+    "查询构建器支持过滤、OR 分组、join、union、CTE 和窗口函数；聚合结果可按指定类型读取（如 sum::<Decimal>），并支持 cursor_paginate 游标分页与 chunk 分块读取",
+    "支持多数据库连接（Database::connect 配合 db.scope 运行）、复合主键、tideorm.toml 项目级规则限制（max_columns、forbid_raw_sql 等），以及经 feature flag 开启的加密字段、迁移、软删除、事务和全文本搜索等模块"
+   ],
+   "use_cases": [
+    "Rust 异步（tokio 或 async-std 运行时）后端服务中需要 ActiveRecord 风格模型与关系查询的场景",
+    "需要连接多个数据库（租户、读写分离副本）并在代码块内切换连接上下文的应用",
+    "需要批量写入、大结果集分块处理、游标分页，或通过加密字段存储敏感列数据的项目"
+   ]
+  },
+  "sha": "99386a18621f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "30c06955d29e": {
+  "identity": {
+   "one_liner": "面向自托管生产的 Claude Code 技能集，为 AI 代理操作添加防护检查",
+   "review": "simba-skills 提供 6 个技能，用于在自托管服务器（Docker、Postgres、VPS）上约束 AI 编码代理的操作。3 个自动技能在运行测试、迁移前检查写入目标，3 个手动技能处理部署、备份与设置审计。通过 Claude Code 插件市场安装，全部本地运行，无遥测；服务器类技能假定 Linux + Docker Compose + Postgres。",
+   "highlights": [
+    "提供 production-safe-loops 自动检查测试、复现循环、迁移的写入目标，指向生产库时拒绝执行",
+    "包含 safe-deploy 分步部署流程（备份、验证、记录回滚方法）与 server-maintenance 夜间备份、磁盘告警、Docker 清理",
+    "提供 lint-project-skills 与 audit-claude-settings，检查技能加载问题并扫描权限设置中的密钥与高风险规则"
+   ],
+   "use_cases": [
+    "在同一台服务器上运行应用与 AI 代理，需防止测试或部署误写生产数据库",
+    "为 VPS 上的 Docker + Postgres 服务建立定时备份、磁盘空间告警与安全检查",
+    "审计 Claude Code 权限设置中累积的密码、令牌及高风险规则"
+   ]
+  },
+  "sha": "30c06955d29e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c6cdf7aa74e1": {
+  "identity": {
+   "one_liner": "自托管的闲鱼卖家 Web 控制台，集成账号、消息、发货与库存管理。",
+   "review": "该项目是 IAMLZY2018/XianYuAssistant 的二次开发版本，提供部署在自有电脑或服务器上的 Web 控制台，用于管理闲鱼账号、商品、消息、自动回复、发货和卡密库存。后端基于 Java 21 与 Spring Boot，数据默认存于本地 SQLite，支持 Docker、JAR 和源码构建等多种部署方式，不提供移动或桌面客户端。",
+   "highlights": [
+    "提供多账号管理、WebSocket 长连接、自动重连和账号级风控事件记录",
+    "支持关键词回复、AI 回复、RAG 知识库上下文和带保底价与轮数限制的智能议价",
+    "内置任务调度、死信队列、Webhook 推送、HMAC-SHA256 签名、自动备份与应用内自动更新"
+   ],
+   "use_cases": [
+    "需要在自有服务器或电脑上集中管理多个闲鱼账号的卖家",
+    "经营卡密类商品、需要库存预占与自动发货流程的运营者",
+    "希望通过 AI 或关键词规则自动回复买家消息的场景"
+   ]
+  },
+  "sha": "c6cdf7aa74e1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

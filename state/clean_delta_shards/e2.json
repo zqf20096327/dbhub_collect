@@ -24163,5 +24163,2453 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "823cc4e0fef9+2": {
+  "fn": "surveyjs/surveyjs-nodejs-express",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "This is the Node.js code behind Integrate SurveyJS with Express, as an Express 5 application you can run example by example. Each example of that page has a page here that runs the real SurveyJS component against these routes, with a short \"Try this\" list, a live request log, a \"What the server stored\" panel and the code that just ran. SurveyJS has no backend of its own, so treat these as starting points for your own app."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    8,
+    4,
+    8,
+    [
+     "- Live catalog: surveyjs-nodejs.demos.surveyjs.io",
+     "- SurveyJS demos: app.demos.surveyjs.io",
+     "- Backend integration examples on the SurveyJS website: surveyjs.io/backend-integration/examples",
+     "- The same examples for other platforms: PHP (Laravel), ASP.NET Core, Python (FastAPI), Next.js, Java (Spring Boot)"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    11,
+    8,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "You need Node.js 24 or later, and nothing else: no Docker, no database server, no other service (see Prerequisites)."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    24,
+    12,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "- **Run Server-Side Workflows** (validate, lint, PDF, extract) run inside the app too, with the SurveyJS libraries (see Server-side workflows in process). Set `VALIDATE_RESPONSES=true` and `LINT_DEFINITIONS=true` in `settings.env` to switch Validate Responses and Lint JSON Schemas on, and an AI provider for Extract Responses from Documents (its key goes in `.env`)."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    40,
+    25,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "- Install Node.js 26 LTS from nodejs.org or with `winget install OpenJS.NodeJS.LTS`."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    108,
+    41,
+    108
+   ],
+   [
+    "replace",
+    108,
+    109,
+    108,
+    109,
+    [
+     "|Variable|Default|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    109,
+    110
+   ],
+   [
+    "replace",
+    110,
+    124,
+    110,
+    124,
+    [
+     "|`APP_PORT`|`8000`|Where the app listens. Wins over `PORT`.|",
+     "|`PORT`|unset|Set by Azure App Service and Heroku; used when `APP_PORT` isn't.|",
+     "|`APP_HOST`|`127.0.0.1` (`0.0.0.0` when `PORT` is set)|The address the app binds.|",
+     "|`NODE_ENV`|`development`|`production` caches templates and hides stack traces.|",
+     "|`DATA_DIR`|`storage`|The database, uploads, sandboxes and relay snapshots.|",
+     "|`SURVEYJS_LICENSE_KEY`|empty|Calls `setLicenseKey()` on every page and, at startup, on the server, so it covers server PDFs too. Without it, the commercial components show a licence banner.|",
+     "|`VALIDATE_RESPONSES`|`false`|Validate Responses: `routes/validate-response.js` replaces `routes/save-response.js`.|",
+     "|`LINT_DEFINITIONS`|`false`|Lint JSON Schemas: `routes/lint-definition.js` replaces the PUT in `routes/creator-load-save.js`.|",
+     "|`SURVEYJS_AI_PROVIDER`, `SURVEYJS_AI_MODEL`, `SURVEYJS_OLLAMA_BASE_URL`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`|empty|Extract Responses from Documents: the extractor's provider (`openai`, `anthropic` or `ollama`), chosen as SurveyJS Server chooses it. Without `SURVEYJS_AI_PROVIDER`, the provider whose key is set.|",
+     "|`AI_BASE_URL`, `AI_API_KEY`, `AI_MODEL`|OpenAI, empty, `gpt-4o-mini`|Translate with AI: any OpenAI-compatible `/chat/completions` endpoint. Without a key, `/api/translate` answers `501`.|",
+     "|`RELAY_URL`, `EDIT_RELAY_URL`|empty|The relays' origin when a proxy serves `/ws/` elsewhere, for example `wss://example.com`. Empty: the page's own origin.|",
+     "|`DEMO_MODE`|`false`|The hosted demo's visitor sandboxes (below).|",
+     "|`SURVEYJS_BUILD`|from git|The `<branch>@<commit>` the pages show as \"Running …\". Hosted demos set it at deploy.|",
+     "|`SURVEYJS_DOCS`, `SURVEYJS_GITHUB`|the Node.js docs page, this repository|Where the pages link.|"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    129,
+    124,
+    129
+   ],
+   [
+    "replace",
+    129,
+    131,
+    129,
+    130,
+    [
+     "|Example|Run|Server|Client|Page|Licence|"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    130,
+    131
+   ],
+   [
+    "replace",
+    132,
+    151,
+    131,
+    149,
+    [
+     "|Save Responses|/examples/save-response|`routes/save-response.js`|`shared/client/save-response.js`|`views/examples/save-response.njk`|MIT|",
+     "|Load JSON Schemas, Variables, and Answers|/examples/load-definition-variables-data|`routes/load-definition-variables-data.js`|`shared/client/load-definition-variables-data.js`|`views/examples/load-definition-variables-data.njk`|MIT|",
+     "|Resume Progress|/examples/resume-progress|`routes/resume-progress.js`|`shared/client/resume-progress.js`|`views/examples/resume-progress.njk`|MIT|",
+     "|Store Files Separately|/examples/store-files|`routes/store-files.js`|`shared/client/store-files.js`|`views/examples/store-files.njk`|MIT|",
+     "|Load Choices from Web|/examples/choices-from-web|`routes/choices-from-web.js`|`shared/client/choices-from-web.js`|`views/examples/choices-from-web.njk`|MIT|",
+     "|Async Calculations and Validation|/examples/async-functions|`routes/async-functions.js`|`shared/client/async-functions.js`|`views/examples/async-functions.njk`|MIT|",
+     "|Use Relational Storage|/examples/relational-storage|`routes/relational-storage.js`|`shared/client/relational-storage.js`|`views/examples/relational-storage.njk`|MIT|",
+     "|Fill Forms Together|/examples/fill-together|`relay/fill-relay.js`|`shared/client/fill-together.js`|`views/examples/fill-together.njk`|MIT|",
+     "|Analyze Results with Dashboard|/examples/dashboard|`routes/dashboard.js`|`shared/client/dashboard.js`|`views/examples/dashboard.njk`|Commercial client|",
+     "|Load and Save Form JSON Schemas|/examples/creator-load-save|`routes/creator-load-save.js`|`shared/client/creator-load-save.js`|`views/examples/creator-load-save.njk`|Commercial client|",
+     "|Upload Files|/examples/creator-uploads|`routes/store-files.js`|`shared/client/creator-uploads.js`|`views/examples/creator-uploads.njk`|Commercial client|",
+     "|Translate with AI|/examples/ai-translation|`routes/ai-translation.js`|`shared/client/ai-translation.js`|`views/examples/ai-translation.njk`|Commercial client, needs an AI provider|",
+     "|Variable Presets|/examples/variable-presets|`routes/variable-presets.js`|`shared/client/variable-presets.js`|`views/examples/variable-presets.njk`|Commercial client|",
+     "|Edit Forms Together|/examples/edit-together|`relay/edit-relay.js`|`shared/client/edit-together.js`|`views/examples/edit-together.njk`|Commercial client|",
+     "|Validate Responses|/examples/validate-response|`routes/validate-response.js`|`shared/client/validate-response.js`|`views/examples/validate-response.njk`|MIT|",
+     "|Lint JSON Schemas|/examples/lint-definition|`routes/lint-definition.js`|`shared/client/lint-definition.js`|`views/examples/lint-definition.njk`|MIT|",
+     "|Generate PDFs|/examples/server-pdf|`routes/server-pdf.js`|`shared/client/server-pdf.js`|`views/examples/server-pdf.njk`|Commercial|",
+     "|Extract Responses from Documents|/examples/extract-from-paper|`routes/extract-from-paper.js`|`shared/client/extract-from-paper.js`|`views/examples/extract-from-paper.njk`|MIT, needs an AI provider|"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    154,
+    149,
+    152
+   ],
+   [
+    "replace",
+    154,
+    155,
+    152,
+    153,
+    [
+     "Each example is two or three files you can read on their own. The full explanation is in the docs."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    161,
+    153,
+    159
+   ],
+   [
+    "replace",
+    161,
+    165,
+    159,
+    163,
+    [
+     " - `stored-json.js` (`save-response`, `relational-storage`, `validate-response`, the fill relay): inserts a response as one JSON document, with an ISO 8601 UTC `created_at`.",
+     " - `surveyjs.js` and `ai-provider.js` (Run Server-Side Workflows): the linter options, the response errors, the PDF call, the extraction timeout and provider, and the logging.",
+     " - `ai-translation.js` (Translate with AI): the call to your OpenAI-compatible provider.",
+     " - `http.js`, `cache.js`, `file-type.js`: errors with a status, fetch with a timeout, the countries cache, and file types by their first bytes."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    171,
+    163,
+    169
+   ],
+   [
+    "replace",
+    171,
+    172,
+    169,
+    170,
+    [
+     "`shared/` holds what every platform repository uses byte for byte: the client modules, the form definitions, samples and seed data, the page UI (`shared/ui/`), and the contract, smoke and browser tests. It is a copy of `surveyjs-php-laravel`'s `shared/` at the commit in `shared/UPSTREAM`; `npm run check` compares it with `shared/SHA256SUMS`. Don't edit it here: send a fix to that repository, then copy `shared/` again."
+    ]
+   ],
+   [
+    "equal",
+    172,
+    197,
+    170,
+    195
+   ],
+   [
+    "replace",
+    197,
+    198,
+    195,
+    196,
+    [
+     "SurveyJS Server (surveyjs/surveyjs-server) is itself an Express 5 app. Here the same libraries run in the app, following its source at `db1ac24`, so these routes accept and reject what the service does:"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    204,
+    196,
+    202
+   ],
+   [
+    "replace",
+    204,
+    205,
+    202,
+    203,
+    [
+     "A failure in the libraries is this app's own error (`500`); `502` and `504` are kept for the AI provider. `SURVEYJS_LICENSE_KEY` covers server PDFs here, because `server.js` calls `setLicenseKey()` at startup. When your backend isn't Node.js, run the same code as a separate service: SurveyJS Server, which the PHP and ASP.NET Core examples call over HTTP."
+    ]
+   ],
+   [
+    "equal",
+    205,
+    214,
+    203,
+    212
+   ],
+   [
+    "replace",
+    214,
+    215,
+    212,
+    213,
+    [
+     "- The pages are Nunjucks templates (`views/`), autoescaped. Nunjucks has layouts and blocks (`{% extends %}`, `{% block %}`) that map one to one onto the Blade views of the reference repository, so each page diffs against its PHP source in template syntax only, with the Tailwind class strings unchanged; EJS, the most common Express engine, has no layouts or blocks, and Pug would rewrite every element. Its syntax is also the Jinja syntax of the Flask port. (LiquidJS has the same layout and block model, if you prefer a maintained alternative.) Inline JSON goes through one `script_json` filter (`app.js`), which escapes `<`, `>`, `&`, U+2028 and U+2029, so a `</script>` in a definition can't end the script."
+    ]
+   ],
+   [
+    "equal",
+    215,
+    227,
+    213,
+    225
+   ],
+   [
+    "replace",
+    227,
+    232,
+    225,
+    226,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    246,
+    226,
+    240
+   ],
+   [
+    "replace",
+    246,
+    250,
+    240,
+    241,
+    [
+     "The code in this repository is available under the MIT licence."
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "1ddac98ee13f+2": {
+  "fn": "TinyNano/TinyChat",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "开源地址：github.com/TinyNano/TinyChat · License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    7,
+    5,
+    7
+   ],
+   [
+    "replace",
+    7,
+    14,
+    7,
+    8,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    26,
+    8,
+    20
+   ],
+   [
+    "replace",
+    26,
+    27,
+    20,
+    21,
+    [
+     "|深色主题|浅色主题|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    21,
+    22
+   ],
+   [
+    "replace",
+    28,
+    29,
+    22,
+    23,
+    [
+     "|TinyChat 深色主题对话界面，含代码块、公式与引用|TinyChat 浅色主题对话界面，含代码块、公式与引用|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    32,
+    23,
+    26
+   ],
+   [
+    "replace",
+    32,
+    33,
+    26,
+    27,
+    [
+     "TinyChat 主题市场 · 四套主题"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    27,
+    28
+   ],
+   [
+    "replace",
+    34,
+    35,
+    28,
+    29,
+    [
+     "|方块|Claude 风格|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    29,
+    30
+   ],
+   [
+    "replace",
+    36,
+    37,
+    30,
+    31,
+    [
+     "|方块主题 · 苹果产品页式的圆角矩形分块|Claude 风格主题 · 暖米白纸感配色与宽扁输入框|"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    31,
+    34
+   ],
+   [
+    "replace",
+    40,
+    41,
+    34,
+    35,
+    [
+     "TinyChat AI 笔记 · 分屏编辑与实时预览"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    44,
+    35,
+    38
+   ],
+   [
+    "replace",
+    44,
+    45,
+    38,
+    39,
+    [
+     "|参与人数|对话模式|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    39,
+    40
+   ],
+   [
+    "replace",
+    46,
+    47,
+    40,
+    41,
+    [
+     "|群聊设置 · 参与人数与成员头像|群聊设置 · 四种对话模式|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    41,
+    44
+   ],
+   [
+    "replace",
+    50,
+    51,
+    44,
+    45,
+    [
+     "TinyChat 管理后台概览"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    57,
+    45,
+    51
+   ],
+   [
+    "replace",
+    57,
+    61,
+    51,
+    55,
+    [
+     " - **TinyChat 默认**：经典外观，蓝色点缀，可自定义主题色，可拖动会话栏与对话列宽度",
+     " - **ChatGPT 风格**：黑白极简、大圆角气泡与胶囊输入框，自带配色",
+     " - **方块**：Apple 官网式质感 —— SF 风格字体、圆角矩形分块不画分割线、毛玻璃侧栏与输入区、胶囊按钮、大标题排版，自带配色",
+     " - **Claude 风格**：暖米白纸感配色、陶土橙点缀，助手整栏通排与宽扁两行式输入框，自带配色"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    55,
+    56
+   ],
+   [
+    "replace",
+    62,
+    63,
+    56,
+    57,
+    [
+     " 四套都做了完整的移动端适配（窄屏下内边距、圆角与底部留白各自收窄），切回默认外观原样还原；主题选择随账号同步。"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    68,
+    57,
+    62
+   ],
+   [
+    "replace",
+    68,
+    72,
+    62,
+    66,
+    [
+     " - 群主组织：群主点名，只请相关的人发言，再收成一个决定",
+     " - 自由讨论：先抛出可争论的命题，之后每轮只反驳上一位",
+     " - 轮流发言：按层次接力，后一位接着前一位写，不回头重写",
+     " - 专家协作：拆成互不重叠的子任务，每人只交自己那一份，由群主拼结论"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    125,
+    66,
+    119
+   ],
+   [
+    "replace",
+    125,
+    130,
+    119,
+    124,
+    [
+     " - 每个汇总可选**轮询**（依次轮流）或**故障自动转移**（当前渠道连不上、超时或回 5xx/429 就换下一个渠道再试；流式在首字节发出前同样会换，已开始输出则不换，避免重复计费）",
+     " - 开启后自动**汇总同名模型**：同一个模型名出现在 ≥2 个启用渠道时自动生成汇总（汇总 ID 就是模型名），无需手工配置；只剩一个渠道时自动清理",
+     " - 汇总项的**前台显示顺序可调**（与供应商共用一条顺序序列），也可选择只显示汇总、隐藏其余未汇总的模型",
+     " - 被汇总的成员渠道不再单独出现在前台，界面看上去与「只加了一个供应商的一个模型」完全一致",
+     " - 候选渠道沿用原有的可见性与用户组模型授权：无权的渠道不会进入候选，也不会因汇总而绕过授权"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    204,
+    124,
+    198
+   ],
+   [
+    "replace",
+    204,
+    205,
+    198,
+    199,
+    [
+     "||TinyChat|NextChat|LobeChat|Open WebUI|"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    199,
+    200
+   ],
+   [
+    "replace",
+    206,
+    212,
+    200,
+    206,
+    [
+     "|运行依赖|仅 PHP 7.4+|Node.js|Node.js / Docker|Docker / Python|",
+     "|数据库|不需要（文件存储）|不需要|建议配置|需要|",
+     "|共享虚拟主机可部署|✅|❌|❌|❌|",
+     "|多用户注册 / 用户组|✅ 内置|—|✅（需服务端模式）|✅|",
+     "|额度计费 / 兑换码|✅ 内置|❌|云端版部分支持|❌|",
+     "|数据归属|全部在自己主机|浏览器本地|服务器|服务器|"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    218,
+    206,
+    212
+   ],
+   [
+    "replace",
+    218,
+    219,
+    212,
+    213,
+    [
+     "> 不想买服务器？先看**全免费部署**：用 InfinityFree 免费主机搭建 TinyChat（图文教程）。"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    237,
+    213,
+    231
+   ],
+   [
+    "replace",
+    237,
+    241,
+    231,
+    232,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    267,
+    232,
+    258
+   ],
+   [
+    "replace",
+    267,
+    268,
+    258,
+    259,
+    [
+     "3. 准备好程序压缩包：从 Releases 下载源码包，或在仓库页点 `Code → Download ZIP`。"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    293,
+    259,
+    284
+   ],
+   [
+    "replace",
+    293,
+    295,
+    284,
+    286,
+    [
+     " - 若看到的是一层文件夹（例如 `TinyChat-main/`），说明多套了一层：进入该文件夹 → 全选所有文件 → 剪切 → 回到站点根目录 → 粘贴。",
+     " - 若根目录出现两个 `index.html`，以大小判断：**约 60 KB、用浏览器打开是 TinyChat 聊天界面的那个才是程序的**；把「站点创建成功」那个小的删掉。"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    300,
+    286,
+    291
+   ],
+   [
+    "replace",
+    300,
+    303,
+    291,
+    294,
+    [
+     " - 所有者：`www`",
+     " - 权限：`755`",
+     " - 勾选「应用到子目录」→ 确定"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    322,
+    294,
+    313
+   ],
+   [
+    "replace",
+    322,
+    332,
+    313,
+    314,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    343,
+    314,
+    325
+   ],
+   [
+    "replace",
+    343,
+    344,
+    325,
+    326,
+    [
+     "|扩展|用途|"
+    ]
+   ],
+   [
+    "equal",
+    344,
+    345,
+    326,
+    327
+   ],
+   [
+    "replace",
+    345,
+    350,
+    327,
+    332,
+    [
+     "|**pdo_sqlite**|数据存储，**必须**|",
+     "|curl|调用上游 AI 接口，**必须**|",
+     "|openssl|加密供应商密钥，**必须**|",
+     "|json|数据序列化，**必须**（PHP 默认自带）|",
+     "|mbstring|中文用量估算与敏感词匹配（建议）|"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    368,
+    332,
+    350
+   ],
+   [
+    "replace",
+    368,
+    369,
+    350,
+    351,
+    [
+     "|现象|处理办法|"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    370,
+    351,
+    352
+   ],
+   [
+    "replace",
+    370,
+    380,
+    352,
+    362,
+    [
+     "|打开显示「站点创建成功」（宝塔占位页）|宝塔自带的占位 `index.html` 还在，或程序没解压到站点根目录（回第 2 步）。**注意别删错**：程序自带的 `index.html`（约 60 KB，是聊天界面）必须保留|",
+     "|打开是宝塔默认页 / 空白|程序多解压了一层文件夹（回第 2 步检查目录层级）|",
+     "|首页正常，一登录或进后台就 404|伪静态没配或没保存成功（回第 4 步）；保存后清一次浏览器缓存|",
+     "|保存伪静态时提示 `duplicate location`|站点配置里已存在 `location /`：到「网站设置 → 配置文件」把原有的 `location / { ... }` 整段删掉（或把 `try_files` 那行合并进去）再保存|",
+     "|环境自检「`data/` 目录可写」标红|按第 3 步把属主改成 `www`、权限改为 755|",
+     "|环境自检「PHP 版本 ≥ 7.4」标红|「网站 → 站点设置 → 网站目录 / PHP 版本」里把 PHP 版本切到 7.4 以上，保存后重新访问|",
+     "|环境自检提示缺扩展|按第 5 步安装扩展，装完到「软件商店 → PHP → 重启」|",
+     "|页面报 500 或只显示「服务器内部错误」|先看「网站设置 → 网站日志」里的具体报错；常见原因是缺扩展（如 `pdo_sqlite`）或目录权限不足（回第 3、5 步）|",
+     "|流式回复不是逐字出现，而是一次性整段蹦出|程序默认已附带关闭缓冲的响应头；若仍如此，见下方「流式输出排查」|",
+     "|上传文档解析失败|「软件商店 → PHP → 设置 → 配置修改」里把 `upload_max_filesize`、`post_max_size` 调大（如 200M）；再到「网站设置 → 配置文件」把 `client_max_body_size` 调大|"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    387,
+    362,
+    369
+   ],
+   [
+    "replace",
+    387,
+    392,
+    369,
+    370,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    417,
+    370,
+    395
+   ],
+   [
+    "replace",
+    417,
+    418,
+    395,
+    396,
+    [
+     "|方法|路径|说明|"
+    ]
+   ],
+   [
+    "equal",
+    418,
+    419,
+    396,
+    397
+   ],
+   [
+    "replace",
+    419,
+    423,
+    397,
+    401,
+    [
+     "|`POST`|`/v1/chat/completions`|对话（默认流式，支持 `stream: true`）；生图模型会自动改走生图接口；`tools` / `tool_choice` 与上游的 `tool_calls` 原样透传（含流式分片），可直接接 Agent 框架|",
+     "|`GET`|`/v1/models`|列出当前用户可用（且管理员开放）的模型|",
+     "|`POST`|`/v1/images/generations`|文生图，返回 `{created, data:[{url\\|b64_json}]}`|",
+     "|`POST`|`/v1/videos`|生视频（同步返回最终地址，服务端完成建任务与轮询）|"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    464,
+    401,
+    442
+   ],
+   [
+    "replace",
+    464,
+    465,
+    442,
+    443,
+    [
+     "|模式|说明|"
+    ]
+   ],
+   [
+    "equal",
+    465,
+    466,
+    443,
+    444
+   ],
+   [
+    "replace",
+    466,
+    469,
+    444,
+    447,
+    [
+     "|文字生成|只填提示词，直接生成视频|",
+     "|首尾帧|分别上传首帧、尾帧，生成两帧之间的过渡视频（至少上传一张）|",
+     "|参考图|上传最多 5 张参考图，模型据此生成视频|"
+    ]
+   ],
+   [
+    "equal",
+    469,
+    488,
+    447,
+    466
+   ],
+   [
+    "replace",
+    488,
+    489,
+    466,
+    467,
+    [
+     " - Base URL 直接粘供应商文档给的地址即可：**带不带 `/v1` 都能正确对接**（不带时自动补 `/v1`，贴了完整接口地址则原样使用）。"
+    ]
+   ],
+   [
+    "equal",
+    489,
+    495,
+    467,
+    473
+   ],
+   [
+    "replace",
+    495,
+    496,
+    473,
+    474,
+    [
+     "|用法|说明|"
+    ]
+   ],
+   [
+    "equal",
+    496,
+    497,
+    474,
+    475
+   ],
+   [
+    "replace",
+    497,
+    501,
+    475,
+    479,
+    [
+     "|输入区「⋯ → 绘画」|打开生图弹窗，选择生图模型（或手动输入）并填提示词即可生成|",
+     "|对话中直接用生图模型|模型选择器末尾的「生图模型」分组里选一个，直接发消息——自动改走生图接口|",
+     "|**图生图 / 改图**|弹窗里「添加图片」上传 1–4 张参考图，再填「把杯子改成红色」这类修改要求；或在对话中给生图模型附上图片 + 说明，自动走改图流程|",
+     "|第三方客户端|用 `sk-tc-` 密钥调用 `POST /v1/images/generations`，与 OpenAI 官方客户端一致|"
+    ]
+   ],
+   [
+    "equal",
+    501,
+    525,
+    479,
+    503
+   ],
+   [
+    "replace",
+    525,
+    526,
+    503,
+    504,
+    [
+     "|变量|说明|"
+    ]
+   ],
+   [
+    "equal",
+    526,
+    527,
+    504,
+    505
+   ],
+   [
+    "replace",
+    527,
+    533,
+    505,
+    511,
+    [
+     "|`ADMIN_PASSWORD`|首次访问时创建 / 同步管理员密码|",
+     "|`ADMIN_NAME`|管理员用户名，默认 `admin`|",
+     "|`JWT_SECRET`|JWT 密钥；不设则写在 `data/secret`|",
+     "|`DATA_DIR`|数据目录，默认 `./data`|",
+     "|`CORS_ORIGIN`|跨域来源，默认 `*`|",
+     "|`SITE_URL`|站点对外地址（邮件链接、SEO canonical 用），不设则自动推断|"
+    ]
+   ],
+   [
+    "equal",
+    533,
+    538,
+    511,
+    516
+   ],
+   [
+    "replace",
+    538,
+    539,
+    516,
+    517,
+    [
+     "|变量|说明|"
+    ]
+   ],
+   [
+    "equal",
+    539,
+    540,
+    517,
+    518
+   ],
+   [
+    "replace",
+    540,
+    544,
+    518,
+    522,
+    [
+     "|`github_repo`|仓库，默认 `TinyNano/TinyChat`|",
+     "|`github_token`|私有仓库必填；公开仓库留空即可|",
+     "|`github_api_base`|API 根地址，默认 `https://api.github.com`，可换镜像|",
+     "|`github_base`|发布包下载根地址，默认 `https://github.com`，可填自建反代等加速前缀|"
+    ]
+   ],
+   [
+    "equal",
+    544,
+    562,
+    522,
+    540
+   ],
+   [
+    "replace",
+    562,
+    584,
+    540,
+    541,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    584,
+    592,
+    541,
+    549
+   ],
+   [
+    "replace",
+    592,
+    614,
+    549,
+    550,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    614,
+    654,
+    550,
+    590
+   ],
+   [
+    "replace",
+    654,
+    686,
+    590,
+    591,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    686,
+    696,
+    591,
+    601
+   ],
+   [
+    "replace",
+    696,
+    729,
+    601,
+    602,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    729,
+    734,
+    602,
+    607
+   ],
+   [
+    "delete",
+    734,
+    735,
+    607,
+    607
+   ],
+   [
+    "equal",
+    735,
+    736,
+    607,
+    608
+   ],
+   [
+    "delete",
+    736,
+    737,
+    608,
+    608
+   ],
+   [
+    "equal",
+    737,
+    738,
+    608,
+    609
+   ],
+   [
+    "replace",
+    738,
+    742,
+    609,
+    610,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "d1f5f465a18d+2": {
+  "fn": "seczoid/localleads",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "LocalLeads logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    10,
+    1,
+    8
+   ],
+   [
+    "replace",
+    10,
+    16,
+    8,
+    14,
+    [
+     "Website",
+     "License: AGPL-3.0",
+     "Rust",
+     "Docker",
+     "MCP",
+     "Docker image"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     "**🌐 localleads.run** · Features · Quick start · MCP · Self-hosting · Docs"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    20,
+    17,
+    18,
+    [
+     " Proxies we recommend: ProxyScrape residential. Affiliate link: signing up through it supports the project at no extra cost to you. "
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    18,
+    19
+   ],
+   [
+    "replace",
+    21,
+    22,
+    19,
+    20,
+    [
+     "The Searches page with a search running: Google Maps done, websites being read for emails"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    20,
+    21
+   ],
+   [
+    "replace",
+    23,
+    28,
+    21,
+    22,
+    [
+     " See every feature, how it compares with Outscraper, Apify and Scrap.io, and the one-line install at www.localleads.run . "
+    ]
+   ],
+   [
+    "equal",
+    28,
+    42,
+    22,
+    36
+   ],
+   [
+    "replace",
+    42,
+    43,
+    36,
+    37,
+    [
+     "The New search form with the Google Maps category list open"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    55,
+    37,
+    49
+   ],
+   [
+    "replace",
+    55,
+    56,
+    49,
+    50,
+    [
+     "A search"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    63,
+    50,
+    57
+   ],
+   [
+    "replace",
+    63,
+    64,
+    57,
+    58,
+    [
+     "Everything found for one lead"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    79,
+    58,
+    73
+   ],
+   [
+    "replace",
+    79,
+    85,
+    73,
+    79,
+    [
+     "|Verdict|Meaning|",
+     "|---|---|",
+     "|✅ Safe|The server confirmed the mailbox|",
+     "|⚠️ Risky|Catch-all domain, role or disposable address|",
+     "|❔ Unverified|The server wouldn't say|",
+     "|❌ Invalid|No such mailbox; never picked as the best email|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    88,
+    79,
+    82
+   ],
+   [
+    "replace",
+    88,
+    89,
+    82,
+    83,
+    [
+     "The leads table filtered to one search and leads with an email, with the Category filter open showing counts"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    100,
+    83,
+    94
+   ],
+   [
+    "replace",
+    100,
+    101,
+    94,
+    95,
+    [
+     "The proxies page with group tabs, the health bar and each proxy"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    114,
+    95,
+    108
+   ],
+   [
+    "replace",
+    114,
+    115,
+    108,
+    109,
+    [
+     "**Where to get proxies.** Free proxy lists rarely last on Google Maps. Residential proxies hold up best, and we recommend ProxyScrape's rotating residential pool (120M+ IPs in 190+ countries, with a free start). Paste the proxy address from their dashboard into **Add proxies** and you're set. *That's an affiliate link; it helps fund LocalLeads.*"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    118,
+    109,
+    112
+   ],
+   [
+    "replace",
+    118,
+    119,
+    112,
+    113,
+    [
+     "The Agents page: API keys, then the setup command for Claude Code and ten other agents"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    137,
+    113,
+    131
+   ],
+   [
+    "replace",
+    137,
+    139,
+    131,
+    132,
+    [
+     " All 44 tools "
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    132,
+    133
+   ],
+   [
+    "replace",
+    140,
+    149,
+    133,
+    140,
+    [
+     "|Area|Tools|",
+     "|---|---|",
+     "|Searches|`search_options` `find_cities` `find_categories` `preview_search` `create_search` `rerun_search` `continue_search` `list_searches` `get_search` `pause_search` `resume_search` `stop_search` `delete_search`|",
+     "|Leads|`browse_leads` `lead_facets` `lead_lists` `get_lead` `enrich_leads` `export_leads` `delete_leads`|",
+     "|Proxies|`list_proxies` `proxy_status` `add_proxies` `import_proxy_file` `check_proxies` `cancel_proxy_check` `set_proxies_enabled` `delete_proxies` `prune_proxies` `proxy_history` `get_checker_settings` `update_checker_settings`|",
+     "|Groups|`list_proxy_groups` `create_proxy_group` `rename_proxy_group` `delete_proxy_group` `assign_proxies_to_group` `remove_proxies_from_group`|",
+     "|App|`overview` `app_info` `list_notices` `server_log` `undo_delete` `backup_database`|"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    152,
+    140,
+    143
+   ],
+   [
+    "replace",
+    152,
+    153,
+    143,
+    144,
+    [
+     "- **One-command setup:** paste one line on your Mac or server and LocalLeads is installed and running, with HTTPS set up on a server. Run it again to update. See the Quick start."
+    ]
+   ],
+   [
+    "equal",
+    153,
+    172,
+    144,
+    163
+   ],
+   [
+    "replace",
+    172,
+    177,
+    163,
+    168,
+    [
+     "|Where|Good for|Takes|",
+     "|---|---|---|",
+     "|**On your Mac**|Trying it out and using it yourself|1 minute|",
+     "|**On your Windows PC**|The same, on Windows|1 minute|",
+     "|**On a server (VPS)**|Opening it from any computer or phone, with searches that keep running when your computer is off|5 minutes|"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    188,
+    168,
+    179
+   ],
+   [
+    "replace",
+    188,
+    189,
+    179,
+    180,
+    [
+     "4. When it says **LocalLeads is running**, open **http://localhost:7878** in your browser and create your account."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    194,
+    180,
+    185
+   ],
+   [
+    "replace",
+    194,
+    196,
+    185,
+    187,
+    [
+     "1. Download **localleads for Windows**.",
+     " On a Windows laptop with an ARM chip (Snapdragon, Surface Pro X), take **this one** instead."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    198,
+    187,
+    189
+   ],
+   [
+    "replace",
+    198,
+    199,
+    189,
+    190,
+    [
+     " If you see \"Windows protected your PC\", click **More info**, then **Run anyway**."
+    ]
+   ],
+   [
+    "equal",
+    199,
+    200,
+    190,
+    191
+   ],
+   [
+    "replace",
+    200,
+    201,
+    191,
+    192,
+    [
+     "5. Open **http://localhost:7878** in your browser and create your account."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    214,
+    192,
+    205
+   ],
+   [
+    "replace",
+    214,
+    216,
+    205,
+    207,
+    [
+     " - **No domain name?** Press **Enter**. You'll open LocalLeads at your server's address, like `https://203.0.113.7`.",
+     " - **Have a domain** (like `leads.yourcompany.com`)? First, at the company you bought it from, add an **A record** that points it at your server's IP address. Then type **2** and enter the domain."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    207,
+    208
+   ],
+   [
+    "replace",
+    217,
+    218,
+    208,
+    209,
+    [
+     " For every other question, press **Enter**."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    234,
+    209,
+    225
+   ],
+   [
+    "replace",
+    234,
+    235,
+    225,
+    226,
+    [
+     "In LocalLeads, open **Agents** in the sidebar, create an API key, choose your agent (Claude, Codex, Cursor and 8 more), and copy what it shows into your agent. Full details: **docs/MCP.md**."
+    ]
+   ],
+   [
+    "equal",
+    235,
+    236,
+    226,
+    227
+   ],
+   [
+    "replace",
+    236,
+    238,
+    227,
+    228,
+    [
+     " On the command line instead "
+    ]
+   ],
+   [
+    "equal",
+    238,
+    252,
+    228,
+    242
+   ],
+   [
+    "delete",
+    252,
+    254,
+    242,
+    242
+   ],
+   [
+    "equal",
+    254,
+    256,
+    242,
+    244
+   ],
+   [
+    "replace",
+    256,
+    258,
+    244,
+    245,
+    [
+     " What the setup command does "
+    ]
+   ],
+   [
+    "equal",
+    258,
+    261,
+    245,
+    248
+   ],
+   [
+    "replace",
+    261,
+    262,
+    248,
+    249,
+    [
+     "3. On a Linux server opened by domain or IP, sets up HTTPS with Caddy. If Caddy is missing, it installs it with the system's package manager: Caddy's own repository on Debian/Ubuntu (apt) and Fedora/RHEL (dnf), the regular package on Arch (pacman) and openSUSE (zypper), or Caddy's official binary anywhere else. If Caddy already serves other sites, LocalLeads is added next to them and the Caddyfile is backed up first. On a Mac, Caddy is never installed."
+    ]
+   ],
+   [
+    "equal",
+    262,
+    265,
+    249,
+    252
+   ],
+   [
+    "replace",
+    265,
+    266,
+    252,
+    253,
+    [
+     "If ports 80 and 443 are already taken (say by nginx), it tells you what's using them and offers other ports, or putting LocalLeads behind that web server. On a Coolify server it routes Let's Encrypt's check through Coolify's proxy, so the IP still gets a trusted certificate."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    253,
+    254
+   ],
+   [
+    "replace",
+    267,
+    273,
+    254,
+    260,
+    [
+     "|Choice|You get|Needs|",
+     "|---|---|---|",
+     "|**The server's IP** (default on Linux)|`https://203.0.113.7` with a Let's Encrypt certificate for the IP, renewed on its own (self-signed if Let's Encrypt can't reach the server)|Nothing|",
+     "|**Your domain**|`https://leads.example.com` with a Let's Encrypt certificate, renewed on its own|A DNS `A` record pointing at the server|",
+     "|**Only this machine** (default on macOS)|`http://localhost:7878`|Nothing|",
+     "|**Behind your own web server**|LocalLeads on `127.0.0.1`, plus a ready-made nginx, Caddy or Apache config to paste in|Your nginx, Traefik, Caddy, ...|"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    284,
+    260,
+    271
+   ],
+   [
+    "replace",
+    284,
+    288,
+    271,
+    272,
+    [
+     " Setup options, and installing without questions "
+    ]
+   ],
+   [
+    "equal",
+    288,
+    295,
+    272,
+    279
+   ],
+   [
+    "replace",
+    295,
+    309,
+    279,
+    293,
+    [
+     "|Option|What it does|",
+     "|---|---|",
+     "|`--domain NAME`|Serve at your domain with Let's Encrypt HTTPS (Linux)|",
+     "|`--ip [ADDRESS]`|Serve at the server's IP with Let's Encrypt HTTPS for the IP (Linux)|",
+     "|`--local`|Only this machine, at `http://localhost:PORT`|",
+     "|`--proxy URL`|Behind your own web server; `URL` is the address people open|",
+     "|`--port N`|Port LocalLeads listens on, on `127.0.0.1` (default 7878)|",
+     "|`--edge`|Install the newest build of `main` instead of the latest release|",
+     "|`--version vX.Y.Z`|Install a specific release|",
+     "|`--binary PATH`|Install a `localleads` binary you built yourself|",
+     "|`--no-firewall`|Leave ufw and firewalld alone|",
+     "|`-y`, `--yes`|Don't ask; use the defaults and the options given|",
+     "|`--update`|Update an existing install|",
+     "|`--uninstall`|Remove it; add `--delete-data` to also delete the data (Caddy stays)|"
+    ]
+   ],
+   [
+    "equal",
+    309,
+    310,
+    293,
+    294
+   ],
+   [
+    "replace",
+    310,
+    311,
+    294,
+    295,
+    [
+     " All downloads "
+    ]
+   ],
+   [
+    "equal",
+    311,
+    312,
+    295,
+    296
+   ],
+   [
+    "replace",
+    312,
+    316,
+    296,
+    297,
+    [
+     "Every release on the **Releases page** has builds for Linux (x86_64, ARM64), macOS (Apple silicon, Intel) and Windows (x86_64, ARM64), with a `SHA256SUMS` file. Unpack one and run:"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    321,
+    297,
+    302
+   ],
+   [
+    "replace",
+    321,
+    322,
+    302,
+    303,
+    [
+     "The newest build of `main` is always on the edge pre-release."
+    ]
+   ],
+   [
+    "equal",
+    322,
+    323,
+    303,
+    304
+   ],
+   [
+    "replace",
+    323,
+    327,
+    304,
+    305,
+    [
+     " Docker "
+    ]
+   ],
+   [
+    "equal",
+    327,
+    350,
+    305,
+    328
+   ],
+   [
+    "replace",
+    350,
+    351,
+    328,
+    329,
+    [
+     "Then open http://127.0.0.1:7878 and create your account with the setup code from the log."
+    ]
+   ],
+   [
+    "equal",
+    351,
+    352,
+    329,
+    330
+   ],
+   [
+    "replace",
+    352,
+    353,
+    330,
+    331,
+    [
+     "Backups, restores, all settings, and running behind your own nginx or Traefik are covered in **docs/SELF_HOSTING.md**."
+    ]
+   ],
+   [
+    "equal",
+    353,
+    354,
+    331,
+    332
+   ],
+   [
+    "replace",
+    354,
+    358,
+    332,
+    333,
+    [
+     " Build from source "
+    ]
+   ],
+   [
+    "equal",
+    358,
+    396,
+    333,
+    371
+   ],
+   [
+    "replace",
+    396,
+    399,
+    371,
+    372,
+    [
+     "The dashboard opens at http://127.0.0.1:7878. Create your account on the first visit."
+    ]
+   ],
+   [
+    "equal",
+    399,
+    406,
+    372,
+    379
+   ],
+   [
+    "replace",
+    406,
+    421,
+    379,
+    380,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    421,
+    429,
+    380,
+    388
+   ],
+   [
+    "replace",
+    429,
+    434,
+    388,
+    389,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    434,
+    438,
+    389,
+    393
+   ],
+   [
+    "replace",
+    438,
+    447,
+    393,
+    402,
+    [
+     "|Layer|Tech|",
+     "|---|---|",
+     "|Server|Rust 2024, axum, Tokio|",
+     "|UI|Server-rendered Askama templates, htmx, Alpine.js, DataTables, Hugeicons|",
+     "|Storage|SQLite in WAL mode (one writer, a pool of readers)|",
+     "|Scraping|Google Maps' web search responses parsed directly; websites read with browser-like TLS (webclaw)|",
+     "|Email checks|check-if-email-exists (optional `verify` feature)|",
+     "|MCP|rmcp, stdio and Streamable HTTP|",
+     "|Deploy|Multi-stage Docker image, Caddy for HTTPS, multi-arch images built in GitHub Actions|"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    463,
+    402,
+    418
+   ],
+   [
+    "replace",
+    463,
+    464,
+    418,
+    419,
+    [
+     "Every push to `main` rebuilds the edge pre-release for all six platforms. To cut a real release, bump `version` in `Cargo.toml`, commit, and push a matching tag:"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    470,
+    419,
+    425
+   ],
+   [
+    "replace",
+    470,
+    471,
+    425,
+    426,
+    [
+     "The Release workflow builds Linux, macOS and Windows binaries, writes `SHA256SUMS`, and publishes \"LocalLeads v0.2.0\" with install instructions and notes generated from the commits since the last tag. `setup.sh` installs it on the next run. The tag push also publishes the Docker image as `:0.2.0` and `:latest`."
+    ]
+   ],
+   [
+    "equal",
+    471,
+    478,
+    426,
+    433
+   ],
+   [
+    "replace",
+    478,
+    479,
+    433,
+    434,
+    [
+     "GNU AGPL-3.0 © seczoid"
+    ]
+   ],
+   [
+    "equal",
+    479,
+    481,
+    434,
+    436
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "9bfadefe36ac+2": {
+  "fn": "Doublzzz/FactoryFlow",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "简体中文 · English "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " 交有数 FactoryFlow "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    7,
+    [
+     " 给小工厂老板和办公室人员的订单、送货与对账工具。 ",
+     " 工厂一线业务人员直接参与制作，早期版本已在工厂日常使用。 ",
+     " 不用先导入资料，从第一张订单开始用；核心业务和识别默认在你自己的电脑上。"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    13,
+    8,
+    13,
+    [
+     " Windows 预览版",
+     " 默认本机运行",
+     " 界面 中文和 English",
+     " CI",
+     " MIT 许可"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    21,
+    14,
+    15,
+    [
+     " 下载试用 · 看看怎么用 · 定制需求"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    15,
+    16
+   ],
+   [
+    "replace",
+    22,
+    25,
+    16,
+    17,
+    [
+     "一张订单就能上手：拖入采购单，录单时新建客户，对照原件核对后生成订单（合成演示）"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    17,
+    18
+   ],
+   [
+    "replace",
+    26,
+    29,
+    18,
+    19,
+    [
+     " 合成演示，0.5 倍速节选，省略了识别等待和部分逐项核对。演示说明 "
+    ]
+   ],
+   [
+    "equal",
+    29,
+    57,
+    19,
+    47
+   ],
+   [
+    "replace",
+    57,
+    58,
+    47,
+    48,
+    [
+     "Windows 10 1903+ / Windows 11 x64 开发者预览：v0.1.0-preview.3。下载 `FactoryFlow-Windows-x64-v0.1.0-preview.3.zip`，包含采购与原料、小生产、CNY/USD、英文安装和可选成品库存。"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    61,
+    48,
+    51
+   ],
+   [
+    "replace",
+    61,
+    62,
+    51,
+    52,
+    [
+     "3. 用仓库里的合成采购单试一遍录单、分批送货和对账。"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    52,
+    53
+   ],
+   [
+    "replace",
+    63,
+    64,
+    53,
+    54,
+    [
+     "无需在线账号，也不用另装 Python、数据库或 Node.js。安装、备份和故障处理见中文使用说明或English guide。同版应用源码、第三方源码材料和 `SHA256SUMS.txt` 在版本页面。"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    54,
+    55
+   ],
+   [
+    "replace",
+    65,
+    66,
+    55,
+    56,
+    [
+     "请使用新的数据目录试用，保留现有安装及备份；本次不提供业务数据库的原地升级。旧 preview.1 继续保留。检查结果与边界见当前状态和验证记录。"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    71,
+    56,
+    61
+   ],
+   [
+    "replace",
+    71,
+    72,
+    61,
+    62,
+    [
+     "对照采购单人工核对后的四行明细，还需勾选确认才生成订单（合成演示）"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    62,
+    63
+   ],
+   [
+    "replace",
+    73,
+    74,
+    63,
+    64,
+    [
+     " 上图是人工核对后的结果。识别只提出候选，表格解析还不稳定，需要对照原件校正或补录。原始识别结果 "
+    ]
+   ],
+   [
+    "equal",
+    74,
+    77,
+    64,
+    67
+   ],
+   [
+    "replace",
+    77,
+    78,
+    67,
+    68,
+    [
+     "分批送货后的待交清单，各行保留自己的单位（合成演示）"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    68,
+    69
+   ],
+   [
+    "replace",
+    79,
+    80,
+    69,
+    70,
+    [
+     " 同一张合成订单：120 件交了 30 件，剩 90 件；35.5 千克交了 10.25 千克，剩 25.25 千克。 "
+    ]
+   ],
+   [
+    "equal",
+    80,
+    97,
+    70,
+    87
+   ],
+   [
+    "replace",
+    97,
+    98,
+    87,
+    88,
+    [
+     "**2026-11-04 交付状态。** 本版所基于的版本已完成非测试本机部署并跑通，由维护者确认；公开包另外完成其标明的检查。真实业务覆盖、实体打印、不同单据 OCR 和其他设备兼容继续逐项验收，详见版本说明。上方演示截图来自早期版本，用于说明基本流程。"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    88,
+    91
+   ],
+   [
+    "replace",
+    101,
+    102,
+    91,
+    92,
+    [
+     "- 当前版本为 **Windows 开发者预览**，安装与业务流程的检查记录见验证记录。"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    106,
+    92,
+    96
+   ],
+   [
+    "replace",
+    106,
+    107,
+    96,
+    97,
+    [
+     "- 备份和导出文件里有业务资料，需要自己妥善保管。构建输入与第三方材料见分发说明。"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    97,
+    100
+   ],
+   [
+    "replace",
+    110,
+    111,
+    100,
+    101,
+    [
+     "成品库存、采购与原料、小生产已进入 preview.3。如果你需要其他业务流程，或希望按自己的工厂流程定制功能，欢迎联系我讨论。可以先说说谁来用、现在怎么处理、希望解决什么问题，再一起确认范围。"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    116,
+    101,
+    106
+   ],
+   [
+    "replace",
+    116,
+    117,
+    106,
+    107,
+    [
+     "当前源码增加 FF + MCP 便携构建、订单原件收取与客户回复文字检查。**已有 preview.3 Windows ZIP 保持，不包含这些新能力；新便携二进制仍待第二台电脑验收。** 请配套使用新版后端与适配器源码，见 MCP 接入和便携说明。"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    124,
+    107,
+    114
+   ],
+   [
+    "replace",
+    124,
+    125,
+    114,
+    115,
+    [
+     "MCP 查询结果交给所选客户端，可能进一步进入其云端 AI。页内 AI 另需 API Key 和网络；核心业务、本地 OCR 不需要。凭据及 Key 不入源码，不分享已使用的数据目录，见隐私和验证范围。"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    128,
+    115,
+    118
+   ],
+   [
+    "replace",
+    128,
+    129,
+    118,
+    119,
+    [
+     "需要 Windows、Node.js 24（准确范围见 `package.json`）、uv、Python 3.14 和独立的 PostgreSQL，首次安装开发依赖需要联网。按本地运行说明准备依赖、配置、显式迁移和首个本地账号后再启动；启动本身不会自动迁移或重置数据。"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    136,
+    119,
+    126
+   ],
+   [
+    "replace",
+    136,
+    137,
+    126,
+    127,
+    [
+     "更多背景：业务规则 · 架构 · 术语表 · 隐私与发布范围"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    142,
+    127,
+    132
+   ],
+   [
+    "replace",
+    142,
+    143,
+    132,
+    133,
+    [
+     "欢迎在 GitHub Issues 反馈：哪一步不好懂？哪种单位或单据版式难核对？请用合成数据复现，不要上传真实客户原件、价格、账号、数据库或完整日志。安全漏洞请按安全反馈说明私下报告。"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    145,
+    133,
+    135
+   ],
+   [
+    "replace",
+    145,
+    147,
+    135,
+    136,
+    [
+     "MIT：允许商用和闭源再分发，须保留 `Copyright (c) 2026 Doublzzz` 及完整许可声明。字体及依赖遵循各自许可，见第三方材料清单。"
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

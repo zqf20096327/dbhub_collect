@@ -2979,5 +2979,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dba0d34abffd": {
+  "identity": {
+   "one_liner": "TypeORM 扩展库，提供数据库创建/删除、漂移检测、锁与数据填充工具",
+   "review": "typeorm-extension 是 TypeORM 的配套工具库，提供数据库创建/删除、schema 与实体元数据的漂移检测、数据库锁、驱动错误识别及 Seeder 数据填充功能，支持 postgres、mysql、mongodb、better-sqlite3 等多种驱动，可通过 CLI 或代码调用。它要求 TypeORM ^1.1.3（不支持 0.3），仅支持 ESM 包并需 Node.js ≥22。适用于部署时需初始化数据库、多副本启动迁移及填充开发测试数据的 Node.js 项目。",
+   "highlights": [
+    "提供 createDatabase/dropDatabase 函数与 db create/db drop/db drift CLI 命令，覆盖 postgres、cockroachdb、mysql、mariadb、mssql、oracle、mongodb、better-sqlite3 驱动",
+    "提供 withDatabaseLock、withLockedEntity、assertSchemaMatchesMetadata、isDatabaseUniqueViolationError 等锁、漂移检测与错误判断工具",
+    "提供 Seeder 类与工厂的 seed run/seed create 命令，支持按名称限定执行及只运行一次的追踪；数据源文件可按默认路径自动发现并通过 useDataSource 按别名懒初始化"
+   ],
+   "use_cases": [
+    "部署流程中在首次连接前创建数据库并执行迁移或多副本启动时以锁控制迁移执行",
+    "CI/发布步骤中检测迁移与实体元数据之间的 schema 漂移",
+    "为开发与测试环境生成并运行种子数据，配合 faker 等数据生成库使用"
+   ]
+  },
+  "sha": "dba0d34abffd",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f009bb088854": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 MCP 记忆服务器，提供 FTS5+向量混合检索",
+   "review": "Mnemo 是一个实现 Model Context Protocol 的持久化 AI 记忆服务器，通过 Streamable HTTP 端点为 MCP 客户端提供记忆存取。它使用单一 SQLite 文件（WAL 模式）本地存储，检索融合 FTS5 全文与 sqlite-vec 向量搜索，RRF 融合后经 rerank 模型重排并施加时间衰减与重要性加权。v2.0 加入双时态知识图谱与 as_of 历史查询。仅支持 HTTP 传输，无 stdio 模式。",
+   "highlights": [
+    "混合检索：FTS5 全文 + sqlite-vec 向量搜索，RRF(k=60) 融合，交叉编码器重排，附时间衰减与重要性加权",
+    "类型化记忆捕获含 6 种 context_type、嵌入去重、0.0-1.0 重要性评分与软归档/恢复策略；v2.0 提供双时态 valid_from/valid_to 列、实体消解与 entity_search/entity_graph/history/as_of 操作",
+    "零配置本地运行：内置注册表解析 Qwen3 ONNX 嵌入与重排模型，无需 API key；云端调用经 [models.*] provider cell（OpenAI 规范，默认 OpenRouter 预接线）"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 MCP 客户端提供跨会话持久化记忆存取",
+    "需要带审计轨迹与时间旅行查询的记忆历史管理场景",
+    "本地自托管的单机记忆存储，备份与跨机迁移经 rclone 在服务器外完成"
+   ]
+  },
+  "sha": "f009bb088854",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a176cd835489": {
+  "identity": {
+   "one_liner": "基于 FastMCP 与 Claude Desktop 的供应链多代理 AI 演示系统",
+   "review": "该系统由 12 个 MCP 代理（共 57 个工具）组成，通过协调代理将用户用自然语言提出的供应链问题路由到发货延迟、库存、采购、货运、仓储等领域代理，各代理读取 SQLite 数据并按集中配置的业务规则返回结构化结果。技术栈为 Python 3.10、FastMCP、SQLite、Streamlit，需配合 Claude Desktop 使用，目前在 Windows 上测试。仓库定位为学习、作品集与架构演示用途，功能限于 demo/community 范围。",
+   "highlights": [
+    "包含 12 个领域代理与 57 个工具，由协调代理统一路由，覆盖发货延迟、库存、采购、货运、仓储、根因调查等域",
+    "内置只读数据库访问、输入校验、SQL 执行控制、提示注入防护与工具调用审计日志等安全机制",
+    "提供查询缓存、Token 用量追踪、慢查询检测，以及基于 OpenRouter 的可选 LLM 回退"
+   ],
+   "use_cases": [
+    "学习 MCP 多代理架构与 FastMCP 编排模式的参考实现",
+    "在 Claude Desktop 中以自然语言查询订单延迟、库存风险、承运商表现等供应链问题",
+    "以 Streamlit 仪表盘查看运营状态并调整集中式业务规则配置"
+   ]
+  },
+  "sha": "a176cd835489",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3b1ed935bba3": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的本地 SQLite 数据层，每主题一库，支持 MCP 访问",
+   "review": "BaguetteDB 提供 bdb——每个 bdb 是一个关于单一主题的加密 SQLite 文件，AI Agent 可通过 MCP（stdio 或 HTTP）或 bdb 命令行用 SQL 查询和修改数据。变更记录日志并可撤销，支持公式（参数化 SQL）、Skills 指令和邀请共享。数据存于 ~/.baguettedb，使用 SQLCipher 加密，通过 brew 或发布包安装，仅支持 Linux 和 macOS，单二进制运行无需 Docker。",
+   "highlights": [
+    "Agent 经 MCP（stdio/Streamable HTTP）或 bdb CLI 操作数据库，含 schema 描述、内置文档与变更日志，支持 undo/redo 和批量撤销",
+    "公式为保存在库内的参数化 SQL，可经 Web 应用呈现为视图或操作表单；Skills 存储供 Agent 读取的使用说明",
+    "每个 bdb 为 SQLCipher 加密的独立 SQLite 文件，支持按 owner/editor/viewer 角色邀请共享及加密导出/导入"
+   ],
+   "use_cases": [
+    "让 Claude Code、Codex 等 Agent 通过 MCP 或命令行维护看板、购物清单、助手记忆等单一主题数据",
+    "通过 Data API 与受限密钥让自建网页或移动应用调用指定公式读写同一数据库",
+    "团队按 bdb 邀请共享数据，成员以不同角色协作并查阅变更历史"
+   ]
+  },
+  "sha": "3b1ed935bba3",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

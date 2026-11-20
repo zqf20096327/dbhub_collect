@@ -3446,5 +3446,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e02abedc79a7": {
+  "identity": {
+   "one_liner": "Rust 编写的服务，将 PostgreSQL 变更流式复制为标准 Apache Iceberg 表",
+   "review": "Flow 是一个 Rust 编写的单进程服务，先复制 PostgreSQL 现有数据，再通过逻辑复制持续将插入、更新和删除写入标准 Iceberg 表（Parquet 数据，经 Iceberg REST 目录发布到 S3 兼容存储）。当前为 beta 版，支持 PostgreSQL 14–18，可变表需要主键；分区源表、高可用等尚不支持。",
+   "highlights": [
+    "在单个 Rust 进程内完成初始 COPY、持续逻辑复制与后台压缩",
+    "支持插入、更新、删除和主键变更；无主键表以追加模式复制",
+    "事务日志、持久行索引与发布账本支持重放、重连和中断恢复"
+   ],
+   "use_cases": [
+    "需要将 PostgreSQL 变更持续同步到 Iceberg 数据湖表的场景",
+    "通过 Iceberg 兼容查询引擎（如 Trino、Spark、DuckDB）直接读取变更后的表",
+    "自托管部署：可从源码构建或使用 Docker 容器镜像，需为事务日志和 RocksDB 行索引提供持久磁盘"
+   ]
+  },
+  "sha": "e02abedc79a7",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5e21c7e962ac": {
+  "identity": {
+   "one_liner": "Apache Kafka 的 Web UI 与管理工具包，用于检查和管理 Kafka 集群",
+   "review": "Kpow 是面向 Apache Kafka 的 Web UI 和工程工具包，用于在生产环境中检查、管理和运维 Kafka 集群，面向大规模运行 Kafka 的团队，支持受保护与隔离网络部署。本仓库只发布官方 Docker 镜像与部署参考；软件为专有软件，提供社区版（免费）与企业版（含 RBAC、审计日志、SSO，30 天试用）两种许可。",
+   "highlights": [
+    "提供用于检查、管理和运维 Kafka 集群的 Web UI",
+    "提供社区版与企业版 Docker 镜像，并支持通过 Helm 在 Kubernetes 部署",
+    "企业版包含基于角色的访问控制（RBAC）、审计日志和 SSO 集成"
+   ],
+   "use_cases": [
+    "生产环境 Kafka 集群的可视化检查与运维",
+    "本地开发与实验（Kpow Local / Factor House Local 的 Docker Compose 环境）",
+    "需要 RBAC、审计日志或 SSO 的企业级部署场景（企业版）"
+   ]
+  },
+  "sha": "5e21c7e962ac",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

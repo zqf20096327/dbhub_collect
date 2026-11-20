@@ -3196,5 +3196,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "071ce395e45e": {
+  "identity": {
+   "one_liner": "本地优先的编码代理任务队列与审计板，通过 MCP/REST/CLI 协调多 harness",
+   "review": "Sugar 是一个本地优先的编码代理协调层：为 Claude Code、Codex、Cursor、Goose 等 harness 提供共享的 SQLite 任务队列、原子认领与租约机制，并将事件写入仅追加的 event spine。开发者通过 Web 仪表盘或 macOS 应用查看实时活动，代理经 MCP 读取共享记忆。需 Python 3.11+，经 pipx 安装；默认仪表盘仅绑定 loopback 且无认证。采用 AGPL-3.0 + 商业双许可。",
+   "highlights": [
+    "提供带优先级、依赖、重试的 SQLite 持久队列，采用原子认领+租约+心跳，worker 崩溃后任务由 reaper 重新入队",
+    "以仅追加事件库记录每次任务转移与 harness 事件，支持 SHA-256 清单和可选 HMAC 签名的审计导出与校验",
+    "提供项目级与全局记忆库，含七类记忆类型，支持本地嵌入语义检索并以 FTS5 关键词为回退，无外部 API 调用"
+   ],
+   "use_cases": [
+    "多个代理在同一仓库工作时防止重复认领同一任务",
+    "按代理/harness/项目归集 token 用量与成本归因，生成可验证的审计导出",
+    "通过 MCP 让代理跨会话读取项目决策、约定与错误模式等共享上下文"
+   ]
+  },
+  "sha": "071ce395e45e",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3304,5 +3304,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bf0f2f9314ea": {
+  "identity": {
+   "one_liner": "基于 Bitcask 模型的 Go 语言键值存储引擎，提供 Redis 风格数据结构",
+   "review": "FlyDB 是用 Go 实现的 KV 存储引擎，采用 Bitcask 模型组织数据，并在 structure 包中提供 String、Hash、List、Set、Sorted Set、Bitmap、Stream 等数据结构操作。可通过 Go SDK 引入，或以 shell、Docker、Kubernetes 方式部署服务端，用 flydb-cli 连接。数据备份与分布式集群功能在 TODO 列表中尚未完成。",
+   "highlights": [
+    "基于 Bitcask 模型实现键值读写，支持 BTree 与 ARTree 两种索引",
+    "structure 包提供 Redis 风格的 String、Hash、List、Set、Sorted Set、Bitmap、Stream 及过期键操作",
+    "支持 TCP 与 HTTP 服务，提供 Go SDK、shell、Docker、Kubernetes 多种使用方式"
+   ],
+   "use_cases": [
+    "需要在 Go 项目中嵌入键值存储引擎的场景",
+    "需要 Redis 风格数据结构 API 的本地持久化存储场景",
+    "需要平衡读写性能与存储成本的应用场景"
+   ]
+  },
+  "sha": "bf0f2f9314ea",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "59a81c776c9a": {
+  "identity": {
+   "one_liner": "YAML 语义层与规则引擎，将声明式模型编译为 8 种 SQL 方言供代理与 BI 使用",
+   "review": "OrionBelt 是一个语义与上下文层，以 sidecar 方式运行：用户或 AI 代理用 YAML（OBML）声明维度、度量、指标与连接，系统经 AST 编译成针对 BigQuery、Snowflake、DuckDB 等八种方言的 SQL、KPI 与语义上下文。需 Python 3.12+，可 pip 安装或用 Docker 运行，许可证为 BUSL-1.1。模型中的数据对象可跨 MySQL、PostgreSQL 等多个库做联邦查询。",
+   "highlights": [
+    "提供 PostgreSQL wire（5432）、Arrow Flight SQL（8815）、REST（8000）与 MCP 四种接入接口，编译输出覆盖 BigQuery、ClickHouse、Databricks、Dremio、DuckDB/MotherDuck、MySQL、PostgreSQL、Snowflake 八种方言",
+    "包含 Composite Fact Layer 规划器，阻断会产生 fan trap 的多事实表连接路径，并以 portable 表达式目录统一各引擎的计算结果（如除零、round、NULL 处理）",
+    "支持 OBML 与 Apache Ossie（OSI）标准模型双向转换、以 JSON/Mermaid/Turtle 输出血缘，以及模型导出为 RDF 并应答只读 SPARQL 查询；DuckDB 数据源可读取 Parquet、CSV、JSON 文件与 Iceberg 表"
+   ],
+   "use_cases": [
+    "AI 代理通过 oneshot 批量接口提交任务级模型与多条查询，获取带 SQL、解释与警告的结果",
+    "BI 工具（Tableau、Power BI、Superset、Metabase 等）经已有 Postgres 驱动或 Flight SQL JDBC/ODBC 连接同一语义模型",
+    "自托管且跨多种引擎的团队，用一份 YAML 模型为各引擎生成可审查的指标定义与查询血缘"
+   ]
+  },
+  "sha": "59a81c776c9a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7cdf6e079461": {
+  "identity": {
+   "one_liner": "AI旅行规划引擎，以确定性排程与事实约束POI数据驱动LLM生成行程",
+   "review": "Yuntu 是一个 AI 旅行规划引擎源码项目，后端基于 FastAPI 与 PostgreSQL，前端为 React 18。地点与经纬度数据由 SQL 从数据库检索，路线排程使用地理空间算法与高德路径规划 API，LLM 仅在结构化事实约束下生成文案。仓库种子数据仅内置重庆 POI，扩展其他城市需自行导入数据；运行需 Python 3.11+、Node.js 20+、大模型 API Key 及高德 Key。",
+   "highlights": [
+    "地点数据由 SQL 检索数据库中经过验证的 POI 经纬度，路线排程基于地理空间算法与高德路径规划，并内置路线可行性硬约束",
+    "LLM 仅在结构化事实约束下生成文案，另有确定性代码复核的 Publish Gate 质量门禁",
+    "提供异步规划任务 API（/trip/async）、任务状态轮询与 SSE 流式进度推送端点"
+   ],
+   "use_cases": [
+    "自建本地旅行规划服务并以此研究确定性排程与 LLM 约束生成的架构实现",
+    "以重庆内置数据体验完整规划链路，或向 travel_canonical_place 表导入其他城市数据做二次开发",
+    "作为旅行/本地生活垂类 AI 应用的参考实现，基于 MIT 协议修改使用"
+   ]
+  },
+  "sha": "7cdf6e079461",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

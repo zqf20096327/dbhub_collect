@@ -3617,5 +3617,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4e66e0eb0596": {
+  "identity": {
+   "one_liner": "将 CSV、JSON、Parquet、XLSX 等多种文件载入内存 SQLite 供 SQL 查询的 Go 库",
+   "review": "filesql 是一个 Go 库，通过 database/sql 接口将 CSV、TSV、LTSV、JSON、JSONL、Parquet、XLSX、ACH、Fedwire 等文件载入内存 SQLite 数据库，不依赖 cgo。每个文件对应一张以文件名命名的表，支持跨格式 join，可用 WithDialect 以 MySQL、PostgreSQL 或 GoogleSQL 方言书写查询（由库翻译为 SQLite 执行）。模块内还包含 prep 包用于加载前清洗校验行数据，以及基于它的交互式 shell sqly。支持从路径、目录、io.Reader 和 embed.FS 读取，支持多种压缩格式，可将内存中的修改以 DumpDatabase 或自动保存方式写回文件。需 Go 1.26.11 及以上。",
+   "highlights": [
+    "将 9 种格式（CSV、TSV、LTSV、JSON、JSONL、Parquet、XLSX、ACH、Fedwire）文件载入内存 SQLite，无 cgo 依赖，支持 .gz、.bz2、.xz、.zst、.snappy、.s2、.lz4 等压缩封装",
+    "支持通过 WithDialect 以 MySQL、PostgreSQL、GoogleSQL 方言书写查询，由库翻译为 SQLite 执行；翻译覆盖声明范围的 SQL 子集，超出范围会报出具体行列位置",
+    "同模块提供 prep 包用于加载前的行清洗与校验（去空格、大小写规范化、默认值填充、按行号报告错误），并可通过 DumpDatabase、EnableAutoSave 等将修改写回文件"
+   ],
+   "use_cases": [
+    "在 Go 程序中对本地多格式数据文件执行 SQL 查询，包括跨格式 join 与 json_extract() 嵌套查询",
+    "数据入库前的清洗与校验流程，结合 prep 包在数据成为表之前处理行数据",
+    "与 sqlc、GORM、sqlx、Bun、Squirrel、Ent 等常用 Go 数据库工具集成（仓库 examples 目录提供示例）"
+   ]
+  },
+  "sha": "4e66e0eb0596",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ea07c986fb28": {
+  "identity": {
+   "one_liner": "ASP.NET Core 个人与业务管理 Web 应用，含财务、预算、日历等模块",
+   "review": "Maroik 是一个基于 ASP.NET Core MVC 的自托管 Web 应用，集成费用记录、电子表格式预算、日历与邮件提醒、公告板、看板、文件管理和基于角色的用户管理。它采用 DDD 与整洁架构并通过测试约束，部署脚本在 Ubuntu 服务器上以 Docker 栈方式运行，依赖 PostgreSQL、RabbitMQ、SMTP 等外部服务，并内置每日备份与从备份恢复的流程。",
+   "highlights": [
+    "提供费用与收入记录、固定收支与存款日提醒，金额以 numeric(20,4) 存储，收支更新与资产余额在同一事务和行锁下完成",
+    "预算模块支持 Excel 兼容公式（如 =SUM、=ACTUAL、跨表引用），服务器端在每次请求时从存储的输入重新计算",
+    "文件管理按 16 MB 分块上传，后台经 ClamAV 病毒扫描，配额由管理员设置"
+   ],
+   "use_cases": [
+    "个人财务管理：记录收支、维护年度收支预算表并导出 Excel",
+    "日程与知识管理：月历事件、公告板发帖、个人看板与私人便签",
+    "自托管建站：在自有 Ubuntu 服务器上运行，并利用备份脚本进行每日归档与灾备恢复"
+   ]
+  },
+  "sha": "ea07c986fb28",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7748a7823299": {
+  "identity": {
+   "one_liner": "School 21（42 网络）38 个已结课项目的集合仓库，覆盖多语言方向",
+   "review": "该仓库收录作者在 School 21（莫斯科校区）完成的 C、C++、Python、机器学习、DevOps、SQL 等方向的 38 个子项目，按语言与方向分目录组织。仓库附有 STATUS.md 就绪矩阵、13 个 CI 工作流、分语言 lint 门禁、MIT 许可与生成的文档站点，适合查阅其课程项目实现与工程化配置。",
+   "highlights": [
+    "包含 38 个子项目，按 algorithms、c、cpp、python、machine_learning、devops、sql 等 12 个方向目录组织",
+    "配置 13 个 GitHub Actions 工作流，覆盖 lint、C/C++/Python/SQL/DevOps 测试、docs 部署与 secrets 检查",
+    "提供 STATUS.md 生产就绪矩阵、Makefile 开发快捷命令、TOOLCHAIN.md 工具链版本固定及 Doxygen+Sphinx 文档站点"
+   ],
+   "use_cases": [
+    "查阅 School 21 各课程项目（C、C++、Python、ML、DevOps、SQL）的具体实现代码",
+    "参考仓库的多语言 lint、CI、安全扫描与文档站点的工程化配置方式",
+    "了解 School 21 同伴式学习模式的项目构成与作者的学习进度记录"
+   ]
+  },
+  "sha": "7748a7823299",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2bc3bc366687": {
+  "identity": {
+   "one_liner": "本地优先的科研工作台，覆盖文献、写作、评审到投稿全流程",
+   "review": "SciFlow 是一个本地优先的研究工作台，数据存储在单个 SQLite 文件中，模型端点由用户自行配置，无需托管账号。它为研究人员提供从选题检查、文献综述、大纲、章节撰写到质量评审与引用格式化的稿件流水线，每步写入检查点支持断点续跑，质量门采用规则打分而非模型评分。安装需 Node 20+ 和 pnpm；README 说明其 Python 沙箱仅为本地运行器，不作为对抗恶意代码的安全边界。",
+   "highlights": [
+    "提供 PI、实验者、评论者与独立评审等多智能体分工的研究流程，协议执行前暂停等待人工或专家智能体批准",
+    "稿件流水线的每一步写入检查点，进程重启后可恢复运行；质量门按七个维度以规则打分并生成稳定指纹",
+    "每个 [n] 引用锚点对应引用行和参考文献，可报告幽灵锚点、孤儿引用、编号断裂和重复 DOI；文献库为空时阻止引用标记"
+   ],
+   "use_cases": [
+    "需要引用可溯源且支持断点续跑的学术稿件撰写流程",
+    "无托管账号、数据保存在本地的文献管理与知识库场景",
+    "通过 AI_MOCK=1 模式在无模型密钥环境下体验完整流水线，或用于投稿前的就绪检查与打包"
+   ]
+  },
+  "sha": "2bc3bc366687",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

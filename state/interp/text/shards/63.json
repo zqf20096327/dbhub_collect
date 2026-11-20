@@ -3369,5 +3369,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "818f0fae41e4": {
+  "identity": {
+   "one_liner": "Rust 编写的 Postgres 逻辑复制引擎，可嵌入应用或独立运行。",
+   "review": "该项目用 Rust 实现 Postgres 到数据仓库/湖仓的复制：先做快照初始同步，再从 WAL 解码持续复制变更，直接写入目标端，靠内存缓冲与背压控制、持久化检查点支持重启恢复，投递语义为至少一次。支持 PostgreSQL 14–19，目标端含 ClickHouse、BigQuery、DuckLake、Snowflake，可作为独立进程或通过 etl crate 嵌入。需注意初始拷贝过长可能导致源端 WAL 保留与槽失效。",
+   "highlights": [
+    "支持 PostgreSQL 14–19 作为源，通过 publication 与逻辑 WAL 解码实现初始同步和持续变更复制",
+    "内置 ClickHouse、BigQuery、DuckLake、Snowflake 目标端（Rust feature），并暴露 trait 支持自定义目标端和状态存储",
+    "无本地磁盘暂存，变更在内存缓冲并通过背压减慢读取；检查点持久化支持重启恢复；提供 Linux AMD64/ARM64 容器镜像"
+   ],
+   "use_cases": [
+    "将现有 Postgres 表数据拷贝并流式同步到 ClickHouse、BigQuery、Snowflake、DuckLake 等仓库/湖仓",
+    "在 Rust 应用中嵌入 etl crate，通过实现自定义 destination/state store trait 构建复制管道",
+    "需要从 Postgres 逻辑复制（含 PG16+ 从物理备库解码）的场景；注意项目处于活跃开发期，API 可能频繁变更"
+   ]
+  },
+  "sha": "818f0fae41e4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9784c00854fa": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Prisma 的 Trello 风格项目协作看板应用",
+   "review": "Taskify 是一个看板式任务管理 Web 应用，支持创建看板、列表和卡片、拖拽排序及活动记录查看。面向需要进行项目与任务协作管理的用户。技术栈为 Next.js、React、TypeScript、Prisma 与 PostgreSQL（Supabase），集成 Clerk 认证、Stripe 订阅支付和 Unsplash 图片 API。运行前需配置多项第三方服务密钥，支持部署到 Vercel。",
+   "highlights": [
+    "提供看板、列表、卡片的创建与拖拽排序，并支持查看活动记录",
+    "集成 Clerk 身份认证与 Stripe 在线支付（含 checkout 与 webhook 事件处理）",
+    "基于 Next.js、Prisma、PostgreSQL 构建，可通过 npm/pnpm 本地运行并部署到 Vercel"
+   ],
+   "use_cases": [
+    "团队或个人进行任务看板与项目进度管理",
+    "学习 Next.js 全栈应用的组织结构与第三方服务集成方式",
+    "需要订阅付费功能的协作类 Web 应用开发参考"
+   ]
+  },
+  "sha": "9784c00854fa",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f2dde7b4c3e0": {
+  "identity": {
+   "one_liner": "PHP+SQLite 自托管列表式文件上传站，复刻 uploader.jp 使用方式",
+   "review": "该项目是响应 uploader.jp 服务终止而开发的自托管列表式上传器，用于在自己的服务器上架设按编号排列文件清单的共享站点。仅依赖 PHP（8.2+）与 pdo_sqlite 等扩展，无需数据库服务器；支持 S3 兼容存储、Cloudflare Turnstile、SMTP 通知，并附带从 uploader.jp 迁移数据的备份与导入工具。MIT 许可。",
+   "highlights": [
+    "以 PHP 与 SQLite 运行，无需数据库服务器，需 pdo_sqlite、fileinfo、mbstring、curl、openssl 扩展；文件可存本地或 Backblaze B2、Cloudflare R2 等 S3 兼容存储，并支持 8MB 分片上传",
+    "提供编号列表、排序、搜索、分页、删除密钥、下载密码、MD5 显示、`/download/123` 形式 URL，以及管理后台（修改/隐藏/删除文件、封禁上传、报表处理）",
+    "支持 Cloudflare Turnstile 人机验证、IP 哈希存储、连续投稿限制、双重扩展名文件拦截、管理员两步验证，并内置从 uploader.jp 迁移编号/评论/下载量等数据的 Python 备份与 PHP 导入工具"
+   ],
+   "use_cases": [
+    "为游戏 MOD、剧本等特定目的的文件集合架设编号清单式下载站",
+    "uploader.jp（getuploader.com）2026 年 11 月停服前备份并迁移原有数据至自托管环境",
+    "在 VPS 或面板环境中部署，利用 S3 兼容存储分担磁盘与带宽"
+   ]
+  },
+  "sha": "f2dde7b4c3e0",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "591b72e220ed": {
+  "identity": {
+   "one_liner": "macOS 桌面数据库客户端，基于 Tauri 2/Rust/React，支持六种数据库与内建 SSH 隧道。",
+   "review": "DBDock 是运行在 macOS（Apple Silicon）上的桌面数据库客户端，基于 Tauri 2、Rust 与 React 构建，用于连接管理 MySQL、PostgreSQL、SQLite、Redis、MongoDB 和 Cloudflare D1。它提供 SSH 隧道、连接分组与环境标签、SQL 编辑器与执行计划、Redis 键浏览和 MongoDB Shell 等功能；密码存于 macOS Keychain，支持从 TablePlus、DBeaver 或连接 URL 导入。构建需 pnpm 与 Rust 环境。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、SQLite、Redis、MongoDB 和 Cloudflare D1 六种数据库的连接与查询",
+    "支持通过 ssh-agent、密钥文件或密码建立 SSH 隧道，并提供 ~/.ssh/config 的管理编辑功能",
+    "SQL 编辑器提供上下文感知补全、可视化执行计划、Vim 模式、查询历史与网格编辑提交"
+   ],
+   "use_cases": [
+    "在 macOS 上集中管理多个 MySQL、PostgreSQL、SQLite 等数据库连接，按分组与环境标签（如 production）组织",
+    "通过 SSH 隧道访问位于堡垒机后的数据库主机",
+    "浏览 Redis 键、执行 MongoDB Shell 命令，或通过 REST API 操作 Cloudflare D1"
+   ]
+  },
+  "sha": "591b72e220ed",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6412e7924c19": {
+  "identity": {
+   "one_liner": "面向 OceanBase MySQL/Oracle 双模式的托管 ADO.NET 数据提供程序",
+   "review": "该驱动为 OceanBase 的 MySQL 与 Oracle 租户兼容模式提供统一的托管 ADO.NET 实现，两种模式共享协议基础设施，模式相关的 SQL、绑定、类型和元数据各自保留。面向需要在 .NET 应用中直连 OceanBase 的开发者。当前为实验性质，验证证据集中于 Windows 上的 OceanBase 4.4.2.2 直连场景，TLS 默认 VerifyFull，不承诺完整原生 MySQL/Oracle 驱动兼容性，部分 Oracle 能力限于已记录子集。",
+   "highlights": [
+    "提供 ADO.NET 连接、命令、参数、读取器与事务 API，支持同步/异步 SQL、服务器端预编译参数、多结果集与流式读取",
+    "支持连接池、TLS（默认 VerifyFull，可配置客户端证书与回调）、XA 事务、多服务器地址、日志/追踪/指标",
+    "提供 DI 集成包，目标 netstandard2.0/2.1 及 net8.0/9.0/10.0，含 Oracle 存储过程、OUT 参数、REF CURSOR、LOB 与数组绑定扩展"
+   ],
+   "use_cases": [
+    ".NET 应用通过 ADO.NET 接口直连 OceanBase 的 MySQL 或 Oracle 兼容模式租户",
+    "需要依赖注入集成的 ASP.NET Core / 通用主机应用的数据访问层",
+    "需要 TLS/双向 TLS、XA 事务或 Oracle LOB、REF CURSOR、数组绑定等扩展能力的连接场景"
+   ]
+  },
+  "sha": "6412e7924c19",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

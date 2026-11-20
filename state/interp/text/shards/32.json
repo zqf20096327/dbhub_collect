@@ -2900,5 +2900,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "56477c16d2ec": {
+  "identity": {
+   "one_liner": "为 EF Core 提供批量 CRUD 操作的扩展库",
+   "review": "EFCore.BulkExtensions 是 EF Core 扩展库，提供 BulkInsert、BulkUpdate、BulkDelete、BulkRead、BulkSaveChanges 等方法，支持 SQL Server、PostgreSQL、MySQL、SQLite、Oracle 等数据库，各库分别使用 SqlBulkCopy、COPY BINARY、MySqlBulkCopy 等底层机制实现。方法作用于 DbContext 并接受实体列表与可选 BulkConfig 参数。README 提示小数据集有临时表创建开销，建议数据量大于 1000 时使用；Sync 操作不支持 SQLite 与 PostgreSQL。通过 NuGet 安装，需按 .NET 版本选择对应包版本。",
+   "highlights": [
+    "提供 BulkInsert、BulkInsertOrUpdate、BulkInsertOrUpdateOrDelete、BulkDelete、BulkRead、BulkSaveChanges 等批量方法，含同步与异步版本",
+    "支持 SQL Server、PostgreSQL、MySQL、SQLite、Oracle、GBase，按数据库分别使用 SqlBulkCopy、COPY BINARY、MySqlBulkCopy 等底层实现",
+    "提供 BulkConfig 配置项，可用 PropertiesToInclude/PropertiesToExclude 控制更新列，支持显式事务与 SetSynchronizeFilter 部分同步"
+   ],
+   "use_cases": [
+    "需要向数据库批量写入、更新或删除大量实体列表的应用",
+    "需要根据大列表进行查询（替代 SQL IN 或内存 JOIN）的读取场景",
+    "需要在一次连接中按主键匹配执行插入或更新（Upsert）及表数据同步的场景"
+   ]
+  },
+  "sha": "56477c16d2ec",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "70e421391304": {
+  "identity": {
+   "one_liner": "将 Slack 工作区数据同步到本地 SQLite 的终端 CLI 工具",
+   "review": "slacrawl 是一个 Go 编写的 CLI 终端应用，把 Slack 工作区消息镜像到本地 SQLite 数据库，支持全文搜索、终端浏览、报告和只读 SQL 查询。它提供 Slack API、桌面缓存、MCP 连接器、外部 JSONL 提供方及导出 ZIP 导入等多种数据来源。安装可用 Homebrew、GitHub Releases 或源码构建。用户需自备 Slack 令牌；无用户令牌时线程覆盖可能不完整。",
+   "highlights": [
+    "支持 Slack API、桌面缓存、MCP 连接器、外部提供方和 Slack 导出 ZIP 等多种数据来源，写入同一 SQLite 归档",
+    "搜索基于 SQLite FTS5，并含子串回退；TUI、结构化命令与只读 SQL 访问同一归档",
+    "提供云端归档读取和 PostgreSQL 采集命令，配合 OS keyring 会话存储与显式令牌配置"
+   ],
+   "use_cases": [
+    "为个人或团队构建可本地查询的 Slack 历史归档",
+    "导入既有 Slack 导出 ZIP 并用 SQL/TUI 检索消息",
+    "需要按时间窗口采集 Slack 数据到 PostgreSQL 的运维流程"
+   ]
+  },
+  "sha": "70e421391304",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dd7cc967bceb": {
+  "identity": {
+   "one_liner": "基于 PHP 与 MySQL 的学校管理系统，含管理员、教师、学生门户",
+   "review": "该项目是一个基于 PHP 与 MySQL 的 Web 端学校管理系统，面向学校与院校，提供学生信息管理、教师分配、班级与科目排课及考勤记录功能，并附带管理员与教师角色登录。安装方式为将代码放入 XAMPP/WAMP 网站根目录、导入 sms_db 数据库并配置连接。代码采用 Bootstrap 前端与 PDO/MySQLi 预处理语句，数据库表已规范化，README 定位于毕业设计用途，采用 MIT 许可证。",
+   "highlights": [
+    "提供学生 CRUD、教师分配、班级科目与考勤记录功能",
+    "登录访问采用角色区分（管理员与教师）",
+    "后端使用 PDO/MySQLi 预处理语句，数据库表结构已规范化"
+   ],
+   "use_cases": [
+    "学校或院校的学籍、排课与考勤信息管理",
+    "毕业设计（final-year project）源码参考与 ER 图学习",
+    "PHP + MySQL Web 开发的本地环境实践"
+   ]
+  },
+  "sha": "dd7cc967bceb",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9568e949abe2": {
+  "identity": {
+   "one_liner": "基于 DeepSeek 与规则双重校验的电商文案质检与发布审核平台",
+   "review": "该项目是一个电商文案质量检测平台：先由 LLM 依据政策规则审阅原文并校验证据引用，再叠加确定性规则保障，人工决定发布。面向多租户运营，每个租户使用独立 MySQL schema 与数据库账号隔离。采用 Redis Streams 投递任务、并发 worker 处理，导出 Prometheus 指标。README 声明这是测试过的开发平台，不含合规认证与生产 SLO。",
+   "highlights": [
+    "LLM 审查原文并逐条校验证据引用与规则引用，确定性规则保障不可被模型覆盖",
+    "每租户独立 MySQL schema 与专属数据库账号，API/worker 容器不持有 MySQL root 凭据",
+    "提供 10,000+ 条可复现合成商品数据生成器，以及 Prometheus/Grafana/Alertmanager 监控配置"
+   ],
+   "use_cases": [
+    "电商文案提交、检测报告、人工发布决策的全流程管理",
+    "多租户隔离的商品与审核数据管理",
+    "离线基线与负载测试下的规则模式检测演练"
+   ]
+  },
+  "sha": "9568e949abe2",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8bb7f2b3ae39": {
+  "identity": {
+   "one_liner": "自托管多智能体群聊与任务工具包：一个 Python 文件加 SQLite，HMAC 签名消息总线",
+   "review": "hermes-agent-fleet-toolkit 是一套自托管基础设施，用单个 Python 文件和 SQLite 实现多 Hermes Agent 配置档案的群聊总线（含线程、长轮询、全文搜索、@提及唤醒）与跨档案 token/成本追踪。写入需 HMAC 签名，依赖 Python 3.10+ 标准库，无 pip 依赖；安装通过 install.sh 写入 systemd 用户单元。非 Hermes 代理可用 agentbus.py 单文件 CLI 接入。",
+   "highlights": [
+    "HTTP 群聊总线：SQLite 历史、HMAC 签名写入、线程、长轮询读取、FTS5 全文搜索、每代理读游标与 @提及唤醒 webhook",
+    "@提及触发 dispatcher 生成真实代理回合，答案回写到线程；提供 inbox/digest/threads/presence 四个只读分诊端点，支持按字段裁剪读取",
+    "fleet-usage 从 Hermes 的 session_model_usage 表汇总 token 与成本：7d/30d/全量窗口、按档案与模型拆分、预算告警、CSV 导出；另含 bus_watch 零 token 空闲轮询与周一消耗周报"
+   ],
+   "use_cases": [
+    "在私有网络内运行多个 AI 代理组成的协作群组，替代 Discord/Slack 等外部 SaaS 平台",
+    "追踪各代理档案的 token 消耗与成本，设置日预算与消耗异常告警",
+    "让非 Hermes 运行时、cron、shell 等通过 agentbus.py 接入同一聊天房间参与协作"
+   ]
+  },
+  "sha": "8bb7f2b3ae39",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

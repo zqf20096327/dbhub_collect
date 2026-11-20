@@ -3339,5 +3339,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1cf7245c8d60": {
+  "identity": {
+   "one_liner": "跨编码代理共享记忆的本地存储工具",
+   "review": "Hippo 在项目内创建 .hippo/ 存储（SQLite 加可提交的 markdown 镜像），将通过 always/never/must 等方式教给某个编码代理的规则与教训存入其中，供 Claude Code、Codex、Cursor、MCP 客户端等读取。npm 全局安装后运行 hippo init 初始化；默认路径存储不调用 LLM，默认嵌入器约 480 MB，可用 --no-embeddings 跳过。README 中提及的基准数字由其自身测试得出且注明局限。",
+   "highlights": [
+    "存储为 SQLite 加 markdown 镜像，可 grep、diff 与提交；零运行时依赖，需 Node.js 22.16+",
+    "通过 hooks 从会话中捕获规则，每次召回返回置顶规则加最多 5 条相关记忆；支持 outcome --bad 弱化错误记忆与 supersede 替换旧记忆",
+    "提供 hippo mcp（13 个工具）、本地 dashboard、hippo learn --git（学习近 30 天提交）及从 ChatGPT、CLAUDE.md、.cursorrules、Slack、markdown 导入"
+   ],
+   "use_cases": [
+    "多个编码代理之间共享项目级规则与教训，切换代理时不重新积累",
+    "团队通过提交 markdown 镜像在 pull request 中评审记忆规则",
+    "需要本地化、免额外 LLM 调用的长期记忆存储场景"
+   ]
+  },
+  "sha": "1cf7245c8d60",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "34fdea6c53ee": {
+  "identity": {
+   "one_liner": "面向 OpenAI 兼容 LLM API 的本地语义缓存代理，改写 baseURL 即接入",
+   "review": "MorrowCache 是一个运行在本地的 OpenAI 兼容语义缓存代理，供使用 Cursor、Claude Code、Windsurf 等编码代理或应用客户端的开发者使用。它通过意图裁决器（云端 Jev 或本地 Kev/Laya 等后端）判定改写后的问题与缓存先前意图是否一致，命中则返回存储答案，未命中则转发上游模型；仅缓存最终文本，不存储 tool_calls。依赖 Node ≥ 22.5，SQLite 为单进程，需每个数据库卷运行单副本。",
+   "highlights": [
+    "采用 Propose + Intent Admit 两级判定流程，对改写问题进行意图裁决后返回缓存答案，tool_calls 不被存储或重放",
+    "支持多种裁决器后端：云端 Jev（经 OpenRouter）、本地 Kev、Laya、Laya MLX、System One 兼容服务，以及仅 SHA-256 精确匹配的 none 模式",
+    "提供 SSE 流式命中、响应头（HIT/MISS/BYPASS、tier、reason）、租户隔离键，裁决器超时或出错时请求直接透传上游（fail-open）"
+   ],
+   "use_cases": [
+    "编码代理在多步重试中重复提出相同任务时，由代理轮次缓存返回先前答案",
+    "客户端频繁出现同义改写问题、希望减少重复调用上游模型的场景",
+    "需离线运行语义判定的环境，可配置本地裁决器后端而不依赖云 API 密钥"
+   ]
+  },
+  "sha": "34fdea6c53ee",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

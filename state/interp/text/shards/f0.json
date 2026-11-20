@@ -3289,5 +3289,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "432db5a0a3e1": {
+  "identity": {
+   "one_liner": "自托管 RSS 阅读器，本地运行 AI 流水线，将订阅内容加工为可检索的知识库",
+   "review": "Alt 是一个自托管 RSS 阅读平台，按小时抓取订阅源，并通过本地运行的 Ollama 模型生成摘要、标签、搜索索引、三日回顾和带引用的 RAG 问答。整套服务以 Docker Compose 编排，通过 altctl CLI 按栈（ai、rag、recap 等）逐个启用，存储与推理均在本机完成，无需云端 LLM 密钥。适合希望在本地将阅读内容沉淀为可检索知识的个人用户。",
+   "highlights": [
+    "支持 RSS/OPML 订阅、每小时轮询及每日流入上限，提供摘要、标签提取、全文搜索（Meilisearch）与基于 pgvector 的带引用问答",
+    "采用 local-first 推理：摘要、嵌入、重排序和搜索均在用户硬件上运行，不需要云端 LLM 密钥",
+    "服务间使用 Connect-RPC/Protobuf 与 Pact 契约测试，通过 mutual TLS 相互认证，并基于 knowledge-sovereign 的追加式事件日志构建读取模型"
+   ],
+   "use_cases": [
+    "个人本地部署 RSS 阅读与文章知识化管理，替代停留在文章列表的阅读流程",
+    "对私有阅读历史进行检索与问答（Ask Augur、Acolyte 报告），生成带引用来源的回答与长文报告",
+    "需要可观测运维的本地多服务部署：日志入 ClickHouse、Prometheus/Grafana 监控与按栈启停管理"
+   ]
+  },
+  "sha": "432db5a0a3e1",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

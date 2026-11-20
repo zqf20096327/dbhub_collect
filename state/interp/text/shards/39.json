@@ -3077,5 +3077,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1bb927104733": {
+  "identity": {
+   "one_liner": "用于自动化管理既有 PostgreSQL 数据库的 Ansible 集合",
+   "review": "community.postgresql 是一个 Ansible 集合，包含约 22 个模块，用于对已有 PostgreSQL 实例执行数据库、用户、权限、pg_hba、复制槽、订阅等管理操作，不负责安装数据库本身。依赖 Psycopg（支持 2.5.1+ 或 3.1.8+），随 Ansible 包分发，也可经 ansible-galaxy 安装，遵循 GPLv3+ 许可，适用于使用 Ansible 自动化数据库运维的场景。",
+   "highlights": [
+    "包含 info、basic、other 三类共 20 余个模块，覆盖数据库、用户、权限、扩展、pg_hba、复制槽、订阅、表、索引等对象管理",
+    "支持 Psycopg2（最低 2.5.1）与 Psycopg3（最低 3.1.8）两种数据库适配器",
+    "经 CI 测试于 ansible-core 2.16–2.21 及 PostgreSQL 13–18，当前主版本提供两年 bugfix 支持"
+   ],
+   "use_cases": [
+    "用 Ansible 剧本自动化管理已有的 PostgreSQL 数据库、用户与权限",
+    "通过 postgresql_query、postgresql_copy 等模块执行查询与数据导入导出",
+    "将集合写入 requirements.yml，纳入统一的 Ansible 环境部署流程"
+   ]
+  },
+  "sha": "1bb927104733",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "067d8e258ea4": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，实现公历与伊朗 Jalali 历日期/时间戳的双向转换。",
+   "review": "该扩展在 PostgreSQL 14 及以上版本内提供公历与 Jalali（波斯）历的互转能力，包含 format_jalali、jalali_part、make_jalali_date 等函数，以及自定义 jalali_date 类型。它感知时区、以周六为每周首日，并提供 jalali_period 等区间函数使查询可用普通索引。可用于需要以 Jalali 历进行日期筛选、格式化输出或生成分组统计的数据库应用。注意：1633 年之后的历法规则可能与部分实现存在一天差异，且暂无 macOS/Windows 预编译包。",
+   "highlights": [
+    "提供 format_jalali、jalali_part、jalali_trunc、jalali_period、make_jalali_date、jalali_series 等函数，覆盖转换、截断、区间、序列、年龄与月份运算",
+    "in_jalali_period 会将查询改写为范围比较以利用普通索引，并提供 jalali_create_statistics 创建扩展统计以改善估算",
+    "包含带 cast、运算符及 btree/hash 索引的 jalali_date 类型；timestamptz 重载遵循会话时区，date/timestamp 重载标记为 IMMUTABLE PARALLEL SAFE"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中按 Jalali 月/周/年过滤和聚合带时间戳的业务数据（如订单表区间查询）",
+    "以 'fa' 或 'en' 语言将 Jalali 日期格式化为含波斯数字与月份名的字符串输出",
+    "构建以 Jalali 历日期为主的应用数据模型，使用 make_jalali_date/jalali_to_date 及 jalali_date 类型"
+   ]
+  },
+  "sha": "067d8e258ea4",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

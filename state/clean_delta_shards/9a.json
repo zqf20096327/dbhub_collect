@@ -30571,5 +30571,1576 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "f21252547236+2": {
+  "fn": "Fozikio/cortex-engine",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "npm version",
+     "npm downloads",
+     "GitHub stars",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    9,
+    6,
+    9
+   ],
+   [
+    "replace",
+    9,
+    12,
+    9,
+    10,
+    [
+     " cortex-engine demo — init, explore, serve"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    10,
+    12
+   ],
+   [
+    "replace",
+    14,
+    23,
+    12,
+    13,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    37,
+    13,
+    27
+   ],
+   [
+    "replace",
+    37,
+    39,
+    27,
+    29,
+    [
+     "- **Three storage backends** — local SQLite (default), cloud Firestore, and JSON file (backup/migration). All share one `CortexStore` interface — see docs/storage-backends.md",
+     "- **Atomic transactions** — `withTransaction(fn)` primitive composes multi-step writes. SQLite uses `BEGIN IMMEDIATE` with a per-store mutex; Firestore uses `runTransaction` with a write-routing proxy. See docs/concurrency.md"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    29,
+    30
+   ],
+   [
+    "replace",
+    40,
+    41,
+    30,
+    31,
+    [
+     "- **Typed tool catalogue** — every cognitive tool carries `category` + `whenToUse` + `doNotUse` metadata so LLMs disambiguate cleanly. Browse with `fozikio tools` or `GET /tools`. Auto-generated reference at docs/tools-reference.md"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    72,
+    31,
+    62
+   ],
+   [
+    "replace",
+    72,
+    73,
+    62,
+    63,
+    [
+     "|Module|Role|"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    63,
+    64
+   ],
+   [
+    "replace",
+    74,
+    84,
+    64,
+    74,
+    [
+     "|`core`|Foundational types, config, and shared utilities|",
+     "|`engines`|Cognitive processing: memory consolidation, FSRS, graph traversal|",
+     "|`stores`|Persistence layer — SQLite (local), Firestore (cloud), JSON (backup/migration). All implement the shared `CortexStore` interface|",
+     "|`tools`|All 60 cognitive tool implementations (one file per tool)|",
+     "|`mcp`|MCP server, tool registry, and plugin loader|",
+     "|`cognitive`|Higher-order cognitive operations (dream, wander, validate)|",
+     "|`triggers`|Scheduled and event-driven triggers|",
+     "|`bridges`|Adapters for external services and APIs|",
+     "|`providers`|Embedding and LLM provider implementations|",
+     "|`bin`|Entry points: `serve.js` (HTTP + MCP), `cli.js` (admin CLI)|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    96,
+    74,
+    86
+   ],
+   [
+    "replace",
+    96,
+    97,
+    86,
+    87,
+    [
+     "See the **Quick Start** guide for the full 5-minute setup."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    106,
+    87,
+    96
+   ],
+   [
+    "replace",
+    106,
+    107,
+    96,
+    97,
+    [
+     "Each agent gets isolated memory via namespaces. See the **Architecture** section for details."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    97,
+    100
+   ],
+   [
+    "replace",
+    110,
+    111,
+    100,
+    101,
+    [
+     "The fastest path: open an AI agent in an empty directory and say *\"set up a cortex workspace.\"* The agent runs `npx fozikio init`, reads the generated files, and is immediately productive. See the **Agent-First Setup** guide for the full walkthrough."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    101,
+    104
+   ],
+   [
+    "replace",
+    114,
+    115,
+    104,
+    105,
+    [
+     "**No dashboard currently ships with the package.** Releases 1.0.0 through 1.2.1 bundled one; it stopped being included at 1.2.2 when publishing moved to CI, and it is not coming back in its old form — see #59 for what a replacement needs."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    129,
+    105,
+    119
+   ],
+   [
+    "replace",
+    129,
+    130,
+    119,
+    120,
+    [
+     "The previous UI's source is Fozikio/dashboard — a Vite/React build that still compiles, but predates the REST and CLI changes in 1.3.0 and 1.4.0 and has not been re-integrated."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    197,
+    120,
+    187
+   ],
+   [
+    "replace",
+    197,
+    201,
+    187,
+    188,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    222,
+    188,
+    209
+   ],
+   [
+    "replace",
+    222,
+    223,
+    209,
+    210,
+    [
+     "|Variable|Required|Description|"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    224,
+    210,
+    211
+   ],
+   [
+    "replace",
+    224,
+    231,
+    211,
+    218,
+    [
+     "|`CORTEX_API_TOKEN`|Optional|Used by the `cortex-telemetry` hook to send retrieval feedback to the cortex API. Not required to run the MCP server.|",
+     "|`MOONSHOT_API_KEY`|Optional|Required when `llm: kimi` is set. Get one from platform.moonshot.cn.|",
+     "|`OPENAI_API_KEY`|Optional|Required when `llm: openai` is set, or when using any OpenAI-compatible provider without an explicit API key.|",
+     "|`CORTEX_STORE`|Optional|`sqlite` \\|`firestore`. Overrides the config file — meant for containers that ship no config.|",
+     "|`CORTEX_EMBED`|Optional|`built-in` \\|`ollama` \\|`vertex`. Same precedence as above.|",
+     "|`CORTEX_LLM`|Optional|`ollama` \\|`gemini` \\|`anthropic` \\|`openai` \\|`kimi`. Same precedence as above.|",
+     "|`CORTEX_SQLITE_PATH`|Optional|Path to the SQLite file, e.g. a mounted volume (`/data/cortex.db`).|"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    218,
+    219
+   ],
+   [
+    "replace",
+    232,
+    233,
+    219,
+    220,
+    [
+     "Additional variables are required depending on which providers you enable (Firestore, Vertex AI, etc.). See `docs/` for provider-specific configuration, and `docs/deploy-railway.md` for a hosted deployment with no Ollama — or use the one-click template: Deploy on Railway"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    240,
+    220,
+    227
+   ],
+   [
+    "replace",
+    240,
+    241,
+    227,
+    228,
+    [
+     "cortex-engine ships with Reflex rules — portable YAML-based guardrails that work across any agent runtime, not just Claude Code."
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    228,
+    229
+   ],
+   [
+    "replace",
+    242,
+    243,
+    229,
+    230,
+    [
+     "|Rule|Event|What It Does|"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    244,
+    230,
+    231
+   ],
+   [
+    "replace",
+    244,
+    247,
+    231,
+    234,
+    [
+     "|`cognitive-grounding`|`prompt_submit`|Nudges the agent to call `query()` before evaluation, design, review, or creation work|",
+     "|`observe-first`|`file_write` / `file_edit`|Warns if writing to memory directories without calling `observe()` or `query()` first|",
+     "|`note-about-doing`|`prompt_submit`|Suggests capturing new threads of thought with `thread_create()`|"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    248,
+    234,
+    235
+   ],
+   [
+    "replace",
+    248,
+    249,
+    235,
+    236,
+    [
+     "Rules live in `reflex-rules/` as standard Reflex YAML. They're portable — use them with Claude Code, Cursor, Codex, or any runtime with a Reflex adapter. See @fozikio/reflex for the full rule format and tier enforcement."
+    ]
+   ],
+   [
+    "equal",
+    249,
+    258,
+    236,
+    245
+   ],
+   [
+    "replace",
+    258,
+    259,
+    245,
+    246,
+    [
+     "|Skill|When to Use|What It Provides|"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    260,
+    246,
+    247
+   ],
+   [
+    "replace",
+    260,
+    261,
+    247,
+    248,
+    [
+     "|`cortex-memory`|Query, record, and review work|Full memory workflow — query/observe patterns, belief tracking, memory-grounded code review, session patterns|"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    264,
+    248,
+    251
+   ],
+   [
+    "replace",
+    264,
+    265,
+    251,
+    252,
+    [
+     "|Agent|Description|"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    266,
+    252,
+    253
+   ],
+   [
+    "replace",
+    266,
+    267,
+    253,
+    254,
+    [
+     "|`cortex-researcher`|Deep research agent that queries cortex before external sources, observes novel findings back into memory|"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    278,
+    254,
+    265
+   ],
+   [
+    "replace",
+    278,
+    279,
+    265,
+    266,
+    [
+     "|Capability|Tools|"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    280,
+    266,
+    267
+   ],
+   [
+    "replace",
+    280,
+    295,
+    267,
+    282,
+    [
+     "|**Memory**|`observe`, `query`, `recall`, `wander`, `wonder`, `forget`, `retrieve`, `context`, `feedback`, `query_cross`, `federated_query`|",
+     "|**Beliefs & Reasoning**|`believe`, `belief`, `contradict`, `speculate`, `validate`, `predict`|",
+     "|**Threads**|`thread_create`, `thread_update`, `thread_resolve`, `threads_list`|",
+     "|**Journaling**|`journal_write`, `journal_read`|",
+     "|**Identity**|`evolve`, `evolution_list`|",
+     "|**Social**|`social_read`, `social_update`, `social_draft`, `social_score`|",
+     "|**Graph**|`neighbors`, `suggest_links`, `suggest_tags`, `link`, `graph_report`|",
+     "|**Maintenance**|`dream`, `digest`, `reflect`, `abstract`, `find_duplicates`, `retrieval_audit`, `consolidation_status`|",
+     "|**Vitals**|`vitals_get`, `vitals_set`, `sleep_pressure`|",
+     "|**Reasoning**|`surface`, `ruminate`, `notice`, `intention`, `resolve`|",
+     "|**Content**|`content_create`, `content_list`, `content_update`|",
+     "|**Ops**|`ops_append`, `ops_query`, `ops_update`|",
+     "|**Goals**|`goal_set`|",
+     "|**Agents**|`agent_invoke`|",
+     "|**Stats**|`stats`, `query_explain`|"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    282,
+    283
+   ],
+   [
+    "replace",
+    296,
+    297,
+    283,
+    284,
+    [
+     "The plugin system is still available for custom extensions — see Plugin Docs."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    301,
+    284,
+    288
+   ],
+   [
+    "replace",
+    301,
+    312,
+    288,
+    299,
+    [
+     " - Quick Start — 5-minute setup",
+     " - Storage backends — SQLite vs Firestore vs JSON, migration paths",
+     " - Concurrency model — `withTransaction` contract, single-process invariant, SQLite vs Firestore semantics",
+     " - Tools reference — all 60 tools by category with when-to-use guidance (auto-generated)",
+     " - Multi-agent design — namespace isolation, bridges, federation",
+     " - Design specs — design documents from the v1.2.0 audit-driven refactor",
+     " - Agent-first setup — Workspace initialization walkthrough",
+     "- **Discussions** — Ask questions, share what you've built",
+     "- **Contributing** — How to contribute",
+     "- **Issues** — Open work and known gaps",
+     "- **Security** — Report vulnerabilities"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    314,
+    299,
+    301
+   ],
+   [
+    "replace",
+    314,
+    320,
+    301,
+    302,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    322,
+    302,
+    304
+   ],
+   [
+    "replace",
+    322,
+    325,
+    304,
+    307,
+    [
+     "- @fozikio/reflex — Portable safety guardrails for agents. Rules as data, not code.",
+     "- sigil — Agent control surface (archived, no longer maintained).",
+     "- fozikio.com — Documentation and guides"
+    ]
+   ],
+   [
+    "equal",
+    325,
+    327,
+    307,
+    309
+   ],
+   [
+    "replace",
+    327,
+    329,
+    309,
+    310,
+    [
+     "MIT — see LICENSE"
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "0eb1dfe9e3d3+2": {
+  "fn": "DocForum/docforum-core",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "License",
+     "Status",
+     "Stack"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    16,
+    5,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "**📖 Browse the docs site** —"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    19,
+    17,
+    19
+   ],
+   [
+    "replace",
+    19,
+    22,
+    19,
+    20,
+    [
+     "`docs/site/`)."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    24,
+    20,
+    22
+   ],
+   [
+    "replace",
+    24,
+    36,
+    22,
+    23,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    46,
+    23,
+    33
+   ],
+   [
+    "replace",
+    46,
+    60,
+    33,
+    34,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    62,
+    34,
+    36
+   ],
+   [
+    "replace",
+    62,
+    64,
+    36,
+    38,
+    [
+     "- **`docforum-web`** — React/TypeScript frontend. Talks only to this repo's API; never calls `docforum-escrow` or Stellar directly.",
+     "- **`docforum-escrow`** — Rust/Soroban escrow contract + `@docforum/escrow-sdk`. Consumed here as a *library dependency* by the `payments` module, never called as a running network service — see `docs/adr/0002-stellar-escrow-for-fulfillment-payout.md`."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    67,
+    38,
+    41
+   ],
+   [
+    "replace",
+    67,
+    69,
+    41,
+    43,
+    [
+     "`docs/adr/0001-modular-monolith.md` and",
+     "`docs/adr/0002-stellar-escrow-for-fulfillment-payout.md`."
+    ]
+   ],
+   [
+    "equal",
+    69,
+    72,
+    43,
+    46
+   ],
+   [
+    "replace",
+    72,
+    73,
+    46,
+    47,
+    [
+     "|Layer|Choice|"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    47,
+    48
+   ],
+   [
+    "replace",
+    74,
+    81,
+    48,
+    55,
+    [
+     "|Runtime / language|Node.js + TypeScript|",
+     "|API framework|Express (or Fastify)|",
+     "|Database|PostgreSQL|",
+     "|ORM / schema|Prisma (`backend/prisma/schema/` is the source of truth, one file per module)|",
+     "|Auth|JWT access + refresh tokens, role claims (`patient` \\|`doctor` \\|`facility` \\|`admin`)|",
+     "|Jobs|Simple cron/interval — no queue until a real job needs one|",
+     "|Payments|Stellar escrow via `@docforum/escrow-sdk` (see `docforum-escrow`), never custom payment rails|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    55,
+    56
+   ],
+   [
+    "replace",
+    82,
+    83,
+    56,
+    57,
+    [
+     "Full rationale for every choice: `ARCHITECTURE.md` §2."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    90,
+    57,
+    64
+   ],
+   [
+    "replace",
+    90,
+    97,
+    64,
+    65,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    99,
+    65,
+    67
+   ],
+   [
+    "replace",
+    99,
+    100,
+    67,
+    68,
+    [
+     "Full field-level schema: `ARCHITECTURE.md` §4 and `backend/prisma/schema/` (the two must never drift — schema wins if they do)."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    121,
+    68,
+    89
+   ],
+   [
+    "replace",
+    121,
+    133,
+    89,
+    90,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    139,
+    90,
+    96
+   ],
+   [
+    "replace",
+    139,
+    140,
+    96,
+    97,
+    [
+     "|Doc|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    97,
+    98
+   ],
+   [
+    "replace",
+    141,
+    147,
+    98,
+    104,
+    [
+     "|`PRD.md`|What we're building, for whom, and why — personas, user flows, functional requirements, explicit non-goals, and a running list of \"what would break / edge cases / overengineered\" hard questions.|",
+     "|`ARCHITECTURE_ESSENTIALS.md`|Fast-reference: stack, hard rules, data-model map, known unresolved design gaps, overengineering guardrails.|",
+     "|`ARCHITECTURE.md`|Full reasoning: tech stack rationale, module boundaries, complete data models, key flows, architecture-level hard questions.|",
+     "|`ROADMAP.md`|Phased plan and current status — updated on every contribution that touches roadmap-tracked work.|",
+     "|`AGENTS.md` / `CLAUDE.md`|Rules for coding agents (human- or AI-directed) working in this repo.|",
+     "|`docs/adr/`|Architecture decision records — 0001 (modular monolith over microservices), 0002 (Stellar escrow as a consumed library; the 3-repo org split).|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    166,
+    104,
+    123
+   ],
+   [
+    "replace",
+    166,
+    174,
+    123,
+    124,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    176,
+    124,
+    126
+   ],
+   [
+    "replace",
+    176,
+    177,
+    126,
+    127,
+    [
+     "|Command|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    127,
+    128
+   ],
+   [
+    "replace",
+    178,
+    184,
+    128,
+    134,
+    [
+     "|`npm run dev`|`tsx watch` dev server|",
+     "|`npm run build`|Typecheck + compile to `dist/`|",
+     "|`npm start`|Run the compiled `dist/server.js`|",
+     "|`npm test`|Unit tests only (no DB needed)|",
+     "|`npm run test:integration`|The booking-concurrency test — **spins up its own throwaway Postgres** (via `embedded-postgres`, a prebuilt binary) on port 5433, so this needs no pre-existing DB either|",
+     "|`npm run test:all`|Everything|"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    189,
+    134,
+    139
+   ],
+   [
+    "replace",
+    189,
+    190,
+    139,
+    140,
+    [
+     "`docs/api/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    212,
+    140,
+    162
+   ],
+   [
+    "replace",
+    212,
+    213,
+    162,
+    163,
+    [
+     "Full phase breakdown: `ROADMAP.md`."
+    ]
+   ],
+   [
+    "equal",
+    213,
+    215,
+    163,
+    165
+   ],
+   [
+    "replace",
+    215,
+    226,
+    165,
+    166,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    227,
+    166,
+    167
+   ],
+   [
+    "replace",
+    227,
+    229,
+    167,
+    168,
+    [
+     "Apache License 2.0"
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "8bc5e0b23e20+2": {
+  "fn": "BelledonneCommunications/flexisip-account-manager",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "equal",
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    "delete",
+    9,
+    10,
+    9,
+    9
+   ],
+   [
+    "equal",
+    10,
+    11,
+    9,
+    10
+   ],
+   [
+    "delete",
+    11,
+    17,
+    10,
+    10
+   ],
+   [
+    "equal",
+    17,
+    23,
+    10,
+    16
+   ],
+   [
+    "replace",
+    23,
+    24,
+    16,
+    17,
+    [
+     "Check the INSTALL.md and CHANGELOG.md files."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    40,
+    17,
+    33
+   ],
+   [
+    "replace",
+    40,
+    41,
+    33,
+    34,
+    [
+     " php artisan spaces:create-update {sip_domain} {host} {name} {--super} {--digest-realm=}"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    46,
+    34,
+    39
+   ],
+   [
+    "replace",
+    46,
+    47,
+    39,
+    40,
+    [
+     " php artisan spaces:import-configuration-from-dot-env {sip_domain}"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    58,
+    40,
+    51
+   ],
+   [
+    "replace",
+    58,
+    59,
+    51,
+    52,
+    [
+     " php artisan accounts:create-admin-account {-u|username=} {-p|password=} {-d|domain=} {-k|api_key_ip=}"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    64,
+    52,
+    57
+   ],
+   [
+    "replace",
+    64,
+    65,
+    57,
+    58,
+    [
+     " php artisan digest:clear-api-keys {minutes}"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    70,
+    58,
+    63
+   ],
+   [
+    "replace",
+    70,
+    71,
+    63,
+    64,
+    [
+     " php artisan digest:clear-opaques {minutes}"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    76,
+    64,
+    69
+   ],
+   [
+    "replace",
+    76,
+    77,
+    69,
+    70,
+    [
+     " php artisan accounts:clear-unconfirmed {days} {--apply} {--and-confirmed}"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    84,
+    70,
+    77
+   ],
+   [
+    "replace",
+    84,
+    85,
+    77,
+    78,
+    [
+     " php artisan accounts:clear-accounts-tombstones {days} {--apply}"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    92,
+    78,
+    85
+   ],
+   [
+    "replace",
+    92,
+    93,
+    85,
+    86,
+    [
+     " php artisan accounts:set-admin {account_id}"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    100,
+    86,
+    93
+   ],
+   [
+    "replace",
+    100,
+    101,
+    93,
+    94,
+    [
+     " php artisan accounts:seed /path/to/accounts.json"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    104,
+    94,
+    97
+   ],
+   [
+    "replace",
+    104,
+    105,
+    97,
+    98,
+    [
+     "To send SMS to the USA some providers need to validate their templates before transferring them, see Sending SMS messages to the USA - OVH."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    135,
+    98,
+    128
+   ],
+   [
+    "replace",
+    135,
+    136,
+    128,
+    129,
+    [
+     " $ linphone-daemon --pipe ld"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    139,
+    129,
+    132
+   ],
+   [
+    "replace",
+    139,
+    140,
+    132,
+    133,
+    [
+     " APP_LINPHONE_DAEMON_UNIX_PATH=/tmp/ld"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    133,
+    134
+   ],
+   [
+    "replace",
+    141,
+    142,
+    134,
+    135,
+    [
+     "If you have issues connecting to that socket check the `systemd restrictions` part of this document."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    135,
+    138
+   ],
+   [
+    "replace",
+    145,
+    146,
+    138,
+    139,
+    [
+     "The systemd service PrivateTmp setting might also restrict that access."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    149,
+    139,
+    142
+   ],
+   [
+    "replace",
+    149,
+    150,
+    142,
+    143,
+    [
+     "The provisioning endpoints can be authentified using the mTLS flow."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    160,
+    143,
+    153
+   ],
+   [
+    "replace",
+    160,
+    164,
+    153,
+    154,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    154,
+    155
+   ]
+  ],
+  "at": "2026-11-20"
+ },
+ "d0b3f5480893+2": {
+  "fn": "larkxai/larkx",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Website: https://larkx.ai"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    16,
+    11,
+    16
+   ],
+   [
+    "replace",
+    16,
+    29,
+    16,
+    29,
+    [
+     "|Area|State|",
+     "|------------------------------------------------------|-----------------------------------------------------------------------------------|",
+     "|Execution protocol (`@larkx/protocol`)|Implemented, version 1|",
+     "|Local workflow runtime (`@larkx/core`)|Implemented|",
+     "|Memory storage|Implemented. Does not survive process exit|",
+     "|SQLite storage and Node adapter|Implemented. Node's built-in `node:sqlite` is experimental|",
+     "|Replay, crash recovery, effect policies, ownership|Implemented and tested on Node.js|",
+     "|Durable agents, tools, model adapters (`@larkx/agent`)|Implemented on the existing engine. Scripted model in CI. No device run for Cactus|",
+     "|React Native adapter|Implemented on the shared engine. Device and emulator runs are not in CI|",
+     "|Cactus adapter (`@larkx/cactus`)|Implemented against cactus-react-native 1.13.1. Native dev build only. Not run here|",
+     "|Optional Cloud telemetry (`@larkx/telemetry`)|Implemented. Metadata only. Execution does not wait on it. Not a device run|",
+     "|HTTP transport, worker SDK, reference coordinator|Not implemented|",
+     "|Managed LarkX Cloud|Ingestion lives in `larkxai/cloud`. This tree only sends the batch|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    62,
+    29,
+    62
+   ],
+   [
+    "replace",
+    62,
+    68,
+    62,
+    63,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    82,
+    63,
+    77
+   ],
+   [
+    "replace",
+    82,
+    115,
+    77,
+    78,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    131,
+    78,
+    94
+   ],
+   [
+    "replace",
+    131,
+    135,
+    94,
+    95,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    143,
+    95,
+    103
+   ],
+   [
+    "replace",
+    143,
+    177,
+    103,
+    104,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    181,
+    104,
+    108
+   ],
+   [
+    "replace",
+    181,
+    190,
+    108,
+    117,
+    [
+     "- Architecture RFC",
+     "- Execution semantics RFC",
+     "- Execution model",
+     "- Replay",
+     "- State machines",
+     "- Storage",
+     "- Side effects",
+     "- Cloud observability specification",
+     "- Telemetry export"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    117,
+    118
+   ],
+   [
+    "replace",
+    191,
+    192,
+    118,
+    119,
+    [
+     "Agents and the model adapter are implemented: agents, model adapter. Hybrid dispatch, mobile lifecycle, and a future Rust core: hybrid, mobile, Rust."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    218,
+    119,
+    145
+   ],
+   [
+    "replace",
+    218,
+    225,
+    145,
+    152,
+    [
+     "|Platform|Support|",
+     "|-----------------------------------|----------------------------------------------------------------------------------|",
+     "|Node.js 22.13+|Local workflows, file SQLite, process-death tests, and the mobile ownership policy|",
+     "|React Native, Expo SDK 58|Workflow demo and renovation agent. Not executed here on an emulator or a device|",
+     "|Cactus native module|Adapter compiled against 1.13.1. Requires a dev build, not Expo Go. Not run here|",
+     "|Browser|Not a target of this release|",
+     "|Native iOS, Android, embedded, Rust|Design constraints only|"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    249,
+    152,
+    176
+   ],
+   [
+    "replace",
+    249,
+    250,
+    176,
+    177,
+    [
+     "`pnpm test` builds the packages and runs Vitest. Tests import the built `dist` entry points. See Contributing."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    252,
+    177,
+    179
+   ],
+   [
+    "replace",
+    252,
+    255,
+    179,
+    180,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    256,
+    180,
+    181
+   ],
+   [
+    "replace",
+    256,
+    259,
+    181,
+    182,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    260,
+    182,
+    183
+   ],
+   [
+    "replace",
+    260,
+    262,
+    183,
+    184,
+    [
+     "Apache License 2.0. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-20"
  }
 }

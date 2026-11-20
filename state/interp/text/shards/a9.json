@@ -3424,5 +3424,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "869092daf61f": {
+  "identity": {
+   "one_liner": "Go 编写的 Discord 归档 CLI，将服务器历史与本地缓存消息存入 SQLite",
+   "review": "Discrawl 是一个命令行工具，把 Discord 服务器数据（经 bot 同步）和 Discord Desktop 本地缓存消息归档到本地 SQLite，供离线搜索、SQL 查询和终端浏览。面向需要持久化服务器历史或本地读取缓存私信的用户。支持 bot 同步、wiretap 缓存导入、Git 快照发布/订阅，以及可选的嵌入向量语义搜索；wiretap 仅读取已缓存消息，私信不进入共享快照。",
+   "highlights": [
+    "将 Discord 服务器数据与本地缓存消息写入本地 SQLite，支持 FTS5 全文搜索、只读 SQL 查询和 TUI 浏览",
+    "提供四种归档来源：bot 同步、Desktop 缓存导入（wiretap）、Git 快照订阅、远程 Worker 只读访问",
+    "支持发布分片 Git 快照供其他机器离线订阅，快照排除 wiretap 私信，并可选语义/混合搜索与实时嵌入更新"
+   ],
+   "use_cases": [
+    "本地持久化 Discord 服务器消息历史，进行离线搜索与结构化浏览",
+    "无 bot token 时读取 Discord Desktop 已缓存的消息（含可分类私信）",
+    "通过 Git 快照向其他机器或读者分发只读归档，读者无需 Discord 凭据"
+   ]
+  },
+  "sha": "869092daf61f",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e4d097bfad6b": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 React 19 的后台管理基础框架，含行级权限与审批流。",
+   "review": "该项目是一个后台管理系统基础框架，采用 pnpm + turbo monorepo 组织，包含 FastAPI 后端、React 19 Web 控制台、Electron 桌面模板和 Expo 移动端模板，供需要搭建管理系统时复用登录、权限、审批、文件等通用模块的开发者使用。支持 PostgreSQL、SQL Server 和 MySQL 三种数据库，前后端 API 契约由 OpenAPI 生成，内置 AI 助手经权限与数据范围绑定。",
+   "highlights": [
+    "RBAC 权限扩展到行级数据范围，规则配置在模型列上，配置错误时 UI 提示",
+    "基于 React 19 <Activity> 的多标签页保持状态，视图状态存于 URL",
+    "内置审批工作流（表单设计器、或签/会签、超时处理）与基于 pydantic-ai 的 AI 助手，写操作需预览确认并记录审计"
+   ],
+   "use_cases": [
+    "以 FastAPI + React 技术栈快速搭建包含用户、角色、部门、审批等通用模块的后台管理系统",
+    "需要一套代码同时提供 Web 控制台、Electron 桌面端和 Expo 移动端的内部系统",
+    "需要行级数据权限（如部门经理仅见本部门数据）或带权限绑定的 AI 助手与 MCP 网关的管理场景"
+   ]
+  },
+  "sha": "e4d097bfad6b",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "30bdb5f09487": {
+  "identity": {
+   "one_liner": "自托管邮件客户端，单容器聚合多个 IMAP 邮箱并附带任务、日历与联系人",
+   "review": "nexmail 是一个自托管的 Web 邮件客户端，通过单个容器和 SQLite 文件运行，聚合多个 IMAP 邮箱，无需额外数据库或云账户。功能包含会话分组、全文搜索、规则、标签（以 IMAP 关键词存储）、联系人（CardDAV 同步）、任务（可接 Todoist/nextasks）、日历（CalDAV）、定时发送、外出回复与会议邀请。前端 React、后端 FastAPI，支持多用户和 OpenID Connect 登录。README 提示版本尚早（0.29.5），建议先在非重要邮箱上试用。",
+   "highlights": [
+    "聚合多个 IMAP 邮箱并提供合并收件箱视图，全文搜索可按需回退到服务器端 IMAP SEARCH",
+    "标签以 IMAP 关键字存储在服务器上，Snooze 使用服务器上的真实文件夹；支持 CardDAV/CalDAV 与 iCloud、Google、Nextcloud 等同步",
+    "支持定时发送与撤回、规则处理新邮件、任务转发到 Todoist/nextasks/webhook，支持 OIDC 登录与多用户"
+   ],
+   "use_cases": [
+    "在家庭服务器/homelab 环境中通过浏览器管理多个 IMAP 邮箱",
+    "需要任务、日历、联系人（CardDAV/CalDAV）与邮件一体的自托管工作流",
+    "多用户场景下通过 OpenID Connect 接入现有身份认证体系"
+   ]
+  },
+  "sha": "30bdb5f09487",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "34f17db538cd": {
+  "identity": {
+   "one_liner": "自托管文档问答平台，以布局感知解析与 RAG 检索生成带引用的回答",
+   "review": "DocuMind 是一个开源文档智能平台，支持上传 PDF、DOCX、XLSX 等文件（≤25MB），经 IBM Docling 解析布局与表格、本地生成 384 维嵌入并存入 Qdrant，再由 Gemini 生成基于证据的回答，引用由服务端构造。技术栈为 Next.js + FastAPI + PostgreSQL + Celery，面向自托管部署；README 注明尚未完成生产上线资格验证，使用前需完成部署核验步骤。",
+   "highlights": [
+    "支持 PDF、DOCX、XLSX、PPTX、TXT、CSV、Markdown 上传，默认上限 25MB，含 SHA-256 去重与文件魔数校验",
+    "使用 IBM Docling 解析布局层级、多栏阅读顺序与表格为 Markdown；嵌入由本地 Sentence Transformers（all-MiniLM-L6-v2，384 维）生成",
+    "向量查询强制 user_id 与 document_id 过滤，引用元数据由后端从 Qdrant 检索结果构造，证据相关度阈值 0.35"
+   ],
+   "use_cases": [
+    "检索和分析内部报告、结构化文档并将回答追溯到原文段落",
+    "自托管文档解析与检索技术栈的评估与部署",
+    "异步摄取、租户隔离检索与引用构造的参考实现"
+   ]
+  },
+  "sha": "34f17db538cd",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dfd3566de07d": {
+  "identity": {
+   "one_liner": "面向巴拿马市场的多租户薪酬与员工管理 SaaS 平台",
+   "review": "NomiFlow 是一个多租户 SaaS 平台，用于处理巴拿马劳动法规下的薪酬计算与员工管理，包含 CSS 社保、ISR 累进税、加班、第 13 个月工资等计算功能。技术栈为 .NET 9、React 19、TypeScript 与 PostgreSQL 16，采用 Clean Architecture 分层。本地运行需 .NET SDK、Node.js 20+，创建 PaglyDB 数据库后依次执行迁移、启动前后端即可。订阅与 B2B API 依赖 Stripe 等外部服务。",
+   "highlights": [
+    "实现巴拿马法规的薪酬计算，含 CSS 社保、教育保险、ISR 累进所得税、8 类加班及第 13 个月工资",
+    "采用多租户架构实现数据隔离，提供基于角色的访问控制和 29 项系统权限",
+    "集成 Stripe 订阅计费、B2B REST API（SHA-256 密钥认证、限流、幂等键）及 PDF/Excel 报表生成"
+   ],
+   "use_cases": [
+    "巴拿马企业或代账机构处理多公司薪酬发放与税务合规报表",
+    "需要多租户隔离、角色权限与审计跟踪的员工档案及假期、贷款、扣款管理",
+    "通过 B2B API 将薪酬与员工数据集成到外部系统"
+   ]
+  },
+  "sha": "dfd3566de07d",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

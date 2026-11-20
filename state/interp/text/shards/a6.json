@@ -3216,5 +3216,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "884057ec08ba": {
+  "identity": {
+   "one_liner": "为编码代理构建自进化踩坑免疫记忆，失败后修复的工具调用转为注入式抗体",
+   "review": "agent-immune（npm 包 dsh-immune-system）是一个零运行时依赖的编码代理记忆工具：当工具调用失败且后续调用修复时，引擎生成经路径清洗的抗体（trigger→avoid→do），存入本地 node:sqlite + FTS5，并在下次会话工具执行前注入 <immune_memory> 提醒。通过 connect 命令接入 Claude Code、Cursor、Codex CLI 等 13 种代理界面，提供 MCP server、GitHub Action、pre-commit 钩子及类型化 SDK。数据全部本地存储，README 声称零遥测。",
+   "highlights": [
+    "失败后修复的工具调用被提炼为打分、路径清洗的抗体，存储于本地 node:sqlite + FTS5，工具执行前注入最多 3 条匹配提醒",
+    "connect 命令自动检测已安装代理并幂等合并配置，支持 Claude Code、Cursor、Codex CLI、Gemini CLI、VS Code 等 13 种界面，附 .bak-immune 备份与 --remove 清理",
+    "提供 diagnose（5 域雷达诊断）、autopsy（事后账本）、compile-rules（转译为 Cursor/Copilot/Windsurf 等 5 种规则格式）、wrapped（SVG 记分卡）等工作流"
+   ],
+   "use_cases": [
+    "多会话使用编码代理、希望避免重复排查已修复错误的开发者",
+    "团队需要通过 .immune/rules.jsonl 同步踩坑规则或编译为各 IDE 静态规则文件",
+    "基于 Node/TS 的自定义代理可通过 ImmuneRuntime SDK 集成免疫记忆能力"
+   ]
+  },
+  "sha": "884057ec08ba",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51cc5f3e0740": {
+  "identity": {
+   "one_liner": "跨 Android/iOS 的 AI 陪伴应用，把人格建模为长期联系人，本地优先。",
+   "review": "YetAnotherPal（Yap）是一个开源的 Android + iOS AI 陪伴应用，将「人格」建模为长期存在的联系人而非聊天参数集合。两端共享数据模型、行为约定与备份文件，持久化分别用 Room 与系统 SQLite，模型接入任意 OpenAI 兼容服务，决策核心默认在本机运行。当前处于 0.x 内测阶段，采用 Apache-2.0 协议。",
+   "highlights": [
+    "Android（Kotlin/Compose/Room）与 iOS（Swift/SwiftUI/SQLite3）共享同一套数据契约，备份 JSON 两端互读",
+    "提供长期记忆抽取与生命周期管理、200 条一块的历史存储、中文二元组倒排索引加本地哈希嵌入重排的检索",
+    "模型接入任意 OpenAI 兼容服务，支持 SSE 流式、工具调用（recall/web_search/defer_reply 等），发布包默认零网络本机决策"
+   ],
+   "use_cases": [
+    "在 Android 或 iOS 设本机运行 AI 联系人式陪伴会话，数据与备份留在本地",
+    "接入自有的 OpenAI 兼容服务或多套模型配置进行长会话对话，附带记忆与检索",
+    "通过本地参考服务（node harness/server.mjs）无需 API Key 走通工具调用、记忆抽取等全链路联调"
+   ]
+  },
+  "sha": "51cc5f3e0740",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3fea23132ee5": {
+  "identity": {
+   "one_liner": "刚果共和国地理数据导出库与 CLI，生成多格式带 UUID 数据",
+   "review": "242places 提供 2026 年 11 月接收的刚果共和国行政区划参考数据（4,353 条记录），通过 npm CLI 生成 XLSX、CSV、JSON/NDJSON、PostgreSQL SQL、SQLite 及 GeoJSON 导出文件，附 UUID 与完整性清单。面向需要本地化地理数据的应用开发者与数据整理者；数据覆盖为部分覆盖，观测日期未知，PostgreSQL 导入需匹配既有业务表结构。代码 MIT 许可，文档提供英文与法文版本。",
+   "highlights": [
+    "支持 xlsx、csv、json/ndjson、sql-postgres、sqlite、geojson 六种导出格式",
+    "包含 4,353 条记录：15 省、16 市、23 区、92 县、782 街区与 3,285 村庄等",
+    "附带只读 Fastify HTTP API，提供 /v1/communes 等分页路由"
+   ],
+   "use_cases": [
+    "为应用初始化 PostgreSQL 或 SQLite 行政区划表",
+    "生成电子表格或 JSON 资源文件供本地集成与共享",
+    "本地运行只读 API 查询城市、区县与街区层级数据"
+   ]
+  },
+  "sha": "3fea23132ee5",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3165,5 +3165,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bc16ba65d84a": {
+  "identity": {
+   "one_liner": "基于 WASM 组件模型的确定性工作流运行时",
+   "review": "Obelisk 是一个用 Rust 编写的确定性工作流运行时，以单个二进制文件执行 WASM 组件形式的工作流、活动和 webhook 端点，执行日志持久化到 SQLite 或 PostgreSQL。工作流由运行时保证确定性、可重放，活动支持错误/超时/panic 自动重试。通过 CLI、REST API 和 Web UI 管理，提供执行跟踪、时间回溯调试器。项目处于 pre-release 阶段，CLI、REST API、WIT 和数据库 schema 可能变更。",
+   "highlights": [
+    "活动基于 WASI 0.2，支持 HTTP 请求，遇错误、超时和 WASM trap 自动重试，执行结果持久化",
+    "工作流由运行时保证确定性，基于持久化执行日志可完全重放，支持结构化并发的子执行",
+    "内置 Web UI 提供部署图、执行跟踪、事件浏览和时间回溯调试器"
+   ],
+   "use_cases": [
+    "AI 辅助代码的沙箱化与审计",
+    "周期性任务和后台作业的编排，含内置重试与错误处理",
+    "端到端测试自动化，保留每步骤详细日志"
+   ]
+  },
+  "sha": "bc16ba65d84a",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aace0d7f6e99": {
+  "identity": {
+   "one_liner": "开源自托管备份软件，以 Web 控制台管理多平台服务器、虚拟机与数据库备份",
+   "review": "BackupZit 是一个 AGPLv3 协议下的开源自托管备份软件，用于备份 Windows/Linux 机器、Proxmox VE/VMware ESXi/Hyper-V 虚拟机、SQL Server/PostgreSQL/MySQL 数据库、NAS 共享和 Microsoft 365，备份经去重、压缩和加密后写入用户自选存储。控制台为 Linux 服务（2 vCPU、2-4 GB 内存），代理主动连接控制台、直接写存储，无需开放客户端端口。安装支持 VM 镜像、ISO、脚本、手动包和 Docker 五种方式。",
+   "highlights": [
+    "支持文件、整盘、无代理虚拟机、数据库、NAS 与 Microsoft 365 备份，存储后端含 S3、SFTP、SMB、Azure Blob 及加固仓库，提供不可变备份与 AES-256 加密",
+    "提供裸机恢复（含异机恢复）、即时恢复、P2V、数据库时间点恢复与自动恢复验证测试，控制台支持 14 种语言、LDAP/SAML/OpenID Connect 登录及 REST API",
+    "架构上控制台不存备份数据，代理经证书指纹信任控制台并直接写入存储；控制台与代理支持签名自更新"
+   ],
+   "use_cases": [
+    "需要自托管、不依赖云服务的组织统一备份服务器、虚拟机和数据库",
+    "面向 3-2-1 策略场景，用备份副本作业在多个存储目标保留第二份拷贝",
+    "无公网证书场景下通过证书指纹固定方式注册代理进行内网备份管理"
+   ]
+  },
+  "sha": "aace0d7f6e99",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "da7276b94e35": {
+  "identity": {
+   "one_liner": "Antigravity 右侧面板的 Token 与上下文监控插件，只读读取本地会话数据。",
+   "review": "agy-token-monitor 是面向 Antigravity 编辑器用户的 Token 与上下文监控插件（v0.5.1 beta），运行于右侧面板，以只读方式读取本地 SQLite 会话数据。它提供 tok/s 速度、409.6k/512k 上下文监控与 /compact 快捷复制、按会话成本与分模型缓存命中率统计、Canvas 2D 像素工位动画，以及官方定价每日同步与代理自动检测。",
+   "highlights": [
+    "以只读方式读取本地会话数据，不修改 Antigravity 数据库、转录或宿主设置",
+    "统计每会话 uncached input、cache read、output token、分模型缓存命中率与等效成本，支持排序与 Top-5 折叠",
+    "基于 SQLite 步骤完成时间戳计算实时 tok/s、加权平均、峰值与 20 步趋势线"
+   ],
+   "use_cases": [
+    "需要在 Antigravity 中监控上下文用量并在接近 409.6k 告警线时执行 /compact 的开发者",
+    "需要按会话、按模型追踪 token 消耗、缓存命中率与等效成本的用户",
+    "需要查看子代理/Swarm 活动状态与 Side Question 用量明细的会话管理者"
+   ]
+  },
+  "sha": "da7276b94e35",
+  "source": "readme",
+  "generated_at": "2026-11-20",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
