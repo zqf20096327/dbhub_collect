@@ -67,10 +67,11 @@ def one_liner(r):
 
 def light(fn, r):
     """列表分片轻字段：够列表页渲染即可，严禁整卡拷贝（卡 JSON 有 _fp 等内部字段，且体积失控）。
-    dbs=适配库名单（通常 1-3 个）：站点旧版排版的清单「库」列与冠军矩阵「通用工具」标记用。"""
+    dbs=适配库名单全量不截（P8 组合页成员口径：一卡多库须进全部分属组合；曾截前 6 致 dbeaver
+    这类多库工具缺席第 7 库起的组合页，+N 徽标也变假数）；展示层截断归渲染端 db_tags 的 [:3]+N。"""
     return {"fn": fn, "name": (fn.split("/")[-1] if "/" in fn else fn),
             "stars": r.get("stars"), "lang": r.get("language"), "cat": cat_of(r),
-            "dbs": (r.get("dbs") or [])[:6],
+            "dbs": r.get("dbs") or [],
             "ol": one_liner(r)[:120], "url": f"/p/{fn}/"}
 
 def paged(items, page=PAGE):
