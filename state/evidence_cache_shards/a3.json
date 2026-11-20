@@ -766,15 +766,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T03:58:20Z",
+  "collected_at": "2026-11-20T18:57:28Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
-  "stars": 12807,
+  "pushed_at": "2026-11-20",
+  "stars": 12805,
   "tree": {
-   "sha": "9fde7cb10083b101c27cd99a83553ce59d7b2034",
-   "etag": "W/\"b28a8af77a51b33231769f8fc67535ca5c935d7c18b93a33c9a75e3b478395e7\"",
+   "sha": "3d585751a2de8c9066dc3fc5ac18340c1ef48810",
+   "etag": "W/\"6e3afdfc6445d7e56e6eb2e2ab7e61dc254a0206fa97046a260943d6dc5ca91e\"",
    "truncated": false,
-   "path_count": 6534,
+   "path_count": 6531,
    "matched": [
     "Cargo.toml",
     "demo/package.json",
@@ -817,7 +817,6 @@
     "crates/load_generator/Cargo.toml",
     "crates/local_backend/Cargo.toml",
     "crates/log_interleaver/Cargo.toml",
-    "crates/managed_export/Cargo.toml",
     "crates/managed_export_worker/Cargo.toml",
     "crates/metrics/Cargo.toml",
     "crates/migrations_model/Cargo.toml",
@@ -833,6 +832,7 @@
     "crates/postgres/Cargo.toml",
     "crates/roles/Cargo.toml",
     "crates/runtime/Cargo.toml",
+    "crates/s3_exports/Cargo.toml",
     "crates/search/Cargo.toml",
     "crates/search_index_workers/Cargo.toml",
     "crates/shape_inference/Cargo.toml",
@@ -855,7 +855,7 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "dd35d4edd226cb6efffbc509e48cabd2c4a91433",
+    "blob_sha": "0fb5c8b92fbeab7275262648ecccf3c554b76d60",
     "ecosystem": "cargo",
     "bytes": 15153
    },
@@ -883,9 +883,9 @@
    {
     "path": "npm-packages/package.json",
     "kind": "dep",
-    "blob_sha": "1a803996b4861568393e9f0bbcb6938f0f5f2efb",
+    "blob_sha": "f414bcf0831b346fb1d2f44f8c635efae41b37f5",
     "ecosystem": "npm",
-    "bytes": 436,
+    "bytes": 437,
     "dev": [
      "turbo"
     ]
@@ -2336,41 +2336,6 @@
     ]
    },
    {
-    "path": "crates/managed_export/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "a517ba3da28826d635a73f75b5b963be945b8be1",
-    "ecosystem": "cargo",
-    "bytes": 1511,
-    "names": [
-     "anyhow",
-     "arrow_iceberg",
-     "aws-credential-types",
-     "aws-sdk-glue",
-     "aws-sdk-s3",
-     "common",
-     "errors",
-     "fastrace",
-     "futures",
-     "iceberg",
-     "iceberg-storage-opendal",
-     "keybroker",
-     "parquet_iceberg",
-     "pb",
-     "prost",
-     "serde_json",
-     "uuid",
-     "value"
-    ],
-    "dev": [
-     "common",
-     "errors",
-     "iceberg-storage-opendal",
-     "keybroker",
-     "tokio",
-     "value"
-    ]
-   },
-   {
     "path": "crates/managed_export_worker/Cargo.toml",
     "kind": "dep",
     "blob_sha": "0b7b351ec2ac0ff3be5c2b65bd12c20d3f04f012",
@@ -2852,6 +2817,41 @@
     ]
    },
    {
+    "path": "crates/s3_exports/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "884f9f4027dc32f794bfc1a15461d65fe6172056",
+    "ecosystem": "cargo",
+    "bytes": 1507,
+    "names": [
+     "anyhow",
+     "arrow_iceberg",
+     "aws-credential-types",
+     "aws-sdk-glue",
+     "aws-sdk-s3",
+     "common",
+     "errors",
+     "fastrace",
+     "futures",
+     "iceberg",
+     "iceberg-storage-opendal",
+     "keybroker",
+     "parquet_iceberg",
+     "pb",
+     "prost",
+     "serde_json",
+     "uuid",
+     "value"
+    ],
+    "dev": [
+     "common",
+     "errors",
+     "iceberg-storage-opendal",
+     "keybroker",
+     "tokio",
+     "value"
+    ]
+   },
+   {
     "path": "crates/search/Cargo.toml",
     "kind": "dep",
     "blob_sha": "3647e53e02602fa741efe33c34c29db3d474651c",
@@ -3114,6 +3114,7 @@
     "npm-packages/@convex-dev/eslint-plugin/tsconfig.json",
     "npm-packages/@convex-dev/eslint-plugin/vitest.config.ts",
     "npm-packages/@convex-dev/eslint-plugin/vitest.setup.ts",
+    "npm-packages/docs/scripts/typedoc-api-plugin.js",
     "npm-packages/local-store/browser/driver.ts",
     "crates/fivetran_common/fivetran_sdk/466a61bddfc0e541bfec3cb0cc6a3cf3704d64be/connector_sdk.proto",
     "npm-packages/@convex-dev/eslint-plugin/.tshy/build.json",
@@ -3128,6 +3129,7 @@
     "npm-packages/@convex-dev/eslint-plugin/src/version.ts",
     "npm-packages/convex/src/cli/plugins.ts",
     "npm-packages/docs/docs/ai/convex-plugins.mdx",
+    "npm-packages/docs/src/plugins/cliReferencePlugin.js",
     "npm-packages/docs/src/plugins/imageZoom.ts",
     "npm-packages/docs/src/plugins/imageZoomPlugin.js",
     "npm-packages/docs/src/plugins/prefixIds.js",
@@ -3156,7 +3158,6 @@
     "npm-packages/@convex-dev/eslint-plugin/src/lib/require-args-validator.ts",
     "npm-packages/@convex-dev/eslint-plugin/src/scripts/dont-publish-alpha-as-latest.mjs",
     "npm-packages/@convex-dev/eslint-plugin/src/scripts/version-check.mjs",
-    "npm-packages/docs/docs/cli/reference/plugins.mdx",
     "npm-packages/docs/src/plugins/zoom-vanilla/README.md",
     "npm-packages/docs/src/plugins/zoom-vanilla/zoom-vanilla.css",
     "npm-packages/docs/src/plugins/zoom-vanilla/zoom-vanilla.js",
@@ -4262,15 +4263,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T00:40:32Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-20T19:43:57Z",
   "default_branch": "master",
-  "pushed_at": "2026-08-11",
+  "pushed_at": "2026-11-20",
   "stars": 52,
   "tree": {
-   "sha": "c203a53fb1a3cf18705f038eef6759f710d1dbd8",
-   "etag": "W/\"67753a39a48802368c50eb058f0fa08aac4c1f3f0ba85a5f00a94b6ee05b9c81\"",
+   "sha": "2576d12e653bcdbb89dddc3c0a9654b8fc097f65",
+   "etag": "W/\"93958f389c2700ff05a41467a12872a0a87502bb31ac7f48721f86011322f083\"",
    "truncated": false,
-   "path_count": 40,
+   "path_count": 44,
    "matched": []
   },
   "files": [],
@@ -5192,15 +5194,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:55:39Z",
+  "collected_at": "2026-11-20T19:54:32Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-20",
   "stars": 25,
   "tree": {
-   "sha": "dad6d734b4e11788a725027afcc5cac9b39551bf",
-   "etag": "W/\"af3c15340583ca8d2755a457633446d93f412f05c82731399aec47d9927bf002\"",
+   "sha": "69a2321500d448f74fb5f2c33649a01db1de160f",
+   "etag": "W/\"5116685e7789846ba5824058d49620308f3ee9844650f0c8648bde7e38adfc50\"",
    "truncated": false,
-   "path_count": 1010,
+   "path_count": 1050,
    "matched": [
     "package.json",
     "examples/minimal-cloudflare/package.json",
@@ -5226,9 +5228,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "b33db2bbffbee51abe243027aac3f79843006468",
+    "blob_sha": "e6b468baff9bfbf4913927168340ea167305e160",
     "ecosystem": "npm",
-    "bytes": 13258,
+    "bytes": 13320,
     "names": [
      "@logtape/logtape",
      "@cloudflare/workers-types",
@@ -5507,8 +5509,8 @@
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "69b81ef0b4342a00ae254202f88e875c49e2e91c",
-    "bytes": 7038
+    "blob_sha": "b695ce1f262eac28298f6683b9d00a2fb3831b53",
+    "bytes": 7675
    },
    {
     "path": ".github/workflows/test-infra.yml",
@@ -5858,15 +5860,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:59:45Z",
+  "collected_at": "2026-11-20T19:58:59Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-20",
   "stars": 19,
   "tree": {
-   "sha": "4ad4e1d4ec064ef3d09426811e2772575d6f343b",
-   "etag": "W/\"184f4610250c8b04454d7e8260548913c556093687d7f74608e42e6785689698\"",
+   "sha": "562765ffbec6248cbf5b31f8695646f2c949a2f9",
+   "etag": "W/\"152321bf9b9b1b6ee5745cd9b368b4cd87b9a231ded148c0fd5a8e3d2349b0ff\"",
    "truncated": false,
-   "path_count": 1338,
+   "path_count": 1349,
    "matched": [
     "backend/pyproject.toml",
     "frontend/package.json",
@@ -8349,15 +8351,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T03:55:36Z",
+  "collected_at": "2026-11-20T18:54:14Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-18",
-  "stars": 23905,
+  "pushed_at": "2026-11-20",
+  "stars": 23911,
   "tree": {
-   "sha": "9d42de0c9731c7d7e36424d535f6a6949e9e5e14",
-   "etag": "W/\"5b78ece580ca3964831d42f511447987e74c790062889e0b0848290298e1e804\"",
+   "sha": "c635c3c56601497b2f357b1bc5381a4c27b08149",
+   "etag": "W/\"275dc35c5243dcc1b1b6a7ce2a37fb92ca226cf94a9ae38376e20092b84e836c\"",
    "truncated": false,
-   "path_count": 2069,
+   "path_count": 2073,
    "matched": [
     "package.json",
     "requirements.txt",
@@ -8419,7 +8421,7 @@
    {
     "path": "apps/studio/package.json",
     "kind": "dep",
-    "blob_sha": "be845da4f640e68b383f20ec9f64e275543863c3",
+    "blob_sha": "a720b3e724fcd63387a767de767fff862271cc53",
     "ecosystem": "npm",
     "bytes": 9902,
     "names": [
@@ -8799,8 +8801,8 @@
    {
     "path": ".github/workflows/e2e-smoke-test.yml",
     "kind": "ci",
-    "blob_sha": "c7e1767e6414c86f9822c23613d5d32d5a04b201",
-    "bytes": 3800
+    "blob_sha": "d839b820bb8519342d6fa2c715658156eb2e24d3",
+    "bytes": 4039
    },
    {
     "path": ".github/workflows/e2e-tests.yml",
@@ -8823,8 +8825,8 @@
    {
     "path": ".github/workflows/release-published.yml",
     "kind": "ci",
-    "blob_sha": "591a2aafc95d0518df11f5c79feed9a8c94e0eb3",
-    "bytes": 10593
+    "blob_sha": "0f3afb8c51a4187cb5d55cb8cc9849b6b6cb43d0",
+    "bytes": 10635
    },
    {
     "path": ".github/workflows/sqlserver-kerberos-tests.yaml",
@@ -8835,8 +8837,8 @@
    {
     "path": ".github/workflows/studio-build-non-production.yml",
     "kind": "ci",
-    "blob_sha": "4f01f498afada6038503a975227abef359a36c0c",
-    "bytes": 6306
+    "blob_sha": "05951b78ab0b1174ce45d41522eea10f28327bb9",
+    "bytes": 6481
    },
    {
     "path": ".github/workflows/studio-publish.yml",
@@ -9781,15 +9783,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:13:42Z",
+  "collected_at": "2026-11-20T19:13:57Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-20",
   "stars": 1138,
   "tree": {
-   "sha": "cc3c25c5872a96a51caa8eb839b8fefc8a6ebef7",
-   "etag": "W/\"3847743196033e8088cfc8612839846f02433595b0071233c0296024e37e3bcb\"",
+   "sha": "ecd9efca0f6be9107a5c4042f29a932c3bf1623c",
+   "etag": "W/\"b917be6cbe8b01e214f2d6b613bf591c7d0f8b7f628f0afec3f46e90889b676f\"",
    "truncated": false,
-   "path_count": 4786,
+   "path_count": 4811,
    "matched": [
     "go.mod",
     "documentation/requirements.txt",
@@ -10053,9 +10055,9 @@
    {
     "path": "dashboards/pmm-app/package.json",
     "kind": "dep",
-    "blob_sha": "62b1ab422a0e09ffb1bf3f7a55939989493b5bcf",
+    "blob_sha": "0000bdab8bc4b015ea0b84bd785474def38ca465",
     "ecosystem": "npm",
-    "bytes": 4714,
+    "bytes": 4713,
     "names": [
      "@ant-design/compatible",
      "@ant-design/cssinjs",
@@ -11109,13 +11111,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:21:31Z",
+  "collected_at": "2026-11-20T19:21:52Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-20",
   "stars": 410,
   "tree": {
    "sha": "fc6600a4ef60031036db253b9752a43140433b6f",
-   "etag": "W/\"a1fb17977ba30bc65f4370ccdbf15d187955e7d28648bf7733c2421eb749e9c5\"",
+   "etag": "W/\"9c2b9134c2380f626285b612ff614bf0b151af2450aa547f21634258bcf25165\"",
    "truncated": false,
    "path_count": 5771,
    "matched": [
@@ -11996,15 +11998,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:34:52Z",
+  "collected_at": "2026-11-20T19:34:45Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
-  "stars": 109,
+  "pushed_at": "2026-11-20",
+  "stars": 112,
   "tree": {
-   "sha": "6803834fa73d49a9588dd08de400b22ba200b556",
-   "etag": "W/\"062e7dda15266f710b0a5c9904c4b39dbae09d1379dadf80a71c54ec2bb499a6\"",
+   "sha": "a107e0ac24c1c5e2d529a6231ec150d588586a27",
+   "etag": "W/\"f738443314e56e0670b7612525daf608d364081d7c78234e63d5747bf1fa1a1d\"",
    "truncated": false,
-   "path_count": 810,
+   "path_count": 842,
    "matched": [
     "pyproject.toml",
     "requirements.txt",
@@ -12017,15 +12019,16 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "fd4783e4ba3ae2275584608268f5d98c04a32f66",
+    "blob_sha": "194df53c7f800b41bdbea507267bde6d34a0a446",
     "ecosystem": "pyproject",
-    "bytes": 7405,
+    "bytes": 7977,
     "names": [
      "fastapi",
      "uvicorn",
      "python-multipart",
      "pyyaml",
      "packaging",
+     "cryptography",
      "s",
      "openai",
      "anthropic",
@@ -12048,9 +12051,9 @@
    {
     "path": "requirements.txt",
     "kind": "dep",
-    "blob_sha": "90266dba0bc6dd980024007e422cd3c76a369eee",
+    "blob_sha": "bb7fab23b289c70b97b13d60ed02d5df10769554",
     "ecosystem": "pypi",
-    "bytes": 2092,
+    "bytes": 2396,
     "names": [
      "fastapi",
      "uvicorn",
@@ -12058,6 +12061,7 @@
      "pyyaml",
      "packaging",
      "pydantic",
+     "cryptography",
      "openai",
      "anthropic",
      "firecrawl-anydoc",
@@ -12087,8 +12091,8 @@
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "1b1f186c7795f6b63cb7c0031dbf0bf7e1d366dc",
-    "bytes": 2883
+    "blob_sha": "aecb7747631c9490a77ec1f76699d8522e90041f",
+    "bytes": 3395
    },
    {
     "path": ".github/workflows/test.yml",
@@ -12099,7 +12103,8 @@
   ],
   "clues": {
    "changelog": [
-    ".trade-template/companies/company-slug/libraries/library-slug/changelog.md"
+    ".trade-template/companies/company-slug/libraries/library-slug/changelog.md",
+    "CHANGELOG.md"
    ],
    "readme_i18n": [
     "README.en.md"
@@ -12325,34 +12330,37 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T18:47:30Z",
+  "collected_at": "2026-11-20T19:39:30Z",
   "default_branch": "2.x",
-  "pushed_at": "2026-10-22",
+  "pushed_at": "2026-11-20",
   "stars": 72,
   "tree": {
-   "sha": "6b6d5b4304e77f5b61c1739fc46c9dd0010079fc",
-   "etag": "W/\"4e609eb65e03c20aa1fe8f566f1d9e36df811768982b227093f47e8caba4572e\"",
+   "sha": "6750c96c53ae55fed0002a3375f59b92cb17cec6",
+   "etag": "W/\"7edcc1c4b29a1b59254892c92569cd2af71e90325d8e1a15d366b95ba681a8d5\"",
    "truncated": false,
-   "path_count": 505,
+   "path_count": 423,
    "matched": [
     "composer.json",
+    "vendor-bin/code-style/composer.json",
+    "vendor-bin/infection/composer.json",
+    "vendor-bin/psalm/composer.json",
     ".github/workflows/apply-labels.yml",
-    ".github/workflows/ci-mssql.yml",
-    ".github/workflows/ci-mysql.yml",
-    ".github/workflows/ci-pgsql.yml",
     ".github/workflows/ci.yml",
     ".github/workflows/create-release.yml",
     ".github/workflows/cs-fix.yml",
-    ".github/workflows/main.yml"
+    ".github/workflows/infection.yml",
+    ".github/workflows/main.yml",
+    ".github/workflows/psalm.yml",
+    ".github/workflows/security.yml"
    ]
   },
   "files": [
    {
     "path": "composer.json",
     "kind": "dep",
-    "blob_sha": "ac45eaab0e41a276037513e879c2127ecf976f7d",
+    "blob_sha": "72f2483d38e7da53404fc91abe5272bf27c98237",
     "ecosystem": "composer",
-    "bytes": 2708,
+    "bytes": 4698,
     "names": [
      "php",
      "ext-pdo",
@@ -12362,45 +12370,59 @@
      "symfony/polyfill-php83"
     ],
     "dev": [
+     "bamarni/composer-bin-plugin",
      "buggregator/trap",
+     "cycle/testing",
      "ergebnis/composer-normalize",
-     "infection/infection",
+     "llm/skills",
      "mockery/mockery",
-     "phpunit/phpunit",
-     "spiral/code-style",
-     "spiral/tokenizer",
+     "roxblnfk/unpoly",
+     "testo/bridge-mockery",
+     "testo/testo"
+    ]
+   },
+   {
+    "path": "vendor-bin/code-style/composer.json",
+    "kind": "dep",
+    "blob_sha": "0b76314b3c9e60582eaa1f9a2610d071b6e28e9e",
+    "ecosystem": "composer",
+    "bytes": 63,
+    "names": [
+     "spiral/code-style"
+    ]
+   },
+   {
+    "path": "vendor-bin/infection/composer.json",
+    "kind": "dep",
+    "blob_sha": "8436e132afe6f7e308dd1fac7ab3b20cbd4b49ea",
+    "ecosystem": "composer",
+    "bytes": 220,
+    "names": [
+     "infection/infection",
+     "testo/bridge-infection"
+    ]
+   },
+   {
+    "path": "vendor-bin/psalm/composer.json",
+    "kind": "dep",
+    "blob_sha": "788aeeb07681ffc7d4d1bb3d62ecf62dd13a0f76",
+    "ecosystem": "composer",
+    "bytes": 55,
+    "names": [
      "vimeo/psalm"
     ]
    },
    {
     "path": ".github/workflows/apply-labels.yml",
     "kind": "ci",
-    "blob_sha": "931bccf17ffcb24081b0b2e3524f74ae02069d3d",
-    "bytes": 637
-   },
-   {
-    "path": ".github/workflows/ci-mssql.yml",
-    "kind": "ci",
-    "blob_sha": "cd83687b62d9240b75329009d3c739b8dbc56172",
-    "bytes": 235
-   },
-   {
-    "path": ".github/workflows/ci-mysql.yml",
-    "kind": "ci",
-    "blob_sha": "f1c3abdb4399c381e3102de18624534edb0d80da",
-    "bytes": 235
-   },
-   {
-    "path": ".github/workflows/ci-pgsql.yml",
-    "kind": "ci",
-    "blob_sha": "76ac29859f17925b671622eca44ec29d7b456a00",
-    "bytes": 238
+    "blob_sha": "98583dccd45ca9f1a5290a0054fd796f91b427eb",
+    "bytes": 668
    },
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "2ebbd5ed3439d890a2a02bef127daf9dca19a662",
-    "bytes": 2094
+    "blob_sha": "3b42e0032396c972eb4232ba35d2e53debaec5e8",
+    "bytes": 2220
    },
    {
     "path": ".github/workflows/create-release.yml",
@@ -12411,14 +12433,32 @@
    {
     "path": ".github/workflows/cs-fix.yml",
     "kind": "ci",
-    "blob_sha": "68058717dd4844910b990ad75e55ac14c182defc",
-    "bytes": 258
+    "blob_sha": "230ea818743c760a9cbebbe3aa0735a19ea298e3",
+    "bytes": 310
+   },
+   {
+    "path": ".github/workflows/infection.yml",
+    "kind": "ci",
+    "blob_sha": "7fc35c00b9af8507e9415466b9cbd52dffa9b463",
+    "bytes": 533
    },
    {
     "path": ".github/workflows/main.yml",
     "kind": "ci",
-    "blob_sha": "c28594dbcd2b413f3c2612f512d212668a27d112",
-    "bytes": 2818
+    "blob_sha": "5e5ca81ef043d3042ab4225c8147ed3a0d5e6222",
+    "bytes": 533
+   },
+   {
+    "path": ".github/workflows/psalm.yml",
+    "kind": "ci",
+    "blob_sha": "d5371671fc15e37b9c3ef04fbd03126ef27b6171",
+    "bytes": 512
+   },
+   {
+    "path": ".github/workflows/security.yml",
+    "kind": "ci",
+    "blob_sha": "bfb1d3acd956efb9eb1519d2afb4263b17e4c5a8",
+    "bytes": 1870
    }
   ],
   "clues": {
@@ -12505,129 +12545,68 @@
     "src/Driver/SQLite/Schema/SQLiteForeignKey.php",
     "src/Driver/SQLite/Schema/SQLiteIndex.php",
     "src/Driver/SQLite/Schema/SQLiteTable.php",
+    "tests/Feature/MySQL/Driver/DriverTest.php",
+    "tests/Feature/Postgres/Driver/CursorTest.php",
+    "tests/Feature/Postgres/Driver/DriverTest.php",
+    "tests/Feature/Postgres/Driver/SearchPathTest.php",
+    "tests/Feature/SQLServer/Driver/CursorTest.php",
+    "tests/Feature/SQLServer/Driver/DriverTest.php",
+    "tests/Feature/SQLServer/Driver/StatementTest.php",
+    "tests/Unit/Driver/MySQL/MySQLOnConflictTest.php",
+    "tests/Unit/Driver/Postgres/PostgresHandlerTest.php",
+    "tests/Unit/Driver/Postgres/PostgresOnConflictTest.php",
+    "tests/Unit/Driver/SQLite/SQLiteDriverTest.php",
+    "tests/Unit/Driver/SQLite/SQLiteOnConflictTest.php",
     "src/Driver/MySQL/Query/Traits/WhereJsonTrait.php",
     "src/Driver/Postgres/Query/Traits/WhereJsonTrait.php",
     "src/Driver/SQLServer/Query/Traits/WhereJsonTrait.php",
     "src/Driver/SQLite/Query/Traits/WhereJsonTrait.php",
-    "tests/Database/Functional/Driver/MySQL/BuildersAccessTest.php",
-    "tests/Database/Functional/Driver/MySQL/DatabaseTest.php",
-    "tests/Database/Functional/Driver/Postgres/BuildersAccessTest.php",
-    "tests/Database/Functional/Driver/Postgres/DatabaseTest.php",
-    "tests/Database/Functional/Driver/Postgres/DriverTest.php",
-    "tests/Database/Functional/Driver/Postgres/Helpers.php",
-    "tests/Database/Functional/Driver/SQLServer/BuildersAccessTest.php",
-    "tests/Database/Functional/Driver/SQLServer/DatabaseTest.php",
-    "tests/Database/Functional/Driver/SQLite/BuildersAccessTest.php",
-    "tests/Database/Functional/Driver/SQLite/DatabaseTest.php",
-    "tests/Database/Unit/Driver/MySQL/MySQLOnConflictTest.php",
-    "tests/Database/Unit/Driver/Postgres/PostgresHandlerTest.php",
-    "tests/Database/Unit/Driver/Postgres/PostgresOnConflictTest.php",
-    "tests/Database/Unit/Driver/SQLite/SQLiteOnConflictTest.php",
-    "tests/Database/Functional/Driver/MySQL/Connection/ConnectionExceptionTest.php",
-    "tests/Database/Functional/Driver/MySQL/Connection/CustomOptionsTest.php",
-    "tests/Database/Functional/Driver/MySQL/Connection/TransactionDisconnectingTest.php",
-    "tests/Database/Functional/Driver/MySQL/Driver/DriverTest.php",
-    "tests/Database/Functional/Driver/MySQL/Driver/ReadonlyTest.php",
-    "tests/Database/Functional/Driver/MySQL/Driver/StatementTest.php",
-    "tests/Database/Functional/Driver/MySQL/Query/DeleteQueryTest.php",
-    "tests/Database/Functional/Driver/MySQL/Query/ExceptionsTest.php",
-    "tests/Database/Functional/Driver/MySQL/Query/InsertQueryTest.php",
-    "tests/Database/Functional/Driver/MySQL/Query/NestedQueriesTest.php",
-    "tests/Database/Functional/Driver/MySQL/Query/SelectQueryTest.php",
-    "tests/Database/Functional/Driver/MySQL/Query/SelectWithJoinQueryTest.php",
-    "tests/Database/Functional/Driver/MySQL/Query/TransactionsTest.php",
-    "tests/Database/Functional/Driver/MySQL/Query/UpdateQueryTest.php",
-    "tests/Database/Functional/Driver/MySQL/Query/UpsertQueryTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/AlterColumnTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/AutoIncrementColumnTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/BinaryColumnTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/BooleanColumnTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/BulkIntrospectionTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/CharsetCollationTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/CommentTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/ConsistencyTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/CreateTableTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/DatetimeColumnTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/DefaultValueTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/ForeignKeysTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/IndexesTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/IntrospectionQueryCountTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/IsolationTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/JsonColumnTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/NumberColumnTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/PositionColumnTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/ReflectorTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/StringColumnTest.php",
-    "tests/Database/Functional/Driver/MySQL/Schema/TableTest.php",
-    "tests/Database/Functional/Driver/Postgres/Connection/ConnectionExceptionTest.php",
-    "tests/Database/Functional/Driver/Postgres/Connection/CustomOptionsTest.php",
-    "tests/Database/Functional/Driver/Postgres/Connection/TransactionDisconnectingTest.php",
-    "tests/Database/Functional/Driver/Postgres/Driver/CursorTest.php",
-    "tests/Database/Functional/Driver/Postgres/Driver/DriverTest.php",
-    "tests/Database/Functional/Driver/Postgres/Driver/ReadonlyTest.php",
-    "tests/Database/Functional/Driver/Postgres/Driver/StatementTest.php",
-    "tests/Database/Functional/Driver/Postgres/Query/DeleteQueryTest.php",
-    "tests/Database/Functional/Driver/Postgres/Query/ExceptionsTest.php",
-    "tests/Database/Functional/Driver/Postgres/Query/InsertQueryTest.php",
-    "tests/Database/Functional/Driver/Postgres/Query/JsonPathQuotingTest.php",
-    "tests/Database/Functional/Driver/Postgres/Query/NestedQueriesTest.php",
-    "tests/Database/Functional/Driver/Postgres/Query/SelectQueryTest.php",
-    "tests/Database/Functional/Driver/Postgres/Query/SelectWithJoinQueryTest.php",
-    "tests/Database/Functional/Driver/Postgres/Query/TransactionsTest.php",
-    "tests/Database/Functional/Driver/Postgres/Query/UpdateQueryTest.php",
-    "tests/Database/Functional/Driver/Postgres/Query/UpsertQueryTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/AlterColumnTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/AlterColumnsWithSchemaTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/ArrayColumnTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/BinaryColumnTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/BooleanColumnTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/BulkIntrospectionTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/CommentTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/ConsistencyTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/CreateTableTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/CreateTableWithSchema.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/DatabaseGetTablesTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/DatetimeColumnTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/DefaultValueTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/EnumIntrospectionTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/EraseTableTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/ForeignKeysTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/HasTableWithSchemaTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/IndexesTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/IntrospectionQueryCountTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/IsolationTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/JsonColumnTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/NumberColumnTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/RangeColumnTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/ReflectorTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/SerialColumnTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/StringColumnTest.php",
-    "tests/Database/Functional/Driver/Postgres/Schema/TableTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Connection/ConnectionExceptionTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Connection/CustomOptionsTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Connection/TransactionDisconnectingTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Driver/CursorTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Driver/DriverTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Driver/ReadonlyTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Driver/StatementTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Query/DeleteQueryTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Query/ExceptionsTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Query/InsertQueryTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Query/NestedQueriesTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Query/SelectQueryTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Query/SelectWithJoinQueryTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Query/TransactionsTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Query/UpdateQueryTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Query/UpsertQueryTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Schema/AlterColumnTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Schema/BinaryColumnTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Schema/BooleanColumnTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Schema/BulkIntrospectionTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Schema/ConsistencyTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Schema/CreateTableTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Schema/CrossSchemaIntrospectionTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Schema/DatetimeColumnTest.php",
-    "tests/Database/Functional/Driver/SQLServer/Schema/DefaultValueTest.php"
+    "tests/Unit/Driver/MySQL/Injection/MySQLJsonExpressionTest.php",
+    "tests/Unit/Driver/Postgres/Injection/PostgresJsonExpressionTest.php",
+    "tests/Unit/Driver/Postgres/Schema/PostgresColumnTest.php",
+    "tests/Unit/Driver/SQLServer/Injection/CompileJsonContainsKeyTest.php",
+    "tests/Unit/Driver/SQLServer/Injection/SQLServerJsonExpressionTest.php",
+    "tests/Unit/Driver/SQLServer/Query/SQLServerInsertQueryTest.php",
+    "src/Config/DriverConfig.php",
+    "src/Config/MySQLDriverConfig.php",
+    "src/Config/PostgresDriverConfig.php",
+    "src/Config/SQLServerDriverConfig.php",
+    "src/Config/SQLiteDriverConfig.php",
+    "src/Driver/BulkSchemaProviderInterface.php",
+    "src/Driver/CachingCompilerInterface.php",
+    "src/Driver/Compiler.php",
+    "src/Driver/CompilerCache.php",
+    "src/Driver/CompilerInterface.php",
+    "src/Driver/CursorInterface.php",
+    "src/Driver/CursorOptions.php",
+    "src/Driver/Driver.php",
+    "src/Driver/DriverInterface.php",
+    "src/Driver/Handler.php",
+    "src/Driver/HandlerInterface.php",
+    "src/Driver/Jsoner.php",
+    "src/Driver/PDOInterface.php",
+    "src/Driver/PDOStatementInterface.php",
+    "src/Driver/Quoter.php",
+    "src/Driver/ReadonlyHandler.php",
+    "src/Driver/Statement.php",
+    "src/Exception/DriverException.php",
+    "tests/Unit/Config/MySQLDriverConfigTest.php",
+    "tests/Unit/Config/PostgresDriverConfigTest.php",
+    "tests/Unit/Config/SQLServerDriverConfigTest.php",
+    "tests/Unit/Config/SQLiteDriverConfigTest.php",
+    "tests/Unit/Driver/AbstractDriverTest.php",
+    "tests/Unit/Driver/CompilerCacheTest.php",
+    "tests/Unit/Driver/CompilerTest.php",
+    "tests/Unit/Driver/DatabaseManagerTest.php",
+    "tests/Unit/Driver/JsonerTest.php",
+    "tests/Unit/Driver/MapExceptionTest.php",
+    "tests/Unit/Driver/QuoterTest.php",
+    "tests/Unit/Driver/ReadonlyHandlerTest.php",
+    "tests/Unit/Driver/StatementTest.php",
+    "tests/Feature/Common/Driver/CursorTest.php",
+    "tests/Feature/Common/Driver/DriverTest.php",
+    "tests/Feature/Common/Driver/ReadonlyTest.php",
+    "tests/Feature/Common/Driver/StatementTest.php"
    ]
   },
   "fail_count": 0
@@ -19101,15 +19080,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-16T00:21:40Z",
+  "collected_at": "2026-11-20T20:10:49Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
+  "pushed_at": "2026-11-20",
   "stars": 10,
   "tree": {
-   "sha": "d02a050aa7713575be8b718a41ce745abac94d59",
-   "etag": "W/\"90fe1122302ebc653c03f116408155983df8100675562075f10827515a044864\"",
+   "sha": "2f93a0700ffc1103c1d21062b39ea1cca609aeaa",
+   "etag": "W/\"2e94ce1131f79008a88028acc414ec2dc86b85bc84615a7ca9b68f38e3fadd2f\"",
    "truncated": false,
-   "path_count": 117,
+   "path_count": 120,
    "matched": [
     "composer.json",
     "Dockerfile",
@@ -19136,8 +19115,8 @@
    {
     "path": "Dockerfile",
     "kind": "image",
-    "blob_sha": "7f9f45def33ab57549aa877db2a003e2eccb8501",
-    "bytes": 893,
+    "blob_sha": "ae83fe7eaf4144e2ad4459a1cf43726bc290a5af",
+    "bytes": 1074,
     "images": [
      "php:8.4-cli-alpine"
     ]
@@ -19145,14 +19124,17 @@
    {
     "path": "docker-compose.yml",
     "kind": "image",
-    "blob_sha": "a3867ad8d71cb51bc363c31a46a242fb7ff7cb5a",
-    "bytes": 308
+    "blob_sha": "0e1a019bff2a579e3a6746d9fc83600f97e96397",
+    "bytes": 413,
+    "images": [
+     "ghcr.io/webready-se/puls:latest"
+    ]
    },
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "baeec40b3a2f09fd67fd6e775bc18591e3e3f70a",
-    "bytes": 2276
+    "blob_sha": "2e46d63ec33651476d24a5bdb1826ce7bc0e208e",
+    "bytes": 4390
    },
    {
     "path": ".github/workflows/tests.yml",
@@ -19721,15 +19703,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T05:08:39Z",
+  "collected_at": "2026-11-20T20:07:58Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-20",
   "stars": 11,
   "tree": {
-   "sha": "b0dd85d858cea26a6e882fa2c7b6210b28bf41d3",
-   "etag": "W/\"20898c5a4273fe9fa76b0d9ac304193b04d023cb74426faeaf33098793ddd406\"",
+   "sha": "eaa3d0c86c6d92d5fe038ec3ebe8e80530ab179a",
+   "etag": "W/\"9622178182a72b9d954ce08e301ea9f48281244b949887196301ffbd55ed145e\"",
    "truncated": false,
-   "path_count": 859,
+   "path_count": 871,
    "matched": [
     "go.mod",
     "docs/package.json",
@@ -19754,9 +19736,9 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "ca86067a37b11bff8d26961dc1e0e36337b8e2e5",
+    "blob_sha": "af287a2203ab6aa9251c8a8ba384137148c1aa81",
     "ecosystem": "go",
-    "bytes": 8348,
+    "bytes": 8312,
     "names": [
      "github.com/DATA-DOG/go-sqlmock",
      "github.com/blang/semver/v4",
@@ -19778,6 +19760,7 @@
      "github.com/spf13/pflag",
      "github.com/testcontainers/testcontainers-go",
      "go.uber.org/zap",
+     "golang.org/x/sync",
      "golang.org/x/sys",
      "golang.org/x/term",
      "k8s.io/api",
@@ -19787,6 +19770,8 @@
      "k8s.io/streaming",
      "k8s.io/utils",
      "sigs.k8s.io/controller-runtime",
+     "sigs.k8s.io/kustomize/api",
+     "sigs.k8s.io/kustomize/kyaml",
      "sigs.k8s.io/yaml"
     ],
     "dev": [
@@ -19875,7 +19860,7 @@
    {
     "path": "docs/package.json",
     "kind": "dep",
-    "blob_sha": "0528f668656cd833a6cb3f1cd48a53fd1a0afa09",
+    "blob_sha": "cc966050b173a85e8083fcf2ebcf1515aed12bae",
     "ecosystem": "npm",
     "bytes": 660,
     "names": [
@@ -19918,7 +19903,7 @@
    {
     "path": ".github/workflows/codeql.yml",
     "kind": "ci",
-    "blob_sha": "0947f260109a775b7deb716af2b99f4029a116c9",
+    "blob_sha": "39640577c37263878fca395b2499b85015169bd1",
     "bytes": 2092
    },
    {
@@ -19978,7 +19963,7 @@
    {
     "path": ".github/workflows/scorecard.yml",
     "kind": "ci",
-    "blob_sha": "45f8f72e1c5156f05aa2f0237946b6d95ad712b4",
+    "blob_sha": "b556ba53e66c08d1f5b906dae44bec0a6c48ed49",
     "bytes": 1489
    },
    {
@@ -19995,6 +19980,8 @@
     "docs/src/database-users.md"
    ],
    "paths": [
+    "pkg/management/mysql/config/plugins.go",
+    "pkg/management/mysql/config/plugins_test.go",
     "design/016-kubectl-plugin.md",
     "hack/install-cnmsql-plugin.sh",
     "cmd/kubectl-cnmsql/plugin/client.go",
@@ -20676,13 +20663,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T05:11:57Z",
+  "collected_at": "2026-11-20T20:11:02Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
-  "stars": 8,
+  "pushed_at": "2026-11-20",
+  "stars": 9,
   "tree": {
-   "sha": "41dfaaebdbfefb99ab2dad36fdc3dccc6d1bddad",
-   "etag": "W/\"1ee8a4e5fd55af07a2f8f952137edba35f001b1f876ff6438210ab268d4e1afc\"",
+   "sha": "434769fd191f414ccf1f0f060dceb442f3a2b6c4",
+   "etag": "W/\"3aa49cb751150905ef87b15df00269b1dce4888981774d112c3e5b85618361c7\"",
    "truncated": false,
    "path_count": 731,
    "matched": [

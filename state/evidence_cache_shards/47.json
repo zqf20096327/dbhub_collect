@@ -1262,15 +1262,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:12:13Z",
+  "collected_at": "2026-11-20T19:12:10Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-20",
   "stars": 1368,
   "tree": {
-   "sha": "471eb5d73c4d182c24daff37ba3e6216a37ea47e",
-   "etag": "W/\"2948d903bed8039ad47315063cd61786677afca4e36fab6d230337ad79d3998d\"",
+   "sha": "cb328bc382a68f08787c6b138af012c30691cf78",
+   "etag": "W/\"991cb1892efd203fec0adb168490384fd7bbd17a8f09398474176e563e15d8fd\"",
    "truncated": false,
-   "path_count": 3661,
+   "path_count": 3772,
    "matched": [
     "Cargo.toml",
     "crates/common-build-info/Cargo.toml",
@@ -1912,11 +1912,12 @@
    {
     "path": "modules/metering/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "3ce69c0922a8649234d5aaff2bd09aa4a47e79dc",
+    "blob_sha": "a454212df7ef8a066283a6ed37f2fb0663fc4c7d",
     "ecosystem": "cargo",
-    "bytes": 2410,
+    "bytes": 2489,
     "names": [
      "rand.workspace",
+     "rust_decimal",
      "async-trait.workspace",
      "cached",
      "chrono",
@@ -1954,6 +1955,7 @@
      "workspace-hack"
     ],
     "dev": [
+     "rust_decimal_macros",
      "argon2",
      "base62",
      "meteroid-grpc"
@@ -3309,6 +3311,7 @@
     "modules/metering/src/connectors/clickhouse/discovery.rs",
     "modules/metering/src/connectors/clickhouse/mod.rs",
     "modules/metering/src/connectors/clickhouse/extensions/mod.rs",
+    "modules/metering/src/connectors/clickhouse/sql/meter_value.rs",
     "modules/metering/src/connectors/clickhouse/sql/mod.rs",
     "modules/metering/src/connectors/clickhouse/sql/query_raw.rs",
     "modules/adapters/slurm-collector/Cargo.toml",
@@ -3791,15 +3794,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:47:50Z",
+  "collected_at": "2026-11-20T19:47:22Z",
   "default_branch": "1.5",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-20",
   "stars": 39,
   "tree": {
-   "sha": "6b8665b6a4bb0ecf8aabce8ed70c92a4a5eb53af",
-   "etag": "W/\"afc37e7007918386b7546cee56b5ed3cb5a91abad77f2a5a688f09dd59ecb4ed\"",
+   "sha": "7d2d5cf2e4db0f03b037b06c2a60dcd331d65114",
+   "etag": "W/\"18afac8cba5eb69a5453362cb9d121f1708929df499b636d90ee8c36f7ca1f2f\"",
    "truncated": false,
-   "path_count": 256,
+   "path_count": 274,
    "matched": [
     "composer.json",
     "assets/package.json",
@@ -3808,17 +3811,18 @@
     "docker-compose.yml",
     ".github/workflows/ci.yml",
     ".github/workflows/crowdin.yml",
-    ".github/workflows/docker-beta.yml",
-    ".github/workflows/docker-release.yml"
+    ".github/workflows/docker-rebuild-on-frankenphp-image-update.yml",
+    ".github/workflows/docker-release.yml",
+    ".github/workflows/license-year.yml"
    ]
   },
   "files": [
    {
     "path": "composer.json",
     "kind": "dep",
-    "blob_sha": "ebd74b68a506fa82cc36bb75d9dd7376e6f07f0b",
+    "blob_sha": "5302ed4ed2577e7f6e6c48022f4501c88b6a39e9",
     "ecosystem": "composer",
-    "bytes": 3888,
+    "bytes": 4015,
     "names": [
      "php",
      "ext-ctype",
@@ -3839,14 +3843,18 @@
      "symfony/console",
      "symfony/css-selector",
      "symfony/dependency-injection",
+     "symfony/doctrine-messenger",
      "symfony/dotenv",
      "symfony/event-dispatcher",
      "symfony/expression-language",
      "symfony/flex",
      "symfony/form",
      "symfony/framework-bundle",
+     "symfony/http-client",
+     "symfony/messenger",
      "symfony/mime",
      "symfony/monolog-bundle",
+     "symfony/reprise",
      "symfony/routing",
      "symfony/runtime",
      "symfony/security-bundle",
@@ -3855,7 +3863,6 @@
      "symfony/twig-bundle",
      "symfony/uid",
      "symfony/validator",
-     "symfony/webpack-encore-bundle",
      "symfony/yaml",
      "twig/extra-bundle",
      "twig/intl-extra",
@@ -3877,34 +3884,25 @@
    {
     "path": "assets/package.json",
     "kind": "dep",
-    "blob_sha": "180aca6c051abfac497095d601227fae4d8786d1",
+    "blob_sha": "90e40af9ddb783060ad599e43e5a8f8506a9b12d",
     "ecosystem": "npm",
-    "bytes": 1016,
+    "bytes": 675,
     "names": [
      "bulma",
      "bulma-toast",
-     "stimulus",
      "stimulus-use"
     ],
     "dev": [
-     "@babel/core",
-     "@babel/preset-env",
      "@hotwired/stimulus",
-     "@symfony/stimulus-bridge",
-     "@symfony/webpack-encore",
-     "copy-webpack-plugin",
-     "core-js",
-     "regenerator-runtime",
-     "webpack",
-     "webpack-cli",
-     "webpack-notifier"
+     "@symfony/reprise",
+     "vite"
     ]
    },
    {
     "path": "Dockerfile",
     "kind": "image",
-    "blob_sha": "44fc1d8ec9922b5ad019df33d2d10ffb4f1fbf1b",
-    "bytes": 2170,
+    "blob_sha": "808dedc49b9c2b7689b788d3a2f63665aadf64f6",
+    "bytes": 2531,
     "images": [
      "dunglas/frankenphp:php8.5",
      "node:26-bookworm",
@@ -3914,8 +3912,8 @@
    {
     "path": "Dockerfile.dev",
     "kind": "image",
-    "blob_sha": "eeaaaad827f05ade1b72bff73118d132eb23c65c",
-    "bytes": 1628,
+    "blob_sha": "edb8ffb4a8946918e17f0c0f1c89e05674115b04",
+    "bytes": 1645,
     "images": [
      "dunglas/frankenphp:php8.5"
     ]
@@ -3923,8 +3921,8 @@
    {
     "path": "docker-compose.yml",
     "kind": "image",
-    "blob_sha": "714b1be9d6aa365aa2a9b51b0c8c22a8daea769b",
-    "bytes": 1626,
+    "blob_sha": "c1cacc45ed250b5e46d50889451ebe8ce91dd6b5",
+    "bytes": 1662,
     "images": [
      "pgvector/pgvector:pg16",
      "dpage/pgadmin4"
@@ -3933,29 +3931,36 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "ce17291829d85c5ff5df869c8777931ac4543963",
-    "bytes": 3719,
+    "blob_sha": "faf91ec03366c8b0ffe58b67d22949dff5a7583b",
+    "bytes": 5845,
     "images": [
+     "pgvector/pgvector:pg18",
      "ci-image"
     ]
    },
    {
     "path": ".github/workflows/crowdin.yml",
     "kind": "ci",
-    "blob_sha": "e9c82e8400a3e0a4c47109402acabb2caeb02d89",
-    "bytes": 1585
+    "blob_sha": "ea4e8cfdb481a06fb4d3f5866478da3ba66b3704",
+    "bytes": 1623
    },
    {
-    "path": ".github/workflows/docker-beta.yml",
+    "path": ".github/workflows/docker-rebuild-on-frankenphp-image-update.yml",
     "kind": "ci",
-    "blob_sha": "d03426dd68ce1fa2b4a24ea2872de3a5424c5135",
-    "bytes": 976
+    "blob_sha": "058c53a90c7237ad9862a5bb9f4ce1b30e88e66d",
+    "bytes": 1892
    },
    {
     "path": ".github/workflows/docker-release.yml",
     "kind": "ci",
-    "blob_sha": "e9b9e496f84542963b8e59fb00ca822b6f990b91",
-    "bytes": 1075
+    "blob_sha": "a725daa1334b30e419241f7a65f736d4a5e5123d",
+    "bytes": 1906
+   },
+   {
+    "path": ".github/workflows/license-year.yml",
+    "kind": "ci",
+    "blob_sha": "8dee2fdf92ce68a71165aaca41f847aea8670ca0",
+    "bytes": 460
    }
   ],
   "clues": {
@@ -4837,15 +4842,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T03:54:57Z",
+  "collected_at": "2026-11-20T18:53:28Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
-  "stars": 30778,
+  "pushed_at": "2026-11-20",
+  "stars": 31037,
   "tree": {
-   "sha": "58e62fe49e9f8c7c5f2dda014c32dd411575d809",
-   "etag": "W/\"540d31f3f08a42ff2c79f7fba053c38426290b16f38bf1384e6eff3f67afb30e\"",
+   "sha": "c6df43e321f301144e743e9614a0de0a7f7182f5",
+   "etag": "W/\"e28f4a8f2559a29d29515fc9bb728471ee348cd3f637d4a46e8ff9769db3a3ec\"",
    "truncated": false,
-   "path_count": 8481,
+   "path_count": 8460,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -4959,7 +4964,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "6ac9184a07783adbaaf2011932ffabc15f30a0d6",
+    "blob_sha": "a9671e5d6479ee9e1799b8ae917e376ceba5f33d",
     "ecosystem": "npm",
     "bytes": 6873,
     "names": [
@@ -5110,7 +5115,7 @@
    {
     "path": "src-tauri/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b43ed9c8b97af7c40f34f54799003b9e9a9cac4f",
+    "blob_sha": "031a1da64d8316008545f26c3a9454693e308c99",
     "ecosystem": "cargo",
     "bytes": 5055,
     "names": [
@@ -5880,7 +5885,7 @@
    {
     "path": "crates/dbx-web/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "247ef252b5779c4e2620364a70f303a4bd38f33a",
+    "blob_sha": "636a6314aeb723a34cbb63ef6281fa283f1b1183",
     "ecosystem": "cargo",
     "bytes": 2378,
     "names": [
@@ -6106,7 +6111,7 @@
    {
     "path": "plugins/jdbc/build.gradle",
     "kind": "dep",
-    "blob_sha": "4d6b55d99e51417891c2c75763ced442f43649bb",
+    "blob_sha": "a80dc8f043c30aacc12e1262971c2b3f3e68878e",
     "ecosystem": "gradle",
     "bytes": 2113,
     "names": [
@@ -7192,13 +7197,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:00:06Z",
+  "collected_at": "2026-11-20T18:59:30Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
-  "stars": 8735,
+  "pushed_at": "2026-11-20",
+  "stars": 8738,
   "tree": {
    "sha": "a0a800f5d15648a25afcc4dd20da22e6d286f3ab",
-   "etag": "W/\"0cffb21595d29c136b025e6cd0c92dc0dc92691bf32eef1bd6c130935e3c658f\"",
+   "etag": "W/\"c5636ce283db533ff778cf0fb9c7643a7b8b96712626636ec49377f1bdc71e87\"",
    "truncated": false,
    "path_count": 977,
    "matched": [
@@ -8951,13 +8956,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:31:20Z",
+  "collected_at": "2026-11-20T19:32:00Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-20",
   "stars": 141,
   "tree": {
    "sha": "2d1a7b789912b6bb07f3bfb0ea2de28481419b80",
-   "etag": "W/\"c46f312eec41493dc00dee88d65142f3ab397d505f47c43f603c662af46695fd\"",
+   "etag": "W/\"9ad6d9a5dbcf9996275b04af2308b690b92a61e74b44351a0dfa5d0f017dbdb7\"",
    "truncated": false,
    "path_count": 946,
    "matched": [
@@ -11040,13 +11045,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:52:30Z",
+  "collected_at": "2026-11-20T19:51:53Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-19",
   "stars": 30,
   "tree": {
    "sha": "ae24ea693601d1af3cf899dc8c2da684cd6c9f6f",
-   "etag": "W/\"4ebd6dccec17449ed5a5a0fa1dfb05f34da222574e5f5a383b377025868ce883\"",
+   "etag": "W/\"ad1ec4a46577ac469750c08a2f79a14b41016a0706a71e375781a0707c01c789\"",
    "truncated": false,
    "path_count": 212,
    "matched": [
@@ -16664,15 +16669,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:37:19Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-20T20:08:32Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-29",
-  "stars": 10,
+  "pushed_at": "2026-11-19",
+  "stars": 11,
   "tree": {
-   "sha": "734c9a393d13d4ff2e495224d35ddfd3609c3b06",
-   "etag": "W/\"7b49988c4281e2dc4e6394662eb627e087ca0ddecb52cd398b0142ab4e6511a7\"",
+   "sha": "594a298434c7f61ffcae1d8887c305eaec71272a",
+   "etag": "W/\"2f1eee704803b0d458bb502279a0dc2df0e7924e6d62d4f92eee0619feacd59f\"",
    "truncated": false,
-   "path_count": 724,
+   "path_count": 847,
    "matched": [
     "package.json",
     "apps/server/package.json",
@@ -16685,7 +16691,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "008f0cbcd3e6e5e23bd5c03ccb130b0d60b3ad59",
+    "blob_sha": "b6781b3a75f126438495b721db6908fbc043fad2",
     "ecosystem": "npm",
     "bytes": 1164,
     "dev": [
@@ -16696,9 +16702,9 @@
    {
     "path": "apps/server/package.json",
     "kind": "dep",
-    "blob_sha": "af9230f01bb6880d620296da41af058e782c87e9",
+    "blob_sha": "eac18d02875b6eb3b0d6b2a94af2e147344e7335",
     "ecosystem": "npm",
-    "bytes": 1116,
+    "bytes": 1185,
     "names": [
      "@earendil-works/pi-ai",
      "@earendil-works/pi-coding-agent",
@@ -16764,9 +16770,12 @@
    {
     "path": "packages/shared/package.json",
     "kind": "dep",
-    "blob_sha": "c35f9daffca97c5533d973188f5b7336fcf9fc3a",
+    "blob_sha": "fd194390f4070de4163735d0e9c83e3081ef2f06",
     "ecosystem": "npm",
-    "bytes": 254
+    "bytes": 336,
+    "names": [
+     "zod"
+    ]
    },
    {
     "path": ".github/workflows/ci.yml",
@@ -18159,19 +18168,22 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:35:13Z",
+  "collected_at": "2026-11-20T19:35:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-20",
   "stars": 107,
   "tree": {
-   "sha": "bcc66ba984a6ec81bf756ea5ee185360ad986b95",
-   "etag": "W/\"8fd4c88da69cc5e69148b419008e81efb6fdb3ac7da7456d31c70080e6e492df\"",
+   "sha": "131dd52340151bdc7b96809ab5855a622ab526d7",
+   "etag": "W/\"c5949be0eb4bd33caa04157062a5f3219598f79f9d57b7e0e86b1f71b9bbde35\"",
    "truncated": false,
-   "path_count": 1288,
+   "path_count": 1195,
    "matched": [
     "go-zero-admin-react/package.json",
     "go-zero-admin/go.mod",
+    "compose.yaml",
     "go-zero-admin/docker/Dockerfile",
+    "go-zero-admin/docker/quickstart/Dockerfile",
+    "go-zero-admin/docker/quickstart/Dockerfile.dockerignore",
     ".github/workflows/ci.yml"
    ]
   },
@@ -18316,6 +18328,17 @@
     ]
    },
    {
+    "path": "compose.yaml",
+    "kind": "image",
+    "blob_sha": "36ffbc24fbdd03f126c1c687a9db9465623d6626",
+    "bytes": 3228,
+    "images": [
+     "mysql:9.7",
+     "redis:8",
+     "rustfs/rustfs:1.0.3"
+    ]
+   },
+   {
     "path": "go-zero-admin/docker/Dockerfile",
     "kind": "image",
     "blob_sha": "dc5863a700af76276a5baa0972c8272be3c93cdf",
@@ -18326,10 +18349,28 @@
     ]
    },
    {
+    "path": "go-zero-admin/docker/quickstart/Dockerfile",
+    "kind": "image",
+    "blob_sha": "a9eb6880986be3c45adce24b1cb3412522188947",
+    "bytes": 1533,
+    "images": [
+     "golang:1.27.3-alpine",
+     "alpine:3.24.2",
+     "node:24-bookworm-slim",
+     "nginx:1.27-alpine"
+    ]
+   },
+   {
+    "path": "go-zero-admin/docker/quickstart/Dockerfile.dockerignore",
+    "kind": "image",
+    "blob_sha": "b407cbd0baa5b0c795e163bb5b688a05b7491709",
+    "bytes": 729
+   },
+   {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "4cc7f8b191ee429ec3cd1ac853b8a8c624eab47f",
-    "bytes": 3775
+    "blob_sha": "885ca9a4118b75ccb08afb658347a223385daf8c",
+    "bytes": 4964
    }
   ],
   "clues": {
@@ -19524,6 +19565,366 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
+  },
+  "fail_count": 0
+ },
+ "mplemay/rowx": {
+  "fn": "mplemay/rowx",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-20T18:50:23Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-20",
+  "stars": 3,
+  "tree": {
+   "sha": "1b6eaf1036df677d1a26021fd08573b2db45bb8f",
+   "etag": "W/\"3b91739f816db1be13f8d8302764509923ff405417784c99366b3c77454ed48e\"",
+   "truncated": false,
+   "path_count": 794,
+   "matched": [
+    "Cargo.toml",
+    "pyproject.toml",
+    "fuzz/Cargo.toml",
+    "crates/rowx-core/Cargo.toml",
+    "crates/rowx-postgres/Cargo.toml",
+    "crates/rowx-py-core/Cargo.toml",
+    "crates/rowx-sqlite/Cargo.toml",
+    "examples/app/pyproject.toml",
+    "examples/embedded/pyproject.toml",
+    "examples/migrations/pyproject.toml",
+    "examples/security/pyproject.toml",
+    "packages/rowx-core/pyproject.toml",
+    "packages/rowx-embedded/Cargo.toml",
+    "packages/rowx-embedded/pyproject.toml",
+    "packages/rowx-postgres/Cargo.toml",
+    "packages/rowx-postgres/pyproject.toml",
+    "packages/rowx-sqlite/Cargo.toml",
+    "packages/rowx-sqlite/pyproject.toml",
+    "vendor/wasmer-compiler/Cargo.toml",
+    "packages/rowx-embedded/crates/rowx-embedded-host/Cargo.toml",
+    ".github/workflows/bench.yml",
+    ".github/workflows/ci.yml",
+    ".github/workflows/docs.yml",
+    ".github/workflows/fuzz-nullability.yml",
+    ".github/workflows/fuzz.yml",
+    ".github/workflows/release.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "fbd564cb1b4cea616687a69abb28544ecc74eac6",
+    "ecosystem": "cargo",
+    "bytes": 2951
+   },
+   {
+    "path": "pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "2a041c42d73159bdb143a1e3013be16f88c75d67",
+    "ecosystem": "pyproject",
+    "bytes": 6120,
+    "names": [
+     "rowx-core",
+     "pathspec"
+    ]
+   },
+   {
+    "path": "fuzz/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f9b9c1d3462a88f59ef0907535d308cbd5dd3c6f",
+    "ecosystem": "cargo",
+    "bytes": 3813,
+    "names": [
+     "libfuzzer-sys",
+     "rowx-postgres",
+     "serde_json"
+    ]
+   },
+   {
+    "path": "crates/rowx-core/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "7514eaa09130bd464fa035cedf410a4469d1c231",
+    "ecosystem": "cargo",
+    "bytes": 335,
+    "names": [
+     "sha2",
+     "thiserror",
+     "tokio"
+    ],
+    "dev": [
+     "tempfile",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/rowx-postgres/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "9838b145be266b4e34a410d28dac9ac938a82e52",
+    "ecosystem": "cargo",
+    "bytes": 725,
+    "names": [
+     "rowx-core.workspace",
+     "bytes",
+     "crc32fast",
+     "futures-util",
+     "rustls",
+     "rustls-pemfile",
+     "serde_json",
+     "thiserror",
+     "tokio",
+     "tokio-postgres",
+     "tokio-postgres-rustls",
+     "webpki-roots"
+    ],
+    "dev": [
+     "rowx-core.workspace",
+     "proptest",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/rowx-py-core/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "dcdec31524565acd763c8d24656923484031bc89",
+    "ecosystem": "cargo",
+    "bytes": 324,
+    "names": [
+     "pyo3.workspace",
+     "pyo3-async-runtimes.workspace",
+     "rowx-core.workspace",
+     "tokio.workspace"
+    ]
+   },
+   {
+    "path": "crates/rowx-sqlite/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f033da1316c179d49196291e0600ec592b423d87",
+    "ecosystem": "cargo",
+    "bytes": 814,
+    "names": [
+     "rowx-core.workspace",
+     "rusqlite",
+     "libsqlite3-sys",
+     "thiserror",
+     "tokio"
+    ],
+    "dev": [
+     "rowx-sqlite",
+     "tempfile",
+     "tokio"
+    ]
+   },
+   {
+    "path": "examples/app/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "b0182227bc9314cbf1d4201c37d5f43f3e05f4e5",
+    "ecosystem": "pyproject",
+    "bytes": 290,
+    "names": [
+     "rowx",
+     "pydantic"
+    ]
+   },
+   {
+    "path": "examples/embedded/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "4f4fb1169634b5c0e22c06b8283a02b2922657b9",
+    "ecosystem": "pyproject",
+    "bytes": 745,
+    "names": [
+     "rowx"
+    ]
+   },
+   {
+    "path": "examples/migrations/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "9d9623986c128a4f52ddf770694056e7f4e6ad6e",
+    "ecosystem": "pyproject",
+    "bytes": 580,
+    "names": [
+     "rowx"
+    ]
+   },
+   {
+    "path": "examples/security/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "2ddec90e29a6ec281fa2fa4a1a8408a92f11efb0",
+    "ecosystem": "pyproject",
+    "bytes": 307,
+    "names": [
+     "rowx"
+    ]
+   },
+   {
+    "path": "packages/rowx-core/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "c0bde1b0adc18f5eef1ec9462bd19e2691a3e4b6",
+    "ecosystem": "pyproject",
+    "bytes": 1229
+   },
+   {
+    "path": "packages/rowx-embedded/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "70615dc4525acd36d3fa5083a11e9ab4c7cba685",
+    "ecosystem": "cargo",
+    "bytes": 768,
+    "names": [
+     "pyo3",
+     "rowx-embedded-host",
+     "thiserror"
+    ]
+   },
+   {
+    "path": "packages/rowx-embedded/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "0eb3e68102d96994daec49e3de3d4e7cf3f448a8",
+    "ecosystem": "pyproject",
+    "bytes": 2152,
+    "names": [
+     "rowx-core",
+     "rowx-postgres"
+    ]
+   },
+   {
+    "path": "packages/rowx-postgres/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "bc5c0501c2d81bbaee75d2142ae75c409a7f811f",
+    "ecosystem": "cargo",
+    "bytes": 444,
+    "names": [
+     "pyo3.workspace",
+     "pyo3-async-runtimes.workspace",
+     "tokio",
+     "rowx-core.workspace",
+     "rowx-postgres.workspace",
+     "rowx-py-core.workspace"
+    ]
+   },
+   {
+    "path": "packages/rowx-postgres/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "d85ce4852fe8c702a941ec44850b1aa1bb8d0549",
+    "ecosystem": "pyproject",
+    "bytes": 1901,
+    "names": [
+     "rowx-core"
+    ]
+   },
+   {
+    "path": "packages/rowx-sqlite/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "66c45aa87df08108f28d2f85c1c8b6f53542d1e4",
+    "ecosystem": "cargo",
+    "bytes": 640,
+    "names": [
+     "pyo3.workspace",
+     "pyo3-async-runtimes.workspace",
+     "tokio",
+     "rowx-core.workspace",
+     "rowx-sqlite.workspace",
+     "rowx-py-core.workspace"
+    ]
+   },
+   {
+    "path": "packages/rowx-sqlite/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "ca7bab4de554adb918be2626094c235bd6246f17",
+    "ecosystem": "pyproject",
+    "bytes": 1854,
+    "names": [
+     "rowx-core"
+    ]
+   },
+   {
+    "path": "vendor/wasmer-compiler/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "a2b42fe0dc067243bfb0536c0510c0eafbb2d39d",
+    "ecosystem": "cargo",
+    "bytes": 3960
+   },
+   {
+    "path": "packages/rowx-embedded/crates/rowx-embedded-host/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "7ff3a0a4d06d81d52bd07f51b172b907cf24670e",
+    "ecosystem": "cargo",
+    "bytes": 491,
+    "names": [
+     "liboliphaunt-wasix-portable",
+     "oliphaunt-wasix.workspace",
+     "rustix",
+     "serde",
+     "serde_json",
+     "sha2",
+     "tar",
+     "tempfile",
+     "thiserror",
+     "zstd"
+    ]
+   },
+   {
+    "path": ".github/workflows/bench.yml",
+    "kind": "ci",
+    "blob_sha": "e2a30cc15170cc135527525b55f5e491d466918f",
+    "bytes": 1509,
+    "images": [
+     "postgres:18"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "fd699899f792c86c911e810a6b6569ecaea87cd5",
+    "bytes": 20156,
+    "images": [
+     "postgres:18"
+    ]
+   },
+   {
+    "path": ".github/workflows/docs.yml",
+    "kind": "ci",
+    "blob_sha": "ce76ac815269c30584bb19b8c84699b323bf35ee",
+    "bytes": 1714
+   },
+   {
+    "path": ".github/workflows/fuzz-nullability.yml",
+    "kind": "ci",
+    "blob_sha": "7826af18fb8fd046d06f5b2d6493341e27359c3a",
+    "bytes": 2696,
+    "images": [
+     "postgres:18"
+    ]
+   },
+   {
+    "path": ".github/workflows/fuzz.yml",
+    "kind": "ci",
+    "blob_sha": "f3c1893e24406df45bc22ad2f5be0a1cebc52bc7",
+    "bytes": 3747,
+    "images": [
+     "postgres:18"
+    ]
+   },
+   {
+    "path": ".github/workflows/release.yml",
+    "kind": "ci",
+    "blob_sha": "d320634dab7dbc51973bb1baefd669d9f87d4064",
+    "bytes": 23453
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "docs/changelog.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [
+    "docs/reference/driver.md"
+   ],
+   "paths": [
+    "bench/fetch_drivers.py",
+    "docs/reference/driver.md"
+   ]
   },
   "fail_count": 0
  }

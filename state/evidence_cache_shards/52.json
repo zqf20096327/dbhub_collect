@@ -540,15 +540,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T03:56:36Z",
+  "collected_at": "2026-11-20T18:55:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
-  "stars": 20308,
+  "pushed_at": "2026-11-20",
+  "stars": 20319,
   "tree": {
-   "sha": "decf2726ab7fcc8d5e7e0ea638d38362a7cc220f",
-   "etag": "W/\"c707fe0a2bd06e3aa2dbd74dce27eebc233d1b488e25159e02c94ae46a5c22ad\"",
+   "sha": "7b88d8ca46d36716ebafee104e32bff52d77f3ba",
+   "etag": "W/\"f8a8969f6466188004a449842cae289eb612df730ed85f7b8a8c465ee5e65a5e\"",
    "truncated": false,
-   "path_count": 5438,
+   "path_count": 5973,
    "matched": [
     "pyproject.toml",
     "docs/package.json",
@@ -559,6 +559,7 @@
     "packages/dbgpt-ext/pyproject.toml",
     "packages/dbgpt-sandbox/pyproject.toml",
     "packages/dbgpt-serve/pyproject.toml",
+    "standalone/financial-analysis/package.json",
     "packages/dbgpt-accelerator/dbgpt-acc-auto/pyproject.toml",
     "packages/dbgpt-accelerator/dbgpt-acc-flash-attn/pyproject.toml",
     "docker-compose.yml",
@@ -622,9 +623,9 @@
    {
     "path": "web/package.json",
     "kind": "dep",
-    "blob_sha": "6a12970d1aadf459a8392974d2dc61bf9046dd44",
+    "blob_sha": "10b2cf26ebc512310d9d69bda1877cdc527c6e66",
     "ecosystem": "npm",
-    "bytes": 6511,
+    "bytes": 6909,
     "names": [
      "@ant-design/cssinjs",
      "@ant-design/icons",
@@ -694,7 +695,8 @@
      "ajv",
      "react-grid-layout",
      "react-markdown",
-     "react-resizable"
+     "react-resizable",
+     "xlsx"
     ],
     "dev": [
      "@types/crypto-js",
@@ -727,7 +729,9 @@
      "@playwright/test",
      "jsdom",
      "vitest",
-     "@types/uuid"
+     "@types/uuid",
+     "terser",
+     "webpack"
     ]
    },
    {
@@ -786,9 +790,9 @@
    {
     "path": "packages/dbgpt-ext/pyproject.toml",
     "kind": "dep",
-    "blob_sha": "42a30a8bdcb5729f21579b8e2a8d1f46b59cbcec",
+    "blob_sha": "027cc418dd68676914d87a7254ad33a6ef9569a3",
     "ecosystem": "pyproject",
-    "bytes": 2449,
+    "bytes": 2457,
     "names": [
      "dbgpt",
      "pymysql"
@@ -822,6 +826,13 @@
      "dbgpt-ext",
      "apscheduler"
     ]
+   },
+   {
+    "path": "standalone/financial-analysis/package.json",
+    "kind": "dep",
+    "blob_sha": "cdbe35243b856604751483e3574a918175130d08",
+    "ecosystem": "npm",
+    "bytes": 115
    },
    {
     "path": "packages/dbgpt-accelerator/dbgpt-acc-auto/pyproject.toml",
@@ -986,6 +997,8 @@
     "docs/docs/awel/cookbook/write_your_chat_database.md"
    ],
    "paths": [
+    "assets/suites/mysql-ops-expert/CONNECTORS.md",
+    "assets/suites/mysql-ops-expert/.dbgpt-plugin/plugin.json",
     "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/config-reference/vector_store/oceanbase_store_oceanbaseconfig_220e36.mdx",
     "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/installation/integrations/clickhouse_install.md",
     "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/installation/integrations/gaussdb_install.md",
@@ -1002,12 +1015,23 @@
     "examples/agents/plugin_agent_dialogue_example.py",
     "tests/unit_tests/test_plugins.py",
     "web/hooks/use-connector-api.ts",
+    "assets/suites/db-query/CONNECTORS.md",
     "docs/docs/application/mcp_connectors.md",
     "docs/superpowers/specs/2026-04-03-external-connectors-design.md",
     "examples/test_files/plugins/DB-GPT-Plugins-main-20231117140550.zip",
+    "standalone/financial-analysis/adapters/attachments.tsx",
+    "standalone/financial-analysis/adapters/chat-context.tsx",
+    "standalone/financial-analysis/adapters/dynamic.tsx",
+    "standalone/financial-analysis/adapters/markdown.tsx",
+    "standalone/financial-analysis/adapters/router.ts",
+    "standalone/financial-analysis/adapters/semantic-provenance.tsx",
+    "standalone/financial-analysis/adapters/taskflow.test.cjs",
+    "standalone/financial-analysis/adapters/taskflow.ts",
     "web/components/agent/market-plugins.tsx",
     "web/components/agent/my-plugins.tsx",
     "web/components/icons/colorful-plugin.tsx",
+    "web/locales/en/plugins.ts",
+    "web/locales/zh/plugins.ts",
     "web/modules/session-files/home-adapter.test.ts",
     "web/modules/session-files/home-adapter.ts",
     "web/new-components/connector/ConfirmDialog.tsx",
@@ -1017,6 +1041,15 @@
     "web/new-components/connector/index.ts",
     "web/new-components/connector/types.ts",
     "web/new-components/connector/useConfirmPolling.ts",
+    "web/new-components/suites/HomePlugins.module.css",
+    "web/new-components/suites/PluginCenter.module.css",
+    "assets/retired-suites/db-ops/.dbgpt-plugin/plugin.json",
+    "assets/suites/db-analysis/.dbgpt-plugin/plugin.json",
+    "assets/suites/db-query/.dbgpt-plugin/plugin.json",
+    "assets/suites/financial-analysis/.dbgpt-plugin/plugin.json",
+    "assets/suites/legal-expert-suite/.dbgpt-plugin/plugin.json",
+    "assets/suites/metadata-architecture-expert/.dbgpt-plugin/plugin.json",
+    "assets/suites/sql-optimization-expert/.dbgpt-plugin/plugin.json",
     "docs/docs/config-reference/datasource/conn_duckdb_duckdbconnectorparameters_c672c7.mdx",
     "docs/docs/config-reference/datasource/conn_sqlite_sqliteconnectorparameters_82c8b5.mdx",
     "docs/docs/config-reference/llm/hf_adapter_hfllmdeploymodelparameters_103e81.mdx",
@@ -1050,7 +1083,15 @@
     "packages/dbgpt-serve/src/dbgpt_serve/connector/__init__.py",
     "packages/dbgpt-serve/src/dbgpt_serve/connector/config.py",
     "packages/dbgpt-serve/src/dbgpt_serve/connector/serve.py",
+    "packages/dbgpt-serve/src/dbgpt_serve/plugins/__init__.py",
+    "packages/dbgpt-serve/src/dbgpt_serve/plugins/config.py",
+    "packages/dbgpt-serve/src/dbgpt_serve/plugins/creation.py",
+    "packages/dbgpt-serve/src/dbgpt_serve/plugins/installer.py",
+    "packages/dbgpt-serve/src/dbgpt_serve/plugins/loader.py",
+    "packages/dbgpt-serve/src/dbgpt_serve/plugins/registry.py",
+    "packages/dbgpt-serve/src/dbgpt_serve/plugins/serve.py",
     "packages/dbgpt-serve/src/dbgpt_serve/rag/connector.py",
+    "assets/suites/db-analysis/skills/build-dashboard/references/connector-readiness.md",
     "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/api/app.md",
     "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/api/benchmark.md",
     "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/api/chat.md",
@@ -1155,37 +1196,7 @@
     "packages/dbgpt-core/src/dbgpt/model/adapter/template.py",
     "packages/dbgpt-core/src/dbgpt/model/adapter/vllm_adapter.py",
     "packages/dbgpt-core/src/dbgpt/storage/chat_history/storage_adapter.py",
-    "packages/dbgpt-core/src/dbgpt/vis/tags/vis_plugin.py",
-    "packages/dbgpt-ext/src/dbgpt_ext/knowledge_source/connectors/__init__.py",
-    "packages/dbgpt-ext/src/dbgpt_ext/knowledge_source/connectors/feishu_drive.py",
-    "packages/dbgpt-ext/src/dbgpt_ext/knowledge_source/connectors/feishu_wiki.py",
-    "packages/dbgpt-ext/src/dbgpt_ext/knowledge_source/connectors/rss.py",
-    "packages/dbgpt-ext/src/dbgpt_ext/knowledge_source/connectors/yuque.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/agent/hub/plugin_hub.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/agent/resource/plugin.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/connector/api/__init__.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/connector/api/endpoints.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/connector/api/schemas.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/connector/models/__init__.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/connector/models/models.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/connector/service/__init__.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/connector/service/service.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/connector/tests/test_endpoints.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/connector/tests/test_service.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/datasource/manages/connector_manager.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/file/models/file_adapter.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/flow/models/variables_adapter.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/model/models/model_adapter.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/prompt/models/prompt_template_adapter.py",
-    "packages/dbgpt-serve/src/dbgpt_serve/prompt/tests/test_prompt_template_adapter.py",
-    "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/agents/cookbook/calculator_with_agents.md",
-    "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/agents/introduction/conversation.md",
-    "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/agents/introduction/custom_agents.md",
-    "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/agents/introduction/database.md",
-    "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/agents/introduction/introduction.md",
-    "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/agents/introduction/planning.md",
-    "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/agents/introduction/tools.md",
-    "docs/i18n/zh-CN/docusaurus-plugin-content-docs/current/agents/introduction/tools_use.md"
+    "packages/dbgpt-core/src/dbgpt/vis/tags/vis_plugin.py"
    ],
    "matrix_urls": [
     "http://docs.dbgpt.cn/docs/modules/smmf"
@@ -1268,13 +1279,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T23:32:33Z",
+  "collected_at": "2026-11-20T19:05:42Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
-  "stars": 3333,
+  "pushed_at": "2026-11-19",
+  "stars": 3335,
   "tree": {
-   "sha": "b1dc2ee9adf0df37e4b6bdac5d86b613e39099d8",
-   "etag": "W/\"9fc7f9cd23d70fe6eb7489dda399ff41343b07991a53591d7dde876a16df465e\"",
+   "sha": "dc355f6ed1330799245ee70c286fa6a13a702dfe",
+   "etag": "W/\"b8e99edf393a858946dd7a0e4cb43a28a2f5dfdfd7a051a324759895e944b8c8\"",
    "truncated": false,
    "path_count": 6856,
    "matched": [
@@ -3739,13 +3750,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:39:02Z",
+  "collected_at": "2026-11-20T19:39:01Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-20",
   "stars": 75,
   "tree": {
-   "sha": "f80ea84ba6b374bf91b59165d93f21a96b345237",
-   "etag": "W/\"957b239bc047d9671efb56152d99444ef7d765cff9d674d2055a0632f4d81cf8\"",
+   "sha": "0b02ad0b40cfa94770f464f6b04a4299d314560e",
+   "etag": "W/\"d55dd04ddc4f950eeebc6a2302d837d40e3f82b540a5ae3509015193bcacfd58\"",
    "truncated": false,
    "path_count": 164,
    "matched": [
@@ -3763,9 +3774,9 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "104b4b2040026adb7d682942283a448164320806",
+    "blob_sha": "e0cb68beed83b8cff9acbd42acbec3f4342e0ca7",
     "ecosystem": "go",
-    "bytes": 1552,
+    "bytes": 1582,
     "names": [
      "github.com/caarlos0/env/v11",
      "github.com/creasty/defaults",
@@ -5803,13 +5814,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T05:09:43Z",
+  "collected_at": "2026-11-20T20:08:59Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-19",
   "stars": 11,
   "tree": {
    "sha": "fe4fa6b5b0479432857daa58f3ea0cc4b57c91a8",
-   "etag": "W/\"e4f5f01e1ae625a79bf8a22034613b7a00c1ef02ff36f19d7174d0cbc6c00209\"",
+   "etag": "W/\"1251806504bf82b7c7a5424fd7e7c8be70aeffe6733a44979e31cacfbec05f39\"",
    "truncated": false,
    "path_count": 81,
    "matched": [
@@ -6642,15 +6653,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T02:43:04Z",
+  "collected_at": "2026-11-20T18:52:45Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-13",
-  "stars": 40404,
+  "pushed_at": "2026-11-20",
+  "stars": 40557,
   "tree": {
-   "sha": "3e13d8ea901a5368a0d4824e3b55775928bd5760",
-   "etag": "W/\"698b6e4144494db9d14848b312eac337f9410fc4113677e2228c04d534f9fa61\"",
+   "sha": "39b44e350cfc56ba67114ce6bce9687cbf51e534",
+   "etag": "W/\"062705ed807eda42bf8bf28148f8e1645e7348bc4ad2daaa158d184ca661c406\"",
    "truncated": false,
-   "path_count": 9211,
+   "path_count": 9585,
    "matched": [
     "pom.xml",
     "yudao-dependencies/pom.xml",
@@ -6680,6 +6691,7 @@
     "yudao-framework/yudao-spring-boot-starter-biz-data-permission/pom.xml",
     "yudao-framework/yudao-spring-boot-starter-biz-ip/pom.xml",
     "yudao-framework/yudao-spring-boot-starter-biz-tenant/pom.xml",
+    "yudao-framework/yudao-spring-boot-starter-elasticsearch/pom.xml",
     "yudao-framework/yudao-spring-boot-starter-excel/pom.xml",
     "yudao-framework/yudao-spring-boot-starter-job/pom.xml",
     "yudao-framework/yudao-spring-boot-starter-monitor/pom.xml",
@@ -6719,15 +6731,19 @@
    {
     "path": "yudao-dependencies/pom.xml",
     "kind": "dep",
-    "blob_sha": "72cae06f3635c09b8bfbef179fb8c791c143d791",
+    "blob_sha": "63ebc28ebc5cacedd5fdf97c33e4f3b1b58e6e57",
     "ecosystem": "maven",
-    "bytes": 36746,
+    "bytes": 43806,
     "names": [
      "io.netty:netty-bom",
      "org.springframework:spring-framework-bom",
      "org.springframework.security:spring-security-bom",
      "io.opentelemetry:opentelemetry-bom",
      "org.jetbrains.kotlin:kotlin-bom",
+     "com.squareup.okhttp3:okhttp-bom",
+     "com.squareup.okio:okio-bom",
+     "com.fasterxml.jackson:jackson-bom",
+     "io.micrometer:micrometer-bom",
      "org.springframework.boot:spring-boot-dependencies",
      "io.github.mouzt:bizlog-sdk",
      "cn.iocoder.boot:yudao-spring-boot-starter-biz-tenant",
@@ -6758,6 +6774,11 @@
      "cn.com.kingbase:kingbase8",
      "com.taosdata.jdbc:taos-jdbcdriver",
      "org.apache.iotdb:iotdb-jdbc",
+     "cn.iocoder.boot:yudao-spring-boot-starter-elasticsearch",
+     "org.dromara.easy-es:easy-es-boot-starter",
+     "co.elastic.clients:elasticsearch-java",
+     "org.elasticsearch.client:elasticsearch-rest-client",
+     "jakarta.json:jakarta.json-api",
      "cn.iocoder.boot:yudao-spring-boot-starter-job",
      "cn.iocoder.boot:yudao-spring-boot-starter-mq",
      "org.apache.rocketmq:rocketmq-spring-boot-starter",
@@ -6787,61 +6808,59 @@
      "org.apache.fesod:fesod-sheet",
      "com.googlecode.aviator:aviator",
      "org.apache.tika:tika-core",
+     "org.apache.pdfbox:pdfbox",
+     "org.apache.pdfbox:fontbox",
+     "org.apache.pdfbox:pdfbox-tools",
+     "org.apache.pdfbox:xmpbox",
      "org.apache.velocity:velocity-engine-core",
      "com.alibaba:fastjson",
-     "com.alibaba.fastjson2:fastjson2",
-     "com.google.guava:guava",
-     "com.alibaba:transmittable-thread-local",
-     "commons-net:commons-net",
-     "com.github.mwiede:jsch",
-     "org.apache.commons:commons-lang3",
-     "com.anji-plus:captcha-spring-boot-starter",
-     "org.lionsoul:ip2region",
-     "org.jsoup:jsoup",
-     "com.github.houbb:sensitive-word",
-     "com.belerweb:pinyin4j",
-     "io.vertx:vertx-core",
-     "io.vertx:vertx-web",
-     "io.vertx:vertx-mqtt"
+     "com.alibaba.fastjson2:fastjson2"
     ]
    },
    {
     "path": "yudao-framework/pom.xml",
     "kind": "dep",
-    "blob_sha": "76e674099b9d377a18508c013692cbdc703f9c24",
+    "blob_sha": "7b0af6c2d29b8d29c36e8a1fe5b9a0ad5460fd63",
     "ecosystem": "maven",
-    "bytes": 2037
+    "bytes": 2102
    },
    {
     "path": "yudao-module-ai/pom.xml",
     "kind": "dep",
-    "blob_sha": "b205413e1af2e52aff18217120756b8f80368b51",
+    "blob_sha": "4ae3021ee228d1bfe2d4b01a728ba8310c03eab6",
     "ecosystem": "maven",
-    "bytes": 10293,
+    "bytes": 13294,
     "names": [
-     "org.springframework.ai:spring-ai-bom",
      "cn.iocoder.boot:yudao-module-system",
      "cn.iocoder.boot:yudao-module-infra",
      "cn.iocoder.boot:yudao-spring-boot-starter-biz-tenant",
+     "cn.iocoder.boot:yudao-spring-boot-starter-protection",
      "cn.iocoder.boot:yudao-spring-boot-starter-security",
      "cn.iocoder.boot:yudao-spring-boot-starter-mybatis",
      "cn.iocoder.boot:yudao-spring-boot-starter-job",
      "cn.iocoder.boot:yudao-spring-boot-starter-test",
      "cn.iocoder.boot:yudao-spring-boot-starter-excel",
-     "org.springframework.ai:spring-ai-starter-model-openai",
-     "org.springframework.ai:spring-ai-starter-model-azure-openai",
-     "org.springframework.ai:spring-ai-starter-model-anthropic",
-     "org.springframework.ai:spring-ai-starter-model-deepseek",
-     "org.springframework.ai:spring-ai-starter-model-ollama",
-     "org.springframework.ai:spring-ai-starter-model-stability-ai",
-     "com.alibaba.cloud.ai:spring-ai-alibaba-starter-dashscope",
-     "org.springframework.ai:spring-ai-starter-vector-store-qdrant",
-     "org.springframework.ai:spring-ai-starter-vector-store-redis",
+     "cn.iocoder.spring-ai:spring-ai-starter-model-openai",
+     "cn.iocoder.spring-ai:spring-ai-starter-model-anthropic",
+     "cn.iocoder.spring-ai:spring-ai-starter-model-deepseek",
+     "cn.iocoder.spring-ai:spring-ai-starter-model-ollama",
+     "cn.iocoder.spring-ai:spring-ai-starter-model-stability-ai",
+     "cn.iocoder.spring-ai-alibaba:spring-ai-alibaba-starter-dashscope",
+     "com.alibaba:dashscope-sdk-java",
+     "com.volcengine:volcengine-java-sdk-ark-runtime",
+     "org.apache.httpcomponents.client5:httpclient5",
+     "com.tencentcloudapi:tencentcloud-sdk-java-ocr",
+     "com.tencentcloudapi:tencentcloud-sdk-java-common",
+     "com.volcengine:volc-sdk-java",
+     "com.tencentcloudapi:tencentcloud-sdk-java-tts",
+     "cn.iocoder.spring-ai:spring-ai-starter-vector-store-qdrant",
+     "cn.iocoder.spring-ai:spring-ai-starter-vector-store-redis",
      "cn.iocoder.boot:yudao-spring-boot-starter-redis",
-     "org.springframework.ai:spring-ai-starter-vector-store-milvus",
-     "org.springframework.ai:spring-ai-tika-document-reader",
-     "org.springframework.ai:spring-ai-starter-mcp-server-webmvc",
-     "org.springframework.ai:spring-ai-starter-mcp-client",
+     "cn.iocoder.spring-ai:spring-ai-starter-vector-store-milvus",
+     "cn.iocoder.spring-ai:spring-ai-tika-document-reader",
+     "org.apache.pdfbox:pdfbox",
+     "cn.iocoder.spring-ai:spring-ai-starter-mcp-server-webmvc",
+     "cn.iocoder.spring-ai:spring-ai-starter-mcp-client",
      "dev.tinyflow:tinyflow-java-core"
     ]
    },
@@ -7305,6 +7324,19 @@
     ]
    },
    {
+    "path": "yudao-framework/yudao-spring-boot-starter-elasticsearch/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e8a317f6811b44816919a5134ac32755c2af9e82",
+    "ecosystem": "maven",
+    "bytes": 1364,
+    "names": [
+     "org.dromara.easy-es:easy-es-boot-starter",
+     "co.elastic.clients:elasticsearch-java",
+     "org.elasticsearch.client:elasticsearch-rest-client",
+     "jakarta.json:jakarta.json-api"
+    ]
+   },
+   {
     "path": "yudao-framework/yudao-spring-boot-starter-excel/pom.xml",
     "kind": "dep",
     "blob_sha": "b080e3b3bc1b29c42bc1ae47f2c4fd836bc2dbf9",
@@ -7371,9 +7403,9 @@
    {
     "path": "yudao-framework/yudao-spring-boot-starter-mybatis/pom.xml",
     "kind": "dep",
-    "blob_sha": "e98ba197463719195404d422839f8d9e23119051",
+    "blob_sha": "2f603fc6b1e0cd8e43510424d32c29d0dcb5874d",
     "ecosystem": "maven",
-    "bytes": 4209,
+    "bytes": 4370,
     "names": [
      "cn.iocoder.boot:yudao-common",
      "cn.iocoder.boot:yudao-spring-boot-starter-security",
@@ -7393,7 +7425,8 @@
      "org.dromara:easy-trans-spring-boot-starter",
      "org.dromara:easy-trans-mybatis-plus-extend",
      "org.springframework.boot:spring-boot-starter-test",
-     "org.mockito:mockito-inline"
+     "org.mockito:mockito-inline",
+     "com.h2database:h2"
     ]
    },
    {
@@ -7496,9 +7529,9 @@
    {
     "path": "yudao-module-iot/yudao-module-iot-biz/pom.xml",
     "kind": "dep",
-    "blob_sha": "062a467a6d05b51975917b923e28e1d28e305dde",
+    "blob_sha": "7357d7ac0324bdcdef11c8602b48ceb8f89979ec",
     "ecosystem": "maven",
-    "bytes": 4728,
+    "bytes": 4907,
     "names": [
      "cn.iocoder.boot:yudao-module-system",
      "cn.iocoder.boot:yudao-module-iot-core",
@@ -7508,11 +7541,12 @@
      "cn.iocoder.boot:yudao-spring-boot-starter-security",
      "com.taosdata.jdbc:taos-jdbcdriver",
      "org.apache.iotdb:iotdb-jdbc",
+     "org.postgresql:postgresql",
      "cn.iocoder.boot:yudao-spring-boot-starter-mybatis",
      "cn.iocoder.boot:yudao-spring-boot-starter-redis",
      "cn.iocoder.boot:yudao-spring-boot-starter-test",
      "cn.iocoder.boot:yudao-spring-boot-starter-excel",
-     "com.squareup.okhttp3:okhttp",
+     "com.squareup.okhttp3:okhttp-jvm",
      "com.squareup.okhttp3:mockwebserver",
      "org.eclipse.paho:org.eclipse.paho.client.mqttv3",
      "org.apache.rocketmq:rocketmq-spring-boot-starter",
@@ -7523,9 +7557,9 @@
    {
     "path": "yudao-module-iot/yudao-module-iot-core/pom.xml",
     "kind": "dep",
-    "blob_sha": "ecdcc9cabb09a3e17bd44025c218ba29a0b60469",
+    "blob_sha": "77274137c308d5f21867edffff88c1267574617b",
     "ecosystem": "maven",
-    "bytes": 2759,
+    "bytes": 2761,
     "names": [
      "cn.iocoder.boot:yudao-common",
      "org.springframework.boot:spring-boot-starter",
@@ -7535,24 +7569,27 @@
      "org.springframework.amqp:spring-rabbit",
      "org.springframework.kafka:spring-kafka",
      "org.mozilla:rhino",
-     "org.springframework.boot:spring-boot-starter-test"
+     "cn.iocoder.boot:yudao-spring-boot-starter-test"
     ]
    },
    {
     "path": "yudao-module-iot/yudao-module-iot-gateway/pom.xml",
     "kind": "dep",
-    "blob_sha": "46ae40d18cc3afc5c9c32c70407453657692b014",
+    "blob_sha": "fe6e3bf23beec3c172251f7091ebcef2b019b6a0",
     "ecosystem": "maven",
-    "bytes": 4470,
+    "bytes": 4972,
     "names": [
      "cn.iocoder.boot:yudao-module-iot-core",
      "org.springframework:spring-web",
      "org.springframework.kafka:spring-kafka",
      "org.apache.rocketmq:rocketmq-spring-boot-starter",
+     "org.springframework.amqp:spring-rabbit",
      "io.vertx:vertx-web",
      "io.vertx:vertx-mqtt",
      "com.ghgande:j2mod",
      "org.eclipse.californium:californium-core",
+     "org.xerial:sqlite-jdbc",
+     "org.springframework:spring-jdbc",
      "cn.iocoder.boot:yudao-spring-boot-starter-test",
      "io.vertx:vertx-codegen",
      "org.jetbrains.kotlin:kotlin-stdlib",
@@ -10295,15 +10332,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:47:23Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-20T19:33:50Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-29",
-  "stars": 123,
+  "pushed_at": "2026-11-19",
+  "stars": 124,
   "tree": {
-   "sha": "88ee67e6b51c4ada3f514ecf5a291bd99f1255ba",
-   "etag": "W/\"e0bb10861a5161521804e46464f74e65a1ce66752c5419fdaeabdc4f3b73d21e\"",
+   "sha": "4d8f6a308865953a5c7d79ef5eb33b7ffcfa0216",
+   "etag": "W/\"2f6ed866f06be1a716c81071bc0a7792cedab818d589a3e1f400766cf0ef5746\"",
    "truncated": false,
-   "path_count": 316,
+   "path_count": 315,
    "matched": [
     "contrib/docker/Dockerfile.alpine",
     "contrib/docker/Dockerfile.rocky10",
@@ -11182,15 +11220,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:18:36Z",
+  "collected_at": "2026-11-20T19:40:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-13",
-  "stars": 66,
+  "pushed_at": "2026-11-19",
+  "stars": 68,
   "tree": {
-   "sha": "913693a3ac70863a808df3785b40b7a1ae5d3bae",
-   "etag": "W/\"d745146dda4ee9c719e3a30d3ab7847927c47ba7e6a8cc75fc686339e4deb0b8\"",
+   "sha": "ebe62f33ea94b3c0b6e931bf0fae887a8c1f9afa",
+   "etag": "W/\"1060d306ef8ebb28ecf9fe0524f9f564d041f6d76fc6d7eb0458e49da22e9bb1\"",
    "truncated": false,
-   "path_count": 1074,
+   "path_count": 1109,
    "matched": [
     "Cargo.toml",
     "crates/libduckdb-sys-runtime/Cargo.toml",
@@ -11215,7 +11253,7 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "1cd0ffc4ca730b5c3223364e65a322c64ffcb168",
+    "blob_sha": "f29a72b664d0499f8bd3dbded24d38ca1509bebc",
     "ecosystem": "cargo",
     "bytes": 4129,
     "names": [
@@ -12117,15 +12155,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:36:50Z",
+  "collected_at": "2026-11-20T19:43:13Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-19",
   "stars": 55,
   "tree": {
-   "sha": "18f6dc4e7ce61d6963f37caf23180afd1e257934",
-   "etag": "W/\"7aa0d73bf7f0b0df684fe110439a78b24a221ce5d52e33125a8b59836f52a1d6\"",
+   "sha": "43cc308aec52c53efedabbb550da0fdf09331936",
+   "etag": "W/\"6813d84bccb888ee83005df5346133263a15bdb67a43053880c183833b543746\"",
    "truncated": false,
-   "path_count": 680,
+   "path_count": 681,
    "matched": [
     "documentdb-kubectl-plugin/go.mod",
     "documentdb-playground/bcdr-testing/requirements.txt",
@@ -12986,8 +13024,8 @@
    {
     "path": ".github/workflows/test-docs.yml",
     "kind": "ci",
-    "blob_sha": "0bbbddfd55dff32331c29d69bbcd9779ad0104c6",
-    "bytes": 1264
+    "blob_sha": "4aaad8de368480a66044a052178b5f53fe9b99b1",
+    "bytes": 1694
    },
    {
     "path": ".github/workflows/test-e2e.yml",
@@ -13902,15 +13940,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:49:59Z",
+  "collected_at": "2026-11-20T19:49:32Z",
   "default_branch": "forever",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-20",
   "stars": 34,
   "tree": {
-   "sha": "10b0ea6b3f96e9afc77103c3fceafcc39e4884f6",
-   "etag": "W/\"d57b9a4308d9f638ea3235e768264c4d540896fcafd477d941ec140eda6ecb4c\"",
+   "sha": "00f75b1cad67a0a96c2e03dd2280d8d0dade20bc",
+   "etag": "W/\"2aac7c2c2062d68377f68a0c322cc6d1f6955b6e285a0468bfe7f81239032a00\"",
    "truncated": false,
-   "path_count": 5905,
+   "path_count": 5978,
    "matched": [
     "Cargo.toml",
     "crates/bnet-server/Cargo.toml",
@@ -15506,15 +15544,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:46:42Z",
+  "collected_at": "2026-11-20T19:52:58Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-20",
   "stars": 28,
   "tree": {
-   "sha": "9d0e25f0873b847e9bc47ae6af629a0c8575531e",
-   "etag": "W/\"a006dc652c4a74134ef6019311f6502999599d36233827f8123f0e24adb59adb\"",
+   "sha": "d8619d0dad3a80b0056855ebabf4c9116b34331f",
+   "etag": "W/\"b8c0b8625bb0be95951c23544b2dc7fc2c52e2450feeda574eec3f932ac0ae18\"",
    "truncated": false,
-   "path_count": 381,
+   "path_count": 402,
    "matched": [
     "android/build.gradle.kts",
     "android/app/build.gradle.kts"
@@ -20069,6 +20107,124 @@
     "eval/tests/test_adapters.py",
     "integrations/benchd/mempp_adapter.py",
     "integrations/benchd/test_adapter.py"
+   ]
+  },
+  "fail_count": 0
+ },
+ "seczoid/localleads": {
+  "fn": "seczoid/localleads",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-20T18:49:31Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-19",
+  "stars": 4,
+  "tree": {
+   "sha": "f2d39ab823243726e4c085452e716aefcf00c7f5",
+   "etag": "W/\"d5600b02fbb05a33e514ae6f7af6f58f8c70462d5a4d78aeacc66713b22f603f\"",
+   "truncated": false,
+   "path_count": 132,
+   "matched": [
+    "Cargo.toml",
+    "Dockerfile",
+    "compose.yaml",
+    ".github/workflows/docker.yml",
+    ".github/workflows/release.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "bb4b97a389d444e0db58c4b2a02da4e1733dd587",
+    "ecosystem": "cargo",
+    "bytes": 3133,
+    "names": [
+     "anyhow",
+     "argon2",
+     "rand",
+     "sha2",
+     "tower-http",
+     "askama",
+     "axum",
+     "axum-extra",
+     "chrono",
+     "clap",
+     "csv",
+     "directories",
+     "futures",
+     "reqwest",
+     "rmcp",
+     "rusqlite",
+     "schemars",
+     "rustls",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "tokio",
+     "tokio-stream",
+     "tokio-util",
+     "url",
+     "uuid",
+     "webpki-roots",
+     "h3o",
+     "check-if-email-exists",
+     "webclaw-fetch",
+     "webclaw-core",
+     "regex",
+     "rustls-platform-verifier",
+     "semver",
+     "flate2"
+    ],
+    "dev": [
+     "tempfile"
+    ]
+   },
+   {
+    "path": "Dockerfile",
+    "kind": "image",
+    "blob_sha": "7397aaea82d6eaccfcdca490827e8d5614c53b96",
+    "bytes": 1617,
+    "images": [
+     "rust:1.96-trixie",
+     "debian:trixie-slim"
+    ]
+   },
+   {
+    "path": "compose.yaml",
+    "kind": "image",
+    "blob_sha": "d56cb372a470b545439da284a1ccfb624a60d9de",
+    "bytes": 1546,
+    "images": [
+     "${LOCALLEADS_IMAGE:-localleads:local}",
+     "caddy:2.10-alpine"
+    ]
+   },
+   {
+    "path": ".github/workflows/docker.yml",
+    "kind": "ci",
+    "blob_sha": "fa81065c1ddf7a8a29821e29b5d9deb5e2ce50c7",
+    "bytes": 3366,
+    "images": [
+     "ghcr.io/${{"
+    ]
+   },
+   {
+    "path": ".github/workflows/release.yml",
+    "kind": "ci",
+    "blob_sha": "87341d9957eae35bbd4efe4b803c6be6740f71d6",
+    "bytes": 9084
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [],
+   "matrix_urls": [
+    "https://fas.st/t/R1CJJibL"
    ]
   },
   "fail_count": 0
