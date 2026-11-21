@@ -1,6 +1,6 @@
 # AspNetCoreWebApi
 
-An ASP.NET 11.0 Web API, SignalR and GRPC project using Clean Architecture to quickly bootstrap new projects. Includes Identity, JWT authentication w/ refresh tokens. The design of the application is driven by both Domain-Driven-Design and Clean Architecture (https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html). It makes use of Command and Decorator pattern, and MediatR for in-process synchronous messaging.
+An ASP.NET 11.0 Web API, SignalR and GRPC project using Clean Architecture to quickly bootstrap new projects. Includes Identity, JWT authentication w/ refresh tokens. The design of the application is driven by both Domain-Driven-Design and Clean Architecture (https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html). It makes use of Command and Decorator pattern, and MediatR for in-process synchronous messaging. 320 test cases and counting!
 
 # Development environment
 
@@ -26,10 +26,9 @@ An ASP.NET 11.0 Web API, SignalR and GRPC project using Clean Architecture to qu
   $ dotnet ef database update -c AppIdentityDbContext
   ```
 
-# SignalR Client Setup
+# JWT login, connect and authenticaion refresh
 
-- `npm install @microsoft/signalr`
-- Copy content of `node_modules\@microsoft\signalr\dist\browser` to `wwwroot/lib/signalr`
+![SignalR JWT](./signalr-jwt-sequence.jpg?raw=true "SignalR JWT")
 
 # Visual Studio
 
@@ -64,6 +63,16 @@ export NODE_USE_SYSTEM_CA=1
 - Install .Net Core Test Explorer
 - `echo fs.inotify.max_user_instances=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p`
 - https://github.com/dotnet/aspnetcore/issues/8449
+
+# JWT Signing Key
+
+The HMAC-SHA512 key that signs and validates JWTs (`AuthSettings:SecretKey`) is **not** stored in this repository.
+
+- Development: if no key is configured, a random 64-byte key is generated on first run and kept outside the repository at `~/.local/share/AspNetCoreWebApi/jwt-signing-key` (Linux) or `%LOCALAPPDATA%\AspNetCoreWebApi\jwt-signing-key` (Windows). Delete the file to get a new key. Alternatively: `dotnet user-secrets set "AuthSettings:SecretKey" "<key>"` from `src/Web.Api`.
+- Every other environment: set the environment variable `AuthSettings__SecretKey` (e.g. from a Kubernetes Secret or a vault). Startup fails if it is missing or shorter than 64 bytes.
+- Generate a key: `openssl rand -base64 64 | tr -d '\n'` (Linux) or `[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(64))` (PowerShell).
+
+Refresh tokens are stored as SHA-512 hashes, are single-use (rotated on every exchange), and presenting an invalid refresh token with a valid access token revokes all of that user's refresh tokens. `/api/auth/login`, `/api/auth/refreshtoken` and the gRPC `Auth` service are rate limited per client IP.
 
 # Swagger Enabled
 

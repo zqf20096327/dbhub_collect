@@ -25,7 +25,7 @@ It's a Claude Code plugin that turns Claude into a personal assistant: it keeps 
 
 You give it **goals**: "sell my birdcage on facebook marketplace", "fix new issues on my repo", "find me the three best new job ads each week", "turn NZ$200 into more by flipping Marketplace bargains", "clear old installers out of Downloads". Each goal runs on its own schedule in the background of your Claude Code session, on your Claude plan. When it wants to act, it proposes, and you approve or reject from the **Goals pane** beside your chat, or from your phone.
 
-The idea behind it: persistent intent may matter more than persistent memory.
+The idea behind it: persistent intent may matter more than persistent memory. Instead of prompt → act, a goal is an action cycle that keeps going, punctuated only by your approvals and the occasional question.
 
 ![The Goals pane: five goals with their last and next runs and Reschedule, Run now and Pause, then the to-do lists, with an expanded to-do showing Ask, Plan and Start](docs/goals-pane.png)
 
@@ -172,6 +172,8 @@ claude plugin install quarterdeck-goals@quarterdeck --scope user
 ```
 
 That's the whole setup. `quarterdeck-guard` comes with it as a dependency, and the plugin brings the `quarterdeck` MCP server with it, so there is nothing to clone, build or `claude mcp add`. Start Claude Code (or `/reload-plugins`) and type `/goals` to open the Goals pane. Due runs start on their own while Claude Code is open. The web app is optional.
+
+The MCP server is also in the official [MCP Registry](https://registry.modelcontextprotocol.io) as `io.github.shannonbay/quarterdeck` (an MCPB bundle on each release). On its own it gives an MCP client the goal, memory and to-do tools only; scheduled runs, the guard and the Goals pane need the Claude Code plugin above.
 
 See [`plugins/quarterdeck-goals`](plugins/quarterdeck-goals/README.md) for the pane, commands, settings and how runs work, and [`plugins/quarterdeck-guard`](plugins/quarterdeck-guard/README.md) for what a run may do.
 

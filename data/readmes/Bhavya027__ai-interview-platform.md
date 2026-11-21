@@ -5,9 +5,6 @@ A full-stack web app for practising coding interviews. An interviewer opens a ti
 **Live site:** https://ai-interview-platform-stgg.onrender.com
 (Hosted on the free Render plan, so the first load can take about 50 seconds while the server wakes up.)
 
-Course project: Full Stack Development – II (24CSP-304), BE-CSE, Chandigarh University
-Student: Bhavya Sharma (UID 24BCS12397), Section 24BCS804-B
-Faculty: Ms. Muskan Deswal
 
 ## Features
 

@@ -2,17 +2,18 @@
 
 English | [简体中文](README_cn.md)
 
-Last edited: 2026-11-19
+Last edited: 2026-11-22
 
 Motion-triggered video recording for the Luckfox Pico Pro Max (Rockchip
-RV1106). Records H.264 to HLS on the SD card, serves a live MJPEG stream and a
-playback UI over HTTP, and logs motion events to SQLite.
+RV1106; support for the Pico Ultra is in progress). Records H.264 to HLS on
+the SD card, serves a live MJPEG stream and a playback UI over HTTP, and logs
+motion events to SQLite.
 
 ## What it is for
 
 Originally written for a shared fridge — who took what. It may suit other
 scenes of the same shape, static for hours with a few seconds of activity: a
-dorm room, a store cupboard, a warehouse aisle.
+dorm room, a store cupboard, a warehouse aisle, a basement.
 
 - **Get through a whole day fast.** Idle stretches play back sped up, with no
   scrubbing back and forth.
@@ -121,14 +122,14 @@ They talk over a unix socket (`/tmp/motionsense-stream.sock`), which keeps the
 split honest: the daemon can die without taking the web interface with it, and
 the agent restarts without disturbing a recording.
 
-Configuration is one `config.yaml` on the SD card, seeded from the image on
-first boot and never overwritten after that. Compiled-in defaults apply when
-it is missing, so a blank card still records.
+Configuration is one `config.json` on the SD card. The daemon writes it with
+the defaults on first boot and never overwrites it after that, so a blank card
+still records. [docs/BUILD.md](docs/BUILD.md#configuration) lists the keys.
 
-`S99motionsense` starts both, waits for the card to mount, and hands the
-camera over from the stock `rkipc` app. It ships in the image through the
-board overlay, so a flashed board records from first boot with nothing to
-install and nothing to configure.
+`S99motionsense` hands the camera over from the stock `rkipc` app and starts
+both. Each waits for the card to mount by itself. The script ships in the
+image, so a flashed board records from first boot with nothing to install and
+nothing to configure.
 
 ## Building
 
@@ -176,34 +177,7 @@ what to do when a link drops, and the bugs that present as something else.
 
 ## Planned
 
-### Features (mainly for the Pico Pro Max)
-- Peripherals
-  - OLED
-  - Temperature and humidity
-  - Servo
-- Basic AI on the NPU (YOLO and the like)
-  - Person detection
-- Ambient light compensation, or an alternative, so lighting changes do not
-  trigger recording
-- A better front end (a lightweight web framework)
-- Better live view (WebRTC)
-- Authentication
-- OTA
-- Watchdog
-
-### Board support
-- Multiple boards
-  - Board detection
-  - Update the mount points
-- Luckfox Pico Ultra
-  - Wi-Fi / multiple networks
-  - The 4-inch screen
-  - Microphone
-  - Speaker
-
-### Other
-- A full-stack development environment
-- Slim the image further and remove rkipc entirely
+See the [roadmap](docs/ROADMAP.md).
 
 ## Scope
 

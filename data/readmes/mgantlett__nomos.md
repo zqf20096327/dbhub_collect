@@ -1,30 +1,15 @@
-<div align="center">
-
-<img src="intent/assets/nomos_hero_emblem.jpg" alt="SophiaLabs // Nomos Unified Emblem" width="180" />
-
 # Nomos (Νόμος)
 
-**Agents guess; Git cannot. The Apache 2.0 Go execution substrate beneath any coding agent (0 LLM tokens).**
+**Agents guess; Git cannot. The Apache 2.0 Go execution substrate beneath any coding agent (0 LLM tokens, certified up to `3.60M` LOC).**
 
 [![CI](https://github.com/mgantlett/nomos/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/mgantlett/nomos/actions/workflows/ci.yaml)
-[![Release](https://img.shields.io/github/v/release/mgantlett/nomos?color=0EA5E9)](https://github.com/mgantlett/nomos/releases/latest)
-[![Marketplace](https://img.shields.io/badge/Marketplace-Nomos_PR_Proof-0EA5E9?logo=github)](https://github.com/marketplace/actions/nomos-zero-trust-pr-proof)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/mgantlett/nomos?filename=substrate%2Fgo.mod&logo=go&logoColor=white)](substrate/go.mod)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24240539.svg)](https://doi.org/10.5281/zenodo.24240539)
-[![Docs](https://img.shields.io/badge/Docs-sophialabs.ca-0EA5E9)](https://sophialabs.ca/docs/introduction)
-[![Web X-Ray](https://img.shields.io/badge/Web_X--Ray-0--Install_Scan-10B981)](https://sophialabs.ca/xray)
-[![Discussions](https://img.shields.io/github/discussions/mgantlett/nomos?color=0EA5E9&label=Discussions)](https://github.com/mgantlett/nomos/discussions)
+[![Release](https://img.shields.io/github/v/release/mgantlett/nomos?label=Release&color=0284C7)](https://github.com/mgantlett/nomos/releases/latest)
+[![License](https://img.shields.io/badge/License-Apache_2.0-0284C7)](LICENSE)
+[![Docs](https://img.shields.io/badge/Docs-sophialabs.ca-0284C7)](https://sophialabs.ca/docs/introduction)
+[![Nomos X-Ray](https://sophialabs.ca/api/xray/badge/mgantlett/nomos.svg)](https://sophialabs.ca/mgantlett/nomos)
+[![Telemetry](https://img.shields.io/badge/Telemetry-Live-0284C7)](https://sophialabs.ca/system/analytics)
 
-<br />
-
-<img src="intent/assets/nomos_hero_terminal.svg" alt="Nomos Split-Terminal Overview - Day-0 Brownfield X-Ray and Baseline Ratchet paired with Fail-Closed AST Verification and 2PC Release" width="100%" />
-
-</div>
-
----
-
-**Nomos** is a single `~20 MB` static Go binary (`Apache 2.0`, `0` LLM tokens, zero cloud account) between your coding agent (**Claude Code**, **Cursor**, **OpenCode**, **Codex**, **Gemini CLI**, **Antigravity**, **Windsurf**, or **Aider**) and Git. Run `nomos init` once (or paste 1 prompt into your agent) - Nomos blocks skipped tests, hollow stubs, and leaked secrets in `24ms`, your agent fixes its own mess mid-turn, and your `feat/*` workflow never changes:
+**Nomos** is a single `~20 MB` static Go binary (`Apache 2.0`, `0` LLM tokens, zero cloud account) between your coding agent (**Claude Code**, **Cursor**, **OpenCode**, **Codex**, **Gemini CLI**, **Antigravity**, **Windsurf**, or **Aider**) and Git. Run `nomos init` once (or paste 1 prompt into your agent) - Nomos blocks skipped tests, hollow stubs, monolith bloat, and leaked secrets in `24ms` (`<365ms` full 42-gate diff verify even across `3.60M`-LOC monorepos), your agent fixes its own mess mid-turn, and your `feat/*` workflow never changes:
 
 ```text
 You             -> Same plain-English prompts, same IDE, normal feat/* PRs (0 new commands to learn)
@@ -36,7 +21,7 @@ Nomos Substrate -> Invisible ~4ms hooks + 42 AST gates + Day-0 debt ratchet (0 L
 Git             -> main stays read-only & verified; shortcuts fail closed before commit
 ```
 
-> **Initialize once, then forget `nomos` exists.** Nomos supplies `0`-token repository physics; **your coding agent supplies the intelligence** to self-correct before ending its turn. Use `nomos xray .` anytime you want a 5-second codebase health scan.
+> **Initialize once, then forget `nomos` exists.** Nomos supplies `0`-token repository physics; **your coding agent supplies the intelligence** to self-correct before ending its turn. Use `nomos xray .` anytime you want a `~4s` codebase health scan.
 
 ### Two Ways to Set Up in 30 Seconds (Or Scan in Browser First)
 
@@ -52,10 +37,14 @@ Install Nomos (curl -fsSL https://sophialabs.ca/install | bash), run `nomos xray
 
 ```bash
 curl -fsSL https://sophialabs.ca/install | bash
-cd your-project && nomos xray .          # 1. Read-only 5s AI Hangover Score & hotspot scan (use --markdown to share)
+cd your-project && nomos xray .          # 1. Read-only ~4s AI Hangover Score & hotspot scan (use --markdown to share)
 nomos init                               # 2. Branch Guard + brownfield baseline + agent hooks (or --local for stealth trial)
 git switch -c feat/auth                  # 3. Done - forget nomos and keep coding & committing as usual
 ```
+
+<div align="center">
+  <img src="intent/assets/nomos_hero_terminal.svg" alt="Nomos Split-Terminal Overview - Day-0 Brownfield X-Ray and Baseline Ratchet paired with Fail-Closed AST Verification and 2PC Release" width="100%" />
+</div>
 
 What happens automatically underneath your agent the next time it tries taking a shortcut on `feat/*`:
 
@@ -136,11 +125,12 @@ nomos init --ci
 nomos init --worktrees
 ```
 
+Enforce zero-trust PR mutation proofs in GitHub Actions ([GitHub Marketplace](https://github.com/marketplace/actions/nomos-zero-trust-pr-proof)):
+
 ```yaml
-# Enforce zero-trust PR mutation proofs in GitHub Actions:
 - uses: actions/checkout@v4
   with: { fetch-depth: 0 }
-- uses: mgantlett/nomos@v4.27.1
+- uses: mgantlett/nomos@v4.29.0
   with: { base-ref: origin/main, mutate-diff: 'true' }
 ```
 
@@ -167,8 +157,10 @@ nomos init --worktrees
 | **Workhorse Brownfield Lift (`N = 108` Paired)** | **`86.1%` (`31/36`) vs. `27.8%` Stock (`3.1x` lift) · `-43%` to `-57%` Tokens** | `14B-32B` models across Python/TS/Go; `100%` hexagonal purity vs. `0%` Stock ([`cleanroom_obligation_polyglot_stress_test.go`](substrate/cli/cleanroom_obligation_polyglot_stress_test.go)) |
 | **Prompt-Injection & Security (`1,481` Traces)** | **`0.00%` ASR (`0/949` `AgentDojo` · `0/200` `SecBench-Live`) · `85.04%` UA** | Official `AgentDojo v1.2.2` (`-0.53 pp` benign delta) + 4-model `SecBench-Live 1.0` (`-2.6%` turns, [Dispatch D-11](https://sophialabs.ca/dispatches/paired-security-and-brownfield-ablation-v417)) |
 | **CLI Harness Security ([`HarnessSecurity-Bench`](https://arxiv.org/abs/2610.07639))** | **`13.0%` ASR (`3/23`) vs. `60.9%` Control (`14/23`) · `-35.2%` Cost** | `46` paired `Claude Code 2.1.252 + Sonnet 5.5` containers across `9` mechanisms (`92.0%` non-`ro` utility, [Dispatch D-14](https://sophialabs.ca/dispatches/harness-security-bench-paired-audit)) |
+| **`3.60M`-LOC Polyglot Monorepo Scale (`MonorepoScale-Bench`)** | **`361.6ms` `42`-Gate Diff Verify · `3.58s-4.33s` Cold `xray` · `3.0x` `Pass@1` / `4.0x` `Pass@2` Debt-Free PRs** | `getsentry/sentry` (`3.60M` LOC), `grafana/grafana` (`3.52M` LOC), `rust-analyzer` (`605k` LOC); `3/4` vs. `0/4` debt-free on `3.5M+` LOC ([Dispatch D-16](https://sophialabs.ca/dispatches/million-loc-polyglot-monorepo-scale-audit)) |
 | **`233k`-LOC Mature OSS Brownfield Ratchet** | **`6/6` `42`-Gate Clean · `2x` Debt-Free · `-14.7%` Tokens** | Zero-hint refactors across `sqlglot` (`152k` LOC), `commander.js`, `go-chi`, and `BurntSushi/toml` (blocked `+26` hidden complexity debt) |
 | **`Terminal-Bench 2.0` (`k=5` · `445` Docker Runs)** | **`76.40%` `Pass@1` (`340/445`) · `92.13%` `Pass@5` (`82/89` Tasks)** | Lightweight `Gemini Flash` across `89` tasks (`91.20%` cached tokens, [`nomos-harbor`](https://github.com/mgantlett/nomos-harbor)) |
+| **Self-Dogfooding Velocity (`main` + 1-Seat Studio)** | **`2,270+` Verified `2PC` Tasks · `42+` SemVer Cuts · `0` Rollbacks** | `100%` `42`-gate AST pass rate + `SHA-256` Git Notes receipts ([Live Telemetry](https://sophialabs.ca/system/analytics)) |
 | **Footprint & Gate Latency** | **`~20 MB` binary (`CGO_ENABLED=0`) · `~4ms` hook · `~24ms` `--fast-file`** | `860+` automated tests across `16` packages + `7/7` adversarial fail-closed vectors ([`cleanroom_tracetrial_bench_test.go`](substrate/cli/cleanroom_tracetrial_bench_test.go)) |
 
 <details>
@@ -196,6 +188,7 @@ Across `108` paired zero-hint brownfield episodes (`54` Stock vs. `54` Nomos `v4
 | **Official `AgentDojo v1.2.2` (`4` Suites)** | `1,081` runs (`132` benign + `949` indirect prompt-injection tasks, `sha256:e0847020a2f5`) | Indirect tool-hijack exposure | **`0.00%` ASR (`0/949`) · `85.04%` UA** | Only **`-0.53 pp`** vs. `85.57%` Benign (`0` lockouts) |
 | **4-Model `SecBench-Live 1.0` (Rounds 1 - 5)** | `400` runs (`Claude Sonnet 5.5`, `Haiku 5.5`, `Gemini 3.8 Flash`, `Qwen 3.8 27B`, `sha256:7f671df45ed9`) | `9.0%` ASR (`18/200` compromised) | **`0.00%` ASR (`0/200`) · `92.5%` Utility** | **`-2.6%` fewer turns** (`304` -> `296` in Round 5) |
 | **[`HarnessSecurity-Bench`](https://github.com/TsingPig/HarnessSecurity-Benchmark) (`arXiv:2610.07639`)** | `46` containers (`23` tasks across `9` CLI mechanisms on `Claude Code 2.1.252 + Sonnet 5.5`) | `60.9%` ASR (`14/23` · `21/31` actions · `$3.88`) | **`13.0%` ASR (`3/23` · `3/31` actions) · `92.0%` Non-`ro` Utility** | **`-78.6%` relative ASR cut · `-35.2%` API spend** (`$2.52`, `1,234.2s` vs. `3,016.7s`) |
+| **`MonorepoScale-Bench v1.2` (`3.60M` LOC Max)** | `30` zero-hint episodes across `sentry` (`19,441` files), `grafana` (`17,464` files), `rust-analyzer` (`sha256:ff1182411949`) | `1/6` Debt-Free (`0/4` on `3.5M+` LOC · `+14` `dMax V(G)` · `+542` `dCDS`) | **`3/6` `Pass@1` (`3.0x`) · `4/6` `Pass@2` (`4.0x` · `3/4` on `3.5M+` LOC)** | **`361.6ms`** `diff` verify · **`3.58s-4.33s`** cold `xray` (`<= 273 MB` RSS) |
 | **`RealRepo-BrownfieldBench v2` (`233k` LOC)** | Zero-file-hint refactors across `sqlglot`, `commander.js`, `go-chi`, `BurntSushi/toml` | Leaked **`+26` `dCDS`** structural debt (`16.7%` clean) | **`6/6` `42`-gate clean · `2x` Debt-Free (`33.3%`)** | **`-14.7%` fewer tokens** (`1.58M` -> `1.35M`) |
 
 #### 3. `Terminal-Bench 2.0` Harbor Hub Trajectories & `TraceTrial-Bench` (`arXiv:2610.32285`)
@@ -273,8 +266,10 @@ Nomos Community Edition is **100% open-source under Apache 2.0** with zero telem
 ## Community & License
 
 - **Community & Governance:** Join [GitHub Discussions](https://github.com/mgantlett/nomos/discussions) for setup Q&A, `nomos.yaml` tuning, and feature ideas. See [`CONTRIBUTING.md`](CONTRIBUTING.md), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md), and [`SECURITY.md`](SECURITY.md).
-- **License:** Licensed under the **Apache License, Version 2.0**. See [`LICENSE`](LICENSE), [`NOTICE`](NOTICE), and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+- **License & Citation:** Licensed under the **Apache License, Version 2.0** (see [`LICENSE`](LICENSE), [`NOTICE`](NOTICE), and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)). For academic citation, see [`CITATION.cff`](CITATION.cff) and [DOI `10.5281/zenodo.24240539`](https://doi.org/10.5281/zenodo.24240539).
 
 <div align="center">
+  <img src="intent/assets/nomos_hero_emblem.jpg" alt="SophiaLabs // Nomos Unified Emblem" width="56" />
+  <br />
   <sub>Built with deterministic rigor by <a href="https://sophialabs.ca"><b>SophiaLabs</b></a> · Governed by Nomos</sub>
 </div>

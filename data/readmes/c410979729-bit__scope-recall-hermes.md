@@ -1,6 +1,6 @@
 # Scope Recall
 
-This checkout is `4.0.5.dev0`, a development version; the newest release is `4.0.4`. Local, source-backed memory shared by Claude Code, Codex, Hermes, WorkBuddy and DeepSeek Harness.
+Scope Recall `4.0.5` gives Antigravity, Claude Code, Codex, Hermes, WorkBuddy and DeepSeek Harness local, source-backed memory. Cherry Studio can query the same store through a read-only MCP entry.
 SQLite keeps the original conversations; model-derived facts and vectors remain traceable and rebuildable.
 
 ## Quick start
@@ -9,11 +9,11 @@ SQLite keeps the original conversations; model-derived facts and vectors remain 
 2. Run `scope-recall setup`. Review the detected hosts, store, scopes, zero model budget and worker plan, then confirm.
 3. Start a new host session. Approve the plugin hooks or MCP server when the host asks.
 
-For this development checkout, install from the repository root with `python -m pip install -U ".[codex]"`;
-the package-index command above selects a published release. An unpublished wheel can be installed directly with its `codex` extra.
+To install from source, run `python -m pip install -U ".[codex]"` from the repository root. A local wheel can also be installed with its `codex` extra.
 
 | Host | Setup and host-specific approval |
 |---|---|
+| Antigravity | [Set up capture and recall](docs/install/antigravity.md) |
 | Claude Code | [Setup](docs/install/claude-code.md) |
 | Codex | [Setup and hook review](docs/install/codex.md) |
 | Hermes | [Setup and local identity](docs/install/hermes.md) |

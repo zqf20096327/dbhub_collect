@@ -1,12 +1,120 @@
 # HeliosDB Nano
 
 [![Crates.io](https://img.shields.io/crates/v/heliosdb-nano.svg)](https://crates.io/crates/heliosdb-nano)
+[![Downloads](https://img.shields.io/crates/d/heliosdb-nano.svg)](https://crates.io/crates/heliosdb-nano)
+[![Latest release](https://img.shields.io/github/v/release/HeliosDatabase/HeliosDB-Nano)](https://github.com/HeliosDatabase/HeliosDB-Nano/releases/latest)
+[![Tests](https://github.com/HeliosDatabase/HeliosDB-Nano/actions/workflows/tests.yml/badge.svg)](https://github.com/HeliosDatabase/HeliosDB-Nano/actions/workflows/tests.yml)
 [![Documentation](https://docs.rs/heliosdb-nano/badge.svg)](https://docs.rs/heliosdb-nano)
+[![GitHub stars](https://img.shields.io/github/stars/HeliosDatabase/HeliosDB-Nano?style=social)](https://github.com/HeliosDatabase/HeliosDB-Nano/stargazers)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-**An embedded database with native PostgreSQL and MySQL wire-protocol compatibility, plus one-shot SQLite file import.** Single self-contained binary (~32 MB; ~12 MB compressed download). HNSW vector search, git-like branching, time-travel queries, AES-256-GCM encryption, built-in BaaS layer (Auth, REST API, Realtime).
+**One self-contained binary (about 53 MB on Linux x86_64, a 20 MB download): SQL + vector search + full-text search, speaking the PostgreSQL and MySQL wire protocols. Embed it as a Rust library or run it as a server.**
 
-Use your existing clients (`psql`, `mysql`), RESTful HTTP, drivers (`psycopg2`, `mysql-connector`, `node-postgres`, JDBC), and ORMs (SQLAlchemy, Prisma, Drizzle, Hibernate, GORM) — zero migration required. Existing `.sqlite` files import via a bundled converter.
+## 60-second quickstart
+
+No Rust toolchain needed. Pick one:
+
+```bash
+# Docker (public image on GHCR; the server requires a password when it listens on 0.0.0.0)
+docker run -d --name nano -p 5432:5432 -e HELIOSDB_PASSWORD=change-me \
+  ghcr.io/heliosdatabase/heliosdb-nano
+PGPASSWORD=change-me psql "host=localhost user=helios sslmode=require"
+
+# ...or a prebuilt binary (Linux x86_64/arm64 with glibc >= 2.39, macOS Apple Silicon; checksum-verified)
+curl -fsSL https://raw.githubusercontent.com/HeliosDatabase/HeliosDB-Nano/main/scripts/install.sh | sh
+heliosdb-nano start --data-dir ./helios-data      # loopback only, no password needed
+psql -h localhost -U helios
+```
+
+```sql
+CREATE TABLE docs(id int, body text, emb vector(3));
+INSERT INTO docs VALUES (1, 'hello', '[0.1,0.2,0.3]'), (2, 'world', '[0.9,0.8,0.7]');
+SELECT id FROM docs ORDER BY emb <-> '[0.1,0.2,0.3]' LIMIT 5;
+```
+
+The Linux binary needs glibc ≥ 2.39 (Ubuntu 24.04, Debian 13 or newer); on older distros such as RHEL/Rocky 9, Ubuntu 22.04 or Debian 12 the installer stops without installing anything, so use Docker there. Windows and macOS Intel: see [Install](#install).
+If Nano saves you a Postgres container, a ⭐ helps others find it.
+
+## What you get
+
+- **Wire compatibility:** PostgreSQL (`psql`, `psycopg2`, `node-postgres`, JDBC, Prisma, Drizzle, SQLAlchemy…) and MySQL (`--mysql`) clients work unchanged; one-shot SQLite file import. The MySQL listener does not check passwords yet, so the server only starts it when the PostgreSQL side is in trust mode too (see [authentication](docs/guides/authentication.md)).
+- **Vector search:** HNSW indexes with `<->`, `<#>`, `<=>`; hybrid with full-text.
+- **Full-text search:** `tsvector` / `tsquery` / `@@` / `ts_rank_cd`, BM25-backed (see [limits](docs/compatibility/fts.md)).
+- **Branching and time travel:** git-like database branches, `AS OF TIMESTAMP` queries.
+- **Security:** AES-256-GCM encryption at rest (opt-in), SCRAM auth, TLS.
+- **Built-in BaaS layer:** Auth, REST API, Realtime.
+- **Replication:** read-only physical standbys over one replication connection, with promotion and planned switchover (see [High Availability](#high-availability) for what is and is not automatic).
+- **Opt-in at build time:** code-graph indexing, graph-RAG, MCP server (`--features code-graph,graph-rag,mcp-endpoint`). Graph traversal is a Rust/MCP API, not SQL.
+
+## Who it's for
+
+- **Local-first apps** that want real Postgres/MySQL clients against a single file-backed process.
+- **AI agent memory:** vectors, full-text and branches in one store, with an MCP server available as an opt-in feature.
+- **Edge and IoT:** one self-contained binary, no external services.
+- **Hosting providers** offering per-tenant databases (multi-tenant support is built in).
+
+## How it compares
+
+Rows where others win are deliberate. Competitor columns reflect their documented defaults as of 2026-10; check each project for the current state.
+
+| | HeliosDB Nano | SQLite | DuckDB | PGlite | Postgres + pgvector |
+|---|---|---|---|---|---|
+| Wire protocol | PostgreSQL + MySQL | none (library) | none (library/CLI) | PostgreSQL via an add-on socket server | PostgreSQL |
+| Vector search | built-in HNSW | extension (sqlite-vec) | extension (vss) | pgvector bundled | extension |
+| Graph | Rust / MCP API only | no | extension | no | extensions (e.g. Apache AGE) |
+| Full-text search | built-in | FTS5 | extension | Postgres FTS | Postgres FTS |
+| WASM / browser | **not shipped** | yes | yes | yes (it is WASM) | no |
+| Embedded | yes | yes | yes | yes | no (server) |
+| Branching / time travel | yes | no | no | no | no (managed vendors only) |
+| Maturity and ecosystem | young | decades, ubiquitous | mature | young | decades, huge |
+| License | Apache-2.0 | public domain | MIT | Apache-2.0 / PostgreSQL | PostgreSQL |
+
+## Install
+
+### Prebuilt binaries (fastest)
+
+The one-line installer downloads the right archive from [GitHub Releases](https://github.com/HeliosDatabase/HeliosDB-Nano/releases/latest), verifies it against the release `SHA256SUMS`, and installs to `/usr/local/bin` (root) or `~/.local/bin`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/HeliosDatabase/HeliosDB-Nano/main/scripts/install.sh | sh
+heliosdb-nano --version
+```
+
+Release assets: Linux `x86_64` and `aarch64` (glibc ≥ 2.39, built on Ubuntu 24.04), macOS `aarch64` (Apple Silicon), Windows `x86_64` (`.zip`, manual download). **Not provided:** macOS Intel, Linux musl/Alpine — use Docker or build from source there. Manual download:
+
+```bash
+VER=<release-tag>
+curl -sSfL -O "https://github.com/HeliosDatabase/HeliosDB-Nano/releases/download/$VER/heliosdb-nano-$VER-x86_64-unknown-linux-gnu.tar.gz"
+tar xzf "heliosdb-nano-$VER-x86_64-unknown-linux-gnu.tar.gz"
+./heliosdb-nano --version
+```
+
+### Docker
+
+Published to GHCR on each release (`linux/amd64`, `linux/arm64`) as `ghcr.io/heliosdatabase/heliosdb-nano` (tags `latest`, `X.Y.Z`, `X.Y`, `vX.Y.Z`). The container listens on `0.0.0.0`, so it requires `HELIOSDB_PASSWORD` (or `HELIOSDB_PASSWORD_FILE`) and serves TLS with a generated self-signed certificate; mount a volume at `/data` to persist. There is no Docker Hub image. See [`deployment/docker/`](deployment/docker/) for compose files.
+
+### Build from source (Cargo)
+
+Compiling takes minutes. Install Rust first (`rustup`, <https://rustup.rs>): the default features need **Rust 1.88 or newer**, and the optional `code-embed` feature needs **Rust 1.92 or newer** for its ONNX Runtime bindings. Then:
+
+```bash
+cargo install heliosdb-nano --locked
+heliosdb-nano --version
+
+# Optional features
+cargo install heliosdb-nano --locked --features code-graph,mcp-endpoint
+
+# Embedded Rust library
+cargo add heliosdb-nano
+
+# From a checkout
+git clone https://github.com/HeliosDatabase/HeliosDB-Nano.git
+cd HeliosDB-Nano
+cargo build --release --locked
+./target/release/heliosdb-nano --version
+```
+
+Package-manager channels such as npm and Homebrew are not published; treat a channel as available only if it is listed on the releases page.
 
 ## Ecosystem
 
@@ -25,77 +133,40 @@ Nano is one of four products in the HeliosDB family. SDKs and integrations are c
 
 **Performance:** [what's fast, and where we're still improving](docs/PERFORMANCE.md) — honest strengths + transparent limits.
 
-**Benchmark:** [HeliosDB-Nano vs PostgreSQL 18.4 — the `pg35` benchmark, its history & evolution](docs/benchmarks/PG35_BENCHMARK.md) — 35 SQL categories head-to-head; Nano wins all 35/35 at 300 iterations (30 by 10×–35,000×, the joins by 1.1×–2×). The one category that ever classified against Nano (Prepared stmts) turned out to expose a real `ROLLBACK TO SAVEPOINT` bug — fixed in v3.60.3, and now a ~157× Nano win. **Read the methodology note before quoting those ratios:** `pg35` runs Nano *embedded and in-memory* against a *networked, fsyncing* PostgreSQL, so the margins include deployment effects, not just engine speed.
+### Benchmarks against PostgreSQL 18.4 (release 4.42.0, reproducible)
 
-For a like-for-like **wire-to-wire** comparison — Nano also as a TCP server, `pgbench` driving both — see [**vs PostgreSQL, 2026-08-28**](docs/benchmarks/heliosdb-nano-vs-postgresql-2026-08-28.md): Nano leads on indexed point-reads across all three query protocols (1.33×–2.22×) and on `SELECT 1` (1.84×–2.84×); PostgreSQL leads on `COPY` above ~50k rows (1.28× at 100k) and on `DROP TABLE` (2.05×), and **PostgreSQL keeps scaling from 32→64 clients (+32–41%) where Nano plateaus**.
+Two benchmarks, answering different questions. Both are measured against PostgreSQL 18.4
+(`fsync=on`, `synchronous_commit=on`) on the same Linux x86_64 host (32 logical CPUs), with the
+binaries identified by SHA-256 and every number taken from the run's own output.
 
-## Install
+- **Server against server (`pgbench`, both engines over TCP).** PostgreSQL 18.4 is faster than
+  Nano 4.42.0 in most cells. Nano leads with one client (`SELECT 1` 1.35×, indexed point read as
+  text 1.26×) and on a 10,000-row `COPY` (1.38×). PostgreSQL leads at 8 to 64 clients
+  (`SELECT 1` 1.07–1.26×, indexed point read 1.06–1.35× as text), in the extended and prepared
+  protocols at every client count (1.16–1.93×), on `COPY` of 50,000 and 100,000 rows
+  (1.38×, 1.65×) and on `DROP TABLE` of 100,000 rows (2.47×). Nano ran with its default
+  `durable_commit = false`, so its write cells are not like for like on durability.
+- **`pg35`, 35 kinds of SQL statement.** Nano 4.42.0 is faster in all 35 categories (3.0× for
+  `ORDER BY … LIMIT` to about 1,000× for a one-row `DELETE`). Nano runs *embedded in the test
+  process and in memory*, PostgreSQL as a *server over TCP that syncs every commit*: the margins
+  measure deployment as much as engine speed. Use them to compare Nano releases, not as a
+  server-to-server result.
+- **Against 4.41.1:** 4.42.0 sets a new best time in 9 pg35 categories and is more than 15%
+  slower than 4.41.1's best in 14, most of all in one-row writes (3–3.8×), which now record
+  history so `AS OF` is correct. The release benchmark lists every category and the reason.
 
-### Supported now: Cargo / crates.io
+| File | What it is |
+|---|---|
+| [`docs/benchmarks/RELEASE_4_42_0.md`](docs/benchmarks/RELEASE_4_42_0.md) | The 4.42.0 release benchmark: pg35, one-row `UPDATE` over the wire, pgbench, against 4.41.1 and PostgreSQL 18.4 |
+| [`docs/benchmarks/results/release-4.42.0/summary.json`](docs/benchmarks/results/release-4.42.0/summary.json) | Every number of that run as JSON, with commits, binary checksums and the PostgreSQL settings |
+| [`docs/benchmarks/REPRODUCING.md`](docs/benchmarks/REPRODUCING.md) | How to rerun it, and how to check you measured the same binaries and reference |
+| [`docs/benchmarks/PG35_BENCHMARK.md`](docs/benchmarks/PG35_BENCHMARK.md) | The pg35 suite: methodology and history |
+| [`tests/pg35_benchmark.rs`](tests/pg35_benchmark.rs), [`tests/pg35_support/`](tests/pg35_support/) | The pg35 harness: the 35 categories and the result checks |
+| [`benches/public/pg35_run.py`](benches/public/pg35_run.py), [`benches/public/release_bench.sh`](benches/public/release_bench.sh) | The runners that build, run and report |
+| [`benches/public/pg35_baseline.json`](benches/public/pg35_baseline.json), [`pg35_baseline.py`](benches/public/pg35_baseline.py) | The best time each category has reached, and the tool that checks a run against it |
+| [`docs/benchmarks/bench-engines.sh`](docs/benchmarks/bench-engines.sh) | The pgbench comparison |
 
-Install Rust and Cargo first. On Linux, macOS, or WSL, the recommended installer
-is `rustup`:
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source "$HOME/.cargo/env"
-rustc --version
-cargo --version
-```
-
-On Windows, install Rust from [rustup.rs](https://rustup.rs/), then open a new
-terminal so `cargo` is on `PATH`.
-
-Install the `heliosdb-nano` CLI binary from crates.io:
-
-```bash
-cargo install heliosdb-nano --locked
-heliosdb-nano --version
-```
-
-Use Nano as an embedded Rust library:
-
-```bash
-cargo add heliosdb-nano
-```
-
-Enable optional crate features when installing or adding the dependency:
-
-```bash
-cargo install heliosdb-nano --locked --features code-graph,mcp-endpoint
-cargo add heliosdb-nano --features code-graph,mcp-endpoint
-```
-
-Build from source:
-
-```bash
-git clone https://github.com/HeliosDatabase/HeliosDB-Nano.git
-cd HeliosDB-Nano
-cargo build --release --locked
-./target/release/heliosdb-nano --version
-```
-
-### Prebuilt Binaries
-
-Grab a self-contained binary from the [**GitHub Releases**](https://github.com/HeliosDatabase/HeliosDB-Nano/releases/latest)
-page — Linux (`x86_64` / `aarch64`), macOS (`aarch64`), and Windows (`x86_64`),
-each with `SHA256SUMS`. No Rust toolchain required: download the archive for your
-platform, verify it against `SHA256SUMS`, extract, and run the `heliosdb-nano`
-binary.
-
-```bash
-# Example: Linux x86_64 (see Releases for macOS arm64 / Linux aarch64 / Windows)
-VER=<release-tag>
-curl -sSfL -O "https://github.com/HeliosDatabase/HeliosDB-Nano/releases/download/$VER/heliosdb-nano-$VER-x86_64-unknown-linux-gnu.tar.gz"
-tar xzf "heliosdb-nano-$VER-x86_64-unknown-linux-gnu.tar.gz"
-./heliosdb-nano --version
-```
-
-### Install Channels
-
-Use Cargo or the GitHub release binaries for a verified install. Package-manager
-channels such as npm, Homebrew, and container images should be treated as
-available only when they are listed on the official releases page.
+**Release 4.42.0:** [release notes](docs/release-notes/v4.42.0.md) (what changed, what breaks, how to upgrade, FAQ). Older wire measurement: [vs PostgreSQL, 2026-08-28](docs/benchmarks/heliosdb-nano-vs-postgresql-2026-08-28.md) (4.19.0; superseded by the 4.42.0 run above).
 
 ## Start the Server
 
@@ -151,13 +222,13 @@ the same token works on the CLI, in `config.toml`, and in `SET` / `SHOW`:
 | `authentication_timeout` (bare = seconds) | `60s` | server (`SET` refused, 55P02) | A socket that has not finished the handshake — startup packet, TLS, password / SCRAM — is closed and its slot released. This is what stops an internet scanner from holding a connection slot forever. |
 | `idle_session_timeout` (bare = ms) | `0` (off) | session (`SET` / `RESET`) | An authenticated session idle outside a transaction is closed with `FATAL 57P05 terminating connection due to idle-session timeout`. |
 | `idle_in_transaction_session_timeout` (bare = ms) | `0` (off) | session (`SET` / `RESET`) | A session idle inside a transaction block is closed with `FATAL 25P03`; the transaction is rolled back. Inside a block the shorter of the two idle limits applies. |
-| `tcp_keepalives_idle` / `tcp_keepalives_interval` (bare = seconds), `tcp_keepalives_count` | `0` (OS default) | server | `SO_KEEPALIVE` is always on for accepted PostgreSQL, MySQL and replication sockets, so half-open peers are reaped by the kernel; these tune the timers. |
+| `tcp_keepalives_idle` / `tcp_keepalives_interval` (bare = seconds), `tcp_keepalives_count` | `0` (OS default) | server | `SO_KEEPALIVE` is always on for accepted PostgreSQL, MySQL and replication sockets, so half-open peers are reaped by the kernel; these tune the timers. (A replication connection gets keepalive only, never an idle timeout; it also detects a dead peer by its heartbeats and `[replication.physical] frame_timeout_secs`.) |
 
 The two idle timeouts ship **disabled**, exactly as in PostgreSQL — the
 availability fix for dead sockets is `authentication_timeout` (on by default)
 plus TCP keepalive. A timeout never fires on a busy connection: it bounds only
 the wait for the *next* client message, and the first byte of a message
-disarms it. Replication connections are never subject to a timeout. CLI flags:
+disarms it. Replication connections are never subject to these timeouts. CLI flags:
 `--authentication-timeout`, `--idle-session-timeout`,
 `--idle-in-transaction-session-timeout`, `--tcp-keepalives-idle`,
 `--tcp-keepalives-interval`, `--tcp-keepalives-count`,
@@ -181,6 +252,19 @@ heliosdb> SELECT * FROM products WHERE price < 15;
   1 | Widget |  9.99
 (1 row)
 ```
+
+For scripts and CI the same command runs SQL without a prompt (`sql` is an alias of `repl`):
+
+```bash
+$ heliosdb-nano sql --data-dir ./mydata -c "SELECT id, name FROM products" --format json
+[{"id":1,"name":"Widget"},{"id":2,"name":"Gadget"}]
+$ heliosdb-nano sql --data-dir ./mydata -f schema.sql      # `-f -` reads standard input
+```
+
+`--format` is `table` (the default), `csv`, `tsv`, `json`, `jsonl`, `vertical` or `markdown`. Results go to
+stdout and errors to stderr; the exit code is 0 when every statement ran, 1 for a usage error, 2 when the
+database cannot be opened and 3 when a statement failed. `-1` runs everything in one transaction (data
+changes only: DDL is not transactional), `-t` drops headers, `--null TEXT` sets how NULL is written.
 
 ### PostgreSQL Client (`psql`)
 
@@ -371,9 +455,8 @@ destructive change (a migration, an experiment, an AI agent's writes) against
 real data, then discard the branch. `main` is never touched. This is the
 recommended pattern for giving every agent run its own sandbox.
 
-`CREATE BRANCH` **requires an `AS OF` clause** — use `AS OF NOW` to fork current
-state, or `AS OF TIMESTAMP '…'` to fork from the past. Without it the statement is
-rejected with `CREATE BRANCH requires AS OF clause` (`src/sql/parser.rs:3490`).
+`AS OF` is optional: with none, or `AS OF NOW`, the branch forks from its parent's
+current state; `AS OF TIMESTAMP '…'` forks `main` as it was then.
 
 ```sql
 CREATE DATABASE BRANCH agent_run_42 FROM main AS OF NOW;
@@ -392,15 +475,121 @@ Branches can also fork from a past point in time:
 `CREATE DATABASE BRANCH rewind FROM main AS OF TIMESTAMP '2026-08-24 09:00:00'`
 (requires time-travel, which the `agent` profile keeps enabled).
 
+**A branch is a fork.** It sees its parent as it was at its fork point: the `AS OF` anchor, or the
+creation when there is none. What the parent does after that does not show on it: rows, `ADD COLUMN`,
+`DROP TABLE`, a table it creates. The parent's write copies what a live child sees into the child's own
+overlay, in the same write, so reads stay as cheap as they were and no history is pinned. A table of a
+million rows dropped under a live child is a million copies, written in chunks.
+
+What that write costs, per row written and per live child of the level written: one or two point reads
+to see whether the child holds the row, and the first time, one more read and two keys for the copy. The
+reads are paid on every write of the row, also when the child holds it already, so the cost follows the
+number of live children and stays after the first touch: 100 branches of main made an `UPDATE` by primary
+key about 16 times slower, on first touch and afterwards alike (about 1.4 times with one, 2.6 with ten;
+debug build, as ratios). Drop the branches you are done with. With no branch at all, the hook is one atomic
+load per write, and dropping every branch goes back to that.
+
+One cost is not the hook's: with time travel on, `DELETE` of a row now writes its delete event in the
+version index, branch or no branch, so that `AS OF` can return the row (below). An autocommit `DELETE` by
+primary key also writes a snapshot record. Measured about 15% fewer such `DELETE`s per second, and about 30%
+longer for a 10,000-row `DELETE` (debug build).
+
+- **Per session.** `USE BRANCH x` moves that session only; so do `SET heliosdb.branch = 'x'` and the
+  PostgreSQL startup forms `dbname=<db>@<branch>` and `options=-c heliosdb.branch=<branch>`. A physical
+  standby takes all of them: binding a session writes nothing. HeliosProxy's `hba` and tenant rules do not
+  match `db@branch` yet, so do not rely on it through the proxy.
+- **Writes and constraints.** PRIMARY KEY, UNIQUE and FOREIGN KEY hold over the rows the branch sees.
+  `TRUNCATE` on a branch empties the table on that branch only. Sequences are shared: `nextval` on a
+  branch moves main's.
+- **Schema.** `CREATE TABLE`, `DROP TABLE` and `ALTER TABLE … ADD COLUMN` apply to the branch only. Every
+  other schema statement is refused (`0A000`). They run on the branch alone, and a live child keeps what
+  it saw: it first takes its own copy of the table, in chunks (`55006` while it has staged writes of it).
+  A schema statement on main, and a `CREATE` or `REFRESH MATERIALIZED VIEW`, is wholly before a fork of main
+  or wholly after it: `CREATE BRANCH` waits for the running ones, and new ones wait for it to register.
+- **Views, materialized views, functions and procedures are not forked: all branches share them**, as they
+  share sequences. So what main does to one shows on every branch, at once, whatever its fork point:
+
+  ```sql
+  CREATE FUNCTION dbl(x INT) RETURNS INT AS $$ SELECT $1 * 2 $$ LANGUAGE sql;
+  CREATE BRANCH dev;
+  CREATE OR REPLACE FUNCTION dbl(x INT) RETURNS INT AS $$ SELECT $1 * 3 $$ LANGUAGE sql;
+  USE BRANCH dev;
+  SELECT dbl(21);    -- 63, not 42
+  ```
+
+  After `DROP VIEW v` on main, `SELECT * FROM v` on a branch fails (`42P01`) though the tables it read are
+  all there; `CREATE OR REPLACE VIEW` changes what it returns there; a view main creates appears there. A
+  view's body reads the session's branch. Rows are forked, though: a `REFRESH MATERIALIZED VIEW` on main does
+  not change the rows a branch reads from it. A branch session cannot change any of these, so it cannot
+  change them for main: `CREATE`, `REPLACE`, `DROP` and `REFRESH` of them on a branch are refused (`0A000`).
+- **`AS OF` a past time** is materialized once, at creation, from main's version history: the rows that
+  differ, as they were then. It needs `time_travel_enabled` and an anchor inside the retention window
+  (`storage.version_retention`), and main as the parent: a branch keeps no history. The definitions are
+  the current ones, so a column
+  added since the anchor shows, NULL or padded. A table dropped since is gone, and one created since is
+  there, empty. An anchor before a `DROP COLUMN`, `RENAME COLUMN`, `ALTER COLUMN … SET STORAGE` or `RENAME
+  TO` of a table on main, or a `REFRESH` of a materialized view, is refused (`0A000`, naming it): the rows as
+  they were then cannot be read now. That refuses the branch as a whole, for any table of the store, not just
+  that one: a branch holds every table at its anchor or none. It goes on for later anchors too: one is refused
+  if some row's last version at it is from before that statement and the row has changed since, and one more
+  versioned write of such a row, before the anchor, is what ends that. A row not changed since is what it is
+  now. `AS OF NOW` always works. Such a statement run before 4.42.0 left no record, so nothing refuses an
+  anchor before it, and its rows read by position, wrongly.
+  `SELECT … AS OF` on a session bound to a branch is refused because only main has history. Every
+  `UPDATE` and `DELETE` is versioned since 4.42.0, the autocommit primary-key fast path included, so `AS OF`,
+  query or branch, and a later transaction's scan read it as of the time it committed.
+- **A fork lands between DML statements.** A transaction is one write, and so is a statement on the simple
+  protocol. Since 4.42.0 the extended protocol's autocommit `UPDATE`, `DELETE`, `INSERT … SELECT`,
+  `INSERT … ON CONFLICT` and `TRUNCATE` of many rows on main are one write group too, so a fork, main's
+  readers and a standby see each before or after, never half done.
+- **Dropping reclaims.** `DROP BRANCH` deletes the branch's keys, in batches, and a finished merge deletes
+  its source's, once no live branch reads through it. A crash on the way is finished by the next open.
+  The name is free at once. A branch with a child cannot be dropped (`2BP01`, naming the child): a merged
+  child counts until it is dropped itself, which loses nothing, its rows being in its target.
+- **REST and MCP** are scoped: `/v1/branches/:name/…` and an MCP call that names a branch run on it alone.
+  `heliosdb_branch_drop` exists.
+
 > **⚠️ `MERGE BRANCH` moves rows, but does not detect conflicts.**
 > Merging is **last-writer-wins**: if `main` and the branch both changed the same
 > row, one value silently wins and you get no warning. Merge strategies are not
 > implemented — `WITH (conflict_resolution = …)` errors with *not implemented*.
-> `WITH (delete_branch_after = true)` is honoured and works.
+> `WITH (delete_branch_after = true)` is honoured and works; on a branch with a child it is refused
+> (`2BP01`) before anything is merged.
 >
-> Merge is safe when the target has not been written since the fork. When you
-> cannot guarantee that — and an agent never can — use fork-test-discard as
-> designed: drop the branch and re-run the validated SQL against `main`.
+> A merge carries what the branch itself changed, and never what it only copied: a row
+> the target changed after the fork stays the target's, unless the branch changed that
+> same row. It carries the branch's schema changes too. When you need more than that, and
+> an agent always does, use fork-test-discard as designed: drop the branch and re-run the
+> validated SQL against `main`.
+>
+> A merge is **refused before anything changes** when it could not apply cleanly: the
+> target changed the definition of a table the branch changed, even only its rows, or
+> dropped and recreated one since the fork, even identically (`55000`); the branch was
+> created by an earlier release, so it has no recorded fork point, and it changed rows
+> (`55000`: recreate the branch, or copy its rows);
+> a merged row's PRIMARY KEY / UNIQUE key is held by another target row (`23505`); or an open
+> transaction with staged writes on one of the merge's tables, on `main` too, stands in the
+> way (`55006`). The branch stays active and mergeable.
+>
+> On `main`, each table's changes land as one ordinary transaction, with versions and logical WAL:
+> a reader or a crash sees a table's merge wholly or not at all, `AS OF` and replication see it like any
+> commit, and a table whose changed rows would not fit in one atomic write is refused up front (`54000`).
+> The merge holds a table's changed rows in memory. Tables land one after another.
+>
+> If a merge stops part way (a failed write, a crash), run the same statement again; the next
+> writable open also tries (`55006` for what it holds until then). A table that already landed is left
+> alone. If it cannot finish, `MERGE BRANCH x ABORT` abandons it: the branch is active again, and the
+> statement lists the tables that may be partially changed. Nothing undoes what the merge already did to
+> them.
+>
+> A merge does not duplicate a key, and writers do not race it. It holds each table it changes
+> exclusively, as `ALTER TABLE` does: a statement writing such a table waits for it and then runs against
+> what landed (an `INSERT` of a merged key gets its ordinary `23505`), and the merge waits for the writers
+> already there, including an open transaction. Readers never wait. `[session] lock_timeout_ms` (default
+> 30000) or a session's `SET lock_timeout` bounds every wait: after it, `55P03` naming what holds the table,
+> with nothing changed. A
+> `REPEATABLE READ` transaction keeps its snapshot, and if the merge changed a row it writes, its `COMMIT`
+> gets a serialization failure (`40001`).
 >
 > **An earlier version of this warning said `MERGE BRANCH` "merges nothing and
 > reports success". That was wrong** and is retracted — see `CHANGELOG.md`
@@ -541,12 +730,12 @@ reports `C.UTF-8`). See the SQL dialect notes in `docs/llms.txt`.
 ## Features at a Glance
 
 - **Full SQL**: JOINs, CTEs, window functions, subqueries, set operations, aggregates, CASE
-- **User-defined functions**: **scalar calls work** — `CREATE FUNCTION dbl(x INT) RETURNS INT AS $$ SELECT $1 * 2 $$ LANGUAGE sql` then `SELECT dbl(21)`, `SELECT id, dbl(id) FROM t`, `SELECT id FROM t WHERE dbl(id) = 2`, `SELECT public.dbl(21)` and bound-parameter `SELECT dbl($1)` all return `42`/rows, on the embedded API and both wires, and the definition survives a restart. `LANGUAGE plpgsql` bodies work for `DECLARE` + SQL statements + `SELECT … INTO` + `RETURN`. One rule, identical to stored procedures: parameters and variables must carry the **`$` sigil** (`$1` / `$name`) — a bare name is a column reference. Recursion is bounded by `[session] udf_max_call_depth` (default 32). ⚠️ Still absent: set-returning functions (`SELECT * FROM f()` errors as a missing table, and `RETURNS TABLE(...)`'s column list is discarded), overloading (the registry keys on the name alone, so two same-name functions collide), `CALL f()` for a *function*, non-`public.` schema qualification, PL/pgSQL control flow inside a **function** body (`IF` / `CASE` / loops / `:=` are REFUSED with an explicit error rather than silently taking the wrong branch — the procedural expression parser stores expression text instead of parsing it), catalog visibility (`pg_proc`, `information_schema.routines` / `.parameters` are still empty), and the REST `/rest/v1/rpc/<fn>` endpoint (still HTTP 501). A function call inside an **embedded/REPL** explicit `BEGIN` is refused with an error (the body re-enters the executor and would deadlock on the global transaction lock)
+- **User-defined functions**: **scalar calls work** — `CREATE FUNCTION dbl(x INT) RETURNS INT AS $$ SELECT $1 * 2 $$ LANGUAGE sql` then `SELECT dbl(21)`, `SELECT id, dbl(id) FROM t`, `SELECT id FROM t WHERE dbl(id) = 2`, `SELECT public.dbl(21)` and bound-parameter `SELECT dbl($1)` all return `42`/rows, on the embedded API and both wires, and the definition survives a restart. `LANGUAGE plpgsql` bodies work for `DECLARE` + SQL statements + `SELECT … INTO` + `RETURN`. One rule, identical to stored procedures: parameters and variables must carry the **`$` sigil** (`$1` / `$name`) — a bare name is a column reference. Scalar body reads and writes join the calling transaction on wire sessions and embedded RAII transaction handles, so they see its staged rows and follow its rollback/savepoints. Recursion is bounded by `[session] udf_max_call_depth` (default 32). ⚠️ Still absent: set-returning functions (`SELECT * FROM f()` errors as a missing table, and `RETURNS TABLE(...)`'s column list is discarded), overloading (the registry keys on the name alone, so two same-name functions collide), `CALL f()` for a *function*, non-`public.` schema qualification, PL/pgSQL control flow inside a **function** body (`IF` / `CASE` / loops / `:=` are REFUSED with an explicit error rather than silently taking the wrong branch — the procedural expression parser stores expression text instead of parsing it), catalog visibility (`pg_proc`, `information_schema.routines` / `.parameters` are still empty), and the REST `/rest/v1/rpc/<fn>` endpoint (still HTTP 501). A function call inside an **embedded/REPL** explicit `BEGIN` is refused with an error (the body re-enters the executor and would deadlock on the global transaction lock)
 - **Stored procedures**: `CREATE PROCEDURE p(a INT, b TEXT) LANGUAGE sql AS $$INSERT INTO t VALUES ($a, $b)$$` + `CALL p(1, 'x')` works, arguments included — in **both** `LANGUAGE sql` and `LANGUAGE plpgsql` bodies (plpgsql binding is new; it substituted nothing through 4.10.2), and now on **every client path**. One rule: the body must reference parameters and `DECLARE`d variables with a **`$` sigil**, by name (`$a`) or positionally (`$1`). A bare parameter name is always a column reference and fails with `Column 'a' not found in schema` — PostgreSQL resolves bare PL/pgSQL variable names, Nano deliberately does not, so a variable can never silently shadow a column. Substitution is literal-aware: a `$1` inside `'a string'`, a `-- comment` or a `$tag$…$tag$` block is data, not a placeholder. **Through 4.11.0, `CALL` ran the body only on the simple-query / MySQL / REPL / embedded `execute()` path**: over the PostgreSQL *extended* protocol (psycopg with server-side bind, JDBC, sqlx, Drizzle, node-postgres) and through the REST/BaaS layer it was a silent no-op that reported one affected row, and `CALL nonexistent_proc()` reported success. Both paths now share one implementation; `CALL` reports 0 rows affected and errors if the procedure does not exist. One limitation remains: on the **embedded API and the REPL**, a `CALL` inside an explicit `BEGIN` is refused with an error (the body would re-enter the executor and deadlock on the global transaction lock) — issue it outside the transaction. A `BEGIN` over the PG or MySQL wire is a per-session transaction and is unaffected
 - **Failed transactions**: an error inside an explicit `BEGIN` **aborts the whole transaction** — PostgreSQL's aborted-transaction-block semantics, enforced by the engine rather than only by the PG wire handler, so the **embedded API, the REPL, the session API and the PostgreSQL wire** all behave the same way. Every following statement that reaches the transaction is refused with SQLSTATE `25P02` (`current transaction is aborted, commands ignored until end of transaction block`) until the block ends. **Statements that never reach the transaction are not refused**, and that set is not exhaustive: the pre-parse utility family (`SET` / `RESET`, `SET CONSTRAINTS`, `search_path`, `PRAGMA`, and the `VACUUM` / `REINDEX` / `CREATE DOMAIN` no-ops) is answered before the statement ever reaches the transaction — PostgreSQL refuses them — as are `SHOW` and `DISCARD` on the PostgreSQL wire, and the column-aware text read `query_with_columns` / `query_with_schema` (the REST layer's reader), which does not attach the embedded transaction at all and so returns committed-only rows with `Ok` inside an aborted block. Separately, the **MySQL listener keeps MySQL's own statement-level semantics** — a failed statement does NOT abort the block, so `BEGIN; bad; good; COMMIT;` commits `good`, exactly as InnoDB does (with one gap: rows the failed statement had already staged before failing are not discarded). On the **embedded API** `COMMIT` / `db.commit()` / `Transaction::commit()` rolls the transaction back and returns an error — nothing is committed, and a caller with no command tag to read cannot mistake a discarded transaction for a successful one; the **PostgreSQL wire** keeps answering such a `COMMIT` with the `ROLLBACK` command tag and no error, exactly as PostgreSQL does. `ROLLBACK` always succeeds, and `ROLLBACK TO SAVEPOINT s` is the one statement allowed through: it recovers the block and keeps the work that preceded the savepoint (this now works over the PG wire too, tagged `ROLLBACK`). Savepoints are **per transaction** (v4.41.0): they are destroyed at `COMMIT` and at `ROLLBACK`, exactly as PostgreSQL destroys them, and one connection can never see, `RELEASE` or `ROLLBACK TO` another connection's savepoint — two sessions may hold savepoints with the same name at the same time. A name that is not established in the **current** transaction is `3B001 invalid_savepoint_specification`. The whole family (`SAVEPOINT` / `RELEASE` / `ROLLBACK TO SAVEPOINT`) also works over the **extended query protocol**, so drivers that prepare server-side (Prisma nested transactions, JDBC `setSavepoint`) reach it. Before v4.41.0 the stack was process-wide and survived the transaction, so a stale savepoint could inject a dead transaction's write set into a live one
 - **SQL session identity**: `current_user`, `session_user`, `current_role` and `current_setting('session_authorization')` report the login the connection actually authenticated with — the PostgreSQL-wire startup `user` (published only *after* authentication; a startup packet with no `user` is now refused with `08P01`), the MySQL handshake user (that listener is trust-only, so the name is asserted by the client, never proved), the name passed to `create_session()` on the embedded API, or `heliosdb` for a session-less embedded call. Through 4.33 every one of them was a hard-coded literal — and two different literals, so `current_user` and `session_authorization` contradicted each other — which made `DEFAULT current_user` audit columns and `WHERE owner = current_user` predicates silently wrong. `SHOW session_authorization` answers the same name on the PG wire. ⚠️ This is identity **reporting**, not access control: `SET ROLE` / `SET SESSION AUTHORIZATION` stay refused, no privilege or row-access decision is made from these functions, and ownership surfaces (`pg_tables.tableowner`, `pg_roles`, ACL grantors) still report the service role, so `WHERE tableowner = current_user` no longer matches
 - **Materialized views**: `CREATE` / `REFRESH MATERIALIZED VIEW`, staleness tracking (`\dmv`, `pg_mv_staleness()`)
-- **MVCC transactions**: **snapshot isolation**, with first-committer-wins write-write conflict detection (SQLSTATE `40001`). `READ COMMITTED` re-snapshots per statement; `REPEATABLE READ` takes one snapshot per transaction. ⚠️ **`SERIALIZABLE` is accepted as a name but served as snapshot isolation** — conflict validation sees only the transaction's *write* set, no read set is tracked anywhere in the engine (no SSI), so `SERIALIZABLE` is byte-identical to `REPEATABLE READ` and **does not prevent write skew**: two transactions can each read the rows the other is about to change and both commit. Requesting it raises a wire `WARNING` naming the anomaly; set `[storage] serializable_policy = "error"` to refuse the level outright rather than downgrade it. Real SSI is not implemented. ⚠️ **DDL is not transactional** — `BEGIN; DROP TABLE orders; ROLLBACK;` destroys the table permanently, and a `CREATE TABLE` inside a rolled-back transaction survives; only the DML in the block is undone. Run schema changes outside an explicit transaction, and take a dump or a branch before a destructive migration
+- **MVCC transactions**: **snapshot isolation**, with first-committer-wins write-write conflict detection (SQLSTATE `40001`). `READ COMMITTED` re-snapshots per statement; `REPEATABLE READ` takes one snapshot per transaction. ⚠️ **`SERIALIZABLE` is accepted as a name but served as snapshot isolation** — conflict validation sees only the transaction's *write* set, no read set is tracked anywhere in the engine (no SSI), so `SERIALIZABLE` is byte-identical to `REPEATABLE READ` and **does not prevent write skew**: two transactions can each read the rows the other is about to change and both commit. Requesting it raises a wire `WARNING` naming the anomaly; set `[storage] serializable_policy = "error"` to refuse the level outright rather than downgrade it. Real SSI is not implemented. ⚠️ **DDL is not transactional** — `BEGIN; DROP TABLE orders; ROLLBACK;` destroys the table permanently, and a `CREATE TABLE` inside a rolled-back transaction survives; only the DML in the block is undone. Run schema changes outside an explicit transaction, and take a dump or a branch before a destructive migration. `ALTER TABLE … ADD COLUMN` with a stable default (a literal, or an expression of stable functions) rewrites no row and takes one atomic catalog write at any table size; a volatile default rewrites every row in one atomic write, up to `[storage] max_atomic_rewrite_bytes` (default 256 MiB, `54000` above it)
 - **COPY (PostgreSQL wire)**: `COPY … FROM STDIN` / `TO STDOUT` in text and CSV — works with `psql \copy` and high-throughput PG→Nano bulk migration
 - **JSONB**: `->`, `->>`, `@>`, `?` operators
 - **Full-text search**: `tsvector`, `tsquery`, `@@`, `ts_rank_cd`, `CREATE INDEX ... USING gin` (see [FTS scope](docs/compatibility/fts.md))
@@ -587,16 +776,24 @@ definitions, sequences, roles and ACLs) and durable index snapshots. This holds 
 route: autocommit, batch/`COPY`, explicit and session transactions, WAL replay, `RENAME TABLE`
 and `MERGE BRANCH`.
 
+**HNSW graph snapshots are not written at all** on an encrypted store: the graph library can only
+write plaintext files, and a graph dump holds every vector. Each HNSW index is instead rebuilt
+from its sealed rows at **every** open for the default in-process backend, so open time grows with the size of those vector indexes
+(each rebuild is logged at INFO with its row count and duration). Graph dumps an unencrypted run
+left in `<data_dir>/hnsw_snapshots/` are deleted at the first encrypted open — deleted, not
+erased: their bytes can remain in free disk blocks until overwritten, so a store that held
+vectors before encryption was enabled still needs the underlying disk wiped to be rid of them.
+
 **Not encrypted — read this before relying on it:**
 
 | Not sealed | Why it matters |
 |---|---|
 | **RocksDB keys** | Table names, column names, row ids, timestamps and branch ids are visible on disk. Only *values* are sealed |
 | **Column sidecars for non-default `STORAGE` modes** (`col:`, `colz:`, `colp:`, `dict:`, `cas:`) | For a column declared `STORAGE COLUMNAR`, `DICTIONARY` or `CONTENT_ADDRESSED`, the row holds only a reference and the payload lives in a sidecar in the clear. With `time_travel` on (the default) the sealed version copy still holds the value; with time travel **off** there is no sealed copy anywhere |
-| **HNSW graph snapshots** under `<data_dir>/hnsw_snapshots/` | Plain files outside RocksDB containing raw vectors |
+| **Opt-in persistent HNSW/PQ graph records** (`--features vector-persist`, `__vidx:` metadata, adjacency, vector and PQ-code records) | These graph values remain unsealed, including vector payloads. The new authoritative `row_image:` overlays are sealed with the engine key, but that does not seal the older graph representation. Use disk encryption for this backend until the tracked graph-encryption gap is resolved |
 | **Backup dumps** (`[dump]`, `--dump-on-shutdown`, `--dump-schedule`) | Written unencrypted; protect the dump directory separately |
 | **Data written before enabling encryption** | Existing values are read as-is and never rewritten. Enabling encryption seals *new* writes; it does not retroactively seal an existing database |
-| **The replication link** | Rows are shipped to standbys in the clear. Encryption at rest says nothing about the wire — use TLS |
+| **The replication link** | A physical standby receives the primary's write groups verbatim: sealed values stay sealed (the standby needs the same key), and RocksDB keys and the replication token travel inside the link. Over TLS (`--replication-tls` / `--primary-tls`, required for a remote standby) the link is encrypted; plaintext stays on loopback unless `--allow-insecure-replication-remote` |
 
 **Wrong-key protection.** A sentinel is sealed at first open and verified strictly on every
 subsequent open, so a wrong or rotated key is refused up front rather than silently yielding
@@ -611,45 +808,78 @@ deployments should track write volume against that bound.
 
 ## High Availability
 
-**Warm standby is enabled by default** — no feature flag needed. Just pass the replication flags at startup:
+**Physical standby is enabled by default** — no feature flag needed. A standby is a read-only
+**physical replica** of its primary: it applies the primary's RocksDB write groups verbatim, so its
+data is identical to the primary's at the same sequence, and it serves read-only SQL while it applies.
+Everything travels over **one replication connection** to the primary's `--replication-port`: the
+bootstrap copy, the physical WAL, heartbeats and acknowledgements. Both nodes share one owner-only
+32-byte token file:
 
 ```bash
-# Primary
-heliosdb-nano start --data-dir ./data --replication-role primary \
-  --standby-hosts 10.0.0.2:5433,10.0.0.3:5433
+install -d -m 700 /srv/nano   # owner-only parent of the data directories
+head -c 32 /dev/urandom > replication.token && chmod 600 replication.token
 
-# Standby
-heliosdb-nano start --data-dir ./data --replication-role standby \
-  --primary-host 10.0.0.1:5433
+# Primary: SQL on 5432, standbys on its replication port 5433
+heliosdb-nano start --data-dir /srv/nano/primary --replication-role primary \
+  --replication-port 5433 --replication-token-file replication.token
+
+# Standby: --primary-host is the primary's REPLICATION port; an empty or absent
+# data directory is bootstrapped from the primary, then followed
+heliosdb-nano start --data-dir /srv/nano/standby --port 5442 --http-port 8081 \
+  --replication-role standby --primary-host 127.0.0.1:5433 \
+  --replication-token-file replication.token
 ```
+
+- **Readiness**: `GET /ready` is 200 only while the standby is current (or briefly disconnected,
+  `[replication] max_standby_lag`); on the PostgreSQL wire, `SELECT heliosdb_require_ready()`,
+  `pg_is_in_recovery()`, `pg_last_wal_replay_lsn()` and `in_hot_standby` give HeliosDB Proxy the same
+  answer. A primary's `/health` lists its standbys with their applied and durable positions.
+- **Sync modes**: `[replication] sync_mode = "semi-sync"` makes a commit wait until `min_acks`
+  standbys hold it durably, `"sync"` until they have applied it; `sync_timeout_ms` and
+  `sync_timeout_action = "warn" | "fail"` decide what a commit does when they do not answer.
+- **Remote standbys over TLS**: `--replication-tls` (with `--replication-tls-cert` /
+  `--replication-tls-key`, or the PostgreSQL `--tls-cert` pair) lets the primary's replication port
+  bind its `--listen` address; a standby reaches a non-loopback `--primary-host` over TLS by default,
+  verified against `--primary-ca`. `--replication-tls-ca` adds mutual TLS. The token is still
+  required. Plaintext over a network needs `--allow-insecure-replication-remote` (dev only).
+- **Stays up**: a standby the primary refuses (another dataset, pruned WAL, wrong token) stays up in
+  `needs_recovery`, refusing data reads with SQLSTATE 55000 that names the reason. It is rebuilt by
+  starting it on a new, empty data directory. An interrupted bootstrap copy resumes where it
+  stopped (the primary leases the snapshot for `[replication] snapshot_export_lease_secs`).
+- **Limits of this release**: no promotion or failover yet (`SWITCHOVER` is refused); writes are
+  never forwarded from a standby; key rotation is not supported with standbys attached; a 4.41.x
+  logical standby directory is not converted — rebuild it once.
+
+Full guide: [docs/guides/physical-standby.md](docs/guides/physical-standby.md).
 
 Optional HA features (opt-in at compile time):
 
 | Flag | Description |
 |------|-------------|
-| `ha-tier1` | Warm standby — **enabled by default** |
-| `ha-tier2` | Multi-primary: branch-based active-active |
-| `ha-tier3` | Sharding: consistent hash ring |
-| `ha-dedup` | Content-addressed deduplication across nodes |
+| `ha-tier1` | Physical standby — **enabled by default** |
 | `ha-ab-testing` | Branch-based experiment routing |
-| `ha-branch-replication` | Selective branch sync to remote servers |
-| `ha-full` | All optional HA features bundled |
+| `ha-full` | `ha-tier1` + `ha-ab-testing` (plus the deprecated names below) |
+| `ha-tier2`, `ha-tier3`, `ha-dedup`, `ha-branch-replication` | Deprecated: select nothing beyond `ha-tier1`; kept so existing builds work |
+
+Multi-primary replication and sharding are on the roadmap; no release contains
+them. `SELECT * FROM heliosdb_features` (or `\version` in the shell) lists what a
+binary really contains.
 
 ```bash
 cargo build --release --features ha-full    # everything
 ```
 
-> **Tip — verify HA changes locally, not in CI**: the HA streaming and
-> lock-management integration tests rely on tight TCP-port spin-waits
-> that pass cleanly on a developer workstation (sub-second) but routinely
-> hang on the 2-CPU GitHub Actions runner. The release workflow gates on
+> **Tip — verify HA changes locally, not in CI**: the HA integration tests
+> start real primary and standby daemons on loopback ports and wait on
+> them, which is quick on a developer workstation but slow and flaky on
+> the 2-CPU GitHub Actions runner. The release workflow gates on
 > `cargo test --lib` only; if you're modifying anything under
-> `src/storage/wal/`, `src/cluster/`, or `src/storage/locks/`, run the full
-> integration suite locally first:
+> `src/replication/`, `src/storage/`, or the commit path, run the HA suites
+> locally first (see [docs/guides/ha_testing.md](docs/guides/ha_testing.md)):
 >
 > ```bash
-> cargo test --features ha-tier1 --test ha_integration   # warm-standby + streaming
-> cargo test --tests --skip ha_tests::streaming_tests --skip lock_management
+> cargo test --test physical_standby_serving --test physical_standby_sync \
+>   --test physical_standby_refusals --test ha_integration --test replication_restart_gap
 > ```
 
 ### Connection Routing & Load Balancing
@@ -657,7 +887,8 @@ cargo build --release --features ha-full    # everything
 For production deployments with multiple HeliosDB Nano instances, put **[HeliosProxy](https://github.com/HeliosDatabase/HeliosDB-Proxy)** in front — a standalone binary providing:
 
 - Read/write splitting across primary + standbys
-- Automatic failover with transaction replay (Oracle TAF-style)
+- Automatic failover with transaction replay (Oracle TAF-style) — on the Nano side this needs
+  standby promotion, which is not available yet (plan phase P5)
 - Connection pooling
 - Health checks + circuit breakers
 - TLS termination
@@ -666,17 +897,18 @@ For production deployments with multiple HeliosDB Nano instances, put **[HeliosP
 
 ```
            ┌────────────────┐
-    psql ─▶│                │──▶ HeliosDB Nano (primary, read+write)
-   mysql ─▶│  HeliosProxy   │──▶ HeliosDB Nano (standby, read-only)
-    curl ─▶│                │──▶ HeliosDB Nano (standby, read-only)
+    psql ─▶│                │──▶ HeliosDB Nano (primary, read+write; PostgreSQL, MySQL, HTTP)
+           │  HeliosProxy   │──▶ HeliosDB Nano (standby, read-only; PostgreSQL)
+           │                │──▶ HeliosDB Nano (standby, read-only; PostgreSQL)
            └────────────────┘
-              port 5432/3306/8080
 ```
 
-1. Deploy 1 primary + 2 standbys (Fly.io / Render / Docker Swarm)
-2. HeliosProxy in front for routing + failover
-3. Automatic failover on primary death (< 5 s typical)
-4. Readonly queries load-balanced across standbys
+1. Deploy 1 primary + standbys. Standbys on other hosts replicate over TLS (`--replication-tls` on
+   the primary, `--primary-ca` on each standby)
+2. HeliosProxy in front for routing: it sends writes to the primary and reads to standbys whose
+   `SELECT heliosdb_require_ready()` succeeds, with `pg_last_wal_replay_lsn()` for lag
+3. Read-only queries load-balanced across ready standbys (standbys serve the PostgreSQL wire only;
+   MySQL and REST go to the primary)
 
 ## Deploy
 
@@ -703,7 +935,7 @@ See **[the Rust API guide](https://docs.rs/heliosdb-nano)** for embedded usage a
 The `heliosdb-nano` binary builds with `cargo build --release`. Default features are `encryption + vector-search + ring-crypto + ha-tier1` — covers most embedded and single-node-server cases. Run `cargo info heliosdb-nano` (or `cargo metadata --no-deps --format-version 1 | jq '.packages[0].features'`) for the live list. Recipes for the non-obvious combinations:
 
 ```bash
-# Default build — embedded + Postgres/MySQL wire + warm-standby HA.
+# Default build — embedded + Postgres/MySQL wire + physical-standby HA.
 cargo build --release
 
 # Code-graph + MCP server (matches what heliosdb-codekb-mcp links).
@@ -712,15 +944,22 @@ cargo build --release
 cargo build --release --features "code-graph,graph-rag,mcp-endpoint"
 
 # In-process embedder (no external HTTP service for embeddings).
-# Pulls fastembed-rs + ORT — adds ~30 MB to the binary.
+# Pulls fastembed-rs + ORT — adds ~30 MB to the binary. Needs Rust >= 1.92
+# (the pinned ort 2.0.0-rc.15); the model downloads on first use.
 cargo build --release --features "code-graph,code-embed"
+# The ONNX Runtime ort downloads needs glibc >= 2.38 (Ubuntu 24.04, Debian 13,
+# Fedora 39+, RHEL 10). On RHEL/AlmaLinux/Rocky 9, link Microsoft's release
+# build (onnxruntime-linux-x64-1.24.x from github.com/microsoft/onnxruntime)
+# instead, and keep its lib directory on LD_LIBRARY_PATH at run time:
+ORT_LIB_PATH=/opt/onnxruntime-linux-x64-1.24.4/lib ORT_PREFER_DYNAMIC_LINK=1 \
+  cargo build --release --features "code-graph,code-embed"
 
 # FIPS 140-3 compliant crypto (AWS-LC FIPS Cert #4816, SHA-256, PBKDF2).
 # `--no-default-features` is required to swap out ring-crypto.
 cargo build --release --no-default-features \
   --features "fips,encryption,vector-search,ha-tier1"
 
-# Full HA bundle — multi-primary + sharding + dedup + branch replication.
+# HA bundle — physical standby + A/B experiment routing.
 cargo build --release --features "ha-full"
 ```
 
@@ -808,7 +1047,7 @@ The cache path exists once cargo has extracted the crate (`cargo install` does t
 | `heliosdb-nano-vector` | HNSW indexes, `<-> <#> <=>` operators, hybrid search |
 | `heliosdb-nano-code-graph` | AST symbol index, LSP queries, git hook (`code-graph` feature) |
 | `heliosdb-nano-graph-rag` | Knowledge graph + RAG ingest pipeline (`graph-rag` feature) |
-| `heliosdb-nano-mcp` | MCP server, 16-tool catalog, stdio/HTTP/WS (`mcp-endpoint` feature) |
+| `heliosdb-nano-mcp` | MCP server, 17-tool catalog, stdio/HTTP/WS (`mcp-endpoint` feature) |
 | `heliosdb-nano-server` | Daemon, TLS, auth, HA tier 1/2/3, user management |
 | `heliosdb-nano-tenant` | Multi-tenant isolation modes, tiered plans, RLS policies |
 | `heliosdb-nano-deploy` | Docker, Fly.io, Railway, Render, systemd template |
@@ -828,7 +1067,7 @@ In-repo guides (`docs/`):
 - [`information_schema` compatibility](docs/compatibility/information_schema.md)
 - [SQLite drop-in tutorial](docs/guides/sqlite_drop_in_tutorial.md)
 - [REPL demo](docs/guides/repl_demo.md)
-- [HA cluster tutorial](docs/guides/ha_cluster_tutorial.md) · [HA testing](docs/guides/ha_testing.md)
+- [Physical standby (HA)](docs/guides/physical-standby.md) · [HA testing](docs/guides/ha_testing.md) · [Replication history guard](docs/guides/replication-history-guard.md)
 - [Audit logging](docs/guides/audit.md)
 - [Tracing guide](docs/TRACING_GUIDE.md)
 - [Full-text search](docs/compatibility/fts.md) · [PL/pgSQL compatibility](docs/compatibility/plpgsql.md) · [SQLite compatibility](docs/compatibility/sqlite.md)
@@ -847,3 +1086,5 @@ Hosted docs:
 ## License
 
 [Apache-2.0](LICENSE) — Apache License, Version 2.0
+
+If Nano saves you a Postgres container, a ⭐ on [GitHub](https://github.com/HeliosDatabase/HeliosDB-Nano) helps others find it.

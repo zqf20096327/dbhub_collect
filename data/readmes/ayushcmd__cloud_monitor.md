@@ -42,10 +42,11 @@ CloudMonitor combines a React dashboard, a FastAPI backend, PostgreSQL persisten
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)](https://www.docker.com/)
 [![Prometheus](https://img.shields.io/badge/Prometheus-Metrics-E6522C?logo=prometheus)](https://prometheus.io/)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue)](LICENSE)
+[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue)](LICENSE)
 
 ## Table of contents
 
+- [What's new in v2.0.0](#whats-new-in-v200)
 - [Overview](#overview)
 - [Live demo](#live-demo)
 - [Screenshots](#screenshots)
@@ -68,6 +69,22 @@ CloudMonitor combines a React dashboard, a FastAPI backend, PostgreSQL persisten
 - [Team](#team)
 - [Documentation](#documentation)
 - [License](#license)
+
+## What's new in v2.0.0
+
+**CloudMonitor v2.0.0 — Major Observability & Docker Monitoring Update** expands the monitoring and agent-onboarding capabilities introduced in v1.0.0. This summary describes source changes merged in [PR #29](https://github.com/ayushcmd/cloud_monitor/pull/29); it does not certify their availability in every deployment.
+
+- **Richer observability:** Host, API Performance, Prometheus Health and Docker Container dashboards with responsive charts, KPI summaries, selectable time ranges (15m / 1h / 6h / 24h) and refresh controls.
+- **Historical Docker telemetry:** Timestamped CPU, memory, network and block I/O samples, container lifecycle events, agent/container filtering and a database migration for metric history.
+- **Easier Docker onboarding:** Guided local agent provisioning, existing-agent reuse, connection verification and manual setup options for remote hosts.
+- **Stronger security boundaries:** Authenticated monitoring endpoints, tenant-scoped metric access, additional provisioning safeguards and restricted direct Prometheus exposure.
+- **Improved monitoring accuracy:** More explicit offline, stale, unhealthy and removed statuses, with unavailable readings shown as missing rather than misleading zeroes.
+- **Regression coverage:** Expanded tests for agent connection, container history, local provisioning, monitoring dashboards and security.
+- **Team documentation:** Updated responsibilities for [Sarnendu Das](https://github.com/blackpython34) (Backend & Monitoring API), [Parveen Kumar](https://github.com/Parveen-collab) (Frontend & Dashboard), and [Ayush Raj](https://github.com/ayushcmd) (AWS Cloud & DevOps), as documented in [PR #31](https://github.com/ayushcmd/cloud_monitor/pull/31).
+
+**Upgrade notes:** Apply the new Alembic migration, review Docker agent permissions and enrollment settings, preserve existing database volumes and secrets, and validate monitoring connectivity after deployment. Automatic Docker agent provisioning is intended for trusted local development environments; remote hosts use the manual enrollment path.
+
+**Release notes:** See the published [CloudMonitor v2.0.0 GitHub release](https://github.com/ayushcmd/cloud_monitor/releases/tag/v2.0.0) for the full changelog and upgrade guidance. The v2.0.0 tag was created before this README documentation update; merging this PR updates `main` but does not change the existing release tag.
 
 ## Overview
 
@@ -593,15 +610,80 @@ Automated production deployment is a **known limitation, not a confirmed healthy
 
 ## Team
 
-BSc Computer Science and Data Analytics students, IIT Patna, 5th semester.
+**Project:** CloudMonitor — Cloud Infrastructure & Monitoring Platform  
+**Institution:** Indian Institute of Technology Patna  
+**Program:** BSc Computer Science and Data Analytics  
+**Semester:** 5th
 
-| Member | Area | Built (implemented) | AWS deployment role (target) | Optional |
-|---|---|---|---|---|
-| Sarnendu Das | Custom backend | FastAPI backend and Prometheus metrics; health, status, and simulation endpoints; backend Dockerfile with a non-root user | Backend container on EC2; backend image through ECR; port 8000 security group setup | Scripted ECR image push |
-| Ayush Raj | Monitoring and observability | Prometheus configuration and six alert rules; Alertmanager routing and Grafana provisioning; GitHub Actions CI pipeline | Monitoring ports kept private; Grafana via admin IP or SSH tunnel; EC2 bootstrap with Docker Compose | CloudWatch integration |
-| Parveen Kumar | Custom frontend | React and Vite dashboard; testing suite with a 10-check pipeline test; failure injection and SRE verification | Frontend container on EC2; public access on ports 80 and 443 through Nginx; post-deploy checks with the test suite | CloudFront in front of the frontend |
+CloudMonitor is a collaborative cloud computing project developed by three students across three primary workstreams: backend development and monitoring APIs; frontend development and dashboard; and AWS cloud infrastructure, DevOps and observability. The responsibilities below combine the team's presentation with implementation and deployment details recorded in this README.
 
-The AWS deployment roles are the target scope for each member, and the optional items are extensions that are not part of the current deployment. See [AWS deployment](#aws-deployment) and [Known limitations](#known-limitations) for what is live today.
+### 1. Sarnendu Das ([blackpython34](https://github.com/blackpython34)) — Backend Development & Monitoring API
+
+**Roll Number:** 24a12res592  
+**Primary Responsibility:** Custom Backend, API Services & Metric Processing
+
+**Backend development**
+- Developed the FastAPI backend service and REST endpoints connecting the backend to the dashboard.
+- Implemented health, status and simulation endpoints for service visibility and monitoring scenarios.
+- Exposed Prometheus-compatible metric endpoints.
+- Responsible for backend metric ingestion, processing, API integration, and the database/persistence workstream.
+
+**Containerization and deployment scope**
+- Implemented the backend Dockerfile with a non-root container user.
+- Assigned AWS deployment work: deploy the backend container on EC2, distribute its image via Amazon ECR and configure port 8000 networking/security-group access.
+- **Optional extension:** Scripted or automated ECR image pushes.
+
+### 2. Parveen Kumar ([Parveen-collab](https://github.com/Parveen-collab)) — Frontend Development & Dashboard
+
+**Roll Number:** 24a12res426  
+**Primary Responsibility:** React Dashboard, Visualizations & Frontend Integration
+
+**Frontend development**
+- Developed the monitoring dashboard using React, TypeScript and Vite.
+- Built host/container status views, health displays and metric visualizations.
+- Worked on frontend ↔ backend REST API integration and user experience.
+
+**Testing and deployment scope**
+- Contributed the documented testing suite, including the 10-check pipeline test, failure-injection testing and SRE verification.
+- Assigned AWS deployment work: deploy the frontend container on EC2, serve it publicly using Nginx on ports 80 and 443, and run post-deployment checks with the test suite.
+- **Optional extension:** Add Amazon CloudFront in front of the frontend.
+
+### 3. Ayush Raj ([ayushcmd](https://github.com/ayushcmd)) — AWS Cloud Infrastructure, DevOps & Observability
+
+**Roll Number:** 24a12res897  
+**Primary Responsibility:** AWS Cloud, Infrastructure Deployment, CI/CD, Containerization & Monitoring
+
+**AWS cloud and infrastructure**
+- Responsible for the AWS EC2 Ubuntu deployment environment, IAM permissions, security groups and infrastructure access/networking.
+- Worked on infrastructure preparation, operations and deployment verification.
+
+**Docker and orchestration**
+- Responsible for Docker/Compose deployment integration, service coordination and infrastructure readiness.
+- Worked on configuring the containerized environment for the application and monitoring stack.
+
+**Infrastructure monitoring and observability**
+- Responsible for Node Exporter and cAdvisor integration to support host/container telemetry.
+- Configured Prometheus monitoring, including the documented six alert rules.
+- Implemented Alertmanager routing and Grafana provisioning; worked on monitoring dashboards and operational alert visibility.
+
+**CI/CD and deployment scope**
+- Implemented the documented GitHub Actions CI pipeline and worked on deployment coordination and verification.
+- Assigned AWS deployment work: provision/configure EC2, bootstrap Docker Compose, keep monitoring ports private, and restrict Grafana admin access via approved IP or SSH tunnel.
+- **Optional extension:** Amazon CloudWatch integration.
+
+### Team Responsibility Summary
+
+| Member | Roll number | Primary workstream | Main responsibilities |
+|---|---|---|---|
+| **Sarnendu Das** | 24a12res592 | Backend & Monitoring API | FastAPI, REST/metrics endpoints, ingestion and processing, health checks, persistence/API integration |
+| **Parveen Kumar** | 24a12res426 | Frontend & Dashboard | React/TypeScript, status and metric visualizations, frontend integration, UX and testing |
+| **Ayush Raj** | 24a12res897 | AWS Cloud & DevOps | EC2, IAM, security groups, Docker/Compose, Node Exporter, cAdvisor, Prometheus, Grafana, Alertmanager, CI/CD and deployment verification |
+
+### Implementation and Deployment Scope
+
+The implementation details above are taken from the project's documented work, while the three primary workstreams reflect the team's presentation. Assigned AWS deployment responsibilities describe each member's target scope and should **not** be read as a claim that every task is live. Optional ECR publishing automation, CloudFront and CloudWatch integrations are extensions, not completed features.
+
+See [AWS deployment](#aws-deployment) and [Known limitations](#known-limitations) for the documented current deployment status.
 
 ## Documentation
 
@@ -617,7 +699,7 @@ The AWS deployment roles are the target scope for each member, and the optional 
 
 ## License
 
-CloudMonitor is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+**Proposed for future distributions:** GNU General Public License v3.0 only ([GPL-3.0-only](LICENSE)), subject to confirming contributor relicensing permissions and compatibility with third-party components. See [NOTICE](NOTICE). The previous [Apache License 2.0](LICENSES/Apache-2.0-previous.txt) and [historical NOTICE](LICENSES/NOTICE-Apache-previous.txt) are preserved; permissions granted for earlier Apache-licensed distributions are not withdrawn.
 
 ## Community
 

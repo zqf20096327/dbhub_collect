@@ -100,6 +100,7 @@ To build locally instead, use `docker build -t tidbyt-unraid:latest .` and updat
 | `UNRAID_API_KEY`   | Yes      | —                      | API key for authentication                     |
 | `TIDBYT_DEVICE_ID` | Yes      | —                      | Your Tidbyt device ID                          |
 | `TIDBYT_API_KEY`   | Yes      | —                      | Your Tidbyt API key                            |
+| `TIDBYT_API_BASE`  | No       | `https://api.tidbyt.com/v0` | Push target. Set to `http://server:port/v0` for Tronbyt |
 | `UPDATE_INTERVAL`  | No       | `3600` (1 hour)        | Seconds between updates                        |
 | `METRICS`          | No       | `cpu,ram,array,uptime` | Comma-separated list of metrics                |
 | `TEMP_UNIT`        | No       | `F`                    | Temperature unit (`C` or `F`)                  |
@@ -112,6 +113,17 @@ To build locally instead, use `docker build -t tidbyt-unraid:latest .` and updat
 3. Apply
 
 Or manually add as a custom Docker container with the variables above.
+
+## Running against Tronbyt (local, no cloud)
+
+Tidbyt was acqui-hired and no longer ships hardware, so the cloud is on borrowed time. [Tronbyt](https://github.com/tronbyt/server) is the self-hosted replacement and this app pushes to it unchanged.
+
+1. Run Tronbyt Server (Docker image `ghcr.io/tronbyt/server:2`, data at `/app/data`, web UI on container port 8000).
+2. In its web UI: add the device, generate firmware with your WiFi details, flash it over USB once.
+3. Copy the per-device **API key** from the device page.
+4. Set `TIDBYT_API_BASE=http://<tronbyt-host>:<port>/v0`, `TIDBYT_DEVICE_ID=<tronbyt device id>`, `TIDBYT_API_KEY=<per-device key>`.
+
+Tronbyt replies to a push with plain text rather than JSON, which the client handles.
 
 ## Customizing Metrics
 

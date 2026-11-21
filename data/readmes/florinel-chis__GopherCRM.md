@@ -483,11 +483,10 @@ customer, a ticket comment, a repeat form enquiry, an automation rule step and a
 that unlinks its records send no updated event. The event says that the record changed, not what
 changed: fetch the record to see its current state.
 
-A deleted event goes only to the endpoints that received a created or updated event for that
-record (an endpoint subscribed to `lead.deleted` alone hears of no lead), and only while that
-delivery is still in the log: finished deliveries are pruned after 30 days, and an endpoint that
-was deleted and registered again starts with an empty log, so either gets no deleted event for an
-older record. An erasure sends the same deleted event as a delete, with no reason and no personal
+A deleted event goes to every active endpoint subscribed to it, whether or not that endpoint
+received an earlier event for the record: an endpoint subscribed to `lead.deleted` alone hears of
+every deleted lead, and an endpoint registered after a record was created, or whose earlier
+deliveries of it were pruned, still gets the deleted event. An erasure sends the same deleted event as a delete, with no reason and no personal
 data: one event per lead or customer the erasure removed, cascades included, and none for a record
 that had already been deleted.
 
@@ -511,7 +510,13 @@ update or a delete that rolls back sends nothing. A background sender delivers c
 is success. A non-2xx answer, a redirect (never followed), a timeout (10 seconds), a connection
 failure or a refused destination is retried after 1, 2, 4, … minutes (at most 6 hours apart) until
 10 attempts have been made (about 8.5 hours); the event is then marked failed. Delivery is at least
-once and unordered: deduplicate on `webhook-id`.
+once. A sender works on several endpoints at a time but sends one endpoint's events one at a time,
+oldest first, so a slow endpoint does not hold up the others. A retry or a second replica can still
+deliver an endpoint's events out of order: deduplicate on `webhook-id` and do not rely on order.
+An endpoint whose sent requests fail 3 times in a row is paused: the sender skips all its events
+for 1 minute, then 2, 4, … up to 1 hour after each further failure, and the first 2xx answer ends
+the pause. The endpoint shows `consecutive_failures` and `paused_until`. Neither a redelivery nor
+a change to the endpoint ends a pause early, and the test ping ignores it.
 
 **Test ping.** `POST /api/v1/webhooks/endpoints/:id/test` sends one signed request to the endpoint
 at once, active or not, and answers with the outcome: `{"event_id":"evt_…","outcome":"succeeded",
@@ -558,8 +563,11 @@ def verify(secret, headers, body: bytes, tolerance=300):
 string or fragment. Every connection resolves the host again and refuses private, loopback, CGNAT,
 unique-local, link-local, metadata, multicast and unspecified addresses; proxy variables are
 ignored. The AEO egress allowlists do not apply to webhooks. The secret is stored encrypted with
-`API_KEY_SECRET` (or `JWT_SECRET`); changing that secret makes existing endpoints fail with
-`secret_unavailable` until they are re-created or their secret rotated.
+`API_KEY_SECRET` (or `JWT_SECRET`). After that secret changes, the sender holds the deliveries of
+every endpoint whose secret it can no longer open: they stay `pending` with their attempts
+unchanged, and go out once the secret can be read again, after a restart with the previous key or
+after the endpoint's secret is rotated. Meanwhile `GET /health` reports `webhooks.state` `paused`
+and one error line per held endpoint is logged.
 
 **Delivery log.** The "Delivery log" tab of Settings > Webhooks lists each event per endpoint,
 newest first, with its event type, record id, status, attempts, last attempt time and last
@@ -685,7 +693,10 @@ generated into `api/`: open `api/index.html` in a browser (a static page that wo
 straight from the checkout), or feed `api/swagger.json` / `api/swagger.yaml` (Swagger 2.0) to a
 client generator. The list below is the overview.
 
-`GET /health` is served outside the API prefix and needs no authentication.
+`GET /health` is served outside the API prefix and needs no authentication. Its `webhooks` field
+is `{"state": "running"}`, or `{"state": "paused", "reason": "secret_unavailable"}` while the
+webhook sender holds the deliveries of an endpoint whose signing secret cannot be opened; the
+top-level `status` stays `healthy` and the answer stays 200 either way.
 
 ### Authentication (public)
 - `POST /api/v1/auth/register` - Register a new user. **Gated by the
@@ -713,7 +724,10 @@ client generator. The list below is the overview.
   once and only under the session it was sent with.
 - `POST /api/v1/auth/password-reset` - Request a password-reset email. Always answers `200`
   whether or not the account exists (anti-enumeration). Delivery goes through SMTP when
-  `SMTP_HOST` is configured, otherwise a logging fallback.
+  `SMTP_HOST` is configured, otherwise a logging fallback. The answer comes before the account is
+  looked up: a background queue (one worker, up to 100 waiting requests) issues the link and
+  mails it, normally within seconds. Changing an account's login email ends the reset links issued
+  before the change.
 - `POST /api/v1/auth/password-reset/confirm` - Redeem a single-use reset token (1 h expiry) and set
   a new password. The token claim, the password update, the lockout reset and the revocation of
   all refresh tokens are one transaction: a failed or rejected confirmation leaves the link
@@ -903,7 +917,7 @@ authentication and live on the moderate tier:
   fails; `last_emailed_at` is set on success. Without `SMTP_HOST` the same logging fallback as the
   password reset applies: the mail is logged, not delivered, and the call still answers 200 and
   stamps `last_emailed_at`. The email of a sent quote ends with a single-use client response
-  link, `APP_BASE_URL/quote-response?token=...`; each email invalidates the previous link, a
+  link, `APP_BASE_URL/quote-response?token=...`; each successful email invalidates the previous link, a
   status change away from sent invalidates the current one, and the link works until the end of
   the `valid_until` day. An accepted quote and a sent quote past `valid_until` get no link. The
   link opens the web application's public page `/quote-response`, where the client sees the
@@ -969,11 +983,16 @@ authentication and live on the moderate tier:
 
 ### API Keys *(always scoped to the caller's own keys — no admin override)*
 - `GET /api/v1/api-keys` - List user's API keys
-- `POST /api/v1/api-keys` - Create new API key (optional RFC3339 `expires_at`; the plaintext key is
-  returned only in this response)
+- `POST /api/v1/api-keys` - Create new API key (optional RFC3339 `expires_at`, by default and at
+  most one year from now; the plaintext key is returned only in this response). Staff accounts only:
+  a customer account is 403. Only a signed-in session (password or single sign-on) creates keys, and
+  its sign-in must be within the last 15 minutes (403 `REAUTHENTICATION_REQUIRED` otherwise, also
+  for a token from `POST /auth/refresh`): a request authenticated with an API key is 403
 - `GET /api/v1/api-keys/:id` - Get one key
-- `PUT /api/v1/api-keys/:id` - Rename, deactivate or reactivate a key
-- `DELETE /api/v1/api-keys/:id` - Revoke API key (marks inactive; the row is kept)
+- `PUT /api/v1/api-keys/:id` - Rename or revoke a key (`is_active: false`); `is_active: true` on a
+  revoked key is 409, and from a request authenticated with an API key 403
+- `DELETE /api/v1/api-keys/:id` - Revoke API key (marks inactive and stamps `revoked_at`; the row
+  is kept and revocation is final)
 
 Keys authenticate via `Authorization: ApiKey gcrm_xxx`. A key is rejected if it is inactive or
 expired, or if its owner has been deactivated or erased.
@@ -1198,11 +1217,17 @@ gophercrm/
 
 ## Known Limitations
 
-- **Access tokens end early only on logout, password change and password reset.** These three
-  increment the account's `users.token_version`, which every JWT carries, so every access token
-  issued before them is refused at once (deactivation and erasure reject it too). Refresh rotation
+- **Access tokens end early only on logout, password change, password reset, deactivation and a
+  SCIM group change that lowers the role.**
+  These increment the account's `users.token_version`, which every JWT carries, so every access
+  token issued before them is refused at once (erasure rejects it too). Password change, password
+  reset and deactivation (by an administrator or through SCIM) also revoke every API key of the
+  account for good, and reactivating an account brings none of its earlier credentials back;
+  logout leaves API keys alone. A SCIM group change that leaves an account in no mapped group
+  deactivates it the same way; one that gives it a role lacking a permission the old one had ends
+  its access and refresh tokens, not its API keys. Refresh rotation
   does not: the access token it replaces stays valid until `JWT_EXPIRY_HOURS` elapses, and so does
-  every token of an account whose role changes. There is no per-token denylist.
+  every token of an account whose role changes any other way. There is no per-token denylist.
 - **Session handling has known gaps.** Browser tabs sharing a remembered session coordinate their
   refreshes through the Web Locks API (#184), which browsers offer only in secure contexts: served
   over plain HTTP (the bundled nginx without TLS) each tab locks on its own, and two tabs
@@ -1262,10 +1287,12 @@ gophercrm/
   (`embed.js`, the definition and the hosted view). `DISABLE_RATE_LIMIT=true` bypasses the strict
   tier alone — the check lives inside `RateLimitStrict` — so the moderate tier still applies to
   test traffic.
-- **Rate limits are per process and per middleware instance.** Each instance tracks at most 10,000
-  client IPs; when it is full, previously unseen IPs get the ordinary 429 until idle records are
-  reclaimed (after five idle minutes, and only once the bucket has refilled). Limits are not shared
-  between replicas, and behind a proxy they depend on `TRUSTED_PROXIES`. See
+- **Rate limits are per process and per middleware instance.** Clients are counted per IPv4
+  address and per IPv6 /64 network. Each instance tracks at most 10,000 clients; when it is full, a
+  new client is still admitted and the least recently active record is dropped (that client
+  starts again with a fresh burst). Idle records are also reclaimed after five idle minutes once
+  the bucket has refilled. Limits are not shared between replicas, and behind a proxy they depend
+  on `TRUSTED_PROXIES`. `DISABLE_RATE_LIMIT=true` stops startup when `SERVER_MODE=production`. See
   [DEVELOPMENT.md](docs/DEVELOPMENT.md) for details.
 - **Bulk operations are status-only.** Only `POST /leads|tickets|tasks/bulk/status` exist (see
   *Bulk operations* above); there is no bulk create, update or delete.
@@ -1274,9 +1301,14 @@ gophercrm/
   permanently at that age, at boot and then every 24 hours, so the first boot removes the existing
   backlog. Until a separate frontend task merges, the form-delete dialogs still say "Collected
   submissions are retained", which is wrong for those rows.
-- **Sign-in audit rows are kept for `AUTH_AUDIT_RETENTION_DAYS`.** Every password sign-in, single
-  sign-on callback and refresh writes one `auth_audit_log` row, and refused API keys are counted
-  in one row per reason, account, client network and minute (`attempts`, #466); rows are kept 90
+- **Sign-in audit rows are kept for `AUTH_AUDIT_RETENTION_DAYS`.** Every successful password
+  sign-in, single sign-on callback and successful refresh writes one `auth_audit_log` row, so does every password change
+  (`password_change`), password reset request (`reset_request`), reset completion
+  (`reset_confirm`) and logout (`logout`, #550), so does every API key creation
+  (`api_key_create`), revocation (`api_key_revoke`) and refused re-enable of a revoked key
+  (`api_key_enable`, #551, with the key's id), and refused API keys (#466), refused password
+  sign-ins, refused refreshes and refused SCIM authentications (#553) are counted in one row per
+  method, reason, account, client network and minute (`attempts`); rows are kept 90
   days by default (#454). The rows hold no email, name, subject or full IP address, and erasure leaves them
   to age out.
 - **Erasure does not reach logs or issued tokens.** Service logs omit email, name, title and

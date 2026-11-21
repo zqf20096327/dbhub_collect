@@ -2,13 +2,7 @@
 > If you need an enterprise-level database MCP server with built-in guardrails like approval flow, access control, data masking, and audit logging beyond what DBHub offers, check out [Bytebase](https://www.bytebase.com/).
 
 <p align="center">
- <a href="https://www.star-history.com/bytebase/dbhub">
-  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/badge?repo=bytebase/dbhub&type=trending&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/badge?repo=bytebase/dbhub&type=trending" />
-   <img alt="GitHub Trending Repository of the Day" src="https://api.star-history.com/badge?repo=bytebase/dbhub&type=trending" />
-  </picture>
- </a>
+<a href="https://code.claude.com/docs/en/mcp#example-query-your-postgresql-database"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/featured-by-claude-code-dark.svg" /><source media="(prefers-color-scheme: light)" srcset="docs/images/featured-by-claude-code-light.svg" /><img alt="Featured in the official Claude Code docs — read the DBHub example" src="docs/images/featured-by-claude-code-light.svg" width="280" height="64" /></picture></a>
 </p>
 
 <p align="center">
@@ -50,17 +44,21 @@ DBHub is a minimal MCP server: token-efficient, zero-dependency, and just two to
 - **Guardrails**: Read-only mode, row limiting, and query timeout to prevent runaway operations
 - **Secure Access**: SSH tunneling and SSL/TLS encryption
 
-> DBHub is the official example in the [Claude Code docs](https://code.claude.com/docs/en/mcp#example-query-your-postgresql-database) for connecting to PostgreSQL via MCP.
+<p align="center">
+ <img src="docs/images/community-logo-wall.png" alt="Our community includes developers from 30 companies and 10 universities, including Microsoft, NVIDIA, Amazon, Google, Oxford, Cornell, Duke, Tsinghua, Peking, KAIST, UBC, and Waseda." width="100%" />
+</p>
 
 ## Token Efficiency
 
-DBHub loads just 2 tools by default at **0.5k tokens** — 16-25x fewer than alternatives — keeping the context window open for your actual work.
+DBHub's two built-in tool definitions total **261 tokens** with the `cl100k_base` tokenizer.
 
-| MCP Server | Default Config | Default Tools |
-|------------|---------------|--------------|
-| **DBHub** | **0.5k** | 2 (`execute_sql`, `search_objects`) |
-| MCP Toolbox | 7.7k | 29 |
-| Supabase MCP | 11.6k | 36 |
+| MCP Server | Definition Tokens | Tools |
+|------------|-------------------|-------|
+| **DBHub 2.0.1** | **261** | 2 |
+| MCP Toolbox 1.18.0 | 3,901 | 29 |
+| Supabase MCP 0.19.0 | 6,982 | 36 |
+
+Full tool definitions, not session usage. See the [November 2026 benchmark](https://dbhub.ai/blog/database-mcp-server-token-benchmark-2026) for configurations and reproduction steps.
 
 ## Use Cases
 
@@ -89,7 +87,24 @@ DBHub implements MCP tools for database operations:
 
 DBHub includes a [built-in web interface](https://dbhub.ai/workbench/overview) for interacting with your database tools. It provides a visual way to execute queries, run custom tools, and view request traces without requiring an MCP client.
 
-![DBHub Workbench showing connection details and available tools](docs/images/workbench/workbench.webp)
+<table>
+  <tr>
+    <td colspan="2">
+      <strong>Workbench overview</strong><br /><br />
+      <a href="docs/images/workbench/workbench.webp"><img src="docs/images/workbench/workbench.webp" alt="DBHub Workbench showing connection details and available tools" width="100%" /></a>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Execute SQL</strong><br /><br />
+      <a href="docs/images/workbench/execute-sql.webp"><img src="docs/images/workbench/execute-sql.webp" alt="SQL editor showing an employee query and its results" width="100%" /></a>
+    </td>
+    <td width="50%" valign="top">
+      <strong>Request traces</strong><br /><br />
+      <a href="docs/images/workbench/request-trace.webp"><img src="docs/images/workbench/request-trace.webp" alt="Recent SQL requests with execution times and client details" width="100%" /></a>
+    </td>
+  </tr>
+</table>
 
 ## Installation
 

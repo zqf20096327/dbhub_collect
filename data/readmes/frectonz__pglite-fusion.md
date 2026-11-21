@@ -12,12 +12,6 @@ docker run --network=host frectonz/pglite-fusion
 
 `pglite-fusion` is also distributed with other PostgreSQL versions.
 
-### PostgreSQL 14
-
-```bash
-docker run --network=host frectonz/pglite-fusion:pg14
-```
-
 ### PostgreSQL 15
 
 ```bash
@@ -40,6 +34,12 @@ docker run --network=host frectonz/pglite-fusion:pg17
 
 ```bash
 docker run --network=host frectonz/pglite-fusion:pg18
+```
+
+### PostgreSQL 19
+
+```bash
+docker run --network=host frectonz/pglite-fusion:pg19
 ```
 
 Connect to the PostgreSQL database using `psql`.

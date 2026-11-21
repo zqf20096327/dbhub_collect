@@ -46,6 +46,8 @@ Kondisi eksisting penyimpanan Google Drive:
 | `tu_umum` | Petugas Kearsipan | Staf Agenda TU Dispora | PETUGAS_ARSIP | Pengadministrasi Persuratan |
 | `subbag_keuangan` | Verifikator Keuangan | Norika Fajriana, SH, MH | BIDANG | Kasubbag Perencanaan & Keuangan |
 | `kabid_pora` | Kepala Bidang Teknis | Budiono, S.Pd, M.AP | BIDANG | Kepala Bidang Pembudayaan Olahraga |
+| `magang_masuk` | Magang Surat Masuk | Anak Magang Surat Masuk | PETUGAS_ARSIP | Staff Magang Persuratan Masuk (Khusus Surat Masuk) |
+| `magang_keluar` | Magang Surat Keluar | Anak Magang Surat Keluar | PETUGAS_ARSIP | Staff Magang Persuratan Keluar (Khusus Surat Keluar) |
 
 Kata sandi setiap akun kedinasan disimpan dalam bentuk salted hash Bcrypt dan dirahasiakan untuk menjaga integritas data kearsipan daerah.
 
@@ -108,6 +110,28 @@ Kata sandi setiap akun kedinasan disimpan dalam bentuk salted hash Bcrypt dan di
 - Retry logic 2x dengan exponential backoff untuk reliability 99%.
 - Fallback URL folder jika upload gagal setelah 2 retry.
 
+### 11. Smart Document Scanner (Pindai Bersih Multi-Foto ke 1 PDF A4)
+- **Genius Scan Bawaan Peramban**: Pengguna dapat memilih banyak foto naskah (JPG/PNG) sekaligus dari kamera HP atau komputer.
+- **Filter Pemrosesan Kanvas Real-Time**: Magic Color (mencerahkan kertas & mempertahankan warna stempel/paraf resmi), Hitam Putih (teks tegas kontras tinggi), dan Foto Asli.
+- **Navigasi Multi-Halaman & Pangkas Tepi Lipat**: Lompat antar lembar halaman, rotasi 90 derajat, slider potong margin yang dapat dilipat (collapsible) hemat ruang, dan pengemasan instan multi-lembar ke 1 berkas PDF A4 terpadu via `pdf-lib`.
+
+### 12. Lampiran Naskah Opsional & Lencana Penanda Khusus
+- **Perekaman Fleksibel**: Surat masuk maupun surat keluar dapat langsung diindeks dan disimpan tanpa lampiran berkas fisik.
+- **Lencana Status di Tabel**: Surat tanpa lampiran berkas ditandai lencana peringatan warna amber `⚠️ Belum Ada Berkas` di tabel persuratan.
+- **Pratinjau Informatif & Tombol Cepat**: Pratinjau surat tanpa berkas menyajikan ajakan ramah dan tombol `Unggah Berkas Sekarang`.
+- **Lengkapi Kapan Saja**: Melalui modal edit (Ubah Metadata Arsip), berkas PDF atau foto naskah dapat dilampirkan kapan saja; lencana penanda otomatis hilang begitu berkas tersimpan.
+
+### 13. Struktur Tabel Dinamis: Kolom Posisi Disposisi & Format Nomor Surat Keluar
+- **Kolom Posisi Disposisi / Bidang Pemrakarsa**: Terletak tepat di tengah antara kolom Asal/Tujuan & Perihal dan kolom Tanggal, menyajikan status disposisi secara visual (`Diterima Persuratan` [amber], `Kepala Dinas` [blue], `Selesai` [emerald] dilengkapi unit kerja tujuan `ke: {bidang}`).
+- **Format Khusus Surat Keluar**: Kolom pertama menampilkan Nomor Surat Keluar resmi lengkap secara tegas (misal `005/11502/DISPORA/2026`) dengan subteks nomor slot agenda (`Agenda #...`), sementara kolom ketiga secara otomatis berganti tajuk menjadi `BIDANG PEMRAKARSA`.
+- **Kolom Perihal Bersih & Bebas Redundansi**: Redundansi nomor surat dan tag bidang di kolom perihal dibersihkan sehingga tabel tampil rapi, proporsional, dan informatif.
+
+### 14. Manajemen Master Klasifikasi Arsip (Otorisasi Developer & Akun Rana)
+- **Otorisasi Khusus RBAC**: Tombol penambahan kode klasifikasi baru (`+ Tambah Klasifikasi`) secara ketat diproteksi hanya dapat diakses oleh akun **Developer** (`developer`) dan akun **Rana** (`pengarsip` / Rana Nur Syifa) sebagai Pengelola Arsip Digital.
+- **Penyimpanan Terpusat TiDB Cloud Serverless**: Input kode, nama/judul urusan dinas, uraian naskah, dan masa retensi langsung dimutasikan ke tabel `klasifikasi_arsip` dengan perlindungan anti-duplikasi kode.
+- **Integrasi Dropdown Indeks Real-Time**: Kode klasifikasi baru yang ditambahkan langsung tersinkronisasi ke dropdown formulir perekaman surat baru (`NewLetterModal.tsx`) dan penelusuran katalog.
+- **Audit Forensik Keamanan**: Setiap penambahan kode klasifikasi tercatat permanen di jejak audit trail forensik sistem.
+
 ---
 
 ## 🛠️ Tumpukan Teknologi (Cloud-Native & Zero Cost)
@@ -127,28 +151,34 @@ Kata sandi setiap akun kedinasan disimpan dalam bentuk salted hash Bcrypt dan di
 npm test
 ```
 Test suite verifikasi 6 dimensi:
-1. **TiDB Connection**: 170 Surat Masuk, 241 Surat Keluar, 5 Users, 5 Bidang, 6 Klasifikasi
+1. **TiDB Connection**: 170 Surat Masuk, 241 Surat Keluar, 7 Users, 5 Bidang, 6 Klasifikasi
 2. **Cloudinary Signed URL**: Anti-401 streaming signature valid
-3. **Code Modular Ratio**: Semua 58 files ≤ 200 LOC (zero god objects)
-4. **Zero Em-Dash Invariant**: 0 em-dash di 108 project files (readability)
+3. **Code Modular Ratio**: Semua 107 files di src/ <= 200 LOC (zero god objects)
+4. **Zero Em-Dash Invariant**: 0 em-dash di 179 project files (readability)
 5. **Security Headers**: API auth guards aktif di gateway & routes
 6. **Zero Hardcoded Secrets**: Semua credentials via env vars
 
-### E2E Production Tests
+### E2E Production & Browser Automation Tests (Google Chrome)
 ```bash
-python tests/e2e/production-test.py
-```
-Browser automation (Playwright) test 8 skenario real user:
-1. Login & cookie persistence
-2. Dashboard stats load
-3. Upload surat masuk baru (PDF + metadata)
-4. PDF preview & GDrive backup link
-5. Cetak lembar disposisi
-6. Distribusi ekspedisi (surat keluar)
-7. Riwayat disposisi (filter status + search)
-8. Ekspor Buku Agenda Excel
+# 1. Master E2E Chrome Audit (11 Modul UI + 6 API Suites)
+python scripts/master_chrome_audit.py
 
-**Output**: 8 screenshots bukti di `tests/e2e/screenshots/`
+# 2. Audit Smart Document Scanner Multi-Foto ke 1 PDF A4
+python scripts/audit_e2e_multipage_scanner.py
+
+# 3. Audit Pindai Foto & Akses Dokumen Disposisi Fisik
+python scripts/audit_e2e_photo_scan.py
+
+# 4. Audit Berkas Opsional, Lencana Penanda & Alur Edit Berkas
+python scripts/audit_e2e_optional_file.py
+
+# 5. Audit Kolom Posisi Disposisi & Nomor Surat Keluar
+python scripts/audit_table_columns.py
+
+# 6. Audit Penambahan Master Klasifikasi (RBAC Developer & Rana)
+python scripts/audit_e2e_classification.py
+```
+Seluruh pengujian peramban Google Chrome berjalan otomatis (*headless/headed*) dengan tingkat kelulusan **100% SUKSES (ALL PASSED)** dan **0 console errors**.
 
 ---
 

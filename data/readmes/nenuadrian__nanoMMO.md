@@ -82,7 +82,7 @@ How each part of the game works is in `docs/`, a page each, which the
 - [Getting started](docs/getting-started.md): from a clone to playing, on macOS and Ubuntu, and what each error means.
 - [Gameplay](docs/gameplay.md): monsters, health and levels, fighting, skills, items and gold,
   quests, chat, guilds, trading and duels.
-- [Content](docs/content.md): the items, monsters, NPCs, quests and skills, as data the servers, the client and the bots read.
+- [Content](docs/content.md): the items, monsters, NPCs, quests and skills, as data the servers, the client and the bots read, checked as a graph in smollerGraph.
 - [NPCs](docs/npcs.md): who stands where, and the storyteller, which tells stories with mvGPT.
 - [Graphics and sound](docs/graphics.md): the characters, the interface, the map, the sky, day and night, the weather, the music, the sound effects and the weather's, made from numbers, and the post-processing: bloom, cel shading and anti-aliasing.
 - [Cinema](docs/cinema.md): filming the game frame by frame, in slow motion, with a stage of players and monsters, for the trailer.
@@ -92,8 +92,9 @@ How each part of the game works is in `docs/`, a page each, which the
 - [Accounts, logins and TLS](docs/accounts.md): the login server, the tokens, and TLS with an authority of our own.
 - [Saving players and migrations](docs/saving.md): the players in Redis, the saver that takes them on to MySQL, and Flyway's migrations.
 - [The website](docs/website.md): the Laravel website, with its rankings and accounts.
-- [Monitoring, logs and analytics](docs/monitoring.md): Prometheus and Grafana, the bots, alerts, logs in Loki, and analytics in ClickHouse.
-- [Benchmarking and profiling](docs/benchmarking.md): the load test, flame graphs, Pyroscope and Tracy.
+- [Monitoring, logs, traces and analytics](docs/monitoring.md): Prometheus and Grafana, the bots, alerts, logs in Loki, traces in Tempo, and analytics in ClickHouse.
+- [Benchmarking and profiling](docs/benchmarking.md): the load test, flame graphs, Pyroscope and Tracy, and chaos experiments.
+- [Reliability](docs/reliability.md): the objectives and their error budgets, the alerts on how fast those burn, what breaking things on purpose found, and [postmortems](docs/postmortems/README.md).
 - [Deployment](docs/deployment.md): a server with Docker Compose, handing players over without downtime, and deploying on push.
 - [The client in a browser](docs/web.md): the client built with Emscripten, drawing with WebGL 2 in a page, what differs there, playing offline, and online through the gateway.
 - [Code style and checks](docs/checks.md): clang-format and cpplint, the sanitizers, the fuzzers, clang-tidy and the coverage report.

@@ -21,7 +21,7 @@ A personal bookmark manager with a Go server, an embedded web interface and Post
 - Save bookmarks and capture rendered pages, screenshots or PDFs with the [Pocketmark Chrome extension](#pocketmark-chrome-extension).
 - Use the mobile web interface; sync browser bookmarks with Floccus over WebDAV.
 
-Personal use only: collaboration, public sharing, SSO and automations are outside the supported scope.
+Personal use only: collaboration, public sharing, SSO and library automations are outside the supported scope.
 
 ## Quick start
 
@@ -37,7 +37,7 @@ printf 'POCKETMARK_DB_PASSWORD=%s\n' "$(openssl rand -hex 32)" > .env
 docker compose up -d --build
 ```
 
-Open [http://127.0.0.1:8090](http://127.0.0.1:8090) and create your personal account before exposing the instance to untrusted networks. Register an authenticator app and save the single-use recovery codes. On later visits, sign in with your password and an authentication or recovery code. PostgreSQL stores the library in its own persistent volume. The application volume holds the server secret. The Go container has a 128 MiB memory limit, with PostgreSQL using additional memory; see [memory measurement methodology](docs/BENCHMARK.md) for workload boundaries.
+Open [http://127.0.0.1:8090](http://127.0.0.1:8090) and create your personal account before exposing the instance to untrusted networks. Register an authenticator app and save the single-use recovery codes. On later visits, sign in with your password and an authentication or recovery code. PostgreSQL stores the library in its own persistent volume. By default the application volume holds the server secret. To supply it from the environment, set `POCKETMARK_SERVER_SECRET` in your private Compose `.env` or shell. On an existing installation, use the original secret value to preserve MFA and sessions. The Go container has a 128 MiB memory limit, with PostgreSQL using additional memory; see [memory measurement methodology](docs/BENCHMARK.md) for workload boundaries.
 
 For HTTPS access, set `POCKETMARK_ORIGIN` to your public URL. See the [guide](docs/GUIDE.md#configuration) for configuration.
 
@@ -77,14 +77,23 @@ WebDAV was previously verified with unmodified **Floccus 5.11.1**, including syn
 
 ## Development
 
+With Docker Compose v2 running, start the development stack from the repository root:
+
+```sh
+make up
+```
+
+Open [http://localhost:8091](http://localhost:8091). The development stack has its own volumes and a built-in local database password. Run `make down` to stop it and keep your data. The next `make up` reuses the same volumes.
+
+### Native development
+
 Requires Go (see `go.mod`), a C compiler and Make. Node.js 24 with npm is required to compile the React/shadcn frontend; Python 3 is required for checks and tests. Production runs the Go binary and PostgreSQL 18. Native backups require the PostgreSQL client tools. See the [frontend guide](docs/FRONTEND.md) for development and dependency updates.
 
 Build and run locally:
 
 ```sh
 export POCKETMARK_DATABASE_URL=postgresql://pocketmark@localhost/pocketmark
-make build
-./bin/pocketmark
+make run
 ```
 
 For integration tests, set `POCKETMARK_TEST_DATABASE_URL` to a disposable PostgreSQL cluster where the role can create databases. Install PostgreSQL 18 client tools, then run:
@@ -99,7 +108,7 @@ During development, enable auto-merge for the pull request so it merges into `ma
 
 ## Documentation
 
-- [User guide](docs/GUIDE.md) — configuration, migration and full backups.
+- [User guide](docs/GUIDE.md) — configuration, migration, [scheduled S3/Garage backups](docs/GUIDE.md#scheduled-remote-backups) and recovery.
 - [Browser extension](extension/README.md) — installation and capture tools.
 - [API](docs/API.md) — endpoints and request limits.
 - [Observability](docs/OBSERVABILITY.md) — JSON logs, authenticated metrics and optional OpenTelemetry traces.

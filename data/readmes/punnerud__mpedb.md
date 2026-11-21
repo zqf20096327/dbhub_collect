@@ -487,8 +487,19 @@ is locked".
 | `mpedb-capi` | The libsqlite3 ABI shim: a cdylib exporting sqlite3's C-API (`libmpedb_sqlite3.so`), `LD_PRELOAD`ed or linked by any libsqlite3 consumer — CPython's `sqlite3`, language bindings, tools. Its own workspace; status in [C-API-COMPAT.md](C-API-COMPAT.md). |
 | `mpedb-mirror` | Bidirectional sqlite3/PostgreSQL ⇄ mpedb mirroring: import, incremental diff-pull under load, write-back, epoch-fenced authority switch. Round-trip differential export/diff is sqlite-only; the CLI drives sqlite only (PostgreSQL is library-level today). |
 | `mpedb-cli` | The `mpedb` binary: repl / exec / prepare / call / dump / stress / crash / powerloss / bench / proc / mirror. |
+| `mpedb-redis` | RESP blob server (`GET`/`SET`/`HGET`/`HSET` and a small command set) over one or more `.mpedb` files, with a static cluster slot map and `MOVED`. Its own workspace. No replica and no failover. |
 | `mpedb-testkit` | sqllogictest harness + 3-way differential testing vs sqlite3 and PostgreSQL. |
 | `mpedb-bench` | Cross-engine benchmarks. |
+
+## Redis protocol
+
+`mpedb-redis` is a separate program. It speaks a small RESP set and stores
+the blobs in one or more `.mpedb` files. One file is the default. More files
+are more writer locks. The split is a static Redis Cluster slot map, and a
+key this process does not own is answered with `MOVED`. There is no replica
+and no failover. The command list, the config, and what is deliberately
+absent are in
+[crates/mpedb-redis/README.md](crates/mpedb-redis/README.md).
 
 ## Using it
 
@@ -932,7 +943,10 @@ blobs, tmpfs) and wins from ~8 KiB; on macOS it currently LOSES below ~1 MiB
 (sparse preallocation makes each payload pwrite allocate APFS blocks), so
 the default differs per platform: **on by default at 16 KiB on Linux, off on
 macOS** — `extent_threshold_kb` in the config overrides either way (`0` =
-off). The 4 KiB cell and the macOS curve share one queued fix: per-commit
+off). Under `durability = "async"` the default is off on every
+platform: the payload is synced before the commit returns, and on a disk
+whose flush costs milliseconds that sync is the whole write (measured
+34 → 5 648 writes/s at 6 KB with it off; tmpfs hides this). The 4 KiB cell and the macOS curve share one queued fix: per-commit
 coalesced `pwritev`. See
 [benchmarks/head-to-head.md](benchmarks/head-to-head.md#bulk-mbs--and-the-number-that-makes-it-mean-something).
 

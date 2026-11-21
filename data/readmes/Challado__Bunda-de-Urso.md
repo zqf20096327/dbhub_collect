@@ -1,43 +1,62 @@
 # BUNDA DE URSO
 
-**Documentação:** [API e exportação — JSON, NDJSON, XML, TXT, DIF e EDIFACT](docs/API_E_EXPORTACAO.md) · [Rede e intercâmbio](docs/INTERCAMBIO_INSTANCIAS.md) · [Histórico](CHANGELOG.md)
+O Bunda de Urso é um cadastro aberto de radares e outros equipamentos de
+fiscalização eletrônica de trânsito no Brasil. Você pode buscar radares perto
+de uma localização, consultar os detalhes e conferir a origem dos dados.
 
+[Abrir o mapa](https://servidor3.lucas.inf.br/openclaw/radar/) · [API e exportação](docs/API_E_EXPORTACAO.md) · [Status das fontes](docs/STATUS.md) · [Histórico de alterações](CHANGELOG.md)
 
-O `radar.conf` fica junto da API. `RADAR_CONF` pode indicar outro arquivo.
-`[dados] dir` reúne os arquivos operacionais do Radar e `[dados] motor`
-seleciona a configuração em `[postgres]` ou `[sqlite]`. A instalação
-transfere os agendamentos do Radar ao crontab do `www-data`.
-
-A instalação com `radar.conf` junto aos scripts e caminhos relativos está
-descrita em [Migração para a raiz web](docs/MIGRACAO_RAIZ_WEB.md). A migração
-é feita pelo instalador privado, preservando o banco e preparando www-data.
-## Cadastro nacional aberto, rastreável e auditável de radares e fiscalização eletrônica de trânsito
+[Bundita de Urso](#bundita-de-urso) · [Traseiro de Urso](#traseiro-de-urso) · [Instalação e operação](#instalação-e-operação)
 
 [![Validação](https://github.com/Challado/Bunda-de-Urso/actions/workflows/testes.yml/badge.svg)](https://github.com/Challado/Bunda-de-Urso/actions/workflows/testes.yml)
-
-[Histórico de alterações](CHANGELOG.md) · [Acessar Radar Brasil](https://servidor3.lucas.inf.br/openclaw/radar/) · [Código no GitHub](https://github.com/Challado/Bunda-de-Urso)
 
 ![Bunda de Urso — a bunda do urso com o radar tatuado](docs/bunda-de-urso.png)
 
 > **O nome é uma provocação; o propósito é sério.**
 
 > **🤖 Autoria:** este repositório — código, documentação e este README — foi **feito pelo Jarvis**, o assistente de IA (OpenClaw). Detalhes na seção [Autoria e proveniência](#autoria-e-proveniência), no fim.
->
-> **🌐 No ar:** a consulta pública roda em <https://servidor3.lucas.inf.br/openclaw/radar/> (mapa e raio por localização); a API responde em <https://servidor3.lucas.inf.br/openclaw/radar/api.pse>.
 
-### Uso da instância pública
+## Uso da instância pública
 
-O servidor público é destinado a consultas individuais. Empresas, entidades
-com fins lucrativos e integrações de outros sistemas, comerciais ou não,
-devem operar sua própria instância do Bunda de Urso, conforme a licença do
-software. Isso mantém a capacidade do servidor disponível para quem consulta o mapa.
+O servidor público atende consultas individuais. Empresas, organizações e
+operadores de aplicativos ou de outros sistemas devem usar uma instância
+própria, inclusive em projetos sem fins lucrativos.
+O arquivo diário está disponível para baixar a compilação com atribuição,
+conforme a política de acesso.
 
 Raspagem, cópia automatizada por paginação e redistribuição sem atribuição podem
 levar à limitação ou ao bloqueio de acesso. Para conversar sobre acesso, use o
 canal de contato. A compilação de dados continua sob CC BY 4.0, com atribuição
 ao Bunda de Urso e respeito às condições das fontes originais.
 
-[Política de uso](https://servidor3.lucas.inf.br/openclaw/radar/politica-de-uso.html) · [Contato](https://servidor.lucas.inf.br/site/contato) · [Licença dos dados](LICENSE-DATA.md)
+[Política de uso](https://servidor3.lucas.inf.br/openclaw/radar/politica-de-uso.html) · [Arquivo diário](docs/API_E_EXPORTACAO.md#download-diário-da-base-pública) · [Contato](https://servidor.lucas.inf.br/site/contato) · [Licença dos dados](LICENSE-DATA.md)
+
+## Bundita de Urso
+
+O **Bundita de Urso** é o cadastro próprio de uma instalação. O operador
+usa a API de escrita autenticada para incluir dados, como uma vistoria da
+equipe em um ponto de fiscalização. O Radar guarda esses registros com
+origem de cadastro próprio, no mesmo banco que armazena as coletas oficiais.
+
+O formulário público também usa o nome Bundita de Urso. Ele recebe sugestões
+em uma fila e devolve um protocolo. Após o processamento, os cadastros
+aceitos entram como **colaborativos não verificados**, com fonte e histórico
+próprios. No painel, a equipe pode revisar a contribuição e cruzá-la com
+publicações oficiais. [Cadastrar radar](https://servidor3.lucas.inf.br/openclaw/radar/cadastro.html) · [Guia do Bundita](docs/BUNDITA_DE_URSO.md)
+
+## Traseiro de Urso
+
+O **Traseiro de Urso** é a rede opcional de troca de dados entre instalações.
+Uma instância pode enviar e receber registros na mesma rodada, com token e
+respeitando o intervalo e as paradas anunciados pelo outro servidor.
+Os registros recebidos aguardam revisão em uma fila própria. Após aprovação
+local, a posição pode ser publicada com a origem da rede preservada.
+
+Por exemplo, uma instalação municipal pode oferecer seus pontos a outra
+instalação. A equipe receptora confere as posições antes de publicá-las.
+As instâncias também podem compartilhar instruções para ler fontes. Cada
+instrução recebida começa desativada e só o administrador local pode ativá-la.
+[Configurar o Traseiro](docs/TRASEIRO_DE_URSO.md) · [Protocolo para outros sistemas](docs/INTERCAMBIO_INSTANCIAS.md)
 
 ## Por que “Bunda de Urso”?
 
@@ -45,7 +64,9 @@ Bunda de Urso nasceu de um daqueles momentos em que a estrada te deixa na mão. 
 
 E tem o outro lado, que dói igual: o radar que já morreu há anos, desligado, sucateado, arrancado do chão — e continua firme no mapa, como se estivesse lá. Aí você freia no vazio, por nada, todo dia no mesmo lugar, feito bobo.
 
-A proposta é transformar essa frustração em infraestrutura pública de informação: descobrir onde estão os equipamentos de fiscalização, identificar sua situação real e permitir que aplicativos, navegadores, pesquisadores e cidadãos consultem uma base consolidada, verificável e atualizada — em vez de depender de achismo, de rumor e de cadastro comunitário para saber onde tem radar.
+A proposta é descobrir onde estão os equipamentos de fiscalização e
+facilitar a conferência dos dados publicados. Cada cadastro pode reunir
+localização, situação operacional e referências às fontes consultadas.
 
 Não se trata de incentivar excesso de velocidade nem de escapar da fiscalização. Quem quer correr, que responda por isso. A ideia é aumentar a transparência, facilitar o respeito aos limites, reduzir informação incorreta e permitir auditoria pública de dados que, em tese, já são públicos.
 
@@ -70,7 +91,9 @@ Ninguém aqui quer passar a mão na cabeça de quem corre. Queremos é que a inf
 
 Construir um cadastro nacional independente de fornecedores comerciais, com foco em **latitude e longitude de cada equipamento**, complementadas por identificação física, órgão responsável, velocidade regulamentada, rodovia, quilômetro, sentido, faixas, tipo, datas, aferições e documentos de origem.
 
-O objetivo é que Bunda de Urso seja uma referência que outros serviços — inclusive ferramentas de navegação e projetos cartográficos — possam consultar ou aproveitar conforme seus próprios processos e licenças, em vez de depender de cadastros comunitários para estabelecer a existência de um radar.
+Ferramentas de navegação e projetos cartográficos podem usar uma instância
+própria ou reutilizar a compilação publicada conforme a licença dos dados,
+com atribuição ao Bunda de Urso e às fontes originais.
 
 **Princípio essencial:** não inventar coordenadas, velocidades, situação operacional ou datas. Um registro sem posição exata permanece identificável e investigável, com localização candidata e grau de certeza explícitos.
 
@@ -97,26 +120,24 @@ O projeto separa duas responsabilidades:
 1. **Coletor e normalizador:** processo independente que descobre recursos oficiais, baixa documentos, interpreta formatos, valida campos, registra alterações e alimenta o banco relacional.
 2. **Aplicação web/API:** interface de consulta que lê o banco local, sem consultar portais governamentais a cada requisição.
 
-A implementação é em **Python 3, só stdlib** (`urllib`, `sqlite3`, `csv`, `json`, `xml.etree`) — sem pip, sem dependência externa. Não utiliza `import cgi`.
+A API e os coletores usam Python 3. O banco pode ser SQLite ou PostgreSQL
+com Psycopg 3 (`psycopg`). Algumas fontes exigem ferramentas auxiliares,
+como Poppler para extrair tabelas de PDF. [Referência técnica](docs/README_TECNICO.md)
 
-### O que é o “`.pse`”? (o servidor web, explicado)
+### Como a API é servida
 
-Quem esbarra em `api.pse` não tem como adivinhar o que é — e não precisa: **`.pse` é apenas uma extensão de arquivo**, uma convenção histórica **deste servidor** (não é formato, linguagem nem produto). Todo script executável do site usa `.pse` — por exemplo `cnpj.pse`, `frase.pse`, `pythoninfo.pse` e, aqui, `api.pse`. É o equivalente local de um `.cgi`.
-
-Na prática, a API é:
-
-- um **programa Python 3** (só a biblioteca padrão), guardado **fora** da pasta pública;
-- que o **nginx** executa **sob demanda** via **`fcgiwrap`** (o adaptador FastCGI→CGI do servidor);
-- **sem servidor de aplicação, sem daemon e sem porta própria** — cada requisição sobe o processo, responde (*JSON*, *XML*, *TXT*, *NDJSON*, *EDIFACT* ou *DIF*) e termina;
-- com a **rota no parâmetro `rota`**, porque o `fcgiwrap` deste servidor não define `PATH_INFO`:
+No servidor3, o Nginx executa o programa Python `api.pse` sob demanda via
+`fcgiwrap`. A extensão `.pse` segue a convenção local para scripts CGI.
+O parâmetro `rota` indica qual operação atender.
 
 ```
 https://servidor3.lucas.inf.br/openclaw/radar/api.pse?rota=/api/v1/radares&lat=-24.9555&lon=-53.4552&raio=5000&formato=json
 ```
 
-Resumindo: **nginx + fcgiwrap + Python** executando um arquivo `.pse`. Nada mais exótico que isso.
-
-O esquema é **SQL canônico, sem ORM** — nada de SQLAlchemy por aqui. São **81 tabelas no esquema base** (T01..T80 + EXECUCAO_ARTEFATO) definidas uma única vez em `core/manutencao/build_schema.py` (o comando `tools/build_schema.py` encaminha a geração pela API), que gera as duas DDLs gêmeas (`sql/schema.sqlite.sql` e `sql/schema.postgres.sql`), com chaves primárias/estrangeiras, `CHECK`, `UNIQUE` e índices, incluindo equipamentos, pontos, instalações, faixas, órgãos, fontes, documentos, verificações, operações, evidências e candidatos geográficos. O banco padrão é SQLite, sem PostGIS. O [migrador SQLite → PostgreSQL](docs/MIGRACAO_POSTGRES.md) transfere o esquema e o histórico e pode ativar o PostgreSQL para a API, os coletores e os crons.
+O esquema relacional usa SQL e mantém versões para SQLite e PostgreSQL,
+com as migrações em `sql/migracoes/`. SQLite é o padrão para instalações
+novas. O migrador transfere o banco e o histórico e permite ativar
+PostgreSQL para a API, os coletores e os crons. [Normalização relacional](docs/NORMALIZACAO_RELACIONAL.md) · [Migração para PostgreSQL](docs/MIGRACAO_POSTGRES.md)
 
 ## Como a coleta funciona
 
@@ -208,138 +229,83 @@ O tipo de equipamento (fixo, portátil), a função (controlador, redutor), o se
 
 ## API e formatos
 
-**[Guia completo de consulta e exportação](docs/API_E_EXPORTACAO.md)**: exemplos de `/radares`, NDJSON linha a linha, 32 colunas TXT, paginação e download de todas as páginas.
+A API consulta radares por localização, permite buscar cadastros por UF, município
+ou rodovia e informa a origem de cada ponto. As consultas aceitam GET e POST.
+Os formatos incluem JSON, NDJSON, XML, TXT delimitado, DIF e EDIFACT.
+O arquivo diário `radares.json.gz` reúne a compilação pública.
+[API e exportação](docs/API_E_EXPORTACAO.md) · [Ajuda da API](https://servidor3.lucas.inf.br/openclaw/radar/api.pse?rota=/api/v1/ajuda)
 
-A API web (arquivo `.pse`: **nginx + fcgiwrap + Python**, explicado acima) oferece consultas por latitude, longitude e raio (até **1000 km**); identificação do equipamento; UF, rodovia e quilômetro; além de fontes, atualizações, situação do serviço, operações, trechos e tráfego.
+A consulta pode retornar zero pontos sem confirmar a cobertura da região.
+Consulte `resultado.status` e `cobertura.completude_confirmada` para
+interpretar o resultado. [Cobertura e erros](docs/API_E_EXPORTACAO.md#status-cobertura-e-erros)
 
-Os endpoints da API são:
+## Governança da ingestão
 
-- `/api/v1/radares`
-- `/api/v1/radares/{id}`
-- `/api/v1/radares/busca`
-- `/api/v1/equipamentos/{id}`
-- `/api/v1/fontes` e `/api/v1/fontes/{id}`
-- `/api/v1/atualizacoes`
-- `/api/v1/operacoes`
-- `/api/v1/trechos`
-- `/api/v1/trafego`
-- `/api/v1/status`
-- `/api/v1/ajuda`
-- `/api/v1/radares/submeter` (submissão pública, sem token)
-- `/api/v1/radares/{id}/historico` (auditoria pública do ponto)
-- `/api/v1/login` e `/api/v1/logout` (sessão do painel)
-- `/api/v1/minha-senha` (troca da própria senha)
-- `/api/v1/gestao/*` (pendentes, radar, correspondências, bloqueios, tokens, usuários — exige sessão ou `X-Api-Token`)
-- `/api/v1/gestao/eu` (contexto da sessão: login/papel — o painel usa para decidir o que exibir)
-- `/api/v1/admin/sincronizar` e `/api/v1/admin/rollback`
-- `/health/live` e `/health/ready` (também em `/api/v1/health/live|ready`)
-
-Os retornos incluem **TXT delimitado em linha única por registro** (delimitador configurável por GET/POST), JSON, NDJSON, XML, DIF (Data Interchange Format) e EDI/EDIFACT no perfil bilateral do projeto. O perfil EDIFACT precisa de homologação com cada consumidor; não se declara interoperabilidade universal.
-
-O endpoint de ajuda documenta parâmetros, tipos, formatos, exemplos, significado dos campos e códigos de erro. Campos ausentes não devem ser substituídos por zeros ou valores presumidos.
-
-**Sem resultado não é sinônimo de ausência de radar.** Se a região não possui fonte suficiente, o sistema informa `sem_cobertura` e `completude_confirmada=false`, em vez de garantir falsamente que a via está livre de fiscalização. (É o reverso da lamúria: melhor dizer “não sei” do que jurar que a pista está limpa e te entregar de bandeja.)
-
-## Governança da ingestão (camadas de confiança)
-
-Toda escrita passa pela **API**; nenhuma tela nem ferramenta toca o banco por fora do
-app. As camadas de confiança são:
-
-- **Leitura aberta** (site + API), sem cadastro.
-- **Criação aberta** por `POST /api/v1/radares/submeter` (sem token): o formulário
-  usa `Prefer: respond-async`, salva um JSON durável e recebe **202 com protocolo**.
-  O processamento posterior valida, procura correspondências e publica como
-  `colaborativo` **não verificado**, com selo, procedência e limite por IP.
-  Recebido não significa publicado. Clientes antigos sem esse cabeçalho continuam
-  recebendo 201 após processamento síncrono. Veja [fila de cadastros](docs/FILA_CADASTROS.md).
-- **Verificação / edição / remoção** exigem **sessão do painel** ou **`X-Api-Token`**.
-  Escopos: `contribuidor` (lê) < `moderador` (verifica/edita/remove) < `admin`
-  (usuários, tokens, bloqueios). A remoção é **tombstone** (soft delete com motivo
-  obrigatório): o radar sai do mapa/consulta, mas a linha e o histórico permanecem.
-- **Correspondência com o oficial:** ao ingerir um colaborativo, procura-se um ponto
-  OFICIAL no raio `RAIO_CORRESPONDENCIA_M` (default 150 m). Havendo, o colaborativo é
-  ligado a uma **sugestão de correspondência**, permanecendo **não verificado**.
-  Uma decisão fundamentada de moderador é necessária para substituir o oficial.
-- **Anti-sabotagem:** coordenada dentro de um `BLOQUEIO_GEOGRAFICO` ativo
-  (`marcacao_falsa` | `zona_sombra`) é **recusada (409)** com o motivo.
-- **Consulta pública:** preserva o oficial até decisão explícita de moderação e
-  **esconde** pontos removidos/desabilitados. `GET /api/v1/radares/{id}/historico` é
-  público (transparência: “removido em X por Y, motivo Z”).
-
-Submissões públicas possuem fonte própria e não podem atualizar a base autenticada
-por meio de IDs enviados pelo usuário. As correções de reconciliação e operação
-estão descritas em `docs/CORRECOES_BUNDITA_DE_URSO.md`.
-
-A configuração operacional mora em `[governanca]` do `radar.conf`, fora do checkout; o esquema aditivo da
-camada em `sql/migracoes/`. Detalhes e exemplos `curl` em `docs/GOVERNANCA.md`.
-
-O **painel HTML** mora em `web/gestao.html` (login, fila de pendentes, detalhe/verificar/
-editar/desabilitar/remover, histórico, correspondências, bloqueios, tokens e troca de
-senha) e `web/usuarios.html` (usuários e tokens). É HTML/CSS/JS vanilla, sem CDN, e fala
-só pela API (`api.pse?rota=...`) com o cookie de sessão — nunca lê o banco direto. O que a
-tela mostra acompanha o escopo do login (contribuidor = leitura; moderador = moderação;
-admin = bloqueios/tokens/usuários).
+Os controles seguem a origem do registro. A equipe usa a gestão para
+verificar contribuições, revisar cruzamentos e corrigir ou remover
+cadastros. Registros removidos saem das consultas e mantêm o histórico.
+A API distingue a ingestão autenticada, a contribuição em fila e a troca
+entre instâncias. [Guia de governança](docs/GOVERNANCA.md) · [Fila de cadastros](docs/FILA_CADASTROS.md) · [Cruzamentos](docs/CRUZAMENTOS.md)
 
 ## Atualizações, observabilidade e auditoria
 
-O coletor pode ser agendado via systemd, com verificações periódicas, cache persistente e atualização incremental. O resolvedor geográfico possui execução independente. A periodicidade deve respeitar a publicação efetiva de cada fonte e suas limitações de acesso.
+No servidor3, a coleta, a fila, a rede e a geração do arquivo diário são agendadas no crontab do `www-data`. As fontes têm periodicidades próprias e a coleta reutiliza o cache persistente. [Configuração](docs/CONFIGURACAO.md)
 
-Registrar logs de download, parsing, validação, importação, deduplicação, alterações, falhas, idade do cache e cobertura territorial. Relatórios devem distinguir equipamentos com GPS oficial, posição referencial, posição derivada, candidato em revisão e sem coordenada.
+A página de status mostra a cobertura por UF e as leituras oficiais. A equipe pode consultar as falhas detalhadas e os relatórios da instalação, da agenda e da fila. [Status](docs/STATUS.md) · [Relatórios de atualização](docs/RELATORIOS_ATUALIZACOES.md)
 
 Os dados devem permitir rastrear cada resposta da API até a publicação original. Isso é indispensável para correção de erros e transparência pública.
 
-## No ar (consulta pública)
-
-O serviço publicado responde em:
-
-- **Página de consulta (mapa + raio por localização):** <https://servidor3.lucas.inf.br/openclaw/radar/>
-- **API:** <https://servidor3.lucas.inf.br/openclaw/radar/api.pse> (rotas em `/api/v1/*`)
-
-**Palavras-chave:** radar de velocidade, radares, fiscalização eletrônica, trânsito, dados abertos, Brasil, API, mapa, segurança viária.
-
 ## Instalação e operação
 
-Rede de radares: [TRASEIRO DE URSO](docs/TRASEIRO_DE_URSO.md).
-Integração com outros sistemas: [protocolo de Intercâmbio de Instâncias](docs/INTERCAMBIO_INSTANCIAS.md), com cliente independente e JSON Schema.
+Os guias de configuração e instalação descrevem a operação atual. A
+especificação v1.1 registra o desenho original do projeto.
+[Referência técnica](docs/README_TECNICO.md) · [Especificação v1.1](ESPECIFICACAO_v1.1.txt)
 
-
-A especificação funcional é o `ESPECIFICACAO_v1.1.txt`; a referência técnica do código está em `docs/README_TECNICO.md`, `docs/LOCALIZADOR_GEOGRAFICO_V1_4.md`, `docs/CRUZAMENTO_DE_CAMPOS.md` e `docs/REQUISITOS_VIGENTES_2026-10-10.md`.
-
-Sem pip, sem instalação: basta ter Python 3. Gera as DDLs, sincroniza uma fonte e serve a API:
+Para testar em um checkout novo com SQLite:
 
 ```bash
-python3 tools/build_schema.py
-python3 -m coletor.sync --fonte antt
-python3 -m coletor.sync --fonte recife --arquivo tests/fixtures/recife_equipamentos.csv
+cp -n deploy/radar.conf.exemplo radar.conf
+mkdir -p dados
+cp tests/fixtures/antt_radares_fixture.json dados/
+python3 web/api.pse sync --fonte antt --arquivo "$PWD/dados/antt_radares_fixture.json"
 ```
 
-**Caminhos: um arquivo só.** A instalação (código, banco, dados, webroot, logs,
-espelho de dados) é declarada em **`/etc/radar-brasil/radar.conf`** e lida por
-`core/caminhos.py`. Precedência: variável de ambiente > `.conf` > padrão do
-checkout. Nenhum script decide diretório por conta própria — quem escrever
-caminho fixo é reprovado por `.github/scripts/verificar_caminhos.py`. Modelo,
-chaves e diagnóstico em [`docs/CONFIGURACAO.md`](docs/CONFIGURACAO.md):
+O `radar.conf` fica na raiz do checkout ou, em produção, ao lado do
+`api.pse` instalado. Para usar outro arquivo, indique o caminho com
+`RADAR_CONF`. Na seção `[dados]`, a opção `dir` define onde ficam os
+arquivos operacionais, e `motor` indica qual seção da configuração será
+usada para o banco, `[postgres]` ou `[sqlite]`.
 
 ```bash
-python3 deploy/conf_radar.py            # caminhos efetivos e de onde vieram
-python3 deploy/conf_radar.py --verificar
+python3 web/api.pse configuracao mostrar
 ```
 
-Variáveis de ambiente equivalentes: `RADAR_BRASIL_HOME`, `RADAR_DATA_DIR`,
-`RADAR_DB`, `RADAR_WEB_ROOT`, `RADAR_WEB_URL`, `RADAR_LOG_DIR`,
-`RADAR_SYNC_CLONE`, `RADAR_SYNC_REMOTO` (e `RADAR_CONF` para apontar outro
-arquivo). O entry point web é `web/api.pse`; os testes rodam com:
+No servidor3, o instalador do repositório privado aplica as atualizações.
+Em um servidor já preparado, execute este comando como root a partir da
+pasta do instalador. Ele atualiza o código e o esquema e adia o reprocessamento.
+[Guia de configuração](docs/CONFIGURACAO.md)
+
+```sh
+bash instalar-servidor3.sh --aplicar --sem-pacotes --sem-reprocessamento
+```
+
+O instalador também prepara o crontab do `www-data`. Se você ainda usa
+o layout antigo, o guia explica como mover a instalação para a raiz web
+preservando o banco existente. [Migração para a raiz web](docs/MIGRACAO_RAIZ_WEB.md)
+
+Para rodar a suíte completa, incluindo os testes do instalador:
 
 ```bash
-python3 -m unittest discover -s tests
+python3.13 .github/scripts/rodar_suite.py
 ```
 
-O ambiente web requer Nginx, fcgiwrap, Python e permissão controlada de acesso ao banco local. Antes de colocar em produção, testar autenticação administrativa, configurações, permissões, atualização, formatos e recuperação de falhas.
+O instalador requer Python 3.13 ou superior. O ambiente web usa Nginx,
+fcgiwrap e um usuário com acesso ao banco configurado.
 
 ## Validação automática (CI)
 
-Os testes de [layouts e interações](docs/TESTES_LAYOUTS.md) cobrem celular, tablet e PC nos três motores, incluindo a gestão da rede.
-
+Os testes de interface cobrem celular, tablet e PC nos três motores,
+incluindo a gestão da rede. [Layouts e interações](docs/TESTES_LAYOUTS.md)
 
 O workflow **Navegadores** testa o cadastro em Firefox e Chromium, com desktop
 e tela estreita/toque, CGI e SQLite reais. Inclui rede indisponível, prazo de
@@ -385,7 +351,10 @@ O projeto apoia informação pública, fiscalização transparente, respeito aos
 
 ## Visão de futuro
 
-Queremos que qualquer pessoa ou aplicativo possa perguntar: **“Existe equipamento de fiscalização perto desta latitude e longitude? Qual é, qual velocidade fiscaliza, em que sentido, desde quando, e qual documento comprova isso?”** — e receber uma resposta verificável, inclusive quando a resposta responsável for **“ainda não conseguimos confirmar”**.
+O objetivo é que uma consulta ao cadastro possa responder onde fica o
+equipamento, qual velocidade fiscaliza, em que sentido, desde quando e
+qual documento sustenta cada informação. Quando a origem não permite
+confirmar um desses dados, a consulta deve indicar a lacuna.
 
 No fim das contas, é isso: transformar a lamúria em dado. Para que ninguém mais freie no vazio, ninguém mais leve um flash por falta de aviso, e ninguém mais fique na mão por causa de informação que deveria ser pública e não é.
 
@@ -401,16 +370,9 @@ O Bunda de Urso é **código-fonte disponível**, não software livre: o código
 | alterar o código da sua instalação | distribuir o código, original ou alterado, fora deste repositório |
 | propor melhorias por pull request aqui | oferecer o sistema como serviço para outras pessoas |
 | fazer fork no GitHub para preparar essas propostas | manter um fork como projeto separado |
-| consultar e usar os **dados** publicados (mapa e API), sob CC BY 4.0 | apresentar os dados sem atribuição, ou como se fossem de outra origem |
+| reutilizar os **dados** publicados sob CC BY 4.0 | apresentar os dados sem atribuição, ou como se fossem de outra origem |
 
 Para qualquer outro uso, peça autorização pelo GitHub ([Challado](https://github.com/Challado)).
-
-> 💡 **Contribua, não copie.** Ser contribuidor do Bunda de Urso é muito melhor que fazer um fork: a sua melhoria entra
-> para todos, com o seu nome no histórico, e você não corre risco nenhum. Já um fork que vira projeto próprio viola a
-> licença, e os direitos sobre este código são defendidos: pedido de remoção nas plataformas, ação judicial com
-> indenização e até ação penal (a Lei 9.609/98 trata a violação de direito de autor de software como crime). Mesmo quem
-> acha que está certo pode ter de se defender, e isso custa tempo e advogado. **Na dúvida, pergunte antes:** a resposta é
-> de graça, a discussão depois não é.
 
 - **Dados:** o cadastro é compilado a partir de fontes oficiais públicas. A compilação e a estrutura são oferecidas sob **[CC BY 4.0](LICENSE-DATA.md)** (atribuição), respeitando os termos de cada fonte original.
 - **Terceiros:** a pasta `referencia/` é material de terceiros e mantém a licença de origem.
@@ -419,14 +381,5 @@ Para qualquer outro uso, peça autorização pelo GitHub ([Challado](https://git
 
 - **Contato:** [fale com o mantenedor](https://servidor.lucas.inf.br/site/contato).
 - **Quem fez:** este repositório — o código, a documentação e este README — foi **escrito e mantido pelo Jarvis**, o assistente de IA (**OpenClaw**), a pedido do mantenedor do projeto. Os commits e os pushes também foram feitos pelo Jarvis.
-- **Como foi feito:** em colaboração direta com o mantenedor, no dia a dia, a partir da especificação do projeto e de material de referência. O código é Python 3 puro (só stdlib), sem dependências externas.
-- **Onde está no ar:** a consulta pública roda em <https://servidor3.lucas.inf.br/openclaw/radar/> e a API em <https://servidor3.lucas.inf.br/openclaw/radar/api.pse> (rotas em `/api/v1/*`).
+- **Como foi feito:** em colaboração com o mantenedor, a partir da especificação do projeto e do material de referência.
 - **O que não é nosso:** a pasta `referencia/` reúne material de referência de terceiros, guardado apenas para estudo e comparação; não é de autoria deste projeto nem do Jarvis.
-
-A configuração da instalação pode ser consultada no painel **Administração →
-Configuração** ou em `api.pse configuracao mostrar`. O painel salva os parâmetros
-operacionais pela API; caminhos e credenciais são administrados pela mesma API no
-terminal. Atualizações preservam o arquivo do servidor. Veja `docs/CONFIGURACAO.md`.
-
-A página de status por UF e dos leitores é acessada diretamente, sem link na
-home. Consulte [o funcionamento e as regras de contagem](docs/STATUS.md).

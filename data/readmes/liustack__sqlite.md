@@ -1,11 +1,12 @@
 <h1 align="center"><img src="assets/brand/sqlite-banner.png" alt="SQLite driver for Go"></h1>
 
-<p align="center"><b>The fastest cgo-free SQLite driver out there, fully compatible with Go's <code>database/sql</code>.<br>Real-time backup to Cloudflare R2 built in keeps your app stable and reliable on a single VPS.</b></p>
+<p align="center"><b>The fastest cgo-free SQLite driver out there, fully compatible with Go's <code>database/sql</code>.<br>Real-time backup to Cloudflare R2 built in keeps your app stable and reliable on a single VPS.<br>Concurrent writes wait their turn, so <code>database is locked</code> means real overload, never bad luck.</b></p>
 
 <p align="center">
   English · <a href="README.zh-CN.md">简体中文</a> ·
   <a href="docs/benchmarks.md">Benchmarks</a> ·
-  <a href="docs/architecture.md">How it works</a>
+  <a href="docs/architecture.md">How it works</a> ·
+  <a href="docs/principles.md">Principles</a>
 </p>
 
 <p align="center">
@@ -33,64 +34,87 @@ The pure Go drivers paid for that in speed. modernc translates SQLite's C into G
 Time per operation, lower is better, the median of 6 runs. The best of a row is in bold when its 95% confidence interval overlaps no other driver's. WAL, `synchronous=NORMAL`, the same settings checked on every driver.
 
 <!-- bench:readme-linux-amd64 -->
-**linux/amd64** (AMD EPYC 7B13, Go 1.27.4, commit `44acf8c`):
+**linux/amd64** (AMD EPYC 7B13, Go 1.27.4, commit `91bfddb`):
 
 | Workload | liustack/sqlite | [mattn](https://github.com/mattn/go-sqlite3) (cgo) | [modernc](https://gitlab.com/cznic/sqlite) | [ncruces](https://github.com/ncruces/go-sqlite3) |
 | :-- | --: | --: | --: | --: |
-| Insert one row | 22.9 µs | 23.3 µs | 26.7 µs | 24.2 µs |
-| Insert 1000 rows in a transaction | 1.40 ms | 1.67 ms | 2.19 ms | 1.91 ms |
-| Read one row by key | **3.79 µs** | 7.43 µs | 9.31 µs | 7.11 µs |
-| Read 100k rows | **35.1 ms** | 79.9 ms | 84.5 ms | 52.5 ms |
-| Join and group | 2.88 ms | 2.87 ms | 4.93 ms | 4.74 ms |
-| Find a user with 400 comments | **512 µs** | 880 µs | 1.15 ms | 826 µs |
-| Read 100 rows of 200 KB text | 8.75 ms | **8.34 ms** | 9.38 ms | 9.14 ms |
-| Read by key, 4 threads | **1.47 µs** | 2.97 µs | 3.86 µs | 2.79 µs |
-| Insert, 8 goroutines at once | **10.4 µs** | 22.9 µs | 26.0 µs | 23.4 µs |
-| Insert, 64 goroutines at once | **3.42 µs** | 22.2 µs | 30.1 µs | 28.6 µs |
-| Insert, 64 goroutines, `synchronous=FULL` | **30.4 µs** | 4.53 ms | 7.11 ms | 1.42 ms |
+| Insert one row | 22.8 µs | 23.3 µs | 27.0 µs | 24.3 µs |
+| Insert 1000 rows in a transaction | **1.41 ms** | 1.68 ms | 2.25 ms | 1.89 ms |
+| Read one row by key | **3.85 µs** | 7.54 µs | 9.61 µs | 7.22 µs |
+| Read 100k rows | **34.7 ms** | 81.4 ms | 79.7 ms | 56.0 ms |
+| Join and group | 2.83 ms | 2.89 ms | 4.91 ms | 4.88 ms |
+| Find a user with 400 comments | **521 µs** | 876 µs | 1.13 ms | 841 µs |
+| Read 100 rows of 200 KB text | 8.77 ms | **8.25 ms** | 9.69 ms | 9.49 ms |
+| Read by key, 4 threads | **1.58 µs** | 2.89 µs | 3.85 µs | 2.75 µs |
+| Insert, 8 goroutines at once | **11.2 µs** | 21.7 µs | 26.2 µs | 24.7 µs |
+| Insert, 64 goroutines at once | **3.72 µs** | 22.8 µs | 30.7 µs | 30.2 µs |
+| Insert, 64 goroutines, `synchronous=FULL` | **30.9 µs** | 4.60 ms | 7.15 ms | 1.44 ms |
 <!-- /bench:readme-linux-amd64 -->
 
 <!-- bench:readme-darwin-arm64 -->
-**darwin/arm64** (Apple M4, Go 1.27.2, commit `44acf8c`):
+**darwin/arm64** (Apple M4, Go 1.27.2, commit `91bfddb`):
 
 | Workload | liustack/sqlite | [mattn](https://github.com/mattn/go-sqlite3) (cgo) | [modernc](https://gitlab.com/cznic/sqlite) | [ncruces](https://github.com/ncruces/go-sqlite3) |
 | :-- | --: | --: | --: | --: |
-| Insert one row | 5.95 µs | 5.99 µs | 7.34 µs | 7.01 µs |
-| Insert 1000 rows in a transaction | **483 µs** | 557 µs | 765 µs | 584 µs |
-| Read one row by key | **1.08 µs** | 1.93 µs | 2.76 µs | 2.02 µs |
-| Read 100k rows | **13.7 ms** | 29.7 ms | 29.9 ms | 20.6 ms |
-| Join and group | 1.27 ms | **1.14 ms** | 2.64 ms | 1.87 ms |
-| Find a user with 400 comments | **212 µs** | 371 µs | 554 µs | 342 µs |
-| Read 100 rows of 200 KB text | 3.46 ms | 3.29 ms | 3.79 ms | 3.55 ms |
-| Read by key, 10 threads | **1.13 µs** | 1.52 µs | 1.77 µs | 2.33 µs |
-| Insert, 8 goroutines at once | **3.04 µs** | 6.75 µs | 8.19 µs | 45.0 µs |
-| Insert, 64 goroutines at once | **1.19 µs** | 9.94 µs | 5.67 ms | 85.8 µs |
+| Insert one row | 5.98 µs | 5.90 µs | 7.28 µs | 6.83 µs |
+| Insert 1000 rows in a transaction | **470 µs** | 554 µs | 733 µs | 566 µs |
+| Read one row by key | **1.07 µs** | 1.93 µs | 2.77 µs | 2.02 µs |
+| Read 100k rows | **13.7 ms** | 29.6 ms | 29.8 ms | 20.5 ms |
+| Join and group | 1.27 ms | **1.12 ms** | 2.64 ms | 1.85 ms |
+| Find a user with 400 comments | **212 µs** | 363 µs | 556 µs | 339 µs |
+| Read 100 rows of 200 KB text | 3.41 ms | 3.34 ms | 3.73 ms | 3.62 ms |
+| Read by key, 10 threads | **1.13 µs** | 1.51 µs | 1.78 µs | 2.32 µs |
+| Insert, 8 goroutines at once | **2.98 µs** | 6.58 µs | 7.98 µs | 42.3 µs |
+| Insert, 64 goroutines at once | **1.14 µs** | 9.36 µs | 6.35 ms | 78.7 µs |
 <!-- /bench:readme-darwin-arm64 -->
 
 Against SQLite in C on the same machine: SQLite(C) is a C program calling SQLite itself, liustack/sqlite(direct) calls the driver without `database/sql`, and the two `database/sql` columns read and write as a program would. Many writers at once go faster because the driver merges their commits into one.
 
 <!-- bench:readme-through-linux-amd64 -->
-**linux/amd64** (AMD EPYC 7B13, Go 1.27.4, commit `44acf8c`):
+**linux/amd64** (AMD EPYC 7B13, Go 1.27.4, commit `91bfddb`):
 
 **Throughput.** Reads or writes done per second by all threads together, on a file of 100k rows in WAL mode, higher is better:
 
 | Benchmark | SQLite(C) | liustack/sqlite(direct) | liustack/sqlite(database/sql) | mattn(database/sql) |
 | :-- | --: | --: | --: | --: |
-| 1 thread, each reads one row by key | 194k reads/s ±1% | **380k reads/s** ±1% | 290k reads/s ±1% | 103k reads/s ±0% |
-| 8 threads, each reads one row by key | 1154k reads/s ±5% | **1320k reads/s** ±2% | 987k reads/s ±2% | 423k reads/s ±5% |
-| 64 threads, each reads one row by key | 1034k reads/s ±8% | **1325k reads/s** ±1% | 939k reads/s ±3% | 425k reads/s ±3% |
-| 1 thread, each reads one row by key, whole file in cache | 241k reads/s ±2% | **756k reads/s** ±2% | 487k reads/s ±2% | 117k reads/s ±1% |
-| 8 threads, each reads one row by key, whole file in cache | 1499k reads/s ±8% | **2394k reads/s** ±4% | 1463k reads/s ±3% | 455k reads/s ±4% |
-| 64 threads, each reads one row by key, whole file in cache | 1241k reads/s ±5% | **2123k reads/s** ±4% | 1293k reads/s ±5% | 327k reads/s ±8% |
-| 8 threads read as above while 8 others write | 1005k reads/s ±8% | 1021k reads/s ±4% | 615k reads/s ±5% | 167k reads/s ±2% |
-| 8 threads, each inserts one row, while 8 others read | 2796 writes/s ±25% | 19467 writes/s ±11% | **28900 writes/s** ±4% | 15437 writes/s ±2% |
-| 64 threads, each inserts one row, `synchronous=FULL` | 819 writes/s ±6% | 56830 writes/s ±5% | 55212 writes/s ±2% | 845 writes/s ±2% |
+| 1 thread, each reads one row by key | 189k reads/s ±2% | **373k reads/s** ±4% | 284k reads/s ±4% | 102k reads/s ±2% |
+| 8 threads, each reads one row by key | 1075k reads/s ±5% | **1280k reads/s** ±4% | 955k reads/s ±5% | 421k reads/s ±2% |
+| 64 threads, each reads one row by key | 982k reads/s ±3% | **1289k reads/s** ±4% | 914k reads/s ±3% | 429k reads/s ±4% |
+| 1 thread, each reads one row by key, whole file in cache | 235k reads/s ±4% | **719k reads/s** ±9% | 481k reads/s ±11% | 115k reads/s ±2% |
+| 8 threads, each reads one row by key, whole file in cache | 1395k reads/s ±7% | **2228k reads/s** ±8% | 1430k reads/s ±7% | 443k reads/s ±4% |
+| 64 threads, each reads one row by key, whole file in cache | 1204k reads/s ±13% | **2003k reads/s** ±5% | 1254k reads/s ±5% | 332k reads/s ±8% |
+| 8 threads read as above while 8 others write | 968k reads/s ±7% | 975k reads/s ±5% | 593k reads/s ±12% | 164k reads/s ±4% |
+| 8 threads, each inserts one row, while 8 others read | 2431 writes/s ±21% | 20551 writes/s ±8% | **27319 writes/s** ±14% | 14970 writes/s ±5% |
+| 64 threads, each inserts one row, `synchronous=FULL` | 845 writes/s ±3% | 56081 writes/s ±4% | 55955 writes/s ±3% | 851 writes/s ±5% |
 
 <!-- /bench:readme-through-linux-amd64 -->
 
 Where another driver still wins: work that stays inside SQLite (the join), where this driver runs the same C but as Go assembly, and reading large text values. Why reads and many writers are faster, the versions of each driver, and how to run it all again are in [docs/benchmarks.md](docs/benchmarks.md).
 
+## Concurrent writes without `database is locked`
+
+Writers in one process wait their turn in order instead of racing for SQLite's lock. Open the database with `_txlock=immediate`, and a write transaction gets `database is locked` only when the ones queued ahead of it take longer than the busy timeout (5 s by default), that is, only when writes come faster than the disk can commit them. With other drivers, a writer that keeps losing the race waits for seconds and times out at a load where the rest wait a few milliseconds.
+
+<!-- bench:readme-contention-linux-amd64 -->
+**linux/amd64** (AMD EPYC 7B13, Go 1.27.4, commit `10d5df4`):
+
+**The slowest write** (a transaction, or an autocommit statement), and how many writes got `database is locked`, in 30 s of each:
+
+| Workload | liustack/sqlite | [mattn](https://github.com/mattn/go-sqlite3) (cgo) | [modernc](https://gitlab.com/cznic/sqlite) | [ncruces](https://github.com/ncruces/go-sqlite3) |
+| :-- | --: | --: | --: | --: |
+| Insert one row, 64 goroutines at once | 16.3 ms | 4.43 s | 2.93 s | 83.1 ms |
+| Transactions, 64 goroutines, `_txlock=immediate` | 28.5 ms | 5.01 s | 4.13 s | 165 ms |
+| Transactions, 64 goroutines, immediate, 2 ms of work in each | 165 ms | 5.01 s, 45 locked | 4.94 s, 35 locked | 1.78 s |
+| Transactions, 64 goroutines, immediate, `synchronous=FULL` | 96.2 ms | 5.01 s, 256 locked | 5.01 s, 241 locked | 4.63 s |
+| Transactions, 256 goroutines, immediate, 1 ms of work in each | 326 ms | 5.01 s, 283 locked | 5.06 s, 216 locked | 4.45 s |
+
+<!-- /bench:readme-contention-linux-amd64 -->
+
+A transaction here reads two rows and updates them, and the work inside it holds the write lock. The cases, the median and the writes per second are in [docs/benchmarks.md](docs/benchmarks.md#many-writers-at-once).
+
 ## Real-time backup to S3
+
+Your data outlives the machine. Every commit is in R2 about a second later, so if the VPS disappears, a new one is back where it stopped, and if a deploy deletes the wrong rows, you rewind to the second before it. On R2 it usually stays in the free tier.
 
 Start the replicator before you open the database, and every commit goes to S3, Cloudflare R2 or MinIO about a second later:
 
@@ -127,7 +151,7 @@ Settings, how far behind the copy is, and its limits: [Replication](docs/replica
 go get github.com/liustack/sqlite
 ```
 
-Go 1.26.6 to 1.27 (see [Moving to a new Go](docs/upstream.md#moving-to-a-new-go)). linux and darwin on amd64 and arm64, windows on amd64.
+Go 1.26.6 to 1.27 (see [Moving to a new Go](docs/upstream.md#moving-to-a-new-go)). linux, darwin and windows, on amd64 and arm64.
 
 ## Use
 
@@ -138,10 +162,10 @@ import (
 	_ "github.com/liustack/sqlite"
 )
 
-db, err := sql.Open("sqlite", "file:app.db?_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)")
+db, err := sql.Open("sqlite", "file:app.db?_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)&_txlock=immediate")
 ```
 
-The name is a file, `:memory:` or a [SQLite URI](https://sqlite.org/uri.html). `_pragma=name(value)` runs a PRAGMA on every new connection, and `_txlock=immediate` makes `BEGIN` take the write lock at once. A connection waits 5 seconds for a lock unless `busy_timeout` says otherwise. The rest is on [pkg.go.dev](https://pkg.go.dev/github.com/liustack/sqlite).
+The name is a file, `:memory:` or a [SQLite URI](https://sqlite.org/uri.html). `_pragma=name(value)` runs a PRAGMA on every new connection, and `_txlock=immediate` makes `BEGIN` wait its turn for the write lock, so that a transaction that reads before it writes never fails with `database is locked` halfway. Start a transaction that only reads with `db.BeginTx(ctx, &sql.TxOptions{ReadOnly: true})`: it takes no write lock. A connection waits 5 seconds for a lock unless `busy_timeout` says otherwise. The rest is on [pkg.go.dev](https://pkg.go.dev/github.com/liustack/sqlite).
 
 Each connection keeps SQLite's page cache, up to 2 MB by default, until it closes, and `database/sql` opens a connection for every query that runs at the same time. Give the pool a size, and let it keep that many idle so that connections are not closed and opened again:
 
@@ -192,19 +216,20 @@ The driver registers as `sqlite`, as modernc.org/sqlite and glebarez/go-sqlite d
 - **The C is SQLite's, unchanged.** `engine/` holds the 3.54.1 amalgamation as released, checked against its hash (`engine/vendor.sh --verify`). The compile options sit in one file, each with its reason.
 - **The Go assembly is made, never written.** LLVM compiles the C, and a generator turns what LLVM writes into Go assembly. It stops on anything it has no rule for, and checks the linked binary. `make check-gen` fails when the checked-in assembly is not what the generator makes from `engine/` today.
 - **The numbers show where it loses.** The tables above keep the rows where another driver is faster, and [docs/benchmarks.md](docs/benchmarks.md) says how each run was taken and what else ran on the machine.
-- **Every push is tested** on linux/amd64, linux/arm64, darwin/arm64 and windows/amd64 (with the race detector, except on windows), with the sqlite3 shell writing the same database at the same time, and with processes killed while they write.
+- **Every push is tested** on linux/amd64, linux/arm64, darwin/arm64, windows/amd64 and windows/arm64 (with the race detector, except on windows), with the sqlite3 shell writing the same database at the same time, and with processes killed while they write.
 
 ## Not there yet
 
 - No loadable extensions: SQLite is built without `load_extension`.
 - No shared cache: `cache=shared` gives an error. For a memory database that all connections of a pool see, use `file:/name?vfs=memdb`.
 - Double-quoted strings are identifiers only (`SQLITE_DQS=0`, as SQLite advises): write string literals in single quotes.
-- windows/arm64 and other targets do not build.
+- Other targets (freebsd, 32-bit, riscv64, ...) do not build: the build stops with an error that names the supported ones.
 
 ## Documentation
 
 | Doc | Read it when |
 | :-- | :-- |
+| [Principles](docs/principles.md) | You want to know what the driver promises, what it cannot, and what it will not trade for speed |
 | [Benchmarks](docs/benchmarks.md) | You want the full numbers, or to run them on your machine |
 | [Architecture](docs/architecture.md) | You want to know how C becomes Go assembly, or how group commit works |
 | [Group commit](docs/group-commit.md) | You want to know which concurrent writes merge, and what error each gets when one fails |
@@ -212,6 +237,7 @@ The driver registers as `sqlite`, as modernc.org/sqlite and glebarez/go-sqlite d
 | [Replication](docs/replication.md) | You want a copy of the database in S3, R2 or MinIO, or to restore one |
 | [When every core is busy](docs/busy-cores.md) | A read or a write waits tens of milliseconds or more now and then, or you run on one core or two |
 | [Upstream](docs/upstream.md) | You want to know which SQLite it is, or how it moves to a new one |
+| [Changelog](CHANGELOG.md) | You want to know what a release changed before you upgrade |
 | [Testing](docs/testing.md), [Commits](docs/commit.md) | You are about to change the code |
 
 ## Talk to us

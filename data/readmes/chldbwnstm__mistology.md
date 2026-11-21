@@ -83,11 +83,11 @@ Install MISTOLOGY from https://github.com/chldbwnstm/mistology (`cargo install -
 > **Already cloned this repository locally?** Just paste:
 > ``Build and install mistology from this folder (`cargo install --path . --locked`), run mistology setup, and verify mistology --help.``
 
-`mistology setup` writes the embedded `SKILL.md` directly into your active agent skill folders (`~/.claude`, `~/.gemini`, `~/.codex`, `~/.cursor`, `~/.agents`)—no leftover clone directory, no fragile `/tmp` symlinks, and **no per-project `init` step** (`.mistology/notes/` and `.mistology/.gitignore` are created automatically when the first mistake is recorded). For team-shared workspace skills, ask your agent to run `mistology setup --project`.
+A single `mistology setup` installs both the embedded `SKILL.md` and **cross-platform global auto-hooks (`mistology hook`) + Always-On rules** into every detected coding agent (`~/.gemini/config/hooks.json`, `~/.claude/settings.json`, `~/.codex/hooks.json`, `~/.cursor/rules/mistology.mdc`, `~/.agents`), strictly preserving your existing settings and sibling hooks. Because the binary itself handles stdin/stdout JSON with zero shell/PowerShell scripts, it works identically on macOS, Linux, and Windows (`mistology.exe`)—giving you automatic preflight search, automatic error lookup, and a single-shot pre-stop omission gate **with zero per-repo setup**. (Use `mistology setup --no-hooks` for skill-only install, `mistology setup --uninstall-hooks` to cleanly remove MISTOLOGY hooks, or `mistology setup --project` for team-shared workspace skills.)
 
-### 2. Lock In Always-On Usage *(Recommended — Once per Project)*
+### 2. Optional Team-Shared Repo Rules *(Optional — For Teams)*
 
-Skill files alone only run when an agent remembers to invoke them. Paste this prompt inside your repository to enforce **100% automatic preflight search, error lookup, and subagent coverage** via project rules and hooks:
+On your own machine, Step 1 (`mistology setup`) is already always-on across all repositories. If you also want repository-committed rules (`AGENTS.md` / `CLAUDE.md`) or worktree-specific overrides for a team, paste this prompt inside your repository:
 
 ```text
 Configure this repository so coding agents always use `mistology` without skipping:

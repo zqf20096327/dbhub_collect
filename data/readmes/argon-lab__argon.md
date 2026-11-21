@@ -81,6 +81,12 @@ argon merge apply <plan-id>
 argon sandbox discard -p myapp -b <sandbox>
 ```
 
+On a MongoDB deployment with access control, add `--credential` to
+`argon sandbox create` to get a URI that can read and write only that
+sandbox. Save the URI when the command prints it. The credential stays valid
+until you discard the sandbox or a sweep reaps it after expiry.
+See [Exposure and credentials](docs/OPERATIONS.md#exposure-and-credentials).
+
 Through the MCP server or `argon console`, capture and expiry are managed for
 you: nothing stays in the foreground, and expired sandboxes are swept every
 minute. `--watch` needs 2.3.0 or newer; on older versions run
@@ -96,9 +102,12 @@ keep running, then follow its changes on the project's `main`. Write-back is
 also available by default. Review the plan in CLI JSON and pass its digest
 when applying it to the source. The experimental options `--auto-resync`
 and `--enable-source-images` are off by default and each requires
-`ARGON_EXPERIMENTAL_SOURCE=1`. Write-back tests have not covered Atlas,
-deployments with access control, multi-member elections, sharded sources or
-MongoDB versions other than 7.0. For known issues and limits, see
+`ARGON_EXPERIMENTAL_SOURCE=1`. The deployment tests exercise authenticated
+TLS connections, primary elections on a three-member source, MongoDB 6.0
+and 8.0 sources with a 7.0 engine, and an 8.0 engine with a 7.0 source.
+MongoDB Atlas is tested as a source on a free M0 cluster and a dedicated M10,
+with least-privilege custom roles; see [MongoDB Atlas as a source](docs/OPERATIONS.md#mongodb-atlas-as-a-source).
+Sharded sources remain untested. For source roles and deployment limits, see
 [the operations guide](docs/OPERATIONS.md#following-a-source-database).
 
 ```bash
@@ -189,7 +198,7 @@ For a complete managed workflow, run [the two-agent pinned dataset example](exam
 ```bash
 claude mcp add argon -- argon mcp        # 13 tools: sandbox, diff, merge, undo, pins
 # Install the published Python SDK and LangGraph adapter.
-python3 -m pip install 'argon-agents[langgraph]==0.2.0'
+python3 -m pip install 'argon-agents[langgraph]==0.3.0'
 ```
 
 Start `argon console --no-browser` in another terminal, then:
@@ -246,15 +255,16 @@ files. Side by side:
 Where it differs from Git: there is no commit step, because a running capture
 process records each document change. A merge goes from a branch into its
 parent and compares whole documents. Checking out a branch copies its data, so
-it takes time and storage that depend on the dataset. Documents are versioned;
-indexes and collection options are not. History older than the retention
+it takes time and storage that depend on the dataset. Documents are versioned.
+Secondary indexes are not, but a checkout builds the latest definitions
+recorded for its branch; collection options are not copied. History older than the retention
 window can be reclaimed unless a pin protects it.
 
 ## What you get
 
 | | Command | In one line |
 |---|---|---|
-| **Sandboxes** | `argon sandbox create --ttl 1h` | fork + checkout + TTL in one step — disposable agent workspaces |
+| **Sandboxes** | `argon sandbox create --ttl 1h [--credential]` | fork with a TTL and an optional MongoDB user scoped to the sandbox |
 | **Dataset pins** | `argon pin create` / `pin sandbox` | named captured states protected from GC and resets while the pin exists |
 | **Data PRs** | `argon merge preview/apply` | three-way merges as reviewable plans; conflicts never silent |
 | **Undo** | `argon undo --actor <a>` | revert a range or actor label; append-only, conflict-aware |
@@ -266,8 +276,9 @@ window can be reclaimed unless a pin protects it.
 | **Web console** | `argon console` | local UI + REST API in one command |
 
 Data history covers document inserts, updates, replacements and deletes. Collection
-drop/rename produces degraded capture; indexes and collection options are not
-versioned. Native writes are asynchronous; control operations drain capture.
+drop/rename produces degraded capture. Index definitions are recorded from
+the source and from captured index builds, and a checkout builds them; they
+are not versioned, and collection options are not copied. Native writes are asynchronous; control operations drain capture.
 Stop writers before release. Existing pins protect their referenced states, while GC can expire audit
 and undo history. See [operations](docs/OPERATIONS.md) for recovery and credentials.
 

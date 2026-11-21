@@ -86,9 +86,13 @@ Amazon ECS too.
   MySQL, and routing keeps transactions there.
 - **Lookups stay on your MySQL.** A read by key takes a few milliseconds on
   MySQL and about 100 on the copy, so routing leaves it on your MySQL.
-- **Not high availability, and not your backup.** Writes always go to your
-  MySQL and nothing fails over to DBTrail. History starts the day you install
-  it. Keep your replicas and your backups.
+- **Not high availability, and not your backup.** Your data stays on your
+  MySQL and nothing fails over to DBTrail. An application that connects to
+  DBTrail's MySQL port depends on that port: while it is down the application
+  gets connection errors there, with MySQL up and untouched. Keep a way to
+  MySQL that does not pass through it, or a proxy in front that falls back to
+  MySQL: [When the router stops](docs/time-travel-sql.md#when-the-router-stops).
+  History starts the day you install it. Keep your replicas and your backups.
 - **Needs a ROW binlog with full row images** (`binlog_format=ROW`,
   `binlog_row_image=FULL`), and a primary key on every InnoDB table. The
   connect form checks the binlog settings and shows the fix.
@@ -117,18 +121,19 @@ All of them: [Limitations](https://www.dbtrail.com/docs/limitations/).
 | Amazon Aurora MySQL | Yes (verified) | Yes (verified) |
 | Google Cloud SQL for MySQL | Should work, please report issues | Should work |
 | MariaDB 10.11+, including Amazon RDS for MariaDB | Yes | Yes. See [MariaDB source](docs/mariadb.md) |
-| PostgreSQL 15+ | Beta. Scheduled updates run, and a table added to the publication later is read in | Beta. See [PostgreSQL source](docs/postgres.md) |
+| PostgreSQL 15+ | Yes. Scheduled updates run, and a table added to the publication later is read in | Yes. See [PostgreSQL source](docs/postgres.md) |
 
-On PostgreSQL 18, a table with a `VIRTUAL` generated column cannot be
-captured, and a table with a `STORED` one needs `publish_generated_columns =
-stored` on the publication. See
-[PostgreSQL source](docs/postgres.md#3-set-replica-identity-full-on-every-captured-table).
+On PostgreSQL 18, a table with a `VIRTUAL` generated column cannot be at
+`REPLICA IDENTITY FULL` (it is captured without undo), and a table with a
+`STORED` one needs `publish_generated_columns = stored` on the publication to
+be. See
+[PostgreSQL source](docs/postgres.md#3-replica-identity-full-optional-needed-only-for-undo).
 
 DBTrail never needs the binlog files on disk, which is why managed cloud
 databases work.
 
 Each DBTrail installation serves one database family: MySQL and MariaDB, or
-PostgreSQL (beta). See
+PostgreSQL. See
 [one database family per installation](docs/install.md#one-database-family-per-installation).
 
 ## Who builds it

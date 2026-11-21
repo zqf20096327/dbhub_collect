@@ -87,15 +87,15 @@ We evaluated this local retrieval pipeline on two public long-term memory benchm
 
 | Metric | ATM-Bench Main (1,013 questions) | ATM-Bench Hard (31 questions) | LoCoMo Full Set (1,540 questions) |
 |---|---|---|---|
-| **Official `Recall@10` (per-question gold coverage mean)** | **82.85%** | **52.43%** | — |
-| **Official `Recall@25` / `Recall@50`** | 86.41% / 90.11% | 60.14% / 70.62% | — |
-| **Auxiliary `Any-Hit@10` (at least one gold item in Top-10)** | 85.39% (865/1,013) | 80.65% (25/31) | — |
-| **Auxiliary `All-Hit@10` (every gold item in Top-10)** | 80.16% (812/1,013) | 29.03% (9/31) | — |
+| **Official `Recall@10` (per-question gold coverage mean)** | **82.77%** | **52.43%** | — |
+| **Official `Recall@25` / `Recall@50`** | 86.44% / 90.16% | 59.91% / 70.62% | — |
+| **Auxiliary `Any-Hit@10` (at least one gold item in Top-10)** | 85.29% (864/1,013) | 80.65% (25/31) | — |
+| **Auxiliary `All-Hit@10` (every gold item in Top-10)** | 80.06% (811/1,013) | 29.03% (9/31) | — |
 | **Answer Token Recall / Answer-in-Context (2026-11-08 reference run)** | — | — | 72.93% / 53.96% (831/1,540) |
 | **End-to-end judge accuracy (deepseek-v4.1-flash answerer + judge, 2026-11-16)** | — | — | **85.26%** (1313/1540 · cat1 70.57 / cat2 87.23 / cat3 71.88 / cat4 90.96) |
 | **Per-query retrieval latency (recorded run; mean / P95)** | 68.6 ms / 108.3 ms | 107.9 ms / 651 ms | 371 ms mean (P95 not recorded) |
 
-- **Current product arm**: the ATM rows above are the current `local_plain` product-arm readings (corpus `c9c4cc55…`, question sets `3c4cbf84…` / `f6f63ff1…`), re-verified 2026-11-19. Composite score (0.70 × Main R@10 + 0.30 × Hard R@10) = **73.72**. The frozen v0.0.1 readings (77.21% / 46.12%) are kept in the changelog as historical values; do not mix them with the current rows.
+- **Current product arm**: the ATM rows above are the current `local_plain` product-arm readings (corpus `c9c4cc55…`, question sets `3c4cbf84…` / `f6f63ff1…`), re-verified 2026-11-20. Composite score (0.70 × Main R@10 + 0.30 × Hard R@10) = **73.67**. The frozen v0.0.1 readings (77.21% / 46.12%) are kept in the changelog as historical values; do not mix them with the current rows.
 - **Latency** is recorded per run and depends on cache state, CPU, and concurrency; treat the values above as a single-run reference, not a cross-run benchmark.
 
 These results show both what local lexical-statistical search can do and where its limits lie:

@@ -150,6 +150,12 @@ def can_subscribe(request, topic):
     return default(request, topic)
 ```
 
+A refused topic gets a 403 without a body. htmx does not retry it.
+htmx 4 swaps error responses into the target, by default the element with `hx-sse:connect`.
+The empty body clears that element, so keep it empty, as in the example above.
+With `DEBUG` on, django-htmx replaces the whole page with the body of a 400, 403, 404 or 500.
+A refused stream then leaves a blank page, and only the browser console shows the 403.
+
 The check runs when a stream opens. After taking access away, call `close_streams()`:
 
 ```python

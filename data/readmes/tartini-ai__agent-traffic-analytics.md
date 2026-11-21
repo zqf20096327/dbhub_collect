@@ -4,11 +4,23 @@
 
 # AgentCake — AI Agent Traffic Analytics
 
+Copy and paste these instructions into Claude Code or Codex to complete the installation.
+
+<div align="left">
+
+```text
+Set up AgentCake 0.6.0 for this website.
+Use curl or the GitHub CLI to download the guide at https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/v0.6.0/INSTALL.md and follow its steps.
+If the download fails, ask for network access.
+```
+
+</div>
+
 [![Releases: download](https://img.shields.io/badge/Releases-download-ff5c8a?style=flat)](https://github.com/tartini-ai/agent-traffic-analytics/releases)
 [![Issues: report a bug](https://img.shields.io/badge/Issues-report%20a%20bug-ff5c8a?style=flat)](https://github.com/tartini-ai/agent-traffic-analytics/issues)
-[![License: MIT](https://img.shields.io/badge/License-MIT-ff5c8a?style=flat)](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-ff5c8a?style=flat)](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/LICENSE)
 
-**English** · [简体中文](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/docs/locales/zh-CN/README.md)
+**English** · [简体中文](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/docs/locales/zh-CN/README.md)
 
 </div>
 
@@ -38,11 +50,14 @@ Here's what AgentCake can help you understand:
 
 ![This animation scrolls through the dashboard, opens the session list, then replays a hand-off from Claude in Chrome to a human.](https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/main/docs/assets/readme/demo.png)
 
-*The recording shows Claude in Chrome adding a T-shirt to the cart on a test shop and a human taking over to check out.*
+*The recording is from a test shop: Claude in Chrome added a T-shirt to the cart, and a human took over to check out.*
 
 ### Dashboard preview
 
 <!-- The line of no-break spaces under each picture keeps it this wide: without it a browser shrinks the six to fit one row instead of letting the row scroll sideways. -->
+<details>
+<summary>Cake style</summary>
+
 <table>
   <tr>
     <td width="720">
@@ -72,8 +87,44 @@ Here's what AgentCake can help you understand:
   </tr>
 </table>
 
-- **Human, AI agent or bot**: AgentCake gives each session a single classification. Agent sessions are
-  split into Agent only and Human + agent.
+</details>
+
+<details open>
+<summary>Minimal style</summary>
+
+<table>
+  <tr>
+    <td width="720">
+      <img src="https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/main/docs/assets/readme/preview-key-metrics-minimal.png" alt="Key metrics" width="720"><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+    <td width="720">
+      <img src="https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/main/docs/assets/readme/preview-top-agents-minimal.png" alt="Top agents and Trends" width="720"><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+    <td width="720">
+      <img src="https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/main/docs/assets/readme/preview-paths-minimal.png" alt="Paths and Sources" width="720"><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+    <td width="720">
+      <img src="https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/main/docs/assets/readme/preview-devices-minimal.png" alt="Devices and Geography" width="720"><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+    <td width="720">
+      <img src="https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/main/docs/assets/readme/preview-sessions-minimal.png" alt="Session replay" width="720"><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+    <td width="720">
+      <img src="https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/main/docs/assets/readme/preview-session-replay-minimal.png" alt="Session replay: Claude in Chrome, then a human" width="720"><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+</table>
+
+</details>
+
+- **Human, agent or script bot**: AgentCake gives each session one classification. Agent sessions are split
+  into Agent only and Human + agent. Script bots are programs on the bot list that run the page script.
 - **Agent names and confidence levels**: AgentCake identifies agents by name, such as Claude in Chrome, ChatGPT and
   Muse, and labels each name Verified or Likely. Agents it can't identify appear as Unnamed.
 - **Timeline and reasons**: A timeline shows when a human or an agent was in control during each session and marks
@@ -85,95 +136,55 @@ Here's what AgentCake can help you understand:
 
 ## Install
 
-Open Claude Code, Codex or another coding agent in a new, empty folder and paste these instructions:
+Open Claude Code, Codex, or another coding agent in your website's code folder. If your website runs on a platform such
+as Shopify, use a new, empty folder instead. Then paste these instructions:
 
 ```text
-Install AgentCake 0.5.1 by following the guide at https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/v0.5.1/INSTALL.md step by step.
-Use curl or the GitHub CLI to download the guide.
-Finally, print the address of the AgentCake local page and the steps to connect a website.
+Set up AgentCake 0.6.0 for this website.
+Use curl or the GitHub CLI to download the guide at https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/v0.6.0/INSTALL.md and follow its steps.
+If the download fails, ask for network access.
 ```
 
-Your agent downloads the release and verifies it. The agent then starts AgentCake and runs `agentcake doctor`, which
-checks that the installation works.
-
-Next, open http://127.0.0.1:7878/ and register your installation. The page guides you through connecting your website.
-
-AgentCake runs on macOS and Linux and requires uv or Python 3.11 or later. To install manually, follow the steps in
-[`INSTALL.md`](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/INSTALL.md).
+- Tell the agent about your site. It recommends a setup and lists [each monthly cost and the total](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/docs/hosting.md).
+  AgentCake is free, but a public website needs a server to record its visits.
+- Once you approve, the agent installs AgentCake, connects your site and checks it with `agentcake doctor`. It can also create a server and add a DNS record. You handle sign-in, new accounts, payment, and terms.
+- To try AgentCake without a server, choose your computer when the agent asks where to run it. On your computer,
+  AgentCake records only visits from that computer, such as visits to your local site.
+- AgentCake runs on macOS and Linux and requires uv or Python 3.11 or later. To register and view your dashboard, open
+  http://127.0.0.1:7878/ in your browser. If AgentCake runs on a server, first open an SSH tunnel to it.
 
 ## How it decides
 
-To identify agent sessions and the agents behind them, AgentCake checks four layers of evidence on your machine.
+AgentCake checks four kinds of evidence on your computer or server.
 
-- **Name**: AgentCake matches the name in the User-Agent string against the agent lists included in each release.
-- **Verification**: On a server, AgentCake verifies self-reported agent names with request signatures and published IP
-  ranges.
-- **Environment**: AgentCake detects automation traces, spoofed browsers and the page markers that some agents add.
-- **Behavior**: Our behavioral model analyzes pointer movement, keyboard timing and scrolling for every action in a
-  session.
+- **Name.** Does the User-Agent match a known agent?
+- **Verification.** On a server, do request signatures or published IP ranges confirm that name?
+- **Environment.** Does the browser show signs of automation, a spoofed identity or a marker left by an agent?
+- **Behavior.** What do pointer movements, keyboard timing and scrolling tell us about who was in control?
 
-AgentCake's test data includes 1,118 agent sessions from our own recordings and 7,122 human sessions. AgentCake can
-make mistakes, and we're continuing to improve the model's performance.
-
-For details on how each number is counted, see the
-[evaluation report](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/eval/README.md).
+We tested with 1,118 agent sessions we recorded and 7,122 human sessions. Some visits are misclassified. [See the evaluation results](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/eval/README.md).
 
 ## Your data stays yours
 
-The page script sends visit data only to your own AgentCake installation. The installation doesn't send any usage data.
-AgentCake accesses the internet only when you register, update its agent lists or run a site check.
+Visit data goes only to your AgentCake installation. AgentCake sends no usage telemetry.
 
-AgentCake doesn't record what visitors type or which keys they press. It also doesn't record passwords, card numbers,
-cookies or IP addresses.
+- AgentCake never stores what visitors type, which keys they press, passwords, card numbers, cookies or visitor IP addresses.
+- A random ID in the browser counts unique visitors without cookies. It expires a year after their last visit. Only the referring page's domain is kept.
+- Visit recording works before registration. Choosing **Register and continue** sends your registration details to Tartini AI once.
+- AgentCake goes online for site checks and monthly downloads of public agent lists and, on servers, a city database. You can turn off these downloads in **Settings**.
 
-To count visitors, AgentCake stores a random ID in each visitor's browser without using a cookie. The ID expires a year
-after the visitor's last visit. AgentCake keeps only the domain of the referring page.
-
-AgentCake sends your registration details only once, when you select **Register and continue**. AgentCake records visits
-whether or not you register.
-
-For details about how AgentCake handles data, see [`PRIVACY.md`](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/PRIVACY.md).
-To inform your visitors, you can use the template in
-[`docs/privacy-notice-template.md`](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/docs/privacy-notice-template.md).
-
-## Connect your website
-
-After you register, copy the setup instructions from the local page. Open a coding agent in your website's project
-folder, and paste the instructions. The agent asks for your website's address and the machine that will run AgentCake.
-
-To load cake.js on every page, the agent adds one line of code to your shared page layout. The cake.js script is 48 KB
-gzipped. The agent can also add server middleware for Next.js, Express, Flask, FastAPI, Django, PHP and WordPress.
-
-You can also complete these steps manually.
-
-For a public website, run AgentCake on a server with Docker or systemd. Open the dashboard through an SSH tunnel to keep
-it private. For step-by-step instructions, see
-[`SERVER.md`](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/SERVER.md).
+[Privacy details](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/PRIVACY.md) · [Privacy notice template for your website](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/docs/privacy-notice-template.md)
 
 ## Help and contributing
 
-For answers to common questions, see [`docs/FAQ.md`](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/docs/FAQ.md).
-If AgentCake misclassifies a session or doesn't recognize an agent, open an
-[issue](https://github.com/tartini-ai/agent-traffic-analytics/issues/new?template=wrong_verdict.yml).
-Describe what happened without including any visitor data.
-
-The rules and the model's parameters are JSON files in `agentcake/data/`. When you send a pull request, include the
-`agentcake eval` results from before and after your change. A pull request is merged only if it does not increase the
-number of humans classified as agents.
-
-For contribution guidelines, see [`CONTRIBUTING.md`](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/CONTRIBUTING.md).
-For coding agent instructions, see [`AGENTS.md`](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/AGENTS.md).
-
-To report a security vulnerability, email [admin@tartini.ai](mailto:admin@tartini.ai) instead of opening an issue. For
-more information, see [`SECURITY.md`](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/SECURITY.md).
+- Have a setup or usage question? [Read the FAQ](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/docs/FAQ.md).
+- Wrong classification or missing agent name? Describe the session without visitor data. [Report a classification issue](https://github.com/tartini-ai/agent-traffic-analytics/issues/new?template=wrong_verdict.yml).
+- For rule or model changes, include `agentcake eval` results from before and after the change. Your change must not misclassify more humans as agents. [Contributing guide](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/CONTRIBUTING.md) · [Instructions for coding agents](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/AGENTS.md)
+- Report security issues privately by email. [admin@tartini.ai](mailto:admin@tartini.ai) · [Security policy](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/SECURITY.md)
 
 ## License
 
-AgentCake is released under the MIT License, copyright Tartini AI. For the full license, see
-[`LICENSE`](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/LICENSE).
-
-Third-party components bundled with AgentCake retain their respective licenses. For the list, see
-[`THIRD_PARTY.md`](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.5.1/THIRD_PARTY.md).
+Copyright Tartini AI. [MIT License](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/LICENSE) · [Third-party licenses](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/THIRD_PARTY.md)
 
 <sub>AgentCake is an independent product and isn't affiliated with the developers of the agents and tools it names.
 Those developers don't endorse or sponsor AgentCake. All trademarks belong to their owners.</sub>

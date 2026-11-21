@@ -12,17 +12,17 @@ A Django-inspired, experimental web framework built with **Axum**, **Tera**, **S
 ![MSRV: 1.89](https://img.shields.io/badge/MSRV-1.89-informational)
 ![Workspace: 16 crates](https://img.shields.io/badge/workspace-16%20crates-informational)
 
-[**Quick start**](#quick-start) · [**Features**](#why-fexu) · [**Docs**](docs/index.md) · [**Contribute**](#help-build-fexu) · [**Roadmap: proposed v0.2/v0.3**](docs/roadmap.md)
+[**Quick start**](#quick-start) · [**Features**](#why-fexu) · [**Documentation source**](docs/index.md) · [**Contribute**](#help-build-fexu) · [**Roadmap**](docs/roadmap.md) · [**Documentation site setup**](docs/documentation-maintenance.md)
 
 > [!IMPORTANT]
-> **Fexu 0.1.2 is published on crates.io but remains experimental and is not production-ready.** APIs, configuration and migrations may change. The version badges show the latest crates.io releases. The `main` branch may contain newer, unreleased changes; features added after the `v0.1.2` tag are not part of the published 0.1.2 packages. Do not expose a demo application directly to the public internet.
+> **Fexu 0.1.2 is published on crates.io but remains experimental and is not production-ready.** APIs, configuration and migrations may change. The version badges show the latest crates.io releases. The `main` branch uses the **unpublished `0.2.0-dev.1` workspace version** and may contain newer changes; features added after the `v0.1.2` tag are not part of the published 0.1.2 packages. The `-dev.1` version is a development marker, not a registry release or an approved 0.2.0 release candidate. Do not expose a demo application directly to the public internet.
 
 ## Why Fexu?
 
 Rust brings strong typing, performance and explicit control. Fexu aims to bring familiar framework ergonomics to those strengths: one place for models and validation, consistent database access, built-in application features, and a native admin.
 
 | | Feature | What is available |
-|---|---|---|
+|---|---|---|---|
 | 🧱 | **Typed models** | `#[derive(FexuModel)]`, validation and generated CRUD endpoints |
 | 🗃️ | **Database layer** | SQLite by default, PostgreSQL, composable model queries and batched relation reads |
 | 🔄 | **Migrations** | Versioned schema changes, dependency checks and guarded SQLite table rebuilds |
@@ -34,28 +34,28 @@ These features have **documented limitations**. In particular, public model rout
 
 ## Workspace crates
 
-Fexu is developed as a **16-crate Rust workspace**. Each version badge below reflects the latest version reported by crates.io. The `main` branch is the development version and can contain changes not yet released to the registry.
+Fexu is developed as a **16-crate Rust workspace**. Each version badge below reflects the latest version reported by crates.io. The `main` branch is currently `0.2.0-dev.1` (unpublished), and can contain changes not yet released to the registry. The CLI generator still deliberately pins registry-generated projects to published `0.1.2` unless `--fexu-path` is supplied.
 
-| Crate | Purpose | Latest on crates.io |
-|---|---|---|
-| [`fexu`](crates/fexu/) | Framework entry point and application builder | [![fexu version](https://img.shields.io/crates/v/fexu.svg?label=version)](https://crates.io/crates/fexu) |
-| [`fexu-cli`](crates/fexu-cli/) | Command-line tools and project scaffolding | [![fexu-cli version](https://img.shields.io/crates/v/fexu-cli.svg?label=version)](https://crates.io/crates/fexu-cli) |
-| [`fexu-core`](crates/fexu-core/) | Core model types and framework primitives | [![fexu-core version](https://img.shields.io/crates/v/fexu-core.svg?label=version)](https://crates.io/crates/fexu-core) |
-| [`fexu-macros`](crates/fexu-macros/) | Model derive and procedural macros | [![fexu-macros version](https://img.shields.io/crates/v/fexu-macros.svg?label=version)](https://crates.io/crates/fexu-macros) |
-| [`fexu-db`](crates/fexu-db/) | SQLite and PostgreSQL database access | [![fexu-db version](https://img.shields.io/crates/v/fexu-db.svg?label=version)](https://crates.io/crates/fexu-db) |
-| [`fexu-migrations`](crates/fexu-migrations/) | Versioned database migrations | [![fexu-migrations version](https://img.shields.io/crates/v/fexu-migrations.svg?label=version)](https://crates.io/crates/fexu-migrations) |
-| [`fexu-auth`](crates/fexu-auth/) | Authentication, sessions and CSRF protection | [![fexu-auth version](https://img.shields.io/crates/v/fexu-auth.svg?label=version)](https://crates.io/crates/fexu-auth) |
-| [`fexu-api`](crates/fexu-api/) | HTTP API, routing and OpenAPI | [![fexu-api version](https://img.shields.io/crates/v/fexu-api.svg?label=version)](https://crates.io/crates/fexu-api) |
-| [`fexu-admin`](crates/fexu-admin/) | Server-rendered administration | [![fexu-admin version](https://img.shields.io/crates/v/fexu-admin.svg?label=version)](https://crates.io/crates/fexu-admin) |
-| [`fexu-cache`](crates/fexu-cache/) | Opt-in typed caching | [![fexu-cache version](https://img.shields.io/crates/v/fexu-cache.svg?label=version)](https://crates.io/crates/fexu-cache) |
-| [`fexu-forms`](crates/fexu-forms/) | Form handling and validation | [![fexu-forms version](https://img.shields.io/crates/v/fexu-forms.svg?label=version)](https://crates.io/crates/fexu-forms) |
-| [`fexu-static`](crates/fexu-static/) | Static assets and ETags | [![fexu-static version](https://img.shields.io/crates/v/fexu-static.svg?label=version)](https://crates.io/crates/fexu-static) |
-| [`fexu-storage`](crates/fexu-storage/) | File storage and signed downloads | [![fexu-storage version](https://img.shields.io/crates/v/fexu-storage.svg?label=version)](https://crates.io/crates/fexu-storage) |
-| [`fexu-middleware`](crates/fexu-middleware/) | Common HTTP middleware | [![fexu-middleware version](https://img.shields.io/crates/v/fexu-middleware.svg?label=version)](https://crates.io/crates/fexu-middleware) |
-| [`fexu-mail`](crates/fexu-mail/) | Email utilities | [![fexu-mail version](https://img.shields.io/crates/v/fexu-mail.svg?label=version)](https://crates.io/crates/fexu-mail) |
-| [`fexu-jobs`](crates/fexu-jobs/) | Persistent background jobs | [![fexu-jobs version](https://img.shields.io/crates/v/fexu-jobs.svg?label=version)](https://crates.io/crates/fexu-jobs) |
+| Crate | Purpose | Latest published on crates.io | Next coordinated release (planned) |
+|---|---|---|---|
+| [`fexu`](crates/fexu/) | Framework entry point and application builder | [![fexu version](https://img.shields.io/crates/v/fexu.svg?label=version)](https://crates.io/crates/fexu) | `0.2.0` (candidate, not published) |
+| [`fexu-cli`](crates/fexu-cli/) | Command-line tools and project scaffolding | [![fexu-cli version](https://img.shields.io/crates/v/fexu-cli.svg?label=version)](https://crates.io/crates/fexu-cli) | `0.2.0` (candidate, not published) |
+| [`fexu-core`](crates/fexu-core/) | Core model types and framework primitives | [![fexu-core version](https://img.shields.io/crates/v/fexu-core.svg?label=version)](https://crates.io/crates/fexu-core) | `0.2.0` (candidate, not published) |
+| [`fexu-macros`](crates/fexu-macros/) | Model derive and procedural macros | [![fexu-macros version](https://img.shields.io/crates/v/fexu-macros.svg?label=version)](https://crates.io/crates/fexu-macros) | `0.2.0` (candidate, not published) |
+| [`fexu-db`](crates/fexu-db/) | SQLite and PostgreSQL database access | [![fexu-db version](https://img.shields.io/crates/v/fexu-db.svg?label=version)](https://crates.io/crates/fexu-db) | `0.2.0` (candidate, not published) |
+| [`fexu-migrations`](crates/fexu-migrations/) | Versioned database migrations | [![fexu-migrations version](https://img.shields.io/crates/v/fexu-migrations.svg?label=version)](https://crates.io/crates/fexu-migrations) | `0.2.0` (candidate, not published) |
+| [`fexu-auth`](crates/fexu-auth/) | Authentication, sessions and CSRF protection | [![fexu-auth version](https://img.shields.io/crates/v/fexu-auth.svg?label=version)](https://crates.io/crates/fexu-auth) | `0.2.0` (candidate, not published) |
+| [`fexu-api`](crates/fexu-api/) | HTTP API, routing and OpenAPI | [![fexu-api version](https://img.shields.io/crates/v/fexu-api.svg?label=version)](https://crates.io/crates/fexu-api) | `0.2.0` (candidate, not published) |
+| [`fexu-admin`](crates/fexu-admin/) | Server-rendered administration | [![fexu-admin version](https://img.shields.io/crates/v/fexu-admin.svg?label=version)](https://crates.io/crates/fexu-admin) | `0.2.0` (candidate, not published) |
+| [`fexu-cache`](crates/fexu-cache/) | Opt-in typed caching | [![fexu-cache version](https://img.shields.io/crates/v/fexu-cache.svg?label=version)](https://crates.io/crates/fexu-cache) | `0.2.0` (candidate, not published) |
+| [`fexu-forms`](crates/fexu-forms/) | Form handling and validation | [![fexu-forms version](https://img.shields.io/crates/v/fexu-forms.svg?label=version)](https://crates.io/crates/fexu-forms) | `0.2.0` (candidate, not published) |
+| [`fexu-static`](crates/fexu-static/) | Static assets and ETags | [![fexu-static version](https://img.shields.io/crates/v/fexu-static.svg?label=version)](https://crates.io/crates/fexu-static) | `0.2.0` (candidate, not published) |
+| [`fexu-storage`](crates/fexu-storage/) | File storage and signed downloads | [![fexu-storage version](https://img.shields.io/crates/v/fexu-storage.svg?label=version)](https://crates.io/crates/fexu-storage) | `0.2.0` (candidate, not published) |
+| [`fexu-middleware`](crates/fexu-middleware/) | Common HTTP middleware | [![fexu-middleware version](https://img.shields.io/crates/v/fexu-middleware.svg?label=version)](https://crates.io/crates/fexu-middleware) | `0.2.0` (candidate, not published) |
+| [`fexu-mail`](crates/fexu-mail/) | Email utilities | [![fexu-mail version](https://img.shields.io/crates/v/fexu-mail.svg?label=version)](https://crates.io/crates/fexu-mail) | `0.2.0` (candidate, not published) |
+| [`fexu-jobs`](crates/fexu-jobs/) | Persistent background jobs | [![fexu-jobs version](https://img.shields.io/crates/v/fexu-jobs.svg?label=version)](https://crates.io/crates/fexu-jobs) | `0.2.0` (candidate, not published) |
 
-All 16 workspace crates have a published `0.1.2` release on crates.io. Use compatible published versions when building an independent project. Features merged into `main` after `v0.1.2` require a source checkout until the next release.
+All **16** workspace crates currently have a published `0.1.2` release on crates.io. On `main`, the shared Cargo version is **`0.2.0-dev.1`**, while the next coordinated stable release is planned as **`0.2.0`** and remains unpublished. The badges deliberately reflect real registry versions, while the last column describes the release target. Use compatible published versions when building an independent project. Features merged into `main` after `v0.1.2` require a source checkout until the next release.
 
 ## Quick start
 
@@ -162,7 +162,7 @@ Please use [private security reporting guidance](SECURITY.md) for vulnerabilitie
 
 ## Documentation and development
 
-Start with the [documentation index](docs/index.md). Other useful entry points: [architecture](docs/architecture.md), [configuration](docs/configuration.md), [security](docs/security.md), [testing](docs/testing.md) and [implementation guide](docs/implementation-guide.md).
+Start with the [documentation index](docs/index.md). The manual is being prepared for a **versioned GitHub Pages site**; no public documentation deployment is claimed until Pages is enabled and a release version is explicitly published. See [documentation maintenance](docs/documentation-maintenance.md) for review and publishing rules. Other useful entry points: [architecture](docs/architecture.md), [configuration](docs/configuration.md), [security](docs/security.md), [testing](docs/testing.md) and [implementation guide](docs/implementation-guide.md).
 
 ```bash
 cargo fmt --all -- --check

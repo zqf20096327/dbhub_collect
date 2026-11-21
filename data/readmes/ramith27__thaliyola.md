@@ -11,8 +11,10 @@ The server holds no LLM. Clients (Claude Code, claude.ai, scheduled agents) do t
 | ![Home: search, setup checklist and spaces](docs/images/home.png) | ![Knowledge graph](docs/images/graph.png) | ![A project's articles by folder](docs/images/project-frontend.png) |
 | **Design system** (inherits from the Library) | **Sessions** asking each other | **Security** |
 | ![Design system with inherited and overridden colours and contrast checks](docs/images/design.png) | ![Sessions: who can be asked, listening or busy](docs/images/sessions.png) | ![Security: vulnerabilities needing attention](docs/images/security.png) |
-| **Guide**: every feature and command | **On a phone** | |
-| ![Guide: what's switched on and every command](docs/images/guide.png) | <img src="docs/images/design-phone.png" alt="Design system on a phone" width="220"> | |
+| **Incident** with its timeline | **Pull request briefings** | **What happened lately** |
+| ![An incident: severity, status, and a timeline of notes and status changes](docs/images/incident.png) | ![Pull requests briefed, with the PR briefing setting and webhook](docs/images/pulls.png) | ![A project's brief: incidents, decisions, new knowledge](docs/images/brief.png) |
+| **Guide**: every feature and command | **On a phone** | **Health** |
+| ![Guide: what's switched on and every command](docs/images/guide.png) | <img src="docs/images/design-phone.png" alt="Design system on a phone" width="220"> | ![Admin › System › Health: backups, restore checks, jobs](docs/images/health.png) |
 
 New here? Open **Guide** in the app (`#/guide`) for every feature, whether it's switched on, how to use it and every command, or read [`docs/`](docs/README.md).
 
@@ -44,15 +46,15 @@ A project can declare that it **uses** an item from the library or from another 
 |---|---|
 | `search_knowledge` | Hybrid keyword and semantic search over article sections and findings. Defaults to the current project + team + library |
 | `get_article` | One article, or one section of it, with relations, source links and entities |
-| `get_finding` | One finding with relations, source links and review history |
-| `browse_kb` | Folder tree of articles in a scope |
-| `list_projects` | Projects with components and Project admins (with their names) |
-| `get_project_context` | Cold-start context for an agent in a project or component: overview, contracts, impact notices, recent decisions, shared items it uses, known issues |
-| `list_impact_notices` / `ack_notice` | Upstream contract or shared-design changes a project or component hasn't hand
+| `get_finding` | One finding with relations, s
 
 [...截断...]
 
-led yet |
+ource links and review history |
+| `browse_kb` | Folder tree of articles in a scope |
+| `list_projects` | Projects with components and Project admins (with their names) |
+| `get_project_context` | Cold-start context for an agent in a project or component: overview, contracts, impact notices, recent decisions, shared items it uses, known issues |
+| `list_impact_notices` / `ack_notice` | Upstream contract or shared-design changes a project or component hasn't handled yet |
 | `list_review_queue` | Pending and decided proposals (`mine: true` for your own), plus `skill_reviews`: how many skill versions wait for you |
 | `get_article_template` | Expected sections for an article type |
 | `list_stale_entries` | Entries not verified recently and articles past their review date |
@@ -82,8 +84,4 @@ led yet |
 | `review_proposal` | Approve (optionally with `edits`) or reject (with a `reason`) a proposal. Your own proposal written through Claude in the last 10 minutes needs `confirmed_by_user: true` |
 | `list_skill_reviews` / `get_skill_version` | Skill versions waiting for review with `can_approve`, flags and import groups / one version's files and diff |
 | `review_skill_version` | Approve or reject a skill version; `checked_flags` / `checked_tools` when it has high-risk flags or pre-approved tools. Never one you proposed or whose import you started |
-| `approve_skill_import` | Approve an import's low-risk versions (no high-risk flags, no pre-approved tools) together; the rest are listed as skipped, with why |
-| `publish_release` / `unpublish_release` | Publish a drafted release of the release notes, or put it back to a draft (Manage releases) |
-| `list_skill_sources` / `sync_skill_source` | Skill sources with their last run and webhook / start a sync now (`dry_run` to preview), for Manage skills |
-
-**Repository documentation tools.** The agent reads the code; 
+| `approve_skill_import` | Approve an import's low-ri

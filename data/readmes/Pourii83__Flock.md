@@ -22,11 +22,14 @@
 ## Key Features
 
 - 💬 **Chats**: direct messages, groups and channels, with replies, reactions, file sharing (the admin sets the size limit) and read receipts
+- 🎙️ **Voice messages**: waveform, playback that keeps going between chats, 1×/1.5×/2× speed
+- 🔔 **Push notifications**: in browsers and the installed web app, on computers and phones, even when Flock is closed
 - 🔗 **Invite links**: anyone can join a group or channel with one tap; the owner can revoke the link
 - 🔒 **Secret chats**: optional end-to-end encryption; the server only stores ciphertext
 - 📞 **Voice & video calls**: one-to-one or in groups, full-screen video, screen sharing and noise cancellation
 - 🎟️ **Meeting links**: guests join a call from their browser, no account needed
-- 🛡️ **Admin settings**: sign-up, guest access, upload limits and file retention, right inside the app
+- 🛡️ **Admin settings**: create accounts, sign-up, guest access, upload limits and file retention, right inside the app
+- ☁️ **One-click cloud**: deploy the whole app on Railway or Render, no terminal needed
 - 🎨 **Themes**: light and dark, with any accent color
 - 📱 **Every device**: installable web app (PWA), Android and Windows
 - 🌍 **i18n**: English and Persian (right to left)
@@ -53,8 +56,9 @@ Want to look around first? Try the [live demo](https://app.flock.beer); its data
 ### Cloud hosting
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Pourii83/Flock)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/5zHqd9)
 
-The Render button creates the Flock server and its PostgreSQL database from [`render.yaml`](render.yaml). On Railway, create a service from this repository, set its root directory to `server` (it builds from [`server/railway.json`](server/railway.json)), add a PostgreSQL database and set `DATABASE_URL` and `JWT_SECRET`. Either way you get the server only: use it from the apps or the web app by typing its address. On free plans uploaded files don't survive a redeploy, and calls use public STUN only.
+One click sets up Flock (server, database and web app) on one address; you choose the admin password while deploying. Details: [Cloud hosting](https://docs.flock.beer/install/cloud/).
 
 ## Documentation
 

@@ -213,7 +213,7 @@ Then open the dashboard at **https://localhost:9080** (HTTPS with a self-signed 
 
 ## 🧭 Run Modes
 
-PingWAF is a single binary (`pingwaf`) that shares its entry point with `pingap`. It selects a mode from the CLI subcommand **or** the `PINGWAF_MODE` environment variable.
+PingWAF is a single binary (`pingwaf`) that shares its entry point with `pingap`. It selects a mode from the CLI subcommand **or** the `PINGWAF_MODE` environment variable. Releases also ship **`pingwaf-agent`**, the agent-only build (no PostgreSQL, REST API or dashboard); `install.sh --mode agent` installs it as `pingwaf`.
 
 | Mode | Command | Role |
 | --- | --- | --- |

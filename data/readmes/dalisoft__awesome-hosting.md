@@ -89,6 +89,7 @@ List of all Backend-as-a-Service platform <sup>[1](#status)</sup>
 | [Zenavo](https://zenavo.app)                                             | [Dev](https://zenavo.app/pricing) (5 \$/m)                    | No          | Yes               |             | Dynamic | No     |
 | [fortrabbit](https://www.fortrabbit.com)                                 | [Small website](https://www.fortrabbit.com/pricing) (€ 4.5/m) | 1-Week      | No                |             | Dynamic | No     |
 | [Render](https://render.com)                                             | [Starter](https://render.com/pricing) (7 \$/m)                | No          | Yes               |             | Dynamic | No     |
+| [blitz.cloud](https://blitz.cloud)                                       | [Pro](https://blitz.cloud/pricing) (€ 7/m)                    | No          | Yes               |             | Dynamic | No     |
 | [Netlify Functions](https://www.netlify.com/platform/core/functions)     | [Personal](https://www.netlify.com/pricing) (9 \$/m)          | No          | Yes               | Yes         |         |        |
 | [Zerops](https://zerops.io)                                              | [Pricing](https://zerops.io/pricing) (10 \$/m)                | No          | No                |             | Dynamic | No     |
 | [Leapcell](https://leapcell.io)                                          | [Plus](https://leapcell.io/pricing) (12.9 \$/m)               | No          | Yes               |             | Dynamic | -      |
@@ -128,6 +129,7 @@ List of all Container-as-a-Service platform (likely Docker and Podman containers
 | [podway](https://podway.io)                                           | [Mini](https://podway.io/apps) (4 \$/m)                                        | No          | 1 app                  |             |
 | [Cloudflare Containers](https://developers.cloudflare.com/containers) | [Pay-as-you-Go](https://developers.cloudflare.com/containers/pricing) (5 \$/m) | No          | No                     |             |
 | [DigitalOcean Platform][do-ref]                                       | [Pay-as-you-Go][do-ref] (5 \$/m)                                               | $200 credit | Yes                    |             |
+| [Dockhold](https://dockhold.eu)                                       | Compute (5 \$/m)                                                               | -           | Always-on public apps  |             |
 | [Ownkube](https://ownkube.io)                                         | [Personal](https://ownkube.io/pricing) (5 \$/m)                                | $5 credit   | No                     |             |
 | [Rivet](https://rivet.dev)                                            | [Hobby](https://rivet.dev/pricing) (5 \$/m)                                    | No          | Yes                    |             |
 | [DeployBase](https://deploybase.io)                                   | [Starter](https://deploybase.io/pricing) (6 \$/m)                              | No          | No                     |             |
@@ -194,6 +196,7 @@ List of all static site hosting platform <sup>[1](#status)</sup>
 | [harvis.dev](https://harvis.dev)                                 | [Usage-based](https://harvis.dev/pricing) (5 \$/m)       | No          | Yes       |                   | Static | No     |
 | [Reliant](https://reliantlabs.io)                                | [Pay-as-you-Go](https://reliantlabs.io/pricing) (5 \$/m) | No          | 1 site    |                   | Static | No     |
 | [tiiny.host](https://tiiny.host)                                 | [Tiny](https://tiiny.host) (5 \$/m)                      | No          | No        |                   | Static | No     |
+| [droply](https://droply.so)                                      | [Starter](https://droply.so/pricing) (6 \$/m)            | 7 days      | 1 project |                   | Static | No     |
 | [Qoddi](https://qoddi.com)                                       | [XS](https://qoddi.com/pricing) (6 \$/m)                 | No          | 3 apps    |                   | Static | No     |
 | [Stacktree](https://stacktr.ee)                                  | [Pro](https://stacktr.ee/pricing) (8 \$/m)               | No          | Yes       |                   | Static | No     |
 | [Benchlight](https://benchlight.dev)                             | [Own address](https://benchlight.dev/pricing) (9 \$/m)   | 14 days     | Yes       |                   | Static | No     |
@@ -475,6 +478,7 @@ See [AI Coding Subscriptions](https://github.com/dalisoft/awesome-ai-coding?tab=
 | Name                                                         | Minimal plan                                    | Trial     | Free |
 |--------------------------------------------------------------|-------------------------------------------------|-----------|------|
 | [Cloudflare](https://www.cloudflare.com/products/ai-gateway) | -                                               | -         | -    |
+| [HiAPI](https://hiapi.ai)                                    | [Pricing](https://hiapi.ai/en/pricing)          | $0.10     | -    |
 | [NagaAI][naga-ai-ref]                                        | [Pricing](https://naga.ac/pricing)              | -         |      |
 | [OpenRouter](https://openrouter.ai)                          | [Pricing](https://openrouter.ai/pricing)        | -         |      |
 | [OrcaRouter](https://orcarouter.ai)                          | [Pricing](https://orcarouter.ai/pricing)        | $5 credit |      |
@@ -536,7 +540,9 @@ while executes with Build (cheap) model.
 | [GPUs](https://gpus.io)                              | GPU  | ~5        |
 | [GPUVista](https://gpuvista.com)                     | GPU  | 12+       |
 | [GrabGPU](https://grabgpu.com)                       | GPU  | 22        |
+| [HostBilgim](https://hostbilgim.com/en)              | All  | 1380+     |
 | [HostingHub](https://hostinghub.ru/top/vds/desheviy) | VPS  | 10+       |
+| [Lantern Works](https://thelanternworks.com)         | GPU  | 25        |
 | [LowENDBox](https://lowendbox.com)                   | VPS  | -         |
 | [ServerBudget](https://serverbudget.com)             | VPS  | 3         |
 | [Serverhunter](https://www.serverhunter.com)         | VPS  | 900+      |
@@ -555,6 +561,7 @@ while executes with Build (cheap) model.
 - <https://free-for.dev/#/?id=web-hosting>
 - <https://gist.github.com/bmaupin/0ce79806467804fdbbf8761970511b8c>
 - <https://gist.github.com/bmaupin/d2d243218863320b01b0c1e1ca0cf5f3>
+- <https://github.com/666break/vps-price-dataset>
 - <https://github.com/AlonDrilich/tld-renewal-prices>
 - <https://github.com/anaibol/awesome-serverless#hosting-and-code-execution-in-the-cloud>
 - <https://github.com/Simpix/researched-prices>

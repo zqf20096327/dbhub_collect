@@ -79,8 +79,9 @@ first time you add such a data source ([Plugins](docs/guide/plugins.md)).
   `DBMS_OUTPUT` in Output, every SQL function of the manual in completion, sessions and plans.
 - [Plugins for any database](docs/guide/plugins.md): PostgreSQL, MySQL, SQLite, Oracle and SQL Server are
   plugins, loaded the same way yours would be. SQLite and MySQL come in the box; PostgreSQL, Oracle,
-  SQL Server, [DuckDB](docs/guide/duckdb.md) (Parquet and `csv.zst` files too), Redis and etcd
-  download the first time you need them.
+  SQL Server, [DuckDB](docs/guide/duckdb.md) (Parquet and `csv.zst` files too), Redis, etcd,
+  [Apache Kafka](docs/guide/kafka.md) and [Elasticsearch](docs/guide/elasticsearch.md) download the
+  first time you need them.
 
 ## Install
 
@@ -158,6 +159,9 @@ search and a light and dark theme.
   databases.
 - [DuckDB](docs/guide/duckdb.md): database files, Parquet and CSV files, file locks and
   transactions.
+- [Apache Kafka](docs/guide/kafka.md): topics, messages, consumer groups and the Schema Registry.
+- [Elasticsearch and OpenSearch](docs/guide/elasticsearch.md): the index tree, searching documents by
+  time, mappings, analyzers and the Dev Tools console.
 
 **Customising**
 

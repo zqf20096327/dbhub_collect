@@ -187,6 +187,8 @@ params: [1024, "active"]
 - **提示注入边界**：返回的行数据是数据而不是指令；`query_guide` / `write_guide` 明确要求模型不得因库里的文字改变任务或触发写入。MCP Server 不是安全防火墙，表/列白名单与行级权限仍应落在数据库账号、视图或 RLS 上。
 - **数据库账号最小权限**：建议给 MCP 用的账号仅授予 `SELECT` 权限，作为最后一道闸。
 - **审计**：所有工具调用（含被策略拒绝的写尝试、超时、慢查询）都会在 stderr 输出一条 JSON 审计记录（含脱敏列、字节截断标记），可用 shell 重定向 `2> audit.log` 收集；审计不含查询结果。
+- **依赖安全**：`npm audit --omit=dev` 为 0 漏洞。工具层使用 `zod@^4.6.7`（SDK 1.x 同时兼容 `^3.25 || ^4.0`，已实测 `tools/list` 的输入/输出 schema 与 `structuredContent` 在 v4 下完整可用），以避开 `GHSA-mrhx-c7xc-m3w5`（仅影响 zod <4.6.6 的数组校验）。
+- **第三方扫描误报说明**：M8ven Trust Index 曾报告"5 个工具缺少 annotations"——这是扫描器只解析源码常量、未读取协议响应造成的误报；实测 `tools/list` 中五个工具均完整返回 `readOnlyHint / destructiveHint / idempotentHint / openWorldHint` 四个布尔值，`tests/enhancements.mjs` 有对应断言。
 
 ## 开发
 

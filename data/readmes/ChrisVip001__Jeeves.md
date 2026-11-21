@@ -1,14 +1,14 @@
 English | [简体中文](README.zh.md)
 
-# Jeeves — a local agent whose memory you can open
+# Jeeves — a personal assistant for complex, long-running tasks
 
 [![CI](https://github.com/ChrisVip001/Jeeves/actions/workflows/ci.yml/badge.svg)](https://github.com/ChrisVip001/Jeeves/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/github/license/ChrisVip001/Jeeves)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/ChrisVip001/Jeeves)](https://github.com/ChrisVip001/Jeeves/releases/latest)
 
-**A personal assistant that runs on your own machine, with a memory you can inspect.**
-Use the main chat for everyday conversation, delegating work and following up on an existing task. [Main chat and task threads](docs/design/main-entry.md)
-Rust owns the agent loop, memory and tools; TypeScript carries the shared clients, chat gateways and the isolated browser adapter. Conversations, `state.db` and API keys stay on your machine. The dashboard speaks English and Chinese.
+Give Jeeves an outcome to deliver. For an incident review, that might mean gathering evidence, checking the figures and producing a report another person can verify. In main chat you can name an output file and quote text it must contain. The task can check the file, correct a missing result and bring the outcome back to the conversation. Open the original task from its receipt to follow up. [Main chat and task threads](docs/design/main-entry.md) · [Long-task roadmap](docs/planning/long-task-roadmap.md)
+
+The same Rust Runtime can run on a personal computer, on a self-hosted server or in an isolated per-user deployment behind the cloud control plane. The deployment determines where task state and tools live. Models and connectors use the providers configured for that Runtime. [Architecture](docs/architecture.md) · [Email verification, password recovery, two-factor sign-in and hosted deployment](control-plane/README.md)
 
 Pair a device by public key and revoke its grant through the [device protocol](docs/protocol.md#device-pairing-and-revocation). The cockpit’s [global emergency stop](docs/protocol.md#global-emergency-stop) freezes managed task browsers across restarts. Take over a task browser from your phone or desktop and [save a download to that task](docs/protocol.md#remote-browser-input-and-downloads).
 
@@ -31,10 +31,10 @@ Jeeves runs on macOS and Linux (Windows through WSL2). After any install, the da
 ```bash
 just desktop-install   # one-time setup
 just desktop-build     # bundles the Runtime into the Mac app
-just desktop-dev       # development: starts `jeeves dashboard`; JEEVES_RUNTIME_URL attaches to a running Runtime instead
+just desktop-open      # open the project app or bring its existing window forward
 ```
 
-On Mac, switch between Assistant and Cowork at the top left. The assistant keeps the main chat and recent activity together. Open a task in Cowork to read its conversation or follow up. [Mac desktop app](docs/operations.md#mac-desktop-app) · [Teal appearance preview](docs/design/today-preview.html#p=teal&f=sans)
+Use **Chat** to delegate and **Activity** to return to work on Mac or iPhone. [Chat and Activity](docs/design/main-entry.md) · [Mac desktop app](docs/operations.md#mac-desktop-app)
 
 **Docker** — the dashboard walks you through the model, permissions and chat connections:
 

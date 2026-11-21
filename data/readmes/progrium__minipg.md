@@ -95,6 +95,8 @@ psql, pg_dump, and the other tools run in their own short-lived h9 machine (abou
 
 Linux builds are static musl binaries, so one runs on glibc distros and Alpine alike. Windows on ARM isn't supported yet: h9 has no WHP backend for arm64, and minipg leaves out h9's emulator, which is GPL-licensed.
 
+On macOS, Gatekeeper blocks a binary that a browser downloaded until it's notarized, and kills it before it prints anything. If macOS refuses to run `minipg`, clear the quarantine attribute with `xattr -d com.apple.quarantine ./minipg`. Downloading with `curl -LO` doesn't set that attribute, so the binary runs as is.
+
 On Windows, turn the feature on in Settings > System > Optional features > More Windows features ("Windows Hypervisor Platform"), or with `DISM /Online /Enable-Feature /FeatureName:HypervisorPlatform` as an administrator, then restart.
 
 ## In containers and CI
@@ -126,6 +128,16 @@ make root ARCH=arm64             # just assets/root-arm64.tar.xz and .json
 make build PG_MAJOR=17           # embed another major
 make dist VERSION=v0.4           # dist/minipg_v0.4_<os>_<arch>.zip
 ```
+
+macOS builds are signed ad hoc with the hypervisor entitlement by default, which is enough to run them on the Mac that built them. For a release, sign with a Developer ID and notarize, so a browser download runs without Gatekeeper blocking it:
+
+```sh
+# once: save notary credentials (an app-specific password) in the keychain
+xcrun notarytool store-credentials minipg --apple-id you@example.com --team-id TEAMID
+make dist VERSION=v0.4 SIGN_IDENTITY="Developer ID Application: Name (TEAMID)" NOTARY_PROFILE=minipg
+```
+
+`SIGN_IDENTITY` also turns on the hardened runtime and a secure timestamp, which notarization requires. A bare binary can't have a notarization ticket stapled to it, so Gatekeeper checks it online the first time it runs.
 
 [scripts/root.sh](scripts/root.sh) pulls the image from Docker Hub's registry, drops what a server doesn't need (LLVM for JIT, headers, docs), and records the image's digest, version, and ENV beside the tarball. JIT is therefore unavailable, and minipg sets `jit=off`. macOS builds have to be made on a Mac (for the SDK's Hypervisor framework). Windows builds cross-compile from anywhere; on Windows itself, run root.sh from Git Bash or MSYS2.
 

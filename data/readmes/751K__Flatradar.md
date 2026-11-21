@@ -6,7 +6,7 @@
 
 FlatRadar monitors the Dutch rental market. It runs as a hosted service at
 [flatradar.app](https://flatradar.app) and can also be self-hosted. It tracks
-Codomo (formerly Holland2Stay), OurDomain, OurCampus, Xior, Magis, Student
+Codomo (formerly Holland2Stay), OurDomain, Canvas, Xior, Magis, Student
 Experience and Plaza, and as soon as a listing matches your criteria it sends a
 notification through the channels you enabled, with a direct link included. For
 Plaza, it can submit applications automatically when the user enables it.
@@ -42,7 +42,7 @@ Support: [flatradar.app/support](https://flatradar.app/support) ·
 
 | | |
 |---|---|
-| **Coverage** | Seven platforms: Codomo, OurDomain, OurCampus, Xior, Magis, Student Experience and Plaza. Polling tightens during the hours when new listings tend to appear |
+| **Coverage** | Seven platforms: Codomo, OurDomain, Canvas, Xior, Magis, Student Experience and Plaza. Polling tightens during the hours when new listings tend to appear |
 | **Alert channels** | Web, Telegram, Email, WhatsApp, iOS push, Android push, iMessage; several may be enabled at once |
 | **Filters** | Maximum rent, minimum area, minimum floor, type, occupancy, city, neighbourhood, platform, contract type, tenant requirements, and others |
 | **Views** | List, map, calendar, dashboard and charts, in English or Chinese |
@@ -56,7 +56,7 @@ Support: [flatradar.app/support](https://flatradar.app/support) ·
 | Codomo (formerly Holland2Stay) | 26 Dutch cities | Plain HTTP since the 2026-11 rebrand; the bulk of what lands | Notify only (the old booking flow died with the rebrand) |
 | OurDomain | Amsterdam Diemen / South-East | Proven | Notify only (booking flow built, not enabled) |
 | Xior | Any of 30 buildings across 14 cities | Proven | Notify only (booking flow built, not enabled) |
-| OurCampus | Amsterdam Diemen (1 building) | Checked against real markup; very low volume | Notify only |
+| Canvas | Amsterdam Diemen (1 building) | Checked against real markup; very low volume | Notify only |
 | Magis | 17 buildings across 5 cities (9 in Eindhoven) | Verified against live data; plain HTTP, no anti-bot | Notify only |
 | Student Experience | Amsterdam (4 sites) and Leiden | Verified against live data; the listing date lives only on the detail page, so each unit costs an extra request | Notify only |
 | Plaza | 13 Dutch cities | Verified against live data; a paid account (€27.50/yr) is required to *apply*, not to see listings | Automatic applications supported, off by default |
@@ -417,7 +417,7 @@ select “Checked; resume applications for this listing” in user settings. Onl
 that account and listing are paused; other listings can still be processed.
 Protection cannot be removed while the application task is running.
 
-Xior, OurDomain and OurCampus use RENTCafe and share an implementation
+Xior, OurDomain and Canvas use RENTCafe and share an implementation
 ([`bookers/rentcafe.py`](../bookers/rentcafe.py)). Captcha solving and parts of
 the application flows are implemented, but their end-to-end booking paths have
 not been verified and remain **switched off**.
@@ -426,7 +426,7 @@ not been verified and remain **switched off**.
 |---|---|---|
 | Xior | A real account reached the application form and saved a draft (2026-08-03) | Saving after the system uploads the ID document has not been verified. A draft **does not hold the unit**; the next page asks for IBAN/SWIFT. |
 | OurDomain | Entry leg verified against the live site (2026-08-04): floorplans → available units → terms POST | The post-login path needs real-account verification. If the application form is missing, the implementation retries unit selection once and aborts if the form is still unavailable. |
-| OurCampus | `OurCampusBooker` registered and credentials can be entered in the panel, but **off for users** (not in `_AUTO_BOOK_SOURCES`). Verified with a real account: unit selection, terms page, Start Application (v3 accepted first try) and login all work | Landing on Applicant Info after login does not work yet. The premise that starting an application holds the unit is disproved: the site states it only enters you into the lottery |
+| Canvas | `CanvasBooker` registered and credentials can be entered in the panel, but **off for users** (not in `_AUTO_BOOK_SOURCES`). Verified with a real account: unit selection, terms page, Start Application (v3 accepted first try) and login all work | Landing on Applicant Info after login does not work yet. The premise that starting an application holds the unit is disproved: the site states it only enters you into the lottery |
 | Magis | Nothing | Booking flow has never been scouted |
 
 > The hosted demo has auto-booking disabled for user accounts. Email us or
@@ -456,7 +456,7 @@ mismatch and would only interrupt a scrape in progress.
 | One platform always returns 0 listings | May be genuine. Check whether the round was marked complete; see [listing status and completeness](ARCHITECTURE.md#status-convergence). |
 | A listing you know is taken still shows as available | Its city was not completely scanned, so it never became eligible for convergence. Check `(complete/targets)` on `/monitoring`. |
 | A batch of listings turned Occupied at once | Expected if they carry the **inferred** badge — that is aging catching up after a restart or a threshold change, and it generates no notifications. Without the badge, the platform actually reported it. |
-| Logs repeat `抓到 0 个单元，第 N/3 轮` | Normal. An empty result from OurDomain/OurCampus has to repeat for 3 rounds before it counts, so a single bad round cannot converge a whole building. |
+| Logs repeat `抓到 0 个单元，第 N/3 轮` | Normal. An empty result from OurDomain/Canvas has to repeat for 3 rounds before it counts, so a single bad round cannot converge a whole building. |
 | Container gets OOM-killed | Raise `mem_limit`. Each Cloudflare-protected source holds a resident browser. |
 | Container will not start, log says `FATAL` | The entrypoint preflight. Either `Caddyfile` still says `your.domain.com` or `WEB_PASSWORD` is empty. Both are refusals to expose an unauthenticated panel. |
 | Cannot sign in after setting `WEB_PASSWORD` | The username is `admin` unless you set `WEB_USERNAME`. |
@@ -477,7 +477,7 @@ own monitoring if you want to be paged.
 | [ARCHITECTURE.md](ARCHITECTURE.md) | System architecture, key failure boundaries and troubleshooting entry points |
 | [API.md](API.md) | Backend contracts for mobile and integrations |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
-| [CODOMO.md](CODOMO.md) · [RENTCAFE.md](RENTCAFE.md) · [XIOR.md](XIOR.md) · [OURDOMAIN.md](OURDOMAIN.md) · [PLAZA.md](PLAZA.md) · [SCRAPING_RECON.md](SCRAPING_RECON.md) | Per-platform research; `RENTCAFE.md` covers the booking flow shared by Xior, OurDomain and OurCampus, and `PLAZA.md` covers Plaza booking only — Plaza's scraping side, with Magis and Student Experience, is in `SCRAPING_RECON.md` |
+| [CODOMO.md](CODOMO.md) · [RENTCAFE.md](RENTCAFE.md) · [XIOR.md](XIOR.md) · [OURDOMAIN.md](OURDOMAIN.md) · [PLAZA.md](PLAZA.md) · [SCRAPING_RECON.md](SCRAPING_RECON.md) | Per-platform research; `RENTCAFE.md` covers the booking flow shared by Xior, OurDomain and Canvas, and `PLAZA.md` covers Plaza booking only — Plaza's scraping side, with Magis and Student Experience, is in `SCRAPING_RECON.md` |
 | [iOS_README.md](https://github.com/751K/FlatRadar-iOS/blob/master/docs/iOS_README.md) | iOS client — moved to [FlatRadar-iOS](https://github.com/751K/FlatRadar-iOS) |
 | [ANDROID_PLAN.md](https://github.com/751K/FlatRadar-Android/blob/master/docs/ANDROID_PLAN.md) | Android client — moved to [FlatRadar-Android](https://github.com/751K/FlatRadar-Android) |
 | [dataflow_en.mmd](dataflow_en.mmd) · [dataflow_ch.mmd](dataflow_ch.mmd) | Full scrape/notify flow as a Mermaid diagram |

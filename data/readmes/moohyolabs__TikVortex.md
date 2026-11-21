@@ -6,7 +6,7 @@
 
 **Download TikTok videos, photo slideshows and highlights in their original quality - no watermark.**
 
-By **[moohyo labs](https://github.com/moohyolabs)** · a desktop app for Windows (with a command line for everything else), built on the
+By **[moohyo labs](https://github.com/moohyolabs)** · a desktop app for Windows, built on the
 [Ez-TikTok-Downloader](https://github.com/AlexRabbit/Ez-TikTok-Downloader) engine by AlexRabbit.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-8b5cf6?style=flat-square)](LICENSE)
@@ -24,7 +24,6 @@ By **[moohyo labs](https://github.com/moohyolabs)** · a desktop app for Windows
 - [Features](#features)
 - [Install](#install)
 - [Using the app](#using-the-app)
-- [Command line](#command-line)
 - [Settings and files](#settings-and-files)
 - [Building a release](#building-a-release)
 - [Troubleshooting](#troubleshooting)

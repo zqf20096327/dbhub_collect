@@ -295,8 +295,14 @@ Pythia's settings, connections and saved passwords.
   storage and top statements from `performance_schema`. Other users'
   threads, transactions and lock waits need the `PROCESS` privilege; top
   statements and lock waits `SELECT` on `performance_schema`.
+- *Tools → Export Tables…* as on Oracle: pick a database's tables, a
+  WHERE per table, one file per table (`orders.csv`, `orders.ddl.sql` from
+  `SHOW CREATE TABLE`), each streamed from the session. *Read: Table by
+  table* reads each table as of its own query; *Consistent* all of them
+  in one transaction `WITH CONSISTENT SNAPSHOT` (InnoDB tables). INSERTs
+  leave out generated columns.
 - Everything built on Oracle's dictionary or PL/SQL — debugger, profiler,
-  the rest of the monitor, reports, scheduler jobs, compare, import/export,
+  the rest of the monitor, reports, scheduler jobs, compare, import,
   the other form editors — isn't offered on MySQL connections. End a
   routine with `/` on a line of its own, as in SQL\*Plus, or with a
   `DELIMITER` of its own, as for the `mysql` client (`DELIMITER ;;` …
@@ -322,6 +328,13 @@ Pythia's settings, connections and saved passwords.
   Transactions work as with
   Oracle; on PostgreSQL a failing statement doesn't abort the transaction,
   and notices (`RAISE NOTICE`) show as messages.
+- *Tools → Export Tables…* as on MySQL: a schema's tables, a WHERE per
+  table, one file per table and its DDL, each streamed from the session.
+  *Consistent* reads all of them in one read-only `REPEATABLE READ`
+  transaction on PostgreSQL, a `SNAPSHOT` one on SQL Server (which needs
+  `ALLOW_SNAPSHOT_ISOLATION ON`). INSERTs leave out generated and computed
+  columns and rowversions, and give identities their values
+  (`OVERRIDING SYSTEM VALUE`, `SET IDENTITY_INSERT`).
 - *Edit* on a result of one table changes its rows in place, as on
   MySQL: rows are found by the table's primary key (or a unique key on
   NOT NULL columns), which DbCraft adds to the result if the query doesn't
@@ -407,6 +420,10 @@ Pythia's settings, connections and saved passwords.
   index on NOT NULL columns, or else its `rowid`, so every table can be
   edited (a view can't). Applying checks the values that were fetched; a
   number is found whether the column holds it as a number or as text.
+- *Tools → Export Tables…*: a database's tables (`main` or an attached
+  one), a WHERE per table, one file per table and its DDL; *Consistent*
+  reads all of them in one transaction. INSERTs leave out generated
+  columns.
 - Scripts end each statement at `;`; a trigger's `BEGIN … END` keeps its
   own.
 - *Maintenance* of a table or index: `ANALYZE`, `REINDEX` and an integrity
@@ -417,8 +434,8 @@ Pythia's settings, connections and saved passwords.
 ## Installing
 
 Download DbCraft from [its website](https://ortic.github.io/dbcraft/#download).
-Packages for Linux (`.deb`, AppImage), Windows (MSI, setup `.exe`) and
-macOS (`.dmg`) are attached to each [GitHub
+Packages for Linux (`.deb`, AppImage), Windows (MSI, setup `.exe`; x64
+and ARM64) and macOS (`.dmg`) are attached to each [GitHub
 release](https://github.com/ortic/dbcraft/releases), in two flavors:
 `dbcraft_…` with the pure-Rust driver, and `dbcraft-instantclient_…` on the
 Oracle Instant Client (see below). Take the first unless you need the

@@ -25,6 +25,8 @@ Current major release: `v0.6.3`.
 - Multilingual collection across Chinese, English, Japanese, Korean, Russian, Polish, Dutch, and more
 - Dedicated `今日好消息` / Good News lane derived from the same impact evaluation's feelgood dimension
 - WIRED-inspired static HTML reports with system/light/dark modes and self-hosted fonts
+- Per-task LLM routing: name your providers once (DeepSeek, OpenRouter, any OpenAI-compatible endpoint), then pick a provider and model for each pipeline step, with a default and a fallback
+- LAN settings page: see provider balances, the Telegram check, and every setting with where it comes from and whether the running services have picked it up; log in to edit and changes apply within about a minute, no restart
 - CLI entrypoints for collection, publish, replay, and scheduler runs
 
 ## Architecture
@@ -35,7 +37,7 @@ newsprism/
 ├── config.py         YAML + environment loader
 ├── repo/             SQLite persistence
 ├── service/          collect, dedup, cluster (LLM + embedding fallback), impact eval, storyline, calibrate, summarize
-└── runtime/          schedule, render, publish, feedback poll
+└── runtime/          schedule, render, publish, feedback poll, admin portal, settings page
 ```
 
 Layer rule: `types -> config -> repo -> service -> runtime`. Higher layers must not be imported downward.
@@ -65,6 +67,39 @@ The default stack includes:
 The default image-based install uses the config and templates bundled inside the `newsprism` image. If you want editable host-side `config/`, `templates/`, or nginx config files, use the contributor/source-build stack in `docker-compose.dev.yml`. For Chinese-source coverage, NewsPrism works best with the self-hosted [`NewsNow`](https://github.com/ourongxing/newsnow) proxy enabled.
 
 Full server install, update, backup, and customization guidance lives in `docs/deploy-docker.md`.
+
+### Settings page (optional, source-build stack)
+
+`docker-compose.dev.yml` adds `newsprism-settings`, a small web page for running the installation from a browser on your home network:
+
+- an overview of each service (applied or pending), LLM provider balances, Tavily usage, and a live Telegram check
+- every setting with its value (secrets masked), where it comes from (`store`, `.env`, `config.yaml`, or a default), and whether it is applied
+- after logging in, edit forms for providers, per-task models, search keys, delivery, schedule, and site URLs
+
+Edits are saved to `settings-store/settings.json`, which keeps revisions and an audit log. The scheduler reloads it between jobs, so changes apply within about a minute without a restart. For any key in the store, the store wins over `.env`.
+
+```bash
+# One-time: copy the current .env / compose / config.yaml values into the store
+docker compose -f docker-compose.dev.yml exec newsprism-settings python -m newsprism settings import
+
+# Set the admin password (viewing works without one; editing needs it)
+docker compose -f docker-compose.dev.yml exec -it newsprism-settings python -m newsprism settings set-password
+```
+
+The page only answers LAN clients and is bound to one host IP (`SETTINGS_BIND_IP`, never `0.0.0.0`). Don't put it behind a public reverse proxy.
+
+### Demo copy on Cloudflare Pages (optional)
+
+`scripts/publish_demo_site.py` publishes a noindex copy of the public reports to a Cloudflare Pages project (for example `newsprism.pages.dev`). It builds a staging tree from `output/` (never the private `staging`, `shadow` or `verify-*` folders), rewrites the canonical hostname to the demo one, and uploads it with wrangler in a throwaway Node container. `output/` is not modified.
+
+```bash
+# Credentials live outside the repo, mode 600 (CLOUDFLARE_API_TOKEN needs Account > Cloudflare Pages > Edit)
+python3 scripts/publish_demo_site.py --build-only   # build and report, upload nothing
+python3 scripts/publish_demo_site.py --dry-run      # also print the upload command
+python3 scripts/publish_demo_site.py                # upload (--project, --days, --to-base-url available)
+```
+
+Run it from cron shortly after the daily publish. The credentials file defaults to `~/.config/newsprism/cloudflare-pages.env`.
 
 ## Develop Locally
 
@@ -110,6 +145,11 @@ Optional:
 | `TAVILY_API_KEY` / `BRIGHTDATA_API_KEY` | Active search providers |
 | `X_BEARER_TOKEN` / `YOUTUBE_API_KEY` | Official social fallback providers |
 | `SCHEDULE_TIMEZONE` | Override scheduler timezone without editing YAML |
+| `SETTINGS_BIND_IP` / `SETTINGS_PORT` | Host LAN IP and port for the settings page (default port `8085`) |
+| `SETTINGS_UID` / `SETTINGS_GID` | Host user/group the settings page runs as (must read `.env` and write `settings-store/`) |
+| `SETTINGS_LOW_BALANCE` | Balance below which a provider is flagged red on the settings page |
+
+Once the settings store exists, the keys it holds (LLM providers and models, search keys, Telegram, schedule, site URLs) are managed on the settings page; editing them in `.env` no longer has any effect. `.env` still provides bootstrap values such as paths, ports, and the `SETTINGS_*` variables.
 
 ## Customization
 
@@ -120,6 +160,7 @@ For the default image-based install, those files live inside the container image
 | Surface | What you can change |
 |---|---|
 | `.env` | provider keys, public report URL, scheduler timezone, optional integrations |
+| settings page / `settings-store/settings.json` | LLM providers and per-task models, search keys, Telegram, schedule, site URLs (source-build stack; wins over `.env` once imported) |
 | `config/config.yaml` | schedule, source list, clustering thresholds, dedup rules, storyline coherence, English report toggle, active-search behavior |
 | `config/editorial-values.yaml` | impact dimension weights, status floors, positive-lane thresholds, source tier scores |
 | `config/style-guide.md` | editorial prompt and no-fabrication rules used by the summarizer |
@@ -145,6 +186,9 @@ Common examples:
 | `python -m newsprism feedback add\|list\|poll` | Record editor 👍/👎 on a cluster, list recent feedback, or poll Telegram |
 | `python -m newsprism calibrate run\|show\|reset` | Run weight calibration + policy distillation, inspect, or reset to seeds |
 | `python -m newsprism portal --host 127.0.0.1 --port 8081` | Run the local admin quality portal (inspect selection + give structured feedback) |
+| `python -m newsprism settings --host-root /host` | Run the LAN settings page |
+| `python -m newsprism settings import [--force]` | One-time import of `.env` / compose / `config.yaml` values into the settings store |
+| `python -m newsprism settings set-password` | Set the settings-page admin password |
 
 ## Testing and Packaging
 
@@ -164,6 +208,7 @@ Most behavior is file-based:
 | `config/config.yaml` | Sources, schedules, thresholds, storyline/hot-topic behavior |
 | `config/editorial-values.yaml` | Impact dimension weights, status floors, positive-lane thresholds, source tier scores |
 | `config/style-guide.md` | Editorial prompt and no-fabrication constraints |
+| `settings-store/settings.json` | Operator settings edited on the settings page (providers, models, keys, schedule, site) |
 
 ## Project Docs
 
@@ -184,7 +229,7 @@ Development assistance for recent quality, deployment, and release work was prov
 
 - Supported public deployment target: one Linux server with Docker Compose
 - Default self-hosting path uses published GHCR images; no local source checkout is required
-- Persistence lives in `data/`, `output/`, and the Hugging Face cache volume
+- Persistence lives in `data/`, `output/`, `settings-store/` (source-build stack), and the Hugging Face cache volume
 - SQLite is intended for single-host use; this repo does not target clustered multi-writer deployments
 - For public internet exposure, run a reverse proxy with HTTPS in front of the `web` service and set `REPORT_BASE_URL` accordingly
 - Some source coverage, especially difficult Chinese sites, is materially better when [`NewsNow`](https://github.com/ourongxing/newsnow) is enabled

@@ -2,7 +2,7 @@
 
 ## Download and play
 
-### [Download the complete gx-v0.1.13 portable — Client + Server + Data](https://drive.google.com/file/d/1E6IkTncfp3Yal4OshmTGu6kWsxs1aCqs/view?usp=sharing)
+### [Download the complete gx-v0.1.15 portable — Client + Server + Data](https://drive.google.com/file/d/1oBq9bmt0eTmu9NNabIma0gmgGCe7i_Hk/view?usp=sharing)
 
 **One Google Drive download for Windows and Linux. Includes the client, GX Server,
 game data, external fonts and the development database. Everything is included:
@@ -15,12 +15,12 @@ no separate data download, Go installation or build tools required.**
 Requires a 64-bit OS and OpenGL 4.5. The server includes development test accounts;
 preserve your existing runtime database when upgrading.
 
-**Latest binary release: [gx-v0.1.13](https://github.com/Spelunkern/Shaiya-GX/releases/tag/gx-v0.1.13).**
-The Drive package includes **gx-v0.1.13 client and server binaries, GX Studio, and complete data**
-for Windows and Linux. Preserve your personal runtime and configuration and read the
-[v0.1.13 upgrade guide](docs/releases/gx-v0.1.13-upgrade.md).
+**Latest binary release: [gx-v0.1.15](https://github.com/Spelunkern/Shaiya-GX/releases/tag/gx-v0.1.15).**
+The Drive package includes **gx-v0.1.15 client and server binaries, GX Studio, and complete data**
+for Windows and Linux. Preserve your runtime and configuration and use matching client data when updating.
+[Upgrade guide](docs/releases/gx-v0.1.15-upgrade.md).
 
-[Setup and requirements](docs/client-portable.md) · [Latest patch notes](docs/releases/gx-v0.1.13.md) · [GitHub binary updates (without client game data)](https://github.com/Spelunkern/Shaiya-GX/releases/latest)
+[Setup and requirements](docs/client-portable.md) · [Latest patch notes](docs/releases/gx-v0.1.15.md) · [GitHub binary updates (without client game data)](https://github.com/Spelunkern/Shaiya-GX/releases/latest)
 
 ---
 
@@ -38,7 +38,7 @@ GX reads loose assets from a `data/` folder beside the **Shaiya GX** executable.
 
 **SQLite is the primary production database. Its embedded operation simplifies deployment and distribution without a separate database service.**
 
-[**gx-v0.1.13 patch notes**](docs/releases/gx-v0.1.13.md) · [Linux/Windows binary portable](https://github.com/Spelunkern/Shaiya-GX/releases/latest/download/gx-portable-linux-windows.zip) · [Separate client/server downloads](https://github.com/Spelunkern/Shaiya-GX/releases/latest)
+[**gx-v0.1.15 patch notes**](docs/releases/gx-v0.1.15.md) · [Linux/Windows binary portable](https://github.com/Spelunkern/Shaiya-GX/releases/latest/download/gx-portable-linux-windows.zip) · [Separate client/server downloads](https://github.com/Spelunkern/Shaiya-GX/releases/latest)
 
 ## On-screen metrics panel
 
@@ -107,17 +107,20 @@ GX Server retains Rapture's gameplay and protocol behavior. Its programs are `gx
 
 | Input | Action |
 |---|---|
-| W/S, A/D, Q/E | Forward/back, turn, side step |
+| W/S, A/D, Q/E | Move forward/back relative to camera, turn, side step |
 | Right mouse / both buttons | Steer / move forward |
 | Wheel / F9 / F10 | Zoom / reset camera / first person |
 | Space / C / Tab / NumLock | Jump / sit / walk or run / automatic movement |
-| F2 | Select yourself |
-| F / X / H | Attack target / stop attack / approach nearby loot |
+| F1–F7 | Select a party member. F1–F6 select within your raid group |
+| F / X / H | Assist the selected group member / stop attack / toggle catalog IDs |
+| F11 / F12 or Print Screen | Toggle HUD / save a PNG in `screenshot` |
 | I / T / K / B | Inventory / Status / skills / actions |
-| U / G / M / O | Quests / guild / map / options |
+| U / G / M / V / O | Quests / guild / map / minimap / options |
 | Enter / Up / Down | Chat / sent-message history while typing |
 | 1–9, 0 / numeric keypad | First / second action bar |
-| Grave accent / Backspace | Cycle enemies / previous target |
+| Grave accent / Backspace | Cycle hostile mobs and players / previous target |
+
+Click a target once to select it. Click the selected target again to interact or attack. Choose **Keys** or **Extra Hotkey** in Options to change gameplay bindings.
 
 Inventory: left-click uses an item, right-click equips/replaces it, drag moves it. Supported window headers and action bars are draggable. Escape closes the active panel first. Chat uses `!name message` for whisper, `@message` for party, `#message` for guild and `$message` for trade. Settings are kept in the user's configuration directory; passwords are not saved by the graphical client.
 
@@ -127,4 +130,4 @@ Inventory: left-click uses an item, right-click equips/replaces it, drag moves i
 
 Source is [BSD 3-Clause](LICENSE). The original server copyright and terms are retained in [server/LICENSE](server/LICENSE). Third-party notices are in [NOTICE](NOTICE). Original Shaiya game content and trademarks retain their respective ownership; the source license does not grant rights to game assets.
 
-The complete [Client + Server + Data portable](https://drive.google.com/file/d/1E6IkTncfp3Yal4OshmTGu6kWsxs1aCqs/view?usp=sharing) is hosted on Drive. Updated client builds with external fonts are available in [GX releases](https://github.com/Spelunkern/Shaiya-GX/releases/latest); those archives do not include game data. Both executables may share one adjacent `data/` directory; see [portable client instructions](docs/client-portable.md).
+The complete [Client + Server + Data portable](https://drive.google.com/file/d/1oBq9bmt0eTmu9NNabIma0gmgGCe7i_Hk/view?usp=sharing) is hosted on Drive. Updated client builds with external fonts are available in [GX releases](https://github.com/Spelunkern/Shaiya-GX/releases/latest); those archives do not include game data. Both executables may share one adjacent `data/` directory; see [portable client instructions](docs/client-portable.md).

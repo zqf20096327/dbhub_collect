@@ -5,26 +5,96 @@
 [![Go Version](https://img.shields.io/github/go-mod/go-version/gabisonia/go-vectorstore)](https://github.com/gabisonia/go-vectorstore/blob/master/go.mod)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A lightweight Go vector-store library inspired by `Microsoft.Extensions.VectorData`.
+Store typed Go structs and search them by vector. Start with a SQLite file;
+the same model API also works with PostgreSQL, Redis, Qdrant and in-memory
+collections. [Documentation](https://gabisonia.dev/go-vectorstore/) · [Provider differences](docs/parity.md)
 
-Scope:
-- Go 1.25+
-- PostgreSQL + `pgvector`, embedded SQLite, standalone Redis, bounded Qdrant snapshots and in-memory model storage
-- Model-driven collections with typed/native keys, named vectors, struct tags, and optional embeddings
-- Shared model contracts and conformance tests across providers
-- Original Record API and custom codecs remain supported
+## Your first SQLite search
 
-This library can be used to build retrieval systems such as:
-- semantic search
-- RAG pipelines (retrieve from vector DB, then generate with an LLM)
-- context-aware assistants grounded on your own data
+With Go 1.26 or later, start in an empty directory and run:
+
+```sh
+go mod init example.com/handbook
+go get github.com/gabisonia/go-vectorstore/stores/sqlite@v0.7.0
+```
+
+Save this as `main.go`. Each handbook page has a two-number vector describing
+how strongly it relates to **recovery** and **deployment**, in that order.
+The values are hand-written so you can see exactly why a query matches.
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "log"
+
+    "github.com/gabisonia/go-vectorstore/stores/sqlite"
+    "github.com/gabisonia/go-vectorstore/vectordata"
+)
+
+type Page struct {
+    ID     string    `vectordata:"key"`
+    Title  string    `vectordata:"data"`
+    Vector []float32 `vectordata:"vector,dimensions=2,metric=cosine"`
+}
+
+func main() {
+    if err := search(); err != nil {
+        log.Fatal(err)
+    }
+}
+
+func search() error {
+    ctx := context.Background()
+    store, err := sqlite.Open(ctx, "handbook.db", sqlite.StoreOptions{})
+    if err != nil {
+        return err
+    }
+    defer store.Close()
+
+    pages, err := vectordata.EnsureTypedModelCollection[string, Page](
+        ctx, store, "pages", nil, vectordata.ModelCollectionOptions{})
+    if err != nil {
+        return err
+    }
+    _, err = pages.Upsert(ctx, []Page{
+        {"restore", "Restore a database backup", []float32{1, 0}},
+        {"rollback", "Roll back a deployment", []float32{0.7, 0.7}},
+        {"deploy", "Deploy a new service", []float32{0, 1}},
+    })
+    if err != nil {
+        return err
+    }
+    hits, err := pages.Search(ctx, []float32{1, 0}, 1, vectordata.ModelSearchOptions{})
+    if err != nil {
+        return err
+    }
+    for _, hit := range hits {
+        fmt.Println(hit.Item.Title)
+    }
+    return nil
+}
+```
+
+Run `go run .`. The recovery query points in the same direction as the first
+page's vector, so cosine search prints:
+
+```text
+Restore a database backup
+```
+
+Try changing the vector passed to `pages.Search` to `[]float32{0, 1}` and run it again to find the
+deployment page. SQLite keeps the collection in `handbook.db`; upserting the
+same IDs updates the same three pages. Delete the demo directory when finished.
 
 ## Requirements
 
-The minimum Go version is now 1.25 because the patched pgx and text dependencies
-require it. Use current stable Go for up-to-date standard-library security fixes.
+This checkout requires Go 1.26 or later for its patched dependencies. The
+published v0.5.0 release supports Go 1.25.
 
-- Go 1.25+
+- Go 1.26+
 - PostgreSQL provider: PostgreSQL 16+ with `pgvector` extension
 - Qdrant provider: standalone Qdrant 1.20.2 with explicit snapshot/receipt limits ([scope](docs/qdrant.md))
 - SQLite provider: a writable database file; no database server or C toolchain required
@@ -41,6 +111,7 @@ require it. Use current stable Go for up-to-date standard-library security fixes
 - `stores/redis`: atomic snapshots/hash generations, dense exact search and opt-in HNSW/FLAT
 - `stores/qdrant`: bounded standalone snapshots and exact Go search ([scope and limits](docs/qdrant.md))
 - `stores/memory`: transient model collections for development and contract tests
+- `connectors/azuresearch` and `connectors/pinecone`: independently versioned native adapters. See the [native connector support matrix](docs/native-support.md) for tested operations across all backends.
 - `samples`: runnable demos (see `samples/README.md`)
 - `docs`: architecture and implementation notes
 
@@ -51,12 +122,11 @@ go get github.com/gabisonia/go-vectorstore@latest
 ```
 
 Use the [release list](https://github.com/gabisonia/go-vectorstore/releases) to
-check available tags and pin the resolved version in go.mod. Published
-[v0.5.0](https://github.com/gabisonia/go-vectorstore/releases/tag/v0.5.0) is available.
+check available tags and pin the resolved version in go.mod.
 Master can include later changes; use a matching tag for a released checkout. See the
 [upgrade guide](docs/upgrading.md) and [compatibility policy](docs/releases.md).
 
-## Quick Start (Local)
+## Run the repository samples
 
 For typed text retrieval with no server or API key:
 
@@ -334,29 +404,27 @@ store, err := postgres.NewVectorStore(pool, postgres.StoreOptions{
 
 ## Integration tests
 
-```bash
-go test -tags=integration ./...
+Run unit tests with `go test ./...`. For the PostgreSQL provider and recipes,
+run each package separately against a disposable PostgreSQL database:
+
+```sh
+go test -count=1 -race -tags=integration -timeout=5m ./stores/postgres
+go test -count=1 -race -tags=integration -timeout=5m ./samples/recipes
 ```
 
-Unit tests run with:
-
-```bash
-go test ./...
-```
-
-Notes:
-- Integration tests start Postgres/pgvector automatically via Testcontainers
-- Docker daemon must be available when running integration tests
-- Optional override: set `PGVECTOR_TEST_DSN` to use an existing Postgres instance instead of starting a container
-- Set `PGVECTOR_TEST_IMAGE=pgvector/pgvector:pg18` to test a different PostgreSQL image (the default is `pgvector/pgvector:pg16`)
+By default these tests use Docker and `pgvector/pgvector:pg16`. Set
+`PGVECTOR_TEST_IMAGE=pgvector/pgvector:pg18` to test PostgreSQL 18, or set
+`PGVECTOR_TEST_DSN` to use an existing disposable database. Redis and Qdrant
+have their own fixtures and test commands. See [Redis verification](docs/redis.md#verification)
+and the [Qdrant provider guide](docs/qdrant.md).
 
 ## Aspire local development (optional)
 
 The [shared Go AppHost](samples/aspire-services/README.md) manages persistent local
-PostgreSQL and Redis services, the semantic-search/RAG examples, and the local
+PostgreSQL, Redis and Qdrant services, the semantic-search/RAG examples, and the local
 documentation agent. Aspire owns readiness, dependency ordering, logs and terminals.
 
-Use Aspire CLI 17.0.0, Go 1.26+ and Docker. The root library remains Go 1.25+;
+Use Aspire CLI 17.0.0, Go 1.26+ and Docker. The root library also requires Go 1.26+;
 AppHosts and their generated SDKs live in isolated modules. Ordinary AppHost stops
 retain persistent services; `--force` removes those containers while preserving
 data volumes. Integration tests still use Testcontainers for disposable databases.
@@ -368,7 +436,7 @@ the separate [Aspire vector-search sample](samples/aspire-vector-search/README.m
 
 GitHub Actions workflows are configured for:
 
-- CI on pushes/PRs with race detection, `go vet`, release-script tests, and vulnerability scanning, testing Go 1.25/current stable and PostgreSQL 16/18 (`.github/workflows/ci.yml`)
+- CI on pushes/PRs with race detection, `go vet`, release-script tests, and vulnerability scanning, testing Go 1.26/current stable and PostgreSQL 16/18 (`.github/workflows/ci.yml`)
 - release publishing from semver tags or manual workflow dispatch (`.github/workflows/release.yml`), gated on the same CI checks
 
 Release version input is passed through environment variables and validated before
@@ -376,7 +444,7 @@ any publishing job runs. Existing tags must point to the checked-out, tested
 commit; the workflow will not move a tag to another commit. Prerelease versions
 are published as GitHub prereleases.
 
-`VERSION` selects the source version being prepared or tagged (`0.5.0`). It does
+`VERSION` selects the source version being prepared or tagged (`0.7.0`). It does
 not establish that the tag has been published. Choose an unused version and update
 `VERSION` and the changelog in a reviewed PR before publishing from master. Published tags are immutable; documentation updates after
 a release do not change the source stored under that tag.
@@ -393,6 +461,8 @@ git push origin "v${RELEASE_VERSION}"
 ```
 
 ## Samples
+
+[Search an engineering handbook](samples/handbook/README.md) to see a cited passage change after editing and reindexing its source. Replay it locally with SQLite or on PostgreSQL with pgvector.
 
 - Overview and entry points: [`samples/README.md`](samples/README.md)
 - Local agent with Ollama and SQLite: [`local-doc-agent`](samples/local-doc-agent/README.md) (Aspire, separate module)
@@ -441,6 +511,10 @@ Unsupported filters keep exact Go evaluation. KeywordTerms lists OR plain-text
 AND groups; native mode advertises HybridKeywordTerms.
 Native indexing requires Redis Search and database zero; writes rebuild the generation's index.
 See [native support and fallback rules](docs/redis.md#native-indexes-and-search).
+
+## Contributing
+
+[Start with the contributor guide](CONTRIBUTING.md) for a first issue, a local test command, and how to submit a pull request.
 
 ## License
 

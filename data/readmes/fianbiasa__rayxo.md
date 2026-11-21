@@ -25,7 +25,7 @@
   <img src=".github/screenshots/admin-dashboard.png" alt="Dashboard admin RAYXO" width="900">
 </p>
 
-> **Status:** beta, versi terbaru [v0.8.30](https://github.com/fianbiasa/rayxo/releases/latest). Lihat juga [Berikutnya](#berikutnya).
+> **Status:** beta, versi terbaru [v0.8.36](https://github.com/fianbiasa/rayxo/releases/latest). Lihat juga [Berikutnya](#berikutnya).
 
 ## Instalasi
 
@@ -68,7 +68,7 @@ Dengan syarat itu terpenuhi, `setup.sh` otomatis memasang **SSL Let's Encrypt** 
 <details>
 <summary><strong>Pilihan instalasi, email panel, dan lupa password</strong></summary>
 
-`setup.sh` dari sebuah rilis otomatis mengunduh paket rilis yang sama dari GitHub dan memverifikasi checksum-nya. Versi tertentu: `--version 0.8.30`. Versi PHP untuk website (default 7.4 sampai 8.5): `--php-versions "8.2 8.3 8.4"`; versi yang sudah terpasang tidak dihapus. `setup.sh` aman dijalankan ulang kalau berhenti di tengah. Pilihan lengkap: `bash setup.sh --help`.
+`setup.sh` dari sebuah rilis otomatis mengunduh paket rilis yang sama dari GitHub dan memverifikasi checksum-nya. Versi tertentu: `--version 0.8.36`. Versi PHP untuk website (default 7.4 sampai 8.5): `--php-versions "8.2 8.3 8.4"`; versi yang sudah terpasang tidak dihapus. `setup.sh` aman dijalankan ulang kalau berhenti di tengah. Pilihan lengkap: `bash setup.sh --help`.
 
 **Email panel** (verifikasi, reset password) dikirim lewat Postfix di server itu sendiri (port 587 dengan login `rayxo@<hostname>`) dan ditandatangani DKIM oleh OpenDKIM. Di akhir instalasi, `setup.sh` menampilkan rekaman DNS yang perlu dipasang beserta statusnya (✔/✘), dan menyimpannya di `/etc/rayxo/dns-records.txt`:
 
@@ -155,10 +155,13 @@ Repo ini berisi kode sumber lengkap. Server tidak membangun apa pun: `setup.sh` 
 
 ## Berikutnya
 
-| Fase | Isi                                                                                   |
-| ---- | ------------------------------------------------------------------------------------- |
-| P5   | ModSecurity, update panel sekali klik, UI dua bahasa                                  |
-| P6   | App installer dan WordPress manager, Git deploy, Node.js/Python, DNSSEC, multi-server |
+RAYXO sudah mencakup seluruh target fitur sampai siap produksi, plus beberapa fitur lanjutan yang dimajukan (Redis, ClamAV, PostgreSQL, aplikasi Node.js). Rencana berikutnya:
+
+| Versi  | Isi                                                                                                                                 |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| v1.0.0 | Rilis stabil pertama, setelah masa uji (soak) di server staging. Sebelum itu: UX antivirus ClamAV (halaman karantina & notifikasi). |
+| v1.1.0 | UI dua bahasa (Indonesia & English) dengan bahasa default server.                                                                   |
+| Nanti  | App & WordPress manager, Git deploy, aplikasi Python, DNSSEC, mailing list, multi-server & DNS cluster, dan lainnya.                |
 
 Panel dirancang untuk menjual shared hosting (Admin → Reseller → User) di satu server; desain agent sudah disiapkan untuk multi-server.
 

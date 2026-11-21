@@ -46,7 +46,7 @@ The data is kept in a Docker volume named after the folder (`monido_data`); `doc
 
 ![When you reach each goal. Dates from what the family actually saves, and what would move them.][Screens/en-US/goals]
 
-![Was this month a usual one? Income, expenses and savings against your own typical month.][Screens/en-US/cashflow]
+![Where the income went: a year of income by source, flowing to what you saved, the spending groups and loan interest.][Screens/en-US/cashflow]
 
 ![What the family owns, and whose it is. By type, owner and currency, with what changed over the month.][Screens/en-US/assets]
 

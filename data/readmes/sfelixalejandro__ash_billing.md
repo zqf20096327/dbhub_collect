@@ -1,0 +1,439 @@
+<!--
+SPDX-FileCopyrightText: 2026 Alejandro Felix <https://github.com/sfelixalejandro/ash_billing>
+
+SPDX-License-Identifier: MIT
+-->
+
+![Logo](https://github.com/ash-project/ash/blob/main/logos/cropped-for-header-black-text.png?raw=true#gh-light-mode-only)
+![Logo](https://github.com/ash-project/ash/blob/main/logos/cropped-for-header-white-text.png?raw=true#gh-dark-mode-only)
+
+[![CI](https://github.com/sfelixalejandro/ash_billing/actions/workflows/ci.yml/badge.svg)](https://github.com/sfelixalejandro/ash_billing/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Hex version badge](https://img.shields.io/hexpm/v/ash_billing.svg)](https://hex.pm/packages/ash_billing)
+[![Hexdocs badge](https://img.shields.io/badge/docs-hexdocs-purple)](https://hexdocs.pm/ash_billing)
+
+# AshBilling
+
+Welcome! `ash_billing` provides declarative billing, subscriptions, and payment providers for the [Ash Framework](https://ash-hq.org). This documentation is best viewed on [hexdocs](https://hexdocs.pm/ash_billing).
+
+Inspired by Laravel Cashier and Rails Pay, `ash_billing` offers a unified, declarative architecture to handle customers, checkout sessions, customer billing portals, and recurring subscription lifecycles natively in Ash.
+
+## About the Documentation
+
+[**Tutorials**](#tutorials) walk you through a series of steps to accomplish a goal. These are **learning-oriented**, and are a great place for beginners to start.
+
+---
+
+[**Topics**](#topics) provide a high-level overview of a specific concept or feature. These are **understanding-oriented**, and are perfect for discovering design patterns, features, and operational architecture.
+
+---
+
+[**Reference**](#reference) documentation is produced automatically from our source code. It comes in the form of module documentation and DSL documentation. This documentation is **information-oriented**. Use the sidebar and the search bar to find relevant reference information.
+
+## Tutorials
+
+- [Getting Started with AshBilling](documentation/tutorials/getting-started-with-ash-billing.md)
+
+## Topics
+
+- [Webhooks & Operational Resilience](documentation/topics/webhooks-and-resilience.md)
+- [Diagnostics, Recovery CLI & Observability](documentation/topics/observability-and-diagnostics.md)
+- [Upgrading to 0.7](documentation/topics/upgrading-to-0.7.md)
+- [Stripe Test Mode Validation](documentation/topics/stripe-test-mode.md)
+
+## Reference
+
+- [AshBilling.Resource DSL](documentation/dsls/DSL-AshBilling.Resource.md)
+- [AshBilling.Subscription DSL](documentation/dsls/DSL-AshBilling.Subscription.md)
+- [AshBilling.WebhookEvent DSL](documentation/dsls/DSL-AshBilling.WebhookEvent.md)
+- For other reference documentation, see the sidebar & search bar
+
+## Related Packages
+
+- [Ash Framework](https://hexdocs.pm/ash)
+- [Igniter](https://hexdocs.pm/igniter) | Project setup and automated code generation
+- [AshPostgres](https://hexdocs.pm/ash_postgres) | PostgreSQL data layer for Ash
+- [AshAuthentication](https://hexdocs.pm/ash_authentication) | Authentication extension for Ash
+
+---
+
+## Features
+
+- **Declarative Spark DSL**: Add billing customer or subscription capabilities to any Ash resource with clean DSL blocks (`billing do ... end` and `billing_subscription do ... end`).
+- **Compile-Time Spark Verifiers**: Automatic validation of relationship existence and attribute type safety during compilation.
+- **Stripe Provider**: First-class support for Stripe Checkout Sessions, Customer Billing Portal, and Recurring Subscriptions.
+- **Secure Webhook Plug**: Phoenix/Plug endpoint with constant-time HMAC-SHA256 signature verification and replay attack protection.
+- **Automatic Retries via HTTP 500 Protocol**: Responds with HTTP 500 when database synchronization fails, triggering Stripe's automated exponential retry backoff.
+- **Modular Provider Architecture**: Built with an extensible `AshBilling.Provider` behaviour, ready for Stripe, Paddle, LemonSqueezy, and more.
+- **Durable Reconciliation & Quantity Sync**: PostgreSQL-backed `last_reconciled_at` checkpoints, fail-closed `quantity` / `provider_subscription_item_id` synchronization, and live provider re-verification against delayed webhooks.
+- **Diagnostics, Recovery CLI & Reference SaaS**: Built-in `mix ash_billing.doctor`, `mix ash_billing.reconcile`, low-cardinality `:telemetry` metrics, and a runnable Phoenix + AshPostgres SaaS example (`examples/saas_example`).
+- **100% Testable**: Zero external HTTP calls needed during test suites thanks to plug-based stubs and polymorphic extractors.
+
+---
+
+## Installation
+
+Version **0.7.0** adds PostgreSQL persistence and synchronization for subscription `quantity`
+and `provider_subscription_item_id`, layered diagnostics (`AshBilling.Diagnostics` &
+`mix ash_billing.doctor`), a safe drift-inspection and reconciliation CLI (`AshBilling.Reconciler`
+& `mix ash_billing.reconcile`), low-cardinality observability telemetry, and a runnable
+Phoenix + Ash + AshPostgres SaaS reference application (`examples/saas_example`).
+Read [Upgrading to 0.7](documentation/topics/upgrading-to-0.7.md) before updating from `0.6.0`
+(requires adding nullable `quantity` and `provider_subscription_item_id` columns). For earlier
+upgrades, see [Upgrading to 0.6](documentation/topics/upgrading-to-0.6.md),
+[Upgrading to 0.5](documentation/topics/upgrading-to-0.5.md), and
+[Upgrading to 0.4](documentation/topics/upgrading-to-0.4.md).
+
+`ash_billing` is available on [Hex.pm](https://hex.pm/packages/ash_billing).
+
+The recommended way to install `ash_billing` is using Igniter:
+
+```bash
+mix igniter.install ash_billing
+```
+
+Igniter adds the dependency, configures resources and domain registration, mounts the webhook route, and sets up runtime credentials and raw-body handling. New subscriptions inherit an explicitly configured customer PostgreSQL repo. Review its notices, generate and apply migrations, and configure persistent webhook deduplication for production.
+
+Alternatively, you can install it manually by adding `ash_billing` to your `mix.exs`:
+
+```elixir
+def deps do
+  [
+    {:ash_billing, "~> 0.7.0"}
+  ]
+end
+```
+
+---
+
+## Quickstart
+
+### 1. Add Billing to your User Resource
+
+```elixir
+defmodule MyApp.Accounts.User do
+  use Ash.Resource,
+    domain: MyApp.Accounts,
+    extensions: [AshBilling.Resource]
+
+  attributes do
+    uuid_primary_key :id
+    attribute :email, :string, public?: true
+    attribute :name, :string, public?: true
+  end
+
+  billing do
+    # Defaults to :stripe_customer_id
+    customer_id_attribute :stripe_customer_id
+    provider AshBilling.Providers.Stripe
+  end
+end
+```
+
+### 2. Define a Subscription Resource
+
+```elixir
+defmodule MyApp.Billing.Subscription do
+  use Ash.Resource,
+    domain: MyApp.Billing,
+    extensions: [AshBilling.Subscription]
+
+  attributes do
+    uuid_primary_key :id
+  end
+
+  relationships do
+    belongs_to :user, MyApp.Accounts.User
+  end
+
+  billing_subscription do
+    customer_relationship :user
+    provider AshBilling.Providers.Stripe
+  end
+end
+```
+
+The extension automatically manages attributes such as `:provider_subscription_id`, `:status`, `:price_id`, `:current_period_end`, `:cancel_at_period_end`, and `:cancel_at`, and generates `:active?`, `:on_trial?`, and `:canceling?` calculations.
+
+---
+
+### 3. Mount the Webhook Handler in your Phoenix Router
+
+```elixir
+# lib/my_app_web/router.ex
+scope "/webhooks" do
+  forward "/stripe", AshBilling.Plug,
+    provider: AshBilling.Providers.Stripe,
+    webhook_secret: {System, :get_env, ["STRIPE_WEBHOOK_SECRET"]},
+    customer_resource: MyApp.Accounts.User,
+    subscription_resource: MyApp.Billing.Subscription,
+    domain: MyApp.Billing
+end
+```
+
+`AshBilling.Plug` verifies the HMAC signature and automatically synchronizes customer and subscription states. You can also pass an optional `handler: MyApp.Billing.WebhookHandler` if you want to listen to custom Stripe events.
+
+> [!NOTE]
+> In Phoenix applications, ensure `AshBilling.Plug` has access to the raw request body for cryptographic signature verification. You can mount it in `endpoint.ex` before `Plug.Parsers`, or configure a `body_reader` in `Plug.Parsers` that populates `conn.assigns[:raw_body]`.
+
+---
+
+## High-Level API
+
+### Create a Customer
+```elixir
+# user must be an authorized, persisted resource in the trusted billing scope.
+billing_opts = [actor: user, authorize?: true]
+{:ok, customer_id} = AshBilling.create_customer(user, [persist: true] ++ billing_opts)
+user = Ash.get!(MyApp.Accounts.User, user.id, billing_opts)
+```
+
+Recurring Checkout requires an associated Customer. A missing ID returns
+`{:error, :no_customer_id}` before calling Stripe. Create/persist once as above and
+reload the record; concurrent creation uses the same automatic idempotency key and
+conditional association. Keep tenant/account/environment options server-controlled.
+If persistence fails after remote creation, the returned
+`{:persistence_failed, customer_id, reason}` contains the identity for reconciliation.
+
+### Start a Checkout Session
+```elixir
+{:ok, session} = AshBilling.create_checkout_session(user,
+  price: "price_pro_monthly",
+  success_url: "https://myapp.com/billing?success=true",
+  cancel_url: "https://myapp.com/billing?canceled=true"
+)
+
+# Redirect the user to session.url
+```
+
+### Open the Customer Billing Portal
+```elixir
+{:ok, portal} = AshBilling.create_portal_session(user,
+  return_url: "https://myapp.com/dashboard"
+)
+
+# Redirect the user to portal.url
+```
+
+### Check Subscription Status
+```elixir
+# Check if user has any active/trialing subscription
+AshBilling.subscribed?(user)
+
+# Check if user has a specific plan
+AshBilling.subscribed?(user, "price_pro_monthly")
+```
+
+### Swap Subscription Plans (Upgrades / Downgrades)
+```elixir
+# Upgrade to an annual or higher-tier plan with automatic proration
+{:ok, updated_sub} = AshBilling.swap_plan(user_subscription, "price_enterprise_annual",
+  proration_behavior: "create_prorations"
+)
+```
+
+### Update Quantities (Per-Seat Billing)
+```elixir
+# Update seat quantities directly without altering the subscription's price or plan
+{:ok, updated_sub} = AshBilling.update_quantity(user_subscription, 10)
+
+# Or provide an optimistic price assertion (aborts if Stripe has a different plan):
+{:ok, updated_sub} = AshBilling.update_quantity(user_subscription, 10, price_id: "price_seats_v1")
+```
+
+> [!NOTE]
+> **Provider Quantity Isolation & Persistence Scope**: `AshBilling.Providers.Stripe` guarantees price isolation by sending only the subscription item ID and updated quantity, omitting the price from the payload. For custom providers lacking `@callback update_quantity/3`, `AshBilling` falls back to `swap_plan/3`. If a caller supplies a stale `:price_id` to a legacy fallback provider, `swap_plan/3` will execute with that stale price. To guarantee price safety, custom providers must implement `update_quantity/3`.
+>
+> **Local Synchronization & Consistency:** `AshBilling.Subscription` persists and synchronizes `quantity` (nullable non-negative integer) and `provider_subscription_item_id` from single-item provider webhooks and `AshBilling.reconcile_subscription/2`. Remote mutations (`update_quantity/3`, `swap_plan/3`) update Stripe immediately and converge locally when the signed webhook arrives (eventual consistency); call `AshBilling.reconcile_subscription/2` whenever immediate local convergence is required. Historical or metered subscriptions without a provider quantity keep `quantity: nil` rather than assuming `1`; provider-reported `0` persists as `0` contracted seats; negative or malformed non-integer quantities fail closed with `{:error, :invalid_quantity}` without erasing valid persisted state.
+
+### Resume a Canceled Subscription
+```elixir
+# Reactivate a subscription that was scheduled to cancel at period end
+{:ok, resumed_sub} = AshBilling.resume_subscription(user_subscription)
+```
+
+### Reconcile Subscriptions (Webhook Drift & Recovery)
+```elixir
+# Safely fetch live state from Stripe and commit updates to PostgreSQL inside advisory locks:
+{:ok, reconciled_sub} = AshBilling.reconcile_subscription(user_subscription,
+  domain: MyApp.Billing
+)
+```
+
+> [!TIP]
+> `AshBilling.get_subscription/2` only reads remote state from the billing provider without persisting changes. To repair database drift when webhooks are permanently lost or delayed (e.g. endpoint down > 72h), use `AshBilling.reconcile_subscription/2` in periodic maintenance jobs (such as an Oban worker) or interactive recovery tasks. It wraps the authoritative provider snapshot in a synthetic event, processes it through `AshBilling.WebhookSync.sync_event/2`, and commits state inside transaction and advisory lock boundaries.
+
+---
+
+## Declarative Ash Policies
+
+Protect any resource action declaratively based on billing status using native Ash policy checks:
+
+```elixir
+defmodule MyApp.AI.Prompt do
+  use Ash.Resource,
+    domain: MyApp.AI,
+    authorizers: [Ash.Policy.Authorizer]
+
+  policies do
+    # Authorize any user with an active subscription or ongoing trial
+    policy action(:generate) do
+      authorize_if AshBilling.Checks.Subscribed
+    end
+
+    # Require a specific plan tier (single price or list of allowed prices)
+    policy action(:export_fine_tuned_weights) do
+      authorize_if {AshBilling.Checks.HasPrice, price: ["price_enterprise_annual", "price_enterprise_monthly"]}
+    end
+  end
+end
+```
+
+---
+
+## Webhook Deduplication (Single-Node & Clustered)
+
+`ash_billing` provides two deduplication strategies to prevent double-processing on Stripe webhook retries:
+
+### 1. In-Memory ETS (`:memory`, default)
+Zero-configuration in-memory ETS table with automatic 24-hour TTL cleanup. Ideal for single-server deployments and local development.
+
+### 2. Database-Backed Resource (`:resource`)
+Guarantees deduplication across multi-node clusters (e.g., Fly.io, Kubernetes, AWS ECS) using an Ash resource backed by PostgreSQL.
+
+> [!IMPORTANT]
+> Distributed cross-node deduplication with atomic transaction-scoped advisory locks (`pg_try_advisory_xact_lock`) and row-level fencing (`FOR UPDATE NOWAIT`) is specifically implemented and verified for **PostgreSQL**. Non-PostgreSQL data layers (such as SQLite, MySQL, or ETS) rely on local node locks and do not provide distributed cross-node concurrency guarantees.
+
+Define a dedicated webhook event resource configured with `AshPostgres`:
+
+```elixir
+defmodule MyApp.Billing.WebhookEvent do
+  use Ash.Resource,
+    domain: MyApp.Billing,
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshBilling.WebhookEvent]
+
+  postgres do
+    table "webhook_events"
+    repo MyApp.Repo
+  end
+
+  # WebhookEvent is an internal deduplication mechanism.
+  # Its actions should remain internal to the system and must NOT be exposed
+  # to untrusted clients via public APIs (AshJsonApi, AshGraphql, or unrestricted forms).
+  actions do
+    default_accept :*
+    defaults [:read, :create, :update, :destroy]
+  end
+end
+```
+
+> [!NOTE]
+> - **Internal resource**: `WebhookEvent` manages internal idempotency state (`event_id`, `status`, `lease_token`, `attempts`, `error`, etc.). Do not expose it to external clients.
+> - **Shared Repo pool**: Configured customer, subscription, and webhook event resources must use the same primary PostgreSQL Repo pool to ensure strict transactional integrity.
+> - **Domain & Migrations**: Register `MyApp.Billing.WebhookEvent` in your domain (e.g., `MyApp.Billing`) and generate and apply the PostgreSQL migration (`mix ash.codegen` / `mix ash.migrate`).
+
+Then configure it in your router:
+
+```elixir
+forward "/webhooks/stripe", AshBilling.Plug,
+  customer_resource: MyApp.Accounts.User,
+  subscription_resource: MyApp.Billing.Subscription,
+  deduplication_resource: MyApp.Billing.WebhookEvent
+```
+
+---
+
+## Configuration
+
+Configure your Stripe API credentials in `config/runtime.exs`:
+
+```elixir
+config :ash_billing,
+  stripe_api_key: System.get_env("STRIPE_SECRET_KEY"),
+  stripe_webhook_secret: System.get_env("STRIPE_WEBHOOK_SECRET")
+```
+
+---
+
+## Telemetry
+
+`ash_billing` emits standard `:telemetry` spans across all critical operations, enabling real-time monitoring via Grafana, AppSignal, Datadog, or Prometheus:
+
+| Event Prefix | Description | Measurements | Metadata |
+|---|---|---|---|
+| `[:ash_billing, :webhook, :start \| :stop \| :exception]` | Emitted during webhook receipt and signature verification in `AshBilling.Plug`. | `:system_time` / `:duration` | `:conn`, `:provider`, `:status`, `:event_type`, `:event_id` |
+| `[:ash_billing, :sync, :start \| :stop \| :exception]` | Emitted during database synchronization in `AshBilling.WebhookSync`. | `:system_time` / `:duration` | `:event_type`, `:event_id`, `:customer_resource`, `:subscription_resource`, `:status` |
+| `[:ash_billing, :checkout, :start \| :stop \| :exception]` | Emitted during Checkout session creation in `AshBilling.create_checkout_session/2`. | `:system_time` / `:duration` | `:provider`, `:mode`, `:customer`, `:status`, `:session_id`, `:url` |
+| `[:ash_billing, :portal, :start \| :stop \| :exception]` | Emitted during Billing Portal session creation in `AshBilling.create_portal_session/2`. | `:system_time` / `:duration` | `:provider`, `:customer`, `:status`, `:url` |
+| `[:ash_billing, :swap_plan, :start \| :stop \| :exception]` | Emitted during plan swaps in `AshBilling.swap_plan/3`. | `:system_time` / `:duration` | `:provider`, `:subscription_id`, `:new_price_id`, `:status` |
+| `[:ash_billing, :update_quantity, :start \| :stop \| :exception]` | Emitted during quantity/seat updates in `AshBilling.update_quantity/3`. | `:system_time` / `:duration` | `:provider`, `:subscription_id`, `:quantity`, `:status` |
+| `[:ash_billing, :reconcile, :start \| :stop \| :exception]` | Emitted once per logical `AshBilling.reconcile_subscription/2` call. | `:system_time` / `:duration` | `:provider`, `:mode`, `:status`, `:drift_detected`, `:changed_fields`, `:error_category` |
+| `[:ash_billing, :reverify, :start \| :stop \| :exception]` | Emitted once per live provider `GET` re-verification inside `AshBilling.WebhookSync`. | `:system_time` / `:duration` | `:provider`, `:status`, `:drift_detected`, `:changed_fields`, `:error_category` |
+| `[:ash_billing, :deduplication, :acquire \| :complete \| :release]` | Emitted once per logical deduplication lease operation. | `:count`, `:duration` (`:acquire`) | `:strategy`, `:outcome` / `:status`, `:error_category` |
+| `[:ash_billing, :postgres, :contention]` | Emitted when PostgreSQL lock/connection contention aborts a billing transaction. | `:count` | `:operation`, `:reason` |
+| `[:ash_billing, :reconciler, :batch]` | Emitted once per `AshBilling.Reconciler.run/1` batch (`mix ash_billing.reconcile`). | `:duration`, `:total`, `:drifted`, `:reconciled`, `:unchanged`, `:skipped`, `:failed`, `:pages` | `:mode` |
+
+See [Diagnostics, Recovery CLI & Observability](documentation/topics/observability-and-diagnostics.md) for `mix ash_billing.doctor`, `mix ash_billing.reconcile`, and a `Telemetry.Metrics` dashboard example.
+
+---
+
+## Runnable SaaS Reference Application
+
+A complete runnable **Phoenix + Ash + AshPostgres** SaaS reference application lives in `examples/saas_example` (with Docker Compose for PostgreSQL 16, migrations, demo seeds, Stripe Test Mode configuration, `Subscribed` & `HasPrice` policies, per-seat `quantity` enforcement, signed webhooks with PostgreSQL deduplication, `mix ash_billing.doctor` / `mix ash_billing.reconcile`, and automated tests). See [`examples/saas_example/README.md`](https://github.com/sfelixalejandro/ash_billing/tree/main/examples/saas_example) to run it locally.
+
+---
+
+## Supported Stripe API Baseline
+
+`ash_billing` processes Stripe snapshot billing events using v1 resource shapes. Check your endpoint API version against the customer, subscription, price and timestamp fields your integration uses. Thin events and non-nil v2 `context` envelopes are not supported; they are rejected rather than recorded as processed.
+
+---
+
+## Security, Financial Responsibility & Support Scope
+
+- **Financial Compliance**: Tax calculation, invoice finalization, currency conversion rules, and PCI-DSS compliance boundaries remain the architectural responsibility of the implementing application.
+- **Billing Input Boundaries**: Billing state is excluded from wildcard actions. Explicit accepts still require application policies. Configure a fixed Stripe account/environment per tenant; see the [security hardening and deployment contract](documentation/topics/webhooks-and-resilience.md#billing-inputs-tenants-and-stripe-scope).
+- **Webhook Resilience**: In production environments, always pair `AshBilling.Plug` with a database-backed deduplication resource (`AshBilling.WebhookEvent`) to ensure idempotency across multi-node deployments and automatic Stripe exponential retries.
+- **Support & Issues**: The issue tracker is strictly reserved for reproducible bugs and targeted feature enhancements. For architecture questions and implementation advice, please participate in the [Ash Discord](https://discord.gg/HTHRaaVPUc) or [Elixir Forum](https://elixirforum.com/c/ash-framework-forum/).
+
+---
+
+## Community & Support
+
+- Ask questions on the [Ash Discord](https://discord.gg/HTHRaaVPUc)
+- Discuss on the [Elixir Forum](https://elixirforum.com/c/ash-framework-forum/)
+- Official Ash Framework Website: [ash-hq.org](https://ash-hq.org)
+
+---
+
+## License
+
+MIT License. Copyright (c) 2026 Alejandro Felix.
+
+## Billing lifecycle hardening (0.5.0)
+
+Recurring subscriptions support exactly one line item. Multiple subscription lines
+are rejected before Checkout; multi-item nonterminal webhooks return an error and
+retain the last supported local snapshot. Terminal events still revoke access.
+Payment-mode Checkout can have multiple lines and does not guarantee Customer
+creation, payment success, or fulfillment.
+
+Plan changes preserve quantity by fetching the selected item when necessary.
+Only an explicit item ID plus a positive integer quantity avoids that GET; ambiguous
+items and unknown quantities fail safely.
+
+Custom webhook handlers must return `:ok`, `{:ok, value}`, or `{:error, reason}`.
+Other values and exceptions fail instead of marking an event processed. Shared-Repo
+PostgreSQL writes roll back on processing failure; remote effects remain at-least-once.
+
+See [the 0.5 upgrade guide](documentation/topics/upgrading-to-0.5.md)
+for behavior changes, unsupported external subscriptions, actor freshness and retry
+responsibilities. Version 0.5 introduces no new schema migration.
+
+## Stripe Test Mode validation
+
+The optional [isolated consumer](documentation/topics/stripe-test-mode.md) exercises real
+Stripe test requests, Checkout and signed CLI-forwarded webhooks separately from
+normal tests. Its local replay and PostgreSQL fault-injection scenarios are labeled
+as simulations. Credentials, event payloads and run evidence remain local.

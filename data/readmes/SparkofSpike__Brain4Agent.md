@@ -122,15 +122,26 @@ imported 4 turns across 2 sessions
 }}}
 ```
 
-Five tools:
+Seven tools:
 
 | Tool | Purpose |
 |---|---|
 | `b4a_remember` | Store one turn; returns a session id |
+| `b4a_supersede` | Replace an outdated memory with an existing correction; keeps history |
+| `b4a_unsupersede` | Undo that link; makes the old memory current again |
 | `b4a_recall` | Search; returns sessions with `corpus_missing` and per-session `missing_terms` |
 | `b4a_ask` | Retrieve and answer in one step; needs a model, and says so when none is configured |
 | `b4a_session` | Read a whole session in order |
 | `b4a_stats` | Counts |
+
+To correct a fact, store its replacement with `b4a_remember`, then call
+`b4a_supersede` with `old_id` and `new_id`. Memory IDs are returned by
+`b4a_remember`, as `memory_id` in recall evidence, and as `id` in session turns.
+Recall follows the replacement even when queried with the old wording;
+`b4a_session` keeps both turns and shows `superseded_by` on the old one. The
+replacement also inherits the old memory's tags, so a scope-filtered query still
+reaches the correction. `b4a_unsupersede` takes the link back if the correction
+turns out to be wrong.
 
 The same library is also packaged as an agent [skill](integrations/).
 
@@ -462,9 +473,9 @@ unambiguous.
 | Capability | Status here |
 |---|---|
 | Structured memory (typed facts, preferences, entities) | **Partial.** `kind` is a free-form label, `tags` are scopes, `refs` are links. No schema, no validation. |
-| Temporal / graph memory (validity windows, relation evolution) | **Not built.** `created_at` and `superseded_by` only; no validity interval, no query-time traversal. One-hop `refs` scores 4/4 on PrecisionMemBench. |
+| Temporal / graph memory (validity windows, relation evolution) | **Partial.** Facts are bitemporal: a half-open `[valid_from, valid_to)` axis for when something was true and a half-open `[known_from, known_to)` axis for when this store believed it, queried by `as_of` and `known_as_of` and composable (D-047, D-054); `supersede` closes the validity window at the replacement's start and the belief at the replacement's `known_from`. What is missing is the graph: one-hop `refs` (4/4 on PrecisionMemBench), no relation evolution across hops and no query-time traversal (D-024). |
 | Conflict resolution | **Built.** `supersede(old, new)`; the replaced memory stops surfacing. PrecisionMemBench supersession category: 3/3. |
-| Write-path deduplication / pattern extraction | **Not built.** Extraction exists (`remember()`) and is **off by default** (D-023). |
+| Write-path deduplication / pattern extraction | **Not built.** Extraction exists (`remember()`) and is **off by default** (D-023). Near-duplicates are reported by `duplicates_of`, never merged (D-028). |
 | Multi-retriever fusion | **Not built.** One retriever: BM25. |
 | Forgetting / consolidation | **Crude.** `prune(keep_sessions=N)` is recency-based size control; `decay` and `prune_by_weight` add a weight signal. Recovering a noisy corpus needs deleting 95% of it (D-022). |
 | Cross-session aggregation | **Not built.** |
@@ -489,8 +500,21 @@ in one passage (D-042) — LoCoMo hit@1 0.6826 → 0.7054 and MRR 0.7784 → 0.7
 with the Chinese benchmark, PrecisionMemBench, LongMemEval and keyword queries
 against the real store all measured unchanged.
 
+**New:** a fact is true for a window, and believed for a window — two axes, not
+one. `add(...)` takes `valid_from` and `known_from`; `supersede` closes the
+replaced validity window at the replacement's start and the replaced belief at
+the replacement's `known_from`, because hearing about a change is a separate
+event from the change. `search(..., as_of=)` ranks only what was live at that
+instant, `search(..., known_as_of=)` ranks only what this store believed then,
+and passing both requires the answer to have been both (D-047, D-054). Every
+window is half-open, so the switch instant belongs to exactly one fact, and an
+empty dated result names the cause it actually had — absent from the corpus,
+not true then, or not yet believed — the same split D-018 spent 27 false
+refusals separating.
+
 **Not built:** cross-session synthesis, multimodal, schema on `kind`,
-multi-retriever fusion, a recall scheduler, time-decayed forgetting.
+multi-retriever fusion, a recall scheduler, time-decayed forgetting,
+query-time traversal across `refs`.
 
 **Measured and rejected:** query-time graph traversal (D-024), write-time
 extraction (D-023), chunking LoCoMo sessions for retrieval, running LongMemEval
@@ -498,7 +522,7 @@ on the store's own tokenisers (D-037), chunking LoCoMo sessions (D-037),
 minimum-span and early-position re-ranks (D-042).
 
 Release history is in [CHANGELOG.md](CHANGELOG.md). The
-[decision log](docs/decisions.md) records 43 entries; the
+[decision log](docs/decisions.md) records 54 entries; the
 [research notes](docs/research.md) and [landscape analysis](docs/landscape.md)
 cover the field.
 

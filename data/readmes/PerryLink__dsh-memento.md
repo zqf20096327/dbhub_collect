@@ -38,6 +38,10 @@ dsh plugin --profile <name> add dsh-memento
 
 ## 它是什么
 
+![dsh-memento 真实终端运行](docs/assets/dsh-memento-demo.gif)
+
+*本仓库一次真实运行的动图回放。*
+
 写下一条值得记住的事，它就在下一次会话开头等着模型——而那次写入过了审批门、留了审计行。`dsh-v0.2.2-rc.4`（2026-11-18）；`dsh-memento` 给 DeepSeek Harness 补的是**能力接缝**，不是又一个记忆仓库：一个类型安全的 `ctx.memory` 服务、一个本地 SQLite 提供方（`node:sqlite`，WAL，权限 `0600`，默认 `$DSH_HOME/dsh-memento/memory.db`），以及它的两个消费方——`memory` 工具与注入系统提示的冻结快照。两条轨道（`user` / `agent`）× 两个层级（`user-global` / `workspace`）× 按 `agentPreset` 隔离，每轨每层都有硬字符预算；`dsh-memento-mcp` 另提供一个只读 stdio MCP 入口。
 
 **参见同类。** `dsh-mnemon` 是带 mem0/Honcho 托管 provider 的 framework，锁在 0.2.1 线；`@openviking/dsh-memory-plugin` 是 Volcengine 示例，未声明 dsh engine；`dsh-plugin-memory` 是最接近的同类，无 provenance。`dsh-memento` 是本地 SQLite + 审批门 + 审计链，不是托管 provider 的 drop-in。
@@ -413,7 +417,7 @@ profile patch 覆盖示例：
 
 | 维度 | 状态 |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.2.2-rc.4`（2026-11-18 适配；`0.2.2-rc.4` 自 2026-11-18 起）：`0.1.7` 线把整条设置注册面（`installSettingsSection` / `SettingsProvider.installSection` / `SettingsNamespace` / `SettingsScope`）换成 live config 表单——表单的 namespace 就是 profile entry id（`memento`），可编辑字段就是标了 `.volatile()` 的那些，被接受的编辑**提交进运行中的插件**而不是重挂它。浏览器半经 `ctx.configForms.get(entryId)` 读同一份表单（`ctx.settingsScope` 服务已删）。两侧都保留了 `installSection` / `settingsScope` 分支，peer 区间仍声明支持 `0.1.2-rc.1`、`0.1.5-alpha.1`、`0.1.6-0` 三条线；新增的 `>=0.1.7-0 <0.2.0 || >=0.2.2-0 <0.3.0` 这一段是修 bug——旧范围按 semver 预发布规则把目标宿主本身排除在外。仍无插件事件注册面——`KNOWN_SESSION_EVENT_TYPES` 不含 `memory/*`，且 `Session.append` 第三参只承载 surface 类型的 `SurfaceIntent`，故审计门保持自适应、行为不变（会在进程内告警一次，并在 `/memory audit` 输出里明示缺口）。类型证据来自三个面：本机 checkout 的已构建类型、`node_modules` 里钉住的已发布线、以及 DOM 库下的浏览器半侧。**已按 `0.2.1-alpha.2` 复核：** 本插件触及的全部宿主面在两个 tag 之间**逐字节相同**（`packages/settings/settings/src/**`、`packages/client/ui-settings/src/**`、`packages/client/ui-slots/src/**`、`packages/client/modules/src/**`、`packages/interaction/user-approval/**`、`vendor/loader/src/**`、`vendor/schemastery/src/**`、`packages/boot/app-boot/src/config-schema/**`），会话格式仍是 v4、没有 v4→v5 迁移，`KNOWN_SESSION_EVENT_TYPES` 只增了一个官方类型——故审计门继续关闭、**代码零改动**。真正变动的是钉住的 dev/test 线（`0.2.1-alpha.2`，以及 `pnpm-workspace.yaml` 里对应的 release-age 白名单）与兼容基线；`npm test`（201 例，含真实 Loader 组合套件）、`typecheck:ci`、覆盖率、制品、一致性套件与五语门在 alpha.2 上全绿。alpha.2 确实新增了 `plugin:<name>/*` 命名空间的 `appendPluginRecord` 写入器，但宿主自己的 `packages/core/session/README.md` 禁止仓外插件调用，且强制的 `plugin:` 前缀无法表达 `memory/*`，故本包不采用。 |
+| Harness | DeepSeek Harness `dsh-v0.2.2-rc.4`（2026-11-18 适配；`0.2.2-rc.4` 自 2026-11-18 起）：`0.1.7` 线把整条设置注册面（`installSettingsSection` / `SettingsProvider.installSection` / `SettingsNamespace` / `SettingsScope`）换成 live config 表单——表单的 namespace 就是 profile entry id（`memento`），可编辑字段就是标了 `.volatile()` 的那些，被接受的编辑**提交进运行中的插件**而不是重挂它。浏览器半经 `ctx.configForms.get(entryId)` 读同一份表单（`ctx.settingsScope` 服务已删）。两侧都保留了 `installSection` / `settingsScope` 分支，peer 区间仍声明支持 `0.1.2-rc.1`、`0.1.5-alpha.1`、`0.1.6-0` 三条线；新增的 `>=0.1.7-0 <0.2.0 \|\| >=0.2.2-0 <0.3.0` 这一段是修 bug——旧范围按 semver 预发布规则把目标宿主本身排除在外。仍无插件事件注册面——`KNOWN_SESSION_EVENT_TYPES` 不含 `memory/*`，且 `Session.append` 第三参只承载 surface 类型的 `SurfaceIntent`，故审计门保持自适应、行为不变（会在进程内告警一次，并在 `/memory audit` 输出里明示缺口）。类型证据来自三个面：本机 checkout 的已构建类型、`node_modules` 里钉住的已发布线、以及 DOM 库下的浏览器半侧。**已按 `0.2.1-alpha.2` 复核：** 本插件触及的全部宿主面在两个 tag 之间**逐字节相同**（`packages/settings/settings/src/**`、`packages/client/ui-settings/src/**`、`packages/client/ui-slots/src/**`、`packages/client/modules/src/**`、`packages/interaction/user-approval/**`、`vendor/loader/src/**`、`vendor/schemastery/src/**`、`packages/boot/app-boot/src/config-schema/**`），会话格式仍是 v4、没有 v4→v5 迁移，`KNOWN_SESSION_EVENT_TYPES` 只增了一个官方类型——故审计门继续关闭、**代码零改动**。真正变动的是钉住的 dev/test 线（`0.2.1-alpha.2`，以及 `pnpm-workspace.yaml` 里对应的 release-age 白名单）与兼容基线；`npm test`（201 例，含真实 Loader 组合套件）、`typecheck:ci`、覆盖率、制品、一致性套件与五语门在 alpha.2 上全绿。alpha.2 确实新增了 `plugin:<name>/*` 命名空间的 `appendPluginRecord` 写入器，但宿主自己的 `packages/core/session/README.md` 禁止仓外插件调用，且强制的 `plugin:` 前缀无法表达 `memory/*`，故本包不采用。 |
 | Node | `^22.19.0 \|\| >=24.9.0` |
 | 平台 | Windows / macOS / Linux（纯 host；无原生代码、无网络） |
 | 模型 | 任意 |
@@ -468,17 +472,27 @@ Topics：`dsh`, `dsh-plugin`, `deepseek-harness`, `memory`, `agent-memory`, `app
 | **[dsh-archive-check](https://github.com/PerryLink/dsh-archive-check)** |  |
 | **[dsh-auto-review](https://github.com/PerryLink/dsh-auto-review)** |  |
 | **[dsh-autotier](https://github.com/PerryLink/dsh-autotier)** | 🧊 已冻结 — 见仓库 README |
+| **[dsh-background-agents](https://github.com/PerryLink/dsh-background-agents)** | 🚫 已退役 — 见仓库 README |
 | **[dsh-bid-ca-precheck](https://github.com/PerryLink/dsh-bid-ca-precheck)** |  |
 | **[dsh-bid-qual-check](https://github.com/PerryLink/dsh-bid-qual-check)** |  |
+| **[dsh-budget](https://github.com/PerryLink/dsh-budget)** | 🧊 已冻结 — 见仓库 README |
 | **[dsh-cert-mcp](https://github.com/PerryLink/dsh-cert-mcp)** | 🧊 已冻结 — 见仓库 README |
+| **[dsh-check-pack](https://github.com/PerryLink/dsh-check-pack)** |  |
 | **[dsh-checkpoint-rewind](https://github.com/PerryLink/dsh-checkpoint-rewind)** |  |
+| **[dsh-claude-move](https://github.com/PerryLink/dsh-claude-move)** | 🧊 已冻结 — 见仓库 README |
 | **[dsh-click](https://github.com/PerryLink/dsh-click)** |  |
+| **[dsh-clinic](https://github.com/PerryLink/dsh-clinic)** |  |
+| **[dsh-codemod](https://github.com/PerryLink/dsh-codemod)** |  |
+| **[dsh-community-bench](https://github.com/PerryLink/dsh-community-bench)** | 🧊 已冻结 — 见仓库 README |
 | **[dsh-composer-history](https://github.com/PerryLink/dsh-composer-history)** |  |
 | **[dsh-contract-stance](https://github.com/PerryLink/dsh-contract-stance)** |  |
 | **[dsh-customs-doc-check](https://github.com/PerryLink/dsh-customs-doc-check)** |  |
 | **[dsh-data-quality](https://github.com/PerryLink/dsh-data-quality)** | 🧊 已冻结 — 见仓库 README |
+| **[dsh-defend](https://github.com/PerryLink/dsh-defend)** | 🧊 已冻结 — 见仓库 README |
 | **[dsh-demurrage-ledger](https://github.com/PerryLink/dsh-demurrage-ledger)** |  |
+| **[dsh-dida](https://github.com/PerryLink/dsh-dida)** |  |
 | **[dsh-doublecheck](https://github.com/PerryLink/dsh-doublecheck)** |  |
+| **[dsh-draw](https://github.com/PerryLink/dsh-draw)** | 🧊 已冻结 — 见仓库 README |
 | **[dsh-drill-script-check](https://github.com/PerryLink/dsh-drill-script-check)** |  |
 | **[dsh-eia-guide-check](https://github.com/PerryLink/dsh-eia-guide-check)** |  |
 | **[dsh-emergency-plan](https://github.com/PerryLink/dsh-emergency-plan)** |  |
@@ -489,7 +503,7 @@ Topics：`dsh`, `dsh-plugin`, `deepseek-harness`, `memory`, `agent-memory`, `app
 | **[dsh-fmea-table-check](https://github.com/PerryLink/dsh-fmea-table-check)** |  |
 | **[dsh-forecast-penalty](https://github.com/PerryLink/dsh-forecast-penalty)** |  |
 | **[dsh-fund-research](https://github.com/PerryLink/dsh-fund-research)** |  |
-| **[dsh-github](https://github.com/PerryLink/dsh-github)** |  |
+| **[dsh-github-bot](https://github.com/PerryLink/dsh-github-bot)** |  |
 | **[dsh-gongwen-flow-check](https://github.com/PerryLink/dsh-gongwen-flow-check)** |  |
 | **[dsh-gongwen-word-check](https://github.com/PerryLink/dsh-gongwen-word-check)** |  |
 | **[dsh-guard-plan-qc](https://github.com/PerryLink/dsh-guard-plan-qc)** |  |
@@ -517,48 +531,42 @@ Topics：`dsh`, `dsh-plugin`, `deepseek-harness`, `memory`, `agent-memory`, `app
 | **[dsh-ota-review-check](https://github.com/PerryLink/dsh-ota-review-check)** |  |
 | **[dsh-output-styles](https://github.com/PerryLink/dsh-output-styles)** |  |
 | **[dsh-paper-doc-adapter](https://github.com/PerryLink/dsh-paper-doc-adapter)** |  |
+| **[dsh-param-repair](https://github.com/PerryLink/dsh-param-repair)** |  |
 | **[dsh-permission-rules](https://github.com/PerryLink/dsh-permission-rules)** |  |
 | **[dsh-permit-report-check](https://github.com/PerryLink/dsh-permit-report-check)** |  |
+| **[dsh-phocinae](https://github.com/PerryLink/dsh-phocinae)** |  |
+| **[dsh-phone-inbox](https://github.com/PerryLink/dsh-phone-inbox)** |  |
 | **[dsh-pipeline-check](https://github.com/PerryLink/dsh-pipeline-check)** |  |
 | **[dsh-pleading-draft](https://github.com/PerryLink/dsh-pleading-draft)** |  |
-| **[dsh-plugin-doctor](https://github.com/PerryLink/dsh-plugin-doctor)** | 🚫 已退役（仓库已归档） |
-| **[dsh-plugin-guide](https://github.com/PerryLink/dsh-plugin-guide)** |  |
-| **[dsh-plugin-kit](https://github.com/PerryLink/dsh-plugin-kit)** | 🚫 已退役（仓库已归档） |
-| **[dsh-plugin-upgrade](https://github.com/PerryLink/dsh-plugin-upgrade)** | 🚫 已退役（仓库已归档） |
 | **[dsh-policy-brief-draft](https://github.com/PerryLink/dsh-policy-brief-draft)** |  |
 | **[dsh-power-loss-split](https://github.com/PerryLink/dsh-power-loss-split)** |  |
 | **[dsh-power-ticket-check](https://github.com/PerryLink/dsh-power-ticket-check)** |  |
 | **[dsh-ppap-check](https://github.com/PerryLink/dsh-ppap-check)** |  |
+| **[dsh-primer](https://github.com/PerryLink/dsh-primer)** |  |
 | **[dsh-protest-deadline](https://github.com/PerryLink/dsh-protest-deadline)** |  |
 | **[dsh-railway-window](https://github.com/PerryLink/dsh-railway-window)** |  |
+| **[dsh-reach](https://github.com/PerryLink/dsh-reach)** | 🧊 已冻结 — 见仓库 README |
 | **[dsh-repair-order-qc](https://github.com/PerryLink/dsh-repair-order-qc)** |  |
 | **[dsh-research-report](https://github.com/PerryLink/dsh-research-report)** |  |
 | **[dsh-review-reply-check](https://github.com/PerryLink/dsh-review-reply-check)** |  |
 | **[dsh-rulefile-check](https://github.com/PerryLink/dsh-rulefile-check)** |  |
 | **[dsh-safety-brief-check](https://github.com/PerryLink/dsh-safety-brief-check)** |  |
+| **[dsh-scaffold](https://github.com/PerryLink/dsh-scaffold)** |  |
 | **[dsh-score](https://github.com/PerryLink/dsh-score)** | 🧊 已冻结 — 见仓库 README |
+| **[dsh-security-pack](https://github.com/PerryLink/dsh-security-pack)** |  |
+| **[dsh-session-pin](https://github.com/PerryLink/dsh-session-pin)** | 🚫 已退役 — 见仓库 README |
 | **[dsh-session-sync](https://github.com/PerryLink/dsh-session-sync)** |  |
 | **[dsh-site-log-check](https://github.com/PerryLink/dsh-site-log-check)** |  |
-| **[dsh-skill-pack-security](https://github.com/PerryLink/dsh-skill-pack-security)** |  |
 | **[dsh-soe-decision-check](https://github.com/PerryLink/dsh-soe-decision-check)** |  |
 | **[dsh-soilwater-check](https://github.com/PerryLink/dsh-soilwater-check)** |  |
 | **[dsh-sop-sync-check](https://github.com/PerryLink/dsh-sop-sync-check)** |  |
 | **[dsh-spc-gbt-adapter](https://github.com/PerryLink/dsh-spc-gbt-adapter)** |  |
 | **[dsh-talk](https://github.com/PerryLink/dsh-talk)** |  |
+| **[dsh-team-rooms](https://github.com/PerryLink/dsh-team-rooms)** | 🚫 已退役 — 见仓库 README |
 | **[dsh-tender-extract](https://github.com/PerryLink/dsh-tender-extract)** |  |
 | **[dsh-tender-matrix](https://github.com/PerryLink/dsh-tender-matrix)** |  |
 | **[dsh-test-drive](https://github.com/PerryLink/dsh-test-drive)** |  |
-| **[dsh-ticktick](https://github.com/PerryLink/dsh-ticktick)** | 🚫 已退役（仓库已归档） |
-| **[dsh-translate](https://github.com/PerryLink/dsh-translate)** |  |
 | **[dsh-warranty-calc](https://github.com/PerryLink/dsh-warranty-calc)** |  |
-| **[dsh-budget](https://github.com/PerryLink/dsh-budget)** | 🧊 已冻结 — 见仓库 README |
-| **[dsh-claude-move](https://github.com/PerryLink/dsh-claude-move)** | 🧊 已冻结 — 见仓库 README |
-| **[dsh-defend](https://github.com/PerryLink/dsh-defend)** | 🧊 已冻结 — 见仓库 README |
-| **[dsh-draw](https://github.com/PerryLink/dsh-draw)** | 🧊 已冻结 — 见仓库 README |
-| **[dsh-reach](https://github.com/PerryLink/dsh-reach)** | 🧊 已冻结 — 见仓库 README |
-| **[dsh-background-agents](https://github.com/PerryLink/dsh-background-agents)** | 🚫 已退役（仓库已归档） |
-| **[dsh-session-pin](https://github.com/PerryLink/dsh-session-pin)** | 🚫 已退役（仓库已归档） |
-| **[dsh-team-rooms](https://github.com/PerryLink/dsh-team-rooms)** | 🚫 已退役（仓库已归档） |
 
 </details>
 

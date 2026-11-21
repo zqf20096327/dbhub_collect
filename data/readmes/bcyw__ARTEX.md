@@ -12,7 +12,7 @@ AI 自主渗透测试系统（Go 后端 + Next.js 前端）
 
 ## 自维护版本说明（v1.0.0 起）
 
-本仓库 [`jaykwok/ARTEX`](https://github.com/jaykwok/ARTEX) 是 **ARTEX 的自维护修改版**。自 **v1.0.0** 起单独打标签发布，用于与原始项目的提交和版本号区分。
+本仓库 [`bcyw/ARTEX`](https://github.com/bcyw/ARTEX) 是 **ARTEX 的自维护修改版**（fork 自 [`jaykwok/ARTEX`](https://github.com/jaykwok/ARTEX)）。自 **v1.0.0** 起单独打标签发布，用于与原始项目的提交和版本号区分。
 
 - **原始版本**：ARTEX **v0.3.15**，对应原始项目提交 [`e6ec569`](https://github.com/Autumn-27/ARTEX/commit/e6ec56999175509551a1e43a3ee3b053d0941bd9)（2026-10-07；原仓库已删除，链接可能返回 404）。`v0.3.15` 及更早的版本号属于原始项目；`e6ec569` 之后提交的内容均为本仓库的修改。
 - **自维护版本**：**v1.0.0 及之后的所有版本均由本仓库独立维护**，以原版 `e6ec569` 为基础持续开发，当前源码包含以下调整：
@@ -20,7 +20,7 @@ AI 自主渗透测试系统（Go 后端 + Next.js 前端）
   - 移除**资产拦截**功能：删除「系统 → 资产拦截」页、全局 `.gov` / `.gov.cn` / `.edu` / `.edu.cn` 黑名单、任务级拦截 / 允许规则、任务模板中的拦截规则，以及 `add_intent` / `insert_assets` 执行前的资产闸门与对应 API；
   - 移除内置命令拦截规则「删除类接口路径」，其余命令拦截规则不变；
   - 移除登录前的「使用须知与免责声明」弹窗，登录不再需要勾选同意；
-  - 一键更新源改为本仓库 `jaykwok/ARTEX`，Docker Compose 改为从源码本地构建镜像（不再拉取已下架的 `autumn27/artex`）。
+  - 一键更新源改为本仓库 `bcyw/ARTEX`，Docker Compose 改为从源码本地构建镜像（不再拉取已下架的 `autumn27/artex`）。
 - 完整变更记录见 [CHANGELOG.md](CHANGELOG.md)。
 - YAML 工具配方见 [工具说明](tools/README.md)，浏览器请求导入见 [扩展说明](plugins/artex-browser-extension/README.md)。
 
@@ -31,15 +31,15 @@ AI 自主渗透测试系统（Go 后端 + Next.js 前端）
 如果需要未做上述修改的原始版本，检出 `e6ec569` 即可：
 
 ```bash
-git clone https://github.com/jaykwok/ARTEX.git
+git clone https://github.com/bcyw/ARTEX.git
 cd ARTEX
 git checkout e6ec569
 ```
 
 也可以直接下载该提交的源码包：
 
-- <https://github.com/jaykwok/ARTEX/archive/e6ec569.zip>
-- <https://github.com/jaykwok/ARTEX/archive/e6ec569.tar.gz>
+- <https://github.com/bcyw/ARTEX/archive/e6ec569.zip>
+- <https://github.com/bcyw/ARTEX/archive/e6ec569.tar.gz>
 
 原始版本同时也以 **`e6ec569`** Release 提供各平台预编译包（Release 标题为 v0.3.15），可直接从 [Releases](https://github.com/jaykwok/ARTEX/releases) 下载。
 
@@ -104,7 +104,7 @@ git checkout e6ec569
 ### 方式一：一键安装脚本（推荐）
 
 ```bash
-git clone https://github.com/jaykwok/ARTEX.git
+git clone https://github.com/bcyw/ARTEX.git
 cd ARTEX
 ./install.sh
 ```
@@ -119,7 +119,7 @@ cd ARTEX
 ### 方式二：Docker Compose（手动）
 
 ```bash
-git clone https://github.com/jaykwok/ARTEX.git
+git clone https://github.com/bcyw/ARTEX.git
 cd ARTEX
 cp .env.example .env          # 可选：填写 LLM API Key
 docker compose up -d --build  # 从源码构建并启动 ARTEX，自动创建 SQLite 文件
@@ -135,7 +135,7 @@ docker compose up -d --build  # 从源码构建并启动 ARTEX，自动创建 SQ
 
 ### 方式三：下载预编译二进制（Releases）
 
-到 [Releases](https://github.com/jaykwok/ARTEX/releases) 下载对应平台的 zip，解压后得到 `artex` + `start.sh`（Windows 为 `start.bat`）+ `skills/` + `config.example.json`：
+到 [Releases](https://github.com/bcyw/ARTEX/releases) 下载对应平台的 zip，解压后得到 `artex` + `start.sh`（Windows 为 `start.bat`）+ `skills/` + `config.example.json`：
 
 ```bash
 # 无需数据库配置；可选：复制 config.example.json 自定义 SQLite 文件路径
@@ -179,16 +179,16 @@ ARTEX_TARGETS=linux/amd64,windows/amd64 ./build.sh --release
 
 > 业务库保存在 `data/artex.sqlite`，流量库、证据和归档保存在 `data/` 的各自目录中。更新程序前请停止 ARTEX 并完整备份 `data/` 与 `skills/`。数据库表结构由程序自动初始化；本自维护版本按全新 SQLite 数据目录使用。
 
-### 本仓库的私有 Release 更新源
+### 本仓库的 Release 更新源
 
-页面一键更新固定从 [jaykwok/ARTEX Releases](https://github.com/jaykwok/ARTEX/releases) 检查和下载版本（写死在 `selfupdate/github.go` 的 `Repo`）。克隆或通过 Git 更新源码也使用 `jaykwok/ARTEX`；原项目的 Go module 路径保持不变。
+页面一键更新固定从 [bcyw/ARTEX Releases](https://github.com/bcyw/ARTEX/releases) 检查和下载版本（写死在 `selfupdate/github.go` 的 `Repo`）。克隆或通过 Git 更新源码也使用 `bcyw/ARTEX`；原项目的 Go module 路径保持不变。
 
 > 安全提示：一键更新会安装该仓库 Release 里的任意二进制，`SHA256SUMS` 与安装包来自同一个 Release，只防传输损坏、不防发布者。**只能指向自己完全控制的仓库**，不要改成第三方 fork。
 
-这是私有仓库。请为运行 ARTEX 的后端进程设置 `ARTEX_UPDATE_GITHUB_TOKEN`，令牌只需本仓库的 **Contents: read** 权限。令牌由后端用于查询 Release 和下载附件，不发送给浏览器，也不要提交到 Git。
+这是公开仓库，正常情况下无需令牌；若遇到 GitHub API 未认证限流，可为后端进程设置 `ARTEX_UPDATE_GITHUB_TOKEN`（仅需本仓库的 **Contents: read** 权限）。令牌由后端用于查询 Release 和下载附件，不发送给浏览器，也不要提交到 Git。
 
 ```bash
-# 先在当前 shell 或服务环境中安全设置 ARTEX_UPDATE_GITHUB_TOKEN
+# 可选：遇到 API 限流时在服务环境中设置 ARTEX_UPDATE_GITHUB_TOKEN
 ./start.sh
 ```
 
@@ -238,7 +238,7 @@ docker image prune -f          # 清理旧镜像（可选）
 
 ### 方式四：预编译二进制（Releases）
 
-到 [Releases](https://github.com/jaykwok/ARTEX/releases) 下载新版本 zip，停掉旧进程后覆盖 `artex` 与 `skills/`（保留你的 `config.json` 与 `data/`），重启即可：
+到 [Releases](https://github.com/bcyw/ARTEX/releases) 下载新版本 zip，停掉旧进程后覆盖 `artex` 与 `skills/`（保留你的 `config.json` 与 `data/`），重启即可：
 
 ```bash
 cp -r <解压目录>/skills ./ && cp <解压目录>/artex ./

@@ -120,6 +120,48 @@ College coordinators have their own separate administrative dashboard (`/KLEF/8-
 
 ---
 
+## Entity Relationship Architecture (ER Diagram)
+
+The portal's data model is organized around structured academic relationships that connect students, academic clusters, courses, sections, and faculty allocations:
+
+```mermaid
+erDiagram
+    ACADEMIC_TERMS ||--o{ FACULTY_ALLOCATIONS : "schedules"
+    BUCKETS ||--o{ COURSES : "organizes"
+    COURSE_CATEGORIES ||--o{ COURSES : "classifies"
+    SPECIALIZATIONS ||--o{ CLUSTERS : "aligns"
+    SPECIALIZATIONS ||--o{ STUDENTS : "enrolls"
+    CLUSTERS ||--o{ SECTIONS : "groups"
+    CLUSTERS ||--o{ STUDENTS : "assigns"
+    COURSES ||--o{ FACULTY_ALLOCATIONS : "delivers"
+    COURSES ||--o{ STUDENT_SUBJECT_SELECTIONS : "selected_as"
+    FACULTY ||--o{ FACULTY_ALLOCATIONS : "teaches"
+    SECTIONS ||--o{ FACULTY_ALLOCATIONS : "bounds"
+    SECTIONS ||--o{ STUDENT_FACULTY_PREFERENCES : "chooses"
+    STUDENTS ||--o{ STUDENT_SUBJECT_SELECTIONS : "selects"
+    STUDENTS ||--o{ STUDENT_FACULTY_PREFERENCES : "ranks"
+```
+
+### Database Schema & Relationship Breakdown
+
+| Primary Entity | Relational Link | Target Entity | Functional Purpose |
+| :--- | :---: | :--- | :--- |
+| **`ACADEMIC_TERMS`** | `schedules` | **`FACULTY_ALLOCATIONS`** | Ties teaching assignments to a specific academic term (e.g. `2026-27-ODD`). |
+| **`BUCKETS`** | `organizes` | **`COURSES`** | Groups courses into curricular buckets (`C0` Capstone to `C8` Placed Electives). |
+| **`COURSE_CATEGORIES`** | `classifies` | **`COURSES`** | Categorizes course roles (e.g. Core, PE, OE, Audit, Project). |
+| **`SPECIALIZATIONS`** | `aligns` | **`CLUSTERS`** | Maps 17 technology specializations into `Cluster-1` (S1–S50) or `Cluster-2` (S51–S100). |
+| **`SPECIALIZATIONS`** | `enrolls` | **`STUDENTS`** | Tracks each student's chosen academic discipline. |
+| **`CLUSTERS`** | `groups` | **`SECTIONS`** | Divides cohort sections into Cluster 1 (S1–S50) and Cluster 2 (S51–S100). |
+| **`CLUSTERS`** | `assigns` | **`STUDENTS`** | Restricts student course/faculty choices strictly within their assigned cluster cohort. |
+| **`COURSES`** | `delivers` | **`FACULTY_ALLOCATIONS`** | Connects catalog courses to active institutional teaching assignments. |
+| **`COURSES`** | `selected_as` | **`STUDENT_SUBJECT_SELECTIONS`** | Stores the specific course chosen by a student within each academic bucket. |
+| **`FACULTY`** | `teaches` | **`FACULTY_ALLOCATIONS`** | Links 426 faculty members to their specific delivery components (Lecture, Lab, Skill). |
+| **`SECTIONS`** | `bounds` | **`FACULTY_ALLOCATIONS`** | Binds faculty teaching to specific classroom sections. |
+| **`SECTIONS`** | `chooses` | **`STUDENT_FACULTY_PREFERENCES`** | Captures the section anchor selected by a student for their faculty preferences. |
+| **`STUDENTS`** | `ranks` | **`STUDENT_FACULTY_PREFERENCES`** | Records student 1st, 2nd, and 3rd rank faculty preferences for each registered course. |
+
+---
+
 ## Real numbers behind this portal
 
 I built and tested this project using the actual academic data for our Y23 batch:

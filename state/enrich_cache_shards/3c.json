@@ -2,9 +2,9 @@
  "timgit/pg-boss": {
   "commit_7d": 2,
   "commit_90d": 470,
-  "rel_ver": "12.38.2",
-  "rel_pub": "2026-11-10",
-  "rel_days": 10,
+  "rel_ver": "12.39.0",
+  "rel_pub": "2026-11-21",
+  "rel_days": 0,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 94,
-  "enriched_at": "20261120",
+  "enriched_at": "20261121",
   "lang": {
    "TypeScript": 97,
    "JavaScript": 2,
@@ -23,10 +23,25 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261120",
-   "release": "20261120",
+   "release": "20261121",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "12.39.0",
+    "d": "2026-11-21",
+    "n": "* Docs: `fromKysely()` and `fromPrisma()` can't be the constructor `db` while `migrate` or `supervise` is on. Thanks to [@AsyncNigam](https://github.com/AsyncNigam) for [#1014](https://github.com/timgit/pg-boss/pull/1014).\nDashboard users need dashboard 1.14.0, which is built for schema 47. Dashboard 1.13.x is built for schema 46. Against a database on 47, its lists still load. Opening, cancelling, resuming or deleting a job, sending a job, creating a queue, and adding or removing a schedule fail with `pg-b"
+   },
+   {
+    "t": "proxy-1.14.0",
+    "d": "2026-11-21",
+    "n": "Requires pg-boss **12.39.0** or later.\r\n\r\n* `schedule` takes `precision` in its options, `minute` (the default) or `second`. With `second`, a cron expression with a seconds field sends a job for every occurrence. See [Schedules with second precision](https://pgboss.io/api/scheduling#schedules-with-second-precision).\r\n* Dependency updates, including hono 4.13.19 and @hono/node-server 2.1.11."
+   },
+   {
+    "t": "dashboard-1.14.0",
+    "d": "2026-11-21",
+    "n": "* Built with pg-boss 12.39.0. Move to 1.14.0 when the application moves to 12.39. Against a 12.38 database (schema 46), opening, cancelling, resuming or deleting a job, sending a job, creating a queue, and adding or removing a schedule fail with `pg-boss database requires migrations`. Stay on 1.13.x until the application upgrades. See [Matching pg-boss versions](https://pgboss.io/dashboard#matching-pg-boss-versions)."
+   },
    {
     "t": "12.38.2",
     "d": "2026-11-10",
@@ -61,27 +76,15 @@
     "t": "proxy-1.12.0",
     "d": "2026-10-14",
     "n": "Requires pg-boss **12.38.0** or later.\r\n\r\n* The list routes take `limit` and page with `after`, as the pg-boss 12.38 list reads do.\r\n* `previewRedrive` takes `limit`.\r\n* `deleteQueuedJobs`, `deleteStoredJobs` and `deleteAllJobs` return how many jobs they deleted.\r\n\r\n## Highlights\r\n\r\n### Bounded list routes\r\n\r\npg-boss 12.38 returns at most 1,000 rows from its list reads unless given a `limit`, in a fixed\r\norder, and continues a list past the last row of the previous page with `after`. The GET routes pass\r\nbo"
-   },
-   {
-    "t": "dashboard-1.12.0",
-    "d": "2026-10-14",
-    "n": "write action, and that copy only connects to a database on its own schema version.\nAgainst a database that pg-boss 12.38 has migrated, 1.11.x lists queues, jobs and\n`pg-boss database requires migrations`.\n* Works against pg-boss 12.38 databases.\narrives with the database upgrade whichever dashboard you run. After the 12.38"
-   },
-   {
-    "t": "12.38.0",
-    "d": "2026-10-13",
-    "n": "- A concurrent index build or drop on PostgreSQL keeps running on the server. Its row stays\nWith a custom [`db`](https://pgboss.io/api/constructor#db) adapter, pg-boss has no connection to\nmigration claim with an `error`. See [`db`](https://pgboss.io/api/constructor#db).\nWithout table partitioning (`noTablePartitioning`, as on CockroachDB), `queue_stats` retention deletes\n| `getDependencies(name, id, options)`, `getDependents(name, id, options)` | queue name, then id | third, beside `db` |\non an instance th"
-   },
-   {
-    "t": "proxy-1.11.0",
-    "d": "2026-10-09",
-    "n": "Requires pg-boss **12.37.1** or later.\r\n\r\n* `getQueueStats` takes `percentiles` and returns wait and run times for each snapshot.\r\n* Queue and queue stats responses carry the 12.36 wait and run histograms, the oldest ready wait, and `blockedCount`.\r\n\r\n## Highlights\r\n\r\n### Percentiles from `getQueueStats`\r\n\r\n`GET /api/getQueueStats` accepts `percentiles`, a comma-separated list of percents from 1 to 100, and passes it to `boss.getQueueStats()`. Each snapshot then carries one entry per percent asked for:\r\n\r\n`"
    }
   ],
   "etag": {
-   "release": "W/\"dbe7af0e62fec9149f7b4e6fe007af1d5e268e61009b3d1a0c0fe96aa23b1025\""
+   "release": "W/\"16592e02346aabeeeb5e2435a6c028c8a985103f75993ed2c12a22dbb1cd72ca\""
   },
   "rel_dates": [
+   "2026-11-21",
+   "2026-11-21",
+   "2026-11-21",
    "2026-11-10",
    "2026-11-10",
    "2026-11-05",
@@ -108,10 +111,7 @@
    "2026-09-21",
    "2026-09-21",
    "2026-09-19",
-   "2026-09-18",
-   "2026-09-17",
-   "2026-09-16",
-   "2026-09-14"
+   "2026-09-18"
   ]
  },
  "JasperFx/marten": {
@@ -119,7 +119,7 @@
   "commit_90d": 836,
   "rel_ver": "V9.62.0",
   "rel_pub": "2026-11-16",
-  "rel_days": 4,
+  "rel_days": 5,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -131,7 +131,7 @@
    "GHSA-vmw2-qwm8-x84c(CVE-2026-45288,critical)"
   ],
   "contrib_n": 257,
-  "enriched_at": "20261120",
+  "enriched_at": "20261121",
   "lang": {
    "C#": 99,
    "HTML": 0,
@@ -142,8 +142,8 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261120",
-   "release": "20261120",
-   "security": "20261114"
+   "release": "20261121",
+   "security": "20261121"
   },
   "rel_notes": [
    {
@@ -198,8 +198,8 @@
    }
   ],
   "etag": {
-   "release": "W/\"8fa4f58766d2c649d4a8fbbb69a586ce535e25966851e070a267d4fa59049f7d\"",
-   "security": "W/\"0872698e207c7493ac68ea55f72d91d30a402a21299df42a6bc82769d65ef69d\""
+   "release": "W/\"305603960d323cec4e4193a2ce029ebe4e4ac910c33c64eaa04425315fef19f9\"",
+   "security": "W/\"0208c5608e0647cfc6a3de882bf7e70d5ed412c6ab6dfc6e603342aee90b3c2a\""
   },
   "rel_dates": [
    "2026-11-16",
@@ -239,7 +239,7 @@
   "commit_90d": 35,
   "rel_ver": "v2.5.0",
   "rel_pub": "2026-10-12",
-  "rel_days": 39,
+  "rel_days": 40,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -289,7 +289,7 @@
   "commit_90d": 5,
   "rel_ver": "4.2.1",
   "rel_pub": "2026-08-13",
-  "rel_days": 99,
+  "rel_days": 100,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -320,7 +320,7 @@
   "commit_7d": 8,
   "rel_ver": "@ts-safeql/zod-annotator@5.0.5",
   "rel_pub": "2026-10-18",
-  "rel_days": 33,
+  "rel_days": 34,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -405,7 +405,7 @@
   "commit_7d": 0,
   "rel_ver": "3.5.0",
   "rel_pub": "2025-10-23",
-  "rel_days": 393,
+  "rel_days": 394,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -428,7 +428,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-09-19",
-  "rel_days": 62,
+  "rel_days": 63,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -455,7 +455,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.6.0",
   "rel_pub": "2026-02-21",
-  "rel_days": 272,
+  "rel_days": 273,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -476,7 +476,7 @@
   "commit_7d": 7,
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-10-25",
-  "rel_days": 26,
+  "rel_days": 27,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -608,7 +608,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.0",
   "rel_pub": "2018-07-30",
-  "rel_days": 3035,
+  "rel_days": 3036,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -631,7 +631,7 @@
   "commit_7d": 0,
   "rel_ver": "1.6.1",
   "rel_pub": "2023-05-24",
-  "rel_days": 1276,
+  "rel_days": 1277,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -688,7 +688,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.8",
   "rel_pub": "2024-03-20",
-  "rel_days": 975,
+  "rel_days": 976,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -708,7 +708,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.15",
   "rel_pub": "2026-04-06",
-  "rel_days": 228,
+  "rel_days": 229,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -830,7 +830,7 @@
   "commit_7d": 0,
   "rel_ver": "main-latest",
   "rel_pub": "2026-08-01",
-  "rel_days": 111,
+  "rel_days": 112,
   "rel_n90": 3,
   "rel_pre": true,
   "rel_none": false,
@@ -851,7 +851,7 @@
  "kosame-rs/kosame": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2025-12-10",
-  "rel_days": 345,
+  "rel_days": 346,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -898,7 +898,7 @@
  "Pure-Peace/peace": {
   "rel_ver": "v0.12.0",
   "rel_pub": "2021-06-16",
-  "rel_days": 1983,
+  "rel_days": 1984,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -917,7 +917,7 @@
  "thijsmie/pocketbase": {
   "rel_ver": "0.12.0",
   "rel_pub": "2025-02-02",
-  "rel_days": 656,
+  "rel_days": 657,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -977,7 +977,7 @@
  "depyronick/clickhouse-client": {
   "rel_ver": "2.1.0",
   "rel_pub": "2026-01-21",
-  "rel_days": 303,
+  "rel_days": 304,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -995,7 +995,7 @@
  "EddieHubCommunity/CreatorsRegistry": {
   "rel_ver": "v0.26.3",
   "rel_pub": "2024-08-12",
-  "rel_days": 830,
+  "rel_days": 831,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1069,11 +1069,11 @@
    "Shell": 2,
    "Yacc": 1
   },
-  "enriched_at": "20261110",
-  "commit_90d": 2,
+  "enriched_at": "20261121",
+  "commit_90d": 1,
   "commit_7d": 0,
   "dim_ts": {
-   "commit": "20261102",
+   "commit": "20261121",
    "release": "20261110"
   },
   "etag": {
@@ -1129,7 +1129,7 @@
  "antifailure/antifailure": {
   "rel_ver": "v1.8.1",
   "rel_pub": "2026-09-27",
-  "rel_days": 54,
+  "rel_days": 55,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1150,7 +1150,7 @@
  "hxlog/balanced-portfolio": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-07-17",
-  "rel_days": 126,
+  "rel_days": 127,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1171,7 +1171,7 @@
  "bilaschandra/laravel-coreui": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2024-09-27",
-  "rel_days": 784,
+  "rel_days": 785,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1191,7 +1191,7 @@
  "rapidloop/rapidrows": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-09-29",
-  "rel_days": 1513,
+  "rel_days": 1514,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1224,7 +1224,7 @@
  "CEDStandards/CEDS-Data-Warehouse": {
   "rel_ver": "v14.1.0.0",
   "rel_pub": "2026-06-18",
-  "rel_days": 155,
+  "rel_days": 156,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1254,7 +1254,7 @@
  "agis/pglockanalyze": {
   "rel_ver": "v0.0.4",
   "rel_pub": "2025-09-26",
-  "rel_days": 420,
+  "rel_days": 421,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1272,7 +1272,7 @@
  "basxsoftwareassociation/basxconnect": {
   "rel_ver": "v0.4.62",
   "rel_pub": "2024-04-24",
-  "rel_days": 940,
+  "rel_days": 941,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1334,7 +1334,7 @@
  "bnomei/kirby3-pageviewcounter": {
   "rel_ver": "v5.4.0",
   "rel_pub": "2026-05-13",
-  "rel_days": 191,
+  "rel_days": 192,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1352,7 +1352,7 @@
  "Point72/polars-io-tools": {
   "rel_ver": "v0.2.4",
   "rel_pub": "2026-09-26",
-  "rel_days": 55,
+  "rel_days": 56,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -1414,7 +1414,7 @@
  "dzwvip/oracle": {
   "rel_ver": "v1.3.2",
   "rel_pub": "2024-12-31",
-  "rel_days": 689,
+  "rel_days": 690,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1431,7 +1431,7 @@
  "kungfux/business-accounting-desktop": {
   "rel_ver": "1.4.1",
   "rel_pub": "2019-10-11",
-  "rel_days": 2597,
+  "rel_days": 2598,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1478,7 +1478,7 @@
  "radkawar/screenlogger": {
   "rel_ver": "v0.1.15",
   "rel_pub": "2026-08-21",
-  "rel_days": 91,
+  "rel_days": 92,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1544,7 +1544,7 @@
  "chanukyasds/pg_math": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-10-16",
-  "rel_days": 400,
+  "rel_days": 401,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1577,7 +1577,7 @@
  "r2hu1/cavio": {
   "rel_ver": "v2.2",
   "rel_pub": "2026-02-14",
-  "rel_days": 279,
+  "rel_days": 280,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1596,7 +1596,7 @@
  "banghuazhao/longevity-master": {
   "rel_ver": "v1.6.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 57,
+  "rel_days": 58,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1630,7 +1630,7 @@
  "kingrishabdugar/Green-Leaf-Gourmet": {
   "rel_ver": "v2.5.1",
   "rel_pub": "2023-02-14",
-  "rel_days": 1375,
+  "rel_days": 1376,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1675,7 +1675,7 @@
  "CNVioletTech/image2-ai": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-07-11",
-  "rel_days": 132,
+  "rel_days": 133,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1709,7 +1709,7 @@
  "gewebe/TecdocBundle": {
   "rel_ver": "v0.9.1",
   "rel_pub": "2019-05-19",
-  "rel_days": 2742,
+  "rel_days": 2743,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1726,7 +1726,7 @@
  "DavLagoHern/LakeDB": {
   "rel_ver": "v1.0.0-beta.6.3",
   "rel_pub": "2026-09-22",
-  "rel_days": 59,
+  "rel_days": 60,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1759,7 +1759,7 @@
  "frerich/pg_large_objects": {
   "rel_ver": "v0.2.7",
   "rel_pub": "2026-05-17",
-  "rel_days": 187,
+  "rel_days": 188,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1790,7 +1790,7 @@
  "KillerAery/ForAlive": {
   "rel_ver": "v0.213",
   "rel_pub": "2018-05-15",
-  "rel_days": 3111,
+  "rel_days": 3112,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1914,7 +1914,7 @@
  "IITDBGroup/gprom": {
   "rel_ver": "v1.0.5",
   "rel_pub": "2026-04-03",
-  "rel_days": 231,
+  "rel_days": 232,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1996,7 +1996,7 @@
  "deadislove/nestJS-modular-monolith-cqrs-event-sourcing-architecture-template": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2025-05-11",
-  "rel_days": 558,
+  "rel_days": 559,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2077,7 +2077,7 @@
  "SaberSz/College-System-2-Attendance-Management-Systems": {
   "rel_ver": "v1.0",
   "rel_pub": "2017-11-15",
-  "rel_days": 3292,
+  "rel_days": 3293,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2113,7 +2113,7 @@
  "Holo795/CBMCoolifyBackup": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-07-03",
-  "rel_days": 140,
+  "rel_days": 141,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2146,7 +2146,7 @@
  "jince-boy/php-ccenote-blog-api": {
   "rel_ver": "laravel",
   "rel_pub": "2023-02-28",
-  "rel_days": 1361,
+  "rel_days": 1362,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2187,7 +2187,7 @@
  "hieutdo/policyfs": {
   "rel_ver": "v1.0.8",
   "rel_pub": "2026-08-28",
-  "rel_days": 84,
+  "rel_days": 85,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2255,7 +2255,7 @@
  "bbkane/enventory": {
   "rel_ver": "v0.0.28",
   "rel_pub": "2026-06-20",
-  "rel_days": 153,
+  "rel_days": 154,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2280,7 +2280,7 @@
  "Salve-Software/react-native-salve-db": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-09-04",
-  "rel_days": 77,
+  "rel_days": 78,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2326,7 +2326,7 @@
  "budiadiono/sqlite-ts": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2019-02-10",
-  "rel_days": 2840,
+  "rel_days": 2841,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2770,7 +2770,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-09-01",
-  "rel_days": 78,
+  "rel_days": 81,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -3059,7 +3059,7 @@
  "sucraft-hub/homeledger": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 57,
+  "rel_days": 58,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3086,7 +3086,7 @@
  "paperkite-hq/stork": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-04-06",
-  "rel_days": 228,
+  "rel_days": 229,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3178,7 +3178,7 @@
  "DavidBelicza/semantic-search": {
   "rel_ver": "v1.9.0",
   "rel_pub": "2026-08-18",
-  "rel_days": 94,
+  "rel_days": 95,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -3221,7 +3221,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.6.7",
   "rel_pub": "2026-11-11",
-  "rel_days": 9,
+  "rel_days": 10,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -3314,7 +3314,7 @@
   },
   "rel_ver": "v1.3.2",
   "rel_pub": "2026-10-29",
-  "rel_days": 22,
+  "rel_days": 23,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,

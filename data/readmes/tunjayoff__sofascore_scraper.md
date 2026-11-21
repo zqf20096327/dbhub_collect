@@ -10,11 +10,11 @@
 
 One core, three faces: a **Python library**, the **`ssc` command line** for servers and automation, and a versioned **HTTP API** with a **web app** on top. It runs on your own machine or server.
 
-> **3.1.2 is released from source.** Install it from a checkout (the Docker or pip steps below); each release on GitHub also has a source archive with the built web app, and its Docker image is `ghcr.io/tunjayoff/sofascore_scraper`. There is no package on PyPI. Coming from 3.0: [Upgrading from 3.0](#upgrading-from-30); from 2.x: [Upgrading from 2.x](#upgrading-from-2x).
+> **3.2.0 is released from source.** Install it from a checkout (the Docker or pip steps below); each release on GitHub also has a source archive with the built web app, and its Docker image is `ghcr.io/tunjayoff/sofascore_scraper`. There is no package on PyPI. Coming from 3.1: [Upgrading from 3.1](#upgrading-from-31); from 3.0: [Upgrading from 3.0](#upgrading-from-30); from 2.x: [Upgrading from 2.x](#upgrading-from-2x).
 
 Unofficial and not affiliated with SofaScore; see the [disclaimer](#disclaimer).
 
-**Contents:** [Features](#features) · [Screenshots](#screenshots) · [Quick start](#quick-start) · [Command line](#command-line-ssc) · [HTTP API](#http-api) · [Python library](#python-library) · [Configuration](#configuration) · [Data and exports](#data-and-exports) · [Live watching](#live-watching) · [Security model](#security-model) · [Upgrading from 3.0](#upgrading-from-30) · [Upgrading from 2.x](#upgrading-from-2x) · [FAQ](#faq) · [Documentation](#documentation) · [Contributing](#contributing-and-development) · [Contact](#contact) · [License](#license)
+**Contents:** [Features](#features) · [Screenshots](#screenshots) · [Quick start](#quick-start) · [Command line](#command-line-ssc) · [HTTP API](#http-api) · [Python library](#python-library) · [Configuration](#configuration) · [Data and exports](#data-and-exports) · [Live watching](#live-watching) · [Security model](#security-model) · [Upgrading from 3.1](#upgrading-from-31) · [Upgrading from 3.0](#upgrading-from-30) · [Upgrading from 2.x](#upgrading-from-2x) · [FAQ](#faq) · [Documentation](#documentation) · [Contributing](#contributing-and-development) · [Contact](#contact) · [License](#license)
 
 ## Features
 
@@ -172,7 +172,7 @@ ssc describe config     # every section and key as JSON Schema
 ```
 
 - **Layers**, the later one wins: built-in default → `config/overrides.json` (what the web app's **Settings** page saves) → `sofascore.toml` → environment variables (`.env` is loaded into the environment) → command-line flags. A value fixed by the file, the environment or a flag shows as locked on the Settings page.
-- **Environment overrides**: every key as `SOFASCORE_<SECTION>__<KEY>`, for example `SOFASCORE_CLIENT__RATE=2` or `SOFASCORE_LIVE__SOURCE=poll` (`.env.example` lists them). The variable names of 2.x (`DATA_DIR`, `REQUEST_RATE_LIMIT`, `APP_LANGUAGE`, …) are not read since 3.1.0; four of them (`SOFASCORE_API_TOKEN`, `SOFASCORE_ALLOWED_HOSTS`, `USE_PROXY`, `PROXY_URL`) are deprecated and still read until 3.2; `ssc doctor` and `ssc config show` name the new name of each one still set.
+- **Environment overrides**: every key as `SOFASCORE_<SECTION>__<KEY>`, for example `SOFASCORE_CLIENT__RATE=2` or `SOFASCORE_LIVE__SOURCE=poll` (`.env.example` lists them). The variable names of 2.x (`DATA_DIR`, `REQUEST_RATE_LIMIT`, `APP_LANGUAGE`, …) are not read since 3.1.0, and `ssc doctor` and the warnings name the new name of each one still set. Four of them (`SOFASCORE_API_TOKEN`, `SOFASCORE_ALLOWED_HOSTS`, `USE_PROXY`, `PROXY_URL`) were read until 3.1 and removed in 3.2. They guard the access token, the allow-list and the proxy, so one of them set without its new name stops everything with a configuration error (exit code 2) that names the variable to set.
 - **Secrets** come from the environment only: the access token `SOFASCORE_SERVER__TOKEN` and webhook secrets (`secret_env` names the variable).
 - **Language**: `SOFASCORE_DISPLAY__LANGUAGE=en|tr` (or `[display] language`) pins it; otherwise Turkish systems and browsers get Turkish and everyone else English. `--lang` sets it for one command; JSON output is never translated.
 
@@ -239,6 +239,33 @@ The web app has **no user accounts** and listens on `127.0.0.1` by default. Open
 
 The app itself answers only to allowed host names, refuses state-changing requests sent by other sites, sends a strict Content-Security-Policy, warns when it is exposed without a token, and keeps `.env`, the settings file and the browser profile readable by their owner only. Details: [docs/deploy](docs/deploy/README.md#access-token).
 
+## Upgrading from 3.1
+
+```bash
+git pull
+pip install -r requirements.txt -c constraints.txt
+pip install -e .
+cd frontend && npm install && npm run build && cd ..
+ssc doctor                # fails on an old name below that is still set, and names the one to set
+```
+
+With Docker Compose: `git pull`, then `docker compose pull` (or `docker compose build`) and `docker compose up -d`. The image of this release is `ghcr.io/tunjayoff/sofascore_scraper:3.2.0`.
+
+- **Rename four environment names before you upgrade.** `SOFASCORE_API_TOKEN`, `SOFASCORE_ALLOWED_HOSTS`, `USE_PROXY` and `PROXY_URL` (deprecated in 3.1, with a warning) are no longer read. If one of them is still set anywhere (`.env`, the shell, a service file, the container settings) and its new name is not, nothing starts: commands exit with `2`, the web app and the container refuse to start, and `ssc doctor` fails and shows each old name, where it is set and the name to set (never the value). Rename them:
+
+  | Old name (3.1) | New name (3.2) |
+  |---|---|
+  | `SOFASCORE_API_TOKEN` | `SOFASCORE_SERVER__TOKEN` |
+  | `SOFASCORE_ALLOWED_HOSTS` | `SOFASCORE_SERVER__ALLOWED_HOSTS` |
+  | `USE_PROXY` | `SOFASCORE_CLIENT__USE_PROXY` |
+  | `PROXY_URL` | `SOFASCORE_CLIENT__PROXY` |
+
+  Instead of renaming, `[server] token_env` or `[client] proxy_env` in the config file may name the variable that holds the token or the proxy, the old one included. The Docker entrypoint no longer reads the old allow-list name either.
+- **`ssc doctor --live`** now sends one request the way downloads do, and uses the built-in browser only when that request falls back to it. `ssc doctor --live --browser` checks the browser as well.
+- **Backups carry the trusted certificates** of a network that re-signs HTTPS (the `ca` folder of the config directory), and a restore puts them back. Older backups restore as before.
+
+The full list is in [CHANGELOG.md](CHANGELOG.md#320---2026-11-20).
+
 ## Upgrading from 3.0
 
 ```bash
@@ -252,7 +279,7 @@ ssc doctor                # names every 2.x setting name that is still set, and 
 
 With Docker Compose: `git pull`, then `docker compose pull` (or `docker compose build`) and `docker compose up -d`.
 
-- **Rename the 2.x environment names.** 3.1.0 no longer reads `DATA_DIR`, `REQUEST_RATE_LIMIT`, `APP_LANGUAGE`, `LOG_LEVEL` and the other 2.x names, wherever they are set (`.env`, the shell, a service file, the container settings): the default applies instead, so an old `DATA_DIR` leaves the app on the default data folder. Four of them are deprecated instead: `SOFASCORE_API_TOKEN`, `SOFASCORE_ALLOWED_HOSTS`, `USE_PROXY` and `PROXY_URL` still work in 3.1, with a warning, and are removed in 3.2; when the new name is set too, the new one wins. Use `SOFASCORE_<SECTION>__<KEY>` (`SOFASCORE_STORAGE__DATA_DIR`, `SOFASCORE_SERVER__TOKEN`, `SOFASCORE_SERVER__ALLOWED_HOSTS`, `SOFASCORE_CLIENT__PROXY`, …). `ssc doctor` and `ssc config show` list each old name still set with its new name and where it is set; `ssc config init --from-legacy > sofascore.toml` writes the old settings as a config file.
+- **Rename the 2.x environment names.** 3.1.0 no longer reads `DATA_DIR`, `REQUEST_RATE_LIMIT`, `APP_LANGUAGE`, `LOG_LEVEL` and the other 2.x names, wherever they are set (`.env`, the shell, a service file, the container settings): the default applies instead, so an old `DATA_DIR` leaves the app on the default data folder. Four of them were deprecated instead: `SOFASCORE_API_TOKEN`, `SOFASCORE_ALLOWED_HOSTS`, `USE_PROXY` and `PROXY_URL` still worked in 3.1, with a warning, and are removed in 3.2. Since 3.2, if one of them is set without its new name, nothing starts: commands exit with `2`, the web app and the container refuse to start and `ssc doctor` fails. The message names the variable to set. Rename them before you upgrade to 3.2. Use `SOFASCORE_<SECTION>__<KEY>` (`SOFASCORE_STORAGE__DATA_DIR`, `SOFASCORE_SERVER__TOKEN`, `SOFASCORE_SERVER__ALLOWED_HOSTS`, `SOFASCORE_CLIENT__PROXY`, …). `ssc doctor` and `ssc config show` list each old name still set with its new name and where it is set; `ssc config init --from-legacy > sofascore.toml` writes the old settings as a config file.
 - **The catalog is rebuilt on its first open** (catalog schema 2): `catalog.db` is rebuilt once from the stored files, without a request to SofaScore, so the first start on a large data folder takes longer.
 - **Removed**: the `main.py` flags (an old flag is a usage error that names the `ssc` command replacing it), the 2.x routes under `/api/...` (they answer 404; use `/api/v1`) and the backup scopes `config`, `seasons`, `matches` and `match_details` (use `all`, `state` or `data`; old backups still restore). A web app built before 3.0.0 does not work under the strict Content-Security-Policy: build it again.
 - **`ssc export` file names**: without `--out`, a file is named like a web export (`exports/premier-league_2026-10-09_142530.jsonl`), and the wide CSV is `match_details/processed/events-wide_<date>_<time>.csv` instead of `all_matches_<epoch>.csv`.
@@ -272,7 +299,7 @@ ssc migrate --dry-run     # optional: what would move to the new layout
 - **Data**: nothing is moved on its own. Old data is read where it is; new writes use the new layout. `ssc migrate` converts and verifies the old folders and keeps them; `ssc migrate --delete-legacy --yes` removes verified old copies later.
 - **The terminal menu is gone.** `python main.py` without arguments prints a short help and exits with `2`. Use the web app, or `ssc` for scripts.
 - **The import package is `sofascore_scraper`** (it was `src`, and there is no alias): your own systemd units and scripts run `python -m sofascore_scraper.cli.main` instead of `python -m src.cli.main`, and library code imports `sofascore_scraper`.
-- **Removed in 3.1.0** (deprecated in 3.0.0): the `main.py` flags (a usage error names the command that replaces each one: `--headless --update-all` is `ssc sync`, `--refresh-only` is `ssc refresh`, `--watch` is `ssc watch --source poll --stdout`, `--web` is `ssc serve`, …), the 2.x routes under `/api/...` (use `/api/v1`), the backup scopes `config`, `seasons`, `matches` and `match_details` (use `all`, `state` or `data`; old backups still restore) and the 2.x environment names (four of them are deprecated and still read until 3.2; see [Upgrading from 3.0](#upgrading-from-30)). Exit codes follow the new table (a breaker stop is `4`, no longer `2`).
+- **Removed in 3.1.0** (deprecated in 3.0.0): the `main.py` flags (a usage error names the command that replaces each one: `--headless --update-all` is `ssc sync`, `--refresh-only` is `ssc refresh`, `--watch` is `ssc watch --source poll --stdout`, `--web` is `ssc serve`, …), the 2.x routes under `/api/...` (use `/api/v1`), the backup scopes `config`, `seasons`, `matches` and `match_details` (use `all`, `state` or `data`; old backups still restore) and the 2.x environment names (four of them were still read in 3.1 and stop everything in 3.2 until they are renamed; see [Upgrading from 3.0](#upgrading-from-30)). Exit codes follow the new table (a breaker stop is `4`, no longer `2`).
 - **Settings**: rename the 2.x names in `.env` (`ssc doctor` lists each one with its new name), or run `ssc config init --from-legacy > sofascore.toml`, which writes the old `.env` and `config/leagues.txt` as a config file. Leagues in `config/leagues.txt` are still downloaded; **Move to here** on a league's page moves one into the app.
 
 The full list of changes is in [CHANGELOG.md](CHANGELOG.md).

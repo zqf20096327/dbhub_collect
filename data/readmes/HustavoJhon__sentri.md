@@ -2,11 +2,14 @@
 
 # SENTRI
 
-### Tu radar personal de oportunidades — en la terminal
+### Your personal opportunity radar, in the terminal
 
-**SENTRI** reúne becas, hackathons, cursos, empleos, voluntariados, fellowships,
-convocatorias, eventos y proyectos open source en un solo feed, los puntúa
-según tus intereses y te deja decidir qué hacer con cada uno.
+**English** · [Español](README.es.md)
+
+**SENTRI** brings scholarships, hackathons, courses, jobs, volunteering,
+fellowships, open calls, events, communities and open source projects into a
+single feed, scores them against your interests, and lets you decide what to
+do with each one.
 
 [![CI](https://github.com/HustavoJhon/sentri/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/HustavoJhon/sentri/actions/workflows/ci.yml)
 [![Rust](https://img.shields.io/badge/Rust-1.89%2B-000000?logo=rust&logoColor=white)](https://www.rust-lang.org/)
@@ -15,82 +18,98 @@ según tus intereses y te deja decidir qué hacer con cada uno.
 [![Ratatui](https://img.shields.io/badge/TUI-Ratatui-4E9A06)](https://ratatui.rs/)
 [![Status](https://img.shields.io/badge/status-active%20development-fe8019)](docs/roadmap.md)
 
-[Qué es](#qué-es-sentri) · [Características](#características) ·
-[Instalación](#instalación) · [Uso](#uso) · [Arquitectura](#arquitectura) ·
-[Documentación](#documentación)
+[What it is](#what-is-sentri) · [Features](#features) ·
+[Installation](#installation) · [Usage](#usage) ·
+[Terminal images](#terminal-images) · [Architecture](#architecture) ·
+[AI usage](#ai-usage) · [Contributing](#feedback-and-contributing)
 
 </div>
 
-![Recorrido por SENTRI: primer arranque, dashboard, Discover, Tech News, comunidades peruanas y calendario](docs/assets/demo/sentri.gif)
+![A tour of SENTRI: first run, dashboard, Discover, Tech News, Peruvian communities and the calendar](docs/assets/demo/sentri.gif)
 
 <p align="center">
-  <sub>Capturas reales de la TUI · tema Gruvbox Dark · usable por SSH sin Nerd Fonts</sub>
+  <sub>Real captures of the TUI · Gruvbox Dark theme · usable over SSH without Nerd Fonts</sub>
 </p>
 
 ---
 
-## Qué es SENTRI?
+## What is SENTRI?
 
-Las oportunidades interesantes están repartidas entre decenas de fuentes:
-portales de becas, blogs, GitHub, Hacker News, calendarios de comunidades,
-newsletters, redes sociales… y casi siempre llegan tarde o se pierden.
+Good opportunities are scattered across dozens of places: scholarship
+portals, blogs, GitHub, Hacker News, community calendars, job boards and
+event directories. They usually arrive late or get lost.
 
-SENTRI nace para resolver eso: es un **radar personal** que recopila, normaliza
-y deduplica todo lo que te interesa, le asigna una **puntuación explicable** y
-lo presenta en una interfaz de terminal rápida, privada y sin distracciones.
+SENTRI is a **personal radar** for that problem. It collects, normalizes and
+deduplicates what matters to you, gives each item an **explainable score**, and
+shows everything in a fast, private, distraction-free terminal interface.
 
-No es un lector RSS más ni un buscador de empleo. Es una bandeja de entrada
-personal para decidir **qué oportunidad merece tu tiempo**.
+**Who it is for:** students, developers and tech community members who want
+to keep track of opportunities without checking twenty websites. It is built
+with the Peruvian and Latin American tech ecosystem in mind (Peruanos.dev,
+GDG chapters, Get on Board, hack0.dev), and works just as well anywhere you
+can point it at feeds and public sources.
 
-### Lo que lo hace diferente
+**What it finds:** scholarships, fellowships, exchanges, hackathons and
+competitions, courses and trainings, jobs and internships, volunteering, open
+calls, conferences, meetups and workshops, calls for speakers, communities,
+open source projects and tech news.
 
-- **Relevancia explicable.** Cada recomendación muestra *por qué* sube o baja:
-  coincidencia de intereses, ciudad, país, modalidad, viaje, deadline y
-  afinidad aprendida de tus interacciones.
-- **Fuentes independientes.** Un conector que falla no detiene a los demás; el
-  error queda registrado y el resto sigue recopilando.
-- **Terminal first.** TUI en Rust + Ratatui, pensada para funcionar por SSH
-  incluso desde el móvil, sin Nerd Fonts ni protocolos gráficos.
-- **Datos tuyos.** SQLite embebido, sin cuentas, sin nube obligatoria y con
-  permisos restrictivos desde el primer arranque.
-- **Contenido externo no confiable.** Cliente HTTP con protección anti-SSRF,
-  límites de tamaño, saneamiento de texto y secretos solo por variables de
-  entorno.
+It is not another RSS reader or job search engine. It is a personal inbox for
+deciding **which opportunity deserves your time**.
 
-## En acción
+### What makes it different
 
-| Primer arranque | Dashboard |
+- **Explainable relevance.** Every recommendation shows *why* it ranks where
+  it does: matching interests, city, country, modality, travel, deadline and
+  the affinity SENTRI learns from your likes and saves.
+- **Independent sources.** A failing connector never stops the others; its
+  error is recorded and collection goes on.
+- **Terminal first.** A Rust + Ratatui interface that works over SSH, even
+  from a phone, without Nerd Fonts. Images use Kitty or Sixel graphics when
+  the terminal supports them, and colored half blocks everywhere else.
+- **Local first.** Your data lives in an embedded SQLite database on your
+  machine: no account and no cloud service. Files are created with
+  owner-only permissions.
+- **External content is untrusted.** The HTTP client blocks SSRF, enforces
+  size and time limits, sanitizes text before it reaches the terminal, and
+  reads secrets only from environment variables.
+
+## See it in action
+
+| First run | Dashboard |
 |---|---|
-| ![Al abrir por primera vez, SENTRI recolecta de todas las fuentes y el feed se llena en vivo](docs/assets/demo/01-first-run.gif) | ![Dashboard con contadores, gráficos, recomendaciones, próximas fechas y noticias](docs/assets/demo/02-dashboard.gif) |
-| **Ecosistema peruano** | **Calendario** |
-| ![Comunidades y Call for Speakers de Perú](docs/assets/demo/07-peru-communities.gif) | ![Calendario con vistas de mes, semana, día y agenda](docs/assets/demo/08-calendar.gif) |
+| ![On first launch SENTRI collects from every source and the feed fills in live](docs/assets/demo/01-first-run.gif) | ![Dashboard with counters, charts, recommendations, upcoming dates and news](docs/assets/demo/02-dashboard.gif) |
+| **Peruvian ecosystem** | **Calendar** |
+| ![Communities and calls for speakers from Peru](docs/assets/demo/07-peru-communities.gif) | ![Calendar with month, week, day and agenda views](docs/assets/demo/08-calendar.gif) |
 
-## Características
+## Features
 
 | | |
 |---|---|
-| **Feed unificado** | Oportunidades y noticias en un solo lugar, con filtros, búsqueda y orden por relevancia, fecha o deadline. |
-| **Scoring por reglas** | Intereses, categorías, ciudad, país, modalidad, elegibilidad, gratuidad, certificado, premios, viaje y deadlines. Sin cajas negras. |
-| **Afinidad aprendida** | Likes, guardados, descartes y postulaciones ajustan la recomendación por categoría, etiqueta y tipo de oportunidad. |
-| **Interacciones claras** | Like, guardado, descarte, interesante, postulado, inscrito y completado, con historial append-only. |
-| **Añadir cualquier enlace** | `sentri add URL` detecta la plataforma, extrae metadatos públicos (Open Graph / JSON-LD) y guarda la URL aunque la página bloquee la lectura. |
-| **Conectores** | RSS/Atom, GitHub (repos y *good first issues*), Hacker News, Google News, Mastodon, Bluesky y YouTube. |
-| **Detalles ricos** | Imagen, autor, editor, notas personales, historial de cambios y campos personalizados. |
-| **Calendario** | Vista mensual, semanal, diaria y agenda; programa fechas de una oportunidad sin inscribirte en nada. |
-| **Configuración declarativa** | Perfil, intereses, pesos del scoring y fuentes en un `config.toml` comentado. Añadir un interés no requiere código. |
-| **Daemon desacoplado** | Recopilación periódica en segundo plano, con bloqueo de instancia única, recuperación tras caídas y unidad de systemd. |
-| **Seguridad por defecto** | Bloqueo de IPs privadas/loopback/metadatos cloud, límites de redirecciones, tipos y tamaños, y saneamiento de texto para la terminal. |
-| **Un solo binario** | SQLite va embebido; no hay servidor, servicio externo ni base de datos que instalar. |
+| **Unified feed** | Opportunities and news in one place, with filters, search, and sorting by relevance, date or deadline. |
+| **Rule-based scoring** | Interests, categories, city, country, modality, eligibility, free courses, certificates, prizes, travel and deadlines. No black boxes. |
+| **Learned affinity** | Likes, saves, dismissals and applications adjust recommendations by category, tag and kind of opportunity. |
+| **Clear interactions** | Like, save, dismiss, interesting, applied, enrolled and completed, with an append-only history. |
+| **Add any link** | `sentri add URL` detects the platform, reads public metadata (Open Graph / JSON-LD), and keeps the URL even when the page blocks reading. |
+| **Connectors** | RSS/Atom (including Google News, Mastodon, Bluesky and YouTube feeds), iCalendar (Luma, Meetup), GitHub (repositories and *good first issues*), Hacker News, GDG, Devpost, Kaggle, Peruanos.dev, hack0.dev, dev.events and Get on Board. |
+| **Cards per kind** | Jobs show salary, modality and skills; events show date, organizer and place; communities show city and links; news shows topic, author and classification. What cards show is configurable. |
+| **Rich details** | Description with its paragraphs and lists, key facts, image (with a full-screen viewer), author, notes, edit history and custom fields. |
+| **Configurable dashboard** | Choose which widgets and metrics appear, their order, and a detailed or compact layout. |
+| **Calendar** | Month, week, day and agenda views; schedule an opportunity's dates without signing up for anything. |
+| **Declarative configuration** | Profile, interests, scoring weights and sources in a commented `config.toml`, also editable from the TUI. Adding an interest needs no code. |
+| **Background daemon** | Periodic collection with a single-instance lock, crash recovery and a systemd unit. |
+| **Secure by default** | Private, loopback and cloud metadata IPs are blocked; redirects, content types and sizes are limited; text is sanitized for the terminal. |
+| **One binary** | SQLite is built in: no server, external service or database to install. |
 
-## Instalación
+## Installation
 
-### Requisitos
+### Requirements
 
-- **Rust stable 1.89+** (edición 2024).
-- **Linux** (probado en escritorio; también funciona por SSH).
-- Nada más: SQLite se compila dentro del binario (`sqlx` con `sqlite-bundled`).
+- **Rust stable 1.89+** (edition 2024).
+- **Linux** (developed and tested on a Linux desktop; also works over SSH).
+- Nothing else: SQLite is compiled into the binary (`sqlx` with `sqlite-bundled`).
 
-### Desde el código
+### From source
 
 ```sh
 git clone https://github.com/HustavoJhon/sentri.git
@@ -98,101 +117,110 @@ cd sentri
 cargo install --path crates/sentri-cli
 ```
 
-También puedes ejecutarlo sin instalar:
+You can also run it without installing:
 
 ```sh
-cargo run -p sentri-cli --          # abre la TUI
-cargo run -p sentri-cli -- --help   # lista los comandos
+cargo run -p sentri-cli --          # opens the TUI
+cargo run -p sentri-cli -- --help   # lists the commands
 ```
 
-### Primer arranque
+### First run
 
 ```sh
-sentri config init   # escribe la configuración comentada (no sobrescribe)
-sentri collect       # recopila de las fuentes habilitadas
-sentri               # abre la TUI
+sentri config init   # writes the commented configuration (never overwrites)
+sentri               # opens the TUI and collects from the enabled sources
 ```
 
-## Uso
+On an empty database the TUI starts collecting right away and fills each
+section as sources answer. `sentri collect` does the same from the command
+line.
 
-### Línea de comandos
+## Usage
+
+### Command line
 
 ```sh
-sentri                                  # abre la TUI
-sentri add https://example.com/evento   # añade un enlace con metadatos
+sentri                                  # opens the TUI
+sentri add https://example.com/event    # adds a link with its metadata
 sentri feed --view jobs --free --upcoming
 sentri search rust --category open_source
-sentri show 42                          # detalles y explicación del score
-sentri like 42                          # alterna like
+sentri show 42                          # details and score explanation
+sentri like 42                          # toggles like
 sentri save 42
 sentri mark 42 applied
-sentri schedule 42                      # añade sus fechas al calendario
+sentri schedule 42                      # adds its dates to the calendar
 sentri calendar --days 60
 sentri collect --source hn-front-page
 sentri sources
 sentri status
-sentri daemon --interval 120            # recopilación continua
+sentri terminal                         # explains how this terminal draws images
+sentri daemon --interval 120            # continuous collection
 sentri backup ~/backups/sentri.db
 ```
 
 <details>
-<summary><b>Ver los comandos principales</b></summary>
+<summary><b>Main commands</b></summary>
 
-| Comando | Qué hace |
+| Command | What it does |
 |---|---|
-| `sentri` | Abre la TUI. |
-| `sentri add URL` | Añade un enlace y extrae metadatos públicos. |
-| `sentri edit ID` | Corrige o completa campos; `--set campo=valor` y `--reset campo`. |
-| `sentri feed --view …` | Feed filtrado por sección: `discover`, `news`, `jobs`, `courses`, `events`, `hackathons`, `scholarships`, `volunteering`, `open-source`, `travel`… |
-| `sentri search …` | Busca por palabras con los mismos filtros del feed. |
-| `sentri show ID` | Detalles y explicación de la relevancia. |
-| `sentri like/save/dismiss ID` | Alterna una interacción. |
-| `sentri mark/unmark ID FLAG` | Estado: `applied`, `enrolled`, `completed`, `interesting`… |
-| `sentri history` | Acciones recientes. |
-| `sentri calendar` | Entradas y oportunidades con fecha. |
-| `sentri schedule ID` | Añade las fechas de una oportunidad al calendario. |
-| `sentri collect` | Recopila ahora de las fuentes habilitadas. |
-| `sentri daemon` | Recopila en segundo plano (ideal para systemd). |
-| `sentri config init/path/check` | Gestiona y valida la configuración. |
-| `sentri backup FILE` | Copia consistente de la base de datos. |
+| `sentri` | Opens the TUI. |
+| `sentri add URL` | Adds a link and reads its public metadata. |
+| `sentri edit ID` | Corrects or completes fields; `--set field=value` and `--reset field`. |
+| `sentri feed --view …` | Feed filtered by section: `discover`, `news`, `jobs`, `courses`, `events`, `hackathons`, `scholarships`, `volunteering`, `open-source`, `travel`… |
+| `sentri search …` | Searches by keywords with the same filters as the feed. |
+| `sentri show ID` | Details and relevance explanation. |
+| `sentri like/save/dismiss ID` | Toggles an interaction. |
+| `sentri mark/unmark ID FLAG` | Status: `applied`, `enrolled`, `completed`, `interesting`… |
+| `sentri history` | Recent actions. |
+| `sentri calendar` | Calendar entries and dated opportunities. |
+| `sentri schedule ID` | Adds an opportunity's dates to the calendar. |
+| `sentri collect` | Collects now from the enabled sources. |
+| `sentri daemon` | Collects in the background (made for systemd). |
+| `sentri terminal` | Shows the detected terminal, graphics protocol, image renderer and why. |
+| `sentri config init/path/check` | Manages and validates the configuration. |
+| `sentri backup FILE` | Consistent copy of the database. |
 
 </details>
 
-### Atajos de la TUI
+### TUI shortcuts
 
-| Tecla | Acción |
+| Key | Action |
 |---|---|
-| `j` `k` `↓` `↑` | Mover |
-| `Enter` | Abrir detalles (registra en el historial) |
-| `Tab` `⇧Tab` `[` `]` | Cambiar de sección |
-| `1`…`9` `0` | Saltar a una sección |
-| `l` `s` `d` `i` | Like · guardar · descartar · interesante |
-| `p` `e` `c` | Postulado · inscrito · completado |
-| `a` | Añadir al calendario |
-| `o` | Abrir enlace original |
-| `n` | Añadir un enlace |
-| `/` | Buscar |
-| `:` `Ctrl-p` | Paleta de comandos |
-| `S` | Cambiar orden: relevancia → recientes → deadline |
-| `E` | Editar todos los campos y notas |
-| `v` | Densidad de las cards |
-| `R` | Recopilar ahora |
-| `?` | Ayuda |
-| `q` `Ctrl-c` | Salir |
+| `j` `k` `↓` `↑` | Move |
+| `Enter` | Open details (recorded in the history) |
+| `Tab` `⇧Tab` `[` `]` | Switch section |
+| `1`…`9` `0` | Jump to a section |
+| `l` `s` `d` `i` | Like · save · dismiss · interesting |
+| `p` `e` `c` | Applied · enrolled · completed |
+| `a` | Add to the calendar |
+| `o` | Open the original link |
+| `z` | View the image full screen (`Esc` closes) |
+| `n` | Add a link |
+| `/` | Search |
+| `:` `Ctrl-p` | Command palette |
+| `S` | Change order: relevance → newest → deadline |
+| `E` | Edit every field and your notes |
+| `v` | Card density |
+| `R` | Collect now |
+| `?` | Help |
+| `q` `Ctrl-c` | Quit |
 
-La TUI se adapta al ancho: tres paneles con ≥110 columnas, dos con ≥80 y solo
-el feed en pantallas estrechas. Ratón: rueda para desplazar, clic para
-seleccionar y segundo clic para abrir detalles. Ver [docs/tui.md](docs/tui.md).
+Shortcuts can be remapped in **Settings › Shortcuts** or `[keys]`. The TUI
+adapts to the width: three panes from 110 columns, two from 80, a narrow
+section rail from 60, and just the feed on smaller screens. Mouse: wheel to
+scroll, click to select, second click to open details. See
+[docs/tui.md](docs/tui.md).
 
-## Configuración
+## Configuration
 
-| Qué | Ruta por defecto (Linux) |
+| What | Default path (Linux) |
 |---|---|
-| Configuración | `~/.config/sentri/config.toml` (o `$SENTRI_CONFIG`) |
-| Base de datos | `~/.local/share/sentri/sentri.db` |
-| Secretos | Variables de entorno; la config solo guarda su **nombre** (`token_env`) |
+| Configuration | `~/.config/sentri/config.toml` (or `$SENTRI_CONFIG`) |
+| Database | `~/.local/share/sentri/sentri.db` |
+| Image cache | `~/.cache/sentri/images` |
+| Secrets | Environment variables; the configuration only stores their **name** (`token_env`) |
 
-Un interés se declara sin tocar código:
+An interest is declared without touching code:
 
 ```toml
 [[profile.interests]]
@@ -202,33 +230,84 @@ categories = ["hackathon", "fellowship"]
 priority = "high"          # low ×1 · medium ×2 · high ×3
 ```
 
-Los pesos del scoring (`home_city`, `travel`, `deadline_soon`,
-`not_eligible`, `avoid_keyword`…) son configurables y cada recomendación se
-puede explicar desde la TUI o con `sentri show`. Ver
-[docs/configuration.md](docs/configuration.md).
+Set your own city, country and GitHub user (all optional):
 
-## Arquitectura
+```toml
+[profile]
+home_city = "Your city"
+country = "Your country"
 
-SENTRI es un **monolito modular** en un workspace Cargo. No hay microservicios:
-la TUI, la CLI, el daemon y la futura API son adaptadores que llaman a los
-mismos casos de uso.
+[github]
+username = "your-github-user"   # public profile and avatar only, no token
+```
+
+Scoring weights (`home_city`, `travel`, `deadline_soon`, `not_eligible`,
+`avoid_keyword`…) are configurable, and every recommendation can be explained
+from the TUI or with `sentri show`. Dashboard widgets and card contents are
+set in `[dashboard]` and `[cards]`. Everything can also be changed from
+**Settings** in the TUI, which keeps your comments and makes a backup before
+writing. See [docs/configuration.md](docs/configuration.md).
+
+## Terminal images
+
+SENTRI shows images (event posters, logos, your GitHub avatar) with real
+pixels when the terminal supports a graphics protocol, and with colored half
+blocks (`▀`, two pixels per cell) everywhere else. Keep `images = "auto"` (the
+default): it asks the terminal what it supports when the TUI starts. Rendering
+uses [`ratatui-image`](https://github.com/ratatui/ratatui-image) 11.1.
+
+Run `sentri terminal` to see what SENTRI detected in your terminal, what it
+is drawing with, and why.
+
+| Terminal | Protocol | What was tested in a real terminal |
+|---|---|---|
+| foot 1.28 | Sixel | ✅ Detection, details image and avatar drawn in Sixel, startup without a key press |
+| Alacritty 0.17 | none (Alacritty supports neither Kitty graphics nor Sixel) | ✅ Detection and half-block fallback |
+| tmux 3.8 inside foot, `allow-passthrough on` | Sixel is detected but **not used**: tmux cannot place Sixel images reliably, so `auto` uses half blocks | ✅ Large images and the full-screen viewer drew correctly, but small ones landed in the wrong place; fallback, navigation and clean exit checked |
+| tmux without `allow-passthrough` | none: graphics cannot reach the terminal | ✅ Half blocks, no keys lost at startup |
+| kitty 0.49 | Kitty graphics protocol (kitty has no Sixel) | ✅ Detection, details image, avatar, full-screen viewer, navigation, redraw after resizing, `sentri terminal` |
+| tmux 3.8 inside kitty, `allow-passthrough on` | Kitty graphics protocol, through Unicode placeholders | ✅ Detection, images in the right place, navigation, full-screen viewer, clean exit with no images left behind |
+| WezTerm, Ghostty, iTerm2, Konsole, Windows Terminal | depends on the terminal | ⏳ Not tested; `ratatui-image` supports Kitty, Sixel and iTerm2 images |
+
+Notes:
+
+- Resizing was checked in kitty with images on screen (129×66 → 68×39 →
+  150×76 columns: images are redrawn at the new size) and in tmux with half
+  blocks. Resizing while Sixel images are shown has not been checked.
+- Kitty images inside tmux use Unicode placeholders, which tmux keeps in
+  place; they need `set -g allow-passthrough on` in `~/.tmux.conf`. SENTRI
+  never changes your tmux settings.
+- **Seeing blocky images in kitty or foot?** Check `images` in your
+  `config.toml`: older configuration files set `images = "halfblock"`, which
+  never asks the terminal. SENTRI says so at startup, in Settings and in
+  `sentri terminal`; set `images = "auto"` and restart.
+- `images = "kitty"`, `"sixel"` or `"iterm2"` forces a protocol (for example
+  Sixel inside tmux, at your own risk). `"halfblock"`, `"ascii"` and `"off"`
+  never use one.
+- Details: [docs/configuration.md](docs/configuration.md#imágenes).
+
+## Architecture
+
+SENTRI is a **modular monolith** in a Cargo workspace. There are no
+microservices: the TUI, the CLI and the daemon are adapters that call the same
+use cases.
 
 ```mermaid
 flowchart TD
-    subgraph adapters[Adaptadores]
+    subgraph adapters[Adapters]
         TUI[sentri-tui<br/>Ratatui]
         CLI[sentri-cli<br/>Clap]
         DMN[daemon]
     end
 
-    APP[sentri-app<br/>casos de uso + config]
+    APP[sentri-app<br/>use cases + config]
 
-    subgraph infra[Infraestructura]
+    subgraph infra[Infrastructure]
         ST[(sentri-storage<br/>SQLite + SQLx)]
-        SRC[sentri-sources<br/>conectores + HTTP seguro]
+        SRC[sentri-sources<br/>connectors + safe HTTP]
     end
 
-    CORE[sentri-core<br/>dominio + scoring<br/>sin I/O]
+    CORE[sentri-core<br/>domain + scoring<br/>no I/O]
 
     TUI --> APP
     CLI --> APP
@@ -239,84 +318,113 @@ flowchart TD
     SRC --> CORE
 ```
 
-| Crate | Responsabilidad |
+| Crate | Responsibility |
 |---|---|
-| `sentri-core` | Modelos de dominio, normalización y deduplicación de URLs, intereses, scoring basado en reglas. **Sin I/O.** |
-| `sentri-storage` | SQLite, migraciones versionadas y repositorios. |
-| `sentri-sources` | Trait `Connector`, conectores, cliente HTTP seguro (anti-SSRF) y extracción de metadatos. |
-| `sentri-app` | Configuración TOML y casos de uso: recopilar, añadir enlaces, interactuar, consultar feed y calendario. |
-| `sentri-tui` | Interfaz Ratatui. Solo habla con `sentri-app`. |
-| `sentri-cli` | Binario `sentri` (Clap): despacha subcomandos y abre la TUI. |
+| `sentri-core` | Domain models, URL normalization and deduplication, interests, rule-based scoring. **No I/O.** |
+| `sentri-storage` | SQLite, versioned migrations and repositories. |
+| `sentri-sources` | `Connector` trait, connectors, safe HTTP client (anti-SSRF) and metadata extraction. |
+| `sentri-app` | TOML configuration and use cases: collect, add links, interact, query the feed and the calendar. |
+| `sentri-tui` | Ratatui interface. Talks only to `sentri-app`. |
+| `sentri-cli` | The `sentri` binary (Clap): dispatches subcommands and opens the TUI. |
 
-Reglas clave: `sentri-core` no hace I/O; los adaptadores no ejecutan SQL ni HTTP
-directamente; todo contenido externo se valida, se trunca y nunca se ejecuta.
-Ver [docs/architecture.md](docs/architecture.md) y las
-[decisiones de arquitectura](docs/adr/).
+Key rules: `sentri-core` does no I/O; adapters never run SQL or HTTP
+directly; external content is validated, truncated and never executed. See
+[docs/architecture.md](docs/architecture.md) and the
+[architecture decisions](docs/adr/).
 
-## Seguridad y privacidad
+## Security and privacy
 
-- **Anti-SSRF** en cada petición: solo `http`/`https`, solo IPs públicas, DNS
-  rebinding filtrado, redirecciones revalidadas y proxies del sistema ignorados.
-- **Límites** de tiempo, tamaño, redirecciones y `Content-Type` en streaming.
-- **Saneamiento** de caracteres de control y bidi para evitar inyección de ANSI
-  en la terminal.
-- **Secretos** nunca en el repositorio ni en `config.toml`: solo variables de
-  entorno (`token_env`).
-- **Datos personales** con permisos `0600` (base, WAL y backups) y directorio
-  `0700`.
-- **Sin scraping** de plataformas restringidas ni cookies de cuentas
-  personales. Ver [docs/security.md](docs/security.md).
+- **Anti-SSRF** on every request: only `http`/`https`, only public IPs, DNS
+  rebinding filtered, redirects revalidated, system proxies ignored.
+- **Limits** on time, size, redirects and `Content-Type`, enforced while
+  streaming.
+- **Sanitization** of control and bidirectional characters to prevent ANSI
+  injection into the terminal. Descriptions keep their paragraphs and lists,
+  but HTML is never rendered.
+- **Secrets** never live in the repository or in `config.toml`: only in
+  environment variables (`token_env`).
+- **Personal data** is stored with `0600` permissions (database, WAL and
+  backups) in a `0700` directory.
+- **No scraping** of restricted platforms and no personal account cookies.
+- **Profile display:** IP addresses found in your public GitHub profile
+  fields are never shown.
+
+See [docs/security.md](docs/security.md).
+
+## AI usage
+
+SENTRI was built with **heavy use of AI coding assistants** (Claude Code and
+OpenCode). The maintainer wrote the specifications, reviewed the changes and
+is responsible for the result. **SENTRI itself uses no AI at runtime** and
+sends none of your data to AI services: recommendations come from explicit,
+explainable rules. Full disclosure: [AI_USAGE.md](AI_USAGE.md).
 
 ## Roadmap
 
-| Fase | Contenido | Estado |
+| Phase | Content | Status |
 |---|---|---|
-| 0–4 | Workspace, modelos, SQLite, búsqueda, interacciones, TUI y edición | Completado |
-| 5 | Conectores: RSS/Atom, GitHub, Hacker News, Google News, Mastodon, Bluesky, YouTube | En curso |
-| 6 | Intereses, scoring, explicaciones y personalización | En curso |
-| 7 | Eventos y Google Calendar (OAuth2) | Pendiente |
-| 8–10 | Cursos, empleos, perfil profesional y asistencia a inscripciones | Pendiente |
-| 11 | Daemon, systemd, reintentos y supervisión | Base |
-| 12–13 | Acceso remoto, VPS, API Axum y PWA | Pendiente |
+| 0–4 | Workspace, models, SQLite, search, interactions, TUI | Done |
+| 5 | Connectors (RSS/Atom, GitHub, Hacker News, iCalendar, Peruvian ecosystem, Get on Board…) | In progress |
+| 6 | Interests, scoring, explanations and personalization | In progress |
+| 7 | Events and Google Calendar (OAuth2) | Local calendar done; Google not connected |
+| 8–10 | Courses, jobs, professional profile and help with sign-ups | Pending |
+| 11 | Daemon, systemd, retries and supervision | Base done |
+| 12–13 | Remote access, VPS, Axum API and PWA | Pending |
 
-Consulta el detalle y los próximos pasos en [docs/roadmap.md](docs/roadmap.md).
+Details and next steps: [docs/roadmap.md](docs/roadmap.md).
 
-## Desarrollo
+## Development
 
 ```sh
 ./scripts/check.sh   # fmt + clippy (-D warnings) + tests
 ```
 
-El mismo script corre en GitHub Actions para `main` y `dev`. La documentación
-técnica vive en [`docs/`](docs/):
+The same script runs in GitHub Actions for `main` and `dev`. Technical
+documentation lives in [`docs/`](docs/) and is currently written in Spanish:
 
-| Documento | Contenido |
+| Document | Content |
 |---|---|
-| [Arquitectura](docs/architecture.md) | Capas, crates y flujo de datos |
-| [Configuración](docs/configuration.md) | Perfil, intereses, scoring y fuentes |
-| [Fuentes](docs/sources.md) | Viabilidad, políticas y orden de implementación |
-| [Seguridad](docs/security.md) | Anti-SSRF, secretos y datos personales |
-| [TUI](docs/tui.md) | Distribución, atajos y secciones |
-| [Daemon](docs/daemon.md) | systemd, garantías y despliegue en VPS |
-| [Base de datos](docs/database.md) | Modelo, migraciones, backups y permisos |
-| [Edición](docs/editing.md) | Datos detectados vs. correcciones manuales |
-| [Calendario](docs/calendar.md) | Vistas, entradas y Google Calendar |
-| [Roadmap](docs/roadmap.md) | Fases y próximos pasos |
-| [ADR](docs/adr/) | Decisiones de arquitectura |
+| [Architecture](docs/architecture.md) | Layers, crates and data flow |
+| [Configuration](docs/configuration.md) | Profile, interests, scoring, sources, dashboard, cards and images |
+| [Sources](docs/sources.md) | Feasibility, policies and implementation order |
+| [Security](docs/security.md) | Anti-SSRF, secrets and personal data |
+| [TUI](docs/tui.md) | Layout, shortcuts and sections |
+| [Daemon](docs/daemon.md) | systemd, guarantees and VPS deployment |
+| [Database](docs/database.md) | Model, migrations, backups and permissions |
+| [Editing](docs/editing.md) | Detected data vs. manual corrections |
+| [Calendar](docs/calendar.md) | Views, entries and Google Calendar |
+| [Roadmap](docs/roadmap.md) | Phases and next steps |
+| [ADR](docs/adr/) | Architecture decisions |
 
-## Contribuir
+## Feedback and contributing
 
-SENTRI está en desarrollo activo y el alcance cambia rápido. Si quieres
-proponer una fuente, un atajo o una mejora:
+SENTRI is in active development and feedback shapes what comes next.
 
-1. Abre un issue describiendo el caso de uso.
-2. Mantén los cambios pequeños y con tests.
-3. Ejecuta `./scripts/check.sh` antes de abrir el PR.
+- **Report a bug:** [open an issue](https://github.com/HustavoJhon/sentri/issues/new)
+  with what you did, what you expected and what happened. Include your SENTRI
+  version or commit, your OS and terminal, and the output of
+  `sentri terminal` if the problem involves the display. Remove personal data
+  (paths, tokens, IP addresses) from logs and screenshots.
+- **Request a feature:** open an issue that describes the use case: what you
+  want to do and why. That helps more than a proposed solution.
+- **Source integration problems:** if a source stops working or returns wrong
+  data, open an issue with the source name from `sentri sources`, the error
+  shown there or in `sentri.log` (next to the database), and an example link.
+- **Propose a new connector:** open an issue with the platform, how it
+  publishes data (official API, RSS/Atom, iCalendar, JSON-LD on public pages),
+  whether it needs a token, and its terms of use. SENTRI only uses public,
+  permitted access and never scrapes restricted platforms (see
+  [docs/sources.md](docs/sources.md) and
+  [ADR 0004](docs/adr/0004-no-scraping-of-restricted-platforms.md)).
+- **Contribute code:**
+  1. Open an issue first to agree on the change.
+  2. Keep changes small and include tests.
+  3. Run `./scripts/check.sh` before opening the pull request.
 
-Este repositorio todavía no tiene una licencia publicada.
+This repository does not have a published license yet.
 
 ---
 
 <div align="center">
-  <sub>Hecho con Rust desde Cusco, Perú</sub>
+  <sub>Made with Rust in Cusco, Peru</sub>
 </div>

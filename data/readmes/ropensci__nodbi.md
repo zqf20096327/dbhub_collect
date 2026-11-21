@@ -13,17 +13,11 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 `nodbi` is an R package that provides a single interface for several
 NoSQL databases and databases with JSON functionality, with the same
 function parameters and return values across all database backends. Last
-updated 2026-08-25.
+updated 2026-11-21.
 
-| Currently, `nodbi` supports<br/>as database backends | for an `R` object of any<br/>of these data types | for these operations |
+| Currently, `nodbi` supports<br/>as database backends | for an `R` object of any<br/>of these data types | for these operations on<br/>collection(s) in a database |
 |:---|:---|:---|
-| MongoDB | data.frame | List |
-| SQLite | list | Create |
-| PostgreSQL | JSON string | Get |
-| DuckDB | name of file with NDJSON records | Query |
-| Elasticsearch | URL to NDJSON records | Update |
-| CouchDB |  | Delete |
-| MariaDB |  | Exists |
+| \- MongoDB<br/>- SQLite<br/>- PostgreSQL<br/>- DuckDB<br/>- MariaDB<br/>- Elasticsearch<br/>- CouchDB | \- list<br/>- data.frame<br/>- JSON string<br/>- name of file with NDJSON records<br/>- URL to NDJSON records | \- Exists<br/>- List<br/>- Create<br/>- Get<br/>- Query<br/>- Update<br/>- Delete |
 
 For speed comparisons of database backends, see [benchmark](#benchmark)
 and [testing](#testing) below.
@@ -44,10 +38,10 @@ parameter holds the name of a container.
 | Get all documents back into a data frame | `nodbi::docdb_get(src = src, key = "my_container")` |
 | Get documents selected with query (as MongoDB-compatible JSON) into a data frame | `nodbi::docdb_query(src = src, key = "my_container", query = '{"age": 20}')` |
 | Get selected fields (in MongoDB compatible JSON) from documents selected by query into a data frame | `nodbi::docdb_query(src = src, key = "my_container", query = '{"age": {"$gt": 20}}', fields = '{"friends.name": 1, "_id": 0, "age": 1}', limit = 2L)` |
-| Update (patch) documents selected by query with new data `my_data` (in a data frame, list, JSON string, or file name or URL pointing to NDJSON records) | `nodbi::docdb_update(src = src, key = "my_container", value = my_data, query = '{"age": 20}')` |
+| Update (patch) documents, optionally selected by a query, with new data `my_data` (in a data frame, list, JSON string, or file name or URL pointing to NDJSON records) | `nodbi::docdb_update(src = src, key = "my_container", value = my_data, query = '{"age": 20}')` |
 | Check if container exists | `nodbi::docdb_exists(src = src, key = "my_container")` |
-| List all containers in database | `nodbi::docdb_list(src = src)` |
-| Delete document(s) in container | `nodbi::docdb_delete(src = src, key = "my_container", query = '{"age": 20}')` |
+| List all containers in a database | `nodbi::docdb_list(src = src)` |
+| Delete document(s) in the container | `nodbi::docdb_delete(src = src, key = "my_container", query = '{"age": 20}')` |
 | Delete container | `nodbi::docdb_delete(src = src, key = "my_container")` |
 | Close and remove database connection manually (when restarting R, connections are automatically closed and removed by `nodbi`) | `rm(src)` |
 
@@ -381,29 +375,29 @@ result <- rbenchmark::benchmark(
   SQLite = testFunction(src = srcSqlite),
   CouchDB = testFunction(src = srcCouchdb),
   Elastic = testFunction(src = srcElastic),
-  replications = 3L,
+  replications = 5L,
   order = "elapsed"
 )
 
-# 2026-08-23 with M3 hardware, databases via homebrew
-result[ , c("test", "replications", "elapsed")]
-#         test replications elapsed
-# 1     DuckDB            3     1.0
-# 5     SQLite            3     1.0
-# 3    MongoDB            3     2.0
-# 4 PostgreSQL            3     2.2
-# 2    MariaDB            3     2.8
-# 7    Elastic            3    29.5
-# 6    CouchDB            3    55.0
+# 2026-11-21 with M3 hardware, databases via homebrew
+with(result, data.frame(test, elapsed / replications))
+#         test elapsed.replications
+# 1     DuckDB                 0.36
+# 2     SQLite                 0.39
+# 3 PostgreSQL                 0.73
+# 4    MariaDB                 1.05
+# 5    MongoDB                 2.44
+# 6    Elastic                 9.04
+# 7    CouchDB                16.88
 
 message(R.version$version.string)
-# R Under development (unstable) (2026-06-24 r90190)
+# R version 4.6.2 (2026-10-29)
 
 pkgs <- c("nodbi", "RSQLite", "duckdb", "RPostgres", "mongolite", "elastic", "sofa", "RMariaDB")
 for (pkg in pkgs) message(pkg, ": ", packageVersion(pkg))
-# nodbi: 0.14.0.9000
+# nodbi: 0.15.0.9000
 # RSQLite: 3.53.3
-# duckdb: 1.5.5
+# duckdb: 2.0.0
 # RPostgres: 1.4.10
 # mongolite: 4.1.0
 # elastic: 1.2.2
@@ -417,23 +411,22 @@ Every database backend is subject to identical tests, see
 [core-nodbi.R](https://github.com/ropensci/nodbi/blob/master/tests/testthat/core-nodbi.R).
 
 ``` r
-# 2026-08-23
+# 2026-11-21
 options(duckdb.home = "~/.duckdb")
 suppressMessages(testthat::test_local())
 # ✔ | F W  S  OK | Context
-# ✔ |      2 184 | couchdb [77.7s]
-# ✔ |      1 183 | duckdb [3.6s]
-# ✔ |      2 181 | elastic [65.3s]
-# ✔ |      2 181 | mariadb-remote [17.2s]
-# ✔ |      2 181 | mariadb [6.6s]
-# ✔ |      2 182 | mongodb [4.6s]
-# ✔ |        185 | postgres [7.2s]
-# ✔ |        186 | sqlite [4.2s]
+# ✔ |      2 184 | couchdb [77.1s]
+# ✔ |      1 183 | duckdb [5.3s]
+# ✔ |      2 181 | elastic [73.7s]
+# ✔ |      2 181 | mariadb-remote [20.4s]
+# ✔ |      2 181 | mariadb [10.1s]
+# ✔ |      2 182 | mongodb [6.1s]
+# ✔ |        185 | postgres [9.6s]
+# ✔ |        186 | sqlite [7.0s]                                                                                        
+# ══ Results ════════════════════════════════════════════════════════
+# Duration: 209.3 s
 # 
-# ══ Results ═══════════════════════════════
-# Duration: 186.3 s
-# 
-# ── Skipped tests (11) ────────────────────
+# ── Skipped tests (11) ─────────────────────────────────────────────
 # • empty test (2): test-mariadb-remote.R:27:3, test-mariadb.R:22:3
 # • Testing for auto disconnect and shutdown not relevant (5): 
 #   test-couchdb.R:26:3, test-elastic.R:21:3,
@@ -444,17 +437,19 @@ suppressMessages(testthat::test_local())
 # 
 # [ FAIL 0 | WARN 0 | SKIP 11 | PASS 1463 ]
 
-covr::package_coverage(path = ".", type = "tests")
-# nodbi Coverage: 94.72%
+report <- covr::package_coverage(path = ".", type = "tests")
+# covr::report(report)
+report
+# nodbi Coverage: 94.73%
 # R/src_postgres.R: 82.43%
 # R/src_duckdb.R: 84.00%
 # R/zzz.R: 86.67%
 # R/src_mariadb.R: 92.86%
 # R/src_mongo.R: 95.00%
 # R/query.R: 95.28%
-# R/update.R: 95.40%
+# R/update.R: 95.37%
 # R/get.R: 96.19%
-# R/create.R: 96.62%
+# R/create.R: 96.68%
 # R/delete.R: 99.02%
 # R/exists.R: 100.00%
 # R/list.R: 100.00%

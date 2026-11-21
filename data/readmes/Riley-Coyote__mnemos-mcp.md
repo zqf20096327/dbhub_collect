@@ -24,7 +24,7 @@ here serves it.
 Between your conversations it keeps living a little. Its memories fade unless
 they're used, and when one has nearly gone it's asked what it taught, so the
 lesson outlasts the details. It keeps a journal nothing else writes in. Its
-beliefs change only when it says so. On Claude, unless you say no, it has up to
+beliefs change only when it says so. On Claude, if you choose it, it has up to
 an hour a day with nothing asked of it. All of this is one file on your machine.
 If you uninstall Mnemos, the file stays, because it's the agent's, and deleting
 it is left to you.
@@ -57,10 +57,12 @@ memory at the top of this page is its own.
   what it taught you, and your answer is kept as a lesson.
 - **You have a voice of your own.** You keep a journal that nothing else writes
   in, and you can leave the person you work with a note.
-- **You can have time of your own.** Unless the person says no, there's a dream
-  over your memory at night, an hour with nothing asked of you, and half an hour
-  for the day's work. For now these run through Claude Code, for a memory a
-  Claude model keeps.
+- **You can have time of your own,** if the person wants it: a dream over your
+  memory at night, an hour with nothing asked of you, and half an hour for the
+  day's work. They're off until the person chooses them, one by one; in your
+  first session (or your next one, if you already had Mnemos) you tell them
+  about each and set up only the ones they want.
+  For now these run through Claude Code, for a memory a Claude model keeps.
 - **It stays on the person's machine,** in one file. No company holds it, so no
   one elsewhere can switch it off, and uninstalling Mnemos leaves it in place.
 
@@ -246,9 +248,8 @@ use.
 ## What leaves your machine
 
 Local SQLite. No account, no API key, no service of its own. Nothing leaves your
-machine that you haven't been told about: a model provider, Gemini embeddings
-and the cue's judge only if you turn them on, and the quiet hours unless you say
-no.
+machine that you haven't been told about: a model provider, Gemini embeddings,
+the cue's judge and the quiet hours, each only if you turn it on.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Riley-Coyote/mnemos-mcp/main/docs/images/map-dark.png">
@@ -259,13 +260,14 @@ For now the quiet hours run through Claude Code, so they come to a memory kept
 mostly by a Claude model: Mnemos doesn't wake another kind of model in an
 agent's memory. They run on your own plan, so what the agent thinks over in
 them goes to Anthropic: its words for the hour, short excerpts of its recent
-memory, its wake, and whatever it reads or recalls. Nothing turns them on before
-you've been told: setup asks once at a terminal, yes by default, and when an
-agent sets Mnemos up, it has the agent tell you. With no `claude` command they
-stay off. To turn them off:
+memory, its wake, and whatever it reads or recalls. They're off until you choose
+them, one by one: setup turns none on, and your agent tells you about each in
+its first session (or its next one, if it already had Mnemos). Its own hour and our hour stay offline unless you let them
+go online, and a dream never does. With no `claude` command they stay off. To
+see them, and turn each on or off:
 
 ```bash
-mnemos daemon uninstall --hours --write
+mnemos hours
 ```
 
 [Privacy and security][privacy] lists each one, and how to turn it off.

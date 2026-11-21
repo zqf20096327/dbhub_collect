@@ -1,5 +1,10 @@
 # db-branch
 
+[![Release](https://img.shields.io/github/v/release/db-branch/db-branch)](https://github.com/db-branch/db-branch/releases)
+[![License](https://img.shields.io/github/license/db-branch/db-branch)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/db-branch/db-branch?style=flat)](https://github.com/db-branch/db-branch/stargazers)
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa?logo=githubsponsors)](https://github.com/sponsors/MaSuCcHI)
+
 Instant database branches for MySQL and PostgreSQL, on your own servers.
 
 Test a migration, let an AI agent loose, or give every pull request its own copy of the database. db-branch creates a copy-on-write branch of a large database in seconds, with nothing copied. Break it, reset it, throw it away. Built on ZFS clones, self-hosted, Apache-2.0.
@@ -96,13 +101,13 @@ A base is a ZFS dataset holding a loaded database. A branch is a ZFS clone of a 
 
 - **Disposable by design (no merge or rebase).** Branches are block-level ZFS copy-on-write clones, not hooks into the database engine's MVCC. Divergent writes across concurrent branches cannot be merged or rebased back into a base or another branch like Git. db-branch is built for disposable sandboxes (AI agents, CI runs, migration tests) that you reset or throw away.
 - **Clean-shutdown vs. live snapshots.** Because PostgreSQL and MySQL (InnoDB) are crash-consistent, an atomic ZFS snapshot of a running instance (with data files and WAL/redo logs on the same volume) does work—and db-branch uses crash-consistent live snapshots for running-branch checkpoints. However, starting a branch from a live snapshot triggers crash recovery (WAL/redo log replay), which added about 10 s of startup latency in our MySQL testing. Base snapshots are therefore taken after a clean shutdown to keep branch creation sub-second / a few seconds.
-- **Mask at the base, not after branching.** Branches isolate writes from production, but an AI agent or user with access to a branch can still *read* everything in it. If you load unmasked production data, sensitive records remain exposed to `SELECT` queries. Mask data when creating the base snapshot (using a masked dump or the `greenmask`, `greenmask-mysql`, or `anon` modules) rather than relying on post-branch masking.
+- **Mask at the base, not after branching.** Branches isolate writes from production, but an AI agent or user with access to a branch can still *read* everything in it. If you load unmasked production data, sensitive records remain exposed to `SELECT` queries. Mask data when creating the base snapshot (using a masked dump or a masker module distributed separately, such as `greenmask`, `greenmask-mysql`, or `anon`) rather than relying on post-branch masking.
 - **ZFS `recordsize` tuning.** ZFS's default `recordsize` (128K) does not match database page sizes, causing double copy-on-write / `fsync` write amplification and hurting random I/O. Matching `recordsize` to the engine's page size—`16K` for MySQL/InnoDB and `8K` for PostgreSQL—avoids this overhead. (`db-branch` automatically sets `recordsize=16K` on base datasets, matching InnoDB; for PostgreSQL workloads sensitive to random I/O, `8K` is the page-matched setting, trading some `lz4` compression efficiency.)
 
 ## Editions
 
 - **Core (this repository), Apache-2.0:** branches, bases, runtimes, clustering, CLI, API, web console, MCP, monitoring, notifications, anonymous (no sign-in) branches with limits, scheduled base refresh, backup of cluster state.
-- **Free modules** in the same apt repository: `proxysql`, `greenmask`, `greenmask-mysql`, `anon` (routing and data masking).
+- **Free modules** in the same apt repository: `proxysql` (routing). Data masking modules (`greenmask`, `greenmask-mysql`, `anon`) are distributed separately from this repository.
 - **Paid modules** (auth/SSO, audit, history, diff, FSx storage) are separate, closed-source packages, self-hosted and enabled with a license key (monthly or yearly). A governed masking workflow is planned as an opt-in beta and is not part of any plan yet. See [docs/modules.md](docs/modules.md) for the extension points they use.
 
 There is no hosted or cloud version of db-branch.
@@ -120,6 +125,7 @@ There is no hosted or cloud version of db-branch.
 - Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Commits need a DCO sign-off (`git commit -s`).
 - Security issues: see [SECURITY.md](SECURITY.md). Please use private vulnerability reporting, not public issues.
 - Support: see [SUPPORT.md](SUPPORT.md). No support is promised; Issues are read when possible.
+- Sponsor: if db-branch is useful to you, you can support its development on [GitHub Sponsors](https://github.com/sponsors/MaSuCcHI). It is optional and does not buy support or paid modules.
 - Please follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
@@ -131,3 +137,5 @@ Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 db-branch は、ZFS クローンで MySQL / PostgreSQL のデータベースブランチを発行・リセット・破棄するツールです。現在は Beta で、1.0 までに API が変わる可能性があります。コアは Apache-2.0 で、有償モジュール（認証/SSO・監査・履歴・差分・FSx ストレージ）は別パッケージ（クローズドソース、セルフホスト、ライセンスキー）です。
 
 Mac / Windows では、Multipass のコマンド1つで試せます: <https://db-branch.com/ja/docs/getting-started/#multipass-ですぐ試す>。日本語のサイトは <https://db-branch.com/ja/>、設計ドキュメントは [docs/](docs/) にあります（日本語）。
+
+開発を支援する場合は、[GitHub Sponsors](https://github.com/sponsors/MaSuCcHI) から行えます（任意です。サポートや有償モジュールの提供は伴いません）。

@@ -1,0 +1,270 @@
+# Leyes Como Código - Mexico
+
+> [!IMPORTANT]
+> Tezca handles legal/compliance data, official-source scraping, search indexes, API keys, webhooks, chat/LLM prompts, billing handoffs, and package/deploy publishing paths.
+> Scrapers, RMF/DOF ingestion, index rebuilds, exports, webhooks, Selva chat, DB mutations, and publish/deploy flows are side-effectful. Keep examples placeholder-only and set the matching local guard env var only for an explicit operation.
+
+**The definitive digital platform for Mexican legal research** - comprehensive, machine-readable database of Mexican laws (federal, state, municipal) with intuitive interfaces for professionals and citizens.
+
+**Coverage**: 93.9% of Legislative Laws (11,696 of 12,456) + 18,439 non-legislative (30,343 total) — [sourced from `data/universe_registry.json`]
+**Status**: Production Ready
+
+## Quick Start
+
+### Prerequisites
+- Node.js 20+
+- Python 3.10+
+- Docker & Docker Compose
+
+### Development Setup
+
+1. **Install Dependencies**
+   ```bash
+   npm install          # Frontend (all workspaces)
+   poetry install       # Backend (Python)
+   cp .env.example .env # Configure environment
+   ```
+
+2. **Start Development Servers**
+   ```bash
+   npm run dev:web          # Public portal → http://localhost:3000
+   npm run dev:admin        # Admin console → http://localhost:3001
+   poetry run python manage.py runserver  # API → http://localhost:8000
+   ```
+
+3. **Docker (all services)**
+   ```bash
+   docker compose up -d   # API, Celery, Web, Admin, PostgreSQL, Redis, Elasticsearch
+   ```
+
+
+## Coverage
+
+All numbers sourced from `data/universe_registry.json` with links to official sources.
+
+| Level | Laws | Universe | Coverage | Source |
+|-------|------|----------|----------|--------|
+| **Federal** | 333/336 | 336 | 99.1% | [Cámara de Diputados](https://www.diputados.gob.mx/LeyesBiblio/) |
+| **State (Legislativo)** | 11,363/12,120 | 12,120 | 93.7% | [OJN - Poder Legislativo](https://compilacion.ordenjuridico.gob.mx/) |
+| **State (Other Powers)** | 18,439/23,660 | 23,660 | 77.9% | OJN - Poderes 1/3/4 |
+| **Municipal** | 208 | Unknown | N/A | 5 city portals (no census exists) |
+| **Leyes Vigentes** | **11,696/12,456** | **12,456** | **93.9%** | Federal + State Legislativo |
+
+**Note**: 782 OJN links are permanently dead (Michoacán 504, EDOMEX 141, SLP 47). Municipal universe is unknown — INEGI reports 2,468 municipalities but no authoritative count of municipal laws exists.
+
+## Features
+
+- ✅ **93.9% Legislative Coverage** - 11,696 of 12,456 legislative laws (federal + state)
+- ✅ **Structured Parsing** - Akoma Ntoso XML output with automated validation
+- ✅ **Dynamic Dashboard** - Real-time statistics and recent legislation feed
+- ✅ **Advanced Search** - Date range filtering, state filters, and auto-complete
+- ✅ **Law Detail 2.0** - Enhanced typography, improved ease-of-reading, and citations
+- ✅ **Quality Validation** - 5 automated checks, A-F grading
+- ✅ **Full-Text Search** - 1,100,000+ articles indexed in Elasticsearch
+- ✅ **Version History** - Track legal evolution over time
+- ✅ **REST API** - Machine-readable access for legal tech (paginated, filtered, rate-limited)
+- ✅ **Batch Processing** - Parallel ingestion with 4-8 workers
+- ✅ **Production Ready** - Full-stack testing (2164 Pytest + 930 web Vitest + 78 admin Vitest + 48 api-client Vitest + 23 MCP server Pytest); backend coverage gate 60% (≈64% actual), frontend gates 61% statements / 62% lines with `all: true` denominator
+- ✅ **OpenAPI Documentation** - Swagger UI, ReDoc at `/api/docs/`
+- ✅ **Background Processing** - Celery + Redis for ingestion jobs
+- ✅ **Cross-References** - Automatic detection and linking between laws
+- ✅ **Legal Pages** - Terms & Conditions, Legal Disclaimer, Privacy Policy (trilingual ES/EN/NAH)
+- ✅ **Site Footer** - Persistent navigation, official source links, disclaimer bar
+- ✅ **Disclaimer Banner** - Dismissable one-time homepage notice (localStorage persistence)
+- ✅ **Trilingual UI** - ES/EN/NAH (Classical Nahuatl) language toggle across all components (law content remains Spanish)
+- ✅ **Tezca Manifesto** - `/acerca-de` brand page with mission statement
+- ✅ **Persistent Navbar** - Sticky navigation with mobile hamburger menu, transparent-on-homepage
+- ✅ **Bookmarks** - Heart toggle, localStorage persistence, `/favoritos` page
+- ✅ **Reading UX** - Progress bar, font size control, back-to-top, breadcrumbs
+- ✅ **Share & Export** - Social sharing (Twitter, LinkedIn, WhatsApp), copy link, PDF print export
+- ✅ **Loading Skeletons** - Shaped placeholders for law detail, search results, dashboard
+- ✅ **API Hardening** - Rate limiting (100/hr), pagination (50/page), law status field, search-within-law
+- ✅ **Accessibility** - WCAG 2.1 AA (skip-to-content, aria-labels, keyboard nav, 44px touch targets)
+- ✅ **Search-Within-Law** - Elasticsearch-powered article search with highlighted snippets
+- ✅ **Keyboard Shortcuts** - j/k article navigation, / search, b bookmark, ? help panel
+- ✅ **Recently Viewed** - Homepage section showing last 10 visited laws (localStorage)
+- ✅ **SEO Foundation** - Dynamic sitemap, robots.txt, OG metadata, trilingual 404 page
+- ✅ **URL-Synced Search** - Pagination, filters, and query persisted in URL (shareable/bookmarkable)
+- ✅ **Faceted Search** - ES aggregations (by tier, category, status, law_type, state) with live filter counts
+- ✅ **Browse Pages** - Browse by Category (/categorias/) and State (/estados/) with API-backed counts
+- ✅ **Related Laws** - Elasticsearch more_like_this recommendations on law detail
+- ✅ **6-Format Export** - TXT/PDF/LaTeX/DOCX/EPUB/JSON with tier-based rate limits (anon/free/premium)
+- ✅ **Word-Level Compare Diff** - Side-by-side comparison with green (added) / red (removed) inline highlights
+- ✅ **Cross-Reference Panel** - Outgoing + incoming law references with confidence threshold filter
+- ✅ **Version Timeline** - Collapsible history with change_summary and valid_to dates
+- ✅ **Cmd+K Global Search** - Overlay with debounced suggestions and keyboard navigation
+- ✅ **Citation Export** - Legal citation + BibTeX copy from article viewer
+- ✅ **Dynamic OG Images** - Per-law opengraph images via Next.js ImageResponse
+- ✅ **Homepage Refresh** - FeaturedLaws grid, QuickLinks, trilingual headings
+- ✅ **JSON-LD Structured Data** - schema.org Legislation + WebSite + Organization
+- ✅ **Canonical URLs** - alternates for es/en/x-default, expanded sitemap with categories + states
+- ✅ **Spanish URL Paths** - /leyes, /busqueda, /comparar with 301 redirects from English
+- ✅ **Dual Storage** - Local dev / Cloudflare R2 production backend
+- ✅ **Sentry Integration** - Django API + Next.js web (optional)
+- ✅ **API Key Authentication** - `tzk_` prefixed keys with SHA-256 hashing, tier-based access (free/pro/enterprise/internal)
+- ✅ **Combined Auth** - API key + Janua JWT fallback chain with uniform tier/scope propagation
+- ✅ **Tiered Rate Limiting** - Per-tier sliding window throttle (anon 10/min → internal 200/min)
+- ✅ **Bulk Data Feed** - Cursor-paginated `/bulk/articles/` endpoint with domain filtering (requires `bulk` scope)
+- ✅ **Changelog API** - `/changelog/?since=` endpoint for incremental sync of law updates
+- ✅ **Fiscal Values Feed** - `/fiscal/{uma,minimos,tables}/` versioned UMA, salario mínimo and ISR/subsidio tables with DOF provenance and `?on=YYYY-MM-DD` point-in-time lookup (requires `read` scope). 2025 and 2026 are published with DOF provenance; the remaining gaps (annual Art. 152 tarifa for 2026, salarios mínimos profesionales, `imss_rates`/`isn_rates`) are listed rather than filled, so `all_published` stays `false`. See [docs/FISCAL_VALUES_FEED.md](docs/FISCAL_VALUES_FEED.md) and [docs/fiscal/](docs/fiscal/README.md)
+- ✅ **Webhook Subscriptions** - HMAC-SHA256 signed push notifications with auto-disable after failures
+- ✅ **Domain Filtering** - `?domain=finance` maps to category groups on all endpoints; API key domain restrictions
+- ✅ **TypeScript SDK** - `@tezca/api-client` package with auto-pagination, typed endpoints, error handling
+- ✅ **API Key Admin** - CRUD endpoints for key management (`/admin/apikeys/`)
+- ✅ **Usage Logging** - Batched request logging middleware for analytics
+
+## Architecture
+
+### Monorepo Structure
+This project uses a monorepo architecture managed by NPM Workspaces.
+
+```text
+/
+├── packages/
+│   ├── ui/          # Shared UI Library (@tezca/ui) - React 19 / Shadcn
+│   ├── lib/         # Shared Utilities & Types (@tezca/lib)
+│   ├── api-client/  # TypeScript SDK (@tezca/api-client)
+│   └── tsconfig/    # Shared TypeScript configurations
+├── apps/
+│   ├── web/         # Public Portal (Next.js 16)
+│   ├── admin/       # Management Console (Next.js 16)
+│   └── api/         # Backend API (Django / Python)
+└── package.json     # Workspace Root
+```
+
+### Components
+  - **Ingestion Pipeline**: PDF Download → Text Extraction → Parsing → Validation
+  - **Public Portal**: Citizen-facing search and traversal of laws
+  - **Admin Console**: Operator dashboard for monitoring ingestion jobs
+
+## Role in the MADFAM monetization engine
+
+Tezca is intended as a revenue-carrying product in MADFAM's compliance line, not an internal tool. It is aimed at
+the people whose work depends on knowing what Mexican law currently says — compliance officers, accountants, legal
+and regulatory teams — with the machine-readable API over the legal corpus as the principal commercial surface.
+Tezca is also an upstream data dependency for other MADFAM compliance products, which consume its feeds rather
+than re-deriving them.
+
+Its place in the wider MADFAM pipeline is simply that of a product to be sold. Demand discovery, pricing,
+checkout, invoicing, and entitlement are each owned by other platforms; none of that path lives in this
+repository, and nothing here should grow a dependency on it.
+
+> **Boundary note.** This is a deliberately sanitized statement of Tezca's *designed* role. It is not a statement
+> about the live state of any deployment, nor about current commercial availability. The canonical end-to-end description of
+> the monetization pipeline is private and lives in the `internal-devops` repository at
+> `docs/monetization-engine.md`. Catalog prices, payment and entitlement wiring, credential names, deployment
+> topology, and tax/invoicing configuration belong there and must not be added to this repository.
+
+_Last Updated: 2026-07-26_
+
+## Documentation
+
+- [Setup Guide](docs/guides/SETUP.md) - Installation and configuration
+- [Tech Stack](docs/architecture/TECH_STACK.md) - Approved technologies
+- [Architecture](docs/architecture/ARCHITECTURE.md) - System design
+- [Testing](tests/) - Test suite (backend + frontend). How to run each suite, the skip inventory, known flaky tests and the manual PDF render check: [docs/guides/TESTING_STRATEGY.md](docs/guides/TESTING_STRATEGY.md#6-current-test-infrastructure)
+- [MCP server](packages/mcp-server/README.md) - `tezca-mcp`: tools, `/health`, host protection, Docker
+- [Security policy and baseline](SECURITY.md#security-baseline-2026-09-30) - Dependency security floors and how to ship a root-lockfile fix
+- [Production deployment](docs/deployment/PRODUCTION_DEPLOYMENT.md) - Deploy workflows, trigger paths, verification
+- [llms.txt](llms.txt) - Agent-consumable project summary ([llms-full.txt](llms-full.txt) for expanded version)
+
+## Related repositories / contracts
+
+| Repository | Contract | Defined in |
+|---|---|---|
+| [janua](https://github.com/madfam-org/janua) | Identity provider. `apps/web` and `apps/admin` are Janua OIDC clients; the API validates Janua RS256 JWTs (see [docs/AUTH.md](docs/AUTH.md)). | [`docs/guides/ECOSYSTEM_INTEGRATION.md`](https://github.com/madfam-org/janua/blob/main/docs/guides/ECOSYSTEM_INTEGRATION.md) |
+| [janua](https://github.com/madfam-org/janua) | Machine-to-machine tokens, for a service that calls Tezca's API with a Janua token instead of an API key. | [`docs/service-tokens.md`](https://github.com/madfam-org/janua/blob/main/docs/service-tokens.md) |
+| [enclii](https://github.com/madfam-org/enclii) | Deploy platform. [`enclii.yaml`](enclii.yaml) follows its service spec; the `deploy-*.yml` workflows build, pin digests in `k8s/production/` and report to Enclii, which ArgoCD then syncs. | [`docs/reference/service-spec.md`](https://github.com/madfam-org/enclii/blob/main/docs/reference/service-spec.md), [`docs/guides/EXTERNAL_REPO_DEPLOY.md`](https://github.com/madfam-org/enclii/blob/main/docs/guides/EXTERNAL_REPO_DEPLOY.md) |
+| karafiel (consumer) | Reads Tezca's law feeds: the fiscal values feed and the labor rules (SAT catalogues) instead of hard-coding them. | This repo: [`docs/FISCAL_VALUES_FEED.md`](docs/FISCAL_VALUES_FEED.md), [`docs/labor/reglas.md`](docs/labor/reglas.md) |
+| symbiosis-hcm (consumer) | Reads the labor feed (contract C1: article text in force on a date) and the fiscal values feed. | This repo: [`docs/labor/README.md`](docs/labor/README.md), [`docs/FISCAL_VALUES_FEED.md`](docs/FISCAL_VALUES_FEED.md) |
+
+## Performance
+
+| Metric | Result |
+|--------|--------|
+| Processing Speed | 23s per law |
+| Parallel Speedup | 3-4x |
+| Schema Compliance | 100% |
+
+## Project Roadmap
+
+**Phase 1: Federal Laws** - ✅ COMPLETE
+- ✅ 333 federal laws ingested (99.1% of 336)
+- ✅ Quality validation framework
+- ✅ Elasticsearch full-text search
+
+**Phase 2: State Laws** - ✅ COMPLETE
+- ✅ 11,363 state laws downloaded (93.7% of 12,120 OJN Legislativo)
+- ✅ Database schema update
+- ✅ State law processing pipeline
+- ✅ Frontend state filters
+
+**Phase 3: UI/UX Transformation** - ✅ COMPLETE
+- ✅ Dynamic Homepage Dashboard
+- ✅ Law Detail Page 2.0 (breadcrumbs, font control, progress bar)
+- ✅ Advanced Search with Autocomplete Typeahead
+- ✅ Legal Pages (Terms, Disclaimer, Privacy) — trilingual ES/EN/NAH
+- ✅ Persistent Navbar + Site Footer + Disclaimer Banner
+- ✅ Comparison Tool (side-by-side, sync scroll, mobile tabs)
+- ✅ Bookmarks, Share Buttons, PDF Export, Loading Skeletons
+- ✅ API Hardening (pagination, filtering, rate limiting, search-within-law)
+- ✅ CI/CD (coverage, E2E in CI, Dockerfile verification)
+
+**Phase 4-7: Data Depth & Infrastructure** - ✅ COMPLETE
+- ✅ 150 federal reglamentos ingested
+- ✅ 18,439 non-legislative state laws (77.9% of OJN Poderes 1/3/4)
+- ✅ Parser V2 (TRANSITORIOS boundary, dedup, Bis patterns)
+- ✅ DOF daily scraper wired to Celery Beat (7 AM)
+- ✅ Dual storage backend (local / Cloudflare R2)
+- ✅ Sentry integration, ES resilience (retry/timeout/pooling)
+- ✅ JSON-LD structured data on law detail pages
+- ✅ Trilingual UI (ES/EN/NAH — Classical Nahuatl)
+
+**Phase 8-9: Surface & Search Intelligence** - ✅ COMPLETE
+- ✅ law_type field + non-legislative badges
+- ✅ Faceted search (ES aggregations), browse by category/state
+- ✅ Related laws (more_like_this), sort on catalog
+- ✅ Spanish URL paths (/leyes, /busqueda, /comparar) with 301 redirects
+- ✅ Hierarchical TOC, citation copy, enhanced accessibility
+
+**Phase 10-11: Professional Polish & User Magnet** - ✅ COMPLETE
+- ✅ SEO hardening (canonical URLs, alternates, expanded sitemap, OG images)
+- ✅ Cross-reference panel, version timeline
+- ✅ 6-format export (TXT/PDF/LaTeX/DOCX/EPUB/JSON) with tier-based rate limits
+- ✅ Word-level compare diff
+- ✅ Cmd+K global search overlay, citation + BibTeX export
+- ✅ Homepage refresh (FeaturedLaws, QuickLinks, trilingual headings)
+
+**Phase 12: Full Legal Framework Data Gathering** - ✅ COMPLETE
+- ✅ State scrapers (BC, Durango, QR) — 1,102 additional laws
+- ✅ Municipal scrapers (GDL, MTY, León, Zapopan) — 2,195 files
+- ✅ NOM catalog (80 DOF NOMs), OCR pipeline fallback
+
+**Phase 13: API Platform — Ecosystem & External Customers** - ✅ COMPLETE
+- ✅ API key infrastructure (generation, hashing, auth backend, combined auth chain)
+- ✅ Tiered rate limiting + usage logging middleware
+- ✅ Bulk data feed (`/bulk/articles/`) + changelog (`/changelog/`) endpoints
+- ✅ Webhook subscriptions with HMAC-SHA256 signing + auto-disable
+- ✅ Domain filtering (`?domain=finance`) on all endpoints
+- ✅ TypeScript SDK (`@tezca/api-client`) with auto-pagination
+- ✅ API key admin CRUD + CORS for API key consumers
+- ✅ OpenAPI security schemes (ApiKey + Bearer)
+
+**Phase 14: Production & Growth** - 🔄 IN PROGRESS
+- ✅ Production go-live at tezca.mx (web + api.tezca.mx live behind Cloudflare)
+- 📋 Embeddings / vector search integration
+- 📋 External customer onboarding (legaltech, compliance SaaS)
+
+**See**: [ROADMAP.md](ROADMAP.md) for detailed timeline and [Strategic Overview](docs/strategy/STRATEGIC_OVERVIEW.md) for comprehensive vision
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+AGPL-3.0 — see [pyproject.toml](pyproject.toml) for details.
+
+## Contact
+
+Issues: https://github.com/madfam-org/tezca/issues

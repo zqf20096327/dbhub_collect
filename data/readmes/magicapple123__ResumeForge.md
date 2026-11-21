@@ -25,7 +25,7 @@
 
 <p align="center"><a href="README.zh-CN.md">简体中文</a> · <b>English</b></p>
 
-Version: `2.1.0` · [Releases](https://github.com/magicapple123/ResumeForge/releases) · [Full user guide](docs/user-guide.md) · [Architecture](docs/architecture.md)
+Version: `2.3.0` · [Releases](https://github.com/magicapple123/ResumeForge/releases) · [Full user guide](docs/user-guide.md) · [Architecture](docs/architecture.md)
 
 <p>
 <a href="#-community-and-feedback"><b>QQ group: <code>922830167</code></b></a>
@@ -289,6 +289,8 @@ The app handles ID and phone numbers, company names and Resume text, so the boun
 If you believe you have found a security problem, please follow [SECURITY.md](SECURITY.md).
 
 ## 🔄 Updating without losing data
+
+In the Windows desktop app, open **Settings → Updates & help → Check for updates**. The release notes follow the app language. Select **Update now** to download, verify and install the update. The app restarts in place and keeps your resumes and settings. If you hide the download, select **View update progress** in Settings to reopen it.
 
 Jobs, Profile, Resumes, assistant history and model configuration are stored in `backend/data/resume_forge.db`; server environment variables are stored in `backend/.env`. Both are ignored by Git, so `git pull` never overwrites them.
 

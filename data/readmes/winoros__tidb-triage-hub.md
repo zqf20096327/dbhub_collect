@@ -39,6 +39,8 @@ SQLite runs in `WAL` mode (`busy_timeout=15000`), so CLI commands can run safely
 | `triage` | Validate and apply triage decisions from a JSON file, stdin, or quick flags | `--file`, `--stdin`, `--dry-run`, `--skip-todo`, `--skip-conflicts`, `--ack-retriage`, `--exclude` |
 | `backup` | Create a consistent online SQLite snapshot (local or remote) | `--out`, `--remote`, `--token` |
 
+Bind a Git checkout to its deployed workbench once with `triage-hub bind https://your-host`. Run `triage-hub bind` to show the saved URL. All worktrees of the repository share this Git-local setting. The CLI reads URL-specific maintainer tokens from `triage-hub/credentials.json` in the user configuration directory (mode `0600`, JSON object keyed by canonical workbench URL). An explicit `--token` or non-empty `TRIAGE_HUB_TOKEN` overrides the stored credential. For commands other than `serve`, the target precedence is explicit `--remote`, explicit `--db` (local SQLite), `TRIAGE_HUB_URL`, then the repository binding. Unbound projects retain the SQLite default. A bound remote request reports authentication or connection errors directly. To remove the binding, run `git config --local --unset triagehub.workbench`.
+
 Typical sync and triage cycle:
 
 ```bash

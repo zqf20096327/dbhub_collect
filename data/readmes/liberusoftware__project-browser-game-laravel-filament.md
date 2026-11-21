@@ -57,7 +57,7 @@ Review `.env` before migrating. Use `php artisan migrate --seed` only when examp
 
 ## Composable package architecture
 
-Each runtime capability is an independent `liberu-module` Composer package with its own GitHub repository, release lifecycle, manifest, provider, documentation, and tests. Each visual package is an independent `liberu-theme`. Shared contract packages and the custom installer are normal Composer dependencies under `/vendor`.
+Reusable runtime capabilities are distributed as `liberu-module` Composer packages with their own GitHub repositories and release lifecycles. Each visual package is an independent `liberu-theme`. Shared contract packages and the custom installer are Composer dependencies under `/vendor`.
 
 ```text
 Application composition
@@ -86,9 +86,15 @@ The trusted [`liberusoftware/composer-installer`](https://github.com/liberusoftw
 | `liberu-theme` | `/themes/{installer-name}` | `liberusoftware/theme-{installer-name}` |
 | Contract/library | `/vendor` | Package-specific repository |
 
-`modules/` and `themes/` are intentionally kept out of `.gitignore`. Their reproduced contents are committed so deployments and reviews can see the exact installed code, while `composer.lock` pins each release and source commit. Do not edit an installed module only in this host: contribute the generic change to its package repository, release it, and update the Composer dependency here.
+`modules/` and `themes/` are tracked so deployments and reviews can see the exact installed code. `composer.lock` pins published releases and checkout package metadata. Make changes to published packages in their source repositories, then update the Composer dependency here.
 
 Installation, runtime enablement, authorisation, and commercial entitlement are separate concerns. `config/modules.php` selects the enabled capability graph; the module manager validates dependencies and orders providers without scanning application classes manually.
+
+The shipped gameplay integration lives in the existing quests, combat, social, and items modules and their API, Filament, and Livewire adapters. Their `host/` directories retain the application's established schema and entry points. Composer resolves these modules from the checkout. See the [Browser Game module map](https://github.com/liberusoftware/documentation/blob/main/projects/browser-game/PLAY-MODULES.md).
+
+Team provisioning for this application lives in `modules/organizations-teams/host/`. Composer also resolves that module from the checkout.
+
+For the first upgrade to this lockfile, install dependencies in a clean build directory with a fresh Composer vendor directory. Composer can replace an existing package directory when its installation source changes from an archive to a checkout path.
 
 Every module also publishes a validated feature catalog in `module.json`. Hosts can inspect the complete catalog or search it without loading module internals:
 
@@ -122,16 +128,17 @@ Themes contain `composer.json`, `theme.json`, source assets, compatibility metad
 ```bash
 composer validate --strict
 vendor/bin/pest
+vendor/bin/pest --testsuite=Modules
 vendor/bin/pint --test
 npm run build
 ```
 
-The test suite exercises authentication, teams, authorization, game services, API endpoints, Filament resources, Livewire components, module boundaries, and installed providers. The CI workflow publishes `coverage.xml` to Codecov and enforces the configured release-scope coverage threshold (`--min=100`); a coverage failure blocks the workflow.
+The root PHPUnit configuration discovers host tests and `modules/*/host/tests/Integration`. It measures PHP under `app/` and module source, configuration, routes, factories, migrations, and seeders. Package repositories also run their standalone suites. The CI workflow publishes `coverage.xml` to Codecov and requires 100% line coverage for the configured source.
 
 Run the same coverage gate locally with:
 
 ```bash
-XDEBUG_MODE=coverage vendor/bin/pest --coverage-clover=coverage.xml --min=100
+XDEBUG_MODE=coverage composer test:coverage
 ```
 
 ### Publishing the component repositories

@@ -15,15 +15,15 @@ host foundation.
 Current package version: `1.4.0`.
 
 Zova `1.0.0` established the stable native 1.x contract. The current
-development `.zova` file `format_version` is `13`, and the
+development `.zova` file `format_version` is `14`, and the
 earliest migratable format is `9`. Open never migrates silently: format-9,
-format-10, format-11 and format-12 databases are reported as migration-required and left byte-identical,
+format-10, format-11, format-12 and format-13 databases are reported as migration-required and left byte-identical,
 and downgrades are unsupported. Older databases migrate forward with the
 explicit, copy-forward probe and migration surfaces (`zova format` and
 `zova migrate` on the CLI, `zova_database_probe_format` and
 `zova_database_migrate` on the C ABI, and aligned APIs in the Rust, Python, Go,
 and JavaScript bindings). Migration writes only to a new, separately validated
-format-13 destination and never mutates the source.
+format-14 destination and never mutates the source.
 
 [API stability](API_STABILITY.md) defines the stable 1.x public
 contract. [Storage compatibility](docs/storage-compatibility.md) is the normative 1.x
@@ -39,16 +39,19 @@ SQLite's C interface; enabling it does not add a high-level Zova array API.
 `dbstat` is available for storage diagnostics; it is not a portable guarantee
 for databases opened through an unrelated system SQLite build.
 
-Zova also provides an experimental browser subset (SQL, binary KV, objects,
-exact vectors and graphs) through `zova-wasm`, with worker-owned memory
-databases and named OPFS persistence.
-Browser APIs remain experimental and do not promise full native compatibility.
+Zova also runs in browsers through `zova-wasm`, with worker-owned memory
+databases and named OPFS persistence. It follows the native `zova-js` API,
+except where a browser makes that impossible. From 1.5.0 it is a stable 1.x
+surface; [API_STABILITY.md](API_STABILITY.md#browser-package-zova-wasm) names
+the exceptions.
 Rust packages now select target-specific generated-C companion crates without
 requiring consumer-side Zig or native-source downloads. Python wheels retain
 CPython 3.13 stable-ABI coverage for Python 3.13 and 3.14. Storage
-is format 13 with explicit 12→13 migration, which adds a chunk-reference
-index for fast object deletes; new files use incremental auto-vacuum and
-`zova reclaim` releases free pages in place. Zova 1.3.0 used format 12.
+is format 14 with explicit 13→14 migration, which adds opt-in per-chunk LZ4
+compression for objects; migrated chunks stay uncompressed. Format 13 added a
+chunk-reference index for fast object deletes; new files use incremental
+auto-vacuum and `zova reclaim` releases free pages in place. Zova 1.4.0 used
+format 13 and Zova 1.3.0 used format 12.
 See the
 [browser package guide](bindings/wasm/README.md) for lifecycle and storage limits.
 
@@ -142,7 +145,7 @@ Zova vendors SQLite. You do not need a system SQLite installation.
 | JavaScript / TypeScript | `bun add zova-js` / `npm install zova-js` | no | no | no | prebuilt Node-API 8 packages for Node 22/24 and Bun |
 | Rust | `cargo add zova` | no | yes | yes | `zova-sys` compiles the matching generated-C platform package with Clang |
 | Python | `uv add zova` / `pip install zova` | no | no | no | stable-ABI wheels are published for Linux/macOS x86_64/arm64 and Windows x86_64, and tested on CPython 3.13/3.14; PyPI source builds are not supported |
-| Go | `go get github.com/ata-sesli/zova/bindings/go@v1.4.0` | no, if using a release C ABI archive | no | yes, cgo | caller provides `zova.h` and `libzova_c.a` |
+| Go | `go get github.com/ata-sesli/zova/bindings/go@v1.4.0` | no | no | yes, cgo | releases after 1.4.0 carry prebuilt `libzova_c.a` for Linux/macOS x86_64/arm64 and Windows x86_64 (MinGW); 1.4.0 and earlier need a release C ABI archive |
 | C ABI | release archive or `zig build c-abi` | no, if using a release archive | no | no, if using a release archive | static C ABI library and `zova.h` |
 | Zig | package source | yes | no | yes | native API |
 | CLI | release archive or `zig build` | no, if using a release archive | no | no, if using a release archive | source-built or prebuilt command line tool |
@@ -394,6 +397,15 @@ which sharply reduces manifest rows for large low-deduplication payloads. Both
 profiles keep the same full-object identity and verified chunk model. Existing
 objects retain their first valid physical representation when replayed through
 another profile.
+
+Chunk compression is opt-in and set per database handle; it is not stored in
+the file. After `db.setObjectCompression(.lz4)`, each new chunk the handle
+writes is stored as an LZ4 block when that is smaller than the chunk, and raw
+otherwise. Object IDs, chunk hashes, manifests and deduplication are computed
+from the uncompressed bytes, so they do not change, and every read path decodes
+chunks before verifying them. Existing chunks are not re-encoded. The C ABI
+exposes `zova_object_set_compression`; see
+[Per-chunk compression](docs/storage-compatibility.md#per-chunk-compression-format-14).
 
 You can put/get whole objects, range-read object bytes, inspect manifests,
 fetch verified chunks, store loose chunks, assemble complete objects, or use a
@@ -1065,9 +1077,10 @@ lifecycle. A separate FIFO `AsyncDatabase` runs one-shot expensive work on
 native workers and does not expose async transaction callbacks.
 
 All SQL integers and counts are `bigint`; binary values use `Uint8Array`;
-vectors preserve `Float32Array`, `Uint16Array`, or `Int8Array`. Advanced
-opaque-key graph, payload, scan, and fresh-build APIs remain C ABI/raw
-`zova-sys` surfaces for this release. See `bindings/javascript/README.md` for
+vectors preserve `Float32Array`, `Uint16Array`, or `Int8Array`. The
+synchronous `Database` wraps every C ABI function, including the opaque-key
+graph, edge-payload, topology-scan and fresh-build session APIs, application
+SQL functions, and linked plugins. See `bindings/javascript/README.md` for
 ownership and runtime details.
 
 ### Rust
@@ -1094,10 +1107,10 @@ Existing Rust object, vector, and graph APIs transparently use a bound store aft
 database is opened. Store create/bind/unbind/split management remains
 native-Zig/CLI-only in v0.25.
 
-The additive opaque-key graph, edge-payload, topology-scan, and fresh-build
-session APIs introduced for v0.25 are exposed through the C ABI and raw
-`zova-sys` declarations. The safe Rust crate does not yet wrap those low-level
-publication APIs.
+The safe Rust crate wraps every C ABI function, including the opaque-key
+graph, edge-payload, topology-scan and fresh-build session APIs, application
+SQL functions, and statically linked plugins. See the
+[Rust binding README](bindings/rust/README.md) for the method names.
 
 From crates.io, Rust builds compile the matching generated-C platform package.
 Install Clang and the platform linker/SDK; Zig is not required. A target-compatible
@@ -1131,9 +1144,10 @@ build.
 
 Existing Python object, vector, and graph APIs transparently use a bound store after the
 database is opened. Store create/bind/unbind/split management remains
-native-Zig/CLI-only in v0.25. The additive v0.25 opaque-key graph,
-edge-payload, topology-scan, and fresh-build session APIs remain C ABI/raw
-`zova-sys` surfaces and are not Python APIs yet.
+native-Zig/CLI-only in v0.25. The Python package wraps every C ABI function,
+including the opaque-key graph, edge-payload, topology-scan and fresh-build
+session APIs, application SQL functions, and linked plugins. See the
+[Python binding README](bindings/python/README.md#low-level-surfaces).
 
 ### Go
 
@@ -1149,9 +1163,13 @@ Import:
 import zova "github.com/ata-sesli/zova/bindings/go"
 ```
 
-The Go package uses cgo over `include/zova.h` and links `libzova_c.a`. The
-GitHub Release includes prebuilt C ABI archives for Go/manual embedding. Point
-cgo at an unpacked archive:
+The Go package uses cgo over `include/zova.h` and links `libzova_c.a`.
+Release versions after 1.4.0 include `zova.h` and a prebuilt `libzova_c.a` for
+Linux and macOS x86_64/arm64 and Windows x86_64, so `go get` is enough to build
+on those platforms; cgo still needs a C compiler (MinGW GCC on Windows).
+
+Version 1.4.0 and earlier need a prebuilt C ABI archive from the GitHub Release.
+Point cgo at an unpacked archive:
 
 ```sh
 CGO_CFLAGS="-I/path/to/zova-c-abi/include" \
@@ -1167,16 +1185,19 @@ zig build c-abi
 
 Existing Go object, vector, and graph APIs transparently use a bound store after the
 database is opened. Store create/bind/unbind/split management remains
-native-Zig/CLI-only in v0.25. The additive v0.25 opaque-key graph,
-edge-payload, topology-scan, and fresh-build session APIs remain C ABI/raw
-`zova-sys` surfaces and are not Go APIs yet.
+native-Zig/CLI-only in v0.25. The Go package wraps every C ABI function,
+including the opaque-key graph, edge-payload, topology-scan and fresh-build
+session APIs, application SQL functions, and statically linked plugins. See
+the [Go binding README](bindings/go/README.md#low-level-surfaces).
 
-External Go projects should point cgo at an installed Zova C ABI:
+To link another Zova C ABI build, such as one with statically linked plugins,
+build with the `zova_external` tag, which drops the bundled search paths, and
+point cgo at it:
 
 ```sh
 CGO_CFLAGS="-I/path/to/zova/include" \
 CGO_LDFLAGS="-L/path/to/zova/lib -lzova_c" \
-go test ./...
+go test -tags zova_external ./...
 ```
 
 ### C ABI
@@ -1199,8 +1220,8 @@ normal SQLite locking behavior.
 The v0.25 C ABI includes opaque-key graph batch mutation and lookup, keyed
 neighbors and topology scans, edge payload access, prepared fresh graph builds,
 and a generic fresh-build session for predeclared targets. These APIs are also
-declared by raw `zova-sys`; they are not yet mirrored by every high-level
-language binding.
+declared by raw `zova-sys` and wrapped by the safe Rust, Python, Go, and
+JavaScript packages, and by the browser WASM package.
 
 ### Zig
 
@@ -1270,9 +1291,9 @@ the bundled SQLite version, and the Zova storage format recorded in
 
 For the 1.x series, every release can migrate databases created by every earlier
 1.x release. Format 9, used by released Zova 0.26.1, is the only pre-1.0 format
-guaranteed a migration into 1.0. The current format is 13, reached
-through the sequential 9 → 10 → 11 → 12 → 13 registry; format-10, format-11 and
-format-12 databases migrate through the remaining steps. Older formats are rejected rather than migrated. Open never
+guaranteed a migration into 1.0. The current format is 14, reached
+through the sequential 9 → 10 → 11 → 12 → 13 → 14 registry; format-10, format-11,
+format-12 and format-13 databases migrate through the remaining steps. Older formats are rejected rather than migrated. Open never
 migrates silently, and downgrades are unsupported.
 
 Migration is explicit and copy-forward. Probe with `zova format`, then migrate
@@ -1280,7 +1301,7 @@ with `zova migrate`:
 
 ```sh
 zova format app.zova
-zova migrate app.zova app-format-13.zova
+zova migrate app.zova app-format-14.zova
 ```
 
 The same workflow is available through `zova_database_probe_format` and
@@ -1303,7 +1324,7 @@ locking, and PRAGMAs remain application policy.
 
 Zova enables `PRAGMA foreign_keys = ON` on its owned connections so format-11
 private graph and vector cascades remain enforced. Files Zova creates use
-`PRAGMA auto_vacuum = INCREMENTAL` (format 13), so `zova reclaim` can release
+`PRAGMA auto_vacuum = INCREMENTAL` (since format 13), so `zova reclaim` can release
 free pages in place; Zova never vacuums automatically and does not change
 journal and synchronous settings.
 
@@ -1408,7 +1429,9 @@ Zova publishes several release artifact types:
 - A GitHub Release source archive.
 - Rust crates on crates.io: `zova-sys` and `zova`.
 - Python stable-ABI wheels on PyPI.
-- A Go module tag: `bindings/go/v1.4.0`.
+- A Go module tag: `bindings/go/v1.4.0`. From the next release, it points at
+  a child of the release commit that adds prebuilt `libzova_c.a` files under
+  `bindings/go/native/`.
 - JavaScript/TypeScript Node-API packages on npm as `zova-js`, with native
   packages for the supported platform matrix.
 
@@ -1475,7 +1498,9 @@ allows token-free subsequent releases.
 The local scripts remain useful for maintainer smoke tests. Do not run release
 or distribution commands until the exact commit is ready to tag and publish.
 
-The Go module tag is created by the protected publish workflow.
+The Go module tag is created only by the protected publish workflow, because the
+module it tags carries every platform's prebuilt library.
+`scripts/package-release.sh` creates the source tag, not the Go module tag.
 
 ## License
 

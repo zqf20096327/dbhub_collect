@@ -392,6 +392,13 @@ stocks:
 
 ## 🔄 更新日志
 
+- **2026-11-21**：修复百度网盘旧备份清理删错方向——每周备份上传成功后被立即自删
+  - **问题根因**：`cleanup_old_backups()` 按 `x.get("mtime", 0)` 排序，但网盘 list API 从不返回 `mtime` 字段（实测真实字段为 `server_mtime`/`local_mtime`），排序键恒为 0 使排序完全失效、列表保持 API 升序（旧→新），`backup_files[keep_count:]` 实际选中的是**最新**文件——结果每周备份"上传成功 → 立即删除刚上传的那份"，网盘冻结在最旧 7 份（截止 2026-10-04），而通知邮件因只看上传结果一直报"成功"
+  - **附带缺陷**：删除 API 返回 `errno != 0` 也计入 `deleted`，清理数虚报
+  - **修复方案**：排序键改用 `server_mtime`（回退 `local_mtime`/`mtime`），保留最新 N 份、删除最旧；删除响应校验 `errno == 0` 才计数，失败记 warning
+  - **影响**：2026-10-11 ~ 11-15 共 6 份备份因自删丢失，且本地临时包上传后已清理、无法找回（每份均为完整库快照，11-21 补备后数据恢复最新）；2026-09-13 ~ 09-27 三次失败为 token 过期（errno -6，2026-10-01 已修复），与本缺陷无关
+  - **测试**：新增 `tests/test_backup_cleanup.py` 3 例（真实 API 字段结构下删最旧不删刚上传、保留最新 N 份、失败删除不计数），未修复代码下 3 例全数复现；全量 339 例通过
+  - 修改文件：`scripts/backup_to_baidu.py`、`tests/test_backup_cleanup.py`（新增）、`README.md`
 - **2026-11-06**：下载项按配置开关启用/关闭，K 线复权类型可配置（重实现社区 PR #1 思路，感谢 [murphy-mfr](https://gitee.com/murphy-mfr)）
   - **问题根因**：`config.yaml`/README 早已声明 `download.*.enabled` 与 `kline.*.adjustflags`，但代码只认少数键——`update_daily.py` 各阶段无开关、日/周/月 K 线复权类型硬编码 `[1,2,3]`；社区 PR #1（gitee）补齐该能力，但分支落后 master 95 个提交且存在语义冲突（草率解冲突会回退月线完整月守卫），另有两个开关缺陷（`with KlineDownloader` 不受开关控制、仍白白 login；weekly/monthly/minute 开关被 `kline.daily` 耦合锁死），且无测试与文档
   - **修复方案**：在最新 master 上重实现净增量并修缺陷——(1) 新增 `config_loader.get_kline_adjustflags(freq)`：复权类型从配置读取（daily/weekly/monthly 默认 `[1,2,3]`、minute 默认 `[3]`；1=后复权、2=前复权、3=不复权），非法配置（空列表/None/非列表/越界值/未知频率）fail-fast 报错并指明配置键，不再静默跳过或烧配额；(2) `update_daily.py` 全阶段 `is_download_enabled` 门控（components/index_kline/kline.daily|weekly|monthly/financial/dividend），K 线三开关全关时不再构造 KlineDownloader（不白 login、不受配额/黑名单闸牵连）；(3) `download_all.py` Phase 7 改为任一 K 线频率开启即运行、各频率独立门控，Phase 8 分钟线从 daily 开关解耦，Phase 5 补 components 开关；默认配置下行为与此前完全一致（向后兼容）

@@ -48,15 +48,16 @@ type AppDB struct {
 
 var Users = ant.Fields[User]()
 
-db, err := ant.Open[AppDB](ctx, postgres.Dialect, dsn)
+db, err := ant.Open[AppDB](ctx, postgres.Dialect, dsn) // shared, tracks nothing
 
-adults, err := db.Users.
+session := ant.Session(db) // one unit of work, such as a request
+adults, err := session.Users.
     Where(ant.Gt(&Users.Age, 18)). // ant.Gt(&Users.Age, "18") won't compile
     Include(&Users.Posts).         // one batched query, not one per user
     All(ctx)
 
 adults[0].Age++
-err = db.SaveChanges(ctx) // writes only the columns that changed
+err = session.SaveChanges(ctx) // writes only the columns that changed
 ```
 
 ## See it
@@ -242,7 +243,7 @@ The [roadmap](docs/ROADMAP.md) lists what's planned, and why some items were ski
 - [Documentation](https://skudra.net): guides, recipes and reference.
 - [Feature examples](tests/features/): a short test for every feature, edge cases included
 - [ant-examples](https://github.com/skudra-go/ant-examples): small projects built on ant
-- [Roadmap](docs/ROADMAP.md) and [design decisions](docs/DECISIONS.md)
+- [Roadmap](docs/ROADMAP.md) and [design decisions](docs/decisions/README.md)
 
 ## With an AI assistant
 

@@ -6,7 +6,7 @@ Asisten tugas untuk mahasiswa yang memecah tenggat besar menjadi langkah kecil, 
 
 ## Latar Belakang
 
-Mahasiswa jarang gagal karena tidak mampu. Mereka gagal karena tidak tahu harus mulai dari mana (Task Paralysis), meremehkan waktu pengerjaan (Planning Fallacy), dan berhenti total setelah satu hari terlewat (Streak Fragility). Aplikasi to-do biasa hanya mencatat tugas. Ketiga masalah ini tidak tersentuh.
+Mahasiswa jarang gagal karena tidak mampu. Mereka gagal karena tidak tahu harus mulai dari mana (Task Paralysis), meremehkan waktu pengerjaan (Planning Fallacy), dan kehilangan ritme setelah beberapa tenggat terlewat (Streak Fragility). Aplikasi to-do biasa hanya mencatat tugas. Ketiga masalah ini tidak tersentuh.
 
 DeadlineMate menjawabnya dengan tiga pendekatan. AI Task Breakdown memecah tugas menjadi sub-langkah yang jelas. Gamifikasi dengan sistem Shield menjaga streak tetap adil. Push notification mengingatkan secara proaktif sebelum tenggat, bukan setelahnya.
 
@@ -90,29 +90,29 @@ Pengingat dikirim oleh endpoint cron yang dipanggil terjadwal dan dilindungi `CR
 
 EXP diberikan berdasarkan ketepatan waktu penyelesaian.
 
-| Kondisi | EXP |
-| :--- | :---: |
-| Selesai tepat waktu | +15 |
-| Selesai terlambat | +5 |
-| Terlambat dan tidak diselesaikan | -5 |
+| Kondisi                          | EXP |
+| :------------------------------- | :-: |
+| Selesai tepat waktu              | +15 |
+| Selesai terlambat                | +5  |
+| Terlambat dan tidak diselesaikan | -5  |
 
-Shield menahan streak agar tidak reset saat satu hari terlewat. Pengguna yang sempat berhenti tidak kehilangan seluruh progres.
+Streak menghitung tugas utama bertenggat yang diselesaikan tepat waktu secara beruntun. Setiap tugas yang terlambat mengurangi satu Shield; Shield membantu menjaga streak sebelum akhirnya direset. Progres historis tetap tercatat meskipun streak terputus.
 
 ## Tech Stack
 
-| Layer | Teknologi |
-| :--- | :--- |
-| Framework | Next.js 15 (App Router, Server Actions) |
-| Bahasa | TypeScript strict mode |
-| Styling | Tailwind CSS v4 dengan custom design tokens |
-| Database | PostgreSQL (Neon) |
-| ORM | Prisma 7 |
-| Autentikasi | Auth.js v5 (NextAuth) |
-| AI Engine | Vercel AI SDK + Groq |
-| File Storage | Vercel Blob |
-| Email Service | Resend |
-| Push Notif | Web Push (VAPID) + Service Worker |
-| Validasi | Zod |
+| Layer         | Teknologi                                   |
+| :------------ | :------------------------------------------ |
+| Framework     | Next.js 16 (App Router, Server Actions)     |
+| Bahasa        | TypeScript strict mode                      |
+| Styling       | Tailwind CSS v4 dengan custom design tokens |
+| Database      | PostgreSQL (Neon)                           |
+| ORM           | Prisma 7                                    |
+| Autentikasi   | Auth.js v5 (NextAuth)                       |
+| AI Engine     | Vercel AI SDK + Groq                        |
+| File Storage  | Vercel Blob                                 |
+| Email Service | Resend                                      |
+| Push Notif    | Web Push (VAPID) + Service Worker           |
+| Validasi      | Zod                                         |
 
 ## Menjalankan di Lokal
 
@@ -129,7 +129,7 @@ Shield menahan streak agar tidak reset saat satu hari terlewat. Pengguna yang se
 git clone https://github.com/mhdridwannst/DeadlineMate.git
 cd DeadlineMate
 npm install
-cp .env.example .env
+cp env.example .env
 npx prisma migrate dev
 npm run dev
 ```
@@ -138,20 +138,28 @@ Isi `.env` terlebih dahulu sebelum menjalankan migrasi. Aplikasi berjalan di `ht
 
 ### Environment Variables
 
-| Variabel | Keterangan |
-| :--- | :--- |
-| `DATABASE_URL` | Connection string PostgreSQL |
-| `AUTH_SECRET` | Secret untuk Auth.js. Generate dengan `openssl rand -base64 32` |
-| `AUTH_GOOGLE_ID` | Client ID Google OAuth |
-| `AUTH_GOOGLE_SECRET` | Client secret Google OAuth |
-| `GROQ_API_KEY` | API key Groq untuk Smart Scheduler |
-| `AI_MODEL` | Nama model, contoh `llama-3.3-70b-versatile` |
-| `RESEND_API_KEY` | API key Resend untuk email forgot password |
-| `BLOB_READ_WRITE_TOKEN` | Token Vercel Blob untuk file attachment |
-| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Kunci publik VAPID, dibaca di sisi client |
-| `VAPID_PRIVATE_KEY` | Kunci privat VAPID, hanya di server |
-| `VAPID_SUBJECT` | Kontak pengirim push, format `mailto:email@domain.com` |
-| `CRON_SECRET` | Secret untuk mengamankan endpoint cron |
+| Variabel                       | Keterangan                                                      |
+| :----------------------------- | :-------------------------------------------------------------- |
+| `DATABASE_URL`                 | Connection string PostgreSQL                                    |
+| `AUTH_SECRET`                  | Secret untuk Auth.js. Generate dengan `openssl rand -base64 32` |
+| `AUTH_TRUST_HOST`              | `true` untuk deployment di balik proxy tepercaya seperti Vercel |
+| `AUTH_GOOGLE_ID`               | Client ID Google OAuth                                          |
+| `AUTH_GOOGLE_SECRET`           | Client secret Google OAuth                                      |
+| `GROQ_API_KEY`                 | API key Groq untuk Smart Scheduler                              |
+| `AI_MODEL`                     | Nama model, contoh `llama-3.3-70b-versatile`                    |
+| `RESEND_API_KEY`               | API key Resend untuk email forgot password                      |
+| `RESEND_FROM_EMAIL`            | Sender email dari domain yang diverifikasi di Resend            |
+| `NEXT_PUBLIC_APP_URL`          | URL publik app, dipakai untuk membuat link reset password       |
+| `NEXT_PUBLIC_SUPPORT_EMAIL`    | Email dukungan untuk permintaan privasi dan bantuan pengguna    |
+| `BLOB_READ_WRITE_TOKEN`        | Token Vercel Blob untuk file attachment                         |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Kunci publik VAPID, dibaca di sisi client                       |
+| `VAPID_PRIVATE_KEY`            | Kunci privat VAPID, hanya di server                             |
+| `VAPID_SUBJECT`                | Kontak pengirim push, format `mailto:email@domain.com`          |
+| `CRON_SECRET`                  | Secret untuk mengamankan endpoint cron                          |
+
+### Deploy ke Vercel
+
+Tambahkan semua environment variable yang dibutuhkan pada pengaturan project Vercel untuk environment Production, Preview, atau Development yang sesuai. Jangan memasukkan secret ke variabel berawalan `NEXT_PUBLIC_`. Pastikan domain production Google OAuth dan `NEXT_PUBLIC_APP_URL` sudah cocok. Script `vercel-build` menjalankan migrasi database sebelum build. Endpoint pengingat berada di `/api/cron/notify`; jadwalkan pemanggilannya sesuai paket Vercel yang digunakan dan pastikan request membawa `Authorization: Bearer <CRON_SECRET>`.
 
 ## Design Philosophy
 

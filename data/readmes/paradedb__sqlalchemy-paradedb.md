@@ -42,8 +42,8 @@ The official [SQLAlchemy](https://www.sqlalchemy.org/) integration for ParadeDB.
 
 | Component            | Supported                                                                                                                     |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Python               | 3.10+                                                                                                                         |
-| SQLAlchemy           | 2.0.32+                                                                                                                       |
+| Python               | 3.11+                                                                                                                         |
+| SQLAlchemy           | 2.1+                                                                                                                          |
 | PostgreSQL           | 15+                                                                                                                           |
 | pgvector             | 0.7.0+ (provides vector types for ParadeDB’s [native vector search](https://www.paradedb.com/docs/reference/vector/overview)) |
 | ParadeDB / pg_search | 0.27.0+                                                                                                                       |

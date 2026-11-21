@@ -76,15 +76,14 @@ docker run -d \
   --name ech0 \
   -p 6277:6277 \
   -v /opt/ech0/data:/app/data \
-  -e JWT_SECRET="Hello Echos" \
   sn0wl1n/ech0:latest
 ```
 
 Then open `http://ip:6277`:
 
 1. Register your first account.
-2. The first account becomes Owner (admin privileges).
-3. By default, publishing is restricted to privileged accounts.
+2. The first account becomes the administrator.
+3. Every signed-in account can publish; administrators additionally manage instance settings and accounts.
 
 See [Quick Deployment](./DEPLOYMENT.md#quick-deployment) for Docker Compose and Helm options.
 
@@ -200,17 +199,17 @@ For the simplest path, the [Try in 60 Seconds](#try-in-60-seconds) snippet above
 5. **Does Ech0 support RSS?**
    Yes. Ech0 supports RSS subscriptions so you can follow updates in RSS readers.
 
-6. **Why does publishing fail with "contact administrator"?**
-   Publishing is restricted to privileged accounts by default. During initialization, the first account becomes Owner (with management privileges). Regular users cannot publish until explicitly granted permission by a privileged account. If this is your first setup, review [Try in 60 Seconds](#try-in-60-seconds) and confirm which account is Owner.
+6. **Who can publish?**
+   Every signed-in account can publish, comment and upload files. During initialization the first account becomes the administrator, which only gates instance-level operations (settings, access tokens, storage, webhooks, migration, user management).
 
 7. **Why is there no detailed permission matrix?**
-   Ech0 currently uses a lightweight role model (Owner / Admin / regular user) to keep operation simple and predictable. The permission model will continue to evolve based on community feedback.
+   Ech0 uses a two-role model (administrator / regular user) to keep operation simple and predictable: members own their content, administrators own the instance. Private echoes are visible to their author and to administrators.
 
 8. **Why can't others see their Connect avatar?**
    Set your current instance URL in `System Settings - Service URL`, for example `https://memo.sn0w.fyi/` (must include `http://` or `https://`).
 
 9. **What is the MetingAPI option in settings?**
-   It is the API endpoint used by music cards to resolve playable stream metadata. You can provide your own trusted endpoint; when left empty, Ech0 falls back to a default resolver endpoint. For production, a self-controlled endpoint is recommended.
+   It is the API endpoint used by music cards to resolve playable stream metadata. Ech0 ships no built-in resolver: while the field is empty, music cards for providers other than Apple Music report that no source is available, and the editor refuses to publish such links. Apple Music links render through Apple's embed and are unaffected. For production, a self-controlled endpoint is recommended.
 
 10. **Why does a newly added Connect show only partial results?**
     The backend tries to fetch instance information for all Connect entries. If an instance is down or unreachable, it is discarded, and only valid/accessible Connect data is returned to the frontend.

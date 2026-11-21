@@ -103,7 +103,7 @@ model Person {...}
 
 model Post is rw {
     has Int         $.id        is serial;
-    has Int         $!author-id is referencing( *.id, :model(Person) );
+    has Int         $!author-id is referencing( *.id, :model<Person> );
     has Str         $.title     is column{ :unique };
     has Str         $.body      is column;
     has Person      $.author    is relationship{ .author-id };
@@ -213,7 +213,7 @@ SELECT
 FROM
     post
 WHERE
-    post.title = ‘my title’
+    post.title = 'my title'
 ```
 
 ```raku
@@ -226,12 +226,12 @@ INSERT INTO person(
     name
 )
 VALUES(
-    $1
+    ?
 ) RETURNING *
 -- BIND: ["Fernando"]
 ```
 
-```raku
+```text
 RETURNS:
 Person.new(name => "Fernando")
 ```
@@ -260,7 +260,7 @@ WHERE
 ```raku
 say Person.new(:2id)
     .active-posts
-    .grep: { .created > now }
+    .grep: { .created > DateTime.now }
 ```
 
 ```sql
@@ -283,12 +283,12 @@ WHERE
            OR post.deleted IS NULL
        )
     )
-    AND post.created > 1554246698.448671
+    AND post.created > '2019-04-02T22:55:13Z'
 -- BIND: [2]
 ```
 
 ```raku
-my $now = now;
+my $now = DateTime.now;
 say Person.new(:3id)
     .active-posts
     .grep: { .created > $now }
@@ -317,10 +317,7 @@ WHERE
     AND post.created > ?
 -- BIND: [
 --   3,
---   Instant.from-posix(
---       <399441421363/257>,
---       Bool::False
---   )
+--   "2019-04-02T22:55:13Z"
 -- ]
 ```
 
@@ -389,11 +386,11 @@ SELECT
 FROM
     post
 WHERE
-    post.title = ‘My new post’
+    post.title = 'My new post'
 -- BIND: []
 ```
 
-```raku
+```text
 RETURNS:
 Post.new(
    title   => "My new post",
@@ -416,7 +413,7 @@ Post.new(
 say $post.body;
 ```
 
-```raku
+```text
 PRINTS:
 A long post
 ```
@@ -425,7 +422,7 @@ A long post
 my $author = $post.author;
 ```
 
-```raku
+```text
 RETURNS:
 Person.new(name => "Fernando")
 ```
@@ -439,7 +436,7 @@ $author.^save;
 ```sql
 -- Equivalent to the following query:
 UPDATE person SET
-    name = ‘John Doe’
+    name = 'John Doe'
 WHERE id = 1
 ```
 
@@ -492,7 +489,7 @@ WHERE
 -- BIND: [1]
 ```
 
-```raku
+```text
 RETURNS:
 2
 ```
@@ -540,8 +537,9 @@ model Related { ... }
 
 # belongs to
 model MyModel {
+    has Int     $.id is serial;
     has Int     $!related-id is referencing( *.id, :model<Related> );
-    has Related $.related    is relationship{ .id };
+    has Related $.related    is relationship{ .related-id };
 }
 
 # has one/has many
@@ -556,8 +554,9 @@ If you want to put your schema into multiple files, you can create an "indirect"
 ```raku
 # MyModel.pm6
 model MyModel {
-    has Int     $!related-id is referencing{ :model<Related>, :column<id> };
-    has         $.related    is relationship({ .id }, :model<Related>);
+    has Int     $.id is serial;
+    has Int     $!related-id is referencing(:model<Related>, :column<id>);
+    has         $.related    is relationship({ .related-id }, :model<Related>);
 }
 
 # Related.pm6
@@ -570,8 +569,8 @@ model Related {
 If Red can’t find where your `model` is defined you can override where it looks with `require`:
 
 ```raku
-    has Int     $!related-id is referencing{ :model<Related>, :column<id>,
-                                             :require<MyApp::Schema::Related> };
+    has Int     $!related-id is referencing(:model<Related>, :column<id>,
+                                             :require<MyApp::Schema::Related>);
 ```
 
 #### creating through a scalar relationship
@@ -782,10 +781,26 @@ Guards keep the reserved session usable by asynchronous work that inherits the b
 
   * `after-delete`
 
+#### live query results
+
+`.Supply` emits the initial query rows followed by future inserts. Each subscription has independent `head` and `skip` counters: `head(2)` emits at most two items in all, and `skip(1)` skips only the first item, including the snapshot. Filters and maps run in their original order. Equal projected values from distinct rows are preserved. Insert notifications overlapping the snapshot are deduplicated by the complete source-row primary key before projection.
+
+See [live query results](docs/tutorials/cookbook.md#live-query-results-with-supply) for examples and limitations.
+
+#### global events
+
+Models declared with `is global-notifiable` can receive insert events from other processes when the database driver supports global notifications. Listeners start automatically after `schema(...).create` commits or when a marked model's `.Supply` is built. Applications that only subscribe to `Red.events` can start a listener explicitly:
+
+```raku
+Red.start-global-events(:with($*RED-DB));
+```
+
+The `:with` argument defaults to the current Red database. See [global events across nodes](docs/tutorials/cookbook.md#global-events-across-nodes) for model setup and driver requirements.
+
 #### Temporary table
 
 ```raku
-model Bla is temp { ... }
+model Bla is temp { has Int $.id is serial }
 ```
 
 #### is handling
@@ -839,9 +854,9 @@ Post.^create: :body("bla ble bli blo blu"), :title("qwer");
 
 
 model Tree {
-    has UInt   $!id        is id;
+    has UInt   $!id        is serial;
     has Str    $.value     is column;
-    has UInt   $!parent-id is referencing{ Tree.id };
+    has UInt   $!parent-id is referencing(*.id, :model<Tree>);
 
     has Tree   $.parent    is relationship{ .parent-id };
     has Tree   @.kids      is relationship{ .parent-id };

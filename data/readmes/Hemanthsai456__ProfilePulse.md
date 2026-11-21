@@ -41,12 +41,86 @@ Embed the badge in your GitHub README using your deployed host:
 
 | Parameter | Options / Format | Description |
 |---|---|---|
-| `metric` | `unique` (default), `today`, `loads`, `windows` | Metric to display: total uniques, today's uniques, badge loads, or active 30-min windows. |
+| `metric` | `both` (default), `unique`, `today`, `loads`, `windows` | Metric to display: both (unique views on left & total visits on right), unique (all-time), today, badge loads, or active windows. |
 | `view` | `split`, standard (default) | `split` displays both today and total counts (`X today · Y total`). |
 | `label` | String (e.g. `Views`) | Custom label on the left side of the badge. |
-| `color` | Hex (`4c1`, `#0969da`) or name (`blue`, `green`, `orange`) | Custom color for the right side of the badge. |
+| `color` | Hex (`4c1`, `#0969da`) or name (`blue`, `green`, `orange`) | Custom color for the main/left counter (default: green `#2ea043`). |
+| `label_color` | Hex (`2ea043`, `#555`) or name (`green`, `blue`) | Custom color for the left label (default: grey `#555555`, alias: `labelColor`). |
+| `label2_color`| Hex or name | Custom color for the right label in dual and split badges (defaults to `label_color`). |
+| `color2`      | Hex or name | Custom color for the right counter in dual and split badges (defaults to `color`). |
 | `source` | `camo` (default), `all`, `direct` | Traffic source filter. In production, default `camo` counts only GitHub proxy hits. |
 | `preview` | `true`, `false` (default) | Renders the badge without incrementing or recording hits (alias: `ignore_owner`). |
+
+### 🎨 Badge Variations & Examples
+
+Select and copy any variation below directly into your GitHub profile `README.md` (replace `YOUR-HOST` and `YOUR_GITHUB_USERNAME`):
+
+#### 1. Unique Views & Total Visits (Default)
+Displays unique views on the left and total visits on the right (`X unique views | Y total visits`):
+```markdown
+[![Profile Views](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
+
+#### 2. Standalone Unique Visitors
+Displays estimated all-time unique visitors on the right (`Unique Visitors (est.) | X`):
+```markdown
+[![Unique Visitors](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME/unique)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
+*(Also available via query parameter: `https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?metric=unique`)*
+
+#### 3. Today's Visitors
+Displays unique visitors for the current day (resets at 00:00 IST):
+```markdown
+[![Visitors Today](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?metric=today)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
+
+#### 4. Split View (Today · Total)
+Displays both today's visitors and all-time total within a single badge (`X today · Y total`):
+```markdown
+[![Profile Views](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?view=split)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
+
+#### 5. Total Badge Loads (Raw Impressions)
+Displays total times the badge has been fetched and rendered, including repeated loads:
+```markdown
+[![Badge Loads](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?metric=loads)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
+
+#### 6. Active Windows (30-Minute Blocks)
+Displays the count of distinct 30-minute visitor activity blocks:
+```markdown
+[![Active Windows](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?metric=windows)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
+
+#### 7. Custom Label & Color
+Customizes the badge text and right-side color (e.g., `blue`, `green`, `brightgreen`, `orange`, `red`, `yellow`, `gray`, or hex code `#0969da`):
+```markdown
+[![Profile Views](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?label=Profile+Views&color=blue)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
+
+#### 8. Four-Part Dual Badge with Custom Colors
+Independently style each segment of the default badge (e.g., green on the left, blue `#2C81F5` on the right):
+```markdown
+[![Profile Views](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?label_color=2ea043&color=2ea043&label2_color=2C81F5&color2=2C81F5)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
+
+#### 9. Side-by-Side Badges (Two Badges on One Line)
+Render any two independent metrics side-by-side on GitHub by placing them without a blank line break:
+```markdown
+[![Total Loads](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?metric=loads&color=2C81F5)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME) [![Today](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?metric=today&color=2ea043)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
+
+#### 10. Split View with Custom Styling
+Combines split metrics (`Today | X | Total | Y`) with custom label and branding color:
+```markdown
+[![Visitors](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?view=split&label=Visitors&color=2ea043)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
+
+#### 11. Preview Mode (Non-Incrementing)
+Renders the badge live without incrementing counters or logging hits — ideal for testing layouts:
+```markdown
+[![Preview](https://YOUR-HOST/badge/YOUR_GITHUB_USERNAME?preview=true)](https://YOUR-HOST/report/YOUR_GITHUB_USERNAME)
+```
 
 ---
 
@@ -56,7 +130,7 @@ Configure via environment variables or a `.env` file:
 
 | Variable | Default | Description |
 |---|---|---|
-| `DATABASE_URL` | *Required* | PostgreSQL connection string (production Neon or local container). |
+| `DATABASE_URL` | *Required* | PostgreSQL connection string (production Supabase or local container). |
 | `TEST_DATABASE_URL` | *None* | Dedicated PostgreSQL test database URL used strictly by the test suite. |
 | `PROFILEPULSE_ENV` | `development` | Mode: `development` or `production`. In production, secure secret checks are enforced. |
 | `PROFILEPULSE_SECRET` | `dev-secret-change-me` | Secret for HMAC hashing visitor fingerprints. Must be a secure 16+ char key in production. |
@@ -86,7 +160,7 @@ ProfilePulse adheres to strict privacy guarantees matching `/privacy`:
 - **Estimates Only**: Static image embeds cannot observe viewport visibility or tab focus; counts reflect observed requests.
 - **Camo Caching**: GitHub's Camo proxy caches images for variable intervals, which may coalesce rapid visits into fewer requests.
 - **In-Memory Rate Limiting**: The sliding-window rate limiter is stored in-memory per process; it resets on restarts and does not coordinate across multi-worker deployments.
-- **Free Tier Cold Starts & Database Pauses**: Render's free tier sleeps after 15 minutes of inactivity, and Neon's free compute pauses when idle. Keep-warm pinging (e.g. via UptimeRobot every 5 minutes on `/health`) prevents cold starts.
+- **Free Tier Cold Starts & Database Pauses**: Render's free tier sleeps after 15 minutes of inactivity, and Supabase free projects pause after a week of inactivity. Keep-warm pinging (e.g. via UptimeRobot every 5 minutes on `/health`) prevents cold starts and keeps the database active.
 - **Reverse Proxy Headers**: `PROFILEPULSE_TRUST_PROXY` must be set to `true` when deployed behind Render or other reverse proxies so that client IPs are extracted safely.
 
 ---

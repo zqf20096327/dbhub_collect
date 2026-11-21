@@ -65,6 +65,14 @@ sudo bash ./ograc_sim_single.sh destroy
 - 使用：将对应技能目录复制到 Cursor、OpenCode 或 `~/.codex/skills/` 后，按该目录里的 `SKILL.md` 运行。
 - 注意：secret-scan 的报告含密钥原文，只留本地，不要提交进 git。
 
+### ograc-skills
+
+oGRAC 测试与运维技能集（环境无关版本）。
+
+- 作用：提供 oGRAC 两节点集群部署/构建、冷备恢复、TPC-C 数据准备、进程故障长稳测试等可复用 skill；主机、用户、LUN、路径等环境参数全部由使用者通过环境变量传入。
+- 使用：将 `ograc-skills/<skill>/` 复制到 agent 的 skills 目录（如 `.claude/skills/`、`.opencode/skills/`、`.agents/skills/`），按该目录的 `SKILL.md` 执行。
+- 说明：见 `ograc-skills/README.md`。
+
 ## 许可证
 
 MulanPSL-2.0

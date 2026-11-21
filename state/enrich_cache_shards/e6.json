@@ -4,7 +4,7 @@
   "commit_90d": 25,
   "rel_ver": "wasp-v0.26-template",
   "rel_pub": "2026-10-15",
-  "rel_days": 36,
+  "rel_days": 37,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -75,9 +75,9 @@
  "gajus/slonik": {
   "commit_7d": 1,
   "commit_90d": 17,
-  "rel_ver": "slonik@49.13.0",
-  "rel_pub": "2026-11-06",
-  "rel_days": 14,
+  "rel_ver": "slonik@49.15.0",
+  "rel_pub": "2026-11-20",
+  "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -86,7 +86,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 58,
-  "enriched_at": "20261120",
+  "enriched_at": "20261121",
   "lang": {
    "TypeScript": 98,
    "JavaScript": 2,
@@ -96,95 +96,95 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261120",
-   "release": "20261120",
+   "release": "20261121",
    "security": "20261027"
   },
   "rel_notes": [
    {
-    "t": "slonik@49.13.0",
-    "d": "2026-11-06",
-    "n": "- [#826](https://github.com/gajus/slonik/pull/826) [`4f74b91`](https://github.com/gajus/slonik/commit/4f74b91351b583a8beadff374bf4dbc03f4d8ad4) Thanks [@gajus](https://github.com/gajus)! - add `foreignConnections` configuration (`\"reject\"` (default) or `\"allow\"`), which replaces `dangerouslyAllowForeignConnections`. `dangerouslyAllowForeignConnections: true` keeps working as a deprecated alias of `foreignConnections: \"allow\"`; `foreignConnections` takes precedence when both are provided.\n- [#826](https://gi"
+    "t": "slonik@49.15.0",
+    "d": "2026-11-20",
+    "n": "### Minor Changes\n\n- [`e905699`](https://github.com/gajus/slonik/commit/e905699d5a5546bf6b622141f92be85c967b5ec2) Thanks [@gajus](https://github.com/gajus)! - add `socketTimeout` configuration, which closes a connection if the server does not send any data for that long while a query is in progress, e.g. because a proxy stopped forwarding traffic without closing the connection. The query fails with `SocketTimeoutError` and the pool replaces the connection. The timeout restarts whenever data arrives, so quer"
    },
    {
-    "t": "slonik-sql-tag-raw@49.13.0",
-    "d": "2026-11-06",
-    "n": "### Patch Changes\n\n- Updated dependencies []:\n  - @slonik/sql-tag@49.13.0"
+    "t": "slonik@49.14.0",
+    "d": "2026-11-20",
+    "n": "- [#832](https://github.com/gajus/slonik/pull/832) [`6090a3c`](https://github.com/gajus/slonik/commit/6090a3c6e001062a5f8dd81292e17c6db88734fd) Thanks [@sgtoj](https://github.com/sgtoj)! - fix: the pool no longer exceeds `maxPoolSize` when it replaces a destroyed connection to keep `minPoolSize` connections while another connection is being established.\n- [#832](https://github.com/gajus/slonik/pull/832) [`6090a3c`](https://github.com/gajus/slonik/commit/6090a3c6e001062a5f8dd81292e17c6db88734fd) Thanks [@sgt"
    },
    {
-    "t": "slonik-interceptor-field-name-transformation@49.13.0",
-    "d": "2026-11-06",
-    "n": "### Minor Changes\n\n- [#828](https://github.com/gajus/slonik/pull/828) [`370c0d3`](https://github.com/gajus/slonik/commit/370c0d31b577a8cd2c097459a641133e310d3936) Thanks [@gajus](https://github.com/gajus)! - improve `transformRow` performance: rows are copied by a function that is compiled once per set of fields into an object literal, instead of being assembled one property at a time on a null-prototype object (which V8 keeps in slower dictionary mode). Transforming 200,000 rows of 12 fields is ~25x faster"
+    "t": "slonik-sql-tag-raw@49.15.0",
+    "d": "2026-11-20",
+    "n": "### Patch Changes\n\n- Updated dependencies []:\n  - @slonik/sql-tag@49.15.0"
    },
    {
-    "t": "@slonik/utilities@49.13.0",
-    "d": "2026-11-06",
-    "n": "### Patch Changes\n\n- Updated dependencies []:\n  - @slonik/errors@49.13.0\n  - @slonik/types@49.13.0"
+    "t": "slonik-sql-tag-raw@49.14.0",
+    "d": "2026-11-20",
+    "n": "### Patch Changes\n\n- Updated dependencies [[`625c3e7`](https://github.com/gajus/slonik/commit/625c3e74de2a67bb2343171b002eb4d0fe3cdced)]:\n  - @slonik/sql-tag@49.14.0"
    },
    {
-    "t": "@slonik/sql-tag@49.13.0",
-    "d": "2026-11-06",
-    "n": "### Patch Changes\n\n- Updated dependencies []:\n  - @slonik/errors@49.13.0\n  - @slonik/types@49.13.0"
+    "t": "@slonik/utilities@49.15.0",
+    "d": "2026-11-20",
+    "n": "### Patch Changes\n\n- Updated dependencies [[`e905699`](https://github.com/gajus/slonik/commit/e905699d5a5546bf6b622141f92be85c967b5ec2)]:\n  - @slonik/errors@49.15.0\n  - @slonik/types@49.15.0"
    },
    {
-    "t": "@slonik/pg-driver@49.13.0",
-    "d": "2026-11-06",
-    "n": "### Minor Changes\n\n- [#829](https://github.com/gajus/slonik/pull/829) [`bed6b20`](https://github.com/gajus/slonik/commit/bed6b20f1327390940a5295b2f924f2f18be3fff) Thanks [@gajus](https://github.com/gajus)! - fix: `InvalidInputError` raised for SQLSTATE 22P02 (invalid text representation) includes the original error as `cause`, like the other errors that the driver maps.\n\n- [#829](https://github.com/gajus/slonik/pull/829) [`bed6b20`](https://github.com/gajus/slonik/commit/bed6b20f1327390940a5295b2f924f2f18be"
+    "t": "@slonik/utilities@49.14.0",
+    "d": "2026-11-20",
+    "n": "### Patch Changes\n\n- Updated dependencies [[`6090a3c`](https://github.com/gajus/slonik/commit/6090a3c6e001062a5f8dd81292e17c6db88734fd)]:\n  - @slonik/errors@49.14.0\n  - @slonik/types@49.14.0"
    },
    {
-    "t": "@slonik/errors@49.13.0",
-    "d": "2026-11-06",
-    "n": "### Patch Changes\n\n- Updated dependencies []:\n  - @slonik/types@49.13.0"
+    "t": "@slonik/sql-tag@49.15.0",
+    "d": "2026-11-20",
+    "n": "### Patch Changes\n\n- Updated dependencies [[`e905699`](https://github.com/gajus/slonik/commit/e905699d5a5546bf6b622141f92be85c967b5ec2)]:\n  - @slonik/errors@49.15.0\n  - @slonik/types@49.15.0"
    },
    {
-    "t": "@slonik/driver@49.13.0",
-    "d": "2026-11-06",
-    "n": "### Patch Changes\n\n- Updated dependencies []:\n  - @slonik/types@49.13.0\n  - @slonik/utilities@49.13.0"
+    "t": "@slonik/sql-tag@49.14.0",
+    "d": "2026-11-20",
+    "n": "- Updated dependencies [[`6090a3c`](https://github.com/gajus/slonik/commit/6090a3c6e001062a5f8dd81292e17c6db88734fd)]:"
    },
    {
-    "t": "slonik@49.12.0",
-    "d": "2026-10-24",
-    "n": "### Minor Changes\n\n- [#824](https://github.com/gajus/slonik/pull/824) [`3fb9109`](https://github.com/gajus/slonik/commit/3fb9109ae59f8d3d9cebc8ae833145d47392b437) Thanks [@gajus](https://github.com/gajus)! - add `typeParsers` option to `createSqlTag`: queries created by the tag override the pool's type parsers for the types they name, e.g. `createSqlTag({ typeParsers: [{ name: \"numeric\", parse: (value) => value }] })`. `slonik-interceptor-query-cache` does not cache queries that override type parsers.\n\n### "
+    "t": "@slonik/pg-driver@49.15.0",
+    "d": "2026-11-20",
+    "n": "### Minor Changes\n\n- [`e905699`](https://github.com/gajus/slonik/commit/e905699d5a5546bf6b622141f92be85c967b5ec2) Thanks [@gajus](https://github.com/gajus)! - add `socketTimeout` configuration, which closes a connection if the server does not send any data for that long while a query is in progress, e.g. because a proxy stopped forwarding traffic without closing the connection. The query fails with `SocketTimeoutError` and the pool replaces the connection. The timeout restarts whenever data arrives, so quer"
    },
    {
-    "t": "slonik-sql-tag-raw@49.12.0",
-    "d": "2026-10-24",
-    "n": "### Patch Changes\n\n- Updated dependencies [[`3fb9109`](https://github.com/gajus/slonik/commit/3fb9109ae59f8d3d9cebc8ae833145d47392b437)]:\n  - @slonik/sql-tag@49.12.0"
+    "t": "@slonik/pg-driver@49.14.0",
+    "d": "2026-11-20",
+    "n": "- Updated dependencies [[`8eb25b2`](https://github.com/gajus/slonik/commit/8eb25b2919d02ba7619eede1d5592fe29cf81674), [`777d254`](https://github.com/gajus/slonik/commit/777d254577d499da6438f3bd2d3d3601eb949ae7), [`6090a3c`](https://github.com/gajus/slonik/commit/6090a3c6e001062a5f8dd81292e17c6db88734fd), [`625c3e7`](https://github.com/gajus/slonik/commit/625c3e74de2a67bb2343171b002eb4d0fe3cdced)]:"
    }
   ],
   "etag": {
-   "release": "W/\"90abd7bb1f25ce09dcf2417bd21b5e5fc4fe468145e8cd33dbbb203d43b401bc\""
+   "release": "W/\"19ffe4d45451436cb0fe484da9e688546a64ac076c6ccb124a3d9b245e54f207\""
   },
   "rel_dates": [
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
    "2026-11-06",
    "2026-11-06",
    "2026-11-06",
-   "2026-11-06",
-   "2026-11-06",
-   "2026-11-06",
-   "2026-11-06",
-   "2026-11-06",
-   "2026-11-06",
-   "2026-11-06",
-   "2026-11-06",
-   "2026-11-06",
-   "2026-11-06",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-24",
-   "2026-10-11",
-   "2026-10-11",
-   "2026-10-11",
-   "2026-10-11"
+   "2026-11-06"
   ]
  },
  "superfly/litefs": {
@@ -192,7 +192,7 @@
   "commit_90d": 1,
   "rel_ver": "v0.5.14",
   "rel_pub": "2025-04-22",
-  "rel_days": 577,
+  "rel_days": 578,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -265,9 +265,9 @@
  "supabase/cli": {
   "commit_7d": 90,
   "commit_90d": 1075,
-  "rel_ver": "v4.0.0-next.39",
+  "rel_ver": "v4.0.0-next.42",
   "rel_pub": "2026-11-20",
-  "rel_days": 0,
+  "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": true,
   "rel_none": false,
@@ -276,7 +276,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 176,
-  "enriched_at": "20261120",
+  "enriched_at": "20261121",
   "lang": {
    "TypeScript": 92,
    "Go": 6,
@@ -287,7 +287,7 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261120",
-   "release": "20261120",
+   "release": "20261121",
    "security": "20261027"
   },
   "rel_notes": [
@@ -327,23 +327,23 @@
     "n": "# [1.9.0](https://github.com/supabase/cli/compare/config-v1.8.0...config-v1.9.0) (2026-11-20)\n\n\n### Features\n\n* **config:** add an effect-free `./convert` entry point (CLI-3169) ([#7738](https://github.com/supabase/cli/issues/7738)) ([16ec3f6](https://github.com/supabase/cli/commit/16ec3f6609af1aaa50ec47d2ad32a4dff7c551e3)), closes [supabase/supabase#53449](https://github.com/supabase/supabase/issues/53449)"
    },
    {
-    "t": "v4.0.0-next.36",
-    "d": "2026-11-19",
-    "n": "# [4.0.0-next.36](https://github.com/supabase/cli/compare/v4.0.0-next.35...v4.0.0-next.36) (2026-11-19)\n\n\n### Features\n\n* **cli:** derive flag documentation from flag definitions ([#7700](https://github.com/supabase/cli/issues/7700)) ([5de7bf1](https://github.com/supabase/cli/commit/5de7bf134cb7012107bcc04bd2d475f62c489435))"
+    "t": "v4.0.0-next.42",
+    "d": "2026-11-20",
+    "n": "# [4.0.0-next.42](https://github.com/supabase/cli/compare/v4.0.0-next.41...v4.0.0-next.42) (2026-11-20)\n\n\n### Bug Fixes\n\n* **cli:** suggest stopping stacks when shadow database fails (CLI-2818) ([#7742](https://github.com/supabase/cli/issues/7742)) ([795f19c](https://github.com/supabase/cli/commit/795f19c6429c6de73d6dd1c564d5ba321fba67cb)), closes [#7737](https://github.com/supabase/cli/issues/7737)"
    },
    {
-    "t": "v4.0.0-next.35",
-    "d": "2026-11-19",
-    "n": "# [4.0.0-next.35](https://github.com/supabase/cli/compare/v4.0.0-next.34...v4.0.0-next.35) (2026-11-19)\n\n\n### Bug Fixes\n\n* **cli:** wait for postgrest after local `db reset` (CLI-3162) ([#7716](https://github.com/supabase/cli/issues/7716)) ([61e1433](https://github.com/supabase/cli/commit/61e1433b1feecf4ad6806e92499eed9b9cd52247))"
+    "t": "v4.0.0-next.41",
+    "d": "2026-11-20",
+    "n": "# [4.0.0-next.41](https://github.com/supabase/cli/compare/v4.0.0-next.40...v4.0.0-next.41) (2026-11-20)\n\n\n### Features\n\n* **cli:** add --to to config convert (CLI-3170) ([#7741](https://github.com/supabase/cli/issues/7741)) ([19bfd19](https://github.com/supabase/cli/commit/19bfd19709e49bc154417ccab03629820e5c07d3))"
    },
    {
-    "t": "v4.0.0-next.34",
-    "d": "2026-11-19",
-    "n": "# [4.0.0-next.34](https://github.com/supabase/cli/compare/v4.0.0-next.33...v4.0.0-next.34) (2026-11-19)\n\n\n### Bug Fixes\n\n* **stack:** retry lost storage helper execs and deflake stack tests ([#7711](https://github.com/supabase/cli/issues/7711)) ([5884942](https://github.com/supabase/cli/commit/5884942c4d92877866b84d631ca8b43fefc47fe5))"
+    "t": "v4.0.0-next.40",
+    "d": "2026-11-20",
+    "n": "# [4.0.0-next.40](https://github.com/supabase/cli/compare/v4.0.0-next.39...v4.0.0-next.40) (2026-11-20)\n\n\n### Bug Fixes\n\n* **stack:** continue a launch when a timed-out docker start left the container running ([#7655](https://github.com/supabase/cli/issues/7655)) ([ee8bae4](https://github.com/supabase/cli/commit/ee8bae42b3da41d23d4c91b63024e6c2c6bef4ae)), closes [#7602](https://github.com/supabase/cli/issues/7602) [#7600](https://github.com/supabase/cli/issues/7600)"
    }
   ],
   "etag": {
-   "release": "W/\"b31b4b7d6bcb0f14de085afc3bd574045ad8f9e963077a6003e890288e396b1d\""
+   "release": "W/\"bb5f302001432c9cdb6cbf281bad407a2a34fdfd59b43d498eb137e5ebc33c6f\""
   },
   "rel_dates": [
    "2026-11-20",
@@ -353,6 +353,13 @@
    "2026-11-20",
    "2026-11-20",
    "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
+   "2026-11-20",
    "2026-11-19",
    "2026-11-19",
    "2026-11-19",
@@ -368,14 +375,7 @@
    "2026-11-17",
    "2026-11-17",
    "2026-11-17",
-   "2026-11-17",
-   "2026-11-17",
-   "2026-11-17",
-   "2026-11-16",
-   "2026-11-16",
-   "2026-11-16",
-   "2026-11-16",
-   "2026-11-16"
+   "2026-11-17"
   ]
  },
  "planetscale/database-js": {
@@ -383,7 +383,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 57,
+  "rel_days": 58,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -425,7 +425,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.48.5",
   "rel_pub": "2026-03-26",
-  "rel_days": 239,
+  "rel_days": 240,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -467,7 +467,7 @@
   "commit_7d": 16,
   "rel_ver": "v2.0.1",
   "rel_pub": "2026-11-10",
-  "rel_days": 10,
+  "rel_days": 11,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -520,7 +520,7 @@
   "commit_7d": 0,
   "rel_ver": "housewatch-0.1.9",
   "rel_pub": "2024-06-04",
-  "rel_days": 899,
+  "rel_days": 900,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -543,7 +543,7 @@
   "commit_7d": 0,
   "rel_ver": "1.9.5",
   "rel_pub": "2023-04-17",
-  "rel_days": 1313,
+  "rel_days": 1314,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -577,7 +577,7 @@
   "commit_7d": 0,
   "rel_ver": "v14.1.0-r1",
   "rel_pub": "2026-10-20",
-  "rel_days": 31,
+  "rel_days": 32,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -666,7 +666,7 @@
   "commit_7d": 0,
   "rel_ver": "1.11.0",
   "rel_pub": "2025-12-21",
-  "rel_days": 334,
+  "rel_days": 335,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -738,7 +738,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.8.1",
   "rel_pub": "2023-03-20",
-  "rel_days": 1341,
+  "rel_days": 1342,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -846,14 +846,14 @@
   "lang": {
    "Shell": 100
   },
-  "enriched_at": "20261120",
+  "enriched_at": "20261121",
   "dim_ts": {
    "commit": "20261120",
-   "release": "20261120",
+   "release": "20261121",
    "security": "20261106"
   },
   "rel_pub": "2026-11-18",
-  "rel_days": 2,
+  "rel_days": 3,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_notes": [
@@ -909,7 +909,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"59fe158279291b895e1e4b3905178de88ba333915e1944d388a2627e84a19dd8\""
+   "release": "W/\"b1ff0f4bef283b8636485a3ab767eedad871d6e63684bd70b6bb9cd415d9e697\""
   },
   "rel_dates": [
    "2026-11-18",
@@ -949,7 +949,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.1-beta",
   "rel_pub": "2022-10-09",
-  "rel_days": 1503,
+  "rel_days": 1504,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -970,7 +970,7 @@
   "commit_7d": 0,
   "rel_ver": "2.0.2",
   "rel_pub": "2017-09-27",
-  "rel_days": 3341,
+  "rel_days": 3342,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -993,7 +993,7 @@
   "commit_7d": 0,
   "rel_ver": "database",
   "rel_pub": "2025-12-19",
-  "rel_days": 336,
+  "rel_days": 337,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1031,7 +1031,7 @@
   "commit_7d": 8,
   "rel_ver": "v0.5.30",
   "rel_pub": "2026-11-05",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -1141,7 +1141,7 @@
   "commit_7d": 0,
   "rel_ver": "1.3.0",
   "rel_pub": "2017-05-02",
-  "rel_days": 3489,
+  "rel_days": 3490,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1180,7 +1180,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-04-18",
-  "rel_days": 1312,
+  "rel_days": 1313,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1201,7 +1201,7 @@
   "commit_7d": 0,
   "rel_ver": "0.15.0",
   "rel_pub": "2026-06-18",
-  "rel_days": 155,
+  "rel_days": 156,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1235,7 +1235,7 @@
  "devlive-community/dameng-connector": {
   "rel_ver": "2026.0.0",
   "rel_pub": "2026-08-17",
-  "rel_days": 95,
+  "rel_days": 96,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1272,7 +1272,7 @@
  "vapor/fluent-mysql-driver": {
   "rel_ver": "4.8.0",
   "rel_pub": "2025-08-26",
-  "rel_days": 451,
+  "rel_days": 452,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1302,7 +1302,7 @@
  "witnet/witnet-solidity-bridge": {
   "rel_ver": "3.2.3",
   "rel_pub": "2026-03-19",
-  "rel_days": 246,
+  "rel_days": 247,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1369,7 +1369,7 @@
  "kaiso/relmongo": {
   "rel_ver": "v4.0.0",
   "rel_pub": "2024-03-21",
-  "rel_days": 974,
+  "rel_days": 975,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1431,7 +1431,7 @@
  "uclapi/uclapi": {
   "rel_ver": "1.4.16",
   "rel_pub": "2026-05-06",
-  "rel_days": 198,
+  "rel_days": 199,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1480,7 +1480,7 @@
  "PnX-SI/GeoNature-atlas": {
   "rel_ver": "2.0.0",
   "rel_pub": "2026-06-12",
-  "rel_days": 161,
+  "rel_days": 162,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1613,7 +1613,7 @@
  "RohanNagar/thunder": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2021-08-13",
-  "rel_days": 1925,
+  "rel_days": 1926,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1634,7 +1634,7 @@
  "viartemev/ktor-flyway-feature": {
   "rel_ver": "v1.2.1",
   "rel_pub": "2020-12-30",
-  "rel_days": 2151,
+  "rel_days": 2152,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1666,7 +1666,7 @@
  "or-abdillh/stock-app": {
   "rel_ver": "v.1.0.0.0",
   "rel_pub": "2021-10-31",
-  "rel_days": 1846,
+  "rel_days": 1847,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1686,7 +1686,7 @@
  "go-graphite/graphite-ch-optimizer": {
   "rel_ver": "v1.3.0",
   "rel_pub": "2024-12-19",
-  "rel_days": 701,
+  "rel_days": 702,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1706,7 +1706,7 @@
  "ordo-pink/ordo": {
   "rel_ver": "0.6.0",
   "rel_pub": "2024-02-15",
-  "rel_days": 1009,
+  "rel_days": 1010,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1743,7 +1743,7 @@
  "turbot/steampipe-plugin-net": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-10-13",
-  "rel_days": 403,
+  "rel_days": 404,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1806,7 +1806,7 @@
  "alecxcode/edm": {
   "rel_ver": "v2.2.0",
   "rel_pub": "2023-04-30",
-  "rel_days": 1300,
+  "rel_days": 1301,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1840,7 +1840,7 @@
  "tiagofilipe12/pATLAS": {
   "rel_ver": "1.6.1",
   "rel_pub": "2018-10-29",
-  "rel_days": 2944,
+  "rel_days": 2945,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1860,7 +1860,7 @@
  "canonical/microcloud-cluster-manager": {
   "rel_ver": "0.9",
   "rel_pub": "2026-03-24",
-  "rel_days": 241,
+  "rel_days": 242,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1913,7 +1913,7 @@
  "Pigmice2733/peregrine-backend": {
   "rel_ver": "v3.1.2",
   "rel_pub": "2019-10-06",
-  "rel_days": 2602,
+  "rel_days": 2603,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2027,7 +2027,7 @@
  "walkindude/gosymdb": {
   "rel_ver": "v0.1.3",
   "rel_pub": "2026-04-26",
-  "rel_days": 208,
+  "rel_days": 209,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2112,7 +2112,7 @@
  "Jathon-yang/go-wxsqlite3": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-03-05",
-  "rel_days": 1721,
+  "rel_days": 1722,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2160,7 +2160,7 @@
  "practicalli/clojure-web-services": {
   "rel_ver": "2026-08-22",
   "rel_pub": "2026-08-22",
-  "rel_days": 90,
+  "rel_days": 91,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2178,7 +2178,7 @@
  "halinkeji/qwscrm": {
   "rel_ver": "1.0.3",
   "rel_pub": "2022-11-08",
-  "rel_days": 1473,
+  "rel_days": 1474,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2278,7 +2278,7 @@
  "tuhinpal/cash_compass": {
   "rel_ver": "v0.1.3",
   "rel_pub": "2024-03-17",
-  "rel_days": 978,
+  "rel_days": 979,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2365,7 +2365,7 @@
  "smartcontractkit/hello_chainlink": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2018-03-14",
-  "rel_days": 3173,
+  "rel_days": 3174,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2396,7 +2396,7 @@
  "oracle/coherence-py-client": {
   "rel_ver": "v2.0.4",
   "rel_pub": "2025-07-08",
-  "rel_days": 500,
+  "rel_days": 501,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2416,7 +2416,7 @@
  "aminsamadzadeh/Simorgh": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2020-11-09",
-  "rel_days": 2202,
+  "rel_days": 2203,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2433,7 +2433,7 @@
  "jrfrigat/Weir": {
   "rel_ver": "v1.10.0",
   "rel_pub": "2026-09-13",
-  "rel_days": 68,
+  "rel_days": 69,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2494,7 +2494,7 @@
  "kasoir/urbac": {
   "rel_ver": "1.0.0",
   "rel_pub": "2026-08-03",
-  "rel_days": 109,
+  "rel_days": 110,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2592,7 +2592,7 @@
  "huaweicloud-samples/database-gaussdb-flink-connector-jdbc": {
   "rel_ver": "v3.3.2-1.20-normal",
   "rel_pub": "2026-06-15",
-  "rel_days": 158,
+  "rel_days": 159,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2605,13 +2605,17 @@
    "Java": 100,
    "Shell": 0
   },
-  "enriched_at": "20261028",
-  "commit_90d": 9,
+  "enriched_at": "20261121",
+  "commit_90d": 2,
   "commit_7d": 0,
   "dim_ts": {
-   "commit": "20260930",
-   "release": "20261028"
-  }
+   "commit": "20261121",
+   "release": "20261121"
+  },
+  "etag": {
+   "release": "W/\"503229f292d31df3dffd3ddb89bc14bb24ab73dc3cec113f3f8282baa394d987\""
+  },
+  "rel_dates": []
  },
  "ww-1009/ob_agent": {
   "rel_ver": null,
@@ -2657,7 +2661,7 @@
  "gxc/gaussdb-ro-mcp": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-10-21",
-  "rel_days": 30,
+  "rel_days": 31,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2682,7 +2686,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.2",
   "rel_pub": "2016-02-24",
-  "rel_days": 3922,
+  "rel_days": 3923,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2770,7 +2774,7 @@
  "flavorjones/sqlean-ruby": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2024-11-26",
-  "rel_days": 724,
+  "rel_days": 725,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2858,7 +2862,7 @@
  "artalis-io/hull": {
   "rel_ver": "v0.15.0",
   "rel_pub": "2026-09-20",
-  "rel_days": 61,
+  "rel_days": 62,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3092,7 +3096,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.1",
   "rel_pub": "2026-08-31",
-  "rel_days": 79,
+  "rel_days": 82,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3149,7 +3153,7 @@
   "commit_7d": 1,
   "rel_ver": "v10.2.0",
   "rel_pub": "2026-11-12",
-  "rel_days": 8,
+  "rel_days": 9,
   "rel_n90": 22,
   "rel_pre": false,
   "rel_none": false,
@@ -3632,7 +3636,7 @@
  "sebastianhutter/local-rag": {
   "rel_ver": "v0.20.0",
   "rel_pub": "2026-09-23",
-  "rel_days": 58,
+  "rel_days": 59,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3717,7 +3721,7 @@
  "iktakahiro/calendarpit": {
   "rel_ver": "v0.9.4",
   "rel_pub": "2026-10-19",
-  "rel_days": 32,
+  "rel_days": 33,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -3743,7 +3747,7 @@
  "openctemio/openctem": {
   "rel_ver": "v0.16.1",
   "rel_pub": "2026-10-29",
-  "rel_days": 22,
+  "rel_days": 23,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3810,7 +3814,7 @@
  "shiker1996/wechat-editroom": {
   "rel_ver": "1.0.5",
   "rel_pub": "2026-11-03",
-  "rel_days": 17,
+  "rel_days": 18,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3858,7 +3862,7 @@
   },
   "rel_ver": "v1.4.1",
   "rel_pub": "2026-11-11",
-  "rel_days": 9,
+  "rel_days": 10,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -3976,7 +3980,7 @@
   },
   "rel_ver": "v0.0.1+414de9491d8f373f829b634d3fe3bbbe0f587ac5",
   "rel_pub": "2026-03-20",
-  "rel_days": 245,
+  "rel_days": 246,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -4053,7 +4057,8 @@
    "security": "20261119",
    "contrib": "20261119",
    "lang": "20261119"
-  }
+  },
+  "rel_n90": 0
  },
  "DHURJATI-JS/kisansetu-farmers-webapp": {
   "etag": {

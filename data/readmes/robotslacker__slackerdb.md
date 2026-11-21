@@ -91,6 +91,12 @@ The command also writes `offline/javarepo.zip` and `offline/npmrepo.zip`, and re
 uncompressed `javarepo/` and `npmrepo/` directories. Copy those two zips to the offline
 machine and unzip them into the same directory.
 
+When regenerating, npm packages are taken from existing local caches first (the previous
+`offline/npmrepo`, `NPM_CONFIG_CACHE`, and the machine-wide cache reported by
+`npm config get cache`). Only packages that no local cache contains are fetched from the npm
+registry. Add `-Doffline.npm.cache.dirs=<dir>` (comma or semicolon separated) for extra cache
+directories.
+
 `javarepo` does not only contain the jars that end up on the classpath: it carries the complete
 POM descriptor closure (parent POMs, imported BOMs, and every candidate dependency version Maven
 reads while collecting, including the ones dropped by nearest-wins mediation). An offline build
@@ -132,25 +138,4 @@ Run the following commands to complete the build:
 ==== Stop db server
 
 ....
-    java -jar dbserver/target/slackerdb-dbserver-0.2.2-standalone.jar stop
-....
-
-==== Check db status
-
-....
-    java -jar dbserver/target/slackerdb-dbserver-0.2.2-standalone.jar status
-....
-
-==== Start db proxy
-
-....
-    java -jar dbproxy/target/slackerdb-dbproxy-0.2.2-standalone.jar start
-....
-
-==== Stop db proxy
-
-....
-    java -jar dbproxy/target/slackerdb-dbproxy-0.2.2-standalone.jar stop
-....
-
-==== Check proxy 
+    java -jar dbserver/target/slackerdb-dbserver-0

@@ -287,10 +287,12 @@ can be selective. `corpus:` spreads words the way natural text does, and plants 
 configuration sets:
 
 ```toml
-body = "corpus:100;20000;1.0;kolvak@0.92,trimbol@0.6,quorlat@0.07,vexin@0.006"
+body = "corpus:20..200;20000;1.0;kolvak@0.92,trimbol@0.6,quorlat@0.07,vexin@0.006"
 ```
 
-- `WORDS`: words per document, or a range (`80..120`).
+- `WORDS`: words per document, or a range (`20..200`). Prefer a range for ranked queries. BM25 normalises a term's
+  frequency by document length, so at one length a term's score takes only as many values as its frequency does, and
+  a top-k ends in a tie of thousands of documents. That flatters any engine that stops at its k-th score.
 - `VOCABULARY`: how many distinct filler words there are. They are spelled from consonant-vowel syllables (`baba`,
   `babe`, …), the same words for every seed.
 - `EXPONENT`: the Zipf exponent. The rank-`r` word is drawn with probability proportional to `1 / r^EXPONENT`, so at
@@ -366,6 +368,11 @@ Each scan object can make use of the following values:
     - `name`: share the index under this name. Consecutive scans that name the same index, with the same
       definition, build it once before the first and drop it after the last; the build time is reported on the
       first. Without a name, each scan builds and drops its own index, named by its `id`.
+- `with_indexes`: (optional) Further indexes the indexed legs read beside `with_index`, each with a `name`: a query
+  over two fields that each hold their own full-text index. They are built after `with_index`, in order, and dropped
+  with it, and they are shared with the next scan only when it declares the same list. Only the build of
+  `with_index` is timed in the results. If one of them cannot be built on an engine (MongoDB keeps one text index a
+  collection), every index built for the scan is dropped and its indexed legs are reported as not run.
 - `clients` / `threads`: (optional) Concurrency for this scan's timed legs, overriding `--clients`
   and `--threads`. `clients` is capped at the pool `--clients` created. Index DDL is unaffected — it
   always runs on a single client.
@@ -684,8 +691,15 @@ A filter is `{ name, field, op, value }`:
 - `field`: an `integer`, `float`, `string` or `bool` column from the value template. Other column
   types are rejected — a datetime or decimal filter would need per-engine literal formats and
   collation rules, and getting either subtly wrong leaves two engines answering different questions.
-- `op`: `eq`, `ne`, `lt`, `lte`, `gt`, `gte`, or `in`. The ordering operators require a numeric
-  column; `in` takes a list and is the natural way to dial selectivity on a categorical column.
+- `op`: `eq`, `ne`, `lt`, `lte`, `gt`, `gte`, `in` or `matches`. The ordering operators require a
+  numeric column; `in` takes a list and is the natural way to dial selectivity on a categorical column.
+  `matches` is a full-text match of one word, of letters and digits, in a string column: a row matches
+  when the column holds the word whole, in any case. The scan builds a full-text index on the column
+  before its legs (untimed) and drops it after, whatever `filter_index` says, since SurrealDB answers
+  `@@` only through one. SurrealDB renders it as `field @@ 'word'`, Postgres as
+  `to_tsvector('english', field) @@ plainto_tsquery('english', 'word')`; Redis, which mirrors filter
+  columns as tags, skips it. A `corpus:` column with planted words gives each word a known
+  selectivity; `config/vector-fulltext.toml` runs a ladder of them.
 - `value`: a literal, or a list for `in`. Text literals are restricted to letters, digits, space and
   `_-./+:@` — every engine here quotes strings differently, and a mis-escaped literal does not fail
   loudly, it silently selects a different set of rows in one engine than in another.

@@ -45,6 +45,14 @@ and queries are organized inside each database.
   appear instantly with what was there last time, and the server updates them
   (the server always wins). It only stores names and structure.
   Details: [`docs/explorer-cache.md`](docs/explorer-cache.md).
+- **Explorer filter** that finds objects in folders that aren't open, by name
+  (the cache at once, then the server) and, optionally, inside their code
+  (views, routines, Power BI measures and tables). Details:
+  [`docs/explorer-cache.md`](docs/explorer-cache.md#the-filter).
+- **Dependencies and lineage:** what an object uses and what uses it (tables,
+  views, routines, foreign keys and sources outside the database), as a list
+  or as a lineage diagram that opens level by level. Details:
+  [`docs/engine-support.md`](docs/engine-support.md#dependencies).
 - **Folders and groups**, for example per client or per environment. They can
   be nested and colored, and servers are moved between them by dragging.
 - **Import connections** from DBeaver, DbGate, DataGrip / JetBrains, Azure Data
@@ -157,6 +165,10 @@ and queries are organized inside each database.
   [docs/query-editor.md](docs/query-editor.md#result-tabs).
 - **Column filters** on a table's data (values, ranges, nulls, text). They are
   applied on the server, with each engine's own filter.
+- **Search in results:** searches every loaded row and column, highlights the
+  matches, lists the columns they're in with how many, and can leave only the
+  matching rows and columns. Details:
+  [docs/query-editor.md](docs/query-editor.md#search-in-results).
 - **Copy results** in 10 formats: with or without headers, CSV, JSON, JSON
   Lines, YAML, INSERT, UPDATE, Mongo inserts… The default format for ⌘C is
   configurable.

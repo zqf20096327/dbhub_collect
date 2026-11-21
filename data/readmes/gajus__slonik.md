@@ -141,6 +141,7 @@ e placeholders](#value-placeholders)
     - [Handling `NotFoundError`](#handling-notfounderror)
     - [Handling `NotNullIntegrityConstraintViolationError`](#handling-notnullintegrityconstraintviolationerror)
     - [Handling `QueueTimeoutError`](#handling-queuetimeouterror)
+    - [Handling `SocketTimeoutError`](#handling-sockettimeouterror)
     - [Handling `StatementCancelledError`](#handling-statementcancellederror)
     - [Handling `StatementTimeoutError`](#handling-statementtimeouterror)
     - [Handling `UniqueIntegrityConstraintViolationError`](#handling-uniqueintegrityconstraintviolationerror)
@@ -160,4 +161,4 @@ e placeholders](#value-placeholders)
 
 Slonik began as a collection of utilities designed for working with [`node-postgres`](https://github.com/brianc/node-postgres). It continues to use `node-postgres` driver as it provides a robust foundation for interacting with PostgreSQL. However, what once was a collection of utilities has since grown into a framework that abstracts repeating code patterns, protects against unsafe connection handling and value interpolation, and provides a rich debugging experience.
 
-Slonik has been [battle-tested](https://medium.com/@gajus/lessons-learned-scaling-postgresql-database-to-1-2bn-records-month-edc5449b3067) wi
+Slonik has been [battle-tested](https://medium.com/@gajus/lessons-learned

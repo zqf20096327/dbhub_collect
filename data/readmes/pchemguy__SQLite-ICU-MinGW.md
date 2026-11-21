@@ -1,6 +1,15 @@
 This project explores the building process of the SQLite library and the SQLiteODBC driver on Windows with two toolchains: Microsoft Visual C++ Build Tools (MSVC) and MSYS2/MinGW. The particular focus is on the SQLite-specific building workflow and customizing/extending the building process. The project provides several scripts producing custom builds of the SQLite library and the SQLiteODBC driver. These builds incorporate extended SQLite-related functionality, and the scripts can be used as templates and further tailored to specific needs.
 
-### Features
+### Current SQLite build harnesses
+
+Both harnesses build the SQLite CLI and libraries with presets for ICU, stock SQLite modules, and the ICUex, PBLOB and RegexpMatches project extensions.
+
+| Directory and build guide | Workflow |
+| --- | --- |
+| [./Current/GCC](./Current/GCC/README.md) | Bash and GCC on Linux build shared and static libraries using system ICU and zlib when selected. The optional Conda wrapper installs the custom library and verifies it from Python. |
+| [./Current/MSVC](./Current/MSVC/README.md) | Run the CMD harness from an x86 or x64 MSVC Native Tools Command Prompt to build the DLL, import library and static library. The default build uses ICU from the active Conda environment and builds or reuses zlib. |
+
+### Windows features
 
   - **ICU enabled builds**  
     SQLite does not support insensitive string operations of non-Latin characters, which is essential for user-oriented applications. Instead, the ICU extension enables this functionality. ICU is disabled by default, and no ICU-enabled binaries are available from the official website. Enabling the ICU extension on Windows is not a straightforward process, but I could not find any adequate building/usage instruction on the Internet, so I am sharing my recipe.
@@ -16,7 +25,7 @@ This project explores the building process of the SQLite library and the SQLiteO
     Three SQLite extensions, ICU and Zipfile/SQLAR, require external dependencies (ICU and Zlib). Since I have encountered problems with static linking of Zlib, I linked both ICU and Zlib dynamically. The building scripts, in turn, copy the Zlib and ICU dependencies as necessary into the folder containing built SQLite binaries.
   - **MSVC Build Tools and MSYS2/MinGW shell scripts**  
 
-### Usage
+### Windows usage
 
 **N.B.: these scripts are from the *Current* folder! Do not use scripts from MinGW/MSVC folders (these are dev folders)!**
 

@@ -21,6 +21,7 @@
 
 <p align="center">
   <a href="https://indoerp.github.io/ERPForAll/"><b>Documentation</b></a> ·
+  <a href="#inside-the-workspace">Screenshots</a> ·
   <a href="#what-works-today">What works today</a> ·
   <a href="#how-an-addon-looks">How an addon looks</a> ·
   <a href="#get-started">Get started</a> ·
@@ -29,14 +30,11 @@
 </p>
 
 <p align="center">
-  <img src=".github/assets/accounting-dashboard.png" alt="The accounting dashboard: journal cards for customer invoices, vendor bills, bank and cash, with counts, amounts and a chart" width="900">
+  <a href=".github/assets/accounting-dashboard.png"><img src=".github/assets/accounting-dashboard.png" alt="Office Blue accounting dashboard with a navy sidebar, unpaid invoices, vendor bills and monthly billing charts" width="1120"></a><br>
+  <sub>Office Blue · Accounting dashboard</sub>
 </p>
 
-> [!IMPORTANT]
-> **Status: early development. Not ready to run a business yet.** The framework core works and is tested. The first
-> business applications (accounting, inventory, sales, purchase) run in early versions: you can enter and post
-> invoices, register their payments, print your documents and move stock on a test database, but bank statements,
-> invoices made from orders and much more are still missing. Try it, read the code, tell us what you find.
+**Early development. Not ready to run a business yet.** Try ERPForAll with sample data. You can post an invoice, trace a ledger balance to its journal items, and follow a retail order into the warehouse. The business applications are still growing.
 
 ## Why ERPForAll
 
@@ -54,8 +52,7 @@ one Odoo developers know, and builds what is underneath anew:
 
 ## What works today
 
-Everything below is in this repository and runs on our test server. "Early" means the main path works and known
-gaps remain; the main ones are listed under the table.
+These workflows are available in the public source. Install the bridge addons to connect Sales and Purchase to Inventory.
 
 ### Framework
 
@@ -73,29 +70,25 @@ gaps remain; the main ones are listed under the table.
 
 | Application | What you can do |
 |---|---|
-| **Accounting** | A dashboard of journal cards; customer invoices and vendor bills with lines, taxes and totals; posting, which opens its fiscal periods; journal entries and items; taxes and tax groups; payment terms with instalments; payments registered from invoices and bills, matched and unmatched (one currency); printed invoices, credit notes and bills; journal items in other currencies |
-| **Inventory** | A warehouse with its locations and operation types for every company; an overview of the operation types; transfers that are confirmed, reserved, validated and cancelled; printed delivery slips, receipts and picking lists |
-| **Sales** | Quotations and sales orders with list prices, pricelists and taxes; confirm, lock and cancel; printed quotations and orders |
-| **Purchase** | Requests for quotation and purchase orders with vendor prices and taxes; an approval limit; printed requests for quotation and orders |
-| **Products** | Products and variants, pictures, barcodes, packagings, units of measure |
-| **Contacts** | Companies and people, tags, company and contact fields kept in step |
-| **Mail** | Messages, internal notes, followers and attachments on records (the chatter), with a history line for each tracked change, on products, invoices, orders and transfers |
+| **Accounting** | Post invoices and vendor bills, register single-currency payments, and print credit notes. Explore the general ledger, partner ledger, trial balance, balance sheet and profit and loss. Open source journal items where the report supports it, or export the report to PDF or XLSX. |
+| **Inventory** | Track receipts, deliveries and internal transfers by warehouse. Reserve stock, validate a transfer and print delivery slips, receipts and picking lists. |
+| **Sales** | Quote products using pricelists and taxes, confirm a sales order, and create its direct warehouse delivery with the Sales–Inventory bridge. |
+| **Purchase** | Request vendor quotations, approve purchase orders and create a direct receipt for an eligible order with the Purchase–Inventory bridge. |
+| **Products and contacts** | Manage product variants, barcodes, packaging and units of measure. Keep companies, people and tags in the contacts directory. |
+| **Collaboration** | Post messages, internal notes and attachments on orders, transfers and invoices. Follow a record to keep up with changes. |
 
-Not there yet, among others: bank statements and their reconciliation, payments in other currencies, invoices made
-from sales orders, receipts from purchase orders, lots and serial numbers, backorders.
+The default theme and the optional **Office Blue** theme use the same forms, lists and keyboard controls. In either theme you can choose visible columns in a list or in the lines of a form.
+
+## Inside the workspace
 
 <table>
   <tr>
-    <td width="60%"><img src=".github/assets/invoice-form.png" alt="A posted customer invoice with two lines, taxes and totals"></td>
-    <td width="40%"><img src=".github/assets/inventory-overview.png" alt="The inventory overview: receiving and delivery operation types with their counts"></td>
-  </tr>
-  <tr>
-    <td align="center"><sub>A posted customer invoice</sub></td>
-    <td align="center"><sub>The inventory overview</sub></td>
+    <td width="72%" valign="top"><b>Customer invoice · Default</b><br>Review the invoice lines, quantities and total on the posted document.<br><br><a href=".github/assets/invoice-form.png"><img src=".github/assets/invoice-form.png" alt="Posted customer invoice with three itemized lines for a sample workshop order"></a></td>
+    <td width="28%" valign="top"><b>Inventory · Office Blue</b><br>Check receiving and delivery work from a phone.<br><br><a href=".github/assets/inventory-overview.png"><img src=".github/assets/inventory-overview.png" alt="Phone view of warehouse operation cards and transfer counts"></a></td>
   </tr>
 </table>
 
-<sub>Screenshots of a test database. All companies, products and amounts in them are invented demo data.</sub>
+The screenshots come from a self-hosted instance populated with fictional sample records. Select an image to view it at full size.
 
 ## How an addon looks
 
@@ -179,8 +172,8 @@ A one-command local setup with demo data is not available yet. It is one of the 
 
 ## Roadmap
 
-- **Now:** complete the early business applications: invoices from sales orders and bills from purchase orders,
-  receipts from purchase orders, bank statements, lots and serial numbers.
+- **Now:** complete the early business applications: deeper order-to-invoice and purchase-to-bill workflows,
+  bank statements and warehouse traceability.
 - **Next:** the remaining view types (gantt, map and others), a design pass over the whole web client, and a simple
   local setup.
 - **Later:** measured performance work, and more business applications built as addons.
