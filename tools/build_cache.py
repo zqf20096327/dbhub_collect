@@ -15,7 +15,10 @@
 """
 import argparse, datetime, io, json, os, re, subprocess, sys, time, glob
 
-VER = "build_cache/1.4"   # 1.4：judge 增 ai_kind 提升、全仓 official 标记（P9 站点浏览「属性」筛选数据源）；
+VER = "build_cache/1.5"   # 1.5：dbs 数据源改「判定层引擎优先 + db_scan.v2 兜底」（与 11-01 裁定「归属移交程序判定、
+                          #     首选引擎+存量兜底」同口径；修 P9.7 断点：引擎 0.3.0 填入判定层的归属从未被读取，
+                          #     metabase/drawdb/airbyte 等仅引擎有归属的 914 仓被误剔出站、768 重叠中 238 仓值偏旧）；
+                          # 1.4：judge 增 ai_kind 提升、全仓 official 标记（P9 站点浏览「属性」筛选数据源）；
                           # 1.3：加 readme_file 字段（README 存档文件存在性，无 README 仓归档口径的判定源）
 ROOT = "D:/dbhub_collect"
 POOL = ROOT + "/data/live/pool.ndjson"
@@ -112,6 +115,14 @@ def is_official(owner, dbs, org_of_db):
     o = (owner or "").lower()
     return bool(o) and any(o in org_of_db.get(str(d).lower(), ()) for d in (dbs or []))
 
+def dbs_of(judge_e, scan_e):
+    """归属来源仲裁：判定层引擎结果（classification.dbs，引擎 0.3.0 填入）优先，db_scan.v2 兜底。
+    引擎为空才落兜底，不做并集（引擎判定可能比旧扫描更窄/更准，如 questdb 只剩 PostgreSQL）。"""
+    d = ((judge_e or {}).get("classification") or {}).get("dbs") or []
+    if d: return sorted(set(d)), "engine"
+    c = (scan_e or {}).get("cands") or {}
+    return (sorted(c.keys()), "dbscan") if c else ([], "")
+
 def build_index():
     t0 = time.time(); repos = {}
     cn = vocab_cn()
@@ -157,7 +168,7 @@ def build_index():
         for f in glob.glob(f"{INTERP_DIR}/{layer}/shards/*.json"):
             for sha, e in loadj(f).items(): m[sha] = e
         layers[layer] = m
-    n_j = n_t = n_tag = n_desc = 0
+    n_j = n_t = n_tag = n_desc = n_eng = 0
     for fn, ent in loadj(INTERP_STATE)["items"].items():
         k = fn.lower(); sha = ent.get("sha")
         if k not in repos or not sha: continue
@@ -175,6 +186,9 @@ def build_index():
                                  "install": j.get("signals", {}).get("install"),
                                  "ai_kind": j.get("classification", {}).get("ai_kind")}
             n_j += 1
+            d, _ = dbs_of(j, None)               # 引擎归属优先（1.5）：判定层 classification.dbs 在此进 index
+            if d:
+                repos[k]["dbs"] = d; n_eng += 1
         t = layers["text"].get(sha)
         if t:
             ident = t.get("identity", {})
@@ -192,7 +206,7 @@ def build_index():
     if os.path.exists(DBSCAN):
         for fn, e in loadj(DBSCAN).items():
             k = fn.lower()
-            if k in repos and e.get("cands"):
+            if k in repos and e.get("cands") and not repos[k].get("dbs"):   # 引擎已判的不再兜底（引擎优先）
                 repos[k]["dbs"] = sorted(e["cands"].keys()); n_db += 1
     org_of_db = db_org_map()                       # P9：官方标记（owner 命中适配库的厂商 org）
     n_off = 0
@@ -202,11 +216,12 @@ def build_index():
         n_off += hit
     meta = {"ver": VER, "built_at": now(), "pool_file": POOL,
             "counts": {"pool": n_pool, "enrich": n_en, "rel_notes": n_notes, "judge": n_j, "text": n_t,
-                       "domain_tags": n_tag, "desc": n_desc, "dbscan": n_db, "readme0": n_rm,
-                       "official": n_off}}
+                       "domain_tags": n_tag, "desc": n_desc, "dbs_engine": n_eng, "dbscan": n_db,
+                       "readme0": n_rm, "official": n_off}}
     size = dumpj({"meta": meta, "repos": repos}, CACHE + "/index.json")
     print(f"OK index: pool={n_pool} enrich={n_en} relnotes={n_notes} judge={n_j} text={n_t} tags={n_tag} "
-          f"desc={n_desc} dbscan={n_db} readme0={n_rm} official={n_off} -> {size//1024} KB in {time.time()-t0:.1f}s")
+          f"desc={n_desc} dbs_engine={n_eng} dbscan={n_db} readme0={n_rm} official={n_off} "
+          f"-> {size//1024} KB in {time.time()-t0:.1f}s")
     return meta
 
 # ---------- ② 星数历史（按快照循环） ----------
@@ -328,7 +343,13 @@ def _selftest():
     assert is_official("dbeaver", ["PostgreSQL", "TiDB"], om) is False   # 工具仓不算
     assert is_official("", ["TiDB"], om) is False and is_official("x", [], om) is False
     assert is_official("postgres", ["MySQL"], om) is False           # 只认「适配了该库」的 org
-    print("OK build_cache selftest: 18 asserts passed")
+    assert dbs_of({"classification": {"dbs": ["MySQL", "PostgreSQL", "MySQL"]}},
+                  {"cands": {"SQLite": ["x"]}}) == (["MySQL", "PostgreSQL"], "engine")  # 引擎优先+去重排序
+    assert dbs_of({"classification": {"dbs": []}},
+                  {"cands": {"ClickHouse": ["x"]}}) == (["ClickHouse"], "dbscan")      # 引擎空才兜底
+    assert dbs_of(None, {"cands": {"ClickHouse": ["x"]}}) == (["ClickHouse"], "dbscan")
+    assert dbs_of({}, {}) == ([], "") and dbs_of(None, None) == ([], "")
+    print("OK build_cache selftest: 22 asserts passed")
     return 0
 
 def main():
