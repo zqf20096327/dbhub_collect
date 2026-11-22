@@ -15,58 +15,67 @@ v1.1（2026-11-12 用户三条指令）:
 """
 import argparse, copy, datetime, html, io, json, os, re, sys
 
-VER = "gen_card/1.8"   # 1.8：P1 SEO 化——title 公式/meta description/JSON-LD/canonical（DBHUB_SITE_BASE 注入）
+VER = "gen_card/1.9"   # 1.9：配色/字体对齐站点 app.css（青绿→accent 蓝 #3352cc、Inter 字体、底/卡面/线全站统一；
+                        #      用户令 11-22「以网页的配色字体保持一致」；公众号名片版不动=青绿是公众号品牌色）
+                        # 1.8：P1 SEO 化——title 公式/meta description/JSON-LD/canonical（DBHUB_SITE_BASE 注入）
 STALE_DAYS = 180
 POOL_DEFAULT = "D:/dbhub_collect/data/live/pool.ndjson"
 
-CSS = """  :root{
-    --brand:#0F766E; --brand-soft:rgba(15,118,110,.09);
-    --ink:#1F2937; --sub:#6B7280; --line:#E5E7EB;
-    --hi:#FEF9E3; --code-bg:#1E293B; --code-ink:#E2E8F0;
+CSS = """  /* P10.2 换装：色板/字体与站内 assets/app.css 同源（--accent/-soft/--ink/--muted/--line/--warn-bg）。
+     Inter 走站内同款变量字体：卡在 /p/{owner}/{repo}/ 下，恒三级回到根 assets/（dist 与镜像变体同深度），
+     加载失败自然回落系统栈。 */
+  @font-face { font-family: "Inter"; src: url("../../../assets/fonts/InterVariable.woff2") format("woff2-variations");
+               font-weight: 100 900; font-style: normal; font-display: swap; }
+  :root{
+    --brand:#3352cc; --brand-soft:#eef1fb;
+    --ink:#171a21; --sub:#666c78; --line:#dde2e9;
+    --hi:#fdf3e3; --code-bg:#161b22; --code-ink:#e6edf3;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
-    background:#F8FAFC; color:var(--ink);
-    font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
-    font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased;
+    background:#e9edf3; color:var(--ink);
+    font-family:"Inter","Segoe UI",-apple-system,"PingFang SC","Microsoft YaHei UI","Microsoft YaHei",sans-serif;
+    font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased;
+    font-variant-numeric:tabular-nums;
     padding:24px 16px 48px;
   }
   b, strong{ font-weight:600; }
-  .card{ max-width:680px; margin:0 auto; background:#fff; border:1px solid var(--line);
-    border-radius:14px; padding:20px 22px; display:flex; flex-direction:column;
+  .card{ max-width:680px; margin:0 auto; background:#fafbfd; border:1px solid var(--line);
+    border-radius:10px; padding:20px 22px; display:flex; flex-direction:column;
+    box-shadow:0 1px 2px rgba(23,26,33,.04), 0 4px 14px rgba(23,26,33,.05);
     overflow-wrap:anywhere; }   /* 继承属性：亮点里 a/b/c 无空格长串强制可断行，不撑破卡片 */
   .c-top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-  .chip{ font-size:12.5px; font-weight:600; color:var(--brand); background:var(--brand-soft);
+  .chip{ font-size:12px; font-weight:600; color:var(--brand); background:var(--brand-soft);
     padding:3px 8px; border-radius:4px; }
   .chip.sub{ color:var(--sub); background:transparent; border:1px solid var(--line); font-weight:400; }
-  .c-no{ margin-left:auto; font-size:12.5px; color:var(--sub); font-variant-numeric:tabular-nums; }
+  .c-no{ margin-left:auto; font-size:12px; color:var(--sub); font-variant-numeric:tabular-nums; }
   .c-body{ display:flex; gap:22px; margin-top:16px; align-items:center; }
   .c-left{ flex:1.5; min-width:0; }
-  .c-title{ font-size:28px; font-weight:600; letter-spacing:-0.3px; line-height:1.15; }
+  .c-title{ font-size:21px; font-weight:700; letter-spacing:-0.5px; line-height:1.2; }
   a.c-title{ color:var(--ink); text-decoration:none; }
   a.c-title:hover{ color:var(--brand); }
-  .pts-label{ margin-top:8px; font-size:12.5px; font-weight:600; color:var(--ink); }
-  .c-anchor{ font-size:12.5px; color:var(--sub); margin-top:6px; }
+  .pts-label{ margin-top:8px; font-size:12px; font-weight:600; color:var(--ink); }
+  .c-anchor{ font-size:12px; color:var(--sub); margin-top:6px; }
   .c-anchor b{ color:var(--ink); }
-  .c-meta{ margin-top:6px; font-size:12.5px; color:var(--sub);
+  .c-meta{ margin-top:6px; font-size:12px; color:var(--sub);
     display:flex; flex-wrap:wrap; row-gap:2px; line-height:1.5; }
   .c-meta span{ white-space:nowrap; }
-  .c-meta span:not(:last-child)::after{ content:"\\00b7"; margin:0 6px; color:#D1D5DB; }
+  .c-meta span:not(:last-child)::after{ content:"\\00b7"; margin:0 6px; color:var(--line); }
   .cap{ margin-top:10px; display:flex; align-items:center; flex-wrap:wrap; gap:6px; }
-  .cap-label{ font-size:12.5px; color:var(--sub); }
+  .cap-label{ font-size:12px; color:var(--sub); }
   .capchip{ font-size:12px; font-weight:600; color:var(--brand); background:var(--brand-soft);
     padding:2px 9px; border-radius:10px; }
   .capchip.mid{ background:transparent; border:1px solid var(--line); color:var(--sub); font-weight:400; }
   .c-right{ flex:1; display:flex; flex-direction:column; align-items:flex-end; min-width:0; }
-  .c-star{ font-size:28px; font-weight:600; line-height:1; font-variant-numeric:tabular-nums; }
-  .c-star .u{ font-size:16px; color:var(--brand); margin-left:2px; }
+  .c-star{ font-size:21px; font-weight:700; line-height:1; }
+  .c-star .u{ font-size:14px; color:var(--brand); margin-left:2px; }
   .spk{ width:100%; height:auto; display:block; margin-top:10px; }
   .sec{ margin-top:24px; }
   .t-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;
     padding-bottom:8px; border-bottom:1px solid var(--line); }
-  .t-title{ font-size:16px; font-weight:600; }
-  .t-sub{ font-size:12.5px; color:var(--sub); }
-  p{ margin-top:10px; font-size:15px; }
+  .t-title{ font-size:16px; font-weight:700; }
+  .t-sub{ font-size:12px; color:var(--sub); }
+  p{ margin-top:10px; font-size:14px; }
   p.pain{ color:var(--sub); }
   p.pain b{ color:var(--ink); }
   table.t{ width:100%; border-collapse:collapse; font-size:13px; }
@@ -80,13 +89,13 @@ CSS = """  :root{
   table.t td a{ color:var(--ink); text-decoration:none; border-bottom:1px solid var(--brand); }
   table.t td a:hover{ color:var(--brand); }
   .verdict{ margin-top:4px; display:grid; gap:10px; }
-  .v-item{ border:1px solid var(--line); border-radius:10px; padding:11px 13px; font-size:15px; }
-  .v-item .t{ font-size:12.5px; font-weight:600; margin-bottom:3px; }
+  .v-item{ border:1px solid var(--line); border-radius:10px; padding:11px 13px; font-size:14px; }
+  .v-item .t{ font-size:12px; font-weight:600; margin-bottom:3px; }
   pre{ background:var(--code-bg); color:var(--code-ink); border-radius:8px;
     padding:13px 15px; margin-top:4px; overflow-x:auto; font-size:13px; line-height:1.6; }
   code{ font-family:ui-monospace,Consolas,"Courier New",monospace; }
   .users{ margin-top:4px; display:grid; gap:8px; }
-  .user{ font-size:15px; padding-left:12px; border-left:3px solid var(--brand-soft); }
+  .user{ font-size:14px; padding-left:12px; border-left:3px solid var(--brand-soft); }
   ul.pts{ margin-top:8px; padding-left:18px; font-size:14px; color:var(--sub); }
   ul.pts li{ margin-top:4px; }
   @media (max-width:600px){
@@ -212,12 +221,12 @@ def render_spark(name, pts):
         f'<svg class="spk" viewBox="0 0 260 66" role="img" aria-label="{name} star trend {vals[0]} to {vals[-1]}">'
         f'<title>{name} star 趋势（{pts[0][0]} 至 {pts[-1][0]}）</title>'
         f'<desc>由 {vals[0]} 增长至 {vals[-1]}</desc>'
-        f'<line x1="8" y1="58" x2="252" y2="58" stroke="#E5E7EB" stroke-width="1"/>'
+        f'<line x1="8" y1="58" x2="252" y2="58" stroke="#dde2e9" stroke-width="1"/>'
         f'<path d="{area}" fill="rgba(15,118,110,.12)"/>'
-        f'<polyline points="{" ".join(P)}" fill="none" stroke="#0F766E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
-        f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="3" fill="#0F766E"/>'
-        f'<text x="8" y="64" font-size="11" fill="#6B7280">{d0}</text>'
-        f'<text x="252" y="64" font-size="11" fill="#6B7280" text-anchor="end">{d1}</text></svg>')
+        f'<polyline points="{" ".join(P)}" fill="none" stroke="#3352cc" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
+        f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="3" fill="#3352cc"/>'
+        f'<text x="8" y="64" font-size="11" fill="#666c78">{d0}</text>'
+        f'<text x="252" y="64" font-size="11" fill="#666c78" text-anchor="end">{d1}</text></svg>')
 
 def render_cap(card):
     """能力徽章行（卡头 meta 之下）：解读层词控标签，high 实色 / mid 描边；低置信与空标签不出行。"""
