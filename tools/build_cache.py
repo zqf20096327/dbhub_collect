@@ -15,7 +15,8 @@
 """
 import argparse, datetime, io, json, os, re, subprocess, sys, time, glob
 
-VER = "build_cache/1.3"   # 1.3：加 readme_file 字段（README 存档文件存在性，无 README 仓归档口径的判定源）
+VER = "build_cache/1.4"   # 1.4：judge 增 ai_kind 提升、全仓 official 标记（P9 站点浏览「属性」筛选数据源）；
+                          # 1.3：加 readme_file 字段（README 存档文件存在性，无 README 仓归档口径的判定源）
 ROOT = "D:/dbhub_collect"
 POOL = ROOT + "/data/live/pool.ndjson"
 VOCAB = ROOT + "/config/domain_vocab_v0.11.json"
@@ -91,6 +92,26 @@ def vocab_cn():
         pass
     return m
 
+def db_org_map():
+    """db_profiles orgs -> {库名小写: (org 登录名小写,…)}，str 与 dict 两种条目形态统一收。
+    名单即「厂商官方 org」（dedicated=org 即产品 / cloud=云厂商超集 org，都是官方）。"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("db_profiles_bcache", ROOT + "/config/db_profiles.py")
+    mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+    m = {}
+    for p in mod.PROFILES:
+        if not p.get("enabled", True): continue
+        names = {(o.get("name") if isinstance(o, dict) else o or "").lower()
+                 for o in (p.get("orgs") or [])}
+        names.discard("")
+        m[p["name"].lower()] = tuple(sorted(names))
+    return m
+
+def is_official(owner, dbs, org_of_db):
+    """官方 = owner 命中其适配库之一的厂商 org 名单（大小写不敏感）。工具仓/空 dbs 恒 False。"""
+    o = (owner or "").lower()
+    return bool(o) and any(o in org_of_db.get(str(d).lower(), ()) for d in (dbs or []))
+
 def build_index():
     t0 = time.time(); repos = {}
     cn = vocab_cn()
@@ -151,7 +172,8 @@ def build_index():
         if j:
             repos[k]["judge"] = {"cat": j.get("classification", {}).get("cat_primary"),
                                  "conf": j.get("audit", {}).get("confidence"),
-                                 "install": j.get("signals", {}).get("install")}
+                                 "install": j.get("signals", {}).get("install"),
+                                 "ai_kind": j.get("classification", {}).get("ai_kind")}
             n_j += 1
         t = layers["text"].get(sha)
         if t:
@@ -172,12 +194,19 @@ def build_index():
             k = fn.lower()
             if k in repos and e.get("cands"):
                 repos[k]["dbs"] = sorted(e["cands"].keys()); n_db += 1
+    org_of_db = db_org_map()                       # P9：官方标记（owner 命中适配库的厂商 org）
+    n_off = 0
+    for r in repos.values():
+        hit = is_official(r.get("owner"), r.get("dbs"), org_of_db)
+        r["official"] = hit                        # 显式写 True/False 两边（布尔字段只写 True 的旧坑）
+        n_off += hit
     meta = {"ver": VER, "built_at": now(), "pool_file": POOL,
             "counts": {"pool": n_pool, "enrich": n_en, "rel_notes": n_notes, "judge": n_j, "text": n_t,
-                       "domain_tags": n_tag, "desc": n_desc, "dbscan": n_db, "readme0": n_rm}}
+                       "domain_tags": n_tag, "desc": n_desc, "dbscan": n_db, "readme0": n_rm,
+                       "official": n_off}}
     size = dumpj({"meta": meta, "repos": repos}, CACHE + "/index.json")
     print(f"OK index: pool={n_pool} enrich={n_en} relnotes={n_notes} judge={n_j} text={n_t} tags={n_tag} "
-          f"desc={n_desc} dbscan={n_db} readme0={n_rm} -> {size//1024} KB in {time.time()-t0:.1f}s")
+          f"desc={n_desc} dbscan={n_db} readme0={n_rm} official={n_off} -> {size//1024} KB in {time.time()-t0:.1f}s")
     return meta
 
 # ---------- ② 星数历史（按快照循环） ----------
@@ -290,7 +319,16 @@ def _selftest():
     assert note_first("- PostgreSQL 19beta4 support.") == "PostgreSQL 19beta4 support."
     assert note_first("See [link](http://x) for more. tail") == "See link for more."
     assert note_first("") == "" and note_first("short") == ""
-    print("OK build_cache selftest: 10 asserts passed")
+    om = db_org_map()                                    # P9：官方 org 名单（str/dict 两种形态统一收）
+    assert om["tidb"] == ("pingcap", "tidb-incubator", "tidb-samples", "tikv")
+    assert "percona" in om["postgresql"] and "percona" in om["mysql"]   # 一 org 双库合法
+    assert "clickhouse" in om["clickhouse"]                          # 国际 str 形态小写化
+    assert is_official("pingcap", ["TiDB", "MySQL"], om) is True     # 命中自家库 org
+    assert is_official("PingCAP", ["TiDB"], om) is True              # 大小写不敏感
+    assert is_official("dbeaver", ["PostgreSQL", "TiDB"], om) is False   # 工具仓不算
+    assert is_official("", ["TiDB"], om) is False and is_official("x", [], om) is False
+    assert is_official("postgres", ["MySQL"], om) is False           # 只认「适配了该库」的 org
+    print("OK build_cache selftest: 18 asserts passed")
     return 0
 
 def main():

@@ -24,12 +24,19 @@ URL 规范（与 P3 dbhub_page 改造约定一致，改这里必须同步那边�
   类  /cat/{cat-slug}/{n}.html      （n=1 省略，即 /cat/{cat-slug}/）
   总  /projects/{n}.html            （n=1 省略）
 """
-import argparse, datetime, io, json, os, re, sys, time
+import argparse, datetime, glob, io, json, os, re, sys, time
 import xml.etree.ElementTree as ET
 
-VER = "build_site/1.2"   # 1.2：light() 增 dbs（站点旧版排版复刻需要：清单「库」列 + 冠军矩阵通用标记）；1.1：补 urls.json 契约出口
+VER = "build_site/1.4"   # 1.4：部署口径 A（用户裁定 11-21）——站内只部署归属过（dbs 非空）的卡，未归属不删源待归属补证自动回站；
+                          # 1.3：light() 增 mnt/off/sec/ai/created/pushed/relpub（P9 站点浏览「属性」筛选/排序字段）；
+                          # 1.2：light() 增 dbs（站点旧版排版复刻需要：清单「库」列 + 冠军矩阵通用标记）；1.1：补 urls.json 契约出口
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PAGE = 100
+TODAY = datetime.date.today()
+
+# v4 ai_kind 的 AI 取值（与 lib/interp_read.AI_KINDS 同源；跨仓不 import，两处各写一份并注释）
+AI_KINDS = frozenset(("mcp", "rag", "text2sql", "dba-agent"))
+STALE_DAYS = 180        # 疑似停维：pushed_at 距生成日 >180 天（与 gen_card 擂台停更口径同源）
 
 def now(): return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 def loadj(p): return json.load(io.open(p, encoding="utf-8"))
@@ -59,20 +66,45 @@ def hostile(fn):
     与 dbhub_page/gen/cards.py 的判定保持同步（跨仓不 import，两处各写一份并注释）。"""
     return any(s != s.rstrip(". ") for s in fn.split("/"))
 
+def deployable(r):
+    """P9.7 口径 A（用户裁定 11-21）：站内只部署归属过（dbs 非空）的卡——redis/duckdb/etcd 等
+    17 库外引擎与归属漏判工具一律不进清单/类目/卡页/sitemap；源卡不删，归属引擎补上证据即自动回站
+    （gen 侧周刊钉住的例外归 weekly/issues 白名单管，见 cards.py）。"""
+    return bool(r.get("dbs"))
+
 def cat_of(r):
     return ((r.get("judge") or {}).get("cat")) or ((r.get("desc") or {}).get("cat"))
 
 def one_liner(r):
     return ((r.get("text") or {}).get("one_liner") or (r.get("desc") or {}).get("one_liner") or "").strip()
 
+def mnt_of(r, today=TODAY):
+    """维护三态：archived -> gone（弃用/归档）；pushed_at 距 today ≥180 天 -> stale（疑似停维）；else ok。
+    天数边界与 gen_card.stale_marker 同口径（days>=180 即停更，勿写 >180 差一天）；无/坏日期按 ok
+    （宁松勿误杀）。today 参数供 selftest 定日。"""
+    if r.get("archived"): return "gone"
+    p = str(r.get("pushed_at") or "")[:10]
+    try: d = datetime.date.fromisoformat(p)
+    except ValueError: return "ok"
+    return "stale" if (today - d).days >= STALE_DAYS else "ok"
+
 def light(fn, r):
     """列表分片轻字段：够列表页渲染即可，严禁整卡拷贝（卡 JSON 有 _fp 等内部字段，且体积失控）。
     dbs=适配库名单全量不截（P8 组合页成员口径：一卡多库须进全部分属组合；曾截前 6 致 dbeaver
-    这类多库工具缺席第 7 库起的组合页，+N 徽标也变假数）；展示层截断归渲染端 db_tags 的 [:3]+N。"""
+    这类多库工具缺席第 7 库起的组合页，+N 徽标也变假数）；展示层截断归渲染端 db_tags 的 [:3]+N。
+    P9 增七字段（浏览筛选/排序）：mnt=维护三态(off 见 official)、off=官方 1/0（build_cache 按
+    db_profiles orgs 名单判定）、sec=有安全通告 1/0（enrich sec_n>0，宽于旧版「高危」——severity
+    已不在管线，勿按高危口径宣传）、ai=AI 项目 1/0（ai_kind 四类）、created/pushed/relpub=排序日期源。"""
+    en = r.get("enrich") or {}
     return {"fn": fn, "name": (fn.split("/")[-1] if "/" in fn else fn),
             "stars": r.get("stars"), "lang": r.get("language"), "cat": cat_of(r),
             "dbs": r.get("dbs") or [],
-            "ol": one_liner(r)[:120], "url": f"/p/{fn}/"}
+            "ol": one_liner(r)[:120], "url": f"/p/{fn}/",
+            "mnt": mnt_of(r), "off": 1 if r.get("official") else 0,
+            "sec": 1 if (en.get("sec_n") or 0) > 0 else 0,
+            "ai": 1 if (r.get("judge") or {}).get("ai_kind") in AI_KINDS else 0,
+            "created": r.get("created_at"), "pushed": r.get("pushed_at"),
+            "relpub": en.get("rel_pub")}
 
 def paged(items, page=PAGE):
     return [items[i:i + page] for i in range(0, len(items), page)] or [[]]
@@ -89,12 +121,16 @@ def site_base():
 def build_lists(site):
     t0 = time.time(); idx = loadj(ROOT + "/cache/index.json")["repos"]
     man = loadj(ROOT + "/cards/manifest.json")["cards"]
-    items = [light(fn, idx[fn]) for fn in man if fn in idx]
-    assert len(items) == len(man), f"index 缺活跃仓 {len(man) - len(items)} 个"
+    miss = [fn for fn in man if fn not in idx]
+    assert not miss, f"index 缺活跃仓 {len(miss)} 个，样例 {miss[:3]}"
+    items = [light(fn, idx[fn]) for fn in man if deployable(idx[fn])]   # P9.7 口径 A：未归属不部署
+    n_unattr = len(man) - len(items)
     skp = sorted(fn for fn in man if hostile(fn))
     if skp: print(f"SKIP 站点不部署 {len(skp)} 个 Windows 敌对仓名: {skp[:3]}")
     items = [it for it in items if not hostile(it["fn"])]
     os.makedirs(site + "/data/cat", exist_ok=True); os.makedirs(site + "/data/db", exist_ok=True)
+    for f in glob.glob(site + "/data/all-*.json") + glob.glob(site + "/data/cat/*.json"):
+        os.remove(f)     # 全量重写前清场（P9.7 坑：分页数收缩——如 140→114 页——旧尾部分片残留会被 gen 读成新旧混合）
     n_urls = 0; n_files = 0; total = 0
     by_cat = {}
     for it in items:
@@ -123,7 +159,7 @@ def build_lists(site):
         dumpj({"db": d, "slug": slugify(d), "count": len(lst), "items": lst[:500]},
               f"{site}/data/db/{slugify(d)}.json"); n_files += 1   # 库页封顶 500 热门，长尾走类目页
     assert total == len(items), f"类目分片总数 {total} != 活跃 {len(items)}（一卡多类目=分组 bug）"
-    print(f"OK lists: 活跃={len(items)} 类目={len(by_cat)} 分片文件={n_files} "
+    print(f"OK lists: 活跃={len(items)}（未归属不部署 {n_unattr}） 类目={len(by_cat)} 分片文件={n_files} "
           f"库页={len(dbs)} -> site/data in {time.time()-t0:.1f}s")
     return {"cats": by_cat, "pages_all": len(pages), "n_urls": n_urls, "items": items, "dbs": dbs}
 
@@ -150,12 +186,13 @@ def build_vs(site):
         except Exception: continue
         b = c.get("basics") or {}
         if (b.get("stars") or 0) < VS_HERO_STARS: continue
+        if not deployable(idx.get(fn, {})): continue            # P9.7：未归属主角不部署 -> 不出对比页
         rows = (c.get("arena") or {}).get("rows") or []
         hero = next((r for r in rows if r.get("me")), None)
         rival = next((r for r in rows if not r.get("me") and (r.get("score") or 0) >= 0.6), None)
         if not hero or not rival: continue
-        if rival["fn"] not in man or hostile(rival["fn"]):
-            n_rival_out += 1; continue          # 对手是归档/敌对名仓 -> 无 /p/ 页可链，弃对（内链 404 会被 gen VERIFY 拦）
+        if rival["fn"] not in man or hostile(rival["fn"]) or not deployable(idx.get(rival["fn"], {})):
+            n_rival_out += 1; continue          # 对手是归档/敌对名/未归属仓 -> 无 /p/ 页可链，弃对（内链 404 会被 gen VERIFY 拦）
         n_hero += 1
         pair = tuple(sorted([fn, rival["fn"]], key=lambda x: (-(idx.get(x, {}).get("stars") or 0), x)))
         slug = vs_slug(pair)
@@ -186,7 +223,8 @@ def build_sitemap(site):
     t0 = time.time(); base = site_base(); ct_vs = "/vs/{slug}/"
     idx = loadj(ROOT + "/cache/index.json")["repos"]
     man = loadj(ROOT + "/cards/manifest.json")["cards"]
-    items = [light(fn, idx[fn]) for fn in man if fn in idx and not hostile(fn)]
+    items = [light(fn, idx[fn]) for fn in man if fn in idx and not hostile(fn)
+             and deployable(idx[fn])]                          # P9.7：未归属卡不进 sitemap（卡页不部署）
     by_cat = {}
     for it in items: by_cat.setdefault(it["cat"] or "综合", []).append(it)
     urls = ["/", "/projects/"] + [f"/db/{slugify(d)}/" for d in
@@ -239,7 +277,25 @@ def _selftest():
          "text": {"one_liner": "x" * 200}}
     it = light("a/b", r)
     assert it == {"fn": "a/b", "name": "b", "stars": 9, "lang": "Go", "cat": "备份",
-                  "dbs": ["PostgreSQL"], "ol": "x" * 120, "url": "/p/a/b/"}
+                  "dbs": ["PostgreSQL"], "ol": "x" * 120, "url": "/p/a/b/",
+                  "mnt": "ok", "off": 0, "sec": 0, "ai": 0,
+                  "created": None, "pushed": None, "relpub": None}     # P9 七字段缺省安全
+    T = datetime.date(2026, 11, 21)
+    assert mnt_of({"archived": True}, T) == "gone"
+    assert mnt_of({"archived": True, "pushed_at": "2026-11-20"}, T) == "gone"   # archived 优先
+    assert mnt_of({"pushed_at": "2026-01-01"}, T) == "stale"                    # 324 天 ≥ 180
+    assert mnt_of({"pushed_at": str(T - datetime.timedelta(days=180))}, T) == "stale"   # 恰 180 天也算（同 gen_card）
+    assert mnt_of({"pushed_at": str(T - datetime.timedelta(days=179))}, T) == "ok"      # 179 天不算
+    assert mnt_of({"pushed_at": "2026-11-15T10:30:00Z"}, T) == "ok"             # datetime 形态取前 10 位
+    assert mnt_of({}, T) == "ok" and mnt_of({"pushed_at": "bad"}, T) == "ok"    # 无/坏日期按 ok
+    r9 = {"judge": {"cat": "管理", "ai_kind": "mcp"}, "official": True,
+          "enrich": {"sec_n": 2, "rel_pub": "2026-11-01"}, "pushed_at": "2020-01-01",
+          "created_at": "2015-10-21"}
+    it9 = light("p/q", r9)
+    assert (it9["ai"], it9["off"], it9["sec"], it9["mnt"]) == (1, 1, 1, "stale")
+    assert (it9["relpub"], it9["created"], it9["pushed"]) == ("2026-11-01", "2015-10-21", "2020-01-01")
+    assert light("r/s", {"judge": {"cat": "备份", "ai_kind": "other"},
+                         "enrich": {"sec_n": 0}})["ai"] == 0                    # other=非 AI
     assert light("c/d", {"desc": {"cat": "管理", "one_liner": "y"}})["cat"] == "管理"
     assert light("e/f", {})["cat"] is None and light("e/f", {})["ol"] == ""   # 空仓安全
     assert slugify("内核/引擎") == "misc" and slugify("YashanDB") == "yashandb"
@@ -250,7 +306,7 @@ def _selftest():
     u = {"card": "/p/{fn}/", "db": "/db/{slug}/", "cat_page": "/cat/{slug}/{n}.html", "vs": "/vs/{slug}/"}
     assert vs_slug(("a/b", "c/d")) == "a__b--c__d"                     # vs slug 无歧义拼接
     assert u["card"].format(fn="a/b") == "/p/a/b/" and u["db"].format(slug="x") == "/db/x/"  # 契约模式可格式化
-    print("OK build_site selftest: 13 asserts passed")
+    print("OK build_site selftest: 23 asserts passed")
     return 0
 
 def main():
