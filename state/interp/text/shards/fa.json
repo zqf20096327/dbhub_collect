@@ -3264,5 +3264,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ad0488d4e346": {
+  "identity": {
+   "one_liner": "面向 Debian 13 VPS 的 WordPress 专用服务器管理面板，Go 单二进制实现。",
+   "review": "WP Panel 是一个 GPL-3.0 开源的 WordPress 服务器管理面板，面向管理 Debian 13 VPS 的用户，覆盖建站、SSL、备份、更新、安全防护等托管操作。它以 Go 单二进制运行，组件经 APT 安装，每站采用独立系统用户与 PHP-FPM Pool 隔离；不做 Docker、邮件、FTP 等功能，仅支持 Debian 13 x86_64，CPU/内存等资源为整机共享。",
+   "highlights": [
+    "提供网站创建/暂停/删除、Let's Encrypt 自动签发与续签、自动备份及异地同步（另一台服务器或 S3 兼容存储）等托管功能",
+    "站点隔离基于独立系统用户、PHP-FPM Pool、独立 MariaDB 数据库与 open_basedir 实现；面板为 Go + Gin 编写的约 20 MB 单二进制，经 systemd 守护，数据存于 SQLite（WAL）",
+    "提供 `wpp` 命令行工具用于重启面板、重置密码、查看状态与清空 IP 封禁；安装脚本支持 `--check` 只读检查模式"
+   ],
+   "use_cases": [
+    "在 Debian 13 VPS 上托管一个或多个 WordPress 网站，需要站点隔离、SSL 证书和自动备份",
+    "需要在面板内集中查看多站点 WordPress 版本/插件/主题待更新项目，并执行带备份回滚的批量更新",
+    "在两台相同版本的 WP Panel 服务器之间搬迁 WordPress 或通用 PHP 网站（文件、数据库、域名、SSL 证书等）"
+   ]
+  },
+  "sha": "ad0488d4e346",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a8ae1f17c1d9": {
+  "identity": {
+   "one_liner": "本地优先的 AI 智能体记忆层，以 Markdown 存储、SQLite 索引、MCP 提供访问",
+   "review": "Noema 是一个用 Rust 编写的智能体记忆层，将每条记忆（Trace）保存为普通 Markdown 文件，用本地 SQLite + FTS5 做索引，并通过 MCP 服务器（stdio 和 Streamable HTTP）供 Claude Code、Copilot、Cursor 等客户端读写。核心存储与词法检索本地运行、无需 API 密钥；支持按 fact/decision/skill 等类型分类，以及基于向量时钟的多 Cortex 点对点联邦同步。项目处于 v0.x 阶段，小版本间可能存在破坏性变更。",
+   "highlights": [
+    "每条记忆为磁盘上的纯 Markdown 文件，SQLite FTS5 作为本地索引，核心存储与词法检索无需 API 密钥",
+    "以 MCP 服务器形式暴露（stdio + Streamable HTTP），兼容 Claude Code、Copilot、Zed、Cursor、Aider 等支持 MCP 的客户端",
+    "支持基于向量时钟与事件日志审计的 Cortex 间点对点联邦，并发编辑自动生成 divergence 记录"
+   ],
+   "use_cases": [
+    "为多智能体工作流提供跨会话持久的结构化记忆存储",
+    "在 Obsidian、VS Code 等编辑器中直接管理智能体记忆，文件系统监视器将编辑转为变更事件",
+    "在多个设备或环境间同步独立 Cortex 的记忆内容"
+   ]
+  },
+  "sha": "a8ae1f17c1d9",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e6a4cc6c9882": {
+  "identity": {
+   "one_liner": "SSM 框架课程项目，实现图文 CMS 与 UGC 社区",
+   "review": "轻享图文是《Java框架技术(一)》课程小组项目，基于 JDK 17 + Spring MVC + MyBatis-Plus + MySQL + JSP 构建带 RBAC 权限、内容审核、评论关注等模块的图文社区系统。项目按三人模块分工，采用增量垂直切片开发模式，main 分支保持可启动，支持 Maven war 打包并通过 cargo 或 IDEA + Tomcat 9 运行。",
+   "highlights": [
+    "包含账号权限、内容分类审核、互动关注分发三个模块，涉及 sys_user、article、comment 等六张核心表",
+    "使用 Spring AOP 实现接口权限校验，RESTful API 配合 ApiFox",
+    "通过 sql 目录脚本初始化数据库，支持 mvn cargo:run 或 IDEA Tomcat 部署，端口 18080"
+   ],
+   "use_cases": [
+    "Java 框架技术课程的设计作业与答辩演示",
+    "学习 SSM 全注解开发、RBAC 六表权限设计的参考实现",
+    "练习多人 Git 分支协作与增量式项目交付流程"
+   ]
+  },
+  "sha": "e6a4cc6c9882",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

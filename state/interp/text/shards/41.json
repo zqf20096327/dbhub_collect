@@ -2854,5 +2854,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "20f54ceefbc5": {
+  "identity": {
+   "one_liner": "将仓库已验证错误笔记转为项目本地本体库的 Rust CLI",
+   "review": "MISTOLOGY 是单个二进制的 Rust CLI 与 agent skill，把仓库中经过验证的错误教训存为 .mistology/notes/ 下的 Git 跟踪 Markdown 笔记，并用可重建的 SQLite FTS5 索引与有向 1/2-hop 耦合图检索。面向 Claude Code、Codex、Gemini CLI、Cursor 等 agent 用户，mistology setup 可自动注册内置 SKILL.md 与钩子；笔记写入要求同时提供失败证据与验证证明。",
+   "highlights": [
+    "单二进制 Rust CLI，运行时依赖为零，license 为 MIT OR Apache-2.0",
+    "search -b 返回最多 6 条预检简报，包含 1-hop 与 2-hop 有向耦合链",
+    "笔记以 Markdown 存储（含 files/symbols/coupled 前置字段），索引 index.db 可删除并在下次搜索时自动重建"
+   ],
+   "use_cases": [
+    "编码 agent 在修改多文件功能前运行预检查询，查看耦合模块与已验证修复",
+    "构建/测试失败时按错误签名检索历史笔记，避免重复已弃用的修补方式",
+    "对已有大量 bugfix 提交的仓库，从 git log 扫描并播种已验证的错误笔记"
+   ]
+  },
+  "sha": "20f54ceefbc5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "27af2a263390": {
+  "identity": {
+   "one_liner": "基于 Python/SQLite 的命令行工具，用于追踪多环境包漏洞与更新。",
+   "review": "netwatch 是一个 Python CLI 工具，检查 Ubuntu、Arch/CachyOS、conda/mamba、uv 与 npm 环境中的漏洞和可用更新，可将清单中的包与 Canonical、Arch 及 OSV 公告匹配，结果存入 SQLite。适合需要跨本机和 SSH 远程主机汇总安全更新信息的用户。限制：apply 会更新整个环境，OS 更新需 sudo -n，Python/npm 检查会把包名和版本发送到 OSV。",
+   "highlights": [
+    "本地或经 SSH 检查 Ubuntu、Arch/CachyOS、conda/mamba、uv、npm 五类环境",
+    "将安装包匹配 Canonical、Arch 与 OSV 公告，可选用 --context 获取 cve.now、pwn.watch 与 Zero Wire 补充信息",
+    "发现与历史存于 SQLite，支持文本与 JSON 输出及 --since 游标分页查询"
+   ],
+   "use_cases": [
+    "汇总多台服务器与本地项目环境的漏洞报告并查看修复版本",
+    "通过 preview/apply 流程审查并执行环境更新",
+    "以 JSON 输出让脚本或代理只读查询漏洞状态与更新历史"
+   ]
+  },
+  "sha": "27af2a263390",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

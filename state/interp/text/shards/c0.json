@@ -3210,5 +3210,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "01b9b875440d": {
+  "identity": {
+   "one_liner": "单二进制 SQL 数据库 MCP 服务器，内置 PII 脱敏与写保护",
+   "review": "dbmcp 是一个 MCP 服务器，供 AI 助手（如 Claude Desktop、Cursor、VS Code 等）连接 MySQL/MariaDB、PostgreSQL 或 SQLite。以约 7 MB 单二进制分发，无需 Python/Node/Docker，支持 stdio 与 HTTP 两种传输、SSH 隧道及分层配置（环境变量、env 文件、YAML）。默认开启只读模式，内置 PII 脱敏；各工具对不同后端的可用性存在差异，如 SQLite 不支持 listDatabases。",
+   "highlights": [
+    "单二进制（约 7 MB）支持 MySQL/MariaDB、PostgreSQL、SQLite 三种后端，无运行时依赖",
+    "提供 schema 发现（listDatabases/listTables/listViews/listTriggers 等）、读写查询、DDL 与 explainQuery 等 MCP 工具；只读模式下隐藏写入类工具",
+    "支持 stdio 与 HTTP 传输、SSH 隧道（内嵌客户端，密码/密钥认证）、DBMCP_* 环境变量与 YAML 配置文件分层配置"
+   ],
+   "use_cases": [
+    "让 Claude Desktop、Cursor、VS Code 等 MCP 客户端查询与浏览 SQL 数据库结构",
+    "通过 HTTP 传输与 bearer token 供远程或多客户端连接数据库",
+    "经由 SSH 堡垒机以只读方式访问内网 MySQL/MariaDB/PostgreSQL 数据库"
+   ]
+  },
+  "sha": "01b9b875440d",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "44881402c712": {
+  "identity": {
+   "one_liner": "Go 编写的 WhatsApp LLM 机器人，内置按人组织的长期记忆系统",
+   "review": "wagoya 将一个 WhatsApp 号码接入 LLM，以伴生设备方式通过 whatsmeow 连接，编译为无 CGO 的单一静态二进制，使用纯 Go SQLite 存储。机器人可被私聊或在群聊中被 @提及触发；面向拥有 whitelisted 号码的运营者。记忆按 WhatsApp LID/号码建档而非显示名，事实写入需通过校验工具，并记录来源与可信度；支持 FTS5 关键词加嵌入的事实检索。私聊仅限白名单号码，模型日支出上限为 2 美元。",
+   "highlights": [
+    "记忆档案按 WhatsApp LID 或电话号码键控，事实通过 save_fact/invalidate_fact 等校验工具由模型写入，每条事实记录来源与信任等级",
+    "事实检索基于 SQLite FTS5 关键词与嵌入的组合查询，另有后台整理器在每 16 条消息或静默 10 分钟后自动保存事实与昵称",
+    "支持 anthropic、openrouter、openai 兼容 API 及 Claude Code CLI 四种模型接入方式，并提供 web_search、http_request、MCP 客户端等工具"
+   ],
+   "use_cases": [
+    "在个人或群聊中运行一个可长期记住聊天对象信息（背景、偏好、昵称）的 WhatsApp 助手",
+    "通过 `!key` 存储与 MCP 配置接入外部 API 和工具服务，让机器人在对话中调用这些能力",
+    "需要设置定时提醒、任务清单与重复消息的场景，任务持久化存储并支持重启后恢复"
+   ]
+  },
+  "sha": "44881402c712",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3159,5 +3159,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "84c9f4d9a5df": {
+  "identity": {
+   "one_liner": "基于 Go 泛型的类型安全 ORM，用字段指针实现编译期查询检查",
+   "review": "ant 是一个 Go 语言 ORM，要求 Go 1.27 以上，通过泛型让查询条件接受字段指针（如 ant.Gt(&Users.Age, 18)），在编译期检查列名和值类型，无需代码生成。支持 PostgreSQL、MySQL、MariaDB、SQLite、SQL Server 的读写，迁移目前仅限 PostgreSQL，项目处于 1.0 之前的阶段。提供 Include 关联加载、变更跟踪、事务、软删除等特性，适合希望在 Go 中以普通 struct 为模型、依赖编译器检查查询的开发者。",
+   "highlights": [
+    "查询条件、关联、聚合、子查询、CTE、窗口函数均经编译器类型检查，使用字段指针而非字符串",
+    "支持 1:1、1:N、多对多关系，通过 Include 显式批量加载；提供变更跟踪，SaveChanges 仅写入变更列",
+    "支持事务（savepoint、隔离级别、重试、读副本）、软删除、乐观并发、迁移漂移检查及 OpenTelemetry 等工具链"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 或 MySQL 等数据库上以普通 struct 建模并需要编译期查询检查的 Go 项目",
+    "需要批量关联加载、变更跟踪与批量写入的数据访问层",
+    "使用 Claude Code、Cursor 等 AI 辅助编码且需向助手提供项目文档的场景"
+   ]
+  },
+  "sha": "84c9f4d9a5df",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7841ec0df00d": {
+  "identity": {
+   "one_liner": "人与各AI在群组内协作接卡、回报、交接的自托管平台",
+   "review": "Aigile-Switch 是一个协作平台，让团队成员与各自的 AI 代理（Claude Code、Codex、opencode 等）在同一群组中收发消息、认领卡片、回报进度和交接。数据存 SQLite，通过 Docker 一行命令启动，也支持 Node 直接运行或部署到 Cloudflare Workers。使用者需生成接入文字让 AI 按公开协议自行接入；公开部署前必须设置 ADMIN_PASSWORD。",
+   "highlights": [
+    "提供群组消息、工作看板、卡片交接与验收、决策卡和「要你处理」汇总页面，AI 只能改动自己负责的卡片",
+    "内置 AI 唤醒机制与即时通知，支持通过一次性接入链接（不含 Token）让 AI 按 /api/docs/ai-integration 规格接入",
+    "支持 Docker、Node（npm start）和 Cloudflare Workers 三种部署方式，默认使用 SQLite，可选 Postgres"
+   ],
+   "use_cases": [
+    "团队希望人与多个 AI 代理在同一群组内共同认领和交接任务",
+    "个人或企业在本地或内网自托管、数据保留在本地的协作场景",
+    "需要 AI 按角色模板领取卡片、回报进度并等待人类验收或退回的工作流"
+   ]
+  },
+  "sha": "7841ec0df00d",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3705,5 +3705,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "71ab5e6680bf": {
+  "identity": {
+   "one_liner": "Telegram 语言学习机器人，按 CEFR 等级发送带电影片段的表达式与 AI 讲解。",
+   "review": "SceneLingo 是一个 Telegram 机器人，订阅者选择学习语言、CEFR 等级（A2–C2）、讲解语言和投递间隔（30 分钟至 24 小时）后，接收附电影片段、AI 释义与间隔复习的表达式。技术栈为 Python/python-telegram-bot、Neon Postgres、Groq（qwen3.8-27b 与 Whisper）和 Clip.Cafe，通过 GitHub Actions 与 cron-job.org 调度，可部署于 Vercel webhook。适合面向个人学习者的内容投递场景。README 提示多语言投递为实验性，不保证恰好一次送达。",
+   "highlights": [
+    "支持 10 种语言菜单（含英语、中文、阿拉伯语等）作为学习/讲解语言，CEFR 等级 A2–C2 可选",
+    "通过 Groq 生成表达式、讲解并做音频验证，从 Clip.Cafe 搜索短电影片段，验证通过后才发送",
+    "每个机器人使用独立 Postgres schema 隔离订阅数据；只读管理面板以 Basic 认证展示聚合统计，不返回订阅者身份信息"
+   ],
+   "use_cases": [
+    "向订阅者按所选语言和 CEFR 等级定时推送带片段的语言学习内容",
+    "需要间隔复习机制的语言学习辅助",
+    "自托管方为零依赖外部平台（Vercel/Neon/GitHub Actions 免费层）的个人部署场景"
+   ]
+  },
+  "sha": "71ab5e6680bf",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "14bbf0ee8ee9": {
+  "identity": {
+   "one_liner": "Rust 编写的单机内存优先向量数据库，含 HNSW 检索、pgwire/HTTP 双接口与 WAL 持久化",
+   "review": "HouyiDB 是一个以 Rust 实现的单机向量数据库，采用内存优先架构，提供 HNSW 向量检索、PAX 行列混存、pgwire 与 HTTP 双接口，并通过 WAL 与磁盘快照支持 kill -9 后的重启恢复。面向 AI/RAG 应用开发者，可通过 Docker 或源码运行，附 Python/TypeScript/Go 等六语言 SDK 及 MCP server。README 标注当前版本为 v0.2.0-beta.9。",
+   "highlights": [
+    "HNSW 检索支持双速写入（HotBuffer + Async-Builder）与 SIMD 距离计算（NEON/AVX feature 隔离），兼容 Clustered/PQ/HII-L0 多后端",
+    "pgwire 协议支持 text/binary 与 SQL 混合检索，含谓词下推 bitset 剪枝；WAL 提供异步写线程、checkpoint/rotate 与冷启动恢复",
+    "提供六语言 SDK（统一 stable_id 生成规则）、LangChain/LlamaIndex adapter 及 stdio MCP server"
+   ],
+   "use_cases": [
+    "RAG 应用中的向量写入与混合检索",
+    "使用 pgwire/SQL 客户端或 LangChain/LlamaIndex 接入向量检索流程",
+    "通过 C ABI 在 iOS/Android 移动端使用轻量索引"
+   ]
+  },
+  "sha": "14bbf0ee8ee9",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

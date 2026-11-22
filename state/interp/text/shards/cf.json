@@ -3457,5 +3457,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b7a9af68cb21": {
+  "identity": {
+   "one_liner": "为 Linux、macOS 和 Windows 提供 PostgreSQL 预编译二进制的分发项目",
+   "review": "该项目按 postgresql-<版本>-<目标元组> 命名发布 PostgreSQL 15–19 的预编译归档包，覆盖 GNU/musl Linux、macOS、Windows MSVC 的 ARM64 与 x86-64 目标；版本号与 PostgreSQL 版本体系兼容，附带可在本地运行的各平台构建脚本，发布由 GitHub Actions 完成。适合需要不经系统包管理器获取 PostgreSQL 二进制的用户。",
+   "highlights": [
+    "提供 Linux GNU/musl、macOS、Windows MSVC 平台 ARM64 与 x86-64 目标的 PostgreSQL 归档包",
+    "版本号采用 <postgres major>.<postgres minor>.<release> 方案，与 PostgreSQL 版本体系兼容",
+    "提供可在本地运行的按平台划分的 Bash 构建脚本，Linux 构建依赖 Docker Buildx"
+   ],
+   "use_cases": [
+    "在无法使用系统包管理器的环境中安装 PostgreSQL",
+    "为 Rust 项目按 target tuple 获取匹配平台的 PostgreSQL 二进制",
+    "在 CI 或本地按指定版本与目标自行构建 PostgreSQL 安装包"
+   ]
+  },
+  "sha": "b7a9af68cb21",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "38003ffb9e46": {
+  "identity": {
+   "one_liner": "Rust 引擎驱动的数据库表传输库，按线格式并行搬表、内存有界",
+   "review": "apitap 是一个数据库间整表传输引擎，通过自带的 Rust 线协议客户端（Postgres COPY、ClickHouse RowBinary、MySQL LOAD DATA、逻辑复制 binlog 等）以并行 range 管道搬表，内存按容器 cgroup 限额而非表大小规划，支持原子交换、增量、log_based CDC 及跨库 SQL join。提供单函数 Python API（pip 安装，CPython ≥3.9，abi3 wheel），MIT 许可，当前版本 0.68.0，建议 pre-1.0 阶段锁定版本。",
+   "highlights": [
+    "支持 Postgres、MySQL/MariaDB、ClickHouse、BigQuery、Iceberg、S3/GCS 等源与目标，提供 replace/append/merge/log_based 四种模式",
+    "内存占用由管道数×缓冲区决定并按 cgroup 限额规划，README 记录 256 MB 容器搬运 100 GB 表",
+    "apitap.sql() 可在 Rust 引擎中对不同数据库的表执行 join 与聚合，结果可经 Arrow C 流输出为 polars、pyarrow、duckdb、pandas"
+   ],
+   "use_cases": [
+    "在资源受限容器中定时批量搬迁数据库整表（可由 cron、Airflow、Kubernetes 调度）",
+    "从 Postgres/MySQL 到 ClickHouse、BigQuery、Iceberg 等目标的增量同步与批量 CDC",
+    "跨多个异构数据源的 SQL join 与聚合分析，结果写入 DataFrame 或目标库"
+   ]
+  },
+  "sha": "38003ffb9e46",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5dca279fb151": {
+  "identity": {
+   "one_liner": "开源个人财务管理应用，内置第一方 MCP 服务器供 AI 客户端读写账务。",
+   "review": "Finlynq 是 AGPL v3 许可的开源个人财务应用，支持免费云托管或 Docker 自托管，可记录账户、交易、预算、目标、贷款与投资组合。其内置第一方 MCP 服务器提供 58 个 HTTP / 89 个 stdio 工具，供 Claude、ChatGPT、Cursor 等 AI 客户端读写财务数据。敏感字段采用 AES-256-GCM 信封加密；公开的 pf_* API 密钥无作用域且不过期，REST 响应结构不保证稳定。",
+   "highlights": [
+    "提供 100+ MCP 工具（HTTP 与 stdio），支持经 OAuth 2.1 + DCR 连接 Claude、ChatGPT、Gemini、Cursor、Windsurf 等客户端",
+    "支持 CSV、Excel、OFX/QFX、PDF 导入，含预算、投资组合、目标、贷款、FIRE 计算器与蒙特卡洛模拟",
+    "敏感字段以 AES-256-GCM 信封加密存储，Docker 镜像支持 linux/amd64 与 linux/arm64"
+   ],
+   "use_cases": [
+    "个人记账与预算、目标、贷款、投资组合管理",
+    "通过 MCP 客户端（如 Claude、Cursor）查询和管理财务数据",
+    "从 CSV/Excel/OFX/PDF 导入账单并用规则自动分类交易"
+   ]
+  },
+  "sha": "5dca279fb151",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7669ac86863": {
+  "identity": {
+   "one_liner": "从 BaoStock API 下载中国A股数据到 SQLite 数据库的 Python 工具",
+   "review": "该项目调用 BaoStock API 将中国A股K线（日/周/月/分钟，3种复权）、季频财务报表、宏观经济数据和指数成分数据写入本地 SQLite 数据库（33张表）。面向需要本地化存储A股数据的用户。内置断点续传、单会话顺序下载、请求频率控制、黑名单检测与趟次调度机制；API 不支持并发下载，全量下载耗时较长，需在服务器上运行并预留磁盘空间。",
+   "highlights": [
+    "下载日/周/月/分钟K线（3种复权）、6类季频财务指标、宏观利率与货币供应量数据及上证50/沪深300/中证500指数数据，写入含33张表的 SQLite 数据库",
+    "提供趟次调度、断点续传、交易日判断、黑名单三道闸（启动退避/查询熔断/频率闸）和退出码区分机制",
+    "支持数据库压缩后自动上传百度网盘定时备份、邮件日报通知，配置分为 config.yaml、.env 与 config.py 三层"
+   ],
+   "use_cases": [
+    "本地批量采集与存储中国A股历史K线、财务和宏观数据，用于个人数据分析或量化研究的数据准备",
+    "在服务器上以常驻模式按趟次增量更新数据库，并通过邮件日报与网盘备份做自动化运维",
+    "按 config.yaml 开关筛选下载范围（如仅上证A股、指定复权类型、跳过财务/分钟数据）做定制化数据拉取"
+   ]
+  },
+  "sha": "a7669ac86863",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5fd57c1ce3cf": {
+  "identity": {
+   "one_liner": "Flutter 包，用 SQLite 本地缓存异步远程 API 调用，支持过期与自定义反序列化",
+   "review": "Remote Caching 是一个 Flutter/Dart 包，用于将异步远程调用结果持久化缓存到 SQLite。开发者通过 RemoteCaching.instance.call<T>() 包裹 API 请求，可设置缓存时长或精确过期时间，选择 cacheFirst/networkFirst 策略，并提供 fromJson 反序列化函数。支持 Web（SQLite WASM + IndexedDB）、内存数据库、缓存统计与按键/前缀失效。适合需要在 Flutter 应用中缓存 API 响应的场景。",
+   "highlights": [
+    "支持按时长或精确日期时间设置缓存过期，提供 cacheFirst 与 networkFirst 两种缓存策略",
+    "缓存基于 SQLite 持久化存储，Web 端经 sqflite_common_ffi_web 使用 SQLite WASM 并存于 IndexedDB",
+    "提供缓存统计、按键/前缀/全量清除缓存、forceRefresh 强制刷新、onError 错误回调与内存数据库模式"
+   ],
+   "use_cases": [
+    "缓存变化较少的用户资料、设置、静态内容等 API 响应",
+    "新闻流等需要优先取最新数据、网络失败时回退到缓存的场景",
+    "使用内存数据库进行测试或临时性缓存"
+   ]
+  },
+  "sha": "5fd57c1ce3cf",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

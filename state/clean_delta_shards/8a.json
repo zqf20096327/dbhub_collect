@@ -21735,5 +21735,425 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "462494e7adfb+2": {
+  "fn": "hugr-lab/mssql-extension",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "replace",
+    0,
+    10,
+    0,
+    6,
+    [
+     "CI",
+     "DuckDB",
+     "Latest release",
+     "Community downloads per week",
+     "License: MIT",
+     "GitHub stars"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    15,
+    6,
+    11
+   ],
+   [
+    "delete",
+    15,
+    17,
+    11,
+    11
+   ],
+   [
+    "equal",
+    17,
+    19,
+    11,
+    13
+   ],
+   [
+    "replace",
+    19,
+    20,
+    13,
+    14,
+    [
+     "Weekly downloads of the mssql DuckDB community extension"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    14,
+    15
+   ],
+   [
+    "replace",
+    21,
+    22,
+    15,
+    16,
+    [
+     "📊 **Interactive chart** — queried live in your browser with DuckDB-Wasm."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    16,
+    17
+   ],
+   [
+    "replace",
+    23,
+    26,
+    17,
+    18,
+    [
+     "> Regenerated weekly and served from GitHub Pages, so it stays current without a commit. Counts are a Cloudflare estimate of `INSTALL mssql FROM community` events, aggregated across DuckDB versions and platforms. Source: DuckDB Community Extensions download metrics."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    18,
+    21
+   ],
+   [
+    "delete",
+    29,
+    30,
+    21,
+    21
+   ],
+   [
+    "equal",
+    30,
+    32,
+    21,
+    23
+   ],
+   [
+    "replace",
+    32,
+    33,
+    23,
+    24,
+    [
+     "**Full documentation lives at hugr-lab.github.io/mssql-extension** —"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    39,
+    24,
+    30
+   ],
+   [
+    "replace",
+    39,
+    40,
+    30,
+    31,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    31,
+    32
+   ],
+   [
+    "replace",
+    41,
+    48,
+    32,
+    39,
+    [
+     "|Getting Started|install, ATTACH, first queries|",
+     "|Connections & Auth|connection strings, secrets, Azure AD, Kerberos|",
+     "|Writing Data|COPY (bulk load), CTAS, INSERT/UPDATE/DELETE|",
+     "|Backup Files|describe a `.bak` without SQL Server|",
+     "|Settings Reference|every `mssql_*` setting with defaults|",
+     "|Troubleshooting|common errors and limitations|",
+     "|Articles|Medium deep dives on design and performance|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    39,
+    40
+   ],
+   [
+    "replace",
+    49,
+    52,
+    40,
+    43,
+    [
+     "Contributor docs stay in the repository: DATAMODEL.md (layered",
+     "architecture), docs/ (internals), docs/TESTING.md,",
+     "CLAUDE.md (development guidelines)."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    59,
+    43,
+    50
+   ],
+   [
+    "replace",
+    59,
+    60,
+    50,
+    51,
+    [
+     "- **Code-page text arrives as UTF-8, converted on the client**: a single-byte code page travels as one byte a character and costs the server no conversion, a raw `mssql_scan` is correct on every code page (types)"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    51,
+    52
+   ],
+   [
+    "replace",
+    61,
+    62,
+    52,
+    53,
+    [
+     "- **SQL Server 2025 `vector(n)` as `FLOAT[n]`**, read from its bytes (VECTORSUPPORT) and written on every path, COPY and CTAS included (types)"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    72,
+    53,
+    63
+   ],
+   [
+    "replace",
+    72,
+    74,
+    63,
+    65,
+    [
+     "- Azure AD authentication (service principal, CLI, interactive device code flow)",
+     "- Kerberos / Windows SSPI integrated authentication — POSIX (`kinit` / keytab / raw credentials) and Windows (current logon session via `secur32.dll`)"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    76,
+    65,
+    67
+   ],
+   [
+    "replace",
+    76,
+    77,
+    67,
+    68,
+    [
+     "- **SQL Server backup files without SQL Server**: `mssql_backup_info('/backups/db.bak')` reports what `RESTORE HEADERONLY` / `LABELONLY` / `FILELISTONLY` do, read from the file alone through DuckDB's file system (local, `s3://`, `https://`) — full, differential and log backups, compressed (`MS_XPRESS`, `ZSTD`) and striped; compared with `RESTORE`'s own answers on SQL Server 2025 samples in CI, and on each version's backups from 2017 to 2025 when the oracle lane runs. `mssql_backup_tables` / `mssql_backup_views` list a full backup's tables (columns, types) and views, `mssql_backup_catalog` its system base tables as stored, and `mssql_backup_scan` reads a table's rows — values stored off row (`text` / `ntext` / `image`, long MAX values, row-overflow) included — in parallel, compared with `RESTORE` table by table (backup files)"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    91,
+    68,
+    82
+   ],
+   [
+    "replace",
+    91,
+    95,
+    82,
+    85,
+    [
+     "> on a case-insensitive column (#272).",
+     "> See Remote Pushdown",
+     "> and String comparisons and collation."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    118,
+    85,
+    108
+   ],
+   [
+    "replace",
+    118,
+    126,
+    108,
+    109,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    141,
+    109,
+    124
+   ],
+   [
+    "replace",
+    141,
+    146,
+    124,
+    125,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    155,
+    125,
+    134
+   ],
+   [
+    "delete",
+    155,
+    156,
+    134,
+    134
+   ],
+   [
+    "equal",
+    156,
+    164,
+    134,
+    142
+   ],
+   [
+    "delete",
+    164,
+    165,
+    142,
+    142
+   ],
+   [
+    "equal",
+    165,
+    166,
+    142,
+    143
+   ],
+   [
+    "replace",
+    166,
+    171,
+    143,
+    144,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    177,
+    144,
+    150
+   ],
+   [
+    "replace",
+    177,
+    180,
+    150,
+    153,
+    [
+     " License, Version 2.0. © The OpenSSL Project Authors and",
+     " contributors. Version pinned via `vcpkg.json`.",
+     " License text: LICENSES/openssl-LICENSE.txt"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    153,
+    154
+   ],
+   [
+    "replace",
+    181,
+    184,
+    154,
+    157,
+    [
+     " under the MIT License option of its dual Apache-2.0/MIT",
+     " licensing. © Daniel Lemire and simdutf contributors.",
+     " License text: LICENSES/simdutf-LICENSE-MIT.txt"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    157,
+    158
+   ],
+   [
+    "replace",
+    185,
+    189,
+    158,
+    162,
+    [
+     " backups), used under the BSD License option of its dual BSD/GPLv2",
+     " licensing. © Meta Platforms, Inc. and affiliates. Version pinned via",
+     " `vcpkg.json`.",
+     " License text: LICENSES/zstd-LICENSE-BSD.txt"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    191,
+    162,
+    164
+   ],
+   [
+    "replace",
+    191,
+    193,
+    164,
+    165,
+    [
+     "This project is licensed under the MIT License. See the LICENSE file for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

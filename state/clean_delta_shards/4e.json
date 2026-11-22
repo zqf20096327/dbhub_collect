@@ -28851,5 +28851,1654 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "31597f74e22f+2": {
+  "fn": "plabayo/venndb",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "> See the benchmarks for more information on this topic."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "This project was developed originally in function of `rama`,"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    13,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "venndb banner"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    29,
+    17,
+    29
+   ],
+   [
+    "delete",
+    29,
+    49,
+    29,
+    29
+   ],
+   [
+    "equal",
+    49,
+    55,
+    29,
+    35
+   ],
+   [
+    "replace",
+    55,
+    60,
+    35,
+    40,
+    [
+     "- Usage: quick introduction on how to use `venndb`;",
+     "- Benchmarks: benchmark results to give you a rough idea how `venndb` peforms for the use case it is made for (write once, read constantly, using binary filters mostly);",
+     "- Q&A: Frequently Asked Questions (FAQ);",
+     "- Example: the full example (expanded version from Usage), tested and documented;",
+     "- Generated Code Summary: a documented overview of the API that `venndb` will generate for you when using `#[derive(VennDB)]` on your _named field struct_;"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    63,
+    40,
+    43
+   ],
+   [
+    "replace",
+    63,
+    68,
+    43,
+    48,
+    [
+     "- Safety",
+     "- Compatibility",
+     "- MSRV (older versions might work but we make no guarantees);",
+     "- Roadmap",
+     "- License: [MIT license][mit-license] and [Apache 2.0 License][apache-license]"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    71,
+    48,
+    51
+   ],
+   [
+    "replace",
+    71,
+    73,
+    51,
+    53,
+    [
+     "- Contributing",
+     "- Sponsors"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    88,
+    53,
+    68
+   ],
+   [
+    "replace",
+    88,
+    116,
+    68,
+    69,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    118,
+    69,
+    71
+   ],
+   [
+    "replace",
+    118,
+    120,
+    71,
+    73,
+    [
+     "See the full example, the examples (the code in this document is taken from these)",
+     "or the \"Generated Code Summary\" chapter below to learn how to use the `VennDB` and its generated code."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    131,
+    73,
+    84
+   ],
+   [
+    "replace",
+    131,
+    132,
+    84,
+    85,
+    [
+     "shaped like the one of `rama`: 7 `bool` properties and 5 filter maps,"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    134,
+    85,
+    87
+   ],
+   [
+    "replace",
+    134,
+    137,
+    87,
+    90,
+    [
+     "- `venn`: the `venndb` version (very similar to the example below);",
+     "- `roaring`: an index of `roaring` bitmaps (version: `0.12.0`), written by hand;",
+     "- `sqlite`: an in-memory table with an index per filter map (using the `sqlite` crate (version: `0.37.4`));"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    147,
+    90,
+    100
+   ],
+   [
+    "replace",
+    147,
+    159,
+    100,
+    112,
+    [
+     "||venn|roaring|sqlite|naive|",
+     "|-|-|-|-|-|",
+     "|create the database (`from_rows`)|12.21 ms|25.63 ms|344.7 ms|-|",
+     "|look up by key (`get_by_id`)|10.16 ns|12.52 ns|1.141 µs|6.958 µs|",
+     "|3 `bool` filters: `tcp + socks5 + datacenter`|164.9 ns|1.61 µs|4.43 ms|698.5 µs|",
+     "|1 `bool` filter, 1 filter map: `tcp + country`|1.574 µs|2.337 µs|380.5 µs|831.7 µs|",
+     "|2 `bool` filters, 2 filter maps: `tcp + datacenter + country + city`|2.303 µs|3.505 µs|157.6 µs|713.4 µs|",
+     "|1 `bool` filter, 2 filter maps: `mobile + pool + 3 countries`|2.78 µs|12.01 µs|1.396 ms|373.9 µs|",
+     "|1 `bool` filter, 1 filter map: `tcp + 5 cities`|1.988 µs|5.774 µs|372.9 µs|1.066 ms|",
+     "|3 `bool` filters and a predicate: `tcp + socks5 + datacenter`|192.3 ns|131.2 µs|-|651.9 µs|",
+     "|3 `bool` filters and a runtime column: `tcp + socks5 + datacenter`|199.9 ns|-|-|-|",
+     "|memory of the index, at its peak|6.483 MB|7.476 MB|-|-|"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    162,
+    112,
+    115
+   ],
+   [
+    "replace",
+    162,
+    174,
+    115,
+    127,
+    [
+     "||venn|roaring|sqlite|naive|",
+     "|-|-|-|-|-|",
+     "|create the database (`from_rows`)|113.7 ms|367.6 ms|3.785 s|-|",
+     "|look up by key (`get_by_id`)|15.21 ns|18.46 ns|1.141 µs|7.083 µs|",
+     "|3 `bool` filters: `tcp + socks5 + datacenter`|198.8 ns|14.55 µs|43.48 ms|7.307 ms|",
+     "|1 `bool` filter, 1 filter map: `tcp + country`|1.871 µs|17.38 µs|5.985 ms|8.876 ms|",
+     "|2 `bool` filters, 2 filter maps: `tcp + datacenter + country + city`|25.34 µs|28.39 µs|1.854 ms|8.631 ms|",
+     "|1 `bool` filter, 2 filter maps: `mobile + pool + 3 countries`|28.84 µs|99.71 µs|11.57 ms|5.069 ms|",
+     "|1 `bool` filter, 1 filter map: `tcp + 5 cities`|2.348 µs|50.71 µs|7.121 ms|10.33 ms|",
+     "|3 `bool` filters and a predicate: `tcp + socks5 + datacenter`|215.7 ns|2.525 ms|-|7.188 ms|",
+     "|3 `bool` filters and a runtime column: `tcp + socks5 + datacenter`|225.9 ns|-|-|-|",
+     "|memory of the index, at its peak|61.79 MB|59.49 MB|-|-|"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    177,
+    127,
+    130
+   ],
+   [
+    "replace",
+    177,
+    178,
+    130,
+    131,
+    [
+     "Time to the first matching row for dense queries on 1K and 8.4M rows"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    184,
+    131,
+    137
+   ],
+   [
+    "replace",
+    184,
+    185,
+    137,
+    138,
+    [
+     "see the Contribution guidelines for more information."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    196,
+    138,
+    149
+   ],
+   [
+    "replace",
+    196,
+    197,
+    149,
+    150,
+    [
+     "Please open an issue and also read the Contribution guidelines. We look forward to hear from you."
+    ]
+   ],
+   [
+    "equal",
+    197,
+    236,
+    150,
+    189
+   ],
+   [
+    "replace",
+    236,
+    259,
+    189,
+    190,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    272,
+    190,
+    203
+   ],
+   [
+    "replace",
+    272,
+    280,
+    203,
+    204,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    280,
+    295,
+    204,
+    219
+   ],
+   [
+    "replace",
+    295,
+    299,
+    219,
+    220,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    302,
+    220,
+    223
+   ],
+   [
+    "replace",
+    302,
+    303,
+    223,
+    224,
+    [
+     "see the `runtime` example, also for what to do when the database is replaced."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    319,
+    224,
+    240
+   ],
+   [
+    "replace",
+    319,
+    332,
+    240,
+    241,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    342,
+    241,
+    251
+   ],
+   [
+    "replace",
+    342,
+    361,
+    251,
+    252,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    361,
+    386,
+    252,
+    277
+   ],
+   [
+    "replace",
+    386,
+    403,
+    277,
+    278,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    403,
+    410,
+    278,
+    285
+   ],
+   [
+    "replace",
+    410,
+    411,
+    285,
+    286,
+    [
+     "you can also read the \"Generated Code Summary\" chapter below."
+    ]
+   ],
+   [
+    "equal",
+    411,
+    416,
+    286,
+    291
+   ],
+   [
+    "replace",
+    416,
+    710,
+    291,
+    292,
+    [
+     "…（294 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    710,
+    720,
+    292,
+    302
+   ],
+   [
+    "replace",
+    720,
+    732,
+    302,
+    303,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    732,
+    753,
+    303,
+    324
+   ],
+   [
+    "replace",
+    753,
+    767,
+    324,
+    338,
+    [
+     "|fn signature|description|",
+     "|-|-|",
+     "|`EmployeeInMemDB::new() -> EmployeeInMemDB`|create a new database with zero capacity|",
+     "|`EmployeeInMemDB::default() -> EmployeeInMemDB`|same as `EmployeeInMemDB::new() -> EmployeeInMemDB`|",
+     "|`EmployeeInMemDB::with_capacity(capacity: usize) -> EmployeeInMemDB`|create a new database with the given capacity, but no rows already inserted|",
+     "|`EmployeeInMemDB::from_rows(rows: ::std::vec::Vec<Employee>) -> EmployeeInMemDB` or `EmployeeInMemDB::from_rows(rows: ::std::vec::Vec<Employee>) -> Result<EmployeeInMemDB, EmployeeInMemDBError<::std::vec::Vec<Employee>>>`|constructor to create the database directly from a heap-allocated list of data instances. The second version is the one used if at least one `#[venndb(key)]` property or a `validator` is defined, otherwise it is the first one (without the `Result`).|",
+     "|`EmployeeInMemDB::from_iter(iter: impl ::std::iter::IntoIterator<Item = impl ::std::convert::Into<Employee>>) -> EmployeeInMemDB` or `EmployeeInMemDB::from_rows(iter: impl ::std::iter::IntoIterator<Item = impl ::std::convert::Into<Employee>>) -> Result<EmployeeInMemDB, EmployeeInMemDBError<::std::vec::Vec<Employee>>>`|Same as `from_rows` but using an iterator instead. The items do not have to be an `Employee` but can be anything that can be turned into one. E.g. in our example above we defined a struct `RawCsvRow` that was turned on the fly into an `Employee`. This happens all at once prior to inserting the database, which is why the version with a result does return a `Vec` and not an iterator.|",
+     "|`EmployeeInMemDB::append(&mut self, data: impl ::std::convert::Into<Employee>)` or `EmployeeInMemDB::append(&mut self, data: impl ::std::convert::Into<Employee>) -> Result<(), EmployeeInMemDBError<Employee>>`|append a single row to the database. Depending on whether or not a `#[venndb(key)]` property is defined it will generate the `Result` version or not. Same as `from_rows` and `from_iter`|",
+     "|`EmployeeInMemDB::extend (&mut self, iter: I) where I: ::std::iter::IntoIterator<Item = Item>, Item: ::std::convert::Into<Employee>` or `EmployeeInMemDB::extend (&mut self, iter: I) -> Result<(), EmployeeInMemDBError<(Employee, I::IntoIter)>> where I: ::std::iter::IntoIterator<Item = Item>, Item: ::std::convert::Into<Employee>`|extend the database with the given iterator, once again returning a result in case such insertion can go wrong (e.g. because keys are used (duplication) or a row is invalid in case a validator is defined). Otherwise this function will return nothing.|",
+     "|`EmployeeInMemDB::get_by_id<Q>(&self, data: impl ::std::convert::Into<Employee>) -> Option<&Employee> where Employee ::std::borrow::Borrow<Q>, Q: ::std::hash::Hash + ::std::cmp::Eq + ?::std::marker::Sized`|look up a row by the `id` key property. This method will be generated for each property marked with `#[venndb(key)`. e.g. if you have key property named `foo: MyType` property there will be also a `get_by_foo(&self, ...)` method generated.|",
+     "|`EmployeeInMemDB::index_by_id<Q>(&self, key: &Q) -> Option<usize>` and `EmployeeInMemDB::get(&self, index: usize) -> Option<&Employee>`|the row index for a key, as used by columns, and the row for an index.|",
+     "|`EmployeeInMemDB::column(&self, predicate: impl FnMut(&Employee) -> bool) -> venndb::RowSet`|the rows matching the predicate, to add to a query with `Filter::Is` or `Filter::Not`.|",
+     "|`EmployeeInMemDB::shrink_to_fit(&mut self)`|release the memory that is not needed, done for you by `from_rows` and `from_iter`.|",
+     "|`EmployeeInMemDB::query(&self) -> EmployeeInMemDBQuery`|create a `EmployeeInMemDBQuery` builder to compose a filter composition to query the database. The default builder will match all rows. See the method API for `EmployeeInMemDBQuery` for more information|"
+    ]
+   ],
+   [
+    "equal",
+    767,
+    770,
+    338,
+    341
+   ],
+   [
+    "replace",
+    770,
+    776,
+    341,
+    347,
+    [
+     "|fn signature|description|",
+     "|-|-|",
+     "|`EmployeeInMemDBQuery::reset(&mut self) -> &mut Self`|reset the query, bringing it back to the clean state it has on creation|",
+     "|`EmployeeInMemDBQuery::execute(&self) -> Option<EmployeeInMemDBQueryResult<'a>>`|return the result of the query using the set filters. It will be `None` in case no rows matched the defined filters. Or put otherwise, the result will contain at least one row when `Some(_)` is returned.|",
+     "|`EmployeeInMemDBQuery::is_manager(&mut self, value: bool) -> &mut Self`|a filter setter for a `bool` filter. One such method per `bool` filter (that isn't `skip`ped) will be available. E.g. if you have ` foo` filter then there will be a `EmployeeInMemDBQuery:foo` method. For _bool_ filters that are optional (`Option<bool>`) this method is also generated just the same.|",
+     "|`EmployeeInMemDBQuery::department(&mut self, value: impl ::std::convert::Into<Department>) -> &mut Self`|a filter (map) setter for a non-`bool` filter. One such method per non-`bool` filter will be available. You can also `skip` these, but that's of course a bit pointless. The type will be equal to the actual field type. And the name will once again be equal to the original field name. Filter maps that have a `Option<T>` type have exactly the same signature. Duering query you can call this method multiple times in case you wish to allow multiple variants.|"
+    ]
+   ],
+   [
+    "equal",
+    776,
+    777,
+    347,
+    348
+   ],
+   [
+    "replace",
+    777,
+    781,
+    348,
+    352,
+    [
+     "|`EmployeeInMemDBQuery::department_ref<Q>(&mut self, value: &Q) -> &mut Self`|the same, for a value that is borrowed, e.g. a `&str` for a `String` filter.|",
+     "|`EmployeeInMemDBQuery::department_where(&mut self, predicate: impl FnMut(&Department) -> bool) -> &mut Self`|filter on the values for which the predicate returns `true`. Called once per distinct value, not once per row. One such method per non-`bool` filter.|",
+     "|`EmployeeInMemDBQuery::and(&mut self, filter: venndb::Filter<'a>) -> &mut Self`|add a filter on a column created with `column`, or on a `venndb::RuntimeColumn`, of which rows can be set at any time.|",
+     "|`EmployeeInMemDBQuery::any(&self) -> Option<&Employee>` and `EmployeeInMemDBQuery::any_where(&self, predicate: impl FnMut(&Employee) -> bool) -> Option<&Employee>`|return a randomly selected employee matching the filters. For filters that many rows match this is a lot faster than `execute` followed by `any`, as random rows are tried instead of all matches worked out.|"
+    ]
+   ],
+   [
+    "equal",
+    781,
+    784,
+    352,
+    355
+   ],
+   [
+    "replace",
+    784,
+    792,
+    355,
+    363,
+    [
+     "|fn signature|description|",
+     "|-|-|",
+     "|`EmployeeInMemDBQueryResult::first(&self) -> &Employee`|return a reference to the first matched employee found. An implementation detail is that this will be the matched row that was first inserted, but for compatibility reasons you best not rely on this if you do not have to.|",
+     "|`EmployeeInMemDBQueryResult::any(&self) -> &Employee`|return a reference to a randomly selected matched employee. The randomness can be relied upon to be fair.|",
+     "|`EmployeeInMemDBQueryResult::len(&self) -> usize`|the number of matched employees, never zero.|",
+     "|`EmployeeInMemDBQueryResult::any_where(&self, predicate: impl FnMut(&Employee) -> bool) -> Option<&Employee>`|return a randomly selected matched employee for which the predicate returns `true`. Tries a few random ones before testing them all.|",
+     "|`EmployeeInMemDBQueryResult::iter(&self) -> impl Iterator<Item = &Employee>`|return an iterator for the query result, which will allow you to iterate over all found results, and as such also collect them into an owned data structure should you wish.|",
+     "|`EmployeeInMemDBQueryResult::filter(&self, predicate: impl FnMut(&Employee) -> bool) -> Option<EmployeeInMemDBQueryResult>`|return `Some(_)` `EmployeeInMemDBQueryResult` with the same reference data, but containing (and owning) only the indexes for which the linked row matches arcoding to the given `Fn` predicate|"
+    ]
+   ],
+   [
+    "equal",
+    792,
+    801,
+    363,
+    372
+   ],
+   [
+    "replace",
+    801,
+    802,
+    372,
+    373,
+    [
+     "but is tested using Github Actions with success."
+    ]
+   ],
+   [
+    "equal",
+    802,
+    803,
+    373,
+    374
+   ],
+   [
+    "replace",
+    803,
+    804,
+    374,
+    375,
+    [
+     "|platform|tested|test platform|"
+    ]
+   ],
+   [
+    "equal",
+    804,
+    805,
+    375,
+    376
+   ],
+   [
+    "replace",
+    805,
+    808,
+    376,
+    379,
+    [
+     "|MacOS|✅|M4 Max (developer laptop) and macOS 26 arm64 (GitHub Action)|",
+     "|Windows|✅|Windows Server 2025 (GitHub Action)|",
+     "|Linux|✅|Ubuntu 24.04 (GitHub Action)|"
+    ]
+   ],
+   [
+    "equal",
+    808,
+    809,
+    379,
+    380
+   ],
+   [
+    "replace",
+    809,
+    810,
+    380,
+    381,
+    [
+     "Please open a ticket in case you have compatibility issues for your setup/platform."
+    ]
+   ],
+   [
+    "equal",
+    810,
+    817,
+    381,
+    388
+   ],
+   [
+    "replace",
+    817,
+    818,
+    388,
+    389,
+    [
+     "Using GitHub Actions we also test if `venndb` on that version still works on"
+    ]
+   ],
+   [
+    "equal",
+    818,
+    822,
+    389,
+    393
+   ],
+   [
+    "replace",
+    822,
+    823,
+    393,
+    394,
+    [
+     "Please refer to <https://github.com/plabayo/venndb/milestones> to know what's on the roadmap. Is there something not on the roadmap for the next version that you would really like? Please create a feature request to request it and become a sponsor if you can."
+    ]
+   ],
+   [
+    "equal",
+    823,
+    840,
+    394,
+    411
+   ],
+   [
+    "replace",
+    840,
+    844,
+    411,
+    415,
+    [
+     "- `good first issue`: issues that are good for those new to the `venndb` codebase;",
+     "- `easy`: issues that are seen as easy;",
+     "- `mentor available`: issues for which we offer mentorship;",
+     "- `low prio`: low prio issues that have no immediate pressure to be finished quick, great in case you want to help out but can only do with limited time to spare;"
+    ]
+   ],
+   [
+    "equal",
+    844,
+    848,
+    415,
+    419
+   ],
+   [
+    "replace",
+    848,
+    849,
+    419,
+    420,
+    [
+     "Should you want to contribure this project but you do not yet know how to program in Rust, you could start learning Rust with as goal to contribute as soon as possible to `venndb` by using \"the Rust 101 Learning Guide\" as your study companion. Glen can also be hired as a mentor or teacher to give you paid 1-on-1 lessons and other similar consultancy services. You can find his contact details at <https://www.glendc.com/>."
+    ]
+   ],
+   [
+    "equal",
+    849,
+    856,
+    420,
+    427
+   ],
+   [
+    "delete",
+    856,
+    860,
+    427,
+    427
+   ],
+   [
+    "equal",
+    860,
+    862,
+    427,
+    429
+   ],
+   [
+    "replace",
+    862,
+    863,
+    429,
+    430,
+    [
+     "Special thanks goes to all involved in developing, maintaining and supporting the Rust programming language. Also a big shoutout to the \"Write Powerful Rust Macros\" book by _Sam Van Overmeire_, which gave the courage to develop this crate."
+    ]
+   ],
+   [
+    "equal",
+    863,
+    864,
+    430,
+    431
+   ],
+   [
+    "replace",
+    864,
+    865,
+    431,
+    432,
+    [
+     "Some code was also copied/forked from google/argh, for which thank you,"
+    ]
+   ],
+   [
+    "equal",
+    865,
+    883,
+    432,
+    450
+   ],
+   [
+    "replace",
+    883,
+    884,
+    450,
+    451,
+    [
+     "Plabayo's Store With VennDB Merchandise"
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "0a98fcd09962+2": {
+  "fn": "n24q02m/mnemo",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "> **Distribution & CLI:** the repo is `mnemo`; the PyPI distribution is **`n24q02m-mnemo`** (install `pip install n24q02m-mnemo` / `uvx --python 3.13 n24q02m-mnemo`). Two console scripts ship: **`n24q02m-mnemo`** (legacy alias `mnemo-mcp`) starts the HTTP MCP server, and **`mnemo`** is the CLI-first memory surface that never serves. See CLI."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    14,
+    8,
+    13,
+    [
+     "CI",
+     "codecov",
+     "PyPI",
+     "License: Apache-2.0",
+     "SafeSkill 91/100"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    13,
+    14
+   ],
+   [
+    "replace",
+    15,
+    21,
+    14,
+    19,
+    [
+     "Python",
+     "SQLite",
+     "MCP",
+     "semantic-release",
+     "Renovate"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    19,
+    20
+   ],
+   [
+    "replace",
+    22,
+    25,
+    20,
+    21,
+    [
+     " Sister projects from n24q02m (click to expand) "
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    21,
+    22
+   ],
+   [
+    "replace",
+    26,
+    46,
+    22,
+    39,
+    [
+     "|Project|Tagline|Tag|",
+     "|-----------------------------------------------------------------------------|--------------------------------------------------------------------------------|-----------|",
+     "|better-semantic-release|Drop-in python-semantic-release fork with built-in release-safety guards (orp...|Tooling|",
+     "|claude-plugins|Claude Code plugin marketplace for the n24q02m MCP servers -- install web sea...|Marketplace|",
+     "|crg|Knowledge graph for token-efficient code reviews -- semantic search and call-...|MCP|",
+     "|email|IMAP/SMTP email for AI agents -- read, send, organize folders, and manage att...|MCP|",
+     "|fastretrieval|Fast multi-model retrieval runtime: ONNX and GGUF embeddings, reranking, and ...|Tooling|",
+     "|hull|hull is the shared monorepo core for the wet, crg and mnemo self-hosted stack|MCP|",
+     "|jules-task-archiver|Chrome Extension for bulk operations on Jules tasks via batchexecute API -- a...|Tooling|",
+     "|mnemo|Persistent AI memory with hybrid search. Open, free, unlimited.|MCP|",
+     "|notion|Markdown-first Notion for AI agents -- pages, databases, blocks, and comments...|MCP|",
+     "|skret|Secrets without the server.|CLI|",
+     "|tacet|A self-distilling neuro-symbolic cascade that amortises LLM cost across knowl...|Tooling|",
+     "|telegram|Telegram for AI agents -- messages, chats, media, and contacts across both bo...|MCP|",
+     "|tools-docs|Docs portal for the n24q02m open-source tool stack (skret, MCP plugins, hull,...|Tooling|",
+     "|wet|Open-source MCP server for AI agents: web search, content extraction, and lib...|MCP|",
+     "|workspace|Google Workspace MCP server (Docs/Drive/Calendar/Gmail/Sheets/Slides/Tasks/Ch...|MCP|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    48,
+    39,
+    41
+   ],
+   [
+    "replace",
+    48,
+    67,
+    41,
+    42,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    75,
+    42,
+    50
+   ],
+   [
+    "replace",
+    75,
+    76,
+    50,
+    51,
+    [
+     "|Phase|Version|Status|Highlights|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    51,
+    52
+   ],
+   [
+    "replace",
+    77,
+    80,
+    52,
+    55,
+    [
+     "|**Phase 1**|**v1.x**|**Shipped**|Typed `memory(action=\"capture\")` (6 context_types + dedup) -- RRF (k=60) hybrid fusion + cross-encoder rerank + temporal decay -- importance x recency archive policy + restore -- Alembic migrations -- multi-provider LLM dispatch (pre-de-host) -- plugin trinity (recall-context + memory-commit skills, SessionStart + opt-in PostToolUse hooks)|",
+     "|**Phase 2**|v1.x+1|**Shipped, partially removed**|LLM-driven compression of older memories (kept, now via `[models.chat]` cell) + Passport sync (encrypted import/export bundle; **removed 2026-09**)|",
+     "|**Phase 3**|**v2.0.0**|**Shipped (BREAKING)**|Temporal knowledge graph -- bitemporal `valid_from` / `valid_to` columns -- entity resolution via embedding KNN -- `entity_search` / `entity_graph` / `history` actions -- `KG_AUTO_ENABLED` opt-in auto-extract on capture|"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    92,
+    55,
+    67
+   ],
+   [
+    "replace",
+    92,
+    93,
+    67,
+    68,
+    [
+     "- **Plugin trinity** -- Ships `/recall-context` + `/memory-commit` skills and SessionStart + opt-in PostToolUse hooks (see docs/ARCHITECTURE.md)"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    68,
+    69
+   ],
+   [
+    "replace",
+    94,
+    95,
+    69,
+    70,
+    [
+     "- **LLM compression** -- Per-turn compression through the `[models.chat]` provider cell targets ~3x token reduction at >=0.9 fact retention; graceful skip when the cell is unconfigured (see docs/compression.md)"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    103,
+    70,
+    78
+   ],
+   [
+    "replace",
+    103,
+    111,
+    78,
+    79,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    115,
+    79,
+    83
+   ],
+   [
+    "replace",
+    115,
+    116,
+    83,
+    84,
+    [
+     "Setup page for full steps):"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    84,
+    85
+   ],
+   [
+    "replace",
+    117,
+    118,
+    85,
+    86,
+    [
+     "|Client|Install|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    86,
+    87
+   ],
+   [
+    "replace",
+    119,
+    123,
+    87,
+    91,
+    [
+     "|Claude Code (plugin)|`/plugin marketplace add n24q02m/claude-plugins` then `/plugin install mnemo@n24q02m-plugins` (requires a running instance; see Self-hosting)|",
+     "|Claude Code (HTTP)|start the server (`uvx --python 3.13 n24q02m-mnemo` or docker compose), then `claude mcp add --transport http mnemo http://127.0.0.1:8000/mcp`|",
+     "|Codex / Gemini CLI / Cursor / Windsurf|start the server, then register the `http://<host>:<port>/mcp` HTTP endpoint in the client's MCP settings|",
+     "|Any MCP client|point it at the `/mcp` endpoint of a running instance (Streamable HTTP)|"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    130,
+    91,
+    98
+   ],
+   [
+    "replace",
+    130,
+    131,
+    98,
+    99,
+    [
+     "|Feature|mnemo|Mem0|Letta|OpenMemory|"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    99,
+    100
+   ],
+   [
+    "replace",
+    132,
+    145,
+    100,
+    113,
+    [
+     "|Hybrid retrieval (FTS + vec)|yes (FTS5 + RRF + sqlite-vec)|yes|partial|yes|",
+     "|Cross-encoder rerank|yes (Fastretrieval Qwen3 local + `[models.rerank]` cell)|partial (Cohere only)|no|no|",
+     "|Temporal decay scoring|yes (exp half-life)|no|no|no|",
+     "|Importance boost in rank|yes (LLM 0.0-1.0)|no|no|no|",
+     "|Soft-archive + restore policy|yes (importance x recency)|no|no|no|",
+     "|Self-hostable (single SQLite file)|yes (zero ext deps)|partial (cloud-first)|yes (Postgres)|yes (Postgres + Qdrant)|",
+     "|LLM dispatch|yes (`[models.chat]` cell, any OpenAI-spec endpoint)|partial|yes|partial|",
+     "|Plugin trinity (skills + hooks)|yes (recall-context + memory-commit)|n/a|n/a|n/a|",
+     "|Cross-machine migration|yes (rclone backup/restore outside the server)|yes (cloud)|n/a|n/a|",
+     "|LLM compression on capture|yes ([models.chat] cell, ~3x at >=0.90 retention)|no|no|no|",
+     "|Bitemporal `valid_from` / `valid_to` queries|yes (`as_of` time-travel)|no|partial (events only)|no|",
+     "|Entity resolution via embedding KNN|yes (cosine threshold tunable)|no|no|no|",
+     "|Audit trail with state hashes|yes (`memory_audit` table)|no|no|no|"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    158,
+    113,
+    126
+   ],
+   [
+    "replace",
+    158,
+    159,
+    126,
+    127,
+    [
+     "> and follow the current setup docs."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    170,
+    127,
+    138
+   ],
+   [
+    "replace",
+    170,
+    177,
+    138,
+    145,
+    [
+     "> - wet -- Web search + content extraction",
+     "> - imagine-mcp -- Image/video understanding + generation",
+     "> - better-notion-mcp -- Notion API",
+     "> - better-email-mcp -- Email management",
+     "> - better-telegram-mcp -- Telegram",
+     "> - better-godot-mcp -- Godot Engine",
+     "> - crg -- Code review knowledge graph"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    182,
+    145,
+    150
+   ],
+   [
+    "replace",
+    182,
+    183,
+    150,
+    151,
+    [
+     "Full docs at **docs.n24q02m.com/servers/mnemo/setup/**:"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    151,
+    152
+   ],
+   [
+    "replace",
+    184,
+    187,
+    152,
+    155,
+    [
+     "- Setup -- install methods for Claude Code, Codex, Gemini CLI, Cursor, Windsurf, mcp.json",
+     "- Modes overview -- http",
+     "- Multi-user setup -- per-user bearer tokens mapped to credential namespaces"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    195,
+    155,
+    163
+   ],
+   [
+    "replace",
+    195,
+    196,
+    163,
+    164,
+    [
+     "mnemo was previously packaged for Smithery via a"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    206,
+    164,
+    174
+   ],
+   [
+    "replace",
+    206,
+    207,
+    174,
+    175,
+    [
+     "|Tool|Actions|Description|"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    175,
+    176
+   ],
+   [
+    "replace",
+    208,
+    211,
+    176,
+    179,
+    [
+     "|`add_memory`, `search_memory`, `list_memories`, `update_memory`, `delete_memory`, `export_memories`, `import_memories`, `memory_stats`, `restore_memory`, `archived_memories`, `consolidate_memories`|(one action each)|Specialized single-purpose memory tools -- the recommended surface|",
+     "|`memory` (legacy dispatcher, **DEPRECATED** -- use the granular tools above instead; will be removed in a future release)|`add`, `capture`, `search`, `list`, `as_of`, `update`, `delete`, `export`, `import`, `stats`, `restore`, `archived`, `archive_now`, `consolidate`, `compress`, `entity_search`, `entity_graph`, `history`|Core CRUD + typed capture (6 context_types) + hybrid search (RRF + rerank + temporal decay) + import/export + soft-archive + restore + on-demand archive sweep + LLM consolidation + LLM compression + temporal KG (entity search / graph / history / as_of)|",
+     "|`config`|`status`, `set`, `warmup`, `backfill_embeddings`|Server status, update runtime settings, pre-download embedding model, backfill missing embedding vectors|"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    214,
+    179,
+    182
+   ],
+   [
+    "replace",
+    214,
+    215,
+    182,
+    183,
+    [
+     "|Component|Trigger|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    216,
+    183,
+    184
+   ],
+   [
+    "replace",
+    216,
+    223,
+    184,
+    191,
+    [
+     "|`mnemo:recall-context` skill|session start, before significant decisions, \"what do I know about X?\"|Pulls cwd / topic-relevant memories with `context_type` filtering|",
+     "|`mnemo:memory-commit` skill|\"remember this\" / \"save this\" / \"ghi nho\" / \"luu lai\"|Typed manual capture with `context_type` decision tree|",
+     "|`mnemo:knowledge-audit` skill|periodic / \"audit memory\"|Find duplicates, contradictions, stale entries; consolidate|",
+     "|`mnemo:session-handoff` skill|end of session|Capture decisions / preferences / corrections / conventions / open questions|",
+     "|`mnemo:temporal-query` skill|\"as of\" / \"back in\" / \"history of\" / \"what did I think then\"|Point-in-time snapshots via `action=\"as_of\"` and version-chain tracing via `superseded_by`|",
+     "|SessionStart hook|every session init|Non-blocking nudge to invoke `recall-context`|",
+     "|PostToolUse hook (opt-in)|`CAPTURE_AUTO_ENABLED=true`|Hint `memory-commit` after Write/Edit of CLAUDE.md / AGENTS.md / ARCHITECTURE.md / docs/*.md|"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    226,
+    191,
+    194
+   ],
+   [
+    "replace",
+    226,
+    227,
+    194,
+    195,
+    [
+     "|URI|Description|"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    195,
+    196
+   ],
+   [
+    "replace",
+    228,
+    229,
+    196,
+    197,
+    [
+     "|`mnemo://stats`|Database statistics and server status|"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    232,
+    197,
+    200
+   ],
+   [
+    "replace",
+    232,
+    233,
+    200,
+    201,
+    [
+     "|Prompt|Parameters|Description|"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    201,
+    202
+   ],
+   [
+    "replace",
+    234,
+    236,
+    202,
+    204,
+    [
+     "|`save_summary`|`summary`|Generate prompt to save a conversation summary as memory|",
+     "|`recall_context`|`topic`|Generate prompt to recall relevant memories about a topic|"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    258,
+    204,
+    226
+   ],
+   [
+    "replace",
+    258,
+    261,
+    226,
+    229,
+    [
+     " starts a server): `capture`, `recall`, `reflect`, `fetch`, and the",
+     " `standing-*` family operate directly on a SQLite memory DB.",
+     " `mnemo-pilot` is a legacy alias of the same entry point."
+    ]
+   ],
+   [
+    "equal",
+    261,
+    262,
+    229,
+    230
+   ],
+   [
+    "replace",
+    262,
+    265,
+    230,
+    233,
+    [
+     " bare invocation starts the HTTP server; a leading subcommand",
+     " (`config-init`, `config`, `warmup`, `token-hash`, `token-verify`) runs an",
+     " action and exits."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    273,
+    233,
+    241
+   ],
+   [
+    "replace",
+    273,
+    278,
+    241,
+    242,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    286,
+    242,
+    250
+   ],
+   [
+    "replace",
+    286,
+    294,
+    250,
+    251,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    294,
+    296,
+    251,
+    253
+   ],
+   [
+    "replace",
+    296,
+    297,
+    253,
+    254,
+    [
+     "|Subcommand|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    254,
+    255
+   ],
+   [
+    "replace",
+    298,
+    303,
+    255,
+    260,
+    [
+     "|`config-init [--force]`|Write the default instance `config.toml` (server auth + `[models.*]` provider cells)|",
+     "|`config init\\|path\\|show\\|get\\|set`|Config file utilities: `init [--force]` (same as `config-init`), `path`, `show` (template if absent), `get <key>`, `set <key> <value>` (dotted keys, comments kept)|",
+     "|`warmup`|Probe the `[models.embed]` cell when it is configured; otherwise pre-download the Fastretrieval-managed local ONNX embedding model so first use works offline|",
+     "|`token-hash`|Mint a `scrypt$` hash for `[server] token_hash` (shared-token auth)|",
+     "|`token-verify`|Verify a candidate token against a stored `scrypt$` hash|"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    357,
+    260,
+    314
+   ],
+   [
+    "replace",
+    357,
+    358,
+    314,
+    315,
+    [
+     "CLI for the full surface (`reflect`, `standing-*`, …)."
+    ]
+   ],
+   [
+    "equal",
+    358,
+    365,
+    315,
+    322
+   ],
+   [
+    "replace",
+    365,
+    366,
+    322,
+    323,
+    [
+     " `auth = \"token\"` send the shared token as the Bearer credential."
+    ]
+   ],
+   [
+    "equal",
+    366,
+    383,
+    323,
+    340
+   ],
+   [
+    "replace",
+    383,
+    384,
+    340,
+    341,
+    [
+     "|Upstream|Action|"
+    ]
+   ],
+   [
+    "equal",
+    384,
+    385,
+    341,
+    342
+   ],
+   [
+    "replace",
+    385,
+    390,
+    342,
+    347,
+    [
+     "|`401` / `403`|disable that credential, use the next one|",
+     "|`429`|cool it down (`Retry-After` / `rate_limit_reset`, 1 s–1 h, default 60 s), use the next one|",
+     "|`5xx`|retry once on the same credential, then use the next one|",
+     "|anything else|re-raise; the credential is not blamed|",
+     "|pool empty / all blocked|one error naming the pool counts and the earliest retry, never a key|"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    392,
+    347,
+    349
+   ],
+   [
+    "replace",
+    392,
+    395,
+    349,
+    352,
+    [
+     " `CredentialStore(mnemo_config_dir() / \"credentials.db\").add_credential(...)`,",
+     " or the `KeyPool`/`CredentialStore` API directly; a task cell with no",
+     " `api_key` still works as long as its provider pool holds one."
+    ]
+   ],
+   [
+    "equal",
+    395,
+    396,
+    352,
+    353
+   ],
+   [
+    "replace",
+    396,
+    398,
+    353,
+    355,
+    [
+     " one derived from `base_url`. `account = \"<account-id>\"` (optional) selects a",
+     " named account's own pool — rotation never crosses accounts."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    399,
+    355,
+    356
+   ],
+   [
+    "replace",
+    399,
+    401,
+    356,
+    358,
+    [
+     " pool on startup **while the pool is empty** and keeps working untouched; the",
+     " env var is never deleted and no key is ever logged."
+    ]
+   ],
+   [
+    "equal",
+    401,
+    402,
+    358,
+    359
+   ],
+   [
+    "replace",
+    402,
+    403,
+    359,
+    360,
+    [
+     " pool, so an entry contributes its key and endpoint, not a model override."
+    ]
+   ],
+   [
+    "equal",
+    403,
+    422,
+    360,
+    379
+   ],
+   [
+    "replace",
+    422,
+    423,
+    379,
+    380,
+    [
+     "|`[server] auth`|Bind allowed|Storage|Who can read your data?|"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    424,
+    380,
+    381
+   ],
+   [
+    "replace",
+    424,
+    427,
+    381,
+    384,
+    [
+     "|`no-auth` (default)|loopback only (non-loopback bind refused)|`~/.mnemo/memories.db` + `config.toml`|Only your OS user|",
+     "|`token`|any|same, one shared `default` namespace|Anyone holding the shared token|",
+     "|`multi`|any|per-namespace `~/.mnemo/subs/<ns>/memories.db` (via `users.toml`)|Each token holder sees only their own namespace|"
+    ]
+   ],
+   [
+    "equal",
+    427,
+    429,
+    384,
+    386
+   ],
+   [
+    "replace",
+    429,
+    431,
+    386,
+    387,
+    [
+     "Apache-2.0 -- See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

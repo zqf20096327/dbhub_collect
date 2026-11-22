@@ -3459,5 +3459,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fad66b584793": {
+  "identity": {
+   "one_liner": "Go 编写的 CLI 工具，备份 MariaDB/MongoDB 并压缩、加密后上传至 S3 等存储。",
+   "review": "该工具通过调用 mariadb-backup、mariadb-dump 或 mongodump 执行物理或逻辑备份，经 pigz 压缩、可选 AES-256-GCM 加密后，上传到 S3 兼容存储、FTP 或本地文件系统，并支持保留策略轮换和内置定时调度。面向需要自动化数据库备份的运维人员，需自行提供对应备份二进制及至少 2 倍数据库大小的临时空间（流式模式除外）。配置经 CLI 标志、环境变量或 .env 文件加载。",
+   "highlights": [
+    "支持物理备份（mariadb-backup）、逻辑备份（mariadb-dump）和 MongoDB 备份（mongodump）三种方式",
+    "提供 S3 兼容存储、FTP、本地文件系统三种存储后端，并支持 --stream 模式直接流式上传、不落盘",
+    "支持按数量、最大年龄、每日/每周/每月保留数等保留策略，以及内置调度守护进程"
+   ],
+   "use_cases": [
+    "通过环境变量或 Docker 容器定时备份云上 MariaDB 数据库至 S3 兼容对象存储",
+    "对 MariaDB 与 MongoDB 混合环境执行备份并通过备份注册表统一追踪",
+    "磁盘临时空间有限时，使用 --stream 流式上传逻辑或 MongoDB 备份"
+   ]
+  },
+  "sha": "fad66b584793",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

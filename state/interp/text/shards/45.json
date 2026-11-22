@@ -3301,5 +3301,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5c02740ce272": {
+  "identity": {
+   "one_liner": "DuckDB 的 Rust 绑定，API 参考 rusqlite，支持 Arrow/Parquet 读写与扩展开发",
+   "review": "duckdb-rs 是 DuckDB 的 Rust 封装 crate，提供受 rusqlite 启发的类型安全 API。支持原生读写 Arrow、Parquet、JSON、CSV，可注册自定义标量与表函数以编写 DuckDB 扩展。默认通过 pkg-config 或 Vcpkg 查找系统库，启用 bundled 特性则在编译期内嵌源码构建；版本号第二位编码对应 DuckDB 版本。另有面向 DuckDB v2 C API 的 beta 版 crate duckdb-neo。",
+   "highlights": [
+    "提供类型安全查询接口，API 参考 rusqlite 风格，支持 Connection、params 等",
+    "原生读取和写入 Arrow、Parquet、JSON、CSV 格式，支持 appender 批量插入",
+    "通过 vtab/vscalar 特性定义自定义表函数与标量函数，loadable-extension 可构建可加载扩展"
+   ],
+   "use_cases": [
+    "在 Rust 应用中以 SQL 查询与写入 DuckDB 数据",
+    "在 Rust 与 Arrow RecordBatch、Polars DataFrame 之间转换数据并查询 Parquet/JSON/CSV 文件",
+    "用 Rust 编写 DuckDB 的自定义标量/表函数或可加载扩展"
+   ]
+  },
+  "sha": "5c02740ce272",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e3091e30121": {
+  "identity": {
+   "one_liner": "基于 C++20 的业务应用开发平台，用元数据描述生成 ERP 应用",
+   "review": "OES 是一个面向库存、会计、工资等业务应用开发平台，用 C++20 编写。开发者以元数据描述业务对象（目录、单据、登记簿、科目表），用内置脚本语言编写规则，平台据此生成数据库表、表单和报表。提供设计器、编译器、调试器、应用服务器、集群和 MCP 工具。当前为 2.0.0-preview.1，数据库格式可能变化，不支持从 1.x 迁移。",
+   "highlights": [
+    "提供查询语言（含寄存器虚拟表）、报表设计器（支持导出 Excel/Word）与带 LINQ 的脚本语言（双方言共用一个编译器，106 个内置函数）",
+    "包含设计器、WebSocket 远程调试器、对象级与行级访问控制、基于 diff 的模式变更（含 Firebird 两阶段提交补偿）",
+    "内置 MCP 服务器，提供 135 个工具供 AI 助手读写元数据、运行代码、查询数据和驱动调试器"
+   ],
+   "use_cases": [
+    "开发库存、会计、工资、销售等记账类业务应用程序",
+    "需要 AI 助手通过 MCP 参与读取、构建和检查应用的开发流程",
+    "通过应用服务器、集群和 Web 客户端部署多用户业务系统"
+   ]
+  },
+  "sha": "1e3091e30121",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eedf84313113": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 PostgreSQL 的 webhook 投递可靠性测试平台，内置故障模拟与重试监控",
+   "review": "该平台由 Next.js 前端、FastAPI 后端、PostgreSQL 存储和租约式后台 Worker 组成，用于向内置接收端发送 webhook 并观察每次投递、重试与死信判定。它支持超时、限流、间歇性错误等故障模式的配置，采用 at-least-once 投递语义（文档明确 Worker 崩溃后租约过期会重复投递），因此要求接收端自行实现幂等处理。适合作为学习或验证 webhook 可靠性机制的环境。",
+   "highlights": [
+    "内置 webhook 接收端，可配置超时、限流、间歇性错误等故障模式，支持指数退避重试、失败分类与死信队列批量重放",
+    "提供实时事件流、投递尝试历史、成功率与延迟百分位等分析数据，并内置可配置键提取的幂等去重",
+    "投递语义为 at-least-once，使用租约式 Worker 并发控制，MIT 许可证"
+   ],
+   "use_cases": [
+    "模拟与复现 webhook 投递失败场景，观察重试与死信流程",
+    "测试接收端服务在超时、限流等异常条件下的幂等处理能力",
+    "分析投递成功率、延迟分布与失败模式"
+   ]
+  },
+  "sha": "eedf84313113",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6248a01a8c88": {
+  "identity": {
+   "one_liner": "面向委内瑞拉五金店的POS系统，前后端分离，支持分装库存与USD/VES双币计费",
+   "review": "该项目是为委内瑞拉五金店（ferreterías）设计的销售点系统，包含销售、分装库存（按米、公斤等小数单位）和双币种（美元USD/玻利瓦尔VES）计费。技术架构为CodeIgniter 4后端API、Vue 3前端、MySQL 8.0与Redis，通过Docker Compose部署。库存变动需生成不可变的kardex记录，单据冻结交易时点汇率。安装需Docker环境并执行migrate与seed命令。",
+   "highlights": [
+    "双币计费：以USD为锚定货币，发票冻结交易时点的汇率与双币金额，支持单张发票混合多种USD/VES支付方式（现金、借记/信用卡、Zelle、Binance、Pago Móvil等）",
+    "分装库存：库存与数量字段使用DECIMAL(12,3)，支持产品设置采购单位到销售单位的转换系数，并强制所有库存变动写入不可变的movimientos_inventario记录",
+    "多收银台并发控制：使用Redis实现跨收银台的临时库存预留与分布式锁（SET NX EX加Lua脚本），登录与API分别限速15/180 req/min，JWT支持黑名单即时吊销"
+   ],
+   "use_cases": [
+    "五金店零售场景：按整件或小数单位（米、公斤、升）销售商品，POS提供+0.25/+0.50等快速分装按钮与条码扫描器支持",
+    "高通胀双币环境收银：按BCV汇率实时换算USD/VES双币显示，收银班次含双币备用金登记、实盘盘点与溢缺对账",
+    "需要审计追溯的库存管理：每笔采购、销售、冲销、调整均生成kardex记录，含变动前后余额与双币单位成本"
+   ]
+  },
+  "sha": "6248a01a8c88",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e6eaeebad073": {
+  "identity": {
+   "one_liner": "只读离线的本地 OpenAI Codex 日志取证审计工具，双实现 Node.js/Python",
+   "review": "codex-local-audit 是一个跨平台（Windows/macOS/Linux）只读离线审计工具，用于检查本地 OpenAI Codex Desktop/CLI 的 ~/.codex 日志、SQLite 数据库与已安装客户端二进制。它以零依赖的 Node.js 与 Python 3 两套实现提供同等功能，可检测推理 token 异常（如 516 截断、零推理输出）、summary 配置变更，并核对 SQLite 删除残留与明文 auth.json 是否存在。全程只读、不联网、不读取凭据，适合关注本地遥测与隐私合规状况的 Codex 用户。",
+   "highlights": [
+    "只读打开所有 SQLite 数据库，不修改 ~/.codex/ 内任何文件，零网络请求",
+    "提供功能对等的 Node.js（零外部依赖）与 Python 3 两种实现，含 --json/--markdown 匿名化报告导出",
+    "检查推理 token 量化截断（516/1034/1552/2070）、零推理抑制、turn_context.summary 变更时间线及二进制内 models.json 默认值"
+   ],
+   "use_cases": [
+    "审计本地 Codex 会话日志中的推理 token 异常与订阅额度使用情况",
+    "核查本地 SQLite 存储的删除残留、明文凭据文件存在性等隐私合规状况（GDPR Arts. 5/6/15/17/25/32 自查）",
+    "生成匿名化的 JSON/Markdown 审计报告，用于个人存档或 DSAR/监管申报材料"
+   ]
+  },
+  "sha": "e6eaeebad073",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "09db955a70f4": {
+  "identity": {
+   "one_liner": "基于 NestJS 的 AI 全栈后端，集成 JWT 鉴权、SSE 流式输出与 RAG 联网搜索。",
+   "review": "该项目是一个后端服务模板，基于 NestJS 框架实现，数据层使用 Prisma 连接 MySQL（TiDB Cloud），面向需要构建 AI 对话类应用的后端开发者。其核心机制包括：JWT 无状态鉴权、POST SSE 流式长连接输出、AI 意图路由结合 Tavily 联网搜索实现 RAG，以及 Throttler 限流防刷。README 还提供了 NestJS 模块、控制器、服务的脚手架生成命令。",
+   "highlights": [
+    "支持 JWT 无状态鉴权与 Throttler 限流",
+    "提供 POST SSE 流式长连接输出能力",
+    "实现 AI 意图路由并集成 Tavily 联网搜索（RAG）"
+   ],
+   "use_cases": [
+    "搭建带流式输出的 AI 对话后端服务",
+    "需要联网搜索增强回答（RAG）的应用开发",
+    "基于 NestJS 模块化架构扩展业务模块"
+   ]
+  },
+  "sha": "09db955a70f4",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

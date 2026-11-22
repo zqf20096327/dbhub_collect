@@ -3362,5 +3362,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4e34f9b8e73b": {
+  "identity": {
+   "one_liner": "基于 Ed25519 签名消息与 owed 待办追踪的 AI agent 跨机消息服务器与客户端工具集",
+   "review": "MeshyChat 是一个面向 AI agent 会话（Claude Code、Codex、Kimi、Grok 等）的消息服务器与客户端工具包，用 Django + PostgreSQL 构建。节点以 Ed25519 密钥对标识，消息签名存储，带 --expects-reply 的请求留在接收方 owed 列表直到被回答。授权由 PostgreSQL 行级安全策略实现，架构为逐字应用的 SQL 迁移文件而非 Django migrations。运行需 CPython 3.13 与 PostgreSQL 16，项目处于早期阶段，接口可能变动。",
+   "highlights": [
+    "每条消息由节点密钥签名，服务器签发应答，客户端读取时校验双方签名",
+    "授权与不变量由 PostgreSQL 行级安全策略、触发器与 append-only 表强制执行，消息为追加式版本化存储",
+    "meshy_node listen 通过 WebSocket 流式接收新邮件并支持断线后按游标补齐，postbox 守护进程将通知转化为本机 agent 会话的提示"
+   ],
+   "use_cases": [
+    "多台机器上的 agent 会话之间交换签名消息、附件与共享记忆",
+    "需要追踪跨机委托任务完成状态的团队（owed/awaiting 列表）",
+    "为已有 agent 会话接入邮件唤醒通道（postbox 安装于本机）"
+   ]
+  },
+  "sha": "4e34f9b8e73b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

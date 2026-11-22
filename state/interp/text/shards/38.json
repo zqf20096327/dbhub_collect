@@ -3538,5 +3538,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d3b0cdfa8ba3": {
+  "identity": {
+   "one_liner": "Rust 编写的 Redis 兼容内存 KV 存储与 PostgreSQL 缓存代理",
+   "review": "FyroDB 是用 Rust 实现的内存键值存储，提供 Redis 兼容接口和 PostgreSQL 缓存代理功能，据描述还包含查询缓存与向量搜索。仓库内 CI/CD 通过标签触发测试、Lint、Verus 验证、E2E 与基准测试。基准数据基于 Intel i5-11400H、回环 TCP、五字节值的特定条件下测得，复现命令在仓库中给出。",
+   "highlights": [
+    "提供 Redis 兼容的内存 KV 存储接口，可作为 Redis 替换部署",
+    "包含面向 PostgreSQL 的缓存代理与查询缓存功能",
+    "CI/CD 流水线集成测试、Lint、Verus、Docker E2E 与基准验证，并按标签触发定向检查"
+   ],
+   "use_cases": [
+    "需要 Redis 协议兼容的内存键值读写场景",
+    "为 PostgreSQL 查询提供缓存代理的部署",
+    "需要向量搜索能力的内存数据场景"
+   ]
+  },
+  "sha": "d3b0cdfa8ba3",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "88281f57c196": {
+  "identity": {
+   "one_liner": "基于 .NET/C# 的分布式 SQL 数据库，默认串行化隔离并用 Raft 复制事务性 KV 存储层",
+   "review": "CamusDB 是用 C# 在 .NET 上实现的分布式 SQL 数据库，SQL 接口下是 Raft 复制、事务性的键值存储层。默认提供串行化隔离与强一致性，支持写时复制数据库分支、已删对象恢复与 AS OF SYSTEM TIME 历史读取。README 说明它已用于生产但部分功能仍年轻，API 与存储格式可能随版本变化。适合能接受 .NET 技术栈、需要可分支或可回溯数据副本的场景。",
+   "highlights": [
+    "默认串行化隔离：悲观两阶段锁、wait-die 死锁避免、跨分区写入使用基于 Raft 的两阶段提交；可按事务或进程级降为 read-committed",
+    "支持 CREATE DATABASE … BRANCH FROM 的写时复制分支、孤儿对象 RELINK 恢复、多版本存储上的 AS OF SYSTEM TIME 时间旅行读取",
+    "同一引擎编译为 WebAssembly 可在浏览器运行，客户端通过 JSON/HTTP 或 gRPC 访问"
+   ],
+   "use_cases": [
+    "需要创建生产数据库 staging 克隆、迁移演练或每个 PR 一个临时数据库的场景",
+    "调试或恢复误删/误改数据：从历史快照读回并重新插入",
+    "在 .NET 技术栈中直接以 C# 扩展数据库逻辑的团队，或需要浏览器内演示多节点 Raft 行为的教学/实验环境"
+   ]
+  },
+  "sha": "88281f57c196",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "deb2db8a57bd": {
+  "identity": {
+   "one_liner": "多租户 RAG 知识库与客服 Copilot SaaS，微服务+混合持久化架构",
+   "review": "该项目是一个多租户 RAG SaaS 平台，供企业上传 PDF/TXT 文档并生成可嵌入网站的 AI 客服组件。架构上分离 Node.js 控制面与 FastAPI 数据面，使用 MongoDB 管理租户配置、TiDB MySQL 记录配额与用量、ChromaDB 按 tenant_id 元数据过滤存储向量。部署需分别配置三个服务的 .env（含 Groq API Key）并启动三个进程，依赖外部 MongoDB/TiDB 云服务。",
+   "highlights": [
+    "ChromaDB 相似度查询强制 tenant_id 元数据过滤，实现租户间向量数据隔离",
+    "通过 SSE 管道（Groq → FastAPI StreamingResponse → 浏览器 ReadableStream）流式输出回答",
+    "在 TiDB MySQL 中逐次记录 prompt/completion token，达到套餐上限后拦截请求"
+   ],
+   "use_cases": [
+    "企业将内部文档构建为知识库并对外提供 AI 客服问答",
+    "需要在自有网站以单脚本标签嵌入带品牌定制的聊天组件",
+    "需要按租户计量 token 用量并执行配额限制的多租户 SaaS 运营场景"
+   ]
+  },
+  "sha": "deb2db8a57bd",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

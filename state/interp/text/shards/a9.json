@@ -3534,5 +3534,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e9f6879e1f39": {
+  "identity": {
+   "one_liner": "自托管书库与阅读进度同步服务器，单 Go 二进制运行。",
+   "review": "LiseurSync 是一个自托管的书库与阅读同步服务器，为 Liseur、KOReader、CrossPoint 及网页阅读器保存书籍、阅读进度和统计。它以单个 Go 二进制运行，默认使用 SQLite，也可连接 PostgreSQL；支持多用户，并可通过 OPDS 供其他阅读应用浏览下载书籍。文件夹默认只读，需显式开启上传。",
+   "highlights": [
+    "索引普通文件夹或 Calibre 书库中的 EPUB，不移动原文件，并支持全文搜索与 CSV 导出",
+    "跨设备同步阅读进度（含段落级位置）、标注、书签、生词复习及阅读统计，旧进度不会覆盖新进度",
+    "提供 OPDS 1.2/2.0 目录、REST API，以及面向 ChatGPT 等助手的只读 MCP 连接"
+   ],
+   "use_cases": [
+    "在 Android 手机、KOReader/CrossPoint 电子阅读器和浏览器之间同步阅读进度与标注",
+    "自建电子书库，通过 OPDS 供多用户按各自文件夹权限浏览和下载书籍",
+    "集中记录阅读时长、连续天数与阅读速度等统计数据，或让 AI 助手查询书籍与进度信息"
+   ]
+  },
+  "sha": "e9f6879e1f39",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c455bd43087a": {
+  "identity": {
+   "one_liner": "Elixir/OTP 实现的常驻 IRC bouncer，服务端终止 IRC，对外提供 REST API 与 PWA 客户端。",
+   "review": "grappa-irc 是一个常驻 IRC bouncer，含 grappa 服务端与 cicchetto PWA 客户端两部分。服务端用 Elixir/OTP + Phoenix 实现，为每个（用户，网络）运行一个受监督进程，滚动记录存于 SQLite，浏览器端只处理 JSON、不解析 IRC。适用于需从浏览器或手机持续接入 IRC 的用户，可通过 Docker 或打包版本自行部署。",
+   "highlights": [
+    "服务端终止 IRC 协议，客户端仅通过 REST 与 Phoenix Channels WebSocket 收发 JSON 资源和事件流",
+    "每个（用户，网络）对应一个受监督的 OTP 进程，滚动记录（scrollback）存储在 SQLite，按保留策略分页",
+    "支持 Docker 一键部署、ghcr.io 多架构镜像（amd64/arm64）、.deb/AUR/systemd 等安装方式，认证经 SASL 桥接到 NickServ"
+   ],
+   "use_cases": [
+    "自托管常驻 IRC 接入点，用浏览器或手机主屏幕 PWA 随时查看频道与滚动记录",
+    "对接仅支持 CAP LS + SASL 的普通 ircd，无需上游 CHATHISTORY 扩展",
+    "从 irssi/weechat/hexchat/goguma 等既有客户端经 shottino --ircd 桥接访问同一账号"
+   ]
+  },
+  "sha": "c455bd43087a",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "699c5d196c61": {
+  "identity": {
+   "one_liner": "本机优先的抖音续火控制台，按固定时刻自动向指定好友发送每日消息",
+   "review": "焰之契约者是一个基于 Playwright 浏览器自动化的抖音续火工具，面向需要维持与少数好友连续互动记录的个人用户。后端采用 FastAPI + SQLite，后台调度每分钟对齐整分钟派发任务，通过扫码登录并持久化浏览器 Profile，所有数据留在本机。它定位为单人低频使用，不提供群发、养号或绕过风控能力，且浏览器自动化可能违反抖音平台服务条款，存在账号风险。",
+   "highlights": [
+    "支持多账号管理，每个账号拥有独立浏览器 Profile 与调度，通过有头窗口扫码或容器内截图扫码登录，登录态失效时自动标记并通知",
+    "内置每日防重复机制，同一好友一天只发一次，结果无法确认时记为待人工复核而不自动重发；失败重试、连续失败熔断",
+    "提供文案池与多模板系统，支持图片与原生表情，接入 Bark 分级推送异常通知，支持只读会话扫描与五类对账"
+   ],
+   "use_cases": [
+    "每天需要给少量指定好友或群聊发送固定消息、维持连续互动记录的个人用户",
+    "希望在 Windows 桌面端（免 Docker 安装包）或自托管 Docker 环境（24 小时常驻）本机运行，数据与登录态不出本机的场景",
+    "需要登录失效、待人工复核等异常通过 Bark 推送到手机，并能对官方火花状态做只读扫描与手动对账确认的场景"
+   ]
+  },
+  "sha": "699c5d196c61",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

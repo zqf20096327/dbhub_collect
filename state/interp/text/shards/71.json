@@ -3067,5 +3067,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1c35e5aa5221": {
+  "identity": {
+   "one_liner": "面向 MCP 客户端的 PostgreSQL 服务器，默认以只读事务运行 SQL",
+   "review": "这是一个 Model Context Protocol 服务器，供 Claude Code、Cursor 等 MCP 客户端查询 PostgreSQL。它提供模式内省、EXPLAIN 执行计划、基于 pg_stat_statements 的性能诊断、健康快照和索引推荐（经 HypoPG 假想索引估算，不落盘）。SQL 默认运行在只读事务中，通过扩展协议限制单语句，写入需设置 ALLOW_WRITES=1；项目建议在 DATABASE_URL 中使用最小权限角色作为主要访问控制。通过 npx 安装，结果集默认截断为 1000 行。",
+   "highlights": [
+    "提供 pg_list_schemas、pg_describe_table、pg_explain、pg_top_queries、pg_health、pg_index_advisor 等工具，覆盖模式内省、执行计划、性能诊断与健康检查",
+    "用户 SQL 默认在 BEGIN READ ONLY 事务中经扩展协议执行，支持 $1/$2 参数化查询，写入需通过 ALLOW_WRITES=1 开启",
+    "单文件打包、零运行时依赖，支持参数化审计日志（可选，默认关闭），结果集按 POSTGRES_MAX_ROWS（默认 1000）截断并标记 truncated"
+   ],
+   "use_cases": [
+    "在 Claude Code、Cursor 等 MCP 客户端中以只读方式查询和内省 PostgreSQL 数据库结构",
+    "用 EXPLAIN ANALYZE、pg_top_queries、pg_table_bloat 等工具分析慢查询与锁等待",
+    "为开发/测试数据库启用 ALLOW_WRITES 后，让代理执行写入或 DDL 操作"
+   ]
+  },
+  "sha": "1c35e5aa5221",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e1f89d4537af": {
+  "identity": {
+   "one_liner": "解密并关联分析 Microsoft Defender mpenginedb.db/WAL 取证浏览器，内存解密。",
+   "review": "mpdbx 是一款用于读取 Microsoft Defender 引擎数据库（mpenginedb.db 及其 WAL、History Store）的取证工具，将解密后的记录按位置、进程运行、文件内容与事件关联呈现。提供 Windows exe、PowerShell 和 Python 三个版本，均单文件运行；需先通过 VSS 快照获取一致的数据库副本。exe 版功能最全，脚本版不支持 History 目录、MFT CSV 与书签。",
+   "highlights": [
+    "在内存中完成解密、WAL 回放与 SQLite 读取，标记每行来源（DB、仅 WAL、WAL 修改、被 WAL 删除）",
+    "关联规则标注强度：● 精确、◐ 部分、○ 启发式",
+    "支持搜索语法（路径/哈希/PID/时间/正则）及 CSV/JSON 导出、HTML 报告与两次取证的 diff"
+   ],
+   "use_cases": [
+    "DFIR 事件响应中对 Defender 扫描历史做取证分析",
+    "排查无嵌入证书的执行、改名可执行文件与威胁检测记录",
+    "在无法运行 exe 的环境用 PowerShell/Python 版导出解析结果"
+   ]
+  },
+  "sha": "e1f89d4537af",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

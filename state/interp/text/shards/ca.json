@@ -3200,5 +3200,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "96f76bc2783e": {
+  "identity": {
+   "one_liner": "本地运行的静态安全扫描器，带沙箱动态验证与浏览器分诊界面",
+   "review": "Nyx 是用 Rust 编写的本地安全扫描工具，对仓库做多语言跨文件污点分析，并对中高置信度发现运行沙箱 harness 进行动态验证。结果通过绑定 127.0.0.1 的 React 界面浏览，分诊状态存入 .nyx/triage.json 随代码提交。支持 10 种语言（规则深度分级），CLI 可输出 SARIF 供 CI 与 GitHub Code Scanning 使用。需 Rust 1.89+，GPL v3 许可。",
+   "highlights": [
+    "支持 10 种语言的 tree-sitter 解析与跨文件污点追踪，覆盖 SQLi、XSS、SSRF、反序列化、路径遍历等规则类",
+    "默认对 Medium 及以上置信度发现运行沙箱动态验证，输出 Confirmed/ConfirmedWithKnownGuard/PartiallyConfirmed 等判定",
+    "提供浏览器 UI（概览、发现列表、流程可视化、批量分诊、扫描对比）与 headless CLI，支持 SARIF/JSON 输出及 GitHub Action"
+   ],
+   "use_cases": [
+    "本地浏览和分诊仓库安全发现，分诊状态随代码共享给团队",
+    "CI 流水线中按严重度门槛失败并上传 SARIF 到 GitHub Code Scanning",
+    "无需云端或账号的本地化代码安全扫描场景"
+   ]
+  },
+  "sha": "96f76bc2783e",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

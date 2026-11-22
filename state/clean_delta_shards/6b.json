@@ -37545,5 +37545,631 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "0d3a52c6a19a+2": {
+  "fn": "stanislav-petryashov/monido",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "English · Русский · Deutsch · Español · Français · Português · 中文"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Monido logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    3,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "Latest release License: MIT Live demo"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Website · Live demo · Help build Monido · Releases"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "Try the live demo: a fictional family in a private copy for 15 minutes, nothing to install; the sign-in screen shows the password."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    18,
+    13,
+    18
+   ],
+   [
+    "replace",
+    18,
+    23,
+    18,
+    23,
+    [
+     "- **How much do we own, after debts?** Accounts, investments, property and loans of every family member, in every currency, in one figure. Example",
+     "- **Did we get richer this year, or did prices and exchange rates move?** Net worth over time, and its real growth after inflation in the currency you spend in. Example · formula",
+     "- **How much did we save ourselves, and how much grew on its own?** Savings and the savings rate per month, and the growth beyond them. Example · formula",
+     "- **How long would we last without income?** The emergency fund in months of spending. Example · formula",
+     "- **When do we reach our goals, and can we afford this?** Goal dates from what you actually save; with the optional Claude advisor, a purchase or a loan weighed against your own numbers and sent to the family for a vote. Goals · A family decision"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    34,
+    23,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "Open http://127.0.0.1:8080 within 15 minutes and set the family password. Server settings (port, address) go in an optional `.env` (`.env.example`, the full guide). To update: `docker compose pull`, then `docker compose up -d`. Something not working? Troubleshooting."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    35,
+    36
+   ],
+   [
+    "replace",
+    36,
+    37,
+    36,
+    37,
+    [
+     "**On a server or from other devices:** the port is published on `127.0.0.1` only, so the address above works on the machine running Docker and nowhere else. To reach Monido from another computer, your phone or the internet, put a reverse proxy with HTTPS in front of it (Caddy, nginx, Traefik). Reverse proxy and HTTPS has a Caddy example and the settings a proxy needs (`APP_URL`, `CLIENT_IP_HEADER`)."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    58,
+    37,
+    58
+   ],
+   [
+    "replace",
+    58,
+    60,
+    58,
+    59,
+    [
+     "Advisor: a family proposal with its consequences and the votes"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    63,
+    59,
+    62
+   ],
+   [
+    "replace",
+    63,
+    64,
+    62,
+    63,
+    [
+     "Once a month the family enters each account's month-end balance and, if you want the cash-flow figures, the month's income and expenses; Close month checks that every account is filled in and then adds the month to the dashboard. Only closed months count, every figure is computed by the app from what was entered, and every formula is written down in Finance rules."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    71,
+    63,
+    70
+   ],
+   [
+    "replace",
+    71,
+    85,
+    70,
+    84,
+    [
+     "||Monido|Kubera|Actual Budget|Ghostfolio|",
+     "|---|---|---|---|---|",
+     "|Price and licence|Free, MIT|$250 a year (Essentials), $2,500 (Black)|Free, MIT|Free to self-host, AGPLv3; paid cloud plan|",
+     "|Self-hosted, open source|✓|✗ hosted service|✓|✓|",
+     "|Bank sync|✗ by design: nothing connects to your bank; month-end balances take a few minutes, statements can go through Claude|✓ Plaid, Yodlee, MX, Mastercard|✓ SimpleFIN, Enable Banking, GoCardless, Akahu, Pluggy.ai|✗|",
+     "|Multi-currency|✓|✓|✗|✓|",
+     "|Per family member, ownership|✓ an owner for every account, sign-in per person|Partial: ownership tags in Black only|✗ shared budget files|✗ a portfolio per user|",
+     "|Investment performance|Partial: yearly return per account, no live prices|✓ IRR|✗|✓ live prices, benchmarks|",
+     "|Loans and early repayment|✓ schedules, early payments compared|Partial: debts, Fast Forward scenarios|Partial: balances|Partial: liabilities|",
+     "|Real estate|✓ valuations, equity|✓ valued by address|Partial: an off-budget account|Partial: a manual asset|",
+     "|Financial-health indicators|✓ with thresholds and formulas|?|✗|Partial: portfolio risk rules, emergency fund|",
+     "|AI assistant|Optional: your own Claude, family vote in Telegram|✓ Claude, ChatGPT, Grok|✗ community MCP servers only|✓ MCP, experimental|",
+     "|Import and export|✓ CSV export, history import, statements through Claude|✓ file import, spreadsheet export|✓ QIF, OFX, QFX, CAMT.053, CSV; export|✓ activities|",
+     "|Mobile|Installable web app (PWA)|Installable web app (PWA)|Installable web app (PWA); iOS app in beta|Installable web app (PWA)|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    84,
+    85
+   ],
+   [
+    "replace",
+    86,
+    87,
+    85,
+    86,
+    [
+     "Competitor features as of November 2026, from their own websites and documentation; a correction is welcome as an issue."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    103,
+    86,
+    102
+   ],
+   [
+    "replace",
+    103,
+    104,
+    102,
+    103,
+    [
+     "Monido is young: its public history starts in November 2026, it has one maintainer, and it is released often (see Releases and the changelog). Most of the code is written with Claude Code; the maintainer directs and reviews the changes. Nothing is merged unless the full check passes in CI (lint, dead-code check, the test suite, build and size budgets), and every formula is written down in Finance rules with worked examples you can check by hand. Updates keep your data: an existing database is checked on every start and never changed behind your back, and you can download a copy before updating. Five of the seven languages are machine translations awaiting review. What comes next is on the roadmap."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    109,
+    103,
+    108
+   ],
+   [
+    "replace",
+    109,
+    111,
+    108,
+    110,
+    [
+     "- **PikaPods** (managed hosting): not yet available. Vote for Monido to have it added.",
+     "- **Claude connector (MCP):** listed in the official MCP Registry and on Glama."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    110,
+    113
+   ],
+   [
+    "replace",
+    114,
+    115,
+    113,
+    114,
+    [
+     "The interface is in English, Russian, German, Spanish, French, Brazilian Portuguese and Simplified Chinese. The German, Spanish, French, Portuguese and Chinese texts are machine translations waiting for native speakers to review them. Corrections are welcome: see Translating."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    114,
+    115
+   ],
+   [
+    "replace",
+    116,
+    117,
+    115,
+    116,
+    [
+     "Translation status"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    116,
+    117
+   ],
+   [
+    "replace",
+    118,
+    119,
+    117,
+    118,
+    [
+     "Translations are managed on Weblate: pick your language, fix or approve strings, and the changes come back to this repository as a pull request."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    118,
+    121
+   ],
+   [
+    "replace",
+    122,
+    132,
+    121,
+    131,
+    [
+     "- Worked examples: seven household questions with fictional data, verification results and limits.",
+     "- User guide: the pages, the monthly update and the settings.",
+     "- Configuration: environment variables, sign-in modes and optional integrations.",
+     "- Deployment: Docker, HTTPS behind a reverse proxy, updates and backups, the public demo.",
+     "- Development: running from source, the commands and the screenshots.",
+     "- Architecture: the code map, the data model and how-tos.",
+     "- Finance rules: how each metric is calculated and judged.",
+     "- Database schema: the current tables and compatibility rules.",
+     "- Design system: tokens, components and rules for the interface.",
+     "- Maintaining: the first public release and cutting a release."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    134,
+    131,
+    133
+   ],
+   [
+    "replace",
+    134,
+    141,
+    133,
+    134,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    143,
+    134,
+    136
+   ],
+   [
+    "replace",
+    143,
+    144,
+    136,
+    137,
+    [
+     "Login, sessions, throttling, the Content-Security-Policy and how to report a vulnerability privately: SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    146,
+    137,
+    139
+   ],
+   [
+    "replace",
+    146,
+    198,
+    139,
+    140,
+    [
+     "MIT."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "1e6661e9d24b+2": {
+  "fn": "rafsaf/ogion",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "replace",
+    0,
+    8,
+    0,
+    8,
+    [
+     "License",
+     "Python 3.15",
+     "Ruff",
+     "Tests",
+     "Type check",
+     "Dev build",
+     "Release build",
+     "Update of db versions"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    13,
+    8,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "Backups are in age format, with strong encryption under the hood. Why age? it's modern replacement for GnuPG, available for most architectures and systems. Lzip compression is used before encryption step."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    19,
+    14,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "- https://ogion.rafsaf.pl"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    20,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "There are better tools for bigger databases like pgBackRest - Reliable PostgreSQL Backup & Restore."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    48,
+    24,
+    48
+   ],
+   [
+    "replace",
+    48,
+    49,
+    48,
+    49,
+    [
+     "Using docker image: `rafsaf/ogion:latest`, see all tags on dockerhub"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    66,
+    49,
+    66
+   ],
+   [
+    "replace",
+    66,
+    76,
+    66,
+    67,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    78,
+    67,
+    69
+   ],
+   [
+    "replace",
+    78,
+    79,
+    69,
+    70,
+    [
+     "(NOTE this will use provider debug that store backups locally in the container)."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    82,
+    70,
+    73
+   ],
+   [
+    "replace",
+    82,
+    83,
+    73,
+    74,
+    [
+     "The author actively uses ogion (with GCS) for one production project plemiona-planer.pl postgres database (both PRD and STG) and for bunch of homelab projects including self hosted Firefly III mariadb, Grafana postgres, KeyCloak postgres, Nextcloud postgres and configuration file, Minecraft server files, and two other postgres dbs for some demo projects."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    74,
+    77
+   ],
+   [
+    "replace",
+    86,
+    87,
+    77,
+    78,
+    [
+     "ogion_gcp_example_twp-min.jpg"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    103,
+    78,
+    94
+   ],
+   [
+    "delete",
+    103,
+    106,
+    94,
+    94
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "e26e9910b0fd+2": {
+  "fn": "gravion-ux/catalog-forge",
+  "clean_ver": "2",
+  "raw_lines": 24,
+  "ops": [
+   [
+    "equal",
+    0,
+    24,
+    0,
+    24
+   ],
+   [
+    "replace",
+    24,
+    38,
+    24,
+    25,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    80,
+    25,
+    67
+   ],
+   [
+    "replace",
+    80,
+    84,
+    67,
+    71,
+    [
+     "- `docs/USER-GUIDE.md` — how to crawl a shop and edit",
+     " prices, step by step",
+     "- `docs/API.md` — every endpoint with its request and response",
+     " shapes"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    86,
+    71,
+    73
+   ],
+   [
+    "delete",
+    86,
+    87,
+    73,
+    73
+   ],
+   [
+    "equal",
+    87,
+    88,
+    73,
+    74
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

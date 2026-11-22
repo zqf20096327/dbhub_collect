@@ -31161,5 +31161,756 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "eb01fdc9db29+2": {
+  "fn": "boundsj/t3-fleet-gateway",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "CI"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "**Let your bots start, follow and pick up coding work on your T3 Code machines.**"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    16,
+    5,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "A bot connects to one gateway, which routes coding work to T3 projects on several machines."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    20,
+    17,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "T3 Code already covers a lot of this on its own. As of T3 v0.1.6:"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    26,
+    22,
+    26,
+    [
+     "- **Remote access is built in.** T3 Connect, LAN pairing, Tailscale HTTPS and SSH let you reach your machines from other devices. Remote access",
+     "- **Outside agents get their own MCP endpoint.** Each machine serves HTTP MCP with OAuth sign-in. Claude Code, Codex, ChatGPT and other OAuth clients can launch, message, read, wait on and stop threads, and answer worker questions. Launches and sends take a retry key (`clientRequestId`). Outside agents",
+     "- **Machines can work together.** *Linked environments*, a Labs beta you turn on for both machines, lets agents on one machine launch and steer work on another; most tools take an `environmentId`. Link another environment",
+     "- **It tracks PRs and sends push alerts.** Workers link PRs to threads and can watch them. T3's mobile app gets an alert when an agent finishes, fails or needs you (this needs T3 Connect). Linked pull requests · Mobile notifications"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    38,
+    26,
+    38
+   ],
+   [
+    "replace",
+    38,
+    50,
+    38,
+    50,
+    [
+     "||T3 Code alone (v0.1.6)|With the gateway|",
+     "|---|---|---|",
+     "|Bot connection|An OAuth MCP endpoint on each machine|One OAuth MCP endpoint for every configured machine; bearer tokens for bots without OAuth, overlap rotation and per-token usage|",
+     "|More machines|Linked environments (Labs beta): turn on for both, link with a pairing code|Add the host to the config and enroll it once|",
+     "|Access per bot|Read only, or a runtime-mode ceiling that applies in every project|Read or Operate per machine, plus optional project allowlists per bot; model, runtime mode and \"may start work\" per project|",
+     "|Staying connected|Agent sign-ins and environment links last 30 days, then you approve or link again; no refresh|Bot sign-ins refresh (an unused refresh token expires after 90 days by default); the gateway renews its own T3 credentials and alerts you if renewal fails|",
+     "|Safe retries|`clientRequestId` on launch and send|A stored `requestId` on every start, follow-up, answer, adoption and settle; a lost launch is found again, never relaunched|",
+     "|Following work|Read or wait on one thread at a time|Jobs with stable IDs, and one `work_feed` with a cursor across all jobs and machines|",
+     "|Notifications|Push to T3's mobile app; webhooks only *into* T3, to trigger automations|Webhooks *out* to your bot, with filters, delivery health and replay|",
+     "|Pull requests|Link and watch PRs; a watch wakes the T3 agent|Each job's PRs and their state, readable by bots; optional PR webhooks|",
+     "|Threads you started by hand|Agents with access can read and message any thread|Adopt a thread so it gets a job ID, feed events, webhooks and a dashboard row|",
+     "|Operator view|T3's app on each machine; agents under Settings → Sharing & access|One private dashboard for hosts, bots, jobs and webhooks|"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    53,
+    50,
+    53
+   ],
+   [
+    "replace",
+    53,
+    54,
+    53,
+    54,
+    [
+     "*T3 facts checked on 2026-10-31 against the v0.1.6 docs and tagged source (`2359643cffa6`). See the gateway compatibility review for contract changes and verification limits. Sign-in lifetime: outside agents, \"Remove an agent\"; no refresh grant: `McpOAuth.ts`; link lifetime: link another environment; access levels: outside agents, \"Approve a sign-in\"; inbound webhooks: webhook automations.*"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    63,
+    54,
+    63
+   ],
+   [
+    "replace",
+    63,
+    64,
+    63,
+    64,
+    [
+     "Adoption is opt-in per bot. The host needs discovery turned on, and you grant the bot `threads:read` and `threads:control` on the gateway machine (step 4 of setup). Archived threads, delegated child threads and threads the gateway already follows cannot be adopted. How adoption works."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    64,
+    65
+   ],
+   [
+    "replace",
+    65,
+    66,
+    65,
+    66,
+    [
+     "For a long-running thread you want every bot to use, such as a coordinator, register it yourself as a **standing job** instead (see Coordinator threads)."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    71,
+    66,
+    71
+   ],
+   [
+    "replace",
+    71,
+    72,
+    71,
+    72,
+    [
+     "You approve each bot once with a one-time code on the gateway's approval page. Choose **Read** (follow work) or **Operate** (also start and steer it), on **All machines** or only **Selected machines**. Bots that take only a bearer token get one from `clients token`. Use `clients tokens <client id>` to inspect safe token IDs, creation, expiry, last use and recent tool call counts. Rotate with `clients rotate <client id> --token-id <id> --overlap 7d`, then update the bot privately before the old token expires. `clients revoke-token <client id> --token-id <id>` revokes one token immediately; `clients revoke <client id>` revokes them all. Bots never see T3's credentials. Per-host grants."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    72,
+    73
+   ],
+   [
+    "replace",
+    73,
+    74,
+    73,
+    74,
+    [
+     "Limit a bot to approved projects with `clients projects <client id> --project <alias> --project @<host>/<projectId>`. Repeat `--project` for each approved project; this replaces the whole list. It applies to every token of that client, including rotated tokens, and takes effect on the next request without a restart. Discovery, job feeds, attention lists, thread access and bot notifications stay inside the list and the bot's machine grants. No list keeps today's access; `--no-projects` denies all projects and `--all-projects` removes the restriction. Project access."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    83,
+    74,
+    83
+   ],
+   [
+    "replace",
+    83,
+    89,
+    83,
+    84,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    93,
+    84,
+    88
+   ],
+   [
+    "replace",
+    93,
+    94,
+    88,
+    89,
+    [
+     "If the tunnel goes down, bots lose access even while the gateway itself is healthy. `doctor` and the dashboard's **Run checks** test the public URL from the gateway machine; a pass there still needs a connection check from your bot. See troubleshooting if the bridge is out."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    112,
+    89,
+    107
+   ],
+   [
+    "replace",
+    112,
+    113,
+    107,
+    108,
+    [
+     "To connect a Grok Bot routine, paste its URL and header into the private dashboard and click **Connect & Test**. Filters narrow a connection to projects, hosts, jobs, events or the bot that started the job. On a connection you set up for one bot, that bot can subscribe its own jobs (`work_subscribe`), check delivery health (`work_notifications`) and replay missed notices from a seven-day archive (`work_replay`). Bot notifications and recovery."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    118,
+    108,
+    113
+   ],
+   [
+    "replace",
+    118,
+    119,
+    113,
+    114,
+    [
+     "While its helpers run, the job is `idle` with `waitingOnDelegatedWork: true`, so the bot knows to wait instead of sending more instructions. When T3 starts the coordinator's next turn, the job goes back to `running`. Standing jobs."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    124,
+    114,
+    119
+   ],
+   [
+    "replace",
+    124,
+    125,
+    119,
+    120,
+    [
+     "`standingInstructions` adds your shared rules, such as \"run the checks before handing back\", to the first message of every new job. Standing instructions."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    128,
+    120,
+    123
+   ],
+   [
+    "replace",
+    128,
+    129,
+    123,
+    124,
+    [
+     "When a worker links its PR in T3 (`link_pull_request`), `work_status` and `work_list` show the job's PRs and their open or merged state, and the dashboard shows a badge. The gateway refreshes them about once a minute while it follows the job. PR tracking limits."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    132,
+    124,
+    127
+   ],
+   [
+    "replace",
+    132,
+    133,
+    127,
+    128,
+    [
+     "T3 credentials expire. The gateway renews its own before they do, using the pairing command you configured, and keeps the old one until the new one is verified. If renewal fails, it raises a credential alert on the dashboard and through webhook connections that include credential events (new connections do by default). **Hosts → Re-pair** in the dashboard then runs the pairing flow again after you confirm it. No pairing code is shown or pasted. Credential renewal."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    136,
+    128,
+    131
+   ],
+   [
+    "replace",
+    136,
+    137,
+    131,
+    132,
+    [
+     "The private dashboard showing fictional hosts, clients and jobs."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    140,
+    132,
+    135
+   ],
+   [
+    "replace",
+    140,
+    141,
+    135,
+    136,
+    [
+     "One page for the operator: which hosts answer, which bots connected and when, jobs waiting on you, credential problems and webhook delivery health. **Run checks** tests every host and the public URL on demand. It also connects webhook receivers, confirms host re-pair and settles quiet jobs. It runs on its own loopback port, published only on your private network. Anyone who can reach it can use those controls. Dashboard setup."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    146,
+    136,
+    141
+   ],
+   [
+    "replace",
+    146,
+    147,
+    141,
+    142,
+    [
+     "- An always-on machine with **Node.js 24.22.3 or a later 24.x, or 26.13.1 or newer**. Older releases lack the required security fixes."
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    142,
+    143
+   ],
+   [
+    "replace",
+    148,
+    149,
+    143,
+    144,
+    [
+     "- A public HTTPS tunnel, such as Tailscale Funnel or Cloudflare Tunnel: how bots reach the gateway."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    161,
+    144,
+    156
+   ],
+   [
+    "replace",
+    161,
+    183,
+    156,
+    157,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    198,
+    157,
+    172
+   ],
+   [
+    "replace",
+    198,
+    199,
+    172,
+    173,
+    [
+     "If the bot accepts only a bearer token, run `node bin/t3-fleet-gateway.js clients token --name <bot> --access operate --hosts <host ids> --ttl 90d` instead and paste the printed token privately into the bot's connection settings. It is shown once and has no refresh. Bearer tokens."
+    ]
+   ],
+   [
+    "equal",
+    199,
+    206,
+    173,
+    180
+   ],
+   [
+    "replace",
+    206,
+    217,
+    180,
+    181,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    229,
+    181,
+    193
+   ],
+   [
+    "replace",
+    229,
+    238,
+    193,
+    194,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    246,
+    194,
+    202
+   ],
+   [
+    "replace",
+    246,
+    247,
+    202,
+    203,
+    [
+     "\"Test accepted\" means the receiver took the request. Check the bot conversation to see that the routine ran. If you recreate the routine, its URL and key can both change: use **Replace key** with both. Other HTTPS receivers work the same way. No dashboard? Configure a webhook by hand."
+    ]
+   ],
+   [
+    "equal",
+    247,
+    256,
+    203,
+    212
+   ],
+   [
+    "replace",
+    256,
+    260,
+    212,
+    213,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    260,
+    266,
+    213,
+    219
+   ],
+   [
+    "replace",
+    266,
+    267,
+    219,
+    220,
+    [
+     "Every step above is in the manual setup guide, with more on the service, the dashboard and webhooks."
+    ]
+   ],
+   [
+    "equal",
+    267,
+    289,
+    220,
+    242
+   ],
+   [
+    "replace",
+    289,
+    290,
+    242,
+    243,
+    [
+     "When you've reviewed a job, the bot can `work_settle` it, which parks the T3 thread without archiving it. An idle settled job can still be continued later. Settlement."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    293,
+    243,
+    246
+   ],
+   [
+    "replace",
+    293,
+    301,
+    246,
+    254,
+    [
+     "|Term|Meaning|",
+     "|---|---|",
+     "|Host|A T3 Code server on one machine. The gateway connects to each configured host on its own.|",
+     "|Project alias|A short name, such as `pilot`, for a host and T3 project, with your launch rules.|",
+     "|Client|A bot or agent connected to the gateway, with its own access grant.|",
+     "|Job|The gateway's record of one T3 thread: stable ID, link, state and event history.|",
+     "|Worker|The agent running inside the T3 thread. Your bot gives it work and reads its replies.|",
+     "|Webhook|An HTTPS notice that wakes a bot. The bot then reads details over MCP.|"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    304,
+    254,
+    257
+   ],
+   [
+    "replace",
+    304,
+    313,
+    257,
+    266,
+    [
+     "|Task|MCP tools|",
+     "|---|---|",
+     "|See hosts, projects and models|`fleet_status`, `fleet_projects`, `fleet_models`|",
+     "|Start work|`work_start`|",
+     "|Read state, history and replies|`work_status`, `work_list`, `work_feed`, `work_messages`|",
+     "|Follow up, answer questions or interrupt|`work_continue`, `work_respond`, `work_cancel`|",
+     "|Settle a quiet thread after review|`work_settle`|",
+     "|Find and adopt threads started in T3|`fleet_threads`, `work_adopt`|",
+     "|Manage its own notifications|`work_notifications`, `work_subscribe`, `work_replay`|"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    314,
+    266,
+    267
+   ],
+   [
+    "replace",
+    314,
+    315,
+    267,
+    268,
+    [
+     "`fleet_projects`, `fleet_models` and `fleet_threads` need discovery on the host; the thread tools also need the thread scopes. Schemas and limits: design reference."
+    ]
+   ],
+   [
+    "equal",
+    315,
+    318,
+    268,
+    271
+   ],
+   [
+    "replace",
+    318,
+    319,
+    271,
+    272,
+    [
+     "Start from config.example.json. The default location is `~/.config/t3-fleet-gateway/config.json`; keep it and the data directory private. Config changes take effect when the service restarts. Dashboard webhook connections and client scope changes apply live."
+    ]
+   ],
+   [
+    "equal",
+    319,
+    320,
+    272,
+    273
+   ],
+   [
+    "replace",
+    320,
+    330,
+    273,
+    283,
+    [
+     "|Option|Use it for|",
+     "|---|---|",
+     "|Projects, models and runtime modes|Alias destinations, model defaults, whether bots may start work and whether workers ask for approval.|",
+     "|Discovery|Let bots browse a host's T3 projects and models. Launching into projects without an alias is a separate opt-in; aliases keep their rules.|",
+     "|Scratch default|Work that names a machine but no project. Needs an explicitly pinned scratch alias; an unknown project never falls back to scratch.|",
+     "|Workspace selection|Work in the project's own folder or a worktree. Folder work edits the existing checkout directly; one gateway job per folder.|",
+     "|Standing jobs|Register a coordinator thread you already use and keep talking to it through one job ID.|",
+     "|Thread adoption|Let selected bots find and adopt threads started in T3 (`threads:read`, `threads:control`).|",
+     "|Attachments|Send images and files with `work_start` or `work_continue`: inline base64, or staged with `work_attachment_prepare` and an HTTP upload. File URLs are not supported.|",
+     "|Renewal|Credential renewal timing and alert thresholds.|"
+    ]
+   ],
+   [
+    "equal",
+    330,
+    341,
+    283,
+    294
+   ],
+   [
+    "replace",
+    341,
+    342,
+    294,
+    295,
+    [
+     "The text is added to the first message of each new job, including scratch and discovered-project jobs. It is not added to follow-ups or to adopted threads. These are instructions in the prompt, not enforced limits. Limits and lifecycle."
+    ]
+   ],
+   [
+    "equal",
+    342,
+    345,
+    295,
+    298
+   ],
+   [
+    "replace",
+    345,
+    354,
+    298,
+    307,
+    [
+     "|I want to…|Read this|",
+     "|---|---|",
+     "|Install by hand, run as a service or connect a client|Setup|",
+     "|Fix a connection, sign-in, host, job or notification problem|Troubleshooting|",
+     "|Look up every configuration field|Configuration|",
+     "|Diagnose connections, recover access, update or back up|Operations|",
+     "|Understand credentials, access and trust boundaries|Security|",
+     "|Read tool contracts and implementation details|Design|",
+     "|See release changes|Changelog · GitHub releases|"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    355,
+    307,
+    308
+   ],
+   [
+    "replace",
+    355,
+    356,
+    308,
+    309,
+    [
+     "Start connection trouble with `doctor`, then `clients diagnose <client-id>` for the bot's stored sign-in state. A valid grant does not prove that a hosted bot saved its token or that its routine is still enabled. Authentication and outage recovery."
+    ]
+   ],
+   [
+    "equal",
+    356,
+    357,
+    309,
+    310
+   ],
+   [
+    "replace",
+    357,
+    358,
+    310,
+    311,
+    [
+     "Server-side and native MCP clients are supported. Browser-only clients cannot finish the gateway's OAuth sign-in, because its OAuth endpoints do not allow cross-origin requests (CORS). Known limitations. Report vulnerabilities through SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    358,
+    368,
+    311,
+    321
+   ],
+   [
+    "replace",
+    368,
+    369,
+    321,
+    322,
+    [
+     "The compatibility check is a separate, manual read-only probe against T3, not part of the test suite. Start contributing with CONTRIBUTING.md and AGENTS.md."
+    ]
+   ],
+   [
+    "equal",
+    369,
+    371,
+    322,
+    324
+   ],
+   [
+    "replace",
+    371,
+    373,
+    324,
+    325,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

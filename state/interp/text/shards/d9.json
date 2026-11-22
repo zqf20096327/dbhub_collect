@@ -3416,5 +3416,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6d49a33bd3f4": {
+  "identity": {
+   "one_liner": "开源 AI 笔记与知识库工作区，支持 Cloudflare 无服务器或 Docker 自托管部署。",
+   "review": "EdgeEver 是一个开源笔记与知识库应用，保留三栏布局（目录树·笔记列表·编辑器），提供富文本与 Markdown 双模式编辑、思维导图、Mermaid 图表、海报画布等笔记类型，并内置 AI 助手与 MCP/ACP 协议支持浏览器剪藏和多平台解析器，可从 Evernote、Obsidian、Notion 等导入。可在 Cloudflare 免费额度内运行或用 Docker 自托管，客户端覆盖 macOS、Windows、Linux、Android 和 iOS（iOS 需非中国大陆 Apple ID）。",
+   "highlights": [
+    "支持 Cloudflare 无服务器部署与 Docker 自托管两种运行方式",
+    "内置 Web Clipper 浏览器扩展，含 20+ 平台专用解析器，并提供 Evernote、Obsidian、Notion、SiYuan、flomo、Joplin 与 Markdown 文件夹的导入",
+    "原生集成 MCP 与 ACP 协议，支持 OpenAI、Anthropic、Gemini 及自定义端点的 BYOK 接入，插件与主题通过官方市场跨设备同步"
+   ],
+   "use_cases": [
+    "需要多端同步与网页剪藏的个人笔记与知识库管理",
+    "将现有 Evernote、Obsidian、Notion 等笔记及附件迁移至自托管实例",
+    "通过 MCP/ACP 将笔记数据接入 AI Agent 工作流，或用 AI 生成表格、思维导图与图表"
+   ]
+  },
+  "sha": "6d49a33bd3f4",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9f33f3005f00": {
+  "identity": {
+   "one_liner": "自托管健康数据聚合器：18 类数据源统一为一个数据模型与 API",
+   "review": "Open Health Sync 是面向开发者和个人的自托管健康数据聚合器，采集 Apple Health、Health Connect、Garmin、Oura、WHOOP、Fitbit 等可穿戴与 health app 数据，以统一数据模型经 REST、FHIR R4、Open mHealth、webhook、CSV/Parquet 及只读 MCP server 输出。单个 Go 二进制加 Postgres（TimescaleDB）运行于 Linux/macOS、Docker、Kubernetes 或树莓派 5。版本 0.3.0（pre-1.0），API、配置与数据库 schema 可能随版本变更；非医疗设备，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "支持 18 类数据源：云端 OAuth 连接器（Oura、WHOOP、Withings、Dexcom 等）、设备端上传端点、FIT/GPX/TCX 文件导入及蓝牙设备桥接",
+    "原始载荷逐字存储（本地磁盘或 S3），先入原始存储再经 ETL 映射为带 UCUM 单位和 LOINC 编码的规范记录，可对历史重新处理",
+    "提供 REST API（OpenAPI）、FHIR R4、Open mHealth、签名 webhook、CSV/Parquet 导出，以及基于 stdio 或 HTTP 的只读 MCP server；配套 Swift/Kotlin/React Native/Flutter/TypeScript/Python SDK"
+   ],
+   "use_cases": [
+    "为应用提供多厂商可穿戴数据的统一 API 接入，或以 SQL 查询导入 PostgreSQL 的 Apple Health 导出",
+    "以 FHIR R4 或 Open mHealth 格式向研究或临床系统交接可穿戴数据，或导出 CSV/Parquet 供电子表格、DuckDB、pandas 使用",
+    "通过只读 MCP server 让 MCP 客户端读取个人睡眠、训练等数据；在自有基础设施上运行可穿戴数据后端"
+   ]
+  },
+  "sha": "9f33f3005f00",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "de4293ff3768": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式多进程共享内存数据库，兼容 sqlite C-API 并提供 MVCC 并发控制。",
+   "review": "MPEdb 是一个以 Rust 实现的嵌入式数据库，进程通过 mmap 共享文件直接访问，无需服务器。它通过 libsqlite3 C-API 垫片或 PyO3 模块对接现有 sqlite 生态，可直接打开 sqlite .db 文件，写入落在 sidecar 增量文件中。适用于使用 sqlite 的 Python/Django/SQLAlchemy/PHP 项目。关键机制包括写时复制 B+tree 上的 MVCC 快照、单写者锁加无阻塞读、内容哈希编译计划，以及类型化列的严格 schema 校验（保留 per-column 的 any 逃生口）。",
+   "highlights": [
+    "通过 LD_PRELOAD 方式加载 libmpedb_sqlite3 垫片，使未修改的 libsqlite3 消费方（含 CPython sqlite3 模块、Django、SQLAlchemy）直接运行于 mpedb 之上",
+    "在写时复制 B+tree 上实现 MVCC 快照，读操作无锁且不被写操作阻塞；写入采用单写者锁并支持组提交",
+    "SQL 编译一次生成内容哈希计划，热路径为 execute(hash, params)，计划携带预计算的读/写足迹"
+   ],
+   "use_cases": [
+    "Django/SQLAlchemy 等 ORM 项目在不改动代码的前提下切换底层引擎",
+    "需要多个进程并发读写同一本地数据库文件的桌面或嵌入式应用",
+    "需要类型校验和 NOT NULL/UNIQUE/CHECK 约束的本地存储场景"
+   ]
+  },
+  "sha": "de4293ff3768",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "67d706cfdf3d": {
+  "identity": {
+   "one_liner": "ParadeDB 官方 SQLAlchemy 集成库，用于在 ORM 中使用全文与向量检索",
+   "review": "该仓库是 ParadeDB 官方发布的 SQLAlchemy 集成，供使用 Python 与 SQLAlchemy 访问 ParadeDB 数据库。README 提供 PyPI 包与官方文档入口，并列出兼容性要求：Python 3.11+、SQLAlchemy 2.1+、PostgreSQL 15+、pgvector 0.7.0+（提供 ParadeDB 原生向量检索的向量类型）、ParadeDB/pg_search 0.27.0+。项目采用 MIT 许可证，源码包含贡献指南与社区支持渠道。",
+   "highlights": [
+    "官方 SQLAlchemy 集成，要求 Python 3.11+、SQLAlchemy 2.1+、PostgreSQL 15+",
+    "依赖 pgvector 0.7.0+ 提供 ParadeDB 原生向量检索所需的向量类型",
+    "采用 MIT 许可证，通过 PyPI 发布并提供文档与社区支持渠道"
+   ],
+   "use_cases": [
+    "在 SQLAlchemy ORM 应用中连接和使用 ParadeDB",
+    "需要全文检索（pg_search）与向量检索的 PostgreSQL Python 项目",
+    "基于一个 PostgreSQL 实例统一管理应用数据、检索与聚合的场景"
+   ]
+  },
+  "sha": "67d706cfdf3d",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e118783090b": {
+  "identity": {
+   "one_liner": "ParadeDB 官方的 Entity Framework Core 集成库，在 .NET ORM 中使用 Postgres 全文/向量检索",
+   "review": "该库是 ParadeDB 的官方 Entity Framework Core 集成包，以 NuGet 包形式发布，用于在 .NET 应用中通过 EF Core 访问 ParadeDB 提供的全文搜索、向量检索等 PostgreSQL 能力。README 仅给出兼容性矩阵与安装指引，未包含具体 API 用法说明，细节需查阅官方设置文档。采用 MIT 许可证。",
+   "highlights": [
+    "以 NuGet 包发布，为 ParadeDB 提供官方 EF Core 集成",
+    "支持 .NET 10.0+、EF Core 10.0+、PostgreSQL 15+、pgvector 0.7.0+ 及 ParadeDB/pg_search 0.27.0+",
+    "配合 pgvector 为 ParadeDB 原生向量搜索提供向量类型"
+   ],
+   "use_cases": [
+    "在 .NET/EF Core 项目中使用单个 Postgres 实例承载应用数据、全文搜索与向量检索",
+    "需要通过 ORM 方式调用 ParadeDB 的 pg_search 全文搜索能力的场景",
+    "需要在 EF Core 模型中使用 pgvector 向量类型进行向量搜索的场景"
+   ]
+  },
+  "sha": "9e118783090b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3240,5 +3240,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d38a9760335b": {
+  "identity": {
+   "one_liner": "面向多数据库的轻量级 MCP 服务器，以少量工具和低 token 消耗连接数据库",
+   "review": "DBHub 是 Bytebase 出品的数据库 MCP 服务器，供 MCP 兼容客户端（如 Claude Code、Cursor、VS Code）连接和探索数据库。默认仅提供 execute_sql 和 search_objects 两个工具，README 称其定义共约 261 tokens；支持 PostgreSQL、MySQL、SQL Server、Oracle、MariaDB、SQLite、ClickHouse，可通过 TOML 配置多连接，内置只读模式、行数限制、查询超时、SSH 隧道与 SSL/TLS，并附 Web Workbench。开发要求 Node.js >= 22.5.0。",
+   "highlights": [
+    "默认内置 execute_sql 与 search_objects 两个工具，可选用 explain_sql、health_check 及自定义参数化 SQL 工具",
+    "通过单一接口支持 PostgreSQL、MySQL、SQL Server、Oracle、MariaDB、SQLite、ClickHouse，可用 TOML 配置同时连接多个数据库",
+    "提供只读模式、行数限制、查询超时、SSH 隧道与 SSL/TLS 加密等防护机制"
+   ],
+   "use_cases": [
+    "本地开发中的 schema 探索、SQL 验证与数据调试",
+    "为非技术人员提供经筛选的只读数据库视图",
+    "以单进程整合多数据库 MCP 接入，或用于带防护的只读生产诊断"
+   ]
+  },
+  "sha": "d38a9760335b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "db41d4d929d8": {
+  "identity": {
+   "one_liner": "开源职位搜索引擎，直抓企业ATS页面并去重为单一目录",
+   "review": "freehire 是一个用 Go 编写的开源职位搜索平台，从 Workday、Greenhouse、Lever 等 ATS 平台及聚合源抓取职位，规范化去重后提供分面全文检索。供求职者和 Agent 使用，支持自托管，提供免密钥 HTTP API、CLI 和 MCP 接口。爬取、 enrichment、索引等功能以独立一次性 worker 运行，依赖 PostgreSQL、Meilisearch、Redis 等，LLM 功能需另行配置端点。",
+   "highlights": [
+    "从 160+ ATS 平台等 421 个数据源抓取职位，规范化去重后提供分面全文搜索（地区、工作模式、资历、技能、薪资）",
+    "提供免密钥公共 HTTP API、CLI、MCP 服务器及 ChatGPT Actions 接入方式",
+    "技术栈为 Go + Fiber、PostgreSQL + pgvector、Meilisearch、langchaingo，通过 Docker Compose 一键启动本地全栈"
+   ],
+   "use_cases": [
+    "求职者按地区、远程/ onsite、资历等条件检索直链原始企业 ATS 的职位",
+    "通过 MCP 或 HTTP API 让 LLM Agent 检索和跟进职位数据",
+    "自托管部署构建私有职位聚合与追踪流水线（cron 运行爬取与索引 worker）"
+   ]
+  },
+  "sha": "db41d4d929d8",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c57d81393a04": {
+  "identity": {
+   "one_liner": "单二进制的 PostgreSQL 持续备份工具，流式归档 WAL 并定时做基础备份",
+   "review": "pgrwl 是一个用 Go 编写的 PostgreSQL 备份工具，通过流复制协议接收 WAL 并执行定时基础备份，写入本地或远程存储（S3、SFTP 或本地目录），可选压缩、加密，并按恢复窗口策略管理保留。工具以单一二进制发布，配置由一个文件驱动，面向需要灾难恢复与 PITR 的数据库运维场景。其设计为先将 WAL 写入本地文件系统并 fsync，仅上传已完成的段文件。采用 MIT 许可证。",
+   "highlights": [
+    "通过流复制协议接收 WAL，支持复制槽、*.partial 部分文件与同步复制确认；WAL 先写入本地并执行 fsync，仅上传已完成的段文件",
+    "支持定时及通过 HTTP API 手动触发的全量基础备份，与 WAL 存储于同一后端（S3、SFTP 或本地）的不同逻辑前缀下",
+    "以恢复窗口策略管理保留：保留锚点备份及其后所有成功备份和向前恢复所需的 WAL，并提供 serve 模式的 restore-command 辅助恢复"
+   ],
+   "use_cases": [
+    "作为常驻接收模式守护进程，持续流式归档 WAL 并定期生成基础备份，用于生产库的灾难恢复",
+    "配合复制槽与 synchronous_standby_names 实现高持久性配置下的 RPO=0，将崩溃集群恢复到恢复窗口内的任意时间点",
+    "在容器化或 Kubernetes 环境中以单进程运行备份与归档，无需额外的备份工具、外部调度器或依赖链"
+   ]
+  },
+  "sha": "c57d81393a04",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

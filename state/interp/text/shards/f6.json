@@ -3688,5 +3688,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d739602ce0d2": {
+  "identity": {
+   "one_liner": "查询 MySQL/TiDB、Redis 与 gRPC 数据源的 CLI，每条命令输出一行 JSON，面向 AI agent。",
+   "review": "TapRoot 是一个 TypeScript 编写的命令行工具，用于查询 MySQL/TiDB、Redis 和 gRPC 数据源，并将每条命令结果输出为一行 JSON，便于 AI agent 解析。安装需 Node.js 20+，凭证存入 OS keychain（keytar）或加密文件。它支持 Teleport 访问、kubectl 端口转发、基于 SQL 解析器的 schema 限制模式（TAPROOT_CONFINE_TO_DATABASE），以及通过 services.json 知识库自动生成数据源配置，还提供 /core、/daemon、/cli 等公开入口供自建 daemon 或 CLI。",
+   "highlights": [
+    "每条命令输出一行 JSON，提供 --help 查看命令用法",
+    "凭证通过可选的 keytar 写入 OS keychain，失败时回退到 ~/.taproot/config/ 下的加密文件",
+    "提供 parser-based 的 schema 限制检查（DATABASE_CONFINED），拒绝命名其他 schema 的 SQL 语句，包括子查询、CTE、UNION、EXPLAIN、DESCRIBE 等"
+   ],
+   "use_cases": [
+    "为 Claude Code 等 AI agent 提供统一命令行接口，通过 skills/taproot/ 中的规则文件接入",
+    "在多 schema 共存的服务器上限制 SQL 数据源只能访问指定 database",
+    "通过 Teleport（tsh）或 kubectl 端口转发访问受管控环境中的数据源"
+   ]
+  },
+  "sha": "d739602ce0d2",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

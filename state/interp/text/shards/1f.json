@@ -3656,5 +3656,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b60c5a4822b1": {
+  "identity": {
+   "one_liner": "本地 MCP 服务器，将 Claude Code 会话完整存入 SQLite/ChromaDB 供自然语言检索。",
+   "review": "Longhand 以 MCP 服务器和 CLI 形式运行，把 ~/.claude/projects 下 Claude Code 会话的工具调用、文件编辑、思考块逐字存入本地 SQLite 与向量索引（ChromaDB，ONNX 本地嵌入），支持模糊自然语言召回、时间线、文件历史与跨会话检索，全程零 API 调用。通过 Stop/SessionEnd 钩子实现进行中会话的实时摄取。适用于在本地持久化并检索个人 Claude Code 使用历史者。注意首次回填 1GB 历史约需 10-30 分钟。",
+   "highlights": [
+    "逐字存储会话事件，一次跨 100+ 会话的 recall 输出约 4K tokens，无 API 调用",
+    "通过 Stop 钩子实时摄取进行中会话，进行中会话可经 list_sessions/timeline/replay_file 查询（语义检索需 SessionEnd 或 reconcile --fix 后可用）",
+    "提供 doctor 健康检查、staleness 标记、reconcile 索引自修复，及可选 longhand backup/restore 经私有 git 仓库迁移存档"
+   ],
+   "use_cases": [
+    "以自然语言检索历史会话中的修复、决策与对话",
+    "在 Claude Code 会话文件被轮转或删除前归档为持久本地记录",
+    "跨 Claude Code 与 Codex 共享同一记忆存档"
+   ]
+  },
+  "sha": "b60c5a4822b1",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "af21722058d3": {
+  "identity": {
+   "one_liner": "本地优先的桌面刷题记录工具，自带题库导入、学习计划与笔记",
+   "review": "LeetCode Tracker 是基于 Tauri 的本地优先桌面应用，面向算法练习者，用于按周计划安排刷题、记录完成情况并维护笔记。它不内置题目数据，用户需导入自有 JSONL 题库；数据存于 SQLite（schema v12），支持英文和简体中文界面，提供 Windows 11 x64 与 macOS Apple Silicon 安装包，可选接入 Gemini/OpenAI/DeepSeek 作辅助。",
+   "highlights": [
+    "打包 React 界面、Fastify API、SQLite 引擎与私有 Node.js 运行时为原生桌面应用，终端用户无需安装 Node.js、npm、Git 或 Rust",
+    "支持导入用户自有的 JSONL 题库文件，内置秒表计时、完成记录、目标题单、收藏夹与 Markdown 笔记（Edit/Split/Preview 三种模式）",
+    "提供进度统计（365 天活动热力图、难度掌握、主题洞察）、单文件跨设备迁移快照包，以及 Markdown/Obsidian ZIP/Notion CSV 导出"
+   ],
+   "use_cases": [
+    "需要本地记录算法练习进度、按周计划与间隔复习安排刷题节奏的个人学习者",
+    "已有 JSONL 格式题目元数据、希望在 Windows 或 macOS 桌面端管理题单、收藏与笔记的用户",
+    "需要用 Markdown 维护题解笔记并导出到 Obsidian、Notion 或跨设备迁移数据的场景"
+   ]
+  },
+  "sha": "af21722058d3",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

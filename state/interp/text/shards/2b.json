@@ -3277,5 +3277,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bbbcf47a84a0": {
+  "identity": {
+   "one_liner": "为 AI agent 提供可分支、可合并的 MongoDB 沙箱数据库，底层实现类 Git 版本控制。",
+   "review": "Argon 是一个面向 AI agent 工作流的 MongoDB 沙箱工具：每次 agent 运行可从分支或固定数据集创建独立的真实 MongoDB 数据库，其写入被记录为差异，支持审查、以数据 PR 方式合并、撤销或丢弃。提供 CLI、MCP 服务器、Python SDK 与本地 Web 控制台，MIT 协议，需 Go 1.26+ 构建源码，生产环境需受支持的 MongoDB 版本。分片源未经测试。",
+   "highlights": [
+    "支持通过 CLI、MCP 服务器（13 个工具）、Python SDK/LangGraph 适配器及本地 Web 控制台创建和管理沙箱",
+    "沙箱为真实 mongod 数据库，兼容 pymongo、mongoose、mongosh 及索引、聚合、事务等 MongoDB 功能",
+    "支持分支、diff、合并（含合并前唯一索引冲突检查与逐字节验证）、撤销、时间回溯，以及在线导入正在使用的副本集数据库并跟随其变更"
+   ],
+   "use_cases": [
+    "为每次 agent 运行提供独立数据库沙箱，运行后审查其变更并选择性合并",
+    "通过 MCP 工具或 Python SDK 将沙箱创建、diff、合并、撤销集成进 agent 工作流，可用 --disable-tools/--read-only 保留人工审批环节",
+    "对 MongoDB 数据做分支、时间点恢复（restore reset）等版本化操作"
+   ]
+  },
+  "sha": "bbbcf47a84a0",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "764316b1bf57": {
+  "identity": {
+   "one_liner": "单二进制 Go 网络延迟监测工具，内置 SQLite 与 Web UI，类 SmokePing。",
+   "review": "fogping 是一个面向 Linux 的网络延迟监测工具，以单个 Go 二进制发布，数据存于内置 SQLite，通过 8518 端口提供 Web UI 管理监测目标并绘制图表。适合需要自托管、轻量部署延迟观测的用户。无默认登录，需通过命令行参数设置用户密码，加 --edit 后才能在 UI 中增删目标；历史保留默认 30 天，上限 93 天。",
+   "highlights": [
+    "单个二进制运行，内置 SQLite 存储，提供 Web UI 管理与图表展示",
+    "支持命令行参数配置登录（含多用户）、只读模式、历史保留天数（默认 30，最大 93）等",
+    "提供只读 stats 端点供 Zabbix 拉取聚合，支持目标列表 JSON 导出/导入（与 pingping 共用格式）、HTTP API（OpenAPI 3.1）与 Docker 镜像（amd64/arm64/armv7）"
+   ],
+   "use_cases": [
+    "在单台 Linux 服务器上自托管监测若干目标的 ICMP/TCP 延迟并查看图表",
+    "多地点各部署一个实例，由 Zabbix 每分钟拉取 stats 端点做聚合、仪表盘与告警",
+    "通过 Docker 快速运行，并借助导出/导入在实例间迁移目标列表"
+   ]
+  },
+  "sha": "764316b1bf57",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

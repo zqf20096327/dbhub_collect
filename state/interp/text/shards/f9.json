@@ -2798,5 +2798,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "31597f74e22f": {
+  "identity": {
+   "one_liner": "Rust 内存数据库，用位标志列以维恩图方式过滤查询仅追加的数据行",
+   "review": "VennDB 是一个仅追加（append-only）的 Rust 内存数据库，通过 bit/标志列对行进行过滤查询，支持基于 Eq+Hash 类型的 filter map、set 类型多值列、运行时列及谓词过滤。通过 #[derive(VennDB)] 派生宏在命名字段结构体上生成查询 API。适用于启动时加载、以简单二元条件高频查询的静态数据集，README 明确说明不适合替代常规数据库。依赖极少，采用 MIT/Apache-2.0 双许可。",
+   "highlights": [
+    "通过 #[derive(VennDB)] 宏为命名字段结构体生成查询代码，支持 bool 过滤器、filter map、set 多值列与可选（Option）过滤器",
+    "支持运行时列与 any_where 谓词过滤，运行时列可在任意线程无锁地设置和取消",
+    "filter map 支持 any 值机制，允许行匹配某列的任意值；key 要求唯一且非可选"
+   ],
+   "use_cases": [
+    "启动时一次性加载的静态数据集，需要用简单二进制标志条件进行高频过滤查询",
+    "代理池类场景：按多个 bool 属性与国家、城市、ASN 等 filter map 挑选匹配行（项目源于 rama 的内存上游代理数据库）",
+    "需要按集合成员（如员工技能标签）过滤行的内存查询"
+   ]
+  },
+  "sha": "31597f74e22f",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

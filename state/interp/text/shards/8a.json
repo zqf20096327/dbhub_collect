@@ -3057,5 +3057,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3d2da7cd22f7": {
+  "identity": {
+   "one_liner": "基于 ZFS 克隆的 MySQL/PostgreSQL 秒级数据库分支工具",
+   "review": "db-branch 是一个自托管的数据库分支工具，通过 ZFS 快照克隆实现 MySQL 和 PostgreSQL 数据库的写时复制分支，创建时零数据拷贝。每个分支运行独立的数据库服务进程，支持 ProxySQL 路由与 Raft 集群。README 明确说明其不支持 Git 式的分支合并回写，适合一次性使用后重置或删除的场景；项目目前处于 Beta 阶段，核心代码采用 Apache-2.0 许可证，部分认证、审计、历史等模块为闭源付费包，安装需要 Ubuntu 24.04/26.04 及 ZFS 池。",
+   "highlights": [
+    "基于 ZFS 克隆实现 copy-on-write 分支，README 记录的测试数据为 PostgreSQL 约 0.5 秒、MySQL 约 3 秒完成创建",
+    "提供 CLI、REST API、Web 控制台和 MCP 服务器四种接口，并内置 ProxySQL 路由与 Raft 多节点集群",
+    "支持分支重置、TTL 自动过期、检查点恢复、单分支版本升级（含 check-only 预检）"
+   ],
+   "use_cases": [
+    "为 AI 智能体提供沙箱分支，通过内置 MCP 服务器执行高风险查询或迁移而不触碰生产库",
+    "为每个 PR 或 CI 运行提供独立数据库副本，用 --ttl 自动清理",
+    "在大版本升级前，先用 branch upgrade --check-only 在分支上试运行升级"
+   ]
+  },
+  "sha": "3d2da7cd22f7",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f1bf41e6dc8c": {
+  "identity": {
+   "one_liner": "本地优先的 macOS 开源仓库编目应用，支持抓取、分类、克隆与更新检查。",
+   "review": "reshelf 是一个本地优先的 macOS 应用（macOS 14+，Apple Silicon 与 Intel 通用，MIT 协议），用于编目、分类保存的 GitHub 仓库并将其克隆到统一目录，检测克隆的更新。无账号无云端，AI（Apple Intelligence）在设备端运行，并提供 Claude Code skill 供编码代理读取已保存的仓库。",
+   "highlights": [
+    "粘贴 GitHub 链接即抓取仓库详情并自动归类（非 AI 分类），支持 Shelf、文件夹、标签、语言等多维浏览与过滤",
+    "一键克隆仓库到 ~/reshelf/repos/<Category>/<repo>，通过 git ls-remote 检测更新并批量 Pull",
+    "目录与克隆数据全部本地存储（SwiftData + GRDB/SQLite），支持 JSON 导出与自动备份；AI 功能在设备端运行"
+   ],
+   "use_cases": [
+    "整理个人收藏的 GitHub 仓库，按项目、类别、价值层级组织并跟踪克隆的代码更新",
+    "将本地克隆目录提供给编码代理（附带 Claude Code skill），让代理读取真实源码并自动写入 ACKNOWLEDGEMENTS.md",
+    "查看仓库许可证的通俗说明，并为自己的项目寻找 shelf 中匹配的仓库"
+   ]
+  },
+  "sha": "f1bf41e6dc8c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

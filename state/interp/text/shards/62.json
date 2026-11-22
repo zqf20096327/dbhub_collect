@@ -3316,5 +3316,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d8328b05c938": {
+  "identity": {
+   "one_liner": "从 SQL 字符串与 schema 推断行/参数类型的 Python 静态检查工具",
+   "review": "SQLTy 读取以 --sql 标记的 SQL 字符串，结合 schema.sql 中的 CREATE TABLE 语句推断行类型与参数类型，经 mypy、Pyright 或 ty 检查，无需连接数据库。面向在 Python 3.14+ 上对 PostgreSQL、SQLite 或 MySQL 手写 SQL 字面量的开发者。SQL[T] 是 str 子类，rewrite/strip 只改包装不改 SQL；提供 breaking 命令检测滚动部署中的新旧 schema 兼容问题。",
+   "highlights": [
+    "通过 --sql 标记自动为查询添加由 CREATE TABLE 推断的行类型 SQL[T]，SQL[T] 为 str 子类",
+    "检查 TypedDict、NamedTuple、dataclass、Pydantic 模型的行类型匹配，以及 ?、$1、%s、:name 等占位符参数",
+    "提供 check --fix、strip、breaking --against origin/main 等命令；引擎基于 sqlparser-rs（Rust/PyO3），提供 Linux、macOS、Windows wheel"
+   ],
+   "use_cases": [
+    "代码库中以字符串字面量形式手写 SQL 并在仓库中保存 schema dump 或 SQL 迁移的项目",
+    "CI 中检测迁移改变列类型（如 nullable 变化）导致现有查询类型不一致的场景",
+    "使用 psycopg 3 的项目实现行类型端到端标注；其他驱动下检查查询与参数类型"
+   ]
+  },
+  "sha": "d8328b05c938",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5eeac14a40cd": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 本地文档知识库插件，混合检索带 [n] 引用标记",
+   "review": "dsh-library 是面向 DeepSeek Harness 的社区插件，把本地 md/txt 文档按路径导入、滑窗切片并写入宿主的 dsh_library 存储域（JSON 或 SQLite 后端）。它提供 library_add/remove/list/search、library_cite_check、library_diagnose 与 /library 命令，检索采用 BM25+语义融合、MMR 多样性重排、相关性过滤与中段规避。默认嵌入为确定性哈希，零模型下载、零网络请求；仅支持 md/txt，PDF/docx 不在范围内。",
+   "highlights": [
+    "library_search 支持 BM25 与语义倒数排名融合（rrf）、MMR 多样性重排、相关性阈值过滤，命中结果带 [n] 来源标记，inject: true 时注入调用 agent",
+    "内置确定性哈希嵌入（零下载、零网络请求），可选 ollama、openai 兼容端点或外部子进程作为嵌入后端",
+    "library_remove 用被删内容签名探测剩余索引报告残留；library_cite_check 用模糊词面匹配加语义相似度双重校验 [n] 引用"
+   ],
+   "use_cases": [
+    "为 agent 提供本地 md/txt 文档的检索问答，回答需带 [n] 引用并可逐条核验",
+    "无网络、无模型下载环境下运行本地知识库检索",
+    "审计文档删除后索引残留，以及诊断切片分布、重复切片与检索信号"
+   ]
+  },
+  "sha": "5eeac14a40cd",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7d40bf450efe": {
+  "identity": {
+   "one_liner": "基于 Spring Cloud 微服务的 BOSS 直聘招聘数据分析与可视化平台",
+   "review": "BossAnalyze 是一个面向求职者、招聘方和数据分析师的招聘数据分析与可视化平台，后端采用 Java 17 与 Spring Cloud 微服务架构，结合 Spark、MySQL、MongoDB、Redis 等组件处理招聘数据。当前已实现权限管理、简历管理、薪资与职位分析等功能；技能图谱、薪资预测等列在规划中，尚未验收。",
+   "highlights": [
+    "采用 Spring Boot 3.4.5 与 Spring Cloud 4.2.1 构建后端，集成 Spark 4.0.0、MySQL、MongoDB、Redis、HDFS 及 S3 兼容对象存储 RustFS",
+    "前端基于 Vue 3 + TypeScript + Vite，使用 shadcn-vue 组件与 Tailwind CSS 4",
+    "已实现 RBAC 权限管理、简历增删改查、薪资多维统计与职位需求趋势分析"
+   ],
+   "use_cases": [
+    "查看不同城市、职位、行业的薪资分布与技能需求分析",
+    "管理用户、角色、菜单的后端授权体系",
+    "简历数据的持久化存储与上传图片的对象存储管理"
+   ]
+  },
+  "sha": "7d40bf450efe",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0257eb4ebc04": {
+  "identity": {
+   "one_liner": "Rust 版 Auto Ontology：将数据库编译为语义本体，用受限只读 SQL 回答自然语言提问。",
+   "review": "该项目用 Rust 重写 NVIDIA Auto Ontology，读取 Postgres 库结构，经 LLM 编译为含业务术语、列含义与语义连接路径的本体，再用基于本体的 SQL 回答自然语言提问。面向需要在本地以命令行（aoq）或 gpui-kit 桌面 Studio 查询自家 Postgres 数据的单用户。查询受 AST 守卫与 READ ONLY 连接器双重限制，仅支持 Postgres，状态为 MVP 原型而非生产服务。",
+   "highlights": [
+    "将提问流程拆为 ingest、compile、ask 三个独立 crate，重摄取时以 diff 应用变更，未变表保留既有本体",
+    "对模型生成的 SQL 施加两层独立限制：AST 解析守卫仅放行目录内表的单条 SELECT 并重渲染执行文本；连接器以 BEGIN READ ONLY、语句超时与行数/字节上限运行查询",
+    "术语与属性嵌入 pgvector 用于检索，连接规划在语义外键上做 BFS，失败尝试携带全部错误重试至多 3 次，总时限 120 秒"
+   ],
+   "use_cases": [
+    "本地单用户环境下用自然语言查询自己的 Postgres 数据并查看所用 SQL 与来源表",
+    "以 CLI 或 JSON 输出（answer/sql/rows/provenance）方式集成到脚本或流水线中",
+    "为含大量表与外键的库构建可复用的语义层，重复提问时复用已编译术语"
+   ]
+  },
+  "sha": "0257eb4ebc04",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

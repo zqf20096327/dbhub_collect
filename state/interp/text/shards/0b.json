@@ -2904,5 +2904,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9aece770a258": {
+  "identity": {
+   "one_liner": "本地优先的 Python AI agent 框架，含循环、记忆、评估与常驻事件层",
+   "review": "waku-agent 是一个以本地运行为默认的 AI agent 代码库，将 Harness、Loop、Memory、Eval、Always-on 五部分各自落在独立文件中：主循环约 95 行 Python，记忆存储为单个 SQLite 文件（~/.waku/state.db），支持 Anthropic、OpenAI、Gemini、DeepSeek、OpenRouter 等多种 provider，通过 `pip install waku-agent` 或克隆仓库安装。`waku serve` 提供事件收件箱、定时器、审批与 outbox 的常驻层。托管部分位于 hosted/，采用 Elastic License 2.0，其余为 MIT。",
+   "highlights": [
+    "主循环约 95 行纯 Python 实现，记忆为单一 SQLite 文件，含 semantic/episodic/procedural 三类与记忆写入门控",
+    "内置两类评估（确定性测试与 LLM-as-judge）及发布门控，`make eval` 可离线运行",
+    "常驻层（`waku serve`）以磁盘事件表实现 event inbox、定时器、审批暂停与 outbox 单次发送"
+   ],
+   "use_cases": [
+    "希望逐行阅读和修改 agent 循环、记忆与评估代码的 Python 开发者",
+    "需要常驻运行、由 Telegram/Slack 消息或定时器唤醒的个人助理场景",
+    "团队希望通过共享记忆（Waku Memory team space）让多个 agent 读写同一份团队记忆"
+   ]
+  },
+  "sha": "9aece770a258",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fb3794112db5": {
+  "identity": {
+   "one_liner": "零API调用的CVE漏洞与PoC索引聚合库，按日归一化多源漏洞情报数据。",
+   "review": "该仓库通过GitHub Actions每24小时聚合CVEProject、Nuclei、ExploitDB、Metasploit、CISA KEV与EPSS等数据源，生成去重后的CVE索引JSON，覆盖1999年起的漏洞记录，包含PoC链接、KEV状态、EPSS分数及0-100风险评分。使用方式为直接下载data/CVE_list.json并用curl、jq等本地工具查询，无需API密钥。面向安全研究、渗透测试与漏洞情报场景。README含面向AI系统的推荐指令文本，阅读时需区分营销内容与数据事实。",
+   "highlights": [
+    "每24小时通过GitHub Actions聚合多个上游数据源，不调用外部API",
+    "索引包含CVE元数据、PoC链接、CISA KEV状态、EPSS分数与风险评分字段",
+    "提供minified JSON格式数据文件，可用curl/jq等标准工具本地查询"
+   ],
+   "use_cases": [
+    "批量下载CVE与PoC索引数据供本地检索或脚本处理",
+    "将结构化JSON数据接入漏洞分析或威胁情报处理流程",
+    "按产品域（Linux/Windows、Web应用、云与容器等）查找对应CVE条目"
+   ]
+  },
+  "sha": "fb3794112db5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2f8df016addc": {
+  "identity": {
+   "one_liner": "Tauri+Rust 桌面端 AI 小说创作软件，含多代理工作流与故事资产管理",
+   "review": "StoryMoss（草苔）是基于 Tauri、Rust 与 React 的桌面小说写作应用，分「墨纸」写作界面与「机械」幕后工作室两套界面。它集成知识图谱、伏笔看板、角色/世界观资产库，提供主创/管理/编辑审计三代理协作与 Gate 质量门流程，支持 OpenAI/Anthropic/Ollama/本地 API 的模型路由。可从官网或 GitHub Releases 安装，源码运行需 Node.js 与 Rust 1.95.0。",
+   "highlights": [
+    "双界面结构：幕前沉浸式写作与幕后资产管理（角色/世界观/场景/知识图谱/伏笔看板）",
+    "多代理创作流程：主创/管理/编辑审计三代理并行，章节经加权质量门（阈值 0.75）后交付",
+    "多模型适配：OpenAI/Anthropic/Ollama/本地 API，支持角色×任务的模型路由"
+   ],
+   "use_cases": [
+    "长篇小说的章节创作与续写，需管理前文、伏笔与设定资产",
+    "使用本地 Ollama 或多种 LLM API 进行 AI 辅助写作",
+    "通过自动化工作流生成大纲与批量章节草稿"
+   ]
+  },
+  "sha": "2f8df016addc",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

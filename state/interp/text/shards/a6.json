@@ -3282,5 +3282,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c3341766f94c": {
+  "identity": {
+   "one_liner": "ClickHouse 存储与 schema 优化分析工具，用样本试测验证改动效果",
+   "review": "Granulee 读取 ClickHouse 系统表与查询日志，针对编解码器、数据类型、排序与分区键、跳数索引提出改动建议，并在临时数据库中用相同数据构建基线表与候选表进行对照试测。扫描阶段不读取表数据。适用对象为需要评估存储与 schema 调整效果的 ClickHouse 运维与开发人员。仅扫描 MergeTree 族表，仅支持 HTTP/HTTPS 端点。",
+   "highlights": [
+    "从系统表扫描表大小、压缩、编解码器、类型、键、跳数索引与 projections，不读取表数据",
+    "在临时数据库构建基线表与候选表，用服务器实际运行的查询回放对照测量大小、插入吞吐与查询耗时",
+    "用 EXPLAIN indexes=1 分析每条日志查询的索引命中情况，支持 EXPLAIN WHATIF 的服务器可预先估算候选索引"
+   ],
+   "use_cases": [
+    "评估修改排序键、分区键、编解码器或跳数索引对表大小与查询性能的影响",
+    "分析查询日志了解表的 SELECT/INSERT 量、被读取与过滤的列及常见查询形态",
+    "在生产表执行语句之前，先在数据样本上测量候选改动的效果"
+   ]
+  },
+  "sha": "c3341766f94c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

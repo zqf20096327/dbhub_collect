@@ -3203,5 +3203,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "93f99b33aad0": {
+  "identity": {
+   "one_liner": "面向 Agent 的长期记忆库，SQLite 存储、BM25 检索、CJK 友好",
+   "review": "Brain4Agent 为 Agent 提供长期记忆：对话轮次存入单个 SQLite 文件，按会话检索。检索用 BM25，核心路径不调用模型，中文依赖字符 bigram 免分词；可选 jieba 词典（20 MB）提升命中率。返回 corpus_missing 等证据字段而非判定，判定由调用方完成。检索单位为会话而非轮次；写后首次查询需重建内存索引（约 402 ms/2925 条），内存占用约 145 字节/索引 token。",
+   "highlights": [
+    "提供 CLI、Python 库和 MCP server 三种使用方式，MCP 端含七个工具（记忆、召回、会话读取等）",
+    "检索无模型调用、无 API key，查询为毫秒级；README 实测 hit@1 为 0.950（含 jieba）/0.875（零依赖）",
+    "支持 b4a_supersede/b4a_unsupersede 记忆替换机制，替换继承旧条目标签并保留历史；支持 JSONL 批量导入与 batch() 批量写入"
+   ],
+   "use_cases": [
+    "为 CJK（中/日/韩）语言的编码 Agent 或对话 Agent 持久化会话上下文与决策依据",
+    "需要本地单文件存储、离线可运行的记忆模块场景",
+    "需要区分\"语料中不存在\"与\"会话缺失\"等检索证据、由上层自行决定是否拒答的系统"
+   ]
+  },
+  "sha": "93f99b33aad0",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e415f99c7a2b": {
+  "identity": {
+   "one_liner": "面向 PostgreSQL 的 Model Context Protocol 服务器，通过 279 个工具让 AI 代理查询与运维数据库",
+   "review": "MCPg 是一个连接 PostgreSQL 的 MCP 服务器，供 MCP 客户端（如 Claude Desktop、IDE、Web 应用）调用。它通过 `pip install mcpg` 或 Docker 运行，提供目录内省、SQL 查询、自然语言转 SQL、结构 diff、混合搜索、图查询、索引调优、EXPLAIN 分析等工具。默认只读，SQL 经 AST 白名单校验，DDL、shell、LISTEN/NOTIFY 等能力需环境变量显式开启；配置完全通过环境变量完成，仅 `MCPG_DATABASE_URL` 必填。支持 PG 14–19 及 TimescaleDB、pgvector、PostGIS、Apache AGE 扩展。",
+   "highlights": [
+    "提供 279 个工具，覆盖目录内省、查询、自然语言转 SQL、结构 diff、混合搜索、图查询、数据迁移、实时运维等",
+    "默认只读访问模式，SQL 经 AST 白名单校验，DDL/shell/LISTEN/NOTIFY 需 opt-in 开启，工具发布 readOnlyHint 等 MCP ToolAnnotations",
+    "支持 stdio 与 HTTP/SSE 传输、连接池、按请求 SET ROLE 多租户、只读副本路由、OIDC JWT 认证、Prometheus /metrics 端点及结构化审计日志"
+   ],
+   "use_cases": [
+    "让 AI 代理连接自有 PostgreSQL 数据库进行安全的数据查询与内省",
+    "面向 DBA 场景的索引调优、EXPLAIN 分析、锁与 vacuum 检查等运维工具调用",
+    "多租户 SaaS 或读写分离部署：通过角色白名单与副本 URL 环境变量配置连接"
+   ]
+  },
+  "sha": "e415f99c7a2b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "13842a383a8c": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的复式记账 CLI，基于 SQLCipher 加密 SQLite，内置 MCP 服务器",
+   "review": "Beankeeper 提供 bk 命令行工具与可嵌入的 Rust 库，以（可选 SQLCipher 加密的）SQLite 数据库为账本存储，供 AI 助手或小型企业执行记账。其运行时强制借贷平衡校验，--reference 键防止重试产生重复交易，审计记录构成 SHA-256 哈希链并可用 bk verify 校验；CLI 输出统一 JSON 信封便于程序解析。注意审计链防篡改但非签名，持有完整数据库权限者仍可重写数据。",
+   "highlights": [
+    "通过 JournalEntry::post() 在运行时校验交易：至少两条分录、单一货币、借贷相等，非法输入返回 VALIDATION 错误",
+    "--reference 以公司为作用域唯一去重，重试投稿返回既有交易 ID 或用 --on-conflict skip 跳过",
+    "审计记录以 SHA-256 哈希链串联，bk verify 检查链完整性、会计不变量与 SQLite 外键完整性"
+   ],
+   "use_cases": [
+    "让 AI 助手通过 CLI 或 MCP 工具安全地记账、查询余额与生成报表",
+    "导入银行流水等可能中途失败并重试的批量记账任务",
+    "需要对已过账期间关闭锁账、对超限额支出走提案审批流程的小型企业或个人记账"
+   ]
+  },
+  "sha": "13842a383a8c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f40cab35258c": {
+  "identity": {
+   "one_liner": "基于 SQLite 的分布式数据层库，提供同步、复制与故障转移",
+   "review": "Sirannon 是一个围绕 SQLite 构建的 TypeScript 库，随应用规模扩展：本地文件上的 SQL 可继续用于 HTTP/WebSocket 服务端与主从复制场景。核心提供查询、事务、CDC、live queries、迁移、备份与加密；复制模块基于 HLC 与 gRPC 双向 TLS，通过 etcd 协调器记录写权威并实现故障转移。规范在 packages/spec 中与实现分离，TypeScript 包为参考实现。",
+   "highlights": [
+    "提供 live queries、变更数据捕获（基于 SQLite 触发器）、迁移、备份调度与 AEGIS-256/SQLCipher 静态加密",
+    "主从复制以 Hybrid Logical Clock 标记变更，经 gRPC 双向 TLS 传输，支持 last-writer-wins、primary-wins、字段合并等冲突解决器",
+    "设备本地库可离线写入，由 device sync 控制器通过 push、live pull、快照重同步与迁移握手实现双向同步"
+   ],
+   "use_cases": [
+    "需要本地优先、离线可写、多端同步的应用（浏览器 IndexedDB、React Native/Expo）",
+    "单机 SQLite 应用演进为 HTTP/WebSocket 服务或主从读副本部署",
+    "需要主节点故障转移的多节点集群场景（etcd 协调器记录写权威）"
+   ]
+  },
+  "sha": "f40cab35258c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

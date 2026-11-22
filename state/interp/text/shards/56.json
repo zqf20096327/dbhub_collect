@@ -3007,5 +3007,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "abe79108e076": {
+  "identity": {
+   "one_liner": "开源数据库基准测试工具，对嵌入式与网络化数据库执行 CRUD、扫描、向量检索等负载测试",
+   "review": "crud-bench 是一个用 Rust 编写、从源码构建的基准测试工具，用于在嵌入式、网络化数据库上运行 Create、Read、Update、Delete、扫描等五类负载，覆盖 SQL 与 NoSQL 平台。自动化测试时通过 Docker 启动被测数据库，也可连接远程实例或用 --pid 指定自建进程；每 250ms 采样进程的 CPU、内存（PSS/RSS）与磁盘读写。工作负载由单一 TOML 文件定义，结果输出 JSON 并可在浏览器本地拖拽比较。主要面向 SurrealDB 开发者评估改动对性能的影响。",
+   "highlights": [
+    "支持五类负载（Create/Read/Update/Scans/Delete），可配置样本数、并发客户端与线程、记录内容、主键类型等参数",
+    "包含向量搜索基准：Bruteforce/HNSW/DiskANN KNN 查询、Recall@k 评分与可复现语料库",
+    "每 250ms 采样被测进程的 CPU、峰值内存（RSS/PSS）与磁盘读写计数，结果以 JSON 记录"
+   ],
+   "use_cases": [
+    "在开发流程中持续监测 SurrealDB 功能改动对查询性能的影响",
+    "以相同语料和配置对键值、关系型、文档、多模型等数据库运行 CRUD、扫描、过滤、索引与向量检索负载",
+    "测量自建或云端远程数据库实例，采集其服务器进程的资源占用数据"
+   ]
+  },
+  "sha": "abe79108e076",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d67191cd6e7d": {
+  "identity": {
+   "one_liner": "Go+PostgreSQL 零停机模式变更示例，实现分阶段 expand-contract 迁移",
+   "review": "这是一个可执行的 Go/PostgreSQL 参考项目，演示在 V1、V2 同时服务 HTTP 流量时将客户联系方式从 JSONB 分阶段迁入关系列。核心机制包括双向触发器同步、有界回填、独立校验器和不可逆的 contract 门禁，配合 Docker Compose 提供本地演示环境与实时仪表盘。README 明确说明其结果来自本地合成运行，不对任意生产负载提供可用性保证，适用于需要演练该迁移流程的工程团队。",
+   "highlights": [
+    "提供触发器双向同步、有界回填、并发索引创建与分阶段约束校验的完整 expand-contract 生命周期",
+    "提供流量生成器与校验器，输出 verification.json/md 报告并区分 PASS/FAIL/INCOMPLETE 三种判定",
+    "提供实时仪表盘（每两秒轮询指标）、写日志比对、异常隔离及多种故障注入命令"
+   ],
+   "use_cases": [
+    "演练新旧代码并存期间的 PostgreSQL 模式分阶段迁移流程",
+    "学习 expand-contract 模式、回填与切换读路径的操作步骤与回滚决策",
+    "在 CI 中运行包含 PostgreSQL 17 集成测试的迁移正确性断言套件"
+   ]
+  },
+  "sha": "d67191cd6e7d",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9398a10eeb71": {
+  "identity": {
+   "one_liner": "PTIT 第10组的智能停车场管理系统，FastAPI+React 全栈架构，配套 TiDB Cloud/MySQL 数据库",
+   "review": "一个停车场管理系统课程项目（PTIT 第10组），基于 FastAPI 与 WebSocket 后端、React 19 + TypeScript 前端，数据库为 TiDB Cloud / MySQL（dbptit，16 张表）。实现车辆进出登记、月票与价格管理、收银班次对账、RBAC 三角色权限（ADMIN/ACCOUNTANT/OPERATOR）、审计日志及 VietQR 支付码生成。另含一个默认只读模式的 Streamlit 演示界面用于学术对照。安装需配置 .env 数据库连接与 AUTH_SECRET_KEY。",
+   "highlights": [
+    "支持车辆入场/出场登记、月票注册续期、价目表管理及收银班次开关与对账",
+    "实现 RBAC 三种角色（ADMIN/ACCOUNTANT/OPERATOR）、refresh token 轮换及含 IP 的审计日志写入",
+    "数据库包含 16 张表，采用带版本号的 migration 和 SELECT ... FOR UPDATE 事务锁；配套 pytest/vitest 测试与 GitHub Actions CI"
+   ],
+   "use_cases": [
+    "需要管理车辆进出、月票与收费对账的停车场运营场景",
+    "需要按角色区分权限并记录审计日志的多用户后台系统",
+    "教学演示 TiDB Cloud/MySQL 与 FastAPI、React 集成的全栈项目参考"
+   ]
+  },
+  "sha": "9398a10eeb71",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2949,5 +2949,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "de7449fae675": {
+  "identity": {
+   "one_liner": "SQL Server DBA 实用脚本集合数据库，通过 PowerShell 安装器部署",
+   "review": "这是作者用于管理 SQL Server 实例的实用脚本数据库，安装后会创建名为 DBA 的数据库并写入工具对象。安装器假定 First Responder Kit 和 Ola Hallengren 维护方案已装入同一数据库，需通过附带 PowerShell 脚本先行拉取。技术基线为 SQL Server 2016 SP1 及以上，要求兼容级别 130+（部分代码使用 STRING_SPLIT/OPENJSON），官方建议在隔离实例上评估。",
+   "highlights": [
+    "提供 PowerShell 安装脚本，支持 -DatabaseName 自定义库名、-InstanceName 接受数组实现多实例部署",
+    "附带 Get-OpenSourceScripts.ps1 从各自下载位置获取 First Responder Kit、Ola Hallengren 维护方案、sp_WhoIsActive、Darling Data 等第三方脚本",
+    "部分第一方代码依赖 STRING_SPLIT/OPENJSON，要求数据库兼容级别 130 以上；低兼容版本可使用 dbo.fn_split"
+   ],
+   "use_cases": [
+    "DBA 需要在单个或多个 SQL Server 实例上部署一套集中管理的辅助脚本库",
+    "已使用 First Responder Kit 或 Ola Hallengren 维护方案、希望将其与自有工具脚本共置一个数据库的环境",
+    "在开发或隔离实例上评估和集成第三方 SQL Server 运维脚本的场景"
+   ]
+  },
+  "sha": "de7449fae675",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "39dc0a563e4a": {
+  "identity": {
+   "one_liner": "纯 Zig 实现的 MySQL/MariaDB 数据库驱动，无外部依赖。",
+   "review": "MyZql 是用原生 Zig 编写的 MySQL 与 MariaDB 驱动，当前处于 Beta 阶段，供需要在 Zig 项目中访问这两类数据库的开发者使用。它提供 TCP 与 Unix socket 连接、TLS（需给 Zig 标准库打补丁）、预编译语句及缓存、结果映射为结构体、线程安全连接池和 DateTime/Time 类型支持。要求 MySQL/MariaDB 5.7.5 及以上，版本需与对应 Zig 版本匹配。",
+   "highlights": [
+    "以原生 Zig 实现，无外部依赖，支持 TCP 与 Unix socket 连接",
+    "支持预编译语句（含按连接的 LRU 语句缓存，默认 32 条）、查询结果映射为结构体、数据插入",
+    "提供线程安全连接池；URL 配置解析支持 ssl、charset、socket 等参数，未知参数会被拒绝"
+   ],
+   "use_cases": [
+    "在 Zig 应用中连接并查询 MySQL/MariaDB 5.7.5+ 数据库",
+    "需要连接池与预编译语句缓存的服务端或工具程序",
+    "通过 URL 参数配置 TLS 加密连接或 Unix socket 本地连接的场景"
+   ]
+  },
+  "sha": "39dc0a563e4a",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

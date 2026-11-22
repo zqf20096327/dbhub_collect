@@ -3405,5 +3405,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4b37f295e843": {
+  "identity": {
+   "one_liner": "基于 Ash DSL 的 Elixir 声明式计费与订阅管理扩展",
+   "review": "ash_billing 是 Ash Framework 的计费扩展，用于为 Phoenix/Elixir 应用添加客户、结账会话、账单门户和周期订阅管理能力。通过 billing 与 billing_subscription 两个 Spark DSL 块接入任意 Ash 资源，内置 Stripe 提供者与 Webhook Plug，0.7.0 起支持 PostgreSQL 持久化 quantity 同步、对账 CLI 与遥测。自定义提供者需实现 update_quantity/3 回调以保证价格安全。",
+   "highlights": [
+    "提供 billing 与 billing_subscription DSL 块，可在任意 Ash 资源上声明客户与订阅能力，并在编译期由 Spark 验证器校验关系与属性类型",
+    "内置 Stripe 提供者，支持 Checkout Session、Customer Billing Portal、周期订阅、换挡（swap_plan）、按席位数更新（update_quantity）与恢复取消订阅",
+    "Webhook Plug 支持 HMAC-SHA256 常量时间签名验证与重放防护，同步失败时返回 HTTP 500 触发 Stripe 指数退避重试"
+   ],
+   "use_cases": [
+    "使用 Ash Framework 与 Phoenix 构建的 SaaS 应用需要集成 Stripe 订阅计费",
+    "需要按席位计费、计划升降级按比例计费或订阅状态查询（subscribed?/active?/on_trial?）",
+    "Webhook 可能丢失或延迟，需要定期对账修复数据库漂移的场景（如配合 Oban 定时任务）"
+   ]
+  },
+  "sha": "4b37f295e843",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7f6170572736": {
+  "identity": {
+   "one_liner": "面向 Windows 的本地开发环境管理器，统一管理运行时、站点、数据库与本地受信 HTTPS。",
+   "review": "OLS 是一个运行于 Windows 的开源本地开发环境管理器，采用 Rust 与 Tauri 实现，通过 ols-core 引擎同时提供桌面 GUI、CLI、MCP 服务器和本地 HTTP API 四种操作接口。它按需下载并校验 PHP、Node.js、Python 等运行时及 Nginx、MariaDB 等服务器，为每个项目分配独立运行时、本地域名与受信 HTTPS，安装包不捆绑第三方运行时，安装器当前未经代码签名。",
+   "highlights": [
+    "一个核心引擎（ols-core）驱动四种接口：桌面 GUI、CLI（olsc）、Stdio MCP 服务器（ols-mcp）与 127.0.0.1:7420 的 JSON API",
+    "运行时按需下载并支持 SHA-256 校验与原子解压，不绑定固定版本，可注册已有 PHP/Node/Python 安装或手动放入运行时目录实现离线安装",
+    "内置设备端 CA 实现 397 天叶子证书的受信本地 HTTPS，站点支持任意域名、通配符子域名与静态站/反向代理绑定"
+   ],
+   "use_cases": [
+    "Windows 上需要为多个项目配置隔离运行时、本地域名与受信 HTTPS 的本地开发",
+    "通过 MCP 服务器让 Claude Desktop、Cursor 等 AI 编码助手检查和控制本地开发环境",
+    "在统一界面中管理 Nginx/Apache/Caddy 网站服务器、MariaDB/PostgreSQL 等数据库与 Docker Compose 栈"
+   ]
+  },
+  "sha": "7f6170572736",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7f5929abe28b": {
+  "identity": {
+   "one_liner": "面向 Java 的 SQL 客户端库，提供查询构建器与对象映射机制",
+   "review": "AdvancedSQLClient 是一个 Java 库，用于操作 SQL 数据库。它提供查询构建器、仓库接口（Repository）、对象映射和事务功能，示例中展示了通过注解定义 Repository 接口以及链式调用构建 insert 语句。可通过 Maven 或 Gradle 引入构建路径，也可用 shade 插件重定位打包。README 未列出支持的数据库版本等细节，需查阅 Wiki。",
+   "highlights": [
+    "提供链式查询构建器，通过 insert().into().values().execute() 生成并执行 SQL 语句",
+    "支持通过 @Table、@Save 等注解定义 Repository 接口，实现对象映射与数据保存",
+    "可通过 Maven、Gradle 引入，或使用 shade 插件进行重定位打包"
+   ],
+   "use_cases": [
+    "Java 项目中以构建器方式编写和执行 SQL 语句",
+    "通过 Repository 接口与注解将 Java 对象映射到数据库表",
+    "需要将 SQL 客户端以 shade 方式打包进独立应用（如插件化项目）的场景"
+   ]
+  },
+  "sha": "7f5929abe28b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

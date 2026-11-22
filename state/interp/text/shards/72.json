@@ -3388,5 +3388,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c942af7bbf1f": {
+  "identity": {
+   "one_liner": "自托管数据库备份工具，基于 WAL 流实现 PITR 并执行真实恢复验证",
+   "review": "Databasus 是 Apache 2.0 许可的自托管备份工具，支持 PostgreSQL（物理+逻辑备份）及 MySQL、MariaDB、MongoDB（逻辑备份）。核心机制包括 WAL 流式捕获实现时点恢复、启动数据库容器执行真实恢复校验，以及 AES-256-GCM 加密。面向需要数据库备份与灾难恢复的运维与开发团队。",
+   "highlights": [
+    "支持物理（全量+增量+WAL 流）与逻辑备份，实现 PostgreSQL 时点恢复（PITR），兼容 Patroni 与 CloudNativePG 集群时间线切换",
+    "通过启动容器执行真实恢复并逐表报告行数来验证备份可用性，可按计划或备份后触发",
+    "提供 GFS 等保留策略、S3/Azure/FTP 等多存储目标、AES-256-GCM 加密及 Email/Slack/Telegram 等通知渠道"
+   ],
+   "use_cases": [
+    "需要低 RPO/RTO 灾难恢复能力的 PostgreSQL 生产数据库备份",
+    "使用 Patroni 或 CloudNativePG 的高可用集群的时间线连续备份",
+    "多项目团队通过工作区、角色权限与审计日志集中管理数据库备份"
+   ]
+  },
+  "sha": "c942af7bbf1f",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3f5dd9960782": {
+  "identity": {
+   "one_liner": "为长时运行 LLM 智能体设计的五轴记忆坐标系统",
+   "review": "LMC-5（Living Memory Coordinate-5）为长期对话的 LLM 智能体提供记忆管理，给每条记忆五个坐标轴（时间线、关系、事实演化、经验、代谢）。面向需要跨会话延续上下文的智能体开发者，提供 SQLite（FTS5）本地实现和 PostgreSQL/pgvector 生产参考实现，附定时夜间任务、多通道召回与 LLM 提议的海马体机制；事实更新保留历史版本并链接新旧记录。",
+   "highlights": [
+    "五轴记忆坐标：时间线、关系（召回可沿链接跳两跳）、事实演化、经验、代谢，删除需单独决策",
+    "提供 SQLite FTS5 本地实现与 PostgreSQL/pgvector 生产参考实现，含定时夜间任务调整记忆权重与标记新旧事实",
+    "支持 JEV 候选重排序，可从 SQLite 或 PostgreSQL 侧启用；提供 AML HTTP 服务版本（快照 v0.3.0-aml.1）"
+   ],
+   "use_cases": [
+    "智能体跨会话/跨窗口延续对话上下文",
+    "需要记录事实变更历史并可查询过去状态的系统",
+    "VPS 7×24 部署的长期运行智能体服务"
+   ]
+  },
+  "sha": "3f5dd9960782",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1687d21a1023": {
+  "identity": {
+   "one_liner": "开源自托管工时与考勤系统，含 Solo/Team 双模式与 PostgreSQL+NestJS+React PWA 栈",
+   "review": "OpenClockwork 是面向个人和小团队的自托管工时与考勤应用，提供 Solo（个人计时、客户项目、工时表导出）和 Team（员工考勤、排班、请假、审批、QR/PIN 打卡终端）两种运行模式。基于 Docker Compose 部署 PostgreSQL、NestJS 与 React PWA，界面支持德语和英语；工时规则按组织显式配置，单一部署时区（默认 UTC）需预先设置。发票与 CAUR 计费仍在路线图中。",
+   "highlights": [
+    "提供 Solo 与 Team 两种模式，共享同一 PostgreSQL、API 与响应式 PWA",
+    "支持 QR/PIN 平板打卡终端，可选基于服务端校验半径的地理围栏",
+    "包含审批工作流、驾驶舱视图、PLAN/IST 报告，以及 CSV 和 HR 工作时 PDF 导出"
+   ],
+   "use_cases": [
+    "个人从业者记录工时、管理客户项目并导出可计费工时表",
+    "团队员工考勤打卡、请假与工时修正的多级审批管理",
+    "通过共享平板终端进行现场签到，并配合审计链归档"
+   ]
+  },
+  "sha": "1687d21a1023",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b4ff0c4351d5": {
+  "identity": {
+   "one_liner": "用链 ID 和交易哈希从链上恢复已发送交易结果的 TypeScript 只读库",
+   "review": "chainreconciler 是一个 TypeScript 库，用于在 RPC 超时或服务重启后，仅凭链 ID 和交易哈希恢复已发送交易的最终结果。签名、发送、nonce 管理留在调用方，库本身只读链。它在发送前将观察记录先写入 SQLite 以支持崩溃恢复，最终性判定由使用者实现的 ChainReader 适配器决定。未发布 npm，需从仓库安装，要求 Node.js 22.12+。",
+   "highlights": [
+    "发送前将观察记录持久化到 SQLite（启用 WAL，以 chain_id+hash 为复合主键），崩溃后可恢复",
+    "通过 ChainReader 适配器定义最终性规则，RPC 异常按瞬时错误指数退避重试，拒绝不匹配哈希或链的回执",
+    "track 幂等，支持多进程共享同一 SQLite 文件，基于版本号的乐观并发控制，重复工作计为 skipped"
+   ],
+   "use_cases": [
+    "RPC 超时或节点已接收交易但服务在写结果前重启的场景中恢复交易结果",
+    "多进程/多 worker 共享同一 SQLite 数据库的应用查询交易最终状态",
+    "需要自定义最终性判定（确认数、finalized 标签等）的 EVM 链交易对账"
+   ]
+  },
+  "sha": "b4ff0c4351d5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

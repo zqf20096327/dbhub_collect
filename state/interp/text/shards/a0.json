@@ -3344,5 +3344,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fda189705840": {
+  "identity": {
+   "one_liner": "从 Final Cut Pro FCPXML/FCPXMLD 导出格式提取标记元数据并转换多种格式的 CLI 工具与 Swift 库",
+   "review": "该工具读取 FCPXML/FCPXMLD 导出数据，提取标记与字幕信息，可批量渲染静止图像或 GIF 并烧录标记元数据标签，支持多线程操作。提供 CLI 与 Swift 库两种形态，输出 Notion、Airtable、CSV、XLSX、MIDI、SRT 等多种配置文件格式。工具作用于单个时间线，嵌套于复合片段、多机位或同步片段深层的标记会被忽略。",
+   "highlights": [
+    "从 FCPXML/FCPXMLD 提取标记与字幕，支持按标记时码批量渲染 PNG/GIF 并烧录元数据标签",
+    "提供 11 种导出格式（Notion/Airtable JSON、CSV、TSV、XLSX、YouTube/Compressor 章节、Markdown、SRT、MIDI 等）",
+    "支持多线程批处理，可通过 --result-file-path 输出包含导出路径等信息的 JSON 结果文件"
+   ],
+   "use_cases": [
+    "将 Final Cut Pro 时间线标记批量导入 Notion 或 Airtable 等数据库工具",
+    "生成视频章节文本或 SRT 字幕文件用于发布平台",
+    "作为 Swift Package 依赖集成到 macOS 应用中处理 FCPXML 标记数据"
+   ]
+  },
+  "sha": "fda189705840",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7dce5b42d1ec": {
+  "identity": {
+   "one_liner": "以 REST API 与 MCP server 提供CVE、KEV、EPSS等安全情报查询与监控的服务",
+   "review": "ContrastAPI 是一个用 C 编写、数据存于 PostgreSQL 的安全数据服务，同时提供 REST API 和 MCP server，供 AI 代理和普通用户查询 CVE、软件包、域名、IP 等信息，数据来自 NVD、CISA KEV、FIRST EPSS、OSV、MITRE 等公开源。多数端点无需 API key，在每小时免费额度内使用；监控和保存自有厂商密钥需 Pro key。它不执行漏洞扫描或漏洞利用，回答的新鲜度取决于数据源上次同步时间。服务器采用 AGPL v3.0 许可。",
+   "highlights": [
+    "提供 CVE、CISA KEV、CWE、CVSS 计算、漏洞利用引用、EPSS 上升榜等查询工具，支持 npm、PyPI、Maven、Go 等多种生态的软件包检查",
+    "提供域名检查（DNS、SPF/DKIM/DMARC、TLS、安全头、WHOIS）、IP/ASN 查询、子域名枚举、LOLDrivers 和密码泄露哈希查询",
+    "支持将 CVE、软件包、域名、IP 加入监视列表并以事件形式读取变更（需 Pro API key）；提供 Python/Node SDK、Claude Desktop 与 VS Code 扩展"
+   ],
+   "use_cases": [
+    "在 AI 代理工作流中通过 MCP 工具查询 CVE 详情、依赖版本公告或域名邮件认证配置",
+    "对依赖包版本做公告与恶意包检查，或按风险对厂商/产品的 CVE 排序做分诊",
+    "对关注的 CVE、软件包、域名或 IP 建立监控并读取变更事件"
+   ]
+  },
+  "sha": "7dce5b42d1ec",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "78521ae6c4c5": {
+  "identity": {
+   "one_liner": "以 SQLite 为核心、支持记录/对象/向量/图存储的嵌入式本地数据库",
+   "review": "Zova 是以 SQLite 为关系核心的嵌入式数据库，在本地 .zova 文件中提供记录、内容寻址对象、向量集合和有向图存储，附 CLI、C ABI 及 Rust/Python/Go/JavaScript 绑定，也提供 WASM 浏览器版本。对象以 SHA-256 寻址，格式迁移需显式执行，不静默改写源文件。",
+   "highlights": [
+    "支持记录、内容寻址对象（FastCDC-v1 分块或 1 MiB 流式分块，SHA-256 寻址）、精确向量检索和带向边的命名关系图四种存储形态",
+    "提供格式探测与迁移接口（zova format/zova migrate），迁移仅写入新建目标文件且不修改源数据库",
+    "内置 SQLite 编译启用 FTS5、R-Tree、Geopoly、carray 等扩展，并支持将既有 SQLite 数据库复制转换为 .zova 文件"
+   ],
+   "use_cases": [
+    "需要在单文件内同时管理 SQL 表数据、大对象、向量和图关系的本地/嵌入式应用",
+    "已使用 SQLite 的应用希望在同一本地文件模型上增加对象、向量、备份与诊断能力",
+    "需要通过 C ABI 或多语言绑定（Rust/Python/Go/JS/WASM）在不同运行环境中使用统一存储的应用"
+   ]
+  },
+  "sha": "78521ae6c4c5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8a52956c968c": {
+  "identity": {
+   "one_liner": "本地桌面工具，实现 Viber 聊天记录与媒体在 Android 与 iOS 间的双向迁移",
+   "review": "该工具在 PC 上本地完成 Viber 聊天记录、媒体与联系人的双向迁移。Android 侧可经 Viber Desktop、Google Drive 备份 ZIP 或 ADB（需 Root）读取；iPhone 侧读写 iTunes/Apple Devices 未加密备份，转换为 CoreData 格式并更新 Manifest.db。所有数据在本机处理，不上传服务器。运行需 Windows 系统，支持便携 EXE 或源码启动。",
+   "highlights": [
+    "支持 Android→iPhone 与 iPhone→Android 双向迁移，处理 Unix 与 Apple Cocoa 时间纪元转换及 SHA-1 路径哈希",
+    "提供三种 Android 数据源：Viber Desktop QR 同步、Google Drive 备份 ZIP 解包、USB/ADB 直连（需 Root）",
+    "提供便携版 ViberTransfer.exe（内置 Node.js 与 SQLite）及源码运行脚本 Start_App.bat，界面支持俄/英切换"
+   ],
+   "use_cases": [
+    "更换手机系统平台（Android 与 iPhone 之间）需保留 Viber 聊天记录、语音消息、图片视频等数据的用户",
+    "需要在本地离线处理迁移、不希望聊天数据经过第三方服务器的场景",
+    "有 Root 设备时可直接读取数据库；无 Root 时借助 Viber Desktop 或 Google Drive 备份完成迁移"
+   ]
+  },
+  "sha": "8a52956c968c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3086,5 +3086,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9620e5d7bf5a": {
+  "identity": {
+   "one_liner": "本地优先的求职自动化应用，所有投递需人工批准。",
+   "review": "JobCtrl 是一款运行在本机的求职自动化应用：搜索职位来源、基于保存的证据生成 1–10 匹配分、用已批准的措辞组装简历，并把申请材料留待人工审核。数据存于 ~/.jobctrl/，无账户和托管后端；LLM 使用用户自己的 provider 账号。签名版目前仅支持 Apple 芯片 Mac（macOS 15+）。工作流运行在 Temporal 上，可跨中断保留状态。",
+   "highlights": [
+    "发现、匹配评估、简历编辑、申请审核全流程本地运行，数据存于 ~/.jobctrl/，无托管后端",
+    "投递有审批门控：浏览器表单由用户自己填写提交，自动发送仅限已批准的 Gmail 邮件且最多一次",
+    "发现与准备流程运行在 Temporal 工作流引擎上，中断后保留持久身份；默认每日 LLM 预算 25 美元"
+   ],
+   "use_cases": [
+    "需要逐条审核申请材料、控制投递行为的求职者",
+    "希望职位数据、简历与申请记录保存在本机、不使用托管服务的用户",
+    "想用自己的 LLM 账号（Codex/Claude/Google）驱动匹配评估与简历生成的 macOS 用户"
+   ]
+  },
+  "sha": "9620e5d7bf5a",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f7e5de9ca07": {
+  "identity": {
+   "one_liner": "读取葡萄牙公共交通时刻表的 REST API，基于 GTFS 数据导入 SQLite。",
+   "review": "该项目是一个用 TypeScript 与 Hono 构建的只读 API，用于查询葡萄牙公共交通站点与班次时刻。它从 Carris、CP、STCP 等运营商的 GTFS 数据源导入数据并存入 SQLite，提供附近站点搜索（按经纬度与半径过滤）和按线路、站点查询出发班次等端点，内置 Swagger 参考界面与 OpenAPI 3.1 文档，支持 Node.js 或 Docker Compose 部署。默认注册表覆盖里斯本、塞图巴尔、波尔图大都市区运营商及 CP，不含岛屿运营商；导入全部九个数据源约需 7 GiB 磁盘空间，数据刷新需自行通过外部调度器安排。",
+   "highlights": [
+    "支持导入九个运营商 GTFS 数据源，提供附近站点搜索（半径默认 1 公里、最大 25 公里）与按线路、站点查询班次的只读端点",
+    "内置 Swagger 交互式 API 参考和 OpenAPI 3.1 文档，支持演示用的内置合成数据，无需下载数据源即可启动",
+    "提供 feed 健康检查端点（/source-health），报告数据源的 service date 范围状态与刷新状态，刷新失败时保留上一份快照"
+   ],
+   "use_cases": [
+    "需要在应用中查询葡萄牙里斯本、塞图巴尔、波尔图地区及 CP 火车附近站点与班次时刻的只读查询服务",
+    "需要将运营商 GTFS 数据导入本地 SQLite 并通过 REST 接口供内部或公开访问的部署场景",
+    "需要定时刷新多个 GTFS 数据源并监控各源数据新鲜度与刷新状态的运维场景"
+   ]
+  },
+  "sha": "8f7e5de9ca07",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7d2712cfb8dd": {
+  "identity": {
+   "one_liner": "离线桌面应用：用 Tesseract OCR 把学习资料截图转为可编辑笔记与抽认卡",
+   "review": "TuonTa 是一个离线运行的 Python 桌面应用，面向想把截图中的学习资料整理成笔记和抽认卡的用户。它用 Tesseract OCR 识别文字（含灰度、放大、对比度、暗色反转等预处理），不调用任何 AI 服务或网络接口；笔记可编辑、打标签、导出 .txt，支持规则识别 Term/定义、Q:/A: 等格式生成卡片，复习采用 Leitner 盒子间隔机制，数据存于本地 SQLite。需自行安装 Python 3.11+ 与 Tesseract。",
+   "highlights": [
+    "导入 PNG/JPG/JPEG 或剪贴板粘贴截图，经 Tesseract 离线识别并做图像预处理",
+    "笔记支持编辑、标签、搜索、导出 .txt；可按 Term:/Term-/Q:A: 等规则生成抽认卡",
+    "复习带翻转动画与 Leitner 盒子，测验从自建卡片生成选择题，进度含连续天数与 7 天活动图；数据存 SQLite，支持 JSON 导入导出"
+   ],
+   "use_cases": [
+    "将课程截图、教材照片转为可编辑笔记",
+    "从识别文本批量生成抽认卡并按 Leitner 间隔复习",
+    "在无网络环境下本地管理学习数据与测验记录"
+   ]
+  },
+  "sha": "7d2712cfb8dd",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -28688,5 +28688,420 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "bc43736c2094+2": {
+  "fn": "genesisdb-io/genesisdb",
+  "clean_ver": "2",
+  "raw_lines": 15,
+  "ops": [
+   [
+    "replace",
+    0,
+    15,
+    0,
+    10,
+    [
+     "<a href=\"https://www.genesisdb.io\">",
+     " GenesisDB",
+     " </a>",
+     "",
+     " license",
+     " Go 1.26+",
+     " CloudEvents native",
+     " GDPR ready",
+     "",
+     " genesisdb.io"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    25,
+    10,
+    20
+   ],
+   [
+    "replace",
+    25,
+    26,
+    20,
+    21,
+    [
+     "- GDBQL, a small query language with filters, ordering, grouping, aggregates, projections and subqueries, see docs/gdbql.md."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    21,
+    23
+   ],
+   [
+    "replace",
+    28,
+    29,
+    23,
+    24,
+    [
+     "- optional Ed25519 event signatures, persisted at commit, verifiable offline and with standard tools, see docs/signatures.md."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    31,
+    24,
+    26
+   ],
+   [
+    "replace",
+    31,
+    34,
+    26,
+    29,
+    [
+     "- built-in MCP endpoint: AI agents connect to `/mcp` with the usual tokens, see docs/mcp.md.",
+     "- embeddable: `store.Open(dir)` gives you the database inside your own Go program, see docs/engines.md.",
+     "- drop-in replacement for the closed source 1.x line, see GenesisDB 2.0 and 1.x."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    39,
+    29,
+    34
+   ],
+   [
+    "replace",
+    39,
+    40,
+    34,
+    35,
+    [
+     "||Compatible with 2.0|"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    35,
+    36
+   ],
+   [
+    "replace",
+    41,
+    46,
+    36,
+    41,
+    [
+     "|1.x data directories|Yes, migrated automatically on first start|",
+     "|1.x backups|Yes, both backup forms restore unchanged|",
+     "|1.x clients and SDKs|Yes, the 1.x API stays under `/api/v1`, unchanged and frozen|",
+     "|2.0 SDKs against a 1.x server|No, they use `/api/v2`|",
+     "|2.0 data directories or backups in 1.x|No, the migration is one-way|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    59,
+    41,
+    54
+   ],
+   [
+    "replace",
+    59,
+    60,
+    54,
+    55,
+    [
+     "Upgrade the server first and move clients to the 2.0 SDKs at your own pace. New features such as stored events returned by commit, upper fetch bounds and typed errors need a 2.0 SDK. Every v1 response carries `Deprecation: true` and a `Link` to its v2 successor. Steps, migration details and the route mapping are in docs/compatibility.md."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    99,
+    55,
+    94
+   ],
+   [
+    "replace",
+    99,
+    100,
+    94,
+    95,
+    [
+     "Every release on the releases page ships static binaries for Linux and macOS on amd64 and arm64, plus `SHA256SUMS`. Download, verify, `chmod +x`, and drop on your `$PATH`."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    108,
+    95,
+    103
+   ],
+   [
+    "replace",
+    108,
+    109,
+    103,
+    104,
+    [
+     "The server binds to `127.0.0.1:8080`, creates `./data` and prints a welcome box when it is up. The token is required and must have at least 32 bytes. For remote access configure TLS or put a TLS reverse proxy in front, and use separate read and write tokens, see SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    123,
+    104,
+    118
+   ],
+   [
+    "replace",
+    123,
+    132,
+    118,
+    119,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    134,
+    119,
+    121
+   ],
+   [
+    "replace",
+    134,
+    135,
+    121,
+    122,
+    [
+     "List responses are NDJSON, one event per line. The full API with every route, request body and status code is in docs/http-api.md. The API of GenesisDB 1.x stays available unchanged under `/api/v1`, so 1.x clients keep working. A Postman collection with a request for every route is in `docs/postman`."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    146,
+    122,
+    133
+   ],
+   [
+    "replace",
+    146,
+    147,
+    133,
+    134,
+    [
+     "|Variable|Default|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    134,
+    135
+   ],
+   [
+    "replace",
+    148,
+    176,
+    135,
+    163,
+    [
+     "|`GENESISDB_AUTH_TOKEN`|required|Administrator bearer token, all protected routes|",
+     "|`GENESISDB_READ_TOKEN`|disabled|Read operations, not backup or hash audit|",
+     "|`GENESISDB_WRITE_TOKEN`|disabled|Read operations plus commit, not administration|",
+     "|`GENESISDB_HOST`|`127.0.0.1`|API bind address, container overrides to `0.0.0.0`|",
+     "|`GENESISDB_PORT`|`8080`|API port|",
+     "|`GENESISDB_TLS_CERT_FILE`, `GENESISDB_TLS_KEY_FILE`|disabled|TLS certificate/key, supply both|",
+     "|`GENESISDB_DATA_DIR`|`data`|Exclusively owned data directory|",
+     "|`GENESISDB_MAX_REQUEST_BYTES`|`0` (unbounded)|Optional request body cap in bytes|",
+     "|`GENESISDB_MAX_RESTORE_BYTES`|`0` (unbounded)|Optional restore body cap in bytes|",
+     "|`GENESISDB_MAX_READ_EVENTS`|`0` (unbounded)|Optional cap on selected events per request|",
+     "|`GENESISDB_MAX_READ_BYTES`|`0` (unbounded)|Optional cap on selected bytes per request|",
+     "|`GENESISDB_MAX_CONCURRENT_REQUESTS`|`0` (unbounded)|Optional cap on active requests including subscriptions|",
+     "|`GENESISDB_REQUEST_TIMEOUT_SECONDS`|`0` (none)|Optional deadline for non-streaming requests|",
+     "|`GENESISDB_MAX_COMMITS_PER_GROUP`|`0` (256)|Concurrent commits that share one durable write, `1` writes every commit on its own|",
+     "|`GENESISDB_MAX_EVENTS_PER_GROUP`|`0` (1024)|Events of one such write. Only splits groups, a larger commit is written on its own|",
+     "|`GENESISDB_MAX_BYTES_PER_GROUP`|`0` (8 MiB)|Payload bytes of one such write. Only splits groups, a larger commit is written on its own|",
+     "|`GENESISDB_TZ`|system|Event timestamp time zone|",
+     "|`GENESISDB_MEMCACHE`|`true`|Set to `false` to disable event caching|",
+     "|`GENESISDB_MEMCACHE_SIZE`|`10000`|Cache entry count, not a byte limit|",
+     "|`GENESISDB_STORAGE_FORMAT`|`auto`|`auto` migrates a 1.x directory on start (back it up first, the backup is mandatory), `keep` leaves it in the 1.x format for inspection|",
+     "|`GENESISDB_LOG_LEVEL`|`info`|`debug`, `info`, `warn`, `error`|",
+     "|`GENESISDB_METRICS` or `GENESISDB_PROMETHEUS_METRICS`|`false`|Enable Prometheus and optional OTLP metrics|",
+     "|`GENESISDB_METRICS_PORT`|`2112`|Separate Prometheus listener|",
+     "|`GENESISDB_LEGACY_METRICS`|`true`|Also expose historical metric names|",
+     "|`GENESISDB_MCP`|`false`|Serve the MCP endpoint for AI agents at `/mcp`|",
+     "|`GENESISDB_SIGNING_KEY`|disabled|Ed25519 private key (PKCS#8) that signs new events, a file path or the file content in base64|",
+     "|`GENESISDB_TRUSTED_SIGNING_KEYS`|recorded keys|Comma separated public keys the audit trusts, see docs/signatures.md|",
+     "|`GENESISDB_REVOKED_SIGNING_KEYS`|none|Comma separated compromised keys, `<key id>` or `<key id>:<last trusted event hash>`|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    198,
+    163,
+    185
+   ],
+   [
+    "replace",
+    198,
+    202,
+    185,
+    186,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    204,
+    186,
+    188
+   ],
+   [
+    "replace",
+    204,
+    205,
+    188,
+    189,
+    [
+     "GenesisDB is one Go module with each engine as its own package under `packages/`. Importing one engine compiles only that package and its GenesisDB dependencies. See docs/engines.md."
+    ]
+   ],
+   [
+    "equal",
+    205,
+    208,
+    189,
+    192
+   ],
+   [
+    "replace",
+    208,
+    209,
+    192,
+    193,
+    [
+     "Every event carries a SHA-256 hash that binds its predecessor. Hash chains are not signatures: an attacker with write access to the data directory can rewrite a whole chain or truncate its tail. Optional event signatures detect a rewrite when the private key is kept away from that attacker and the trusted public keys are pinned outside the data directory. Neither detects truncation of the newest events. Keep trusted external checkpoints and independent backups if that threat matters."
+    ]
+   ],
+   [
+    "equal",
+    209,
+    210,
+    193,
+    194
+   ],
+   [
+    "replace",
+    210,
+    211,
+    194,
+    195,
+    [
+     "Reference-payload erasure replaces the entire reference object with `{}` and records requested/completed audit events. It does not erase immutable metadata, inline payloads, old backups, filesystem snapshots or disk remnants. Do not put personal data in immutable event subjects, types or sources. The reference key that remains is a SHA-256 digest of metadata and original payload, irreversible but confirmable for guessable payloads, see SECURITY.md. Erasure is a building block, not a GDPR compliance guarantee."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    214,
+    195,
+    198
+   ],
+   [
+    "replace",
+    214,
+    226,
+    198,
+    210,
+    [
+     "- HTTP API",
+     "- GDBQL",
+     "- MCP endpoint for AI agents",
+     "- Postman collection",
+     "- Embedded engines",
+     "- Storage format and recovery",
+     "- Event signatures",
+     "- Compatibility and upgrade from 1.x",
+     "- Security policy",
+     "- Design notes",
+     "- Changelog",
+     "- Roadmap"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    233,
+    210,
+    217
+   ],
+   [
+    "replace",
+    233,
+    237,
+    217,
+    218,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    239,
+    218,
+    220
+   ],
+   [
+    "replace",
+    239,
+    240,
+    220,
+    221,
+    [
+     "See CONTRIBUTING.md for the workflow and the rules. Short fuzz runs, synthetic benchmarks and fault injection do not establish production capacity or exhaustive crash safety. Test your workload and practice backup restoration before production use."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    242,
+    221,
+    223
+   ],
+   [
+    "delete",
+    242,
+    243,
+    223,
+    223
+   ],
+   [
+    "equal",
+    243,
+    244,
+    223,
+    224
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

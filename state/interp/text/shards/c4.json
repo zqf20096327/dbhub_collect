@@ -3532,5 +3532,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9ffd1072deb2": {
+  "identity": {
+   "one_liner": "开源 text-to-SQL 引擎，管道各环节可配置并在自有数据库上评估",
+   "review": "mnemiq 是 Apache-2.0 的 text-to-SQL 引擎，由 Agentic Fabriq 开发，用于在自然语言提问与 SQL 执行之间提供可读改的配置。它将生成与决策分离：模型仅在中间阶段生成查询，确定性层校验只读性、权限、方言编译与 EXPLAIN 后才执行。附带评估框架 beacon，可按返回数据而非 SQL 字符串匹配评分，并将正确、拒绝、错误分三项报告。支持 PostgreSQL、Oracle、Databricks、DuckDB 等，可通过 uv 安装，无需 Docker 即可运行内置 SQLite 演示。",
+   "highlights": [
+    "模型仅负责生成查询；执行前由确定性层校验只读性、调用者可见对象、源方言编译与 EXPLAIN，未通过则返回带原因的拒绝",
+    "语义增强分三级（Tier 0 表列、Tier 1 键与分布、Tier 2 LLM 提议的定义），定义可由具名负责人审核认证，编码值须有数据或标准（TTL/SKOS/OWL）依据",
+    "内置评估框架，按数据返回结果评分并分列正确/拒绝/错误三项；评分器 beacon 为独立仓库，同一评分器也用于对比 Cortex Analyst 与 Genie；支持通过 profile 配置与 mnemiq sweep 测量调参"
+   ],
+   "use_cases": [
+    "在自有数据库上评估并调整 text-to-SQL 配置：编写带标签的问题集，对比增强开关、本地与托管模型、不同校验阈值的表现",
+    "需要行/列权限控制与审计的场景：权限在模式检索前生效，答案附带 SQL、涉及表与策略改写的完整追踪",
+    "作为 MCP 服务器或 HTTP API 接入：支持 OIDC 令牌按请求验证身份、从 roles claim 或身份映射取角色，本地单机可用 MNEMIQ_ROLES 指定角色"
+   ]
+  },
+  "sha": "9ffd1072deb2",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

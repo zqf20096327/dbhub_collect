@@ -3087,5 +3087,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "29db3532bb2f": {
+  "identity": {
+   "one_liner": "AI 论文趋势分析系统：抓取元数据，SQLite 分层存储，输出静态仪表盘",
+   "review": "DeepTrender 抓取 arXiv、OpenReview 等来源的论文元数据，经规范化与关键词归并后写入 SQLite 的原始/结构化/分析三层结构，并通过 Flask REST API、MCP 服务器和导出至 GitHub Pages 的静态仪表盘提供访问。适用于追踪 AI/ML 论文数量与关键词趋势的开发者；静态站点不含后端运行时，数据更新依赖 GitHub Actions 工作流。",
+   "highlights": [
+    "支持从 arXiv、OpenReview、OpenAlex、Semantic Scholar 四个来源摄取论文元数据",
+    "提供 Flask REST API、MCP 服务器与导出 JSON 的静态仪表盘三种访问方式",
+    "采用 SQLite 原始/结构化/分析三层模型，关键词经别名合并与噪声过滤后按规范主题统计"
+   ],
+   "use_cases": [
+    "按日/周/月/年查看 AI 论文数量与热门关键词趋势",
+    "通过 MCP 服务器向支持 MCP 的客户端提供论文趋势查询",
+    "用 GitHub Actions 定时抓取数据并自动部署静态站点"
+   ]
+  },
+  "sha": "29db3532bb2f",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b5733484bc91": {
+  "identity": {
+   "one_liner": "本地运行的表格数据问答代理，以本地校验层约束 LLM 生成的 SQL",
+   "review": "DataWhisper 是一个 Python 编写的本地数据引擎，提供两方面功能：用自然语言查询 SQLite、DuckDB、PostgreSQL、Parquet、JSONL 等数据源，以及在 GitHub PR 中审查涉及 SQL 和迁移文件的变更。它将语言模型视为不可信组件，SQL 需经过语义防火墙、AST 解析和基于 EXPLAIN 的成本检查后才执行，敏感数据在离开引擎前经脱敏处理。安装要求 Python 3.11+，从仓库克隆后通过 pip 安装，外部 LLM 需配置 API key，也可用本地模板模式（DW_LLM_PROVIDER=local）不调用外部端点。",
+   "highlights": [
+    "支持 SQLite、DuckDB、PostgreSQL、Parquet、JSONL 等数据源，SQLite 与 DuckDB 以只读模式打开，PostgreSQL 使用只读事务",
+    "SQL 执行前经过多层校验：风险评分防火墙、三层 AST 沙箱（词法/结构/语义）、基于 EXPLAIN 的成本门控，拒绝笛卡尔积并为无界扫描注入 LIMIT",
+    "隐私引擎提供 hash、pseudonymize、differential_privacy、mask、tokenize、redact 六种脱敏模式，支持基于列名与正则（含 Luhn 校验）检测敏感值"
+   ],
+   "use_cases": [
+    "在本地对数据库文件或 Postgres 实例用自然语言提问并生成图表结果，数据不出引擎",
+    "在 CI/CD 流水线中审查涉及 SQL、迁移文件的 PR，注释 DDL 变更与潜在锁表、删除列等风险",
+    "在模型或仪表盘消费数据前，用表契约校验 NOT NULL、唯一性、最小行数等约束"
+   ]
+  },
+  "sha": "b5733484bc91",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1a02a9c1a63b": {
+  "identity": {
+   "one_liner": "乌兹别克语 PWA 提醒与日程应用，按秒级定时发送 Web Push 通知",
+   "review": "Smart Day 是一个乌兹别克语界面的 PWA 提醒与日程应用，支持单次/重复提醒、日历、时间块和完成度统计，在应用关闭或手机锁屏时仍可推送通知。前端为无构建的原生 ES 模块 JavaScript，后端为 Express 5，通过 Netlify Scheduled Function 每分钟触发推送，数据存于 Supabase Postgres；本地开发内置 PGlite，无需安装数据库。适用于需要定时提醒的个人日程管理场景。",
+   "highlights": [
+    "提供今日视图、周条带、逐小时日程、月历视图及周/月目标功能",
+    "基于 Web Push (VAPID) 在指定时间发送推送通知，支持单次与每日/每周/每月重复提醒",
+    "后端使用 Express 5 + JWT (httpOnly cookie)、bcrypt、Zod 验证，通过 Netlify Scheduled Function 每分钟调度推送"
+   ],
+   "use_cases": [
+    "在手机锁屏或应用关闭状态下接收精确到分钟级（±1 分钟）的提醒通知",
+    "管理每日计划、周期性任务与周/月目标并查看完成度统计",
+    "以静态前端 + Serverless Functions + Supabase Postgres 架构进行个人日程应用部署学习"
+   ]
+  },
+  "sha": "1a02a9c1a63b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

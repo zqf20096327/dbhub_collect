@@ -3344,5 +3344,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "eb01fdc9db29": {
+  "identity": {
+   "one_liner": "在 T3 Code 旁运行的网关服务器，通过 MCP 让托管 AI 机器人接入多台 T3 机器",
+   "review": "t3-fleet-gateway 是部署在 T3 Code 旁的小型服务器，为外部机器人提供单一 OAuth 登录地址和 MCP 端点，将编码任务路由到多台机器上的 T3 项目。每项工作成为带稳定 ID 的 job，状态存于本地 SQLite，支持线程接管、webhook 通知与安全重试。机器人不接触 T3 凭据；访问需经公共 HTTPS 隧道，权限按机器和项目授予。",
+   "highlights": [
+    "提供单一 MCP 端点（/mcp），支持 OAuth 登录与 bearer token，并将任务路由到配置中的多台 T3 主机",
+    "任务带稳定 ID 与存储的 requestId，支持光标式 work_feed 事件流、webhook 推送（含过滤、投递健康检查与七日重放），状态持久化在本地 SQLite",
+    "机器人可经 work_adopt 接管用户在 T3 中手动开始的线程（按 bot 选择性开启），每步操作记录历史且不改变 T3 中的线程状态"
+   ],
+   "use_cases": [
+    "让无人值守长期运行的托管机器人（如 Grok Bot、Notion agent）跨多台 T3 机器启动、跟进和接管编码任务",
+    "机器人需在任务完成、需要输入或失败时通过 webhook 被唤醒的场景",
+    "需要按 bot 细粒度控制机器与项目访问权限、并轮换/撤销 token 的多机器人管理"
+   ]
+  },
+  "sha": "eb01fdc9db29",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0a98fcd09962": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地持久化 AI 记忆 MCP 服务器，采用 FTS5+向量混合检索",
+   "review": "Mnemo 是一个实现 MCP 协议的持久化记忆服务器，供 Claude Code、Cursor 等 AI 编码客户端存储与检索对话、偏好、决策等记忆。检索由 FTS5 全文与 sqlite-vec 向量搜索经 RRF 融合，并经重排序、时间衰减与重要性加权；数据存于本地单个 SQLite（WAL）文件。注意其仅支持 Streamable HTTP 传输，需自行启动服务实例，跨机备份依赖外部 rclone。",
+   "highlights": [
+    "提供混合检索：FTS5 + sqlite-vec 向量搜索经 RRF（k=60）融合，支持重排序、时间衰减与重要性加权",
+    "支持类型化记忆捕获（6 种 context_types）、基于嵌入的去重、软归档与恢复，以及带 valid_from/valid_to 双时态列的时间知识图谱（entity_search/entity_graph/history/as_of 操作）",
+    "本地优先存储：单个 SQLite（WAL）文件位于 ~/.mnemo/，云端 LLM 调用通过 [models.*] provider cells 配置（OpenRouter 预设默认），可选 Fastretrieval 本地 Qwen3 嵌入与重排序模型实现零配置运行"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex、Gemini CLI 等支持 MCP 的 AI 编码工具提供跨会话持久记忆",
+    "需要按时间点查询记忆演变历史（as_of 时间回溯）与实体关系图谱的场景",
+    "希望在本地自托管运行、通过 rclone 备份实现跨机器迁移记忆数据的部署"
+   ]
+  },
+  "sha": "0a98fcd09962",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cbfa3ee2f70e": {
+  "identity": {
+   "one_liner": "Python 编写的现代 DX cluster 核心，提供 telnet、Web UI 与 DXSpider 兼容节点互联",
+   "review": "pyCluster 用 Python 实现 DX cluster 核心，服务业余无线电用户。它通过 telnet 提供传统 DX 风格命令界面，附带公开 Web UI 和系统管理员（System Operator）Web 控制台，使用 SQLite 持久化 spots、消息与用户配置，支持与 DXSpider 系节点的 PC 协议互联及自有 PY 协议。部署目标为独立 Linux 主机（VPS、树莓派等），配套 systemd 安装工具。生产部署须从 release tag 安装，不推荐直接拉取 main 分支。",
+   "highlights": [
+    "提供 telnet、公开 Web UI 和系统管理员 Web 控制台三类界面，支持 show/*、set/*、sysop/* 等 DX 风格命令",
+    "将 spots、消息和用户偏好存储于 SQLite，支持按期限清理及 CTY/wpxloc 数据自动刷新工具",
+    "支持与 DXSpider 系节点互联，认证节点间默认协商 PY 协议，PC 协议作为回退；集成 fail2ban 防登录滥用"
+   ],
+   "use_cases": [
+    "在独立 Linux 主机、VPS、树莓派上部署单节点 DX cluster，向用户提供 telnet 与 Web 接入",
+    "作为节点与现有 DXSpider 系 cluster 网络建立多链路互联",
+    "需要本地 RBN/Skimmer spot 接入、过滤与展示的 cluster 运行场景"
+   ]
+  },
+  "sha": "cbfa3ee2f70e",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f6177a4e9d42": {
+  "identity": {
+   "one_liner": "单二进制 Rust 后端框架，集成数据库、任务队列与确定性模拟测试",
+   "review": "charpente 将 HTTP 服务器、嵌入式数据库、任务队列、cron、realtime 和认证编译进一个 Rust 二进制。路由作为单一事务提交写入、任务和事件，核心不直接做 IO，通过可注入的模拟实现支持确定性故障回放。安装需 Rust 1.99+，查询为类型化 Rust 调用而无 SQL 接口，面向新建后端，当前为技术预览版，单主节点运行、不支持分片。",
+   "highlights": [
+    "应用以 Rust crate 编写，与框架编译为一个二进制，服务 HTTP 并将数据保存在一个目录中",
+    "路由的写入、入队任务和事件在同一事务中提交，表、路由、任务均为 Rust 类型，不匹配时产生编译错误",
+    "内置模拟器从种子注入崩溃、丢失回复、时钟跳变等故障，失败可按种子复现并缩小输入"
+   ],
+   "use_cases": [
+    "为编码代理或开发者构建新后端，应用以 Rust 类型定义表、路由、任务和事件",
+    "通过 `charpente test --sim` 在注入故障的确定性模拟中检查幂等性等属性，复现如重复扣款这类依赖故障顺序的缺陷",
+    "以单个二进制部署包含 HTTP、嵌入式数据库、任务队列、realtime 与认证的后端"
+   ]
+  },
+  "sha": "f6177a4e9d42",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

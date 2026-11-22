@@ -3488,5 +3488,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8034af1d60f3": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Java/Kotlin 消息与任务队列库",
+   "review": "Kolbasa 是一个以 PostgreSQL 为存储的 JVM 消息与任务队列库，用 Kotlin 编写，可被 Java、Kotlin、Scala 等语言使用。它不依赖外部消息中间件，运行在 PostgreSQL 10+ 和 JVM 17+ 环境上，适合已有 PostgreSQL、希望复用现有数据库实现队列的团队。通过 Gradle 引入依赖即可使用，并提供可选的 OpenTelemetry 与 Spring Boot 4 starter 集成。",
+   "highlights": [
+    "使用 PostgreSQL 10+ 作为持久化存储，无需额外插件，支持外部事务上下文、事务性发送与消息去重",
+    "提供消息延迟投递、可见性超时、可配置重试次数、死信队列与归档队列",
+    "支持按元字段过滤和排序接收、批量收发、分块部分插入模式，以及通过 SQL 函数 q_<name>_put(...) 直接从数据库触发器/存储过程入队"
+   ],
+   "use_cases": [
+    "已在运行 PostgreSQL 的 JVM 应用中引入消息队列，不部署 Kafka 或 RabbitMQ",
+    "将业务代码交给后台 worker 处理的任务队列场景，含重试、死信与审计归档",
+    "需要消息延迟投递（如 30 天后执行删除）或按 priority、userId 等元字段过滤排序消费的场景"
+   ]
+  },
+  "sha": "8034af1d60f3",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0f01601a3c6e": {
+  "identity": {
+   "one_liner": "本地运行的开源中文输入法，支持五笔/拼音混输与SQLite本地词库。",
+   "review": "人人输入法是一款基于 Windows TSF 与 macOS IMK 的中文输入法，采用 C++20 核心与 WPF 设置界面，词库存储在本地 SQLite 数据库。它支持86五笔、全拼及多种双拼方案的混输，提供候选词置顶、自定义短语、快捷短语与候选栏插件功能。适合五笔用户及希望词库数据保留在本地的使用者。内置词典来自 Rime 开源社区，遵循 MIT 协议开源。",
+   "highlights": [
+    "支持 86 五笔、全拼与自然码/微软/小鹤双拼方案混输，多源召回时对次级输入方式的候选词内联标注主方案编码",
+    "用户词条、词频与插件配置存储于本地 SQLite WAL 数据库，支持 UTF-8 JSON 全量导入导出",
+    "提供候选栏内嵌插件栏（预置计算器、画图、Edge 浏览器），通过 SQLite 配置可挂载截图、脚本等自定义工具，并记录执行日志"
+   ],
+   "use_cases": [
+    "五笔与拼音混合输入，需要在忘码时由拼音候选反查五笔编码",
+    "在本地维护个人词库、置顶词序与快捷短语，并通过 JSON 导出迁移",
+    "通过候选栏插件快速唤起计算器、截图或本地脚本等工具"
+   ]
+  },
+  "sha": "0f01601a3c6e",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

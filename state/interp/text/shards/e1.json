@@ -3170,5 +3170,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "042e6ac9b5b6": {
+  "identity": {
+   "one_liner": "AI 优先的 Scala 3 后端模板，内置 MCP 与 http4s + Skunk + cats-effect 技术栈",
+   "review": "该仓库是一个以 AI 辅助开发为目标配置的 Scala 3 后端模板，技术栈为 http4s、Skunk、cats-effect 和 PostgreSQL，以葡萄酒拍卖为示例领域。仓库提交了 .mcp.json，为 AI 助手提供编译测试回路与只读参考的 MCP 服务器；附带重命名脚本可将项目名替换并移除拍卖示例。默认仅需一个 Postgres 容器即可运行，模板采用 Apache-2.0，由脚本生成的项目可自行选择许可证。",
+   "highlights": [
+    "提交 .mcp.json，接入 Metals 编译测试回路与 madrileno 只读 MCP 服务器，docs/ 目录作为助手知识库",
+    "默认 docker compose 仅启动 Postgres；full profile 追加 Mailpit、OpenObserve、Silo，通过 .env 切换 SMTP、OTel、S3 集成",
+    "提供 init-project 重命名脚本、MigrateMain 迁移工具、doctor 环境检查脚本，以及可后台运行应用并等待健康检查的 app.scala 启动器"
+   ],
+   "use_cases": [
+    "以该模板为起点创建 Scala 3 函数式后端项目，用 init-project 脚本重命名并移除拍卖示例",
+    "在 AI 助手驱动的开发流程中，让助手通过 MCP 访问编译测试回路与仓库参考文档",
+    "本地开发需要邮件、遥测或对象存储集成时，用 full profile 一键启动配套服务并通过 .env 切换"
+   ]
+  },
+  "sha": "042e6ac9b5b6",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0f7a375238c3": {
+  "identity": {
+   "one_liner": "Claude Code 插件市场，汇集 ADR 工作流、DevOps 与效率类技能插件",
+   "review": "该仓库是一个 Claude Code 插件市场（marketplace），包含数十个覆盖 ADR 驱动开发、DevOps 自动化、ClickHouse 管理、语义化版本、浏览器自动化等方向的插件。面向 Claude Code 用户，通过 `claude plugin marketplace add` 命令添加市场源，再按需 `claude plugin install <name>@cc-skills` 安装单个插件；插件清单以 `.claude-plugin/marketplace.json` 为唯一事实源，hooks 随插件自动加载，需重启 Claude Code 生效。README 还提供了 Windows EPERM 错误等故障排查方案。",
+   "highlights": [
+    "包含 30+ 个插件，涵盖 productivity、devops、development、quality、trading 等多个类别，如 itp（ADR 四阶段开发工作流）、devops-tools（ClickHouse/Doppler/MLflow 自动化）、web-forge（浏览器自动化）",
+    "插件清单由 `.claude-plugin/marketplace.json` 生成，可运行 `bun scripts/validate-plugins.mjs` 校验表格与实际一致",
+    "hooks 通过各插件自带 hooks/hooks.json 加载，无需写入 ~/.claude/settings.json，旧版本安装残留可用提供的脚本清理"
+   ],
+   "use_cases": [
+    "Claude Code 用户按需安装工作流、DevOps、文档、代码质量等方向的技能插件",
+    "使用 itp/itp-hooks 实现 ADR 驱动的开发流程并强制代码规范检查",
+    "通过 devops-tools、quality-tools 等插件在 Claude Code 中执行 ClickHouse 管理、通知推送、会话恢复等运维任务"
+   ]
+  },
+  "sha": "0f7a375238c3",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "da8dd9de67dc": {
+  "identity": {
+   "one_liner": "基于 Flutter + Rust + BASS 的 Windows 本地音乐播放器",
+   "review": "Lamp Player 是一款 Windows 本地音乐播放器：Flutter 负责界面，Rust 通过 flutter_rust_bridge 承担文件扫描、元数据解析与曲库逻辑，音频输出依赖 BASS 2.4，曲目存储使用 bundled SQLite 与 FTS5 全文检索。支持 mp3/flac/wav/ogg/m4a/ape/opus 等格式，提供播放队列、均衡器、ReplayGain、LRC 歌词与元数据写回。项目处于 M3 打磨阶段，发布流水线尚未接入。",
+   "highlights": [
+    "Rust 核心用 walkdir 扫描、lofty 解析元数据，曲库基于 rusqlite（bundled SQLite + FTS5）实现全文检索，支持拼音与中文子串兜底",
+    "音频层基于 BASS 2.4，支持 flac/opus/ape/aac/wma add-on，可切换 WASAPI 独占输出（经 bassmix 不重采样），含 10 段均衡器与 ReplayGain",
+    "支持增强 LRC 逐字歌词与桌面歌词窗口，元数据 12 个字段可写回文件标签，歌单支持导入导出 M3U/M3U8"
+   ],
+   "use_cases": [
+    "在 Windows 10+ 上管理并播放本地多格式音乐曲库（万级曲目虚拟滚动、按音质分档浏览）",
+    "需要无损/Hi-Res 播放与响度归一化的场景：WASAPI 独占输出、ReplayGain 批量计算",
+    "歌词重度使用者：增强 LRC 逐字染色、桌面置顶歌词、歌词写回标签或旁载 .lrc"
+   ]
+  },
+  "sha": "da8dd9de67dc",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

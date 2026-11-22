@@ -3304,5 +3304,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fea04b795755": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3 + Vue 3 的 B2C 商城，内置秒杀与多 Agent 智能客服。",
+   "review": "这是一个 B2C 电商平台项目，含后端 REST 服务、用户门户、管理后台和独立的智能客服四个模块。实现注册登录、商品搜索、购物车、下单支付全流程；支付为本地模拟，未接入第三方渠道。客服模块用 LangGraph 编排多 Agent，通过 MCP 调用后端工具，需自行配置 LLM API Key。适合作为全栈电商业务的参考实现。",
+   "highlights": [
+    "秒杀采用 Redis Lua 脚本原子扣减库存，经 RabbitMQ 异步下单，含消费重试、幂等与用户级防重机制",
+    "智能客服基于 LangGraph 编排 Supervisor 路由与多个 Agent，使用 Qdrant 做向量+BM25 混合检索，全链路 SSE 流式响应",
+    "订单超时通过 RabbitMQ 延迟队列（TTL 10 分钟）自动取消并恢复库存，商品搜索基于 Elasticsearch 及定时增量同步"
+   ],
+   "use_cases": [
+    "本地部署 B2C 商城系统进行浏览、购物车、下单与模拟支付的全流程使用",
+    "作为秒杀、限流、多级缓存、订单超时取消等后端方案的代码参考",
+    "部署多 Agent 智能客服，通过上传文档维护知识库并接入商城门户对话"
+   ]
+  },
+  "sha": "fea04b795755",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e5eada0ba1ff": {
+  "identity": {
+   "one_liner": "绊 kizuna：用单个 Go 容器统一管理 PostgreSQL、Redis、Kafka 的自托管 Web 界面",
+   "review": "kizuna 是一个自托管的 Web 数据工具，为 PostgreSQL、Redis 和 Kafka 提供统一的浏览与编辑界面，面向工程师、分析师和支持团队。核心机制是 Go 单二进制内嵌 React 前端，以单个 25 MB 容器运行；跨源链接功能可在 Kafka 消息、Redis 键和 PostgreSQL 行之间建立跳转关系。需注意它无内置认证，默认仅监听 127.0.0.1，面向单机单用户使用。",
+   "highlights": [
+    "支持 PostgreSQL、Redis（standalone/Cluster/Sentinel）和 Kafka（多 broker、SASL、TLS）三类连接，通过向导从一处配置",
+    "提供跨源链接：右键消息或键即可跳转到关联的其他源记录，生成过滤器、面包屑和反向跳转",
+    "包含 SQL 控制台、Redis 分类型编辑器与 CLI、Kafka 消息搜索/生产/protobuf 解析（.proto）及 consumer group offset 重置等功能"
+   ],
+   "use_cases": [
+    "在一处浏览和编辑多种数据源：查看表数据、Redis 键值、Kafka 消息，无需切换多个工具",
+    "排查跨源关联问题：从 Kafka 事件的 user_id 跳到 Redis 用户档案再到 PostgreSQL 订单",
+    "本地或自托管环境的数据日常操作与调试（如 EXPLAIN、key 对比、topic 导出 CSV），单容器部署于本机"
+   ]
+  },
+  "sha": "e5eada0ba1ff",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2737,5 +2737,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a08958d3aa96": {
+  "identity": {
+   "one_liner": "Salesforce Apex 单元测试模拟库，内置可解析 SOQL 的内存数据库。",
+   "review": "Moxygen 是面向 Apex 单元测试的模拟库，包含一个基于 Apex 的内存 SOQL 数据库：测试中通过 SOQL 解析器解析查询并返回结果，多数情况下无需手动指定查询返回值或编写数据访问层桩。它提供 Selector（SOQL）与 DML 两类封装，由 ORM 依据 isUnitTest（默认 Test.isRunningTest()）切换 Database 与 MockDatabase；查询支持按子句分级（完全/部分支持/忽略/不支持，如 WITH 子句抛 QueryException），并提供 registerQuery、didDML 等 @TestVisible 断言与注册方法。",
+   "highlights": [
+    "内置内存模拟 SOQL 数据库，解析查询并返回对应结果",
+    "提供 Selector 与 DML 封装，经 ORM 依据测试上下文切换真实 Database 与 MockDatabase",
+    "提供 registerQuery/registerFailedQuery/doMockInsert/didDML 等 @TestVisible 注册与断言方法"
+   ],
+   "use_cases": [
+    "为调用 SOQL 查询的 Apex 类编写单元测试",
+    "需要在不指定查询返回值的情况下对 DML 操作（插入/更新/删除等）进行测试",
+    "需要注册特定查询返回值或模拟查询异常的测试场景"
+   ]
+  },
+  "sha": "a08958d3aa96",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d366e5b46c38": {
+  "identity": {
+   "one_liner": "Rust 编写的 AI 治理控制平面库，提供身份、模型网关、MCP 工具执行与审计",
+   "review": "SystemPrompt Core 是一个 Rust 库，用于搭建自运营的 AI 治理控制平面，包含 OAuth2/OIDC 身份、Anthropic 兼容模型网关、受治理的 MCP 工具执行与 PostgreSQL 审计记录。通过 inventory 在编译期注册扩展以添加路由、工具和任务。核心为 BSL-1.1 许可，生产使用需商业授权，运行需 PostgreSQL 18+。",
+   "highlights": [
+    "提供 OAuth2/OIDC 身份、范围检查、凭证模式检测、黑名单与速率限制等治理机制",
+    "模型网关兼容 Anthropic /v1/messages 接口，支持模型发现与可配置上游路由",
+    "扩展通过 inventory 在编译/链接期注册，可贡献 API 路由、工具提供者、定时任务、schema 与迁移"
+   ],
+   "use_cases": [
+    "需要将 AI 客户端接入自托管网关并对 MCP 工具调用做身份绑定、策略检查与审计的场景",
+    "需要在私有网络或气隙环境内运行模型与工具调用的部署",
+    "需要以 Rust 扩展方式向运行时注册自定义路由、工具与定时任务的企业集成"
+   ]
+  },
+  "sha": "d366e5b46c38",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d3df149eb2a4": {
+  "identity": {
+   "one_liner": "基于 PySide6 的 Windows 桌面 TikTok 内容下载与库管理工具",
+   "review": "TikVortex 是面向 Windows 桌面端的 TikTok 下载应用，基于 AlexRabbit 的 Ez-TikTok-Downloader 引擎，通过第三方服务 TikWM 获取原画质无水印视频与幻灯片图片。内置库、关注列表（按小时到每日定时检查并自动下载新帖）、高光浏览等功能，支持 GPL v3 协议，也提供 macOS/Linux 源码运行方式。",
+   "highlights": [
+    "支持粘贴链接、短链、帖子 ID、@用户名、.txt/.url 文件及拖放输入，提供并行下载、限速、暂停与队列断点续传",
+    "内置资料库页面，支持按日期/大小/创作者排序筛选、悬停静音预览、多选批量操作；关注列表可定时检查新帖并自动下载",
+    "文件夹整体可移植，配置、缓存与下载文件均存于应用目录；可选 yt-dlp（内置）与 gallery-dl 作为配置列出备选"
+   ],
+   "use_cases": [
+    "批量下载 TikTok 视频与图片幻灯片，并按创作者或分组整理文件夹",
+    "通过关注列表定时追踪指定创作者或创作者分组的新发布并自动下载",
+    "浏览并挑选下载创作者的高光故事合集，或将元数据写入文件以便照片应用按发布时间排序"
+   ]
+  },
+  "sha": "d3df149eb2a4",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

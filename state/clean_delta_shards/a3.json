@@ -32079,5 +32079,234 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "8f7e5de9ca07+2": {
+  "fn": "AndreVarandas/transportes-portugal-api",
+  "clean_ver": "2",
+  "raw_lines": 13,
+  "ops": [
+   [
+    "equal",
+    0,
+    13,
+    0,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "Try nearby stop search and query the first stop’s sample **01:01** departure using the interactive API reference or curl:"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    63,
+    14,
+    63
+   ],
+   [
+    "replace",
+    63,
+    67,
+    63,
+    67,
+    [
+     "|Setup|Measured SQLite database size|Recommended free space before setup|",
+     "|---|---:|---:|",
+     "|Carris only (`npm run import -- carris`)|About 0.9 GiB|4 GiB|",
+     "|All nine feeds (`npm run import -- --all`)|About 7 GiB|20 GiB|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    103,
+    67,
+    103
+   ],
+   [
+    "replace",
+    103,
+    114,
+    103,
+    114,
+    [
+     "|Feed key|Provider and source|",
+     "|---|---|",
+     "|`carris`|Carris GTFS|",
+     "|`cp`|Comboios de Portugal GTFS|",
+     "|`fertagus`|Fertagus GTFS|",
+     "|`metro-lisboa`|Metropolitano de Lisboa on dados.gov.pt|",
+     "|`mts`|Metro Transportes do Sul GTFS|",
+     "|`tcb`|Transportes Colectivos do Barreiro open data|",
+     "|`carris-metropolitana`|Carris Metropolitana official GTFS|",
+     "|`stcp`|STCP dataset, Porto open data|",
+     "|`metro-porto`|Metro do Porto operator download page|"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    117,
+    114,
+    117
+   ],
+   [
+    "replace",
+    117,
+    119,
+    117,
+    119,
+    [
+     "- Rodoviária de Lisboa, TST, and Sulfertagus’s former public bus services in the Lisbon metropolitan area are covered by Carris Metropolitana. Operator transition FAQ",
+     "- Transtejo and Soflusa share one TTSL feed. The operator ZIP timed out locally. The Mobility Database archive has a downloadable snapshot from 17 August 2026 for manual use. Verify that snapshot against current operator schedules before relying on it."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    125,
+    119,
+    125
+   ],
+   [
+    "replace",
+    125,
+    126,
+    125,
+    126,
+    [
+     "For expansion, use Portugal’s National Access Point for multimodal transport alongside operator and municipal catalogs. Track each candidate’s publisher, download URL, licence, service dates, and refresh behaviour before adding it to the default registry."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    129,
+    126,
+    129
+   ],
+   [
+    "replace",
+    129,
+    133,
+    129,
+    133,
+    [
+     "|Candidate|Observed service end|Manual import after downloading its ZIP|",
+     "|---|---|---|",
+     "|Transportes Urbanos de Braga|28 February 2027|`npm run import -- braga /path/to/tub.zip`|",
+     "|SMTUC Coimbra|30 December 2026|`npm run import -- coimbra /path/to/smtuc.zip`|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    138,
+    133,
+    138
+   ],
+   [
+    "replace",
+    138,
+    139,
+    138,
+    139,
+    [
+     "After starting the server, open Interactive API reference. Choose **List feeds**, click **Try it out**, and then **Execute**. Copy a feed key into **List routes**, then use a route ID in **List trips for a route**. Swagger UI shows the live response and a curl command for every request."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    139,
+    140
+   ],
+   [
+    "replace",
+    140,
+    141,
+    140,
+    141,
+    [
+     "Download the OpenAPI 3.1 document to import the v2 API into an API client. The reference and its assets are served locally."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    151,
+    141,
+    151
+   ],
+   [
+    "replace",
+    151,
+    169,
+    151,
+    169,
+    [
+     "|GET path|Optional filters|",
+     "|---|---|",
+     "|`/sources`||",
+     "|`/source-health`||",
+     "|`/nearby-stops`|Requires `lat` and `lon`. Optional `radius` in kilometres (default 1, maximum 25).|",
+     "|`/feeds`, `/feeds/{feedKey}`||",
+     "|`/feeds/{feedKey}/agencies`||",
+     "|`/feeds/{feedKey}/routes`|`agencyId`|",
+     "|`/feeds/{feedKey}/stops`|`routeId`, `tripId`|",
+     "|`/feeds/{feedKey}/trips`|`routeId`, `serviceId`, `directionId`, `serviceDate`|",
+     "|`/feeds/{feedKey}/routes/{routeId}/trips`|`serviceId`, `directionId`, `serviceDate`|",
+     "|`/feeds/{feedKey}/trips/{tripId}/stop-times`|`stopId`|",
+     "|`/feeds/{feedKey}/stops/{stopId}/departures`|`from`, `minutes`, `limit`|",
+     "|`/feeds/{feedKey}/stops/{stopId}/stop-times`|`tripId`, `serviceDate`|",
+     "|`/feeds/{feedKey}/trips/{tripId}/frequencies`||",
+     "|`/feeds/{feedKey}/calendars`|`serviceId`|",
+     "|`/feeds/{feedKey}/calendar-dates`|`serviceId`, `date` in `YYYY-MM-DD`|",
+     "|`/feeds/{feedKey}/shapes`|`routeId`, `tripId`|"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    190,
+    169,
+    190
+   ],
+   [
+    "replace",
+    190,
+    191,
+    190,
+    191,
+    [
+     "GitHub Actions runs lint and tests on pushes and pull requests. After checks pass on the default branch, Release Please uses Conventional Commits to open or update a release pull request. Merging that pull request creates a version tag and GitHub release. The release history starts from the existing `v1.0.2` tag."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    195,
+    191,
+    195
+   ],
+   [
+    "replace",
+    195,
+    197,
+    195,
+    196,
+    [
+     "This project is licensed under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

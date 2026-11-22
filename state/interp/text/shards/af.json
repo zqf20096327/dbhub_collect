@@ -3493,5 +3493,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0e1bf4481104": {
+  "identity": {
+   "one_liner": "Stellar 测试网跨链转账索引器与 Fastify API，持久化历史存于 PostgreSQL",
+   "review": "该服务索引 Hyperion 合约事件，通过 Fastify API 提供转账与认领历史的公开查询，并将记录持久化到 PostgreSQL。支持的路线经 Axelar ITS 或 Circle CCTP 将 Stellar USDC 送达 Ethereum Sepolia、Base Sepolia 与 Arc Testnet。需 Node 22.13+ 和 PostgreSQL；迁移须用 npm run migrate:up 显式执行，服务启动时校验 schema 版本但不自行迁移。可部署于 Vercel 或以常驻容器运行，API 与索引器可用不同凭证分权部署。",
+   "highlights": [
+    "独立验证 ITS 与 CCTP 目的地支付，包括收款人、代币、金额、最终性与确认数",
+    "支持定时追赶索引与连续容器两种运行模式，通过租约机制避免多副本重复推进游标",
+    "提供 /ready 健康探针、/v1/metrics 指标接口，API 连接强制只读事务"
+   ],
+   "use_cases": [
+    "为 Stellar 测试网跨链转账提供公开查询历史与 SSE 回放",
+    "以定时 GitHub Actions 或常驻容器方式运行测试网索引器",
+    "无 EVM 路由合约部署时仅做目的地到账验证"
+   ]
+  },
+  "sha": "0e1bf4481104",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fef7bad36743": {
+  "identity": {
+   "one_liner": "纯 Go 实现的 Yjs CRDT 移植，与 yjs 线格式字节级互通",
+   "review": "Ygo 是 Yjs CRDT 框架的纯 Go 移植，面向需要协作编辑能力的 Go 应用与移动端开发者。它以字节级兼容方式实现 Yjs V1/V2 更新格式，经 691 个跨语言用例双向验证（例外见 README），包含 Map/Array/Text 共享类型、UndoManager、快照、子文档、GC 与观察者机制；附带 yserve WebSocket 服务器（SQLite 持久化）和可嵌入 Go 客户端，支持 gomobile 生成 Android/iOS SDK。未实现 XmlHook 等少数遗留特性。",
+   "highlights": [
+    "与 yjs@13.6.33 的 V1/V2 更新、快照、sync 协议字节级互通，经 691 个跨语言 fixture 双向验证，CI 每次推送运行",
+    "纯 Go 无 CGO，可在 go dist list 全部 47 个目标编译；gomobile 生成 Android AAR 与 iOS xcframework 移动 SDK，含离线优先同步客户端",
+    "提供 yserve 独立服务器（y-websocket 协议、SQLite 持久化、版本快照）、可水平扩展的 server 库（NATS backplane）与 Matrix 传输模块"
+   ],
+   "use_cases": [
+    "Go 后端为 y-websocket/JavaScript 前端提供协作编辑服务（yserve 或嵌入 http.Handler）",
+    "通过 gomobile 在 Swift/Kotlin 移动应用中嵌入支持撤销、光标与后台同步的协作编辑能力",
+    "构建机器人、CLI 工具或服务端 agent：本地持久化离线编辑，重连后同步，或经 Matrix 房间做无服务器的联邦同步"
+   ]
+  },
+  "sha": "fef7bad36743",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

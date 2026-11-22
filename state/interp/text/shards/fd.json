@@ -3576,5 +3576,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d6212c7c5d2a": {
+  "identity": {
+   "one_liner": "用 Rust 编写的开源 PDM/PLM 系统，含检入检出库、BOM 与变更管理",
+   "review": "TeamCraft 是用纯 Rust 编写的自托管产品数据管理/产品生命周期管理系统，面向早期硬件初创团队和大型学生组织。它提供文件检出/检入与版本历史、多级 BOM、变更请求与变更单、STEP 等模型的浏览器端 3D 预览，支持 REST API 与桌面应用，数据存于自有的 PostgreSQL 数据库和文件库。项目处于 0.x 开发阶段，尚无稳定版本，README 明确提示勿用于生产数据，API 与数据库模式仍可能变动。",
+   "highlights": [
+    "提供按修订版本独占锁定的检出/检入库，历史版本不可改写，基于过期版本的检入会被拒绝",
+    "支持 160 多种文件格式识别，浏览器端可预览 STEP、NX、SOLIDWORKS、CATIA V5、Creo、glTF、点云等模型，并提供多级 BOM、变更请求/变更单与全文搜索",
+    "支持 REST API、MCP 服务器与桌面 CLI，可单安装包本地运行或 Docker 部署，数据存于自有 PostgreSQL 与文件库"
+   ],
+   "use_cases": [
+    "硬件初创团队建立修订发布、变更审批与审计追踪的 PLM/PDM 流程",
+    "学生赛车、火箭、卫星、机器人等大型团队进行跨届成员的工程数据交接与管理",
+    "需要通过浏览器或 REST API 查看 CAD 模型 3D 预览、管理 BOM 与质量属性的场景"
+   ]
+  },
+  "sha": "d6212c7c5d2a",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7558f60ba82b": {
+  "identity": {
+   "one_liner": "基于 FunRec 增量开发的 FastAPI 电影推荐与对话选片后端",
+   "review": "该项目以电影推荐为业务背景，在 Datawhale FunRec（固定上游 commit）基础上增量开发：新增在线用户行为表、用户版本行锁与 upsert 并发控制、Redis 隔离缓存与回源锁、Celery 后台索引任务，以及单 Agent 对话选片入口。面向学习推荐系统工程化的开发者，默认离线规则模式可运行，数据与模型须按 REPRODUCE.md 另行准备。",
+   "highlights": [
+    "推荐链路包含多路召回、DeepFM 排序与多样性重排，普通首页不依赖 LLM；对话选片支持类型/片长/排除条件、多轮指代与偏好记忆，只返回库内电影",
+    "工程实现包含 PostgreSQL 行锁与 upsert、Redis 回源锁与故障回退、Celery 唯一请求键与租约恢复、Alembic 迁移、请求 ID 与结构化日志",
+    "附带评测数据：4 条推荐路线 Recall/NDCG 结果、40 轮合成对话验收、9 项模拟故障检查与 Redis 实际中断恢复验证，并保留神经路线未超过 ItemCF 的负结果"
+   ],
+   "use_cases": [
+    "需要带在线行为、事务并发与缓存失效机制的推荐系统后端参考实现",
+    "验证带工具调用约束、偏好记忆与降级策略的对话式检索场景",
+    "离线复现推荐模型训练与评测流程（ItemCF、YouTubeDNN、DeepFM 路线对比）"
+   ]
+  },
+  "sha": "7558f60ba82b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

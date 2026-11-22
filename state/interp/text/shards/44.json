@@ -3147,5 +3147,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0c25e7d72bc5": {
+  "identity": {
+   "one_liner": "基于 SQLite 的事件存储与文档数据库，Critter Stack 中 Marten/Polecat 的同 API 实现",
+   "review": "Fisher 是 JasperFx Critter Stack 中的 SQLite 后端库，复用 Marten 的 API 提供事件溯源与文档存储，数据库为进程内的一个文件，无需安装服务器。1.0 版 API 已稳定，通过 JasperFx.Events.ComplianceTests 共享套件；其测试仅保证 API 可移植性而非与 Marten、Polecat 行为等价，且缺少编译查询等部分 Marten 特性，不内建消息总线。",
+   "highlights": [
+    "提供文档存储（支持四种身份类型、软删除、用户声明索引、LINQ 含 join/grouping/分页）与事件存储（五种投影形态、异步投影守护进程、订阅、事件重写）",
+    "使用 SQLite 文件作为存储，无需数据库服务器，备份为文件复制；duplicated fields 使用 VIRTUAL 生成列",
+    "通过 AddFisher 进行依赖注入注册，提供 Fisher.AspNetCore 与 Fisher.EntityFrameworkCore 伴生包"
+   ],
+   "use_cases": [
+    "需要事件溯源与文档存储、且希望以进程内 SQLite 文件运行而无需部署数据库服务器的 .NET 应用",
+    "测试环境需要免外部数据库依赖的场景（README 提及测试无需 fixture）",
+    "使用 database-per-tenant 模式实现多租户隔离的场景"
+   ]
+  },
+  "sha": "0c25e7d72bc5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "44f9b1e2472a": {
+  "identity": {
+   "one_liner": "SQLyog 社区版分支，以 Qt 6 重写界面，支持五种数据库的桌面客户端",
+   "review": "OpenYog 基于 SQLyog 社区版源码，将仅限 Windows 的界面替换为 Qt 6，可在 Linux 和 Windows 上原生运行，保留原菜单、工具栏与快捷键。提供 MySQL/MariaDB、PostgreSQL、SQLite、MongoDB 连接，含 SSL/TLS 与 SSH 隧道；HTTP 隧道、定时备份等尚未实现。密码存储于系统密钥链，无遥测。",
+   "highlights": [
+    "连接 MySQL/MariaDB、PostgreSQL、SQLite 和 MongoDB，支持 SSL/TLS 与 SSH 隧道",
+    "查询编辑器提供语法高亮、基于 schema 的自动补全、多个结果网格与查询历史",
+    "包含 Schema Designer、Query Builder、Schema Sync/Data Sync 及 CSV/Excel 数据导入"
+   ],
+   "use_cases": [
+    "在 Linux 或 Windows 上需要同时管理多种数据库的桌面客户端用户",
+    "熟悉 SQLyog 界面并希望迁移到 Linux 的用户",
+    "需要在 MongoDB 中浏览集合、运行聚合管道并编辑文档的场景"
+   ]
+  },
+  "sha": "44f9b1e2472a",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

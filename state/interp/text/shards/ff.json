@@ -3389,5 +3389,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b9f68dc1d19b": {
+  "identity": {
+   "one_liner": "跨多个 Eloquent 模型执行联合搜索的 Laravel 包",
+   "review": "该包为 Laravel 应用提供跨多个 Eloquent 模型的搜索能力，返回统一的集合结果。开发者通过 Search 门面链式添加模型与列，可配置通配符、精确匹配、排序、分页与约束查询；全文搜索等特性按 MySQL、PostgreSQL、SQLite 连接自动切换实现。要求 PHP 8.3+、Laravel 12+，无第三方依赖。",
+   "highlights": [
+    "支持跨模型搜索、分页及按列或相关度排序",
+    "可搜索单列、多列及嵌套关联关系，支持各数据库原生的全文搜索",
+    "支持传入查询构建器实现约束与作用域查询，并可预加载关联"
+   ],
+   "use_cases": [
+    "需要在帖子、视频等多种模型中统一检索并分页展示的场景",
+    "需按模型限定条件（如已发布、浏览量阈值）过滤搜索范围的应用",
+    "依赖 MySQL/PostgreSQL/SQLite 原生全文索引的检索需求"
+   ]
+  },
+  "sha": "b9f68dc1d19b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e8041b38d7bb": {
+  "identity": {
+   "one_liner": "社区维护的开源有声书元数据库，以 JSON 打包文件为数据源，编译为 SQLite",
+   "review": "audiosilo-meta 是一个社区维护的有声书元数据库，仓库本身即数据库：元数据以打包 JSON 文件存放在 data/ 目录，贡献者通过 pull request 或 issue 表单编辑，CI 用 Go 工具校验 schema、引用完整性和唯一性，合并后编译为 SQLite 发布物供只读 API（metaserve）和网站使用。数据模型区分作品、录音、人物、系列四个实体。贡献需遵循 Git 工作流，无服务端账号。",
+   "highlights": [
+    "数据以 slug 分段打包的 JSON 文件存储，CI 强制 schema、规范格式、引用完整性与标识符唯一性校验，每次合并生成带校验和的 meta.sqlite 发布物",
+    "metaserve 提供只读 JSON API，包含 FTS 搜索、作品/人物/系列详情、章节列表、ASIN/ISBN/LibriVox 查询及 LibriVox 形状的数据源",
+    "提供 metacheck、metafmt、metabuild、metamigrate 等 Go 命令行工具，查询与 API 代码以 pkg/query 公共包形式可被进程内复用"
+   ],
+   "use_cases": [
+    "为有声书播放器类应用提供元数据查询或镜像（如作为 Audiobookshelf 元数据源端点）",
+    "需要按作品/录音/讲述人/系列结构化整理有声书条目的社区协作编辑",
+    "需要 LibriVox 目录数据或兼容其 JSON feed 的客户端接入场景"
+   ]
+  },
+  "sha": "e8041b38d7bb",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "24071b246d12": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 15 内核规则与 FastAPI 的实时交易欺诈检测引擎",
+   "review": "FraudDetector 是一个实时交易欺诈检测引擎，将规则评估放在 PostgreSQL 15 内部执行：PL/pgSQL 触发器在 INSERT 时同步捕获异常，递归 CTE 追踪最多 6 跳的洗钱链路，LATERAL Join 与窗口函数计算速度与金额异常。面向支付与风控场景，提供 REST API 查询告警与分析结果，支持 Docker Compose 或手动环境部署，MIT 许可，包含 34 个单元与 mock 测试。",
+   "highlights": [
+    "内置 7 条检测规则，覆盖洗钱链路、10 分钟速度、多设备切换、高额异常、重复交易、高风险商户与共享设备，各规则标注风险分值与延迟指标",
+    "使用 PL/pgSQL 触发器、带环保护的递归 CTE（最多 6 跳）、LATERAL Join、RANGE BETWEEN INTERVAL 窗口聚合及 PERCENT_RANK/NTILE 统计实现检测逻辑",
+    "提供 9 个 REST 端点，包括交易写入、告警查询与状态更新、批量规则执行及商户欺诈率、设备共享、用户风险排名等分析接口"
+   ],
+   "use_cases": [
+    "需要规则型欺诈检测并集成 PostgreSQL 存储的支付或交易系统",
+    "通过递归 CTE 追踪多层中转账户以分析洗钱链路",
+    "本地或容器化环境部署风控规则引擎进行学习与扩展（数据工程/SQL 演示）"
+   ]
+  },
+  "sha": "24071b246d12",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "107155562a4c": {
+  "identity": {
+   "one_liner": "UTH Integrador II 课程项目模板，基于 Django+TiDB Cloud+Render。",
+   "review": "这是墨西哥 UTH「Proyecto Integrador II」课程 2027-1 学期的项目模板，面向学生团队。它以 Django 为框架，提供共享核心模块 nucleo（Elemento 与 EventoDispositivo 模型），每位成员在独立文件夹（mod_qr、mod_camara、mod_impresion、mod_analisis）开发各自模块并按提交计分。README 规定了提交规则（须绑定个人账号、当日推送、禁止 force-push）、证据照片命名与 EXIF 要求，并列出四个单元的截止日期与交付物。部署通过 render.yaml 至 Render，数据库用 TiDB Cloud 的 MySQL 连接。",
+   "highlights": [
+    "提供四个独立模块：QR 扫描登记、摄像头拍照取证、标签/小票打印、数据分析与看板",
+    "支持通过 render.yaml 一键部署到 Render，使用 TiDB Cloud (MySQL, 端口 4000) 作为数据库",
+    "包含证据检查脚本 tools/verificar_evidencias.py 与核心测试 python manage.py test"
+   ],
+   "use_cases": [
+    "UTH Integrador II 课程学生按单元提交报告与证据",
+    "团队协作开发带 QR/摄像头/打印外设的 Django Web 应用",
+    "教学场景下按个人提交记录独立评分的多人项目模板"
+   ]
+  },
+  "sha": "107155562a4c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

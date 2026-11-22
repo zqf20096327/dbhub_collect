@@ -3253,5 +3253,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8ba10adfb2a5": {
+  "identity": {
+   "one_liner": "面向 MCP 客户端的 Postgres 网关，以用户自身角色连接并审批写入",
+   "review": "pgwarden 是一个 MCP 网关，让 Claude、ChatGPT、Cursor 等 MCP 客户端以提问者本人的身份查询 Postgres：用户经 OIDC 登录，网关以其对应的 Postgres 角色连接，权限由数据库的 grants、RLS 和脱敏视图决定。读取通过只读事务实现，写入需指定审批人批准，操作记录写入哈希链式审计日志。项目提供 Docker Compose 演示环境、MCP Inspector/Claude Code/Cursor 连接方式及红队测试工具，适用于 Postgres 16+。",
+   "highlights": [
+    "通过 OIDC 登录映射用户到各自的 Postgres 角色，由 grants、RLS 和脱敏视图控制可见数据",
+    "查询经只读事务与扩展协议执行，每次仅一条语句，不解析 SQL；写入需经 EXPLAIN 检查并由指定审批人批准",
+    "提供 133 项红队攻击套件、哈希链式追加审计日志，以及可选的容器镜像与 CLI"
+   ],
+   "use_cases": [
+    "需要让 AI 助手按用户权限访问生产 Postgres 数据的场景",
+    "要求写入操作经人工审批并留存可验证审计记录的环境",
+    "对 PII 脱敏与行级数据隔离有合规需求的团队"
+   ]
+  },
+  "sha": "8ba10adfb2a5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

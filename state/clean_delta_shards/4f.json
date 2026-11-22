@@ -18601,5 +18601,698 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "84c9f4d9a5df+2": {
+  "fn": "skudra-go/ant",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "ant"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    1,
+    2
+   ],
+   [
+    "replace",
+    7,
+    10,
+    2,
+    3,
+    [
+     " A typed ORM for Go. Plain structs, compiler-checked queries, no code generation."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    3,
+    4
+   ],
+   [
+    "replace",
+    11,
+    16,
+    4,
+    7,
+    [
+     " Documentation ·",
+     " Quick start ·",
+     " Examples"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    7,
+    8
+   ],
+   [
+    "replace",
+    17,
+    25,
+    8,
+    12,
+    [
+     " CI",
+     " Go Reference",
+     " Go 1.27+",
+     " MIT license"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    32,
+    12,
+    19
+   ],
+   [
+    "replace",
+    32,
+    60,
+    19,
+    20,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    77,
+    20,
+    37
+   ],
+   [
+    "replace",
+    77,
+    78,
+    37,
+    38,
+    [
+     "examples/hello is one file on SQLite. It needs only Go:"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    91,
+    38,
+    51
+   ],
+   [
+    "replace",
+    91,
+    92,
+    51,
+    52,
+    [
+     "The first run takes about 30 seconds, mostly compiling the SQLite driver. The quick start walks through the same program."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    95,
+    52,
+    55
+   ],
+   [
+    "replace",
+    95,
+    100,
+    55,
+    56,
+    [
+     "The same query in each: users over 18 with their posts, sorted by name, 10 at a time. A test checks that all four return the same rows."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    112,
+    56,
+    68
+   ],
+   [
+    "delete",
+    112,
+    115,
+    68,
+    68
+   ],
+   [
+    "equal",
+    115,
+    121,
+    68,
+    74
+   ],
+   [
+    "replace",
+    121,
+    127,
+    74,
+    75,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    75,
+    76
+   ],
+   [
+    "delete",
+    128,
+    133,
+    76,
+    76
+   ],
+   [
+    "equal",
+    133,
+    140,
+    76,
+    83
+   ],
+   [
+    "replace",
+    140,
+    146,
+    83,
+    84,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    84,
+    85
+   ],
+   [
+    "delete",
+    147,
+    150,
+    85,
+    85
+   ],
+   [
+    "equal",
+    150,
+    162,
+    85,
+    97
+   ],
+   [
+    "delete",
+    162,
+    166,
+    97,
+    97
+   ],
+   [
+    "equal",
+    166,
+    168,
+    97,
+    99
+   ],
+   [
+    "replace",
+    168,
+    175,
+    99,
+    106,
+    [
+     "|Mistake|ant|GORM|Bun|ent|sqlc|",
+     "|---|:---:|:---:|:---:|:---:|:---:|",
+     "|Misspelled column, `agee`|✅|❌|❌|✅|⚠️|",
+     "|`\"18\"` for an `int`|✅|❌|❌|✅|✅|",
+     "|Misspelled relation, `Psots`|✅|❌|❌|✅|⚠️|",
+     "|Column of another model|⚠️|❌|❌|✅|⚠️|",
+     "|No code generation step|✅|✅|✅|–|–|"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    178,
+    106,
+    109
+   ],
+   [
+    "replace",
+    178,
+    179,
+    109,
+    110,
+    [
+     "Each cell was tested by compiling the mistake. GORM also has an optional CLI that generates typed field helpers."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    182,
+    110,
+    113
+   ],
+   [
+    "replace",
+    182,
+    183,
+    113,
+    114,
+    [
+     "tools/compare runs the same operations in each library against PostgreSQL 17 on one machine (Ryzen 5 3600, Docker on WSL2). Each number is the median of 10 runs, and each run repeats the operation hundreds to thousands of times. The database round trip is included, which is why small queries are close. Commits don't wait for the disk, so writes measure the library and not the drive. Plain SQL (a hand-written query and `Scan`, what sqlc generates) is the baseline. Lower is better; 🟢 is the best in each row, shared by any within 1%."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    114,
+    115
+   ],
+   [
+    "replace",
+    184,
+    193,
+    115,
+    124,
+    [
+     "|µs per operation|ant|ant NoTracking|GORM|Bun|ent||Plain SQL baseline|",
+     "|---|---:|---:|---:|---:|---:|-|---:|",
+     "|Read 1000 rows|2,075|🟢 **1,692**|3,361|2,370|2,240||1,692|",
+     "|Find one by key|442|397|405|🟢 **384**|398||398|",
+     "|Filter, sort, 10 rows|557|🟢 **539**|568|🟢 **535**|556||535|",
+     "|100 users, 500 posts|2,238|🟢 **1,774**|2,731|2,030|2,031||1,581|",
+     "|Insert one|410|–|420|1,112|🟢 **404**||392|",
+     "|Update one column|🟢 **399**|–|407|424|🟢 **402**||390|",
+     "|Load, edit, save|🟢 **805**|–|818|🟢 **812**|1,869||798|"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    124,
+    125
+   ],
+   [
+    "replace",
+    194,
+    203,
+    125,
+    134,
+    [
+     "|KiB per operation|ant|ant NoTracking|GORM|Bun|ent||Plain SQL baseline|",
+     "|---|---:|---:|---:|---:|---:|-|---:|",
+     "|Read 1000 rows|582|🟢 **275**|392|295|589||257|",
+     "|Find one by key|3.8|🟢 **3.5**|5.7|6.3|4.9||1.5|",
+     "|Filter, sort, 10 rows|11.5|🟢 **7.9**|9.7|9.2|11.9||3.8|",
+     "|100 users, 500 posts|486|🟢 **241**|362|277|335||257|",
+     "|Insert one|🟢 **2.5**|–|7.0|6.8|3.7||1.3|",
+     "|Update one column|🟢 **2.5**|–|5.6|5.0|3.1||0.3|",
+     "|Load, edit, save|🟢 **5.8**|–|11.2|11.2|10.7||1.8|"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    209,
+    134,
+    140
+   ],
+   [
+    "replace",
+    209,
+    210,
+    140,
+    141,
+    [
+     "- Bun's insert is slow by default (it prepares every insert as a new statement), and ent's update reads the row back. tools/compare has the details."
+    ]
+   ],
+   [
+    "equal",
+    210,
+    225,
+    141,
+    156
+   ],
+   [
+    "replace",
+    225,
+    229,
+    156,
+    160,
+    [
+     "||PostgreSQL|MySQL|MariaDB|SQLite|SQL Server|",
+     "|---|:---:|:---:|:---:|:---:|:---:|",
+     "|Queries and writes|✅|✅|✅|✅|✅|",
+     "|Migrations|✅|||||"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    160,
+    161
+   ],
+   [
+    "replace",
+    230,
+    231,
+    161,
+    162,
+    [
+     "PostgreSQL gets every feature first. docs/databases.md lists what each database lacks."
+    ]
+   ],
+   [
+    "equal",
+    231,
+    238,
+    162,
+    169
+   ],
+   [
+    "replace",
+    238,
+    239,
+    169,
+    170,
+    [
+     "The roadmap lists what's planned, and why some items were skipped."
+    ]
+   ],
+   [
+    "equal",
+    239,
+    242,
+    170,
+    173
+   ],
+   [
+    "replace",
+    242,
+    246,
+    173,
+    177,
+    [
+     "- Documentation: guides, recipes and reference.",
+     "- Feature examples: a short test for every feature, edge cases included",
+     "- ant-examples: small projects built on ant",
+     "- Roadmap and design decisions"
+    ]
+   ],
+   [
+    "equal",
+    246,
+    251,
+    177,
+    182
+   ],
+   [
+    "replace",
+    251,
+    252,
+    182,
+    183,
+    [
+     "- **Claude Code**: `/plugin marketplace add skudra-go/ant`, then `/plugin install ant@ant`. The skill loads whenever a task touches ant."
+    ]
+   ],
+   [
+    "equal",
+    252,
+    253,
+    183,
+    184
+   ],
+   [
+    "replace",
+    253,
+    254,
+    184,
+    185,
+    [
+     "- **Any assistant**: point it at skudra.net/llms.txt, the docs as Markdown, or llms-full.txt, all of them in one file."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    262,
+    185,
+    193
+   ],
+   [
+    "replace",
+    262,
+    271,
+    193,
+    194,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    273,
+    194,
+    196
+   ],
+   [
+    "replace",
+    273,
+    274,
+    196,
+    197,
+    [
+     "*Skudra* means *ant* in Latvian, which is where skudra.net gets its name :)"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    276,
+    197,
+    199
+   ],
+   [
+    "replace",
+    276,
+    278,
+    199,
+    200,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "c68f27564f97+2": {
+  "fn": "4Furki4/Turkce-Sozluk",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "turkce-sozluk.com üzerinde yayımlanan, toplulukla gelişen ve açık kaynaklı bir Türkçe sözlük uygulaması."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    32,
+    3,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "- Bun"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    54,
+    33,
+    54
+   ],
+   [
+    "replace",
+    54,
+    55,
+    54,
+    55,
+    [
+     "Uygulama varsayılan olarak http://localhost:3000 adresinde açılır."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    62,
+    55,
+    62
+   ],
+   [
+    "replace",
+    62,
+    78,
+    62,
+    63,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    84,
+    63,
+    69
+   ],
+   [
+    "replace",
+    84,
+    85,
+    69,
+    70,
+    [
+     "Uygulamanın doğrulanan ortam değişkenleri `src/env.mjs` içinde; yerel geliştirme için örnek ayarlar `.env.development.pi.example` içinde bulunur."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    98,
+    70,
+    83
+   ],
+   [
+    "replace",
+    98,
+    99,
+    83,
+    84,
+    [
+     "Pi veritabanı ve dağıtım işlemleri için sırasıyla veritabanı geçişleri ve dağıtım kılavuzu belgelerini izleyin."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    106,
+    84,
+    91
+   ],
+   [
+    "replace",
+    106,
+    107,
+    91,
+    92,
+    [
+     "Bu proje GNU Affero General Public License v3.0 ile lisanslanmıştır. Uygulamayı değiştirip ağ üzerinden hizmete sunarsanız, değiştirilmiş kaynak kodunu kullanıcılara aynı lisansla sunmanız gerekir."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    92,
+    95
+   ],
+   [
+    "replace",
+    110,
+    113,
+    95,
+    96,
+    [
+     "Muhammed Furkan Cengiz — GitHub · muhammedfurkancengiz@gmail.com"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    116,
+    96,
+    99
+   ],
+   [
+    "replace",
+    116,
+    117,
+    99,
+    100,
+    [
+     "**Çağdaş Türkçe Sözlük** is an open-source, community-driven Turkish dictionary available at turkce-sozluk.com."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    122,
+    100,
+    105
+   ],
+   [
+    "replace",
+    122,
+    123,
+    105,
+    106,
+    [
+     "Contributions and issue reports are welcome. The project is licensed under AGPL-3.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

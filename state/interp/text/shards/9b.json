@@ -2884,5 +2884,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "689d01cc3896": {
+  "identity": {
+   "one_liner": "将 ORCA Cascades 优化器以扩展形式接入单机 PostgreSQL 的插件",
+   "review": "pg_orca 从 Apache Cloudberry 提取 ORCA 优化器核心库与 PG 集成层，适配 PostgreSQL 18/19 并打包为 CREATE EXTENSION 可安装插件。它基于 memo 与转换规则的代价优化，支持关联子查询去相关、join 顺序枚举、eager aggregation 等重写；ORCA 无法处理的查询自动回退标准规划器。默认 pg_orca.enable_orca 为 off，按会话/库/角色开启，代价是更长的规划时间。",
+   "highlights": [
+    "以 memo 存储等效计划并按转换规则探索，逻辑重写与物理实现在同一代价模型下选择",
+    "支持 correlated subquery 去 correlated 为 join、eager aggregation、基于代价的 CTE 内联与传递谓词下推",
+    "通过 planner_hook 接入，无法处理的查询自动回退 PostgreSQL 标准规划器，支持 PG18 与 PG19 同一源码构建"
+   ],
+   "use_cases": [
+    "单机 PostgreSQL 上处理含关联子查询或多表 join、内置规划器保留 SubPlan 执行的查询",
+    "需要在 PG18/PG19 环境编译安装 ORCA 优化器进行测试或研究的开发者",
+    "按会话或角色选择性启用 ORCA 以对比标准规划器生成的计划"
+   ]
+  },
+  "sha": "689d01cc3896",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

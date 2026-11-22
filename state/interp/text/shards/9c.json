@@ -3632,5 +3632,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "027a5327b5b6": {
+  "identity": {
+   "one_liner": "Rust 事件溯源库，基于 Postgres 实现动态一致性边界并自动生成 GraphQL/REST 接口",
+   "review": "SkilJ 是一个 Rust 事件溯源库，以 Postgres 作为存储后端，采用动态一致性边界（DCB）机制：事件与命令通过标签关联，命令的检查仅覆盖其涉及的事件，无需预先定义聚合边界。库内包含投影、快照、幂等键、消息代理桥接等组件，并支持敏感字段按主体加密与盲标签。适用于 Rust 技术栈且接受 Postgres 作为唯一存储的开发者；同一有界上下文命令串行执行，吞吐率为每秒数百次。",
+   "highlights": [
+    "基于 Postgres 15–18 的事件溯源存储，命令的一致性检查按标签动态确定范围，支持单个原子决策覆盖多个实体",
+    "从注册类型生成 GraphQL 与 REST API，GraphQL 模式可按调用者授权裁剪，支持 Apollo Federation 子图与实时订阅",
+    "内置按主体加密的个人数据处理、盲标签唯一性检查、事件撤回修正，以及 Kafka、AMQP 1.0、NATS JetStream、Temporal 桥接"
+   ],
+   "use_cases": [
+    "需要事件溯源与 CQRS 架构且以 Postgres 为存储的 Rust 后端应用",
+    "一个命令需要同时检查多个实体历史的场景，如选课、跨账户操作",
+    "涉及个人数据的事件日志，需要按主体删除敏感信息且不重写历史"
+   ]
+  },
+  "sha": "027a5327b5b6",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3267,5 +3267,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "304a67214ff2": {
+  "identity": {
+   "one_liner": "Python 编写的股票订单撮合引擎，模拟美股交易所机制并附交互式仪表盘",
+   "review": "该项目用 Python 实现股票订单簿撮合系统，按价格-时间优先规则撮合限价单与市价单，通过 Kafka 记录订单日志、启动时回放重建订单簿，并以 WebSocket 与 UDP 组播推送增量行情数据。系统由 Gateway、撮合引擎、行情服务、PostgreSQL 数据库和 Streamlit 界面组成，使用 Docker Compose 部署，适合需要研究撮合机制或搭建模拟交易环境的开发者运行和扩展。",
+   "highlights": [
+    "提供价格-时间优先撮合，支持限价单与市价单，并通过 Kafka 订单日志在启动时确定性回放重建订单簿状态",
+    "支持 WebSocket 增量行情推送与实验性 UDP 组播行情源，包含快照加序号引导、缺口恢复与心跳机制",
+    "提供 FastAPI REST API、Streamlit 交互仪表盘、市场模拟工具及基于 Redis/PostgreSQL 的 VWAP 等分析功能"
+   ],
+   "use_cases": [
+    "本地运行 docker compose 搭建多服务撮合与行情系统，通过 Web 界面或 REST API 提交订单并观察撮合过程",
+    "使用市场模拟器自动生成订单流，演示和测试订单簿服务的行为",
+    "运行项目附带的单元、集成基准脚本，测量撮合逻辑与行情分发的延迟和吞吐数据"
+   ]
+  },
+  "sha": "304a67214ff2",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3efff37c7ae8": {
+  "identity": {
+   "one_liner": "只读 PostgreSQL MCP 服务器，从系统目录读取结构与诊断信息",
+   "review": "pg_licht 是一个面向 AI 助手的只读 PostgreSQL MCP 服务器，供运维人员通过模型查询数据库的 schema、统计、执行计划、锁、复制与 PgBouncer 连接池状态。每次调用在独立 READ ONLY 事务中执行并带语句超时，SQL 全部参数化，不返回表数据。单进程通过 connections.ini 管理多连接，支持按实例、复制组或标签并行扇出查询，安装提供 brew、deb、rpm 等渠道。",
+   "highlights": [
+    "每次调用运行于独立 READ ONLY 事务并设置 statement_timeout（默认两分钟），SQL 参数化构建，PgBouncer 工具仅发送固定 SHOW 命令",
+    "一个进程服务多个连接（最多 32 个并发连接，空闲 60 秒关闭），扇出扫描最多 16 个成员并发，结果按配置顺序返回",
+    "提供 13 个诊断类 prompts（如 diagnose-slow-query、triage-lock-contention）、资源式 schema 浏览接口，以及带 outputSchema、游标分页和缓存提示的结构化输出"
+   ],
+   "use_cases": [
+    "让 AI 助手分析慢查询、锁等待、复制延迟等运维问题并返回 PostgreSQL 原始证据",
+    "跨实例或复制组的批量巡检：一次提问同时查询多台数据库",
+    "磁盘空间排查：通过 diskUsage 查看 WAL、归档积压、临时文件与表空间大小，无需登录服务器 shell"
+   ]
+  },
+  "sha": "3efff37c7ae8",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

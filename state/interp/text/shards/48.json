@@ -3134,5 +3134,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "144657d43989": {
+  "identity": {
+   "one_liner": "本地优先的 AI 业务运营参考系统，含人工审批与 SQLite 验证",
+   "review": "OpsAgent 是一个基于 LangGraph 与 FastAPI 的本地优先参考系统，面向合成零售数据集演示受限的业务运营智能体架构。模型只能读取或提交提案，变更经 SHA-256 哈希绑定的人工审批后在 SQLite 中原子执行，并由独立评估器校验不变量。需 Python 3.12+、Node.js 20+ 与本地工具调用模型，不依赖外部付费 API 或 Docker。",
+   "highlights": [
+    "强制读/提案分离：模型无直接写入工具，SQL 为固定参数化查询，提案经 SHA-256 哈希绑定审批",
+    "审批后变更与 execution_ledger 在单个 SQLite SAVEPOINT 事务中原子执行，校验失败自动回滚",
+    "支持 Ollama 及 OpenAI 兼容本地推理服务，含 SSE 可恢复流、XYFlow 执行图与 opsagent CLI"
+   ],
+   "use_cases": [
+    "演示/研究人工审批介入的智能体工作流（human-in-the-loop）架构模式",
+    "本地环境下测试带幂等台账与独立验证的工具调用智能体",
+    "作为工具契约、提案审批与状态验证机制的参考实现学习材料"
+   ]
+  },
+  "sha": "144657d43989",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

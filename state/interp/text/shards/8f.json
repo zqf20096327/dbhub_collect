@@ -3082,5 +3082,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ec35004c4e66": {
+  "identity": {
+   "one_liner": "本地优先的 Markdown 仓库编辑器，直接打开 Obsidian 兼容 vault 并保持文件所有权。",
+   "review": "Plainva 是面向 Windows/macOS/Linux 的本地优先 Markdown vault 编辑器，可直接打开既有 Obsidian vault，无需迁移格式。它在纯 Markdown 文件上提供 .base 数据库视图，同步走用户自有存储（WebDAV/Nextcloud、S3、Google Drive、OneDrive、Dropbox），并内置逐文件版本快照与每日 ZIP 备份。项目处于 Beta 阶段，桌面版要求 WebView2/macOS 13.3/WebKitGTK 2.40 以上。",
+   "highlights": [
+    "提供实时预览 Markdown 编辑、wiki 链接、KaTeX 数学、Mermaid 图与基于 frontmatter 的 .base 表格/看板/日历/时间线/关系图视图",
+    "支持通过 WebDAV/Nextcloud、S3 兼容存储、Google Drive、OneDrive、Dropbox 同步，含离线队列、三方合并与冲突解决界面",
+    "使用 SQLite/FTS5 全文搜索与增量索引，本地记录每次写入的版本快照，并按日生成 ZIP 备份"
+   ],
+   "use_cases": [
+    "在自有云存储（Nextcloud、S3 等）上同步和管理现有 Obsidian vault",
+    "在纯 Markdown 笔记上以表格、看板、日历等方式组织与检索笔记",
+    "通过脚本、CLI 或 AI 工具直接读写 vault 文件进行自动化处理"
+   ]
+  },
+  "sha": "ec35004c4e66",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c759d1594752": {
+  "identity": {
+   "one_liner": "异步 Python 多智能体会话框架，内置 SQLite 持久化与多渠道适配器",
+   "review": "chatflow-agent 是一个以 asyncio 为基础的 Python 框架，用于编排跨 WhatsApp、Telegram、Webhook 与 CLI 渠道的多智能体对话流程。核心仅依赖 pydantic 与 httpx 两个运行时包，LLM 引擎通过原生 HTTP REST 调用；支持智能体间自主转交、会话级并发锁与回合失败时的历史回滚。要求 Python 3.10-3.13，可按 extras 安装渠道依赖。",
+   "highlights": [
+    "核心运行时仅依赖 pydantic 与 httpx，内置 Gemini/OpenAI/Anthropic 三类 HTTPX 引擎，支持 Ollama 与 vLLM 本地模型，并可在同一多智能体群中混用不同供应商",
+    "提供 WhatsApp（Meta Cloud API）、Telegram 与 CLI 渠道适配器及 Starlette 编写的 webhook 示例应用，webhook 采用 HMAC 安全校验",
+    "实现每会话 asyncio.Lock 串行化、基于线程的 SQLite 非阻塞写入，以及回合中途失败或超时时的历史、智能体与元数据自动回滚"
+   ],
+   "use_cases": [
+    "接入 WhatsApp 或 Telegram 的多智能体客服/对话机器人部署",
+    "通过 webhook 或 CLI 接收消息并运行异步智能体编排的应用",
+    "使用 Ollama/vLLM 本地模型运行多智能体流程的场景"
+   ]
+  },
+  "sha": "c759d1594752",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb265bff5bff": {
+  "identity": {
+   "one_liner": "单文件嵌入式向量数据库，面向 AI Agent 记忆存储，提供 HNSW 检索与记忆语义管理。",
+   "review": "Feather 是一个嵌入式向量数据库，以单个 `.feather` 文件运行于进程内，无需服务器与网络调用。它为 Agent 记忆场景提供自适应衰减、信任/置信度、作用域热集、上下文包、有效时间与时间旅行读取等机制；Python 包发布于 PyPI，另有 Crates.io 包、MCP 服务器与 LangGraph BaseStore 集成。无事务、无查询计划器，单文件单写入者，读取无锁。采用 MIT 许可证。",
+   "highlights": [
+    "嵌入式单文件向量存储，基于 HNSW 索引，支持预过滤 ANN 搜索、int8 量化（磁盘与内存）、持久化图与并行加载",
+    "记忆语义：自适应衰减（召回次数影响老化）、信任/置信度过滤、按 TTL 过期、点分继承作用域、缺失必需约束时 fail-closed 的上下文包",
+    "v0.22 支持有效时间索引、按时间/标签/提交的时间旅行只读打开、事实路由与日期写入；提供 MCP server（Claude Desktop/Code）与 LangGraph BaseStore 集成，Cloud 版含 FastAPI 管理 SPA 与可插拔嵌入服务（OpenAI、Gemini、Voyage、Cohere、Ollama 等）"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供进程内记忆层，存储带衰减、信任与有效时间的长期/短期记忆",
+    "通过 MCP 将本地或远程 Feather 作为 Claude Desktop / Claude Code 的上下文引擎",
+    "经 LangGraph `BaseStore` 实现跨线程 Agent 记忆，或部署 Cloud API 管理多命名空间向量检索与文件摄取"
+   ]
+  },
+  "sha": "bb265bff5bff",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3540,5 +3540,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d7556bbb77bc": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件：SQLite 存储、写入审批门与冻结快照注入",
+   "review": "dsh-memento 是面向 DeepSeek Harness（已核验 dsh-v0.2.2-rc.4）的社区记忆插件，通过 ctx.memory 接缝、本地 SQLite 提供方（WAL、0600 权限）与 memory 工具实现跨会话记忆：写入经服务内部审批门（writePolicy ask/auto/off），记忆分 user/agent 两轨、user-global/workspace 两层并按 agentPreset 隔离，各轨各层有硬字符预算，下次会话注入冻结快照进 systemPrompt。附只读 stdio MCP 服务器与 dsh-memory-protocol v1 适配器注册表。安装经 dsh plugin add，无构建步骤。",
+   "highlights": [
+    "提供两条轨道（user/agent）×两个层级（user-global/workspace）×按 agentPreset 隔离的记忆结构，每轨每层硬字符预算（默认 user 2000 / agent 4000），写满返回结构化错误而非截断",
+    "所有写路径（add/replace/remove/seed）强制经过服务内部审批门，被拒写入落审计行，审计由 approval/asked + approval/decided 事件对、插件审计表与快照行组成",
+    "附带只读 stdio MCP 服务器（dsh-memento-mcp），以 readOnly 打开 SQLite，提供 memory_search 与 memory_stats 工具；内置 mem0、Hermes、CLAUDE.md 三种数据适配器"
+   ],
+   "use_cases": [
+    "需要 AI agent 跨会话保留用户事实与环境约定，且每次写入需经人工审批并留审计记录的场景",
+    "需要让 Claude Desktop 等外部 MCP 客户端以只读方式检索本地记忆库的场景",
+    "需要从 mem0 或 markdown 记忆文件迁移数据接入 DSH 记忆协议的场景"
+   ]
+  },
+  "sha": "d7556bbb77bc",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

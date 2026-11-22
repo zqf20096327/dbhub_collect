@@ -3386,5 +3386,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "388fcbd7235e": {
+  "identity": {
+   "one_liner": "单二进制的本地优先项目管理工具，CLI+Web UI+AI agent 技能，基于 SQLite。",
+   "review": "Pad 是一个面向开发者本机的项目管理工具，以单个二进制运行，数据存储在本地 SQLite 中，无需注册。它提供 CLI、localhost:7777 的 Web UI，以及可通过 `pad agent install` 安装的 AI agent 技能，使 Claude Code、Cursor、Codex 等工具能读写项目条目。内置任务、想法、计划、文档等集合，支持自定义类型化字段与约定、playbook；可选同步到 Pad Cloud。适合希望在本地管理项目并让 AI agent 参与的开发者。",
+   "highlights": [
+    "单二进制提供 CLI、Web UI 和 AI agent 技能，数据存于本地 SQLite，离线可用",
+    "内置 collections（任务/想法/计划/文档/约定/playbook），支持自定义类型化字段与自动引用编号",
+    "提供 /pad 技能和约定、playbook 机制，支持 Claude Code、Cursor、Codex 等 7+ AI 工具，agent 写入在活动流中署名"
+   ],
+   "use_cases": [
+    "在终端或浏览器本地管理任务、计划与文档，无需云端账号",
+    "让 AI 编码工具（如 Claude Code）通过自然语言读取和更新项目条目",
+    "用约定和 playbook 定义项目规则与多步骤工作流，供 agent 自动加载执行"
+   ]
+  },
+  "sha": "388fcbd7235e",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "930bba89ee27": {
+  "identity": {
+   "one_liner": "纯 Go 实现的 SQLite database/sql 驱动，用 LLVM 将 SQLite C 代码编译为 Go 汇编。",
+   "review": "该项目为 Go 的 database/sql 提供 SQLite 驱动，可在 CGO_ENABLED=0 下构建，无需 C 编译器，支持交叉编译为单个静态二进制。它通过 LLVM 将 SQLite 的 C 代码直接编译为 Go 汇编实现，内置写事务排队机制与向 S3/R2/MinIO 实时复制的 replica 包。当前版本为 v0.1，README 标注 API 在 v1 前可能变更。适用于部署为单二进制、数据存于 SQLite 的 Go 程序。",
+   "highlights": [
+    "在 CGO_ENABLED=0 下构建，支持 linux/darwin/windows 的 amd64 与 arm64，兼容 database/sql 接口",
+    "通过 _txlock=immediate 使写事务按序排队等待锁，支持 _pragma=name(value) 在每个新连接上执行 PRAGMA",
+    "内置 replica 包，可将每次提交在约一秒后复制到 S3、Cloudflare R2 或 MinIO，支持按时间点恢复，副本布局与 Litestream 兼容"
+   ],
+   "use_cases": [
+    "需要从任意机器交叉编译、以 scratch 容器镜像或单二进制部署的 SQLite Go 应用",
+    "单 VPS 部署且需要数据库定时备份到 S3/R2 的应用",
+    "同进程内多 goroutine 并发写入、需要避免 database is locked 报错的场景"
+   ]
+  },
+  "sha": "930bba89ee27",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2136decae9e6": {
+  "identity": {
+   "one_liner": "自托管多语言新闻分析工具，按事件聚类多源报道并生成中文摘要报告",
+   "review": "NewsPrism 用 Python 编写，从 12 个国家的 46 个来源采集文章，通过 LLM 聚类将同一事件的多源报道归组，评估各媒体对相同事实的不同叙述角度，生成静态 HTML 中文日报。数据存于 SQLite，支持 Docker Compose 单机部署，也可本地开发运行。依赖 OpenAI 兼容的 LLM API 完成聚类与摘要；来源列表、聚类阈值、影响力权重等均通过 config/ 下的 YAML 文件配置，中文来源采集建议启用可选的 NewsNow 代理服务。",
+   "highlights": [
+    "采集中、英、日、韩、俄、波兰语、荷兰语等多语言来源，以单次 LLM 调用按真实事件聚类，失败时自动回退到基于嵌入的聚类",
+    "流水线包含采集、去重、聚类、影响力评估、叙事线分组、批量摘要等步骤，并支持编辑 👍/👎 反馈每周校准影响力权重",
+    "支持按流水线任务指定 LLM 提供商与模型（DeepSeek、OpenRouter 等 OpenAI 兼容端点），可设默认与备用，提供 CLI 入口与 Telegram 发布"
+   ],
+   "use_cases": [
+    "个人或小团队自托管部署，跟踪同一新闻事件在不同国家与类型媒体（官方媒体、独立媒体、地区记者等）中的报道差异",
+    "需要定期生成中文日报并通过网页或 Telegram 分发的新闻聚合场景",
+    "希望按事件时间线追踪持续性议题跨天发展的读者"
+   ]
+  },
+  "sha": "2136decae9e6",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

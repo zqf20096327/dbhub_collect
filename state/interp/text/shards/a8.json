@@ -3498,5 +3498,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9d03d0bacb25": {
+  "identity": {
+   "one_liner": "基于 wasm2go 的免 cgo SQLite Go 绑定库",
+   "review": "该模块提供免 cgo 的 SQLite Go 封装，内含 database/sql 驱动和对大部分 C SQLite API 的直接访问。实现方式是将 SQLite 编译为 Wasm，再用 wasm2go 转译为 Go，仅依赖 Go 和 x/sys。因连接运行在 Wasm 沙箱中，内存占用会高于其他实现；VFS 被替换为纯 Go 实现，不同平台支持程度见其矩阵。",
+   "highlights": [
+    "提供 database/sql 兼容驱动、C API 封装、纯 Go VFS 实现及 GORM 驱动等多个包",
+    "支持增量 BLOB I/O、嵌套事务、自定义函数、虚拟表、自定义 VFS、在线备份、JSON、加密等特性",
+    "每次提交在 Linux、macOS、Windows、BSD、illumos、Solaris、Plan 9 等多平台组合上测试"
+   ],
+   "use_cases": [
+    "需要在 Go 项目中不引入 cgo 依赖而使用 SQLite 的场景",
+    "通过 database/sql 或 GORM 接口访问 SQLite 数据库",
+    "需要虚拟表、自定义 VFS 或静态加密等 SQLite 高级功能的 Go 应用"
+   ]
+  },
+  "sha": "9d03d0bacb25",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

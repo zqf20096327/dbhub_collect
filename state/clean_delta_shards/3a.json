@@ -28808,5 +28808,668 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "db9249a5212f+2": {
+  "fn": "zou172866/agy-dart",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "agy-dart logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    10,
+    1,
+    8
+   ],
+   [
+    "replace",
+    10,
+    15,
+    8,
+    9,
+    [
+     "简体中文 · English · Third-Party Notices"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    26,
+    9,
+    20
+   ],
+   [
+    "delete",
+    26,
+    28,
+    20,
+    20
+   ],
+   [
+    "equal",
+    28,
+    31,
+    20,
+    23
+   ],
+   [
+    "replace",
+    31,
+    34,
+    23,
+    26,
+    [
+     " - Aligned default source-file cutoff to **`45 KiB` (`46,080 B` / `<= 800` lines, `host-45k` mode)** matching Antigravity's native `read_file` cap with **2-strike soft guard** (5-branch session/subagent/anonymous TTL key isolation) so large source files and MCP-less subagents never deadlock, while keeping high-noise logs/locks/minified bundles at **`16 KB`** (`noiseMaxReadBytes`) and `.patch`/`.diff` code-review files at **`128 KB`** (`reviewMaxReadBytes`) with native `ByteOffset` / open-ended `StartLine` pagination continuation.",
+     " - Decoupled `read_file` size exemptions (`exemptExtensions`, linear ReDoS-proof `exemptPaths`, `readGuardMode: \"soft\"|\"strict\"|\"off\"`) from **both** `readDedup`/`diffRead` (exempt text files still enjoy duplicate-read protection) and `run_command` (which now uses an independent `shellDumpMaxBytes = 16 KB` and no longer allows `cat huge.png` / `curl .../archive.zip` bypasses).",
+     " - Fixed pre-1a read-cache priority (eliminating the 3-strike trap), `measureLineRangeBytes` `>2 MB && startLine > 1` blind spot, multi-line prose mislabeling as minified, `sensitive_read_confirm` TTL/isolation, `getExemptExtensions` split-state bug, Sidecar `/api/purge` `\"conversation\"` scope error, dynamic custom cutoff dropdown echo, and bidirectional upgrade migration (`cutoff:source` migrates legacy `16384` default while preserving custom cutoffs)."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    26,
+    27
+   ],
+   [
+    "replace",
+    35,
+    37,
+    27,
+    29,
+    [
+     " - Added zero-dependency `.patch`/`.diff` outline parser (`extractDiffSymbols`) to `agy-dart_fast` `read_slices({ outlines })` mapping changed files (`+add/-del`) and `@@` hunks.",
+     " - Upgraded `filterGitDiff` to 3-stage context fidelity (Stage 1 lossless within `<= 7.9 KB` budget → Stage 2 `-U`/`--unified`/`-W`/`--word-diff` context-preserved cap → Stage 3 1-line context before compact `+/-`, plus mailbox `From <sha>` / `---` support) and fixed `filterGhCli` so `gh pr view` with Markdown diff fences is never wiped."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    41,
+    29,
+    33
+   ],
+   [
+    "replace",
+    41,
+    43,
+    33,
+    35,
+    [
+     " - Removed mid-task `/compact` prompts from `rules/AGENTS.md` and routed `>60s` builds/tests + background tasks (`WaitMsBeforeAsync <= 2000`, `cliFilterAsyncBypassMs`) directly to native `run_command` (preserving live streaming logs and attaching read-only `permissionOverrides` for plugin scripts on sync `overwrite`).",
+     " - Raised `ctx_execute` default timeout to `120s` (`execTimeoutMs`, per-call `timeoutSec: 1..300`) with `timedOut: true` guidance, added workspace `cwd` support across `agy-dart_context` tools + MCP `initialize` `workspaceFolders`/`rootUri`, suppressed mid-turn tool-loop (`invocationNum >= 1`) TTL/cold-compact banners in `PreInvocation` (scaling 1M-window `ttlMinContext` to `300k`), and added step-based read-dedup decay (`readDedupMaxSteps: 40`)."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    35,
+    36
+   ],
+   [
+    "replace",
+    44,
+    46,
+    36,
+    38,
+    [
+     " - **Access-Control, SSRF, ReDoS & Windows Shell Fidelity**: Enforced end-to-end `sensitiveFileGuard=deny` (including symlinked files, `.envrc`/`*.env`, and `\\\\?\\` ADS paths) across `PreToolUse`, `fast/mcp-server.mjs`, `ctx_index`, and `ctx_execute` (`P1-03`); forced `-n` on `git remote show` to block network SSRF (`P1-04`); hardened `install.mjs` against internal symlinks/NTFS junctions, UNC shares, and `.git` clones/worktrees while supporting self-`uninstall` (`P1-05`/`P1-06`); respected per-directory `PATHEXT` precedence and PowerShell `,`/`--`/`\"` safety in `cli-filter` (`P1-07`); and capped serialized `fast` JSON-RPC payloads `<= 8.8 KB` with mixed `\\n\\n`/`\\r\\n\\r\\n` frame safety, dangling-symlink rollback, and bounded glob/regex/Markdown linear parsers (`P1-09`–`P1-13`).",
+     " - **Session Isolation, Process-Group Teardown & Multi-Provider Accuracy**: Enforced strict session/worktree/lifetime isolation in Sidecar `/api/search` and MCP `ctx_search`/`ctx_resume` (`P1-01`); added POSIX `detached` process-group + Windows `taskkill /T /F` teardown, linear JS ESM `--input-type=module` lexer, recursive subshell inspection, and graceful Windows `413` socket close; wrapped `pruneByTtl` in transactions, computed per-turn USD cost across `model_switch`, fixed OpenAI gateway cached-token double-counting, and anchored 1h implicit-write replay deltas (126/126 tests across Linux & Windows on Node 22/24)."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    50,
+    38,
+    42
+   ],
+   [
+    "replace",
+    50,
+    51,
+    42,
+    43,
+    [
+     " - Split `apply_edits` temp-file write from `rename` fallback with guaranteed rollback (`C-1`), attached `child.stdin`/`stdout`/`stderr` error handlers and `close`-drained capture in `context/lib/executor.js` (`C-2`/`H-10`), hardened PowerShell `-Command` argument passing via env-var indirection (`M-21`), closed read-only `git branch`/`tag` `OPTARG` bypasses (`H-1`), hardened Windows `\\\\?\\`/`\\\\.\\`/8.3 path canonicalization (`H-2`/`H-3`), and eliminated $O(N^4)$ CSS/SFC outline ReDoS (`H-7`)."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    55,
+    43,
+    47
+   ],
+   [
+    "replace",
+    55,
+    57,
+    47,
+    49,
+    [
+     " - Standalone HTTP Sidecar requires per-process `X-Agy-Dart-Token` across all `/api/*` endpoints (while `SidecarApp` mode enforces `POST` + `X-Sidecar-Token`); `/api/search` and all mutating endpoints (`/api/purge`, `/api/toggle-active`, `/api/cutoff`, `/api/exemptions`, `/api/maintenance`, `/api/cli-filter`, `/api/read-dedup`) are strictly `POST`-only with `Content-Type: application/json`, `Host`/`Origin`/`Sec-Fetch-Site` anti-DNS-rebinding guards, a `64 KB` request body cap, and XSS-safe DOM rendering.",
+     " - Consolidated 20+ `AGY_DART_*` toggles into `~/.agy-dart/config.json` (with `AGY_DART_*` env vars always overriding); `doctor` and `ctx_doctor` print effective flags and override provenance."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    49,
+    50
+   ],
+   [
+    "replace",
+    58,
+    60,
+    50,
+    52,
+    [
+     " - Reversible zero-dep JSON/JSONL structural compactor (`context/lib/json-crusher.js`) extracts schema, head/tail samples, and prioritized anomalies (`status >= 400`, `ok: false`, fatal/error rows) while indexing raw output into FTS5.",
+     " - Added built-in CLI rules for `gh`, `kubectl`, `terraform`, and `playwright`, project-level declarative `.agy-dart/filters.json` (with ReDoS validator), safe `cd [/d] <path> && <cmd> [2>&1]` unwrapping, and stricter cmd/PowerShell metacharacter rejection (`%`, `!`, `{}`, `@`, non-git `^`)."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    52,
+    53
+   ],
+   [
+    "replace",
+    61,
+    62,
+    53,
+    54,
+    [
+     " - Compact unified-diff re-reads on modified files are **OFF by default** (`diffRead: true` in `~/.agy-dart/config.json` or `AGY_DART_ENABLE_DIFF_READ=1` to opt in), scoped strictly to direct `conversationId` (zero parent↔subagent baseline leaks), bounded by recency (`diffReadMaxTurns` / `diffReadMaxAgeMs`), and carry baseline SHA/timestamp + 2-strike full-file bypass hints."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    54,
+    55
+   ],
+   [
+    "replace",
+    63,
+    64,
+    55,
+    56,
+    [
+     " - Added `npm run cache:audit` (global Prompt Cache audit), `npm run cache:simulate` (7-policy offline replay comparing 5m vs 1h TTL, cold-boundary compact, and cutoffs), Sidecar **Handoff Brief** + live 1s TTL countdown, 7-bucket `contextComposition` & `subagentBreakdown`, subagent Turn-0 stable-prefix sharing, persistent SQLite L2 `outline_cache`, per-feature ROI telemetry (`featureRoi`), and cross-Node 22/24 zero-`stderr` SQLite warning suppression."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    56,
+    57
+   ],
+   [
+    "replace",
+    65,
+    66,
+    57,
+    58,
+    [
+     " - Split `context/lib/store.js` into focused `context/lib/store/` submodules and `context/lib/cache/profiles.js`; default `scripts/install.mjs install` copies **runtime files only** (pass `--with-devtools` to also copy offline benchmark/audit CLIs), verified automatically by `npm run verify:pkg`."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    71,
+    58,
+    63
+   ],
+   [
+    "replace",
+    71,
+    75,
+    63,
+    67,
+    [
+     " - Deterministic prefix-stable `SessionStart` ordering (static routing line → semi-static Project/Layout + `git HEAD`-cached import hubs → volatile `git status` last) and slimmed canonical Turn-0 MCP tool schemas (`npm run prefix:budget` ~2,832–2,950 est. tokens).",
+     " - Model-aware dynamic watermarks, idle TTL, and cost-discount estimation (`resolveModelProfile` across Claude / Gemini / GPT / DeepSeek / Qwen tiers, with env overrides) + **Doom-Loop / Oscillation Watch** (`edit↔fail` cycles & normalized tool-call repeat rate).",
+     " - Zero-prefix-pollution `PreInvocation` hook using Antigravity's UI-only `metadata.user_markdown` (`systemMessage: \"\"`) for dynamic context watermark, hot-cache compact-delay, idle TTL expiry, multimodal TTFT cliff, and convergence alerts.",
+     " - Deep `transcript.jsonl` cache-bust attribution, last-15-turns ASCII hit-rate trend, and Top-3 context-growth tool attribution in both `fast/benchmark.mjs cache` and the live Sidecar Dashboard (with mini hit-rate bar chart)."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    67,
+    68
+   ],
+   [
+    "replace",
+    76,
+    78,
+    68,
+    70,
+    [
+     " - Tracks `(session, file, range, mtime, size)` in SQLite to prevent redundant unchanged re-reads while automatically invalidating on edits or compaction (`ctx_resume`), and maintains a compact `sessionCheckpoint` ledger (modified files + latest test/build status) returned by `ctx_resume` with zero extra MCP tools.",
+     " - Cross-call `(mtimeMs, size)` LRU caches in `agy-dart_fast` for both `read_slices({ outlines })` (128 entries) and `read_slices({ slices })` (bounded <= 4 MB total / <= 256 KB per file, actively invalidated by `apply_edits`)."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    70,
+    71
+   ],
+   [
+    "replace",
+    79,
+    83,
+    71,
+    73,
+    [
+     " - SSRF-hardened `ctx_index(url)` (`http:`/`https:` whitelist, max 5 redirects with relative `Location` resolution, per-hop DNS & IPv4/IPv6 private/loopback/link-local blocking with DNS pinning), configurable secret redaction before indexing/return (`AGY_DART_DISABLE_SECRET_REDACTION=1` to opt out), and optional sensitive-file read guard (`AGY_DART_SENSITIVE_FILE_GUARD=warn|deny`).",
+     " - Heading-aware Markdown chunking, SHA-256 content dedup, daily TTL pruning, `ctx_purge({ scope: \"stale\", vacuum: true })`, and one-click **Prune & Vacuum** in the Sidecar Dashboard."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    73,
+    76
+   ],
+   [
+    "replace",
+    86,
+    87,
+    76,
+    77,
+    [
+     "`agy-dart` is 100% MIT-licensed with zero runtime npm dependencies (full upstream notices and compliance boundaries are in THIRD_PARTY_NOTICES.md):"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    77,
+    78
+   ],
+   [
+    "replace",
+    88,
+    96,
+    78,
+    84,
+    [
+     "|Project|License|What Was Reused / Inspired|What `agy-dart` Built / Improved|",
+     "|:---|:---:|:---|:---|",
+     "|**INK-Q/agy-fast**|MIT|Reused 4-tool batching engine (`batch_search`, `apply_edits`, `read_slices`, `run_checks`), `SessionStart` snapshot, `<= 8.8 KB` no-spill rule, and `benchmark.mjs`|Bundled as `agy-dart_fast`, prefix-stabilized startup hook, extended `benchmark.mjs` with KV-cache bust attribution & `cache` CLI|",
+     "|**Domush/antigravity-plugin-context-mode**|MIT|Reused & adapted `node:sqlite` FTS5 engine, 8 `ctx_*` tools, `PreToolUse` guard, and Aux Pane Sidecar dashboard|`${PLUGIN_ROOT}` paths, isolated `~/.agy-dart/context.db`, 16 KB / 410-line cutoff, `<= 8.8 KB` cap, `SKILL.md` exemptions, heading-aware MD chunking, DB TTL/Vacuum, and live KV-cache card|",
+     "|**MIT Pattern References** (`mpecan/tokf`, `uuie/agent-cache-optimizer`, `rkolesnichenko/ccdrift`, `ooples/token-optimizer-mcp`, `tobi/qmd`, `DeusData/codebase-memory-mcp`, `tirth8205/code-review-graph`, `lennartschoch/opencode-cache-compact`)|MIT|Clean-room pattern inspiration for declarative CLI filters, prefix stability, cache-bust attribution, read dedup, MD heading chunking, `git HEAD`-cached import hubs, and compaction handoff briefs|Pure zero-dep Node.js ESM implementation integrated natively with Antigravity `PreToolUse.overwrite`, `PostToolUse`, `PreInvocation`, and Sidecar|",
+     "|**Architectural Inspiration Only** (`mksglu/context-mode`, `rtk-ai/rtk`, `opencode-dynamic-context-pruning`, `the-cybersapien/claude-cache`, `huiliyi37/Tianshu-harness`)|Non-MIT / Apache-2.0 (**zero code included**)|High-level conceptual inspiration only (Thinking in Code, transparent CLI hook rewriting, duplicate-read awareness, KV-cache TTL continuity, versioned V8 compile cache, SHA-256 dedup, prefix budget audit, Ghost efficiency feedback, SessionWarmth compact-delay)|Strictly zero source code reused; 100% clean-room MIT implementation|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    99,
+    84,
+    87
+   ],
+   [
+    "replace",
+    99,
+    110,
+    87,
+    96,
+    [
+     "|Workload|Designated Tool|Why|",
+     "|:---|:---|:---|",
+     "|Multi-query code search / glob / read-only `git`|`agy-dart_fast` → `batch_search`|Up to 20 concurrent queries via `rg`/Node, `<= 8.8 KB` inline|",
+     "|Unknown large source / `.patch` (>300 lines)|`agy-dart_fast` → `read_slices({ outlines })` + parallel `read_file`|Map symbols or diff files/hunks once, then read exact ranges with 7ms local `read_file`|",
+     "|Source files (<45 KiB) & diffs (<128 KB)|Built-in `read_file` (parallel, `<= 800` lines)|0 remote checks (~7ms), 45 KiB host cap, 2-strike soft guard above cutoff|",
+     "|Multi-hunk / multi-file edits + verify|`agy-dart_fast` → `apply_edits`|Atomic commits, `bestEffort`, inline `verify` saves full turns|",
+     "|Concurrent build / lint / test checks|`agy-dart_fast` → `run_checks`|True concurrency pool with noise stripping (never sequential `ctx_batch`)|",
+     "|**Large logs (>16 KB – MBs), giant JSON/CSV, API dumps**|`agy-dart_context` → `ctx_execute`|Run local Node/Python/Shell filter scripts; return only concise answers (`<= 8.8 KB`)|",
+     "|**Long docs, web URLs, or repeatedly queried logs**|`agy-dart_context` → `ctx_index` + `ctx_search`|Local SQLite FTS5 BM25 + Trigram RRF; use `ctx_resume` after `/compact`|"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    120,
+    96,
+    106
+   ],
+   [
+    "replace",
+    120,
+    125,
+    106,
+    107,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    154,
+    107,
+    136
+   ],
+   [
+    "delete",
+    154,
+    156,
+    136,
+    136
+   ],
+   [
+    "equal",
+    156,
+    162,
+    136,
+    142
+   ],
+   [
+    "replace",
+    162,
+    172,
+    142,
+    143,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    175,
+    143,
+    146
+   ],
+   [
+    "replace",
+    175,
+    177,
+    146,
+    147,
+    [
+     "MIT. Upstream MIT notices and compliance boundaries are preserved in THIRD_PARTY_NOTICES.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "8c15cb32218c+2": {
+  "fn": "Pavloffm/chatbot-langgraph",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "A looping preview of a chat response showing web search progress and source links"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    12,
+    10,
+    12,
+    [
+     "Download the full 30-second demo (MP4, 3.1 MB)",
+     "· View a still screenshot. The screenshot uses"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    20,
+    12,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     " LangGraph checkpoints preserve message state across restarts."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     " optional web search runs, the UI shows its progress and links to returned sources."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    23,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     " and read or copy Markdown, code, tables, and maths on desktop or mobile."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     " checks conversation ownership instead of trusting a signed-in browser."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    49,
+    27,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "You will need Python 3.12, uv, Node.js 24,"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    52,
+    50,
+    52
+   ],
+   [
+    "replace",
+    52,
+    53,
+    52,
+    53,
+    [
+     "backend setup and frontend setup for"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    56,
+    53,
+    56
+   ],
+   [
+    "replace",
+    56,
+    60,
+    56,
+    60,
+    [
+     " passwords and update both database URLs to match. Supply your",
+     " `CLERK_SECRET_KEY` in that local file, and set",
+     " `CLERK_AUTHORIZED_PARTIES=http://localhost:5173`. Remove `SEARXNG_BASE_URL`",
+     " if you are not running SearXNG. Never commit credentials."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    60,
+    61
+   ],
+   [
+    "replace",
+    61,
+    63,
+    61,
+    63,
+    [
+     " `frontend/.env.local`. Configure that instance for your local origin and invite",
+     " your test account. Start Ollama with the model named above."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    80,
+    63,
+    80
+   ],
+   [
+    "replace",
+    80,
+    81,
+    80,
+    81,
+    [
+     "SearXNG configuration."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    84,
+    81,
+    84
+   ],
+   [
+    "replace",
+    84,
+    85,
+    84,
+    85,
+    [
+     "The GitLab pipeline runs linting, type checks,"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    89,
+    85,
+    89
+   ],
+   [
+    "replace",
+    89,
+    90,
+    89,
+    90,
+    [
+     "are advisory, not a clean bill of health; see security notes."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    93,
+    90,
+    93
+   ],
+   [
+    "replace",
+    93,
+    95,
+    93,
+    95,
+    [
+     "The backend README documents the API and failure behavior;",
+     "the frontend README documents the UI and test setup."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

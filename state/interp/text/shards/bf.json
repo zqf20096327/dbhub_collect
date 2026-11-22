@@ -3275,5 +3275,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a8be74c78dd4": {
+  "identity": {
+   "one_liner": "开源营销工作台，以审批机制控制 AI 代理发送的跨渠道营销活动",
+   "review": "Direx 是一个开源营销工作台，把业务事实、营销计划与跨渠道活动（邮件、社交、通讯、SEO、视频剪辑）组织在同一 Workspace 内。AI 代理负责起草，所有外发内容须经人工批准并经 ledger 记录。技术栈为 TypeScript 与 Bun，依赖 Postgres，支持本地开发安装与服务器部署（Docker Compose、SMTP 邮件服务）。",
+   "highlights": [
+    "支持邮件、社交、DM、newsletter、SEO brief、视频剪辑等多渠道活动步骤，可按日期或依赖步骤触发",
+    "代理起草内容须人工批准，业务事实与禁用声明用于校验草稿，退订请求支持英 语等九种语言识别",
+    "支持按用途路由模型、设置预算，可使用 Claude Code 或 Codex 订阅代替 API key"
+   ],
+   "use_cases": [
+    "需要本地或自托管部署营销自动化环境的团队",
+    "涉及冷邮件外发并需人工审批与退订合规管理的场景",
+    "将录制内容转为带字幕社媒视频剪辑的内容团队"
+   ]
+  },
+  "sha": "a8be74c78dd4",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e6661e9d24b": {
+  "identity": {
+   "one_liner": "定时备份数据库并加密上传至公有云的工具",
+   "review": "Ogion 用 Python 编写，通过 cron 定时调度 pg_dump、mariadb-dump 等客户端对数据库执行备份，先经 lzip 压缩再用 age 加密，然后上传至云端存储。面向家庭实验室、个人项目等场景，可在 docker、kubernetes、虚拟机中运行。README 作者提到更大规模的数据库可考虑 pgBackRest 等工具。",
+   "highlights": [
+    "支持 PostgreSQL、MariaDB、MySQL 及任意单文件/目录备份，上传目标包括 S3 兼容存储、Google Cloud Storage、Azure Blob Storage 和本地 debug 模式",
+    "备份经 lzip 压缩后使用 age 格式加密，支持 Discord、Email、Slack 通知",
+    "提供 linux/amd64 与 linux/arm64 架构的 docker 镜像，支持 docker compose 与 kubernetes 部署"
+   ],
+   "use_cases": [
+    "家庭实验室或个人项目中定时备份数据库并加密上传至公有云",
+    "在 docker compose 或 kubernetes 环境中以容器方式运行定时备份任务",
+    "备份自托管服务的数据库与配置文件（如 Nextcloud、Grafana、KeyCloak 等）"
+   ]
+  },
+  "sha": "1e6661e9d24b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7c9b9cc548e6": {
+  "identity": {
+   "one_liner": "可本地运行的模拟卡支付交换机，实现BIN路由、故障转移与对账",
+   "review": "这是一个可本地运行的模拟卡支付交换机，将交易按BIN路由到模拟发卡行主机，支持主机宕机或超时时的故障转移、冲正的存储转发、日结批处理及与主机对账文件的核对。面向支付开发与测试人员，所有故障模式可通过API或内置控制台触发，便于测试自动化。可通过 Docker Compose 运行，也可用 SQLite 在无 Docker 环境下启动。",
+   "highlights": [
+    "按BIN前缀路由交易到多个模拟发卡行主机，支持主机 down/timeout 状态切换与故障转移",
+    "基于终端ID、STAN和业务日期的唯一约束实现幂等，支持冲正（含存储转发重试）与按币种汇总的结算批处理、CSV对账（匹配/不匹配/缺失/重复项）",
+    "不存储明文PAN，仅保留掩码PAN和HMAC键值；提供 OpenAPI 文档（/docs）与管理端数据重置接口"
+   ],
+   "use_cases": [
+    "支付交换流程（授权、冲正、结算、对账）的端到端测试自动化目标",
+    "模拟各类拒绝码、超时、重复交易等故障场景进行集成测试",
+    "本地演示或学习卡支付交换机的路由与容错机制"
+   ]
+  },
+  "sha": "7c9b9cc548e6",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3298,5 +3298,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6578dbfa2703": {
+  "identity": {
+   "one_liner": "本地 SQLite 实现的 AI 编码代理共享记忆库，带来源标记与注入拦截",
+   "review": "Monomem 用一个本地 SQLite 文件为 Claude Code、Cursor、Codex、Gemini CLI 等多个 AI 编码代理提供共享记忆：每条笔记记录写入者与应用来源、保留历史版本，写入时经模式匹配检查并扣留疑似注入内容等待人工审核。通过 MCP 或 REST 读写，setup 命令可自动配置并支持撤销；提供 Windows 安装包（需 Node 22.16+ 或自带 Node 的压缩包），项目处于 Beta 阶段，下载未经代码签名。",
+   "highlights": [
+    "通过 MCP 或 REST 接口供多个 AI 代理共享读写笔记，每条记录包含写入者、历史版本与隐私标签",
+    "写入检查基于模式匹配识别已知攻击模式（26 种），匹配的写入会被扣留等待人工审核；支持对替换和编辑的撤销",
+    "单文件 SQLite 存储，本地运行，支持 Ollama 本地嵌入模型做语义检索，并提供 `monomem bench` 五套确定性基准（可接入 CI）"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理之间共享项目知识，避免在各工具中重复告知相同信息",
+    "需要记录每条记忆来源、防止代理间不可信写入扩散的团队或个人工作流",
+    "需要在本地保管记忆数据、不依赖云服务或 API 密钥的使用场景"
+   ]
+  },
+  "sha": "6578dbfa2703",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3a9beee60920": {
+  "identity": {
+   "one_liner": "Rust+GTK4 编写的一体化 SSH 客户端，集成终端、SFTP、数据库与容器管理",
+   "review": "PuTTYPlus 是一个在单条 SSH 连接上提供终端、双栏 SFTP、PostgreSQL/MySQL 工作台、Docker 容器管理与端口转发的图形客户端，界面全中文，提供 Linux/Windows 单文件程序。命令行参数兼容 PuTTY，含 73 条回归基准；凭据库用主密码加 argon2 与 AES-GCM 加密。Linux 包依赖 GTK≥4.18、VTE≥0.80，MIT 许可。",
+   "highlights": [
+    "在单条 SSH 连接上开通道实现终端、SFTP、数据库工作台、Docker 管理与端口转发",
+    "命令行参数、退出码与 askpass 兼容 PuTTY，附 73 条黄金基准回归",
+    "内置 PostgreSQL/MySQL 工作台（对象树、可编辑表格、SQL 编辑器、ER 图、导入导出）与 Docker 容器/镜像/卷/网络管理"
+   ],
+   "use_cases": [
+    "Windows/Linux 桌面用户通过图形界面管理远程服务器终端与文件",
+    "需要同时操作 PostgreSQL/MySQL 数据库的运维或开发人员",
+    "使用 Docker compose 的容器管理场景"
+   ]
+  },
+  "sha": "3a9beee60920",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

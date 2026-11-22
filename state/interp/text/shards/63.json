@@ -3479,5 +3479,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "edc2480418b1": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 逻辑复制（pgoutput）将行级变更加工为 JSON 并推送的 .NET 库",
+   "review": "PgOutput2Json 是一个 .NET 库，通过 PostgreSQL 内置的 pgoutput 插件连接复制槽，把 INSERT/UPDATE/DELETE 变更转为 JSON 消息，输出到 Kafka、RabbitMQ、Redis、MongoDB、ClickHouse 等，或经委托处理器直接交给 .NET 应用。它要求 PostgreSQL 14 及以上（Publication 行过滤器需 15+），投递语义为 at-least-once，消息携带 LSN 加序号的去重键，初始数据拷贝以类型 C 表示且无位置信息。",
+   "highlights": [
+    "使用 PostgreSQL 内置的 pgoutput 逻辑解码插件，无需额外安装解码扩展，支持 PostgreSQL 14 至 18",
+    "提供 Kafka、RabbitMQ、Redis、MongoDB、SQLite、Amazon Kinesis、DynamoDB、ClickHouse、Azure Event Hubs 及 Webhook 等多种输出适配器，也可通过 .NET 委托在应用内直接处理消息",
+    "消息以至少一次语义投递，每条消息包含事务 LSN 与事务内序号组成的去重键；支持 Compact 模式以数组形式输出列值并在 schema 属性中携带列名与类型信息"
+   ],
+   "use_cases": [
+    "对数据库插入/更新触发后台任务的近实时场景",
+    "低延迟应用缓存更新、异步日志写入（文件或其他数据库）",
+    "面向数据仓库的轻量级 ETL 与实时数据聚合"
+   ]
+  },
+  "sha": "edc2480418b1",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4dee4233e01d": {
+  "identity": {
+   "one_liner": "面向 Teradata Vantage 的 MCP 服务器，为 AI 代理提供 SQL 执行与内建函数知识库",
+   "review": "该 MCP 服务器连接 Teradata Vantage 数据库，提供 SQL 执行工具和内建分析函数的语法参考库，覆盖数据探索、清洗、机器学习、文本分析、向量检索、时间序列等领域。通过 get_syntax_help 工具与 syntax 资源以分层文档引导模型选用原生分布式函数，使分析在数据库内执行、仅返回结果。适用于使用 Teradata 且借助 MCP 协议进行数据分析的场景。",
+   "highlights": [
+    "提供 get_syntax_help 工具和 teradata://syntax/{topic} 资源，按 guidelines、index、主题文档三层组织 Teradata 内建函数参考库",
+    "支持以 CTE 预测流水线模式在单条 SQL 中封装预处理与评分，FitTable 与模型表可在训练后复用",
+    "参考库覆盖机器学习（Train/Predict 对）、文本分析、向量检索、统计检验、UAF 时间序列、地理空间、BYOM 模型加载与评分等域"
+   ],
+   "use_cases": [
+    "让 AI 代理在 Teradata 平台内完成数据分析流程（探索、清洗、训练、评估、评分），数据不出库",
+    "为不熟悉 Teradata 函数体系的代理提供原生表操作符的发现与语法参考",
+    "构建可脱离代理独立运行的 SQL 评分流水线（视图、存储过程或定时任务）"
+   ]
+  },
+  "sha": "4dee4233e01d",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

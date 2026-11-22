@@ -3320,5 +3320,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "432b8e2a2d2c": {
+  "identity": {
+   "one_liner": "实时追踪 AI CLI 进程出站网络连接的观察器，支持提供商标注与 SQLite 记录。",
+   "review": "rano 通过轮询 Linux /proc 或 macOS libproc 将 Claude Code、Codex CLI、Gemini CLI 及其子进程的套接字映射到 PID，并按 anthropic/openai/google 标注提供者。适用于开发与审计中查看 AI CLI 的网络行为；基于轮询可能漏掉观察间隙内开关的连接，不支持完整抓包与载荷解析，Windows 需经 WSL 2 运行。",
+   "highlights": [
+    "自动追踪目标进程及子进程的套接字，按 anthropic/openai/google/unknown 标注提供者",
+    "支持终端实时统计与 SQLite 持久化日志，内置 provider_counts 等聚合查询",
+    "域名解析提供 PTR（免特权）与 pcap（需 root/CAP_NET_RAW）两种模式，并为每个域名记录 provenance 来源"
+   ],
+   "use_cases": [
+    "开发期间观察 AI CLI 工具实际连接的端点与提供者",
+    "安全审计中记录 AI CLI 进程的网络行为历史",
+    "排查某个进程/进程树的连接归属问题"
+   ]
+  },
+  "sha": "432b8e2a2d2c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f93d285d0513": {
+  "identity": {
+   "one_liner": "为 GSPro 模拟高尔夫提供挥杆记录、SQLite 统计页面与 AI 双解说直播的工具",
+   "review": "GSPro Shotcast 是一款面向 GSPro 3.1.x 模拟高尔夫用户的 Python 工具，将每次击球的发射数据、落点与得分写入本地 SQLite 数据库（logs/season.db），生成本地统计页面，支持杆数得失、挖起距离分布、球洞回放等，并可发布为受密码保护的在线页面。其 AI 解说舱通过两个语音在击球飞行中实时播报，可配置联赛名单与剧情。不需要云服务、账号或 API 密钥即可本地运行，解说功能可选云端或全本地模型。",
+   "highlights": [
+    "将每次击球的发射数据、落点与得分写入本地 SQLite 文件，无需云服务、账号或 API 密钥",
+    "统计页面提供杆数得失、球杆距离与散布、按距离的攻果岭与推杆数据、球洞回放及差点指数",
+    "两个 AI 解说可在球飞行中实时播报，支持英语及法语、西班牙语、德语等云语音，可读取 Squabbit 让杆与 SuperSaaS 预约"
+   ],
+   "use_cases": [
+    "模拟高尔夫联赛记录整季每轮成绩并通过密码页面向成员分享数据",
+    "球手追踪个人挥杆数据、球杆距离分布与差点指数变化",
+    "为模拟器比赛添加实时语音解说与在线直播观看"
+   ]
+  },
+  "sha": "f93d285d0513",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1d37dd4d6914": {
+  "identity": {
+   "one_liner": "在 VS Code 中编辑 Excel/CSV、管理 SQLite 并连接关系数据库的扩展",
+   "review": "Sheet Studio 是一个 VS Code 扩展，提供表格编辑器与数据库工作台：可打开工作区内的 XLSX/CSV/TSV/SQLite 文件进行查看、编辑、搜索和保存，也可通过连接管理连接 PostgreSQL、MySQL、MariaDB、SQL Server 执行 SQL。文件在本地处理，无账号注册；需 VS Code 1.96+，目前通过 VSIX 手动安装，尚未上架扩展市场。",
+   "highlights": [
+    "支持 XLSX/CSV/TSV 查看编辑与原格式保存，提供多工作表、公式栏、排序筛选、查找替换和合并单元格；XLS/ODS 等格式兼容导入后导出为 XLSX",
+    "提供数据库工作台与 SQL 编辑器：表/视图导航、分页、记录增删改、字段/索引/DDL 查看，以及语法高亮、补全、事务和执行历史",
+    "SQLite 文件直接打开无需额外驱动，覆盖保存前生成 .bak 备份；服务器密码存入 VS Code SecretStorage"
+   ],
+   "use_cases": [
+    "在 VS Code 工作区内直接查看和编辑 Excel、CSV 表格文件",
+    "打开本地 SQLite 数据库文件进行数据浏览、编辑和 SQL 查询",
+    "连接 PostgreSQL、MySQL、MariaDB 或 SQL Server 服务器执行 SQL 并管理数据"
+   ]
+  },
+  "sha": "1d37dd4d6914",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

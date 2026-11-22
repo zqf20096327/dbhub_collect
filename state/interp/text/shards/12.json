@@ -2815,5 +2815,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f4f0031fb3cf": {
+  "identity": {
+   "one_liner": "演示工具调用型 Agent 运行回路的 Python 本地应用，用 SQLite 持久化结果",
+   "review": "一个 Python 本地应用，演示 Agent 通过工具（计算、记忆存取、读时钟）完成任务的循环：选择动作、执行、读结果、决定下一步。事实与运行记录存于本地 SQLite，重启后可召回；提供 Demo 固定规则和 OpenAI 兼容模型两种模式。定位为学习项目，仅绑定 localhost，无多用户支持。",
+   "highlights": [
+    "提供计算、保存事实、召回事实、获取时间四个工具，结果与运行轨迹持久化到本地 SQLite",
+    "内置多层预算与校验机制：planner 调用上限、工具调用预算、参数 8 KiB/结果 16 KiB 截断及七项确定性轨迹完整性检查",
+    "Demo 模式无需 API key 即可运行，Web 界面展示任务、回复与可展开的执行步骤"
+   ],
+   "use_cases": [
+    "学习工具调用型 Agent 的基本运行循环与轨迹记录结构",
+    "演示 Agent 结果跨进程重启后的持久化与召回",
+    "作为本地教学示例研究失败场景下的轨迹与错误记录"
+   ]
+  },
+  "sha": "f4f0031fb3cf",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "64fa48d7407b": {
+  "identity": {
+   "one_liner": "自托管的团队 AI 用量与成本度量板，含 SOP 转 Claude 技能工具",
+   "review": "AI Worker 是一个自托管服务，用于度量团队 AI 使用成本、速度与在线状态，并将团队 SOP 转为 Claude 技能。服务器以 Python 标准库和 SQLite 实现，部署在一台 Linux 机器上；客户端数据仅含会话、token、成本等字段，不含聊天内容。适合需要内部统计 AI 开销与流程技能化的团队使用。",
+   "highlights": [
+    "提供实时看板显示成员工作、等待状态与成本配额，支持浏览器、电视墙、菜单栏、Telegram 和地图视图",
+    "通过在项目中复制单个文件测量 AI 项目的单次/千次成本及平均、p95、最慢耗时，按模型与日期导出 PDF/CSV",
+    "make-skill 命令可将 SOP 草拟为技能，在密码密钥处暂停、排除个人数据，并需用户确认后启用；支持 Claude Code、Codex、Cursor、Gemini CLI 通过 MCP 读取看板"
+   ],
+   "use_cases": [
+    "团队层面统计 AI 开销、发现长时间等待的成员",
+    "为自研 AI 项目生成按模型与日期的成本和性能报告",
+    "将团队操作规程转为带安全拦截的 Claude 技能"
+   ]
+  },
+  "sha": "64fa48d7407b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

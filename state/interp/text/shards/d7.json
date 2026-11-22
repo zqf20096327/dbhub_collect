@@ -3511,5 +3511,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "694c72f88381": {
+  "identity": {
+   "one_liner": "多平台 IM 通道网桥，将各平台消息归一化供 AI 代理处理",
+   "review": "octop-gateway 是一个 Python 3.12+ 编写的多平台即时通讯通道网桥（MIT 协议，PyPI 可安装），内置飞书、钉钉、QQ、企业微信、微信 iLink、元宝、小艺、MQTT、Telegram、Discord 共 10 个平台适配器。开发者实现单个异步消息处理器即可接入多平台；ChannelManager 通过异步队列将入站消息归一化为 MessageEvent 流。群聊场景提供 visibility/activation/history 等群组策略与 owner 权限控制。",
+   "highlights": [
+    "通过 BaseChannel 与 ChannelManager 将 10 个内置平台（飞书、钉钉、QQ、企业微信、微信 iLink、元宝、小艺、MQTT、Telegram、Discord）的入站消息统一为 InboundMessage/MessageEvent 模型，处理器为支持 MESSAGE/DELTA/COMPLETED/ERROR 事件的异步生成器",
+    "支持自定义通道（继承 BaseChannel 注册即可复用媒体、限流、推送管线）、可插拔 MediaBackend（默认 FileSystemMediaBackend）、按通道的速率限制/超时/输入指示器、push_text/push_to_all 主动推送与同类型多通道多租户隔离",
+    "提供群组会话策略（visibility、activation、history TTL、owner_commands_only、owner_tools_only 等可按群覆盖的配置）与 QQ 机器人扫码登录"
+   ],
+   "use_cases": [
+    "需要让同一个 AI 代理或机器人同时接入多个 IM 平台（如飞书+钉钉+Telegram），避免为每个平台分别编写收发逻辑",
+    "需要令牌流式输出到聊天平台、处理图片/音视频/文件等多媒体附件的代理应用",
+    "需要在群聊中控制触发条件（@提及、可见性）、限制命令权限（仅 owner 可用内置命令/工具）的多租户部署场景"
+   ]
+  },
+  "sha": "694c72f88381",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f7c6be301dd1": {
+  "identity": {
+   "one_liner": "基于逻辑复制的 PostgreSQL 线协议缓存代理",
+   "review": "pgcache 是部署在应用与 PostgreSQL 之间的线协议兼容代理，缓存查询结果并订阅源库逻辑复制流（CDC）维护一致性，写入仍直达主库。应用仅需改一条连接字符串；要求源库开启 wal_level=logical，被缓存的表必须有主键。支持 PostgreSQL 16/17/18，处于 pre-1.0 活跃开发阶段，采用 Elastic License 2.0。",
+   "highlights": [
+    "线协议兼容，应用按连接 PostgreSQL 的方式直接连入，写入转发至源库",
+    "通过逻辑复制流比对已提交变更，单表查询可直接在缓存上应用变更，无法维持一致的查询则失效并回源",
+    "提供 Fit Analyzer，在浏览器内以 WebAssembly 分析 pg_stat_statements 导出等负载样本，查询不上传"
+   ],
+   "use_cases": [
+    "读多写少、热点查询集中的 PostgreSQL 应用，希望不动应用代码接入缓存",
+    "需要避免读取过期数据的场景，用 CDC 一致性替代定时过期",
+    "想先评估缓存收益的团队：用 pg_stat_statements 导出或 csvlog 估算可缓存比例"
+   ]
+  },
+  "sha": "f7c6be301dd1",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2882,5 +2882,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "908fe84796d0": {
+  "identity": {
+   "one_liner": "基于 Rust 运行时的本地优先个人助理，以追加式账本记录每轮记忆",
+   "review": "Jeeves 是一个 Rust 编写的本地优先个人助理运行时，面向需要在本地或自托管环境中执行长时、可验证任务的用户。它接收目标并产出结果文件，每轮写入一条 append-only 账本记录工具调用、模型与成本，记忆库通过 ledger 标记回溯来源。内置 23 个工具（15 个默认开启，8 个需开关），支持 MCP 连接器、子任务委派与定时任务，写文件与命令执行默认关闭。",
+   "highlights": [
+    "内置 23 个工具（15 个默认开启、8 个需环境变量启用），支持 MCP 服务器连接器与按文件声明的 cron 定时任务",
+    "记忆以每轮一条 append-only 账本行存储，FTS5 索引支持中文并可从账本重建，通过 ledger 标记回溯来源轮次",
+    "预适配 12 个 LLM 提供商，包括本地 Ollama 离线运行；支持终端 REPL、Web 仪表盘及 WeChat、Lark、Telegram 聊天网关"
+   ],
+   "use_cases": [
+    "事件复盘类任务：收集证据、核对数据并生成他人可验证的报告文件",
+    "需要本地数据不出机器的记忆与日程/邮件助理场景（CalDAV 只读、IMAP 读取、SMTP 默认仅草稿）",
+    "编码子任务：在私有 Git worktree 中运行经批准的 CLI，由父任务整合子检查点"
+   ]
+  },
+  "sha": "908fe84796d0",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fe1fcd24b7a4": {
+  "identity": {
+   "one_liner": "oGRAC 定制适配工具管理仓库，含文档检视、仿真环境脚本与技能集",
+   "review": "openGauss 社区 oGRAC 相关的定制工具归档仓库，包含四部分：ograc-docs-review 中文文档错误检视 skill、ograc_sim_single 单文件脚本（在 Docker 内创建含 4 个 LUN 的双节点单集群开发环境）、安全研发技能（密钥扫描与三方 CVE 排查）、以及环境无关的测试运维 skill 集。工具以复制到 skills 目录或源码树的方式使用，许可证为 MulanPSL-2.0，面向 oGRAC 文档、开发与测试人员。",
+   "highlights": [
+    "提供中文文档批量检视与修复 skill，规则由 ograc_rules.json 定义",
+    "ograc_sim_single.sh 内嵌 Dockerfile 与 cluster.sh，复制到源码树任意目录即可运行，支持 status、verify、SQL 登录、重启、清理等命令",
+    "包含扫描历史提交中 AK/SK、token 等密钥并只读核验有效性的技能"
+   ],
+   "use_cases": [
+    "oGRAC 中文文档同步或 PR 前的格式与低级错误批量检查",
+    "在本地 Docker 环境搭建含多路径 LUN 的双节点集群开发/测试环境",
+    "openGauss 仓库的密钥泄露排查与三方库 CVE 修复"
+   ]
+  },
+  "sha": "fe1fcd24b7a4",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3771,5 +3771,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9ec040876290": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式单文件全文搜索数据库，提供 BM25F 排序与容错检索级联",
+   "review": "Persia DB 是一个用 Rust 实现的嵌入式全文搜索数据库，以单个 .persia 文件存储索引与文档，无需独立服务进程。它通过 WAL 提交写入、合并不可变分段，并执行 BM25F 排序搜索，支持过滤、排序、分面与分页。项目处于 pre-alpha 阶段（MVP 完成 67%），核心 API 位于 persia-engine 库中，计划的 Db 门面尚未导出，未发布至 crates.io。",
+   "highlights": [
+    "单文件容器存储：容器含头部、双 superblock 槽与带校验的帧，分段不可变，可通过 Database::compact 或自动压缩回收死字节",
+    "搜索支持 BM25F 评分、过滤、排序、分面与分页；search_relaxed 实现包含同义词、去词、前缀、模糊（含纠错建议与 typo 分层）和 fallback 共五级的松弛级联，可按请求合并 relax 选项并通过 explain 输出命中层级",
+    "默认搜索路径尚不支持松弛：无命中时返回空结果；Db 门面（M10）未构建，crates 未发布，需通过 git 依赖引入 persia-engine 与 persia-analysis"
+   ],
+   "use_cases": [
+    "在 Rust 应用进程内嵌入全文搜索，通过 Database API 创建文件、写入文档、提交并执行排序搜索",
+    "用 persia CLI 检查与校验数据库文件：inspect/dump 分段与词项、verify 全库只读校验、sweep 清理临时与隔离文件",
+    "以库代码形式试验检索松弛级联（typo 容错、纠错、fallback 静态排序返回）与字段 schema（text/keyword/i64/f64/bool/datetime/stored）"
+   ]
+  },
+  "sha": "9ec040876290",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

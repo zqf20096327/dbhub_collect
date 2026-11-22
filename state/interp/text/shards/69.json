@@ -3660,5 +3660,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "db1cfd0d60ea": {
+  "identity": {
+   "one_liner": "面向学生的任务管理 Web 应用，用 AI 将大任务拆解为子步骤并推送截止提醒",
+   "review": "DeadlineMate 是一个任务管理 Web 应用，面向学生用户。它通过 Vercel AI SDK 调用 Groq 模型将用户输入的自由文本任务拆解为子步骤，并以 Zod 校验输出，失败时回退到本地解析器；同时提供基于 Web Push 的定时提醒、streak/EXP 记录和附件存储。技术栈为 Next.js 16、TypeScript、Prisma 7 与 PostgreSQL（Neon），需配置 Google OAuth、Groq、Resend、Vercel Blob 及 VAPID 密钥等环境变量方可运行。",
+   "highlights": [
+    "AI 任务拆解：经 Vercel AI SDK 调用 Groq 模型，输出按 Zod schema 校验，超时或校验失败时由本地解析器接替",
+    "提醒与通知：可安装为 PWA，通过 Web Push（VAPID）由受 CRON_SECRET 保护的定时端点发送截止提醒",
+    "任务与进度功能：支持文件附件（Vercel Blob）、语音输入、日历筛选、7 天进度图表，以及带 Shield 机制的 streak 和按完成时间计算的 EXP"
+   ],
+   "use_cases": [
+    "学生将聊天群粘贴的作业描述拆解为带内部截止时间的子步骤",
+    "通过推送通知在截止日期前接收提醒，而非事后补救",
+    "以 streak、EXP 和 Shield 记录任务按时完成的连续情况"
+   ]
+  },
+  "sha": "db1cfd0d60ea",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c7c85103ba39": {
+  "identity": {
+   "one_liner": "面向业务应用的 Python agent 运行时，宿主掌握身份权限，写入以草稿经人工审批",
+   "review": "cairnkit 是一个面向多用户业务后端的轻量 agent 运行时库，要求 Python 3.12+，核心仅依赖标准库和 httpx。身份信息由宿主应用通过 ToolContext 注入，数据变更通过 propose 访问级别生成草稿，由宿主实现审批与持久化。另含记忆快照、上下文压缩、注入扫描、SQLite 文档检索等模块，可用 pip 或 uv 安装。",
+   "highlights": [
+    "工具声明访问级别（read/propose/write）与允许角色，身份由宿主注入 ToolContext，不从模型获取",
+    "内置记忆系统：冻结快照、写入筛选、上下文压缩（移植自 Hermes Agent）与提示注入扫描",
+    "核心仅依赖标准库与 httpx，可选 knowledge 模块基于 SQLite 提供文档检索与本地向量搜索"
+   ],
+   "use_cases": [
+    "需要多用户身份、角色权限与人工审批写入的业务后端集成 agent",
+    "需要长对话记忆管理与上下文压缩的多轮对话应用",
+    "需要中文/英文文档检索、PDF/Word/Excel 解析的知识库场景"
+   ]
+  },
+  "sha": "c7c85103ba39",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

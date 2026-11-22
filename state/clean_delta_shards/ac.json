@@ -22058,5 +22058,2348 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "bb265bff5bff+2": {
+  "fn": "feather-store/feather",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "*Part of Hawky.ai — AI-Native Development Tools*"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    14,
+    6,
+    14,
+    [
+     "Tests",
+     "PyPI",
+     "Crates.io",
+     "Python",
+     "License: MIT",
+     "Website",
+     "HuggingFace Space",
+     "Benchmark Results"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    18,
+    15,
+    18,
+    [
+     "LongMemEval_S",
+     "ANN p50",
+     "ANN Recall"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    29,
+    18,
+    29
+   ],
+   [
+    "replace",
+    29,
+    38,
+    29,
+    30,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    49,
+    30,
+    41
+   ],
+   [
+    "replace",
+    49,
+    50,
+    41,
+    42,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    42,
+    43
+   ],
+   [
+    "replace",
+    51,
+    56,
+    43,
+    48,
+    [
+     "|Adaptive decay|`stickiness = 1 + ln(1 + recall_count)` — recalled memories age slower|",
+     "|Trust and confidence|Separate from importance, and both filterable|",
+     "|Scoped pockets|Budget-fitted hot set over dotted, inheriting scopes|",
+     "|Context packets|Required constraints resolved first; **fails closed** if one is missing|",
+     "|Expiry|Per-record `ttl`, so a short-lived agent run scope cleans itself up|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    61,
+    48,
+    53
+   ],
+   [
+    "delete",
+    61,
+    63,
+    53,
+    53
+   ],
+   [
+    "equal",
+    63,
+    65,
+    53,
+    55
+   ],
+   [
+    "replace",
+    65,
+    66,
+    55,
+    56,
+    [
+     "|Capability|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    56,
+    57
+   ],
+   [
+    "replace",
+    67,
+    76,
+    57,
+    66,
+    [
+     "|**Valid time**|`Metadata.valid_at` records *when something happened*, beside `timestamp` (when it was recorded). Indexed per namespace (`db.newest(ns, n, by_valid=True)`), filterable (`FilterBuilder().valid_between(after, before)`), and exposed over the Cloud API and `RemoteDB`. Stored as a reserved attribute, so **no file-format or WAL change**.|",
+     "|**Fact routing into `AgentMemory`**|`mem.ingest_facts(facts)` sends each extracted fact to the kind whose lifetime fits: events → episodes (deduplicated), preferences → preferences, the rest → facts with supersession. Every write carries the fact's valid time, so sessions can be ingested in any order.|",
+     "|**Dated writes**|`mem.facts.state(..., at=ts)` and `mem.preferences.set(..., at=ts)`; an older `at` never overwrites a newer value. `episodes.recent()` / `all()` walk the valid-time index instead of sorting the namespace.|",
+     "|**`SessionFactExtractor`**|Dated facts from a whole session, each with `kind`, canonical `entity`, `amount` and own-vs-mentioned; `ledger()` and `profile()` render them for a prompt.|",
+     "|**File ingest (Cloud API)**|`POST /v1/{ns}/ingest_file` stores an image, video, audio, PDF or text file by what a multimodal model sees in it; there is an upload modal in the admin SPA. Hybrid search embeds the query server-side when no vector is given.|",
+     "|**Time travel**|`DB.open(path, as_of=t)` opens the memory as it was at a past moment: by time, by tag (`as_of=\"run-42\"`) or by commit (`generation=n`). The handle is read-only and scores with its clock pinned to that moment, so a replay retrieves what the agent retrieved then. `db.history()`, `db.tag()`, `feather_db.diff(a, b)`. Costs 51 bytes a commit; opening the past costs what a read-only open costs. See Time Travel.|",
+     "|**History retention**|`db.set_history_retention(seconds)` keeps the file a rewrite (vacuum, compact, purge) replaces, so `as_of` reaches back that far. Off by default; tags keep their commit regardless. `erase()` deletes all history.|",
+     "|**LongMemEval_S: 0.911**|Mean of three reportable runs on all 500 questions, official GPT-4o judge (0.916, 0.904, 0.914). See Benchmarks.|",
+     "|**Measured end to end**|Latency p50/p99 for every layer, from a live agent turn down to one search, plus LongMemEval, LoCoMo, contradiction and poisoning scores: Performance and Benchmarks.|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    81,
+    66,
+    71
+   ],
+   [
+    "replace",
+    81,
+    90,
+    71,
+    72,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    96,
+    72,
+    78
+   ],
+   [
+    "replace",
+    96,
+    100,
+    78,
+    79,
+    [
+     " Release history — v0.10 through v0.16 (click to expand) "
+    ]
+   ],
+   [
+    "equal",
+    100,
+    103,
+    79,
+    82
+   ],
+   [
+    "replace",
+    103,
+    104,
+    82,
+    83,
+    [
+     "|Capability|Version|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    83,
+    84
+   ],
+   [
+    "replace",
+    105,
+    113,
+    84,
+    92,
+    [
+     "|**Persisted HNSW graph**|v0.16.0|`save()` embeds the prebuilt graph (**file format v9**) so `load()` restores it instead of rebuilding — **5–25× faster cold load** (48 ms vs 2.7s/13.4s on 40k×128 clustered) and deterministic serial-build recall (0.988). Falls back to rebuild for dirty DBs / old files; ~25% larger files.|",
+     "|**Adaptive index capacity**|v0.15.3|HNSW indices start at 4096 elements and grow via `resizeIndex()` on demand instead of preallocating 1M — **~7.7× less RAM** for many-namespace deployments (709→92 MB across 19 namespaces), no hard cap.|",
+     "|**Parallel HNSW load**|v0.13.0|Graph rebuilt across a thread pool on open — **~4.7× faster load** (7.6s→1.7s for 40k×128), identical recall. `FEATHER_LOAD_THREADS` to cap. Still used for old files / DBs with pending deletions.|",
+     "|**Parallel batch ingest**|v0.13.0|`DB.add_batch(ids, vecs, metas=None)` builds the graph in parallel with the GIL released — **~3.4× faster** bulk insert.|",
+     "|**SIMD on x86**|v0.13.0|SSE/AVX L2 kernels (runtime-dispatched) compiled on x86_64; arm64 uses `-O3` NEON. `FEATHER_SIMD=none\\|sse\\|avx\\|avx512`.|",
+     "|**In-RAM int8 quantization**|v0.15.0|`set_int8_ram(modality)` stores vectors as int8 **in memory** — **~1.7× less RAM** (227→129 MB at 60k×768). Since 0.22 the scale is trained from the data, and search re-ranks by float originals read from the file (`refine=2`), so recall matches float.|",
+     "|**MCP connector for Claude**|v0.14.0|`feather-serve` exposes Feather as a persona context engine to **Claude Desktop / Code** — local `.feather` *or* remote Cloud API (`--api-url`).|",
+     "|**Real embedders**|v0.15.1|`feather-serve --embed-provider gemini\\|openai\\|voyage\\|cohere\\|ollama` — semantic recall over a hosted instance (Gemini `gemini-embedding-001`, asked for 768-d natively).|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    129,
+    92,
+    108
+   ],
+   [
+    "delete",
+    129,
+    131,
+    108,
+    108
+   ],
+   [
+    "equal",
+    131,
+    133,
+    108,
+    110
+   ],
+   [
+    "replace",
+    133,
+    134,
+    110,
+    111,
+    [
+     "|Capability|Version|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    111,
+    112
+   ],
+   [
+    "replace",
+    135,
+    139,
+    112,
+    116,
+    [
+     "|**Secondary metadata indexes**|v0.11.0|Inverted indexes on `namespace_id` / `entity_id` / `attributes` — namespace & attribute lookups go from O(n) scans to **O(matches)**. New `DB` methods: `ids_in_namespace`, `ids_for_entity`, `ids_with_attribute`, `namespace_size`, `list_namespaces`.|",
+     "|**Pre-filtered ANN search**|v0.11.0|`search(filter=…)` with a `namespace`/`entity`/`attribute` constraint now ranks **exactly** over the indexed candidate set, returning a **complete top-k** instead of HNSW's `ef`-bounded under-return — and is O(matches), so selective filters are *faster*.|",
+     "|**Incremental auto-compaction**|v0.11.0|`set_auto_compact(ratio)` rebuilds a modality index once its deleted/total ratio crosses a threshold, reclaiming `forget()`/`purge()`'d vectors automatically. `compact()` also fixed to reclaim forgotten records and never resurrect purged ones.|",
+     "|**On-disk int8 quantization**|v0.12.0|`set_quantized(modality)` persists vectors as int8 + per-vector scale (**file format v7**) — **~2.5–4× smaller `.feather` files**, dequantized to float32 on load (search unchanged).|"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    144,
+    116,
+    121
+   ],
+   [
+    "replace",
+    144,
+    151,
+    121,
+    122,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    155,
+    122,
+    126
+   ],
+   [
+    "delete",
+    155,
+    157,
+    126,
+    126
+   ],
+   [
+    "equal",
+    157,
+    164,
+    126,
+    133
+   ],
+   [
+    "replace",
+    164,
+    165,
+    133,
+    134,
+    [
+     "|Capability|Where|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    134,
+    135
+   ],
+   [
+    "replace",
+    166,
+    181,
+    135,
+    150,
+    [
+     "|**Atlas-style admin SPA**|`/admin/` route on the FastAPI server|Custom HTML + Tailwind + Alpine.js, brand-aligned, zero build step|",
+     "|**Pluggable embeddings**|Settings → Embedding service|OpenAI · Azure OpenAI · Gemini · Voyage · Cohere · Ollama with curated model dropdowns|",
+     "|**Ingest text**|`POST /v1/{ns}/ingest_text`|Server embeds via the configured provider, then stores — single call|",
+     "|**Bulk import**|`POST /v1/{ns}/import`|JSON array of `{id, vector?, metadata}`; WAL-backed throttled saves for fast large loads, `flush` to compact — see bulk ops|",
+     "|**Bulk delete**|`POST /v1/{ns}/records/batch_delete`|Delete many ids and/or a whole `entity_id` in one call (one save) — use instead of looping single DELETE|",
+     "|**Upload `.feather`**|`POST /v1/admin/upload` · Namespaces → Import|Adopt a locally-built DB as a cloud namespace (graph + index intact)|",
+     "|**Any-dimension namespaces**|first vector or `dim` at create|Each namespace adopts its own dim (384/768/1024/1536…), no silent padding — see dimensions|",
+     "|**Filtered search**|`POST /v1/{ns}/search` · Search tab|Vector / keyword / hybrid, filtered by `namespace_id`, `entity_id`, and attributes|",
+     "|**Hierarchy navigator**|Namespace detail → Hierarchy tab|Brand → Channel → Campaign → AdSet → Ad → Creative tree from `metadata.attributes`|",
+     "|**Marketing profile card**|Record drawer|Auto-renders KPIs (CTR, ROAS, channel) when present|",
+     "|**Cmd-K palette**|Press ⌘K / Ctrl+K|Fuzzy search namespaces · `id:123` to open a record · `/seed`, `/import` actions|",
+     "|**Live observability**|Overview screen|p50 / p95 / p99 latency, ops-per-minute sparkline, recent activity feed|",
+     "|**Delete + purge + compact**|Namespace header buttons|Bulk delete by ids/entity, PURGE by `namespace_id`, COMPACT to reclaim|",
+     "|**Schema discovery**|Namespace detail → Schema tab|Distinct attribute keys + type inference + sample values|",
+     "|**Connection panel**|Settings → Connection|Copy-paste cURL / Python / JS snippets pre-filled with your URL|"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    182,
+    150,
+    151
+   ],
+   [
+    "replace",
+    182,
+    183,
+    151,
+    152,
+    [
+     "See docs/quickstart.md for a self-hosted setup walkthrough."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    152,
+    153
+   ],
+   [
+    "replace",
+    184,
+    185,
+    153,
+    154,
+    [
+     "**Guides:** Vector dimensions · Bulk operations (import / delete / upload) · Integrations"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    192,
+    154,
+    161
+   ],
+   [
+    "delete",
+    192,
+    196,
+    161,
+    161
+   ],
+   [
+    "equal",
+    196,
+    198,
+    161,
+    163
+   ],
+   [
+    "replace",
+    198,
+    199,
+    163,
+    164,
+    [
+     "|Capability|Description|"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    200,
+    164,
+    165
+   ],
+   [
+    "replace",
+    200,
+    216,
+    165,
+    179,
+    [
+     "|**ANN Search**|Sub-millisecond approximate nearest-neighbor search via HNSW|",
+     "|**Multimodal Pockets**|Text, image, audio vectors per entity under a single ID|",
+     "|**Context Graph**|Typed + weighted edges, reverse index, auto-link by similarity|",
+     "|**Context Chain**|One call: vector search + n-hop BFS graph expansion|",
+     "|**Living Context**|Recall-count stickiness — frequently accessed items resist temporal decay|",
+     "|**Namespace / Entity / Attributes**|Generic partition + subject + KV metadata for any domain|",
+     "|**Graph Visualizer**|Self-contained D3 force-graph HTML — fully offline, no CDN|",
+     "|**LLM Agent Connectors**|Claude, OpenAI, Gemini tool-use/function-calling with 14 Feather tools|",
+     "|**MCP Server**|`feather-serve` — connects Feather to Claude Desktop, Cursor, and any MCP client|",
+     "|**LangChain / LlamaIndex**|Drop-in `FeatherVectorStore`, `FeatherMemory`, `FeatherRetriever` adapters|",
+     "|**Self-Aligned Context Engine**|LLM-powered ingestion: auto-classifies, scores, links, and namespaces every record|",
+     "|**Valid time**|`valid_at` per record — indexed, filterable, ordered by when it happened rather than when it was written|",
+     "|**Agent memory**|`Pocket` working sets, `AgentMemory`'s five kinds with enforced lifetimes, `ingest_facts()` routing|",
+     "|**Single-file persistence**|`.feather` binary format **v10**: append-only commits behind two checksummed headers, so a save writes only what changed; persisted HNSW graph, optional int8 on-disk and in-RAM; v3–v9 files load transparently|"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    236,
+    179,
+    199
+   ],
+   [
+    "replace",
+    236,
+    240,
+    199,
+    200,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    254,
+    200,
+    214
+   ],
+   [
+    "delete",
+    254,
+    256,
+    214,
+    214
+   ],
+   [
+    "equal",
+    256,
+    262,
+    214,
+    220
+   ],
+   [
+    "replace",
+    262,
+    277,
+    220,
+    221,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    278,
+    221,
+    222
+   ],
+   [
+    "delete",
+    278,
+    280,
+    222,
+    222
+   ],
+   [
+    "equal",
+    280,
+    289,
+    222,
+    231
+   ],
+   [
+    "replace",
+    289,
+    308,
+    231,
+    232,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    328,
+    232,
+    252
+   ],
+   [
+    "replace",
+    328,
+    334,
+    252,
+    253,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    334,
+    337,
+    253,
+    256
+   ],
+   [
+    "delete",
+    337,
+    339,
+    256,
+    256
+   ],
+   [
+    "equal",
+    339,
+    350,
+    256,
+    267
+   ],
+   [
+    "replace",
+    350,
+    356,
+    267,
+    268,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    356,
+    364,
+    268,
+    276
+   ],
+   [
+    "replace",
+    364,
+    374,
+    276,
+    277,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    378,
+    277,
+    281
+   ],
+   [
+    "replace",
+    378,
+    379,
+    281,
+    282,
+    [
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    379,
+    380,
+    282,
+    283
+   ],
+   [
+    "replace",
+    380,
+    396,
+    283,
+    297,
+    [
+     "|`feather_search`|Semantic vector search|",
+     "|`feather_context_chain`|Vector search + graph BFS expansion|",
+     "|`feather_get_node`|Retrieve a single record by ID|",
+     "|`feather_get_related`|Get all graph-linked records|",
+     "|`feather_add_intel`|Store a new record with metadata|",
+     "|`feather_link_nodes`|Create a typed weighted edge|",
+     "|`feather_timeline`|Time-ordered records in a range|",
+     "|`feather_forget`|Drop a record by ID|",
+     "|`feather_health`|Database health report|",
+     "|`feather_why`|Explain why a record was retrieved|",
+     "|`feather_mmr_search`|Maximal marginal relevance search|",
+     "|`feather_consolidate`|Merge near-duplicate records|",
+     "|`feather_episode_get`|Retrieve an episode by ID|",
+     "|`feather_expire`|Purge records past their TTL|"
+    ]
+   ],
+   [
+    "equal",
+    396,
+    412,
+    297,
+    313
+   ],
+   [
+    "replace",
+    412,
+    417,
+    313,
+    314,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    417,
+    427,
+    314,
+    324
+   ],
+   [
+    "delete",
+    427,
+    429,
+    324,
+    324
+   ],
+   [
+    "equal",
+    429,
+    435,
+    324,
+    330
+   ],
+   [
+    "replace",
+    435,
+    443,
+    330,
+    331,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    443,
+    444,
+    331,
+    332
+   ],
+   [
+    "delete",
+    444,
+    446,
+    332,
+    332
+   ],
+   [
+    "equal",
+    446,
+    453,
+    332,
+    339
+   ],
+   [
+    "replace",
+    453,
+    460,
+    339,
+    340,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    460,
+    461,
+    340,
+    341
+   ],
+   [
+    "delete",
+    461,
+    463,
+    341,
+    341
+   ],
+   [
+    "equal",
+    463,
+    486,
+    341,
+    364
+   ],
+   [
+    "replace",
+    486,
+    492,
+    364,
+    365,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    492,
+    515,
+    365,
+    388
+   ],
+   [
+    "replace",
+    515,
+    523,
+    388,
+    389,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    523,
+    544,
+    389,
+    410
+   ],
+   [
+    "replace",
+    544,
+    548,
+    410,
+    411,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    548,
+    570,
+    411,
+    433
+   ],
+   [
+    "replace",
+    570,
+    581,
+    433,
+    434,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    581,
+    584,
+    434,
+    437
+   ],
+   [
+    "replace",
+    584,
+    586,
+    437,
+    439,
+    [
+     " the WAL, records no recalls, and pins the clock that decay scoring,",
+     " `Pocket.hot()`, `PacketBuilder` and TTL checks read (`past.now()`)."
+    ]
+   ],
+   [
+    "equal",
+    586,
+    587,
+    439,
+    440
+   ],
+   [
+    "replace",
+    587,
+    590,
+    440,
+    443,
+    [
+     " while `set_history_retention()` or a tag keeps the replaced files (hard",
+     " links under `<path>.history/`). A moment out of reach is a `ValueError`",
+     " that says where the history begins, never the nearest state instead."
+    ]
+   ],
+   [
+    "equal",
+    590,
+    591,
+    443,
+    444
+   ],
+   [
+    "replace",
+    591,
+    592,
+    444,
+    445,
+    [
+     " the past."
+    ]
+   ],
+   [
+    "equal",
+    592,
+    593,
+    445,
+    446
+   ],
+   [
+    "replace",
+    593,
+    594,
+    446,
+    447,
+    [
+     " the Cloud API serves reads from that commit."
+    ]
+   ],
+   [
+    "equal",
+    594,
+    601,
+    447,
+    454
+   ],
+   [
+    "replace",
+    601,
+    605,
+    454,
+    455,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    605,
+    615,
+    455,
+    465
+   ],
+   [
+    "replace",
+    615,
+    619,
+    465,
+    466,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    619,
+    627,
+    466,
+    474
+   ],
+   [
+    "replace",
+    627,
+    631,
+    474,
+    475,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    631,
+    649,
+    475,
+    493
+   ],
+   [
+    "replace",
+    649,
+    654,
+    493,
+    494,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    654,
+    665,
+    494,
+    505
+   ],
+   [
+    "delete",
+    665,
+    667,
+    505,
+    505
+   ],
+   [
+    "equal",
+    667,
+    676,
+    505,
+    514
+   ],
+   [
+    "delete",
+    676,
+    678,
+    514,
+    514
+   ],
+   [
+    "equal",
+    678,
+    682,
+    514,
+    518
+   ],
+   [
+    "replace",
+    682,
+    683,
+    518,
+    519,
+    [
+     "`bench/reports/e2e_latency_20261108.md`."
+    ]
+   ],
+   [
+    "equal",
+    683,
+    687,
+    519,
+    523
+   ],
+   [
+    "replace",
+    687,
+    688,
+    523,
+    524,
+    [
+     "|stage|p50|p99|"
+    ]
+   ],
+   [
+    "equal",
+    688,
+    689,
+    524,
+    525
+   ],
+   [
+    "replace",
+    689,
+    695,
+    525,
+    531,
+    [
+     "|embed the question (Gemini API)|504|838|",
+     "|**Feather `hybrid_search`, k=30**|**1.3**|**11.0**|",
+     "|the same search through the Cloud API (HTTP)|5.8|19.3|",
+     "|render the context|0.2|1.1|",
+     "|LLM answer|846|1,674|",
+     "|**total**|**1,352**|**2,350**|"
+    ]
+   ],
+   [
+    "equal",
+    695,
+    700,
+    531,
+    536
+   ],
+   [
+    "replace",
+    700,
+    701,
+    536,
+    537,
+    [
+     "|operation|p50|p99|"
+    ]
+   ],
+   [
+    "equal",
+    701,
+    702,
+    537,
+    538
+   ],
+   [
+    "replace",
+    702,
+    712,
+    538,
+    548,
+    [
+     "|vector search, top-10|0.24|0.98|",
+     "|search with a namespace filter (1% of records)|0.18|0.32|",
+     "|search with decay scoring|0.23|0.43|",
+     "|keyword search (BM25), warm, 100k real conversation turns|1.85|3.61|",
+     "|hybrid search, warm, same corpus|2.33|3.82|",
+     "|`context_chain` k=5, 2 hops|0.24|0.42|",
+     "|`get_metadata`|0.001|0.016|",
+     "|`update_metadata`|0.16|0.26|",
+     "|save, a 15-write commit|0.52|1.23|",
+     "|read-only open of the 100k file|214|273|"
+    ]
+   ],
+   [
+    "equal",
+    712,
+    719,
+    548,
+    555
+   ],
+   [
+    "replace",
+    719,
+    720,
+    555,
+    556,
+    [
+     "|ef|recall@10|p50|p99|"
+    ]
+   ],
+   [
+    "equal",
+    720,
+    721,
+    556,
+    557
+   ],
+   [
+    "replace",
+    721,
+    724,
+    557,
+    560,
+    [
+     "|10|0.937|0.23|0.53|",
+     "|**50 (default)**|**0.995**|0.60|0.89|",
+     "|100|0.998|1.06|1.65|"
+    ]
+   ],
+   [
+    "equal",
+    724,
+    727,
+    560,
+    563
+   ],
+   [
+    "replace",
+    727,
+    728,
+    563,
+    564,
+    [
+     "|operation|p50|p99|"
+    ]
+   ],
+   [
+    "equal",
+    728,
+    729,
+    564,
+    565
+   ],
+   [
+    "replace",
+    729,
+    737,
+    565,
+    573,
+    [
+     "|`Pocket.remember`|1.00|2.35|",
+     "|`Pocket.hot()` after a write / memoised|1.25 / 0.0005|1.42 / 0.001|",
+     "|`Pocket.recall`|1.99|2.51|",
+     "|`PacketBuilder.build(required, query)`|2.90|8.34|",
+     "|`FeatherStore.put` (a commit per write)|0.70|3.11|",
+     "|`FeatherStore.search(query)`|0.63|0.98|",
+     "|`AgentMemory.facts.state`|3.80|7.66|",
+     "|`AgentMemory.recall`|0.36|0.45|"
+    ]
+   ],
+   [
+    "equal",
+    737,
+    747,
+    573,
+    583
+   ],
+   [
+    "replace",
+    747,
+    748,
+    583,
+    584,
+    [
+     "|Setting|Value|"
+    ]
+   ],
+   [
+    "equal",
+    748,
+    749,
+    584,
+    585
+   ],
+   [
+    "replace",
+    749,
+    753,
+    585,
+    589,
+    [
+     "|HNSW|M=16, ef_construction=200, ef=50|",
+     "|Capacity per modality|unbounded (starts at 4096, grows on demand)|",
+     "|SIMD|picked at runtime: AVX-512 / AVX2 / SSE2 on x86-64, NEON on arm64|",
+     "|File format|`.feather` v10, append-only: a save writes only what changed|"
+    ]
+   ],
+   [
+    "equal",
+    753,
+    756,
+    589,
+    592
+   ],
+   [
+    "delete",
+    756,
+    758,
+    592,
+    592
+   ],
+   [
+    "equal",
+    758,
+    763,
+    592,
+    597
+   ],
+   [
+    "replace",
+    763,
+    764,
+    597,
+    598,
+    [
+     "500-question end-to-end memory QA benchmark, the standard for long-term memory in chat assistants. Full report: `docs/benchmarks/longmemeval.md`."
+    ]
+   ],
+   [
+    "equal",
+    764,
+    767,
+    598,
+    601
+   ],
+   [
+    "replace",
+    767,
+    768,
+    601,
+    602,
+    [
+     "|Feather configuration (S, all 500, official judge)|Overall||"
+    ]
+   ],
+   [
+    "equal",
+    768,
+    769,
+    602,
+    603
+   ],
+   [
+    "replace",
+    769,
+    772,
+    603,
+    606,
+    [
+     "|**Single reader + evidence packing** (v0.22 default)|**0.911**|mean of 3 runs; +0.7 vs baseline [−1.7, +3.2], 25 fixed, 23 broken (McNemar p = 0.89, within noise)|",
+     "|Single reader, baseline|0.904||",
+     "|Routed reader + count map-reduce|0.794|a regression: **not shipped**, kept only to reproduce it|"
+    ]
+   ],
+   [
+    "equal",
+    772,
+    781,
+    606,
+    615
+   ],
+   [
+    "replace",
+    781,
+    782,
+    615,
+    616,
+    [
+     "|System|Answer model|Overall|Source|"
+    ]
+   ],
+   [
+    "equal",
+    782,
+    783,
+    616,
+    617
+   ],
+   [
+    "replace",
+    783,
+    796,
+    617,
+    630,
+    [
+     "|Supermemory (headline)|gpt-4o|0.970|research page|",
+     "|Mastra Observational Memory|gpt-5-mini|0.949|research page|",
+     "|Mem0 (April 2026 algorithm)|not stated|0.944|blog|",
+     "|Mastra Observational Memory|gemini-3-pro-preview|0.933|research page|",
+     "|Hindsight (Vectorize)|gemini-3-pro-preview|0.914|benchmarks repo|",
+     "|**Feather DB v0.22**|**gemini-2.5-flash**|**0.911**|mean of 3 reportable runs, this repo|",
+     "|EmergenceMem Internal|not stated|0.860|blog|",
+     "|Supermemory|gemini-3-pro|0.852|research page|",
+     "|Mastra Observational Memory|gpt-4o|0.842|research page|",
+     "|EmergenceMem Simple|gpt-4o|0.824|blog|",
+     "|Zep|gpt-4o|0.712|Supermemory's table (Zep's own figure)|",
+     "|Full context, GPT-4o + chain-of-note|gpt-4o|0.640|LongMemEval paper|",
+     "|Full context, GPT-4o-mini|gpt-4o-mini|0.554|LongMemEval paper|"
+    ]
+   ],
+   [
+    "equal",
+    796,
+    800,
+    630,
+    634
+   ],
+   [
+    "replace",
+    800,
+    803,
+    634,
+    637,
+    [
+     " reader than the rows above it; Feather has not been run with gemini-3-pro or",
+     " gpt-5-mini, so the like-for-like comparison with Hindsight and Mastra is",
+     " still to be made."
+    ]
+   ],
+   [
+    "equal",
+    803,
+    804,
+    637,
+    638
+   ],
+   [
+    "replace",
+    804,
+    810,
+    638,
+    644,
+    [
+     " and packs up to 160k characters (~40k tokens) per question; the evidence is",
+     " in context 99.4% of the time, and most misses are reader errors. A",
+     " full-context run with the same reader (gemini-2.5-flash) has not been",
+     " measured yet, so this table does not yet show how much Feather's retrieval",
+     " adds over putting the whole history in the prompt. Mem0 reports ~6.8k tokens",
+     " per retrieval on this benchmark."
+    ]
+   ],
+   [
+    "equal",
+    810,
+    811,
+    644,
+    645
+   ],
+   [
+    "replace",
+    811,
+    813,
+    645,
+    647,
+    [
+     " 0.904-0.916 (standard deviation 0.64 points; two runs disagree on 3.6% of",
+     " questions). A single run of any system carries the same noise."
+    ]
+   ],
+   [
+    "equal",
+    813,
+    815,
+    647,
+    649
+   ],
+   [
+    "replace",
+    815,
+    816,
+    649,
+    650,
+    [
+     "uncommitted tree; the three reportable runs above replace it. `scripts/lme_final.sh` refuses an uncommitted tree or a short or partly failed run, and compares the result with the 0.904 baseline on all 500 and on the held-out 400. Per-question records are in `bench/results/` (`longmemeval__s__20261108_230418__questions.jsonl`, `..._232726__...`, `..._235119__...`)."
+    ]
+   ],
+   [
+    "equal",
+    816,
+    829,
+    650,
+    663
+   ],
+   [
+    "replace",
+    829,
+    830,
+    663,
+    664,
+    [
+     "|System|J|Source|"
+    ]
+   ],
+   [
+    "equal",
+    830,
+    831,
+    664,
+    665
+   ],
+   [
+    "replace",
+    831,
+    838,
+    665,
+    672,
+    [
+     "|**Feather DB** (turns + extracted facts)|**82.4**|one run, all 10 conversations (`bench/README.md`)|",
+     "|MemOS|75.8|MemOS repo|",
+     "|Mem0g|68.4|Mem0 paper (arXiv:2504.19413), Table 2|",
+     "|Mem0|66.9|Mem0 paper, Table 2|",
+     "|Zep|66.0|Mem0 paper, Table 2 (Zep reports ~75 under its own run)|",
+     "|LangMem|58.1|Mem0 paper, Table 2|",
+     "|OpenAI memory|52.9|Mem0 paper, Table 2|"
+    ]
+   ],
+   [
+    "equal",
+    838,
+    843,
+    672,
+    677
+   ],
+   [
+    "replace",
+    843,
+    844,
+    677,
+    678,
+    [
+     "(Penfield audit),"
+    ]
+   ],
+   [
+    "equal",
+    844,
+    854,
+    678,
+    688
+   ],
+   [
+    "replace",
+    854,
+    855,
+    688,
+    689,
+    [
+     "|Benchmark|Configuration|n|Score|"
+    ]
+   ],
+   [
+    "equal",
+    855,
+    856,
+    689,
+    690
+   ],
+   [
+    "replace",
+    856,
+    859,
+    690,
+    693,
+    [
+     "|LongMemEval_S dev|as for the headline runs, official GPT-4o judge|100|**0.930** (the earlier 0.912 run also scored 0.930 on these 100, the 0.904 baseline 0.920: the dev questions are easier than the full set)|",
+     "|LoCoMo dev|turns + extracted facts, gpt-4o-mini reader, Mem0's judge|459|J **81.5**|",
+     "|LoCoMo dev, sound key|the same, without the 99 known-wrong answers|427|J **83.8**|"
+    ]
+   ],
+   [
+    "equal",
+    859,
+    870,
+    693,
+    704
+   ],
+   [
+    "replace",
+    870,
+    871,
+    704,
+    705,
+    [
+     "|How the memory was written|Correct|"
+    ]
+   ],
+   [
+    "equal",
+    871,
+    872,
+    705,
+    706
+   ],
+   [
+    "replace",
+    872,
+    876,
+    706,
+    710,
+    [
+     "|notes + keys|**100%**|",
+     "|keyed facts (`AgentMemory.facts`)|98%|",
+     "|free-text notes|85%|",
+     "|free-text notes, written out of order, no valid time|25%|"
+    ]
+   ],
+   [
+    "equal",
+    876,
+    881,
+    710,
+    715
+   ],
+   [
+    "replace",
+    881,
+    882,
+    715,
+    716,
+    [
+     "|Surface|No defence|Default trust policy|"
+    ]
+   ],
+   [
+    "equal",
+    882,
+    883,
+    716,
+    717
+   ],
+   [
+    "replace",
+    883,
+    886,
+    717,
+    720,
+    [
+     "|`PacketBuilder` with a query|25/25|**0/25**|",
+     "|`PacketBuilder`, hot set|19/20|5/20|",
+     "|`Pocket.hot_text()`|8/20|**15/20**|"
+    ]
+   ],
+   [
+    "equal",
+    886,
+    898,
+    720,
+    732
+   ],
+   [
+    "replace",
+    898,
+    899,
+    732,
+    733,
+    [
+     "Standard ANN benchmark. Full sweep results in `bench/results/`."
+    ]
+   ],
+   [
+    "equal",
+    899,
+    900,
+    733,
+    734
+   ],
+   [
+    "replace",
+    900,
+    901,
+    734,
+    735,
+    [
+     "|Config|p50|p99|Recall@10|"
+    ]
+   ],
+   [
+    "equal",
+    901,
+    902,
+    735,
+    736
+   ],
+   [
+    "replace",
+    902,
+    907,
+    736,
+    739,
+    [
+     "|500K × 128, ef=10|0.07 ms|0.13 ms|0.774|",
+     "|500K × 128, ef=50 (default)|0.19 ms|0.23 ms|**0.972**|",
+     "|500K × 128, ef=200|0.56 ms|0.69 ms|0.998|"
+    ]
+   ],
+   [
+    "equal",
+    907,
+    931,
+    739,
+    763
+   ],
+   [
+    "replace",
+    931,
+    932,
+    763,
+    764,
+    [
+     "|URL|Description|"
+    ]
+   ],
+   [
+    "equal",
+    932,
+    933,
+    764,
+    765
+   ],
+   [
+    "replace",
+    933,
+    936,
+    765,
+    768,
+    [
+     "|`http://<VM_IP>:8000/health`|Health check|",
+     "|`http://<VM_IP>:8000/docs`|Swagger / OpenAPI|",
+     "|`http://<VM_IP>:8000/admin/`|Admin SPA — namespaces, search, graph, embedding settings|"
+    ]
+   ],
+   [
+    "equal",
+    936,
+    937,
+    768,
+    769
+   ],
+   [
+    "replace",
+    937,
+    939,
+    769,
+    771,
+    [
+     "**Self-hosted walkthrough → `docs/quickstart.md`** ·",
+     "**Azure guide → `docs/deploy-azure.md`**"
+    ]
+   ],
+   [
+    "equal",
+    939,
+    943,
+    771,
+    775
+   ],
+   [
+    "delete",
+    943,
+    945,
+    775,
+    775
+   ],
+   [
+    "equal",
+    945,
+    947,
+    775,
+    777
+   ],
+   [
+    "replace",
+    947,
+    948,
+    777,
+    778,
+    [
+     "|File|Description|"
+    ]
+   ],
+   [
+    "equal",
+    948,
+    949,
+    778,
+    779
+   ],
+   [
+    "replace",
+    949,
+    953,
+    779,
+    783,
+    [
+     "|`examples/context_engine_demo.py`|Self-Aligned Context Engine — all four providers + heuristic fallback|",
+     "|`examples/context_graph_demo.py`|Context graph — auto-link, context_chain, D3 HTML export|",
+     "|`examples/marketing_living_context.py`|Multi-brand namespace/entity/attribute filtering|",
+     "|`examples/feather_inspector.py`|Local HTTP inspector — force graph, PCA scatter, edit, delete|"
+    ]
+   ],
+   [
+    "equal",
+    953,
+    965,
+    783,
+    795
+   ],
+   [
+    "delete",
+    965,
+    967,
+    795,
+    795
+   ],
+   [
+    "equal",
+    967,
+    973,
+    795,
+    801
+   ],
+   [
+    "replace",
+    973,
+    1001,
+    801,
+    802,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1001,
+    1002,
+    802,
+    803
+   ],
+   [
+    "delete",
+    1002,
+    1004,
+    803,
+    803
+   ],
+   [
+    "equal",
+    1004,
+    1029,
+    803,
+    828
+   ],
+   [
+    "replace",
+    1029,
+    1032,
+    828,
+    829,
+    [
+     "`include/format_v10.h`."
+    ]
+   ],
+   [
+    "equal",
+    1032,
+    1035,
+    829,
+    832
+   ],
+   [
+    "replace",
+    1035,
+    1036,
+    832,
+    833,
+    [
+     "|Issue|Detail|"
+    ]
+   ],
+   [
+    "equal",
+    1036,
+    1037,
+    833,
+    834
+   ],
+   [
+    "replace",
+    1037,
+    1049,
+    834,
+    844,
+    [
+     "|One writer per file|Writes are serialised within a process; a second writer *process* is refused (readers are unlimited)|",
+     "|Soft deletes reclaimed on compaction|`forget()`/`purge()` mark vectors deleted; space is reclaimed by `compact()` or `set_auto_compact(ratio)`|",
+     "|int8 quantization (two kinds)|`set_quantized()` = smaller files; `set_int8_ram()` = ~1.7× less RAM (opt-in, lossy)|",
+     "|Index capacity|Adaptive (v0.15.3): starts at 4096, grows via `resizeIndex` on demand — no hard cap, RAM tracks the working set|",
+     "|`meta.attributes['k'] = v` silent no-op|pybind11 map copy; use `meta.set_attribute(k, v)`|",
+     "|Rust CLI missing v0.6.0+ features|namespace/entity/context_chain/integrations/time travel are Python-only|",
+     "|History ends at an erase|`erase()` deletes all history; `as_of` sees commits, not writes still only in the WAL|",
+     "|Kept history costs a full copy|each file kept by `set_history_retention()` is the whole DB as it was (off by default)|",
+     "|BM25 builds on first use|the first keyword or hybrid search after an open builds the index: 0.65 s and 58 MB per process at 100k conversation turns (it was 2.0 s and 80 MB)|",
+     "|Erasing much of a graph|`erase()` repairs the graph locally; past ~10% of it in one call, recall@10 sits ~1 point under a rebuild until `compact()` (20k x 768: 0.824 vs 0.834)|"
+    ]
+   ],
+   [
+    "equal",
+    1049,
+    1051,
+    844,
+    846
+   ],
+   [
+    "replace",
+    1051,
+    1059,
+    846,
+    847,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1059,
+    1060,
+    847,
+    848
+   ],
+   [
+    "replace",
+    1060,
+    1065,
+    848,
+    849,
+    [
+     "MIT — see LICENSE"
+    ]
+   ],
+   [
+    "equal",
+    1065,
+    1066,
+    849,
+    850
+   ],
+   [
+    "replace",
+    1066,
+    1071,
+    850,
+    851,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "740e9be2fae2+2": {
+  "fn": "karthikraj-tech/portfolio",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "delete",
+    3,
+    5,
+    3,
+    3
+   ],
+   [
+    "equal",
+    5,
+    16,
+    3,
+    14
+   ],
+   [
+    "delete",
+    16,
+    18,
+    14,
+    14
+   ],
+   [
+    "equal",
+    18,
+    25,
+    14,
+    21
+   ],
+   [
+    "replace",
+    25,
+    29,
+    21,
+    25,
+    [
+     " - Hidden honeypot field (`website_url`) to catch automated bots.",
+     " - Rate limiting (5 messages/hour per IP via Flask-Limiter).",
+     " - Backend and frontend regex validation and length checking.",
+     " - Safe UI text injection using `textContent` to prevent Cross-Site Scripting (XSS)."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    25,
+    26
+   ],
+   [
+    "replace",
+    30,
+    33,
+    26,
+    29,
+    [
+     " - Fully responsive from mobile devices (360px) to desktops.",
+     " - WCAG AA color contrast, visible `:focus-visible` outlines, skip-to-content link, and semantic HTML5.",
+     " - Respects `prefers-reduced-motion` accessibility preferences."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    35,
+    29,
+    31
+   ],
+   [
+    "delete",
+    35,
+    37,
+    31,
+    31
+   ],
+   [
+    "equal",
+    37,
+    44,
+    31,
+    38
+   ],
+   [
+    "replace",
+    44,
+    46,
+    38,
+    40,
+    [
+     " - Development: SQLite (auto-created `portfolio_dev.db`).",
+     " - Production / Local MySQL: MySQL 8.0+ or MySQL-compatible cloud database (TiDB Cloud Starter) via PyMySQL."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    48,
+    40,
+    42
+   ],
+   [
+    "delete",
+    48,
+    50,
+    42,
+    42
+   ],
+   [
+    "equal",
+    50,
+    57,
+    42,
+    49
+   ],
+   [
+    "replace",
+    57,
+    85,
+    49,
+    50,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    50,
+    51
+   ],
+   [
+    "delete",
+    86,
+    88,
+    51,
+    51
+   ],
+   [
+    "equal",
+    88,
+    95,
+    51,
+    58
+   ],
+   [
+    "delete",
+    95,
+    97,
+    58,
+    58
+   ],
+   [
+    "equal",
+    97,
+    114,
+    58,
+    75
+   ],
+   [
+    "replace",
+    114,
+    115,
+    75,
+    76,
+    [
+     " *(If PowerShell shows execution policy restrictions, run: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`)*"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    126,
+    76,
+    87
+   ],
+   [
+    "delete",
+    126,
+    128,
+    87,
+    87
+   ],
+   [
+    "equal",
+    128,
+    156,
+    87,
+    115
+   ],
+   [
+    "replace",
+    156,
+    157,
+    115,
+    116,
+    [
+     "1. Create a free account at https://tidbcloud.com."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    164,
+    116,
+    123
+   ],
+   [
+    "delete",
+    164,
+    166,
+    123,
+    123
+   ],
+   [
+    "equal",
+    166,
+    170,
+    123,
+    127
+   ],
+   [
+    "replace",
+    170,
+    178,
+    127,
+    133,
+    [
+     "|Variable|Description|Example / Default|",
+     "|:---|:---|:---|",
+     "|`SECRET_KEY`|Flask session & cryptographic signature secret|`karthikraj-portfolio-secret-key-2026`|",
+     "|`FLASK_ENV`|Application environment mode (`development` or `production`)|`development`|",
+     "|`DATABASE_URL`|SQLAlchemy connection URI. **Leave blank for DEV MODE (SQLite)**|`mysql+pymysql://root:password@localhost:3306/portfolio_db`|",
+     "|`PORT`|Optional local development port|`5000`|"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    188,
+    133,
+    143
+   ],
+   [
+    "replace",
+    188,
+    189,
+    143,
+    144,
+    [
+     " *Terminal Output:*"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    193,
+    144,
+    148
+   ],
+   [
+    "replace",
+    193,
+    199,
+    148,
+    149,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    217,
+    149,
+    167
+   ],
+   [
+    "delete",
+    217,
+    219,
+    167,
+    167
+   ],
+   [
+    "equal",
+    219,
+    223,
+    167,
+    171
+   ],
+   [
+    "replace",
+    223,
+    231,
+    171,
+    177,
+    [
+     "|Section|Preview Placeholder|",
+     "|:---|:---|",
+     "|**Hero & Navigation**|`[Screenshot: Desktop Hero Section with Dark Theme]`|",
+     "|**Skills & Projects**|`[Screenshot: Project Cards with Planned Badges & Skills Plls]`|",
+     "|**Contact Form**|`[Screenshot: Responsive Contact Form with Success Feedback]`|",
+     "|**Mobile Layout**|`[Screenshot: Mobile 360px viewport with active navigation menu]`|"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    236,
+    177,
+    182
+   ],
+   [
+    "replace",
+    236,
+    244,
+    182,
+    190,
+    [
+     "|Method|Endpoint|Description|",
+     "|:---|:---|:---|",
+     "|`GET`|`/api/health`|Returns backend health status and active database engine.|",
+     "|`GET`|`/api/projects`|Returns sorted array of projects.|",
+     "|`GET`|`/api/skills`|Returns categorized skill entries.|",
+     "|`GET`|`/api/certifications`|Returns earned certification records.|",
+     "|`GET`|`/api/resume-status`|Verifies whether physical resume PDF is stored on disk.|",
+     "|`POST`|`/api/contact`|Submits message to `contact_messages`. Protected by honeypot & rate limiter (5/hr).|"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    250,
+    190,
+    196
+   ],
+   [
+    "replace",
+    250,
+    257,
+    196,
+    197,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    257,
+    266,
+    197,
+    206
+   ],
+   [
+    "delete",
+    266,
+    268,
+    206,
+    206
+   ],
+   [
+    "equal",
+    268,
+    287,
+    206,
+    225
+   ],
+   [
+    "replace",
+    287,
+    289,
+    225,
+    227,
+    [
+     " - Go to tidbcloud.com and create a free Starter cluster.",
+     " - Copy your standard MySQL connection URL (e.g. `mysql+pymysql://<user>:<pwd>@<host>:4000/portfolio_db?ssl_verify_cert=true`)."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    291,
+    227,
+    229
+   ],
+   [
+    "replace",
+    291,
+    305,
+    229,
+    243,
+    [
+     " - Go to render.com and sign in.",
+     " - Click **New +** -> **Web Service**.",
+     " - Select your GitHub repository `karthikraj-tech/portfolio`.",
+     " - Set the following options:",
+     " - **Name**: `karthikraj-portfolio`",
+     " - **Runtime**: `Python`",
+     " - **Build Command**: `pip install -r requirements.txt && python seed.py`",
+     " - **Start Command**: `gunicorn app:app`",
+     " - **Plan**: Free",
+     " - Add Environment Variables in Render Dashboard:",
+     " - `DATABASE_URL`: *(Your TiDB Cloud connection string from Step 2)*",
+     " - `SECRET_KEY`: *(Generate a secure random string)*",
+     " - `FLASK_ENV`: `production`",
+     " - Click **Deploy Web Service**."
+    ]
+   ],
+   [
+    "equal",
+    305,
+    307,
+    243,
+    245
+   ],
+   [
+    "replace",
+    307,
+    312,
+    245,
+    248,
+    [
+     " - Visit the public Render URL (`https://karthikraj-portfolio.onrender.com`).",
+     " - Test `/api/health` to confirm database connectivity.",
+     " - Submit a test inquiry on the live contact form."
+    ]
+   ],
+   [
+    "equal",
+    312,
+    319,
+    248,
+    255
+   ],
+   [
+    "delete",
+    319,
+    321,
+    255,
+    255
+   ],
+   [
+    "equal",
+    321,
+    327,
+    255,
+    261
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

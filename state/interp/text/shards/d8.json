@@ -3260,5 +3260,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0d5ced1cf374": {
+  "identity": {
+   "one_liner": "面向 Ubuntu 24.04 VPS 的开源主机控制面板，单命令安装",
+   "review": "RAYXO 是面向 Ubuntu 24.04 LTS VPS 的 AGPL-3.0 开源主机控制面板，当前为 beta 版（v0.8.36）。面板由 Laravel + React 构建，以非 root 用户运行，系统操作经 Go 编写的 rayxod 代理（封闭动作清单）执行。功能覆盖域名、Let's Encrypt 证书、多版本 PHP、MariaDB/PostgreSQL、邮件、PowerDNS、FTP、备份与 WHMCS 模块，提供 Admin/Reseller/User 三级账户结构，供在单服务器上销售共享主机的人员使用。安装要求干净的 Ubuntu 24.04、FQDN 主机名及 A/PTR 记录，setup.sh 会校验前置条件并校验下载包 checksum。",
+   "highlights": [
+    "每账户对应独立 Linux 用户，配 cgroups 限制 CPU/RAM/IO，面板以非 root 运行",
+    "支持 cPanel 与 DirectAdmin 备份导入、REST API、WHMCS 模块及 SFTP/FTP/S3 备份",
+    "集成 Nginx→Apache→PHP-FPM、Postfix+Dovecot+Rspamd+Roundcube、PowerDNS，含 2FA/passkey 登录与 fail2ban、nftables 防火墙"
+   ],
+   "use_cases": [
+    "在单台 Ubuntu VPS 上部署域名、邮件、DNS、数据库一体的自托管环境",
+    "以 Admin→Reseller→User 三级结构经营共享主机业务，配合 WHMCS 自动开通账户",
+    "从 cPanel 或 DirectAdmin 迁移账户备份到该面板"
+   ]
+  },
+  "sha": "0d5ced1cf374",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "db9249a5212f": {
+  "identity": {
+   "one_liner": "面向 Google Antigravity 的插件，合并延迟加速与基于 SQLite FTS5 的上下文窗口防护",
+   "review": "agy-dart 是运行于 Node.js 的 Google Antigravity 插件，提供批量延迟加速工具（agy-fast）与本地 SQLite FTS5 上下文管理（agy_context），包含读取守护、CLI 输出过滤、JSON 压缩和 Sidecar 仪表盘，通过 install.mjs 安装，配置存于 ~/.agy-dart/config.json。适用于在 Antigravity Desktop/IDE/CLI 中进行长时间编码会话的开发者，需 Node 22/24 环境。",
+   "highlights": [
+    "提供读取守护机制，按文件类型设置分档截断阈值（源文件 45 KiB、日志 16 KB、diff 文件 128 KB），支持分页续读",
+    "实现 JSON/JSONL 结构化压缩与 git diff/gh pr diff 三阶段过滤，输出上限 8.8 KB，并将原始输出索引进 SQLite FTS5",
+    "内置 HTTP Sidecar 仪表盘，提供 /api/search、/api/purge 等接口，带令牌鉴权与 DNS 重绑定防护"
+   ],
+   "use_cases": [
+    "在 Antigravity 中处理多兆字节构建日志或大型 JSON/CSV 输出时压缩命令返回内容",
+    "管理长会话中的上下文窗口占用，配合 TTL 与读取去重策略",
+    "审查大型 .patch/.diff 代码变更文件时按大纲与分页方式读取"
+   ]
+  },
+  "sha": "db9249a5212f",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

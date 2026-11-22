@@ -3253,5 +3253,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "22875c5602fc": {
+  "identity": {
+   "one_liner": "基于静态解析的 Django/SQLAlchemy 模型分析工具，提供 ER 图、N+1 检测与迁移风险检查",
+   "review": "orm-lens（前身为 django-orm-lens）通过静态解析 Python 源码分析 Django 与 SQLAlchemy（含 Alembic）模型，无需数据库连接或启动应用。提供 VS Code 扩展、CLI（17 个子命令）与 MCP 服务器三种形态，支持 ER 图生成、N+1 循环检测、schema 漂移检查与破坏性迁移影响分析。要求 Python 3.9+（MCP 服务器需 3.10+），MIT 许可。",
+   "highlights": [
+    "提供 ER 图（Mermaid 格式，可导出 SVG）、N+1 检测、schema 漂移检测与迁移风险检查，全部基于静态解析，无需数据库或应用启动",
+    "提供 VS Code 扩展（字段自动补全、侧边栏树、悬停卡片、18 条内联诊断规则与 QuickFixes）、CLI（SARIF 输出、pre-commit 钩子、GitHub Action）与 14 个只读 MCP 工具",
+    "支持 factory_boy 工厂脚手架生成、跨提交的 schema diff（含重命名检测）、字段影响分析与交互式查询模板生成；可通过 pip、VS Code 扩展市场、Open VSX 或 Docker（amd64/arm64）安装"
+   ],
+   "use_cases": [
+    "在冷克隆、依赖损坏或无法运行 runserver 的环境中查看项目的应用、模型结构及其关系",
+    "在 CI 或编辑器中对迁移进行风险检查，识别可能锁表或失败的 Django 迁移与 Alembic revision",
+    "通过 MCP 服务器向 AI 编码代理（如 Cursor、Claude Code）提供项目 schema 的静态解析结果"
+   ]
+  },
+  "sha": "22875c5602fc",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "27bc208a3feb": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 Elixir 持久化工作流引擎，采用重放式执行模型",
+   "review": "Continuum 是一个 Elixir/OTP 持久化执行引擎，让工作流函数在进程崩溃后通过重放日志恢复执行。它以 Postgres 作为日志、租约、定时器与信号总线的唯一存储组件，也支持单节点 SQLite。工作流代码要求确定性，编译期 AST 扫描会拒绝非确定性调用；写入采用 fencing-token CAS。适合需要在 Elixir 应用内实现多步业务流程崩溃恢复的团队。",
+   "highlights": [
+    "通过 activity、signal、timer 等效果经日志重放实现崩溃后恢复，run/1 重执行无副作用直到历史末尾",
+    "编译期 AST 扫描拒绝 DateTime.utc_now、:rand.* 等非确定性调用并给出替换提示，代码漂移触发 ReplayDriftError",
+    "依赖 Postgres（或单节点 SQLite）承载日志、租约、定时器与 LISTEN/NOTIFY 信号总线，每次写入使用 fencing-token CAS"
+   ],
+   "use_cases": [
+    "多步业务流程（如下单-扣款-发货）需要跨进程崩溃保持进度",
+    "Elixir 应用内编排长时任务、定时任务与补偿回滚，而不引入独立集群服务",
+    "单节点应用用 SQLite 运行相同持久化语义的轻量部署"
+   ]
+  },
+  "sha": "27bc208a3feb",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "464f3c944d26": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 PostgreSQL 的自托管 GitHub README 访客统计徽章服务",
+   "review": "ProfilePulse 是一个可自托管的 GitHub 个人主页 README 访客计数徽章服务，通过追踪 GitHub Camo 代理请求与直接请求生成计数。基于 FastAPI 和 PostgreSQL 构建，支持 Docker 部署。README 明确说明静态图片徽章无法验证真实访问，计数为估算值；原始 IP 和 User-Agent 不存储，访客经 HMAC-SHA256 哈希去重，原始日志保留 30 天。采用 MIT 许可证。",
+   "highlights": [
+    "提供多种徽章指标：唯一访客、当日访客、总加载量、30 分钟活跃窗口及拆分视图",
+    "不存储原始 IP 或 User-Agent，访客以 HMAC-SHA256 加密哈希去重，原始日志 30 天后清除",
+    "支持 Docker 与手动两种部署方式，提供 13 项环境变量配置（去重天数、限流、代理信任等）"
+   ],
+   "use_cases": [
+    "为 GitHub 个人主页 README 嵌入访客统计徽章",
+    "自托管场景下以聚合方式统计 README 访问量",
+    "开发者在 Render、Supabase 免费层部署个人统计服务"
+   ]
+  },
+  "sha": "464f3c944d26",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7e64b67aa32e": {
+  "identity": {
+   "one_liner": "自托管的定时网页监控服务，用 LLM 判断结果并推送签名 webhook",
+   "review": "open-monitor 是一个自托管监控服务，按计划执行两类任务：搜索监控运行查询并筛选结果，页面监控抓取 URL 并生成与上次运行的文本差异；每个候选结果由一次 LLM 调用按 goal 打分（阈值 0.5），保留的结果通过 Standard Webhooks 签名事件发送。需要自行提供搜索源和 LLM 密钥，无 LLM 时所有运行失败。支持 Node 24+、Docker Compose 和 Cloudflare Workers 部署，数据存于 SQLite。",
+   "highlights": [
+    "LLM 评判器兼容 OpenAI 接口，默认走 OpenRouter 免费模型，也可用本地命令（LLM_COMMAND，仅 Node）",
+    "页面监控支持通过 CDP WebSocket（如 Lightpanda、Chrome）抓取 JavaScript 渲染页面，diff 上限 24 KiB",
+    "webhook 按 Standard Webhooks 规范签名，失败按 7 级间隔重试，密钥轮换后新旧密钥并行签名 24 小时"
+   ],
+   "use_cases": [
+    "定时跟踪特定关键词的搜索结果，由 LLM 按 goal 过滤后推送到自己的 webhook",
+    "监控网页文本变化，将 unified diff 交给 LLM 判断是否值得通知",
+    "在 Node、Docker 或 Cloudflare Workers（D1 存储 + 每分钟 cron）上部署；无内置调度器的环境可用外部 cron 调用 POST /tick"
+   ]
+  },
+  "sha": "7e64b67aa32e",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3010,5 +3010,48 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bd876db33220": {
+  "identity": {
+   "one_liner": "把 PostgreSQL 封装为单可执行文件，用 .pgdb 目录托管整个数据库",
+   "review": "minipg 将 Docker Hub 的 postgres:18-alpine 镜像内嵌进单个二进制，通过 hyper9 (h9) 虚拟化层直接运行 Alpine 的 Postgres 二进制，无需内核、VM 或 Docker。数据库以 .pgdb 目录形式存储，供开发者和 CI 使用。README 明确标注项目处于早期阶段，h9 是研究原型，不建议托管无法重建的数据。",
+   "highlights": [
+    "内嵌 postgres:18-alpine 镜像，可用 init --pg 17 等按需下载其他大版本的 alpine 根并按 digest 缓存",
+    "提供 shell、serve、run、url、dump/restore、exec 等子命令；run 可为宿主命令自动设置 DATABASE_URL 与 PG* 环境变量",
+    "Linux 静态 musl 二进制，容器/CI 中无需安装或特权（无 /dev/kvm 时用 h9 原生后端）"
+   ],
+   "use_cases": [
+    "本地开发：以 minipg run app.pgdb -- npm start 方式带着 Postgres 启动应用",
+    "CI 测试：在 GitHub 标准 runner 上以 init + run 两步跑集成测试",
+    "备份与迁移：通过 minipg dump/restore 或 exec pg_dump/pg_restore 处理 SQL 转储"
+   ]
+  },
+  "sha": "bd876db33220",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0b4cc17349e8": {
+  "identity": {
+   "one_liner": "基于 React + TypeScript + Vite 的前端项目模板",
+   "review": "仓库 README 主体是一份 Vite 官方 React 模板说明，提供带 HMR 的最小 React 开发配置，内置 Oxlint 规则，并可选启用两种官方插件（基于 Oxc 或 SWC）。README 末尾包含多个间隔字符分隔的标题（Athena-CRM、Athena、TIDBE），未提供项目功能的进一步说明。适用于需要以该模板起步的开发者。",
+   "highlights": [
+    "提供带 HMR 的 React + TypeScript + Vite 最小开发配置",
+    "支持 @vitejs/plugin-react（Oxc）与 @vitejs/plugin-react-swc（SWC）两种插件",
+    "包含 Oxlint 基础规则，可通过 oxlint-tsgolint 扩展 type-aware lint 规则"
+   ],
+   "use_cases": [
+    "以 React + TypeScript + Vite 模板启动前端开发",
+    "需要 HMR 和 Oxlint 基础 lint 配置的项目脚手架"
+   ]
+  },
+  "sha": "0b4cc17349e8",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

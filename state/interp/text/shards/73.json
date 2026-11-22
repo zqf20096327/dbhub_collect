@@ -3311,5 +3311,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "72e1d8c226c0": {
+  "identity": {
+   "one_liner": "无需客户端软件的透明 SSH/HTTPS/K8s/数据库/RDP/VNC 堡垒机",
+   "review": "Warpgate 是一个部署在 DMZ/堡垒机上的代理服务，接受 SSH、HTTPS、Kubernetes、MySQL、PostgreSQL、RDP 和 VNC 连接，在本地认证用户后将连接转发至目标主机，对客户端透明。管理员通过内置 Web UI 管理用户与目标并分配权限，会话记录存于 SQLite，支持实时查看与回放。以单个 Rust 二进制发布，无依赖。",
+   "highlights": [
+    "支持 SSH、HTTPS、Kubernetes、MySQL、PostgreSQL、RDP、VNC 协议的连接转发，无需客户端安装额外软件",
+    "内置管理 Web UI，提供会话录制、实时会话查看、回放及用户-目标权限分配",
+    "原生支持 2FA（TOTP）与 SSO（OpenID Connect），并内置暴力破解防护（IP 封锁与用户锁定）"
+   ],
+   "use_cases": [
+    "在 DMZ 中部署堡垒机，按用户精确分配内网主机与 URL 访问权限",
+    "需要会话录制与审计回放的运维访问场景",
+    "通过浏览器访问 SSH/RDP/VNC 目标，或为非交互式连接提供透明代理"
+   ]
+  },
+  "sha": "72e1d8c226c0",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9fc98c97dabc": {
+  "identity": {
+   "one_liner": "为R提供跨多种NoSQL/JSON数据库统一docdb_*接口的连接器包",
+   "review": "nodbi 是一个 R 包，为 MongoDB、SQLite、PostgreSQL、DuckDB、MariaDB、Elasticsearch、CouchDB 七种数据库提供统一的 docdb_* 函数族，各后端参数与返回值一致。用户先通过 src_*() 建立连接，即可对容器执行创建、查询、更新、删除等操作，输入支持 data.frame、list、JSON 字符串及 NDJSON 文件/URL。查询语法采用 MongoDB 兼容 JSON，数据类型由 jsonlite 映射，_id 列取自文档根级字段或自动生成 UUID。适合需要在 R 中以一致代码操作多种 JSON 数据库的开发者。",
+   "highlights": [
+    "支持 MongoDB、SQLite、PostgreSQL、DuckDB、MariaDB、Elasticsearch、CouchDB 七种后端，docdb_* 函数在各后端间参数与返回值一致",
+    "接受 data.frame、list、JSON 字符串、NDJSON 文件名或 URL 作为输入数据类型",
+    "提供存在检查、列举、创建、读取、查询、更新、删除七类集合操作，查询使用 MongoDB 兼容 JSON 语法"
+   ],
+   "use_cases": [
+    "在 R 中以同一套代码对多种 NoSQL 或支持 JSON 的关系数据库进行文档的增删改查",
+    "将 data.frame 或 NDJSON 文件/URL 数据批量写入文档数据库",
+    "使用 MongoDB 兼容查询语法筛选文档并指定返回字段与条数限制"
+   ]
+  },
+  "sha": "9fc98c97dabc",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f439b56406d5": {
+  "identity": {
+   "one_liner": "基于 MySQL 二进制协议的 TiDB 语句批处理与流水线 Go 库",
+   "review": "该库面向 Go 开发者，通过手写 COM_STMT_EXECUTE 包将事务内多条语句与 BEGIN 一次发出、流式读回响应，使悲观事务压缩到 2 次 TCP 往返，并借助 TiDB Plan Cache 降低解析开销。它仅支持悲观事务，不支持 TLS、压缩与乐观事务模型，单参数上限约 16MB。通过 go get 安装，MIT 许可证发布。",
+   "highlights": [
+    "以二进制协议 COM_STMT_EXECUTE 批量流水线发送语句，事务仅需 2 次 TCP 往返",
+    "内置连接池与连接级 LRU 预编译语句缓存（默认 90 条，可调），支持淘汰时发送 COM_STMT_CLOSE",
+    "查询结果流式读取、支持提前终止；提供 ExpandIn 动态 IN 展开与 ExecuteAutoCommit 免事务执行（1 次往返）"
+   ],
+   "use_cases": [
+    "跨可用区、RTT 较高环境下的事务型写入场景，需降低事务网络延迟",
+    "需要减少 TiDB 重复解析与优化开销、提升 Plan Cache 命中的批量语句执行",
+    "可接受部分执行成功语义的只读批量查询（ExecuteAutoCommit）"
+   ]
+  },
+  "sha": "f439b56406d5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

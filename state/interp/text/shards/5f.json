@@ -3345,5 +3345,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dbc80144d164": {
+  "identity": {
+   "one_liner": "将 Supabase 项目备份到自有 S3/R2/B2 存储桶并执行恢复演练的 CLI",
+   "review": "backupdrill 是一个 Node.js CLI，用 pg_dump 备份 Supabase 的 Postgres 数据，配置 Storage S3 密钥后可一并复制 Storage 文件，并生成带校验和的 manifest.json；drill 命令将快照恢复到临时 Postgres 验证可恢复性。数据经本机或 CI 直传用户自有存储桶。适用于需要自管 Supabase 备份副本的开发者。需 Node.js ≥20，pg_dump 主版本须不低于项目 PG 版本；备份流量计入 Supabase 出口流量费用。",
+   "highlights": [
+    "备份 Postgres 数据库，配置 Storage S3 密钥后还可复制 Storage 文件，并生成含校验和的 manifest.json",
+    "drill 命令将最新快照恢复到临时 Postgres 以验证备份可恢复",
+    "支持通过环境变量、配置文件或参数配置，兼容 AWS S3、Cloudflare R2、Backblaze B2 等 S3 兼容端点，提供 estimate 子命令预估出口流量成本"
+   ],
+   "use_cases": [
+    "将 Supabase 项目备份存入自有控制的 S3/R2/B2 存储桶",
+    "定期验证备份能否实际恢复（restore drill）",
+    "在 CI 中自动化备份流程，或配合 Healthchecks.io ping URL 进行告警"
+   ]
+  },
+  "sha": "dbc80144d164",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8337a6165849": {
+  "identity": {
+   "one_liner": "C++ 从零实现的图数据库，含缓冲池、B+ 树与 Cypher 子集查询",
+   "review": "smollerGraph 是一个用 C++ 从零编写的图数据库，也是同名 YouTube 系列的教学项目，每个视频步骤对应一个 git tag。存储采用 4 KiB 页与缓冲池，用 B+ 树按名称定位节点，关系双向成链。支持 Cypher 子集查询、双向 BFS/Dijkstra 最短路径、FastRP 嵌入及 HTTP UI，可经 FetchContent 作为库链接，需 C++20。",
+   "highlights": [
+    "存储层为固定大小记录与 4 KiB 页的缓冲池，B+ 树按名称索引节点，关系在起点和终点各成链，可双向遍历",
+    "支持 Cypher 子集（MATCH/WHERE/RETURN、shortestPath、加权最短路径），以及双向 BFS、Dijkstra 和 FastRP 生成 256 维节点嵌入",
+    "提供 sg serve 的 HTTP UI（D3 力导向绘图）、Emscripten/WASM 浏览器模式、JSONL/CSV 导出及 CMake FetchContent 库集成"
+   ],
+   "use_cases": [
+    "学习数据库存储引擎与查询计划实现，按视频 tag 逐步对照源码",
+    "在 Wikidata 物种图谱等数据上做最短路径查询、FastRP 相似节点检索与 GNN 训练回流",
+    "以库形式嵌入 C++ 项目，或经 Docker/Caddy 部署只读图查询服务"
+   ]
+  },
+  "sha": "8337a6165849",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

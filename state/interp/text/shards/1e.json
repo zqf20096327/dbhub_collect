@@ -3194,5 +3194,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "80878be36efc": {
+  "identity": {
+   "one_liner": "基于编译期反射的 header-only Modern C++ ORM 库，统一支持 MySQL、PostgreSQL、SQLite",
+   "review": "ormpp 是一个 C++17/20 的 header-only ORM 库，通过编译期反射将 C++ 结构体映射到数据库表，为 MySQL、PostgreSQL 和 SQLite 提供统一的增删改查接口，切换数据库只需修改模板参数。使用者是需要在 C++ 中操作多种数据库的开发者。需注意表属性目前仅支持 key、unique 和 not null，replace 在不同数据库底层行为不同，构建要求支持 C++20 协程的编译器。",
+   "highlights": [
+    "header-only，包含头文件即可使用，支持 Linux、macOS、Windows",
+    "提供统一 API 与链式调用 SQL 构建器，支持 join、聚合、group by、范围/列表分区",
+    "内置连接池、基于 ASIO/async_simple 的异步 MySQL、AOP 切面，SQLite 可启用 SQLCipher 加密"
+   ],
+   "use_cases": [
+    "需要在 MySQL、PostgreSQL、SQLite 之间切换或同时使用多种数据库的 C++ 项目",
+    "希望以结构体对象直接执行增删改查、不手写 SQL 语句的应用开发",
+    "需要异步非阻塞查询或数据库连接池管理的 C++ 服务端程序"
+   ]
+  },
+  "sha": "80878be36efc",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6b5f9d221f97": {
+  "identity": {
+   "one_liner": "PostgreSQL 的 SQL 静态检查与格式化工具，用于迁移脚本和设计规范。",
+   "review": "pgrubic 是一个面向 PostgreSQL 的 linter 和 formatter，针对 schema 迁移和设计最佳实践进行检查与格式化。它内置 100+ 条规则并默认全部启用，支持自动修复违规项（如为 CREATE INDEX 语句自动添加 concurrently），可检查嵌入在 PL/pgSQL 函数和 DO 块中的迁移。需 Python 3.12+，采用 GPL-3.0 许可证，可通过 pgrubic.toml 或环境变量 PGRUBIC_CONFIG_PATH 配置。",
+   "highlights": [
+    "包含 100+ 条检查规则，默认全部启用，支持语句级和文件级抑制违规",
+    "提供 lint 和 format 命令，支持 --fix、--check、--diff 等参数；DDL 格式化采用与 pg_dump 接近的样式，DML 采用 River 风格",
+    "提供自动缓存以避免重复格式化未更改的文件，可作为 Python 库被项目引用"
+   ],
+   "use_cases": [
+    "在 CI（GitHub Actions）或 pre-commit 钩子中对 SQL 迁移文件进行 lint 和格式检查",
+    "对包含 PL/pgSQL 函数和 DO 块的迁移脚本进行静态检查",
+    "统一团队 SQL 代码风格（通过 pgrubic.toml 配置目标 PostgreSQL 版本等选项）"
+   ]
+  },
+  "sha": "6b5f9d221f97",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

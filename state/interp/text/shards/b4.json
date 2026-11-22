@@ -3790,5 +3790,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f7e99ab001e8": {
+  "identity": {
+   "one_liner": "面向内心反思的 Claude Code 技能，以 SQLite 本地记忆库与逐轮单一视角模型运行。",
+   "review": "Satori 是一个以 Claude Code 技能形式分发的开源项目（Apache 2.0），用于在 CLI、IDE 和网页聊天中提供心理与哲学取向的对话陪伴。它整合 18 个哲学与冥想传统，采用 6 步反思模型和 8 条行为规则（如每轮最多一个视角、不提供建议）。README 报告其 350 例基准测试中 200 例纯代码提示的非激活率为 98.0%。项目明确声明定位于心理治疗之外而非替代治疗，可通过 `npx skills add` 安装。",
+   "highlights": [
+    "支持 Claude Code、Cursor、Gemini CLI、OpenAI Codex CLI 等多种 CLI/IDE 环境，并提供适用于 Ollama、LM Studio 等本地模型的 Compact 版本（SKILL.md ≤7,800 字符）",
+    "在 CLI/IDE 中使用本地 SQLite 记忆库（~/.satori/memory/），README 称延迟 <150ms，权限设为 POSIX 0700/0600",
+    "README 报告 350 例触发基准：60 例正向召回 100%，200 例纯代码非激活 98.0%，20 例急性危机转介 100%"
+   ],
+   "use_cases": [
+    "在终端或 IDE 工作流中处理倦怠、悲伤、存在感空茫等内在议题的对话反思",
+    "需要纯编码提示不被介入的混合开发环境（技能在技术任务上保持不激活）",
+    "通过 Tailscale 或 Cloudflare Tunnel 自托管 SatoriWeb Beta（含邀请码与每用户独立记忆库）供小范围使用"
+   ]
+  },
+  "sha": "f7e99ab001e8",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8a05285f2195": {
+  "identity": {
+   "one_liner": "拦截 MCP 与 Bash 大体量输出，压缩摘要并全文检索存入 SQLite",
+   "review": "mcp-recall 是一个 Claude Code 插件，通过 PostToolUse 钩子拦截 MCP 工具与 Bash 的大体积输出，将完整结果连同全文索引存入本地 SQLite，只向模型交付压缩摘要；模型可用 11 个 recall__* 工具检索原文。安装时会改写 ~/.claude.json 等配置文件。内置 Read/Grep/Glob 输出不受影响，缩小不足四分之一的输出原样通过。",
+   "highlights": [
+    "通过 PostToolUse 钩子将大型 MCP/Bash 输出替换为约几百字节摘要，完整内容存入带全文索引的本地 SQLite",
+    "提供 recall__search、recall__retrieve、recall__pin、recall__note 等多个 MCP 工具用于搜索和取回存储内容",
+    "相同工具与命令的重复调用返回缓存摘要头；带图片的输出原样传递，不做文本压缩"
+   ],
+   "use_cases": [
+    "会话中频繁调用返回大体量结构化输出的 MCP 工具（浏览器自动化、GitHub API、搜索结果等）",
+    "需要将早期会话或先前工具调用的输出保留为可全文检索的记录",
+    "按 token 计费场景下减少长会话中工具输出占用的上下文"
+   ]
+  },
+  "sha": "8a05285f2195",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

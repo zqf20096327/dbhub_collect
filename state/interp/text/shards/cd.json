@@ -2734,5 +2734,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8919d68cb4c4": {
+  "identity": {
+   "one_liner": "基于 Docker Compose 运行 Rails 8 的示例应用项目模板",
+   "review": "这是一个使用 Rails 8.1 与 Docker Compose v2 搭建的示例应用，可作为新项目基础或现有 Rails 应用容器化的参考。技术栈含 PostgreSQL、Redis、Sidekiq、Action Cable、esbuild、Hotwire、TailwindCSS。配置通过 .env 环境变量管理，日志输出至 STDOUT，内置 bin/rename-project 脚本可批量替换项目名。要求 Docker Compose v2 2.20.2+，Windows 用户需在 WSL 下运行 shell 命令。",
+   "highlights": [
+    "提供 ./run 脚本封装 format、quality、test 等常用任务",
+    "使用 Sidekiq 处理后台任务，Redis 作为缓存后端，Action Cable 独立进程运行",
+    "包含健康检查控制器、GitHub Actions 配置及 bin/rename-project 重命名脚本"
+   ],
+   "use_cases": [
+    "作为新 Rails 项目的起点模板",
+    "参考学习如何将现有 Rails 应用 Docker 化",
+    "需要 Docker Compose 编排 PostgreSQL/Redis/Sidekiq 多服务的开发环境搭建"
+   ]
+  },
+  "sha": "8919d68cb4c4",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0a20ebfdc9e7": {
+  "identity": {
+   "one_liner": "Elixir 的 Postgres CDC 库，通过逻辑复制监听 WAL 并触发事件处理函数",
+   "review": "WalEx 是一个 Elixir 库，通过 PostgreSQL 逻辑复制监听 WAL 日志，在行插入、更新或删除时调用用户以 DSL 声明的处理函数。面向需要在 Elixir 应用内直接订阅数据库变更的开发者。依赖 Postgres 开启 wal_level=logical、创建 publication 并设置表副本标识；支持 durable_slot、处理后再确认（at-least-once，需 PG13+）、TLS 和 Telemetry。",
+   "highlights": [
+    "通过逻辑复制读取 WAL，在行插入、更新、删除时调用 Elixir 处理函数，处理函数用 use WalEx.Event DSL 声明",
+    "支持 durable_slot 选项在断连后保留复制槽，ack_after_processing（需 durable_slot 与 PostgreSQL 13+）提供 at-least-once 语义",
+    "支持通过 url 或分离参数配置连接、多 publication/订阅、[:all_tables] 订阅、TLS 与 Telemetry"
+   ],
+   "use_cases": [
+    "Elixir 应用内响应数据库行变更，触发后续业务逻辑",
+    "构建基于 Postgres 变更事件的缓存失效、索引更新等数据同步流程",
+    "配合 supervisor 嵌入现有 Elixir/Phoenix 应用的进程树中运行 CDC 订阅"
+   ]
+  },
+  "sha": "0a20ebfdc9e7",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "52f036927e00": {
+  "identity": {
+   "one_liner": "Oracle 构建的 Unbreakable Enterprise Kernel Linux 内核源码仓库",
+   "review": "该仓库托管 Oracle 为 Oracle Linux 构建的 UEK 内核源码，包含少量尚未进入主线 Linux 的 Oracle 补丁（可在 ueknext/latest 分支预览）。README 列出 uek6 至 ueknext 多个生产分支及对应内核版本与目标架构（x86_64/aarch64），仓库每周刷新；构建需 libdtrace-ctf；不支持 GitHub PR，正式支持需通过 Oracle Linux Support。",
+   "highlights": [
+    "提供 UEK6 至 UEK-next 多个分支的源码，覆盖 v5.4、v5.15、v6.12 等内核版本，目标架构为 x86_64 与 aarch64",
+    "跟踪主线内核源码，Oracle 新增改动持续合入上游 Linux 树，仓库每周刷新",
+    "仓库完整保留 git 历史，源码此前已在 oss.oracle.com 公开"
+   ],
+   "use_cases": [
+    "需要获取 Oracle Linux 所用内核源码的开发者或合作伙伴",
+    "希望预览尚未合入主线的 Oracle 内核补丁（ueknext/latest 分支）",
+    "从源码自行构建 UEK 内核（需安装 libdtrace-ctf 及标准内核构建工具）"
+   ]
+  },
+  "sha": "52f036927e00",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "584def412eb5": {
+  "identity": {
+   "one_liner": "基于原版 Shaiya EP5.4 的 Go 语言 64 位开源客户端与配套服务器项目",
+   "review": "Shaiya GX 用 Go 为 Linux 和 Windows 编写 Shaiya EP5.4 的原生 64 位客户端与 GX Server。服务器内嵌 SQLite，无需独立数据库服务即可部署；客户端通过 OpenGL 4.5 渲染，从 data/ 目录读取 PNG、Ogg Vorbis 等松散资源。适用于希望在原版玩法基础上开发或研究该游戏的项目开发者，源码采用 BSD 3-Clause 许可。",
+   "highlights": [
+    "提供 Linux 和 Windows 原生 64 位客户端与服务器构建，客户端图形基于 OpenGL 4.5",
+    "服务器内嵌 SQLite 作为主生产数据库，运行无需安装 Go、Docker 或独立 SQL 服务",
+    "客户端实现登录、角色创建、战斗、技能、背包、NPC 商店、组队/团队、任务、公会等游戏流程，并包含 FPS、帧时间、CPU/GPU 耗时等实时性能诊断面板"
+   ],
+   "use_cases": [
+    "搭建可在 Linux 或 Windows 上运行的 Shaiya EP5.4 客户端与服务器环境",
+    "基于原版玩法机制开发新项目或进行协议、逆向工程相关研究",
+    "利用仓库附带的服务器地图、配置和含测试账号的开发数据库进行本地测试"
+   ]
+  },
+  "sha": "584def412eb5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3375,5 +3375,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8f742aa0e32d": {
+  "identity": {
+   "one_liner": "自托管健康数据栈：手机健康与屏幕时间数据存入自有 Postgres 并以 Grafana 展示",
+   "review": "该项目接收来自 Android（Health Connect、屏幕时长）和 iPhone（Apple Health）应用的 HMAC 签名 JSON，写入自有 Postgres 的单表并通过 SQL 视图聚合，Grafana 提供六个仪表盘；另含只读 API 和提供八个只读工具的可选 MCP 服务器。通过 Docker Compose 或 Helm 部署，不含云端组件。配套手机应用需付费或自行编译，数据同步依赖手表或健身应用写入 Health Connect/Apple Health。",
+   "highlights": [
+    "接收方校验 HMAC 签名，重复载荷只应用一次，晚到数据不覆盖新数据，手机端删除会同步删除",
+    "Android 34 种和 iPhone 28 种记录类型存入同一 records 表，dash 视图按时区转换为日/夜/小时/应用维度",
+    "提供只读 JSON API 与可选 MCP 服务器（默认关闭，需设置 token 才启用），镜像覆盖 amd64 与 arm64"
+   ],
+   "use_cases": [
+    "在自有数据库中查询家庭成员多部手机的健康与屏幕时间数据",
+    "通过 MCP 客户端（如 Claude 或 Ollama 本地模型）以只读方式查询个人健康历史",
+    "配合 Home Assistant 并存或作为其替代的数据接收端，用于脚本和小部件取数"
+   ]
+  },
+  "sha": "8f742aa0e32d",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "46a1d291f028": {
+  "identity": {
+   "one_liner": "可复现EEG熵复杂度分析与认知负荷分类研究平台",
+   "review": "NeuroScale Lab 是一个可复现科研平台，用于检验置换熵/多尺度熵 EEG 特征在 n-back 认知负荷分类中是否相对谱特征有增量预测价值。项目基于 NEMAR on007169 数据集（18 名被试、19 通道），经校正重分析得出熵特征未显示增量收益的探索性结论。提供特征提取、SQLite 集成与被试分组五折交叉验证，适用于方法复现与研究教学。",
+   "highlights": [
+    "支持置换熵、多尺度粗粒化与谱特征提取，并生成 1,012,776 条逐通道特征记录",
+    "提供带外键、检查与索引的 SQLite 集成及被试分组五折交叉验证评估",
+    "包含版本锁定数据集获取脚本、验证清单与统计方案等复现性文档"
+   ],
+   "use_cases": [
+    "复制或扩展 n-back 认知负荷 EEG 特征建模研究",
+    "需要被试分组交叉验证与结果留痕的科研数据工程教学",
+    "验证开源数据集元数据与 BIDS 事件结构的审计流程"
+   ]
+  },
+  "sha": "46a1d291f028",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b45d623e412": {
+  "identity": {
+   "one_liner": "将 Monarch Money 财务数据渲染并推送到 Tidbyt 像素屏的 Docker 应用",
+   "review": "该程序通过非官方客户端 monarchmoneycommunity 登录 Monarch，用 PIL 在本地渲染 64x32 WebP 帧后推送到 Tidbyt 云设备或自建 Tronbyt 服务器。支持净值、预算、储蓄率、现金流、账单等视图轮播，凭据仅存于容器内。由于 Monarch 无开发者 API，其接口变更可能导致功能失效。",
+   "highlights": [
+    "提供 dashboard 2x2 网格及 networth、budget、goal、cashflow、bill 六种视图，可配置轮播",
+    "本地渲染像素帧推送，仅当像素变化时才推送，数据默认缓存三小时",
+    "内置异常状态显示 MONARCH OFFLINE 帧，并可配置 Gotify 阈值告警"
+   ],
+   "use_cases": [
+    "在 Tidbyt/Tronbyt 像素屏上持续展示个人财务概况",
+    "通过预算百分比、储蓄目标进度等视图做月度财务跟踪",
+    "配合 Gotify 接收数据拉取失败告警"
+   ]
+  },
+  "sha": "2b45d623e412",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

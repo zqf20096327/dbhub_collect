@@ -3431,5 +3431,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "809c764f90ba": {
+  "identity": {
+   "one_liner": "基于Spring Boot的独立通知服务，经Kafka消费与HTTP接口发送多渠道通知",
+   "review": "TheGameNotification是一个基于Spring Boot的独立通知服务，通过Kafka消费者和HTTP接口接收请求，向SMS、WhatsApp、Email三个渠道发送通知，分别调用AWS Pinpoint和Facebook WhatsApp API。使用PostgreSQL存储、Hibernate与HikariCP连接池，可作为Maven依赖引入或独立运行。README标注docker compose方式未经测试。",
+   "highlights": [
+    "支持SMS、WhatsApp、Email三种通知渠道，可通过新增Service类并注入对应NotificationService接入其他厂商API",
+    "提供HTTP端点 /notification/send 发送任意类型通知，并通过Kafka消费者接收各渠道的JSON载荷",
+    "基于Spring Boot、Kafka、PostgreSQL、Hibernate、HikariCP构建，需Java 18及以上环境，采用MIT许可证"
+   ],
+   "use_cases": [
+    "需要通过Kafka异步消费或HTTP接口统一发送SMS、WhatsApp、Email通知的Java服务",
+    "需以Maven依赖形式在现有Spring Boot项目中集成通知发送能力的场景",
+    "作为扩展其他通知渠道厂商API的模板工程使用"
+   ]
+  },
+  "sha": "809c764f90ba",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d1a03ddcce09": {
+  "identity": {
+   "one_liner": "达梦数据库 DM8 的 SQLx 0.9.x 驱动，workspace 形式",
+   "review": "dameng-rs 是为达梦 DM8 实现的 SQLx 0.9.x 驱动，由 dameng-types、dameng-protocol、sqlx-dameng 三个 crate 组成，分别承担类型编解码、DM8 二进制协议和 sqlx-core 驱动接入，面向需要在 Rust 中通过 SQLx 访问 DM8 的开发者。当前为实验性 0.1.x，支持连接串、事务与最小 Executor，Describe 采用空结果子查询猜列并带降级策略，TLS 依赖 feature tls；README 明确在真实 DM8 联调完成前请勿用于生产。",
+   "highlights": [
+    "实现 DM8 二进制协议（Frame / Message）与 sqlx-core 的 Database / Executor / Transaction 接口",
+    "支持 dm:// 与 dameng:// 连接串，可配置 auto_commit 与 isolation_level",
+    "提供 Statement Cache（缓存列/参数元数据）与 tls feature（默认开启）"
+   ],
+   "use_cases": [
+    "在 Rust 项目中通过 SQLx 连接达梦 DM8 数据库",
+    "参与 DM8 协议联调验证，按 verification-checklist 记录胜出 SQL 与日志",
+    "运行集成测试与 CRUD 示例（just test-integration / just example-crud）"
+   ]
+  },
+  "sha": "d1a03ddcce09",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

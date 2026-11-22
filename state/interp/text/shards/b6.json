@@ -3188,5 +3188,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2f536f54d544": {
+  "identity": {
+   "one_liner": "跨数据库、API、文件与代码的 AI 代理，基于 GraphJin 引擎编译查询",
+   "review": "DeepORG（原名 GraphJin）是一个 AI 代理，用自然语言对组织的数据库、数仓、API、文件和源码提问并执行变更。底层由开源引擎 GraphJin 将查询编译为单条数据库查询，并按访问规则检查、默认等待用户批准变更。安装提供脚本、npm、Homebrew、Docker 多种方式，可通过 MCP 客户端接入。支持 PostgreSQL、MySQL、SQLite、MongoDB 等 12 种数据源。",
+   "highlights": [
+    "将查询编译为单条数据库查询，并依据访问规则检查执行",
+    "支持 PostgreSQL、MySQL、SQLite、MongoDB、Oracle、SQL Server、Snowflake、BigQuery、Cassandra、S3、GCS 及本地文件",
+    "通过 `deeporg mcp add` 接入 Claude 等 MCP 客户端，`deeporg serve --demo` 启动内置演示环境"
+   ],
+   "use_cases": [
+    "用自然语言查询企业数据库与数仓",
+    "将组织系统作为代理任务环境用于评测或训练",
+    "作为 GraphQL API 服务器或 Go 库使用"
+   ]
+  },
+  "sha": "2f536f54d544",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f125b4ca6e91": {
+  "identity": {
+   "one_liner": "ParadeDB 官方 Django 集成包，在 Django ORM 中使用 ParadeDB 检索能力。",
+   "review": "paradedb/django-paradedb 是 ParadeDB 官方提供的 Django 集成库，用于在 Django 应用中调用 ParadeDB 的全文检索、向量检索等 Postgres 能力。要求 Python 3.11+、Django 4.2+、PostgreSQL 15+，并依赖 pgvector 0.7.0+ 与 ParadeDB/pg_search 0.27.0+。README 未详述具体 API，安装使用需参考其官方设置指南。项目采用 MIT 许可证。",
+   "highlights": [
+    "提供 ParadeDB 的官方 Django 集成",
+    "支持通过 PostgreSQL 与 pgvector 实现全文搜索与向量搜索",
+    "要求 Python 3.11+、Django 4.2+、pg_search 0.27.0+，采用 MIT 许可证"
+   ],
+   "use_cases": [
+    "在 Django 项目中通过 ORM 使用 ParadeDB 的全文检索功能",
+    "基于 PostgreSQL 单库同时管理应用数据与向量/全文检索的应用",
+    "需要为 ParadeDB 构建带模型层的 Python Web 应用的团队"
+   ]
+  },
+  "sha": "f125b4ca6e91",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "87ab73da7e00": {
+  "identity": {
+   "one_liner": "读取 MySQL binlog 维护 Parquet 副本，用 DuckDB 提供 HTAP 查询与行级历史。",
+   "review": "DBTrail 通过复制协议读取 MySQL/MariaDB 的 binlog，在本地磁盘或 S3 中维护 Parquet 列式副本，并以兼容 MySQL 协议的端口配合 DuckDB 响应重型查询，提供 AS OF 时间 travel 与生成撤销 SQL 的行级 undo。适合需要在原库旁搭分析副本的 DBA；要求 ROW binlog、full row image 及每表主键，副本存在秒到分钟延迟。",
+   "highlights": [
+    "通过复制协议读取 binlog，无需在 MySQL 上安装插件、agent 或触发器，数据存储为 Parquet 文件，查询由 DuckDB 执行",
+    "提供路由模式：同一连接上写事务和按键查找发往 MySQL，重型读由副本回答，兼容 Metabase、Grafana 等 MySQL 协议工具",
+    "支持 AS OF 时间点查询、行级 undo SQL 生成，并通过 MCP 协议接入 Claude 等客户端，工具仅读且不在 MySQL 上执行 SQL"
+   ],
+   "use_cases": [
+    "在不改动应用 SQL 的前提下，将报表、仪表盘等重型分析查询从主库分流到列式副本",
+    "按时间点查看表或行的历史版本，并为误操作生成待人工审核的撤销 SQL",
+    "面向 RDS/Aurora 等托管数据库搭建分析副本，无需访问 binlog 文件所在磁盘"
+   ]
+  },
+  "sha": "87ab73da7e00",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a30632f5ebad": {
+  "identity": {
+   "one_liner": "基于 BCH 主网按次付费的 AI 洞察与提示词建议服务",
+   "review": "该项目出售两种单次 AI 任务：市场洞察（0.03 美元）和提示词优化（0.02 美元），以比特币现金（BCH）支付。服务器从 XPUB 派生每张发票的收款地址，后台进程在链上检测付款后才调用 Gemini 生成结果，发票 15 分钟过期、不足额标记 UNDERPAID。技术栈为 Next.js、Express、PostgreSQL/Prisma、可选 Redis/BullMQ，支持 Docker 与 Render 部署，提供面向脚本与 AI 代理的免账号 HTTP 402 接口。",
+   "highlights": [
+    "每张发票由 XPUB 派生独立 BCH 地址，服务器不持有收款钱包私钥；后台 watcher 在链上验证付款后才运行 AI，已付发票的结果可重复读取",
+    "提供免账号的 HTTP 402 API（POST /api/v1/insight），返回 invoiceId、payTo、amountSats 等支付指令，限速为每 10 分钟 5 张新发票、每分钟 60 次状态轮询",
+    "支持 WizardConnect 钱包连接与手动扫码支付，含 Quick Pay 会话钱包；可通过 BCH_NETWORK=testnet 与 CHAIN_MODE=mock 在本地无真实资金测试"
+   ],
+   "use_cases": [
+    "需要为脚本或 AI 代理提供按次付费 AI 接口，且希望以 BCH 小额付款结算而不开设订阅账号的场景",
+    "个人用户需单次生成主题分析或提示词改进版本，按张发票支付两三美分并保留历史记录",
+    "学习 BCH 发票支付集成（地址派生、链上付款检测、402 流程）的参考实现与本地开发项目"
+   ]
+  },
+  "sha": "a30632f5ebad",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

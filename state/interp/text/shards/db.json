@@ -2881,5 +2881,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a1018a0fcc71": {
+  "identity": {
+   "one_liner": "基于 pingap/Pingora 的分布式集中管控 Web 应用防火墙",
+   "review": "PingWAF 是一个用 Rust 编写的开源 Web 应用防火墙，基于 pingap 与 Cloudflare Pingora 构建，采用控制面+数据面架构，通过 gRPC 双向流同步规则、日志与指标。检测引擎结合 libinjection、Aho-Corasick 签名、表达式规则与异常评分。支持 all-in-one 单进程与 server/agent 分布式两种部署。README 注明项目与 Cloudflare 及 pingap 维护者无关联，并附有 blazehttp 语料上的拦截率测试数据。",
+   "highlights": [
+    "四阶段检测管线：请求规范化 → 签名/libinjection → 表达式规则 → 异常评分，覆盖 SQL 注入、XSS、RCE、路径穿越与命令注入",
+    "控制面与数据面通过 ControlPlane gRPC 服务的七个 RPC 通信，包括规则下发、日志/指标/证书事件上报与心跳",
+    "提供 ACME/Let's Encrypt 自动签发（HTTP-01/DNS-01）、mTLS 客户端证书签发与吊销、CC 防护挑战、Bot 防护、多维限速、边缘缓存及内嵌多语言管理控制台"
+   ],
+   "use_cases": [
+    "单节点场景使用 all-in-one 模式部署反向代理+WAF",
+    "多节点/多区域边缘节点由一个控制面集中下发规则与策略",
+    "需要自动 TLS 证书签发续期、请求日志存档到 Elasticsearch/PostgreSQL 并可回放 curl 的流量安全管控场景"
+   ]
+  },
+  "sha": "a1018a0fcc71",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7191e2a9042d": {
+  "identity": {
+   "one_liner": "基于 Go 与 SQLite 的单二进制 CMS，内置 HTMX 管理后台与 REST API",
+   "review": "ocms-go 是用 Go 编写的内容管理系统，默认使用嵌入式 SQLite 数据库，以单个二进制文件方式部署运行。它面向需要自建网站或无头内容服务的开发者，内置 HTMX/Alpine.js 服务端渲染管理后台、Bearer Token 认证的 REST API、主题与模块系统、多语言内容、表单构建器、媒体库、Webhook 及 SEO 工具。生产环境下强制要求两步验证；采用 GPL-3.0 许可证。",
+   "highlights": [
+    "以单二进制文件交付，默认使用零配置 SQLite 数据库，支持通过 make 或 Docker Compose 启动",
+    "提供 REST API（Bearer Token 认证、按资源读写权限、速率限制），并包含基于 MCP 协议的 AI 代理内容读取端点（默认关闭，需 mcp:access 权限）",
+    "支持主题导入/切换、模块生命周期与独立数据库迁移、多语言内容（含 RTL 支持）、Webhook（HMAC-SHA256 签名与指数退避重试）"
+   ],
+   "use_cases": [
+    "部署自托管的内容站点，需要页面版本管理、定时发布、全文搜索（SQLite FTS5）与 RSS/Atom 订阅",
+    "作为无头 CMS 使用，通过 REST API 或 MCP 端点向前端应用或 AI 代理提供内容",
+    "构建多语言网站，需要语言前缀 URL、翻译关联与表单收集（联系人表单/问卷）"
+   ]
+  },
+  "sha": "7191e2a9042d",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "152c5238dba4": {
+  "identity": {
+   "one_liner": "面向 Cloudflare Workers 的多租户 SaaS 起始套件，Hono API + React UI + 共享 zod 契约",
+   "review": "Rocketflare 是一个多租户 SaaS 起始套件仓库，包含 Hono 4 API、React 19 UI 与共享 zod 契约包，以单个 Cloudflare Worker 运行在 Postgres（本地 Docker，部署时支持 Neon 或 Hyperdrive）之上。内置租户隔离、魔法链接与 OIDC 认证、队列与 Workflows 后台任务、WebSocket 实时、R2 存储及可选分析与 AI 插件。适合需在 Cloudflare 上构建内部工具或 B2B 产品的团队；使用方式是复制脱离本仓库而非作为依赖引入，本地首跑无需外部凭证。",
+   "highlights": [
+    "单 Worker 同时导出 fetch、queue、scheduled，配合 Durable Object 与 Workflows，数据库层为 Postgres 17 + pgvector，经 Drizzle 每请求一个客户端",
+    "多租户模式可配置（multi/single），每表携带 tenant_id 并附带行级安全策略，TENANT_SCOPE_MODE=enforce 时启用，含目录测试防止遗漏",
+    "提供 CLI（commander + chalk）与 Claude Code 技能（/rf-start、/rf-adapt、/rf-upgrade、/rf-plugin、/rf-security），代码库附带 CLAUDE.md 与分目录指南"
+   ],
+   "use_cases": [
+    "在 Cloudflare Workers 上搭建多租户或单租户的 B2B 产品或内部工具",
+    "需要租户隔离、角色权限、邀请成员与平台管理后台的团队应用",
+    "由编码代理驱动开发流程，通过契约→schema→路由→页面循环添加功能的项目"
+   ]
+  },
+  "sha": "152c5238dba4",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "34fa66193198": {
+  "identity": {
+   "one_liner": "基于 MCP 的持久化事件驱动消息总线，内置 SQLite 存储",
+   "review": "minymaton 用 Rust 实现一个面向编码代理的 MCP 消息总线，让多个会话（跨机器、跨操作系统）通过同一服务器广播或点对点收发消息。消息在 publish 返回前写入内置 SQLite WAL 存储，订阅各自维护进度，未确认批次在重启后保留并重投。公共发行版仅提供单节点 SQLite 后端和仅回环监听，远程访问需 SSH 隧道或经认证的 HTTPS 反向代理；空闲会话唤醒需配套的 minymaton-wait 辅助程序。",
+   "highlights": [
+    "提供 stream、subscription、publish、receive 四个基础 MCP 工具，支持广播与直接寻址",
+    "消息先落盘再返回（内置 SQLite WAL 后端），订阅进度跨重启保留，批次需显式 ACK 后才清除",
+    "提供 Rust 原生 minymaton-wait（6 个目标平台）与 Python 3 标准库版等待器，QueueStore/QueueReader trait 支持替换后端"
+   ],
+   "use_cases": [
+    "多个编码代理会话（如 Claude Code、Codex、Copilot CLI）之间的消息交接与状态同步",
+    "跨机器、跨操作系统的代理协调，客户端无需共享代码检出或本地数据库",
+    "通过手机 App 监控流、查看在线名单并经 HTTPS 回复或提醒"
+   ]
+  },
+  "sha": "34fa66193198",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

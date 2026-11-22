@@ -3307,5 +3307,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bc43736c2094": {
+  "identity": {
+   "one_liner": "Go 编写的单节点事件溯源数据库，事件以 CloudEvents 记录存储并组成哈希链。",
+   "review": "GenesisDB 2.0 是首个开源版本，面向构建事件驱动应用的开发者。事件为 CloudEvents 1.0 记录，存于层级主题树中并以 SHA-256 链接，支持带前置条件的原子批量提交、GDBQL 查询语言、SSE 实时订阅与按引用擦除个人数据的 GDPR 机制。单静态二进制无运行时依赖，可通过容器、go install、源码编译或预编译二进制安装，默认绑定 127.0.0.1:8080，鉴权 token 为必填项。作为 1.x 的替代版本，可自动迁移旧数据目录但迁移是单向的，升级前需备份数据目录。",
+   "highlights": [
+    "每个事件为 CloudEvents 1.0 记录，按 SHA-256 链接前驱，并提供 verify 子命令与审计接口校验整条链",
+    "支持带前置条件的原子批量提交、按事件类型强制 JSON schema、Ed25519 事件签名，以及通过引用载荷实现个人数据擦除且保持哈希链有效",
+    "提供 GDBQL 查询语言、SSE 实时订阅、Prometheus/OpenTelemetry 指标、MCP 端点和嵌入 Go 程序的 store.Open 方式"
+   ],
+   "use_cases": [
+    "构建事件驱动应用并需要事件溯源存储与按提交顺序读取主题及后代事件的场景",
+    "需要记录个人数据引用并在后续擦除同时保留审计轨迹的场景",
+    "从闭源 1.x 版本迁移的现有部署，1.x 数据目录可在首次启动时自动迁移"
+   ]
+  },
+  "sha": "bc43736c2094",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4bb01a7f05bf": {
+  "identity": {
+   "one_liner": "受 Django 启发的 Rust 实验性 Web 框架，含类型化 ORM、迁移、认证与原生 admin。",
+   "review": "Fexu 是构建于 Axum、Tera、SeaQuery、rusqlite 与 SQLx 之上的实验性 Rust Web 框架，面向希望以模型驱动方式开发 Web 应用的 Rust 开发者。通过 #[derive(FexuModel)] 定义模型并自动挂载 CRUD 路由，内置迁移、会话认证、CSRF 防护与服务端渲染 admin，支持 SQLite 与 PostgreSQL。项目以 16 个 crate 组成的 workspace 组织，0.1.2 已发布 crates.io，但 README 明确标注实验状态、非生产就绪，MSRV 为 1.89。",
+   "highlights": [
+    "通过 #[derive(FexuModel)] 定义类型化模型，注册后自动生成 list/detail/create/patch/delete 路由",
+    "提供版本化数据库迁移、用户账户与权限认证、服务端会话及 cookie-CSRF 防护",
+    "包含基于 Axum 和 Tera 的服务端渲染 admin，无需额外的 JavaScript 前端构建"
+   ],
+   "use_cases": [
+    "使用 Rust 构建模型驱动的 CRUD Web 应用",
+    "需要服务端渲染管理后台且不想引入 Node.js 构建链的项目",
+    "以 SQLite 起步、可切换 PostgreSQL 的应用原型开发"
+   ]
+  },
+  "sha": "4bb01a7f05bf",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

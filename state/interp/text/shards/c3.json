@@ -3494,5 +3494,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "353694788606": {
+  "identity": {
+   "one_liner": "基于 deepagents 封装的 Python Agent 运行时，集成模型路由、记忆与多智能体管理。",
+   "review": "octop-harness 是一个 Python 3.12+ 库，在 deepagents 的 create_deep_agent 之上提供工程化封装，面向需要在生产环境中部署 Agent 的开发者。它通过 ChatModelFactory 实现 OpenAI、Anthropic、Bedrock 等 17 个预设的模型路由，内置 L0→L3 分层记忆中间件、LangGraph SQLite 检查点、可插拔工作区（本地/S3/COS/PostgreSQL）与 stdio ACP 服务器。需注意：分层类型化保存依赖尚未发布的配套 memory API。",
+   "highlights": [
+    "提供 ChatModelFactory 模型路由，支持 OpenAI、Anthropic、AWS Bedrock 及 17 个可编辑的供应商预设（含混元、Kimi、GLM、DeepSeek 等）",
+    "内置 octop-memory 分层记忆中间件（L0 原始事件→L2 原子→L3 实体页），配合 LangGraph AsyncSqliteSaver 检查点实现可恢复会话",
+    "AgentManager 支持单进程运行多个隔离 Agent，工作区后端可选本地磁盘、S3、COS 或 PostgreSQL，并提供 stdio ACP 服务器供 IDE/终端接入"
+   ],
+   "use_cases": [
+    "需要在同一进程中管理多个隔离 Agent 并支持会话恢复的应用",
+    "需要跨多家模型供应商路由、且记忆/存储后端可插拔替换的 Agent 服务",
+    "希望通过 ACP 协议让 IDE 或终端 AI 驱动自定义 Agent 的场景"
+   ]
+  },
+  "sha": "353694788606",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "90c5f4aeebb5": {
+  "identity": {
+   "one_liner": "Rust+GPUI 原生跨平台数据库客户端与 SQL 编辑器，多数据源单窗口管理",
+   "review": "FluxDB 是一个桌面端数据库 GUI 和 SQL 编辑器，将 MySQL、PostgreSQL、SQLite、MongoDB、Redis 等多种数据源整合到一个工作流中。它采用 Rust + GPUI 构建而非 Electron/WebView，提供 SQL 补全、可编辑结果集、表设计、ER 图、备份恢复及权限受限的 AI Agent。许可证为 GPL-3.0，支持 macOS/Windows/Linux；各数据库能力不完全一致，如 KingbaseES 仅 PG 兼容模式且部分功能未经单独回归测试。",
+   "highlights": [
+    "基于 Rust + GPUI 原生实现，不依赖 Electron 或 WebView，提供语法补全、SQL 格式化、查询历史与分页浏览",
+    "支持 MySQL/MariaDB/TiDB/PostgreSQL 等的逻辑备份恢复（一致快照、keyset 分页、批量 INSERT），可调用 mysqldump/pg_dump 等原生工具",
+    "内置 MongoDB 与 Redis 工作台，含聚合管道构建、键浏览、Pub/Sub 订阅、TLS/SSH/Sentinel/Cluster 连接，ER 图可导出为 JSON/DBML/Mermaid/SVG"
+   ],
+   "use_cases": [
+    "需要在单窗口内同时管理关系型数据库、MongoDB 和 Redis 的开发或运维人员",
+    "跨方言表结构同步、迁移 SQL 导出与可断点的数据迁移任务",
+    "通过可视化方式设计表结构、生成 DDL 和 ER 图，或生成批量测试数据（单次最高 20 万行）"
+   ]
+  },
+  "sha": "90c5f4aeebb5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

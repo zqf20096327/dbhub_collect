@@ -3818,5 +3818,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a7bcb7f3235": {
+  "identity": {
+   "one_liner": "自托管多用户多智能体AI助手，单进程整合Web、IM与定时任务",
+   "review": "Octop是腾讯云开源的Python自托管AI助手平台，面向家庭和小团队。单进程通过FastAPI同时提供Web控制台、CLI、多种IM渠道（飞书、钉钉、QQ、微信、Telegram等）和cron自动化，数据存于~/.octop/（默认SQLite，可选PostgreSQL）。支持多专家、ACP双向对接IDE编码代理、RAG知识库和浏览器自动化。",
+   "highlights": [
+    "单进程运行Web仪表盘、CLI、IM渠道和cron，状态从控制面数据库重建",
+    "支持多用户JWT隔离、专家库共享、AgentTeams协调器调度多专家（Beta）",
+    "提供ACP双向集成：作为stdio服务供Zed/OpenCode调用，或委派任务给OpenCode、Claude Code、Codex等外部代理"
+   ],
+   "use_cases": [
+    "家庭共享部署：一个管理员账户，各成员使用不同专家和代理",
+    "通过IM渠道把任务接入群聊，配合自然语言cron定时执行",
+    "开发者通过ACP在IDE或终端中调用或委派编码代理，结合浏览器自动化与远程桌面做网页操作和排障"
+   ]
+  },
+  "sha": "1a7bcb7f3235",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ad35a58af7f": {
+  "identity": {
+   "one_liner": "TiDB SQL 层的实验性 Rust 实现，以只读节点接入现有 TiDB 集群",
+   "review": "tidb-rs 是 TiDB SQL 层的 Rust 移植原型，从只读节点起步，与集群中的 Go TiDB 并行运行，通过 MySQL 协议对外服务。目前已实现 TSO 获取、schema 缓存与同步、KV/coprocessor 访问、整数主键单表 SELECT 及部分聚合算子，查询结果须与 Go TiDB 完全一致；不支持写入、DDL、事务、二级索引和统计信息。适合需要验证 Rust 版 TiDB 读路径行为或参与移植工作的开发者。",
+   "highlights": [
+    "以只读节点形式注册进 TiDB 集群，支持批量与异步 TSO、schema 缓存及 etcd 注册、MDL 上报",
+    "实现 MySQL 协议握手、TLS、prepared statement，指标名与 Go TiDB v8.5.8 对齐，可复用其 Grafana 面板",
+    "行解码与下推求值使用 TiKV 的 tidb_query_* crates，并通过 tools/ab 与 Go TiDB 结果逐项比对"
+   ],
+   "use_cases": [
+    "在现有 TiDB 集群中运行只读 SQL 节点，处理整数主键表的单表 autocommit 只读查询",
+    "对 tidb-rs 与 Go TiDB 做同集群查询结果与性能对照测试",
+    "按其移植方法论（CONSTITUTION、Dxx.y 块、ADR）参与或研究 Go TiDB 到 Rust 的逐块移植"
+   ]
+  },
+  "sha": "4ad35a58af7f",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

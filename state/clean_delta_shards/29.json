@@ -24085,5 +24085,3981 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "1e4f164e3a3e+2": {
+  "fn": "IkhyeonJo/Maroik",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "|Role|Email|Password|Seeded by|"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    8,
+    6,
+    8,
+    [
+     "|Admin|`admin@maroik.com`|`demoO12!!`|`Debugging/Init.sql`|",
+     "|User (public demo)|`demo@maroik.com`|`demoO12!!`|`Debugging/Init.sql`, then `SeedDemo.sql`|"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    19,
+    8,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "1"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    20,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    25,
+    23,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    26,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    31,
+    29,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    34,
+    32,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    37,
+    35,
+    37
+   ],
+   [
+    "replace",
+    37,
+    39,
+    37,
+    39,
+    [
+     "image",
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    41,
+    39,
+    41
+   ],
+   [
+    "replace",
+    41,
+    42,
+    41,
+    42,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    44,
+    42,
+    44
+   ],
+   [
+    "replace",
+    44,
+    45,
+    44,
+    45,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    54,
+    45,
+    54
+   ],
+   [
+    "replace",
+    54,
+    55,
+    54,
+    55,
+    [
+     "|Choice|What it deploys|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    55,
+    56
+   ],
+   [
+    "replace",
+    56,
+    59,
+    56,
+    59,
+    [
+     "|`1` / `local` — build here|The source in the clone as it is (a clone on any branch, or source copied by hand). Builds the three app images on the server (release build, as CI does), asks how the site is reached (below) and starts the stack for it. No GitHub, no ghcr.io, no CI check; does not install `AutoDeploy.sh` (and removes it from the cron jobs).|",
+     "|`2` / `github` — GitHub|The newest `main` whose CI `publish` job succeeded: checks it out, pulls its three images from ghcr.io, starts the stack and installs `AutoDeploy.sh`, so merged changes reach production by themselves.|",
+     "|`3` — quit|Nothing.|"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    63,
+    59,
+    63
+   ],
+   [
+    "replace",
+    63,
+    64,
+    63,
+    64,
+    [
+     "|Answer|What runs|Arguments|"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    64,
+    65
+   ],
+   [
+    "replace",
+    65,
+    68,
+    65,
+    68,
+    [
+     "|No domain|The website on a port of this server (default 80) over plain HTTP — for a home network: passwords and sessions travel unencrypted. Also asks the address the mails link to (default `http://<LAN IP>[:port]/`).|`local nodomain [port] [address]`|",
+     "|Domain, Cloudflare Tunnel|cloudflared, no port opened (as choice 2). Needs `TUNNEL_TOKEN`.|`local tunnel <domain>`|",
+     "|Domain, port forwarding|Caddy on 80 / 443 with a Let's Encrypt certificate for `<domain>` and `www.<domain>` (asks the e-mail Let's Encrypt writes to). The router forwards 80 / 443 here and the domain's DNS points at the public IP.|`local portforward <domain> <e-mail>`|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    75,
+    68,
+    75
+   ],
+   [
+    "replace",
+    75,
+    76,
+    75,
+    76,
+    [
+     "|Item|What it is|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    76,
+    77
+   ],
+   [
+    "replace",
+    77,
+    80,
+    77,
+    80,
+    [
+     "|`.env.prod`|Passwords and settings: copy `.env.prod.example` and fill in the database, RabbitMQ and SMTP credentials, `TUNNEL_TOKEN` (Cloudflare Zero Trust > Networks > Tunnels > connector token; the tunnel only), `EXTERNAL_DRIVE_UUID` (`sudo blkid`), `EXTERNAL_DRIVE_MOUNT` (the folder the drive is mounted on) and `BACKUP_BASE_DIR`.|",
+     "|`Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql`|The database the stack starts from: a backup's `pg_dump`, or `Debugging/Init.sql` (same schema, demo data) on a new server. `SQL_Init_Script/SeedDemo.sql` (tracked, shared by both compose files) runs right after it and puts the demo account back to its sample data; other accounts are not touched.|",
+     "|`Maroik.FileStorage/upload/`|Uploaded attachments. Empty is allowed only on a new server: `Deploy.sh` asks first (`ALLOW_EMPTY_UPLOAD=1` skips the question).|"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    96,
+    80,
+    96
+   ],
+   [
+    "replace",
+    96,
+    104,
+    96,
+    97,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    114,
+    97,
+    107
+   ],
+   [
+    "replace",
+    114,
+    118,
+    107,
+    108,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    131,
+    108,
+    121
+   ],
+   [
+    "replace",
+    131,
+    144,
+    121,
+    122,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    160,
+    122,
+    138
+   ],
+   [
+    "replace",
+    160,
+    161,
+    138,
+    139,
+    [
+     " administrator sets (0 GB by default)"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    173,
+    139,
+    151
+   ],
+   [
+    "replace",
+    173,
+    174,
+    151,
+    152,
+    [
+     " worker through the mail queue"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    194,
+    152,
+    172
+   ],
+   [
+    "replace",
+    194,
+    195,
+    172,
+    173,
+    [
+     " totals, 30 free rows, columns A..Z (B..M months, N the year total, O..Z free)"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    196,
+    173,
+    174
+   ],
+   [
+    "replace",
+    196,
+    197,
+    174,
+    175,
+    [
+     " formula bar that colors references, matches parentheses and suggests functions"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    200,
+    175,
+    178
+   ],
+   [
+    "replace",
+    200,
+    201,
+    178,
+    179,
+    [
+     " `#REF!`, a circular reference `#CYCLE!`"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    179,
+    180
+   ],
+   [
+    "replace",
+    202,
+    203,
+    180,
+    181,
+    [
+     " cannot be stale); the Excel download writes the calculated values"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    224,
+    181,
+    202
+   ],
+   [
+    "replace",
+    224,
+    230,
+    202,
+    208,
+    [
+     " suggested class under the field; it is applied only when the user clicks it. A per-account text model — character",
+     " n-grams weighted by TF-IDF and a logistic regression over all classes (ML.NET) — learns from the user's own records (no data",
+     " leaves the server). The worker trains it when the records change (asked through RabbitMQ) and stores it in the file storage;",
+     " the web server only reads it, keeping a bounded number of models in memory. Measured with monthly retraining on the",
+     " newest records it was right 98.5 % (expenditures) and 98.4 % (incomes) of the time; naive Bayes reached 91 %, and a",
+     " \"same content as before\" rule in front of the model added nothing, so it was dropped."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    231,
+    208,
+    209
+   ],
+   [
+    "replace",
+    231,
+    232,
+    209,
+    210,
+    [
+     " currency (the box-plot rule on log amounts, groups of at least 8): 1.9 % of the records, against 4.8 % on raw amounts."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    210,
+    211
+   ],
+   [
+    "replace",
+    233,
+    234,
+    211,
+    212,
+    [
+     " is not a known code keeps every stored decimal."
+    ]
+   ],
+   [
+    "equal",
+    234,
+    246,
+    212,
+    224
+   ],
+   [
+    "replace",
+    246,
+    248,
+    224,
+    226,
+    [
+     " a binder, a tree-walking evaluator and a dependency graph (Tarjan / Kahn) in the Domain project. User text is never",
+     " compiled to code: it can only build a closed set of nodes and call the `FormulaFunctions` catalog."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    226,
+    227
+   ],
+   [
+    "replace",
+    249,
+    252,
+    227,
+    230,
+    [
+     " templates) are checked over every source with the Roslyn parser; memory-safety, security, culture and banned-API",
+     " (direct clock reads, sync-over-async) analyzers are build errors; one .NET SDK is pinned for `global.json`, every",
+     " Dockerfile and CI."
+    ]
+   ],
+   [
+    "equal",
+    252,
+    253,
+    230,
+    231
+   ],
+   [
+    "replace",
+    253,
+    256,
+    231,
+    234,
+    [
+     " time-ordered train / test splits and monthly retraining for the classifier, an exact significance test between close",
+     " candidates — and only what won was built. The measurements, the alternatives not taken and the known",
+     " limits are written down next to the code (`.claude/rules/finance.md`)."
+    ]
+   ],
+   [
+    "equal",
+    256,
+    263,
+    234,
+    241
+   ],
+   [
+    "replace",
+    263,
+    264,
+    241,
+    242,
+    [
+     "|When|Milestone|"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    242,
+    243
+   ],
+   [
+    "replace",
+    265,
+    297,
+    243,
+    275,
+    [
+     "|2021-05|Project starts as *MyLaboratory*: ASP.NET Core (2.1 → .NET 5) with MariaDB, run under docker-compose from the first week|",
+     "|2021-06|AdminLTE 3 layout, NonFactors MVC grid|",
+     "|2021-07|Excel export, registration with e-mail confirmation, password reset, separate admin / user dashboards, English / Korean localization (resx)|",
+     "|2021-08|Account book: assets, income, expenditure, fixed income / expenditure with deposit-day notices|",
+     "|2021-12|MariaDB 10.6|",
+     "|2022-07|User dashboard backend and charts for income and expenditure|",
+     "|2022-08|Public anonymous dashboard and landing pages; role-based navigation menu (Admin / User / Anonymous) stored in the database|",
+     "|2022-09|.NET 6|",
+     "|2022-10|Renamed to **Maroik**; Free Forum with Summernote editor and HTML sanitizing|",
+     "|2022-11|Forum comments, locked and notice posts; security headers|",
+     "|2023-03|.NET 7|",
+     "|2023-04|Income and expenditure statistics|",
+     "|2023-08|Global AJAX error handling; debugging docker-compose in VS Code|",
+     "|2024-02|.NET 8; dashboard breakdowns of each income / expenditure class|",
+     "|2024-04 – 09|Calendar (FullCalendar): calendars, events, reminders, sharing, browsing others' calendars|",
+     "|2024-05|Private notes, per-account time zones, default monetary unit, dashboard year / month selection|",
+     "|2024-09|Maroik.FileStorage service|",
+     "|2025-01|Attachments and inline images for forum posts, calendar events and private notes; server resource monitoring on the admin dashboard; Let's Encrypt certificates renewed automatically with Certbot|",
+     "|2025-03|.NET 9|",
+     "|2025-04|MariaDB → PostgreSQL|",
+     "|2025-05|DNS moved from AWS Route 53 to Cloudflare; ClamAV virus scanning of uploads; public demo account|",
+     "|2025-07|Database transactions for account-book writes|",
+     "|2025-08|BCrypt password hashing|",
+     "|2025-11|.NET 10; data access split into repositories and clients|",
+     "|2025-12|Project split into Core layers (Repository, Service, Client, PostgreSQL)|",
+     "|2026-04|Maroik.Core.Contract; first unit tests|",
+     "|2026-05 – 08|DDD + Clean Architecture refactor, ending with the Maroik.Core.Domain project; CI/CD with a coverage gate; Serilog|",
+     "|2026-07|Valkey (replacing Redis), RabbitMQ and the Maroik.Worker mail service|",
+     "|2026-09|Client scripts migrated to TypeScript; repository and E2E tests on real PostgreSQL (Testcontainers); a series of whole-solution reviews fixing race conditions and security gaps; strict TDD and logging rules; mutation testing (Domain 78 % → 92 %)|",
+     "|2026-09-28|Moved from the private repository to this public repository, where all development continues; the private repository's cleaned history was merged here in 2026-11 and the private repository deleted|",
+     "|2026-10|Service mutation score 70 % → 96 %; TLS ended at Cloudflare through a Cloudflare Tunnel; RSA replaced with ASP.NET Core Data Protection; memory-safety, logging-template, security and banned-API analyzers as build errors; admin and menu safeguards against locking administrators out; GitHub Actions CI (coverage gate, isolated E2E run), release-only minified client scripts, semver from Conventional Commits, images published to GHCR and pulled by the server; calendar reminders delivered by e-mail (scheduled by the domain, sent once a minute by the worker through the mail queue); one pinned .NET SDK with a weekly bump pull request; personal Kanban board; personal File Manager (chunked uploads, quotas, background virus scan, download progress); Income and Expenditure Budget sheets with an Excel-compatible formula engine; `Deploy.sh` hosting modes (Cloudflare Tunnel, port forwarding behind Caddy, no domain)|",
+     "|2026-11|Income and expenditure class suggestion with ML.NET (logistic regression on character n-grams, chosen over naive Bayes on the author's own records; trained by the worker, stored in the file storage); unusual-amount marks in the expenditure list; amounts shown in each currency's own decimals|"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    317,
+    275,
+    295
+   ],
+   [
+    "replace",
+    317,
+    338,
+    295,
+    296,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    341,
+    296,
+    299
+   ],
+   [
+    "replace",
+    341,
+    345,
+    299,
+    303,
+    [
+     " (finance class taxonomies, amounts and history, asset usage, reminder limits and schedules, calendar access, fixed",
+     " schedules, passwords, nicknames, sessions, admin and menu safeguards, uploads, File Manager quotas and names, Kanban",
+     " lanes) and the budget formula engine. It calls no other project, logs nothing, never reads the clock (the current time is passed in) and reports every error through",
+     " `DomainError`, so the outer layers can translate it."
+    ]
+   ],
+   [
+    "equal",
+    345,
+    346,
+    303,
+    304
+   ],
+   [
+    "replace",
+    346,
+    348,
+    304,
+    306,
+    [
+     " the transaction (each write that runs in one spells out `BeginAsync` / `CommitAsync` / `RollbackAsync`), maps to DTOs and logs. It",
+     " calls Repository and Client only through their Contract interfaces."
+    ]
+   ],
+   [
+    "equal",
+    348,
+    349,
+    306,
+    307
+   ],
+   [
+    "replace",
+    349,
+    351,
+    307,
+    309,
+    [
+     " Contract interfaces. Website controllers and views never call them; the Worker calls the SMTP client itself and",
+     " FileStorage calls the ClamAV client itself."
+    ]
+   ],
+   [
+    "equal",
+    351,
+    352,
+    309,
+    310
+   ],
+   [
+    "replace",
+    352,
+    353,
+    310,
+    311,
+    [
+     " JSON reply; views only render. The navigation menu doubles as the access-control list (`AuthorizationFilter`)."
+    ]
+   ],
+   [
+    "equal",
+    353,
+    354,
+    311,
+    312
+   ],
+   [
+    "replace",
+    354,
+    355,
+    312,
+    313,
+    [
+     " from a domain policy serialized into the page, and the server re-validates every write."
+    ]
+   ],
+   [
+    "equal",
+    355,
+    370,
+    313,
+    328
+   ],
+   [
+    "replace",
+    370,
+    381,
+    328,
+    329,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    381,
+    411,
+    329,
+    359
+   ],
+   [
+    "replace",
+    411,
+    414,
+    359,
+    362,
+    [
+     " - Improved performance",
+     " - Enhanced routing",
+     " - Better dependency injection"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    416,
+    362,
+    364
+   ],
+   [
+    "replace",
+    416,
+    419,
+    364,
+    367,
+    [
+     " - Improved query performance",
+     " - Better async support",
+     " - Enhanced change tracking"
+    ]
+   ],
+   [
+    "equal",
+    419,
+    420,
+    367,
+    368
+   ],
+   [
+    "replace",
+    420,
+    423,
+    368,
+    371,
+    [
+     " - Multi-stage builds",
+     " - Container orchestration",
+     " - Environment isolation"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    424,
+    371,
+    372
+   ],
+   [
+    "replace",
+    424,
+    426,
+    372,
+    374,
+    [
+     " - Session Authentication",
+     " - Role-based access control"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    438,
+    374,
+    386
+   ],
+   [
+    "replace",
+    438,
+    445,
+    386,
+    393,
+    [
+     " - The custom client scripts are authored in TypeScript at `Maroik.Website/TypeScripts/{admin,anonymous,user}/custom/**/site.ts` and compiled 1:1 by `tsc` to `Maroik.Website/wwwroot/**/custom/**/site.js` (no bundler, no Babel). The release build (`npm run build`, used by the Docker image) then minifies each `site.js` in place with terser; `npm run build:debug` leaves it readable with a source map.",
+     " - Compiled under `--strict`; each file is an IIFE-wrapped global script (no `import`/`export`).",
+     " - Scripts keep only DOM wiring, widget init, AJAX transport, and notifications — business logic lives in `Maroik.Core.*` (DDD + Clean Architecture). Client-side rule checks are UX mirrors; the server always re-validates.",
+     " - `wwwroot/**/site.js` is build output and git-ignored. Docker Compose builds generate it in the Dockerfile's Node stage; running the site on the host, or running the client-script tests, needs Node 22 + `npm ci` in `Maroik.Website/`.",
+     " - MSBuild runs `tsc` on `dotnet build` when `node_modules/` is present; Docker builds run it in a dedicated `node:22-alpine` stage.",
+     " - Unit-tested with Vitest + jsdom in `Maroik.Website/TypeScripts.Tests/` (one `*.test.ts` per script, exercising the compiled `site.js`).",
+     " - Details: `Maroik.Website/TypeScripts/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    445,
+    472,
+    393,
+    420
+   ],
+   [
+    "replace",
+    472,
+    473,
+    420,
+    421,
+    [
+     " code, and the log entries a use case must write are asserted like any other result."
+    ]
+   ],
+   [
+    "equal",
+    473,
+    474,
+    421,
+    422
+   ],
+   [
+    "replace",
+    474,
+    477,
+    422,
+    425,
+    [
+     " with the production schema and seed data (Testcontainers, one throwaway database per test class); messaging against",
+     " a real RabbitMQ 4; mail against an in-process SMTP server; controllers through `WebApplicationFactory` against a real",
+     " database; and the whole site in a real browser with Playwright."
+    ]
+   ],
+   [
+    "equal",
+    477,
+    478,
+    425,
+    426
+   ],
+   [
+    "replace",
+    478,
+    479,
+    426,
+    427,
+    [
+     " (`BeginAsync` / `CommitAsync` / `RollbackAsync`), the exact error code / key / type, and every `catch`'s log entry."
+    ]
+   ],
+   [
+    "equal",
+    479,
+    480,
+    427,
+    428
+   ],
+   [
+    "replace",
+    480,
+    482,
+    428,
+    430,
+    [
+     " (`ModelMatchesSchemaTests`); every message key a controller can receive must exist in its `en-US` and `ko-KR`",
+     " resources (`ServiceErrorKeyResxTests`); every localized text a page script reads must be rendered by its view."
+    ]
+   ],
+   [
+    "equal",
+    482,
+    483,
+    430,
+    431
+   ],
+   [
+    "replace",
+    483,
+    484,
+    431,
+    432,
+    [
+     " fail the build when broken."
+    ]
+   ],
+   [
+    "equal",
+    484,
+    485,
+    432,
+    433
+   ],
+   [
+    "replace",
+    485,
+    487,
+    433,
+    435,
+    [
+     " script, against fixtures that carry what the real views and replies carry. Guard tests keep `any` and type",
+     " assertions out of the TypeScript, and a compile probe proves that untyped library values are rejected."
+    ]
+   ],
+   [
+    "equal",
+    487,
+    488,
+    435,
+    436
+   ],
+   [
+    "replace",
+    488,
+    490,
+    436,
+    438,
+    [
+     " elements each of the site's own CSS rules targets on the real pages, after the AdminLTE / Bootstrap / FullCalendar",
+     " stylesheets they override, so a rule that is removed, outranked or no longer loaded fails a test."
+    ]
+   ],
+   [
+    "equal",
+    490,
+    491,
+    438,
+    439
+   ],
+   [
+    "replace",
+    491,
+    493,
+    439,
+    441,
+    [
+     " testing with Stryker.NET (Domain 96 %, Service 96 %, measured 2026-10-13 — the survivors left are equivalent mutants",
+     " or ones the MTP runner miscounts inside static field initializers)."
+    ]
+   ],
+   [
+    "equal",
+    493,
+    497,
+    441,
+    445
+   ],
+   [
+    "replace",
+    497,
+    498,
+    445,
+    446,
+    [
+     "|Tests|What they cover|Needs Docker|"
+    ]
+   ],
+   [
+    "equal",
+    498,
+    499,
+    446,
+    447
+   ],
+   [
+    "replace",
+    499,
+    509,
+    447,
+    457,
+    [
+     "|`Maroik.Core.Domain.Tests`, `Maroik.Core.Contract.Tests`|entities, policies, value objects, DTOs, the layering / package-reference architecture rules|no|",
+     "|`Maroik.Core.Service.Tests`|use-case orchestration (mocked repositories)|no|",
+     "|`Maroik.Core.Repository.Tests`|EF Core repositories against a real PostgreSQL 17 loaded from `Maroik.DB/.../Debugging/Init.sql`|yes|",
+     "|`Maroik.Core.PostgreSQL.Tests`|the EF model against the real schema of both init scripts (tables, columns, keys, foreign keys, indexes)|yes|",
+     "|`Maroik.Core.Client.Tests`|mail (in-process SMTP server), file storage, ClamAV, RabbitMQ publisher and health check (real RabbitMQ)|yes|",
+     "|`Maroik.Worker.Tests`|the e-mail consumer and the worker host, against a real RabbitMQ and an SMTP relay|yes|",
+     "|`Maroik.FileStorage.Tests`|the file-storage service|no|",
+     "|`Maroik.Website.Tests`|controllers, filters, views and start-up through `WebApplicationFactory` against a real PostgreSQL|yes|",
+     "|`Maroik.Website/TypeScripts.Tests`|every client script (Vitest + jsdom), run with `npm test` in `Maroik.Website/`|no|",
+     "|`Maroik.E2E.Tests`|the running site in a real browser (Playwright), including the computed styles of the site's own stylesheets over the vendor CSS|yes|"
+    ]
+   ],
+   [
+    "equal",
+    509,
+    528,
+    457,
+    476
+   ],
+   [
+    "replace",
+    528,
+    529,
+    476,
+    477,
+    [
+     "2. Open Maroik.slnx and build the solution; restart Rider when it asks (see Rider settings)"
+    ]
+   ],
+   [
+    "equal",
+    529,
+    556,
+    477,
+    504
+   ],
+   [
+    "replace",
+    556,
+    561,
+    504,
+    505,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    561,
+    566,
+    505,
+    510
+   ],
+   [
+    "replace",
+    566,
+    570,
+    510,
+    514,
+    [
+     " suite, every .NET test project one after another, then the E2E suite on its own (run side by side, the other projects'",
+     " Testcontainers change the Docker network under the browser), and the coverage gate (line >= 80 %, branch >= 65 %). It",
+     " also builds the Dockerfile's client-script stage both ways, so a pull request that breaks the image build fails before",
+     " it is merged: the release build must ship minified `site.js` without source maps, the debug build the opposite."
+    ]
+   ],
+   [
+    "equal",
+    570,
+    571,
+    514,
+    515
+   ],
+   [
+    "replace",
+    571,
+    573,
+    515,
+    517,
+    [
+     " FileStorage and Worker images with that version stamped into the assemblies, checks that the website image ships",
+     " minified scripts and no source maps, pushes the images to GHCR and tags the commit."
+    ]
+   ],
+   [
+    "equal",
+    573,
+    574,
+    517,
+    518
+   ],
+   [
+    "replace",
+    574,
+    575,
+    518,
+    519,
+    [
+     "**Versioning.** Semantic Versioning from Conventional Commits since the last"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    588,
+    519,
+    532
+   ],
+   [
+    "replace",
+    588,
+    597,
+    532,
+    533,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    597,
+    598,
+    533,
+    534
+   ],
+   [
+    "replace",
+    598,
+    600,
+    534,
+    535,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    600,
+    601,
+    535,
+    536
+   ],
+   [
+    "replace",
+    601,
+    603,
+    536,
+    537,
+    [
+     "This project is licensed under the MIT License - see the LICENSE file for details."
+    ]
+   ],
+   [
+    "equal",
+    603,
+    605,
+    537,
+    539
+   ],
+   [
+    "replace",
+    605,
+    606,
+    539,
+    540,
+    [
+     " (`TUNNEL_TOKEN`); `.env.prod.example` lists every setting with dummy values."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "ab0998af3cbe+2": {
+  "fn": "jdfesa/lumapse",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Banner conceptual de Lumapse: «Tus ideas no esperan al Wi-Fi». Capturá, agrupá y conectá."
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " Ilustración conceptual: la visualización de conexiones no forma parte de la beta actual. "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "# Icono de Lumapse Lumapse"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "> App móvil minimalista de captura de notas y gestión del conocimiento personal. "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    9,
+    7,
+    9
+   ],
+   [
+    "replace",
+    9,
+    13,
+    9,
+    13,
+    [
+     "Estado del proyecto",
+     "Hito actual",
+     "Licencia",
+     "Conventional Commits"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    18,
+    13,
+    18
+   ],
+   [
+    "replace",
+    18,
+    21,
+    18,
+    19,
+    [
+     " <video src=\"https://github.com/user-attachments/assets/9c59be03-b0c7-4780-ba2a-9fe2b1bbd215\" width=\"360\" controls></video>"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    19,
+    20
+   ],
+   [
+    "replace",
+    22,
+    23,
+    20,
+    21,
+    [
+     " Un recorrido de un minuto por la captura y consulta de notas, la organización por materias, el calendario académico y los modos claro y oscuro. "
+    ]
+   ],
+   [
+    "equal",
+    23,
+    28,
+    21,
+    26
+   ],
+   [
+    "replace",
+    28,
+    40,
+    26,
+    33,
+    [
+     " Editor y listado de notas en Lumapse 0.6.0 ",
+     " Materias, secciones y búsqueda en Lumapse 0.6.0 ",
+     " Calendario y próximas fechas académicas en Lumapse 0.6.0 ",
+     "",
+     " Captura rápida ",
+     " Materias y secciones ",
+     " Calendario académico "
+    ]
+   ],
+   [
+    "equal",
+    40,
+    43,
+    33,
+    36
+   ],
+   [
+    "replace",
+    43,
+    44,
+    36,
+    37,
+    [
+     "**Abrir el manual interactivo de Lumapse 0.6.0**"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    47,
+    37,
+    40
+   ],
+   [
+    "delete",
+    47,
+    49,
+    40,
+    40
+   ],
+   [
+    "equal",
+    49,
+    56,
+    40,
+    47
+   ],
+   [
+    "replace",
+    56,
+    57,
+    47,
+    48,
+    [
+     "> **¿Por qué \"Lumapse\"?** El nombre es un neologismo que fusiona *Lumen* (claridad, captura sin fricción) y *Synapse* (conexión, conocimiento interconectado). Leer la historia completa →"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    48,
+    49
+   ],
+   [
+    "replace",
+    58,
+    61,
+    49,
+    50,
+    [
+     "> **Nota sobre la arquitectura:** Lumapse fue concebida inicialmente como una PWA. El relevamiento con 120 respuestas válidas respaldó las prioridades **mobile-first** y **offline-first**: el 72.5% eligió el celular y el 81.7% respondió “A veces”, “Raramente” o “Nunca” ante la pregunta por acceso estable a internet en el instituto. La encuesta no comparó PWA con APK. El empaquetado Android con Capacitor y la migración a SQLite se resolvieron mediante el análisis técnico documentado en ADR-005 y ADR-006."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    50,
+    53
+   ],
+   [
+    "replace",
+    64,
+    65,
+    53,
+    54,
+    [
+     "|Capa|Tecnología|Motivo|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    54,
+    55
+   ],
+   [
+    "replace",
+    66,
+    79,
+    55,
+    66,
+    [
+     "|Build|Vite 6|Estándar de la industria, HMR, configuración mínima|",
+     "|Lenguaje|JavaScript (ES2022+) + TypeScript gradual|JS sigue siendo la base; TypeScript entra por contratos y módulos puros para mejorar mantenibilidad|",
+     "|Persistencia actual|SQLite (vía `@capacitor-community/sqlite`)|Robusta, relacional, offline-first y alineada con ADR-006|",
+     "|Simulación web SQLite|`sql.js` + `jeep-sqlite`|Permite desarrollo y tests locales manteniendo el mismo modelo de datos|",
+     "|Empaquetado Android|Capacitor + Android|Distribuye la UI web en un contenedor Android híbrido y expone plugins nativos|",
+     "|Markdown|`marked` + `DOMPurify`|Renderizado de texto enriquecido con sanitización XSS|",
+     "|Estilos|CSS nativo / Custom Properties|Sin dependencias externas, máximo control|",
+     "|Tests|Vitest|Suite unitaria implementada para servicios, store y componentes críticos|",
+     "|CI / Quality Gate|GitHub Actions + scripts locales|Lint, tests, build, bundle budget, trazabilidad, schema, DBML, links, jerarquía, a11y y guardia contra diálogos nativos|",
+     "|Control de versiones|Git + GitHub|Seguimiento del proyecto, GitHub Projects|",
+     "|Commits|Conventional Commits|Historial legible y estandarizado|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    86,
+    66,
+    73
+   ],
+   [
+    "replace",
+    86,
+    87,
+    73,
+    74,
+    [
+     "> `Lumapse v0.6.0 — Release Candidate 1`"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    91,
+    74,
+    78
+   ],
+   [
+    "replace",
+    91,
+    92,
+    78,
+    79,
+    [
+     "no se presenta como estable o libre de errores. Evidencia del corte."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    101,
+    79,
+    88
+   ],
+   [
+    "replace",
+    101,
+    102,
+    88,
+    89,
+    [
+     "limitaciones del corte están en BACKLOG.md."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    105,
+    89,
+    92
+   ],
+   [
+    "replace",
+    105,
+    106,
+    92,
+    93,
+    [
+     "|Herramienta|Versión requerida|Verificar con|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    93,
+    94
+   ],
+   [
+    "replace",
+    107,
+    110,
+    94,
+    97,
+    [
+     "|**Node.js**|v22.20.0|`node --version`|",
+     "|**npm**|v10.9.3|`npm --version`|",
+     "|**Git**|v2+|`git --version`|"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    115,
+    97,
+    102
+   ],
+   [
+    "replace",
+    115,
+    129,
+    102,
+    103,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    139,
+    103,
+    113
+   ],
+   [
+    "replace",
+    139,
+    140,
+    113,
+    114,
+    [
+     "guía para Arch Linux con herramientas de línea de comandos."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    143,
+    114,
+    117
+   ],
+   [
+    "replace",
+    143,
+    146,
+    117,
+    118,
+    [
+     "> 📱 `docs/flujo-desarrollo-android.md`"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    150,
+    118,
+    122
+   ],
+   [
+    "replace",
+    150,
+    151,
+    122,
+    123,
+    [
+     "portal documental y el catálogo de scripts"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    157,
+    123,
+    129
+   ],
+   [
+    "replace",
+    157,
+    218,
+    129,
+    130,
+    [
+     "…（61 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    220,
+    130,
+    132
+   ],
+   [
+    "delete",
+    220,
+    222,
+    132,
+    132
+   ],
+   [
+    "equal",
+    222,
+    223,
+    132,
+    133
+   ],
+   [
+    "replace",
+    223,
+    225,
+    133,
+    135,
+    [
+     "（略）",
+     "### ✅ Hito 00 — Investigación y Anteproyecto (Abril 2026) → Informe"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    236,
+    135,
+    146
+   ],
+   [
+    "replace",
+    236,
+    237,
+    146,
+    147,
+    [
+     "### ✅ Hito 01 — Fundación (Mayo 2026) → Informe"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    249,
+    147,
+    159
+   ],
+   [
+    "replace",
+    249,
+    251,
+    159,
+    161,
+    [
+     "- Análisis cuantitativo y cualitativo de resultados (informe)",
+     "- Decisión de pivote de PWA a aplicación Android híbrida con Capacitor + SQLite (ADR-005)"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    252,
+    161,
+    162
+   ],
+   [
+    "replace",
+    252,
+    253,
+    162,
+    163,
+    [
+     "### ✅ Hito 02 — Core del Editor (Junio 2026) → Informe"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    263,
+    163,
+    173
+   ],
+   [
+    "replace",
+    263,
+    264,
+    173,
+    174,
+    [
+     "> **Nota:** Este hito se implementó con IndexedDB como capa de persistencia inicial. La migración a SQLite se ejecuta posteriormente durante el Hito 04, tras el pivote documentado en ADR-005 y formalizado técnicamente en ADR-006."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    174,
+    175
+   ],
+   [
+    "replace",
+    265,
+    266,
+    175,
+    176,
+    [
+     "### ✅ Hito 03 — Markdown, Offline y MVP Inicial (Julio 2026) → Informe"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    275,
+    176,
+    185
+   ],
+   [
+    "replace",
+    275,
+    276,
+    185,
+    186,
+    [
+     "### ✅ Hito 04 — Organización y UX Móvil (Agosto 2026) → Informe"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    290,
+    186,
+    200
+   ],
+   [
+    "replace",
+    290,
+    291,
+    200,
+    201,
+    [
+     "### ✅ Hito 05 — Testing, Calidad y Distribución (planificado para Septiembre 2026, cerrado) → Informe de cierre"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    307,
+    201,
+    217
+   ],
+   [
+    "replace",
+    307,
+    308,
+    217,
+    218,
+    [
+     "### 🔄 Hito 06 — Entrega Final (planificado para Octubre 2026, activo) → Informe inicial"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    315,
+    218,
+    225
+   ],
+   [
+    "replace",
+    315,
+    316,
+    225,
+    226,
+    [
+     "- Recorte de entrega y deuda postdefensa: evidencia de offline, privacidad y uso/accesibilidad registrada por artefacto en la fuente RNF, sin transferirla automáticamente a la RC1. Matriz final pendiente; CRUD/FPS diferidos, sin afirmar cumplimiento cuantitativo"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    317,
+    226,
+    227
+   ],
+   [
+    "replace",
+    317,
+    318,
+    227,
+    228,
+    [
+     "- Planificación y tareas pendientes: `TODO.md`"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    320,
+    228,
+    230
+   ],
+   [
+    "replace",
+    320,
+    323,
+    230,
+    231,
+    [
+     "> **Nota sobre la planificación:** Los meses asociados a cada hito constituyen estimaciones formuladas al inicio del proyecto. El desarrollo es iterativo: los plazos pueden ajustarse al profundizar la complejidad o aparecer hallazgos que cambian el alcance. El relevamiento por conveniencia aportó evidencia para priorizar móvil, offline y organización por materias; las decisiones de plataforma se justifican por separado en los ADR técnicos. El avance real se registra en los informes de hito, el Changelog y el historial de commits."
+    ]
+   ],
+   [
+    "equal",
+    323,
+    328,
+    231,
+    236
+   ],
+   [
+    "replace",
+    328,
+    329,
+    236,
+    237,
+    [
+     "|Actividad|Estado|Documentación|"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    330,
+    237,
+    238
+   ],
+   [
+    "replace",
+    330,
+    334,
+    238,
+    242,
+    [
+     "|Diseño de la encuesta|✅ Completado|relevamiento-datos.md|",
+     "|Metodología muestral y cálculo de muestra|✅ Completado|metodologia-muestral.md|",
+     "|Ejecución de la encuesta (recolección de respuestas)|✅ Completado|encuesta/README.md|",
+     "|Análisis de resultados y conclusiones|✅ Completado|resultados-relevamiento.md|"
+    ]
+   ],
+   [
+    "equal",
+    334,
+    335,
+    242,
+    243
+   ],
+   [
+    "replace",
+    335,
+    338,
+    243,
+    244,
+    [
+     "> **Nota:** Los resultados de la encuesta retroalimentaron los requisitos funcionales y las prioridades del roadmap. Ver las conclusiones y recomendaciones para un resumen de los hallazgos principales."
+    ]
+   ],
+   [
+    "equal",
+    338,
+    341,
+    244,
+    247
+   ],
+   [
+    "replace",
+    341,
+    353,
+    247,
+    257,
+    [
+     "- Portal documental — Jerarquía, fuentes canónicas y criterio editorial",
+     "- Informe final — capítulos fuente — Unidades vigentes en revisión; ensamblado al cierre editorial",
+     "- Hito 06 — Entrega Final — Alcance y criterios de cierre vigentes",
+     "- Plan de desarrollo inmediato de la beta — Plan aceptado, seguimiento y ajuste vigente del cierre; no acredita pruebas pendientes",
+     "- Cheat sheet de defensa — Métricas y respuestas verificables para la presentación",
+     "- Architecture Decision Records — Decisiones técnicas justificadas",
+     "- Diagramas UML — Casos de Uso, Secuencia, Modelo de Dominio (Mermaid)",
+     "- Informes de hito — Avance mensual del proyecto",
+     "- Documentación de producto — Personas, requisitos, historias de usuario, análisis competitivo, Lean Canvas (Design Thinking)",
+     "- Anteproyecto — Documento formal de definición"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    362,
+    257,
+    266
+   ],
+   [
+    "replace",
+    362,
+    363,
+    266,
+    267,
+    [
+     "El WIP vigente es de **dos elementos activos en total** entre `En Curso` y `En Revisión`. Cada elemento debe tener objetivo, criterio de cierre y evidencia trazable; puede estar respaldado por un issue de GitHub, un ítem del proyecto o una tarea versionada. Los hitos son cortes académicos y de entrega, no Sprints. Ver ADR-003 y la Definition of Workflow."
+    ]
+   ],
+   [
+    "equal",
+    363,
+    365,
+    267,
+    269
+   ],
+   [
+    "delete",
+    365,
+    367,
+    269,
+    269
+   ],
+   [
+    "equal",
+    367,
+    377,
+    269,
+    279
+   ],
+   [
+    "delete",
+    377,
+    379,
+    279,
+    279
+   ],
+   [
+    "equal",
+    379,
+    380,
+    279,
+    280
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "de29bd2a627f+2": {
+  "fn": "ortic/dbcraft",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "equal",
+    0,
+    11,
+    0,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "SQL window with object browser and result grid"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    17,
+    12,
+    17
+   ],
+   [
+    "replace",
+    17,
+    19,
+    17,
+    19,
+    [
+     " multi-cursor, block selection, find/replace with regex, bracket and",
+     " `BEGIN`/`END` matching, comment toggling, case conversion, line moves."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    22,
+    20,
+    22,
+    [
+     " views), package members with signatures, `%ROWTYPE` and cursor records,",
+     " locals and parameters, schema objects and public synonyms."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     " database), references, live syntax diagnostics and an outline."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    26,
+    24,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     " snippets with placeholders (type a trigger, press Tab)."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "Completion with live dictionary data"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    32,
+    29,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     " whole script (F8); SQL\\*Plus `exec`, `prompt`, `define`, `desc`, `&vars`."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    33,
+    34
+   ],
+   [
+    "replace",
+    34,
+    36,
+    34,
+    36,
+    [
+     " their values (or NULL), which the window keeps. A statement with a",
+     " variable that has no value yet waits there for it; Enter or F8 runs it."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    36,
+    37
+   ],
+   [
+    "replace",
+    37,
+    42,
+    37,
+    42,
+    [
+     " record view, value viewer, copy and export (CSV, TSV, JSON, Excel,",
+     " INSERT statements, Markdown, HTML). Columns can be resized, hidden,",
+     " moved by dragging their header and frozen at the left. *Save to file…*",
+     " writes a binary or long text value (an image in a BLOB, a document in a",
+     " CLOB) to a file."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    42,
+    43
+   ],
+   [
+    "replace",
+    43,
+    44,
+    43,
+    44,
+    [
+     " child rows in any table referencing it."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    44,
+    45
+   ],
+   [
+    "replace",
+    45,
+    47,
+    45,
+    47,
+    [
+     " or date column, numeric columns become series; the chart follows the grid's",
+     " filter and sort."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    47,
+    48
+   ],
+   [
+    "replace",
+    48,
+    51,
+    48,
+    51,
+    [
+     " against the fetched values when applied, so concurrent modifications are",
+     " reported instead of overwritten. \"Show SQL\" previews the DML. *Load from",
+     " file…* puts a file into a binary or long text cell."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    51,
+    52
+   ],
+   [
+    "replace",
+    52,
+    54,
+    52,
+    54,
+    [
+     " INSERT statements or Markdown, with live row count and cancel, on every",
+     " database."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    56,
+    54,
+    56
+   ],
+   [
+    "replace",
+    56,
+    59,
+    56,
+    59,
+    [
+     " (`ORA-06512`) is a link to its package, procedure or trigger at the line,",
+     " with the line's code on hover; **Open where raised** goes straight to",
+     " where the error was raised."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    59,
+    60
+   ],
+   [
+    "replace",
+    60,
+    61,
+    60,
+    61,
+    [
+     "Editing a result"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    61,
+    64
+   ],
+   [
+    "replace",
+    64,
+    68,
+    64,
+    68,
+    [
+     " drop, describe, query, test; favorites and recently opened objects;",
+     " filters for invalid or recently changed objects; tables expand to",
+     " columns, indexes, constraints, triggers and referencing tables; users",
+     " and roles."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    68,
+    69
+   ],
+   [
+    "replace",
+    69,
+    76,
+    69,
+    76,
+    [
+     " Object): a table builder (columns with a type picker, primary and",
+     " foreign keys, checks, indexes, identity columns, range, interval, list",
+     " or hash partitioning, temporary tables, a copy of another table), and",
+     " forms for views, materialized views, sequences, synonyms, indexes,",
+     " database links, scheduler jobs, users, roles, profiles and directories,",
+     " with a preview of the generated DDL. Triggers, procedures, functions, packages and types start",
+     " from a form that writes their first source for a program window."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    76,
+    77
+   ],
+   [
+    "replace",
+    77,
+    79,
+    77,
+    79,
+    [
+     " indexes, database links, scheduler jobs, users, roles, profiles,",
+     " directories and grants."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    79,
+    80
+   ],
+   [
+    "replace",
+    80,
+    84,
+    80,
+    84,
+    [
+     " (gutter markers and squiggles), unsaved-change tracking, save to file.",
+     " The outline beside the code jumps to a declaration; right-click one to",
+     " test or debug it, go to its body or specification, find its references",
+     " or copy its name."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    84,
+    85
+   ],
+   [
+    "replace",
+    85,
+    94,
+    85,
+    94,
+    [
+     " IN parameters as binds, OUT parameters and the result printed, also",
+     " collections (element by element), records, `%ROWTYPE` and objects (field",
+     " by field), ref cursors (row by row), LOBs and XMLTYPE. What a bind can't",
+     " carry, such as a collection or a record, is a local to fill in. **Debug…** runs that",
+     " block under the debugger right away and stops on entry to the",
+     " subprogram. Both are on the right-click menu of procedures, functions and",
+     " package members, in the object browser and in the editors, also on a",
+     " subprogram's name in its own package spec or body and in the program",
+     " window's outline."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    94,
+    95
+   ],
+   [
+    "replace",
+    95,
+    107,
+    95,
+    107,
+    [
+     " counts, kept across restarts; break on exception, step over/into/out",
+     " (also through the debugged block itself), run to cursor (Ctrl+F7), call",
+     " stack with subprograms, variables of any frame including records,",
+     " `%ROWTYPE` and collections, watches, values on hover. **Change values",
+     " while stopped**: double-click a variable, field, element or package",
+     " global and the code goes on with the new value (checked against its type",
+     " and precision first; IN parameters and LOBs can't be changed).",
+     " Units with breakpoints are compiled with debug information; Step into",
+     " enters only units that have it (program windows can compile with it,",
+     " Settings → Debugger, and the panel says when a step went over a unit",
+     " without). Its panels (controls and call stack, variables, watches,",
+     " breakpoints, SQL plan) are tabs to arrange as you like."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    107,
+    108
+   ],
+   [
+    "replace",
+    108,
+    121,
+    108,
+    121,
+    [
+     " and on its own when a debug run can't connect): the database connects",
+     " back to DbCraft to debug, which takes `DEBUG CONNECT SESSION`, a network",
+     " ACL entry for the host it connects to, and a way through firewalls.",
+     " The setup tries every host the database might reach this computer by",
+     " (the address it sees for it, the computer's names, one you type) and",
+     " says for each why it fails: no ACL entry, a name the server can't",
+     " resolve, refused, or dropped on the way. It offers what's missing: a",
+     " host that works, the grants and ACL entry (run as yourself, through a",
+     " saved DBA connection or a user and password, or copied for a DBA), and",
+     " a rule for Windows Firewall, ufw, firewalld or the macOS firewall, run",
+     " with administrator rights after asking. *Debugger ports* (Settings →",
+     " Debugger) fixes the ports the debugger listens on, for firewall rules",
+     " and ACL entries limited to a few."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    121,
+    122
+   ],
+   [
+    "replace",
+    122,
+    124,
+    122,
+    124,
+    [
+     " total time per subprogram and SQL statement; double-click jumps to the",
+     " code. Needs `EXECUTE` on `DBMS_HPROF`; profiling commits."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    126,
+    124,
+    126
+   ],
+   [
+    "replace",
+    126,
+    130,
+    126,
+    130,
+    [
+     " to share a team style, rules learned from existing code (an editor or a",
+     " whole schema), formatting on save, on paste or when a statement's `;` is",
+     " typed, and the AI for statements the rules can't lay out (only",
+     " whitespace and case may change)."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    130,
+    131
+   ],
+   [
+    "replace",
+    131,
+    132,
+    131,
+    132,
+    [
+     "Debugger stopped at a breakpoint"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    135,
+    132,
+    135
+   ],
+   [
+    "replace",
+    135,
+    136,
+    135,
+    136,
+    [
+     " likely an uncommitted transaction\"), KPIs and live charts."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    136,
+    137
+   ],
+   [
+    "replace",
+    137,
+    138,
+    137,
+    138,
+    [
+     " it; top wait events with their latency histograms."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    139,
+    138,
+    139
+   ],
+   [
+    "replace",
+    139,
+    142,
+    139,
+    142,
+    [
+     " connection, transaction, PGA, temp, the PL/SQL it runs, time model,",
+     " captured binds, its own plan, locks, all columns) with cancel, kill,",
+     " disconnect after transaction and SQL trace."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    142,
+    143
+   ],
+   [
+    "replace",
+    143,
+    144,
+    143,
+    144,
+    [
+     " aren't shared, and the sessions running the statement."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    144,
+    145
+   ],
+   [
+    "replace",
+    145,
+    147,
+    145,
+    147,
+    [
+     " and AWR reports and a statement's plan history; with the Tuning Pack:",
+     " SQL Monitor reports. A built-in tkprof-style trace analyzer."
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    147,
+    148
+   ],
+   [
+    "replace",
+    148,
+    150,
+    148,
+    150,
+    [
+     " (statement and plan, transaction, locks, the thread they wait for) and",
+     " can be killed."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    151,
+    150,
+    151
+   ],
+   [
+    "replace",
+    151,
+    152,
+    151,
+    152,
+    [
+     " views and DMVs."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    152,
+    153
+   ],
+   [
+    "replace",
+    153,
+    154,
+    153,
+    154,
+    [
+     "Monitoring dashboard"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    157,
+    154,
+    157
+   ],
+   [
+    "replace",
+    157,
+    160,
+    157,
+    160,
+    [
+     " local model server (Ollama, llama.cpp, LM Studio) or a command line tool",
+     " (prompt on stdin, answer on stdout). Several can be set up, one is the",
+     " default; API keys live in the OS keychain."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    160,
+    161
+   ],
+   [
+    "replace",
+    161,
+    164,
+    161,
+    164,
+    [
+     " foreign keys of the connected schema; explain, fix (with the compile or",
+     " run errors) or rewrite the statement under the cursor or the selection,",
+     " then replace it or insert the answer's code with one click."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    164,
+    165
+   ],
+   [
+    "replace",
+    165,
+    167,
+    165,
+    167,
+    [
+     " with statistics) with likely problems and concrete fixes; \"Analyze with",
+     " AI\" on top SQL, session details, AWR/ASH reports and traces."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    167,
+    168
+   ],
+   [
+    "replace",
+    168,
+    171,
+    168,
+    171,
+    [
+     " definitions, statistics, plans and source go with requests; result rows",
+     " and bind values only if you allow it in Settings → AI, and each answer",
+     " shows what was sent."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    174,
+    171,
+    174
+   ],
+   [
+    "replace",
+    174,
+    175,
+    174,
+    175,
+    [
+     " scripts; data compare by key with sync DML."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    175,
+    176
+   ],
+   [
+    "replace",
+    176,
+    177,
+    176,
+    177,
+    [
+     " Markdown, one file per table plus DDL, streamed with progress."
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    177,
+    178
+   ],
+   [
+    "replace",
+    178,
+    181,
+    178,
+    181,
+    [
+     " date formats), import into a new or existing table with array DML.",
+     " Per column: trim, date format, SQL expression (`upper(:value)`,",
+     " constants); bad rows can be skipped and logged to `<file>.bad.csv`."
+    ]
+   ],
+   [
+    "equal",
+    181,
+    182,
+    181,
+    182
+   ],
+   [
+    "replace",
+    182,
+    193,
+    182,
+    193,
+    [
+     " *Maintenance…*), on every database. Its state comes first: when its",
+     " statistics were gathered and whether they are stale or locked, and",
+     " unusable indexes and partitions on Oracle; dead rows and the last",
+     " (auto)vacuum on PostgreSQL; reclaimable space on MySQL; fragmentation on",
+     " SQL Server. Then the database's tasks, with their options and what they",
+     " lock: gather, delete, lock or unlock statistics, rebuild unusable indexes,",
+     " shrink, move (online); `VACUUM`, `ANALYZE`, `REINDEX CONCURRENTLY`;",
+     " `ANALYZE`, `OPTIMIZE` and `CHECK TABLE`; `UPDATE STATISTICS`, rebuild or",
+     " reorganize indexes. The statements run one by one on the window's own",
+     " session, which commits each, with Break; production connections ask",
+     " first."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    193,
+    194
+   ],
+   [
+    "replace",
+    194,
+    200,
+    194,
+    200,
+    [
+     " Scan*, or right-click the Tables folder): what the tables need, with the",
+     " evidence and the fix for each, run as a batch object by object. Stale or",
+     " missing statistics and unusable indexes (Oracle), dead rows, wraparound",
+     " and invalid indexes (PostgreSQL), reclaimable space and old statistics",
+     " (MySQL), fragmented indexes, statistics with many changes and the last",
+     " CHECKDB (SQL Server). The dashboards' findings open the fix too."
+    ]
+   ],
+   [
+    "equal",
+    200,
+    203,
+    200,
+    203
+   ],
+   [
+    "replace",
+    203,
+    204,
+    203,
+    204,
+    [
+     " segments, top SQL, locks, jobs, …) open as editable queries."
+    ]
+   ],
+   [
+    "equal",
+    204,
+    205,
+    204,
+    205
+   ],
+   [
+    "replace",
+    205,
+    206,
+    205,
+    206,
+    [
+     " asked for when it runs."
+    ]
+   ],
+   [
+    "equal",
+    206,
+    209,
+    206,
+    209
+   ],
+   [
+    "replace",
+    209,
+    210,
+    209,
+    210,
+    [
+     " stop, enable, disable, drop; recent runs with errors."
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    210,
+    211
+   ],
+   [
+    "replace",
+    211,
+    213,
+    211,
+    213,
+    [
+     " procedure, start and end, the repeat interval from presets or as a",
+     " calendar expression, with the next runs it gives."
+    ]
+   ],
+   [
+    "equal",
+    213,
+    214,
+    213,
+    214
+   ],
+   [
+    "replace",
+    214,
+    215,
+    214,
+    215,
+    [
+     "Scheduler jobs"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    218,
+    215,
+    218
+   ],
+   [
+    "replace",
+    218,
+    219,
+    218,
+    219,
+    [
+     " tree, a list of changed files, diff with the last commit."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    221,
+    219,
+    221
+   ],
+   [
+    "replace",
+    221,
+    222,
+    221,
+    222,
+    [
+     " …) to put it under version control."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    223,
+    222,
+    223
+   ],
+   [
+    "replace",
+    223,
+    224,
+    223,
+    224,
+    [
+     " order."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    225,
+    224,
+    225
+   ],
+   [
+    "replace",
+    225,
+    226,
+    225,
+    226,
+    [
+     "Comparing a file with the database"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    229,
+    226,
+    229
+   ],
+   [
+    "replace",
+    229,
+    232,
+    229,
+    232,
+    [
+     " status bar always shows pending transactions; production connections are",
+     " marked red and ask before commit; read-only connections; passwords live",
+     " in the OS keychain."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    232,
+    233
+   ],
+   [
+    "replace",
+    233,
+    238,
+    233,
+    238,
+    [
+     " browser, status bar, new windows and SQL windows all use the active one.",
+     " Connecting or picking another moves the SQL windows there (asking first",
+     " about open transactions); program windows keep their connection, named",
+     " in their tab. *Settings → Query → Switch connection per window* gives",
+     " each SQL window a connection of its own instead."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    242,
+    238,
+    242
+   ],
+   [
+    "replace",
+    242,
+    247,
+    242,
+    247,
+    [
+     " tabs, dialogs, the object browser), a Compact density next to the default",
+     " Comfortable one, or padding, gaps, margins and tree indent set one by",
+     " one; an accent color, square corners, no shadows, scroll bars that are",
+     " always visible, no animations. Object names in the browser can use the",
+     " interface font instead of the code font."
+    ]
+   ],
+   [
+    "equal",
+    247,
+    248,
+    247,
+    248
+   ],
+   [
+    "replace",
+    248,
+    249,
+    248,
+    249,
+    [
+     " lines between rows and what NULL looks like."
+    ]
+   ],
+   [
+    "equal",
+    249,
+    250,
+    249,
+    250
+   ],
+   [
+    "replace",
+    250,
+    251,
+    250,
+    251,
+    [
+     " cursor that blinks or not."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    254,
+    251,
+    254
+   ],
+   [
+    "replace",
+    254,
+    258,
+    254,
+    258,
+    [
+     " (`?tls` for TLS, `?tls=skip-verify` for self-signed certificates); no",
+     " client library needed. The database picked in the object browser is the",
+     " one SQL windows run in; the toolbar and status bar show it. Without a",
+     " database in the profile, the connection starts in the one picked last."
+    ]
+   ],
+   [
+    "equal",
+    258,
+    259,
+    258,
+    259
+   ],
+   [
+    "replace",
+    259,
+    264,
+    259,
+    264,
+    [
+     " `ssh -L` or HeidiSQL's SSH tunnel; the database address is then as the",
+     " SSH server sees it (often `localhost:3306/database`). Log in with a",
+     " password, a key file (OpenSSH or PuTTY `.ppk`) or the SSH agent (Pageant",
+     " or Windows' OpenSSH agent). Host keys come from `~/.ssh/known_hosts`; an",
+     " unknown one is shown with its fingerprint to trust once."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    264,
+    265
+   ],
+   [
+    "replace",
+    265,
+    268,
+    265,
+    268,
+    [
+     " *Execute to file*, completion with columns and comments, and",
+     " transactions that work as with Oracle: queries see what others",
+     " committed, changes wait for Commit."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    269,
+    268,
+    269
+   ],
+   [
+    "replace",
+    269,
+    274,
+    269,
+    274,
+    [
+     " comments, `--` comments only before a space, and `/*!…*/` as code (as",
+     " `mysqldump` writes its SETs and triggers). As on every database but",
+     " Oracle, `&name` is no substitution variable unless `SET DEFINE ON`",
+     " says so.",
+     " Warnings show as messages."
+    ]
+   ],
+   [
+    "equal",
+    274,
+    275,
+    274,
+    275
+   ],
+   [
+    "replace",
+    275,
+    278,
+    275,
+    278,
+    [
+     " Oracle. Rows are found by the table's primary key (or a unique key on",
+     " NOT NULL columns), which DbCraft adds to the result if the query doesn't",
+     " select it; tables without one stay read-only."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    278,
+    279
+   ],
+   [
+    "replace",
+    279,
+    285,
+    279,
+    285,
+    [
+     " triggers, and the server's users (as `user@host`) and roles; object",
+     " views show columns, indexes, constraints, triggers, grants, dependencies",
+     " and the DDL. *Edit* opens a routine or trigger as a script that drops",
+     " and creates it again, a view as `CREATE OR REPLACE`. Listing every user",
+     " and role takes `SELECT` on `mysql.user`;",
+     " without it the browser shows your own user and the roles you may use."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    286,
+    285,
+    286
+   ],
+   [
+    "replace",
+    286,
+    290,
+    286,
+    290,
+    [
+     " host, password, expiry, lock, the roles granted (with admin option, and",
+     " which are enabled at login) and privileges on the server, a database or",
+     " a table, with the grant option. They show the statements before",
+     " *Apply*. Reading other accounts takes `SELECT` on the `mysql` database."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    291,
+    290,
+    291
+   ],
+   [
+    "replace",
+    291,
+    297,
+    291,
+    297,
+    [
+     " (lock waits and who blocks, metadata locks, connections near the limit,",
+     " buffer pool hit ratio, long transactions, replication), then KPIs and",
+     " trends from `SHOW GLOBAL STATUS`, running statements, open transactions,",
+     " storage and top statements from `performance_schema`. Other users'",
+     " threads, transactions and lock waits need the `PROCESS` privilege; top",
+     " statements and lock waits `SELECT` on `performance_schema`."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    297,
+    298
+   ],
+   [
+    "replace",
+    298,
+    303,
+    298,
+    303,
+    [
+     " WHERE per table, one file per table (`orders.csv`, `orders.ddl.sql` from",
+     " `SHOW CREATE TABLE`), each streamed from the session. *Read: Table by",
+     " table* reads each table as of its own query; *Consistent* all of them",
+     " in one transaction `WITH CONSISTENT SNAPSHOT` (InnoDB tables). INSERTs",
+     " leave out generated columns."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    304,
+    303,
+    304
+   ],
+   [
+    "replace",
+    304,
+    309,
+    304,
+    309,
+    [
+     " the rest of the monitor, reports, scheduler jobs, compare, import,",
+     " the other form editors — isn't offered on MySQL connections. End a",
+     " routine with `/` on a line of its own, as in SQL\\*Plus, or with a",
+     " `DELIMITER` of its own, as for the `mysql` client (`DELIMITER ;;` …",
+     " `END ;;` … `DELIMITER ;`)."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    312,
+    309,
+    312
+   ],
+   [
+    "replace",
+    312,
+    317,
+    312,
+    317,
+    [
+     " `verify-full` to check the certificate; a `postgresql://` URL works too),",
+     " and *Type: SQL Server* with `host:1433/database` or `host\\instance`",
+     " (`?trust` for a self-signed certificate; an ADO.NET connection string",
+     " works too). Both drivers are pure Rust: no client library needed. Tested",
+     " with PostgreSQL 18 and SQL Server 2022."
+    ]
+   ],
+   [
+    "equal",
+    317,
+    318,
+    317,
+    318
+   ],
+   [
+    "replace",
+    318,
+    330,
+    318,
+    330,
+    [
+     " Break, explain plan (`EXPLAIN (FORMAT JSON)`, `SHOWPLAN_ALL`), completion,",
+     " the object browser (also materialized views and sequences, synonyms on",
+     " SQL Server, and users and roles: PostgreSQL's roles that can log in are",
+     " its users; SQL Server's are the database's) and object views with the",
+     " DDL. Users and roles have forms as on MySQL: on PostgreSQL the role's",
+     " options, password, validity, connection limit, memberships and",
+     " privileges on databases, schemas, tables and sequences; on SQL Server a",
+     " user for a new or existing login (or without one), its default schema,",
+     " role memberships and permissions granted, grantable or denied.",
+     " Transactions work as with",
+     " Oracle; on PostgreSQL a failing statement doesn't abort the transaction,",
+     " and notices (`RAISE NOTICE`) show as messages."
+    ]
+   ],
+   [
+    "equal",
+    330,
+    331,
+    330,
+    331
+   ],
+   [
+    "replace",
+    331,
+    337,
+    331,
+    337,
+    [
+     " table, one file per table and its DDL, each streamed from the session.",
+     " *Consistent* reads all of them in one read-only `REPEATABLE READ`",
+     " transaction on PostgreSQL, a `SNAPSHOT` one on SQL Server (which needs",
+     " `ALLOW_SNAPSHOT_ISOLATION ON`). INSERTs leave out generated and computed",
+     " columns and rowversions, and give identities their values",
+     " (`OVERRIDING SYSTEM VALUE`, `SET IDENTITY_INSERT`)."
+    ]
+   ],
+   [
+    "equal",
+    337,
+    338,
+    337,
+    338
+   ],
+   [
+    "replace",
+    338,
+    344,
+    338,
+    344,
+    [
+     " MySQL: rows are found by the table's primary key (or a unique key on",
+     " NOT NULL columns), which DbCraft adds to the result if the query doesn't",
+     " select it; views and tables without such a key stay read-only. Applying",
+     " checks the values as they were shown, also json, xml, arrays and",
+     " floats on PostgreSQL and `text`, `xml` and CLR types (`geometry`,",
+     " `hierarchyid`) on SQL Server; a `sql_variant` isn't checked."
+    ]
+   ],
+   [
+    "equal",
+    344,
+    345,
+    344,
+    345
+   ],
+   [
+    "replace",
+    345,
+    354,
+    345,
+    354,
+    [
+     " (who blocks whom, sessions idle in transaction, connections near the",
+     " limit, cache hit ratio, deadlocks, replication lag and inactive slots,",
+     " transaction ID wraparound, tables with many dead rows, checkpoints",
+     " forced by WAL volume), then KPIs and trends from `pg_stat_database`,",
+     " active sessions by wait event, connections by user, application, client",
+     " and database, running statements, open transactions, replication, the",
+     " largest databases and tables, and top statements from",
+     " `pg_stat_statements` (when it is loaded). Other users' statements need",
+     " `pg_read_all_stats` (or `pg_monitor`)."
+    ]
+   ],
+   [
+    "equal",
+    354,
+    355,
+    354,
+    355
+   ],
+   [
+    "replace",
+    355,
+    366,
+    355,
+    366,
+    [
+     " blocks, a sleeping session with an open transaction named as such, a",
+     " log nearly full, memory grants pending, low page life expectancy,",
+     " connections near the limit, deadlocks, buffer cache hit ratio, a high",
+     " share of compilations, long transactions and requests), then KPIs and",
+     " trends from the performance counters, running requests by wait class,",
+     " sessions by login, host, program and database, blocking, open",
+     " transactions with their log use, top waits since the refresh before,",
+     " database and table sizes, and top statements from the plan cache. Most",
+     " of it needs `VIEW SERVER STATE` (`VIEW SERVER PERFORMANCE STATE` on",
+     " 2022); without it the dashboard shows the login's own sessions and says",
+     " so."
+    ]
+   ],
+   [
+    "equal",
+    366,
+    367,
+    366,
+    367
+   ],
+   [
+    "replace",
+    367,
+    371,
+    367,
+    371,
+    [
+     " statement, transaction (and how far its snapshot holds back VACUUM),",
+     " locks and who blocks whom, with *Cancel query* and *Terminate*; a SQL",
+     " Server session's connection, request with its cached plan, transactions",
+     " with log used, locks and blocking, with *Kill*."
+    ]
+   ],
+   [
+    "equal",
+    371,
+    372,
+    371,
+    372
+   ],
+   [
+    "replace",
+    372,
+    375,
+    372,
+    375,
+    [
+     " SSH server sees it, e.g. `localhost:5432/database`. On SQL Server give",
+     " the port, not `host\\instance`: the SQL Server Browser can't be reached",
+     " through a tunnel."
+    ]
+   ],
+   [
+    "equal",
+    375,
+    376,
+    375,
+    376
+   ],
+   [
+    "replace",
+    376,
+    383,
+    376,
+    383,
+    [
+     " bodies stay whole and `::` casts aren't bind variables; on SQL Server,",
+     " `GO` on a line of its own ends a batch, routines and scripts with",
+     " `DECLARE`d variables run up to the next `GO`, and `BEGIN … END` blocks",
+     " keep their `;`. *Edit* opens a routine, trigger or view as `CREATE OR",
+     " REPLACE` (PostgreSQL) or `CREATE OR ALTER` (SQL Server). A PostgreSQL",
+     " materialized view is dropped and created again, with its indexes,",
+     " comments and grants, in one block that a failing create undoes."
+    ]
+   ],
+   [
+    "equal",
+    383,
+    384,
+    383,
+    384
+   ],
+   [
+    "replace",
+    384,
+    391,
+    384,
+    391,
+    [
+     " informational messages show as messages, in order with them. Break",
+     " stops the batch and keeps the transaction. So does a statement run",
+     " while a result has rows left, when that result's batch only reads; one",
+     " that may change something is read to its end first. The driver is our",
+     " fork of tiberius (branch `pythia`),",
+     " which passes those messages on and reads the server's answer to a",
+     " Break."
+    ]
+   ],
+   [
+    "equal",
+    391,
+    394,
+    391,
+    394
+   ],
+   [
+    "replace",
+    394,
+    401,
+    394,
+    401,
+    [
+     " makes one). SQLite is built in: nothing to install. A path that doesn't",
+     " exist fails instead of leaving an empty database behind; `?create` makes",
+     " the file, `?ro` opens it read-only, `:memory:` is one in-memory database",
+     " for all windows, and a `file:` URI works as SQLite takes it, except that",
+     " it makes a missing file only with `mode=rwc` and that one of a database",
+     " in memory (`file::memory:`, `mode=memory`) is one for all windows too",
+     " unless it says `cache=private`."
+    ]
+   ],
+   [
+    "equal",
+    401,
+    402,
+    401,
+    402
+   ],
+   [
+    "replace",
+    402,
+    409,
+    402,
+    409,
+    [
+     " (`EXPLAIN QUERY PLAN`), *Execute to file* and completion. Each window",
+     " has its own connection to the file, and transactions work as with",
+     " Oracle: changes wait for Commit, and DDL outside a transaction is",
+     " committed at once. While one window has uncommitted changes, another one",
+     " that writes waits up to five seconds for the file's lock, then asks to",
+     " commit or roll back in the other one. Foreign keys are checked (`pragma",
+     " foreign_keys = off` in the login script turns that off)."
+    ]
+   ],
+   [
+    "equal",
+    409,
+    410,
+    409,
+    410
+   ],
+   [
+    "replace",
+    410,
+    417,
+    410,
+    417,
+    [
+     " attached databases as schemas (`attach database` in the login script",
+     " attaches one for every window). Object views show columns, indexes,",
+     " constraints, triggers, what uses a table and what a view uses, and the",
+     " DDL as written, a table's with its indexes. *Edit* opens a view, trigger",
+     " or index as a script that drops and creates it again in a transaction",
+     " of its own, which a failing create rolls back (`WHENEVER SQLERROR EXIT",
+     " ROLLBACK`), so the object stays as it was."
+    ]
+   ],
+   [
+    "equal",
+    417,
+    418,
+    417,
+    418
+   ],
+   [
+    "replace",
+    418,
+    422,
+    418,
+    422,
+    [
+     " other databases. Rows are found by the table's primary key, a unique",
+     " index on NOT NULL columns, or else its `rowid`, so every table can be",
+     " edited (a view can't). Applying checks the values that were fetched; a",
+     " number is found whether the column holds it as a number or as text."
+    ]
+   ],
+   [
+    "equal",
+    422,
+    423,
+    422,
+    423
+   ],
+   [
+    "replace",
+    423,
+    426,
+    423,
+    426,
+    [
+     " one), a WHERE per table, one file per table and its DDL; *Consistent*",
+     " reads all of them in one transaction. INSERTs leave out generated",
+     " columns."
+    ]
+   ],
+   [
+    "equal",
+    426,
+    427,
+    426,
+    427
+   ],
+   [
+    "replace",
+    427,
+    428,
+    427,
+    428,
+    [
+     " own."
+    ]
+   ],
+   [
+    "equal",
+    428,
+    429,
+    428,
+    429
+   ],
+   [
+    "replace",
+    429,
+    432,
+    429,
+    432,
+    [
+     " check, after its rows, size and whether it has statistics. The",
+     " *Maintenance Scan* finds free pages that `VACUUM` gives back and indexed",
+     " tables without statistics."
+    ]
+   ],
+   [
+    "equal",
+    432,
+    435,
+    432,
+    435
+   ],
+   [
+    "replace",
+    435,
+    436,
+    435,
+    436,
+    [
+     "Download DbCraft from its website."
+    ]
+   ],
+   [
+    "equal",
+    436,
+    489,
+    436,
+    489
+   ],
+   [
+    "replace",
+    489,
+    490,
+    489,
+    490,
+    [
+     "(microsoft/wslg#1386)."
+    ]
+   ],
+   [
+    "equal",
+    490,
+    512,
+    490,
+    512
+   ],
+   [
+    "replace",
+    512,
+    513,
+    512,
+    513,
+    [
+     "rust-oracledb (branch `pythia`:"
+    ]
+   ],
+   [
+    "equal",
+    513,
+    516,
+    513,
+    516
+   ],
+   [
+    "replace",
+    516,
+    517,
+    516,
+    517,
+    [
+     "Packages are built with cargo-packager"
+    ]
+   ],
+   [
+    "equal",
+    517,
+    553,
+    517,
+    553
+   ],
+   [
+    "replace",
+    553,
+    554,
+    553,
+    554,
+    [
+     "|Variable|Used by|"
+    ]
+   ],
+   [
+    "equal",
+    554,
+    555,
+    554,
+    555
+   ],
+   [
+    "replace",
+    555,
+    567,
+    555,
+    567,
+    [
+     "|`DBCRAFT_TEST_DB`|integration tests (app user)|",
+     "|`DBCRAFT_TEST_MYSQL`|MySQL tests, e.g. `dbcraft/dbcraft@localhost:3306/dbcraft` for `docker compose up -d mysql`|",
+     "|`DBCRAFT_TEST_MYSQL_DBA`|MySQL dashboard tests that need privileges, e.g. `root/mysql@localhost:3306/dbcraft`|",
+     "|`DBCRAFT_TEST_SSH`, `DBCRAFT_TEST_MYSQL_VIA_SSH`|SSH tunnel tests: `dbcraft:dbcraft@localhost:2222` and `dbcraft/dbcraft@mysql:3306/dbcraft` for `docker compose up -d mysql ssh`|",
+     "|`DBCRAFT_TEST_POSTGRES_VIA_SSH`|PostgreSQL through the SSH tunnel test (with `DBCRAFT_TEST_SSH`): `dbcraft/dbcraft@postgres:5432/dbcraft` for `docker compose up -d postgres ssh`|",
+     "|`DBCRAFT_TEST_MSSQL_VIA_SSH`|SQL Server through the SSH tunnel test (with `DBCRAFT_TEST_SSH`): `dbcraft/dbcraft@mssql:1433/dbcraft?trust` for `docker compose up -d mssql ssh`|",
+     "|`DBCRAFT_TEST_POSTGRES`|PostgreSQL tests (a superuser), e.g. `dbcraft/dbcraft@localhost:5432/dbcraft` for `docker compose up -d postgres`, which loads `pg_stat_statements`|",
+     "|`DBCRAFT_TEST_MSSQL`|SQL Server tests, e.g. `dbcraft/dbcraft@localhost:1433/dbcraft?trust` for `docker compose up -d mssql mssql-init`|",
+     "|`DBCRAFT_TEST_MSSQL_DBA`|SQL Server dashboard tests that need VIEW SERVER STATE, e.g. `sa/DbCraft-2026@localhost:1433/dbcraft?trust`|",
+     "|`DBCRAFT_TEST_DB_DBA`|monitor, compare and debugger tests (`system/oracle@…`)|",
+     "|`DBCRAFT_DEBUG_HOST`|debugger tests: how the database reaches this machine (`host.containers.internal` for a local Podman container; with Docker on Linux, the compose network's gateway from `docker network inspect dbcraft_default`)|",
+     "|`DBCRAFT_SCREENSHOT_DIR`|renders the real UI offscreen into PNGs (`cargo test -p dbcraft-app screenshots`)|"
+    ]
+   ],
+   [
+    "equal",
+    567,
+    581,
+    567,
+    581
+   ],
+   [
+    "replace",
+    581,
+    582,
+    581,
+    582,
+    [
+     "|Crate|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    582,
+    583,
+    582,
+    583
+   ],
+   [
+    "replace",
+    583,
+    594,
+    583,
+    594,
+    [
+     "|`dbcraft-app`|the application: documents, docking, commands, dialogs|",
+     "|`dbcraft-ui`|code editor, data grid, icon set|",
+     "|`dbcraft-db`|sessions on worker threads (Oracle, MySQL, PostgreSQL, SQL Server, SQLite), dictionary queries, what each database supports (`Dialect`, `Feature`), SSH tunnels|",
+     "|`dbcraft-plsql`|lexer, statement splitter, error-tolerant parser|",
+     "|`dbcraft-lsp-core`|completion, hover, navigation, outline, diagnostics|",
+     "|`dbcraft-data`|export and import|",
+     "|`dbcraft-debugger`|JDWP debugger and panel|",
+     "|`dbcraft-monitor`|dashboard, sessions, AWR/ASH, trace analyzer|",
+     "|`dbcraft-compare`|schema and data compare|",
+     "|`dbcraft-ai`|AI backends (HTTP, command line), prompts and the data policy|",
+     "|`dbcraft-config`|settings and saved connections|"
+    ]
+   ],
+   [
+    "equal",
+    594,
+    595,
+    594,
+    595
+   ],
+   [
+    "replace",
+    595,
+    596,
+    595,
+    596,
+    [
+     "See CONCEPT.md for the full plan and status."
+    ]
+   ],
+   [
+    "equal",
+    596,
+    599,
+    596,
+    599
+   ],
+   [
+    "replace",
+    599,
+    600,
+    599,
+    600,
+    [
+     "|Key|Action|"
+    ]
+   ],
+   [
+    "equal",
+    600,
+    601,
+    600,
+    601
+   ],
+   [
+    "replace",
+    601,
+    620,
+    601,
+    620,
+    [
+     "|Ctrl+Enter / F8|Execute statement / selection or script|",
+     "|F5|Explain plan|",
+     "|Shift+Esc|Cancel running statement|",
+     "|F10 / Shift+F10|Commit / rollback|",
+     "|Ctrl+Space|Completion|",
+     "|F12, Ctrl+click|Go to definition|",
+     "|Ctrl+E|Statement history|",
+     "|Ctrl+Shift+O|Find database object|",
+     "|Ctrl+Alt+F|Find in database source|",
+     "|Ctrl+Shift+P|Command palette|",
+     "|Ctrl+F9|Debug block under cursor|",
+     "|Ctrl+B|Toggle breakpoint|",
+     "|F9 / F6 / F7 / Shift+F7 / Shift+F9|Continue / step over / into / out / stop|",
+     "|Ctrl+F7|Run to cursor (while debugging)|",
+     "|Ctrl+O / Ctrl+S|Open / save file|",
+     "|Shift+F6|Rename symbol|",
+     "|Ctrl+Shift+[ / ]|Fold / unfold|",
+     "|Ctrl+Shift+1..9, Ctrl+1..9|Set / jump to bookmark|",
+     "|Ctrl+,|Settings|"
+    ]
+   ],
+   [
+    "equal",
+    620,
+    622,
+    620,
+    622
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "e6a4cc6c9882+2": {
+  "fn": "JFT-Group/QingXiangTuWen",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "> 项目名暂定「轻享图文」，后续可能改名。 "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    7,
+    3,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "|文档|内容|"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    16,
+    9,
+    16,
+    [
+     "|产品需求与业务说明书|M1 范围、角色、业务规则、验收场景|",
+     "|开发规范|SSM 技术基线、六表 RBAC、AOP 权限、增量开发、质量门禁|",
+     "|接口文档|REST API、请求响应、错误码、模块归属|",
+     "|模块划分与分工|三人模块、全流程交付物、增量顺序与核对触发|",
+     "|UIUX-小红书|小红书 Web 设计 DNA、令牌、布局、组件|",
+     "|开发文档模板|每人开发文档的固定结构|",
+     "|扩展脑暴|M2/M3 推荐、深色主题、治理方向|"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    16,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "|成员|模块|核心表|"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    24,
+    21,
+    24,
+    [
+     "|A|账号、权限与治理|`sys_user` / `sys_role` / `sys_permission` / `operation_log` / `notification`|",
+     "|B|内容、分类与审核|`article` / `category`|",
+     "|C|互动、关注与分发|`article_like` / `article_favorite` / `comment` / `user_follow` / `reader_feedback`|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    38,
+    24,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "- 组员上手教程（clone / push / PR，不需要 gh CLI）：Git 协作图"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    90,
+    39,
+    90
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

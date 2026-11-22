@@ -29047,5 +29047,554 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "689d01cc3896+2": {
+  "fn": "quantumiodb/pgorca",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "pg_orca"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " pgorca "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     " build"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    26,
+    5,
+    22
+   ],
+   [
+    "replace",
+    26,
+    29,
+    22,
+    25,
+    [
+     " rest stay as SubPlans re-executed per outer row. ORCA models them as `Apply` and",
+     " decorrelates them into regular joins through xforms, so the subquery side",
+     " participates in join ordering and costing like any other relation."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    25,
+    26
+   ],
+   [
+    "replace",
+    30,
+    35,
+    26,
+    31,
+    [
+     " `join_collapse_limit`/`from_collapse_limit` (8 by default) and falls back to the",
+     " syntactic order or GEQO. ORCA enumerates join orders as part of the search itself",
+     " (`optimizer_join_order`: `exhaustive2` by default, or `exhaustive` / `greedy` /",
+     " `query`), with `pg_orca.join_order_dynamic_threshold` downshifting to a cheaper",
+     " strategy only when the query is genuinely large."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    31,
+    32
+   ],
+   [
+    "replace",
+    36,
+    39,
+    32,
+    35,
+    [
+     " below a join), CTE inlining as a *cost-based* decision rather than a syntactic rule,",
+     " aggregate splitting, and inferred/transitive predicates pushed across join",
+     " boundaries."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    35,
+    36
+   ],
+   [
+    "replace",
+    40,
+    43,
+    36,
+    39,
+    [
+     " memo, a rewrite that only pays off with a particular physical shape (index scan,",
+     " merge join, partition pruning) can be chosen on cost instead of being applied — or",
+     " skipped — ahead of the plan search."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    50,
+    39,
+    46
+   ],
+   [
+    "replace",
+    50,
+    51,
+    46,
+    47,
+    [
+     "The ORCA optimizer is the work of many people from the Greenplum, Pivotal/VMware, and Apache Cloudberry projects. See CONTRIBUTORS.md for acknowledgments."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    47,
+    50
+   ],
+   [
+    "replace",
+    54,
+    55,
+    50,
+    51,
+    [
+     "|Directory|Description|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    51,
+    52
+   ],
+   [
+    "replace",
+    56,
+    63,
+    52,
+    59,
+    [
+     "|`libgpos/`|ORCA memory pool, error handling, concurrency primitives|",
+     "|`libnaucrates/`|DXL parser/serializer, metadata abstractions|",
+     "|`libgpopt/`|Core optimizer: search, transformation rules, cost model|",
+     "|`libgpdbcost/`|GPDB-specific cost model implementation|",
+     "|`gpopt/`|PostgreSQL ↔ DXL translation layer (relcache, planner bridge)|",
+     "|`compat/`|Stub headers replacing MPP-only Cloudberry types|",
+     "|`pg_orca.cpp`|Extension entry point, `planner_hook`, GUC definitions|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    67,
+    59,
+    63
+   ],
+   [
+    "replace",
+    67,
+    68,
+    63,
+    64,
+    [
+     "- xerces-c (XML parsing for DXL)"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    76,
+    64,
+    72
+   ],
+   [
+    "replace",
+    76,
+    77,
+    72,
+    73,
+    [
+     "See PostgreSQL 19 for what is PG19-specific."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    109,
+    73,
+    105
+   ],
+   [
+    "replace",
+    109,
+    113,
+    105,
+    106,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    170,
+    106,
+    163
+   ],
+   [
+    "replace",
+    170,
+    183,
+    163,
+    164,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    185,
+    164,
+    166
+   ],
+   [
+    "replace",
+    185,
+    186,
+    166,
+    167,
+    [
+     "Existing sessions are unaffected by step 2 until they reconnect. If"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    217,
+    167,
+    198
+   ],
+   [
+    "replace",
+    217,
+    218,
+    198,
+    199,
+    [
+     "|Parameter|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    219,
+    199,
+    200
+   ],
+   [
+    "replace",
+    219,
+    227,
+    200,
+    207,
+    [
+     "|`pg_orca.enable_orca`|`off`|Enable ORCA optimizer|",
+     "|`pg_orca.trace_fallback`|`off`|Log a message on fallback to standard planner|",
+     "|`optimizer_segments`|`1`|Number of segments for cost estimation|",
+     "|`optimizer_sort_factor`|`1.0`|Cost scaling factor for sort operations|",
+     "|`optimizer_metadata_caching`|`on`|Cache relation metadata between calls|",
+     "|`optimizer_mdcache_size`|`16384`|Metadata cache size (KB)|",
+     "|`optimizer_search_strategy_path`|`\"\"`|Path to custom search strategy XML (empty = built-in)|"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    230,
+    207,
+    210
+   ],
+   [
+    "replace",
+    230,
+    231,
+    210,
+    211,
+    [
+     "See **testing.md** for the full guide. Quick start:"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    236,
+    211,
+    216
+   ],
+   [
+    "replace",
+    236,
+    241,
+    216,
+    217,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    261,
+    217,
+    237
+   ],
+   [
+    "replace",
+    261,
+    262,
+    237,
+    238,
+    [
+     " and both `standard_planner()` fallback paths are conditionally compiled (`pg_orca.cpp`)."
+    ]
+   ],
+   [
+    "equal",
+    262,
+    263,
+    238,
+    239
+   ],
+   [
+    "replace",
+    263,
+    265,
+    239,
+    241,
+    [
+     " natively rather than falling back: the null treatment is carried on",
+     " `CScalarWindowFunc` and round-tripped through DXL."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    266,
+    241,
+    242
+   ],
+   [
+    "replace",
+    266,
+    267,
+    242,
+    243,
+    [
+     " byte-identical `#ifndef`-guarded replacement so call sites are unchanged on both versions."
+    ]
+   ],
+   [
+    "equal",
+    267,
+    268,
+    243,
+    244
+   ],
+   [
+    "replace",
+    268,
+    271,
+    244,
+    247,
+    [
+     " `SubPlan.plan_name` themselves, so on PG19 the translator emits PG19-style names",
+     " (`expr_1`, `exists_2`, `any_3`, ...) instead of PG18's `SubPlan N`. `test/init_file`",
+     " maps both back to `SubPlan N`, so one expected file serves both versions."
+    ]
+   ],
+   [
+    "equal",
+    271,
+    272,
+    247,
+    248
+   ],
+   [
+    "replace",
+    272,
+    277,
+    248,
+    252,
+    [
+     " to `One-Time Filter: false`) is marked `RESULT_TYPE_SCAN`. ORCA drops the folded",
+     " relation from the plan's range table, so `relids` stays empty and EXPLAIN prints no",
+     " `Replaces: Scan on ...` line where the PG planner does (PG19's `case` test shows the",
+     " difference). This only affects EXPLAIN output."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "d67191cd6e7d+2": {
+  "fn": "ranajahanzaib/zero-downtime-db-migrations",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Live migration dashboard during a verified demo run"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    55,
+    3,
+    55
+   ],
+   [
+    "replace",
+    55,
+    61,
+    55,
+    56,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    85,
+    56,
+    80
+   ],
+   [
+    "replace",
+    85,
+    86,
+    80,
+    81,
+    [
+     "The live dashboard is at http://localhost:8090. It polls measured database and HTTP request metrics every two seconds. Reports are written under `reports/`."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    91,
+    81,
+    86
+   ],
+   [
+    "replace",
+    91,
+    94,
+    86,
+    89,
+    [
+     "|Backfill, consistency and fleet|Migration timeline and history|",
+     "|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|",
+     "|Backfill progress, data consistency and application fleet|Migration event timeline and history|"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    101,
+    89,
+    96
+   ],
+   [
+    "replace",
+    101,
+    113,
+    96,
+    97,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    148,
+    97,
+    132
+   ],
+   [
+    "replace",
+    148,
+    149,
+    132,
+    133,
+    [
+     "See locking, consistency, deployment order, rollback, failure scenarios, and production considerations. The project is MIT Licensed, see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

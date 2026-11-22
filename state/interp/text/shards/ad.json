@@ -3108,5 +3108,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2d8e4bffd06c": {
+  "identity": {
+   "one_liner": "WinUI 3 + .NET 10 Native AOT 编写的 Windows 11 本地任务管理器，支持 To Do 导入与 CalDAV 同步",
+   "review": "Wintodo 是面向 Windows 11（24H2+）的桌面任务管理应用，用 WinUI 3 与 .NET 10 Native AOT 构建，支持 x64 与 ARM64，数据存储于本地 SQLite，通过 iCalendar（RFC 5545 VTODO）与 CalDAV 协议同步。提供只读的 Microsoft To Do 导入向导；无自有账号体系与分析统计。许可证为 Wintodo Source-Available Licence 1.0，非标准开源协议。",
+   "highlights": [
+    "支持 Microsoft To Do 一次性只读导入（任务、子任务、备注、截止日期、附件），并可对接 Nextcloud、Radicale、Fastmail 等 CalDAV 服务器，凭据存于 Windows PasswordVault",
+    "提供 My Day、Important、自定义列表与分组、子任务、RRULE 重复计划、文件附件、键盘快捷键与多步撤销；系统集成 Mica 背景、深浅色/高对比主题、计划通知、任务栏角标、Jump List 与 Windows Share",
+    "数据本地存储于 SQLite 并支持 FTS5 搜索，提供 .ics/VTODO 文件导入导出，构建产物为 Native AOT 自包含 MSIX 包（x64 56.6 MiB / ARM64 55.0 MiB）"
+   ],
+   "use_cases": [
+    "需要把 Microsoft To Do 数据迁移到本地存储或自建 CalDAV 服务（如 Nextcloud）的用户",
+    "不使用账号云服务、要求任务数据完全本地保存的 Windows 11 用户",
+    "需要在 x64 与 ARM64（如 Surface 系列）设备上运行的桌面任务管理场景"
+   ]
+  },
+  "sha": "2d8e4bffd06c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "35b8a732e5c5": {
+  "identity": {
+   "one_liner": "Go 向量存储库，以类型化结构体模型对接 SQLite/Postgres 等多种后端",
+   "review": "go-vectorstore 是一个 Go 向量存储库，用于将带 vectordata 标签的 Go 结构体存入向量集合并按向量检索。提供 SQLite、PostgreSQL（pgvector）、Redis、Qdrant 与内存等多种 provider，模型 API 参照 Microsoft.Extensions.VectorData 的 key/data/vector 设计，支持类型化 CRUD、过滤、HNSW/IVFFlat 搜索调优及稀疏、二进制向量。要求 Go 1.26+。",
+   "highlights": [
+    "提供后端无关的 vectordata 核心接口及 SQLite、PostgreSQL、Redis、Qdrant、内存等 provider，另有 azuresearch、pinecone 独立适配器",
+    "模型 API 支持类型化 CRUD、生成键、多向量、float16 存储、稀疏与二进制向量、数组过滤及 PostgreSQL 混合搜索",
+    "SearchByVector 支持过滤、距离阈值、投影控制，以及按请求设置 HNSW/IVFFlat 近似搜索参数"
+   ],
+   "use_cases": [
+    "在 Go 应用中存储结构体记录并按向量做相似检索（如语义搜索、RAG）",
+    "无需数据库服务器的嵌入式场景：使用 SQLite 文件或内存集合进行开发与契约测试",
+    "基于 PostgreSQL/pgvector 的持久化向量检索，含 schema 迁移规划与混合搜索"
+   ]
+  },
+  "sha": "35b8a732e5c5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8c15cb32218c": {
+  "identity": {
+   "one_liner": "基于 LangGraph 与 Ollama 的本地化 AI 聊天应用，支持持久化会话与流式回复",
+   "review": "这是一个本地运行的 AI 聊天原型：前端用 React，后端用 FastAPI + LangGraph，模型经 Ollama 本地运行，PostgreSQL 存储会话元数据并通过 checkpointer 保存消息状态，可选集成 SearXNG 做网络搜索并以 NDJSON 流式返回进度和来源链接。认证依赖 Clerk 开发实例，未配置生产部署，需自行提供 HTTPS 和限流等措施。",
+   "highlights": [
+    "会话持久化：PostgreSQL 存储标题与归属，LangGraph checkpoint 在重启后保留消息状态",
+    "回复流式生成，可选 SearXNG 搜索返回最多五条带链接的来源，无 SearXNG 也可运行",
+    "FastAPI 校验 Clerk 会话令牌并检查会话归属；每会话咨询锁防止重叠生成"
+   ],
+   "use_cases": [
+    "本地自建具备登录与多轮持久会话的聊天应用",
+    "在无外部模型服务环境下（Ollama）运行对话系统",
+    "需要展示搜索进度与来源链接的问答原型，或作为 LangGraph + FastAPI + React 集成的参考实现"
+   ]
+  },
+  "sha": "8c15cb32218c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9449bedf8428": {
+  "identity": {
+   "one_liner": "基于 Python、SQLite 与 Apprise 的自动化网络威胁情报采集与 Discord 推送工具",
+   "review": "CTI Monitor 是一个用 Python 编写的自动化威胁情报采集与通知工具，面向需要跟踪漏洞情报的安全运营人员。它轮询约 60 个 RSS/Atom/JSON 情报源，用 CISA KEV 与 FIRST EPSS 数据富化标题，通过 SQLite 做两级去重并跟踪标题更新，按分类路由到 Discord 频道，支持 cron 定时运行和订阅源健康监控。",
+   "highlights": [
+    "轮询约 60 个漏洞订阅源、勒索软件泄露追踪、厂商 PSIRT、政府 CERT 等来源，并用 CISA KEV 目录与 FIRST EPSS API 富化 CVE 信息",
+    "基于 SQLite 实现精确条目去重与频道级标题去重（36 小时滚动窗口），标题相似度低于 85% 或新增 CVE 编号时触发更新告警",
+    "按 keywords.json 中可动态重载的升级规则路由告警，含 KEV 匹配、EPSS 阈值与厂商观察名单，并通过 Apprise 推送到 Discord 等渠道"
+   ],
+   "use_cases": [
+    "搭建自有 Discord 频道的漏洞与威胁情报自动推送流水线",
+    "需要跟踪 CVE 是否被列入 CISA KEV 或 EPSS 分数变化的持续监控场景",
+    "替代手动浏览多个安全博客与厂商公告的日常情报巡检流程"
+   ]
+  },
+  "sha": "9449bedf8428",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

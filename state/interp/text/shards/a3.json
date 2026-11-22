@@ -2958,5 +2958,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6841e70c9b04": {
+  "identity": {
+   "one_liner": "Go 实现的双式记账账本，基于幂等键与 PostgreSQL 原子提交。",
+   "review": "cryptoledger 是用 Go 编写的双式记账账本参考实现，面向需要处理转账请求重试场景的支付/账务系统开发者。客户端提交幂等键后，PostgreSQL 在单次提交中写入借贷分录、余额、Ed25519 签名与审计事件；重试请求会返回原事务及提交时的余额。支持 PostgreSQL 与 SQLite 两种存储，接口为 gRPC over mTLS，并附带 ledgerctl 命令行工具与完整性校验器。",
+   "highlights": [
+    "幂等键结合事务级锁与唯一约束，重复请求返回原事务及提交时余额",
+    "分录、余额、Ed25519 签名与审计事件在同一 PostgreSQL 提交中写入，审计记录通过链接哈希构成链并通过验证器校验",
+    "提供 gRPC over mTLS 接口及 ledgerctl 命令行工具，支持 Docker Compose 与 SQLite 演示模式"
+   ],
+   "use_cases": [
+    "需要在网络重试后保证转账只入账一次的账务/支付后端",
+    "需要可核验审计链与追加式历史记录的记账系统",
+    "作为平台中 Ledger 组件的参考实现进行集成与二次开发"
+   ]
+  },
+  "sha": "6841e70c9b04",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

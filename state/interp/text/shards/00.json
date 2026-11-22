@@ -2885,5 +2885,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a7632c932af4": {
+  "identity": {
+   "one_liner": "自托管的 LLM 驱动多智能体渗透测试平台，以双图结构与证据链组织测试过程",
+   "review": "ARTEX 是一个自托管的渗透测试平台：planner 将目标拆解为意图，worker 调用真实工具执行并回写结果，双图（资产图与探索图）通过锚点关联。适用于需要留存请求/响应证据的安全测试场景。需自行准备 PostgreSQL、LLM 端点，Docker 镜像从本地构建，无预构建镜像。",
+   "highlights": [
+    "提供双图架构：跨任务共享的资产图与任务级探索图，通过锚点节点关联，支持资产测试覆盖率图",
+    "内置记录型 MITM 代理与浏览器扩展用于捕获请求/响应证据，发现项绑定 POE 级别与验证状态，支持流量重放与漏洞复测",
+    "提供人机审批门、argv 前缀规则、scope/deny 门、任务与意图级 token/turn 预算等控制机制，支持多 LLM 配置轮换"
+   ],
+   "use_cases": [
+    "需要为渗透测试发现项留存请求/响应证据并生成报告与导出的授权测试场景",
+    "自托管部署、接入自有 Anthropic/OpenAI 兼容端点或本地 Ollama 的多模型协作测试",
+    "多步骤攻击链测试：planner 按事实满足前置条件逐层派发后续步骤，worker 可检索彼此执行轨迹"
+   ]
+  },
+  "sha": "a7632c932af4",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b42afba5b746": {
+  "identity": {
+   "one_liner": "自托管文件分享服务器，采用 ML-KEM-1024 混合加密实现磁盘零明文存储",
+   "review": "HermitStash 是一个自托管文件上传分享服务器，文件、数据库字段与审计日志在写入磁盘前均加密或哈希。加密原语来自内置于仓库的 blamejs 框架，无 npm 运行时依赖，clone 后直接 node server.js 运行。作者声明该项目未经第三方审计、由个人业余维护，README 提供威胁模型文档供审阅。",
+   "highlights": [
+    "采用 ML-KEM-1024 + P-384 ECDH 混合密钥封装与 XChaCha20-Poly1305 对称加密，签名支持 SLH-DSA-SHAKE-256f 与 ML-DSA-87",
+    "所有数据库字段、文件、审计日志在落盘前加密或哈希，运行时无 npm 依赖（依赖均 vendor 进仓库）",
+    "支持 passkeys、Argon2id 密码哈希、TOTP、mTLS 客户端证书及 S3 兼容对象存储后端"
+   ],
+   "use_cases": [
+    "需要在自有服务器上向客户分享文件、不依赖第三方云存储的个人或团队",
+    "希望部署后磁盘上不存任何明文数据的环境",
+    "可作为 Umbrel App Store 应用在已有 Umbrel 环境中安装使用"
+   ]
+  },
+  "sha": "b42afba5b746",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

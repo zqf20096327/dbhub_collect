@@ -3325,5 +3325,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b3673b7a8715": {
+  "identity": {
+   "one_liner": "基于 MySqlConnector 的 MySQL/MariaDB EF Core 数据库提供程序",
+   "review": "Pomelo.EntityFrameworkCore.MySql 是 .NET 平台上用于 MySQL 与 MariaDB 的 Entity Framework Core 提供程序，底层基于 MySqlConnector 实现。README 标明项目已迁移至 microting/Pomelo.EntityFrameworkCore.MySql，该仓库支持 EF Core 9.0 及更早版本，EF Core 10 及以后需使用 Microting.EntityFrameworkCore.MySql，历史文档见 v9.0 README。适用于使用 EF Core 访问 MySQL/MariaDB 的 .NET 开发者。",
+   "highlights": [
+    "支持 Entity Framework Core 9.0 及更早版本，基于 MySqlConnector 实现",
+    "支持 MySQL 与 MariaDB 数据库",
+    "项目采用 MIT 许可证，已迁移至 microting 组织下的新仓库"
+   ],
+   "use_cases": [
+    ".NET 应用通过 EF Core 访问 MySQL 或 MariaDB 数据库",
+    "需在 EF Core 9.0 及以下版本中使用 MySQL/MariaDB 提供程序的项目",
+    "基于 Amazon Aurora（MySQL 兼容）的 .NET 数据访问场景"
+   ]
+  },
+  "sha": "b3673b7a8715",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e25d2caf5b5f": {
+  "identity": {
+   "one_liner": "基于 PgQ 快照架构的纯 SQL PostgreSQL 事件队列扩展",
+   "review": "PgQue 是部署在 PostgreSQL 14–19 上的事件队列，采用快照分批与 TRUNCATE 表轮转替代逐行 UPDATE/DELETE，避免死元组与 VACUUM 压力。多个消费者各自维护游标读取共享事件日志。安装仅需执行一个 SQL 文件，用 pg_cron 或 pg_timetable 周期调用 ticker 驱动；默认 100ms 一跳，端到端延迟中位数约 52ms，不含 C 扩展或外部守护进程。",
+   "highlights": [
+    "纯 SQL/PL/pgSQL 实现，单文件事务化安装，无 C 扩展与外部守护进程，可在托管 Postgres 上运行",
+    "快照分批 + TRUNCATE 轮转机制，队列主路径不产生死元组；支持多消费者独立游标的共享日志 fan-out、带退避的重试与死信队列",
+    "tick 周期可通过 pgque.set_tick_period_ms() 在 1–1000ms 间调整（1000 的除数）"
+   ],
+   "use_cases": [
+    "需要在托管或自托管 PostgreSQL 内部构建持久事件流的团队",
+    "需要 fan-out 事件分发（每个消费者都收到全部事件）且希望避免表膨胀调优的场景",
+    "以持续负载下的稳定性为优先、可接受百毫秒级端到端延迟的事件驱动集成"
+   ]
+  },
+  "sha": "e25d2caf5b5f",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41c9cf855994": {
+  "identity": {
+   "one_liner": "本地运行的外贸业务 AI 助手，内置 45 个 B2B 技能",
+   "review": "Smart Trade AI 是一个面向外贸业务员的 AI 助手，基于 Hermes Agent 引擎进程内嵌运行，通过 FastAPI 提供本地 Web 界面（绑定 127.0.0.1）。它包含 45 个技能，覆盖客户背调、开发信生成、B2B 平台诊断、商务文档生成、招标监控等外贸客户开发流程。数据默认存储在本地 ~/.trade/。需 Python 3.14 与 LLM API Key（推荐 DeepSeek），有 30 天试用期，部分功能（客户管理、背调、数据导出等）需付费激活。",
+   "highlights": [
+    "包含 45 个技能，覆盖客户开发、客户背调（6 层验证：WHOIS、制裁名单、邮箱检测等）、开发信生成、文档分析与商务文档生成、定时任务等环节",
+    "本地运行：业务数据默认存储于 ~/.trade/，服务绑定 127.0.0.1，会话凭据仅下发给本机浏览器",
+    "支持多公司数据隔离（X-Company-ID）、升级前自动备份数据库，界面支持中英双语切换"
+   ],
+   "use_cases": [
+    "外贸业务员的客户背景调查与开发信撰写",
+    "B2B 平台（阿里国际站/中国制造网）询盘检查与产品页诊断",
+    "报价单、PI、合同等商务文档生成与招标信息监控"
+   ]
+  },
+  "sha": "41c9cf855994",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "43abcf3786b4": {
+  "identity": {
+   "one_liner": "自托管 ML 训练运行追踪系统：Go 单二进制加 PostgreSQL，提供 Web UI、移动应用与 MCP 接口",
+   "review": "runyard 用于在自己 GPU 上训练模型并追踪运行状态的用户，由 Go 服务器（内嵌 Svelte UI）加 Python SDK 组成。三行 Python 代码即可上传指标、样本、日志与检查点；支持 W&B/TensorBoard/MLflow 桥接，无需改动已使用这些工具的代码。服务器需自行部署，通过 Docker Compose 运行，依赖 PostgreSQL，媒体文件可存磁盘或 S3/R2。",
+   "highlights": [
+    "提供 Python SDK，支持 Hugging Face Trainer、TRL、Accelerate、Lightning、Keras、XGBoost 等框架一行接入，并可桥接 W&B、TensorBoard、MLflow 的日志",
+    "内置 ntfy、Slack、Discord、Telegram、webhook 与 web push 通知，以及在 /mcp 提供 MCP 服务器供编码代理读取运行数据",
+    "beacon 命令上报各主机的 GPU、进程、CPU、内存与磁盘状态，按退出方式区分 finished/failed/stopped/crashed 等运行状态"
+   ],
+   "use_cases": [
+    "在自有 GPU 机器上训练模型并实时查看指标、样本与日志",
+    "无需改动代码即可为已向 W&B/TensorBoard 写日志的现有训练脚本接入追踪",
+    "通过 MCP 服务器让编码代理读取运行曲线、日志并进行比较"
+   ]
+  },
+  "sha": "43abcf3786b4",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

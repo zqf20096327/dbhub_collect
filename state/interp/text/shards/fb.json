@@ -2985,5 +2985,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "913f41ad3306": {
+  "identity": {
+   "one_liner": "自托管电子书库服务器，含阅读器、KOReader 同步与阅读统计",
+   "review": "Tome 是一个自托管电子书库服务器，基于 FastAPI、React 和 SQLite 构建，以单个 Docker 镜像发布。它通过自定义 KOReader 插件记录阅读会话、双向同步阅读位置，并提供 EPUB、漫画（CBZ/CBR）和 PDF 的浏览器内阅读器及阅读统计。面向希望管理自有藏书并跟踪阅读行为的自托管用户，支持 OPDS 订阅、OIDC 单点登录，通过 Docker Compose 或安装脚本部署。",
+   "highlights": [
+    "通过自定义 KOReader 插件记录阅读会话并在设备与浏览器之间双向同步位置，支持 OPDS 订阅源",
+    "内置 EPUB、CBZ/CBR 漫画与 PDF 阅读器，支持双页、RTL、webtoon 滚动等模式",
+    "提供阅读统计、阅读目标、日历、三源元数据比对，以及 OIDC SSO、角色权限和 API token 等管理功能"
+   ],
+   "use_cases": [
+    "在家庭服务器（NAS、mini-PC）上自托管个人电子书和漫画库",
+    "使用 KOReader 的电子墨水阅读器用户需要跨设备同步阅读进度并记录阅读数据",
+    "通过 OPDS 客户端或 iPhone 应用浏览和下载藏书"
+   ]
+  },
+  "sha": "913f41ad3306",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6f4b90608609": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，用于公历日期与 Jalali（波斯）历的转换与格式化",
+   "review": "Jalali Utils 是一个 PostgreSQL 扩展，提供 format_jalali 和 jalali_part 两类函数，将 Gregorian 日期转换为 Jalali 日期并提取年、月、日、季度等字段。CI 覆盖 PostgreSQL 12–19。安装需编译源码（make）并在数据库中执行 CREATE EXTENSION。适合需要在数据库层处理 Jalali 历日期的应用。",
+   "highlights": [
+    "提供 format_jalali 函数，接受 TIMESTAMP WITH TIME ZONE 或 DATE，可选是否包含时间部分",
+    "提供 jalali_part 函数，可提取 year、month、day、doy、dow（以周六为零）、quarter、century 等字段",
+    "CI 测试覆盖 PostgreSQL 12 至 19，通过 make 构建安装"
+   ],
+   "use_cases": [
+    "在 SQL 查询中直接以 Jalali 历格式输出日期时间",
+    "按 Jalali 历的年、月、季度、世纪等维度对数据进行分组或过滤",
+    "面向使用伊朗历（Shamsi）日历地区的应用中的日期字段处理"
+   ]
+  },
+  "sha": "6f4b90608609",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4514a11f5110": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的 MCP 记忆服务器，融合混合检索与时间知识图谱，本地单二进制运行。",
+   "review": "MemoryPilot 是一个为 AI 编程助手提供持久化记忆层的 MCP 服务器，用 Rust 实现，编译为单个二进制文件，无需运行时依赖。它通过 BM25、jina-embeddings-v5 嵌入的 RRF 融合与交叉编码器重排实现混合检索，写入时在本地完成去重、实体抽取、图谱链接与嵌入，调用 LLM 次数为零。检索默认开启自适应重排时约 900 毫秒/次，可通过环境变量关闭重排降至约 28 毫秒。适用于在 Cursor、Claude Desktop、VS Code 等客户端本地存储与检索会话记忆的用户。",
+   "highlights": [
+    "提供 BM25 与 jina-embeddings-v5 RRF 融合及交叉编码器重排的混合检索，支持 100+ 语言",
+    "包含时间知识图谱、GraphRAG、AAK 压缩、自动分类与自动压缩机制，写入与检索各产生 0 次 LLM 调用",
+    "以单个 Rust 二进制分发，默认暴露 25 个工具（完整配置 74 个），支持签名自动更新"
+   ],
+   "use_cases": [
+    "为 Cursor、Claude Desktop、VS Code、Windsurf 等 MCP 客户端添加本地持久化会话记忆",
+    "以模糊描述检索过去的 Cursor 或 Claude 对话内容",
+    "在不调用外部 API、数据完全保留在本地的环境中构建带知识图谱的代理记忆层"
+   ]
+  },
+  "sha": "4514a11f5110",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8fdac5657104": {
+  "identity": {
+   "one_liner": "以远程 MCP 服务器形式提供的自托管团队知识库，供 Claude 等客户端读写共享知识",
+   "review": "Thaliyola 是一个自托管团队知识库，以远程 MCP 服务器形式对外提供服务，存储系统、指标、runbook、设计文档、API 契约与调查结论等。服务器本身不含 LLM，推理由客户端完成；Agent 的所有写入均以提案形式提交，经人工审核后才发布。支持 team/项目/library 三种范围、基于 pgvector/PostgreSQL 的关键词与语义混合检索，以及跨项目的条目共享与影响通知。",
+   "highlights": [
+    "提供 search_knowledge、get_article、get_project_context 等 MCP 工具，支持关键词与语义混合检索",
+    "所有写入（文章、发现、编辑、技能版本）均以提案形式提交，由具备相应权限的人工审核后才发布",
+    "API 契约或共享设计变更时生成影响通知（impact notice），在 Agent 加载项目上下文时展示"
+   ],
+   "use_cases": [
+    "团队成员的多个 Claude 客户端（Claude Code、claude.ai、定时 Agent）共享读写同一套项目与团队知识",
+    "记录事故、RCA、已知问题等发现，并将反复出现的根因沉淀为文章",
+    "通过 library 范围在多个项目间共享 UI 组件规格、设计令牌与 API 契约"
+   ]
+  },
+  "sha": "8fdac5657104",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

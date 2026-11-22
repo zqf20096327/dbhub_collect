@@ -2776,5 +2776,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "21945572984c": {
+  "identity": {
+   "one_liner": "基于 Go 与 React 的 WordPress/PHP 主机控制面板，以数据库驱动的调和器收敛多租户服务器状态",
+   "review": "Jabali Panel 面向 WordPress 与 PHP 托管场景的多租户控制面板，面板二进制同时提供 API 与内嵌 SPA，特权操作经由 root 属主的 Unix-socket 代理执行。安装脚本在 Debian 13 上编译构建并部署 MariaDB、PowerDNS、Stalwart、CrowdSec 等模块，通过 60 秒调和器读取数据库收敛 nginx、PHP 池、邮箱、DNS 与 SSL 配置。",
+   "highlights": [
+    "每用户独立 Linux 账户与 PHP-FPM master，配合 cgroup v2、POSIX 配额及 bubblewrap 沙箱 SSH",
+    "60 秒调和器以数据库为唯一事实源，收敛 nginx vhosts、PHP 池、邮箱、DKIM、DNS、SSL 与资源限额",
+    "集成 restic 加密备份（SFTP/S3/B2/Azure/GCS 目标）、CrowdSec AppSec WAF、cPanel/WHM 迁移与 IMAP 邮件同步"
+   ],
+   "use_cases": [
+    "在单台 Debian 13 服务器上运营多租户 WordPress/PHP 托管",
+    "从 cPanel/WHM 迁移账户并保留 MySQL 用户与密码哈希",
+    "需要自建邮件（Stalwart + JMAP 网页邮箱）与权威 DNS（PowerDNS + DNSSEC）的主机环境"
+   ]
+  },
+  "sha": "21945572984c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9baff2f860f2": {
+  "identity": {
+   "one_liner": "DefraDB 的 Rust 实现：P2P 文档数据库，基于内容寻址 CRDT、访问控制与 GraphQL",
+   "review": "该项目是 DefraDB 数据库的 Rust 实现，提供 CLI、HTTP API、GraphQL 查询引擎与 P2P 复制能力，存储层使用纯 Rust 的 LSM-tree 引擎 Regolith。它面向嵌入式、边缘、浏览器（WASM）与服务器部署，并通过 FFI 以 C 兼容静态库形式供 Go 等语言嵌入。当前与 Go DefraDB v1.0.0-rc1 兼容，Go 与 Rust 节点可互联并复制数据。",
+   "highlights": [
+    "提供 GraphQL 查询引擎，覆盖查询、变更、订阅、聚合与 explain，并支持全量 defradb 测试套件",
+    "支持基于 libp2p 的 P2P 复制传输（iroh 为可选），并提供 Postgres 客户端连接兼容（实验性）",
+    "存储层统一使用纯 Rust ACID LSM-tree 引擎 Regolith，读取与扫描以流式方式执行，内存占用以当前页为界"
+   ],
+   "use_cases": [
+    "需要浏览器（WASM）或嵌入式设备上运行文档数据库的场景",
+    "Go 与 Rust 节点之间进行 P2P 数据复制的部署",
+    "通过 FFI 将数据库以 C 兼容静态库嵌入 Go 或其他语言应用"
+   ]
+  },
+  "sha": "9baff2f860f2",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "de29bd2a627f": {
+  "identity": {
+   "one_liner": "Rust 编写的 Oracle PL/SQL 原生桌面 IDE，集成编辑、调试与监控",
+   "review": "DbCraft 是用 Rust（egui on wgpu）实现的 Oracle PL/SQL IDE，面向 Oracle 开发者，覆盖 SQL 执行、PL/SQL 编译调试、数据编辑、Schema 比对与会话监控。其调试器基于 DBMS_DEBUG_JDWP，需数据库回连本机并配置 ACL 与防火墙；性能分析依赖 DBMS_HPROF 权限；0.11.0 前名为 Pythia，首次启动可继承其配置。",
+   "highlights": [
+    "编辑器支持语法高亮、多光标、上下文感知补全、跳转定义与实时语法诊断",
+    "调试器提供条件断点、单步、调用栈、变量查看与停止时修改变量值",
+    "结果网格支持原地编辑、外键跳转、图表绘制及 CSV/TSV/JSON/Excel 等格式导出"
+   ],
+   "use_cases": [
+    "编写、运行和调试 PL/SQL 包、过程与触发器的日常 Oracle 开发",
+    "浏览和编辑表数据、生成对象 DDL、比对并同步 Schema",
+    "监控数据库会话、阻塞树与等待事件（可选 Diagnostics/Tuning Pack 扩展）"
+   ]
+  },
+  "sha": "de29bd2a627f",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17afe7ba8bad": {
+  "identity": {
+   "one_liner": "萨格勒布大学学生团队开发的车辆维修预约与服务管理Web平台",
+   "review": "这是萨格勒布大学电气工程与计算学院（FER）软件工程课程的学生项目，由六人团队开发，用于连接车主、维修技师与维修厂管理员，涵盖预约、维修跟踪、费用审批与服务历史管理。基于Java 21/Spring Boot、React/TypeScript与PostgreSQL，通过Docker Compose部署在Azure上。当前处于第一周期（M1），预约、工单、邮件通知与订阅计费等功能尚未实现，许可证尚未确定。",
+   "highlights": [
+    "支持车主、维修技师、维修厂管理员与平台管理员四类角色，各自具备预设功能",
+    "通过OAuth 2.0/OpenID Connect外部身份提供方登录，提供车辆登记、服务请求与档案存档功能",
+    "使用Docker Compose运行前端、后端与PostgreSQL数据库，部署于Azure Ubuntu环境并经由HTTPS访问"
+   ],
+   "use_cases": [
+    "车主登记自有车辆、提交服务预约并跟踪维修状态",
+    "维修厂管理技师排班、分配工单并查看服务统计",
+    "课程项目参考：包含部署配置、CI流程与项目文档组织的完整示例仓库"
+   ]
+  },
+  "sha": "17afe7ba8bad",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3010,5 +3010,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "38fa37a4fec2": {
+  "identity": {
+   "one_liner": "将指定 SQL 语句改写为预定义目标语句的 PostgreSQL 扩展",
+   "review": "该扩展在服务器级通过 shared_preload_libraries 加载，依据共享内存中的规则表，把与源语句逐字符完全匹配的 SQL 改写为预定义的目标语句。规则通过 pgqr_add_rule 等 SQL 函数管理，条数由 GUC 限制（默认 10）。规则不持久化，且不支持含参数的语句，最大语句长度硬编码为 3K。",
+   "highlights": [
+    "提供 pgqr_add_rule / pgqr_remove_rule / pgqr_truncate / pgqr_rules 函数管理翻译规则",
+    "通过 shared_preload_libraries 在服务器级启用，规则条数由 pg_query_rewrite.max_rules 控制（默认 10）",
+    "已在 PostgreSQL 9.5 至 19 版本上完成测试，基于标准 PGXS 构建"
+   ],
+   "use_cases": [
+    "需要将某些完全匹配的 SQL 语句替换为预定义语句的数据库环境",
+    "使用 pg_start_sql 在实例启动时重建规则的场景",
+    "对固定 SQL 文本做语句级重定向的测试环境"
+   ]
+  },
+  "sha": "38fa37a4fec2",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ce0a362c262": {
+  "identity": {
+   "one_liner": "巴西交通测速电子执法设备的开放编目系统，含采集器与查询 API",
+   "review": "该项目为巴西测速雷达及电子交通执法设备建立开放、可追溯的编目库，提供按位置查询的公开 API、地图与每日导出文件。架构上分为独立的采集/规范化进程与读取本地数据库的 Web/API 应用，使用 Python 3（仅标准库）编写，数据库支持 SQLite 与 PostgreSQL（Psycopg 3）。数据源以 DNIT、PRF、Inmetro 等官方渠道为主，源文件保留 SHA-256 哈希、URL 与采集日期。公共实例仅限个人查询，企业与应用运营方需自建实例；数据采用 CC BY 4.0 许可并要求署名。",
+   "highlights": [
+    "采集器与 API 均用 Python 3 标准库实现，数据库支持 SQLite（默认）与 PostgreSQL (Psycopg 3)，迁移脚本位于 sql/migracoes/",
+    "API 经 Nginx + fcgiwrap 以 CGI 方式运行 api.pse，支持按纬度、经度、半径参数查询并输出 JSON",
+    "源文件归档保留 SHA-256 哈希、URL、采集日期，冲突记录保持可追溯，不自动择值"
+   ],
+   "use_cases": [
+    "按经纬度查询周边测速设备的位置、限速与运行状态并核验数据来源",
+    "导航、地图或出行类项目自建实例或按 CC BY 4.0 署名使用每日数据导出文件",
+    "市政或机构间通过 Traseiro 网络交换执法点位数据，接收方审核后再发布"
+   ]
+  },
+  "sha": "4ce0a362c262",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

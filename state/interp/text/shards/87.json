@@ -2819,5 +2819,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f69f5a867a1e": {
+  "identity": {
+   "one_liner": "将 PromQL/LogQL/TraceQL 翻译为 ClickHouse SQL 的只读查询网关",
+   "review": "Cerberus 是一个用 Go 编写的只读 HTTP 网关，为存储在 ClickHouse 中的指标、日志和追踪数据提供 Prometheus、Loki 和 Tempo 兼容的查询接口。它不采集数据，写入仍由 OTel Collector 完成；查询经解析、统一计划、优化后转为 SQL 并按上游格式返回。适用于已用 Grafana 且希望将遥测数据集中存于 ClickHouse 的团队。要求 ClickHouse 26.3+ 和标准 OTel exporter 表结构。",
+   "highlights": [
+    "逐字实现上游 HTTP API（/api/v1/query_range、/loki/api/v1/query_range、/api/search 等），在 Grafana 中作为三个普通数据源接入，无需插件",
+    "所有查询经 parse → 共享计划 → 优化 → ClickHouse SQL → 按上游格式回传的统一管线，支持三种查询语言",
+    "提供 migrate 子命令，可从规则文件和导出的仪表板采集查询，回放并与参考后端逐条比对结果差异，全部一致才允许切换"
+   ],
+   "use_cases": [
+    "将 Grafana 中现有的 Prometheus/Loki/Tempo 数据源 URL 切换为 cerberus，仪表板和告警无需改动",
+    "通过 OTel Collector ClickHouse exporter 将指标、日志、追踪统一写入 ClickHouse 后继续用 PromQL/LogQL/TraceQL 查询",
+    "迁移前用 cerberus migrate 在自有数据上逐条验证查询结果一致性"
+   ]
+  },
+  "sha": "f69f5a867a1e",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3de105b7deba": {
+  "identity": {
+   "one_liner": "Java Swing 桌面药房管理系统，以 FEFO 批次计费与 MSSQL 存储为核心。",
+   "review": "这是一个面向药房运营的桌面应用（Curo Smart Pharmacy Management System），提供按批次记录的库存管理、先到期先出的多批次扣减计费、处方药核验标记、Owner 授权的账单取消与库存回退。技术栈为 Java（JDK 17+）、Swing/FlatLaf、JDBC 与 SQL Server Express，安装需先执行 curoDB.sql 建库并配置 db.properties。项目按 8 个包分层组织，包含抽象 BaseDAO、自定义异常体系与事务回滚。",
+   "highlights": [
+    "按批次（batch_number、stock_date、exp_date）管理库存，补货插入新批次记录而非覆盖；计费时自动从最早未过期批次扣减并跨批次滚动",
+    "提供角色认证（OWNER/CASHIER），通过 UnauthorizedAccessException 限制账单取消、免费发放、处方覆盖等 Owner 专属操作",
+    "支持 7 天销售速度评估与低库存阈值提醒（moving_type 为 FAST/SLOW 两档目标与告警值），以及提前 7 个月的过期预警；账单取消在 SQL 事务中回退库存并写入 canceled_bills 审计表"
+   ],
+   "use_cases": [
+    "需要按批次效期管理药品库存并执行 FEFO 出库的药房收银/进销存场景",
+    "需要区分 Owner 与收银员权限、记录账单取消原因与审计的门店管理场景",
+    "学习 Java OOP（封装/继承/多态/自定义异常/事务）与 Swing+JDBC+MSSQL 桌面开发的教学参考场景"
+   ]
+  },
+  "sha": "3de105b7deba",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

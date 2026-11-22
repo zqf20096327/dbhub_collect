@@ -3173,5 +3173,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f7e04ec4c546": {
+  "identity": {
+   "one_liner": "OpenCode 插件，用于调度和编排 AI 代理任务（cron、DAG、矩阵）",
+   "review": "agent-steward 是面向 OpenCode V1/V2 的插件，用于调度与编排 AI 代理任务，支持 cron、一次性运行、DAG 依赖管道、矩阵扇出和质量门。cron 与一次性任务注册到系统原生调度器（Task Scheduler/launchd/crontab），可在 OpenCode 关闭时运行并重启后保留；文件、git 与 MCP 事件触发则需 OpenCode 进程运行。运行需 Node.js 22.22+，历史记录存于 SQLite，并附带本地 Web 仪表盘。",
+   "highlights": [
+    "支持 cron、一次性（runAt/delaySeconds）、git 提交、文件变更、MCP 事件与 webhook（HMAC）触发方式",
+    "提供 dependsOn DAG 依赖、成功/错误任务链、矩阵扇出（并行/顺序、并发限制、聚合任务）与质量门命令",
+    "包含 SQLite 运行历史、JSONL 日志、Prometheus /metrics、OTLP 导出及本地 Web 仪表盘，含 14 天分析"
+   ],
+   "use_cases": [
+    "为 AI 代理设置定时或一次性任务，如每日定时生成报告",
+    "按依赖顺序编排多步骤代理任务管道（DAG 链）",
+    "对多个代码仓库执行同一模板任务，并行或顺序运行并设置并发上限"
+   ]
+  },
+  "sha": "f7e04ec4c546",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2f86ead3c7ea": {
+  "identity": {
+   "one_liner": "自托管的游戏化学习与习惯引擎，基于事件溯源账本记录所有数据。",
+   "review": "该项目将备考过程转化为任务、经验值、Boss 与复习机制的游戏化引擎，由作者为一次全国入学考试构建，UI 为波斯语（RTL）并配 Jalali 日期。数据层采用 PostgreSQL 事件溯源，所有变更可重放审计。适配其他考试需修改源码常量与种子 YAML，完整配置化是路线图中的待办事项，适合愿意 fork 自定义的自托管用户。",
+   "highlights": [
+    "所有数据变更为事件记录，XP/分数/金币账本为投影，可通过 npm run replay 重建并比对",
+    "单 PostgreSQL 数据库配合 per-user advisory locks、幂等重试与原子首次安装，含约 400 个单元与并发集成测试",
+    "支持本地 Docker、Vercel + Neon 部署，内置加密异地备份与恢复演练；完整功能无需 AI 密钥"
+   ],
+   "use_cases": [
+    "备考大型考试的个人，想以任务/等级机制管理每日学习与习惯",
+    "开发者 fork 后修改 campaign 常量与种子 YAML，适配自己的考试科目与日期",
+    "通过 make demo 命令加载三周示例数据，离线体验全部界面而不创建账号"
+   ]
+  },
+  "sha": "2f86ead3c7ea",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

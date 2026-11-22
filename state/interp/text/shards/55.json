@@ -3434,5 +3434,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3d27a826a22b": {
+  "identity": {
+   "one_liner": "面向以色列家庭的本地优先个人理财应用，本地运行并同步以色列银行数据。",
+   "review": "Penny 是一个运行在用户自己电脑上的开源个人理财应用（MIT 许可），面向以色列家庭。它通过 israeli-bank-scrapers 同步 18 家以色列银行和信用卡机构的交易，数据保存在单个 SQLite 文件中；内置预算、税务与养老金计算工具，界面以希伯来语为主并支持 RTL 布局，也提供英语。README 警告该工具仅供个人在本地使用，不应作为互联网服务运行。",
+   "highlights": [
+    "通过 israeli-bank-scrapers 每日同步 18 家以色列银行与信用卡，并通过 israeli-pension-scrapers 读取 5 家养老金机构的余额；也支持导入 CSV/XLSX 文件和粘贴表格录入",
+    "包含超过 25 个面向以色列的计算工具（税务点数、养老金管理费、抵押贷款、紧急基金等），交易分类可离线基于约 200 个以色列商户词典完成，AI 分类为可选项（支持 Claude API、Ollama 或 CLI 工具）",
+    "提供 Windows/macOS 桌面安装包和 Docker 部署方式，数据存储在本地 SQLite 文件；界面支持希伯来语 RTL 布局与英语，包含无障碍菜单和隐私模式"
+   ],
+   "use_cases": [
+    "以色列家庭在本地设备上汇总银行、信用卡和养老金账户的交易与余额并做预算管理",
+    "自动拉取数据不可用（如账户启用了双因素认证）时，通过拖入银行对账单文件或智能表格导入交易",
+    "使用内置计算器核查税务点数、养老金管理费、保险重复和抵押贷款方案等以色列本地财务事项"
+   ]
+  },
+  "sha": "3d27a826a22b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "742b40c48da9": {
+  "identity": {
+   "one_liner": "单二进制的本地 OpenTelemetry 链路调试器，以失败为入口检索 trace",
+   "review": "Geko 是一个以失败为中心的 OpenTelemetry trace 仪表板，用 Go 编写为单一二进制，接收 OTLP/HTTP 与可选 OTLP/gRPC，将 span 存入 SQLite，默认仅在回环地址提供服务，无需 Docker 或外部服务。它面向需要在本地排查跨服务请求失败的开发者，首屏列出记录了异常、HTTP 5xx 或错误状态的请求，并提供属性白名单过滤与脱敏机制。",
+   "highlights": [
+    "单个 Go 进程接收 OTLP/HTTP 与可选 OTLP/gRPC，span 存入 SQLite 并带保留期与容量上限，仪表板默认监听回环地址",
+    "支持通过 `geko mcp setup` 注册到 Claude Code、Cursor 或 VS Code，一次 `investigate_group` 调用返回堆栈、成功对照请求与引入失败的版本",
+    "内置属性白名单在入库前丢弃 headers、cookies、请求体与完整 URL，并对邮箱、卡号、IBAN 和土耳其身份证号脱敏，提供仅保留异常类型与消息哈希的 strict 模式"
+   ],
+   "use_cases": [
+    "开发者在本地机器上从失败证据出发排查跨服务请求：过滤失败、打开证据 span、沿 trace 跟踪调用链",
+    "通过 GitHub Action 将测试运行的失败 trace 以评论形式附加到 pull request，或把失败证据交给编码代理调查",
+    "在带 token 的 Docker 或 TLS 反代之后为团队运行共享 dev/staging 实例，支持读写与分诊角色、审计日志与 token 重载"
+   ]
+  },
+  "sha": "742b40c48da9",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

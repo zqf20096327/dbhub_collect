@@ -3161,5 +3161,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "713b4ea6ca74": {
+  "identity": {
+   "one_liner": "基于 Clean Architecture 的 ASP.NET 11.0 Web API 项目模板，含 gRPC、SignalR 与 JWT 认证",
+   "review": "该项目是一个用于快速启动新项目的 ASP.NET 11.0 模板，采用 Clean Architecture 与领域驱动设计组织代码，使用 MediatR 做进程内消息，基于 PostgreSQL 存储，集成 Identity 与带刷新令牌的 JWT 认证。支持 dotnet-ef 迁移建库、Swagger 调试、CircleCI 集成与 Kubernetes 部署；含 320 个测试用例。需要自行配置 TLS 证书与 JWT 签名密钥。",
+   "highlights": [
+    "提供 REST API、gRPC 服务与 SignalR 三类通信方式，内置用户注册、登录、令牌刷新、密码重置、账户锁定等接口",
+    "JWT 签名密钥不出现在仓库中：开发环境首次运行时生成 64 字节随机密钥存储于本地，其他环境要求通过环境变量提供且不足 64 字节启动失败",
+    "刷新令牌以 SHA-512 哈希存储、每次交换后轮换，登录、刷新与 gRPC Auth 服务按客户端 IP 限流"
+   ],
+   "use_cases": [
+    "以 Clean Architecture 结构启动新的 ASP.NET Core 后端服务项目",
+    "需要用户账户体系（Identity/JWT）与实时通信（SignalR）、gRPC 接口的 Web 服务开发",
+    "部署到 Kubernetes 并通过 CircleCI 进行持续集成的 .NET 服务"
+   ]
+  },
+  "sha": "713b4ea6ca74",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "428be64570e5": {
+  "identity": {
+   "one_liner": "OpenEverest 的 TiDB 供给器，将通用 Instance 资源转译为 TiDB Operator v2 原生资源",
+   "review": "该仓库实现 OpenEverest 平台的 TiDB provider：监听 spec.providerRef.name 为 tidb 的 Instance 自定义资源，生成 Cluster 及 PD/TiKV/TiDB 等组件组资源，生命周期由捆绑的 TiDB Operator v2 管理，自身不直接管理 Pod。依赖集群中已安装 OpenEverest 核心组件，目前处于 pre-alpha 阶段，版本间无升级路径，不用于生产。",
+   "highlights": [
+    "通过单个 technology-agnostic Instance 资源供给 PD、TiKV、TiDB，可选 TiFlash 与 TiProxy，并回报健康状态与 MySQL 连接端点",
+    "支持水平/垂直伸缩、版本升级、内联 TOML 配置、mTLS、监控指标输出，以及基于 BR 的备份、定时备份与时间点恢复",
+    "Helm chart 以 OCI 制品发布，捆绑 TiDB Operator v2 依赖并注册准入 webhook 做实例写入校验"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上以统一的 Instance API 管理分布式 MySQL 兼容数据库 TiDB 集群",
+    "需要可选 TiFlash 列存副本（HTAP）或 TiProxy 连接代理的部署",
+    "需要 S3 兼容对象存储上的按需/定时备份与 PITR 恢复的环境"
+   ]
+  },
+  "sha": "428be64570e5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

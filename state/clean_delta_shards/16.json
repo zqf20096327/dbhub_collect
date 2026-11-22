@@ -28612,5 +28612,527 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "b42afba5b746+2": {
+  "fn": "dotCooCoo/hermitstash",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    4,
+    [
+     "HermitStash ",
+     " HermitStash ",
+     " Stash it quietly. Share it instantly. Post-quantum encrypted, self-hosted file upload server. ",
+     " HermitStash Sync — companion desktop sync client "
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    13,
+    5,
+    6,
+    [
+     " <a href=\"https://apps.umbrel.com/app/hermitstash\">"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    6,
+    7
+   ],
+   [
+    "replace",
+    14,
+    23,
+    7,
+    8,
+    [
+     " Get it on the Umbrel App Store"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    8,
+    9
+   ],
+   [
+    "replace",
+    24,
+    25,
+    9,
+    17,
+    [
+     " </a>",
+     "",
+     " <a href=\"https://blamejs.com\">",
+     " blamejs",
+     " </a>",
+     "",
+     " Built on blamejs — the vendored Node framework that owns its stack. ",
+     " Crypto envelopes, session storage, mTLS CA management, vault sealing, body parsers, rate limiting, and the WebSocket layer all come from blamejs; HermitStash composes them into a product."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    32,
+    17,
+    24
+   ],
+   [
+    "replace",
+    32,
+    33,
+    24,
+    25,
+    [
+     "> - **I'm not a cryptographer.** I've used well-reviewed primitives and tried to assemble them carefully, but I haven't had this audited, and there are almost certainly things I don't know that I don't know. I've written `docs/THREAT_MODEL.md` as a detailed design document specifically so that review is *possible* — it describes every protocol, lists known limitations honestly, and includes specific questions for cryptographers. If that's you: thank you, and please open an issue."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    38,
+    25,
+    30
+   ],
+   [
+    "replace",
+    38,
+    39,
+    30,
+    31,
+    [
+     "> — .CooCoo (@dotCooCoo)"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    41,
+    31,
+    33
+   ],
+   [
+    "delete",
+    41,
+    43,
+    33,
+    33
+   ],
+   [
+    "equal",
+    43,
+    70,
+    33,
+    60
+   ],
+   [
+    "replace",
+    70,
+    71,
+    60,
+    61,
+    [
+     "blamejs"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    61,
+    62
+   ],
+   [
+    "replace",
+    72,
+    73,
+    62,
+    63,
+    [
+     "HermitStash is composed on top of **blamejs** — a Node framework that vendors its standard library instead of pulling it from npm at runtime, with security defaults wired in from line zero. Every primitive HermitStash uses for crypto, transport, storage, and identity flows through the framework:"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    83,
+    63,
+    73
+   ],
+   [
+    "replace",
+    83,
+    84,
+    73,
+    74,
+    [
+     "The framework's source tree lives at `lib/vendor/blamejs/`, and `lib/vendor/MANIFEST.json` records the pinned release. [`scripts/vendor-update.sh blamejs [version]`](scripts/vendor-update.sh) refreshes it from the npm registry as `@blamejs/core`, and stops before unpacking when the tarball does not match the registry's published sha512 integrity value. HermitStash has no npm runtime packages: `package.json` has no `dependencies` block."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    87,
+    74,
+    77
+   ],
+   [
+    "replace",
+    87,
+    88,
+    77,
+    78,
+    [
+     "For the detailed design — protocols, security goals, non-goals, adversary model, key hierarchy, known limitations, and open questions for reviewers — see `docs/THREAT_MODEL.md`. The table below is a summary."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    91,
+    78,
+    81
+   ],
+   [
+    "replace",
+    91,
+    92,
+    81,
+    82,
+    [
+     "|Layer|Algorithm|Standard|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    82,
+    83
+   ],
+   [
+    "replace",
+    93,
+    102,
+    83,
+    92,
+    [
+     "|**KEM**|ML-KEM-1024 + P-384 ECDH hybrid|FIPS 203 + NIST P-384|Key encapsulation (PQC + classical)|",
+     "|**Symmetric**|XChaCha20-Poly1305|RFC 8439 extended|Data encryption (192-bit nonce, constant-time)|",
+     "|**KDF**|SHAKE256|FIPS 202 (XOF)|Key derivation from KEM shared secrets|",
+     "|**Hash**|SHA3-512|FIPS 202|Integrity, email/IP hashing, checksums|",
+     "|**Webhook MAC**|HMAC-SHA256 (Standard Webhooks)|RFC 2104|Webhook delivery signatures|",
+     "|**Password**|Argon2id|RFC 9106|Memory-hard password hashing|",
+     "|**Signatures**|SLH-DSA-SHAKE-256f (default) / ML-DSA-87 (legacy)|FIPS 205 / 204|Digital signatures. New keys default to SLH-DSA-SHAKE-256f; existing ML-DSA-87 keys continue to verify (algorithm auto-detected from key PEM)|",
+     "|**mTLS certificates**|ML-DSA-87 (sync CA) / ECDSA-P384-SHA384 (browser CA)|FIPS 204 / NIST P-384|Sync/machine client certs are signed by a post-quantum CA; browser-import certs are signed by a separate classical CA that browsers and OS keystores can actually verify and import|",
+     "|**Random**|SHA3-512(entropy)|"
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
+ },
+ "e6eaeebad073+2": {
+  "fn": "NeHumorist/codex-local-audit",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**Full Cross-Platform Forensic Report:** nehumorist.github.io/codex-local-audit"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "replace",
+    5,
+    7,
+    5,
+    7,
+    [
+     "- **Denis Vaulin** (GitHub · LinkedIn)",
+     "- **Oleksii Mai** (GitHub · LinkedIn)"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    17,
+    7,
+    17
+   ],
+   [
+    "replace",
+    17,
+    21,
+    17,
+    21,
+    [
+     " - Foreign-key & deletion-trigger checks on `thread_history_1.sqlite`;",
+     " - Unzeroed deleted SQLite freelist & `-wal` measurement across `logs_2.sqlite`, `queue_1.sqlite`, `sqlite/codex-dev.db`, `sqlite/codex.db`, and `memories_1.sqlite`;",
+     " - Unencrypted local microphone retention (`dictation-history/`);",
+     " - Live Desktop traces: `user-assist.json` (Windows Explorer ROT13 app-launch history scraping count), live `turn diff analytics capture` hits, `[external-agent-import]` competitor scans, `[devicecheck-attestation]` counts, plaintext `auth.json` presence (never read!), and `config.toml` `[analytics]` opt-out status;"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "delete",
+    22,
+    24,
+    22,
+    22
+   ],
+   [
+    "equal",
+    24,
+    31,
+    22,
+    29
+   ],
+   [
+    "delete",
+    31,
+    33,
+    29,
+    29
+   ],
+   [
+    "equal",
+    33,
+    63,
+    29,
+    59
+   ],
+   [
+    "replace",
+    63,
+    64,
+    59,
+    60,
+    [
+     "Python 3.14+ includes `compression.zstd` in the standard library. On Python 3.10–3.13, run via `uv` (or install `zstandard` / system `zstd`) to decompress `.jsonl.zst` session files:"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    75,
+    60,
+    71
+   ],
+   [
+    "replace",
+    75,
+    84,
+    71,
+    80,
+    [
+     "|Flag|Description|",
+     "|:---|:---|",
+     "|`--codex-dir <dir>`|Custom path to `.codex` directory (default: `~/.codex`)|",
+     "|`--binary <path>`|Explicitly point to an installed `codex` / `codex.exe` binary (auto-detected if omitted)|",
+     "|`--asar <path>`|Explicitly point to an installed `app.asar` bundle (auto-detected if omitted)|",
+     "|`--skip-binary`|Skip inspecting installed `codex` binary and `app.asar`|",
+     "|`--json <file>`|Save an anonymized machine-readable JSON summary|",
+     "|`--markdown <file>`|Save an anonymized shareable Markdown table report|",
+     "|`--include-ids`|*(Off by default)* Include up to 10 sample server `response_id` (`resp_...`) values for `<80%`-quota zero-reasoning & `516`-cutoff events in `--json` / `--markdown` outputs (intended for private DSAR / regulator filings)|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    93,
+    80,
+    89
+   ],
+   [
+    "delete",
+    93,
+    95,
+    89,
+    89
+   ],
+   [
+    "equal",
+    95,
+    100,
+    89,
+    94
+   ],
+   [
+    "replace",
+    100,
+    101,
+    94,
+    95,
+    [
+     "- On **2026-06-27**, developers opened `openai/codex#30364` documenting exact `516 / 1034 / 1552` reasoning-token clustering (`188` comments, `428` reactions, **`0` official OpenAI replies**). An earlier report (`#29353`, `2026-06-21`) was closed `not_planned` in **23 minutes**."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    95,
+    96
+   ],
+   [
+    "replace",
+    102,
+    105,
+    96,
+    99,
+    [
+     " - `04:43:07Z`: `#28879` (*rate-limit cost jumped 10–20×*, `211` comments, `557` reactions)",
+     " - `04:43:33Z` (+26s): `#30364` (*516/1034/1552 clustering*, `188` comments, `428` reactions)",
+     " - `04:44:27Z` (+54s): `#14593` (*Burning tokens very fast*, `630` comments, `307` reactions)"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    112,
+    99,
+    106
+   ],
+   [
+    "replace",
+    112,
+    121,
+    106,
+    115,
+    [
+     "|Bucket (`gpt-6.1-sol::ultra`)|Calls (`N`)|Median Reasoning Blocks|Median `encrypted_content`|P90 `encrypted_content`|",
+     "|:---|---:|---:|---:|---:|",
+     "|`rTok == 0`|3,018|0.0|0 B|0 B|",
+     "|`rTok 501..515`|151|1.0|7,948 B|8,688 B|",
+     "|**`rTok == 516`**|**1,467** (`1,410` single-block)|**1.0**|**8,036 B**|**8,504 B**|",
+     "|`rTok 517..700`|653|**2.0** (block jump)|10,584 B|11,736 B|",
+     "|**`rTok == 1034`**|**352** (`336` two-block)|**2.0**|**15,748 B**|**16,900 B**|",
+     "|**`rTok == 1552`**|**92** (`85` three-block)|**3.0**|**23,238 B**|**25,168 B**|",
+     "|**`rTok == 2070`**|**38** (`33` four-block)|**4.0**|**32,012 B**|**42,876 B**|"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    132,
+    115,
+    126
+   ],
+   [
+    "replace",
+    132,
+    134,
+    126,
+    128,
+    [
+     " - `thread_history_1.sqlite` (`0001_thread_history.sql`, `0005_thread_realtime_items.sql`) has **`0` `FOREIGN KEY ... ON DELETE CASCADE`** constraints, `thread_realtime_items_projection_cleanup` deletes only `thread_realtime_items`, and `StateRuntime::delete_thread` (`threads.rs:1257–1317`) skips `thread_history_1.sqlite`.",
+     " - Unzeroed deleted SQLite freelists & uncheckpointed WALs observed live on Windows: `logs_2.sqlite` (`90.6–91.8%` freelist, `~66 MB`), `queue_1.sqlite` (`98.6%` freelist at `0` live rows + `6.2 MB` WAL), `sqlite/codex-dev.db` (`74.1%` freelist + `4.2 MB` WAL, `auto_vacuum = 0`), `sqlite/codex.db` (`4.1 MB` WAL, `auto_vacuum = 0`)."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    136,
+    128,
+    130
+   ],
+   [
+    "delete",
+    136,
+    138,
+    130,
+    130
+   ],
+   [
+    "equal",
+    138,
+    143,
+    130,
+    135
+   ],
+   [
+    "replace",
+    143,
+    157,
+    135,
+    147,
+    [
+     "|Artifact / Claim|Why It Is Excluded or Scoped Down|",
+     "|:---|:---|",
+     "|`codex.response.receive_wait_ms`|Emitted on every `handle_output_item_done` (`reasoning`, `message`, `function_call`); measures per-item stream channel wait (down to `0.0046 ms` when buffered), **not** prompt Time-to-First-Token (TTFT).|",
+     "|`x-codex-safety-buffering-faster-model`|Verified in `codex.exe` (`safety_buffering.rs`) and `app.asar`: supplies the model slug for the optional UI button *\"Retry with a faster model\"* during safety buffering — it does **not** silently auto-swap the model mid-turn.|",
+     "|`wham/remote/control`|Verified in `codex.exe` (`remote_control_cmd.rs`) and `app.asar`: standard Remote Control / device-pairing feature gated by MFA and TPM/device-key challenge — **not** a \"backdoor\".|",
+     "|`shadow_selection_experiment`|Verified in `ext/skills/src/shadow_selection_experiment/mod.rs`: local benchmark comparing 5 lexical/BM25/ngram rankers over installed `SKILL.md` files — **not** model throttling or proven external exfiltration.|",
+     "|Silent `gpt-6-astra -> gpt-6-luna` reroutes in Codex|Audited Windows & macOS datasets showed **`0`** `model_reroute` events. Background `gpt-6-luna::low` spans stem from hardcoded helper models (`ephemeralGenerationModel`, `ambientSuggestionsModel`) in `app.asar` (`worker.js`).|",
+     "|`browserProfileImporter` (`importPasswords` / `importCookies`)|Verified in `app.asar` (`0x7bcc5b`, `0x7f7b14d`): supports importing cookies/passwords/history from Chrome/Edge/Brave/Opera/Vivaldi, **but** is gated behind an explicit user import dialog (`passwords` and `history` checkboxes default to `false`) — **not** silent background password theft.|",
+     "|Windows `CodexSandboxService` (`LocalSystem`) named pipe|Audited live DACL (`\\\\.\\pipe\\OpenAI.CodexSandbox.*`) and binary (`ipc\\authentication.rs`): explicitly denies the sandbox RID via SDDL and validates callers via `GetNamedPipeClientProcessId`, `ImpersonateNamedPipeClient`, `QueryFullProcessImageNameW`, and `GetTokenInformation` — properly authenticated IPC, **not** an unauthenticated LPE vulnerability.|",
+     "|Viral GitHub issue `openai/codex#59060` (*\"destroyed systemd / $10k\"*)|Explicitly quarantined and excluded as primary evidence after reviewing thread comments showing similar provocative reports from the same author across multiple repositories.|",
+     "|`openai/codex#23794` & `PR #50811` (`afb436df`)|Scoped accurately: `#23794`'s context usage indicator was partially restored behind an opt-in setting in `26.602.30954`; `PR #50811` did **not** introduce `default_reasoning_summary: \"none\"` (that was introduced earlier on `2026-03-06` in `PR #13617`, while `default_reasoning_level: \"low\"` landed on flagship `gpt-5.6-sol` on `2026-07-09` in `PR #31684`).|",
+     "|`openai/codex#55150` (Windows telemetry endpoint)|Verified that `dc.services.visualstudio.com` referenced in `#55150` is a Microsoft telemetry endpoint, **not** an OpenAI endpoint.|"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    162,
+    147,
+    152
+   ],
+   [
+    "replace",
+    162,
+    163,
+    152,
+    153,
+    [
+     "Licensed under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-21"
  }
 }

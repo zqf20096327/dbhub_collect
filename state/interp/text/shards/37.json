@@ -3231,5 +3231,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "86f913780dda": {
+  "identity": {
+   "one_liner": "本地守护进程，为 AI 代理提供类型化、有签名治理的状态引擎",
+   "review": "Cruxible 是一个本地守护进程，供 AI 代理与团队跨数据源维护类型化、带证据引用的状态。核心机制包括声明式类型词汇、每字段签名 Git 历史与溯源、流水线自动化（observe→propose→settle 分级授权），以及变更时只标记受影响事实的失效检测。提供 Python SDK、MCP 服务器与 CLI 三种客户端。需 Python 3.11+ 与 Git，支持 Linux x86-64、macOS Apple silicon，Windows 需 WSL2；内部不运行 LLM。",
+   "highlights": [
+    "每个变更为提案，经审批策略检查后写入签名 Git 账本，保留逐字段历史与出处",
+    "流水线以固定版本提供者运行，支持定时/触发器，可在显式过期授权下自动落定或仅提案待审",
+    "支持 citation_drifted 检测被编辑的引用行、stale_after 过期标记，并区分 found/verified none/unknown"
+   ],
+   "use_cases": [
+    "跨 SBOM、OSV、KEV、EPSS 与本地源码维护依赖暴露判断及豁免理由",
+    "需要双签（owner+reviewer）审批的代理判断治理流程",
+    "多会话代理工作中保留已验证的中间事实，避免每次从头重推导"
+   ]
+  },
+  "sha": "86f913780dda",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "56a8825f20da": {
+  "identity": {
+   "one_liner": "Rust 编写的跨平台桌面数据库客户端，支持 SQL 与 NoSQL 多类数据库。",
+   "review": "DataBug 是一个用 Rust 编写的开源桌面数据库客户端，运行于 macOS、Windows 和 Linux，采用 Apache-2.0 许可。它连接关系型、文档、键值、宽列、时序与分析型等多类数据库，提供带模式补全的 SQL 编辑器、ER 图、查询计划、CSV 导入等功能。可通过安装脚本或 release 包安装，源码构建需 Rust 1.89+ 和 C 编译器。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、MongoDB、Redis、Cassandra、DuckDB 等 17 种数据库引擎，覆盖关系型、文档、键值、宽列、时序与分析型",
+    "SQL 编辑器基于实时模式提供表、列和 join 补全，支持跳转定义与重命名重构",
+    "提供查询计划、schema 对比、ER 图、表格编辑、CSV 导入与文档视图；支持只读和生产连接及确认提示"
+   ],
+   "use_cases": [
+    "需要在同一客户端中访问多种类型数据库（SQL 与 NoSQL）的开发者或 DBA",
+    "需要在生产环境中使用只读连接并带有确认机制的场景",
+    "希望从源码构建或二次开发的 Rust 使用者"
+   ]
+  },
+  "sha": "56a8825f20da",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

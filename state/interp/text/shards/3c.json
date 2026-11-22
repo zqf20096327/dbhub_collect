@@ -3433,5 +3433,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fc5521acb895": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，通过 COPY 命令读写 Parquet 文件",
+   "review": "pg_parquet 是 Crunchy Data 开发的 PostgreSQL 扩展，基于 Apache Arrow 与 pgrx 实现，使用户通过 COPY TO/FROM 命令在 S3、Azure Blob Storage、Google Cloud Storage、http(s) 端点、本地文件及标准输入输出流间读写 Parquet。支持表结构推断（definition_from/load_from）、类型转换，并提供 parquet.schema/metadata/file_metadata/kv_metadata 等函数查看文件的模式与统计信息。安装需 rustup 和 cargo-pgrx 从源码构建。无符号整数类型推断时会升级为更宽类型，部分 Parquet 类型无 Postgres 对应会报错。",
+   "highlights": [
+    "通过 COPY 命令读写位于 S3、Azure Blob Storage、GCS、http(s) 端点、本地文件系统及 stdin/stdout、程序流的 Parquet 文件",
+    "支持用 CREATE TABLE ... WITH (definition_from/load_from) 从 Parquet 文件推断列定义并填充数据",
+    "提供 parquet.schema、parquet.metadata、parquet.file_metadata、parquet.kv_metadata 函数查询模式、行列统计、压缩与编码等元数据"
+   ],
+   "use_cases": [
+    "将 Postgres 表或查询结果导出为 Parquet 文件存入对象存储或本地",
+    "从 Parquet 文件批量导入数据到 Postgres 表并进行类型转换",
+    "在导入前查看 Parquet 文件的模式、列统计与键值元数据"
+   ]
+  },
+  "sha": "fc5521acb895",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9c9a6d3927c2": {
+  "identity": {
+   "one_liner": "面向小初高三学段的 AI 教学平台，FastAPI+React，配置驱动、支持完全离线部署",
+   "review": "SmartKBS 是一个面向小学、初中、高中的通用学科教学平台，将题库组卷、考试练习、课堂互动、学情分析、系统管理整合在同一账号体系内，供学校、教研组或任课教师使用。学科、年级、班级、题型与提示词模板均由配置文件与数据库主数据驱动，不限定具体学科；数据存储于本地 SQLite，支持三种部署方式。内置学段规则仅覆盖一至高三共 12 个年级，幼儿与高校场景需自行扩展年级主数据。",
+   "highlights": [
+    "提供题库与智能组卷、在线考试、作业批改、课堂互动（抢答/投票/分组讨论/协作白板）与学情分析等功能，共 60+ 功能点，按教、学、练、评、管五条主线组织",
+    "AI 能力经统一调用服务接入，支持 DashScope、DeepSeek 与本地 Ollama 三种引擎，按云端/混合/本地三档切换，AI 链路支持 RAG 检索增强并逐级降级",
+    "数据全部写入本地 SQLite 与本地目录，提供 Windows 桌面版一键安装、源码包与 Git 克隆三种部署方式，可完全离线部署；手机浏览器可直接访问，无需安装 App"
+   ],
+   "use_cases": [
+    "中小学教师在同一平台内完成备课出题、课堂互动、作业批改与学情分析",
+    "需要数据本地化、离线部署或 AI 引擎本地运行的教学场景",
+    "信息科技、通用技术等学科的教学与练习管理，通过配置切换课程体系"
+   ]
+  },
+  "sha": "9c9a6d3927c2",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8535559bbfee": {
+  "identity": {
+   "one_liner": "RV1106 开发板上的移动侦测录像方案，动态帧率录制 H.264/HLS 并经 Web 播放",
+   "review": "MotionSense 运行于 Luckfox Pico Pro Max（RV1106），在静止时以 1 fps、侦测到移动时以约 30 fps 录制 H.264 到 SD 卡的 HLS 分片，提供 MJPEG 实时流与按日回放界面，并将移动事件写入 SQLite。架构上由 C 守护进程（rockit 管线）与 Go HTTP 代理两个进程经 unix socket 通信。作者声明其为学习项目，HTTP 无认证，仅限局域网使用。",
+   "highlights": [
+    "自适应帧率录制：静止时 1 fps，移动侦测时约 30 fps，阈值、灵敏度与夜间模式可在 config.json 配置",
+    "通过 unix socket 分离 C 录制守护进程与 Go HTTP 代理（无 cgo，CGO_ENABLED=0 静态编译），录制与 Web 服务互不影响",
+    "按日期目录存储 HLS 分片，附带每日事件数据库，存储低于阈值（默认 2 GB）时自动删除最旧一天的数据，录制不中断"
+   ],
+   "use_cases": [
+    "长时间静止、偶发短暂活动的场景监控，如冰箱、储物间、宿舍、仓库通道等",
+    "在回放中快速浏览全天录像：静止段加速播放，移动段在进度条上以红色标记",
+    "在局域网内通过浏览器查看实时 MJPEG 流、查询设备状态（运行时长、内存、负载、SoC 温度）"
+   ]
+  },
+  "sha": "8535559bbfee",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "833dfaac0714": {
+  "identity": {
+   "one_liner": "终端里的个人机会聚合器，用 Rust 和 SQLite 收集、评分并分类各类机会信息",
+   "review": "SENTRI 是一个 Rust 编写的终端 TUI 应用，将奖学金、黑客松、课程、工作、志愿活动及开源项目聚合到单一信息流，基于用户配置的兴趣、地区等规则打分排序。数据存储于本地内嵌 SQLite，无需账户或外部服务。运行需 Linux 和 Rust 1.89+，通过 cargo 从源码安装。内置 RSS、GitHub、Hacker News 等数据源连接器，单个连接器失败不影响其余采集。",
+   "highlights": [
+    "提供基于规则的评分机制，权重和兴趣可在 config.toml 中声明式配置，每条推荐可查看排序原因",
+    "支持 RSS/Atom、iCalendar、GitHub、Hacker News、GDG、Devpost、Kaggle 等多类数据源连接器，并可用 sentri add URL 添加任意链接",
+    "数据存储于本机内嵌 SQLite 数据库，提供日历视图、后台守护进程、命令行与快捷键可重映射的 TUI 界面"
+   ],
+   "use_cases": [
+    "学生或开发者希望在终端中集中查看奖学金、黑客松、工作等机会信息流",
+    "需要在 SSH 环境或无图形界面的服务器上使用信息聚合工具",
+    "希望数据完全保存在本地、无需注册账户的用户进行机会追踪与状态标记（已申请、已报名等）"
+   ]
+  },
+  "sha": "833dfaac0714",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

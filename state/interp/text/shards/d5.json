@@ -3199,5 +3199,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "815d8fe49cab": {
+  "identity": {
+   "one_liner": "为编码代理记录失败-修复教训并防复发的自进化免疫记忆工具",
+   "review": "agent-immune（npm 包名 dsh-immune-system）是一个零运行时依赖的工具：当编码代理的工具调用失败且随后被修复时，将教训提炼为抗体存入本地 node:sqlite + FTS5，并在代理下次执行前注入提醒。通过 connect 命令接入 Claude Code、Cursor、Codex CLI 等多个代理，适合频繁使用编码代理的开发者。注意 Windows 在本仓库根目录需用 node 直接运行 CLI。",
+   "highlights": [
+    "失败后修复的工具调用被提炼为 trigger → avoid → do 抗体，存储于本地 node:sqlite + FTS5，注入前执行路径清洗",
+    "一条 connect 命令自动检测并接入 15 种代理与 CI 表面（Claude Code、Cursor、Codex CLI 等），含备份与幂等合并，支持 --remove 清除",
+    "提供 guard 命令对破坏性命令打分、拦截与自动改写，以及 compile-rules 将抗体转译为 Cursor、Copilot、Windsurf、Cline、CLAUDE.md 五种规则格式"
+   ],
+   "use_cases": [
+    "跨会话频繁使用 Claude Code、Cursor 等编码代理，希望避免重复调试已修复的问题",
+    "团队希望通过 .immune/ 目录（rules.jsonl + vaccine.lock.json）同步代理教训规则",
+    "需要对破坏性 shell 命令或敏感操作进行拦截与改写的开发流程"
+   ]
+  },
+  "sha": "815d8fe49cab",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

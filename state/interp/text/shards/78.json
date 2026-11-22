@@ -2776,5 +2776,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c8353671ebd1": {
+  "identity": {
+   "one_liner": "基于 SQL 查询生成一致性部分数据库转储并加载回库的 Python 工具。",
+   "review": "XDump 提供 Python API 与 CLI（xdump/xload），用于按 SQL 查询生成数据库部分转储的 zip 文件并加载回库。用户通过 FULL_TABLES/PARTIAL_TABLES 指定内容，工具自动包含关联对象（含递归外键）。支持 PostgreSQL 与 SQLite（需 pg_dump/sqlite3 在 PATH），集成 Django，支持 Python 3.11–3.15 与 PyPy。",
+   "highlights": [
+    "通过 SQL 查询与全量表/部分表配置控制转储内容，支持 dump_schema/dump_data 开关与 ZIP 压缩级别设置",
+    "自动选取选中记录的外键关联对象（含递归关系）一并纳入转储",
+    "提供 Python 后端 API、独立 CLI 及 Django 管理命令，加载时支持 recreate/truncate 两种清理方式"
+   ],
+   "use_cases": [
+    "从生产库（如只读副本）导出指定数据的部分副本，用于本地开发或调试",
+    "在 Django 项目中通过 manage.py xdump/xload 在环境间同步配置好的数据子集",
+    "生成含 schema 与部分数据的压缩归档，用于测试环境的数据准备"
+   ]
+  },
+  "sha": "c8353671ebd1",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b760bd7f8a51": {
+  "identity": {
+   "one_liner": "基于 Flask 与 TiDB Cloud 的员工薪资查询 Web 应用",
+   "review": "该应用使用 Flask 后端与 TiDB Cloud（MySQL 兼容）数据库，提供查询最高薪、最低薪员工、薪资前五名及平均薪资的功能，通过 PyMySQL 连接数据库并以 REST API 暴露接口。数据库需自建 employee 表（含 emp_id、emp_name、department、salary 列），运行前需在 .env 配置 TiDB 凭据与 CA 证书。作者将其作为 DBMS 课程迷你项目开发。",
+   "highlights": [
+    "提供 4 个 REST API 端点：最高薪、最低薪、前五名员工、平均薪资",
+    "后端使用 Flask + PyMySQL 连接 TiDB Cloud（MySQL 兼容）",
+    "凭据与证书文件通过 .gitignore 排除在公开仓库之外"
+   ],
+   "use_cases": [
+    "作为学习 Flask 与云数据库集成的小型示例项目",
+    "教学场景中演示 SQL 聚合查询（MAX/MIN/AVG/LIMIT）的 Web 实现",
+    "作为 DBMS 课程作业的参考结构模板"
+   ]
+  },
+  "sha": "b760bd7f8a51",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

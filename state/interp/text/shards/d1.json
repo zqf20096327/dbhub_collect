@@ -2787,5 +2787,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fa08864c3dbc": {
+  "identity": {
+   "one_liner": "自托管 MCP 服务器，为 AI 代理提供共享长期记忆、文档搜索与代码索引",
+   "review": "ClickHouse Loom 是一个开源（Apache-2.0）的自托管 MCP 服务器，为 Claude Code、Codex、Cursor 等编码代理及自研代理应用提供跨会话共享的长期记忆、带引用的文档搜索（支持 PDF/docx/pptx）和代码索引。记忆与文件、符号关联，代码变更时被标记；支持多用户命名空间、角色与令牌。存储基于 ClickHouse，可选 Postgres；默认安装为单用户本地方案，仅 localhost 访问。",
+   "highlights": [
+    "通过 MCP、HTTP、Python 或 TypeScript SDK 连接代理；记忆与代码文件和符号关联，读取或编辑相关文件时呈现",
+    "提供多用户模式：命名空间、读写角色与令牌作用域控制；仪表盘集中管理记忆、仓库、任务与运行记录",
+    "默认 Docker 安装无需 API 密钥即可运行（本地嵌入模型），支持 OpenAI、Gemini 及兼容端点的嵌入与 LLM 配置"
+   ],
+   "use_cases": [
+    "为编码代理团队建立跨会话共享记忆与代码索引，供实现和审查代理复用经验与问题上下文",
+    "为自研代理应用提供按用户的记忆存储（Python/TypeScript SDK）",
+    "构建多代理工作流的共享上下文，包括任务收件箱、决策记录与代理运行历史"
+   ]
+  },
+  "sha": "fa08864c3dbc",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "57f4ba7576d1": {
+  "identity": {
+   "one_liner": "基于 chubbyphp-framework 的 API 骨架项目，含 CRUD、OIDC 认证与 Docker 环境。",
+   "review": "该项目是一个用于构建 API 的骨架模板，基于 chubbyphp-framework，并依赖 Doctrine ORM、Slim PSR-7 等组件。它提供 Pet 资源的完整 CRUD 接口，通过 chubbyphp-oidc 与 Keycloak 容器实现 /api 路由的 OIDC 认证，使用 Docker Compose 编排 php、PostgreSQL、Keycloak、OpenSearch 等容器。适合需要快速搭建带认证的 PHP API 项目的开发者参考，需 PHP 8.3 及以上版本。",
+   "highlights": [
+    "提供 Pet 资源的完整 CRUD 接口（GET/POST/PUT/DELETE），支持排序、过滤和分页的集合列表",
+    "通过 chubbyphp-oidc 集成 Keycloak，/api 路由受 OIDC 保护，支持授权码流 + PKCE 和密码授权模式",
+    "内置 Docker Compose 编排，包含 php 容器内预装的多个编码代理（Claude Code、Codex、Gemini CLI 等），其配置目录从宿主机挂载以在容器重建后保留"
+   ],
+   "use_cases": [
+    "以 chubbyphp-framework 为基础启动新的 PHP API 项目开发",
+    "需要 OIDC 认证（Keycloak）与 PostgreSQL 的 API 原型搭建",
+    "作为包含 Collection、DTO、Model、Repository、RequestHandler 分层结构的代码组织参考"
+   ]
+  },
+  "sha": "57f4ba7576d1",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3808144dcc22": {
+  "identity": {
+   "one_liner": "面向 DBA 的轻量级 TiDB 集群管理平台，接管 TiUP 部署集群并采集展示",
+   "review": "该平台用于管理 TiUP 部署的 TiDB 集群，通过三通道采集集群信息，提供拓扑、实例、用户、参数、会话视图及 28 项内置巡检与报告下载。后端 Go + Gin + GORM + SQLite，无 CGO，前端产物内嵌编译为单二进制，运行时通过 TMP_ADDR、TMP_DB 等环境变量配置，默认监听 8080 端口。",
+   "highlights": [
+    "三通道采集集群信息，提供拓扑/实例/用户/参数/会话视图与 6 类 28 项内置巡检及可下载报告",
+    "单二进制交付：纯 Go SQLite 驱动无 CGO，前端构建产物通过 //go:embed 内嵌，首次启动自动建 19 张表",
+    "凭据以 AES-256-GCM 加密存储并提供 admin/operator/viewer 三级角色权限、JWT 吊销与统一错误码"
+   ],
+   "use_cases": [
+    "DBA 日常查看 TiUP 部署集群的拓扑、实例状态与参数配置",
+    "定期执行内置巡检检查并生成可下载报告",
+    "设置 TMP_MOCK=true 在无真实集群环境下走通平台全流程演示"
+   ]
+  },
+  "sha": "3808144dcc22",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

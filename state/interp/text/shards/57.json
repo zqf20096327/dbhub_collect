@@ -2977,5 +2977,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "874f4ad99baa": {
+  "identity": {
+   "one_liner": "面向 LLM Agent 的持久化记忆系统，支持跨会话上下文与记忆迁移",
+   "review": "Octop Memory 是为 LLM Agent 提供持久记忆的 Python 库（Python 3.12+，MIT 许可，零核心依赖），用于保存偏好、跨会话延续上下文，并通过 .hmpkg 包在支持的主机间迁移记忆。存储基于 SQLite/FTS5 或 PostgreSQL；自动提取与升级需注入 LLMClient，纯 Python 调用 store 不依赖模型。提供 Python API、CLI、JSON-RPC 桥及 OpenClaw/Hermes 插件。",
+   "highlights": [
+    "零核心依赖，使用 Python 标准库加 SQLite/FTS5 即可实现手动存储与词法检索，无需模型",
+    "对话经模型辅助的提取与升级流程转化为带证据引用的 AtomCard 事实，配实体页面与层级树组织",
+    "支持 SQLite 与 PostgreSQL 后端、可选 LangGraph 检查点，以及 export/import 与 .hmpkg 便携包迁移"
+   ],
+   "use_cases": [
+    "为个人助手持久保存用户偏好与决策记录",
+    "在多轮或跨会话对话中延续项目上下文",
+    "在 OpenClaw、Hermes 等支持的主机之间打包迁移已积累的记忆"
+   ]
+  },
+  "sha": "874f4ad99baa",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e5301ec96a02": {
+  "identity": {
+   "one_liner": "Claude Code 插件，将目标变为后台定时运行的持久代理",
+   "review": "Quarterdeck 是一个 Claude Code 插件，用户通过 /goal-new 用一句话设定目标（如维护仓库、每周求职扫描），目标按计划在后台运行，行动前经 Goals 面板或手机上的 Claude 应用请求批准，并在会话之外保存各目标的记忆、待办与运行历史。需要 Claude Code 与 Node.js 22.13+，通过两条命令安装插件，运行消耗用户自身 Claude 计划的额度。",
+   "highlights": [
+    "目标按可读语法的计划（如 'weekdays at 9'）或基于 gh 命令的 watch 触发，在后台运行",
+    "每类动作可设为 off/propose/auto，连续 10 次批准后可切换为自动；每次运行显示 token 与耗时",
+    "Issue Fixer 将 issue 内容作为不可信文本读取，仅接受仓库所有者、成员与协作者的 issue，工具规则限定 git push 与 gh pr create"
+   ],
+   "use_cases": [
+    "在 Facebook Marketplace、Trade Me 等平台上发布、回复议价与跟进物品出售流程",
+    "仓库维护：修复新 issue、修复 CI、审阅 PR、为 issue 添加 refined/triaged 标签",
+    "定期任务：邮件列表退订、新闻摘要、每周职位扫描、下载目录清理、收件箱分类"
+   ]
+  },
+  "sha": "e5301ec96a02",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ed7a41d2156f": {
+  "identity": {
+   "one_liner": "自托管 AI API 成本记录系统，按分级日期定价核算 token 开销",
+   "review": "该工具用于记录和核算 AI API 调用成本：应用通过 REST API、TypeScript/Python 客户端或 OpenTelemetry 上报 token 数，系统按带生效日期、区分输入/缓存/输出及长提示分级的官方价格精确计价，以十进制存储金额。适合需要按项目、客户、功能拆分成本并管理月度预算的自托管团队。注意：不存储提示词与响应，未定价用量不计入总额，预算仅对先预留额度的调用生效。",
+   "highlights": [
+    "支持通过 API、TypeScript/Python 客户端及 OpenTelemetry 上报用量，价格按生效日期版本化，含缓存、音频、图像与长提示分级费率",
+    "提供仪表盘、按项目月度预算（80%/100% 告警至 webhook/Slack/邮件）、与供应商账单的核对及带 Stripe 开票的账单台账",
+    "基于 Next.js 16 + PostgreSQL 17 构建，金额以精确十进制存储，Docker Compose 或 Vercel 部署，MIT 许可"
+   ],
+   "use_cases": [
+    "按客户、功能或 agent 运行拆分统计 AI API 支出并核算应收账单",
+    "为各项目设定月度预算并在达到阈值时接收告警",
+    "将记录的成本与 OpenAI、Anthropic、Google 账单对账核实"
+   ]
+  },
+  "sha": "ed7a41d2156f",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

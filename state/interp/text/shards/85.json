@@ -3298,5 +3298,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ad845c8745c0": {
+  "identity": {
+   "one_liner": "基于ESP8266与PHP/MySQL服务器的IoT远程控制与数据记录系统",
+   "review": "这是一个自包含的客户端-服务器系统，用于通过ESP8266设备实现远程控制、自动化和环境数据记录。服务器端为PHP/MySQL，无前后端框架，依赖较少；设备定期轮询服务器获取指令并写入GPIO，支持多传感器、继电器控制、OTA更新及Meshtastic集成。适合需要完全掌控代码的离网场景用户。需注意GPIO9/10配置错误会导致设备崩溃。",
+   "highlights": [
+    "ESP8266设备定期轮询服务器读取device_feature表并自动写入GPIO，无需重新刷机即可更改引脚分配",
+    "提供多探头天气数据多时间尺度图表展示，并支持从API或SolArk Copilot读取SolArk逆变器数据",
+    "包含OTA固件更新、多租户安全模型、基于传感器值和天气预报的自动化，以及可通过串口或网页访问的命令行查询系统"
+   ],
+   "use_cases": [
+    "离网太阳能场景的能耗监控与远程控制电器负载",
+    "多点温度/环境传感器的数据记录与可视化",
+    "通过I2C从属Arduino扩展引脚实现远程自动化控制"
+   ]
+  },
+  "sha": "ad845c8745c0",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4a450a7ab0cc": {
+  "identity": {
+   "one_liner": "内嵌式 SQL 数据库，单二进制集成 SQL、向量检索与全文检索，兼容 PostgreSQL/MySQL 线协议",
+   "review": "HeliosDB Nano 是一个 Rust 编写的内嵌式 SQL 数据库，提供单个自包含二进制（Linux x86_64 约 53 MB），可作为 Rust 库嵌入或以服务器方式运行。它实现 PostgreSQL 与 MySQL 线协议，支持 HNSW 向量索引、BM25 全文检索、git 式分支与时间旅行查询、AES-256-GCM 静态加密，以及内置 Auth/REST/Realtime 的 BaaS 层。README 标注其定位面向 local-first 应用、AI 记忆、边缘分析与开发者工作流。限制包括：Linux 二进制要求 glibc ≥ 2.39；MySQL 监听器尚不校验密码；未提供 WASM/浏览器版本；官方对比表自述其生态尚处于 young 阶段。",
+   "highlights": [
+    "单二进制集成 SQL、HNSW 向量检索（<->、<#>、<=>）与 BM25 全文检索，支持向全文混合查询",
+    "实现 PostgreSQL 与 MySQL 线协议，psql、psycopg2、node-postgres、JDBC、Prisma、SQLAlchemy 等客户端可直接连接，并支持 SQLite 文件一次性导入",
+    "提供 git 式数据库分支、AS OF TIMESTAMP 时间旅行查询、只读物理备库复制（含提升与计划切换）、可选 AES-256-GCM 加密、SCRAM 认证与 TLS，以及构建期可选的代码图索引、graph-RAG 与 MCP 服务器功能"
+   ],
+   "use_cases": [
+    "local-first 应用：以单文件后端进程对接现有 Postgres/MySQL 客户端",
+    "AI 智能体记忆存储：将向量、全文检索与分支置于同一存储，可选启用 MCP 服务器",
+    "边缘/IoT 与多租户托管：无需外部服务的自包含二进制，内置多租户支持"
+   ]
+  },
+  "sha": "4a450a7ab0cc",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3527,5 +3527,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d1c8a11bc43c": {
+  "identity": {
+   "one_liner": "开源搜索数据库，用 SQL 与倒排/向量索引实现全文与混合检索",
+   "review": "Manticore Search 是一个面向搜索场景的开源数据库，使用 C++ 编写，GPLv3 许可发布。它支持全文检索、向量检索及二者结合的混合搜索，实时插入即刻可查，并提供 MySQL 兼容的 SQL 语法与 HTTP JSON API 两种访问方式。适用于需要在自有基础设施中运行搜索服务的团队，可用作独立搜索服务器，也支持 MySQL、PostgreSQL、Kafka 等数据源同步。",
+   "highlights": [
+    "提供全文、向量与混合搜索，支持实时插入、分片表与基于 Galera 的多主同步复制",
+    "以 SQL 为原生语法，兼容 MySQL 客户端，同时提供 HTTP JSON API 及多种语言的官方客户端",
+    "包含行式、列式、docstore 三种存储方式，支持基于 PGM-index 的二级索引与代价优化器"
+   ],
+   "use_cases": [
+    "为应用搭建全文/混合搜索服务，如站内搜索、日志查询",
+    "通过 percolate 表或 Kafka 集成对流数据进行过滤",
+    "从 MySQL、PostgreSQL、XML、CSV 等数据源同步数据建立搜索索引"
+   ]
+  },
+  "sha": "d1c8a11bc43c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63e8317c6510": {
+  "identity": {
+   "one_liner": "面向长时运行 Agent 的控制平面，跨会话持久化目标与证据",
+   "review": "LoopX 是一个 harness 中立的 Agent 控制平面，为 Codex、Claude Code 等运行时中的长时任务持久化目标、决策、租约与证据，使工作可在会话与重启后延续。需 Python 3.11+ 与 Node.js 22+，pip 安装后以本地 SQLite 存储；支持 guarded heartbeat、压缩式上下文投递与 owner/safety 等人审门禁。它不执行危险操作，发布与生产写入仍由人工授权，非自治生产控制器。",
+   "highlights": [
+    "跨 Codex、Claude Code、DeepSeek Harness 等运行时持久化目标、决策与证据，支持 200+ 小时跨会话恢复",
+    "内置 guarded heartbeat、预设定时任务（daily-triage、pr-watch 等）与压缩周期的渐进式上下文投递",
+    "提供 owner、safety、publication、private-data 门禁、隔离 worktree 与 Local SQLite/PostgreSQL 存储选项"
+   ],
+   "use_cases": [
+    "需要跨天、跨会话延续的工程、研究或基准实验类长时目标",
+    "带 owner/发布/私据审批门禁的 issue 与 PR 循环、监控类周期任务",
+    "多个对等 Agent 协作、需显式租约与工作交接的团队场景"
+   ]
+  },
+  "sha": "63e8317c6510",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0bd019dd41f6": {
+  "identity": {
+   "one_liner": "开源多人地理猜位对战游戏，基于街景定位与实时匹配竞技。",
+   "review": "GeoDuels 是一个开源的地理猜位对战游戏：玩家在街景中定位并在地图上打点，与真实对手进行计分对决。它支持排位赛（含赛季和排行榜）、自定义房间、社区地图和好友聊天系统，内置作弊检测机制并记录管理操作。技术栈为 Go 后端、Next.js 前端、Postgres、NATS 和 k3s 部署，支持 Docker Compose 自托管。",
+   "highlights": [
+    "提供排位对决、团队战、自定义房间及社区地图，支持 Google 或 Discord 登录或以游客身份游玩",
+    "对战节点将比赛保存在内存中，各服务可独立滚动更新，无需停机维护",
+    "包含私有反作弊模块，对每次猜测的速度和准确性评分，并提供工作人员审计日志；通过 release-please 与 Flux 实现合并即部署，构建 amd64 和 arm64 镜像"
+   ],
+   "use_cases": [
+    "与朋友进行在线地理猜位对战或组队自由对抗",
+    "参与赛季排位赛并通过排行榜追踪 Glicko 评分",
+    "自托管私人游戏服务器供社区使用"
+   ]
+  },
+  "sha": "0bd019dd41f6",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2750bc3fd28b": {
+  "identity": {
+   "one_liner": "面向 F3/Atomic 框架的多引擎 PHP ORM/ODM，统一 API 操作 SQL、MongoDB 与 Jig",
+   "review": "Cortex-Atomic 是基于 ikkez 的 Cortex 分支改造的多引擎 ActiveRecord ORM/ODM，供 Fat-Free Framework 和 Atomic Framework 使用。它用统一的 SQL 风格过滤语法读写 SQLite、MySQL、MariaDB、PostgreSQL（稳定）及 MongoDB、Jig，SQL Server 为预览状态。项目重构为 5 个 trait 架构，要求 PHP 8.0+，内置 Schema Builder，支持 Fluid Mode 自动建表和一对多/多对多关联。",
+   "highlights": [
+    "单一 Mapper API 覆盖 SQL、Jig、MongoDB 引擎，SQL 语法查询可自动翻译为 Jig 过滤器和 Mongo 查询",
+    "基于 trait 的架构（SchemaBuilder/Cast/FieldAccess/Relation/Crud 五个 trait），内置 fork 自 ikkez/f3-schema-builder 的 Schema Builder，无外部依赖",
+    "支持一对一/一对多/多对多关联、智能懒加载与预加载、Fluid Mode 自动建表扩列、DT_SERIALIZED 与 DT_JSON 数组字段类型"
+   ],
+   "use_cases": [
+    "F3 3.9.x 或 Atomic Framework 项目中需要跨 SQL/NoSQL 引擎的对象持久化",
+    "原型开发阶段使用 Fluid Mode 免建表快速迭代数据模型",
+    "需要在模型中配置字段类型、索引、外键约束及关联加载的 PHP 应用"
+   ]
+  },
+  "sha": "2750bc3fd28b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "66bab0f5e605": {
+  "identity": {
+   "one_liner": "基于 Quartz 调度 DAG、以 MySQL 持久化状态的分布式数据工作流平台",
+   "review": "这是一个用于定义和运行数据工作流的分布式平台，通过 Quartz 调度 DAG，将定义与运行状态存于 MySQL，并在对等节点间分发任务。执行路径包含 Flink SQL/JAR、Shell 和 SQL 任务，提供 local/s3/hdfs 三种 Docker 配置启动。README 提示开发库仅首次导入 schema.sql 且 Quartz 表每次启动会重建，调度状态不跨重启保留；部分模块编译为 Java 8 字节码，主构建需 JDK 21。",
+   "highlights": [
+    "通过 Quartz 调度 DAG，任务定义与运行状态持久化在 MySQL，跨对等节点分发执行",
+    "支持 Flink SQL/JAR 提交、Shell 及 SQL 任务等执行路径，仓库包含存储、执行环境适配器与 UDF 模块",
+    "提供 local、s3（MinIO）、hdfs 三种 Docker Compose profile，通过 health 端点检查启动状态"
+   ],
+   "use_cases": [
+    "需要以 DAG 形式定义并定时调度 Flink SQL/JAR 作业的数据团队",
+    "将 Shell 脚本和 ClickHouse/Hive/MySQL 相关 SQL 任务纳入统一工作流编排的场景",
+    "使用 Docker Compose 在本地以 local/s3/hdfs 配置快速搭建带后端与 MySQL 的开发环境"
+   ]
+  },
+  "sha": "66bab0f5e605",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29772c9ca1c5": {
+  "identity": {
+   "one_liner": "Rust 单二进制 AI 编程代理本地记忆库，基于 SQLite 自动回忆。",
+   "review": "Omoikane 是面向 AI 编程代理的本地记忆系统，用 Rust 实现，数据存于单个 SQLite 文件，通过 MCP 工具接入。它借助 hook 在用户输入相关时自动注入记忆，并在会话结束时保存遗漏内容；记忆可加密后经 git 仓库在多设备与团队间同步。无服务器依赖，可离线运行，支持 15 个代理接入。",
+   "highlights": [
+    "提供 10 个 MCP 工具，SQLite（含 FTS5 与 sqlite-vec）内置于单一二进制，无需 Python、Node 或 Docker，可离线运行于 Windows/Linux/macOS",
+    "支持 101 种语言的搜索；无重复、带理由的历史、过期标记、密钥脱敏、回收站与每日数据库副本",
+    "记忆可经 git 仓库加密同步到多台设备与团队成员，spaces 按客户隔离，trades 在同技术栈的项目间共享"
+   ],
+   "use_cases": [
+    "为 Claude Code 等 AI 编程代理保留跨会话记忆（如平台特定 bug、团队约定），由 hook 自动召回",
+    "团队通过加密 git 仓库共享同一份代理记忆，并为不同技术栈维护共享经验",
+    "在 CI、服务器或容器等无人在场的环境中，通过环境变量配置代理记忆"
+   ]
+  },
+  "sha": "29772c9ca1c5",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cea20270683b": {
+  "identity": {
+   "one_liner": "Go 编写的分布式请求延迟根因分析参考应用，基于 OpenTelemetry、Tempo 与 PostgreSQL 锁证据。",
+   "review": "这是一个演示分布式链路追踪与延迟分析的 Go 参考应用：结账请求经过 gateway、auth、orders、inventory、payment 等服务，调试器从 Tempo 读取追踪数据并生成带证据的诊断报告（数据库锁争用、下游延迟、超时传播、链路缺失等类别）。面向学习本地部署场景，通过 Docker Compose 一键启动，不适用于生产环境。",
+   "highlights": [
+    "通过 pg_stat_activity 与 pg_blocking_pids() 观察真实 PostgreSQL 行锁等待，生成带证据的锁争用诊断",
+    "提供 CLI 工具与 REST API，支持场景执行、追踪诊断、基线与事件追踪的差分对比",
+    "预配置 Prometheus 指标与 Grafana 仪表板，覆盖请求速率、p95 时长与错误率"
+   ],
+   "use_cases": [
+    "学习 OpenTelemetry 与 Tempo 分布式追踪的端到端实现",
+    "演示和研究数据库锁争用与下游延迟等常见延迟成因",
+    "通过差分对比定位健康与异常结账流程中具体操作的时长变化"
+   ]
+  },
+  "sha": "cea20270683b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

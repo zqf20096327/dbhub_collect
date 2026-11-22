@@ -3414,5 +3414,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b424ab13ef08": {
+  "identity": {
+   "one_liner": "自托管的求职申请追踪器，以单个机会记录为核心，配浏览器插件与看板",
+   "review": "Job Tracker 是一个自托管、单用户的求职申请追踪器，为每个职位机会建立一条持久记录，聚合多个列表 URL、状态变更、笔记与材料。后端基于 FastAPI（默认 SQLite，可选 Turso 同步），提供 Chrome 浏览器扩展用于在浏览时捕获职位信息，并提供本地看板仪表盘。内置集成仅支持 LinkedIn 及 Gmail 中的 LinkedIn 职位邮件，其他站点需手动添加。通过 /openapi.json 暴露 API 供 AI 代理使用。安装方式包括源码运行、Docker Compose 或 Linux/WSL2 发布包，运行于 localhost:3456。",
+   "highlights": [
+    "每个职位机会对应一条记录，可关联多个列表 URL、状态变更、笔记、决策与材料，重帖合并需人工确认",
+    "浏览器扩展支持在 LinkedIn 页面内捕获职位详情、更新状态，并对支持的 LinkedIn Easy Apply 问题复用已审核的答案",
+    "数据默认存储于本地 SQLite 文件，可选 Turso 同步；API 通过运行服务器的 /openapi.json 模式可被发现"
+   ],
+   "use_cases": [
+    "跨多个平台和邮件追踪同一职位机会及其重帖历史的求职者",
+    "需要在浏览职位列表页时直接记录和更新申请状态的用户",
+    "希望将结构化求职数据提供给 AI 代理辅助决策的场景"
+   ]
+  },
+  "sha": "b424ab13ef08",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d2dbba0752ad": {
+  "identity": {
+   "one_liner": "nexmail 是单容器部署的自托管邮件客户端，聚合多个 IMAP 邮箱并以 SQLite 存储。",
+   "review": "nexmail 将多个 IMAP 邮箱聚合到一个网页界面中，通过单个容器运行，数据存于一个 SQLite 文件，无需额外数据库或云账户。面向已在家中自托管服务的用户。功能包含会话视图、全文搜索、规则、联系人、任务、日历、定时发送、自动回信及 OpenID Connect 登录。项目尚处早期（v0.30.1），README 建议先在不重要的邮箱上试用。",
+   "highlights": [
+    "支持多个 IMAP 邮箱并列显示及合并的 All inboxes 视图，全文搜索缓存内容并可在服务器端执行 IMAP SEARCH",
+    "支持 CardDAV/CalDAV 同步（iCloud、Google、Nextcloud）、Todoist/nextasks 任务同步、BIMI 品牌标识与 OpenID Connect 登录",
+    "标签以 IMAP keywords 存储在服务器端，Snooze 消息存于服务器真实文件夹，可与其他客户端互通"
+   ],
+   "use_cases": [
+    "家庭实验室用户以单容器自托管网页邮件客户端，管理 iCloud、Google 或其他 IMAP 邮箱",
+    "需要读写 CardDAV/CalDAV 联系人与日历、同步 Todoist 任务的邮件工作流",
+    "多用户环境下通过 OpenID Connect 登录并共享同一实例的团队或家庭"
+   ]
+  },
+  "sha": "d2dbba0752ad",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8597f45d1cdf": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL LISTEN/NOTIFY 的 Django 服务端推送应用",
+   "review": "django-pg-sse 是一个 Django 应用，通过 PostgreSQL 的 LISTEN/NOTIFY 实现 Server-Sent Events 推送，可向订阅同一主题的浏览器发送 HTML 或 JSON，支持断线重连后按 Last-Event-ID 重放事件。要求 Python 3.12+、Django 5.2+、psycopg 3.3.9+，并需在 ASGI 服务器（如 uvicorn）上运行，runserver 不支持。默认提供 public: 与 user:<pk> 的订阅策略，其他主题需自行配置 CAN_SUBSCRIBE 函数。",
+   "highlights": [
+    "广播在事务提交后发出，回滚则不发送；事件持久存储，重连时按签名的 Last-Event-ID 重放错过的内容",
+    "默认订阅策略公开 public: 主题、将 user:<pk> 限定为对应用户，可通过 PG_SSE[\"CAN_SUBSCRIBE\"] 自定义，并提供 close_streams() 按用户或会话关闭流",
+    "提供可选 presence 应用跟踪主题读者、stream_opened/stream_closed 信号，以及按 RETENTION_HOURS（默认 24 小时）清理历史事件的 prune_stream_events 命令"
+   ],
+   "use_cases": [
+    "使用 htmx 4 及 hx-sse 扩展的 Django 页面，需要从任意进程向已打开的浏览器推送 HTML 片段（如新闻、聊天消息）",
+    "无 htmx 的前端通过 EventSource 接收 JSON 事件，用于在线人数等状态展示",
+    "已使用 PostgreSQL 且不想引入 Redis 或消息中间件的 Django ASGI 项目"
+   ]
+  },
+  "sha": "8597f45d1cdf",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

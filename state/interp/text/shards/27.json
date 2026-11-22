@@ -3156,5 +3156,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dd91ee8fb58d": {
+  "identity": {
+   "one_liner": "开源 MCP 服务器与 CLI，通过格式级防御手段干扰 AI 逆向分析代理",
+   "review": "BLA 是面向 JS/TS、Electron ASAR、WASM、SQLite、GGUF/Safetensors、Android DEX 等产物的防御性工具，供软件作者和安全团队保护自己的发布制品。通过 CLI 命令 `bla harden` 或注册 MCP 服务器由编码代理调用，采用毒化、预算耗尽、纠缠绑定等机制生成加固文件，包含 audit→protect→verify 流程。README 明确限定仅用于防御自有知识产权，且多数 REA 预算可被调用方调高，加固效果基于特定版本实测。",
+   "highlights": [
+    "提供 CLI（harden/--apply/--restore）与 MCP 服务器两种使用方式，支持注册到 Claude Code、Cursor、Codex 等编码代理",
+    "覆盖 JS/TS、ASAR、WASM、Python、原生二进制、SQLite、GGUF/Safetensors、Android DEX 等格式，并提供 Vite/Rollup/Webpack/esbuild 打包插件",
+    "内置 bla audit/protect/verify 流程与 14 个基准目标，附带针对 morluto/rea 的实测报告（含预算可否调高的说明）"
+   ],
+   "use_cases": [
+    "软件开发者在发布前对构建产物进行加固处理",
+    "安全团队以 MCP 方式将加固流程集成到编码代理工作流",
+    "构建管线中通过打包插件在打包阶段处理 JS chunk、SourceMaps 和 WASM 资产"
+   ]
+  },
+  "sha": "dd91ee8fb58d",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8cac7e597043": {
+  "identity": {
+   "one_liner": "多账号 Gmail 桌面客户端，Rust 本地缓存实现键盘优先的即时浏览搜索",
+   "review": "Mailboat 是一个 GPL-3.0 开源的 Gmail 桌面客户端，支持 macOS 和 Windows，基于 Tauri、Rust 和 React 构建。它将多个 Gmail 账户聚合到统一收件箱，通过 Gmail API 同步并在本地 SQLite（FTS5）缓存，实现本地全文搜索；使用需自建 Google 凭据，项目处于早期开发阶段（v0.3.0），未经第三方安全审计。",
+   "highlights": [
+    "直接调用 Gmail API 并保留本地缓存（SQLite + FTS5），支持跨全部账户的本地全文搜索，并可合并 Gmail 自身的搜索语法",
+    "遵循 Gmail 键盘快捷键并内置 ⌘K 命令面板；邮件正文在 Rust 侧清洗后于无脚本的沙箱视图显示，并移除已知的追踪像素与链接追踪码",
+    "凭证存于 macOS Keychain 或 Windows 凭据管理器；AI 摘要、写作辅助等功能可选，可通过 Apple Intelligence 或用户自己的 Claude/ChatGPT 订阅使用"
+   ],
+   "use_cases": [
+    "在同一桌面应用中管理多个（个人/工作/学校）Gmail 账户的统一收件箱",
+    "偏好键盘操作、依赖本地缓存进行离线浏览与快速搜索的重度 Gmail 用户",
+    "希望本地 AI 工具（如 Claude）以只读方式访问邮件或使用邮件内 AI 写作辅助的场景"
+   ]
+  },
+  "sha": "8cac7e597043",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

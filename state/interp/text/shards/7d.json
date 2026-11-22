@@ -3241,5 +3241,48 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a1ef14939522": {
+  "identity": {
+   "one_liner": "为单个 Git 仓库安装的数据库驱动代理团队基座，运行于多种编码 harness 之上",
+   "review": "Subfloor 安装进已有 Git 仓库，为十个持久化角色 shell（Planner、Developer、Reviewer、Admin、Cartographer 等）提供基于 SQLite 的身份、记忆、规格与交接记录，并通过五个 harness 适配器（Claude Code、Codex、OpenCode、Mistral Vibe、Kimi Code）执行任务。合并受分支保护控制，需操作者显式指令或已授权 Sprint。运行环境仅支持 Linux（Arch/Ubuntu LTS）加 Python 3.14 与 Docker 或 systemd host 运行时。",
+   "highlights": [
+    "初始安装生成十个持久 shell 角色，其记忆与决策跨会话保存于数据库",
+    "提供五个 harness 适配器，各 shell 在同一上下文下由所选 harness 驱动",
+    "开发者分支运行于独立 worktree，合并需操作者显式指令或 Sprint 内实时授权"
+   ],
+   "use_cases": [
+    "在单个代码仓库中维护跨会话的多角色编码代理团队",
+    "通过 Planner 准备工作 lanes、Sprint 授权协调执行与评审合并",
+    "从终端或本地浏览器 UI（十个标签页 Review GUI）查看进行中工作与持久记录"
+   ]
+  },
+  "sha": "a1ef14939522",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5b15a893a38b": {
+  "identity": {
+   "one_liner": "按服务器进程粒度记录 SQL 语句的 PostgreSQL 扩展",
+   "review": "pg_log_statements（PGLS）是一个 PostgreSQL 扩展，用于将 log_statement=all 作用于指定服务器进程，而非实例或数据库级别。它提供 pid 模式与 filter 模式：前者通过 pgls_start/pgls_stop 按 pid 启停日志，后者按 application_name、用户、主机、IP、数据库过滤新进程。扩展需通过 shared_preload_libraries 加载，无 GUC 参数。README 称已在 PostgreSQL 9.5–19 上验证。",
+   "highlights": [
+    "提供 pgls_start/pgls_stop 函数按 pid 启停指定进程的语句日志",
+    "支持按 application_name、user_name、hostname、ip_address、database_name 五种过滤器启用新进程的日志",
+    "提供 pgls_state、pgls_conf 函数查看进程日志状态与当前过滤配置"
+   ],
+   "use_cases": [
+    "需要为单个服务器进程或特定应用连接记录全部 SQL 语句的排查场景",
+    "实例级或数据库级 log_statement 粒度过粗，需按用户、主机或数据库过滤日志的场景"
+   ]
+  },
+  "sha": "5b15a893a38b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3171,5 +3171,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b5f5d96e1740": {
+  "identity": {
+   "one_liner": "单二进制 Go 服务的 TiDB 优化器 issue 分诊与 PR 状态看板",
+   "review": "这是一个面向 TiDB SQL 优化器维护者的分诊工作台：用 Go 编译为单二进制，内置 SQLite（modernc.org/sqlite）与中英双语 Web 界面，提供 serve、sync-issues、sync-prs、pending、triage 等子命令，可直接调用 GitHub GraphQL API。支持匿名只读浏览、Token 或 GitHub OAuth 维护者写权限，以及服务器+远程 worker 的分离部署，提交决策采用双版本计数器做乐观并发校验。",
+   "highlights": [
+    "单二进制 Go 服务，内嵌 web/ 与种子数据，使用 SQLite（WAL 模式）存储，无需外部数据库",
+    "CLI 支持 issue/PR 同步、分诊决策的导出与校验应用（--dry-run）、在线 SQLite 快照备份",
+    "提供分级访问控制：匿名只读、Token 解锁写权限、GitHub OAuth（数字 ID 白名单、PKCE、24 小时会话）"
+   ],
+   "use_cases": [
+    "跟踪 TiDB 优化器相关 issue 的分诊状态与动态重分诊信号",
+    "监控开放的 PR blocker 状态并周期性从 GitHub 同步",
+    "以远程无状态 CLI/AI worker 配合轻量服务器执行批量分诊决策"
+   ]
+  },
+  "sha": "b5f5d96e1740",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

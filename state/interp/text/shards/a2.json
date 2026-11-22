@@ -3342,5 +3342,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f60ce8678808": {
+  "identity": {
+   "one_liner": "单二进制 Rust 本地搜索引擎兼 MCP 服务器，支持 BM25/向量/混合检索",
+   "review": "XERJ 是一个本地优先的搜索引擎与 MCP 服务器，以单个 Rust 二进制分发，可索引代码、文档、日志、JSONL/CSV 和 PDF，提供 BM25 全文、向量与混合检索及代理记忆（/_memory），暴露 Elasticsearch 兼容 API，供 Claude Code、Cursor 等 MCP 客户端使用。通过 curl 脚本安装，`xerj init` 一条命令接入编码代理；引擎源码为 Apache-2.0，rc.101 起随发布二进制附带的 Query-1 模型 crate 为专有。",
+   "highlights": [
+    "单 Rust 二进制实现对代码、文档、日志、JSONL/CSV、PDF 建索引，支持 BM25 全文、向量与混合检索",
+    "提供 Elasticsearch 兼容 API、/_memory 代理记忆命名空间和 MCP 工具（xerj_facts_ask、xerj_batch_search 等）",
+    "rc.101 引入 XERJ Query-1 模型，将问题转为对已存储事实的小程序执行，返回 UNKNOWN/CONFLICT 且默认关闭"
+   ],
+   "use_cases": [
+    "编码代理的参考编程：克隆并索引相近开源仓库，写作前检索已有解法以减少读取文件的 token 消耗",
+    "作为本地无 JVM 的检索后端，用 Elasticsearch 兼容 API 服务全文与混合搜索",
+    "为 MCP 客户端提供代理记忆与批量检索（batch-search 返回有序结果、引用与逐项错误）"
+   ]
+  },
+  "sha": "f60ce8678808",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "997913e46116": {
+  "identity": {
+   "one_liner": "看板与 MCP 服务器合一的单二进制任务管理工具",
+   "review": "Kanzo 是一个以 Rust 编写的开源（AGPL-3.0）看板程序，在浏览器中提供看板界面，同时内嵌 MCP 服务器供编码代理读取/移动任务卡片，另提供 kanzo 命令行。首运行在 ~/kanzo 创建全部数据，看板运行于 http://localhost:4242。支持局域网多机共享、经私有 git 仓库同步、GitHub 风格限定符过滤（tag:/status:/is:waiting 等）、任务依赖（waits_on）与多语言界面。适用于单人及代理协作管理任务、在多台电脑或树莓派间使用。",
+   "highlights": [
+    "单个约 4.7 MB 二进制，运行 kanzo 即启动，无账号与服务端配置，看板数据存于 ~/kanzo",
+    "内嵌 MCP 服务器（kanzo mcp 或 http://localhost:4242/mcp），代理可取任务、移动卡片、评论，并从 git remote 定位项目",
+    "支持局域网实时共享看板（share/join）与通过私有 git 仓库在机器间同步（kanzo sync），提供 GitHub 风格限定符过滤与任务依赖功能"
+   ],
+   "use_cases": [
+    "个人开发者与 Claude Code、Codex 等编码代理共用同一任务看板，代理自动领取并推进任务",
+    "多台电脑或树莓派之间共享/同步看板，用私有 git 仓库在切换机器时保持数据一致",
+    "用 Backlog 列、waits_on 依赖和 tag:/status: 过滤器管理积压想法与任务优先顺序"
+   ]
+  },
+  "sha": "997913e46116",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

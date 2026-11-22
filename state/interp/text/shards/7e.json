@@ -3909,5 +3909,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "10a6bc869530": {
+  "identity": {
+   "one_liner": "基于本地 SQLite、先审核后入库的 AI 长期记忆库",
+   "review": "memory-eternal 是一个面向 AI Agent 的长期记忆系统，用 SQLite 存储知识卡，写入需经人工批准才能进主库，并记录审计日志。提供语义召回、核心记忆注入、记忆账本统计，通过 MCP stdio 接入 Claude Code、Cursor、Codex 等宿主，也可用终端 TUI 或 Web 面板操作。召回基于 FTS5 + BM25，默认零模型调用；可选 Ollama bge-m3 或在线 API 嵌入。",
+   "highlights": [
+    "新卡先进入待审队列，人工批准后才进主库；每次状态变更追加由 SQLite 层强制写入的审计日志，Agent 不能批准自己提交的卡片",
+    "提供 5 个 MCP 工具（memory_recall/memory_capture/memory_stats/memory_audit_list/memory_revise），支持配置到多个宿主客户端，另有终端 TUI 和 Web 面板",
+    "语义召回支持内置、本地 Ollama（bge-m3）和 OpenAI 兼容 API 三种方式，云端不可达时回退本地库"
+   ],
+   "use_cases": [
+    "多会话开发项目中保存决策与踩坑记录，供 Agent 后续会话召回使用",
+    "需要人工审核 Agent 写入内容的记忆管理流程",
+    "多宿主（如 Claude Code、Cursor、Codex）共用同一份本地记忆库的场景"
+   ]
+  },
+  "sha": "10a6bc869530",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d2c05e98c514": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的嵌入式三模数据库，单内核融合向量、图与文档存储。",
+   "review": "TriviumDB 是用纯 Rust 实现的进程内数据库引擎，在同一存储内核中包含向量检索、属性图谱和 JSON 文档三类能力，每个节点通过全局 NodeId 同时持有向量、元数据与图关系。宿主应用通过 Rust、Python（PyO3）或 Node.js（napi-rs）API 管理实例与查询，提供 TQL 查询语言、四类属性索引、内置图算法库和 WAL/原子替换等持久化机制。当前为 0.9.3-beta 预发布版本，HTTP 服务端形态仅处于 nightly 预览。适用于需要将三种数据能力放在单进程内的应用开发。",
+   "highlights": [
+    "单节点同时包含稠密向量、稀疏文本倒排、JSON 元数据和图关系，支持 TQL 编排向量召回、属性索引、图扩展与集合运算",
+    "内置 PageRank、Leiden、SA-PPR 等图算法库，以及 QuIVer ANN 索引和 Hash/ART/Roaring Bitmap 四类属性索引",
+    "通过 WAL、写入原子替换、事务干跑验证与 Mmap 写时复制实现持久化，支持 Rom/Mmap 双存储模式与多进程共享只读打开"
+   ],
+   "use_cases": [
+    "AI Agent 长期记忆：对话存为带向量与时间戳的节点，人物/地点间建边，向量匹配后沿关系链扩散召回",
+    "RAG 与知识图谱应用：文档切片入库存向量与元数据，语义搜索与图导航在同一份数据上组合查询",
+    "单机或容器内多实例场景：通过共享 ResourceRuntime 管理配额、线程与实例诊断，配合快照 API 做备份迁移"
+   ]
+  },
+  "sha": "d2c05e98c514",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a9ac3c31d1a9": {
+  "identity": {
+   "one_liner": "自托管的 Docker 主机与容器观测平台，含 React 仪表盘、FastAPI 后端与采集代理",
+   "review": "CloudMonitor 是一个自托管可观测平台，用于监测 Docker 主机及容器状态。其 Python 代理读取 Docker 守护进程，向 FastAPI 后端上报心跳与 CPU/内存等指标，数据存于 PostgreSQL 16，并用 Prometheus、Node Exporter、Alertmanager 组成监控栈。前端为 React 18 仪表盘。项目定位为 IIT Patna 课程小型实践，本地与 AWS 生产部署服务覆盖不同，Demo 仅为 HTTP。",
+   "highlights": [
+    "Python 代理读取 Docker 容器元数据与资源统计，发送经认证的心跳与遥测数据",
+    "后端提供 JWT 认证、代理注册、指标摄入与状态路由，历史指标含时间戳的 CPU、内存、网络与块 I/O 样本",
+    "监控栈包含 Prometheus、Node Exporter、Alertmanager，本地 Compose 另含 Grafana 与 cAdvisor"
+   ],
+   "use_cases": [
+    "开发团队或小团队集中查看已注册主机与容器的运行状态和资源指标",
+    "教学实验或内部测试环境中练习云部署、容器遥测与指标告警流程",
+    "远程 Docker 主机通过手动注册路径接入代理并上报遥测"
+   ]
+  },
+  "sha": "a9ac3c31d1a9",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1a0a6ab4ea7e": {
+  "identity": {
+   "one_liner": "自托管的万智牌卡牌库存服务器，用FastAPI与React构建，Docker部署",
+   "review": "OpenMTG是一个自托管卡牌库存管理服务器，面向需要管理万智牌收藏的用户。它提供收藏追踪、套牌构建、统计、愿望单、公共展示、卡牌交易与借出记录等功能，通过Scryfall进行卡牌搜索与价格刷新。部署采用Docker Compose，数据库可选PostgreSQL或SQLite（首次部署时锁定），需配置JWT密钥方可启动。",
+   "highlights": [
+    "支持多账户管理，各用户收藏相互隔离；包含收藏管理、套牌构建（含主板/备板/指挥官分区及曲线分析）、愿望单价格提醒、卡牌交易与借出追踪",
+    "通过Scryfall进行模糊搜索卡牌并按可配置间隔自动刷新价格，支持导入Moxfield、MTGO、Arena套牌列表",
+    "提供公共Showroom展示页（仅展示用户选定内容，可按实例禁用）、卡牌照片上传及Home Assistant集成（默认关闭，需管理员启用）"
+   ],
+   "use_cases": [
+    "家庭服务器（homelab）环境中自托管管理个人万智牌收藏",
+    "多用户同一实例下各自管理收藏并进行卡牌交换与借出记录",
+    "通过公开Showroom页面在电视、平板或信息亭上展示选定套牌与卡牌"
+   ]
+  },
+  "sha": "1a0a6ab4ea7e",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2eec9d813697": {
+  "identity": {
+   "one_liner": "自托管在个人 AWS 账户中的 AI 代理长期记忆存储，经 MCP 提供带来源引用的检索。",
+   "review": "Memrain 将笔记、决策、代码与聊天记录存入用户自己的 AWS Postgres 数据库，通过 MCP 供 Claude、ChatGPT、Codex 等客户端搜索，每条结果附来源指针。部署需 AWS Bedrock 账户、Terraform 与域名，约每月 52 美元基础设施成本；Docker 本地模式仅支持关键词检索，语义检索需 AWS 凭据。存储前会脱敏密钥，并提供每日消费上限。",
+   "highlights": [
+    "读取笔记、代码与聊天历史并写入用户自有 AWS 账户中的 Postgres 数据库，支持按语义与关键词混合检索，每条结果包含来源页面指针",
+    "实现按人独立的密钥与每日消费上限、信任分级与写入门控，存入前脱敏 API 密钥、令牌与数据库密码",
+    "提供 Gmail、Outlook、Teams、Slack 等只读连接器，以及导入 ChatGPT 与 Claude 历史、页面版本记录和代码定义/调用检索（TypeScript、Python、Go）"
+   ],
+   "use_cases": [
+    "为日常使用 AI 代理的开发者或小团队提供跨会话的记忆存储，避免每次会话重复粘贴上下文",
+    "需要回答附带来源引用、可核查出处的团队知识检索（如查询某项决策的原文段落）",
+    "数据需保留在自己 AWS 账户内的私有化部署场景"
+   ]
+  },
+  "sha": "2eec9d813697",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

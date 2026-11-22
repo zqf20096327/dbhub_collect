@@ -3276,5 +3276,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d590152c9d6d": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Rust 编写的 DynamoDB 本地模拟器，支持 HTTP/MCP/嵌入/WebAssembly 多种运行形态。",
+   "review": "Dynoxide 是一个用 Rust 实现的 DynamoDB 模拟器，底层存储为 SQLite，面向本地开发、测试和 CI 场景。它以单个静态二进制分发，通过公开的一致性测试套件对照真实 AWS 验证行为；项目自述非生产环境替代品，不支持备份、全局表等云专属操作，且部分行为（如最终一致性读、事务争用错误）与线上 DynamoDB 存在已知差异。",
+   "highlights": [
+    "实现 DynamoDB API，覆盖表、条目、Query/Scan、批次、事务、PartiQL、Streams、TTL、GSI/LSI 及表达式语法与错误码",
+    "可作为 HTTP 服务器、MCP 服务器、可嵌入的 Rust 库（含 iOS），并编译为 WebAssembly 在浏览器运行",
+    "提供 npm、Docker、GitHub Actions、Homebrew、Cargo 等安装方式，并通过 Parity Suite 公开一致性测试对照 AWS 验证"
+   ],
+   "use_cases": [
+    "本地开发与集成测试中替代 DynamoDB 端点，AWS SDK 指向本地 HTTP 端口即可运行",
+    "CI 流水线中通过 npm、Docker 或 GitHub Action 启动 DynamoDB 兼容服务",
+    "Rust 项目以嵌入式库方式在测试中调用内存数据库，无需 HTTP 层"
+   ]
+  },
+  "sha": "d590152c9d6d",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0eec816616c2": {
+  "identity": {
+   "one_liner": "Rust 原生 PostgreSQL 桌面客户端，含 SQL 编辑、数据编辑与模式管理",
+   "review": "RSQL 是一个基于 GPUI 构建的原生 Rust 桌面 PostgreSQL 客户端，支持 macOS、Windows 与 Linux，采用 MIT 许可，无需账号且无遥测。用户可编写 SQL、编辑数据、浏览模式、查看查询计划、导入导出 CSV/JSON 等格式，并通过 SSH 隧道或 SSL 连接。需注意数据库与 SSH 密码目前以未加密形式存储在本地 rsql.db 中。",
+   "highlights": [
+    "提供模式感知的 SQL 补全、多标签分屏、保存查询与会话内 500 条历史记录，支持 EXPLAIN ANALYZE 查询计划查看",
+    "支持结果网格编辑单表数据（需主键）并在单事务中应用更改，可导入 CSV、导出 CSV/JSON/SQL INSERT/Markdown/XML",
+    "包含对象浏览器、DDL 查看、ALTER TABLE 生成、ER 图 SVG 导出、LISTEN/NOTIFY、性能监视与 VACUUM/ANALYZE/REINDEX 等维护操作"
+   ],
+   "use_cases": [
+    "需要桌面工具编写 SQL、浏览模式并可视化编辑 PostgreSQL 数据的开发者",
+    "需要查看查询计划、锁与活动等性能信息并进行 VACUUM 等维护操作的数据库管理员",
+    "需要 CSV 导入导出、ER 图导出或 WKT/GeoJSON 几何值地图预览的数据处理场景"
+   ]
+  },
+  "sha": "0eec816616c2",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c56afe8208c6": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 Socket.io 的全栈模拟面试平台，集成 Gemini AI 代码评分",
+   "review": "这是一个用于练习编程面试的全栈 Web 应用：面试官发布时间段，候选人预约后双方进入私有房间，通过 Socket.io 共享实时代码编辑器，结束后代码发送至 Google Gemini API 生成 10 分制评分与优缺点反馈。技术栈为 Node.js、Express 5、GraphQL、Sequelize，支持 MySQL 本地运行或 TiDB Cloud 在线数据库。需自行配置 .env 密钥；AI 仅审阅代码不执行代码。",
+   "highlights": [
+    "面试官与候选人通过 Socket.io 房间共享实时代码编辑器，面试结束后由 Gemini API 返回 10 分制评分、优势与改进建议",
+    "提供 REST 与 GraphQL 双 API（GraphQL Yoga），包含角色权限控制（JWT + bcrypt，401/403 区分）、原子化预约（重复预约返回 409）、Nodemailer+Brevo 预约确认邮件",
+    "内置 15 个 Jest 测试，由 GitHub Actions 在每次 push 时自动运行；本地启动时自动建表"
+   ],
+   "use_cases": [
+    "候选人练习编程面试并在实时协作编码后获取 AI 评分反馈",
+    "面试官发布面试时段、主持模拟编码环节并生成 AI 评审报告",
+    "需要 REST 与 GraphQL 并存、Socket.io 实时协作、JWT 角色鉴权等技术的全栈学习与部署参考项目"
+   ]
+  },
+  "sha": "c56afe8208c6",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

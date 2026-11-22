@@ -2825,5 +2825,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0e1b7b54f702": {
+  "identity": {
+   "one_liner": "自托管工作区，Go 单二进制加 SQLite 文件，提供文档、数据库与实时协作编辑",
+   "review": "form.md 是一个自托管工作区服务器，将文档编辑、数据库视图与实时协作打包为一个静态 Go 二进制和单个 SQLite 文件，无需外部数据库服务，也无需第三方账号。页面以 CRDT 存储使人与代理的编辑可合并，代理通过 MCP 服务器、REST API 与命令行操作工作区。适用于需要本地部署文档与数据库、并让 AI 代理接入的团队或个人。",
+   "highlights": [
+    "单静态 Go 二进制内嵌 Web 客户端，数据存于单个 SQLite 文件，支持 XTS-AES-256 静态加密与 AES-256-GCM 上传加密",
+    "每个数据库行即页面，同一查询可在表格、看板、列表、画廊、日历、时间线、表单、图表、仪表盘等视图间切换，支持关联、汇总与公式",
+    "内置 MCP 服务器（stdio 与 HTTP）、REST API 和 CLI，凭据可设为读写或只读并限定工作区，权限由服务端在每个路由上执行"
+   ],
+   "use_cases": [
+    "需要自托管、无外部账号依赖的团队文档与数据库工作区",
+    "让 Claude Code、Cursor 等支持 MCP 的 AI 代理读写页面与数据库的场景",
+    "离线环境试用：仓库提供三个双击即开的浏览器演示（编辑器、数据库视图、写作发布）"
+   ]
+  },
+  "sha": "0e1b7b54f702",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e6d2480ffb87": {
+  "identity": {
+   "one_liner": "NestJS + React + Postgres 单仓全栈模板，一条命令初始化项目",
+   "review": "这是一个 pnpm monorepo 项目模板，包含 NestJS API、React 19 前端、Prisma 与 Docker 中的 Postgres。内置邮箱密码登录（access token 仅存内存、refresh token 走 httpOnly cookie 并轮换）、用户管理模块、前后端共享的 Zod 校验 schema，以及 Vitest 单测、连真实数据库的 e2e 和 Playwright 浏览器测试。pnpm init:project 可重命名包、写入环境变量、启动数据库并播种首个管理员。运行需 Node 24、pnpm 10 和 Docker Desktop。",
+   "highlights": [
+    "pnpm init:project 一条命令完成重命名、env 写入、迁移与首个管理员播种，支持 --dry-run 和 --help",
+    "前后端共享 Zod schema，API 校验与 Web 表单使用同一套请求/响应类型；access token 只存内存，refresh token 用 httpOnly cookie 并在复用时撤销会话",
+    "测试分层：Vitest 单测、针对独立 Postgres 测试库的 API e2e、覆盖 Chromium 与 Firefox 生产构建的 Playwright 测试，CI 在每个 PR 上运行格式化、lint、类型检查与测试"
+   ],
+   "use_cases": [
+    "从模板快速创建带认证和用户模块的全栈新项目",
+    "需要前后端共享类型校验、统一错误格式的 NestJS + React 团队项目起点",
+    "学习或参照包含 e2e 与浏览器测试、CI 流程的全栈工程结构"
+   ]
+  },
+  "sha": "e6d2480ffb87",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

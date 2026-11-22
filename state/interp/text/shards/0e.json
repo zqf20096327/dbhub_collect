@@ -3252,5 +3252,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aa0e1bea1b8a": {
+  "identity": {
+   "one_liner": "直接读取PG数据文件与WAL的PostgreSQL数据抽取恢复工具",
+   "review": "PDU 是一个 C 程序，直接解析 PostgreSQL 14–18 的堆/TOAST 数据文件和 WAL 归档，无需运行数据库实例，导出 CSV 或 SQL。适用于实例损坏、误删/误更新记录、删除表等场景。通过修改 basic.h 中 PG_VERSION_NUM 选择目标版本，编译需安装 LZ4 和 zlib 开发库；交互命令须以分号结尾。不支持枚举、复合、范围等自定义类型。",
+   "highlights": [
+    "支持两种抽取方式：直接解析堆/TOAST 数据文件，以及扫描 WAL 归档还原 DELETE/UPDATE 前后数据",
+    "支持按事务 ID 或时间范围过滤恢复，输出格式可选 CSV/SQL，编码可选 utf8/gbk",
+    "以只读方式访问原始数据文件，提供交互式命令行（元数据引导、表/模式导出、DDL 生成）"
+   ],
+   "use_cases": [
+    "数据库实例或系统目录损坏、无法启动时直接从数据文件导出数据",
+    "误执行 DELETE/UPDATE 后基于 WAL 归档还原被删行或更新前值",
+    "从剩余数据文件重建丢失或被删除表的数据"
+   ]
+  },
+  "sha": "aa0e1bea1b8a",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "24ed045249f7": {
+  "identity": {
+   "one_liner": "VS Code 扩展，从 .dacpac 或 SQL Server 系数据库构建可交互依赖血缘图",
+   "review": "该扩展在 VS Code 中以交互图展示 SQL Server、Azure SQL、Fabric Data Warehouse 或 Synapse Dedicated SQL Pool 的对象依赖，可从 .dacpac 文件或活连接导入元数据，支持搜索、上下游追踪、DDL 预览与导出；配合 GitHub Copilot 等语言模型提供 @lineage 自然语言查询。血缘仅基于 DDL/目录元数据，不覆盖外部 ETL、动态 SQL、触发器等同义词类对象。",
+   "highlights": [
+    "提供交互式依赖图：对象搜索、上下游追踪、最短路径，并识别孤岛、枢纽、环形依赖与长链",
+    "支持多种数据源：SSDT 与 SDK 风格 .dacpac 文件、SQL Server/Azure SQL/Fabric/Synapse Dedicated 活连接、外部表及虚拟外部引用（OPENROWSET、跨库、CETAS）",
+    "可选 @lineage 聊天功能基于 VS Code Language Model 提供自然语言血缘查询、图预览与书签；图、搜索、追踪、SQL 预览、剖析和导出无需该提供商即可使用"
+   ],
+   "use_cases": [
+    "在修改表、视图或存储过程前查看其上下游依赖及影响范围",
+    "对 SQL Server 系数据仓库的元数据做离线分析（从 .dacpac 导入，无需连接数据库）",
+    "通过 @lineage 用自然语言追溯列映射、源到目标路径或识别枢纽对象"
+   ]
+  },
+  "sha": "24ed045249f7",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c7715395d2cd": {
+  "identity": {
+   "one_liner": "Rust 构建的 AI 员工/数字队友平台，含桌面端、服务器与 MCP 服务",
+   "review": "Wrok Bot 与 OpenMyBot 基于同一 OpenBot 引擎组装：前者提供桌面与服务器产品界面，后者提供本地前台守护进程、渠道绑定、CrabCode 宿主驱动及 MCP 服务器，能力以插件形式接入。核心为 Rust，桌面用 Tauri，数据存 PostgreSQL，首个发布目标为 macOS，目前处于开发与验证阶段，发布验证尚未完成。许可为非商业个人使用免费。",
+   "highlights": [
+    "提供桌面宿主、服务器、Web 界面及开发中的移动客户端，服务器监听 127.0.0.1 并支持经 TLS 反向代理的远程部署",
+    "OpenMyBot 提供 MCP 服务器，聊天渠道以所有者安装的渠道插件接入，自身可作为 Agent Plugins 包供 MCP 宿主使用",
+    "包含浏览器与计算机交互引擎、本地确认状态机、会话持久化，以及 fmt/test/parity-check/i18n-check 等本地校验命令"
+   ],
+   "use_cases": [
+    "在 macOS 上运行 AI 队友工作台，管理工作区、同事、技能与记忆",
+    "通过 MCP 协议将本地代理能力接入支持 MCP 的宿主应用",
+    "开发者参与开发与验证流程，使用 fixtures 校验与仓库守卫脚本"
+   ]
+  },
+  "sha": "c7715395d2cd",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

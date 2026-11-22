@@ -3523,5 +3523,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5ed49a9653a1": {
+  "identity": {
+   "one_liner": "合并 IEEE/Wireshark/Nmap/HDM 四个来源的 MAC 地址厂商查询数据库",
+   "review": "该项目合并 IEEE、Wireshark、Nmap 与 HDM Mac-Tracker 四个 OUI 注册源，去重后提供 59,424 条 MAC 前缀到厂商的映射记录，含设备类别、注册状态、注册人历史等字段。数据以 TXT/CSV/JSON/SQLite 等 10 种格式发布，提供浏览器内查询页面与 Node.js CLI，通过 GitHub Actions 按月自动更新。适合需要本地或离线进行 MAC 厂商归属查询的网络与安全工作场景；设备类别为启发式分类，仅覆盖约半数条目，其余标记为未分类。",
+   "highlights": [
+    "合并 4 个数据源，去重后含 59,424 条唯一 OUI 记录，其中 110,905 条经多源交叉验证",
+    "提供 TXT、CSV、TSV、JSON、XML、SQLite、SQL、Kismet 等 10 种下载格式，并给出 raw URL 供 curl/cron 拉取",
+    "字段包含 canonical 厂商名、registry 类型（MA-L/MA-M/MA-S/IAB/CID）、设备类型、地址、国家、注册状态与注册人变更历史"
+   ],
+   "use_cases": [
+    "在 Python/Node.js/SQLite/grep 等本地工具或脚本中查询 MAC 地址对应厂商",
+    "排查网络中的未授权设备、按子网发现摄像头或打印机等设备类型",
+    "为 Kismet 等无线工具提供厂商名文件，或分析历史抓包中已注销的 OUI 块"
+   ]
+  },
+  "sha": "5ed49a9653a1",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "462494e7adfb": {
+  "identity": {
+   "one_liner": "通过原生 TDS 协议连接 SQL Server 的 DuckDB 扩展",
+   "review": "该扩展让 DuckDB 直接以 TDS 协议连接 SQL Server，无需 ODBC/JDBC 驱动。支持 ATTACH 挂载、目录集成、过滤与远程查询下推、DML、事务及 BCP 批量加载，还能不经 SQL Server 读取 .bak 备份文件。面向需要在 DuckDB 中查询或写入 SQL Server 数据的用户。要求 DuckDB v1.4.1+ 和 SQL Server 2019+，项目处于实验阶段，API 可能变动；下推时字符串比较遵循列的排序规则。",
+   "highlights": [
+    "以原生 TDS 协议实现连接，支持 TLS 证书验证及 Azure AD、Kerberos/SSPI 等多种认证方式",
+    "支持目录集成、WHERE 过滤下推与默认开启的远程查询下推（含 join、聚合、ORDER BY 等，EXPLAIN 可见 T-SQL）",
+    "提供完整 DML、事务、CTAS、BCP 批量加载，以及 mssql_backup_scan 等直接读取 .bak 备份文件的函数"
+   ],
+   "use_cases": [
+    "在 DuckDB 中直接查询挂载的 SQL Server 数据库，由 SQL Server 执行下推查询",
+    "通过 COPY/CTAS/INSERT 在 DuckDB 与 SQL Server 之间批量导入导出数据",
+    "无 SQL Server 实例时读取 .bak 备份文件中的表结构与行数据（本地、s3://、https://）"
+   ]
+  },
+  "sha": "462494e7adfb",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "154e3ac5795c": {
+  "identity": {
+   "one_liner": "为 Deployer 提供实例间数据库同步任务的 PHP Composer 包",
+   "review": "该包为 deployer.org 的部署工具扩展数据库同步任务：db:pull 将远程实例数据库拉取到本地，db:push 反向推送，db:copy 在远程实例间复制。需在部署脚本中加载包、为各实例配置 .env 中的 INSTANCE 与数据库连接信息，并保证各实例使用相同的 deploy.php 与 vendor 目录。底层通过 mysqldump/mysql 执行，支持多数据库、表过滤和 SSL 连接选项。适用于使用 Deployer 管理多实例 PHP 应用的开发与部署流程。",
+   "highlights": [
+    "提供 db:pull、db:push、db:copy 三个任务，分别实现远程到本地、本地到远程、远程实例之间的数据库同步",
+    "支持通过 preg_match 语法的 ignore_tables_out 与 truncate_tables 配置过滤或清空指定表，并可在导入后执行带预定义标记的 post_sql_in SQL",
+    "数据库连接可从 .env 读取（EnvDriver），并支持 SSL 密钥/证书/CA 配置、mysqldump/mysql 选项自定义及多数据库定义"
+   ],
+   "use_cases": [
+    "将生产或远程实例的数据库拉取到本地开发环境进行调试",
+    "在部署流程中将本地数据库推送到目标实例",
+    "在不同远程实例之间复制数据库，并可按需忽略缓存表或导入后替换域名信息"
+   ]
+  },
+  "sha": "154e3ac5795c",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bd3dacd0b65f": {
+  "identity": {
+   "one_liner": "基于 Snort、BASE 与 MySQL 搭建入侵检测系统的部署指南",
+   "review": "该仓库提供一套在 Windows 环境下部署 Snort 入侵检测系统的步骤文档：通过 Appserv 集成安装 Apache、MySQL 与 PHP，将 Snort 安装至 c:\\snort 并配合 BASE 网页界面查看告警。README 给出网卡索引查询、规则测试与常见错误排查方法，适合按步骤复现实验环境的读者使用。",
+   "highlights": [
+    "提供从 Apache、MySQL、PHP（Appserv 集成包）到 Snort 的完整安装步骤",
+    "给出 snort -W 查询网卡索引、-T 校验配置、-A fast 写入 alert.ids、-dev 配合 BASE 查看告警等命令示例",
+    "包含 local.rules 中 ICMP 告警规则的测试方法与常见错误排查说明"
+   ],
+   "use_cases": [
+    "在 Windows 上搭建 Snort + BASE + MySQL 的网络入侵检测实验环境",
+    "调试 Snort 自定义规则并验证告警是否写入日志与 BASE 界面",
+    "排查 Snort 运行中网卡选择、配置路径等常见问题"
+   ]
+  },
+  "sha": "bd3dacd0b65f",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

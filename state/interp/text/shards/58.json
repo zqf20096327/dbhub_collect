@@ -3861,5 +3861,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "06860c708893": {
+  "identity": {
+   "one_liner": "按最低套餐价格排序的托管服务商清单",
+   "review": "这是一个托管服务清单仓库，将各平台按最低套餐价格升序排列，分为 Web 服务平台、BaaS、容器、Lambda、Node.js、静态站点、WordPress 与 VPS 八个分类。每条记录包含最低套餐价格、试用、免费额度与开源情况等字段，并用徽章标注作者验证状态。适合需要按价格维度浏览和比较托管选项的开发者查阅。",
+   "highlights": [
+    "按最低套餐价格排序，覆盖 BaaS、容器、Lambda、Node.js、静态、WordPress、VPS 等分类",
+    "每条记录含最低套餐、试用、免费额度、开源与否等对比字段",
+    "使用 ✅/⚠️/⛔️/🛑 等徽章标注作者验证与推荐状态"
+   ],
+   "use_cases": [
+    "按预算筛选静态站点、Node.js 应用或 VPS 等托管方案",
+    "查找提供免费额度或试用额度的云平台与 BaaS 服务",
+    "为自托管部署寻找 CapRover、Coolify、Dokku 等开源选项"
+   ]
+  },
+  "sha": "06860c708893",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "98b4363bc40b": {
+  "identity": {
+   "one_liner": "实时敏捷回顾看板，React 前端 + Rust/Axum 后端，支持自托管与 AI 总结。",
+   "review": "Retrospected 是一个面向工程团队的实时敏捷回顾看板，前端基于 React 19 与 Zustand/TanStack Query，后端在 6.0 版用 Rust（Axum、Tokio、sqlx）重写，数据库为 Postgres 16，实时协作由 Socket.IO 实现。可通过公共站点使用，也可按快速入门指南用 Docker 自托管；自托管为演示版，需购买许可转为完整版。AI 教练与回顾总结由 Claude 驱动，需配置 Anthropic API 密钥。",
+   "highlights": [
+    "支持 Socket.IO 实时协作、Pragmatic Drag and Drop 拖拽排序与分组（含触屏），卡片加密采用 AES-GCM",
+    "支持 Google、GitHub、Slack、Microsoft、Okta 等多种 OAuth 登录，通过 i18next 提供多语言界面",
+    "提供 Docker 部署、多架构镜像（兼容 ARM 服务器）、白标定制与 Stripe 付费方案"
+   ],
+   "use_cases": [
+    "工程团队开展迭代回顾会议，实时共创、投票并生成回顾总结",
+    "企业内网自托管部署，满足数据不出内网或 GDPR 相关配置需求",
+    "需要多语言界面与 OAuth 单点登录的组织使用回顾工具"
+   ]
+  },
+  "sha": "98b4363bc40b",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17884514c334": {
+  "identity": {
+   "one_liner": "运行在自有 Cloudflare 账户上的 TypeScript 类型安全实时后端框架",
+   "review": "Lunora 是一个面向全栈开发者的实时后端框架，提供类似 Convex 的开发体验：以 TypeScript 编写查询、变更和动作，本地通过 Vite/Rsbuild/Rspack 集成并在 workerd 上运行，生产环境部署到用户自己的 Cloudflare 账户（Durable Objects 管理实时状态、D1 存储 SQL 数据、R2 存储对象）。认证、存储、调度及 MCP 服务器以 @lunora/* 包形式提供。当前处于 Alpha 阶段，npm 包名为 lunorash，首个稳定版发布前可能出现破坏性变更。",
+   "highlights": [
+    "提供端到端类型安全：schema、校验器、查询结果与客户端 hooks 源于同一来源，开发服务器在保存时重新生成客户端类型",
+    "查询为实时订阅模式：客户端通过 WebSocket 订阅，变更推送到所有订阅者；支持 .shardBy(key) 将应用从单个 Durable Object 扩展到多分片，.global() 提供地理复制读取",
+    "核心不依赖 Cloudflare API：响应式引擎通过 @lunora/platform 中的主机契约通信，各目标有标注功能为原生、模拟或不支持的能力矩阵；@lunora/mcp 向 MCP 客户端暴露部署的表、函数、日志与问题"
+   ],
+   "use_cases": [
+    "在自有 Cloudflare 账户上构建需要实时数据同步的全栈应用，避免将生产基础设施托管在第三方 SaaS 上",
+    "使用 React、Vue、Solid、Svelte、Angular 等前端框架开发，需要类型安全的客户端 hooks 与自动代码生成的项目",
+    "需要 AI 代理通过 MCP 检查和调试应用（表、函数、日志、问题）的部署场景"
+   ]
+  },
+  "sha": "17884514c334",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "804663198c35": {
+  "identity": {
+   "one_liner": "自托管 AI Agent 流量分析平台，录制会话回放并识别人类与 AI Agent 访问。",
+   "review": "AgentCake 是一个自托管的 AI Agent 流量分析平台（MIT 许可），将每次访问录制为会话回放，通过行为模型和规则判定会话来自人类、AI Agent 还是两者。面向网站运营者，仪表盘包含关键指标、Top Agent、路径来源、设备与地理分布等模块。安装可通过 Claude Code 或 Codex 读取 INSTALL.md 指引完成。",
+   "highlights": [
+    "将每次访问录制为会话回放，用行为模型和规则区分类别",
+    "仪表盘提供关键指标、Top Agent、趋势、路径与来源、设备与地理位置视图",
+    "安装指引可下载 INSTALL.md，供 Claude Code 或 Codex 按步骤执行"
+   ],
+   "use_cases": [
+    "识别网站访问中哪些会话来自 AI Agent（如 Claude in Chrome、Grok Bot、Muse）",
+    "查看 Agent 浏览了哪些页面、在哪些步骤停止",
+    "分析 Agent 与人类的会话交接过程，如测试商店中 Agent 加购、人类接手结账的记录"
+   ]
+  },
+  "sha": "804663198c35",
+  "source": "readme",
+  "generated_at": "2026-11-21",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
