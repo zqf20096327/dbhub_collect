@@ -55,15 +55,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T05:12:08Z",
+  "collected_at": "2026-11-22T00:54:44Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-21",
   "stars": 8,
   "tree": {
-   "sha": "a6d7f428ffaf0a7e3a576aa0f10f52eef6b54044",
-   "etag": "W/\"e1d0ff03ad6d858d880543aaffcffb44ca8bd8567cda7622d7f1928d14b3265b\"",
+   "sha": "be41cd14a55fe0fc4f74695ef5af40471fe1713e",
+   "etag": "W/\"1307f1d290e882f6b70e50d86f676392628eb85440b4bfdb1002a3d94fc47768\"",
    "truncated": false,
-   "path_count": 948,
+   "path_count": 957,
    "matched": [
     "Cargo.toml",
     "tests/Cargo.toml",
@@ -83,6 +83,7 @@
     "crates/chronik-query/Cargo.toml",
     "crates/chronik-raft-bridge/Cargo.toml",
     "crates/chronik-raft/Cargo.toml",
+    "crates/chronik-scram/Cargo.toml",
     "crates/chronik-search/Cargo.toml",
     "crates/chronik-server/Cargo.toml",
     "crates/chronik-storage/Cargo.toml",
@@ -109,9 +110,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "5ebcc5d80d814ff62e9370192498bc5f481090a3",
+    "blob_sha": "a248b414abb84818f4d62aefec55592ee3764c8f",
     "ecosystem": "cargo",
-    "bytes": 4468
+    "bytes": 4713
    },
    {
     "path": "tests/Cargo.toml",
@@ -155,9 +156,9 @@
    {
     "path": "crates/chronik-backup/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "e375451e53605fcf15288f3a682a1c52568a8187",
+    "blob_sha": "7f140ae4aacceb3b532eafacfb40c129ec0943ea",
     "ecosystem": "cargo",
-    "bytes": 1400,
+    "bytes": 1369,
     "names": [
      "chronik-common",
      "chronik-storage",
@@ -175,7 +176,6 @@
      "lz4",
      "sha2",
      "crc32fast",
-     "opendal",
      "chrono",
      "anyhow",
      "thiserror",
@@ -203,9 +203,9 @@
    {
     "path": "crates/chronik-bench/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "0711e20a03a10e4a64e76f8154249afd9a84e3e9",
+    "blob_sha": "5fa38eb9da1af161a13af72f8cb7b7536777a459",
     "ecosystem": "cargo",
-    "bytes": 1201,
+    "bytes": 1202,
     "names": [
      "tokio",
      "rdkafka",
@@ -215,7 +215,7 @@
      "serde_json",
      "csv",
      "prometheus",
-     "warp",
+     "axum",
      "lazy_static",
      "anyhow",
      "thiserror",
@@ -247,7 +247,7 @@
    {
     "path": "crates/chronik-columnar/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7226d27bdf7d6de2d9dda04a704157bf23b14e85",
+    "blob_sha": "3172d2db4759eebaff5a78070a828737f8a42256",
     "ecosystem": "cargo",
     "bytes": 2351,
     "names": [
@@ -323,7 +323,7 @@
    {
     "path": "crates/chronik-config/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "414e07b1f8a9da7bb7602ac31a58ec7b684d0d84",
+    "blob_sha": "abda5c112cc3cc17905d22165289c653e68eaa96",
     "ecosystem": "cargo",
     "bytes": 876,
     "names": [
@@ -412,9 +412,9 @@
    {
     "path": "crates/chronik-monitoring/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "fcfcda23327f11b78bf01ae2d1672674dc24c0ed",
+    "blob_sha": "933087133fc2db02e01d579bb5e7172c70b6afb4",
     "ecosystem": "cargo",
-    "bytes": 989,
+    "bytes": 960,
     "names": [
      "chronik-common",
      "tracing",
@@ -424,7 +424,6 @@
      "opentelemetry-otlp",
      "opentelemetry_sdk",
      "axum",
-     "hyper",
      "tower",
      "tower-http",
      "tokio",
@@ -463,9 +462,9 @@
    {
     "path": "crates/chronik-operator/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "5db00ece4504fcd3dde7c479a644d2678dbfef59",
+    "blob_sha": "6b4e459c2c409685492f097f08e1b09d748701d9",
     "ecosystem": "cargo",
-    "bytes": 994,
+    "bytes": 1262,
     "names": [
      "kube",
      "k8s-openapi",
@@ -477,6 +476,10 @@
      "serde_yaml",
      "toml",
      "reqwest",
+     "kafka-protocol",
+     "chronik-scram",
+     "bytes",
+     "sha2",
      "anyhow",
      "thiserror",
      "tracing",
@@ -513,11 +516,12 @@
    {
     "path": "crates/chronik-protocol/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "3a8823eb80443022d4c5e34e1a58143de0a54483",
+    "blob_sha": "1c19721a34cf615f4b39e63c3105b70916810884",
     "ecosystem": "cargo",
-    "bytes": 1107,
+    "bytes": 1153,
     "names": [
      "chronik-common",
+     "chronik-scram",
      "bytes",
      "tokio",
      "tokio-util",
@@ -547,9 +551,9 @@
    {
     "path": "crates/chronik-query/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "6b18ac7dcf4f943c63180822a9cd5e154cc0d418",
+    "blob_sha": "1c06230b6245288787f7c321b41f5fa7a8a719c9",
     "ecosystem": "cargo",
-    "bytes": 1141,
+    "bytes": 1112,
     "names": [
      "chronik-common",
      "chronik-storage",
@@ -558,7 +562,6 @@
      "tokio-stream",
      "async-trait",
      "axum",
-     "hyper",
      "tower",
      "tower-http",
      "serde",
@@ -581,7 +584,7 @@
    {
     "path": "crates/chronik-raft-bridge/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "bd47261966cdd9ea4a4d4ce5696d7c283943eecb",
+    "blob_sha": "b5078a556b5ed777ac84400564a47fbd596ad07d",
     "ecosystem": "cargo",
     "bytes": 425,
     "names": [
@@ -593,15 +596,16 @@
    {
     "path": "crates/chronik-raft/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ecabc3b235cc4b7861b859b5deea9a1270191965",
+    "blob_sha": "1dff59839cf08edbeefd82c055fdb561a08190ee",
     "ecosystem": "cargo",
-    "bytes": 1325,
+    "bytes": 1366,
     "names": [
      "chronik-common",
      "chronik-monitoring",
      "chronik-raft-bridge",
      "raft",
      "tonic",
+     "tonic-prost",
      "prost",
      "prost-types",
      "serde",
@@ -621,7 +625,7 @@
      "slog-stdlog"
     ],
     "dev": [
-     "tonic-build",
+     "tonic-prost-build",
      "tokio-stream",
      "tempfile",
      "tokio",
@@ -629,18 +633,33 @@
     ]
    },
    {
+    "path": "crates/chronik-scram/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "0447dc28e026987718d8ecbd1b10956e61d92c47",
+    "ecosystem": "cargo",
+    "bytes": 625,
+    "names": [
+     "base64",
+     "hmac",
+     "sha2",
+     "pbkdf2",
+     "rand",
+     "subtle",
+     "thiserror"
+    ]
+   },
+   {
     "path": "crates/chronik-search/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "59567fd68f7800391686ce038985d4da115a7ea0",
+    "blob_sha": "563136525f627b237c3a779c740ae5125e1d8bc9",
     "ecosystem": "cargo",
-    "bytes": 1874,
+    "bytes": 1720,
     "names": [
      "chronik-common",
      "chronik-storage",
      "chronik-protocol",
      "chronik-monitoring",
      "axum",
-     "hyper",
      "tower",
      "tower-http",
      "tantivy",
@@ -674,9 +693,9 @@
    {
     "path": "crates/chronik-server/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "2306e5054b04909abd26159eb5c02a9ad6d7adaa",
+    "blob_sha": "98b1cde70fcd1dcb5352c99edb7a213222da0232",
     "ecosystem": "cargo",
-    "bytes": 5546,
+    "bytes": 5551,
     "names": [
      "chronik-common",
      "chronik-protocol",
@@ -699,7 +718,7 @@
      "slog",
      "slog-stdlog",
      "axum",
-     "hyper",
+     "hyper-util",
      "tower",
      "tower-http",
      "reqwest",
@@ -746,9 +765,9 @@
    {
     "path": "crates/chronik-storage/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "93e4622707b3d3c9acb99ea64b5fc9709138313e",
+    "blob_sha": "e9679c2ba977105dc746f4de8a7b6b57345486ba",
     "ecosystem": "cargo",
-    "bytes": 1822,
+    "bytes": 2038,
     "names": [
      "chronik-common",
      "chronik-protocol",
@@ -756,6 +775,7 @@
      "chronik-columnar",
      "chronik-embeddings",
      "opendal",
+     "base64",
      "aws-sdk-s3",
      "aws-credential-types",
      "aws-types",
@@ -796,6 +816,9 @@
     ],
     "dev": [
      "tempfile",
+     "reqwest",
+     "hmac",
+     "sha2",
      "criterion",
      "tokio",
      "walkdir",
@@ -846,7 +869,7 @@
    {
     "path": "crates/raft-proto/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "374c8a6aecd214f5fb3088a90deafff83d8f695a",
+    "blob_sha": "f3cbabcffc622775296a40514a1c2a3b43b73a51",
     "ecosystem": "cargo",
     "bytes": 583,
     "names": [
@@ -861,7 +884,7 @@
    {
     "path": "crates/raft/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "a833b7ee5857466421f30af98c8db6cf659d88de",
+    "blob_sha": "fc40eab1c429dd25316b33e4bfc4eefe11db227b",
     "ecosystem": "cargo",
     "bytes": 1047,
     "names": [
@@ -904,8 +927,8 @@
    {
     "path": "Dockerfile.binary",
     "kind": "image",
-    "blob_sha": "667ddffd38964a936ea247fa9026087ae4391cdf",
-    "bytes": 1693,
+    "blob_sha": "3ac12b1028ab8733a835fc9d7c2f1527ebd1c075",
+    "bytes": 2110,
     "images": [
      "ubuntu:24.04"
     ]
@@ -923,8 +946,8 @@
    {
     "path": "Dockerfile.operator.binary",
     "kind": "image",
-    "blob_sha": "8323f96969500c990dab24a81e2f069bf5c49b2c",
-    "bytes": 1016,
+    "blob_sha": "2276713b363807724dab3b52dd3ad28465508dd2",
+    "bytes": 1433,
     "images": [
      "ubuntu:24.04"
     ]
@@ -980,8 +1003,8 @@
    {
     "path": ".github/workflows/operator-release.yml",
     "kind": "ci",
-    "blob_sha": "38487b1116c92bb93b86bd2bb990c501af6d1c51",
-    "bytes": 11004
+    "blob_sha": "2e8990aee2b52cf380f91913e686c27222cf2075",
+    "bytes": 11085
    },
    {
     "path": ".github/workflows/operator.yml",
@@ -5152,13 +5175,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:47:44Z",
+  "collected_at": "2026-11-22T00:37:08Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-19",
+  "pushed_at": "2026-11-20",
   "stars": 38,
   "tree": {
    "sha": "04ad93d448f538d4577b82bca91409a64b9566bc",
-   "etag": "W/\"289830aa3943e14a4d76b2a8e4d48ccf1eb8165790f550c6d64fdf50b8cdf641\"",
+   "etag": "W/\"98183ea266e9b9be741a413d6648cbfc7b91f81557ca58c93656238453515405\"",
    "truncated": false,
    "path_count": 786,
    "matched": [
@@ -7938,15 +7961,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:09:48Z",
+  "collected_at": "2026-11-22T00:09:44Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-19",
+  "pushed_at": "2026-11-21",
   "stars": 1920,
   "tree": {
-   "sha": "d92ddf44ae9e370991c0954e39485f73a453e088",
-   "etag": "W/\"1f2892e9f2784dd3a7e17118a61be26ad9cbe6b9996aeaeab3f5ff1540873a8c\"",
+   "sha": "4eedb2272841bdeb2d7c3387784ba157d2f33f1c",
+   "etag": "W/\"cbf3632a1ff35e90fc8e56b0a05735c71a5282df36b72420a101391e48ceb1fa\"",
    "truncated": false,
-   "path_count": 1561,
+   "path_count": 1567,
    "matched": [
     "package.json",
     ".github/socket/requirements.txt",
@@ -7997,9 +8020,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "2ec9a15a2bf51194edf2d9d647ed039b90e3e6bc",
+    "blob_sha": "9bb36c0b2a5bea6ee8304252775db45dac859ec7",
     "ecosystem": "npm",
-    "bytes": 8139,
+    "bytes": 8409,
     "dev": [
      "@bokuweb/zstd-wasm",
      "@changesets/cli",
@@ -8055,7 +8078,7 @@
    {
     "path": "apps/relay/package.json",
     "kind": "dep",
-    "blob_sha": "5403f85423f4a1602b84966df2252bb4f1fb2a35",
+    "blob_sha": "f55b4793b5f2d959792f6b2724a3007a7d79a575",
     "ecosystem": "npm",
     "bytes": 1140,
     "names": [
@@ -8341,7 +8364,7 @@
    {
     "path": "packages/common/package.json",
     "kind": "dep",
-    "blob_sha": "c89d9c91cc88ce2ee459482f7e74b32d446011f6",
+    "blob_sha": "397148fb3b9bf9a6ef2608917a79548be369bbd2",
     "ecosystem": "npm",
     "bytes": 2899,
     "names": [
@@ -8361,7 +8384,7 @@
    {
     "path": "packages/nodejs/package.json",
     "kind": "dep",
-    "blob_sha": "b5e7bdd35e8ce2bfe6b8e7c79ab6b6e25fb1ea7b",
+    "blob_sha": "21cfc3ce586bf33d80cd266df1726272fce9731c",
     "ecosystem": "npm",
     "bytes": 3451,
     "names": [
@@ -8408,7 +8431,7 @@
    {
     "path": "packages/react-native/package.json",
     "kind": "dep",
-    "blob_sha": "7f3819a5036151f74678b7b04c33d9a9f90c726b",
+    "blob_sha": "29a3113bae708b1cb03176d5e5b4d2c58e5646fa",
     "ecosystem": "npm",
     "bytes": 4196,
     "names": [
@@ -8450,7 +8473,7 @@
    {
     "path": "packages/react-web/package.json",
     "kind": "dep",
-    "blob_sha": "365c8a6c474f9f63e64415538fb9704349e5f790",
+    "blob_sha": "b180792fa7502dd413660ac2bb091fbf8665e457",
     "ecosystem": "npm",
     "bytes": 1697,
     "names": [
@@ -8474,7 +8497,7 @@
    {
     "path": "packages/react/package.json",
     "kind": "dep",
-    "blob_sha": "432350bac2d13c658e5dbb7b4bd811856ceaea2c",
+    "blob_sha": "710432b54aecf51fe4c75b57b3093ebb58976971",
     "ecosystem": "npm",
     "bytes": 1604,
     "names": [
@@ -8509,7 +8532,7 @@
    {
     "path": "packages/sqlite-wasm/package.json",
     "kind": "dep",
-    "blob_sha": "eac81f4a3ef73836815d66a0294d432df357bd38",
+    "blob_sha": "c3cad272b6578f307d6eaf6864231033db58dab1",
     "ecosystem": "npm",
     "bytes": 2297,
     "names": [
@@ -8529,7 +8552,7 @@
    {
     "path": "packages/svelte/package.json",
     "kind": "dep",
-    "blob_sha": "5ddaa4f7bdbd5469453adf7d6b66424d4fc75618",
+    "blob_sha": "d8ee0466475bcaa6dd268a4ad786ac5fae6eeb04",
     "ecosystem": "npm",
     "bytes": 1754,
     "names": [
@@ -8564,7 +8587,7 @@
    {
     "path": "packages/vitest/package.json",
     "kind": "dep",
-    "blob_sha": "ae3b3a6e76f1d487510148f6a5b5ee962f7c5b89",
+    "blob_sha": "d932ea8db0ef58619a08643f8864312a351803df",
     "ecosystem": "npm",
     "bytes": 1519,
     "names": [
@@ -8581,7 +8604,7 @@
    {
     "path": "packages/vue/package.json",
     "kind": "dep",
-    "blob_sha": "e8d0bd54fa1bf9a09a8045a429ac4a3b15323336",
+    "blob_sha": "6803166e432abe06cd5682464e8661cdbc5c33b8",
     "ecosystem": "npm",
     "bytes": 1361,
     "names": [
@@ -8598,7 +8621,7 @@
    {
     "path": "packages/web/package.json",
     "kind": "dep",
-    "blob_sha": "731d84868c5bf42a4e8d4f257df1ccafc8f10d68",
+    "blob_sha": "1e1f1c319641e5c018a61b96d43e1b58143557a6",
     "ecosystem": "npm",
     "bytes": 1577,
     "names": [
@@ -8702,8 +8725,8 @@
    {
     "path": ".github/workflows/checks.yaml",
     "kind": "ci",
-    "blob_sha": "edde81a62a3bc964abbf4a21ec07f1970bc57084",
-    "bytes": 33530,
+    "blob_sha": "cdc23d1b0aedf38743696a29bf5b700406797b4f",
+    "bytes": 33731,
     "images": [
      "emscripten/emsdk:6.0.3@sha256:bb0910e6a18bb9bd7cb31ae4ed40f9073148b78cb2cdb8ea8676454e0d85425c",
      "mcr.microsoft.com/playwright:v1.65.0-noble"
@@ -8733,8 +8756,8 @@
    {
     "path": ".github/workflows/react-native-app.yaml",
     "kind": "ci",
-    "blob_sha": "4c19647c4453885b382f57dc9143efbf583cb56c",
-    "bytes": 24872
+    "blob_sha": "ff04e9be7ccc10fe8118c1ee30f3a97be25cd8db",
+    "bytes": 24782
    },
    {
     "path": ".github/workflows/react-native-nightly.yaml",
@@ -8745,8 +8768,8 @@
    {
     "path": ".github/workflows/release.yaml",
     "kind": "ci",
-    "blob_sha": "4f5a6ad1be9d8e0f297ec9cabd81d84e0c30655c",
-    "bytes": 11938
+    "blob_sha": "b8a88ddb0165eaaa3ec5719b069a6a2ecbba3f9d",
+    "bytes": 12039
    },
    {
     "path": ".github/workflows/socket.yaml",
@@ -8814,13 +8837,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T23:38:34Z",
+  "collected_at": "2026-11-22T00:13:13Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
-  "stars": 1050,
+  "pushed_at": "2026-11-21",
+  "stars": 1049,
   "tree": {
    "sha": "319b6eefc76c6731d73e32613c36667c50ce6ac4",
-   "etag": "W/\"5ec1657969aeda8ae9af7f3515336329b547ff9f09fb7c2abd97e08ca813122e\"",
+   "etag": "W/\"ed244c8c4525ce56d78db7fe8a15c94c411bc9900af1d1552177467c97275557\"",
    "truncated": false,
    "path_count": 1092,
    "matched": [

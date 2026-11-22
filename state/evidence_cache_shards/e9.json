@@ -434,15 +434,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T05:18:00Z",
+  "collected_at": "2026-11-22T00:58:47Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-20",
   "stars": 0,
   "tree": {
-   "sha": "a46b99937b1c67df350751fd801e0731088399f3",
-   "etag": "W/\"8139597d0d0c88a0224e7edd866613f2fb1f7582f0906b7f36a7556dd7663050\"",
+   "sha": "38a85b53b8cde8bd78f1073910760166381ced37",
+   "etag": "W/\"9fdd0edd18df4ebc466fa71dcebc8b13679d8d4118450c5ceab429d086b97a63\"",
    "truncated": false,
-   "path_count": 3,
+   "path_count": 4,
    "matched": []
   },
   "files": [],
@@ -3719,15 +3719,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T05:17:54Z",
+  "collected_at": "2026-11-22T00:58:41Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-21",
   "stars": 0,
   "tree": {
-   "sha": "5d51646ae87a0792f4408b2f467eaee0a2f721b5",
-   "etag": "W/\"5dc1a4643241f99a02b51473772ab3248b39dc047a1f9ad38a714ae543626ec3\"",
+   "sha": "5a00d5f30957c3d62871d007447f889ab9b0a044",
+   "etag": "W/\"dbf28ab04c7b2029366ec490675aa0c3c220fd19b49e2a6397632985d1fa5ab3\"",
    "truncated": false,
-   "path_count": 1384,
+   "path_count": 1532,
    "matched": [
     "Cargo.toml",
     "crates/base/Cargo.toml",
@@ -4193,9 +4193,9 @@
    {
     "path": "crates/planner/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d150e843bf7994bfdfe96b25bf560e6573ae1eaa",
+    "blob_sha": "bd3621565c6966d6c2afb60bb6c30f86505557c1",
     "ecosystem": "cargo",
-    "bytes": 2016,
+    "bytes": 2204,
     "names": [
      "tidb-base",
      "tidb-infoschema",
@@ -4212,6 +4212,8 @@
      "tidb-tablecodec",
      "tidb-execdetails",
      "tidb-statistics",
+     "tidb-store",
+     "tidb-memory",
      "tipb",
      "log",
      "parking_lot"
@@ -4462,14 +4464,13 @@
    {
     "path": "crates/types/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ec7dfb955a87bac23a232fa8de62356c41a07c26",
+    "blob_sha": "cac765b6915c290855dce5077e2e6e64c6106e5e",
     "ecosystem": "cargo",
-    "bytes": 1283,
+    "bytes": 1188,
     "names": [
      "log",
      "tidb-base",
-     "tidb-parser",
-     "ryu"
+     "tidb-parser"
     ],
     "dev": [
      "serde_json",
@@ -4611,10 +4612,11 @@
    {
     "path": "crates/poc/session/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "49e94c2bb4cf22dc1b148759a87fdd30ce597119",
+    "blob_sha": "fa37a6a1fa85352e98563bbf810a2699853ef914",
     "ecosystem": "cargo",
-    "bytes": 1549,
+    "bytes": 1690,
     "names": [
+     "parking_lot",
      "futures",
      "log",
      "tidb-distsql",
@@ -4639,7 +4641,8 @@
      "tidb-sessiontxn",
      "tokio",
      "tidb-infoschema",
-     "tidb-model"
+     "tidb-model",
+     "tidb-planner"
     ]
    },
    {
@@ -5024,20 +5027,20 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "90ba116b807ad53e35e72c46e0115fd75ce667ae",
-    "bytes": 7934
+    "blob_sha": "8f678c33a6952721ed125d5c892a63df5a7f0744",
+    "bytes": 11819
    },
    {
     "path": ".github/workflows/eval-gate.yml",
     "kind": "ci",
-    "blob_sha": "9471092419c0dfbe0b8d0bb292037fdb7de606b7",
-    "bytes": 3297
+    "blob_sha": "582583bdcf5c572be94534c5b80bdf638a554ad1",
+    "bytes": 3803
    },
    {
     "path": ".github/workflows/weekly.yml",
     "kind": "ci",
-    "blob_sha": "fd8b4c175749b610b3b106c7d7aa09bbdfb0d22c",
-    "bytes": 10614
+    "blob_sha": "a8f67238d56520a40b6710a6aae2320a41e0b124",
+    "bytes": 12284
    }
   ],
   "clues": {
@@ -5053,6 +5056,7 @@
     "crates/expression/tests/eval_drivers.rs",
     "crates/parser/src/driver.rs",
     "crates/parser/tests/driver.rs",
+    "crates/planner/tests/govec_optdriver.rs",
     "crates/executor/src/adapter/tests.rs",
     "crates/store/src/driver/backoff.rs",
     "crates/store/src/driver/error.rs",
@@ -5060,7 +5064,9 @@
     "crates/store/src/driver/txn/batch_getter.rs",
     "crates/store/src/driver/txn/error.rs",
     "crates/store/src/driver/txn/mod.rs",
-    "crates/store/src/driver/txn/snapshot.rs"
+    "crates/store/src/driver/txn/snapshot.rs",
+    "crates/planner/tests/vectors/v8.5.8/amd64/optdriver.jsonl.gz",
+    "crates/planner/tests/vectors/v8.5.8/arm64/optdriver.jsonl.gz"
    ]
   },
   "fail_count": 0
@@ -5276,13 +5282,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:04:51Z",
+  "collected_at": "2026-11-22T00:06:35Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-19",
-  "stars": 3762,
+  "pushed_at": "2026-11-21",
+  "stars": 3764,
   "tree": {
-   "sha": "e394bc44ae72150f2d711736fe703ff9e2c9d7b9",
-   "etag": "W/\"18516a3011653198aed762cc6c5f41a87f62aff8f042a60e31c513ee2468740c\"",
+   "sha": "b61194f1849350bbc1ce3827b3c481930c551f26",
+   "etag": "W/\"d03795f764235dee686c3ef665d691d289a9024b23d8b6d33b6d00bfc3d63f3c\"",
    "truncated": false,
    "path_count": 2000,
    "matched": [
@@ -10691,15 +10697,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:42:54Z",
+  "collected_at": "2026-11-22T00:32:47Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-20",
+  "pushed_at": "2026-11-21",
   "stars": 56,
   "tree": {
-   "sha": "47a4e9690e97309909c11467a2ef82dcb67026b5",
-   "etag": "W/\"17c1fdcc65e10ad41b2d93fddfc06dd9432eafdbe635c7f38d5d19fc2b408593\"",
+   "sha": "85b4201eb3151497692e41748cdb7c1b2753e614",
+   "etag": "W/\"ca261daa9ab431db15e37601f207ac09fd575d699b2f8522d06457b209dceb92\"",
    "truncated": false,
-   "path_count": 3538,
+   "path_count": 3560,
    "matched": [
     "package.json",
     "adapters/mcp/package.json",
@@ -14857,15 +14863,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T21:07:42Z",
+  "collected_at": "2026-11-22T00:51:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
-  "stars": 8,
+  "pushed_at": "2026-11-21",
+  "stars": 11,
   "tree": {
-   "sha": "f48a2f4cfc1478e6b13980ef65b203ce1e812407",
-   "etag": "W/\"62a1182193ae0dc38c7915db289efa5964a5b4ca66de4327256dc32cd506b00c\"",
+   "sha": "0f95d2d4e32a263c461bb22dee6025fb076fbb99",
+   "etag": "W/\"332f0d8a6d94bc4ec47f2fe9844401a6e7d40cb9de2b81b7d6dd56780893e9f1\"",
    "truncated": false,
-   "path_count": 239,
+   "path_count": 241,
    "matched": [
     "backend/pyproject.toml",
     "backend/requirements.txt",
@@ -17624,15 +17630,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T04:44:56Z",
+  "collected_at": "2026-11-22T00:58:31Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-21",
   "stars": 0,
   "tree": {
-   "sha": "034b6e0355faf0703c8afcd1bc2b20380eb526dd",
-   "etag": "W/\"eb87d3dd8cdb659c13304cacafd40cb0967f9527d69e7b50242418ad9209dcf0\"",
+   "sha": "dd120b2a50a6f5289219d6f3fdffd047e3f12cb0",
+   "etag": "W/\"d82bd6015ae992ff02547f86df6cf4fb5ff95f4d1c30b477972b3176f57065e6\"",
    "truncated": false,
-   "path_count": 42,
+   "path_count": 43,
    "matched": [
     "package.json",
     "legacy-python/pyproject.toml"
@@ -17642,9 +17648,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "0b401a88a7e0b3d6b840dbb63e26e5c07ae901eb",
+    "blob_sha": "a4fd68f55ad85585d52b636acf4301bf80804298",
     "ecosystem": "npm",
-    "bytes": 1411,
+    "bytes": 1459,
     "names": [
      "@modelcontextprotocol/sdk",
      "dmdb",
@@ -17675,6 +17681,102 @@
   ],
   "clues": {
    "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "lllllllama/DeepTrender": {
+  "fn": "lllllllama/DeepTrender",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-21T23:55:41Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-20",
+  "stars": 19,
+  "tree": {
+   "sha": "ba08930239bba24e80964cd9adad5067d833c679",
+   "etag": "W/\"33b765d8710e4e8946c7fb2efd8f76dd7f15fa332111114fab0ec1bedaad1cb0\"",
+   "truncated": false,
+   "path_count": 319,
+   "matched": [
+    "requirements.txt",
+    "Dockerfile",
+    "docker-compose.yml",
+    ".github/workflows/pytest.yml",
+    ".github/workflows/test.yml",
+    ".github/workflows/update.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "requirements.txt",
+    "kind": "dep",
+    "blob_sha": "52daee3a4d011b0b4f5e5325b601fc043c869a98",
+    "ecosystem": "pypi",
+    "bytes": 466,
+    "names": [
+     "openreview-py",
+     "yake",
+     "keybert",
+     "sentence-transformers",
+     "pandas",
+     "matplotlib",
+     "wordcloud",
+     "flask",
+     "flask-cors",
+     "requests",
+     "gunicorn",
+     "python-dotenv",
+     "tqdm",
+     "feedparser",
+     "pyyaml",
+     "mcp",
+     "pytest",
+     "pytest-cov"
+    ]
+   },
+   {
+    "path": "Dockerfile",
+    "kind": "image",
+    "blob_sha": "6b36c0160134857070439f6b3401366d0290446a",
+    "bytes": 641,
+    "images": [
+     "python:3.11-slim"
+    ]
+   },
+   {
+    "path": "docker-compose.yml",
+    "kind": "image",
+    "blob_sha": "9ca38c97421b76392a513e9165aa8b2f8fec0715",
+    "bytes": 1242
+   },
+   {
+    "path": ".github/workflows/pytest.yml",
+    "kind": "ci",
+    "blob_sha": "ebe463764c62568d02b7b871f62760fc255f6205",
+    "bytes": 852
+   },
+   {
+    "path": ".github/workflows/test.yml",
+    "kind": "ci",
+    "blob_sha": "0f84e77afedf21a984a9dabd0fef5d3fb90bf151",
+    "bytes": 2557
+   },
+   {
+    "path": ".github/workflows/update.yml",
+    "kind": "ci",
+    "blob_sha": "b6d672e6b9eecc723095e0bb874b1493e17bd34c",
+    "bytes": 10375
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md"
+   ],
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []

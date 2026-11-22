@@ -5,15 +5,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T02:46:16Z",
+  "collected_at": "2026-11-22T00:01:30Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-13",
-  "stars": 13240,
+  "pushed_at": "2026-11-21",
+  "stars": 13392,
   "tree": {
-   "sha": "b5c96b9d194bc8e6b84a31e466227bc221d5ed8a",
-   "etag": "W/\"054ee0549e46f7dbe650f7420dec1f28c9465898de2fed45761e8e8f2b3dfe0b\"",
+   "sha": "6843e3f97e670e8e5f1e8b720f8538938dcaf700",
+   "etag": "W/\"526504a9fcdf27f87b1ad9bfe64659431f7defdc731f97c31b91d4d868a69f3e\"",
    "truncated": false,
-   "path_count": 4478,
+   "path_count": 4727,
    "matched": [
     "CubeAPI/Cargo.toml",
     "CubeMaster/go.mod",
@@ -44,8 +44,10 @@
     "examples/cube-bench/go.mod",
     "examples/cubesandbox-base-nginx/requirements.txt",
     "examples/e2b-dev-sidecar/requirements.txt",
+    "examples/google-adk-integration/requirements.txt",
     "examples/grpc-ingress/requirements.txt",
     "examples/host-mount/requirements.txt",
+    "examples/langgraph-integration/requirements.txt",
     "examples/mcp-gateway/go.mod",
     "examples/mini-rl-training/requirements.txt",
     "examples/network-policy/requirements.txt",
@@ -73,8 +75,6 @@
     "hypervisor/performance-metrics/Cargo.toml",
     "hypervisor/qcow/Cargo.toml",
     "hypervisor/rate_limiter/Cargo.toml",
-    "hypervisor/serial_buffer/Cargo.toml",
-    "hypervisor/test_infra/Cargo.toml",
     "CubeAPI/Dockerfile",
     "CubeEgress/Dockerfile",
     "CubeObservability/Dockerfile",
@@ -122,6 +122,7 @@
     ".github/workflows/release-guest-image.yml",
     ".github/workflows/release-kernel.yml",
     ".github/workflows/release-one-click.yml",
+    ".github/workflows/release-sync-images-check.yml",
     ".github/workflows/sdk-compat-test-check.yml",
     ".github/workflows/sdk-test-check.yml",
     ".github/workflows/sync-to-cnb.yml",
@@ -135,9 +136,9 @@
    {
     "path": "CubeAPI/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "434bfeeccc35cb8191178ce18a2746b165e06372",
+    "blob_sha": "9582e8d7cc808a921bc9860e28f4962cac9494d7",
     "ecosystem": "cargo",
-    "bytes": 5298,
+    "bytes": 5870,
     "names": [
      "axum",
      "axum-extra",
@@ -152,6 +153,10 @@
      "anyhow",
      "tracing",
      "tracing-subscriber",
+     "opentelemetry",
+     "opentelemetry_sdk",
+     "opentelemetry-otlp",
+     "opentelemetry-http",
      "config",
      "dotenvy",
      "uuid",
@@ -166,18 +171,17 @@
     ],
     "dev": [
      "tokio",
-     "tower",
-     "axum-test"
+     "axum-test",
+     "opentelemetry_sdk"
     ]
    },
    {
     "path": "CubeMaster/go.mod",
     "kind": "dep",
-    "blob_sha": "6bf5586fecd87f6f398d22e6f53203151eca5768",
+    "blob_sha": "f0d1c58f7306b88dd78c7ab05d9ca8f84aab57e9",
     "ecosystem": "go",
-    "bytes": 9665,
+    "bytes": 9989,
     "names": [
-     "github.com/tencentcloud/CubeSandbox/pkgs/redisx",
      "github.com/agiledragon/gomonkey/v2",
      "github.com/alicebob/miniredis/v2",
      "github.com/charmbracelet/bubbles",
@@ -209,6 +213,7 @@
      "github.com/tencentcloud/CubeSandbox/pkgs/blobstore",
      "github.com/tencentcloud/CubeSandbox/pkgs/cubedb",
      "github.com/tencentcloud/CubeSandbox/pkgs/proto",
+     "github.com/tencentcloud/CubeSandbox/pkgs/redisx",
      "github.com/tencentcloud/CubeSandbox/pkgs/sandboxrestart",
      "github.com/tencentcloud/CubeSandbox/pkgs/snapshotmode",
      "github.com/urfave/cli",
@@ -224,11 +229,19 @@
      "k8s.io/api",
      "k8s.io/apimachinery",
      "k8s.io/component-helpers",
+     "go.opentelemetry.io/otel",
+     "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc",
+     "go.opentelemetry.io/otel/sdk",
+     "go.opentelemetry.io/otel/trace",
      "google.golang.org/protobuf"
     ],
     "dev": [
      "cel.dev/expr",
      "github.com/antlr4-go/antlr/v4",
+     "github.com/cenkalti/backoff/v5",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "go.opentelemetry.io/otel/exporters/otlp/otlptrace",
+     "go.opentelemetry.io/proto/otlp",
      "google.golang.org/genproto/googleapis/api",
      "dario.cat/mergo",
      "filippo.io/edwards25519",
@@ -302,11 +315,7 @@
      "github.com/modern-go/concurrent",
      "github.com/modern-go/reflect2",
      "github.com/muesli/ansi",
-     "github.com/muesli/cancelreader",
-     "github.com/muesli/termenv",
-     "github.com/munnerz/goautoneg",
-     "github.com/ncruces/go-strftime",
-     "github.com/opencontainers/go-digest"
+     "github.com/muesli/cancelreader"
     ]
    },
    {
@@ -426,14 +435,16 @@
    {
     "path": "CubeTemplateCenter/go.mod",
     "kind": "dep",
-    "blob_sha": "eec84a5c5d8fa80e368543c69df21992832b0f18",
+    "blob_sha": "deb88cf61b4adadb2077063ddc17d34332a293bb",
     "ecosystem": "go",
-    "bytes": 7565,
+    "bytes": 9247,
     "names": [
      "github.com/agiledragon/gomonkey/v2",
      "github.com/containerd/containerd",
      "github.com/gin-gonic/gin",
+     "github.com/go-sql-driver/mysql",
      "github.com/google/go-containerregistry",
+     "github.com/ory/dockertest/v3",
      "github.com/pkg/errors",
      "github.com/prometheus/client_golang",
      "github.com/tencentcloud/CubeSandbox/CubeMaster",
@@ -441,6 +452,9 @@
      "github.com/tencentcloud/CubeSandbox/pkgs/CubeLog",
      "github.com/tencentcloud/CubeSandbox/pkgs/blobstore",
      "github.com/tencentcloud/CubeSandbox/pkgs/cubedb",
+     "go.opentelemetry.io/otel",
+     "go.opentelemetry.io/otel/sdk",
+     "go.opentelemetry.io/otel/trace",
      "golang.org/x/oauth2",
      "golang.org/x/sync",
      "golang.org/x/sys",
@@ -450,13 +464,18 @@
     "dev": [
      "cel.dev/expr",
      "cloud.google.com/go/compute/metadata",
+     "dario.cat/mergo",
      "filippo.io/edwards25519",
+     "github.com/Azure/go-ansiterm",
      "github.com/Microsoft/go-winio",
      "github.com/Microsoft/hcsshim",
+     "github.com/Nvveen/Gotty",
      "github.com/antlr4-go/antlr/v4",
      "github.com/beorn7/perks",
      "github.com/bytedance/sonic",
      "github.com/bytedance/sonic/loader",
+     "github.com/cenkalti/backoff/v4",
+     "github.com/cenkalti/backoff/v5",
      "github.com/cespare/xxhash/v2",
      "github.com/cloudwego/base64x",
      "github.com/containerd/cgroups/v3",
@@ -465,25 +484,32 @@
      "github.com/containerd/errdefs/pkg",
      "github.com/containerd/log",
      "github.com/containerd/typeurl/v2",
+     "github.com/distribution/reference",
      "github.com/docker/cli",
      "github.com/docker/docker-credential-helpers",
+     "github.com/docker/go-connections",
+     "github.com/docker/go-units",
      "github.com/dustin/go-humanize",
+     "github.com/felixge/httpsnoop",
      "github.com/fsnotify/fsnotify",
      "github.com/fxamacker/cbor/v2",
      "github.com/gabriel-vasile/mimetype",
      "github.com/gin-contrib/sse",
      "github.com/go-logr/logr",
+     "github.com/go-logr/stdr",
      "github.com/go-playground/locales",
      "github.com/go-playground/universal-translator",
      "github.com/go-playground/validator/v10",
-     "github.com/go-sql-driver/mysql",
+     "github.com/go-viper/mapstructure/v2",
      "github.com/goccy/go-json",
      "github.com/goccy/go-yaml",
      "github.com/gogo/protobuf",
      "github.com/golang/groupcache",
      "github.com/gomodule/redigo",
      "github.com/google/cel-go",
+     "github.com/google/shlex",
      "github.com/google/uuid",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
      "github.com/hashicorp/errwrap",
      "github.com/hashicorp/go-multierror",
      "github.com/jackc/pgpassfile",
@@ -496,7 +522,6 @@
      "github.com/klauspost/compress",
      "github.com/klauspost/cpuid/v2",
      "github.com/klauspost/crc32",
-     "github.com/kr/text",
      "github.com/leodido/go-urn",
      "github.com/mattn/go-isatty",
      "github.com/mfridman/interpolate",
@@ -504,38 +529,27 @@
      "github.com/minio/md5-simd",
      "github.com/minio/minio-go/v7",
      "github.com/mna/redisc",
+     "github.com/moby/docker-image-spec",
+     "github.com/moby/moby/api",
+     "github.com/moby/moby/client",
      "github.com/moby/sys/sequential",
+     "github.com/moby/sys/user",
      "github.com/moby/sys/userns",
+     "github.com/moby/term",
      "github.com/modern-go/concurrent",
      "github.com/modern-go/reflect2",
      "github.com/munnerz/goautoneg",
      "github.com/opencontainers/go-digest",
      "github.com/opencontainers/image-spec",
-     "github.com/patrickmn/go-cache",
-     "github.com/pelletier/go-toml/v2",
-     "github.com/philhofer/fwd",
-     "github.com/pressly/goose/v3",
-     "github.com/prometheus/client_model",
-     "github.com/prometheus/common",
-     "github.com/prometheus/procfs",
-     "github.com/quic-go/qpack",
-     "github.com/quic-go/quic-go",
-     "github.com/rcrowley/go-metrics",
-     "github.com/rs/xid",
-     "github.com/sethvargo/go-retry",
-     "github.com/sirupsen/logrus",
-     "github.com/smallnest/weighted",
-     "github.com/tencentcloud/CubeSandbox/pkgs/proto",
-     "github.com/tencentcloud/CubeSandbox/pkgs/sandboxrestart",
-     "github.com/tencentcloud/CubeSandbox/pkgs/redisx"
+     "github.com/opencontainers/runc"
     ]
    },
    {
     "path": "Cubelet/go.mod",
     "kind": "dep",
-    "blob_sha": "9d7cb8eba61507069cc5926ef06645d9396b2e29",
+    "blob_sha": "d5b79df1f96ce3f493be512335c794159448fc7a",
     "ecosystem": "go",
-    "bytes": 10475,
+    "bytes": 10901,
     "names": [
      "github.com/cilium/ebpf",
      "github.com/containerd/console",
@@ -584,6 +598,10 @@
      "k8s.io/client-go",
      "k8s.io/cri-api",
      "k8s.io/utils",
+     "go.opentelemetry.io/otel",
+     "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc",
+     "go.opentelemetry.io/otel/sdk",
+     "go.opentelemetry.io/otel/trace",
      "github.com/Microsoft/hcsshim",
      "github.com/containerd/cgroups/v3",
      "github.com/containerd/containerd/api",
@@ -612,9 +630,7 @@
      "k8s.io/api",
      "k8s.io/cloud-provider",
      "k8s.io/klog/v2",
-     "k8s.io/kubelet",
-     "k8s.io/kubernetes",
-     "sigs.k8s.io/yaml"
+     "k8s.io/kubelet"
     ],
     "dev": [
      "github.com/gogo/protobuf",
@@ -1040,9 +1056,9 @@
    {
     "path": "CubeShim/shim/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "e2be87b0f99c564360b1988da47adbf0c62d06ff",
+    "blob_sha": "9737685b87fefdb2c1da796f5c404ab650be91c4",
     "ecosystem": "cargo",
-    "bytes": 1225,
+    "bytes": 1524,
     "names": [
      "containerd-shim",
      "clap",
@@ -1069,7 +1085,10 @@
      "home",
      "hyper",
      "hyper-util",
-     "http-body-util"
+     "http-body-util",
+     "opentelemetry",
+     "opentelemetry_sdk",
+     "opentelemetry-otlp"
     ]
    },
    {
@@ -1253,6 +1272,20 @@
     ]
    },
    {
+    "path": "examples/google-adk-integration/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "fca9ada83f25f95c0800d130d0f508660355e1c6",
+    "ecosystem": "pypi",
+    "bytes": 85,
+    "names": [
+     "google-adk",
+     "e2b",
+     "e2b-code-interpreter",
+     "aiohttp",
+     "python-dotenv"
+    ]
+   },
+   {
     "path": "examples/grpc-ingress/requirements.txt",
     "kind": "dep",
     "blob_sha": "0fccdf5689d7ea7017a334e9855a7a4700549d6c",
@@ -1272,6 +1305,19 @@
     "bytes": 42,
     "names": [
      "e2b-code-interpreter",
+     "python-dotenv"
+    ]
+   },
+   {
+    "path": "examples/langgraph-integration/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "39036d7e6fbdd71fcf854f9561fedd8bce8fd201",
+    "ecosystem": "pypi",
+    "bytes": 398,
+    "names": [
+     "langgraph",
+     "langchain-openai",
+     "cubesandbox",
      "python-dotenv"
     ]
    },
@@ -1706,31 +1752,6 @@
     ]
    },
    {
-    "path": "hypervisor/serial_buffer/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "f5329eb2d3be4ada3c90698e0c96d31177df2d66",
-    "ecosystem": "cargo",
-    "bytes": 110
-   },
-   {
-    "path": "hypervisor/test_infra/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "d5cc613bab54c7cdd556d46b0cbae7c2b362068d",
-    "ecosystem": "cargo",
-    "bytes": 382,
-    "names": [
-     "dirs",
-     "epoll",
-     "libc",
-     "once_cell",
-     "serde",
-     "serde_json",
-     "ssh2",
-     "vmm-sys-util",
-     "wait-timeout"
-    ]
-   },
-   {
     "path": "CubeAPI/Dockerfile",
     "kind": "image",
     "blob_sha": "328a8c3e0e9fe0612140cd70079f2defd2358a43",
@@ -1844,8 +1865,8 @@
    {
     "path": "docker/Dockerfile.builder",
     "kind": "image",
-    "blob_sha": "e3b37ad0a3d23bb06b4c231c5344de2b713ded3b",
-    "bytes": 11399,
+    "blob_sha": "7dc88b1f976f76008b5ace8fd2d1cec64b2c7143",
+    "bytes": 11419,
     "images": [
      "ubuntu:20.04"
     ]
@@ -1945,8 +1966,8 @@
    {
     "path": ".github/workflows/build-check.yml",
     "kind": "ci",
-    "blob_sha": "df4a436054e127d856657f2e6a1ad039ea445cce",
-    "bytes": 9872
+    "blob_sha": "16a9513c7ce0b0e124d8992d2552096b736902ef",
+    "bytes": 10096
    },
    {
     "path": ".github/workflows/build-envd-base-image.yml",
@@ -1969,8 +1990,8 @@
    {
     "path": ".github/workflows/cube-s3lvol-test.yml",
     "kind": "ci",
-    "blob_sha": "3e4beb2891834256fc7b84f778b7bf956b6edb33",
-    "bytes": 2048
+    "blob_sha": "63e130b24d7c476e57d9aca698e8c6bf4962a745",
+    "bytes": 3103
    },
    {
     "path": ".github/workflows/dco-check.yml",
@@ -2053,8 +2074,8 @@
    {
     "path": ".github/workflows/release-docker-images.yml",
     "kind": "ci",
-    "blob_sha": "e6027330edcd67fb00ca27f66f91dd60a9117af4",
-    "bytes": 40198,
+    "blob_sha": "1fbc3f6b2374e8e2b9279a1e1b1e10a21c7dcf3c",
+    "bytes": 42610,
     "images": [
      "ubuntu:24.04"
     ]
@@ -2082,6 +2103,12 @@
     "bytes": 20371
    },
    {
+    "path": ".github/workflows/release-sync-images-check.yml",
+    "kind": "ci",
+    "blob_sha": "37240320207f074fc02264281540156089c96b33",
+    "bytes": 2102
+   },
+   {
     "path": ".github/workflows/sdk-compat-test-check.yml",
     "kind": "ci",
     "blob_sha": "710e122433b49ea5a07cd3d724c902454d8caa96",
@@ -2105,8 +2132,8 @@
    {
     "path": ".github/workflows/terraform-validate.yml",
     "kind": "ci",
-    "blob_sha": "0132da78acb8237ded6322b0686f5f2ae1c599f4",
-    "bytes": 5688
+    "blob_sha": "8615b02d7cbbc3944af9f02ce8e888e0047e7b81",
+    "bytes": 6394
    },
    {
     "path": ".github/workflows/test-arc-runer.yml",
@@ -2117,8 +2144,8 @@
    {
     "path": ".github/workflows/unit-test-check.yml",
     "kind": "ci",
-    "blob_sha": "4fea7579489b83eba55bcbcb5c803f96e22a093a",
-    "bytes": 21877
+    "blob_sha": "ae5d08800ec17d43b83ebf3a6065b6ecb37da33e",
+    "bytes": 23092
    },
    {
     "path": ".github/workflows/web-check.yml",
@@ -2130,11 +2157,11 @@
   "clues": {
    "changelog": [],
    "readme_i18n": [
+    "CubeMaster/pkg/webhook/README_zh.md",
     "CubeTemplateCenter/README_EN.md",
     "CubeTemplateCenter/README_zh.md",
     "README_zh.md",
-    "deploy/one-click/README_zh.md",
-    "dev-env/README_zh.md"
+    "deploy/one-click/README_zh.md"
    ],
    "docs_matrix": [
     "docs/blog/posts/2026-07-08-cubesandbox-arm-support.md",
@@ -2205,6 +2232,7 @@
     "Cubelet/plugins/workflow/request_param.go",
     "Cubelet/plugins/workflow/request_param_qos_test.go",
     "Cubelet/plugins/workflow/restart.go",
+    "Cubelet/plugins/workflow/telemetry_scope_test.go",
     "Cubelet/plugins/workflow/workflow_test.go",
     "Cubelet/services/images/volumeplugin.go",
     "Cubelet/services/server/plugins_compat.go",
@@ -2227,6 +2255,7 @@
     "Cubelet/plugins/cbri/cubeboxcbri/annotation_test.go",
     "Cubelet/plugins/cbri/cubeboxcbri/coldboot.go",
     "Cubelet/plugins/cbri/cubeboxcbri/coldboot_test.go",
+    "Cubelet/plugins/cbri/cubeboxcbri/create_sandbox_annotation_passthrough_test.go",
     "Cubelet/plugins/cbri/cubeboxcbri/create_sandbox_kernel_test.go",
     "Cubelet/plugins/cbri/cubeboxcbri/cubebox.go",
     "Cubelet/plugins/cbri/cubeboxcbri/snapshot_restore_test.go",
@@ -2290,6 +2319,7 @@
     "Cubelet/plugins/cube/internals/cgroup/pool.go",
     "Cubelet/plugins/cube/internals/cgroup/pool_baseline.go",
     "Cubelet/plugins/cube/internals/cgroup/pool_baseline_test.go",
+    "Cubelet/plugins/cube/internals/cgroup/pool_cpuset_test.go",
     "Cubelet/plugins/cube/internals/cgroup/pool_test.go",
     "Cubelet/plugins/cube/internals/cgroup/pool_v1.go",
     "Cubelet/plugins/cube/internals/cgroup/pool_v2.go",
@@ -2339,10 +2369,7 @@
     "pkgs/proto/services/schedulerplugin/v1/plugin.pb.go",
     "pkgs/proto/services/schedulerplugin/v1/plugin.proto",
     "pkgs/proto/services/schedulerplugin/v1/plugin_grpc.pb.go",
-    "pkgs/proto/services/volumeplugin/v1/volumeplugin.pb.go",
-    "pkgs/proto/services/volumeplugin/v1/volumeplugin.proto",
-    "pkgs/proto/services/volumeplugin/v1/volumeplugin_grpc.pb.go",
-    "Cubelet/plugins/cube/internals/cgroup/handle/interface.go"
+    "pkgs/proto/services/volumeplugin/v1/volumeplugin.pb.go"
    ],
    "matrix_urls": [
     "https://img.shields.io/badge/🔌_API-E2B_Compatible-blueviolet"
@@ -6253,13 +6280,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:09:58Z",
+  "collected_at": "2026-11-22T00:10:01Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
-  "stars": 1842,
+  "pushed_at": "2026-11-21",
+  "stars": 1841,
   "tree": {
-   "sha": "ac3585602df01082d38a5a154a4fd404e194acb4",
-   "etag": "W/\"4a1f1295ad5747328b085d0df0c7b096fda90c35bf7c9618f8648f0e2c08b90a\"",
+   "sha": "9273caaa8a9b1dc78d33441af81a664188c2920d",
+   "etag": "W/\"586ad14081b508de2dad0247ba4f08712d85901cb2a819c01e2d4b3000ffdda1\"",
    "truncated": false,
    "path_count": 1425,
    "matched": [
@@ -6348,7 +6375,7 @@
    {
     "path": "schemacrawler-dbconnectors/pom.xml",
     "kind": "dep",
-    "blob_sha": "9c36462307cfd83b51c0fa5b4616d0cd6b5a0baa",
+    "blob_sha": "b9d8b16f77f6dadfcb9eb7413d90253bec715ccc",
     "ecosystem": "maven",
     "bytes": 8647,
     "names": [
@@ -6399,7 +6426,7 @@
    {
     "path": "schemacrawler-distrib/pom.xml",
     "kind": "dep",
-    "blob_sha": "856da4071cc7a4b2dc9887458298c2027b4a434d",
+    "blob_sha": "9fb2165292bd6a125f6ced217ad49044816dc38e",
     "ecosystem": "maven",
     "bytes": 12576,
     "names": [
@@ -6619,7 +6646,7 @@
    {
     "path": "schemacrawler-scripting/pom.xml",
     "kind": "dep",
-    "blob_sha": "54a0cdb8272bf189298ec3f15380f3fca7a6a99e",
+    "blob_sha": "d36cb7a3f920658fb06e871767bf5ccb18503427",
     "ecosystem": "maven",
     "bytes": 4674,
     "names": [
@@ -10987,13 +11014,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:01:13Z",
+  "collected_at": "2026-11-22T00:07:37Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-16",
-  "stars": 3048,
+  "pushed_at": "2026-11-21",
+  "stars": 3074,
   "tree": {
    "sha": "f9e819af43d59c8297acee9cdb86b96f6f6fc6ba",
-   "etag": "W/\"0154d8cb8accf2ff087b076f79d230fda58599f62246a8f066de9bcddf80643e\"",
+   "etag": "W/\"a92d9d28b927a633ab64d0f5aa9f5dc8d823d08572fcd6e716d3f3546f763266\"",
    "truncated": false,
    "path_count": 599,
    "matched": [
@@ -11327,13 +11354,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:08:21Z",
+  "collected_at": "2026-11-22T00:08:41Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-20",
-  "stars": 2370,
+  "pushed_at": "2026-11-21",
+  "stars": 2371,
   "tree": {
    "sha": "34e4d042833dbcf4aa3fc3680cc75ca980c1cd79",
-   "etag": "W/\"06c3054116729e1ea41cd9b0512fa6807d459aa0e3dba6dd1c4b0c08efd048d2\"",
+   "etag": "W/\"3571ac30c243ab61bae010fbd443549e006f330e0419e363089539a6757ea7fb\"",
    "truncated": false,
    "path_count": 559,
    "matched": [
@@ -13588,17 +13615,18 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:43:06Z",
+  "collected_at": "2026-11-22T00:33:14Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-21",
   "stars": 55,
   "tree": {
-   "sha": "10fd5852b2ef7872917e4672c2dbe15add00cb8e",
-   "etag": "W/\"41851a63acad09f853f5a25d81ab6b1f6cd2afc41d387239051fac676626193a\"",
+   "sha": "b6e6593243bae7e02d8069c8db5be44812620176",
+   "etag": "W/\"12cf0005313986c6c9fd91c4fe3ddd06fb92899e86450ecba58a1b49d1f7219e\"",
    "truncated": false,
-   "path_count": 358,
+   "path_count": 361,
    "matched": [
     "package.json",
+    "packages/wordpress/package.json",
     "src/cms/package.json",
     ".github/workflows/ci.yml",
     ".github/workflows/release.yml",
@@ -13609,7 +13637,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "7a5e68177af08ac0039095ef9a1f9ecf064939bf",
+    "blob_sha": "e0477fd587eec55a940f5f380e3930ed55a8fa9a",
     "ecosystem": "npm",
     "bytes": 3455,
     "names": [
@@ -13653,11 +13681,28 @@
     ]
    },
    {
+    "path": "packages/wordpress/package.json",
+    "kind": "dep",
+    "blob_sha": "7522544393d1ec8e69ed6fe14974a38204cd0c79",
+    "ecosystem": "npm",
+    "bytes": 791,
+    "names": [
+     "@wordpress/autop",
+     "@wordpress/block-serialization-default-parser",
+     "@wordpress/shortcode",
+     "@kidecms/core",
+     "better-sqlite3"
+    ],
+    "dev": [
+     "@kidecms/core"
+    ]
+   },
+   {
     "path": "src/cms/package.json",
     "kind": "dep",
-    "blob_sha": "f3a6dd9ef1e70cbc0660d30399122fa04ed47f53",
+    "blob_sha": "19377239257304ed22c8a474b734de700618df38",
     "ecosystem": "npm",
-    "bytes": 2818,
+    "bytes": 2772,
     "names": [
      "@ai-sdk/openai",
      "@base-ui/react",
@@ -13706,14 +13751,14 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "1b190f5b17d43b919cf81109fb6fd68f93806073",
-    "bytes": 2309
+    "blob_sha": "d702995d804bd9b7f90425ac465f1e51a4dbb0a6",
+    "bytes": 2412
    },
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "1632e6672182dde4915667ec9b126147da3ff492",
-    "bytes": 2849
+    "blob_sha": "1e98c7f43b0d7332c26ee6e05846110f80877c7d",
+    "bytes": 2952
    },
    {
     "path": ".github/workflows/scaffold-cloudflare.yml",
@@ -15380,13 +15425,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:45:45Z",
+  "collected_at": "2026-11-22T00:45:22Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-07",
+  "pushed_at": "2026-11-20",
   "stars": 18,
   "tree": {
    "sha": "a8fb48f615ee6efe0310ff766f3fc8f664b77665",
-   "etag": "W/\"d1eefb24c635b27a60ae873ca74100cc0d129ec6a310f75a55f9dc66108be728\"",
+   "etag": "W/\"b37ca467ddb5a19505e3d7255fa8a58be3010417e2c68581a9478de0d524e54d\"",
    "truncated": false,
    "path_count": 670,
    "matched": [
@@ -19577,13 +19622,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T18:53:50Z",
+  "collected_at": "2026-11-21T23:59:10Z",
   "default_branch": "unstable",
-  "pushed_at": "2026-11-20",
-  "stars": 27780,
+  "pushed_at": "2026-11-21",
+  "stars": 27808,
   "tree": {
-   "sha": "6c11c7fb22d207f685ed992d9959cb648e125046",
-   "etag": "W/\"7d4f4e4ff69698ed190ff3bc1b8fefcec4618336457425b174c37bc05d24523f\"",
+   "sha": "80bb13e2a82b331512af2175a7f1117c313e4db2",
+   "etag": "W/\"e057abf0774b41dfa29c2de4dcb175285f146971303cacd8c4b49c403eb5d0a8\"",
    "truncated": false,
    "path_count": 2060,
    "matched": [

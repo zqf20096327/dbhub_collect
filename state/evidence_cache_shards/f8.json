@@ -3902,15 +3902,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:40:22Z",
+  "collected_at": "2026-11-22T00:35:42Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
-  "stars": 42,
+  "pushed_at": "2026-11-21",
+  "stars": 43,
   "tree": {
-   "sha": "c642b4c7334bef20a54cc861876868f968ddff4d",
-   "etag": "W/\"59a5b76702ad170e0113ad3cc5b8275e0e2c0d8716fa0947b5a1846c942f4c7f\"",
+   "sha": "72b8cebc47bb1f776f2b7977ea63bc9e3ff18f51",
+   "etag": "W/\"44449de8590a0eac3a997a34daff15b8580a424559b67218329b4fb9efc9191a\"",
    "truncated": false,
-   "path_count": 1948,
+   "path_count": 2147,
    "matched": [
     "package.json",
     "packages/core/package.json",
@@ -3918,7 +3918,9 @@
     "packages/plugin-api/package.json",
     "packages/website/package.json",
     "plugins/duckdb/package.json",
+    "plugins/elasticsearch/package.json",
     "plugins/etcd/package.json",
+    "plugins/kafka/package.json",
     "plugins/mssql/package.json",
     "plugins/mysql/package.json",
     "plugins/oracle/package.json",
@@ -3938,12 +3940,13 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "000a795d35034b567729b570db1efc9f16087ada",
+    "blob_sha": "ad2bcc1397a45f1a630c99dfeb7887b9b2673bea",
     "ecosystem": "npm",
-    "bytes": 4789,
+    "bytes": 5239,
     "dev": [
      "@electron/asar",
      "@eslint/js",
+     "@platformatic/kafka",
      "@types/node",
      "@types/oracledb",
      "@types/ssh2",
@@ -3978,9 +3981,9 @@
    {
     "path": "packages/desktop/package.json",
     "kind": "dep",
-    "blob_sha": "e05bbeacdca35fff26630a1fe356a7c45ba9303c",
+    "blob_sha": "db292c4cef2331789ab94fc01ac8190ff96745ef",
     "ecosystem": "npm",
-    "bytes": 2369,
+    "bytes": 2495,
     "names": [
      "simple-icons"
     ],
@@ -4059,6 +4062,16 @@
     ]
    },
    {
+    "path": "plugins/elasticsearch/package.json",
+    "kind": "dep",
+    "blob_sha": "8454bea9cc914be0f0ba17162ca0ed1156cda227",
+    "ecosystem": "npm",
+    "bytes": 951,
+    "names": [
+     "@table-craft/plugin-api"
+    ]
+   },
+   {
     "path": "plugins/etcd/package.json",
     "kind": "dep",
     "blob_sha": "bc4e88876bdde5991aea21e883ae29c0e8b6b618",
@@ -4067,6 +4080,19 @@
     "names": [
      "@table-craft/plugin-api",
      "etcd3"
+    ]
+   },
+   {
+    "path": "plugins/kafka/package.json",
+    "kind": "dep",
+    "blob_sha": "0d4a121369544b1e1dd4cb9d735b89cf8d73033f",
+    "ecosystem": "npm",
+    "bytes": 1547,
+    "names": [
+     "@platformatic/kafka",
+     "@table-craft/plugin-api",
+     "avsc",
+     "protobufjs"
     ]
    },
    {
@@ -4175,8 +4201,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "eb7c650245aa563afbbc981f288efc2dd605d476",
-    "bytes": 9994
+    "blob_sha": "ec20ab693f461ed6f8670b22c9d6d7c98d8f1eed",
+    "bytes": 11051
    },
    {
     "path": ".github/workflows/publish-channel.yml",
@@ -4366,6 +4392,8 @@
     "docs/decisions/156-native-drivers-ship-one-package-per-platform.md",
     "docs/decisions/158-private-plugin-registries.md",
     "docs/decisions/165-tablecraft-is-gpl-3-and-its-plugin-api-is-mit.md",
+    "docs/decisions/171-the-kafka-plugin-has-its-own-schema-registry-client.md",
+    "docs/decisions/173-the-elasticsearch-plugin-speaks-rest-without-a-driver.md",
     "docs/guide/plugins.md",
     "docs/guide/writing-plugins.md",
     "docs/media/plugins.gif",
@@ -4376,8 +4404,12 @@
     "packages/plugin-api/tsconfig.build.json",
     "plugins/duckdb/package.json",
     "plugins/duckdb/table-craft-plugin.json",
+    "plugins/elasticsearch/package.json",
+    "plugins/elasticsearch/table-craft-plugin.json",
     "plugins/etcd/package.json",
     "plugins/etcd/table-craft-plugin.json",
+    "plugins/kafka/package.json",
+    "plugins/kafka/table-craft-plugin.json",
     "plugins/redis/package.json",
     "plugins/redis/table-craft-plugin.json",
     "scripts/plugins/baseline.ts",
@@ -4403,13 +4435,7 @@
     "test/plugin-api/format.aligned.test.ts",
     "test/plugin-api/format.test.ts",
     "test/plugin-api/generate.test.ts",
-    "test/plugin-api/inspect.test.ts",
-    "test/plugin-api/literals.test.ts",
-    "test/plugin-api/manifest.test.ts",
-    "test/plugin-api/namespace.test.ts",
-    "test/plugin-api/package.test.ts",
-    "test/plugin-api/parameters.test.ts",
-    "test/plugin-api/rowLimit.test.ts"
+    "test/plugin-api/inspect.test.ts"
    ]
   },
   "fail_count": 0
@@ -5339,13 +5365,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:13:00Z",
+  "collected_at": "2026-11-22T00:12:11Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-20",
+  "pushed_at": "2026-11-21",
   "stars": 1254,
   "tree": {
-   "sha": "e33d33a7055725818c6ba7811c28355ab8cc1f5e",
-   "etag": "W/\"a0f8db4187f19464a26d8a672db1dc6a5e20f7806c3d348c231d2af9195bf20b\"",
+   "sha": "f11ce5ee2e9676606c3462efa31c5277a54799e2",
+   "etag": "W/\"af2108667b6a5e978d21f64c7d4cedcffa467a9daeda12af6ed500c18fc3ef79\"",
    "truncated": false,
    "path_count": 2316,
    "matched": [
@@ -7785,13 +7811,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:28:28Z",
+  "collected_at": "2026-11-22T00:22:16Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-20",
+  "pushed_at": "2026-11-21",
   "stars": 198,
   "tree": {
-   "sha": "23ca9db5ae726f9482488c08aaf34c5d6420a05c",
-   "etag": "W/\"a2c49544b96c9721fd40ee1a5940fda8c3d664245f5c5c72f22224356c683082\"",
+   "sha": "c03beb56ba8757386f82477caff3874284503bbe",
+   "etag": "W/\"d84b92afc301e4fc3dbfd460d457496fe480b43735cfd9973e62acfde065120f\"",
    "truncated": false,
    "path_count": 632,
    "matched": [
@@ -7925,10 +7951,10 @@
    {
     "path": "docker-compose.yml",
     "kind": "image",
-    "blob_sha": "a7610e19350547a9451413df09a97c148f0623d5",
+    "blob_sha": "a63adf4435f0b4a6e033417d7821240fd6b9caf1",
     "bytes": 2763,
     "images": [
-     "eclipse-mosquitto:2.0.22",
+     "eclipse-mosquitto:2.0.23",
      "fdmmonster/fdm-monster:2.1.0",
      "fdmmonster/fdm-monster:develop-mdns",
      "fdmmonster/fdm-monster:develop"
@@ -8522,15 +8548,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:39:13Z",
+  "collected_at": "2026-11-22T00:30:24Z",
   "default_branch": "h7dev",
-  "pushed_at": "2026-11-20",
+  "pushed_at": "2026-11-21",
   "stars": 74,
   "tree": {
-   "sha": "5b56af0ecc09b2d69733307a2c0b8b2357d57fac",
-   "etag": "W/\"6044e0bc778fbc271d9c986fd0e41df7758c320ab96439faea34b524fe9f76d6\"",
+   "sha": "31fd1f79e381f1746a8f736a77f23719799ff506",
+   "etag": "W/\"61fb7b7e74ce8a13439041da6f99d99847ff8a5627ef680dc71e29470e891cd5\"",
    "truncated": false,
-   "path_count": 2681,
+   "path_count": 2684,
    "matched": [
     "composer.json",
     "package.json",
@@ -12048,15 +12074,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:27:12Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-22T00:50:06Z",
   "default_branch": "main",
-  "pushed_at": "2026-06-22",
+  "pushed_at": "2026-11-21",
   "stars": 13,
   "tree": {
-   "sha": "5d26cd72d076c3182396bd235b2be508e4636572",
-   "etag": "W/\"2f6b5a4866068217859717377389344d1bd5badc81edbcb6e1f7c582b7e2b973\"",
+   "sha": "3c0f2878120b0714664edc689a752574c7fcfe49",
+   "etag": "W/\"17b34bab155de82f988e3aa27b84edf980123daafe3b20562191573080a2f491\"",
    "truncated": false,
-   "path_count": 36,
+   "path_count": 37,
    "matched": [
     ".github/workflows/swift.yml"
    ]
@@ -13534,15 +13561,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T05:17:59Z",
+  "collected_at": "2026-11-22T00:58:45Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
+  "pushed_at": "2026-11-21",
   "stars": 0,
   "tree": {
-   "sha": "33be865a639871b8d7e8a74b6ab761a3e3797896",
-   "etag": "W/\"41093a134047d481a961fe66bbcf4f063c4e8ff32f75e40c14aec793cd71d494\"",
+   "sha": "cab10552e726df152d2573bc3f48aa9d1908336b",
+   "etag": "W/\"7ad451f5e6c68b9575b64e2c6e239aab3c1a4ec26ed3e37e3fe82108098b99d2\"",
    "truncated": false,
-   "path_count": 319,
+   "path_count": 346,
    "matched": [
     "go.mod",
     "govec/go.mod",
@@ -13686,8 +13713,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "4771cb8bd5f3153b3315fc7da965f9cd2369c750",
-    "bytes": 8221
+    "blob_sha": "e355745391c46ade06176912aa7258781734a62b",
+    "bytes": 8820
    },
    {
     "path": ".github/workflows/pages.yml",
@@ -13700,7 +13727,12 @@
    "changelog": [],
    "readme_i18n": [],
    "docs_matrix": [],
-   "paths": []
+   "paths": [
+    "govec/domains/optdriver.go",
+    "govec/domains/optdriver_exempt.go",
+    "vectors/v8.5.8/amd64/optdriver.jsonl.gz",
+    "vectors/v8.5.8/arm64/optdriver.jsonl.gz"
+   ]
   },
   "fail_count": 0
  },
@@ -13710,13 +13742,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:29:43Z",
+  "collected_at": "2026-11-22T00:23:11Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-19",
+  "pushed_at": "2026-11-20",
   "stars": 175,
   "tree": {
-   "sha": "1689ad10bb80ef664545927436361808af2f022c",
-   "etag": "W/\"fdb3a6ecebdba82a997984940dd3332547e7988324688f6d518ee6ae698c67e8\"",
+   "sha": "111e9a4e4be08be4130ea86187c8e1d0925def1e",
+   "etag": "W/\"041251bbe40ea3da8f20bd2cbe7ceeb0e67c666e66738f2e2bcdf0bbd9949c85\"",
    "truncated": false,
    "path_count": 3041,
    "matched": [
