@@ -4,7 +4,7 @@
   "commit_90d": 0,
   "rel_ver": "v1.5.2",
   "rel_pub": "2024-01-06",
-  "rel_days": 1050,
+  "rel_days": 1051,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -46,7 +46,7 @@
   "commit_90d": 10,
   "rel_ver": "v0.8.4",
   "rel_pub": "2024-08-07",
-  "rel_days": 836,
+  "rel_days": 837,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -98,7 +98,7 @@
   "commit_90d": 292,
   "rel_ver": "v2026.10.1",
   "rel_pub": "2026-10-25",
-  "rel_days": 27,
+  "rel_days": 28,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -177,12 +177,12 @@
   }
  },
  "backup-manager/backup-manager": {
-  "commit_90d": 0,
-  "commit_7d": 0,
-  "rel_ver": "3.1.0",
-  "rel_pub": "2022-07-05",
-  "rel_days": 1600,
-  "rel_n90": 0,
+  "commit_90d": 38,
+  "commit_7d": 38,
+  "rel_ver": "4.1.1",
+  "rel_pub": "2026-11-22",
+  "rel_days": 0,
+  "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -193,17 +193,68 @@
   "lang": {
    "PHP": 100
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261122",
   "dim_ts": {
-   "security": "20261027"
-  }
+   "security": "20261027",
+   "commit": "20261122",
+   "release": "20261122"
+  },
+  "etag": {
+   "release": "W/\"9f5b40de96b96285ee42578aab00133a3c205b0aaf472f97231b56e9ae0b3592\""
+  },
+  "rel_dates": [
+   "2026-11-22",
+   "2026-11-22",
+   "2026-11-22",
+   "2026-11-22",
+   "2026-11-22",
+   "2026-11-22",
+   "2026-11-22"
+  ],
+  "rel_notes": [
+   {
+    "t": "4.1.1",
+    "d": "2026-11-22",
+    "n": "### Security\n- MySQL restore passed the backup's path to the mysql client as\n  `-e 'source <path>'`. The shell escaping (since 4.0.0) stopped shell\n  syntax, but the client parses the string itself, so a newline in the path\n  could run mysql client commands such as `system`. The dump is now fed to\n  `mysql` on stdin. Same fix as 3.3.1.\n\n### Fixed\n- MySQL restore of backup files whose names contain `;` or end in whitespace."
+   },
+   {
+    "t": "4.1.0",
+    "d": "2026-11-22",
+    "n": "### Added\n- MySQL `socket` option: connects `mysqldump` and `mysql` through a unix\n  socket instead of host and port. (backup-manager/laravel#128 by @brucek2)"
+   },
+   {
+    "t": "4.0.0",
+    "d": "2026-11-22",
+    "n": "`Filesystem`, `Database`, `Compressor` and `Task` interfaces have typed\n- Concrete factories, databases, compressors and tasks are `final`.\n- The MySQL restore command shell-escapes the input path."
+   },
+   {
+    "t": "3.3.1",
+    "d": "2026-11-22",
+    "n": "- MySQL restore passed the downloaded backup's path to the mysql client as\ncommands, and one containing a newline could run mysql client commands\nsuch as `system`. The dump is now fed to `mysql` on stdin, with the path\n- MySQL restore of backup files whose names contain `;` or end in whitespace."
+   },
+   {
+    "t": "3.3.0",
+    "d": "2026-11-22",
+    "n": "### Added\n- MySQL `socket` option: connects `mysqldump` and `mysql` through a unix\n  socket instead of host and port. (backup-manager/laravel#128 by @brucek2)"
+   },
+   {
+    "t": "3.2.1",
+    "d": "2026-11-22",
+    "n": "### Security\n- `symfony/process` now requires a release patched for CVE-2024-51736\n  (command hijack on Windows) and CVE-2026-24739 (argument escaping under\n  MSYS2/Git Bash): `^5.4.51 || ^6.4.33 || ^7.4.5 || ^8.0.5`. `symfony/process`\n  4.4 is no longer accepted; it has no patched release.\n- With Flysystem 3, `league/flysystem` 3.35.3 or later is required\n  (CVE-2026-102601). Flysystem 1 and 2 remain supported in 3.x but have no\n  patched releases and Composer blocks them by default; upgrade to Flysystem 3"
+   },
+   {
+    "t": "3.2.0",
+    "d": "2026-11-22",
+    "n": "- `pdo_mysql` is accepted as a MySQL database type, and the MySQL\n- MySQL `onlyTables` option to dump only the listed tables. (from @fezfez's\n- `postgres` as a PostgreSQL database type. (#175 by @aalinia)"
+   }
+  ]
  },
  "clickvisual/clickvisual": {
   "commit_90d": 87,
   "commit_7d": 2,
   "rel_ver": "v1.1.2",
   "rel_pub": "2026-09-03",
-  "rel_days": 79,
+  "rel_days": 80,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -256,7 +307,7 @@
   "commit_7d": 0,
   "rel_ver": "5.0.11",
   "rel_pub": "2026-11-12",
-  "rel_days": 9,
+  "rel_days": 10,
   "rel_n90": 13,
   "rel_pre": false,
   "rel_none": false,
@@ -354,7 +405,7 @@
   "commit_7d": 3,
   "rel_ver": "8.0.2",
   "rel_pub": "2026-07-18",
-  "rel_days": 126,
+  "rel_days": 127,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -370,10 +421,10 @@
    "M4": 1,
    "Makefile": 1
   },
-  "enriched_at": "20261121",
+  "enriched_at": "20261122",
   "dim_ts": {
    "commit": "20261120",
-   "release": "20261121",
+   "release": "20261122",
    "security": "20261027"
   },
   "rel_notes": [
@@ -394,7 +445,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"70fbea92cfe3c4624dc7ae1e240f10eff062f46e96185f5abead3a925eb5874b\""
+   "release": "W/\"db8dbdd07bad9e28d6664671afb8e761c7f94c54ae425034e867b096b9d62c0d\""
   },
   "rel_dates": []
  },
@@ -456,7 +507,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.8.3",
   "rel_pub": "2025-04-17",
-  "rel_days": 583,
+  "rel_days": 584,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -498,7 +549,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.3",
   "rel_pub": "2026-10-19",
-  "rel_days": 33,
+  "rel_days": 34,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -523,7 +574,7 @@
  "gbdev/database": {
   "rel_ver": "draft4",
   "rel_pub": "2025-02-09",
-  "rel_days": 650,
+  "rel_days": 651,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -544,7 +595,7 @@
  "gabriel-roque/reactnest-boilerplate": {
   "rel_ver": "2.0.0",
   "rel_pub": "2021-01-06",
-  "rel_days": 2145,
+  "rel_days": 2146,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -565,7 +616,7 @@
  "cachapa/sql_crdt": {
   "rel_ver": "3.0.3",
   "rel_pub": "2025-05-03",
-  "rel_days": 567,
+  "rel_days": 568,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -595,7 +646,7 @@
  "LUSHDigital/modelgen": {
   "rel_ver": "1.4.4",
   "rel_pub": "2018-10-24",
-  "rel_days": 2950,
+  "rel_days": 2951,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -690,7 +741,7 @@
  "TranHuuDat2004/BrickShop": {
   "rel_ver": "BrickShop-v1.0.0",
   "rel_pub": "2025-05-16",
-  "rel_days": 554,
+  "rel_days": 555,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -726,7 +777,7 @@
  "keberwein/mlbgameday": {
   "rel_ver": "0.2.0",
   "rel_pub": "2019-04-05",
-  "rel_days": 2787,
+  "rel_days": 2788,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -743,7 +794,7 @@
  "tesseract-olap/tesseract": {
   "rel_ver": "v0.14.13",
   "rel_pub": "2020-06-01",
-  "rel_days": 2364,
+  "rel_days": 2365,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -803,7 +854,7 @@
  "aintshy/hub": {
   "rel_ver": "0.8",
   "rel_pub": "2017-07-06",
-  "rel_days": 3425,
+  "rel_days": 3426,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -823,7 +874,7 @@
  "MicrotronX/mxLore": {
   "rel_ver": "build-136",
   "rel_pub": "2026-09-27",
-  "rel_days": 55,
+  "rel_days": 56,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -844,7 +895,7 @@
  "Mioke/SwiftyArchitecture": {
   "rel_ver": "2.0.1",
   "rel_pub": "2022-06-08",
-  "rel_days": 1627,
+  "rel_days": 1628,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -864,7 +915,7 @@
  "project-cemetery/trona": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2021-09-23",
-  "rel_days": 1885,
+  "rel_days": 1886,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -881,7 +932,7 @@
  "ThinkThinkAI/ThinkDB": {
   "rel_ver": "1.0.24-alpha",
   "rel_pub": "2024-10-16",
-  "rel_days": 766,
+  "rel_days": 767,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -917,7 +968,7 @@
  "joaoribe/SQLScriptsExplorer": {
   "rel_ver": "v1.4.0-beta",
   "rel_pub": "2026-03-22",
-  "rel_days": 244,
+  "rel_days": 245,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -945,7 +996,7 @@
  "vnpy/vnpy_dolphindb": {
   "rel_ver": "1.0.5",
   "rel_pub": "2021-12-08",
-  "rel_days": 1809,
+  "rel_days": 1810,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -962,7 +1013,7 @@
  "ashutoshsahoo/spring-boot-kubernetes-mysql": {
   "rel_ver": "v6.0.0",
   "rel_pub": "2024-06-14",
-  "rel_days": 890,
+  "rel_days": 891,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1021,7 +1072,7 @@
  "oceanbase/obkv-table-client-rs": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2023-06-13",
-  "rel_days": 1257,
+  "rel_days": 1258,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1091,7 +1142,7 @@
  "cybertec-postgresql/patroni-windows-packaging": {
   "rel_ver": "v260505",
   "rel_pub": "2026-05-05",
-  "rel_days": 200,
+  "rel_days": 201,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1166,7 +1217,7 @@
  "rakshitbharat/laravel-storage-with-database": {
   "rel_ver": "1.1",
   "rel_pub": "2025-05-03",
-  "rel_days": 567,
+  "rel_days": 568,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1245,7 +1296,7 @@
  "xgd16/ai-mcp": {
   "rel_ver": "v1.0.3",
   "rel_pub": "2025-10-11",
-  "rel_days": 406,
+  "rel_days": 407,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1360,7 +1411,7 @@
  "pingcap/tidb-loadbalance": {
   "rel_ver": "0.0.6",
   "rel_pub": "2023-04-17",
-  "rel_days": 1314,
+  "rel_days": 1315,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1432,7 +1483,7 @@
  "lmmentel/batchcalculator": {
   "rel_ver": "v0.3.1",
   "rel_pub": "2018-01-21",
-  "rel_days": 3226,
+  "rel_days": 3227,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1467,7 +1518,7 @@
  "1991292318/xiaodai": {
   "rel_ver": "小呆支付",
   "rel_pub": "2023-09-03",
-  "rel_days": 1175,
+  "rel_days": 1176,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1531,7 +1582,7 @@
  "criscola/kubernetes-dbaas": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2021-08-24",
-  "rel_days": 1915,
+  "rel_days": 1916,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1567,7 +1618,7 @@
  "eventstorage/eventstorage": {
   "rel_ver": "v0.0.0-beta.17",
   "rel_pub": "2025-02-21",
-  "rel_days": 638,
+  "rel_days": 639,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1616,7 +1667,7 @@
  "satwiksps/steadlith": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2026-09-05",
-  "rel_days": 77,
+  "rel_days": 78,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1740,7 +1791,7 @@
  "kukushouhou/card-bill-assistant": {
   "rel_ver": "v0.6.1",
   "rel_pub": "2026-09-27",
-  "rel_days": 55,
+  "rel_days": 56,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2061,7 +2112,7 @@
   "commit_7d": 1,
   "rel_ver": "v3.0.0",
   "rel_pub": "2026-04-22",
-  "rel_days": 213,
+  "rel_days": 214,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2264,7 +2315,7 @@
  "widefleet/widefleet": {
   "rel_ver": "v0.3.3",
   "rel_pub": "2026-10-12",
-  "rel_days": 40,
+  "rel_days": 41,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2291,7 +2342,7 @@
  "woosal1337/my-tesla": {
   "rel_ver": "v1.7.0",
   "rel_pub": "2026-10-12",
-  "rel_days": 40,
+  "rel_days": 41,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2372,7 +2423,7 @@
  "vmikhailov/code-explorer": {
   "rel_ver": "v1.50.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 32,
+  "rel_days": 33,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2425,7 +2476,7 @@
   },
   "rel_ver": "v1.0.0",
   "rel_pub": "2019-06-01",
-  "rel_days": 2730,
+  "rel_days": 2731,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2513,7 +2564,7 @@
   },
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-11-20",
-  "rel_days": 1,
+  "rel_days": 2,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2569,6 +2620,29 @@
    "security": "20261121",
    "contrib": "20261121",
    "lang": "20261121"
+  },
+  "rel_n90": 0
+ },
+ "RoomZoneStretch/SQLite-Database-Browser-Full-Download": {
+  "etag": {
+   "release": "\"e04e9497c137bfd5455520bf34b50dbd5c9a98d892bf54c63c1057e69b67b59a\"",
+   "security": "\"e04e9497c137bfd5455520bf34b50dbd5c9a98d892bf54c63c1057e69b67b59a\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {},
+  "enriched_at": "20261122",
+  "dim_ts": {
+   "release": "20261122",
+   "security": "20261122",
+   "contrib": "20261122",
+   "lang": "20261122"
   }
  }
 }

@@ -31,7 +31,11 @@ It runs on your machine. Card data and about 66,000 card images are downloaded o
 - **Themes from the commander's own text.** Tokens, counters, sacrifice, spellslinger, landfall, typal for any creature type and more, with sliders when you disagree.
 - **Combos.** What your deck already contains and what is one card away.
 - **Your collection.** Import a CSV or list, or add cards one by one by the set code and number printed at the bottom of the card (`TDM 123`) or by name; mark what you own, build from owned cards only.
-- **Best from collection.** Ranks the commanders you own by the deck your own cards can build at a bracket, and shows how much better each gets with 5, 10, 15 or 20 purchases, with the buy list, its price, and one click to create the deck or proxy the buys.
+- **Several collections.** "Physical" and "MTG Arena" are kept apart, and a switcher in the top bar picks the one that "owned" means everywhere: green dots, the owned filter, owned-only builds and Best from collection. Switching never touches a deck. Any collection can be exported as a CSV that imports back unchanged.
+- **Build and improve from one collection.** A box beside the deck buttons, "Only my Physical collection" or "Only my MTG Arena collection", keeps Auto-build, Fill the rest, Suggest swaps, Improve, add-one and replace-a-card inside the collection picked in the top bar (basic lands are always allowed). It is remembered.
+- **Copy for Arena.** One button copies the deck in the form MTG Arena imports (Decks, Import) and lists any card of the deck Arena does not have, checked against your own Arena install.
+- **MTG Arena sync.** If Arena is installed on the computer (macOS or Windows; standalone, Steam or Epic), the app reads Arena's own local files on start and on "Sync Arena": `Player.log` for your decks and draft or sealed pools, and Arena's card database to turn its card numbers into names. Nothing leaves the computer and your Wizards account is never used. See [What the Arena sync can see](#what-the-arena-sync-can-see).
+- **Best from collection.** Ranks the commanders you own by the deck your own cards can build at a bracket, and shows how much better each gets with 5, 10, 15 or 20 purchases, with the buy list, its price, and one click to create the deck or proxy the buys. A switch turns it around: the commanders you do **not** own, ranked by the deck your cards already build around them, with the commander as the one card to get.
 - **Directed improve.** Tell an improve run what you want: change at most N cards, aim for another bracket, more win conditions, removal, card draw or ramp, or lean into one theme. Each swap says which goal it serves. "Add one" buttons suggest a single card of a kind with the card to cut for it, and each deck can set its own wanted counts (win conditions default to 4–6). When the engine thinks a change is not an improvement it still offers it, marked with its objection.
 - **Proxies.** Put any card, the cards an improve run proposes, or the cards of a deck you do not own on a proxy list, then print true-size playtest sheets (63 × 88 mm, nine per A4 or US Letter page, cut marks, optional back faces and a "not for sale" label) or download the images as a zip.
 
@@ -150,3 +154,25 @@ Commander Forge is unofficial Fan Content permitted under the Fan Content Policy
 ## License
 
 [MIT](LICENSE) for the source code. Card data, images and third-party statistics are not covered by it.
+
+## What the Arena sync can see
+
+Arena stopped writing the whole collection to `Player.log` in August 2021, and nothing replaced it. Tools that still show a full Arena collection (Untapped.gg, MTGA Tool) read it out of the running game's memory, which needs administrator or debugger rights; 17Lands reads the log only and no longer has the collection. Commander Forge reads files only:
+
+- **Needs** "Detailed Logs (Plugin Support)" switched on in Arena (Options, Account), then a restart of Arena. Without it the log holds no card data and the app says so.
+- **Sees** every card in the decks you built yourself and in your draft and sealed pools. Arena's ready-made decks (starter decks, event loaners, championship lists) are in the same list and are left out, because the log does not say which of them you own the cards for. Arena starts a new log each time it starts, so every sync adds to the earlier ones and never removes a card.
+- **Does not see** cards you own that sit in no deck and no limited pool, and it trusts deck lists (a deck can hold cards you do not own). Quantities are the most copies seen in one deck or pool.
+- **Leaves out** Arena-only cards (Alchemy and other digital-only designs); rebalanced "A-" versions count as the card they change.
+- To fill the gaps, switch to the MTG Arena collection and add cards by hand or paste a full export from a tracker; the import reads any CSV with name and quantity columns. A list of Arena card ids and counts (`POST /api/arena` with `{"cards": [{"grpId": 60235, "qty": 1}]}`) replaces the collection with exactly that list, which is how a memory reader you run yourself can hand over the whole collection.
+
+### Reading the whole Arena collection
+
+The "Read my whole Arena collection" button on the Collection page (MTG Arena selected) reads every owned card out of the running game and replaces the MTG Arena collection with it. It uses [mtga-reader](https://github.com/mtgatool/mtga-reader) (GPL-3.0), which is not part of Commander Forge; set it up once:
+
+```bash
+mkdir -p "$HOME/Library/Application Support/Commander Forge Arena Reader" && cd "$HOME/Library/Application Support/Commander Forge Arena Reader" && npm install mtga-reader
+```
+
+(On Windows the folder is `%LOCALAPPDATA%\Commander Forge Arena Reader`.) Only card numbers and counts are read, never the account. Looking into another program needs extra rights: macOS asks for an administrator password each time, in its own window. A copy of Node named `node-arena` in that folder is used instead when present, with no password; on macOS it has to be signed with the `com.apple.security.cs.debugger` entitlement, which is your decision to make. Reading game memory is something Wizards' terms do not clearly allow; other trackers do it, and it is off unless you press the button.
+
+`COMMANDER_FORGE_ARENA_LOG_DIR` and `COMMANDER_FORGE_ARENA_RAW_DIR` point the sync at a log folder and at Arena's `Downloads/Raw` folder when they are somewhere unusual.

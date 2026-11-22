@@ -18,7 +18,7 @@ A lightweight flat-file CMS with a PHP/SQLite admin panel and a fully static HTM
 - **Categories & tags** — full taxonomy system; posts can belong to multiple categories and tags; archive pages generated at `/category/{slug}/` and `/tag/{slug}/`; tag input is a pill-style picker with autocomplete against existing tags
 - **Related posts** — optional block at the foot of titled posts linking up to three others by shared categories and tags, scored so the closest match wins over the most recent; off by default, switched on in Settings → Content
 - **Featured images** — a titled post's lead picture, set from the editor, MarsEdit (`wp_post_thumbnail`) or Micropub (`featured`); renders above the body as `u-featured` and becomes the post's `og:image`, card thumbnail, feed image, and social preview card. A post that simply begins with an image gets the same treatment automatically, so nothing had to be migrated
-- **Media library** — drag-and-drop uploads with MIME validation; images, video, and audio supported (50 MB limit)
+- **Media library** — drag-and-drop uploads with MIME validation; images, video, and audio supported (200 MB limit)
 - **Image galleries** — select multiple images in the post editor and insert a `[gallery]` shortcode; renders as a Mondrian-style tiled CSS Grid (curated layouts per image count 1–7; larger sets chunk into stacked sibling blocks that visually merge into one continuous tile field) with a looping lightbox
 - **Atom feed** — generated automatically at `/feed.xml`; embeds [Byline](https://bylinespec.org/1.0) elements so feed readers can show your name, bio, avatar, and verified social links
 - **RSS feed** — `/feed.rss` (RSS 2.0) with the same Byline embedding; mirrored to per-term taxonomy archives
@@ -263,7 +263,7 @@ Turning the setting on or off rebuilds the whole site, and publishing a post aft
 
 ### Media
 
-Files are uploaded to `content/media/` and served through a Nginx alias at `/media/`. Filenames are sanitized to `{stem}_{8hex}.{canonical_ext}`. Accepted MIME types: JPEG, PNG, GIF, WebP, SVG, MP4, WebM, MP3, OGG. Maximum size: 50 MB.
+Files are uploaded to `content/media/` and served through a Nginx alias at `/media/`. Filenames are sanitized to `{stem}_{8hex}.{canonical_ext}`. Accepted MIME types: JPEG, PNG, GIF, WebP, SVG, MP4, WebM, QuickTime (.mov), MP3, OGG, M4A. Maximum size: 200 MB (50 MB over XML-RPC).
 
 ### Shortcode Embeds
 
@@ -520,6 +520,8 @@ A client-supplied `summary` is stored as the post's excerpt and used verbatim by
 
 The mf2 `featured` property sets a titled post's [featured image](#featured-images). Values take the same shapes as `photo` — a bare URL or `{"value": "…", "alt": "…"}` — and only the first is used, since a post has one lead picture. It is supported in `replace`, `add` and `delete` updates, and reported by `q=source`.
 
+The mf2 `video` and `audio` properties take URLs — normally ones this site's media endpoint just returned — as bare strings or `{"value": "…"}` objects; an `alt` is ignored. Each is stored as a `post_media` row and drawn as a player (`u-video`, `u-audio`) after any photos and before the body, on the post's page, on a note's card and in all three feeds. Both are supported in `replace`, `add` and `delete` updates, and reported by `q=source`. Files sent with the post itself are not read for them — only `photo` files are — so upload to the media endpoint first. Syndicated copies carry the words and, for a note, a link home to the player: no network gets the file from us. The admin editor can't attach or remove them.
+
 ### Queries
 
 | Query | Returns |
@@ -537,8 +539,8 @@ Omitting `url` from `q=source` returns a list of posts — the [Query for Post L
 |-----------|--------|
 | `limit` | Page size. Defaults to `20`, capped at `100`. A missing or unparseable value falls back to the default. |
 | `offset` | Rows to skip. Usable on its own, since a default `limit` always applies. |
-| `post-type` | Post Type Discovery filter: `note`, `article`, `photo`, `reply`, `rsvp`, `repost`, `like`, `bookmark` — the same list `q=config` advertises under `post-types`. An interaction wins over `article`/`note`, so a titled reply filters as `reply`; an `rsvp` (an `in-reply-to` carrying an `rsvp` value) outranks `reply`. |
-| `post-status` | `published`, or `draft` (which also covers scheduled posts, matching the `post-status` each item reports). |
+| `post-type` | Post Type Discovery filter: `note`, `article`, `photo`, `reply`, `rsvp`, `repost`, `like`, `bookmark`, `video`, `audio` — the same list `q=config` advertises under `post-types`. An interaction wins over `article`/`note`, so a titled reply filters as `reply`; an `rsvp` (an `in-reply-to` carrying an `rsvp` value) outranks `reply`. Below the interactions, `video` outranks `photo` and `photo` outranks `audio`, title or not. |
+| `post-status` | `published` (which also covers scheduled posts, matching the `post-status` each item reports), or `draft`. |
 | `properties[]` | Applied per item. Unlike the single-post response, list items keep their `type` wrapper — a list of bare property bags is not parseable mf2. |
 
 An unrecognised `post-type` or `post-status` returns `400`, rather than quietly answering with the whole archive.
@@ -575,7 +577,7 @@ Pre-create your categories in **Admin → Categories** to have matching client-s
 | Status | Meaning |
 |--------|---------|
 | `201 Created` + `Location: <post URL>` | Post saved (drafts return the admin edit URL) |
-| `400 Bad Request` | Malformed payload, missing `content`/`photo`, or unsupported `h` type |
+| `400 Bad Request` | Malformed payload, missing `content`/`photo`/`video`/`audio`, or unsupported `h` type |
 | `401 Unauthorized` | Missing or invalid bearer token (also `WWW-Authenticate: Bearer realm="Micropub"`) |
 | `429 Too Many Requests` | Per-IP lockout from too many failed auth attempts (shares `login_attempts` with the admin login) |
 

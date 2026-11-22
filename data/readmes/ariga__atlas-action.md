@@ -775,6 +775,8 @@ Apply a declarative migrations to a database.
 #### Outputs
 
 * `error` - The error message if the action fails.
+* `plan` - With `lint-review`, the plan that the action applies or waits for, e.g. `atlas://<schema>/plans/<name>`.
+* `plan-status` - With `lint-review`, the last known status of the `plan` output. For example, `PENDING` or `APPROVED`.
 
 ### `ariga/atlas-action/schema/lint`
 
@@ -870,7 +872,7 @@ script starts open.
 
 #### Outputs
 
-* `link` - Link to the schema plan on Atlas.
+* `link` - Link to the schema plan on Atlas Cloud. Empty if the plan is not in Atlas Cloud.
 * `plan` - The plan to be applied or generated. (e.g. `atlas://<schema>/plans/<id>`)
 * `status` - The status of the plan. For example, `PENDING` or `APPROVED`.
 
@@ -878,6 +880,11 @@ script starts open.
 ### `ariga/atlas-action/schema/plan/approve`
 
 Approve a declarative migration plan.
+
+Without the `plan` input, the action approves the pending plan of the schema transition, typically the plan that
+`schema/plan` created in the pull request. It skips the plans named `commit-<commit>-<random>`, which `schema/apply`
+creates for a deployment outside a pull request, so that re-running such a deployment while it waits for its plan
+does not approve the plan.
 
 #### Inputs
 
@@ -887,9 +894,11 @@ Approve a declarative migration plan.
   If that is also not set, Atlas defaults to the **last known state in the Atlas Registry** (use [`schema.repo`](https://atlasgo.io/hcl/config#env.schema.repo) from the config file).
 * `include` - List of glob patterns used to select which resources to keep in inspection
   see: https://atlasgo.io/declarative/inspect#include-schemas
-* `plan` - The URL of the plan to be approved. For example, `atlas://<schema>/plans/<id>`.
-  If not provided, Atlas will search the registry for a plan corresponding to the given schema transition and approve it
-  (typically, this plan is created during the PR stage). If multiple plans are found, an error will be thrown.
+* `plan` - The URL of the plan to approve, for example `atlas://<schema>/plans/<name>`.
+  If not set, the action searches the registry for the pending plan of the schema transition and approves it,
+  typically the plan that `schema/plan` created in the pull request. It skips the plans named
+  `commit-<commit>-<random>`, which `schema/apply` creates for a deployment outside a pull request.
+  If several plans are found, the action fails.
 * `schema` - List of database schema(s). For example: `public`.
 * `schema-name` - The name (slug) of the schema repository in Atlas Registry.
   Read more in Atlas website: https://atlasgo.io/registry.
@@ -908,7 +917,7 @@ Approve a declarative migration plan.
 
 #### Outputs
 
-* `link` - Link to the schema plan on Atlas.
+* `link` - Link to the schema plan on Atlas Cloud. Empty if the plan is not in Atlas Cloud.
 * `plan` - The plan to be applied or generated. (e.g. `atlas://<schema>/plans/<id>`)
 * `status` - The status of the plan. (e.g, `PENDING`, `APPROVED`)
 

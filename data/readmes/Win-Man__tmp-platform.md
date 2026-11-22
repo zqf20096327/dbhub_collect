@@ -27,6 +27,21 @@ TMP_MOCK=true ./bin/tmp
 TMP_ADDR=:9000 ./bin/tmp        # 自定义端口
 ```
 
+### 接管真实集群的两种形态
+
+| TiUP 部署位置 | 「TiUP 地址」怎么填 | 说明 |
+| --- | --- | --- |
+| 与 TMP 同机 | `127.0.0.1`（或本机 IP/hostname） | 平台**本地直读** `~/.tiup/.../meta.yaml`，无需本机开启 sshd；若元数据不在默认目录，用「TiUP 部署目录」显式指定 |
+| 独立跳板机 | 该机器 IP + SSH 账号/密码或私钥 | 通过 SSH 读取 `meta.yaml`，读不到时回退 `tiup cluster display -n <cluster> -T` |
+
+采集侧字段全部来自真实来源：
+
+- **版本**：`meta.yaml` 的 `tidb_version`（如 `v8.5.5`），并与 MySQL `SELECT VERSION()` 交叉校验；
+- **拓扑/实例数**：`topology` 段下的 `pd_servers` / `tidb_servers` / `tikv_servers` / `tiflash_servers` / `tiproxy_servers` / `monitoring_servers` / `grafana_servers`（PD 用 `client_port`/`peer_port` 而非 `port`）；
+- **架构**：服务级 `arch` 字段，缺失时用 `uname -m` 兜底；
+- **部署模式**：PD `/pd/api/v1/cluster/status` 的复制模式；
+- **外部系统地址**：按各 server 实际端口拼装 Dashboard / Prometheus / Grafana / Alertmanager 链接。
+
 ## 环境变量
 
 | 变量 | 默认值 | 说明 |
@@ -63,6 +78,15 @@ make build      # 首次会自动 npm install（较慢），之后增量构建
 ```
 
 - **环境要求**：Go ≥ 1.22、Node ≥ 20（`CGO_ENABLED=0`，无需 C 工具链）。
+- **macOS 26 / 27 跑单测报 `dyld: missing LC_UUID`**：这是 Go 1.22 内部链接器在新版 macOS 上的已知兼容问题（与代码无关，Linux CI 正常）。用外部链接绕过：
+  ```bash
+  cd backend && CGO_ENABLED=1 go test -ldflags=-linkmode=external ./...
+  ```
+- **真实 TiUP 端到端用例（门控，默认不进 CI）**：需指定本机已有集群，环境不具备时自动 `t.Skip`：
+  ```bash
+  cd backend && TMP_E2E_CLUSTER=tidb-demo CGO_ENABLED=1 go test -tags e2e \
+    -ldflags=-linkmode=external -run TestE2E -v ./internal/collector/
+  ```
 - **`backend/web/dist/` 不入库**（前端构建产物，见 `.gitignore`）。所以单独执行 `cd backend && go build ./...` 前需先 `make frontend-build`，否则 `//go:embed all:dist` 找不到文件；直接 `make build` 会自动按 typecheck → 前端 → 后端 顺序执行。
 - **提交前自检**：`make typecheck && make test && make vet`（`make smoke` 会真实起服务跑端到端断言，耗时约 30s）。
 - **分支约定**：`main` 保持可构建；功能开发走 `feat/xxx`、修复走 `fix/xxx`，PR 合入前跑一遍 `make smoke`。
@@ -120,6 +144,7 @@ tmp-platform/
 
 ## 已知边界（MVP 范围）
 
+- **主机资源**目前只采集 TiUP 主机自身的 CPU/内存/磁盘；其余主机只登记 IP 与角色（CPU/内存依赖 MySQL 通道 `information_schema.cluster_hardware`，逐台 SSH 采集在 P1）。
 - 监控趋势（`/clusters/:id/metrics`）与慢查询（`/slow-queries`）、告警（`/alerts`）当前返回空态或 40901，界面展示「未接入监控」。
 - 定时巡检调度为接口占位（P2），立即巡检与报告全流程可用。
 - 巡检模板只读（内置 6 类 28 项）；自定义模板编辑不在 MVP 范围。

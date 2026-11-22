@@ -65,6 +65,15 @@ Prebuilt installers and single-file binaries are attached to [Releases](https://
 
 ---
 
+## Remote control from your phone
+
+Open **Remote control** from the phone icon in the top bar and generate a one-time link plus QR code. Scanning it opens the same app, not a cut-down chat page: conversations, files, previews, the browser rail, finance pages and settings all work. The phone is only a control surface; data and execution stay on the desktop.
+
+- The token lives after `#`, so the browser never sends it to the server or into access logs. It expires in 10 minutes and is burned on first use.
+- Pairing exchanges it for an `HttpOnly` device cookie, valid for 12 hours by default (1–168 configurable). Closing the panel does not disconnect; **Stop** revokes immediately. **Refresh QR** invalidates the old link and kicks the connected device.
+- Set **Public URL** to an address the phone can reach: `http://192.168.x.x:8788` on a LAN, or `https://money.example.com` on the internet. A loopback address is flagged as unreachable from the phone.
+- **No public IP needed**: run `python -m app.relay.server` on a public host, enter the `ws://` control URL and token in the remote panel, and the desktop dials out. The relay allocates a public port for the phone. Your ledger passes only through your own relay, never a third-party one.
+
 ## What it deliberately does not do
 
 - **No live trading.** Pre-trade checks produce a confirmation token; live orders generate a handoff sheet. The default broker is a dry-run stub.

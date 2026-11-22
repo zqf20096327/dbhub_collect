@@ -7,7 +7,7 @@ BridgeDb
 [![codecov](https://codecov.io/gh/bridgedb/BridgeDb/branch/master/graph/badge.svg?token=F0kJdoEt0x)](https://codecov.io/gh/bridgedb/BridgeDb)
 [![NWO](https://img.shields.io/badge/NWO%20Open%20Science-203.001.121-orange)](https://www.nwo.nl/en/projects/203001121)
 
-BridgeDb is currently tested with Java 11 and higher (3.0.x releases and master branch).
+BridgeDb is currently tested with Java 21 and higher (4.0.x releases).
 
 Using BridgeDb dependencies
 ---------------------------
@@ -15,7 +15,7 @@ Using BridgeDb dependencies
 The [BridgeDb releases](https://github.com/bridgedb/BridgeDb/releases) are published to 
 [Maven Central](https://search.maven.org/artifact/org.bridgedb/bridgedb-bundle), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
 
-Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `3.0.31`:
+Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `4.0.0`:
 
 For [Maven](https://maven.apache.org/):
 
@@ -24,7 +24,7 @@ For [Maven](https://maven.apache.org/):
     <dependency>
         <groupId>org.bridgedb</groupId>
         <artifactId>org.bridgedb.bio</artifactId>
-        <version>3.0.31</version>
+        <version>4.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -32,19 +32,19 @@ For [Maven](https://maven.apache.org/):
 For [Gradle](https://gradle.org/):
 
 ```gradle
-compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '3.0.31'
+compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '4.0.0'
 ```
 
 For [Ivy](http://ant.apache.org/ivy/):
 
 ```xml
-<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="3.0.31"/>
+<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="4.0.0"/>
 ```
 
 For [Buildr](https://buildr.apache.org/):
 
 ```buildr
-'org.bridgedb:org.bridgedb.bio:jar:3.0.31'
+'org.bridgedb:org.bridgedb.bio:jar:4.0.0'
 ```
 
 
@@ -57,8 +57,6 @@ able to compile with a simple:
 ```shell
 mvn clean install -Dgpg.skip
 ```
-
-When compiling the Java8-compatible components, use the `pom-java8.xml` file instead, with `mvn -f pom-java8.xml`.
 
 You can find the libraries in the folder called "target", in each sublibrary folder (used to be called "dist" in ant).
 
@@ -99,14 +97,14 @@ Several tests also depend on a running MySQL backend or running BridgeDb
 webservice. You can exclude these tests in Maven with:
 
 ```shell
-mvn clean test -Djunit5.excludeGroups=webservice,mysql
+mvn clean test -Djunit.excludeGroups=webservice,mysql
 ```
 
-The JUnit5 tagging also allows to specifically test the MySQL-backend tests,
+The JUnit tagging also allows to specifically test the MySQL-backend tests,
 for example with:
 
 ```shell
-mvn clean test junit5.groups=mysql
+mvn clean test -Djunit.groups=mysql -Djunit.excludeGroups=none
 ```
 
 Updating the datasources
@@ -135,7 +133,7 @@ To make the release, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
 
 ```shell
-mvn versions:set -DnewVersion=3.0.31
+mvn versions:set -DnewVersion=4.0.0
 mvn clean deploy
 ```
 
@@ -145,7 +143,7 @@ and everything.
 To make a development (SNAPSHOT) release, use:
 
 ```shell
-mvn versions:set -DnewVersion=3.0.32-SNAPSHOT
+mvn versions:set -DnewVersion=4.0.1-SNAPSHOT
 mvn clean deploy
 ```
 

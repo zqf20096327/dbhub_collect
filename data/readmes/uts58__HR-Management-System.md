@@ -1,209 +1,132 @@
-## Node.js HR Management System
+# HR Management System
 
-HR management system built with Node.js, Express, PostgreSQL, and Prisma ORM.
+A web app for managing employees, departments and positions, leave requests,
+performance appraisals and company notices. Three roles share one login:
+`HR_ADMIN` and `HR` manage people and records, and employees see their own
+data and the notice board.
 
-## Overview
+The app lives in [`web/`](web/). Deployment files (`docker-compose.yml`,
+`compose.dev.yml`, `compose.prod.yml`, `docker/`) are at the repo root.
 
-Navigate and manage HR functionalities with ease. Whether you're an Admin, HR, or an Employee, the system offers tailored features to cater to your needs.
+![Dashboard](docs/images/dashboard.png)
 
-## Features
+## Stack
 
-**1. User Roles:**
-- **Admin:** Highest level of access with capabilities to add and manage HR users.
-- **HR:** Central role with authority to add and manage regular users or employees.
-- **Employee:** General user role with access to personal details, notices, and more.
+Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4 and shadcn/ui,
+Prisma 7 on PostgreSQL 16, Better Auth with argon2id passwords, Zod 4,
+Vitest and Playwright. Full table and conventions: [`web/README.md`](web/README.md).
 
-**2. Notice Panel:** Broadcast important notices, updates, or announcements to employees.
+## Local development
 
-**3. Database Integration:** PostgreSQL via Prisma ORM for reliable data storage and efficient retrieval.
+Prerequisites: Node 26 (`nvm use` in `web/`), npm, Docker.
 
----
+```bash
+docker compose -f compose.dev.yml up -d     # Postgres on 127.0.0.1:5432
+cd web
+npm ci
+cp .env.example .env                        # set BETTER_AUTH_SECRET (openssl rand -base64 32)
+npm run db:migrate
+npm run db:seed                             # dev data (admin / Admin#12345)
+npm run dev                                 # http://localhost:3000
+```
 
-## Running with Docker (Recommended)
+## Tests
 
-### Prerequisites
-- [Docker](https://docs.docker.com/get-docker/) and Docker Compose
+Run from `web/`:
 
-### Setup
+```bash
+npm run lint && npm run format:check && npm run typecheck
+npm test                                    # unit
+npm run test:integration                    # needs DATABASE_URL (a *_test database)
+npm run test:e2e                            # Playwright
+```
 
-1. Clone the repository:
+CI (`.github/workflows/ci.yml`) runs all of these plus a build and a Docker
+image build. See [`docs/qa/test-strategy.md`](docs/qa/test-strategy.md).
+
+## Create the first admin
+
+A fresh database has no users. With `DATABASE_URL` set:
+
+```bash
+cd web
+CREATE_ADMIN_PASSWORD='a-strong-password' npm run create-admin -- --username admin
+```
+
+The command is idempotent and never prints the password.
+
+## Running in production
+
+Prerequisites: a Docker host with Compose, a domain whose DNS points at it,
+and ports 80 and 443 open (Caddy gets the TLS certificate automatically).
+
+1. Create `.env` in the repository root (`cp .env.example .env`) and set:
+
+   | Variable             | Value                                                              |
+   | -------------------- | ------------------------------------------------------------------ |
+   | `APP_DOMAIN`         | Your hostname, e.g. `hr.example.com` (production only)             |
+   | `DB_USER`, `DB_PASS` | Postgres superuser, used only by `db-init`                         |
+   | `WEB_DB_USER`        | App database role (default `hr_web_app`)                           |
+   | `WEB_DB_PASS`        | App role password, URL-safe: `openssl rand -hex 24`                |
+   | `WEB_DB_NAME`        | App database (default `hr_web`)                                    |
+   | `BETTER_AUTH_SECRET` | At least 32 characters: `openssl rand -base64 32`                  |
+   | `LOG_LEVEL`          | Optional: `fatal`, `error`, `warn`, `info` (default), `debug`, `trace` |
+
+   `BETTER_AUTH_URL` is set to `https://$APP_DOMAIN` by `compose.prod.yml`.
+   `DB_PASS` must also be URL-safe.
+
+2. First deploy:
+
    ```bash
-   git clone https://github.com/uts58/HR-Management-System.git
-   cd HR-Management-System
+   export COMPOSE_FILE=docker-compose.yml:compose.prod.yml
+   docker compose build
+   docker compose run --rm db-init
+   docker compose run --rm web-migrate
+   docker compose run --rm -e CREATE_ADMIN_PASSWORD='a-strong-password' web-migrate \
+        node create-admin.mjs --username admin
+   docker compose up -d
+   curl -fsS https://$APP_DOMAIN/api/health
    ```
 
-2. Copy the example env file and set your password:
+   `COMPOSE_FILE` makes every command include `compose.prod.yml`. `create-admin`
+   is idempotent and never prints the password.
+
+3. Update to a new version:
+
    ```bash
-   cp .env.example .env
-   ```
-   Edit `.env` and change `DB_PASS` and `SESSION_SECRET` to secure values.
-
-3. Build and start:
-   ```bash
-   docker compose up --build
-   ```
-
-4. First time only — create the database tables, the session table and seed data:
-   ```bash
-   docker compose exec app npx prisma db push
-   docker compose exec app npm run db:session-table
-   docker compose exec app npm run db:seed
-   ```
-   Until the session table exists the app exits at startup with a message saying so, and
-   Docker restarts it (`restart: unless-stopped`). If that loop prevents `exec`, create the
-   table from the host instead:
-   `docker compose exec -T db psql -U hruser -d hrdb -v ON_ERROR_STOP=1 < prisma/legacy-session-table.sql`
-
-   Default credentials after seeding:
-   | Role | Username | Password |
-   |------|----------|----------|
-   | HR Admin | `admin` | `admin123` |
-   | Employee | `john` | `emp123` |
-
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Environment Variables
-
-| Variable        | Default    | Description                              |
-|-----------------|------------|------------------------------------------|
-| `DB_NAME`       | `hrdb`     | Database name                            |
-| `DB_USER`       | `hruser`   | Database user                            |
-| `DB_PASS`       | —          | Database password **(required)**         |
-| `PORT`          | `3000`     | Application port                         |
-| `SESSION_SECRET` | —         | Session signing secret **(required; the app refuses to start in production without it)** |
-| `COOKIE_SECURE` | `auto`     | Session cookie `Secure` flag: `auto` (Secure when the request is HTTPS), `true`, `false` |
-| `TRUST_PROXY`   | unset      | Number of reverse-proxy hops in front of the app. **In production behind a reverse proxy / load balancer, set the exact hop count (usually `1`). Never set it to `true`** (that trusts any client-supplied `X-Forwarded-For`, so clients can fake their IP and bypass the login rate limit; the app refuses to start with `true`). Leave unset only when clients connect directly. The app logs a warning in production when it is unset |
-| `SESSION_SCHEMA` | `legacy_session` | Postgres schema for the session table |
-| `SESSION_TABLE_AUTO_CREATE` | `false` | `true` lets the app create the session schema/table at startup (needs `CREATE` on the database). Otherwise create it before deploying (see below) |
-| `SESSION_DATABASE_URL` | `DATABASE_URL` | Connection string for the session store only (see "Database TLS") |
-| `SESSION_MAX_AGE_HOURS` | `8` | Session idle lifetime (rolling: renewed on each request) |
-| `LOGIN_RATE_LIMIT_IP` / `LOGIN_RATE_LIMIT_USER` | `20` / `10` | Login attempts per 15 minutes per IP / per username from the same IP |
-| `BCRYPT_ROUNDS` | `12`       | bcrypt cost factor                       |
-
-> `DATABASE_URL` is constructed automatically by Docker Compose from the above variables.
-
-### Security notes
-
-- **Passwords** are stored as bcrypt hashes (`$2b$`, via the native `@node-rs/bcrypt`).
-  Existing plaintext passwords are upgraded automatically the next time each user logs in.
-  To hash all remaining plaintext passwords at once (optional, safe to re-run):
-  ```bash
-  npm run db:hash-passwords -- --dry-run   # count only
-  npm run db:hash-passwords
-  ```
-- **Login names are not unique** (`person.Name`). Login checks at most 10 accounts with the
-  same name (case-insensitive) against the password; an 11th same-named account could not log in.
-- When adding an employee, HR sees the generated temporary password once on the confirmation
-  page. Only its hash is stored. Editing an employee never changes their login name.
-- Changing a password signs out the user's other sessions.
-
-### Deploying this release (pre-deploy steps and rollback)
-
-1. **Create the session table before deploying.** Sessions are stored in Postgres in
-   `legacy_session.session`, outside the `public` schema so `prisma db push` never touches it.
-   Run once, as a role that may create schemas (idempotent):
-   ```bash
-   npm run db:session-table          # or:
-   psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f prisma/legacy-session-table.sql
-   ```
-   If the app connects as a different role, grant it `USAGE` on the schema and
-   `SELECT, INSERT, UPDATE, DELETE` on the table (see the end of the .sql file). The app
-   itself needs no `CREATE` privilege. At startup it only checks the table exists and exits
-   with a clear message if it does not (unless `SESSION_TABLE_AUTO_CREATE=true`). If the
-   database is unreachable at startup it logs a warning and starts anyway.
-2. Set `SESSION_SECRET`, and `TRUST_PROXY` (exact hop count) if behind a proxy.
-3. Deploy. Everyone has to log in once (sessions move from memory to Postgres).
-4. **No rollback after the first login.** Every successful login converts that user's
-   plaintext password to a bcrypt hash, and the old code can only compare plaintext. Once any
-   password is hashed, redeploying the old code locks those users out. Roll back only with a
-   database restore taken before the deploy (losing data written since), or by resetting the
-   affected passwords. Fix forward instead.
-5. Run `npm run db:hash-passwords` **only after the release is confirmed stable**. It hashes
-   every remaining plaintext password, after which a rollback would lock out everyone.
-
-### Database TLS (`sslmode`) — Prisma vs node-postgres
-
-The session store uses node-postgres (`pg`), which reads `sslmode` in `DATABASE_URL`
-differently from Prisma 6:
-
-| `sslmode` in URL | Prisma 6 | node-postgres 8 (`pg-connection-string` 2.x) |
-|---|---|---|
-| (none) | `prefer` (default): TLS if available | no TLS |
-| `prefer` | TLS if available, else plaintext | TLS required **and** certificate + hostname verified (treated as `verify-full`) |
-| `require` | TLS required; certificate not verified (`sslaccept` defaults to `accept_invalid_certs`) | TLS required **and** certificate + hostname verified (treated as `verify-full`) |
-| `require&uselibpqcompat=true` | (Prisma does not document this parameter) | TLS required, certificate not verified (libpq semantics) |
-
-Sources: Prisma 6 PostgreSQL connection arguments docs; `pg-connection-string` README
-(it also prints a warning that `prefer`/`require`/`verify-ca` are aliases for `verify-full`).
-Consequences:
-- With `sslmode=require` and a certificate Node does not trust (e.g. a managed database's
-  private CA), Prisma connects but the session store fails. Fix properly by making `pg` trust
-  the CA: `NODE_EXTRA_CA_CERTS=/abs/path/ca.pem`, or `sslrootcert=/abs/path/ca.pem` in the URL
-  (use an absolute path: Prisma resolves certificate paths relative to `./prisma`, `pg` relative
-  to the working directory). Prisma only verifies the certificate if you also add
-  `sslaccept=strict`. As a stopgap, set `SESSION_DATABASE_URL` to the same URL with
-  `&uselibpqcompat=true`, which matches Prisma's unverified behaviour.
-- With no `sslmode`, Prisma may use TLS while `pg` connects without it. Put an explicit
-  `sslmode` in production URLs.
-- Prisma-only parameters such as `schema=public` and `connection_limit` are ignored by `pg`
-  (tested).
-
----
-
-## Running Locally (without Docker)
-
-### Prerequisites
-- Node.js 22+ (Docker image uses Node 26)
-- PostgreSQL 16+
-
-### Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/uts58/HR-Management-System.git
-   cd HR-Management-System
+   git pull
+   docker compose build
+   docker compose run --rm web-migrate
+   docker compose up -d
    ```
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+Backups, rollback and the topology are in
+[`docs/platform/deployment.md`](docs/platform/deployment.md).
 
-3. Copy the example env file and update `DATABASE_URL` for your local Postgres:
-   ```bash
-   cp .env.example .env
-   ```
+## Screenshots
 
-4. Create the database tables, the session table and seed data:
-   ```bash
-   npm run db:push
-   npm run db:session-table
-   npm run db:seed
-   ```
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/login.png" alt="Sign in"><br><sub>Sign in</sub></td>
+    <td width="50%"><img src="docs/images/employees.png" alt="Employees"><br><sub>Employees</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/images/leave-requests.png" alt="Pending leave requests"><br><sub>Pending leave requests</sub></td>
+    <td width="50%"><img src="docs/images/appraisals.png" alt="Appraisals"><br><sub>Appraisals</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/images/notices.png" alt="Notice board"><br><sub>Notice board</sub></td>
+    <td width="50%"><img src="docs/images/dashboard-dark.png" alt="Dashboard in dark mode"><br><sub>Dashboard in dark mode</sub></td>
+  </tr>
+</table>
 
-5. Start the application:
-   ```bash
-   npm start
-   ```
+## Documentation
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+- [`docs/architecture/`](docs/architecture/): ADRs and service contracts
+- [`docs/data/`](docs/data/): schema decisions
+- [`docs/qa/`](docs/qa/): test strategy
+- [`docs/platform/`](docs/platform/): deployment
 
----
+## License
 
-## NPM Scripts
-
-| Script             | Description                                           |
-|--------------------|-------------------------------------------------------|
-| `npm start`        | Start the application                                 |
-| `npm run db:push`  | Push the Prisma schema to the database (no migration history) |
-| `npm run db:seed`  | Seed departments, positions, admin user, and sample employee |
-| `npm run db:session-table` | Create the Postgres session schema/table (pre-deploy, idempotent) |
-| `npm run db:hash-passwords` | Hash any remaining plaintext passwords (one-off, optional; only after the release is stable) |
-| `npm run migrate`  | Run Prisma migrations (development)                   |
-| `npm run generate` | Regenerate the Prisma client after schema changes     |
-
----
-
-## Contribution
-
-Open to improvements and optimizations. Feel free to fork, submit PRs, or suggest features.
+See [`LICENSE`](LICENSE).

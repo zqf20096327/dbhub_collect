@@ -256,6 +256,13 @@ See [script notes](scripts/README.md) for details.
     - `all`
     - `none`
 - `NEXT_PUBLIC_SITE_FEEDS = 1` enables feeds at `/feed.json` and `/rss.xml`
+- `BLOCK_AI_CRAWLERS`
+  - Configures AI crawler rules in `/robots.txt`
+  - Accepted values:
+    - `all`: blocks all known crawlers from every page
+    - `some` (default): blocks training crawlers, allows search crawlers on pages but not generated images
+    - `none`: blocks nothing
+  - Admin, API, and internal image paths are disallowed for all crawlers unless set to `none`
 
 ### Scripts & Analytics
 - Web Analytics
@@ -489,6 +496,9 @@ Thank you ❤️ translators: [@sconetto](https://github.com/sconetto) (`pt-br`,
 #### How do I edit multiple photos?
 > In the admin menu, select "Batch edit ..." From there, you can perform bulk tag, favorite, and delete actions.
 
+#### Why do my images appear flipped/rotated incorrectly?
+> For a number of reasons, only EXIF orientations: 1, 3, 6, and 8 are supported. Orientations 2, 4, 5, and 7—which make use of mirroring—are not supported. Additionally, photos from earlier app installations may have incorrectly optimized photos. Try choosing "Regenerate optimized files" from the admin menu to mitigate.
+
 #### Why don't my photo changes show up immediately?
 > This template statically optimizes core views such as `/` and `/grid` to minimize visitor load times. Consequently, when photos are added, edited, or removed, it might take several minutes for those changes to propagate. If it seems like a change is not taking effect, try navigating to `/admin/configuration` and clicking "Clear Cache."
 
@@ -539,9 +549,6 @@ Thank you ❤️ translators: [@sconetto](https://github.com/sconetto) (`pt-br`,
 
 #### How do I hide Fujifilm content such as a recipes and film simulations?
 > This can be accomplished by setting `NEXT_PUBLIC_CATEGORY_VISIBILITY` (which has a default value of `tags,cameras,lenses,recipes,films`) to `tags,cameras,lenses`.
-
-#### Why do my images appear flipped/rotated incorrectly?
-> For a number of reasons, only EXIF orientations: 1, 3, 6, and 8 are supported. Orientations 2, 4, 5, and 7—which make use of mirroring—are not supported.
 
 #### Why does my image placeholder blur look different from photo to photo?
 > Earlier versions of this template generated blur data on the client, which varied visually from browser to browser. Data is now generated consistently on the server. If you wish to update blur data for a particular photo, edit the photo in question, make no changes, and choose "Update."

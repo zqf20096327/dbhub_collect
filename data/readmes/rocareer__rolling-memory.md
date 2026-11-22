@@ -1,12 +1,14 @@
 # Rolling-Memory
 
-**[English](README.md) · [简体中文](docs/zh-CN/README.zh-CN.md) · [Official Website](https://rolling-memory.rocareer.com/) · [Documentation Hub](docs/README.md) · [Token Math & Falsification](docs/token-economics.md) · [FAQ](docs/faq.md) · [Benchmarks](docs/benchmarks.md) · [Declaration & Disclaimer](DECLARATION.md)**
+**[English](README.md) · [简体中文](docs/zh-CN/README.zh-CN.md) · [Official Website](https://rolling-memory.rocareer.com/) · [AML Leaderboard](https://agentmemories.ai/leaderboard/) · [Documentation Hub](docs/README.md) · [Token Math & Falsification](docs/token-economics.md) · [FAQ](docs/faq.md) · [Benchmarks](docs/benchmarks.md) · [Contributors](CONTRIBUTORS.md) · [Declaration & Disclaimer](DECLARATION.md)**
 
-**Rolling Memory** is a source-available, local-first memory tool for AI coding agents — Claude Code, Codex, OpenCode, Cursor, Windsurf, Cline, ZCode, and more — built on the **Rolling Autonoetic Memory Engine**. It indexes supported conversation sources and mounted files locally for connected agents to query through one MCP tool: `recall`. See the [integration guide](docs/harness.md#45-conversation-collection-and-manual-import) for collection limits and manual import. **No cloud required, no vectors, no background LLM calls**; free for every noncommercial use.
+**Rolling Memory** is a source-available, local-first memory tool for AI coding agents — Claude Code, Codex, OpenCode, Cursor, Windsurf, Cline, ZCode, and more — built on the **Rolling Autonoetic Memory Engine**. It indexes supported conversation sources and mounted files locally so connected agents can query them through one MCP tool: `recall`. See the [integration guide](docs/harness.md#45-conversation-collection-and-manual-import) for collection limits and manual import. **No cloud required, no vectors, no background LLM calls**; free for every noncommercial use.
 
-![Rolling Memory Live Console — local vault telemetry, MCP recall ledger and memory asset growth](docs/assets/live-console.webp)
+**Independent benchmark result:** on the **Agent Memory Leaderboard (AML) Cycle 2** — closed-source methods board, code track — Rolling Memory ranks **No. 1 on the “Noisy new features” code sub-capability with an 80.39% resolution rate**, the highest of any entrant for that sub-capability. The submission used the same local engine as this repository, with no track-specific tuning. Results were published on 2026-11-19. See the [official AML leaderboard](https://agentmemories.ai/leaderboard/).
 
-*The built-in **Live Console** (`rolling-memory panel`) at a glance — vault telemetry, the MCP `recall` ledger, and 3-layer memory growth, all running on your machine with zero external network requests.*
+![Agent Memory Leaderboard Cycle 2 — Rolling Memory ranks No. 1 on the closed-source code track for Noisy new-feature resolution at 80.39%](docs/assets/aml-cycle2-code-noisy-new-feature.webp)
+
+*AML Cycle 2 (published 2026-11-19) · closed-source methods board · code track · code sub-capability “Noisy new features”: **No. 1 — 80.39% resolution rate**. [Official leaderboard →](https://agentmemories.ai/leaderboard/)*
 
 > **Get started**: Run `curl -fsSL https://github.com/rocareer/rolling-memory/raw/main/install.sh | bash` (or `bash install.sh` from a local checkout) to wire your coding assistants, then just chat normally. Whenever you need to trace back history, ask something like *"Where did we fix that bug last time?"* See the [Quick Start Guide](docs/harness.md) for details.
 
@@ -28,11 +30,17 @@ In everyday use, that comes down to four practical things: **genuinely free, rea
   ```
 - **Built-in USB portable mode**: Because both the binary and the SQLite vault are self-contained files, we also included a USB portable mode (see [`docs/usb-portable.md`](docs/usb-portable.md)) so you can put the tool and your memory vault onto a thumb drive and carry them around. It is still experimental and not thoroughly tested yet, and it comes with a real prerequisite: **for project-specific memories to be useful on another machine, you have to be working on the same project there**. If you are curious and like tinkering, feel free to try it out and tell us what works and what does not.
 
+All of that runs behind one local binary and one local SQLite vault. The built-in **Live Console** puts the moving parts on one screen:
+
+![Rolling Memory Live Console — local vault telemetry, MCP recall ledger and memory asset growth](docs/assets/live-console.webp)
+
+*The built-in **Live Console** (`rolling-memory panel`) at a glance — vault telemetry, the MCP `recall` ledger, and 3-layer memory growth, all running on your machine with zero external network requests.*
+
 > **About this release**: This repository ships **pure local mode (`local_plain`)**: recall, storage, and consolidation all run in the local vault, with no memory-plane network requests. The only outbound calls are the evaluation LLM endpoint you configure, the optional upstream benchmark-corpus download, and the optional update check. A separate **cloud memory service** — ciphertext-only by design and aimed at advanced and enterprise users — is offered by application and is not part of this repository; see [DECLARATION.md](DECLARATION.md) for the release and license boundary and [SUPPORT.md](SUPPORT.md) for how to get help.
 
 ---
 
-## 1. What does it actually do for you in daily work? (Every saved turn counts)
+## 1. What it does for you in daily work (every saved turn counts)
 
 It indexes supported conversation sources and mounted local documents using local lexical and statistical signals, and gives your agent one MCP tool — `recall` — to look up available records and their source coordinates.
 
@@ -49,16 +57,16 @@ Of course, **if `recall` misses and returns nothing useful, that extra turn cost
 > On our primary development machine (where `110,340` LLM requests over the past 7 days averaged **`272.0k` input tokens per call** — and the last 24 hours averaged **`320.1k`**), the last 24 hours produced **`33` deduplicated turn-review cards**: **`6` (18.2%) honestly reported `0` saved turns** (two recall calls timed out under heavy load; four turns needed no lookup at all), while **`27` (81.8%) pinpointed exact file coordinates or past fixes and saved `116` blind search turns in total (≈`4.3` per hit)**. A model-free cross-check agrees: of the **`46` recall outcomes settled by our deterministic post-hoc adoption audit in the last 24 hours, `41` (89.1%) were actually adopted** in the agents' subsequent tool calls or replies (`38` direct file/symbol coordinates + `3` context facts) — versus **`61.1%`** across the longer retained ledger.
 > Extrapolating that 24-hour audited pace across a full week (**`× 7 days`**) projects to **`812` avoided blind turns per week** — or **`162.4M` gross tokens saved per week (`158.2M` practical net; `154.0M` strictest net, assuming every zero-turn card cost a full standalone `200k` turn)** at a conservative **`200k` tokens per turn**. At the latest official API pricing for **GPT-6 Astra, Claude Fable 5.2, and Gemini 4 Argon**, even after factoring in an 85% prompt-cache read ratio, that translates to roughly **`$74.7–$885/week`** in real blended savings on a single heavy developer machine (**`$325–$3,248/week`** at standard uncached input rates). Full breakdown and pricing table in [`docs/token-economics.md` §6](docs/token-economics.md).
 
-**To be completely upfront: we do not promise it will always help.** Lexical retrieval has real limits, and we are actively working to make it better —especially stripping out more log noise and improving recall accuracy. Suggestions, bug reports, and code or algorithmic contributions are warmly welcome so we can improve it together.
+**To be completely upfront: we do not promise it will always help.** Lexical retrieval has real limits, and we are actively working to make it better — especially stripping out more log noise and improving recall accuracy. Suggestions, bug reports, and code or algorithmic contributions are warmly welcome so we can improve it together.
 
 ---
 
 ## 2. Why keep verbatim records + local lexical-statistical search?
 
-Many memory systems ask an LLM to summarize conversations at ingestion time, or chunk and embed everything into dense vectors. Those approaches have clear strengths (summaries are compact; vectors bridge synonyms), but we chose to build a solid local verbatim baseline first for three practical reasons:
+Many memory systems ask an LLM to summarize conversations at ingestion time, or chunk and embed everything into dense vectors. Those approaches have clear strengths (summaries are compact; vectors bridge synonyms), but we chose to build a solid local verbatim baseline first for four practical reasons:
 
 1. **Original records hold all the facts; ingestion-time rewriting doesn't just lose detail — it compounds error**: There is a common myth that LLM-based summarization is a form of "distillation." But if your agent can misinterpret context, so can the LLM tasked with summarizing it. **Using a potentially hallucinating model to rewrite an already potentially misinterpreted conversation is "error compounding."** Worse, once the original transcript is "summarized" and discarded, the truth is lost forever. Some systems propose "costly explicit iterative memory correction," but that leads to a paradox: **How do you detect the error? And how do you ensure the incorrect memory doesn't poison subsequent reasoning before you catch it?**
-   Our ironclad rule is simple: **history happened as it happened.** We do not rewrite, compress, or "polish" records, because every rewrite is a new opportunity to bake hallucination and factual error into your long-term memory. A passage retrieved today is the same as the one retrieved next year, ensuring an unshakeable chain of evidence.
+   Our rule is simple: **history happened as it happened.** We do not rewrite, compress, or "polish" records, because every rewrite is a new opportunity to bake hallucination and factual error into your long-term memory. A passage retrieved today is the same as the one retrieved next year, ensuring an unshakeable chain of evidence.
 2. **Your agent already reads well — why pay a large upfront LLM extraction tax just to save a few dozen tokens at read time?**: The one obvious benefit of LLM summarization is that the extracted note may be a few dozen or a few hundred tokens shorter when retrieved later. Compared against a `100k–400k` per-turn context, however, saving a few hundred tokens at consumption time is tiny — yet to get that summary, you have to pay the **LLM comprehension cost** at write time, whether your active agent spends an extra `100k–400k` round-trip calling a "save memory" tool mid-task, or a separate sidecar LLM reads the context to extract facts. Since your coding agent already has strong reading comprehension and knows your current question, it is much more economical to run zero-cost deterministic format cleanup (stripping protocol wrappers, `<thinking>` blocks, and duplicate log lines) and hand the verbatim passage to the agent on demand.
 3. **Code identifiers, errors, and file paths live in the literal words — while dense vectors blur exact symbols and AI coding sessions use consistent terminology**: A large share of engineering lookups (project codenames, function names, config keys, error strings, ports, version tags, dates, file paths) are exact lexical anchors. Dense embedding vectors work by smoothing text into a continuous semantic space — which bridges loose synonyms, but makes near-identical symbols like `err_code_4012` vs. `err_code_4013`, port `8008` vs. `1828`, `v0.0.1` vs. `v0.0.2`, or `2026-05-12` vs. `2026-05-19` look almost indistinguishable (`>0.98` cosine similarity), while static embedding vocabularies struggle with newly coined identifiers and require heavy model downloads or minutes of CPU fan spin to backfill tens of thousands of historical turns. Just as importantly, in a coding harness you are typically working with the same model on the same codebase: unlike casual human conversation, an AI assistant writes structured prose without ungrammatical phrasing, dropped subjects, or ambiguous pronouns, and its vocabulary stays consistent across turns.
 4. **Clear division of labor — skipping heavy stacks is a deliberate engineering choice, not a lack of familiarity**: When you work in Claude Code, Cursor, or ZCode, a frontier LLM is already sitting in front of you. A local memory tool does not need to run a second small model in the background to guess semantics; its job is to surface verbatim, high-information evidence in tens of milliseconds and leave 100% of semantic reasoning to your host agent. Our team knows the heavy LLM-extraction + vector + knowledge-graph route firsthand — across earlier heavyweight memory prototypes, we achieved a **92.79** score on the LoCoMo benchmark. Building and running those heavy pipelines is precisely what made their hidden token bills and ingestion latency obvious to us, and motivated us to see how far a genuinely free, lightweight local system can go for everyday coding work.
@@ -79,9 +87,26 @@ In daily use, the agent does not need to call a manual "write memory" tool: a ba
 
 ---
 
-## 4. Public benchmark results and where it falls short
+## 4. Independent evaluation and public benchmark results
 
-We evaluated this local retrieval pipeline on two public long-term memory benchmarks: the University of Cambridge **ATM-Bench** (11,034 personal multimodal text records) and **LoCoMo** (5,882 dialogue turns across 1,540 questions). All figures below can be recomputed directly from the archived per-question retrieval outputs (JSONL).
+### 4.1 AML Cycle 2 — official third-party result
+
+The **Agent Memory Leaderboard (AML)** is a public comparison organized by Datawhale with nearly 30 universities and research institutions. Every entrant is scored on the same tasks with the platform's generation and scoring models, so the differences mainly reflect the memory system itself. Rolling Memory entered the closed-source methods board of the code track with the same local engine as this repository and no track-specific tuning.
+
+| Code-track reading (AML Cycle 2, published 2026-11-19) | Result | Standing |
+|---|---|---|
+| **Noisy new-feature resolution rate** | **80.39%** | **No. 1 — highest of any entrant** |
+| Noisy overall resolution rate | 62.00% | tied 3rd on the closed-source board |
+| Official combined code-track ranking (Overall) | 61.00 | 5th |
+| Noisy bug-fix resolution rate | 52.53% | mid-pack |
+
+The card at the top of this page is the official leaderboard graphic for the new-feature sub-capability. Read it at that granularity: **80.39% is a sub-capability result, not a claim that Rolling Memory leads every code-memory dimension.** The same track's bug-fix sub-capability (52.53%) shows the other half: reusing a repository's own history for new feature work is where verbatim, high-information recall transfers best; pinning down an exact fix that is still valid for the current code version is a different and harder retrieval problem we are still improving. The official combined code-track ranking is 5th, and the three AML tracks use different tasks and metrics and are not comparable with each other.
+
+Official leaderboard: <https://agentmemories.ai/leaderboard/>
+
+### 4.2 ATM-Bench and LoCoMo — reproducible local readings
+
+We also evaluated this local retrieval pipeline on two public long-term memory benchmarks: the University of Cambridge **ATM-Bench** (11,034 personal multimodal text records) and **LoCoMo** (5,882 dialogue turns across 1,540 questions). All figures below can be recomputed directly from the archived per-question retrieval outputs (JSONL).
 
 > **Metric note**: ATM-Bench `Recall@10` below strictly follows the official evaluator (`comprehensive_eval.py`), which computes the **mean per-question gold-set coverage**. Binary reachability (`Any-Hit@10`, whether at least one gold item appears in the top 10) and full coverage (`All-Hit@10`, whether every gold item appears in the top 10) are listed separately as auxiliary diagnostics and are never mixed with official `Recall@10` when comparing against public baselines. Daily plugin usage (`rmem recall` / MCP `recall`) and the `rmem eval` runner share the exact same local engine, sentence-harmonic encoder, and ranker.
 
@@ -98,11 +123,13 @@ We evaluated this local retrieval pipeline on two public long-term memory benchm
 - **Current product arm**: the ATM rows above are the current `local_plain` product-arm readings (corpus `c9c4cc55…`, question sets `3c4cbf84…` / `f6f63ff1…`), re-verified 2026-11-20. Composite score (0.70 × Main R@10 + 0.30 × Hard R@10) = **73.67**. The frozen v0.0.1 readings (77.21% / 46.12%) are kept in the changelog as historical values; do not mix them with the current rows.
 - **Latency** is recorded per run and depends on cache state, CPU, and concurrency; treat the values above as a single-run reference, not a cross-run benchmark.
 
+### 4.3 How to read these numbers
+
 These results show both what local lexical-statistical search can do and where its limits lie:
 
 - **About one in seven Main questions still misses the Top-10 (and why that matters less in coding harnesses)**: On ATM Main-1013, **148 questions (14.61%)** have no gold evidence in the top 10, and **86 questions** have none in the top 50. On Hard-31, **6 questions** miss the top 10 (and **4** miss the top 50). Inspecting those misses shows they are mainly cases with **zero lexical overlap** between the question and the record. That happens often in **human-to-human casual conversation** — for example, nicknames vs. formal names (calling someone "Old Zhang" in one place and "Zhang San" in another), dropped subjects, or vague references (*"that project… that person… got it done"*). In **coding harness workflows**, however, you typically use the same model to develop a specific project: its output is consistent and well-formed, free of ungrammatical phrasing or ambiguous references, and anchored on the same module names, symbols, and file paths. That environment fits this system's lexical-statistical architecture naturally, and dense vectors or graphs add less value here than people often assume (we are experienced in that area too — our team previously achieved a **92.79** score on LoCoMo with heavyweight vector/graph/LLM architectures; leaving them out of the default local path here is a practical engineering choice).
 - **How much a local dense vector adds (controlled test)**: On the same 11,034 ATM records, running a local `all-MiniLM-L6-v2` vector retriever alone gives an official `Recall@10` of 67.35% on Main and 29.58% on Hard. In that controlled run (pre-fusion reference baselines: Main 76.72% / Hard 41.93%), fusing the vector model with our lexical-statistical backbone at a **small weight ($w_{\mathrm{vec}} = 0.15$)** via RRF raised Main `Recall@10` to **78.42% (+1.70 percentage points, +17 net hit questions)** and Hard to **42.96%–43.20%**; however, fusing them at **equal weight ($w_{\mathrm{vec}} = 1.00$)** pulled Hard `Recall@10` down to **38.68% (-3.25 percentage points)**.
-- **Same-protocol reference points (not an official leaderboard submission)**: Under the same standard fixed 2B SGM text protocol, publicly reported ATM-Bench official `Recall@10` baselines include MemPalace (76.40%), ATM-RAG (68.70%), HippoRAG2 (66.40%), and Mem0 (61.90%) on Main; and MemoryOS (32.70%), HippoRAG2 (31.90%), ATM-RAG (30.40%), and Mem0 (23.70%) on Hard. Our numbers are local recomputations — **this system is not an official leaderboard submission and claims no official rank**.
+- **Same-protocol ATM-Bench reference points (reference only — this is not an ATM-Bench official submission)**: Under the same standard fixed 2B SGM text protocol, publicly reported ATM-Bench official `Recall@10` baselines include MemPalace (76.40%), ATM-RAG (68.70%), HippoRAG2 (66.40%), and Mem0 (61.90%) on Main; and MemoryOS (32.70%), HippoRAG2 (31.90%), ATM-RAG (30.40%), and Mem0 (23.70%) on Hard. Our ATM numbers are local recomputations and are **not an official ATM-Bench leaderboard submission**. The only official third-party leaderboard result we report is the AML Cycle 2 result in §4.1.
 
 ---
 
@@ -110,7 +137,7 @@ These results show both what local lexical-statistical search can do and where i
 
 1. **Preserving a record does not make its content true**: The memory system only tells you that a statement was recorded at a given time. That statement may have been mistaken, may now be outdated, or may contain untrusted text. Verifying whether a past record is still accurate remains the job of the human user and downstream agent.
 2. **"No LLM" and "offline" apply only to the memory plane**: Ingesting, indexing, and retrieving memories make no model calls and no network requests. However, if your coding agent is connected to a remote LLM API (such as Claude, GPT, or DeepSeek), the passages returned by `recall` will be sent to that model provider when the agent answers your prompt.
-3. **Scores reflect iterative development on these benchmarks**: The weighting rules and heuristics were refined through multiple rounds of error analysis on ATM-Bench and LoCoMo; they should not be read as blind zero-shot generalization to unseen datasets.
+3. **Scores reflect iterative development on these benchmarks**: The weighting rules and heuristics were refined through multiple rounds of error analysis on ATM-Bench and LoCoMo; they should not be read as blind zero-shot generalization to unseen datasets. The AML result is a single Cycle 2 run on one code-track board, not a guarantee of repeatability across future cycles.
 4. **Language and scale coverage need broader testing**: Current evaluations focus on English personal archives and long dialogues (~$10^4$ records). Other languages, heavy code-switching, and million-record streaming workloads need further testing and community feedback.
 5. **Provided "AS IS"**: This software is provided without warranty of any kind. See [DECLARATION.md](DECLARATION.md) for the full disclaimer.
 
@@ -182,7 +209,7 @@ rolling-memory update --release-base https://your-mirror.example.com/releases/la
 
 You can also click **Version & Update** in the top bar of the Web Console (`Memory Overview` or `Memory Console`) to inspect local SHA-256 digests, check for updates, and upgrade in place from the browser. Updating only swaps binaries, static web assets, and host wiring — it **never modifies or overwrites your local SQLite memory vault (`memory.db`)**.
 
-> **Early-stage default**: new installs follow the `dev` channel (`main`). Switch to `stable` or `beta` anytime with `rolling-memory config set update.channel stable` or the console's update dialog. See the full [Installation & Upgrade Guide](docs/install-upgrade.md) for channels, breaking changes, backups and rollback.
+> **Upgrade defaults**: published installs follow the `stable` channel and install verified updates in the background; source installs follow `dev` and notify. Switch channels or the `update.auto` policy anytime in the console's update dialog or with `rolling-memory config set update.channel`. See the full [Installation & Upgrade Guide](docs/install-upgrade.md) for channels, breaking changes, backups and rollback.
 
 ---
 
@@ -266,6 +293,7 @@ Instruction files and host memory features can complement Rolling Memory: concis
 ## 11. License, contributing, and acknowledgments
 
 - **Contributing**: Issues, suggestions, and pull requests are very welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and [SUPPORT.md](SUPPORT.md). This project uses a "human-defined invariants & acceptance criteria + AI-assisted implementation" workflow; the full disclaimer is in [DECLARATION.md](DECLARATION.md).
+- **Contributors**: External contributions are credited in [CONTRIBUTORS.md](CONTRIBUTORS.md). Thanks to [@Buyou27](https://github.com/Buyou27) for the Windows PowerShell 5.1 compatibility fix in [`install.ps1`](install.ps1) ([#2](https://github.com/rocareer/rolling-memory/pull/2)).
 - **License**: Released under the **[PolyForm Noncommercial License 1.0.0](LICENSE)** (SPDX: `PolyForm-Noncommercial-1.0.0`). Full source code — including the client SDK under `sdk/` ([license copy](sdk/LICENSE)) — is free to use, modify, and share **for any noncommercial purpose**; **commercial use and commercial distribution (including SaaS hosting and commercial embedding) require a separate written commercial license**. Third-party attributions are in [NOTICE](NOTICE).
 - **Acknowledgments**: The web administration console is a derivative of **[AI GO ADMIN](https://github.com/ai-go-hub/ai-go-admin)** (Apache-2.0; Go + Gin + Vue 3 admin framework — mirrors: [Gitee](https://gitee.com/ai-go-hub/ai-go-admin) · [AtomGit](https://atomgit.com/ai-go-hub/ai-go-admin)), whose UI lineage traces back to **[BuildAdmin](https://gitee.com/wonderful-code/buildadmin)** (Apache-2.0, © 妙码生花). The plugin catalog page is ported from BuildAdmin `v2.3.9`. Per-file attribution and modification notes are registered in [NOTICE](NOTICE) §2.
 

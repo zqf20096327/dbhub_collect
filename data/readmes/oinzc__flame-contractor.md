@@ -94,6 +94,33 @@ cd desktop && npm ci && npm run build
 # 安装包输出在 desktop/src-tauri/target/release/bundle/nsis/
 ```
 
+## 快速开始 · Android 独立安装包（手机 / 平板免电脑运行）
+
+适合希望在 Android 手机、备用平板上脱离电脑和服务器完全独立运行的用户：
+
+- **系统要求**：Android 8.0+（`minSdk 26`），并保持设备系统 **Android System WebView** 更新至较新版本（内置桌面模式 Chromium `WebView` 离屏执行引擎，无需电脑或 Docker）。
+- **下载安装与使用流程**：
+  1. 在 [GitHub Releases](https://github.com/oinzc/flame-contractor/releases) 下载 `FlameContractor-*-android-universal-release.apk`（也可由 CI 构建调试包或在本地编译安装）。
+  2. 打开 App 在「今日」页点 `[扫码/重登]`，使用另一台设备上的抖音扫码登录网页聊天端（遇到风控时直接在页内完成身份验证；已登录状态切换账号时会先提示保留或清理旧号目标后再继续）。
+  3. 切到「好友」页点右上角「手动扫描同步」，在抽屉中按官方火花置顶与唯一 ID 消歧结果勾选要续火的好友导入；在「模板」页维护固定文案、星期轮换 LRU 文案池或原生「比心」表情模板。
+  4. 在「设置」页配置每日同日发送窗口（`00:00–23:55`，不支持跨午夜）与可选 Bark 通知，并按 **后台稳定性体检** 引导完成以下 4 项授权以防国产系统误杀：
+     - 允许通知权限（开启 `daily_summary` 与 `alerts_urgent` 告警通道）
+     - 电池省电策略设为「无限制 / 忽略电池优化」
+     - 允许「精确闹钟（`SCHEDULE_EXACT_ALARM`）」权限
+     - **小米 / MIUI / HyperOS** 设备务必在系统设置中开启 **自启动** 并关闭对应省电限制
+- **零打扰定时执行与安全不变量**：到点由 `AlarmManager` + 30 分钟纯 SQLite `WorkManager` 兜底拉起短时离屏 `dataSync` 前台服务，息屏/桌面状态下静默完成续火并自动释放；发送超时或中断统一收敛为「待人工复核 (`UNKNOWN_REQUIRES_REVIEW`)」，未人工终裁前全路径硬禁止重复发送。
+
+### 本地自行构建 Android APK
+
+需要 JDK 17 与 Android SDK（`compileSdk 35`）：
+
+```bash
+cd android
+./gradlew verifySelectorBundleSync :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
+# 调试 APK 输出在 android/app/build/outputs/apk/debug/app-debug.apk
+# 也可构建未签名 Release APK：./gradlew :app:assembleRelease
+```
+
 ## 快速开始 · Docker（服务器 / 24 小时常驻）
 
 需要 Docker Desktop（Windows/macOS）或 Docker Engine + Compose（Linux）。官方预构建镜像 `ghcr.io/oinzc/flame-contractor:latest` 同时支持 `linux/amd64` 与 `linux/arm64`，容器内自带 Chromium，宿主机不需要装浏览器或下载源码。
@@ -242,6 +269,7 @@ npm run build    # tsc --noEmit && vite build
 backend/    FastAPI + SQLModel + SQLite + Alembic + asyncio 调度 + Playwright
 frontend/   React + TypeScript + Vite 控制台
 desktop/    Tauri v2 Windows 独立窗口桌面壳与 NSIS 打包配置
+android/    Kotlin + Jetpack Compose + Room + 桌面模式 WebView 独立 Android 客户端
 docs/       PRD、技术设计、API 文档、数据库 Schema、Docker 部署
 ```
 

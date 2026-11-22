@@ -12,7 +12,7 @@
 
 > "It's like Gmail for your coding agents!"
 
-A mail-like coordination layer for AI coding agents, exposed as an MCP server with 45 tools and 25 resources, Git-backed archive, SQLite indexing, an interactive 16-screen TUI, a server-rendered web UI, and an agent-first robot CLI. The Rust rewrite of the [original Python project](https://github.com/Dicklesworthstone/mcp_agent_mail) (1,700+ stars).
+A mail-like coordination layer for AI coding agents, exposed as an MCP server with 47 tools and 25 resources, Git-backed archive, SQLite indexing, an interactive 16-screen TUI, a server-rendered web UI, and an agent-first robot CLI. The Rust rewrite of the [original Python project](https://github.com/Dicklesworthstone/mcp_agent_mail) (1,700+ stars).
 
 **Supported agents:** [Claude Code](https://claude.ai/code), [Codex CLI](https://github.com/openai/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli), [Oh My Pi (OMP)](https://omp.sh), [GitHub Copilot CLI](https://docs.github.com/en/copilot), and any MCP-compatible client.
 
@@ -43,7 +43,7 @@ curl -fsSL "https://raw.githubusercontent.com/Dicklesworthstone/mcp_agent_mail_r
 - [Agent Configuration](#agent-configuration)
 - [Server Modes](#server-modes)
 - [Operator CLI Surface](#operator-cli-surface)
-- [The 45 MCP Tools](#the-45-mcp-tools)
+- [The 47 MCP Tools](#the-47-mcp-tools)
 - [TUI Operations Console](#tui-operations-console)
 - [Robot Mode (`am robot`)](#robot-mode-am-robot)
 - [File Reservations](#file-reservations-for-multi-agent-editing)
@@ -91,12 +91,12 @@ vations (leases) to signal editing intent. Everything is backed by Git for human
 | **Asynchronous Messaging** | Threaded inbox/outbox with subjects, CC/BCC, acknowledgments, and importance levels |
 | **Token-Efficient** | Messages stored in a per-project archive, not in agent context windows |
 | **25 MCP Resources** | Read-only inbox, thread, reservation, tooling, identity, and attention views for cheap lookups |
-| **45 MCP Tools** | Infrastructure, identity, messaging, contacts, reservations, search, macros, product bus, and build slots |
+| **47 MCP Tools** | Infrastructure, identity, messaging, contacts, reservations, search, macros, product bus, and build slots |
 | **16-Screen TUI** | Live operator cockpit for messages, threads, agents, search, reservations, metrics, health, analytics, attachments, archive browsing, and ATC |
 | **Web UI** | Server-rendered `/mail/` routes for human oversight, unified inbox review, search, attachments, and overseer messaging |
 | **Robot Mode** | 19 agent-optimized CLI subcommands with `toon`/`json` output (`md` for thread and message views) for non-interactive workflows |
 | **Git-Backed Archive** | Every message, reservation, and agent profile stored as files in per-project Git repos |
-| **Hybrid Search** | Portable lexical Search V3 uses the local Tantivy bridge. Optional FrankenSearch integration supplies semantic and hybrid routing in builds with the `hybrid` feature and the runtime opt-in `AM_SEARCH_SEMANTIC_ENABLED=true`. Without both, every query runs lexical. |
+| **Hybrid Search** | Portable releases default to lexical Search V3 through the local Tantivy bridge. Builds with `hybrid` and `AM_SEARCH_SEMANTIC_ENABLED=true` can add semantic candidates through FrankenSearch. |
 | **Pre-Commit Guard** | Git hook that blocks commits touching files reserved by other agents |
 | **Dual-Mode Interface** | MCP server (`mcp-agent-mail`) and operator CLI (`am`) share tools but enforce strict surface separation |
 
@@ -138,4 +138,5 @@ Example exchange between two agents coordinating a refactor:
 │ │ I'm reserving src/auth/** for the next hour. Can you focus on the API    │ │
 │ │ tests in tests/api/** instead?                                           │ │
 │ │ [ack_required: true]                                                     │ │
-│ └────────────────────────────────────────────────────────
+│ └──────────────────────────────────────────────────────────────────────────┘ │
+│                                                  

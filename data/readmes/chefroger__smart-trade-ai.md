@@ -109,6 +109,19 @@ Trade 的搜索和客户尽职调查功能依赖 Tavily 的 AI 搜索引擎。�
 
 > 不注册不影响对话功能，但搜索和客户背调质量会受到明显影响。
 
+### 可选：背调数据源凭证
+
+客户背调里的三个公开数据源支持额外凭证，全部可选，不配也能用（只是更容易被限流）：
+
+| 环境变量 | 作用 | 不配置时 |
+|---|---|---|
+| `TRADE_CONTACT_EMAIL` | SEC EDGAR 要求请求 UA 带真实联系邮箱 | 用项目维护者邮箱，SEC 可能拒绝请求 |
+| `GITHUB_TOKEN` | GitHub 公开资料查询配额 | 匿名 60 次/小时 |
+| `CERTSPOTTER_TOKEN` | 证书透明度查询配额 | 匿名严格限流，自动回退 crt.sh |
+
+配置方法：写进 Hermes 的环境文件 `~/.hermes/.env`（每行 `KEY=value`），重启 Trade 生效。
+这些变量只在本机进程内使用，不会上传到任何地方。
+
 ### AI 输出仅供参考
 
 Smart Trade AI 基于大语言模型（LLM）生成回复。受限于当前技术，大模型可能出现幻觉（hallucination），**所有输出内容仅供参考，不构成任何商业建议或法律依据**。涉及合同条款、报价金额、合规判断、客户背调等关键业务决策时，请务必自行核实。使用本工具所产生的任何风险由用户自行承担。
@@ -383,7 +396,7 @@ $TradeHome\venv\Scripts\python.exe server.py
 
 确需从其它设备访问界面时，可在启动前设置环境变量 `TRADE_ALLOW_REMOTE_UI=1` 显式放行 —— **这会降低安全性**：任何能访问该端口的设备都能取得 token 并冒充操作。更稳妥的远程方案仍是 SSH 隧道或反向代理 + 额外认证层，而不是直接改 bind 地址。
 
-> **免责声明**：文档中提及的 Alibaba、LinkedIn、Facebook、Instagram、TikTok、YouTube、WhatsApp 等均为其各自所有者的商标。本工具仅提供对这些平台数据的分析辅助，与上述平台无关联。制裁名单数据来源于 OFAC/UN/EU 公开数据，结果仅供参考，不构成法律意见。详见 [SECURITY.md](SECURITY.md)。
+> **免责声明**：文档中提及的 Alibaba、LinkedIn、Facebook、Instagram、TikTok、YouTube、WhatsApp 等均为其各自所有者的商标。本工具仅提供对这些平台数据的分析辅助，与上述平台无关联。制裁名单数据来源于 OFAC/CSL/UN/EU/UK 官方公开数据，结果仅供参考，不构成法律意见。详见 [SECURITY.md](SECURITY.md)。
 
 ---
 

@@ -12,7 +12,15 @@ Build the binary and run backend and frontend tests:
 ```bash
 go build -o bin/triage-hub ./cmd/triage-hub
 go test -count=1 ./...
-node --test web/review_state.test.cjs
+node --test web/*.test.cjs
+```
+
+Run the Chromium tests for legacy bookmark results, PR check expansion, and inbox focus. They load the production frontend with small, local datasets.
+
+```bash
+npm ci --prefix tests/browser
+npm exec --prefix tests/browser -- playwright install chromium
+npm test --prefix tests/browser
 ```
 
 Start the local web dashboard (listens on `http://127.0.0.1:8787` by default and boots from `seed/initial_dataset.json` if `data/tidb_triage.db` does not exist):

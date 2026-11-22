@@ -1,12 +1,20 @@
 # BioRAG — Memoria Cognitiva Biomimética y Simbólica para Agentes de IA
 
+> **Versión de trabajo en esta rama:** v36.2 — correcciones contextuales aprobadas integradas en core/MCP, activación explícita por propietario. Candidata hasta completar los gates de integración; sin tag ni publicación.
+
+## Correcciones contextuales — v36.2
+
+El MCP real incorpora `registrar_correccion`, `revisar_correccion` y `confirmar_correccion`. `recordar` y `buscar` aceptan `contexto_vigencia` explícito: priorizan evidencia aprobada sin quitar históricos ni alterar scores. La escritura está deshabilitada por defecto y requiere delegación del host stdio; no se habilita sobre SSE. Ledger y aristas `ctx_*` se confirman en una transacción de la misma DB (compatible con WAL), sin sobrescribir `largo_plazo` ni `sinapsis`.
+
+Configuración, seguridad, bootstrap sin fixtures y límites: [Guía v36.2](docs/CORE_V36_2.md). No se infiere intención libre ni se aprueba por mera lectura. La QA del laboratorio es antecedente, no una certificación automática de esta integración.
+
 > [!IMPORTANT]
 > **Repositorio de desarrollo (DEV):** `MemoryBioRAG` es el repositorio principal de desarrollo activo. La versión de trabajo y sus características vigentes pueden incluir cambios aún en curso y no constituyen por sí solos una publicación estable.  
 > Para consultar o descargar la distribución estable, visita el **[repositorio MemoryBioRAG-Stable ↗](https://github.com/dennysjmarquez/MemoryBioRAG-Stable)**.
 
 **BioRAG** es una memoria simbólica persistente para agentes de IA que aborda la pérdida de contexto entre sesiones mediante recuperación híbrida. “Biomimética” describe una inspiración de diseño; no significa que el motor simule literalmente un cerebro humano. Los resultados de rendimiento se limitan a los benchmarks y snapshots indicados.
 
-> **Versión del código:** v36.1 (canal Stable: pipeline de empaquetado y publicación; tag `v36.1` sobre el cierre v36.0). La publicación a `MemoryBioRAG-Stable` se gestiona mediante el pipeline de staging y release.
+> **Versión del código:** v36.2 (candidata en desarrollo: correcciones contextuales aprobadas integradas en core/MCP; tag `v36.1` en canal Stable). La publicación a `MemoryBioRAG-Stable` se gestiona mediante el pipeline de staging y release.
 > **Paradigma:** Motor Python + SQLite FTS5. **Sin embeddings densos, GPU ni llamadas a APIs externas** en el path de búsqueda.
 > **Motor:** Arquitectura modularizada (18 submódulos `core/memory/` + 15 submódulos `core/mcp_server/` + fachada delgada) + SQLite FTS5 WAL + PPMI-SVD (100 dimensiones) + espacio semántico de 13 ejes + grafo sináptico Hebbiano + SDM (2048 bits) + calibración conforme + activación ACT-R + Concept Hubs + validación simétrica fail-fast de sustantivos clave + **neurona de reordenamiento que aprende sola** (29 señales → 6 ocultas → 1 corrección, con piso en la fórmula a mano) + **neurona asociativa cerrada de fábrica** (5 agujas → fuerza 0–1: ¿dos recuerdos tienen que ver?; examinada, aún no decide en el motor) + enlaces del agente intocables + **destino canónico del córtex en `~/.biorag/`** + **instalador de configuración MCP para clientes compatibles**.
 > **Idiomas:** Español e inglés (stemming bilingüe, expansión simbólica con WordNet, Concept Hubs de 5 ángulos y Domain Dict).
@@ -19,15 +27,15 @@
 >
 > **v35.0:** la QA oficial sale **idéntica** antes y después de todos los cambios de la v35 (Recall@5 100.00 % · Recall@1 91.89 % · MRR 0.950 · FP 0/40, misma máquina y semilla). Detalle en [La Neurona Asociativa](#-novedades-de-la-versión-v350--la-neurona-asociativa-sináptica).
 >
-> **Validación de v36.0 en copias temporales:** no se usó la DB viva. El recuento de pytest procede de una corrida aislada registrada previamente; la QA oficial se repitió sobre una copia fresca del snapshot durante esta revisión.
-> - **Pruebas unitarias (registro previo):** `PYTHONHASHSEED=0 python -m pytest tests/` — 852 passed, 18 skipped (870 recopilados; 240.19 s), Python 3.11.2.
-> - **QA oficial (re-ejecución aislada):** `bash scripts/run_qa_suite.sh --qa-only`, con `BIORAG_QA_GATE=1` y `PYTHONHASHSEED` sin fijar — 921 casos (875 de recuperación, 40 negativos y 6 ambiguos fuera del denominador global). R@5 **100.00% (875/875)**, R@1 **93.03% (814/875)**, MRR **0.9566**, FP **0/40**; `[GATE] OK` (719.53 s). El artefacto de esta corrida está en `scripts/qa_metrics.json`.
-> - La copia medida no tenía un campeón de la neurona de ranking, así que esta no actuó. El archivo aislado `scripts/casos_fallidos.jsonl` contiene dos entradas de categoría `ambiguo`, aparte de las métricas globales de recuperación.
-> - El snapshot de referencia es `snapshots/qa_escape_qcr_20260811.db` (SHA-256 `104dd2902aaf2
+> **Validación de v36.0 en copias temporales:** no se usó la DB viva. El recuento de pytest procede de una 
 
 [...截断...]
 
-4c3ce93624492ea95a719acbdcca50f4f6bc123ac8317749796`); la QA se ejecutó sobre una copia temporal. La tabla siguiente conserva métricas históricas del baseline v33.0, no resultados de v36.0. La integración y el tag de v36.0 en `master` siguen pendientes.
+corrida aislada registrada previamente; la QA oficial se repitió sobre una copia fresca del snapshot durante esta revisión.
+> - **Pruebas unitarias (registro previo):** `PYTHONHASHSEED=0 python -m pytest tests/` — 852 passed, 18 skipped (870 recopilados; 240.19 s), Python 3.11.2.
+> - **QA oficial (re-ejecución aislada):** `bash scripts/run_qa_suite.sh --qa-only`, con `BIORAG_QA_GATE=1` y `PYTHONHASHSEED` sin fijar — 921 casos (875 de recuperación, 40 negativos y 6 ambiguos fuera del denominador global). R@5 **100.00% (875/875)**, R@1 **93.03% (814/875)**, MRR **0.9566**, FP **0/40**; `[GATE] OK` (719.53 s). El artefacto de esta corrida está en `scripts/qa_metrics.json`.
+> - La copia medida no tenía un campeón de la neurona de ranking, así que esta no actuó. El archivo aislado `scripts/casos_fallidos.jsonl` contiene dos entradas de categoría `ambiguo`, aparte de las métricas globales de recuperación.
+> - El snapshot de referencia es `snapshots/qa_escape_qcr_20260811.db` (SHA-256 `104dd2902aaf24c3ce93624492ea95a719acbdcca50f4f6bc123ac8317749796`); la QA se ejecutó sobre una copia temporal. La tabla siguiente conserva métricas históricas del baseline v33.0, no resultados de v36.0. La integración y el tag de v36.0 en `master` siguen pendientes.
 >
 > **Cada base tiene su propia neurona.** La neurona aprende con los recuerdos de la base donde vive y se guarda dentro de ella. Esta tabla mide una copia del snapshot oficial, que no trae neurona entrenada: por eso muestra la fórmula a mano sola (el piso), aunque tu neurona esté trabajando en tu DB viva. La QA ahora lo dice antes de medir y nombra el parámetro para verla: `python scripts/evaluar_qa.py --con-neurona`. Detalle en [La neurona en la QA](#la-neurona-en-la-qa-cada-base-tiene-la-suya).
 
@@ -47,12 +55,4 @@ Evaluación sobre el snapshot congelado oficial canónico (**921 casos totales e
 | **Smoke de Concept Hub (5 paráfrasis)** | **5/5 TOP-1** | Repetido sobre una copia aislada del snapshot oficial (851 nodos activos, 6 hubs y 30 puentes); evidencia focal, no sustituto de las pruebas de escala. |
 | **Abismo léxico (EXP-Q)** | **3/3 Pool · 2/3 Top-5 · 1/3 Top-1** | 3/3 descubiertos en pool de grafo; 2/3 en Top-5 (pos #1 y #4) y 1/3 en Top-1 (pos #1). |
 | **Sinónimos · Recall@5 / Recall@1** | **100% (55/55) / 56.36%** | Cobertura total en Top-5; el 43.64% restante queda entre Top-2 y Top-5. |
-| **Por tema · Recall@5 / Recall@1** | **100% (65/65) / 63.08%** | Cobertura total en Top-5; ordenamiento Top-1 guiado por Jaccard y PPMI-SVD (MRR: 0.772). |
-| **Pregunta natural · R@5 / R@1** | **100% (65/65) / 93.85%** | Alta precisión Top-1 en formulaciones conversacionales. |
-| **Cruce de idioma · R@5 / R@1** | **100% (8/8) / 62.50%** | Rescate bilingüe en Top-5; Top-1 asistido por WordNet y Concept Hubs. |
-| **Smoke multicampo en DB local** | **Objetivo #2 → #1** | Promoción de `version_actual_biorag` de #2 a #1 por convergencia multicampo. |
-| **Tiempo de la evaluación global** | **~877 s** | Ejecución determinista de la suite QA de 921 casos en CPU local (sin GPUs ni APIs). |
-
-> **Aclaración Metodológica — Umbrales de Gate vs. Métricas Observadas:**
-> - Los **umbrales formales del Gate** de calidad (`_evaluar_gate()` en `scripts/evaluar_qa.py`) exigen: Recall@5 $\ge$ 97.0%, Fallos $\le$ 24, Tasa de Falsos Positivos $\le$ 15.0%.
-> - **Recall@1 (91.77%)** y **MRR (0.9497)** son métricas co
+| 

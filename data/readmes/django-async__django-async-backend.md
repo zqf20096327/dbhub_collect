@@ -119,7 +119,7 @@ async def main() -> None:
 Or drop to a raw async cursor:
 
 ```python
-async with await connection.cursor() as cursor:
+async with connection.cursor() as cursor:
     await cursor.execute("SELECT id, name FROM app_book ORDER BY name")
 
     print(cursor.rowcount)

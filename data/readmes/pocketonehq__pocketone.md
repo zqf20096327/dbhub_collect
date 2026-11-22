@@ -61,6 +61,7 @@ no runtime overhead.
 | **[PITR](ext/pitr/README.md)** (Litestream) | Point-in-time restore of your database, from Settings → Backups or `pocketone pitr restore`. | On; `--pitr=false` turns it off |
 | **[Backups](ext/backups/README.md)** | Restore to a moment from your own backups (the latest one before it) when PITR is off. | On |
 | **[Settings](ext/settings/README.md)** | One API for the settings your extensions keep (PITR's bucket, Bulk Mail's sender). | On |
+| **[Key-Value Store](ext/kv/README.md)** | Named JSON values for your app's settings and state (`$kv` in page code), with no collection or migration. | On |
 | **[Pages](ext/pages/README.md)** (formerly PocketPages) | Server-rendered pages from a `pb_pages` folder. | On when `pb_pages` exists |
 | **[MCP](ext/mcp/README.md)** | An MCP endpoint at `/mcp` so agents can manage your app and call its tools. | On |
 | **[API Tokens](ext/api-tokens/README.md)** | Long-lived API tokens (`pbt_…`) with scopes, and an [OAuth server](ext/api-tokens/OAUTH.md) for `pocketone login` and MCP sign-in. | On |
@@ -69,8 +70,8 @@ no runtime overhead.
 | **[Bulk Mail](ext/bulkmail/README.md)** | Campaigns to your app's own users, with audiences from a collection, a view or SQL. | On; sends nothing until you start a campaign |
 | **[S3 Redirect](ext/s3redirect/README.md)** | File downloads as short-lived signed S3 redirects. | On when S3 file storage is on |
 | **[S3 Fallback](ext/s3-fallback/README.md)** | A default bucket for uploads and backups when an app hasn't set its own S3; on a multisite host, each instance gets its own folder. | Off until the `storage` section |
-| **[Agent](ext/agent/README.md)** | A language model for your app: your own API, or a small model PocketOne runs itself. | Off until you name a model or an API |
-| **[Agent Chat](ext/agent-chat/README.md)** | Stored conversations with your app's language model, with history and summaries. | On (needs Agent) |
+| **[LLM](ext/llm/README.md)** | Cloud models for your app: text, pictures, speech, transcription, music, video and embeddings from Vultr, Cloudflare, OpenRouter or any OpenAI-compatible API. | On; does nothing until you add a provider in Settings → LLM |
+| **[LLM Chat](ext/llm-chat/README.md)** | Stored conversations with a language model, with history and summaries. | On (needs LLM) |
 | **[WASM](ext/wasm/README.md)** | Go, Rust or Zig modules called from page code, each a closed box. | On when `pb_hooks` holds a `.pb.wasm` file |
 | **[Cache](ext/cache/README.md)** | Cache buckets for every app in the process from one shared store. | On |
 | **[Templates](ext/templates/README.md)** | Theme an extension's own pages (the OAuth sign-in screens). | On |

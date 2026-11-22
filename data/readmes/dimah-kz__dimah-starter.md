@@ -1,44 +1,40 @@
 # Dimah Starter
 
-**Open-source, server-first Next.js 16 starter for multi-tenant SaaS.** Sign-in, organizations with roles, an admin panel, file uploads and English/Persian (RTL) work from the first run — so you start on the feature that makes your product different, not on the login page.
+**Server-first Next.js 16 starter for multi-tenant SaaS.** Built on Cache Components and Better Auth: sign-in, organizations with roles, an admin panel, uploads and English/Persian (RTL) work from the first run, so you start on your product instead of auth.
 
 [![CI](https://github.com/dimah-kz/dimah-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/dimah-kz/dimah-starter/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
-**[Live demo](https://starter.dimah.dev)** · **[Use this template](https://github.com/dimah-kz/dimah-starter/generate)** · [Quick start](#quick-start) · [Cache Components](#built-on-nextjs-16-cache-components) · [Architecture](#how-it-works) · [FAQ](#faq)
+**[Live demo](https://starter.dimah.dev)** · **[Use this template](https://github.com/dimah-kz/dimah-starter/generate)** · [Features](#features) · [How it works](#how-it-works) · [Structure](#project-structure) · [Quick start](#quick-start) · [Deploy](#deploy)
 
 [![Dimah Starter — a server-first starter for multi-tenant SaaS](./.github/assets/cover.png)](https://starter.dimah.dev)
 
-## Why this starter
+## Features
 
-Most SaaS kits give you a client SDK, a data-fetching library and drop-in widgets, then leave the hard parts — tenants, roles, caching, permissions on the server — to you. Dimah Starter goes the other way:
+| Area              | What you get                                                                                                        |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Auth**          | Email and password, Google, passkeys, two-factor (authenticator app, backup codes), email verification, rate limits |
+| **Organizations** | Create and switch organizations, invite by email, owner / admin / member roles, organization logo                   |
+| **Admin panel**   | Search and filter users, ban and unban, platform roles, all organizations                                           |
+| **Account**       | Profile and avatar, email and password change, connected accounts, active sessions, theme, language                 |
+| **Uploads**       | Browser-to-bucket uploads with [dimah-s3](https://s3.dimah.dev), upload quotas, cleanup of abandoned files          |
+| **i18n**          | [next-intl](https://next-intl.dev), English and Persian, a layout that mirrors for right-to-left                    |
+| **Product API**   | Typed [oRPC](https://orpc.dev) router for your own domain logic                                                     |
+| **SEO**           | Metadata, share images that render Persian ([Takumi](https://takumi.kane.tw)), sitemap, robots, JSON-LD             |
+| **Quality**       | Strict TypeScript, ESLint, Prettier, Vitest, Playwright, GitHub Actions CI                                          |
 
-- **Server-first, end to end.** Pages read the session in Server Components, lists come from tagged `'use cache'` reads, and every write is a Server Action. No auth client, no React Query, no client data layer to keep in sync.
-- **Multi-tenant from day one.** Organizations, invitations, member roles and a platform admin panel are built and wired to [Better Auth](https://www.better-auth.com) — with permission checks on every page _and_ every data read, not just in layouts.
-- **Next.js 16 as it is meant to be used.** Built on [Cache Components](#built-on-nextjs-16-cache-components) and Partial Prefetching — not an older App Router kit with a version bump — plus React 19 with the React Compiler, and Turbopack.
-- **Production details already done.** Rate-limited auth, security headers, safe redirects, upload quotas, a stale-upload purge, unit and end-to-end tests, CI, and a production checklist below.
-- **Global from the start.** Every string lives in message files; English and Persian ship with a correct right-to-left layout.
-- **Made to be extended by AI agents.** [`AGENTS.md`](./AGENTS.md) and the task guides in [`docs/agents/`](./docs/agents) tell Claude Code, Codex, Cursor or Copilot where code goes, which file to copy and how to check the result; with the [Next.js MCP server](./docs/agents/nextjs.md#where-to-check-an-api) connected, they can read the running app's errors too.
+## How it works
 
-## Built on Next.js 16 Cache Components
+There is no auth client, no React Query and no client-side data layer. The server owns sessions, permissions and data:
 
-`cacheComponents` and `partialPrefetching` are on in [`next.config.ts`](./apps/web/next.config.ts), and every feature follows the model instead of working around it:
-
-| Next.js 16                                                    | In this starter                                                                                                                                                                                          |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Cache Components** — `'use cache'`, `cacheTag`, `cacheLife` | Every list and profile read is a cache entry tagged per user or organization, e.g. the [members list](<./apps/web/src/app/dashboard/(organization)/manage/members/lib/get-organization-members-page.ts>) |
-| **Partial Prefetching**                                       | Links prefetch each route's App Shell, so a client navigation shows the next page's frame at once and the signed-in parts stream in. Playwright checks it with `instant()` from `@next/playwright`       |
-| **`updateTag`**                                               | A Server Action expires exactly the tags it changed, and the person who acted sees fresh data in the same response — no `router.refresh()`, no client cache                                              |
-| **`refresh()` · `after()`**                                   | Lists without a tag re-render from the action; storage cleanup runs after the response is sent                                                                                                           |
-| **Server Actions**                                            | Every write — auth, organizations, admin, uploads — is one file under `app/action/`, mirroring its route                                                                                                 |
-| **React Compiler · Turbopack**                                | No hand-written `useMemo` / `useCallback`; fast dev server and builds                                                                                                                                    |
-
-A read and a write, trimmed from the dashboard:
+- **Read:** a Server Component checks the session and permission on every request, then reads through a `'use cache'` function tagged per user or organization. Sessions are never cached.
+- **Write:** a Server Action calls `auth.api` (users, organizations, roles) or the oRPC router (your product), then `updateTag`, so the person who acted sees fresh data in the same response.
+- **Upload:** the browser sends the file straight to the bucket with a signed ticket. The action saves the URL and deletes the old file after the response.
 
 ```ts
-// Read: a permission gate per request, then a tagged cache entry
+// Read: check access on every request, then a cached, tagged query
 export async function getOrganizationMembersPage(query) {
   const { organizationId } = await requireOrganizationManager()
   return getCachedPage(organizationId, query)
@@ -51,178 +47,168 @@ async function getCachedPage(organizationId, query) {
   return db.select().from(member) // …
 }
 
-// Write: a Server Action; the change shows in the same response
+// Write: a Server Action that expires exactly what it changed
 export async function removeOrganizationMemberAction(input) {
   await auth.api.removeMember({ headers: await headers(), body })
   updateTag(tags.organizationMembersById(input.organizationId))
 }
 ```
 
-The rules behind it — what to cache, which tag to expire, why sessions are never cached — are in [nextjs.md](./docs/agents/nextjs.md).
+Partial Prefetching is on as well: links prefetch the next page's shell, so navigation shows it at once while signed-in data streams in. The caching rules are in [nextjs.md](./docs/agents/nextjs.md).
 
-## What's inside
+## Project structure
 
-| Area              | Included                                                                                                                                      |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Auth**          | Email + password, Google sign-in, passkeys, two-factor (authenticator app + backup codes), email verification, password reset, rate limiting  |
-| **Organizations** | Create and switch organizations, invite by email, owner / admin / member roles, organization logo                                             |
-| **Admin panel**   | Search and filter users, ban / unban, platform roles, organizations overview                                                                  |
-| **Account**       | Profile and avatar, email change, password change or set, passkeys, two-factor setup, connected accounts, active sessions, theme and language |
-| **Uploads**       | Direct-to-bucket uploads on any S3-compatible storage (R2, S3, MinIO) with [dimah-s3](https://s3.dimah.dev)                                   |
-| **Email**         | Transactional email with [Resend](https://resend.com) and React Email; printed to the log in development                                      |
-| **i18n**          | [next-intl](https://next-intl.dev), English and Persian, RTL, localized dates and numbers, translated auth errors                             |
-| **Product API**   | [oRPC](https://orpc.dev) router in `@repo/api`, called in-process from Server Actions or over HTTP                                            |
-| **UI**            | [shadcn/ui](https://ui.shadcn.com) on Base UI, [ReUI](https://reui.io), Tailwind CSS 4, dark mode                                             |
-| **SEO**           | Metadata, Open Graph image with right-to-left text ([Takumi](https://takumi.kane.tw)), sitemap, robots, JSON-LD and a public landing page     |
-| **Quality**       | Strict TypeScript, ESLint, Prettier, Vitest unit tests, Playwright e2e, Turborepo caching, GitHub Actions CI                                  |
-
-**Stack:** Next.js 16 · React 19 · TypeScript · Better Auth · Drizzle ORM · PostgreSQL · oRPC · Tailwind CSS 4 · shadcn/ui · next-intl · Takumi · Resend · Turborepo · pnpm
-
-## How it works
-
-```mermaid
-flowchart LR
-  browser([Browser])
-  subgraph app [apps/web — Next.js]
-    page[Server Component page]
-    gate{{"Permission gate<br/>requirePlatformAdmin · requireOrganizationManager"}}
-    read["'use cache' read<br/>cacheTag + cacheLife"]
-    action[Server Action]
-  end
-  auth["@repo/auth<br/>Better Auth"]
-  api["@repo/api<br/>oRPC"]
-  db[(PostgreSQL)]
-  bucket[(S3 bucket)]
-
-  browser -- navigate --> page --> gate --> read --> db
-  browser -- submit --> action
-  action -- "auth.api" --> auth --> db
-  action -- createRouterClient --> api --> db
-  action -. "updateTag → fresh UI in the same response" .-> read
-  browser -- "presigned upload (@repo/storage)" --> bucket
+```
+dimah-starter
+├── apps
+│   └── web                   # Next.js 16, React 19, React Compiler
+│       ├── src/app
+│       │   ├── (marketing)   # landing page, SEO, share image
+│       │   ├── (auth)        # sign-in, sign-up, invitations
+│       │   ├── dashboard     # tenant and admin pages: gate, then 'use cache'
+│       │   └── action        # every write is a Server Action
+│       └── next.config.ts    # Cache Components, Partial Prefetching
+├── packages
+│   ├── auth                  # Better Auth: organizations, roles, permissions
+│   ├── db                    # Drizzle ORM, Postgres, migrations
+│   ├── api                   # oRPC router, in-process or over HTTP
+│   ├── storage               # S3 uploads straight from the browser
+│   ├── email                 # Resend, React Email
+│   ├── i18n                  # next-intl, English and Persian, RTL
+│   └── ui                    # shadcn/ui on Base UI, Tailwind CSS 4
+├── tooling                   # shared ESLint, TypeScript, Vitest configs
+├── docs/agents               # where the next file goes, for people and agents
+├── pnpm-workspace.yaml       # one version catalog for every package
+└── turbo.json                # cached lint, typecheck, test, build
 ```
 
-- **Read:** a page checks the session and permission, then reads through a `'use cache'` function tagged per user or organization. Sessions are never cached.
-- **Write:** a Server Action calls `auth.api` (auth, organizations, admin) or the oRPC router (your product), then `updateTag` so the person who acted sees the change in the same response.
-- **Upload:** the browser sends the file straight to the bucket with a signed ticket; the action stores the public URL and cleans up the previous file after the response.
+Imports point one way: `apps/` uses `packages/`, never the reverse. A second app (mobile, extension) goes in `apps/` and reuses the same packages.
 
 ## Quick start
 
-**You need:** Node.js ≥ 22.12, pnpm 12, a PostgreSQL database (or Docker) and, for uploads, an S3-compatible bucket.
+You need Node.js 22.12+, pnpm 12 and a PostgreSQL database.
 
 ```bash
+git clone https://github.com/dimah-kz/dimah-starter.git my-saas
+cd my-saas
 pnpm install
-cp .env.example .env          # fill in BETTER_AUTH_SECRET, then the optional blocks
-docker compose up -d --wait   # local Postgres; or point DATABASE_URL at your own
-pnpm --filter @repo/db db:migrate
-pnpm dev
+cp .env.example .env                # set DATABASE_URL and BETTER_AUTH_SECRET
+pnpm --filter @repo/db db:migrate   # create the tables
+pnpm dev                            # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Without `RESEND_API_KEY`, verification and reset emails are printed to the server log. The app starts without S3 settings; only uploads need them.
+Open the app and sign up. Until you add a Resend key, verification and reset emails are printed in the terminal running `pnpm dev`.
 
-**First platform admin.** Sign up, verify the email, then grant the role once:
+### Environment variables
+
+Only the first two are needed to run locally. Each one is explained in [`.env.example`](./.env.example).
+
+| Variable                                   | Used for                                                                           |
+| ------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `DATABASE_URL`                             | **Required.** PostgreSQL connection string                                         |
+| `BETTER_AUTH_SECRET`                       | **Required.** Signs sessions; 32+ characters (`openssl rand -base64 32`)           |
+| `BETTER_AUTH_URL`                          | Public URL of the app. Defaults to `http://localhost:3000`; required in production |
+| `RESEND_API_KEY`, `EMAIL_FROM`             | Sending email                                                                      |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google sign-in                                                                     |
+| `DIMAH_S3_SECRET`, `S3_*`                  | Uploads (avatars, organization logos) to R2, S3 or MinIO                           |
+| `GOOGLE_SITE_VERIFICATION`                 | Google Search Console                                                              |
+
+<details>
+<summary>Make yourself platform admin</summary>
+
+After you sign up and verify your email, run this once against your database:
 
 ```sql
 UPDATE auth."user" SET role = 'admin' WHERE email = 'you@example.com';
 ```
 
-With the Compose database: `docker compose exec postgres psql -U postgres -d dimah_starter -c "…"`.
+Sign in again and **Platform management** appears in the sidebar. Promote later admins from `/dashboard/admin/users`.
 
-Sign in again to see **Platform management** in the sidebar. Later admins are promoted from `/dashboard/admin/users`.
+</details>
 
-| Command                                              | What it does                                    |
-| ---------------------------------------------------- | ----------------------------------------------- |
-| `pnpm dev`                                           | Run the web app                                 |
-| `pnpm format:check` · `lint` · `typecheck` · `build` | Quality gates (CI runs all of them)             |
-| `pnpm test` · `test:watch` · `test:coverage`         | Unit tests (Vitest, beside the code they test)  |
-| `pnpm test:e2e`                                      | End-to-end tests (Playwright, `apps/web/e2e`)   |
-| `pnpm --filter @repo/db db:generate` · `db:migrate`  | Create and apply migrations                     |
-| `pnpm --filter @repo/db db:studio`                   | Browse the database                             |
-| `pnpm ui:sync`                                       | Regenerate shadcn / ReUI components             |
-| `pnpm storage:purge`                                 | Clean up abandoned uploads (schedule it hourly) |
-| `pnpm docs:check`                                    | Check that links and paths in the docs exist    |
+## Scripts
 
-## Project structure
-
-```
-dimah-starter/
-├── apps/
-│   └── web/                 # Next.js app: landing page, auth, dashboard, admin
-├── packages/
-│   ├── api/                 # Product oRPC router (in-process caller + /api/rpc)
-│   ├── auth/                # Better Auth config, roles and permissions
-│   ├── db/                  # Drizzle schema, client and migrations
-│   ├── email/               # Transactional email (Resend + React Email)
-│   ├── i18n/                # Messages, locales and formatters
-│   ├── storage/             # dimah-s3 upload routes and object cleanup
-│   └── ui/                  # shadcn/ui, ReUI and Dimah components
-├── tooling/                 # Shared ESLint, TypeScript and Vitest configs
-├── docs/agents/             # How-to guides for contributors and AI agents
-└── scripts/                 # Repository checks (docs links)
+```bash
+pnpm dev                              # start the app on http://localhost:3000
+pnpm build                            # production build
+pnpm lint                             # ESLint
+pnpm typecheck                        # TypeScript
+pnpm test                             # unit tests (Vitest)
+pnpm test:e2e                         # end-to-end tests (Playwright, port 3100)
+pnpm format                           # format with Prettier
+pnpm --filter @repo/db db:generate    # create a migration from schema changes
+pnpm --filter @repo/db db:migrate     # apply migrations
+pnpm --filter @repo/db db:studio      # browse the database
+pnpm ui:sync                          # regenerate shadcn/ui and ReUI components
+pnpm storage:purge                    # delete abandoned uploads (run it hourly)
 ```
 
-Core logic lives in `packages/`, routes and feature UI in `apps/web`. Another app — mobile, a browser extension — would sit beside it in `apps/` and reuse the same packages.
+CI runs format, lint, typecheck, unit tests, the build and end-to-end tests on every pull request and push to `main`, and fails when a schema change has no migration.
 
-## Build your product on it
+## Make it yours
 
-1. **Make it yours** —
-   - **Brand:** app name and description in `packages/i18n/src/messages/*/common.json`, colors in `packages/ui/src/styles/globals.css`, and the landing page, FAQ and `llms.txt` in `apps/web/src/app/(marketing)/` (with their copy in `marketing.json`).
-   - **Repository files** that still describe this starter:
-     - `apps/web/src/lib/site.ts` (links, author)
-     - the root `package.json` metadata
-     - `README.md`, `CONTRIBUTING.md`, `SECURITY.md`
-     - the copyright line in `LICENSE`
-   - **Private vulnerability reporting:** enable it under **Settings → Security**.
-2. **Add a procedure** — one file per procedure in `packages/api/src/routers/<domain>/` ([api.md](./docs/agents/api.md)).
-3. **Add a page** — copy a sibling under `apps/web/src/app/dashboard/`, its action under `app/action/`, and register its URL, labels and cache tags ([dashboard.md](./docs/agents/dashboard.md)).
-4. **Add tables** — Drizzle schema in `packages/db`, then `db:generate` and `db:migrate`.
-5. **Test it** — a `*.test.ts` beside the logic, an e2e spec for a flow; each kind has a reference test to copy ([testing.md](./docs/agents/testing.md)).
+**Rebrand** — these files still describe this starter:
 
-Working with an AI agent? Most read [`AGENTS.md`](./AGENTS.md) on their own: it holds the commands, the rules and which guide to open for each task.
+| Change                        | In                                                                             |
+| ----------------------------- | ------------------------------------------------------------------------------ |
+| App name and description      | `packages/i18n/src/messages/en/common.json` and the other locales              |
+| Colors                        | `packages/ui/src/styles/globals.css`, `apps/web/src/components/og/og-card.tsx` |
+| Landing page, FAQ, `llms.txt` | `apps/web/src/app/(marketing)/`, with copy in `marketing.json`                 |
+| GitHub links, author          | `apps/web/src/lib/site.ts`                                                     |
+| Repository files              | `package.json`, `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `LICENSE`       |
 
-## FAQ
+**Add features** — each guide shows a real file to copy:
 
-**Is it free for commercial use?**
-Yes. It is MIT licensed: use it for client work or your own SaaS. Keep the license notice in copies of the code; nothing else is required.
+| To add       | Start from                                                                | Guide                                                 |
+| ------------ | ------------------------------------------------------------------------- | ----------------------------------------------------- |
+| A page       | a sibling folder in `apps/web/src/app/dashboard/`                         | [dashboard.md](./docs/agents/dashboard.md)            |
+| A write      | a Server Action in `apps/web/src/app/action/`, mirroring the page's route | [better-auth.md](./docs/agents/better-auth.md#writes) |
+| Domain logic | one oRPC procedure per file in `packages/api/src/routers/`                | [api.md](./docs/agents/api.md)                        |
+| A table      | a Drizzle schema in `packages/db/src/schema/`, then `db:generate`         | [packages/db](./packages/db/README.md)                |
+| A test       | a `*.test.ts` beside the code, or a spec in `apps/web/e2e/`               | [testing.md](./docs/agents/testing.md)                |
 
-**Why no client-side data library?**
-Server Components and Server Actions already cover reads and writes, and keep sessions, permissions and database access on the server. The UI ships less JavaScript and has one source of truth. You can still add a client library for a live feature that needs one.
+## Guides
 
-**Where can I deploy it?**
-Anywhere that runs Next.js on Node.js — Vercel, a container, or your own server. On serverless, use a pooled Postgres URL (see [Production](#production)).
+[`docs/agents/`](./docs/agents) has one short guide per area: how it works here, the steps to change it and a file to copy. Claude Code, Codex, Cursor and Copilot read [`AGENTS.md`](./AGENTS.md), which holds the rules and points them to the right guide. With the [Next.js MCP server](./docs/agents/nextjs.md#where-to-check-an-api) connected, they can also read the running app's errors.
 
-**Do I have to keep Persian or multi-tenancy?**
-No. Remove a locale with the steps in [i18n.md](./docs/agents/i18n.md#remove-a-locale) — the language switcher hides itself with one locale — and remove a dashboard area by deleting its route folder, its `action/` folder and its keys. The layout stays correct for left-to-right and right-to-left either way.
+[Architecture](./docs/agents/architecture.md) · [Next.js](./docs/agents/nextjs.md) · [Auth](./docs/agents/better-auth.md) · [Dashboard](./docs/agents/dashboard.md) · [API](./docs/agents/api.md) · [Storage](./docs/agents/storage.md) · [i18n](./docs/agents/i18n.md) · [UI](./docs/agents/ui.md) · [SEO](./docs/agents/seo.md) · [Testing](./docs/agents/testing.md)
 
-**How is it different from other Next.js SaaS starters?**
-It is server-first rather than client-SDK-first, multi-tenant with real permission checks, current with Next.js 16 Cache Components, and documented for AI coding agents. It does not include billing yet — see the next question.
+## Deploy
 
-**What is not included?**
-Billing, a marketing CMS and analytics are left to you, so you can pick the provider that fits your product.
-
-## Production
+It runs wherever Next.js runs on Node.js: Vercel, a container or your own server. Run `pnpm --filter @repo/db db:migrate` against the production database before each release.
 
 <details>
 <summary>Checklist before you go live</summary>
 
-- **Public URL** — set `BETTER_AUTH_URL` to the public origin. `http://localhost:3000` is trusted only outside production.
-- **Postgres on serverless** — use a **pooled** `DATABASE_URL` (Neon pooler, PgBouncer, Supabase pooler). Direct `5432` connections run out under bursty functions.
-- **Session cookie cache** — `getSession` may use a cookie for up to **5 minutes**. After a ban or role change, the affected user can still look signed-in until that cache expires.
-- **Auth rate limit** — counters live in Postgres so they survive serverless. Better Auth limits its HTTP routes (`/api/auth`); the sign-in, sign-up, password-reset, two-factor, passkey and Google Server Actions call `consumeRateLimit` first, per address and per account. Behind more than one proxy, set Better Auth `advanced.ipAddress` so the client IP is right.
-- **Product API** — `/api/rpc` refuses requests other sites' pages make and allows 300 calls a minute per IP. Organization procedures build on `member`, which scopes them to the caller's active organization — [api.md](./docs/agents/api.md).
-- **Security headers** — `next.config.ts` denies framing and sets `nosniff`, `Referrer-Policy`, `Permissions-Policy` and, in production, HSTS. Add a script CSP if you need one.
-- **SEO** — canonicals, `sitemap.xml`, `robots.txt`, `llms.txt` and the share image use `BETTER_AUTH_URL`. Set `GOOGLE_SITE_VERIFICATION`, then submit `/sitemap.xml` in Search Console. Public pages go in `apps/web/src/app/(marketing)/` — [seo.md](./docs/agents/seo.md).
-- **Email** — set `RESEND_API_KEY` and `EMAIL_FROM`. Without a key, development prints the message (including the link) to the server log.
-- **Storage** — allow `GET`, `PUT` and `HEAD` from your origin in the bucket CORS, serve objects at `S3_PUBLIC_BASE_URL`, and schedule `pnpm storage:purge` hourly so uploads that never confirm leave the bucket and the database. [`storage-purge.yml`](./.github/workflows/storage-purge.yml) does it once you set the repository variable and secrets it lists — [packages/storage](./packages/storage/README.md#purging-stale-uploads).
-- **Testing API** — `EXPOSE_TESTING_API=1` is for the e2e build only. Never set it for a deployment.
+- **URL:** set `BETTER_AUTH_URL` to your public origin. Sign-in, canonical URLs, the sitemap and share images use it.
+- **Database:** on serverless, use a **pooled** `DATABASE_URL` (Neon, Supabase or PgBouncer). Direct connections run out under bursts of traffic.
+- **Dependencies:** install on the platform you deploy to, as Vercel and Docker builds do. The share image renderer ships a native binary per OS, so `node_modules` copied from macOS or Windows won't work on Linux.
+- **Email:** set `RESEND_API_KEY` and `EMAIL_FROM`.
+- **Storage:** allow `GET`, `PUT` and `HEAD` from your origin in the bucket's CORS, serve files from `S3_PUBLIC_BASE_URL`, and run `pnpm storage:purge` hourly. [`storage-purge.yml`](./.github/workflows/storage-purge.yml) does it once you add its secrets ([details](./packages/storage/README.md#purging-stale-uploads)).
+- **Proxies:** rate limits are kept in Postgres, so they hold across instances. Behind more than one proxy, set Better Auth's `advanced.ipAddress` so the client IP is right.
+- **Sessions:** a session is cached in a cookie for up to 5 minutes, so a banned or demoted user can keep access until it expires.
+- **Search:** set `GOOGLE_SITE_VERIFICATION`, then submit `/sitemap.xml` in Search Console ([seo.md](./docs/agents/seo.md)).
+- **Never** set `EXPOSE_TESTING_API=1` in a deployment. It exists for the end-to-end build only.
+
+Already in place: security headers (no framing, `nosniff`, `Referrer-Policy`, `Permissions-Policy`, HSTS in production) and a cross-site check plus 300 calls a minute per IP on `/api/rpc`.
 
 </details>
 
+## FAQ
+
+**Can I use it commercially?** Yes. It's MIT licensed; keep the license notice in copies of the code.
+
+**Why no client data library?** Server Components and Server Actions already cover reads and writes, and keep permissions on the server. Add one only for a live feature that needs it.
+
+**Can I remove Persian or multi-tenancy?** Yes. Remove a locale with [these steps](./docs/agents/i18n.md#remove-a-locale); the language switcher hides itself when one is left. Remove a dashboard area by deleting its route folder, its `action/` folder and its messages.
+
+**How do I get later updates?** Your copy is yours, not a dependency. To pull a change from this repository, add it as a remote and cherry-pick or merge.
+
+**What's not included?** Billing, a CMS and analytics, so you can pick the provider that fits.
+
 ## Contributing
 
-Issues and pull requests are welcome — read [CONTRIBUTING.md](./CONTRIBUTING.md) first. Report security issues privately as described in [SECURITY.md](./SECURITY.md).
-
-If this starter saves you time, a ⭐ helps other developers find it.
+Issues and pull requests are welcome; read [CONTRIBUTING.md](./CONTRIBUTING.md) first. Report security issues privately, as [SECURITY.md](./SECURITY.md) describes. If the starter saves you time, a ⭐ helps others find it.
 
 ## License
 

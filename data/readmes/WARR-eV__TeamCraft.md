@@ -30,8 +30,8 @@
 <p align="center">
   <strong><a href="https://github.com/WARR-eV/TeamCraft/releases">Download TeamCraft</a></strong>
   for Windows, macOS and Linux.<br />
-  To try it, pick the desktop app <em>with local server</em>: app, server and
-  database in one installer, nothing to set up (<a href="#download">which file?</a>).
+  The desktop app <em>with local server</em> (app, server and database in one
+  installer) is paused for the next releases (<a href="#download">which file?</a>).
 </p>
 
 <p align="center">
@@ -82,7 +82,10 @@
 [Releases page](https://github.com/WARR-eV/TeamCraft/releases)** – 0.x
 versions are pre-releases (see the warning above). Which one you need:
 
-- **Just try TeamCraft on your laptop** – the desktop app **with local
+- **Just try TeamCraft on your laptop** – *paused for the next releases (since 2026-11-22, to make releases faster); until it is back, use the
+  [live demo][demo] or `teamcraft local` with the Linux server archive (see
+  [Try it on your computer](https://warr-ev.github.io/TeamCraft/guide/local-server.html)).*
+  The desktop app **with local
   server** (`TeamCraft-with-local-server_…`): one installer with the app, the
   server and its PostgreSQL database. It installs **TeamCraft Local**, an app
   of its own; start it and it starts its local server, your browser opens to
@@ -95,9 +98,9 @@ versions are pre-releases (see the warning above). Which one you need:
 
 |                                            | Linux x86_64                            | Linux ARM64                | macOS (Apple silicon) | Windows x64                                   | Windows ARM64                                     |
 |--------------------------------------------|-----------------------------------------|----------------------------|-----------------------|-----------------------------------------------|---------------------------------------------------|
-| **Desktop app with local server** (try it) | `.AppImage`                             | –                          | `.dmg`                | `_x64-setup.exe`                              | –                                                 |
+| **Desktop app with local server** (paused) | –                                       | –                          | –                     | –                                             | –                                                 |
 | **Desktop app**                            | `.AppImage`, `.deb`, `.rpm`, `.flatpak` | `.deb`, `.rpm`, `.flatpak` | `.dmg`, `.app.zip`    | `.msi`, `_x64-setup.exe`, `_x64_portable.zip` | `.msi`, `_arm64-setup.exe`, `_arm64_portable.zip` |
-| **Server** (`teamcraft`)                   | `.tar.gz`                               | `.tar.gz`                  | –                     | `.zip`                                        | –                                                 |
+| **Server** (`teamcraft`)                   | `.tar.gz`                               | `.tar.gz`                  | –                     | – (paused; build from source)                 | –                                                 |
 
 - **With local server:** the same app plus the server (`teamcraft-server`)
   and PostgreSQL's programs, installed as *TeamCraft Local* next to the
@@ -194,7 +197,9 @@ end-to-end tests against a real PostgreSQL.
 **Files and versions**
 
 - **Check-out / check-in** – exclusive locks per revision; a check-in based on
-  an outdated version is refused instead of overwriting it.
+  an outdated version is refused instead of overwriting it. Several parts of an
+  assembly can be checked out in one step to edit them in its context
+  (`POST /api/v1/checkouts`, a result per part).
 - **Versions and rollback** – every upload is a new version; download or
   restore any of them, history is never rewritten.
 - **Vault explorer** – project groups as folders with lock owners, files and
@@ -213,10 +218,14 @@ end-to-end tests against a real PostgreSQL.
   Rhino models (`.3dm`, SubD included),
   SketchUp models (`.skp`, SketchUp 3 to today), JT files with their whole
   assembly, Fusion designs (`.f3d`), STL, OBJ, PLY, 3MF, glTF, point clouds
+  (PTS, XYZ, LAS and laser-scanner E57 with every scan placed by its pose)
   and more.
 - **CAD thumbnails** – the preview images stored in Inventor drawings and Solid
   Edge files; NX, SOLIDWORKS, Inventor, CATIA, Creo, Rhino, SketchUp, JT and
-  Fusion files get a sharper thumbnail rendered from their 3D preview.
+  Fusion files get a sharper thumbnail rendered from their 3D preview. The
+  picture of the main model heads the revision page and every row of the item
+  list, the search results, the vault explorer and the desktop app's Home views
+  (lazy-loaded, cached by content hash).
 - **FEA/CFD results** – VTK, VTU/VTP and CalculiX results coloured by a result
   field, with legend.
 - **Search** – ranked full-text search over numbers, names, materials, file
@@ -227,7 +236,8 @@ end-to-end tests against a real PostgreSQL.
 **Structure**
 
 - **Multi-level BOM** – mass and cost roll-up, revision rules, comparison of
-  two revisions, CSV/Excel export.
+  two revisions, CSV/Excel export; components are picked by searching their
+  number, name or file name (web and desktop).
 - **Mass properties** – mass, centre of gravity and inertia tensor of a whole
   assembly or vehicle from the exported meshes of its parts, a material
   library of densities and measured masses of bought parts; CSV/JSON export.
@@ -235,6 +245,10 @@ end-to-end tests against a real PostgreSQL.
 - **Alternates and supersession** – alternate parts, superseded parts and *Replace in assemblies* with a preview.
 - **BOM import** – items and BOMs from CAD BOM tables (CSV, Excel, ODS) or a
   STEP assembly; preview first, one transaction.
+- **BOM from the CAD file** – the parts an assembly uses, with the instance
+  counts of Inventor, SOLIDWORKS, NX, STEP and SolidCraft files; updated at
+  check-in when *Update the BOM from the CAD file* is ticked (the default),
+  never removing a line.
 - **Pack and Go** – a ZIP of a whole assembly with all its files.
 
 **Change and release**
@@ -299,17 +313,25 @@ end-to-end tests against a real PostgreSQL.
 **Clients and integrations**
 
 - **Web UI** – light and dark design that follows the operating system, plus
-  distribution skins; responsive down to phone width.
+  distribution skins; responsive down to phone width. English and German (first
+  part, #379): the header and the empty states follow the browser's language, the desktop app has
+  *Settings → Language*. Empty lists name the next step, by role – viewers
+  learn why they see no editing buttons (#423).
 - **Desktop app** – Linux, macOS and Windows client with a local working
-  folder, *Get* of whole assemblies, an import wizard, a *Files* view of each
+  folder, a *Getting started* wizard after the first sign-in (working folder,
+  *Get* of your project groups, the daily loop), *Get* of whole assemblies, an import wizard, a *Files* view of each
   project group (with *New item here* on every folder, starting in a favourite folder, e.g. the one with the
   Inventor project file, if you like), a navigable *Graph* of every revision (BOM children,
   references and where-used, coloured by state, with quantities and preview
-  images), *Park* of work in progress, new items straight from the files
+  images), *Park* of work in progress, files dropped from the file manager into *New*
+  or *Add files…*, new items straight from the files
   saved in the working folder (group and folder taken from where they are,
   duplicates refused, the worklist suggesting the parts and assemblies that
-  belong to no item yet), an Agent view, crash reports the user
-  decides about and an update notice (never installs anything itself). The
+  belong to no item yet), a *Local changes* list of the whole working folder
+  (modified, outdated, conflicting and missing files with *Check out (keep my
+  file)*, *Get latest* and *Check in selected*), an Agent view, crash reports the user
+  decides about, *Report…* on every error (a reviewed, redacted report with
+  the action and its key inputs; nothing is sent without a click) and an update notice (never installs anything itself). The
   download *with local server* also runs a private test server with its own
   database on the laptop (*Try TeamCraft on this computer*).
 - **REST API** – everything the UI does, with personal access tokens.
@@ -321,7 +343,8 @@ end-to-end tests against a real PostgreSQL.
   service, or a local model (Ollama, vLLM). In the desktop app it is the *Agent* view's company AI.
 - **SolidCraft and FieldCraft** – [SolidCraft](https://github.com/tangency-labs/solidcraft)
   designs (`.sc`, checked by content) and
-  [FieldCraft](https://github.com/tangency-labs/fieldcraft) models (`.fieldcraft`) are recognised and their STEP and 3MF
+  [FieldCraft](https://github.com/tangency-labs/fieldcraft) models (`.fieldcraft`) are recognised, SolidCraft's embedded picture is the preview image, linked designs are
+  file references with quantities, SolidCraft's BOM CSV and the design itself import as a BOM, the design properties (part number, revision, description) are shown with the file, searchable and compared with the item, the desktop app exports designs to STEP with `solidcraft-cli`, a TeamCraft plugin for SolidCraft shows and checks the design's TeamCraft item inside SolidCraft – and, through a folder shared with the desktop app, its live state and requests to check out, check in or open it – and their STEP and 3MF
   exports previewed –
   design, export and analysis in one revision ([more](https://warr-ev.github.io/TeamCraft/reference/interop.html)).
 
@@ -348,7 +371,8 @@ there is no separate enterprise edition.
       read-only or MCP-only; SSO users' tokens can expire after a number of
       idle days.
     - [Offboarding](https://warr-ev.github.io/TeamCraft/admin/users.html#when-someone-leaves)
-      for high-turnover teams: a holdings report per user, *Offboard and
+      for high-turnover teams: a holdings report per user, the check-outs of
+      a group as a graph (web and desktop), *Offboard and
       deactivate*, season handover per group, groups without an active
       manager, OpenID Connect back-channel logout and a report of SSO users
       who stopped signing in.
@@ -389,6 +413,15 @@ there is no separate enterprise edition.
 - **Configuration** – everything through environment variables, each also as
   `*_FILE` for Docker or Kubernetes secrets; see the
   [configuration reference](https://warr-ev.github.io/TeamCraft/admin/configuration.html).
+- **Privacy** – nothing leaves your servers by itself without your choice: usage
+  statistics stay on your own server, sharing a summary with the developers is
+  off by default and shown byte for byte before it is sent; see
+  [Privacy: what TeamCraft sends](https://warr-ev.github.io/TeamCraft/admin/privacy.html).
+- **Desktop rollout** – policies per computer or user with the operating
+  system's tools (Group Policy/Intune ADMX templates, a macOS configuration
+  profile, `/etc/teamcraft/policies.json`): a fixed server, update checks,
+  crash-report prompts, the default working folder and *Managed by …*; see
+  [Deploying the desktop app](https://warr-ev.github.io/TeamCraft/admin/desktop-deployment.html).
 
 **Planned** – what is left of the issues above (all their steps are built):
 
@@ -555,6 +588,7 @@ Third-party components (complete list with versions in `Cargo.lock` and
 | futures-core                                                                 | desktop app: cancellable streamed uploads                                            | MIT / Apache-2.0                                             |
 | Montserrat, Oswald                                                           | fonts                                                                                | SIL OFL 1.1                                                  |
 | libfuzzer-sys (libFuzzer)                                                    | fuzz targets in `fuzz/` only, never shipped                                          | MIT / Apache-2.0 (libFuzzer: Apache-2.0 with LLVM exception) |
+| wit-bindgen; SolidCraft's plugin interface (`plugins/solidcraft/wit/plugin.wit`, unchanged) | the TeamCraft plugin for SolidCraft in `plugins/solidcraft` only, never in the server or desktop app | Apache-2.0 WITH LLVM-exception / MIT / Apache-2.0; WIT file: MIT |
 
 SolidWorks, NX, Creo, CATIA, Inventor, Fusion,
 Revit and the other product names are trademarks of their respective

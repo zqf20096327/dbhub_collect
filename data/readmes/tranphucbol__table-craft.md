@@ -33,16 +33,18 @@ https://github.com/user-attachments/assets/9aec53fe-6fcd-40dc-ab79-4fe0cacb6dc4
 
 ## Supported databases
 
-| Database                       | Plugin                                                                                                                                                        | Since                                                                      |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| SQLite                         | In the box                                                                                                                                                    | [v0.1.0](https://github.com/tranphucbol/table-craft/releases/tag/v0.1.0)   |
-| MySQL, MariaDB, TiDB           | In the box                                                                                                                                                    | [v0.1.0](https://github.com/tranphucbol/table-craft/releases/tag/v0.1.0)   |
-| PostgreSQL                     | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-postgres?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-postgres)               | [v0.1.0](https://github.com/tranphucbol/table-craft/releases/tag/v0.1.0)   |
-| [Redis](docs/guide/redis.md)   | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-redis?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-redis)                     | [v1.3.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.3.0)   |
-| [Oracle](docs/guide/oracle.md) | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-oracle?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-oracle)                   | [v1.11.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.11.0) |
-| SQL Server, Azure SQL          | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-mssql?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-mssql)                     | [v1.11.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.11.0) |
-| [etcd](docs/guide/etcd.md)     | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-etcd?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-etcd)                       | [v1.18.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.18.0) |
-| [DuckDB](docs/guide/duckdb.md) | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-duckdb-darwin-arm64?label=npm)](https://www.npmjs.com/search?q=%40tablecraft-app%2Fplugin-duckdb) | [v1.28.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.28.0) |
+| Database                                                 | Plugin                                                                                                                                                        | Since                                                                      |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| SQLite                                                   | In the box                                                                                                                                                    | [v0.1.0](https://github.com/tranphucbol/table-craft/releases/tag/v0.1.0)   |
+| MySQL, MariaDB, TiDB                                     | In the box                                                                                                                                                    | [v0.1.0](https://github.com/tranphucbol/table-craft/releases/tag/v0.1.0)   |
+| PostgreSQL                                               | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-postgres?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-postgres)               | [v0.1.0](https://github.com/tranphucbol/table-craft/releases/tag/v0.1.0)   |
+| [Redis](docs/guide/redis.md)                             | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-redis?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-redis)                     | [v1.3.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.3.0)   |
+| [Oracle](docs/guide/oracle.md)                           | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-oracle?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-oracle)                   | [v1.11.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.11.0) |
+| SQL Server, Azure SQL                                    | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-mssql?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-mssql)                     | [v1.11.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.11.0) |
+| [etcd](docs/guide/etcd.md)                               | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-etcd?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-etcd)                       | [v1.18.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.18.0) |
+| [DuckDB](docs/guide/duckdb.md)                           | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-duckdb-darwin-arm64?label=npm)](https://www.npmjs.com/search?q=%40tablecraft-app%2Fplugin-duckdb) | [v1.28.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.28.0) |
+| [Apache Kafka](docs/guide/kafka.md)                      | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-kafka?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-kafka)                     | [v1.41.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.41.0) |
+| [Elasticsearch, OpenSearch](docs/guide/elasticsearch.md) | [![npm](https://img.shields.io/npm/v/@tablecraft-app/plugin-elasticsearch?label=npm)](https://www.npmjs.com/package/@tablecraft-app/plugin-elasticsearch)     | [v1.42.0](https://github.com/tranphucbol/table-craft/releases/tag/v1.42.0) |
 
 In the box means the plugin ships inside the app and works offline; the others download from npm the
 first time you add such a data source ([Plugins](docs/guide/plugins.md)).
@@ -77,11 +79,13 @@ first time you add such a data source ([Plugins](docs/guide/plugins.md)).
   leases, live Watch, members and maintenance, users and roles, and a visual transaction builder.
 - [Oracle without the Instant Client](docs/guide/oracle.md): schemas, packages and their members in the tree,
   `DBMS_OUTPUT` in Output, every SQL function of the manual in completion, sessions and plans.
-- [Plugins for any database](docs/guide/plugins.md): PostgreSQL, MySQL, SQLite, Oracle and SQL Server are
-  plugins, loaded the same way yours would be. SQLite and MySQL come in the box; PostgreSQL, Oracle,
-  SQL Server, [DuckDB](docs/guide/duckdb.md) (Parquet and `csv.zst` files too), Redis, etcd,
-  [Apache Kafka](docs/guide/kafka.md) and [Elasticsearch](docs/guide/elasticsearch.md) download the
-  first time you need them.
+- [Apache Kafka without a consumer group](docs/guide/kafka.md): reads that never join a group, Avro and
+  Protobuf through the Schema Registry, consumer lag and offset resets, and a `kcat`-shaped console.
+- [Elasticsearch and OpenSearch, time first](docs/guide/elasticsearch.md): index tabs open on the last
+  15 minutes with a histogram, Lucene or query DSL, mappings, analyzers and a Dev Tools console.
+- [Plugins for any database](docs/guide/plugins.md): every database is a plugin, loaded the same way yours would be.
+  SQLite and MySQL come in the box; PostgreSQL, Oracle, SQL Server, [DuckDB](docs/guide/duckdb.md), Redis, etcd,
+  Kafka and Elasticsearch download the first time you need them.
 
 ## Install
 
@@ -99,8 +103,7 @@ installed, TableCraft [updates itself](docs/guide/install.md#updates).
 The builds are not signed with a paid certificate, so the first launch needs one extra step:
 
 - **macOS**: see [Running the unsigned macOS app](docs/guide/install.md#running-the-unsigned-macos-app).
-- **Windows**: SmartScreen says _Windows protected your PC_; click **More info**, then **Run
-  anyway**.
+- **Windows**: SmartScreen says _Windows protected your PC_; click **More info**, then **Run anyway**.
 - **Linux**: make the AppImage executable with `chmod +x TableCraft-*.AppImage` and run it.
 
 ## Quick start
@@ -155,13 +158,10 @@ search and a light and dark theme.
 - [Plugins](docs/guide/plugins.md): which databases ship in the box and which download on demand.
 - [Redis](docs/guide/redis.md): the key tree, key tabs, the command console and the Server tab.
 - [etcd](docs/guide/etcd.md): revision-guarded keys, leases, Watch and cluster administration.
-- [Oracle](docs/guide/oracle.md): connecting without the Instant Client, and what differs from SQL
-  databases.
-- [DuckDB](docs/guide/duckdb.md): database files, Parquet and CSV files, file locks and
-  transactions.
+- [Oracle](docs/guide/oracle.md): connecting without the Instant Client, and what differs from SQL databases.
+- [DuckDB](docs/guide/duckdb.md): database files, Parquet and CSV files, file locks and transactions.
 - [Apache Kafka](docs/guide/kafka.md): topics, messages, consumer groups and the Schema Registry.
-- [Elasticsearch and OpenSearch](docs/guide/elasticsearch.md): the index tree, searching documents by
-  time, mappings, analyzers and the Dev Tools console.
+- [Elasticsearch and OpenSearch](docs/guide/elasticsearch.md): the index tree, time-first search, mappings and Dev Tools.
 
 **Customising**
 

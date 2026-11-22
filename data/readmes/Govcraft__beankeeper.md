@@ -16,7 +16,12 @@ SQLite (optionally encrypted with SQLCipher) is the source of truth, not a `.jou
 
 ### The agent cannot create an unbalanced transaction
 
-A `Transaction` can only be constructed through `JournalEntry::post()`, which checks at runtime that there are at least two entries, all in one currency, and that total debits equal total credits. Invalid entries return a `TransactionError`; the type's private fields prevent callers from bypassing those checks when constructing a `Transaction`. The CLI validates postings through this API before saving them and reports validation failures as `VALIDATION` errors (exit code 3).
+The CLI’s private transaction writer requires a validated `Transaction` and proof
+that its company’s posting date falls in an open period. `JournalEntry` checks
+entry currency as entries are added, and `JournalEntry::post()` requires at least
+two entries with equal debit and credit totals. Account lookup, journal
+validation, and the period check run in the savepoint that writes the posting.
+Balance and closed-period failures return `VALIDATION` (exit code 3).
 
 ### Retries are safe
 
@@ -35,8 +40,10 @@ Monetary JSON fields retain integer minor units and add decimal-string companion
 for example `"amount": 180000, "amount_display": "1800.00"` for USD.
 `txn list` and `audit log` keep their data arrays and expose
 `meta.pagination` with filtered totals and `has_more`; table mode warns on stderr
-when more rows exist. Continue with `--offset` and `--limit`. MCP tools expose
-the same amounts and put pagination in the tool result’s `_meta.pagination`.
+when more rows exist. Audit pages default to 50 rows and accept up to 100. For
+the next page, pass `meta.pagination.next_offset` to `--offset` with the same
+filters. MCP tools expose the same amounts and put pagination in the tool
+result’s `_meta.pagination`.
 
 Named error codes (`NOT_FOUND`, `VALIDATION`, `DATABASE`, etc.), `meta.command` in dot notation, consistent field presence. The agent can handle `bk` output reliably without parsing human-readable text or guessing at shapes.
 
@@ -46,9 +53,14 @@ A successful `bk export --output-format json` writes a standalone `{"beankeeper_
 
 Database triggers reject changes to posted financial fields, entry details, and audit records, including deletion and replacement. Transaction metadata and entry clearance status remain mutable for correlation, reversals, and reconciliation. Supported mutations append an actor, timestamp, and before/after snapshots in the same atomic operation.
 
-Every new posting, including imports and reversals, stores `posted_by` and a `create` audit record containing its immutable transaction and entry details. Set the principal with `--actor NAME` or `BK_ACTOR`. `bk txn show` displays the poster; JSON transaction output includes `posted_by`. Legacy transactions have an unknown poster (`null` in JSON).
+Every new posting, including imports and reversals, stores `posted_by` and a `create` audit record containing its immutable transaction and entry details. Set the actor label with `--actor NAME` or `BK_ACTOR` on the CLI or MCP server. Both use the verified agent URI as the actor when a token is present and no label is configured. `bk txn show` displays the poster; JSON transaction output includes `posted_by`. Legacy transactions have an unknown poster (`null` in JSON).
 
-Audit rows form a SHA-256 hash chain. `bk verify` checks the chain, its tail, new posting snapshots, and accounting invariants alongside SQLite integrity and foreign keys. It reports the first broken link or invalid transaction as a `DATABASE` error (exit code 4).
+`bk verify` checks every company in one ledger snapshot. It reports currency-by-currency
+debit and credit totals, row counts, named checks, and the SHA-256 audit-chain head
+after recomputing every row hash. Use `bk --json verify` or the MCP `verify` tool for
+the same structured evidence. Failures identify the first failed check and the
+affected record where available (`DATABASE`, exit code 4).
+See [verification and its limits](docs/audit-integrity.md#verification-and-limits).
 
 These protections detect tampering against the stored chain; they are not signatures or an external trust anchor. Someone with unrestricted database access can remove triggers and rewrite the ledger, hashes, and sequence together, or restore an older complete database. See [audit integrity](docs/audit-integrity.md) for the format, migration behavior, and limits.
 
@@ -422,6 +434,14 @@ your assistant to launch the server. Each process opens one database and resolve
 its passphrase once at startup. Missing databases and incorrect passphrases fail
 before the protocol starts.
 
+Both stdio and HTTP choose the recorded actor in this order: `--actor`,
+`BK_ACTOR`, verified agent URI, then a sanitized `mcp:<client>` name. MCP uses
+`mcp:unknown` when none is available. A verified request also records its signed
+`agent_uri` and `token_jti`, including when the server has a configured label.
+Find changes with `audit_log` using `actor` for the exact label or `agent` for
+the verified URI. The CLI equivalents are `bk audit log --by-actor NAME` and
+`bk audit log --agent URI`. Supplying both filters matches both fields.
+
 For Claude Desktop, add this entry to `claude_desktop_config.json`, adjusting the
 absolute binary and database paths:
 
@@ -462,8 +482,17 @@ mutation tools are absent and cannot be called.
 
 | Tools | Purpose |
 | --- | --- |
+| `ledger_setup_begin`, `ledger_setup_finish`, `ledger_setup_revoke` | Use a live owner Admin credential to issue or end an encrypted ledger's setup session |
+| `ledger_setup_book_create`, `ledger_setup_book_initialize`, `ledger_setup_book_update`, `ledger_setup_chart_apply`, `ledger_setup_account_add` | Configure personal and business books, charts, and accounts with an active setup grant |
+| `ledger_setup_opening_preview` | Validate a balanced opening journal within an active setup generation |
+| `ledger_setup_opening_reserve` | Hold the exact previewed opening journal for the existing approval workflow |
+| `ledger_setup_statement_preview` | Freeze the entries parsed from bounded CSV, OFX, or QFX content for review |
+| `ledger_setup_statement_commit` | Post the reviewed batch with a separate live approval credential |
+| `ledger_setup_statement_receipt` | Read statement provenance and the transaction IDs the batch created |
 | `period_close`, `period_reopen`, `period_list` | Close company posting dates, explicitly reopen with a reason, and inspect cutoffs |
 | `company_list`, `company_show` | Inspect companies |
+| `company_create` | Create and audit a company by slug and name, with an optional description |
+| `company_delete` | Confirm and audit deletion of a company with no retained data |
 | `account_list`, `account_show`, `account_create` | Inspect and create accounts |
 | `txn_post`, `txn_reverse`, `txn_meta_set`, `txn_meta_unset` | Post, reverse and annotate transactions |
 | `txn_list`, `txn_show`, `txn_clear`, `txn_reconcile` | Inspect transactions, clear entries and check intercompany links |
@@ -471,6 +500,8 @@ mutation tools are absent and cannot be called.
 | `security_create`, `security_list`, `security_price` | Register securities and record prices |
 | `investment_buy`, `investment_sell`, `investment_lots`, `investment_holdings` | Trade, inspect lots and value holdings |
 | `financial_summary` | Read-only advisor facts and comparisons; `company`, optional dates, currency and account selector arrays; returns the full `bk summary` JSON envelope |
+| `ledger_setup_status` | Read ledger readiness, including company, account, and transaction counts and whether the approval key is configured. Takes no arguments. |
+| `ledger_setup_book_show` | Read a book's current profile, fiscal year, base currency, and named accounts |
 | `report` | Run CLI reports |
 | `budget_list`, `budget_set`, `budget_delete` | Inspect and manage budgets |
 | `verify`, `audit_log` | Verify integrity and inspect the audit trail |
@@ -479,6 +510,17 @@ This catalog covers the full router. Capability enforcement can restrict discove
 further. Company-scoped tools require a `company` argument. `report` takes a `kind`
 and its options, with all 13 CLI report kinds available, including `schedule-c`,
 `1099` and `trend`. See the [report-kind list](docs/beankeeper/references/commands.md#report-kinds).
+For `trial-balance`, `balance`, `balance-sheet`, and `reconciliation`, use
+`as_of` or `to` in MCP and `--as-of` or `--to` in the CLI. Use `as_of` for
+`aging`. For date-range reports such as `income-statement`, use `from` and `to`.
+
+`txn_clear` and `bk txn clear` accept signed major-unit statement amounts such
+as `-95.40` for a withdrawal (credit) or `+95.40` for a deposit (debit) on
+the selected account. An unsigned amount clears an entry on either side.
+For same-company corrections, use `txn_reverse` / `bk txn reverse`. For a
+reference to a related posting, use `txn_meta_set` / `bk txn meta set` with a
+custom metadata key such as `related_transaction`.
+
 Tool schemas describe the accepted arguments. For example, `txn_post` takes:
 
 ```json
@@ -500,9 +542,26 @@ are accepted conflict strategies. Inputs use decimal major-unit strings, and res
 use the same data payload and integer minor units as `bk --json`. Results are
 available as JSON text content and, where the negotiated MCP protocol permits the
 payload's shape, `structuredContent`. Tool failures set `isError: true` with
-`{code, message}`. `financial_summary` instead returns the full CLI envelope on
-both success and failure. Audited writes use `mcp:<client name>` from the MCP handshake,
-with a sanitized name or `mcp:unknown`. Creation auditing is unchanged.
+`{code, message}`. `financial_summary` returns the full CLI envelope on both
+success and failure.
+
+`company_create` takes `slug`, `name`, and optional `description`. It creates a
+company without a setup profile and returns the same row array as the CLI.
+Use `ledger_setup_book_create` during authorized setup to create it together
+with its profile. Both use the same audited company insert. Under enforcement,
+`company_create` and `company_delete` require `ledger/admin`. Read-only mode
+omits both.
+
+Call `company_delete` with a `slug` to confirm deletion. The tool deletes an
+eligible company, records its prior state in the audit log, and returns
+`{"deleted":"slug"}`, matching the CLI's JSON data. Companies with retained
+data return `VALIDATION`. Keep them for their history and use `txn_reverse`
+when a posting needs correction.
+
+For a separate set of sample books, run `bk init --demo --path demo.db`.
+Desktop hosts can call `beankeeper_cli::commands::init::create_demo_ledger`
+with a fresh path and a passphrase resolved by the host. It publishes a
+verified demo ledger without overwriting an existing destination.
 
 Call `txn_meta_set` with `company`, exactly one of `id` or `reference`, and a
 `values` array such as `["status=disputed", "dispute_id=D-42"]`. `txn_meta_unset`
@@ -515,8 +574,9 @@ Supply the same explicit `reference` on retries to return the existing reversal
 with `skipped: true` and `existing_id`. Reconciled transactions cannot be reversed;
 existing clearings stay on the original and reversal entries start uncleared.
 
-Ledger initialization, company creation/deletion, account deletion, import,
-export, and attachments remain CLI operations. See the [MCP command reference](docs/beankeeper/references/commands.md#mcp).
+See the [MCP command reference](docs/beankeeper/references/commands.md#mcp) for
+tool arguments and the [intentional CLI-only mutations](docs/beankeeper/references/commands.md#intentional-cli-only-mutations)
+for actions that still need a local command.
 
 ### Streamable HTTP
 
@@ -1073,7 +1133,9 @@ currencies requires `--currency` (MCP: `currency`). With no selection,
 `bk` uses the company's sole transaction currency, or USD if the company has
 no transactions. `BEANKEEPER_CURRENCY` does not select a currency for this query.
 
-`bk account list` can include balances in a single query:
+Set `with_balances: true` in MCP `account_list` or pass `--with-balances`
+to `bk account list` to include debit, credit, and balance totals. Supply a
+currency if the company has transactions in several currencies.
 
 ```sh
 # List expense accounts with their debit/credit totals

@@ -4,7 +4,7 @@
   "commit_90d": 646,
   "rel_ver": "mariadb-13.1.2",
   "rel_pub": "2026-11-21",
-  "rel_days": 0,
+  "rel_days": 1,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -22,7 +22,7 @@
    "GHSA-c4gx-34mg-95q5(CVE-2026-107821,high)"
   ],
   "contrib_n": 83,
-  "enriched_at": "20261121",
+  "enriched_at": "20261122",
   "lang": {
    "C++": 58,
    "C": 36,
@@ -33,7 +33,7 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261120",
-   "release": "20261121",
+   "release": "20261122",
    "security": "20261121"
   },
   "rel_notes": [
@@ -89,7 +89,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"14282dccb0e6446b75e345dd540a01a0258c9d7f88cc93bc26bf5036560840c3\"",
+   "release": "W/\"0be927da11862258a8e039009e4180ec55e9e55d985f5dd41bd62a84b629d448\"",
    "security": "W/\"0313d584e425de4df8042ada4ccb322bf745d7837eac8d5b89193342b3ff121d\""
   },
   "rel_dates": [
@@ -137,7 +137,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2",
   "rel_pub": "2020-05-24",
-  "rel_days": 2372,
+  "rel_days": 2373,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -186,7 +186,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.2",
   "rel_pub": "2023-06-29",
-  "rel_days": 1241,
+  "rel_days": 1242,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -205,7 +205,7 @@
   "commit_7d": 0,
   "rel_ver": "1.1.1",
   "rel_pub": "2018-04-06",
-  "rel_days": 3151,
+  "rel_days": 3152,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -239,12 +239,12 @@
   "enriched_at": "20260927"
  },
  "fuma-nama/fumadb": {
-  "commit_90d": 10,
-  "commit_7d": 4,
-  "rel_ver": "fumadb@0.7.1",
-  "rel_pub": "2026-11-08",
-  "rel_days": 13,
-  "rel_n90": 2,
+  "commit_90d": 8,
+  "commit_7d": 0,
+  "rel_ver": "fumadb@0.7.3",
+  "rel_pub": "2026-11-15",
+  "rel_days": 7,
+  "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -258,16 +258,22 @@
    "MDX": 4,
    "CSS": 1
   },
-  "enriched_at": "20261108",
+  "enriched_at": "20261122",
   "etag": {
-   "release": "W/\"e405c153d53bc1235b541f9bf0613d2ee6e9f351255e5221fb47ccad20a12783\""
+   "release": "W/\"d1d974f51b9c1a06e8438d3cd8d9d9b854b33f4d32089708b70f4cd043da130b\""
   },
   "rel_dates": [
+   "2026-11-15",
    "2026-11-08",
    "2026-11-08",
-   "2026-08-13"
+   "2026-11-08"
   ],
   "rel_notes": [
+   {
+    "t": "fumadb@0.7.3",
+    "d": "2026-11-15",
+    "n": "### Literal Matching in String Operators ([b809f58](https://github.com/fuma-nama/fumadb/commit/b809f5886a9dcc7da545438612af0c8ff7ad48af))\n\n- On the Kysely and Drizzle adapters, `contains`, `starts with`, `ends with` and their `not` variants match `%` and `_` as literal characters instead of wildcards.\n- On the MongoDB adapter, the same operators match regular expression characters like `.` and `[` as literal characters.\n- Fix `b.not()` on the Prisma and MongoDB adapters."
+   },
    {
     "t": "fumadb@0.7.1",
     "d": "2026-11-08",
@@ -279,14 +285,19 @@
     "n": "- Generated Drizzle schemas no longer import `fumadb/cuid`. The Drizzle adapter generates runtime default values like other adapters.\n### Support drizzle-orm 1.0.0-rc.5 on MSSQL ([9c8ae29](https://github.com/fuma-nama/fumadb/commit/9c8ae2988c6726ece7e43b13ea4ba2f024f610b5))\n### Consistent migrations and generated schemas across adapters ([9c8ae29](https://github.com/fuma-nama/fumadb/commit/9c8ae2988c6726ece7e43b13ea4ba2f024f610b5))\n- `migrateTo()` and `migrateToLatest()` run the custom `up` (or `down`) of e"
    },
    {
+    "t": "fumadb@0.7.2",
+    "d": "2026-11-08",
+    "n": "- `from-database` migrations on PostgreSQL only introspect the current schema and the schemas of your tables.\n### PostgreSQL Schema ([6b476a8](https://github.com/fuma-nama/fumadb/commit/6b476a8e53afacd2ec192ac4b73fb3123f3f86fd))\n- Place tables in a PostgreSQL schema by setting their SQL name to `schema.table`, or with `names.schema()` for all tables.\n### UTC Timestamps on Kysely ([6b476a8](https://github.com/fuma-nama/fumadb/commit/6b476a8e53afacd2ec192ac4b73fb3123f3f86fd))\n- On PostgreSQL and MySQL, the Ky"
+   },
+   {
     "t": "fumadb@0.6.0",
     "d": "2026-08-13",
     "n": "### Add `forceReturning()` to `upsert()` ([aee041f](https://github.com/fuma-nama/fumadb/commit/aee041f2d4e5bc1a91a06e44b762022f40323dba))\nintrospection reported every database as empty, and `from-database` migration generation emitted\n### Fix Convex adapter sending SQL table names, and make `upsert()` atomic ([0ca4ce0](https://github.com/fuma-nama/fumadb/commit/0ca4ce06f12ffed69d072683c0cb0095572a9e9b))\nhandler looks tables up by their ORM name. Any table declared with a database name that differs\nfrom its "
    }
   ],
   "dim_ts": {
-   "commit": "20261108",
-   "release": "20261108"
+   "commit": "20261122",
+   "release": "20261122"
   }
  },
  "hydraide/hydraide": {
@@ -294,7 +305,7 @@
   "commit_7d": 7,
   "rel_ver": "server/v3.19.10",
   "rel_pub": "2026-11-09",
-  "rel_days": 12,
+  "rel_days": 13,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -355,7 +366,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.1",
   "rel_pub": "2026-11-01",
-  "rel_days": 20,
+  "rel_days": 21,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -394,7 +405,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.3",
   "rel_pub": "2022-11-20",
-  "rel_days": 1462,
+  "rel_days": 1463,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -436,7 +447,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.20.0",
   "rel_pub": "2026-10-15",
-  "rel_days": 37,
+  "rel_days": 38,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -530,7 +541,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.3",
   "rel_pub": "2024-07-05",
-  "rel_days": 869,
+  "rel_days": 870,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -640,7 +651,7 @@
   "commit_7d": 179,
   "rel_ver": "1.5.0-alpha.101",
   "rel_pub": "2026-11-09",
-  "rel_days": 12,
+  "rel_days": 13,
   "rel_n90": 4,
   "rel_pre": true,
   "rel_none": false,
@@ -713,7 +724,7 @@
   "commit_7d": 2,
   "rel_ver": "v.8.7.8",
   "rel_pub": "2026-08-14",
-  "rel_days": 99,
+  "rel_days": 100,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -755,7 +766,7 @@
  "webdevops/clitools": {
   "rel_ver": "2.4.4",
   "rel_pub": "2017-05-15",
-  "rel_days": 3477,
+  "rel_days": 3478,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -830,7 +841,7 @@
  "ClickHouse/homebrew-clickhouse": {
   "rel_ver": "clickhouse@23.5.3.24",
   "rel_pub": "2023-06-30",
-  "rel_days": 1240,
+  "rel_days": 1241,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -861,7 +872,7 @@
  "pwman3/pwman3": {
   "rel_ver": "v0.13.1",
   "rel_pub": "2024-10-15",
-  "rel_days": 767,
+  "rel_days": 768,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -957,7 +968,7 @@
  "Tinywan/openresty-project-v0.01": {
   "rel_ver": "v0.02",
   "rel_pub": "2017-07-13",
-  "rel_days": 3418,
+  "rel_days": 3419,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -995,7 +1006,7 @@
  "MAIF/thoth": {
   "rel_ver": "v3.0.0",
   "rel_pub": "2026-06-02",
-  "rel_days": 172,
+  "rel_days": 173,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1033,7 +1044,7 @@
  "YTFL/AttendMate-Bunk-Calculator-Attendance-Tracker": {
   "rel_ver": "v2.2.0",
   "rel_pub": "2026-09-12",
-  "rel_days": 70,
+  "rel_days": 71,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1052,7 +1063,7 @@
  "haymon-ai/dbmcp": {
   "rel_ver": "v0.13.2",
   "rel_pub": "2026-05-29",
-  "rel_days": 176,
+  "rel_days": 177,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1072,7 +1083,7 @@
  "ashvardanian/NetworkXternal": {
   "rel_ver": "0.5",
   "rel_pub": "2020-04-19",
-  "rel_days": 2407,
+  "rel_days": 2408,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1117,7 +1128,7 @@
  "ismailperim/briefd": {
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-09-23",
-  "rel_days": 59,
+  "rel_days": 60,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1138,7 +1149,7 @@
  "clems4ever/go-graphkb": {
   "rel_ver": "v0.0.54",
   "rel_pub": "2021-03-23",
-  "rel_days": 2069,
+  "rel_days": 2070,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1174,7 +1185,7 @@
  "boostcamp-2020/Project04-C-Whale": {
   "rel_ver": "1.0.0",
   "rel_pub": "2020-12-20",
-  "rel_days": 2162,
+  "rel_days": 2163,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1316,7 +1327,7 @@
  "ClayLipscomb/Odapter": {
   "rel_ver": "v2.01",
   "rel_pub": "2021-06-22",
-  "rel_days": 1978,
+  "rel_days": 1979,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1369,7 +1380,7 @@
  "HendrixString/Android-TriOrm": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2015-12-18",
-  "rel_days": 3991,
+  "rel_days": 3992,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1484,7 +1495,7 @@
  "ronek22/TodoApp": {
   "rel_ver": "v0.1",
   "rel_pub": "2018-09-26",
-  "rel_days": 2978,
+  "rel_days": 2979,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1542,7 +1553,7 @@
  "adbc-drivers/trino": {
   "rel_ver": "go/v0.5.3",
   "rel_pub": "2026-09-09",
-  "rel_days": 73,
+  "rel_days": 74,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1621,7 +1632,7 @@
  "nestjs-mod/nestjs-mod-fullstack": {
   "rel_ver": "server-v1.20.5",
   "rel_pub": "2025-05-02",
-  "rel_days": 568,
+  "rel_days": 569,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1656,7 +1667,7 @@
  "Bethel-nz/aurora": {
   "rel_ver": "v0.5.1",
   "rel_pub": "2026-03-23",
-  "rel_days": 243,
+  "rel_days": 244,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1675,7 +1686,7 @@
  "nethalo/dbsafe": {
   "rel_ver": "v0.6.4",
   "rel_pub": "2026-07-16",
-  "rel_days": 128,
+  "rel_days": 129,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1954,7 +1965,7 @@
  "LightBuzz/Azure-Unity": {
   "rel_ver": "v.1.4.1",
   "rel_pub": "2019-07-02",
-  "rel_days": 2699,
+  "rel_days": 2700,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1977,7 +1988,7 @@
  "nobrin/macaron": {
   "rel_ver": "0.4.0-pre2",
   "rel_pub": "2019-04-24",
-  "rel_days": 2768,
+  "rel_days": 2769,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2080,7 +2091,7 @@
  "hortopan/steam-wishlist-pulse": {
   "rel_ver": "v0.1.16",
   "rel_pub": "2026-08-13",
-  "rel_days": 100,
+  "rel_days": 101,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2107,7 +2118,7 @@
  "reloop-labs/reloop": {
   "rel_ver": "v0.9.0",
   "rel_pub": "2026-08-15",
-  "rel_days": 98,
+  "rel_days": 99,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2150,7 +2161,7 @@
  "Garionhk/StockGraber": {
   "rel_ver": "1.0.1",
   "rel_pub": "2026-07-16",
-  "rel_days": 128,
+  "rel_days": 129,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2374,7 +2385,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.3",
   "rel_pub": "2021-03-29",
-  "rel_days": 2063,
+  "rel_days": 2064,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2890,7 +2901,7 @@
  "t21dev/turbo-reader": {
   "rel_ver": "v0.28.1",
   "rel_pub": "2026-10-07",
-  "rel_days": 45,
+  "rel_days": 46,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2942,7 +2953,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.4.21",
   "rel_pub": "2026-10-23",
-  "rel_days": 29,
+  "rel_days": 30,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -3038,7 +3049,7 @@
   },
   "rel_ver": "v3.3.0",
   "rel_pub": "2026-11-08",
-  "rel_days": 13,
+  "rel_days": 14,
   "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,

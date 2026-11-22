@@ -47,18 +47,26 @@ Oracle Fusion Cloud doesn't allow direct database connections. Developers and co
 ### 1. Download the JAR
 Get the latest `orfujdbc-x.x.jar` from [Releases](https://github.com/krokozyab/ofjdbc/releases).
 
-### 2. Upload BI Publisher Catalogs
-You need permission to upload the BI Publisher catalogs, or help from your Fusion administrator.
+### 2. Upload the BI Publisher Reports
+You need permission to upload to the BI Publisher catalog, or help from your Fusion administrator.
 
-Upload `otbireport/DM_ARB.xdm.catalog` and `RP_ARB.xdo.catalog` to  
-`/Shared Folders/Custom/Financials` in your Oracle Fusion instance.
+Download the four files and upload them to `/Shared Folders/Custom/Financials` in your Oracle Fusion instance (Catalog → **Upload**), data models first:
+
+1. [DM_ARB.xdmz](https://github.com/krokozyab/ofjdbc/raw/master/otbireport/DM_ARB.xdmz)
+2. [DM_ARB2_V3.xdmz](https://github.com/krokozyab/ofjdbc/raw/master/otbireport/DM_ARB2_V3.xdmz)
+3. [RP_ARB.xdoz](https://github.com/krokozyab/ofjdbc/raw/master/otbireport/RP_ARB.xdoz)
+4. [RP_ARB2_V3.xdoz](https://github.com/krokozyab/ofjdbc/raw/master/otbireport/RP_ARB2_V3.xdoz)
+
+The driver uses `DM_ARB2_V3` by itself: wide tables and large results come back several times faster with far less network traffic, and a query may be longer than 32 KB. `DM_ARB` covers the few queries the newer model cannot take and older driver versions. `CHECK SETUP` (step 5) shows what the driver finds.
+
+Using another folder? Name it in the URL (step 3), and point each report to the data model in that folder (open the report → **Edit** → data model).
 
 ### 3. Connect
 In DBeaver, create a JDBC driver, add the downloaded JAR under Libraries, then enter the driver class and connection URL below.
 
 | Setting | Value |
 |---|---|
-| **JDBC URL** | `jdbc:wsdl://<host>/xmlpserver/services/ExternalReportWSSService?WSDL:/Custom/Financials/RP_ARB.xdo` |
+| **JDBC URL** | `jdbc:wsdl://<host>/Custom/Financials` — the catalog folder you uploaded the reports to (`jdbc:wsdl://<host>` alone means `/Custom/Financials`). The long form `jdbc:wsdl://<host>/xmlpserver/services/ExternalReportWSSService?WSDL:/Custom/Financials/RP_ARB.xdo` keeps working. |
 | **Driver Class** | `my.jdbc.wsdl_driver.WsdlDriver` |
 | **Authentication** | Fusion Username & Password, Browser SSO with MFA (`?authType=BROWSER`), **or** OAuth 2.0 client credentials for headless jobs (`?authType=OAUTH`, see [OAuth](docs/environment-variables.md#oauth-authentication)) |
 
@@ -67,6 +75,9 @@ In DBeaver, create a JDBC driver, add the downloaded JAR under Libraries, then e
 ```sql
 SELECT * FROM FUSION.GL_LEDGERS FETCH FIRST 10 ROWS ONLY;
 ```
+
+### 5. Something not working?
+Run `CHECK SETUP` in the SQL editor. It answers with one row per step — the driver JAR your tool loaded, the server, the login, the reports in the folder and a test query — each OK, WARNING or FAILED with what to do. `HELP` lists every driver command with an example to copy.
 
 <p align="center">
   <img src="pics/formatted_sql.png" alt="OFJDBC — SQL queries in DBeaver against Oracle Fusion" width="700"/>
@@ -113,13 +124,30 @@ FROM DUCK.je
 GROUP BY currency_code;
 ```
 
-One query can also mix both: `UNION` branches and parenthesized subqueries that read only `FUSION.*` tables are fetched from Fusion first, then the whole query runs locally. Keep the Fusion part filtered — it is fetched in full:
+One query can also mix both: `UNION` branches and parenthesized subqueries that read only `FUSION.*` tables are read from Fusion, and the whole query runs locally. Keep the Fusion part filtered. When the query has a row limit — its own `LIMIT`, or the result set size DBeaver sets — and the part reads plain Fusion columns, only the pages the query needs are read (the first 200 rows of a join in about a second instead of the whole table); otherwise the part is read in full:
 
 ```sql
 SELECT l.*, f.enabled_flag
   FROM DUCK.gcc l
   JOIN (SELECT code_combination_id, enabled_flag FROM FUSION.GL_CODE_COMBINATIONS
          WHERE segment2 = '1110') f ON f.code_combination_id = l.code_combination_id;
+```
+
+**Live views.** A view in DUCK can read Fusion or REST: it keeps no copy, and every query of it reads the source again, with column types from the Fusion dictionary or the REST description. Put the filters inside the view ([details](docs/duck_workspace.md#3-mixed-queries-and-the-next-result-page)):
+
+```sql
+CREATE VIEW DUCK.open_invoices AS
+  SELECT invoice_id, invoice_num, invoice_amount FROM ap_invoices_all WHERE payment_status_flag = 'N';
+
+CREATE VIEW DUCK.big_invoices AS
+  SELECT InvoiceId, InvoiceNumber, InvoiceAmount FROM REST.invoices WHERE InvoiceAmount > 1000;
+```
+
+**Fusion SQL and driver commands inside DuckDB queries.** `fusion('<Oracle SQL>')` returns the rows of a Fusion query, and every consultant command below is a table too — `lookup('…')`, `profile('…')`, `ess_requests(…)`, `user_access('…')`, … — to filter, join or export. With connections to two environments open in the same tool, `host := '…'` reads the other one, so one query compares them:
+
+```sql
+SELECT * FROM ess_requests(job := 'ImportPayables%', last := 200) WHERE state = 'ERROR';
+SELECT * FROM lookup('YES_NO', host := 'test') EXCEPT SELECT * FROM lookup('YES_NO');
 ```
 
 A statement prefixed with `#d` (or `#duck`) runs in DuckDB as written — its full SQL dialect and functions, CSV, Parquet, JSON and Excel files, `COPY`, `SUMMARIZE`:
@@ -136,6 +164,8 @@ The workspace `~/.ofjdbc/duck.duckdb` is shared by all your Fusion connections, 
 
 | Command | Result |
 |---|---|
+| `HELP ['word']` | Every driver command with its syntax, what it does and an example to copy; `HELP DUCK`, `HELP REST`, `HELP JOIN KEYS` show one area or command. |
+| `CHECK SETUP` | What the connection finds: driver JAR, server, login, the reports in the folder and a test query, each OK / WARNING / FAILED with what to do. |
 | `FIND FUSION TABLE 'GL_JE%'` | Tables and views whose name or description matches the pattern (`'%journal%'` searches descriptions). Answered from the local cache in milliseconds. |
 | `FIND FUSION COLUMN 'INVOICE_NUM'` | Tables and views having a matching column (`'%invoice number%'` searches column descriptions), with type, width and description. |
 | `JOIN KEYS AP_INVOICES_ALL [AP_INVOICE_LINES_ALL]` | How tables join, learned from Oracle's own view definitions (all `FND_VIEWS`): join condition, number of views using it, example views. For two tables with no key of their own it finds paths through up to two intermediate tables. |
@@ -148,6 +178,8 @@ The workspace `~/.ofjdbc/duck.duckdb` is shared by all your Fusion connections, 
 | `EXPLAIN FUSION VIEW FND_CURRENCIES_ACTIVE_V` | Objects the view reads, the join keys between them and single-object filters, read from the full view text. |
 | `DESCRIBE FLEXFIELD AP_INVOICES_ALL` | Segment → column mapping (`ATTRIBUTE1..N` / `SEGMENT1..N`) of the descriptive or key flexfields of a table, with contexts/structures, required flags and value sets. |
 
+**Errors That Say What to Do** — A report missing from the folder in the URL names the folder and the files to check instead of a bare HTTP 500. `ORA-00942` lists the tables of your query, which names are known and which look like a known one (`AP_INVOCES_ALL` → did you mean `AP_INVOICES_ALL`?); `ORA-00904` offers the column you probably meant (`AI.INVOICE_NUM`) or the table of your query that has it.
+
 **Query Profiler** — Add `?profile=true` to the JDBC URL and every fetched page reports its telemetry in the IDE's Output panel: SOAP round trip vs download and parse time, payload size, whether the page was read completely, and the exact SQL sent. See [Query Profiler](docs/environment-variables.md#query-profiler-ofjdbc_profile).
 
 **Runs Locally** — The driver runs on your computer and connects directly to your Fusion instance. No third-party relay, no SaaS intermediary.
@@ -159,6 +191,8 @@ The `DUCK` schema remembers where each imported table came from, can bring it up
 | I want to… | Use | Section |
 |---|---|---|
 | Read only the Fusion rows for a list I have locally | `… WHERE col IN (SELECT col FROM DUCK.ids)` | [Filter Fusion by a list](#filter-fusion-by-a-list-kept-in-duck) |
+| See current Fusion or REST data under a DUCK name, without copying it | `CREATE VIEW DUCK.x AS SELECT … FROM …` | [Views that read Fusion and REST](docs/duck_workspace.md#3-mixed-queries-and-the-next-result-page) |
+| Filter, join or export a command's result; compare DEV with TEST in one query | `lookup('…')`, `ess_requests(…)`, `fusion('…', host := 'test')` | [Commands as tables](docs/duck_workspace.md#3-mixed-queries-and-the-next-result-page) |
 | Save a big Fusion result to a file | `#d COPY (SELECT … FROM FUSION.x) TO 'f.parquet'` | [Export](#export-to-parquet-or-csv) |
 | See which tables came from which environment, and refresh them | `DUCK TABLES`, `REFRESH DUCK.x` | [Datasets](#datasets-where-a-table-came-from-and-refresh) |
 | Get a table with names instead of ids and codes | `… DECODE FLEXFIELDS, NAMES, ACCOUNTS, LOOKUP …` | [Readable imports](#readable-imports-decode) |
@@ -404,7 +438,8 @@ Two ways into the same data: a JDBC driver for the JVM world, and an Oracle Net 
 
 - **Read-only** — Oracle Fusion is queried with `SELECT` only (the BI layer permits no writes, and the driver never writes through REST); writing is possible only in the local `DUCK` schema.
 - **Performance** — SOAP and REST transports add overhead compared to native DB access. Automatic pagination helps, but very large exports take time.
-- **SQL length** — The BI Publisher data model receives the query as a PL/SQL `VARCHAR2`, so a query may be at most 32,767 bytes (UTF-8) as sent — comments are stripped, but the added pagination clause and secured-view names count. Longer queries are rejected before sending with a clear error (SQLState `54000`).
+- **Long queries** — The driver waits 120 seconds for BI Publisher's answer (`OFJDBC_HTTP_READ_TIMEOUT`). A query not answered in time is stopped with advice on making it faster and is not sent again, since it may still be running in Fusion.
+- **SQL length** — With `DM_ARB` the query may be at most 32,767 bytes (UTF-8) as sent, up to about 375 KB with `DM_ARB2_V3` — comments are stripped, but the added pagination clause and secured-view names count. Longer queries are rejected before sending with a clear error (SQLState `54000`).
 - **Security** — Ensure usage complies with your organization's security policies and Oracle Fusion terms of service.
 
 ## 📄 Documentation

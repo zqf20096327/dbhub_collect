@@ -24,14 +24,22 @@ across projects, machines, and sessions.
   become a shared knowledge base.
 - **On me / Delegated.** Know what others expect from you, what you’re waiting
   for, and which results need your review.
-- **A graph that drives work.** Dependencies show agents what’s ready; claims
-  keep them from taking the same task.
+- **A graph that drives work.** Dependencies show agents what’s ready; an agent
+  asks for the next ready task and claims it. The claim is atomic: two agents
+  never take the same task.
 - **Search by meaning.** Find past work and decisions even when the wording is
   different.
 - **Duplicate detection.** Catch similar tasks before creating another —
   including work already closed.
 
+Skein is an MCP server for task management for AI coding agents — Claude Code,
+Codex, Cursor and any other MCP client — self-hosted or in the cloud.
+
 **[Explore features and workflows → skein.net](https://skein.net)**
+
+**Cloud:** sign up at <https://app.skein.net/signup> → create a key in
+Settings → API keys → connect your agent to `https://app.skein.net/mcp` with
+the header `X-Skein-Api-Key`. Each team member uses their own key.
 
 Self-host Skein with Docker Compose or Kubernetes.
 
@@ -68,8 +76,8 @@ three service repositories, which are cloned into `projects/` of this one.
 
 ### Install from the registry
 
-You need Docker with Compose 2.23.1 or newer and curl. Ports 8080 and 3900 must
-be free.
+You need Docker with Compose 2.23.1 or newer and curl. Ports 8080, 3900 and
+5103 must be free.
 
 ```bash
 mkdir -p skein/garage && cd skein
@@ -87,8 +95,8 @@ you must never use them on a server.
 
 ### Build from source
 
-You need the same Git and Docker (Compose 2.23.1 or newer); ports 8080, 3900
-and 5173 must be free.
+You need the same Git and Docker (Compose 2.23.1 or newer); ports 8080, 3900,
+5103 and 5173 must be free.
 
 ```bash
 git clone https://github.com/tryskein/skein.git
@@ -143,7 +151,10 @@ What you need:
 
 - a Linux server with Docker and the Compose v2 plugin, version 2.23.1 or newer;
 - a public HTTPS address for Skein. The guide asks who terminates HTTPS in front
-  of it;
+  of it. The session cookie `__Host-skein.sid` is `Secure`, so plain HTTP gives
+  no working sign-in; `SKEIN_ALLOW_INSECURE_HTTP` (cookie `skein.sid`) exists
+  only for local work in the `Development` environment, see
+  [INSTALL.md](INSTALL.md);
 - access for the agent to the server (SSH), or run the agent on the server itself.
 
 Pin the version: set `SKEIN_VERSION` in `.env` to a Skein release such as
@@ -187,6 +198,15 @@ Every variable of each service is described in its own reference:
 3. Set the new `SKEIN_VERSION` in `.env`, apply any `.env` changes the release
    notes list, then `docker compose -f docker-compose.production.yml pull` and
    `docker compose -f docker-compose.production.yml up -d`.
+
+The release that introduces the `__Host-skein.sid` session cookie changes the
+session format and is rolled out with a stop: old and new skein-web never run
+together, and everyone signs in once more. On Kubernetes its `skein-web.yaml`
+uses `strategy: Recreate`; if you keep your own copy of the manifests, set that
+in the same apply as the new image tags, and return to RollingUpdate in a
+separate change after that release. After a rollback delete the Redis key
+`skein:session-format` before rolling forward again; details in
+[INSTALL.md](INSTALL.md).
 
 Database migrations run automatically when skein-api starts. Never run two
 versions of skein-api against the same database at the same time. Rolling the
@@ -290,5 +310,10 @@ Please report vulnerabilities privately — see [SECURITY.md](SECURITY.md).
 ## License
 
 Skein is licensed under the [Business Source License 1.1](LICENSE).
+**Fair Source:** free for any organization of up to 99 people and for
+non-profits of any size; for-profit companies of 100 or more people pay a
+fixed yearly fee after a free period. Nobody may resell Skein as a paid hosted
+service or embed it in a paid product that competes with it. Each version
+becomes MPL 2.0 four years after its release.
 Licensing FAQ: https://skein.net/licensing.
 Trademarks: [TRADEMARKS.md](TRADEMARKS.md).

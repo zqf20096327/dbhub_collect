@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.99.10-gold"></a>
+  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.99.13-gold"></a>
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-ISC-blue.svg"></a>
   <a href="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml"><img alt="Build" src="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml/badge.svg"></a>
   <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg">
@@ -120,6 +120,21 @@ npm run build
 
 LOG.md`](./CHANGELOG.md)。
 
+### v0.99.13 · 切章保存不再误丢稿 / 更新检查不再假报错（日志巡检）
+
+- **问题**：v0.99.10 日志包（11-17～11-22）里 27 条 ERROR 集中在两处。第一，10 次「正文已被另一窗口更新，拒绝用旧快照覆盖」的保存冲突，全部发生在切章后 10–50ms，冲突对象都是**上一章**——上一章在途保存被换成新章的 CAS 基线，后端正确拒绝、前端却误报「另一窗口已更新」并停止重试，切章前最后几次编辑因此丢失。第二，12 次「检查更新失败」+3 次「安装更新失败」：本机 GitHub 源不可达、官网已明确返回「无更新」，但旧裁决把「任一源失败」整体升级成更新失败，用户每次启动都看到报错。
+- **结果**：CAS 基线改为「按 scene 绑定 + 保存入口同步捕获」，跨 scene 不发送指纹、在途保存不再覆盖新章基线；视觉空稿（`<p></p>` 等）直接跳过写入，避免把前端基线写成空稿后永久冲突。更新检查改为「有源成功给出确定结果即采用」，另一源失败只附 `warning` 诊断日志；所有源都失败才报错。新增 8 条回归测试（Rust 4 / 前端 4）。
+
+### v0.99.12 · 续写训练真机复盘（日志保留 / 主角识别 / 修订直出 / 探针收敛）
+
+- **问题**：11-22 的 10 章训练（报告 `aa70a919`）编审判 6 章修订，但报告写「0 章真正修订、7 章判修订但修订未完成」——修订只要 tool_loop 正常结束就记账，模型没写黑板也算完成；v0.99.11 重跑时单章修订 prompt 约 30k 字符（15k tokens），24 分钟仍未完成。同日重启后当日 tracing 从新进程第一行开始：日志保留条件写反，启动时删掉刚写入的日志、留下 7 天前旧文件。确定性 cast 兜底把出场最早的「大波浪卷女人」当成角色表第一项，旧 roster 便标成主角；brief 里「我/主角/周成」并存，编审把主角姓名判成配角。记忆探针仍报 `蓝漆铁/黄铜钥/邵先生/传呼机/冷库门`。
+- **结果**：日志保留改为「早于 7 天才删」，当日 tracing 不再丢失；主角只按原文自称句式（我叫X/以X身份/X自报/自称X）识别，并把「我/主角/阴脉先生」合并到权威姓名，roster 不再假定第一项是主角；训练批量修订跳过 ReAct，用完整正文 + 逐条问题直出并校验「与首稿不同、≥300 字」，写回后再走第二轮 gate（round-2 也跟随直连 JSON）——修订完成才记账；LeadWriter 单章草稿写入上限 2 次，第二稿成功写入即采用，避免单章 9 稿轮询；首稿裁决 pass、修订稿变 revise 时回退首稿；探针改为长串优先 + 称谓/器物收尾过滤；写作红线新增「禁止不是…而是…排比/比喻堆叠、每章至少一次配角互动、主角身份统一」。新增 6 条回归测试。
+
+### v0.99.11 · 模型调度止血（撞额度重试 + reasoning_effort + 冷却兜底）
+
+- **问题**：本机 11-22 实机对账确认三处调度缺陷：writer 只申请 8192 输出，推理模型 CoT 吃满后 `content` 为空（`finish_reason=length`），连续 8 次空正文最终被当成主创熔断；`LlmProfile.reasoning_effort` 字段存在但从未发送给 API，JSON/抽取任务一直按默认 high 思考；`candidate_count=1` 时一次空正文就把唯一候选冷却 10 分钟，后续请求直接报「所有候选模型都因连续空正文进入冷却」。
+- **结果**：适配器解析 `finish_reason` 与 `reasoning_tokens`，空正文撞 `length` 时把 `max_tokens` ×4（封顶 32768）重试一次；打通 `reasoning_effort`（profile 显式值优先，JSON/结构化任务默认 low，未声明 reasoning 的端点不发送）；全部候选冷却时恢复候选兜底而非硬失败；keepalive 与 pre-call 探测 5s/4 tokens → 30s/64 tokens，空正文告警 60s 节流。新增 7 条回归测试。
+
 ### v0.99.10 · 训练报告/标题落库/记忆探针收尾（日志巡检）
 
 - **问题**：11-21 两轮真机 10 章训练（v0.99.9）第二轮总分升到 0.86、承接 9.9，但报告出现「0 章质检降级（编辑审计未完成，已放行保产出）」自相矛盾；第一轮第 12/13 章自动取名因 `database is locked` 失败、标题缺失；记忆探针仍把 `宏达投/达投资`（白名单长词窗口碎片）、`条案上/像是有/缕青烟`（方位/虚词窗口）误报为新专名。
@@ -152,23 +167,4 @@ LOG.md`](./CHANGELOG.md)。
 
 ### v0.99.4 · 官网 Release 保留策略 5→3（修复 552 Disk full）
 
-- **问题**：v0.99.2 三平台构建成功，但 `upload-to-website` 在 macOS 更新包 `.sig` 报 `552 Disk full`；retention=5、服务器正好 5 版，清理「nothing to clean up」，官网 latest.json 停在 0.99.1。
-- **结果**：上传脚本默认 `RELEASE_RETENTION_COUNT` 5→3，Cleanup Releases keep 默认 5→3；Cleanup keep=3 已释放空间，v0.99.2 上传重跑，后续 v0.99.3/v0.99.4 按新策略上传。
-
-### v0.99.3 · 训练 compact/blind/probes + brief 预览 + 模型 GPU 诊断
-
-- **问题**：v0.99.2 的 P1/P2 剩余项——本地模型没有 compact 提示词模式、训练页没有盲测开关、资产摘要阶段没有逐章进度、人物/线索/地点/新专名探针未接入报告、摘要缓存无 TTL、报告详情看不到模型实际收到的《前情提要》、模型页不显示 GPU 实测 prompt 上限。
-- **结果**：新增 compact prompt（预算 6000/brief 2200/ledger 600/progress 900）、训练页盲测/紧凑勾选、资产逐章进度（35→40）+日志心跳、记忆探针（人物留存/线索未推进/地点跳切/疑似新专名）、V163 摘要缓存 30 天 TTL、`training_get_story_brief` 报告详情预览、`ModelHealthReport.prompt_limit_tokens` 模型页诊断。
-
-### v0.99.2 · 续写训练资产分阶段 + 网关容量路由 + 进度/评分口径
-
-- **问题**：v0.99.1 真机报告 0.63（承接 7.2）证明长程记忆有效，但资产重建仍失败——单次 26k prompt/8192 tokens 下 deepseek-v4 三次 CoT-only（content 空）、Qwren127 GPU OOM（16,781 tokens 需 9,439MB，仅 3,387MB）；brief 只剩 2042 字首尾摘要/0 白名单/0 cast；147 次 writer 调用 55 次失败；确定性摘要漏第 142 章 81% 的邵卫江；编审把原书后续差距误判为承接断裂；任务 40% 停 45 分钟。
-- **结果**：资产重建改为「逐章小 prompt（并发 3、V163 缓存）→ 聚合 brief（只喂结构化摘要）」；JSON mode 补全 reasoning 截断 JSON；GPU OOM 学习模型 prompt 上限并按大小跳过本地小模型；确定性事件摘要（首句+中段冲突/引号/专名句+尾句）；批内每章 progress/log/heartbeat；judge 分列「承接（沙盒）」与「原书差距 reference_gap」；blind 反馈模式过滤真实后续节点。
-
-### v0.99.1 · 续写训练长程记忆（前情提要 + 本批账本 + 设定白名单）
-
-- **问题**：v0.99.0 后 10 章训练仍 0.40（承接 3.1、情节 3.3），编审结论「缺乏长程记忆与逻辑连贯性」；11-17 那轮资产重建成功（10 条逐章梗概都在库里）也只有 0.24（承接 1.2）——数据生成了，但没进 writer/planner 的 prompt。
-- **根因**：writer 进度块只读最近 3 章正文末 220 字，第 11 章后 `scene_outcomes` 更把上下文整体替换成 3 条 outcome；planner 只读 3 条梗概，1400 字承接锚点又在 3200 字 directive 之外被截掉；资产重建失败时通用兜底用「正文头 600 + 尾 1800」生成「第 134 章单章回顾 + 下一拍规划」，截到 1200 字冒充故事大纲。
-- **结果**：新增《前情提要》（逐章事实/未结线索/人物当前态/设定白名单），protected 全量注入 writer、planner 与编审；进度块改为全量逐章梗概 + outcomes 补充；批次维护滚动账本（第 n 章看到第 11..n-1 章实际发生了什么）；训练路径跳过 `ensure_story_outline` 伪大纲；通用大纲兜底改逐章摘要归纳并拒绝执行规划；红线引用白名单与未结线索。
-
-### v0.99.0 ·
+- **问题**：v0.99.2 三平台构建成功，但 `upload-to-website` 在 macOS 更新包 `.sig` 报 `552 Disk full`；retentio

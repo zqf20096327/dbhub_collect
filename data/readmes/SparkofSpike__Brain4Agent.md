@@ -236,11 +236,15 @@ and the MCP server and the CLI can hold the same file at once. WAL mode means
 a snapshot must go through SQLite's backup API rather than a file copy, which
 leaves the log behind and drops committed rows.
 
-The cost to know about is not the file. A local write marks the store dirty and
-the next search rebuilds the whole index: **402 ms at 2,925 memories**, against
-4 ms for a keyword query once warm. Resident memory is the other ceiling --
-145 bytes per index token, about 1.2 GB at 100k memories. Both belong to the
-in-memory index layer, not to SQLite (D-043).
+The cost to know about is not the file, and as of 0.2.0 it is no longer the
+write-then-read cycle either. A local write extends the index in place instead
+of dirtying it, so the first search after a write costs **16.3 ms at 2,930
+memories** instead of 408 ms, against 4.4 ms once warm (D-049). Three derived
+tables cannot be extended, because every idf is a function of the document
+count; that pass is deferred to the next query and costs 11.3 ms, already
+inside that 16.3 ms. Resident memory is the other ceiling -- 145 bytes per
+index token, about 1.2 GB at 100k memories. Both belong to the in-memory index
+layer, not to SQLite (D-043).
 
 ### Read/write tokenizer split
 

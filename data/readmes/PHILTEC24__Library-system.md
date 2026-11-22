@@ -1,4 +1,6 @@
-﻿<div align="center">
+<div align="center">
+  <a href="https://github.com/PHILTEC24/Library-system"><strong>🔗 GitHub Repository: https://github.com/PHILTEC24/Library-system</strong></a>
+  <br><br>
   <img src="database/logo.png" alt="Library Management System logo" width="260">
   <h1>Library Management System</h1>
   <p><strong>LibraryMS — a complete, database-driven library operations system</strong></p>
@@ -20,6 +22,7 @@ The application uses **PHP 8 + PDO** for secure server-side operations and **MyS
 - Secure login and role-aware staff sessions
 - Dashboard with live library statistics and overdue alerts
 - CRUD management for books, authors, categories and members
+- Book cover images and staff-uploaded PDF e-books with in-browser viewing
 - 14-day book issue workflow with availability and transaction checks
 - Book return workflow with automatic overdue-day calculation
 - Active-loan and overdue-loan tracking
@@ -103,52 +106,85 @@ flowchart TD
 
 ## Screenshots
 
-| Dashboard | Books | Loans |
+### Application Overview
+
+| Dashboard | Books Catalogue | Loans Circulation |
 |---|---|---|
 | ![Dashboard](docs/screenshots/01_dashboard.png) | ![Books](docs/screenshots/02_books_list.png) | ![Loans](docs/screenshots/03_loans_list.png) |
 
-| Issue a book | Business rules |
+| Issue a Book | Business Rules Safeguard |
 |---|---|
 | ![Issue a book](docs/screenshots/04_issue_book.png) | ![Business rules](docs/screenshots/05_business_rules.png) |
 
+### CRUD Operations & Business Logic
+
+| Entity / Domain | Create | Read / List | Update | Delete / Safeguard |
+|---|---|---|---|---|
+| **Books** | [![Books: Create](docs/screenshots/crud/01_books_create.png)](docs/screenshots/crud/01_books_create.png) | [![Books: Read](docs/screenshots/crud/02_books_read.png)](docs/screenshots/crud/02_books_read.png) | [![Books: Update](docs/screenshots/crud/03_books_update.png)](docs/screenshots/crud/03_books_update.png) | [![Books: Delete](docs/screenshots/crud/04_books_delete.png)](docs/screenshots/crud/04_books_delete.png) |
+| **Members** | [![Members: Create](docs/screenshots/crud/05_members_create.png)](docs/screenshots/crud/05_members_create.png) | [![Members: Read](docs/screenshots/crud/06_members_read.png)](docs/screenshots/crud/06_members_read.png) | [![Members: Update](docs/screenshots/crud/07_members_update.png)](docs/screenshots/crud/07_members_update.png) | [![Members: Delete](docs/screenshots/crud/08_members_delete.png)](docs/screenshots/crud/08_members_delete.png) |
+| **Loans** | [![Loans: Create](docs/screenshots/crud/09_loans_create.png)](docs/screenshots/crud/09_loans_create.png) | [![Loans: Read](docs/screenshots/crud/10_loans_read.png)](docs/screenshots/crud/10_loans_read.png) | [![Loans: Update](docs/screenshots/crud/11_loans_update.png)](docs/screenshots/crud/11_loans_update.png) | [![Delete Refused (Rule 6)](docs/screenshots/crud/12_delete_refused.png)](docs/screenshots/crud/12_delete_refused.png) |
+
+| Authors: Create & Read | Categories: Create & Read |
+|---|---|
+| [![Authors: Create and Read](docs/screenshots/crud/13_authors_create_and_read.png)](docs/screenshots/crud/13_authors_create_and_read.png) | [![Categories: Create and Read](docs/screenshots/crud/14_categories_create_and_read.png)](docs/screenshots/crud/14_categories_create_and_read.png) |
+
 ## Project structure
 
+Your project folder sits inside XAMPP's `htdocs` directory (e.g. `C:\xampp\htdocs\library-system`) and is strictly organized according to the course specification:
+
 ```text
-Library-system/
-├── index.php                 # Entry router
-├── README.md                 # Project documentation
-├── LICENSE                   # MIT licence
-├── assets/
-│   ├── css/style.css         # Custom responsive styling
-│   └── js/main.js            # Live search, confirmations and alerts
-├── auth/
-│   ├── login.php             # Staff login
-│   └── logout.php            # Session logout
-├── authors/                  # Author CRUD
-├── books/                    # Book CRUD and CSV export
-├── categories/               # Category CRUD
+library-system/
+├── index.php                 redirects to login or dashboard
+├── README.md                 how to install and run the project
 ├── config/
-│   └── database.php          # PDO database connection
-├── dashboard/
-│   └── index.php             # Statistics and overdue information
+│   └── database.php          the one and only database connection
 ├── database/
-│   ├── library_db.sql        # Schema and complete seed data
-│   ├── queries.sql           # Loan, overdue and aggregate reports
-│   ├── logo.png              # Project logo
-│   └── erd.png               # Entity relationship diagram
-├── docs/
-│   ├── report.html           # HTML project report
-│   ├── report.pdf            # PDF project report
-│   └── screenshots/          # Application screenshots
+│   ├── library_db.sql        creates tables and inserts sample data
+│   ├── queries.sql           your JOIN and aggregate queries
+│   └── erd.png               your ERD diagram
 ├── includes/
-│   ├── auth_check.php        # Protected-route session guard
-│   ├── footer.php            # Shared footer and scripts
-│   ├── functions.php         # Escaping, flash and helper functions
-│   ├── header.php            # Shared page head
-│   └── navbar.php            # Shared navigation
-├── loans/                    # Issue, return, list and export loans
-└── members/                  # Member CRUD and CSV export
+│   ├── header.php
+│   ├── navbar.php
+│   ├── footer.php
+│   ├── auth_check.php        blocks any page when not logged in
+│   └── functions.php         shared helpers (validation, messages)
+├── auth/
+│   ├── login.php
+│   └── logout.php
+├── dashboard/
+│   └── index.php             summary after login
+├── books/
+│   ├── index.php             list, search, filter
+│   ├── create.php
+│   ├── edit.php
+│   └── delete.php
+├── members/
+│   ├── index.php
+│   ├── create.php
+│   ├── edit.php
+│   └── delete.php
+├── loans/
+│   ├── index.php
+│   ├── issue.php
+│   └── return.php
+├── authors/                  minimum: list and add
+├── categories/               minimum: list and add
+├── assets/
+│   ├── css/
+│   ├── js/
+│   └── images/
+└── docs/
+    ├── report.pdf
+    └── screenshots/
 ```
+
+### Rules for the structure
+
+- **One folder per entity:** Do not mix book pages and member pages in one folder.
+- **Shared page parts:** (header, navigation, footer, login check) live only in `includes/`. Do not copy and paste them into every page.
+- **Single database connection:** The database connection is written once in `config/database.php` and reused with `require_once`.
+- **Clean root:** No file may sit loose in the root except `index.php` and `README.md`.
+- **Consistent naming:** Use lowercase names with no spaces, and the same naming pattern everywhere.
 
 ## Installation
 
@@ -190,6 +226,8 @@ C:\xampp\htdocs\library-system\database\library_db.sql
 
 and click **Import**. The SQL script creates `library_db`, tables, relationships, constraints and sample records.
 
+For an existing database, run `database/migrations/20261120_add_book_media.sql` once in phpMyAdmin instead of re-importing the full SQL file. Re-importing `library_db.sql` drops and recreates the database, replacing its data.
+
 ### 4. Configure the connection
 
 Check [config/database.php](config/database.php). The default XAMPP credentials are:
@@ -213,6 +251,12 @@ Visit <http://localhost/library-system>. Use one of the seeded accounts:
 | `librarian` | `password` | Librarian |
 
 > Change or remove demo credentials before using the application in production.
+
+### Upload covers and digital books
+
+From **Books → Add book** or **Edit book**, optionally attach a JPEG/PNG/WebP cover image (up to 5 MB) and a PDF digital copy (up to 25 MB). Covers appear in the catalogue. Staff can open PDFs in the browser or download them. Uploaded media is private to authenticated users; only upload digital books that the library is authorised to distribute.
+
+If uploads are rejected due to PHP limits, update `upload_max_filesize` to at least `25M` and `post_max_size` to at least `32M` in `php.ini`, then restart Apache. The application stores files under `uploads/books/`; retain this directory and its contents when backing up or moving the database.
 
 ## Database design
 
@@ -255,14 +299,12 @@ The supplied team register contains the following twelve names and registration 
 | 2 | ALIMPA ANNE HILLARY | 269-896 |
 | 3 | KABAJUNGU RITAH | 267-640 |
 | 4 | KIRABO ALICE | 274-961 |
-| 5 | MUAWIA MOHAMED | 229-449 |
-| 6 | IBRAHIM ISHAG | — |
-| 7 | NATOZO PATIENCE | 258-901 |
-| 8 | MARTHA | — |
-| 9 | NIWASIIMA ASHELYCOLE | 275-353 |
-| 10 | ONYANGO JOHN STEVEN | 270-472 |
-| 11 | RWOTHOMIO EVANS, E. | 275-372 |
-| 12 | TUSABEGE PHILBERT | 272-210 |
+| 5 | MUAWIA MOHAMED IBRAHIM ISHAG | 229-449 |
+| 6 | NATOZO PATIENCE MARTHA| 258-901 |
+| 7 | NIWASIIMA ASHELYCOLE | 275-353 |
+| 8 | ONYANGO JOHN STEVEN | 270-472 |
+| 9| RWOTHOMIO EVANS . E. | 275-372 |
+| 10 | TUSABEGE PHILBERT | 272-210 |
 
 ## Security
 

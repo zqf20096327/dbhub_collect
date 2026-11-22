@@ -171,9 +171,10 @@ single-database directories are migrated to `default/` on startup. See
   (`zażółć` → `zazolc`).
 - Quoted phrases requiring contiguous token sequences.
 - Fuzzy search with trigrams plus bounded Levenshtein distance (`_distance`).
-- Exact vector search with `cosine`, `dot`, and `l2` metrics. Vectors are
-  stored in LMDB and queried with a brute-force top-K scan; no external vector
-  service is required. Results include `_distance`, lowest first.
+- Vector search with `cosine`, `dot`, and `l2` metrics. Vectors are stored in
+  LMDB and queried with an exact top-K scan by default; an optional internal IVF
+  sidecar accelerates unfiltered queries. No external vector service is
+  required. Results include `_distance`, lowest first.
 - All search indexes are maintained in the same transaction as the document.
 
 ### Aggregation
@@ -216,9 +217,7 @@ curl -s --unix-socket /tmp/nonodb.sock \
 Aggregation is intentionally bounded: an intermediate result may contain at
 most 100,000 documents. It never writes to the database and is available inside
 the read-only `batch` operation. See
-[Aggregation](docs/api.md#aggregate) for the full stage list and semantics,
-and [benchmarks](docs/benchmarks.md#aggregation-pipeline) for stage timings and
-optimization notes.
+[Aggregation](docs/api.md#aggregate) for the full stage list and semantics.
 
 ### Document history
 
@@ -441,7 +440,7 @@ docker run -d --name nonodb \
   --group-add "$(id -g)" \
   -v "$NONODB_AUTH_FILE:/etc/nonodb/auth.json:ro" \
   -v nonodb-data:/var/lib/nonodb \
-  ghcr.io/essmos/nonodb:0.27.0
+  ghcr.io/essmos/nonodb:0.29.1
 ```
 
 Check health and logs:
@@ -525,7 +524,7 @@ listener, so the Windows daemon requires TCP plus `NONODB_AUTH_FILE`.
 Download, verify, and extract the x86_64 archive:
 
 ```bash
-TAG=v0.27.0
+TAG=v0.29.1
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/nonodb-$TAG-linux-x86_64.tar.gz"
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/nonodb-$TAG-linux-x86_64.tar.gz.sha256"
 sha256sum -c "nonodb-$TAG-linux-x86_64.tar.gz.sha256"
@@ -613,7 +612,7 @@ connection failures, or `5xx`. You can also set `write_url` explicitly. See
 Download the archive matching your CPU (`uname -m` prints `arm64` or `x86_64`):
 
 ```bash
-TAG=v0.27.0
+TAG=v0.29.1
 ARCHIVE="nonodb-$TAG-macos-arm64.tar.gz"   # use macos-x86_64 on Intel
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/$ARCHIVE"
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/$ARCHIVE.sha256"
@@ -743,12 +742,12 @@ documentation.
 | [HTTP API](docs/api.md) | Every operation, request/response shapes, filters, updates, indexes, search, errors |
 | [MongoDB compatibility](docs/mongodb-compatibility.md) | Feature comparison, practical coverage, and migration caveats |
 | [SQL queries](docs/sql.md) | `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `DISTINCT`, `HAVING`, `CASE`, functions, aggregates, `explain_sql`, parameters, limits, client examples |
-| [Clients](docs/clients.md) | Python, Rust, Node.js and Go clients: install, CRUD, batches, indexes, search, TCP/TLS, read-replica write routing |
+| [Clients](docs/clients.md) | Python, Rust, Node.js and Go clients: install, CRUD, batches, indexes, search, TCP/TLS, read-replica write routing, async Python watch/streams |
 | [Migration and import](docs/migration.md) | MongoDB, PostgreSQL, SQLite and CSV migration, NDJSON format, import manifest, cutover |
 | [Authentication and permissions](docs/auth.md) | Principals, scopes, tokens, certificates, CLI/API/GUI management, lockout, reloads, audit log |
 | [Security checks](docs/security-check.md) | Local security regression checks, LiveAPISec audit method, results, hardening gaps, production checklist |
 | [Mutual TLS](docs/mtls.md) | Client certificate setup, private CA, fingerprint mapping, revocation, rotation |
-| [Python client](docs/python-client.md) | `NonoDB`/`Collection` API, caching, retries, TCP/TLS, FastAPI usage |
+| [Python client](docs/python-client.md) | `NonoDB`/`Collection` API, `AsyncNonoDB` watch/streams, caching, retries, TCP/TLS, FastAPI usage |
 | [Background jobs](docs/workers.md) | Durable `_jobs`, workers, leases, retries, cron/systemd, language-independent contract |
 | [Outbox events](docs/events.md) | Atomic data + event writes, automatic collection events, source-side filters, polling consumers, checkpoints, event worker CLI, TTL, systemd |
 | [Conditional subscriptions](docs/subscriptions.md) | Persistent conditions over collection state, count thresholds, edge-triggered delivery |
@@ -805,7 +804,7 @@ results. Visit [liveapisec.com](https://liveapisec.com) to learn more.
 
 ## Status
 
-nonodb is an early-stage project (`0.27.0`). Its core storage, query, index,
+nonodb is an early-stage project (`0.29.1`). Its core storage, query, index,
 search, batching, security, snapshot, and operational paths are covered by unit,
 property-based, end-to-end, concurrency, crash, and large-data tests. The API
 may still change before a stable release.

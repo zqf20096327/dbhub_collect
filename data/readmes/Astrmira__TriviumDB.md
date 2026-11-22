@@ -5,7 +5,7 @@
 <div align="center">
 
 <!-- 动态打字效果 Slogan -->
-<a href="https://github.com/YoKONCy/TriviumDB">
+<a href="https://github.com/Astrmira/TriviumDB">
   <img src="https://readme-typing-svg.demolab.com?font=Noto+Serif+SC&weight=600&size=24&duration=4000&pause=1000&color=1E90FF&center=true&vCenter=true&multiline=true&repeat=false&width=800&height=70&lines=%E4%B8%89%E4%BD%8D%E4%B8%80%E4%BD%93%E7%9A%84+AI+%E5%8E%9F%E7%94%9F%E5%B5%8C%E5%85%A5%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93;%E5%90%91%E9%87%8F+%C3%97+%E5%9B%BE%E8%B0%B1+%C3%97+%E5%85%B3%E7%B3%BB%E5%9E%8B;%E4%B8%BA+Agent+%E6%89%93%E9%80%A0%E7%9A%84%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%B0%E5%BF%86%E6%A0%B8%E5%BF%83" alt="Slogan" />
 </a>
 
@@ -22,14 +22,15 @@
 > TriviumDB 为 Agent、RAG 和知识图谱应用提供进程内的向量、图与文档存储。宿主应用通过 Rust、Python 或 Node.js API 管理数据库实例、查询和持久化。
 
 [![Rust](https://img.shields.io/badge/Rust-stable-orange?logo=rust)](https://www.rust-lang.org/)
-[![Python 3.9–3.12](https://img.shields.io/badge/Python-3.9%E2%80%933.12-blue?logo=python)](https://pypi.org/)
+[![Python 3.9–3.15](https://img.shields.io/badge/Python-3.9%E2%80%933.15-blue?logo=python)](docs/api-reference.md)
 [![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
-[![arXiv](https://img.shields.io/badge/arXiv-2605.02171-b31b1b.svg)](https://arxiv.org/abs/2605.02171)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/YoKONCy/TriviumDB)
+[![QuIVer arXiv](https://img.shields.io/badge/QuIVer%20arXiv-2605.02171-b31b1b.svg)](https://arxiv.org/abs/2605.02171)
+[![Pelorus arXiv](https://img.shields.io/badge/Pelorus%20arXiv-2611.22159-b31b1b.svg)](https://arxiv.org/abs/2611.22159)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Astrmira/TriviumDB)
 
 **中文** | [**English**](README_EN.md)
 
-当前预发布版本为 **0.9.3-beta.1**，新增可选的 Pelorus 双曲向量检索、QuIVer SSD 请求级 I/O 计量，并改进检查点恢复和图查询预算。Python 版本为 `0.9.3b1`，npm 使用 `beta` 通道。完整变更与升级步骤见[双语发布说明](docs/changes/0.9.3-beta.1.md)。
+当前预发布版本 **0.9.4-beta.1** 扩展了 Python 和 Node.js 的批量向量接口，并修复检索预算、存储约束和迁移重试。安装命令和升级步骤见[双语发布说明](docs/changes/0.9.4-beta.1.md)。
 
 SDK 的支持范围见 [SDK 正式接口清单](docs/sdk-contract.md)，历史磁盘格式通过[外部迁移工具](docs/migration.md)升级。
 
@@ -160,13 +161,13 @@ flowchart TD
 推荐使用超快的 [uv](https://github.com/astral-sh/uv) （只需毫秒级）：
 
 ```bash
-uv pip install "triviumdb==0.9.3b1"
+uv pip install "triviumdb==0.9.4b1"
 ```
 
 或者使用传统 pip：
 
 ```bash
-pip install "triviumdb==0.9.3b1"
+pip install "triviumdb==0.9.4b1"
 ```
 
 ### 🌐 Node.js / 前端用户
@@ -174,9 +175,9 @@ pip install "triviumdb==0.9.3b1"
 跨平台包已自带 `*.node` 预编译拓展，并含有完整的 TypeScript 补全：
 
 ```bash
-npm install triviumdb@0.9.3-beta.1
+npm install triviumdb@0.9.4-beta.1
 # 或者
-pnpm add triviumdb@0.9.3-beta.1
+pnpm add triviumdb@0.9.4-beta.1
 ```
 
 ### 🦀 Rust 原生用户
@@ -184,10 +185,10 @@ pnpm add triviumdb@0.9.3-beta.1
 直接把我们当成 Library 依赖：
 
 ```bash
-cargo add triviumdb@0.9.3-beta.1
+cargo add triviumdb@0.9.4-beta.1
 ```
 
-本页示例使用 `0.9.3-beta.1`。采用当前格式的 0.9.2 数据库可直接打开。打开时若返回 `TDB_MIGRATION_REQUIRED`，按[外部迁移指南](docs/migration.md)创建并核验目标库。
+本页示例使用 `0.9.4-beta.1`（PyPI 为 `0.9.4b1`，npm 通道为 `beta`）。0.9.3 当前格式数据库可直接打开。若返回 `TDB_MIGRATION_REQUIRED`，请按[外部迁移指南](docs/migration.md)创建并核验目标库。
 
 需要为嵌入式应用提供管理前端时，按[Console 宿主接入](docs/embedded-console.md)复用同一实例和文件锁；现有 HTML 仍需前端传输适配，资源包会标明这一条件及 CDN 依赖。
 
@@ -222,9 +223,13 @@ batch_results = db.search_batch(
 const batchResults = await db.searchBatch(queryVectors, 10, 0, 0.0)
 ```
 
+本预发布版支持启用 GIL 的 CPython 3.9–3.15 和 Node.js 22、24、26。批量插入与检索接受二维 Python `memoryview`，以及 Node.js 的 `Float32Array` 或 `BigUint64Array`。
+
 `parallelism=0` 表示自动选择并发度，最大允许值为 64；结果外层顺序严格对应输入查询。批量 API 仅支持无状态查询，不允许 fatigue 语义。
 
 > 📖 完整 API 参考、高级用法和 Rust 示例请查看 **[API 参考文档](docs/api-reference.md)**。
+>
+> 📖 深入了解架构设计和技术细节请查看 **[支持特性详解](docs/features.md)**。
 
 ---
 
@@ -232,9 +237,34 @@ const batchResults = await db.searchBatch(queryVectors, 10, 0, 0.0)
 
 TriviumDB 中的一个节点可以同时拥有**向量、JSON 文档、稀疏文本和图关系**，通过同一个 NodeId 按业务问题选择不同的查询路径。向量、文档与关系变更共享事务和 WAL；独立登记的稀疏文本通过 `flush()` 或可写句柄的 `close()` 持久化，应用应保留正文与别名来源以便重建。
 
-### TQL：自由 DIY 的统一查询语言
+### 用 TQL 编排 Agent 的检索步骤
 
-**TQL（Trivium Query Language）** 提供**可自由编排的三模执行管线**：每个 `WITH` 阶段产出命名 NodeSet，向量、BM25/AC 文本召回、属性索引、图扩展、图算法、FISTA、DPP、NMF、路径与集合代数都可按业务语义自由串联，最后由 Cascades 优化器在预算内选择物理计划：
+**TQL（Trivium Query Language）** 借鉴了 PowerShell 对象管道的设计，让下一步直接使用上一步的结构化结果。在 TQL 中，`AS` 给结果命名，`WITH` 选择要传给下一阶段的节点、分数或字段。Agent 可以在同一个查询里用向量找论文、沿引用找证据，再按原问题的相关性排列候选。
+
+假设论文节点有二维嵌入和 `title` 字段，`cites` 边从论文指向它引用的论文。Agent 可以先执行一条短查询，查看哪两篇论文会成为检索起点。
+
+```sql
+SEARCH VECTOR [0.1, 0.2] TOP 2 AS seed
+WITH seed
+RETURN seed.id AS id, seed.title AS title, similarity(seed) AS score
+ORDER BY score DESC, id
+```
+
+看过标题后，如果决定顺着引用追查，就复用这个开头，提交下面的完整查询。它沿 `cites` 走一到两跳，只对找到的论文按原查询向量精确重排，最多返回十篇。
+
+```sql
+SEARCH VECTOR [0.1, 0.2] TOP 2 AS seed
+WITH seed
+EXPAND seed [:cites*1..2] AS related
+WITH related
+RANK related BY VECTOR [0.1, 0.2] TOP 10
+RETURN related.id AS id, related.title AS title, similarity(related) AS score
+ORDER BY score DESC, id
+```
+
+这两次调用各自执行，阶段名只在当次查询内有效。检索步骤确定后，应用可以直接提交完整管线。给查询加上 `EXPLAIN` 可查看 Cascades 选择的物理算子、预计行数和临时内存。`EXPLAIN ANALYZE` 会执行查询并给出实际行数。
+
+**其他检索方式**
 
 ```sql
 -- 文档查询：按 JSON 字段过滤（命中属性索引则跳过全表扫描）
@@ -256,17 +286,6 @@ WHERE topic.name == "Database"
 RANK paper BY VECTOR [0.12, -0.45, 0.78] TOP 10
 RETURN paper
 
--- 🧪 自由 DIY：向量种子 → 图扩展 → 图算法打分 → 相似度过滤 → 重排
-SEARCH VECTOR [0.12, -0.45, 0.78] TOP 100 AS seed
-WITH seed
-EXPAND seed [:cites*1..2] AS related
-WITH related
-pagerank related AS scored
-WITH scored
-WHERE similarity(scored) > 0.5
-RETURN scored, similarity(scored) AS sim
-ORDER BY sim DESC LIMIT 10
-
 -- 🧠 文本锚定 → 参数化 SA-PPR → DPP 多样化
 TEXT HYBRID "vector database" TOP 100 K1 1.2 B 0.75 AC_WEIGHT 1 AS text_seed
 WITH text_seed
@@ -284,7 +303,7 @@ WITH route
 RETURN path(route) AS nodes, path_length(route) AS hops
 ```
 
-一条查询内还能使用 `TEXT BM25/AC/HYBRID` 做稀疏召回，`RESIDUAL` 做 FISTA 残差召回，`DIVERSIFY` 做 DPP 多样化，`TOPICS` 做有界 NMF 主题分配，`SA_PPR_CONFIG` 控制扩散参数；也可使用 `union` / `intersect` / `except` 做多路候选集合运算、`iterate` 做定点迭代扩散、`COUNT/SUM/AVG/MIN/MAX/COLLECT` 做聚合。`text_score()`、`residual_score()`、`diversity_score()`、`topic()` 与 `topic_score()` 均是一等表达式。`EXPLAIN` 会暴露 Cascades 选出的物理算子、预计行数、临时字节与预算切片。
+同一条管线还可使用 `TEXT BM25/AC/HYBRID` 召回文本，用 PageRank 为节点打分，用 `RESIDUAL` 做 FISTA 残差召回，或用 `TOPICS` 分配主题。多路候选可以求并集、交集和差集，再迭代或聚合。应用可通过 `text_score()`、`graph_score()`、`diversity_score()` 等表达式选择要返回的分数。
 
 `search_advanced()` 通过 `SearchConfig` 配置文本混合、FISTA、SA-PPR、DPP 与疲劳不应期，并按固定顺序执行。TQL 复用同一底层算法，支持按查询需求编排无状态算子。
 
@@ -314,33 +333,6 @@ Rust / Python / Node.js 三语言共享同一套 TQL、Prepared、四类属性�
 | **Prepared TQL** | 参数化查询，缺参 / 多参 / 非法值一律 fail-closed | 高频业务查询的安全复用 |
 
 **Reachability 回答“结构上能否到达”**，**GraphFirst 回答“结构约束内谁最相似”**，**SA-PPR 回答“哪些关联节点应获得更高相关性”**。应用可以在同一份 `.tdb` 数据上按场景自由选择，也可以通过 TQL 将文档、图和向量条件组合在一次查询中。
-
----
-
-## 核心特性
-
-| 特性                   | 说明                                                                                                                             |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| 🧪 **自由 DIY 混合查询** | TQL `WITH` 管线：向量 / BM25 / AC / 属性 / 图扩展 / FISTA / DPP / NMF / 路径 / 集合 / 聚合自由编排，确定性 Cascades 优化器 + `EXPLAIN` 成本透明 |
-| 📊 **四类属性索引**    | Hash / Ordered ART / Composite ART / Roaring Bitmap，统一持久化到 `.idx`，支持等值 / 范围 / 前缀 / 复合 / 低基数集合运算        |
-| 🧮 **内嵌图算法库**    | PageRank / WCC / Leiden / Betweenness / Degree / Label Propagation / SA-PPR，在查询内直接调用                                    |
-| 🛰️ **路径与集合代数**  | `ALL_PATHS` / `SHORTEST_PATHS` / `UNION` / `INTERSECT` / `EXCEPT` / `ITERATE`，Prepared TQL 三语言参数化                        |
-| 🔍 **混合检索**        | 向量锚定 → Top-K → 图谱扩散（Spreading Activation）→ 最终排序                                                                    |
-| 🧠 **认知管线**        | `search_advanced()` 提供组件可开关、顺序固定的官方模板；TQL 提供 FISTA / 参数化 SA-PPR / DPP / NMF 无状态算子的自由编排，疲劳不应期仍仅属有状态 API |
-| 🔌 **Hook 扩展系统**   | 6 个管线关键阶段的自定义注入点：查询预处理 / 自定义召回 / 召回后处理 / 图扩散前 / 重排序 / 最终后处理，支持 C/C++ FFI 动态库插件 |
-| 📦 **槽位与边维护**   | FreeList 复用已删除节点的槽位；反向边哈希表（Reverse Hash Net）辅助清理入边           |
-| ⚡ **QuIVer ANN 索引** | BQ 快速构图 + 默认 SM-L2 导航 + 余弦精排，冷热分离架构，增量维护同步默认 SM 状态 |
-| 💾 **双模式存储**      | Mmap（分离向量与 Payload，按需映射） / Rom（主文件内嵌向量与 Payload），通过检查点切换                                                   |
-| 🛡️ **四层灾备防御**    | 预写日志(WAL) + 写入原子替换 + 事务预检干跑(Dry-Run) + OS 内存写时复制隔离                                                       |
-| 🔄 **原子事务**      | `begin_tx()` 在写 WAL 前完成业务预检与容量准入，提交时原子更新事实及相关索引                 |
-| 🔎 **高级过滤**        | 类 MongoDB 语法：`$eq/$ne/$gt/$lt/$in/$and/$or` + 行级布隆特征阵列（Parallel Bit-Tag Array）硬件级加速                           |
-| 📝 **图谱查询**        | 内置类 Cypher 查询引擎：`MATCH (a)-[:knows]->(b) WHERE b.age > 18 RETURN b`                                                      |
-| 🐍 **Python 原生**     | PyO3 绑定，`pip install` 后直接 `import triviumdb`                                                                               |
-| 🌐 **Node.js 原生**    | napi-rs 绑定，`npm install` 后直接 `require('triviumdb')`                                                                        |
-| 🧰 **共享资源与实例诊断** | 0.9.0-beta.1：数据库配额、维护保护额度、线程与任务名额、可用预算余额、实例及后台任务状态 |
-| 📸 **受控关闭与快照** | 0.9.0-beta.1：关闭请求、限时等待、一致快照、完整性校验与新目录恢复；Rust/Python/Node 接口同步提供 |
-
-> 📖 深入了解架构设计和技术细节请查看 **[支持特性详解](docs/features.md)**。
 
 ---
 
@@ -438,6 +430,8 @@ ORDER BY score DESC, id
 ```
 
 构建步骤、精确检索选项和 Hot／Mmap／SSD 驻留配置见 [Pelorus 使用说明](docs/pelorus.md)。
+
+[Pelorus 论文（arXiv）](https://arxiv.org/abs/2611.22159) · [Pelorus 源码仓库（GitHub）](https://github.com/Astrmira/Pelorus)
 
 ---
 
@@ -625,11 +619,23 @@ TriviumDB 的认知检索管线借鉴并实现了以下学术成果（均为本�
 
 ```bibtex
 @article{quiver2026,
-  title   = {QuIVer: Rethinking ANN Graph Topology via Training-Free Binary Quantization},
-  author  = {Xiao, Wenxuan and Wang, Zhiyou and Li, Chengcheng},
+  title   = {{QuIVer}: Efficient Graph Indexing with Two-Bit Construction and Navigation},
+  author  = {Xiao, Wenxuan and Zhu, Peidong and Li, Chengcheng and Cao, Xu},
   journal = {arXiv preprint arXiv:2605.02171},
   year    = {2026},
   url     = {https://arxiv.org/abs/2605.02171}
+}
+```
+
+### 📝 引用 Pelorus
+
+```bibtex
+@article{pelorus2026,
+  title   = {{Pelorus}: Warped-Product Graph Indexing for Hyperbolic Vector Search},
+  author  = {Xiao, Wenxuan and Cao, Xu},
+  journal = {arXiv preprint arXiv:2611.22159},
+  year    = {2026},
+  url     = {https://arxiv.org/abs/2611.22159}
 }
 ```
 
@@ -645,13 +651,15 @@ Apache-2.0
 
 ## 社区
 
+安装、SDK 或 TQL 遇到疑问，欢迎来 [Q&A](https://github.com/Astrmira/TriviumDB/discussions/categories/q-a)。有新点子可以聊聊 [Ideas](https://github.com/Astrmira/TriviumDB/discussions/categories/ideas)，做了项目可以到 [Show and tell](https://github.com/Astrmira/TriviumDB/discussions/categories/show-and-tell) 分享。报告故障或提出明确的功能需求，请[提交 Issue](https://github.com/Astrmira/TriviumDB/issues/new/choose)。中英文都欢迎。
+
 本项目已链接并认可 [LINUX DO 社区](https://linux.do/)。
 
 <br/>
 
 ## 🌟 Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=YoKONCy/TriviumDB&type=Date)](https://star-history.com/#YoKONCy/TriviumDB&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Astrmira/TriviumDB&type=Date)](https://star-history.com/#Astrmira/TriviumDB&Date)
 
 <br/>
 

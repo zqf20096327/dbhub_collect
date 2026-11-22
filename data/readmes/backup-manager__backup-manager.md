@@ -1,13 +1,22 @@
 # Database Backup Manager
 
-![Packagist Version](https://img.shields.io/packagist/v/backup-manager/backup-manager)
-![Packagist License](https://img.shields.io/packagist/l/backup-manager/backup-manager)
-![Installs](https://img.shields.io/packagist/dt/backup-manager/backup-manager)
+[![Tests](https://github.com/backup-manager/backup-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/backup-manager/backup-manager/actions/workflows/ci.yml)
+[![Static analysis](https://github.com/backup-manager/backup-manager/actions/workflows/static.yml/badge.svg)](https://github.com/backup-manager/backup-manager/actions/workflows/static.yml)
+[![Latest Version](https://img.shields.io/packagist/v/backup-manager/backup-manager)](https://packagist.org/packages/backup-manager/backup-manager)
+[![PHP Version](https://img.shields.io/packagist/dependency-v/backup-manager/backup-manager/php)](https://packagist.org/packages/backup-manager/backup-manager)
+[![Downloads](https://img.shields.io/packagist/dt/backup-manager/backup-manager)](https://packagist.org/packages/backup-manager/backup-manager/stats)
+[![License](https://img.shields.io/packagist/l/backup-manager/backup-manager)](LICENSE)
 
-This package provides a framework-agnostic database backup manager for dumping to and restoring databases from S3, Dropbox, FTP, SFTP, and Rackspace Cloud.
+Framework integrations: [Laravel](https://github.com/backup-manager/laravel) · [Symfony](https://github.com/backup-manager/symfony)
 
-- use version 2+ for &gt;=PHP 7.3
-- use version 1 for &lt;PHP 7.2
+This package provides a framework-agnostic database backup manager for dumping to and restoring databases from S3, Google Cloud Storage, Dropbox, FTP, SFTP, WebDAV, and any other [Flysystem](https://flysystem.thephpleague.com/) filesystem.
+
+- use version 4 for PHP 8.2+ with Flysystem 3 (active)
+- use version 3 for PHP 7.4+ with Flysystem 1, 2 or 3 (security fixes until 2027-12-31)
+- use version 2 for PHP 7.3 (unsupported)
+- use version 1 for &lt;PHP 7.2 (unsupported)
+
+See [CHANGELOG.md](CHANGELOG.md) for release notes and [UPGRADE.md](UPGRADE.md) for upgrading from 3.x.
 
 [Watch a video tour](https://www.youtube.com/watch?v=vWXy0R8OavM) showing the Laravel driver in action to give you an idea what is possible.
 
@@ -53,10 +62,17 @@ This package provides a framework-agnostic database backup manager for dumping t
     // Example: ['table1', 'table2']
     // http://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_ignore-table
     'ignoreTables' => [],
+    // connect through a unix socket; when set, host and port are not used (mysql only):
+    // 'socket' => '/run/mysqld/mysqld.sock',
     // using ssl to connect to your database - active ssl-support (mysql only):
     'ssl'=>false,
     // add additional options to dump-command (like '--max-allowed-packet')
     'extraParams'=>null,
+    // set to false to pass --column-statistics=0, needed when a MySQL 8 mysqldump
+    // dumps from a server without column statistics. MariaDB's mysqldump rejects it.
+    // 'columnStatistics' => false,
+    // Dump only these tables (table names without the database name)
+    // 'onlyTables' => ['table1', 'table2'],
 ],
 'production' => [
     'type' => 'postgresql',
@@ -86,34 +102,24 @@ This package provides a framework-agnostic database backup manager for dumping t
     'root'   => '',
     'use_path_style_endpoint' => false,
 ],
-'b2' => [
-    'type' => 'B2',
-    'key'    => '',
-    'accountId' => '',
-    'bucket' => '',
-],
-'gcs' => [
-    'type' => 'Gcs',
+'async-s3' => [
+    'type' => 'AsyncAwsS3', // uses async-aws instead of the AWS SDK
     'key'    => '',
     'secret' => '',
-    'version' => 'latest',
+    'region' => 'us-east-1',
     'bucket' => '',
     'root'   => '',
 ],
-'rackspace' => [
-    'type' => 'Rackspace',
-    'username' => '',
-    'key' => '',
-    'container' => '',
-    'zone' => '',
-    'root' => '',
+'gcs' => [
+    'type' => 'Gcs',
+    'projectId' => '',
+    'keyFilePath' => '', // path to a service account JSON key; omit to use default credentials
+    'bucket' => '',
+    'root'   => '',
 ],
 'dropbox' => [
-    'type' => 'DropboxV2',
+    'type' => 'Dropbox',
     'token' => '',
-    'key' => '',
-    'secret' => '',
-    'app' => '',
     'root' => '',
 ],
 'ftp' => [
@@ -133,14 +139,13 @@ This package provides a framework-agnostic database backup manager for dumping t
     'username' => '',
     'password' => '',
     'root' => '',
-    'port' => 21,
+    'port' => 22,
     'timeout' => 10,
     'privateKey' => '',
 ],
 'flysystem' => [
     'type' => 'Flysystem',
-    'name' => 's3_backup',
-    //'prefix' => 'upload',
+    'name' => 's3_backup', // key of a FilesystemOperator passed to new FlysystemFilesystem([...])
 ],
 'doSpaces' => [
     'type' => 'AwsS3',
@@ -183,12 +188,30 @@ $manager->makeRestore()->run('s3', 'test/backup.sql.gz', 'development', 'gzip');
 
 > This package does not allow you to backup from one database type and restore to another. A MySQL dump is not compatible with PostgreSQL.
 
+**Back up several databases in one run.**
+
+Each call backs up one database connection, so loop over the ones you want:
+
+```php
+use BackupManager\Filesystems\Destination;
+
+$manager = require 'bootstrap.php';
+$date = date('Y-m-d-His');
+
+foreach (['development', 'production'] as $database) {
+    $manager->makeBackup()->run($database, [new Destination('s3', "{$database}/{$date}.sql")], 'gzip');
+}
+```
+
+**The `local` filesystem is required.** Backups and restores use the `local` storage connection as a working directory, so your storage config needs a `local` entry and `LocalFilesystem` must be registered with the `FilesystemProvider`, as in the [example bootstrap](examples/standalone/bootstrap.php).
+
 ### Requirements
 
-- PHP 5.5
+- PHP 8.2 or later
+- [Flysystem](https://flysystem.thephpleague.com/) 3
 - MySQL support requires `mysqldump` and `mysql` command-line binaries
 - PostgreSQL support requires `pg_dump` and `psql` command-line binaries
-- Gzip support requires `gzip` and `gunzip` command-line binaries
+- Gzip support requires the `gzip` command-line binary
 
 
 ### Installation
@@ -201,33 +224,21 @@ Run the following to include this via Composer
 composer require backup-manager/backup-manager
 ```
 
-Then, you'll need to select the appropriate packages for the adapters that you want to use.
+Then, install the adapter package for each filesystem type you use:
 
-```shell
-# to support s3
-composer require league/flysystem-aws-s3-v3
+| Type | Package |
+|---|---|
+| `Local` | included |
+| `AwsS3` | `league/flysystem-aws-s3-v3` |
+| `AsyncAwsS3` | `league/flysystem-async-aws-s3` |
+| `Gcs` | `league/flysystem-google-cloud-storage` |
+| `Dropbox` | `spatie/flysystem-dropbox` |
+| `Ftp` | `league/flysystem-ftp` |
+| `Sftp` | `league/flysystem-sftp-v3` |
+| `Webdav` | `league/flysystem-webdav` |
+| `Flysystem` | none: pass your own `FilesystemOperator` instances to `FlysystemFilesystem` |
 
-# to support b2
-composer require mhetreramesh/flysystem-backblaze
-
-# to support google cs
-composer require league/flysystem-aws-s3-v2
-
-# to install the preferred dropbox v2 driver
-composer required spatie/flysystem-dropbox
-
-# to install legacy dropbox v2 driver
-composer require srmklive/flysystem-dropbox-v2
-
-# to support rackspace
-composer require league/flysystem-rackspace
-
-# to support sftp
-composer require league/flysystem-sftp
-
-# to support webdav (supported by owncloud nad many other)
-composer require league/flysystem-webdav
-```
+For any other storage, construct the Flysystem adapter yourself and register it through the `Flysystem` type. A Flysystem `MountManager` can be registered the same way, with destination paths such as `upload://backup.sql`.
 
 ### Usage
 
@@ -240,11 +251,11 @@ The required bootstrapping can [be found in the example here](https://github.com
 
 ### Contribution Guidelines
 
-We recommend using the vagrant configuration supplied with this package for development and contribution. Simply install VirtualBox, Vagrant, and Ansible then run `vagrant up` in the root folder. A virtualmachine specifically designed for development of the package will be built and launched for you.
+See [docs/MAINTAINING.md](docs/MAINTAINING.md) for supported versions, the release procedure and the security baseline. Run the specs with `vendor/bin/phpspec run`. Static analysis: `phpstan analyze`, `psalm` and `php-cs-fixer fix --dry-run` (PSR-12).
 
 When contributing please consider the following guidelines:
 
-- Code style is PSR-2
+- Code style is PSR-12
     - Interfaces should NOT be suffixed with `Interface`, Traits should NOT be suffixed with `Trait`.
 - All methods and classes must contain docblocks.
 - Ensure that you submit tests that have minimal 100% coverage. Given the project's simplicity it just makes sense.
@@ -256,9 +267,7 @@ This package is maintained by [Shawn McCool](http://shawnmc.cool) and you!
 
 ### Backwards Compatibility Breaks
 
-#### 3.0
-
-Remove support for symfony 2. Specifically symfony/process versions < 3.x
+See [CHANGELOG.md](CHANGELOG.md).
 
 ### License
 

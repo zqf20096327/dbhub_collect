@@ -103,6 +103,8 @@ tx.Commit(ctx)  // job and order appear atomically
 
 **Choose Machinery** if you need Celery-style workflow primitives (chains, chords, groups) across RabbitMQ or SQS.
 
+Moving over from one of them? Migration guides: [Asynq](https://goncordia.docs7.io/migrating-from-asynq), [River](https://goncordia.docs7.io/migrating-from-river), [Machinery](https://goncordia.docs7.io/migrating-from-machinery).
+
 ---
 
 ## Installation
@@ -110,26 +112,26 @@ tx.Commit(ctx)  // job and order appear atomically
 Requires Go 1.26 or newer.
 
 ```bash
-go get github.com/kirimatt/goncordia/v2@v2.7.2
+go get github.com/kirimatt/goncordia/v2@v2.8.0
 ```
 
 Pick a driver:
 
 ```bash
 # PostgreSQL via pgx v5
-go get github.com/kirimatt/goncordia/driver/pgxv5/v2@v2.7.1
+go get github.com/kirimatt/goncordia/driver/pgxv5/v2@v2.8.0
 
 # PostgreSQL / MySQL / MariaDB / SQLite via database/sql
-go get github.com/kirimatt/goncordia/driver/stdlib/v2@v2.7.2
+go get github.com/kirimatt/goncordia/driver/stdlib/v2@v2.8.0
 
 # gorm adapter
-go get github.com/kirimatt/goncordia/driver/gorm/v2@v2.7.2
+go get github.com/kirimatt/goncordia/driver/gorm/v2@v2.8.0
 
 # bun adapter
-go get github.com/kirimatt/goncordia/driver/bun/v2@v2.7.2
+go get github.com/kirimatt/goncordia/driver/bun/v2@v2.8.0
 
 # MongoDB (replica set required)
-go get github.com/kirimatt/goncordia/driver/mongodbv2/v2@v2.6.0
+go get github.com/kirimatt/goncordia/driver/mongodbv2/v2@v2.8.0
 
 # Redis
 go get github.com/kirimatt/goncordia/driver/redis/v2@v2.7.1
@@ -1160,6 +1162,8 @@ Apple M5, single process. Memory/SQLite are in-process (no network); Postgres/Mo
 | Firestore | 200 | c=4 | ~14 | polling; per-job RunTransaction on emulator |
 
 End-to-end throughput is bounded by the 5 ms poll interval used in the benchmark. In production the pgxv5 driver uses LISTEN/NOTIFY and the Redis driver uses Pub/Sub, eliminating poll latency entirely — real throughput matches the FetchAndComplete numbers above.
+
+> **v2.8.0 changed the SQL hot path; the tables above predate it.** On Postgres the fetch query now reads a partial index in fetch order instead of sorting the backlog, `EnqueueMany` sends one pgx batch, the worker pool claims several jobs per query, and completions are written in batches (pgxv5, stdlib on Postgres/SQLite, gorm, bun, mongodbv2). Measured on another machine (embedded Postgres 18, Windows, localhost), so compare ratios only: fetch query with a 20k backlog 4.9 ms → 0.05 ms; `EnqueueBatch(100)` 28 ms → 6 ms; end-to-end, 5 000 jobs, 32 workers, ~880 → ~8 000–9 700 jobs/s with ~4× fewer database transactions.
 
 Cassandra's high per-operation latency comes from Lightweight Transaction consensus (Paxos, ~3 network round trips per claim). ClickHouse's overhead comes from `SELECT … FINAL` deduplication at query time. DynamoDB's per-operation cost is dominated by HTTP/JSON round trips to the service — measured against DynamoDB Local on localhost, so real AWS numbers include additional network latency. Firestore's per-job `RunTransaction` for claiming is the primary bottleneck on the emulator; production GCP Firestore will be faster due to lower round-trip latency, but the sequential-per-job claiming model inherently limits throughput. All four backends are best suited for workloads where horizontal scale matters more than raw per-job latency.
 

@@ -1722,7 +1722,7 @@ Testing utilities and patterns.
 | ---------------------------------------- | -------------------- |
 | [Mock](guides/tests/mock.md)             | Mock data generation |
 | [Containers](guides/tests/containers.md) | Testcontainers setup |
-| [Util](guides/tests/util.md)             | Test utilities       |
+| [Util](guides/tests/utils.md)            | Test utilities       |
 
 ### 📂 [Setup](guides/setup/)
 

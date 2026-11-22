@@ -17,8 +17,8 @@ source with evidence levels each time.
 
 ## [What the model sees](https://t-macabee.github.io/lurp/MODEL_VIEW.html)
 
-A point-in-time map of one Lurp 3.5.1 index of
-[eNoteV2](https://github.com/t-macabee/eNoteV2) (`eNote/eNote.sln` at `5b13fbd`, 7 projects):
+A point-in-time map of one Lurp 4.0.0 index of
+[eNoteV2](https://github.com/t-macabee/eNoteV2) (`eNote/eNote.sln` at `4ba9901`, 7 projects):
 the evidence level of every edge, the DI, routing and EF Core surfaces, and the
 full edge ledgers behind them. [`scripts/model-view/`](scripts/model-view/)
 regenerates it.
@@ -57,7 +57,7 @@ separately.
 | `timings` | Per-step performance data for a snapshot. |
 | `outline` | List declarations in a document with line spans. |
 | `diagnostics` | List compiler diagnostics captured at index time. |
-| `dead-candidates` | List dead-code candidates: no incoming LIVE edge, after a suppression ladder. Public surface, EF/serialization conventions, process entry points and generated/test code are never reported as `proved_dead`. |
+| `dead-candidates` | List dead-code candidates: no incoming LIVE edge (one-hop liveness), after a suppression ladder. Public surface (effective accessibility for types, methods and events; declared accessibility for constructors, properties and fields; plus internals of projects granting `InternalsVisibleTo` outside the snapshot), EF/serialization conventions, process entry points and generated/test code are never reported as `proved_dead`. |
 
 ## Worked example
 
@@ -118,7 +118,7 @@ older runtime does not. Indexing and solution-backed status
 solution should be restored (an unrestored project still indexes, with a warning and missing edges; see "Restore first" below).
 
 ```bash
-dotnet tool install --global lurp --version 3.6.1
+dotnet tool install --global lurp --version 4.0.0
 lurp --mode=index --solution=path/to/Your.slnx
 ```
 
@@ -141,8 +141,8 @@ dotnet run --project src -- --mode=index --solution=path/to/Your.slnx --output-d
 ```
 
 Environment variables `LURP_SOLUTION_PATH` and `LURP_OUTPUT_DIR` are equivalent to
-`--solution=` and `--output-dir=`. Requires .NET 10 SDK (pinned via the root
-`global.json` `rollForward=latestMajor`; Roslyn 5.6 requires `net10.0`).
+`--solution=` and `--output-dir=`. Requires .NET 10 SDK (the root `global.json`
+pins one exact version, see CONTRIBUTING; Roslyn 5.6 requires `net10.0`).
 
 **Installing a local build as the global tool:** if you pack a local build and its
 version number matches the version already on nuget.org, `dotnet tool install
@@ -168,7 +168,7 @@ Task-first lookup for things you already know Lurp can do but not which mode doe
 |---|---|
 | Find unused `using` directives | `lurp --mode=diagnostics --severity=hidden --id=CS8019 --output-dir=./out` |
 | Confirm the installed build matches these docs | `lurp --version` |
-| Find dead-code candidates (public API and tests are never `proved_dead`) | `lurp --mode=dead-candidates --output-dir=./out` |
+| Find dead-code candidates (public API and tests are never `proved_dead`; see [CLI Reference](docs/CLI_REFERENCE.md#--modedead-candidates)) | `lurp --mode=dead-candidates --output-dir=./out` |
 | Search source text literally (not symbol search) | `lurp --mode=grep --query=<text> --output-dir=./out` |
 | See what changed between two indexing runs | `lurp --mode=diff --from-snapshot=<id> --to-snapshot=<id> --output-dir=./out` |
 | Pull just the code relevant to a change | `lurp --mode=context --file=<path> --line=<n> --output-dir=./out` |
@@ -177,26 +177,18 @@ Task-first lookup for things you already know Lurp can do but not which mode doe
 
 ## Framework adapters
 
-Lurp models framework-mediated relationships through six adapters that emit
-ordinary typed facts into the shared model. Each fact retains its evidence level;
-see [ARCHITECTURE.md](docs/ARCHITECTURE.md) for the ladder.
-
-| Adapter | Facts emitted |
-|---|---|
-| ASP.NET Core | `RoutesTo` (route → controller action) |
-| Dependency Injection | `Registers` (service → implementation) |
-| MediatR | request/notification → handler chains |
-| EF Core | entity, `DbSet`, and configuration relationships |
-| Serialization | DTO/property contract participation |
-| Test | `TestedBy` (production symbol → covering test) |
+Lurp models framework-mediated relationships through adapters that emit ordinary
+typed facts into the shared model. Each fact keeps its evidence level. The adapters
+and their facts are in [ARCHITECTURE.md §4.1](docs/ARCHITECTURE.md#41-framework-adapters);
+the evidence ladder is in [§4.2](docs/ARCHITECTURE.md#42-evidence-ladder).
 
 ## Limitations
 
 - **Windows and Linux only**: macOS is not tested.
 - **Multi-target projects are indexed as a union**: one snapshot per index run holds every target framework the solution declares. The declared TFM list is recorded per project and the per-symbol TFM set is recorded per snapshot, but CLI/MCP reads do not surface the per-symbol set, so a member present in only one target framework cannot be told apart by a consumer from one present in all of them.
-- **Source generators not executed**: `GeneratedTreesIncluded=false`; generated files under `obj/` are path-filtered out.
+- **Source generators not executed**: `GeneratedTreesIncluded=false`; compile items under `bin/` and `obj/` are excluded from the snapshot and counted in the completeness block (`excluded_document`), while gitignored compile items are indexed. "Generated" is one rule across the index (Roslyn file-name patterns, EF Core `*ModelSnapshot.cs`, and a leading `<auto-generated` / `<autogenerated` comment).
 - **Reflection string-literal candidates are `name_candidate`**, not `compiler_proved`.
-- **3-snapshot retention**: older snapshots and their document versions are pruned automatically, except a snapshot pinned via `pin-snapshot`, which pruning always skips.
+- **3-snapshot retention**: the 3 newest complete snapshots and their document versions are retained; older ones are pruned automatically, except a snapshot pinned via `pin-snapshot`, which is kept in addition and does not take a slot.
 - **Restore first**: an unrestored project still indexes, with a warning, but `MSBuildWorkspace` cannot resolve its references, so edges are missing and diagnostics are wrong. Run `dotnet restore` before `--mode=index`.
 - **NuGet audit warnings look like load failures**: `MSBuildWorkspace` reports a NuGet vulnerability warning as a failure-level workspace diagnostic, so the index run prints `WARNING: workspace load reported N failure-level diagnostic(s)` with the package message. Such a warning does not stop the index.
 
@@ -204,19 +196,16 @@ see [ARCHITECTURE.md](docs/ARCHITECTURE.md) for the ladder.
 
 | Measurement | Value |
 |---|---|
-| eNoteV2 (402 docs at `4ba9901`) full index | ~18 s |
-| eNoteV2 incremental (no changes) | ~0.3 s |
+| eNoteV2 (402 docs at `4ba9901`) full index | 18.5 s |
+| eNoteV2 incremental (no changes) | 0.2 s |
 | Capsule token estimates | `estimated_tokens` (content) vs `estimated_artifact_tokens` (delivery) |
 
-Measured 2026-10-18 on commit `bcb44f0` (tool 3.5.1, Release build) and eNoteV2 at `4ba9901` (402 documents; the `5b13fbd` tree named at the top of this file has 562 documents and is newer, so these timings do not describe it): wall time, median of three warm runs; 12th Gen Intel(R) Core(TM) i5-12500H, 16 GB RAM, NVMe SSD, Microsoft Windows 11 Education, AC power, Best performance mode. A no-change run hashes every document. The first run after the machine has been idle for hours can be much slower, because the source files are read cold.
+Measured on 2026-11-21 with Lurp 4.0.0 (Release build from `f683ccf` with the P2-S23 changes) and eNoteV2 at `4ba9901`. The performance harness (`--protocol=gate`) reports the median wall time of five runs after three warm-up runs. The machine used an Intel Core i5-12500H and 16 GB of RAM. It ran Fedora Linux 45 (KDE Plasma Desktop Edition) on AC power with the TuneD Balanced profile. A no-change run hashes every document. The first run after the machine has been idle for hours can be much slower, because the source files are read cold.
 
 ## Status & roadmap
 
-Shipped as a global tool (`dotnet tool install lurp`); the published version is
-3.6.1. This source tree is <!-- generated:versions -->tool 3.6.1, schema v37, extractor 1.11.0, CLI/MCP contract v6, output schema v6<!-- /generated:versions -->. 3.0.0 moves the default database to
-`%LOCALAPPDATA%\lurp\`, registers the MCP write tools only with
-`--enable-write-tools`, and needs one `--mode=index` run on an index built by
-2.0.0: see [RELEASE_NOTES_3.0.0.md](docs/RELEASE_NOTES_3.0.0.md). 3.0.1 fixes an index run that failed after a re-pin: see [RELEASE_NOTES_3.0.1.md](docs/RELEASE_NOTES_3.0.1.md). 3.0.2 stores the edges of a partial type at its hand-written part and needs one `--mode=index` run: see [RELEASE_NOTES_3.0.2.md](docs/RELEASE_NOTES_3.0.2.md). 3.5.0 changes the CLI/MCP contract to version 6 and needs one `--mode=index` run: see [RELEASE_NOTES_3.5.0.md](docs/RELEASE_NOTES_3.5.0.md). `windows-latest`
+Shipped as a global tool (`dotnet tool install lurp`). This source tree is <!-- generated:versions -->tool 4.0.0, schema v50, extractor 1.12.0, CLI/MCP contract v7, output schema v7<!-- /generated:versions -->. Each release, and whether it needs an index run, is listed under
+[Documentation & license](#documentation--license). `windows-latest`
 and `ubuntu-latest` CI plus a manual real-parity gate on eNoteV2 that runs on Windows and Linux
 GitHub-hosted runners (`workflow_dispatch`); a release publishes only the CI-built package of a commit
 that passed that gate, unless the release run is started with an `override_reason` (see [CONTRIBUTING.md](CONTRIBUTING.md#releasing)). Roadmap: surfacing the
@@ -228,6 +217,7 @@ by design (see
 
 - [ARCHITECTURE.md](docs/ARCHITECTURE.md): product model, storage, pipeline, rules.
 - [CLI_REFERENCE.md](docs/CLI_REFERENCE.md): commands, options, output shapes, snapshot lifecycle, MCP.
+- [RELEASE_NOTES_4.0.0.md](docs/RELEASE_NOTES_4.0.0.md): the 4.0.0 changes to extraction, storage, indexing and the CLI/MCP contract. Run one full index after the upgrade.
 - [RELEASE_NOTES_3.6.1.md](docs/RELEASE_NOTES_3.6.1.md): the 3.6.1 changes (release workflow waits up to 60 minutes for nuget.org to index); no index run is needed.
 - [RELEASE_NOTES_3.6.0.md](docs/RELEASE_NOTES_3.6.0.md): the 3.6.0 changes (Linux support, Windows-built manifests read on Linux, lock files kept after a run, and a clear error for a manifest without `git_root`/`solution_path`); no index run is needed.
 - [RELEASE_NOTES_3.5.2.md](docs/RELEASE_NOTES_3.5.2.md): the 3.5.2 changes (the dead-candidate `generated_excluded` text, the `lurp_dead_candidates` description, MCP `lurp_index` failure reporting, and the MSBuild/SDK failure cause); no index run is needed.

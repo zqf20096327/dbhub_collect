@@ -29,7 +29,43 @@ For 16.9.0 to 16.10.0, run the following scripts in order for your provider. [Po
 
 For 16.10.0 to 16.11.0, run `11.owner-oidc-binding-only.sql` after the earlier upgrades. It removes the OIDC enable/disable switch. Existing bindings are preserved, including previously disabled bindings, which resume allowing third-party sign-in.
 
+The widget-composer schema also requires `12.widget-regions.sql` after script 11. It replaces widget numeric placement bands with explicit regions and region-local order, and raises the stored title limit to 128. Follow the [widget upgrade and recovery steps](database/README.md#widget-regionorder-upgrade-12) before starting this application against an existing database.
+
 For databases older than 16.9.0, run the applicable category ID and PostgreSQL naming upgrades (`1` and `2`) first. Keep access restricted until any required owner setup is complete. [First run](#first-run)
+
+### Widget Placement
+
+In `/admin/widgets`, select a widget in the sidebar structure and edit its content inline. Add by type, drag widgets within or between regions, choose placement, or use Move up/Move down within a region. The regions are Before Profile, Before Tags, Before Categories, and After Categories. Built-in anchors reflect existing settings and remain read-only. Edits, removals, and type changes stay in a page draft until Save changes replaces the complete collection. Undo restores staged widget removals; Discard changes restores the loaded baseline. Titles allow 128 characters and each widget content allows 2000 characters.
+
+The isolated, noninteractive preview uses the actual public sidebar templates, current theme and saved custom CSS. It follows draft changes without saving. Invalid fields or preview failures retain the last successful preview with an out-of-date notice; use Refresh preview to retry. Preview immediately reflects saved custom CSS; public tabs retain the existing one-hour stylesheet cache and may need a fresh asset cache for comparison. Link List respects each link's opening switch; legacy links without a stored switch retain their new-tab default.
+
+### Widgets API
+
+Administrator-only `GET /api/widgets` returns an uncached complete `{ "widgets": [...] }` collection, including disabled widgets in canonical sidebar order. Antiforgery-protected `PUT /api/widgets` atomically replaces that collection and returns the canonical saved envelope. `POST /api/widgets/preview` accepts the same editable envelope and returns uncached HTML without saving widgets, settings or activity. Other APIs are unchanged; the old widget list/detail and individual create/update/delete routes are retired.
+
+Every entry must explicitly include all seven editable fields:
+
+```json
+{
+    "widgets": [
+        {
+            "id": "10000000-0000-0000-0000-000000000001",
+            "title": "Links",
+            "widgetType": "LinkList",
+            "region": "AfterCategories",
+            "sortOrder": 0,
+            "isEnabled": true,
+            "contentCode": "[]"
+        }
+    ]
+}
+```
+
+IDs must be unique nonempty GUIDs and stay stable across retries. Types are `LinkList`, `ImageLink` and `ButtonLink`; `contentCode` is the corresponding JSON string, limited to 2000 characters per widget. Empty link lists are valid; images require an image URL and button lists contain one to three buttons. Titles are required, trimmed and limited to 128 characters. Missing/null/incomplete envelopes, invalid values or malformed type content return HTTP 400 with field errors such as `Widgets[index].ContentCode[item].Name`, before mutation. There is no widget/link count cap beyond existing host request limits.
+
+Regions are `BeforeProfile`, `BeforeTags`, `BeforeCategories` and `AfterCategories`; submitted `sortOrder` is an integer from 0 through 2147483647. Within each region, submitted array position breaks order ties; saved orders become contiguous from zero. `displayOrder` is retired. An explicit empty array deletes every widget. Omitted IDs are deleted, absent IDs are created/restored and matching IDs are updated. The later successful whole-page save replaces earlier additions and deletions. Surviving IDs retain creation UTC; new/restored IDs receive current server UTC. Responses also include server-owned `contentType` and `createdTimeUtc`, which clients cannot overwrite.
+
+An uncertain save retains the draft and requires explicit whole-page overwrite confirmation before retry. Cache invalidation failure after commit returns HTTP 500 Problem Details with `committed: true` and `savedCollection`; the editor reports Saved, blocks edits/resubmission and offers confirmed reload. Activity dispatch failures preserve successful persistence. Public widget caches remain per-instance. Follow the [database upgrade and recovery guide](database/README.md#widget-regionorder-upgrade-12) when installing the matching schema and application.
 
 ### Quick Local Deployment (Docker)
 

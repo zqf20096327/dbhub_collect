@@ -116,7 +116,7 @@ curl -fsSL https://raw.githubusercontent.com/susomejias/rembric/main/install.sh 
 
 Pick **Server → install**: it generates `REMBRIC_ADMIN_TOKEN` and, if Docker is present and you confirm, runs `docker compose up -d` for you. Then pick **Plugins** to install the plugin for your agent. Pin a release for reproducibility with `--ref=<tag>` where the backend supports it. Hermes uses its native plugin manager and rejects explicit refs/local sources; [copied-install migration and native ownership](./apps/plugin/.hermes-plugin/README.md#transition-from-a-copied-installation) require explicit operator review.
 
-Docker is the canonical distribution: the image bundles Node 22, the native modules (`better-sqlite3`, `sqlite-vec`, `onnxruntime-node`) and the embedding model, pre-built for `linux/amd64` and `linux/arm64` — the only requirement on your host is Docker with at least 2 vCPUs and 2 GB of RAM, 3–4 GB recommended (the in-process embedder and reranker are why — see [docs/embeddings.md](./docs/embeddings.md)).
+Docker is the canonical distribution: the image bundles Node 26, the native modules (`better-sqlite3`, `sqlite-vec`, `onnxruntime-node`) and the embedding model, pre-built for `linux/amd64` and `linux/arm64` — the only requirement on your host is Docker with at least 2 vCPUs and 2 GB of RAM, 3–4 GB recommended (the in-process embedder and reranker are why — see [docs/embeddings.md](./docs/embeddings.md)).
 
 MCP at `http://<host>:8787/mcp`, dashboard at `http://<host>:8787/dashboard` (replace `<host>` with `127.0.0.1` if running on the same host as your agent, or the LAN/Tailscale hostname of the box hosting Rembric otherwise).
 
@@ -434,7 +434,7 @@ Self-hosted operator surface for every memory, session, prompt, judgment, entity
 
 <br>
 
-Day-to-day operator work lives in the dashboard at [http://127.0.0.1:8787/dashboard](http://127.0.0.1:8787/dashboard) (port `8788` in the dev stack). Mint and revoke API tokens at `/dashboard/tokens`, create and archive projects at `/dashboard/projects`, soft-delete agent sessions at `/dashboard/sessions`, browse and soft-delete curated user prompts at `/dashboard/prompts` (FTS5 search over content + tags; refined predecessors show a `REFINED` badge), trigger consolidation at `/dashboard/consolidation`, and run the operator-only purges from `/dashboard/maintenance`. Programmatic agents talk to the same data through the MCP `project.*` / `memory.*` tools or, for admin-only operations, through the HTTP endpoints under `/admin/*` (admin bearer token required — see [docs/agents.md](./docs/agents.md)).
+Day-to-day operator work lives in the dashboard at [http://127.0.0.1:8787/dashboard](http://127.0.0.1:8787/dashboard) (`http://localhost:3000/dashboard` under `pnpm run dev`). Mint and revoke API tokens at `/dashboard/tokens`, create and archive projects at `/dashboard/projects`, soft-delete agent sessions at `/dashboard/sessions`, browse and soft-delete curated user prompts at `/dashboard/prompts` (FTS5 search over content + tags; refined predecessors show a `REFINED` badge), trigger consolidation at `/dashboard/consolidation`, and run the operator-only purges from `/dashboard/maintenance`. Programmatic agents talk to the same data through the MCP `project.*` / `memory.*` tools or, for admin-only operations, through the HTTP endpoints under `/admin/*` (admin bearer token required — see [docs/agents.md](./docs/agents.md)).
 
 ### Maintenance (manual purges)
 

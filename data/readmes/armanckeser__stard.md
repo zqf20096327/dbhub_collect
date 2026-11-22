@@ -40,7 +40,7 @@
 
 Your stars say what you actually use, and nobody can see them. Stard turns them into something for your GitHub profile: your top four repos, short reviews in your own words, and your Lists, each drawn as a card.
 
-**1. Pick your top four.** The four repos you would put on a poster. Every repo gets a poster in the colour of its language.
+**1. Pick your top four.** The four repos you would put on a poster. Every repo gets a poster in the colour of its language, filled up to a line that tracks how busy the repo was over the past year: a repo winding down drains to grey.
 
 **2. Review what you use.** A rating out of five and a sentence or two. The card links to the repo.
 

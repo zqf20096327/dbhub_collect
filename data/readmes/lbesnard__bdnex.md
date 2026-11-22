@@ -88,11 +88,11 @@ that comes from the page (`$authors` in the default one-shot template) asks for 
    (`~/.local/share/bdnex/pages` by default), under any name that ends with the album id
    (`BD-Nains-Tome-1-Redwin-de-la-Forge-245127.html`, or just `245127.html`), then run `bdnex import --fetch`.
 2. **Use a fetcher**: a function that takes a URL and returns the page as bytes. The default,
-   `bdnex.importer.bedetheque:flaresolverr_fetch`, asks a FlareSolverr server whose address you give; or name your own:
+   `bdnex.fetchers:flaresolverr_fetch`, asks a FlareSolverr server whose address you give; or name your own:
 
    ```yaml
-   bedetheque:
-     fetcher_endpoint: "http://localhost:8191/v1"             # the default fetcher: your FlareSolverr
+   fetch:
+     endpoint: "http://localhost:8191/v1"                     # the default fetcher: your FlareSolverr
      # fetcher: "package.module:function"                     # or your own function: url -> page bytes
    ```
 
@@ -114,7 +114,7 @@ Requires Python 3.10 to 3.13. [uv](https://docs.astral.sh/uv/) is the recommende
 |---|---|---|
 | reading `.cbr` files (match, covers, `write`, `move`, `repair`) | `unrar`, or `unar`, or `bsdtar` (a `7z` only if it has the RAR codec: many builds do not) | every CBR fails with `Failed the read enough data` in the log |
 | the cover check (`cover.check`, `candidates --cover`) | OpenCV (installed with bdnex; a build without it, e.g. an unusual platform, degrades) | covers are still downloaded, but not compared |
-| fetching pages (the default fetcher) | a [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) address in `bedetheque.fetcher_endpoint`, or your own fetcher | no page can be fetched (see [Album pages](#album-pages-read-this-first)) |
+| fetching pages (the default fetcher) | a [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) address in `fetch.endpoint`, or your own fetcher | no page can be fetched (see [Album pages](#album-pages-read-this-first)) |
 
 On Debian or Ubuntu: `sudo apt install unrar` (it needs the `non-free` / `multiverse` repository), or `sudo apt install libarchive-tools` for `bsdtar` (the package is called `bsdtar` on the newest releases).
 
@@ -170,6 +170,13 @@ the wheel and publishes a GitHub release.
 The documentation is at <https://bdnex.readthedocs.io/en/latest/> (how to get started, a "How do I...?" page for the common tasks, the configuration and query references).
 
 To build it locally: `uv sync --extra docs && uv run sphinx-build -b html docs docs/_build/html`, then open `docs/_build/html/index.html`.
+
+## License
+
+bdnex is free software under the **GNU Affero General Public License, version 3 or later** (see [LICENSE](LICENSE)). You may use, study, change
+and share it, and sell copies, on one condition: whoever distributes it, changed or not, or lets others use it over a network (a hosted
+`bdnex serve`), must give them the complete source, changes included, under the same license. It is the license of PyMuPDF, which bdnex
+builds on. Versions before the one that changed the license (up to 0.13.0) were released as MIT / CC0 and stay available under those terms.
 
 ## Examples
 

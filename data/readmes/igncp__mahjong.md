@@ -1,7 +1,5 @@
 # 麻雀 - Mahjong
 
-![Checks](https://github.com/igncp/mahjong/actions/workflows/checks.yml/badge.svg) ![Deploy](https://github.com/igncp/mahjong/actions/workflows/deploy.yml/badge.svg)
-
 Hong Kong style mahjong game engine and web application. It uses a server to
 handle games which handles most of the game mechanics.
 

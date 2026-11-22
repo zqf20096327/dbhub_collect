@@ -30,16 +30,18 @@
 
 ## Download
 
-Grab the installer for your OS from the [latest release](https://github.com/AdrianBonpin/gridline/releases/latest) — the links below point at the current release (**v0.8.4**):
+Grab the installer for your OS from the [latest release](https://github.com/AdrianBonpin/gridline/releases/latest) — the links below point at the current release (**v0.9.2**):
 
 | OS                           | Architecture                 | Download                                                                                                                             |
 | :--------------------------- | :--------------------------- | :----------------------------------------------------------------------------------------------------------------------------------- |
-| **macOS**                    | Apple Silicon (M1/M2/M3/M4…) | [Gridline_0.8.4_aarch64.dmg](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline_0.8.4_aarch64.dmg)         |
-| **macOS**                    | Intel                        | [Gridline_0.8.4_x64.dmg](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline_0.8.4_x64.dmg)                 |
-| **Windows**                  | x64                          | [Gridline_0.8.4_x64-setup.exe](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline_0.8.4_x64-setup.exe)     |
-| **Debian / Ubuntu**          | amd64                        | [Gridline_0.8.4_amd64.deb](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline_0.8.4_amd64.deb)             |
-| **Fedora / RHEL / openSUSE** | x86_64                       | [Gridline-0.8.4-1.x86_64.rpm](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline-0.8.4-1.x86_64.rpm)       |
-| **Other Linux**              | amd64                        | [Gridline_0.8.4_amd64.AppImage](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline_0.8.4_amd64.AppImage)   |
+| **macOS**                    | Apple Silicon (M1/M2/M3/M4…) | [Gridline_0.9.2_aarch64.dmg](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline_0.9.2_aarch64.dmg)         |
+| **macOS**                    | Intel                        | [Gridline_0.9.2_x64.dmg](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline_0.9.2_x64.dmg)                 |
+| **Windows**                  | x64                          | [Gridline_0.9.2_x64-setup.exe](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline_0.9.2_x64-setup.exe)     |
+| **Debian / Ubuntu**          | amd64                        | [Gridline_0.9.2_amd64.deb](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline_0.9.2_amd64.deb)             |
+| **Fedora / RHEL / openSUSE** | x86_64                       | [Gridline-0.9.2-1.x86_64.rpm](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline-0.9.2-1.x86_64.rpm)       |
+| **Other Linux**              | x86_64                       | [Gridline_0.9.2_amd64.AppImage](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline_0.9.2_amd64.AppImage)   |
+
+> **Linux is built and tested on Ubuntu 22.04 x86_64 only.** The `.deb`, `.rpm` and `.AppImage` are three packagings of that one verified build — not a per-distribution certification. See [Linux support and troubleshooting](#linux-support-and-troubleshooting) for exactly what is and is not covered, and for the AppImage black-window diagnostic checklist ([issue #62](https://github.com/AdrianBonpin/gridline/issues/62), open).
 
 **macOS via Homebrew** (recommended for Mac users):
 
@@ -57,7 +59,7 @@ The cask installs the app directly. The DMGs are Developer-ID signed and notariz
 > **macOS first launch:** Gridline is Developer-ID signed and notarized, so macOS opens it without a Gatekeeper prompt. Not sure if your Mac is Intel or Apple Silicon? See [Which file should I download?](#which-file-should-i-download) below.
 
 <!--
-  MAINTENANCE: These links are STATIC (versioned) — they point at the v0.8.4
+  MAINTENANCE: These links are STATIC (versioned) — they point at the v0.9.2
   release assets, not at a moving "latest" target. On every new release,
   update BOTH tables here (Download + Which file should I download?) to the
   new version's asset names, which are tauri-action's default naming:
@@ -101,6 +103,8 @@ Gridline is built for developers and small teams who manage multiple database en
 
 <details>
 <summary>View the full changelog</summary>
+
+- **v0.9.2** — **SSH host keys are verified before your credentials are sent**: a known host verifies silently, an unknown host asks you to accept its fingerprint once and remembers it, a changed key fails closed with both fingerprints, and replacing stale trust is a separate deliberate action rather than an override on the error path. **TLS fails closed** — an unrecognised mode is an error at save, import and connect instead of a silent plaintext connection, and certificate verification through an SSH tunnel now validates the real database hostname rather than the loopback endpoint. **File access goes through File Grants** — backup output, restore input, streamed exports, CSV/JSON imports, settings import/export and connection transfer each consume a backend-issued grant that expires after five minutes and is used up by one job, so a path the interface merely displays authorises nothing, and a failed write publishes no partial file over an existing one. **A SQLite table rebuild is one transaction or no change at all** and either reproduces the table's `CHECK`s, constraints, indexes, triggers, generated columns, table options and sequence state or refuses in the editor before touching anything; values move by Column Identity, so a reorder shifts no data and adding a column is never read as a rename. **An edit or delete changes exactly the row you selected or nothing** — Row Identity covers every primary-key column, the write commits only when one row matched, and the original value of the edited column is checked so a concurrent change is reported as a conflict instead of being overwritten; pending work stays scoped to the Change Origin it was staged against. **Restores and dumps are honest about failure** — PostgreSQL restores run in a single transaction when the dump allows it and otherwise require you to accept the stated partial-application risk, a lock-waiting restore is stopped after 60 seconds of continuous waiting while a large progressing one is never killed, MySQL restores understand the dialect's escapes and clean only the objects the dump recreates, and a SQLite dump is read from one snapshot and is either lossless or refused. **Every place SQL can be sent from applies the same rules** — run, re-run, history/saved, pagination, refresh and export share one guard, classification reads the whole script and fails closed on an unknown verb, export is validated and executed read-only in the backend, a confirmation is bound to its request, and each accepted request executes once. **Long-running work is cancellable** with process-tree termination on cancel or quit, one connection's slow query no longer blocks the rest of the app, and a disconnect closes the pool and tunnel together while a failed reconnect keeps the working session. **Releases run through one pipeline with least trust** — pinned actions, job-scoped tokens, verified tool inputs, fail-closed macOS signing and notarization checks, validated cask rendering, and dependency advisories either patched or covered by a reviewed exception CI enforces; a version-consistency test now covers every manifest, the landing page, the changelog, `ROADMAP.md` and both README download tables. **Linux support language now matches what is tested** (one Ubuntu 22.04 x86_64 build repackaged as `.deb`/`.rpm`/`.AppImage`), and the Fedora AppImage black-window report ([#62](https://github.com/AdrianBonpin/gridline/issues/62)) stays **open** — no root cause, no fix, no unconditional graphics workaround, only a diagnostic checklist so it can be reproduced from evidence.
 
 - **v0.8.4** — **Restore and sync now stop at the first error.** A failing statement during a PostgreSQL plain restore used to be skipped while the rest of the script ran, so a broken dump could report success with part of the schema applied. Plain restores now run `psql` with `--no-psqlrc` and `-v ON_ERROR_STOP=1`; archive restores and DB Sync add `pg_restore --exit-on-error` ([#49](https://github.com/AdrianBonpin/gridline/issues/49)). **SQLite clean restore is atomic** — the drops and every statement of the dump run inside one `BEGIN IMMEDIATE`, so a malformed or truncated dump rolls back and leaves the target untouched; `VACUUM`, `ATTACH` and `DETACH` statements and empty dumps are rejected before anything is changed, drop errors propagate instead of being ignored, and the target's `foreign_keys` setting is restored on every exit path ([#48](https://github.com/AdrianBonpin/gridline/issues/48)). **MySQL sync cannot target the source database, and a failed dump is no longer reported as success** — the dump no longer emits `--databases` (which produced `CREATE DATABASE` / `USE <source>`), its exit status is checked before the restore's, and its stderr is drained on a thread so a burst of warnings cannot block the pipe; each endpoint now derives its own TLS, and MariaDB connections reach the MySQL tools pages instead of the SQLite ones ([#47](https://github.com/AdrianBonpin/gridline/issues/47)). **The confirmation dialog examines every statement** — `SELECT 1; DROP TABLE demo;` used to run because only the first statement was inspected; it now prompts, and the dialog identifies the statement (*"Statement 2 of 2 — a schema-modifying statement (DDL)."*). Read statements are allowlisted, writes and DDL prompt, an unrecognised verb prompts rather than being assumed safe, `WITH` chains are classified by their CTE bodies, and a schema-changing script refreshes the object tree however it was run ([#50](https://github.com/AdrianBonpin/gridline/issues/50)). **SSH tunnels no longer hang** — a tunnelled connection could stall once authentication completed: *Test connection* never returned, and any second connection behind the tunnel waited on a listener that accepted only one client, because two forwarding threads shared one SSH session whose lock made a pending read block the write carrying the client's first packet. One nonblocking worker now drives the session: every client is served concurrently, partially written data is buffered, half-closes are preserved, and clients still stalled mid-authentication or mid-query are closed when the tunnel is released. SSH connect, handshake and authentication are bounded at 10 seconds, the PostgreSQL probe has a 10-second deadline covering TLS, authentication and the version query, and an idle tunnel polls less often. Reported and fixed by [@Amikas](https://github.com/Amikas) in [#57](https://github.com/AdrianBonpin/gridline/pull/57). **Security and CI** — [`SECURITY.md`](./SECURITY.md) documents private vulnerability reporting through GitHub advisories, pull requests to `prod` now run formatting, the Rust tests, the frontend tests and the frontend production build in a read-only workflow ([#52](https://github.com/AdrianBonpin/gridline/issues/52)), and the Windows MariaDB archive is checksum-verified before it is bundled ([#51](https://github.com/AdrianBonpin/gridline/issues/51)).
 
@@ -344,24 +348,24 @@ Gridline's macOS builds are **Developer-ID signed and notarized by GitHub Action
    | `APPLE_API_ISSUER`           | App Store Connect **Issuer ID**                                                                     |
    | `APPLE_API_KEY_CONTENT`      | contents of the downloaded `AuthKey_<KeyID>.p8`                                                     |
 
-   When these secrets are absent the macOS jobs still build, but the DMGs are ad-hoc signed and **not** notarized (users get the “Open Anyway” prompt). The CI re-signs the bundled PostgreSQL/MariaDB client binaries with the same Developer ID identity, because Apple rejects ad-hoc-signed nested executables during notarization.
+   **All seven secrets are required.** A macOS release fails — before it builds anything — when any of them is missing or the notarization key is rejected, because Gridline does not publish a macOS build unless it carries a real Developer ID signature and Apple's notarization ticket. Nothing is uploaded until the built artifacts have been verified: the `.app` must carry a `Developer ID Application` signature with the hardened runtime and a secure timestamp, pass `codesign --verify`, `xcrun stapler validate` and `spctl --assess --type execute`; and the `.dmg` is notarized, stapled, `stapler validate`d and `spctl --assess`ed before it is uploaded (`scripts/verify-macos-artifacts.sh`, which also notarizes the DMG that the app bundle is shipped in). The CI re-signs the bundled PostgreSQL/MariaDB client binaries with the same Developer ID identity, because Apple rejects locally signed nested executables during notarization.
 
-`scripts/release-mac.sh` is the **local fallback** path (handy for a signed build without burning CI minutes, or when Actions is unavailable). It auto-detects the Developer ID identity from your keychain, reads notarization credentials from `~/.config/gridline/notarize.env` (`APPLE_API_KEY`, `APPLE_API_ISSUER`, `APPLE_API_KEY_PATH`), signs both architectures, notarizes + staples them, verifies the result, then uploads the DMGs to the **GitHub** release for the tag (`gh release upload --clobber`, so a locally signed pair supersedes the CI-built ones — publish the draft afterwards). If the certificate or credentials are missing it fails with instructions (set `GRIDLINE_SKIP_NOTARIZE=1` to build signed-but-unnotarized for testing only).
+`scripts/release-mac.sh` is the **local fallback** path (handy for a signed build without burning CI minutes, or when Actions is unavailable). It makes the same checks in the same order: it needs the Developer ID identity in your keychain plus notarization credentials in `~/.config/gridline/notarize.env` (`APPLE_API_KEY`, `APPLE_API_ISSUER`, `APPLE_API_KEY_PATH`) — validated **before** the build starts — builds both architectures, runs the same verifier, and uploads only the verified artifacts to the **GitHub** release for the tag (`gh release upload --clobber`, so a locally signed pair supersedes the CI-built ones — publish the draft afterwards). It has no switch to skip notarization: an unnotarized build is not a release artifact.
 
 **Windows** still shows a SmartScreen prompt (no Windows signing cert yet); **Linux** installs without a warning.
 
 #### Which file should I download?
 
-Each release contains **one file per platform** — you only need the one that matches your computer. The links below point at the current release (**v0.8.4**):
+Each release contains **one file per OS and architecture** — you only need the one that matches your computer. The links below point at the current release (**v0.9.2**):
 
 | Your system                            | Download this                                                                                                                                | Notes                                                            |
 | :------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------- |
-| macOS **Apple Silicon** (M1/M2/M3/M4…) | [Gridline_0.8.4_aarch64.dmg](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline_0.8.4_aarch64.dmg)                 | `aarch64` = Apple's own chip                                     |
-| macOS **Intel**                        | [Gridline_0.8.4_x64.dmg](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline_0.8.4_x64.dmg)                         | `x64` = Intel/AMD                                                |
-| **Windows** (most PCs)                 | [Gridline_0.8.4_x64-setup.exe](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline_0.8.4_x64-setup.exe)             | The `.msi` is an alternate installer (for enterprises/IT admins) |
-| **Debian / Ubuntu**                    | [Gridline_0.8.4_amd64.deb](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline_0.8.4_amd64.deb)                     | Install: `sudo apt install ./Gridline_0.8.4_amd64.deb`           |
-| **Fedora / RHEL / openSUSE**           | [Gridline-0.8.4-1.x86_64.rpm](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline-0.8.4-1.x86_64.rpm)               | Install: `sudo dnf install Gridline-0.8.4-1.x86_64.rpm`          |
-| **Any other Linux**                    | [Gridline_0.8.4_amd64.AppImage](https://github.com/AdrianBonpin/gridline/releases/download/v0.8.4/Gridline_0.8.4_amd64.AppImage)           | Works on every distro: `chmod +x` the file, then double-click it |
+| macOS **Apple Silicon** (M1/M2/M3/M4…) | [Gridline_0.9.2_aarch64.dmg](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline_0.9.2_aarch64.dmg)                 | `aarch64` = Apple's own chip                                     |
+| macOS **Intel**                        | [Gridline_0.9.2_x64.dmg](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline_0.9.2_x64.dmg)                         | `x64` = Intel/AMD                                                |
+| **Windows** (most PCs)                 | [Gridline_0.9.2_x64-setup.exe](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline_0.9.2_x64-setup.exe)             | The `.msi` is an alternate installer (for enterprises/IT admins) |
+| **Debian / Ubuntu**                    | [Gridline_0.9.2_amd64.deb](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline_0.9.2_amd64.deb)                     | Install: `sudo apt install ./Gridline_0.9.2_amd64.deb`           |
+| **Fedora / RHEL / openSUSE**           | [Gridline-0.9.2-1.x86_64.rpm](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline-0.9.2-1.x86_64.rpm)               | Install: `sudo dnf install Gridline-0.9.2-1.x86_64.rpm`          |
+| **Any other Linux** (x86_64)           | [Gridline_0.9.2_amd64.AppImage](https://github.com/AdrianBonpin/gridline/releases/download/v0.9.2/Gridline_0.9.2_amd64.AppImage)           | Portable build for glibc 2.35+ systems: `chmod +x` the file, then run it. Built on Ubuntu 22.04 — not verified on every distribution ([Linux notes](#linux-support-and-troubleshooting)) |
 
 **Not sure if your Mac is Intel or Apple Silicon?** Click the **Apple menu** → **About This Mac**. If it shows "Apple M1/M2/M3/M4…" download the `aarch64` file; if it shows an Intel chip, download `x64`. Downloading the wrong one won't run.
 
@@ -371,17 +375,19 @@ Cutting a release is one command — CI builds everything. **Releases are cut fr
 
 ```bash
 git checkout prod && git pull
-git tag v0.8.4
-git push github v0.8.4        # GitHub is the only release remote
+git tag v0.9.2
+git push github v0.9.2        # GitHub is the only release remote
 ```
 
-The version bump itself lands through a pull request first — `desktop/package.json`, `desktop/src-tauri/Cargo.toml`, `desktop/src-tauri/tauri.conf.json`, `www/src/pages/index.astro`, `www/public/landing.js`, `www/src/data/changelog.ts` and both README download tables all carry it, and the docs-coverage tests fail if one is missed.
+The version bump itself lands through a pull request first — the root `package.json`, `desktop/package.json`, `desktop/src-tauri/Cargo.toml` and its `gridline` `Cargo.lock` entry, `desktop/src-tauri/tauri.conf.json`, `www/src/pages/index.astro`, `www/public/landing.js`, `www/src/data/changelog.ts`, `ROADMAP.md` and both README download tables all carry it, and `desktop/src/lib/version.test.ts` fails if any one of them is missed.
 
-GitHub Actions (`.github/workflows/release.yml`) builds the **macOS (Apple Silicon + Intel), Windows, and Linux** installers in parallel and opens a **draft release** on the [Releases](https://github.com/AdrianBonpin/gridline/releases) page. Paste the new version's entry from [`www/src/data/changelog.ts`](./www/src/data/changelog.ts) into the draft's description (`gh release edit v0.8.4 --notes-file notes.md`), review the draft, then hit **Publish release** — publishing triggers a follow-up job that bumps the Homebrew cask in [`AdrianBonpin/homebrew-gridline`](https://github.com/AdrianBonpin/homebrew-gridline) (pushed via a write-enabled deploy key on the tap, `HOMEBREW_TAP_DEPLOY_KEY`; skipped when unset).
+GitHub Actions (`.github/workflows/release.yml`) builds the **macOS (Apple Silicon + Intel), Windows, and Linux** installers in parallel and opens a **draft release** on the [Releases](https://github.com/AdrianBonpin/gridline/releases) page. Paste the new version's entry from [`www/src/data/changelog.ts`](./www/src/data/changelog.ts) into the draft's description (`gh release edit v0.9.2 --notes-file notes.md`), review the draft, then hit **Publish release** — publishing triggers a follow-up job that bumps the Homebrew cask in [`AdrianBonpin/homebrew-gridline`](https://github.com/AdrianBonpin/homebrew-gridline) (pushed via a write-enabled deploy key on the tap, `HOMEBREW_TAP_DEPLOY_KEY`; skipped when unset).
 
-The self-hosted Gitea mirror (`.gitea/workflows/release.yml`) still builds Linux and Windows for the Gitea release, and `scripts/release-mac.sh` can build macOS locally — both are kept as a fallback if GitHub is unavailable.
+GitHub Actions is the **only** release pipeline: the self-hosted Gitea mirror is a code-only copy that receives `prod` and the release tags for redundancy and runs no release build. `scripts/release-mac.sh` can still build, sign, notarize and upload the macOS DMGs from a local machine if Actions is unavailable.
 
-Before tagging, make sure the version number is in sync across `desktop/package.json`, `desktop/src-tauri/Cargo.toml`, and `desktop/src-tauri/tauri.conf.json`, and update the **README download tables** (Download + Which file should I download?) to the new version's asset names.
+Release tags are protected and immutable, and a release can only be built from a tag reachable through reviewed `prod` history — see [AGENTS.md](./AGENTS.md#release-ref-protection-owner-applied-repository-settings) for the exact repository settings (an owner applies those; they are not files in this repo).
+
+Before tagging, run `bun run test` — it checks every place the version is stated (the root and desktop `package.json`, `desktop/src-tauri/Cargo.toml`, the `gridline` `Cargo.lock` entry, `tauri.conf.json`, the landing page, the changelog, `ROADMAP.md` and both README download tables) against `desktop/package.json` and fails on any mismatch.
 
 ### Build from source
 
@@ -405,9 +411,84 @@ bun run tauri build
 
 - **macOS:** 13 (Ventura) or newer
 - **Windows:** 10 or newer
-- **Linux:** Ubuntu 22.04+ or equivalent modern distribution
+- **Linux (x86_64 only):** glibc 2.35+ — the Ubuntu 22.04 baseline the releases are built on. `.deb`, `.rpm` and `.AppImage` are published; what that does and does not promise is spelled out in [Linux support and troubleshooting](#linux-support-and-troubleshooting). There is no ARM or 32-bit Linux build.
 - **RAM:** 8 GB recommended
 - **PostgreSQL client tools:** `pg_dump`/`pg_restore`/`psql` are **bundled** with Gridline — no separate install required for backup/restore/sync. (System tools, if installed, are preferred.)
+
+---
+
+## Linux support and troubleshooting
+
+### What Linux support actually means
+
+Gridline ships three Linux package formats, all **x86_64**, all built from the same verified build on **Ubuntu 22.04 (glibc 2.35)**:
+
+| Package      | Aimed at                                    | What has been verified                                                       |
+| :----------- | :------------------------------------------ | :--------------------------------------------------------------------------- |
+| `.deb`       | Debian, Ubuntu and derivatives              | Built, unit-tested and Rust-tested on Ubuntu 22.04 in CI                      |
+| `.rpm`       | Fedora, RHEL / Rocky / Alma, openSUSE        | Same build, repackaged; not separately tested on those distributions          |
+| `.AppImage`  | Any x86_64 distribution with glibc 2.35+     | Same build, bundled as a portable image; not verified per distribution        |
+
+That is the whole claim, and it is deliberately narrower than "works everywhere":
+
+- Gridline is **not** verified on every Linux distribution. No CI lane installs the `.deb`/`.rpm` on each distro, and there is no Fedora, openSUSE or Arch certification.
+- Automated Linux coverage is Ubuntu-based: builds and unit/Rust tests on Ubuntu 22.04, a headless desktop E2E smoke that launches the app under a software-rendered display on Ubuntu 24.04 (a non-AppImage binary), and a nightly/manual AppImage smoke that launches the published `.AppImage` itself, requires a mapped window at the configured size with painted content, and fails on fatal renderer diagnostics. The same check runs in a Fedora container, which is **cross-distribution compatibility coverage only** — a container on a GPU-less runner, not your session, so it neither reproduces nor closes [#62](https://github.com/AdrianBonpin/gridline/issues/62).
+- The AppImage is a **portable build**, not a guarantee that every compositor and GPU stack paints it. If it does not work on your system, that is a bug worth reporting — packaging does not promise against it.
+- A user report that the AppImage opens to a black window on Fedora ([issue #62](https://github.com/AdrianBonpin/gridline/issues/62)) is **open**: the root cause is not identified and no fix has shipped. See the checklist below.
+
+### Black, blank, or white window on Linux
+
+If Gridline starts but the main window never paints — a black, blank or white rectangle, with or without the menu bar — collect the six items below before filing or updating a report. Each one rules out a different class of cause, so a report with all six is reproducible and a report without them is a guess.
+
+**1. The exact distribution release** — "Fedora" is not enough, the version is:
+
+```bash
+cat /etc/os-release      # NAME, VERSION_ID, VERSION
+uname -r                 # kernel (Fedora/RHEL change drivers between kernels)
+```
+
+**2. Install type, architecture and version** — which asset (`.AppImage`, `.deb`, `.rpm`), the release tag it came from, `uname -m`, and whether another package format behaves the same way. That last point separates packaging problems from rendering problems.
+
+**3. Session type** — Wayland, X11, or Wayland with XWayland:
+
+```bash
+echo "$XDG_SESSION_TYPE / $XDG_CURRENT_DESKTOP"
+```
+
+**4. GPU and driver** — vendor, model, driver in use, and whether the machine is a VM or a hybrid/PRIME laptop:
+
+```bash
+lspci -k | grep -A3 -E "VGA|3D"   # adapter + "Kernel driver in use"
+glxinfo -B | head -n 20           # renderer string (package: mesa-utils on Debian/Ubuntu, mesa-demos on Fedora)
+nvidia-smi                        # NVIDIA proprietary drivers only
+```
+
+**5. Terminal output** — launch it from a shell instead of double-clicking, so stdout/stderr are visible, and separate a mount failure from a render failure:
+
+```bash
+chmod +x Gridline_0.9.2_amd64.AppImage
+./Gridline_0.9.2_amd64.AppImage
+./Gridline_0.9.2_amd64.AppImage --appimage-extract-and-run
+```
+
+- A FUSE / `libfuse.so.2` / "failed to mount" error is an **AppImage mount** problem, not a graphics problem — install `libfuse2` (or keep using `--appimage-extract-and-run`) and it may simply start.
+- An `error while loading shared libraries` line — commonly `libEGL.so.1` — is a **missing host library**, not a Gridline bug: the image bundles GTK3 and WebKitGTK but not the driver-provided GL stack, on purpose, so your distribution supplies it. Install the graphics runtime for your distribution (Debian/Ubuntu: `libegl1 libgles2 libgl1`; Fedora: `libglvnd-egl libglvnd-gles mesa-dri-drivers`) and it will start. A minimal or server install is where this happens; a normal desktop install already has them.
+- A window that opens and paints nothing is a **rendering** problem; continue to step 6.
+
+**6. The graphics workaround ladder** — set these for one launch only, one at a time, in this order, and record which one changes the result. They are diagnostics, not fixes Gridline ships: no environment variable is set by the app or baked into the package.
+
+| Launch with                                                    | What a change tells you                                                                                                              |
+| :------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------- |
+| `WEBKIT_DISABLE_DMABUF_RENDERER=1 ./Gridline_0.9.2_amd64.AppImage`   | The GPU's DMA-BUF export path is the culprit — typical of NVIDIA proprietary drivers and some Wayland compositors on WebKitGTK 2.42+. |
+| `WEBKIT_DISABLE_COMPOSITING_MODE=1 ./Gridline_0.9.2_amd64.AppImage`  | Accelerated compositing is the culprit; the window paints with software compositing instead.                                          |
+| `LIBGL_ALWAYS_SOFTWARE=1 ./Gridline_0.9.2_amd64.AppImage`            | The graphics driver/stack is the culprit, not Gridline: llvmpipe renders everything on the CPU (expect a slow UI if it works).        |
+| `GDK_BACKEND=x11 ./Gridline_0.9.2_amd64.AppImage`                    | The Wayland/compositor path is the culprit — it works under X11/XWayland instead.                                                     |
+
+If none of the four changes anything, the failure is probably not in the WebKit/GPU path at all, and the terminal output from step 5 is the useful evidence.
+
+**Then report it** on [issue #62](https://github.com/AdrianBonpin/gridline/issues/62) — or a new issue if your symptom is different — with the output of steps 1–6: the exact command you ran, what happened, and which workaround (if any) changed it. Redact hostnames, usernames, connection strings and any secret before pasting.
+
+Issue #62 keeps its current state until evidence changes it: it stays **open**, with no root cause and no shipped fix, and it is closed only after the reporter — or an equivalent Fedora environment reproducing the same behaviour — confirms the result. A green build, an AppImage that starts in CI, or a workaround that happens to work does not close it.
 
 ---
 
@@ -492,6 +573,7 @@ Highlights of what's next:
 - [Why Gridline vs the alternatives?](#why-gridline-vs-the-alternatives)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
+- [Linux support and troubleshooting](#linux-support-and-troubleshooting)
 - [Development](#development)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)

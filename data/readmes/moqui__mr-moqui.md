@@ -35,10 +35,11 @@ cd mr-moqui
 ./moq component-get apps   # Optional: the applications (Marble ERP, IronStone BOSS and PASS, with Mantle)
 ./moq build                # Every feature and the dev tools; --lite for a smaller, quicker build
 ./moq load                 # Load all data, including demo; the first run on an empty database loads it too
-./moq run                  # Start moqui; logs to console, ctrl-c to stop; default ports 8080 and 8443
+./moq trust-dev-cert       # Trust the localhost development CA for this user (macOS and Linux)
+./moq run                  # Start moqui on HTTPS 8443; ctrl-c to stop
 ```
 
-Open `http://localhost:8080` and sign in as `john.doe` with the password `moqui`.
+Open `https://localhost:8443` and sign in as `john.doe` with the password `moqui`.
 
 It needs Rust 1.99 or newer, git and bash, on Linux, macOS, or Windows ([Build](docs/Build-Test.md#build)). On
 Windows, use the MSVC toolchain, Visual Studio Build Tools and Git for Windows, and `moq.cmd` from PowerShell or cmd
@@ -96,7 +97,7 @@ out under `runtime/components/addon/`. The repository, its directory and its `co
 | [mr-boss](https://github.com/moqui/mr-boss) | IronStone BOSS, the Business OS Suite: sixteen apps in one shell, from Commons and Comms (groupware and communication) through Sales, Warehouse, Accounting and People | Built |
 | [mr-pass](https://github.com/moqui/mr-pass) | IronStone PASS, the Public Application Software Suite: Forum, Shop, Smithy (git hosting), and the customer and supplier pages of the BOSS apps | Built |
 | [mr-marble](https://github.com/moqui/mr-marble) | Marble ERP and the Simple Screens library it is built from, ported from Moqui Java | Ported |
-| [mr-l10n](https://github.com/moqui/mr-l10n) | Language packs: Spanish and Simplified Chinese | Covers the framework, Mantle, Marble and nine BOSS apps |
+| [mr-l10n](https://github.com/moqui/mr-l10n) | Language packs: Spanish and Simplified Chinese | Covers the framework, Mantle, Marble, the BOSS apps, and PASS |
 | [mr-home](https://github.com/moqui/mr-home) | IronStone HOME: BOSS's capabilities for a household | In design |
 | [mr-three](https://github.com/moqui/mr-three) | IronStone THREE: 3D in business screens, and a town to walk through to reach them | In design |
 

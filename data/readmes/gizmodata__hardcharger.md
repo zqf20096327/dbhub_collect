@@ -17,7 +17,8 @@
   <a href="https://github.com/gizmodata/hardcharger/pkgs/container/hardcharger"><img src="https://img.shields.io/badge/github--package-container--image-green.svg?logo=Docker" alt="GitHub container image"></a>
   <a href="https://github.com/gizmodata/hardcharger/releases/latest"><img src="https://img.shields.io/badge/release-binaries-orange.svg?logo=GitHub" alt="Release binaries"></a>
   <a href="https://github.com/gizmodata/chargewire"><img src="https://img.shields.io/badge/protocol-Chargewire-31a8db.svg" alt="Chargewire protocol"></a>
-  <a href="https://duckdb.org"><img src="https://img.shields.io/badge/engine-DuckDB%202.0-fff000.svg?logo=duckdb&logoColor=black" alt="DuckDB 2.0"></a>
+  <a href="https://github.com/gizmodata/hardcharger-engine"><img src="https://img.shields.io/badge/engine-Hardcharger%20Engine%202.0-fff000.svg" alt="Hardcharger Engine 2.0"></a>
+  <a href="https://duckdb.org"><img src="https://img.shields.io/badge/fork%20of-DuckDB%202.0-fff000.svg?logo=duckdb&logoColor=black" alt="A fork of DuckDB 2.0"></a>
   <a href="https://arrow.apache.org"><img src="https://img.shields.io/badge/wire%20format-Apache%20Arrow-f15a24.svg" alt="Apache Arrow"></a>
   <br>
   <a href="https://pypi.org/project/adbc-driver-hardcharger/"><img src="https://img.shields.io/badge/PyPI%20client-adbc--driver--hardcharger-blue.svg?logo=PyPI" alt="PyPI: adbc-driver-hardcharger (client)"></a>
@@ -28,12 +29,17 @@
   <a href="https://gizmodata.com"><img src="https://img.shields.io/badge/by-GizmoData%E2%84%A2-f15a24.svg" alt="by GizmoData™"></a>
 </p>
 
-<h3 align="center">Fast, secure, remote DuckDB. Every feature included.</h3>
+<h3 align="center">Fast, secure, remote DuckDB SQL on Hardcharger Engine. Every feature included.</h3>
+<p align="center"><a href="https://github.com/gizmodata/hardcharger-engine">Hardcharger Engine</a> is GizmoData's performance fork of <a href="https://duckdb.org">DuckDB</a>.</p>
 
 <p align="center">The quickest start: fully managed, nothing to install.</p>
 <p align="center">
   <a href="https://gizmodata.com/cloud"><img src="docs/assets/gizmodata-cloud-badge.png" alt="Run it on GizmoData Cloud" height="48"></a>
-</p>
+<
+
+[...截断...]
+
+/p>
 <h3 align="center">
   <a href="https://docs.hardcharger.gizmodata.com">📖 Documentation</a>
   &nbsp;·&nbsp;
@@ -41,11 +47,7 @@
 </h3>
 <p align="center">Or try it on your phone or tablet:</p>
 <p align="center">
-  <a href="https://apps.apple.com/us/app/hardcharger/id6824900180"><img src="docs/assets/app-store-badge.svg" alt="Download
-
-[...截断...]
-
- on the App Store" height="40"></a>
+  <a href="https://apps.apple.com/us/app/hardcharger/id6824900180"><img src="docs/assets/app-store-badge.svg" alt="Download on the App Store" height="40"></a>
   &nbsp;
   <a href="https://play.google.com/store/apps/details?id=com.gizmodata.hardcharger"><img src="docs/assets/google-play-badge.png" alt="Get it on Google Play" height="40"></a>
 </p>
@@ -54,21 +56,29 @@
 
 ## 🏎️ What is Hardcharger?
 
-**Hardcharger™** puts [DuckDB 2.0](https://duckdb.org) on the network. Clients connect over
-[**Chargewire**](https://github.com/gizmodata/chargewire), an open HTTP protocol that moves
-[Apache Arrow](https://arrow.apache.org) record batches straight from DuckDB to your
-application: no gRPC, no Flight, no sidecars.
+**Hardcharger™** puts [Hardcharger Engine 2.0](https://github.com/gizmodata/hardcharger-engine),
+GizmoData's performance fork of [DuckDB 2.0](https://duckdb.org), on the network. Clients
+connect over [**Chargewire**](https://github.com/gizmodata/chargewire), an open HTTP protocol
+that moves [Apache Arrow](https://arrow.apache.org) record batches straight from the engine to
+your application: no gRPC, no Flight, no sidecars.
 
 It is the successor to [GizmoSQL](https://github.com/gizmodata/gizmosql), rebuilt from
 scratch for DuckDB 2.0, and it is free: no editions, no license keys. Everything that was
 Enterprise in GizmoSQL is in every Hardcharger build.
 
-- 🦆 **DuckDB 2.0 inside.** A standalone server on DuckDB's v2 C API, not an extension.
+- 🦆 **Hardcharger Engine inside.** A standalone server on the v2 C API of
+  [Hardcharger Engine 2.0](https://github.com/gizmodata/hardcharger-engine), not an extension. The
+  engine is [DuckDB 2.0](https://duckdb.org), the DuckDB team's work, with targeted
+  performance changes from GizmoData on top: join planning for OR conditions under `DISTINCT`
+  and for timestamp-to-date keys, integer range filters, filtered scans, read-ahead, substring
+  search and regex extraction
+  ([the changes and what we measured](https://github.com/gizmodata/hardcharger-engine/blob/v2.0.1/docs/optimizations.md)).
+  DuckDB's SQL syntax, extensions and file format are unchanged.
 - ⚡ **Chargewire on the wire.** A query and its first rows come back in one HTTP round trip.
   Large results stream as Arrow IPC, compressed with LZ4 or zstd when asked, and can be resumed. Bulk ingest
   streams Arrow straight into a table.
 - 🔐 **Security in the core, not bolted on.** Token sign-in, TLS and mTLS, and role-based
-  access control checked inside DuckDB against each statement's own plan. Also row
+  access control checked inside the engine against each statement's own plan. Also row
   policies, column masking, tenants, SSO (OIDC/JWKS) and a tamper-evident audit log.
 - 🔭 **Observable.** Instrumentation into a DuckDB file or PostgreSQL, catalog logging (also
   into DuckLake), a Prometheus `/metrics` endpoint, query profiles and `KILL SESSION`.
@@ -87,30 +97,9 @@ the window leaves the server running in the macOS menu bar or Windows system tra
 **Quit Hardcharger** stops it.
 
 <p align="center">
-  <img src="docs/assets/desktop-preview-light.png" alt="Hardcharger desktop dashboard design preview, light theme: server controls, database information and the SQL workspace button" width="49%">
-  <img src="docs/assets/desktop-preview-dark.png" alt="Hardcharger desktop dashboard design preview, dark theme" width="49%">
+  <img src="docs/assets/desktop-preview-light.png" alt="Hardcharger desktop app, local server page (design preview), light theme: server status with the Open SQL workspace button, server address, uptime and database size, and the administrator credentials other programs on this computer sign in with" width="49%">
+  <img src="docs/assets/desktop-preview-dark.png" alt="Hardcharger desktop app, local server page (design preview), dark theme" width="49%">
 </p>
 
 The dashboard images show the design preview with sample data. The app runs the same
-`hardcharger-server` executable shipped in the command-line packages and opens its built-in
-web UI in a separate window. It also bundles the `hardcharger` CLI. Pick the desktop app
-for an interactive computer, or the command-line packages for terminals, automation,
-containers and operating-system services. Both remain supported.
-
-For v2.1.0+, desktop release artifacts use the **`Hardcharger-desktop-…`** prefix:
-the macOS `.dmg` is signed and notarized, and the Windows `.msi` is signed. The existing
-Windows `Hardcharger-windows-…msi` installs the command-line tools. Linux users continue
-to use the command-line packages or Docker; a Linux desktop package is follow-up work.
-See the [desktop guide](docs/desktop-app.md) for installation, network sharing, certificates,
-settings import/export, and the difference between closing and quitting.
-
-<a id="built-in-web-ui"></a>
-
-## 🌐 Built-in web UI
-
-<p align="center">
-  <img src="docs/assets/web-ui-query-light.png" alt="Hardcharger's web UI, light theme: the schema browser with the server and its catalogs, two editor tabs, and a query's results" width="49%">
-  <img src="docs/assets/web-ui-query-dark.png" alt="Hardcharger's web UI, dark theme" width="49%">
-</p>
-
-Hardcharger has a web UI compiled into the server 
+`hardcharger-server` executable shipped in t

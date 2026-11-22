@@ -39,6 +39,12 @@ Instead of maintaining a monolithic `MISTAKES.md` that coding agents re-read fro
 <br />
 
 <div align="center">
+  <img src="./assets/before-after.svg" alt="Before vs After MISTOLOGY — Unprotected Terminal vs Guarded Terminal" width="100%" />
+</div>
+
+<br />
+
+<div align="center">
   <img src="./assets/benchmarks.svg" alt="MISTOLOGY Empirical Benchmarks" width="100%" />
 </div>
 

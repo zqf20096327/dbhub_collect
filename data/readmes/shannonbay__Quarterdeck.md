@@ -23,7 +23,7 @@ More in the [Quickstart](#quickstart).
 
 It's a Claude Code plugin that turns Claude into a personal assistant: it keeps looking after the things you hand it, asks before it does anything you haven't allowed, and remembers what you decided.
 
-You give it **goals**: "sell my birdcage on facebook marketplace", "fix new issues on my repo", "find me the three best new job ads each week", "turn NZ$200 into more by flipping Marketplace bargains", "clear old installers out of Downloads". Each goal runs on its own schedule in the background of your Claude Code session, on your Claude plan. When it wants to act, it proposes, and you approve or reject from the **Goals pane** beside your chat, or from your phone.
+You give it **goals**: "sell my birdcage on facebook marketplace", "fix new issues on my repo", "find me the three best new job ads each week", "turn NZ$200 into more by flipping Marketplace bargains", "clear old installers out of Downloads". Each goal runs in the background of your Claude Code session, on your Claude plan: on a schedule, or when a **watch** sees something new (a new issue on your repo, a new listing, a new email), so its agent wakes up when there is something to do instead of checking on a timer. When it wants to act, it proposes, and you approve or reject from the **Goals pane** beside your chat, or from your phone.
 
 The idea behind it: persistent intent may matter more than persistent memory. Instead of prompt → act, a goal is an action cycle that keeps going, punctuated only by your approvals and the occasional question.
 
@@ -33,6 +33,7 @@ The idea behind it: persistent intent may matter more than persistent memory. In
 
 - **It asks first.** A buyer offers $30 for your $50 birdcage, and the reply countering at $40 waits under **Needs you** until you approve it. Nothing goes to a buyer before that. Rejected with "too formal"? That feedback becomes memory, and later runs follow it.
 - **It reaches you when you're away.** With Remote Control connected, a new proposal or question pushes to the Claude app on your phone. Reply "approve" and it's done.
+- **It wakes up when something happens.** A watch is a cheap check (a `gh` command, a feed, a folder, a web page, a mail search) run every few minutes outside the model. A run starts, and spends tokens, only when the check sees something it hasn't seen before, and the run is told what's new. Quarterdeck's own Issue Fixer has no schedule at all: a new issue starts it.
 - **It asks when it's stuck.** When a run needs something only you can give (your lowest price, when buyers can pick up), it asks under Needs you instead of guessing, and carries on with your answer.
 - **It earns trust one kind of action at a time.** Each kind of action (message a buyer, buy, delete a file) is *off*, *propose* or *auto*. After 10 approvals in a row, the pane offers to switch that kind to auto.
 - **It remembers.** Each goal keeps its own memory, its open items (never assessing the same listing twice) and its run history, outside any one conversation.
@@ -43,7 +44,7 @@ The idea behind it: persistent intent may matter more than persistent memory. In
 
 *A friend's goal selling his old audio gear stops to ask for condition notes and his floor price instead of guessing.*
 
-Start with `/goal-new`: pick a ready-made goal (maintain my repo, which sets up all the GitHub goals below at once, unsubscribe from mailing lists, a daily news digest, a weekly job scan with your CV, tidy Downloads, inbox triage, keep your GitHub profile current, fix failing CI, triage new GitHub issues, refine new GitHub issues, work on new GitHub issues, review pull requests, flip items on Facebook Marketplace) or type your own. Schedules can be plain words: "30d", "weekdays at 9", "the first of every month".
+Start with `/goal-new`: pick a ready-made goal (maintain my repo, which sets up all the GitHub goals below at once, unsubscribe from mailing lists, a daily news digest, a weekly job scan with your CV, tidy Downloads, inbox triage, keep your GitHub profile current, fix failing CI, triage new GitHub issues, refine new GitHub issues, work on new GitHub issues, review pull requests, flip items on Facebook Marketplace) or type your own. Schedules can be plain words: "30d", "weekdays at 9", "the first of every month". Or skip the schedule and ask Claude for a watch: "run when a new issue is opened on my repo".
 
 ## Example: selling a birdcage
 

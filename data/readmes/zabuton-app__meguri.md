@@ -350,8 +350,8 @@ npm test
 
 E2E tests (Playwright + Electron). Builds the app first, then launches the
 packaged main process against fixture media in `e2e/fixtures/media/`. Run them
-under a virtual framebuffer (Linux, needs `xvfb-run`) so no windows appear on
-your desktop; CI runs the same script:
+under virtual framebuffers (Linux, needs `Xvfb`; each Playwright worker gets its
+own display) so no windows appear on your desktop; CI runs the same script:
 
 ```bash
 npm run test:e2e:headless
@@ -377,7 +377,7 @@ Electron needs, `npm run test:e2e:install` pulls them in.
 | Tag / Rate | Assign in the detail view (tags have autocomplete). Click a tag in the grid to search                                |
 | Search     | Filter and sort by full text, kind, and rating in the top bar (conditions shown as badges, individually removable)   |
 | Theme      | Switch from Theme at the top-right of the header                                                                     |
-| Zoom       | Ctrl + wheel, Ctrl +/-, Ctrl + 0 to reset                                                                            |
+| Zoom       | Ctrl + wheel, Ctrl +/-, Ctrl + 0 to reset. Over an image or a video in the detail view, Ctrl + wheel zooms it        |
 
 To drag a file to another app, hover over it in grid or list view and drag
 the arrow beside its selection checkbox. Drag from a selected file's arrow
@@ -688,3 +688,8 @@ See the [License](#license) section for the full legal terms.
 ## License
 
 MIT
+
+The app bundles OpenCV.js for the image comparison. Its license and those of
+the libraries built into it are in
+[THIRD_PARTY_NOTICES.txt](./THIRD_PARTY_NOTICES.txt), which also ships in the
+app's resources folder.

@@ -5,6 +5,7 @@
 [![Latest release](https://img.shields.io/github/v/release/joszz/GarageStack)](https://github.com/joszz/GarageStack/releases/latest)
 [![Docker image build](https://github.com/joszz/GarageStack/actions/workflows/docker-publish.yml/badge.svg?branch=main)](https://github.com/joszz/GarageStack/actions/workflows/docker-publish.yml)
 [![MIT licence](https://img.shields.io/github/license/joszz/GarageStack)](LICENSE)
+[![Website](https://img.shields.io/badge/website-joszz.github.io%2FGarageStack-3b82f6)](https://joszz.github.io/GarageStack/)
 
 ![The GarageStack dashboard: the car on the road with its speed, tyre pressures and charge, a map of where it is, and cards for the battery, range, doors, windows, climate and today's driving](documentation/screenshots/desktop-dashboard.webp)
 
@@ -38,7 +39,7 @@ And on a phone, with a single trip snapped to the roads and coloured against the
 
 <!-- markdownlint-enable MD033 -->
 
-The statistics, trip log, route editor, charge history, maintenance list, climate schedules, settings, logs, sign-in page and light theme are in the [screenshot gallery](documentation/screenshots/README.md).
+The map behind the dashboard, the layout editor, the offline view, the HV battery, the statistics with energy and efficiency, the trip log, route editor, charge history, maintenance list, climate schedules, settings for each car, logs, sign-in page and light theme are in the [screenshot gallery](documentation/screenshots/README.md).
 
 **Want to try it?** Read [MG iSmart account and session limits](#mg-ismart-account-and-session-limits) first, because GarageStack and the MG app cannot be signed in to the same account at once, then pick an [installation option](#installation). A single `docker run` is enough to get going.
 
@@ -58,11 +59,11 @@ The statistics, trip log, route editor, charge history, maintenance list, climat
 
 ## Features
 
-- **Live dashboard** -- Real-time vehicle telemetry displayed as configurable cards. Cards are automatically shown or hidden based on your vehicle type (HEV, PHEV, BEV) and can be reordered or toggled individually in the dashboard's edit mode. The car drawn on the dashboard takes your car's colour (Settings > Vehicle > Car colour), and the vehicle type can be set by hand under Settings > Vehicle > Vehicle type when detection gets it wrong.
+- **Live dashboard** -- Real-time vehicle telemetry displayed as configurable cards. Cards are automatically shown or hidden based on your vehicle type (HEV, PHEV, BEV) and can be reordered or toggled individually in the dashboard's edit mode. The car drawn on the dashboard and the map takes your car's colour, a preset or two colours of your own (Settings > Vehicle > Car colour), and the vehicle type can be set by hand under Settings > Vehicle > Vehicle type when detection gets it wrong.
 - **Directions to the car** -- Open walking directions to the car's last known location from the dashboard or the car's map marker, on OpenStreetMap or, if you prefer, Google Maps, Apple Maps or a map app on your phone. See [Directions to the car](#directions-to-the-car).
 - **Tyre history** -- Tap a tyre's pressure on the dashboard's car to see a month of daily pressures for all four tyres, and how each one moved against the other three over the last two weeks: a tyre falling behind the others while they hold is a slow puncture, which also sends a notification.
 - **Trip history** -- Browse past journeys on an interactive map, each drawn on the roads it took and coloured by speed or by the speed limit, with a heatmap of the roads you drive most. Each trip is saved to the database a few minutes after the car parks. After upgrading from a version that did not save trips, the existing history is saved in the background on the Worker's first start.
-- **Phone GPS (Dawarich)** -- Fill gaps in recorded car trips with phone locations from your own Dawarich instance. Identify trackers by their app/device ID and last-seen time; you can link multiple phones, and GarageStack uses the best match for each trip. See [Phone GPS setup](documentation/PHONE_GPS.md).
+- **Phone GPS** -- Fill gaps in recorded car trips with the phone's own GPS: from the installed app, kept on screen in a holder during the drive, or from your own Dawarich instance. Identify trackers by their app/device ID and last-seen time; you can link multiple phones, and GarageStack uses the best match for each trip. See [Phone GPS setup](documentation/PHONE_GPS.md).
 - **Trip log** -- Mark each trip as business, commute or private (commutes between your home and work are marked automatically), add notes, hide a GPS glitch, join two trips a fuel stop split, fix a route the car recorded badly on the map, and export a month or a year as a spreadsheet with the addresses and odometer readings a tax trip log (such as the Dutch *rittenregistratie*) asks for. See [Trip log](#trip-log).
 - **Charge history** -- Review completed and ongoing charging sessions with their duration, state of charge, odometer, battery-energy gain and peak power. Expand a session to see charging power plotted over time, plus distance, battery energy used and consumption since the previous charge when readings are available. Sessions are reconstructed from recorded charging-state telemetry, so their history depends on what the vehicle has reported and retained.
 - **Maintenance** -- Keep the car's service items (oil, tyres, the yearly inspection, ...) with a distance interval, a time interval or both. GarageStack works out from the odometer and your service log when each one is due, shows the most urgent on the dashboard, and sends a notification when an item reaches 90 % of its interval. Log each service with its date, odometer reading and notes.
@@ -508,7 +509,7 @@ GarageStack has a read-only endpoint for the [gethomepage.dev](https://gethomepa
 
 Under **Settings > Data & API > Calendar feed**, **Make a calendar link** gives an address a calendar app can subscribe to. **Add to calendar** opens it in the calendar app of the device you are on; elsewhere, paste the link where the app adds a calendar from a URL (Google Calendar: *Other calendars > From URL*). The calendar holds:
 
-- the APK expiry date, as a whole-day event, when [RDW lookups](#the-dutch-registration-rdw) are on and the car has a plate;
+- the APK expiry date, as a whole-day event, when [RDW lookups](#dutch-registration-rdw) are on and the car has a plate;
 - each maintenance item's due date, for items with an interval in months (an item due by distance alone has no date to show);
 - every climate schedule run of the next two weeks.
 
@@ -731,7 +732,7 @@ For running GarageStack:
 - [`AUTHENTICATION.md`](documentation/AUTHENTICATION.md): single sign-on, the built-in login, and provider examples
 - [`API.md`](documentation/API.md): the REST API and its reference page, for scripts and integrations
 - [`HOME_ASSISTANT.md`](documentation/HOME_ASSISTANT.md): the car in Home Assistant, through MQTT or an API token
-- [`PHONE_GPS.md`](documentation/PHONE_GPS.md): fill recorded car trips with phone GPS from Dawarich
+- [`PHONE_GPS.md`](documentation/PHONE_GPS.md): fill recorded car trips with phone GPS from the app or Dawarich
 - [`WIDGET.md`](documentation/WIDGET.md): the gethomepage.dev widget
 - [`docker/all-in-one/README.md`](docker/all-in-one/README.md): the all-in-one image and Unraid
 - [Screenshots](documentation/screenshots/README.md) of the main pages

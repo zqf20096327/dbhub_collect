@@ -1,14 +1,16 @@
 English | [简体中文](README.zh.md)
 
-# Jeeves — a personal assistant for complex, long-running tasks
+# Jeeves — your personal assistant
 
 [![CI](https://github.com/ChrisVip001/Jeeves/actions/workflows/ci.yml/badge.svg)](https://github.com/ChrisVip001/Jeeves/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/github/license/ChrisVip001/Jeeves)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/ChrisVip001/Jeeves)](https://github.com/ChrisVip001/Jeeves/releases/latest)
 
-Give Jeeves an outcome to deliver. For an incident review, that might mean gathering evidence, checking the figures and producing a report another person can verify. In main chat you can name an output file and quote text it must contain. The task can check the file, correct a missing result and bring the outcome back to the conversation. Open the original task from its receipt to follow up. [Main chat and task threads](docs/design/main-entry.md) · [Long-task roadmap](docs/planning/long-task-roadmap.md)
+Tell Jeeves what you need in your own words. It can answer a quick question, compare current prices, improve a program or take on an assignment that runs for days. It can turn an informal request into a clear outcome and bring back the result in the conversation, whether that's a sourced comparison, a file, tested code or a receipt for an authorized action. [How conversation becomes work](docs/design/main-entry.md)
 
-The same Rust Runtime can run on a personal computer, on a self-hosted server or in an isolated per-user deployment behind the cloud control plane. The deployment determines where task state and tools live. Models and connectors use the providers configured for that Runtime. [Architecture](docs/architecture.md) · [Email verification, password recovery, two-factor sign-in and hosted deployment](control-plane/README.md)
+Cloud users sign in through one Go gateway. A new workspace can start while you draft the first assignment. Rust Runtimes isolate tasks and data per tenant. Run a source installation in your local browser with `just local-up`. [Architecture](docs/architecture.md) · [Unified gateway](gateway/README.md) · [Hosted deployment](control-plane/README.md)
+
+Choose a workspace, assign or follow up on a task, and review approvals in the conversation. A task receipt shows which operations were approved or denied in that run. The menu opens account, device and connection management. [Workbench guide](docs/design/main-entry.md)
 
 Pair a device by public key and revoke its grant through the [device protocol](docs/protocol.md#device-pairing-and-revocation). The cockpit’s [global emergency stop](docs/protocol.md#global-emergency-stop) freezes managed task browsers across restarts. Take over a task browser from your phone or desktop and [save a download to that task](docs/protocol.md#remote-browser-input-and-downloads).
 
@@ -16,7 +18,7 @@ A paired iPhone can open [task approval notifications](docs/protocol.md#task-app
 
 On a Mac, [select one window for a task](docs/protocol.md#macos-single-window-operation) to press buttons, edit a field, scroll a list or preview a screenshot before sharing it with a screen model.
 
-> Most agents keep memory in a black box. Jeeves writes **one append-only ledger row per turn**. Open any row and you see that turn's entry stream: which tools ran, which model answered, and what it cost. The memory library links back to source turns via `ledger:…` chips, and the FTS5 index can be rebuilt from the ledger.
+Open a turn in the memory center to review its recorded tool calls and results. [Memory center](docs/internals/05-memory.md#510-memory-center)
 
 ![The Cowork workspace in the Jeeves macOS app](docs/assets/mac-cowork.png)
 
@@ -24,39 +26,25 @@ Coding tasks can run an approved CLI in a private Git worktree. A parent can int
 
 ## Install
 
-Jeeves runs on macOS and Linux (Windows through WSL2). After any install, the dashboard opens a three-step wizard that connects a model and sets permissions; see the [getting started guide](docs/guide.md).
+Develop from the repository root with `just build`, `just check` and `just release-package`. See the [repository layout](AGENTS.md#repository-layout).
 
-**Mac app** — a thin shell around the Runtime's own front end, built from source:
+**Hosted** users register or sign in at the service's public HTTPS origin. The browser and iOS PWA share the same account and workspace. Pair the Mac app with that account to authorize work in selected windows. [Cloud deployment](control-plane/README.md)
 
-```bash
-just desktop-install   # one-time setup
-just desktop-build     # bundles the Runtime into the Mac app
-just desktop-open      # open the project app or bring its existing window forward
-```
-
-Use **Chat** to delegate and **Activity** to return to work on Mac or iPhone. [Chat and Activity](docs/design/main-entry.md) · [Mac desktop app](docs/operations.md#mac-desktop-app)
-
-**Docker** — the dashboard walks you through the model, permissions and chat connections:
+**Personal self-hosting** starts with `just local-up` from the checkout. Create the owner account in the browser and connect a model. The Mac development app and browser share the Go gateway on port `8743`. The OS assigns the private Runtime port.
 
 ```bash
-JEEVES_OPS_TOKEN=$(openssl rand -hex 24) docker compose up -d   # -> http://<host>:7777
+just local-up          # start the Go gateway and private Runtime, then open the browser
+just desktop-build     # optional Mac development bundle
+just desktop-open      # return to the original window if already running
 ```
 
-**From source:**
-
-```bash
-cd jeeves-rs && cargo build
-JEEVES_PROVIDER=deepseek DEEPSEEK_API_KEY=… ./target/debug/jeeves            # terminal REPL
-JEEVES_PROVIDER=deepseek DEEPSEEK_API_KEY=… ./target/debug/jeeves dashboard  # -> http://localhost:7777
-```
-
-Prebuilt `jeeves` binaries for macOS and Linux (x86_64 and aarch64) are attached to each [release](https://github.com/ChrisVip001/Jeeves/releases/latest). Without an API key, Ollama works offline (`JEEVES_PROVIDER=ollama`). The dashboard needs a build (`just dashboard-build`) when run from source.
-
-To update a running development dashboard, press Ctrl-C, wait for it to exit, then run `just dashboard-build && just dashboard` from the repository root with the same `JEEVES_HOME`. Open browser event streams cannot hold shutdown open; the listening address appears only after the Runtime is ready.
+Delegate in Chat. Open **My work** to see results, review changed lines and continue the task. [Getting started](docs/guide.md) · [Mac desktop app](docs/operations.md#mac-desktop-app)
 
 ## What Jeeves can do
 
-- **Converse** on the terminal, in the dashboard, or through chat gateways (WeChat Official Account, Lark, Telegram; see [docs/guide.md](docs/guide.md))
+Tell Jeeves what you need in your own words — even if the request is still vague. It turns an informal goal into a clear one, then delivers the result in the conversation. The kind of work spans information retrieval (web, internal and local sources), documents (slides, spreadsheets, Markdown), audio and video content, writing or improving programs, comparing prices and placing supported orders. [How conversation becomes work](docs/design/main-entry.md)
+
+- **Converse** in the terminal, the dashboard, or a connected chat. See [Feishu chat and approval cards](docs/guide.md#lark--feishu).
 - **Use Feishu business capabilities** through the official CLI and the `feishu-cli` skill (`just install-feishu-cli`); existing exec permissions and approvals apply
 - **Remember**: semantic facts (FTS5, CJK-capable), dated episodes and procedural Skills, with local keyword retrieval on each full turn ([docs/architecture.md](docs/architecture.md))
 - **Show its memory**: the dashboard's memory center opens the ledger, the memory library and the context meter; `/compact [focus]` compacts on demand ([docs/operations.md](docs/operations.md))
@@ -66,7 +54,7 @@ To update a running development dashboard, press Ctrl-C, wait for it to exit, th
 - **Stay cheap**: the system prompt is a stable prefix plus a per-turn tail so the provider can cache it, and `JEEVES_TOOL_POLICY=deferred` keeps only the always-on tool schemas in the request ([docs/configuration.md](docs/configuration.md))
 - **Grow on your say-so**: the capability center lists Skills, MCP connectors and scheduled jobs side by side; the [Connections page](docs/guide.md#connection-status) shows what needs attention, configures local calendar/mail, and starts supported OAuth authorization. Browse the catalog, add a custom MCP connection and switch individual tools on or off. The resident Runtime renews bound MCP OAuth credentials. Configure MCP tool permissions in the [connector manifest](docs/configuration.md#connector-manifests). You add and delete your own entries, bundled ones are read-only.
 - **Follow the project's rules**: `AGENTS.md` / `AGENTS.override.md` / `CLAUDE.md` are discovered upwards from the working directory and joined into the per-turn tail ([docs/internals/06-app-server.md](docs/internals/06-app-server.md))
-- **Finish what it starts**: when the step budget runs out with open todo items it continues, up to `JEEVES_AUTO_CONTINUE_MAX` times ([docs/configuration.md](docs/configuration.md))
+- **Keep assigned work moving**: Jeeves works in the same task until it can deliver or hits a condition that requires it to stop. [Working on a long task](docs/design/main-entry.md#working-on-a-long-task)
 - **Be examined**: deterministic and replay evals gate every release; a judge scores answer quality ([docs/internals/08-quality.md](docs/internals/08-quality.md))
 
 ### Built-in tools
@@ -98,6 +86,8 @@ Tool failures return to the model as text; the loop never crashes on one.
 
 ### Providers and keys
 
+The Runtime sizes each model response from the catalog and its available context. [Built-in model defaults](docs/configuration.md#built-in-default-models)
+
 Twelve LLM providers are pre-adapted (`jeeves-provider`), including local Ollama. `<home>/models-catalog.json` patches built-in defaults or adds a provider, and `scripts/gen_catalog.py` generates rows from [models.dev](https://models.dev) ([docs/configuration.md](docs/configuration.md)). In the REPL, `/model` lists configured profiles, `/model add ds deepseek deepseek-flash --env DEEPSEEK_API_KEY` adds one and `/model use ds` switches without a restart; the Web and desktop preferences have the same model menu. Each profile identifies its credential source ([SECURITY.md](SECURITY.md)). `JEEVES_OPS_HOST=0.0.0.0` requires `JEEVES_OPS_TOKEN` at startup ([docs/operations.md](docs/operations.md)).
 
 ## Documentation
@@ -105,22 +95,21 @@ Twelve LLM providers are pre-adapted (`jeeves-provider`), including local Ollama
 | Document | Content |
 |---|---|
 | [docs/guide.md](docs/guide.md) | getting started: install, wizard, models, permissions, chat gateways, skills |
-| [docs/architecture.md](docs/architecture.md) | principles, crate dependency graph, one turn's data flow, design decisions |
-| [docs/protocol.md](docs/protocol.md) | JSON-RPC methods, human responsibility controls and sourced Feishu weekly reports, notifications and error codes |
+| [docs/architecture.md](docs/architecture.md) | deployment topology, module responsibilities, dependencies and turn lifecycle |
+| [docs/protocol.md](docs/protocol.md) | JSON-RPC methods, session list and detail responses, human responsibility controls and sourced Feishu weekly reports, notifications and error codes |
 | [docs/configuration.md](docs/configuration.md) | runtime settings, model key rotation and recovery, and every `JEEVES_*` variable |
 | [docs/operations.md](docs/operations.md) | running every shape, backups, troubleshooting |
 | [docs/limitations.md](docs/limitations.md) | known boundaries, each with the file to open next |
 | [docs/internals/](docs/internals/README.md) | the implementation tutorial, one chapter per layer |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | engineering discipline and commit rules |
 | [SECURITY.md](SECURITY.md) | the security model: credentials, capability boundaries, OAuth |
-| [CHANGELOG.md](CHANGELOG.md) | changelog |
 
 ## Naming
 
 | Purpose | Name |
 |---|---|
 | GitHub repository | `ChrisVip001/Jeeves` |
-| Package name | `jeeves` |
+| Rust CLI crate | `jeeves-cli` |
 | Rust crate prefix | `jeeves-` |
 | CLI binary | `jeeves` |
 | Persona | Jeeves |

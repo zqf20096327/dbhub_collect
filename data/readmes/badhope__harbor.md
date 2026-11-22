@@ -22,7 +22,7 @@ drafting, a compliance gate, and a human in the loop when a platform fights back
 | **AI drafting with a compliance gate** | Seven provider routes with failover, plus a four-stage gate before anything ships: safety scan → AIGC disclosure → dual-model review → human confirmation. |
 | **Pauses instead of guessing** | CAPTCHA, risk control, expired session: the task stops, tells you, and resumes where it left off. |
 | **Session persistence** | Log in once per platform. Cookies live in a local profile plus an atomic snapshot, so a wiped profile does not force a re-scan. |
-| **MCP server, 32 tools** | Drive the whole pipeline from Claude Code, Cursor or any MCP client. stdio, streamable-http or legacy SSE; any non-loopback transport requires a bearer token. |
+| **MCP server, 33 tools** | Drive the whole pipeline from Claude Code, Cursor or any MCP client. stdio, streamable-http or legacy SSE; any non-loopback transport requires a bearer token. |
 | **Everything local, and portable out** | SQLite with FTS5 full-text search, local media store with content-addressed dedupe, no vendor account, no telemetry. Export any article — or the whole library — as Markdown with YAML front-matter for Hexo, Hugo or Obsidian. |
 | **A live view that survives reconnects** | Task and article changes stream over SSE with monotonic event ids; after a dropped connection the client replays what it missed via `Last-Event-ID` instead of showing a stale "stuck" task. |
 | **Measured, not asserted** | `/metrics` exports real Prometheus histograms, every release runs eight gates, and the desktop build is a tested single-file executable — not a claim in a README. |
@@ -69,12 +69,18 @@ Open <http://127.0.0.1:5173>. The Vite dev server proxies `/api` to port 8000.
 ### Command line
 
 ```bash
+uv run --project backed python -m backed.cli init --name demo --platforms juejin,csdn
+uv run --project backed python -m backed.cli add-platforms --name demo --platforms bilibili,toutiao
 uv run --project backed python -m backed.cli status                 # library + account overview
 uv run --project backed python -m backed.cli list                   # newest articles
 uv run --project backed python -m backed.cli create --title "..." --content "..."
 uv run --project backed python -m backed.cli publish --id 12 --platforms juejin,csdn
 uv run --project backed python -m backed.cli export --all --out ./markdown
 ```
+
+On first launch, the web UI / desktop app opens a three-step setup wizard: create
+your profile, log in to platforms, then copy the MCP config. The `init` command
+above produces the same profile and SOP files if you prefer the CLI.
 
 ### Desktop shell (experimental)
 
@@ -95,6 +101,27 @@ Tauri launches the Python backend as a sidecar and reads its port from a handsha
 file. **Verified on Windows** (2026-11-07): `tauri build` compiles, the app starts,
 the sidecar binds a loopback port, and the data directory is created under
 `%APPDATA%`. macOS and Linux are untested — see [Known limits](#known-limits).
+
+## Make it yours (and keep your data out of the repo)
+
+Harbor is built to be re-run by anyone, not just its author. Each deployment is single-user and
+self-hosted: cookies, accounts and drafts never leave your machine.
+
+- `profiles/` is your private space. Copy `profiles/example.yaml` to
+  `profiles/<name>/profile.yaml` and put real accounts, report links and progress files there.
+  Everything under `profiles/` except the README and the example is `.gitignore`d.
+- `playbooks/` ships **templates** for daily operations (Cnblogs, Zhihu, CSDN, Juejin).
+  Copy one into `profiles/<name>/playbooks/`, fill `{{profile.*}}`, and point your scheduler
+  at the copy.
+- `python scripts/scan_privacy.py` (also run in CI) blocks commits containing account IDs,
+  Feishu document links or absolute local paths.
+
+One instance serves one person by design: publishing needs your login state, so multi-tenant
+hosting would be a liability, not a feature.
+
+> **Login happens on the machine running Harbor, never in your AI client's browser.**
+> See [docs/guides/login.md](docs/guides/login.md) for local, LAN and headless deployments,
+> and [docs/guides/mcp-clients.md](docs/guides/mcp-clients.md) for connecting an MCP client.
 
 ## Connect a platform
 

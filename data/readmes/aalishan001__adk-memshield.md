@@ -8,7 +8,10 @@
 [![CI](https://github.com/aalishan001/adk-memshield/actions/workflows/ci.yml/badge.svg)](https://github.com/aalishan001/adk-memshield/actions/workflows/ci.yml)
 [![Google ADK](https://img.shields.io/badge/google--adk-%3E%3D2.12-4285F4.svg)](https://github.com/google/adk-python)
 
-### Live Demos & Evidence
+## Live Demos & Evidence
+
+Public, read-only and rate-limited: one Cloud Run instance with at most 10 concurrent requests, Gemini calls throttled to 6 per minute, and a database that scales to zero when idle.
+
 - **Live Interactive Red-Team Console (`adk-leak-arena`):** https://adk-leak-arena-268336845218.asia-southeast1.run.app (Cloud Run + AlloyDB Express PG 18.4, `39/40 -> 0/40` leaks, `100%` recall, WCAG 2.2 AA)
 - **Live Continuous Monitor (`memshield-monitor`):** https://memshield-monitor-268336845218.asia-southeast1.run.app (hourly canary/RLS posture checks, Google Cloud Monitoring alerts, DPDP operational evidence reports, WCAG 2.2 AA)
 - **Evidence & Skills:** [`benchmarks/runs/2026-11-20/`](benchmarks/runs/2026-11-20/) (113/122 AlloyDB Express PG 18.4, 50k ScaNN, 15/15 Antigravity skill trigger tests) · [`skills/`](skills/) (`memshield-tenant-isolation`, `leak-arena-audit`, `memshield-rbac-onboarding`)

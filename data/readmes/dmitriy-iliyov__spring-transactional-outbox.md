@@ -190,22 +190,27 @@ the topic's retention. If you keep `order-events` longer or replay further back,
 
 You need **Java 21**, **Maven 3.9+** and **Docker**.
 
-**1. Start the infrastructure** - a database per service and a single-node Kafka:
+**1. Start the infrastructure** - a database per service and a single-node Kafka, from the
+[`docker-compose.yml`](docker-compose.yml) in the repository root:
 
 ```bash
-docker run -d --name orders-db -p 5432:5432 \
-  -e POSTGRES_DB=orders -e POSTGRES_USER=orders -e POSTGRES_PASSWORD=orders postgres:16-alpine
-
-docker run -d --name notifications-db -p 5433:5432 \
-  -e POSTGRES_DB=notifications -e POSTGRES_USER=notifications -e POSTGRES_PASSWORD=notifications postgres:16-alpine
-
-docker run -d --name kafka -p 9092:9092 apache/kafka:3.8.1
+docker compose up -d
 ```
+
+| Container | Host port |
+|---|---|
+| `orders-db` (PostgreSQL, database / user / password `orders`) | 5432 |
+| `notifications-db` (PostgreSQL, database / user / password `notifications`) | 5433 |
+| `kafka` | 9092 |
+
+A one-off `kafka-init` container creates the topics, `order-events` with 3 partitions and its dead letter topic
+`order-events-dlt`, and exits; Kafka does not create topics on its own. `docker compose down` stops it all and
+removes its data. The image versions and host ports are set in [`.env`](.env).
 
 **2. Build and start the services** (one terminal each). `install` puts the shared event contract module into your
 local Maven repository, so each service can then be started on its own; the `local` profile logs plain text
 instead of the JSON lines meant for a log shipper. The application tables come from Liquibase,
-the outbox and inbox tables are created by oncebox on startup, and the topics by the services themselves:
+the outbox and inbox tables are created by oncebox on startup:
 
 ```bash
 mvn clean install -DskipTests
@@ -274,6 +279,17 @@ Errors come back as RFC 9457 problem details, with a `type` a client can branch 
 }
 ```
 
+**Everything in containers.** [`docker/compose.servlet.yml`](docker/compose.servlet.yml) runs both services with
+databases and a Kafka of their own, with nothing but Docker on the host:
+
+```bash
+docker compose -f docker/compose.servlet.yml up -d --wait
+```
+
+`--wait` returns once both services report ready. The order service answers on http://localhost:8180 and the notification service on http://localhost:8181; the
+requests above work the same on these ports. The first start builds the service images from the sources, which
+takes a few minutes. `docker compose -f docker/compose.servlet.yml down` removes the stack.
+
 ## 🔁 See the inbox at work
 
 Send the last `order-created` event to Kafka **once more, under its original id** - exactly what a lost
@@ -281,13 +297,13 @@ acknowledgement or a consumer restart would do. Processed events stay in `outbox
 payload are still there:
 
 ```bash
-EVENT=$(docker exec orders-db psql -U orders -d orders -Atc \
+EVENT=$(docker compose exec -T orders-db psql -U orders -d orders -Atc \
   "SELECT id || ' ' || payload FROM outbox_events
    WHERE event_type = 'order-created' ORDER BY created_at DESC LIMIT 1")
 
 printf 'oncebox_event_id:%s,oncebox_event_type:order-created\t%s\n' "${EVENT%% *}" "${EVENT#* }" \
-  | docker exec -i kafka /opt/kafka/bin/kafka-console-producer.sh \
-      --bootstrap-server localhost:9092 --topic order-events --reader-property parse.headers=true
+  | docker compose exec -T kafka /opt/kafka/bin/kafka-console-producer.sh \
+      --bootstrap-server kafka:29092 --topic order-events --property parse.headers=true
 ```
 
 The console producer sends the payload with the same headers the outbox sets. The notification service receives it,

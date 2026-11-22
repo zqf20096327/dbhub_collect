@@ -8,6 +8,14 @@ If this helps you save time, consider supporting the work:
 
 # Incredible Technologies Super Easy Universal Setup Guide
 
+## This guide is no longer required!
+
+As of November 20th 2026, the TP devs have added a game feature that automatically creates a standalone local database for any of the IT games in the collection that require one.  There is NO LONGER A REQUIREMENT to install and setup a Postgres database and learn how to maintain it.
+
+You can certainly perform the db setup yourself following this guide, it's up to you. For the full steps of how to use this new feature, jump to [Golden Tee Live 2018 TPUI Express Database install](#golden-tee-live-2018-tpui-express-database-install). Otherwise, it makes sense to use the standalone database function.
+
+---
+
 This universal guide applies to almost all Incredible Technologies games supported in the TeknoParrot environment and will help you:
 
 - install PostgreSQL v8.3,
@@ -16,13 +24,6 @@ This universal guide applies to almost all Incredible Technologies games support
 
 It is no longer recommended to use the older individual "Detailed Guides". The TPUI app will setup and make the necessary changes to the game databases even if you do them yourself - you're just wasting your time needlessly messing with tables.
 
-## Golden Tee Live 2018, and future releases
-
-As of the release of Golden Tee Live 2018 in February 2026, TP devs have added a game settings feature that automatically restores the database backup and settings if it has not been done before.
-
-You can use this option to save yourself some time. You can certainly still opt to perform the db restore yourself following this guide, it's up to you.  This new feature is only for GT 2018 and newer versions, it will not be added to the older versions. For the full steps of how to use this new feature, jump to [Golden Tee Live 2018 TPUI Express Database install](#golden-tee-live-2018-tpui-express-database-install)
-
-If you have problems with your database setup using the TPUI restore db functionality, head to the TeknoParrot Discord and ask for help. Or, just follow this simple guide and get back up and running.
 
 ---
 
@@ -323,6 +324,66 @@ DB name: GameDB20
 Encoding: SQL_ASCII    
 db backup location: \pg_backup\2025-05-10\   
 db filename: 2228-postgresql_database-GameDB-backup
+
+**Golden Tee Live 2021 (16.04.15)**   
+DB name: GameDB21   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2025-05-14   
+db filename: 0431-postgresql_database-GameDB-backup
+
+**Golden Tee Live 2022 (17.04.19)**   
+DB name: GameDB22   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2025-06-17   
+db filename: 0727-postgresql_database-GameDB-backup
+
+**Golden Tee Live 2023-2024 (18.04.15)**   
+DB name: GameDB23   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2024-09-06   
+db filename: 2239-postgresql_database-GameDB-backup
+
+**Golden Tee Live 2025 (19.04.09)**   
+DB name: GameDB25   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2025-08-22   
+db filename: 2317-postgresql_database-GameDB-backup
+
+**Golden Tee Live 2026 (20.05.06)**   
+DB name: GameDB26   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2026-01-20   
+db filename: 0935-postgresql_database-GameDB-backup
+
+**Golden Tee PGA Tour 2021 (50.05.00)**   
+DB name: GameDBPGA21   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2022-05-11   
+db filename: 0948-postgresql_database-GameDB-backup
+
+**Golden Tee PGA Tour 2022 (51.05.19)**   
+DB name: GameDBPGA22   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2025-06-22   
+db filename: 2313-postgresql_database-GameDB-backup
+
+**Golden Tee PGA Tour 2023-2024 (52.05.15)**   
+DB name: GameDBPGA23   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2025-06-22   
+db filename: 2116-postgresql_database-GameDB-backup
+
+**Golden Tee PGA Tour 2025 (53.05.09)**   
+DB name: GameDBPGA25   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2025-08-13   
+db filename: 1504-postgresql_database-GameDB-backup
+
+**Golden Tee PGA Tour 2026 (54.05.06)**   
+DB name: GameDBPGA26   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2026-06-21   
+db filename: 1156-postgresql_database-GameDB-backup
 
 **Orange County Choppers Pinball** (0.00.51)   
 DB name: GameDBOCC   

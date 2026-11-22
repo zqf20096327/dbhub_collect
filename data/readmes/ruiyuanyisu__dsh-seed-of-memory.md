@@ -16,7 +16,7 @@ Seed of Memory is a local-first memory plugin for **DeepSeek Harness (DSH)**. It
 
 - **根（anchors.md / self.md / us.md）** 是纯文本，每轮最先注入；插件卸了、模型换了，任何 agent 都能直接读。
 - **记忆** 分四层（persona / semantic / episodic / buffer），有半衰期、有取代链、有「存疑」状态，不删历史。
-- **认知** 是带证据与置信度的判断；冲突时挂起，不覆盖。
+- **认知** 是带证据与置信度的判断。新说法不会直接盖掉旧说法：同一件事说法变了就另记一条，旧的那条退休、留链；真正拿不准的标成「存疑」，等你点头才算数。**它还会淡**——九十天没人再印证，置信度按半衰期往下走，最低落到 0.2（不归零，是「还记得，但没那么确定」）；再说一遍同一件事，从那天重算。
 - **情绪** 有两层：一层是被动打分（你每说一句话，按词表判夸奖 / 重话 / 出事 / 催促，推出积极性、委屈、愧疚、压力，时间会把它们冲回去），一层是六维评估（相关、顺逆、确定、可控、归因、意外）。两层都写进 `emotions`、聚合为 `mood`，只影响语气与召回权重，**不改事实**。
 - **情感** 是「对他」的慢状态：信任 / 亲近 / 欣赏 / 依恋，30 天半衰期回落；情绪只轻轻推它一下。
 - **人格** 从记忆与认知里长出来：理想 → 特质 → 行为，有每日上限、有反例、有衰减。
@@ -82,7 +82,10 @@ pnpm add dsh-seed-of-memory
 ├── us.md            # 我们之间（纯文本，可直接改）
 ├── qq.json          # 可选：QQ 配置（路由、白名单、语音）
 ├── qq-history.json  # 可选：QQ 每个会话最近几轮 + 换过的会话 id（删了只丢「重启接话」）
+├── qq-orders.json   # 可选：QQ 里下过的指令（「放她进来」这类），重启后还算数
+├── qq-proactive.json # 可选：主动开口的节奏、上次的判断、最近说过什么
 ├── sources.json     # 可选：外部档案目录（见下）
+├── seed.db.pre-v16-from-v15   # 升级前的库快照（版本不同名字不同）
 ├── seed.db-backup-YYYY-MM-DD   # 每天一份的库快照（只留最近 3 份）
 └── seed-export-<时间>.jsonl    # /seed export 导出的快照
 ```
@@ -195,6 +198,41 @@ group:<群号>      看 shared + 自己这一档
 
 候选**不会**自动变成记忆：要么由 agent 用 `seed_remember` 决定，要么在面板「记忆」页点「记下 / 不用」。写过之后相似的候选会自动标记为已采用，3 天没处理的自动过期。想看队列可以 `GET /dsh-seed-of-memory/captures`。
 
+## 说之前先判一遍（1.5.12）
+
+主动开口最容易翻车：半夜一句、连着两条一样的、拿别人的私事当引子。所以 1.5.12 起，**每一句要主动说出去的话，先过一遍判断**（纯函数 `lib/qq/judge.js`，不联网、不调模型）。
+
+先过六道硬闸，任何一条不过就不说：
+
+| 闸 | 看什么 |
+| --- | --- |
+| `content` | 有没有能出口的中文——路径、代码、版本号不算 |
+| `quiet` | 在不在安静时段（默认 23:00–08:00） |
+| `quota` | 今天是不是已经说够了（默认 5 条） |
+| `interval` | 离上一条够不够久（默认 2 小时） |
+| `repeat` | 24 小时内有没有说过相似到 0.8 的话 |
+| `privacy` | 引子是共用的，或就是自己这一档 |
+
+过了再算软分（九项加权：播报腔、情绪类型、有没有具体的事、语气合不合此刻、留没留话头、隔了多久、字数、新鲜度、时段），**0.58 以下不说**；播报腔和语气不对各再罚 0.3。
+
+- 一次会攒几个候选（换引子、换说法），**只收过得了的，取分最高的**；一个都不过就这次不开口——不拿「最不差的」凑数。
+- 判断结论会写进日志（`judge` 行），`/seed proactive` 和面板上能看到「上一次的判断：不说（安静时段）」。
+- 提醒：它管的是**主动开口**那一条路。你说话之后的回复不走这个闸，不会被它吞掉。
+
+## 先别提（1.5.5）
+
+有些事记着就行，这段时间别拿出来说：
+
+```
+/seed mute <id> 7d      # 七天内不进卡片、不当主动开口的素材
+/seed mute <id> off     # 收回
+/seed mute              # 看看现在有哪些先别提的
+```
+
+- 单位支持 `30m` / `12h` / `7d`，只写数字当小时算；到期自己回来。
+- 「别提」不是「忘掉」：`seed_search` 和 `/seed open` 照旧查得到，只是不进卡片、不主动提。
+- 只锁得住自己看得见的那条（档位不对会被拦）。
+
 ## QQ 通道（可选，SnowLuma）
 
 Seed 自己就是桥：只要有一个 OneBot 11 实现（SnowLuma、NapCat、Lagrange 都行）就行。
@@ -237,11 +275,9 @@ Seed 自己就是桥：只要有一个 OneBot 11 实现（SnowLuma、NapCat、La
 
 `seed_loose` 是未完话头：`add` 记下我问过、还没落定的那一句；他回话后自动标成 answered，再由我判断 `done` / `cancel` / `update` 收掉。
 
-`seed_contact` 是熟人卡：`set` 写称呼、关系、生日、喜欢什么、要留神什么（`peer` 写成 `private:…` 或 `group:…`），`get` / `list` / `forget` 对应看和删。它不是记忆，不进四层、不打分。
+命令：`/seed status | search <词> | open <id> | remember <内容> | why <id> | forget <id> | mute <id> [7d|off] | self | who [名字|anon] | lineage <id> | move <id> <档> | anchor <一句话> | grow <一句话> | mood | feel <原因> | believe [一句话] | persona | aspire <一句话> | trait <名字> | habit <说话习惯> | style | bili [天数] [--dry] | sources [rescan] | backup | export | pending | keep <id> | consolidate [apply] | proactive [say] | contact [set|forget] | loose [done|cancel|update] <id>`
 
-`seed_loose` 是未完话头：`add` 记下我问过、还没落定的那一句；他回话后自动标成 answered，再由我判断 `done` / `cancel` / `update` 收掉。
-
-命令：`/seed status | search <词> | open <id> | remember <内容> | why <id> | forget <id> | self | anchor <一句话> | grow <一句话> | mood | feel <原因> | believe <一句话> | persona | aspire <一句话> | trait <名字> | habit <说话习惯> | style | bili [天数] [--dry] | sources [rescan] | backup | export | pending | keep <id> | consolidate [apply] | proactive [say] | contact [set|forget] | loose [done|cancel|update] <id>`
+几个口径：`who` / `lineage` / `move` / `anchor` / `grow` / `aspire` / `trait` / `habit` / `export` **只认「当面」这一档**——`shared` 不算当面，免得某个 QQ 路由把自己配成 `shared` 就能改根。`/seed believe` 不带内容时是把心里的判断列出来（淡了的会显示「现在只算 0.xx」）。
 
 ## 设计原则
 
@@ -264,10 +300,11 @@ Seed 自己就是桥：只要有一个 OneBot 11 实现（SnowLuma、NapCat、La
 
 ```bash
 node --check lib/index.js
-node --test test/*.test.mjs          # 需要带 node:sqlite 的 Node 22.19+
+node test\run.mjs        # 全量（自动按内存挑并发，跑完清临时目录）
+node test\review\run.mjs # 审查包搬过来的 24 项（对照守岸人的判据）
 ```
 
-测试覆盖：存储/取代/挂起、身份根、情绪评分、档案索引、人格生长、说话习惯、插件注册。
+现状（1.5.13）：全量 **476 项全绿**，另加审查脚本 24 项；`lib` 37 个文件、测试 39 个文件。测试覆盖：存储/取代/存疑/分档可见性、身份根、认知会淡、情绪评分与情绪账、卡片预算、判断层（六道闸 + 九项权重）、语义检索与索引形状、备份校验、迁移自愈、插件注册、QQ 通道（@ 硬闸、指令存盘、停机收尾、群聊发言人）。
 
 ### QQ 通道的模型
 
@@ -300,7 +337,9 @@ qq.json 里可以显式指定 provider / model / reasoningEffort；不填会跟�
 ```
 
 - 收：语音段会先找本地文件、再 `get_record`、最后按 url 下载，然后交给本地 faster-whisper 转写，正文前加「（语音）」。
-- 发：`voiceOut = "auto"` 时，短回复（≤ `voiceMaxChars`）合成语音条；合成或发送失败自动退回文字。
+- 发：`voiceOut` 有四档（1.5.9 起）——`off` 从不出声、`manual` 只有你明说要听才出声（默认推荐）、`auto` 按 `voiceEvery` 隔几句念一条、`always` 每条都念。别名也收：`on`/`true`/`yes` → `always`，`ask`/`on-ask` → `manual`，`false`/`no`/`none` → `off`。合成或发送失败自动退回文字。
+- 提示词也跟着走：`off` 不会让她写 `[语音]` 那行；`manual` 写的是「他要听才写」；`auto`/`always` 才是「每次都要」。
+- 注意：写了 `[语音]` 那行**不等于一定念**——`[语音]` 只是「这条可以念」，念不念还要过节奏（`voiceEvery`）。
 - `asrScript` 默认用包内的 `asr/asr_once.py`；`ttsUrl` 指向本地 GPT-SoVITS `api_v2.py`。
 
 ### 没装语音模块也能用（v0.18）
@@ -324,7 +363,8 @@ qq.json 里可以显式指定 provider / model / reasoningEffort；不填会跟�
 
 - 安静时段（默认 23:00–08:00）不说；两次之间至少隔 4 小时；一天最多 3 次。
 - **先填「主人 QQ」**：面板「QQ」页 → 主动找主人 → 填你的 QQ 号，保存。主动消息就发给你（`private:<QQ号>`）；没填就不发。填了之后这个号也会自动进私聊白名单。
-- 文案会带一句真实的记忆（最近 30 条里随机挑一条截 36 字），不是模板群发。
+- 文案会带一句真实的记忆（最近 30 条里随机挑一条），不是模板群发。**引子会先洗一遍**（1.5.11）：开头日期、「【标签】」、「他说：」都去掉；带盘符路径、代码、版本号、`PRAGMA`/`SELECT` 这种的引子直接不用。
+- **同一句不会复读**（1.5.11）：每种语气有六种说法，按 `salt` 轮换；24 小时内相似到 0.8 就算重复，会换一个候选；连着两次一模一样的话会被拦下来。你还没回的时候，最多再补一句就停（`sinceUser >= 2` 就不接着说）。
 - 也可以在 `qq.json` 里写 `"ownerQQ": "10001"`，或旧写法 `"proactive": { "target": "private:10001" }`（`ownerQQ` 优先）；面板「QQ」页还能改开关、冷却、上限、安静时段，点「现在说一句」立刻试。
 - 状态在 `<stateDir>/qq-proactive.json`；发送记录写进 `qq.log`（`proactive`）。
 - 聊天里也能用：`/seed proactive` 看现在会不会开口，`/seed proactive say` 立刻说一句。
@@ -344,6 +384,7 @@ qq.json 里可以显式指定 provider / model / reasoningEffort；不填会跟�
 
 - 频率保护：两次之间至少 120 秒，每小时最多 8 条，每天最多 60 条。
 - 兴趣词在面板「QQ」页改（逗号分隔）；也可以切成「只在 @ 我时回」或「群聊关闭」。
+- **「只接点我的」是硬闸**（1.5.10 起）：`qq.json` 里 `"groupRequireAt": true` 一旦勾上，没 @ 我、也不是回我的话，一句都不接——上面那张「兴趣词按心情接」的表只在**没勾**的时候生效。以前这个勾只在「只在 @ 我时回」那一档里才算数，选了「看情况接话」等于没勾，于是没点我也会插话；现在改过来了。
 - 判断是纯函数（`lib/qq/group.js`），日志里会写 `join`（接了，附电量/兴趣）或 `lurk`（没接，附原因），面板能看到。
 - 说话电量 = `0.5 + 0.5×愉悦 + 0.5×(唤醒−0.35)`，跟着当前 mood 走；低落时（愉悦 ≤ -0.3 且唤醒 ≤ 0.45）不主动插话。
 

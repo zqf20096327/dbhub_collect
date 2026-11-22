@@ -1,10 +1,5 @@
 # SceneLingo 🎬
 
-[![CI](https://github.com/revolover00/scenelingo/actions/workflows/test.yml/badge.svg)](https://github.com/revolover00/scenelingo/actions/workflows/test.yml)
-[![License: Proprietary](https://img.shields.io/badge/License-All%20Rights%20Reserved-red.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/revolover00/scenelingo?style=social)](https://github.com/revolover00/scenelingo/stargazers)
-[![Telegram Bot](https://img.shields.io/badge/Telegram-Bot-26A5E4?logo=telegram)](https://t.me/scenelingo_bot)
-
 A Telegram bot for useful expressions with matching short movie clips and explanations. Subscribers choose a CEFR level, learning language, explanation language and delivery interval inside Telegram.
 
 > Learn languages by watching movies — expressions for your level, zero self-hosting.

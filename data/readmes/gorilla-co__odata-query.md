@@ -1,0 +1,139 @@
+OData-Query
+===========
+
+.. image:: https://readthedocs.org/projects/odata-query/badge/?version=latest
+    :alt: Documentation Status
+    :target: https://odata-query.readthedocs.io/en/latest/?badge=latest
+
+.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+    :alt: Ruff
+    :target: https://github.com/astral-sh/ruff
+
+
+``odata-query`` is a library that parses `OData v4`_ filter strings, and can
+convert them to other forms such as `Django Queries`_, `SQLAlchemy Queries`_,
+or just plain SQL.
+
+* Django (including GeoDjango ``geo.*`` functions), SQLAlchemy Core and ORM,
+  and raw SQL for generic databases, SQLite and Athena.
+* Supports ``$filter``, ``$orderby``, ``$top`` and ``$skip``.
+* Parses to an AST that you can inspect, rewrite and turn into your own target
+  with visitors.
+
+
+Installation
+------------
+
+``odata-query`` is available on pypi, so can be installed with the package manager
+of your choice:
+
+.. code-block:: bash
+
+    pip install odata-query
+    # OR
+    uv add odata-query
+    # OR
+    poetry add odata-query
+    # OR
+    pipenv install odata-query
+
+
+The package defines the following optional ``extra``'s:
+
+* ``django``: If you want to pin a compatible Django version.
+* ``sqlalchemy``: If you want to pin a compatible SQLAlchemy version.
+
+
+You can install ``extra``'s by adding them between square brackets during
+installation:
+
+.. code-block:: bash
+
+    pip install odata-query[sqlalchemy]
+
+
+Quickstart
+----------
+
+The most common use case is probably parsing an OData query string, and applying
+it to a query your ORM understands. For this purpose there is an all-in-one function:
+``apply_odata_query``.
+
+Example for Django:
+
+.. code-block:: python
+
+    from odata_query.django import apply_odata_query
+
+    orm_query = MyModel.objects  # This can be a Manager or a QuerySet.
+    odata_query = "name eq 'test'"  # This will usually come from a query string parameter.
+
+    query = apply_odata_query(orm_query, odata_query)
+    results = query.all()
+
+
+Example for SQLAlchemy ORM:
+
+.. code-block:: python
+
+    from odata_query.sqlalchemy import apply_odata_query
+
+    orm_query = select(MyModel)  # This is any form of Query or Selectable.
+    odata_query = "name eq 'test'"  # This will usually come from a query string parameter.
+
+    query = apply_odata_query(orm_query, odata_query)
+    results = session.execute(query).scalars().all()
+
+Example for SQLAlchemy Core:
+
+.. code-block:: python
+
+    from odata_query.sqlalchemy import apply_odata_core
+
+    core_query = select(MyTable)  # This is any form of Query or Selectable.
+    odata_query = "name eq 'test'"  # This will usually come from a query string parameter.
+
+    query = apply_odata_core(core_query, odata_query)
+    results = session.execute(query).scalars().all()
+
+``apply_odata_query`` also takes the ``$orderby``, ``$top`` and ``$skip`` query
+options, as the keyword arguments ``orderby``, ``top`` and ``skip``:
+
+.. code-block:: python
+
+    query = apply_odata_query(orm_query, "name eq 'test'", orderby="age desc", top=10, skip=20)
+
+.. splitinclude-1
+
+Advanced Usage
+--------------
+
+Not all use cases are as simple as that. Luckily, ``odata-query`` is modular
+and extendable. See the `documentation`_ for advanced usage or extending the
+library for other cases.
+
+.. splitinclude-2
+
+Contact
+-------
+
+Got any questions or ideas? We'd love to hear from you. Check out our
+`contributing guidelines`_ for ways to offer feedback and
+contribute.
+
+
+License
+-------
+
+Copyright © `Gorillini NV`_.
+All rights reserved.
+
+Licensed under the MIT License.
+
+
+.. _odata v4: https://www.odata.org/
+.. _django queries: https://docs.djangoproject.com/en/stable/topics/db/queries/
+.. _sqlalchemy queries: https://docs.sqlalchemy.org/en/14/orm/loading_objects.html
+.. _documentation: https://odata-query.readthedocs.io/en/latest
+.. _Gorillini NV: https://gorilla.co/
+.. _contributing guidelines: ./CONTRIBUTING.rst

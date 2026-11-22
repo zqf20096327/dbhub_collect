@@ -6,6 +6,8 @@ A shared team knowledge base exposed as a remote [MCP](https://modelcontextproto
 
 The server holds no LLM. Clients (Claude Code, claude.ai, scheduled agents) do the reasoning; Thaliyola stores, searches, validates and versions. Agent-written content goes through human review before it is published.
 
+**Website:** [thaliyola.tricknowtech.app](https://thaliyola.tricknowtech.app) · **Live demo:** [thaliyola-demo.tricknowtech.app](https://thaliyola-demo.tricknowtech.app) (one-click sign-in, resets every 12 hours)
+
 | Home | Knowledge graph | Project |
 |---|---|---|
 | ![Home: search, setup checklist and spaces](docs/images/home.png) | ![Knowledge graph](docs/images/graph.png) | ![A project's articles by folder](docs/images/project-frontend.png) |
@@ -44,13 +46,13 @@ A project can declare that it **uses** an item from the library or from another 
 
 | Tool | Purpose |
 |---|---|
-| `search_knowledge` | Hybrid keyword and semantic search over article sections and findings. Defaults to the current project + team + library |
-| `get_article` | One article, or one section of it, with relations, source links and entities |
-| `get_finding` | One finding with relations, s
+| `search_knowledge` | Hybrid keyword and semantic search over article sect
 
 [...截断...]
 
-ource links and review history |
+ions and findings. Defaults to the current project + team + library |
+| `get_article` | One article, or one section of it, with relations, source links and entities |
+| `get_finding` | One finding with relations, source links and review history |
 | `browse_kb` | Folder tree of articles in a scope |
 | `list_projects` | Projects with components and Project admins (with their names) |
 | `get_project_context` | Cold-start context for an agent in a project or component: overview, contracts, impact notices, recent decisions, shared items it uses, known issues |
@@ -83,5 +85,4 @@ ource links and review history |
 | `get_proposal` | One proposal: the item now (`current`) and what it would become (`proposed`), who wrote it, whether it's stale and whether you may decide it (`can_review`) |
 | `review_proposal` | Approve (optionally with `edits`) or reject (with a `reason`) a proposal. Your own proposal written through Claude in the last 10 minutes needs `confirmed_by_user: true` |
 | `list_skill_reviews` / `get_skill_version` | Skill versions waiting for review with `can_approve`, flags and import groups / one version's files and diff |
-| `review_skill_version` | Approve or reject a skill version; `checked_flags` / `checked_tools` when it has high-risk flags or pre-approved tools. Never one you proposed or whose import you started |
-| `approve_skill_import` | Approve an import's low-ri
+| `review_skill_version` | Approve or r

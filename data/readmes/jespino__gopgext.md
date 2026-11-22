@@ -54,7 +54,7 @@ or later with its server development files (`pg_config`, headers, PGXS),
 `make`, a C compiler and binutils (`objcopy`).
 
 ```sh
-go install .          # or: make  (builds ./gopgext)
+go install github.com/jespino/gopgext@latest
 ```
 
 See [Installation](https://jespino.github.io/gopgext/docs/install/) for details.

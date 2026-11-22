@@ -28,7 +28,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/cockpit.png" alt="The TaskWing desktop app: one task, agents each in their own sandbox, a question for you, and the locked exam" width="100%">
+  <img src="docs/assets/board.svg" alt="A taskwing run in the terminal: the lead plans, you approve the exam, then one line per agent while they build in their own sandboxes" width="100%">
 </p>
 
 > **Early and moving fast.** The CLI runs real tasks today with Claude Code agents in [boat](https://boat.dev) sandboxes. More agent runtimes, models and sandbox providers are next. See [Status](#status) for exactly what works.
@@ -68,6 +68,8 @@ brew install josephgoksu/tap/taskwing
 go install github.com/josephgoksu/TaskWing/v2/cmd/taskwing@latest
 ```
 
+> Until the first v2 tag ships, Homebrew still installs v1.23.2, which has none of these commands. Use `go install github.com/josephgoksu/TaskWing/v2/cmd/taskwing@latest` (needs Go 1.24+) for now.
+
 Linux packages (`.deb`, `.rpm`, `.apk`) and archives for macOS, Linux and Windows are on the [releases page](https://github.com/josephgoksu/TaskWing/releases).
 
 **You also need:** `bash` and `git` on your PATH (every run goes through bash, Windows included), the [GitHub CLI](https://cli.github.com) (`gh`, logged in), [Claude Code](https://code.claude.com/docs) (`claude`, logged in) and, for sandboxes, the `boat` CLI.
@@ -81,7 +83,7 @@ cd your-repo                     # a clean working tree
 taskwing run "add a /health endpoint with a test" --provider local --no-pr
 
 # 2. The real thing: every agent in its own sandbox, one draft pull request
-taskwing config boat-base bx_abc123      # one setting for every repo; per repo use --boat-base (docs/poc.md)
+taskwing config boat-base bx_abc123      # one setting for every repo; per repo use --boat-base (docs/guide.md)
 taskwing run "add discount codes at checkout, with tests"
 
 # 3. Hunt bugs: each one proven by a failing test, then fixed in parallel
@@ -89,14 +91,14 @@ taskwing hunt "the payment code"
 ```
 
 ```
-1/4 Plan    lead splits the task  ·  a separate session writes the hidden exam
-            you read both, press y
-2/4 Build   one sandbox and one agent per piece, live squares
-3/4 Exam    pieces joined on one branch, exam runs in a clean sandbox
-4/4 PR      pushed from your machine, draft pull request, sandboxes deleted
+1/4 Plan          lead splits the task  ·  a separate session writes the hidden exam
+                  you read both: y to start, r for a new plan, or type a check of your own
+2/4 Build         one sandbox and one agent per piece, one live line each (e + Enter: exam now)
+3/4 Exam          pieces joined on one branch, exam runs in a clean sandbox
+4/4 Pull request  pushed from your machine, draft pull request, sandboxes deleted
 ```
 
-Every flag, the boat setup and what a run leaves behind: [docs/poc.md](docs/poc.md).
+Every flag and environment variable, the boat setup, exit codes and what a run leaves behind: [docs/guide.md](docs/guide.md).
 
 ## The harness
 
@@ -127,13 +129,12 @@ The full set of rules, each with its reason: [PRINCIPLES.md](PRINCIPLES.md).
 
 ### Architecture
 
-One Go binary does all the work. By design the CLI and the desktop app are both thin clients of it, so anything the app can do can also be scripted.
+One Go binary does all the work, from your terminal. The same runs (not hunts yet) are available as JSON lines (`taskwing engine --json`, see [docs/engine-protocol.md](docs/engine-protocol.md)), so scripts, CI and editors can drive them too.
 
 | Part | What it does | What it never does |
 |---|---|---|
 | **Engine** (`internal/`, Go) | Runs, plan check, sandboxes, exam runner, git join, push, GitHub | Call a model itself |
-| **CLI** (`cmd/taskwing`) | Every action, as a command | Anything the engine can't do |
-| **Desktop app** (`app/`, Tauri) | Shows engine events as squares, sends commands | Hold logic or state of its own |
+| **CLI** (`cmd/taskwing`) | Every action, as a command, plus `taskwing engine --json`; draws the run as one line per agent | Anything the engine can't do |
 | **Lead and exam writer** | Your own coding agent, on your machine | See the hidden tests (lead) |
 | **Workers** | Agent CLIs inside sandboxes, one piece each | Push, hold a GitHub login, see the exam |
 
@@ -146,15 +147,11 @@ Every concept and how they connect: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 | Area | Today | Next |
 |---|---|---|
 | **Run** | ✅ `taskwing run`, plan check, parallel agents, join, draft PR · ✅ `taskwing hunt` | ⬜ lead resolves join conflicts · ⬜ resume after a crash |
-| **Exam** | ✅ fresh exam writer, hidden tests, clean exam sandbox · 🟡 approve before dispatch | ⬜ add your own check · ⬜ plain-words failure reports |
+| **Exam** | ✅ fresh exam writer, hidden tests, clean exam sandbox · ✅ approve before dispatch · ✅ add your own check · ✅ new plan, exam now (CLI and JSON) | ⬜ rulings after a failure · ⬜ plain-words failure reports |
 | **Sandboxes** | ✅ boat · ✅ local (no isolation, for trying it) | ⬜ E2B · ⬜ AWS · ⬜ Docker |
 | **Agents and models** | ✅ Claude Code · 🟡 lead and exam writer on any command | ⬜ a second runtime (OpenCode or Codex) · ⬜ open-weight models · ⬜ per-step model routing |
-| **Safety** | ✅ no GitHub login in any box · 🟡 refuse boxes with GitHub credentials · 🟡 secret scan before destroy | ⬜ key proxy · ⬜ hardened git reads of worker commits |
-| **Clients** | ✅ CLI · 🟡 desktop app for macOS, Linux and Windows · ✅ engine event stream for the app (`taskwing engine --json`) | ⬜ start from a Claude Code skill |
-
-## Desktop app
-
-The app in [`app/`](app/) is a small [Tauri 2](https://tauri.app) shell with a plain HTML, CSS and JavaScript window. Every agent is a square: blue working, grey done, amber needs you, red stuck. It runs real tasks through `taskwing engine --json`, and falls back to a built-in demo engine when no `taskwing` is installed. Until the first app release, test builds are on the successful manual runs of the [Release desktop app workflow](https://github.com/josephgoksu/TaskWing/actions/workflows/release-app.yml?query=event%3Aworkflow_dispatch+branch%3Amain+is%3Asuccess) (GitHub sign-in needed, kept 90 days). On a Mac take `darwin-universal-dmg`; the builds are not notarised or signed yet, so macOS and Windows ask before the first launch. Or run it from source with `cd app && npm install && npm run dev` (see [app/README.md](app/README.md)).
+| **Safety** | ✅ no GitHub login in any box · 🟡 refuse boxes with GitHub credentials · 🟡 secret scan before destroy (GitHub tokens, SSH keys) · ✅ host git runs with hooks off on agent commits | ⬜ key proxy |
+| **Clients** | ✅ CLI with one live line per agent · ✅ JSON lines for scripts and CI (`taskwing engine --json`) | ⬜ start from a Claude Code skill |
 
 ## Contributing
 
@@ -162,7 +159,7 @@ TaskWing is early, so this is a good time to shape it. Good first areas:
 
 - **A sandbox provider** (E2B, Docker, AWS). A provider needs only create, exec, start agent, list and destroy: see the `Provider` interface in [`internal/box`](internal/box).
 - **A second agent runtime** (OpenCode, Codex CLI, Gemini CLI).
-- **The missing app events**: pausing agents, agent questions and notes between agents ([app/docs/engine-protocol.md](app/docs/engine-protocol.md)).
+- **The missing engine events**: pausing agents, agent questions and notes between agents ([docs/engine-protocol.md](docs/engine-protocol.md)).
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) first; it has the checks CI runs and the few house rules. Found a security problem? See [SECURITY.md](SECURITY.md).
 
@@ -180,11 +177,11 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) first; it has the checks CI runs and the
 cmd/taskwing/     the CLI entry point
 internal/engine/  runs, plan check, exam, join, pull request
 internal/box/     sandbox providers (boat, local)
-app/              desktop app (Tauri shell in src-tauri/, UI in ui/)
-docs/             architecture, features, PoC guide, diagrams
+internal/proc/    child processes as a group, so a timeout or Ctrl-C stops them all
+docs/             architecture, features, user guide, engine protocol, diagrams
 context/          research behind the principles
 ```
 
 ## License
 
-[AGPL-3.0](LICENSE), with a [NOTICE](NOTICE). Copies must credit TaskWing and stay open, even when run as a hosted service. Earlier copies (up to v1.23.2 and the first v2-poc builds) keep their old licence; the v1 knowledge layer lives on at tag [`v1.23.2`](https://github.com/josephgoksu/TaskWing/tree/v1.23.2). Geist fonts in the app are under the SIL Open Font License.
+[AGPL-3.0](LICENSE), with a [NOTICE](NOTICE). Copies must credit TaskWing and stay open, even when run as a hosted service. Earlier copies (up to v1.23.2 and the first v2-poc builds) keep their old licence; the v1 knowledge layer lives on at tag [`v1.23.2`](https://github.com/josephgoksu/TaskWing/tree/v1.23.2).

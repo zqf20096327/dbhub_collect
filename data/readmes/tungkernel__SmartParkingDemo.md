@@ -22,8 +22,6 @@ Phiên bản **v2.1.0** tách rõ tầng nghiệp vụ domain, bổ sung xác th
 5. **Phân tích Doanh thu (Recharts):** Biểu đồ doanh thu & lưu lượng theo ngày (múi giờ Việt Nam UTC+7), cơ cấu theo loại phương tiện và theo bãi đỗ (gộp đầy đủ cả lượt ngày và đăng ký/gia hạn vé tháng).
 6. **Quản trị RBAC & Kiểm toán:** Quản lý tài khoản đăng nhập (thu hồi phiên tức thì qua `token_version`, chặn khóa ADMIN cuối cùng), danh bạ nhân sự/khách hàng/phương tiện (ẩn PII đối với `OPERATOR`), kho thẻ RFID, hạ tầng bãi/khu và nhật ký `audit_logs` ghi kèm IP trong cùng transaction.
 
-> **Lưu ý về bản Streamlit kế thừa (`src/app.py`):** Bản demo Streamlit 6 trang vẫn được giữ phục vụ đối chiếu học thuật nhưng mặc định chạy ở **chế độ chỉ đọc** để tránh ghi dữ liệu bỏ qua RBAC, ca trực và `audit_logs`. Chỉ bật ghi khi cần demo cục bộ qua `ENABLE_LEGACY_STREAMLIT_WRITES=1`.
-
 ## 3. Cấu trúc dự án
 
 ```text
@@ -47,8 +45,6 @@ SmartParkingDemo/
 │   │   ├── middleware.py         # Request-ID, Security Headers, Sliding-window Rate Limiter
 │   │   ├── ws.py                 # WebSocket xác thực ticket, broadcast song song, heartbeat
 │   │   └── v1/routers/           # 8 module router REST /api/v1/*
-│   ├── app.py                    # Giao diện Streamlit kế thừa (chỉ đọc mặc định)
-│   └── ui/                       # CSS, SVG icons & HTML templates kế thừa
 ├── frontend/                     # React 19 + TypeScript (strict) + Vite 8 + Tailwind v4 SPA
 │   └── src/
 │       ├── context/              # AuthContext, ToastContext, ThemeContext (Dark Mode)
@@ -80,10 +76,6 @@ SmartParkingDemo/
    npm run dev
    ```
    Truy cập `http://localhost:5173` (Vite tự proxy `/api`, `/ws`, `/health` về cổng `8000`), hoặc chạy `npm run build` để FastAPI phục vụ trực tiếp bản build tại `http://127.0.0.1:8000`.
-4. **Chạy giao diện Streamlit kế thừa (chỉ đọc):**
-   ```powershell
-   .\.venv\Scripts\streamlit.exe run src/app.py
-   ```
 
 ## 5. Kiểm thử & Kiểm tra chất lượng mã
 

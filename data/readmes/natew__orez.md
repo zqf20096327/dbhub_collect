@@ -8,6 +8,7 @@ Run [Zero](https://zero.rocicorp.dev) locally with zero native dependencies. No 
 Read the [Orez documentation](https://orez-docs.natewienert.workers.dev).
 
 ```
+bun add -D @rocicorp/zero
 bunx orez
 ```
 
@@ -17,14 +18,13 @@ oreZ makes Zero work on [PGlite](https://pglite.dev) (Postgres in WASM) and [bed
 
 Lime Sync is the separate SQLite-native Zero engine, published as
 [`limesync`](https://www.npmjs.com/package/limesync) (formerly `orez-lite`). It runs on Cloudflare and other constrained
-hosts, replaces Zero's server side, and speaks the Zero protocol to the real
-`@rocicorp/zero` client. `limesync/client` supplies the transport without
-forking Zero's query or mutation API. Read the
+hosts and speaks the Zero protocol to the vendored `limesync/zero` client.
+`limesync/client` supplies the HTTP transport. Read the
 [Lime Sync documentation](https://lime-sync.natewienert.workers.dev).
 
 `limesync/aggregate` maintains queryable count and sum columns until Zero ships
 aggregate queries. One declaration generates the SQLite migration and triggers
-and projects the same change during optimistic on-zero mutations. See the
+and projects the same change during optimistic limesync data mutations. See the
 [aggregate documentation](docs/aggregates.md).
 
 ## Cloudflare
