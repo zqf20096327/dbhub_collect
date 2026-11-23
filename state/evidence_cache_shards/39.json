@@ -3918,15 +3918,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:09:58Z",
+  "collected_at": "2026-11-23T00:50:59Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-13",
+  "pushed_at": "2026-11-22",
   "stars": 173,
   "tree": {
-   "sha": "fd0f936232a683a4d842accd7802c546153ec3ef",
-   "etag": "W/\"ccde83c1891577b0547532870e9e7f8d48c4341db9bf994846bdedb6c8aca8d3\"",
+   "sha": "00247072092019ab8b0b767d7d526da95720a750",
+   "etag": "W/\"940d706613e860054ecfede97b65ff1fe23f42774cc5c820ac5483954de2311f\"",
    "truncated": false,
-   "path_count": 1672,
+   "path_count": 2120,
    "matched": [
     "go.mod",
     "docsite/package.json",
@@ -3938,12 +3938,22 @@
     "build/Dockerfile.observer",
     "build/Dockerfile.operator",
     "build/Dockerfile.sql-analyzer",
+    "build/ss/Dockerfile.compose-runtime",
+    "build/ss/Dockerfile.helper",
+    "build/ss/Dockerfile.oblogservice",
+    "build/ss/Dockerfile.observer",
     "charts/ob-operator/values.yaml",
     "charts/obproxy-ce/values.yaml",
     "charts/oceanbase-cluster/values.yaml",
     "charts/oceanbase-dashboard/values.yaml",
+    "charts/oceanbase-minio/values.yaml",
+    "charts/oceanseek/values.yaml",
     "distribution/oceanbase-todo/Dockerfile",
     "distribution/sysbench/Dockerfile",
+    "deploy/compose/oceanseek/Dockerfile.bootstrap",
+    "scripts/oceanseek/images/Dockerfile.helper",
+    "scripts/oceanseek/images/Dockerfile.observer",
+    "scripts/oceanseek/images/minio-rejoin/Dockerfile",
     "tests/config/2.1.0_test/oceanbase-cluster/values.yaml",
     ".github/workflows/addlicense.yml",
     ".github/workflows/build-docsite.yml",
@@ -3952,6 +3962,8 @@
     ".github/workflows/codeql.yml",
     ".github/workflows/deploy-docsite.yml",
     ".github/workflows/golangci-lint.yml",
+    ".github/workflows/oceanseek-compose.yml",
+    ".github/workflows/oceanseek-release.yml",
     ".github/workflows/release-charts.yml",
     ".github/workflows/release-cli.yml",
     ".github/workflows/release-dashboard.yml",
@@ -3967,9 +3979,9 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "80890f86bc0ecfe8e8f191e866bcdff67368766a",
+    "blob_sha": "6c598dfa04debb225eaaa9d8ca1ff9a6d9f1deb7",
     "ecosystem": "go",
-    "bytes": 11984,
+    "bytes": 12047,
     "names": [
      "github.com/antlr4-go/antlr/v4",
      "github.com/casbin/casbin/v2",
@@ -4053,6 +4065,7 @@
      "github.com/duckdb/duckdb-go/mapping",
      "github.com/edsrzf/mmap-go",
      "github.com/emicklei/go-restful/v3",
+     "github.com/evanphx/json-patch",
      "github.com/evanphx/json-patch/v5",
      "github.com/facette/natsort",
      "github.com/fatih/color",
@@ -4098,8 +4111,7 @@
      "github.com/imdario/mergo",
      "github.com/inconshreveable/mousetrap",
      "github.com/jmespath/go-jmespath",
-     "github.com/josharian/intern",
-     "github.com/jpillora/backoff"
+     "github.com/josharian/intern"
     ]
    },
    {
@@ -4127,9 +4139,9 @@
    {
     "path": "ui/package.json",
     "kind": "dep",
-    "blob_sha": "ce956cdc09d7fdb192511ab5890608f7f58c85df",
+    "blob_sha": "62f704c34aba6c9ddb96032631b014d8406d08f7",
     "ecosystem": "npm",
-    "bytes": 1797,
+    "bytes": 1940,
     "names": [
      "@ant-design/icons",
      "@ant-design/pro-components",
@@ -4163,6 +4175,7 @@
      "globals",
      "husky",
      "lint-staged",
+     "patch-package",
      "prettier",
      "prettier-plugin-organize-imports",
      "prettier-plugin-packagejson",
@@ -4274,8 +4287,8 @@
    {
     "path": "build/Dockerfile.operator",
     "kind": "image",
-    "blob_sha": "0877cac9590f2efb07e015bc3b68c454b6a8066d",
-    "bytes": 368,
+    "blob_sha": "41e33385b5d1b95247b63454f19e181288aa03a0",
+    "bytes": 444,
     "images": [
      "golang:1.25",
      "openanolis/anolisos:8.8"
@@ -4284,18 +4297,57 @@
    {
     "path": "build/Dockerfile.sql-analyzer",
     "kind": "image",
-    "blob_sha": "74a2803197ce5833f8f05d584ccead340818d16b",
-    "bytes": 1032,
+    "blob_sha": "deb2d888e0e8a0367e3b1ab4179705b7b208054e",
+    "bytes": 1053,
     "images": [
      "golang:1.25",
      "ubuntu:24.04"
     ]
    },
    {
+    "path": "build/ss/Dockerfile.compose-runtime",
+    "kind": "image",
+    "blob_sha": "613e3cf3d7aff56557e1ebbb1b0024553ee22ac1",
+    "bytes": 252,
+    "images": [
+     "${BASE_IMAGE}"
+    ]
+   },
+   {
+    "path": "build/ss/Dockerfile.helper",
+    "kind": "image",
+    "blob_sha": "4f32e2d976af0e1f5e9331781e135f69cf43a06d",
+    "bytes": 930,
+    "images": [
+     "${BASE_IMAGE}"
+    ]
+   },
+   {
+    "path": "build/ss/Dockerfile.oblogservice",
+    "kind": "image",
+    "blob_sha": "f0cd980f50821a6368a63105f177b60f7b7b0e8f",
+    "bytes": 1485,
+    "images": [
+     "${HELPER_IMAGE}"
+    ]
+   },
+   {
+    "path": "build/ss/Dockerfile.observer",
+    "kind": "image",
+    "blob_sha": "4ca24c8f82e91f1d05779b074c9968e43c2df56f",
+    "bytes": 1895,
+    "images": [
+     "${HELPER_IMAGE}"
+    ]
+   },
+   {
     "path": "charts/ob-operator/values.yaml",
     "kind": "image",
-    "blob_sha": "c06fa8f36f7972151f274d4e6a8e762e37bfc628",
-    "bytes": 148
+    "blob_sha": "99d092ce7e5bd8673dcaa7ae42a0ecf0802236e5",
+    "bytes": 399,
+    "images": [
+     "quay.io/oceanbase/ob-operator:2.3.4"
+    ]
    },
    {
     "path": "charts/obproxy-ce/values.yaml",
@@ -4309,18 +4361,43 @@
    {
     "path": "charts/oceanbase-cluster/values.yaml",
     "kind": "image",
-    "blob_sha": "3cdd4b34cecda5f0766695495fe31e38dd62b986",
-    "bytes": 1107
+    "blob_sha": "25e94b8ebe354c9426af4dcef93dbe2dcecbc1ab",
+    "bytes": 2727
    },
    {
     "path": "charts/oceanbase-dashboard/values.yaml",
     "kind": "image",
-    "blob_sha": "3c499bddedf91f7a8012a2afa42dc69763b51410",
-    "bytes": 1099,
+    "blob_sha": "6cc05d3e7644ee931c2b08f2afc4644e49edc07b",
+    "bytes": 2366,
     "images": [
-     "oceanbase/obdiag:latest",
-     "oceanbase/oceanbase-helper:latest",
+     "quay.io/prometheus/prometheus:v2.51.1",
+     "quay.io/prometheus/alertmanager:v0.27.0",
+     "ghcr.io/oceanbase/obdiag:5.0.2-12026102116",
+     "quay.io/oceanbase/oceanbase-helper:latest",
      "quay.io/oceanbase/sql-analyzer:0.1.0"
+    ]
+   },
+   {
+    "path": "charts/oceanbase-minio/values.yaml",
+    "kind": "image",
+    "blob_sha": "5c68cfda6ecabd1443c05a553a6f3c65330912c0",
+    "bytes": 466,
+    "images": [
+     "quay.io/oceanbase/minio:RELEASE.2025-10-15T17-29-55Z"
+    ]
+   },
+   {
+    "path": "charts/oceanseek/values.yaml",
+    "kind": "image",
+    "blob_sha": "8d72294ca1e2114bcaf0ccff9feb555a7e3c5f7a",
+    "bytes": 8351,
+    "images": [
+     "oceanbase/obproxy-ce:4.3.3.0-5",
+     "quay.io/oceanbase/minio:RELEASE.2025-10-15T17-29-55Z",
+     "quay.io/oceanbase/mc:RELEASE.2025-08-13T08-35-41Z",
+     "quay.io/oceanbase/logservice:1.3.3-152026112014",
+     "quay.io/oceanbase/obagent:4.2.6-100000152026051118",
+     "quay.io/oceanbase/oceanseek:4.6.3.0-482026112114"
     ]
    },
    {
@@ -4341,6 +4418,43 @@
     "bytes": 224,
     "images": [
      "ubuntu:24.04"
+    ]
+   },
+   {
+    "path": "deploy/compose/oceanseek/Dockerfile.bootstrap",
+    "kind": "image",
+    "blob_sha": "10b35ed7c84ec73b58ddb6f076588b8e1da52b17",
+    "bytes": 519,
+    "images": [
+     "golang:1.25-bookworm",
+     "busybox:1.36.1"
+    ]
+   },
+   {
+    "path": "scripts/oceanseek/images/Dockerfile.helper",
+    "kind": "image",
+    "blob_sha": "08e5c75c7e43e10e661258624d5253a0aa59fbfa",
+    "bytes": 321,
+    "images": [
+     "${BASE_IMAGE}"
+    ]
+   },
+   {
+    "path": "scripts/oceanseek/images/Dockerfile.observer",
+    "kind": "image",
+    "blob_sha": "7de445644894aab40f290519ebf6b806b4bda76a",
+    "bytes": 348,
+    "images": [
+     "${BASE_IMAGE}"
+    ]
+   },
+   {
+    "path": "scripts/oceanseek/images/minio-rejoin/Dockerfile",
+    "kind": "image",
+    "blob_sha": "45c6b944f3f43b5802d63f022533f1b3fa944457",
+    "bytes": 240,
+    "images": [
+     "${BASE_IMAGE}"
     ]
    },
    {
@@ -4388,8 +4502,20 @@
    {
     "path": ".github/workflows/golangci-lint.yml",
     "kind": "ci",
-    "blob_sha": "df4fef67fbfdcb8e698d1c64ec0bd836e98db34e",
-    "bytes": 731
+    "blob_sha": "311c0855c16726305c9f1ad4a8a5c736740b4a2d",
+    "bytes": 1003
+   },
+   {
+    "path": ".github/workflows/oceanseek-compose.yml",
+    "kind": "ci",
+    "blob_sha": "97f650c4eef3d08e67afe63eec3e0b90afb93de7",
+    "bytes": 4181
+   },
+   {
+    "path": ".github/workflows/oceanseek-release.yml",
+    "kind": "ci",
+    "blob_sha": "0d107527e96d000dfd1e7d1bc160e3dd738b0d41",
+    "bytes": 2953
    },
    {
     "path": ".github/workflows/release-charts.yml",
@@ -4418,8 +4544,8 @@
    {
     "path": ".github/workflows/release-operator.yml",
     "kind": "ci",
-    "blob_sha": "80ed3882f991d3406c8829ce881149723fa5228e",
-    "bytes": 1827
+    "blob_sha": "81ee75ae19cfc6f14d6b7b21744cad619e5d894b",
+    "bytes": 1887
    },
    {
     "path": ".github/workflows/release-sql-analyzer.yml",
@@ -4457,6 +4583,7 @@
    "docs_matrix": [],
    "paths": [
     "pkg/oceanbase-sdk/connector/datasource.go",
+    "pkg/oceanbase-sdk/connector/datasource_test.go",
     "pkg/database/connector.go",
     "docsite/i18n/zh-Hans/docusaurus-plugin-content-blog/options.json",
     "docsite/i18n/zh-Hans/docusaurus-plugin-content-docs/current.json",
@@ -5253,15 +5380,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:06:14Z",
+  "collected_at": "2026-11-23T00:37:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-22",
   "stars": 3219,
   "tree": {
-   "sha": "d06663cbedca4f6dfda24e949e434bf46496d6b5",
-   "etag": "W/\"8e42a9dbcd773e13bae6d96215ea469c3405e9e0c2f806b94fb9f3e3dbec0dc3\"",
+   "sha": "14315d37ac70caaa3f99d8279b1a40845c1db7a4",
+   "etag": "W/\"1936ec1cd98e3fa7c2da4420416b0fa688af88f77bb66a57372bb5dc79e848ab\"",
    "truncated": false,
-   "path_count": 1757,
+   "path_count": 1758,
    "matched": [
     "package.json",
     "docs/package.json",
@@ -6574,13 +6701,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:23:26Z",
+  "collected_at": "2026-11-23T00:47:03Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-20",
-  "stars": 331,
+  "pushed_at": "2026-11-22",
+  "stars": 330,
   "tree": {
    "sha": "65726e5ef959a8a90bed69b976697b906d495f47",
-   "etag": "W/\"b97c5a3fe0e2eb5187e5f819e18b21dcd88f520bdf38c65257cd02ee3f618bec\"",
+   "etag": "W/\"c5498a6c0e279d1b9ff6987300d8d7c4729f727e8a8d05543bbf3bd9e252f21d\"",
    "truncated": false,
    "path_count": 1185,
    "matched": [
@@ -7558,15 +7685,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:21:30Z",
+  "collected_at": "2026-11-23T00:49:29Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
+  "pushed_at": "2026-11-22",
   "stars": 214,
   "tree": {
-   "sha": "1985a0fb9a6e4742f18eae9f7305a553b8d26762",
-   "etag": "W/\"4088435e3eeb8e340ecb391b42bebf282125bc2c3acf7cf0c2e8564a2e024d05\"",
+   "sha": "ea87e8f62159431306591ba41bc02f968fc4abbf",
+   "etag": "W/\"2d1b45b0af715512a7dd4897d4922b3a904bb9da903986c0327ef40827745e40\"",
    "truncated": false,
-   "path_count": 647,
+   "path_count": 660,
    "matched": [
     "go.mod",
     "cli/package.json",
@@ -7587,9 +7714,9 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "cb92ae313cca3dfbe18c49adae6acbd7c51e9dbc",
+    "blob_sha": "ba184ecae6dc505e7a9e2d726c5c2bf06233aba1",
     "ecosystem": "go",
-    "bytes": 6537,
+    "bytes": 6525,
     "names": [
      "github.com/danielgtaylor/huma/v2",
      "github.com/go-chi/chi/v5",
@@ -7618,7 +7745,8 @@
      "go.opentelemetry.io/otel/sdk/metric",
      "go.opentelemetry.io/otel/trace",
      "golang.org/x/crypto",
-     "golang.org/x/sync"
+     "golang.org/x/sync",
+     "golang.org/x/text"
     ],
     "dev": [
      "dario.cat/mergo",
@@ -7683,7 +7811,6 @@
      "go.opentelemetry.io/proto/otlp",
      "golang.org/x/net",
      "golang.org/x/sys",
-     "golang.org/x/text",
      "google.golang.org/genproto/googleapis/api",
      "google.golang.org/genproto/googleapis/rpc",
      "google.golang.org/grpc",
@@ -7734,7 +7861,7 @@
    {
     "path": "pkg/authjwt/go.mod",
     "kind": "dep",
-    "blob_sha": "a3e185e2b39c5668644e1263101bf1afbacd5ca3",
+    "blob_sha": "4b7bbbac48e396aa8ec3c895ab5d30f075aae2e8",
     "ecosystem": "go",
     "bytes": 674,
     "names": [
@@ -8523,15 +8650,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:28:35Z",
+  "collected_at": "2026-11-23T00:54:51Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
+  "pushed_at": "2026-11-22",
   "stars": 96,
   "tree": {
-   "sha": "4dcd83cf64cccca66d947f008d1cfc83302c22bd",
-   "etag": "W/\"804be08a8a49bd14355bf02733ccce6d811663dc8fcc0b72455d46db96cd1394\"",
+   "sha": "7f034bc28448e0111ba0a5efb1a8a94f6517256b",
+   "etag": "W/\"679ca3b73c7143ee84df4aff4135acc2188c6e38d6bf185db852753c3a39748e\"",
    "truncated": false,
-   "path_count": 3769,
+   "path_count": 3812,
    "matched": [
     "package.json",
     "Dockerfile",
@@ -8548,9 +8675,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "2ca0336c056523caedb06318dbe9ae89644b4ecd",
+    "blob_sha": "0dab429e2d4ade4b83c051f4e0f7325ffade8be8",
     "ecosystem": "npm",
-    "bytes": 4897,
+    "bytes": 4898,
     "names": [
      "@better-auth/oauth-provider",
      "@better-auth/passkey",
@@ -9610,13 +9737,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:32:26Z",
+  "collected_at": "2026-11-23T00:58:00Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
+  "pushed_at": "2026-11-22",
   "stars": 60,
   "tree": {
    "sha": "87dcd41c2b5fe1cf18e71124e8d53cf9329dbac2",
-   "etag": "W/\"16eb4a8e786199922787d0e513b69293b2e9e1251c40bd5871efa6447f38b992\"",
+   "etag": "W/\"5ad33731685106d1aec9ddf8c01d71d7f2e082165d27f4da51b4786db44565d0\"",
    "truncated": false,
    "path_count": 1022,
    "matched": [
@@ -10012,13 +10139,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:34:10Z",
+  "collected_at": "2026-11-23T00:59:00Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
+  "pushed_at": "2026-11-22",
   "stars": 50,
   "tree": {
-   "sha": "807e38d5223308bc28969202afa15d94186b3b03",
-   "etag": "W/\"bcf36a8f7edc294168b545b64e0ef95a491029376173570409f4a355789bec57\"",
+   "sha": "ddfce30bbae5e68896903be640aa62faaf433168",
+   "etag": "W/\"29d6b28488d0416173b7c95aa78903a225908f3ba008fa898bbb30e0202b2400\"",
    "truncated": false,
    "path_count": 2035,
    "matched": [
@@ -13116,15 +13243,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-16T00:05:40Z",
+  "collected_at": "2026-11-23T01:00:27Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-15",
-  "stars": 41,
+  "pushed_at": "2026-11-22",
+  "stars": 43,
   "tree": {
-   "sha": "91c72261384a06df418f132fbb6b04ef17902d72",
-   "etag": "W/\"fa02ebf1f6a559a4161ccf1d34f07717ed854fa1f0d5824bef29c6dffce957b1\"",
+   "sha": "3b9c7967216ae5f8f7ca6e4382f79cd58ec218df",
+   "etag": "W/\"fc2581353a93a2c7e140e80af4a93315a9650e63520768ffc348470adef8fddb\"",
    "truncated": false,
-   "path_count": 1119,
+   "path_count": 1172,
    "matched": [
     "package.json",
     "backend/pyproject.toml",
@@ -13140,7 +13267,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "e7ce0d2bee4d296f714d4a51d002c45fa602320d",
+    "blob_sha": "2fb952079f79f072d51130675ecda618f665b5fd",
     "ecosystem": "npm",
     "bytes": 1071,
     "dev": [
@@ -13191,7 +13318,7 @@
    {
     "path": "frontend/package.json",
     "kind": "dep",
-    "blob_sha": "cb6a39d0c397228735b9101688a0df46bd2f4d16",
+    "blob_sha": "98865054258c6e2c7e15552b6eb20073d14c9afe",
     "ecosystem": "npm",
     "bytes": 2268,
     "names": [
@@ -14753,13 +14880,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:16:57Z",
+  "collected_at": "2026-11-23T01:08:25Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-08",
+  "pushed_at": "2026-11-22",
   "stars": 17,
   "tree": {
    "sha": "61152ef38ed7271230bc33a5c26a5809b11a6204",
-   "etag": "W/\"c40b87bec0bcf187acb5834b5e61a80cfd644fc568a101505452f35db80a7fcd\"",
+   "etag": "W/\"266f90dfe15d03dd59bdf8a005dedd425bddcb075e1e156aacc3189baabfd447\"",
    "truncated": false,
    "path_count": 5037,
    "matched": [
@@ -18134,13 +18261,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:42:52Z",
+  "collected_at": "2026-11-23T01:05:54Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
+  "pushed_at": "2026-11-22",
   "stars": 24,
   "tree": {
    "sha": "f386504727b6800c43b6d0d309bdbe5772f36783",
-   "etag": "W/\"0980fc35280be4f0199d9ed299fef0a439e95b7ceb749252c1f89dddb1bd858a\"",
+   "etag": "W/\"e6dc0669e0c7219762bccaa18ab7c28bcf83838b00be57eb9d546eeea2ff662c\"",
    "truncated": false,
    "path_count": 639,
    "matched": [
@@ -18920,13 +19047,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-21T23:59:13Z",
+  "collected_at": "2026-11-23T00:30:31Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-21",
-  "stars": 25570,
+  "pushed_at": "2026-11-22",
+  "stars": 25569,
   "tree": {
-   "sha": "c0f3122f5b0ad319d47a5d0a8c0d43313ff132e0",
-   "etag": "W/\"492d25789a5828aff94dc5cfa70c38159a492c416c76df9afb4f44a620544e9f\"",
+   "sha": "340dc085c316c67314bbea7b872c680b7aa6184a",
+   "etag": "W/\"bb97d082556e1cbac1afe61fe9f5f311ac8105da6eb542cf23b54ca9514239ff\"",
    "truncated": false,
    "path_count": 7928,
    "matched": [

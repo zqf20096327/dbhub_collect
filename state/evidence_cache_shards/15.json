@@ -6814,13 +6814,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:58:41Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-23T00:47:12Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-24",
-  "stars": 325,
+  "pushed_at": "2026-11-22",
+  "stars": 323,
   "tree": {
    "sha": "aacce867e3644fc0ef462f6b29968fc84c0d4aa7",
-   "etag": "W/\"fe4809ec668cffed724b271011c64b07141006df0fdfa8b9069e2e043dada150\"",
+   "etag": "W/\"3fc1ec8d26e5c9a3c3f3f0112fbe55227f50a613b313007dc67a83598899350b\"",
    "truncated": false,
    "path_count": 320,
    "matched": [
@@ -13462,13 +13463,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:47:15Z",
+  "collected_at": "2026-11-23T01:09:13Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
+  "pushed_at": "2026-11-22",
   "stars": 15,
   "tree": {
    "sha": "dd963abc4a388bde98997066f6e5f43ddb1379fc",
-   "etag": "W/\"43e8ca704d4f8c6d5b83736761af959fcede59489c960f998a8ab90909cc8fac\"",
+   "etag": "W/\"e84a0dcc4b4e1394b6c6c486a7a3b10021ddc0dd8480e190da52555fbf7ffc1b\"",
    "truncated": false,
    "path_count": 191,
    "matched": [
@@ -14528,33 +14529,37 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:06:23Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-23T01:11:25Z",
   "default_branch": "main",
-  "pushed_at": "2026-09-22",
-  "stars": 11,
+  "pushed_at": "2026-11-22",
+  "stars": 13,
   "tree": {
-   "sha": "00174e8c4c7f7a41b89090f65ac0c2631060ec9a",
-   "etag": "W/\"5fed250a9a7d5088138691827284c5140fca354a5d5803d737cb1b335bb6df34\"",
+   "sha": "4d9b9127ae062eefa9a8710f0fc54288ecfc338b",
+   "etag": "W/\"78b556d6c95e913fbe602239d414790d0b538d4557d86f0ac513ec67dc7f21fb\"",
    "truncated": false,
-   "path_count": 272,
+   "path_count": 310,
    "matched": [
     "package.json",
+    "desktop/package.json",
     "frontend/package.json",
     "Dockerfile",
     "docker-compose.dev-ports.yml",
     "docker-compose.dokploy.yml",
     "docker-compose.yml",
     "frontend/Dockerfile",
-    ".github/workflows/ci.yml"
+    ".github/workflows/ci.yml",
+    ".github/workflows/desktop.yml",
+    ".github/workflows/release-notes.yml"
    ]
   },
   "files": [
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "b3f1ba3cd75fa99b986f6b145791b74bb95f5849",
+    "blob_sha": "d84c7361bc906f675587d8f79e219c646e160db4",
     "ecosystem": "npm",
-    "bytes": 1997,
+    "bytes": 2120,
     "names": [
      "bcryptjs",
      "cors",
@@ -14580,11 +14585,42 @@
     ]
    },
    {
+    "path": "desktop/package.json",
+    "kind": "dep",
+    "blob_sha": "e285483ebc9df0e468385fca4a6757ffb4613c7f",
+    "ecosystem": "npm",
+    "bytes": 1697,
+    "names": [
+     "bcryptjs",
+     "cors",
+     "dotenv",
+     "express",
+     "express-rate-limit",
+     "helmet",
+     "ipaddr.js",
+     "jsonwebtoken",
+     "knex",
+     "nodemailer",
+     "pg",
+     "pino",
+     "pino-pretty",
+     "safe-regex2",
+     "uuid",
+     "@embedded-postgres/linux-arm64",
+     "@embedded-postgres/linux-x64",
+     "@embedded-postgres/windows-x64"
+    ],
+    "dev": [
+     "electron",
+     "electron-builder"
+    ]
+   },
+   {
     "path": "frontend/package.json",
     "kind": "dep",
-    "blob_sha": "1443b57be606237b79c217fa820e93df4ac6bb2d",
+    "blob_sha": "93c81c39a2b8fced4068cc538397a1d09a071361",
     "ecosystem": "npm",
-    "bytes": 636,
+    "bytes": 638,
     "names": [
      "vue",
      "vue-router",
@@ -14603,10 +14639,10 @@
    {
     "path": "Dockerfile",
     "kind": "image",
-    "blob_sha": "63c741b071eb48f865787e8add4f2e9ad60d2463",
-    "bytes": 563,
+    "blob_sha": "fa83b22dc76172e8c71eabf1fb6854a8cc0c3917",
+    "bytes": 570,
     "images": [
-     "node:22-alpine"
+     "node:22.23-alpine3.24"
     ]
    },
    {
@@ -14618,41 +14654,53 @@
    {
     "path": "docker-compose.dokploy.yml",
     "kind": "image",
-    "blob_sha": "09723e515bb8567cb27187f5586f0e446a8db344",
-    "bytes": 5467,
+    "blob_sha": "aed467de1f562d7c774b09e164496b3e8689ab0b",
+    "bytes": 7487,
     "images": [
      "postgres:16-alpine",
-     "searxng/searxng:latest"
+     "searxng/searxng:2026.11.21-c6ee3e9fd"
     ]
    },
    {
     "path": "docker-compose.yml",
     "kind": "image",
-    "blob_sha": "f309906bfc2c7c1f9a731ab5f12a741c17455939",
-    "bytes": 5406,
+    "blob_sha": "34c47ae2cd2c52d7581a60d881718d2fae252b02",
+    "bytes": 7168,
     "images": [
      "postgres:16-alpine",
-     "searxng/searxng:latest"
+     "searxng/searxng:2026.11.21-c6ee3e9fd"
     ]
    },
    {
     "path": "frontend/Dockerfile",
     "kind": "image",
-    "blob_sha": "35d6e23ebda45439e7a1cffe4c53817fb9247c15",
-    "bytes": 377,
+    "blob_sha": "84fcccfe6661ff557690894bb0c9075246584659",
+    "bytes": 388,
     "images": [
-     "node:22-alpine",
-     "nginx:1.29-alpine"
+     "node:22.23-alpine3.24",
+     "nginx:1.30-alpine3.24"
     ]
    },
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "51cacf805359f13cc1f4c4a4ae110e054925f8e5",
-    "bytes": 2111,
+    "blob_sha": "27ddef0b21c9b2439ebee06024faeafdece6fb52",
+    "bytes": 3239,
     "images": [
      "postgres:16-alpine"
     ]
+   },
+   {
+    "path": ".github/workflows/desktop.yml",
+    "kind": "ci",
+    "blob_sha": "fbf6d94b1107efc11c9734c076ce7d8e5445a9a6",
+    "bytes": 6765
+   },
+   {
+    "path": ".github/workflows/release-notes.yml",
+    "kind": "ci",
+    "blob_sha": "5235305b57ccbff766aa89d950a13073d5890c66",
+    "bytes": 1103
    }
   ],
   "clues": {
@@ -18696,13 +18744,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:58:33Z",
+  "collected_at": "2026-11-23T01:18:20Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-20",
+  "pushed_at": "2026-11-22",
   "stars": 0,
   "tree": {
    "sha": "3b72fdb6b9a74d34368ee18aeb01eef5a78a4c2a",
-   "etag": "W/\"17e98e9a948ca146c37a976c48b7429407828cbd9792160d3b8290c0dc268057\"",
+   "etag": "W/\"474226ffa41397d2a99ea52bfbba8a3c7ad583581dbb274bc3e0f3aa6b366859\"",
    "truncated": false,
    "path_count": 1552,
    "matched": [
@@ -20832,15 +20880,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:47:18Z",
+  "collected_at": "2026-11-23T01:09:15Z",
   "default_branch": "kingres-18",
-  "pushed_at": "2026-11-21",
+  "pushed_at": "2026-11-22",
   "stars": 15,
   "tree": {
-   "sha": "5c9f061c928fa67dbb3b8aaa704e32605efde887",
-   "etag": "W/\"82c52d6d0e1d1da96c87074c94ba6019b844174962493fdbb70efa60d551c5ab\"",
+   "sha": "b049d04bd5d96d3bc9e315a1936e1acfa741ac91",
+   "etag": "W/\"6c2d8f67ea94317e1849ddce51692a1c8b6a81a81cc97cc075a00a213dec289f\"",
    "truncated": false,
-   "path_count": 9653,
+   "path_count": 9739,
    "matched": [
     "kingres/api/package.json",
     "kingres/control-plane/go.mod",
@@ -21360,13 +21408,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:56:26Z",
+  "collected_at": "2026-11-23T01:16:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
+  "pushed_at": "2026-11-22",
   "stars": 4,
   "tree": {
    "sha": "799363f3f90f983ddbf3f6e315de0335d03ef44d",
-   "etag": "W/\"4310031b740aff3f958c57875ee57c938a4978e5bc556ce54f5cd2fa70652cba\"",
+   "etag": "W/\"b859979bd3fe179eaa56ad29854992cebd3a4edd5673180d489e4705f2a3d1d5\"",
    "truncated": false,
    "path_count": 624,
    "matched": [
