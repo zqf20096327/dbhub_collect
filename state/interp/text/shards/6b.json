@@ -3019,5 +3019,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "02cf505e344f": {
+  "identity": {
+   "one_liner": "面向 DBA 的轻量级 TiDB 集群管理平台，单二进制交付",
+   "review": "该平台用于接管 TiUP 部署的 TiDB 集群，通过本地读取或 SSH 读取 meta.yaml（失败时回退 tiup cluster display）三通道采集拓扑、版本、架构等信息，提供拓扑/实例/用户/参数/会话视图、异步任务引擎与内置 28 项巡检。凭据采用 AES-256-GCM 加密存储。运行依赖 Go ≥ 1.22 与 Node ≥ 20，监控趋势、慢查询、告警及定时巡检调度在当前版本未接入。",
+   "highlights": [
+    "单二进制交付：Go + Gin + GORM + SQLite（纯 Go 驱动，无 CGO），前端构建产物通过 //go:embed 内嵌，首次启动自动建 19 张表",
+    "支持本地直读或 SSH 读取 TiUP meta.yaml 接管集群，提供 admin/operator/viewer 三种角色权限与统一错误码",
+    "内置 6 类 28 项巡检模板，可生成可下载报告；支持 TMP_MOCK=true 演示模式（内置 3 套假集群数据）"
+   ],
+   "use_cases": [
+    "DBA 集中查看与运维 TiUP 部署的 TiDB 集群拓扑、参数、用户与会话",
+    "对集群执行立即巡检并下载巡检报告",
+    "在无真实集群的环境下通过演示模式走通平台全流程"
+   ]
+  },
+  "sha": "02cf505e344f",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

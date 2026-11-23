@@ -3199,5 +3199,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2a309cde2ca2": {
+  "identity": {
+   "one_liner": "Go 单二进制后端引擎，将原始 JSON 转为 REST API",
+   "review": "ElysianDB 是用 Go 编写的自包含后端引擎，读取 JSON 数据并自动生成带 CRUD、过滤、分页、排序的 REST API，内置认证、ACL、JavaScript hooks、Admin UI 及可插拔存储引擎（internal 默认，mongodb 处于 beta）。适合前端优先开发、原型与内部工具；README 明确说明其不面向复杂跨实体 join 或重事务负载。",
+   "highlights": [
+    "零配置生成 REST API，支持分页、排序、过滤、投影与 includes，并附查询系统支持逻辑操作符与嵌套过滤",
+    "默认 internal 引擎使用 append-only 日志、写时复制实体状态与自动索引；可选 mongodb 引擎（beta）将持久化交由 MongoDB",
+    "提供 token/basic/用户三种认证模式、API 层 ACL、热备份接口、Prometheus /metrics 端点及 Redis 风格 TCP 协议"
+   ],
+   "use_cases": [
+    "快速原型与 MVP 开发，避免搭建模型与迁移等后端基础设施",
+    "前端优先项目或 Mock API，需要即时可用的数据接口",
+    "访问模式可预测的读密集型内部工具与管理后台"
+   ]
+  },
+  "sha": "2a309cde2ca2",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "508b246e1069": {
+  "identity": {
+   "one_liner": "自托管 IPTV 播放列表管理器，支持 M3U/Xtream Codes 编辑、EPG 匹配与分享",
+   "review": "这是一个用于导入、编辑、整理和导出 M3U 及 Xtream Codes 播放列表的工具，面向需要管理 IPTV 频道列表的用户。同一代码库提供两种运行方式：Windows/Linux 桌面应用（Electron 打包，内置 PostgreSQL，无需服务器）和 Docker 自托管 Web 版（Vue 3 + Express + PostgreSQL，支持多用户与 Xtream Codes 输出）。支持 XMLTV EPG 匹配、拖拽排序、AI 助手（OpenAI 兼容接口）等功能。许可证为 MIT。",
+   "highlights": [
+    "支持 Xtream Codes 导入（Live TV、VOD、Series）及本地/远程 M3U 导入、转义 M3U 导出",
+    "支持 XMLTV EPG 源、按 tvg-id 自动匹配频道和时区感知的节目指南视图",
+    "提供桌面版（内置 PostgreSQL，数据存本地）与 Docker 多用户 Web 版两种部署方式"
+   ],
+   "use_cases": [
+    "编辑和整理个人 IPTV 播放列表的频道分类与顺序",
+    "为播放器生成带 EPG 匹配的 Xtream Codes 输出或 M3U 导出文件",
+    "服务器上的多用户播放列表托管与分享"
+   ]
+  },
+  "sha": "508b246e1069",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e9624ae4af90": {
+  "identity": {
+   "one_liner": "介于编码代理与 Git 之间的 Go 事务运行时，用 AST 门禁拦截代码捷径",
+   "review": "Nomos 是一个约 20MB 的静态 Go 二进制，部署在编码代理与 Git 之间，不调用 LLM。它在 feat/* 分支提交时运行 42 项多语言 AST 检查，拦截跳过的测试、空桩、超长函数和密钥泄露，并向代理返回修复配方。支持 Claude Code、Cursor、Gemini CLI 等代理，通过 nomos init 初始化，可选启用 CI 校验与 git worktree 隔离模式。",
+   "highlights": [
+    "42 项多语言 AST 门禁覆盖 Go、TypeScript、Python、Rust、Ruby、C/C++、Java、Kotlin、C#，单文件检查约 24ms，42 门全量 diff 校验约 460ms",
+    "pre-tool hook 拒绝代理读取 ~/.ssh、~/.aws 等敏感路径，阻断云元数据 SSRF，并在 3 次连续无进展工具失败后停止循环",
+    "提供 nomos xray 只读扫描（含 AI Hangover Score 与热点报告）、nomos.baseline.json 基线棘轮、经验证才写入的 SQLite 记忆库 mneme.db 及只读 MCP 接口"
+   ],
+   "use_cases": [
+    "在使用编码代理的仓库中阻止跳过测试、空桩实现与配置篡改等提交",
+    "存量代码库的无侵入接入：基线冻结旧债，仅对改动文件执行递增约束",
+    "多代理并行开发场景下，通过 --worktrees 启用 git worktree 隔离与 INT/SUB 规格先行任务结构"
+   ]
+  },
+  "sha": "e9624ae4af90",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

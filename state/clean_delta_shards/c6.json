@@ -27529,5 +27529,644 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "bb6b4edec4c5+2": {
+  "fn": "yuuki/shawk",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "AI Generated",
+     "CI",
+     "Security",
+     "Release",
+     "License",
+     "Go version"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    20,
+    8,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     " or protocol, cron jobs and third-party software included."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    25,
+    22,
+    25,
+    [
+     " at connection state changes (unless wire protocols are classified, below),",
+     " so the agent can always run and does not sample: a job that runs once a",
+     " month is still seen."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     " are recorded, so \"not used\" can be told apart from \"not observed\"."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    36,
+    28,
+    36,
+    [
+     " sockets (a local PostgreSQL, php-fpm, Docker, munge), without their",
+     " traffic; so \"not used\" means \"no TCP, UDP or Unix stream connection\".",
+     " Datagram Unix sockets (syslog, journald) are not traced. RDMA verbs",
+     " (InfiniBand, RoCE) bypass the sockets: the RDMA",
+     " transports of MPI (UCX) and NCCL, Lustre o2ib, GPFS verbs and NFS over",
+     " RDMA are not seen, even when their control connections over TCP are; TCP",
+     " over IPoIB is. See packaging/README.md",
+     " for HPC clusters."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    36,
+    37
+   ],
+   [
+    "replace",
+    37,
+    42,
+    37,
+    42,
+    [
+     " a new TCP connection sends tells its protocol: the version of TLS, HTTP/1",
+     " or HTTP/2 in clear text, SSH, PostgreSQL and MySQL with or without a",
+     " request of TLS, Redis or Slurm, kept in PostgreSQL, so that clients still",
+     " on TLS 1.0 or in clear text are found. Its program runs on every TCP",
+     " send, so it is off by default."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    42,
+    43
+   ],
+   [
+    "replace",
+    43,
+    45,
+    43,
+    45,
+    [
+     " way OBI (OpenTelemetry eBPF Instrumentation) names them, so shawk's",
+     " dependencies and OBI's application metrics share the same `job`."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    49,
+    45,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "The design is in docs/design.md."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    50,
+    51
+   ],
+   [
+    "replace",
+    51,
+    55,
+    51,
+    52,
+    [
+     " On every host, eBPF programs in the kernel trace the sockets of all processes, and the shawk agent sends the bundled flows as OTLP metrics every 15 seconds to an OpenTelemetry Collector with the shawk connector. The connector writes dependencies, listeners and observation segments to PostgreSQL and metrics per service without addresses to Prometheus; Grafana shows both. OBI can send application-layer metrics to the same collector."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    52,
+    53
+   ],
+   [
+    "replace",
+    56,
+    57,
+    53,
+    54,
+    [
+     "|component|role|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    54,
+    55
+   ],
+   [
+    "replace",
+    58,
+    63,
+    55,
+    60,
+    [
+     "|`shawk agent`|runs on every host; sends its dependencies as OTLP metrics every 15 s; no database, no open port|",
+     "|shawk connector|an OpenTelemetry Collector component; writes PostgreSQL, names the peer of every dependency, forwards metrics without addresses to Prometheus|",
+     "|PostgreSQL|whether a dependency exists and when (views of the schema `shawk_v1`)|",
+     "|Prometheus|how much flows: connections, failures, bytes, RTT, connect time, retransmissions|",
+     "|Grafana|dashboards and alerts|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    67,
+    60,
+    64
+   ],
+   [
+    "replace",
+    67,
+    76,
+    64,
+    73,
+    [
+     " upstream 5.14 or later. UDP and Unix stream sockets use BPF trampolines",
+     " when available and fall back to kprobes, including on arm64 before 6.0",
+     " and Rocky Linux 9.6 on arm64. For UDP the fallback roughly doubles the",
+     " cost per datagram on arm64. Wire protocol classification (`-classify-protocols`) requires",
+     " trampolines. The tested kernels",
+     " are listed in",
+     " design §3.5.",
+     " The agent runs as root with the capabilities that",
+     " its systemd unit grants."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    78,
+    73,
+    75
+   ],
+   [
+    "replace",
+    78,
+    79,
+    75,
+    76,
+    [
+     " accepts OTLP metrics."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    101,
+    76,
+    98
+   ],
+   [
+    "replace",
+    101,
+    102,
+    98,
+    99,
+    [
+     "(packaging/)."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    107,
+    99,
+    104
+   ],
+   [
+    "replace",
+    107,
+    108,
+    104,
+    105,
+    [
+     "certificate (packaging/). Services that"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    119,
+    105,
+    116
+   ],
+   [
+    "replace",
+    119,
+    120,
+    116,
+    117,
+    [
+     "packaging/ has the configuration of the collector,"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    123,
+    117,
+    120
+   ],
+   [
+    "replace",
+    123,
+    125,
+    120,
+    122,
+    [
+     "(packaging/). A database created",
+     "by v0.8.0 must be created again; see the CHANGELOG."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    130,
+    122,
+    127
+   ],
+   [
+    "replace",
+    130,
+    131,
+    127,
+    128,
+    [
+     "(design §5.4)."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    139,
+    128,
+    136
+   ],
+   [
+    "replace",
+    139,
+    140,
+    136,
+    137,
+    [
+     " of each dependency, with its first and last seen times."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    137,
+    138
+   ],
+   [
+    "replace",
+    141,
+    143,
+    138,
+    140,
+    [
+     " the selected services, and failures and connect time by peer host; with",
+     " `networks`, the networks the connections use."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    145,
+    140,
+    142
+   ],
+   [
+    "replace",
+    145,
+    146,
+    142,
+    143,
+    [
+     " the same service."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    152,
+    143,
+    149
+   ],
+   [
+    "replace",
+    152,
+    153,
+    149,
+    150,
+    [
+     "The dependency map: ~external to haproxy on lb-01, to storefront on web-01 and web-02, to catalog, memcached, redis-server, recommend and postgres; order-worker to postgres, redis-server and payment-gateway; legacy-cron, nightly-report and ~unresolved to postgres"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    150,
+    151
+   ],
+   [
+    "replace",
+    154,
+    155,
+    151,
+    152,
+    [
+     "The dependency details of storefront: connections, connection failure ratio, request and response bytes, mean RTT, retransmitted segments and open connections per dependency over the hour, with a red band where cache-01 was not observed"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    152,
+    153
+   ],
+   [
+    "replace",
+    156,
+    158,
+    153,
+    154,
+    [
+     " Fleet and Changes "
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    154,
+    155
+   ],
+   [
+    "replace",
+    159,
+    160,
+    155,
+    156,
+    [
+     "The fleet: 9 agents alive, 0 silent, 9 without UDP tracing, 15 new dependencies today; the agents, the observation gap of cache-01 and the dependencies that appeared today"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    156,
+    157
+   ],
+   [
+    "replace",
+    161,
+    164,
+    157,
+    158,
+    [
+     "The changes: nightly-report to postgres appeared and disappeared, recommend to redis-server and storefront to redis-server and recommend appeared, storefront to memcached and legacy-cron to postgres disappeared"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    171,
+    158,
+    165
+   ],
+   [
+    "replace",
+    171,
+    187,
+    165,
+    166,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    205,
+    166,
+    184
+   ],
+   [
+    "replace",
+    205,
+    209,
+    184,
+    185,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    213,
+    185,
+    189
+   ],
+   [
+    "replace",
+    213,
+    214,
+    189,
+    190,
+    [
+     "test/harness, which also lists the variables each"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    223,
+    190,
+    199
+   ],
+   [
+    "replace",
+    223,
+    226,
+    199,
+    202,
+    [
+     "The other targets are described in the Makefile; see",
+     "CONTRIBUTING.md, AGENTS.md and",
+     "SECURITY.md. The compiled"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    231,
+    202,
+    207
+   ],
+   [
+    "replace",
+    231,
+    233,
+    207,
+    209,
+    [
+     "docs/proposals/ holds designs not implemented yet, and",
+     "docs/research/ background research that is not"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    238,
+    209,
+    214
+   ],
+   [
+    "replace",
+    238,
+    239,
+    214,
+    215,
+    [
+     "cccc on pull requests and pushes to `main`"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    240,
+    215,
+    216
+   ],
+   [
+    "replace",
+    240,
+    241,
+    216,
+    217,
+    [
+     "octocov as custom metrics: the number of"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    255,
+    217,
+    231
+   ],
+   [
+    "replace",
+    255,
+    256,
+    231,
+    232,
+    [
+     "(IOTS 2019) and was"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    259,
+    232,
+    235
+   ],
+   [
+    "replace",
+    259,
+    266,
+    235,
+    236,
+    [
+     "Apache License 2.0. The eBPF programs"
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

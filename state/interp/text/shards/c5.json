@@ -3446,5 +3446,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5ad2e529f5c2": {
+  "identity": {
+   "one_liner": "通过原生 TDS 协议连接 SQL Server 的 DuckDB 扩展，支持目录集成与查询下推。",
+   "review": "该扩展让 DuckDB 直接以原生 TDS 协议（含 TLS）连接 Microsoft SQL Server，无需 ODBC/JDBC 或外部驱动。使用者通过 INSTALL mssql FROM community 安装后，可用 SECRET 或连接字符串 ATTACH 远端数据库，执行查询、DML、CTAS、事务及读取 .bak 备份文件。要求 DuckDB v1.4.1+ 与 SQL Server 2019+；项目标注为实验性，API 可能随版本变化。",
+   "highlights": [
+    "原生实现 TDS 协议并默认校验服务器 TLS 证书，支持 Azure AD、Kerberos/SSPI 认证与连接池",
+    "支持过滤与远程下推：WHERE、join、聚合、DISTINCT、ORDER BY/LIMIT 等翻译为 T-SQL 在 SQL Server 执行，EXPLAIN 可查看",
+    "提供 mssql_backup_info/mssql_backup_scan 等函数，不依赖 SQL Server 即可读取本地、s3://、https:// 上的 .bak 备份元数据与表数据，支持压缩与条带备份"
+   ],
+   "use_cases": [
+    "在 DuckDB 中直接查询、分析 SQL Server 数据库表，无需安装 ODBC/JDBC 驱动",
+    "通过 COPY/CTAS/INSERT 在 DuckDB 与 SQL Server 之间加载与写入数据",
+    "在没有 SQL Server 实例的环境下读取 .bak 备份文件的元数据、表结构和行数据"
+   ]
+  },
+  "sha": "5ad2e529f5c2",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "46a72949c76e": {
+  "identity": {
+   "one_liner": "基于 Python + SQLite FTS5 与 PPMI+SVD 混合检索的 AI 代理持久化符号记忆系统",
+   "review": "BioRAG 为 AI 代理提供跨会话的持久化符号记忆，检索路径不使用稠密嵌入、GPU 或外部 API，采用 SQLite FTS5（WAL 模式）、100 维 PPMI-SVD 语义空间、Hebbian 突触图、SDM 与 ACT-R 激活等机制，支持西英双语词干化与 WordNet 符号扩展。当前分支为开发版 v36.2 候选，稳定版发布在单独的 MemoryBioRAG-Stable 仓库；基准指标限定于其官方 QA 套件与指定快照。",
+   "highlights": [
+    "混合检索：SQLite FTS5 + PPMI-SVD（100 维）+ 13 轴语义空间 + Hebbian 突触图 + SDM（2048 位）+ ACT-R 激活，搜索路径无 GPU 与外部 API 调用",
+    "支持西班牙语和英语双语词干化，并通过 WordNet 进行符号扩展",
+    "官方 QA 套件（921 例，含 875 条检索查询与 40 条负向控制）记录 Recall@5 100.00%、MRR 0.95、FP 0/40；单元测试 852 passed / 18 skipped（Python 3.11.2）"
+   ],
+   "use_cases": [
+    "为需要跨会话保留记忆的 AI 代理提供本地持久化存储与检索",
+    "在无 GPU、无法调用外部嵌入 API 的环境中运行语义检索",
+    "构建多代理间共享记忆层（inter-agent shared cortex），记忆数据存放于 ~/.biorag/"
+   ]
+  },
+  "sha": "46a72949c76e",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

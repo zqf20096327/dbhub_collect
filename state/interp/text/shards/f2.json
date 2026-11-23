@@ -3612,5 +3612,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fee4cb0762df": {
+  "identity": {
+   "one_liner": "D 语言的 ORM 框架，机制类似 Hibernate，基于 DDBC 抽象访问多种数据库",
+   "review": "HibernateD 是面向 D 语言的 ORM 库，通过 DDBC 抽象层连接 SQLite、MySQL、Postgres、ClickHouse 等数据库，提供实体映射、HQL 查询、复合主键（@EmbeddedId）等机制。使用时需注意其限制：复合键的 schema 生成尚未支持，@EmbeddedId 类的 @ManyToOne/@ManyToMany 关系暂不可用，ClickHouse 方言无事务支持。",
+   "highlights": [
+    "基于 DDBC 抽象层，支持 SQLite、MySQL、Postgres 及 ClickHouse 23.8+ 等 SQL 方言",
+    "支持 @EmbeddedId 复合主键、@Embeddable 嵌入类及 @Generated 生成键",
+    "提供 Session 缓存与 HQL 查询；ClickHouse 方言下更新以 ALTER TABLE ... UPDATE 变更执行，不支持事务"
+   ],
+   "use_cases": [
+    "在 D 语言项目中以 ORM 方式读写 SQLite、MySQL、Postgres 数据库",
+    "需要映射含复合主键的既有数据库表结构",
+    "基于 ClickHouse 的分析型数据访问（适合偶发更新而非更新密集型负载）"
+   ]
+  },
+  "sha": "fee4cb0762df",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b686e434f9f5": {
+  "identity": {
+   "one_liner": "一款通过邮件、会议与日历自动填充记录的源码可得 CRM，AI 代理经 MCP/REST 在其中工作。",
+   "review": "Margince 是一个 CRM 系统，从用户连接的邮箱、会议和日历生成联系人、公司与交易记录，AI 代理通过 MCP 或 REST 以与用户相同的权限引擎接入。技术栈为 Go 后端加 React 前端，使用 PostgreSQL 和 Redis。许可为 Business Source License 1.1，属 source-available 而非开源，无许可证 token 时为 14 天试用。支持 Docker Compose 自托管，每套安装服务一家公司。",
+   "highlights": [
+    "从连接账户的邮件和会议中生成联系人、公司与交易记录，AI 变更可溯源到具体交易",
+    "AI 代理通过 MCP 或 REST 接入，使用与用户相同的权限引擎，审批、同意、数据请求和管道设置对代理关闭",
+    "AI 任务可使用本机模型（Ollama 或 vLLM）或云供应商，sovereign 模式拒绝所有云供应商"
+   ],
+   "use_cases": [
+    "需要将邮件和会议内容自动整理为 CRM 记录的销售团队",
+    "需要在自有服务器上运行 CRM 并控制 AI 数据出向（数据主权要求）的场景",
+    "希望 AI 代理以受限凭证操作 CRM、且操作留有审计日志的团队"
+   ]
+  },
+  "sha": "b686e434f9f5",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "10b2b41f618f": {
+  "identity": {
+   "one_liner": "Python 共享磁盘缓存库，以 Rust 引擎与 SQLite 存储，兼容 diskcache API",
+   "review": "diskcache-oxide 是一个 Python 磁盘缓存库，保留 diskcache 的 API，底层以 Rust 实现引擎并用 SQLite 存储，支持多线程、多进程、fork() 及自由线程 Python（3.14t/3.15t）。值默认以 msgpack 或 JSON 存储而非 pickle，含 register_type 机制注册自定义类型。仅支持 CPython 3.14/3.15，不兼容旧版 Python，且与 diskcache 数据不互通。",
+   "highlights": [
+    "跨线程、进程和 fork() 共享同一缓存目录，支持自由线程 Python 构建（3.14t、3.15t）",
+    "提供 memoize、标签批量驱逐、push/pull 工作队列、进程级锁/信号量/限流、transact() 事务写，以及 FanoutCache 分片",
+    "提供 Django 缓存后端（diskcache_oxide.DjangoCache），无运行时依赖，SQLite 编译内嵌"
+   ],
+   "use_cases": [
+    "多 worker 部署（gunicorn/uwsgi）下共享缓存与跨进程协调（锁、队列、限流）",
+    "需要缓存重启后仍在本地磁盘、且不想部署 Redis 等独立服务的 Python 应用",
+    "Django 应用的全站/视图级/模板片段缓存与缓存会话后端"
+   ]
+  },
+  "sha": "10b2b41f618f",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

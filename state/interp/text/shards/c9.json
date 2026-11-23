@@ -2826,5 +2826,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "30c673dbc995": {
+  "identity": {
+   "one_liner": "为 Deployer 提供跨实例数据库同步任务的 PHP Composer 包",
+   "review": "该包为 deployer.org 的部署工具扩展数据库同步任务：db:pull 将远程实例数据库拉取到本地，db:push 推送到远程，db:copy 在远程实例间复制。通过 .env 文件在各实例配置 INSTANCE 名称与数据库连接，经 mysqldump/mysql 执行导出导入。适用于使用 Deployer 管理多实例部署、需在各环境间搬运数据库数据的 PHP 项目；要求各实例保持相同的 vendor 目录与 deploy.php。",
+   "highlights": [
+    "提供 db:pull、db:push、db:copy 三类任务，支持本地与远程及远程实例之间的数据库同步",
+    "支持配置 ignore_tables_out、truncate_tables（preg_match 匹配）、post_sql_in 及域名单标记 {{domainsSeparatedByComma}}",
+    "支持 SSL 连接参数（ssl_key/ssl_cert/ssl_ca 等）、MYSQLI 连接标志，dump 目录默认权限 700，临时 .cnf 文件权限 0600"
+   ],
+   "use_cases": [
+    "将生产或远程实例数据库拉取到本地开发环境",
+    "部署流程中截断缓存类数据表并执行导入后的 SQL（如更新数据库中存储的域名）",
+    "在两个远程实例之间复制数据库"
+   ]
+  },
+  "sha": "30c673dbc995",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

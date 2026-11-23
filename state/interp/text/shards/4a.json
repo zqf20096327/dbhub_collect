@@ -3240,5 +3240,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b7079d96eedf": {
+  "identity": {
+   "one_liner": "Go 编写的开源业务平台，用 YAML+DSL 构建记账类应用",
+   "review": "OneBase 是一个用 Go 编写的开源业务平台，单个二进制文件可在 SQLite 或 PostgreSQL 上运行应用配置。配置以 YAML 描述元数据、内置 DSL 编写业务逻辑，采用目录/文档/登记簿/报表的记账模型，供开发记账类业务应用的开发者和用户使用。支持文件（git）与数据库内两种配置存储方式，提供 CLI 与启动器入口，MIT 许可。",
+   "highlights": [
+    "支持积累登记簿（余额与周转）、信息登记簿、会计科目表与复式记账会计登记簿、FIFO 批次核销",
+    "提供托管表单可视化设计器、带分组/筛选/条件外观与用户个性化变体的报表、图表与仪表盘",
+    "内置 REST API、MCP 服务器、AI 助手、1С 配置 XML 导入，以及基于 onebase check/MCP 命令的 AI 代理开发工作流"
+   ],
+   "use_cases": [
+    "构建贸易与仓储记账应用（examples/trade 含 FIFO 与多登记簿）",
+    "构建含科目表与复式记账的会计核算应用",
+    "使用 AI 代理生成与校验配置：AGENTS.md 指南、onebase check 编译执行查询、MCP 服务器对接"
+   ]
+  },
+  "sha": "b7079d96eedf",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c1cad7ee12e4": {
+  "identity": {
+   "one_liner": "读取 MySQL binlog 构建分析副本的 HTAP 查询工具",
+   "review": "DBTrail 通过复制协议读取 MySQL/MariaDB/RDS/Aurora 的 binlog，将数据以 Parquet 文件存储，借助 DuckDB 响应重查询。应用沿用原有 SQL 与 mysql 客户端，路由在同一连接上自动分流读写。支持 AS OF 时间旅行查询与行级 undo SQL 生成，并可接入 MCP 客户端查询变更历史。需 ROW binlog、FULL row image 及各表主键；副本延迟数秒到数分钟，不提供高可用与备份。采用 Apache-2.0 许可，完全运行在用户自有基础设施中。",
+   "highlights": [
+    "通过复制协议读取 binlog，在 MySQL 服务器上无需安装插件、代理或触发器",
+    "提供同一连接上的读写自动路由，重读查询由 Parquet 副本应答，事务和按键查找留在源库",
+    "支持 AS OF 时间旅行查询、行级 undo SQL 生成，以及通过 MCP 协议连接 AI 客户端（工具只读，不在 MySQL 上执行 SQL）"
+   ],
+   "use_cases": [
+    "为 MySQL 应用分流全表聚合、多年趋势等重查询，应用程序 SQL 无需改动",
+    "将 Metabase、Grafana 等支持 MySQL 协议的仪表盘指向分析副本",
+    "审计数据变更历史并生成撤销误操作的 SQL"
+   ]
+  },
+  "sha": "c1cad7ee12e4",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dd5225f76b03": {
+  "identity": {
+   "one_liner": "ArchiPy 是一个遵循整洁架构原则的 Python 结构化开发框架",
+   "review": "ArchiPy 是面向 Python 3.14+ 的框架，提供配置管理注入、Redis/SQLAlchemy/邮件适配器及配套测试 Mock、基础实体与 DTO、BDD 测试等能力，采用模块化设计，各适配器以可选依赖形式独立安装。适合希望在 Python 项目中统一架构规范的团队使用，通过 pip 或 uv 安装。",
+   "highlights": [
+    "提供配置管理与注入工具，以及基础实体、DTO 和类型安全支持",
+    "内置 Redis、SQLAlchemy 和邮件的适配器及对应测试 Mock，集成 Behave 的 BDD 测试",
+    "模块化可选依赖设计，如 archipy[redis] 安装 archipy-redis 包，导入路径保持不变"
+   ],
+   "use_cases": [
+    "需要统一配置管理和数据建模规范的 Python 应用开发",
+    "使用 FastAPI、gRPC 等构建服务并依赖 Redis、PostgreSQL 等组件的项目",
+    "采用行为驱动开发（BDD）进行功能验证的团队"
+   ]
+  },
+  "sha": "dd5225f76b03",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e90ca19df875": {
+  "identity": {
+   "one_liner": "Swift 编写的 Apple Mail MCP 服务器，直接读取本地 SQLite 存储，提供 61 个邮件工具。",
+   "review": "该项目是一个运行于 macOS 的 MCP 服务器，用 Swift 实现，面向在 Claude 等客户端中操作 Apple Mail 的用户。它通过三条路径工作：直接读取 Mail 本地 SQLite 与 .emlx 文件实现检索导出，经 AppleScript 执行撰写回复等写操作，并支持经 IMAP/SMTP 直接发送草稿。需授予完全磁盘访问等权限，推荐以 Claude 插件形式安装以获得签名二进制与安全规则。",
+   "highlights": [
+    "提供 61 个 MCP 工具，含搜索、批量导出 Markdown、邮箱/规则/签名/VIP 管理及草稿撰写",
+    "读取路径直接解析 Mail 本地 SQLite 与 .emlx 文件，支持最多每次 50 封的批量操作",
+    "二进制经 Developer ID 签名并公证，撰写工具不经 AppleScript 注入正文"
+   ],
+   "use_cases": [
+    "在支持 MCP 的客户端中用自然语言搜索、读取和批量导出本地 Apple Mail 邮件",
+    "通过对话完成邮件撰写、回复、转发、移动、标记等 Mail 应用操作",
+    "对账户实施邮箱、规则、签名等管理，或在 Mail 未运行时经 SMTP 发送草稿"
+   ]
+  },
+  "sha": "e90ca19df875",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "84a651b5e893": {
+  "identity": {
+   "one_liner": "基于 CrewAI 的四智能体研究写作流水线，生成带 Mermaid 图与引用审计的博客。",
+   "review": "该项目用 CrewAI 实现四个阶段的智能体流水线：联网研究、大纲、写作与引用审计，用于生成长篇技术博客。依赖 OpenRouter 与 Gemini 的多模型自动回退链，使用 FastAPI 后端与 Next.js 前端，支持 TiDB Cloud Serverless 或本地 SQLite 存储，并包含邮箱 OTP/密码登录与多租户隔离。需要 Python 3.10–3.13、Node.js ≥ 20.9 及至少一个 LLM API 密钥。",
+   "highlights": [
+    "四阶段智能体流水线：联网搜索抓取、大纲、写作、引用审计，visited-source 注册表用于标记未实际访问的链接",
+    "模型层支持 3 个 Gemini 与 7 个 OpenRouter 免费模型的故障自动回退，在 429、超时或服务不可用时切换",
+    "内置 SSRF 防护、PII 掩码、提示注入隔离等安全机制，并提供 TiDB Cloud Serverless 加 SQLite 的持久化与二级缓存"
+   ],
+   "use_cases": [
+    "需要联网调研并生成带内联引用与架构图的技术博客写作流程",
+    "希望在免费 LLM 额度受限场景下通过多模型回退保持任务连续运行",
+    "需要用户隔离、邮箱 OTP 认证与 MySQL 兼容云端存储的多用户部署"
+   ]
+  },
+  "sha": "84a651b5e893",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

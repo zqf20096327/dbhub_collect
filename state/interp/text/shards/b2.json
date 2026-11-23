@@ -3452,5 +3452,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "64f58e80a896": {
+  "identity": {
+   "one_liner": "自托管的单租户开源 BD CRM，复现 Pipedrive 核心流程",
+   "review": "warpdrive 是一个以 MIT 许可发布的自托管、单租户 CRM，面向商务拓展（BD）团队，运行在用户自己的基础设施上。它提供看板式管道管理、交易工作台、联系人与组织管理，以及基于 Gmail API 的双向邮件功能，数据存储在使用方的 Postgres 与 S3 兼容对象存储中，通过 Google Workspace 认证登录。",
+   "highlights": [
+    "提供看板管道管理，支持拖拽阶段、多管道、自定义阶段、按阶段加权统计与保存的过滤器",
+    "支持通过 Gmail API 双向收发邮件，具备线程关联、打开/点击追踪、模板与定时发送",
+    "内置单机 Docker 部署拓扑（应用、WebSocket 服务、后台任务、Postgres、Garage、Caddy 自动 HTTPS）"
+   ],
+   "use_cases": [
+    "需要将客户数据保留在自己基础设施内的商务拓展团队销售流程管理",
+    "由单一团队自托管使用的管道、交易、联系人与 Gmail 邮件协作",
+    "基于 Next.js、Drizzle ORM、tRPC、Postgres 的 TypeScript 全栈开发与二次定制"
+   ]
+  },
+  "sha": "64f58e80a896",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dac66d4d5c43": {
+  "identity": {
+   "one_liner": "面向 Agent 的本地长期记忆模块，基于 SQLite 存储、BM25 检索，无核心模型调用",
+   "review": "Brain4Agent 是一个为 AI Agent 提供长期记忆的 Python 库，把对话轮次存入单个 SQLite 文件并按会话检索。核心检索走 BM25，不调用任何模型；面向中日韩（CJK）文本用字符二元组免分词处理，可选安装 20MB 的 jieba 词典提升精确度。检索结果附带 corpus_missing/missing_terms 等证据字段而非置信度，由调用方自行判断。可通过 pip、CLI、Python 库或 MCP server（含 7 个工具）四种方式使用，支持记忆替换（supersede）与 JSONL 批量导入。限制：索引常驻内存约每 token 145 字节，10 万条记忆约 1.2GB；需要 Python 3.11+。",
+   "highlights": [
+    "读写分离的分词策略：索引用 bigrams+词组合，查询侧去除疑问词，中文 hit@1 达 0.950（配合 jieba）",
+    "检索返回 corpus_missing、missing_terms、term_frequencies 等证据字段，而非置信度分数",
+    "提供 MCP server 七个工具（b4a_remember/b4a_recall/b4a_supersede 等），支持记忆替换与历史保留"
+   ],
+   "use_cases": [
+    "为编码 Agent 持久化开发上下文：决策原因、失败尝试、部署位置等，按会话召回",
+    "需要中文/日文/韩文记忆检索且不想引入模型 API 依赖的本地 Agent 流水线",
+    "通过 MCP server 接入支持 MCP 的 Agent 框架，实现记忆存取与事实修正"
+   ]
+  },
+  "sha": "dac66d4d5c43",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

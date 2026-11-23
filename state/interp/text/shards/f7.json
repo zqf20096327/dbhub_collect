@@ -3474,5 +3474,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "635b2aeb81e6": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI 智能体记忆层，通过 pip 安装、单文件存储、无外部服务依赖",
+   "review": "Mnemosyne 是为 AI 智能体提供记忆功能的 Python 库，支持通过 MCP 协议接入 Claude Code、Cursor、Codex 等客户端，也可通过 SDK 在任意 Python 智能体中直接调用 remember/recall 接口。其 BEAM 架构包含工作记忆、情景记忆和三元组知识图谱三层，检索采用向量相似度、FTS5 全文排序与重要度的混合评分，全部在 SQLite 内实现。README 标注其基准数据来自 v3.0.0 版本，尚未在新版本上复测。",
+   "highlights": [
+    "支持 MCP（stdio/SSE）、Python SDK、OpenWebUI 桥接文件等多种接入方式，覆盖 Cursor、Claude Code、Codex、Windsurf 等平台",
+    "BEAM 架构含工作记忆（TTL 驱逐）、情景记忆（sqlite-vec + FTS5 混合检索）与带版本链的时间知识图谱",
+    "384 维 float32 嵌入经 MIB 二值化压缩为 48 字节，汉明距离计算在 SQLite 内完成，无需外部向量数据库"
+   ],
+   "use_cases": [
+    "为基于 MCP 协议的智能体客户端（如 Claude Code、Cursor）添加跨会话记忆功能",
+    "在 Python 智能体项目中通过 import mnemosyne 直接读写记忆数据",
+    "在无外部服务依赖的环境（如离线或单机部署）运行本地化的智能体记忆存储"
+   ]
+  },
+  "sha": "635b2aeb81e6",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

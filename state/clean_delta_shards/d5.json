@@ -29174,5 +29174,867 @@
    ]
   ],
   "at": "2026-11-19"
+ },
+ "fa006a654f2e+2": {
+  "fn": "aalishan001/adk-memshield",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    9,
+    4,
+    9,
+    [
+     "PyPI",
+     "Python",
+     "License: Apache-2.0",
+     "CI",
+     "Google ADK"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    16,
+    9,
+    16
+   ],
+   [
+    "replace",
+    16,
+    19,
+    16,
+    17,
+    [
+     "- **Evidence & Skills:** `benchmarks/runs/2026-11-20/` (113/122 AlloyDB Express PG 18.4, 50k ScaNN, 15/15 Antigravity skill trigger tests) · `skills/` (`memshield-tenant-isolation`, `leak-arena-audit`, `memshield-rbac-onboarding`)"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    22,
+    17,
+    20
+   ],
+   [
+    "replace",
+    22,
+    25,
+    20,
+    23,
+    [
+     "- **0.2.2 (docs):** an iterative scan stops at `hnsw.max_scan_tuples` and its memory limit, so tenants that own almost nothing can stay empty; the fix is the B-tree memshield's schema already ships (`idx_memories_scope_lookup`). Found by Sunnatulla; see ANN indexes and RLS.",
+     "- **0.2.1 (docs):** if you add an HNSW index, enable pgvector's iterative scan as a connection option; a filtered HNSW search can otherwise return nothing for callers who see little of a large table. See ANN indexes and RLS.",
+     "- **Recall no longer collapses when a prepared statement switches to a generic plan** (prepared statements + an HNSW index). Every RLS transaction pins `plan_cache_mode = force_custom_plan`. Reported and measured by Sunnatulla; see ANN indexes and RLS."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    30,
+    23,
+    28
+   ],
+   [
+    "replace",
+    30,
+    33,
+    28,
+    29,
+    [
+     "- Upgrading from 0.1.x: apply the migration. The public ADK API is unchanged."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    38,
+    29,
+    34
+   ],
+   [
+    "replace",
+    38,
+    40,
+    34,
+    36,
+    [
+     "1. **Cross-user semantic leakage**: *MemLeak: Cross-User Semantic Leakage in Multi-Tenant AI Agent Memory* (arXiv:2610.04195) shows that similarity search over a pooled store surfaces other users' memories without any exploit, and that hard ownership gating is the mitigation that consistently restores the clean baseline.",
+     "2. **Lateral leakage inside agent swarms**: *AgentLeak* (arXiv:2602.11510) shows that internal channels between agents are a major leakage path. `adk-memshield` addresses the memory-retrieval slice of that problem: a low-clearance sub-agent must not retrieve shared tenant memories labelled above its clearance."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    43,
+    36,
+    39
+   ],
+   [
+    "replace",
+    43,
+    44,
+    39,
+    40,
+    [
+     "adk-leak-arena console: the same no-WHERE query leaks cross-tenant rows from an unprotected table, while adk-memshield returns only rows the caller is entitled to"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    40,
+    41
+   ],
+   [
+    "replace",
+    45,
+    48,
+    41,
+    42,
+    [
+     "*Live side-by-side comparison in the companion red-team console, adk-leak-arena (`pip install adk-leak-arena`).*"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    55,
+    42,
+    49
+   ],
+   [
+    "replace",
+    55,
+    72,
+    49,
+    50,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    76,
+    50,
+    54
+   ],
+   [
+    "replace",
+    76,
+    77,
+    54,
+    55,
+    [
+     "- **No superuser bypass, checked at runtime.** Superusers and `BYPASSRLS` roles ignore RLS even under `FORCE ROW LEVEL SECURITY`. `sql/01_schema.sql` creates a least-privilege `memshield_app` role (`NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS`). Before the first operation on a pool, memshield reads `pg_roles`, `pg_class` and `pg_policy` and raises `MemShieldConfigurationError` if the role can bypass RLS, owns the table (or is a member of its owner role, so it could disable RLS), the table lacks forced RLS, a command has no policy, or a permissive policy that applies to the role (directly, through PUBLIC or through role membership) has a `USING` or `WITH CHECK` expression that never references `app.current_tenant_id`. This is a configuration check, not a proof that every policy is correct. Call `verify_rls_posture()` at startup to fail fast."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    86,
+    55,
+    64
+   ],
+   [
+    "delete",
+    86,
+    88,
+    64,
+    64
+   ],
+   [
+    "equal",
+    88,
+    90,
+    64,
+    66
+   ],
+   [
+    "replace",
+    90,
+    91,
+    66,
+    67,
+    [
+     "`benchmarks/run_memleak_eval.py` seeds a synthetic enterprise corpus (**3 tenants, 6 users, 60 memories**: API credentials, compensation, medical/HR records, query-shaped lure memories, and L3/L4 executive memos) into an ordinary table and into the RLS table. Each scenario runs **the same buggy application-layer SQL** against both, inside the same transaction-local identity of the authenticated caller, so the only variable is whether the database enforces ownership. `top_k=3`, 75 queries, 5 repeats. Raw output: `benchmarks/runs/2026-11-16/memleak-eval-pg16.txt` (PostgreSQL 16.15, pgvector 0.8.7)."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    67,
+    68
+   ],
+   [
+    "replace",
+    92,
+    101,
+    68,
+    77,
+    [
+     "|Scenario|Application-layer mistake|Queries|Unprotected: queries leaking|Unprotected: leaked share of top-k rows|Unprotected: leak at rank 1|`adk-memshield`: queries leaking|Unprotected clean recall|`adk-memshield` clean recall|",
+     "|:---|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
+     "|Scenario 1: Shared-Tenant Pool (Incidental Overlap)|Filters `tenant_id` only, omits `user_id`/`scope`|12|100.0%|44.4%|8.3%|**0.0%**|100.0%|**100.0%**|",
+     "|Scenario 2: Adversarial Top-K Planted Lure|Same tenant-only filter; co-tenant plants query-shaped lures|12|100.0%|58.3%|58.3%|**0.0%**|100.0%|**100.0%**|",
+     "|Scenario 3: Tool-Argument `user_id` Override|Correct filter, but `user_id` taken from attacker-controlled tool args|9|100.0%|81.5%|100.0%|**0.0%**|n/a|**n/a**|",
+     "|Scenario 4: Low-Clearance Swarm Agent (AgentLeak-style)|Own + `tenant_shared` rows, omits `min_clearance` check|9|100.0%|44.4%|66.7%|**0.0%**|100.0%|**100.0%**|",
+     "|Scenario 5: Total Filter Omission|No `WHERE` clause at all (`simulate_missing_app_filter=True`)|33|100.0%|74.7%|69.7%|**0.0%**|72.7%|**100.0%**|",
+     "|**Mean of Scenarios 1-5**||75|**100.0%**|**60.7%**|**60.6%**|**0.0%**|**93.2%**|**100.0%**|",
+     "|Control: Correct App Filter (no bug)|`MemShieldMemoryService` default filter (user/scope/clearance)|33|0.0%|0.0%|0.0%|**0.0%**|100.0%|**100.0%**|"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    104,
+    77,
+    80
+   ],
+   [
+    "replace",
+    104,
+    112,
+    80,
+    88,
+    [
+     "|Scenario|Unprotected p50 / p95|`adk-memshield` p50 / p95|",
+     "|:---|:---:|:---:|",
+     "|Scenario 1: Shared-Tenant Pool (Incidental Overlap)|1.48 / 2.04|1.57 / 2.89|",
+     "|Scenario 2: Adversarial Top-K Planted Lure|1.48 / 2.05|1.61 / 2.26|",
+     "|Scenario 3: Tool-Argument `user_id` Override|1.53 / 1.95|1.60 / 2.57|",
+     "|Scenario 4: Low-Clearance Swarm Agent (AgentLeak-style)|1.63 / 2.21|1.63 / 2.39|",
+     "|Scenario 5: Total Filter Omission|1.15 / 1.53|1.15 / 1.58|",
+     "|Control: Correct App Filter (no bug)|1.29 / 1.87|1.45 / 2.00|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    123,
+    88,
+    99
+   ],
+   [
+    "replace",
+    123,
+    126,
+    99,
+    100,
+    [
+     "The companion adk-leak-arena runs a larger attack suite against live ADK agents; its numbers live in its own BENCHMARKS.md."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    131,
+    100,
+    105
+   ],
+   [
+    "replace",
+    131,
+    132,
+    105,
+    106,
+    [
+     "**What goes wrong without plan pinning.** psycopg 3 prepares a statement after 5 executions on the same connection (asyncpg prepares everything). After 5 more executions PostgreSQL may switch the prepared statement to a cached *generic* plan, and the generic plan sticks to that connection. For `ORDER BY embedding <=> $1 LIMIT $2` the generic plan can be the HNSW index scan with the whole RLS policy applied afterwards as a filter. HNSW hands back only `hnsw.ef_search` (default 40) candidates, so a caller who can see only a few rows of a large table gets an **empty** result. Nothing leaks; recall fails silently, which looks like \"no memories yet\". This was reported and measured first by Sunnatulla on PostgreSQL 17 (100k rows, asyncpg and psycopg 3)."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    135,
+    106,
+    109
+   ],
+   [
+    "replace",
+    135,
+    136,
+    109,
+    110,
+    [
+     "**Measured** with `benchmarks/plan_cache_hnsw.py`: 100,000 rows in 3 tenants, clustered 384-d embeddings, HNSW (`vector_cosine_ops`, default build parameters), top 10, all 20 searches per row on **one** pinned connection (5 queries x 4 repeats). The light user sees 30 rows in a 33k-row tenant; the heavy user owns 30k of them. \"RLS only\" is the search with no `WHERE` clause, which is also the shape of custom SQL run under `rls_transaction()`. Recall is against an exact search."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    110,
+    111
+   ],
+   [
+    "replace",
+    137,
+    146,
+    111,
+    120,
+    [
+     "|Query shape|Plan cache|User|`hnsw.iterative_scan`|Empty results (pg16 / pg17)|Recall@10 (pg16)|Recall@10 (pg17)|",
+     "|:---|:---|:---|:---|---:|---:|---:|",
+     "|RLS only|0.1.x (`auto`)|light|off|**10 / 10 of 20**|**0.50**|**0.50**|",
+     "|RLS only|**0.2.0 (`force_custom_plan`)**|light|off|0 / 0 of 20|**1.00**|**1.00**|",
+     "|RLS only|0.1.x (`auto`)|light|`relaxed_order`|0 / 0 of 20|0.85|0.84|",
+     "|RLS only|0.2.0|light|`relaxed_order`|0 / 0 of 20|1.00|1.00|",
+     "|memshield's default search|0.1.x and 0.2.0|light|off|0 / 0 of 20|1.00|1.00|",
+     "|RLS only / default search|0.1.x and 0.2.0|heavy|off|0 / 0 of 20|0.84|0.80|",
+     "|RLS only|0.2.0|heavy|`relaxed_order`|0 / 0 of 20|0.84|0.84|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    120,
+    121
+   ],
+   [
+    "replace",
+    147,
+    148,
+    121,
+    122,
+    [
+     "Raw output, plans and per-search row counts: `plan-cache-hnsw-pg16-100k.txt` (PostgreSQL 16.15) and `plan-cache-hnsw-pg17-100k.txt` (PostgreSQL 17.12), both pgvector 0.8.7. On one connection the light user's 0.1.x RLS-only searches return 10 rows for searches 1 to 10 and 0 rows from the 11th on."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    122,
+    123
+   ],
+   [
+    "replace",
+    149,
+    150,
+    123,
+    124,
+    [
+     "**A second empty-results case: HNSW post-filtering under a custom plan.** Found while testing 0.2.0 with adk-leak-arena's prepared-connection mode (`leak-arena prepared`): 100,000 rows per table, a light caller who can read about 1.5% of them, a query whose nearest neighbours belong to other users, top 10, 20 executions on one pinned connection, recall against the exact answer. With an HNSW index the planner chose the index scan **under a custom plan, from the first execution**; the scan returned its 40 candidates (`hnsw.ef_search`) and the filter removed all 40. Plan pinning cannot help here. It happened with the RLS policy as the only filter and equally with an application `WHERE` clause on a table without RLS, so it is a property of filtered HNSW search, not of RLS. pgvector's iterative index scan fixed it:"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    151,
+    124,
+    125
+   ],
+   [
+    "replace",
+    151,
+    159,
+    125,
+    133,
+    [
+     "|Table / query shape|Index|`hnsw.iterative_scan`|Empty results|Recall@10|Plan (rows removed by filter)|p50|",
+     "|:---|:---|:---|---:|---:|:---|---:|",
+     "|memshield, RLS only|none|off|0 of 20|1.00|Bitmap Heap Scan (16,193)|63.2 ms|",
+     "|memshield, RLS only|HNSW|off|**20 of 20**|**0.00**|HNSW Index Scan (40)|1.7 ms|",
+     "|memshield, RLS only|HNSW|`relaxed_order`|0 of 20|1.00|HNSW Index Scan (412)|5.3 ms|",
+     "|memshield, default search|HNSW|off|0 of 20|1.00|Bitmap Heap Scan (16,193)|63.2 ms|",
+     "|plain pgvector table, app `WHERE` only|HNSW|off|**20 of 20**|**0.00**|HNSW Index Scan (40)|1.4 ms|",
+     "|plain pgvector table, app `WHERE` only|HNSW|`relaxed_order`|0 of 20|1.00|HNSW Index Scan (427)|5.6 ms|"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    160,
+    133,
+    134
+   ],
+   [
+    "replace",
+    160,
+    161,
+    134,
+    135,
+    [
+     "PostgreSQL 16.15, pgvector 0.8.7, adk-memshield 0.2.0 from PyPI. Raw outputs: `prepared-100k-exact`, `prepared-100k-hnsw` and `prepared-100k-hnsw-iterative` (`.json`, `.log`, and the command in `.cmd`). memshield's default search got an exact bitmap plan here; that is the planner's choice for this data, not a guarantee."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    174,
+    135,
+    148
+   ],
+   [
+    "replace",
+    174,
+    175,
+    148,
+    149,
+    [
+     "**Iterative scans have a budget: tenants that own almost nothing.** An iterative scan stops after `hnsw.max_scan_tuples` tuples (20,000 by default) and when it reaches its memory limit (`hnsw.scan_mem_multiplier` × `work_mem`), even if fewer than `LIMIT` rows have passed the filter. A tenant that owns one row in a large table can therefore still come back empty. Sunnatulla found that `relaxed_order` alone left about half of the one-row tenants empty on a 200k-row table, and that a B-tree on the user key took recall to 1.00, because with it the planner skips HNSW for tiny users."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    178,
+    149,
+    152
+   ],
+   [
+    "replace",
+    178,
+    179,
+    152,
+    153,
+    [
+     "Measured with `benchmarks/tiny_tenant_hnsw.py`: 200,000 rows, 20 tenants that own one row each, HNSW, top 10, each tenant searched once per configuration, recall against its one row. PostgreSQL 16.15 and 17.12 gave the same found/missed counts."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    153,
+    154
+   ],
+   [
+    "replace",
+    180,
+    187,
+    154,
+    161,
+    [
+     "|Configuration|Query shape|One-row tenants found (pg16 / pg17)|Plan|p50 pg16 / pg17|",
+     "|:---|:---|---:|:---|---:|",
+     "|shipped schema (`idx_memories_scope_lookup` present), iterative scan off or `relaxed_order`|RLS only and default search|**20 / 20**|Index Scan using `idx_memories_scope_lookup`|1.3–1.6 / 1.3–1.7 ms|",
+     "|B-tree dropped, planner's choice|RLS only and default search|20 / 20|Seq Scan|48–75 / 40–58 ms|",
+     "|B-tree dropped, HNSW forced (`enable_seqscan = off`), iterative scan off|RLS only and default search|**0 / 20**|HNSW Index Scan|9–11 ms|",
+     "|same, `relaxed_order`, `hnsw.max_scan_tuples` 20,000|RLS only and default search|**0 / 20**|HNSW Index Scan|60–70 ms|",
+     "|same, `relaxed_order`, `hnsw.max_scan_tuples` 250,000|RLS only and default search|**0 / 20**|HNSW Index Scan|92–105 ms|"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    188,
+    161,
+    162
+   ],
+   [
+    "replace",
+    188,
+    189,
+    162,
+    163,
+    [
+     "Raw output: `tiny-tenant-hnsw-pg16-200k.txt` and `tiny-tenant-hnsw-pg17-200k.txt`, pgvector 0.8.7. On this data the planner never chose HNSW for a one-row tenant on its own. Without the B-tree it fell back to a sequential scan, which is exact but 25–57 times slower than the B-tree here, and a different data distribution can make it choose HNSW instead, as in the report above. The forced rows show what happens on that path. Even with the tuple cap raised above the table size, the iterative scan found none of the one-row tenants, so raising `hnsw.max_scan_tuples` is not a fix on its own. Nothing leaked in any configuration."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    192,
+    163,
+    166
+   ],
+   [
+    "replace",
+    192,
+    193,
+    166,
+    167,
+    [
+     "Measured on Google Cloud **AlloyDB Express** (PostgreSQL 18.4, `vector 0.8.7.google-1`, `alloydb_scann 0.1.4`, 1 vCPU) with `benchmarks/scann_vs_hnsw_rls.py`: 50,000 rows in 3 tenants, 384-d cosine embeddings, top-10, 10 queries per user (`light` sees 30 rows; `heavy` owns ~30,000 rows), `rls_only` query shape (no app `WHERE`). Build time: HNSW **38.14 s**, ScaNN (`num_leaves=223`) **16.28 s** (2.3x faster). Raw output: `benchmarks/runs/2026-11-19/scann-vs-hnsw-alloydb-50k.txt`."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    167,
+    168
+   ],
+   [
+    "replace",
+    194,
+    204,
+    168,
+    178,
+    [
+     "|Configuration|User|Recall@10|Empty|Leaks|p50 Server Exec|Plan|",
+     "|:---|:---|:---:|:---:|:---:|---:|:---|",
+     "|Shipped B-tree (no ANN)|light|**1.000**|0/10|**0**|20.68 ms|`Bitmap Heap Scan` (`idx_memories_scope_lookup`)|",
+     "|Shipped B-tree (no ANN)|heavy|**1.000**|0/10|**0**|27.73 ms|`Bitmap Heap Scan` (`idx_memories_scope_lookup`)|",
+     "|HNSW (`iterative_scan=off` / `relaxed_order`)|light|**1.000**|0/10|**0**|15.42 / 15.84 ms|`Bitmap Heap Scan` (`idx_memories_scope_lookup`)|",
+     "|HNSW (`iterative_scan=off` / `relaxed_order`)|heavy|0.820 / 0.850|0/10|**0**|0.79 / 0.83 ms|`Index Scan(idx_bench_hnsw)`|",
+     "|ScaNN (`inline_filtering=on`, default)|light|**0.090**|**2/10**|**0**|1.08–1.13 ms|`Custom Scan + Bitmap Index Scan(idx_memories_scope_lookup)`|",
+     "|ScaNN (`inline_filtering=on`, default)|heavy|**0.890**|0/10|**0**|**0.53–0.54 ms**|`Index Scan(idx_bench_scann)`|",
+     "|ScaNN forced (`inline_filtering=off`)|light|0.090|2/10|**0**|1.46 ms|`Index Scan(idx_bench_scann)`|",
+     "|ScaNN forced (`inline_filtering=off`)|heavy|0.890|0/10|**0**|0.53 ms|`Index Scan(idx_bench_scann)`|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    210,
+    178,
+    184
+   ],
+   [
+    "replace",
+    210,
+    211,
+    184,
+    185,
+    [
+     "See `docs/SCALING.md` for the full scaling guide (what is measured, what the design supports, and what is not yet tested)."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    221,
+    185,
+    195
+   ],
+   [
+    "delete",
+    221,
+    223,
+    195,
+    195
+   ],
+   [
+    "equal",
+    223,
+    231,
+    195,
+    203
+   ],
+   [
+    "replace",
+    231,
+    232,
+    203,
+    204,
+    [
+     "- **ANN indexes:** see ANN indexes (HNSW) and RLS."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    236,
+    204,
+    208
+   ],
+   [
+    "delete",
+    236,
+    238,
+    208,
+    208
+   ],
+   [
+    "equal",
+    238,
+    253,
+    208,
+    223
+   ],
+   [
+    "delete",
+    253,
+    255,
+    223,
+    223
+   ],
+   [
+    "equal",
+    255,
+    259,
+    223,
+    227
+   ],
+   [
+    "replace",
+    259,
+    260,
+    227,
+    228,
+    [
+     "Apply `sql/01_schema.sql` as a superuser/owner, then rotate the `memshield_app` password. The file also ships inside the wheel:"
+    ]
+   ],
+   [
+    "equal",
+    260,
+    279,
+    228,
+    247
+   ],
+   [
+    "replace",
+    279,
+    307,
+    247,
+    248,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    307,
+    315,
+    248,
+    256
+   ],
+   [
+    "replace",
+    315,
+    324,
+    256,
+    257,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    324,
+    334,
+    257,
+    267
+   ],
+   [
+    "replace",
+    334,
+    354,
+    267,
+    268,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    394,
+    268,
+    308
+   ],
+   [
+    "replace",
+    394,
+    401,
+    308,
+    309,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    401,
+    411,
+    309,
+    319
+   ],
+   [
+    "replace",
+    411,
+    416,
+    319,
+    320,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    416,
+    417,
+    320,
+    321
+   ],
+   [
+    "delete",
+    417,
+    419,
+    321,
+    321
+   ],
+   [
+    "equal",
+    419,
+    422,
+    321,
+    324
+   ],
+   [
+    "replace",
+    422,
+    424,
+    324,
+    326,
+    [
+     "1. Apply `sql/migrations/0.1_to_0.2.sql` as the table owner, in one transaction: `psql \"$ADMIN_DSN\" -v ON_ERROR_STOP=1 --single-transaction -f sql/migrations/0.1_to_0.2.sql`. It is idempotent. It adds `compartments` (existing rows get `{}` and keep exactly their 0.1.x visibility), a GIN index, and recreates the four policies.",
+     " **Locking:** `ALTER TABLE` takes an `ACCESS EXCLUSIVE` lock, and in one transaction it is held while the `CHECK` constraint scans the table and the GIN index is built, so reads and writes on `memories` wait for the whole migration (the file sets `lock_timeout = '10s'` so it fails instead of queueing). On a large table, run it in a quiet window, or first add the constraint `NOT VALID` and `VALIDATE` it separately and create the index `CONCURRENTLY` outside a transaction; the migration then skips both."
+    ]
+   ],
+   [
+    "equal",
+    424,
+    429,
+    326,
+    331
+   ],
+   [
+    "delete",
+    429,
+    431,
+    331,
+    331
+   ],
+   [
+    "equal",
+    431,
+    433,
+    331,
+    333
+   ],
+   [
+    "replace",
+    433,
+    436,
+    333,
+    336,
+    [
+     "This repo ships two `agentskills.io`-compatible skills:",
+     "1. `skills/memshield-tenant-isolation/` (`SKILL.md`, `references/`, `scripts/posture_check.py`): instructs coding agents (Antigravity, Gemini CLI, and other Agent Skills-compatible tools) to wire `adk-memshield` safely — non-bypass application role, token-bound identity via `JwtIdentityVerifier` / `HmacIdentityVerifier`, owner-run schema migrations, iterative scan + scope B-tree when adding HNSW, and never printing DSNs or storing tenant secrets in memories.",
+     "2. `skills/memshield-rbac-onboarding/` (`SKILL.md`, deterministic `scripts/map_rbac.py`, fixtures): reads existing roles YAML/JSON, IdP group claims (Okta, Entra ID, Google Groups), roles CSVs, or Casbin policy CSVs **read-only**, proposes `memshield-mapping.yaml` (mapping onto real `tenant_id`, `user_id`, `clearance` 1–5, and `compartments` fields), emits a `JwtIdentityVerifier` snippet, flags unmappable rules (attribute conditions, explicit deny rules, time restrictions, per-record ACLs) for human approval, and generates pairwise isolation test cases."
+    ]
+   ],
+   [
+    "equal",
+    436,
+    446,
+    336,
+    346
+   ],
+   [
+    "replace",
+    446,
+    449,
+    346,
+    347,
+    [
+     "**Trigger verification:** tested in Antigravity across 15 prompts total (10 for `memshield-tenant-isolation` + `leak-arena-audit`: `benchmarks/runs/2026-11-19/skill-trigger-tests.md`; 5 for `memshield-rbac-onboarding`: `benchmarks/runs/2026-11-20/rbac-skill-trigger-tests.md`): **15 of 15 correct**, with all positive outputs following the safety rules."
+    ]
+   ],
+   [
+    "equal",
+    449,
+    452,
+    347,
+    350
+   ],
+   [
+    "replace",
+    452,
+    453,
+    350,
+    351,
+    [
+     "**Compatibility:** tested on PostgreSQL 16.15 and 17.12 (`pgvector` 0.8.7, 122 of 122 tests) and verified on Google Cloud **AlloyDB Express** (PostgreSQL 18.4, `vector 0.8.7.google-1`, `alloydb_scann 0.1.4`, `asia-southeast1` on synthetic data): 113 of 122 tests pass on AlloyDB Express (PG 18.4); the 9 failures are test fixtures that expect a true superuser, which AlloyDB doesn't hand out (0 product bugs — see `benchmarks/runs/2026-11-19/pytest-alloydb-express.txt`). Production target: Mumbai (`asia-south1`) where regional residency is required."
+    ]
+   ],
+   [
+    "equal",
+    453,
+    460,
+    351,
+    358
+   ],
+   [
+    "replace",
+    460,
+    470,
+    358,
+    359,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    470,
+    472,
+    359,
+    361
+   ],
+   [
+    "replace",
+    472,
+    475,
+    361,
+    362,
+    [
+     "Raw outputs of every number in this README are under `benchmarks/runs/`."
+    ]
+   ],
+   [
+    "equal",
+    475,
+    478,
+    362,
+    365
+   ],
+   [
+    "replace",
+    478,
+    480,
+    365,
+    367,
+    [
+     "- The prepared-statement + HNSW recall collapse was reported and measured by Sunnatulla, who also suggested pinning the plan in one helper rather than per query.",
+     "- The iterative-scan limit for tenants that own almost nothing (0.2.2) was also found and measured by Sunnatulla: `relaxed_order` alone left about half of the one-row tenants empty at 200k rows, and a B-tree on the user key fixed it."
+    ]
+   ],
+   [
+    "equal",
+    480,
+    483,
+    367,
+    370
+   ],
+   [
+    "replace",
+    483,
+    485,
+    370,
+    371,
+    [
+     "Apache License 2.0. See `LICENSE`."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

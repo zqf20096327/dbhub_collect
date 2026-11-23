@@ -3121,5 +3121,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3628f5842548": {
+  "identity": {
+   "one_liner": "法语漫画元数据工具，从 Bédéthèque 抓取数据并写入 CBZ/CBR",
+   "review": "BDneX 是面向法语漫画（BD）的标记与库管理命令行工具，从 Bédéthèque 下载专辑列表，将 .cbz/.cbr/.pdf 文件模糊匹配到专辑，元数据存入 SQLite 库，并可写入 ComicInfo.xml、按模板重命名文件，供 Komga 等支持 ComicRack 标准的库管理器读取。项目处于 1.0 前开发阶段，接口可能随时发生破坏性变更；获取受保护的专辑页面需用户自行提供页面文件或配置 FlareSolverr 等 fetcher。",
+   "highlights": [
+    "从 Bédéthèque 站点地图下载专辑列表并离线完成匹配，支持模糊匹配、逐条确认、--auto、后台多核运行、断点续传与去重处理",
+    "将专辑元数据写入 ComicInfo.xml，支持 CBR/PDF 无损转换为 CBZ，可按自定义模板重命名并整理库目录",
+    "提供 SQLite 库存储（系列、作者、流派、校验和）、查询语法（bdnex ls）、封面墙网页（bdnex serve）、批量复核界面及基于 OpenCV SIFT 的封面比对"
+   ],
+   "use_cases": [
+    "整理本地法语漫画文件库，为 CBZ/CBR 文件写入 ComicInfo.xml 元数据供 Komga 等库管理器使用",
+    "按系列、作者、年份、流派等字段检索和复核大型漫画收藏，发现缺失卷并处理重复文件",
+    "维护本地 Bédéthèque 目录镜像（bdnex mirror），保存专辑页面以便离线重建元数据"
+   ]
+  },
+  "sha": "3628f5842548",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "89385a915384": {
+  "identity": {
+   "one_liner": "自托管团队 AI 聊天服务器，单个 Go 二进制加 Postgres/pgvector 实现。",
+   "review": "Kera 是一个面向团队的自托管 AI 聊天服务，以单个 Go 二进制加 Postgres 18/pgvector 运行，无需 Redis 或独立向量数据库。支持 Ollama 与 OpenAI 兼容端点，提供知识库混合检索、工具调用、代码沙箱及 PII 处理、提示注入检查等护栏机制，事件记录于 guardrail_event 表。",
+   "highlights": [
+    "单个 Go 二进制加 Postgres 18/pgvector 存储用户、会话、文件元数据、向量和全文索引；提供约 28 MB 容器镜像",
+    "支持流式 Markdown、Mermaid 图、知识混合检索（向量+全文，可选招排序）、OpenAPI/MCP 工具服务器、Jupyter 沙箱代码解释器",
+    "每次模型调用经统一护栏：PII 检测与脱敏、提示注入检查、正则黑名单、可选审核模型，事件含规则与动作但不含匹配文本"
+   ],
+   "use_cases": [
+    "团队内部部署本地（Ollama）或 OpenAI 兼容模型的共享聊天工作区",
+    "需要将上传文档解析、OCR、向量化后供模型检索问答的知识库场景",
+    "要求消息与输出中的个人数据脱敏/拦截并保留审计记录的合规场景"
+   ]
+  },
+  "sha": "89385a915384",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

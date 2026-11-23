@@ -3248,5 +3248,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a66eb8e42a22": {
+  "identity": {
+   "one_liner": "为 Nebula mesh VPN 提供自托管控制平面，集中签发证书并管理主机配置",
+   "review": "nebula-mesh 由两个 Go 静态二进制组成：管理端 nebula-mgmt 提供 Web UI、REST API 与 CLI，用于签发和撤销证书、轮换 CA、分发配置；代理端 nebula-agent 部署在每台 Nebula 主机上，轮询更新并以原子写入加 SIGHUP 重载配置。状态存于 SQLite（WAL），CA 采用 AES-256-GCM 信封加密静态存储。提供 .deb/.rpm 包、多平台预编译二进制、Docker 镜像及源码构建（需 Go 1.27+）。",
+   "highlights": [
+    "主机通过一次性令牌注册，私钥不离开主机；iOS/Android 可通过 QR 码包注册",
+    "提供 PKI 全生命周期管理：按操作员隔离的 CA、基于 blocklist 的证书撤销、CA 手动或后台自动轮换",
+    "支持本地账号与 OIDC 登录、TOTP 两步验证、按操作员的 API 密钥，并记录含操作者与目标的审计日志"
+   ],
+   "use_cases": [
+    "自托管 Nebula 覆盖网络时集中管理证书签发、轮换与配置分发",
+    "通过 per-network 防火墙规则与 unsafe_routes 网关将非 Nebula 网络接入 mesh",
+    "需多操作员与信任域隔离的团队以 Web UI 或 API 管理多网络、多主机部署"
+   ]
+  },
+  "sha": "a66eb8e42a22",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

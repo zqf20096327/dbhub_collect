@@ -3342,5 +3342,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3e31ee971d96": {
+  "identity": {
+   "one_liner": "列式存储+JIT 编译的 SQLite 兼容嵌入式数据库",
+   "review": "musql 是用 Go 编写的 SQLite 兼容数据库，采用列式 .musq 段格式存储数据，通过 JIT 将支持的查询路径编译为本地机器码执行。提供 database/sql 驱动、musql 命令行 shell 和 musqld 服务端（兼容 libSQL 协议），支持 SQLite 数据互转导入导出、CRDT 或 leader 模式复制、S3 备份恢复及向量检索。需 Go 1.27+，无 CGo；每个 Exec/Query 调用仅限一条 SQL 语句。",
+   "highlights": [
+    "纯 Go 实现，无 CGo，driver 注册为 sqlite/musql，通过 database/sql 使用；musqld 服务端兼容 Turso/libSQL 协议",
+    "支持导入导出 SQLite 数据库（musql-convert）、向量检索（libSQL vector 函数与 vec1 扩展）、S3 兼容存储的流式备份与按时间点恢复",
+    "SQL 引擎包含连接、窗口函数、触发器、JSON、全文搜索和 R-tree 索引；写入通过 append-only delta 实现"
+   ],
+   "use_cases": [
+    "替换嵌入式 SQLite 驱动的 Go 应用（代码通常只需改 import）",
+    "需要向 libSQL/Turso 客户端提供 SQL 接口的本地或 Docker 服务端",
+    "在 SQLite 与 .musq 格式间转换、向 S3 备份或跨节点复制的场景"
+   ]
+  },
+  "sha": "3e31ee971d96",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

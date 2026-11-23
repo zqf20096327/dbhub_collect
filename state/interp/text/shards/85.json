@@ -3342,5 +3342,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2174ca1ee008": {
+  "identity": {
+   "one_liner": "本地优先的 LLM/Agent 记忆模块，SQLite + FTS5 + sqlite-vec 混合检索，附 MCP 服务器",
+   "review": "Mnemotree 为 LLM 代理提供本地记忆存储：消息原文保留于 SQLite（FTS5 + sqlite-vec），检索用 RRF 融合 BM25 与向量搜索并按 token 预算打包证据。面向需可溯源记忆的代理开发者，提供 Python API、MCP 服务器和 HTTP 服务三种接入方式；README 注明基准测试代码尚未包含在仓库中，0.4.0 之前的数据库不兼容。",
+   "highlights": [
+    "混合检索：FTS5 BM25 与 sqlite-vec 余弦搜索经 RRF 融合，支持可选重排序",
+    "源优先存储：保留消息原文并返回带归属的源片段，写入（源、分块、索引、幂等回执）在单事务中提交",
+    "三种运行形态：Python API、stdio MCP 服务器（uvx mnemotree-mcp）、HTTP 服务（serve extra，AML 风格 API）"
+   ],
+   "use_cases": [
+    "为 Claude Code/Claude Desktop 等 MCP 客户端添加本地持久记忆",
+    "需要带来源引用与 token 预算控制的检索增强（RAG）记忆层",
+    "检索评测：内置 mnemotree-evidence 命令行支持检索评估与消融对比"
+   ]
+  },
+  "sha": "2174ca1ee008",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d2c5e8354300": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的开源后端平台，单个 Rust 二进制提供 REST/实时 API 与管理面板。",
+   "review": "slonbase 是运行于 PostgreSQL 之上的后端平台，将集合实现为真实数据库表，提供 REST 与 SSE 实时 API、带角色的认证、文件存储、JavaScript 钩子和多项目管理面板，以单个约 10 MB 的静态二进制分发。它面向自托管的 Web/移动应用开发者，支持多实例水平扩展，并兼容 PocketBase SDK 与 pb_hooks/pb_migrations 文件。",
+   "highlights": [
+    "每个集合对应一张 PostgreSQL 表，支持 SQL 查询、pg_dump 备份、复制和托管服务部署",
+    "表上触发器发布每次写入的实时事件，SSE 订阅按订阅者规则过滤，写入无论来自 API、SQL 还是其他程序都会触发",
+    "支持多实例共享一个数据库部署，实时、模式变更和限流状态通过 PostgreSQL 同步；API 兼容 PocketBase SDK"
+   ],
+   "use_cases": [
+    "在自有服务器或托管平台上自托管应用后端，数据保留在 PostgreSQL 中",
+    "从一个管理面板运行多个相互隔离的项目，每个项目使用独立数据库",
+    "将现有 PocketBase 应用迁移到 PostgreSQL 后端，可导入集合、记录、文件与用户密码哈希"
+   ]
+  },
+  "sha": "d2c5e8354300",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fa73731615c3": {
+  "identity": {
+   "one_liner": "本地运行的 MTG Commander 套牌构建器，按 bracket 自动构建与评分。",
+   "review": "Commander Forge 是一个本地运行的开源 MTG Commander（EDH）套牌构建工具，基于 Next.js 和 TypeScript 实现。用户选择指挥官和 bracket 后，它生成合法的 100 卡套牌，并为每张卡给出 0-100 分及评分依据；也支持导入已有套牌、提出换卡建议、按收藏查找可构建套牌及打印代用卡。数据来自 Scryfall、Commander Spellbook 等来源，首次运行需下载约 5 GB 图片数据。桌面端布局，仅支持英文卡牌。",
+   "highlights": [
+    "根据指挥官和 bracket 自动构建合法 100 卡套牌，并为每张卡给出 0-100 分及评分构成说明",
+    "支持导入套牌并获得带理由和评分变化的换卡建议，可导入 CSV 收藏并基于收藏构建",
+    "支持离线运行，内置套牌评分、combo 检测、竞技场（MTG Arena）本地文件同步与代理卡打印表生成"
+   ],
+   "use_cases": [
+    "为 Commander 指挥官组牌或优化现有套牌，需要逐卡评分解释和换卡理由的玩家",
+    "管理实体卡牌或 MTG Arena 收藏，并基于已拥有的卡牌寻找可构建的指挥官套牌",
+    "需要生成合法尺寸的测试用代理卡打印页"
+   ]
+  },
+  "sha": "fa73731615c3",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

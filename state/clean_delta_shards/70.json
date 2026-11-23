@@ -33513,5 +33513,478 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "fb8ba241227f+2": {
+  "fn": "dunamismax/go-web-server",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "CI",
+     "Release",
+     "Go",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    15,
+    6,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "The user management page"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    16,
+    19
+   ],
+   [
+    "replace",
+    19,
+    34,
+    19,
+    34,
+    [
+     "|Concern|Choice|Why|",
+     "|---|---|---|",
+     "|HTTP|`net/http`|The standard library router has had method and wildcard patterns since Go 1.22. There is no framework to upgrade or outgrow.|",
+     "|HTML|templ|Components are type-checked and compiled to Go. A misspelled field fails the build instead of rendering blank.|",
+     "|Interactivity|htmx 2|Search-as-you-type and in-place updates from HTML attributes. Every page also works with JavaScript turned off.|",
+     "|CSS|Tailwind CSS 4|Compiled by the standalone CLI, which the Makefile downloads and checksum-verifies.|",
+     "|Database|PostgreSQL via pgx|The native driver and connection pool.|",
+     "|Queries|sqlc|You write SQL; it generates type-safe Go. No ORM.|",
+     "|Migrations|goose|Plain SQL files embedded in the binary, applied at startup or with `server migrate`.|",
+     "|Sessions|scs|Server-side sessions stored in PostgreSQL, so sign-outs and deactivations take effect immediately.|",
+     "|Passwords|Argon2id|Via `golang.org/x/crypto`, in the standard PHC format, with automatic upgrades when the parameters are raised.|",
+     "|CSRF|`http.CrossOriginProtection`|The standard library's token-free defense (Go 1.25+). Forms need no hidden fields.|",
+     "|Config|Environment variables|Parsed into a typed struct by caarlos0/env.|",
+     "|Logging|`log/slog`|Structured logs: text in development, JSON in production.|",
+     "|Tasks|`make`|One Makefile pins every tool version for local runs, CI and Docker alike.|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    75,
+    34,
+    75
+   ],
+   [
+    "replace",
+    75,
+    87,
+    75,
+    87,
+    [
+     "|Command|What it does|",
+     "|---|---|",
+     "|`make dev`|Run with live reload|",
+     "|`make generate`|Regenerate sqlc, templ and CSS output after editing their sources|",
+     "|`make test`|Run every test with the race detector, including the PostgreSQL-backed ones|",
+     "|`make test-short`|Run only the tests that need no database|",
+     "|`make lint` / `make fmt`|Lint with golangci-lint / format Go and templ files|",
+     "|`make check`|Everything CI runs: generated-code check, lint, tests, vulnerability scan, build|",
+     "|`make build`|Build the production binary to `bin/server`, stamped with the Git version|",
+     "|`make migration name=add_widgets`|Create a new migration file|",
+     "|`make migrate` / `make migrate-status`|Apply migrations / show their state|",
+     "|`make docker`|Build the container image|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    91,
+    87,
+    91
+   ],
+   [
+    "replace",
+    91,
+    92,
+    91,
+    92,
+    [
+     " changes. Changing a password signs out every other device."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    92,
+    93
+   ],
+   [
+    "replace",
+    93,
+    95,
+    93,
+    95,
+    [
+     " search, pagination, create, edit, deactivate and delete. Admins cannot",
+     " demote, deactivate or delete themselves, so there is always one left."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    95,
+    96
+   ],
+   [
+    "replace",
+    96,
+    99,
+    96,
+    99,
+    [
+     " inline, security headers, CSRF protection, rate-limited sign-in, hardened",
+     " session cookies, and login responses that do not reveal which emails exist.",
+     " See docs/security.md."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    99,
+    100
+   ],
+   [
+    "replace",
+    100,
+    102,
+    100,
+    102,
+    [
+     " request IDs in logs and on error pages, a distroless container image, and a",
+     " sandboxed systemd unit with a Caddy example."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    102,
+    103
+   ],
+   [
+    "replace",
+    103,
+    104,
+    103,
+    104,
+    [
+     " stack against a real PostgreSQL, each in its own throwaway schema."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    111,
+    104,
+    111
+   ],
+   [
+    "replace",
+    111,
+    121,
+    111,
+    112,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    123,
+    112,
+    114
+   ],
+   [
+    "replace",
+    123,
+    124,
+    114,
+    115,
+    [
+     "docs/architecture.md explains how the pieces fit and"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    130,
+    115,
+    121
+   ],
+   [
+    "replace",
+    130,
+    131,
+    121,
+    122,
+    [
+     "`.env.example` documents each one."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    122,
+    123
+   ],
+   [
+    "replace",
+    132,
+    146,
+    123,
+    137,
+    [
+     "|Variable|Default|Purpose|",
+     "|---|---|---|",
+     "|`APP_ENV`|`development`|`production` switches to JSON logs, Secure cookies and HSTS|",
+     "|`HTTP_ADDR`|`:8080`|Listen address; falls back to `:$PORT` when unset|",
+     "|`DATABASE_URL`|required|PostgreSQL connection string|",
+     "|`DATABASE_MAX_CONNS`|`10`|Connection pool size|",
+     "|`DATABASE_AUTO_MIGRATE`|`true`|Apply pending migrations at startup|",
+     "|`LOG_LEVEL`|`info`|`debug`, `info`, `warn` or `error`|",
+     "|`LOG_FORMAT`|by environment|`text` or `json`|",
+     "|`SESSION_LIFETIME`|`168h`|How long a sign-in lasts|",
+     "|`SESSION_COOKIE_SECURE`|by environment|Force the cookie's `Secure` flag on or off|",
+     "|`TRUSTED_PROXIES`|empty|Proxies whose `X-Forwarded-For` is believed|",
+     "|`TRUSTED_ORIGINS`|empty|Extra origins allowed to send state-changing requests|",
+     "|`SHUTDOWN_TIMEOUT`|`15s`|Grace period for in-flight requests|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    150,
+    137,
+    141
+   ],
+   [
+    "replace",
+    150,
+    151,
+    141,
+    142,
+    [
+     "2. Change `AppName` in `internal/view/view.go`."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    152,
+    142,
+    143
+   ],
+   [
+    "replace",
+    152,
+    154,
+    143,
+    145,
+    [
+     " `internal/store/queries/`, and run",
+     " `make generate`."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    155,
+    145,
+    146
+   ],
+   [
+    "replace",
+    155,
+    157,
+    146,
+    148,
+    [
+     " `internal/web`, and a line in",
+     " `internal/web/routes.go`."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    148,
+    149
+   ],
+   [
+    "replace",
+    158,
+    159,
+    149,
+    150,
+    [
+     "docs/development.md walks through each of these."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    177,
+    150,
+    168
+   ],
+   [
+    "replace",
+    177,
+    178,
+    168,
+    169,
+    [
+     "docs/deployment.md:"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    181,
+    169,
+    172
+   ],
+   [
+    "replace",
+    181,
+    182,
+    172,
+    173,
+    [
+     " `deploy/`."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    190,
+    173,
+    181
+   ],
+   [
+    "replace",
+    190,
+    191,
+    181,
+    182,
+    [
+     " need one)"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    197,
+    182,
+    188
+   ],
+   [
+    "replace",
+    197,
+    198,
+    188,
+    189,
+    [
+     "5 as a reference rather than merging it. CHANGELOG.md has the"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    200,
+    189,
+    191
+   ],
+   [
+    "replace",
+    200,
+    211,
+    191,
+    202,
+    [
+     "|4.x|5|",
+     "|---|---|",
+     "|Echo v4|Standard library `net/http`|",
+     "|Tailwind and DaisyUI built with npm|Tailwind 4 from the standalone CLI; no Node.js|",
+     "|Custom CSRF token middleware|`http.CrossOriginProtection`|",
+     "|Atlas migrations plus a startup schema bootstrap|goose migrations embedded in the binary|",
+     "|Mage|Make|",
+     "|koanf (YAML, `.env` and environment)|Environment variables only|",
+     "|Air|`templ generate --watch`|",
+     "|GoReleaser packaging|A Dockerfile and a systemd unit|",
+     "|Any signed-in user manages all users|`admin` and `member` roles|"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    216,
+    202,
+    207
+   ],
+   [
+    "replace",
+    216,
+    217,
+    207,
+    208,
+    [
+     "`.env.example`."
+    ]
+   ],
+   [
+    "equal",
+    217,
+    222,
+    208,
+    213
+   ],
+   [
+    "replace",
+    222,
+    224,
+    213,
+    214,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

@@ -3196,5 +3196,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c2d3b83d0419": {
+  "identity": {
+   "one_liner": "面向 Laravel 的数据库安全工具包，检查迁移 SQL 的锁与停机风险并审计在线 schema",
+   "review": "SQLens 是 Composer 包，供 PostgreSQL 18+/MySQL 8.4+ 上的 Laravel 应用使用。它读取迁移实际生成的 SQL（含 DB::statement）进行 lint，审计在线 schema，检测漂移与安全问题，并给出 pass/fail/undetermined 三值结果。检查仅读取目录与状态视图，不向目标库写入、不加锁；shadow/roundtrip 等模式在自建临时库中执行。需 PHP 8.4+、Laravel 12 或 13，公共 API 在 1.0 前可能变更。",
+   "highlights": [
+    "提供 lint、audit、security、deploy、analyse、format、guard、agent 八个套件，覆盖迁移前检查到运行中应用的场景",
+    "所有检查结果为 pass、fail 或带命名原因的 undetermined，不可执行的检查不会报告为通过",
+    "以非特权只读角色运行（PostgreSQL 用 pg_monitor，MySQL 用 PROCESS、REPLICATION CLIENT 及 performance_schema 读权限），不写库、不加自身锁、无遥测"
+   ],
+   "use_cases": [
+    "Laravel 应用部署前检查待运行迁移的锁与停机风险，并集成到 CI 门禁",
+    "审计 PostgreSQL 或 MySQL 在线 schema 的安全配置、角色权限与漂移",
+    "在托管数据库（catalog 受限）环境下运行检查，接受 undetermined 结果"
+   ]
+  },
+  "sha": "c2d3b83d0419",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d2b5222f348b": {
+  "identity": {
+   "one_liner": "基于 Ollama 本地模型的全球多源研究问答引擎，聚合多路检索并流式生成带引用的回答。",
+   "review": "DeepEvil 是一个在本地运行的 AI 问答引擎，通过 HTTP 访问 DuckDuckGo、Google News RSS、多语言 Wikipedia、OpenAlex、ArXiv、GitHub API、HackerNews 等检索源，并用 @mozilla/readability 提取正文，交由 Ollama 本地模型生成带 [n] 引用标记的回答，经 SSE 实时推送。依赖 Node.js 20+ 与 Ollama，通过 npm install 与 npm start 在 127.0.0.1:3000 启动，支持 .env 可选配置。适用于需要本地推理且不调用外部 API 服务的检索问答场景；引用文本会经 verifyCitationGrounding 与提取片段核对后写入 Qdrant 集合。",
+   "highlights": [
+    "聚合 DuckDuckGo、Google News RSS、Wikipedia 多语言、OpenAlex、ArXiv、GitHub API、HackerNews 等检索源，并用 @mozilla/readability 提取页面正文",
+    "生成回答时附带 [n] 引用标记，经 verifyCitationGrounding 与提取片段核对后写入 Qdrant（1024 维 bge-m3）集合 deepevil_conversations_v2",
+    "提供 /ask、/stream/:turnId、/turns/:turnId/rewrite、/turns/:turnId/translate/stream、/turns/:turnId/export.md、/api/models 等接口，模型列表从本地 Ollama 动态读取"
+   ],
+   "use_cases": [
+    "在本地环境运行检索增强问答，不调用外部付费 API 服务",
+    "面向技术、科学、新闻类问题生成带引用编号的回答，并以 Markdown 导出检索档案",
+    "通过 POST /api/search JSON 接口将多源检索能力接入本地集成或 SDK 调用"
+   ]
+  },
+  "sha": "d2b5222f348b",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

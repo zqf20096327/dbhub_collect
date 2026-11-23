@@ -2987,5 +2987,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bc2373d17e72": {
+  "identity": {
+   "one_liner": "位于 AI 编程代理与 shell 之间的命令门控工具，提供后果预览、备份与审计",
+   "review": "Termaxa 是一个 Rust 编写的单二进制工具，部署在 Claude Code、Codex、Cursor、Copilot 等 AI 代理的 hook 路径中。对每条 shell 命令按仓库内策略判定允许/询问/拒绝，预览删除文件、丢失提交、被 DROP 的行等后果，执行前生成可回滚的备份，并用跨写法的熔断器计数破坏性意图，所有决策写入仅追加的哈希链日志。适合单独或无人值守运行编码代理的用户。",
+   "highlights": [
+    "按仓库内 policy.yaml 规则判定命令，首条匹配生效，未匹配默认询问；支持 observe 模式先行观察",
+    "拆分 &&、||、;、| 等复合命令并逐段判定，以最危险段为准；熔断器跨 shell 统计破坏性意图（默认阈值 2）",
+    "执行前备份文件、固定 ref、转储表，支持 termaxa rollback 回滚；决策记录在仅追加、哈希链式的日志中"
+   ],
+   "use_cases": [
+    "无人值守运行 AI 编码代理时拦截 rm -rf、git reset --hard、git push --force、DROP TABLE 等命令",
+    "采用门控前用 replay 评估历史命令被询问的频率，先以 observe 模式收集数据再切换 enforce",
+    "需在 force push、硬重置等操作后恢复数据时，借助预执行的备份执行 rollback"
+   ]
+  },
+  "sha": "bc2373d17e72",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9f3708800e6a": {
+  "identity": {
+   "one_liner": "为编码代理记录“失败→修复”工具调用并注入防重复踩坑的本地免疫系统",
+   "review": "该项目将编码代理的失败-修复工具调用记录为本地 SQLite+FTS5 存储，在同类错误再次发生前注入提示。提供 immune guard 预检（0-100 爆炸半径评分）、vaccine.lock.json 锁文件、跨代理 federate 三类命令，通过 hooks/MCP 接入 7 种代理平台，无运行时依赖，npm 安装，MIT 协议。",
+   "highlights": [
+    "捕获失败后修复的工具调用，存入本地 SQLite+FTS5 并在执行前注入",
+    "immune guard 基于 7 条内置策略与 0-100 风险评分对危险命令执行 allow/warn/rewrite/block",
+    "支持 7 个代理平台接入（Claude Code、Codex CLI、Cursor、ZCode、DSH、Gemini CLI、Windsurf），零运行时依赖"
+   ],
+   "use_cases": [
+    "团队通过 Git 提交 vaccine.lock.json，使成员与 CI 代理首次运行即继承项目已验证的踩坑记录",
+    "需要对 rm -rf、强制推送、DROP TABLE 等破坏性命令做执行前拦截或自动改写的开发环境",
+    "在同一台机器上使用多个编码代理工具，需要汇总去重各代理的本 antibodies 库"
+   ]
+  },
+  "sha": "9f3708800e6a",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

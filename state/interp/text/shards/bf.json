@@ -3341,5 +3341,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "928e43dcdab5": {
+  "identity": {
+   "one_liner": "面向长时运行 Agent 的持久状态控制平面",
+   "review": "LoopX 是一个跨运行时（Codex、Claude Code、DeepSeek Harness 等）的 Agent 控制平面，用持久状态层保存目标、决策、租约与证据，使长周期任务可跨会话续行。安装需 Python 3.11+ 与 Node.js 22.22.3+，本地以 SQLite 存储，可扩展至 PostgreSQL。它不替代 Agent 框架，发布与生产写操作仍由人工授权把守。",
+   "highlights": [
+    "提供目标、决策、证据与租约的持久状态层，跨会话与重启保留工作状态",
+    "支持 Codex、Claude Code、DeepSeek Harness 及自定义运行时接入",
+    "本地运行使用 SQLite 存储，零外部基础设施；团队场景提供 GitHub 与 Lark 集成及共享工作区视图"
+   ],
+   "use_cases": [
+    "跨多天/多周的工程、研究或基准实验任务",
+    "需要保留范围、证据与审查状态的 issue/PR 循环",
+    "含负责人审批、发布或私有数据门控的多 Agent 协作工作流"
+   ]
+  },
+  "sha": "928e43dcdab5",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b98706c93fe7": {
+  "identity": {
+   "one_liner": "PHP 框架无关的数据库备份管理器，转储与恢复 MySQL/PostgreSQL 到多种存储",
+   "review": "这是一个 PHP 编写的框架无关数据库备份管理包，用于将 MySQL 和 PostgreSQL 数据库转储并压缩后上传到 S3、Google Cloud Storage、Dropbox、FTP、SFTP、WebDAV 等 Flysystem 文件系统，也可从中恢复。通过 Composer 安装，并提供 Laravel 与 Symfony 集成驱动。限制：不支持跨数据库类型恢复，MySQL 与 PostgreSQL 的 dump 不兼容；需依赖命令行工具如 mysqldump、pg_dump、gzip。",
+   "highlights": [
+    "支持 MySQL 和 PostgreSQL 数据库的转储与恢复",
+    "支持 Gzip 压缩，并可写入 S3、GCS、Dropbox、FTP、SFTP、WebDAV 等任何 Flysystem 文件系统",
+    "框架无关，提供 Laravel 与 Symfony 驱动"
+   ],
+   "use_cases": [
+    "将数据库定期转储并压缩上传到云对象存储或其他远程存储",
+    "从远程存储下载备份文件并恢复到已配置的数据库连接",
+    "在 Laravel 或 Symfony 项目中以驱动方式集成数据库备份流程"
+   ]
+  },
+  "sha": "b98706c93fe7",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b72b367dc5f1": {
+  "identity": {
+   "one_liner": "基于 PHP+MySQL 与 React 管理后台的自托管出版 CMS，生产环境无需 Node.js。",
+   "review": "VonCMS 是面向出版者、独立新闻编辑室和内容型网站的自托管 CMS，采用 PHP/MySQL 运行时与 React 19 管理后台，内置 TipTap 编辑器、媒体管理、编辑日历、评论审核与 SEO 元数据生成。运行环境要求 PHP 8.2+、MySQL 5.7+ 与支持 .htaccess 的 Web 服务器；部分新功能需执行数据库 Schema Repair 方可启用。",
+   "highlights": [
+    "生产部署仅需 PHP（8.2 最低，8.3+ 推荐）与 MySQL 5.7+，无需 Node.js/Vite/npm；源码开发则需 Node.js 22.22+",
+    "内置文章/页面/定时发布、TipTap 编辑器、编辑日历、评论审核、Newsletter 工具、审计日志与数据库修复工具",
+    "服务端生成 SEO 元数据，含 sitemap、可选 News Sitemap、RSS feeds、JSON-LD、Open Graph、robots 输出与 llms.txt"
+   ],
+   "use_cases": [
+    "在共享主机或 Apache/LiteSpeed 环境中自托管发布新闻、博客等内容的站点",
+    "需要内置 SEO、分析（Strict/Balanced 模式）与相关文章、Promo Bar 等扩展而减少第三方插件的出版团队",
+    "希望基于主题注册、插件注册与 PHP API 进行源码级定制的开发者与机构"
+   ]
+  },
+  "sha": "b72b367dc5f1",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bbcada1e93c0": {
+  "identity": {
+   "one_liner": "支持 PostgreSQL、MySQL、SQLite 与 Redis 的跨平台原生桌面数据库客户端",
+   "review": "Datum 是一款运行于 macOS、Windows 和 Linux 的桌面数据库客户端，连接 PostgreSQL、MySQL、SQLite 和 Redis。UI 用 TSX 编写并以各平台原生视图绘制，数据层为 Rust。提供 SQL 编辑、表浏览与编辑、SQL 风险检查等功能；从 Releases 获取安装包，源码构建需 Rust ≥ 1.97 和 nsh CLI。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite 与 Redis 连接，覆盖 macOS、Windows、Linux 三平台",
+    "SQL 编辑器与表编辑，含 SQL 风险检查；Redis 支持以表格形式编辑 hash、list、set、sorted set 和 stream",
+    "架构上 UI 为 TSX 配原生视图，数据层为 Rust（crates/core），可源码构建并运行核心测试"
+   ],
+   "use_cases": [
+    "在同一桌面应用中管理多种数据库的日常查询与表编辑",
+    "执行前评估 ALTER TABLE 等操作对写入的影响",
+    "基于 Git Releases 分发包，开发者可从源码构建参与开发"
+   ]
+  },
+  "sha": "bbcada1e93c0",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

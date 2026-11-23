@@ -3469,5 +3469,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bb6b4edec4c5": {
+  "identity": {
+   "one_liner": "基于 eBPF 追踪套接字、记录服务器网络依赖并存储于 PostgreSQL 的工具。",
+   "review": "shawk 用 eBPF 追踪主机上所有进程的 TCP/UDP 与 Unix 流套接字连接，通过 OTLP 发送至 OpenTelemetry Collector，依赖记录写入 PostgreSQL、流量指标写入 Prometheus，并在 Grafana 展示。适用于需要在变更前排查系统间依赖的运维场景。要求内核支持 BTF（5.14+）、PostgreSQL 14+，RDMA 传输不在观测范围内。",
+   "highlights": [
+    "无需对进程做插桩，覆盖各语言与协议的进程，包括 cron 任务和第三方软件",
+    "记录每台主机的观测时段与丢流时段，用于区分“未被使用”与“未被观测”",
+    "可选 -classify-protocols 识别 TCP 连接首包的协议（TLS 版本、HTTP/1、HTTP/2、SSH、PostgreSQL、MySQL、Redis、Slurm）"
+   ],
+   "use_cases": [
+    "变更前查询哪些进程仍在使用某个数据库或主机（含过去 90 天的 SQL 视图查询）",
+    "部署后通过 Grafana 的 Changes 面板查看新出现或消失的依赖",
+    "配合 OBI 将应用层 RED 指标与同一服务的依赖关系对齐展示"
+   ]
+  },
+  "sha": "bb6b4edec4c5",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

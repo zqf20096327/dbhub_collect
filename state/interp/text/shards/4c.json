@@ -3534,5 +3534,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2be6f2590b8d": {
+  "identity": {
+   "one_liner": "基于 PGlite/SQLite-WASM 的零配置开发服务器，本地即时运行 Zero 同步",
+   "review": "orez 是面向 Zero（Rocicorp 同步框架）开发者的实验性开发服务器，将 Postgres（PGlite WASM）或嵌入式 Postgres 与 zero-cache 打包运行，安装后执行 bunx orez 即可启动，无需 Docker 或原生依赖。README 明确其 Node 运行器仅限开发用途，PGlite 后端查询经互斥锁串行化，不适用于生产；生产环境可改用 postgres 后端或 Lime Sync Cloudflare 运行时。",
+   "highlights": [
+    "支持 pglite（纯 WASM、无原生依赖）与 postgres（嵌入式真实 Postgres、走生产逻辑复制路径）两种后端",
+    "内置管理面板，提供日志流、HTTP 请求检查、重启/重置控制；支持 pg_dump/pg_restore 生产数据恢复",
+    "提供程序化 API、生命周期钩子（onDbReady/onHealthy）、端口自动递增与自动恢复"
+   ],
+   "use_cases": [
+    "本地零配置启动 Postgres 与 Zero Sync 的开发环境",
+    "Cloudflare Workers 上部署 SQLite 原生 Lime Sync 数据服务",
+    "通过 CLI 或程序化 API 在测试/CI 中运行 Zero 栈并执行迁移、种子数据"
+   ]
+  },
+  "sha": "2be6f2590b8d",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

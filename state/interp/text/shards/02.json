@@ -3217,5 +3217,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d5cfe708447c": {
+  "identity": {
+   "one_liner": "基于单条 SSH 连接的一体化远程管理客户端，Rust + GTK4 编写",
+   "review": "PuTTYPlus 是一个运行于 Windows / Linux 的单文件 SSH 客户端，在同一 SSH 连接上开通道实现终端、SFTP 文件传输、PostgreSQL/MySQL 数据库工作台、Docker 容器管理与端口转发。README 提到其命令行参数兼容 PuTTY，可用于堡垒机场景。源码以 Rust 编写，采用 GTK4 界面，MIT 许可发布。",
+   "highlights": [
+    "在单条 SSH 连接上承载终端、SFTP、数据库工作台、Docker 容器管理与本地/远程转发及 SOCKS 代理（-L/-R/-D）",
+    "数据库工作台支持对象树、可编辑数据网格（事务化提交或整体回滚）、SQL 编辑器、ER 图与 CSV/JSON/XML/HTML/INSERT SQL 导出",
+    "提供带语法高亮的远程文件编辑、容器内文件浏览、asciicast 会话录制，凭据库使用 argon2 + AES-GCM 加密"
+   ],
+   "use_cases": [
+    "通过堡垒机管理服务器，需在原处使用兼容 PuTTY 命令行参数的客户端",
+    "日常运维中需在同一连接上使用终端、文件传输与数据库查询",
+    "管理 Docker/compose 部署环境并配置端口转发"
+   ]
+  },
+  "sha": "d5cfe708447c",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "150a5fb511a0": {
+  "identity": {
+   "one_liner": "Rust 编写的单机内存优先向量数据库，支持 HNSW 检索与 pgwire/HTTP 双接口",
+   "review": "HouyiDB 是用 Rust 编写的单机、内存优先向量数据库，实现 HNSW 向量检索、PAX 行列混存、WAL 持久化与 pgwire/HTTP 双接口。面向需要向量检索的 AI/LLM 应用开发者，可通过 Docker、源码编译运行，提供 Python/TypeScript/Go/Rust/.NET/Java 六种语言 SDK、MCP server 及 iOS/Android C ABI 索引。当前版本为 v0.2.0-beta.9，采用 Apache-2.0 许可证。",
+   "highlights": [
+    "实现 HNSW 双速写入（HotBuffer + Async-Builder）、SIMD 距离计算（NEON/AVX）与 Clustered/PQ/HII-L0 多后端",
+    "支持 pgwire 协议（text/binary）、SQL 混合检索与谓词下推 bitset 剪枝；WAL 提供异步写线程、checkpoint/rotate 与冷启动恢复",
+    "提供六语言 SDK（同一字符串 id 跨语言映射为同一 u64）、stdio MCP server 及移动端 C ABI 轻量索引"
+   ],
+   "use_cases": [
+    "为 LLM/RAG 应用存储与检索 embedding 向量",
+    "需要 PostgreSQL wire 协议或 HTTP API 接入向量检索的应用",
+    "通过 MCP 接入 Claude Code、Cursor、Cline 等客户端进行检索或写入，或在 iOS/Android 中嵌入向量索引"
+   ]
+  },
+  "sha": "150a5fb511a0",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1a3de6ef2930": {
+  "identity": {
+   "one_liner": "浏览器端 P2P 文件传输工具，WebRTC 直连，QR/配对码配对",
+   "review": "Slipstream 是一个运行在浏览器中的点对点文件传输工具，供同一局域网内两台设备互传文件。发送方生成临时配对码与 QR 码，接收方扫码或输码加入；双方通过 PHP REST API 与 MySQL 完成信令交换后建立 WebRTC 数据通道，文件以有序 16 KB 分块传输，接收方校验 SHA-256 后提供下载。服务器只保存临时信令数据，不接收文件字节。单文件限 100 MiB；物理设备间连通仍在开发中。",
+   "highlights": [
+    "通过 QR 码或短配对码配对，浏览器间建立 WebRTC RTCDataChannel 直连，文件分块传输并由接收端进行 SHA-256 完整性校验",
+    "PHP/MySQL 仅用于临时信令（配对会话、SDP、ICE 候选），配对码约 10–15 分钟过期并支持删除，SQL 使用预处理语句",
+    "支持多文件排队、文本共享（≤8 KiB）、反向文件请求、传输预览（JPEG/PNG/GIF/WebP/PDF/文本前 32 KiB）与活动统计"
+   ],
+   "use_cases": [
+    "同一局域网内两台设备（如笔记本与手机）之间直接互传文件",
+    "不便使用云存储或不愿注册账号时的临时文件交换",
+    "局域网内共享文本片段、代码或 HTTP(S) 链接"
+   ]
+  },
+  "sha": "1a3de6ef2930",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

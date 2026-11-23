@@ -3128,5 +3128,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dffa0ec34106": {
+  "identity": {
+   "one_liner": "自托管分布式任务调度与编排系统，基于 Kafka 微服务与 Docker 执行",
+   "review": "Chronoverse 是一个部署在用户自有基础设施上的分布式任务调度与编排系统，用于按分钟间隔定时或手动运行容器化工作流。它由 Go 编写的 gRPC 微服务、Kafka worker、PostgreSQL、ClickHouse、Redis 和 Meilisearch 组成，通过 idempotency key、事务性 outbox 和任务租约实现可重放执行，并提供 Compose 与 Kustomize 部署脚本。Kubernetes 运行时要求节点安装 Docker Engine，不支持仅 containerd 集群。",
+   "highlights": [
+    "支持 HEARTBEAT 和 CONTAINER 两种工作流类型，可按分钟间隔调度或手动触发，作业状态覆盖 queued/running/completed/failed/canceled 并自动重试系统故障",
+    "通过 idempotency key、工作流代际、事务性 outbox、持久任务租约和 Redis 协调的镜像拉取锁实现重放安全执行",
+    "作业日志存储于 ClickHouse 并由 Meilisearch 提供检索，支持原始日志下载、流过滤、SSE 实时输出与按工作流的保留策略"
+   ],
+   "use_cases": [
+    "在自有服务器或 Kubernetes 集群上运行定时容器化任务并保留可检索的执行日志",
+    "跨多台 Docker 节点分发执行工作负载，由 runtime-agent 注册节点并由 jobs-service 分配运行时归属",
+    "需要通知、工作流/作业分析与 OpenTelemetry 可观测性面板的自托管调度场景"
+   ]
+  },
+  "sha": "dffa0ec34106",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

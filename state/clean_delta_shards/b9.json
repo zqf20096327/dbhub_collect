@@ -37692,5 +37692,2263 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "e90ca19df875+2": {
+  "fn": "PsychQuant/che-apple-mail-mcp",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "License: MIT",
+     "macOS",
+     "Swift",
+     "MCP"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    11,
+    6,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "|Path|Used by|Needs|"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    16,
+    13,
+    16,
+    [
+     "|Mail's local store (SQLite and `.emlx`), read directly|reading, searching, exporting|Full Disk Access; data is as fresh as Mail's last sync|",
+     "|The Mail app (AppleScript, its compose window)|most writes: compose, reply, forward, move, flag, delete|Mail running; Automation and, for compose, Accessibility|",
+     "|The mail server directly (IMAP and SMTP)|`send_draft` (#742), `append_draft` (#744)|an entry in `direct-transport.json` and an app-specific password; Mail need not run, applies no signature, and shows the change after its next sync|"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    20,
+    17,
+    18,
+    [
+     "English | 繁體中文"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    18,
+    21
+   ],
+   [
+    "replace",
+    23,
+    24,
+    21,
+    22,
+    [
+     "|Feature|Other MCPs|che-apple-mail-mcp|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    22,
+    23
+   ],
+   [
+    "replace",
+    25,
+    38,
+    23,
+    34,
+    [
+     "|Total Tools|~20|**61**|",
+     "|Language|Python|**Swift (Native)**|",
+     "|Search Speed|Seconds (AppleScript)|**Milliseconds (SQLite)**|",
+     "|Search Fields|Subject/Sender|**Subject/Sender/Recipient/Date**|",
+     "|Batch Operations|No|**Up to 50 emails per call**|",
+     "|Mailbox Management|Basic|Full CRUD|",
+     "|Email Colors|No|7 flag colors + background|",
+     "|VIP Management|No|Yes|",
+     "|Rule Management|Partial|Full CRUD|",
+     "|Signatures|No|Yes|",
+     "|Raw Headers/Source|No|Yes|"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    101,
+    34,
+    97
+   ],
+   [
+    "replace",
+    101,
+    102,
+    97,
+    98,
+    [
+     "|Shipped by the plugin|Present with MCP-only|"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    98,
+    99
+   ],
+   [
+    "replace",
+    103,
+    110,
+    99,
+    106,
+    [
+     "|All 61 MCP tools|✅ yes|",
+     "|`/archive-mail` + `-migrate` / `-rebuild-threads` / `-repair-synthetic-ids` / `-view`|❌ the archiving SOP does not exist|",
+     "|`rules/compose-wrapper-free.md` — what the cite-block was, and what a refused compose call means|⚠️ background: since #304 the known body-injection trigger has been removed; this rule explains the reported upstream regression FB11734014 and current refusal recipes|",
+     "|`rules/confirmation-triggers.md`, `rules/false-positive-detection.md`|❌ no confirmation discipline on destructive operations|",
+     "|`hooks/session-start.sh` — staleness kill|❌ a session can keep running a stale binary after an upgrade|",
+     "|Developer ID **signed + notarized** binary|❌ a self-built binary is ad-hoc signed; on macOS 26 TCC cannot reliably hold FDA/Automation for it, so permissions appear to be granted and then stop working (#211)|",
+     "|Version sidecar → `--self-update` + the #303 staleness self-check|❌ no sidecar next to a hand-built binary, so that check is permanently silent|"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    106,
+    107
+   ],
+   [
+    "replace",
+    111,
+    113,
+    107,
+    108,
+    [
+     " Advanced: register the MCP server only (development, or you want no plugin) "
+    ]
+   ],
+   [
+    "equal",
+    113,
+    118,
+    108,
+    113
+   ],
+   [
+    "replace",
+    118,
+    125,
+    113,
+    114,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    132,
+    114,
+    121
+   ],
+   [
+    "replace",
+    132,
+    133,
+    121,
+    122,
+    [
+     "Developer ID; see Signing & Notarization. Otherwise"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    122,
+    123
+   ],
+   [
+    "delete",
+    134,
+    138,
+    123,
+    123
+   ],
+   [
+    "equal",
+    138,
+    141,
+    123,
+    126
+   ],
+   [
+    "replace",
+    141,
+    142,
+    126,
+    127,
+    [
+     "For full details see CHANGELOG.md."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    144,
+    127,
+    129
+   ],
+   [
+    "replace",
+    144,
+    147,
+    129,
+    132,
+    [
+     "- Hardened `attachmentFragment` indent across all 3 callers + removed dead `MailController.attachmentScript` helper that bypassed v2.7.0's race-mitigation delays (#61, #62)",
+     "- Attachment count cap (50) + env-configurable delays via `CHE_MAIL_ATTACHMENT_DELAY_BETWEEN` / `_TRAILING` (#63, #64)",
+     "- `get_email_metadata` SQLite path now falls back to AppleScript on error — last read-tool gap closed; all 8 SQLite-first read tools now have parity fallback (#71)"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    149,
+    132,
+    134
+   ],
+   [
+    "replace",
+    149,
+    152,
+    134,
+    137,
+    [
+     "- **Critical**: RFC822 header/body split was returning a relative array index instead of an absolute `Data` index, causing `html_body` to begin with `\"sion: 1.0\\n\\n<base64>\"` for some Android Gmail messages — raw base64 leaked into LLM context and triggered AUP false-positives downstream (#72)",
+     "- `save_attachment` now reads from `Attachments/<rowId>/<part_id>/<filename>` cache when `.partial.emlx` body is empty — no more silent 0-byte writes for IMAP messages with stripped binaries (#66)",
+     "- SQLite fast-path failures now log to stderr (`SQLite ... fast path failed for rowId=...; falling through to AppleScript`) (#69)"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    154,
+    137,
+    139
+   ],
+   [
+    "replace",
+    154,
+    155,
+    139,
+    140,
+    [
+     "- Multi-attachment AppleScript paced with 0.3s between + 0.5s trailing delays to mitigate Mail.app silently dropping attachments under fast IPC (#60)"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    157,
+    140,
+    142
+   ],
+   [
+    "replace",
+    157,
+    164,
+    142,
+    149,
+    [
+     "- `forward_email` plain mode now embeds RFC 3676 `> ` quoted original (parity with `reply_email`'s #43 fix) (#44)",
+     "- Hard-fail on tool param type mismatch — `bool` / `[String]` no longer silently coerced (#35)",
+     "- Recipient email validation rejects header injection (control chars, missing/multiple `@`) (#41)",
+     "- `cc_additional` deduplicates case-insensitively (#34)",
+     "- Attachment path deny-list (`~/.ssh`, Keychains, TCC db, browser cookies) + symlink-resolved + new `MAIL_MCP_ATTACHMENT_ROOTS` env allow-list (#38)",
+     "- All 17 id-taking tools hard-validate `id` as Int at handler boundary — defeats AppleScript predicate injection (#50)",
+     "- Gated integration tests for `reply_email` runtime (#37, #45) + smoke matrix templates (#46, #47)"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    149,
+    151
+   ],
+   [
+    "replace",
+    166,
+    167,
+    151,
+    152,
+    [
+     "- All 4 composing tools (`compose_email` / `create_draft` / `reply_email` / `forward_email`) gain `format: \"plain\" | \"markdown\" | \"html\"` param (closes #14, #15)"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    152,
+    153
+   ],
+   [
+    "delete",
+    168,
+    170,
+    153,
+    153
+   ],
+   [
+    "equal",
+    170,
+    177,
+    153,
+    160
+   ],
+   [
+    "replace",
+    177,
+    179,
+    160,
+    161,
+    [
+     " Compose Preflight (1) "
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    161,
+    162
+   ],
+   [
+    "replace",
+    180,
+    181,
+    162,
+    163,
+    [
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    182,
+    163,
+    164
+   ],
+   [
+    "replace",
+    182,
+    183,
+    164,
+    165,
+    [
+     "|`check_compose_length`|Exact encoded URL/body length without Mail access; fits is not full eligibility|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    165,
+    166
+   ],
+   [
+    "replace",
+    184,
+    185,
+    166,
+    167,
+    [
+     " Email Classification (4) "
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    167,
+    168
+   ],
+   [
+    "replace",
+    186,
+    188,
+    168,
+    174,
+    [
+     "|Tool|Description|",
+     "|------|-------------|",
+     "|`get_email_classification_policy`|Read local policy and approvals|",
+     "|`configure_email_classification`|Configure criteria and explicitly approve/revoke rules|",
+     "|`classify_emails`|Read-only classification and expiring explicit-id plan|",
+     "|`apply_email_classification`|Guarded move to native Trash with audit; no permanent deletion|"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    189,
+    174,
+    175
+   ],
+   [
+    "replace",
+    189,
+    190,
+    175,
+    178,
+    [
+     " Accounts (2) ",
+     "",
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    178,
+    179
+   ],
+   [
+    "replace",
+    191,
+    195,
+    179,
+    181,
+    [
+     "|`list_accounts`|List all mail accounts|",
+     "|`get_account_info`|Get account details|"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    196,
+    181,
+    182
+   ],
+   [
+    "replace",
+    196,
+    197,
+    182,
+    183,
+    [
+     " Mailboxes (4) "
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    183,
+    184
+   ],
+   [
+    "replace",
+    198,
+    200,
+    184,
+    190,
+    [
+     "|Tool|Description|",
+     "|------|-------------|",
+     "|`list_mailboxes`|List all mailboxes (folders)|",
+     "|`create_mailbox`|Create a new mailbox|",
+     "|`delete_mailbox`|Delete a mailbox|",
+     "|`get_special_mailboxes`|Get special mailbox names (inbox, drafts, sent, trash, junk, outbox)|"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    201,
+    190,
+    191
+   ],
+   [
+    "replace",
+    201,
+    202,
+    191,
+    194,
+    [
+     " Emails (7) ",
+     "",
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    203,
+    194,
+    195
+   ],
+   [
+    "replace",
+    203,
+    205,
+    195,
+    202,
+    [
+     "|`list_emails`|List emails in a mailbox|",
+     "|`get_email`|Get full email content|",
+     "|`search_emails`|Search by subject/content|",
+     "|`get_unread_count`|Get unread count|",
+     "|`get_email_headers`|Get all email headers|",
+     "|`get_email_source`|Get raw email source|",
+     "|`get_email_metadata`|Get metadata (forwarded, replied, size)|"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    202,
+    203
+   ],
+   [
+    "replace",
+    206,
+    207,
+    203,
+    204,
+    [
+     " Actions (8) "
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    204,
+    205
+   ],
+   [
+    "replace",
+    208,
+    210,
+    205,
+    215,
+    [
+     "|Tool|Description|",
+     "|------|-------------|",
+     "|`mark_read`|Mark as read/unread|",
+     "|`flag_email`|Flag/unflag email|",
+     "|`set_flag_color`|Set flag color (7 colors)|",
+     "|`set_background_color`|Set email background color|",
+     "|`mark_as_junk`|Mark as junk/not junk|",
+     "|`move_email`|Move to another mailbox|",
+     "|`copy_email`|Copy to another mailbox|",
+     "|`delete_email`|Delete email (to trash)|"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    215,
+    216
+   ],
+   [
+    "replace",
+    211,
+    212,
+    216,
+    219,
+    [
+     " Compose (7) ",
+     "",
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    219,
+    220
+   ],
+   [
+    "replace",
+    213,
+    263,
+    220,
+    227,
+    [
+     "|`compose_email`|Send new email (supports cc/bcc/attachments — bare addresses only: a display-name recipient in any list is refused on a send, use `create_draft` (#404); `format`: `plain` only since #304; optional `from_address` for multi-account sender selection — see #131, clean path supported via the verified From popup, #219). Bodies always come from Mail's own editor — see #175 / `check_accessibility`; a call that cannot run cleanly FAILS with a named reason and creates nothing (#304)|",
+     "|`reply_email`|Reply to email. Optional: `cc_additional`, `save_as_draft`, `format` (since v2.4.0). `attachments` is currently refused whenever non-empty: the attach step erased the pasted body and Mail's quote while reporting success (#534); save the reply as a draft without it and drag the files in from Mail until #608. Plain mode embeds RFC 3676 `> ` quoted original (since v2.5.0 / #43). The new body is pasted into Mail's native reply (#218); a non-`plain` `format` or a missing Accessibility grant FAILS instead of falling back (#304)|",
+     "|`forward_email`|Forward email. Optional `body` + `format`. Plain mode embeds RFC 3676 `> ` quoted original (since v2.5.0+ / #44). A bodyless forward assigns nothing and needs no Accessibility grant; with a body, same rules as `reply_email` (#218 / #304). **Sends** unless `save_as_draft: true`, which saves the forward as a draft through the same paste path (body required for now: a bare forward with `save_as_draft` is refused, #673); read the saved draft's To recipients and body back before sending it (#599)|",
+     "|`redirect_email`|Redirect email (keeps original sender)|",
+     "|`send_draft`|Send one draft already in the server's drafts mailbox over SMTP, without Mail (#742). Not yet run against a real server. Only for accounts in `direct-transport.json`; see \"Direct transport (send_draft)\" below|",
+     "|`append_draft`|Create a new plain-text draft in the server's drafts mailbox over IMAP, without Mail (#744). Not yet run against a real server. Only for accounts in `direct-transport.json`; bare addresses only; returns the `message_id` that `send_draft` accepts. See \"Direct transport\" below|",
+     "|`open_mailto`|Open mailto URL|"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    266,
+    227,
+    230
+   ],
+   [
+    "replace",
+    266,
+    267,
+    230,
+    231,
+    [
+     "Reply to a thread, add extra CC, and save as a draft for human review before sending. To attach files, open the saved reply from Drafts in Mail and drag them in: `attachments` on `reply_email` is refused until #608 (#534)."
+    ]
+   ],
+   [
+    "equal",
+    267,
+    272,
+    231,
+    236
+   ],
+   [
+    "replace",
+    272,
+    277,
+    236,
+    237,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    279,
+    237,
+    239
+   ],
+   [
+    "replace",
+    279,
+    280,
+    239,
+    240,
+    [
+     " Drafts (3) "
+    ]
+   ],
+   [
+    "equal",
+    280,
+    281,
+    240,
+    241
+   ],
+   [
+    "replace",
+    281,
+    283,
+    241,
+    246,
+    [
+     "|Tool|Description|",
+     "|------|-------------|",
+     "|`list_drafts`|List draft emails — each entry carries `subject` + numeric `id` (#276, additive; feeds `update_draft.draft_id` / `delete_email.id`)|",
+     "|`create_draft`|Create a draft (supports attachments; optional `from_address` for multi-account sender selection — see #131, clean path supported via the verified From popup, #219). Bodies come from Mail's own editor — see #175 / `check_accessibility` — except the opt-in direct write (`CHE_MAIL_EXPERIMENTAL_DIRECT_DRAFT=1`, #472), described under Accessibility below; a call that cannot run cleanly FAILS with a named reason and creates nothing (#304). Display-name recipients (`Name <addr>`) in `to` / `cc` / `bcc` are filled through the compose window's AX-addressed fields with a token read-back before the save; a hidden Bcc field is revealed and left visible (`bcc_field_revealed: true`); cc/bcc addresses are re-read after the save (`recipients_verified: true|false` + `recipients_diff`, draft always kept) — #277 / #404|",
+     "|`update_draft`|Replace an existing draft (upsert, #276): locate by `draft_id` or exact `subject_match` → create replacement (inherits `create_draft` eligibility + disclosure) → delete old. Deliberately create-THEN-delete with a post-create receipt (failure always leans toward keeping drafts — worst case both MAY exist, never neither); 0 or >1 matches always refuse (candidates listed). Replacement gets a NEW id. Display-name `to` / `cc` / `bcc` supported as on `create_draft` (#404)|"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    284,
+    246,
+    247
+   ],
+   [
+    "replace",
+    284,
+    285,
+    247,
+    250,
+    [
+     " Attachments (2) ",
+     "",
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    285,
+    286,
+    250,
+    251
+   ],
+   [
+    "replace",
+    286,
+    289,
+    251,
+    253,
+    [
+     "|`list_attachments`|List email attachments|",
+     "|`save_attachment`|Save attachment to disk|"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    290,
+    253,
+    254
+   ],
+   [
+    "replace",
+    290,
+    291,
+    254,
+    255,
+    [
+     " VIP (1) "
+    ]
+   ],
+   [
+    "equal",
+    291,
+    292,
+    255,
+    256
+   ],
+   [
+    "replace",
+    292,
+    294,
+    256,
+    259,
+    [
+     "|Tool|Description|",
+     "|------|-------------|",
+     "|`list_vip_senders`|List VIP senders|"
+    ]
+   ],
+   [
+    "equal",
+    294,
+    295,
+    259,
+    260
+   ],
+   [
+    "replace",
+    295,
+    296,
+    260,
+    263,
+    [
+     " Rules (5) ",
+     "",
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    263,
+    264
+   ],
+   [
+    "replace",
+    297,
+    299,
+    264,
+    269,
+    [
+     "|`list_rules`|List mail rules|",
+     "|`get_rule_details`|Get rule details|",
+     "|`create_rule`|Create a new rule|",
+     "|`delete_rule`|Delete a rule|",
+     "|`enable_rule`|Enable/disable a rule|"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    269,
+    270
+   ],
+   [
+    "replace",
+    300,
+    301,
+    270,
+    271,
+    [
+     " Signatures (2) "
+    ]
+   ],
+   [
+    "equal",
+    301,
+    302,
+    271,
+    272
+   ],
+   [
+    "replace",
+    302,
+    304,
+    272,
+    276,
+    [
+     "|Tool|Description|",
+     "|------|-------------|",
+     "|`list_signatures`|List email signatures|",
+     "|`get_signature`|Get signature content|"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    305,
+    276,
+    277
+   ],
+   [
+    "replace",
+    305,
+    306,
+    277,
+    280,
+    [
+     " SMTP (1) ",
+     "",
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    307,
+    280,
+    281
+   ],
+   [
+    "replace",
+    307,
+    308,
+    281,
+    282,
+    [
+     "|`list_smtp_servers`|List SMTP servers|"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    309,
+    282,
+    283
+   ],
+   [
+    "replace",
+    309,
+    310,
+    283,
+    284,
+    [
+     " Sync (2) "
+    ]
+   ],
+   [
+    "equal",
+    310,
+    311,
+    284,
+    285
+   ],
+   [
+    "replace",
+    311,
+    313,
+    285,
+    289,
+    [
+     "|Tool|Description|",
+     "|------|-------------|",
+     "|`check_for_new_mail`|Check for new mail|",
+     "|`synchronize_account`|Sync IMAP account|"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    314,
+    289,
+    290
+   ],
+   [
+    "replace",
+    314,
+    315,
+    290,
+    293,
+    [
+     " Batch (4) ",
+     "",
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    316,
+    293,
+    294
+   ],
+   [
+    "replace",
+    316,
+    321,
+    294,
+    298,
+    [
+     "|`get_emails_batch`|Get up to 50 emails in one call (per-item errors)|",
+     "|`list_attachments_batch`|List attachments for up to 50 emails|",
+     "|`batch_export_emails_markdown`|Server-side bulk export to verbatim markdown + attachments (frozen frontmatter manifest; concurrency-serialized per output_dir — #193 / #236)|",
+     "|`export_emails_markdown`|**DEPRECATED** — renamed to `batch_export_emails_markdown` (#233); alias removed no earlier than v3.0|"
+    ]
+   ],
+   [
+    "equal",
+    321,
+    322,
+    298,
+    299
+   ],
+   [
+    "replace",
+    322,
+    323,
+    299,
+    300,
+    [
+     " Utilities (4) "
+    ]
+   ],
+   [
+    "equal",
+    323,
+    324,
+    300,
+    301
+   ],
+   [
+    "replace",
+    324,
+    326,
+    301,
+    307,
+    [
+     "|Tool|Description|",
+     "|------|-------------|",
+     "|`extract_name_from_address`|Extract name from email address|",
+     "|`extract_address`|Extract email from full address|",
+     "|`get_mail_app_info`|Get Mail.app info|",
+     "|`import_mailbox`|Import mailbox from file|"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    307,
+    308
+   ],
+   [
+    "replace",
+    327,
+    328,
+    308,
+    311,
+    [
+     " Diagnostics (4) ",
+     "",
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    329,
+    311,
+    312
+   ],
+   [
+    "replace",
+    329,
+    388,
+    312,
+    316,
+    [
+     "|`check_fda`|Check Full Disk Access status and retry opening this server's index reader now; reports the server's actual SQLite fast-path state (open / just recovered / still unavailable)|",
+     "|`check_accessibility`|Check Accessibility permission (the compose/reply GUI paths; without it those tools refuse — except the opt-in direct-write `create_draft` path, which needs Full Disk Access instead)|",
+     "|`check_automation`|Check Automation permission (Apple Events to Mail) — non-prompting probe, four states with remediation (#293); the binary holds its OWN grant, osascript working ≠ binary authorized (#288)|",
+     "|`get_mail_log_events`|Read Mail's own unified log to find where an event chain stops (e.g. draft saved → queued → engine notified → IMAP `APPENDUID` receipt) — read-only (#465). `detail=brief` (default) returns only the static event template, integer arguments and an account letter for `[account - mailbox]` lines — no account names, subjects or Message-IDs, as long as the template is a compile-time string (Mail's own are); `detail=detailed` adds the raw message, which **contains account identifiers and received-mail content: do not paste it into public issues**. Window ≤ 60 min, times must carry a UTC offset; page with `since=next_start`, `offset=next_offset` and the same `until` and `events`. `events` keeps only events whose `event` equals one of the given names exactly — a template, `imap.append_uid_received`, or `<template withheld>` (never the text of a withheld template, never a substring), in either detail; the values are not echoed, the response reports `event_filter_count` (#466). An empty result never means the action did not happen. At most two reads run at once; a third returns `status: unavailable`, `reason: busy` and starts nothing (#467). Verified on macOS 27.2 / Mail 16.0 only; needs an admin-group user|"
+    ]
+   ],
+   [
+    "equal",
+    388,
+    391,
+    316,
+    319
+   ],
+   [
+    "replace",
+    391,
+    392,
+    319,
+    320,
+    [
+     "Both tools return an **envelope object** `{ results, returned, limit, truncated }` — **not** a bare array (changed in v2.14.0, #204). Read the matches from `.results`:"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    393,
+    320,
+    321
+   ],
+   [
+    "replace",
+    393,
+    394,
+    321,
+    322,
+    [
+     "|Field|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    394,
+    395,
+    322,
+    323
+   ],
+   [
+    "replace",
+    395,
+    399,
+    323,
+    327,
+    [
+     "|`results`|Array of result objects (per-object fields unchanged from the pre-envelope shape). `search_emails` objects carry `id`, `subject`, `sender`, `date_received`, `account_name`, `mailbox`, `to`, plus `account_id` when the account UUID is resolvable. `list_emails` objects carry `id`, `subject`, `sender`.|",
+     "|`returned`|Number of objects in `results`|",
+     "|`limit`|Effective `limit` applied to the query|",
+     "|`truncated`|`true` when more results are available than were returned — **raise `limit` or narrow the query** to retrieve the rest (definitive on the SQLite fast path; a best-effort heuristic on the AppleScript fallback — see below)|"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    406,
+    327,
+    334
+   ],
+   [
+    "replace",
+    406,
+    407,
+    334,
+    335,
+    [
+     "|`message_id` on the row|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    407,
+    408,
+    335,
+    336
+   ],
+   [
+    "replace",
+    408,
+    411,
+    336,
+    339,
+    [
+     "|a non-empty string|the Message-ID, angle brackets kept; it equals what `get_email`, `get_emails_batch` and the batch export report for the same message|",
+     "|`\"\"`|the header block was read and has no `Message-ID` header (or an empty one), as `get_email` reports|",
+     "|key missing|unknown, in these cases only: (1) no readable `.emlx` for the row (body not downloaded and no partial file, a mailbox that keeps none, a missing file); (2) the file could not be read or its length line could not be parsed, which includes a length line longer than 4096 bytes; (3) the header block does not end within the first 256 KiB of the message (this includes a message larger than that whose lines end in lone CR); (4) the Message-ID value is longer than 4096 bytes (UTF-8); (5) the row came from the AppleScript fallback, which never fills it|"
+    ]
+   ],
+   [
+    "equal",
+    411,
+    412,
+    339,
+    340
+   ],
+   [
+    "replace",
+    412,
+    415,
+    340,
+    341,
+    [
+     "In cases 2 to 4 `get_email` may still report a value, because it reads the whole file. A missing key means unknown, not \"no Message-ID\" and not \"new message\": hold such a row back instead of treating it as one you have not seen. A row is never dropped because its value could not be read; one line per call on stderr counts the rows left without one, and names a fixed reason, never header text. The flag is rejected with projection `ids` or `count` (they return no row objects), and a value that is not a boolean is an error. With `dedup: \"logical\"` and `summary`, the value is the kept row's. Cost: one `.emlx` read per returned row. The reader stops at the end of the header block (the first blank line, `\\r\\n\\r\\n` or `\\n\\n`) and never looks at more than the first 256 KiB of a message; the first 4096 bytes of the file are also read to find the length line, whatever they hold. The mailbox's store folder is looked up once per mailbox, so keep `limit` modest; without the flag no file is read. Which line endings real `.emlx` files use was not measured. **Not yet run against a real mail store**: the field is covered by synthetic `.emlx` fixtures only (#682)."
+    ]
+   ],
+   [
+    "equal",
+    415,
+    418,
+    341,
+    344
+   ],
+   [
+    "replace",
+    418,
+    419,
+    344,
+    345,
+    [
+     "> **Start with Quick Start** — installing the plugin is the"
+    ]
+   ],
+   [
+    "equal",
+    419,
+    422,
+    345,
+    348
+   ],
+   [
+    "replace",
+    422,
+    423,
+    348,
+    349,
+    [
+     "> Plugin vs MCP-only for what is missing, since nothing"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    469,
+    349,
+    395
+   ],
+   [
+    "replace",
+    469,
+    473,
+    395,
+    396,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    473,
+    511,
+    396,
+    434
+   ],
+   [
+    "replace",
+    511,
+    512,
+    434,
+    435,
+    [
+     "macOS grants Full Disk Access to the **responsible process** — the app that *launched* this server — not to the binary itself. For an MCP server run by **Claude Code inside a terminal**, that responsible process is the **terminal** (Ghostty / Terminal / iTerm), so add **your terminal app** here and enable it. One grant on the terminal covers every MCP server it launches. (If you instead run the binary directly, or use the **Claude Desktop** bundle, add that binary — `~/bin/CheAppleMailMCP` — since it is then its own responsible process.) The FDA-denied error message names these candidates for you — it does **not** auto-resolve the one exact app, because macOS exposes no reliable in-process API for that (#214). Without Full Disk Access, read tools silently fall back to the slower AppleScript path and SQLite-only features (`projection`, `export_emails_markdown`) fail. For the direct-launch path, a Developer ID-signed build makes the grant survive version bumps — see Signing & Notarization."
+    ]
+   ],
+   [
+    "equal",
+    512,
+    517,
+    435,
+    440
+   ],
+   [
+    "replace",
+    517,
+    518,
+    440,
+    441,
+    [
+     "- The **`check_fda` MCP tool** reports the same status to Claude on demand (call it when a SQLite-only feature errors). It also makes the running server retry opening its own index reader and reports the result (#537): a granted probe is no longer taken to mean the server can use the index. If the reader was unavailable and the retry opens it, the answer says it recovered; if the probe can read the file but the server's open still fails, it shows that error and says to reconnect the server (`/mcp` in Claude Code)."
+    ]
+   ],
+   [
+    "equal",
+    518,
+    521,
+    441,
+    444
+   ],
+   [
+    "replace",
+    521,
+    522,
+    444,
+    445,
+    [
+     "**Upstream evidence (#310).** Apple Developer Forums 738842 includes an October 2023 script and received MIME example; its author said FB11734014 was Open then. A March 2024 reply could not reproduce on macOS 13.3.1, while a January 2025 reply reported similar symptoms on macOS 15.2. Checked September 14, 2026: this public thread does not establish the private report's current status or universal behavior across Ventura and later versions. Apple may fix the regression; reassess architecture choices against received MIME on the target version. The project continues to avoid body injection. Normal quotations of the original message in replies/forwards are separate."
+    ]
+   ],
+   [
+    "equal",
+    522,
+    523,
+    445,
+    446
+   ],
+   [
+    "replace",
+    523,
+    524,
+    446,
+    447,
+    [
+     "**Accessibility (compose, #175/#304)** — a separate grant from Full Disk Access, needed by the GUI compose paths. The reported upstream regression **FB11734014** can wrap an AppleScript-injected outgoing-message body in `<blockquote type=\"cite\">`, which some mobile clients render as a quotation of your own text — and which the sender cannot see locally, because the wrapper's inline style has no border. Since #304 **this project has removed the known body-injection trigger**: every composing tool takes its body from Mail's own editor — a `mailto:` hand-off for `compose_email` / `create_draft`, the native reply/forward verb plus paste for `reply_email` / `forward_email` — and drives save/send/attach with keyboard shortcuts, which needs **Accessibility** (System Settings → Privacy & Security → Accessibility), granted to the same responsible process as FDA (your terminal / Claude Desktop). The **`check_accessibility` MCP tool** and the `--setup` window's **Accessibility** row report the status. **Without it these tools now FAIL rather than fall back** (`forward_email` without a body writes nothing and needs no grant) — the legacy path they used to fall back to is gone, so a call that cannot run cleanly returns a named error and creates nothing. The error points at `open_mailto`, which needs no TCC grant at all (it cannot carry attachments; you save or send the window yourself). See the canonical refusal table for the current nine input/eligibility reasons and remedies (the ninth is temporary and applies to `reply_email` only: any `attachments` is refused until #608, #534). One more refusal is not a row of that table: `forward_email` with `save_as_draft: true` and no body is refused at the tool's entry, before any Mail call, as a parameter refusal (#599; a bodyless draft mode is #673). For a clean body from a **non-default account**, pass `from_address`: the GUI selects it in Mail's From popup and reads the selection back, aborting rather than risk the wrong sender (#219). **Removed with the legacy path**: `format: \"markdown\"` / `\"html\"` — no path shipped today delivers rich text without the body assignment that was deleted. This is a product integration limit, not proof of impossibility (#310): #306's July 29 experiment reports four rich-paste draft variants passing and the HTML combination passing in Sent and received MIME. Those ASCII probes do not establish CJK, all OS versions, or sending with every flavor; the product still accepts only plain; #308 / #309 are alternatives, the `require_wrapper_free` and `sanitize_links` parameters, and the `CHE_MAIL_DISABLE_MAILTO_COMPOSE` / `CHE_MAIL_DISABLE_PASTE_REPLY` escape hatches. Two capabilities go with them, stated plainly: composing **without a visible window** (the hatches' original purpose) is no longer possible, and `compose_email` can no longer **send** to `Name <addr>` — use `create_draft` and send the draft yourself."
+    ]
+   ],
+   [
+    "equal",
+    524,
+    525,
+    447,
+    448
+   ],
+   [
+    "replace",
+    525,
+    526,
+    448,
+    449,
+    [
+     "**One exception, opt-in and experimental**: with `CHE_MAIL_EXPERIMENTAL_DIRECT_DRAFT=1`, a `create_draft` call that meets every condition of the direct-write path (the two closed lists in the `message-composition` spec, *Requirement: Direct-write draft path*) writes the draft straight into Mail's store (#472 / #475). That path opens no window and needs no Accessibility; it needs Full Disk Access and Automation. Any call that fails a condition takes the GUI path above, with everything said there. It also has no `mailto:` length limit (#388): a body over the GUI path's 8000 encoded characters is written as is."
+    ]
+   ],
+   [
+    "equal",
+    526,
+    555,
+    449,
+    478
+   ],
+   [
+    "delete",
+    555,
+    557,
+    478,
+    478
+   ],
+   [
+    "equal",
+    557,
+    579,
+    478,
+    500
+   ],
+   [
+    "delete",
+    579,
+    581,
+    500,
+    500
+   ],
+   [
+    "equal",
+    581,
+    585,
+    500,
+    504
+   ],
+   [
+    "replace",
+    585,
+    586,
+    504,
+    505,
+    [
+     "|Index|Color|"
+    ]
+   ],
+   [
+    "equal",
+    586,
+    587,
+    505,
+    506
+   ],
+   [
+    "replace",
+    587,
+    595,
+    506,
+    514,
+    [
+     "|0|Red|",
+     "|1|Orange|",
+     "|2|Yellow|",
+     "|3|Green|",
+     "|4|Blue|",
+     "|5|Purple|",
+     "|6|Gray|",
+     "|-1|Clear|"
+    ]
+   ],
+   [
+    "equal",
+    595,
+    599,
+    514,
+    518
+   ],
+   [
+    "delete",
+    599,
+    601,
+    518,
+    518
+   ],
+   [
+    "equal",
+    601,
+    608,
+    518,
+    525
+   ],
+   [
+    "replace",
+    608,
+    609,
+    525,
+    526,
+    [
+     "|Tool|SQLite/.emlx path|AppleScript fallback|"
+    ]
+   ],
+   [
+    "equal",
+    609,
+    610,
+    526,
+    527
+   ],
+   [
+    "replace",
+    610,
+    618,
+    527,
+    535,
+    [
+     "|`get_email`|✓|✓ on any error|",
+     "|`get_emails_batch`|✓ (per item)|✓ (per item)|",
+     "|`get_email_headers`|✓|✓ on any error|",
+     "|`get_email_source`|✓|✓ on any error|",
+     "|`search_emails`|✓ (with `include_message_id`: one bounded `.emlx` header read per row)|✓ when reader unavailable (never carries `message_id`)|",
+     "|`list_attachments`|✓|✓ on any error|",
+     "|`save_attachment`|✓|✓ on extraction errors; destination errors are terminal (#402)|",
+     "|`get_email_metadata`|✓|✓ on any error (since #71)|"
+    ]
+   ],
+   [
+    "equal",
+    618,
+    623,
+    535,
+    540
+   ],
+   [
+    "replace",
+    623,
+    624,
+    540,
+    541,
+    [
+     "For `save_attachment`'s read path the fast path is **10–100× faster** than AppleScript (per #12 measurements). Other tools' speedup ratios depend on request shape; in general, large bulk reads see the biggest gain."
+    ]
+   ],
+   [
+    "equal",
+    624,
+    633,
+    541,
+    550
+   ],
+   [
+    "replace",
+    633,
+    634,
+    550,
+    551,
+    [
+     "Exchange (EWS) accounts in Apple Mail **do not materialize `.emlx` files** — message bodies live on the server and are fetched on demand. For these accounts, all 8 read tools (including `get_email_metadata` since #71) transparently degrade to AppleScript IPC (which is correct but slower). Symptoms:"
+    ]
+   ],
+   [
+    "equal",
+    634,
+    636,
+    551,
+    553
+   ],
+   [
+    "replace",
+    636,
+    637,
+    553,
+    554,
+    [
+     "- This is **not a bug** — it's an Apple Mail storage architecture constraint (see #9)"
+    ]
+   ],
+   [
+    "equal",
+    637,
+    640,
+    554,
+    557
+   ],
+   [
+    "replace",
+    640,
+    641,
+    557,
+    558,
+    [
+     "When the fast path fails for a non-EWS account, the failure is logged to stderr (since #69). Run the binary in a terminal and watch stderr to distinguish:"
+    ]
+   ],
+   [
+    "equal",
+    641,
+    642,
+    558,
+    559
+   ],
+   [
+    "replace",
+    642,
+    643,
+    559,
+    560,
+    [
+     "- `EnvelopeIndexReader init failed: ...` — DB unreachable when the server started (commonly: Full Disk Access missing). It is not final (#537): until the index opens, read tools use AppleScript; a read tool that runs at least 30 s after the last attempt tries to open it again, and `check_fda` retries at once."
+    ]
+   ],
+   [
+    "equal",
+    643,
+    651,
+    560,
+    568
+   ],
+   [
+    "delete",
+    651,
+    653,
+    568,
+    568
+   ],
+   [
+    "equal",
+    653,
+    655,
+    568,
+    570
+   ],
+   [
+    "replace",
+    655,
+    656,
+    570,
+    571,
+    [
+     "|Problem|Solution|"
+    ]
+   ],
+   [
+    "equal",
+    656,
+    657,
+    571,
+    572
+   ],
+   [
+    "replace",
+    657,
+    663,
+    572,
+    578,
+    [
+     "|Server disconnected|Rebuild with `swift build -c release`|",
+     "|Not allowed to send Apple events|Add permissions in System Settings > Automation|",
+     "|Mail.app not responding|Ensure Mail.app is running with configured accounts|",
+     "|Commands timing out|Large mailboxes take longer; try specific searches. If a call that sends, saves a draft or changes a message timed out, its outcome in Mail is unknown: see After a timeout before retrying|",
+     "|Bulk fetch slower than expected|Watch stderr for `... falling through to AppleScript` lines. EWS/Exchange accounts always fall back (see Performance & Storage); other accounts logging fallback indicate a fixable .emlx issue|",
+     "|`save_attachment` fails with `-1728 \"Can't get account\"` or `-1719 \"Invalid mailbox index\"`|Since #173 both errors come back with an actionable hint naming the failing reference (account / mailbox / message). Common causes: two Mail.app accounts share the same `display_name`, or an email-form `account_name` maps to several accounts — see Account Disambiguation below.|"
+    ]
+   ],
+   [
+    "equal",
+    663,
+    668,
+    578,
+    583
+   ],
+   [
+    "replace",
+    668,
+    669,
+    583,
+    584,
+    [
+     "|Operation|What the tool reports|What you can look at|What that does not tell you|"
+    ]
+   ],
+   [
+    "equal",
+    669,
+    670,
+    584,
+    585
+   ],
+   [
+    "replace",
+    670,
+    674,
+    585,
+    589,
+    [
+     "|Sends: `compose_email`, `reply_email`, `forward_email`|`send state is UNKNOWN`, `NOT retrying` (the tool never re-sends on its own)|`search_emails` with `field=\"subject\"` and the subject you used; read each row's `mailbox` and `date_received`. A matching row is evidence that a message with that subject exists in that mailbox|A missing row does not show that no message went out: the index is written asynchronously, some accounts keep no Sent copy, and `search_emails` can come back empty without cause (#549, #536). A matching row may also be an earlier message with the same subject. Do not resend automatically; let the user decide|",
+     "|Saving a draft: `create_draft`, `reply_email` with `save_as_draft`|A timeout error saying that saving or sending may already have occurred|`search_emails` as above, or `list_drafts` (asks Mail, so it can time out again)|A missing row does not prove the draft was not saved. Saving again may leave two drafts; delete the extra one|",
+     "|Deleting the old draft inside `update_draft`|`deleted_old: false` and a `note` saying the deletion outcome is unknown|`list_drafts`, or `search_emails` with the draft's subject|A row for the old id that is still listed means the index still lists it; a missing row is the index's view, not a confirmation from Mail. Do not retry the update or the deletion until you have looked|",
+     "|Setting a value: `mark_read`, `flag_email`, `set_flag_color`, `set_background_color`, `mark_as_junk`|A timeout error|Repeating the same call sets the same value (each one sets an absolute value, not a toggle). `get_email_metadata` reports `read` and `flagged`|The timed-out call may still complete later; if you meant a different value, check the state afterwards|"
+    ]
+   ],
+   [
+    "equal",
+    674,
+    676,
+    589,
+    591
+   ],
+   [
+    "delete",
+    676,
+    678,
+    591,
+    591
+   ],
+   [
+    "equal",
+    678,
+    689,
+    591,
+    602
+   ],
+   [
+    "replace",
+    689,
+    695,
+    602,
+    603,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    695,
+    703,
+    603,
+    611
+   ],
+   [
+    "replace",
+    703,
+    704,
+    611,
+    612,
+    [
+     "**Backward compatibility**: `account_id` is **optional**. When omitted (or empty), tools fall back to the legacy `account \"<display_name>\"` path — behavior identical to pre-#101 — **with one `save_attachment` exception** (#173): when `account_name` contains `@` (email-shaped, the form SQLite-path tools like `search_emails` emit), `save_attachment` first reverse-looks-it-up in AccountsMap and silently upgrades to the `account id \"<UUID>\"` selector (the upgrade is logged to stderr). Exactly one match → that UUID; several accounts behind one address (iCloud catch-all + Gmail) → an actionable error listing every candidate instead of a raw `-1728`; no match → the legacy display-name path, unchanged. Edge: a Mail account whose *description* legitimately contains `@` and happens to equal another account's email now resolves in the email namespace first — pass `account_id` explicitly to pin the selector. Other tools keep the strict pre-#101 fallback (the cross-tool sweep is #176)."
+    ]
+   ],
+   [
+    "equal",
+    704,
+    705,
+    612,
+    613
+   ],
+   [
+    "replace",
+    705,
+    706,
+    613,
+    614,
+    [
+     "**Scope**: `account_id` is accepted across the AppleScript-routed tools that reference mail by account. It began with `save_attachment` (#101); the #104 sweep then added the 13 single-message / movement / relay / mailbox tools below:"
+    ]
+   ],
+   [
+    "equal",
+    706,
+    707,
+    614,
+    615
+   ],
+   [
+    "replace",
+    707,
+    708,
+    615,
+    616,
+    [
+     "- `save_attachment` (#101) — the precursor"
+    ]
+   ],
+   [
+    "equal",
+    708,
+    715,
+    616,
+    623
+   ],
+   [
+    "replace",
+    715,
+    719,
+    623,
+    627,
+    [
+     "- **#176** — generalized the email→UUID `resolveAccountIdForTool` chokepoint across all 14 AppleScript-routed write handlers (so an email-form `account_name` resolves to the UUID selector, not just an accepted `account_id`).",
+     "- **#180** — threaded `account_id` through the read-tool AppleScript fallbacks (`list_emails` / `search_emails` / `get_email` / headers / source / metadata / attachments / `get_unread_count`) via `resolveMailboxRef` / `resolveMsgRef` (the PR-E that was previously deferred is now done).",
+     "- **#179** — `get_special_mailboxes` accepts `account_id` / `account_name` for per-account special-mailbox real names.",
+     "- **#191** — the account-level action tools `check_for_new_mail` and `synchronize_account` gained the `account_id` escape hatch (`synchronize_account` accepts `account_id` alone)."
+    ]
+   ],
+   [
+    "equal",
+    719,
+    720,
+    627,
+    628
+   ],
+   [
+    "replace",
+    720,
+    721,
+    628,
+    629,
+    [
+     "Still **not** covered by `account_id` (tracked): `get_account_info` / `list_mailboxes` (#202)."
+    ]
+   ],
+   [
+    "equal",
+    721,
+    722,
+    629,
+    630
+   ],
+   [
+    "replace",
+    722,
+    723,
+    630,
+    631,
+    [
+     "`compose_email` / `create_draft` do **not** exhibit the display_name-collision defect — they `make new outgoing message` rather than referencing existing mail by account, so they never emit an `account \"<display_name>\"` selector. Multi-account sender selection is now available via the optional `from_address` parameter (#131) — pass any one of your configured Mail.app email addresses (`\"alice@example.com\"` or RFC 5322 form `\"Alice <alice@example.com>\"`) to set the `sender` of the outgoing message; omit to use Mail.app's default account. Use `list_accounts` to discover the addresses configured on the running Mac."
+    ]
+   ],
+   [
+    "equal",
+    723,
+    724,
+    631,
+    632
+   ],
+   [
+    "replace",
+    724,
+    727,
+    632,
+    633,
+    [
+     "**Cross-account move/copy is not supported via `account_id`** (#129 — from #127 verify). `move_email` and `copy_email` accept a single `account_id`, which is threaded through **both** the source `msgRef` and the destination `mailboxRef`. The architectural choice is correct (movement stays within one account, because Mail.app's AppleScript verb `move msg to <mailboxRef>` requires the destination mailbox to be expressed relative to a single account context). Mail.app's UI permits cross-account move via drag-and-drop, but the AppleScript-routed `move_email` / `copy_email` tools cannot replicate that — calling `move_email` with `account_id` of one account while expecting the destination `to_mailbox` to be resolved against a different account silently picks the wrong account's mailbox of that name (if both accounts happen to have one) or raises `-1719 \"Invalid mailbox index\"`. If you need a copy of the message's contents under a different account, you can manually rebuild it via `save_attachment` + `compose_email` — note this is **not** a true move/copy: original metadata (Message-ID, received-date, flags, labels) and message identity are not preserved."
+    ]
+   ],
+   [
+    "equal",
+    727,
+    740,
+    633,
+    646
+   ],
+   [
+    "replace",
+    740,
+    741,
+    646,
+    647,
+    [
+     "(#574). In every"
+    ]
+   ],
+   [
+    "equal",
+    741,
+    743,
+    647,
+    649
+   ],
+   [
+    "replace",
+    743,
+    744,
+    649,
+    650,
+    [
+     "|Install|Where|Example|"
+    ]
+   ],
+   [
+    "equal",
+    744,
+    745,
+    650,
+    651
+   ],
+   [
+    "replace",
+    745,
+    748,
+    651,
+    654,
+    [
+     "|Claude Code plugin|The `env` block of a Claude Code settings file (for example `~/.claude/settings.json`); Claude Code passes it to the MCP servers it starts. Exporting the variable in the shell that launches `claude` also works.|`\"env\": { \"CHE_MAIL_EXPORT_ALLOWED_ROOTS\": \"/Volumes/Archive/Mail\" }`|",
+     "|Claude Desktop `.mcpb`|The extension's settings in Claude Desktop: **Allowed save and export folders**. Leave it empty to keep the home default.|`/Volumes/Archive/Mail:/Users/you/Mail Exports`|",
+     "|Manual / binary|The `env` of the server entry in your MCP client's configuration, or the environment of the process that launches the binary.|`CHE_MAIL_EXPORT_ALLOWED_ROOTS=/Volumes/Archive/Mail`|"
+    ]
+   ],
+   [
+    "equal",
+    748,
+    792,
+    654,
+    698
+   ],
+   [
+    "replace",
+    792,
+    793,
+    698,
+    699,
+    [
+     "(#576). Path forms that were previously"
+    ]
+   ],
+   [
+    "equal",
+    793,
+    802,
+    699,
+    708
+   ],
+   [
+    "replace",
+    802,
+    803,
+    708,
+    709,
+    [
+     "(#579): whether"
+    ]
+   ],
+   [
+    "equal",
+    803,
+    814,
+    709,
+    720
+   ],
+   [
+    "replace",
+    814,
+    816,
+    720,
+    722,
+    [
+     " mailbox, such as Gmail's All Mail), has Mail's draft type (`messages.type` 5) or",
+     " Mail's draft flag."
+    ]
+   ],
+   [
+    "equal",
+    816,
+    817,
+    722,
+    723
+   ],
+   [
+    "replace",
+    817,
+    820,
+    723,
+    726,
+    [
+     " negative: neither the message nor any copy has type 5, the draft flag, a NULL",
+     " type or flag, or a folder named as drafts (`Drafts`, `草稿` and the other common",
+     " localizations) or of unknown name."
+    ]
+   ],
+   [
+    "equal",
+    820,
+    821,
+    726,
+    727
+   ],
+   [
+    "replace",
+    821,
+    822,
+    727,
+    728,
+    [
+     " than 0 and 5, and an index without the flag or copy columns."
+    ]
+   ],
+   [
+    "equal",
+    822,
+    850,
+    728,
+    756
+   ],
+   [
+    "replace",
+    850,
+    851,
+    756,
+    757,
+    [
+     "> #742, treat every outcome as unverified."
+    ]
+   ],
+   [
+    "equal",
+    851,
+    853,
+    757,
+    759
+   ],
+   [
+    "replace",
+    853,
+    854,
+    759,
+    760,
+    [
+     "(#729). It writes no content: the message submitted"
+    ]
+   ],
+   [
+    "equal",
+    854,
+    856,
+    760,
+    762
+   ],
+   [
+    "replace",
+    856,
+    857,
+    762,
+    763,
+    [
+     "drafts it saves, is refused (#745). Mail stores such drafts in a layout it"
+    ]
+   ],
+   [
+    "equal",
+    857,
+    863,
+    763,
+    769
+   ],
+   [
+    "replace",
+    863,
+    864,
+    769,
+    770,
+    [
+     "`append_draft` (#744) creates a new plain-text"
+    ]
+   ],
+   [
+    "equal",
+    864,
+    868,
+    770,
+    774
+   ],
+   [
+    "replace",
+    868,
+    869,
+    774,
+    775,
+    [
+     "(#745 describes what goes wrong with a draft"
+    ]
+   ],
+   [
+    "equal",
+    869,
+    882,
+    775,
+    788
+   ],
+   [
+    "replace",
+    882,
+    887,
+    788,
+    789,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    887,
+    889,
+    789,
+    791
+   ],
+   [
+    "replace",
+    889,
+    891,
+    791,
+    793,
+    [
+     " `sent_copy` is `append` when the tool should store the sent copy in the server's sent mailbox, or `provider`",
+     " when the provider stores it itself. `allowed_from` lists other addresses this account may send as."
+    ]
+   ],
+   [
+    "equal",
+    891,
+    892,
+    793,
+    794
+   ],
+   [
+    "replace",
+    892,
+    898,
+    794,
+    800,
+    [
+     " Two optional keys, `drafts_mailbox` and `sent_mailbox`, give the exact names of those mailboxes for a server",
+     " that does not mark them (#748). The tools use",
+     " the mailbox the server marks `\\Drafts` or `\\Sent` in its mailbox list; when it marks none and advertises",
+     " `SPECIAL-USE`, they ask it once more; only when it still marks none do they use the name written here, and",
+     " only if the server lists a mailbox with exactly that name (letter case included). A mailbox is never chosen by",
+     " guessing from its name. Each result's notes say which way each mailbox was found."
+    ]
+   ],
+   [
+    "equal",
+    898,
+    899,
+    800,
+    801
+   ],
+   [
+    "replace",
+    899,
+    900,
+    801,
+    802,
+    [
+     " binary in a terminal. The password is read from standard input, without echo, and never printed:"
+    ]
+   ],
+   [
+    "equal",
+    900,
+    905,
+    802,
+    807
+   ],
+   [
+    "replace",
+    905,
+    907,
+    807,
+    809,
+    [
+     " The item's service is `che-apple-mail-mcp.direct-transport`. No MCP tool can create, change or read it, and the",
+     " server never reads Mail's passwords. Login uses the full `address` as the user name."
+    ]
+   ],
+   [
+    "equal",
+    907,
+    913,
+    809,
+    815
+   ],
+   [
+    "replace",
+    913,
+    914,
+    815,
+    816,
+    [
+     "|`outcome`|Meaning|What to do|"
+    ]
+   ],
+   [
+    "equal",
+    914,
+    915,
+    816,
+    817
+   ],
+   [
+    "replace",
+    915,
+    918,
+    817,
+    820,
+    [
+     "|`submitted`|The server accepted the message. `sent_copy` and `draft_removal` then report `done`, `pending` or `skipped`|A `pending` stage is finished by calling `send_draft` again with the same draft; it is not submitted again|",
+     "|`not_sent`|Refused before the server accepted it|Fix the cause in the reply and call again|",
+     "|`unknown`|Whether the server took the message could not be established (for example the connection ended after it was handed over); the tool is not retrying|Look in the recipients' mail or the sent mailbox. Only if it was not sent, run `--direct-transport-forget '<message-id>'` (quoted: zsh reads the angle brackets as redirections) and call again|"
+    ]
+   ],
+   [
+    "equal",
+    918,
+    960,
+    820,
+    862
+   ],
+   [
+    "delete",
+    960,
+    961,
+    862,
+    862
+   ],
+   [
+    "equal",
+    961,
+    977,
+    862,
+    878
+   ],
+   [
+    "delete",
+    977,
+    978,
+    878,
+    878
+   ],
+   [
+    "equal",
+    978,
+    980,
+    878,
+    880
+   ],
+   [
+    "replace",
+    980,
+    981,
+    880,
+    881,
+    [
+     "- **Framework**: MCP Swift SDK v0.10.0"
+    ]
+   ],
+   [
+    "equal",
+    981,
+    985,
+    881,
+    885
+   ],
+   [
+    "delete",
+    985,
+    987,
+    885,
+    885
+   ],
+   [
+    "equal",
+    987,
+    1002,
+    885,
+    900
+   ],
+   [
+    "replace",
+    1002,
+    1009,
+    900,
+    901,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1009,
+    1027,
+    901,
+    919
+   ],
+   [
+    "delete",
+    1027,
+    1029,
+    919,
+    919
+   ],
+   [
+    "equal",
+    1029,
+    1030,
+    919,
+    920
+   ],
+   [
+    "replace",
+    1030,
+    1035,
+    920,
+    921,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1035,
+    1036,
+    921,
+    922
+   ],
+   [
+    "replace",
+    1036,
+    1041,
+    922,
+    923,
+    [
+     "MIT License - see LICENSE for details."
+    ]
+   ],
+   [
+    "equal",
+    1041,
+    1043,
+    923,
+    925
+   ],
+   [
+    "replace",
+    1043,
+    1044,
+    925,
+    926,
+    [
+     "Created by **Che Cheng** (@kiki830621)"
+    ]
+   ],
+   [
+    "equal",
+    1044,
+    1046,
+    926,
+    928
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

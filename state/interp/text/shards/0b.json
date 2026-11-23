@@ -2970,5 +2970,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "74ff395518ff": {
+  "identity": {
+   "one_liner": "基于官方 postgres 镜像构建、预装 PostGIS 扩展的 Docker 镜像",
+   "review": "该仓库提供运行带 PostGIS 扩展的 PostgreSQL 的 Docker 镜像，基于官方 postgres 镜像制作，含 Debian 与 Alpine 两种变体，支持 PostgreSQL 14–19 与 PostGIS 3.7.x，另有基于 master 分支的测试镜像。默认数据库自动初始化 postgis 和 postgis_topology 扩展；使用方式与环境变量沿用官方 postgres 镜像。注意 PG18+ 数据卷路径变更及 3.5/3.6 升级需 pg_dump 迁移。",
+   "highlights": [
+    "提供 Debian 与 Alpine 变体，覆盖 PostgreSQL 14–19 与 PostGIS 3.7.x 组合，另有基于 PostGIS/GEOS/PROJ/GDAL master 分支的 *-master 测试镜像",
+    "默认数据库自动安装并初始化 postgis 与 postgis_topology 扩展，postgis_raster 与 postgis_sfcgal 可用但不初始化；亦提供启用 PostGIS 的 template_postgis 模板库",
+    "支持官方 postgres 镜像的全部环境变量（POSTGRES_PASSWORD、POSTGRES_USER、POSTGRES_DB 等），仅初始化空数据目录"
+   ],
+   "use_cases": [
+    "需要通过 Docker 快速启动带空间扩展的 PostgreSQL 数据库容器",
+    "使用 docker run 一条命令启动 PostGIS 数据库，或以容器网络方式连接客户端容器",
+    "需要测试 PostGIS/GEOS/PROJ/GDAL 开发分支版本的场景（使用 *-master 测试镜像）"
+   ]
+  },
+  "sha": "74ff395518ff",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32aca9895db6": {
+  "identity": {
+   "one_liner": "用Java编写的SQLite数据库已删除记录取证恢复工具",
+   "review": "FQLite是一款基于Java和JavaFX的SQLite数据库取证工具，用于扫描数据库文件中标记为已删除的记录并恢复显示。它面向数字取证人员，支持读取freelist页面、未分配空间、WAL日志和回滚日志，提供GUI模式以及可脱离界面使用的Java库和命令行版本（JSON/CSV输出）。数据库以只读方式查看，解码字段仅存在于视图中。",
+   "highlights": [
+    "扫描SQLite数据库文件中已删除记录、freelist页面、未分配空间，并支持恢复被删除的表，数据导出为CSV/TSV、HTML、新SQLite数据库及CASE/UCO JSON-LD格式",
+    "解码多种BLOB格式（protobuf、bplist、typedstream等）并透明解压gzip、zstd、LZ4、LZFSE等压缩数据，支持嵌套多层解压",
+    "提供SHA-256证据哈希与导出清单、恢复记录的置信度标注、WAL帧校验和检查及基于时间线的案例模式分析"
+   ],
+   "use_cases": [
+    "移动设备应用数据库（如iMessage、plist存储数据）的已删除内容取证恢复",
+    "对SQLite证据文件进行完整性审计、WAL状态检查与row历史追踪",
+    "以命令行或Java库方式批量分析数据库文件并生成JSON/CSV结果"
+   ]
+  },
+  "sha": "32aca9895db6",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

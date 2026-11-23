@@ -3073,5 +3073,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2a769f336b78": {
+  "identity": {
+   "one_liner": "Raven 语言的 SQLite 驱动，捆绑 C 引擎源码，经 FFI 编译链接",
+   "review": "raven-sqlite 是 Raven 语言的 SQLite 绑定库。它将 SQLite 单文件 amalgamation 随包分发，由 rvpm build 直接编译链接进程序，无需安装系统 SQLite。API 提供 Db 连接、语句 prepare/bind/读取等操作，句柄以普通 Raven 类型经 FFI 传递。需 Raven 3.0.0 以上与一个 C 编译器；语句与连接需手动释放。",
+   "highlights": [
+    "随包捆绑 SQLite C amalgamation，由 rvpm build 编译链接，无需安装系统 SQLite",
+    "提供 ? 占位符参数绑定，1-based 索引，checked 绑定返回 Result 报告错误",
+    "支持内存库（\":memory:\"）与文件路径持久化，文本绑定保留嵌入 NUL 字节"
+   ],
+   "use_cases": [
+    "在 Raven 程序中读写本地 SQLite 数据库文件",
+    "使用内存数据库进行无需外部依赖的测试",
+    "执行 CREATE/INSERT/UPDATE 等语句并获取变更行数、last_insert_id 等结果"
+   ]
+  },
+  "sha": "2a769f336b78",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

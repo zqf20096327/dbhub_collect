@@ -28307,5 +28307,1598 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "5ad2e529f5c2+2": {
+  "fn": "hugr-lab/mssql-extension",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "replace",
+    0,
+    10,
+    0,
+    6,
+    [
+     "CI",
+     "DuckDB",
+     "Latest release",
+     "Community downloads per week",
+     "License: MIT",
+     "GitHub stars"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    15,
+    6,
+    11
+   ],
+   [
+    "delete",
+    15,
+    17,
+    11,
+    11
+   ],
+   [
+    "equal",
+    17,
+    19,
+    11,
+    13
+   ],
+   [
+    "replace",
+    19,
+    20,
+    13,
+    14,
+    [
+     "Weekly downloads of the mssql DuckDB community extension"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    14,
+    15
+   ],
+   [
+    "replace",
+    21,
+    22,
+    15,
+    16,
+    [
+     "📊 **Interactive chart** — queried live in your browser with DuckDB-Wasm."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    16,
+    17
+   ],
+   [
+    "replace",
+    23,
+    26,
+    17,
+    18,
+    [
+     "> Regenerated weekly and served from GitHub Pages, so it stays current without a commit. Counts are a Cloudflare estimate of `INSTALL mssql FROM community` events, aggregated across DuckDB versions and platforms. Source: DuckDB Community Extensions download metrics."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    18,
+    21
+   ],
+   [
+    "delete",
+    29,
+    30,
+    21,
+    21
+   ],
+   [
+    "equal",
+    30,
+    32,
+    21,
+    23
+   ],
+   [
+    "replace",
+    32,
+    33,
+    23,
+    24,
+    [
+     "**Full documentation lives at hugr-lab.github.io/mssql-extension** —"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    39,
+    24,
+    30
+   ],
+   [
+    "replace",
+    39,
+    40,
+    30,
+    31,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    31,
+    32
+   ],
+   [
+    "replace",
+    41,
+    48,
+    32,
+    39,
+    [
+     "|Getting Started|install, ATTACH, first queries|",
+     "|Connections & Auth|connection strings, secrets, Azure AD, Kerberos|",
+     "|Writing Data|COPY (bulk load), CTAS, INSERT/UPDATE/DELETE|",
+     "|Backup Files|describe a `.bak` without SQL Server|",
+     "|Settings Reference|every `mssql_*` setting with defaults|",
+     "|Troubleshooting|common errors and limitations|",
+     "|Articles|Medium deep dives on design and performance|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    39,
+    40
+   ],
+   [
+    "replace",
+    49,
+    52,
+    40,
+    43,
+    [
+     "Contributor docs stay in the repository: DATAMODEL.md (layered",
+     "architecture), docs/ (internals), docs/TESTING.md,",
+     "CLAUDE.md (development guidelines)."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    59,
+    43,
+    50
+   ],
+   [
+    "replace",
+    59,
+    60,
+    50,
+    51,
+    [
+     "- **Code-page text arrives as UTF-8, converted on the client**: a single-byte code page travels as one byte a character and costs the server no conversion, a raw `mssql_scan` is correct on every code page (types)"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    51,
+    52
+   ],
+   [
+    "replace",
+    61,
+    62,
+    52,
+    53,
+    [
+     "- **SQL Server 2025 `vector(n)` as `FLOAT[n]`**, read from its bytes (VECTORSUPPORT) and written on every path, COPY and CTAS included (types)"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    72,
+    53,
+    63
+   ],
+   [
+    "replace",
+    72,
+    74,
+    63,
+    65,
+    [
+     "- Azure AD authentication (service principal, CLI, interactive device code flow)",
+     "- Kerberos / Windows SSPI integrated authentication — POSIX (`kinit` / keytab / raw credentials) and Windows (current logon session via `secur32.dll`)"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    76,
+    65,
+    67
+   ],
+   [
+    "replace",
+    76,
+    77,
+    67,
+    68,
+    [
+     "- **SQL Server backup files without SQL Server**: `mssql_backup_info('/backups/db.bak')` reports what `RESTORE HEADERONLY` / `LABELONLY` / `FILELISTONLY` do, read from the file alone through DuckDB's file system (local, `s3://`, `https://`) — full, differential and log backups, compressed (`MS_XPRESS`, `ZSTD`) and striped; compared with `RESTORE`'s own answers on SQL Server 2025 samples in CI, and on each version's backups from 2017 to 2025 when the oracle lane runs. `mssql_backup_tables` / `mssql_backup_views` list a full backup's tables (columns, types) and views, `mssql_backup_catalog` its system base tables as stored, and `mssql_backup_scan` reads a table's rows — values stored off row (`text` / `ntext` / `image`, long MAX values, row-overflow) included — in parallel, compared with `RESTORE` table by table; a backup taken under writes says which tables differ from a `RESTORE` (`fuzzy_status`), and `mssql_backup_transactions` / `mssql_backup_transaction_records` read the log it carries (backup files)"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    91,
+    68,
+    82
+   ],
+   [
+    "replace",
+    91,
+    95,
+    82,
+    85,
+    [
+     "> on a case-insensitive column (#272).",
+     "> See Remote Pushdown",
+     "> and String comparisons and collation."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    118,
+    85,
+    108
+   ],
+   [
+    "replace",
+    118,
+    126,
+    108,
+    109,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    141,
+    109,
+    124
+   ],
+   [
+    "replace",
+    141,
+    146,
+    124,
+    125,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    155,
+    125,
+    134
+   ],
+   [
+    "delete",
+    155,
+    156,
+    134,
+    134
+   ],
+   [
+    "equal",
+    156,
+    164,
+    134,
+    142
+   ],
+   [
+    "delete",
+    164,
+    165,
+    142,
+    142
+   ],
+   [
+    "equal",
+    165,
+    166,
+    142,
+    143
+   ],
+   [
+    "replace",
+    166,
+    171,
+    143,
+    144,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    177,
+    144,
+    150
+   ],
+   [
+    "replace",
+    177,
+    180,
+    150,
+    153,
+    [
+     " License, Version 2.0. © The OpenSSL Project Authors and",
+     " contributors. Version pinned via `vcpkg.json`.",
+     " License text: LICENSES/openssl-LICENSE.txt"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    153,
+    154
+   ],
+   [
+    "replace",
+    181,
+    184,
+    154,
+    157,
+    [
+     " under the MIT License option of its dual Apache-2.0/MIT",
+     " licensing. © Daniel Lemire and simdutf contributors.",
+     " License text: LICENSES/simdutf-LICENSE-MIT.txt"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    157,
+    158
+   ],
+   [
+    "replace",
+    185,
+    189,
+    158,
+    162,
+    [
+     " backups), used under the BSD License option of its dual BSD/GPLv2",
+     " licensing. © Meta Platforms, Inc. and affiliates. Version pinned via",
+     " `vcpkg.json`.",
+     " License text: LICENSES/zstd-LICENSE-BSD.txt"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    191,
+    162,
+    164
+   ],
+   [
+    "replace",
+    191,
+    193,
+    164,
+    165,
+    [
+     "This project is licensed under the MIT License. See the LICENSE file for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "46a72949c76e+2": {
+  "fn": "dennysjmarquez/MemoryBioRAG",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "Configuración, seguridad, bootstrap sin fixtures y límites: Guía v36.2. No se infiere intención libre ni se aprueba por mera lectura. La QA del laboratorio es antecedente, no una certificación automática de esta integración."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "replace",
+    11,
+    13,
+    11,
+    13,
+    [
+     "> **Repositorio de desarrollo (DEV):** `MemoryBioRAG` es el repositorio principal de desarrollo activo. La versión de trabajo y sus características vigentes pueden incluir cambios aún en curso y no constituyen por sí solos una publicación estable. ",
+     "> Para consultar o descargar la distribución estable, visita el **repositorio MemoryBioRAG-Stable ↗**."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    21,
+    13,
+    21
+   ],
+   [
+    "delete",
+    21,
+    23,
+    21,
+    21
+   ],
+   [
+    "equal",
+    23,
+    25,
+    21,
+    23
+   ],
+   [
+    "replace",
+    25,
+    26,
+    23,
+    24,
+    [
+     "> **v34.0:** con una DB nueva, o sin campeón, la neurona no actúa y estos números se mantienen **idénticos** (son el piso). Con el campeón ya aprendido sobre la copia del snapshot (`despertar_neurona.sh`, 500 ciclos), la misma suite da **Recall@5 100.00 % · Recall@1 94.06 % (823/875) · MRR 0.964 · FP 0/40**, sin ninguna categoría por debajo del piso. Detalle en La Neurona de BioRAG."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    24,
+    25
+   ],
+   [
+    "replace",
+    27,
+    28,
+    25,
+    26,
+    [
+     "> **v35.0:** la QA oficial sale **idéntica** antes y después de todos los cambios de la v35 (Recall@5 100.00 % · Recall@1 91.89 % · MRR 0.950 · FP 0/40, misma máquina y semilla). Detalle en La Neurona Asociativa."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    39,
+    26,
+    37
+   ],
+   [
+    "replace",
+    39,
+    40,
+    37,
+    38,
+    [
+     "> **Cada base tiene su propia neurona.** La neurona aprende con los recuerdos de la base donde vive y se guarda dentro de ella. Esta tabla mide una copia del snapshot oficial, que no trae neurona entrenada: por eso muestra la fórmula a mano sola (el piso), aunque tu neurona esté trabajando en tu DB viva. La QA ahora lo dice antes de medir y nombra el parámetro para verla: `python scripts/evaluar_qa.py --con-neurona`. Detalle en La neurona en la QA."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    46,
+    38,
+    44
+   ],
+   [
+    "replace",
+    46,
+    47,
+    44,
+    45,
+    [
+     "|Métrica|Resultado observado|Contexto y Significado Científico|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    45,
+    46
+   ],
+   [
+    "replace",
+    48,
+    58,
+    46,
+    56,
+    [
+     "|**Recall@5 global**|**100.00% (875/875)**|**100% de cobertura en ventana de trabajo**: todo recuerdo gold ingresa al Top-5 del agente sin fallos de recuperación (0 fallos).|",
+     "|**Recall@1 (Top-1)**|**91.77% (803/875)**|**Precisión de primer resultado**: 803 de 875 casos quedan en primer lugar directo (métrica complementaria observada en benchmark).|",
+     "|**MRR (Mean Reciprocal Rank)**|**0.950**|Posición recíproca promedio ponderada (0.9497 sin redondear; métrica complementaria observada).|",
+     "|**Falsos positivos**|**0/40 (0.00%)**|Calibración conforme efectiva en los 40 controles negativos del benchmark (FP rate observada 0.00%).|",
+     "|**Casos ambiguos (contradictorios)**|**6 casos (2 con cobertura parcial)**|Evaluados por separado del Recall global; 2 casos no cubren al menos una de las etiquetas contradictorias.|",
+     "|**Pruebas unitarias de v36.0**|**852 passed · 18 skipped**|`PYTHONHASHSEED=0 python -m pytest tests/` en copia aislada (870 recopilados; 240.19 s; Python 3.11.2). Resultado registrado para el cierre.|",
+     "|**Smoke de Concept Hub (5 paráfrasis)**|**5/5 TOP-1**|Repetido sobre una copia aislada del snapshot oficial (851 nodos activos, 6 hubs y 30 puentes); evidencia focal, no sustituto de las pruebas de escala.|",
+     "|**Abismo léxico (EXP-Q)**|**3/3 Pool · 2/3 Top-5 · 1/3 Top-1**|3/3 descubiertos en pool de grafo; 2/3 en Top-5 (pos #1 y #4) y 1/3 en Top-1 (pos #1).|",
+     "|**Sinónimos · Recall@5 / Recall@1**|**100% (55/55) / 56.36%**|Cobertura total en Top-5; el 43.64% restante queda entre Top-2 y Top-5.|",
+     "|"
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "49658dfea08a+2": {
+  "fn": "win4r/runwright",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "English | 简体中文"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    16,
+    3,
+    16
+   ],
+   [
+    "replace",
+    16,
+    18,
+    16,
+    18,
+    [
+     " of a run, start it again, and the run carries on from the last finished step. A finished step is never run",
+     " twice."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    21,
+    19,
+    21,
+    [
+     " approval, and stay inside a spend cap, a tool-call budget and a turn limit. A run that hits a limit pauses and",
+     " says what it needs; it does not fail."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     " graded, versions what passes and gives it to the next run of that agent."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    23,
+    24
+   ],
+   [
+    "replace",
+    24,
+    26,
+    24,
+    26,
+    [
+     " steps with typed output, decisions with a confidence threshold, branches, bounded maps and loops, sub-workflows,",
+     " a hand-off to an agent) instead of an open-ended loop."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    32,
+    26,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "> not had an independent security audit. Read Security before exposing it beyond your own"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    33,
+    36
+   ],
+   [
+    "replace",
+    36,
+    51,
+    36,
+    37,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    37,
+    40
+   ],
+   [
+    "replace",
+    54,
+    55,
+    40,
+    41,
+    [
+     " through its built-in type stripping; no build step is needed to run, test or develop."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    41,
+    42
+   ],
+   [
+    "replace",
+    56,
+    58,
+    42,
+    44,
+    [
+     " `npm install` only fetches the two development dependencies (`typescript`, `@types/node`), used for type",
+     " checking and for building the package."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    44,
+    45
+   ],
+   [
+    "replace",
+    59,
+    62,
+    45,
+    48,
+    [
+     " `npm pack` / `npm publish` run it first (`prepack`). Installed that way, the `runwright` binary and the three",
+     " entry points (`runwright`, `runwright/client`, `runwright/workflow`) load from `node_modules`. The examples and",
+     " the test suite are in the repository, not in the package."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    72,
+    48,
+    58
+   ],
+   [
+    "replace",
+    72,
+    78,
+    58,
+    59,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    83,
+    59,
+    64
+   ],
+   [
+    "replace",
+    83,
+    85,
+    64,
+    66,
+    [
+     " port when 7411 is taken (up to 20 ports further), and prints the URL, the path of the API token file and the",
+     " data directory (`~/.runwright`, or `RUNWRIGHT_DATA_DIR`). The token itself is never printed."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    88,
+    66,
+    69
+   ],
+   [
+    "replace",
+    88,
+    89,
+    69,
+    70,
+    [
+     " which means \"waiting on a person\", and lists the open question."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    93,
+    70,
+    74
+   ],
+   [
+    "replace",
+    93,
+    96,
+    74,
+    77,
+    [
+     " file's text, `Hello, Ada!`. Off a terminal (piped into another program, or with `--json`) it is one JSON",
+     " document, `{\"path\": \"greeting.txt\", \"contentType\": ..., \"bytes\": 12, \"encoding\": \"utf8\", \"content\": \"Hello,",
+     " Ada!\\n\"}`, with the text in `content`; `--out <file>` writes the file's bytes instead."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    106,
+    77,
+    87
+   ],
+   [
+    "replace",
+    106,
+    107,
+    87,
+    88,
+    [
+     "(CLI reference)."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    132,
+    88,
+    113
+   ],
+   [
+    "replace",
+    132,
+    133,
+    113,
+    114,
+    [
+     " writes a file with it. The script answers the question itself and prints the file."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    139,
+    114,
+    120
+   ],
+   [
+    "replace",
+    139,
+    141,
+    120,
+    122,
+    [
+     " used directly; an answer below the confidence threshold is routed to an agent, whose typed result replaces the",
+     " decision."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    147,
+    122,
+    128
+   ],
+   [
+    "replace",
+    147,
+    149,
+    128,
+    130,
+    [
+     " works it out and keeps a note; the second run is given that note and finishes in fewer turns, so it costs",
+     " measurably less. The script prints both costs."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    167,
+    130,
+    148
+   ],
+   [
+    "replace",
+    167,
+    175,
+    148,
+    149,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    181,
+    149,
+    155
+   ],
+   [
+    "replace",
+    181,
+    182,
+    155,
+    156,
+    [
+     "`$0`, it reports `unknown`. See Configuration for every provider option."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    192,
+    156,
+    166
+   ],
+   [
+    "replace",
+    192,
+    207,
+    166,
+    167,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    210,
+    167,
+    170
+   ],
+   [
+    "replace",
+    210,
+    211,
+    170,
+    171,
+    [
+     "examples/triage-workflow/workflow.ts builds a complete one."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    215,
+    171,
+    175
+   ],
+   [
+    "replace",
+    215,
+    216,
+    175,
+    176,
+    [
+     "behaviour reference and the chapters it links to."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    218,
+    176,
+    178
+   ],
+   [
+    "replace",
+    218,
+    220,
+    178,
+    180,
+    [
+     " and sealed secrets live in one SQLite file in WAL mode. Every run has an append-only journal, and every model",
+     " call, tool call, question and wait is a *durable step* with a stable key in it."
+    ]
+   ],
+   [
+    "equal",
+    220,
+    221,
+    180,
+    181
+   ],
+   [
+    "replace",
+    221,
+    223,
+    181,
+    183,
+    [
+     " from the top. Every step already in the journal returns its recorded result at once, and real work starts again",
+     " at the first unfinished step, so a finished step is never repeated."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    224,
+    183,
+    184
+   ],
+   [
+    "replace",
+    224,
+    227,
+    184,
+    187,
+    [
+     " store accepts writes only from the current holder at the current epoch, and the built-in file tools stage their",
+     " writes through a folder of the writer's epoch, so a runner that lost its lease cannot write anything after its",
+     " successor took over. Another runner takes a dead runner's runs after the lease expires (30 s by default)."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    187,
+    188
+   ],
+   [
+    "replace",
+    228,
+    230,
+    188,
+    190,
+    [
+     " crash, read-only and resumable tools run again by themselves; any other unfinished call waits for a person to",
+     " retry it, skip it with a result, or cancel the run."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    231,
+    190,
+    191
+   ],
+   [
+    "replace",
+    231,
+    233,
+    191,
+    193,
+    [
+     " pauses and interrupted calls share one shape and one list (`runwright pendings list`, the console's \"needs you\"",
+     " list), and survive restarts."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    193,
+    194
+   ],
+   [
+    "replace",
+    234,
+    236,
+    194,
+    196,
+    [
+     " call's worst-case cost and sends it only if the run stays within its cap. Provided a provider never bills more",
+     " than that worst case, a run never spends more than its cap."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    196,
+    197
+   ],
+   [
+    "replace",
+    237,
+    240,
+    197,
+    200,
+    [
+     " characters), a provenance check against untrusted text such as fetched pages, and a grader. Anything that may",
+     " come from untrusted content is held for a person. Kept items are versioned and given to later runs within a token",
+     " budget, ranked by relevance. A skill that keeps being used can be promoted to a validated workflow."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    241,
+    200,
+    201
+   ],
+   [
+    "replace",
+    241,
+    243,
+    201,
+    203,
+    [
+     " path for every problem, can be dry-run without calling anything, exports as a graph or Mermaid text, and runs",
+     " durably under the owning agent's policies and limits."
+    ]
+   ],
+   [
+    "equal",
+    243,
+    246,
+    203,
+    206
+   ],
+   [
+    "replace",
+    246,
+    247,
+    206,
+    207,
+    [
+     "|Guide|What it covers|"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    248,
+    207,
+    208
+   ],
+   [
+    "replace",
+    248,
+    256,
+    208,
+    216,
+    [
+     "|Behaviour reference|the precise rules: journal and replay, fencing, pendings, limits and cost, redaction, security notes|",
+     "|Architecture|the durability model, run state machine, runners and the store|",
+     "|Workflow language|every node kind, references, validation codes, dry run, builder|",
+     "|HTTP API|every route, request and response, SSE timelines, errors|",
+     "|CLI|every command and flag, output modes, exit codes|",
+     "|Learning|proposals, checks, provenance, grading, selection, promotion|",
+     "|Security|threat model, token, sealed secrets, redaction, SSRF guard, workspace rules|",
+     "|Configuration|every key and default, environment variables, providers and prices, triggers|"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    262,
+    216,
+    222
+   ],
+   [
+    "replace",
+    262,
+    264,
+    222,
+    223,
+    [
+     "|Measurement|Result|"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    223,
+    224
+   ],
+   [
+    "replace",
+    265,
+    275,
+    224,
+    233,
+    [
+     "|Completed runs per second, concurrency 1 (400 runs)|612 runs/s|",
+     "|Completed runs per second, concurrency 4 (400 runs)|842 runs/s|",
+     "|Completed runs per second, concurrency 16 (400 runs)|1 007 runs/s|",
+     "|Completed runs per second, concurrency 64 (400 runs)|1 019 runs/s|",
+     "|Journal appends, one record per commit (20 000 records)|34 728 records/s|",
+     "|Journal appends, eight records per commit (20 000 records)|177 656 records/s|",
+     "|Enqueue to claim, in-process wake-up (500 samples)|p50 0.48 ms, p99 1.65 ms|",
+     "|Recovery of 50 runs after SIGKILL of their runner (lease 1 000 ms, model calls of 1 500 ms in flight)|all reclaimed after 1 025 ms, all completed after 2 558 ms|",
+     "|Timeline SSE fan-out, 50 subscribers x 200 events (commit to bytes received)|p50 0.38 ms, p99 0.95 ms|"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    290,
+    233,
+    248
+   ],
+   [
+    "replace",
+    290,
+    291,
+    248,
+    249,
+    [
+     " in-process runner or separate `runwright runner` processes on the same data directory."
+    ]
+   ],
+   [
+    "equal",
+    291,
+    292,
+    249,
+    250
+   ],
+   [
+    "replace",
+    292,
+    296,
+    250,
+    254,
+    [
+     " person's decision (retry, skip with a result, cancel) for any other interrupted call. An unfinished call of a",
+     " tool declared `idempotent` is run again by itself only when no write call of the run finished after it",
+     " started; otherwise repeating it could undo that finished work, so it waits for a person as an interrupted",
+     " call."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    298,
+    254,
+    256
+   ],
+   [
+    "replace",
+    298,
+    303,
+    256,
+    261,
+    [
+     " output of any JSON type (object, array, scalar or `null`); the engine retries",
+     " transient errors attempt by attempt (capped exponential backoff and jitter, honouring `Retry-After` in full up",
+     " to a configurable limit), admitting",
+     " and charging every attempt on its own; one size limit per provider reply (64 MiB, streamed or not); a price",
+     " table you can override."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    304,
+    261,
+    262
+   ],
+   [
+    "replace",
+    304,
+    306,
+    262,
+    264,
+    [
+     " `web_fetch` (with an SSRF guard), `shell` (off by default), `run_workflow`, and `recall` for learning; a",
+     " registry for host tools with JSON Schema argument validation."
+    ]
+   ],
+   [
+    "equal",
+    306,
+    308,
+    264,
+    266
+   ],
+   [
+    "replace",
+    308,
+    309,
+    266,
+    267,
+    [
+     " execution with per-node deadlines and bounded retries."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    310,
+    267,
+    268
+   ],
+   [
+    "replace",
+    310,
+    311,
+    268,
+    269,
+    [
+     " within a budget, per-run given/opened records, before/after metrics, skill promotion to a validated workflow."
+    ]
+   ],
+   [
+    "equal",
+    311,
+    312,
+    269,
+    270
+   ],
+   [
+    "replace",
+    312,
+    313,
+    270,
+    271,
+    [
+     " delivery dedupe; every trigger carries a cap and can be turned off."
+    ]
+   ],
+   [
+    "equal",
+    313,
+    314,
+    271,
+    272
+   ],
+   [
+    "replace",
+    314,
+    315,
+    272,
+    273,
+    [
+     " resume from `Last-Event-ID`, a CLI, a dependency-free TypeScript client, and a one-page web console."
+    ]
+   ],
+   [
+    "equal",
+    315,
+    316,
+    273,
+    274
+   ],
+   [
+    "replace",
+    316,
+    317,
+    274,
+    275,
+    [
+     " time, so memory holds a page of a few records whatever the journal's size)."
+    ]
+   ],
+   [
+    "equal",
+    317,
+    321,
+    275,
+    279
+   ],
+   [
+    "replace",
+    321,
+    322,
+    279,
+    280,
+    [
+     " browsers. Runwright's tools act only in a local workspace folder per run."
+    ]
+   ],
+   [
+    "equal",
+    322,
+    324,
+    280,
+    282
+   ],
+   [
+    "replace",
+    324,
+    325,
+    282,
+    283,
+    [
+     " recipes, and clients in languages other than TypeScript."
+    ]
+   ],
+   [
+    "equal",
+    325,
+    327,
+    283,
+    285
+   ],
+   [
+    "replace",
+    327,
+    329,
+    285,
+    287,
+    [
+     " journal record from any runner (picked up by polling), but `delta` events only come from the server's own",
+     " in-process runner."
+    ]
+   ],
+   [
+    "equal",
+    329,
+    337,
+    287,
+    295
+   ],
+   [
+    "replace",
+    337,
+    339,
+    295,
+    297,
+    [
+     " page, the health checks and the signed webhook route needs the token from `<data dir>/token` (mode 0600). It",
+     " speaks plain HTTP: put a TLS proxy in front before binding it anywhere else."
+    ]
+   ],
+   [
+    "equal",
+    339,
+    340,
+    297,
+    298
+   ],
+   [
+    "replace",
+    340,
+    341,
+    298,
+    299,
+    [
+     " write-only: it reports whether a secret is set, never its value."
+    ]
+   ],
+   [
+    "equal",
+    341,
+    342,
+    299,
+    300
+   ],
+   [
+    "replace",
+    342,
+    344,
+    300,
+    302,
+    [
+     " record, stored value, API response, SSE event and log line, and text a caller sends is redacted before it is",
+     " stored. Files a run writes into its workspace are not redacted."
+    ]
+   ],
+   [
+    "equal",
+    344,
+    345,
+    302,
+    303
+   ],
+   [
+    "replace",
+    345,
+    346,
+    303,
+    304,
+    [
+     " built-in file tools, to the workspace. File tools stay inside the run's workspace folder."
+    ]
+   ],
+   [
+    "equal",
+    346,
+    347,
+    304,
+    305
+   ],
+   [
+    "replace",
+    347,
+    348,
+    305,
+    306,
+    [
+     " refused on every redirect hop) and its output, like `shell` output, is marked untrusted for learning."
+    ]
+   ],
+   [
+    "equal",
+    348,
+    349,
+    306,
+    307
+   ],
+   [
+    "replace",
+    349,
+    350,
+    307,
+    308,
+    [
+     " with the server's user rights."
+    ]
+   ],
+   [
+    "equal",
+    350,
+    352,
+    308,
+    310
+   ],
+   [
+    "replace",
+    352,
+    354,
+    310,
+    312,
+    [
+     "The full rules and their limits are in Security notes and",
+     "docs/security.md."
+    ]
+   ],
+   [
+    "equal",
+    354,
+    365,
+    312,
+    323
+   ],
+   [
+    "delete",
+    365,
+    366,
+    323,
+    323
+   ],
+   [
+    "equal",
+    366,
+    376,
+    323,
+    333
+   ],
+   [
+    "replace",
+    376,
+    392,
+    333,
+    334,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    395,
+    334,
+    337
+   ],
+   [
+    "replace",
+    395,
+    397,
+    337,
+    338,
+    [
+     "MIT, see LICENSE. Copyright (c) 2026 The Runwright authors."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

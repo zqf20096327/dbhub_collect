@@ -3424,5 +3424,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7c98f7a265ea": {
+  "identity": {
+   "one_liner": "Hyperion Stellar 测试网事件索引器与 Fastify API，持久化历史存于 PostgreSQL。",
+   "review": "该项目索引 Hyperion 合约事件并提供公开的转账与领取记录查询接口，面向需要查询 Stellar 测试网跨链转账历史的开发者与前端应用。它通过 Axelar ITS 或 Circle CCTP 路由向 Sepolia、Base Sepolia 和 Arc 测试网交付 USDC，并对目标端支付进行独立验证。索引器支持定时补扫与多副本游标租约；API 连接要求只读角色，写入需独立凭据。运行需 Node 22.13+ 与 PostgreSQL。",
+   "highlights": [
+    "对已支付的 ITS 与 CCTP 目标端凭证独立验证接收方、代币、金额、最终性与确认数",
+    "多副本通过游标租约避免重复推进游标，并提供 /ready 健康探针",
+    "定时补扫进程按时间预算分配各阶段，已提交工作在预算到期后保留"
+   ],
+   "use_cases": [
+    "为 Stellar 测试网跨链转账前端提供公开转账与领取历史 API",
+    "以 GitHub Actions 定时任务或常驻容器运行测试网索引器",
+    "在只托管 API 的部署中，从现有数据库读取记录而不运行链上监听"
+   ]
+  },
+  "sha": "7c98f7a265ea",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aac0144e2633": {
+  "identity": {
+   "one_liner": "基于 SlateDB 对象存储的 Datalog 三元组数据库，支持历史与增量查询",
+   "review": "Triplox 是一个受 Datomic 启发的数据库，以对象存储（S3）为唯一事实来源，底层使用 SlateDB 键值存储，采用客户端/服务器架构，查询在服务端执行。它基于 Feldera 的 DBSP 实现增量 Datalog 查询订阅。项目为 Alpha 阶段，索引编码未稳定，当前为单写入者，不支持 schema 更新，递归规则仍在计划中。",
+   "highlights": [
+    "以对象存储为数据源，通过 SlateDB 实现存算分离，支持单写入者加多读取者的部署形态",
+    "支持增量 Datalog 查询订阅与解除，覆盖 or/or-join、not/not-join、谓词、函数与聚合，底层使用 DBSP",
+    "提供 Docker 镜像，支持内存、本地持久化和 dev 三种运行模式"
+   ],
+   "use_cases": [
+    "需要以 S3 对象存储为部署基础并跟随 Datomic 数据模型的场景",
+    "需要动态订阅数据变化并增量更新查询结果（如视图）的场景",
+    "偏读取密集的 OLTP 工作负载"
+   ]
+  },
+  "sha": "aac0144e2633",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

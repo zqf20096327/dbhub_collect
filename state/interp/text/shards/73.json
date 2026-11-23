@@ -3377,5 +3377,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d6ddba8be539": {
+  "identity": {
+   "one_liner": "用纯 Raven 编写、经 std/net 实现 PostgreSQL v3 协议的客户端库。",
+   "review": "raven-postgres 是面向 Raven 语言的 PostgreSQL 客户端库，不依赖 libpq 或原生组件，直接在 TCP 上实现 v3 前后端协议。提供简单与扩展协议查询、$n 参数绑定、事务 SQL、SQLSTATE 错误保留等能力。当前版本 v0.1.0，已针对 PostgreSQL 16.9 和 17.5 做端到端测试；仅支持 trust 与 cleartext password 认证，尚无 TLS、MD5、SCRAM 支持和连接池。",
+   "highlights": [
+    "通过 std/net 实现 PostgreSQL v3 前后端协议，无需 libpq、C 编译器或其他原生依赖",
+    "支持简单协议查询与扩展协议 $1/$2 参数绑定，参数经 Bind 消息单独传输；可区分 SQL NULL 与空字符串",
+    "错误结果保留 severity 与 SQLSTATE，语句或参数错误后连接仍可复用；支持可配置的 socket 超时"
+   ],
+   "use_cases": [
+    "在 Raven 项目中执行 CRUD 查询、INSERT ... RETURNING 及基于 BEGIN/COMMIT/ROLLBACK 的事务",
+    "可信开发网络内使用 trust 或 cleartext password 认证连接 PostgreSQL 16/17 的应用",
+    "需要参数化查询并区分 NULL 与空字符串、结果按文本格式读取的场景"
+   ]
+  },
+  "sha": "d6ddba8be539",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

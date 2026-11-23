@@ -3471,5 +3471,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "216aad525e86": {
+  "identity": {
+   "one_liner": "检测 PostgreSQL 并发写入超额与 Supabase 迁移 RLS 缺口的 CLI 工具",
+   "review": "VibeRaven 是一个 Node 命令行工具，包含 check 和 race 两个子命令：check 读取仓库中的迁移文件、客户端代码与环境变量文件，标注存在 RLS 或 Data API 授权缺口的位置；race 在单个 PGlite WebAssembly 实例中运行两个独立会话，枚举有界的语句顺序并验证规则。面向使用 Supabase 与 PostgreSQL 的开发者，race 需要 Node 24+ 并启用 JSPI，check 只需 Node 20+。",
+   "highlights": [
+    "race 子命令在 PGlite WebAssembly 实例中运行两个带真实锁的会话，枚举有界语句顺序并按规则检查",
+    "check 子命令读取 migrations、客户端代码和 env 文件，输出每个缺口的文件名与行号",
+    "支持通过 MCP 接入 ChatGPT、Claude Code、Codex、Cursor、Lovable 等 agent，并提供本地 Studio 界面"
+   ],
+   "use_cases": [
+    "在发布前复现多用户并发预订同一资源的写入竞争",
+    "检查 Supabase 迁移文件中缺失的 RLS 策略和 Data API 授权",
+    "在编码 agent 对话中通过 MCP 连接器执行并发测试查询"
+   ]
+  },
+  "sha": "216aad525e86",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

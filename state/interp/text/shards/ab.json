@@ -3237,5 +3237,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1ea4fc172895": {
+  "identity": {
+   "one_liner": "静态链接的 C++ 推理多工具，整合 llama/whisper/stable-diffusion 于单一二进制",
+   "review": "chimera 是面向本地 ggml 模型的 C++ 推理工具与静态库，将 llama.cpp、whisper.cpp、stable-diffusion.cpp、SQLite 及 sqlite-vec 打包进单一可执行文件，提供文本生成、交互聊天、语音转写、文生图、嵌入向量与 OpenAI 兼容 HTTP 服务。三个引擎共享同一份 ggml 和一个 SQLite 数据库。需通过 make 构建并链接 OpenSSL。",
+   "highlights": [
+    "同一进程提供文本生成、聊天、语音转写、文生图、嵌入、向量存储（sqlite-vec ANN 搜索）与 OpenAI 兼容 HTTP 服务",
+    "三个上游引擎共享同一份 ggml 构建以支持静态链接；提供 gen、chat、whisper、sd、serve、index、search 等子命令",
+    "同一构建产出 libchimera.a 等静态库，供 C++ 项目以过程 API 或 OOP 层嵌入调用"
+   ],
+   "use_cases": [
+    "在无 Python/Node 运行时的目标机器上分发单一静态二进制运行多模态模型",
+    "通过一个 HTTP 端点同时调用文本、音频、图像、嵌入、RAG 与聊天历史接口",
+    "C++ 嵌入者在其进程内直接驱动 llama.cpp / whisper.cpp / sd.cpp 而不重复实现加载与运行脚手架"
+   ]
+  },
+  "sha": "1ea4fc172895",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

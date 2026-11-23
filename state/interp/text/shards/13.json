@@ -3626,5 +3626,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5180e59dd8af": {
+  "identity": {
+   "one_liner": "将 GitHub Stars 转为卡牌对战与 Lists 整理的开源应用",
+   "review": "Stard 基于用户的 GitHub Stars 提供两类功能：以 starred 仓库为卡牌的回合制对战游戏，以及将 Stars 分类写入 GitHub Lists、生成健康评分与 README 个人资料卡的工具。无需注册即可按用户名使用；也可通过 npx 运行或以 Docker 自托管。自托管需要具有 repo 权限的 classic token，该 token 可执行 unstar 和编辑 Lists 操作，README 提示需配置密码或 OIDC 保护端口。代码由 ElectricSQL、Postgres 等容器组成。",
+   "highlights": [
+    "提供卡牌对战模式：从指定用户的 Stars 中抽取卡牌，5 胜结束一局、3 败结束，含集卡与增益机制",
+    "提供 Stars 整理功能：将仓库分类写入 GitHub Lists 并双向同步，按提交、issues、贡献者、star 增长等计算 0–10 健康评分",
+    "支持三种部署方式：npx 运行、Docker 自托管（含单容器 aio 镜像）、以及生成可粘贴到 README 的图片卡片；提供 /api/* 供 Agent 调用，每次启动前生成备份"
+   ],
+   "use_cases": [
+    "将大量未整理的 GitHub Stars 批量分类到 GitHub Lists 并识别已停止维护的仓库",
+    "在 GitHub 个人主页 README 中展示精选仓库、评分评论与 Lists 卡片",
+    "以自己或指定用户的 Stars 生成卡牌进行对战或挑战"
+   ]
+  },
+  "sha": "5180e59dd8af",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dd47ed971ac5": {
+  "identity": {
+   "one_liner": "无 Docker 本地运行 22 种数据库引擎的 CLI 管理工具",
+   "review": "SpinDB 是一个本地数据库管理 CLI，通过下载原生二进制文件在 macOS、Linux 和 Windows 上运行 PostgreSQL、MySQL、MongoDB、Redis、DuckDB 等 22 种数据库引擎，无需 Docker。它为每个引擎提供统一的创建、启动、连接、备份、克隆命令，支持同机多版本共存与数据目录隔离，并提供分支、--json 输出等能力。面向需要本地多数据库环境的开发者，需 Node.js 22+，非商业用途免费，商业使用需购买许可。",
+   "highlights": [
+    "支持 22 种数据库引擎，覆盖关系型、文档型、键值、向量、时序、OLAP 等类型，各引擎使用统一命令集",
+    "以原生进程方式运行数据库（无需 Docker/VM），各数据库保留指定版本并拥有独立数据目录",
+    "提供 copy-on-write 分支（fork/reset/delete），在 APFS、Btrfs、XFS-reflink、ZFS 上即时创建，其他文件系统回退为完整复制；内置备份、恢复、克隆及 --json 输出"
+   ],
+   "use_cases": [
+    "需要在本机并行运行多个数据库引擎或同一数据库多版本的开发与测试环境",
+    "为脚本和 AI Agent 提供可编程的数据库生命周期管理（JSON 输出）",
+    "希望以分支方式快速复制数据库进行实验、验证后重置或删除的场景"
+   ]
+  },
+  "sha": "dd47ed971ac5",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9823baac7bec": {
+  "identity": {
+   "one_liner": "基于写时复制为 SQL Server 备份镜像秒级创建可写数据库分支的 CLI 工具",
+   "review": "SqlBranch 是一个 .NET CLI 工具，用于从 SQL Server 备份文件构建镜像，并通过 XFS reflink 写时复制机制快速生成可写的数据库分支，供开发、测试和 AI 代理使用。它管理一个 SQL Server Developer 容器作为引擎，所有分支挂载其上；仅限开发测试用途，要求 Docker、.NET 10 SDK 和 Linux/macOS 环境。当前版本 0.2，部分功能为预览状态。",
+   "highlights": [
+    "通过 XFS reflink 写时复制创建分支，创建时仅复制元数据，仅在写入时复制数据块，50 GiB 镜像的分支创建约 0.4 秒、自有数据约 300 KB",
+    "支持从 .bak 备份、SQL 脚本构建镜像，BACPAC 构建与云备份 URL 为预览功能；镜像可在密封前通过 --post-script 运行脱敏脚本",
+    "提供 SqlBranch.Testing 包供测试框架使用，分支随 dispose 释放，支持 reset/rm 命令，每个命令支持 --format json 与稳定退出码"
+   ],
+   "use_cases": [
+    "为每个开发者或拉取请求提供独立的全尺寸可写数据库副本，用于运行数据迁移验证",
+    "在集成测试中为每个测试提供私有全尺寸数据库，避免每次运行重新恢复或种子数据",
+    "为 AI 代理提供可随时重置或删除的沙箱数据库，用于执行迁移和破坏性查询"
+   ]
+  },
+  "sha": "9823baac7bec",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9dcd6a3e8f7d": {
+  "identity": {
+   "one_liner": "macOS Quick Look 扩展应用，为 MKV、压缩包、SQLite 等文件提供空格预览",
+   "review": "QuickPeek 是一个开源 macOS 应用（MIT 协议，约 3 MB），通过 Quick Look、缩略图和 Finder 扩展，为系统原生预览未覆盖的文件格式提供空格预览，包括 MKV/WebM 视频、ZIP/RAR/7z 等压缩包、SQLite 数据库、约 50 种代码配置文件、Markdown、CSV、IPA/APK 和种子文件。要求 macOS 26 及以上，扩展在沙盒中以只读方式运行且无网络访问。可通过 Homebrew 安装，应用为临时签名而非 Apple 公证，首次启动需在系统设置中手动放行。",
+   "highlights": [
+    "提供 MKV/WebM 视频预览，支持硬件解码 H.264、HEVC、VP9，AV1 需 M3 或更新芯片",
+    "支持读取 ZIP、RAR、7z、TAR、ISO 等压缩包文件树，无需解压即可预览内部文件",
+    "SQLite 数据库以只读方式打开，显示表和视图的行数及首行数据；扩展运行于 App Sandbox，无网络访问"
+   ],
+   "use_cases": [
+    "在 Finder 中按空格预览 MKV/WebM 视频、压缩包内容、SQLite 数据库等 macOS 系统不支持的文件类型",
+    "查看 APK/IPA/Xcode 归档的图标、版本、权限与描述文件信息",
+    "预览带语法高亮的代码配置文件和渲染后的 Markdown、CSV/TSV 表格"
+   ]
+  },
+  "sha": "9dcd6a3e8f7d",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7f440d95b6d4": {
+  "identity": {
+   "one_liner": "Windows 原生工具，用本地语音朗读 TikTok 与 Kick 直播间聊天消息",
+   "review": "TikVoz 是一个用 Rust 编写的 Windows 桌面程序，读取 TikTok 和 Kick 直播间的评论、礼物、关注等事件，并通过 Windows 离线语音朗读，两个平台的消息进入同一队列。程序为单个约 7 MB 的可执行文件，免安装、无需管理员权限。用户可配置每用户语音、VIP 优先级、防垃圾过滤与脏话检测。适用于 Windows x64 平台的直播主播。",
+   "highlights": [
+    "支持同时连接 TikTok 与 Kick 直播间，消息进入统一朗读队列，并提供演示模式模拟直播间",
+    "内置脏话过滤：对消息做 Unicode NFKC 归一化、同形字映射、处理 leetspeak、零宽字符、双向控制符等规避手法，参考 Unicode UTS #39 与 CVE-2021-42574",
+    "基于 egui 即时模式 UI 与 tokio 单线程运行时，只声明 Protobuf 中约 30 个使用的字段；构建由 GitHub Actions 生成并附来源证明"
+   ],
+   "use_cases": [
+    "主播在直播时想语音朗读观众评论、礼物和关注事件，而无需阅读聊天窗口",
+    "需要跨 TikTok 和 Kick 双平台汇合朗读消息的直播场景",
+    "希望对朗读内容做脏话过滤、按用户限流或设置触发前缀（如 !v）的直播间管理"
+   ]
+  },
+  "sha": "7f440d95b6d4",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

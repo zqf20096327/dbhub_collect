@@ -3205,5 +3205,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c203948b53e7": {
+  "identity": {
+   "one_liner": "自托管数据库备份工具，支持 PITR 与恢复验证",
+   "review": "Databasus 是一个 Apache 2.0 协议的自托管备份工具，通过 Web 界面为 PostgreSQL（物理+逻辑）、MySQL、MariaDB、MongoDB 提供定时备份。核心机制包括基于 WAL 流的时点恢复（PITR）、启动容器执行真实恢复的备份验证，以及 AES-256-GCM 加密；部署方式为 Docker 或 Helm。",
+   "highlights": [
+    "提供物理备份（全量+增量+WAL 流式）与逻辑备份两种类型，PostgreSQL 支持 PITR",
+    "通过启动数据库容器执行真实恢复并核对表行数来验证备份可用性",
+    "支持本地、S3、Azure Blob、FTP、SFTP 等多种存储目标及 GFS 等保留策略"
+   ],
+   "use_cases": [
+    "需要对 PostgreSQL 集群做时点恢复（PITR）的灾难恢复场景，含 Patroni/CNPG 主切换后的时间线延续",
+    "使用 Docker 或 Kubernetes（Helm）自托管部署备份系统，并接入 Slack/Telegram 等通知渠道",
+    "团队环境需要工作区、角色权限与审计日志的数据库备份管理"
+   ]
+  },
+  "sha": "c203948b53e7",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a50700a5e375": {
+  "identity": {
+   "one_liner": "基于 Bun 的 Telegram CLI，本地 SQLite 缓存加只读同步守护进程，提供完整 MTProto API 访问。",
+   "review": "telegram-sync-cli 是运行在 Bun 上的 TypeScript 命令行工具，将 Telegram 消息同步到本地 SQLite 缓存，支持离线全文搜索（FTS5）、只读 SQL 查询、文件收发与语音转文字，并通过 `tg api` 调用任意 MTProto 方法。默认输出 JSON、带稳定错误码，面向在终端和编程代理中使用 Telegram 的用户。需自备 Telegram API 凭据；群组仅在使用期内缓存。",
+   "highlights": [
+    "提供只读守护进程做实时同步与历史回填，消息读取默认缓存优先，可用 --fresh 绕过缓存",
+    "支持 FTS5 全文搜索、`tg sql` 只读 SQL 查询缓存、`tg api <method>` 调用任意 MTProto 方法",
+    "JSON 输出、固定退出码、可重试错误结构与分页 next 字段，附只读模式与聊天白名单环境变量"
+   ],
+   "use_cases": [
+    "在终端离线搜索和 SQL 分析已缓存的 Telegram 消息",
+    "让编程代理（如 Claude Code、Codex）通过 shell 以 JSON 接口读取/发送 Telegram 消息",
+    "下载消息附件、将语音/视频笔记本地转写为文本并参与搜索"
+   ]
+  },
+  "sha": "a50700a5e375",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

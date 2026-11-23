@@ -3334,5 +3334,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5c72b5771051": {
+  "identity": {
+   "one_liner": "基于 Next.js 的照片博客模板，上传时提取并展示 EXIF 拍摄参数",
+   "review": "这是一个基于 Next.js 和 PostgreSQL 的照片博客模板，面向希望在线发布摄影作品的用户。上传照片时自动提取光圈、快门速度、ISO 等 EXIF 数据，支持按标签/相机/镜头等分类、内置鉴权、CMD-K 搜索、OG 图片自动生成及 RSS/JSON 输出。部署主要面向 Vercel（需配置 Postgres 与 Blob 存储），也可通过脚本对接 S3、R2 或 MinIO 进行程序化上传。",
+   "highlights": [
+    "上传照片时提取 EXIF 参数（光圈、快门速度、ISO），并支持 Fujifilm 胶片模拟与 OM SYSTEM/Olympus 配方分类",
+    "内置鉴权、无限滚动、CMD-K 照片搜索、自动 OG 图片生成、RSS/JSON feeds",
+    "AI 文本生成可通过 Vercel AI Gateway 或 OpenAI 兼容端点配置，支持标题/说明/标签/语义字段自动生成"
+   ],
+   "use_cases": [
+    "摄影爱好者搭建展示 EXIF 信息的个人照片博客",
+    "作品集展示场景（可通过环境变量隐藏 EXIF 数据）",
+    "需要程序化批量上传照片到博客的摄影师工作流"
+   ]
+  },
+  "sha": "5c72b5771051",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2e941d1c60b3": {
+  "identity": {
+   "one_liner": "本地末端物流数据平台：幂等批处理管道、PostgreSQL 星型模型与事务性数据质量门",
+   "review": "DeliveryPulse 是一个本地运行的末端物流数据平台，通过 Python 批处理管道对合成订单与配送事件进行校验、去重并加载到 PostgreSQL 星型模型，每批数据在指标对账和质量检查通过后才事务性提交。提供 Streamlit 只读仪表盘，并附 Docker Compose、Airflow、Kafka、MongoDB 和本地 Kubernetes 等可选服务演示。使用 uv、GNU Make 和 Docker 运行，要求主机预留 13 GiB 空闲磁盘空间。",
+   "highlights": [
+    "每批加载前运行 35 条质量检查定义（共产生 50 项检查结果），无效记录保留并附拒绝原因",
+    "重复批次重放不改变业务数据，失败批次支持回滚与重试",
+    "批量加载后刷新 SQL 增量聚合指标，支持按日期和城市筛选的配送趋势、迟到率、高峰时段与司机表现视图"
+   ],
+   "use_cases": [
+    "末端物流合成数据的批处理管道教学与演示",
+    "数据质量门与批次对账机制的工程参考实现",
+    "在本地通过 Docker Compose、Airflow 或 kind 运行参数化管道镜像进行试验"
+   ]
+  },
+  "sha": "2e941d1c60b3",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

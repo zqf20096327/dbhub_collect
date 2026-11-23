@@ -3384,5 +3384,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0590ca266c43": {
+  "identity": {
+   "one_liner": "自托管于 Next.js 应用的开源内容平台，支持可视化建模与页面搭建。",
+   "review": "Nextly 是面向 Next.js 应用的开源内容平台，开发者可用 TypeScript 或管理后台的 Visual Schema Builder 定义内容模型，团队通过 Visual Page Builder 搭建页面，并支持多语言、版本历史、定时发布与字段级权限。当前处于 alpha 阶段，API 可能变更，生产环境建议固定版本。",
+   "highlights": [
+    "内容模型可通过 TypeScript 配置或管理后台可视化构建，两者共享同一数据模型；`nextly generate:types` 为代码配置生成端到端类型",
+    "支持 PostgreSQL 15+、MySQL 8.0+、SQLite 3.38+（本地演示）三种数据库，本地磁盘、S3/R2/MinIO、Vercel Blob 或 UploadThing 等存储适配器",
+    "提供 REST 与 Direct API、RBAC 与 API 密钥、webhook、插件 SDK（schema、服务、路由、管理 UI、权限），页面构建器本身即插件，服务端渲染的核心块不含额外 JavaScript"
+   ],
+   "use_cases": [
+    "需要在自有 Next.js 应用和自有数据库中托管内容的团队",
+    "同一站点需支持多语言、独立草稿/发布状态与版本回滚的内容管理场景",
+    "需要通过插件 SDK 扩展 schema、路由或管理界面的项目"
+   ]
+  },
+  "sha": "0590ca266c43",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cb521a2ddf16": {
+  "identity": {
+   "one_liner": "Home Assistant SQLite recorder 数据库的侧边栏可视化管理面板",
+   "review": "这是一个 Home Assistant 自定义集成，通过侧边栏面板管理默认 SQLite recorder 数据库：展示各实体占用比例与库大小，提供按设备/实体的录制开关（写入生成的 recorder_studio.yaml）、清理、重打包、孤儿排除项清理和迁移向导，操作经确认并要求输入 PURGE。仅支持 SQLite，面板与 API 仅限管理员使用。",
+   "highlights": [
+    "按设备或实体开关录制，改动写入生成的 recorder_studio.yaml 并即时生效",
+    "显示数据库总大小（含 WAL/SHM）、每表大小、实体占用百分比、24小时写入量与增长趋势",
+    "提供按保留期、按排除实体、按实体/设备的清理和数据库重打包，破坏性操作需确认或输入 PURGE"
+   ],
+   "use_cases": [
+    "排查哪些高频/诊断类实体占用 SQLite 数据库空间并停止其录制",
+    "定期清理过期历史、重打包数据库以回收磁盘空间",
+    "将分散在 configuration.yaml、packages 等处的 recorder 配置迁移到统一管理的 YAML 文件"
+   ]
+  },
+  "sha": "cb521a2ddf16",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5291272156c0": {
+  "identity": {
+   "one_liner": "pbrc 是在一次性 Docker 容器中验证 PostgreSQL 逻辑备份可恢复性的 CLI 工具",
+   "review": "pbrc 将 pg_dump 生成的逻辑备份恢复到网络隔离的一次性 Docker 容器中，通过 TOML 期望清单校验表结构、行数与索引约束，并生成 JSON 与 Markdown 审计报告。面向需要定期验证备份可恢复性的运维与 DBA 团队，适用于 CI/CD 流水线。需本机运行 Docker，且不能替代完整的生产灾备演练。",
+   "highlights": [
+    "支持 5 种逻辑备份格式（custom/tar/directory/plain SQL/gzip SQL）及 PostgreSQL 16/17/18 版本镜像",
+    "容器以 --network none 运行，无宿主机挂载，配置 CPU 与内存限制，SQL 断言在只读 pbrc_verify 角色下执行",
+    "提供 TOML 期望清单、pg_amcheck 结构审计、SHA-256 指纹、0-6 退出码及 report.json/report.md 证据输出"
+   ],
+   "use_cases": [
+    "定时/cron 或 GitHub Actions 流水线中自动验证每日备份可恢复性",
+    "检查备份文件是否损坏、截断或缺失预期数据",
+    "在不接触生产环境的情况下对新版 PostgreSQL 镜像做恢复测试"
+   ]
+  },
+  "sha": "5291272156c0",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

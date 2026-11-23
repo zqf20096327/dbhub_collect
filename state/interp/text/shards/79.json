@@ -3370,5 +3370,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e4ce3c1819f6": {
+  "identity": {
+   "one_liner": "基于 GraphBLAS 稀疏矩阵的属性图数据库，以 Redis 模块形式运行",
+   "review": "FalkorDB 是以 Rust 实现的 Redis 模块（libfalkordb），使用 GraphBLAS 稀疏矩阵存储图结构并通过线性代数执行查询。它支持带属性的属性图模型和 OpenCypher 查询语言，可通过任意 Redis 客户端调用 GRAPH.QUERY 命令。README 提供官方 Python、Java、Node.js、Rust、Go、C# 客户端库，可通过 Docker 一条命令启动并内置浏览器界面，许可证为 SSPLv1 或 AGPLv3 双选。构建需先安装 GraphBLAS、LAGraph 和 RediSearch 依赖。",
+   "highlights": [
+    "使用 GraphBLAS 稀疏矩阵表示图邻接矩阵，以线性代数方式执行查询",
+    "支持属性图模型与 OpenCypher 查询语言（含专有扩展）",
+    "以 Redis 模块运行，可通过任意 Redis 客户端发送 GRAPH.QUERY 命令"
+   ],
+   "use_cases": [
+    "为 LLM 应用构建可查询的知识图谱（GraphRAG 场景）",
+    "需要图数据查询能力的 Redis 技术栈项目，通过 docker run 快速启动",
+    "通过 Python/Java/Node.js/Rust/Go/C# 等官方客户端库在应用中操作图数据"
+   ]
+  },
+  "sha": "e4ce3c1819f6",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cd658b445b38": {
+  "identity": {
+   "one_liner": "桌面端数据库 IDE，每个数据库以插件形式接入并内置 MCP 服务。",
+   "review": "TableCraft 是一个基于 Electron 与 TypeScript 的开源桌面数据库 IDE，提供连接管理、SQL 控制台、结果表格、数据编辑器、EXPLAIN 计划与查询历史，面向需要在多数据库间执行 SQL 的开发者。其机制是每个数据库作为一个插件，由独立的引擎进程运行查询，结果行保留在引擎进程中。SQLite 与 MySQL 内置，其余数据库插件首次使用时从 npm 下载；应用遵循 GPLv3 及以上许可。",
+   "highlights": [
+    "提供 MCP 服务，AI 代理（Claude Code、OpenCode、Cursor）可本机连接数据源，每个数据源默认关闭，可选读前询问、只读或写前询问模式",
+    "SQL 控制台提供基于 schema 的补全，每个数据源运行于独立引擎进程，结果以窗口方式分页读取",
+    "内置 DataGrip 风格的键位与布局，支持从 DataGrip、TablePro、MySQL Workbench 或 Beekeeper Studio 导入连接"
+   ],
+   "use_cases": [
+    "在 macOS、Windows 或 Linux 桌面上集中管理 MySQL、PostgreSQL、Oracle、Redis、etcd 等多种数据源并执行 SQL",
+    "让本机运行的 AI 编码代理通过 MCP 以受控权限查询数据库",
+    "通过插件 API 为 README 未列出的数据库编写自己的接入插件"
+   ]
+  },
+  "sha": "cd658b445b38",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4a5c81f28cec": {
+  "identity": {
+   "one_liner": "自托管游戏收藏追踪 Web 应用，集成 IGDB 目录、Steam/GOG 同步与浏览器模拟器",
+   "review": "VideoGameTrackarr 是一个自托管的单管理员 Web 应用，用于记录游戏收藏、愿望单、游玩进度与硬件。技术栈为 Python/FastAPI 后端、React 前端与 SQLite 数据库，通过 Docker Compose 单容器部署。游戏数据来自 IGDB（需 Twitch 开发者账号获取密钥），Steam/GOG 库导入与比价功能需另行配置 API 密钥，内置模拟器支持上传自有 ROM 在浏览器中游玩。",
+   "highlights": [
+    "提供 IGDB 目录检索、按平台/格式/标签等维度的筛选排序，以及按游玩状态、平台、类型的收藏统计视图",
+    "支持 Steam 库导入前逐项审核变更、GOG DRM-free 安装包下载，及经 IsThereAnyDeal/PlatPrices 的愿望单降价提醒",
+    "内置自托管模拟器可读取上传的 ROM 在浏览器游玩超过 25 种系统，存档保存在服务器端"
+   ],
+   "use_cases": [
+    "个人或家庭服务器上集中管理实体与数字游戏收藏、愿望单与目标价格",
+    "上传自有游戏的 ROM，通过浏览器或 PWA 在多设备上继续游玩并同步离线编辑",
+    "定期执行目录重同步、库导入与降价刷新等计划任务并查看运行日志"
+   ]
+  },
+  "sha": "4a5c81f28cec",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "292d984035c6": {
+  "identity": {
+   "one_liner": "本地优先的 Python 智能体运行框架，含 MCP 客户端、工具循环与降级链",
+   "review": "UH 是一个 Python 编写的 agent harness，通过 pip 安装后在终端或浏览器中运行。它实现同步 run_turn 工具循环、MCP 客户端（stdio 接入外部服务器）、SQLite 全文检索会话存储，以及 Ollama/Cloudflare/DeepSeek 等供应商的降级链。首个运行时依赖仅 httpx，首次启动不要求 API key；危险工具集默认关闭，night pass 只提议不执行工具调用。",
+   "highlights": [
+    "实现同步 run_turn 智能体循环，带硬性 max_iterations 预算，工具集以 JSON Schema 声明契约",
+    "通过 config.toml 挂载 MCP 服务器，工具以 mcp__<server>__<tool> 形式进入循环，支持每服务器 allowlist",
+    "会话存于 SQLite FTS5，支持列表/搜索/恢复；uh router serve 提供 127.0.0.1 上的 OpenAI 兼容端点"
+   ],
+   "use_cases": [
+    "在本地通过 Ollama 或 OpenAI 兼容路由驱动 LLM 进行带工具调用的对话任务",
+    "接入外部 MCP 服务器（如文件系统、S3、Google Drive）扩展智能体能力",
+    "开发与维护场景：uh doctor 诊断、uh upgrade 自更新、uh dream 离线生成想法与工作流提案"
+   ]
+  },
+  "sha": "292d984035c6",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

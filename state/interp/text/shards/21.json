@@ -3408,5 +3408,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "289dc14b46b7": {
+  "identity": {
+   "one_liner": "用 TinyGo 将普通 Go 代码编译为 PostgreSQL 扩展的构建工具",
+   "review": "gopgext 通过 TinyGo 将 Go 函数（标记 //gopgext:function）构建为 PostgreSQL 扩展，自动生成 C 胶水代码、CREATE FUNCTION 脚本和控制文件。Go 标准库可用，并可通过 SPI 执行查询。README 明确标注为实验性项目，不适用于生产环境，要求 Linux x86-64 与 PostgreSQL 14 及以上。",
+   "highlights": [
+    "从纯 Go 文件生成扩展：自动产出 .so、.control 与 SQL 安装脚本，提供 init/build/install 命令行流程",
+    "支持 Go 标准库（fmt、strings、regexp、encoding/json、crypto 等）、泛型、defer/recover，并可通过 SPI 运行 SQL 查询",
+    "采用自定义 TinyGo target 与运行时层，C 运行时由 PGXS 构建，架构与 gokm（Go 编写 Linux 内核模块）类似"
+   ],
+   "use_cases": [
+    "用 Go 语言编写 PostgreSQL 的 SQL 函数扩展",
+    "开发与实验触发器、聚合、FDW 等框架能力（文档涵盖相关内容）",
+    "通过 make test / make pgtest 对扩展进行单元与集成测试"
+   ]
+  },
+  "sha": "289dc14b46b7",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

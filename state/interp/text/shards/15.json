@@ -3453,5 +3453,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0a47f0160322": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件：审批门控写入本地 SQLite，冻结快照注入后续会话",
+   "review": "dsh-memento 为 DeepSeek Harness 提供类型安全的 ctx.memory 能力接缝，写入经服务内部审批门落进本地 SQLite（零依赖 node:sqlite，WAL，权限 0600），记忆按 user/agent 两轨 × user-global/workspace 两层 × agentPreset 隔离，各有硬字符预算；下次会话首次组装提示时把冻结快照注入 systemPrompt。适合需要在 DSH 环境中让模型跨会话读取记忆、并要求写入可审批可审计的使用者。审计依赖会话日志收录 memory/* 事件类型，部分宿主上由插件审计表承担。",
+   "highlights": [
+    "所有写路径（add/replace/remove/seed）强制经过服务内部审批 waterfall，writePolicy 支持 ask/auto/off，被拒写入落 *-denied 审计行",
+    "记忆按 user/agent 轨 × user-global/workspace 层 × agentPreset 隔离，每轨每层有硬字符预算（默认 user 2000 / agent 4000），写满返回结构化错误而不截断",
+    "附带只读 stdio MCP 服务器（dsh-memento-mcp），以 node:sqlite readOnly 打开，供外部 MCP 客户端检索与统计"
+   ],
+   "use_cases": [
+    "让 DSH 会话中的模型跨会话记住用户事实与环境约定，快照在会话开始时自动注入",
+    "需要每次记忆写入经人工审批并可通过 approval/asked + approval/decided 与审计表重建写历史的场景",
+    "通过内置适配器导入 mem0 fact collections、Hermes memory.md、CLAUDE.md 风格 markdown 等外部格式，或经 MCP 服务器在 Claude/Codex 等客户端中只读检索记忆库"
+   ]
+  },
+  "sha": "0a47f0160322",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2a61560c54aa": {
+  "identity": {
+   "one_liner": "基于 Express + TypeScript + ESM 的 Node.js 服务端项目模板",
+   "review": "这是一个 Express 服务器启动模板，集成 TypeScript、ESM、Oxlint 和 Oxfmt，仅支持 Node.js 24+。内置 Prisma/PostgreSQL、Redis 会话存储、OpenAPI 规范导出及 Vitest 测试等 npm 脚本。开发者可通过克隆、复制 .env 并运行 npm run dev 快速启动项目。",
+   "highlights": [
+    "提供开发、构建、生产启动、类型检查、格式化与 lint 的完整 npm 脚本",
+    "支持 OpenAPI 规范导出为 openapi.json 并可校验",
+    "通过环境变量配置 PostgreSQL（Prisma）、Redis 会话存储、CORS、日志级别与分页上限"
+   ],
+   "use_cases": [
+    "使用 TypeScript 与 ESM 新建 Express 后端服务",
+    "需要 PostgreSQL 数据访问与 Redis 会话存储的 Web API 项目",
+    "需要 OpenAPI 规范生成与统一格式化、lint 流程的团队项目起点"
+   ]
+  },
+  "sha": "2a61560c54aa",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4106fb0254d5": {
+  "identity": {
+   "one_liner": "用 Rust 重写的 paperless-ngx 兼容文档管理系统，单进程运行",
+   "review": "PaperRust 是 paperless-ngx 3.4.2 的 Rust 重实现，复用同一 PostgreSQL 数据库、文件和 REST API，单程序取代 web、worker、调度等多个服务，无需 Python/Redis/Tika 等组件。支持消费文件夹、邮箱、扫描仪等来源导入文档，用 Tesseract 做 OCR，并提供迁移命令与回退路径。当前版本 0.1.1，README 提示属早期软件，建议先用数据副本试用；macOS 桌面版尚在计划中。",
+   "highlights": [
+    "单进程实现 web 服务、worker、调度器与消费文件夹，队列和缓存存于 PostgreSQL",
+    "与 paperless-ngx 数据兼容：同一数据库、文件和 REST API，保留 PAPERLESS_* 变量含义，提供 migrate 命令（支持 --dry-run）",
+    "支持消费文件夹、上传、邮箱、扫描仪（AirScan/eSCL）、REST API 导入；PDF、图片（HEIC、多页 TIFF）、Office 文件、邮件，Tesseract 文本识别与 PDF/A 归档"
+   ],
+   "use_cases": [
+    "希望以 Docker 单容器方式在 amd64/arm64 设备（如 NAS、树莓派类板卡）上运行文档归档系统",
+    "已有 paperless-ngx 实例，希望迁移数据库与文件并保留现有客户端应用与脚本",
+    "个人或小团队文档扫描归档、OCR 全文检索，需支持嵌套标签、存储路径、自动匹配与工作流"
+   ]
+  },
+  "sha": "4106fb0254d5",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ed3ad184b859": {
+  "identity": {
+   "one_liner": "本地 SQLite 规则库技能，按任务关键词加载匹配规则并常驻必选规则",
+   "review": "该项目为 AI 代理提供本地 SQLite 常设规则库，将规则分为强制常驻（Tier 1）与按关键词查询加载（Tier 2）两层，通过 rules_db.py 脚本进行增改查、版本管理与导出。规则由用户扫描并审批后入库，软件本身不含任何规则。适用于需要管理数十至数百条行为约束且关注上下文占用的代理用户；检索基于关键词匹配而非语义，触发词不重叠时可能漏检，冲突处理需人工介入。",
+   "highlights": [
+    "两级加载机制：强制规则始终注入，其余规则仅按任务关键词匹配加载",
+    "规则带稳定 ID、优先级标签与 active/disabled/deprecated 生命周期，规则从不物理删除",
+    "提供 write gate 流程与 scan_candidates.py 辅助导入，规则激活需用户审批"
+   ],
+   "use_cases": [
+    "代理常设规则数量超出提示词可容纳规模（约 15-30 条）时迁移至可查询索引",
+    "从既有记忆文件、CLAUDE.md、AGENTS.md 扫描并结构化管理规则",
+    "通过 STANDING_RULES_SYNC_URL 连接集中面板做多机同步与密钥发现管理"
+   ]
+  },
+  "sha": "ed3ad184b859",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3405,5 +3405,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9888205b3515": {
+  "identity": {
+   "one_liner": "基于菜单式命令行的 Coolify 备份与迁移工具",
+   "review": "coolify-mirror 是一个用 Go 编写的命令行工具，用于在运行 Coolify v4.3–v4.7（需两端同版本）的服务器之间备份与恢复项目。它将应用、数据库、环境变量、密钥、卷与代理设置打包为 age 加密文件，可通过 HTTPS 链接分享码在新服务器粘贴一条命令完成恢复，并支持通过 rclone 定时将备份上传到 Google Drive、S3、SFTP 等远端存储。",
+   "highlights": [
+    "按项目或整服务器打包应用、数据库转储、环境变量、卷与镜像，通过 Coolify 自身启动恢复",
+    "备份经 age X25519 加密，传输使用证书固定的 HTTPS，支持断点续传下载",
+    "通过 rclone 计划任务（systemd timer）执行每晚全量备份，上传校验后删除本地副本，保留远端若干份"
+   ],
+   "use_cases": [
+    "将 Coolify 服务器上的一个或多个项目迁移到新服务器",
+    "为自托管（homelab）环境配置异地自动备份与灾后恢复",
+    "在不同存储（Google Drive、S3、SFTP 等）之间轮转 Coolify 备份副本"
+   ]
+  },
+  "sha": "9888205b3515",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9cb92d402280": {
+  "identity": {
+   "one_liner": "基于 Next.js 16 的多租户 SaaS 起步模板，服务端优先架构",
+   "review": "该仓库是一个面向多租户 SaaS 的 Next.js 16 起步模板，内置 Better Auth 认证、组织与角色管理、管理面板和 S3 上传。数据层采用 Drizzle ORM，读取通过带标签的 'use cache' 函数缓存且每次请求校验会话与权限，写入经 Server Action。要求 Node.js 22.12+、pnpm 12 和 PostgreSQL，MIT 许可，不含计费、CMS 与分析功能。",
+   "highlights": [
+    "提供邮箱密码、Google、passkey、两步验证等认证方式，以及组织邀请、owner/admin/member 角色的 RBAC 管理",
+    "读取走带用户/组织标签的 'use cache' 函数，写入由 Server Action 调用 auth.api 或 oRPC 路由后执行 updateTag，会话不做缓存",
+    "支持 next-intl 的英文与波斯语（RTL 镜像布局），浏览器经签名票据直传 S3/R2/MinIO 并带上传配额与清理脚本"
+   ],
+   "use_cases": [
+    "以模板方式启动一个含认证、组织与多租户结构的 SaaS 项目",
+    "需要同时提供英文与波斯语（RTL）界面的产品",
+    "以 apps/packages 单仓库结构开发，后续可复用包到第二个应用"
+   ]
+  },
+  "sha": "9cb92d402280",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

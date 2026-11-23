@@ -2929,5 +2929,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7fef057d6c16": {
+  "identity": {
+   "one_liner": "基于 oncebox 的 Spring Boot 事务性 Outbox/Inbox 示例项目",
+   "review": "该项目包含 order-service 与 notification-service 两个 Spring Boot 服务，演示如何用事务性 outbox 将业务写入与事件发布放在同一数据库事务中，再由轮询器投递到 Kafka 或 RabbitMQ；消费侧通过事务性 inbox 实现事件 ID 去重。支持按事件类型配置轮询间隔、重试次数与退避策略，失败事件进入 DLQ 表并可经 REST API 检查与重试，数据表按计划清理。基于 PostgreSQL，含 OpenAPI 与 RFC 9457 错误响应。",
+   "highlights": [
+    "order-service 通过 outbox + FOR UPDATE SKIP LOCKED 轮询发布 order-created/order-cancelled 事件，支持注解式与显式发布两种方式",
+    "notification-service 以 @TransactionalConsumer 将 inbox 记录与通知存储放在同一事务，按事件 ID 去重",
+    "失败事件分别进入 outbox_dlq_events（REST API 检查/重试）或 order-events-dlt，表清理在分布式锁下定时执行"
+   ],
+   "use_cases": [
+    "需要将数据库变更与 Kafka/RabbitMQ 事件发布原子化提交的服务",
+    "消费端需对 at-least-once 重投递进行幂等处理的场景",
+    "需要 DLQ 与定时清理机制的 Java 微服务项目"
+   ]
+  },
+  "sha": "7fef057d6c16",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

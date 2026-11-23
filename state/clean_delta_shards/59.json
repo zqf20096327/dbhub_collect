@@ -40063,5 +40063,343 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "0e2cebebf885+2": {
+  "fn": "Green-tero/datawhisper",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    10,
+    6,
+    10,
+    [
+     "CI",
+     "Python",
+     "Release",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    14,
+    11,
+    12,
+    [
+     "**Persian docs:** docs/README.fa.md · **Configuration reference:** docs/configuration.md · **Changelog:** CHANGELOG.md"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    25,
+    12,
+    23
+   ],
+   [
+    "delete",
+    25,
+    27,
+    23,
+    23
+   ],
+   [
+    "equal",
+    27,
+    33,
+    23,
+    29
+   ],
+   [
+    "replace",
+    33,
+    71,
+    29,
+    30,
+    [
+     "…（38 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    30,
+    31
+   ],
+   [
+    "delete",
+    72,
+    74,
+    31,
+    31
+   ],
+   [
+    "equal",
+    74,
+    77,
+    31,
+    34
+   ],
+   [
+    "replace",
+    77,
+    87,
+    34,
+    42,
+    [
+     "|Source|Backend|Security & Access Profile|",
+     "|------|-------|-------------------------|",
+     "|`.sqlite`, `.db`|`sqlite3` (stdlib)|Opened `mode=ro` with `query_only=ON`|",
+     "|`.duckdb`|DuckDB driver|Opened `read_only=True`|",
+     "|`.parquet`, `.pq`|DuckDB in-memory view|Read-only view; file access functions blocked at AST layer|",
+     "|`.jsonl`, `.ndjson`|DuckDB in-memory view|Vectorized JSON schema extraction|",
+     "|`.csv`|DuckDB (SQLite fallback)|Schema inference and type ingestion|",
+     "|`postgres://...`|psycopg (v3)|Read-only transaction with server-side `statement_timeout`|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    96,
+    42,
+    51
+   ],
+   [
+    "replace",
+    96,
+    101,
+    51,
+    52,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    110,
+    52,
+    61
+   ],
+   [
+    "delete",
+    110,
+    112,
+    61,
+    61
+   ],
+   [
+    "equal",
+    112,
+    118,
+    61,
+    67
+   ],
+   [
+    "replace",
+    118,
+    142,
+    67,
+    68,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    146,
+    68,
+    72
+   ],
+   [
+    "delete",
+    146,
+    148,
+    72,
+    72
+   ],
+   [
+    "equal",
+    148,
+    150,
+    72,
+    74
+   ],
+   [
+    "replace",
+    150,
+    162,
+    74,
+    84,
+    [
+     "|Command|Description|",
+     "|-------|-----------|",
+     "|`datawhisper ask \"<question>\" --source <path> [--explain-only]`|Run the agent against the database. `--explain-only` prints pruned schema context and candidate SQL without executing.|",
+     "|`datawhisper advise \"<sql>\" --source <path>`|Analyze query predicates and propose covering index statements with estimated cost reduction.|",
+     "|`datawhisper contract --source <path> --table <name> [rules]`|Validate table constraints (`--not-null`, `--unique`, `--min-rows`) in CI or pipeline jobs.|",
+     "|`datawhisper inspect --source <path> [--profile .<col>]`|View schema catalog, profile column distributions, or test schema retrieval.|",
+     "|`datawhisper explain \"<sql>\" --source <path>`|Run statement through AST validation and the planner cost gate without executing.|",
+     "|`datawhisper dashboard --source <path> [-o report.html]`|Generate a standalone Plotly HTML report with distribution and correlation charts.|",
+     "|`datawhisper audit --base-sql a.sql --head-sql b.sql --dry-run`|Run offline migration audit for schema drift, lock risks, and unindexed foreign keys.|",
+     "|`datawhisper audit --repo o/r --pr N --base-ref main --head-ref SHA --ci-audit`|Run full automated review in GitHub Actions and comment on the pull request.|"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    186,
+    84,
+    108
+   ],
+   [
+    "delete",
+    186,
+    188,
+    108,
+    108
+   ],
+   [
+    "equal",
+    188,
+    196,
+    108,
+    116
+   ],
+   [
+    "delete",
+    196,
+    198,
+    116,
+    116
+   ],
+   [
+    "equal",
+    198,
+    202,
+    116,
+    120
+   ],
+   [
+    "replace",
+    202,
+    212,
+    120,
+    130,
+    [
+     "|Operation|Component|Median Latency|",
+     "|---------|---------|--------------|",
+     "|**System-1 Decision**|Intent and risk scoring|**~23 µs**|",
+     "|**Semantic Firewall**|Substring and regex rules|**~20 µs**|",
+     "|**AST Validation**|sqlglot structural parsing|**~0.77 ms**|",
+     "|**Schema Pruning**|BM25 + 128-dim trigram hashing (50 tables)|**~1.29 ms**|",
+     "|**Index Recommendation**|AST predicate extraction and DDL|**~0.35 ms**|",
+     "|**PII Scrubbing**|10,000 cells across 4 columns (with fast-paths)|**~61 ms**|",
+     "|**Synthetic Generation**|1,000 rows with referential integrity|**~2.94 ms**|",
+     "|**Full Test Suite**|206 unit and integration tests|**~6.2 s**|"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    217,
+    130,
+    135
+   ],
+   [
+    "delete",
+    217,
+    219,
+    135,
+    135
+   ],
+   [
+    "equal",
+    219,
+    226,
+    135,
+    142
+   ],
+   [
+    "replace",
+    226,
+    232,
+    142,
+    143,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    143,
+    144
+   ],
+   [
+    "delete",
+    233,
+    235,
+    144,
+    144
+   ],
+   [
+    "equal",
+    235,
+    238,
+    144,
+    147
+   ],
+   [
+    "replace",
+    238,
+    244,
+    147,
+    151,
+    [
+     "- Full Configuration Guide — Reference table of all environment variables (`DW_*`).",
+     "- Persian Documentation / راهنمای فارسی — Documentation in Persian.",
+     "- Security Policy — Security model and vulnerability reporting.",
+     "- Contributing Guide — Contribution guidelines and pull request workflow."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    246,
+    151,
+    153
+   ],
+   [
+    "replace",
+    246,
+    248,
+    153,
+    154,
+    [
+     "Apache-2.0. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

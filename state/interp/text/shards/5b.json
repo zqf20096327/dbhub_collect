@@ -2911,5 +2911,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1199f5176c8c": {
+  "identity": {
+   "one_liner": "本地 Garmin 健康数据归档工具，通过 API 同步与 GDPR 导入构建本地数据库并支持 AI 分析。",
+   "review": "Garmin Local Archive 是一款开源 Windows 应用（含 Python 源码），用于在本地保存 Garmin Connect 健康数据：实时同步拉取近期数据，Bulk Import 从 GDPR 导出 ZIP 导入完整历史，并以 JSON、Excel、HTML 等开放格式存储。它在本地数据之上提供仪表板、多格式导出和 MCP 服务器供 AI 查询，还可合并天气、花粉与空气质量上下文。适用于想在本地保存和检索自身健康数据的个人用户；仅支持 Windows GUI，且仍依赖 Garmin Connect 作为数据来源。",
+   "highlights": [
+    "提供实时同步与 GDPR 导出 ZIP 批量导入两种数据来源，导入不覆盖已有 API 数据，并以 JSON、Excel、HTML 等格式存储",
+    "内置健康分析、日内时间序列、热力图和每日总览四类仪表板，支持导出 JSON、CSV 和 InfluxDB",
+    "包含本地 MCP 服务器供 AI 工具查询归档数据，支持 Ollama 本地模型或 Anthropic/OpenAI 云端后端"
+   ],
+   "use_cases": [
+    "将 Garmin Connect 近期数据与 GDPR 完整历史合并为本地长期归档",
+    "通过内置仪表板查看心率、HRV、睡眠、压力等指标的日内与长期变化",
+    "借助 MCP 服务器让本地 AI 模型读取归档数据并回答个人健康数据问题"
+   ]
+  },
+  "sha": "1199f5176c8c",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e4873fb61ab1": {
+  "identity": {
+   "one_liner": "完全本地运行的 AI 助手，含推理管线、分层记忆与桌面控制",
+   "review": "ELI 是一个运行在用户本机的 AI 助手与认知运行时：推理与记忆全部在本地硬件上，默认离线并在 socket 层由 netguard 强制拦截出网。它提供桌面控制、屏幕/文档读取、语音、232 项能力与 SQLite+FAISS+知识图谱记忆。用户自带本地 GGUF 模型，模型与硬件无关。README 注明作者主要在 Linux + NVIDIA 环境验证，其他路径可能有粗糙之处。",
+   "highlights": [
+    "提供 12 阶段推理管线、DAG 编排的多智能体与三层记忆（SQLite、FAISS 向量索引、知识图谱）",
+    "netguard 在 socket 层 fail-close 拦截进程内出网连接，联网功能需用户显式开启作用域窗口",
+    "支持本地语音（唤醒词、Piper TTS、本地声音克隆）与视觉（屏幕读取、OCR、 gaze 眼动控制），以及 LoRA/QLoRA 自训练管线"
+   ],
+   "use_cases": [
+    "网络受限或不愿数据离开本机的个人桌面助理使用",
+    "在本地硬件上用自选 GGUF 模型搭建语音/视觉/记忆一体的助手环境",
+    "智能家居、媒体控制与定时自动化等本地桌面操作场景"
+   ]
+  },
+  "sha": "e4873fb61ab1",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a8b058718101": {
+  "identity": {
+   "one_liner": ".NET 全栈开发课程的实验代码与解答集合",
+   "review": "该仓库收录 ITI .Net 全栈开发课程（ITP.Qn.23.R2.Net）的全部实验及配套解答，内容覆盖 ASP.NET Core、Web API、MVC，以及 HTML/CSS/JavaScript、Angular 等前端技术，还涉及 OOP 与 Git。仓库仅含两行说明，未提供各实验的运行步骤，使用者需自行查看代码目录获取细节。",
+   "highlights": [
+    "包含全栈 .NET 课程各 Labs 的代码及对应 Solutions",
+    "涉及 ASP.NET Core、ASP.NET Web API、MVC 与前端技术（HTML/CSS/JavaScript、Angular、Bootstrap）",
+    "主题标签中包含 OOP 与 Git 相关内容"
+   ],
+   "use_cases": [
+    "对照实验代码与解答，学习 .NET 全栈开发课程内容",
+    "检索 ASP.NET Core、Web API、MVC 等技术的示例代码",
+    "复用 Lab 解答作为练习参考"
+   ]
+  },
+  "sha": "a8b058718101",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b3081ac61d40": {
+  "identity": {
+   "one_liner": "嵌入式 Rust 查询引擎，以类型化代数统一关系、全文、向量、图与概率检索。",
+   "review": "UQA Engine 是一个可嵌入的数据库引擎，在共享 Rust 运行时上提供 PostgreSQL 18 兼容的 SQL 接口，覆盖关系查询、BM25/Bayesian BM25 全文检索、KNN 向量检索、Cypher 图查询与混合排序。面向不想为每条查询路径单独组装数据库、搜索服务器、向量库和图引擎的应用。支持内存、SQLite 与纯 Rust redb 三种后端，SQLCipher 路径支持静态加密；韩文/日文分词器为可选 feature，未启用时相关分析器请求会被拒绝。",
+   "highlights": [
+    "在同一 Rust 运行时提供关系 SQL、全文（BM25/Bayesian BM25）、KNN 向量、Cypher 图查询与混合排序，全文倒排采用分块 delta 编码 postings 存储",
+    "持久化可选 SQLite 后端或纯 Rust redb 后端，二者使用相同 SQL DDL 与查询 API；支持全量与增量备份、SQLCipher 加密容器（redb 不支持静态加密）",
+    "提供 Rust/C++ 嵌入、Python/Node.js/浏览器 WASM 绑定，以及经认证 HTTP 数据平面（/v1/sql、/v1/sql/batch、/v1/sql/stream）连接本地或 Cloud 节点"
+   ],
+   "use_cases": [
+    "应用需要同时使用关系查询、全文搜索、向量检索与图查询，但不希望分别部署多个独立系统",
+    "需要嵌入 Rust、C/C++ 或 WASM（浏览器/iOS）运行的单体应用内数据库",
+    "混合排序检索场景，如结合文本匹配与向量信号的搜索，或需要贝叶斯证据融合与鲁棒混合搜索接口的排序任务"
+   ]
+  },
+  "sha": "b3081ac61d40",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

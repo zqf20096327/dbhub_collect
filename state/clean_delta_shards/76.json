@@ -29103,5 +29103,2615 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "30c673dbc995+2": {
+  "fn": "sourcebroker/deployer-extended-database",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "Latest Stable Version",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    10,
+    4,
+    10
+   ],
+   [
+    "replace",
+    10,
+    13,
+    10,
+    13,
+    [
+     "1. task \"db:pull [source-instance]\" task which allows you to pull database from remote instance to local instance,",
+     "2. task \"db:push [target-instance]\" task which allows you to push database from local to remote instance,",
+     "3. task \"db:copy [source-instance] --options=target:[target-instance]\" which allows to copy database between remote instances."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    13,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "1) Install package with composer:"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     " composer require sourcebroker/deployer-extended-database"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "2) Put following lines in your deploy.php:"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    27,
+    22,
+    27,
+    [
+     " require_once(__DIR__ . '/vendor/autoload.php');",
+     " new \\SourceBroker\\DeployerLoader\\Load([",
+     " ['path' => 'vendor/sourcebroker/deployer-instance/deployer'],",
+     " ['path' => 'vendor/sourcebroker/deployer-extended-database/deployer'],",
+     " ]);"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    33,
+    28,
+    33,
+    [
+     "3) Create \".env\" file in your project root (where you store deploy.php file). The .env file should be out of",
+     " git because you need to store here information about instance name. Additionally put there info about database",
+     " you want to synchronise. You can move the info about database data to other file later but for the tests its better",
+     " to put it in .env file. Remember to protect .env file from downloading with https request (if the root folder",
+     " is readable from WWW server level)."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    33,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     " INSTANCE=\"local\""
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    35,
+    36
+   ],
+   [
+    "replace",
+    36,
+    40,
+    36,
+    40,
+    [
+     " DATABASE_HOST=\"127.0.0.1\"",
+     " DATABASE_NAME=\"database_name\"",
+     " DATABASE_USER=\"database_user\"",
+     " DATABASE_PASSWORD=\"password\""
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    40,
+    41
+   ],
+   [
+    "replace",
+    41,
+    43,
+    41,
+    43,
+    [
+     " The INSTANCE must correspond to `host()` name. You need to put the .env file with proper INSTANCE name and",
+     " database access data on on each of you instances."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    45,
+    44,
+    45,
+    [
+     "4) Define \"local\" localhost and set the \"db_databases\" for it. Use following code:"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    45,
+    46
+   ],
+   [
+    "replace",
+    46,
+    47,
+    46,
+    47,
+    [
+     " (new \\SourceBroker\\DeployerExtendedDatabase\\Driver\\EnvDriver())->getDatabaseConfig()"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    47,
+    48
+   ],
+   [
+    "replace",
+    48,
+    49,
+    48,
+    49,
+    [
+     " which will read database data from .env file."
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    49,
+    50
+   ],
+   [
+    "replace",
+    50,
+    59,
+    50,
+    59,
+    [
+     " localhost('local')",
+     " ->set('deploy_path', getcwd())",
+     " ->set('bin/php', 'php')",
+     " //->set('local/bin/php', 'php') // this is auto detected but if you have problems with it you can set it manually. This path must be the same as ``bin/php``.",
+     " ->set('db_databases', [",
+     " 'database_default' => [",
+     " (new \\SourceBroker\\DeployerExtendedDatabase\\Driver\\EnvDriver())->getDatabaseConfig()",
+     " ]",
+     " ])"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    59,
+    60
+   ],
+   [
+    "replace",
+    60,
+    65,
+    60,
+    65,
+    [
+     " The `local/bin/php` is used to run deployer binary at remote. The value for `local/bin/php` is",
+     " auto detected, based on `composer.json`, but if you have non standard php binary location you can set it manually.",
+     " It should have the same value as `bin/php`. If you want `bin/php` to be also auto detected then you need to",
+     " install <https://github.com/sourcebroker/deployer-extended> and add `'path' => 'vendor/sourcebroker/deployer-extended/includes/settings/bin_php.php'`",
+     " to loader from point 2. Then for standard hosting config you do not need to set either `bin/php` or `local/bin/php`."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    65,
+    66
+   ],
+   [
+    "replace",
+    66,
+    67,
+    66,
+    67,
+    [
+     "5) Add \"db_databases\" var for all other hosts. For example for live host it can be:"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    67,
+    68
+   ],
+   [
+    "replace",
+    68,
+    79,
+    68,
+    79,
+    [
+     " host('live')",
+     " ->setHostname('my-server.example.com')",
+     " ->setRemoteUser('deploy')",
+     " ->set('bin/php', '/usr/bin/php82')",
+     " //->set('local/bin/php', '/usr/bin/php82') // this is auto detected but if you have problems with it you can set it manually. This path must be the same as ``bin/php``.",
+     " ->set('deploy_path', '/var/www/myapplication/')",
+     " ->set('db_databases', [",
+     " 'database_default' => [",
+     " (new \\SourceBroker\\DeployerExtendedDatabase\\Driver\\EnvDriver())->getDatabaseConfig()",
+     " ]",
+     " ])"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    79,
+    80
+   ],
+   [
+    "replace",
+    80,
+    82,
+    80,
+    82,
+    [
+     "6) Make sure all instances have the same `/vendors` folder with `deployer-extended-database` and the same `deploy.php` file.",
+     " Most problems are because of differences in `deploy.php` file between instances."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    82,
+    83
+   ],
+   [
+    "replace",
+    83,
+    84,
+    83,
+    84,
+    [
+     "7) Run `dep db:pull live` to test if all works."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    87,
+    84,
+    87
+   ],
+   [
+    "replace",
+    87,
+    91,
+    87,
+    89,
+    [
+     "- **db_databases** ",
+     " *default value:* null "
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    89,
+    90
+   ],
+   [
+    "replace",
+    92,
+    96,
+    90,
+    91,
+    [
+     " Databases to be synchronized. You can define more than one database to be synchronized. See db_databases for options available inside db_databases. Look for Examples for better understanding of structure."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    91,
+    92
+   ],
+   [
+    "replace",
+    97,
+    101,
+    92,
+    94,
+    [
+     "- **db_databases_overwrite_global** ",
+     " *default value:* null "
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    94,
+    95
+   ],
+   [
+    "replace",
+    102,
+    106,
+    95,
+    96,
+    [
+     " Array merged into `db_databases` for all instances. Use it to change `db_databases` (e.g. add tables to `ignore_tables_out`) without redefining it. See Changing db_databases with overwrites."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    96,
+    97
+   ],
+   [
+    "replace",
+    107,
+    111,
+    97,
+    99,
+    [
+     "- **db_databases_overwrite** ",
+     " *default value:* null "
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    99,
+    100
+   ],
+   [
+    "replace",
+    112,
+    116,
+    100,
+    101,
+    [
+     " Array merged into `db_databases` after `db_databases_overwrite_global`. Set it on host level to change `db_databases` for one instance only (e.g. `post_sql_in` executed after import into that instance). See Changing db_databases with overwrites."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    101,
+    102
+   ],
+   [
+    "replace",
+    117,
+    121,
+    102,
+    104,
+    [
+     "- **db_storage_path_relative** ",
+     " *default value:* .dep/database/dumps "
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    104,
+    105
+   ],
+   [
+    "replace",
+    122,
+    126,
+    105,
+    106,
+    [
+     " Path relative to \"deploy_path\" where you want to store database dumps produced during database synchro commands. Permissions of this directory are set with `db_storage_dir_mode`."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    106,
+    107
+   ],
+   [
+    "replace",
+    127,
+    131,
+    107,
+    109,
+    [
+     "- **db_storage_dir_mode** ",
+     " *default value:* 700 "
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    109,
+    110
+   ],
+   [
+    "replace",
+    132,
+    136,
+    110,
+    111,
+    [
+     " Permissions set on the database dumps directory (see `db_storage_path_relative`) each time it is used, on local and remote instances. Dumps contain the whole database, so by default only the owner can access them. Set other mode (e.g. `'750'`) if another system user must read dumps, or `false` to not change permissions at all."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    111,
+    112
+   ],
+   [
+    "replace",
+    137,
+    141,
+    112,
+    141,
+    [
+     "- **db_export_mysqldump_options_structure** ",
+     " *default value:* --no-data=true --default-character-set=utf8mb4 --no-tablespaces ",
+     "",
+     " Options `mysqldump` used for exporting the database structure.",
+     "",
+     "- **db_export_mysqldump_options_data** ",
+     " *default value:* --opt --skip-lock-tables --single-transaction --no-create-db --default-character-set=utf8mb4 --no-tablespaces ",
+     "",
+     " Options `mysqldump` used for exporting the database data.",
+     "",
+     "- **db_import_mysql_options_structure** ",
+     " *default value:* --default-character-set=utf8mb4 ",
+     "",
+     " Options `mysql` used for importing the database structure.",
+     "",
+     "- **db_import_mysql_options_data** ",
+     " *default value:* --default-character-set=utf8mb4 ",
+     "",
+     " Options `mysql` used for importing the database data.",
+     "",
+     "- **db_import_mysql_options_post_sql_in** ",
+     " *default value:* --default-character-set=utf8mb4 ",
+     "",
+     " Options `mysql` used for importing the additional SQL from `post_sql_in`.",
+     "",
+     "- **db_defaults_file_mode** ",
+     " *default value:* 0600 ",
+     "",
+     " Permissions of the temporary `.cnf` file with database credentials passed to `mysql`/`mysqldump` as `--defaults-file`. MySQL/MariaDB ignore world-writable option files, which happens with `umask 0000` (e.g. DDEV)."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    143,
+    141,
+    143
+   ],
+   [
+    "delete",
+    143,
+    145,
+    143,
+    143
+   ],
+   [
+    "equal",
+    145,
+    150,
+    143,
+    148
+   ],
+   [
+    "replace",
+    150,
+    151,
+    148,
+    149,
+    [
+     "return array of configuration. Each or array configuration parts is merged. Look for Examples for better"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    153,
+    149,
+    151
+   ],
+   [
+    "replace",
+    153,
+    157,
+    151,
+    153,
+    [
+     "- **host** ",
+     " *default value:* null "
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    153,
+    154
+   ],
+   [
+    "replace",
+    158,
+    162,
+    154,
+    155,
+    [
+     " Database host."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    155,
+    156
+   ],
+   [
+    "replace",
+    163,
+    167,
+    156,
+    158,
+    [
+     "- **user** ",
+     " *default value:* null "
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    158,
+    159
+   ],
+   [
+    "replace",
+    168,
+    172,
+    159,
+    160,
+    [
+     " Database user."
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    160,
+    161
+   ],
+   [
+    "replace",
+    173,
+    177,
+    161,
+    163,
+    [
+     "- **password** ",
+     " *default value:* null "
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    163,
+    164
+   ],
+   [
+    "replace",
+    178,
+    182,
+    164,
+    165,
+    [
+     " Database user password."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    165,
+    166
+   ],
+   [
+    "replace",
+    183,
+    187,
+    166,
+    168,
+    [
+     "- **dbname** ",
+     " *default value:* null "
+    ]
+   ],
+   [
+    "equal",
+    187,
+    188,
+    168,
+    169
+   ],
+   [
+    "replace",
+    188,
+    192,
+    169,
+    170,
+    [
+     " Database name."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    193,
+    170,
+    171
+   ],
+   [
+    "replace",
+    193,
+    197,
+    171,
+    173,
+    [
+     "- **truncate_tables** ",
+     " *default value:* null "
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    173,
+    174
+   ],
+   [
+    "replace",
+    198,
+    202,
+    174,
+    175,
+    [
+     " Array of tables names that will be truncated with task db:truncate. Usually it should be some caching tables that will be truncated while deployment. The value is put between ^ and $ and treated as preg_match. For example you can write \"cf\\_.\\*\" to truncate all tables that starts with \"cf\\_\". The final preg_match checked is /^cf\\_.\\*$/i"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    203,
+    175,
+    176
+   ],
+   [
+    "replace",
+    203,
+    207,
+    176,
+    178,
+    [
+     "- **ignore_tables_out** ",
+     " *default value:* null "
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    178,
+    179
+   ],
+   [
+    "replace",
+    208,
+    212,
+    179,
+    180,
+    [
+     " Array of tables names that will be ignored while pulling database from target instance with task db:pull The value is put between ^ and $ and treated as preg_match. For example you can write \"cf\\_.\\*\" to truncate all tables that starts with \"cf\\_\". The final preg_match checked is /^cf\\_.\\*$/i"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    180,
+    181
+   ],
+   [
+    "replace",
+    213,
+    217,
+    181,
+    183,
+    [
+     "- **post_sql_in** ",
+     " *default value:* null "
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    183,
+    184
+   ],
+   [
+    "replace",
+    218,
+    222,
+    184,
+    185,
+    [
+     " SQL that will be executed after importing database on local instance."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    223,
+    185,
+    186
+   ],
+   [
+    "replace",
+    223,
+    227,
+    186,
+    225,
+    [
+     "- **post_sql_in_markers** ",
+     " *default value:* null ",
+     "",
+     " SQL that will be executed after importing database on local instance. The diffrence over \"post_sql_in\" is that you can use some predefined markers. For now only marker is {{domainsSeparatedByComma}} which consist of all domains defined in `->set('public_urls', ['https://live.example.com']);` and separated by comma. Having such marker allows to change active domain in database after import to other instance as some frameworks keeps domain names in database.",
+     "",
+     "- **flags** ",
+     " *default value:* null ",
+     "",
+     " Integer flags passed to `mysqli::real_connect()`. For example set to `MYSQLI_CLIENT_SSL` (value `64`) to require an SSL connection.",
+     "",
+     "- **ssl_key** ",
+     " *default value:* null ",
+     "",
+     " Path to the SSL key file used for the database connection and passed to `mysqldump`/`mysql` as `--ssl-key`.",
+     "",
+     "- **ssl_cert** ",
+     " *default value:* null ",
+     "",
+     " Path to the SSL certificate file used for the database connection and passed to `mysqldump`/`mysql` as `--ssl-cert`.",
+     "",
+     "- **ssl_ca** ",
+     " *default value:* null ",
+     "",
+     " Path to the SSL CA file used for the database connection and passed to `mysqldump`/`mysql` as `--ssl-ca`.",
+     "",
+     "- **ssl_capath** ",
+     " *default value:* null ",
+     "",
+     " Path to a directory containing trusted SSL CA certificates in PEM format, passed as `--ssl-capath`.",
+     "",
+     "- **ssl_cipher** ",
+     " *default value:* null ",
+     "",
+     " Allowed cipher list for the SSL connection, passed as `--ssl-cipher`.",
+     "",
+     "- **ssl_disabled** ",
+     " *default value:* null ",
+     "",
+     " Set to `true` to fully disable SSL for the database connection. Writes `ssl=false` into the temporary `.cnf` file used by `mysqldump`/`mysql`. Useful for local environments such as DDEV where the MySQL server does not have SSL configured (DDEV 1.25+ uses a Trixie image with stricter SSL defaults)."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    232,
+    225,
+    230
+   ],
+   [
+    "replace",
+    232,
+    238,
+    230,
+    231,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    240,
+    231,
+    233
+   ],
+   [
+    "replace",
+    240,
+    244,
+    233,
+    237,
+    [
+     "- **ssl_skip_verify** ",
+     " *default value:* null ",
+     "",
+     " Set to `true` to keep SSL enabled but skip server certificate verification. Writes `ssl-verify-server-cert=false` into the temporary `.cnf` file. Useful when connecting to a server that uses a self-signed certificate."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    253,
+    237,
+    246
+   ],
+   [
+    "replace",
+    253,
+    258,
+    246,
+    251,
+    [
+     " set('db_default', [",
+     " 'ignore_tables_out' => [",
+     " 'caching_.*'",
+     " ]",
+     " ]);"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    259,
+    251,
+    252
+   ],
+   [
+    "replace",
+    259,
+    272,
+    252,
+    265,
+    [
+     " host('live')",
+     " ->setHostname('my-server.example.com')",
+     " ->setRemoteUser('deploy')",
+     " ->set('bin/php', '/usr/bin/php82')",
+     " ->set('deploy_path', '/var/www/myapplication')",
+     " ->set('db_databases',",
+     " [",
+     " 'database_foo' => [",
+     " get('db_default'),",
+     " (new \\SourceBroker\\DeployerExtendedDatabase\\Driver\\EnvDriver())->getDatabaseConfig()",
+     " ],",
+     " ]",
+     " );"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    273,
+    265,
+    266
+   ],
+   [
+    "replace",
+    273,
+    284,
+    266,
+    277,
+    [
+     " localhost('local')",
+     " ->set('deploy_path', getcwd())",
+     " ->set('bin/php', 'php')",
+     " ->set('db_databases',",
+     " [",
+     " 'database_foo' => [",
+     " get('db_default'),",
+     " (new \\SourceBroker\\DeployerExtendedDatabase\\Driver\\EnvDriver())->getDatabaseConfig()",
+     " ],",
+     " ]",
+     " );"
+    ]
+   ],
+   [
+    "equal",
+    284,
+    290,
+    277,
+    283
+   ],
+   [
+    "replace",
+    290,
+    300,
+    283,
+    293,
+    [
+     " set('db_databases',",
+     " [",
+     " 'database_foo' => [",
+     " 'ignore_tables_out' => [",
+     " 'caching_.*'",
+     " ]",
+     " (new \\SourceBroker\\DeployerExtendedDatabase\\Driver\\EnvDriver())->getDatabaseConfig()",
+     " ],",
+     " ]",
+     " );"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    301,
+    293,
+    294
+   ],
+   [
+    "replace",
+    301,
+    306,
+    294,
+    299,
+    [
+     " host('live')",
+     " ->setHostname('my-server.example.com')",
+     " ->setRemoteUser('deploy')",
+     " ->set('bin/php', '/usr/bin/php82')",
+     " ->set('deploy_path', '/var/www/myapplication/');"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    307,
+    299,
+    300
+   ],
+   [
+    "replace",
+    307,
+    310,
+    300,
+    303,
+    [
+     " localhost('local')",
+     " ->set('bin/php', 'php')",
+     " ->set('deploy_path', getcwd());"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    313,
+    303,
+    306
+   ],
+   [
+    "replace",
+    313,
+    314,
+    306,
+    307,
+    [
+     " INSTANCE=\"[instance name]\""
+    ]
+   ],
+   [
+    "equal",
+    314,
+    315,
+    307,
+    308
+   ],
+   [
+    "replace",
+    315,
+    319,
+    308,
+    312,
+    [
+     " DATABASE_HOST=\"127.0.0.1\"",
+     " DATABASE_NAME=\"database_name\"",
+     " DATABASE_USER=\"database_user\"",
+     " DATABASE_PASSWORD=\"password\""
+    ]
+   ],
+   [
+    "equal",
+    319,
+    324,
+    312,
+    317
+   ],
+   [
+    "replace",
+    324,
+    340,
+    317,
+    333,
+    [
+     " set('db_databases',",
+     " [",
+     " 'database_application1' => [",
+     " 'ignore_tables_out' => [",
+     " 'caching_.*'",
+     " ]",
+     " (new \\SourceBroker\\DeployerExtendedDatabase\\Driver\\EnvDriver())->getDatabaseConfig('APP1_')",
+     " ],",
+     " 'database_application2' => [",
+     " 'ignore_tables_out' => [",
+     " 'cf_.*'",
+     " ]",
+     " (new \\SourceBroker\\DeployerExtendedDatabase\\Driver\\EnvDriver())->getDatabaseConfig('APP2_')",
+     " ],",
+     " ]",
+     " );"
+    ]
+   ],
+   [
+    "equal",
+    340,
+    341,
+    333,
+    334
+   ],
+   [
+    "replace",
+    341,
+    346,
+    334,
+    339,
+    [
+     " host('live')",
+     " ->setHostname('my-server.example.com')",
+     " ->setRemoteUser('deploy')",
+     " ->set('bin/php', '/usr/bin/php82')",
+     " ->set('deploy_path', '/var/www/myapplication/');"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    347,
+    339,
+    340
+   ],
+   [
+    "replace",
+    347,
+    350,
+    340,
+    343,
+    [
+     " localhost('local')",
+     " ->set('bin/php', 'php')",
+     " ->set('deploy_path', getcwd());"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    353,
+    343,
+    346
+   ],
+   [
+    "replace",
+    353,
+    354,
+    346,
+    347,
+    [
+     " INSTANCE=\"[instance name]\""
+    ]
+   ],
+   [
+    "equal",
+    354,
+    355,
+    347,
+    348
+   ],
+   [
+    "replace",
+    355,
+    359,
+    348,
+    352,
+    [
+     " APP1_DATABASE_HOST=\"127.0.0.1\"",
+     " APP1_DATABASE_NAME=\"database_name\"",
+     " APP1_DATABASE_USER=\"database_user\"",
+     " APP1_DATABASE_PASSWORD=\"password\""
+    ]
+   ],
+   [
+    "equal",
+    359,
+    360,
+    352,
+    353
+   ],
+   [
+    "replace",
+    360,
+    364,
+    353,
+    357,
+    [
+     " APP2_DATABASE_HOST=\"127.0.0.1\"",
+     " APP2_DATABASE_NAME=\"database_name\"",
+     " APP2_DATABASE_USER=\"database_user\"",
+     " APP2_DATABASE_PASSWORD=\"password\""
+    ]
+   ],
+   [
+    "equal",
+    364,
+    369,
+    357,
+    362
+   ],
+   [
+    "replace",
+    369,
+    370,
+    362,
+    363,
+    [
+     "1) array,"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    371,
+    363,
+    364
+   ],
+   [
+    "replace",
+    371,
+    374,
+    364,
+    367,
+    [
+     " 'ignore_tables_out' => [",
+     " 'caching_*'",
+     " ]"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    375,
+    367,
+    368
+   ],
+   [
+    "replace",
+    375,
+    377,
+    368,
+    370,
+    [
+     "2) get() which returns array with database options,",
+     " `get('db_default')`"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    378,
+    370,
+    371
+   ],
+   [
+    "replace",
+    378,
+    380,
+    371,
+    373,
+    [
+     "3) direct file include which returns array with database options",
+     " `__DIR__ . '/.dep/database/config/additional_db_config.php`"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    381,
+    373,
+    374
+   ],
+   [
+    "replace",
+    381,
+    383,
+    374,
+    376,
+    [
+     "4) class/method which returns array with database options",
+     " `(new \\YourVendor\\YourPackage\\Driver\\MyDriver())->getDatabaseConfig()`"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    384,
+    376,
+    377
+   ],
+   [
+    "replace",
+    384,
+    386,
+    377,
+    379,
+    [
+     "5) closure which returns array with database options",
+     " `function() { return (new \\YourVendor\\YourPackage\\Driver\\MyDriver())->getDatabaseConfig()` }"
+    ]
+   ],
+   [
+    "equal",
+    386,
+    391,
+    379,
+    384
+   ],
+   [
+    "replace",
+    391,
+    394,
+    384,
+    387,
+    [
+     " set('db_default', [",
+     " 'post_sql_in' => 'UPDATE sys_domains SET hidden=1;'",
+     " ]);"
+    ]
+   ],
+   [
+    "equal",
+    394,
+    395,
+    387,
+    388
+   ],
+   [
+    "replace",
+    395,
+    412,
+    388,
+    405,
+    [
+     " set('db_databases',",
+     " [",
+     " 'database_foo' => [",
+     " [",
+     " 'ignore_tables_out' => [",
+     " 'caching_.*'",
+     " ]",
+     " ],",
+     " get('db_default'),",
+     " __DIR__ . '/databases/config/additional_db_config.php',",
+     " (new \\YourVendor\\YourPackage\\Driver\\MyDriver())->getDatabaseConfig(),",
+     " function() {",
+     " return (new \\YourVendor\\YourPackage\\Driver\\MyDriver())->getDatabaseConfig();",
+     " }",
+     " ],",
+     " ]",
+     " );"
+    ]
+   ],
+   [
+    "equal",
+    412,
+    413,
+    405,
+    406
+   ],
+   [
+    "replace",
+    413,
+    418,
+    406,
+    411,
+    [
+     " host('live')",
+     " ->setHostname('my-server.example.com')",
+     " ->setRemoteUser('deploy')",
+     " ->set('bin/php', '/usr/bin/php82')",
+     " ->set('deploy_path', '/var/www/myapplication/');"
+    ]
+   ],
+   [
+    "equal",
+    418,
+    419,
+    411,
+    412
+   ],
+   [
+    "replace",
+    419,
+    422,
+    412,
+    415,
+    [
+     " localhost('local')",
+     " ->set('bin/php', 'php')",
+     " ->set('deploy_path', getcwd());"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    429,
+    415,
+    422
+   ],
+   [
+    "replace",
+    429,
+    438,
+    422,
+    429,
+    [
+     " set('db_databases',",
+     " [",
+     " 'database_default' => [",
+     " (new \\YourVendor\\YourPackage\\Driver\\MyDriver())->getDatabaseConfig()",
+     " ],",
+     " ]",
+     " );"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    443,
+    429,
+    434
+   ],
+   [
+    "replace",
+    443,
+    458,
+    434,
+    447,
+    [
+     " set('db_default', [",
+     " 'truncate_tables' => [",
+     " 'cf_.*'",
+     " ],",
+     " 'ignore_tables_out' => [",
+     " 'cf_.*',",
+     " 'cache_.*',",
+     " 'be_sessions',",
+     " 'fe_sessions',",
+     " 'sys_file_processedfile',",
+     " 'tx_devlog',",
+     " ],",
+     " ]);"
+    ]
+   ],
+   [
+    "equal",
+    458,
+    480,
+    447,
+    469
+   ],
+   [
+    "replace",
+    480,
+    481,
+    469,
+    470,
+    [
+     " config part (index `0`). Other parts are often closures reading credentials and can not be overwritten."
+    ]
+   ],
+   [
+    "equal",
+    481,
+    483,
+    470,
+    472
+   ],
+   [
+    "replace",
+    483,
+    485,
+    472,
+    474,
+    [
+     " Values are removed after merging, so also values added by packages in the same overwrite are removed. Only exact",
+     " values are removed: `'__UNSET' => ['cache_.*']` removes the pattern `cache_.*`, not single table `cache_pages`."
+    ]
+   ],
+   [
+    "equal",
+    485,
+    487,
+    474,
+    476
+   ],
+   [
+    "replace",
+    487,
+    488,
+    476,
+    477,
+    [
+     " the string is treated as path to config file and the task stops with \"The config file does not exists\"."
+    ]
+   ],
+   [
+    "equal",
+    488,
+    491,
+    477,
+    480
+   ],
+   [
+    "replace",
+    491,
+    496,
+    480,
+    485,
+    [
+     " // Add table to ignore_tables_out on all instances. Extend the value instead of set() with new array,",
+     " // because packages (e.g. sourcebroker/deployer-extended-typo3) may already set db_databases_overwrite_global.",
+     " $dbDatabasesOverwriteGlobal = get('db_databases_overwrite_global', []);",
+     " $dbDatabasesOverwriteGlobal['database_default'][0]['ignore_tables_out'][] = 'tx_my_table';",
+     " set('db_databases_overwrite_global', $dbDatabasesOverwriteGlobal);"
+    ]
+   ],
+   [
+    "equal",
+    496,
+    497,
+    485,
+    486
+   ],
+   [
+    "replace",
+    497,
+    501,
+    486,
+    490,
+    [
+     " // Do not ignore sys_refindex anymore (remove it from ignore_tables_out) on all instances.",
+     " $dbDatabasesOverwriteGlobal = get('db_databases_overwrite_global', []);",
+     " $dbDatabasesOverwriteGlobal['database_default'][0]['ignore_tables_out']['__UNSET'][] = 'sys_refindex';",
+     " set('db_databases_overwrite_global', $dbDatabasesOverwriteGlobal);"
+    ]
+   ],
+   [
+    "equal",
+    501,
+    502,
+    490,
+    491
+   ],
+   [
+    "replace",
+    502,
+    514,
+    491,
+    503,
+    [
+     " // SQL executed after the database is imported into \"staging\" (e.g. \"dep db:pull live\" run on staging or",
+     " // \"dep db:copy live --options=target:staging\").",
+     " host('staging')",
+     " ->set('db_databases_overwrite', [",
+     " 'database_default' => [",
+     " [",
+     " 'post_sql_in' => '",
+     " UPDATE tx_myext_table SET field = \"value\" WHERE uid = 1;",
+     " ',",
+     " ],",
+     " ],",
+     " ]);"
+    ]
+   ],
+   [
+    "equal",
+    514,
+    517,
+    503,
+    506
+   ],
+   [
+    "delete",
+    517,
+    519,
+    506,
+    506
+   ],
+   [
+    "equal",
+    519,
+    521,
+    506,
+    508
+   ],
+   [
+    "replace",
+    521,
+    522,
+    508,
+    509,
+    [
+     "Backup database. In background, on target instance, three tasks are executed db:export, db:compress and db:dumpclean."
+    ]
+   ],
+   [
+    "equal",
+    522,
+    533,
+    509,
+    520
+   ],
+   [
+    "replace",
+    533,
+    539,
+    520,
+    524,
+    [
+     " dep db:backup local",
+     " dep db:backup live",
+     " dep db:backup live --options=dumpcode:mycode",
+     " dep db:backup live --options=dumpcode:mycode,tags:tag1+tag2"
+    ]
+   ],
+   [
+    "equal",
+    539,
+    550,
+    524,
+    535
+   ],
+   [
+    "replace",
+    550,
+    553,
+    535,
+    536,
+    [
+     " dep db:compress live --options=dumpcode:0772a8d396911951022db5ea385535f6"
+    ]
+   ],
+   [
+    "equal",
+    553,
+    558,
+    536,
+    541
+   ],
+   [
+    "replace",
+    558,
+    559,
+    541,
+    542,
+    [
+     " dep db:copy [source-instance] --options=target:[target-instance]"
+    ]
+   ],
+   [
+    "equal",
+    559,
+    563,
+    542,
+    546
+   ],
+   [
+    "replace",
+    563,
+    564,
+    546,
+    547,
+    [
+     " dep db:copy live --options=target:dev"
+    ]
+   ],
+   [
+    "equal",
+    564,
+    567,
+    547,
+    550
+   ],
+   [
+    "replace",
+    567,
+    568,
+    550,
+    551,
+    [
+     "In below description: "
+    ]
+   ],
+   [
+    "equal",
+    568,
+    572,
+    551,
+    555
+   ],
+   [
+    "replace",
+    572,
+    573,
+    555,
+    556,
+    [
+     "1\\) First it runs `dep db:export live --options=dumpcode:123456` task on source instance. The dumps from export task are stored "
+    ]
+   ],
+   [
+    "equal",
+    573,
+    575,
+    556,
+    558
+   ],
+   [
+    "replace",
+    575,
+    576,
+    558,
+    559,
+    [
+     "2\\) Then it runs `db:download live --options=dumpcode:123456` on local instance to download dump files from live instance from "
+    ]
+   ],
+   [
+    "equal",
+    576,
+    579,
+    559,
+    562
+   ],
+   [
+    "replace",
+    579,
+    587,
+    562,
+    570,
+    [
+     "3) Then it runs `db:process local --options=dumpcode:123456` on local instance to make some operations directly on SQL dumps files.",
+     "4) Then it runs `db:upload dev --options=dumpcode:123456` on local instance. This task takes dump files with `code:123456`",
+     " and send it to dev instance and store it in folder `{{deploy_path}}/.dep/databases/dumps/`. The dump at",
+     " local instance is deleted at this point because already uploaded to target instance.",
+     "5) Then it make backup of target database before importing the dump.",
+     "6) Finally it runs `db:import dev --options=dumpcode:123456` on target instance. This task reads dumps with `code:123456` from folder",
+     " `{{deploy_path}}/.dep/databases/dumps/` on dev instance and import it to database.",
+     "7) At the very end it runs db:dumpclean to clean up old dumps on target instance."
+    ]
+   ],
+   [
+    "equal",
+    587,
+    592,
+    570,
+    575
+   ],
+   [
+    "delete",
+    592,
+    594,
+    575,
+    575
+   ],
+   [
+    "equal",
+    594,
+    605,
+    575,
+    586
+   ],
+   [
+    "replace",
+    605,
+    608,
+    586,
+    587,
+    [
+     " dep db:decompress live --options=dumpcode:0772a8d396911951022db5ea385535f6"
+    ]
+   ],
+   [
+    "equal",
+    608,
+    617,
+    587,
+    596
+   ],
+   [
+    "replace",
+    617,
+    620,
+    596,
+    597,
+    [
+     " dep db:download live --options=dumpcode:0772a8d396911951022db5ea385535f6"
+    ]
+   ],
+   [
+    "equal",
+    620,
+    628,
+    597,
+    605
+   ],
+   [
+    "replace",
+    628,
+    629,
+    605,
+    606,
+    [
+     " set('db_dumpclean_keep', 10); // keep last 10 dumps for all instances"
+    ]
+   ],
+   [
+    "equal",
+    629,
+    630,
+    606,
+    607
+   ],
+   [
+    "replace",
+    630,
+    635,
+    607,
+    612,
+    [
+     " set('db_dumpclean_keep', [",
+     " 'live' => 10 // keep last 10 dumps for live instance dumps",
+     " 'dev' => 5 // keep last 5 dumps for dev instance dumps",
+     " '*' => 2 // keep last 5 dumps for all other instances dumps",
+     " ]);"
+    ]
+   ],
+   [
+    "equal",
+    635,
+    636,
+    612,
+    613
+   ],
+   [
+    "replace",
+    636,
+    639,
+    613,
+    614,
+    [
+     " dep db:dumpclean live"
+    ]
+   ],
+   [
+    "equal",
+    639,
+    650,
+    614,
+    625
+   ],
+   [
+    "replace",
+    650,
+    651,
+    625,
+    626,
+    [
+     " dep db:export live --options=dumpcode:362d7ca0ff065f489c9b79d0a73720f5"
+    ]
+   ],
+   [
+    "equal",
+    651,
+    654,
+    626,
+    629
+   ],
+   [
+    "replace",
+    654,
+    656,
+    629,
+    631,
+    [
+     " 2025-02-26_14:56:08#server=live#dbcode=database_default#type=data#dumpcode=362d7ca0ff065f489c9b79d0a73720f5.sql",
+     " 2025-02-26_14:56:08#server=live#dbcode=database_default#type=structure#dumpcode=362d7ca0ff065f489c9b79d0a73720f5.sql"
+    ]
+   ],
+   [
+    "equal",
+    656,
+    659,
+    631,
+    634
+   ],
+   [
+    "replace",
+    659,
+    662,
+    634,
+    635,
+    [
+     " dep db:export live --options=dbCodeFilter:db1+db2"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    670,
+    635,
+    643
+   ],
+   [
+    "replace",
+    670,
+    671,
+    643,
+    644,
+    [
+     " dep db:import dev --options=dumpcode:0772a8d396911951022db5ea385535f66"
+    ]
+   ],
+   [
+    "equal",
+    671,
+    674,
+    644,
+    647
+   ],
+   [
+    "replace",
+    674,
+    677,
+    647,
+    648,
+    [
+     " dep db:import live --options=dbCodeFilter:db1+db2"
+    ]
+   ],
+   [
+    "equal",
+    677,
+    685,
+    648,
+    656
+   ],
+   [
+    "replace",
+    685,
+    688,
+    656,
+    657,
+    [
+     " dep db:process local --options=dumpcode:0772a8d396911951022db5ea385535f66"
+    ]
+   ],
+   [
+    "equal",
+    688,
+    705,
+    657,
+    674
+   ],
+   [
+    "replace",
+    705,
+    707,
+    674,
+    676,
+    [
+     " # export from live and import on current host",
+     " dep db:pull live"
+    ]
+   ],
+   [
+    "equal",
+    707,
+    708,
+    676,
+    677
+   ],
+   [
+    "replace",
+    708,
+    710,
+    677,
+    679,
+    [
+     " # import from database storage of current host",
+     " dep db:pull live --options=fromLocalStorage"
+    ]
+   ],
+   [
+    "equal",
+    710,
+    711,
+    679,
+    680
+   ],
+   [
+    "replace",
+    711,
+    715,
+    680,
+    682,
+    [
+     " # export and import only some databases",
+     " dep db:pull live --options=dbCodeFilter:db1+db2"
+    ]
+   ],
+   [
+    "equal",
+    715,
+    723,
+    682,
+    690
+   ],
+   [
+    "replace",
+    723,
+    728,
+    690,
+    695,
+    [
+     "1) First it runs db:export task on local instance.",
+     "2) Then it runs db:upload on local instance with remote as argument.",
+     "3) Then it runs db:process on remote instance.",
+     "4) Then it runs db:backup on remote instance to make backup before import.",
+     "5) Then it runs db:import on remote instance."
+    ]
+   ],
+   [
+    "equal",
+    728,
+    736,
+    695,
+    703
+   ],
+   [
+    "replace",
+    736,
+    737,
+    703,
+    704,
+    [
+     " dep db:push live"
+    ]
+   ],
+   [
+    "equal",
+    737,
+    738,
+    704,
+    705
+   ],
+   [
+    "replace",
+    738,
+    742,
+    705,
+    707,
+    [
+     " # Only push some databases",
+     " dep db:push live --options=dbCodeFilter:db1+db2"
+    ]
+   ],
+   [
+    "equal",
+    742,
+    750,
+    707,
+    715
+   ],
+   [
+    "replace",
+    750,
+    753,
+    715,
+    716,
+    [
+     " dep db:rmdump live --options=dumpcode:0772a8d396911951022db5ea385535f66"
+    ]
+   ],
+   [
+    "equal",
+    753,
+    762,
+    716,
+    725
+   ],
+   [
+    "replace",
+    762,
+    763,
+    725,
+    726,
+    [
+     " dep db:truncate"
+    ]
+   ],
+   [
+    "equal",
+    763,
+    766,
+    726,
+    729
+   ],
+   [
+    "replace",
+    766,
+    769,
+    729,
+    730,
+    [
+     " dep db:truncate live"
+    ]
+   ],
+   [
+    "equal",
+    769,
+    778,
+    730,
+    739
+   ],
+   [
+    "replace",
+    778,
+    779,
+    739,
+    740,
+    [
+     " dep db:upload live --options=dumpcode:0772a8d396911951022db5ea385535f6"
+    ]
+   ],
+   [
+    "equal",
+    779,
+    781,
+    740,
+    742
+   ],
+   [
+    "replace",
+    781,
+    783,
+    742,
+    743,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "a639fd87324a+2": {
+  "fn": "Anhao1314/FCode-FlowCredit",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    1,
+    [
+     "FCode — Build your own work"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    6,
+    2,
+    5,
+    [
+     " CI",
+     " License: Apache-2.0",
+     " Python 3.11+"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    5,
+    6
+   ],
+   [
+    "replace",
+    7,
+    8,
+    6,
+    7,
+    [
+     " **让模型提议，让主机决定。**"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    7,
+    8
+   ],
+   [
+    "replace",
+    9,
+    13,
+    8,
+    9,
+    [
+     " Work · 责任链 · 治理与审计 · 快速开始 · 文档"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    9,
+    12
+   ],
+   [
+    "replace",
+    16,
+    17,
+    12,
+    13,
+    [
+     "仓库采用 monorepo 结构。可运行项目位于 `flowcredit/`，根目录保留仓库级入口、桌面端与归档原型。"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    13,
+    14
+   ],
+   [
+    "replace",
+    18,
+    19,
+    14,
+    15,
+    [
+     "FCode Work 首页：项目、对话、任务与模型控制"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    24,
+    15,
+    20
+   ],
+   [
+    "replace",
+    24,
+    28,
+    20,
+    24,
+    [
+     "|对话分流|实时线程|主机门控|独立验证|",
+     "|---|---|---|---|",
+     "|问候与问答直接回复，不制造运行记录|计划、工具、命令、差异与结果按真实事件呈现|权限、参数、预算与危险动作由宿主决定|产物状态由 Runtime 复核，不采信模型自报成功|",
+     "|明确任务才进入 Run|运行中与完成后使用同一条时间线|关键审批始终可调整|失败保留原因、证据与恢复上下文|"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    24,
+    25
+   ],
+   [
+    "replace",
+    29,
+    30,
+    25,
+    26,
+    [
+     "FCode Work 执行线程：计划、过程、交付产物与文件状态复核"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    40,
+    26,
+    36
+   ],
+   [
+    "replace",
+    40,
+    41,
+    36,
+    37,
+    [
+     "详见 Capability Runtime 与 Work 模式。"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    48,
+    37,
+    44
+   ],
+   [
+    "replace",
+    48,
+    65,
+    44,
+    45,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    67,
+    45,
+    47
+   ],
+   [
+    "replace",
+    67,
+    74,
+    47,
+    54,
+    [
+     "|角色|负责|不越界做什么|",
+     "|---|---|---|",
+     "|模型 / Provider|理解目标、提出动作、生成候选产物|不拥有权限、预算或最终判定|",
+     "|Work Harness|计划、审批、预算、执行、事件持久化与恢复|不替模型编造内容|",
+     "|Capability Runtime|阶段迁移、动作门、产物检查、修复与回滚|不重写主循环的授权与计费|",
+     "|Host Verifier|独立重算、真实帧探针、声明验证|不接受模型自报的「通过」|",
+     "|人|授权、拒绝、停止、追加预算与复核|不必逐行阅读内部 journal|"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    79,
+    54,
+    59
+   ],
+   [
+    "replace",
+    79,
+    80,
+    59,
+    60,
+    [
+     "FCode 治理台：像素伙伴、治理角色与审计命令"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    60,
+    63
+   ],
+   [
+    "replace",
+    83,
+    84,
+    63,
+    64,
+    [
+     "FCode 审计台：发现、验证状态、授权范围与签名链"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    94,
+    64,
+    74
+   ],
+   [
+    "replace",
+    94,
+    95,
+    74,
+    75,
+    [
+     "方法、证据模型与覆盖范围见 审计方法论、REA 证据融合 和 能力图谱。"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    105,
+    75,
+    85
+   ],
+   [
+    "replace",
+    105,
+    106,
+    85,
+    86,
+    [
+     "详见 Computer Use。"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    115,
+    86,
+    95
+   ],
+   [
+    "replace",
+    115,
+    120,
+    95,
+    96,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    122,
+    96,
+    98
+   ],
+   [
+    "replace",
+    122,
+    123,
+    98,
+    99,
+    [
+     "打开 **http://127.0.0.1:8642/**。真实模型接入与密钥配置见 Kimi 接入 和 DeepSeek 配置；密钥只放在本机环境或本地配置中，不要提交到仓库。"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    138,
+    99,
+    114
+   ],
+   [
+    "replace",
+    138,
+    145,
+    114,
+    115,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    157,
+    115,
+    127
+   ],
+   [
+    "replace",
+    157,
+    169,
+    127,
+    128,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    185,
+    128,
+    144
+   ],
+   [
+    "replace",
+    185,
+    200,
+    144,
+    155,
+    [
+     "|文档|内容|",
+     "|---|---|",
+     "|Runtime 完整说明|启动、场景、Provider、桌面端与边界|",
+     "|架构|Runtime、状态、存储与执行链|",
+     "|Capability Runtime|阶段机、动作门、预算语义与构图回滚|",
+     "|Work 模式|对话分流、实时线程、项目与运行控制|",
+     "|Computer Use|会话级权限、桌面与浏览器控制、证据链|",
+     "|任务基准|版本化任务、独立 verifier、指标与证据|",
+     "|审计方法论|AGI 分类法、证据模型与交互方式|",
+     "|能力图谱|逐条可复现的能力与测试口径|",
+     "|Prompt 目录|提示词版本、快照与边界|"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    203,
+    155,
+    158
+   ],
+   [
+    "replace",
+    203,
+    204,
+    158,
+    159,
+    [
+     "Apache License 2.0 · LICENSE"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    206,
+    159,
+    161
+   ],
+   [
+    "delete",
+    206,
+    208,
+    161,
+    161
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

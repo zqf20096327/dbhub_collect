@@ -2864,5 +2864,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e1c10b01b7d6": {
+  "identity": {
+   "one_liner": "纯 Rust 嵌入式三模数据库，单内核融合向量、图与文档存储",
+   "review": "TriviumDB 是用 Rust 编写的进程内嵌入式数据库，在同一存储内核中提供向量检索、属性图谱和 JSON 文档三类能力，每个节点通过唯一 NodeId 同时拥有向量、元数据和图关系。面向 Agent 记忆、RAG、知识图谱等应用，通过 Rust、Python 或 Node.js API 使用，支持 TQL 查询语言和四类属性索引。当前为 0.9.4-beta.1 预发布版本，官方 HTTP 服务端形态尚处 nightly 预览。",
+   "highlights": [
+    "单内核支持向量检索（QuIVer ANN 与精确检索）、属性图谱（内置 PageRank、Leiden、路径等图算法）与 JSON 文档查询，节点通过 NodeId 关联三类数据",
+    "提供 TQL 查询语言，可将向量召回、图扩展、文本 BM25/AC 召回、集合代数与聚合编排为管线，支持 Prepared 参数化查询与 EXPLAIN 分析",
+    "提供 Rust/Python/Node.js 三语言接口，Python 支持 3.9–3.15、Node.js 支持 22/24/26，含批量向量接口、ResourceRuntime 多实例资源管理与快照备份恢复"
+   ],
+   "use_cases": [
+    "AI Agent 长期记忆：对话存为带向量与关系的节点，检索时向量匹配后沿关系链扩散",
+    "RAG 与知识图谱应用：语义检索、文本混合召回与图结构扩展在同一数据上组合使用",
+    "单机或容器化应用中的嵌入式持久化存储：无需部署独立数据库服务，通过库依赖直接集成"
+   ]
+  },
+  "sha": "e1c10b01b7d6",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2d6fa1be40af": {
+  "identity": {
+   "one_liner": "面向 .NET 的 ORM 数据中间件，含自动建模、多级缓存与分表分库。",
+   "review": "NewLife.XCode 是一个 .NET 数据中间件，围绕实体类生成与 CRUD 操作构建，通过 XML 模型生成数据类与业务类双文件，并在启动时自动同步表结构。内置 33 种数据库提供程序，覆盖关系型、时序、列式、文档等类型，并支持基于 MySQL/PostgreSQL/Prometheus 协议的兼容数据库别名接入。安装方式为 dotnet add package NewLife.XCode，或使用 NewLife.Templates 模板脚手架。",
+   "highlights": [
+    "通过 XML 模型文件（db.xml）与 xcodetool 工具生成实体类，数据类重复生成、业务类首次生成后不再覆盖",
+    "内置 33 种数据库提供程序，覆盖 55 个数据库（含 22 个协议兼容数据库），支持 LINQ 查询、导航属性与窗口函数",
+    "提供多级缓存（全表缓存/单对象缓存/行数缓存）、原生分页与分表策略，兼容 Dapper 用法执行任意 SQL"
+   ],
+   "use_cases": [
+    ".NET 项目中需要以实体类方式操作多种数据库的 CRUD 场景",
+    "模型变更后需自动同步表结构、避免手写迁移脚本的部署流程",
+    "小表读多写少场景（少于 1000 行可使用全表缓存）以及大表分页查询场景"
+   ]
+  },
+  "sha": "2d6fa1be40af",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "819febe46c18": {
+  "identity": {
+   "one_liner": "面向 Java 17+ 的轻量级 ORM，通过编译期生成的类型化键映射数据库行。",
+   "review": "Ujorm3 是一个 Java ORM 库，用于将数据库行映射到 JavaBean 或 Record 对象。它以 Typed Key 模式为核心，提供类型安全的查询 DSL（SelectQuery）、原生 SQL 查询（SqlQuery）和按主键的 CRUD（EntityManager），并在运行时生成映射辅助类。库不提供懒加载、1:M 集合、事务管理，映射基于 JPA/Jakarta 或 Ujorm 注解，适合需要在 JDBC 之上以最小抽象操作关系数据库的 Java 开发者。",
+   "highlights": [
+    "提供类型安全的查询 DSL：通过 Criterion 对象与 fluent API 构建 SELECT、JOIN 和 WHERE，编译器校验列与参数类型",
+    "支持映射到可变 JavaBean 和不可变 Record，包含 M:1 关系，注解兼容 JPA/Jakarta（@Table、@Column、@Id）及 Ujorm 替代注解",
+    "运行时生成映射辅助类字节码，反射开销仅限于元数据初始加载；SqlQuery 提供 bind()/label() 的安全参数绑定"
+   ],
+   "use_cases": [
+    "需要按主键进行单表 CRUD、无需手写 SQL 的应用",
+    "以 Record 或 JavaBean 作为数据载体、偏好显式 SQL 与类型安全过滤条件的查询场景",
+    "使用原生 SQL 并要求参数绑定安全的复杂查询，包括嵌套关系的自动结果映射"
+   ]
+  },
+  "sha": "819febe46c18",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

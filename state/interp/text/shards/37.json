@@ -3275,5 +3275,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "69f111ad7ea4": {
+  "identity": {
+   "one_liner": "单二进制 Rust 本地搜索引擎与 MCP 服务器，提供 BM25、向量与混合检索。",
+   "review": "XERJ 是一个本地优先的 AI 搜索引擎，以单个 Rust 二进制运行，可自动索引文件夹中的代码、文档、日志、JSONL/CSV 和 PDF，通过 Elasticsearch 兼容 API 提供 BM25 全文、向量与混合检索及 /_memory 代理记忆接口，支持 Claude Code、Cursor 等 MCP 客户端。引擎源码为 Apache-2.0，rc.101 起发布二进制中的 XERJ Query-1 模型 crate 为专有组件，不在公开源码内。",
+   "highlights": [
+    "一个 Rust 二进制实现 BM25 全文、向量与混合检索、代码搜索和 /_memory 代理记忆，提供 Elasticsearch 兼容 API",
+    "通过 MCP 工具（xerj_facts_ask、xerj_batch_search 等）和 HTTP 接口与 Claude Code、Cursor 及任意 MCP 客户端协作",
+    "XERJ Query-1 在发布二进制中可用（--facts-model-dir 启用），将问题编译为存储事实上的小程序，无法回答时返回 UNKNOWN 或 CONFLICT，模型源码与训练数据未公开"
+   ],
+   "use_cases": [
+    "为编码代理建立参考代码检索：索引开源仓库，供代理在写代码前查询相关实现",
+    "为 AI 代理提供本地代理记忆（/_memory 命名空间）与 RAG 检索后端",
+    "替代 Elasticsearch API 场景下无需 JVM 的本地检索部署（README 报告通过 1448/1458 项 ES-YAML 一致性测试）"
+   ]
+  },
+  "sha": "69f111ad7ea4",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9bce00a3974a": {
+  "identity": {
+   "one_liner": "基于 Azure 全家桶的端到端 ETL 教学项目，从本地 SQL 到 Power BI 报表",
+   "review": "该项目演示一条完整数据管道：用 Azure Data Factory 通过自托管集成运行时将本地 SQL Server 的 AdventureWorks 数据复制到 Data Lake bronze 层，经 Databricks PySpark 按 medallion 架构转为 delta 格式的 silver、gold 层，再经 Azure Synapse 无服务器 SQL 视图加载，Power BI 以 DirectQuery 呈现。适用于学习云迁移与 ETL 流程的开发者。作者注明数据集仅约 800 行、7MB，多组件组合系自学目的。",
+   "highlights": [
+    "使用 Azure Data Factory 自托管集成运行时从本地 SQL Server 复制全部表到 Data Lake bronze 文件夹",
+    "使用 Azure Databricks 与 PySpark 按 medallion 架构将 parquet 数据转换为 delta 格式，并由管道自动执行转换笔记本",
+    "通过 Azure Synapse 无服务器 SQL 视图加载 gold 层数据，Power BI 以 DirectQuery 连接实现报表动态更新"
+   ],
+   "use_cases": [
+    "学习 Azure 数据工程 ETL 管道的常见实践",
+    "为中小型业务将本地数据迁移到云端做流程参考",
+    "练习 medallion 数据湖架构与 Databricks PySpark 转换"
+   ]
+  },
+  "sha": "9bce00a3974a",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

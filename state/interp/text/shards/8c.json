@@ -3052,5 +3052,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7db726f96d0b": {
+  "identity": {
+   "one_liner": "面向 AI 搜索优化的自托管平台，通过 REST API 与 CLI 让代理追踪品牌在各类答案引擎中的提及与引用。",
+   "review": "Canonry 是一个开源、可自托管的 AEO/GEO 平台，用于追踪品牌在 ChatGPT、Claude、Gemini 等答案引擎中的提及与引用，并整合 Search Console、GA4、服务器日志与 SEO 数据。所有功能通过统一的 REST API、CLI（cnry）和 MCP 服务器暴露，供 Claude Code、Codex 等代理读取证据并执行发布、索引等操作。SEO 关键词数据依赖外部服务 DataForSEO，AI 可见性检测需自备各家 API 密钥。",
+   "highlights": [
+    "提供 REST API、CLI、MCP 服务器与 Web 控制台四种接口，OpenAPI 规范位于 /api/v1/openapi.json",
+    "支持追踪 ChatGPT、Claude、Gemini、Perplexity、Meta、OpenRouter、Exa、Parallel 及 OpenAI 兼容本地模型的提及与引用，各来源结果分开保存",
+    "内置 Agent Readiness 站点审计，检查 AI 爬虫访问、llms.txt、结构化数据与可提取内容，并支持 WordPress 发布与 Google/Bing 提交"
+   ],
+   "use_cases": [
+    "追踪品牌在多个 AI 答案引擎中的提及份额与引用来源，查看竞争对手表现差距",
+    "从服务器日志分析 GPTBot、ClaudeBot 等 AI 爬虫的抓取行为及 AI 引流流量",
+    "让编码代理基于搜索数据与站点审计结果生成 WordPress 草稿或 PR，并在发布后复查效果"
+   ]
+  },
+  "sha": "7db726f96d0b",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "381707dbee56": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理记忆层：单 Docker 镜像、单 SQLite 文件，经 MCP 提供记忆服务。",
+   "review": "Rembric 为 AI 编码代理提供持久化记忆、会话与仪表盘，服务对象是使用 Claude Code、Codex CLI、opencode、Cursor 等 MCP 客户端的开发者。部署为单个 Node 进程加一个 SQLite 文件，在进程内运行嵌入模型与重排序器；采用 append-only 存储，服务端将凭证类文本替换为 [REDACTED:<kind>] 标记。要求宿主机至少 2 vCPU 与 2 GB 内存。",
+   "highlights": [
+    "提供 MCP 端点（http://<host>:8787/mcp）与 Web 仪表盘，支持 Claude Code、Codex CLI、opencode、Pi、ChatGPT 等客户端及任意 MCP/HTTP 客户端",
+    "在进程内运行嵌入模型（hs-embed-1，384 维）与交叉编码器重排序器（hs-rerank-1），可通过 REMBRIC_RERANK=off 关闭重排序",
+    "支持插件级会话生命周期管理、按项目路径隔离，并在客户端上传前对 <private>…</private> 片段做脱敏，凭证类文本存储为 [REDACTED:<kind>]"
+   ],
+   "use_cases": [
+    "为多个 MCP 编码代理提供共享的持久化记忆存储",
+    "在自有服务器或 NAS 上以 Docker 自托管运行，通过 Tailscale、WireGuard 或反向代理接入",
+    "需要审计记录与仪表盘管理（备份、升级、令牌签发）的多客户端部署场景"
+   ]
+  },
+  "sha": "381707dbee56",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

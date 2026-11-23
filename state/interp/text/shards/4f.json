@@ -3503,5 +3503,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4a94bd0eee92": {
+  "identity": {
+   "one_liner": "本地优先的项目管理工具，单个二进制，CLI、Web UI 与 AI agent 技能共用 SQLite 存储",
+   "review": "Pad 是一个运行在本地的项目管理工具，基于 SQLite 存储，提供 CLI、localhost:7777 的 Web UI 以及面向 AI 编码工具的 /pad 技能，支持 Claude Code、Cursor、Codex 等工具。内置任务、想法、计划、文档等集合，支持自定义类型化字段，可选迁移至 Pad Cloud 以获得同步和多用户访问。",
+   "highlights": [
+    "单二进制发行，通过 Homebrew、源码构建（Go 1.26+ 与 Node.js 22+）或 Docker 安装，数据存于本地 SQLite",
+    "提供 pad 命令行（item/collection/agent/session 等子命令）与 Web UI（看板/列表/表格视图、键盘导航、wiki 链接、版本化历史、实时更新）",
+    "面向 AI agent 提供 /pad 技能与约定（conventions）、多步骤 playbook 机制，agent 操作在活动流中按注册名称归因"
+   ],
+   "use_cases": [
+    "在终端与浏览器中管理个人或小型项目的任务、想法与计划",
+    "让 Claude Code、Cursor、Codex 等 AI 编码工具通过自然语言读取和更新项目条目",
+    "为 agent 定义项目约定与工作流 playbook，例如完成任务前先运行测试"
+   ]
+  },
+  "sha": "4a94bd0eee92",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "70b6edd453b7": {
+  "identity": {
+   "one_liner": "基于 Tauri v2 的桌面应用模板，预置窗口外壳与原生集成",
+   "review": "WingHarness 是一个 Tauri v2 + React 19 桌面应用模板，为开发者预置无边框窗口、路由、主题、托盘、全局快捷键、i18n 等常用外壳功能，使首个功能开发无需先搭窗口框架。运行依赖 Node.js ≥18、pnpm ≥9、Rust ≥1.70。内置终端、笔记、文件预览等页面，部分特性指南描述的页面尚未包含在仓库中。",
+   "highlights": [
+    "提供无边框窗口、自定义标题栏、系统托盘、全局快捷键、自动更新等预置能力",
+    "内置本地终端（portable-pty）、Markdown 笔记、项目文件浏览器与多格式文件预览（Word、Excel、PDF、图片、压缩包等）",
+    "支持中英双语 i18n、亮/暗/跟随系统主题，文档以中英双语提供"
+   ],
+   "use_cases": [
+    "作为 Tauri v2 桌面应用开发的起点模板，复用已接线的窗口与原生集成",
+    "需要文件预览、本地终端、笔记等桌面功能页面的开发者",
+    "学习 Tauri 命令注册、多窗口路由、GitHub Actions 签名发布流程的参考实现"
+   ]
+  },
+  "sha": "70b6edd453b7",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17bf4c281451": {
+  "identity": {
+   "one_liner": "Rust CLI 工具，通过控制型并发实验检测 PostgreSQL 锁等待与连接池争用",
+   "review": "这是一个 Rust 命令行工具，用于在 Docker Compose 搭建的一次性 PostgreSQL 18 实验库上运行可复现的并发实验，覆盖 inventory-hotspot、pool-starvation、index-contention 三种场景。它从客户端侧采集延迟分位数、连接池等待、SQL 往返与吞吐，同时由独立监控角色采样锁与会话信息，输出 JSON/Markdown 报告并支持基线对比。目前仅支持闭环负载；死锁复现、预留争用与仪表盘尚未实现。",
+   "highlights": [
+    "提供 inventory-hotspot、pool-starvation、index-contention 三种受控场景，输出客户端观测的延迟分位数、连接池等待、SQL 往返与吞吐（HDR 直方图）",
+    "独立监控池采样会话、等待事件、锁元数据与 pg_blocking_pids()，并采集 pg_stat_statements 前后增量（不含查询文本）",
+    "支持有界实验矩阵、JSON 基线/候选对比（含 p95 与错误率回归门槛）及仅回环地址的 HTTP 报告历史端点"
+   ],
+   "use_cases": [
+    "在生产部署前验证事务并发下共享行锁等待对客户端延迟的影响",
+    "区分连接池获取等待与短暂行锁等待，诊断池饥饿问题",
+    "对比加索引前后的 EXPLAIN 计划与读取性能，验证复合索引效果"
+   ]
+  },
+  "sha": "17bf4c281451",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

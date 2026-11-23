@@ -3100,5 +3100,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "50d8619134d3": {
+  "identity": {
+   "one_liner": "CVE 漏洞与 PoC 聚合索引库，每日自动归一化多来源攻击面数据为 JSON 索引",
+   "review": "该仓库通过 GitHub Actions 每 24 小时聚合 CVEProject、Nuclei、Exploit-DB、Metasploit、CISA KEV、EPSS 等来源，生成约 15.7 万条 CVE 的去重索引，含风险评分、PoC 链接与统计数据，MIT 协议，可通过 curl 下载 JSON 并用本地命令行工具查询，无需 API 密钥，面向安全研究人员、渗透测试人员及用于 RAG 检索的威胁情报系统。",
+   "highlights": [
+    "聚合 CVEProject/cvelistV5、Nuclei 模板、Exploit-DB CSV、Metasploit 模块、Vulhub、CISA KEV 与 FIRST EPSS 多来源数据",
+    "提供 0-100 exploit-risk 评分，综合 KEV、EPSS、CVSS、PoC 证据与时间因素",
+    "采用压缩 JSON schema 并提供 curl 下载与本地查询方式，无需 API 密钥"
+   ],
+   "use_cases": [
+    "按产品域（操作系统、Web 应用、企业软件、容器云）检索 CVE 与 PoC 链接",
+    "为 RAG/LLM 威胁情报流程提供 token 占用较低的 JSON 数据层",
+    "红队与漏洞研究人员的本地终端查询数据源"
+   ]
+  },
+  "sha": "50d8619134d3",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8de780a3b599": {
+  "identity": {
+   "one_liner": "面向 DeepSeek Harness 的本地记忆插件，用单个 SQLite 文件存储记忆与人格。",
+   "review": "dsh-seed-of-memory 是 DSH 的记忆层插件，把身份根、四层记忆、认知、情绪、人格与说话习惯存进本地 SQLite 文件，不联网、零 npm 依赖（需 Node≥22.19、DSH 0.2.x）。通过 seed_* 工具集与 /seed 命令读写，记录带 scope 分档控制可见性，冲突不覆盖而是退休留链。可选安装本地运行时启用语义检索。适合使用 DSH 并需要跨会话持久记忆的用户。",
+   "highlights": [
+    "提供四层记忆（persona/semantic/episodic/buffer）、带证据与置信度的认知、双层情绪与心情聚合，全部存于本地单个 SQLite（WAL）文件，无网络调用",
+    "支持 scope 分档（shared/gui/qq:/group:）控制读写可见性，冲突记录走退休链（superseded_by）或挂起（pending），可通过 seed_inspect what=why 追溯来源",
+    "可选语义检索（Ollama + bge-small，默认端口 11435），FTS 与余弦加权重排，无运行时自动退回纯 FTS；另提供 16 个 seed_* 工具与 30 余个 /seed 命令"
+   ],
+   "use_cases": [
+    "为 DSH 会话提供跨会话、可追溯的持久记忆与人格状态存储",
+    "需要按会话/群聊/QQ 私聊隔离记忆可见性的多场景部署",
+    "可选接入 OneBot 11 实现（如 SnowLuma），将 QQ 私聊/群聊作为 Agent 会话接入记忆系统"
+   ]
+  },
+  "sha": "8de780a3b599",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fd4b75e0f0b6": {
+  "identity": {
+   "one_liner": "rag-titan 是一个提供多种 RAG 类型和统一 Python API 的本地检索增强问答库",
+   "review": "rag-titan 是一个 Python RAG 库，通过 rag_type 参数在 simple、adaptive、hyde 等 7 种 RAG 流程间切换，支持 Ollama 本地运行或 Claude 生成，答案引用来源 chunk。提供 8 种分块器、向量/BM25/混合检索、SQLite/Chroma/Qdrant 三种索引存储，并内置 rag-titan evaluate 命令以 recall、MRR、nDCG 等指标评估各阶段。需 Python 3.10+ 与 Ollama。",
+   "highlights": [
+    "支持 7 种 RAG 类型，通过 rag_type 参数切换，均提供 answer() 与返回各步骤的 run() 接口",
+    "包含 8 种分块器（词、字符、token、递归、句子、段落、标题、页面级），向量、BM25 及 RRF 融合的混合检索",
+    "提供 CLI 与 Python API 的评估功能，输出 recall、MRR、nDCG、answered rate、p95 时间及各阶段 70+ 指标与 0-100 评分卡"
+   ],
+   "use_cases": [
+    "需要答案仅来自指定文档并附带 chunk 引用的问答场景",
+    "在本地对 PDF、Word、Markdown、文本文件建立索引并多次提问",
+    "对自己的文档和测试问题比较不同分块器与 RAG 类型的组合，或诊断已有 RAG 流水线中失败的阶段"
+   ]
+  },
+  "sha": "fd4b75e0f0b6",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

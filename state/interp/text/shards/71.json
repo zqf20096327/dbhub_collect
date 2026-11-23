@@ -3111,5 +3111,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bb34945bd238": {
+  "identity": {
+   "one_liner": "嵌入式图数据库，支持 Cypher 查询与列式存储",
+   "review": "Ladybug 是一个嵌入式图数据库，面向复杂分析型查询负载，采用属性图模型和 Cypher 查询语言。它以无服务器方式集成到应用中，提供全文检索、向量索引、CSR 邻接表索引，并通过多核并行执行查询。安装覆盖 Python、NodeJS、Rust、Go 等多种语言，采用 MIT 许可证，前身为 Kuzu。",
+   "highlights": [
+    "支持属性图数据模型与 Cypher 查询语言，可嵌入应用实现无服务器集成",
+    "采用列式磁盘存储与 CSR 邻接表索引，支持多核查询并行和可串行化 ACID 事务",
+    "内置全文检索与向量索引，提供 Wasm 绑定以在浏览器中运行"
+   ],
+   "use_cases": [
+    "在应用程序中内嵌图查询能力（Python、NodeJS、Rust、Go 等语言均可安装）",
+    "对大型数据库执行复杂分析型图查询",
+    "在浏览器环境中通过 Wasm 运行图数据库"
+   ]
+  },
+  "sha": "bb34945bd238",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fd651c733dc3": {
+  "identity": {
+   "one_liner": "基于 ZFS 克隆实现 MySQL/PostgreSQL 秒级写时复制数据库分支的自托管工具",
+   "review": "db-branch 在自有服务器上为 MySQL 和 PostgreSQL 创建写时复制分支：基础库是 ZFS 数据集，分支是快照的 ZFS 克隆，创建时不复制数据，每个分支独立运行服务器实例。提供 CLI、REST API、Web 控制台和 MCP 服务器四种接口，可组成 Raft 集群。当前为 Beta 状态，要求 Ubuntu 24.04/26.04 与 ZFS 池。",
+   "highlights": [
+    "分支创建基于 ZFS 克隆的写时复制机制，创建时零数据复制，并提供 reset、checkpoint/restore、--ttl 自动过期与按分支版本升级能力",
+    "CLI、REST API、Web 控制台和内置 MCP 服务器使用同一套 API，支持多版本数据库引擎并存",
+    "单节点或多节点 Raft 集群运行，可选 ProxySQL 按用户名或查询注释路由连接"
+   ],
+   "use_cases": [
+    "AI 代理沙箱：通过 MCP 服务器让 LLM 代理在分支上执行高风险查询或迁移，不触及生产数据",
+    "每个 CI 运行或 Pull Request 独享一份大型数据库副本，用 --ttl 自动删除",
+    "版本升级预检：先用 branch upgrade --check-only 在单个分支上测试大版本升级"
+   ]
+  },
+  "sha": "fd651c733dc3",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "635e4ced17ef": {
+  "identity": {
+   "one_liner": "PocketBase 的社区分叉，核心保持最小改动，功能以扩展形式提供。",
+   "review": "PocketOne 是 PocketBase 的社区分叉，由 Ben Allfree 及贡献者维护，与上游项目无隶属关系。它在核心中只保留供扩展使用的钩子，其余功能全部以扩展实现，内置 PITR、Pages、MCP、LLM、多实例等标准扩展，并通过 PocketBase 原版测试套件验证兼容性。安装支持 Homebrew、安装脚本及 deb/rpm/apk 包，以 pocketone serve 启动。",
+   "highlights": [
+    "核心仅保留文件系统驱动、迁移列表、日志等少量钩子，其余功能均为独立扩展，可通过 core-changes 分支的单个 diff 审计全部改动",
+    "每个二进制内置约二十项标准扩展，包括基于 Litestream 的 PITR、pb_pages 服务端渲染页面、MCP 端点、LLM 接入及多实例（Pocker/Docker）托管",
+    "每个变更和每日运行未修改的 PocketBase 测试套件；支持 pocketone upgrade、桌面应用构建和 ACME 自动 TLS"
+   ],
+   "use_cases": [
+    "需要在单台服务器上按主机名路由托管多个实例的 BaaS 部署场景",
+    "希望在不改动 PocketBase 核心代码的前提下，通过扩展添加备份、邮件、LLM 等能力的应用开发",
+    "需要在 pb_hooks 中调用 Go/Rust/Zig WASM 模块或使用 QuickJS 引擎编写页面与钩子逻辑的项目"
+   ]
+  },
+  "sha": "635e4ced17ef",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1b73bc81859e": {
+  "identity": {
+   "one_liner": "纯 PHP 编写的加密投资基金平台，支持申购赎回与 NAV 管理双端流程",
+   "review": "该项目用原生 PHP、MySQL 与 jQuery 实现一个 USDT 加密基金平台：投资者可通过邮箱验证码注册登录、以三种链上方式转账申购单位、按 FIFO 赎回；管理员录入每日 NAV 并审批交易。作者注明登录验证码实际未发送邮件、数据库凭据硬编码，不适合直接部署。",
+   "highlights": [
+    "支持三种风险等级的 USDT 基金，申购支持 TRC20/ERC20/BEP20 转账凭证（交易链接或截图）与可选最高价格",
+    "赎回按最早持有单位优先（FIFO）匹配并扣减每单位赎回费，提供含买卖、剩余单位与赎回费的账单（cardex）",
+    "含交互式 NAV 图表（Highcharts）与 1 天、1 周、1/3/6/12 个月收益展示，采用 MySQLi 预处理语句"
+   ],
+   "use_cases": [
+    "初级全栈开发者学习无框架环境下完整 Web 应用的组织方式",
+    "作为 HTML/CSS/JavaScript + PHP + MySQL 项目模板参考",
+    "需要 Persian/RTL 界面与 Jalali 日期支持的 Web 项目参考实现"
+   ]
+  },
+  "sha": "1b73bc81859e",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "93c83b8d5b9a": {
+  "identity": {
+   "one_liner": "自托管的现代MG汽车数据面板与行程/充电记录Web应用",
+   "review": "GarageStack是一个自托管Web应用，登录SAIC iSmart API读取MG4、MG5、ZS EV、HS PHEV等现代MG车的遥测数据，提供实时仪表盘、行程地图、充电记录、维护提醒和远程控制，支持HEV/PHEV/BEV车型。部署为Docker单容器或Compose栈，数据存于PostgreSQL，仅适用于使用iSmart应用的SAIC车型。",
+   "highlights": [
+    "登录SAIC iSmart API，按车型（HEV/PHEV/BEV）自动调整仪表盘卡片，展示燃料、电池、胎压、门窗与空调状态",
+    "自动保存行程并在地图上绘制轨迹，支持行程标记为公务/通勤/私人并导出电子表格，记录充电会话与功率曲线",
+    "支持远程指令（空调预热、锁车、开充电等）、定时空调、推送通知，并通过MQTT discovery接入Home Assistant"
+   ],
+   "use_cases": [
+    "MG车主希望自托管查看车辆实时状态、行程轨迹与充电记录",
+    "需要按公务/通勤/私人分类行程并导出报表用于税务登记（如荷兰rittenregistratie）的用户",
+    "home lab用户希望将车辆数据接入Home Assistant、自建首页组件或单点登录体系"
+   ]
+  },
+  "sha": "93c83b8d5b9a",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

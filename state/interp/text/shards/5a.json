@@ -2894,5 +2894,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c1d0cffee0a7": {
+  "identity": {
+   "one_liner": "纯 Go 实现的 Yjs CRDT 移植，与 yjs 线格式字节级兼容",
+   "review": "Ygo 是协同编辑 CRDT 框架 Yjs 的纯 Go 移植，V1/V2 更新格式与 yjs@13.6.33 字节级一致，由 703 个跨语言 fixture 双向验证。面向需要协作编辑的 Go 开发者，提供 Map/Array/Text 共享类型、UndoManager、快照、子文档、观察者及离线同步客户端。核心模块需 Go 1.23，SQLite 持久化模块需 Go 1.26 且不支持 wasm 等部分平台。",
+   "highlights": [
+    "支持 Yjs V1/V2 线格式字节级兼容，经 703 个双向跨语言 fixture 验证",
+    "纯 Go、无 CGO，可编译至 47 个 Go 目标平台，含 Android AAR 与 iOS xcframework 移动 SDK",
+    "提供 Map、Array、Text、Awareness、UndoManager、快照、子文档及离线优先同步客户端"
+   ],
+   "use_cases": [
+    "Go 后端服务中集成 Yjs 协同文档读写与 WebSocket 服务（yserve）",
+    "移动端（Swift/Kotlin）嵌入协作编辑 SDK，含离线存储与后台同步",
+    "为机器人、CLI 工具或服务端代理实现文档变更监听（OnUpdate/EncodeDiff）"
+   ]
+  },
+  "sha": "c1d0cffee0a7",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ecb485c832ca": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI 代理自组织本地记忆系统，无需调用 LLM。",
+   "review": "Limbic 是为 Hermes Agent 实现的 MemoryProvider 接口的本地记忆插件，使用 SQLite 存储，通过嵌入与干扰检测写入事实，按使用情况自适应调整信任分数与衰减速率，被取代或长期未用的记忆在审查期后被后台清理。提供 remember/recall/forget 三个代理工具与 hermes limbic 运维命令，支持多用户按 user_id 分桶、可选 users.yaml 清单和纠正下限（默认 0.30）。安装依赖 Python 需启用 sqlite-vec 扩展加载。",
+   "highlights": [
+    "通过 remember/recall/forget 三个工具与 SQLite 单文件存储工作，全程不调用 LLM",
+    "信任评分、衰减半衰期与相关性阈值根据使用情况自适应调整，由 SQLite 触发器原子处理成熟度",
+    "支持多用户隔离：按完整平台 ID 分桶，提供 users.yaml 清单、guardian 写入语义与按用户的数据删除/导出命令"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 用户提供跨会话的本地事实记忆与上下文召回",
+    "需要按用户隔离记忆的多用户部署（每个平台账号独立记忆桶）",
+    "需要错误事实删除、数据导出及哈希墓碑删除凭证的合规场景"
+   ]
+  },
+  "sha": "ecb485c832ca",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

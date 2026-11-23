@@ -3165,5 +3165,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0a7113541608": {
+  "identity": {
+   "one_liner": "面向 DNF90 客户端的 Go 游戏服务端，在 Linux 容器中运行游戏服务与 MariaDB 存档",
+   "review": "ServerS5A3 是以 Go 编写的 DNF90（official-24.9 客户端）游戏服务端，运行于 Linux Docker 环境，使用 MariaDB 存储角色、背包、公会、团本等数据，支持 Windows 玩家经登录器连接。项目提供 manage.sh 配置生成器与推荐开关预设，许多玩法开关默认关闭需按文档配置；采用 GPL-3.0 许可，面向需要自建私服测试环境的用户。",
+   "highlights": [
+    "游戏服务处理账号登录令牌、频道连接、组队 UDP 中继与副本战斗协议，领域层实现角色、装备、拍卖、公会等规则与 MariaDB 增量事务",
+    "提供 Docker 镜像、实例配置生成器、推荐开关预设包，并发布配套 PVF 与客户端组件（GitHub Releases）",
+    "支持 4 核 16 GiB 同机混跑性能配置、120 频道外部 ETC 校验，并提供 build.sh 跨平台构建与按范围测试脚本"
+   ],
+   "use_cases": [
+    "在 Linux 服务器上部署配套 official-24.9 客户端的 DNF90 私服测试环境",
+    "基于 Docker 配置生成器与推荐预设快速初始化游戏服务与 MariaDB 实例",
+    "本地构建、按范围验证并参与服务端协议与玩法的开源协作开发"
+   ]
+  },
+  "sha": "0a7113541608",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "643ac91e76e8": {
+  "identity": {
+   "one_liner": "Rust 实现的嵌入式多进程共享内存数据库，提供 sqlite 兼容 C-API 与 MVCC 并发",
+   "review": "MPEdb 是用 Rust 编写的嵌入式数据库：进程通过 mmap 共享文件直接访问，无服务器进程，采用写时复制 B+tree 上的 MVCC 快照实现读写并发，并强制类型化 schema 校验。它构建 libmpedb_sqlite3.so 供 LD_PRELOAD 接管既有 libsqlite3 调用，也可通过 pip 安装为 Python 模块替代 sqlite3，或用 CLI 直接打开已有 sqlite 文件；写入落在侧车增量文件，经 checkpoint 写回。适合需在无服务器模式下获得事务快照隔离与严格 schema 的本地应用及多进程写入场景。",
+   "highlights": [
+    "导出 sqlite3 C-API 的 cdylib，可 LD_PRELOAD 或按 soname 替换，CPython sqlite3 模块、Django、PDO 等无需改码即可运行",
+    "基于写时复制 B+tree 的 MVCC 快照，读不阻塞写、写不阻塞读，多进程可并发写入且 SIGKILL 不损坏数据库",
+    "SQL 编译一次生成内容哈希计划，热路径为 execute(hash, params)，计划携带预计算读写足迹"
+   ],
+   "use_cases": [
+    "以文件数据库运行的多进程应用，需要并发写入与快照隔离",
+    "无法修改代码的既有 libsqlite3 消费方（如 Django 测试、PHP pdo_sqlite），经 shim 接入",
+    "直接打开并增量写入现有 sqlite .db 文件，之后 checkpoint 发布回标准 sqlite 格式"
+   ]
+  },
+  "sha": "643ac91e76e8",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "72f8981ded43": {
+  "identity": {
+   "one_liner": "以 Julia 制品分发 QUBO 基准实例库的 SQLite 索引数据库包",
+   "review": "QUBOLib.jl 是 QUBO.jl 生态中的基准实例库，数据以 Julia artifact 形式随包分发，经 SQLite 索引定位后从 HDF5 归档加载模型。面向需要在 QUBO 数据集上做检索与基准测试的 Julia 用户。使用时需注意本地工作目录不得与制品目录重叠，查询需另装 SQLite.jl 与 DataFrames.jl；数据集引用须遵循 DATASET.md 中按集合区分的来源条款。",
+   "highlights": [
+    "实例数据以 Julia artifact 记录于 Artifacts.toml，首次调用 QUBOLib.access 时自动下载",
+    "通过 SQLite 索引库查询实例标识，并从 HDF5 归档加载模型",
+    "v0.2.7-data+10 数据版包含 9,294 个原始 QUBO、620 个精确捕获与 62 条修复记录"
+   ],
+   "use_cases": [
+    "为 QUBO 求解器与算法开发选取基准实例",
+    "按集合、规模等条件检索并加载 QUBO 模型",
+    "复现论文或研究中使用的标准 QUBO 数据集并完成引用"
+   ]
+  },
+  "sha": "72f8981ded43",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "678bae7af15d": {
+  "identity": {
+   "one_liner": "基于 pg_stat_statements 的 PostgreSQL 性能调查与前后对比工具",
+   "review": "pgpa 是一个 Rust 命令行工具，结合 PostgreSQL 统计视图与可重复 HTTP 工作负载，用于查找开销大的查询、检查执行计划、采样锁等待并比较负载变化前后差异。子命令覆盖体检、排序、捕获、诊断、基准与报告。适用于持有 pg_stat_statements 数据库读写权限并需离线证据的运维与开发者；诊断结果仅作为线索，需自行验证，且工作负载仅支持 HTTP。",
+   "highlights": [
+    "提供 doctor/inspect/capture/locks/explain/diagnose/run/compare/report 九个子命令，输出终端、JSON、Markdown 或独立 HTML 报告",
+    "诊断覆盖高缓冲区读取、重复调用、锁争用、顺序扫描过滤成本、行数估算偏差与磁盘溢出",
+    "默认只读安全：不安装扩展、不改服务器配置、不自动执行查询文本，凭据不写入产物文件"
+   ],
+   "use_cases": [
+    "排查数据库中耗时或高缓冲区读取的查询并分析 EXPLAIN 计划",
+    "通过固定速率 HTTP 工作负载的前后对比观察性能变化",
+    "对锁等待与阻塞关系进行非侵入式采样"
+   ]
+  },
+  "sha": "678bae7af15d",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "93d87765b6e2": {
+  "identity": {
+   "one_liner": "自托管团队 Wiki，Rust 后端 + Yjs CRDT 实时协同编辑",
+   "review": "WikiCraft 是一个自托管团队 Wiki，后端用 Rust（axum、yrs、tantivy）实现，前端为 React/Tiptap。面向需要自建知识库或迁移 Confluence 内容的团队，提供实时协同编辑、空间与页面树、细粒度权限、SSO/LDAP/SAML 登录、全文检索与 CQL 查询、PDF/Word 导出及多种格式导入。以单个无状态二进制运行，依赖 PostgreSQL ≥ 15，Docker Compose 启动后经向导完成初始化。采用 MIT OR Apache-2.0 双许可。",
+   "highlights": [
+    "实时协同编辑基于 Yjs CRDT，服务器通过 yrs 支持 y-websocket 协议",
+    "提供 Confluence 导入（XML/CSV 导出，含历史、附件、评论、权限），并将旧 Confluence URL 重定向到导入页面",
+    "支持 OpenID Connect、GitHub、LDAP/AD、SAML 2.0 登录及 TOTP 两步验证"
+   ],
+   "use_cases": [
+    "团队自托管知识库与文档协作",
+    "从 Confluence Data Center 迁移历史内容",
+    "需要 SSO/LDAP/SAML 集成与细粒度权限管理的企业部署"
+   ]
+  },
+  "sha": "93d87765b6e2",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

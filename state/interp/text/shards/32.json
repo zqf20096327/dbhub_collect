@@ -3053,5 +3053,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "15ff6fb7b2df": {
+  "identity": {
+   "one_liner": "AI 热点日报网站框架：采集信源后经 LLM 筛选、聚簇并自动生成日报",
+   "review": "AIHOT 是一个自托管的热点资讯网站框架，用 Docker Compose 部署，技术栈为 Node.js 24、TypeScript、React Router、Fastify 与 PostgreSQL。它从 RSS、网页、X 账号、微信公众号等六类信源采集内容，经 LLM 预筛和两次独立评分生成中文标题摘要，将不同来源的同一报道聚成事件并按热度排序，定时产出日报、周报、月报。面向想搭建自己行业资讯站的用户，精选标准的提示词与入选门槛存放在 industry/ 目录下，可修改而无需改代码；仓库自带 18 个示范信源，不含 AIHOT 线上站的信源名单和运营数据，作者建议用自己标注的样本通过 eval-selection 脚本校准筛选效果。",
+   "highlights": [
+    "支持 RSS、网页列表、JSON 接口、X 账号、微信公众号及脚本推送六种信源，信源分三级并对应不同入选门槛",
+    "精选流程包含 LLM 预筛、同一标准独立两次评分与入选门槛判断，提示词位于 industry/prompts/，可自行修改并用标注样本校准",
+    "按事件聚簇报道并计算热度（48 小时窗口、独立来源去重、24 小时减半），定时生成日报、周报、月报，日报编写不调用模型"
+   ],
+   "use_cases": [
+    "为法律、人力资源、金融等特定行业搭建自托管的热点资讯站，替换成自己行业的信源与精选标准",
+    "需要定时生成行业日报、周报、月报并按事件聚合热点排行的内容运营场景",
+    "为 Agent 提供行业资讯数据源，通过 MCP、RSS 或公开 API 读取精选与日报内容"
+   ]
+  },
+  "sha": "15ff6fb7b2df",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "171d0490d810": {
+  "identity": {
+   "one_liner": "Claude Code 插件：用单条 prompt 创建按计划或 watch 触发的持久后台目标代理",
+   "review": "Quarterdeck 是一个 Claude Code 插件，将目标（goal）作为持续运行的后台任务：按自然语言描述的计划执行，或由 watch（gh 命令、订阅源、文件夹、网页、邮件检查）在有新内容时唤醒运行。每个动作默认需在 Goals 面板或手机端审批，各目标独立保存记忆、待办与运行历史，每次运行记录 token 与耗时。面向已使用 Claude Code 并需要持续自动化任务的用户；依赖 Claude Code 与 Node.js 22.13+。",
+   "highlights": [
+    "目标可按计划或 watch 触发运行，watch 在模型之外每几分钟检查一次，仅在有新内容时启动运行",
+    "每类动作设为 off、propose 或 auto，连续批准 10 次后面板提供切换为 auto 的选项",
+    "每个目标维护独立记忆、待办列表与运行历史，运行显示 token 用量和耗时"
+   ],
+   "use_cases": [
+    "维护 GitHub 仓库：修复新 issue、失败 CI、审阅 PR、细化 issue 规格",
+    "在 Facebook Marketplace / Trade Me 上发布商品并回复买家，每条消息待审批",
+    "周期性任务：邮件分拣、订阅退订、新闻摘要、求职扫描、清理下载目录"
+   ]
+  },
+  "sha": "171d0490d810",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

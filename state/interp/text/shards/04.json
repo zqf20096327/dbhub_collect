@@ -3339,5 +3339,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ddb6db875819": {
+  "identity": {
+   "one_liner": "提供 GCJ02、BD09 与 CGCS2000 坐标转换及 Jenks 自然断点计算的 PostgreSQL 扩展",
+   "review": "pg_eviltransform 是基于 pgrx 用 Rust 编写的 PostgreSQL 扩展，依赖 PostGIS。它提供 ST_EvilTransform 函数，按 ST_Transform 的四种重载形式在 WGS84、GCJ02、BD09 与地理 CGCS2000 之间转换坐标，自定义坐标系经 WGS84 桥接；另提供 ST_JenksBins 计算自然断点边界。适用于在 PostgreSQL 中处理中国区域地图坐标与数据分级的用户。README 注明中国包围框外 GCJ02/BD09 步骤不改变 X/Y，升级 0.0.9 需重算历史转换结果并重建相关索引。",
+   "highlights": [
+    "ST_EvilTransform 提供 geometry 配合 to_srid、to_proj 及 from_proj 的四种重载，支持 SRID 990001（GCJ02）、990002（BD09）、4326（WGS84）、4490（CGCS2000）及文本别名",
+    "自定义坐标系转换保留 Z/M 坐标，标准系统委托给 PostGIS/PROJ，可在受限 search_path 下使用限定名调用",
+    "ST_JenksBins 接受多种数值类型的数组或聚合输入，忽略 NULL，返回指定类数的分界数组"
+   ],
+   "use_cases": [
+    "在 PostGIS 数据库中将 WGS84、GCJ02、BD09 与 CGCS2000 坐标相互转换",
+    "对中国境内地图点数据做坐标系纠偏后继续使用 PostGIS 空间函数",
+    "对数值字段按 Jenks 自然断点生成分级边界（返回 double precision[]）"
+   ]
+  },
+  "sha": "ddb6db875819",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

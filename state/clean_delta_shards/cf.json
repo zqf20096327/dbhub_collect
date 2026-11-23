@@ -25962,5 +25962,838 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "7c98f7a265ea+2": {
+  "fn": "StellarHyperion/stellarhyperion-backend",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "App | Public API health | Contracts and deployment evidence"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    76,
+    3,
+    76
+   ],
+   [
+    "replace",
+    76,
+    77,
+    76,
+    77,
+    [
+     "The `hyperion-backend` Vercel project serves stellarhyperion-backend.vercel.app. Configure its production `DATABASE_URL` through Vercel environment variables with a managed PostgreSQL connection and TLS. Keep the value server-side. Set `HYPERION_NETWORK` and `HYPERION_DEPLOYMENTS_FILE` explicitly to the intended network and deployment record. Redis and signing keys are unnecessary while `KEEPER_ENABLED=false`."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    77,
+    78
+   ],
+   [
+    "replace",
+    78,
+    79,
+    78,
+    79,
+    [
+     "`vercel.json` includes the deployment metadata in the API function. Production indexing runs in the testnet indexer workflow, independently of requests to the API. Store the same database connection as the repository Actions secret `HYPERION_DATABASE_URL`. Each run applies pending SQL migrations and runs the real indexer and bridge pollers for 150 seconds, with graceful shutdown and a persisted PostgreSQL cursor. The concurrency group prevents overlapping hosted jobs. No signer is configured."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    211,
+    79,
+    211
+   ],
+   [
+    "replace",
+    211,
+    221,
+    211,
+    221,
+    [
+     " `GET /health` reports hosting environment, database role, a stable public configuration digest",
+     " (`configDigest`) and effective-setting provenance (`configProvenance`). The report uses selected",
+     " deployment routers and per-chain commits, with safe names for conflicting overrides.",
+     " `DEPLOYMENT_REVISION` is an expected Git commit and never replaces the selected deployment",
+     " record. Endpoints are reported only as omitted values and their source; database credentials,",
+     " signer material, host/path/process identity and arbitrary metadata are excluded. The digest",
+     " covers public effective settings and selected deployment identities, excluding endpoint",
+     " credentials, diagnostic-only overrides and tuning for disabled workers. Equivalent explicit",
+     " defaults and reordered JSON targets therefore share a digest. Provider health does not",
+     " establish destination delivery."
+    ]
+   ],
+   [
+    "equal",
+    221,
+    222,
+    221,
+    222
+   ],
+   [
+    "replace",
+    222,
+    224,
+    222,
+    224,
+    [
+     " also include an opaque `nextCursor`; pass it back with the same filters for stable keyset",
+     " pagination. Cursors are scoped to the descending transfer-id order and reject mismatched filters."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    245,
+    224,
+    245
+   ],
+   [
+    "replace",
+    245,
+    246,
+    245,
+    246,
+    [
+     "As of October 29, 2026, the public API and scheduled indexer use persistent Neon PostgreSQL. The verified database retained 10 delivered testnet transfers. The successful indexer run advanced its stored Stellar cursor and preserved transfer history after shutdown. These are recorded verification results; current freshness is available through `/v1/metrics`."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    247,
+    246,
+    247
+   ],
+   [
+    "replace",
+    247,
+    248,
+    247,
+    248,
+    [
+     "Signed source transactions and independently checked destination payments are published in the contracts repository's paid ITS evidence, XLM conversion evidence and CCTP evidence for all three destinations."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    248,
+    249
+   ],
+   [
+    "replace",
+    249,
+    250,
+    249,
+    250,
+    [
+     "The October 29 CI run passed formatting, lint, types, the production build and all 220 tests. `npm audit` reported zero known vulnerabilities after compatible locked HTTP redirect and test-tooling patches. These results cover dependency and regression checks; they are not a formal security audit."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    546,
+    250,
+    546
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "a51ac4c6553b+2": {
+  "fn": "sakebomb/mcp-recall",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    11,
+    2,
+    10,
+    [
+     "CI",
+     "npm",
+     "npm downloads",
+     "License: Apache-2.0",
+     "Runtime: Bun",
+     "TypeScript",
+     "Claude Code Plugin",
+     "PRs Welcome"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    16,
+    10,
+    15
+   ],
+   [
+    "replace",
+    16,
+    17,
+    15,
+    16,
+    [
+     "It works in Claude Code, pi, OpenCode and xAI's `grok` CLI. Where it runs gives every agent's status, including the ones still to come."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    16,
+    17
+   ],
+   [
+    "replace",
+    18,
+    19,
+    17,
+    18,
+    [
+     "The goal is sessions that run for hours instead of hitting the context limit in minutes. Results shows what is measured today, and the quality benchmark what the summaries keep."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    18,
+    19
+   ],
+   [
+    "replace",
+    20,
+    21,
+    19,
+    20,
+    [
+     "**Status: maintenance mode since 2026-11-04.** Fixes keep shipping on a weekly release; new features are not planned. Why, and what it deliberately won't become: ROADMAP.md."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    20,
+    21
+   ],
+   [
+    "replace",
+    22,
+    25,
+    21,
+    22,
+    [
+     "mcp-recall demo"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    39,
+    22,
+    36
+   ],
+   [
+    "replace",
+    39,
+    40,
+    36,
+    37,
+    [
+     "**What it has not shown:** that Claude solves more tasks. In paired runs with and without it, no study found a difference in solved tasks larger than chance. Claude also almost never fetched the stored output, so the summaries carry the effect. See the task-success benchmark for every study and its limits."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    37,
+    38
+   ],
+   [
+    "replace",
+    41,
+    44,
+    38,
+    39,
+    [
+     "**What it costs you:** an install that edits your Claude Code config, and a local SQLite store on your own disk. Nothing leaves your machine, and credentials are never stored: see Safety and privacy."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    49,
+    39,
+    44
+   ],
+   [
+    "replace",
+    49,
+    50,
+    44,
+    45,
+    [
+     "|Agent|Status|Setup|"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    45,
+    46
+   ],
+   [
+    "replace",
+    51,
+    59,
+    46,
+    54,
+    [
+     "|Claude Code|**Supported**|`mcp-recall install`, or the plugin marketplace|",
+     "|pi|**Supported**|`mcp-recall install` adds an extension (details)|",
+     "|OpenCode|**Supported**|`mcp-recall install` adds a plugin (details)|",
+     "|xAI `grok` CLI|**Supported** in folders you trust in grok|Reads Claude Code's setup (details)|",
+     "|GitHub Copilot CLI|**On request**|Its documented hooks should work, untested; ask in #476|",
+     "|OpenAI Codex CLI|**Waiting on Codex**|A hook can't yet replace a result without an error (openai/codex#38135)|",
+     "|Gemini CLI, Qwen Code|**Not possible today**|A hook can replace a result only by reporting an error|",
+     "|Cursor|**Not possible today**|Its hook doesn't say which MCP server a result came from|"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    54,
+    55
+   ],
+   [
+    "replace",
+    60,
+    63,
+    55,
+    56,
+    [
+     "Using an agent that isn't listed? Say so in #473."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    66,
+    56,
+    59
+   ],
+   [
+    "replace",
+    66,
+    67,
+    59,
+    60,
+    [
+     "You need Claude Code and Bun (`curl -fsSL https://bun.sh/install | bash`). To run without Bun, use the standalone binary."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    91,
+    60,
+    84
+   ],
+   [
+    "replace",
+    91,
+    92,
+    84,
+    85,
+    [
+     "Ask again while the log is unchanged and the header reads `[recall:… · cached · <date>]`: mcp-recall reuses the summary it already made. There is no warm-up: the store starts empty, and each large output is summarized from the first call. Short output usually passes through untouched, with no header. For the running total, run `mcp-recall stats`, or ask Claude \"what has recall saved in this project?\", which calls `recall__stats`. The savings grow with how much large, structured output your tools return, such as browser snapshots, GitHub and API results, and long test logs: Is it for you? says who gains most."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    95,
+    85,
+    88
+   ],
+   [
+    "replace",
+    95,
+    98,
+    88,
+    89,
+    [
+     "→ All install options, updating and uninstalling (plugin marketplace, from source, standalone binary)"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    109,
+    89,
+    100
+   ],
+   [
+    "replace",
+    109,
+    110,
+    100,
+    101,
+    [
+     "The architecture guide walks through the full pipeline step by step."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    117,
+    101,
+    108
+   ],
+   [
+    "replace",
+    117,
+    120,
+    108,
+    109,
+    [
+     "**What it covers.** MCP tools (`mcp__*`, except mcp-recall's own) and the native Bash tool. Each output is routed to a handler built for its shape, so `git diff`, test runners, compilers and `grep` get summaries that put failures and errors first. The handler reference lists every handler and what it keeps. A result that carries an image, such as a browser screenshot, is delivered unchanged, since a text summary can't carry the picture. The built-in Read, Grep and Glob pass through unchanged; if large file reads are your biggest cost, the filesystem MCP server can be intercepted where Read can't."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    123,
+    109,
+    112
+   ],
+   [
+    "replace",
+    123,
+    124,
+    112,
+    113,
+    [
+     "Here is one real call, from the public benchmark corpus: the GitHub MCP server's `list_issues`, returning five issues and pull requests from this repository. Without mcp-recall, all 31.2 KB of the GitHub API's JSON lands in Claude's context: every URL, user record and timestamp. With it, Claude receives this instead (shortened here; `…` marks the cuts):"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    143,
+    113,
+    132
+   ],
+   [
+    "replace",
+    143,
+    144,
+    132,
+    133,
+    [
+     "The excerpt is the matching part of the original output, verbatim, escapes and all. In practice Claude rarely needs this step: in the task-success studies agents almost never called a `recall__*` tool, so the summaries alone carried the effect."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    153,
+    133,
+    142
+   ],
+   [
+    "replace",
+    153,
+    154,
+    142,
+    143,
+    [
+     "|Tool|Use when|"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    155,
+    143,
+    144
+   ],
+   [
+    "replace",
+    155,
+    166,
+    144,
+    155,
+    [
+     "|`recall__context`|Start of session — get pinned items, notes, and recent activity|",
+     "|`recall__retrieve(id, query?, mode?)`|Need detail from a prior tool call — `summary` / `peek` / `full` tiers|",
+     "|`recall__search(query, tool?)`|Find stored output by content, no ID needed|",
+     "|`recall__pin(id)`|Protect an item from expiry and eviction|",
+     "|`recall__note(text, title?)`|Leave a short project note, shown again by `recall__context`|",
+     "|`recall__stats()`|Session efficiency report with savings and suggestions|",
+     "|`recall__session_summary(date?)`|Digest of a specific session's activity|",
+     "|`recall__list_stored(sort?, tool?)`|Browse stored items|",
+     "|`recall__forget(...)`|Delete by id, tool, session, age, or all|",
+     "|`recall__export()`|JSON dump of all stored items|",
+     "|`recall__suggest()`|Surface pin candidates and stale items, with the command to act on each|"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    167,
+    155,
+    156
+   ],
+   [
+    "replace",
+    167,
+    170,
+    156,
+    157,
+    [
+     "→ Full tool reference"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    174,
+    157,
+    161
+   ],
+   [
+    "replace",
+    174,
+    176,
+    161,
+    163,
+    [
+     "- **What the summaries keep.** A smaller summary only helps if it keeps what Claude needs. The quality benchmark checks each summary for the facts in the original, against simply cutting the output to the same size. It runs on a public corpus anyone can rerun with `bun run quality`, and lists every kind of output where mcp-recall does no better than the plain cut.",
+     "- **Whether Claude still solves the task.** No measured change either way. Is it for you? has the short version, and the task-success benchmark has every study and its limits."
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    163,
+    164
+   ],
+   [
+    "replace",
+    177,
+    180,
+    164,
+    165,
+    [
+     "Long, structured, repetitive output (browser snapshots, API JSON, large diffs, test logs) compresses well; short or one-off output has little to remove. Every figure, how it was measured, and its caveats: Benchmarks."
+    ]
+   ],
+   [
+    "equal",
+    180,
+    183,
+    165,
+    168
+   ],
+   [
+    "replace",
+    183,
+    184,
+    168,
+    169,
+    [
+     "Profiles teach mcp-recall how to compress output from specific MCPs, as declarative TOML with no TypeScript required. Five profiles ship built in (Jira, Gmail, Context7, Docker, Cloudflare docs), and **26 community profiles** cover Stripe, Grafana, Shopify, Datadog, Notion, Teams, and more."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    192,
+    169,
+    177
+   ],
+   [
+    "replace",
+    192,
+    195,
+    177,
+    178,
+    [
+     "→ Profiles quickstart · Profile schema · retrain guide · AI profile guide · Contributing a profile"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    200,
+    178,
+    183
+   ],
+   [
+    "replace",
+    200,
+    201,
+    183,
+    184,
+    [
+     "|Setting|Default|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    184,
+    185
+   ],
+   [
+    "replace",
+    202,
+    207,
+    185,
+    190,
+    [
+     "|`store.expire_after_session_days`|`30`|Days you **actively use** Claude Code on a project before stored items expire. Calendar time away doesn't count|",
+     "|`store.max_size_mb`|`500`|Target store size; past it, unpinned items are evicted lowest-value first|",
+     "|`store.retention`|`\"balanced\"`|Which outputs keep a retrievable full body: `full`, `balanced` (reproducible Bash is stored summary-only), or `minimal`|",
+     "|`denylist.additional` / `denylist.allowlist`|empty|Extra tool patterns never to store, or tools to store despite a deny pattern|",
+     "|`debug.enabled`|`false`|Diagnostic logging to stderr (same as `RECALL_DEBUG=1`)|"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    190,
+    191
+   ],
+   [
+    "replace",
+    208,
+    211,
+    191,
+    192,
+    [
+     "→ Full configuration reference: every key with its trade-offs, environment variables, and how session days work."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    218,
+    192,
+    199
+   ],
+   [
+    "replace",
+    218,
+    227,
+    199,
+    200,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    233,
+    200,
+    206
+   ],
+   [
+    "replace",
+    233,
+    236,
+    206,
+    207,
+    [
+     "→ Maintenance details: what `gc` deletes and why, `--vacuum`, and import options."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    239,
+    207,
+    210
+   ],
+   [
+    "replace",
+    239,
+    240,
+    210,
+    211,
+    [
+     "- **Credentials are never stored.** Password-manager MCPs (1Password, Bitwarden, Vault and others) are blocked by name, credential-like tool names (`*secret*`, `*token*`, `*api_key*`, …) by pattern, and every output is scanned for secrets (PEM headers, GitHub PATs, AWS keys) before any write. A tool blocked by mistake goes in `denylist.allowlist`. Full lists: SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    241,
+    211,
+    212
+   ],
+   [
+    "replace",
+    241,
+    242,
+    212,
+    213,
+    [
+     "- **Running alongside rtk:** its command-rewriting hook was measured with mcp-recall, and the install guide says what changes. Its PostToolUse pipeline is untested."
+    ]
+   ],
+   [
+    "equal",
+    242,
+    247,
+    213,
+    218
+   ],
+   [
+    "delete",
+    247,
+    249,
+    218,
+    218
+   ],
+   [
+    "equal",
+    249,
+    253,
+    218,
+    222
+   ],
+   [
+    "replace",
+    253,
+    254,
+    222,
+    223,
+    [
+     "Without it, Claude Code puts an MCP result into the window whole when it is under 25,000 tokens (`MAX_MCP_OUTPUT_TOKENS`) and 50,000 characters. A larger result is saved to a file that Claude reads in chunks. Neither can be searched in a later session. mcp-recall swaps the result for a summary before it reaches the window and keeps the full output searchable. If Claude Code has already saved the result to a file, mcp-recall stores and summarizes the file's content instead of the notice."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    255,
+    223,
+    224
+   ],
+   [
+    "replace",
+    255,
+    256,
+    224,
+    225,
+    [
+     "|Where context goes|What helps|"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    257,
+    225,
+    226
+   ],
+   [
+    "replace",
+    257,
+    261,
+    226,
+    230,
+    [
+     "|**① Tool definitions:** every connected MCP server loads its full schema up front, about 500 tokens per tool|Claude Code Tool Search (built in) · Switchboard|",
+     "|**② Multi-step workflows:** each intermediate result passes back through context|Code Mode · FastMCP 3.1|",
+     "|**③ Large MCP results:** in the window whole, or in a file read in chunks|**mcp-recall**|",
+     "|**④ Earlier sessions' output:** gone, or at best a model-written summary|**mcp-recall** keeps it verbatim and searchable (it is not a memory layer)|"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    262,
+    230,
+    231
+   ],
+   [
+    "replace",
+    262,
+    265,
+    231,
+    232,
+    [
+     "In the API, context editing, compaction and the memory tool also reduce context, by dropping old content or summarizing it. None of them keeps the original output retrievable, and all of them work alongside mcp-recall."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    268,
+    232,
+    235
+   ],
+   [
+    "replace",
+    268,
+    275,
+    235,
+    242,
+    [
+     "- **Deciding whether to install:** the FAQ answers the common questions in a line or two each.",
+     "- **All the docs:** the documentation index lists every page by what you came to do, with a glossary of the terms used here.",
+     "- **Something not working:** Troubleshooting guide.",
+     "- **Contributing:** the easiest contribution is a TOML profile, with no TypeScript and no clone of this repo. Check the community profiles repo or open a profile request. TypeScript handlers are welcome for complex non-JSON output (HTML, DOM trees, binary formats): CONTRIBUTING.md has the workflow (`bun install && bun test`) and how to add one, and docs/architecture.md the pipeline and the invariants a change must not break.",
+     "- **Where it's headed:** ROADMAP.md, including what it deliberately won't become.",
+     "- **Release history:** CHANGELOG.md.",
+     "- **License:** Apache-2.0, see LICENSE and NOTICE. Releases up to 1.19.0 were published under MIT and stay under it."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

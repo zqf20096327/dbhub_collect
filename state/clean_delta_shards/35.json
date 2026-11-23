@@ -28805,5 +28805,2321 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "5485ab38661a+2": {
+  "fn": "kirimatt/goncordia",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    9,
+    2,
+    9,
+    [
+     "CI",
+     "codecov",
+     "Go Reference",
+     "GitHub release",
+     "Go version",
+     "License: MIT",
+     "Mentioned in Awesome Go"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Documentation · Changelog · API reference · Migrating to v2 · Who uses it"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    27,
+    11,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "`EnqueueTx` implements the transactional outbox pattern: the job is written inside your existing transaction and becomes visible to workers only after commit. If the transaction rolls back, the job disappears — no separate relay process, no dual-write risk."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    35,
+    28,
+    35
+   ],
+   [
+    "delete",
+    35,
+    37,
+    35,
+    35
+   ],
+   [
+    "equal",
+    37,
+    60,
+    35,
+    58
+   ],
+   [
+    "delete",
+    60,
+    62,
+    58,
+    58
+   ],
+   [
+    "equal",
+    62,
+    64,
+    58,
+    60
+   ],
+   [
+    "replace",
+    64,
+    65,
+    60,
+    61,
+    [
+     "|Driver|Package|Tx type|Atomic insert|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    61,
+    62
+   ],
+   [
+    "replace",
+    66,
+    80,
+    62,
+    74,
+    [
+     "|PostgreSQL (pgx v5)|`driver/pgxv5`|`pgx.Tx`|✅|LISTEN/NOTIFY, lease leadership, SKIP LOCKED|",
+     "|PostgreSQL / MySQL / MariaDB / SQLite|`driver/stdlib`|`*sql.Tx`|✅|pgx stdlib, go-sql-driver/mysql (MySQL 8, MariaDB 10.6+), modernc sqlite|",
+     "|gorm|`driver/gorm`|`*gorm.DB`|✅|thin adapter over stdlib|",
+     "|bun|`driver/bun`|`bun.Tx`|✅|thin adapter over stdlib|",
+     "|MongoDB 4.0+|`driver/mongodbv2`|`*mongo.Session` (mongo-driver v2)|✅|replica set required|",
+     "|MongoDB 4.0+ (deprecated)|`driver/mongodb`|`mongo.SessionContext` (mongo-driver v1)|✅|use `driver/mongodbv2`|",
+     "|Redis|`driver/redis`|`NoTx`|❌|at-least-once; Pub/Sub notifications|",
+     "|Cassandra 3.11+|`driver/cassandra`|`NoTx`|❌|LWT claiming; ScyllaDB / DSE compatible|",
+     "|ClickHouse 23+|`driver/clickhouse`|`NoTx`|❌|ReplacingMergeTree; at-least-once|",
+     "|Amazon DynamoDB|`driver/dynamodb`|`NoTx`|❌|conditional writes; at-least-once|",
+     "|Cloud Firestore|`driver/firestore`|`*firestore.Transaction`|✅|RunTransaction; composite index required|",
+     "|In-memory|`driver/memory`|`memory.NoTx`|❌|synchronized operations, no rollback; for tests|"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    74,
+    77
+   ],
+   [
+    "replace",
+    83,
+    84,
+    77,
+    78,
+    [
+     "||goncordia|River|Asynq|Machinery|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    78,
+    79
+   ],
+   [
+    "replace",
+    85,
+    96,
+    79,
+    90,
+    [
+     "|Backends|Postgres, MySQL, SQLite, MongoDB, Redis, Cassandra, ClickHouse, DynamoDB, Firestore, memory|**PostgreSQL only**|**Redis only**|Redis, RabbitMQ, SQS, MongoDB|",
+     "|Transactional insert (outbox pattern)|✅ where backend supports tx|✅ Postgres only|❌|❌|",
+     "|Generic `Driver[TTx]` interface|✅|✅ (Postgres only)|—|—|",
+     "|Scheduled / cron jobs|✅|✅|✅|✅|",
+     "|Unique jobs|✅|✅|✅|❌|",
+     "|Priority queues|✅|✅|✅|❌|",
+     "|Push notifications|✅ LISTEN/NOTIFY, Change Streams, Pub/Sub|✅ LISTEN/NOTIFY|✅ Pub/Sub|❌ polling|",
+     "|Web UI|✅ embeddable|✅ (River UI, Pro)|✅ (asynqmon)|❌|",
+     "|Await a job's typed result|✅ `future.Func.Call` / `Await`|❌|stores results, no await|✅ `AsyncResult.Get`|",
+     "|Unit tests without Docker|✅ in-memory driver + `gontest`|needs Postgres|needs Redis|needs a broker|",
+     "|Workflow primitives (chains, chords)|❌|❌|❌|✅|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    105,
+    90,
+    99
+   ],
+   [
+    "replace",
+    105,
+    108,
+    99,
+    100,
+    [
+     "Moving over from one of them? Migration guides: Asynq, River, Machinery."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    123,
+    100,
+    115
+   ],
+   [
+    "replace",
+    123,
+    149,
+    115,
+    116,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    153,
+    116,
+    120
+   ],
+   [
+    "replace",
+    153,
+    156,
+    120,
+    121,
+    [
+     "selected. See Migrating to v2 for upgrade commands."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    165,
+    121,
+    130
+   ],
+   [
+    "replace",
+    165,
+    199,
+    130,
+    131,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    216,
+    131,
+    148
+   ],
+   [
+    "replace",
+    216,
+    235,
+    148,
+    149,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    248,
+    149,
+    162
+   ],
+   [
+    "replace",
+    248,
+    260,
+    162,
+    163,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    260,
+    268,
+    163,
+    171
+   ],
+   [
+    "replace",
+    268,
+    279,
+    171,
+    172,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    287,
+    172,
+    180
+   ],
+   [
+    "replace",
+    287,
+    299,
+    180,
+    181,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    321,
+    181,
+    203
+   ],
+   [
+    "replace",
+    321,
+    336,
+    203,
+    204,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    336,
+    344,
+    204,
+    212
+   ],
+   [
+    "replace",
+    344,
+    360,
+    212,
+    213,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    360,
+    368,
+    213,
+    221
+   ],
+   [
+    "replace",
+    368,
+    383,
+    221,
+    222,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    391,
+    222,
+    230
+   ],
+   [
+    "replace",
+    391,
+    409,
+    230,
+    231,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    409,
+    417,
+    231,
+    239
+   ],
+   [
+    "replace",
+    417,
+    425,
+    239,
+    240,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    425,
+    438,
+    240,
+    253
+   ],
+   [
+    "delete",
+    438,
+    440,
+    253,
+    253
+   ],
+   [
+    "equal",
+    440,
+    446,
+    253,
+    259
+   ],
+   [
+    "replace",
+    446,
+    450,
+    259,
+    260,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    450,
+    451,
+    260,
+    261
+   ],
+   [
+    "delete",
+    451,
+    453,
+    261,
+    261
+   ],
+   [
+    "equal",
+    453,
+    460,
+    261,
+    268
+   ],
+   [
+    "replace",
+    460,
+    474,
+    268,
+    269,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    474,
+    492,
+    269,
+    287
+   ],
+   [
+    "delete",
+    492,
+    494,
+    287,
+    287
+   ],
+   [
+    "equal",
+    494,
+    500,
+    287,
+    293
+   ],
+   [
+    "replace",
+    500,
+    536,
+    293,
+    294,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    536,
+    602,
+    294,
+    360
+   ],
+   [
+    "delete",
+    602,
+    604,
+    360,
+    360
+   ],
+   [
+    "equal",
+    604,
+    635,
+    360,
+    391
+   ],
+   [
+    "replace",
+    635,
+    639,
+    391,
+    392,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    639,
+    647,
+    392,
+    400
+   ],
+   [
+    "replace",
+    647,
+    657,
+    400,
+    401,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    657,
+    665,
+    401,
+    409
+   ],
+   [
+    "replace",
+    665,
+    675,
+    409,
+    410,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    675,
+    679,
+    410,
+    414
+   ],
+   [
+    "replace",
+    679,
+    680,
+    414,
+    415,
+    [
+     "share them) and failed jobs stay for retention; set"
+    ]
+   ],
+   [
+    "equal",
+    680,
+    715,
+    415,
+    450
+   ],
+   [
+    "replace",
+    715,
+    716,
+    450,
+    451,
+    [
+     "Runnable examples: `future/example_test.go` runs the"
+    ]
+   ],
+   [
+    "equal",
+    716,
+    717,
+    451,
+    452
+   ],
+   [
+    "replace",
+    717,
+    718,
+    452,
+    453,
+    [
+     "`driver/pgxv5/example_future_test.go`"
+    ]
+   ],
+   [
+    "equal",
+    718,
+    729,
+    453,
+    464
+   ],
+   [
+    "replace",
+    729,
+    737,
+    464,
+    465,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    737,
+    742,
+    465,
+    470
+   ],
+   [
+    "delete",
+    742,
+    744,
+    470,
+    470
+   ],
+   [
+    "equal",
+    744,
+    751,
+    470,
+    477
+   ],
+   [
+    "replace",
+    751,
+    763,
+    477,
+    478,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    763,
+    796,
+    478,
+    511
+   ],
+   [
+    "replace",
+    796,
+    797,
+    511,
+    512,
+    [
+     "|Metric|Type|Labels|"
+    ]
+   ],
+   [
+    "equal",
+    797,
+    798,
+    512,
+    513
+   ],
+   [
+    "replace",
+    798,
+    804,
+    513,
+    519,
+    [
+     "|`goncordia_future_awaits_in_flight`|gauge|—|",
+     "|`goncordia_future_await_duration_seconds`|histogram|`kind`, `outcome`|",
+     "|`goncordia_future_await_polls_total`|counter|`kind`|",
+     "|`goncordia_future_await_wakeups_total`|counter|`kind`|",
+     "|`goncordia_future_store_duration_seconds`|histogram|`kind`, `status`|",
+     "|`goncordia_future_result_size_bytes`|histogram|`kind`|"
+    ]
+   ],
+   [
+    "equal",
+    804,
+    836,
+    519,
+    551
+   ],
+   [
+    "delete",
+    836,
+    838,
+    551,
+    551
+   ],
+   [
+    "equal",
+    838,
+    847,
+    551,
+    560
+   ],
+   [
+    "replace",
+    847,
+    854,
+    560,
+    561,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    854,
+    866,
+    561,
+    573
+   ],
+   [
+    "replace",
+    866,
+    867,
+    573,
+    574,
+    [
+     "|What|Kept for|"
+    ]
+   ],
+   [
+    "equal",
+    867,
+    868,
+    574,
+    575
+   ],
+   [
+    "replace",
+    868,
+    872,
+    575,
+    579,
+    [
+     "|completed jobs|24 hours|",
+     "|cancelled jobs|24 hours|",
+     "|discarded jobs (dead letters)|7 days|",
+     "|future results of completed jobs|1 hour|"
+    ]
+   ],
+   [
+    "equal",
+    872,
+    881,
+    579,
+    588
+   ],
+   [
+    "replace",
+    881,
+    885,
+    588,
+    589,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    885,
+    893,
+    589,
+    597
+   ],
+   [
+    "replace",
+    893,
+    894,
+    597,
+    598,
+    [
+     "Futures). `Manager.Forget` drops a result"
+    ]
+   ],
+   [
+    "equal",
+    894,
+    903,
+    598,
+    607
+   ],
+   [
+    "replace",
+    903,
+    912,
+    607,
+    608,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    912,
+    919,
+    608,
+    615
+   ],
+   [
+    "replace",
+    919,
+    920,
+    615,
+    616,
+    [
+     "|Driver|How retention finds expired jobs|"
+    ]
+   ],
+   [
+    "equal",
+    920,
+    921,
+    616,
+    617
+   ],
+   [
+    "replace",
+    921,
+    927,
+    617,
+    623,
+    [
+     "|pgxv5, stdlib (Postgres, MySQL, SQLite), gorm, bun, MongoDB, Redis|index on state and finalization time, batched deletes (`driver.JobPruner`)|",
+     "|DynamoDB|sparse GSI `gsi_retention` on terminal jobs, sharded 16 ways; created by `Migrate`|",
+     "|Firestore|composite index `state ASC, finalized_at ASC` on `goncordia_jobs` (create it yourself, like the fetch index); results use the automatic `updated_at` index|",
+     "|Cassandra|lookup tables `goncordia_jobs_finalized` and `goncordia_results_written`, read from a stored watermark so deleted rows' tombstones are not rescanned|",
+     "|ClickHouse|data-skipping indexes on `state`, `finalized_at`, `id`, and result `updated_at`; expired rows are removed physically with lightweight `DELETE`, including rows that `JobDelete` only marked deleted|",
+     "|memory|scans in process memory|"
+    ]
+   ],
+   [
+    "equal",
+    927,
+    952,
+    623,
+    648
+   ],
+   [
+    "replace",
+    952,
+    953,
+    648,
+    649,
+    [
+     "|Metric|Type|Labels|"
+    ]
+   ],
+   [
+    "equal",
+    953,
+    954,
+    649,
+    650
+   ],
+   [
+    "replace",
+    954,
+    959,
+    650,
+    655,
+    [
+     "|`goncordia_retention_passes_total`|counter|`status` (`ok`, `error`)|",
+     "|`goncordia_retention_jobs_deleted_total`|counter|—|",
+     "|`goncordia_retention_results_deleted_total`|counter|—|",
+     "|`goncordia_retention_last_success_timestamp_seconds`|gauge|—|",
+     "|`goncordia_retention_last_pass_duration_seconds`|gauge|—|"
+    ]
+   ],
+   [
+    "equal",
+    959,
+    966,
+    655,
+    662
+   ],
+   [
+    "delete",
+    966,
+    968,
+    662,
+    662
+   ],
+   [
+    "equal",
+    968,
+    977,
+    662,
+    671
+   ],
+   [
+    "replace",
+    977,
+    998,
+    671,
+    672,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    998,
+    1006,
+    672,
+    680
+   ],
+   [
+    "replace",
+    1006,
+    1013,
+    680,
+    681,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1013,
+    1034,
+    681,
+    702
+   ],
+   [
+    "replace",
+    1034,
+    1036,
+    702,
+    704,
+    [
+     " scheduling, provide a stable `ID` and `StartAt`; the first occurrence is",
+     " `Schedule.Next(StartAt)`."
+    ]
+   ],
+   [
+    "equal",
+    1036,
+    1037,
+    704,
+    705
+   ],
+   [
+    "replace",
+    1037,
+    1039,
+    705,
+    707,
+    [
+     " after enqueue. Each occurrence uses a permanent uniqueness key, so leader",
+     " failover or a crash between enqueue and cursor advancement cannot duplicate it."
+    ]
+   ],
+   [
+    "equal",
+    1039,
+    1040,
+    707,
+    708
+   ],
+   [
+    "replace",
+    1040,
+    1042,
+    708,
+    710,
+    [
+     " `CronCatchUpLatest` keeps only the latest, and `CronSkipMissed` drops old",
+     " occurrences while still enqueueing an occurrence reached on the current tick."
+    ]
+   ],
+   [
+    "equal",
+    1042,
+    1045,
+    710,
+    713
+   ],
+   [
+    "replace",
+    1045,
+    1048,
+    713,
+    714,
+    [
+     " owns the lease; a stale instance cannot resign a newer leader."
+    ]
+   ],
+   [
+    "equal",
+    1048,
+    1055,
+    714,
+    721
+   ],
+   [
+    "replace",
+    1055,
+    1076,
+    721,
+    722,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1076,
+    1077,
+    722,
+    723
+   ],
+   [
+    "delete",
+    1077,
+    1079,
+    723,
+    723
+   ],
+   [
+    "equal",
+    1079,
+    1088,
+    723,
+    732
+   ],
+   [
+    "replace",
+    1088,
+    1093,
+    732,
+    733,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1093,
+    1095,
+    733,
+    735
+   ],
+   [
+    "replace",
+    1095,
+    1098,
+    735,
+    736,
+    [
+     "See `driver/driver.go` for the full core interface and optional rescue/admin capabilities, and `driver/memory/memory.go` for a reference implementation. Every `Executor` also implements `driver.JobResultStore` (`JobResultPut`, `JobResultGet`, `JobResultDelete`; `JobDelete` removes the result too), which `driver/drivertest.RunResults` verifies. Driver authors can reuse `driver/drivertest.Run` for the base contract and `driver/drivertest.RunScheduled` with an injected `clock.Manual` for scheduled-job conformance. The base contract includes opaque job/queue pagination, deterministic ordering, invalid-cursor classification, fencing, and typed stale-claim behavior."
+    ]
+   ],
+   [
+    "equal",
+    1098,
+    1109,
+    736,
+    747
+   ],
+   [
+    "replace",
+    1109,
+    1110,
+    747,
+    748,
+    [
+     "|Backend|ns/op|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1110,
+    1111,
+    748,
+    749
+   ],
+   [
+    "replace",
+    1111,
+    1120,
+    749,
+    758,
+    [
+     "|Memory|0.57 µs|in-process mutex, no I/O|",
+     "|SQLite|27 µs|WAL mode, single connection|",
+     "|Redis|109 µs|ZADD over localhost|",
+     "|Postgres (pgx v5)|129 µs|INSERT over localhost|",
+     "|MongoDB|338 µs|insertOne over localhost|",
+     "|DynamoDB|632 µs|PutItem over localhost|",
+     "|Firestore|1 195 µs|RunTransaction + Create over emulator|",
+     "|ClickHouse|1 378 µs|INSERT + new data part over localhost|",
+     "|Cassandra|7 216 µs|LWT requires Paxos quorum (3 round trips)|"
+    ]
+   ],
+   [
+    "equal",
+    1120,
+    1123,
+    758,
+    761
+   ],
+   [
+    "replace",
+    1123,
+    1124,
+    761,
+    762,
+    [
+     "|Backend|ms/batch|jobs/s|"
+    ]
+   ],
+   [
+    "equal",
+    1124,
+    1125,
+    762,
+    763
+   ],
+   [
+    "replace",
+    1125,
+    1134,
+    763,
+    772,
+    [
+     "|Memory|0.06 ms|~1 775 000|",
+     "|SQLite|2.8 ms|~35 300|",
+     "|Redis|10.9 ms|~9 200|",
+     "|Postgres (pgx v5)|12.8 ms|~7 800|",
+     "|MongoDB|34.9 ms|~2 900|",
+     "|DynamoDB|62.9 ms|~1 590|",
+     "|Firestore|93.5 ms|~1 070|",
+     "|ClickHouse|150 ms|~665|",
+     "|Cassandra|708 ms|~141|"
+    ]
+   ],
+   [
+    "equal",
+    1134,
+    1137,
+    772,
+    775
+   ],
+   [
+    "replace",
+    1137,
+    1138,
+    775,
+    776,
+    [
+     "|Backend|µs/op|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1138,
+    1139,
+    776,
+    777
+   ],
+   [
+    "replace",
+    1139,
+    1148,
+    777,
+    786,
+    [
+     "|SQLite|53 µs|indexed; faster than memory at scale|",
+     "|Memory|520 µs|O(N) linear scan|",
+     "|Redis|729 µs|Lua ZPOPMIN + HSET|",
+     "|DynamoDB|1 731 µs|Query GSI + conditional UpdateItem|",
+     "|MongoDB|2 475 µs|findAndModify + updateOne|",
+     "|Postgres (pgx v5)|12 190 µs|SELECT SKIP LOCKED + UPDATE|",
+     "|ClickHouse|14 416 µs|SELECT FINAL + INSERT new version|",
+     "|Cassandra|18 813 µs|SELECT avail + LWT UPDATE per job|",
+     "|Firestore|140 943 µs|Query + per-job RunTransaction on emulator|"
+    ]
+   ],
+   [
+    "equal",
+    1148,
+    1151,
+    786,
+    789
+   ],
+   [
+    "replace",
+    1151,
+    1152,
+    789,
+    790,
+    [
+     "|Backend|workload|concurrency|jobs/s|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1152,
+    1153,
+    790,
+    791
+   ],
+   [
+    "replace",
+    1153,
+    1162,
+    791,
+    800,
+    [
+     "|Memory|1 000|c=10|~2 020||",
+     "|Redis|1 000|c=4|~1 084|Pub/Sub notifications|",
+     "|SQLite|1 000|c=4|~800||",
+     "|DynamoDB|1 000|c=4|~780|polling; GSI query overhead|",
+     "|MongoDB|1 000|c=4|~452|Change Streams|",
+     "|Postgres (pgx v5)|1 000|c=4|~179|LISTEN/NOTIFY|",
+     "|Cassandra|1 000|c=4|~153|polling; LWT overhead|",
+     "|ClickHouse|1 000|c=4|~148|polling; SELECT FINAL overhead|",
+     "|Firestore|200|c=4|~14|polling; per-job RunTransaction on emulator|"
+    ]
+   ],
+   [
+    "equal",
+    1162,
+    1168,
+    800,
+    806
+   ],
+   [
+    "delete",
+    1168,
+    1170,
+    806,
+    806
+   ],
+   [
+    "equal",
+    1170,
+    1185,
+    806,
+    821
+   ],
+   [
+    "replace",
+    1185,
+    1193,
+    821,
+    822,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1193,
+    1204,
+    822,
+    833
+   ],
+   [
+    "replace",
+    1204,
+    1210,
+    833,
+    834,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1210,
+    1218,
+    834,
+    842
+   ],
+   [
+    "replace",
+    1218,
+    1228,
+    842,
+    843,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1228,
+    1236,
+    843,
+    851
+   ],
+   [
+    "replace",
+    1236,
+    1248,
+    851,
+    852,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1248,
+    1256,
+    852,
+    860
+   ],
+   [
+    "replace",
+    1256,
+    1266,
+    860,
+    861,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1266,
+    1267,
+    861,
+    862
+   ],
+   [
+    "delete",
+    1267,
+    1269,
+    862,
+    862
+   ],
+   [
+    "equal",
+    1269,
+    1280,
+    862,
+    873
+   ],
+   [
+    "replace",
+    1280,
+    1302,
+    873,
+    874,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1302,
+    1311,
+    874,
+    883
+   ],
+   [
+    "replace",
+    1311,
+    1312,
+    883,
+    884,
+    [
+     " (`max(created_at, run_at)`) to handler start; scheduled waiting is excluded"
+    ]
+   ],
+   [
+    "equal",
+    1312,
+    1340,
+    884,
+    912
+   ],
+   [
+    "replace",
+    1340,
+    1341,
+    912,
+    913,
+    [
+     "|Signal|Name|Attributes|"
+    ]
+   ],
+   [
+    "equal",
+    1341,
+    1342,
+    913,
+    914
+   ],
+   [
+    "replace",
+    1342,
+    1349,
+    914,
+    921,
+    [
+     "|span|`goncordia.future.await`|job id, kind, queue, state, outcome, polls, wakeups, result bytes|",
+     "|span|`goncordia.future.store`|job id, kind, queue, attempt, result bytes; child of `goncordia.process`|",
+     "|histogram (s)|`goncordia.future.await.duration`|kind, outcome, blocking|",
+     "|counter|`goncordia.future.await.polls`|kind|",
+     "|counter|`goncordia.future.await.wakeups`|kind|",
+     "|histogram (By)|`goncordia.future.result.size`|kind|",
+     "|histogram (s)|`goncordia.future.store.duration`|kind, status|"
+    ]
+   ],
+   [
+    "equal",
+    1349,
+    1352,
+    921,
+    924
+   ],
+   [
+    "replace",
+    1352,
+    1353,
+    924,
+    925,
+    [
+     "endpoint (see Admin dashboard)."
+    ]
+   ],
+   [
+    "equal",
+    1353,
+    1370,
+    925,
+    942
+   ],
+   [
+    "replace",
+    1370,
+    1376,
+    942,
+    943,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1376,
+    1384,
+    943,
+    951
+   ],
+   [
+    "replace",
+    1384,
+    1394,
+    951,
+    952,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1394,
+    1395,
+    952,
+    953
+   ],
+   [
+    "delete",
+    1395,
+    1397,
+    953,
+    953
+   ],
+   [
+    "equal",
+    1397,
+    1404,
+    953,
+    960
+   ],
+   [
+    "replace",
+    1404,
+    1429,
+    960,
+    961,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1429,
+    1430,
+    961,
+    962
+   ],
+   [
+    "delete",
+    1430,
+    1432,
+    962,
+    962
+   ],
+   [
+    "equal",
+    1432,
+    1435,
+    962,
+    965
+   ],
+   [
+    "replace",
+    1435,
+    1436,
+    965,
+    966,
+    [
+     "|Backend|Guarantee|Mechanism|"
+    ]
+   ],
+   [
+    "equal",
+    1436,
+    1437,
+    966,
+    967
+   ],
+   [
+    "replace",
+    1437,
+    1448,
+    967,
+    976,
+    [
+     "|Postgres / MySQL / SQLite|Atomic with business tx|Same DB connection, same `BEGIN`/`COMMIT`|",
+     "|gorm / bun|Atomic with business tx|Extracts underlying `*sql.Tx`|",
+     "|MongoDB|Atomic with business tx|Multi-document transaction on replica set|",
+     "|Redis|**None** — at-least-once|Pub/Sub + idempotent workers|",
+     "|Cassandra|**None** — at-least-once|LWT for claiming; no cross-statement tx|",
+     "|ClickHouse|**None** — at-least-once|ReplacingMergeTree + FINAL; no transactions|",
+     "|DynamoDB|**None** — at-least-once|Conditional writes; no cross-table tx|",
+     "|Firestore|Atomic with business tx|`RunTransaction` + `EnqueueTx`|",
+     "|In-memory|Atomic (in-process)|Single mutex|"
+    ]
+   ],
+   [
+    "equal",
+    1448,
+    1451,
+    976,
+    979
+   ],
+   [
+    "replace",
+    1451,
+    1457,
+    979,
+    985,
+    [
+     "- Using goncordia? Add yourself to ADOPTERS.md with a pull",
+     " request or the adopter form.",
+     "- Read CONTRIBUTING.md before opening an issue or pull request.",
+     "- Follow the Code of Conduct in all project spaces.",
+     "- Report vulnerabilities privately according to SECURITY.md.",
+     "- Goncordia is available under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "9823baac7bec+2": {
+  "fn": "vuglll/SqlBranch",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    9,
+    4,
+    9,
+    [
+     "NuGet",
+     "NuGet",
+     ".NET 10",
+     "CI",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    13,
+    9,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "> This assumes the image already exists. Building the image is a one-time full restore that takes minutes or more (see Building an image)."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "SqlBranch demo: init, a 50.78 GiB image, then a branch created in about 3.5 s, listed with 288 KiB of own data, connected and removed"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     " Replay of a recorded session on x86-64 Linux with a 50.78 GiB StackOverflow2013 image. `branch create` runs at its real speed; `init` and the one-time `image build` are sped up, with their real durations shown. "
+    ]
+   ],
+   [
+    "equal",
+    18,
+    22,
+    18,
+    22
+   ],
+   [
+    "replace",
+    22,
+    25,
+    22,
+    25,
+    [
+     " test server, restore a backup **once** into an *image*. Run your masking",
+     " scripts before the image is sealed, so no branch ever sees real personal",
+     " data."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    30,
+    26,
+    30,
+    [
+     " image's files (XFS reflink): it shares the image's blocks on disk, so",
+     " creating one copies only metadata. A block is copied only when the branch",
+     " writes to it. That is why a branch of a 50 GB database takes about 0.4 s",
+     " and about 300 KB, whatever the size."
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    30,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     " database on one SQL Server Developer container that SqlBranch manages."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    40,
+    32,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "> docs/roadmap.md."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    77,
+    41,
+    77
+   ],
+   [
+    "replace",
+    77,
+    78,
+    77,
+    78,
+    [
+     "||Testcontainers|SqlBranch|"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    78,
+    79
+   ],
+   [
+    "replace",
+    79,
+    83,
+    79,
+    83,
+    [
+     "|What a test gets|A new SQL Server container, usually per test class or run, with an empty database|A branch of a prebuilt image on one long-running engine|",
+     "|Schema and data|You create them in every run (migrations, seed scripts)|Built once into the image: a backup, SQL scripts or a BACPAC|",
+     "|Cost of a 50 GB database|A restore in every run|One restore; each branch then takes seconds and almost no disk|",
+     "|Best for|Small schemas, empty or small seeded databases|Realistic data volume and query plans, slow migrations or seed|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    123,
+    83,
+    123
+   ],
+   [
+    "replace",
+    123,
+    124,
+    123,
+    124,
+    [
+     "Building and masking with SQL scripts."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    138,
+    124,
+    138
+   ],
+   [
+    "replace",
+    138,
+    139,
+    138,
+    139,
+    [
+     "error, 3 environment not ready); see docs/cli-output.md."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    139,
+    140
+   ],
+   [
+    "replace",
+    140,
+    144,
+    140,
+    144,
+    [
+     "Commands in detail: docs/engine.md (`init`, `status`,",
+     "`doctor`, `engine start|stop`, `teardown`), docs/images.md,",
+     "docs/branches.md and",
+     "docs/configuration.md (flags, `SQLBRANCH_*` variables,"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    150,
+    144,
+    150
+   ],
+   [
+    "replace",
+    150,
+    151,
+    150,
+    151,
+    [
+     "|Step|How often|Time|"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    152,
+    151,
+    152
+   ],
+   [
+    "replace",
+    152,
+    154,
+    152,
+    154,
+    [
+     "|`image build`|Once per backup (for example weekly)|About as long as a normal `RESTORE DATABASE` of that backup, plus a short seal step|",
+     "|`branch create`|Every developer, pull request, test or agent|Seconds, regardless of database size|"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    162,
+    154,
+    162
+   ],
+   [
+    "replace",
+    162,
+    163,
+    162,
+    163,
+    [
+     "For reference: a 14.8 GB compressed backup (StackOverflow2013) built a 50.8 GB image in about 2 minutes on an 8-vCPU x86-64 Linux server with local disk (docs/research/2026-11-20-x86-64-release-gate-run.md)."
+    ]
+   ],
+   [
+    "equal",
+    163,
+    170,
+    163,
+    170
+   ],
+   [
+    "replace",
+    170,
+    171,
+    170,
+    171,
+    [
+     "Images can also be built from SQL scripts (`--from-scripts`) and from a BACPAC (`--from-bacpac`, preview); see docs/images.md."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    184,
+    171,
+    184
+   ],
+   [
+    "replace",
+    184,
+    189,
+    184,
+    185,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    195,
+    185,
+    191
+   ],
+   [
+    "replace",
+    195,
+    196,
+    191,
+    192,
+    [
+     "tests are covered in docs/testing.md; runnable projects are"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    200,
+    192,
+    196
+   ],
+   [
+    "replace",
+    200,
+    201,
+    196,
+    197,
+    [
+     "|Term|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    197,
+    198
+   ],
+   [
+    "replace",
+    202,
+    206,
+    198,
+    202,
+    [
+     "|**Pool**|Storage that can clone files without copying them: a directory on a reflink file system, or an XFS file that SqlBranch creates and mounts itself|",
+     "|**Engine**|One SQL Server Developer container that SqlBranch creates and owns, with the pool mounted at `/pool`|",
+     "|**Image**|A sealed, read-only set of database files, built once from a full backup|",
+     "|**Branch**|A writable database whose files are clones of an image, so changes never reach the image or another branch|"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    212,
+    202,
+    208
+   ],
+   [
+    "replace",
+    212,
+    216,
+    208,
+    212,
+    [
+     " image's files and costs almost no disk until it writes. Creating one does not",
+     " depend on the database's size. On Linux without a reflink directory, and on",
+     " Docker Desktop for macOS, `init` creates an XFS file and mounts it itself,",
+     " which needs permission to run a privileged helper container."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    212,
+    213
+   ],
+   [
+    "replace",
+    217,
+    222,
+    213,
+    218,
+    [
+     " image and takes as long and as much disk as the copy does. `init` falls back",
+     " to this when it cannot make a thin pool, says why, and exits 0. Set",
+     " `requireThin: true` to refuse copies later: in copy mode, `branch create`",
+     " without `--copy` and `branch reset` then exit 3 with `thin_required`",
+     " before creating any file."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    232,
+    218,
+    228
+   ],
+   [
+    "replace",
+    232,
+    233,
+    228,
+    229,
+    [
+     "docs/research/spike-results.md): updating"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    243,
+    229,
+    239
+   ],
+   [
+    "replace",
+    243,
+    245,
+    239,
+    241,
+    [
+     " minutes to days and is reset often. A reset gives a fresh, unfragmented",
+     " clone."
+    ]
+   ],
+   [
+    "equal",
+    245,
+    246,
+    241,
+    242
+   ],
+   [
+    "replace",
+    246,
+    248,
+    242,
+    244,
+    [
+     " `--copy`. The setup is in the benchmark section of",
+     " docs/branches.md."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    244,
+    245
+   ],
+   [
+    "replace",
+    249,
+    250,
+    245,
+    246,
+    [
+     " has drifted far from its image is visible."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    278,
+    246,
+    274
+   ],
+   [
+    "replace",
+    278,
+    279,
+    274,
+    275,
+    [
+     "docs/engine.md."
+    ]
+   ],
+   [
+    "equal",
+    279,
+    283,
+    275,
+    279
+   ],
+   [
+    "replace",
+    283,
+    285,
+    279,
+    281,
+    [
+     " filegroups. A differential, log or striped backup is refused. The engine must",
+     " be at least as new as the backup."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    286,
+    281,
+    282
+   ],
+   [
+    "replace",
+    286,
+    288,
+    282,
+    284,
+    [
+     " and `enterprise-developer` (SQL Server 2025 and later) to match production's",
+     " feature set."
+    ]
+   ],
+   [
+    "equal",
+    288,
+    289,
+    284,
+    285
+   ],
+   [
+    "replace",
+    289,
+    291,
+    285,
+    287,
+    [
+     " created (60 GB by default, `poolSize`) and cannot be resized in 0.1. A copy",
+     " branch needs the image's full size free in the pool."
+    ]
+   ],
+   [
+    "equal",
+    291,
+    292,
+    287,
+    288
+   ],
+   [
+    "replace",
+    292,
+    293,
+    288,
+    289,
+    [
+     " Changing them means `teardown --force` and a new `init`."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    289,
+    290
+   ],
+   [
+    "replace",
+    294,
+    296,
+    290,
+    292,
+    [
+     " made by a client that was killed is repaired with `branch reset` or removed",
+     " with `branch rm`."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    292,
+    293
+   ],
+   [
+    "replace",
+    297,
+    298,
+    293,
+    294,
+    [
+     " roadmap."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    299,
+    294,
+    295
+   ],
+   [
+    "replace",
+    299,
+    300,
+    295,
+    296,
+    [
+     " Azure SQL Database trust only relative benchmark results."
+    ]
+   ],
+   [
+    "equal",
+    300,
+    303,
+    296,
+    299
+   ],
+   [
+    "replace",
+    303,
+    304,
+    299,
+    300,
+    [
+     "|Platform|Status|"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    305,
+    300,
+    301
+   ],
+   [
+    "replace",
+    305,
+    308,
+    301,
+    304,
+    [
+     "|Linux x86-64 with Docker|✅ Supported. The SQL Server container image supports x86-64 Linux hosts only|",
+     "|macOS (Docker Desktop or Colima)|✅ Works through the managed pool. On Apple Silicon the engine runs under emulation, which is slower and less reliable, and `init` warns about it|",
+     "|Windows (Docker Desktop / WSL2)|🧪 Not verified yet; help wanted. The check is prepared in docs/research/windows-check.md. If the managed pool cannot be mounted, `init` falls back to copy mode and says so|"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    311,
+    304,
+    307
+   ],
+   [
+    "replace",
+    311,
+    312,
+    307,
+    308,
+    [
+     "(docs/research/spike-results.md)."
+    ]
+   ],
+   [
+    "equal",
+    312,
+    314,
+    308,
+    310
+   ],
+   [
+    "replace",
+    314,
+    320,
+    310,
+    311,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    321,
+    311,
+    312
+   ],
+   [
+    "replace",
+    321,
+    323,
+    312,
+    313,
+    [
+     "Apache-2.0. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

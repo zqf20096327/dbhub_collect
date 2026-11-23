@@ -2926,5 +2926,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "77e275be674c": {
+  "identity": {
+   "one_liner": "面向 LLM 代理的代码图+向量知识库，以 file:line 证据回答代码问题",
+   "review": "RAGRAF 是一个可完全本地运行的 MCP 服务器，将代码库索引进 SQLite（图、FTS5 与向量一体），供 AI 代理通过 94 个 ragraf_* 工具查询符号定义、调用关系、影响面等问题，答案附带 file:line 引用。依赖 Python 3.13+ 与 tree-sitter，本地嵌入不依赖 torch；可选 Java+Joern 属性图层解锁切片，pro/enterprise 版本提供团队索引、事实记忆等额外操作。",
+   "highlights": [
+    "提供 87 种固定操作与 94 个 MCP 工具，覆盖 search、symbol、callers/callees、impact、dead_code、repo_map 等代码定位与结构查询",
+    "索引基于 SQLite（图+FTS5+向量）与 tree-sitter，嵌入完全本地，不依赖 torch；所有命中带 path:start-end 地址",
+    "支持 freshness/drift_report 索引一致性检查、live_read 实时文件比对，以及 answer/brief 两种回答形态"
+   ],
+   "use_cases": [
+    "为本地运行的 LLM 代理/编码助手提供代码库定位、调用关系与变更影响查询",
+    "检索死代码、入口点、路由、数据库表读写方等仓库结构信息",
+    "在无网络环境下对代码库做混合搜索（BM25+向量）与文档图主题分析"
+   ]
+  },
+  "sha": "77e275be674c",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "221ceecfd5ca": {
+  "identity": {
+   "one_liner": "基于 Kafka 与 TiDB 的实时信贷风险特征流水线，Go API 输出特征。",
+   "review": "该项目实现一条实时信贷风险特征管道：Python 消费者读取四个 Kafka 主题（贷款申请、还款、操作、客户资金），将事件写入 TiDB 并把聚合特征计算到 kv_cache 表；Go 编写的 API 服务在缓存未命中时实时计算特征并通过 HTTP :8080 提供 81 个特征。README 说明两个服务使用内容相同的 SQL，添加特征时需保持两处目录同步，且消费者还从 Postgres 读取主题与特征组配置。项目内置一个随机生成合成数据的 producer，适合需要自建风险特征服务并验证流程的信贷数据团队参考部署。",
+   "highlights": [
+    "包含四个服务：producer（生成四主题合成数据）、consumer（消费 Kafka 并写 TiDB 与 kv_cache）、API（Go，监听 :8080），共覆盖 81 个特征、分四个特征组，每组对应一个 Kafka 主题",
+    "API 提供 GET /v1/risk-profile/:client_id、按 group_id 查询、DELETE 清除缓存及 /v1/health 接口，缓存未命中时实时计算特征",
+    "特征载荷携带 client_id（IIN）与毫秒级 UTC 的 computed_at 时间戳；各特征组设有不同 TTL（如 1800 秒、3600 秒）"
+   ],
+   "use_cases": [
+    "为信贷风控系统按 client_id 提供 HTTP 预计算风险特征查询",
+    "以 Kafka 事件流为输入、TiDB 为存储的实时特征工程管道搭建参考",
+    "使用 producer 生成的合成数据对特征消费与 API 服务进行测试运行"
+   ]
+  },
+  "sha": "221ceecfd5ca",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

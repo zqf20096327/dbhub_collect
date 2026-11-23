@@ -3327,5 +3327,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "89240ee8b58b": {
+  "identity": {
+   "one_liner": "跨平台 SQL Server 执行计划分析器，含 GUI、CLI 与内置 MCP 服务器",
+   "review": "Performance Studio 是一个 SQL Server 执行计划分析工具，解析 .sqlplan XML 并按 30 条规则输出告警（内存授予、行数估算偏差、缺失索引、TempDB 溢出、隐式转换、参数嗅探等），面向开发者与 DBA。提供 Avalonia 桌面 GUI 与 dotnet tool 形式的 CLI，内置 MCP 服务器供 AI 客户端调用，MIT 协议，提供 Windows/macOS/Linux 自包含二进制。",
+   "highlights": [
+    "包含 30 条分析规则，输出带严重级别（Info/Warning/Critical）、节点 ID 与上下文的告警，并提取缺失索引的 CREATE 语句",
+    "提供桌面 GUI 与 CLI 两种使用方式，支持 Query Store 拉取查询、计划对比、多语句导航；CLI 以 .NET tool 形式发布在 nuget.org",
+    "内置 MCP 服务器，可由 MCP 客户端分析已加载的计划、识别告警、建议索引与比较计划，支持 GCF 紧凑输出格式以减少 token 消耗"
+   ],
+   "use_cases": [
+    "在命令行或 CI 管道中批量分析 .sqlplan 文件并生成 JSON 结果",
+    "在图形界面中查看实际执行计划、操作符属性与计划对比",
+    "通过 MCP 服务器在 AI 编码工具中调用计划分析与比较能力"
+   ]
+  },
+  "sha": "89240ee8b58b",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "755a4dbd5368": {
+  "identity": {
+   "one_liner": "面向开发者的免费工具目录，含55项工具并自动检测可用状态",
+   "review": "该仓库收录55个开发相关工具，按AI编码代理、云托管、数据库、DevOps、安全等16个类别组织，每项标注用途、定价模式（免费/开源/免费层/BYOK等）与在线状态。状态由GitHub Actions每晚自动检测，判断标准为服务器响应是否小于500。面向开发者及使用AI编码工具的用户，可经PR贡献新工具，许可证为MIT。",
+   "highlights": [
+    "收录55个工具，覆盖16个类别，每项标注定价模式与在线状态",
+    "通过GitHub Actions每晚自动检测各工具链接可用性",
+    "采用MIT许可证，接受通过Pull Request和Issue贡献新工具"
+   ],
+   "use_cases": [
+    "查找特定类别（如AI编码代理、数据库、托管）的免费层或开源工具",
+    "查询某工具链接当前的在线状态",
+    "浏览AI编码IDE、终端代理与CLI类工具清单"
+   ]
+  },
+  "sha": "755a4dbd5368",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fa006a654f2e": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL RLS 与 pgvector 的多租户 AI 代理语义记忆服务",
+   "review": "adk-memshield 为 AI 代理提供长期语义记忆存储，通过 PostgreSQL 的 FORCE ROW LEVEL SECURITY 和事务内 set_config 绑定身份实现租户、用户、权限级别与 compartment 的隔离，支持 pgvector 相似检索。它提供 Google ADK 记忆服务适配、框架无关的 MemShieldStore 核心和 MCP 服务器，发布于 PyPI，采用 Apache-2.0 许可。运行前会检查角色无 BYPASSRLS、表已启用强制 RLS 等配置条件；需 PostgreSQL 与 pgvector 环境。",
+   "highlights": [
+    "提供 Google ADK 记忆服务适配、框架无关的 MemShieldStore 核心与 memshield-mcp MCP 服务器三种接入方式",
+    "基于 PostgreSQL 行级安全（FORCE RLS）与事务本地身份（set_config）实现多租户隔离，SELECT、INSERT、UPDATE、DELETE 四类命令均受策略约束",
+    "支持可选的签名令牌身份验证（HMAC 与 OIDC/JWKS JWT），以及基于 clearance 与 compartments 的横向访问控制"
+   ],
+   "use_cases": [
+    "多租户、多代理部署中需要数据库层强制隔离的共享语义记忆存储",
+    "基于 Google ADK 构建的代理应用需接入长期记忆服务",
+    "通过 MCP 协议为外部工具提供带租户隔离的记忆读写能力"
+   ]
+  },
+  "sha": "fa006a654f2e",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

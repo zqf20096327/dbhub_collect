@@ -2655,5 +2655,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "93888c4fbb89": {
+  "identity": {
+   "one_liner": "面向 Elixir 的持久化工作流执行引擎，步骤存入 PostgreSQL 以支持断点续跑",
+   "review": "Durable 是一个 Elixir 工作流执行引擎，开发者将工作流写成普通步骤，每个步骤被持久化到 PostgreSQL，因此运行可在崩溃、部署或长时间等待后恢复。仓库为 Monorepo，包含核心引擎 :durable、LiveView 监控面板 :durable_dashboard 及 Phoenix 参考示例，两个包均发布于 Hex，适合需要在 Elixir 应用中编排可恢复流程的团队。",
+   "highlights": [
+    "将工作流编写为普通步骤，每步结果保存至 PostgreSQL，运行可在崩溃、部署和长时间等待后恢复",
+    "Monorepo 结构：核心引擎 :durable 与基于 LiveView 的管理面板 :durable_dashboard 均发布于 Hex",
+    "提供 Phoenix 参考示例应用与 docker-compose 启动的测试用 Postgres 实例"
+   ],
+   "use_cases": [
+    "在 Elixir 应用中实现需要跨崩溃与部署恢复的长流程编排",
+    "通过 durable_dashboard 监控与管理运行中的工作流",
+    "参照 examples/phoenix_demo 集成引擎与面板到 Phoenix 项目"
+   ]
+  },
+  "sha": "93888c4fbb89",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4281b8c270fc": {
+  "identity": {
+   "one_liner": "本地持久化调试记忆工具，将调试过程存入 SQLite 并经 MCP 供开发者与编码代理检索。",
+   "review": "MemoryWhale 记录调试过程中的命令、输出、失败与有效修复，存入本地 SQLite，并通过 MCP 供多个编码代理跨会话读取。提供 CLI、TUI、Web 面板与桌面应用接口，无需账号、数据不上传，Windows 需在 WSL 中运行。MCP 提供记忆访问，自动捕获需客户端 hook 支持；MCP 写入的经验默认待审核。适用于调试环境分散于终端、SSH 与临时代理会话的开发者。",
+   "highlights": [
+    "记录命令、环境、输出、失败与修复经验到本地 SQLite，提供 mw search 与 mw context 检索",
+    "mw-mcp 作为 stdio MCP 服务器暴露六个记忆工具，mw-serve 支持 HTTP MCP 与只读 JSON API",
+    "支持 CLI、TUI、Web 面板与桌面应用，提供 mw doctor 环境检查与 mw integrate 集成命令"
+   ],
+   "use_cases": [
+    "在多个编码代理间共享同一份本地调试记忆，跨会话找回历史失败及修复方法",
+    "SSH 或多机开发场景下保存可搜索的构建、依赖、部署调试记录",
+    "偏好本地存储、不使用托管记忆服务的开发者维护调试经验库"
+   ]
+  },
+  "sha": "4281b8c270fc",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -34250,5 +34250,737 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "2e941d1c60b3+2": {
+  "fn": "Aashritha-2005/DeliveryPulse-Last-Mile-Logistics-Data-Platform",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    9,
+    5,
+    9,
+    [
+     "Tests",
+     "Security",
+     "Coverage: 84.30%",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Dashboard: delivery trends, late-delivery rates, peak hours and driver performance"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    22,
+    11,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "|Result|Confirmed measurement and scope|"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    23,
+    24
+   ],
+   [
+    "replace",
+    24,
+    39,
+    24,
+    39,
+    [
+     "|Production batch input|50,484 order rows, 441,222 delivery-event rows, 48,997 shift-event rows and 833 driver rows across three batches; 50,000 generated orders|",
+     "|Accepted business data|49,450 orders and 439,822 delivery events|",
+     "|Rejected records|1,355, retained with reasons|",
+     "|Duplicates removed|1,000: 350 orders, 600 delivery events, 50 shift events; plus 100 stale order versions ignored (per source and batch)|",
+     "|End-to-end runtime|Not measured as one run for the 50,000-order dataset; only stages were timed (transformation ~30 s, measured 31.68 s and 30.58 s; load with quality gate 121.88 s). The measured end-to-end run is the 5,000-order, 500-driver demo: **38.708 s** from an empty database with a cached image (2026-10-23). An earlier 40.106 s figure was a different, 83-driver configuration (details)|",
+     "|Reconciliation|4,395 manifest cases; every source/batch balances accepted + rejected + duplicate + stale + pending|",
+     "|Quality|35 check definitions produce 50 results (registry); whole-database run: zero blocking failures and warnings; 25/25 case types detected|",
+     "|Replay and recovery|Repeated batches preserve business data; failed-batch rollback/retry and late/orphan handling covered by integration tests|",
+     "|Load with quality gate|121.88 s for three batches; this excludes separate generation/Parquet transformation|",
+     "|SQL tuning: `order_event_summary`|Median 72.487 → 25.323 ms, three warm-cache runs (plans and protocol)|",
+     "|Largest scale benchmark|Spark completed 2M generated orders in 63.169 s; pandas stopped at the 4 GiB memory limit|",
+     "|pandas/Spark crossover|About 1M orders: 43.374 / 40.919 s on the benchmark subset|",
+     "|Parquet read layouts|Single / partitioned: pandas 0.851 / 1.28 s; Spark 8.473 / 8.442 s. No useful gain on this workload|",
+     "|Coverage|Combined unit/PostgreSQL result on 2026-10-24: **84.30%** (record); optional live suites and `scripts/` are outside this `src/` figure|",
+     "|CI|Security was red on `86ecbf0` after new pillow and certifi advisories were published; the fix landed in `9c6ffc2`. Tests green on `9c6ffc2` (run #17) and `1e4f2ec` (#20). Security green on `9c6ffc2` (#18) and `1e4f2ec` (#21), including the pipeline image scan (user-reported, 2026-10-24). The badges link to live workflow status|"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    39,
+    40
+   ],
+   [
+    "replace",
+    40,
+    42,
+    40,
+    42,
+    [
+     "Sources: artifact provenance and batch results,",
+     "data-quality report, scale measurements."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    49,
+    42,
+    49
+   ],
+   [
+    "replace",
+    49,
+    64,
+    49,
+    50,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    71,
+    50,
+    57
+   ],
+   [
+    "replace",
+    71,
+    72,
+    57,
+    58,
+    [
+     "Architecture and component boundaries"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    77,
+    58,
+    63
+   ],
+   [
+    "replace",
+    77,
+    83,
+    63,
+    64,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    64,
+    67
+   ],
+   [
+    "replace",
+    86,
+    87,
+    67,
+    68,
+    [
+     "Full data model, grains and metric definitions"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    90,
+    68,
+    71
+   ],
+   [
+    "replace",
+    90,
+    91,
+    71,
+    72,
+    [
+     "|Component|Why it is used|Verified scope|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    72,
+    73
+   ],
+   [
+    "replace",
+    92,
+    103,
+    73,
+    84,
+    [
+     "|Python 3.12, NumPy, PyArrow, psycopg|Deterministic generation, explicit validation, Parquet, parameterised bulk loads|Core batch pipeline|",
+     "|PostgreSQL 18.6|Transactions, constraints, least-privilege roles, SQL analytics|Four schemas, star model and incremental aggregates|",
+     "|Streamlit|Local read-only view of delivery metrics|Dashboard with date/city filters|",
+     "|uv, pytest, ruff, mypy|Locked dependencies, behavioural tests and strict checks|Unit/PostgreSQL suites and separate optional suites|",
+     "|Docker Compose|Repeatable local services with explicit volumes and limits|Core and isolated optional services|",
+     "|Airflow 3.3.2|Scheduling, retries, catchup and quality-gated orchestration|Three weekly windows; rerun/failure recovery verified|",
+     "|SeaweedFS 4.48 + S3 API|Raw, cleaned and aggregate object layers|Local write/read-back and restricted credentials|",
+     "|pandas 3.0 / PySpark 4.2|Measure the scale crossover|Separate benchmark; Spark is not the production transform|",
+     "|Kafka 4.3.1|Validate and land streamed messages with provenance|One broker; database landing only|",
+     "|MongoDB Community|Flexible raw-event queries and insert-only replay|SSPL-licensed; query comparison with PostgreSQL|",
+     "|kind / Kubernetes|Run the same parameterised pipeline image|Single local node, existing-data replay; CronJob suspended|"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    112,
+    84,
+    93
+   ],
+   [
+    "replace",
+    112,
+    113,
+    93,
+    94,
+    [
+     "(details). The timing excludes dependency"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    181,
+    94,
+    162
+   ],
+   [
+    "replace",
+    181,
+    182,
+    162,
+    163,
+    [
+     "Staged timing, diagnostics and cleanup."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    187,
+    163,
+    168
+   ],
+   [
+    "replace",
+    187,
+    203,
+    168,
+    184,
+    [
+     "- PostgreSQL for analytics: atomic batches,",
+     " explicit roles and reproducible SQL metrics.",
+     "- Immutable raw input: content-derived identity and",
+     " auditable dispositions; invalid records remain available.",
+     "- Partition keys: distinguish batch ingestion dates from",
+     " business reporting dates.",
+     "- When Spark pays off: the measured crossover and",
+     " memory ceiling apply to the benchmark workload.",
+     "- MongoDB alongside SQL: flexible raw payloads, source-row identity",
+     " and a bounded comparison, not a general database speed claim.",
+     "- Local Kubernetes: restricted application pods, explicit",
+     " infrastructure exception and staged disk checks.",
+     "- One-off AWS proof: Sydney, Free plan, short-lived credentials,",
+     " least-privilege role and a verified teardown; one scoped encryption exception.",
+     "- Dependency-age exceptions: security fixes",
+     " adopted before the usual 14-day minimum, with the reasons and dates."
+    ]
+   ],
+   [
+    "equal",
+    203,
+    218,
+    184,
+    199
+   ],
+   [
+    "replace",
+    218,
+    220,
+    199,
+    201,
+    [
+     "Artifact provenance ·",
+     "quality report · contracts."
+    ]
+   ],
+   [
+    "equal",
+    220,
+    224,
+    201,
+    205
+   ],
+   [
+    "replace",
+    224,
+    225,
+    205,
+    206,
+    [
+     " comparison; other queries can correctly prefer sequential scans."
+    ]
+   ],
+   [
+    "equal",
+    225,
+    226,
+    206,
+    207
+   ],
+   [
+    "replace",
+    226,
+    227,
+    207,
+    208,
+    [
+     " completed. No 5M run was attempted because its projected disk use exceeded the budget."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    208,
+    209
+   ],
+   [
+    "replace",
+    228,
+    230,
+    209,
+    211,
+    [
+     " export reduced measured peak RSS from 923,090,944 to 653,492,224 bytes; no unsourced export",
+     " duration is claimed."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    231,
+    211,
+    212
+   ],
+   [
+    "replace",
+    231,
+    232,
+    212,
+    213,
+    [
+     " Sampled PostgreSQL-plus-Airflow peak was 2.12–2.26 GiB."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    213,
+    214
+   ],
+   [
+    "replace",
+    233,
+    234,
+    214,
+    215,
+    [
+     " The 100,000-record rate trials are documented separately."
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    215,
+    216
+   ],
+   [
+    "replace",
+    235,
+    236,
+    216,
+    217,
+    [
+     " matched SQL; Mongo used its timeline index while SQL used a parallel sequential scan."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    217,
+    218
+   ],
+   [
+    "replace",
+    237,
+    239,
+    218,
+    220,
+    [
+     " batches were already loaded and skipped; this does not prove first-time loading into an",
+     " empty database."
+    ]
+   ],
+   [
+    "equal",
+    239,
+    240,
+    220,
+    221
+   ],
+   [
+    "replace",
+    240,
+    244,
+    221,
+    225,
+    [
+     " Sydney through the same S3 code path, and one Athena query (late-delivery rate by city)",
+     " matched PostgreSQL exactly: 10,143 bytes scanned, 638 ms, estimated USD 0.000048. All 12",
+     " Terraform resources were then destroyed and the teardown was verified",
+     " (details)."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    245,
+    225,
+    226
+   ],
+   [
+    "replace",
+    245,
+    246,
+    226,
+    227,
+    [
+     "Athena query on S3 in Sydney: late-delivery rate by city, matching PostgreSQL"
+    ]
+   ],
+   [
+    "equal",
+    246,
+    247,
+    227,
+    228
+   ],
+   [
+    "replace",
+    247,
+    249,
+    228,
+    230,
+    [
+     "Full methodology, timings and plans ·",
+     "optional Kubernetes reproduction · service operations."
+    ]
+   ],
+   [
+    "equal",
+    249,
+    256,
+    230,
+    237
+   ],
+   [
+    "replace",
+    256,
+    263,
+    237,
+    238,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    274,
+    238,
+    249
+   ],
+   [
+    "replace",
+    274,
+    275,
+    249,
+    250,
+    [
+     "rounded to 77% (record). Live kind tests belong to the"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    286,
+    250,
+    261
+   ],
+   [
+    "replace",
+    286,
+    287,
+    261,
+    262,
+    [
+     "Security policy · publishing checklist."
+    ]
+   ],
+   [
+    "equal",
+    287,
+    291,
+    262,
+    266
+   ],
+   [
+    "replace",
+    291,
+    292,
+    266,
+    267,
+    [
+     " scaling, Java implementation or Hadoop/HDFS deployment claim."
+    ]
+   ],
+   [
+    "equal",
+    292,
+    293,
+    267,
+    268
+   ],
+   [
+    "replace",
+    293,
+    296,
+    268,
+    271,
+    [
+     " dependencies already installed and the PostgreSQL image already cached. No fresh-clone setup",
+     " was timed; first-time dependency installation and the image download (about 672 MB) are",
+     " excluded, so the project makes no \"within 10 minutes\" claim."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    271,
+    272
+   ],
+   [
+    "replace",
+    297,
+    298,
+    272,
+    273,
+    [
+     " artifact."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    299,
+    273,
+    274
+   ],
+   [
+    "replace",
+    299,
+    302,
+    274,
+    277,
+    [
+     " destroyed. It is not a production deployment and no AWS resources remain. The bucket uses",
+     " SSE-S3 rather than a paid KMS key (one scoped Trivy exception). The billed amount is to be",
+     " confirmed from the console."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    277,
+    278
+   ],
+   [
+    "replace",
+    303,
+    306,
+    278,
+    281,
+    [
+     " 686 MB (PostgreSQL's binary-size display) versus 86,633,684 raw bytes:",
+     " `686 × 1,048,576 / 86,633,684 ≈ 8.30`. This is derived arithmetic from a rounded",
+     " historical database size, not a current storage measurement."
+    ]
+   ],
+   [
+    "equal",
+    306,
+    307,
+    281,
+    282
+   ],
+   [
+    "replace",
+    307,
+    309,
+    282,
+    284,
+    [
+     " load, about 54.15%, is derived arithmetic from the three measured gate timings. It is not",
+     " a separate gate-disabled benchmark."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    310,
+    284,
+    285
+   ],
+   [
+    "replace",
+    310,
+    311,
+    285,
+    286,
+    [
+     " Raw Parquet is a normalised representation, not the byte-identical source files."
+    ]
+   ],
+   [
+    "equal",
+    311,
+    315,
+    286,
+    290
+   ],
+   [
+    "replace",
+    315,
+    317,
+    290,
+    292,
+    [
+     " No independent from-scratch reproduction of the runbook has been performed. There is no",
+     " Deployment manifest because the pipeline is a batch Job, not a long-running service."
+    ]
+   ],
+   [
+    "equal",
+    317,
+    318,
+    292,
+    293
+   ],
+   [
+    "replace",
+    318,
+    320,
+    293,
+    295,
+    [
+     " the usual 14-day minimum to fix security advisories",
+     " (reasons and dates)."
+    ]
+   ],
+   [
+    "equal",
+    320,
+    321,
+    295,
+    296
+   ],
+   [
+    "replace",
+    321,
+    323,
+    296,
+    298,
+    [
+     " and flagged under the documented rule. Synthetic driver utilisation was 3.75–22.76%",
+     " (median 12.14%) because the generator sizes the fleet generously."
+    ]
+   ],
+   [
+    "equal",
+    323,
+    325,
+    298,
+    300
+   ],
+   [
+    "replace",
+    325,
+    327,
+    300,
+    302,
+    [
+     "See operations, data model and",
+     "architecture for implementation boundaries and recovery procedures."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

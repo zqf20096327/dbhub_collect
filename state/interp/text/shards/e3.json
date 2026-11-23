@@ -3332,5 +3332,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b5e2ee6fef54": {
+  "identity": {
+   "one_liner": "基于 Gmail API 与本地缓存的多账户 Gmail 客户端，支持 macOS 和 Windows",
+   "review": "Mailboat 是一款开源（GPL-3.0）的桌面 Gmail 客户端，将多个 Gmail 账户合并到一个收件箱中。它通过 Gmail API 直接通信并用本地 SQLite/FTS5 缓存邮件，实现本地全文搜索。技术栈为 Tauri v2、Rust（负责同步、存储、发送、搜索）和 React。用户需自建 Google 凭据并完成约十分钟的引导配置，项目目前处于早期开发阶段（0.3.0），提供 Apple silicon 和 Windows 的签名下载。",
+   "highlights": [
+    "统一收件箱聚合多个 Gmail 账户，线程不跨账户合并，本地全文搜索覆盖所有账户，并与 Gmail 自身搜索语法（from:、has:attachment 等）合并",
+    "支持 Gmail 原生键盘快捷键和 ⌘K 命令面板；邮件正文在 Rust 端清理后于无脚本的沙盒视图中渲染，移除已知跟踪像素和链接跟踪码",
+    "提供可选 AI 功能（通过 Apple Intelligence 或用户自己的 Claude/ChatGPT 订阅实现摘要、写作辅助、翻译），并通过 MCP 协议让 Claude Desktop/Claude Code 读取邮件和保存草稿（默认关闭，不能发送）"
+   ],
+   "use_cases": [
+    "需要在单一收件箱中管理个人、工作、学校等多个 Gmail 账户的 macOS/Windows 用户",
+    "偏好键盘操作和本地缓存搜索、关注邮件阅读安全（脚本清理、跟踪像素移除）的用户",
+    "希望让本地 AI 应用通过 MCP 读取邮件并起草回复、同时要求 AI 功能可选且默认关闭的用户"
+   ]
+  },
+  "sha": "b5e2ee6fef54",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0e12c0dec151": {
+  "identity": {
+   "one_liner": "原生 macOS SwiftUI/Metal 应用，用于 Android 设备投屏、控制与文件交互",
+   "review": "AndOnMac 是一个 MIT 协议的开源 macOS 应用（要求 macOS 14+），用于在 Mac 上镜像和控制 Android 设备。它基于 VideoToolbox 硬件解码 HEVC/H.264 与 Metal 渲染，README 标称最高支持 120 FPS；内置 Apple Vision OCR、SQLite FTS5 屏幕历史检索，并通过绑定 127.0.0.1 的 Kotlin 守护进程与持久化 UI 图谱（DroidPath）向 MCP 客户端暴露 Android 自动化工具。需自行清除 Gatekeeper 隔离（应用未签名），依赖 adb。",
+   "highlights": [
+    "基于 VideoToolbox 硬解码（HEVC，H.264 回退）与 Metal 渲染的投屏管线，README 标称最高 120 FPS，含自适应码率与音频转发",
+    "支持 USB-C、Android 11+ QR/Bonjour Wi-Fi 配对，以及热点/蓝牙 PAN 回退连接",
+    "内置 MCP 服务器与 A* UI 路由（DroidPath），含 Zero-PII 种子图谱、Human-in-the-Loop 确认机制与三色 Agentic HUD"
+   ],
+   "use_cases": [
+    "在 macOS 上通过 USB 或 Wi-Fi 镜像并操控 Android 设备，包括键盘快捷键、触控板手势与多应用独立窗口",
+    "抓取 Android 屏幕上不可选中的文本（OCR），并对本地屏幕历史进行全文检索",
+    "让支持 MCP 的 LLM 客户端/Agent 通过本地回环 MCP 服务器执行 Android UI 导航与点击自动化"
+   ]
+  },
+  "sha": "0e12c0dec151",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

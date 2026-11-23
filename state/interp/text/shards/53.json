@@ -3424,5 +3424,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ea7909aec899": {
+  "identity": {
+   "one_liner": "用 Rust 开发 PostgreSQL 扩展的框架，支持多版本与自动 SQL 生成",
+   "review": "pgrx 是一个用 Rust 编写 PostgreSQL 扩展的开发框架，支持 Postgres 15 至 19。开发者通过 cargo-pgrx 工具链完成创建、编译、测试和打包（含 RPM/DEB）；扩展以 Rust 函数实现，框架自动生成对应 SQL schema，并提供 panic 转 ERROR、内存管理遵循 Rust drop 语义等安全机制。适用于希望在 Rust 生态中开发数据库扩展的工程师。",
+   "highlights": [
+    "提供 cargo pgrx 子命令覆盖扩展创建、初始化、运行、跨版本测试、回归测试与打包全流程",
+    "通过 #[pg_extern]、#[pg_trigger] 等过程宏将 Rust 函数暴露为 Postgres UDF，并自动生成 SQL schema",
+    "将 Rust panic 转换为 Postgres ERROR 以中止事务而非进程，Datums 以 Option<T> 表示 NULL"
+   ],
+   "use_cases": [
+    "使用 Rust 开发包含自定义函数、触发器或自定义类型的 PostgreSQL 扩展",
+    "同一份代码库构建和测试面向 Postgres 15 至 19 多个版本的扩展",
+    "为扩展生成 RPM/DEB 安装包进行分发"
+   ]
+  },
+  "sha": "ea7909aec899",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c58950dfc02": {
+  "identity": {
+   "one_liner": "自托管开源算法交易平台，通过39个券商插件统一策略设计、托管与执行。",
+   "review": "OpenAlgo 是一个自托管的开源算法交易平台，基于 Python Flask 与 React 构建，面向手工交易者、Python 策略开发者、期权交易者和偏好无代码/AI 对话交互的用户。它通过 39 个券商插件提供统一的 REST API（76 个方法）、WebSocket 行情流、浏览器内 Python 策略托管、可视化策略构建器及 20 个期权与组合分析工具；要求 Python 3.12+，各插件的可选能力因券商而异。",
+   "highlights": [
+    "提供 39 个券商插件的统一 REST API（/api/v1，76 个方法）与基于 ZMQ 的 WebSocket 行情流",
+    "内置浏览器内 Python 策略托管（CodeMirror 编辑器、IST 调度、进程隔离）与无代码可视化策略构建器",
+    "包含 20 个期权与组合分析工具、Analyzer Mode 模拟测试环境（含 ₹1 Crore 沙盒资金）及订单审批工作流"
+   ],
+   "use_cases": [
+    "将 TradingView、Amibroker、Excel、Python 等外部平台信号通过统一 API 接入多个券商执行",
+    "在浏览器内编写、调度并并行运行 Python 交易策略，无需额外服务器或 Docker",
+    "期权交易者使用期权链、Greeks、波动率曲面、GEX 等工具进行分析并直接下单"
+   ]
+  },
+  "sha": "2c58950dfc02",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "68a908d13532": {
+  "identity": {
+   "one_liner": "基于 Django+React 的开源框架，将通用代码封装为可升级的包供 AI 编码代理构建应用与游戏",
+   "review": "Karni 是一个面向 AI 编码代理的 Django + React 框架，把登录、权限、admin、API、React 界面和游戏引擎等通用代码打包为可升级的版本化包，代理只需编写领域逻辑或游戏内容。项目通过 AGENTS.md 约束代理行为，并用 karni check 在代理手写框架自带代码时使构建失败。README 包含与原生 Django+React 的代理基准测试数据。",
+   "highlights": [
+    "karni new/karni.yaml/karni build 流程从模型声明生成 REST API、admin、RBAC、React 界面、测试与演示数据",
+    "支持应用与游戏两类项目，游戏端提供场景、碰撞、音效、存档、积分与钱包的服务端",
+    "提供 recipes、生成器、种子数据、OpenAPI 类型化前端客户端、Docker Compose 与 Celery 支持"
+   ],
+   "use_cases": [
+    "用 AI 编码代理从一行描述生成带支付、角色等配方的 Web 应用",
+    "构建含场景、存档、排行榜等机制的网页游戏",
+    "替换每个新项目重复手写脚手架的团队开发流程"
+   ]
+  },
+  "sha": "68a908d13532",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ce07e81b989c": {
+  "identity": {
+   "one_liner": "基于 Go 的 Discord 服务器定制机器人，集成 SQLite 持久化与 Redis 缓存。",
+   "review": "Elysia-BotBot 是一个用 Go 编写的 Discord 机器人学习项目，提供服务器前缀配置、自动表情回应、模板消息和基于 Gemini 的消息改写效果等功能，配置命令仅限管理员使用。技术栈包含 discord.go、SQLite（Bun）、Redis 与 Uber Fx 依赖注入，支持 Docker 部署。运行需 Discord Token、Redis 实例和 Gemini API Key，并在开发者门户启用 Message Content intent 与 Manage Webhooks 权限。",
+   "highlights": [
+    "提供 /server、/autoreactions、/effects、/templates 等斜杠命令，用于服务器定制与消息模板管理",
+    "采用 SQLite 持久化、Redis 缓存，通过 Uber Fx 实现依赖注入与应用生命周期管理",
+    "支持本地 go run 运行和 Docker 容器部署，通过卷挂载保留数据库文件"
+   ],
+   "use_cases": [
+    "为 Discord 服务器配置自动表情回应和发布含内容、嵌入与附件的模板消息",
+    "通过 Gemini 驱动的效果功能对消息进行临时改写，经 Webhook 发送",
+    "作为学习 Go 分层架构、依赖注入与缓存持久化实践的项目参考"
+   ]
+  },
+  "sha": "ce07e81b989c",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fe870159c1c3": {
+  "identity": {
+   "one_liner": "Rust 编写的跨平台 GUI 工具包，含组件库、数据表格、报表套件与应用生成器",
+   "review": "RavenRS 是一个用 Rust 实现的开源界面工具包，在 Windows、macOS、Linux 和浏览器上通过 GPU 绘制共享一套渲染器。它提供 100 余个组件、数据网格、报表引擎与设计器、应用内训练影片和本地运行的 AI 模块。面向用 Rust 构建业务应用的开发者，要求 Rust 1.88+，采用 MIT 或 Apache-2.0 双许可，API 仍在变动。",
+   "highlights": [
+    "提供 100+ 组件、支持 10 万行以上的 DataGrid，以及含设计器、查看器、PDF/XLSX 导出和定时邮件服务器的报表套件",
+    "ravenrs-app 从 Rust 结构体声明生成包含导航、表单、规则、安全与审计的应用，支持运行时以 JSON 差异定制",
+    "桌面与浏览器 canvas 共享渲染器与布局引擎，桌面端通过 AccessKit、Web 端通过 ARIA 镜像提供屏幕阅读器支持，并内置 WAI-ARIA 键盘操作模式"
+   ],
+   "use_cases": [
+    "构建运行于桌面与浏览器的 Rust 业务应用程序",
+    "需要终端用户报表设计、定时渲染与邮件分发的应用",
+    "数据本地存储、模型在 CPU 上运行的本地应用场景"
+   ]
+  },
+  "sha": "fe870159c1c3",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3306,5 +3306,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5485ab38661a": {
+  "identity": {
+   "one_liner": "运行在已有数据库上的 Go 后台任务队列库，通过 Driver[TTx] 接口接入多种存储。",
+   "review": "goncordia 是一个 Go 后台任务队列库，直接运行在应用已有的数据库上，支持 Postgres、MySQL、MongoDB、Redis 等 11 种后端。核心机制是 EnqueueTx 将任务写入业务同一事务，随提交原子生效；部分后端不支持事务，退化为 at-least-once。需要 Go 1.26+，驱动以子模块按需引入。适合已持有数据库、不想另起消息代理的 Go 服务。",
+   "highlights": [
+    "提供 EnqueueTx 事务性入队（outbox 模式），在支持事务的后端上任务与业务数据原子提交；Redis、Cassandra、ClickHouse、DynamoDB 后端为 at-least-once 语义",
+    "支持重试退避、优先级、唯一任务去重、cron/定时任务、崩溃恢复、队列暂停/恢复、Pipeline 串行化与批量入队",
+    "提供 future.Func.Call/Await 获取任务的类型化返回值，并附带内嵌管理面板、JSON API、Prometheus 指标与 OpenTelemetry 接入"
+   ],
+   "use_cases": [
+    "在业务事务中原子发出后台任务（如订单创建后发确认邮件、webhook），避免双写不一致",
+    "需要等待后台任务返回类型化结果的调用场景（future.Await/Call）",
+    "使用 SQLite 或内存驱动的入队与 worker 单元测试，无需启动 Docker 或独立消息中间件"
+   ]
+  },
+  "sha": "5485ab38661a",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41db3c345bff": {
+  "identity": {
+   "one_liner": "面向AI编码代理的本地优先长期记忆工具，基于SQLite保险库提供单一MCP recall工具。",
+   "review": "Rolling-Memory 是一个源码可见、本地优先的 AI 编码代理记忆工具，用 Go 编写，编译为单个零依赖二进制文件，索引本地会话记录和挂载文件，存入本机 SQLite 文件，代理通过一个 MCP 工具 recall 查询记录及其源坐标。其检索基于本地词法与统计信号，不使用向量、云端服务或后台 LLM 调用。适用于在 Claude Code、Cursor、Cline 等支持 MCP 的编码代理中回溯历史决策与文件位置的开发者。许可证为 PolyForm-NC-1.0.0，仅限非商业用途免费；USB 便携模式标注为实验性，云端记忆服务不属于本仓库。",
+   "highlights": [
+    "提供单一 MCP 工具 recall，代理可查询本地索引的会话记录与挂载文件及其源坐标",
+    "检索基于本地词法与统计信号，存储于单个本机 SQLite 文件，记忆层无外部网络请求",
+    "编译为单个零依赖 Go 二进制（CGO_ENABLED=0），支持 USB 便携模式（实验性），内置 Live Console 与评估钩子（可通过 --mcp-only 或配置关闭）"
+   ],
+   "use_cases": [
+    "在长会话编码场景中，代理需要回溯历史决策、修复位置或文件坐标时查询本地记录",
+    "个人开发者、学生或小团队在无云服务、无订阅的本地环境中为编码代理配置长期记忆",
+    "需要将工具与记忆库随 USB 介质携带、在处理同一项目的另一台机器上使用（实验性功能）"
+   ]
+  },
+  "sha": "41db3c345bff",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

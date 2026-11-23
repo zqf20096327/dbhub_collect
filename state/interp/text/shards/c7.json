@@ -3452,5 +3452,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bc689afe4095": {
+  "identity": {
+   "one_liner": "基于LangGraph的文档问答助手，逐条核验引用后作答，无证据则拒答",
+   "review": "CiteRight是一个检索问答助手：从用户上传的PDF/Markdown与网页检索证据作答，每个论断经grounding核验匹配引用，无支撑则移除或拒答。流程为17节点的LangGraph状态机，由FastAPI与React UI提供。面向需要溯源文档问答的用户。需自备Groq或OpenAI API密钥，grounding为启发式而非蕴含模型，扫描PDF需先OCR。",
+   "highlights": [
+    "混合检索（向量+BM25，RRF融合），引用以芯片形式可点击查看原文页",
+    "grounding核验器拒绝未检索的引用并捕捉与来源矛盾（数字、否定）的论断",
+    "内置算术计算器工具、网络搜索需人工批准、每用户会话持久化与文档租户隔离"
+   ],
+   "use_cases": [
+    "对本地PDF/Markdown文档进行带页码引用的问答检索",
+    "需要人工批准网络搜索的时效性问题查询",
+    "配合离线评测门禁（路由、grounding、记忆隔离）作为可核验问答流程的参考实现"
+   ]
+  },
+  "sha": "bc689afe4095",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8677566c0186": {
+  "identity": {
+   "one_liner": "自托管的家庭动态分享应用，一个 Docker Compose 栈含后端、Web 与移动端",
+   "review": "Famlin 是一个自托管的家庭社交应用，用于在自有服务器上与家人分享动态、照片、视频、里程碑、投票和旅行记录。技术栈为 Fastify + Prisma + PostgreSQL，Web 端用 Vite，移动端用 Expo，Docker 镜像为多架构构建。README 明确标注项目处于早期阶段，可能出现破坏性变更，需要自行备份数据卷。",
+   "highlights": [
+    "支持帖子、里程碑、投票、旅行打卡、共享相册、24 小时 Stories、评论与 @提及等多种内容类型",
+    "支持 Immich 相册链接与本地文件夹作为媒体来源，可全量导出为归档并恢复到新服务器",
+    "登录方式包括邮箱密码、任意 OpenID Connect 提供商和 Sign in with Apple，提供 iOS/Android 官方应用与 /admin 管理界面"
+   ],
+   "use_cases": [
+    "在 NAS、VPS 或家庭服务器上为单个或多个关联家庭搭建私有照片与动态分享空间",
+    "通过邀请链接、SSO 或 Apple 登录让家庭成员从手机或浏览器访问内容",
+    "需要多语言界面（含简体中文）并将数据保留在自己硬件上的家庭场景"
+   ]
+  },
+  "sha": "8677566c0186",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

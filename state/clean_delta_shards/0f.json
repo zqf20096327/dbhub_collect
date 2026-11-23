@@ -34365,5 +34365,1092 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "1c059f298994+2": {
+  "fn": "jonathan-gtd/scribe",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "Scribe"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    11,
+    1,
+    6
+   ],
+   [
+    "replace",
+    11,
+    12,
+    6,
+    7,
+    [
+     "Release Downloads Tests License"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    7,
+    8
+   ],
+   [
+    "replace",
+    13,
+    18,
+    8,
+    9,
+    [
+     "lang en lang fr lang es lang de lang nl"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    22,
+    9,
+    13
+   ],
+   [
+    "replace",
+    22,
+    23,
+    13,
+    14,
+    [
+     "- 🗜️ **Compressed automatically** — old history is chunked and compressed, typically 20× to 30× smaller."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    26,
+    14,
+    17
+   ],
+   [
+    "delete",
+    26,
+    28,
+    17,
+    17
+   ],
+   [
+    "equal",
+    28,
+    35,
+    17,
+    24
+   ],
+   [
+    "replace",
+    35,
+    36,
+    24,
+    25,
+    [
+     "Open your Home Assistant instance and open a repository inside the Home Assistant Community Store."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    41,
+    25,
+    30
+   ],
+   [
+    "replace",
+    41,
+    42,
+    30,
+    31,
+    [
+     "Open your Home Assistant instance and start setting up a new integration."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    56,
+    31,
+    45
+   ],
+   [
+    "replace",
+    56,
+    57,
+    45,
+    46,
+    [
+     " 🧩 Scribe Card — charts on your dashboard "
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    46,
+    47
+   ],
+   [
+    "replace",
+    58,
+    63,
+    47,
+    48,
+    [
+     "**Scribe Card** puts any query from your history on a dashboard. Drawn with Apache ECharts — what Home Assistant's own history charts use — and configured in a form, with the chart type, the unit and the axes picked from the columns your query returns."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    66,
+    48,
+    51
+   ],
+   [
+    "replace",
+    66,
+    71,
+    51,
+    52,
+    [
+     " 🗄️ Setting up TimescaleDB "
+    ]
+   ],
+   [
+    "equal",
+    71,
+    84,
+    52,
+    65
+   ],
+   [
+    "replace",
+    84,
+    85,
+    65,
+    66,
+    [
+     "If you are running Home Assistant OS, I recommend using the TimescaleDB Add-on."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    66,
+    67
+   ],
+   [
+    "replace",
+    86,
+    87,
+    67,
+    68,
+    [
+     "Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    104,
+    68,
+    85
+   ],
+   [
+    "replace",
+    104,
+    108,
+    85,
+    86,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    110,
+    86,
+    88
+   ],
+   [
+    "replace",
+    110,
+    115,
+    88,
+    89,
+    [
+     " ⚙️ Every option, with its defaults "
+    ]
+   ],
+   [
+    "equal",
+    115,
+    122,
+    89,
+    96
+   ],
+   [
+    "replace",
+    122,
+    177,
+    96,
+    97,
+    [
+     "…（55 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    179,
+    97,
+    99
+   ],
+   [
+    "replace",
+    179,
+    180,
+    99,
+    100,
+    [
+     " 📋 Parameter reference "
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    100,
+    101
+   ],
+   [
+    "replace",
+    181,
+    184,
+    101,
+    143,
+    [
+     "|Parameter|Description|",
+     "|:---|:---|",
+     "|`db_url`|**Required.** The connection string for your TimescaleDB database.|",
+     "|`db_ssl`|Enable SSL/TLS for the database connection.|",
+     "|`ssl_root_cert`|Path to the CA certificate file (e.g. `/ssl/ca.crt`). A relative path resolves from the Home Assistant config directory.|",
+     "|`ssl_cert_file`|Path to the client certificate file, for mutual TLS.|",
+     "|`ssl_key_file`|Path to the client private key file, for mutual TLS.|",
+     "|`db_schema`|PostgreSQL schema to record into. Empty (default) uses the connection's own schema, normally `public`.|",
+     "|`chunk_time_interval`|How much time each chunk of the table covers. See *Storage tuning* below.|",
+     "|`compress_after`|Chunks older than this are compressed. See *Storage tuning* below.|",
+     "|`retention_states`|**Deletes** state history older than this interval (e.g. `\"365 days\"`). Empty (default) keeps everything. See *Retention* below.|",
+     "|`retention_events`|**Deletes** event history older than this interval. Empty (default) keeps everything. See *Retention* below.|",
+     "|`record_states`|Whether to record state changes.|",
+     "|`record_events`|Whether to record events.|",
+     "|`batch_size`|Number of items to buffer before writing to the database.|",
+     "|`flush_interval`|Seconds before an incomplete batch is written anyway (default `30`). Each flush is one transaction: a short interval writes a handful of rows at a time instead of batching them, and a long one risks only the last interval of history, and only if Home Assistant is killed.|",
+     "|`max_queue_size`|Maximum number of items to hold in memory before dropping new ones.|",
+     "|`query_timeout`|Seconds a `scribe.query` call may run before the database stops it (default `60`).|",
+     "|`query_max_rows`|Rows a `scribe.query` call may return before it is refused (default `20000`).|",
+     "|`buffer_on_failure`|If true, keeps data in memory if the DB is unreachable (up to `max_queue_size`).|",
+     "|`enable_stats_io`|Enable real-time writer performance sensors (no DB queries).|",
+     "|`enable_stats_chunk`|Enable chunk count statistics sensors (queries DB).|",
+     "|`enable_stats_size`|Enable storage size statistics sensors (queries DB).|",
+     "|`stats_io_interval`|Seconds between two values of the I/O sensors (default `60`). Every change is a row Scribe records about itself.|",
+     "|`stats_chunk_interval`|Interval (in minutes) to update chunk statistics.|",
+     "|`stats_size_interval`|Interval (in minutes) to update size statistics.|",
+     "|`include_domains`|List of domains to include.|",
+     "|`include_entities`|List of specific entities to include.|",
+     "|`include_entity_globs`|List of entity patterns to include (e.g. `sensor.weather_*`).|",
+     "|`exclude_domains`|List of domains to exclude.|",
+     "|`exclude_entities`|List of specific entities to exclude.|",
+     "|`exclude_entity_globs`|List of entity patterns to exclude (e.g. `switch.kitchen_*`).|",
+     "|`include_labels`|List of label ids: an entity carrying one of them, itself or through its device, is recorded whatever the domain rules say. Alone, it records only labelled entities.|",
+     "|`exclude_labels`|List of label ids: an entity carrying one of them, itself or through its device, is never recorded.|",
+     "|`exclude_attributes`|List of attributes to exclude from the `attributes` column.|",
+     "|`include_events`|List of event types to record. Leave empty to record all events.|",
+     "|`exclude_events`|List of event types to never record (applied after `include_events`).|",
+     "|`enable_table_areas`|Enable creation and sync of the `areas` table.|",
+     "|`enable_table_devices`|Enable creation and sync of the `devices` table.|",
+     "|`enable_table_integrations`|Enable creation and sync of the `integrations` table.|",
+     "|`enable_table_users`|Enable creation and sync of the `users` table.|",
+     "|`enable_rollups`|Keep pre-computed hourly and daily summaries of states (`states_hourly`, `states_daily`). Off by default.|"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    143,
+    144
+   ],
+   [
+    "replace",
+    185,
+    233,
+    144,
+    145,
+    [
+     " 🗜️ Storage tuning — chunks and compression "
+    ]
+   ],
+   [
+    "equal",
+    233,
+    249,
+    145,
+    161
+   ],
+   [
+    "replace",
+    249,
+    251,
+    161,
+    163,
+    [
+     " retention, and queries over short recent windows touch less data. Past a",
+     " point, a query spanning months has to open hundreds of chunks."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    252,
+    163,
+    164
+   ],
+   [
+    "replace",
+    252,
+    255,
+    164,
+    167,
+    [
+     " historical queries, worse for memory — TimescaleDB's own guidance is that the",
+     " chunks you write to should comfortably fit in memory alongside their indexes,",
+     " so an oversized chunk on a small machine hurts write performance."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    279,
+    167,
+    191
+   ],
+   [
+    "replace",
+    279,
+    280,
+    191,
+    192,
+    [
+     "Measured on the database behind this README: **18 GB of history down to 608 MB, 29.7×**, the whole hypertable at 733 MB for two years — with the queries that produce those figures, in Compression, measured."
+    ]
+   ],
+   [
+    "equal",
+    280,
+    283,
+    192,
+    195
+   ],
+   [
+    "replace",
+    283,
+    288,
+    195,
+    200,
+    [
+     "|Setting|What it does|Reversible|",
+     "|:---|:---|:---|",
+     "|`chunk_time_interval`|How much time one chunk covers|Yes — future chunks only|",
+     "|`compress_after`|When a chunk gets compressed|Yes|",
+     "|`retention_states` / `retention_events`|When a chunk gets **deleted**|**No**|"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    293,
+    200,
+    205
+   ],
+   [
+    "replace",
+    293,
+    294,
+    205,
+    206,
+    [
+     " they are ever compressed, and compression does nothing."
+    ]
+   ],
+   [
+    "equal",
+    294,
+    295,
+    206,
+    207
+   ],
+   [
+    "replace",
+    295,
+    296,
+    207,
+    208,
+    [
+     " you set *plus* up to one `chunk_time_interval`. Smaller chunks make it tighter."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    301,
+    208,
+    213
+   ],
+   [
+    "replace",
+    301,
+    306,
+    213,
+    214,
+    [
+     " 🧹 Retention — dropping old history on a schedule "
+    ]
+   ],
+   [
+    "equal",
+    306,
+    328,
+    214,
+    236
+   ],
+   [
+    "replace",
+    328,
+    331,
+    236,
+    239,
+    [
+     " deleting the line from `configuration.yaml` both remove the policy — a value",
+     " Scribe once imported from YAML is never allowed to outlive the line that set",
+     " it."
+    ]
+   ],
+   [
+    "equal",
+    331,
+    332,
+    239,
+    240
+   ],
+   [
+    "replace",
+    332,
+    335,
+    240,
+    243,
+    [
+     " removes the policy — including one you created by hand with",
+     " `add_retention_policy()`, which is the only way clearing the setting in the UI",
+     " can actually stop the deletions."
+    ]
+   ],
+   [
+    "equal",
+    335,
+    336,
+    243,
+    244
+   ],
+   [
+    "replace",
+    336,
+    338,
+    244,
+    246,
+    [
+     " being created, not at the next daily interval — everything outside the window",
+     " is gone on the first run, right after the restart that enabled it."
+    ]
+   ],
+   [
+    "equal",
+    338,
+    339,
+    246,
+    247
+   ],
+   [
+    "replace",
+    339,
+    342,
+    247,
+    250,
+    [
+     " of its rows are older than the interval, so with the default `chunk_time_interval`",
+     " of 7 days you keep up to a week more than you asked for. That is what makes",
+     " retention nearly free: it drops files rather than deleting rows."
+    ]
+   ],
+   [
+    "equal",
+    342,
+    343,
+    250,
+    251
+   ],
+   [
+    "replace",
+    343,
+    345,
+    251,
+    253,
+    [
+     " tables are not touched, so an entity whose history has fully expired still",
+     " resolves."
+    ]
+   ],
+   [
+    "equal",
+    345,
+    346,
+    253,
+    254
+   ],
+   [
+    "replace",
+    346,
+    348,
+    254,
+    256,
+    [
+     " plain PostgreSQL, setting a retention interval raises a Repairs issue instead",
+     " of silently doing nothing."
+    ]
+   ],
+   [
+    "equal",
+    348,
+    349,
+    256,
+    257
+   ],
+   [
+    "replace",
+    349,
+    350,
+    257,
+    258,
+    [
+     " Anything else is refused with an error rather than sent to the database."
+    ]
+   ],
+   [
+    "equal",
+    350,
+    351,
+    258,
+    259
+   ],
+   [
+    "replace",
+    351,
+    356,
+    259,
+    260,
+    [
+     " 📈 Summaries — hourly and daily rollups "
+    ]
+   ],
+   [
+    "equal",
+    356,
+    368,
+    260,
+    272
+   ],
+   [
+    "replace",
+    368,
+    372,
+    272,
+    276,
+    [
+     "|View|One row per|Columns|",
+     "|---|---|---|",
+     "|`states_hourly`|entity and hour|`entity_id`, `bucket`, `value_avg`, `value_min`, `value_max`, `samples`|",
+     "|`states_daily`|entity and day|the same|"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    385,
+    276,
+    289
+   ],
+   [
+    "replace",
+    385,
+    390,
+    289,
+    290,
+    [
+     " 🗃️ Recording into a specific PostgreSQL schema "
+    ]
+   ],
+   [
+    "equal",
+    390,
+    409,
+    290,
+    309
+   ],
+   [
+    "replace",
+    409,
+    410,
+    309,
+    310,
+    [
+     "**The tables themselves** — every column, how they relate, and query recipes for Grafana and `scribe.query` — are documented in `docs/data-structure.md`."
+    ]
+   ],
+   [
+    "equal",
+    410,
+    411,
+    310,
+    311
+   ],
+   [
+    "replace",
+    411,
+    416,
+    311,
+    312,
+    [
+     " 🛠️ Services — flush, query, purge "
+    ]
+   ],
+   [
+    "equal",
+    416,
+    470,
+    312,
+    366
+   ],
+   [
+    "replace",
+    470,
+    475,
+    366,
+    367,
+    [
+     " 📊 Statistics sensors "
+    ]
+   ],
+   [
+    "equal",
+    475,
+    482,
+    367,
+    374
+   ],
+   [
+    "replace",
+    482,
+    490,
+    374,
+    382,
+    [
+     "|Sensor|Description|",
+     "|:---|:---|",
+     "|`sensor.scribe_states_written`|Total number of state changes written to the DB.|",
+     "|`sensor.scribe_events_written`|Total number of events written to the DB.|",
+     "|`sensor.scribe_buffer_size`|Current number of items waiting in the memory buffer.|",
+     "|`sensor.scribe_last_write_duration`|Time taken (in ms) for the last database write operation.|",
+     "|`sensor.scribe_states_rate`|Rate of states written to DB (per minute).|",
+     "|`sensor.scribe_events_rate`|Rate of events written to DB (per minute).|"
+    ]
+   ],
+   [
+    "equal",
+    490,
+    495,
+    382,
+    387
+   ],
+   [
+    "replace",
+    495,
+    503,
+    387,
+    395,
+    [
+     "|Sensor|Description|",
+     "|:---|:---|",
+     "|`sensor.scribe_states_total_chunks`|Total number of chunks for the states table.|",
+     "|`sensor.scribe_states_compressed_chunks`|Number of chunks that have been compressed.|",
+     "|`sensor.scribe_states_uncompressed_chunks`|Number of chunks waiting to be compressed.|",
+     "|`sensor.scribe_events_total_chunks`|Total number of chunks for the events table.|",
+     "|`sensor.scribe_events_compressed_chunks`|Number of compressed event chunks.|",
+     "|`sensor.scribe_events_uncompressed_chunks`|Number of uncompressed event chunks.|"
+    ]
+   ],
+   [
+    "equal",
+    503,
+    508,
+    395,
+    400
+   ],
+   [
+    "replace",
+    508,
+    520,
+    400,
+    412,
+    [
+     "|Sensor|Description|",
+     "|:---|:---|",
+     "|`sensor.scribe_states_total_size`|Total disk size (includes compressed data + recent chunks + indices).|",
+     "|`sensor.scribe_states_original_size`|**Theoretical size** if data was not compressed (e.g. 11 GB).|",
+     "|`sensor.scribe_states_compressed_size`|Physical size of the compressed data chunks.|",
+     "|`sensor.scribe_states_uncompressed_size`|Size of recent data not yet compressed (or pending indices).|",
+     "|`sensor.scribe_states_compression_ratio`|Compression ratio for states (%).|",
+     "|`sensor.scribe_events_total_size`|Total disk size of the events table.|",
+     "|`sensor.scribe_events_original_size`|Theoretical size of events before compression.|",
+     "|`sensor.scribe_events_compressed_size`|Size of compressed event data.|",
+     "|`sensor.scribe_events_uncompressed_size`|Size of uncompressed event data.|",
+     "|`sensor.scribe_events_compression_ratio`|Compression ratio for events (%).|"
+    ]
+   ],
+   [
+    "equal",
+    520,
+    521,
+    412,
+    413
+   ],
+   [
+    "replace",
+    521,
+    526,
+    413,
+    414,
+    [
+     " 🖼️ Dashboard "
+    ]
+   ],
+   [
+    "equal",
+    526,
+    529,
+    414,
+    417
+   ],
+   [
+    "replace",
+    529,
+    533,
+    417,
+    421,
+    [
+     "|File|What it is|Where to paste it|",
+     "|---|---|---|",
+     "|`lovelace_scribe_card.yaml`|A **single card** (`type: vertical-stack`)|The card YAML editor (\"Add card\" → \"Manual\")|",
+     "|`lovelace_scribe_view.yaml`|A **whole view** (`title` / `icon` / `cards`)|The view YAML editor|"
+    ]
+   ],
+   [
+    "equal",
+    533,
+    538,
+    421,
+    426
+   ],
+   [
+    "replace",
+    538,
+    541,
+    426,
+    429,
+    [
+     "1. Open your dashboard and click \"Edit Dashboard\" (pencil icon).",
+     "2. Click **+ Add card** and scroll to the bottom of the card picker to select **Manual**.",
+     "3. Copy the content of `lovelace_scribe_card.yaml`, replace everything in the editor with it, and click **Save**."
+    ]
+   ],
+   [
+    "equal",
+    541,
+    544,
+    429,
+    432
+   ],
+   [
+    "replace",
+    544,
+    548,
+    432,
+    436,
+    [
+     "1. Open your dashboard and click \"Edit Dashboard\" (pencil icon).",
+     "2. Click the **+** button *in the top tab bar* (next to your existing view names) to add a new View — not the \"Add card\" button.",
+     "3. In the view dialog, open the ⋮ menu (or the \"Show code editor\" button) and choose **Edit in YAML**.",
+     "4. Copy the content of `lovelace_scribe_view.yaml`, replace everything in the editor with it, and click **Save**."
+    ]
+   ],
+   [
+    "equal",
+    548,
+    549,
+    436,
+    437
+   ],
+   [
+    "replace",
+    549,
+    554,
+    437,
+    438,
+    [
+     " 🔀 Running alongside the recorder — or instead of it "
+    ]
+   ],
+   [
+    "equal",
+    554,
+    583,
+    438,
+    467
+   ],
+   [
+    "replace",
+    583,
+    591,
+    467,
+    468,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    591,
+    596,
+    468,
+    473
+   ],
+   [
+    "replace",
+    596,
+    597,
+    473,
+    474,
+    [
+     "every chart drawn by Scribe Card,"
+    ]
+   ],
+   [
+    "equal",
+    597,
+    618,
+    474,
+    495
+   ],
+   [
+    "replace",
+    618,
+    623,
+    495,
+    496,
+    [
+     " 📦 Migrating from InfluxDB, LTSS, the recorder or Scribe 2.x "
+    ]
+   ],
+   [
+    "equal",
+    623,
+    650,
+    496,
+    523
+   ],
+   [
+    "replace",
+    650,
+    655,
+    523,
+    528,
+    [
+     "|Source|Script|What to fill in|",
+     "|---|---|---|",
+     "|InfluxDB|`influx2scribe.py`|`INFLUX_*`|",
+     "|LTSS|`ltss2scribe.py`|`LTSS_*`|",
+     "|Home Assistant recorder|`recorder2scribe.py`|`RECORDER_*`, with `RECORDER_TYPE` set to `postgres` or `sqlite` (SQLite only needs `RECORDER_DB_PATH`)|"
+    ]
+   ],
+   [
+    "equal",
+    655,
+    660,
+    528,
+    533
+   ],
+   [
+    "replace",
+    660,
+    665,
+    533,
+    534,
+    [
+     " 🩺 Troubleshooting "
+    ]
+   ],
+   [
+    "equal",
+    665,
+    671,
+    534,
+    540
+   ],
+   [
+    "replace",
+    671,
+    675,
+    540,
+    544,
+    [
+     " the writer is actually doing: connected or not, whether TimescaleDB was found, how",
+     " many items are waiting in the buffer and how many were dropped, consecutive write",
+     " failures, the storage and retention settings in force. The database URL is never",
+     " included, and driver errors have any connection string stripped out."
+    ]
+   ],
+   [
+    "equal",
+    675,
+    676,
+    544,
+    545
+   ],
+   [
+    "replace",
+    676,
+    678,
+    545,
+    547,
+    [
+     " **Settings → System → System health** shows the database Scribe is pointed at and",
+     " whether it is connected right now."
+    ]
+   ],
+   [
+    "equal",
+    678,
+    683,
+    547,
+    552
+   ],
+   [
+    "replace",
+    683,
+    699,
+    552,
+    568,
+    [
+     "|Repair|What it means|",
+     "|---|---|",
+     "|Cannot reach its database|The connection failed. Scribe keeps buffering and retries in the background, so history recorded during the outage is written once the database returns. Check that the server is up and that the URL and credentials are right.|",
+     "|Cannot write to its database|Several consecutive writes failed. Data is held in memory and written on recovery — unless Home Assistant restarts first.|",
+     "|Buffer is full|Writes failed long enough to saturate the buffer; the oldest records are now being discarded. Fix the database, or raise `max_queue_size`.|",
+     "|Discarding records|A write failed while buffering is disabled, so records were dropped immediately. Enable buffering to survive short outages.|",
+     "|Could not create its tables|Scribe reached the database but failed to build its schema, usually a privileges problem. On a new database nothing is recorded at all.|",
+     "|Cannot reach the schema it was given|The schema in `db_schema` does not exist and could not be created, or the database user has no rights on it. Nothing is recorded — rather than silently filling `public` instead.|",
+     "|Could not create the `states` view|History is recorded, but the view every query goes through is missing — the history looks empty even though nothing is lost.|",
+     "|`states_raw` / `events` is not a hypertable|TimescaleDB is installed but the table was never converted (a common outcome when the extension is added *after* the tables filled up). Chunking, compression and retention all do nothing.|",
+     "|`states_raw` / `events` is never compressed|The table is a hypertable but has no compression policy, so it keeps its full uncompressed size.|",
+     "|TLS is not fully in force|Scribe connects over TLS, but a certificate you configured could not be applied — most often a client certificate, so it authenticates as an ordinary client instead of the one you provisioned.|",
+     "|TimescaleDB is not installed|History is recorded, but chunking and compression are unavailable, so the database grows much faster and the size sensors stay empty.|",
+     "|Database predates version 3.0|The database still uses the pre-3.0 layout, which this version cannot convert. Nothing is recorded and nothing was modified — install Scribe 3.8 to convert it, then update again.|",
+     "|Could not apply the retention policy|You asked Scribe to delete data older than an interval and the policy could not be created. Nothing was deleted, and nothing is being deleted — the table keeps growing.|",
+     "|Entity rename was not applied|A rename collided with an existing row in the database. The entity's history is split across the two IDs.|"
+    ]
+   ],
+   [
+    "equal",
+    699,
+    716,
+    568,
+    585
+   ],
+   [
+    "replace",
+    716,
+    717,
+    585,
+    586,
+    [
+     "Scribe creates that function next to the view, with the same five columns. `docs/data-structure.md` covers when to reach for which."
+    ]
+   ],
+   [
+    "equal",
+    717,
+    734,
+    586,
+    603
+   ],
+   [
+    "replace",
+    734,
+    739,
+    603,
+    604,
+    [
+     "Please open an issue on GitHub with your logs and configuration. I would be happy to help!"
+    ]
+   ],
+   [
+    "equal",
+    739,
+    741,
+    604,
+    606
+   ],
+   [
+    "delete",
+    741,
+    742,
+    606,
+    606
+   ],
+   [
+    "equal",
+    742,
+    743,
+    606,
+    607
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

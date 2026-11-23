@@ -2831,5 +2831,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1bc9a8d3743c": {
+  "identity": {
+   "one_liner": "本地优先的邮件与聊天归档工具，基于 SQLite 和 DuckDB 存储检索",
+   "review": "msgvault 是一个本地优先的开源归档程序，用于将邮件、聊天、日历、会议、联系人等历史记录保存在用户自己的硬件上，支持按发件人、日期、关键词或语义搜索，提供 Web UI、TUI、CLI、HTTP API 和 MCP 接口，可用 SQL 查询和导出数据。目前为 Alpha 阶段，API、存储格式和 CLI 参数可能变更。安装可通过脚本、Homebrew、conda-forge 或源码构建（需 Go 1.27+）。",
+   "highlights": [
+    "支持同步邮件、聊天、日历、联系人等多种来源，或通过导入 API 导入本地导出文件",
+    "基于 SQLite 与 DuckDB 存储，关键词搜索与分析可在离线状态下读取归档",
+    "提供浏览器、TUI、CLI、HTTP API 与 MCP 五种访问方式，支持 SQL 查询与去重、备份等维护功能"
+   ],
+   "use_cases": [
+    "将长期积累的邮件和聊天记录集中归档到自有硬件并离线检索",
+    "按人聚合多个地址/账号身份，维护联系人档案并经 CardDAV 同步",
+    "通过 SQL、导出或 MCP 将个人消息历史接入自有工具与分析流程"
+   ]
+  },
+  "sha": "1bc9a8d3743c",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "657ac8fa6d2c": {
+  "identity": {
+   "one_liner": "面向外贸业务员的本地运行 AI 助手，基于 Hermes Agent 提供 45 项 B2B 技能",
+   "review": "Smart Trade AI 是一个在本地运行的 AI 助手，以外贸业务员为使用对象，基于 Hermes Agent 引擎，通过 FastAPI 服务在浏览器提供聊天界面。它包含客户背调、开发信生成、客户管理、文档生成等技能，业务数据默认存储于 ~/.trade/。运行需 Python 3.14、LLM API Key，搜索功能依赖 Tavily API，部分功能为付费激活项。",
+   "highlights": [
+    "包含客户背调（邮箱检测/WHOIS/制裁名单等 6 层验证）、开发信生成、客户分级管理、报价单/PI/合同文档生成等 45 项技能",
+    "支持定时任务自动化与每日简报，提供中英双语界面；数据默认存于本地 ~/.trade/ 目录，服务绑定 127.0.0.1",
+    "基于 Hermes Agent 进程内运行，兼容 DeepSeek、OpenAI、Anthropic 等 OpenAI 接口模型，项目测试在 DeepSeek 上完成"
+   ],
+   "use_cases": [
+    "外贸客户开发：线索搜索、客户背景调查、开发信撰写与跟进管理",
+    "B2B 平台与社媒运营：阿里国际站/中国制造网诊断、LinkedIn/Facebook/TikTok 内容日历生成",
+    "商务文档与合规：报价单、PI、合同生成，招标信息监控与询价单整理"
+   ]
+  },
+  "sha": "657ac8fa6d2c",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a51ac4c6553b": {
+  "identity": {
+   "one_liner": "拦截 MCP 和 Bash 输出，压缩后交给 Claude，完整结果存入支持全文检索的 SQLite。",
+   "review": "mcp-recall 是一个 Claude Code 插件（TypeScript，运行于 Bun），通过 PostToolUse 钩子把大型 MCP/Bash 工具输出替换为摘要，原文连同全文索引存入本地 SQLite，并提供 11 个 recall__* 工具供检索。安装命令为 bun add -g mcp-recall 后运行 mcp-recall install。限制：不覆盖内置 Read/Grep/Glob，图像输出原样传递，项目自 2026-11 起处于维护模式。",
+   "highlights": [
+    "通过 PostToolUse 钩子压缩 MCP 和 Bash 工具输出，完整内容存储在本地 SQLite 并建立全文检索索引",
+    "提供 recall__search、recall__retrieve 等 11 个 MCP 工具，用于按内容检索或按 ID 取回存储的输出",
+    "支持 Claude Code、pi、OpenCode 和 grok CLI；相同输出重复调用时返回缓存摘要，数据不离开本机"
+   ],
+   "use_cases": [
+    "长时间使用返回大体积结构化输出的 MCP 工具（如浏览器自动化、GitHub API、搜索结果）的会话",
+    "需要将早前会话的工具输出保留为可检索记录，而不重新运行工具",
+    "压缩收益不足四分之一的短输出会原样通过，因此适合输出体量大的工具链场景"
+   ]
+  },
+  "sha": "a51ac4c6553b",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5947c3470f7a": {
+  "identity": {
+   "one_liner": "面向 Orca 的数据库客户端与 SQL 工作台插件",
+   "review": "Datanoa Studio 是一个 Orca 插件（要求 Orca >=1.4.248），提供侧边栏面板和全屏 Studio 两种界面，用于浏览 schema、编辑和导入数据、设计表结构以及运行 SQL 或 Redis 查询。它通过连接 URI 或自动检测 .env 与本地 SQLite 文件建立连接，凭据存放在 Orca 加密 secrets vault 中。自定义驱动需手动复制适配器目录并执行 npm install 后确认信任。导入文件上限为 25 MB，maxRows 范围为 1–50,000，查询超时为 1–110 秒。",
+   "highlights": [
+    "内置支持 SQLite、PostgreSQL、MySQL、MariaDB、CockroachDB、ClickHouse、Redis、LibSQL/Turso、Cloudflare D1 等 12+ 种引擎，并可经本地驱动目录接入 MSSQL、Oracle、MongoDB 及自定义 Node 适配器",
+    "提供持久化多标签 SQL 控制台，支持 schema 自动补全、绑定参数（:name、@name、$1、?、{{var}}）、手动事务（BEGIN/COMMIT/ROLLBACK）及破坏性 SQL 确认",
+    "支持 CSV/TSV/JSON/NDJSON 导入与 CSV/JSON/NDSQL/SQL/Markdown 导出，含可视化表设计器与迁移 SQL 预览"
+   ],
+   "use_cases": [
+    "在 Orca 编辑器内浏览和编辑数据库表数据、运行查询，无需切换到独立客户端",
+    "通过 SSH 隧道和 TLS/mTLS 连接本地或云端数据库，按文件夹和工作区组织连接配置",
+    "以只读配置保护生产库，配合破坏性查询确认机制执行受限的查询与数据维护"
+   ]
+  },
+  "sha": "5947c3470f7a",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

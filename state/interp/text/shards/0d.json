@@ -3206,5 +3206,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f65e7303b805": {
+  "identity": {
+   "one_liner": "自托管健康数据聚合器，将多来源穿戴数据统一为一个API与数据模型。",
+   "review": "Open Health Sync 是一个自托管的开源健康数据聚合服务，面向开发者和个人用户。它从 Apple Health、Health Connect、Garmin、Oura、WHOOP、Fitbit 等 18 种数据源采集数据，经 ETL 归一化存储到 Postgres/TimescaleDB，再以 REST API、FHIR R4、Open mHealth、CSV/Parquet、webhooks 及只读 MCP server 输出。单个 Go 二进制加 Postgres 即可运行，支持 Docker、Kubernetes 等。项目处于 pre-1.0 阶段（0.3.0），API、配置或数据库结构可能变动；它不是医疗器械。",
+   "highlights": [
+    "支持 18 种数据源接入，包括云连接器（OAuth）、设备上传端点、文件导入（FIT/GPX/TCX、HealthKit export.zip）和蓝牙健康设备",
+    "原始数据逐字保存于 raw store，可映射修复后重新处理历史；输出统一数据模型，含 UCUM 单位与 LOINC 编码",
+    "单二进制 `ohs` 可运行 api、collect、etl 三种角色，支持 Docker/Kubernetes/Helm、树莓派 5，并提供多租户管理、Prometheus 指标与审计日志"
+   ],
+   "use_cases": [
+    "为应用提供多家穿戴设备数据的统一 API，替代逐厂商接入",
+    "将 Apple Health 导出数据导入 PostgreSQL 用 SQL 查询，或导出 CSV/Parquet 供 DuckDB、pandas 分析",
+    "通过 FHIR R4 或 Open mHealth 向研究/临床系统提供数据，或经只读 MCP server 让 AI 客户端读取个人健康数据"
+   ]
+  },
+  "sha": "f65e7303b805",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7c48dcf0e61b": {
+  "identity": {
+   "one_liner": "基于 Bun 的后端框架，集成 SQLite ORM、认证、任务队列与可观测性。",
+   "review": "Yatta 是一个运行在 Bun 上的后端框架，提供零配置路由、基于 bun:sqlite 的类型安全 ORM、Argon2id/JWT 认证、任务队列、缓存、对象存储、邮件、实时通信与进程内可观测性。模块引擎相互独立，可单独引入；无需构建步骤，TypeScript 直接运行，采用 MIT 许可。适用于使用 Bun 且希望在同一运行时内组合后端能力的开发者。",
+   "highlights": [
+    "支持按需引入的独立引擎：api、db、auth、jobs、cache、storage、mail、realtime、observe 等，各含独立错误类与内存/持久化存储",
+    "基于 navigator.hardwareConcurrency 构建 cpu-pool 与 io-pool 两个工作线程池，任务微批处理（每 IPC 消息最多 32 个，积压时 64 个）",
+    "在文件路由前预挂载 gRPC-Web、WebDAV、DoH、WebFinger、OAuth 2.0、OIDC、MCP 等协议端点，均可独立导入配置"
+   ],
+   "use_cases": [
+    "在 Bun 运行时上构建含数据库、认证、任务队列的 API 服务",
+    "需要 SSE/WebSocket 实时推送、后台定时任务（支持时区的 cron）的后端",
+    "需要进程内 tracing/metrics/logs、SLO 评估与 N+1 查询检测的应用监控场景"
+   ]
+  },
+  "sha": "7c48dcf0e61b",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

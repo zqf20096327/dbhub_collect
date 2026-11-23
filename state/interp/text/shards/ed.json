@@ -3090,5 +3090,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a78b81eaa497": {
+  "identity": {
+   "one_liner": "Java 实现的生物信息学标识符映射库，支持多种数据源与 URI 映射机制。",
+   "review": "BridgeDb 是一个面向 Java 21 及以上环境的生物信息学标识符映射库，发布于 Maven Central，供生物数据集成开发者通过 Maven、Gradle 等依赖管理工具引用。它包含制表符分隔文件驱动、BioDataSource 枚举、REST 服务器及多个 Web 服务模块；SQL 后端要求 MySQL，URI 支持基于 RDF/Sesame 实现，Apache 2.0 许可。",
+   "highlights": [
+    "发布至 Maven Central，提供 Maven、Gradle、Ivy、Buildr 多种依赖引入方式，并附带 info.sh、qc.sh、batchmapper 等命令行工具",
+    "模块化设计：org.bridgedb.jar 内含制表符分隔文件驱动，另有 bio、webservice、server、sql、rdf、uri 等模块按需引入",
+    "URI/OpenPHACTS 相关包支持从 RDF 与 miriam 加载数据源，可通过 RDF linkset 装载并生成传递性 linkset，配置文件支持环境变量与 Tomcat 目录等多级加载位置"
+   ],
+   "use_cases": [
+    "在 Java 项目中集成基因、蛋白等生物数据标识符之间的映射功能",
+    "部署 BridgeRest 服务器或使用 MySQL 后端、webservice 映射器搭建标识符映射服务",
+    "通过 RDF linkset 装载器构建支持 URI 的标识符映射数据存储"
+   ]
+  },
+  "sha": "a78b81eaa497",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f51f7f854955": {
+  "identity": {
+   "one_liner": "GizmoData 开发的分析服务器，将 Hardcharger Engine（DuckDB 2.0 分支）暴露到网络。",
+   "review": "Hardcharger 是 GizmoData 推出的分析服务器，内嵌其基于 DuckDB 2.0 的性能分支 Hardcharger Engine 2.0。客户端通过 Chargewire HTTP 协议连接，查询结果以 Apache Arrow 记录批次流式返回。项目提供 Python ADBC、JDBC 客户端驱动、桌面应用及 Docker 镜像，采用 Apache 2.0 许可证，前身是 GizmoSQL。适用于需要通过网络远程执行 DuckDB SQL 的场景。",
+   "highlights": [
+    "基于 v2 C API 构建的独立服务器（非扩展），引擎为 DuckDB 2.0，SQL 语法、扩展和文件格式保持不变，叠加了针对 OR 条件 DISTINCT 连接规划、整数范围过滤、预读等性能改动",
+    "通过 Chargewire 协议在一个 HTTP 往返中返回查询及首批行，大结果以 Arrow IPC 流式传输，支持 LZ4/zstd 压缩和断点续传",
+    "内置 token 登录、TLS/mTLS、基于语句执行计划的 RBAC、行策略、列掩码、多租户、OIDC/JWKS SSO 和防篡改审计日志"
+   ],
+   "use_cases": [
+    "需要让多个客户端通过 HTTP 远程执行 DuckDB SQL 并以 Apache Arrow 格式流式获取结果的场景",
+    "需要行级策略、列掩码、租户隔离和审计日志等引擎内置安全控制的 DuckDB 分析部署",
+    "通过 macOS/Windows 桌面应用本地运行服务器的个人或团队环境"
+   ]
+  },
+  "sha": "f51f7f854955",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

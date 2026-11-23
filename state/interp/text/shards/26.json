@@ -3363,5 +3363,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2fa18952653c": {
+  "identity": {
+   "one_liner": "用 Rust 从零实现的 SQLite 引擎，提供页级 MVCC 并发写入",
+   "review": "FrankenSQLite 是以 C SQLite 为行为规范的独立 Rust 重实现，当前可运行路径为兼容模式，直接读写标准 SQLite 文件。它以页级 MVCC 与可串行化快照隔离（SSI）替代单写者锁，支持不同页的写事务并发，同页冲突则中止重试；引擎核心为安全 Rust，unsafe 仅限 VFS 与 C ABI。适用于需要嵌入数据库但希望多写者并发的场景。",
+   "highlights": [
+    "页级 MVCC 允许写不同页的事务并发，默认启用可串行化快照隔离（SSI），同页冲突中止并重试",
+    "兼容模式直接运行于标准 SQLite 文件，支持 UTF-8 与 UTF-16le/be 编码读写，编码不匹配的附加数据库会被拒绝",
+    "引擎核心为安全 Rust（workspace 级禁止 unsafe），unsafe 仅存在于 fsqlite-vfs（mmap/shm）与可选 C ABI 垫片"
+   ],
+   "use_cases": [
+    "需要并发多写者的嵌入式 SQLite 工作负载",
+    "在 Rust 项目中通过 crate 或 CLI 使用无 unsafe 引擎核心的嵌入数据库",
+    "读取/写入既有 SQLite 3.x 格式数据库文件并验证与 C SQLite 的字节与行为一致性"
+   ]
+  },
+  "sha": "2fa18952653c",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

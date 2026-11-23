@@ -3347,5 +3347,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9c0f43256551": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，用自然语言表达式生成时间值",
+   "review": "pg-when 是一个 PostgreSQL 扩展，提供 when_is、seconds_at、millis_at 等函数，将如 '5 days ago at this hour in Asia/Tokyo' 的自然语言表达式解析为时间戳或 UNIX 纪元数值。查询由日期、时间、时区三部分组成，用 at 和 in 连接，支持相对/精确日期、相对/精确时间、IANA 时区名或 UTC 偏移；未提供时区时默认为 UTC。通过 Docker 镜像运行，覆盖 PostgreSQL 15–19 版本。",
+   "highlights": [
+    "提供 when_is（返回 TIMESTAMPTZ）及 seconds_at/millis_at/micros_at/nanos_at（返回 BIGINT 纪元值）五个 SQL 函数",
+    "查询支持日期+时间+时区三组件组合，时区支持 IANA 名称与 UTC 偏移两种写法",
+    "通过 Docker 分发，提供 pg15 至 pg19 多个 PostgreSQL 版本的镜像"
+   ],
+   "use_cases": [
+    "在 SQL 中以自然语言表达式生成相对时间戳",
+    "需要在查询中指定 IANA 时区或 UTC 偏移的时间计算",
+    "需要将自然语言时间解析为 UNIX 纪元秒/毫秒/微秒/纳秒整数的场景"
+   ]
+  },
+  "sha": "9c0f43256551",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "10121f5a8794": {
+  "identity": {
+   "one_liner": "将MLB Statcast投球数据转化为打者三维度诊断的FastAPI+Next.js分析项目",
+   "review": "NorthStar Baseball处理2025赛季Statcast数据（742,080笔投球转为190,987个打席），生成选球、接触与伤害三个维度的打者诊断，通过FastAPI服务与Next.js前端呈现，支持2至4名打者并排比较，并为蓝鸟队与加拿大籍球员提供专门视图。建模仅使用打席前可得信息，按时间顺序切分训练集；未发布综合评分。适合对棒球数据分析感兴趣的用户。",
+   "highlights": [
+    "处理2025常规赛742,080笔投球数据并重构每个打席起始的垒包/出局状态",
+    "提供选球、接触、伤害三维度诊断，并与wOBA、xwOBA、RE24等指标并列展示",
+    "支持从CSV或PostgreSQL运行API，数据下载按七天分块缓存于Parquet且可断点续传"
+   ],
+   "use_cases": [
+    "查询并阅读任一2025赛季MLB打者的三维诊断画像",
+    "并排比较2至4名打者的各项指标",
+    "针对蓝鸟队与加拿大籍球员的专项数据分析"
+   ]
+  },
+  "sha": "10121f5a8794",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "23dbdf77c05f": {
+  "identity": {
+   "one_liner": "Rust 编写的关系数据库，可嵌入或以服务端运行，各组件可插拔",
+   "review": "Turborel 是用 Rust 编写的关系数据库系统，可作为库嵌入或以服务端 turboreld 运行供多客户端访问，配套命令行客户端 turborel。其存储引擎、索引、数据类型、优化器规则、认证与传输协议等均为可插拔接口。项目目前处于 alpha 阶段（0.0.0），SQL、API、协议与文件格式均可能随版本变更。",
+   "highlights": [
+    "支持 SQL-86 至 SQL:2023 的标准 SQL，默认 READ COMMITTED 事务并可通过多版本并发控制提供 SERIALIZABLE 隔离级别",
+    "支持按表选择行式或列式存储、RANGE/LIST/HASH 分区、B-link 树/线性哈希/R 树等可插拔索引，并提供基于代价的查询计划器",
+    "内置 SQL/MM Spatial 几何类型与 R 树空间查询、SQL/MM Full-Text 全文检索（43 种语言）、SQL/JSON 与 SQL/XML 功能，以及基于 Viewstamped Replication 的多节点复制与在线备份"
+   ],
+   "use_cases": [
+    "需要以库形式嵌入应用进程内的数据存储场景",
+    "需要单一系统同时使用 SQL、JSON、XML、空间数据与全文检索的多模型查询场景",
+    "需要多节点复制、在线备份与时间点恢复的服务端数据库部署场景"
+   ]
+  },
+  "sha": "23dbdf77c05f",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

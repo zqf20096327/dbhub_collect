@@ -29729,5 +29729,1929 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "15ff6fb7b2df+2": {
+  "fn": "KKKKhazix/AIHOT",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "AIHOT：每个行业，都可以有自己的 AIHOT。很多条信源流进中间的精选，再分给法律、人力资源、金融等各个行业"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    1,
+    2
+   ],
+   [
+    "replace",
+    7,
+    14,
+    2,
+    7,
+    [
+     " MIT License",
+     " Node.js 24",
+     " PostgreSQL 17",
+     " Docker Compose",
+     " 线上原站 aihot.news"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    7,
+    8
+   ],
+   [
+    "replace",
+    15,
+    19,
+    8,
+    10,
+    [
+     " 一个自己找热点、自己写日报的网站框架。 ",
+     " 把信源换成你的，把精选标准换成你的 KnowHow，它就是你的行业热点站。"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    10,
+    11
+   ],
+   [
+    "replace",
+    20,
+    23,
+    11,
+    12,
+    [
+     " 简体中文 · English · 日本語"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    12,
+    13
+   ],
+   [
+    "replace",
+    24,
+    33,
+    13,
+    18,
+    [
+     " 跑起来 ·",
+     " 改成你的行业 ·",
+     " 它是怎么工作的 ·",
+     " 文档 ·",
+     " 社区交流"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    18,
+    21
+   ],
+   [
+    "replace",
+    36,
+    37,
+    21,
+    22,
+    [
+     "AIHOT 是我做的一个 AI 热点网站。它每天从一批信源里收资料，用大模型先筛一遍、再独立打两次分，挑出真正值得看的，写成中文标题和摘要；把不同来源说的同一件事聚成一个事件，按有多少人在说排出热点；每天早上出一份日报。"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    59,
+    22,
+    44
+   ],
+   [
+    "replace",
+    59,
+    63,
+    44,
+    45,
+    [
+     " 六步：采集、预筛、两次评分、写作、聚簇、热点与成刊"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    45,
+    46
+   ],
+   [
+    "replace",
+    64,
+    65,
+    46,
+    47,
+    [
+     "一条资料从信源进来，先判重，再预筛；可能重要的独立打两次分，写好中文标题和摘要，和别的报道聚成事件，算进热度。X 帖子没有正文或只有链接时，保留原帖的链接和图片，不调用写作或翻译模型。分数过了门槛、又不是精选里已有新闻的重复，才进精选；日报按规则编出当天要闻，周报、月报再从日报里汇编。每一步的提示词都在 `industry/prompts/`，改标准不用改代码。详见 精选与校准。"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    47,
+    50
+   ],
+   [
+    "replace",
+    68,
+    72,
+    50,
+    51,
+    [
+     " 五个来源的报道聚成一个事件，事件进入当前热点榜"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    79,
+    51,
+    58
+   ],
+   [
+    "replace",
+    79,
+    83,
+    58,
+    59,
+    [
+     " AIHOT 线上实测：页面中位数 10 毫秒，95% 在 50 毫秒内；接口中位数 6 毫秒，95% 在 12 毫秒内；文章页 95% 在 14 毫秒内"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    59,
+    62
+   ],
+   [
+    "replace",
+    86,
+    87,
+    62,
+    63,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    63,
+    64
+   ],
+   [
+    "replace",
+    88,
+    98,
+    64,
+    74,
+    [
+     "|**六种信源**|RSS、网页列表、JSON 接口、X 账号、微信公众号，以及你自己脚本推送进来的内容。信源分三级（官方一手、官方账号与准官方、媒体与个人），各级入选门槛不同；抓取频率按产出自动调整|",
+     "|**精选**|预筛，同一份评分标准独立打两次分，再按信源分级的门槛决定入选；同一条新闻只占一条，换个说法的重复不进。提示词和门槛全部公开，全部可以改；用你自己标注的样本在 SelectBench 里校准|",
+     "|**写作**|中文标题、答案先行的摘要、推荐理由，外文全文翻译；分类、标签和新闻事实单独抽取；防止模型把原文没提到的公司写进标题|",
+     "|**聚簇**|不同来源报道的同一件事聚成一个事件，后续进展挂在同一个事件下，事件页有综述；进展和报道时间线可一起切换“最新在前”或“最早在前”；人工改过的归属不会被覆盖|",
+     "|**热点**|按事件算热度：独立来源越多越靠前，X 上的讨论也算进来；和 6 小时前比，涨得快的标上升，新出现的标“新”|",
+     "|**日报、周报、月报**|每天出日报（默认 08:00），按规则编出当天要闻：一件事一条，报过的事只在有新进展时跟进，不调模型。每周一出周报、每月 1 日出月报（默认 10:00、10:30），从日报里汇编，模型只写总述和栏目导读。几点出刊在 `site/site.ts` 的 `EDITION_TIMES` 里改|",
+     "|**主题与搜索**|公司、方向、内容形态三类主题页；标题摘要搜索和全文相关搜索|",
+     "|**阅读设置**|深浅色外观、网站默认字体或浏览器默认字体；收藏和阅读设置只保存在本机，可以导出、导入备份|",
+     "|**给 Agent 用**|RSS（精选、全部、全文、日报、周报、月报）、公开 API、MCP、Agent Markdown、`llms.txt`，同一份内容给人看也给 Agent 用|",
+     "|**后台**|信源管理与试抓、内容诊断与人工评分更正、精选评测、每一步单独换模型、付费服务的预算熔断、运行记录与告警|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    74,
+    77
+   ],
+   [
+    "replace",
+    101,
+    105,
+    77,
+    78,
+    [
+     " 首页的每日精选，关于页的信源河"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    78,
+    79
+   ],
+   [
+    "replace",
+    106,
+    107,
+    79,
+    80,
+    [
+     " 截图来自用示范信源跑起来的本地站，站名是默认的 MyHOT。 "
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    80,
+    83
+   ],
+   [
+    "replace",
+    110,
+    111,
+    83,
+    84,
+    [
+     "想创建自己的独立站点，可以先点 Use this template，再克隆你生成的仓库。想持续合并上游更新或贡献代码，建议先 Fork。下面的命令适合直接试用。"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    84,
+    85
+   ],
+   [
+    "replace",
+    112,
+    113,
+    85,
+    86,
+    [
+     "需要 Docker、Node.js 24（运行 `init-env` 生成配置要用），和一个 OpenAI 兼容的模型 API Key（DeepSeek、千问、智谱都可以）。"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    125,
+    86,
+    98
+   ],
+   [
+    "replace",
+    125,
+    126,
+    98,
+    99,
+    [
+     "机器上没有 Node、服务器在中国大陆、要配域名和 HTTPS，或者不用 Docker、直接在 Linux、macOS 上跑（Windows 用 WSL2），见 部署。"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    139,
+    99,
+    112
+   ],
+   [
+    "replace",
+    139,
+    140,
+    112,
+    113,
+    [
+     "要改的东西几乎都在 `site/` 和 `industry/` 这两个文件夹里，代码基本不用动："
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    113,
+    114
+   ],
+   [
+    "replace",
+    141,
+    142,
+    114,
+    115,
+    [
+     "|文件|改什么|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    115,
+    116
+   ],
+   [
+    "replace",
+    143,
+    151,
+    116,
+    124,
+    [
+     "|`site/site.ts`|站名、行业词、出刊时间、首页文案、关于页、条目与日报周报月报上的说法、公开接口的分类|",
+     "|`industry/taxonomy.ts`、`industry/topics.json`|分类、标签、主题|",
+     "|`industry/sources.json`|首次启动时导入的信源|",
+     "|`industry/prompts/`|精选标准和写作要求。**你的行业 KnowHow，就写在这里**|",
+     "|`industry/selection.ts`|入选门槛|",
+     "|`site/models.ts`|每一步默认用哪个模型（不改也行：都用 `.env` 里配的那一个）|",
+     "|`site/brand/`、`site/pages/`、`site/public/`、`site/changelog.json`|图标与 Logo，使用规则和隐私说明，`robots.txt` 这类发布在网站根目录的文件，更新日志|",
+     "|`modules/`|框架里没有、只有你的站要的功能，做成模块放在这里，见 架构 的“模块”|"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    152,
+    124,
+    125
+   ],
+   [
+    "replace",
+    152,
+    153,
+    125,
+    126,
+    [
+     "最值得花时间的是评分标准（`industry/prompts/selection-score.md`）和门槛：拿一两百条你自己标注过的资料，用 `scripts/eval-selection.ts` 跑一遍，看它选得准不准，再回去改。怎么做写在 精选与校准 里。"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    156,
+    126,
+    129
+   ],
+   [
+    "replace",
+    156,
+    157,
+    129,
+    130,
+    [
+     "|文档|内容|"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    130,
+    131
+   ],
+   [
+    "replace",
+    158,
+    165,
+    131,
+    138,
+    [
+     "|把它改成你的行业|站名、分类、主题、信源、提示词、门槛、模型、品牌，一步一步来|",
+     "|信源|六种信源怎么配，分级和全文，抓取频率，旧文和存档，固定起点 `publishedAfter`，外部推送接口|",
+     "|精选与校准|一条资料怎么变成精选、怎么编进日报周报月报，怎么用自己的样本校准|",
+     "|事件归组与关系评测|事件关系怎么判断，怎么用自己标注的成对样本评测|",
+     "|综述评测|改事件综述提示词前，怎么在同一批事件上并排比较|",
+     "|部署|Docker、域名和 HTTPS、中国大陆、更新、备份、花多少钱，不用 Docker 时在 Linux、macOS（Windows 用 WSL2）上怎么跑|",
+     "|架构|三个进程、几条不变的规则、目录、模块、数据库迁移、对外出口、测试|"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    170,
+    138,
+    143
+   ],
+   [
+    "replace",
+    170,
+    171,
+    143,
+    144,
+    [
+     "部署和使用问题到 问答区，新想法到 想法交流区，欢迎在 作品展示区 分享你做出的行业热点站。"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    172,
+    144,
+    145
+   ],
+   [
+    "replace",
+    172,
+    173,
+    145,
+    146,
+    [
+     "发现 Bug 或有明确的功能建议，可以 提交 Issue。准备改代码前，先看 贡献说明；安全漏洞请走 私密报告入口。"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    182,
+    146,
+    155
+   ],
+   [
+    "replace",
+    182,
+    183,
+    155,
+    156,
+    [
+     " —— 数字生命卡兹克 "
+    ]
+   ],
+   [
+    "equal",
+    183,
+    185,
+    156,
+    158
+   ],
+   [
+    "replace",
+    185,
+    187,
+    158,
+    159,
+    [
+     "代码使用 MIT 许可证。AIHOT 的名字和 Logo 不在许可范围内。字体有自己的许可，见 NOTICE。"
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "fa1b0078e845+2": {
+  "fn": "91zgaoge/StoryMoss",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "StoryMoss 草苔"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " StoryMoss · 草苔 "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    10,
+    4,
+    6,
+    [
+     " 🌿 越写越懂的 AI 小说创作桌面应用 ",
+     " 幕后管理故事资产，幕前沉浸式写作，AI 在需要时随行辅助"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    22,
+    7,
+    14,
+    [
+     " Version",
+     " License",
+     " Build",
+     " Platform",
+     " Tauri",
+     " React",
+     " Rust"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    14,
+    17
+   ],
+   [
+    "replace",
+    25,
+    49,
+    17,
+    39,
+    [
+     "||特性|说明|",
+     "|:---:|---|---|",
+     "|🎬|**双界面创作**|幕前「墨纸」沉浸写作 + 幕后「机械」工作室管理，两套设计语言各得其所|",
+     "|🎛️|**自适应幕后工作台**|暗色主题、容器感知卡片与表单、独立面板滚动；800×600 到宽屏均无逐字竖排、固定限高裁切或悬浮遮挡|",
+     "|🤖|**Agency 多代理创作**|主创 / 管理 / 编辑审计三代理黑板并行协作，每章经 Gate v2 加权质量门（代码 0.2 / 规则 0.3 / 编辑 0.5，阈值 0.75）才交付；你的修改率作为独立信号回流|",
+     "|🗂️|**语料资产**|新闻 / 故事 / 概念 / 灵感 / 图片 / 链接 / 笔记按故事隔离；支持导入、AI 提炼、转为角色/世界观/伏笔草稿、交给导演调度|",
+     "|🎬|**导演 Agent 与剧组对话**|代理工作室三栏：导演统筹管理 / 编审 / 主创；子 agent 异步派发、心跳、租约、重试与审批；幕后可直接 @ 三个 agent|",
+     "|⚡|**分时介入架构**|幕前续写走三角色主创、编辑审计后台化；划词改写仍可走完整质检——解开「质量与速度不可兼得」的根本矛盾|",
+     "|🧠|**越写越懂你**|持续学习：从创作事件观察模式 → 提炼 instinct → 确认后晋升为可复用技能；Tab 接受 / Esc 放弃还会回灌到每拍写作手法的选择（章法偏好）|",
+     "|🧭|**长篇记性与计划**|续写前按需检索前文原文（【前文相关原文】只读块）；卷/弧中层计划（卷目标 / 卷末高潮 / 须兑现伏笔）；改稿后下游章纲标记待重规划、逐条勾选才落库——长篇不崩的四件套|",
+     "|🧪|**判官一致率与文笔校准**|「创作评估」按你的改动核对编辑的每条审查意见（判得准不准有数字）；文笔基线阈值经公版人类语料校准（`resources/voice_corpus/`）|",
+     "|📝|**PROBLEM 七元素**|简单指令自动基于 Erik Bork 七元素增强为强力 Logline，驱动大纲与续写|",
+     "|🌍|**资产强关联**|世界观 / 故事大纲 / 场景大纲 / 用户指令四位一体显式调和，剧情不跑偏|",
+     "|🔄|**资产回流**|每章正文生成后自动提取角色 / 关系 / 世界观 / 大纲回流累积进资产库，手工编辑永不覆盖，续写越写越强关联|",
+     "|🔌|**多模型适配**|OpenAI / Anthropic / Ollama / 本地 API，角色 × 任务模型路由|",
+     "|🔄|**双源自动更新**|GitHub Releases 优先、官网备用；清单与下载网络故障自动换源，备用源限同一版本，签名验证始终启用|",
+     "|📚|**全链路资产管理**|角色 / 世界构建 / 场景 / 知识图谱 / 伏笔看板 / 叙事分析 / 拆书，AI 不「吃书」|",
+     "|❤️|**情感回路**|单拍强制「事件→评估→情绪变化→行动/台词→代价」因果链；批量续写按章生成 1–3 幕；关系张力账本、情感债务与读者面板；情感驱动情节，不是形容词|",
+     "|🧩|**叙事契约**|每拍先编译场契约（目标 / 具名阻力 / 转折 / 必须结果 / 情感链 / 字数），writer 按这一页写；gate 对具名阻力缺席、正文过短、契约无效硬拦截；幕后选中另一部小说即切换，生成中也不静默拒绝|",
+     "|🧵|**多 write 并行**|同一故事最多 3 个 write 任务并行；章号由数据库原子分配，Append 同章排队，资产补齐加租约，不抢号、不重复造资产|",
+     "|📌|**固定语料**|语料页「固定用于续写」后，素材以只读块进入单拍/批量 writer prompt（≤4 条、≤1200 字）；图片语料读取尺寸/摘要；deepseek-v4.1-flash 等视觉模型可读原图，作者可强制 AI 遵守/化用|",
+     "|🪪|**姓名编译**|创世角色名做重名 / 同用字 / 同姓扎堆 / 长度塌缩 / 模型陈词组合校验；常见姓可正常使用，但不再整组「林雪/沈夜/苏墨/顾寒」式二字塌缩|"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    39,
+    42
+   ],
+   [
+    "replace",
+    52,
+    55,
+    42,
+    43,
+    [
+     " 幕前写作界面"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    43,
+    44
+   ],
+   [
+    "replace",
+    56,
+    57,
+    44,
+    45,
+    [
+     " 幕前 · 极简全屏写作，AI 输入栏随行辅助，文思模式主动给萤火提示 "
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    45,
+    46
+   ],
+   [
+    "replace",
+    58,
+    61,
+    46,
+    47,
+    [
+     " 幕后工作室"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    47,
+    48
+   ],
+   [
+    "replace",
+    62,
+    65,
+    48,
+    49,
+    [
+     " 幕后 · 故事 / 角色 / 世界构建 / 场景 / 知识图谱 / 代理工作室等全套资产管理 "
+    ]
+   ],
+   [
+    "equal",
+    65,
+    74,
+    49,
+    58
+   ],
+   [
+    "replace",
+    74,
+    75,
+    58,
+    59,
+    [
+     "需要安装 Node.js（推荐 20 LTS）和 Rust。"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    81,
+    59,
+    65
+   ],
+   [
+    "replace",
+    81,
+    89,
+    65,
+    66,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    112,
+    66,
+    89
+   ],
+   [
+    "delete",
+    112,
+    114,
+    89,
+    89
+   ],
+   [
+    "equal",
+    114,
+    125,
+    89,
+    100
+   ],
+   [
+    "replace",
+    125,
+    126,
+    100,
+    101,
+    [
+     "- **结果**：CAS 基线改为「按 scene 绑定 + 保存入口同步捕获」，跨 scene 不发送指纹、在途保存不再覆盖新章基线；视觉空稿（` ` 等）直接跳过写入，避免把前端基线写成空稿后永久冲突。更新检查改为「有源成功给出确定结果即采用」，另一源失败只附 `warning` 诊断日志；所有源都失败才报错。新增 8 条回归测试（Rust 4 / 前端 4）。"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    170,
+    101,
+    145
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "68a908d13532+2": {
+  "fn": "cbsshekhawat18-lab/karni",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "Karni"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    1,
+    2
+   ],
+   [
+    "replace",
+    7,
+    8,
+    2,
+    3,
+    [
+     " The Django + React framework where your coding agent writes only your app or your game "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    3,
+    4
+   ],
+   [
+    "delete",
+    9,
+    10,
+    4,
+    4
+   ],
+   [
+    "equal",
+    10,
+    11,
+    4,
+    5
+   ],
+   [
+    "delete",
+    11,
+    12,
+    5,
+    5
+   ],
+   [
+    "equal",
+    12,
+    13,
+    5,
+    6
+   ],
+   [
+    "replace",
+    13,
+    22,
+    6,
+    13,
+    [
+     " PyPI",
+     " npm",
+     " CI",
+     " Docs",
+     " License: Apache-2.0",
+     " Python versions",
+     " Node 20.19 or later"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    13,
+    14
+   ],
+   [
+    "replace",
+    23,
+    28,
+    14,
+    17,
+    [
+     " Quickstart &nbsp;·&nbsp;",
+     " Docs &nbsp;·&nbsp;",
+     " Recipes "
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    17,
+    18
+   ],
+   [
+    "replace",
+    29,
+    35,
+    18,
+    22,
+    [
+     " Live demo (sign in as <code>demo@example.com</code> / <code>karni-password</code>, the first page can take a minute to wake) &nbsp;·&nbsp;",
+     " Deploy to Render",
+     "",
+     " The shop demo: the shop recipe as one service, with a public demo login and a daily reset."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    46,
+    22,
+    33
+   ],
+   [
+    "replace",
+    46,
+    47,
+    33,
+    34,
+    [
+     "**How Karni solves it.** That code ships as versioned packages on one base. Apps and games are peers: a project is an app, a game, or both (apps and games). The app side is `karni` (Python), `@karni/ui` (React) and the `karni` command. The game side is `karni-game` (the server) and `@karni/game` (the game in the browser), on the same accounts, admin, roles and deploy. `karni upgrade` moves a project to each new release, so a fix reaches every project that depends on Karni."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    56,
+    34,
+    43
+   ],
+   [
+    "replace",
+    56,
+    57,
+    43,
+    44,
+    [
+     "3. **The agent writes `karni.yaml`** from the closest recipe, and asks you only the questions `karni plan --questions` lists."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    70,
+    44,
+    57
+   ],
+   [
+    "replace",
+    70,
+    85,
+    57,
+    58,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    87,
+    58,
+    60
+   ],
+   [
+    "replace",
+    87,
+    88,
+    60,
+    61,
+    [
+     "On a developer laptop, `karni new --recipe shop` builds the shop from scratch on SQLite in 53.8 seconds, its tests and `karni check` included and the frontend install left out (how fast is it). The flow works without an agent too: every step is a command you can run yourself. The recording below builds a project command by command, then shows its welcome page, its admin and its React screens."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    61,
+    62
+   ],
+   [
+    "replace",
+    89,
+    92,
+    62,
+    63,
+    [
+     " A terminal runs karni new, karni make model, migrate, seed and serve. Then the browser shows the welcome page, the admin listing the seeded events, and the React app"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    101,
+    63,
+    72
+   ],
+   [
+    "replace",
+    101,
+    103,
+    72,
+    73,
+    [
+     "|In the finished app|Plain Django + React|Karni|"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    73,
+    74
+   ],
+   [
+    "replace",
+    104,
+    114,
+    74,
+    83,
+    [
+     "|API operations (route and method)|22 to 25|71 to 135|",
+     "|Sign-in and account endpoints, outside the admin|1 to 2|16|",
+     "|Models in the admin|1 to 2|26 to 30|",
+     "|React screens|none|9 to 12|",
+     "|Tests the project ships with|none|7 to 15|",
+     "|OpenAPI schema served|no|yes|",
+     "|Typed API client in the frontend|no|yes|",
+     "|Production Docker stack|no|yes|",
+     "|Rules for the coding agent|no|yes|"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    121,
+    83,
+    90
+   ],
+   [
+    "replace",
+    121,
+    123,
+    90,
+    91,
+    [
+     "|Task|Plain Django + React|Karni 0.5.0 candidate|Karni after the agent-flow work|"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    91,
+    92
+   ],
+   [
+    "replace",
+    124,
+    128,
+    92,
+    96,
+    [
+     "|Booking with payments|$0.19, 61.76 s, 5 of 5 passed, 5 tool calls|$0.45, 208 s, 3 of 5 passed, 26 tool calls|$0.33, 187 s, 5 of 5 passed, 20 tool calls|",
+     "|A CRM with three roles and import|$0.21, 70.51 s, 5 of 5 passed, 6 tool calls|$0.56, 278 s, 5 of 5 passed, 31 tool calls|$0.40, 236 s, 5 of 5 passed, 22 tool calls|",
+     "|A shop with orders and refunds|$0.23, 72.21 s, 5 of 5 passed, 7 tool calls|$0.62, 238 s, 4 of 5 passed, 29 tool calls|$0.44, 255 s, 4 of 5 passed, 24 tool calls|",
+     "|All three tasks|$0.63, 204 s, 15 of 15 passed, 18 tool calls|$1.63, 724 s, 12 of 15 passed, 86 tool calls|$1.17, 678 s, 14 of 15 passed, 66 tool calls|"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    129,
+    96,
+    97
+   ],
+   [
+    "replace",
+    129,
+    131,
+    97,
+    98,
+    [
+     "Each cell: median cost in US dollars, median wall time, runs that passed every acceptance test, and median tool calls. In the last row the runs add up and the other figures are the sums of the task medians, as the benchmark report gives them."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    138,
+    98,
+    105
+   ],
+   [
+    "replace",
+    138,
+    139,
+    105,
+    106,
+    [
+     "The benchmark report has every figure with its range, the method, the limits, the commands to repeat it and the raw data."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    142,
+    106,
+    109
+   ],
+   [
+    "replace",
+    142,
+    147,
+    109,
+    110,
+    [
+     "Every feature, grouped by what you need. The features page lists all of them with their status."
+    ]
+   ],
+   [
+    "equal",
+    147,
+    150,
+    110,
+    113
+   ],
+   [
+    "replace",
+    150,
+    159,
+    113,
+    119,
+    [
+     "- `karni new`: a Django + React project, its settings in one call, Docker Compose and a Makefile",
+     "- Recipes: six ready apps, from a shop to a data portal",
+     "- `karni.yaml`: the app in one small file, with `karni plan` and `karni build`",
+     "- Generators: `karni make app`, `make model`, `make page`",
+     "- Demo data with `karni seed`, and real content with `karni load`",
+     "- A public website next to the app, from a designer's pages"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    162,
+    119,
+    122
+   ],
+   [
+    "replace",
+    162,
+    173,
+    122,
+    128,
+    [
+     "- `BaseModel`: UUID key, timestamps, soft delete, audit fields",
+     "- Typed fields the database enforces: money, percent, phone, country",
+     "- States, capacity and no-overlap rules in the database",
+     "- `BaseViewSet` with a required `access` rule, applied to the queryset",
+     "- Accounts: email sign-in, roles, per-user grants, two-factor",
+     "- Change history, events and scheduled tasks"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    176,
+    128,
+    131
+   ],
+   [
+    "replace",
+    176,
+    185,
+    131,
+    137,
+    [
+     "- Aggregations: counts and sums by category or date",
+     "- Search across models, with access applied per model",
+     "- Navigation from data, opened by role",
+     "- Tree models and taxonomies",
+     "- Import and export: CSV and XLSX, with a dry run",
+     "- Tooling for 100 models or more: context per area, cached checks"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    188,
+    137,
+    140
+   ],
+   [
+    "replace",
+    188,
+    189,
+    140,
+    141,
+    [
+     "- An admin for every model, with no `admin.py`"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    141,
+    142
+   ],
+   [
+    "replace",
+    190,
+    198,
+    142,
+    145,
+    [
+     "- Row scope and field visibility per role",
+     "- A permission matrix and the change history of each row",
+     "- Saved charts, defined and previewed in the admin"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    201,
+    145,
+    148
+   ],
+   [
+    "replace",
+    201,
+    203,
+    148,
+    150,
+    [
+     "- `ResourceTable`, `ResourceForm`, `ResourceDetail` from the OpenAPI schema",
+     "- Sign-in pages, the app shell and page blocks"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    204,
+    150,
+    151
+   ],
+   [
+    "replace",
+    204,
+    205,
+    151,
+    152,
+    [
+     "- Your design system's look with `karni ui detect`"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    208,
+    152,
+    155
+   ],
+   [
+    "replace",
+    208,
+    212,
+    155,
+    156,
+    [
+     "- Payments, approvals, impersonation, a public site, charts, PDF reports, extraction and protected files, each added with one command"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    215,
+    156,
+    159
+   ],
+   [
+    "replace",
+    215,
+    226,
+    159,
+    165,
+    [
+     "- AGENTS.md, one file for every coding agent, from one rule set",
+     "- `/new-app`: from one line to a running app",
+     "- `karni context`: the project inventory an agent reads first",
+     "- An MCP server with the same commands as tools",
+     "- `karni check` fails the build when code rebuilds what Karni ships",
+     "- Debugging: `karni why`, `explain`, `trace`, `queries`"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    229,
+    165,
+    168
+   ],
+   [
+    "replace",
+    229,
+    238,
+    168,
+    174,
+    [
+     "- `karni new --kind game`: a game first, a small game you can play at `/play/<slug>/`, its server, the admin and a package per game portal. `--kind app+game` puts the game on a page of an app",
+     "- Game starters: `karni new \"Sky Dash\" --kind game --genre runner` writes a complete one-tap runner (a seeded track, a daily run with its own board, a shop of trails and hats, an ad continue) with its tests, and `karni starters list --match` finds the starter for a request",
+     "- Apps and games: the kinds, what each one installs, and the base an app and a game share",
+     "- karni-game: guest players who keep their progress when they sign in, cloud saves, leaderboards, a soft-currency wallet, daily content and achievements, all decided on the server",
+     "- @karni/game: a canvas loop, input, audio, saves on the device, an offline queue, a simulation contract with replay, scenes, a UI kit, drawing, collision, assets and sound, adapters for Poki, CrazyGames, GameDistribution and Y8, and adapters for Phaser, PixiJS and React Three Fiber",
+     "- The game API: the HTTP contract, for a client or a realtime server of your own"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    241,
+    174,
+    177
+   ],
+   [
+    "replace",
+    241,
+    249,
+    177,
+    181,
+    [
+     "- A production Docker Compose stack: Caddy with automatic TLS, PostgreSQL, Redis, Celery and backups, booted and smoke-tested in CI",
+     "- Safe defaults: security headers, and `karni check --deploy` before each start",
+     "- Tests in one line: `assert_crud` and `assert_isolated`",
+     "- `karni upgrade`: codemods for each release, under a written stability promise"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    252,
+    181,
+    184
+   ],
+   [
+    "replace",
+    252,
+    253,
+    184,
+    185,
+    [
+     "A recipe is a ready `karni.yaml` plus the little domain code a spec cannot express. `karni new --recipe` builds it with its demo data and tests (recipes)."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    185,
+    186
+   ],
+   [
+    "replace",
+    254,
+    255,
+    186,
+    187,
+    [
+     "|Recipe|What it gives|One command|"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    256,
+    187,
+    188
+   ],
+   [
+    "replace",
+    256,
+    262,
+    188,
+    194,
+    [
+     "|`shop`|Products in categories, a cart, orders, checkout with online payments|`karni new \"Corner Shop\" --recipe shop`|",
+     "|`booking`|Resources with time slots that members book and pay for, never over capacity|`karni new \"Yoga Studio\" --recipe booking`|",
+     "|`crm`|Companies, contacts and deals in a pipeline, with two-factor sign-in|`karni new \"Sales Desk\" --recipe crm`|",
+     "|`lms`|Courses with lessons in order, enrolments and each student's progress|`karni new \"Course Hub\" --recipe lms`|",
+     "|`marketplace`|Sellers, listings, orders and the payout after the fee|`karni new \"Market Hall\" --recipe marketplace`|",
+     "|`data-portal`|Datasets and indicators by region and sector, with saved charts|`karni new \"Data Portal\" --recipe data-portal`|"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    263,
+    194,
+    195
+   ],
+   [
+    "replace",
+    263,
+    264,
+    195,
+    196,
+    [
+     "A module is a separate package for anything with its own service or a real memory cost (modules)."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    196,
+    197
+   ],
+   [
+    "replace",
+    265,
+    266,
+    197,
+    198,
+    [
+     "|Module|What it gives|One command|"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    198,
+    199
+   ],
+   [
+    "replace",
+    267,
+    277,
+    199,
+    209,
+    [
+     "|`karni-payments`|Hosted checkout, refunds and signature-verified webhooks for Stripe and Razorpay, with a test provider for CI|`pip install karni-payments && karni add payments`|",
+     "|`karni-approvals`|A second person approves high-value changes before they are written, with a queue and an audit trail|`pip install karni-approvals && karni add approvals`|",
+     "|`karni-impersonation`|Safe \"log in as user\" for support staff: a banner, a time limit, both identities in the audit trail|`pip install karni-impersonation && karni add impersonation`|",
+     "|`karni-site`|A public website whose every text, image and menu is editable in the admin, with forms and redirects|`pip install \"karni-site[images]\" && karni add site`|",
+     "|`karni-charts`|Charts defined and previewed in the admin, served under each resource's access|`pip install karni-charts && karni add charts`|",
+     "|`karni-reports`|A row printed to PDF from an HTML template in the background, served only to users who may see the row|`pip install karni-reports && karni add reports`|",
+     "|`karni-ai`|Rows for any resource read from text, a web page or a PDF by a language model, always through the import preview|`pip install \"karni-ai[<provider>]\" && karni add ai`|",
+     "|`karni-storage`|Files a row owns, in S3 or an S3-compatible service, served only to whoever may read the row|`pip install \"karni-storage[images]\" && karni add storage`|",
+     "|`karni-commerce`|One cart, checkout and order path for anything a project sells: products, seats, bookings|`pip install karni-commerce && karni add commerce`|",
+     "|`karni-game`|The server side of a game: guest players, cloud saves, leaderboards, a soft-currency wallet, daily content, achievements|`pip install karni-game && karni add game`|"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    301,
+    209,
+    233
+   ],
+   [
+    "replace",
+    301,
+    302,
+    233,
+    234,
+    [
+     "PostgreSQL is Karni's default database, and the quickstart guide runs it with Docker. CI runs that page verbatim on every push. `karni doctor` checks your Python, Node, npm and database."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    309,
+    234,
+    241
+   ],
+   [
+    "replace",
+    309,
+    318,
+    241,
+    242,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    326,
+    242,
+    250
+   ],
+   [
+    "replace",
+    326,
+    333,
+    250,
+    251,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    335,
+    251,
+    253
+   ],
+   [
+    "replace",
+    335,
+    336,
+    253,
+    254,
+    [
+     "From those two classes Karni derives the endpoints at `/api/venues/` with filters, search, pagination and `?expand=`, the OpenAPI schema and a typed client, the admin screen, the permission checks on every query, and a table, form and detail view in React. The reference app, EventHub, has payments, email and four roles in 617 lines of project code."
+    ]
+   ],
+   [
+    "equal",
+    336,
+    343,
+    254,
+    261
+   ],
+   [
+    "replace",
+    343,
+    344,
+    261,
+    262,
+    [
+     "A public name keeps working for at least one minor release, with a `KarniDeprecationWarning` that names the release that removes it. `karni upgrade --to <version>` applies the mechanical changes and lists, by file and line, what it could not change (stability promise)."
+    ]
+   ],
+   [
+    "equal",
+    344,
+    346,
+    262,
+    264
+   ],
+   [
+    "replace",
+    346,
+    347,
+    264,
+    265,
+    [
+     "Yes. Nothing in Karni calls a language model, and every generator is a command you run yourself (building without an agent)."
+    ]
+   ],
+   [
+    "equal",
+    347,
+    349,
+    265,
+    267
+   ],
+   [
+    "replace",
+    349,
+    350,
+    267,
+    268,
+    [
+     "A boilerplate is copied into your project once, and its code then becomes yours to maintain. Karni stays a dependency you upgrade (comparisons)."
+    ]
+   ],
+   [
+    "equal",
+    350,
+    357,
+    268,
+    275
+   ],
+   [
+    "replace",
+    357,
+    358,
+    275,
+    276,
+    [
+     "More answers are in the FAQ."
+    ]
+   ],
+   [
+    "equal",
+    358,
+    360,
+    276,
+    278
+   ],
+   [
+    "replace",
+    360,
+    363,
+    278,
+    279,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    363,
+    364,
+    279,
+    280
+   ],
+   [
+    "replace",
+    364,
+    366,
+    280,
+    281,
+    [
+     "Apache License 2.0. Built and maintained by Chandrabhan Shekhawat, Gigai Kripa Services (<https://gigaikripaservices.com/>)."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "fa73731615c3+2": {
+  "fn": "Egecan33/mtg-commander-deck-builder",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    6,
+    0,
+    4
+   ],
+   [
+    "replace",
+    6,
+    13,
+    4,
+    11,
+    [
+     "Download",
+     "Downloads",
+     "License: MIT",
+     "TypeScript",
+     "Next.js",
+     "Tests",
+     "Runs locally"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    11,
+    12
+   ],
+   [
+    "replace",
+    14,
+    17,
+    12,
+    13,
+    [
+     "The deck builder: card browser, deck and rating side by side"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    36,
+    13,
+    32
+   ],
+   [
+    "replace",
+    36,
+    37,
+    32,
+    33,
+    [
+     "- **MTG Arena sync.** If Arena is installed on the computer (macOS or Windows; standalone, Steam or Epic), the app reads Arena's own local files on start and on \"Sync Arena\": `Player.log` for your decks and draft or sealed pools, and Arena's card database to turn its card numbers into names. Nothing leaves the computer and your Wizards account is never used. See What the Arena sync can see."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    41,
+    33,
+    37
+   ],
+   [
+    "replace",
+    41,
+    51,
+    37,
+    42,
+    [
+     " Swap proposals for an imported deck Improve: swap proposals with reasons and rating change ",
+     " Card detail with score breakdown Every score explains itself ",
+     "",
+     " Bracket panel Bracket floor, violations and combos ",
+     " Commander picker Pick from every legal commander "
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    42,
+    45
+   ],
+   [
+    "replace",
+    54,
+    55,
+    45,
+    46,
+    [
+     "No Node.js or anything else to install. Get the zip for your computer from the latest release:"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    46,
+    47
+   ],
+   [
+    "replace",
+    56,
+    57,
+    47,
+    48,
+    [
+     "|Computer|File|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    48,
+    49
+   ],
+   [
+    "replace",
+    58,
+    61,
+    49,
+    52,
+    [
+     "|Mac with Apple Silicon (M1 and later)|`CommanderForge-<version>-macos-arm64.zip`|",
+     "|Mac with Intel|`CommanderForge-<version>-macos-x64.zip`|",
+     "|Windows 10/11 (x64)|`CommanderForge-<version>-windows-x64.zip`|"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    71,
+    52,
+    62
+   ],
+   [
+    "replace",
+    71,
+    72,
+    62,
+    63,
+    [
+     "Requires Node 22+ and pnpm. About 6 GB of free disk space."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    86,
+    63,
+    77
+   ],
+   [
+    "replace",
+    86,
+    87,
+    77,
+    78,
+    [
+     "|Step|What it fetches|Size|Time|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    78,
+    79
+   ],
+   [
+    "replace",
+    88,
+    94,
+    79,
+    85,
+    [
+     "|`cards`|Scryfall oracle cards (one row per card)|25 MB|seconds|",
+     "|`printings`|Scryfall default cards: set code and collector number of every paper printing|81 MB|under a minute|",
+     "|`tags`|Scryfall Tagger function tags|6 MB|seconds|",
+     "|`combos`|Commander Spellbook combo export|32 MB|~3 min|",
+     "|`features`|computed locally: roles, themes, mana info|—|seconds|",
+     "|`images`|two WebP sizes per card face|~4.7 GB|~40 min|"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    103,
+    85,
+    94
+   ],
+   [
+    "replace",
+    103,
+    104,
+    94,
+    95,
+    [
+     "|Part|Weight|Measures|"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    95,
+    96
+   ],
+   [
+    "replace",
+    105,
+    111,
+    96,
+    102,
+    [
+     "|Synergy|35|Does it feed or pay off what the commander cares about?|",
+     "|Co-play data|15|How often real decks with this commander run it (optional, see below)|",
+     "|Quality|20|Format-wide strength and efficiency for its job|",
+     "|Role need|15|Is the deck short on what this card does?|",
+     "|Castability and curve|10|Can your mana base cast it, and does it fit the curve?|",
+     "|Bracket fit|5|Is its power level right for the bracket you chose?|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    102,
+    105
+   ],
+   [
+    "replace",
+    114,
+    115,
+    105,
+    106,
+    [
+     "The design document, with the reasoning behind every number, is in `docs/superpowers/specs`. The fact-checked research on rules, brackets and data sources is in `docs/research`."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    131,
+    106,
+    122
+   ],
+   [
+    "replace",
+    131,
+    132,
+    122,
+    123,
+    [
+     "The engine in `src/engine` is pure TypeScript with no IO and is where most of the logic and tests live. `AGENTS.md` describes the layout, the invariants and how to work on it — for coding agents and for people."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    146,
+    123,
+    137
+   ],
+   [
+    "replace",
+    146,
+    149,
+    137,
+    140,
+    [
+     "- **Scryfall** — card data, images and Tagger tags. Not affiliated with or endorsed by Scryfall.",
+     "- **Commander Spellbook** — combo data.",
+     "- **EDHREC** — optional per-commander statistics, opt-in."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    154,
+    140,
+    145
+   ],
+   [
+    "replace",
+    154,
+    157,
+    145,
+    146,
+    [
+     "MIT for the source code. Card data, images and third-party statistics are not covered by it."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    169,
+    146,
+    158
+   ],
+   [
+    "replace",
+    169,
+    170,
+    158,
+    159,
+    [
+     "The \"Read my whole Arena collection\" button on the Collection page (MTG Arena selected) reads every owned card out of the running game and replaces the MTG Arena collection with it. It uses mtga-reader (GPL-3.0), which is not part of Commander Forge; set it up once:"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    178,
+    159,
+    167
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

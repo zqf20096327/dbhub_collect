@@ -3498,5 +3498,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ed692335c6ca": {
+  "identity": {
+   "one_liner": "PostgreSQL 的 BM25 全文检索扩展，以 C 实现并采用 LSM 式段索引",
+   "review": "pg_textsearch 是 Timescale 发布的 PostgreSQL 扩展，为文本列提供 BM25 相关度排序搜索，通过 CREATE INDEX ... USING bm25 建索引，用 ORDER BY content <@> '查询词' 返回排序结果，支持 Postgres 文本搜索配置、表达式/部分/分区索引，top-k 查询用 Block-Max WAND 剪枝。仅支持 PostgreSQL 17-19，需加入 shared_preload_libraries 并重启。适合在 Postgres 内实现关键词排序搜索的开发者。",
+   "highlights": [
+    "提供 BM25 排序索引（可配置 k1、b）与 <@> 评分算子，top-k 查询使用 Block-Max WAND",
+    "支持 PostgreSQL 文本搜索配置、表达式索引、部分索引、分区表索引及并行索引构建",
+    "提供段压缩、内联/后台/手动压缩策略，及 tsquery 布尔过滤（AND/OR/NOT/短语/前缀）"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内对文档表做 BM25 相关度排序的关键词搜索",
+    "通过 zhparser 等中文分词配置实现中文全文检索",
+    "JSONB 字段提取、多语言分表等需要表达式或部分索引的搜索场景"
+   ]
+  },
+  "sha": "ed692335c6ca",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "50769bffd166": {
+  "identity": {
+   "one_liner": "自托管的 Claude Code、Codex、Gemini、Kimi Code 网页控制台，运行在自有服务器上",
+   "review": "Depo 是一个自托管的 Web 控制台，用于在自有服务器（Raspberry Pi、家庭服务器、VPS 或 Linux 笔记本）上运行 Claude Code、Codex、Gemini CLI 和 Kimi Code 四种命令行智能体。它通过官方 CLI 账号登录（不需要 API 密钥），提供项目文件夹管理、聊天界面、用量限额显示、多智能体协作模式和语音助手。基于 Node.js 22.5+，零 npm 运行时依赖，仅使用 Node 内置模块（含 node:sqlite），安装后以 systemd 服务运行在 4620 端口。",
+   "highlights": [
+    "在一个界面中接入 Claude Code、Codex、Gemini CLI 和 Kimi Code 四种智能体，使用用户自己的 CLI 账号登录，不使用 API 密钥",
+    "零 npm 运行时依赖，仅使用 Node.js 内置模块（包括 node:sqlite），支持 x86_64、ARM64、ARMv7 架构",
+    "提供多智能体团队模式、项目共享记忆（.depo/memory）、智能体间任务交接、后台任务面板、重启后自动续跑、Web push 通知、Telegram 机器人、PWA 移动端支持和语音助手"
+   ],
+   "use_cases": [
+    "在 Raspberry Pi 或家庭服务器上集中管理多个 CLI 编码智能体，并通过手机 PWA 远程访问",
+    "需要多个智能体按角色分工协作完成同一任务（计划、前端、测试等步骤）的团队模式场景",
+    "需要查看智能体会话/周限额用量、上下文百分比和单步成本的账号管理场景"
+   ]
+  },
+  "sha": "50769bffd166",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "551e68644565": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 SQLite 的即零售前置仓原型，实现库存集中与结账预留",
+   "review": "该项目是 CSL559 课程作业，实现即零售应用中前置仓（dark store）微仓储模块的原型，为顾客、拣货员和门店运营提供界面与 API。采用模块化单体架构，由 Inventory Service 集中处理库存变更，通过 10 分钟购物车整体预留机制控制超卖。本地以 SQLite 运行，也可经 Docker Compose 切换 PostgreSQL、Prometheus 与 Grafana；测试覆盖端到端流程与权限规则。",
+   "highlights": [
+    "提供购物车整体预留（hold）机制，预留期 10 分钟，付款生成拣货任务，取消或超时归还库存",
+    "支持 SQLite 默认运行，可通过 DARKSTORE_DB 环境变量切换 PostgreSQL，并用 docker compose --profile monitoring 启动 Prometheus 与 Grafana",
+    "包含条码逐件扫描校验、按角色限制门店的令牌权限、审计日志，以及 pytest 端到端测试与负载测试脚本"
+   ],
+   "use_cases": [
+    "在校园网内访问课程托管的演示站点，体验顾客下单、拣货、复核打包、补货与运营看板的完整流程",
+    "在课程教学中展示模块边界与高阶设计（HLD）服务的对应关系，演示并发抢购最后一件商品等场景",
+    "用 load_test.py 与 compare_picking.py 等脚本对运行中的服务做负载测试和履约流程对比实验"
+   ]
+  },
+  "sha": "551e68644565",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

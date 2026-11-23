@@ -28660,5 +28660,595 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "132e073e0154+2": {
+  "fn": "level09/enferno",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "Checks",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "**Docs** · **Tutorials** · **Changelog** · To hear about new versions, choose Watch, then Custom, then Releases."
+    ]
+   ],
+   [
+    "equal",
+    6,
+    47,
+    6,
+    47
+   ],
+   [
+    "replace",
+    47,
+    48,
+    47,
+    48,
+    [
+     "||What it gives the agent|When|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    48,
+    49
+   ],
+   [
+    "replace",
+    49,
+    53,
+    49,
+    53,
+    [
+     "|`AGENTS.md`|Stack, layout, commands, routes and hard rules, in about 100 lines|Every session, read automatically|",
+     "|`enferno-dev` skill|Full patterns for models, APIs, Vue pages, dialogs, migrations and upgrades|Loaded only when a task needs it|",
+     "|`flask mcp`|Live routes, schema with row counts, migration revision and audit log, read-only|When the agent needs the real state, not the docs|",
+     "|`/llms.txt`|A short description of your app for LLM tools|Edit it to describe what you build|"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    82,
+    53,
+    82
+   ],
+   [
+    "replace",
+    82,
+    83,
+    82,
+    83,
+    [
+     "Requires Python 3.11+ and uv."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    95,
+    83,
+    95
+   ],
+   [
+    "replace",
+    95,
+    96,
+    95,
+    96,
+    [
+     "Any Ubuntu VPS, with Caddy and automatic SSL, via Ignite:"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    109,
+    96,
+    109
+   ],
+   [
+    "replace",
+    109,
+    114,
+    109,
+    110,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    116,
+    110,
+    112
+   ],
+   [
+    "replace",
+    116,
+    117,
+    112,
+    113,
+    [
+     "Full guides: docs.enferno.io"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    120,
+    113,
+    116
+   ],
+   [
+    "replace",
+    120,
+    122,
+    116,
+    118,
+    [
+     "- **ReadyKit** adds Stripe, workspaces and teams on top of Enferno.",
+     "- **STK** is the same philosophy on Quart (async Flask) with native WebSockets."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    124,
+    118,
+    120
+   ],
+   [
+    "delete",
+    124,
+    125,
+    120,
+    120
+   ],
+   [
+    "equal",
+    125,
+    126,
+    120,
+    121
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "2fa18952653c+2": {
+  "fn": "Dicklesworthstone/frankensqlite",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "FrankenSQLite — a Frankenstein monster building a database engine at his workbench"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " FrankenSQLite "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     " An independent ground-up Rust reimplementation of SQLite with page-level MVCC concurrent-writer support. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    5,
+    6
+   ],
+   [
+    "replace",
+    10,
+    17,
+    6,
+    9,
+    [
+     " License: MIT+Rider",
+     " Rust",
+     " unsafe only in VFS + C ABI"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    63,
+    9,
+    55
+   ],
+   [
+    "replace",
+    63,
+    64,
+    55,
+    56,
+    [
+     "|Feature|C SQLite|FrankenSQLite|"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    56,
+    57
+   ],
+   [
+    "replace",
+    65,
+    79,
+    57,
+    69,
+    [
+     "|Concurrent writers|1 (file-level lock)|Many by design (page-level MVCC with SSI); full concurrent-writer certification remains gated on the correctness gates below|",
+     "|Isolation level|SERIALIZABLE (by serializing)|SERIALIZABLE (SSI for concurrent mode)|",
+     "|Concurrent readers|Many (WAL; 5 read-mark slots by default)|Many (Compat: same 5 read-mark slots; Native: bounded by txn-slot capacity, no WAL-index cap)|",
+     "|Memory safety|Manual (C)|Core engine is safe Rust; `unsafe` is limited to `fsqlite-vfs` (mmap/shm) and the optional `fsqlite-c-api` shim (FFI)|",
+     "|Data races|Possible (careful C)|Prevented inside the Rust engine by ownership and type-system checks|",
+     "|File format|SQLite 3.x|SQLite 3.x layout; UTF-8 and UTF-16le/be text encodings are admitted for reads and writes, with parity verification deepest on the UTF-8 surface|",
+     "|Self-healing storage|No|Opt-in (`PRAGMA raptorq_repair_symbols = N`, default 0): native file-backed connections with a blocking pool generate WAL repair symbols asynchronously, and a writable open of an opted-in database repairs damaged WAL frames from them; the main database file is not covered|",
+     "|Page-level encryption|No (commercial SEE extension)|Not currently available: the XChaCha20-Poly1305 DEK/KEK implementation exists in `fsqlite-pager`, but no `PRAGMA key`/`rekey` dispatch is wired into `Connection`|",
+     "|SQL dialect|Full|Large and growing subset; parser coverage exceeds full execution parity today|",
+     "|Extensions|FTS3/4/5, R-tree, JSON1, etc.|FTS5, JSON1, R-tree/geopoly, ICU, and misc (`generate_series`) wired in live engine; session is a library facade; FTS3/4 are helper-level only|",
+     "|Cross-process MVCC|No|Partial (shared-memory coordination, bounded by the measured harness scale)|",
+     "|Embedded, zero-config|Yes|Yes|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    101,
+    69,
+    91
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "7d6dc914b07b+2": {
+  "fn": "swendlcode/keystone-desktop",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     "License: MIT",
+     "Tauri",
+     "Rust",
+     "React",
+     "Offline"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    17,
+    7,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     " compatible with it."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     " waveform."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     " (`8A/8B`) rather than committing to a letter it cannot stand behind."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     " with a preview before and an undo after."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    24,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     " Keystone refuses to write while the app is open."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    34,
+    26,
+    34
+   ],
+   [
+    "replace",
+    34,
+    36,
+    34,
+    36,
+    [
+     " files themselves across four container formats, so it comes when it can be tested",
+     " properly rather than when it compiles."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    38,
+    36,
+    38
+   ],
+   [
+    "replace",
+    38,
+    46,
+    38,
+    46,
+    [
+     " does not claim to beat Mixed In Key. Any figure would have to be measured on a public",
+     " annotated set of real audio with the scoring method named, and that has not been done",
+     " yet. When it is, the number and the method get published together or not at all.",
+     " There is one measurement in the repository — docs/ACCURACY.md,",
+     " which reports how often Keystone's key agrees with Mixed In Key's own labels on one",
+     " private 1,063-track library — and it is agreement between two programs on one DJ's",
+     " collection, where neither is known to be right, so nothing in it is an accuracy figure",
+     " or comparable with any published one."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    46,
+    47
+   ],
+   [
+    "replace",
+    47,
+    51,
+    47,
+    51,
+    [
+     " behind the key badge were fitted on synthetic audio and read far too low on real",
+     " records, so on a real library most tracks currently show the relative pair rather than",
+     " a single key. The answer underneath is usually sound; the number grading it is not.",
+     " This is a known defect, not the honest-ambiguity feature working as intended."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    53,
+    51,
+    53
+   ],
+   [
+    "replace",
+    53,
+    55,
+    53,
+    55,
+    [
+     " classical, swung and half-time tracks get a low-confidence result or an honest \"could",
+     " not analyse\" — never a confident wrong answer."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    55,
+    56
+   ],
+   [
+    "replace",
+    56,
+    57,
+    56,
+    57,
+    [
+     " bundled, it does not ship."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    62,
+    57,
+    62
+   ],
+   [
+    "replace",
+    62,
+    64,
+    62,
+    64,
+    [
+     "1. Download the `.dmg` from keystone.swendl.com or the",
+     " releases page."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    84,
+    64,
+    84
+   ],
+   [
+    "replace",
+    84,
+    85,
+    84,
+    85,
+    [
+     " restart."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    89,
+    85,
+    89
+   ],
+   [
+    "replace",
+    89,
+    90,
+    89,
+    90,
+    [
+     "You need Node 20+, Rust stable via rustup, and on macOS the Xcode"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    113,
+    90,
+    113
+   ],
+   [
+    "replace",
+    113,
+    118,
+    113,
+    114,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

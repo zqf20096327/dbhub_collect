@@ -2972,5 +2972,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f8b901014f79": {
+  "identity": {
+   "one_liner": "本地优先的 AI Agent 可观测与评测工具，记录会话并转为可回放 eval",
+   "review": "coding.sh 是一个运行在本地的 AI Agent 可观测与评测工具，记录 Claude Code、Codex 等 agent 的每次提示、模型调用、工具调用、文件改动与开销，存入本地 SQLite 索引，通过 CLI 或本地 viewer 查看，并支持通过 MCP 供 agent 读取。安装方式为 `npx coding.sh` 或 npm 全局安装，需 Node 22.16 以上。它通过 hooks、transcript、包装命令或 OpenTelemetry 采集数据；无配置远程 sink 时数据不出本机，ingest 时会先脱敏 secret。适合使用多种编码 agent 的开发者。",
+   "highlights": [
+    "通过 hooks、transcript、`coding.sh run` 包装命令和 OpenTelemetry collector 采集 agent 会话，支持 Claude Code、Codex CLI 等十余种 agent 及自定义 agent",
+    "将会话存入本地 SQLite 索引，提供 viewer、CLI 查询、全文搜索和 MCP 接口；`coding.sh eval new` 可把失败会话转为可回放 eval，用代码评分器或 LLM 评判者做实验与配对统计对比",
+    "MIT 许可、无运行时依赖，无 sink 配置时会话数据不出本机，ingest 前对 secret 脱敏，唯一默认网络请求是每日更新检查（可用环境变量关闭）"
+   ],
+   "use_cases": [
+    "查看各编码 agent 会话的模型、时长、token、延迟与估算开销，并进行全文搜索",
+    "把失败会话转化为可回放 eval，对 prompt、harness 文件和模型做 A/B 实验与基准测试",
+    "用 `coding.sh serve` 部署 ingest、viewer 和 API 一体的服务端，API 应用通过 TypeScript/Python SDK 或 OpenTelemetry 上报 trace"
+   ]
+  },
+  "sha": "f8b901014f79",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

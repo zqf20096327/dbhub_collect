@@ -33533,5 +33533,245 @@
    ]
   ],
   "at": "2026-11-20"
+ },
+ "1e12e2a742b0+2": {
+  "fn": "ranajahanzaib/customer-data-export",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Customer Data Export dashboard with completed, verified exports"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    22,
+    5,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "Dashboard before an administrator loads jobs"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    26,
+    23,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "Successful end-to-end CLI export"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    30,
+    27,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "CLI verifies a completed export"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    34,
+    31,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "CLI rejects a modified export archive"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    49,
+    35,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "The local stack runs PostgreSQL, MinIO, the API, and a worker. The dashboard is at http://localhost:8080/dashboard. Seed data contains three fictional tenants and sample attachment objects. The fixed credentials in `.env.example` and Compose are for local development only."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    57,
+    50,
+    57
+   ],
+   [
+    "replace",
+    57,
+    65,
+    57,
+    58,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    73,
+    58,
+    66
+   ],
+   [
+    "replace",
+    73,
+    81,
+    66,
+    74,
+    [
+     "|Method|Route|Purpose|",
+     "|------|-------------------------------|----------------------------------------------|",
+     "|`POST`|`/api/v1/exports`|Queue an export; accepts `Idempotency-Key`|",
+     "|`GET`|`/api/v1/exports`|List the current tenant's jobs with pagination|",
+     "|`GET`|`/api/v1/exports/{id}`|Inspect job status and verification details|",
+     "|`POST`|`/api/v1/exports/{id}/cancel`|Cancel a queued or active job|",
+     "|`GET`|`/api/v1/exports/{id}/manifest`|Retrieve the verified manifest|",
+     "|`GET`|`/api/v1/exports/{id}/download`|Receive a short-lived presigned URL|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    84,
+    74,
+    77
+   ],
+   [
+    "replace",
+    84,
+    85,
+    77,
+    78,
+    [
+     "The ZIP contains `data/<dataset>.jsonl` files, attachment binaries under `attachments/<attachment-id>/`, and `manifest.json`. The manifest records the format version, tenant ID, per-dataset counts, and SHA-256 hashes for data files. UUID and exact numeric values are serialized as strings. Run `exportctl verify ARCHIVE.zip` to check archive safety, file hashes, JSONL validity, tenant IDs, record counts, and supported relational references. Verification does not restore or import data. See the export format specification."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    99,
+    78,
+    92
+   ],
+   [
+    "replace",
+    99,
+    100,
+    92,
+    93,
+    [
+     "The API authenticates requests and creates durable jobs in PostgreSQL. Workers claim jobs with leases, collect tenant-filtered records from a repeatable-read snapshot, verify attachment metadata, construct and validate the archive, then upload it to the private object bucket. The API checks tenant authorization again before returning a manifest or download URL. See architecture for the workflow diagram."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    93,
+    94
+   ],
+   [
+    "replace",
+    101,
+    106,
+    94,
+    99,
+    [
+     "- Security model and limitations",
+     "- Export format",
+     "- Failure recovery",
+     "- Adding a dataset",
+     "- Contributing"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    116,
+    99,
+    109
+   ],
+   [
+    "replace",
+    116,
+    117,
+    109,
+    110,
+    [
+     "This project is intended for local evaluation and development. Production deployment requires the additional controls and verification described in the security documentation."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    119,
+    110,
+    112
+   ],
+   [
+    "replace",
+    119,
+    121,
+    112,
+    113,
+    [
+     "See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

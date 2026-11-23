@@ -3749,5 +3749,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c23d8ac8287f": {
+  "identity": {
+   "one_liner": "自托管空间数据目录平台，支持地图、故事与仪表盘制作，通过 OGC API 与 STAC 对外服务。",
+   "review": "GeoLens 是一个自托管的网络 GIS 平台，用于把分散在文件、数据库、服务和 STAC 目录中的空间数据汇总为可检索目录，并记录每个数据集的来源、刷新时间与上游模式变化。团队可在浏览器中构建地图、故事和仪表盘并分组共享；QGIS、脚本和 AI 代理可通过 OGC API、STAC、CLI、SDK 和 MCP 服务器读取同一数据。部署依赖 Docker Compose（约 8 GB 内存），不发送遥测，采用 Apache-2.0 许可证。",
+   "highlights": [
+    "支持上传 Shapefile、GeoPackage、GeoJSON、GeoParquet、GeoTIFF 等格式，GeoTIFF 自动转换为 COG，并托管 3D Tiles 和 COPC 点云",
+    "提供 OGC API Features（CQL2 过滤）、OGC API Records、STAC API 1.0、DCAT 系列元数据端点，每层数据提供瓦片 URL，支持导出多种格式",
+    "包含地图构建器（多种图层类型与缓冲、裁剪、空间连接等空间操作）、故事地图、仪表盘，以及带来源追踪、版本恢复和刷新调度功能的目录管理"
+   ],
+   "use_cases": [
+    "将分散的文件共享、数据库和网络服务中的空间数据整合为统一可检索目录",
+    "团队内或公开发布地图、故事和仪表盘，并嵌入外部站点",
+    "供 QGIS、GDAL、脚本和 AI 代理通过标准 OGC/STAC 接口访问同一数据目录"
+   ]
+  },
+  "sha": "c23d8ac8287f",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9935e8ba6154": {
+  "identity": {
+   "one_liner": "Lurp 是用 Roslyn 将 .NET 解决方案索引进 SQLite 的代码语义地图，供 AI 代理查询",
+   "review": "Lurp 是一个 .NET 全局工具，通过 Roslyn 将 C# 解决方案的符号、类型化关系、源码位置与证据等级编译进一个 SQLite 数据库，供 AI 代理以 CLI 或 MCP 方式查询，避免每轮重新解析整个解决方案。支持上下文胶囊、影响可达性、语义 diff、全文搜索等模式。仅支持 Windows 和 Linux，运行需 .NET 10 运行时，索引还需可构建目标解决方案的 .NET SDK，且快照保留最近 3 个。",
+   "highlights": [
+    "通过 Roslyn 将解决方案符号、类型化关系、源码区间与证据等级（compiler_proved 到 runtime_unknown）存入单个 SQLite 数据库",
+    "提供 context、impact、diff、search、grep、dead-candidates 等十余种 CLI 模式，并可按 token 预算生成带来源标注的上下文胶囊",
+    "通过框架适配器将 DI、路由和 EF Core 关系以带证据等级的类型化事实建模"
+   ],
+   "use_cases": [
+    "为 AI 代理/代码助手提供持久化的 C# 代码库语义索引与证据化上下文检索",
+    "变更前分析符号影响范围（上下游依赖、witness 路径）",
+    "对比两次索引快照间的语义差异，或查找死代码候选"
+   ]
+  },
+  "sha": "9935e8ba6154",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f993a3cd4a2e": {
+  "identity": {
+   "one_liner": "基于 Gemini 2.0 Flash 的 AI 模拟面试平台，支持多智能体公司调研与多轮面试",
+   "review": "InterviewAI 是一个基于 Gemini 2.0 Flash、FastAPI 与 React 构建的模拟面试平台，面向求职者。它读取用户上传的简历或职位描述（JD），生成不同人设（Adinath、Veda）的 AI 面试官对话，并结合本地公司档案库（含 383 家公司数据）与 LangGraph 多智能体实时检索来生成面试内容。后端使用 PostgreSQL（Neon Cloud）与 SQLAlchemy，前端集成 Web Speech API 与摄像头/麦克风控制，提供 STAR 方法分析与表现评估报告。项目处于个人开发阶段，部分功能（多轮面试、高级分析、支付）仍在路线图中未实现。",
+   "highlights": [
+    "集成 Gemini 2.0 Flash 与经 LoRA 微调的 Llama-3-8B，提供多人设面试官、分级难度与面板面试模式",
+    "包含三层公司信息机制：本地档案库、LangGraph 多智能体实时检索（Router-Researcher-Auditor 工作流）、未知公司的 AI 兜底生成",
+    "已实现 Google OAuth 登录、JWT 会话管理、PDF 简历解析（PyPDF）与 Web Speech API 语音交互"
+   ],
+   "use_cases": [
+    "求职者针对特定公司进行基于简历或 JD 的模拟面试练习",
+    "需要按不同职业领域（技术、金融、医疗等）生成对应面试轮次的场景",
+    "面试后获取 STAR 方法分析与累积表现报告，追踪练习记录"
+   ]
+  },
+  "sha": "f993a3cd4a2e",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

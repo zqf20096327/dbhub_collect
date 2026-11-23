@@ -3313,5 +3313,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1704059a162f": {
+  "identity": {
+   "one_liner": "为 AI agent 提供可分支、diff、合并的 MongoDB 沙箱数据库工具",
+   "review": "Argon 是一个用 Go 编写的 CLI/服务工具，为每次 agent 运行从源数据分支出一个真实的 MongoDB 沙箱（副本集或 Atlas 来源，含免费 M0），agent 用任意驱动写入，改动以 diff 形式呈现，可审阅、合并回源或丢弃。底层以类 Git 的分支、pin 与时间回退机制实现，引擎需自建副本集运行，不支持分片集群。",
+   "highlights": [
+    "沙箱为真实 MongoDB 数据库，支持 pymongo、mongoose、mongosh、索引、聚合与事务",
+    "提供分支、diff、合并（数据 PR）、撤销、pin 与按时间回退（restore）命令",
+    "通过 MCP server 提供 14 个工具，支持 --read-only 与禁用单个合并工具，另发布 Python SDK 与 LangGraph 适配器"
+   ],
+   "use_cases": [
+    "为每次 agent 运行提供隔离的真实数据库副本，改动人工审阅后再合并",
+    "需要分支、diff、撤销与时间回退的 MongoDB 数据开发与测试流程",
+    "通过 MCP 或 SDK 将数据库沙箱接入 Claude、OpenAI Agents SDK、LangGraph 等 agent 工作流"
+   ]
+  },
+  "sha": "1704059a162f",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee771d41e290": {
+  "identity": {
+   "one_liner": "chDB 的 Go 绑定与 CLI，基于 ClickHouse 的进程内 SQL OLAP 引擎",
+   "review": "chdb-go 提供 chDB（基于 ClickHouse 的进程内 OLAP 引擎）的 Go 库、database/sql 驱动和命令行客户端。引擎可运行时加载本机 libchdb，也可通过 blank import 将引擎嵌入二进制，首次运行时解压到缓存目录。单进程绑定一个数据路径，多个连接可并发执行查询；可选 durable 模块将状态以 checkpoint 加 WAL 形式存入 S3 等对象存储。",
+   "highlights": [
+    "提供 Go 库、database/sql 驱动和 CLI 三种使用方式，支持嵌入引擎构建自包含二进制",
+    "database/sql 驱动按连接池开启独立原生连接，可用 SetMaxOpenConns 控制并发，支持 {name:Type} 占位符命名参数绑定",
+    "durable 模块以 checkpoint 加 WAL 段及 compare-and-set head.json 将数据库状态存入 S3/R2/MinIO 或目录，可被 Python 与 Node 绑定读取"
+   ],
+   "use_cases": [
+    "在 Go 程序中执行 ClickHouse 兼容 SQL，包括无安装步骤的 scratch 容器或自包含二进制场景",
+    "通过 CLI 进行交互式 SQL 查询，或以 --path 指定目录做持久化会话",
+    "将本地 MergeTree 工作副本的状态定期持久化到自有的对象存储"
+   ]
+  },
+  "sha": "ee771d41e290",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

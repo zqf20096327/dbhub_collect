@@ -2997,5 +2997,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c9f929bec768": {
+  "identity": {
+   "one_liner": "Python 编写的股票订单撮合引擎，以价格-时间优先规则模拟美股交易所机制。",
+   "review": "该项目用 Python 实现撮合引擎，按价格-时间优先规则处理限价与市价订单，并通过 Kafka 日志重放重建订单簿。系统由网关、撮合引擎、行情服务、数据库和 Streamlit 界面五个服务组成，面向需要学习或研究撮合与行情分发机制的开发者。UDP 多播订阅端为独立参考客户端，未包含在 Docker Compose 部署中。",
+   "highlights": [
+    "支持限价与市价订单的价格-时间优先撮合，启动时通过 Kafka orders 日志确定性重放重建订单簿",
+    "通过 WebSocket 推送增量行情，提供原子快照加序列号引导机制，队列溢出的客户端以关闭码 1008 断开以便重新同步",
+    "提供 FastAPI REST 接口、Streamlit 交互面板、Decimal 精度 VWAP 计算，以及包含 SIGKILL 崩溃恢复验证的 Docker Compose 部署与 CI 冒烟测试"
+   ],
+   "use_cases": [
+    "本地运行微服务栈以学习撮合引擎与订单簿的实现机制",
+    "通过市场模拟器自动生成订单并提交限价/市价单以观察撮合与成交记录",
+    "在回环网络环境下对 WebSocket 与 UDP 多播行情分发进行基准测试"
+   ]
+  },
+  "sha": "c9f929bec768",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0525d563e972": {
+  "identity": {
+   "one_liner": "以 SKILL.md 格式组织的可移植 AI 技能库，含元数据目录与本地运行时",
+   "review": "该仓库是 ellmos 生态的可复用技能目录，包含 142 个公开技能（380 个被跟踪），涵盖流程技能、开发工作流、研究辅助和基础设施手册，采用带 YAML frontmatter 的 Anthropic 兼容 SKILL.md 格式。元数据内嵌于每个文件，无需中央注册表即可检查来源、兼容性与依赖。提供 Python >=3.10 的测试套件（455 项通过），MIT 许可，通过 registry/components.json 提供机器可读目录和 llms.txt 上下文。",
+   "highlights": [
+    "提供 142 个公开技能的标准 SKILL.md 文件，YAML frontmatter 内嵌元数据，可被 Claude Code、Codex、AGY/Gemini 及自定义 agent 运行时直接读取",
+    "包含零外发（Zero-Egress）约束、privacy_gate.py 静态隐私边界检查、RunAsInvoker 用户模式执行与 SBOM 透明度说明",
+    "提供机器可读目录 registry/components.json、llms.txt、六语言文档及 S/L/U 三层测试框架（455 项 Pytest 测试）"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、BACH 等多智能体运行时提供标准化的技能/工作流文件",
+    "在离线或受监管环境中部署本地优先的 agent 工作流，依赖隐私边界检查与零外发约束",
+    "技能作者依据 docs/CONVENTIONS.md 规范与测试框架编写、测试并发布自定义技能"
+   ]
+  },
+  "sha": "0525d563e972",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

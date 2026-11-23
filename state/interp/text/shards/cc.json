@@ -3109,5 +3109,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "793130eae785": {
+  "identity": {
+   "one_liner": "自托管网关，将保存的 SQL 查询转换为带类型参数的版本化 REST 端点与 MCP 工具。",
+   "review": "QueryAPIGate 是部署在数据库与应用/AI 代理之间的自托管 Python 网关：保存一条 SQL 即获得带类型、防注入参数的版本化 REST 端点，同时也是自描述的 MCP 工具。支持 PostgreSQL、MySQL、SQLite、DuckDB、ClickHouse、MongoDB、H2/JDBC 及文件数据源，输出 JSON、CSV 等 8 种格式。内置管理控制台、作用域 API 密钥、列掩码、审计日志、Prometheus 指标与 OpenAPI 文档，可通过 pip 或 Docker 部署。",
+   "highlights": [
+    "保存的查询同时作为版本化 REST 端点（GET /q/<name>）和 MCP 工具，支持 JSON/NDJSON/XML/YAML/CSV/TSV/Excel/Parquet 八种输出格式并从数据库游标流式返回",
+    "统一治理核心包含作用域 API 密钥、角色与集合、IP 白名单、速率限制、配额、列掩码及带签名哈希链的审计日志，并经同一检查流程",
+    "支持 PostgreSQL、MySQL、SQLite、DuckDB、ClickHouse、MongoDB、H2 及 JDBC 连接，并可通过 DuckDB 读取 S3、GCS、R2 或磁盘上的 Parquet、CSV、JSON 文件"
+   ],
+   "use_cases": [
+    "将报表、看板或 ETL 任务中的 SQL 查询以受控密钥方式暴露为 REST API，供应用、合作伙伴或流水线调用",
+    "为 AI 代理提供治理化的 MCP 工具调用，代理通过保存的查询或只读 ad-hoc SQL 获取数据，写入操作需人工审批",
+    "按计划将查询结果增量导出到 S3、GCS、R2 或本地文件夹，并通过 SSE 实时事件流监控每次运行"
+   ]
+  },
+  "sha": "793130eae785",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab0576c902c3": {
+  "identity": {
+   "one_liner": "Swift 编写的 SQLite 接口库，提供类型安全与线程安全的数据库访问",
+   "review": "FeistyDB 是一个基于 CSQLite 的 Swift 语言 SQLite 接口库，面向 Swift 开发者，支持同步与异步访问、事务和保存点，可注册自定义 SQL 函数、排序序列、虚拟表和 FTS5 分词器。其底层 SQLite 关闭了线程安全，多线程访问需通过 DatabaseQueue 序列化，且项目本身不是 ORM。采用 MIT 许可证发布。",
+   "highlights": [
+    "提供类型安全的 DatabaseValue 与 ColumnConvertible 协议，支持同步和异步两种数据库访问方式",
+    "支持事务、保存点、自定义 SQL 函数（含聚合与窗口函数）、自定义排序序列、虚拟表和 FTS5 分词器",
+    "基于 CSQLite 构建，该包在 SQLite 合并版基础上附带 carray、decimal、ieee754、series、sha3、uuid 扩展"
+   ],
+   "use_cases": [
+    "Swift/iOS 应用中需要直接执行 SQL 并管理事务的本地数据存储",
+    "需要注册自定义 SQL 函数、排序规则或 FTS5 分词器的场景",
+    "使用 DatabaseQueue 与 DatabaseReadQueue 配合 WAL 模式实现多读单写的并发数据库访问"
+   ]
+  },
+  "sha": "ab0576c902c3",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d87061eeb78a": {
+  "identity": {
+   "one_liner": "面向开发者的开源社交平台，集社区、在线编程学院与游戏化模块于一体",
+   "review": "TEKA NEXUS 是基于 Next.js 16 和 TypeScript 构建的 PWA 平台，包含社交动态、项目协作工作区、含 300 课时的编程学院（Python/HTML/CSS/JavaScript 四轨）、12 个游戏模块和 WebSocket 实时聊天。数据层使用 Prisma + PostgreSQL（生产为 Supabase），支持 7 种语言界面及波斯语和阿拉伯语的 RTL 布局，部署于 Vercel。据 README 称由个人开发者独立开发。",
+   "highlights": [
+    "提供 300 节双语课程，浏览器内运行 Python 子集解释器（pylite）及沙箱 iframe，配合自动评分测试",
+    "支持社交功能（发帖、关注、私信）、项目看板、里程碑、socket.io 实时团队聊天及 GitHub 集成",
+    "实现 7 种语言的类型化字典与波斯语、阿拉伯语完整 RTL 支持，附带 scrypt 认证与 zod 验证的 60+ REST 接口"
+   ],
+   "use_cases": [
+    "波斯语等多语言用户学习 Python、HTML、CSS、JavaScript 并在浏览器内完成自动评分练习",
+    "开发者社区发布项目、组建看板协作工作区并进行实时团队聊天",
+    "通过游戏化模块（技能树、Boss 战、收集卡牌等）跟踪学习进度与活动记录"
+   ]
+  },
+  "sha": "d87061eeb78a",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

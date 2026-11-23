@@ -3432,5 +3432,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "43b21ccc95b1": {
+  "identity": {
+   "one_liner": "自托管工作室，将故事转化为角色一致的 AI 绘制漫画、条漫或解说视频",
+   "review": "OpenManga 是一个自托管的内容生产工具：用户输入故事后，系统将其结构化为角色、世界、章节、场景、分镜等状态，以规范参考图固定角色形象，支持漫画页、16:9 解说视频和竖向条漫三种格式。文本推理与图像生成由用户自备的服务商密钥驱动，语音合成默认使用本地 Kokoro-82M 模型，也可导入外部录音并由本地 Whisper 对齐分段。支持无密钥演示模式（粘贴对话回复代替 API）、项目预算上限、无遥测设计，通过 Docker 部署，数据存于 PostgreSQL。",
+   "highlights": [
+    "BYOK 模式：文本推理与图像生成按运行选择服务商和模型，语音合成默认本地 Kokoro-82M，无需外部 API 费用",
+    "生产流程一键运行完整管线（分析、参考图、章节规划、绘图、解说、音频、视频、YouTube 包），可跳过已有步骤、按预算上限消费、按章节报价",
+    "无遥测设计：出站请求仅限配置的 AI 服务商、首次启动的模型下载及用户自行连接的 YouTube API"
+   ],
+   "use_cases": [
+    "将小说或故事脚本转化为角色形象一致的长篇漫画、条漫或解说视频",
+    "面向 YouTube 的解说视频/回顾视频生产，含字幕、缩略图、标题与标签打包",
+    "印刷出版流程：支持 KDP 裁切尺寸 PDF、印刷封面、PSD/SVG 分层导出供后期编辑"
+   ]
+  },
+  "sha": "43b21ccc95b1",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6d5e5480c333": {
+  "identity": {
+   "one_liner": "基于 C++11 封装 libuv 的网络库，提供 RAII 事件循环与 HTTP/WebSocket 模块",
+   "review": "libuvcpp 将 libuv 的事件循环、句柄和请求封装为 C++ 类，提供 RAII 资源管理与 std::function 回调，并分层提供 TCP/UDP 客户端与服务端、HTTP/1.1、WebSocket（RFC 6455）、SSL/TLS 及更高层的 webapp 应用框架。采用 MIT 许可，提供 Windows/Linux 的预编译包、deb/rpm 与 apt/dnf 安装渠道；可选功能（HTTP/2、QUIC、HTTP/3 等）均需通过 CMake 开关显式启用。",
+   "highlights": [
+    "核心层封装 libuv 的事件循环、TCP/UDP/pipe/tty 句柄、定时器、信号、文件系统与线程池等工具类",
+    "Web 模块提供 HTTP/1.1 客户端与服务端（含路由注册、流式解析）、RFC 6455 WebSocket 客户端与服务端，支持异步回调和同步 wait() 双模式 API",
+    "提供 TCMalloc 风格内存池（默认关闭，预编译包内含），可选启用 OpenSSL、HTTP/2、QUIC、HTTP/3、zlib/brotli 压缩等 CMake 开关"
+   ],
+   "use_cases": [
+    "在 C++11 项目中基于事件驱动 I/O 构建 TCP/UDP 网络服务",
+    "开发 HTTP/1.1 或 WebSocket 服务端与客户端，可通过开关启用 HTTPS/WSS、HTTP/2 或 HTTP/3",
+    "使用 webapp 层以路由、中间件和生命周期管理的方式编写 Web 应用处理逻辑"
+   ]
+  },
+  "sha": "6d5e5480c333",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

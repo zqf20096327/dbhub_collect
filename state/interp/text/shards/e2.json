@@ -2972,5 +2972,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "20d2635fa9a5": {
+  "identity": {
+   "one_liner": "面向 CUBRID 数据库的 Python 示例集，涵盖快速上手、迁移指南与生产模板。",
+   "review": "该仓库为 CUBRID 11.2/11.4 提供基于 pycubrid 和 sqlalchemy-cubrid 的 Python 示例集合，包含入门教程、迁移指南（Java JDBC 迁移、CUBRIDdb 驱动迁移）、FastAPI/Flask/Django/Celery 等生产模板、性能基准示例及常见反模式说明。示例默认通过 Docker 连接本地 33000 端口的 testdb 实例，要求 Python 3.11+。项目隶属 CUBRID Lab，与 CUBRID 官方无隶属关系，采用 MIT 许可证。",
+   "highlights": [
+    "包含 8 类生产模板（FastAPI、Flask、Django、Celery 异步任务、Pandas ETL、AI agent 状态存储、本地 RAG、Streamlit 仪表盘）",
+    "提供 Java JDBC 到 Python 的迁移对照文档及 CUBRIDdb 驱动到 pycubrid 的迁移指南",
+    "包含性能模式示例（批量插入、fetch 优化、连接池）及 7 个反模式说明"
+   ],
+   "use_cases": [
+    "初次接触 CUBRID 的 Python 开发者按照入门教程建立第一个连接",
+    "从 Java/JDBC 或 CUBRIDdb 驱动迁移到 Python/pycubrid 时查阅对照代码",
+    "基于现成模板搭建 FastAPI/Flask REST API、Celery 后台任务或 Pandas 数据管道"
+   ]
+  },
+  "sha": "20d2635fa9a5",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a710684d3fb5": {
+  "identity": {
+   "one_liner": "以 SQLite 为核心、存记录/对象/向量/图的嵌入式单文件数据库",
+   "review": "Zova 是嵌入式数据库，以自带 SQLite 为关系核心，在 .zova 单文件中额外存储内容寻址对象、向量集合与图关系，提供 Rust/Python/Go/JS/Zig/C ABI 绑定与 CLI。迁移不静默进行，需通过显式命令把格式 9–13 复制到新的格式 14 文件，且不支持降级。适合在本地文件中管理结构化数据与二进制/向量数据并存的应用。",
+   "highlights": [
+    "提供记录、对象（FastCDC-v1 去重或 1 MiB 流式分块，SHA-256 寻址）、向量精确检索、显式有向边图四类存储形态，支持 SQL 原生的向量查询与图遍历",
+    "内置启用 FTS5、R-Tree、Geopoly、carray、math 函数与 dbstat 的 SQLite，无需系统 SQLite 安装；提供备份、压缩拷贝、salvage、诊断等工具命令",
+    "支持浏览器端 WASM 运行（worker 内存库与 OPFS 持久化）、可选的每块 LZ4 压缩，以及 SQLite 数据库到 .zova 的不改动源库转换"
+   ],
+   "use_cases": [
+    "应用需在同一本地文件中同时保存 SQL 表、大二进制对象和向量数据",
+    "已有 SQLite 数据库的应用希望迁移到 .zova 文件并增加对象/向量存储",
+    "Rust/Python/Go/Node.js/C 程序需要通过各自语言的绑定操作嵌入式数据库"
+   ]
+  },
+  "sha": "a710684d3fb5",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3d321c2ecdaf": {
+  "identity": {
+   "one_liner": "PCAR 是一款 Windows 桌面 AI 伴侣运行时，以人格版本化与长期记忆为核心。",
+   "review": "PCAR（Persona-Centric Agent Runtime）是面向 Windows 11 x64 的开源桌面 AI 伴侣工作台，用户可导入微信或 DeepSeek 双人聊天 Markdown 自动生成角色卡，在多个会话中管理多位角色。角色资料、聊天记录与记忆保存在本机 SQLite（依主题标签），聊天通过用户自存的 DeepSeek API Key 调用官方接口，额度计入用户账户。社区版 1.0 提供一键安装并随包附带 Python 与本地检索模型；主版本 v0.4 提供 Gemini 正文选项，支持从 v0.3 升级。源码采用 AGPL-3.0-only 许可。",
+   "highlights": [
+    "支持从微信（Moect 导出）或 DeepSeek 聊天记录 Markdown 自动提炼特质、表达风格与价值观生成角色卡，可留空无依据资料",
+    "实现人格版本化：记录每次修改、可恢复到历史版本，并支持自动整理跨会话长期记忆与会话内授权联网检索",
+    "角色资料、聊天记录和长期记忆保存在本机，聊天前按当前话题选取相关材料交给模型"
+   ],
+   "use_cases": [
+    "已在 DeepSeek 或微信中与某角色积累大量对话，希望以角色卡和旧历史继续在新会话中聊天",
+    "需要集中管理多位角色的人设、说话习惯、关系与聊天记录",
+    "希望角色在多周跨度的会话中依据本地保存的记忆回应当前提起过的旧话题"
+   ]
+  },
+  "sha": "3d321c2ecdaf",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e12e2a742b0": {
+  "identity": {
+   "one_liner": "Go 编写的多租户客户数据导出参考服务，基于 PostgreSQL 任务队列与 S3 存储。",
+   "review": "该服务面向 SaaS 租户管理员，提供可验证的数据导出：请求经带幂等键的 API 入队，PostgreSQL 存储持久化作业，worker 以租约方式领取任务，在可重复读快照下收集数据集，生成含 manifest 与 SHA-256 校验的 ZIP，并上传到 S3 兼容存储。本地栈由 Docker Compose 编排 PostgreSQL 与 MinIO，README 明确其定位为本地评估与开发用途，并列出认证、内存暂存 128 MiB 上限等未实现的限制。",
+   "highlights": [
+    "提供租户隔离的导出 API，支持管理员授权、幂等请求、作业取消与短时效预签名下载",
+    "导出归档包含 JSONL 数据、附件与带版本号的 manifest，文件采用 SHA-256 校验，并提供离线验证 CLI（exportctl verify）",
+    "worker 通过租约与心跳续约处理 PostgreSQL 持久化作业，支持重试与取消"
+   ],
+   "use_cases": [
+    "为租户管理员生成含附件的可携带、可验证数据副本",
+    "本地评估多租户数据导出流程，包括请求、worker 运行、下载与归档校验",
+    "通过 CLI 独立验证既有导出 ZIP 的完整性，包括检测被篡改的数据文件"
+   ]
+  },
+  "sha": "1e12e2a742b0",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

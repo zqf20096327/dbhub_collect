@@ -3168,5 +3168,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "947ae5348d6b": {
+  "identity": {
+   "one_liner": "通过MQTT从USB/RTSP摄像头发布图像与检测事件的Python服务",
+   "review": "这是一个运行在树莓派等CPU设备上的无头Python程序，将USB摄像头或RTSP源的画面经YOLOX/RF-DETR模型检测后，以稀疏JPEG和事件消息发布到MQTT，供Home Assistant自动发现并生成人员/车辆实体。用uv锁定42个依赖、无需GPU；可选FastALPR本地车牌OCR与监控名单匹配。RTSP输出与SQLite录像为可选功能。",
+   "highlights": [
+    "支持Speed（YOLOX Nano）与Accuracy（RF-DETR Nano INT8）两种模型预设，Pi运行时使用ONNX Runtime CPU，不含PyTorch",
+    "提供两帧轨迹确认与可配置presence hold，输出vehicle_detected/plate_recolved/watched_plate_detected等MQTT事件",
+    "默认通过MQTT发布稀疏JPEG，RTSP输出（基于PyAV）与文件式SQLite录像为可选"
+   ],
+   "use_cases": [
+    "在树莓派上以单个无头进程接入Home Assistant，实现人员出入自动化通知",
+    "对车道摄像头做本地车辆检测与车牌OCR，并按监控名单触发事件",
+    "用benchmark脚本基于录像文件测量采集、推理与追踪的阶段延迟"
+   ]
+  },
+  "sha": "947ae5348d6b",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "09cf5bfca32b": {
+  "identity": {
+   "one_liner": "Go 与 PostgreSQL 实现的个人书签管理器，带内嵌 Web 界面",
+   "review": "Pocketmark 是一个面向个人使用的书签管理器，由 Go 服务器、内嵌 Web 界面和 PostgreSQL 存储组成，支持书签、搜索、归档与附件。用户可通过嵌套集合、标签、收藏与笔记组织书签，并可离线保存页面、附加文件及标注文本。项目提供 Docker Compose 与 Linux 二进制两种部署方式，明确不支持协作、公开分享和 SSO。",
+   "highlights": [
+    "支持嵌套集合、标签、收藏和笔记组织书签，可搜索书签及已保存的页面文本",
+    "可保存页面供离线阅读，附加文件并标注文本；支持 JSON 或浏览器书签导入",
+    "提供 Chrome 扩展抓取渲染页面、截图或 PDF，并支持通过 Floccus 的 WebDAV 后端双向同步浏览器书签"
+   ],
+   "use_cases": [
+    "个人部署自托管书签库，含搜索、归档与附件管理",
+    "配合 Chrome 扩展保存页面快照（HTML/PNG/PDF）供离线阅读",
+    "通过 Floccus 在浏览器与服务器之间双向同步书签及嵌套文件夹"
+   ]
+  },
+  "sha": "09cf5bfca32b",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2d656bc23508": {
+  "identity": {
+   "one_liner": "医生-患者问诊 Web 应用，基于 Next.js 与 WebRTC/Socket.io 实现音视频通话与预约",
+   "review": "MediConnect 是一个医生-患者问诊 Web 应用，患者可查找医生、预约 20 分钟时段、实时聊天并进行音视频通话，医生可查看周排班与今日预约。技术栈为 Next.js App Router、TypeScript、Prisma、PostgreSQL，Socket.io 挂载于自定义 Node 服务器承担信令与聊天，认证采用 httpOnly Cookie 中的 JWT。仓库另附 ASSIGNMENT.md，为 IOMechs 技术评估项目。部署需长驻 Node 进程，不适用 serverless 平台。",
+   "highlights": [
+    "通过 WebRTC 与 Socket.io 信令（server.ts 自定义服务器）实现医患音视频通话与实时聊天",
+    "预约防双重 booking：基于 (doctorId, startsAt) 部分唯一索引加事务，并发请求仅一个成功，另一个返回 409",
+    "自带 JWT httpOnly Cookie 认证、bcrypt 哈希、zod 校验及按角色的路由保护，支持 Docker/Neon/Supabase 三种数据库接入方式"
+   ],
+   "use_cases": [
+    "患者查找医生、预约 20 分钟时段并进行在线音视频问诊与聊天",
+    "医生查看每周排班、今日预约并与患者实时沟通",
+    "作为 IOMechs 技术评估的练习或参考项目，按 ASSIGNMENT.md 完成作业"
+   ]
+  },
+  "sha": "2d656bc23508",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

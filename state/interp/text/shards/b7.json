@@ -3240,5 +3240,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e820d34c9335": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 本地文档知识库插件，切片嵌入后混合检索并带引用核验",
+   "review": "dsh-library 是面向 DeepSeek Harness 的社区插件，把本地 md/txt 文档按路径导入，经滑窗切片与嵌入写入宿主 dsh_library 存储域（JSON 或 SQLite）。检索采用 BM25 + 语义 RRF 融合、MMR 重排与相关性过滤，结果带 [n] 来源标记。默认使用内置哈希嵌入，零模型下载、零网络请求，但语义能力限于词法层面。提供 library_cite_check 逐条核验引用、library_remove 清除探测。适合在 Harness 环境中为 agent 构建可核验引用的本地文档库的用户。",
+   "highlights": [
+    "library_search 实现 BM25 + 语义 RRF 融合打分、MMR 多样性重排、相关性过滤与中段丢失规避，返回带 [n] 来源标记的结果页",
+    "内置确定性哈希嵌入，零模型下载、零网络请求；可配置切换到 command 子进程、Ollama 或 OpenAI 兼容嵌入后端",
+    "提供 library_cite_check 引用双重校验、library_remove 清除签名探测、library_diagnose 切片统计与重复诊断"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 中的 agent 建立带引用编号、可核验的本地 md/txt 文档知识库",
+    "在无网络、无模型下载的本地环境中运行文档检索",
+    "对 agent 回答中的 [n] 引用逐条核验有效性，并诊断索引切片质量"
+   ]
+  },
+  "sha": "e820d34c9335",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4c6483e2619d": {
+  "identity": {
+   "one_liner": "面向 AI 代理的复式记账 CLI，以 SQLCipher 加密 SQLite 存储，内置 MCP 服务器。",
+   "review": "Beankeeper 提供 bk 命令行工具，将账本数据存于可选 SQLCipher 加密的 SQLite 数据库，并通过内置 MCP 服务器供 AI 代理操作。写入路径强制借贷平衡、期间开放校验与 --reference 去重，输出统一 JSON 信封；支持防篡改审计链、代理令牌与权限分级的批准流。适用于让代理或脚本处理个人或小企业记账的用户。",
+   "highlights": [
+    "写入端在 savepoint 中校验至少两条分录且借贷总额相等、币种一致，并检查记账日期处于开放期间，失败返回 VALIDATION（退出码 3）",
+    "--reference 以公司为单位唯一去重，重试同一引用返回既有事务 ID 或以 --on-conflict skip 跳过；所有命令返回统一 JSON 信封与命名错误码",
+    "支持 bk key init 本地信任根、带 TTL 的代理令牌、按 grant（ledger/read、post、propose、approve 等）的逐调用鉴权，以及每代理/公司/币种的消费限额与提案-审批流"
+   ],
+   "use_cases": [
+    "让 MCP 兼容的 AI 代理通过 CLI 或 MCP 工具录入、查询、导出账目",
+    "需要对已过账记录做触发器级防改动、SHA-256 审计链校验的记账场景",
+    "需要期间关账锁定、代理消费限额与提案审批控制的多角色小企业记账"
+   ]
+  },
+  "sha": "4c6483e2619d",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3156,5 +3156,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "982eab4ac5bf": {
+  "identity": {
+   "one_liner": "自主智能体身份管理系统，基于 OAuth 2.1 与 WIMSE/SPIFFE 签发可验证凭证",
+   "review": "ZeroID 是面向自主 AI 智能体的身份基础设施，用 Go 编写，提供凭证签发、智能体间委托授权和实时吊销。每个智能体拥有全局唯一 WIMSE/SPIFFE 身份 URI，令牌携带完整的 on-behalf-of 委托链，委托时逐级缩减 scope。它不做人类 IAM，与 OIDC、RFC 8693 等标准集成，适用于需要审计智能体行为归属的安全与合规场景。",
+   "highlights": [
+    "实现 RFC 8693 令牌交换委托，每跳自动缩减 scope，并支持委托深度追踪与级联吊销",
+    "支持 OAuth 2.1 多种授权流程，包括 client_credentials、jwt_bearer、token_exchange、CIBA 及 DPoP 发送方约束令牌（RFC 9449）",
+    "为智能体、MCP 服务器、服务和应用提供身份注册表，含角色分类、元数据、信任级别与生命周期管理"
+   ],
+   "use_cases": [
+    "安全与合规团队需要追溯智能体行为归属与委托链的场景",
+    "多智能体工作流中的子智能体权限缩减与委托审计",
+    "MCP 服务器及服务调用方需要动态客户端注册或免预注册接入（CIMD）的场景"
+   ]
+  },
+  "sha": "982eab4ac5bf",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6e0988c727e8": {
+  "identity": {
+   "one_liner": "运行在应用内部的 CMS，用 TypeScript 定义集合并生成管理界面与类型化内容 API",
+   "review": "Kide CMS 是嵌入 Astro 或 SvelteKit 项目的内容管理系统：开发者在 src/cms/collections/ 用 TypeScript 定义集合，配置自动生成 Drizzle 表、类型、Zod 校验和管理界面，内容通过本地函数调用而非 HTTP 读取。支持 Package（npm 依赖）与 Embedded（源码在 src/cms/）两种运行方式，部署到 Node.js（SQLite）或 Cloudflare（D1 + R2）。当前为 beta 版，核心 API 相对稳定但破坏性变更会随 minor 版本发布。",
+   "highlights": [
+    "用 TypeScript 定义集合，一份配置生成 Drizzle 表、TypeScript 类型、Zod 校验器和管理 UI",
+    "管理端提供 16 种字段类型、草稿/发布/定时/版本恢复、字段级 i18n、基于角色的访问控制与审计记录",
+    "可通过 kide eject 将运行时、路由和管理界面移入 src/cms/ 以便阅读和修改源码"
+   ],
+   "use_cases": [
+    "使用 Astro 或 SvelteKit 且希望内容管理与应用部署在同一代码库的项目",
+    "需要编辑侧完整功能（富文本、预览、草稿、i18n、权限）的团队内容站点",
+    "希望以源码形式持有并自行审计、修改 CMS 运行时的场景"
+   ]
+  },
+  "sha": "6e0988c727e8",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d7935c02b9dd": {
+  "identity": {
+   "one_liner": "自托管多用户 AI Agent 平台，基于 MCP 连接外部工具与多模型。",
+   "review": "Ontheia 是一个以 Docker 部署的开源（AGPL v3/商业双许可）AI Agent 平台，面向需要自建基础设施的团队与组织。它集成 Claude、GPT、Gemini、Grok、Ollama 等多提供商模型，通过 MCP 协议连接外部工具，内置 pgvector 长期记忆、Chain Engine 可视化工作流、定时任务与 Webhook 触发器，访问控制依赖 PostgreSQL 行级安全。使用需至少一个模型 API Key，内存/RAG 功能另需支持嵌入的提供商。",
+   "highlights": [
+    "支持 Claude、GPT、Gemini、Grok、Ollama 及任何 OpenAI 兼容模型，并支持 MCP 协议连接外部工具",
+    "内置基于 pgvector 的 RAG 长期记忆，按情景、语义、程序性、工作、文档五类归档，按用户与命名空间隔离",
+    "提供 Chain Engine 无代码工作流、Cron 定时任务、Webhook 触发器与 Inbox 审批机制，支持代理间 delegate-to-agent 协作"
+   ],
+   "use_cases": [
+    "在自有服务器上为团队部署多用户、基于角色的 AI Agent 工作环境",
+    "通过 Webhook 或定时任务运行无人值守的 Agent 作业并集中审批结果",
+    "接入企业自有工具与知识库，构建带持久记忆的多步骤 Agent 流程"
+   ]
+  },
+  "sha": "d7935c02b9dd",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

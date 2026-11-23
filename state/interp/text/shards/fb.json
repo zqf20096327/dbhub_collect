@@ -3073,5 +3073,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fb8ba241227f": {
+  "identity": {
+   "one_liner": "基于 net/http 的 Go 服务端渲染 Web 应用模板，编译为单一静态二进制。",
+   "review": "该项目是 Go 服务端渲染 Web 应用的起始模板，内含注册登录、admin/member 角色权限、管理界面、PostgreSQL 迁移与测试套件。技术栈为 net/http、templ、htmx、Tailwind CSS 4、pgx、sqlc、goose，全链路不依赖 Node.js。配置仅用环境变量；需 Go 1.27+、make 与 PostgreSQL。模板、样式与迁移嵌入二进制。",
+   "highlights": [
+    "使用标准库 net/http 路由、templ 类型检查组件、htmx 交互与 Tailwind CSS 4，无 Node.js 与打包器",
+    "数据层采用 pgx 连接 PostgreSQL，sqlc 从 SQL 生成类型安全代码，goose 迁移以 SQL 文件嵌入二进制",
+    "提供 Argon2id 密码散列、PostgreSQL 服务端会话、http.CrossOriginProtection CSRF 防护及 CSP、限流、安全头等默认配置"
+   ],
+   "use_cases": [
+    "需要从模板起步开发服务端渲染 Go Web 应用时，通过 GitHub 模板复制并按 docs/development.md 定制",
+    "需要内置账号、角色权限与管理界面的项目可直接使用其注册登录与用户管理功能",
+    "部署场景需单一二进制或容器镜像时，提供 make build 与 distroless 镜像、systemd+Caddy 两类部署路径"
+   ]
+  },
+  "sha": "fb8ba241227f",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "27b4afb2bdd7": {
+  "identity": {
+   "one_liner": "本地优先的个人助理系统，将自然语言请求转为可验证、可回溯的任务执行",
+   "review": "Jeeves 是一个开源（MIT）的个人助理系统，接受自然语言请求并交付带来源的结果。采用 Go 网关加 Rust Runtime 架构，按租户隔离任务与数据，支持本地自托管（just local-up）和托管两种形态。内置 23 个工具，可通过 JEEVES_WRITE/EXEC 等环境变量开启写文件、执行命令等敏感能力，并提供任务收据记录已批准的操作。",
+   "highlights": [
+    "内置 23 个工具（15 个默认开启、8 个需开关），并支持接入 MCP 服务器与定时任务",
+    "记忆系统包含语义事实（FTS5、支持中日韩文）、带日期的事件记录与程序性 Skills，每轮进行本地关键词检索",
+    "预适配 12 家 LLM 提供商，含本地 Ollama，可在 REPL 中通过 /model 命令添加和切换模型而无需重启"
+   ],
+   "use_cases": [
+    "在本地自托管环境中运行需要权限控制与操作收据的个人任务（信息检索、文档生成、代码改进）",
+    "通过 Feishu 聊天、终端或桌面应用委派与跟进任务，在手机上审批任务操作",
+    "配置 CalDAV/IMAP/SMTP 连接，接收晨间简报并管理带审批机制的邮件起草与发送"
+   ]
+  },
+  "sha": "27b4afb2bdd7",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

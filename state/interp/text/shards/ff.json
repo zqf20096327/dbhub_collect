@@ -3477,5 +3477,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a5495c111e98": {
+  "identity": {
+   "one_liner": "为 beam 数据库自动生成迁移脚本的 Haskell 库",
+   "review": "beam-automigrate 是一个 Haskell 库，用于为 beam 数据库生成迁移。它从 Haskell 数据类型派生 AnnotatedDatabaseSettings，经 fromAnnotatedDbSettings 生成 Schema，与数据库中实际 Schema 做 diff 得出编辑序列并生成 SQL，可先预览再执行。外键在无歧义时自动推断，可通过 beam-core API 手动注解。部分实现依赖 Postgres，且不支持手动迁移与 via 派生的枚举推断。",
+   "highlights": [
+    "从 Haskell 类型自动生成 Schema，并通过与数据库 Schema 的 diff 计算迁移所需的编辑序列",
+    "在无歧义时自动推断外键，支持 JSON、JSONB 与 Range 类型",
+    "通过 beam-core 的 withDbModification API 注解表和字段（如约束、默认值），迁移 SQL 可先预览后执行"
+   ],
+   "use_cases": [
+    "使用 beam 与 Postgres、希望由 Haskell 数据类型生成数据库迁移的项目",
+    "需要在执行迁移前检查生成 SQL 的场景",
+    "需要依据 Haskell 类型同步数据库表结构（列类型、非空约束、外键）的开发流程"
+   ]
+  },
+  "sha": "a5495c111e98",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3314,5 +3314,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9e47c8653106": {
+  "identity": {
+   "one_liner": "基于 Apache Arrow Flight 的分布式向量引擎，面向 Agent 内存共享",
+   "review": "Longbow 是一个用 Go 编写的分布式向量引擎，采用 Arrow Flight 协议并辅以 REST 和 GraphQL API，README 定位其用于 AI/Agent 工作负载的向量存储与检索。集群采用共享无（shared-nothing）架构，通过一致性哈希与 SWIM 协议实现成员管理；流量分数据（3000）与元数据（3001）两个 gRPC 端口。存储为内存型，靠 WAL 加 Parquet 快照保证持久性。支持 float32 等多种向量类型（128–3072 维），需要 Go 1.27.4+，GPU 需另行编译对应平台二进制。",
+   "highlights": [
+    "基于 Apache Arrow Flight（gRPC/HTTP2），另提供 REST 与 GraphQL 接口",
+    "支持稠密 ANN/k-NN、稀疏/BM25、混合检索、过滤搜索、地理与时间范围搜索等多种搜索模态，支持多种距离度量",
+    "支持多种向量数据类型（128–3072 维），内置 SIMD 内核，带 Prometheus 指标与结构化 JSON 日志"
+   ],
+   "use_cases": [
+    "需要多节点共享向量数据的 Agent 记忆/缓存场景",
+    "需要向量检索、过滤及混合搜索的应用服务端部署",
+    "基于 Docker 的容器化部署与本地集群基准测试环境"
+   ]
+  },
+  "sha": "9e47c8653106",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

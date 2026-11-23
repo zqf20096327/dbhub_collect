@@ -3341,5 +3341,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7023fccaf896": {
+  "identity": {
+   "one_liner": "Windows 富文本加密记事本，基于 SQLite FTS5 检索与 SQLCipher 加密",
+   "review": "面向 Windows x64 的免费富文本笔记应用，将笔记存入可选 SQLCipher AES-256 加密的 SQLite 数据库，提供全文搜索、wikilink 与链接图、Markdown、表格图片及 .knote/.kndb 分享。以 Costura.Fody 打包为单文件 exe，无需额外运行时安装，可通过 WinGet、Chocolatey 或直接下载 exe 获取。",
+   "highlights": [
+    "支持标题/正文/标签即时全文搜索，含 tag:、group:、after: 等过滤语法与保存的搜索",
+    "支持多数据库及 SQLCipher AES-256 加密，密码保护的 .knote/.kndb 文件分享",
+    "提供 wikilink 双向链接、链接图、Markdown/HTML 原生预览与版本历史、定时备份"
+   ],
+   "use_cases": [
+    "需要本地加密存储技术笔记、片段并全文检索的开发者",
+    "从 Obsidian 或 Markdown 导出导入笔记库进行离线管理",
+    "需要定时备份、版本历史与 30 天回收站等数据保护机制的个人笔记工作流"
+   ]
+  },
+  "sha": "7023fccaf896",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4629bc77f09a": {
+  "identity": {
+   "one_liner": "基于 async 的 Python 多代理会话框架，含 SQLite 持久化与代理间移交",
+   "review": "chatflow-agent 是 async-first 的 Python 框架，用于在 WhatsApp、Telegram、Webhook、CLI 等渠道编排多代理对话流程。核心依赖仅 pydantic 与 httpx，LLM 引擎经原生 REST 调用多家供应商；支持会话级 asyncio.Lock、回滚与 HMAC webhook 安全。需 Python 3.10-3.13，pip 安装后可按需安装渠道 extras。",
+   "highlights": [
+    "内置 WhatsApp (Meta Cloud API)、Telegram、CLI 渠道适配器及 Starlette webhook 示例应用",
+    "支持 Gemini、OpenAI、Claude、Grok、DeepSeek、Groq、Ollama、vLLM，可在同一多代理系统中混用供应商",
+    "核心运行时依赖仅 pydantic 与 httpx，所有 LLM 引擎通过原生 httpx REST 调用"
+   ],
+   "use_cases": [
+    "构建接入 WhatsApp/Telegram 的对话机器人",
+    "通过 webhook 搭建自定义消息处理服务",
+    "使用 Ollama/vLLM 本地模型运行多代理工作流"
+   ]
+  },
+  "sha": "4629bc77f09a",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "83268d15b299": {
+  "identity": {
+   "one_liner": "自托管的智能体长期记忆服务，钩子接入AI宿主实现记忆注入与存取",
+   "review": "aiduMEI 是一个用 Python/FastAPI 编写的单机自托管长期记忆服务，供使用 Claude Code、Codex CLI、DeepSeek Harness 等命令行 AI 宿主的用户运行。它在对话前注入召回记忆、对话后写入、会话结束提炼摘要；记忆正文、全文索引、向量等存于单个 SQLite 库，支持 cloud/auto/local 三种挡位，local 模式不外呼云端。README 未说明服务端并发或分布式部署能力，数据备份为明文。",
+   "highlights": [
+    "采用 native 单库 SQLite 内核，记忆正文、FTS5 全文索引、向量、修改历史与墓碑在同一 memory.db 中以事务写入，检索由全文与向量两路 RRF 融合",
+    "提供 connect_host.py 一条命令接入宿主（Claude Code/Codex/Hermes），DeepSeek Harness 与 OpenChamber 另有原生扩展接入方式，并附带端到端冒烟验证脚本",
+    "删除记忆时同步清理索引、派生事实与相关会话精华，删除前留墓碑快照，可通过 API 恢复，快照默认 30 天后擦除正文"
+   ],
+   "use_cases": [
+    "希望为本地运行的 AI 编程宿主（如 Claude Code、Codex CLI、pi）添加跨会话长期记忆的个人开发者",
+    "需要数据全部留存在本机、可备份可恢复的自托管记忆部署场景",
+    "无云端 Key 或要求零外呼的离线环境，可使用 local 挡位仅走全文检索"
+   ]
+  },
+  "sha": "83268d15b299",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "be7d12b130a2": {
+  "identity": {
+   "one_liner": "基于 FastAPI 的短链接管理服务，采用分层架构并按学习路线渐进引入组件。",
+   "review": "该仓库是一个以学习为目标的链接管理后端，用于创建、解析和分析可分享链接，当前处于早期基础阶段，尚未引入数据库、缓存与 CI/CD，计划栈包括 FastAPI、PostgreSQL、Redis、Celery 等，按需逐步加入。项目分为 api、core 等模块，本地通过 uvicorn 启动，但应用入口实现后命令才可运行。适合希望理解后端请求流程与分层设计的学习者。",
+   "highlights": [
+    "按 api/schema/service/storage 分层组织代码，README 提供分层职责说明",
+    "计划引入 PostgreSQL、Redis、Celery、Docker、Pytest、GitHub Actions，且按实际问题需要逐步添加",
+    "提供从内存存储逐步演进到生产风格服务的开发路线"
+   ],
+   "use_cases": [
+    "学习后端请求从客户端到响应的完整流程",
+    "练习按层调试与增量构建功能",
+    "参考 AI 辅助开发的协作规范文档（AGENTS.md 等）"
+   ]
+  },
+  "sha": "be7d12b130a2",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

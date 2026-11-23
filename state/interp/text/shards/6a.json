@@ -3271,5 +3271,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "75a4bfa2ccb2": {
+  "identity": {
+   "one_liner": "离线 Rust CLI，在一次性 SQLite 快照上分析 Cloudflare D1 迁移风险",
+   "review": "该工具在本地一次性 SQLite 快照上执行待应用迁移，检测 schema 破坏、行数减少、外键违规和查询计划回退，并输出带规则编号与严重级别的结构化报告。面向使用 Cloudflare D1 的开发与 CI 流程，支持 wrangler.toml 读取配置与 GitHub Actions 注释输出。注意 SQLite 仅为对 D1 行为的本地近似，且显式 BEGIN/COMMIT 语句会被拒绝。MIT 许可。",
+   "highlights": [
+    "离线运行，内嵌 SQLite，无需网络、凭证或 Cloudflare 基础设施",
+    "提供 18 条带严重级别的检测规则（DP/SC/FK/IX/QP/SQ/OB/MG 系列），覆盖删除表列、行数减少、外键违规、查询计划 SEARCH 转 SCAN 等",
+    "支持 --json-out/--markdown-out 报告输出、--github CI 注释及从 wrangler.toml 自动读取迁移配置"
+   ],
+   "use_cases": [
+    "在 CI 流水线中对 D1 迁移做合并前检查",
+    "验证表重建迁移是否造成行数或主键身份丢失",
+    "评估删除索引后应用工作负载查询的计划回退"
+   ]
+  },
+  "sha": "75a4bfa2ccb2",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

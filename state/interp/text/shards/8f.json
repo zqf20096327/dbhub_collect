@@ -3148,5 +3148,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1c059f298994": {
+  "identity": {
+   "one_liner": "Home Assistant 的 TimescaleDB 历史记录集成，经 asyncpg 写入状态与事件",
+   "review": "Scribe 是一个 Home Assistant 自定义集成，将状态与事件通过 asyncpg 异步批量 COPY 写入 TimescaleDB（ hypertable 分块），并对旧块自动压缩、可配置保留策略，附带实体/设备/区域等上下文表与仪表盘卡片。需单独部署 TimescaleDB 实例，缺扩展时新装会被拒绝；通过 HACS 或手动复制 custom_components 安装。适合需要长期保存 HA 历史数据的用户。",
+   "highlights": [
+    "通过 asyncpg 异步批量写入，数据库不可用时可在内存缓冲后补写",
+    "自动创建 hypertable 并应用分块、压缩与保留策略，压缩旧数据块",
+    "支持 SSL、按域/实体/标签/事件类型的过滤，以及 states_hourly/states_daily 预汇总表"
+   ],
+   "use_cases": [
+    "需要将 Home Assistant 历史状态与事件长期存储于 TimescaleDB 的实例",
+    "需要按区域、设备、用户等上下文查询历史数据的场景",
+    "需要自定义历史图表并直接查询数据库的仪表盘搭建"
+   ]
+  },
+  "sha": "1c059f298994",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "44c59c51050b": {
+  "identity": {
+   "one_liner": "PostgreSQL 迁移风险检查工具，通过解析 SQL、模拟 schema 变更并与数据库快照比对来发现风险。",
+   "review": "safe-migrate 是一个用 Rust 编写的 CI/CD 工具，用于在迁移 SQL 应用到生产前检查其风险。它解析 SQL 文件，模拟 schema 变更，并将结果与通过只读事务同步的数据库快照比对，全程不执行迁移 SQL。支持 PostgreSQL 14–18，提供 lint、lint-chain、sync 等命令，可生成 GitHub Actions 集成，也可作为 Rust 库（safe_migrate::api）嵌入。限制包括：基线快照仅反映连接角色视角，未覆盖的操作会标记为 lock_prediction_unavailable。",
+   "highlights": [
+    "内置规则覆盖锁模式风险（lock-risk）、表重写、约束、索引、分区、物化视图刷新、破坏性变更、权限变更及超时缺失等类别",
+    "通过 sync 在只读、可重复读事务中读取 PostgreSQL 目录生成基线缓存，后续检查可离线运行",
+    "发现结果分三个等级（Tier1 阻断退出码 2、Tier2/Tier3 退出码 0），每条含稳定规则 ID、原因和修复建议，支持 --json 与 --markdown 输出"
+   ],
+   "use_cases": [
+    "在 CI 中对迁移目录运行 lint-chain，配合生成的 GitHub Actions 工作流做 PR 检查",
+    "使用离线基线缓存审查带状态传递的有序迁移链",
+    "通过 Rust API 或 CLI 将迁移风险检查嵌入现有发布流程"
+   ]
+  },
+  "sha": "44c59c51050b",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

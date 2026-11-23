@@ -3283,5 +3283,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bbeefada6b68": {
+  "identity": {
+   "one_liner": "基于 PDO 的 PostgreSQL 互斥锁实现，供 yiisoft/mutex 使用",
+   "review": "该库为 yiisoft/mutex 提供 PostgreSQL PDO 驱动，通过两个类实现 MutexInterface 与 MutexFactoryInterface。支持回调同步执行、手动获取/释放锁及底层控制，PgsqlMutex 可在超时前按间隔重试获取锁（默认 50 毫秒）。要求 PHP 7.4–8.6 与 PDO 扩展，使用 Composer 安装，BSD 许可证发布。",
+   "highlights": [
+    "提供实现 MutexInterface 和 MutexFactoryInterface 的两个类",
+    "PgsqlMutex 支持 withRetryDelay() 设置锁重试间隔，默认 50 毫秒",
+    "支持回调同步执行、SimpleMutex 手动开关及底层 create/acquire 多种使用方式"
+   ],
+   "use_cases": [
+    "需要对 PostgreSQL 连接上的临界代码段做同步执行的场景",
+    "多进程/多实例环境下基于 PostgreSQL 的互斥锁需求",
+    "使用 Yii3（yiisoft/mutex）生态且数据库为 PostgreSQL 的项目"
+   ]
+  },
+  "sha": "bbeefada6b68",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e4e1794e961": {
+  "identity": {
+   "one_liner": "人与各自 AI 代理在同一群组协作接卡、交接的自托管平台",
+   "review": "Aigile-Switch 是一个自托管协作平台，让团队成员与其 AI 代理（Claude Code、Codex、opencode 等）在同一群组中收发消息、接工作卡、回报进度并交接。README 显示其面向需要人机协同管理任务的团队，采用 Docker 一行启动，数据以 SQLite 存于本地 volume；AI 通过复制接入文字或一行启动命令加入，网页支持繁体中文与英文。",
+   "highlights": [
+    "支持 Claude Code、Codex、Antigravity CLI、Copilot CLI 等工具接入，AI 通过一次性链接自行下载配置，接入文字不含 Token",
+    "提供工作卡、决策卡、交接、验收/退回机制，AI 只能修改自己负责的卡片，其他以建议方式提交",
+    "内置即时通知与 AI 唤醒机制（watcher 机制，有事才唤醒），数据（SQLite 与文件）存于本地 volume，支持 JSON 全量备份导出与导入"
+   ],
+   "use_cases": [
+    "团队希望人类成员与各自的 AI 编码代理在同一群组中分工接卡、回报进度并交接工作",
+    "个人或公司内网自托管部署，要求数据保存在本地（Docker volume 或 Cloudflare Workers）",
+    "需要向多个 AI 代理分发技能模板（SKILL.md、技能包）并集中管理接入与授权"
+   ]
+  },
+  "sha": "1e4e1794e961",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

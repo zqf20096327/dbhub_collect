@@ -3526,5 +3526,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b4d132904118": {
+  "identity": {
+   "one_liner": "覆盖30万+金融符号的开源CSV数据库，按类别筛选股票、ETF、基金、指数等资产。",
+   "review": "FinanceDatabase 是一个包含 303,685 个符号的开源数据库，涵盖股票、ETF、基金、指数、货币、加密货币与货币市场，数据以 CSV 文件存储并由社区维护。通过 pip 安装后可在 Python 中按国家、行业、板块等条件筛选，无需 API key。它不提供实时行情或基本面数据，定位是与 Finance Toolkit 配合使用。",
+   "highlights": [
+    "包含 121,621 只股票、32,232 只 ETF、57,761 只基金、82,401 个指数等共 303,685 个符号，数据每周更新",
+    "每类资产支持 select（按类别筛选）、search（全文搜索）、show_options（查看可选值）三个函数，返回 pandas 或 Polars DataFrame",
+    "支持 only_primary_listing 仅保留主要上市、exclude_delisted 排除退市符号，并提供 MCP Server 供 Claude、Cursor 等客户端直接查询"
+   ],
+   "use_cases": [
+    "按国家、板块、行业筛选证券列表，如查询美国保险业公司或阿姆斯特丹证券交易所的半导体公司",
+    "浏览各资产类别下的可选分类（行业、交易所、市值档位等），了解某一领域存在哪些产品",
+    "将筛选出的符号输入 FinanceToolkit 进行基本面与竞争分析"
+   ]
+  },
+  "sha": "b4d132904118",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6482eace094a": {
+  "identity": {
+   "one_liner": "面向 RV1106 开发板的移动侦测录像方案，动态帧率录制 HLS 并提供网页回放",
+   "review": "MotionSense 运行于 Luckfox Pico Pro Max（RV1106），在检测到移动时以约 30 fps 录制、空闲时降至 1 fps，将 H.264 写为 SD 卡上的 HLS 分段，并通过内置 HTTP 服务提供 MJPEG 实时流、按日回放界面与 SQLite 事件记录。由 C 守护进程与 Go 网络代理两个进程经 unix socket 协作。适用于长时间静止、偶发动作的场景；README 注明无认证、定位为学习项目，仅限局域网使用。",
+   "highlights": [
+    "自适应帧率录制：空闲 1 fps、检测到移动时约 30 fps，阈值、灵敏度与夜视模式可配置",
+    "H.264 按关键帧切分为 .ts 分段，按日期目录组织，含每日事件数据库与磁盘空间不足时自动清理",
+    "内置 HTTP 服务：/api/stream 提供 MJPEG 实时流，支持按日期浏览回放，/api/status 报告运行时间、内存、负载与 SoC 温度"
+   ],
+   "use_cases": [
+    "监控静态为主、偶发短暂动作的场所，如冰箱、储物间、仓库通道或地下室",
+    "在局域网内通过浏览器查看实时画面并快速回看全天录像（空闲段加速播放）",
+    "作为 Luckfox Pico SDK 应用学习 RV1106 上 ISP/编码/移动侦测的开发项目"
+   ]
+  },
+  "sha": "6482eace094a",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

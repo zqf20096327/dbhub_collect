@@ -29134,5 +29134,845 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "ea7909aec899+2": {
+  "fn": "pgcentralfoundation/pgrx",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    12,
+    6,
+    11,
+    [
+     "GitHub Actions badge",
+     "crates.io badge",
+     "docs.rs badge",
+     "Twitter Follow",
+     "[Discord Chat][Discord]"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    19,
+    11,
+    18
+   ],
+   [
+    "replace",
+    19,
+    20,
+    18,
+    19,
+    [
+     " + **Please join our [Discord Server][Discord].**"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    19,
+    20
+   ],
+   [
+    "replace",
+    21,
+    22,
+    20,
+    21,
+    [
+     " + **We are also in need of financial sponsorship.**"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    21,
+    24
+   ],
+   [
+    "replace",
+    25,
+    34,
+    24,
+    33,
+    [
+     "- **A fully managed development environment with `cargo-pgrx`**",
+     " + `cargo pgrx new`: Create new extensions quickly",
+     " + `cargo pgrx init`: Install new (or register existing) PostgreSQL installs",
+     " + `cargo pgrx run`: Run your extension and interactively test it in `psql` (or `pgcli`)",
+     " + `cargo pgrx test`: Unit-test your extension across multiple PostgreSQL versions",
+     " + `cargo pgrx regress`: Run SQL regression tests and compare their output with expected files",
+     " + `cargo pgrx package`: Create installation packages for your extension, including RPM and DEB packages on Linux",
+     " + `cargo pgrx migrate`: Optionally build upgrade scripts from one small SQL file per change",
+     " + More in the `README.md`!"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    33,
+    34
+   ],
+   [
+    "replace",
+    35,
+    38,
+    34,
+    37,
+    [
+     " + Support from Postgres 15 to Postgres 19 from the same codebase",
+     " + Use Rust feature gating to use version-specific APIs",
+     " + Seamlessly test against all versions"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    37,
+    38
+   ],
+   [
+    "replace",
+    39,
+    43,
+    38,
+    42,
+    [
+     " + Implement extensions entirely in Rust",
+     " + Automatic mapping for many Rust types into PostgreSQL",
+     " + SQL schemas generated automatically (or manually via `cargo pgrx schema`)",
+     " + Include custom SQL with `extension_sql!` & `extension_sql_file!`"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    42,
+    43
+   ],
+   [
+    "replace",
+    44,
+    48,
+    43,
+    47,
+    [
+     " + During binding generation, pgrx transpiles nearly all of PostgreSQL's function-style C `#define` macros into Rust `macro_rules!` macros",
+     " + Call them through `pgrx::` with their original C names and `!`, such as `pgrx::VARSIZE_ANY!(ptr)`",
+     " + Their behavior follows the selected PostgreSQL installation, compiler flags, and target",
+     " + See Using PostgreSQL C macros for extension examples and the transpiler architecture for implementation details"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    47,
+    48
+   ],
+   [
+    "replace",
+    49,
+    54,
+    48,
+    53,
+    [
+     " + Translates Rust `panic!`s into Postgres `ERROR`s that abort the transaction, not the process",
+     " + Memory Management follows Rust's drop semantics, even in the face of `panic!` and `elog(ERROR)`",
+     " + `#[pg_guard]` procedural macro to ensure the above",
+     " + Postgres `Datum`s are `Option<T> where T: FromDatum`",
+     " - `NULL` Datums are safely represented as `Option::<T>::None`"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    53,
+    54
+   ],
+   [
+    "replace",
+    55,
+    59,
+    54,
+    58,
+    [
+     " + Annotate functions with `#[pg_extern]` to expose them to Postgres",
+     " + Return `pgrx::iter::SetOfIterator<'a, T>` for `RETURNS SETOF`",
+     " + Return `pgrx::iter::TableIterator<'a, T>` for `RETURNS TABLE (...)`",
+     " + Create trigger functions with `#[pg_trigger]`"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    58,
+    59
+   ],
+   [
+    "replace",
+    60,
+    66,
+    59,
+    65,
+    [
+     " + `#[derive(PostgresType)]` to use a Rust struct as a Postgres type",
+     " - By default, represented as a CBOR-encoded object in-memory/on-disk, and JSON as human-readable",
+     " - Supports `#[pg_binary_protocol]` to generate binary protocol send/recv functions",
+     " - Provide custom in-memory/on-disk/human-readable representations",
+     " + `#[derive(PostgresEnum)]` to use a Rust enum as a Postgres enum",
+     " + Composite types supported with the `pgrx::composite_type!(\"Sample\")` macro"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    65,
+    66
+   ],
+   [
+    "replace",
+    67,
+    69,
+    66,
+    68,
+    [
+     " + Safe access into SPI",
+     " + Transparently return owned Datums from an SPI context"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    68,
+    69
+   ],
+   [
+    "replace",
+    70,
+    77,
+    69,
+    76,
+    [
+     " + Safe access to Postgres' `MemoryContext` system via `pgrx::PgMemoryContexts`",
+     " + Executor/planner/transaction/subtransaction hooks",
+     " + Safely use Postgres-provided pointers with `pgrx::PgBox<T>` (akin to `alloc::boxed::Box<T>`)",
+     " + `#[pg_guard]` proc-macro for guarding `extern \"C-unwind\"` Rust functions that need to be passed into Postgres",
+     " + Access Postgres' logging system through `eprintln!`-like macros",
+     " + Direct `unsafe` access to large parts of Postgres internals via the `pgrx::pg_sys` module",
+     " + New features added regularly!"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    86,
+    76,
+    85
+   ],
+   [
+    "replace",
+    86,
+    88,
+    85,
+    87,
+    [
+     "target limits.",
+     "A cross build has further requirements; see Cross-compiling."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    92,
+    87,
+    91
+   ],
+   [
+    "replace",
+    92,
+    100,
+    91,
+    99,
+    [
+     " - Debian-likes: `apt install clang llvm libclang-dev`",
+     " - RHEL-likes: `yum install clang llvm`",
+     " - Windows: download installers from https://github.com/llvm/llvm-project/releases",
+     " - On Linux, pgrx's CI generates the C macros with every Clang major from 14 through 23, on x86_64 and aarch64, and requires those versions to generate the same macros. Other Clang versions are not tested on Linux.",
+     " - `pgrx-pg-sys` uses the driver to find the target's system headers, to check the C macro profile against the PostgreSQL headers and to compile its native support archive, including the `cshim` feature. Its major version must match `libclang`. pgrx uses `CLANG_PATH` when it is set; otherwise it uses the first match among the `CLANG` recorded in a `pg_config` program's `--configure` output, the `clang` installed with `libclang`, and `clang-<major>` or `clang` on `PATH`.",
+     " - The archiver is `llvm-ar` from the driver's LLVM release, or `llvm-lib` for Windows targets. pgrx looks for `llvm-ar-<major>` beside a `clang-<major>` driver, then `llvm-ar` beside the driver or beside its resolved path, such as Debian's `/usr/lib/llvm-<major>/bin/llvm-ar`. Without one, builds for Unix targets use the system `ar`, which works for native builds but may not index objects built for another target.",
+     " - A failure to generate the C macros stops the build with an error that names the cause.",
+     " - A driver that loads a default configuration file, as Gentoo's Clang does, is refused. Set `CLANG_NO_DEFAULT_CONFIG=1` to build without it."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    99,
+    100
+   ],
+   [
+    "replace",
+    101,
+    106,
+    100,
+    105,
+    [
+     " - Linux and macOS: a host C compiler, which builds the generator's SHA-256 backend",
+     " - Windows: MSVC, which Rust's MSVC targets need for linking",
+     "- PostgreSQL's build dependencies ‡",
+     " - Debian-likes: `sudo apt-get install build-essential libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache pkg-config libicu-dev`",
+     " - RHEL-likes: `sudo yum install -y bison-devel readline-devel zlib-devel openssl-devel wget ccache && sudo yum groupinstall -y 'Development Tools'`"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    120,
+    105,
+    119
+   ],
+   [
+    "replace",
+    120,
+    121,
+    119,
+    120,
+    [
+     "The Mac C compiler (clang) and related tools are bundled with Xcode."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    123,
+    120,
+    122
+   ],
+   [
+    "replace",
+    123,
+    124,
+    122,
+    123,
+    [
+     "For additional C libraries, it's easiest to use Homebrew. In particular,"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    142,
+    123,
+    141
+   ],
+   [
+    "replace",
+    142,
+    166,
+    141,
+    142,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    178,
+    142,
+    154
+   ],
+   [
+    "replace",
+    178,
+    183,
+    154,
+    155,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    197,
+    155,
+    169
+   ],
+   [
+    "replace",
+    197,
+    198,
+    169,
+    170,
+    [
+     " └── lib.rs"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    218,
+    170,
+    190
+   ],
+   [
+    "delete",
+    218,
+    219,
+    190,
+    190
+   ],
+   [
+    "equal",
+    219,
+    225,
+    190,
+    196
+   ],
+   [
+    "replace",
+    225,
+    261,
+    196,
+    197,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    280,
+    197,
+    216
+   ],
+   [
+    "replace",
+    280,
+    389,
+    216,
+    217,
+    [
+     "…（109 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    391,
+    217,
+    219
+   ],
+   [
+    "replace",
+    391,
+    399,
+    219,
+    227,
+    [
+     " --> pgrx/src/lib.rs:151:5",
+     " |",
+     "151 | / assert!(",
+     "152 | | same_slice(pg_sys::FMGR_ABI_EXTRA, b\"xPostgreSQL\\0\"),",
+     "153 | | \"Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?\",",
+     "154 | | );",
+     " | |_____^ the evaluated program panicked at 'Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?', pgrx/src/lib.rs:151:5",
+     " |"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    403,
+    227,
+    231
+   ],
+   [
+    "replace",
+    403,
+    450,
+    231,
+    232,
+    [
+     "…（47 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    450,
+    461,
+    232,
+    243
+   ]
+  ],
+  "at": "2026-11-22"
+ },
+ "221ceecfd5ca+2": {
+  "fn": "sunquan03/risk-scoring-streaming",
+  "clean_ver": "2",
+  "raw_lines": 13,
+  "ops": [
+   [
+    "equal",
+    0,
+    13,
+    0,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "|Service|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    18,
+    15,
+    18,
+    [
+     "|risk-feature-producer/|Producer made for providing synthetic data for all 4 topics (randomized).|",
+     "|risk-feature-consumer/|Consumes four Kafka topics, writes events to TiDB, computes aggregate features into the `kv_cache` table. Reads its topic and feature-group config from Postgres.|",
+     "|risk-feature-api/|Serves features from `kv_cache`, computing them live on a cache miss. Listens on `:8080`.|"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    24,
+    18,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "|Method|Path|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    30,
+    26,
+    30,
+    [
+     "|`GET`|`/v1/health`|",
+     "|`GET`|`/v1/risk-profile/:client_id`|",
+     "|`GET`|`/v1/risk-profile/:client_id/:group_id`|",
+     "|`DELETE`|`/v1/risk-profile/:client_id/cache`|"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    35,
+    30,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "risk-feature-consumer/aggregations/, the API"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    36,
+    37
+   ],
+   [
+    "replace",
+    37,
+    38,
+    37,
+    38,
+    [
+     "risk-feature-api/internal/features/sql/."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    51,
+    38,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "|Feature|What it measures and why it matters|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    52,
+    53
+   ],
+   [
+    "replace",
+    53,
+    75,
+    53,
+    75,
+    [
+     "|`total_applications`|Lifetime count of credit applications. Denominator for every rate below.|",
+     "|`apps_last_30d`|Credit hunger. Applications in the trailing month - the strongest short-horizon distress and fraud signal in this group. Shopping several lenders in weeks usually means being declined elsewhere.|",
+     "|`apps_last_90d`|Trailing quarter. Smooths a single-month spike and separates a one-off need from sustained shopping.|",
+     "|`apps_last_12m`|Trailing year. The structural application rate, and the baseline against which a 30-day spike is judged abnormal.|",
+     "|`max_requested_amount`|Largest sum ever requested (KZT). Ceiling of stated need; a far outlier flags a large legitimate purchase or an inflated ask.|",
+     "|`min_requested_amount`|Smallest sum requested. Very low values indicate micro-lending behaviour, which carries a distinct risk profile.|",
+     "|`avg_requested_amount`|Mean request size. Normalises an incoming application against the client's own history rather than the portfolio's.|",
+     "|`total_approved_amount`|Cumulative credit ever approved. Proxy for total lifetime exposure to this client.|",
+     "|`max_approved_amount`|Largest single approval. An implicit prior credit decision - the highest limit any underwriter has extended.|",
+     "|`approved_count`|Number of approvals. Accumulated positive underwriting history.|",
+     "|`rejected_count`|Number of rejections. Adverse decision history; meaningful only alongside `total_applications`.|",
+     "|`approval_rate`|Core underwriting-quality score. Approvals ÷ applications. A low rate means repeatedly judged uncreditworthy by decisions that already priced in full information.|",
+     "|`last_application_at`|Most recent application timestamp. Drives how stale the rest of the profile should be considered.|",
+     "|`last_status`|Outcome of the most recent application (`APPROVED`, `REJECTED`, `PENDING`, `CANCELLED`). Current standing, which a lifetime rate can mask entirely.|",
+     "|`last_rejection_reason`|Causal attribution for the latest decline. `FRAUD_RISK` and `EXISTING_OVERDUE` carry categorically different weight from `AGE_LIMIT` - the reason matters more than the count.|",
+     "|`distinct_channels`|Channels used across `MOBILE_APP`, `WEB`, `BRANCH`, `KASPI_PAY`, `CALL_CENTER`. Channel-hopping often indicates an attempt to route around a decline.|",
+     "|`mobile_app_count`|Applications from the mobile app. Digital-engagement measure and a soft device-trust anchor.|",
+     "|`avg_score_at_decision`|Mean credit score at decision time. Typical creditworthiness across the client's history.|",
+     "|`min_score_at_decision`|Floor of credit quality. The worst score ever recorded - the low point a mean smooths away, usually the more predictive figure.|",
+     "|`distinct_products`|Distinct product types applied for. Separates a diversified borrower from one concentrated in a single risky product.|",
+     "|`has_mortgage`|Ever applied for a mortgage (0/1). Secured-lending engagement, generally a stability and life-stage marker.|",
+     "|`has_micro_loan`|Ever applied for a micro loan (0/1). A recognised subprime and short-term-distress marker in this market.|"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    84,
+    75,
+    84
+   ],
+   [
+    "replace",
+    84,
+    85,
+    84,
+    85,
+    [
+     "|Feature|What it measures and why it matters|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    85,
+    86
+   ],
+   [
+    "replace",
+    86,
+    107,
+    86,
+    107,
+    [
+     "|`total_payment_events`|All payment-related events on the client's loans. Volume denominator for every ratio below.|",
+     "|`on_time_payments`|The primary positive repayment signal. Payments settled at zero days overdue; sustained volume here outweighs most adverse markers elsewhere.|",
+     "|`late_payments`|Payments made, but past the due date. Soft delinquency - the debt is serviced, just not on schedule.|",
+     "|`missed_payments`|Scheduled payments not made at all. Hard delinquency count over the client's lifetime.|",
+     "|`missed_last_90d`|Recent deterioration. Misses in the trailing quarter - materially more predictive of imminent default than a lifetime count that never decays.|",
+     "|`total_paid_amount`|Cumulative amount actually paid (KZT). Demonstrated cash-flow servicing capacity.|",
+     "|`total_penalties`|Accumulated penalty charges. Monetary cost of the client's own indiscipline; correlates tightly with chronic lateness.|",
+     "|`avg_payment_amount`|Mean payment size. The typical instalment being serviced, used to size affordability against income.|",
+     "|`max_single_payment`|Largest single payment. Indicates lump-sum or early-settlement capacity beyond the regular schedule.|",
+     "|`max_days_overdue`|The classic severity marker. Worst DPD ever reached - the figure most underwriting policies key a decline on.|",
+     "|`avg_days_overdue`|Mean DPD across late events only. Separates chronic from acute: a low mean beside a high max is one bad month; a high mean is habitual.|",
+     "|`ever_30dpd`|Ever 30+ days past due (0/1). First standard bureau delinquency threshold.|",
+     "|`ever_60dpd`|Ever 60+ days past due (0/1). Serious delinquency; typically triggers collections escalation.|",
+     "|`ever_90dpd`|The regulatory default definition under most frameworks, and in practice a hard decline on its own.|",
+     "|`total_principal_paid`|Principal repaid. Real debt reduction, as distinct from merely servicing interest.|",
+     "|`total_interest_paid`|Interest repaid. Revenue contribution - but a high interest-to-principal ratio signals slow amortisation and a client treading water.|",
+     "|`last_payment_at`|Timestamp of the most recent payment or partial payment. Recency of active servicing.|",
+     "|`days_since_last_payment`|Silence is the signal. A widening gap warns of default before any `MISSED` event is emitted, because it needs no event at all.|",
+     "|`late_fee_count`|Late-fee events. Frequency of lateness severe enough to trigger a charge.|",
+     "|`penalty_count`|Penalty events. Escalated enforcement beyond a routine late fee.|",
+     "|`restructure_count`|Forbearance history. Restructuring resets the delinquency clock and suppresses every DPD feature above it - repeated restructures are adverse precisely because they hide one.|"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    116,
+    107,
+    116
+   ],
+   [
+    "replace",
+    116,
+    117,
+    116,
+    117,
+    [
+     "|Feature|What it measures and why it matters|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    117,
+    118
+   ],
+   [
+    "replace",
+    118,
+    136,
+    118,
+    136,
+    [
+     "|`total_operations`|All lifecycle operations on the client's loans. Activity baseline for the group.|",
+     "|`disbursement_count`|Loans actually funded. Distinguishes approvals that converted from those that did not.|",
+     "|`topup_count`|Revolving dependence. Repeated top-ups mean borrowing further against an existing facility rather than paying it down - a debt spiral in its early form.|",
+     "|`early_close_count`|Loans closed ahead of term. A strong credit-quality positive, though it reduces expected interest revenue.|",
+     "|`refinance_count`|Refinancing events. Debt restructuring outside formal forbearance, often used to move stress off the books before it registers as delinquency.|",
+     "|`write_off_count`|Realised loss. The terminal adverse outcome; any non-zero value is normally decisive on its own.|",
+     "|`total_disbursed`|Total principal advanced (KZT). Lifetime exposure actually put at risk.|",
+     "|`avg_disbursement`|Mean disbursement size. The client's typical facility.|",
+     "|`max_disbursement`|Largest single disbursement. Peak exposure carried at any one point.|",
+     "|`distinct_devices`|Device velocity. Distinct hashed fingerprints seen for one client - a high count is a classic account-takeover and synthetic-identity marker.|",
+     "|`distinct_device_types`|Variety across `IOS`, `ANDROID`, `WEB`, `POS`. A coarser view of the same signal; a newly appearing type warrants a soft flag.|",
+     "|`suspicious_op_count`|Operations the upstream fraud rules flagged. Direct count of rule hits over the client's history.|",
+     "|`suspicious_last_30d`|Active fraud pressure, as opposed to historical noise. The trailing-30-day window is what a review queue should key on.|",
+     "|`distinct_countries`|Distinct IP countries observed. Geographic dispersion of account access.|",
+     "|`foreign_op_count`|Operations originating outside Kazakhstan. For a domestic KZT retail book this is a meaningful anomaly, not routine travel noise.|",
+     "|`first_operation_at`|Earliest operation on record. Start of the lending relationship - tenure is itself protective.|",
+     "|`last_operation_at`|Most recent operation. Account liveness and profile freshness.|",
+     "|`ops_last_30d`|Operations in the trailing month. Current activity intensity; a sudden burst pairs with the suspicious counters to justify review.|"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    145,
+    136,
+    145
+   ],
+   [
+    "replace",
+    145,
+    146,
+    145,
+    146,
+    [
+     "|Feature|What it measures and why it matters|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    146,
+    147
+   ],
+   [
+    "replace",
+    147,
+    167,
+    147,
+    167,
+    [
+     "|`latest_month_end_balance`|Current liquidity position. The most recent month-end balance - the headline affordability figure.|",
+     "|`avg_monthly_balance`|Mean month-end balance. Sustained liquidity, immune to a single window-dressed month.|",
+     "|`min_monthly_balance`|Liquidity floor. How close to zero the client actually runs - usually more informative than the average, because the trough is what causes a missed instalment.|",
+     "|`max_monthly_balance`|Best month-end balance observed. Peak liquidity; brackets the range alongside the floor.|",
+     "|`balance_months_tracked`|Confidence weight. How many month-end observations exist - two months of history must not be read like twenty.|",
+     "|`total_salary_credits`|Cumulative salary inflow (KZT). Verified income received through the account.|",
+     "|`salary_credit_count`|Income regularity. The count matters as much as the sum - steady monthly arrivals evidence stable employment in a way one large sum does not.|",
+     "|`avg_salary_credit`|Mean salary credit - the working estimate of monthly income, and the denominator of any debt-to-income calculation.|",
+     "|`max_salary_credit`|Largest salary credit. Detects bonuses and annual supplements, and flags a one-off that may be inflating the mean.|",
+     "|`last_salary_at`|Employment liveness. A stale last-salary date is one of the earliest job-loss signals, well ahead of any payment miss.|",
+     "|`total_transfer_in`|Cumulative incoming transfers. Non-salary inflow - informal income, family support, or undeclared earnings.|",
+     "|`total_transfer_out`|Cumulative outgoing transfers. Standing outflow commitments, possibly obligations not disclosed on the application.|",
+     "|`large_debit_count`|Large debit events. Frequency of significant outflow shocks against the balance.|",
+     "|`large_credit_count`|Large credit events. Unexplained large inflows are a source-of-funds and AML consideration rather than a positive.|",
+     "|`max_single_debit`|Largest single outflow. The worst spending shock the account has absorbed.|",
+     "|`max_single_credit`|Largest single inflow. Warrants source-of-funds attention when far out of line with the salary profile.|",
+     "|`net_flow_last_30d`|Current cash-flow direction. Inflows minus outflows over the trailing month; sustained negative net flow leads a missed payment - it turns before delinquency does.|",
+     "|`events_last_30d`|Money events in the trailing month. Near-zero suggests a dormant or secondary account, which invalidates the affordability reading above it.|",
+     "|`distinct_source_systems`|Distinct originating banks (`KASPI`, `HALYK`, `FREEDOM`, …). Broad multi-banking means any single lender sees a smaller share of the true picture.|",
+     "|`distinct_accounts`|Variety across `CURRENT`, `SAVINGS`, `DEPOSIT`. Depth of the banking relationship; a deposit product is a wealth and stability marker.|"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    171,
+    167,
+    171
+   ]
+  ],
+  "at": "2026-11-22"
  }
 }

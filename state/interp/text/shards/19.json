@@ -3456,5 +3456,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3ec173c2328c": {
+  "identity": {
+   "one_liner": "纯 Raven 实现的 MySQL 客户端库，基于 std/net 实现 MySQL 协议。",
+   "review": "raven-mysql 是 Raven 编程语言的 MySQL 客户端库，纯 Raven 实现，不依赖 libmysqlclient 或 C 编译器。它通过 std/net 实现 MySQL 4.1 协议握手与 mysql_native_password 认证，提供 ？ 占位符参数查询、事务、错误码返回等能力，参数以十六进制字面量绑定以避免拼接为 SQL 语法。当前为 v0.1.0，仅在 MySQL 8.0.43 上完成端到端测试，未实现 TLS、caching_sha2_password 等特性，需为用户显式配置 mysql_native_password。",
+   "highlights": [
+    "实现 MySQL 协议 4.1 握手与 mysql_native_password 认证，无原生依赖",
+    "提供 ？ 参数绑定，值转换为 _utf8mb4 十六进制字面量，支持 SQL NULL 与空串区分",
+    "支持事务、连接健康检查、超时配置，语句错误后连接保持可复用"
+   ],
+   "use_cases": [
+    "在 Raven 应用中连接 MySQL 8（使用 mysql_native_password 认证）执行查询与写入",
+    "需要注入安全参数绑定的 SQL 执行场景",
+    "通过仓库提供的 Docker 脚本运行端到端测试的环境"
+   ]
+  },
+  "sha": "3ec173c2328c",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e7d8e9b6443e": {
+  "identity": {
+   "one_liner": "基于 Python Flask 和 MySQL 的药房销售、库存与账单管理系统",
+   "review": "该系统是一个 Web 端药房管理应用，覆盖销售、库存与账单操作，为计算机专业学生的课程小组项目，同时面向需要本地或免费云端部署的使用者。后端用 Flask，数据存于 MySQL 或兼容的 TiDB，配置全部经环境变量读取；仓库附 schema.sql 与测试文件。部署在 Vercel serverless 上时冷启动需数秒，且上传的头像文件不会持久保存。",
+   "highlights": [
+    "使用 Python Flask 后端与 MySQL（含 MySQL Connector for Python），前端为 HTML/CSS/JavaScript",
+    "附带 schema.sql（含表和 expiry_tracking 视图）及测试文件 test_id_logic.py",
+    "数据库连接与 SECRET_KEY 均通过环境变量配置，并提供 TiDB Cloud + Vercel 免费部署流程"
+   ],
+   "use_cases": [
+    "学生学习 Flask + MySQL 的完整 Web 应用结构与部署流程",
+    "药房销售、库存与账单相关操作的演示或教学场景",
+    "使用 TiDB Cloud（MySQL 兼容）和 Vercel Hobby 计划的零成本云端部署实践"
+   ]
+  },
+  "sha": "e7d8e9b6443e",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

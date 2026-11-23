@@ -2906,5 +2906,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8b173949e469": {
+  "identity": {
+   "one_liner": "基于SQLite分片存储、兼容Redis协议的Rust Blob存储服务器",
+   "review": "Blobasaur 是用 Rust 编写的分片二进制大对象（Blob）存储服务器，每个分片对应一个 SQLite 数据库，对外实现 Redis 协议，可用 redis-cli 或任意 Redis 客户端访问。支持多探针一致性哈希分片、TTL 过期、HGET/HSET 命名空间、可配置压缩及 Prometheus 指标。迁移分片时需停机，且需为新旧数据库预留磁盘空间。",
+   "highlights": [
+    "实现 GET、SET、DEL、EXISTS、HGET、HSET、HSETEX、HDEL、HEXISTS 等 Redis 命令，可用任意 Redis 客户端连接",
+    "每个分片使用独立 SQLite 数据库，通过一致性哈希分布数据，并提供 shard migrate 命令在分片配置间迁移数据",
+    "支持键 TTL（SET EX/PX、TTL、EXPIRE）及后台自动清理，可选 Gzip、Zstd、Lz4、Brotli 压缩，暴露 Prometheus 兼容指标"
+   ],
+   "use_cases": [
+    "需要持久化存储二进制大对象、同时复用现有 Redis 客户端与运维习惯的场景",
+    "希望通过配置文件调整分片数、压缩算法、批量写入参数的独立部署存储服务",
+    "借助 HGET/HSET 命名空间对键进行逻辑分组管理的数据组织需求"
+   ]
+  },
+  "sha": "8b173949e469",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "70cd5f38e6d8": {
+  "identity": {
+   "one_liner": "面向小型虚拟机与边缘设备的单二进制 JSON 文档数据库",
+   "review": "NonoDB 是用 Rust 编写的单进程 JSON 文档数据库，借鉴 SQLite 的嵌入式理念，由单一守护进程持有 LMDB 数据文件并通过 HTTP/JSON 提供 MongoDB 风格查询 API。它面向需要在小型虚拟机和边缘设备上管理共享 JSON 状态的应用开发者，支持 SQL、BM25/模糊/向量搜索、副本复制和内嵌 GUI。限制包括：无 SQL join，向量搜索默认为精确扫描，写入由单写线程串行提交。",
+   "highlights": [
+    "空闲时占用约 5 MB 内存（100 万文档加三个索引），基于 LMDB 崩溃安全存储，MIT 许可单二进制发布",
+    "支持 MongoDB 风格过滤器与更新操作符、SQL SELECT/INSERT/UPDATE/DELETE（单集合、无 join）、BM25 全文/三元组模糊/余弦与 dot/l2 向量精确搜索",
+    "提供文档版本历史、按租户密钥的整文档加密、主/备异步复制与自动选举、gzip/age 加密备份至本地/S3/R2，以及内嵌浏览器 GUI"
+   ],
+   "use_cases": [
+    "在 512 MB–2 GB 内存的虚拟机或边缘设备上运行需要文档 API 的应用",
+    "使用官方 PyMongo、Node.js、Go 驱动通过兼容端点接入的项目",
+    "需要在同一数据库内同时进行 JSON 文档存储、全文/模糊/向量检索与 SQL 报表查询的场景"
+   ]
+  },
+  "sha": "70cd5f38e6d8",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

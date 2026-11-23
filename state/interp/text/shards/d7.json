@@ -3555,5 +3555,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "34fbf4ad9cdb": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的本地优先可审计长期记忆控制平面，含受管检索与执行证据记录",
+   "review": "AtMem 是一个通过 pip 安装的 Python 包，为 OpenClaw、Pydantic AI、LangChain/LangGraph 等运行时提供受管长期记忆。它记录模型与工具事件，按策略控制上下文注入，新集成默认以 shadow 模式启动，需显式激活。本地记忆运行无需外部 API；AtBot 组件随装自动部署。",
+   "highlights": [
+    "支持 OpenClaw、Pydantic AI 与 LangChain/LangGraph 原生适配，本地记忆运行无需外部 API",
+    "所有集成默认以 shadow 模式启动，审查后通过 CLI 显式激活受管注入",
+    "提供 Agent Black Box 事件记录、Agent 级记忆授权管理及可选 SQLCipher 加密存储"
+   ],
+   "use_cases": [
+    "为基于 Pydantic AI 或 LangGraph 构建的 Agent 添加受审计的长期记忆",
+    "需要记忆操作留痕与执行证据、支持离线基准测试（atmem benchmark）的本地部署",
+    "多编码 Agent 之间共享项目记忆（可选 AtMem Code 功能）"
+   ]
+  },
+  "sha": "34fbf4ad9cdb",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e35a4153e7a9": {
+  "identity": {
+   "one_liner": "为 Postgres 数组列元素提供外键约束的 pgrx 扩展",
+   "review": "pg_anyfk 是一个 Postgres 扩展，用于对数组列中的单个元素实施引用完整性检查，弥补原生外键只约束整列的不足。它通过 pgrx 用 Rust 构建，以触发器实现，提供 add/violations/drop_constraint 等函数。要求两表均为用户所有、被引用列有单列唯一索引，且建议数组列上建 GIN 索引。支持 Postgres 15-18，无需预加载库或重启。",
+   "highlights": [
+    "提供 anyfk.add 等函数为数组列元素添加引用约束，支持 restrict 和 scrub 两种 on_delete 模式",
+    "检查前对被引用行加 FOR KEY SHARE 锁，避免并发写入产生悬空引用",
+    "支持可延迟检查（提交时校验）、重命名表/列跟踪，以及 NULL/空数组按 MATCH SIMPLE 语义放行"
+   ],
+   "use_cases": [
+    "已有数组列（如 tag_ids bigint[]）的存量 schema 需要元素级引用检查",
+    "需要删除被引用行时自动从各数组中移除该元素（scrub 模式）",
+    "托管 Postgres 环境中无法配置 shared_preload_libraries 的场景"
+   ]
+  },
+  "sha": "e35a4153e7a9",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

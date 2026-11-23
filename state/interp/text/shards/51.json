@@ -3300,5 +3300,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b80e7651d8d7": {
+  "identity": {
+   "one_liner": "自托管的 LLM 驱动多智能体渗透测试平台，用双图结构记录测试进展与证据",
+   "review": "ARTEX 是一个自托管的 AI 渗透测试平台，以 Go 单二进制加内嵌 Next.js UI 运行，依赖 PostgreSQL。规划器分解目标为意图，工作器调用真实工具执行并回写资产图与探索图；发现项绑定捕获的 HTTP 请求/响应作为证据。每次自主操作经过范围规则、审批门与预算控制。适用于需要留存审计记录的授权安全测试团队。",
+   "highlights": [
+    "双图架构：跨任务共享的资产图与每任务的探索图，通过锚点关联并生成资产测试覆盖图",
+    "录制式 MITM 代理与浏览器扩展捕获真实流量，发现项绑定请求/响应证据并支持复测",
+    "人工审批门、argv 前缀规则、范围/拒绝门与 token/轮次预算等自主性控制机制"
+   ],
+   "use_cases": [
+    "授权范围内的 bug bounty 或渗透测试任务，需要保留每个发现的原始请求/响应证据",
+    "需要人工审批关键工具调用、限制 token 与轮次预算的半自主测试流程",
+    "多步攻击链推进场景，利用跨唤醒的 todolist 与共享工作器执行记录"
+   ]
+  },
+  "sha": "b80e7651d8d7",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8cf78e002366": {
+  "identity": {
+   "one_liner": "开源自托管餐厅POS与管理系统，离线优先，运行于局域网单服务器。",
+   "review": "OrderRestro 是面向餐厅、咖啡馆、云厨房及多门店连锁的餐厅管理系统，涵盖点餐计费、桌台与预订、厨房显示（KDS）、库存、员工考勤薪资、会计报表等模块。技术栈为 Next.js + NestJS + Postgres，通过 Docker 在自有服务器或局域网内运行，无需订阅与云端依赖。README 标注 20 个模块中部分已建成、部分仍在规划中，采用 AGPL v3 许可证。",
+   "highlights": [
+    "离线优先：Postgres、API 与 Web 应用三个容器运行于餐厅本地服务器，断开外网后点餐、计费、KDS 与打印仍可工作",
+    "包含 QR/NFC 桌台点餐（需员工现场激活的桌码）、KDS 多工位路由、库存与采购、CRM 会员积分、员工薪资与会计共 20 个产品域",
+    "支持多种部署方式：Docker Compose、Linux 安装脚本、CasaOS/ZimaOS 应用清单、Windows 桌面客户端（WebView2 封装），并可用 Cloudflare Tunnel 等隧道从外网访问"
+   ],
+   "use_cases": [
+    "单店餐厅在本地局域网内运行完整点餐、厨房、库存与薪资流程，不依赖外部互联网",
+    "多门店连锁通过分支切换与跨门店库存调拨进行集中管理，也可部署于 VPS 远程运维",
+    "餐厅信息系统开发者可参考 prompts/AI_INTEGRATION_PROMPT.md 中的接口文档，用编码代理在其上构建订餐网站或应用"
+   ]
+  },
+  "sha": "8cf78e002366",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "187e9dea0df1": {
+  "identity": {
+   "one_liner": "基于 TanStack Start 与 Hono 的漫画阅读平台，采用 monorepo 架构。",
+   "review": "Taiyō 是一个漫画阅读平台，包含 Hono API、BullMQ worker 和 TanStack Start 网页应用，支持 manga、manhwa、manhua 和轻小说格式，提供用户库、阅读历史、章节上传和搜索功能。面向读者、汉化组与站点运营者。数据存储于 PostgreSQL，图片经 magic-byte 校验和 EXIF 剥离后存入 S3 兼容对象存储，依赖 Docker 运行本地基础设施。",
+   "highlights": [
+    "支持 manga、manhwa、manhua、light novel 四种内容格式，内容分级含 Normal/Suggestive/NSFW/NSFL",
+    "认证通过 Better Auth 实现，包含邮箱、magic link 与 Discord/Google OAuth，配有 Turnstile 验证码和限流",
+    "图片管道在服务端执行 magic-byte 校验、EXIF 剥离并通过 sharp 转 JPEG；搜索由 Meilisearch 支撑"
+   ],
+   "use_cases": [
+    "自托管漫画/轻小说阅读站点，供读者浏览、阅读和管理个人书库",
+    "汉化组章节上传与协作：通过申请/审批流程认领组织，成员上传受身份门控",
+    "全栈开发参考：Turborepo + pnpm monorepo 结构，含 OpenAPI 文档、Storybook 组件库与集成测试示例"
+   ]
+  },
+  "sha": "187e9dea0df1",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a639fd87324a": {
+  "identity": {
+   "one_liner": "本地优先、可审计的 Agent Runtime，模型提议、宿主决定",
+   "review": "FCode（可运行主体位于 flowcredit/）是一个基于 Python 3.11 的本地 Agent Runtime，将目标转化为可检查的执行过程：模型负责理解与提议，Runtime 负责计划、权限、预算、执行、验证与恢复。附带审计域 flowaudit，通过 PoC、宿主侧 oracle 与审计事件哈希链生成可复核的证据。离线演示零依赖、零配置，不需要 API key；当前桌面构建在 macOS arm64 上经过验证。",
+   "highlights": [
+    "采用 monorepo 结构，核心能力包含 typed capability 执行链、repair_ticket 有界修复、产物 exit checks 与构图回滚",
+    "审计域 flowaudit 生成受限子进程 PoC、REA 制品事实与哈希链事件账本，支持通过 rea 适配器审计无源码的 .app / 二进制 / JS 树",
+    "Computer Use 能力默认关闭，按会话授权并受动作次数、时限与目标范围约束，权限缺失时 fail-closed"
+   ],
+   "use_cases": [
+    "需要保留人工审批与预算控制的 Agent 任务执行工作台",
+    "对 agent 应用进行可重放证据审计，包括无源码的应用包",
+    "需要事件链与收据留存以支持事后复核的本地运行环境"
+   ]
+  },
+  "sha": "a639fd87324a",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6dfbd687abcc": {
+  "identity": {
+   "one_liner": "NestJS+React全栈monorepo模板，含Prisma/Postgres与刷新令牌轮换认证",
+   "review": "这是一个基于pnpm workspaces与Turborepo的全栈项目模板，前端为React 19+Vite+Tailwind，后端为NestJS+Prisma+Postgres。认证采用内存access token与httpOnly刷新cookie，刷新令牌每次使用轮换、重用即撤销会话。通过pnpm init:project一键重命名包、写env、建库并播种管理员。适合以该技术栈启动新项目的开发者；限流计数存于内存，多实例需自行共享存储。",
+   "highlights": [
+    "pnpm init:project 一次性完成重命名、env写入、数据库迁移与管理员播种",
+    "access token仅存内存，refresh token存httpOnly cookie并在每次使用时轮换，重用令牌撤销会话",
+    "共享Zod schema同时用于API校验与Web表单；CI在每次PR运行格式、lint、类型检查与单元/e2e/浏览器测试"
+   ],
+   "use_cases": [
+    "以NestJS+React+Prisma技术栈启动新的全栈项目",
+    "需要现成认证流程（JWT刷新轮换、ADMIN/USER角色、默认拒绝路由）作为项目起点",
+    "需要一个API与前端共享请求schema、测试连真实Postgres的monorepo结构模板"
+   ]
+  },
+  "sha": "6dfbd687abcc",
+  "source": "readme",
+  "generated_at": "2026-11-22",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
