@@ -3496,5 +3496,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8d8372187b8e": {
+  "identity": {
+   "one_liner": "面向 AI 应用的数据库：同一记录上提供图、向量与聚合查询，写入时维护实时模式目录。",
+   "review": "RushDB 是一个以单个 Rust 二进制运行的数据库，将嵌套 JSON、CSV、Cypher 等写入存为带类型的图记录，同一记录支持关系查询、向量/全文搜索和聚合。每次写入更新标签、字段与值的目录供 agent 查询前读取。通过 HTTP、PostgreSQL wire、Bolt、gRPC 或 MCP 连接，Apache-2.0 许可，Windows 需用 WSL 2 或 Docker。",
+   "highlights": [
+    "同一记录上提供图查询、向量（精确与 HNSW）、BM25 全文、混合搜索及 count/sum/average/groupBy 聚合",
+    "每次写入自动更新标签、字段、类型和值的模式目录，提供 findLabels、getSchemaSummary 等 MCP 工具",
+    "支持 PostgreSQL wire 协议、openCypher、ISO GQL、Gremlin、Mongo 风格写入；具备 WAL、事务、时间点恢复备份和只读副本"
+   ],
+   "use_cases": [
+    "Agent 记忆与 RAG：记忆按用户/会话关联到来源记录，检索先按图谓词过滤再融合向量与 BM25 排序",
+    "在应用内实现分面搜索或 AI 搜索：过滤计数来自目录，无需单独维护搜索索引",
+    "模式随写入演进的场景：推送任意 JSON 自动推断类型、嵌套对象转为关联记录、新字段即时入目录"
+   ]
+  },
+  "sha": "8d8372187b8e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f5aea8e5fd9f": {
+  "identity": {
+   "one_liner": "葡萄牙公共交通时刻表只读 REST API，基于 GTFS 数据导入 SQLite 提供查询",
+   "review": "该项目提供葡萄牙公共交通时刻表的只读 REST API，使用 TypeScript、Hono 与 SQLite 构建，内置导入器可从 Carris、CP、STCP 等九个运营方的 GTFS 数据源下载数据并写入本地 SQLite。提供附近站点搜索、线路、班次与发车时刻查询端点，附带 OpenAPI 3.1 文档、Swagger UI 与健康检查端点。支持 npm 或 Docker Compose 部署，刷新时机由使用者自行调度，默认注册表不含岛屿运营商，轮渡覆盖未定。",
+   "highlights": [
+    "支持从九个运营商数据源导入 GTFS feed，含日历例外与跨午夜时刻，导入器跳过相同归档并拒绝已过服务日期的快照",
+    "提供 /nearby-stops（lat/lon 必填，radius 默认 1 公里、最大 25 公里）、线路、班次与发车查询等只读 v2 端点，附带 OpenAPI 3.1 文档与 Swagger UI",
+    "支持 npm 与 Docker Compose 两种运行方式，提供 /health 与 /source-health 两个监控端点，后者在快照缺失、刷新失败或过期时返回 HTTP 503 及按运营商的错误码"
+   ],
+   "use_cases": [
+    "需要查询里斯本、塞图巴尔、波尔图都会区及葡萄牙铁路（CP）附近站点与计划发车的应用或服务",
+    "自建公交时刻查询服务并自行调度每日 GTFS 数据刷新的部署者",
+    "使用本地 GTFS 归档（如布拉加 TUB、科英布拉 SMTUC）做手动导入与扩展数据源评估的场景"
+   ]
+  },
+  "sha": "f5aea8e5fd9f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e4ee481a3386": {
+  "identity": {
+   "one_liner": "Rust 编写的 Windows 原生工具，朗读 TikTok 和 Kick 直播弹幕",
+   "review": "TikVoz 是一个运行于 Windows 的开源程序，通过 TTS 朗读 TikTok 和 Kick 直播间的评论、礼物等事件。它以单个约 7 MB 的 exe 分发，使用 egui 构建原生界面，语音采用 Windows 离线音色。支持两平台消息合并为单一朗读队列、按用户分配声音、VIP 优先级，以及基于 Unicode 归一化和同形字检测的脏话过滤。设置保存在 %APPDATA%，也可用 --config 便携模式。",
+   "highlights": [
+    "同时连接 TikTok 与 Kick 直播，将消息合并为一条语音队列，支持按用户固定音色、VIP/房管优先级和用户冷却",
+    "内置脏话过滤器，处理 leetspeak、同形异码字、零宽字符、双向控制符等规避写法，支持分类开关、通配符与例外词表",
+    "提供消息清洗（去 emoji、链接替换、缩写展开）、可编辑发音词典、队列上限与防刷屏，并支持自动重连与便携模式"
+   ],
+   "use_cases": [
+    "直播主播希望在直播过程中语音朗读观众评论和礼物事件",
+    "同时运营 TikTok 和 Kick 直播、需要统一朗读队列的创作者",
+    "需要对朗读内容进行脏话过滤和消息清洗的西班牙语直播间"
+   ]
+  },
+  "sha": "e4ee481a3386",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

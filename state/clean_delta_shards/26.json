@@ -39017,5 +39017,500 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "dde6bf750510+2": {
+  "fn": "getcoinio/coinio",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "CI",
+     "License: MIT",
+     "Docker image"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "**English** · Türkçe · Deutsch · Français · Español · Português (Brasil) · 简体中文 · 日本語"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Website · Documentation · Live demo · Free hosted app"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "Coinio: every subscription, one calm page"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    13,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "**Try it first:** the live demo is the real web app running in your browser with sample data. Nothing is sent anywhere, and it resets whenever you like."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "**Rather not install anything?** Use Coinio free at app.getcoinio.me: the same app, no ads, no tracking. More"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    22,
+    19,
+    22
+   ],
+   [
+    "replace",
+    22,
+    32,
+    22,
+    24,
+    [
+     " Home: what is left to pay this month and what is due next Home: what is left to pay this month and what is due next ",
+     " Calendar: payment days and weekly totals Calendar: payment days and weekly totals "
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    24,
+    25
+   ],
+   [
+    "replace",
+    33,
+    47,
+    25,
+    35,
+    [
+     " Reports: 12 months back, 12 months ahead Reports: 12 months back, 12 months ahead ",
+     " Type “spot” and Spotify fills in Type “spot” and Spotify fills in ",
+     "",
+     " More screenshots ",
+     "",
+     " Every subscription at a glance Every subscription at a glance ",
+     " Themes, accent colour and fonts Themes, accent colour and fonts ",
+     "",
+     " Night theme Night theme ",
+     " On the phone, installable as a web app On the phone, installable as a web app "
+    ]
+   ],
+   [
+    "equal",
+    47,
+    58,
+    35,
+    46
+   ],
+   [
+    "replace",
+    58,
+    59,
+    46,
+    47,
+    [
+     "- **Firefly III.** Two-way sync with your own Firefly III: subscriptions become bills, and payments go both ways."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    68,
+    47,
+    56
+   ],
+   [
+    "replace",
+    68,
+    69,
+    56,
+    57,
+    [
+     "**Install script:** checks for Docker, starts Coinio on port 8080 and offers a Cloudflare Tunnel for https (read the script)."
+    ]
+   ],
+   [
+    "equal",
+    69,
+    92,
+    57,
+    80
+   ],
+   [
+    "replace",
+    92,
+    98,
+    80,
+    86,
+    [
+     "|Platform|How|",
+     "|---|---|",
+     "|Unraid|Template `deploy/unraid/coinio.xml` · guide|",
+     "|CasaOS|Compose file `deploy/casaos/docker-compose.yml` · guide|",
+     "|Portainer|App template `deploy/portainer/template.json` · guide|",
+     "|Dokploy|Compose service from this repository, `./docker-compose.yml` · guide|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    86,
+    87
+   ],
+   [
+    "replace",
+    99,
+    100,
+    87,
+    88,
+    [
+     "See deploy/README.md and the installation docs for details."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    103,
+    88,
+    91
+   ],
+   [
+    "replace",
+    103,
+    104,
+    91,
+    92,
+    [
+     "Coinio is configured with environment variables. Everything else (currency, time zone, language, reminder time, appearance) is set in the app and stored in the database. An empty variable counts as not set. A starting point is in `.env.example`."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    92,
+    93
+   ],
+   [
+    "replace",
+    105,
+    115,
+    93,
+    103,
+    [
+     "|Variable|Default|What it does|",
+     "|---|---|---|",
+     "|`COINIO_PUBLIC_URL`|not set|The address you reach Coinio at, e.g. `https://coinio.example.com`. Turns on OAuth for remote MCP clients and secure session cookies. Must be `https://` (or `http://localhost`); with a plain `http://` address OAuth stays off.|",
+     "|`COINIO_TELEGRAM_BOT_TOKEN`|not set|Telegram bot token. With the chat ID, creates a Telegram channel on first start; then manage it in **Settings › Notifications**.|",
+     "|`COINIO_TELEGRAM_CHAT_ID`|not set|Telegram chat ID for that channel.|",
+     "|`COINIO_TELEGRAM_THREAD_ID`|not set|Optional topic ID in a forum group.|",
+     "|`PORT`|`8080`|Port the server listens on inside the container.|",
+     "|`COINIO_DATA_DIR`|`/data`|Folder for the database (`coinio.db`) and logos (`logos/`).|",
+     "|`COINIO_WEB_DIR`|built-in|Folder with the built web app; only useful in development.|",
+     "|`TZ`|`UTC`|Container time zone; set it to your own, e.g. `Europe/Berlin`. The zone that \"today\", automatic payments and reminders follow is chosen in the app (**Settings › General**).|"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    103,
+    104
+   ],
+   [
+    "replace",
+    116,
+    117,
+    104,
+    105,
+    [
+     "In Docker, leave `PORT` and `COINIO_DATA_DIR` alone: publish another port (`-p 9000:8080`) or mount another folder at `/data` instead. The container runs as user `node` (UID 1000), so a mounted folder must be writable by it; the entrypoint takes over root-owned folders on start. Full reference: docs.getcoinio.me/docs/reference/configuration."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    125,
+    105,
+    113
+   ],
+   [
+    "replace",
+    125,
+    126,
+    113,
+    114,
+    [
+     "Either way, set `COINIO_PUBLIC_URL` to that https address. See Expose to the internet."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    129,
+    114,
+    117
+   ],
+   [
+    "replace",
+    129,
+    130,
+    117,
+    118,
+    [
+     "The MCP server lives at your Coinio address plus `/mcp`. Cloud apps such as claude.ai and ChatGPT sign in with OAuth (needs `COINIO_PUBLIC_URL` on https); tools on your own machine use an API key from **Settings › Integrations › API keys**. **Settings › Integrations** shows ready-made snippets. Guide: docs.getcoinio.me/docs/integrations/mcp."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    133,
+    118,
+    121
+   ],
+   [
+    "replace",
+    133,
+    134,
+    121,
+    122,
+    [
+     "`widget/coinio-widget.js` is a Scriptable script for small, medium and large Home Screen widgets and Lock Screen widgets. Create a read-only API key, paste the script, fill in `SERVER_URL` and `API_KEY`. Guide: docs.getcoinio.me/docs/integrations/iphone-widget."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    122,
+    123
+   ],
+   [
+    "replace",
+    135,
+    136,
+    123,
+    124,
+    [
+     "**Android:** the Coinio widget runs in the free ScriptWidget app; **Settings › Integrations › Android widget** gives you the parameter to paste. Guide: docs.getcoinio.me/docs/integrations/android-widget."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    139,
+    124,
+    127
+   ],
+   [
+    "replace",
+    139,
+    140,
+    127,
+    128,
+    [
+     "**Settings › Integrations › Firefly III** keeps your subscriptions in step with the bills in your own Firefly III, in both directions, payments included. You need a Personal Access Token from Firefly III and an address Coinio can reach. Nothing is ever deleted on either side. Guide: docs.getcoinio.me/docs/integrations/firefly."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    149,
+    128,
+    137
+   ],
+   [
+    "replace",
+    149,
+    155,
+    137,
+    138,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    170,
+    138,
+    153
+   ],
+   [
+    "replace",
+    170,
+    171,
+    153,
+    154,
+    [
+     "With Compose, archive the `./data` folder while the container is stopped. The backup holds API keys, notification tokens and sessions, so store it like a password. You can also export subscriptions and payments as CSV or JSON from the app. Restore steps: docs.getcoinio.me/docs/maintenance."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    185,
+    154,
+    168
+   ],
+   [
+    "replace",
+    185,
+    186,
+    168,
+    169,
+    [
+     "The docs site is a separate package: `cd docs-site && pnpm install && pnpm dev`. See CONTRIBUTING.md for the rest."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    193,
+    169,
+    176
+   ],
+   [
+    "replace",
+    193,
+    199,
+    176,
+    177,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    203,
+    177,
+    181
+   ],
+   [
+    "replace",
+    203,
+    204,
+    181,
+    182,
+    [
+     "- Brand logos come from Simple Icons (CC0-1.0). The logos are trademarks of their owners; using them does not imply endorsement."
+    ]
+   ],
+   [
+    "equal",
+    204,
+    205,
+    182,
+    183
+   ],
+   [
+    "replace",
+    205,
+    208,
+    183,
+    186,
+    [
+     "- Exchange rates from Frankfurter, which publishes European Central Bank reference rates.",
+     "- Fonts via Fontsource and Google Fonts: Geist, Geist Mono, Inter, Manrope, Space Grotesk, Bricolage Grotesque, Fraunces, Instrument Serif, IBM Plex Mono and Plus Jakarta Sans, all under the SIL Open Font License 1.1.",
+     "- Icons by Lucide (ISC). The docs site is built with Fumadocs."
+    ]
+   ],
+   [
+    "equal",
+    208,
+    210,
+    186,
+    188
+   ],
+   [
+    "replace",
+    210,
+    212,
+    188,
+    189,
+    [
+     "MIT © 2026 Yakup Emre Yerli"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

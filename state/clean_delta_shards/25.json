@@ -29921,5 +29921,3840 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "92827cf890f3+2": {
+  "fn": "redbase-app/redb-identity",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "> Built on OpenIddict and redb.Route. Every endpoint is a `direct-vm://` route — call it over HTTP, gRPC, RabbitMQ, SignalR, or **straight from another in-process module with zero network overhead**. Ships as `.tpkg` packages for redb.Tsak. REDB-backed, cluster-ready, standards-compliant."
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    4,
+    7
+   ],
+   [
+    "replace",
+    7,
+    26,
+    7,
+    24,
+    [
+     "License: Apache 2.0",
+     "Website",
+     ".NET",
+     "Providers",
+     "NuGet: redb.Identity.Core",
+     "NuGet: redb.Identity.Http",
+     "NuGet: redb.Identity.Client",
+     "OIDC",
+     "OAuth",
+     "DPoP",
+     "PAR",
+     "JAR",
+     "DCR",
+     "SCIM-2E7D32)",
+     "FIDO2",
+     "Engine",
+     "Runtime"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    24,
+    26
+   ],
+   [
+    "replace",
+    28,
+    41,
+    26,
+    27,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    43,
+    27,
+    29
+   ],
+   [
+    "replace",
+    43,
+    44,
+    29,
+    30,
+    [
+     "|If you want…|redb.Identity gives you…|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    30,
+    31
+   ],
+   [
+    "replace",
+    45,
+    57,
+    31,
+    43,
+    [
+     "|A full OIDC / OAuth 2.1 server without ASP.NET coupling|A `direct-vm://`-only core: `token`, `authorize`, `userinfo`, `introspect`, `revoke`, `jwks`, `.well-known/openid-configuration`, PAR, JAR (signed request objects), Device Code, Dynamic Registration.|",
+     "|To call Identity from another in-process module **with no HTTP**|`To(\"direct-vm://identity-token\")` from your own `RouteBuilder`. Zero serialization, zero loopback, zero TLS handshake, same exchange.|",
+     "|HTTP / gRPC / RabbitMQ / SignalR endpoints|Drop in the matching facade `.tpkg`. Each facade is a thin transport bridge — no business logic.|",
+     "|A drop-in user / group / scope / client / consent / audit / session store|Built-in storage via redb.Core typed `*Props` objects. Code-first schemes, no migrations.|",
+     "|Multi-instance / cluster deployment|DataProtection key-ring + signing keys shared through redb object store. Cleanup timers run leader-only via `.Cluster(true)`.|",
+     "|Modern MFA|TOTP (RFC 6238) + SMS/Email OTP + WebAuthn (FIDO2) + Recovery codes.|",
+     "|Self-service for end users|`/me/profile`, `/me/sessions`, `/me/mfa`, `/me/webauthn`, `/me/consents`, `/me/federated`.|",
+     "|Federation|OIDC / GitHub external providers, stored as redb props objects, admin CRUD.|",
+     "|Backchannel logout that works across replicas|RFC 8417-style revoked-SID list (`/revoked-sids/add` + `/since`) + push-and-poll fallback.|",
+     "|SCIM 2.0 provisioning|Users + Groups + Bulk endpoints (RFC 7644).|",
+     "|RFC compliance|OIDC Core, OAuth 2.1, RFC 7662 (Introspection), RFC 7591/7592 (DCR), RFC 8628 (Device Code), RFC 9126 (PAR), **RFC 9101 (JAR — JWT-Secured Authorization Request, opt-in)**, RFC 9068 (JWT access-token profile — `at+jwt`, full claim set, `aud` issued and verified), RFC 8707 (Resource Indicators), RFC 8693 (Token Exchange, opt-in), RFC 9449 (DPoP), RFC 8417 / OIDC Backchannel Logout.|",
+     "|Conformance you can check|Exercised against the **official OpenID Foundation conformance suite** (Config OP, Basic OP). Unsigned `alg:none` request objects are refused, as FAPI 2.0 requires. Per-module results: OPENID_CERTIFICATION.md.|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    68,
+    43,
+    54
+   ],
+   [
+    "replace",
+    68,
+    74,
+    54,
+    55,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    76,
+    55,
+    57
+   ],
+   [
+    "replace",
+    76,
+    77,
+    57,
+    58,
+    [
+     "|Package|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    58,
+    59
+   ],
+   [
+    "replace",
+    78,
+    89,
+    59,
+    70,
+    [
+     "|`redb.Identity.Core`|OAuth 2.1 / OIDC engine — OpenIddict pipeline, redb stores, MFA, WebAuthn, federation, signing keys|",
+     "|`redb.Identity.Http`|HTTP / HTTPS facade — discovery, token, authorize, userinfo, introspect, JWKS, PAR, DCR, SCIM, `/me`, management|",
+     "|`redb.Identity.Grpc`|gRPC facade — service-to-service surface (token, introspect, revoke, userinfo, discovery, JWKS) + the management services; `.proto` contracts ship in `redb.Identity.Contracts` under `Protos/`|",
+     "|`redb.Identity.Soap`|WS-Trust facade — `Issue`, `Validate`, `Cancel`, `Renew` over SOAP on the same core routes; WSDL published on GET; TLS required, and its absence is a refusal to start|",
+     "|`redb.Identity.Management`|Transport-neutral management + self-service controllers — thin adapters over `direct-vm://identity-manage-*`, shared by every facade|",
+     "|`redb.Identity.Contracts`|Wire DTOs + route-name constants (shared by Core, Http, Client)|",
+     "|`redb.Identity.Client`|Typed HTTP SDK (`IIdentityClient`) + backchannel OIDC client|",
+     "|`redb.Identity.DataProtection`|redb-backed ASP.NET Core DataProtection key-ring|",
+     "|`redb.Identity.Core.Module`|redb.Tsak `.tpkg` host glue (only when hosting inside a Tsak worker)|",
+     "|`redb.Identity.Ldap`|LDAP / Active Directory federation provider|",
+     "|`redb.Identity.Resource.Dpop`|Resource-server DPoP (RFC 9449) validator for downstream APIs|"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    97,
+    70,
+    78
+   ],
+   [
+    "replace",
+    97,
+    98,
+    78,
+    79,
+    [
+     "|Image|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    79,
+    80
+   ],
+   [
+    "replace",
+    99,
+    103,
+    80,
+    84,
+    [
+     "|`redb-identity-backend`|Tsak Worker + Identity modules (OIDC only)|",
+     "|`redb-identity-managed`|+ Tsak dashboard|",
+     "|`redb-identity-full`|+ Identity Web BFF (login, consent, admin UI)|",
+     "|`redb-identity-web`|Identity Web BFF only|"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    106,
+    84,
+    87
+   ],
+   [
+    "replace",
+    106,
+    107,
+    87,
+    88,
+    [
+     "DEPLOYMENT.md."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    88,
+    91
+   ],
+   [
+    "replace",
+    110,
+    111,
+    91,
+    92,
+    [
+     "UPGRADING.md lists what to check and change for each version; CHANGELOG.md has the"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    92,
+    93
+   ],
+   [
+    "delete",
+    112,
+    114,
+    93,
+    93
+   ],
+   [
+    "equal",
+    114,
+    126,
+    93,
+    105
+   ],
+   [
+    "replace",
+    126,
+    127,
+    105,
+    106,
+    [
+     "DEPLOYMENT.md and HTTPS.md."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    136,
+    106,
+    115
+   ],
+   [
+    "replace",
+    136,
+    137,
+    115,
+    116,
+    [
+     "|Package|Tsak context|Contains|"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    116,
+    117
+   ],
+   [
+    "replace",
+    138,
+    143,
+    117,
+    122,
+    [
+     "|`redb.Identity.Contracts.tpkg`|`identity.contracts`|The shared DTO assembly every Identity module resolves against|",
+     "|`redb.Identity.Core.Module.tpkg`|`identity.core`|OIDC engine, redb stores, MFA, federation, signing keys|",
+     "|`redb.Identity.Http.tpkg`|`identity.http`|HTTP facade: protocol endpoints, management API, SCIM, `/me`|",
+     "|`redb.Identity.Grpc.tpkg`|`identity.grpc`|gRPC facade (optional)|",
+     "|`redb.Identity.Soap.tpkg`|`identity.soap`|WS-Trust facade (optional)|"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    155,
+    122,
+    134
+   ],
+   [
+    "replace",
+    155,
+    168,
+    134,
+    135,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    201,
+    135,
+    168
+   ],
+   [
+    "delete",
+    201,
+    203,
+    168,
+    168
+   ],
+   [
+    "equal",
+    203,
+    205,
+    168,
+    170
+   ],
+   [
+    "replace",
+    205,
+    206,
+    170,
+    171,
+    [
+     "Each item links to the migration steps in UPGRADING.md."
+    ]
+   ],
+   [
+    "equal",
+    206,
+    208,
+    171,
+    173
+   ],
+   [
+    "replace",
+    208,
+    210,
+    173,
+    175,
+    [
+     " refresh tokens issued by earlier versions stay valid.",
+     " OpenIddict 7"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    175,
+    176
+   ],
+   [
+    "replace",
+    211,
+    212,
+    176,
+    177,
+    [
+     " resource parameter"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    177,
+    178
+   ],
+   [
+    "replace",
+    213,
+    214,
+    178,
+    179,
+    [
+     " Client assertions"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    216,
+    179,
+    181
+   ],
+   [
+    "replace",
+    216,
+    217,
+    181,
+    182,
+    [
+     " `cnf.jkt`. DPoP"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    182,
+    183
+   ],
+   [
+    "replace",
+    218,
+    219,
+    183,
+    184,
+    [
+     " DataProtection key ring"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    184,
+    185
+   ],
+   [
+    "replace",
+    220,
+    223,
+    185,
+    186,
+    [
+     " and `full` compose stacks keep the Tsak key rings on a volume. See DEPLOYMENT.md."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    234,
+    186,
+    197
+   ],
+   [
+    "replace",
+    234,
+    235,
+    197,
+    198,
+    [
+     "||ASP.NET-bound IS (Duende, OpenIddict samples)|redb.Identity|Standalone IAM (Keycloak / Auth0)|"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    236,
+    198,
+    199
+   ],
+   [
+    "replace",
+    236,
+    245,
+    199,
+    206,
+    [
+     "|Call `token` from another in-process module|Loopback HTTP|**`To(\"direct-vm://identity-token\")`** — same exchange, zero copy|Network hop|",
+     "|Add a new transport (gRPC, MQ, SignalR)|Rewrite endpoints as gRPC services / consumers|Add a facade `.tpkg`, point it at `direct-vm://`|Vendor adapter (if it exists)|",
+     "|Replace HTTP with RabbitMQ entirely|Major refactor|**Drop the HTTP facade. Keep Core.**|Not possible|",
+     "|Storage|Custom EF Core schema + migrations|redb `RedbObject<TProps>` — code-first, no migrations|Vendor schema, vendor migrations|",
+     "|Multi-replica key sharing|DIY DataProtection persistence + JWKS rotation|Built-in: redb-backed key-ring + signing key store|Built-in (vendor-specific)|",
+     "|Embeddable in a Tsak worker|No|**Yes — as one or two `.tpkg` packages**|No|",
+     "|License|Mixed (Duende: commercial)|Apache 2.0|Mixed|"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    256,
+    206,
+    217
+   ],
+   [
+    "replace",
+    256,
+    276,
+    217,
+    218,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    288,
+    218,
+    230
+   ],
+   [
+    "replace",
+    288,
+    290,
+    230,
+    232,
+    [
+     " the `client_credentials` grant and only the granular scopes it needs, for example `identity:users:read`. Take a",
+     " token from `IdentityEndpoints.Token` and reuse it until it expires."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    291,
+    232,
+    233
+   ],
+   [
+    "replace",
+    291,
+    293,
+    233,
+    235,
+    [
+     " `IdentityEndpoints.AuthManagement`. It validates the token and leaves the management context",
+     " (`identity:management-scopes`, `identity:management-subject`) on the exchange, or stops it with `401`."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    235,
+    236
+   ],
+   [
+    "replace",
+    294,
+    298,
+    236,
+    240,
+    [
+     " `/api/v1/identity/groups`, ...) and `identity:authz-action` to `read` or `write`, and send the exchange through",
+     " `IdentityEndpoints.AuthzCheck`. It checks the token's scopes against the same table the facades use, or stops the",
+     " exchange with `403 insufficient_scope`. Skipping this step lets any token with a management scope reach every",
+     " operation."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    299,
+    240,
+    241
+   ],
+   [
+    "replace",
+    299,
+    300,
+    241,
+    242,
+    [
+     " send the exchange to the management route."
+    ]
+   ],
+   [
+    "equal",
+    300,
+    305,
+    242,
+    247
+   ],
+   [
+    "replace",
+    305,
+    322,
+    247,
+    248,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    334,
+    248,
+    260
+   ],
+   [
+    "replace",
+    334,
+    359,
+    260,
+    261,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    359,
+    367,
+    261,
+    269
+   ],
+   [
+    "replace",
+    367,
+    368,
+    269,
+    270,
+    [
+     "|Flow / endpoint|Needs HTTP + browser|Works on any transport|"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    369,
+    270,
+    271
+   ],
+   [
+    "replace",
+    369,
+    378,
+    271,
+    278,
+    [
+     "|`client_credentials` (M2M)|—|yes|",
+     "|`authorization_code` — redirect to `/authorize`|yes|—|",
+     "|`authorization_code` — `code → token` exchange|—|yes|",
+     "|`refresh_token`, `revoke`, `introspect`, `userinfo`|—|yes|",
+     "|`device_code` — initial request|—|yes|",
+     "|`device_code` — user verification URL|yes|—|",
+     "|Management API, SCIM 2.0, audit query|—|yes|"
+    ]
+   ],
+   [
+    "equal",
+    378,
+    390,
+    278,
+    290
+   ],
+   [
+    "replace",
+    390,
+    440,
+    290,
+    291,
+    [
+     "…（50 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    440,
+    464,
+    291,
+    315
+   ],
+   [
+    "replace",
+    464,
+    497,
+    315,
+    316,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    497,
+    500,
+    316,
+    319
+   ],
+   [
+    "delete",
+    500,
+    502,
+    319,
+    319
+   ],
+   [
+    "equal",
+    502,
+    509,
+    319,
+    326
+   ],
+   [
+    "replace",
+    509,
+    547,
+    326,
+    327,
+    [
+     "…（38 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    547,
+    548,
+    327,
+    328
+   ],
+   [
+    "delete",
+    548,
+    550,
+    328,
+    328
+   ],
+   [
+    "equal",
+    550,
+    553,
+    328,
+    331
+   ],
+   [
+    "replace",
+    553,
+    554,
+    331,
+    332,
+    [
+     "Every protocol endpoint (`/connect/*`) is *also* registered on `direct-vm://identity-*` for zero-network in-process calls — see IdentityEndpoints.cs."
+    ]
+   ],
+   [
+    "equal",
+    554,
+    557,
+    332,
+    335
+   ],
+   [
+    "replace",
+    557,
+    558,
+    335,
+    336,
+    [
+     "Wired in HttpFacadeRouteBuilder.cs."
+    ]
+   ],
+   [
+    "equal",
+    558,
+    559,
+    336,
+    337
+   ],
+   [
+    "replace",
+    559,
+    560,
+    337,
+    338,
+    [
+     "|Path|Method|Auth|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    560,
+    561,
+    338,
+    339
+   ],
+   [
+    "replace",
+    561,
+    575,
+    339,
+    353,
+    [
+     "|`/connect/token`|POST|client authentication; grants `authorization_code` / `client_credentials` / `password` / `refresh_token` / `device_code` / token exchange (opt-in)|OAuth 2.1 token endpoint|",
+     "|`/connect/authorize`|GET, POST|session cookie|Authorization endpoint (browser redirect); validates `resource` (RFC 8707)|",
+     "|`/connect/par`|POST|`client_credentials`|Pushed Authorization Request (RFC 9126); validates `resource`|",
+     "|`/connect/userinfo`|GET, POST|Bearer|OpenID Connect userinfo|",
+     "|`/connect/introspect`|POST|`client_credentials`|RFC 7662 token introspection|",
+     "|`/connect/revocation`|POST|`client_credentials`|RFC 7009 token revocation|",
+     "|`/connect/logout`|GET, POST|session cookie (optional)|OIDC RP-Initiated Logout|",
+     "|`/connect/register`|POST|Bearer (optional)|RFC 7591 Dynamic Client Registration|",
+     "|`/connect/register/{client_id}`|GET, PUT, DELETE|Bearer|RFC 7592 DCR Management|",
+     "|`/connect/deviceauthorization`|POST|`client_credentials`|RFC 8628 Device Authorization|",
+     "|`/connect/device/verify`|POST|anonymous|RFC 8628 §3.3 end-user verification|",
+     "|`/.well-known/openid-configuration`|GET|anonymous|OIDC Discovery 1.0|",
+     "|`/.well-known/oauth-authorization-server`|GET|anonymous|RFC 8414 metadata|",
+     "|`/.well-known/jwks`|GET|anonymous|JSON Web Key Set|"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    578,
+    353,
+    356
+   ],
+   [
+    "replace",
+    578,
+    579,
+    356,
+    357,
+    [
+     "|Path|Method|Purpose|Source|"
+    ]
+   ],
+   [
+    "equal",
+    579,
+    580,
+    357,
+    358
+   ],
+   [
+    "replace",
+    580,
+    593,
+    358,
+    371,
+    [
+     "|`/applications` (+ `/{id}/rotate-secret`)|GET/POST/PUT/DELETE|OAuth client CRUD + secret rotation|ApplicationsController.cs|",
+     "|`/users` (+ `/search`, `/{id}/change-password`)|GET/POST/PUT/DELETE|User management|UsersController.cs|",
+     "|`/groups` (+ `/{id}/children`, `/members`, `/move`)|GET/POST/PUT/DELETE|Hierarchical groups & membership|GroupsController.cs|",
+     "|`/scopes`|GET/POST/PUT/DELETE|OAuth scope catalogue|ScopesController.cs|",
+     "|`/claim-mappers`|GET/POST/PUT/DELETE|Declarative claim mapping rules|ClaimMappersController.cs|",
+     "|`/claim-scopes` (+ `/assignments`)|GET/POST/PUT/DELETE|Reusable Client Scope bundles + per-app assignment|ClaimScopesController.cs|",
+     "|`/audit`|GET|Audit log query|AuditController.cs|",
+     "|`/tokens`|GET/POST/DELETE|Token lifecycle management; the type filter accepts the short and the URI form (`refresh_token`, `urn:ietf:params:oauth:token-type:refresh_token`)|TokensController.cs|",
+     "|`/consents`|GET/DELETE|User-consent admin|ConsentsController.cs|",
+     "|`/sessions`|GET/POST/DELETE|Admin session control|SessionsController.cs|",
+     "|`/mfa`|GET/POST/DELETE|Admin MFA lifecycle|MfaController.cs|",
+     "|`/federation-providers`|GET/POST/PUT/DELETE|External IdP CRUD (redb-stored)|FederationProvidersController.cs|",
+     "|`/revoked-sids`|GET/POST|Backchannel revoked-SIDs delta feed|RevokedSidsController.cs|"
+    ]
+   ],
+   [
+    "equal",
+    593,
+    598,
+    371,
+    376
+   ],
+   [
+    "replace",
+    598,
+    599,
+    376,
+    377,
+    [
+     "|Path|Method|Purpose|Source|"
+    ]
+   ],
+   [
+    "equal",
+    599,
+    600,
+    377,
+    378
+   ],
+   [
+    "replace",
+    600,
+    607,
+    378,
+    385,
+    [
+     "|`/me`|GET, PUT|Profile read/update|MeController.cs|",
+     "|`/me/password`|PUT|Self-service password change|MePasswordController.cs|",
+     "|`/me/sessions`|GET, DELETE|List/revoke own sessions (SSO)|MeSessionsController.cs|",
+     "|`/me/mfa`|GET/POST/DELETE|Self-service MFA enroll/disable|MeMfaController.cs|",
+     "|`/me/webauthn`|GET/POST/PATCH/DELETE|WebAuthn credentials (FIDO2)|MeWebAuthnController.cs|",
+     "|`/me/consents`|GET, DELETE|Consent dashboard|MeConsentsController.cs|",
+     "|`/me/federated-identities`|GET/POST/DELETE|Link/unlink external IdP accounts|MeFederatedIdentitiesController.cs|"
+    ]
+   ],
+   [
+    "equal",
+    607,
+    611,
+    385,
+    389
+   ],
+   [
+    "replace",
+    611,
+    613,
+    389,
+    391,
+    [
+     "Contract: identity.v1.proto; usage:",
+     "redb.Identity.Grpc/README.md."
+    ]
+   ],
+   [
+    "equal",
+    613,
+    614,
+    391,
+    392
+   ],
+   [
+    "replace",
+    614,
+    615,
+    392,
+    393,
+    [
+     "|Method|Auth|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    615,
+    616,
+    393,
+    394
+   ],
+   [
+    "replace",
+    616,
+    623,
+    394,
+    401,
+    [
+     "|`/identity.v1.Identity/Token`|client credentials, fields or `authorization: Basic`|RFC 6749 §3.2|",
+     "|`/identity.v1.Identity/Introspect`|client credentials|RFC 7662|",
+     "|`/identity.v1.Identity/Revoke`|client credentials|RFC 7009|",
+     "|`/identity.v1.Identity/UserInfo`|`authorization: Bearer`|OIDC Core §5.3|",
+     "|`/identity.v1.Identity/Discovery`, `/Jwks`|anonymous|documents, passed through verbatim|",
+     "|`/redb.route.grpc.RedbService/Process`|as above|envelope fallback: JSON body + `operation` metadata|",
+     "|`/grpc.health.v1.Health/Check`|anonymous|k8s / Consul / Envoy probe|"
+    ]
+   ],
+   [
+    "equal",
+    623,
+    630,
+    401,
+    408
+   ],
+   [
+    "replace",
+    630,
+    631,
+    408,
+    409,
+    [
+     "|Path|Method|Auth|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    631,
+    632,
+    409,
+    410
+   ],
+   [
+    "replace",
+    632,
+    636,
+    410,
+    414,
+    [
+     "|`/Users`|GET/POST/PUT/PATCH/DELETE|Bearer + `scim` scope|RFC 7644 §3.2–3.5|",
+     "|`/Groups`|GET/POST/PUT/PATCH/DELETE|Bearer + `scim` scope|RFC 7644 §3.2–3.5|",
+     "|`/Bulk`|POST|Bearer + `scim` scope|RFC 7644 §3.7|",
+     "|`/ServiceProviderConfig`, `/ResourceTypes`, `/Schemas`|GET|anonymous|RFC 7643 §5 discovery|"
+    ]
+   ],
+   [
+    "equal",
+    636,
+    639,
+    414,
+    417
+   ],
+   [
+    "replace",
+    639,
+    640,
+    417,
+    418,
+    [
+     "|Path|Method|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    640,
+    641,
+    418,
+    419
+   ],
+   [
+    "replace",
+    641,
+    647,
+    419,
+    423,
+    [
+     "|`/api/auth/login`|POST|Form-based browser login over BFF|",
+     "|`/api/auth/logout`|POST|BFF logout|",
+     "|`/account/login`|GET|Back-compat redirect to `/login`|",
+     "|`/health`|GET|BFF liveness probe|"
+    ]
+   ],
+   [
+    "equal",
+    647,
+    654,
+    423,
+    430
+   ],
+   [
+    "replace",
+    654,
+    655,
+    430,
+    431,
+    [
+     "|RFC|Spec|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    655,
+    656,
+    431,
+    432
+   ],
+   [
+    "replace",
+    656,
+    673,
+    432,
+    449,
+    [
+     "|**6749**|OAuth 2.0 Authorization Framework|Authorization Code, Client Credentials, Refresh Token, Resource Owner Password Credentials (§4.3, opt-in). RFC 6749 §5.2 error mapping (`invalid_request`/`invalid_grant`/`unsupported_grant_type` → correct HTTP status), §10.5 single-use authorization code (atomic consume), §10.12-style one-time `jti` enforcement.|",
+     "|**6750**|Bearer Token Usage|`Authorization: Bearer …`. Query-parameter transport (§2.3) explicitly rejected by management API.|",
+     "|**7009**|Token Revocation|Always 200 (§2.1), idempotent re-revocation, refresh-token rotation.|",
+     "|**7591**|Dynamic Client Registration|`POST /connect/register`, optional initial access token (§1.2).|",
+     "|**7592**|DCR Management Protocol|`GET/PUT/DELETE /connect/register/{client_id}` with `registration_access_token`.|",
+     "|**7521 / 7523**|Assertion Framework + JWT Bearer client authentication|`private_key_jwt` — DCR accepts `token_endpoint_auth_method=private_key_jwt` with inline `jwks`; `/connect/token` + `/connect/introspect` authenticate via an RS256-signed client assertion (RFC 7521 §4.2 / RFC 7523 §2.2); advertised in discovery `token_endpoint_auth_methods_supported`. Assertions follow draft-ietf-oauth-rfc7523bis: `typ` header `client-authentication+jwt` and the issuer as `aud`, for every endpoint (UPGRADING.md). Tampered signature → 401 `invalid_client`. Pinned by `demo_private_key_jwt`.|",
+     "|**7636**|PKCE|`S256` mandated; `plain` rejected per OAuth 2.1 / RFC 7636 §4.2.|",
+     "|**7662**|Token Introspection|Answers only a client the token concerns: one in its `aud` or the client it was issued to; any other caller gets `active: false` (§2.2). A resource server is put into the audience through the `Resources` of the scopes its callers request.|",
+     "|**8252**|OAuth 2.0 for Native Apps (BCP 212)|Private-use URI scheme redirect (§7.1); loopback IP redirect (§7.3) on `127.0.0.1` / `[::1]` with any port (`AllowLoopbackRedirectPortWildcard`, on by default); `application_type=native` and `token_endpoint_auth_method=none` accepted by DCR (`Register_NativeApp_SetsApplicationType`).|",
+     "|**8414**|Authorization Server Metadata|`/.well-known/oauth-authorization-server` (separate from OIDC Discovery, for non-OIDC clients) — verified by `DiscoveryD1ConformanceTests`.|",
+     "|**8628**|Device Authorization Grant|`/connect/deviceauthorization`, `/connect/device/verify`, configurable `expires_in` / `interval` (§3.2).|",
+     "|**8693**|Token Exchange (opt-in)|`grant_type=urn:ietf:params:oauth:grant-type:token-exchange` on OpenIddict's built-in grant, switched on by `EnableTokenExchange`; delegation + impersonation. Subject and actor tokens are access tokens; a token bound to a presenter can be exchanged only by that client, and a token of a disabled or deleted user is refused with `invalid_grant`.|",
+     "|**8707**|Resource Indicators|`resource` on `/connect/authorize`, `/connect/par` and token exchange: an absolute URI listed in a scope's `Resources`, with the client's `rsrc:<resource>` permission, otherwise `invalid_target` (UPGRADING.md). The access-token `aud` is composed from the same model (see RFC 9068).|",
+     "|**9068**|JWT Profile for OAuth 2.0 Access Tokens|`typ: at+jwt` header (OpenIddict's default for access tokens; id_tokens stay `JWT`, internal tokens carry private `oi_*+jwt` types, so token-type confusion is structurally impossible). Required claims `iss`/`exp`/`aud`/`sub`/`client_id`/`iat`/`jti` plus `auth_time`/`acr`/`amr`, `scope`, and `roles`/`groups` under the §2.2.3 SCIM names. `aud` (§2.2/§3) is composed by `AttachAccessTokenResources`: Resources of the granted scopes ∪ the application's `AccessTokenAudiences`, the OP's own audience for `identity:*` scopes, `{issuer}/resources` (or `DefaultAccessTokenAudience`) as the default resource indicator, plus the requesting `client_id` (so the issuing client may introspect its own token — OpenIddict admits only audience members to introspection). The local validation stack behind the management API verifies `aud` (§4) — a token minted for another API is refused with 401. Pinned by `FullStackAccessTokenAudienceTests`. Note: with the default access-token encryption on, external resource servers see a JWE — set `DisableAccessTokenEncryption` for third-party RFC 9068 validation.|",
+     "|**9101**|JAR — JWT-Secured Authorization Request|`/connect/authorize` accepts a signed `request` object, resolves the client's keys, verifies the signature and takes the parameters from inside the JWT with §6.1 precedence (inner values win; outer values not repeated inside are dropped). `ValidateRequestObjectHandler` **replaces** OpenIddict's built-in `ValidateRequestParameter` / `ValidateRequestUriParameter`, which reject both unconditionally. Opt-in via `Features.EnableJar` (default `false` → `request_not_supported`, byte-identical to releases before the flag existed); `request_uri` fetching is a second switch (`Jar.EnableRequestUri`) behind `OutboundUrlGuard`, while PAR-issued `urn:ietf:params:oauth:request_uri:` values stay with OpenIddict. Unsigned `alg:none` objects are refused with the flag on or off. Discovery advertises `request_parameter_supported` / `request_uri_parameter_supported` / `request_object_signing_alg_values_supported` only while the flag is on — the server never announces a mode it will not serve. Signing-algorithm mismatch against the client's registered hint is `LogOnly` or `Enforce`. Pinned by 15 tests in `ValidateRequestObjectHandlerTests`.|",
+     "|**9126**|Pushed Authorization Requests (PAR)|`POST /connect/par`, configurable `Require PAR`, `request_uri` lifetime (§2.2).|",
+     "|**9449**|DPoP — Demonstrating Proof-of-Possession|Issuance binding (`cnf.jkt`) + `DPoP-Nonce` (§8) with HMAC-signed stateless nonces + resource-server validator (`redb.Identity.Resource.Dpop`). Per-`jkt` replay store (`DpopConsumedJtiProps`). A resource server of your own that validates these tokens with OpenIddict.Validation 7 must skip its proof-of-possession check for `cnf.jkt` and verify the DPoP proof itself (UPGRADING.md).|"
+    ]
+   ],
+   [
+    "equal",
+    673,
+    676,
+    449,
+    452
+   ],
+   [
+    "replace",
+    676,
+    677,
+    452,
+    453,
+    [
+     "|Spec|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    677,
+    678,
+    453,
+    454
+   ],
+   [
+    "replace",
+    678,
+    683,
+    454,
+    459,
+    [
+     "|**OIDC Core 1.0**|Authorization Code + PKCE, ID Token (RS256), Userinfo, claim mappers, `prompt=login\\|consent\\|none`, `max_age`, `acr_values`.|",
+     "|**OIDC Discovery 1.0**|`/.well-known/openid-configuration` — verified by `DiscoveryD1ConformanceTests` against §3 + RFC 8414 §2.|",
+     "|**OIDC RP-Initiated Logout 1.0**|`/connect/logout` with `post_logout_redirect_uri` allow-list.|",
+     "|**OIDC Backchannel Logout 1.0 / RFC 8417**|SET event sink (`BackchannelLogoutEndpoint`), push to RPs **plus** pull-based revoked-SID list (`/revoked-sids/add` + `/revoked-sids/since?cursor=`) for multi-replica RPs — survives lost RP nodes and partitions.|",
+     "|**OIDC Form Post Response Mode**|`response_mode=form_post`.|"
+    ]
+   ],
+   [
+    "equal",
+    683,
+    696,
+    459,
+    472
+   ],
+   [
+    "replace",
+    696,
+    697,
+    472,
+    473,
+    [
+     "breakdown: **`OPENID_CERTIFICATION.md`**."
+    ]
+   ],
+   [
+    "equal",
+    697,
+    700,
+    473,
+    476
+   ],
+   [
+    "replace",
+    700,
+    701,
+    476,
+    477,
+    [
+     "|RFC|Spec|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    701,
+    702,
+    477,
+    478
+   ],
+   [
+    "replace",
+    702,
+    709,
+    478,
+    485,
+    [
+     "|**7515**|JSON Web Signature|RS256 / ES256 issuance + validation.|",
+     "|**7517**|JSON Web Key + JWKS|`/.well-known/jwks` — verified by `JwksHttpContractTests` (RFC 7517 §5 top-level `keys` array).|",
+     "|**7518**|JSON Web Algorithms|Algorithm allow-list, asymmetric proofs only (matches RFC 9449 §4.2).|",
+     "|**7519**|JSON Web Token|ID tokens, access tokens, DPoP proofs.|",
+     "|**7638**|JWK Thumbprint|SHA-256 thumbprint, base64url-encoded — used as DPoP `jkt` per RFC 9449 §10 (`DpopProofValidator.ComputeJktAsync`, `DpopFullCycleTests`).|",
+     "|**7800**|PoP Key Semantics for JWTs|`cnf` claim with `jkt` (DPoP proof-of-possession-bound access tokens — `AttachDpopConfirmationClaimHandler`).|",
+     "|**8176**|Authentication Method Reference Values|`amr` claim values (`pwd`, `mfa`, `otp`, `face`, `fpt`, `hwk`, etc.) emitted by `IdentityPrincipalBuilder`, plus the standardised `mfa` marker per §2.|"
+    ]
+   ],
+   [
+    "equal",
+    709,
+    712,
+    485,
+    488
+   ],
+   [
+    "replace",
+    712,
+    713,
+    488,
+    489,
+    [
+     "|Surface|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    713,
+    714,
+    489,
+    490
+   ],
+   [
+    "replace",
+    714,
+    720,
+    490,
+    496,
+    [
+     "|`/scim/v2/Users` (CRUD + PATCH)|RFC 7644 §3|",
+     "|`/scim/v2/Groups` (CRUD + PATCH)|RFC 7644 §3|",
+     "|`/scim/v2/Bulk`|RFC 7644 §3.7, partial-success semantics|",
+     "|`/scim/v2/ServiceProviderConfig`, `/Schemas`, `/ResourceTypes`|Unauthenticated per RFC 7643 §5|",
+     "|Attribute names|Verbatim per RFC 7643 §7 — `IdentityCodecProfilesTests` pins that no naming policy mangles them.|",
+     "|Wire serialization|UTF-8 JSON per RFC 8259 §8.1; null attributes omitted per RFC 7644 §3.8.|"
+    ]
+   ],
+   [
+    "equal",
+    720,
+    723,
+    496,
+    499
+   ],
+   [
+    "replace",
+    723,
+    724,
+    499,
+    500,
+    [
+     "|RFC / Spec|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    724,
+    725,
+    500,
+    501
+   ],
+   [
+    "replace",
+    725,
+    729,
+    501,
+    505,
+    [
+     "|**4226**|HOTP — the basis for TOTP (20-byte HMAC-SHA1 key per §4).|",
+     "|**6238**|TOTP — with atomic verification (`SELECT FOR UPDATE` + `FailedAttempts++`) and replay protection per §5.2 (a code from an already-accepted step is rejected even within skew). Pinned by `TotpReplayTests`.|",
+     "|**WebAuthn Level 2 / FIDO2**|Registration + assertion (Fido2NetLib), consumed-challenge cleanup timer, per-credential admin.|",
+     "|SMS / Email OTP, Recovery codes|One-shot, marked consumed in the same transaction as session creation.|"
+    ]
+   ],
+   [
+    "equal",
+    729,
+    732,
+    505,
+    508
+   ],
+   [
+    "replace",
+    732,
+    733,
+    508,
+    509,
+    [
+     "|Spec|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    733,
+    734,
+    509,
+    510
+   ],
+   [
+    "replace",
+    734,
+    739,
+    510,
+    515,
+    [
+     "|**OIDC** external providers|Per-provider redb CRUD, `IdentityCookie` state binding.|",
+     "|**GitHub OAuth**|First-class adapter on top of the federation provider.|",
+     "|**LDAP** (binding)|Search + bind authentication.|",
+     "|**RFC 4514**|LDAP DN string representation — CN extraction in `LdapGroupMapper`.|",
+     "|**RFC 4515**|LDAP search filter escaping (`LdapExternalUserProviderTests`).|"
+    ]
+   ],
+   [
+    "equal",
+    739,
+    742,
+    515,
+    518
+   ],
+   [
+    "replace",
+    742,
+    743,
+    518,
+    519,
+    [
+     "|RFC|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    743,
+    744,
+    519,
+    520
+   ],
+   [
+    "replace",
+    744,
+    753,
+    520,
+    529,
+    [
+     "|**6265 / 6265bis**|`SameSite=Lax\\|Strict\\|None`; `__Host-` prefix only emitted when `Secure=true` per §4.1.3.2; empty-value cookie treated as delete directive per §5.2.2. Pinned by `CookieDefaultsTests` + `IdentityCookieFormatterTests`.|",
+     "|**6585**|Additional HTTP Status Codes — `429 Too Many Requests` + `Retry-After` on rate-limited `/connect/token`, `/connect/par`, `/connect/register` (§4). Pinned by `demo_throttle_rfc6585`.|",
+     "|**7230**|HTTP/1.1 Message Syntax — Bearer-header OWS tolerance (`ManagementBearerAuthProcessor`, `BearerParsingD6Tests`).|",
+     "|**7231**|HTTP/1.1 Semantics — `Retry-After` delta-seconds format (§7.1.3) emitted by rate-limit responses (`RateLimitMetricsAndRetryAfterTests`).|",
+     "|**7232**|HTTP Conditional Requests — `ETag` / `If-Match` → 412 on stale resource (SCIM, per RFC 7644 §3.14 + RFC 7232 §4.2 — `ScimEtagTests`).|",
+     "|**7234**|HTTP Caching — `Cache-Control` on metadata endpoints (§5.2).|",
+     "|**7235**|HTTP/1.1 Authentication — quoted-string escaping in `WWW-Authenticate` Bearer challenges (§2.1) on userinfo error responses.|",
+     "|**7807 / 9457**|`application/problem+json` for HTTP error responses — surfaced by the SDK as `ApiException`.|",
+     "|**8259**|UTF-8 JSON wire format — locked `JsonSerializerOptions` profiles in `Contracts`.|"
+    ]
+   ],
+   [
+    "equal",
+    753,
+    756,
+    529,
+    532
+   ],
+   [
+    "replace",
+    756,
+    757,
+    532,
+    533,
+    [
+     "|Primitive|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    757,
+    758,
+    533,
+    534
+   ],
+   [
+    "replace",
+    758,
+    768,
+    534,
+    544,
+    [
+     "|**Argon2id**|Password hashing — PHC string format with unpadded base64 per **RFC 7693 §3.5** (`Argon2idPasswordHasher`).|",
+     "|**PBKDF2 / RFC 2898**|Secret derivation for MFA shared-secret encryption (`MfaService` via `Rfc2898DeriveBytes.Pbkdf2(SHA-256)`).|",
+     "|Recovery codes|One-shot, pepper-encrypted, marked consumed in the same transaction as session creation.|",
+     "|Brute-force defense|Per-IP rate limits, per-`(IP+user)` failure ceiling with security-channel logger.|",
+     "|Trusted proxies|`X-Forwarded-For` sanitized BEFORE rate-limit / lockout sees it.|",
+     "|**SSRF guard on outbound fetches**|`OutboundUrlGuard` refuses loopback, **RFC 1918** private ranges, link-local (including the `169.254.169.254` cloud metadata address) and **RFC 6598** CGNAT space. It gates the only two URLs a client can make the server fetch: `jwks_uri` (`ClientKeyResolver`) and JAR `request_uri` (`ValidateRequestObjectHandler`). Private targets are reachable only by explicit opt-in (`ClientKeysOptions`), for single-network test hosts. Pinned by `OutboundUrlGuardTests`.|",
+     "|Idempotency|Cache placed AFTER authorization — revoked tokens can't unlock cached responses. Expired records are deleted hourly (`identity-idempotency-cleanup`).|",
+     "|Self-vs-admin|`RequireSelfOrAdminProcessor` on every `/me/*` route.|",
+     "|Constant-time comparisons|All secret comparisons.|",
+     "|**Facade pages: framing, CSRF, consent binding**|Every response through the facade's serializer carries `X-Frame-Options: DENY`, `Content-Security-Policy: frame-ancestors 'none'`, `X-Content-Type-Options: nosniff`, `Referrer-Policy` — the same set the web console's `SecurityHeadersMiddleware` emits. Form POSTs (`/login`, `/consent`, `/mfa`, `/mfa/recovery`) refuse a foreign `Origin`/`Referer` with 403 before reading the body (`AntiForgeryProcessors`; origin-less callers — the console's BFF, demos, API clients — pass). The consent page renders only from a server-signed ticket (`/consent?ct=…`, minted by the authorize endpoint — app name and scopes never come from the URL, so a crafted link cannot dress an attacker's client in a familiar name), and the decision is bound to the session cookie: no session → 401, a ticket minted for another user → 403, the form carries no `user_id`. Pinned by `FullStackFacadeFormHardeningTests`.|"
+    ]
+   ],
+   [
+    "equal",
+    768,
+    802,
+    544,
+    578
+   ],
+   [
+    "delete",
+    802,
+    804,
+    578,
+    578
+   ],
+   [
+    "equal",
+    804,
+    806,
+    578,
+    580
+   ],
+   [
+    "replace",
+    806,
+    807,
+    580,
+    581,
+    [
+     "> redb.Identity does not own a database schema. It is built on top of **REDB** — the typed object / props storage engine that ships with this repo (`redb.Core`, `redb.Core.Pro`, `redb.Postgres`, `redb.Postgres.Pro`, `redb.MSSql`, `redb.MSSql.Pro`, `redb.SQLite`, `redb.SQLite.Pro`). This is the single biggest architectural difference vs every other .NET identity server."
+    ]
+   ],
+   [
+    "equal",
+    807,
+    810,
+    581,
+    584
+   ],
+   [
+    "replace",
+    810,
+    811,
+    584,
+    585,
+    [
+     "|Property|redb.Identity|Typical EF-Core identity server (IdentityServer/OpenIddict-EF/ASP.NET Identity)|"
+    ]
+   ],
+   [
+    "equal",
+    811,
+    812,
+    585,
+    586
+   ],
+   [
+    "replace",
+    812,
+    819,
+    586,
+    593,
+    [
+     "|**Storage engines**|Postgres, MSSQL **and** SQLite from one codebase — swap by changing the provider package the host loads|One provider per build; switching requires re-writing the EF model + migrations|",
+     "|**Schema evolution**|No migrations. Add a property to a `*Props` class — the redb scheme picks it up at next `InitializeAsync`|Generate migration, review SQL, run `Update-Database`, hope rollback works|",
+     "|**Custom claims / per-tenant extensions**|`Dictionary<string,string>? CustomClaims` on `UserProps` — each key becomes a queryable, indexed props row|`jsonb`/`nvarchar(max)` blob; you write your own GIN / computed-column indexes|",
+     "|**Multi-provider federation links**|`Dictionary<string, ExternalIdentity>` on User — native props rows, hot reverse-lookup via `value_string = \"{provider}:{sub}\"`|One-to-many join table, scaffolding per provider|",
+     "|**Hot + cold attribute split**|Hot keys (login, password, status) stay in the relational `_users` table; cold OIDC profile lives in props rows linked by `RedbObject.key = _users._id`. No over-indexed wide rows, no JSON-blob lookups|Either everything in one wide table, or normalised into 8 satellite tables|",
+     "|**Multi-tenant data isolation**|a named redb instance (`Identity:RedbInstanceName`; the images ship `identity-sqlite`, with `identity-pg` and `identity-mssql` predefined) that can target a separate database or the one of your business module|Single `DbContext`; isolation requires separate ASP.NET apps|",
+     "|**Caching tier**|`Global*Cache` in `redb.Core` makes scheme + struct lookups O(1) in-process|Bring your own (`IDistributedCache` plumbing)|"
+    ]
+   ],
+   [
+    "equal",
+    819,
+    822,
+    593,
+    596
+   ],
+   [
+    "replace",
+    822,
+    823,
+    596,
+    597,
+    [
+     "|Engine|Open-source package|Pro package|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    823,
+    824,
+    597,
+    598
+   ],
+   [
+    "replace",
+    824,
+    827,
+    598,
+    601,
+    [
+     "|PostgreSQL 13+|`redb.Postgres`|`redb.Postgres.Pro`|Battle-tested production target; `LISTEN/NOTIFY`-aware caches in Pro|",
+     "|Microsoft SQL Server 2019+|`redb.MSSql`|`redb.MSSql.Pro`|Full parity for OAuth / SCIM / MFA / WebAuthn; Service Broker hooks in Pro|",
+     "|SQLite 3.44+|`redb.SQLite`|`redb.SQLite.Pro`|Single-file / embedded target for dev, edge and small deployments; same schemes, same contracts|"
+    ]
+   ],
+   [
+    "equal",
+    827,
+    832,
+    601,
+    606
+   ],
+   [
+    "replace",
+    832,
+    833,
+    606,
+    607,
+    [
+     "All defined via `[RedbScheme(\"identity.*\")]` in src/redb.Identity.Core/Models/ (+ DataProtection). Enumerate them with:"
+    ]
+   ],
+   [
+    "equal",
+    833,
+    838,
+    607,
+    612
+   ],
+   [
+    "replace",
+    838,
+    839,
+    612,
+    613,
+    [
+     "|Domain|Schemes|"
+    ]
+   ],
+   [
+    "equal",
+    839,
+    840,
+    613,
+    614
+   ],
+   [
+    "replace",
+    840,
+    851,
+    614,
+    625,
+    [
+     "|OAuth / OIDC core|`identity.application`, `identity.scope`, `identity.token`, `identity.authorization`, `identity.session`, `identity.idempotency_record`|",
+     "|Users & groups|`identity.user`, `identity.group`, `identity.group_member`, `identity.password_history`|",
+     "|Roles & assignments|`identity.role`, `identity.user_role_assignment`, `identity.group_role_assignment`, `identity.role_scope_assignment`|",
+     "|Account-lifecycle tokens|`identity.password_reset_token`, `identity.email_verification_token`, `identity.change_email_token`|",
+     "|MFA / WebAuthn|`identity.mfa`, `identity.mfa_otp`, `identity.webauthn_consumed_challenge`|",
+     "|Federation|`identity.federation_provider`, `identity.federated_identity`|",
+     "|Claims engine|`identity.claim_definition`, `identity.claim_mapper`, `identity.claim_scope`, `identity.claim_scope_assignment`|",
+     "|DPoP / replay|`identity.dpop_consumed_jti`|",
+     "|Webhooks|`identity.webhook_subscription`|",
+     "|Cluster / cleanup|`identity.revoked_sid`, `identity.system_flag`|",
+     "|Crypto / DP-keys|`identity.signing_key`, `identity.dp_key`, `identity.dp_key_import` (when the file key ring was moved into redb)|"
+    ]
+   ],
+   [
+    "equal",
+    851,
+    860,
+    625,
+    634
+   ],
+   [
+    "replace",
+    860,
+    880,
+    634,
+    635,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    880,
+    890,
+    635,
+    645
+   ],
+   [
+    "delete",
+    890,
+    892,
+    645,
+    645
+   ],
+   [
+    "equal",
+    892,
+    896,
+    645,
+    649
+   ],
+   [
+    "replace",
+    896,
+    897,
+    649,
+    650,
+    [
+     "|Concern|Mechanism|"
+    ]
+   ],
+   [
+    "equal",
+    897,
+    898,
+    650,
+    651
+   ],
+   [
+    "replace",
+    898,
+    906,
+    651,
+    657,
+    [
+     "|DataProtection key-ring across replicas|`RedbXmlRepository` — redb-persisted XML keys, registered as the ring's repository, so every node reads and writes the same ring. Every replica refreshes its in-memory snapshot every `XmlRepositoryRefreshInterval` (default 12 h, half of the 24 h DataProtection refresh of the active key). **Not** cluster-gated by design — every node must catch keys rotated by others.|",
+     "|OAuth signing keys across replicas|`PropsSigningKeyStore` — RSA 2048 PEMs, DataProtection-encrypted at rest, bootstrapped under a distributed lock so only one replica generates the first key. Off by default (`UsePropsSigningKeyStore=false`); switch it on for multi-replica.|",
+     "|Cleanup timers (tokens / sessions / MFA OTP / WebAuthn challenges / revoked SIDs)|Registered with `.Cluster(true)` — leader-only in a clustered Tsak deployment, silently ignored in standalone. Even without the marker, every cleanup uses `IBackgroundDeletionService` (claim pattern), so concurrent execution is safe — `.Cluster(true)` is belt-and-suspenders + log-noise reduction.|",
+     "|MFA atomicity under concurrency|`SELECT FOR UPDATE` on the MFA row + `FailedAttempts++` inside the same transaction. TOTP replay window enforced per RFC 6238 §5.2.|",
+     "|Backchannel logout across replicas|`/revoked-sids/add` writes the revocation; `/revoked-sids/since?cursor=` lets every RP replica pull deltas. Push-and-poll, not push-only — survives lost RP nodes and broken network partitions.|",
+     "|OpenIddict per-request scoping|`RedbRouteOpenIddictServerHandler` captures `IServiceScopeFactory` and opens a fresh per-request scope — works correctly under .tpkg child SP isolation.|"
+    ]
+   ],
+   [
+    "equal",
+    906,
+    920,
+    657,
+    671
+   ],
+   [
+    "replace",
+    920,
+    921,
+    671,
+    672,
+    [
+     "Defined in IdentityMetrics.cs:"
+    ]
+   ],
+   [
+    "equal",
+    921,
+    922,
+    672,
+    673
+   ],
+   [
+    "replace",
+    922,
+    923,
+    673,
+    674,
+    [
+     "|Instrument|Type|Tags|What it tells you|"
+    ]
+   ],
+   [
+    "equal",
+    923,
+    924,
+    674,
+    675
+   ],
+   [
+    "replace",
+    924,
+    934,
+    675,
+    685,
+    [
+     "|`identity.login.attempts`|Counter|—|Password login throughput|",
+     "|`identity.login.failures`|Counter|`reason`|Bad-password / unknown-user / locked / mfa-required|",
+     "|`identity.mfa.verifications`|Counter|`method`, `result`|TOTP / SMS / email / recovery code outcomes|",
+     "|`identity.mfa.lockouts`|Counter|`method`|MFA brute-force lockouts triggered|",
+     "|`identity.tokens.issued`|Counter|`grant_type`, `token_type`|Tokens minted by OpenIddict|",
+     "|`identity.tokens.errors`|Counter|`error`|`invalid_grant`, `invalid_client`, `invalid_dpop_proof`, …|",
+     "|`identity.rate_limit.rejections`|Counter|`endpoint`, `key_dimension`|Throttled requests (per-IP / per-client / per-user)|",
+     "|`identity.password.verify.duration`|Histogram (ms)|`algorithm`|Hash-verify wall-clock (BCrypt / PBKDF2 / Argon2) — catches CPU regressions|",
+     "|`identity.unique_violation`|Counter|`scheme`, `column`|DB unique-index hits (TOCTOU guard fired)|",
+     "|`identity.audit.write_failures`|Counter|`event_type`|Audit events whose row could not be written; a gap in the audit trail|"
+    ]
+   ],
+   [
+    "equal",
+    934,
+    940,
+    685,
+    691
+   ],
+   [
+    "replace",
+    940,
+    941,
+    691,
+    692,
+    [
+     "- **Source:** IdentitySecurityLog.cs"
+    ]
+   ],
+   [
+    "equal",
+    941,
+    945,
+    692,
+    696
+   ],
+   [
+    "replace",
+    945,
+    946,
+    696,
+    697,
+    [
+     "Surface under Tsak's aggregated `/api/health/{startup,live,ready}`. Defined in IdentityHealthContributor.cs."
+    ]
+   ],
+   [
+    "equal",
+    946,
+    947,
+    697,
+    698
+   ],
+   [
+    "replace",
+    947,
+    948,
+    698,
+    699,
+    [
+     "|Probe|Healthy when …|Failure semantics|"
+    ]
+   ],
+   [
+    "equal",
+    948,
+    949,
+    699,
+    700
+   ],
+   [
+    "replace",
+    949,
+    954,
+    700,
+    703,
+    [
+     "|`db`|`IRedbService.GetDbVersionAsync()` returns non-empty|Unhealthy — storage unreachable|",
+     "|`signing-keys`|≥ 1 signing credential registered with OpenIddict|Unhealthy — token issuance would fail|",
+     "|`data-protection`|Active key-ring exposes ≥ 1 key|Degraded — cookies still work on bootstrap key|"
+    ]
+   ],
+   [
+    "equal",
+    954,
+    957,
+    703,
+    706
+   ],
+   [
+    "replace",
+    957,
+    958,
+    706,
+    707,
+    [
+     "|Surface|Defense|"
+    ]
+   ],
+   [
+    "equal",
+    958,
+    959,
+    707,
+    708
+   ],
+   [
+    "replace",
+    959,
+    978,
+    708,
+    725,
+    [
+     "|Token endpoint|Per-IP rate limit + per-`client_id` throttle (token bucket) + RFC 6749 error mapping|",
+     "|Login endpoint|Per-IP rate limit + per-`(IP+username)` failure ceiling with security-channel logger|",
+     "|Facade HTML forms|`X-Frame-Options: DENY` + `frame-ancestors 'none'` on every page (no clickjacking of the consent \"Allow\"); cross-site `Origin`/`Referer` on `/login`, `/consent`, `/mfa*` → 403; consent page renders only from a server-signed ticket and the decision is bound to the session cookie, never to a form field|",
+     "|Reserved headers|Never trusted from the wire on any transport: `IdentityReservedInboundHeaders` (Contracts) names the internal-only headers (`session_*`, `reauth_marked_sid`, `client_id`, `client_secret`, `access_token`, `user_id`, `ip_address`, `user_agent`) and each facade — HTTP, gRPC (metadata and envelope headers), SOAP — strips them as its first step, so only the cookie / `Authorization` / Basic / body / path / transport can set them. A forged `session_user_id` cannot impersonate a user and a forged `ip_address`/`user_id`/`client_id` cannot sign the audit log. `operation` is stripped on HTTP only — the gRPC envelope route lets the caller name it by design|",
+     "|Audit attribution|`client_id` comes from Basic **or** the form body, so form-authenticated and public PKCE clients are attributed too; `ip_address` falls back to the transport's proxy-sanitized `redbHttp.RemoteAddress` and `user_agent` to the real `User-Agent`; on SQLite the `timestamp` column is `REAL` (Julian day), matching how the provider encodes `DateTimeOffset`|",
+     "|Consent page|Renders and grants only from a server-signed consent ticket (`?ct=…`); app name and scopes come from the ticket, not the URL (no trusted-UI phishing), and the ticket is bound to the session user (no cross-session replay). Pinned by `FullStackFacadeFormHardeningTests`|",
+     "|MFA verify|DB row-lock + `IdempotentConsumer` keyed by `(jti, code)` — defeats retransmit / captured-request replay|",
+     "|Recovery codes|One-shot — marked consumed in the same transaction as session creation|",
+     "|Role scopes|A scope attached to a role is an entitlement, never an addition: it reaches a token only when the client requests it and holds the `scp:` permission, and a gated scope (`AdminScopeEntitlement`: `identity:*`, `scim`, `GatedScopes`) stays only for users whose roles carry it. An administrator signing in to some other application gives it no management scope. Pinned by `RoleScopeAugmentationTests`|",
+     "|Self vs admin|`RequireSelfOrAdminProcessor` on every `/me/*` route — a token with `identity:account` can never mutate another user's MFA, password, sessions, or consents|",
+     "|Idempotency|Cache placed AFTER authorization so a revoked token cannot unlock cached responses; expired records are deleted hourly|",
+     "|Trusted proxies|`TrustedProxyResolverProcessor` — `redbHttp.RemoteAddress` is sanitized BEFORE any rate-limit / lockout sees it|",
+     "|Password history|Configurable depth, rejects reuse|",
+     "|Federation|OIDC + GitHub, secrets server-side, never returned over the wire|",
+     "|Audit|Flat `identity_audit_log` table + optional external multicast (Kafka / Elasticsearch / RabbitMQ / log) — typed payloads, then JSON for external transports|",
+     "|DPoP|RFC 9449 — issuance binding + resource-server `redb.Identity.Resource.Dpop` for downstream APIs|",
+     "|Secrets|Never in `context.json` — only via Tsak override env-vars (`Tsak__Contexts__identity.core__Override__Identity__*`)|"
+    ]
+   ],
+   [
+    "equal",
+    978,
+    981,
+    725,
+    728
+   ],
+   [
+    "replace",
+    981,
+    982,
+    728,
+    729,
+    [
+     "**109 typed audit events across 7 categories** — single source of truth in IdentityAuditEventIds.cs, with `IdentityAuditCategories.CategoryOf(eventType)` as the one mapping from event to bucket. Every event lands in the flat `identity_audit_log` table (see the storage section — audit is the one part of Identity that is deliberately relational, not props) and, if configured, is multicast to Kafka / Elasticsearch / RabbitMQ / log. Plaintext secrets are never persisted to audit — rotations log a `ClientSecretRotated` marker only."
+    ]
+   ],
+   [
+    "equal",
+    982,
+    983,
+    729,
+    730
+   ],
+   [
+    "replace",
+    983,
+    984,
+    730,
+    731,
+    [
+     "|Category|Count|Examples|"
+    ]
+   ],
+   [
+    "equal",
+    984,
+    985,
+    731,
+    732
+   ],
+   [
+    "replace",
+    985,
+    992,
+    732,
+    739,
+    [
+     "|`authentication`|14|`UserLoggedIn`, `UserLoggedOut`, `LoginFailed`, `PasswordChanged`, the password-reset chain (`Requested` / `TokenIssued` / `Completed` / `Failed`), email verification (`Sent` / `Completed` / `Failed`), email change (`Requested` / `Completed` / `Failed`)|",
+     "|`authorization`|14|`TokenIssued`, `TokenRevoked`, `TokenIntrospected`, `AuthorizationGranted`, `ConsentGranted` / `Revoked` / `AllConsentsRevoked`, `DeviceCodeIssued` / `Verified` / `Denied`, `ParRequestAccepted` / `Rejected`, `DpopBindingApplied`, `DpopReplayDetected`|",
+     "|`admin`|42|`ClientRegistered` / `Updated` / `Deleted` / `SecretRotated`, `Scope*`, `ClaimMapper*`, `ClaimScope*` (+ `Assigned` / `Unassigned`), `User*`, `Group*` (+ `Moved`), `Member*`, the role registry (`RoleCreated` / `Updated` / `Deleted`, `RoleAssignedUser` / `Group`, `RoleScopeAttached` / `Detached`) and webhook subscriptions (`Created` / `Updated` / `Deleted` / `SecretRotated`)|",
+     "|`federation`|9|`FederationChallengeInitiated`, `FederationStateValidationFailed`, `FederatedUserLoggedIn`, `FederatedIdentityLinked` / `Unlinked`, `FederatedEmailConflict`, `FederationProvider*`|",
+     "|`mfa`|10|`MfaEnrolled`, `MfaDisabled`, `MfaChallengeIssued`, `MfaVerifyFailed`, `MfaRecoveryCodeUsed` / `CodesDownloaded`, `MfaWebAuthnRegistered` / `Asserted` / `Revoked` / `SignCounterAnomaly`|",
+     "|`scim`|9|`ScimUserCreated` / `Replaced` / `Patched` / `Deleted`, `ScimGroupCreated` / `Replaced` / `Patched` / `Deleted`, `ScimBulkProcessed`|",
+     "|`system`|13|`SessionRevoked` / `AllSessionsRevoked` / `SessionsPruned`, `SidRevoked` / `RevokedSidsPruned`, `MfaOtpPruned`, `IdempotencyRecordsPruned`, `TokenCleanupRan` / `TokensPruned`, `TokensRevokedByUser`, plus the dry-run markers `AllSessionsRevocationPreviewed` / `TokensPrunePreviewed` / `IdempotencyRecordsPrunePreviewed`|"
+    ]
+   ],
+   [
+    "equal",
+    992,
+    994,
+    739,
+    741
+   ],
+   [
+    "delete",
+    994,
+    996,
+    741,
+    741
+   ],
+   [
+    "equal",
+    996,
+    1003,
+    741,
+    748
+   ],
+   [
+    "replace",
+    1003,
+    1004,
+    748,
+    749,
+    [
+     "|Demo|Contract exercised|"
+    ]
+   ],
+   [
+    "equal",
+    1004,
+    1005,
+    749,
+    750
+   ],
+   [
+    "replace",
+    1005,
+    1017,
+    750,
+    762,
+    [
+     "|`demo_discovery_jwks.ps1`|OIDC Discovery + JWKS shape, RFC 8414 metadata|",
+     "|`demo_client_credentials.ps1` / `demo_password_ropc.ps1` / `demo_authcode_pkce.ps1`|Core grants + PKCE (`S256`)|",
+     "|`demo_private_key_jwt.ps1`|`private_key_jwt` client auth (RFC 7521 / 7523)|",
+     "|`demo_dpop.ps1`|DPoP proof binding + replay (RFC 9449)|",
+     "|`demo_par.ps1` / `demo_par_per_client.ps1`|Pushed Authorization Requests (RFC 9126)|",
+     "|`demo_throttle_rfc6585.ps1`|`429 Too Many Requests` + `Retry-After` (RFC 6585)|",
+     "|`demo_backchannel_logout.ps1`|OIDC Back-Channel Logout + `logout_token` fan-out|",
+     "|`demo_scim.ps1` / `demo_scim_bulk.ps1` / `demo_scim_etag.ps1`|SCIM 2.0 CRUD + Bulk + ETag concurrency (RFC 7643 / 7644)|",
+     "|`demo_mfa_totp.ps1` / `demo_mfa_recovery_codes.ps1`|TOTP (RFC 6238) + one-shot recovery codes|",
+     "|`demo_federation_e2e.ps1` / `demo_federation_github.ps1`|OIDC + GitHub federation, provision-on-first-login|",
+     "|`demo_jwks_rotation.ps1`|Live JWKS key rotation / retire against a running server|",
+     "|`demo_roles_registry.ps1` / `demo_claim_definitions.ps1` / `demo_webhooks.ps1`|Roles, declarative claim schema, signed outbound webhooks|"
+    ]
+   ],
+   [
+    "equal",
+    1017,
+    1027,
+    762,
+    772
+   ],
+   [
+    "replace",
+    1027,
+    1030,
+    772,
+    773,
+    [
+     "`run_all.ps1` executes each demo in its own `pwsh` child process (a hard failure in one can't abort the rest), streams stdout live, captures a per-demo transcript to `demos/_logs/<demo>.log`, and prints a final pass/fail summary table. Browser-in-the-loop demos (e.g. `demo_device_code.ps1`) are skipped unless `-IncludeInteractive` is passed. Point the demos at a running server with `IDENTITY_BASE` (default `https://127.0.0.1:5002`), started per the Quick start above."
+    ]
+   ],
+   [
+    "equal",
+    1030,
+    1037,
+    773,
+    780
+   ],
+   [
+    "replace",
+    1037,
+    1057,
+    780,
+    781,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1057,
+    1067,
+    781,
+    791
+   ],
+   [
+    "delete",
+    1067,
+    1069,
+    791,
+    791
+   ],
+   [
+    "equal",
+    1069,
+    1081,
+    791,
+    803
+   ],
+   [
+    "replace",
+    1081,
+    1082,
+    803,
+    804,
+    [
+     "|Self-service|Admin|"
+    ]
+   ],
+   [
+    "equal",
+    1082,
+    1083,
+    804,
+    805
+   ],
+   [
+    "replace",
+    1083,
+    1086,
+    805,
+    806,
+    [
+     "|Profile, Password, MFA (TOTP), WebAuthn credentials, Sessions, Federated identities, Consents|Users (CRUD + password reset), Groups (tree + members), Applications (CRUD + scopes), Scopes, Claim Mappers, Federation providers, Sessions (revoke single/all), Tokens (prune), Audit (15 event types + JsonViewer), SCIM browser, Settings (health / discovery / JWKS)|"
+    ]
+   ],
+   [
+    "equal",
+    1086,
+    1093,
+    806,
+    813
+   ],
+   [
+    "replace",
+    1093,
+    1097,
+    813,
+    814,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1097,
+    1101,
+    814,
+    818
+   ],
+   [
+    "replace",
+    1101,
+    1102,
+    818,
+    819,
+    [
+     "|Project|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1102,
+    1103,
+    819,
+    820
+   ],
+   [
+    "replace",
+    1103,
+    1106,
+    820,
+    823,
+    [
+     "|`redb.Identity.Tests`|Unit + integration; real PostgreSQL / MSSQL / SQLite via `HttpIdentityFixture` for HTTP E2E|",
+     "|`redb.Identity.Client.Tests`|SDK transport / serialization contract|",
+     "|`redb.Identity.Web.Tests`|BFF smoke acceptance|"
+    ]
+   ],
+   [
+    "equal",
+    1106,
+    1117,
+    823,
+    834
+   ],
+   [
+    "delete",
+    1117,
+    1119,
+    834,
+    834
+   ],
+   [
+    "equal",
+    1119,
+    1132,
+    834,
+    847
+   ],
+   [
+    "replace",
+    1132,
+    1133,
+    847,
+    848,
+    [
+     "- Formal OpenID Certification submission; conformance results in `OPENID_CERTIFICATION.md`"
+    ]
+   ],
+   [
+    "equal",
+    1133,
+    1137,
+    848,
+    852
+   ],
+   [
+    "delete",
+    1137,
+    1139,
+    852,
+    852
+   ],
+   [
+    "equal",
+    1139,
+    1141,
+    852,
+    854
+   ],
+   [
+    "replace",
+    1141,
+    1146,
+    854,
+    859,
+    [
+     "- License: Apache 2.0",
+     "- Engine: OpenIddict (Apache 2.0)",
+     "- Runtime: redb.Route",
+     "- Container: redb.Tsak",
+     "- Storage: redb.Core"
+    ]
+   ],
+   [
+    "equal",
+    1146,
+    1147,
+    859,
+    860
+   ],
+   [
+    "replace",
+    1147,
+    1149,
+    860,
+    862,
+    [
+     "Contributions are welcome: see CONTRIBUTING.md. Report vulnerabilities as described in",
+     "SECURITY.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "ce14f0b275e5+2": {
+  "fn": "engasnm111/lnwdeck",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "equal",
+    0,
+    7,
+    0,
+    7
+   ],
+   [
+    "replace",
+    7,
+    10,
+    7,
+    10,
+    [
+     "License: MIT",
+     "Platform: Windows",
+     "Stack"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    14,
+    10,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     " timestamps. Scans are read-only and bounded."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     " are shown as usage-only data, never as an invented percentage."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     " estimates for models that have no exact catalog match."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    19,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     " the same live provider data as the dashboard."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    26,
+    22,
+    26
+   ],
+   [
+    "replace",
+    26,
+    31,
+    26,
+    31,
+    [
+     " adapter now decrypts `v2/credentials.json` in memory, uses the per-account",
+     " coding-plan key that owns the current login, honors the active region, and",
+     " sends team scope when the plan is a team subscription. Start plans keep the",
+     " local billing-log fallback. ZCode 3.17.1's `CREDIT_LIMIT` window rows are",
+     " accepted alongside `TOKENS_LIMIT`."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    31,
+    32
+   ],
+   [
+    "replace",
+    32,
+    35,
+    32,
+    35,
+    [
+     " the bundle-id profile; both the old and new log layouts and the `qoderUsage`",
+     " snapshot (including add-on credits) are read. Qoder CN uses its current",
+     " `qoder.cn` endpoint."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    35,
+    36
+   ],
+   [
+    "replace",
+    36,
+    39,
+    36,
+    39,
+    [
+     " CVE-2026-119375), zip 9.8.1 (fixes the ZIP extraction advisories), Tauri",
+     " 2.12.7 with updater 2.14.1, and Vite 8 / Vitest 5 / TypeScript 6 / React 19.3",
+     " on the JavaScript side."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    39,
+    40
+   ],
+   [
+    "replace",
+    40,
+    42,
+    40,
+    42,
+    [
+     " vulnerabilities and `cargo audit` no longer fails; the documented",
+     " informational advisories remain in `audit.toml`."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    42,
+    43
+   ],
+   [
+    "replace",
+    43,
+    45,
+    43,
+    45,
+    [
+     "See CHANGELOG.md and the",
+     "provider setup guide for source-specific details."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    49,
+    45,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     " no longer make an uninstalled tool get polled as if it were still present."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    50,
+    51
+   ],
+   [
+    "replace",
+    51,
+    54,
+    51,
+    54,
+    [
+     " sources for OpenCode Go, Gemini, Copilot, Grok, Kiro, Command Code, Devin,",
+     " Ark Coding/Agent Plan, Qoder and Qoder CN, while Antigravity is tracked as a",
+     " separate provider."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    54,
+    55
+   ],
+   [
+    "replace",
+    55,
+    56,
+    55,
+    56,
+    [
+     " rounded glass surface that follows the existing desktop theme."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    56,
+    57
+   ],
+   [
+    "replace",
+    57,
+    60,
+    57,
+    60,
+    [
+     " lnwdeck itself, so the titlebar blends into the app instead of sitting in a",
+     " separate native Windows layer. Dragging, minimize, maximize/restore and",
+     " close-to-tray behavior are preserved."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    60,
+    61
+   ],
+   [
+    "replace",
+    61,
+    63,
+    61,
+    63,
+    [
+     "See CHANGELOG.md and the",
+     "provider setup guide for source-specific details."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    71,
+    63,
+    71
+   ],
+   [
+    "replace",
+    71,
+    74,
+    71,
+    74,
+    [
+     " order: the GitHub release page, `raw.githubusercontent.com`, and jsDelivr.",
+     " The release workflow commits `latest.json` to the repository root so the",
+     " fallback endpoints always serve the current manifest."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    74,
+    75
+   ],
+   [
+    "replace",
+    75,
+    77,
+    75,
+    77,
+    [
+     " GitHub API asset id, which redirects to the same signed binary and works",
+     " where `github.com` is unreachable."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    77,
+    78
+   ],
+   [
+    "replace",
+    78,
+    80,
+    78,
+    80,
+    [
+     " application/octet-stream` so the GitHub API redirects to the binary instead",
+     " of returning JSON metadata."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    80,
+    81
+   ],
+   [
+    "replace",
+    81,
+    82,
+    81,
+    82,
+    [
+     " the embedded public key before installation; only the transport changed."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    82,
+    83
+   ],
+   [
+    "replace",
+    83,
+    86,
+    83,
+    86,
+    [
+     "See the release notes, the",
+     "end-user guide (nine languages) and the",
+     "provider setup guide."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    94,
+    86,
+    94
+   ],
+   [
+    "replace",
+    94,
+    96,
+    94,
+    96,
+    [
+     " monogram replaces the previous icons; small app icons no longer carry a tiny",
+     " wordmark, keeping them legible at 16px and below."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    96,
+    97
+   ],
+   [
+    "replace",
+    97,
+    100,
+    97,
+    100,
+    [
+     " `icon.png`, `logo.ico` / `logo.png`, the Store tile set",
+     " (Square30–Square150 and StoreLogo) and the installer icon all use the new",
+     " pack."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    100,
+    101
+   ],
+   [
+    "replace",
+    101,
+    102,
+    101,
+    102,
+    [
+     " with the icon source in `apps/desktop/src-tauri/icons`."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    102,
+    103
+   ],
+   [
+    "replace",
+    103,
+    106,
+    103,
+    106,
+    [
+     "See the release notes, the",
+     "end-user guide (nine languages) and the",
+     "provider setup guide."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    113,
+    106,
+    113
+   ],
+   [
+    "replace",
+    113,
+    115,
+    113,
+    115,
+    [
+     "readable. See the release notes and the",
+     "provider setup guide for App/CMD/WSL and"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    123,
+    115,
+    123
+   ],
+   [
+    "replace",
+    123,
+    124,
+    123,
+    124,
+    [
+     " `NotConfigured`; the test no longer treats that state as a failure."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    124,
+    125
+   ],
+   [
+    "replace",
+    125,
+    126,
+    125,
+    126,
+    [
+     " release tag is created."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    134,
+    126,
+    134
+   ],
+   [
+    "replace",
+    134,
+    135,
+    134,
+    135,
+    [
+     " store and per-machine workspace credentials are both absent."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    135,
+    136
+   ],
+   [
+    "replace",
+    136,
+    138,
+    136,
+    138,
+    [
+     " refresh pipeline records the error and leaves the provider card in its",
+     " localized no-connection/not-configured state."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    139,
+    138,
+    139
+   ],
+   [
+    "replace",
+    139,
+    140,
+    139,
+    140,
+    [
+     " contract paths used by hosted CI."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    147,
+    140,
+    147
+   ],
+   [
+    "replace",
+    147,
+    149,
+    147,
+    149,
+    [
+     " show `No connection`, unsupported quota shows a localized usage-only state,",
+     " and a missing provider no longer makes the combined refresh look failed."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    150,
+    149,
+    150
+   ],
+   [
+    "replace",
+    150,
+    152,
+    150,
+    152,
+    [
+     " `OPENCODE_GO_AUTH_COOKIE` pair, from Settings or that machine's environment;",
+     " it never falls back to a fabricated 100%."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    152,
+    153
+   ],
+   [
+    "replace",
+    153,
+    155,
+    153,
+    155,
+    [
+     " sources. Kimi follows the TokenTracker-compatible usage response and keeps",
+     " OAuth refresh credentials in memory only."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    155,
+    156
+   ],
+   [
+    "replace",
+    156,
+    157,
+    156,
+    157,
+    [
+     " `OpenCode (Go) — 5-hour`, in a wider, keyboard-readable tooltip."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    157,
+    158
+   ],
+   [
+    "replace",
+    158,
+    159,
+    158,
+    159,
+    [
+     " documented in `docs/PROVIDER_QUOTA_SETUP.md`."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    200,
+    159,
+    200
+   ],
+   [
+    "replace",
+    200,
+    201,
+    200,
+    201,
+    [
+     "`docs/PROVIDER_QUOTA_SETUP.md`."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    209,
+    201,
+    209
+   ],
+   [
+    "replace",
+    209,
+    210,
+    209,
+    210,
+    [
+     " `1,000`, `1,234,567`, `1,234,567,890`."
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    210,
+    211
+   ],
+   [
+    "replace",
+    211,
+    212,
+    211,
+    212,
+    [
+     " show the full comma-grouped value; Escape returns to compact form."
+    ]
+   ],
+   [
+    "equal",
+    212,
+    235,
+    212,
+    235
+   ],
+   [
+    "replace",
+    235,
+    237,
+    235,
+    237,
+    [
+     " keys, Enter/Space, Escape, outside-click handling, visible focus and reduced",
+     " motion support. Native selects have a dark `color-scheme` fallback."
+    ]
+   ],
+   [
+    "equal",
+    237,
+    238,
+    237,
+    238
+   ],
+   [
+    "replace",
+    238,
+    241,
+    238,
+    241,
+    [
+     " Pet and Tray use `skip_taskbar`; Main is the only dashboard taskbar window.",
+     " Closing Main hides it to the tray. Opening only a pet/widget therefore does",
+     " not create a misleading main-app taskbar button."
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    241,
+    242
+   ],
+   [
+    "replace",
+    242,
+    247,
+    242,
+    247,
+    [
+     " has localized metrics, compact/full token values and an Open dashboard action.",
+     " The native tray menu and its `Sync now ({time})` label use the selected locale.",
+     " Choosing **Check for updates** from the tray reports the result in the popup:",
+     " a themed \"up to date\" banner with the running version when nothing newer",
+     " exists, or a failure banner when the check cannot complete."
+    ]
+   ],
+   [
+    "equal",
+    247,
+    248,
+    247,
+    248
+   ],
+   [
+    "replace",
+    248,
+    251,
+    248,
+    251,
+    [
+     " placeholders, loading/empty/error states and ARIA labels are translated in",
+     " English, Thai, Simplified Chinese, Japanese, Korean, German, French, Spanish",
+     " and Russian. Language changes update open surfaces immediately."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    291,
+    251,
+    291
+   ],
+   [
+    "replace",
+    291,
+    292,
+    291,
+    292,
+    [
+     "|View|Image|"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    293,
+    292,
+    293
+   ],
+   [
+    "replace",
+    293,
+    299,
+    293,
+    299,
+    [
+     "|Dashboard|Dashboard|",
+     "|Providers|Providers|",
+     "|Costs|Costs|",
+     "|System diagnostics|System|",
+     "|Floating widget|Widget|",
+     "|Desktop pet|Pet|"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    311,
+    299,
+    311
+   ],
+   [
+    "replace",
+    311,
+    312,
+    311,
+    312,
+    [
+     "docs/DESIGN.md: near-black navy canvas, glass panels, cyan /"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    324,
+    312,
+    324
+   ],
+   [
+    "replace",
+    324,
+    336,
+    324,
+    325,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    336,
+    346,
+    325,
+    335
+   ],
+   [
+    "replace",
+    346,
+    358,
+    335,
+    336,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    367,
+    336,
+    345
+   ],
+   [
+    "replace",
+    367,
+    368,
+    345,
+    346,
+    [
+     "docs/releases/v13.0.1.md."
+    ]
+   ],
+   [
+    "equal",
+    368,
+    373,
+    346,
+    351
+   ],
+   [
+    "replace",
+    373,
+    375,
+    351,
+    353,
+    [
+     " user-entered display metadata are stored. Prompts, responses, source code,",
+     " file contents, file names, absolute paths and secrets are not stored."
+    ]
+   ],
+   [
+    "equal",
+    375,
+    376,
+    353,
+    354
+   ],
+   [
+    "replace",
+    376,
+    377,
+    354,
+    355,
+    [
+     " logs, UI state or exports."
+    ]
+   ],
+   [
+    "equal",
+    377,
+    378,
+    355,
+    356
+   ],
+   [
+    "replace",
+    378,
+    379,
+    356,
+    357,
+    [
+     " that setup path; they are never copied into SQLite, logs, UI state or exports."
+    ]
+   ],
+   [
+    "equal",
+    379,
+    380,
+    357,
+    358
+   ],
+   [
+    "replace",
+    380,
+    381,
+    358,
+    359,
+    [
+     " official Codex Pets import. No arbitrary user-entered pet URL is fetched."
+    ]
+   ],
+   [
+    "equal",
+    381,
+    386,
+    359,
+    364
+   ],
+   [
+    "replace",
+    386,
+    387,
+    364,
+    365,
+    [
+     " Windows SmartScreen may warn on first run."
+    ]
+   ],
+   [
+    "equal",
+    387,
+    388,
+    365,
+    366
+   ],
+   [
+    "replace",
+    388,
+    391,
+    366,
+    369,
+    [
+     " the shared job has a bounded 60-second deadline, and a provider call already",
+     " inside I/O cannot be force-killed safely. Previously stored data remains",
+     " visible during partial refresh."
+    ]
+   ],
+   [
+    "equal",
+    391,
+    392,
+    369,
+    370
+   ],
+   [
+    "replace",
+    392,
+    393,
+    370,
+    371,
+    [
+     " accounting is not implemented."
+    ]
+   ],
+   [
+    "equal",
+    393,
+    394,
+    371,
+    372
+   ],
+   [
+    "replace",
+    394,
+    396,
+    372,
+    374,
+    [
+     " dollar cap. If its dashboard HTML changes, the quota channel reports a",
+     " schema error and does not guess a percentage."
+    ]
+   ],
+   [
+    "equal",
+    396,
+    397,
+    374,
+    375
+   ],
+   [
+    "replace",
+    397,
+    398,
+    375,
+    376,
+    [
+     " credential; lnwdeck does not rewrite the provider-owned credential file."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    401,
+    376,
+    379
+   ],
+   [
+    "replace",
+    401,
+    403,
+    379,
+    380,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "e7ee6b6a5458+2": {
+  "fn": "borisdali/helpdesk",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    3,
+    [
+     "<a href=\"https://medium.com/@borisdali/your-sre-on-call-runbook-is-already-obsolete-heres-why-that-s-not-your-fault-0a82b3b0183c\">",
+     " aiHelpDesk_logo",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    3,
+    6
+   ],
+   [
+    "replace",
+    10,
+    11,
+    6,
+    7,
+    [
+     "CI golangci-lint Release Go Version codecov Docs"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    7,
+    8
+   ],
+   [
+    "replace",
+    12,
+    13,
+    8,
+    9,
+    [
+     "**AI is shipping database-backed apps faster than any DBA team can review them. Every AI tool promises a faster fix. aiHelpDesk is the one that proves it is safe.** See who this is for →"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    9,
+    12
+   ],
+   [
+    "replace",
+    16,
+    17,
+    12,
+    13,
+    [
+     "A _productivity_ agent makes your team faster. An _accountability_ agent certifies that any actions taken were correct, safe and defensible. aiHelpDesk is the second kind. Exclusively. It does not do database migrations, optimize schemas or answer general SQL questions. It is for the moment something goes wrong in production database and an AI is about to recommend a write or destructive action. See who this is for."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    21,
+    13,
+    17
+   ],
+   [
+    "replace",
+    21,
+    22,
+    17,
+    18,
+    [
+     "The governed actuation arm consists of the formal tool registry, fleet runner, playbooks, policy engine, blast-radius guards. The actuation arm executes remediation steps on your real infrastructure under a tamper-proof audit trail. Every tool call is logged, every destructive action requires human approval and the governance framework enforces limits that can't be bypassed at runtime. This is Google's \"Safety Trifecta\" (transparency, real-time risk evaluation, progressive authorization) as a running system, not a design doc."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    24,
+    18,
+    20
+   ],
+   [
+    "replace",
+    24,
+    25,
+    20,
+    21,
+    [
+     "Every resolved incident automatically proposes a playbook draft. Every successful `faulttest` remediation auto-saves a draft. Human operators review and activate. The Vault, which is aiHelpDesk's library of fault→remedy pairings, grows richer with every incident. The next time the same failure occurs, the agent handles it faster and with higher confidence because someone already did the hard thinking. That knowledge doesn't wait for someone to name the right playbook, either: a free-text query is matched against the same encoded symptoms and routed automatically, see the automatic routing and playbook selection. The remaining piece is triggering that same match from a raw monitoring signal instead of a query someone had to type, coming shortly, tracked as an open item in here."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    27,
+    21,
+    23
+   ],
+   [
+    "replace",
+    27,
+    28,
+    23,
+    24,
+    [
+     "Before a playbook enters live rotation it is certified across three stability dimensions: _outcome_ (did it pass?), _conclusion_ (did the agent reach the same diagnosis every run?) and _evaluation_ (did the judge agree with itself?). `STABLE(7) attr=oom-kill (7/7)` is a different claim from \"it passed.\" It proves the agent doesn't just get the _right answer_. It gets it for the _right reason_, consistently."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    24,
+    25
+   ],
+   [
+    "delete",
+    29,
+    30,
+    25,
+    25
+   ],
+   [
+    "equal",
+    30,
+    31,
+    25,
+    26
+   ],
+   [
+    "replace",
+    31,
+    34,
+    26,
+    29,
+    [
+     "See here for extensive treatment of this topic and the 13 specific customer expectations that the cloud DBaaS providers mostly fail to satisfy. ",
+     "",
+     "With avalanche-like AI adoption, we expect the shift towards self-managing databases to only accelerate, pushing the products like aiHelpDesk into the mainstream."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    38,
+    29,
+    33
+   ],
+   [
+    "replace",
+    38,
+    43,
+    33,
+    36,
+    [
+     " <a href=\"https://medium.com/@borisdali/your-sre-on-call-runbook-is-already-obsolete-heres-why-that-s-not-your-fault-0a82b3b0183c#7fe7\">",
+     " aiHelpDesk_flywheel",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    36,
+    37
+   ],
+   [
+    "replace",
+    44,
+    45,
+    37,
+    38,
+    [
+     "The Flywheel is a loop that turns resolved incidents (real or injected) into better playbooks: Inject → Evaluate → Update Playbooks → Judge → Activate → Repeat."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    38,
+    39
+   ],
+   [
+    "replace",
+    46,
+    47,
+    39,
+    40,
+    [
+     "The Vault is the mechanism that closes this loop. It holds every playbook, tracks their effectiveness across runs, flags regressions before they become incidents and proposes updates when a successful incident trace suggests a better approach. The Vault is a learning signal. See here and here for the full story."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    57,
+    40,
+    50
+   ],
+   [
+    "replace",
+    57,
+    60,
+    50,
+    51,
+    [
+     "See design principles, the FAQ and who is it for before diving in. Already have restore scripts or runbooks? See what aiHelpDesk adds and where it does not help."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    71,
+    51,
+    62
+   ],
+   [
+    "replace",
+    71,
+    72,
+    62,
+    63,
+    [
+     "See here for the full instructions."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    79,
+    63,
+    70
+   ],
+   [
+    "replace",
+    79,
+    80,
+    70,
+    71,
+    [
+     "See here for the full instructions."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    90,
+    71,
+    81
+   ],
+   [
+    "replace",
+    90,
+    93,
+    81,
+    82,
+    [
+     "See here for the full instructions."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    96,
+    82,
+    85
+   ],
+   [
+    "replace",
+    96,
+    97,
+    85,
+    86,
+    [
+     "See the primary Architecture page for system design, configuration and the extension guide."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    100,
+    86,
+    89
+   ],
+   [
+    "replace",
+    100,
+    101,
+    89,
+    90,
+    [
+     "See the primary Vault page for how aiHelpDesk accumulates and improves operational knowledge over time: the flywheel concept, how playbook drafts are auto-generated from incident traces, the three paths into the Vault, the review-and-activate workflow and the three core customer workflows (onboarding, acceptance, regression monitoring)."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    90,
+    91
+   ],
+   [
+    "replace",
+    102,
+    103,
+    91,
+    92,
+    [
+     "**The Vault as a learning signal** — aiHelpDesk tracks three per-version metrics that answer \"is the system actually improving?\": step count (is the agent becoming more direct?), recovery time (is it responding faster?) and approach appropriateness (is it fixing problems elegantly or just technically?). A resolution rate tells you whether the system is working. These metrics tell you whether it is getting better. See here for the full treatment."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    108,
+    92,
+    97
+   ],
+   [
+    "replace",
+    108,
+    109,
+    97,
+    98,
+    [
+     "`vault accuracy` shows per-playbook correctness from human operator feedback. `vault calibration` shows whether the system's stated confidence predicts actual accuracy. `vault cert-compare` gates model upgrades by comparing cert depth across two models before promoting. See CONSISTENCY.md and ATTRIBUTION_CERTS.md for the full concept and per-platform runbooks."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    112,
+    98,
+    101
+   ],
+   [
+    "replace",
+    112,
+    113,
+    101,
+    102,
+    [
+     "aiHelpDesk's Governance system rests on eight subsystems including full auditing, compliance reporting and the journeys. See the primary AI Governance page for the complete reference."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    102,
+    103
+   ],
+   [
+    "replace",
+    114,
+    115,
+    103,
+    104,
+    [
+     "HTTP-level authorization is presented here. Identity provider configuration (static users, JWT/OIDC, service accounts) is described here."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    118,
+    104,
+    107
+   ],
+   [
+    "replace",
+    118,
+    119,
+    107,
+    108,
+    [
+     "See the primary Fleet Management page for how aiHelpDesk coordinates the multi-database operations: job definitions, canary phases, approval gates, schema drift detection, the natural-language Planner and rollback."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    108,
+    111
+   ],
+   [
+    "replace",
+    122,
+    123,
+    111,
+    112,
+    [
+     "See the primary Playbook page for how Playbooks take the central stage in aiHelpDesk. This page presents the Playbook schema, CRUD API, import formats (Markdown, YAML, Ansible, Rundeck), system playbooks and versioning. See here for the Playbooks operational best practices."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    112,
+    115
+   ],
+   [
+    "replace",
+    126,
+    127,
+    115,
+    116,
+    [
+     "aiHelpDesk's testing strategy is documented in here. Two guides cover fault injection testing specifically:"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    116,
+    117
+   ],
+   [
+    "replace",
+    128,
+    134,
+    117,
+    123,
+    [
+     "- **Fault Injection Testing** is the customer-facing guide: validate agent behavior against your own staging database using SQL-only injection, SSH-level fault injection and automated remediation verification; no Docker or cluster access required",
+     "- **Internal Fault Injection Harness** is the engineer-facing guide: Docker-compose test stack, full catalog of 27 failure modes, CI/CD integration",
+     "- **High Availability / Disaster Recovery** is the domain-specific deep dive: what's certified today (replication lag, replica disconnection) and what's on the roadmap (replica promotion, Patroni HA)",
+     "- **Backup & Restore** covers backup-taking health specifically: WAL archiving and pgBackRest job-level status, triage and narrow remediation",
+     "- **Point-in-time recovery** restores a single pgBackRest instance to a time or LSN a human chose, down or still serving: the safety model, the operator steps, the limits and what is verified",
+     "- **Restore operations** is the operational guide for restores: drilling a backup on a clone you bring (verified, recorded, and a reminder when one is overdue), what a drill counts for in the plan's restore-time estimate, and what to read in the plan and after a restore"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    141,
+    123,
+    130
+   ],
+   [
+    "replace",
+    141,
+    153,
+    130,
+    131,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    155,
+    131,
+    133
+   ],
+   [
+    "replace",
+    155,
+    156,
+    133,
+    134,
+    [
+     "See the primary API page for the full REST API reference: all endpoints with request/response shapes, query parameters and `curl` examples."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    159,
+    134,
+    137
+   ],
+   [
+    "replace",
+    159,
+    160,
+    137,
+    138,
+    [
+     "|Script|Description|"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    138,
+    139
+   ],
+   [
+    "replace",
+    161,
+    163,
+    139,
+    141,
+    [
+     "|`scripts/gateway-repl.sh`|Interactive REPL using the Gateway API (recommended for containers)|",
+     "|`scripts/k8s-local-repl.sh`|Run orchestrator locally with K8s agents port-forwarded|"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    164,
+    141,
+    142
+   ],
+   [
+    "replace",
+    164,
+    165,
+    142,
+    143,
+    [
+     "See here for detailed usage."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    170,
+    143,
+    148
+   ],
+   [
+    "replace",
+    170,
+    174,
+    148,
+    152,
+    [
+     "- **SREBot** is the O11y watcher that calls aiHelpDesk to diagnose a database and ask for AI-powered triage",
+     "- **SecBot** is the Security responder that fires alerts for governance violations in real-time and creates incident bundles",
+     "- **GovBot** is the Compliance reporter that queries governance endpoints and posts structured snapshots to Slack on a schedule",
+     "- **Real-Time Auditor** is the Long-running daemon that connects to the audit socket and fires webhook/email/syslog alerts"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    152,
+    153
+   ],
+   [
+    "replace",
+    175,
+    176,
+    153,
+    154,
+    [
+     "See here for a sample interactive dialog with a human operator."
+    ]
+   ],
+   [
+    "equal",
+    176,
+    183,
+    154,
+    161
+   ],
+   [
+    "replace",
+    183,
+    184,
+    161,
+    162,
+    [
+     "This blog post adds some additional context for how AI models are treated at aiHelpDesk."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    162,
+    163
+   ],
+   [
+    "replace",
+    185,
+    186,
+    163,
+    164,
+    [
+     "|Vendor|Model|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    164,
+    165
+   ],
+   [
+    "replace",
+    187,
+    195,
+    165,
+    173,
+    [
+     "|Anthropic|`claude-haiku-4-5-20251001`|Fast, cost-effective|",
+     "|Anthropic|`claude-sonnet-4-6`|Balanced performance|",
+     "|Anthropic|`claude-opus-4-8`|Most capable|",
+     "|Gemini|`gemini-2.5-flash`|Fast, recommended for most use cases|",
+     "|Gemini|`gemini-2.5-flash-lite`|Fastest, lowest cost|",
+     "|Gemini|`gemini-2.5-pro`|Most capable 2.5 model|",
+     "|Gemini|`gemini-3-flash-preview`|Latest 3.0 series, fast|",
+     "|Gemini|`gemini-3-pro-preview`|Latest 3.0 series, most capable|"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    197,
+    173,
+    175
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

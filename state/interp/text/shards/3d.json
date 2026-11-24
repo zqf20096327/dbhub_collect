@@ -3862,5 +3862,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bd985ce17e62": {
+  "identity": {
+   "one_liner": "本地 Rust 单二进制工具，统一检索与追溯多种 AI 编码工具的会话历史",
+   "review": "sessionwiki 将 Claude Code、Codex、Cline、OpenCode、Gemini CLI 等多种 AI 编码工具已写入磁盘的会话文件统一扫描建索引用 SQLite FTS5 存储，支持跨工具全文检索、文件到会话的追溯、会话归档（防止工具清理后丢失）、在原工具中恢复会话，并提供本地 web 界面与 MCP server。首次建索引约每 GB 数分钟，之后增量更新。面向多机多工具使用 AI 编码的开发者。",
+   "highlights": [
+    "支持 Claude Code、Codex、Cline、OpenCode、Gemini CLI 等多个工具的会话统一扫描与跨工具全文搜索（trigram 分词器支持子串与 CJK，可切换 unicode61）",
+    "提供 trace/blame 命令将文件或代码行回溯到产生它的会话，工具清理原始会话时可归档保留索引",
+    "提供 MCP server（search_sessions、trace_file 等只读工具）与 Claude Code 插件，支持 resume 在原工具中恢复会话及 migrate 跨目录迁移"
+   ],
+   "use_cases": [
+    "在多个 AI 编码工具的历史会话中全文检索某次修复或讨论",
+    "将某文件或某行代码追溯到生成它的 AI 会话",
+    "为 Claude Code 提供 SessionStart 钩子自动召回项目过往会话，或通过 MCP 让任意 agent 查询会话历史"
+   ]
+  },
+  "sha": "bd985ce17e62",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0698fd69c1f9": {
+  "identity": {
+   "one_liner": "Rust 编写的 Debian 多节点托管控制面板，原子化事务配置站点并支持回滚。",
+   "review": "Hyperion 是面向 Debian 的自托管主机控制面板，采用 master 加多 agent 架构，通过签名 RPC 管理集群。它在一个事务中创建 Linux 用户、nginx vhost、PHP-FPM 池、数据库与 TLS，任一步失败即回滚。面向运营小型托管业务的用户，提供 Web UI、OpenAPI HTTP 接口和 CLI（hctl）。README 注明项目较年轻，多节点路径使用量少于单节点。",
+   "highlights": [
+    "支持 PHP 8.1–8.4 并存、MariaDB/PostgreSQL、Let's Encrypt 证书（HTTP-01 与 acme-dns DNS-01 通配符）及自动续期",
+    "使用 `#![forbid(unsafe_code)]`，系统命令由类型化且预校验的参数构建，不经过 shell；审计日志采用 BLAKE3 哈希链",
+    "提供 S3（age 加密）、FTP/FTPS/SFTP 备份与 restic 快照，并支持从 HestiaCP、CloudPanel 及任意主机导入 WordPress 站点"
+   ],
+   "use_cases": [
+    "在单台或多台 Debian 12/13 服务器上托管 WordPress、PHP、静态站点及反向代理站点",
+    "需要异地备份、站点监控、付费维保计划与月度客户报告的小型托管业务",
+    "从 HestiaCP 或 CloudPanel 原地、经 SSH 或导出文件迁移现有站点"
+   ]
+  },
+  "sha": "0698fd69c1f9",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

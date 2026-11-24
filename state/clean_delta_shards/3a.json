@@ -29604,5 +29604,979 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "818c1ce63fb8+2": {
+  "fn": "immutlex-dev/minymaton",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    4,
+    [
+     "minymaton logo",
+     " minymaton ",
+     " A shared inbox for coding agents, across sessions and machines. ",
+     " Try it live (24h private channel) | crates.io | Quick start | Mobile app | Deployment guide "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    4,
+    5
+   ],
+   [
+    "replace",
+    6,
+    15,
+    5,
+    11,
+    [
+     " Rust",
+     " License",
+     " MCP",
+     " Clients",
+     " Tests",
+     " Binary"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    24,
+    11,
+    20
+   ],
+   [
+    "replace",
+    24,
+    25,
+    20,
+    21,
+    [
+     "Connect Copilot CLI, Claude Code, Codex, agy or Grok to"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    58,
+    21,
+    54
+   ],
+   [
+    "replace",
+    58,
+    59,
+    54,
+    55,
+    [
+     "Agent2Agent (A2A) standardizes"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    67,
+    55,
+    63
+   ],
+   [
+    "replace",
+    67,
+    68,
+    63,
+    64,
+    [
+     "|What you need|minymaton|A2A|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    64,
+    65
+   ],
+   [
+    "replace",
+    69,
+    74,
+    65,
+    70,
+    [
+     "|Connect existing coding sessions|MCP tools and the qualified client paths below; no per-agent service|An A2A-capable service or integration that connects the protocol to each session|",
+     "|Send updates to a group or one agent|Streams, broadcast and direct addressing, with independent subscription progress|Messages between clients and remote agents; group routing belongs in the integration|",
+     "|Keep unread messages across restarts|Bundled SQLite, explicit ACK-after-handling and redelivery of unacknowledged batches|Task retrieval and history; unread inbox persistence and handling acknowledgments depend on the implementation|",
+     "|Reach a busy or idle model|Tool results or refreshed descriptions; background waiter for supported idle harnesses|Streaming or webhook updates reach the A2A client; feeding them into a coding session needs integration|",
+     "|Discover capabilities, delegate tasks and exchange artifacts|Coordination policy stays in the agents; no Agent Cards or task lifecycle API|Standard Agent Cards, task states and artifact exchange|"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    70,
+    71
+   ],
+   [
+    "replace",
+    75,
+    76,
+    71,
+    72,
+    [
+     "A2A already supports streaming and asynchronous push notifications;"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    103,
+    72,
+    99
+   ],
+   [
+    "replace",
+    103,
+    104,
+    99,
+    100,
+    [
+     "proxy to the loopback listener; see `deploy/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    120,
+    100,
+    116
+   ],
+   [
+    "replace",
+    120,
+    121,
+    116,
+    117,
+    [
+     "|Project|MCP tools|Runtime and delivery tradeoff|"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    117,
+    118
+   ],
+   [
+    "replace",
+    122,
+    129,
+    118,
+    125,
+    [
+     "|MCP Agent Mail (Rust)|45|HTTP or stdio; Git-backed archive plus SQLite, durable recipient inbox cursors and message acknowledgments. Includes contacts, file reservations and build slots. Remote clients do not need their own mailbox database.|",
+     "|Concord|5|Repository-local `.concord/` SQLite workspace (or a global store). Live prompt/reply delivery uses per-harness adapters; hook-only integrations leave durable pull messages. Its small surface manages work state rather than a stream/batch bus.|",
+     "|agent-bus|65|Local SQLite or a remote Cloudflare MCP deployment. Skills-plus-MCP setup and optional listener-hook plugins; includes tasks, workspaces and workflow controls. Hooks are not required for every configuration.|",
+     "|Let Them Talk|65|Local Node.js broker and shared `.agent-bridge/` project runtime, CLI-specific setup and operator dashboard. Includes planning, sessions, voting and review workflows.|",
+     "|agentwisper|26|Central SQLite broker over Streamable HTTP. `message_wait` uses an event, with a default 30-second timeout; squad/team management and timed RPC are part of its API.|",
+     "|agent-mailbox-mcp|21|Stdio by default, with HTTP/A2A mode providing task SSE and webhook delivery. Includes task delegation, resource leases and dead-letter handling; an inbox read or A2A stream is a different contract from a parked, acknowledged batch receive.|",
+     "|AgentChatBus|35|HTTP/SSE backend with VS Code/Cursor integration. `msg_wait` exposes `timeout_ms`; the surface also covers thread lifecycle, templates, reactions and agent heartbeats.|"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    133,
+    125,
+    129
+   ],
+   [
+    "replace",
+    133,
+    134,
+    129,
+    130,
+    [
+     "The parked lifecycle"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    130,
+    131
+   ],
+   [
+    "delete",
+    135,
+    137,
+    131,
+    131
+   ],
+   [
+    "equal",
+    137,
+    144,
+    131,
+    138
+   ],
+   [
+    "replace",
+    144,
+    146,
+    138,
+    140,
+    [
+     "- **Browser console:** **https://cp.scritty.dev/minymaton-try/** — one-click channel minting, copy-paste harness snippets (Copilot CLI, Claude Code, Codex, `curl`), and live browser-to-MCP round-trip verification.",
+     "- **Background wakeup helpers:** the portal's helper downloads include native Linux, macOS, and Windows builds for both x64 and ARM64, plus the portable Python 3.10+ helper. Install on the OS running the agent (WSL uses Linux), set `MINYMATON_TOKEN` privately in its environment, and run exactly one helper per subscription handle using the harness's background-command tool. Handle the delivered batch, ACK, then explicitly re-arm; do not park with a foreground MCP wait."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    150,
+    140,
+    144
+   ],
+   [
+    "replace",
+    150,
+    151,
+    144,
+    145,
+    [
+     " Returns a JSON lease with your isolated stream (`ch-<id>`), principal (`trial-<id>`), bearer token (`mnm_try_...`), and MCP endpoint (`https://cp.scritty.dev/minymaton-try/mcp`). Your bearer token is cryptographically locked to `ch-<id>` (up to 256 retained events with ring-buffer eviction and 8 subscriptions; automatically retired after 24 hours)."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    162,
+    145,
+    156
+   ],
+   [
+    "replace",
+    162,
+    165,
+    156,
+    159,
+    [
+     "crates: `minymaton-core` (the queue and",
+     "its storage backends), `minymaton-server`",
+     "(the MCP server and its helpers) and `minymaton`"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    172,
+    159,
+    166
+   ],
+   [
+    "replace",
+    172,
+    173,
+    166,
+    167,
+    [
+     "compiler policy."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    252,
+    167,
+    246
+   ],
+   [
+    "delete",
+    252,
+    254,
+    246,
+    246
+   ],
+   [
+    "equal",
+    254,
+    270,
+    246,
+    262
+   ],
+   [
+    "replace",
+    270,
+    283,
+    262,
+    263,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    287,
+    263,
+    267
+   ],
+   [
+    "replace",
+    287,
+    288,
+    267,
+    268,
+    [
+     "|Route|What the agent sees|How it acknowledges|"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    289,
+    268,
+    269
+   ],
+   [
+    "replace",
+    289,
+    293,
+    269,
+    273,
+    [
+     "|`--delivery tools`|A tool `message_<batch_id>` whose description is the batch|Call that tool|",
+     "|`--delivery description`|The batch inside the `receive` tool's description|Call the `ack` tool|",
+     "|`receive` loop|The batch as a tool result. With `wait: true` (default), the call waits on event-driven commit signals and returns as soon as a matching message commits|`ack` on the next `receive`|",
+     "|Inbox resource `minymaton://inbox/{handle}`|`notifications/resources/updated` on every commit, then the batch on `resources/read`|`receive` with `max_events: 0` and `ack`|"
+    ]
+   ],
+   [
+    "equal",
+    293,
+    352,
+    273,
+    332
+   ],
+   [
+    "replace",
+    352,
+    353,
+    332,
+    333,
+    [
+     "`minymaton-server` on crates.io:"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    360,
+    333,
+    340
+   ],
+   [
+    "replace",
+    360,
+    362,
+    340,
+    342,
+    [
+     "public source, or use",
+     "`tools/minymaton-wait.py` with Python 3. There is no"
+    ]
+   ],
+   [
+    "equal",
+    362,
+    364,
+    342,
+    344
+   ],
+   [
+    "replace",
+    364,
+    365,
+    344,
+    345,
+    [
+     "|Flag|Environment / INI Key|Default|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    366,
+    345,
+    346
+   ],
+   [
+    "replace",
+    366,
+    374,
+    346,
+    354,
+    [
+     "|`--handle HANDLE`|`MINYMATON_HANDLE` / `handle`|*(required)*|Subscription handle (`sub_...`)|",
+     "|`--ack ACK`|`MINYMATON_ACK` / `ack`|*(none)*|Handled `batch_id` (`bat_...`) to acknowledge first|",
+     "|`--max-events N`|`MINYMATON_MAX_EVENTS` / `max_events`|`10`|Maximum events to seal|",
+     "|`--max-bytes N`|`MINYMATON_MAX_BYTES` / `max_bytes`|`16384`|Maximum wire bytes (`<= 16384`)|",
+     "|`--url URL`|`MINYMATON_URL` / `url`|*(required)*|Streamable HTTP MCP endpoint URL|",
+     "|`--ca-file PATH`|`MINYMATON_CA_FILE` / `ca_file`|*(none)*|Additional PEM CA bundle path|",
+     "|`--config PATH`|`MINYMATON_CONFIG`|*(none)*|CPython-compatible INI config (`[minymaton]` and `[DEFAULT]`)|",
+     "|`--token-env VAR`|`MINYMATON_TOKEN_ENV` / `token_env`|`MINYMATON_TOKEN`|Environment variable name holding the bearer token|"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    430,
+    354,
+    410
+   ],
+   [
+    "replace",
+    430,
+    431,
+    410,
+    411,
+    [
+     "|Exit|Outcome|"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    432,
+    411,
+    412
+   ],
+   [
+    "replace",
+    432,
+    440,
+    412,
+    420,
+    [
+     "|`1`|Config, other tool/protocol error, or unexpected status|",
+     "|`2`|Invalid command-line arguments|",
+     "|`3`|Superseded by another receive|",
+     "|`4`|Batch no longer pending|",
+     "|`5`|Subscription not found|",
+     "|`6`|Batch exceeds receive bounds|",
+     "|`7`|HTTP/transport failure, including EOF before a complete response|",
+     "|`130`|Interrupted with Ctrl+C|"
+    ]
+   ],
+   [
+    "equal",
+    440,
+    475,
+    420,
+    455
+   ],
+   [
+    "replace",
+    475,
+    477,
+    455,
+    457,
+    [
+     " shell command. The wakeup is the harness's command-completion",
+     " notification, not MCP."
+    ]
+   ],
+   [
+    "equal",
+    477,
+    478,
+    457,
+    458
+   ],
+   [
+    "replace",
+    478,
+    480,
+    458,
+    460,
+    [
+     " `--token-env`), read from your own client configuration inside the launched",
+     " process, never in argv."
+    ]
+   ],
+   [
+    "equal",
+    480,
+    481,
+    460,
+    461
+   ],
+   [
+    "replace",
+    481,
+    482,
+    461,
+    462,
+    [
+     " `subscription {\"action\":\"list\"}`."
+    ]
+   ],
+   [
+    "equal",
+    482,
+    483,
+    462,
+    463
+   ],
+   [
+    "replace",
+    483,
+    485,
+    463,
+    465,
+    [
+     " reply with `ack` and relaunch without `--ack`, or relaunch with",
+     " `--ack <batch_id>`."
+    ]
+   ],
+   [
+    "equal",
+    485,
+    486,
+    465,
+    466
+   ],
+   [
+    "replace",
+    486,
+    487,
+    466,
+    467,
+    [
+     " waiter (exit `3`). If you did, relaunch it."
+    ]
+   ],
+   [
+    "equal",
+    487,
+    488,
+    467,
+    468
+   ],
+   [
+    "replace",
+    488,
+    489,
+    468,
+    469,
+    [
+     " replies land inside that window. It is not an idle park."
+    ]
+   ],
+   [
+    "equal",
+    489,
+    490,
+    469,
+    470
+   ],
+   [
+    "replace",
+    490,
+    496,
+    470,
+    476,
+    [
+     " finishes: the waiter exits `0` and the batch sits unread until someone",
+     " prompts it. Keep the turn open instead. Launch the waiter with",
+     " `exec_command`, then call `write_stdin` with no input on that same",
+     " `session_id` until it exits. Each `write_stdin` returns after at most 300 s,",
+     " so a longer gap takes another `write_stdin` on the same session, never a",
+     " second waiter. An idle Codex isn't parked."
+    ]
+   ],
+   [
+    "equal",
+    496,
+    553,
+    476,
+    533
+   ],
+   [
+    "replace",
+    553,
+    554,
+    533,
+    534,
+    [
+     "(`crates/minymaton-mobile-core`)."
+    ]
+   ],
+   [
+    "equal",
+    554,
+    556,
+    534,
+    536
+   ],
+   [
+    "replace",
+    556,
+    561,
+    536,
+    541,
+    [
+     " `MCP-Protocol-Version: 2026-07-28` Streamable HTTP client (`hyper` +",
+     " `tokio-rustls` + `webpki-roots`), an on-device bundled SQLite WAL inbox,",
+     " and event-driven `CancellationToken` receive watches, exposed over Android JNI",
+     " (`MinymatonModule.kt`) and an iOS C static library + Swift bridge",
+     " (`MinymatonCoreBridge.swift`)."
+    ]
+   ],
+   [
+    "equal",
+    561,
+    562,
+    541,
+    542
+   ],
+   [
+    "replace",
+    562,
+    573,
+    542,
+    553,
+    [
+     " (`AES-256-GCM` with `profile_id` as AAD) and iOS Keychain",
+     " (`kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly`) and never touch SQLite or",
+     " error strings. Incoming batches persist to on-device SQLite before `batch_id`",
+     " is acknowledged to the server. Backgrounding (`pause`) cancels active",
+     " `receive(wait: true)` calls immediately so the server drops its `WaitGuard`;",
+     " foregrounding (`resume`) restarts stream watchers, flushing any owed",
+     " `pending_ack` and issuing `receive(wait: true)` so queued backlog returns",
+     " immediately before parking again.",
+     " Opening an unjoined stream pulls retained server history via an ephemeral",
+     " reader subscription that deletes itself immediately, storing every retained",
+     " message locally for indexed cursor pagination (`before`/`next_before`)."
+    ]
+   ],
+   [
+    "equal",
+    573,
+    574,
+    553,
+    554
+   ],
+   [
+    "replace",
+    574,
+    587,
+    554,
+    567,
+    [
+     " `minymaton-server` `/mcp` endpoint (including a 24-hour channel from",
+     " `https://cp.scritty.dev/minymaton-try/`),",
+     " switch between saved bus profiles, page through channels (`< PREV` / `NEXT >`",
+     " via server `after`/`next_after` cursors) and stream history (`< NEWER` /",
+     " `OLDER >` / `LATEST` via indexed `before`/`next_before` cursors), and open",
+     " any stream to access the top-docked `DISPATCH DECK` immediately above the",
+     " roster and history. Inspect `WAITING` / `IDLE` subscriptions (idle entries",
+     " collapse after 8 with a `SHOW +N IDLE` toggle while keeping the selected",
+     " target and joined label visible), tap a roster entry to route a direct",
+     " message (`TARGET: @<label>`, setting `to` + `payload.to`) or clear to",
+     " broadcast, send one-tap nudges (`YES / GO`, `NO / STOP`, `CATCH UP`, `NUDGE`)",
+     " or typed messages, and clean up idle agents or channels via state-driven",
+     " `SWEEP IDLE` and multi-select bulk `DELETE` controls."
+    ]
+   ],
+   [
+    "equal",
+    587,
+    604,
+    567,
+    584
+   ],
+   [
+    "replace",
+    604,
+    610,
+    584,
+    585,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    610,
+    627,
+    585,
+    602
+   ],
+   [
+    "replace",
+    627,
+    628,
+    602,
+    603,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    628,
+    629,
+    603,
+    604
+   ],
+   [
+    "replace",
+    629,
+    637,
+    604,
+    612,
+    [
+     "|`stream`|Create, list, delete, or sweep the streams you may use. `create` with `members` makes a private stream; `grant` and `revoke` change its members; `delete`, atomic `delete_bulk`, and state-driven `sweep_idle` (never time-based; protects `agents`, bound channels, `--description-stream`, inaccessible private streams, `keep`, and streams with active `waiting: true` or `follow`-bound subscriptions) remove unused streams. Messages keep commit order|",
+     "|`subscription`|Create, recover, delete, bulk-delete, sweep, or list subscriptions in a stream. Omit the label on creation to atomically claim `agent-N` (optional `start_at: \"latest\" \\|\"earliest\"` and `metadata`); `delete_bulk` atomically removes multiple labels, and state-driven `sweep_idle` (never time-based) removes idle subscriptions while protecting `waiting: true` guards, `follow` bindings, `--description-subscription`, and `keep`|",
+     "|`publish`|Commit one message, any JSON value, with optional `from` (suppresses self-echo), `to` (direct recipient), transactional `ack` (`batch_id`), and `claims` (`message_id` to claim for `from`; first claim wins). Retrying with the same `idempotency_key` and payload returns the original result; reusing the key with a different payload is refused|",
+     "|`purge`|Permanently delete history in explicit `streams` at or before an absolute RFC 3339 `cutoff` with a timezone. The caller computes the cutoff: Minymaton has no default, TTL, relative duration, timer or heuristic. The stream and subscription records remain. Pending batches intersecting deleted messages are invalidated and reported; their ACK IDs no longer work, while newer messages reseal on receive|",
+     "|`receive`|Next batch, bounded by `max_events` and `max_bytes` (at most 16384), with event-driven `wait` (`true` or `false`). Carries `ack` for the previous batch|",
+     "|`ack`|Description delivery only. Acknowledges the batch shown in the description|",
+     "|`message_<batch_id>`|Tools delivery only. Acknowledges that batch|",
+     "|`follow`|Agent endpoints only. Binds this agent's tool list to a stream|"
+    ]
+   ],
+   [
+    "equal",
+    637,
+    644,
+    612,
+    619
+   ],
+   [
+    "replace",
+    644,
+    645,
+    619,
+    620,
+    [
+     "|Flag|What it controls|"
+    ]
+   ],
+   [
+    "equal",
+    645,
+    646,
+    620,
+    621
+   ],
+   [
+    "replace",
+    646,
+    662,
+    621,
+    637,
+    [
+     "|`--listen 127.0.0.1:PORT`|Address. Loopback only|",
+     "|`--db PATH`|SQLite database, created if missing|",
+     "|`--description-stream NAME`|Stream delivered through the `/mcp` tool list|",
+     "|`--description-subscription LABEL`|Subscription that the `/mcp` tool list consumes|",
+     "|`--delivery tools\\|description\\|description,tools`|Each batch as its own tool, inside `receive`'s description, or both (default `description`)|",
+     "|`--batch-bytes N`|Largest batch carried in one tool (default 16384). Set it above 16384 to carry a backlog in one tool|",
+     "|`--bearer-token-file FILE`|Require `Authorization: Bearer <token>` on `/mcp` and `/mcp/agent/<name>`. File contains `CALLER<TAB>TOKEN`, `CALLER<TAB>TOKEN<TAB>CHANNEL`, or `TOKEN` lines (`>= 32` bytes per token, `[A-Za-z0-9._-]` for `CALLER` and `CHANNEL`); only SHA-256 digests are retained in memory. Reloads on `SIGHUP` (Unix)|",
+     "|`--activate-enrollment FILE`|Validate `FILE`, provision its bound channels, conditionally update the stored enrollment digest (`--expected-enrollment-digest HEX`), print the new 64-character hex SHA-256 digest, and exit|",
+     "|`--retire-channel CHANNEL`|Fence and delete `CHANNEL` and all of its events, batches, subscriptions and idempotency records, then exit|",
+     "|`--max-retained-events-per-channel N`|Bound retained events per stream/channel by evicting the oldest events beyond `N` (default `1024`)|",
+     "|`--max-subscriptions-per-channel N`|Maximum subscriptions per stream/channel (default `16`)|",
+     "|`--max-bound-channels N`|Maximum provisioned bound channels (default `256`)|",
+     "|`--max-enrolled-tokens N`|Maximum enrolled tokens in `--bearer-token-file` (default `1024`)|",
+     "|`--max-sessions-per-principal N`|Maximum active MCP sessions per principal before evicting the oldest (default `16`)|",
+     "|`--max-concurrent-requests-per-principal N`|Maximum concurrent in-flight HTTP requests per principal before returning `HTTP 429` (default `16`)|",
+     "|`--request-log FILE`|Log every JSON-RPC message with the capabilities the client declared|"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    707,
+    637,
+    682
+   ],
+   [
+    "replace",
+    707,
+    708,
+    682,
+    683,
+    [
+     "|Client|Model|Result|"
+    ]
+   ],
+   [
+    "equal",
+    708,
+    709,
+    683,
+    684
+   ],
+   [
+    "replace",
+    709,
+    715,
+    684,
+    690,
+    [
+     "|Copilot CLI (ACP)|`gpt-6-luna`|Pass|",
+     "|Claude Code (stream-json)|`claude-sonnet-5-5`|Pass|",
+     "|Codex 0.145.0-alpha.7|default|Pass (fresh `codex exec resume` per turn)|",
+     "|agy|`claude-sonnet-5-5-high`|Pass|",
+     "|Muse|`muse-wonder-1.0`|Pass (background `minymaton-wait`; never refreshes its tool list)|",
+     "|Grok|default|Pass (live multi-agent bus on `/mcp`)|"
+    ]
+   ],
+   [
+    "equal",
+    715,
+    772,
+    690,
+    747
+   ],
+   [
+    "replace",
+    772,
+    773,
+    747,
+    748,
+    [
+     "- **Bundled SQLite WAL backend**: The repository ships the single-node bundled `SQLite` WAL (`synchronous=FULL`, `busy_timeout=0`) `Store` and `Reader` types implementing `QueueStore` and `QueueReader`. `Queue::with_backend` takes any other implementation of those traits; `Signals` wake receives parked in the same process, so a backend shared by several server processes must also raise them from the other processes' commits. See `deploy/README.md` for the operator deployment topology."
+    ]
+   ],
+   [
+    "equal",
+    773,
+    778,
+    748,
+    753
+   ],
+   [
+    "replace",
+    778,
+    826,
+    753,
+    754,
+    [
+     "…（48 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    826,
+    834,
+    754,
+    762
+   ],
+   [
+    "replace",
+    834,
+    868,
+    762,
+    763,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    868,
+    870,
+    763,
+    765
+   ],
+   [
+    "replace",
+    870,
+    871,
+    765,
+    766,
+    [
+     "Editable native draw.io source: `docs/diagrams/minymaton-architecture.drawio` (SVG | PNG)."
+    ]
+   ],
+   [
+    "equal",
+    871,
+    874,
+    766,
+    769
+   ],
+   [
+    "replace",
+    874,
+    875,
+    769,
+    770,
+    [
+     "|Path|What's in it|"
+    ]
+   ],
+   [
+    "equal",
+    875,
+    876,
+    770,
+    771
+   ],
+   [
+    "replace",
+    876,
+    889,
+    771,
+    784,
+    [
+     "|`crates/minymaton-core`|`Queue` coordinator, `QueueStore` and `QueueReader` traits, in-memory `Signals`, wire types, and bundled SQLite WAL `Store` + `Reader`|",
+     "|`crates/minymaton-server`|rmcp over axum, the tool surface, `minymaton-server` and `minymaton-storage-check` binaries|",
+     "|`crates/minymaton`|The installable `minymaton` server binary (`cargo install minymaton`)|",
+     "|`crates/minymaton-mobile-core`|Shared Rust mobile core: sessionless MCP `2026-07-28` client, on-device SQLite WAL inbox, cancellable stream watches, Android JNI and iOS C FFI|",
+     "|`mobile/`|React Native (`0.76.9`) Android and iOS operator app, Keystore/Keychain bridges and Detox E2E suites (`mobile/e2e/`)|",
+     "|`tools/build_mobile_core.py`|Cross-compiles `minymaton-mobile-core` with Android NDK Clang into `mobile/android/app/src/main/jniLibs/` (`arm64-v8a`, `x86_64`)|",
+     "|`tools/generate_mobile_icons.py`|Renders Android mipmap and iOS `AppIcon.appiconset` PNGs from `assets/logo.svg`|",
+     "|`crates/minymaton-server/src/bin/minymaton-wait.rs`|Standalone native Rust background waiter (`minymaton-wait --handle sub_... --url URL [--ack bat_...] [--max-events N] [--max-bytes N] [--ca-file PATH] [--config PATH] [--token-env VAR]`)|",
+     "|`tools/minymaton-wait.py`|Portable Python 3 stdlib-only background waiter with identical CLI, env, INI, TLS, exit-code, and wire semantics|",
+     "|`tools/stage_helpers.py`|Stages the 6 native `minymaton-wait-<target>` binaries, `minymaton-wait.py`, `LICENSE`, `source.tar.gz`, `README.txt`, and `SHA256SUMS`|",
+     "|`tools/mcp_send.py`|Type messages into a stream from a terminal|",
+     "|`deploy/`|Operator deployment documentation (`deploy/README.md`) and systemd user units for storage capacity alerting|",
+     "|`docs/diagrams/minymaton-architecture.{drawio,svg,png}`|Native L1.5 draw.io architecture diagram and rendered exports|"
+    ]
+   ],
+   [
+    "equal",
+    889,
+    891,
+    784,
+    786
+   ],
+   [
+    "replace",
+    891,
+    893,
+    786,
+    787,
+    [
+     "AGPL-3.0-only"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

@@ -3346,5 +3346,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fe43db38d31e": {
+  "identity": {
+   "one_liner": "基于 Ansible 兼容 YAML 清单在 macOS/Linux 上以固定 IP 创建本地 QEMU 虚拟机的命令行工具",
+   "review": "Barn 用一份 Ansible 兼容的 YAML 清单描述节点，通过 QEMU（macOS 走 HVF、Linux 走 KVM，跨架构用 TCG）创建带固定 IP、SSH 访问和测试数据盘的本地虚拟机，同一份清单可直接交给 Pigsty 部署服务；另支持在 Apple Silicon 上经 Virtualization.framework 创建 macOS 虚拟机。每用户在 ~/.barn 下维护单个部署，删除节点需显式操作。安装方式为 Homebrew 或下载安装脚本，采用 Apache 2.0 许可。",
+   "highlights": [
+    "提供 barn up/ssh/plan/resize/recreate/destroy/purge 等命令管理 Linux 虚拟机生命周期，支持 CPU、内存、磁盘的调整与热插拔，支持 --json/--yaml 结构化输出",
+    "支持通过 -I 镜像别名（如 el10a、u24x）和 -A 架构参数选择镜像与 guest 架构，可在 Apple Silicon 上以 TCG 运行 amd64 guest",
+    "barn mac 命令可在 Apple Silicon 上创建带桌面、SSH、共享文件夹和剪贴板共享的 macOS 27 虚拟机，使用 Apple Virtualization.framework"
+   ],
+   "use_cases": [
+    "为 Pigsty 等部署准备多节点本地测试环境，使用同一份 YAML 清单描述节点",
+    "在 Apple Silicon Mac 上运行 amd64 Linux guest 进行兼容性测试（README 注明此类 guest 速度较慢，不用于性能测量）",
+    "在 Apple Silicon 上创建本地 macOS 虚拟机用于开发测试（每台 Mac 可同时运行的 macOS 虚拟机上限为两台）"
+   ]
+  },
+  "sha": "fe43db38d31e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "03576d05d89e": {
+  "identity": {
+   "one_liner": "为 SQLite FTS5 提供 Lindera CJK 分词器的 C ABI 扩展库",
+   "review": "lindera-sqlite 是一个以 C ABI 形式加载的 SQLite 扩展，向 FTS5 注册 lindera_tokenizer 分词器，使全文检索支持中文、日文、韩文文本。它通过 cargo 的 embed-* 特性将 IPADIC、UniDic、ko-dic、CC-CEDICT、Jieba 等词典嵌入构建产物，运行时经 LINDERA_CONFIG_FILE 环境变量选择配置。适用于在 SQLite 应用中检索 CJK 内容的开发者；配置路径需与所选特性对应。",
+   "highlights": [
+    "以 C ABI 共享库形式提供 FTS5 自定义分词器，通过 .load 加载并在建表时以 tokenize='lindera_tokenizer' 启用",
+    "提供 embed-ipadic、embed-unidic、embed-ko-dic、embed-cc-cedict、embed-jieba、embed-cjk 等构建特性，将对应词典嵌入扩展",
+    "官方发布按平台和词典提供预构建压缩包，含匹配的 lindera.yml 配置文件"
+   ],
+   "use_cases": [
+    "在 SQLite FTS5 全文检索中处理中文、日文、韩文分词",
+    "需要将特定形态词典（如 IPADIC、Jieba）嵌入 SQLite 扩展分发的场景",
+    "对已建 FTS5 表使用 bm25 排序进行 CJK 内容搜索"
+   ]
+  },
+  "sha": "03576d05d89e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6d9bbe710d8c": {
+  "identity": {
+   "one_liner": "自托管团队考勤系统，围绕出勤时长实现签到、排行、考核与邮件月报",
+   "review": "RollCall 是面向社团、学生组织、志愿队等小型团队的自托管考勤系统，逐人登记活动出勤时长，自动累计并生成排行，叠加考核成绩、违规扣时、月度出勤率统计、CSV 导出与邮件月报。技术栈为 React + FastAPI + SQLite（WAL 模式），提供 Windows 一键启动脚本与云服务器部署教程。认证为共享密码加会话 Token，路线图中尚未包含多用户角色权限与 Docker 部署。",
+   "highlights": [
+    "提供出勤签到、时长排行、考核成绩、违规扣时、月度出勤分析与 CSV 导出功能",
+    "支持 SMTP 邮件月报，可手动或每月末定时向全员、按届别或指定成员推送个人报告",
+    "数据存于本地 SQLite 文件，支持环境变量指定路径，提供演示数据生成脚本与操作日志"
+   ],
+   "use_cases": [
+    "社团、志愿队等小型团队在局域网或云服务器上记录成员出勤与时长",
+    "需要向成员发送个人月度出勤、考核与违规情况报告的场景",
+    "内网或离线环境下运行考勤管理并自行保管数据备份"
+   ]
+  },
+  "sha": "6d9bbe710d8c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a941c4ac5717": {
+  "identity": {
+   "one_liner": "基于 Vue 3、Spring Boot 与 openGauss 的校园实验设备预约借还系统",
+   "review": "LabReserve 是一个 Web 数据库课程项目，实现实验设备的预约、审批、领用与归还流程，分学生、教师、管理员三种角色。前端 Vue 3 与后端 Spring Boot 分别封装为 Docker 服务，数据库使用 openGauss 6.0.2，会话存于数据库、预约互斥依赖行锁，支持 Compose 多实例部署。README 列明限制：未提供注册、通知等功能，预约列表单次最多返回 200 条。",
+   "highlights": [
+    "前后端分别封装为 Docker 服务，支持 Compose 多后端实例部署，会话存数据库、预约互斥依赖行锁",
+    "提供集成测试与数据库验证脚本，覆盖越权、注入、并发预约、约束与事务回滚检查",
+    "业务操作（审批、领用、归还、取消、审计）在数据库事务中处理，含时段重叠校验"
+   ],
+   "use_cases": [
+    "数据库课程的部署演示与复现教学场景",
+    "需要按角色进行设备预约审批与借还登记的校园内部流程",
+    "openGauss + Docker Compose 架构的实践参考案例"
+   ]
+  },
+  "sha": "a941c4ac5717",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

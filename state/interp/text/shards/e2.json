@@ -3060,5 +3060,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6f92cded24eb": {
+  "identity": {
+   "one_liner": "用 Rust 重写的 Moqui 业务应用框架，XML 定义工件，内嵌 Postgres",
+   "review": "MR Moqui 是 Moqui Java 框架的 Rust 重写版，用于构建业务应用：应用由 XML 编写的实体、服务、屏幕等工件组成，框架提供持久化、事务、安全、缓存、搜索、REST 等基础能力。构建产物为单个二进制文件并携带内嵌 Postgres；脚本与模板统一使用 JavaScript（quickjs-oxide 引擎）。README 明确标注 0.1.0 之前未达生产可用，数据模型与存储布局不稳定且不做迁移，安全评审仍在进行，只应在开发机上运行。",
+   "highlights": [
+    "XML 工件模型：实体、服务、屏幕/表单、ECA 规则、REST API 与数据文件，脚本用 JavaScript",
+    "单二进制交付，无配置时内嵌 Postgres，可改用外部 Postgres 或 MySQL，搜索默认用 Postgres 全文与 JSON，OpenSearch 可选",
+    "同一屏幕定义可渲染为网页、Vue/Quasar 客户端、终端 UI（含 SSH）、PDF、CSV 与 XLSX"
+   ],
+   "use_cases": [
+    "在开发机上克隆、构建并运行完整的业务应用套件（Marble ERP、IronStone BOSS/PASS 等）",
+    "从 Moqui Java 迁移组件或部署，沿用 XML 工件与 ExecutionContext/facade 结构",
+    "部署为单服务器、容器、通过共享数据库协调的集群或无公网端口的边缘节点"
+   ]
+  },
+  "sha": "6f92cded24eb",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

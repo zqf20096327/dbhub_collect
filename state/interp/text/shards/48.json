@@ -3222,5 +3222,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "712c67b0122b": {
+  "identity": {
+   "one_liner": "纯 C# 嵌入式 .NET 数据库，内置 LSM 存储、列式索引与 HNSW 向量搜索。",
+   "review": "DataVo 是面向 .NET 10 的进程内嵌入式数据库，以 NuGet 包分发，无需外部服务器或原生二进制。它提供 SQL 执行、LSM 磁盘/内存两种存储引擎、编译期 LINQ 源生成器、MVCC 快照隔离事务。注意它不支持客户端/服务器模式、复制功能及串行化隔离，磁盘格式尚无跨版本兼容承诺。",
+   "highlights": [
+    "提供 InMemory 与 LSM 两种存储引擎，LSM 模式支持 WAL 及可选逐提交 fsync 持久化",
+    "支持 VECTOR(n) 列的 FLAT 精确与 HNSW 近似向量索引，含余弦/欧氏距离运算符",
+    "支持 CREATE INDEX ... USING COLUMNAR 列式索引与基于 Z-set 的增量物化视图"
+   ],
+   "use_cases": [
+    "需要将数据库嵌入单进程 .NET 应用（桌面、服务）并避免打包原生动态库的场景",
+    "需要在同一事务边界内同时进行关系查询与向量搜索的应用",
+    "需要离线编译 AOT 发布、或通过 ADO.NET/Dapper/EF Core 桥接访问嵌入式存储的项目"
+   ]
+  },
+  "sha": "712c67b0122b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f4459182215": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 React 19 的智能停车场管理系统，含 13 表 MySQL/TiDB 数据库",
+   "review": "这是 PTIT 数据库课程（第 10 组）开发的智能停车场管理系统，v2.2.0 面向单一管理员场景，运行于本机或局域网。后端 FastAPI 提供 /api/v1 接口和 /ws/live WebSocket，前端 React 19 + TypeScript，数据库 dbptit 含 13 张表，部署在 TiDB Cloud / MySQL 8。移除了登录与权限模块，但操作仍记录执行员工 id。MIT 许可证，提供 Windows 一键启动脚本。",
+   "highlights": [
+    "数据库 dbptit 包含 13 张表，事务使用 SELECT ... FOR UPDATE 按固定加锁顺序并对 TiDB/MySQL 冲突错误码自动重试",
+    "包含 6 个功能模块：出入口 POS、实时车位总览、月票与价格表、交易历史、营收分析和基础数据管理",
+    "支持 VietQR 转账码生成、80mm 热敏小票打印、CSV 导出，以及 Windows 一键启动脚本 Mo_SmartParking.bat"
+   ],
+   "use_cases": [
+    "停车场日常运营管理：车辆进出登记、车位监控、月票续期与收费结算",
+    "数据库课程教学与项目演示：ERD 设计、事务与锁机制、UTC+7 业务日期统计的实践示例",
+    "局域网内部部署：同网段的工作站或手机通过 0.0.0.0 端口访问系统"
+   ]
+  },
+  "sha": "8f4459182215",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

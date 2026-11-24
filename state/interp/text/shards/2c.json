@@ -3570,5 +3570,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1f6a798dda7b": {
+  "identity": {
+   "one_liner": "面向既有 AI Agent 运行时的确定性策略门控、熔断开关与防篡改审计组件",
+   "review": "aaf-gate 是一个位于工具调用之前的策略门控组件，本身不是 Agent，不重实现模型或 Agent 循环，主要适配 Hermes Agent（v0.23.1）。它按 read/draft/internal_write 三类工具执行确定性策略，提供按主体的 kill switch、按时间窗的调用次数上限、SQLite 哈希链式审计日志及备份恢复。core 部分仅用 Python 标准库，无第三方依赖。当前为 1.0.0rc1，仅在本地通过 719 项单元测试，未经设备验证，作者已停止维护。",
+   "highlights": [
+    "按工具类（read/draft/internal_write）执行确定性允许/拒绝策略，无人值守的内部写入保持阻断",
+    "提供 gate-stop/gate-resume/gate-status 熔断开关与按时间窗、按工具类的调用次数限制",
+    "SQLite 中写入仅追加、哈希链式审计日志，支持带链锚点的备份与恢复"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 运行时的工具调用前置一层可审计的确定性策略控制",
+    "Pilot 1 场景：读取 Gmail 并分类、生成回复草稿（不含发送邮件）",
+    "需要按主体随时停止 Agent 后续操作并保留不可篡改调用记录的本地部署"
+   ]
+  },
+  "sha": "1f6a798dda7b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e22fbd862f59": {
+  "identity": {
+   "one_liner": "自托管游戏化学习与习惯引擎，以事件溯源账本驱动备考任务、XP 与复习",
+   "review": "THE ASCENT 是一个基于 Next.js 与 PostgreSQL 17 的自托管备考应用，将考试周期组织为任务、XP、Boss 与复习等机制。它由作者为一场伊朗全国入学考试构建，界面为波斯语（RTL）并使用 Jalali 日期；换考目标需修改 campaign.ts 常量与 seed YAML，完整配置化仍在路线图中。支持 Vercel+Neon 或 Docker 部署，可离线运行，AI 功能为可选且受限流。",
+   "highlights": [
+    "每次数据变更均写入事件存储，XP/分数/金币账本作为投影可通过 npm run replay 重建与比对",
+    "包含约 400 个自动化测试（单元与 PostgreSQL 并发集成），并支持加密备份、原子恢复与恢复演练",
+    "提供 make demo 一键生成含三周示例历史的演示数据库，以及 Windows 焦点小部件（Rust + Slint） companion"
+   ],
+   "use_cases": [
+    "备考自学：将考试日期、科目、章节等替换为自己的配置后运行完整备考循环",
+    "习惯与复习追踪：习惯分层、连续记录网格与间隔重复复习卡片",
+    "长期运行的自托管服务：通过事务锁、幂等重试与备份恢复机制支撑多月运行"
+   ]
+  },
+  "sha": "e22fbd862f59",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2885,5 +2885,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b904122d563a": {
+  "identity": {
+   "one_liner": "基于 Postgres 的认知图谱数据库，用于记录 agent 与人的工作、信念与发现。",
+   "review": "Trackinizer 是一个以 Inquiry 为核心模型的认知数据库：Issue 表示工作、Artifact 表示产出，通过七种有向边（narrowing、requires、proves 等）构成有向图，底层为 Postgres 或 PGlite，上层用 FastAPI 提供 HTTP 接口。面向使用 AI agent 做自动化研究或知识管理的团队。安装可用 uvx 直接运行，附带 trax CLI、内置 Web 界面与实时 agent 会话控制台；无认证模式仅限本地运行。",
+   "highlights": [
+    "数据模型统一为 Inquiry（Issue/Artifact 两类变体），以 inquiries、edges、change_log 三张核心表存储，边表为真实存储、类型字段为其投影",
+    "关系边有向且含反向视图，插入时拒绝环；cites 类文献边独立于六种推理边",
+    "包分为 types/wire/client/trax 四层，客户端（SDK+CLI）不依赖服务端组件，可独立分发"
+   ],
+   "use_cases": [
+    "记录自治 agent 的研究过程：实验、论文引用、信念及其支持与反对证据",
+    "以图结构管理任务分解与产出关系，如 Issue 拆分、依赖与产物溯源",
+    "通过 Web 界面和实时控制台查看多 agent 会话并向 agent 发送消息"
+   ]
+  },
+  "sha": "b904122d563a",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0a459a1bcdf8": {
+  "identity": {
+   "one_liner": "单机自托管的 AI 智能体长期记忆服务，基于 FastAPI 与 SQLite 单库内核",
+   "review": "aiduMEI 是一个 MIT 许可的单机自托管长期记忆服务，用 Python/FastAPI 实现。它通过钩子或原生扩展接入 Claude Code、Codex CLI、pi、DeepSeek Harness、OpenChamber 等宿主，在对话前注入召回记忆、对话后写入、会话结束提炼精华。默认采用自研 native 单库 SQLite 内核，数据全部存本机；运行需 Python 3.10–3.12，提供 cloud/auto/local 三种挡位。",
+   "highlights": [
+    "native 单库内核：正文、FTS5 trigram 全文索引、向量、历史、墓碑、关系边写入同一 memory.db，检索由全文 bm25 与向量余弦两路经 RRF 融合",
+    "提供 connect_host.py 一条命令接入宿主并当场验收，另为 DeepSeek Harness 与 OpenChamber 提供原生扩展接入",
+    "支持墓碑快照与单条记忆恢复（默认保留 30 天），提供 /graph/checkup 只读体检与本地档零外呼模式"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex CLI、pi 等 CLI 型智能体宿主添加跨会话的长期记忆读写",
+    "在本机离线环境下运行记忆服务（local 挡位不外呼、无需模型 Key，走全文检索）",
+    "对数据本地化有要求的个人部署场景：数据落本机数据目录，可通过脚本备份与恢复"
+   ]
+  },
+  "sha": "0a459a1bcdf8",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3678,5 +3678,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3d70bd8b3bca": {
+  "identity": {
+   "one_liner": "一组免费的 SQL Server 性能故障排查存储过程合集",
+   "review": "该项目包含 sp_QuickieStore、sp_PressureDetector、sp_HumanEvents 等多个 T-SQL 存储过程，用于查询 Query Store、计划缓存、扩展事件和错误日志等诊断数据，面向需要排查 SQL Server 性能问题的 DBA。安装通过运行 Install-All/DarlingData.sql 或各文件夹内的 .sql 文件完成，采用 MIT 许可证，按月发布版本。作者说明这些脚本不能替代成熟的监控工具。",
+   "highlights": [
+    "提供约 10 个故障排查存储过程，覆盖 CPU/内存压力检测、Query Store 数据查询、扩展事件追踪、索引清理等场景",
+    "sp_PressureDetector 可报告自启动以来的等待统计、数据库文件活动、tempdb 配置和内存消耗者信息",
+    "附带实用脚本，包括结果导出 CSV、sp_WhoIsActive 日志记录、备份设置性能测试等工具"
+   ],
+   "use_cases": [
+    "排查 SQL Server 查询性能问题，如查询超时、CPU 或内存压力",
+    "从 Query Store、计划缓存和系统健康扩展事件中提取和分析现有诊断数据",
+    "识别未使用和重复索引、清理 Query Store 中的重复查询"
+   ]
+  },
+  "sha": "3d70bd8b3bca",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b0f87c66643c": {
+  "identity": {
+   "one_liner": "本地媒体库桌面应用，用自定义元数据（chips）、标签和筛选组织视频/图片/音频/文本",
+   "review": "MediaChips 是 GPL-3.0 许可的开源桌面应用（Electron + Express + SQLite + Vue 3），用于管理本地视频、图片、音频和文本文件。用户可自定义 chip 元数据字段、多级标签和组合筛选，支持缩略图预览、故事板、内置播放器，并可从 Google Drive、SFTP、WebDAV 等远程源导入。数据存储在本地 SQLite，可通过浏览器或 Docker/NAS 访问。安装包未签名，Windows/macOS 首次运行可能提示警告；OneDrive 和 Dropbox 集成为 beta 状态。",
+   "highlights": [
+    "支持自定义元数据类型（评分、收藏、日期、数字、颜色、嵌套字段）及标签层级、同义词、合并工具",
+    "按任意字段/标签组合筛选，支持保存预设、全局搜索、重复文件查找、多数据库与备份恢复",
+    "可通过 Google Drive、SFTP、FTP、WebDAV 浏览并导入远程文件，支持 Docker/NAS 部署与 LAN 浏览器访问"
+   ],
+   "use_cases": [
+    "为大量本地视频/图片/音频建立带自定义元数据的可筛选资料库",
+    "在 NAS/Docker 上自托管媒体库并通过浏览器或移动设备访问",
+    "从 Stash 导入 scenes/performers/tags 等数据并继续整理（经 Stash 导入插件）"
+   ]
+  },
+  "sha": "b0f87c66643c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "919bdde95173": {
+  "identity": {
+   "one_liner": "本地运行的 AI 代理记忆层，集成 hooks、MCP 服务器与混合检索。",
+   "review": "ClawMem 是一个完全本地运行的 AI 代理记忆层，用 TypeScript 编写并运行在 Bun 上。它将 markdown 笔记、项目文档和会话记录转换为持久记忆，通过 Claude Code hooks、MCP 服务器、OpenClaw 插件或 Hermes MemoryProvider 插件接入，各模式写入同一个本地 SQLite 库。检索采用 BM25、向量搜索、倒数排名融合、重排序等混合机制。需要 Bun v1.3.14+，完整支持 Linux、macOS 和 WSL2。",
+   "highlights": [
+    "提供 BM25 + 向量搜索 + 倒数排名融合 + 查询扩展 + 交叉编码器重排序的混合检索",
+    "通过 hooks、MCP 服务器、OpenClaw 插件或 Hermes MemoryProvider 插件集成，各模式共享同一本地 SQLite 记忆库",
+    "使用本地 GGUF 观察模型从会话记录中捕获决策、偏好、里程碑与问题，支持导入 Claude Code、ChatGPT、Slack 等对话导出"
+   ],
+   "use_cases": [
+    "为 Claude Code、OpenClaw、Hermes 等 AI 编码代理在本地保存和检索项目决策与上下文",
+    "导入既有对话导出并挖掘其中的结构化决策、偏好与里程碑",
+    "需要跨多个代理运行时共享同一记忆库且不依赖云端服务的项目"
+   ]
+  },
+  "sha": "919bdde95173",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ff6fc1d3266": {
+  "identity": {
+   "one_liner": "基于 Next.js 的 Turborepo 全栈应用启动模板，集成认证、安全与环境管理",
+   "review": "Vazen 是一个 TypeScript monorepo 启动模板（MIT 协议），基于 Turborepo 组织，面向需要从零搭建全栈 Web 应用的开发者。技术栈包含 Next.js v16、React v19、Tailwind CSS v4、Drizzle ORM、PostgreSQL 和 Better-Auth。其机制特点是用 Varlock 从 .env.schema 生成带类型的 env.ts，用 Infisical 集中管理各环境密钥，本地开发通过 portless 使用主机名而非端口。",
+   "highlights": [
+    "内置 pnpm、oxlint、oxfmt、commitlint、lefthook、Playwright 等开发工具链",
+    "通过 .env.schema 声明变量并由 Varlock 生成类型化 env.ts，支持 Infisical 按环境注入密钥",
+    "提供 Better-Auth 认证、Drizzle ORM + PostgreSQL 数据层、oRPC 接口及 Sentry、PostHog 等观测集成"
+   ],
+   "use_cases": [
+    "搭建需要认证、数据库和对象存储的全栈 Next.js 应用",
+    "需要按 development/staging/production 分环境集中管理密钥的团队项目",
+    "需要类型化环境变量校验与本地主机名开发流程的场景"
+   ]
+  },
+  "sha": "4ff6fc1d3266",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "661f99e9b1c8": {
+  "identity": {
+   "one_liner": "Rust 编写的开源 ERP 框架，采用 Odoo 风格的插件扩展模型",
+   "review": "ERPForAll 是一个用 Rust 与 PostgreSQL 构建的开源 ERP 框架，addon 结构（模型继承、XML 视图 XPath 扩展、访问规则）沿用 Odoo 开发者熟悉的组织方式，但未复制 Odoo 源代码。自带 Web 客户端，核心保持精简，会计、库存、销售等均为独立 addon。项目处于早期开发阶段，README 明确标注尚不适合用于真实经营。",
+   "highlights": [
+    "类型化 ORM 支持 recordset、domain 编译为 SQL、访问规则编译进查询、多公司、多语言等能力",
+    "addon 平台支持 Rust 原生 addon、纯数据 addon 与 WebAssembly addon 三种形式，安装/升级/卸载在单事务内完成",
+    "内置 Web 客户端提供表单、列表、看板、透视、图表、日历等视图，API 暴露模型方法并支持 API keys"
+   ],
+   "use_cases": [
+    "需要通过 addon 定制 ERP 业务流程且熟悉 Odoo addon 开发方式的团队",
+    "自托管部署、希望会计/库存/销售/采购等模块以插件形式组合使用的企业",
+    "需要 JSON API 与 API keys 供脚本或 AI agent 调用 ERP 数据的场景"
+   ]
+  },
+  "sha": "661f99e9b1c8",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

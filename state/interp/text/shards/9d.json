@@ -3269,5 +3269,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5f7b943cd4e6": {
+  "identity": {
+   "one_liner": "在 PostgreSQL 中实现的复式记账账本，全部由 SQL 表、函数和视图构成。",
+   "review": "pgledger 是一个部署在 PostgreSQL 内的复式记账账本实现，无应用层代码，通过 SQL 函数（创建账户、转账）写入账本，通过视图查询余额与条目。由于完全运行在数据库内，账本写入与应用其他操作可在同一事务中原子提交。安装需先执行 vendored 的 ULID/UUID 辅助函数 SQL，再执行 pgledger.sql。账户为单币种，多币种需用多个账户。",
+   "highlights": [
+    "提供 pgledger_create_account 与 pgledger_create_transfer 等函数及 pgledger_accounts_view、pgledger_entries_view 等视图，余额约束在每个请求后检查，拒绝的批次不留下任何记录",
+    "支持可选 event_at 事件时间戳、idempotency_key 幂等调用，以及按名称等自定义查询方式（可用 CTE 组合 SQL）",
+    "转账金额必须为正有限数，方向由 from/to 账户决定；账户可设置是否允许负余额"
+   ],
+   "use_cases": [
+    "需要在应用同一事务中原子写入账本记录的场景",
+    "通过 webhook 记录真实世界资金事件并按 event_at 与银行对账单比对时间段查询",
+    "跨编程语言的复用式账本需求——应用只需调用 SQL 函数与查询视图"
+   ]
+  },
+  "sha": "5f7b943cd4e6",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "590b7566409c": {
+  "identity": {
+   "one_liner": "自托管制品仓库管理器，单 Go 二进制支持 19 种包格式",
+   "review": "Nexspence 是一个自托管的制品仓库管理器，以单个 Go 二进制加 PostgreSQL 运行，支持 Maven、npm、PyPI、Docker 等 19 种包格式，并实现 Nexus v1 REST API。提供 hosted、proxy、group 三类仓库、RBAC、OIDC/LDAP 单点登录、S3 兼容存储，并内置从运行中的 Nexus 实例进行在线迁移的功能。适用于需要私有制品库的团队。注意 AGPL-3.0 许可及需外接 PostgreSQL。",
+   "highlights": [
+    "单 Go 二进制实现 19 种包格式的 hosted、proxy、group 三类仓库",
+    "兼容 Nexus v1 REST API，并提供从运行中 Nexus 实例的可暂停、可恢复在线迁移",
+    "支持 RBAC、OIDC/LDAP、审计日志、S3 兼容存储及 Helm/Kubernetes/Terraform 部署"
+   ],
+   "use_cases": [
+    "为 CI/CD 流水线自托管多格式制品仓库与 Docker/OCI 镜像仓库",
+    "从 Sonatype Nexus 迁移仓库定义、制品、用户和路由规则",
+    "通过 Prometheus/Grafana 与漏洞仪表板管理组件与依赖缓存"
+   ]
+  },
+  "sha": "590b7566409c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bf7e2418dcee": {
+  "identity": {
+   "one_liner": "seekdb 的多语言客户端绑定库，以 C11 实现 libseekdb 核心。",
+   "review": "该仓库为 seekdb 提供 C 库、CLI、Python、Node.js、Java/Android 等客户端绑定，核心 libseekdb 以 C11 实现且不链接 libstdc++。面向需要以多语言嵌入或连接 seekdb 的开发者，构建需通过 SEEKDB_BIN 指定 seekdb 二进制，仓库依赖 git submodules，Linux 基线为 glibc 2.28。",
+   "highlights": [
+    "核心 libseekdb 以 C11 实现，不链接 libstdc++/libc++，运行时仅需 pthreads",
+    "提供 C SDK、Python wheel（CPython 3.11/3.12 稳定 ABI）、Node.js tarball、Java/JNI 及 Android AAR 包",
+    "通过 CMake 构建，支持 Linux、macOS、Windows、Android 多平台目标与 cibuildwheel 打包"
+   ],
+   "use_cases": [
+    "以 Python 或 Node.js 客户端连接 seekdb 服务",
+    "在 Android 应用中集成含 JNI 与引擎依赖的 AAR（需 API 28 及以上）",
+    "基于公开 C 头文件 seekdb.h 开发自定义客户端或嵌入场景"
+   ]
+  },
+  "sha": "bf7e2418dcee",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1bdb3ff945fd": {
+  "identity": {
+   "one_liner": "面向 DSH 等智能体的逆向工程技能，用 REA 分析已编译产物并输出可核查结论",
+   "review": "该仓库是一个 DSH/Agent Skill（v1.2.1），核心为 SKILL.md 加 references 与 scripts 目录，通过将仓库放入智能体的技能目录来安装，支持 DSH、Codex、WorkBuddy、Claude Code 等环境。技能激活后借助 REA 工具链对原生二进制、Electron 应用、APK、固件、字节码等产物做分析，结论以二进制证据为依据。README 未包含具体分析效果的示例或性能数据。",
+   "highlights": [
+    "覆盖原生二进制（伪代码、汇编、调用图、xref）、JS/Electron、.NET 程序集、APK、固件、WASM/EVM 字节码、SQLite、网络抓包等对象类型",
+    "以 SKILL.md 描述自动触发，或通过名称 Reverse Engineer-20261017 在对话中显式调用",
+    "提供 git clone 与 DSH plugin_manager install_bundle 两种安装方式，兼容多智能体技能目录"
+   ],
+   "use_cases": [
+    "对 exe、dll、so、apk、asar、wasm 等已编译产物进行反编译查看",
+    "对比两个编译版本或还原某段算法时，需要基于二进制证据而非源码给出结论",
+    "在 DSH/Codex/WorkBuddy/Claude Code 等智能体环境中为对话增加逆向工程能力"
+   ]
+  },
+  "sha": "1bdb3ff945fd",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7b20a3726c6c": {
+  "identity": {
+   "one_liner": "全栈个人作品集应用：React/Vite 前端 + Express API + MySQL/TiDB 数据库",
+   "review": "该项目是一个完整的全栈应用而非静态模板：前端部署于 Vercel，Express API 与遥测面板部署于 Render，内容存于 TiDB MySQL 兼容库。含管理员后台（HttpOnly cookie 会话、CSRF 防护、CRUD）、Gemini AI 技能解说、Cloudinary 图片上传，以及七任务 GitHub Actions 流水线。免费层 Render API 休眠后需 30-60 秒唤醒。适合开发者展示个人项目与技能。",
+   "highlights": [
+    "前端 React 18/Vite 6，后端 Node.js 22/Express 5，数据库为 TiDB Cloud 或 MySQL 8，共五张关系表",
+    "提供 /system 实时遥测页面，展示 CPU、内存、运行时长与 AI 可用性，每五秒轮询刷新",
+    "GitHub Actions 七任务流水线执行 lint、测试、构建、部署与线上冒烟测试；Docker Compose 可本地运行含数据库的完整栈"
+   ],
+   "use_cases": [
+    "开发者构建数据库驱动的个人作品集网站",
+    "需要管理员后台管理项目、技能与证书内容的场景",
+    "学习前后端分离部署、JWT/会话认证与 CI/CD 流水线实践"
+   ]
+  },
+  "sha": "7b20a3726c6c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

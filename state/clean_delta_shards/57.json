@@ -30828,5 +30828,1531 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "f74cdadd4daf+2": {
+  "fn": "Dicklesworthstone/frankengraphdb",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    10,
+    2,
+    8,
+    [
+     "License: MIT + Rider",
+     "Rust Edition",
+     "toolchain: nightly",
+     "unsafe: forbidden*",
+     "language: GQL ISO/IEC 39075:2024",
+     "deps: closed universe"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    12,
+    8,
+    10
+   ],
+   [
+    "delete",
+    12,
+    14,
+    10,
+    10
+   ],
+   [
+    "equal",
+    14,
+    22,
+    10,
+    18
+   ],
+   [
+    "replace",
+    22,
+    23,
+    18,
+    19,
+    [
+     "The CLI and server can write a graph, query the new state, and recover it after restart. On a 176 MB test database, `fgdb query --buffered` streamed 6,144 rows under a 60 MiB memory limit. An ordinary local query exhausted that limit while opening the same database, even with `LIMIT 0`. The reality check and bridge plan records the tested revisions, commands, and open qualification work."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    19,
+    20
+   ],
+   [
+    "replace",
+    24,
+    27,
+    20,
+    21,
+    [
+     "> **A note on tense (read this first).** This README is written in the **present tense, as if the entire design in `COMPREHENSIVE_PLAN_FOR_THE_DESIGN_OF_FRANKENGRAPHDB.md` is fully realized**: the 1.0 target state where every performance gate is green and every subsystem is live. This is a deliberate choice. It lets the document describe the *finished* system so it gets **trued-up in place as milestones land** (§19's gates G1→G4) rather than rewritten from scratch later. Where the plan itself stages something as genuinely future work (horizontal sharding, covered under Limitations), the README says so plainly. Everything else below is the spec of the system this repository builds."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    40,
+    21,
+    34
+   ],
+   [
+    "replace",
+    40,
+    41,
+    34,
+    35,
+    [
+     "||`frankengraphdb`|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    35,
+    36
+   ],
+   [
+    "replace",
+    42,
+    56,
+    36,
+    48,
+    [
+     "|Durability|Content-addressed, RaptorQ-erasure-coded commit stream. **No double-write journaling anywhere**; bit-rot is a maintenance event, not an outage.|",
+     "|Time|Unbounded, queryable history (`FOR SYSTEM_TIME AS OF/BETWEEN`) as a *corollary* of how MVCC works, not a bolt-on temporal engine.|",
+     "|Branches|`git`-style database branches: O(1), zero-copy, 10k+ concurrent. Fork, mutate, run analytics, merge or discard.|",
+     "|Storage|Three temperature tiers per vertex: inline micro-adjacency → sorted delta blocks → sealed compressed CSR runs. Hot minority pays delta cost; cold majority sits *below* raw CSR.|",
+     "|Execution|One Free-Join operator family: binary hash joins, worst-case-optimal multiway joins, and factorized intermediates in one continuum, over runs that *are already tries*.|",
+     "|Incremental|One DBSP-style Z-set engine drives recursion, materialized views, subscriptions, and incremental analytics; the commit stream *is* the delta stream.|",
+     "|Determinism|Same state + same query + same policy ⇒ byte-identical results, *including order*. Every result ships an auditable, replayable **plan certificate**.|",
+     "|Verification|The whole database runs under a deterministic lab runtime: virtual time, DPOR schedule exploration, chaos injection, seed-replayable failures. FoundationDB-class, largely by inheritance.|",
+     "|Governance|Capability tokens (macaroons) with graph caveats compile to **planner-enforced** row/subgraph security, applied before expansion, never as a post-filter.|",
+     "|Retrieval|`hybrid.search(text, vector, seeds, expand)` fuses ANN + BM25 + graph expansion *inside one planner*: GraphRAG's retrieval step as one optimized operator, transactional and time-travelable.|",
+     "|Safety|`unsafe_code = \"forbid\"` workspace-wide, with a ledgered boundary for the few SIMD/arena/VFS islands, each carrying a bit-identical scalar fallback.|",
+     "|Dependencies|**Closed universe.** `std` + the pinned nightly + three owned foundations. No serde, no tokio, no rocksdb, no arrow, no tantivy, no hnswlib in first-party code or on any new dependency path. Ever. (The foundations' own transitive dependencies, which do include serde, are enumerated and pinned in `deny.toml`.)|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    63,
+    48,
+    55
+   ],
+   [
+    "replace",
+    63,
+    91,
+    55,
+    56,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    56,
+    57
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "1a8b280570d6+2": {
+  "fn": "erict16/ragdoll-mail",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Ragdoll Mail icon "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " Ragdoll Mail "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     " The free mail app your AI agent can use. A desktop app for Mac and Windows with a command line built in: Claude Code, Codex and other agents can search your mail, write replies and send them once you say yes. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     " Works with Tencent Exmail (腾讯企业邮箱), QQ Mail, 163, Gmail, iCloud, Fastmail and any other IMAP mailbox. "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    13,
+    8,
+    11,
+    [
+     " Latest release",
+     " Tests",
+     " MIT license"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    11,
+    12
+   ],
+   [
+    "replace",
+    14,
+    20,
+    12,
+    16,
+    [
+     " Download for Mac ·",
+     " Download for Windows ·",
+     " Website ·",
+     " 简体中文 "
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    16,
+    17
+   ],
+   [
+    "replace",
+    21,
+    22,
+    17,
+    18,
+    [
+     " Ragdoll Mail on a Mac: an AI agent in a terminal writes a reply with the ragdoll command, you read the draft in the app, the agent sends it when you say yes, it shows in Sent, and search finds mail as you type "
+    ]
+   ],
+   [
+    "equal",
+    22,
+    42,
+    18,
+    38
+   ],
+   [
+    "replace",
+    42,
+    45,
+    38,
+    41,
+    [
+     "1. **Download** the app from the latest release:",
+     " - Mac (M1 or newer): `ragdoll-mail-mac.dmg`",
+     " - Windows 10 or 11: `ragdoll-mail-windows.zip`"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    41,
+    42
+   ],
+   [
+    "replace",
+    46,
+    47,
+    42,
+    43,
+    [
+     " Or, on a Mac with Homebrew (this also installs the `ragdoll` command):"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    53,
+    43,
+    49
+   ],
+   [
+    "replace",
+    53,
+    56,
+    49,
+    52,
+    [
+     " - Mac: when macOS says it could not check the app, open **System Settings → Privacy & Security**, scroll down and press **Open Anyway**. (On older macOS: right-click the app and choose **Open**.)",
+     " - Windows: choose **More info**, then **Run anyway**.",
+     "3. **Sign in** with your mail address and password. For the mailboxes named above, and for company addresses on Tencent Exmail, Google Workspace, Alibaba or NetEase mail, the app fills in the server settings by itself. Using Exmail? See the Exmail setup guide."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    95,
+    52,
+    91
+   ],
+   [
+    "replace",
+    95,
+    105,
+    91,
+    96,
+    [
+     " Ragdoll Mail showing the inbox and an open conversation with attachments ",
+     " Searching the mailbox in Ragdoll Mail: results while you type ",
+     "",
+     " Writing a mail in Ragdoll Mail with fonts, lists and a signature ",
+     " Ragdoll Mail in dark mode "
+    ]
+   ],
+   [
+    "equal",
+    105,
+    108,
+    96,
+    99
+   ],
+   [
+    "replace",
+    108,
+    109,
+    99,
+    100,
+    [
+     "||**Ragdoll Mail**|Apple Mail|Outlook (new)|Thunderbird|Foxmail|Spark|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    100,
+    101
+   ],
+   [
+    "replace",
+    110,
+    117,
+    101,
+    108,
+    [
+     "|Price|free|free|free with ads, or paid|free|free|free plan; Plus and Pro are paid|",
+     "|Mac and Windows|both|Mac only|both|both|both|both|",
+     "|Mail goes straight between you and your mail server|✅|✅|a copy is kept in Microsoft's cloud|✅|✅|goes through Spark's servers|",
+     "|Open code that anyone can check|✅|no|no|✅|no|no|",
+     "|Your own AI assistant can use the mailbox|✅|no|no|no|no|yes, sending needs Pro|",
+     "|Phone app|no|✅|✅|Android|no|✅|",
+     "|Several mailboxes in one window|not yet|✅|✅|✅|✅|✅|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    122,
+    108,
+    113
+   ],
+   [
+    "replace",
+    122,
+    123,
+    113,
+    114,
+    [
+     " Compared from each product's public pages, November 2026. Is something wrong or out of date? Tell us and we will fix it. "
+    ]
+   ],
+   [
+    "equal",
+    123,
+    160,
+    114,
+    151
+   ],
+   [
+    "replace",
+    160,
+    161,
+    151,
+    152,
+    [
+     "To get the command: **Settings → Command line → Install** in the app. To get only the command, without the app, on a Mac: `brew tap erict16/tap`, `brew trust erict16/tap`, `brew install ragdoll`. It needs no Apple signature, so macOS shows no warning. Every command and how it compares with the Gmail API: **the command-line guide**."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    164,
+    152,
+    155
+   ],
+   [
+    "replace",
+    164,
+    165,
+    155,
+    156,
+    [
+     "Found a problem, or does your mailbox not work? Open an issue. Want to help with code or a translation? Read CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    167,
+    156,
+    158
+   ],
+   [
+    "replace",
+    167,
+    169,
+    158,
+    159,
+    [
+     "MIT. Icons from Lucide (ISC); file-type icons from Material Design Icons (Apache-2.0)."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "4cde8233aa03+2": {
+  "fn": "YunusEmreAlps/Geko",
+  "clean_ver": "2",
+  "raw_lines": 20,
+  "ops": [
+   [
+    "replace",
+    0,
+    20,
+    0,
+    4,
+    [
+     "Geko",
+     " Geko ",
+     " Find the failure. Follow the trace. ",
+     " A local, failure-first dashboard for OpenTelemetry traces. One Go binary, SQLite storage, no Docker or external services required. "
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    4,
+    5
+   ],
+   [
+    "replace",
+    21,
+    22,
+    5,
+    18,
+    [
+     " CI",
+     " Release",
+     " Go version",
+     " MIT License",
+     "",
+     " Quick start ·",
+     " Connect your app ·",
+     " Investigate ·",
+     " Run for a team ·",
+     " Configuration ·",
+     " Compare",
+     "",
+     "Geko Failures dashboard showing errors from a reporting API and an online store"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    29,
+    18,
+    25
+   ],
+   [
+    "replace",
+    29,
+    30,
+    25,
+    26,
+    [
+     " recorded an exception, an HTTP 5xx, or an error status, not every trace you sent."
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    26,
+    27
+   ],
+   [
+    "replace",
+    31,
+    33,
+    27,
+    29,
+    [
+     " retried payment timeout still shows the payment exception next to the",
+     " successful response."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    29,
+    30
+   ],
+   [
+    "replace",
+    34,
+    38,
+    30,
+    34,
+    [
+     " with Claude Code, Cursor or VS Code, and one `investigate_group` call gives",
+     " the agent the stack trace, a successful request to compare with, and the",
+     " release the failure started in. A GitHub Action",
+     " comments the failing traces of a test run on the pull request."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    34,
+    35
+   ],
+   [
+    "replace",
+    39,
+    41,
+    35,
+    37,
+    [
+     " stores spans in SQLite with retention and a size limit, and serves the",
+     " dashboard on a loopback address by default."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    37,
+    38
+   ],
+   [
+    "replace",
+    42,
+    46,
+    38,
+    42,
+    [
+     " bodies, and full URLs before anything is stored, and e-mail addresses, card",
+     " numbers, IBANs and Turkish identity numbers are masked. A `strict` mode, the",
+     " default on a token-protected server, keeps only exception types and message",
+     " hashes."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    42,
+    43
+   ],
+   [
+    "replace",
+    47,
+    48,
+    43,
+    44,
+    [
+     " reports refused telemetry, export failures, and queue pressure."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    44,
+    45
+   ],
+   [
+    "replace",
+    49,
+    50,
+    45,
+    46,
+    [
+     " span volume, service limit overages, and high-cardinality attributes."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    68,
+    46,
+    64
+   ],
+   [
+    "replace",
+    68,
+    70,
+    64,
+    65,
+    [
+     " The demo, step by step "
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    65,
+    66
+   ],
+   [
+    "replace",
+    71,
+    77,
+    66,
+    70,
+    [
+     "Error groups in the demo: payment timeouts, a reopened NullPointerException, a database deadlock and a query timeout",
+     "One error group with its note, issue link and matching traces",
+     "A failing checkout trace with the payment gateway timeout as its evidence span",
+     "Version regressions flagging a failure-rate and latency rise from 5.12.0 to 5.13.0"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    100,
+    70,
+    93
+   ],
+   [
+    "replace",
+    100,
+    106,
+    93,
+    99,
+    [
+     "|Example|What it sends|",
+     "|---|---|",
+     "|Go checkout|Real HTTP requests through the OpenTelemetry SDK, with success, failure, and retry routes.|",
+     "|Node, Python, Java and .NET SDKs|Real SDK exporters, successful/failing loopback requests, resource metadata, run IDs and explicit shutdown.|",
+     "|OTLP/HTTP JSON|A synthetic HTTP 503 trace from Node.js, Python, Java, or .NET, using only the standard library.|",
+     "|Service map|One synthetic trace across five services, for exploring the map and waterfall.|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    109,
+    99,
+    102
+   ],
+   [
+    "replace",
+    109,
+    118,
+    102,
+    111,
+    [
+     "|Method|Command|",
+     "|---|---|",
+     "|Install script, Linux and macOS|`curl -fsSL https://raw.githubusercontent.com/YunusEmreAlps/geko/master/scripts/install.sh \\|sh` installs to `~/.local/bin`.|",
+     "|Install script, Windows|`irm https://raw.githubusercontent.com/YunusEmreAlps/geko/master/scripts/install.ps1 \\|iex` installs to `%LOCALAPPDATA%\\Programs\\Geko` and adds it to your PATH.|",
+     "|Scoop|`scoop bucket add geko https://github.com/YunusEmreAlps/geko`, then `scoop install geko/geko`.|",
+     "|Homebrew|`brew tap yunusemrealps/geko https://github.com/YunusEmreAlps/geko`, then `brew install yunusemrealps/geko/geko`.|",
+     "|Release archive|Download `geko_<version>_<os>_<arch>.tar.gz` (`.zip` on Windows) from GitHub Releases, check it against `checksums.txt`, extract it, and run `./geko serve`.|",
+     "|Go|`go install github.com/YunusEmreAlps/geko/cmd/geko@latest`, then `geko serve`. Replace `latest` with a tag to pin a version.|",
+     "|Docker|`docker run --rm --network host -v geko-data:/data ghcr.io/yunusemrealps/geko`, or build it with `docker build -t geko .`|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    124,
+    111,
+    117
+   ],
+   [
+    "replace",
+    124,
+    125,
+    117,
+    118,
+    [
+     "Run Geko for a team."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    150,
+    118,
+    143
+   ],
+   [
+    "replace",
+    150,
+    151,
+    143,
+    144,
+    [
+     "Connect your application."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    154,
+    144,
+    147
+   ],
+   [
+    "replace",
+    154,
+    164,
+    147,
+    157,
+    [
+     "|Guide|Covers|",
+     "|---|---|",
+     "|Investigate a failure|Failures, the service map and waterfall, applications, comparing with a success, version regressions, error groups and triage, notifications, moving a trace|",
+     "|Run Geko for a team|Docker with a token, Compose with Caddy, access, ingest, read and triage tokens, roles, sign-in through a proxy, the audit log, token reload|",
+     "|Coding agents and test runs|`geko failures --json`, MCP over stdio and HTTP, `geko run`|",
+     "|Connect your application|Ports, OTLP/gRPC, receiver limits|",
+     "|Configuration and reference|Every setting, retention and capacity, privacy modes, upgrades, CLI, JSON API|",
+     "|Collector Doctor|Diagnose Collector pipelines, export failures and queue pressure|",
+     "|Telemetry Budget|Measure hourly span volume, service limits and attribute cardinality|",
+     "|Architecture|Ingestion, storage, privacy filtering, evidence selection|"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    167,
+    157,
+    160
+   ],
+   [
+    "replace",
+    167,
+    175,
+    160,
+    168,
+    [
+     "|Tool|Best for|Deployment|",
+     "|---|---|---|",
+     "|**Geko**|Starting from failure evidence on a developer machine or a shared dev/staging instance: filter failures, open the evidence span, follow the trace's calls.|Single binary, loopback by default, SQLite with retention and a size limit. Traces only.|",
+     "|Jaeger|Searching and inspecting traces and service dependencies at any scale.|All-in-one or separate collector and query roles with external storage.|",
+     "|Zipkin|Looking up traces by ID, service, operation, tags, and duration, with an aggregate dependency diagram.|In-memory or persistent backends such as Cassandra and Elasticsearch.|",
+     "|OpenTelemetry Desktop Viewer|A local telemetry UI with SQL access.|Local CLI with a browser UI.|",
+     "|otel-tui|Browsing telemetry in a terminal UI.|Local terminal tool.|",
+     "|Aspire Dashboard|Logs, traces, and metrics in one local dashboard.|Standalone container.|"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    194,
+    168,
+    187
+   ],
+   [
+    "replace",
+    194,
+    195,
+    187,
+    188,
+    [
+     "competitive research."
+    ]
+   ],
+   [
+    "equal",
+    195,
+    209,
+    188,
+    202
+   ],
+   [
+    "replace",
+    209,
+    210,
+    202,
+    203,
+    [
+     "`ghcr.io/yunusemrealps/geko`. See Releasing."
+    ]
+   ],
+   [
+    "equal",
+    210,
+    212,
+    203,
+    205
+   ],
+   [
+    "replace",
+    212,
+    214,
+    205,
+    206,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "b8a4716bcfd1+2": {
+  "fn": "cocosip/go-oceanbase",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "**Status: release candidate.** Direct-target acceptance is complete for OceanBase 4.4.2.2 in both compatibility modes: the 72-scenario acceptance tool reached **114 pass / 0 fail / 3 skip / 27 not applicable**, the full integration suite passed, and both-mode `ChangeUser` passed with second identities. TLS, compression, OBProxy/multi-node, plugin/KDC and Linux-client combinations require deployments the current endpoints cannot provide and are recorded as unverified boundaries, not client gaps. See the release-readiness assessment and the compatibility matrix."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "The 2026-10-20 release validation records passing direct MySQL/Oracle 4.4.2.2 scenarios, official Connector/J 2.4.14 source alignment, and deployment validation boundaries. Licensed under MIT."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    7,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "- The core driver builds without cgo. Optional system authentication and platform transports have additional requirements described in the architecture."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    28,
+    13,
+    28
+   ],
+   [
+    "replace",
+    28,
+    64,
+    28,
+    29,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    68,
+    29,
+    33
+   ],
+   [
+    "replace",
+    68,
+    69,
+    33,
+    34,
+    [
+     "Applications can also import `config`, `types`, `dberrors`, `metadata`, and `obproxy` directly for their public models and helpers. The root package retains aliases for those contracts, so existing `oceanbase.Config`, value, error, and metadata names remain usable. Driver registration and connection-bound operations stay in the root package; `internal` packages are implementation details."
+    ]
+   ],
+   [
+    "equal",
+    69,
+    81,
+    34,
+    46
+   ],
+   [
+    "replace",
+    81,
+    82,
+    46,
+    47,
+    [
+     "These are placeholders. URL-escape credentials (`%40` represents `@`), or use `Config` to avoid constructing credential-bearing URLs. Supported DSN option names ignore case; duplicate names after case folding are rejected, while `compatibilityMode` values are case-insensitive (`auto`, `mysql`, `oracle`). DSNs reject unknown options and option names borrowed from other drivers. See the usage guide for supported configuration."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    87,
+    47,
+    52
+   ],
+   [
+    "replace",
+    87,
+    96,
+    52,
+    61,
+    [
+     "|Area|APIs and behavior|",
+     "|---|---|",
+     "|Standard SQL|`database/sql` queries, prepared statements, transactions and multiple result sets|",
+     "|Parameters and types|Positional parameters in both modes, Oracle named parameters, OUT/INOUT, exact numeric and temporal types|",
+     "|Batch execution|`ExecBatch` with per-input status and the actual execution strategy|",
+     "|Large and complex values|Table BLOB access in both modes; Oracle native LOBs, objects and collections|",
+     "|Cursors and metadata|Explicit cursor resources and metadata queries through the public root package|",
+     "|Distributed transactions|XA branch operations on a pinned session; the application supplies the durable coordinator|",
+     "|Connectivity|TLS, caller-supplied credentials and logging, routing/discovery and platform-specific transports|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    61,
+    62
+   ],
+   [
+    "replace",
+    97,
+    98,
+    62,
+    63,
+    [
+     "Availability depends on compatibility mode, server version, negotiated capabilities and platform. The compatibility matrix records those boundaries. Resource APIs require a pinned `*sql.Conn` or `*sql.Tx`; close rows and resources before releasing their session."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    63,
+    66
+   ],
+   [
+    "replace",
+    101,
+    102,
+    66,
+    67,
+    [
+     "These are deployment boundaries, not missing Go features. The driver reports them explicitly instead of simulating success. The compatibility matrix §0 records the exact evidence."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    67,
+    68
+   ],
+   [
+    "replace",
+    103,
+    111,
+    68,
+    76,
+    [
+     "|Combination|Why it is unverified|Driver behavior|",
+     "|---|---|---|",
+     "|TLS / mTLS|The endpoint reports `have_ssl=YES` but has no certificates configured|Plaintext unless `TLSConfig` is set; certificate and mTLS logic covered by local peer tests|",
+     "|Compression|The direct endpoint does not advertise `CLIENT_COMPRESS`|`compression=required` fails negotiation with an explicit unsupported-capability error|",
+     "|OBProxy, multi-node, OCP|Only a direct single-endpoint 2881 is available (2883 is not a usable protocol endpoint)|Direct-target behavior verified; proxy and topology paths unverified|",
+     "|Plugin / KDC|No vendor plugin runtime or KDC is deployed|No per-plugin support is claimed|",
+     "|B21 Oracle proxy reauthentication|4.4.2.2 does not apply the proxy target on `COM_CHANGE_USER`|The driver rejects the proxy target on this version instead of reporting a false success|",
+     "|Linux client transports|The local client host is Windows without WSL or Docker|Core driver builds without cgo; Unix socket/shared memory/VC/GSSAPI paths unverified|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    76,
+    79
+   ],
+   [
+    "replace",
+    114,
+    115,
+    79,
+    80,
+    [
+     "`BenchmarkDriver` covers 18 scenarios over one physical connection to an in-process `net.Pipe` protocol peer. It connects to no database, so **ns/op is not database latency**; timings include `database/sql`, the driver, peer response construction, protocol I/O and result assertions. The full methodology, all samples and resource checks are in the benchmark guide."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    118,
+    80,
+    83
+   ],
+   [
+    "replace",
+    118,
+    128,
+    83,
+    93,
+    [
+     "|Scenario|MySQL ns/op|Oracle ns/op|",
+     "|---|---|---|",
+     "|crud|140,431|133,644|",
+     "|prepare-per-call|81,428|91,360|",
+     "|prepare-reuse|19,949|27,104|",
+     "|cache-hit|26,670|29,375|",
+     "|batch-multisend (8 rows)|208,289|216,202|",
+     "|batch-rewrite / array-binding (8 rows)|157,059|96,715|",
+     "|lob (16 KiB BLOB)|352,196|102,149|",
+     "|fetch (32 values)|278,709|319,728|"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    139,
+    93,
+    104
+   ],
+   [
+    "replace",
+    139,
+    151,
+    104,
+    116,
+    [
+     "|Document|Contents|",
+     "|---|---|",
+     "|Usage guide|Configuration, TLS, queries, ownership, errors and examples|",
+     "|Capability matrix|Current Go driver capabilities and support boundaries|",
+     "|Feature gaps and limitations|Driver gaps separated from server, permission, environment and verification limits|",
+     "|Compatibility matrix|Feature support, conditions and verification status|",
+     "|Architecture|Public contracts, protocol design and package boundaries|",
+     "|Development plan|D01–D32 scope and delivery stages|",
+     "|Development progress|Implementation history and verification evidence|",
+     "|Benchmarks|Local protocol-peer scenarios, commands, samples and limitations|",
+     "|Live validation record|Merged live-database evidence, current baseline and dated results|",
+     "|Acceptance tool|Configure and run the standalone `obtest` database suite|"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    154,
+    116,
+    119
+   ],
+   [
+    "replace",
+    154,
+    157,
+    119,
+    122,
+    [
+     "- Comprehensive example: queries, transactions, prepared statements, batch execution, procedures, multiple results, LOBs, complex types and cursors.",
+     "- XA example: start, end and roll back a branch on a pinned session.",
+     "- Standalone acceptance tool: 72 configured scenarios with fixture creation, cleanup and JSON reporting. Build with `go build -o bin/obtest ./cmd/obtest` (use `bin/obtest.exe` on Windows)."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    166,
+    122,
+    131
+   ],
+   [
+    "replace",
+    166,
+    170,
+    131,
+    132,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    172,
+    132,
+    134
+   ],
+   [
+    "replace",
+    172,
+    173,
+    134,
+    135,
+    [
+     "The integration command compiles the database tests without running them. `obtest -list` lists scenarios without connecting. See the acceptance tool guide for live runs and the benchmark guide for offline performance measurements."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    176,
+    135,
+    138
+   ],
+   [
+    "replace",
+    176,
+    177,
+    138,
+    139,
+    [
+     "CI runs on pushes to `master`, `main` and `develop`, on `v*` tag pushes, on pull requests and on manual dispatch:"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    183,
+    139,
+    145
+   ],
+   [
+    "replace",
+    183,
+    184,
+    145,
+    146,
+    [
+     "Coverage artifacts are retained for 14 days; benchmark artifacts for 30 days. Superseded automatic runs are canceled, while manual CI runs are not. CodeQL scans on push/PR, weekly and on manual dispatch; Dependabot checks Go modules and Actions weekly. Dependency updates must retain the Go 1.26 minimum."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    146,
+    147
+   ],
+   [
+    "replace",
+    185,
+    186,
+    147,
+    148,
+    [
+     "On a `v*` tag push, CI calls the reusable release workflow only after all platform tests and lint succeed. Publishing generates release notes and creates a source release without rerunning builds or tests. CodeQL remains an independent workflow and is not a release dependency."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    190,
+    148,
+    152
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "5603554e0d31+2": {
+  "fn": "jielun132/pcc_kernel",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "当前正式版 **0.2.0** · 下载 v0.2.0 · 所有版本 · 更新记录"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "0.2.0 支持在比对时启用文本等价规则。每条差异 SQL 都有 old → new 的变化摘要，DBA 可以将代表 SQL 的人工结论应用到同组。菜单 2 直接回车会选择全部业务库，报告文件名带生成时间。规则配置与人工评审"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "0.1.7 为菜单 2/3 统一增加独立预热，正式采集复查 `pseudo` / `partial` 统计；报告支持人工评审勾选、结论、备注及恢复文件。菜单 8 和报告中的版本规则方案可选择评审配置，默认匹配 `6.5.12 → 8.5.7`。外部 JSON 可调整规则选择、阈值、卡片说明和版本组合，见规则配置与人工评审。生产和临时环境分网时，传输完整采集包后即可在临时端自动导入，无需再连接生产。"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "填写 `pcc.json` 后运行 `./pcc`，选择采集或文件模式，核对目标后输入一次 `IMPORT`，自动串联导出、准备、导入和比较。支持生成可 `source` 的建表造数文件及 **413 条、17 类**完整 SQL 案例。纯操作步骤见操作说明，配置模板见 pcc.example.json。既有 CLI/SDK 保持兼容，`prepare` 仍只生成文件。"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    20,
+    11,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "安装包和校验文件见 v0.2.0 Release。源码安装步骤见本地开发说明。"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    26,
+    21,
+    26
+   ],
+   [
+    "replace",
+    26,
+    31,
+    26,
+    27,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    35,
+    27,
+    31
+   ],
+   [
+    "replace",
+    35,
+    36,
+    31,
+    32,
+    [
+     "|配置名|对应环境|用途|"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    32,
+    33
+   ],
+   [
+    "replace",
+    37,
+    40,
+    33,
+    36,
+    [
+     "|`prod`|模拟生产|跑演示 SQL，导出材料|",
+     "|`old`|升级前的临时环境|导入材料，获取旧计划|",
+     "|`new`|升级后的临时环境|导入材料，获取新计划|"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    36,
+    37
+   ],
+   [
+    "replace",
+    41,
+    42,
+    37,
+    38,
+    [
+     "本例使用**无 TLS、三套环境相同的数据库密码**。下面所有 `mysql` 命令中的示例主机、端口、用户，也要替换成配置中对应的值。不同密码或 TLS 配置见 操作说明。"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    59,
+    38,
+    55
+   ],
+   [
+    "replace",
+    59,
+    71,
+    55,
+    56,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    83,
+    56,
+    68
+   ],
+   [
+    "replace",
+    83,
+    89,
+    68,
+    69,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    101,
+    69,
+    81
+   ],
+   [
+    "replace",
+    101,
+    105,
+    81,
+    82,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    111,
+    82,
+    88
+   ],
+   [
+    "replace",
+    111,
+    112,
+    88,
+    89,
+    [
+     "- 64 张规则卡区分计划证据与运行代价。D01、D02、D08、D10 命中即复核，另 9 张运行时卡默认在 SQL 详情提示，可按需加入复核。点击“待复核”查看每条 SQL 的原因、对应卡片和复核方法，支持 JSON/CSV 导出。规则预判说明"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    121,
+    89,
+    98
+   ],
+   [
+    "replace",
+    121,
+    122,
+    98,
+    99,
+    [
+     "0.2.0 在 Community v6.5.12 → v8.5.7 的 413 条固定案例上，示例配置得到 260 条一致、136 条差异、6 条无法完整比对、11 条按用例预期未运行。空库专项验证另比较了有数据的模拟源和只导入 DDL、统计的两个目标。规则 v8 会标出派生表及写语句中可能提前读表的子查询。验证说明"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    99,
+    100
+   ],
+   [
+    "replace",
+    123,
+    124,
+    100,
+    101,
+    [
+     "开发中的回归案例集中在 固定 SQL 用例库：413 条、17 类，历史用例只允许追加，CI 校验历史内容。报告交互测试还覆盖 1,053 条 SQL 的分页与分组，需要本机 Node.js；程序运行本身不依赖 Node.js。本地 Docker v6.5.12 / v8.5.5 的用例验证不替代客户版本认证。"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    101,
+    102
+   ],
+   [
+    "replace",
+    125,
+    126,
+    102,
+    103,
+    [
+     "所有 Release · 更新记录 · 详细原理与 SDK · 操作说明 · 源码安装与贡献 · 构建说明"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    103,
+    104
+   ],
+   [
+    "replace",
+    127,
+    128,
+    104,
+    105,
+    [
+     "许可证：Apache-2.0。"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

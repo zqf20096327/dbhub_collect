@@ -3023,5 +3023,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6239c17b9940": {
+  "identity": {
+   "one_liner": "本地 SQLite 的 AI 长期记忆库，先人工审核再入库并记录审计日志",
+   "review": "memory-eternal 是一个以本地 SQLite 存储的 AI 记忆系统，知识卡须经待审队列人工批准后进入主库，状态变更写入由 SQLite 层强制的不变审计日志。它通过 MCP stdio 接入 Claude Code、Cursor、Codex 等宿主，提供 FTS5+BM25 召回，可选 Ollama bge-m3 向量；另有可选云端同步（服务端为独立私有项目）。适合使用多种 AI 编码工具并希望控制记忆入库的用户。",
+   "highlights": [
+    "提供先审后入流程：新卡进入待审队列，Agent 只能提议或修改，批准/驳回由人工在 Web、TUI 或 CLI 完成",
+    "召回使用 FTS5+BM25，默认零模型调用；可选本地 Ollama（bge-m3）或 OpenAI 兼容在线端点作语义召回",
+    "内置记忆账本，记录召回命中数、注入字符、沉淀 LLM 调用次数与有用率反馈"
+   ],
+   "use_cases": [
+    "多会话项目中保存决策与踩坑记录，避免每次会话重新解释上下文",
+    "同一份记忆库供多个 AI 宿主（Claude Code、Cursor、Qwen Code 等）通过 MCP 共同读写",
+    "需要对 AI 自动产生的记忆内容进行人工审核与审计留痕的本地数据管理"
+   ]
+  },
+  "sha": "6239c17b9940",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "19093b2144d5": {
+  "identity": {
+   "one_liner": "为 Docker Compose 全栈提供统一虚拟时钟的时间穿越测试工具",
+   "review": "ChronoStack 用 LD_PRELOAD 注入的共享时钟页，让 compose 栈中 Postgres、Redis 及 Node/Python/JVM 等服务读取同一虚拟时间；advance 停靠在声明的触发点运行定时任务，barrier 等待队列清空后再前进，并以探针验证各服务已见新时间。支持 YAML 场景、故障注入、JUnit/Markdown 报告与 MCP 服务。基于 LD_PRELOAD，Go 等静态二进制不支持；时间只能前进，处于 Alpha 阶段。",
+   "highlights": [
+    "通过 LD_PRELOAD 共享时钟页使 Postgres、Redis、Node、Python、JVM 等容器读取统一虚拟时间，无需修改业务代码",
+    "advance 在每个虚拟时间点运行声明的 triggers，并支持 BullMQ/Sidekiq/Celery 队列 barrier 与 pg_cron 自动检测",
+    "提供 YAML 场景（含虚拟时间内 HTTP 故障注入）、JSON/Markdown/JUnit 报告、模拟用户、GitHub Action 与 17 工具的 MCP 服务"
+   ],
+   "use_cases": [
+    "在秒级内验证试用到期、会话超时、续费、催款、webhook 重试等时间依赖逻辑的集成测试",
+    "在 CI 中编写可重复的场景脚本，覆盖定时任务与外部依赖宕机的组合情形",
+    "通过 MCP 服务器让 AI 代理检查栈状态、推进时间并运行场景对比结果"
+   ]
+  },
+  "sha": "19093b2144d5",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

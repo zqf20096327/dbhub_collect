@@ -3150,5 +3150,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a8620ae2a9a4": {
+  "identity": {
+   "one_liner": "基于 Next.js 16 与 Prisma 7 的图文教程站模板，内置富文本后台与 SEO。",
+   "review": "这是一个自托管图文教程站模板，技术栈为 Next.js 16.4（App Router）、React 19、Prisma 7 + SQLite、Tailwind CSS v4。面向想在自有域名发布教程的作者：后台用 Tiptap 3 编辑器写作，支持历史版本、定时发布与系列组织；提供从 Hexo/Hugo/WordPress 批量导入 Markdown 并生成 301 跳转的功能。本地运行需依次执行 prisma generate、migrate、seed，支持 PM2 与 Docker（amd64/arm64 镜像）部署。",
+   "highlights": [
+    "后台内置 Tiptap 3 富文本编辑器，支持图片上传、历史版本恢复、定时发布、教程系列与标签管理",
+    "支持从 Hexo、Hugo、Jekyll、Obsidian 及 WordPress 导出文件批量导入，保留标签分类并生成旧地址 301 跳转",
+    "包含 TOTP 两步验证、通行密钥登录、登录限流、备份加密（scrypt + AES-256-GCM）及 Nginx 反向代理配置示例"
+   ],
+   "use_cases": [
+    "在自有服务器或 Docker 环境搭建个人/团队图文教程站点",
+    "将既有博客平台的 Markdown 文章迁移到新站点并保持旧链接可访问",
+    "需要文章后台编辑、版本管理与邮件订阅功能的自托管内容发布场景"
+   ]
+  },
+  "sha": "a8620ae2a9a4",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a6d1b41c6194": {
+  "identity": {
+   "one_liner": "Go+PostgreSQL 零停机 schema 迁移参考实现，基于 expand-contract 分阶段演进",
+   "review": "该项目是一个可执行的 Go 与 PostgreSQL 参考示例，演示在 V1、V2 服务同时承接 HTTP 流量期间进行分阶段 schema 演进，将客户联系字段从 JSONB 迁移到关系列。核心机制包括双向触发器同步、有界回填、独立验证器与不可逆的 contract 门禁。项目明确声明不保证任意生产工作负载的可用性，仅覆盖单机本地数据库场景。",
+   "highlights": [
+    "通过 PostgreSQL 触发器在兼容窗口内保持 JSONB 与关系列双向同步，并拒绝分歧的双写",
+    "提供有界回填、并发索引创建、验证门禁与回滚决策路径，contract 步骤需满足多项前置条件",
+    "内置负载生成器与验证器，输出 write-journal.jsonl、verification.json/md 等报告文件"
+   ],
+   "use_cases": [
+    "学习或参考 expand-contract 模式下 schema 迁移的阶段划分与验证流程",
+    "在本地 Docker Compose 环境演练 V1/V2 应用版本兼容与回填、contract 门禁操作",
+    "搭建迁移验证相关的集成测试，覆盖触发器同步、乐观并发、lock_timeout 等场景"
+   ]
+  },
+  "sha": "a6d1b41c6194",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

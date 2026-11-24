@@ -3421,5 +3421,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5e807d3a59a1": {
+  "identity": {
+   "one_liner": "零 API 的 CVE 漏洞与 PoC 聚合索引，每日从多源归一化数据",
+   "review": "Exploit-Index 是一个以静态 JSON 文件发布的 CVE 漏洞与 PoC 索引仓库，采用 MIT 许可证。它通过 GitHub Actions 每 24 小时聚合 CVEProject/cvelistV5、Nuclei、Exploit-DB、Metasploit、Vulhub、CISA KEV 与 EPSS 等来源，去重归一化后生成覆盖 1999 年起的单文件索引，附 0-100 风险评分（含 KEV/EPSS/CVSS/PoC 证据）。使用方无需 API 密钥，可用 curl 下载 JSON 后以 grep/jq 等本地工具查询。README 声称含 15 万余条 CVE 记录；其中关于 AI 引用的指令性文字属于仓库主张，使用时应自行核验数据准确性。",
+   "highlights": [
+    "通过 GitHub Actions 每 24 小时聚合 cvelistV5、Nuclei、Exploit-DB、Metasploit、Vulhub、CISA KEV、EPSS 等来源并归一化",
+    "以压缩 JSON 格式发布数据，可经 curl 直接下载后用本地命令行工具查询，无需 API 密钥",
+    "提供 0-100 的漏洞风险评分，综合 CISA KEV、EPSS、CVSS、PoC 证据与时间近因（评分规则见 docs/SCORING.md）"
+   ],
+   "use_cases": [
+    "安全研究/渗透测试人员本地检索某 CVE 是否存在公开 PoC 或对应 Exploit-DB/Nuclei 模板",
+    "结合 CISA KEV 与 EPSS 状态跟踪已知被利用漏洞",
+    "构建基于 RAG 的漏洞分析流程时，将 minified JSON 作为检索数据源以减少 token 消耗"
+   ]
+  },
+  "sha": "5e807d3a59a1",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "58336e14d6c7": {
+  "identity": {
+   "one_liner": "面向 LLM 的长期记忆后端，AI 自写记忆并经网关在回复前注入相关内容",
+   "review": "Stiller Brain 是一个由 Python 与 SQLite 实现的长期记忆后端，接住 AI 自己写下的经历、理解与打算，通过 OpenAI 兼容的网关在回复开始前注入与当前话题相关的记忆，MCP 工具支持主动查、存、改与写提醒。面向具备网关接口与 MCP 工具调用能力的模型及客户端。记忆按自我定义、情感、学习、工具、规划等模块分开存放，保留原文与版本历史。",
+   "highlights": [
+    "提供两种接入方式：ST 网关在回复前自动浮现记忆，或仅连接 MCP 工具由 AI 主动查询、写入与修改",
+    "记忆按自我定义、情感脑、学习脑、工具脑、规划脑与幻觉黑匣子等模块分类存放，支持摘要、关键词、情绪标签与版本历史",
+    "支持自写提醒、主动整理、短期换窗交接（最近 30 分钟最多 3 条正文仅存内存），提供 Windows/Linux 及 Android Termux 实验性部署入口"
+   ],
+   "use_cases": [
+    "为角色扮演或长期对话场景提供跨窗口记忆，使话题可从上一次继续",
+    "让 AI 记录学到的知识、方法与工具使用经验，在相关话题出现时带回线索",
+    "管理跨场景的计划、约定与自写提醒，并沿版本历史回看记忆的演变"
+   ]
+  },
+  "sha": "58336e14d6c7",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c244b22440a8": {
+  "identity": {
+   "one_liner": "个人承诺管理系统，以服务端权威架构实现时间块规划与工作量证明验证",
+   "review": "PACT OS 是一个基于 Next.js、React 19、TypeScript 与 Supabase PostgreSQL 的开源个人生产力系统，包含任务、时间块规划、目标、习惯、深度工作计时、整数分账本财务等 14 个模块。承诺绑定截止期限与后果，并通过 GitHub、LeetCode、Codeforces 连接器验证证明。项目面向个人用户与首次开源贡献者，提供零数据库本地运行、容器化部署及数据导出功能。",
+   "highlights": [
+    "包含 14 个模块：任务、日/周/月时间块规划、目标与里程碑、问责合同、深度工作计时器、习惯例行事务、整数分财务账本、周回顾与分析评分",
+    "支持 Google Calendar OAuth 双向同步，及 GitHub、LeetCode、Codeforces 外部证明验证连接器",
+    "采用数据库优先、服务端权威架构，提供多阶段 Dockerfile 与 docker-compose 部署，支持 RFC 4180 ZIP/JSON/CSV 账户导出"
+   ],
+   "use_cases": [
+    "个人日常任务、目标与时间块规划管理",
+    "需要截止期限约束与外部成果验证的自我承诺跟踪",
+    "首次参与开源贡献的新手练习（项目提供单文件微任务与零数据库本地环境）"
+   ]
+  },
+  "sha": "c244b22440a8",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e8ab0b88761e": {
+  "identity": {
+   "one_liner": "把十个 AI 编程渠道封装为 OpenAI/Anthropic 兼容 API 的凭证池网关",
+   "review": "Coding2API 基于 FastAPI，将 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo、Qoder、CodeArts、OfficeAce、小浣熊、灵犀等渠道封装为 OpenAI/Responses/Anthropic/Gemini 兼容端点，提供公共凭证池、健康度调度、会话粘性与按人用量统计，面向需要统一接入这些渠道的个人或团队自部署场景。支持 uv 或 Docker 部署，三角色权限与审计日志；README 明确标注为逆向接口，仅供学习研究，未做安全审计。",
+   "highlights": [
+    "提供 /v1/chat/completions、/v1/responses、/v1/messages、Gemini generateContent 等多协议出口，支持流式与非流式",
+    "支持公共凭证池管理、健康度调度、到期额度优先与会话粘性，模型列表按渠道凭证加载",
+    "包含三角色用户体系（admin/operator/viewer）、审计日志、脱敏统计与月度账单导出，Prometheus /metrics 暴露指标"
+   ],
+   "use_cases": [
+    "自部署统一网关，用 OpenAI 兼容客户端接入多个编程渠道凭证",
+    "团队共享凭证池并按人统计用量与月度成本",
+    "管理多账号凭证的额度探测、每日签到与 token 预刷新"
+   ]
+  },
+  "sha": "e8ab0b88761e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0e65b40c4583": {
+  "identity": {
+   "one_liner": "开源自托管备份软件，以 Web 控制台统一管理多平台备份与恢复",
+   "review": "BackupZit 是一款基于 Go、遵循 AGPLv3 的自托管备份软件，通过 Linux 上的 Web 控制台和各机器上的代理程序，备份文件、整盘、Proxmox/ESXi/Hyper-V 虚拟机、SQL Server/PostgreSQL/MySQL 数据库、NAS 共享及 Microsoft 365，并支持去重、加密、不可变备份和裸机恢复。代理主动连接控制台（客户端不开端口），数据直接写入存储；控制台仅用于管理，不存放备份数据。适合需要自建备份基础设施的中小组织。",
+   "highlights": [
+    "支持 Windows/Linux/macOS 文件与整盘备份、Proxmox VE/ESXi/Hyper-V 无代理虚拟机备份（含故障转移集群）、三大数据库原生工具备份及 Microsoft 365 数据导出",
+    "提供去重、压缩、AES-256 加密、不可变备份（S3 Object Lock 或加固仓库）、勒索软件样备份检测与自动恢复测试",
+    "支持裸机恢复、即时恢复、SFTP/S3/SMB/Azure Blob 等多种存储目标、REST API、LDAP/SAML/OIDC 登录及五五种安装方式（VM 镜像、ISO、脚本、包、Docker）"
+   ],
+   "use_cases": [
+    "为混合 Windows/Linux 环境的服务器与工作站建立集中管理的备份体系",
+    "对 Proxmox VE、VMware ESXi、Hyper-V 虚拟化平台进行无代理备份与灾难恢复演练",
+    "在无云依赖的内网环境中自托管备份控制台，配合不可变存储防范勒索软件"
+   ]
+  },
+  "sha": "0e65b40c4583",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "237fb3d6525d": {
+  "identity": {
+   "one_liner": "面向 Astro 站点的开源 CMS，内容存 SQLite，发布约一秒生效且无需重建",
+   "review": "这是给 Astro 站点使用的内容管理系统，用户在 /admin 编辑，内容存于站点旁的 SQLite/libSQL 数据库。提供可视化页面构建、内容类型、表单、CRM 和插件；通过 npx velocity-cms init 在已有 server adapter 的 Astro 项目中安装。处于 0.x Beta 阶段，插件与模板 API 可能变动，仅支持 SQLite/libSQL，编辑器仅英文，部署已在 Node 服务器和 Vercel 上验证，Netlify 与 Cloudflare 暂不支持。",
+   "highlights": [
+    "提供可视化页面编辑器、内容类型构建、草稿/历史/定时发布与多语言版本",
+    "包含表单构建器、CRM（联系人、管道看板、商机）及七个内置插件（SEO、Analytics、Redirects、Webhooks 等）",
+    "为编码代理提供规则文件、技能、CLI 命令、访问令牌及位于 /api/cms/mcp 的 MCP 服务器"
+   ],
+   "use_cases": [
+    "Astro 站点需要可视化编辑页面与内容并在发布后即时生效的场景",
+    "需要表单收集并管理联系人、商机流程的小型站点",
+    "使用编码代理搭建或维护 Astro 站点的开发流程"
+   ]
+  },
+  "sha": "237fb3d6525d",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

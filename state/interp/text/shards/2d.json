@@ -3183,5 +3183,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "808db9071c2d": {
+  "identity": {
+   "one_liner": "拦截MCP与Bash工具输出，存入SQLite全文检索并返回压缩摘要",
+   "review": "mcp-recall是一个运行于Bun的TypeScript工具，通过PostToolUse hook将Claude Code等代理的大型MCP/Bash工具输出替换为压缩摘要，完整输出存入本地SQLite并建立全文索引，供Claude通过11个recall__*工具检索。支持Claude Code、pi、OpenCode和grok CLI，安装会修改~/.claude配置文件。内置Read/Grep/Glob输出不经处理；缩幅不足四分之一的输出原样通过。",
+   "highlights": [
+    "通过hook拦截MCP与Bash工具输出，生成压缩摘要并存入SQLite全文索引",
+    "提供11个recall__*工具用于搜索与检索存储内容（summary/peek/full三级），相同输出返回缓存结果",
+    "支持Claude Code、pi、OpenCode与xAI grok CLI，提供mcp-recall status/stats命令与压缩profile"
+   ],
+   "use_cases": [
+    "长时间使用返回大体量结构化输出的MCP工具（浏览器自动化、GitHub API、搜索结果）的Claude Code会话",
+    "需要跨会话保留并检索早期工具输出原文的场景",
+    "按token计费的较小模型上希望减少大型工具输出占用上下文的场景"
+   ]
+  },
+  "sha": "808db9071c2d",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c8e574369395": {
+  "identity": {
+   "one_liner": "自托管文档归档系统，含德国 GoBD 合规模式：哈希链、保留期锁定、审计访问",
+   "review": "Belegt 是一个自托管文档归档应用，用于集中管理邮件、电子发票（ZUGFeRD、XRechnung）、扫描件（OCR）及任意文件。GoBD 模式下，印章与哈希链存于 PostgreSQL，按 § 147 AO 计算保留期限，到期前锁定，删除需第二人确认。面向需按德国法律保留凭证的企业；当前为 Beta，AGPL-3.0 许可，以 Docker/Podman 容器部署，文档为德文。",
+   "highlights": [
+    "支持多种采集渠道：IMAP、JMAP、Microsoft 365、Google、SMTP 日志、PST、FTP 扫描器与上传，并提供 PDF/Office/邮件/OCR 全文检索",
+    "GoBD 机制：哈希链与印章存储于数据库，可选 S3 Object Lock 与 RFC 3161 时间戳，提供审计员访问（Z1）与审计数据载体（Z3）",
+    "提供 REST API（OpenAPI）、Webhooks、MCP（供 AI 助手读取/写入但不可删除）、OpenID Connect 登录，并可从 Paperless-ngx 迁移数据"
+   ],
+   "use_cases": [
+    "德国企业按 § 147 AO 期限归档发票、银行对账单与商业信函，供税务审计（Betriebsprüfung）调取",
+    "接收并校验 XRechnung/ZUGFeRD 电子发票，可选用 KoSIT 校验器验证",
+    "整合多来源邮件与扫描件到单一可检索档案，允许税务顾问或审计员按时间段受限访问"
+   ]
+  },
+  "sha": "c8e574369395",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "30c1971a9321": {
+  "identity": {
+   "one_liner": "基于 oncebox 的 Spring Boot 示例项目，用事务性 Outbox/Inbox 实现 Kafka 可靠投递与幂等消费",
+   "review": "该项目包含 order-service 与 notification-service 两个 Spring Boot 服务，演示如何在订单事务内写入 outbox 表、由轮询器投递到 Kafka，并通过 inbox 表按事件 id 去重消费。底层为 oncebox-starter，支持 PostgreSQL/MySQL/Oracle、按事件类型配置轮询与退避重试、DLQ 表及 REST 管理。项目自身未含安装部署说明，需具备 Java/Spring Boot 与 Kafka 环境。",
+   "highlights": [
+    "订单写入与事件发布在同一数据库事务内提交，outbox 行由轮询器按重试与退避策略投递到 Kafka",
+    "消费端将事件 id 与业务效果置于同一事务，实现按事件 id 去重；重试耗尽的事件分别进入 DLQ 表或 DLT 主题，并提供 REST 接口查看与重发",
+    "轮询使用 FOR UPDATE SKIP LOCKED 支持多实例并行，含超过 10 分钟锁定事件的 stuck recovery，以及按分布式锁定时清理各表"
+   ],
+   "use_cases": [
+    "需要将数据库变更与 Kafka 事件发布保持一致性的微服务间通知流程",
+    "需要按事件类型差异化设置轮询间隔、批次大小与重试退避的发布管道",
+    "消费端需要基于统一 inbox 表识别 Kafka 重复投递的事件处理"
+   ]
+  },
+  "sha": "30c1971a9321",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b96a03aeb6bb": {
+  "identity": {
+   "one_liner": "本地优先的多邮箱聚合桌面客户端，以 2.5D 书籍界面组织邮件收发。",
+   "review": "MailHub 是一款本地优先的多邮箱聚合桌面客户端，面向需要在桌面端管理多个邮箱账号的用户。前端采用 Vue 3 与 TypeScript，后端为 FastAPI 分层架构，邮件缓存、全文索引（SQLite FTS5）与加密凭据均保存在本机 data/ 目录，不经第三方云端中转。它支持 IMAP/SMTP 协议、OAuth2 PKCE 登录、Fernet 加密存储、HTML 正文消毒与追踪像素拦截。项目以 Windows 启动器或源码方式运行，仓库默认不附带壁纸与 Live2D 等视觉资源，缺失时前端降级为纯 CSS 背景。",
+   "highlights": [
+    "支持 QQ/Foxmail、网易 163/126/yeah.net、Gmail、Outlook/Microsoft 365、iCloud、教育与企业自定义邮局等多渠道，Gmail/Outlook 走 OAuth2 PKCE 本地回环回调，SMTP 发信含 465 SSL 到 587 STARTTLS 的自动回退",
+    "邮件主题、发件人、摘要与正文通过 SQLite FTS5 虚拟表实时索引实现全文检索，支持按发件人/主题匹配的自定义分类规则；授权码与 OAuth2 令牌使用 Fernet（AES-128-CBC + HMAC-SHA256）加密落盘",
+    "提供 2.5D 四栏书籍界面、明暗双主题、三档动效强度与 prefers-reduced-motion 降级，内置 5 个演示账号沙盒、脱敏诊断报告导出（Markdown/.zip）及 C/J/K/S 键盘快捷键"
+   ],
+   "use_cases": [
+    "在同一桌面客户端中聚合收发多个真实邮箱（含 OAuth2 接入 Gmail/Outlook、授权码接入国内邮箱）",
+    "在本地离线索引下检索与分类大量历史邮件，且凭据加密存于本机",
+    "克隆仓库后通过演示沙盒体验界面与搜索功能，再绑定真实邮箱或按需上传自定义立绘"
+   ]
+  },
+  "sha": "b96a03aeb6bb",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3064,5 +3064,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "15f5954635bb": {
+  "identity": {
+   "one_liner": "面向 WhatsApp 群组的 JavaScript 机器人，基于 Baileys 与多供应商 AI 定制",
+   "review": "ClaudIA 是一个 WhatsApp 群聊机器人，基于 SawBot-MD 修改而成，为乌拉圭某 WhatsApp 群组定制开发，使用 Node.js 和 Baileys 库。它提供 AI 对话（Gemini 级联加 Groq、OpenRouter、NVIDIA、Cerebras 备援）、群游戏、UruCoins 虚拟经济、群管理与审核、媒体下载等命令功能，并设有按群的隐私与消息发送频率控制机制。适合需要自建 WhatsApp 群机器人的用户。",
+   "highlights": [
+    "提供 AI 对话功能：多 Gemini 模型级联，并以 Groq、OpenRouter、NVIDIA、Cerebras 作为备援，意图解析走 JSON 输出",
+    "包含游戏与 UruCoins 经济系统：问答、二十一点、轮盘等游戏，配每日上限、管理开关与时段设置",
+    "提供群管理功能：警告与记录、黑名单、防链接、防刷屏、不活跃成员标记与移除、进群申请审批，并区分 WhatsApp 管理员与机器人角色"
+   ],
+   "use_cases": [
+    "为朋友或社区 WhatsApp 群组部署带 AI 对话与游戏功能的机器人",
+    "需要群组管理工具（警告、黑名单、防刷屏、不活跃成员清理）的群主或管理员",
+    "希望在群内运行虚拟货币经济、赌场游戏与真实赛事投注市场的社群"
+   ]
+  },
+  "sha": "15f5954635bb",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fad44a3b3b31": {
+  "identity": {
+   "one_liner": "为 golang-migrate 提供纯 Go 数据库驱动与配套 CLI 的扩展项目",
+   "review": "该项目为 golang-migrate/migrate 提供额外数据库驱动，实现上游 database.Driver 接口并注册到上游 registry，迁移引擎与公共 API 沿用上游。面向需在 Oracle、DM8、GaussDB、openGauss、OceanBase 上做迁移的 Go 开发者。全部驱动纯 Go 实现、禁用 CGO；附保留上游命令与参数的 CLI。README 注明各数据库尚无服务器版本验证。",
+   "highlights": [
+    "提供 Oracle、DM8、GaussDB、openGauss、OceanBase（MySQL/Oracle 租户）驱动，纯 Go 实现，CI 以 CGO_ENABLED=0 构建测试",
+    "驱动实现上游 database.Driver 接口并注册到上游 registry，迁移引擎与公共 API 直接使用 golang-migrate",
+    "CLI 保留上游命令与参数，附带会话锁迁移机制，Oracle 驱动使用可在 DDL 提交后存续的会话锁"
+   ],
+   "use_cases": [
+    "在 Oracle、DM8、GaussDB、openGauss 或 OceanBase 数据库上使用 golang-migrate 执行迁移",
+    "需要无 CGO 的纯 Go 驱动以简化交叉编译与部署",
+    "构建自定义 CLI 二进制，通过 cli.Main 与 blank-import 方式组合所选驱动"
+   ]
+  },
+  "sha": "fad44a3b3b31",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dbef427a0023": {
+  "identity": {
+   "one_liner": "把文本译入人造语言梦天语（Nakthu）的 Claude skill 译者工作台",
+   "review": "该仓库是一个 Claude skill，用于把原文（主要是中文）按「信、达、雅」标准译入实验性人造语言梦天语。内置约 2.7 MB 语言档案快照（词法手册、分级词典、翻译汇编等），skill 依据档案而非模型记忆工作；附带纯标准库 Python 脚本做查词、词形校验、新铸词登记与缺词记录。面向 Claude Code（插件或个人 skill）及 Claude Chat 用户，需 Python 3.8+。check 只校验词形与音节结构，不验证句法。",
+   "highlights": [
+    "提供 default、-only、-doc 三种输出模式，支持 -style 指定 22 种文体之一、-out 指定输出路径",
+    "内置语言档案快照（词法手册、分级词典、临时词账等，2026-11-22），支持 NAKTHU_ROOT/-root 覆盖为活档案",
+    "scripts/nakthu_lex.py 提供 lookup、check、coin、gap 四个子命令，check 校验词形在册、一格一音节及临时词占比 ≤ 5%"
+   ],
+   "use_cases": [
+    "将中文文本或诗文译为梦天语，生成含逐词直译、落点读、译解与校记的 Markdown 文档",
+    "为梦天语词典贡献新词：通过 coin 登记铸词、gap 记录缺词候选",
+    "在 Claude Chat 环境使用打包 zip 安装 skill，利用内置档案离线查词与校验"
+   ]
+  },
+  "sha": "dbef427a0023",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

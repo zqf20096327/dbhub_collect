@@ -3265,5 +3265,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7ee83d63a3dc": {
+  "identity": {
+   "one_liner": "自托管的数据库与文件备份自动化工具，按计划加密备份并发送至多种存储。",
+   "review": "DBackup 是一个以单个 Docker 容器运行的自托管备份工具，按计划备份数据库和目录，加密压缩后发送到用户选择的存储，无需在服务器上安装代理，可通过直连或 SSH 执行备份。备份格式为标准 dump 或 TAR 加 AES-256-GCM，附 Recovery Kit 可用 Node.js 脚本独立恢复。采用 GPL v3 许可。注意：尚未进行外部正式安全审计。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、MongoDB、Redis、Valkey、SQLite、SQL Server、Azure SQL、Firebird 共 10 种数据库，可直连或经 SSH 备份",
+    "支持本地文件系统、S3 及 S3 兼容存储、Google Drive、Dropbox、OneDrive、SFTP、FTP/FTPS、WebDAV、SMB、rsync over SSH 共 13 类目标，每个任务可配置多个目标",
+    "提供 AES-256-GCM 加密、增量备份、日/周/月/年保留策略，以及 OIDC SSO、2FA、审计日志、REST API 和面向 MSP 的多租户模式"
+   ],
+   "use_cases": [
+    "为自托管服务器上的多种数据库和 Docker 卷配置定时加密备份并保存到云端或自建存储",
+    "MSP 或团队用一个实例为多个客户/租户隔离管理备份任务、密钥与审计日志",
+    "依赖文档化备份格式，通过 Recovery Kit 脚本和密钥在无 DBackup 环境下离线恢复备份"
+   ]
+  },
+  "sha": "7ee83d63a3dc",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "243f076c6473": {
+  "identity": {
+   "one_liner": "自托管笔记、任务与共享列表应用，单 Go 二进制加 SQLite 文件运行。",
+   "review": "MindSift 是一个自托管的笔记与任务管理服务，将大纲式笔记、看板、日历、共享列表和快速收集收纳在单个容器中，数据存储于一个 SQLite 文件。它面向想在自有服务器上与多人协作记录的用户，支持通过 OpenID Connect 登录，并作为 MCP 服务器供 AI 代理读写数据。项目明确不提供 SAML/LDAP、PostgreSQL、S3 备份和端到端加密，时区为每服务器单一设置。",
+   "highlights": [
+    "支持多人实时协作编辑大纲笔记、共享列表和画布，任务与日历视图可订阅为只读 iCalendar 流",
+    "提供 MCP 服务器、带作用域密钥的 REST API 与 OAuth 接入，供 Claude、ChatGPT、Home Assistant 等读写数据",
+    "以单个 Docker 容器部署，数据存于一个 SQLite 文件，登录支持 Authentik、Keycloak 等 OpenID Connect 提供方"
+   ],
+   "use_cases": [
+    "团队或家庭在自有服务器上协作维护笔记、任务看板与购物清单",
+    "通过快捷收集和收件箱分拣流程记录待整理的想法与待办",
+    "让 AI 代理或智能家居脚本经 MCP/API 管理任务、列表与笔记"
+   ]
+  },
+  "sha": "243f076c6473",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aa991871da8f": {
+  "identity": {
+   "one_liner": "GaussDB 智能体后端：网关加 K8s 隔离用户环境，承载诊断与知识库技能",
+   "review": "该仓库是 GaussDB 数据库智能体的后端，包含接入网关（认证、按工号分配环境、反向代理）、K8s 部署清单、诊断与知识库导入技能包，以及发版台和资源大盘。面向部署运维、DBA 与前端对接团队。状态集中存于 NAS 单一 RWX 卷；技能包需复制进 opencode 技能目录并设置 GSDB_SKILLS_DIR 才生效；Fuyao 沙箱模式为预览，仅限测试环境。",
+   "highlights": [
+    "提供接入网关与按需建 Pod、固定池化、Fuyao 沙箱（预览）三种运行模式，用户状态统一存于 NAS",
+    "诊断技能包含 17 个诊断技能、132 条白名单脚本及分版本增量 SQL，v1.5.1 支持 A/M 两种兼容模式业务库",
+    "发布 GHCR 容器镜像（amd64/arm64）、离线交付包、发版台与部署自检、验收题库等配套交付物"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群中为 DBA 部署按工号隔离的 GaussDB/openGauss 诊断对话环境",
+    "为知识库管理员提供官方文档集（CHM）、网页剪藏、扫描件 PDF 与 PPT 的导入入库流程",
+    "通过发版台执行首次部署、按槽位在线升级替换、回滚与冒烟验证"
+   ]
+  },
+  "sha": "aa991871da8f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

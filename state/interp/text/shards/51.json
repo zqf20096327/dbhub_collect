@@ -3410,5 +3410,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "10c8494d62a7": {
+  "identity": {
+   "one_liner": "自托管小型 VPN 管理面板，通过 SSH 从浏览器添加节点并发放订阅链接",
+   "review": "Mistgate 是面向个人与小型团队的自托管 VPN 面板，由两个 Go 二进制、SQLite 和 systemd 组成，无需 Docker。管理员在浏览器中经 SSH 添加节点，为每位用户生成订阅链接；支持 Hysteria2、VLESS REALITY、AmneziaWG、TrustTunnel 等协议，可共用 TCP 443 端口。项目处于 beta 阶段，1.0 前接口和配置可能变动。",
+   "highlights": [
+    "支持 Hysteria2、VLESS（REALITY/TLS）、AmneziaWG、TrustTunnel 与 MTProto，多个协议可共用一个 TCP 443 端口",
+    "从浏览器经 SSH 添加节点，面板固定主机密钥、配置防火墙并安装签名 agent；节点每 5 分钟做客户端侧连通性检查",
+    "内置模板化伪装站点、Cloudflare R2 加密备份、Telegram 告警，以及供 AI 代理读取与规划变更的 MCP 接口（风险操作需管理员批准）"
+   ],
+   "use_cases": [
+    "为家人、朋友或小团队维护少量自有服务器并分发订阅链接",
+    "在仅放行 TCP 443 的网络环境中部署多协议代理节点",
+    "需要节点健康检查、分批灰度更新与加密备份的轻量自托管运维场景"
+   ]
+  },
+  "sha": "10c8494d62a7",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bc04eed6b4c3": {
+  "identity": {
+   "one_liner": "Java 事务性发件箱库，经中继轮询 PostgreSQL outbox 表向 Kafka 投递事件",
+   "review": "Tandem 是实现 Transactional Outbox Pattern 的 Java 库：在同一数据库事务中写入领域变更与 outbox 行，由独立 relay 轮询该表并按 at-least-once 语义、按聚合键保序发布到 Kafka，不依赖 CDC 或 Kafka Connect。面向 Java/Spring Boot 应用开发者，提供 Spring Boot 自动配置、Admin API 与 tandem-cli，需 Java 17+ 与 PostgreSQL、Kafka。失败场景可能产生重复事件，需消费端幂等。",
+   "highlights": [
+    "支持在同一数据库事务内写入 outbox 行，由 relay 轮询并以 at-least-once 语义、按 aggregate_id 保序发布到 Kafka，无需 CDC 或 Kafka Connect",
+    "提供 Spring Boot 自动配置、Admin API（查询摘要/消息、失败行重放与丢弃、relay bucket/worker 接口）及 tandem-cli 命令行工具",
+    "集成 Micrometer/Prometheus 指标与 OpenTelemetry 链路追踪，并提供基于 Testcontainers 的示例与基准演示脚本"
+   ],
+   "use_cases": [
+    "微服务中需将 PostgreSQL 数据变更事件可靠发布到 Kafka 的事件驱动架构",
+    "需按聚合维度保持事件顺序的写入侧集成",
+    "不希望引入与运维独立 CDC 组件、仅需现有关系库与 Kafka 的团队"
+   ]
+  },
+  "sha": "bc04eed6b4c3",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "811483588d53": {
+  "identity": {
+   "one_liner": "把 opencode + GaussDB/openGauss 诊断技能容器化的 Kubernetes 交付项目",
+   "review": "该仓库将 opencode 与 GaussDB/openGauss DBA 技能集封装进 Kubernetes：每用户一个无状态 Agent Pod，状态全部存于 NAS（RWX PVC），诊断与知识库导入分属不同镜像。面向行内实施、运维与 DBA 团队交付，含五个镜像、离线交付包、发版台与多份部署文档。仓库公开，不含客户凭据。",
+   "highlights": [
+    "每用户一个无状态 runtime Pod，历史会话经 NAS 上 users/<工号>/ 的 opencode.db 直接恢复",
+    "支持 Top SQL、健康检查、WDR、死锁日志解析、时段体检等诊断技能，SQL 白名单共 132–138 条",
+    "提供 x86_64/aarch64 双架构离线交付包、SM2/SM3 签名中间件接入与 sqlite-vec 向量知识库"
+   ],
+   "use_cases": [
+    "行内集中部署 GaussDB/openGauss 诊断智能体（Web / CLI 接入）",
+    "知识库标准化与导入（word/pdf/txt/照片/PPT → 六要素 md，含网页剪藏）",
+    "单机 Docker 演示与售前试用环境搭建"
+   ]
+  },
+  "sha": "811483588d53",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

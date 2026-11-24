@@ -3361,5 +3361,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "111272323ab3": {
+  "identity": {
+   "one_liner": "基于二进制只读连接 PostgreSQL 统计视图，生成健康检查报告的数据库诊断工具",
+   "review": "pgbot 是一个单二进制 PostgreSQL 只读诊断工具，通过 pg_monitor 角色读取内置统计视图，输出分级健康报告并本地保存基线以对比变化。面向开发者和 AI Agent 使用，提供 --json 版本化契约和 MCP 接口。结果由 Go 从 SQL 确定性计算生成；ask/explain 等可选 AI 功能需模型密钥。支持 PostgreSQL 14–18，queries 部分需 pg_stat_statements 扩展，advise 需 hypopg。",
+   "highlights": [
+    "只读访问：依赖 pg_monitor 登录角色，配合事务只读、语句超时等会话级设置",
+    "提供 inspect、indexes、queries、tables、vacuum、schema diff、erd、mcp 等子命令",
+    "--json 输出版本化 Schema 契约（当前 1.6.0），无 AI 密钥的命令完全确定性运行"
+   ],
+   "use_cases": [
+    "对不熟悉的数据库进行快速只读体检和性能信号排查",
+    "为 AI Agent 或 CI 脚本提供结构化的 Postgres 检查结果（--json / MCP）",
+    "检查 autovacuum 滞后、未使用索引、慢查询等信号"
+   ]
+  },
+  "sha": "111272323ab3",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1a142adc5acc": {
+  "identity": {
+   "one_liner": "在一次性 Docker 容器中验证 PostgreSQL 逻辑备份可恢复性的 CLI 工具",
+   "review": "pbrc 是一个 Rust 编写的命令行工具，将 pg_dump 生成的逻辑备份恢复到网络隔离的一次性 Docker 容器中，依据 TOML 清单校验表结构、行数、索引与约束，并生成 JSON 和 Markdown 审计报告。它面向运维与 CI 流水线使用者，提供 doctor、inspect、check、report、cleanup 等子命令；README 说明它不能替代完整的生产灾难恢复演练。安装需 Rust 1.80+ 与本地 Docker。",
+   "highlights": [
+    "支持 pg_dump 全部五种逻辑格式（custom/tar/directory/plain SQL/gzip 压缩 SQL），支持 PostgreSQL 16、17、18 镜像",
+    "容器以 --network none 运行，无主机挂载、无发布端口，并施加 CPU 与内存限制，断言通过只读的 pbrc_verify 角色执行",
+    "提供 TOML 期望清单（表、行数、扩展、自定义 SQL 断言）、pg_amcheck 结构审计、SHA-256 指纹与 0–6 结构化退出码及 --ci 模式"
+   ],
+   "use_cases": [
+    "在 CI/CD 或定时任务中自动验证每日数据库备份是否可恢复",
+    "检测截断、损坏、空库导出或行数缺失等备份问题，并留存 report.json/report.md 审计证据",
+    "离线检查归档文件的格式、大小与 SHA-256 指纹，或通过 pbrc report 读取历史报告"
+   ]
+  },
+  "sha": "1a142adc5acc",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

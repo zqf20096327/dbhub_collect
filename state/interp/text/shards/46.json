@@ -2825,5 +2825,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d024eab9d07d": {
+  "identity": {
+   "one_liner": "自托管的 LLM 多智能体渗透测试平台，用双图谱绑定发现与证据",
+   "review": "ARTEX 是一个自托管的 LLM 驱动渗透测试平台，由规划器拆解目标、工作者执行真实工具调用，结果写回资产图谱与任务探索图谱，发现项可绑定抓包请求/响应作为证据。面向漏洞赏金与安全测试人员，通过 Docker Compose 部署，支持 Anthropic/OpenAI 兼容端点及本地 Ollama，含审批门、范围门与 token/轮次预算控制，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供共享资产图谱与按任务探索图谱的双图谱架构，并通过锚点关联，支持资产测试覆盖率展示",
+    "内置记录式 MITM 代理与浏览器扩展抓取真实流量，发现项支持 POE 等级、验证状态与流量重放",
+    "支持多 LLM 工作者轮换、人工审批拦截门（string/regex/argv 前缀规则）以及任务级与意图级 token/轮次预算"
+   ],
+   "use_cases": [
+    "对已声明范围的授权目标执行自主化渗透测试，覆盖子域名、服务与端点",
+    "需要将发现项与原始请求/响应证据绑定的漏洞验证与复测流程",
+    "需要人工审批、预算限制与范围控制的多智能体安全任务编排"
+   ]
+  },
+  "sha": "d024eab9d07d",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7601ff8d23ea": {
+  "identity": {
+   "one_liner": "Percona 社区网站的源码仓库，基于 Hugo 生成静态站点。",
+   "review": "该仓库存放 Percona 社区网站源码，内容涵盖社区博客、活动、播客视频、MySQL/PostgreSQL/MongoDB/PMM 相关聚会与贡献指南，面向开源数据库使用者和内容创作者。网站由 Hugo 引擎将 Markdown 转为 HTML，托管于 GitHub Pages；投稿可通过提交 PR 或直接邮件发送 PDF/Google Doc/Markdown 文件完成，社区文章以 CC BY 4.0 发布。",
+   "highlights": [
+    "网站基于 Hugo 引擎运行，通过 hugo server 命令在本地 localhost:1313 预览",
+    "接收数据库与开源技术相关的技术文章投稿，允许转载他处已发布内容，文章以 CC BY 4.0 许可发布",
+    "投稿流程支持 GitHub PR 或以 PDF/Google Doc/Markdown 邮件发送至 community-team@percona.com"
+   ],
+   "use_cases": [
+    "向 Percona 社区博客发布数据库或开源技术文章",
+    "查阅 Percona 组织的开源数据库贡献入口与社区活动、聚会议程",
+    "本地运行网站源码预览页面或提交内容修改"
+   ]
+  },
+  "sha": "7601ff8d23ea",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "330503b24665": {
+  "identity": {
+   "one_liner": "单文件 PHP + SQLite 的自托管网页分析工具",
+   "review": "Puls 是一个自托管网页分析工具，整个程序由单个 PHP 文件加 SQLite 数据库组成，无框架依赖，要求 PHP 8.3+，也支持 Docker 部署。它不使用 cookie、不存储 IP 地址，访客 ID 由地址、浏览器和站点加每日随机盐生成哈希。适用于需要在自己服务器上运行、希望无需 cookie 提示条的中小型网站运营者；提供事件追踪、目标、多站点管理和 JSON/CSV API，但按页面或渠道过滤的查询可能需要数秒。",
+   "highlights": [
+    "单个 PHP 文件 + SQLite，无需 Node、Docker 或独立数据库服务器，可运行在普通 PHP 虚拟主机上",
+    "无 cookie、不存储 IP，访客 ID 使用每日更换随机盐的哈希，盐删除后无法再计算",
+    "追踪脚本 gzip 后小于 2.5 KB，使用 sendBeacon 发送；支持自定义事件、漏斗、目标、多站点和 JSON/CSV API"
+   ],
+   "use_cases": [
+    "在共享主机或已有 PHP 环境上自托管站点流量统计，无需 cookie 同意横幅",
+    "追踪自定义事件（如注册、CTA 点击）并按属性分组、导出 CSV",
+    "以只读 API 令牌向 AI 助手或外部工具提供访问数据"
+   ]
+  },
+  "sha": "330503b24665",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "daa96967d009": {
+  "identity": {
+   "one_liner": "面向 Claude Code 的插件市场，提供约 33 个技能插件，以 marketplace.json 为单一事实源。",
+   "review": "cc-skills 是一个 Claude Code 插件集合仓库，通过 `claude plugin marketplace add` 注册后可按需安装各个插件。插件覆盖 ADR 驱动的 ITP 工作流及 hooks 强制、DevOps 自动化（ClickHouse、Doppler、Cloudflare Workers）、文档与链接校验、量化研究、Telegram/Gmail 等生产力工具。清单文件 `.claude-plugin/marketplace.json` 为单一事实源，附校验脚本；hooks 随插件自动加载，需重启 Claude Code 生效。适用于已在运行 Claude Code 并希望扩展其命令与工作流的开发者。",
+   "highlights": [
+    "包含 30+ 插件，覆盖工作流（itp/itp-hooks）、DevOps（devops-tools、ssh-tunnel-companion）、质量（quality-tools、link-tools）、生产力（productivity-tools、tlg）等类别",
+    "以 `.claude-plugin/marketplace.json` 为单一事实源，提供 `bun scripts/validate-plugins.mjs` 校验脚本",
+    "hooks 通过各插件 `hooks/hooks.json` 自动加载，无需写入 settings.json；支持命令行安装、更新与故障排查流程"
+   ],
+   "use_cases": [
+    "为 Claude Code 会话添加 ADR 驱动的开发流程与 lint/类型检查 hooks",
+    "接入 ClickHouse、Cloudflare、Telegram、Gmail 等外部工具的自动化操作",
+    "补充文档生成、链接校验、GitHub 工作流等开发辅助命令"
+   ]
+  },
+  "sha": "daa96967d009",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

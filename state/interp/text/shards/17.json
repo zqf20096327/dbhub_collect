@@ -3813,5 +3813,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "246543a438c8": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 .NET 异步持久化键值存储库",
+   "review": "Akavache 为 .NET 桌面与移动应用提供异步、持久化的键值存储，底层基于 SQLite3，通过 NuGet 分模块安装（核心包+存储后端+序列化器），支持静态初始化与依赖注入两种接入方式。内置 UserAccount、LocalMachine、Secure、InMemory 四类缓存，V12 重写 SQLite 后端为直接 SQLitePCLRaw 3.x 访问。支持 .NET Framework 4.7.2 至 .NET 10 及移动端目标。",
+   "highlights": [
+    "提供四种缓存类型：UserAccount、LocalMachine、Secure（加密）与 InMemory",
+    "V12 直接访问 SQLitePCLRaw 3.x，支持 SQLite3MultipleCiphers 加密与预编译语句复用",
+    "提供 System.Text.Json 与 Newtonsoft.Json 两种序列化器包，含 JsonTypeInfo<T> AOT 安全重载"
+   ],
+   "use_cases": [
+    "存储用户设置与偏好等需持久化的数据",
+    "存放可过期删除的本地缓存数据",
+    "通过 Secure 缓存保存凭据、API 密钥等敏感数据"
+   ]
+  },
+  "sha": "246543a438c8",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "adf01437374f": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理记忆服务器，MCP 接口 + 单进程单 SQLite 文件",
+   "review": "Rembric 为 AI 编码代理提供自托管的记忆、会话与仪表盘层，通过 MCP 或 HTTP 接入 Claude Code、Codex CLI、opencode 等客户端。服务器以 Docker 镜像分发，单进程内运行嵌入模型与重排器，数据存于一个 SQLite 文件。部署要求至少 2 vCPU 与 2 GB 内存；数据目录不可挂载到 NFS/SMB 等网络文件系统。",
+   "highlights": [
+    "以 Docker 镜像分发（支持 linux/amd64 与 linux/arm64），内含 Node 26、better-sqlite3、sqlite-vec、onnxruntime-node 及嵌入模型，数据持久化到单个 SQLite 文件",
+    "提供 MCP 服务端（默认端口 8787 的 /mcp 端点）与 Web 仪表盘（/dashboard），所有端点要求 Bearer token 认证，支持 OAuth 2.1 客户端接入",
+    "进程内运行 384 维 int8 ONNX 嵌入模型（单条记忆最多读取 1024 token）与交叉编码器重排器，可通过 REMBRIC_RERANK=off 关闭重排以降低约 0.45 GB 内存占用"
+   ],
+   "use_cases": [
+    "为多个支持 MCP 的编码代理（Claude Code、Codex CLI、opencode、Cursor、Gemini CLI 等）提供共享的自托管记忆存储",
+    "在本地或内网（LAN/Tailscale）部署集中式记忆服务，配合 Docker Compose 与 .env 环境变量进行版本管理、升级与回滚",
+    "通过仪表盘执行在线 WAL 安全备份、版本更新检查与容器一键更新（需挂载 Docker socket）"
+   ]
+  },
+  "sha": "adf01437374f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

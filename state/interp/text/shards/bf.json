@@ -3429,5 +3429,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ca869c73c3bb": {
+  "identity": {
+   "one_liner": "面向 SQL 数据库的 MCP 服务器，在服务端内置脱敏后再返回查询结果",
+   "review": "dbmcp 是一个 MCP 服务器，连接 MySQL、MariaDB、PostgreSQL 和 SQLite，供 Claude Desktop、Cursor 等 AI 客户端查询数据库时使用。查询结果中的敏感值在服务端先被替换为带密钥的占位符（相同值映射到相同 token，保留计数、分组、连接能力），默认只读，无法证明安全的语句在执行前被拒绝。安装支持 curl 脚本、npm（npx 可直接启动）、Docker 和 Cargo。",
+   "highlights": [
+    "默认开启脱敏：47 种内置数据类型检测（邮箱、电话、银行卡号、API 密钥等，含校验和验证），检测在服务端内运行、不调用外部服务；可选本地模型补充人名、地名、公司名",
+    "提供列级规则：指定的列在别名、表达式、视图、CTE、join、union 等任意查询路径下均被改写；无法证明安全的语句在执行前拒绝",
+    "支持 stdio 与 HTTP 传输、SSH 隧道（MySQL/MariaDB/PostgreSQL）、分层配置（环境变量/env 文件/YAML），提供 schema 发现、readQuery/writeQuery、DDL 及 explainQuery 工具"
+   ],
+   "use_cases": [
+    "让 Claude Desktop、Cursor 等 MCP 客户端查询含敏感数据的生产或业务数据库，同时避免原始敏感值进入 AI 上下文",
+    "以只读模式向 AI 助手开放数据库探索（表、视图、触发器、元数据发现与 explainQuery）",
+    "通过 SSH 堡垒机或 HTTP 传输（含 bearer token）接入远程或多客户端环境下的数据库"
+   ]
+  },
+  "sha": "ca869c73c3bb",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1f9bf78130fd": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 记忆服务器，基于 Rust 单二进制与混合检索实现 AI 助手持久化记忆。",
+   "review": "MemoryPilot 是一个面向 Cursor、Claude Desktop、VS Code 等 MCP 客户端的本地记忆服务器，用 Rust 编写为单二进制文件，无运行时依赖。它为 AI 助手提供跨会话的可检索记忆，采用 BM25 与 jina-embeddings-v5 嵌入的 RRF 混合检索加交叉编码器重排，支持 100+ 语言与时序知识图谱。写入和搜索均不调用 LLM API；默认暴露 25 个工具，数据存储于本地 SQLite，数据库自动压缩，README 中标注基准结果为作者自测、未经独立复现。",
+   "highlights": [
+    "提供 BM25 + jina-embeddings-v5 嵌入 RRF 混合检索与交叉编码器重排，支持 100+ 语言",
+    "包含时序知识图谱、GraphRAG、自动分类、AAAK 压缩与自动压缩机制",
+    "Rust 单二进制实现，写入与搜索均为本地处理，零 LLM API 调用，支持签名自动更新与 HTTP API"
+   ],
+   "use_cases": [
+    "为 Cursor、Claude Code、VS Code 等 MCP 客户端提供跨会话持久记忆与历史对话检索",
+    "需要在本地处理数据、不希望记忆内容经外部 API 传输的环境",
+    "需要降低加载上下文时的 token 消耗（README 称 AAAK 压缩节省 5-10 倍 token）"
+   ]
+  },
+  "sha": "1f9bf78130fd",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cc1a2b90ff76": {
+  "identity": {
+   "one_liner": "Windows 平台的 Claude Code 插件，提供发送成本预览、会话交接与本地长期记忆",
+   "review": "Alethite 是面向 Windows Claude Code 桌面版（引擎 2.1.295+、Python 3.8+）的 MIT 许可插件，通过 MIT 许可发布。它在提示框上方显示会话大小、缓存剩余时间与下次发送价格；可一键交接至新会话；用 SQLite 加本地 Ollama 向量为全部历史会话建立索引，供 recall 检索；并提供起始于 5-16k token 的精简子代理类型。可选 Ollama、加密与网络盘同步，通过 PowerShell 从 GitHub 安装。",
+   "highlights": [
+    "状态行实时显示上下文大小、缓存剩余分钟数与下次发送价格",
+    "本地 SQLite + Ollama 向量索引覆盖所有项目历史会话（含子代理），索引前隐藏密钥",
+    "提供 5-16k 起始 token 的精简代理类型，并支持无需模型调用的会话交接与超过 10 分钟的后台运行"
+   ],
+   "use_cases": [
+    "长时间运行的 Claude Code 会话，需要在发送前查看上下文大小与缓存状态",
+    "跨会话检索历史决策、错误教训与工具输出（含已索引的工具错误）",
+    "多台 Windows 计算机间通过共享文件夹同步记忆索引与向量"
+   ]
+  },
+  "sha": "cc1a2b90ff76",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7f6b6bda3f94": {
+  "identity": {
+   "one_liner": "面向乌拉圭共和国大学社区的论坛，采用 React、Express 和 PostgreSQL 实现。",
+   "review": "UdelarHITS 是一个独立论坛项目，内容按分类、主题与嵌套评论组织，面向共和国大学（乌拉圭）社区使用。后端为 Express 5 分层结构（路由/控制器/服务/仓库），前端为 React SPA，数据存于 PostgreSQL。运行需 Node.js 22+、PostgreSQL 的 unaccent 扩展；Cloudinary 与 Resend 用于图片上传和邮件，Google 登录、图片自动审核与推送通知未配置相应变量时保持禁用。项目与该大学无官方隶属关系。",
+   "highlights": [
+    "提供带标签的分类、嵌套评论及编辑历史，包含首页个性化信息流、最新/热门/浏览页与跨分类、主题、评论、用户的统一搜索",
+    "支持用户资料与关注、私密账户、用户间屏蔽、1:1 实时聊天与通知（可选推送）、评论附件与投票，以及基于举报的社区管理与申诉面板",
+    "包含 Jest/Supertest 与 Vitest/Testing Library 测试套件、SQL schema 与迁移脚本、每日数据库备份工作流、维护模式开关和 /health 健康检查端点"
+   ],
+   "use_cases": [
+    "为大学社区或类似群体部署包含分类、主题与嵌套评论的论坛站点",
+    "搭建包含实时聊天、通知、用户关系与社区管理的社区交流平台",
+    "作为 React SPA 加 Express API 加 PostgreSQL 的分层架构参考项目运行或二次开发"
+   ]
+  },
+  "sha": "7f6b6bda3f94",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

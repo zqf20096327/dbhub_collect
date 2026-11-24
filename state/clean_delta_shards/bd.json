@@ -29007,5 +29007,1020 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "a4e5f929c133+2": {
+  "fn": "csvidx/csvidx",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "CI",
+     "crates.io",
+     "PyPI"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "README in Russian: README.ru.md."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    14,
+    7,
+    14
+   ],
+   [
+    "replace",
+    14,
+    22,
+    14,
+    15,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    34,
+    15,
+    27
+   ],
+   [
+    "replace",
+    34,
+    35,
+    27,
+    28,
+    [
+     "|Step|What it checks|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    28,
+    29
+   ],
+   [
+    "replace",
+    36,
+    45,
+    29,
+    38,
+    [
+     "|`cargo test`|11 unit tests of the scanner/header + 23 integration + 5 differential tests of the parallel scan (see below): quotes, `\"\"`, newlines inside fields, CRLF, BOM, empty and short rows, **forced hash collisions**, external sort (limit of 1–3 records, the index is byte-for-byte equal to the ordinary one, including after `update`), `verify` on a corrupted index, append + `update`, the **tail** (the main index stays byte-for-byte unchanged, `compact` == a full rebuild, an unfinished row in the main index is replaced by the row from the tail, an interrupted `compact` leaves a stale tail that is ignored, the auto-merge threshold, a broken tail is an error, not a silent loss of rows), mutation testing of the tests (with shadowing disabled two tests fail), a last row without `\\n`, stale/corrupted index|",
+     "|`scripts/oracle_test.py`|Differential test against Python's `csv` module (an independent parser): 8 dialects (LF/CRLF × QUOTE_MINIMAL/ALL × BOM × key by name/number), \"nasty\" keys (`a,b`, `x\"y`, a key with `\\n`, unicode, empty), append, `update`, stale index detection|",
+     "|`scripts/threads_check.py`|The index built at 1, 2, 4 threads: sha256 of the files must match; time and the number of chunks that needed boundary repair are measured|",
+     "|`scripts/extsort_check.py`|The same index built under different memory limits: sha256 must match, the process's `RssAnon` is polled during the build, no temp files left behind|",
+     "|`python/tests` (pytest)|14 binding tests, a pandas oracle: `get` == `read_csv` + filter on \"nasty\" keys, CRLF, a headerless file, an empty result with columns and dtype, `int`/`str`/`bytes` keys, `get_arrow`, `update`/`compact`/`verify` from Python, `CsvIdxError` errors, 8 threads, **the GIL is released** (checked by mutation)|",
+     "|`python/bench_pandas.py`|`Index.get` vs chunked pandas and DuckDB, results verified as DataFrames|",
+     "|`csvidx verify`|The index is byte-for-byte equal to one rebuilt from scratch|",
+     "|`scripts/check_counts.py`|Row counts for ~2000 keys (existing, heavy, missing) match pandas over the whole file|",
+     "|`scripts/bench.py`|Time and memory vs `grep`, pandas, DuckDB; cold and warm cache; `update` vs a rebuild|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    52,
+    38,
+    45
+   ],
+   [
+    "replace",
+    52,
+    53,
+    45,
+    46,
+    [
+     "|Operation|Time|"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    46,
+    47
+   ],
+   [
+    "replace",
+    54,
+    65,
+    47,
+    58,
+    [
+     "|Index build (1 thread)|12.3 s (~700 MB/s), index 1.49 GiB (36% of the CSV)|",
+     "|`csvidx get`, ordinary key (8 rows), separate process|**1.7 ms** warm cache, **3.1 ms** cold|",
+     "|Same in-process (index already open)|p50 ≈ 5 µs|",
+     "|`csvidx get`, key hitting 20,574 rows|27 ms warm, **748 ms cold**|",
+     "|`grep` (full scan)|4.5 s cold / 3.7 s warm (ordinary key)|",
+     "|DuckDB `count(*) WHERE key = ?`|5.4 s|",
+     "|pandas `read_csv(usecols=[key])` + filter|21 s, 1.6 GB RAM|",
+     "|`update` after appending 86 MiB (2%)|**0.54 s** (writes only a 30 MiB tail, the main index untouched)|",
+     "|`compact` (merge the tail into a 1.5 GiB main index)|3.0 s|",
+     "|Full rebuild (for comparison)|21 s in this run (before the tail, `update` rewrote the whole index: 3.9 s)|",
+     "|`get` of an ordinary key with a tail present|2.4 ms warm (1.7 ms without a tail; runs are noisy)|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    72,
+    58,
+    65
+   ],
+   [
+    "replace",
+    72,
+    73,
+    65,
+    66,
+    [
+     "|`--mem-limit-mib`|Build time|Peak anon RSS|Runs on disk|Index (sha256)|"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    66,
+    67
+   ],
+   [
+    "replace",
+    74,
+    78,
+    67,
+    71,
+    [
+     "|64|21–25 s|65 MiB|24|identical|",
+     "|256|17–19 s|257 MiB|6|identical|",
+     "|1024 (default)|24 s|1025 MiB|2|identical|",
+     "|8192 (all in RAM)|12–19 s|1527 MiB|0|identical|"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    87,
+    71,
+    80
+   ],
+   [
+    "replace",
+    87,
+    88,
+    80,
+    81,
+    [
+     "|File|1 thread|2 threads|Speedup|Index|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    81,
+    82
+   ],
+   [
+    "replace",
+    89,
+    93,
+    82,
+    86,
+    [
+     "|20M rows, ordinary CSV|3.29 s|2.13 s|1.54×|byte-for-byte identical|",
+     "|20M rows, with multi-line fields|3.48 s|2.12 s|1.64×|byte-for-byte identical|",
+     "|100M rows, 1 GiB limit|21.3 s|15.9 s|1.34×|byte-for-byte identical|",
+     "|100M rows, 256 MiB limit (external sort)|20.4 s|15.7 s|1.30×|byte-for-byte identical|"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    116,
+    86,
+    109
+   ],
+   [
+    "replace",
+    116,
+    122,
+    109,
+    110,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    132,
+    110,
+    120
+   ],
+   [
+    "replace",
+    132,
+    133,
+    120,
+    121,
+    [
+     " `float`, `bool` and `None` raise `TypeError` (`7.0` is not the text `7`)."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    121,
+    122
+   ],
+   [
+    "replace",
+    134,
+    135,
+    122,
+    123,
+    [
+     " rows will be `int64`, while in another set the same column may end up `object`. Pass `dtype=` if you need stable types."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    123,
+    124
+   ],
+   [
+    "replace",
+    136,
+    137,
+    124,
+    125,
+    [
+     " `idx.bytes_behind` tells whether the file was appended after indexing."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    144,
+    125,
+    132
+   ],
+   [
+    "replace",
+    144,
+    145,
+    132,
+    133,
+    [
+     "|Query|Rows|csvidx (warm cache)|csvidx (cold)|pandas chunked|DuckDB|"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    133,
+    134
+   ],
+   [
+    "replace",
+    146,
+    149,
+    134,
+    137,
+    [
+     "|ordinary key|8|**0.8 ms**|5.1 ms|40.5 s|12.1 s|",
+     "|heavy key|20,574|17 ms|59 ms|39.5 s|12.2 s|",
+     "|batch of 1000 keys|1,970,592|1.8 s|**15.5 s**|40.9 s|13.4 s|"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    156,
+    137,
+    144
+   ],
+   [
+    "replace",
+    156,
+    159,
+    144,
+    147,
+    [
+     " the file is two million random reads, while a full scan reads the file sequentially. On a warm cache the index is",
+     " still faster (1.8 s), but the crossover where a scan wins is somewhere around a few percent of the file. The index",
+     " pays off while the query takes a small share of the rows."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    160,
+    147,
+    148
+   ],
+   [
+    "replace",
+    160,
+    161,
+    148,
+    149,
+    [
+     " (`get_arrow` is faster if Arrow suits you)."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    165,
+    149,
+    153
+   ],
+   [
+    "replace",
+    165,
+    171,
+    153,
+    159,
+    [
+     " (~the size of the index) plus the index itself. Scan and sort are parallel (`--threads`), writing and run merging stay sequential;",
+     " on 100M rows it's 12 s in memory and ~2× longer at a 64 MiB limit.",
+     " The parallel scan keeps one \"round\" of results (about a quarter of the limit) in memory until stitching.",
+     " On a \"hostile\" file where almost every newline is inside quotes, guesses don't converge and the scan degrades",
+     " to sequential (correctness is preserved) with extra work on discarded guesses.",
+     " CSV pages mapped via `mmap` count in RSS, but the kernel can evict them at any time (hence `RssAnon` in the measurements)."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    172,
+    159,
+    160
+   ],
+   [
+    "replace",
+    172,
+    174,
+    160,
+    162,
+    [
+     " entirely (it is small), and when the tail reaches 10% of the main index, `update` calls `compact` itself",
+     " (3 s on 100M rows). A tail ≥ 10% is always merged immediately, so on small files `update` behaves like before. Each `get` opens two files instead of one."
+    ]
+   ],
+   [
+    "equal",
+    174,
+    176,
+    162,
+    164
+   ],
+   [
+    "replace",
+    176,
+    178,
+    164,
+    166,
+    [
+     " error. An edit in the middle of the file without a size change is **not detected**, so the index assumes an",
+     " append-only file. If you suspect edits — `csvidx verify`."
+    ]
+   ],
+   [
+    "equal",
+    178,
+    179,
+    166,
+    167
+   ],
+   [
+    "replace",
+    179,
+    180,
+    167,
+    168,
+    [
+     " index is ordered by hash."
+    ]
+   ],
+   [
+    "equal",
+    180,
+    182,
+    168,
+    170
+   ],
+   [
+    "replace",
+    182,
+    183,
+    170,
+    171,
+    [
+     " Windows (replacing the index file over an open mapping may not work there)."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    195,
+    171,
+    183
+   ],
+   [
+    "replace",
+    195,
+    197,
+    183,
+    185,
+    [
+     " If a tail exists, main-index records with offset `>= the tail's base_offset` are **shadowed** (ignored): this way a",
+     " conditionally indexed row without a trailing `\\n` in the main index is replaced by its rescanned version."
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    185,
+    186
+   ],
+   [
+    "replace",
+    198,
+    200,
+    186,
+    188,
+    [
+     " `compact` or `build`: it is silently ignored and the next `update` replaces it. A broken tail (CRC, size, CSV",
+     " prefix) is an error, not a silent loss of rows."
+    ]
+   ],
+   [
+    "equal",
+    200,
+    201,
+    188,
+    189
+   ],
+   [
+    "replace",
+    201,
+    202,
+    189,
+    190,
+    [
+     " `build` removes the tail after replacing the main index."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    224,
+    190,
+    212
+   ],
+   [
+    "replace",
+    224,
+    230,
+    212,
+    213,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    233,
+    213,
+    216
+   ],
+   [
+    "replace",
+    233,
+    239,
+    216,
+    217,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "01b12dd81778+2": {
+  "fn": "moznhub/rexyra",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "CI",
+     "License: Apache-2.0"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    20,
+    4,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "**Version 1.0**, the first stable release. From 1.0 on, version numbers follow Semantic Versioning: within 1.x, what is listed under Versions and compatibility does not change in an incompatible way."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    25,
+    21,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "- five client libraries, two versions of each: StackExchange.Redis, redis-py, Jedis, Lettuce and go-redis (see clients);"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    26,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "Behaviour is compared with Redis 7.4 command by command, and the comparisons are kept as tools that can be run again. Before each release, a six-hour soak test runs a mixed workload with every reply checked and a client that uses client-side caching (results)."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    32,
+    29,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "It is a **single-instance** server: replication, cluster mode, streams, modules and TLS are not implemented. See what differs from Redis and the roadmap."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    38,
+    33,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "- **Commands** keep replying as documented: as Redis 7.4 does, apart from the differences listed in COMPATIBILITY.md. A change that brings a reply closer to Redis's counts as a fix, and is listed in the changelog."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    43,
+    39,
+    43
+   ],
+   [
+    "replace",
+    43,
+    44,
+    43,
+    44,
+    [
+     "Not covered: the wording of log lines and of `INFO` fields that Redis does not have, performance figures, and the tools in tools."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    44,
+    45
+   ],
+   [
+    "replace",
+    45,
+    46,
+    45,
+    46,
+    [
+     "Security fixes are made for the latest 1.x version; see SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    49,
+    46,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "**Install it as a service.** Download `rexyra-vX.Y.Z-windows-x86_64.msi` from the releases page and run it. Setup asks for the folder and the port, then installs Rexyra as a Windows service that starts with the machine. See Running as a Windows service."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    59,
+    50,
+    59
+   ],
+   [
+    "replace",
+    59,
+    60,
+    59,
+    60,
+    [
+     "**Or build from source.** You need Rust (stable, MSVC toolchain) and the Visual Studio Build Tools with the C++ workload, which compiles the bundled Lua interpreter."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    84,
+    60,
+    84
+   ],
+   [
+    "replace",
+    84,
+    85,
+    84,
+    85,
+    [
+     "|Option|Meaning|Default|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    85,
+    86
+   ],
+   [
+    "replace",
+    86,
+    98,
+    86,
+    98,
+    [
+     "|`--bind`, `--port`|Address and port to listen on|`127.0.0.1`, `6379`|",
+     "|`--requirepass`|Password clients must give with `AUTH`|none|",
+     "|`--protected-mode`|Without a password, accept only local connections|`yes`|",
+     "|`--dir`, `--dbfilename`|Where the snapshot is kept. The folder must exist: as in Redis, the server will not start without it.|`.`, `dump.rdb`|",
+     "|`--logfile`|File the log is written to|standard error|",
+     "|`--logfile-max-size`, `--logfile-max-files`|Size at which the log file is started afresh, and how many earlier ones (`rexyra.1.log`, ...) are kept; `0` never rolls it|`100mb`, `5`|",
+     "|`--save`|Automatic snapshots, as `seconds changes` pairs|`3600 1 300 100 60 10000`|",
+     "|`--appendonly`, `--appendfsync`|The append-only file and when it is forced to disk|`no`, `everysec`|",
+     "|`--maxmemory`, `--maxmemory-policy`|Memory limit and what to evict at the limit|none, `noeviction`|",
+     "|`--notify-keyspace-events`|Keyspace notifications to publish, in Redis's letters (`KEA` for all); see COMPATIBILITY.md|none|",
+     "|`--tracking-table-max-keys`|The most keys client-side caching (`CLIENT TRACKING`) remembers before it invalidates some; `0` for no limit|`1000000`|",
+     "|`--databases`, `--maxclients`|Number of databases and of simultaneous clients|`16`, `10000`|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    105,
+    98,
+    105
+   ],
+   [
+    "replace",
+    105,
+    106,
+    105,
+    106,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    106,
+    107
+   ],
+   [
+    "replace",
+    107,
+    111,
+    107,
+    111,
+    [
+     "|`C:\\Program Files\\Rexyra\\`|The program|",
+     "|`C:\\ProgramData\\Rexyra\\rexyra.conf`|The settings; edit and restart the service to change them|",
+     "|`C:\\ProgramData\\Rexyra\\data\\`|The data files|",
+     "|`C:\\ProgramData\\Rexyra\\logs\\rexyra.log`|The log, with up to five earlier files of 100 MB each beside it|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    118,
+    111,
+    118
+   ],
+   [
+    "replace",
+    118,
+    119,
+    118,
+    119,
+    [
+     "**docs/WINDOWS-SERVICE.md** covers the rest: upgrading and removing, what is kept when the service stops, opening the port to other machines, and setting the service up by hand with `rexyra-server.exe --service`."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    119,
+    122
+   ],
+   [
+    "replace",
+    122,
+    123,
+    122,
+    123,
+    [
+     "|Group|Commands|"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    123,
+    124
+   ],
+   [
+    "replace",
+    124,
+    137,
+    124,
+    137,
+    [
+     "|Connection|`PING` `ECHO` `HELLO` `AUTH` `SELECT` `QUIT` `RESET` `CLIENT` (`ID`, `GETNAME`, `SETNAME`, `SETINFO`, `LIST`, `INFO`, `KILL`, `UNBLOCK`, `NO-EVICT`, `NO-TOUCH`, and for client-side caching `TRACKING`, `CACHING`, `GETREDIR`, `TRACKINGINFO`)|",
+     "|Server|`COMMAND` (`COUNT`, `LIST`, `INFO`, `DOCS`, `GETKEYS`, `GETKEYSANDFLAGS`) `DBSIZE` `SWAPDB` `FLUSHDB` `FLUSHALL` `INFO` `CONFIG` (`GET`, `SET`, `RESETSTAT`) `SLOWLOG` (`GET`, `LEN`, `RESET`) `MEMORY` (`USAGE`) `ACL` (`SETUSER`, `GETUSER`, `DELUSER`, `LIST`, `USERS`, `WHOAMI`, `CAT`, `GENPASS`, `DRYRUN`) `TIME` `SAVE` `LASTSAVE` `SHUTDOWN` `BGSAVE` `BGREWRITEAOF` `DEBUG` (`PANIC`, `SET-ACTIVE-EXPIRE`)|",
+     "|Pub/Sub|`SUBSCRIBE` `UNSUBSCRIBE` `PSUBSCRIBE` `PUNSUBSCRIBE` `SSUBSCRIBE` `SUNSUBSCRIBE` `PUBLISH` `SPUBLISH` `PUBSUB` (`CHANNELS`, `NUMSUB`, `NUMPAT`, `SHARDCHANNELS`, `SHARDNUMSUB`, `HELP`), and keyspace notifications (`notify-keyspace-events`)|",
+     "|Transactions|`MULTI` `EXEC` `DISCARD` `WATCH` `UNWATCH`|",
+     "|Scripting|`EVAL` `EVALSHA` `EVAL_RO` `EVALSHA_RO` `SCRIPT` (`LOAD`, `EXISTS`, `FLUSH`, `KILL`) `FCALL` `FCALL_RO` `FUNCTION` (`LOAD`, `DELETE`, `FLUSH`, `LIST`, `STATS`, `KILL`, `DUMP`, `RESTORE`)|",
+     "|Keys|`DEL` `UNLINK` `EXISTS` `TOUCH` `TYPE` `RENAME` `RENAMENX` `COPY` `MOVE` `KEYS` `SCAN` `RANDOMKEY` `SORT` `SORT_RO` `DUMP` `RESTORE` `OBJECT` (`ENCODING`, `REFCOUNT`, `IDLETIME`, `FREQ`)|",
+     "|Expiry|`EXPIRE` `PEXPIRE` `EXPIREAT` `PEXPIREAT` `TTL` `PTTL` `EXPIRETIME` `PEXPIRETIME` `PERSIST`|",
+     "|Strings|`GET` `SET` `SETNX` `SETEX` `PSETEX` `GETSET` `GETDEL` `GETEX` `MGET` `MSET` `MSETNX` `INCR` `DECR` `INCRBY` `DECRBY` `INCRBYFLOAT` `APPEND` `STRLEN` `GETRANGE` `SUBSTR` `SETRANGE` `LCS`|",
+     "|Bitmaps|`SETBIT` `GETBIT` `BITCOUNT` `BITPOS` `BITOP` `BITFIELD` `BITFIELD_RO`|",
+     "|Hashes|`HSET` `HMSET` `HSETNX` `HGET` `HMGET` `HDEL` `HGETALL` `HKEYS` `HVALS` `HLEN` `HEXISTS` `HSTRLEN` `HINCRBY` `HINCRBYFLOAT` `HSCAN` `HRANDFIELD` `HEXPIRE` `HPEXPIRE` `HEXPIREAT` `HPEXPIREAT` `HTTL` `HPTTL` `HEXPIRETIME` `HPEXPIRETIME` `HPERSIST`|",
+     "|Lists|`LPUSH` `RPUSH` `LPUSHX` `RPUSHX` `LPOP` `RPOP` `LMPOP` `LMOVE` `RPOPLPUSH` `BLPOP` `BRPOP` `BLMPOP` `BLMOVE` `BRPOPLPUSH` `LLEN` `LRANGE` `LINDEX` `LPOS` `LSET` `LINSERT` `LREM` `LTRIM`|",
+     "|Sets|`SADD` `SREM` `SCARD` `SISMEMBER` `SMISMEMBER` `SMEMBERS` `SMOVE` `SPOP` `SRANDMEMBER` `SSCAN` `SINTER` `SUNION` `SDIFF` `SINTERSTORE` `SUNIONSTORE` `SDIFFSTORE` `SINTERCARD`|",
+     "|Sorted sets|`ZADD` `ZINCRBY` `ZREM` `ZCARD` `ZSCORE` `ZMSCORE` `ZRANK` `ZREVRANK` `ZCOUNT` `ZLEXCOUNT` `ZRANGE` `ZREVRANGE` `ZRANGEBYSCORE` `ZREVRANGEBYSCORE` `ZRANGEBYLEX` `ZREVRANGEBYLEX` `ZRANGESTORE` `ZREMRANGEBYRANK` `ZREMRANGEBYSCORE` `ZREMRANGEBYLEX` `ZPOPMIN` `ZPOPMAX` `ZMPOP` `BZPOPMIN` `BZPOPMAX` `BZMPOP` `ZUNION` `ZINTER` `ZDIFF` `ZUNIONSTORE` `ZINTERSTORE` `ZDIFFSTORE` `ZINTERCARD` `ZSCAN` `ZRANDMEMBER`|"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    140,
+    137,
+    140
+   ],
+   [
+    "replace",
+    140,
+    141,
+    140,
+    141,
+    [
+     "For the commands above, Rexyra is meant to be indistinguishable from Redis 7.x to a client. Where it is not, the difference is listed in docs/COMPATIBILITY.md, together with the details of persistence, the memory limit and access control. A few to know about up front:"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    158,
+    141,
+    158
+   ],
+   [
+    "replace",
+    158,
+    159,
+    158,
+    159,
+    [
+     "The method, raw results and the tool that produced them are in docs/benchmarks and tools/rexyra-bench."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    169,
+    159,
+    169
+   ],
+   [
+    "replace",
+    169,
+    170,
+    169,
+    170,
+    [
+     "Fuzzing the protocol parser needs a nightly toolchain and cargo-fuzz:"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    178,
+    170,
+    178
+   ],
+   [
+    "replace",
+    178,
+    179,
+    178,
+    179,
+    [
+     "|Path|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    179,
+    180
+   ],
+   [
+    "replace",
+    180,
+    189,
+    180,
+    189,
+    [
+     "|`crates/resp`|RESP2/RESP3 parser, decoder and encoder (no I/O)|",
+     "|`crates/engine`|The keyspace: hash table, databases, value types, expiry (no I/O, no clock)|",
+     "|`crates/persist`|The RDB snapshot format: writer, reader, checksum|",
+     "|`crates/commands`|Command table and handlers, persistence, eviction, scripting, users and permissions|",
+     "|`crates/server`|Networking, the command-execution thread, configuration, the `rexyra-server` binary|",
+     "|`tools/rexyra-bench`|Load generator for measuring background saves under traffic, and the throughput of single commands|",
+     "|`tools/rexyra-keyevents`|Records the keyspace notifications a script of commands produces, to compare with Redis|",
+     "|`fuzz`|cargo-fuzz targets for the protocol crate|",
+     "|`docs`|Compatibility notes, roadmap, design notes, benchmarks|"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    189,
+    190
+   ],
+   [
+    "replace",
+    190,
+    191,
+    190,
+    191,
+    [
+     "One thread executes every command and owns the data; network I/O runs on a Tokio runtime and hands requests to it. How a consistent snapshot is taken without `fork` is described in docs/design/snapshot-without-fork.md."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    193,
+    191,
+    193
+   ],
+   [
+    "replace",
+    193,
+    200,
+    193,
+    194,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    201,
+    194,
+    195
+   ],
+   [
+    "replace",
+    201,
+    208,
+    195,
+    196,
+    [
+     "Licensed under the Apache License, Version 2.0."
+    ]
+   ],
+   [
+    "equal",
+    208,
+    211,
+    196,
+    199
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

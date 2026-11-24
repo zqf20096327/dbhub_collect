@@ -24268,5 +24268,2126 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "0f7d448f47ea+2": {
+  "fn": "milen-denev/rasterizeddb",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "delete",
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    "equal",
+    1,
+    4,
+    0,
+    3
+   ],
+   [
+    "replace",
+    4,
+    5,
+    3,
+    4,
+    [
+     "rdb_studio connected to a RasterizedDB server"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    4,
+    5
+   ],
+   [
+    "replace",
+    6,
+    7,
+    5,
+    6,
+    [
+     "*rdb_studio, the desktop console, watching a"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    18,
+    6,
+    17
+   ],
+   [
+    "replace",
+    18,
+    19,
+    17,
+    18,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    18,
+    19
+   ],
+   [
+    "replace",
+    20,
+    34,
+    19,
+    33,
+    [
+     "|**PostgreSQL wire protocol**|Simple and extended query protocols, bound parameters, SCRAM-SHA-256, TLS. Drivers and ORMs work as-is — see SQL surface|",
+     "|**Type system**|40 PostgreSQL types, including intervals, MAC and bit strings, the seven geometric types and the six ranges — each with its real wire OID|",
+     "|**Transactions**|MVCC snapshots, `READ COMMITTED` / `REPEATABLE READ`, savepoints, first-updater-wins conflicts|",
+     "|**Durability**|Write-ahead log with checkpoints, and a `synchronous_commit` knob with the trade stated exactly|",
+     "|**Filter index**|Bit-sliced fingerprints, 512 rows per SIMD register, plus zone maps for ranges. Adaptive and runtime-tunable|",
+     "|**Space reclamation**|Background vacuum publishing a free list the write path allocates from; `VACUUM` and `VACUUM FULL`|",
+     "|**JSON**|Documents stored as binary values, with path indexing|",
+     "|**Replication**|Multi-primary, statement-shipping, HLC-ordered, over TLS 1.3|",
+     "|**Backup**|Snapshot and point-in-time recovery to any S3-compatible store|",
+     "|**Branches**|A database copied live (or from a past point), then reset, promoted, diffed and three-way merged back|",
+     "|**Storage pools**|One database across several directories, with a placement policy and mirrored backups|",
+     "|**Key/value storage**|A database kept in an object store instead of files, per table, alongside file and in-memory tables|",
+     "|**PostgreSQL import**|One-shot migration of a live PostgreSQL database|",
+     "|**rdb_studio**|A desktop console that also speaks to PostgreSQL|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    33,
+    34
+   ],
+   [
+    "replace",
+    35,
+    36,
+    34,
+    35,
+    [
+     "Design notes for each subsystem live in docs/ — they cover the"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    41,
+    35,
+    40
+   ],
+   [
+    "replace",
+    41,
+    42,
+    40,
+    41,
+    [
+     "Download the archive for your platform from the releases (tags `v*`):"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    41,
+    42
+   ],
+   [
+    "replace",
+    43,
+    44,
+    42,
+    43,
+    [
+     "|Platform|Archive|CPU|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    43,
+    44
+   ],
+   [
+    "replace",
+    45,
+    49,
+    44,
+    48,
+    [
+     "|Linux x86-64|`rasterizeddb-server-<version>-linux-x86_64.tar.gz`|x86-64-v3 (AVX2: Intel Haswell / AMD Excavator or later)|",
+     "|Linux ARM64|`rasterizeddb-server-<version>-linux-arm64.tar.gz`|any ARMv8-A (Graviton, Ampere, Raspberry Pi 4/5, ...)|",
+     "|Windows x86-64|`rasterizeddb-server-<version>-windows-x86_64.zip`|x86-64-v3 (AVX2)|",
+     "|Windows ARM64|`rasterizeddb-server-<version>-windows-arm64.zip`|any ARMv8-A (Snapdragon X, ...)|"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    70,
+    48,
+    69
+   ],
+   [
+    "replace",
+    70,
+    71,
+    69,
+    70,
+    [
+     "|Feature|Default|What it adds|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    70,
+    71
+   ],
+   [
+    "replace",
+    72,
+    86,
+    71,
+    85,
+    [
+     "|`s3_backup`|on|Backup, restore and PITR to an object store, and the `BACKUP`/`RESTORE` statements. Implies `storage_pools`|",
+     "|`pg_import`|on|The PostgreSQL frontend client and `IMPORT DATABASE FROM POSTGRES`|",
+     "|`storage_pools`|on|Multi-directory placement, mirroring, and the `STORAGE` statements|",
+     "|`kv_storage`|on|A table kept in a key/value store rather than in files, and the `kv:` placement spec. Implies `storage_pools`|",
+     "|`kv_storage_s3`|on|The S3 backing store for `kv_storage`. Implies `kv_storage` and `s3_backup`|",
+     "|`kv_cache`|on|A Redis-compatible key/value store: `KV …` statements, and the Redis protocol on `--kv-port`|",
+     "|`mysql_wire`|on|The MySQL / MariaDB client protocol on `--mysql-port` / `--mysql-socket`|",
+     "|`mssql_wire`|on|The SQL Server (TDS) client protocol on `--mssql-port` / `--mssql-socket`|",
+     "|`query_stats`|on|`SHOW QUERIES`, `SHOW QUERY STATS` and `pg_stat_statements`|",
+     "|`db_branching`|on|`CREATE BRANCH`, `RESET`/`PROMOTE`/`DROP BRANCH`, `SHOW BRANCH DIFF`, `MERGE BRANCH`, `AS OF`. Implies `s3_backup`|",
+     "|`replication_compression`|on|Zstd on replication links; a node without it still interoperates, uncompressed|",
+     "|`memory_pool_reuse`|on|Thread-local free lists in the buffer pool|",
+     "|`enable_long_row`|off|Rows above the standard width cap|",
+     "|`enable_data_verification`|off|Extra checksums on the read path|"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    114,
+    85,
+    113
+   ],
+   [
+    "replace",
+    114,
+    117,
+    113,
+    116,
+    [
+     " location directory holds (`postgres` by default); others are created with",
+     " `CREATE DATABASE` and live in subdirectories of it. A name that does not exist",
+     " is refused rather than silently served the default."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    116,
+    117
+   ],
+   [
+    "replace",
+    118,
+    120,
+    117,
+    119,
+    [
+     " `require`, which refuses a cleartext connection instead of downgrading it. With",
+     " no certificate given, a self-signed one is generated at start-up."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    119,
+    120
+   ],
+   [
+    "replace",
+    121,
+    123,
+    120,
+    122,
+    [
+     " time a database's role catalogue is empty; after that, use `CREATE USER`.",
+     " Roles are per database."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    122,
+    123
+   ],
+   [
+    "replace",
+    124,
+    125,
+    123,
+    124,
+    [
+     " host."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    151,
+    124,
+    150
+   ],
+   [
+    "replace",
+    151,
+    155,
+    150,
+    151,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    161,
+    151,
+    157
+   ],
+   [
+    "replace",
+    161,
+    162,
+    157,
+    158,
+    [
+     "|Flag|Default||"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    158,
+    159
+   ],
+   [
+    "replace",
+    163,
+    170,
+    159,
+    166,
+    [
+     "|`--mysql-port`, `--mssql-port`|off|TCP port to serve on|",
+     "|`--mysql-addr`, `--mssql-addr`|`127.0.0.1`|Address to listen on|",
+     "|`--mysql-socket`, `--mssql-socket`|off|Unix socket (`--socket-mode`, `--socket-group` apply)|",
+     "|`--mysql-auth`, `--mssql-auth`|`password`|`password` or `trust`|",
+     "|`--mysql-socket-auth`, `--mssql-socket-auth`|the TCP method|Authentication on the socket|",
+     "|`--mysql-tls`, `--mssql-tls`|`prefer`|`disable`, `prefer` or `require`|",
+     "|`--mysql-cert`/`--mysql-key`, `--mssql-cert`/`--mssql-key`|`--pg-cert`/`--pg-key`, else self-signed|TLS certificate|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    194,
+    166,
+    190
+   ],
+   [
+    "replace",
+    194,
+    195,
+    190,
+    191,
+    [
+     "docs/mysql-and-sql-server.md for what each"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    202,
+    191,
+    198
+   ],
+   [
+    "replace",
+    202,
+    203,
+    198,
+    199,
+    [
+     "See `docs/mysql-and-sql-server.md` for what is"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    210,
+    199,
+    206
+   ],
+   [
+    "replace",
+    210,
+    211,
+    206,
+    207,
+    [
+     " case-insensitive resolution, arithmetic, `SELECT DISTINCT`."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    212,
+    207,
+    208
+   ],
+   [
+    "replace",
+    212,
+    215,
+    208,
+    211,
+    [
+     " with parentheses, `IN`, `NOT IN`, `BETWEEN`, `LIKE` and `ILIKE` with the full",
+     " pattern language, and `SIMILAR TO` with alternation, grouping, quantifiers",
+     " and bracket expressions."
+    ]
+   ],
+   [
+    "equal",
+    215,
+    216,
+    211,
+    212
+   ],
+   [
+    "replace",
+    216,
+    219,
+    212,
+    215,
+    [
+     " and geometry; `<<`, `<<=`, `>>` and `>>=` over networks; `@@` for text search.",
+     " An operator with no meaning for its operands is an **error**, not `false` —",
+     " answering `false` would drop every row and look like an empty table."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    215,
+    216
+   ],
+   [
+    "replace",
+    220,
+    224,
+    216,
+    220,
+    [
+     " **composite keys** (`ON a.x = b.x AND a.y = b.y`), which every junction table",
+     " needs. Executed as a hash join over materialised rows, each relation scanned",
+     " once with its own share of the `WHERE` pushed down, so filter pruning still",
+     " applies per relation."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    225,
+    220,
+    221
+   ],
+   [
+    "replace",
+    225,
+    227,
+    221,
+    223,
+    [
+     " `HAVING`, over a single table or a join. `SUM` and `AVG` over an exact type",
+     " stay exact, so a money column keeps its cents."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    223,
+    224
+   ],
+   [
+    "replace",
+    228,
+    234,
+    224,
+    230,
+    [
+     " `PERCENT_RANK`, `CUME_DIST`), the value calls (`LAG`, `LEAD`, `FIRST_VALUE`,",
+     " `LAST_VALUE`, `NTH_VALUE`) and the aggregates over a window, with `ROWS` and",
+     " `RANGE` frames. Not an aggregate: every row survives and gains a column",
+     " computed from the rows around it. The default frame follows PostgreSQL's, so",
+     " `SUM(x) OVER (ORDER BY t)` is a running total and `SUM(x) OVER ()` is the",
+     " partition total."
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    230,
+    231
+   ],
+   [
+    "replace",
+    235,
+    240,
+    231,
+    236,
+    [
+     " `phraseto_tsquery`, `websearch_to_tsquery`, `ts_rank` and `@@`, with",
+     " PostgreSQL's `english` stop-word list and Snowball stemmer, so a query for",
+     " `runs` finds a document that said `running`. `CREATE INDEX … USING gin",
+     " (to_tsvector('english', title || ' ' || body))` indexes it: a match over",
+     " any of those columns in that configuration is answered from the index."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    241,
+    236,
+    237
+   ],
+   [
+    "replace",
+    241,
+    243,
+    237,
+    239,
+    [
+     " pre-12 semantics: an optimisation fence, evaluated once however many times it",
+     " is referenced."
+    ]
+   ],
+   [
+    "equal",
+    243,
+    244,
+    239,
+    240
+   ],
+   [
+    "replace",
+    244,
+    245,
+    240,
+    241,
+    [
+     " as a literal list so filter pruning still applies."
+    ]
+   ],
+   [
+    "equal",
+    245,
+    246,
+    241,
+    242
+   ],
+   [
+    "replace",
+    246,
+    248,
+    242,
+    244,
+    [
+     " direction, including expressions and keys that are not selected; `LIMIT`,",
+     " `OFFSET`, and the `FETCH FIRST … ROWS ONLY` spellings."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    244,
+    245
+   ],
+   [
+    "replace",
+    249,
+    251,
+    245,
+    247,
+    [
+     " `DELETE`, `DELETE … USING`, `ON CONFLICT DO UPDATE`, and `RETURNING` on all of",
+     " them — where a returned item may be an expression, not only a column."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    252,
+    247,
+    248
+   ],
+   [
+    "replace",
+    252,
+    254,
+    248,
+    250,
+    [
+     " `MOD`, `array_length`, `array_ndims`, and `::` casts — over a column as well",
+     " as a literal — in projections, predicates and `RETURNING`."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    255,
+    250,
+    251
+   ],
+   [
+    "replace",
+    255,
+    257,
+    251,
+    253,
+    [
+     " `timestamp ± interval` moves the **calendar**: 31 January plus a month is",
+     " 28 February, not 3 March."
+    ]
+   ],
+   [
+    "equal",
+    257,
+    258,
+    253,
+    254
+   ],
+   [
+    "replace",
+    258,
+    263,
+    254,
+    259,
+    [
+     " `DEFAULT CURRENT_TIMESTAMP` means the time of the insert, and likewise",
+     " `clock_timestamp()`, `CURRENT_DATE` and `CURRENT_TIME`), primary keys,",
+     " single- and multi-column `UNIQUE`, foreign keys, and `CHECK` — all",
+     " **enforced** rather than merely accepted. A `CHECK` that evaluates to NULL",
+     " passes, which is PostgreSQL's rule and the opposite of a `WHERE` clause."
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    259,
+    260
+   ],
+   [
+    "replace",
+    264,
+    266,
+    260,
+    262,
+    [
+     " row as it will be stored, so it sees the values defaults filled in. A",
+     " client-supplied value for one is refused, as PostgreSQL refuses it."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    262,
+    263
+   ],
+   [
+    "replace",
+    267,
+    276,
+    263,
+    272,
+    [
+     " what PostgreSQL expands them to: an integer column, `NOT NULL`, defaulting to",
+     " the next value of a sequence made with the table. As in PostgreSQL, a value",
+     " written explicitly into the column does not advance the sequence, so a later",
+     " default can repeat it. After a restart a plain table's sequence resumes above",
+     " the largest value stored, while a hash-partitioned table's resumes from a",
+     " durable reservation: exactly after a clean shutdown, and up to 1,024 values",
+     " further after a crash (a gap, as PostgreSQL's sequences leave). Only the",
+     " table whose `SERIAL` made the sequence reserves it: a second table that shares",
+     " it through a hand-written `DEFAULT nextval('…')` does not."
+    ]
+   ],
+   [
+    "equal",
+    276,
+    277,
+    272,
+    273
+   ],
+   [
+    "replace",
+    277,
+    278,
+    273,
+    274,
+    [
+     " `ADD`/`DROP`/`RENAME COLUMN` and `ALTER … TYPE … USING`."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    274,
+    275
+   ],
+   [
+    "replace",
+    279,
+    280,
+    275,
+    276,
+    [
+     " statement names one, so tools that introspect `pg_catalog` work."
+    ]
+   ],
+   [
+    "equal",
+    280,
+    281,
+    276,
+    277
+   ],
+   [
+    "replace",
+    281,
+    283,
+    277,
+    279,
+    [
+     " built from the engine's own statement log, plus a `rows_scanned` column",
+     " PostgreSQL has no counterpart for."
+    ]
+   ],
+   [
+    "equal",
+    283,
+    289,
+    279,
+    285
+   ],
+   [
+    "replace",
+    289,
+    291,
+    285,
+    287,
+    [
+     " column bytes and literals and has nowhere to evaluate an expression per row —",
+     " which is why `to_tsvector(…)` works in a select list but not in a predicate."
+    ]
+   ],
+   [
+    "equal",
+    291,
+    296,
+    287,
+    292
+   ],
+   [
+    "replace",
+    296,
+    297,
+    292,
+    293,
+    [
+     "See docs/postgres-compatibility.md for the"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    322,
+    293,
+    318
+   ],
+   [
+    "replace",
+    322,
+    323,
+    318,
+    319,
+    [
+     "See docs/mvcc.md."
+    ]
+   ],
+   [
+    "equal",
+    323,
+    364,
+    319,
+    360
+   ],
+   [
+    "replace",
+    364,
+    365,
+    360,
+    361,
+    [
+     "docs/indexes.md."
+    ]
+   ],
+   [
+    "equal",
+    365,
+    393,
+    361,
+    389
+   ],
+   [
+    "replace",
+    393,
+    394,
+    389,
+    390,
+    [
+     "See docs/bit-bloom-filter-design.md for the"
+    ]
+   ],
+   [
+    "equal",
+    394,
+    434,
+    390,
+    430
+   ],
+   [
+    "replace",
+    434,
+    435,
+    430,
+    431,
+    [
+     "See docs/space-reclamation.md."
+    ]
+   ],
+   [
+    "equal",
+    435,
+    455,
+    431,
+    451
+   ],
+   [
+    "replace",
+    455,
+    456,
+    451,
+    452,
+    [
+     "`rasterizeddb_client` crate, which does not compile the"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    467,
+    452,
+    463
+   ],
+   [
+    "replace",
+    467,
+    474,
+    463,
+    464,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    474,
+    511,
+    464,
+    501
+   ],
+   [
+    "replace",
+    511,
+    514,
+    501,
+    504,
+    [
+     " there is no legacy peer to accommodate and no reason to keep TLS 1.2's",
+     " negotiable ciphers and downgrade dances. 0-RTT early data is off, because a",
+     " replayed request here is a repeated write."
+    ]
+   ],
+   [
+    "equal",
+    514,
+    515,
+    504,
+    505
+   ],
+   [
+    "replace",
+    515,
+    517,
+    505,
+    507,
+    [
+     " for drivers that speak nothing else; `--rdb-auth` takes `scram-sha-256`",
+     " (default) or `trust` and refuses the other two."
+    ]
+   ],
+   [
+    "equal",
+    517,
+    518,
+    507,
+    508
+   ],
+   [
+    "replace",
+    518,
+    522,
+    508,
+    512,
+    [
+     " the exchange safe even though the client does not verify the server's",
+     " self-signed certificate by default: an attacker who intercepts the connection",
+     " cannot relay the exchange onto their own connection to the real server,",
+     " because the proof is bound to the connection it was made on."
+    ]
+   ],
+   [
+    "equal",
+    522,
+    523,
+    512,
+    513
+   ],
+   [
+    "replace",
+    523,
+    524,
+    513,
+    514,
+    [
+     " through without a challenge."
+    ]
+   ],
+   [
+    "equal",
+    524,
+    525,
+    514,
+    515
+   ],
+   [
+    "replace",
+    525,
+    526,
+    515,
+    516,
+    [
+     " to the log in full — their text contains a password."
+    ]
+   ],
+   [
+    "equal",
+    526,
+    539,
+    516,
+    529
+   ],
+   [
+    "replace",
+    539,
+    540,
+    529,
+    530,
+    [
+     "|Listener|Socket|Turn TCP off|How callers on the socket log in|"
+    ]
+   ],
+   [
+    "equal",
+    540,
+    541,
+    530,
+    531
+   ],
+   [
+    "replace",
+    541,
+    544,
+    531,
+    534,
+    [
+     "|Native (`rasterizeddb_client`)|`--rdb-socket PATH`|`--rdb-tcp off`|`--rdb-socket-auth` (defaults to `--rdb-auth`)|",
+     "|Redis protocol|`--kv-socket PATH`|leave out `--kv-port`|`--kv-auth`|",
+     "|PostgreSQL|`--pg-socket-dir DIR`|`--pg-tcp off`|`--pg-socket-auth` (defaults to `--pg-auth`)|"
+    ]
+   ],
+   [
+    "equal",
+    544,
+    557,
+    534,
+    547
+   ],
+   [
+    "replace",
+    557,
+    559,
+    547,
+    549,
+    [
+     " its name is the operating-system user connecting, which the kernel reports.",
+     " The role must exist and be allowed to log in."
+    ]
+   ],
+   [
+    "equal",
+    559,
+    560,
+    549,
+    550
+   ],
+   [
+    "replace",
+    560,
+    562,
+    550,
+    552,
+    [
+     " its owner and group (`660` yes, `666` no), as it is allowed on TCP only on",
+     " loopback."
+    ]
+   ],
+   [
+    "equal",
+    562,
+    563,
+    552,
+    553
+   ],
+   [
+    "replace",
+    563,
+    565,
+    553,
+    555,
+    [
+     " start-up. One another server is listening on, or a path that is not a socket,",
+     " is refused rather than taken. The file is removed at shutdown."
+    ]
+   ],
+   [
+    "equal",
+    565,
+    575,
+    555,
+    565
+   ],
+   [
+    "replace",
+    575,
+    576,
+    565,
+    566,
+    [
+     "A pgAdmin-style console for RasterizedDB, written in iced."
+    ]
+   ],
+   [
+    "equal",
+    576,
+    588,
+    566,
+    578
+   ],
+   [
+    "replace",
+    588,
+    589,
+    578,
+    579,
+    [
+     "server can actually change. See rdb_studio/README.md."
+    ]
+   ],
+   [
+    "equal",
+    589,
+    598,
+    579,
+    588
+   ],
+   [
+    "replace",
+    598,
+    613,
+    588,
+    589,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    613,
+    615,
+    589,
+    591
+   ],
+   [
+    "replace",
+    615,
+    616,
+    591,
+    592,
+    [
+     "See docs/introspection.md for what each figure means"
+    ]
+   ],
+   [
+    "equal",
+    616,
+    628,
+    592,
+    604
+   ],
+   [
+    "replace",
+    628,
+    632,
+    604,
+    605,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    632,
+    654,
+    605,
+    627
+   ],
+   [
+    "replace",
+    654,
+    662,
+    627,
+    628,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    668,
+    628,
+    634
+   ],
+   [
+    "replace",
+    668,
+    669,
+    634,
+    635,
+    [
+     "See docs/replication.md for the wire format, the"
+    ]
+   ],
+   [
+    "equal",
+    669,
+    698,
+    635,
+    664
+   ],
+   [
+    "replace",
+    698,
+    703,
+    664,
+    669,
+    [
+     "|policy|what it does|",
+     "|---|---|",
+     "|`primary` (default)|always the first enabled primary|",
+     "|`round-robin`|the enabled primary holding the fewest tables|",
+     "|`free-space`|the enabled primary with the most available bytes, weighted|"
+    ]
+   ],
+   [
+    "equal",
+    703,
+    715,
+    669,
+    681
+   ],
+   [
+    "replace",
+    715,
+    730,
+    681,
+    682,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    730,
+    739,
+    682,
+    691
+   ],
+   [
+    "replace",
+    739,
+    747,
+    691,
+    692,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    747,
+    752,
+    692,
+    697
+   ],
+   [
+    "replace",
+    752,
+    753,
+    697,
+    698,
+    [
+     "move says which. See docs/kv-storage.md."
+    ]
+   ],
+   [
+    "equal",
+    753,
+    765,
+    698,
+    710
+   ],
+   [
+    "replace",
+    765,
+    766,
+    710,
+    711,
+    [
+     "The STORAGE tab in rdb_studio is the same"
+    ]
+   ],
+   [
+    "equal",
+    766,
+    773,
+    711,
+    718
+   ],
+   [
+    "replace",
+    773,
+    774,
+    718,
+    719,
+    [
+     "See docs/storage-pools.md for the on-disk format, what"
+    ]
+   ],
+   [
+    "equal",
+    774,
+    798,
+    719,
+    743
+   ],
+   [
+    "replace",
+    798,
+    799,
+    743,
+    744,
+    [
+     "See docs/kv-storage.md for the object layout, the"
+    ]
+   ],
+   [
+    "equal",
+    799,
+    819,
+    744,
+    764
+   ],
+   [
+    "replace",
+    819,
+    820,
+    764,
+    765,
+    [
+     "`--kv-persist` snapshot it. See docs/kv-cache.md for the"
+    ]
+   ],
+   [
+    "equal",
+    820,
+    859,
+    765,
+    804
+   ],
+   [
+    "replace",
+    859,
+    860,
+    804,
+    805,
+    [
+     "it. See docs/s3-backup.md for the design, the full flag"
+    ]
+   ],
+   [
+    "equal",
+    860,
+    871,
+    805,
+    816
+   ],
+   [
+    "replace",
+    871,
+    876,
+    816,
+    817,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    876,
+    888,
+    817,
+    829
+   ],
+   [
+    "replace",
+    888,
+    889,
+    829,
+    830,
+    [
+     "for all of it. See docs/branching.md."
+    ]
+   ],
+   [
+    "equal",
+    889,
+    901,
+    830,
+    842
+   ],
+   [
+    "replace",
+    901,
+    906,
+    842,
+    843,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    906,
+    948,
+    843,
+    885
+   ],
+   [
+    "replace",
+    948,
+    949,
+    885,
+    886,
+    [
+     "See docs/postgres-import.md for the type mapping, the"
+    ]
+   ],
+   [
+    "equal",
+    949,
+    953,
+    886,
+    890
+   ],
+   [
+    "replace",
+    953,
+    954,
+    890,
+    891,
+    [
+     "The native-protocol client SDK is `rasterizeddb_client` on crates.io: typed queries, transactions, an ORM, migrations and the key/value API. Any PostgreSQL, MySQL or SQL Server driver works against the matching listener too."
+    ]
+   ],
+   [
+    "equal",
+    954,
+    1005,
+    891,
+    942
+   ],
+   [
+    "replace",
+    1005,
+    1006,
+    942,
+    943,
+    [
+     "`rasterizeddb_embedded` runs the whole engine in-process and hands you a `rasterizeddb_client::Client` for it:"
+    ]
+   ],
+   [
+    "equal",
+    1006,
+    1014,
+    943,
+    951
+   ],
+   [
+    "replace",
+    1014,
+    1015,
+    951,
+    952,
+    [
+     "How releases are cut (crates and executables): docs/releasing.md."
+    ]
+   ],
+   [
+    "equal",
+    1015,
+    1017,
+    952,
+    954
+   ],
+   [
+    "replace",
+    1017,
+    1020,
+    954,
+    955,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1020,
+    1022,
+    955,
+    957
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "98307ba4d6d0+2": {
+  "fn": "darkterminal/turso-php-installer",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Turso PHP Installer"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    8,
+    2,
+    3,
+    [
+     " Turso PHP Installer "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    3,
+    4
+   ],
+   [
+    "replace",
+    9,
+    15,
+    4,
+    5,
+    [
+     " A Composer package and Laravel Zero CLI that installs the native libSQL PHP extension on Linux and macOS."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    5,
+    6
+   ],
+   [
+    "replace",
+    16,
+    17,
+    6,
+    10,
+    [
+     " MIT License",
+     " Release",
+     " Total downloads",
+     " Contributors"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    20,
+    10,
+    13
+   ],
+   [
+    "replace",
+    20,
+    21,
+    13,
+    14,
+    [
+     "**turso-php-installer** downloads the prebuilt libSQL extension for your PHP runtime and wires it into `php.ini`. It also ships local development helpers: database tokens, server certificates and local `sqld` environments."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    27,
+    14,
+    20
+   ],
+   [
+    "delete",
+    27,
+    29,
+    20,
+    20
+   ],
+   [
+    "equal",
+    29,
+    31,
+    20,
+    22
+   ],
+   [
+    "replace",
+    31,
+    37,
+    22,
+    28,
+    [
+     "|PHP Versions|Build Versions|",
+     "|------------|--------------|",
+     "|8.2|TS / NTS|",
+     "|8.3|TS / NTS|",
+     "|8.4|TS / NTS|",
+     "|8.5|TS / NTS|"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    28,
+    31
+   ],
+   [
+    "replace",
+    40,
+    41,
+    31,
+    32,
+    [
+     "Supported on Linux (`x86_64`, `arm64`) and macOS. On Windows, use WSL or download the extension binary from the extension releases."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    43,
+    32,
+    34
+   ],
+   [
+    "delete",
+    43,
+    45,
+    34,
+    34
+   ],
+   [
+    "equal",
+    45,
+    86,
+    34,
+    75
+   ],
+   [
+    "delete",
+    86,
+    88,
+    75,
+    75
+   ],
+   [
+    "equal",
+    88,
+    92,
+    75,
+    79
+   ],
+   [
+    "replace",
+    92,
+    101,
+    79,
+    88,
+    [
+     "- Getting started",
+     "- Install",
+     "- Update",
+     "- Uninstall",
+     "- Local development workflow",
+     "- Tokens & local development",
+     "- Server certificates",
+     "- sqld local environments",
+     "- Laravel Sail guide"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    88,
+    89
+   ],
+   [
+    "replace",
+    102,
+    105,
+    89,
+    90,
+    [
+     "Canonical Sail stubs live in `stubs/sail/`."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    115,
+    90,
+    100
+   ],
+   [
+    "delete",
+    115,
+    117,
+    100,
+    100
+   ],
+   [
+    "equal",
+    117,
+    119,
+    100,
+    102
+   ],
+   [
+    "replace",
+    119,
+    123,
+    102,
+    104,
+    [
+     "- Report issues on GitHub Issues",
+     "- Sponsor via GitHub Sponsors or Saweria"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    125,
+    104,
+    106
+   ],
+   [
+    "replace",
+    125,
+    127,
+    106,
+    107,
+    [
+     "This project is open-sourced under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "bf7e2418dcee+2": {
+  "fn": "oceanbase/seekdb-bindings",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "C library, CLI, Python, Java, Android, and Node.js bindings for seekdb."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    12,
+    3,
+    12
+   ],
+   [
+    "replace",
+    12,
+    21,
+    12,
+    13,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    44,
+    13,
+    36
+   ],
+   [
+    "replace",
+    44,
+    45,
+    36,
+    37,
+    [
+     "|target|output|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    37,
+    38
+   ],
+   [
+    "replace",
+    46,
+    53,
+    38,
+    45,
+    [
+     "|`make seekdb`|`libseekdb` (shared; `libseekdb_driver` symlink for compatibility)|",
+     "|`make seekdb_cli`|`seekdb_cli` (interactive SQL client)|",
+     "|`make pylibseekdb`|`pylibseekdb.cpython-*.so` (Python extension)|",
+     "|`make seekdb_tests`|`test_one_client_process`, `test_two_clients_threads`|",
+     "|`make wheel`|`wheelhouse/pylibseekdb-*.whl` via cibuildwheel (runs Python integration tests per wheel)|",
+     "|`make verify-wheel`|Re-run Python integration tests against wheels in `build/wheelhouse/`|",
+     "|`make`|everything above|"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    84,
+    45,
+    76
+   ],
+   [
+    "replace",
+    84,
+    90,
+    76,
+    77,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    112,
+    77,
+    99
+   ],
+   [
+    "replace",
+    112,
+    113,
+    99,
+    100,
+    [
+     "|option|default|what it does|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    100,
+    101
+   ],
+   [
+    "replace",
+    114,
+    117,
+    101,
+    104,
+    [
+     "|`SEEKDB_DRIVER_ENABLE_LOG`|OFF|enables `tlog()` debug prints in libseekdb|",
+     "|`SEEKDB_BIN`|`$SEEKDB_BIN` env|path to the seekdb binary|",
+     "|`SEEKDB_BUILD_PYTHON`|ON|configure the Python extension; set OFF for a C-only build/package|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    154,
+    104,
+    141
+   ],
+   [
+    "replace",
+    154,
+    160,
+    141,
+    147,
+    [
+     "|Target|Packages|Minimum runtime|",
+     "|---|---|---|",
+     "|Linux x86_64 / aarch64|C SDK, Python wheels, Node.js tarball, Java/JNI archive|glibc 2.28|",
+     "|macOS arm64|C SDK, Python wheels, Node.js tarball, Java/JNI archive|macOS 15.0|",
+     "|Windows x86_64|C SDK, Python wheels, Node.js tarball, Java/JNI archive|Windows 10, MSVC `/MD`|",
+     "|Android arm64|C SDK, Java classes and JNI/engine AAR|Android 9 / API 28|"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    223,
+    147,
+    210
+   ],
+   [
+    "replace",
+    223,
+    242,
+    210,
+    211,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    262,
+    211,
+    231
+   ],
+   [
+    "replace",
+    262,
+    293,
+    231,
+    232,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    232,
+    233
+   ],
+   [
+    "replace",
+    294,
+    296,
+    233,
+    235,
+    [
+     "sha256sum -c libseekdb-*.tar.gz.sha256 # Linux",
+     "shasum -a 256 -c libseekdb-*.tar.gz.sha256 # macOS"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    309,
+    235,
+    248
+   ],
+   [
+    "replace",
+    309,
+    314,
+    248,
+    249,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    320,
+    249,
+    255
+   ],
+   [
+    "replace",
+    320,
+    333,
+    255,
+    256,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    340,
+    256,
+    263
+   ],
+   [
+    "replace",
+    340,
+    350,
+    263,
+    264,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    372,
+    264,
+    286
+   ],
+   [
+    "replace",
+    372,
+    376,
+    286,
+    287,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    376,
+    385,
+    287,
+    296
+   ],
+   [
+    "replace",
+    385,
+    387,
+    296,
+    298,
+    [
+     " --seekdb-git-url https://github.com/oceanbase/seekdb.git \\",
+     " --seekdb-git-ref master"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    390,
+    298,
+    301
+   ],
+   [
+    "replace",
+    390,
+    391,
+    301,
+    302,
+    [
+     " --wheel-version 0.2.0 --platform linux --arch x86_64"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    395,
+    302,
+    306
+   ],
+   [
+    "replace",
+    395,
+    405,
+    306,
+    307,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    405,
+    419,
+    307,
+    321
+   ],
+   [
+    "replace",
+    419,
+    420,
+    321,
+    322,
+    [
+     " --seekdb-cmake-arg -DDEFAULT_LOG_LEVEL=OB_LOG_LEVEL_DBA_WARN"
+    ]
+   ],
+   [
+    "equal",
+    420,
+    422,
+    322,
+    324
+   ],
+   [
+    "replace",
+    422,
+    423,
+    324,
+    325,
+    [
+     " --seekdb-cmake-arg -DDEFAULT_LOG_LEVEL=OB_LOG_LEVEL_DBA_WARN"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    427,
+    325,
+    329
+   ],
+   [
+    "replace",
+    427,
+    432,
+    329,
+    330,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    432,
+    437,
+    330,
+    335
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

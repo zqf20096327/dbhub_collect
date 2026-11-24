@@ -3165,5 +3165,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "97b234e0a92f": {
+  "identity": {
+   "one_liner": "托管代码编写的 .NET 嵌入式键值存储，设计与 API 沿用 RocksDB",
+   "review": "Solarium 是用纯托管 C# 编写的嵌入式键值存储，数据库存于单个目录。它包含列族、跨列族原子写入批次、WAL、跳表 memtable、SSTable、分层压缩、范围删除与有序迭代器；memtable 与缓存数据块分配在 GC 堆外原生内存。原为 Kommander（Raft 库）的日志存储而建，可作为其无原生依赖的 WAL 后端，也可作 Kahuna 存储引擎。要求 .NET 10，磁盘格式尚可能变更，写入失败后需重新打开才能继续写入。",
+   "highlights": [
+    "写入通过 group commit 共享 WAL 追加与刷盘，读取基于跳表 memtable 无锁，所有成员可多线程调用",
+    "支持列族、跨列族原子批次、DeleteRange、检查点、带上界的迭代器，以及 LZ4 压缩和动态层级大小的 leveled compaction",
+    "校验和绑定块的表与偏移，撕裂的 WAL 尾部会被裁剪，损坏时抛出带 IsCorruption 的 SolariumException"
+   ],
+   "use_cases": [
+    "作为 Kommander Raft 库的 WAL 日志存储，替代 RocksDB 且无需原生库",
+    "作为 Kahuna 服务器的持久化后端与 Raft WAL，通过 --extension-assembly 加载",
+    "嵌入 .NET 10 应用中，需要一个目录式、支持列族与原子批次的键值存储"
+   ]
+  },
+  "sha": "97b234e0a92f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

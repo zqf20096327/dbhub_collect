@@ -3408,5 +3408,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6c0db288c47e": {
+  "identity": {
+   "one_liner": "通过 Postgres 逻辑复制监听 WAL 的 Elixir CDC 库",
+   "review": "WalEx 是一个 Elixir 库，通过 PostgreSQL 逻辑复制监听预写日志（WAL），在行发生插入、更新或删除时调用用户以 DSL 声明的 Elixir 处理函数。安装需在 mix.exs 添加依赖，数据库端需开启 wal_level=logical 并创建 publication。支持持久复制槽、处理完成后确认（at-least-once，需 PG 13+）、TLS 与遥测。适用于已在 Elixir 应用内直接消费数据库变更事件的场景。",
+   "highlights": [
+    "通过逻辑复制监听 PostgreSQL WAL，捕获行的插入、更新、删除事件，并以 DSL 声明处理模块",
+    "提供 durable_slot（跨断连保留复制槽）与 ack_after_processing（处理完成后确认，at-least-once，需 PostgreSQL 13+）等投递保证选项",
+    "支持通过 url 或分项连接参数配置，包含 TLS、槽名、背压（back-pressure）与 Telemetry 等配置项"
+   ],
+   "use_cases": [
+    "在 Elixir 应用中直接订阅 PostgreSQL 表变更事件并触发业务函数",
+    "需要对指定表或全部表（[:all_tables]）建立变更订阅的场景",
+    "需要跨断连保持复制槽、处理失败后重放事件的投递保证场景"
+   ]
+  },
+  "sha": "6c0db288c47e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e96692962c86": {
+  "identity": {
+   "one_liner": "演示分页模式的 Next.js 示例项目：服务端分页、无限滚动与数据表格",
+   "review": "该项目是一个分页模式演示应用，展示服务端分页、无限滚动以及带三种数据策略的表格。技术栈为 Next.js 16（App Router）、React 19、Prisma 7 与 PostgreSQL 18，UI 采用 Tailwind CSS v4 与 shadcn/ui，使用 pnpm 管理依赖。README 可见部分未包含安装与运行步骤，开发者可将其作为分页实现的参考示例。",
+   "highlights": [
+    "实现服务端分页、无限滚动与高级数据表格三种分页模式",
+    "数据层使用 Prisma 7 配合 PostgreSQL 18（@prisma/adapter-pg）",
+    "前端基于 Tailwind CSS v4 与 shadcn/ui 组件，含 TanStack Table v9 与 Zod 4"
+   ],
+   "use_cases": [
+    "学习 Next.js App Router 下的服务端分页实现",
+    "参考无限滚动与数据表格的分页数据策略",
+    "了解 Prisma 与 PostgreSQL 结合的分页查询用法"
+   ]
+  },
+  "sha": "e96692962c86",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fad1d966f79e": {
+  "identity": {
+   "one_liner": "面向新加坡SkillsFuture培训生态的自托管AI学习与培训管理系统",
+   "review": "这是一个基于Next.js、TypeScript和PostgreSQL的自托管学习与培训管理系统，面向新加坡SkillsFuture生态的培训机构、讲师和学员。它提供SSG/TPGateway API对接、七种角色仪表盘、二维码签到考勤、QuickBooks财务集成、多租户Docker部署，以及可切换OpenAI/Claude的AI功能，支持外部代理通过WhatsApp/Telegram访问。",
+   "highlights": [
+    "支持SkillsFuture Singapore API，覆盖课程、报名、评估、资助与申领流程",
+    "提供7种角色（学员、讲师、管理员等）的专属仪表盘，并以Docker在Coolify上多租户部署",
+    "AI功能可由管理员选择OpenAI（Codex SDK）或Claude，含Claude回退重试，凭据在服务端加密"
+   ],
+   "use_cases": [
+    "新加坡培训机构管理课程发布、报名、考勤与SSG合规申报",
+    "多租户培训提供商的统一系统部署与运营",
+    "培训财务处理：发票、QuickBooks集成与资助申领跟踪"
+   ]
+  },
+  "sha": "fad1d966f79e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5ff862176e7d": {
+  "identity": {
+   "one_liner": "PostgreSQL 中文转拼音扩展，基于 Rust 与 pgrx，支持按字/按词罗马化",
+   "review": "pg_pinyin 是一个 PostgreSQL 扩展，包含 SQL 基线脚本和 Rust (pgrx) 实现两部分，提供 pinyin_char_romanize、pinyin_word_romanize、批量罗马化等函数，并可与 pg_search、pg_trgm 配合构建拼音查询。需 PostgreSQL 15 及以上；pg_search 相关查询助手要求先启用 pg_search，否则安装为错误占位。升级迁移保留已有词典和生成值。",
+   "highlights": [
+    "提供按字（pinyin_char_romanize）与按词（pinyin_word_romanize，含批量与 tokenizer 重载）罗马化函数",
+    "提供 pinyin_regex_phrase 等查询助手，支持 full/initials/autocomplete/auto/compat 显式模式、声调与 ü 归一化、撇号音节边界",
+    "函数标记为 IMMUTABLE、STRICT、PARALLEL SAFE；Rust 后端使用内嵌数据，无运行时 SPI"
+   ],
+   "use_cases": [
+    "为存储中文文本的表生成拼音列或函数表达式索引",
+    "结合 pg_search 或 pg_trgm 实现按拼音全文检索（含首字母、自动补全查询）",
+    "批量将独立文本文档转为拼音文本数组"
+   ]
+  },
+  "sha": "5ff862176e7d",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dc208935142c": {
+  "identity": {
+   "one_liner": "以代理（agentic）流程开发音频软件的开源项目，含磁带延迟插件与硬件测量工具",
+   "review": "TidBank 是一个由 AI 代理驱动开发的音频软件项目，包含磁带延迟效果（TidBank）、循环器（Reels）、立体声滤波器（Filtær）及离线测量工具。DSP 核心为 header-only C++17，插件以 JUCE 9 封装，支持 macOS arm64（VST3/AU/Standalone）与 Linux x86_64（VST3/Standalone）。仓库含 CLAUDE.md 和 skills 供代理使用，README 建议用户先做安全审计再运行。适用于学习代理式开发流程的开发者和音频插件使用者。",
+   "highlights": [
+    "DSP 核心为 header-only C++17，无 JUCE 依赖，prepare() 后无内存分配",
+    "包含离线渲染与数值测量工具（tools/ears/），用于量化时序、滑音、混叠、爆音、稳定性与频谱",
+    "提供 .claude/skills/ 目录，记录构建、测试、模型参数及已知问题供代理参考"
+   ],
+   "use_cases": [
+    "在 macOS/Linux DAW 中运行磁带延迟、循环器或立体声滤波器插件",
+    "学习基于测量的 agentic 软件开发流程（先写测量、代理复核、技能沉淀）",
+    "参考 tools/matriarch/ 中通过 MIDI 与音频测量真实合成器的方法，测试自己的电路模型"
+   ]
+  },
+  "sha": "dc208935142c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

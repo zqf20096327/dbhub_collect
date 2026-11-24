@@ -23311,5 +23311,1712 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "34af6850a573+2": {
+  "fn": "davefatkin/EinVault",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Ein, the EinVault mascot"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    1,
+    4
+   ],
+   [
+    "replace",
+    6,
+    8,
+    4,
+    6,
+    [
+     "License: MIT",
+     "Version"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    11,
+    6,
+    9
+   ],
+   [
+    "replace",
+    11,
+    12,
+    9,
+    10,
+    [
+     "Want a look before you self-host? There's a read-only demo at **demo.einvault.app**. Pick a role and explore; nothing you do there sticks."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    10,
+    12
+   ],
+   [
+    "replace",
+    14,
+    49,
+    12,
+    13,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    72,
+    13,
+    36
+   ],
+   [
+    "replace",
+    72,
+    73,
+    36,
+    37,
+    [
+     "EinVault dashboard"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    37,
+    40
+   ],
+   [
+    "replace",
+    76,
+    77,
+    40,
+    41,
+    [
+     "Companion overview"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    41,
+    44
+   ],
+   [
+    "replace",
+    80,
+    81,
+    44,
+    45,
+    [
+     "Caretaker dashboard"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    45,
+    46
+   ],
+   [
+    "replace",
+    82,
+    85,
+    46,
+    49,
+    [
+     "|Member dashboard (mobile)|Caretaker dashboard (mobile)|",
+     "|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------|",
+     "|Member dashboard mobile|Caretaker dashboard mobile|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    49,
+    50
+   ],
+   [
+    "replace",
+    86,
+    89,
+    50,
+    51,
+    [
+     "More screenshots"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    94,
+    51,
+    56
+   ],
+   [
+    "replace",
+    94,
+    95,
+    56,
+    57,
+    [
+     "Download `docker-compose.prod.yml` and set your domain before starting:"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    117,
+    57,
+    79
+   ],
+   [
+    "replace",
+    117,
+    135,
+    79,
+    97,
+    [
+     "||Default|Description|",
+     "|-----------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`TZ`|`UTC`|Container timezone. Set to your local timezone (e.g. `America/New_York`, `Europe/London`) so dates and times display correctly. Celebration notifications go out at 09:00 in this zone (UTC if unset).|",
+     "|`UPLOAD_MAX_MB`|`10`|Maximum size in MB for image (photo and avatar) uploads. `BODY_SIZE_LIMIT` is derived from the larger of this and `VIDEO_MAX_MB` at container start.|",
+     "|`VIDEO_MAX_MB`|`100`|Maximum size in MB for journal video uploads. Videos are stored as-is unless transcoding is enabled (see below).|",
+     "|`MAX_DAILY_MEDIA`|`5`|Maximum number of journal photos and videos (combined) per companion per day. (Renamed from `MAX_DAILY_PHOTOS`, still honored with a deprecation warning.)|",
+     "|`MAX_NOTE_MEDIA`|`10`|Maximum number of photos and videos (combined) attached to a single note.|",
+     "|`MAX_DOCUMENTS_PER_COMPANION`|`200`|Maximum number of documents (uploads and Paperless references combined) stored per companion.|",
+     "|`REMINDER_UNDO_SECONDS`|`7`|Default undo window (seconds) when dismissing a Reminder. `0` disables the undo window. Each user can override in their settings.|",
+     "|`CALENDAR_FEED_HISTORY_DAYS`|`90`|Days of past events the calendar feed includes. `0` includes all history (larger feeds).|",
+     "|`CALENDAR_FEED_ENABLED`|`true`|Set `false` to disable the calendar feed endpoint entirely.|",
+     "|`API_TOKENS_ENABLED`|`true`|Set `false` to disable the Bearer-token API (token creation and the `/api/logs`, `/api/journal`, `/api/quick-logs` endpoints) entirely.|",
+     "|`API_RATE_LIMIT_PER_MINUTE`|`30`|Bearer API requests allowed per client IP per minute. Behind a reverse proxy, set adapter-node's `ADDRESS_HEADER` so each client gets its own budget.|",
+     "|`DEMO_MODE`|`false`|Enable read-only public demo mode. See Running a demo instance.|",
+     "|`user`|`1000:1000`|UID:GID the container runs as. Change if your `./data` directory has different ownership.|",
+     "|`./data` volume|`./data`|Where the database and uploads are stored on the host.|",
+     "|`DATABASE_URL`|`/data/einvault.db`|Database path inside the container. Unlikely to need changing.|",
+     "|`TWOFA_ENC_KEY`|-|32-byte base64 key (`openssl rand -base64 32`) that encrypts stored TOTP secrets. Required to enable two-factor authentication.|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    146,
+    97,
+    108
+   ],
+   [
+    "replace",
+    146,
+    157,
+    108,
+    119,
+    [
+     "||Default|Description|",
+     "|-----------------------------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`VIDEO_TRANSCODE`|`false`|Enable background transcoding of uploaded videos to a web-playable MP4 plus a poster.|",
+     "|`VIDEO_KEEP_ORIGINAL`|`true`|Keep the original source file alongside the transcoded copy. The original is never served; it is retained for re-encoding or backup. `false` discards it.|",
+     "|`VIDEO_TRANSCODE_MAX_MB`|`VIDEO_MAX_MB`|Skip transcoding (store as-is) for inputs larger than this.|",
+     "|`VIDEO_TRANSCODE_MAX_SECONDS`|`600`|Skip transcoding for inputs longer than this.|",
+     "|`VIDEO_TRANSCODE_MAX_WIDTH`|`4096`|Skip transcoding for inputs wider than this.|",
+     "|`VIDEO_TRANSCODE_MAX_HEIGHT`|`4096`|Skip transcoding for inputs taller than this.|",
+     "|`VIDEO_FFMPEG_PATH`|`/usr/bin/ffmpeg`|Absolute path to the `ffmpeg` binary. Override if it lives elsewhere (e.g. `/opt/homebrew/bin/ffmpeg` on macOS).|",
+     "|`VIDEO_FFPROBE_PATH`|`/usr/bin/ffprobe`|Absolute path to the `ffprobe` binary.|",
+     "|`VIDEO_TMP_DIR`|`<data>/transcode-tmp`|Scratch directory for in-progress transcodes. Must be on disk with room for the source plus output. Do not point it at the in-memory `/tmp` tmpfs.|"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    166,
+    119,
+    128
+   ],
+   [
+    "replace",
+    166,
+    176,
+    128,
+    138,
+    [
+     "||Default|Description|",
+     "|------------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`STORAGE_BACKEND`|`local`|`local` writes to `./data/uploads`. `s3` writes new uploads to the configured bucket. Reads always honor the per-row provider, so switching does not invalidate old rows.|",
+     "|`S3_ENDPOINT`|-|Full endpoint URL, e.g. `https://s3.garage.example.com` or `https://s3.us-east-1.amazonaws.com`.|",
+     "|`S3_BUCKET`|-|Bucket name. Must already exist and should be private.|",
+     "|`S3_REGION`|`auto`|Region. For non-AWS providers, `auto` usually works.|",
+     "|`S3_ACCESS_KEY_ID`|-|Access key. Scope it to this bucket only.|",
+     "|`S3_SECRET_ACCESS_KEY`|-|Secret key.|",
+     "|`S3_FORCE_PATH_STYLE`|`false`|Set to `true` for Garage, MinIO, and older S3 deployments. Leave `false` for AWS and R2.|",
+     "|`S3_PRESIGN_TTL_SECONDS`|`300`|Lifetime of presigned download URLs. Shorter is stricter, longer improves browser cache reuse on reload.|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    183,
+    138,
+    145
+   ],
+   [
+    "replace",
+    183,
+    188,
+    145,
+    150,
+    [
+     "||Default|Description|",
+     "|-----------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`IMMICH_URL`|-|Base URL of your Immich server, e.g. `http://immich.local:2283`. No trailing slash. Required if `IMMICH_API_KEY` is set.|",
+     "|`IMMICH_API_KEY`|-|API key. Required permissions: `asset.read`, `asset.view`. Generate in Immich → Account Settings → API Keys. Required if `IMMICH_URL` is set.|",
+     "|`IMMICH_ALBUM_ID`|-|If set, the picker only shows assets in this album. If unset, the picker shows the user's most recent assets across the whole library.|"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    195,
+    150,
+    157
+   ],
+   [
+    "replace",
+    195,
+    196,
+    157,
+    158,
+    [
+     "When `PAPERLESS_URL` and `PAPERLESS_API_TOKEN` are set, members and admins get an \"Add from Paperless\" option on the Documents tab that searches a Paperless-ngx instance and attaches a document by reference. The document stays in Paperless; EinVault stores only a reference and proxies reads through the server using the token. EinVault never uploads to or deletes from Paperless. Caretakers cannot use the picker. EinVault serves the archived (OCR'd PDF) version of each referenced document."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    199,
+    158,
+    161
+   ],
+   [
+    "replace",
+    199,
+    204,
+    161,
+    166,
+    [
+     "||Default|Description|",
+     "|---------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`PAPERLESS_URL`|-|Base URL of your Paperless-ngx instance, e.g. `http://paperless.local:8000`. No trailing slash. Required if `PAPERLESS_API_TOKEN` is set.|",
+     "|`PAPERLESS_API_TOKEN`|-|API token. Generate in Paperless under Settings → \"My Profile\". Use a dedicated user limited to the documents you want visible. Required if `PAPERLESS_URL` is set.|",
+     "|`PAPERLESS_TAG_ID`|-|If set, only documents carrying this Paperless tag ID can be searched and imported. Strongly recommended; without it every member can search the whole library.|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    211,
+    166,
+    173
+   ],
+   [
+    "replace",
+    211,
+    219,
+    173,
+    181,
+    [
+     "||Default|Description|",
+     "|-------------|-------|-------------------------------------------------------------------------------------------------------------------------------|",
+     "|`SMTP_HOST`|-|SMTP server hostname. Required (with `SMTP_FROM`) to enable email.|",
+     "|`SMTP_PORT`|`587`|SMTP port. Use `465` with `SMTP_SECURE=true` for implicit TLS, or `587` (default) for STARTTLS.|",
+     "|`SMTP_SECURE`|`false`|`true` = implicit TLS (port 465). `false` = STARTTLS upgrade on connect.|",
+     "|`SMTP_USER`|-|SMTP username. Leave unset for unauthenticated relays.|",
+     "|`SMTP_PASS`|-|SMTP password. Leave unset for unauthenticated relays.|",
+     "|`SMTP_FROM`|-|RFC 5322 From address shown to recipients, e.g. `EinVault <einvault@example.com>`. Required (with `SMTP_HOST`) to enable email.|"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    222,
+    181,
+    184
+   ],
+   [
+    "replace",
+    222,
+    223,
+    184,
+    185,
+    [
+     "When `NTFY_URL` is set, EinVault can publish push notifications via ntfy. This configures the server only (base URL and optional access token). Each user sets their own topic name under Settings -> Notifications; a non-empty topic is that user's opt-in for pushes scoped to what they can see in the app (reminders due, shift alerts, celebrations). The notification scheduler runs when either SMTP or ntfy is configured. The forgot-password flow remains email-only."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    226,
+    185,
+    188
+   ],
+   [
+    "replace",
+    226,
+    231,
+    188,
+    193,
+    [
+     "||Default|Description|",
+     "|-------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`NTFY_URL`|-|ntfy server base URL, e.g. `https://ntfy.sh` or a self-hosted instance. No topic in the URL.|",
+     "|`NTFY_TOKEN`|-|Bearer token for self-hosted ntfy servers with auth enabled. Used for every publish regardless of topic.|",
+     "|`NOTIFY_SCAN_INTERVAL_MS`|`60000`|How often the notification scheduler scans for due reminders, shift alerts, and celebrations, in milliseconds. Values below 250 fall back to the default. Mainly useful for automated tests.|"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    260,
+    193,
+    222
+   ],
+   [
+    "replace",
+    260,
+    269,
+    222,
+    231,
+    [
+     "|||",
+     "|-------------------|---------------------------------------|",
+     "|Runs as root|No (runs as `node`, UID 1000)|",
+     "|`no-new-privileges`|Enabled|",
+     "|Linux capabilities|All dropped|",
+     "|Root filesystem|Read-only|",
+     "|Writable `/tmp`|tmpfs, 64 MB|",
+     "|CPU limit|0.5 cores (raise for video transcoding)|",
+     "|Memory limit|256 MB (raise for video transcoding)|"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    272,
+    231,
+    234
+   ],
+   [
+    "replace",
+    272,
+    279,
+    234,
+    241,
+    [
+     "|Tag|Description|",
+     "|--------------|---------------------------------------------------|",
+     "|`latest`|Latest stable release (published on version tags)|",
+     "|`x.y.z`|Pinned release|",
+     "|`x.y`|Latest patch of a minor release|",
+     "|`main`|Latest commit on `main`, unstable, for testing only|",
+     "|`sha-<commit>`|Specific commit build, useful for rollback|"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    282,
+    241,
+    244
+   ],
+   [
+    "replace",
+    282,
+    283,
+    244,
+    245,
+    [
+     "Each release image carries a Sigstore-signed SLSA provenance attestation and a SPDX SBOM, and only ships after Trivy clears the OS and library packages on both `linux/amd64` and `linux/arm64`. See SECURITY.md for the verification commands."
+    ]
+   ],
+   [
+    "equal",
+    283,
+    289,
+    245,
+    251
+   ],
+   [
+    "delete",
+    289,
+    291,
+    251,
+    251
+   ],
+   [
+    "equal",
+    291,
+    301,
+    251,
+    261
+   ],
+   [
+    "delete",
+    301,
+    303,
+    261,
+    261
+   ],
+   [
+    "equal",
+    303,
+    326,
+    261,
+    284
+   ],
+   [
+    "replace",
+    326,
+    335,
+    284,
+    285,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    354,
+    285,
+    304
+   ],
+   [
+    "delete",
+    354,
+    356,
+    304,
+    304
+   ],
+   [
+    "equal",
+    356,
+    361,
+    304,
+    309
+   ],
+   [
+    "delete",
+    361,
+    363,
+    309,
+    309
+   ],
+   [
+    "equal",
+    363,
+    374,
+    309,
+    320
+   ],
+   [
+    "replace",
+    374,
+    380,
+    320,
+    326,
+    [
+     "|Variable|Description|",
+     "|--------------------|---------------------------------------------------------------------------------------------------------------|",
+     "|`OIDC_ISSUER_URL`|IdP base URL. Discovery happens at `<issuer>/.well-known/openid-configuration`. e.g. `https://auth.example.com`|",
+     "|`OIDC_CLIENT_ID`|Client ID registered with your IdP.|",
+     "|`OIDC_CLIENT_SECRET`|Client secret. Omit for public clients (PKCE-only).|",
+     "|`OIDC_REDIRECT_URI`|Must match what's registered with the IdP. e.g. `https://einvault.yourdomain.com/auth/oidc/callback`|"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    383,
+    326,
+    329
+   ],
+   [
+    "replace",
+    383,
+    393,
+    329,
+    339,
+    [
+     "|Variable|Default|Description|",
+     "|-------------------------------|----------------------|-----------------------------------------------------------------------------------------------------------------|",
+     "|`OIDC_SCOPES`|`openid profile email`|Space-separated scopes requested from the IdP.|",
+     "|`OIDC_PROVIDER_NAME`|`SSO`|Display label on the login button.|",
+     "|`OIDC_ALLOW_SIGNUP`|`false`|If `true`, auto-creates accounts for users who authenticate but have no matching record. See below.|",
+     "|`OIDC_DEFAULT_ROLE`|`member`|Role assigned to auto-created users. Allowed: `member`, `caretaker`. Admin can only be granted via groups.|",
+     "|`OIDC_ADMIN_GROUPS`|_(unset)_|Comma-separated. Users whose `groups` claim contains any value here are promoted to admin on every login.|",
+     "|`OIDC_POST_LOGOUT_REDIRECT_URI`|_(unset)_|If set and the IdP advertises `end_session_endpoint`, logout triggers RP-initiated logout at the IdP.|",
+     "|`OIDC_STATE_SECRET`|_(random)_|Pin a long random string. Without it, in-flight logins break across server restarts.|",
+     "|`OIDC_ALLOW_INSECURE_HTTP`|`false`|Allows plain-HTTP issuer URLs. Exists for automated tests against a local mock IdP. Never set this in production.|"
+    ]
+   ],
+   [
+    "equal",
+    393,
+    417,
+    339,
+    363
+   ],
+   [
+    "replace",
+    417,
+    418,
+    363,
+    364,
+    [
+     "By default, logout destroys the local EinVault session and returns the user to `/auth/login`. Set `OIDC_POST_LOGOUT_REDIRECT_URI` (and register it with your IdP) to also end the IdP session via RP-initiated logout."
+    ]
+   ],
+   [
+    "equal",
+    418,
+    421,
+    364,
+    367
+   ],
+   [
+    "replace",
+    421,
+    429,
+    367,
+    373,
+    [
+     "|Provider|Notes|",
+     "|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|**Authelia**|Register the redirect URI under the OIDC client config. Set `client_secret_basic` (default) or `none` for public clients.|",
+     "|**Authentik**|Create an OAuth2/OIDC provider; scope mapping for `groups` is built-in. `OIDC_ADMIN_GROUPS` matches the `groups` claim directly.|",
+     "|**Keycloak**|Add a \"Group Membership\" mapper to the client with token claim name `groups` and \"Full group path\" off. EinVault does not read `realm_access.roles`. Add the redirect URI to \"Valid Redirect URIs\".|",
+     "|**PocketID**|Public-client first; omit `OIDC_CLIENT_SECRET`. Register the redirect URI in the client settings.|"
+    ]
+   ],
+   [
+    "equal",
+    429,
+    460,
+    373,
+    404
+   ],
+   [
+    "delete",
+    460,
+    462,
+    404,
+    404
+   ],
+   [
+    "equal",
+    462,
+    481,
+    404,
+    423
+   ],
+   [
+    "replace",
+    481,
+    506,
+    423,
+    448,
+    [
+     "|Method & path|Body|Purpose|",
+     "|-----------------------------------|---------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`GET /api/companions`|-|List the companions the token user may target (members/admins: all active; caretakers: assigned). Returns `{ companions: [...] }` with each companion's full profile. Use this to discover `companionId`s.|",
+     "|`GET /api/companions/{companionId}`|-|Get one companion. Full-scope tokens get the full profile; write-scope tokens get the minimal projection (no PII). An id the token can't reach reads as `404`, same as unknown, so it can't be used to probe which ids exist; an archived companion reads as `404` too, not as a retrievable \"deleted\" record. Returns `{ companion }`.|",
+     "|`POST /api/logs`|`{ companionId or companionIds, type, subtypes?, notes?, durationMinutes?, loggedAt? }`|Log a daily event. `type` is one of `walk`, `meal`, `bathroom`, `litter`, `treat`, `play`, `grooming`, `other`. Each species allows a subset (a cat has no `bathroom`, a dog no `litter`, and an `other` companion has neither those nor `walk`); a type any target companion can't have is rejected with `400 typeNotAllowedForSpecies`. `subtypes` is an optional array of kinds valid for that type (e.g. `[\"pee\"]` for `bathroom`, `[\"leash\"]` for `walk`; the full list per type is in `/api/docs`); a value that no target companion can take is rejected with `400 invalidSubtype`, and one that fits only some targets is kept for those and dropped for the rest. Returns `201 { ids, eventGroupId }`.|",
+     "|`GET /api/logs`|query `?companionId=&date=` (`date` optional `YYYY-MM-DD`)|Read back logged events for a companion, newest first. Each event includes its `subtypes` (`null` when none were logged). Returns `{ events: [...] }`.|",
+     "|`GET /api/journal`|query `?companionId=&date=` (`date` defaults to today)|Read back the journal entry for a companion/day. Returns `{ entry }` (or `{ entry: null }`).|",
+     "|`POST /api/journal`|`{ companionId, date?, body?, mood? }`|Upsert the journal entry for a day (`date` defaults to today). Sending both `body` and `mood` replaces them; omitting a key leaves that field untouched, so a mood-only or body-only post won't wipe the other. Caretaker tokens may only write today. Returns `201 { id, companionId, date }`.|",
+     "|`GET /api/notes`|query `?companionId=&tag=&match=&pinned=`|List a companion's notes, pinned first. Repeat `tag` to filter by several (up to 20); `match=all` returns only notes with every tag, default `any`. Full-scope tokens only, for members and admins. Returns `{ notes: [...], hasMore }`.|",
+     "|`POST /api/notes`|`{ companionId, title, body?, tags?, pinned?, sharedWithCaretakers? }`|Create a note. `body` is markdown (up to 20000 characters), `title` up to 200, and up to 10 tags of 32 characters each. Returns `201 { id, companionId }`.|",
+     "|`GET /api/notes/{id}`|-|Read one note.|",
+     "|`PATCH /api/notes/{id}`|`{ title?, body?, tags?, pinned?, sharedWithCaretakers? }`|Partial update; `tags` replaces the whole set. Returns the updated note.|",
+     "|`DELETE /api/notes/{id}`|-|Delete a note. Returns `204`.|",
+     "|`GET /api/quick-logs`|-|List the token user's enabled quick logs so a device can discover their ids. Returns `{ quickLogs: [...] }`.|",
+     "|`POST /api/quick-logs/{id}/execute`|`{ companionIds?, loggedAt? }` (optional)|Run a configured quick log. With no body it uses the quick log's remembered/assigned companions, so a physical button only needs the URL and token. Returns `201 { ids }`.|",
+     "|`POST /api/health-events`|`{ companionId, type, title, notes?, occurredAt?, vetName?, vetClinic? }`|Log a health event. `type` is one of `vet_visit`, `vaccination`, `medication`, `procedure`, `other`. `occurredAt` defaults to now and may be historical. Returns `201 { id, companionId }`.|",
+     "|`GET /api/health-events`|query `?companionId=&date=` (`date` optional `YYYY-MM-DD`)|Read back health events for a companion, newest first by `occurredAt`. Returns `{ events: [...] }`.|",
+     "|`POST /api/weight`|`{ companionId, weight, unit, notes?, recordedAt? }`|Log a weight entry. `unit` is `kg`, `lbs`, `g`, or `oz`. `recordedAt` defaults to now and may be historical. Returns `201 { id, companionId }`.|",
+     "|`GET /api/weight`|query `?companionId=`|Read back weight entries for a companion, newest first by `recordedAt`. Returns `{ entries: [...] }`.|",
+     "|`GET /api/reminders`|query `?companionId=&status=due\\|all`|List reminders. Default `status=due` lists not-yet-completed reminders oldest-due first; `status=all` also includes completed reminders, ordered by due date (newest first). Omit `companionId` to list across every companion the token user may access. Returns `{ reminders: [...] }`.|",
+     "|`POST /api/reminders/{id}/complete`|-|Mark a reminder done. A recurring reminder spawns its next occurrence. Returns `200 { id, completedAt, nextReminderId }` (`nextReminderId` is `null` for a one-off).|",
+     "|`GET /api/medications`|query `?companionId=&status=active\\|all`|List medications. Default `status=active`; caretakers only ever see active ones. Write-scope tokens may call it so a device can find ids; they get active medications only, with just `id`, `companionId`, `name`, `active` and `nextDueAt`. Returns `{ medications: [...] }`.|",
+     "|`POST /api/medications/{id}/doses`|`{ givenAt?, note? }` (optional)|Record a dose. Completes the matching linked reminder occurrence (a missed one from an earlier day, or one due within 3 hours of `givenAt`), otherwise logs a standalone dose. Returns `201 { doseId, completedReminderId }`; a `givenAt` before the start date is `400 givenBeforeStart`, one more than 5 minutes in the future is `400 givenInFuture` (up to 5 minutes ahead counts as now), an ended medication is `409 medicationEnded`.|",
+     "|`GET /api/shifts`|query `?from=&to=` (both optional `YYYY-MM-DD`)|List the caretaker shift schedule, most recent shifts first (up to 200; use `from`/`to` to window further back). Admins and members see every shift; a caretaker sees only their own. Returns `{ shifts: [...] }`.|",
+     "|`GET /api/users`|-|List the user roster, scoped to what the token user may see: an admin sees everyone, a member sees everyone except admins, a caretaker sees only themselves. Returns `{ users: [...] }` with `id`, `displayName`, `role`, `isActive` per user, plus `username` (omitted for a member-role token, since a member has no need to see other users' login identifiers).|"
+    ]
+   ],
+   [
+    "equal",
+    506,
+    514,
+    448,
+    456
+   ],
+   [
+    "delete",
+    514,
+    516,
+    456,
+    456
+   ],
+   [
+    "equal",
+    516,
+    527,
+    456,
+    467
+   ],
+   [
+    "delete",
+    527,
+    529,
+    467,
+    467
+   ],
+   [
+    "equal",
+    529,
+    534,
+    467,
+    472
+   ],
+   [
+    "replace",
+    534,
+    535,
+    472,
+    473,
+    [
+     "- **Session-based auth:** custom sessions with bcryptjs password hashing; optional OIDC SSO via `openid-client`"
+    ]
+   ],
+   [
+    "equal",
+    535,
+    537,
+    473,
+    475
+   ],
+   [
+    "delete",
+    537,
+    539,
+    475,
+    475
+   ],
+   [
+    "equal",
+    539,
+    540,
+    475,
+    476
+   ],
+   [
+    "replace",
+    540,
+    547,
+    476,
+    477,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    547,
+    548,
+    477,
+    478
+   ],
+   [
+    "replace",
+    548,
+    550,
+    478,
+    479,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "114826ded593+2": {
+  "fn": "robeertm/ev-charge-tracker",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "> look wrong — please open an issue"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    14,
+    7,
+    14
+   ],
+   [
+    "replace",
+    14,
+    18,
+    14,
+    18,
+    [
+     "Latest Release",
+     "License: Source-available",
+     "Python",
+     "Self-Hosted"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    36,
+    18,
+    36
+   ],
+   [
+    "replace",
+    36,
+    39,
+    36,
+    39,
+    [
+     "> climate control and, for some brands, lock and unlock the vehicle. It is off",
+     "> by default and must be enabled per vehicle. Enable it only if you accept",
+     "> that consequence."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    39,
+    40
+   ],
+   [
+    "replace",
+    40,
+    43,
+    40,
+    43,
+    [
+     "> computed from this app's own recorded data and does not replace an",
+     "> accredited battery test. Do not use it as the basis of a sale or a warranty",
+     "> claim without an independent measurement."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    48,
+    44,
+    48,
+    [
+     "> Those interfaces are outside this project's control and may change, throttle",
+     "> or refuse access at any time; some are not officially supported by the",
+     "> manufacturer. Costs, CO2 figures and consumption values are estimates",
+     "> derived from your own inputs and may be wrong."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    52,
+    48,
+    52
+   ],
+   [
+    "delete",
+    52,
+    54,
+    52,
+    52
+   ],
+   [
+    "equal",
+    54,
+    65,
+    52,
+    63
+   ],
+   [
+    "replace",
+    65,
+    66,
+    63,
+    64,
+    [
+     "Dashboard"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    70,
+    64,
+    68
+   ],
+   [
+    "replace",
+    70,
+    71,
+    68,
+    69,
+    [
+     "Dark mode"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    74,
+    69,
+    72
+   ],
+   [
+    "replace",
+    74,
+    76,
+    72,
+    74,
+    [
+     "Vehicle",
+     "Vehicle, dark"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    80,
+    74,
+    78
+   ],
+   [
+    "replace",
+    80,
+    81,
+    78,
+    79,
+    [
+     "Driving log"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    84,
+    79,
+    82
+   ],
+   [
+    "replace",
+    84,
+    85,
+    82,
+    83,
+    [
+     "New charge"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    89,
+    83,
+    87
+   ],
+   [
+    "replace",
+    89,
+    90,
+    87,
+    88,
+    [
+     "History"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    93,
+    88,
+    91
+   ],
+   [
+    "replace",
+    93,
+    94,
+    91,
+    92,
+    [
+     "Report"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    97,
+    92,
+    95
+   ],
+   [
+    "replace",
+    97,
+    98,
+    95,
+    96,
+    [
+     "Maintenance"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    96,
+    99
+   ],
+   [
+    "replace",
+    101,
+    102,
+    99,
+    100,
+    [
+     "OBD"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    106,
+    100,
+    104
+   ],
+   [
+    "replace",
+    106,
+    107,
+    104,
+    105,
+    [
+     "Logs"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    105,
+    108
+   ],
+   [
+    "replace",
+    110,
+    111,
+    108,
+    109,
+    [
+     "Export and import of charges"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    116,
+    109,
+    114
+   ],
+   [
+    "replace",
+    116,
+    117,
+    114,
+    115,
+    [
+     "Import of the XPENG data export"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    122,
+    115,
+    120
+   ],
+   [
+    "replace",
+    122,
+    123,
+    120,
+    121,
+    [
+     "Setting up a Leapmotor read from Leapmotor Mate"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    127,
+    121,
+    125
+   ],
+   [
+    "replace",
+    127,
+    128,
+    125,
+    126,
+    [
+     "Settings"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    136,
+    126,
+    134
+   ],
+   [
+    "replace",
+    136,
+    141,
+    134,
+    137,
+    [
+     " Dashboard on a phone Dashboard Dark mode on a phone Dark mode ",
+     " New charge on a phone New charge History on a phone History ",
+     " Driving log on a phone Driving log Vehicle on a phone Vehicle "
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    137,
+    138
+   ],
+   [
+    "replace",
+    142,
+    144,
+    138,
+    139,
+    [
+     " 6 more pictures "
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    139,
+    140
+   ],
+   [
+    "replace",
+    145,
+    150,
+    140,
+    143,
+    [
+     " Report on a phone Report Maintenance on a phone Maintenance ",
+     " Settings on a phone Settings Vehicle dark on a phone Vehicle, dark ",
+     " OBD on a phone OBD Logs on a phone Logs "
+    ]
+   ],
+   [
+    "equal",
+    150,
+    151,
+    143,
+    144
+   ],
+   [
+    "replace",
+    151,
+    156,
+    144,
+    145,
+    [
+     " Try it with the same data "
+    ]
+   ],
+   [
+    "equal",
+    156,
+    163,
+    145,
+    152
+   ],
+   [
+    "delete",
+    163,
+    166,
+    152,
+    152
+   ],
+   [
+    "equal",
+    166,
+    169,
+    152,
+    155
+   ],
+   [
+    "replace",
+    169,
+    170,
+    155,
+    156,
+    [
+     "|Problem|Solution|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    156,
+    157
+   ],
+   [
+    "replace",
+    171,
+    179,
+    157,
+    163,
+    [
+     "|Apps from your carmaker only show last 30-90 days|**Lifetime tracking** in your own database|",
+     "|No privacy / data sold to third parties|**100% local** — SQLite file on your machine|",
+     "|Cant compare AC vs DC vs PV cost & CO2|Built-in **AC/DC/PV split** with separate tariffs|",
+     "|GHG quota payouts not tracked|**THG quota** card deducts payouts from total cost|",
+     "|Manual logging is tedious|**Vehicle API** auto-fills SoC, odometer, charging status|",
+     "|ENTSO-E grid CO2 not integrated|**Hourly CO2 intensity** auto-fetched, missing values backfilled|"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    250,
+    163,
+    234
+   ],
+   [
+    "replace",
+    250,
+    251,
+    234,
+    235,
+    [
+     "- **Wallbox link (v3.0.127)** — pulls finished home charges from a Shelly Energy Analyzer and files them against the matching charge entry: the kWh the meter really saw, the split into sun / house battery / grid, the real cost of that mix, and the charge curve rendered exactly as the analyzer draws it. Read-only and pull-only — the analyzer never writes here, and the link token never reaches the browser. Each car is bound to the wallbox it charges on; where two cars have a charge in the same window the reading is filed as *ambiguous* for a person to settle rather than guessed. Past charges are backfilled in the same pass. Adopting the measured figures into an entry is reversible, and a price entered by hand is never overwritten by default"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    271,
+    235,
+    255
+   ],
+   [
+    "replace",
+    271,
+    273,
+    255,
+    257,
+    [
+     " - `new` prints a new token on stdout and nothing else, so it can be piped straight into a file; the previous token stops working",
+     " - `off` switches the endpoint off, `status` says `on` / `off` and never shows the token"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    303,
+    257,
+    287
+   ],
+   [
+    "delete",
+    303,
+    305,
+    287,
+    287
+   ],
+   [
+    "equal",
+    305,
+    321,
+    287,
+    303
+   ],
+   [
+    "replace",
+    321,
+    323,
+    303,
+    304,
+    [
+     " Prefer to do it by hand? "
+    ]
+   ],
+   [
+    "equal",
+    323,
+    334,
+    304,
+    315
+   ],
+   [
+    "delete",
+    334,
+    335,
+    315,
+    315
+   ],
+   [
+    "equal",
+    335,
+    372,
+    315,
+    352
+   ],
+   [
+    "replace",
+    372,
+    378,
+    352,
+    358,
+    [
+     "|Variable|Default|What it does|",
+     "|---|---|---|",
+     "|`EV_PORT`|`7654`|Port on the host|",
+     "|`TZ`|`Europe/Berlin`|Time zone used for timestamps|",
+     "|`ENTSOE_API_KEY`|empty|Enables the real CO2 intensity of your grid|",
+     "|`SECRET_KEY`|—|Required. Signs the session cookie|"
+    ]
+   ],
+   [
+    "equal",
+    378,
+    381,
+    358,
+    361
+   ],
+   [
+    "delete",
+    381,
+    383,
+    361,
+    361
+   ],
+   [
+    "equal",
+    383,
+    390,
+    361,
+    368
+   ],
+   [
+    "replace",
+    390,
+    399,
+    368,
+    369,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    403,
+    369,
+    373
+   ],
+   [
+    "delete",
+    403,
+    405,
+    373,
+    373
+   ],
+   [
+    "equal",
+    405,
+    422,
+    373,
+    390
+   ],
+   [
+    "replace",
+    422,
+    423,
+    390,
+    391,
+    [
+     "|Brand|Package|Auth|"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    424,
+    391,
+    392
+   ],
+   [
+    "replace",
+    424,
+    443,
+    392,
+    411,
+    [
+     "|**Kia**|`hyundai-kia-connect-api`|Username / Password ¹|",
+     "|**Hyundai**|`hyundai-kia-connect-api`|Username / Password ¹|",
+     "|**Kia / Hyundai / Genesis (Pleos)**|none — official Pleos Vehicle Data API (Europe)|Client ID / Secret from pleos.ai ⁴|",
+     "|**Volkswagen**|`carconnectivity` + connector|Username / Password|",
+     "|**Škoda**|none — official MyŠkoda Public API|API key (MyŠkoda app) + VIN ²|",
+     "|**Škoda (old access)**|`carconnectivity` + connector|Username / Password ³|",
+     "|**Seat**|`carconnectivity` + connector|Username / Password|",
+     "|**Cupra**|`carconnectivity` + connector|Username / Password|",
+     "|**Audi**|`carconnectivity` + connector|Username / Password|",
+     "|**Tesla**|`teslapy`|OAuth Refresh-Token|",
+     "|**Renault**|`renault-api`|Username / Password|",
+     "|**Dacia**|`renault-api`|Username / Password|",
+     "|**Polestar**|`pypolestar`|Username / Password|",
+     "|**MG (SAIC)**|`saic-ismart-client-ng`|Username / Password|",
+     "|**Smart #1/#3**|`pySmartHashtag`|Username / Password|",
+     "|**Porsche**|`pyporscheconnectapi`|Username / Password|",
+     "|**XPENG**|*(none — built-in)*|Enode Client ID / Secret|",
+     "|**Home Assistant** (any car HA knows)|none — reads HA's REST API|HA address + long-lived token + entity prefix ⁵|",
+     "|**Leapmotor (Mate)** — experimental|none — reads a self-hosted Leapmotor Mate|Mate address + Mate password if one is set ⁶|"
+    ]
+   ],
+   [
+    "equal",
+    443,
+    471,
+    411,
+    439
+   ],
+   [
+    "replace",
+    471,
+    473,
+    439,
+    441,
+    [
+     "Pleos personal Vehicle Data API:",
+     "on pleos.ai open the account menu → *My Vehicle Data API* → pick the"
+    ]
+   ],
+   [
+    "equal",
+    473,
+    502,
+    441,
+    470
+   ],
+   [
+    "replace",
+    502,
+    503,
+    470,
+    471,
+    [
+     "run the open-source self-hosted app Leapmotor Mate"
+    ]
+   ],
+   [
+    "equal",
+    503,
+    521,
+    471,
+    489
+   ],
+   [
+    "replace",
+    521,
+    522,
+    489,
+    490,
+    [
+     "speaks the official MyŠkoda Public API:"
+    ]
+   ],
+   [
+    "equal",
+    522,
+    535,
+    490,
+    503
+   ],
+   [
+    "replace",
+    535,
+    538,
+    503,
+    504,
+    [
+     "**XPENG note:** XPENG has no public brand SDK, so it connects through the Enode aggregator (the same route the community Home Assistant integrations use). Create an Enode app (Client ID + Secret), link your XPENG account once via Enode's hosted flow, then enter the keys under Settings > Vehicle API — brand *XPENG*, Client ID as username, Client Secret as password. Needs no extra package (rides on `requests`). Provides SoC, range, odometer, charging status and location."
+    ]
+   ],
+   [
+    "equal",
+    538,
+    560,
+    504,
+    526
+   ],
+   [
+    "delete",
+    560,
+    562,
+    526,
+    526
+   ],
+   [
+    "equal",
+    562,
+    564,
+    526,
+    528
+   ],
+   [
+    "replace",
+    564,
+    565,
+    528,
+    529,
+    [
+     "1. Register at transparency.entsoe.eu"
+    ]
+   ],
+   [
+    "equal",
+    565,
+    568,
+    529,
+    532
+   ],
+   [
+    "delete",
+    568,
+    570,
+    532,
+    532
+   ],
+   [
+    "equal",
+    570,
+    575,
+    532,
+    537
+   ],
+   [
+    "replace",
+    575,
+    576,
+    537,
+    538,
+    [
+     "|Setting|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    576,
+    577,
+    538,
+    539
+   ],
+   [
+    "replace",
+    577,
+    584,
+    539,
+    546,
+    [
+     "|First registration (Erstzulassung)|--|Calendar date the battery actually ages on — drives age + degradation benchmark on the certificate|",
+     "|Battery capacity (net)|64 kWh|Usable net size — basis for cycle, loss, cost, CO2 and SoH|",
+     "|Battery capacity (gross)|--|Optional gross/buffer size — informational, printed on the certificate|",
+     "|Max AC power|--|Max AC charging power|",
+     "|Battery production CO2|100 kg/kWh|For break-even calculation (MY2021)|",
+     "|ICE CO2 WTW|164 g/km|Well-to-wheel comparison (DE average)|",
+     "|Recuperation|0.086 kWh/km|Energy recovered per km|"
+    ]
+   ],
+   [
+    "equal",
+    584,
+    587,
+    546,
+    549
+   ],
+   [
+    "replace",
+    587,
+    588,
+    549,
+    550,
+    [
+     "|Setting|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    588,
+    589,
+    550,
+    551
+   ],
+   [
+    "replace",
+    589,
+    596,
+    551,
+    556,
+    [
+     "|System size|--|kWp of your PV system|",
+     "|Annual yield|950 kWh/kWp|Annual yield per kWp (DE average)|",
+     "|Lifetime|25 years|Expected system lifetime|",
+     "|Manufacturing CO2|1000 kg/kWp|Production CO2 incl. transport & installation|",
+     "|PV electricity price|0.00 EUR/kWh|Self-consumption cost|"
+    ]
+   ],
+   [
+    "equal",
+    596,
+    612,
+    556,
+    572
+   ],
+   [
+    "delete",
+    612,
+    614,
+    572,
+    572
+   ],
+   [
+    "equal",
+    614,
+    622,
+    572,
+    580
+   ],
+   [
+    "delete",
+    622,
+    624,
+    580,
+    580
+   ],
+   [
+    "equal",
+    624,
+    625,
+    580,
+    581
+   ],
+   [
+    "replace",
+    625,
+    636,
+    581,
+    582,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    636,
+    637,
+    582,
+    583
+   ],
+   [
+    "delete",
+    637,
+    638,
+    583,
+    583
+   ],
+   [
+    "equal",
+    638,
+    639,
+    583,
+    584
+   ],
+   [
+    "delete",
+    639,
+    644,
+    584,
+    584
+   ],
+   [
+    "equal",
+    644,
+    657,
+    584,
+    597
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

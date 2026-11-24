@@ -3545,5 +3545,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "90210cc1d622": {
+  "identity": {
+   "one_liner": "Zoonk：根据目标生成每日学习计划的 AI 学习平台",
+   "review": "Zoonk 是一个接收用户用自然语言描述的学习目标、据此生成包含课程、练习和复习的每日学习计划直到目标日期的应用。技术栈基于 Next.js、Prisma 与 PostgreSQL，计划与课程内容由 AI 网关生成（使用 Vercel AI SDK）。本地开发无需环境变量即可运行，未配置的服务保持关闭。适合想自托管或参与贡献的开发者。",
+   "highlights": [
+    "根据用户目标生成每日学习计划，包含课程、练习和复习",
+    "计划与课程生成通过 AI Gateway 完成，可链接 Zoonk 的 Vercel 团队或自配 AI_GATEWAY_API_KEY",
+    "本地开发无需环境变量，pnpm db:setup 自动创建开发、测试和 E2E 数据库并执行迁移与种子"
+   ],
+   "use_cases": [
+    "为自己设定学习目标并获取按日安排的学习计划",
+    "开发者克隆仓库后本地运行或参与贡献（含 AI 编码工具的 worktree 支持）",
+    "在同一可信网络下从手机等设备测试应用（pnpm dev:lan）"
+   ]
+  },
+  "sha": "90210cc1d622",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fccc3d661733": {
+  "identity": {
+   "one_liner": "本地运行的持久记忆 MCP 服务器与自托管 AI 工作区",
+   "review": "SynaBun 是开源的自托管 AI 工作区，通过 MCP 协议为 Claude Code、Codex、OpenCode 等工具提供跨会话的持久记忆，数据存储在本地单个 SQLite 文件中。提供 Neural Interface 本地网页界面，支持 3D 记忆地图、代理调度、任务模板自动化等。需 Node.js 22.19+，npm 全局安装，语义搜索需额外下载嵌入模型。不含模型访问，需用户自备已登录的编码工具账号。",
+   "highlights": [
+    "提供 MCP 服务器（stdio），暴露 remember、recall、reflect、forget、restore 等记忆工具，任何 MCP 客户端均可接入",
+    "记忆存储于本地单个 SQLite 文件，支持关键词与语义双重检索、修订历史、回收站与校验备份",
+    "Neural Interface 本地应用（端口 3344）提供 3D 记忆地图、终端、文件浏览器、代理侧边栏与任务自动化"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、OpenCode 等编码代理在会话之间保留项目上下文与决策记录",
+    "本地查看、编辑、删除代理记忆，通过记忆地图管理已积累的知识",
+    "将任务保存为模板，以循环或定时方式运行代理工作流"
+   ]
+  },
+  "sha": "fccc3d661733",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2f28ea5e5fe5": {
+  "identity": {
+   "one_liner": "面向软件工程师的开源学习路径平台，含考试与练习门控解锁机制",
+   "review": "TalebElm 是一个用于软件工程学习的开源路径平台：用户按顺序学习 Track 中的课程，每个模块末尾有服务端评分的考试，并需完成指定的 Codeforces 题目和 GitHub 任务，两类门控同时通过后下一模块才解锁，进度不可回退。技术栈为 ASP.NET Core 与 EF Core，采用 Clean Architecture 分层。README 注明后端仍在开发中，功能进度见 docs/FEATURE_INDEX.md。",
+   "highlights": [
+    "模块解锁由考试门控与题目门控共同决定，进度为单向粘性记录",
+    "自动验证外部平台的 Codeforces 题目与 GitHub 任务",
+    "采用 Clean Architecture：Domain 无依赖，Api/Infrastructure/Application/Domain 四层分离"
+   ],
+   "use_cases": [
+    "按顺序学习软件工程路径并通过真实考试检验掌握程度",
+    "需要自动核验编程练习与任务完成情况的学习场景",
+    "作为 .NET Clean Architecture 与 EF Core 项目的参考实现"
+   ]
+  },
+  "sha": "2f28ea5e5fe5",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f564d26629ed": {
+  "identity": {
+   "one_liner": "基于 Go、OpenTelemetry 与 Tempo 的分布式请求延迟诊断参考应用",
+   "review": "这是一个用于跨多服务排查请求变慢原因的 Go 参考应用。结账请求依次经过 gateway、auth、orders、inventory、payment 等服务，调试器从 Tempo 读取并归一化 trace，计算独占耗时，结合 PostgreSQL pg_stat_activity 与 pg_blocking_pids() 的锁等待观测输出分类诊断报告，并支持基线/故障 trace 差分对比。面向学习分布式追踪与延迟分析的本地环境；README 明确身份与支付为演示实现，无认证与 TLS，不适用于生产公开部署。",
+   "highlights": [
+    "提供五种演示场景：健康结账、真实 PostgreSQL 行锁争用、慢支付、网关超时与缺失传播，并给出 confirmed/inferred/insufficient_evidence 分级诊断",
+    "支持通过 REST API 与 debugger CLI 获取诊断报告（类别、证据、后续步骤）及两 trace 差分对比",
+    "内置 Grafana、Prometheus、Tempo 可观测栈，导出 OTLP 追踪与指标，集成测试覆盖传播、锁证据与 Tempo 故障独立等场景"
+   ],
+   "use_cases": [
+    "学习分布式追踪与延迟根因分析的本地演示环境",
+    "演示数据库锁等待与下游依赖延迟的区分诊断",
+    "通过差分对比定位两次请求间各操作的耗时变化"
+   ]
+  },
+  "sha": "f564d26629ed",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

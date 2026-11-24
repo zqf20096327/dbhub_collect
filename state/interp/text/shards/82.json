@@ -3468,5 +3468,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "69ab177906d3": {
+  "identity": {
+   "one_liner": "基于 TinyGo 将普通 Go 代码编译为 PostgreSQL 扩展的构建工具",
+   "review": "gopgext 是一个命令行工具，通过 TinyGo 将 Go 源文件编译为 PostgreSQL 扩展：标记 //gopgext:function 的函数会被生成为 SQL 函数，工具自动生成 C 胶水代码、CREATE FUNCTION 脚本和控制文件。Go 代码可通过 SPI 执行查询。适用于需要在 PostgreSQL 内运行 Go 逻辑的开发者，官方明确标注为实验性项目，不建议用于生产环境。",
+   "highlights": [
+    "提供 init、build、install 子命令，自动生成 .so、.control 和 SQL 安装脚本",
+    "支持 Go 标准库（fmt、regexp、encoding/json、crypto 等）、泛型与 defer/recover",
+    "提供 SPI 查询、触发器、聚合、索引访问方法、FDW、后台 worker 等框架能力"
+   ],
+   "use_cases": [
+    "用 Go 编写 PostgreSQL SQL 函数并打包为可安装扩展",
+    "在数据库内实现基于 Go 标准库（如 JSON、正则、加密）的函数逻辑",
+    "构建触发器、聚合函数或外部数据封装器（FDW）类扩展的实验项目"
+   ]
+  },
+  "sha": "69ab177906d3",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "355e7cda3ff2": {
+  "identity": {
+   "one_liner": "每日一句励志名言，手写 WebAssembly 模块提供 10 语言版本",
+   "review": "该项目每日展示一句关于克服困境的名言，本地时区午夜切换，同一日期全球显示同一句。数据存于 SQLite，由 Python 编译为手写的 WebAssembly Text 模块，浏览器端 JavaScript 仅读时钟并渲染文本，另有 Kotlin/Jetpack Compose 原生 Android 应用。构建需 Python 3.10+ 与 Node.js 20+，依赖 wabt 汇编为 wasm。内置日程表覆盖 2000–2399 年，超出范围时模块即时重算。",
+   "highlights": [
+    "包含 1,000 条名言，手工翻译为 10 种语言，界面语言跟随浏览器或手机设置",
+    "日程由 PCG32 加种子块号的 Fisher-Yates 洗牌生成，内置 146,097 天的查询表，并附 Python 参考实现与 Kotlin 移植用于交叉测试",
+    "网站为纯静态文件部署在 Vercel，无服务端代码，支持离线访问；Android 应用支持每日通知与分享"
+   ],
+   "use_cases": [
+    "每天查看一条多语言励志名言，或通过通知在设定时间接收当日名言",
+    "按日期回顾或检索历史名言（?date=YYYY-MM-DD 预览、归档、收藏、搜索）",
+    "学习手写 WebAssembly Text、静态站点构建流程与多端（Web/Android）日程一致性测试的参考实现"
+   ]
+  },
+  "sha": "355e7cda3ff2",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

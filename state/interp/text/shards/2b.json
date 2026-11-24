@@ -3321,5 +3321,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a4e5f929c133": {
+  "identity": {
+   "one_liner": "为大型 CSV 文件生成旁路二级索引的 Rust/Python 工具",
+   "review": "csvidx 在 CSV 旁生成排序的 (键哈希, 行偏移) 索引文件，查询时通过 mmap 二分查找定位并只读取所需行，原 CSV 不复制不导入。面向需要按单键取行的数据工程场景，提供 CLI、Python/pandas 绑定与外部排序、并行构建。键按字节比较，类型推断仅基于命中行。",
+   "highlights": [
+    "通过 mmap 索引二分查找定位行，只读取命中行，CSV 文件保持原样不复制",
+    "支持外部排序（--mem-limit-mib 固定内存构建）与多线程并行扫描排序，结果与顺序构建逐字节一致",
+    "支持 CSV 追加后增量 update（写 tail）、compact 合并与 verify 校验；Python 绑定基于 PyO3 abi3（≥3.9），查询期间释放 GIL"
+   ],
+   "use_cases": [
+    "大 CSV 文件中按键（如 user_id）频繁取少量行的点查场景",
+    "内存受限环境下为超大文件构建索引",
+    "在 pandas 工作流中对已按键过滤的查询，替代全量 read_csv+filter"
+   ]
+  },
+  "sha": "a4e5f929c133",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

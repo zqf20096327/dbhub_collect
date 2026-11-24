@@ -3198,5 +3198,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e1718f5df561": {
+  "identity": {
+   "one_liner": "基于 Tauri 2（Rust + React）的 macOS 桌面数据库客户端，支持六种数据库并内置 SSH 隧道。",
+   "review": "DBDock 是运行于 macOS（Apple Silicon）的桌面数据库客户端，基于 Tauri 2、Rust 与 React 构建，连接 MySQL、PostgreSQL、SQLite、Redis、MongoDB 和 Cloudflare D1。它提供 SSH 隧道、连接分组与环境标签、SQL 编辑器与可视化执行计划、网格编辑及 CSV/JSON 导入。密码存于 macOS Keychain，D1 通过 REST API 访问且查询不可取消。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、SQLite、Redis、MongoDB、Cloudflare D1 六种数据库，内置 ssh-agent / 密钥文件 / 密码三种 SSH 隧道方式",
+    "提供带上下文感知补全的 SQL 编辑器、可视化执行计划、主键表格网格编辑和 CSV/JSON 数据导入",
+    "连接数据本地存储于 JSON 文件，密码与令牌写入 macOS Keychain，支持 AES-256-GCM 加密导出"
+   ],
+   "use_cases": [
+    "需要在桌面端统一管理多种数据库连接并按 local/dev/production 等环境标签分组的开发运维人员",
+    "需要经堡垒机 SSH 隧道访问内网数据库、并用生产连接 SQL 确认保护机制降低误操作风险的场景",
+    "使用 Cloudflare D1 并希望通过 REST API（Account ID / Database ID / API token）浏览和编辑数据的开发者"
+   ]
+  },
+  "sha": "e1718f5df561",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6d6b50d8caab": {
+  "identity": {
+   "one_liner": "仅含 Docker Compose 编排配置的电商演示平台，以固定版本 GHCR 镜像组装三个应用。",
+   "review": "本仓库不含应用源码，仅通过 Compose 文件编排 API（NestJS）、管理后台与商店前端三个固定版本的 GHCR 镜像，配合 PostgreSQL、Redis 启动完整电商演示栈，并内置演示数据与本地登录账号。使用者需安装 Docker（Compose v2.24+）和 Git，执行 docker compose up 即可运行； checkout 使用 mock 支付，不支持真实支付。",
+   "highlights": [
+    "一个 Compose 文件启动 storefront、admin、API 及 PostgreSQL/Redis，支持 observability profile 启用 Grafana 与 Prometheus",
+    "组件版本通过 versions.json 钉定，可用 npm run bump 升级；降级需重置数据",
+    "提供 npm 快捷命令、make、compose.override 端口覆盖及 hosted-api 模式等多种运行方式"
+   ],
+   "use_cases": [
+    "本地一键运行完整电商演示环境（storefront + admin + API + 文档页）",
+    "通过 Super admin / Admin / Customer 三类演示账号测试后台与购物流程",
+    "以 observability profile 启动 Grafana/Prometheus 观察栈运行指标"
+   ]
+  },
+  "sha": "6d6b50d8caab",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

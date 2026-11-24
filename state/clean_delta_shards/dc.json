@@ -32177,5 +32177,797 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "6424e47268a6+2": {
+  "fn": "PgOutput2Json/PgOutput2Json",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "📖 **Documentation:** pg2json.com"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    21,
+    5,
+    21
+   ],
+   [
+    "replace",
+    21,
+    25,
+    21,
+    25,
+    [
+     "- ✅ **Kafka** (used by PgHook.Kafka)",
+     "- ✅ **RabbitMQ** (Streams + Classic Queues - used by PgHook.RabbitMqStreams)",
+     "- ✅ **Redis** (Streams + Pub/Sub Channels - used by PgHook.Redis)",
+     "- ✅ **SQLite** (used by PgFreshCache)"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    30,
+    25,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "- ✅ **Webhooks** (used by PgHook)"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    53,
+    31,
+    53
+   ],
+   [
+    "replace",
+    53,
+    59,
+    53,
+    54,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    78,
+    54,
+    73
+   ],
+   [
+    "replace",
+    78,
+    79,
+    73,
+    74,
+    [
+     "|PostgreSQL type|JSON|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    74,
+    75
+   ],
+   [
+    "replace",
+    80,
+    86,
+    75,
+    81,
+    [
+     "|`smallint`, `integer`, `bigint`, `oid`, `numeric`, `real`, `double precision`|A number, with every digit PostgreSQL sent. `NaN`, `Infinity` and `-Infinity` are `null`, because JSON has no such numbers.|",
+     "|`boolean`|`true` or `false`|",
+     "|`bytea`|A string of hex digits, e.g. `\"deadbeef\"`|",
+     "|Everything else, including `json`, `jsonb`, `uuid`, dates and timestamps|A string, in PostgreSQL's text format. `timestamptz` is in UTC.|",
+     "|Arrays of the types above|A JSON array, nested for more dimensions. A `NULL` element is `null`.|",
+     "|Arrays of other types (enums, user-defined types)|A string with the PostgreSQL array literal, e.g. `\"{sad,happy}\"`|"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    123,
+    81,
+    118
+   ],
+   [
+    "replace",
+    123,
+    124,
+    118,
+    119,
+    [
+     "The outputs that store data instead of forwarding messages (SQLite, MongoDB, DynamoDB) save their position with the data, and the changes replayed after a reconnect are skipped for them. They keep it per subscription, under `options.SubscriptionName`, which they require: give every source database and slot that writes into the same store its own name. A store of an earlier version has one position, which the first subscription takes. If a source database is restored from a backup or replaced, its positions start again lower, and the saved position would skip its changes: stop the listener, delete the position (the key `Position:<subscription name>` in `__pg2j_config`: a row in SQLite, a document in MongoDB, an item in DynamoDB), and start it again. Its changes are then written again from where the slot is. The message outputs publish them again, except a single RabbitMQ stream with `UseDeduplication`. The ClickHouse output saves no position: every row it writes carries the position as its version, so a replayed change changes nothing."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    129,
+    119,
+    124
+   ],
+   [
+    "replace",
+    129,
+    130,
+    124,
+    125,
+    [
+     "To measure the throughput on your own machine, run the benchmark: it copies and streams rows to a null output or to ClickHouse, and reports rows per second, CPU and allocations."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    166,
+    125,
+    161
+   ],
+   [
+    "replace",
+    166,
+    168,
+    161,
+    163,
+    [
+     "- Sending a **SIGHUP** to the PostgreSQL process ",
+     "- Running `pg_ctl reload` "
+    ]
+   ],
+   [
+    "equal",
+    168,
+    196,
+    163,
+    191
+   ],
+   [
+    "replace",
+    196,
+    220,
+    191,
+    192,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    259,
+    192,
+    231
+   ],
+   [
+    "replace",
+    259,
+    263,
+    231,
+    232,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    295,
+    232,
+    264
+   ],
+   [
+    "replace",
+    295,
+    327,
+    264,
+    265,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    327,
+    334,
+    265,
+    272
+   ],
+   [
+    "replace",
+    334,
+    335,
+    272,
+    273,
+    [
+     "At the end of every batch the listener waits for the confirms of RabbitMQ (publisher confirms). `UseRabbitMq` therefore sets the batch size to 1,000 changes (the default of the library is 100). In our benchmark, with a durable queue bound to the exchange, the initial copy and the stream ran at about 31,000 rows per second with batches of 1,000, and at about 24,000 and 21,000 with batches of 100 (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and RabbitMQ in Docker on the same machine). Larger batches added nothing: RabbitMQ itself used most of the CPU, routing and confirming every message, also when the messages were not persistent. For more throughput, use RabbitMQ Streams. To use another size, call `WithBatchSize` after `UseRabbitMq`. A batch that is not full is still confirmed after the batch wait time (100 ms by default)."
+    ]
+   ],
+   [
+    "equal",
+    335,
+    362,
+    273,
+    300
+   ],
+   [
+    "replace",
+    362,
+    394,
+    300,
+    301,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    394,
+    401,
+    301,
+    308
+   ],
+   [
+    "replace",
+    401,
+    402,
+    308,
+    309,
+    [
+     "The producer has up to one batch of messages in flight, and the listener waits for their confirmations at the end of the batch. `UseRabbitMqStreams` therefore sets the batch size to 10,000 changes (the default of the library is 100). In our benchmark the initial copy ran at about 170,000 rows per second and the stream at about 100,000 with batches of 10,000, and at about 68,000 and 42,000 with batches of 100 (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and RabbitMQ in Docker on the same machine). To use another size, call `WithBatchSize` after `UseRabbitMqStreams`. A batch that is not full is still confirmed after the batch wait time (100 ms by default). After an error, the unconfirmed messages of the batch are sent again."
+    ]
+   ],
+   [
+    "equal",
+    402,
+    437,
+    309,
+    344
+   ],
+   [
+    "replace",
+    437,
+    463,
+    344,
+    345,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    463,
+    469,
+    345,
+    351
+   ],
+   [
+    "replace",
+    469,
+    470,
+    351,
+    352,
+    [
+     "At the end of every batch the listener waits until Kafka has acknowledged all of its messages (with `acks=all`, which idempotence needs). `UseKafka` therefore sets the batch size to 10,000 changes (the default of the library is 100). In our benchmark the initial copy ran at about 140,000 rows per second and the stream at about 94,000 with batches of 10,000, and at about 8,800 and 8,300 with batches of 100 (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and Kafka in Docker on the same machine). The batching of librdkafka itself (`linger.ms`, 5 ms by default) made no difference there. To use another size, call `WithBatchSize` after `UseKafka`. A batch that is not full is still confirmed after the batch wait time (100 ms by default). After an error, the unconfirmed messages of the batch are sent again."
+    ]
+   ],
+   [
+    "equal",
+    470,
+    495,
+    352,
+    377
+   ],
+   [
+    "replace",
+    495,
+    523,
+    377,
+    378,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    523,
+    560,
+    378,
+    415
+   ],
+   [
+    "replace",
+    560,
+    561,
+    415,
+    416,
+    [
+     "Every batch of changes is one transaction. `UseSqlite` sets the batch size to 1,000 changes (the default of the library is 100). In our benchmark with batches of 1,000 and the database file on the server's disk, the initial copy ran at about 55,000 rows per second and the stream at about 50,000, or about 68,000 and 61,000 with `options.UseWal = true` (the WAL journal mode of SQLite), since a commit then waits less for the disk. With the file in memory (tmpfs), where a commit does not wait for a disk, they ran at about 85,000 and 75,000 (with or without `UseWal`), and at about 72,000 and 68,000 with batches of 100 (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs, 8 GB RAM and its local disk with ext4, with PostgreSQL in Docker on the same machine). Larger batches add little. To use another size, call `WithBatchSize` after `UseSqlite`. A batch that is not full is still written after the batch wait time (100 ms by default)."
+    ]
+   ],
+   [
+    "equal",
+    561,
+    578,
+    416,
+    433
+   ],
+   [
+    "replace",
+    578,
+    604,
+    433,
+    434,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    604,
+    637,
+    434,
+    467
+   ],
+   [
+    "replace",
+    637,
+    670,
+    467,
+    468,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    670,
+    692,
+    468,
+    490
+   ],
+   [
+    "replace",
+    692,
+    723,
+    490,
+    491,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    723,
+    762,
+    491,
+    530
+   ],
+   [
+    "replace",
+    762,
+    797,
+    530,
+    531,
+    [
+     "…（35 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    797,
+    800,
+    531,
+    534
+   ],
+   [
+    "replace",
+    800,
+    801,
+    534,
+    535,
+    [
+     "Every batch of changes is written with `BatchWriteItem` requests of up to 25 items, and `MaxParallelBatchWrites` of them (8 by default) are in flight at a time. Two changes of the same row are never in flight together, so they are applied in order. The position is saved once per batch, after its rows. `UseDynamoDb` sets the batch size to 1,000 changes (the default of the library is 100), so that the parallel requests have work. In our benchmark, against DynamoDB Local, 8 parallel requests were about 2.5 times faster than one (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and DynamoDB Local in Docker on the same machine). DynamoDB Local is not DynamoDB: on AWS the throughput depends on the network and on the capacity of the tables, so measure it with your own tables (`--dynamodb URL`). To use another size, call `WithBatchSize` after `UseDynamoDb`. A batch that is not full is still written after the batch wait time (100 ms by default)."
+    ]
+   ],
+   [
+    "equal",
+    801,
+    844,
+    535,
+    578
+   ],
+   [
+    "replace",
+    844,
+    879,
+    578,
+    579,
+    [
+     "…（35 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    879,
+    899,
+    579,
+    599
+   ],
+   [
+    "replace",
+    899,
+    926,
+    599,
+    600,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    926,
+    936,
+    600,
+    610
+   ],
+   [
+    "replace",
+    936,
+    942,
+    610,
+    611,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    942,
+    949,
+    611,
+    618
+   ],
+   [
+    "replace",
+    949,
+    950,
+    618,
+    619,
+    [
+     " See: Validating Webhook Deliveries"
+    ]
+   ],
+   [
+    "equal",
+    950,
+    953,
+    619,
+    622
+   ],
+   [
+    "replace",
+    953,
+    955,
+    622,
+    624,
+    [
+     " Note that this is not fully standard compliant. It can only be used for idempotency check if the `BatchSize` is 1.",
+     " Otherwise, deduplication keys from the individual messages should be used."
+    ]
+   ],
+   [
+    "equal",
+    955,
+    956,
+    624,
+    625
+   ],
+   [
+    "replace",
+    956,
+    957,
+    625,
+    626,
+    [
+     "- `webhook-signature`: The signature of the webhook. See: Standard Webhooks."
+    ]
+   ],
+   [
+    "equal",
+    957,
+    963,
+    626,
+    632
+   ],
+   [
+    "replace",
+    963,
+    964,
+    632,
+    633,
+    [
+     "Every batch of changes is one POST, and the listener waits for its answer before it goes on. The batch size is the default of the library, 100 changes. In our benchmark, with a webhook that only reads the request, the initial copy ran at about 130,000 rows per second and the stream at about 81,000 with batches of 100, at about 184,000 and 86,000 with batches of 1,000, and at about 209,000 and 106,000 with batches of 10,000 (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL in Docker on the same machine and the webhook in the process of the benchmark). A larger batch is a larger request (about 300 bytes a row in the benchmark), so call `WithBatchSize` after `UseWebhook` if your webhook takes it. A batch that is not full is still sent after the batch wait time (100 ms by default)."
+    ]
+   ],
+   [
+    "equal",
+    964,
+    970,
+    633,
+    639
+   ],
+   [
+    "replace",
+    970,
+    971,
+    639,
+    640,
+    [
+     "The output uses the HTTP interface of ClickHouse, and sends the rows as JSON, or in the faster RowBinary format if you turn it on (see Insert format). It needs no ClickHouse client library, and is tested with ClickHouse 26.10."
+    ]
+   ],
+   [
+    "equal",
+    971,
+    980,
+    640,
+    649
+   ],
+   [
+    "replace",
+    980,
+    981,
+    649,
+    650,
+    [
+     "- `_version`: the position of the change in the PostgreSQL WAL (`w * 2^64 + n` of the deduplication key). A copied row has version 0."
+    ]
+   ],
+   [
+    "equal",
+    981,
+    1011,
+    650,
+    680
+   ],
+   [
+    "replace",
+    1011,
+    1012,
+    680,
+    681,
+    [
+     "- A table that already exists is used as it is. To choose the column types or an engine the options do not offer (for example a replicated one), create the table before the first row arrives. It needs the columns `_version UInt128` and `_deleted UInt8`. With RowBinary, a column type it does not cover makes the rows of the table go as JSON: see Insert format."
+    ]
+   ],
+   [
+    "equal",
+    1012,
+    1023,
+    681,
+    692
+   ],
+   [
+    "replace",
+    1023,
+    1029,
+    692,
+    693,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1029,
+    1032,
+    693,
+    696
+   ],
+   [
+    "replace",
+    1032,
+    1033,
+    696,
+    697,
+    [
+     "- `PartitionBy`: a `PARTITION BY` expression. The default is no partitions. The cleanup of deleted rows works per partition: a partition that has had no new rows (inserts, updates or deletes) for that long is cleaned up, even while other partitions of the table get new rows."
+    ]
+   ],
+   [
+    "equal",
+    1033,
+    1034,
+    697,
+    698
+   ],
+   [
+    "replace",
+    1034,
+    1037,
+    698,
+    701,
+    [
+     " - `ReplacingMergeTree` (the default) keeps the latest version of every row.",
+     " - `MergeTree` keeps every version, deletes included: the history of the table, in the order of `_version`. Read it without `FINAL`. A change that PostgreSQL replays after a reconnect is there twice, with the same `_version`.",
+     " - `Null` keeps nothing: only the materialized views on the table get the rows. An update that did not change a large value has `null` for it, because there is no row to take it from, unless the table has `REPLICA IDENTITY FULL`."
+    ]
+   ],
+   [
+    "equal",
+    1037,
+    1051,
+    701,
+    715
+   ],
+   [
+    "replace",
+    1051,
+    1052,
+    715,
+    716,
+    [
+     "|PostgreSQL|ClickHouse|"
+    ]
+   ],
+   [
+    "equal",
+    1052,
+    1053,
+    716,
+    717
+   ],
+   [
+    "replace",
+    1053,
+    1067,
+    717,
+    731,
+    [
+     "|`boolean`|`Bool`|",
+     "|`smallint`, `integer`, `bigint`|`Int16`, `Int32`, `Int64`|",
+     "|`real`, `double precision`|`Float32`, `Float64` (`NaN` and `Infinity` are null)|",
+     "|`numeric(p, s)`|`Decimal(p, s)`|",
+     "|`numeric` without precision|`Decimal(76, 38)`|",
+     "|`uuid`|`UUID`|",
+     "|`date`|`Date32`|",
+     "|`timestamp`|`DateTime64(6, 'UTC')`, or the zone of `TimestampTimeZone`|",
+     "|`timestamptz`|`DateTime64(6, 'UTC')`|",
+     "|arrays of the types above, and of `text`, `bytea` and the other types sent as text|`Array(Nullable(...))` of the element type, e.g. `integer[]` is `Array(Nullable(Int32))` (see Arrays)|",
+     "|arrays of enums and user-defined types|`Array(Nullable(String))`, e.g. `['sad','happy']`|",
+     "|`json`, `jsonb`|`JSON` (see JSON columns)|",
+     "|`bytea`|`String` with the bytes in hex|",
+     "|anything else (`text`, `time`, `interval`, enums...)|`String` with the text PostgreSQL sends|"
+    ]
+   ],
+   [
+    "equal",
+    1067,
+    1107,
+    731,
+    771
+   ],
+   [
+    "replace",
+    1107,
+    1108,
+    771,
+    772,
+    [
+     "ClickHouse wants few, large inserts. `UseClickHouse` therefore sets the batch size to 10,000 changes (the default of the library is 100). In our benchmark the initial copy ran at about 1,500 rows per second with batches of 100 and at about 95,000 with batches of 10,000, or about 105,000 with RowBinary (see Insert format) (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and ClickHouse in Docker on the same machine). To use another size, call `WithBatchSize` after `UseClickHouse`. A batch that is not full is still sent after the batch wait time (100 ms by default)."
+    ]
+   ],
+   [
+    "equal",
+    1108,
+    1115,
+    772,
+    779
+   ],
+   [
+    "replace",
+    1115,
+    1116,
+    779,
+    780,
+    [
+     "With `options.UseRowBinary = true` they are sent in RowBinary, which ClickHouse reads two to three times faster (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and ClickHouse in Docker on the same machine). In our benchmark it made the initial copy and the stream about 10% faster on the same machine, since the inserts are only a part of the time. It is newer, and off by default, as the binary format of PostgreSQL's own replication: the output then does what the parser of ClickHouse does with the text (the time zone of a `timestamp`, dates out of range, decimal digits), so a difference would be stored without an error."
+    ]
+   ],
+   [
+    "equal",
+    1116,
+    1137,
+    780,
+    801
+   ],
+   [
+    "replace",
+    1137,
+    1165,
+    801,
+    802,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1165,
+    1169,
+    802,
+    806
+   ],
+   [
+    "replace",
+    1169,
+    1170,
+    806,
+    807,
+    [
+     "|Option|Default||"
+    ]
+   ],
+   [
+    "equal",
+    1170,
+    1171,
+    807,
+    808
+   ],
+   [
+    "replace",
+    1171,
+    1183,
+    808,
+    820,
+    [
+     "|`Endpoint`|`http://localhost:8123`|The HTTP interface of ClickHouse.|",
+     "|`Database`|`default`|The database of the tables. It must exist.|",
+     "|`Username`, `Password`|`default`, empty||",
+     "|`UseAsyncInserts`|`true`|For batches of fewer than 1,000 rows. See Batch size.|",
+     "|`UseRowBinary`|`false`|See Insert format.|",
+     "|`UseJsonType`|`true`|See JSON columns.|",
+     "|`UseArrayTypes`|`true`|See Arrays.|",
+     "|`CleanUpDeletedRowsAfter`|none|Removes the deleted rows. See Deleted rows.|",
+     "|`Tables`|empty|The order, partitions and engine per table. See Order, partitions and engine.|",
+     "|`Settings`|empty|ClickHouse settings sent with every request, e.g. `options.Settings[\"insert_quorum\"] = \"2\"`.|",
+     "|`GetTableName`|see Tables|Returns the ClickHouse table name for a PostgreSQL table, from its schema and its name.|",
+     "|`HttpClient`|none|Your own `HttpClient`, e.g. with a proxy or a client certificate.|"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

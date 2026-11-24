@@ -3541,5 +3541,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "732b7f086fd5": {
+  "identity": {
+   "one_liner": "本地优先的 Discord–GitHub 自动化引擎，按“读取→规划→审计→应用”流程执行",
+   "review": "Gitcord 是 AOSSIE 组织下的 Python 项目，读取 GitHub 活动与 Discord 状态，以确定性逻辑规划角色变更与 GitHub 任务分配，写入前生成 JSON 与 Markdown 审计报告，默认 dry-run 模式。本地状态用 SQLite 存储，支持 Docker 部署与斜杠命令交互，需要 GitHub PAT 与 Discord Bot Token，写入操作需在配置中显式开启。",
+   "highlights": [
+    "默认 dry-run 与 observer 模式，写入操作由 MutationPolicy 门控，报告先行",
+    "读取、规划、写入三层分离：规划器为纯函数式确定性逻辑，相同输入产出相同计划",
+    "提供 /link、/verify-link、/profile、/summary、/issue、/create-issue 等斜杠命令，支持身份验证与贡献指标查询"
+   ],
+   "use_cases": [
+    "为 GitHub 组织与 Discord 服务器建立成员身份链接与贡献者档案",
+    "按贡献活动自动规划并审计 Discord 角色变更",
+    "在 Discord 中查询开放 PR/Issue、创建 GitHub Issue 或部署常驻同步调度"
+   ]
+  },
+  "sha": "732b7f086fd5",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "62d10429a349": {
+  "identity": {
+   "one_liner": "只读访问本地 Zotero 文献库的 DeepSeek Harness 插件，支持 Local API 与 sqlite 副本两种读取模式",
+   "review": "该插件为 DeepSeek Harness 提供只读的 Zotero 文献库访问工具，包含状态探测、检索、条目读取和证据快照四个工具，仅执行 HTTP GET 与 SELECT 操作。它通过环回地址的 Local API 或复制到临时目录的 zotero.sqlite 副本读取数据，不提供任何写入路径，也不与 Zotero Web API 通信、不下载 PDF 附件。安装方式为 dsh plugin add 命令，运行时无依赖，适配 Zotero 6/7。",
+   "highlights": [
+    "提供 zotero_status、zotero_search、zotero_item、zotero_to_rep 四个工具，仅执行 GET 与 SELECT 操作",
+    "双读取模式：优先 Local API（仅 127.0.0.1:23119），备用方案为复制 zotero.sqlite 到临时目录后只读打开，两模式均不可用时返回具体操作步骤",
+    "zotero_to_rep 将条目固化为 JSON 快照与 REP 证据，不下载 PDF，附件路径保留在元数据中以配合 doc_anchor"
+   ],
+   "use_cases": [
+    "在 DeepSeek Harness 会话中检索并读取本地 Zotero 文献的标题、作者、年份、DOI、摘要、标签与集合信息",
+    "将选定的文献条目注册为不可变的 JSON 证据快照，用于研究记录留痕",
+    "Local API 未启用时，通过设置 dataDir 指向 zotero.sqlite 所在目录，以只读副本方式提取条目"
+   ]
+  },
+  "sha": "62d10429a349",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

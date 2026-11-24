@@ -3562,5 +3562,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "170b112df579": {
+  "identity": {
+   "one_liner": "自托管家庭健康数据仪表盘，将 Google Health API 数据镜像到单个 SQLite 文件。",
+   "review": "Hælan 是面向家庭的自托管健康数据仪表盘，从 Google Health API 或配套 Android 应用读取数据，将完整历史写入单个 SQLite 文件，无需遥测、无托管服务。每个家庭需自带 Google Cloud 项目并运行一个容器实例。数据以个人基线（如最近60天）对比方式展示。README 声明代码由 AI 编码代理编写并经人审，未经专业安全审计，仅有单家庭生产使用。",
+   "highlights": [
+    "将全量健康历史（含分钟级日内样本）写入一个 SQLite 文件，数据保留期不受源端留存窗口限制",
+    "提供十个页面（Dashboard、Records、Activity、Sleep、Recovery 等）与个人基线对比视图，支持英语和荷兰语界面",
+    "提供18个只读、按人绑定的类型化工具接口（stdio 或 POST /mcp），其中 sql_query 对一次性构建的投影数据库执行只读 SELECT"
+   ],
+   "use_cases": [
+    "家庭自托管长期保存个人健康数据，避免受 Google 数据保留窗口或 API 访问丢失影响",
+    "需要基于个人基线查看睡眠、活动、恢复等指标趋势的家庭成员",
+    "通过 MCP 工具以只读方式让 AI 代理查询本人健康数据的场景"
+   ]
+  },
+  "sha": "170b112df579",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dceed3345ba4": {
+  "identity": {
+   "one_liner": "单文件 Python 的 Linux 主机 CVE 追踪工具，基于 OSV.dev 无代理匹配评级。",
+   "review": "cvewatch 是一个单文件 Python 工具，用于追踪 Linux 主机上的 CVE。它通过本地或 SSH 无代理方式收集 dpkg/rpm/apk 软件包清单，匹配 OSV.dev 发行版数据，并用 CISA KEV 和 FIRST EPSS 数据富化，按 P1–P4 分级，将历史记录保存在 SQLite 中，生成 HTML/CSV/JSON 报告和 Prometheus 指标，并通过 ntfy、webhook 或电子邮件发送新的 P1/P2 警报。该工具面向家庭实验室和小型团队，仅使用 Python 标准库，对主机只读。",
+   "highlights": [
+    "通过 SSH 无代理扫描，无需在目标主机上安装任何东西",
+    "通过 OSV 发行版数据和原生 dpkg/rpm 版本比较实现回移修复的包匹配",
+    "SQLite 历史记录，支持首次发现/已解决/重新打开时间以及平均修复时间"
+   ],
+   "use_cases": [
+    "跟踪少量 Linux 服务器的每日漏洞状态，并生成优先级列表",
+    "包含已接受风险异常的合规/审计历史记录",
+    "作为 CI 或镜像流水线中阻断构建的漏洞门禁"
+   ]
+  },
+  "sha": "dceed3345ba4",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "66461fc041c9": {
+  "identity": {
+   "one_liner": "离线优先专注计时器，Loop 会话存本地 SQLite",
+   "review": "Hour Loop 是一款离线优先的专注计时应用，基于 Expo/React Native 构建。核心机制是将带时间戳的专注会话（Loop）持久化为 UTC 时间间隔，SQLite 作为唯一数据源，配合独立任务池、日/月时间意向与历史统计。数据全部本地存储，无需账号；AI 助手与部分 Play 商店构建才使用网络。面向需要记录专注时间的个人用户。",
+   "highlights": [
+    "Loop 专注会话支持暂停、恢复与停止，采用崩溃安全的持久化计时，达成目标后自动打开完成日志",
+    "支持任务池、胶囊清单、日/月意向目标、日/周/月历史视图（含周条形图与月热力图），并可导出/恢复 JSON 备份",
+    "支持 15 种界面语言、系统/浅色/深色主题，可本地构建多种 ABI 的 Android APK"
+   ],
+   "use_cases": [
+    "在无网络环境（如飞行模式）下记录专注会话与任务进度",
+    "通过本地构建 APK 侧载安装进行自托管式使用与测试",
+    "需要日/月维度的计划与实际专注时间统计的个人时间管理"
+   ]
+  },
+  "sha": "66461fc041c9",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

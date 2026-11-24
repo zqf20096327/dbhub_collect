@@ -3244,5 +3244,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b7e88f71a00d": {
+  "identity": {
+   "one_liner": "Ruby/Rails 功能开关（feature flag）库，支持多存储适配器与 Web UI",
+   "review": "Flipper 是面向 Ruby 和 Rails 应用的功能开关库，用于控制不同用户对功能的访问。它支持按全体、特定参与者、参与者分组、参与者百分比或时间百分比启用或禁用功能，可通过控制台或 Web UI 配置。功能默认关闭，需显式开启。数据存储通过适配器实现（如 Active Record、Redis），另有可选的商业云服务 Flipper Cloud 提供多环境、审计历史等能力。",
+   "highlights": [
+    "支持为全体、特定参与者、分组、参与者百分比、时间百分比启用或禁用功能",
+    "提供多种存储适配器（Active Record、Redis、Sequel 等）与可选 Web UI（flipper-ui）",
+    "支持命名实例，可在同一应用内维护多套独立的功能开关集合"
+   ],
+   "use_cases": [
+    "Rails 或其他 Ruby 应用中按用户/百分比灰度控制功能开关",
+    "需要将功能标志存储在已有数据库或 Redis 中的团队",
+    "多个应用需要共享同一套功能开关配置的场景"
+   ]
+  },
+  "sha": "b7e88f71a00d",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8e765167ee17": {
+  "identity": {
+   "one_liner": "面向买家与商家的只读订单售后核查助手，程序管校验、模型管解释。",
+   "review": "这是一个可本地运行的售后核查演示应用：买家只读本人订单，商家只读授权店铺，用于核对退款金额、匹配按支付时刻选版的政策并给出带引用的结论。技术栈为 Python/FastAPI/PostgreSQL，工具调用经 MCP 服务，金额以整数分计算。默认不调用模型、不联网读取平台，输出结论标注\"仍需售后核验\"，不执行退款等操作。",
+   "highlights": [
+    "通过 MCP 独立网络服务提供工具，服务端重新核对专用凭据，聊天自报身份编号不改变权限",
+    "政策条款按店铺、类别、业务时间匹配版本，结论保留期限、条件、例外、未核实事实及文件行号引用",
+    "提供 demo.py 的 prepare/up/check 流程与15项离线核查，默认使用标注的合成数据运行，无需模型密钥"
+   ],
+   "use_cases": [
+    "买家查询本人订单的退款截止、退货资格与运费承担依据",
+    "商家核对授权店铺内订单金额变化及退款原因证据",
+    "本地演示模型工具调用与政策条件判断分离的架构实践"
+   ]
+  },
+  "sha": "8e765167ee17",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5c4780d92deb": {
+  "identity": {
+   "one_liner": "面向 Bun 运行时的后端框架，内置 SQLite ORM、认证、任务队列、存储与可观测性引擎",
+   "review": "Yatta 是运行于 Bun 的后端框架，直接使用 bun:sqlite、Bun.serve、Bun.Worker 等原生能力，TypeScript 无需构建步骤即可运行。它提供文件式路由、类型安全 ORM、Argon2id 认证、任务队列、缓存、对象存储、邮件、实时通信和内置可观测性模块，并预挂载 gRPC-Web、WebDAV、DoH、OAuth/OIDC、MCP 等协议端点。面向在 Bun 上构建自托管后端服务的开发者；README 指出 WebDAV 与 OAuth/OIDC 状态默认存于进程内存，且 WebDAV 无内置认证，多节点部署时需自行处理。",
+   "highlights": [
+    "包含十个可独立引入的功能引擎（api/db/auth/jwt/jobs/cache/storage/mail/realtime/observe），每个引擎自带错误类并提供内存与持久化两种存储",
+    "worker 运行时按 CPU 核数划分 cpu-pool 与 io-pool，通过微批处理（单条 IPC 消息最多 32 个任务）降低线程切换开销",
+    "内置 Observer 记录 spans、指标与日志，分析结论附带证据与 unknowns 披露，数据不足时拒绝给出判断"
+   ],
+   "use_cases": [
+    "在 Bun 上开发自托管全栈后端服务，需要 ORM、认证、任务队列与存储一体化的运行时",
+    "为应用快速提供 OAuth 2.0 / OIDC、gRPC-Web、WebDAV、MCP 等标准协议端点",
+    "需要对查询性能、SLO、内存趋势进行进程内分析并通过 /_yatta 仪表盘查看的项目"
+   ]
+  },
+  "sha": "5c4780d92deb",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

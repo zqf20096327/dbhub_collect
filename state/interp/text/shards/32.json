@@ -3097,5 +3097,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "40ae71a58ec3": {
+  "identity": {
+   "one_liner": "Redis 官方 MCP 服务器，为 AI 代理提供自然语言接口管理并搜索 Redis 数据",
+   "review": "该项目是 Redis 官方发布的 MCP 服务器，面向使用 MCP 客户端的 AI 代理应用，通过自然语言读写和检索 Redis 数据。它封装了字符串、哈希、列表、集合、有序集合、pub/sub、流与 JSON 文档等工具，并提供向量索引与文档搜索工具。当前仅支持 stdio 传输，可通过 PyPI、GitHub 或 Docker 运行。",
+   "highlights": [
+    "提供覆盖 hash、list、set、sorted set、stream、JSON、pub/sub 等数据类型的工具集",
+    "包含向量索引管理、向量搜索及基于 HTTP API 的 Redis 文档搜索工具",
+    "支持 Redis ACL、TLS/SSL 连接，可通过 MCP_REDIS_ALLOWED_TOOLS 环境变量以允许列表方式限制暴露的工具"
+   ],
+   "use_cases": [
+    "AI 代理以自然语言将对话、会话或缓存数据写入 Redis",
+    "管理向量索引并对存储的向量嵌入执行搜索",
+    "为 MCP 客户端（如 Claude Desktop）提供受限权限的 Redis 数据操作接口"
+   ]
+  },
+  "sha": "40ae71a58ec3",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "678f2bdc332c": {
+  "identity": {
+   "one_liner": "自托管健康数据聚合服务，将多源穿戴设备数据统一为一个 API。",
+   "review": "open-health-sync 是一个用 Go 编写的自托管健康数据聚合器，可从 Apple Health、Health Connect、Garmin、Oura、WHOOP、Fitbit 等约 18 个来源采集数据，经 ETL 归一化后存入 Postgres/TimescaleDB，并通过 REST、FHIR R4、Open mHealth、webhook、CSV/Parquet 及只读 MCP server 提供。面向开发者与个人，需自备 Postgres，采用 AGPL-3.0 许可。项目处于 0.3.0 版本（pre-1.0），API、配置或数据库 schema 在任意版本中都可能变更，且并非医疗设备。",
+   "highlights": [
+    "支持约 18 个数据源，包括云端 OAuth 连接器、HealthKit/Health Connect 上传、FIT/GPX/TCX 文件导入及蓝牙健康设备",
+    "提供 REST API、FHIR R4、Open mHealth、签名 webhook、CSV/Parquet 导出及只读 MCP server 等多种输出方式",
+    "单一 Go 二进制加 Postgres（TimescaleDB）架构，可运行于 Docker、Kubernetes、Linux/macOS 或 Raspberry Pi 5"
+   ],
+   "use_cases": [
+    "为自己的应用提供多个穿戴设备品牌的统一 API，替代逐个厂商集成",
+    "将 Apple Health 导出数据载入 PostgreSQL 用 SQL 查询，或导出为 CSV/Parquet 供 DuckDB、pandas 使用",
+    "通过 FHIR R4 或 Open mHealth 向研究或临床系统提供穿戴数据，或允许 MCP 客户端以只读方式访问个人健康数据"
+   ]
+  },
+  "sha": "678f2bdc332c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ef75fe107dec": {
+  "identity": {
+   "one_liner": "基于PurpleAir API的空气质量数据采集器，支持多种存储与指标输出",
+   "review": "PADL是一套查询PurpleAir传感器并落存数据的日志工具，面向需要采集空气质量遥测数据的用户。它通过云端API（需PurpleAir密钥）或本地网络IPv4地址读取传感器，写入TimescaleDB PostgreSQL、SQLite3、CSV或Grafana Loki，并以Prometheus指标和Matter格式JSON输出。核心包含Python记录器类，以及基于C++17遥测引擎（内嵌SQLite3、SWIG 4绑定Python/Node.js/C#/.NET/Go）的统一CLI与桌面/浏览器GUI。云端请求依赖API密钥，PSQL模式需自备PostgreSQL实例。",
+   "highlights": [
+    "支持将传感器数据存储到 TimescaleDB PostgreSQL、SQLite3、CSV 文件和 Grafana Loki",
+    "提供 Prometheus 指标导出与 Matter 形态的设备 JSON HTTP 输出",
+    "包含统一 JSON 配置 CLI、桌面 tkinter GUI 和浏览器 Studio GUI，并内置 SWIG 4 绑定（Python/Node.js/C#/.NET/Go）"
+   ],
+   "use_cases": [
+    "长期采集和存档 PurpleAir 传感器的空气质量（如 pm2.5）数据",
+    "将传感器数据接入 Prometheus/Grafana 监控体系",
+    "通过本地网络读取传感器数据并写入 SQLite3/CSV 等轻量存储"
+   ]
+  },
+  "sha": "ef75fe107dec",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ca83ebec8528": {
+  "identity": {
+   "one_liner": "面向私人教师的多租户SaaS教学管理平台，含公开教师目录",
+   "review": "Talmidon 是为私人教师（面向以色列/希伯来语市场）设计的多租户SaaS平台：每位教师管理自己的学生、课表、教学笔记与按课时计费；家长和学生获得受限视图；公开目录无需登录即可按科目和城市查找教师。前端 Angular 21 + PrimeNG（RTL希伯来UI），后端 ASP.NET Core (.NET 10) + PostgreSQL，用 Hangfire 跑课节系列生成与提醒等后台任务。产品按以色列本地化设计：单一时区 Asia/Jerusalem、犹太历跳过节日、以色列电话格式。",
+   "highlights": [
+    "按租户隔离的教学管理：学生档案、FullCalendar 课表、按课时计费、月度收入与出勤报告（可导出 CSV）",
+    "周期课以规则形式生成独立课时，基于 .NET HebrewCalendar 跳过犹太节日，后台任务滚动推进 8 周窗口",
+    "角色分权的门户体系（访客/教师/家长/学生/管理员）与 ASP.NET Core Identity + JWT 认证（含轮换 refresh token）"
+   ],
+   "use_cases": [
+    "私人教师独立管理学生、课表、教学笔记与按课时收费",
+    "家长和学生查看受限视图：课表、共享笔记、学习材料、消息线程",
+    "潜在学生通过免登录公开目录按科目和城市筛选并联系教师"
+   ]
+  },
+  "sha": "ca83ebec8528",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

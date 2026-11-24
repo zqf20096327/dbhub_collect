@@ -3275,5 +3275,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "92827cf890f3": {
+  "identity": {
+   "one_liner": "基于 OpenIddict 与 redb.Route 的传输无关 OAuth 2.1 / OpenID Connect 服务器",
+   "review": "redb.Identity 是一个面向 .NET 生态的 OAuth 2.1 / OIDC 服务器，基于 OpenIddict 构建，核心端点以 direct-vm:// 路由形式提供，可经 HTTP、gRPC、SOAP 等多种传输调用，也可在进程内直接调用。内置基于 redb 的用户、客户端、会话等存储，支持 TOTP、WebAuthn 等 MFA、SCIM 2.0、外部身份提供方联邦，并可在 PostgreSQL、MSSQL、SQLite 上运行。适合需要在 .NET 应用中承载身份认证能力、且希望以模块化方式部署的团队。",
+   "highlights": [
+    "核心端点为 direct-vm:// 路由，支持经 HTTP、gRPC、RabbitMQ、SignalR 门面或在进程内直接调用",
+    "提供 TOTP、SMS/Email OTP、WebAuthn（FIDO2）与恢复码等多因素认证，以及 SCIM 2.0 用户/组配置端点",
+    "通过 redb 对象存储共享 DataProtection 密钥环与签名密钥，支持多实例/集群部署；支持 PostgreSQL、MSSQL、SQLite 存储"
+   ],
+   "use_cases": [
+    "在 .NET 服务（含 Worker Service、消息总线消费者）中通过进程内路由调用 token、introspect 等端点，无需 HTTP 回环",
+    "需要部署多实例身份服务器并共享密钥环、会话与清理任务的集群环境",
+    "需要 SCIM 2.0 自动化用户/组配置或对接 OIDC、GitHub、LDAP/AD 等外部身份提供方的系统集成"
+   ]
+  },
+  "sha": "92827cf890f3",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "08ef4013a726": {
+  "identity": {
+   "one_liner": "Windows 零依赖本地 PHP 开发面板，按项目隔离 PHP、MariaDB、Composer",
+   "review": "PHP Station 是面向 Windows 10/11 的本地 PHP/Laravel 开发面板，为每个项目提供独立的 php.exe、端口、Composer 与 MariaDB 实例，可多项目并行运行。需 Node.js 18+，解压或克隆后双击 bat 启动于 127.0.0.1:7070，安装向导从官方源补齐缺失组件。内置邮件捕获、dump/错误聚合、数据库回滚、MCP 服务器与免费 AI 接入。",
+   "highlights": [
+    "每个项目运行独立的 PHP（7.4–8.5）、Composer 与 MariaDB（10.4–12）实例，支持并行运行不同 PHP 版本",
+    "内置 Mail Catcher、dump()/dd() 查看器与错误分组面板，通过 auto_prepend_file 实现，无需修改 .env",
+    "作为 MCP 服务器向 Claude Code、Cursor、Copilot 等工具暴露错误、邮件、dump 与数据库写入记录，并提供单条写入撤销与还原点"
+   ],
+   "use_cases": [
+    "在同一台 Windows 机器上并行维护需要不同 PHP 版本的多个本地项目",
+    "本地开发中捕获测试邮件、查看 dump 输出与聚合 laravel.log 错误",
+    "让 AI 编码代理读取本地错误日志、验证码邮件和数据库变更并回滚误操作"
+   ]
+  },
+  "sha": "08ef4013a726",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

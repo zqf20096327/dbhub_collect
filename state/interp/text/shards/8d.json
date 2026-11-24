@@ -2994,5 +2994,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "883d45d08f03": {
+  "identity": {
+   "one_liner": "单容器自托管邮件客户端，聚合多个 IMAP 邮箱并持久化为一个 SQLite 文件",
+   "review": "nexmail 是一个自托管 Web 邮件客户端，用 Python (FastAPI) 与 React 编写，将多个 IMAP 邮箱聚合到一个容器和一个 SQLite 文件中运行，不依赖第二套数据库或云账号。面向在家自行托管服务的用户，支持 OpenID Connect 登录与多用户。README 明确提示其版本为 0.32.0、仍处早期，建议先在非关键邮箱上试用。",
+   "highlights": [
+    "多 IMAP 邮箱聚合视图与合并收件箱，支持全文搜索及按需在服务商侧执行 IMAP SEARCH",
+    "标签以 IMAP 关键字存储于服务器；Snooze/归档/垃圾文件夹识别依据服务端 SPECIAL-USE 标志",
+    "支持 CardDAV/CalDAV 同步 iCloud、Google、Nextcloud，任务可推送至 Todoist 或自托管 nextasks，并提供签名 JSON 的 webhook 目标"
+   ],
+   "use_cases": [
+    "homelab 用户在自己的机器上以单容器托管个人邮件客户端",
+    "需要在一个界面管理多个 IMAP 邮箱并保留服务端可读标签与文件夹的场景",
+    "多用户环境（通过 OpenID Connect 登录）共享自托管实例"
+   ]
+  },
+  "sha": "883d45d08f03",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a95f92f10688": {
+  "identity": {
+   "one_liner": "支持24种数据库的桌面客户端，内置AI助手与MCP服务器，写入操作需经用户批准",
+   "review": "Graphite 是一款基于 Electron 的桌面数据库客户端，连接 SQL、NoSQL 及云端仓库共 24 种数据库（部分为 beta），提供 SQL 编辑器、表格浏览与内联编辑、ER 图、备份导出等功能。其 AI 助手与 MCP 服务器通过数据库自身的只读模式或审批对话框控制写入。提供 macOS、Windows、Linux 安装包，采用 MIT 许可证。",
+   "highlights": [
+    "支持 SQLite、PostgreSQL、MySQL、MongoDB、Redis、DynamoDB、ClickHouse 等 24 种数据库，连接密码通过操作系统密钥链加密保存",
+    "AI 助手（Anthropic API 或 OpenAI 兼容接口）与 MCP 服务器共用同一工具集，读取操作由数据库强制只读模式执行，写入操作弹出审批对话框",
+    "内置 CodeMirror 6 SQL 编辑器、ER 图自动布局与 SVG/PNG 导出、无 pg_dump/mysqldump 依赖的流式备份恢复，以及 CSV/JSON/SQL INSERT 导出"
+   ],
+   "use_cases": [
+    "需要在一个桌面应用中管理多种 SQL 与 NoSQL 数据库连接的开发者或 DBA",
+    "希望让 Claude Code、Cursor 等外部代理通过 MCP 访问数据库并保留写入审批流程的场景",
+    "需要 ER 图、表数据内联编辑、按格式导出查询结果的日常数据操作"
+   ]
+  },
+  "sha": "a95f92f10688",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bac11fcdfd0c": {
+  "identity": {
+   "one_liner": "面向 Claude Code 和 Kimi Code 的 PostgreSQL 与 MySQL/InnoDB 数据库设计审查 Agent Skill",
+   "review": "这是一个安装到 Claude Code 或 Kimi Code 的 Agent Skill，用于关系数据库的模式设计、索引策略、查询调优、事务并发和零停机迁移。它基于真实的 schema、执行计划和统计信息给出建议，并指出背后的引擎机制；不覆盖 NoSQL，未经明确批准不会执行 DDL。附带标准库 Python 审计脚本，可独立运行或作为 CI 门禁。",
+   "highlights": [
+    "覆盖模式设计、B+tree 索引、EXPLAIN (ANALYZE, BUFFERS) 计划解读、隔离级别与锁、expand/contract 零停机迁移五大主题",
+    "支持 PostgreSQL 13+ 与 MySQL 8.0+（InnoDB），涵盖 GIN/BRIN/hash 等索引类型及 12 种迁移工具的引擎特定命令",
+    "内置标准库 Python 3 审计脚本，退出码 0/1/2 可用作 CI 检查；通过 npx 或 git clone 安装，支持 KIMI_CODE_HOME 自定义路径"
+   ],
+   "use_cases": [
+    "为 Claude Code 或 Kimi Code 会话中的 schema 设计、索引选择、慢查询分析等话题自动激活，或通过 /designing-databases 手动调用",
+    "对 pg_dump/mysqldump 导出的 DDL 或迁移文件做结构化审计",
+    "将 schema 审计脚本接入 CI 流程，对 ERROR 级发现以非零退出码拦截"
+   ]
+  },
+  "sha": "bac11fcdfd0c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6d1602c5c295": {
+  "identity": {
+   "one_liner": "基于 Netlify Functions 与 Netlify Database 的记录存储演示 API",
+   "review": "该项目实现一个部署在 Netlify 上的公共记录 API，端点为 /.netlify/functions/api，使用 Netlify Database 存储数据，部署时自动执行表迁移，无需自定义数据库凭据。适合需要快速搭建无鉴权公开数据接口的开发者演示。README 说明其不含身份验证，仅应提交可公开的数据。",
+   "highlights": [
+    "GET 返回最多 100 条记录，按最新排序",
+    "POST 接受 application/json 类型的 JSON 对象（最大 16 KiB），返回 201 及含 id、data、createdAt 的存储记录",
+    "使用 Netlify Database 存储，部署时自动执行表迁移，无需自定义数据库凭据"
+   ],
+   "use_cases": [
+    "为站点提供无需数据库配置的公开记录写入与读取接口",
+    "通过 curl 或 HTTP 客户端演示 POST/GET 请求流程",
+    "提交可公开的数据进行存储测试"
+   ]
+  },
+  "sha": "6d1602c5c295",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

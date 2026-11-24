@@ -2903,5 +2903,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c8163a73ae5c": {
+  "identity": {
+   "one_liner": "自托管项目管理与事项跟踪工具，支持可定制看板与实时协作",
+   "review": "Scrumboy 是一个用 Go 编写的自托管项目管理和事项跟踪应用，提供可自定义工作流列、优先级层级、冲刺、标签和自由画布故事墙等能力，默认使用 SQLite 存储于 ./data 目录。它面向需要自托管、零 SaaS 依赖的团队，支持 Docker、源码、Windows/macOS 可执行文件多种运行方式，并提供 MCP 客户端接入。部分功能（2FA、日程订阅、密码重置）需额外配置加密密钥或 SMTP。",
+   "highlights": [
+    "支持 Docker 镜像、源码构建、Windows/macOS 可执行文件运行，无需 .env 或 TLS 证书即可启动",
+    "提供自定义工作流列、优先级层级、冲刺管理、实时协作同步和公开展示的只读看板",
+    "支持 MCP 兼容客户端接入、出站 Webhook、TOTP 2FA、追加式审计日志、Trello JSON 导入和 JSON 备份导出"
+   ],
+   "use_cases": [
+    "团队自托管看板协作，通过冲刺、优先级和截止日期提醒管理任务",
+    "通过 /anon 创建临时匿名共享看板，或向访客发布无需账号的只读看板",
+    "通过 MCP 兼容客户端（如 Claude、Cursor）自动化管理项目与故事"
+   ]
+  },
+  "sha": "c8163a73ae5c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e93f997147f9": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的前后端分离 RBAC 权限管理系统后端。",
+   "review": "youlai-boot 是一套企业级权限管理系统后端，配套 vue3-element-admin 前端和 youlai-app 移动端，属于有来技术多语言生态矩阵（9 种后端实现共享同一套 API 规范与数据库结构）。核心包含 Spring Security + JWT/Redis 双令牌、RBAC 五级权限（数据/菜单/按钮/接口/字段）、代码生成器、Flowable 工作流等，工作流、OIDC、多租户、AI 辅助默认关闭需配置开启。环境要求 JDK 17+、MySQL 8.0+、Redis 6.0+，采用 Apache License 2.0 开源。",
+   "highlights": [
+    "安全体系采用 Spring Security + JWT/Redis 两种令牌格式，支持统一会话管理、令牌续期与多端互斥",
+    "RBAC 权限细分为数据、菜单、按钮、接口、字段五个层级",
+    "内置代码生成器可生成前后端 CRUD 代码，模块包含用户、角色、菜单、部门、字典、文件、定时任务、消息中心、操作日志"
+   ],
+   "use_cases": [
+    "企业中后台管理系统的学习参考",
+    "基于同一 API 规范与数据库结构的二次开发",
+    "需要 RBAC 权限管理、审批流或多租户能力的系统原型搭建"
+   ]
+  },
+  "sha": "e93f997147f9",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e5b6dfed5e27": {
+  "identity": {
+   "one_liner": "chDB 的 Go 语言绑定与命令行工具，内嵌进程内 ClickHouse SQL OLAP 引擎",
+   "review": "chdb-go 为 chDB 提供纯 Go 绑定、database/sql 驱动和 CLI，使程序以库方式运行基于 ClickHouse 的进程内 OLAP 引擎。引擎可从系统 libchdb 运行时加载，也可经空白导入将 libchdb 嵌入二进制，首跑解压到缓存目录。限制包括：单进程绑定一个数据路径，context 截止不保证原生中断查询。",
+   "highlights": [
+    "支持两种引擎来源：运行时查找 libchdb，或通过嵌入式模块将引擎打进二进制",
+    "提供 database/sql 驱动，支持 sql.Named 配合 ClickHouse {name:Type} 占位符的原生参数绑定",
+    "durable 包支持将数据库状态以检查点加 WAL 形式写入 S3、R2、MinIO 或目录"
+   ],
+   "use_cases": [
+    "在 Go 程序中直接执行 ClickHouse 兼容的 SQL 查询",
+    "构建自包含二进制或 FROM scratch 镜像，无需安装步骤",
+    "用 CLI 以持久 --path 模式或临时交互模式查询本地数据"
+   ]
+  },
+  "sha": "e5b6dfed5e27",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ff73a2288b32": {
+  "identity": {
+   "one_liner": "VideoDB 的 Python SDK，以编程方式访问其无服务器视频基础设施",
+   "review": "该 SDK 提供对 VideoDB 服务端视频基础设施的编程访问，面向构建需要将视频作为结构化数据处理的 AI 应用的开发者。0.5 版将检索流程分为 Understand→Index→Retrieve 三个原语，支持上传媒体、生成转录、建立索引、语义检索，并含实时流、桌面录制、生成式媒体等模块。需 API key，要求 Python 3.8+。",
+   "highlights": [
+    "提供 upload、understand、index、search 等方法，支持 spoken_words、vlm、object_detection、ocr 等内置分析器类型",
+    "包含 4 层结构的 Timeline 编辑器（Assets/Clips/Tracks/Timeline），支持字幕、转码、配音、缩略图生成",
+    "支持实时流处理、WebSocket 事件、会议录制、Sandbox 计算及 YouTube 搜索集成"
+   ],
+   "use_cases": [
+    "为 AI 代理或 RAG 应用构建视频语义搜索与时间戳内容检索",
+    "以代码方式实现多轨视频合成、字幕叠加与自动字幕生成",
+    "处理直播流、录制桌面或在线会议并进行索引分析"
+   ]
+  },
+  "sha": "ff73a2288b32",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e0d6fafb5b99": {
+  "identity": {
+   "one_liner": "定时备份数据库并将数据加密后传输至云存储的开源工具",
+   "review": "ogion 是一个用 Python 编写的定时数据库备份工具，支持 PostgreSQL、MariaDB、MySQL 以及单文件/目录备份。它先用 lzip 压缩，再用 age 格式加密，随后上传到 GCS、S3 兼容存储（AWS、Minio）、Azure Blob 或本地调试目录。作者定位其面向 home lab、兴趣项目等场景，并提示更大的数据库可考虑 pgBackRest。以 Docker 镜像部署，提供 Cron 定时、Discord/邮件/Slack 通知。",
+   "highlights": [
+    "支持 PostgreSQL 15-19、MariaDB 10.11-13.1、MySQL 8.4-26.10 及单文件/目录备份",
+    "备份流程为 lzip 压缩后以 age 格式加密，上传至 GCS、S3 兼容（AWS、Minio）或 Azure Blob 存储",
+    "提供 Cron 定时执行、Discord/SMTP/Slack 通知，linux/amd64 与 linux/arm64 双架构镜像"
+   ],
+   "use_cases": [
+    "home lab 或兴趣项目中定时备份数据库并加密上传云存储",
+    "在 docker、docker compose 或 Kubernetes 部署环境中运行定时备份任务",
+    "对配置文件目录等非数据库内容进行压缩加密备份"
+   ]
+  },
+  "sha": "e0d6fafb5b99",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

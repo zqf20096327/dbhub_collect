@@ -2962,5 +2962,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "85e001bb7ffd": {
+  "identity": {
+   "one_liner": "开源实时任务管理器，支持自托管、键盘操作与 MCP 服务",
+   "review": "Orbit 是一个开源的实时任务管理器，包含议题、看板、冲刺、项目、文档和分析功能，面向需要任务管理的团队。变更通过 websocket 同步；内置 MCP 服务器供 AI 代理以 OAuth 方式读写看板。自托管目前处于 Preview 状态，README 明确说明尚非受支持的生产版本。技术栈为 TypeScript、Next.js、Postgres（Drizzle）、Bun，许可证为 Apache-2.0。",
+   "highlights": [
+    "支持议题、看板、冲刺（含燃尽与结转）、项目、文档、站立会视图与分析统计",
+    "变更通过 websocket 实时分发，客户端按 scope 补丁本地缓存",
+    "内置约六十余个工具的 MCP 服务器，AI 代理经 OAuth 授权，权限不超过授权者"
+   ],
+   "use_cases": [
+    "团队在本地或自托管环境中运行任务管理（Preview 阶段，用于本地评估）",
+    "通过 Cmd K 命令面板与键盘快捷键操作议题、冲刺与文档",
+    "将 Claude、Cursor 等支持 MCP 的 AI 助手接入看板进行查询和建单"
+   ]
+  },
+  "sha": "85e001bb7ffd",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f665b56a7f7b": {
+  "identity": {
+   "one_liner": "本地代码上下文与记忆层，以 AST 签名检索与三层记忆机制为 AI 编码代理提供持久上下文",
+   "review": "Infimium 是一个运行在本地的 MCP 服务器与 CLI 工具，为 Cursor、Claude Desktop 等 AI 编码代理提供代码上下文检索与会话记忆。它用 Tree-sitter 提取 AST 符号签名，先返回轻量签名、按需展开实现；记忆分为 Scratchpad、情节归档、语义台账三层，存于嵌入式 SQLite。索引嵌入依赖本地 Ollama 的 nomic-embed-text 模型；内置支持 TypeScript、JavaScript、Python、Dart，其余语言经 WASM 解析器支持。",
+   "highlights": [
+    "以 MCP 服务器（infimium serve）提供 12 个工具，包括语义代码搜索、符号展开、依赖图查询、本地文档搜索与实现计划生成",
+    "采用 AST-first 检索策略，先返回符号签名，通过 expand_symbol 按需获取完整实现",
+    "三层记忆模型：会话 Scratchpad、SQLite 情节归档、带版本键值的持久语义台账"
+   ],
+   "use_cases": [
+    "为基于 Cursor、Windsurf、Claude Desktop 等 MCP 客户端的编码代理提供代码库上下文与会话记忆",
+    "维护 monorepo 或多项目工作区的跨项目依赖索引",
+    "在本地环境中对代码与文档（md/txt/pdf/html）进行语义检索而使用云端服务"
+   ]
+  },
+  "sha": "f665b56a7f7b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7a0b02d41c29": {
+  "identity": {
+   "one_liner": "基于原版 5.4 的开源 Shaiya 客户端与服务器配对，Go 编写，x64",
+   "review": "Shaiya GX 是用 Go 编写的 Shaiya EP5.4 原生 64 位客户端及配套 GX Server，支持 Linux 和 Windows。客户端使用 OpenGL 4.5 渲染，服务器嵌入 SQLite 作为主数据库，无需独立数据库服务即可运行。项目提供含游戏数据的便携包，仓库含开发测试数据库，游戏资产版权不随源码许可授予。",
+   "highlights": [
+    "客户端实现登录、角色创建、战斗、技能、背包、NPC 商店、任务、公会、组队/团等功能流程",
+    "服务器包含 gx_login、gx_world、gx_console 三个程序，保留 Rapture 的玩法与协议行为，兼容原有环境键与数据库文件名",
+    "内置性能诊断覆盖层，显示 FPS、帧时间、CPU/GPU 毫秒耗时、内存与绘制调用"
+   ],
+   "use_cases": [
+    "在 Linux/Windows 上本地运行和搭建 Shaiya EP5.4 风格的游戏服务",
+    "基于原版协议和玩法做逆向工程、功能补齐或重构的二次开发",
+    "阅读服务器架构、协议与封包布局的服务器参考实现"
+   ]
+  },
+  "sha": "7a0b02d41c29",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "288b9caa648a": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 复制流维护内存聚合、通过 HTTP 提供GROUP BY查询的服务",
+   "review": "Straum 以 PostgreSQL 物化视图的子集语法声明聚合规范（含 buckets 时间分桶），启动时加载全表到内存，随后跟随逻辑复制流处理 insert/update/delete，保持聚合实时精确，并通过 /ask HTTP 端点响应参数化 SELECT。数据不落盘，重启需重新加载；要求 PostgreSQL 17 及以上、具备 SELECT 权限的角色和 publication，托管数据库可用，但 RDS/Aurora/Cloud SQL 不支持 physical WAL 模式。README 注明其尚不稳定，规范与参数可能变化。",
+   "highlights": [
+    "支持 count、sum、avg、min、max、方差、标准差、百分位数、mode、distinct 计数及 FILTER，可连接查找表并按小时/天/周多粒度分桶",
+    "通过 PostgreSQL 复制流（含可选 --wal physical 读取 WAL）保持聚合与最新提交一致，响应含 as_of 时间戳",
+    "以 sidecar 方式运行：不添加扩展、表、触发器或索引，无超级用户要求，内存驻留（示例运行占约 202-305 MiB）"
+   ],
+   "use_cases": [
+    "仪表盘持续执行相同 GROUP BY 聚合查询的场景，避免每次全表扫描",
+    "需要实时精确聚合（含百分位数）替代定时刷新物化视图或触发器维护汇总表的场景",
+    "使用 PostgreSQL 17+ 且有 publication 权限的托管或自建数据库的实时聚合需求"
+   ]
+  },
+  "sha": "288b9caa648a",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

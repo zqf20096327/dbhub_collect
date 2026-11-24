@@ -3036,5 +3036,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ca16ce871022": {
+  "identity": {
+   "one_liner": "以编程方式启动 PostgreSQL 集群的 Node 包",
+   "review": "该包通过 NPM 安装，可在 Node.js 程序内创建、启动、停止 PostgreSQL 集群，并执行数据库的创建与删除。基于 zonky 的 embedded-postgres-binaries 提供的多平台二进制文件，支持 PostgreSQL 14–19 版本。需 post-install 脚本生成符号链接；root 环境需配置专用用户。适用于 Node.js 生态开发者。",
+   "highlights": [
+    "提供创建集群、启动、创建/删除数据库、停止进程的 API，配置项包含数据目录、端口、认证方式、持久化、initdb/postgres 附加参数等",
+    "支持 Darwin、Windows、Linux 多平台多架构二进制，覆盖 PostgreSQL 14 至 19 版本，并支持自定义日志与错误处理回调",
+    "提供 autoRehydrateSymlinks 选项在初始化或启动时自动重建缺失的符号链接"
+   ],
+   "use_cases": [
+    "Node.js/TypeScript 项目中需要以编程方式启动本地 PostgreSQL 实例的场景",
+    "Docker 容器等以 root 运行的环境中启动 PostgreSQL（可配合 createPostgresUser 选项创建专用用户）",
+    "需要按版本号指定安装 PostgreSQL 二进制的测试或开发流程"
+   ]
+  },
+  "sha": "ca16ce871022",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1b111830222e": {
+  "identity": {
+   "one_liner": "Go 语言精确十进制用量计费引擎，含按比例分摊与 PostgreSQL 模式",
+   "review": "这是一个面向 SaaS 应用的自托管用量计量与计费基础设施，提供基于 math/big.Rat 的精确十进制计费库、本地演示服务器和带行级安全的 PostgreSQL 模式。计费采用半开区间 UTC 日历月、分段按秒分摊、阶梯超额定价和存储量时间积分计算。README 明确指出它不是开箱即用的生产计费服务，支付网关、硬配额等需宿主应用自行集成。",
+   "highlights": [
+    "全程无浮点运算，中间值为精确有理数，仅在生成最终行项目时按 half-up 规则取整到分",
+    "支持周期中途订阅分段分摊（按经过秒数）、阶梯超额计价和存储字节秒的 GB-月积分计量",
+    "PostgreSQL 模式含按租户强制的行级安全（RLS）、GiST 区间排他约束及禁止修改不可变计费证据的触发器"
+   ],
+   "use_cases": [
+    "需要确定性、可解释账单计算的 SaaS 用量计费系统开发",
+    "在 Go 应用中通过 internal/billing 包实现计费逻辑，配合文档覆盖幂等与两阶段准入模式",
+    "通过本地 loopback 演示服务器（/api/preview、/api/simulate 等端点）探索和验证计费语义"
+   ]
+  },
+  "sha": "1b111830222e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

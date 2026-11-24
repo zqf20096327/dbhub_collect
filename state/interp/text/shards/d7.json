@@ -3599,5 +3599,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9758cc67f537": {
+  "identity": {
+   "one_liner": "单二进制 OLTP 数据库服务器，编译执行 T-SQL 并兼容 PostgreSQL 协议",
+   "review": "LionSQL 是用 Go 编写的 OLTP 数据库服务器，以单个静态二进制分发，原生编译并执行 Microsoft SQL Server 的 T-SQL 与存储过程，同时通过 PGWire v3（端口 5433）和 TDS（端口 1433）两种线协议对外服务。存储层提供内存 OCC 引擎与 WiredTiger MVCC 磁盘引擎两种后端。适用于需要在单一进程中同时承载 T-SQL 业务逻辑、PostgreSQL 驱动接入与 Web 管理界面的应用场景。源码构建需 Go 1.26+，启用 WiredTiger 后端需安装对应开发库。",
+   "highlights": [
+    "提供 PostgreSQL v3 协议（端口 5433）与 MSSQL TDS 协议（端口 1433）双协议接入，内置基于 goroutine 的连接池",
+    "支持存储过程、标量/表值函数、AFTER/INSTEAD OF 触发器，以及 IF...ELSE、WHILE、TRY...CATCH、游标等 T-SQL 流程语法，查询编译为 VDBE 字节码执行并支持 EXPLAIN BYTECODE",
+    "包含内存 OCC 与 WiredTiger MVCC 两种存储引擎、快照隔离、在线快照备份（CLI/REST API/Web Studio）与 WAL 流复制；README 报告内核 TPC-C 测试达 1,066k/1,184k tpmC"
+   ],
+   "use_cases": [
+    "需要运行 T-SQL 存储过程且客户端使用 psql、GORM、Prisma、pgx 或 SSMS、sqlcmd 等 MSSQL 工具接入的应用",
+    "希望以单个可执行文件同时获得数据库、连接池、REST API 与静态前端托管的部署环境",
+    "macOS、Linux、Windows（x86_64/arm64）上的 OLTP 负载，需要快照隔离、在线备份与主从复制"
+   ]
+  },
+  "sha": "9758cc67f537",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

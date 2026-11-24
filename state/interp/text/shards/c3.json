@@ -3560,5 +3560,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "818c1ce63fb8": {
+  "identity": {
+   "one_liner": "面向编程 agent 的持久化 MCP 消息总线，内置 SQLite 存储。",
+   "review": "minymaton 是一个基于 MCP 的消息总线，让 Copilot CLI、Claude Code、Codex 等 agent 通过同一服务器广播或定向通信。消息先落库再确认发布，订阅进度跨重启保留，批量消息需接收方 ACK 后才算处理完成。公共发行版为单节点 SQLite、仅监听回环地址，远程访问需 SSH 隧道或 HTTPS 反代，适合需要跨会话/跨机器协调 agent 的开发者。",
+   "highlights": [
+    "提供 stream、subscription、publish、purge、receive 五个基础 MCP 工具，支持流广播与单收件人寻址",
+    "消息在 publish 返回前写入内置 SQLite 存储，未 ACK 批量会重新投递，订阅进度跨服务器重启保留",
+    "附带 minymaton-wait（Rust 原生，6 个目标平台）与 Python 3 标准库版本两个后台等待器，以及一个可远程查看流并回复的 Android/iOS 应用"
+   ],
+   "use_cases": [
+    "多个 agent 分处不同机器/操作系统时的协调通信，如一个改 API、另一个更新调用方、第三个跑测试",
+    "通过 SSH 隧道或认证 HTTPS 代理，用手机 App 监控 agent 流并派发回复或提醒",
+    "在公共沙盒铸造 24 小时隔离通道，用 curl 或 MCP 客户端快速体验浏览器到 MCP 的往返流程"
+   ]
+  },
+  "sha": "818c1ce63fb8",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "52b2f58fa671": {
+  "identity": {
+   "one_liner": "本地优先的表格数据分析工具，兼作 CI/CD 中的 SQL 迁移与 PR 审计器。",
+   "review": "DataWhisper 是一个本地运行的数据分析与 PR 审计工具，支持 SQLite、DuckDB、PostgreSQL 及 Parquet、JSONL 等文件。其核心设计是把语言模型视为不可信组件：模型仅起草 SQL，语法校验、执行计划成本门槛、数据契约与敏感值脱敏均在确定性 Python 代码中完成。工具定位为只读分析与模式审计，写入类语句被一律阻断，需 Python 3.13+ 运行。",
+   "highlights": [
+    "提供三层 AST 沙箱、语义防火墙与查询计划成本门槛，仅放行 SELECT/WITH/EXPLAIN 根节点的只读语句",
+    "支持在 GitHub Actions 中审计 PR 的迁移与模式变更，检测执行计划回退、表锁风险与新增敏感字段，并以评论形式输出报告",
+    "内置六种 PII 脱敏策略（hash、mask、tokenize、redact、pseudonymize、差分隐私）以及基于 BM25 与字符三元组哈希的离线模式过滤，无 LangChain/LlamaIndex 依赖"
+   ],
+   "use_cases": [
+    "以自然语言对本地或远程数据库进行只读分析查询，并通过 HTML 仪表盘生成 Plotly 图表报告",
+    "在 CI 流水线中对 SQL 迁移与模式变更做静态审计，或在测试流水线中用 datawhisper contract 校验 NOT NULL、唯一性等数据契约",
+    "用 datawhisper advise 分析查询谓词与连接键以生成索引建议，或从模式快照生成保留外键关系的合成测试数据"
+   ]
+  },
+  "sha": "52b2f58fa671",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

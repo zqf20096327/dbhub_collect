@@ -2593,5 +2593,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "890208442b28": {
+  "identity": {
+   "one_liner": "LLM 多 agent 自主渗透测试系统，Go 单体内嵌 Next.js，SQLite 存储",
+   "review": "ARTEX 是一套 LLM 多 agent 驱动的自主渗透测试系统，为安全测试人员提供基于 Web 的任务管理界面。采用 Go 单体后端内嵌 Next.js 前端与 SQLite（无需安装数据库服务），核心为资产图与探索图组成的双图架构，agent 能力由 norma SDK 提供。支持 Docker、预编译二进制、源码编译等多种部署方式，运行需配置 ANTHROPIC 或 OPENAI 的 API Key。本仓库为基于原版 v0.3.15 的自维护修改版，移除了资产拦截等功能，不提供旧版数据迁移。",
+   "highlights": [
+    "双图架构：全局共享的资产图（域名/子域/IP/服务/端点）与每任务独立的探索图（goal/intent/fact/finding 血缘链）",
+    "每任务一个 planner 加多个 worker agent，支持拦截审批、人在环路对话、流量录制代理与漏洞复测",
+    "支持页面一键更新（SHA256 校验、冒烟测试、失败自动回滚）与 ScopeSentry 资产同步"
+   ],
+   "use_cases": [
+    "对授权范围内目标执行 LLM 驱动的自主渗透测试任务管理",
+    "通过复测 Agent 对已知漏洞进行修复验证与状态更新",
+    "从 ScopeSentry 同步资产数据并归并到资产图供 agent 探索"
+   ]
+  },
+  "sha": "890208442b28",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "85c02ba9aae6": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 记忆服务器，为多个 AI 代理提供共享且版本化的记忆。",
+   "review": "Make0 Brain 是一个开源（MIT）的本地 MCP 服务器，让 Claude Code、Cursor、Codex、Windsurf 等代理读写同一份记忆，数据存于单个 SQLite 文件。首次下载约 50MB 本地模型后可离线运行，无需 API key。`init` 命令可自动配置检测到的代理，并写入自定义指令；还支持从 41 个编码代理导入历史会话。需要 Node.js 22 及以上。",
+   "highlights": [
+    "所有连接的代理通过 MCP 使用同一套 7 个工具读写共享记忆，每次编辑保留带作者和时间的版本",
+    "本地运行：模型和数据（~/.make0/brain.db）都在本机，一次性下载后离线工作，无需 API key",
+    "提供 import 命令，可读取 41 个编码代理的磁盘会话、Markdown 笔记目录或标准输入文本"
+   ],
+   "use_cases": [
+    "在多个 AI 编码代理之间共享持久事实、偏好和决策，避免各代理记忆副本各自漂移",
+    "将已有的 CLAUDE.md、AGENTS.md、编辑器规则或历史会话导入统一记忆库",
+    "需要数据完全留在本地、可导出为纯 Markdown 的记忆管理场景"
+   ]
+  },
+  "sha": "85c02ba9aae6",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

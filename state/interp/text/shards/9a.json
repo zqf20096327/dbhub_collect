@@ -3843,5 +3843,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a5e4280eb03": {
+  "identity": {
+   "one_liner": "为 PostgreSQL 提供透明数据加密（TDE）的扩展",
+   "review": "pg_tde 是 PostgreSQL 扩展，通过 tde_heap 访问方法在文件层对静态数据透明加密。它加密元组、WAL 和索引，暂不支持临时文件和统计信息加密；仅适用于 Percona Server for PostgreSQL 17/18。密钥可存于 keyringfile 或外部 KMS。二进制包仅面向 Percona Server 提供，也可从源码构建或以 Docker 方式运行。",
+   "highlights": [
+    "提供 tde_heap 访问方法，加密元组、WAL 与索引",
+    "通过 Global Key Provider 接口支持 keyringfile 与外部 KMS",
+    "加密对用户透明，可查询表加密状态等辅助函数"
+   ],
+   "use_cases": [
+    "保护 PostgreSQL 数据库的静态数据（data at rest）",
+    "需要对接外部密钥管理系统（KMS）的部署",
+    "使用 Percona Server for PostgreSQL 17/18 且需表级加密的场景"
+   ]
+  },
+  "sha": "1a5e4280eb03",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29749d3aad49": {
+  "identity": {
+   "one_liner": "运行在 SQL Server 内部的存储过程，采集索引诊断并调用 Azure OpenAI 生成索引建议",
+   "review": "这是一个以单个 T-SQL 存储过程实现的索引调优工具：收集缺失索引、索引重叠、非 SARGable 谓词、Query Store 查询等诊断数据，通过 sp_invoke_external_rest_endpoint 调用用户自己的 Azure OpenAI 部署，将建议写入表，并可在验证后创建索引。面向使用 SQL Server 2025 及 Azure/Fabric SQL 平台的 DBA。限制：仅支持 OpenAI 模型，SQL Server 2025 及更早版本不支持。",
+   "highlights": [
+    "通过存储过程采集缺失索引、重复/重叠索引、非 SARGable 谓词、Query Store 前 50 查询、统计直方图偏斜等诊断信息",
+    "提供 Recommend（默认）与 CREATE 两种模式，CREATE 模式可在变更控制与阈值（MinPriority、MinConfidence、MaxNewIndexes 等）约束下创建经验证的新索引",
+    "建议结果存储在 AIIndexTuner 架构的表中，可通过 SQL Server Agent 作业调度运行，卸载脚本可清理对象并保留已创建的索引"
+   ],
+   "use_cases": [
+    "DBA 希望在数据库服务器内部以 T-SQL 方式定时运行索引调优分析",
+    "需要将缺失索引建议、冗余索引识别与低基数列过滤索引建议等工作交给模型处理并留存建议记录",
+    "已部署 Azure OpenAI 资源、希望用自有模型端点分析索引诊断数据的团队"
+   ]
+  },
+  "sha": "29749d3aad49",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

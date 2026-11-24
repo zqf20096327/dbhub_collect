@@ -3392,5 +3392,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cd1239c2e8a1": {
+  "identity": {
+   "one_liner": "Dokku 官方 PostgreSQL 服务插件，通过 CLI 管理数据库服务",
+   "review": "这是 Dokku PaaS 的官方 PostgreSQL 插件，默认安装 PostgreSQL 19.0，要求 dokku 0.35.x+ 与 Docker 1.8.x。通过 `dokku plugin:install` 安装后，用户可运行 postgres:create 等命令创建和管理数据库服务，支持指定镜像版本、自定义环境变量、内存限制等启动参数，并可将服务备份到 S3。适用于在 Dokku 单机部署中需要数据库服务的应用。",
+   "highlights": [
+    "提供 postgres:create 等子命令管理 PostgreSQL 服务实例",
+    "支持通过 --image、--image-version 等参数自定义服务启动配置",
+    "支持 postgres:backup 将服务数据备份到 S3 桶"
+   ],
+   "use_cases": [
+    "在 Dokku 托管应用中创建和管理 PostgreSQL 数据库服务",
+    "对数据库服务执行定期备份到 S3",
+    "为服务容器配置环境变量、网络和日志驱动等参数"
+   ]
+  },
+  "sha": "cd1239c2e8a1",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6cd3c79726a7": {
+  "identity": {
+   "one_liner": "基于 Tauri 的跨平台桌面 AI 角色引擎，集成 Live2D 与多模态对话。",
+   "review": "Kokoro Engine 是一个运行于桌面的虚拟角色引擎，基于 Tauri v2、React 与 Rust 构建，MIT 许可。它提供 Live2D 渲染、语音交互、长期记忆（SQLite 混合检索）与 MOD/MCP 扩展机制，面向虚拟角色创作者、开发者和普通用户。需注意 Live2D Cubism SDK 部分遵循独立许可，中大型企业可能需商业授权。",
+   "highlights": [
+    "支持 Live2D 渲染、视线追踪、动作触发与桌面浮窗，模型可热切换",
+    "支持 Ollama、llama.cpp 及 OpenAI、Anthropic 兼容协议接口，集成 GPT-SoVITS、Whisper 等 TTS/STT 实现",
+    "提供 QuickJS 沙箱 MOD 框架、MCP 工具调用与 SillyTavern 角色卡导入"
+   ],
+   "use_cases": [
+    "在桌面运行具备形象、语音和长期记忆的 AI 角色进行日常对话",
+    "导入 SillyTavern 角色卡，为不同人格维护各自的对话与记忆",
+    "通过 Bot 服务将角色接入 Telegram、QQ 等平台的远程消息交互"
+   ]
+  },
+  "sha": "6cd3c79726a7",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "14cd6be70aa7": {
+  "identity": {
+   "one_liner": "dokku 官方 MariaDB 服务插件，以 Docker 容器形式创建和管理 MariaDB 数据库服务。",
+   "review": "该插件为 dokku PaaS 提供 MariaDB 数据库服务管理能力，适用于在自托管 dokku 环境中部署应用的开发者。通过 mariadb:create 创建服务容器，支持自定义镜像版本、环境变量、内存限制、卷挂载等创建参数，并提供 link/unlink 连接应用、S3 备份、端口暴露、信息查询等子命令。要求 dokku 0.35.x+ 与 Docker 1.8.x；销毁服务前需先解除应用链接。",
+   "highlights": [
+    "提供 mariadb:create/destroy/info/backup 等子命令，以 Docker 或 compose 为后端创建 MariaDB 服务容器",
+    "创建时可指定镜像及版本、自定义环境变量、内存限制、重启策略、卷挂载、docker 标签和等待超时",
+    "支持向 S3 及兼容端点备份服务数据，可配置定时备份、加密、存储类及备份信息查询"
+   ],
+   "use_cases": [
+    "在 dokku 服务器上为部署的应用创建并链接独立的 MariaDB 数据库服务",
+    "通过 backup 命令将 MariaDB 服务定时备份到 S3 兼容存储桶",
+    "通过 info/expose 相关命令查看服务的 DSN、端口、内部 IP 等运行信息"
+   ]
+  },
+  "sha": "14cd6be70aa7",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "030430a0f418": {
+  "identity": {
+   "one_liner": "跨平台本地开发环境应用，为每个站点提供受信任的 https://*.localhost 及运行时与服务",
+   "review": "DevCatz 是一款面向 macOS、Windows 和 Linux 的桌面本地开发环境，用户放入项目文件夹后自动检测技术栈并运行站点，每个站点通过受信任证书以 https://<name>.localhost 访问。它按站点管理 PHP、Node.js 等运行时，并可搭配 MySQL、Redis、MinIO 等服务，兼容多种 Docker 引擎。Windows 与 Linux 安装包尚未签名，Windows 会触发 SmartScreen 警告。",
+   "highlights": [
+    "支持 PHP、Node.js/Bun、Python、Ruby、Go、Rust 项目及其框架版本检测，含 monorepo 和 Git worktree",
+    "提供 MySQL、PostgreSQL、Redis、MongoDB 等数据库与对象存储、搜索引擎、邮件捕获、隧道等服务",
+    "兼容 DoCatz、OrbStack、Docker Desktop、Colima、Podman 等多种容器引擎"
+   ],
+   "use_cases": [
+    "需要为本地站点配置受信任 HTTPS 域名的 Web 开发",
+    "在同一应用中统一管理多项目运行时与配套数据库、存储服务",
+    "通过隧道与他人共享本地站点进行演示或测试"
+   ]
+  },
+  "sha": "030430a0f418",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4b95541ecac9": {
+  "identity": {
+   "one_liner": "区块链事件消费端确定性重放测试工具，注入重复投递与崩溃故障",
+   "review": "iro 是一个用 Rust 编写的 CLI 测试工具，通过 JSONL 子进程协议驱动被测事件消费端，注入重复投递、进程重启、提交后崩溃等故障场景，并对比 SQLite/PostgreSQL 投影状态是否一致。适用于 Ponder、Envio、The Graph 或自建索引管道的开发者。要求 Rust 1.80+，消费者需实现 hello/ack 握手与崩溃钩子协议。",
+   "highlights": [
+    "通过 PRNG 驱动的调度生成器注入重复事件、进程重启、crash-after-commit 故障和依赖感知重排序",
+    "内置 delta debugging 最小化，可将失败场景缩减至 1 事件 2 操作，并导出含 SHA-256 指纹的独立复现包",
+    "支持 SQLite 零依赖模式和 PostgreSQL 多 schema 隔离并行运行，报告输出 report.json、report.md 与 JUnit XML"
+   ],
+   "use_cases": [
+    "为索引器或事件消费端编写幂等性与崩溃恢复相关的回归测试",
+    "在 CI 中以固定种子运行可重复的重放验证并生成 JUnit 报告",
+    "将生产失败还原为最小复现场景，定位具体表与列的状态差异"
+   ]
+  },
+  "sha": "4b95541ecac9",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

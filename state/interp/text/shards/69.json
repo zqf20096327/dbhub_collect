@@ -3704,5 +3704,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e511f81dd900": {
+  "identity": {
+   "one_liner": "基于 Apache DataFusion 的 SQL AI 函数推理引擎",
+   "review": "Quail 是 CMU Full Stack Data Lab 开源的 SQL 推理引擎，通过 AI.IF、AI.CLASSIFY 等 AI 函数把模型调用嵌入 SQL 过滤、分类、抽取等操作。它以 DataFusion 扩展形式解析和执行 SQL，底层依赖 vLLM 在 CUDA GPU 上运行 Qwen3、LFM2 等指定模型。需要 Python 3.12 与受支持的 NVIDIA GPU，也可通过 Quail Server 在远程 GPU 上运行查询，或经 Rust crate 集成到已有 DataFusion 会话。",
+   "highlights": [
+    "提供 AI.IF、AI.SCORE、AI.CLASSIFY、AI.EXTRACT、AI.MAP、AI.SAE_FEATURES 等 AI 函数，可用于 SQL 过滤、连接与抽取",
+    "作为 Apache DataFusion 扩展实现，同一查询中对每行文本只读取一次并可复用于多个 AI 函数",
+    "支持 Python（PyPI 包 quail-engine）、Rust（crates.io）两种接入方式，并可经 Quail Server 在远程 GPU 运行、客户端断开后查询继续执行"
+   ],
+   "use_cases": [
+    "对评论文本等非结构化数据用 SQL 做模型驱动的筛选与标注（如保留讨论结局的评论并分类为赞扬或抱怨）",
+    "在自有 DataFusion 会话的 Rust 程序中注册 AI 函数",
+    "在无本地 GPU 的环境中通过 Quail Server 将查询提交到远程 GPU 机器执行"
+   ]
+  },
+  "sha": "e511f81dd900",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3476,5 +3476,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7c060a1619b7": {
+  "identity": {
+   "one_liner": "GORM 的 OceanBase 数据库驱动，通过单个 Dialector 支持 MySQL 与 Oracle 兼容模式",
+   "review": "gorm-oceanbase 是为 GORM ORM 实现的 OceanBase 方言驱动，基于 database/sql 驱动 go-oceanbase，供使用 GORM 访问 OceanBase 数据库的 Go 开发者使用。它通过 DSN 参数或结构化配置选择 MySQL 或 Oracle 兼容模式，支持模式自动探测、时间类型处理、Oracle 标识符大写折叠映射、MERGE upsert 和错误码翻译。开发基线为 gorm v1.31.2；Oracle 模式下 FOR SHARE 会转为 FOR UPDATE，注释标签不被 Oracle 模式渲染，未经验证的特性未声明可用于生产。",
+   "highlights": [
+    "通过单个 Dialector 与 DSN 参数 compatibilityMode（含 auto 自动探测）选择 MySQL 或 Oracle 兼容模式，并定义了配置优先级规则",
+    "提供错误码到 GORM 错误的翻译（MySQL 1062/1451/1452、Oracle ORA-00001/2291/2292 映射为 ErrDuplicatedKey/ErrForeignKeyViolated），Oracle 模式支持 IDENTITY 自增键回填与 MERGE INTO upsert",
+    "附带实机验收工具 cmd/gorm-obtest，支持配置 MySQL/Oracle 目标、类型覆盖、迁移与 GORM 行为测试，验收状态记录于 docs/development.md"
+   ],
+   "use_cases": [
+    "使用 GORM 访问 OceanBase MySQL 兼容模式的 Go 应用开发",
+    "使用 GORM 访问 OceanBase Oracle 兼容模式的应用（含 MERGE upsert、序列与错误翻译需求）",
+    "对驱动行为进行实机租户验收测试与类型覆盖验证的工具场景"
+   ]
+  },
+  "sha": "7c060a1619b7",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

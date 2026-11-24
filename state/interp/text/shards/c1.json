@@ -3192,5 +3192,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "474c7253b90a": {
+  "identity": {
+   "one_liner": "面向生产排障的只读 MCP 服务，通过 Web 控制台登记组件供 AI 客户端按名查询。",
+   "review": "DrPanda MCP 是一个只读 MCP 服务（当前版本 1.13.0），供运维与开发人员在生产排障时让 AI 客户端安全查询数据库、日志、代码与消息队列。管理员在 Web 控制台登记目标组件，模型仅凭 environment 和 target 名称调用只读工具，凭据由服务端保管，无需模型提供主机或密码。需 Python 3.11+ 与 uv，支持 SQLite/MySQL/PostgreSQL 存储配置，首次运行数据目录中的密钥文件需一并备份。",
+   "highlights": [
+    "支持登记 10 类组件（MySQL、MongoDB、Elasticsearch、Redis、GitLab、RabbitMQ、Kafka、CLS、Nacos、Jenkins），提供 39 个只读工具",
+    "设置连接、操作、身份三重边界：仅限已登记目标、只读白名单（拒绝管理命令与高成本查询）、Web 登录与 MCP Bearer Token 相互独立并逐次审计",
+    "提供代理排查技能包（SKILL.md 及 playbooks、errors 等参考文件），内置十条事故流程，并用 scripts/check_skill.py 在 CI 中校验"
+   ],
+   "use_cases": [
+    "生产事故排查：AI 客户端按 target 名只读查询日志、慢 SQL、缓存、Kafka/RabbitMQ 等组件",
+    "需要凭据不暴露给模型、且操作可审计的团队环境",
+    "支持 Cursor、Codex、DeepSeek Harness 等 MCP 客户端接入的排障流程标准化"
+   ]
+  },
+  "sha": "474c7253b90a",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

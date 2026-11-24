@@ -3319,5 +3319,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "709b8d5928b9": {
+  "identity": {
+   "one_liner": "基于 Vue 3 + Spring Boot 的前后端分离表情包搜索与在线制作网站",
+   "review": "father 是程序员鱼皮开源的全栈表情包网站，前台提供关键词搜索、原图下载与浏览器端裁剪合成制图功能，后台包含内容审核与管理能力。前端为 Vue 3 + Ant Design Vue，后端为 Spring Boot + MyBatis-Plus + MySQL，并接入腾讯云 COS、CDN 与数据万象。本地运行需 Node.js、JDK 8、Maven 与 MySQL 环境，完整图片上传功能需补充腾讯云密钥。",
+   "highlights": [
+    "前端集成 Vue Cropper 裁剪、Html2Canvas 合成导出、FileSaver 本地保存与 Vue3 Picker 拾色器，制图流程在浏览器端完成",
+    "后端接入腾讯云 COS 对象存储、CDN 加速与数据万象内容安全审核，通过 Knife4j 生成在线接口文档",
+    "仓库采用单体双模块结构，同时包含 father-web 前端与 father-backend 后端源码，采用 MIT 协议"
+   ],
+   "use_cases": [
+    "作为 Vue 3 与 Spring Boot 全栈开发流程的参考实现，涵盖接口联调、云服务接入到容器化部署",
+    "基于开源代码二次开发，搭建自己的表情包检索与在线制图工具",
+    "参考纯前端图片裁剪合成方案，或对象存储 + CDN + 内容审核的图片站点架构组合"
+   ]
+  },
+  "sha": "709b8d5928b9",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "96d912b6d2bf": {
+  "identity": {
+   "one_liner": "Rust CLI 工具，在一次性 PostgreSQL 实验环境中运行受控并发实验并生成报告",
+   "review": "ranajahanzaib/postgres-concurrency-tester 是一个 Rust 命令行工具，通过 Docker Compose 启动的 PostgreSQL 18 实验环境运行三种场景：inventory-hotspot（共享行热点）、pool-starvation（连接池占用）和 index-contention（5 万行索引读写）。工具采用闭环负载模型，由独立监控连接采集会话、锁等待和 pg_stat_statements 数据，输出 JSON/Markdown 报告。需要 Rust 1.85+、Cargo 和 Docker Compose。当前仅支持闭环负载，不支持开环调度和死锁复现。",
+   "highlights": [
+    "提供 inventory-hotspot、pool-starvation、index-contention 三种实验场景，输出客户端观测延迟百分位、连接池等待、SQL 往返次数和吞吐量，生成 JSON 和 Markdown 报告",
+    "包含独立的监控连接池，采样会话、等待事件、锁元数据和 pg_blocking_pids() 关系，并采集 pg_stat_statements 前后差值",
+    "支持有界实验矩阵、基线/候选报告对比命令（含 p95 和错误率回归门限），以及仅监听本地的报告历史 HTTP 端点"
+   ],
+   "use_cases": [
+    "在本地一次性环境中复现行锁竞争和连接池等待，观察事务竞争时的客户端体验",
+    "通过 matrix 和 compare 命令在不同并发度与池大小下运行实验，对比基线与候选报告文件",
+    "验证索引添加前后的读取行为，报告包含捕获的 EXPLAIN (FORMAT JSON) 计划与库存不变量检查"
+   ]
+  },
+  "sha": "96d912b6d2bf",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

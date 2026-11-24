@@ -3460,5 +3460,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3b0ada196f4c": {
+  "identity": {
+   "one_liner": "纯 Ruby 生成确定性 structure.sql 的 Rails gem，不依赖数据库客户端二进制",
+   "review": "BetterStructureSql 是一个 Rails gem，通过 ActiveRecord 连接读取数据库目录并生成固定格式、排序后的 structure.sql，无需安装 pg_dump/mysqldump 等客户端工具。支持 PostgreSQL（主要目标）、MySQL/MariaDB 和 SQLite，提供多文件输出、数据库中存储的 schema 版本及可挂载的 Web UI。各适配器的对象类型在 CI 中做往返测试；不支持 PostgreSQL 聚合、规则、行级安全策略及 public 之外的 schema。",
+   "highlights": [
+    "纯 Ruby 实现，通过 ActiveRecord 连接读取 schema，生成固定头部、对象排序的确定性 SQL 输出",
+    "支持多文件输出（按对象类型分目录、数字前缀表加载顺序）和存储于数据库的 schema 版本，含可挂载的浏览引擎",
+    "特性矩阵覆盖表、索引、外键、视图、函数、触发器等对象，每种类型经 CI 往返测试"
+   ],
+   "use_cases": [
+    "Rails 项目需要确定性、无版本噪声的 structure.sql 且开发/CI 环境无法安装数据库客户端二进制",
+    "团队希望将 schema 快照存入数据库供无生产库访问权限的开发者查看",
+    "需要将大体量单文件 schema 拆分为按类型组织的多文件输出"
+   ]
+  },
+  "sha": "3b0ada196f4c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fae34421c158": {
+  "identity": {
+   "one_liner": "基于 LangGraph 的开源 AI 聊天助手，含 RAG、深度研究、编码代理与 MCP 连接器。",
+   "review": "OpenGPT 是一个前后端分离的开源 AI 工作区：FastAPI+LangGraph 后端、React 前端、MySQL 持久化会话。支持任意 OpenAI/Anthropic 兼容模型端点，内置 RAG 文档问答（FAISS+本地嵌入）、深度研究报告、博客写作、编码代理等模块。Agent 页面与浏览器引擎尚处预览阶段，官方注明未经充分测试；聊天工具依赖模型支持 tool calling。",
+   "highlights": [
+    "支持任意 OpenAI 或 Anthropic 兼容端点（含 Ollama 等本地模型），可按任务配置不同模型",
+    "提供 FAISS+HuggingFace 本地嵌入的文档 RAG、多轮深度研究、博客写作及工具调用（搜索/天气/股票/计算器）",
+    "会话由 MySQL 持久化并支持临时聊天，可添加 MCP 连接器与 SKILL.md 技能，Agent 与编码代理在改动前需用户确认"
+   ],
+   "use_cases": [
+    "搭建可对接自有模型端点（托管或本地 Ollama/LM Studio）的自用聊天与文档问答工作区",
+    "对 PDF/Markdown/文本文件进行多文件联合检索问答与引用溯源",
+    "在项目文件夹内让编码代理读改代码、运行命令并先行展示 diff 的辅助开发流程"
+   ]
+  },
+  "sha": "fae34421c158",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

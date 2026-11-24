@@ -3393,5 +3393,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "442ac06fc06d": {
+  "identity": {
+   "one_liner": "PostgreSQL BM25 相关性排序全文检索扩展",
+   "review": "pg_textsearch 是 Timescale 开源的 PostgreSQL 扩展，在文本列上创建 BM25 索引，通过 `<@>` 运算符按相关性排序检索文档，支持布尔过滤、表达式/部分/分区索引及 Block-Max WAND top-k 查询。适用于 PostgreSQL 17–19，需加入 shared_preload_libraries 并重启。索引默认要求 text_config 配置，部分索引查询须用 to_bm25query() 显式指定索引名。",
+   "highlights": [
+    "基于 BM25 排序，k1、b 参数可配置，索引可通过 ORDER BY content <@> '查询词' 语法使用",
+    "支持 PostgreSQL 文本搜索配置、布尔 tsquery 过滤、表达式/部分/分区索引及并行构建",
+    "top-k 查询使用 Block-Max WAND 算法，小 LIMIT 排序扫描可跳过非竞争块"
+   ],
+   "use_cases": [
+    "对文档表按相关性排序返回 top-k 检索结果",
+    "JSONB 字段提取或多列表达式的文本索引检索",
+    "通过 zhparser 等配置实现中文分词的多语言全文检索"
+   ]
+  },
+  "sha": "442ac06fc06d",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d8bf6cbf54d4": {
+  "identity": {
+   "one_liner": "面向小型虚拟机和边缘设备的 Rust 单二进制 JSON 文档数据库，兼容 MongoDB 查询风格。",
+   "review": "NonoDB 是一个用 Rust 编写的 JSON 文档数据库守护进程，面向小型虚拟机和边缘设备，空闲内存约 5 MB。它基于 LMDB 存储，通过 HTTP/JSON 提供文档 API，支持可选的 MongoDB 兼容端点、SQL 查询、BM25/模糊/向量搜索、加密备份与主从复制，并内置浏览器 GUI。采用 MIT 许可，单守护进程管理多个独立数据库，写入由单线程串行化提交。",
+   "highlights": [
+    "基于 LMDB 的崩溃安全存储，空闲内存约 5 MB（100 万文档加三个索引），单二进制可托管多个数据库",
+    "支持 MongoDB 风格查询过滤与更新操作符，同时提供 SQL SELECT/INSERT/UPDATE/DELETE、BM25 全文搜索、模糊搜索和向量搜索",
+    "提供加密备份、异步复制与故障转移、文档版本控制、租户加密、webhooks 及嵌入式 GUI 浏览器控制台"
+   ],
+   "use_cases": [
+    "运行在 512 MB–2 GB 内存的小型虚拟机或边缘设备上，需要持久化共享 JSON 状态的应用",
+    "需要 MongoDB 风格查询但不想部署 MongoDB 服务的场景",
+    "需要内置全文/模糊/向量搜索或 CI 环境中快速克隆数据库分支的场景"
+   ]
+  },
+  "sha": "d8bf6cbf54d4",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "16dc49375991": {
+  "identity": {
+   "one_liner": "收录55款免费开发工具的清单，每夜自动检测在线状态",
+   "review": "这是一个收录免费开发工具的目录类仓库，共55项，按AI编程、云托管、数据库、DevOps等16个类别组织，每条含用途、定价模式（免费/开源/Free Tier等）和在线状态。状态由GitHub Actions每晚自动检测（HTTP响应<500记为在线）。适合寻找免费额度工具的开发者，贡献通过PR或Issue提交，许可证为MIT。",
+   "highlights": [
+    "收录55款工具，覆盖AI编程IDE/Agent、云托管、数据库、DevOps、安全、自托管等类别",
+    "每条目标注用途与定价模式（Free Tier、开源、Freemium、BYOK等）",
+    "在线状态由GitHub Actions每晚自动检测，按HTTP状态码标记在线/离线"
+   ],
+   "use_cases": [
+    "查找提供免费额度的开发、托管与数据库服务",
+    "挑选开源的AI编码Agent与API调试工具",
+    "按类别浏览免费工具并查看各站点可用状态"
+   ]
+  },
+  "sha": "16dc49375991",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -25524,5 +25524,1218 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "4faafa5bdc30+2": {
+  "fn": "richarvey/OmniMem",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "OmniMem"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " Test coverage "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     " omnimem.org · Developed on Squarecows, mirrored to GitHub · Issues on GitHub "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    28,
+    5,
+    26
+   ],
+   [
+    "replace",
+    28,
+    31,
+    26,
+    27,
+    [
+     "> 7.0.3 is the first release of OmniMem 7: one app in place of the four containers 6.x ran. The installers for every platform are on the releases page. Running 6.x? See Coming from 6.x: the 6.x Docker stack stays on the `v6.7.x` branch, and its one-line installer still works."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    41,
+    27,
+    37
+   ],
+   [
+    "delete",
+    41,
+    43,
+    37,
+    37
+   ],
+   [
+    "equal",
+    43,
+    45,
+    37,
+    39
+   ],
+   [
+    "replace",
+    45,
+    46,
+    39,
+    40,
+    [
+     "Everything is on the releases page, each file with a `.sha256` beside it."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    40,
+    41
+   ],
+   [
+    "replace",
+    47,
+    48,
+    41,
+    42,
+    [
+     "|Where|Download|What you get|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    42,
+    43
+   ],
+   [
+    "replace",
+    49,
+    54,
+    43,
+    48,
+    [
+     "|Windows 10 and 11 (x64)|`OmniMem-<version>-x64.msi`|The tray app, installed for you alone with no administrator needed. Not signed yet, so SmartScreen asks first: **More info**, then **Run anyway**|",
+     "|macOS 13.4 or later (Apple silicon)|`OmniMem-<version>-arm64.dmg`|The menu bar app: drag it to Applications. There's no Intel build. `omnimem-<version>-macos-arm64.tar.gz` is the bare binary|",
+     "|Linux desktop (amd64, arm64)|`omnimem-desktop-<version>-linux-<arch>.flatpak`|The tray app with everything it needs: `flatpak install --user` the file. `omnimem-desktop-<version>-linux-<arch>.tar.gz` is the same app for systems without Flatpak, needing GTK 3 and libayatana-appindicator3|",
+     "|Linux server (amd64, arm64)|`omnimem_<version>_<arch>.deb`, `omnimem-<version>-1.<x86_64\\|aarch64>.rpm`|The headless server as the `omnimem` systemd service, configured in `/etc/omnimem/omnimem.env`, with its data in `/var/lib/omnimem`. `omnimem-<version>-linux-<arch>.tar.gz` has an `install.sh` for other distributions|",
+     "|Docker (amd64, arm64)|`richarvey/omnimem:<version>`|The same server as a container, with one `/data` volume. See the Docker guide|"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    63,
+    48,
+    57
+   ],
+   [
+    "replace",
+    63,
+    66,
+    57,
+    58,
+    [
+     "The server hands its own usage guide to every agent that connects, so there's no instructions file to copy around. The quick start covers the rest."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    75,
+    58,
+    67
+   ],
+   [
+    "replace",
+    75,
+    76,
+    67,
+    68,
+    [
+     "- **Skills**: SKILL.md documents compiled from your experience in a domain, so the agent works your way from the first prompt. Nothing changes without your say-so. See the skill compiler."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    78,
+    68,
+    70
+   ],
+   [
+    "delete",
+    78,
+    80,
+    70,
+    70
+   ],
+   [
+    "equal",
+    80,
+    85,
+    70,
+    75
+   ],
+   [
+    "replace",
+    85,
+    96,
+    75,
+    86,
+    [
+     "- **Hooks for Claude Code**: memory that works without the agent choosing to use it, because mostly it doesn't. `omnimem hook` puts the project's briefing in the opening context of every session, stops a tool call that repeats a known dead end before it runs (handing back what failed and what worked instead), and records what a session changed when it ends. `omnimem install-hooks` sets them up. Over ten paired runs on one task, every attempt at the abandoned approach was stopped, no treated run hit a failing test suite against 8 of 10 without, and it cost 27% less.",
+     "- **The graveyard**: every dead end is logged with what you tried, why it failed and how long it cost you. The agent checks it before suggesting a library or pattern.",
+     "- **Experience scoring**: something that took four attempts and a weird workaround to crack is gold. The harder it was, the more readily it comes back.",
+     "- **Memory lifecycle**: `ACTIVE → DEPRIORITISED → ARCHIVED → DELETED`. \"Forget about X\" usually means stop bringing it up, not wipe it from existence.",
+     "- **Contradiction detection**: a quick check on every write, and a deeper look with Claude Haiku when you want one.",
+     "- **Semantic deduplication**: near-duplicates get flagged as they're written and cleaned up in bulk with `find_duplicates()`.",
+     "- **One-call briefing**: `briefing()` hands over project context, experience stats, stale memories, new articles, contradictions and skill suggestions in one go.",
+     "- **The skill compiler**: turns reinforced lessons and dead ends into loadable skills, behind a propose-and-accept gate so a one-off opinion can't quietly become policy.",
+     "- **Auto-maintenance**: duplicates archived, contradictions flagged, expired articles tidied, all in the background.",
+     "- **Licence and provenance**: every memory records whether it can be redistributed and who's speaking (you, the agent, or a source it retrieved), so a later session can tell evidence from inference.",
+     "- **Trust**: whether OmniMem believes a memory, not just whether it shows it. A fact it extracted for itself waits for you to confirm it, one side of a confirmed contradiction is marked disputed, a memory a newer one replaced folds into it, and one you've judged wrong never comes back. Only you can confirm or reject, in the settings panel or the terminal, never an agent."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    105,
+    86,
+    95
+   ],
+   [
+    "delete",
+    105,
+    107,
+    95,
+    95
+   ],
+   [
+    "equal",
+    107,
+    109,
+    95,
+    97
+   ],
+   [
+    "replace",
+    109,
+    110,
+    97,
+    98,
+    [
+     "One memory for all of them: claude.ai, Claude Code, Claude Desktop, Cursor, GitHub Copilot, GitLab Duo, AWS Kiro, OpenCode, Mistral Vibe, OpenAI Codex CLI and Open Design. 49 tools, served over streamable HTTP."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    98,
+    99
+   ],
+   [
+    "replace",
+    111,
+    114,
+    99,
+    100,
+    [
+     "Run it on one machine and put it behind a reverse proxy, and every laptop and agent you use shares the same memory. A shared token covers your own clients; OAuth 2.1 with a login page covers claude.ai and anything else that signs in. See multiple machines."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    121,
+    100,
+    107
+   ],
+   [
+    "replace",
+    121,
+    140,
+    107,
+    108,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    142,
+    108,
+    110
+   ],
+   [
+    "replace",
+    142,
+    145,
+    110,
+    111,
+    [
+     "Over the network it answers `/mcp`, the OAuth routes, `/healthz` and the settings panel at `/admin`, and that's the whole list. The panel signs people in itself (an MCP token never opens it), wants HTTPS from anywhere but the same machine, and `ADMIN_PANEL=false` turns it off. More in the architecture doc and the settings panel."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    155,
+    111,
+    121
+   ],
+   [
+    "delete",
+    155,
+    157,
+    121,
+    121
+   ],
+   [
+    "equal",
+    157,
+    163,
+    121,
+    127
+   ],
+   [
+    "replace",
+    163,
+    164,
+    127,
+    128,
+    [
+     "7.0.8 adds trust. The first start moves the database to schema version 5, and 7.0.7 can't open it afterwards, so take a backup first if you might go back."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    178,
+    128,
+    142
+   ],
+   [
+    "delete",
+    178,
+    180,
+    142,
+    142
+   ],
+   [
+    "equal",
+    180,
+    187,
+    142,
+    149
+   ],
+   [
+    "replace",
+    187,
+    190,
+    149,
+    150,
+    [
+     "The tools, the vectors and your compiled skills behave as they did, so nothing needs retuning. Recall scoring has three deliberate changes since 6.x: recency declines from day one rather than staying flat for 90 days (older memories rank a little lower; nothing extra is dropped), an abandoned outcome no longer scores 0.1, and recording an abandonment no longer suppresses anything. Your agents just need their URL changing from `/sse` to `/mcp`. 3.x backups import the same way. If your 6.x install is a clone of this repository, run `git checkout v6.7.x` in it before you next `git pull`: `main` is 7 now and has no Compose file. The quick start has the details, and 6.x itself carries on in the `v6.7.x` branch."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    193,
+    150,
+    153
+   ],
+   [
+    "replace",
+    193,
+    194,
+    153,
+    154,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    195,
+    154,
+    155
+   ],
+   [
+    "replace",
+    195,
+    209,
+    155,
+    169,
+    [
+     "|Quick start|Installing, building from source, moving from 6.x, connecting your agent|",
+     "|Hooks for Claude Code|Briefing at session start, dead ends stopped before they run, sessions recorded|",
+     "|Configuration|Every setting, for the desktop app and headless installs|",
+     "|Features in depth|Lifecycle, graveyard, experience scoring, dedup, contradictions, briefing|",
+     "|The skill compiler|Compiling experience into loadable skills|",
+     "|MCP tool reference|All 49 tools|",
+     "|RSS and knowledge|Passive knowledge ingestion and promotion|",
+     "|Multiple machines|Reverse proxies, OAuth 2.1 for claude.ai, troubleshooting|",
+     "|Settings panel|The desktop app's window, page by page|",
+     "|Architecture|The process, the recall pipeline, design decisions|",
+     "|Atlas evidence|Each Agent Memory Atlas mark, the code that earns it and the test that fails without it|",
+     "|Memory type specs|The storage model, field by field|",
+     "|Connection guides|Per-agent setup|",
+     "|Deployment guides|Docker · macOS · Raspberry Pi · AWS · GCP · Linux + Tailscale Funnel|"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    210,
+    169,
+    170
+   ],
+   [
+    "replace",
+    210,
+    213,
+    170,
+    171,
+    [
+     "Per-namespace specs, if you want to know exactly what gets stored and by whom: overview · episodic · project · knowledge · preference · skill"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    215,
+    171,
+    173
+   ],
+   [
+    "replace",
+    215,
+    222,
+    173,
+    174,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    223,
+    174,
+    175
+   ],
+   [
+    "delete",
+    223,
+    224,
+    175,
+    175
+   ],
+   [
+    "equal",
+    224,
+    225,
+    175,
+    176
+   ],
+   [
+    "delete",
+    225,
+    229,
+    176,
+    176
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "019e69760fb5+2": {
+  "fn": "SimonWaldherr/tinySQL",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "CI",
+     "Go Reference",
+     "DOI"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    9,
+    5,
+    9
+   ],
+   [
+    "replace",
+    9,
+    11,
+    9,
+    11,
+    [
+     "Browser playground ·",
+     "Documentation"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    26,
+    11,
+    26
+   ],
+   [
+    "replace",
+    26,
+    53,
+    26,
+    27,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    56,
+    27,
+    30
+   ],
+   [
+    "replace",
+    56,
+    58,
+    30,
+    32,
+    [
+     "Go integration; for C, Python, Rust, and Swift,",
+     "see language bindings."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    61,
+    32,
+    35
+   ],
+   [
+    "replace",
+    61,
+    68,
+    35,
+    42,
+    [
+     "|Area|Capabilities and guides|",
+     "|---|---|",
+     "|SQL|Joins, recursive CTEs, UNION, windows, views, triggers, and procedures. Function reference (SQL source), SQL examples.|",
+     "|Retrieval|Exact flat or approximate IVF/HNSW vector search, BM25, hybrid ranking, and retrieval pre-filters. RAG guide.|",
+     "|Storage|In-memory, WAL, JSON, disk, indexed, and SQLite-backed modes; backups and read-only snapshots. Storage guide, analytical snapshots.|",
+     "|Maps and files|Document/tabular/geospatial imports, geometry, tiles, and routing. Geospatial guide, routing, file queries.|",
+     "|Applications|CLI, HTTP/gRPC server, browser workspace, and command index.|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    42,
+    43
+   ],
+   [
+    "replace",
+    69,
+    70,
+    43,
+    44,
+    [
+     "The demo index lists runnable examples, from the SQL"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    74,
+    44,
+    48
+   ],
+   [
+    "replace",
+    74,
+    75,
+    48,
+    49,
+    [
+     "WASM builds; see the browser build guide."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    49,
+    50
+   ],
+   [
+    "replace",
+    76,
+    78,
+    50,
+    52,
+    [
+     "Workload-specific measurements cover SQL execution,",
+     "CTEs, and vector/RAG retrieval."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    88,
+    52,
+    62
+   ],
+   [
+    "replace",
+    88,
+    90,
+    62,
+    64,
+    [
+     "Development covers builds, tests, and benchmarks;",
+     "architecture and API stability"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    94,
+    64,
+    68
+   ],
+   [
+    "replace",
+    94,
+    97,
+    68,
+    71,
+    [
+     "- Use one writer process per database. Server replicas are",
+     " asynchronous; sharding, automatic failover, multi-primary writes, and",
+     " distributed transactions are not supported."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    71,
+    72
+   ],
+   [
+    "replace",
+    98,
+    101,
+    72,
+    75,
+    [
+     " generated columns, and data-modifying CTE bodies are not supported. CHECK,",
+     " `ON CONFLICT (target) DO UPDATE` and SAVEPOINT work, with the limits described",
+     " in SQL feature gaps."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    75,
+    76
+   ],
+   [
+    "replace",
+    102,
+    104,
+    76,
+    78,
+    [
+     " GEO_SEARCH for indexed point-column bbox/radius queries; ordinary",
+     " WHERE GEO_DWITHIN(...) predicates are not planner-accelerated."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    78,
+    79
+   ],
+   [
+    "replace",
+    105,
+    107,
+    79,
+    81,
+    [
+     " GEO_DISSOLVE/GEO_UNION_AGG require clean, vertex-aligned adjacent polygons;",
+     " they are not general polygon-boolean union operations."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    81,
+    82
+   ],
+   [
+    "replace",
+    108,
+    109,
+    82,
+    83,
+    [
+     " WAL-backed modes or metadata files."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    83,
+    84
+   ],
+   [
+    "replace",
+    110,
+    111,
+    84,
+    85,
+    [
+     "See SQL feature gaps for details and current coverage."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "c2f1ee577e9d+2": {
+  "fn": "kruschdev/krusch-stack",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "License: MIT",
+     "Node.js >= 22",
+     "MCP Compatible",
+     "DolphinBench 91.17% (Queued UUID c047b063)-00e5ff.svg)",
+     "DolphinBench Open-Weights 57.33% ($0.00)-brightgreen.svg)",
+     "Audited by AddonAudit"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    10,
+    8,
+    10
+   ],
+   [
+    "delete",
+    10,
+    12,
+    10,
+    10
+   ],
+   [
+    "equal",
+    12,
+    25,
+    10,
+    23
+   ],
+   [
+    "replace",
+    25,
+    33,
+    23,
+    24,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    41,
+    24,
+    32
+   ],
+   [
+    "replace",
+    41,
+    46,
+    32,
+    33,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    56,
+    33,
+    43
+   ],
+   [
+    "replace",
+    56,
+    62,
+    43,
+    49,
+    [
+     "|Profile Flag|Tools Exposed|Approx. Schema Budget|Best For & Included Capabilities|",
+     "|:---|:---|:---|:---|",
+     "|`--profile memory-only`|**5 tools**|`~350` tokens|**Persistent Memory Only**: Decisions, invariants, pre-commit `nudge`, and SHA-256 line-span drift checks (`krusch-context-mcp`).|",
+     "|`--profile coding-agent`|**19 tools** *(Default for `init`)*|`~1,450` tokens|**Daily Coding Agents**: Persistent memory + AST symbol/call-graph search (`krusch-git`) + 2PC staged file harness (`+ krusch-grounded-harness` in `--modular` mode).|",
+     "|`--profile core`|**27 tools**|`~2,100` tokens|**Backend & Systems Engineering**: Adds bounded OS PageMemory (`krusch-fs`) and `<25µs` L1-L3 Cascade Router.|",
+     "|`--profile full`|**39 tools** *(Default for `mcp`/`serve`)*|`~3,100` tokens (`~600` w/ `--defer-tools`)|**Full Ecosystem**: Adds Frontend Design templates and Workspace Docs RAG (`--include-extended` or `--modular` adds the 23 extension tools; `--defer-tools` compresses any profile by `-80.67%` schema tokens via BM25 deferral).|"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    66,
+    49,
+    53
+   ],
+   [
+    "replace",
+    66,
+    69,
+    53,
+    56,
+    [
+     "> - **Adding Reliable Memory to Cursor and Claude Code in One Command** (`--profile memory-only`, 5 verbs, SHA-256 span drift vs. stale `CLAUDE.md`)",
+     "> - **Why Two-Phase Commit (2PC) for Agent File Writes** (staging unified diffs, pre-commit invariants, and `<32ms` `SIGKILL`-safe journal recovery)",
+     "> - **GitHub Discussions** (questions, local GPU setups, and benchmark reproductions)"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    72,
+    56,
+    59
+   ],
+   [
+    "replace",
+    72,
+    73,
+    59,
+    60,
+    [
+     "Watch the KruschStack Narrated Product Tour (01:40, 1080p HD)"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    60,
+    61
+   ],
+   [
+    "replace",
+    74,
+    77,
+    61,
+    62,
+    [
+     "> ▶️ **Stream 1080p HD Product Tour (`01:40`, with audio)** | **Interactive Player on `krusch.dev`** | **Local MP4** | **WebM** | **Closed Captions (`.srt`)**"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    92,
+    62,
+    77
+   ],
+   [
+    "delete",
+    92,
+    94,
+    77,
+    77
+   ],
+   [
+    "equal",
+    94,
+    98,
+    77,
+    81
+   ],
+   [
+    "replace",
+    98,
+    106,
+    81,
+    87,
+    [
+     "|Capability Needed|Standalone Repository|Single-Piece CLI or ESM Import via `krusch-stack`|",
+     "|:---|:---|:---|",
+     "|**Persistent Memory Only (`5` MCP verbs)**|`kruschdev/krusch-context-mcp`|`npx krusch-stack mcp --profile memory-only`|",
+     "|**Turn-0 Grounding & Spin-Loop Gate**|`kruschdev/grounded-harness`|`import { createGroundedHarnessEngine } from 'krusch-stack/grounded-harness'`|",
+     "|**2PC File & Tool-Action Harness**|`kruschdev/krusch-coding-harness`|`import { createActionHarnessEngine } from 'krusch-stack/action-harness'`|",
+     "|**Reusable Runtime Bricks (Node/TS & Python)**|`kruschdev/toolkit`|`@krusch/toolkit` (`40` JS/TS bricks) & `krusch_toolkit` (Python `3.11+`)|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    115,
+    87,
+    96
+   ],
+   [
+    "replace",
+    115,
+    137,
+    96,
+    97,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    141,
+    97,
+    101
+   ],
+   [
+    "replace",
+    141,
+    155,
+    101,
+    113,
+    [
+     "|Capability (Internal Module Name)|Standalone Repo|Key Tools & Subpath Surfaces|Default Storage|",
+     "|:---|:---|:---|:---|",
+     "|**Persistent Working Memory & Git Alignment (`krusch-context-mcp`)**|`krusch-context-mcp`|`krusch_context_retrieve`, `remember`, `revise`, `nudge` (`git blame -w -M` + co-change), `health` (`krusch-stack/git-alignment`)|`node:sqlite` (`db/init.sql` PG parity)|",
+     "|**Codebase AST & Call-Graph Search (`krusch-git`)**|`krusch-git`|`krusch_git_search_symbols`, `file_symbols`, `dependency_graph`, `semantic_search` (2-hop `git_edges` bridge), `read_tree`, `read_blob`, `list_repos`|`node:sqlite` (`db/init.sql` PG parity)|",
+     "|**Bounded OS Page Memory (`krusch-fs`)**|`krusch-fs-mcp`|`krusch_fs_locate`, `search`, `page_tree`, `read_page`, `remember_on_page`, `sync` (`.env` `KEYS_ONLY` redaction + secret shield)|`node:sqlite` (`db/init.sql` PG parity)|",
+     "|**Temporal Graph Context (`hydrascope`)**|`HydraScope`|`krusch-stack/hydrascope`, `POST /hydrascope/*`, & `--server hydrascope` (`traverse_context` w/ `asOf` `:SUPERSEDES`, `check_answerable`, `compare_vector_vs_graph`)|`node:sqlite` (`db/init.sql` PG parity)|",
+     "|**Signed Module Reuse & 2-Hop Blast Radius (`brick-exchange`)**|`toolkit` / `HydraScope`|`krusch-stack/brick-exchange`, `POST /brick-exchange/*`, & `--server krusch-brick-exchange` (Ed25519 `--permission` seals, 2-hop AST fan-out, `$0` hexagonal binding)|`node:sqlite` (`db/init.sql` PG parity)|",
+     "|**2PC Staged File & Action Harness (`krusch-harness`)**|`krusch-coding-harness`|`krusch_run`, `task_status`, `diff`, `apply_diff`, `explain`, `reject`, `abort` + `krusch-stack/action-harness` (`POST /action-harness/*`)|`node:sqlite` (`db/init.sql` PG parity)|",
+     "|**Turn-0 Schema Grounding & Spin-Loop Gate (`grounded-harness`)**|`grounded-harness`|`krusch-stack/grounded-harness`, `POST /grounded-harness/*`, & `--server krusch-grounded-harness` (Turn-0 CSV/JSON/SQLite scan, scale profiles, defect-only stop)|`node:sqlite` (`db/init.sql` PG parity)|",
+     "|**Frontend Design & Component Templates (`krusch-frontend-mcp`)**|`krusch-frontend-mcp`|`get_canonical_template` (`16` HTML/SVG + Lego/Vercel templates), `list_canonical_templates`, `generate_color_palette`, `css_to_tailwind`, `query_design_rules`, `generate_responsive_breakpoints`|`node:sqlite` (`db/init.sql` PG parity)|",
+     "|**Workspace & Docs RAG (`g-krusch`)**|`G-krusch`|`get_agent_steering`, `search_drive_rag`, `read_drive_file`, `write_drive_file`, `list_drive_workspace`, `get_workspace_status`|`node:sqlite` (`db/init.sql` PG parity)|",
+     "|**Task Routing, Prerequisite ToolGraph & Polyglot Audit (`krusch-cascade-router`)**|`krusch-cascade-router`|`krusch_route_task`, `krusch_stack_status`, `krusch-stack/tool-graph` (`<1ms` `CONSUMES -> PRODUCED_BY`), & `krusch-stack/polyglot-audit` (`28` brownfield rules)|In-Memory (`<25µs` to `<1ms` CPU)|"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    160,
+    113,
+    118
+   ],
+   [
+    "replace",
+    160,
+    165,
+    118,
+    123,
+    [
+     "|Hardware Tier|Recommended Local Models & Adapters|Ollama / Runtime Settings|Recommended `krusch-stack` Flags & Verified Local Outcome|",
+     "|:---|:---|:---|:---|",
+     "|**12-16 GB VRAM** *(RTX 3060 / 4060 Ti / 4070)*|`gemma4:e4b` + `qwen2.5-coder:7b` (+ `snowflake-arctic-embed2`)|`num_ctx=16384`, `OLLAMA_KV_CACHE_TYPE=q8_0`, `SMALL_MODEL` scale profile|`npx krusch-stack init --profile coding-agent --defer-tools` (`-80.67%` schema tokens so `16K` context stays clean).|",
+     "|**24 GB VRAM** *(RTX 3090 / 4090)*|`qwen3-coder-30b-moe` / `krush420/qwen3-coder-30b-sre-lora` (`30.5B` total / `3.3B` active MoE)|`Q4_K_M`, `num_ctx=16384`, `OLLAMA_KV_CACHE_TYPE=q8_0`|`--profile coding-agent` + `Grounded Harness` (`43.00%` [`258/600`] DolphinBench @ `$0.00`; `-95.2%` duplicate MCP calls w/ `2PC`).|",
+     "|**32-48 GB VRAM** *(RTX 5090 / A6000 / Apple Silicon)*|`google/gemma-4-31b-it` + `krush420/gemma4-31b-sre-lora` (`30.7B` dense, Apache-2.0)|`MID_MODEL` Thinking ON + `Grounded Harness`|**`57.33%` (`344/600`) DolphinBench @ `$0.00`** (highest open-weights score in my 28-run evaluation; `54.17%` stock queued `UUID 288671ad`).|"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    168,
+    123,
+    126
+   ],
+   [
+    "replace",
+    168,
+    175,
+    126,
+    133,
+    [
+     "|Benchmark / Workload|Raw Model Baseline|With `krusch-stack` Control Plane|Relative Lift / Cost Savings|",
+     "|:---|:---|:---|:---|",
+     "|**Aider Polyglot (`225/225` coding tasks)**|`19.56%` `Pass@1`|**`51.56%` `Pass@2`** *(2PC test-gated retry)*|**`2.64x` accuracy lift** (ties `Claude 3.5 Sonnet` baseline)|",
+     "|**BIRD-SQL (`500/500` text-to-SQL)**|`26.00%` EX|**`40.20%` EX** *(schema + execution gate)*|**`1.55x` accuracy lift** (`100%` syntactically valid SQL)|",
+     "|**Adyen DABstep (`data analysis episodes`)**|`20.0%` local / `$3.19` frontier|**`40.0%` local (`$0.00`) / `90.0%` frontier (`$0.81`)**|**`2.0x` local lift** & **`-74.5%` frontier API cost** (`2.54x` faster)|",
+     "|**UC Berkeley BFCL v3 Live (`2,251` Qs, `64` tools)**|`59.88%` Micro|**`66.28%` Micro & `84.69%` Irrelevance** (`--defer-tools`)|**`-80.67%` schema tokens** & **`+17.46 pp` irrelevance accuracy**|",
+     "|**DolphinBench Tool Hygiene (`600` tasks, `30B`)**|`42` duplicate MCP calls|**`2` duplicate MCP calls** (`30B + 2PC`)|**`-95.2%` wasted duplicate tool calls** @ `$0.00`|"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    177,
+    133,
+    135
+   ],
+   [
+    "delete",
+    177,
+    179,
+    135,
+    135
+   ],
+   [
+    "equal",
+    179,
+    184,
+    135,
+    140
+   ],
+   [
+    "replace",
+    184,
+    185,
+    140,
+    141,
+    [
+     "1. **Tier 1 -- Maintainer-Reviewed & Merged Upstream**: `RouteWorks/RouterArena` PR #169 merged into `main @ 844e93b` (`0.7263` `github-actions[bot]` CI-verified across `8,400/8,400` live receipts at `$0.3802/1K`; leaderboard table row queued for next batch refresh)."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    141,
+    142
+   ],
+   [
+    "replace",
+    186,
+    187,
+    142,
+    143,
+    [
+     "3. **Tier 3 -- Self-Run Clean-Room with SHA-256 Audit Logs**: Reproducible harness evaluations published with raw JSON receipts in `BENCHMARKS.md` and `krush420/sovereign-g4-benchmarks`."
+    ]
+   ],
+   [
+    "equal",
+    187,
+    188,
+    143,
+    144
+   ],
+   [
+    "replace",
+    188,
+    198,
+    144,
+    154,
+    [
+     "|Stack Pillar|External Benchmark|Headline Result|Verification Tier|",
+     "|:---|:---|:---|:---|",
+     "|**Cascade Router**|**RouteWorks RouterArena (`8,400` live receipts)**|**`0.7263` (`74.44%` Acc @ `$0.38/1K`)**, `2.0x-26.4x` cheaper than `Azure-Model-Router` / `GPT-5` / `Martian`|**Tier 1**: Merged upstream (PR #169)|",
+     "|**Memory + Control Plane**|**Official DolphinBench (`600/600`, `28` runs)**|**`91.17%` Argon Low (`$24.54`)**; **`81.50%` Luna High + Grounded (`$1.35`)**; **`57.33%` Gemma 4 LoRA + Grounded (`$0.00`)**|**Tier 2** (`UUID c047b063`, `288671ad` queued) & **Tier 3**|",
+     "|**Working Memory (`context`)**|**Official Snap LoCoMo (`ACL 2024`, `1,540` Qs)**|**`90.26%` accuracy & `95.77%` `dia_id` recall** at **`$0.00` zero-LLM ingestion** (`181.8ms` median retrieval)|**Tier 3**: Self-Run Clean-Room (SHA-256 logs)|",
+     "|**Long-Horizon Memory**|**ICLR 2026 BEAM (`100K` to `10M` tokens, `2,000` Qs)**|**`92.58%` (`100K`) & `93.00%` (`10M` IE) recall** (`78.67%` 4-split weighted; zero E2E drop `100K -> 1M`)|**Tier 3**: Self-Run Clean-Room (SHA-256 logs)|",
+     "|**Security & Policy Floor**|**ETH SpyLab AgentDojo v1.2.2 (`949` attacks)**|**`0.00%` Targeted ASR (`0/949` attacks succeeded)** vs. `19.28%` raw ASR (`69.07%` benign utility)|**Tier 3**: Self-Run Clean-Room (SHA-256 logs)|",
+     "|**Code AST & Call Graph**|**ACL 2025 CoIR (`162K` Qs) & RepoBench-R (`48K` Qs)**|**`56.40%` CoIR 10-task `NDCG@10` (`73.88%` `R@10`)**; **`68.58%` RepoBench-R `Acc@5`**|**Tier 3**: Self-Run Clean-Room (SHA-256 logs)|",
+     "|**2PC & Grounded Harnesses**|**Aider Polyglot (`225`), BIRD-SQL (`500`) & DABstep**|**Polyglot `51.56%` (`2.64x`)**; **BIRD-SQL `40.20%` (`1.55x`)**; **DABstep `90.0%` @ `$0.81` (`-74.5%` cost)**|**Tier 3**: Self-Run Clean-Room (SHA-256 logs)|",
+     "|**Deferred MCP (`--defer-tools`)**|**UC Berkeley BFCL v3 Live (`2,251` Qs, `64` tools)**|**`66.28%` Micro (`+6.40 pp`) & `84.69%` Irrelevance (`+17.46 pp`)** at **`-80.67%` schema tokens**|**Tier 3**: Self-Run Clean-Room (SHA-256 logs)|"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    210,
+    154,
+    166
+   ],
+   [
+    "replace",
+    210,
+    213,
+    166,
+    167,
+    [
+     "Read the full methodology, competitor tables (`Mem0`, `past.dev`, `Honcho`, `NotDiamond`, `Martian`), and whitepapers in **`BENCHMARKS.md`**, **Paper #27: Return on Memory** (**PDF**), **Paper #26: What DolphinBench Taught Me About Local AI**, and **Paper #30: Ontological Brick Exchange**."
+    ]
+   ],
+   [
+    "equal",
+    213,
+    223,
+    167,
+    177
+   ],
+   [
+    "replace",
+    223,
+    226,
+    177,
+    178,
+    [
+     "See **`docs/PRODUCTION.md`** for Solo `node:sqlite` WAL vs. Multi-User Team PostgreSQL 16 deployment patterns, security perimeters, and failure recovery playbooks."
+    ]
+   ],
+   [
+    "equal",
+    226,
+    233,
+    178,
+    185
+   ],
+   [
+    "replace",
+    233,
+    256,
+    185,
+    186,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    260,
+    186,
+    190
+   ],
+   [
+    "delete",
+    260,
+    262,
+    190,
+    190
+   ],
+   [
+    "equal",
+    262,
+    264,
+    190,
+    192
+   ],
+   [
+    "replace",
+    264,
+    275,
+    192,
+    201,
+    [
+     "|Resource|Hugging Face / GitHub|Role & Base Architecture|",
+     "|:---|:---|:---|",
+     "|**31B Dense SRE LoRA (`L2`)**|`krush420/gemma4-31b-sre-lora`|`google/gemma-4-31b-it` (`30.7B` dense, Apache-2.0; `57.33%` DolphinBench + Grounded @ `$0.00`)|",
+     "|**30B MoE Coding LoRA (`L2`)**|`krush420/qwen3-coder-30b-sre-lora`|`Qwen/Qwen3-Coder-30B-A3B-Instruct` (`3.3B` active MoE; `43.00%` + Grounded @ `$0.00`)|",
+     "|**8B Edge Referee LoRA (`L1.5`)**|`krush420/llama3-hermes3-8b-sre-lora`|`NousResearch/Hermes-3-Llama-3.1-8B` (BF16 LoRA + DPO; `15.7x` DolphinBench lift)|",
+     "|**120B Teacher QLoRA (`L2.5`)**|`krush420/gpt-oss-120b-sre-lora`|`openai/gpt-oss-120b` (`5.1B` active MXFP4 MoE; `39.50%` DolphinBench @ `$0.00`)|",
+     "|**SFT + DPO Dataset (`18,131` rows)**|`krush420/sovereign-code-audit-sft`|7 zero-leak splits of test-gated remediations, AST code audits, and tool-calling DPO pairs|",
+     "|**Hermetic Benchmarks (`95/95` Gates)**|`krush420/sovereign-g4-benchmarks`|Raw JSON evaluation logs, SHA-256 manifests, and merged `RouterArena` PR `#169` receipts|",
+     "|**Jean SRE Daemon (`jean-sre`)**|`kruschdev/Jean-SRE-by-kruschdev`|Autonomous 24/7 11-phase code auditor and test-gated remediation harness|"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    278,
+    201,
+    204
+   ],
+   [
+    "replace",
+    278,
+    279,
+    204,
+    205,
+    [
+     "Contributions, bug reports, and clean-room benchmark reproductions are welcome! Read **`CONTRIBUTING.md`** for local `node --test` workflows, isolated single-engine development (`src/engines/*`), and CI invariants (`INV-STACK-01..15`), and **`docs/PRODUCTION.md`** for production operations."
+    ]
+   ],
+   [
+    "equal",
+    279,
+    281,
+    205,
+    207
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

@@ -3240,5 +3240,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9ca068ec41ac": {
+  "identity": {
+   "one_liner": "用 Rust 编写的轻量级 Postgres 兼容运行时，单进程承载大量隔离的一次性数据库。",
+   "review": "PGBoxDB 是面向 AI 代理、CI、PR 与测试环境的短生命周期 Postgres 兼容数据库运行时。它以单进程共享一个 SQL 引擎，客户端通过标准 Postgres wire protocol 连接，按需从密封模板以 copy-on-write 方式（如 ZFS 块克隆）生成隔离数据库，会话结束后由 janitor 自动回收。README 明确限制：不支持生产数据、非崩溃安全（fsync=off）、单进程即单故障域、不能加载 Postgres C 扩展。",
+   "highlights": [
+    "支持 Postgres wire protocol 与 SQL 方言，Rails、Django、Prisma、SQLAlchemy、node-postgres 可不加修改地运行 migrate→test→schema-change 流程",
+    "通过连接名即从密封模板生成数据库（mint-on-connect），热池下约 6 ms、冷启动约 74 ms，闲置数据库约占用 70 KB 内存",
+    "内置会话/数据库/运行时三级内存与连接限制，并以 Linux cgroup 兜底，超限返回 SQLSTATE 53200 错误；提供 pgrust_runtime_status() 以 JSON 输出运行状态"
+   ],
+   "use_cases": [
+    "为 AI 编码代理（Claude Code、Cursor、Codex 等）的每个会话或子代理提供独立、用后即删的数据库分支",
+    "CI 流水线与每 PR 数据库：从生产库的脱敏副本或密封模板快速生成测试环境",
+    "本地测试与预览环境，替代为每个任务启动独立 PostgreSQL 服务器或 Docker 实例"
+   ]
+  },
+  "sha": "9ca068ec41ac",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4a365615d98b": {
+  "identity": {
+   "one_liner": "基于 pgrx 的 PostgreSQL 扩展，实现 GCJ02/BD09/CGCS2000 坐标转换与 Jenks 分级",
+   "review": "pg_eviltransform 是用 Rust/pgrx 编写的 PostgreSQL 扩展，提供 ST_EvilTransform 坐标转换函数（覆盖 WGS84、GCJ02、BD09、CGCS2000 四种坐标系，接口遵循 ST_Transform 的四种重载）和 ST_JenksBins 自然断点分级函数。适用于需在 PostGIS 中处理中国偏移坐标系数据的开发者。注意：需 PG15.20+ 与 PostGIS，不支持 PG14，中国边界框外坐标保持不变。",
+   "highlights": [
+    "ST_EvilTransform 提供四种与 ST_Transform 一致的重载，支持 SRID 与文本别名（EPSG:990001/990002）",
+    "自定义坐标系转换保留 Z/M 坐标，标准坐标系委托给 PostGIS/PROJ 处理",
+    "ST_JenksBins 支持 numeric、double precision 等多种数值类型的数组与聚合输入，忽略 NULL"
+   ],
+   "use_cases": [
+    "在数据库内对存储的几何数据执行 WGS84 与 GCJ02/BD09 之间的批量坐标转换",
+    "需要以受限 search_path 运行、调用限定名扩展函数的场景",
+    "对数值字段计算 Jenks 自然断点分级边界用于分类"
+   ]
+  },
+  "sha": "4a365615d98b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3120,5 +3120,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "29267bb15579": {
+  "identity": {
+   "one_liner": "本地运行的个人资产看板与市场分析工具，数据存于本机 SQLite",
+   "review": "licai 用 FastAPI、React 与 SQLite 在本地运行，将 A 股、港美股、基金、理财、现金、数字资产与交易所机器人的头寸汇总到统一看板，按统一口径计算成本、盈亏与风险敞口，并附市场榜单、板块情绪、复盘与问答 agent。行情取自公开接口，账本存于本机单个 SQLite 文件，无云端与账号体系；输出限定为客观信息，不提供买卖建议。分时、五档盘口等部分功能依赖通达信数据源，AI 功能需配置大模型。",
+   "highlights": [
+    "汇总 A 股、港美股、基金、理财、现金、数字资产与网格/定投机器人，按统一口径计算成本、盈亏与风险敞口，账本存于本机 SQLite",
+    "提供全市场榜单、盘口异动、龙虎榜、板块情绪、场外基金净值两层盘中估算、穿透同源分析与组合 TWR 复盘",
+    "内嵌市场问答 agent，约 50 个基础数据工具，支持子 agent、预约任务与流式工具调用展示"
+   ],
+   "use_cases": [
+    "分散在券商、银行与交易所的跨平台个人资产统一记账与盈亏核算",
+    "A 股与港美股的全市场榜单查看、板块情绪跟踪与交易复盘",
+    "基于持仓数据的行情、资金与基本面查询及新闻 AI 解读"
+   ]
+  },
+  "sha": "29267bb15579",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "23f57ebd3ec6": {
+  "identity": {
+   "one_liner": "面向小团队的编码代理共享工作台，经ACP驱动现有CLI代理并共享事件日志",
+   "review": "Threadbase 是一个单二进制的 Rust 服务器（内嵌 React web 客户端与 SQLite），不实现代理运行时，而是通过 Agent Client Protocol 驱动 Codex、Claude Code、opencode、pi 等本地 CLI。团队可实时观看代理会话、对 diff 逐行评论、回答代理提问并审批，每回合快照 worktree 以支持回退。部署仅支持 loopback + Tailscale serve，身份来自 Tailscale whois，数据留在单机目录。适合已在 Tailscale 网络内、共用主机代理账号的小型团队。",
+   "highlights": [
+    "通过 Agent Client Protocol 驱动 Codex、Claude Code、opencode、pi 等已有 CLI 代理，适配器以 PATH 上的普通命令安装",
+    "提供线程级实况观看、diff 行级评论、审批与结构化提问、CRDT 共享草稿、每回合 worktree 快照与回退",
+    "单二进制部署：Rust 服务器内嵌 SQLite 与 web 客户端，仅绑定 loopback，访问经由 tailscale serve 并以 whois 校验身份，所有自动放行动作写入审计日志"
+   ],
+   "use_cases": [
+    "小团队共享观察、评论并审批编码代理的运行过程",
+    "需要按线程/项目设置权限梯度（supervised/auto-edit/full_access）并保留审计日志的场景",
+    "在 Tailscale tailnet 内以 Tailscale 身份登录、数据不出本机的私有部署"
+   ]
+  },
+  "sha": "23f57ebd3ec6",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

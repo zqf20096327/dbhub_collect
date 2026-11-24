@@ -3219,5 +3219,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9713ce0eac46": {
+  "identity": {
+   "one_liner": "基于 Spring Boot + Gateway + Dubbo 的分布式 API 开放平台后端",
+   "review": "该仓库提供 API 开放平台的后端及微服务模块源码，包含主后端服务、模拟接口服务、Spring Cloud Gateway 网关、客户端 SDK 与公共契约模块五个部分。管理员可发布、下线接口并统计调用数据，开发者可通过 SDK 一行代码完成带签名的接口调用。README 未包含部署步骤，完整课程资料需加入编程导航获取。",
+   "highlights": [
+    "包含主后端、接口服务、网关、SDK、公共模块五个子模块及 SQL 初始化脚本",
+    "网关基于 Spring Cloud Gateway 实现签名校验、黑白名单与调用次数统计",
+    "SDK 采用 Spring Boot Starter 自动装配，使用 AccessKey/SecretKey 加随机数与时间戳生成签名"
+   ],
+   "use_cases": [
+    "学习微服务网关鉴权与 Dubbo RPC 跨服务通信的实现方式",
+    "搭建供开发者接入调用的接口开放平台原型",
+    "结合 Spring Boot Starter 开发自研客户端 SDK"
+   ]
+  },
+  "sha": "9713ce0eac46",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "581a48d49e14": {
+  "identity": {
+   "one_liner": "面向 Ruby API 应用的类 Rails 框架，经 Spinel 编译为单个原生二进制。",
+   "review": "Snails 是一个面向 API-only Ruby 应用的类 Rails 框架，保留路由、控制器、表单、任务、测试等 Rails 约定，但移除 Active Record，数据读写经由一个薄 SQL 层，需要 join 或分组查询时直接写 SQL。应用、框架与 HTTP 服务器由 Spinel AOT 编译器编译为一个原生二进制，多线程运行。当前处于 1.x，README 称公开 API 稳定。",
+   "highlights": [
+    "将应用、框架和 HTTP 服务器编译为一个原生二进制文件，单进程多线程运行",
+    "保留路由、控制器、表单、后台任务与测试的 Rails 约定；模型层不含 Active Record，读写经由薄 SQL 层，复杂查询直接写 SQL",
+    "提供 snails new 脚手架，支持 Linux amd64/arm64 与 macOS Apple Silicon/Intel，数据库支持 sqlite 与 PostgreSQL"
+   ],
+   "use_cases": [
+    "使用 Ruby 源码并沿用 Rails 约定构建 API-only 服务",
+    "在内存受限的小规格节点上部署 API 应用（README 示例为 1 GB 节点，进程约 20 MB RSS）",
+    "从 Rails 项目迁移 API 功能，按 Coming from Rails 文档进行移植"
+   ]
+  },
+  "sha": "581a48d49e14",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "db55f89000ad": {
+  "identity": {
+   "one_liner": "基于 NVIDIA cuVS 的 PostgreSQL GPU 向量检索扩展，GPU 生成候选、Postgres 控制查询。",
+   "review": "pg_cuvs 是 PostgreSQL 扩展，通过旁路守护进程调用 NVIDIA cuVS 提供 GPU 向量检索，GPU 仅返回 TID 候选与距离，堆访问、可见性检查和过滤仍由 PostgreSQL 完成。它构建于 pgvector 之上，复用其运算符接口，支持常驻 CAGRA/flat/IVF-PQ 索引检索和 GPU 建索引后导出为 pgvector HNSW 两种模式。目标平台为 Linux 与 PostgreSQL 16，需 pgvector 0.7.0 以上，当前版本 0.9.3。官方说明显示小数据集（N<10K）时 IPC 开销可能超过 GPU 收益，路径选择需用 EXPLAIN 验证。",
+   "highlights": [
+    "支持三种 GPU 索引（常驻 CAGRA、flat 暴力检索、压缩 IVF-PQ）作为候选生成器，SQL 查询语句无需修改",
+    "提供 GPU 建索引加速路径：GPU 上构建 CAGRA 后导出为标准 pgvector HNSW 索引，查询可在 CPU 上服务",
+    "通过 sidecar 守护进程共享 GPU 资源，各后端进程不含 CUDA 上下文；提供 pg_stat_gpu_search、pg_cuvs_memory_status() 等观测函数"
+   ],
+   "use_cases": [
+    "10 万至千万级向量、索引可装入显存的低延迟检索场景（CAGRA GPU 搜索层）",
+    "自建或私有化 RAG 部署中已存在 GPU 资源池、希望在线服务保持 pgvector HNSW CPU 路径、仅在批量建索引/重建窗口复用 GPU",
+    "需要在同一守护进程内做多 GPU 分片检索（shard_count）的场景"
+   ]
+  },
+  "sha": "db55f89000ad",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

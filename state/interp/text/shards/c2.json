@@ -3317,5 +3317,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ab009adbb0ca": {
+  "identity": {
+   "one_liner": "单容器 All-In-One Docker 镜像，用于搭建与运行自动化媒体栈",
+   "review": "DUMB（Distributed Unlimited Media Bridge）是一个 All-In-One Docker 镜像，将 Debrid 与 Usenet 工作流、Arr 自动化、媒体服务器（Emby/Jellyfin/Plex）、请求工具、Traefik 访问层及 PostgreSQL/pgAdmin 等组件整合在单个容器中，通过向导式设置完成服务安装、生命周期管理、日志、健康检查与更新。面向需要部署多服务媒体栈的用户。采用 GPLv3 许可，提供 GHCR 与 Docker Hub 镜像，也可经 Proxmox Community Scripts 以 LXC 方式部署；各组件可按需选用，非全部必需。",
+   "highlights": [
+    "单个容器内整合 30 余个媒体栈组件（Sonarr、Radarr、Prowlarr、Jellyfin、Plex、Traefik、PostgreSQL 等），可按需启用",
+    "提供服务安装、配置、生命周期管理、日志、健康检查、更新与恢复自动化，并内嵌各服务 UI",
+    "支持 Traefik 与 Cloudflare 访问工具、可选 Authelia 身份提供者及 OIDC/ForwardAuth 保护，包含指标、告警与数据库诊断"
+   ],
+   "use_cases": [
+    "通过 docker-compose 或单个 Docker 镜像部署完整自动化媒体栈的场景",
+    "在 Proxmox 环境中通过 Community Scripts 以 Debian LXC 原生运行 DUMB 及其托管服务",
+    "需要集中仪表盘管理多个媒体服务的日志、健康状态、更新与通知的场景"
+   ]
+  },
+  "sha": "ab009adbb0ca",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "064566b32285": {
+  "identity": {
+   "one_liner": "TypeORM 扩展库，提供建库、漂移检测、锁与数据填充的代码与 CLI 工具",
+   "review": "typeorm-extension 是面向 TypeORM 0.3+ 项目的 Node.js 库，提供 createDatabase/dropDatabase、多副本迁移数据库锁（withDatabaseLock）、schema 与实体元数据一致性检查（db drift）、行级写锁及按驱动识别错误码等函数，并附带 seed run/create 等命令。以 ESM-only 包发布，要求 Node.js ≥22，typeorm 为 peer dependency（^1.1.3），支持 postgres、mysql、mongodb、better-sqlite3 等驱动。",
+   "highlights": [
+    "提供 createDatabase/dropDatabase API 及 db create、db drop、db drift、seed run、seed create CLI 命令，支持 postgres、cockroachdb、mysql、mariadb、mssql、oracle、mongodb、better-sqlite3 驱动",
+    "提供 withDatabaseLock、withLockedEntity、assertSchemaMatchesMetadata 等函数，以及按驱动定位错误码的 isDatabaseUniqueViolationError 等判断函数",
+    "Seeder 类与工厂机制支持生成数据填充，可通过 --name 限制执行范围，并可选记录每个 seeder 使其只运行一次"
+   ],
+   "use_cases": [
+    "多副本同时启动时需要以数据库锁协调迁移执行的服务",
+    "部署流程中需先创建数据库（含 postgres 指定初始库）并在发布步骤执行 schema 同步的场景",
+    "需要以 seeder/factory 生成开发与测试数据的项目"
+   ]
+  },
+  "sha": "064566b32285",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

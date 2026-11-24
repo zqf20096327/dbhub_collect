@@ -28011,5 +28011,3003 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "b2ae8bfa4ea8+2": {
+  "fn": "kirimatt/goncordia",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    10,
+    2,
+    10,
+    [
+     "CI",
+     "codecov",
+     "Go Reference",
+     "GitHub release",
+     "Go version",
+     "License: MIT",
+     "Mentioned in Awesome Go",
+     "Context7"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "Documentation · Changelog · API reference · Migrating to v2 · Who uses it"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    28,
+    12,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "`EnqueueTx` implements the transactional outbox pattern: the job is written inside your existing transaction and becomes visible to workers only after commit. If the transaction rolls back, the job disappears — no separate relay process, no dual-write risk."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    36,
+    29,
+    36
+   ],
+   [
+    "delete",
+    36,
+    38,
+    36,
+    36
+   ],
+   [
+    "equal",
+    38,
+    61,
+    36,
+    59
+   ],
+   [
+    "delete",
+    61,
+    63,
+    59,
+    59
+   ],
+   [
+    "equal",
+    63,
+    65,
+    59,
+    61
+   ],
+   [
+    "replace",
+    65,
+    66,
+    61,
+    62,
+    [
+     "|Driver|Package|Tx type|Atomic insert|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    62,
+    63
+   ],
+   [
+    "replace",
+    67,
+    81,
+    63,
+    75,
+    [
+     "|PostgreSQL (pgx v5)|`driver/pgxv5`|`pgx.Tx`|✅|LISTEN/NOTIFY, lease leadership, SKIP LOCKED|",
+     "|PostgreSQL / MySQL / MariaDB / SQLite|`driver/stdlib`|`*sql.Tx`|✅|pgx stdlib, go-sql-driver/mysql (MySQL 8, MariaDB 10.6+), modernc sqlite|",
+     "|gorm|`driver/gorm`|`*gorm.DB`|✅|thin adapter over stdlib|",
+     "|bun|`driver/bun`|`bun.Tx`|✅|thin adapter over stdlib|",
+     "|MongoDB 4.0+|`driver/mongodbv2`|`*mongo.Session` (mongo-driver v2)|✅|replica set required|",
+     "|MongoDB 4.0+ (deprecated)|`driver/mongodb`|`mongo.SessionContext` (mongo-driver v1)|✅|use `driver/mongodbv2`|",
+     "|Redis|`driver/redis`|`NoTx`|❌|at-least-once; Pub/Sub notifications|",
+     "|Cassandra 3.11+|`driver/cassandra`|`NoTx`|❌|LWT claiming; ScyllaDB / DSE compatible|",
+     "|ClickHouse 23+|`driver/clickhouse`|`NoTx`|❌|ReplacingMergeTree; at-least-once|",
+     "|Amazon DynamoDB|`driver/dynamodb`|`NoTx`|❌|conditional writes; at-least-once|",
+     "|Cloud Firestore|`driver/firestore`|`*firestore.Transaction`|✅|RunTransaction; composite index required|",
+     "|In-memory|`driver/memory`|`memory.NoTx`|❌|synchronized operations, no rollback; for tests|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    84,
+    75,
+    78
+   ],
+   [
+    "replace",
+    84,
+    85,
+    78,
+    79,
+    [
+     "||goncordia|River|Asynq|Machinery|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    79,
+    80
+   ],
+   [
+    "replace",
+    86,
+    97,
+    80,
+    91,
+    [
+     "|Backends|Postgres, MySQL, SQLite, MongoDB, Redis, Cassandra, ClickHouse, DynamoDB, Firestore, memory|**PostgreSQL only**|**Redis only**|Redis, RabbitMQ, SQS, MongoDB|",
+     "|Transactional insert (outbox pattern)|✅ where backend supports tx|✅ Postgres only|❌|❌|",
+     "|Generic `Driver[TTx]` interface|✅|✅ (Postgres only)|—|—|",
+     "|Scheduled / cron jobs|✅|✅|✅|✅|",
+     "|Unique jobs|✅|✅|✅|❌|",
+     "|Priority queues|✅|✅|✅|❌|",
+     "|New-job wake-up|✅ LISTEN/NOTIFY, Change Streams, Pub/Sub; polling elsewhere|✅ LISTEN/NOTIFY|❌ polling (`TaskCheckInterval`, 1 s)|✅ blocking pop on Redis (`BLPOP`); broker-dependent|",
+     "|Web UI|✅ embeddable|✅ (River UI, Pro)|✅ (asynqmon)|❌|",
+     "|Await a job's typed result|✅ `future.Func.Call` / `Await`|❌|stores results, no await|✅ `AsyncResult.Get`|",
+     "|Unit tests without Docker|✅ in-memory driver + `gontest`|needs Postgres|needs Redis|needs a broker|",
+     "|Workflow primitives (chains, chords)|❌|❌|❌|✅|"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    102,
+    91,
+    96
+   ],
+   [
+    "replace",
+    102,
+    104,
+    96,
+    98,
+    [
+     "Against river, asynq and machinery;",
+     "code in `bench/compare`). Jobs per second, higher is better:"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    98,
+    99
+   ],
+   [
+    "replace",
+    105,
+    106,
+    99,
+    100,
+    [
+     "|Postgres|goncordia (pgxv5)|River|River, 10 ms fetch interval|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    100,
+    101
+   ],
+   [
+    "replace",
+    107,
+    112,
+    101,
+    106,
+    [
+     "|Enqueue, one per call|**1,044**|671|670|",
+     "|Enqueue, batches of 100|31,237|34,427|**34,827**|",
+     "|Drain 20,000 jobs, 10 workers|**5,801**|99|4,726|",
+     "|Drain 20,000 jobs, 100 workers|20,610|999|**22,588**|",
+     "|Idle pickup latency, p50|**2.8 ms**|100 ms|15 ms|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    106,
+    107
+   ],
+   [
+    "replace",
+    113,
+    114,
+    107,
+    108,
+    [
+     "|Redis|goncordia (redis)|Asynq|Machinery|"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    108,
+    109
+   ],
+   [
+    "replace",
+    115,
+    120,
+    109,
+    114,
+    [
+     "|Enqueue, one per call|3,232|**3,669**|1,910|",
+     "|Enqueue, batches of 100|**61,826**|no batch API|no batch API|",
+     "|Drain 20,000 jobs, 10 workers|**11,450**|3,040|2,263|",
+     "|Drain 20,000 jobs, 100 workers|**21,205**|3,021|2,243|",
+     "|Idle pickup latency, p50|**0.7 ms**|1,036 ms|1.6 ms|"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    129,
+    114,
+    123
+   ],
+   [
+    "replace",
+    129,
+    130,
+    123,
+    124,
+    [
+     "only on Redis; their own numbers are in Benchmarks."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    139,
+    124,
+    133
+   ],
+   [
+    "replace",
+    139,
+    142,
+    133,
+    134,
+    [
+     "Moving over from one of them? Migration guides: Asynq, River, Machinery."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    149,
+    134,
+    141
+   ],
+   [
+    "replace",
+    149,
+    158,
+    141,
+    150,
+    [
+     " Context7 MCP server installed, add",
+     " `use context7` or `use library /kirimatt/goncordia` to your prompt.",
+     " Versions are indexed per release (`/kirimatt/goncordia/v2.11.0`).",
+     "- **Plain text, no MCP**: context7.com/kirimatt/goncordia/llms.txt",
+     " (add `?topic=EnqueueTx` to narrow it) and",
+     " goncordia.docs7.io/llms.txt.",
+     "- **In your repository**: copy the rules from AGENTS.md into",
+     " your own `AGENTS.md` / `CLAUDE.md` / `.cursor/rules`, so the agent uses",
+     " `EnqueueTx`, the `/v2` import paths and the in-memory test driver."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    161,
+    150,
+    153
+   ],
+   [
+    "replace",
+    161,
+    162,
+    153,
+    154,
+    [
+     "The `mcpserver` module serves your queues and jobs over MCP, so an"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    175,
+    154,
+    167
+   ],
+   [
+    "replace",
+    175,
+    176,
+    167,
+    168,
+    [
+     "See the MCP guide."
+    ]
+   ],
+   [
+    "equal",
+    176,
+    191,
+    168,
+    183
+   ],
+   [
+    "replace",
+    191,
+    217,
+    183,
+    184,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    221,
+    184,
+    188
+   ],
+   [
+    "replace",
+    221,
+    224,
+    188,
+    189,
+    [
+     "selected. See Migrating to v2 for upgrade commands."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    233,
+    189,
+    198
+   ],
+   [
+    "replace",
+    233,
+    267,
+    198,
+    199,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    284,
+    199,
+    216
+   ],
+   [
+    "replace",
+    284,
+    303,
+    216,
+    217,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    316,
+    217,
+    230
+   ],
+   [
+    "replace",
+    316,
+    328,
+    230,
+    231,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    336,
+    231,
+    239
+   ],
+   [
+    "replace",
+    336,
+    347,
+    239,
+    240,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    355,
+    240,
+    248
+   ],
+   [
+    "replace",
+    355,
+    367,
+    248,
+    249,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    389,
+    249,
+    271
+   ],
+   [
+    "replace",
+    389,
+    404,
+    271,
+    272,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    404,
+    412,
+    272,
+    280
+   ],
+   [
+    "replace",
+    412,
+    428,
+    280,
+    281,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    436,
+    281,
+    289
+   ],
+   [
+    "replace",
+    436,
+    451,
+    289,
+    290,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    451,
+    459,
+    290,
+    298
+   ],
+   [
+    "replace",
+    459,
+    477,
+    298,
+    299,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    477,
+    485,
+    299,
+    307
+   ],
+   [
+    "replace",
+    485,
+    493,
+    307,
+    308,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    493,
+    506,
+    308,
+    321
+   ],
+   [
+    "delete",
+    506,
+    508,
+    321,
+    321
+   ],
+   [
+    "equal",
+    508,
+    514,
+    321,
+    327
+   ],
+   [
+    "replace",
+    514,
+    518,
+    327,
+    328,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    518,
+    519,
+    328,
+    329
+   ],
+   [
+    "delete",
+    519,
+    521,
+    329,
+    329
+   ],
+   [
+    "equal",
+    521,
+    528,
+    329,
+    336
+   ],
+   [
+    "replace",
+    528,
+    542,
+    336,
+    337,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    542,
+    560,
+    337,
+    355
+   ],
+   [
+    "delete",
+    560,
+    562,
+    355,
+    355
+   ],
+   [
+    "equal",
+    562,
+    568,
+    355,
+    361
+   ],
+   [
+    "replace",
+    568,
+    604,
+    361,
+    362,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    604,
+    670,
+    362,
+    428
+   ],
+   [
+    "delete",
+    670,
+    672,
+    428,
+    428
+   ],
+   [
+    "equal",
+    672,
+    703,
+    428,
+    459
+   ],
+   [
+    "replace",
+    703,
+    707,
+    459,
+    460,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    707,
+    715,
+    460,
+    468
+   ],
+   [
+    "replace",
+    715,
+    725,
+    468,
+    469,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    725,
+    733,
+    469,
+    477
+   ],
+   [
+    "replace",
+    733,
+    743,
+    477,
+    478,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    743,
+    747,
+    478,
+    482
+   ],
+   [
+    "replace",
+    747,
+    748,
+    482,
+    483,
+    [
+     "share them) and failed jobs stay for retention; set"
+    ]
+   ],
+   [
+    "equal",
+    748,
+    783,
+    483,
+    518
+   ],
+   [
+    "replace",
+    783,
+    784,
+    518,
+    519,
+    [
+     "Runnable examples: `future/example_test.go` runs the"
+    ]
+   ],
+   [
+    "equal",
+    784,
+    785,
+    519,
+    520
+   ],
+   [
+    "replace",
+    785,
+    786,
+    520,
+    521,
+    [
+     "`driver/pgxv5/example_future_test.go`"
+    ]
+   ],
+   [
+    "equal",
+    786,
+    797,
+    521,
+    532
+   ],
+   [
+    "replace",
+    797,
+    805,
+    532,
+    533,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    805,
+    810,
+    533,
+    538
+   ],
+   [
+    "delete",
+    810,
+    812,
+    538,
+    538
+   ],
+   [
+    "equal",
+    812,
+    819,
+    538,
+    545
+   ],
+   [
+    "replace",
+    819,
+    831,
+    545,
+    546,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    831,
+    864,
+    546,
+    579
+   ],
+   [
+    "replace",
+    864,
+    865,
+    579,
+    580,
+    [
+     "|Metric|Type|Labels|"
+    ]
+   ],
+   [
+    "equal",
+    865,
+    866,
+    580,
+    581
+   ],
+   [
+    "replace",
+    866,
+    872,
+    581,
+    587,
+    [
+     "|`goncordia_future_awaits_in_flight`|gauge|—|",
+     "|`goncordia_future_await_duration_seconds`|histogram|`kind`, `outcome`|",
+     "|`goncordia_future_await_polls_total`|counter|`kind`|",
+     "|`goncordia_future_await_wakeups_total`|counter|`kind`|",
+     "|`goncordia_future_store_duration_seconds`|histogram|`kind`, `status`|",
+     "|`goncordia_future_result_size_bytes`|histogram|`kind`|"
+    ]
+   ],
+   [
+    "equal",
+    872,
+    904,
+    587,
+    619
+   ],
+   [
+    "delete",
+    904,
+    906,
+    619,
+    619
+   ],
+   [
+    "equal",
+    906,
+    915,
+    619,
+    628
+   ],
+   [
+    "replace",
+    915,
+    922,
+    628,
+    629,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    922,
+    934,
+    629,
+    641
+   ],
+   [
+    "replace",
+    934,
+    935,
+    641,
+    642,
+    [
+     "|What|Kept for|"
+    ]
+   ],
+   [
+    "equal",
+    935,
+    936,
+    642,
+    643
+   ],
+   [
+    "replace",
+    936,
+    940,
+    643,
+    647,
+    [
+     "|completed jobs|24 hours|",
+     "|cancelled jobs|24 hours|",
+     "|discarded jobs (dead letters)|7 days|",
+     "|future results of completed jobs|1 hour|"
+    ]
+   ],
+   [
+    "equal",
+    940,
+    949,
+    647,
+    656
+   ],
+   [
+    "replace",
+    949,
+    953,
+    656,
+    657,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    953,
+    961,
+    657,
+    665
+   ],
+   [
+    "replace",
+    961,
+    962,
+    665,
+    666,
+    [
+     "Futures). `Manager.Forget` drops a result"
+    ]
+   ],
+   [
+    "equal",
+    962,
+    971,
+    666,
+    675
+   ],
+   [
+    "replace",
+    971,
+    980,
+    675,
+    676,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    980,
+    987,
+    676,
+    683
+   ],
+   [
+    "replace",
+    987,
+    988,
+    683,
+    684,
+    [
+     "|Driver|How retention finds expired jobs|"
+    ]
+   ],
+   [
+    "equal",
+    988,
+    989,
+    684,
+    685
+   ],
+   [
+    "replace",
+    989,
+    995,
+    685,
+    691,
+    [
+     "|pgxv5, stdlib (Postgres, MySQL, SQLite), gorm, bun, MongoDB, Redis|index on state and finalization time, batched deletes (`driver.JobPruner`)|",
+     "|DynamoDB|sparse GSI `gsi_retention` on terminal jobs, sharded 16 ways; created by `Migrate`|",
+     "|Firestore|composite index `state ASC, finalized_at ASC` on `goncordia_jobs` (create it yourself, like the fetch index); results use the automatic `updated_at` index|",
+     "|Cassandra|lookup tables `goncordia_jobs_finalized` and `goncordia_results_written`, read from a stored watermark so deleted rows' tombstones are not rescanned|",
+     "|ClickHouse|data-skipping indexes on `state`, `finalized_at`, `id`, and result `updated_at`; expired rows are removed physically with lightweight `DELETE`, including rows that `JobDelete` only marked deleted|",
+     "|memory|scans in process memory|"
+    ]
+   ],
+   [
+    "equal",
+    995,
+    1020,
+    691,
+    716
+   ],
+   [
+    "replace",
+    1020,
+    1021,
+    716,
+    717,
+    [
+     "|Metric|Type|Labels|"
+    ]
+   ],
+   [
+    "equal",
+    1021,
+    1022,
+    717,
+    718
+   ],
+   [
+    "replace",
+    1022,
+    1027,
+    718,
+    723,
+    [
+     "|`goncordia_retention_passes_total`|counter|`status` (`ok`, `error`)|",
+     "|`goncordia_retention_jobs_deleted_total`|counter|—|",
+     "|`goncordia_retention_results_deleted_total`|counter|—|",
+     "|`goncordia_retention_last_success_timestamp_seconds`|gauge|—|",
+     "|`goncordia_retention_last_pass_duration_seconds`|gauge|—|"
+    ]
+   ],
+   [
+    "equal",
+    1027,
+    1034,
+    723,
+    730
+   ],
+   [
+    "delete",
+    1034,
+    1036,
+    730,
+    730
+   ],
+   [
+    "equal",
+    1036,
+    1045,
+    730,
+    739
+   ],
+   [
+    "replace",
+    1045,
+    1066,
+    739,
+    740,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1066,
+    1074,
+    740,
+    748
+   ],
+   [
+    "replace",
+    1074,
+    1081,
+    748,
+    749,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1081,
+    1102,
+    749,
+    770
+   ],
+   [
+    "replace",
+    1102,
+    1104,
+    770,
+    772,
+    [
+     " scheduling, provide a stable `ID` and `StartAt`; the first occurrence is",
+     " `Schedule.Next(StartAt)`."
+    ]
+   ],
+   [
+    "equal",
+    1104,
+    1105,
+    772,
+    773
+   ],
+   [
+    "replace",
+    1105,
+    1107,
+    773,
+    775,
+    [
+     " after enqueue. Each occurrence uses a permanent uniqueness key, so leader",
+     " failover or a crash between enqueue and cursor advancement cannot duplicate it."
+    ]
+   ],
+   [
+    "equal",
+    1107,
+    1108,
+    775,
+    776
+   ],
+   [
+    "replace",
+    1108,
+    1110,
+    776,
+    778,
+    [
+     " `CronCatchUpLatest` keeps only the latest, and `CronSkipMissed` drops old",
+     " occurrences while still enqueueing an occurrence reached on the current tick."
+    ]
+   ],
+   [
+    "equal",
+    1110,
+    1113,
+    778,
+    781
+   ],
+   [
+    "replace",
+    1113,
+    1116,
+    781,
+    782,
+    [
+     " owns the lease; a stale instance cannot resign a newer leader."
+    ]
+   ],
+   [
+    "equal",
+    1116,
+    1123,
+    782,
+    789
+   ],
+   [
+    "replace",
+    1123,
+    1144,
+    789,
+    790,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1144,
+    1145,
+    790,
+    791
+   ],
+   [
+    "delete",
+    1145,
+    1147,
+    791,
+    791
+   ],
+   [
+    "equal",
+    1147,
+    1156,
+    791,
+    800
+   ],
+   [
+    "replace",
+    1156,
+    1161,
+    800,
+    801,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1161,
+    1163,
+    801,
+    803
+   ],
+   [
+    "replace",
+    1163,
+    1166,
+    803,
+    804,
+    [
+     "See `driver/driver.go` for the full core interface and optional rescue/admin capabilities, and `driver/memory/memory.go` for a reference implementation. Every `Executor` also implements `driver.JobResultStore` (`JobResultPut`, `JobResultGet`, `JobResultDelete`; `JobDelete` removes the result too), which `driver/drivertest.RunResults` verifies. Driver authors can reuse `driver/drivertest.Run` for the base contract and `driver/drivertest.RunScheduled` with an injected `clock.Manual` for scheduled-job conformance. The base contract includes opaque job/queue pagination, deterministic ordering, invalid-cursor classification, fencing, and typed stale-claim behavior."
+    ]
+   ],
+   [
+    "equal",
+    1166,
+    1182,
+    804,
+    820
+   ],
+   [
+    "replace",
+    1182,
+    1183,
+    820,
+    821,
+    [
+     "|Backend|per job|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1183,
+    1184,
+    821,
+    822
+   ],
+   [
+    "replace",
+    1184,
+    1193,
+    822,
+    831,
+    [
+     "|Memory|1.5 µs|in-process mutex, no I/O|",
+     "|SQLite|67 µs|WAL mode, single connection|",
+     "|Redis|328 µs|one script call|",
+     "|Postgres (pgx v5)|392 µs|INSERT|",
+     "|DynamoDB|1.4 ms|PutItem + queue row|",
+     "|MongoDB|1.6 ms|insertOne|",
+     "|Firestore|2.3 ms|Create on the emulator|",
+     "|ClickHouse|6.8 ms|INSERT, one new data part|",
+     "|Cassandra|7.2 ms|lightweight transactions (Paxos)|"
+    ]
+   ],
+   [
+    "equal",
+    1193,
+    1196,
+    831,
+    834
+   ],
+   [
+    "replace",
+    1196,
+    1197,
+    834,
+    835,
+    [
+     "|Backend|per batch|jobs/s|"
+    ]
+   ],
+   [
+    "equal",
+    1197,
+    1198,
+    835,
+    836
+   ],
+   [
+    "replace",
+    1198,
+    1207,
+    836,
+    845,
+    [
+     "|Memory|0.13 ms|~800 000|",
+     "|Redis|1.9 ms|~54 000|",
+     "|Postgres (pgx v5)|2.0 ms|~49 000|",
+     "|MongoDB|4.3 ms|~23 000|",
+     "|SQLite|6.6 ms|~15 000|",
+     "|ClickHouse|7.4 ms|~13 500|",
+     "|Cassandra|19.9 ms|~5 000|",
+     "|DynamoDB|28.0 ms|~3 600|",
+     "|Firestore|47.4 ms|~2 100|"
+    ]
+   ],
+   [
+    "equal",
+    1207,
+    1210,
+    845,
+    848
+   ],
+   [
+    "replace",
+    1210,
+    1211,
+    848,
+    849,
+    [
+     "|Backend|per job|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1211,
+    1212,
+    849,
+    850
+   ],
+   [
+    "replace",
+    1212,
+    1221,
+    850,
+    859,
+    [
+     "|SQLite|0.23 ms||",
+     "|Redis|0.74 ms|claim and complete scripts|",
+     "|Memory|0.94 ms|linear scan over b.N jobs|",
+     "|Postgres (pgx v5)|1.0 ms|UPDATE … SKIP LOCKED + UPDATE|",
+     "|MongoDB|6.1 ms|find + claim + complete|",
+     "|DynamoDB|8.8 ms|GSI query + conditional updates|",
+     "|Cassandra|19.5 ms|lightweight transactions per claim|",
+     "|ClickHouse|27.1 ms|SELECT … FINAL + new row version|",
+     "|Firestore|36.6 ms|query + transaction on the emulator|"
+    ]
+   ],
+   [
+    "equal",
+    1221,
+    1224,
+    859,
+    862
+   ],
+   [
+    "replace",
+    1224,
+    1225,
+    862,
+    863,
+    [
+     "|Backend|concurrency|jobs/s|Wake-up|"
+    ]
+   ],
+   [
+    "equal",
+    1225,
+    1226,
+    863,
+    864
+   ],
+   [
+    "replace",
+    1226,
+    1235,
+    864,
+    873,
+    [
+     "|Redis|c=4|~6 200|Pub/Sub|",
+     "|Memory|c=10|~4 900|in-process|",
+     "|SQLite|c=4|~4 700|polling|",
+     "|Postgres (pgx v5)|c=4|~4 300|LISTEN/NOTIFY|",
+     "|MongoDB|c=4|~870|Change Streams|",
+     "|Cassandra|c=4|~655|polling|",
+     "|DynamoDB|c=4|~430|polling|",
+     "|ClickHouse|c=4|~310|polling|",
+     "|Firestore|c=4|~230|polling, emulator|"
+    ]
+   ],
+   [
+    "equal",
+    1235,
+    1262,
+    873,
+    900
+   ],
+   [
+    "replace",
+    1262,
+    1263,
+    900,
+    901,
+    [
+     "||goncordia (pgxv5)|river|river-tuned|"
+    ]
+   ],
+   [
+    "equal",
+    1263,
+    1264,
+    901,
+    902
+   ],
+   [
+    "replace",
+    1264,
+    1269,
+    902,
+    907,
+    [
+     "|enqueue, one per call|1,044|671|670|",
+     "|enqueue, batches of 100|31,237|34,427|34,827|",
+     "|drain 20,000 jobs, 10 workers|5,801|99|4,726|",
+     "|drain 20,000 jobs, 100 workers|20,610|999|22,588|",
+     "|idle pickup latency p50 / p99|2.8 / 6.0 ms|100 / 991 ms|15 / 20.5 ms|"
+    ]
+   ],
+   [
+    "equal",
+    1269,
+    1272,
+    907,
+    910
+   ],
+   [
+    "replace",
+    1272,
+    1273,
+    910,
+    911,
+    [
+     "||goncordia (redis)|asynq|asynq-tuned|machinery|"
+    ]
+   ],
+   [
+    "equal",
+    1273,
+    1274,
+    911,
+    912
+   ],
+   [
+    "replace",
+    1274,
+    1279,
+    912,
+    917,
+    [
+     "|enqueue, one per call|3,232|3,669|3,548|1,910|",
+     "|enqueue, batches of 100|61,826|no batch API|no batch API|no batch API|",
+     "|drain 20,000 jobs, 10 workers|11,450|3,040|3,050|2,263|",
+     "|drain 20,000 jobs, 100 workers|21,205|3,021|3,044|2,243|",
+     "|idle pickup latency p50 / p99|0.7 / 1.1 ms|1,036 / 1,495 ms|11.1 / 16.4 ms|1.6 / 2.4 ms|"
+    ]
+   ],
+   [
+    "equal",
+    1279,
+    1284,
+    917,
+    922
+   ],
+   [
+    "delete",
+    1284,
+    1287,
+    922,
+    922
+   ],
+   [
+    "equal",
+    1287,
+    1302,
+    922,
+    937
+   ],
+   [
+    "replace",
+    1302,
+    1310,
+    937,
+    938,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1310,
+    1321,
+    938,
+    949
+   ],
+   [
+    "replace",
+    1321,
+    1327,
+    949,
+    950,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1327,
+    1335,
+    950,
+    958
+   ],
+   [
+    "replace",
+    1335,
+    1345,
+    958,
+    959,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1345,
+    1353,
+    959,
+    967
+   ],
+   [
+    "replace",
+    1353,
+    1365,
+    967,
+    968,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1365,
+    1373,
+    968,
+    976
+   ],
+   [
+    "replace",
+    1373,
+    1383,
+    976,
+    977,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1383,
+    1384,
+    977,
+    978
+   ],
+   [
+    "delete",
+    1384,
+    1386,
+    978,
+    978
+   ],
+   [
+    "equal",
+    1386,
+    1397,
+    978,
+    989
+   ],
+   [
+    "replace",
+    1397,
+    1419,
+    989,
+    990,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1419,
+    1428,
+    990,
+    999
+   ],
+   [
+    "replace",
+    1428,
+    1429,
+    999,
+    1000,
+    [
+     " (`max(created_at, run_at)`) to handler start; scheduled waiting is excluded"
+    ]
+   ],
+   [
+    "equal",
+    1429,
+    1460,
+    1000,
+    1031
+   ],
+   [
+    "replace",
+    1460,
+    1461,
+    1031,
+    1032,
+    [
+     "The admin API and the MCP server show the tags; `get_job` in the MCP"
+    ]
+   ],
+   [
+    "equal",
+    1461,
+    1476,
+    1032,
+    1047
+   ],
+   [
+    "replace",
+    1476,
+    1477,
+    1047,
+    1048,
+    [
+     "|Signal|Name|Attributes|"
+    ]
+   ],
+   [
+    "equal",
+    1477,
+    1478,
+    1048,
+    1049
+   ],
+   [
+    "replace",
+    1478,
+    1485,
+    1049,
+    1056,
+    [
+     "|span|`goncordia.future.await`|job id, kind, queue, state, outcome, polls, wakeups, result bytes|",
+     "|span|`goncordia.future.store`|job id, kind, queue, attempt, result bytes; child of `goncordia.process`|",
+     "|histogram (s)|`goncordia.future.await.duration`|kind, outcome, blocking|",
+     "|counter|`goncordia.future.await.polls`|kind|",
+     "|counter|`goncordia.future.await.wakeups`|kind|",
+     "|histogram (By)|`goncordia.future.result.size`|kind|",
+     "|histogram (s)|`goncordia.future.store.duration`|kind, status|"
+    ]
+   ],
+   [
+    "equal",
+    1485,
+    1488,
+    1056,
+    1059
+   ],
+   [
+    "replace",
+    1488,
+    1489,
+    1059,
+    1060,
+    [
+     "endpoint (see Admin dashboard)."
+    ]
+   ],
+   [
+    "equal",
+    1489,
+    1506,
+    1060,
+    1077
+   ],
+   [
+    "replace",
+    1506,
+    1512,
+    1077,
+    1078,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1512,
+    1520,
+    1078,
+    1086
+   ],
+   [
+    "replace",
+    1520,
+    1530,
+    1086,
+    1087,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1530,
+    1531,
+    1087,
+    1088
+   ],
+   [
+    "delete",
+    1531,
+    1533,
+    1088,
+    1088
+   ],
+   [
+    "equal",
+    1533,
+    1540,
+    1088,
+    1095
+   ],
+   [
+    "replace",
+    1540,
+    1565,
+    1095,
+    1096,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1565,
+    1566,
+    1096,
+    1097
+   ],
+   [
+    "delete",
+    1566,
+    1568,
+    1097,
+    1097
+   ],
+   [
+    "equal",
+    1568,
+    1571,
+    1097,
+    1100
+   ],
+   [
+    "replace",
+    1571,
+    1572,
+    1100,
+    1101,
+    [
+     "|Backend|Guarantee|Mechanism|"
+    ]
+   ],
+   [
+    "equal",
+    1572,
+    1573,
+    1101,
+    1102
+   ],
+   [
+    "replace",
+    1573,
+    1584,
+    1102,
+    1111,
+    [
+     "|Postgres / MySQL / SQLite|Atomic with business tx|Same DB connection, same `BEGIN`/`COMMIT`|",
+     "|gorm / bun|Atomic with business tx|Extracts underlying `*sql.Tx`|",
+     "|MongoDB|Atomic with business tx|Multi-document transaction on replica set|",
+     "|Redis|**None** — at-least-once|Pub/Sub + idempotent workers|",
+     "|Cassandra|**None** — at-least-once|LWT for claiming; no cross-statement tx|",
+     "|ClickHouse|**None** — at-least-once|ReplacingMergeTree + FINAL; no transactions|",
+     "|DynamoDB|**None** — at-least-once|Conditional writes; no cross-table tx|",
+     "|Firestore|Atomic with business tx|`RunTransaction` + `EnqueueTx`|",
+     "|In-memory|Atomic (in-process)|Single mutex|"
+    ]
+   ],
+   [
+    "equal",
+    1584,
+    1587,
+    1111,
+    1114
+   ],
+   [
+    "replace",
+    1587,
+    1593,
+    1114,
+    1120,
+    [
+     "- Using goncordia? Add yourself to ADOPTERS.md with a pull",
+     " request or the adopter form.",
+     "- Read CONTRIBUTING.md before opening an issue or pull request.",
+     "- Follow the Code of Conduct in all project spaces.",
+     "- Report vulnerabilities privately according to SECURITY.md.",
+     "- Goncordia is available under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "db55f89000ad+2": {
+  "fn": "pg-cuvs/pg_cuvs",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Reference · Architecture · Benchmarks · Roadmap · Install"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    7,
+    5,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "It is **built on** pgvector and RAPIDS cuVS."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    16,
+    8,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "How pg_cuvs connects PostgreSQL backends to a GPU sidecar daemon"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    19,
+    17,
+    19
+   ],
+   [
+    "replace",
+    19,
+    22,
+    19,
+    22,
+    [
+     "> release is v0.9.2. This overview is not",
+     "> re-verified against every commit: for current behavior, the code, `docs/reference.md`",
+     "> and `ARCHITECTURE.md` take precedence. Historical GPU measurements below retain"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    26,
+    22,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "> (see CI / testing)."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    41,
+    27,
+    41
+   ],
+   [
+    "replace",
+    41,
+    44,
+    41,
+    44,
+    [
+     " If the daemon fails after a GPU scan has been planned, that statement raises an",
+     " error; it does not switch executor nodes in place. Roll back a failed transaction",
+     " before retrying. See failure and recovery."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    44,
+    45
+   ],
+   [
+    "replace",
+    45,
+    48,
+    45,
+    48,
+    [
+     " indexes, hardware profile, and freshness gates also matter. Check `EXPLAIN` for",
+     " the selected path. The index-scan candidate budget is `cuvs.k` (default 100),",
+     " independent of SQL `LIMIT`; size it for the requested result count and filtering."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    48,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     " Historical GPU checks do not certify every later change, and a CPU-reference CI pass is not a GPU verification."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    61,
+    50,
+    61
+   ],
+   [
+    "replace",
+    61,
+    62,
+    61,
+    62,
+    [
+     "|Scenario|Recommended path|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    62,
+    63
+   ],
+   [
+    "replace",
+    63,
+    69,
+    63,
+    69,
+    [
+     "|N < 10K, any dim|pgvector HNSW|IPC + daemon round-trip overhead exceeds GPU search benefit|",
+     "|N 100K–10M, VRAM fits index|pg_cuvs CAGRA (GPU search)|Hot tier, low latency; crossover vs pgvector appears around N≈50K (synthetic clustered data; verify with your embedding distribution)|",
+     "|Fast build/rebuild needed, CPU serving preferred|CAGRA build + `USING pg_cuvs_hnsw`|~2× faster than pgvector native build on real embeddings (1M×1024, end-to-end); much higher on synthetic random data (1M×384, pgvector's HNSW worst case). Serves as standard pgvector HNSW afterward|",
+     "|On-prem RAG, embedding GPU pool already available|Reuse GPU for batch index build via the GPU Build Accelerator: the HNSW export path (GPU CAGRA build → pgvector-servable HNSW)|GPU pool not idle; online search stays on pgvector HNSW CPU path|",
+     "|Larger-than-VRAM / billion-scale / NVMe cold tier|pgvectorscale DiskANN or VectorChord|the pg_cuvs DiskANN path is a no-go in cuVS 26.04; revisit when demand is confirmed|",
+     "|Multi-GPU placement within one daemon|pg_cuvs CAGRA with `shard_count`|Measure recall and latency at the intended shard count; neither changes monotonically|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    75,
+    69,
+    75
+   ],
+   [
+    "replace",
+    75,
+    76,
+    75,
+    76,
+    [
+     "the bootstrap guide. It installs PostgreSQL, the extension,"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    88,
+    76,
+    88
+   ],
+   [
+    "replace",
+    88,
+    92,
+    88,
+    89,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    118,
+    89,
+    115
+   ],
+   [
+    "replace",
+    118,
+    119,
+    115,
+    116,
+    [
+     "service and a separate daemon user, follow deployment operations,"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    129,
+    116,
+    126
+   ],
+   [
+    "replace",
+    129,
+    130,
+    126,
+    127,
+    [
+     "Existing installations use the upgrade playbook"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    137,
+    127,
+    134
+   ],
+   [
+    "replace",
+    137,
+    138,
+    134,
+    135,
+    [
+     "the bootstrap and its assumptions. These are recipe"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    141,
+    135,
+    138
+   ],
+   [
+    "replace",
+    141,
+    142,
+    138,
+    139,
+    [
+     " opclasses, so the type is required even when queries only use `vector`."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    139,
+    140
+   ],
+   [
+    "replace",
+    143,
+    144,
+    140,
+    141,
+    [
+     " functions. Validate upgrades against the HNSW build contract."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    141,
+    142
+   ],
+   [
+    "replace",
+    145,
+    155,
+    142,
+    152,
+    [
+     " patched cuVS recipe, including patches 0001–0004, 0006 and 0007.",
+     " That recipe requires CMake 3.30.4+, Ninja, and nvcc 12.9 or 13.1 with matching",
+     " RAPIDS dependencies. The CUDA 12.4 development bootstrap does not install that",
+     " patched SDK. Use the SDK's link settings.",
+     " `CUVS_SDK_SOURCE_INCLUDE` is optional and nothing in `infra/` sets it: pass the",
+     " `cpp/src` of the patched source tree (the one the recipe builds, or the output of",
+     " `scripts/prepare-patched-cuvs-source.sh`) and the ACE receipt records and verifies",
+     " the effective partition count. Without it ACE still builds on the patched SDK, the",
+     " receipt records the requested count and says the effective count is not guaranteed,",
+     " and `CREATE INDEX` raises a NOTICE; see HNSW build options."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    152,
+    153
+   ],
+   [
+    "replace",
+    156,
+    157,
+    153,
+    154,
+    [
+     " v5 and HNSW op-23 payload v6 are separate compatibility checks."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    169,
+    154,
+    166
+   ],
+   [
+    "replace",
+    169,
+    212,
+    166,
+    167,
+    [
+     "…（43 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    218,
+    167,
+    173
+   ],
+   [
+    "replace",
+    218,
+    219,
+    173,
+    174,
+    [
+     "listed in the reference."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    235,
+    174,
+    190
+   ],
+   [
+    "replace",
+    235,
+    249,
+    190,
+    191,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    251,
+    191,
+    193
+   ],
+   [
+    "replace",
+    251,
+    252,
+    193,
+    194,
+    [
+     "See HNSW build options for `build_algo`,"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    263,
+    194,
+    205
+   ],
+   [
+    "replace",
+    263,
+    264,
+    205,
+    206,
+    [
+     "See docs/reference.md."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    273,
+    206,
+    215
+   ],
+   [
+    "replace",
+    273,
+    274,
+    215,
+    216,
+    [
+     "Choose sharding at CAGRA build time using the reference; changing `cuvs.shard_count`"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    286,
+    216,
+    228
+   ],
+   [
+    "replace",
+    286,
+    287,
+    228,
+    229,
+    [
+     "reduction scratch on the request stream. See memory accounting"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    296,
+    229,
+    238
+   ],
+   [
+    "replace",
+    296,
+    297,
+    238,
+    239,
+    [
+     "|Index|Storage|Use Case|"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    239,
+    240
+   ],
+   [
+    "replace",
+    298,
+    302,
+    240,
+    244,
+    [
+     "|`USING cagra`|GPU VRAM|Approximate NN, low latency (~2.9 ms p50 end-to-end at 1M×1024 real; ~1.5 ms at 384-dim), hot data, fits in GPU VRAM|",
+     "|`USING flat`|GPU VRAM (`.vectors` and TID map, no graph)|Exhaustive GPU brute-force for read-heavy corpora; float16 storage can change ranking relative to float32|",
+     "|`USING ivfpq`|GPU VRAM (compressed)|Approximate NN, 10–100x VRAM savings vs cagra via product quantization|",
+     "|`USING pg_cuvs_hnsw` (built from heap, or reuses a `USING cagra` source)|GPU build / CPU serve|Faster GPU-accelerated build (~2× vs pgvector on real embeddings, higher on synthetic), then served by pgvector HNSW on CPU|"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    317,
+    244,
+    259
+   ],
+   [
+    "replace",
+    317,
+    318,
+    259,
+    260,
+    [
+     "|Feature|Status|Verified on|"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    319,
+    260,
+    261
+   ],
+   [
+    "replace",
+    319,
+    327,
+    261,
+    269,
+    [
+     "|CAGRA GPU search|Implemented; historical GPU evidence|A100 VM, MIG, multi-GPU|",
+     "|Exhaustive GPU brute-force (`USING flat`)|Implemented; historical GPU evidence|A100 VM, installcheck 31/31 at introduction, restart test (ADR-073)|",
+     "|GPU Build Accelerator (`USING pg_cuvs_hnsw`)|Implemented; route-specific validation required|Historical 1M×384 export; current build options and SDK requirements|",
+     "|Multi-GPU sharding (`shard_count`)|Implemented; historical GPU evidence|2×A100, shard_count=1/2|",
+     "|MIG (Multi-Instance GPU)|Historical deployment evidence|`CUDA_VISIBLE_DEVICES=MIG-uuid`|",
+     "|GCS snapshot restore|Implemented; historical round-trip evidence|Snapshot operations|",
+     "|CPU HNSW sidecar (`cuvs.cpu_hnsw_fallback`)|Implemented; requires a live daemon and sidecar|Distinct from the daemon-independent `pg_cuvs_hnsw` index|",
+     "|DiskANN / NVMe cold tier|Deferred (no-go)|cuVS 26.04 PQFlash API unstable; see `design/spikes/3b-diskann-decision.md`|"
+    ]
+   ],
+   [
+    "equal",
+    327,
+    332,
+    269,
+    274
+   ],
+   [
+    "replace",
+    332,
+    333,
+    274,
+    275,
+    [
+     "ROADMAP.md, and those old checks do not certify every later change:"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    342,
+    275,
+    284
+   ],
+   [
+    "replace",
+    342,
+    343,
+    284,
+    285,
+    [
+     "- [x] Admission diagnostics and memory controls: `pg_cuvs_last_rejection()`, `pg_cuvs_memory_status()`, `pg_cuvs_build_status()`, and index load/unload/pin controls; see the reference"
+    ]
+   ],
+   [
+    "equal",
+    343,
+    348,
+    285,
+    290
+   ],
+   [
+    "replace",
+    348,
+    349,
+    290,
+    291,
+    [
+     "|Limitation|Operational consequence|"
+    ]
+   ],
+   [
+    "equal",
+    349,
+    350,
+    291,
+    292
+   ],
+   [
+    "replace",
+    350,
+    358,
+    292,
+    300,
+    [
+     "|GPU scans can fail after planning|Daemon loss, OOM, and stale replies raise errors; retry after rollback and verify the new plan. `enable_cuvs=off` disables the GPU planner path.|",
+     "|Stale delivery remains best-effort (#202)|A daemon outage can lose the stale marker. Delta and tombstone files share the `cuvs.max_delta_rows` limit. A normal VACUUM can hit it; increasing the limit does not clear an existing stale marker. See write-path recovery.|",
+     "|IVF-PQ inserts are not indexed incrementally|`ivfpq_aminsert` is a no-op. Rebuild after loading or changing vectors; ordinary REINDEX can leave an old tombstone sidecar, so verify recovery.|",
+     "|GPU sidecars are outside PostgreSQL WAL|Validate backup/restore and physical-replica procedures; do not infer artifact replication from catalog replication.|",
+     "|Memory admission is a preflight check|RMM quota, build estimates, and physical-free checks do not reserve memory against other processes or bound every SDK allocation. See memory accounting.|",
+     "|HNSW layout and build resources|Export must fit PostgreSQL pages; disk space, host budget, SDK patches, and the selected build route matter. See build options.|",
+     "|DiskANN/NVMe cold tier|Deferred; the historical spike does not provide a shipping DiskANN AM.|",
+     "|Multi-GPU and replica coverage|Historical runs cover particular hardware and workloads; validate the intended deployment and shard count.|"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    366,
+    300,
+    308
+   ],
+   [
+    "replace",
+    366,
+    368,
+    308,
+    310,
+    [
+     "tested (see `BENCHMARK.md` §2.1c; raw:",
+     "`bench/results/pg_cuvsbench_98.csv`). The earlier"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    369,
+    310,
+    311
+   ],
+   [
+    "replace",
+    369,
+    370,
+    311,
+    312,
+    [
+     "(`pg_cuvsbench_wiki1m_brev.csv`, §2.1b);"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    374,
+    312,
+    316
+   ],
+   [
+    "replace",
+    374,
+    375,
+    316,
+    317,
+    [
+     "`bench/results/pg_cuvsbench_1m_legacy.csv`)."
+    ]
+   ],
+   [
+    "equal",
+    375,
+    379,
+    317,
+    321
+   ],
+   [
+    "replace",
+    379,
+    381,
+    321,
+    323,
+    [
+     "benchmark caveat and",
+     "provenance ledger."
+    ]
+   ],
+   [
+    "equal",
+    381,
+    382,
+    323,
+    324
+   ],
+   [
+    "replace",
+    382,
+    383,
+    324,
+    325,
+    [
+     "|Path|Build|p50 @ recall≈0.99|QPS|vs pgvector|"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    384,
+    325,
+    326
+   ],
+   [
+    "replace",
+    384,
+    387,
+    326,
+    329,
+    [
+     "|pgvector HNSW (CPU, native)|237s|12.8ms|74|baseline|",
+     "|pg_cuvs CAGRA (GPU search)|62s†|2.9ms|340|**search ~4.5×**|",
+     "|CAGRA build → pgvector HNSW (GPU build, CPU serve)|120s|served as pgvector HNSW|—|**build ~2×**|"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    390,
+    329,
+    332
+   ],
+   [
+    "replace",
+    390,
+    391,
+    332,
+    333,
+    [
+     " Synthetic worst-case (1M×384 random): pgvector's HNSW build stresses here; NOT representative of real embeddings "
+    ]
+   ],
+   [
+    "equal",
+    391,
+    392,
+    333,
+    334
+   ],
+   [
+    "replace",
+    392,
+    393,
+    334,
+    335,
+    [
+     "|Method|Build time|p50 latency|Recall@10|"
+    ]
+   ],
+   [
+    "equal",
+    393,
+    394,
+    335,
+    336
+   ],
+   [
+    "replace",
+    394,
+    397,
+    336,
+    339,
+    [
+     "|pgvector HNSW (native)|918s|—|baseline|",
+     "|CAGRA build + HNSW conversion|66s|1.65ms|1.0000*|",
+     "|pg_cuvs CAGRA search|27s build|1.65ms|0.978**|"
+    ]
+   ],
+   [
+    "equal",
+    397,
+    398,
+    339,
+    340
+   ],
+   [
+    "replace",
+    398,
+    400,
+    340,
+    342,
+    [
+     "\\* recall=1.0000 on synthetic random data (uniform distribution). ",
+     "\\*\\* 0.978 on synthetic clustered data (20 clusters, sigma=0.05). "
+    ]
+   ],
+   [
+    "equal",
+    400,
+    401,
+    342,
+    343
+   ],
+   [
+    "delete",
+    401,
+    402,
+    343,
+    343
+   ],
+   [
+    "equal",
+    402,
+    403,
+    343,
+    344
+   ],
+   [
+    "replace",
+    403,
+    404,
+    344,
+    345,
+    [
+     "See `BENCHMARK.md` for the latency decomposition and the current wiki_all_1M results, `docs/experiments/benchmark-archive.md` for the full Cohere 1M×1024 Pareto and the pre-#80 filtered-search selectivity sweep, and `design/benchmarks/crossover-methodology.md` for crossover methodology."
+    ]
+   ],
+   [
+    "equal",
+    404,
+    410,
+    345,
+    351
+   ],
+   [
+    "replace",
+    410,
+    415,
+    351,
+    356,
+    [
+     " (`src/cuvs_wrapper.h`) is replaced by an exact-kNN **CPU shim** (`make",
+     " PGCUVS_CPU_SHIM=1`, zero CUDA), and the daemon + IPC + fail-closed +",
+     " Tier-1 correctness regression subset runs against it. This catches the bug class that",
+     " actually bites (IPC/struct drift, `search_mode` labeling, fail-closed rejects,",
+     " manifest contract, recall) without a GPU."
+    ]
+   ],
+   [
+    "equal",
+    415,
+    416,
+    356,
+    357
+   ],
+   [
+    "replace",
+    416,
+    418,
+    357,
+    359,
+    [
+     " regression**, and real VRAM/mempool behavior, run when explicitly triggered",
+     " (not every PR)."
+    ]
+   ],
+   [
+    "equal",
+    418,
+    423,
+    359,
+    364
+   ],
+   [
+    "replace",
+    423,
+    438,
+    364,
+    365,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    446,
+    365,
+    373
+   ],
+   [
+    "replace",
+    446,
+    458,
+    373,
+    374,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    458,
+    464,
+    374,
+    380
+   ],
+   [
+    "replace",
+    464,
+    468,
+    380,
+    384,
+    [
+     "The planner compares the available paths with the cost model described in Index types.",
+     "Full current-state architecture: ARCHITECTURE.md. User-facing surface",
+     "(GUCs, reloptions, functions, views): docs/reference.md. How all the docs",
+     "fit together (current vs historical): docs/doc-map.md."
+    ]
+   ],
+   [
+    "equal",
+    468,
+    471,
+    384,
+    387
+   ],
+   [
+    "replace",
+    471,
+    479,
+    387,
+    395,
+    [
+     "- **docs/reference.md**: current AM, GUC, SQL function, view and search-mode surface",
+     "- **ARCHITECTURE.md**: current process, IPC, lifecycle and failure boundaries",
+     "- **docs/doc-map.md**: how the documents fit together, current versus historical",
+     "- **BENCHMARK.md**: measured results only",
+     "- **ROADMAP.md**: remaining work and release readiness",
+     "- **docs/hnsw-build-options.md**: the HNSW build contract and SDK requirements",
+     "- **docs/playbooks/**: upgrade, failure recovery, snapshot and write-path runbooks",
+     "- **CONTRIBUTING.md**: how to contribute"
+    ]
+   ],
+   [
+    "equal",
+    479,
+    481,
+    395,
+    397
+   ],
+   [
+    "replace",
+    481,
+    484,
+    397,
+    398,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    484,
+    485,
+    398,
+    399
+   ],
+   [
+    "replace",
+    485,
+    488,
+    399,
+    400,
+    [
+     "PostgreSQL License. Copyright (c) 2026, JAESOL SHIN. See LICENSE for details."
+    ]
+   ],
+   [
+    "equal",
+    488,
+    490,
+    400,
+    402
+   ],
+   [
+    "replace",
+    490,
+    494,
+    402,
+    406,
+    [
+     "- pgvector: PostgreSQL vector type and CPU indexes (HNSW, IVFFlat)",
+     "- pgvectorscale: DiskANN for PostgreSQL (CPU/SSD; benchmark comparison baseline)",
+     "- RAPIDS cuVS: GPU ANN library (CAGRA, IVF-Flat, IVF-PQ, brute force)",
+     "- PG-Strom: GPU-accelerated SQL for PostgreSQL (architectural inspiration)"
+    ]
+   ],
+   [
+    "equal",
+    494,
+    496,
+    406,
+    408
+   ],
+   [
+    "replace",
+    496,
+    498,
+    408,
+    409,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "9ef8327af6ea+2": {
+  "fn": "alibabacloud-sdk-swift/polardbx-20200202",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "English | 简体中文"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    16,
+    1,
+    14
+   ],
+   [
+    "replace",
+    16,
+    17,
+    14,
+    15,
+    [
+     "To integrate `AlibabacloudPolardbx20200202` into your Xcode project using Carthage, specify it in your `Cartfile`:"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    24,
+    15,
+    22
+   ],
+   [
+    "replace",
+    24,
+    25,
+    22,
+    23,
+    [
+     "To integrate `AlibabacloudPolardbx20200202` into your Xcode project using Swift Package Manager , adding `AlibabacloudPolardbx20200202` to the `dependencies` value of your `Package.swift`."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    44,
+    23,
+    42
+   ],
+   [
+    "replace",
+    44,
+    45,
+    42,
+    43,
+    [
+     "Opening an Issue, Issues not conforming to the guidelines may be closed immediately."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    47,
+    43,
+    45
+   ],
+   [
+    "replace",
+    47,
+    50,
+    45,
+    46,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    52,
+    46,
+    48
+   ],
+   [
+    "replace",
+    52,
+    54,
+    48,
+    50,
+    [
+     "* OpenAPI Developer Portal",
+     "- Latest Release"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    56,
+    50,
+    52
+   ],
+   [
+    "replace",
+    56,
+    60,
+    52,
+    53,
+    [
+     "Apache-2.0"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

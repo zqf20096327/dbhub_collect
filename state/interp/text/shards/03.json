@@ -3623,5 +3623,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fbdab888befc": {
+  "identity": {
+   "one_liner": "ioBroker 的 SQL 历史数据适配器，将状态历史写入多种 SQL 数据库",
+   "review": "ioBroker.sql 是 ioBroker 平台的适配器，用于将状态历史数据保存到 PostgreSQL、MySQL、Microsoft SQL Server 或 SQLite。它面向 ioBroker 用户，提供按数据点配置的去抖、阻塞时间、仅记录变化值等记录规则，并支持数据保留期、RAM 缓冲、Unix socket 连接和统计清理功能。SQLite 为文件型数据库，README 提示其不适合大量数据；MySQL 8.0 需选择旧版认证方式。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、Microsoft SQL Server 和 SQLite 四种数据库，可配置主机、端口、加密、并行请求等连接参数",
+    "提供数据点级记录控制：去抖时间、阻塞时间、仅记录变化值、最小差值阈值、忽略 0/负值及 RAM 缓冲",
+    "内置统计标签页，列出各 ID 的存储类型、记录条数、占用空间估计与时间范围，清理操作需确认后执行"
+   ],
+   "use_cases": [
+    "为 ioBroker 系统中的数据点状态变化建立可查询的 SQL 历史记录",
+    "在 SD 卡或消费级 SSD 上通过 PostgreSQL synchronous_commit=off 选项减少磁盘写入（接受短暂数据丢失风险）",
+    "设备更换后通过 Alias-ID 保持历史数据记录的连续性"
+   ]
+  },
+  "sha": "fbdab888befc",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f766e32a558": {
+  "identity": {
+   "one_liner": "开源自托管科技与AI新闻简报系统，聚合RSS源、分组排序并生成每日摘要",
+   "review": "Trace 从 RSS、HN、Reddit 等约百个来源定时抓取新闻，将同事件报道合并为一条卡片，按覆盖度与时效用 LLM 排序并生成摘要，默认每日输出十条。提供 Web 订阅、自定义邮件简报、公共归档、Expo 移动端、Chrome 新标签页扩展，并作为只读远程 MCP 服务器供 AI 代理读取。自托管需 Docker、OpenAI API key 与 Firebase 登录，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "以约20分钟间隔抓取来源，合并同一事件的报道并按覆盖度、来源权重、时效与 LLM 排序",
+    "支持自定义每日邮件简报（主题、条数5/10/15、摘要或仅标题），并在 /brief/YYYY-MM-DD 提供公共归档",
+    "内置 MCP 服务器（OAuth 2.1 + PKCE），Claude、ChatGPT、Cursor、Codex 等客户端可通过 URL 连接读取简报"
+   ],
+   "use_cases": [
+    "自托管个人或团队每日科技/AI新闻简报站点",
+    "为 AI 代理配置新闻读取数据源（MCP）",
+    "作为 Chrome 新标签页或 Android 客户端的新闻订阅入口"
+   ]
+  },
+  "sha": "5f766e32a558",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c79457175bca": {
+  "identity": {
+   "one_liner": "离线 Rust CLI，在一次性 SQLite 快照上分析 Cloudflare D1 迁移风险",
+   "review": "d1-preflight 是一个独立的 Rust 命令行工具，用于在部署前分析 Cloudflare D1 的 SQL 迁移。它将待应用的迁移执行到一次性 SQLite 快照上，比较前后 schema、行数与主键身份，检查外键完整性，并用 EXPLAIN QUERY PLAN 对比工作负载查询计划，输出带规则编号和严重级别的结构化报告。工具不联网、不调用 Wrangler、不需要凭证，需要本地 Rust 工具链和 C 编译器构建。注意 SQLite 执行是对 D1 行为的近似，不支持显式事务语句。",
+   "highlights": [
+    "提供 18 条编号规则（DP/SC/FK/IX/QP/SQ/OB/MG 系列），覆盖删表删列、行数减少、主键变更、外键违规、查询计划回归和无 WHERE 的 UPDATE/DELETE 等情况",
+    "支持多种基线输入：--schema 加迁移文件、--migrations-dir 结合 d1_migrations 跟踪表，或通过 SQLite backup API 读取现有数据库的只读快照",
+    "输出终端文本、版本化 JSON（--json-out）、Markdown（--markdown-out），并支持 --wrangler-config 读取 wrangler.toml 中的迁移目录配置"
+   ],
+   "use_cases": [
+    "在本地或 GitHub Actions 的 pull request 工作流中检查 D1 迁移，通过 --github 标志输出 workflow 注释和 Markdown 摘要",
+    "验证表重建类迁移（CREATE 新表/INSERT SELECT/DROP 旧表）是否造成行丢失或主键身份缺失",
+    "在删除索引或修改 schema 前评估给定 SELECT 工作负载的查询计划是否从 SEARCH 退化为 SCAN"
+   ]
+  },
+  "sha": "c79457175bca",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

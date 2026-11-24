@@ -3153,5 +3153,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5ac1cc9aae25": {
+  "identity": {
+   "one_liner": "基于 Python 的 provider 无关桌面 agent harness，含 MCP 客户端与本地会话存储",
+   "review": "UH 是一个 Python 编写的 agent harness，运行同步 agent 循环并执行工具调用。面向偏好本地运行的个人用户，首次启动无需 API key，按 ollama→cloudflare→deepseek→omnirouter→router 的链条回退并打印切换过程。通过 config.toml 的 [[mcp.servers]] 挂载外部 MCP 服务器，会话存于 SQLite（FTS5 全文搜索）。仅有一个运行时依赖 httpx，UI 为可选附加安装。",
+   "highlights": [
+    "同步 run_turn agent 循环，执行模型请求的工具并回填结果，受硬性 max_iterations 预算约束",
+    "MCP 客户端：通过 stdio 连接外部 MCP 服务器，工具以 mcp__<server>__<tool> 形式进入循环，支持每服务器 allowlist 与消息/结果大小上限",
+    "会话存储于 SQLite（FTS5），支持 list/show/search/resume；可选 Web UI 由 127.0.0.1 提供并带 per-process token"
+   ],
+   "use_cases": [
+    "在本地 Ollama 模型上进行带工具调用（file/terminal/memory/web_search）的对话与任务",
+    "通过 MCP 协议接入外部工具服务器（如 filesystem、AWS S3、Google Drive）的桌面 agent 环境",
+    "提供 OpenAI 兼容本地网关（uh router serve），供其他工具复用其 provider 池"
+   ]
+  },
+  "sha": "5ac1cc9aae25",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

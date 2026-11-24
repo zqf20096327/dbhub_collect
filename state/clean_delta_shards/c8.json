@@ -32560,5 +32560,889 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "030e57d0162b+2": {
+  "fn": "ralforion/orionbelt-analytics",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    1,
+    [
+     "OrionBelt Logo"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    1,
+    2
+   ],
+   [
+    "replace",
+    5,
+    6,
+    2,
+    3,
+    [
+     " OrionBelt® Analytics "
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    3,
+    4
+   ],
+   [
+    "replace",
+    7,
+    8,
+    4,
+    5,
+    [
+     " The Ontology-based MCP server for your Text-2-SQL convenience. "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    5,
+    6
+   ],
+   [
+    "replace",
+    9,
+    14,
+    6,
+    11,
+    [
+     "Version 2.3.1",
+     "Python 3.13+",
+     "License: BUSL-1.1",
+     "FastMCP 4.0.5+",
+     "RDF/OWL"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    11,
+    12
+   ],
+   [
+    "replace",
+    15,
+    23,
+    12,
+    20,
+    [
+     "BigQuery",
+     "PostgreSQL",
+     "Snowflake",
+     "ClickHouse",
+     "Dremio",
+     "Databricks",
+     "DuckDB",
+     "MySQL"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    20,
+    21
+   ],
+   [
+    "replace",
+    24,
+    27,
+    21,
+    24,
+    [
+     "Docker Hub",
+     "Docker pulls",
+     "Image size"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    32,
+    24,
+    29
+   ],
+   [
+    "replace",
+    32,
+    38,
+    29,
+    35,
+    [
+     "|Project|Purpose|",
+     "|------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|",
+     "|**OrionBelt Analytics** (this)|Schema analysis, ontology generation, GraphRAG, Text-to-SQL|",
+     "|**OrionBelt Semantic Layer**|Declarative YAML models compiled into dialect-specific, fan-trap-free SQL|",
+     "|**OrionBelt Ontology Builder**|Visual OWL ontology editor with reasoning and graph visualization (live demo)|",
+     "|**OrionBelt Chat**|AI chat UI for Analytics + Semantic Layer (Chainlit, multiple LLM providers)|"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    43,
+    35,
+    40
+   ],
+   [
+    "replace",
+    43,
+    46,
+    40,
+    41,
+    [
+     " OrionBelt Analytics Architecture"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    49,
+    41,
+    44
+   ],
+   [
+    "replace",
+    49,
+    50,
+    44,
+    45,
+    [
+     "- **GraphRAG** -- graph traversal (up to 12 hops) + ChromaDB vector embeddings for semantic schema discovery, run locally; a multilingual option lets questions in other languages find the schema (German *\"Umsatz\"* finds a column named *\"Net revenue\"*)"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    55,
+    45,
+    50
+   ],
+   [
+    "replace",
+    55,
+    56,
+    50,
+    51,
+    [
+     "- **MCP sampling** -- when the connected client supports sampling (e.g. OrionBelt Chat), `suggest_semantic_names` asks the host LLM to pre-fill rename suggestions for cryptic identifiers via `sampling/createMessage`, collapsing the previous review-then-apply flow into a single tool call. Clients without sampling support (e.g. Claude Desktop) silently fall back to the manual review path"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    63,
+    51,
+    58
+   ],
+   [
+    "replace",
+    63,
+    73,
+    58,
+    68,
+    [
+     "|Check|What it catches|",
+     "|---------------------------|-------------------------------------------------------------------------------------------------|",
+     "|**Table existence**|References to tables that don't exist in the schema|",
+     "|**Column existence**|References to columns not present in their table, ambiguous unqualified columns|",
+     "|**Join validity**|Missing join conditions (Cartesian products), join columns that don't match declared foreign keys|",
+     "|**Copies of a schema**|Joins from one prefixed copy of a schema into another (`OLD_ROOMS` to `NEW_BUILDING`)|",
+     "|**Type compatibility**|WHERE/ON comparisons between incompatible types (e.g. string vs. integer)|",
+     "|**Personal data**|Results that return columns whose names say they hold personal data (`email`, `date_of_birth`)|",
+     "|**Aggregation correctness**|SELECT columns missing from GROUP BY when aggregates are used|",
+     "|**Fan-trap detection**|Aggregations across one-to-many joins that silently multiply results, unless the GROUP BY keeps each row once (credits per student across a bridge table)|"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    77,
+    68,
+    72
+   ],
+   [
+    "replace",
+    77,
+    78,
+    72,
+    73,
+    [
+     "2. When `execute_sql_query` is called, OBQC parses the SQL with sqlglot and validates every table, column, join, and aggregation against the ontology's schema model."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    80,
+    73,
+    75
+   ],
+   [
+    "replace",
+    80,
+    81,
+    75,
+    76,
+    [
+     "OBQC is fully deterministic -- no LLM calls, no probabilistic reasoning. It acts as a safety net that complements the LLM's SQL generation with hard structural guarantees. Errors **block query execution**; warnings are attached to the response for the LLM to act on. See OBQC documentation for the full rule reference, severity behavior, and annotation requirements."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    92,
+    76,
+    87
+   ],
+   [
+    "replace",
+    92,
+    93,
+    87,
+    88,
+    [
+     "> Requires **Python 3.13+** and **uv**."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    102,
+    88,
+    97
+   ],
+   [
+    "replace",
+    102,
+    103,
+    97,
+    98,
+    [
+     "See docs/configuration.md for all environment variables, transport options, and troubleshooting."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    122,
+    98,
+    117
+   ],
+   [
+    "replace",
+    122,
+    132,
+    117,
+    118,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    155,
+    118,
+    141
+   ],
+   [
+    "replace",
+    155,
+    156,
+    141,
+    142,
+    [
+     "OrionBelt works with LangChain, OpenAI Agents SDK, CrewAI, Google ADK, Vercel AI SDK, n8n, and ChatGPT Custom GPTs. See docs/integrations.md for setup examples."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    163,
+    142,
+    149
+   ],
+   [
+    "replace",
+    163,
+    172,
+    149,
+    158,
+    [
+     "|Tool|Description|",
+     "|-------------------|----------------------------------------------------------------------|",
+     "|`connect_database`|Connect to any supported database using `.env` credentials|",
+     "|`list_databases`|List the databases configured on the server, by name and description|",
+     "|`list_schemas`|List available schemas in the connected database|",
+     "|`reset_cache`|Clear cached schema and ontology data for the current session|",
+     "|`discover_schema`|Analyze schema structure with automatic GraphRAG + ontology generation|",
+     "|`get_table_details`|Get detailed column, key, and constraint info for a specific table|",
+     "|`cleanup_workspace`|Delete all workspace files for the current connection and start fresh|"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    175,
+    158,
+    161
+   ],
+   [
+    "replace",
+    175,
+    183,
+    161,
+    169,
+    [
+     "|Tool|Description|",
+     "|------------------------|---------------------------------------------------------------------|",
+     "|`generate_ontology`|Generate RDF/OWL ontology from schema with SQL mapping annotations|",
+     "|`suggest_semantic_names`|Detect abbreviations and cryptic names for business-friendly renaming|",
+     "|`apply_semantic_names`|Apply LLM-suggested semantic names and descriptions to ontology|",
+     "|`load_my_ontology`|Load a custom `.ttl` ontology file from an import folder|",
+     "|`validate_relationship`|Check a relationship against the data and record the verdict in the ontology|",
+     "|`download_artifact`|Download ontology or R2RML mapping as a Turtle file|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    186,
+    169,
+    172
+   ],
+   [
+    "replace",
+    186,
+    191,
+    172,
+    177,
+    [
+     "|Tool|Description|",
+     "|-------------------|--------------------------------------------------------------------------|",
+     "|`sample_table_data`|Preview table data with row limit and injection protection|",
+     "|`execute_sql_query`|Execute SQL with OBQC validation, security checks, and fan-trap detection|",
+     "|`generate_chart`|Generate Plotly charts (bar, line, scatter, heatmap) with MCP-UI rendering|"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    194,
+    177,
+    180
+   ],
+   [
+    "replace",
+    194,
+    202,
+    180,
+    188,
+    [
+     "|Tool|Description|",
+     "|-------------------------|-------------------------------------------------------------------------|",
+     "|`graphrag_search`|Semantic search + schema overview (auto-initialized by `discover_schema`)|",
+     "|`graphrag_query_context`|Get optimized context for SQL generation (85-95% token reduction)|",
+     "|`graphrag_find_join_path`|Discover join paths between tables via graph traversal|",
+     "|`reachable_from`|Dimension-capable tables for an anchor grain (many-to-one closure)|",
+     "|`measurable_from`|Measure-capable tables for an anchor grain (one-to-many closure)|",
+     "|`plan_composite_query`|Advise a fan-trap-safe Composite Fact Layer (UNION ALL) decomposition|"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    205,
+    188,
+    191
+   ],
+   [
+    "replace",
+    205,
+    210,
+    191,
+    196,
+    [
+     "|Tool|Description|",
+     "|-----------------------|---------------------------------------------------------------|",
+     "|`store_ontology_in_rdf`|Persist ontology in Oxigraph for SPARQL access|",
+     "|`query_sparql`|Execute SPARQL queries (SELECT, ASK, CONSTRUCT — auto-detected)|",
+     "|`add_rdf_knowledge`|Add custom metadata triples to the RDF store|"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    213,
+    196,
+    199
+   ],
+   [
+    "replace",
+    213,
+    218,
+    199,
+    204,
+    [
+     "|Tool|Description|",
+     "|----------------------|----------------------------------------------------------|",
+     "|`save_semantic_model`|Save a semantic model (e.g., OBML YAML) to the workspace|",
+     "|`get_semantic_model`|Retrieve a stored semantic model by name|",
+     "|`list_semantic_models`|List all stored semantic models for the current connection|"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    219,
+    204,
+    205
+   ],
+   [
+    "replace",
+    219,
+    220,
+    205,
+    206,
+    [
+     "For full parameter details, return values, and examples, see docs/tools-reference.md."
+    ]
+   ],
+   [
+    "equal",
+    220,
+    252,
+    206,
+    238
+   ],
+   [
+    "replace",
+    252,
+    253,
+    238,
+    239,
+    [
+     "`mypy` are the gates. The Development guide has the full"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    269,
+    239,
+    255
+   ],
+   [
+    "replace",
+    269,
+    279,
+    255,
+    265,
+    [
+     "|Document|Contents|",
+     "|--------------------------------------------------|-----------------------------------------------------------------------------|",
+     "|Tools Reference|Full parameter docs, return values, and usage examples|",
+     "|Configuration|Environment variables, transport setup, troubleshooting|",
+     "|GraphRAG|Graph-based schema intelligence and OBML workflow|",
+     "|OBQC Overview|Short explanation of how OBQC works inside OrionBelt Analytics|",
+     "|OBQC|Validation rules, severity levels, blocking behavior, annotation requirements|",
+     "|Fan-Trap Prevention|The fan-trap problem, detection, and safe SQL patterns|",
+     "|Integrations|LangChain, OpenAI, CrewAI, Google ADK, Vercel, n8n, ChatGPT|",
+     "|Development|Project structure, testing, contributing|"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    281,
+    265,
+    267
+   ],
+   [
+    "replace",
+    281,
+    290,
+    267,
+    268,
+    [
+     "Copyright 2025-2026 RALFORION d.o.o."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    292,
+    268,
+    270
+   ],
+   [
+    "replace",
+    292,
+    293,
+    270,
+    271,
+    [
+     "OrionBelt Analytics builds on open source. `THIRD_PARTY_NOTICES.md` lists every bundled dependency with its licence, and calls out the few that carry obligations beyond attribution (psycopg2's LGPL, wordfreq's CC-BY-SA data, the MPL-2.0 components)."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    296,
+    271,
+    274
+   ],
+   [
+    "replace",
+    296,
+    297,
+    274,
+    277,
+    [
+     " <a href=\"https://ralforion.com\">",
+     " RALFORION d.o.o.",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    277,
+    278
+   ],
+   [
+    "replace",
+    298,
+    308,
+    278,
+    280,
+    [
+     " Copyright © 2026 RALFORION d.o.o. ",
+     " OrionBelt® is a registered trademark of RALFORION d.o.o."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "5522262332c5+2": {
+  "fn": "strvmarv/total-recall",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    25,
+    4,
+    5,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    27,
+    5,
+    7
+   ],
+   [
+    "replace",
+    27,
+    30,
+    7,
+    10,
+    [
+     "CI",
+     "npm",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    56,
+    10,
+    36
+   ],
+   [
+    "replace",
+    56,
+    57,
+    36,
+    37,
+    [
+     "Inside a session the same two steps are `/plugin marketplace add strvmarv/total-recall-marketplace` and `/plugin install total-recall@strvmarv-total-recall-marketplace`. Details, permissions and known gaps: Claude Code."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    64,
+    37,
+    44
+   ],
+   [
+    "replace",
+    64,
+    65,
+    44,
+    45,
+    [
+     "This runs the package's install script, which can also configure other tools it finds on the machine (what it changes). The form that skips it, the git form and known gaps: pi."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    70,
+    45,
+    50
+   ],
+   [
+    "replace",
+    70,
+    71,
+    50,
+    51,
+    [
+     "|Harness|How it installs|Page|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    51,
+    52
+   ],
+   [
+    "replace",
+    72,
+    84,
+    52,
+    64,
+    [
+     "|Codex CLI|Plugin from the total-recall marketplace; trust its hooks once|Codex CLI|",
+     "|Copilot CLI|Plugin from the total-recall marketplace|Copilot CLI|",
+     "|Cursor|Local plugin (Windows only so far); MCP server only elsewhere|Cursor|",
+     "|Gemini CLI|npm package: MCP server, a per-prompt hook and a `GEMINI.md` block|Gemini CLI|",
+     "|Kiro|npm package: MCP server and a steering file; hooks per workspace|Kiro|",
+     "|OpenCode|npm package plus an `mcp` entry added by hand|OpenCode|",
+     "|Cline|npm package plus an entry in Cline's MCP settings|Cline|",
+     "|Windsurf|npm package: MCP server and a rules file|Windsurf|",
+     "|Zed|npm package: a context server entry|Zed|",
+     "|VS Code|npm package: an `mcp.json` entry|VS Code|",
+     "|Hermes|npm package: a memory provider plugin|Hermes|",
+     "|Any other MCP client|npm package plus an `mcpServers` entry|Other MCP clients|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    97,
+    64,
+    77
+   ],
+   [
+    "replace",
+    97,
+    98,
+    77,
+    78,
+    [
+     "First run says what happens the first time. If nothing appears, see your harness's page under Install; Hermes has its own check."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    78,
+    81
+   ],
+   [
+    "replace",
+    101,
+    107,
+    81,
+    87,
+    [
+     "- **It remembers without being asked.** Where the harness delivers the startup instructions (Supported platforms), corrections, preferences and decisions are stored as you work, and relevant memories are retrieved for each question. You can also ask the assistant to remember something, or run `/total-recall:commands store <content>`. See what gets remembered.",
+     "- **Pin what must always be followed.** `/total-recall:commands pin <id>` makes an entry a pinned directive: injected first at session start and never decayed. See the tier model.",
+     "- **Give it your docs.** `/total-recall:commands ingest <path>` adds files or a directory to the knowledge base, retrieved when relevant. See the `ingest` and `kb` rows in Commands.",
+     "- **Commands.** `/total-recall:commands help` lists them all: search, forget, inspect, promote, compact, eval and more. The form differs by harness (on pi it is `/total-recall <subcommand>`): see Supported platforms and Commands.",
+     "- **Web UI.** Where the global npm package is installed, `total-recall ui` opens a local dashboard for memories, the knowledge base, token usage and retrieval quality. On a plugin install or in pi, where `total-recall` is not on your PATH, ask the assistant for the command for your install. See Web UI.",
+     "- **The `develop` skill.** `/develop` takes a change from an idea to a pull request: Define turns the idea into a reviewed GitHub issue, and Deliver turns the issue into a pull request. It never merges. See the develop skill."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    87,
+    90
+   ],
+   [
+    "replace",
+    110,
+    111,
+    90,
+    91,
+    [
+     "New memories land in the **warm** tier, where they are searched for every question with a mix of keyword and vector search. Entries that prove useful earn a place in the small **hot** tier, which is injected at session start within a token budget. **Sticky** pins are hot entries you mark by hand: they are injected first, in full, and re-asserted during long sessions where the harness supports it. The **cold** tier holds the knowledge base built from the files you ingest, and memories that decay out of warm. Embeddings come from a model that ships with the binary and runs locally. The full explanation is in How total-recall works."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    91,
+    94
+   ],
+   [
+    "replace",
+    114,
+    115,
+    94,
+    95,
+    [
+     "|Page|What it covers|"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    95,
+    96
+   ],
+   [
+    "replace",
+    116,
+    136,
+    96,
+    116,
+    [
+     "|INSTALL.md|The install runbook an assistant follows|",
+     "|Supported platforms|What an install delivers on each harness|",
+     "|First run|Provisioning, the first session, upgrading from 0.7.x|",
+     "|How total-recall works|Entry types, tiers, search, embeddings, session start, the pinned floor|",
+     "|Commands|Every `/total-recall:commands` subcommand|",
+     "|Web UI|The local dashboard and its sections|",
+     "|Configuration|`config.toml`, Postgres, remote embedders|",
+     "|Transcript archive|The opt-in archive of conversation transcripts: enabling, archiving and embedding Claude Code sessions, searching them by meaning and words, reading around a hit, listing sessions, status, forgetting|",
+     "|Relocating the database|Cloud-synced and shared databases|",
+     "|Connecting to Cortex|The shared backend for teams|",
+     "|Skills|Advertising your own skills at session start|",
+     "|The develop skill|Requirements, trust, account pinning, tool allowlist|",
+     "|MCP tools|The tool reference|",
+     "|Architecture|Layers, data flow, backends, core technologies|",
+     "|What the install script changes|Other tools that installing the npm package can configure|",
+     "|Verifying a release|Checking a download's build attestation|",
+     "|Building from source|Prerequisites and the build|",
+     "|PRIVACY.md|What is stored and what can leave the machine|",
+     "|CONTRIBUTING.md|The contributor guide|",
+     "|CHANGELOG.md|Release history|"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    139,
+    116,
+    119
+   ],
+   [
+    "replace",
+    139,
+    140,
+    119,
+    120,
+    [
+     "Your data stays on your machine by default and no memory or usage data goes to any analytics service or third party. It leaves your machine only if you configure a Postgres backend, Cortex or a remote embedder. Two things contact GitHub on their own: a plugin install downloads the engine from GitHub Releases on first launch, and a periodic version check, about once a day, asks `api.github.com` for the newest release (it sends only the version of total-recall you run, in its User-Agent header, GitHub sees your IP address as for any request, and `updates.check = false` turns it off). The detail is in PRIVACY.md."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    142,
+    120,
+    122
+   ],
+   [
+    "replace",
+    142,
+    145,
+    122,
+    123,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    147,
+    123,
+    125
+   ],
+   [
+    "replace",
+    147,
+    148,
+    125,
+    126,
+    [
+     "total-recall's plugin architecture, skill format, hook system and multi-platform wrapper pattern are modeled after superpowers by obra. If you are building plugins for coding assistants, start there. The technologies total-recall is built with are listed under Architecture."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    150,
+    126,
+    128
+   ],
+   [
+    "replace",
+    150,
+    152,
+    128,
+    129,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

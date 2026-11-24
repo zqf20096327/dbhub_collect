@@ -24500,5 +24500,1583 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "10c8494d62a7+2": {
+  "fn": "Mistgate/mistgate",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Mistgate logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " Mistgate "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    6,
+    [
+     " A self-hosted panel for a small VPN: a few servers of your own and the people you share them with. ",
+     "Hysteria2, VLESS and AmneziaWG. Two Go binaries, SQLite and systemd. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    6,
+    7
+   ],
+   [
+    "replace",
+    6,
+    8,
+    7,
+    12,
+    [
+     "Status: beta",
+     "Latest release",
+     "Licence: AGPL-3.0",
+     "CI",
+     "Go version"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    12,
+    13
+   ],
+   [
+    "replace",
+    9,
+    16,
+    13,
+    14,
+    [
+     " Docs · Install · Protocols · Is it stable? · Compare · Русский · 简体中文 · فارسی · Türkçe "
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     " Beta. Expect changes before 1.0. Status and roadmap "
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    24,
+    17,
+    18,
+    [
+     "A Mistgate demo: a node is added over SSH from the browser, comes online with a profile and appears at once on a person"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    29,
+    18,
+    23
+   ],
+   [
+    "replace",
+    29,
+    30,
+    23,
+    24,
+    [
+     " How Mistgate fits together "
+    ]
+   ],
+   [
+    "equal",
+    30,
+    33,
+    24,
+    27
+   ],
+   [
+    "replace",
+    33,
+    131,
+    27,
+    98,
+    [
+     " Add a server from the browser ",
+     " Type the server's IP, choose how the panel logs in (its own SSH key, added once at your hoster, or the root password) and watch the install. The panel pins the server's SSH host key, checks the host, opens the ports in an active UFW or firewalld and installs the signed agent. No terminal on the new server; a one-time command is there if you prefer it. ",
+     " Docs → ",
+     "",
+     " A New node window: the server ",
+     "",
+     " One link per person, and a page of their own ",
+     " Each person gets one subscription link, a QR code and a page behind it with instructions for their platform, days left, traffic and their own devices. Mihomo apps get all protocols from the link, Happ gets Hysteria2 and VLESS, AmneziaVPN takes a key per device from the page. Groups decide which servers each person reaches. ",
+     " Docs → ",
+     "",
+     " A person ",
+     "",
+     " Checks from the client's side ",
+     " Every 5 minutes the panel connects to every protocol on every node the way an app does and shows the delay through each tunnel, so you hear about a broken server before the people on it do. A doctor on each node runs 23 host checks and offers ten fixes; none of them runs without your confirmation. ",
+     " Docs → ",
+     "",
+     " The client-eye checks table: nodes against protocols with the delay through each tunnel, and a failing node opened to show why ",
+     "",
+     " One TCP 443 for several protocols ",
+     " Many networks let through only TCP 443. A node can keep VLESS REALITY, VLESS over TLS, TrustTunnel and MTProto on that one port: the agent tells them apart by the name the client asks for. When you put a second profile on a taken port, the panel offers to put it beside the first and shows the DNS record to add. ",
+     " Docs → ",
+     "",
+     " The offer to put a profile beside another on port 443, then the card of the shared port with its counters ",
+     "",
+     " Decoy sites from a template ",
+     " A stranger who opens a node should see an ordinary small site, not a Mistgate page. Pick a country and one of ten kinds (a status page, documentation, a blog, a small business, a portfolio and more) and the panel builds a site in that country's language, with its own look and texts, different every time. Look at it, ask for another variant, then save. With your own free photo key a site gets real photographs, served from the node itself. ",
+     " Docs → ",
+     "",
+     " The From a template window: a country, a kind, the preview of the new site and the Another variant button Five sites of five kinds made by the generator, passing by ",
+     "",
+     " Updates that roll out and roll back ",
+     " Nodes never update on their own. A rollout installs one canary node first and gives it 5 minutes to pass a health check, then goes on in small batches. A node that fails gets its previous build back and the rollout pauses. The panel updates itself only when you confirm, and puts the old binary and data back if the new one does not stay up. ",
+     " Docs → ",
+     "",
+     " The Updates page: a rollout installs the canary, checks it for 5 minutes, then moves on to the other nodes ",
+     "",
+     " Updates of the servers' systems ",
+     " See which servers wait for security updates or a reboot, without logging in to each of them. Install security updates or reboot one server, or tick several and run them as a rollout: a few at a time, each node health-checked afterwards, a stop at the first that fails. ",
+     " Docs → ",
+     "",
+     " The Server systems tab: servers with their kernels and waiting updates, two ticked, installing, done ",
+     "",
+     " WARP exit, with a check that it works ",
+     " Send a profile's traffic out through Cloudflare WARP, with one account per node. The card shows the tunnel, the traffic and an egress check; the panel also fetches a list of sites through each node's WARP and raises an alert when some of them start to block it. A profile with the WARP exit never falls back to the node's own address. ",
+     " Docs → ",
+     "",
+     " The WARP card of a node: the tunnel is up and the egress check passes, then the tunnel goes down and the card offers a restart ",
+     "",
+     " DNS presets for the apps ",
+     " A preset says which DNS servers a person's app asks and how (plain, DoT or DoH), with split rules for a country or a list of sites, such as Russian sites direct, and ads blocked in the apps. Give one to everybody, to a group or to one person; the editor shows what each app will really get. ",
+     " Docs → ",
+     "",
+     " The DNS tab of Subscriptions: the presets, then one opened with its servers and what each app gets, then its split rules ",
+     "",
+     " An assistant and MCP, with a plan first ",
+     " A built-in assistant (a cloud model you connect with your own key) answers about your nodes and people and prepares changes. MCP gives an outside AI agent the same: it reads the fleet and plans changes, and you approve each risky one in the admin before it is applied. An API token can disable or rewrite at most 10 people an hour unless you lift the limit. ",
+     " Docs → ",
+     "",
+     " The assistant ",
+     "",
+     " Alerts in Telegram ",
+     " Connect your own bot and the panel writes to your chat when a node goes down or comes back, a check fails, a backup fails or an agent's plan waits for you. It only sends alerts: nothing is approved or changed from the chat. Each admin links their own chat. ",
+     " Docs → ",
+     "",
+     " The Integrations page: the bot, the chat that waits for Start, then linked, and a test message sent ",
+     "",
+     " Encrypted backups and a careful restore ",
+     " Backups go to your own Cloudflare R2 bucket, on a schedule or on demand, encrypted before they leave the panel with a key you keep offline. A restore checks the backup first and shows what it holds against what you have now; nothing changes until you confirm, and the data from before the restore is kept. ",
+     " Docs → ",
+     "",
+     " The Restore from a backup window: the file is checked, the summary compared with now, the restore, the panel is back "
+    ]
+   ],
+   [
+    "equal",
+    131,
+    134,
+    98,
+    101
+   ],
+   [
+    "replace",
+    134,
+    137,
+    101,
+    104,
+    [
+     "- When some networks cannot reach a server, people get to it through another of your nodes, which only forwards the encrypted traffic. The panel checks the path before switching it on and watches it afterwards; Ways in on the node page is a graph of how people reach the server, and the Nodes page maps the whole fleet. Relays",
+     "- Optional checks of whether your servers open from inside a country, network by network: Globalping probes on home and mobile networks over IPv4 and IPv6, volunteer and SIM probes, block lists and a TSPU probe from your own node. Most sources work only in Russia. Reachability",
+     "- No Docker, no database server. The panel idles at 16-20 MiB of memory on a 1 vCPU / 1 GB server. Benchmarks, including where Mistgate is slower."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    104,
+    105
+   ],
+   [
+    "replace",
+    138,
+    140,
+    105,
+    107,
+    [
+     "- Who gets which server: a node goes to everyone, to chosen groups or to nobody yet, and a person can be in several groups. Groups",
+     "- A desktop app for Windows, Mistgate, works with these panels and with plain subscription links."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    107,
+    108
+   ],
+   [
+    "replace",
+    141,
+    142,
+    108,
+    109,
+    [
+     "Not there yet: a Telegram bot beyond alerts, and the Cloudflare Workers edition is still a preview. Some defaults lean towards users in Russia; all of them are settings."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    109,
+    112
+   ],
+   [
+    "replace",
+    145,
+    146,
+    112,
+    113,
+    [
+     "|Protocol|On the node|What you can set|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    113,
+    114
+   ],
+   [
+    "replace",
+    147,
+    152,
+    114,
+    119,
+    [
+     "|Hysteria2|The official Hysteria2 core|UDP (QUIC). Salamander obfuscation (Gecko is experimental), port hopping, a Let's Encrypt or a pinned self-signed certificate.|",
+     "|VLESS|xray-core|REALITY over XHTTP or TCP (RAW + Vision); TLS over XHTTP or WebSocket, direct or behind a CDN.|",
+     "|AmneziaWG|amneziawg-go in userspace, or the kernel module|Versions 3.1 (the default) and 2.0, a separate key per device. 1.5 and 1.0 are not offered.|",
+     "|TrustTunnel|Mistgate's own engine in the node agent|Experimental. A VPN inside ordinary HTTPS (HTTP/2, HTTP/3 optional) with a real certificate; `tt://` keys for the official TrustTunnel apps.|",
+     "|MTProto|Mistgate's own MTProto core|Experimental. A proxy for the Telegram app only: Fake TLS with the node's own domain or another site as the name, a key per person, the decoy site for everyone else.|"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    119,
+    120
+   ],
+   [
+    "replace",
+    153,
+    154,
+    120,
+    121,
+    [
+     "Hysteria2 and VLESS can share a node, TCP 443 included. Not every app format carries every profile: see what works where."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    157,
+    121,
+    124
+   ],
+   [
+    "replace",
+    157,
+    158,
+    124,
+    125,
+    [
+     "A protocol is two halves compiled into the binaries. On the panel, one Go interface: a JSON Schema for its settings (the admin builds the form from it), validation, the spec a node runs, credential issuing, and its piece of each subscription format. On the node, an engine that runs the spec, swaps credentials without a restart and reports traffic and health. A new protocol goes only to agents that announce it, so older agents keep working. See the protocol plugin contract."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    161,
+    125,
+    128
+   ],
+   [
+    "replace",
+    161,
+    162,
+    128,
+    129,
+    [
+     "It is beta, and young: v0.1.0 was tagged on 2026-10-03, and the 0.2.0 line redraws the whole interface. Until 1.0 the API, the stored settings and the node protocol may still change. Releases do not go through an automated upgrade test from older versions yet; that is one of the conditions for 1.0."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    165,
+    129,
+    132
+   ],
+   [
+    "replace",
+    165,
+    166,
+    132,
+    133,
+    [
+     "The tunnels do not depend on the panel: a node keeps serving its last applied configuration while the panel is down, a user change does not restart the server, and older agents work with a newer panel. In the benchmark, adding and removing users and restarting the panel dropped no connection."
+    ]
+   ],
+   [
+    "equal",
+    166,
+    169,
+    133,
+    136
+   ],
+   [
+    "replace",
+    169,
+    172,
+    136,
+    139,
+    [
+     "- CI on every push and pull request (ci.yml): Go tests and vet, the race detector on the panel-agent session, `govulncheck`, the admin's lint and tests, the docs build, the installer on Debian and Ubuntu.",
+     "- An end-to-end run (scripts/e2e-wsl.sh): a real panel and node with real Hysteria2, AmneziaWG, Xray, mihomo and sing-box clients, plus agent updates, rollbacks and an install over SSH. It runs by hand before every release, in WSL or a VM, not in CI.",
+     "- GitHub Actions builds each tag as a draft. I rebuild it from the tag on a machine with the offline release key and sign only binaries that match byte for byte; nodes and the panel install only signed builds. Releases and signing"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    139,
+    140
+   ],
+   [
+    "replace",
+    173,
+    174,
+    140,
+    141,
+    [
+     " What an update is trusted for "
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    141,
+    142
+   ],
+   [
+    "replace",
+    175,
+    176,
+    142,
+    143,
+    [
+     "Updating (Updates):"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    181,
+    143,
+    148
+   ],
+   [
+    "replace",
+    181,
+    182,
+    148,
+    149,
+    [
+     "- Keep encrypted backups of `/var/lib/mistgate` anyway."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    149,
+    150
+   ],
+   [
+    "replace",
+    183,
+    184,
+    150,
+    151,
+    [
+     "Mistgate is written with AI coding agents. I review what they write and decide what is merged and released; the checks above are the same for their code as for anyone's. Commits made with an agent carry a `Co-Authored-By` line, and the rules agents follow in this repository are in AGENTS.md."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    193,
+    151,
+    160
+   ],
+   [
+    "replace",
+    193,
+    194,
+    160,
+    161,
+    [
+     "The installer verifies the signed panel manifest, starts Mistgate under systemd and prints the admin URL with a one-time setup link (valid for 30 minutes). It leaves the firewall alone. `--yes` skips the questions, `--dry-run` only verifies the release; manual installation and other options are in Install the panel."
+    ]
+   ],
+   [
+    "equal",
+    194,
+    198,
+    161,
+    165
+   ],
+   [
+    "replace",
+    198,
+    200,
+    165,
+    167,
+    [
+     "2. Add servers in **Nodes → Add node**, over SSH or with a one-time command (Add a node).",
+     "3. Add people: First users."
+    ]
+   ],
+   [
+    "equal",
+    200,
+    201,
+    167,
+    168
+   ],
+   [
+    "replace",
+    201,
+    202,
+    168,
+    169,
+    [
+     "An AI agent that can run `ssh` can do these steps with the prompt in the AI agent guide; you still create the owner account yourself."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    205,
+    169,
+    172
+   ],
+   [
+    "replace",
+    205,
+    206,
+    172,
+    173,
+    [
+     "||Mistgate|3x-ui|Remnawave|Hiddify|PasarGuard|s-ui|"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    207,
+    173,
+    174
+   ],
+   [
+    "replace",
+    207,
+    219,
+    174,
+    186,
+    [
+     "|Runs without Docker|✅|✅|❌|✅|🟡 partial|✅|",
+     "|Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite|",
+     "|Panel RAM, idle|16-20 MiB¹|68-74 MiB¹|426-454 MiB¹|not measured|262-265 MiB¹|not measured|",
+     "|Add a node from the panel (SSH)|✅|❌|❌|❌|❌|?|",
+     "|Hysteria2|✅|✅|🟡 partial|✅|✅|✅|",
+     "|VLESS REALITY|✅|✅|✅|✅|✅|?|",
+     "|AmneziaWG|✅ 2.0 and 3.1|✅ 3.1|?|?|?|?|",
+     "|VMess, Trojan, Shadowsocks|❌|✅|🟡 partial|✅|✅|✅|",
+     "|Xray JSON or sing-box subscriptions|✅ both|Xray JSON|✅ both|✅ both|sing-box|sing-box|",
+     "|Health checks and alerts|✅ client-eye checks, node doctor, reachability from a country|✅ tunnel monitor (opt-in)|✅ status, Prometheus|🟡 partial|🟡 partial|?|",
+     "|Telegram bot|🟡 alerts only|✅|🟡 partial|✅|✅|?|",
+     "|Built-in MCP server for AI agents|✅|?|❌|?|?|?|"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    186,
+    187
+   ],
+   [
+    "replace",
+    220,
+    221,
+    187,
+    188,
+    [
+     "¹ Private memory of the whole panel group, idle, 0 to 200 users, no node attached, on a 1 vCPU / 1 GB test server (3x-ui includes its Xray core and fail2ban). Method, versions and limits: Benchmarks. \"?\" means the project's own README and docs do not say."
+    ]
+   ],
+   [
+    "equal",
+    221,
+    222,
+    188,
+    189
+   ],
+   [
+    "replace",
+    222,
+    223,
+    189,
+    190,
+    [
+     "Others are ahead in protocol breadth, community size and full Telegram bots. The full table with sources, checked on 2026-10-09, is in Comparison with other panels."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    226,
+    190,
+    193
+   ],
+   [
+    "replace",
+    226,
+    227,
+    193,
+    194,
+    [
+     "Everything is at mistgate.app and in `docs/`. Good places to start:"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    194,
+    195
+   ],
+   [
+    "replace",
+    228,
+    232,
+    195,
+    199,
+    [
+     "- Overview and Requirements",
+     "- Install the panel, Install a node over SSH, First users",
+     "- Health, Updates, Encrypted backups, Troubleshooting",
+     "- CLI, API, MCP, Architecture"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    234,
+    199,
+    201
+   ],
+   [
+    "replace",
+    234,
+    237,
+    201,
+    202,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    239,
+    202,
+    204
+   ],
+   [
+    "replace",
+    239,
+    240,
+    204,
+    205,
+    [
+     "Report vulnerabilities privately: see SECURITY.md. Back up the panel's data directory (`/var/lib/mistgate`): it holds the database, the master key and the CA your nodes trust."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    242,
+    205,
+    207
+   ],
+   [
+    "replace",
+    242,
+    245,
+    207,
+    208,
+    [
+     "Mistgate is free software under the GNU Affero General Public License v3.0 only. If you run a modified panel for others, its admin shows a \"Source code\" link (`serve --source-url`) that should point to your source."
+    ]
+   ],
+   [
+    "equal",
+    245,
+    246,
+    208,
+    209
+   ],
+   [
+    "replace",
+    246,
+    254,
+    209,
+    210,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "c8e574369395+2": {
+  "fn": "Speicherstadt/belegt",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Belegt: Dokumentenarchiv mit GoBD-Modus, selbst gehostet "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " Startseite von Belegt: Eingang, Archiv, offener Löschantrag, Sperre und Speicher, Fristen, Quellen, Zustand der Hash-Kette und eine gespeicherte Ansicht"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    10,
+    4,
+    5,
+    [
+     "**Belegt ist, was du beweisen kannst.** "
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    5,
+    8
+   ],
+   [
+    "replace",
+    13,
+    19,
+    8,
+    14,
+    [
+     "Status: Beta",
+     "CI",
+     "Lizenz: AGPL-3.0",
+     "Doku",
+     "GoBD",
+     "E-Rechnung"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    14,
+    15
+   ],
+   [
+    "replace",
+    20,
+    26,
+    15,
+    21,
+    [
+     "Warum? •",
+     "Funktionen •",
+     "Schnellstart •",
+     "FAQ •",
+     "Dokumentation •",
+     "Entwicklung"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    21,
+    22
+   ],
+   [
+    "replace",
+    27,
+    29,
+    22,
+    24,
+    [
+     "🖱️ **Demo ausprobieren**: mit Beispieldaten, im Browser, ohne Installation •",
+     "🖼️ **Rundgang in Bildern**"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    24,
+    25
+   ],
+   [
+    "replace",
+    30,
+    33,
+    25,
+    26,
+    [
+     " English: self-hosted document archive with a GoBD mode for German businesses: mails (IMAP, JMAP, Microsoft 365, Google, SMTP journal, PST), e-invoices (ZUGFeRD, XRechnung), scans with OCR and any other file, immutable until the end of the legal retention period, with auditor access and the data medium for tax audits. The app is in German and English; the documentation is in German. "
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    26,
+    29
+   ],
+   [
+    "replace",
+    36,
+    37,
+    29,
+    30,
+    [
+     "> (Sichern); Migrationen lassen sich nicht zurückspielen."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    45,
+    30,
+    38
+   ],
+   [
+    "replace",
+    45,
+    46,
+    38,
+    39,
+    [
+     " Object Lock bis Fristende und ein täglicher Zeitstempel nach RFC 3161"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    39,
+    40
+   ],
+   [
+    "replace",
+    47,
+    48,
+    40,
+    41,
+    [
+     " einer zweiten Person löschen; der Nachweis bleibt"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    41,
+    42
+   ],
+   [
+    "replace",
+    49,
+    50,
+    42,
+    43,
+    [
+     " beliebige Dateien, durchsuchbar"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    43,
+    44
+   ],
+   [
+    "replace",
+    51,
+    52,
+    44,
+    45,
+    [
+     " eine Verfahrensdokumentation, die sich selbst aktuell hält"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    45,
+    46
+   ],
+   [
+    "replace",
+    53,
+    54,
+    46,
+    47,
+    [
+     " Einbetten in ein Portal"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    47,
+    48
+   ],
+   [
+    "replace",
+    55,
+    56,
+    48,
+    49,
+    [
+     " deinem Server"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    60,
+    49,
+    53
+   ],
+   [
+    "replace",
+    60,
+    61,
+    53,
+    54,
+    [
+     "Alle Funktionen."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    54,
+    55
+   ],
+   [
+    "replace",
+    62,
+    63,
+    55,
+    56,
+    [
+     "|Bereich|Was Belegt kann|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    56,
+    57
+   ],
+   [
+    "replace",
+    64,
+    76,
+    57,
+    69,
+    [
+     "|📥 Eingang|Hochladen, Foto mit dem Handy, Teilen an die installierte App, Scanner per FTP mit Trennblättern, Postfächer per IMAP, JMAP, Microsoft 365 und Google, SMTP-Journal, EML, MBOX und PST|",
+     "|🔎 Suche|Volltext in PDFs, Office-Dateien, Mails und Scans (Texterkennung), fortlaufende Archivnummer|",
+     "|🏷️ Ordnung|Korrespondenten, Tags, Dokumenttypen und eigene Felder, Zuordnungsregeln und gelernte Vorschläge, gespeicherte Ansichten|",
+     "|🧾 E-Rechnungen|XRechnung und ZUGFeRD erkannt, als Vorschlag zur Einordnung, auf Wunsch mit dem KoSIT-Validator geprüft|",
+     "|⏳ Fristen und Löschen|Fristen nach § 147 AO, Sperren bei Außenprüfung oder Rechtsstreit, Löschen nach Fristende mit zweiter Person|",
+     "|🔒 Prüfung|Siegel und Hash-Kette in PostgreSQL, Prüfbericht, Prüferzugang (Z1), Datenträger mit `index.xml` (Z3), Zeitstempel nach RFC 3161|",
+     "|📘 Verfahrensdokumentation|Aus dem tatsächlichen Stand erzeugt, mit deinen Angaben und den Lücken, die noch fehlen|",
+     "|⚙️ Workflows|Tags, Typ, Felder, Notiz, Webhook oder Original an eine Adresse, wenn ein Dokument ankommt oder eingeordnet wird|",
+     "|🔌 Schnittstellen|REST-API mit OpenAPI, API-Tokens, signierte Webhooks, MCP für Claude und andere Assistenten|",
+     "|🔐 Zugänge|Inhaber, Steuerberatung, Prüfer und Mitarbeiter mit Sichtbereich, zweiter Faktor, OpenID Connect und Einbetten, Teilen per Link|",
+     "|📦 Umzug|Aus Paperless-ngx über die API oder einen Export, mit Tags, Feldern und Notizen|",
+     "|🌍 Oberfläche|Deutsch und Englisch, hell, dunkel oder nach dem Gerät, als App installierbar, gegen WCAG 2.2 AA geprüft|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    79,
+    69,
+    72
+   ],
+   [
+    "replace",
+    79,
+    89,
+    72,
+    74,
+    [
+     " Archiv mit der Suche nach „Rechnung“: Mail, XRechnung, Rechnung des Holzhandels und Stromrechnung mit Korrespondent, Typ, Tags und Frist Suche : Volltext mit Filtern und Tags ",
+     " ZUGFeRD-Rechnung mit PDF-Vorschau, Nummer, Datum, Verkäufer, Gesamtbetrag, Prüfung gültig und Vorschlag zur Einordnung E-Rechnung : erkannt, geprüft und vorgeschlagen "
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    74,
+    75
+   ],
+   [
+    "replace",
+    90,
+    91,
+    75,
+    79,
+    [
+     " Fristen nach § 147 AO mit einem offenen Löschantrag, der auf die zweite Person wartet Fristen : Löschen mit zweiter Person ",
+     " Prüfung: Kette intakt, Prüfbericht mit Prüfwert und Datenträger für die Betriebsprüfung Prüfung : Prüfbericht und Datenträger (Z3) ",
+     "",
+     "Mehr im Rundgang in Bildern."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    94,
+    79,
+    82
+   ],
+   [
+    "replace",
+    94,
+    98,
+    82,
+    86,
+    [
+     "||Was es ist|Was Belegt anders macht|",
+     "|---|---|---|",
+     "|Paperless-ngx|selbst gehostetes Dokumentenmanagement mit Texterkennung und Suche|dasselbe Ablegen und Suchen, dazu Fristen nach § 147 AO und Unveränderbarkeit in PostgreSQL; Umzug mit Tags, Feldern und Notizen|",
+     "|Ordner auf dem Server|Dateiablage im Dateisystem oder auf einem Netzlaufwerk|Siegel und Hash-Kette statt änderbarer Dateien, gesperrt bis Fristende, Löschen nur mit zweiter Person und Nachweis|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    108,
+    86,
+    96
+   ],
+   [
+    "replace",
+    108,
+    109,
+    96,
+    97,
+    [
+     "„Setz Belegt auf meinem Server auf, nach der Installationsanleitung.“"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    131,
+    97,
+    119
+   ],
+   [
+    "replace",
+    131,
+    132,
+    119,
+    120,
+    [
+     "Installation und Betrieb."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    138,
+    120,
+    126
+   ],
+   [
+    "replace",
+    138,
+    139,
+    126,
+    127,
+    [
+     "aus dem Partnerprogramm."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    142,
+    127,
+    130
+   ],
+   [
+    "replace",
+    142,
+    144,
+    130,
+    131,
+    [
+     " Ist Belegt GoBD-konform? "
+    ]
+   ],
+   [
+    "equal",
+    144,
+    148,
+    131,
+    135
+   ],
+   [
+    "replace",
+    148,
+    150,
+    135,
+    136,
+    [
+     "in Unterlagen für ein Testat."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    151,
+    136,
+    137
+   ],
+   [
+    "replace",
+    151,
+    153,
+    137,
+    138,
+    [
+     " Ist das ein Dokumentenmanagement wie paperless? "
+    ]
+   ],
+   [
+    "equal",
+    153,
+    157,
+    138,
+    142
+   ],
+   [
+    "replace",
+    157,
+    159,
+    142,
+    143,
+    [
+     "Feldern und Notizen um, siehe Von Paperless-ngx zu Belegt."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    160,
+    143,
+    144
+   ],
+   [
+    "replace",
+    160,
+    162,
+    144,
+    145,
+    [
+     " Kann ich Mails aus Microsoft 365, Google oder Outlook archivieren? "
+    ]
+   ],
+   [
+    "equal",
+    162,
+    165,
+    145,
+    148
+   ],
+   [
+    "replace",
+    165,
+    167,
+    148,
+    149,
+    [
+     "Eingang, Mails und Suche."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    149,
+    150
+   ],
+   [
+    "replace",
+    168,
+    170,
+    150,
+    151,
+    [
+     " Wo liegen meine Dokumente, und was sieht eine KI? "
+    ]
+   ],
+   [
+    "equal",
+    170,
+    174,
+    151,
+    155
+   ],
+   [
+    "delete",
+    174,
+    175,
+    155,
+    155
+   ],
+   [
+    "equal",
+    175,
+    176,
+    155,
+    156
+   ],
+   [
+    "replace",
+    176,
+    178,
+    156,
+    157,
+    [
+     " Kann meine Steuerberatung oder die Betriebsprüfung damit arbeiten? "
+    ]
+   ],
+   [
+    "equal",
+    178,
+    181,
+    157,
+    160
+   ],
+   [
+    "replace",
+    181,
+    184,
+    160,
+    162,
+    [
+     "oder Korrespondenten und ordnen sie auf Wunsch ein. Siehe Prüfung, Z1 und Z3",
+     "und Zugänge."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    162,
+    163
+   ],
+   [
+    "replace",
+    185,
+    187,
+    163,
+    164,
+    [
+     " Kann ich Claude oder andere Programme anbinden? "
+    ]
+   ],
+   [
+    "equal",
+    187,
+    190,
+    164,
+    167
+   ],
+   [
+    "replace",
+    190,
+    192,
+    167,
+    168,
+    [
+     "Schnittstellen."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    193,
+    168,
+    169
+   ],
+   [
+    "replace",
+    193,
+    195,
+    169,
+    170,
+    [
+     " Was kostet Belegt? "
+    ]
+   ],
+   [
+    "equal",
+    195,
+    197,
+    170,
+    172
+   ],
+   [
+    "delete",
+    197,
+    198,
+    172,
+    172
+   ],
+   [
+    "equal",
+    198,
+    201,
+    172,
+    175
+   ],
+   [
+    "replace",
+    201,
+    202,
+    175,
+    176,
+    [
+     "Alles im Detail, mit Suche: **belegt.store** (auf Deutsch). Jede Funktion oben verlinkt ihre"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    204,
+    176,
+    178
+   ],
+   [
+    "replace",
+    204,
+    214,
+    178,
+    188,
+    [
+     "- **Einstieg:** Rundgang in Bildern, alle Funktionen,",
+     " Installation und Betrieb und Zu Hause betreiben",
+     "- **Arbeiten mit Belegt:** Eingang, Mails und Suche,",
+     " Scannen, Von Paperless-ngx zu Belegt,",
+     " Fristen und Löschen, Prüfung, Z1 und Z3 und",
+     " Verfahrensdokumentation",
+     "- **Schnittstellen:** Programme, Webhooks, MCP und",
+     " REST-API",
+     "- **Hintergrund:** Glossar, Unterlagen für ein Testat,",
+     " Entwicklung und Plan"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    217,
+    188,
+    191
+   ],
+   [
+    "replace",
+    217,
+    225,
+    191,
+    199,
+    [
+     "TypeScript",
+     "Bun",
+     "Hono",
+     "React",
+     "TanStack",
+     "Tailwind CSS",
+     "Vite",
+     "PostgreSQL"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    227,
+    199,
+    201
+   ],
+   [
+    "replace",
+    227,
+    228,
+    201,
+    202,
+    [
+     "Entwicklung."
+    ]
+   ],
+   [
+    "equal",
+    228,
+    237,
+    202,
+    211
+   ],
+   [
+    "replace",
+    237,
+    238,
+    211,
+    212,
+    [
+     "Belegt nutzt den GoBD-Kern (`@firsttris/gobd-kern`) aus Haben, der"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    242,
+    212,
+    216
+   ],
+   [
+    "replace",
+    242,
+    243,
+    216,
+    217,
+    [
+     "Weitere Open-Source-Apps für deinen eigenen Server, etwa für Buchhaltung, Mail, Office-Dokumente und mehr: **speicherstadt.app**"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    246,
+    217,
+    220
+   ],
+   [
+    "replace",
+    246,
+    250,
+    220,
+    224,
+    [
+     "Fehler und Ideen gern als Issue, mit dem Formular für Fehlerberichte",
+     "oder für Funktionswünsche.",
+     "Sicherheitslücken bitte privat melden, siehe SECURITY.md. Wie du mitmachst, steht in",
+     "CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    254,
+    224,
+    228
+   ],
+   [
+    "replace",
+    254,
+    258,
+    228,
+    231,
+    [
+     "",
+     " Verlauf der GitHub-Sterne von Belegt",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    258,
+    260,
+    231,
+    233
+   ],
+   [
+    "replace",
+    260,
+    261,
+    233,
+    234,
+    [
+     "⭐ **Gefällt dir Belegt?** Ein Stern auf GitHub hilft anderen, es zu finden."
+    ]
+   ],
+   [
+    "equal",
+    261,
+    262,
+    234,
+    235
+   ],
+   [
+    "replace",
+    262,
+    263,
+    235,
+    236,
+    [
+     "Fehler melden &nbsp;·&nbsp; Idee vorschlagen"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    236,
+    237
+   ],
+   [
+    "replace",
+    264,
+    275,
+    237,
+    242,
+    [
+     " Lizenz: AGPL-3.0 · © Tristan Teufel und Mitwirkende ",
+     "Wer eine veränderte Fassung von Belegt für andere übers Netz betreibt, muss ihnen den Quellcode anbieten (§ 13 AGPL). ",
+     "Für IT-Dienstleister und Hoster: Partnerprogramm. ",
+     "Belegt ist keine Steuer- oder Rechtsberatung. Aufbewahrung und Verfahrensdokumentation vor dem Echtbetrieb mit deiner Steuerberatung abgleichen. ",
+     "Paperless-ngx ist ein Projekt seiner Entwickler; Belegt steht mit ihm in keiner Verbindung."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

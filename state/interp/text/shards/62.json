@@ -3426,5 +3426,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e491884c3298": {
+  "identity": {
+   "one_liner": "本地代码分析 CLI 与 MCP 服务器，为 AI 编码代理提供 SQLite 代码图索引",
+   "review": "roam-code 是一个运行在本地的代码分析工具，通过 pip 安装后用 roam init 为 Git 仓库构建 SQLite 索引，提供 CLI 命令和 MCP 服务器两种接入方式，供 AI 编码代理调用。本地分析不调用模型或付费 API、无需账户，要求 Python 3.11+ 与 Git 2.24+。README 明确其结果为线索性质，不构成完整测试覆盖。",
+   "highlights": [
+    "提供 288 个 CLI 命令（281 个规范命令 + 7 个别名，分 7 类）和 259 个 MCP 工具，默认 core 预设含 17 个工具，另有 8 种可选预设",
+    "支持 28 种语言，39 个命令支持 --sarif 输出用于 CI 集成，每个命令可用 --json 输出结构化结果",
+    "本地运行、无账户或 API key，无源代码或遥测自动上传；提供 roam guard-pr 汇总变更审查记录并支持 CI 门禁模式"
+   ],
+   "use_cases": [
+    "让 AI 编码代理通过 MCP 或 CLI 查询符号定义、引用与依赖关系，进行代码探索和变更影响分析",
+    "在 GitHub、GitLab、Jenkins、Azure 或 Bitbucket 的流水线中运行检查并上传 SARIF 结果",
+    "审查补丁时用 roam critique 检查遗漏的关联代码，用 roam guard-pr 生成变更审查证据"
+   ]
+  },
+  "sha": "e491884c3298",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4c8730447435": {
+  "identity": {
+   "one_liner": "为 Claude Code 和 Codex 提供可查改、含来源凭证的跨会话记忆",
+   "review": "Cairn.ink Memory 是一个 MCP 记忆服务，为 Claude Code 与 Codex 提供共享的跨会话记忆。每条记忆保存来源文本（Source Receipt），支持检索、修正与遗忘；数据可存本地 SQLite（免账号）或托管于 cairn.ink 云端。安装需 Node 22.16+，命令为 npx @cairn-ink/memory setup。目前为开发者预览版，README 列有已知限制，如 Node 24.22.3 下搜索变慢。",
+   "highlights": [
+    "每条记忆附带 Source Receipt（来源原文），可查看、修正或停用",
+    "Claude Code 与 Codex 读写同一存储，本地模式数据存于明文 SQLite 数据库",
+    "提供 remember/inspect/correct/forget 等记忆工具，关键词搜索不调用模型"
+   ],
+   "use_cases": [
+    "让新会话沿用此前对话中的偏好与项目决定",
+    "需要追溯记忆出处并人工修正或删除的场景",
+    "在 Linux/WSL/macOS 上本地保存 Claude Code/Codex 对话以便日后查询"
+   ]
+  },
+  "sha": "4c8730447435",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f1c323d05ac6": {
+  "identity": {
+   "one_liner": ".NET 类型化对象存储，以 C# 类为模式，基于 LINQ API 运行于 PostgreSQL/MSSQL/SQLite",
+   "review": "RedBase 是一个面向 .NET 开发者的数据平台，将类型化对象存储在关系数据库后端（PostgreSQL、SQL Server、SQLite）中。模式以普通 C# 类定义，通过 SyncSchemeAsync 同步，无需迁移脚本；属性以真实列而非 JSON 存储。支持树查询、聚合、窗口函数等 LINQ 风格 API，并通过 NuGet 包安装使用，许可证为 Apache 2.0。",
+   "highlights": [
+    "模式由 C# 类定义，通过 SyncSchemeAsync 同步，README 称无需独立迁移流程",
+    "属性值按类型写入真实数据库列并建立索引，数组与字典以规范化行存储",
+    "提供 TreeQuery、聚合与窗口函数的单一 LINQ 风格 API，支持 PostgreSQL、MSSQL 与 SQLite 三种后端"
+   ],
+   "use_cases": [
+    "包含多层关联对象图且希望单次 LoadAsync 加载的 .NET 应用",
+    "使用 SQLite 提供程序的嵌入式/离线场景、Blazor WebAssembly 及移动端",
+    "需要在 SQL 层直接查询、过滤和聚合属性数据的系统"
+   ]
+  },
+  "sha": "f1c323d05ac6",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

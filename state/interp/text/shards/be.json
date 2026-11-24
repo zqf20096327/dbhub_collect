@@ -3171,5 +3171,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fd5e284e0017": {
+  "identity": {
+   "one_liner": "本地优先的项目管理工具，单二进制集成 CLI、Web UI 与 AI agent 技能",
+   "review": "Pad 是一个用 Go 编写的本地优先项目管理工具，提供命令行界面、运行在 localhost:7777 的 Web UI 和面向 AI 编码工具的 /pad 技能，数据存储于本地 SQLite，也可选择迁移到 Pad Cloud。内置任务、想法、计划、文档等集合，支持自定义类型化字段；可通过 pad agent install 为 Claude Code、Cursor、Codex 等多种 agent 工具安装技能，并用 conventions 和 playbooks 约束 agent 行为。安装支持 Homebrew、源码构建（需 Go 1.27+、Node.js 22+）和 Docker。",
+   "highlights": [
+    "单一二进制包含 CLI、Web UI 和 AI agent 技能，数据存于本地 SQLite，支持离线使用",
+    "支持 Claude Code、Cursor、Windsurf、Codex、OpenCode、GitHub Copilot 等 7+ 种 agent 工具，通过 /pad 技能以自然语言读写项目条目",
+    "提供集合与自定义字段机制，内置 tasks/ideas/plans/docs/conventions/playbooks 六种集合，条目自动生成编号并可按版本记录变更历史"
+   ],
+   "use_cases": [
+    "在终端中用 CLI 管理任务、搜索条目、查看状态，配合本地 Web UI 看板拖拽操作",
+    "让 AI 编码助手通过 /pad 技能读取和更新项目任务，用 conventions 与 playbooks 约束 agent 的多步工作流",
+    "Docker 部署到 localhost:7777，通过一次性 setup token 创建管理员账号的本地自托管场景"
+   ]
+  },
+  "sha": "fd5e284e0017",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a5501caac848": {
+  "identity": {
+   "one_liner": "给 AI 助手接入的中国校招/实习/社招岗位搜索技能，支持 Skill 与 MCP，本地查询快照数据",
+   "review": "job_radar 是一个面向 AI 助手的求职搜索技能，用于查询中国校招、实习、社招岗位与招聘日历，返回岗位要求、来源链接和网申窗口，面向应届生、实习生和社招求职者。采集在 GitHub Actions 定时运行并发布数据快照，查询通过 Python CLI 或 MCP 在本地执行，包名为 jobsearchradar，需 Python 3.11+。首次安装需联网下载数据，之后可离线查询；项目不要求上传简历，不代投。",
+   "highlights": [
+    "提供搜索、单岗详情、近期变化、招聘日历、公司对比、趋势等 9 个查询工具，CLI 与 MCP 共享同一筛选规则",
+    "已核验快照含 360,178 条岗位记录、2,203 个启用数据源、27 个采集适配器，覆盖官方与聚合来源并分开标注",
+    "数据存储于 jobs.db、jd_text.db、calendar.db 三个 SQLite 库，支持 FTS5 trigram 索引，下载后本地离线查询"
+   ],
+   "use_cases": [
+    "应届生和实习生用自然语言筛选特定城市、公司、届次的校招或实习岗位并查看 JD 原文",
+    "求职者跟踪网申窗口和岗位开岗、变更、下架历史",
+    "助手客户端接入者为 Claude Desktop、Kimi 等配置 MCP 服务或导入技能包"
+   ]
+  },
+  "sha": "a5501caac848",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e86c397537c5": {
+  "identity": {
+   "one_liner": "SchemaCrawler 的 Web 应用，在线生成数据库图表与文档",
+   "review": "这是 SchemaCrawler 的 Spring Boot Web 应用，提供在线生成数据库图表与文档的功能，当前实现基于 SQLite 数据库生成鸦足 ERD 图。构建依赖 Graphviz 和 Maven，可用 Docker 容器或 jar 包运行，运行时需配置 AWS S3 相关环境变量，服务默认监听 8080 端口。适合需要在浏览器中查看数据库结构图表与文档的用户。",
+   "highlights": [
+    "基于 Spring Boot 和 Bootstrap 构建，通过 Docker 镜像部署运行",
+    "为 SQLite 数据库生成鸦足（crows-foot）风格 ERD 图",
+    "在线生成数据库图表与文档，依赖 Graphviz 渲染"
+   ],
+   "use_cases": [
+    "在浏览器中在线查看数据库的 ERD 结构图",
+    "生成数据库 schema 的文档说明",
+    "本地部署数据库结构可视化服务"
+   ]
+  },
+  "sha": "e86c397537c5",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8556cf54ba37": {
+  "identity": {
+   "one_liner": "逐模块构建 ETF 投研 Agent 的可运行学习项目，含模块矩阵与可追溯证据。",
+   "review": "Open ETF Agent 是一个面向 Agent 开发者的 JavaScript 学习项目，以六层架构（输入、上下文、执行、工具、交付、界面）组织约数十个模块，从合成文档离线报告起步，逐步演进到 v0.48.0。每次运行在 runs/ 目录生成 report.md、manifest.json 与 run.jsonl，可通过 observe 命令回溯来源与执行过程。默认无需模型密钥、离线运行，明确声明不构成实时投研或投资建议服务。",
+   "highlights": [
+    "每次运行生成独立目录，包含 report.md、manifest.json 与 run.jsonl，可追溯来源与执行记录",
+    "默认示例无需模型密钥，安装后离线运行；提供 CLI、本地研究 GUI 等多种界面",
+    "提供中英双语文章与模块矩阵，文章链接与实现版本覆盖记录分离"
+   ],
+   "use_cases": [
+    "Agent 开发者逐模块学习 Agent 执行、上下文压缩、报告交付等机制",
+    "用自己的文档开展离线研究流程演练，检查文章与实现的真实覆盖差异",
+    "需要可回溯证据链的研究场景：从报告追溯到来源、代码与验证记录"
+   ]
+  },
+  "sha": "8556cf54ba37",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -33075,5 +33075,2436 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "c8163a73ae5c+2": {
+  "fn": "markrai/scrumboy",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "replace",
+    0,
+    10,
+    0,
+    1,
+    [
+     "scrumboy logo"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    1,
+    2
+   ],
+   [
+    "insert",
+    11,
+    11,
+    2,
+    8,
+    [
+     " version",
+     " license",
+     " i18n",
+     " CI",
+     " snyk monitored",
+     " OpenSSF Scorecard"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    14,
+    8,
+    11
+   ],
+   [
+    "replace",
+    14,
+    16,
+    11,
+    12,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    18,
+    12,
+    14
+   ],
+   [
+    "replace",
+    18,
+    50,
+    14,
+    15,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    56,
+    15,
+    21
+   ],
+   [
+    "replace",
+    56,
+    57,
+    21,
+    22,
+    [
+     "Scrumboy creates runtime data under `./data` by default. The default SQLite database is `./data/app.db`, and SQLite may also create `app.db-wal` and `app.db-shm` while the server is running. "
+    ]
+   ],
+   [
+    "equal",
+    57,
+    70,
+    22,
+    35
+   ],
+   [
+    "replace",
+    70,
+    71,
+    35,
+    36,
+    [
+     "The mounted `/data` volume preserves Scrumboy data across container recreation. Open http://localhost:8080. For Compose using the published image, persistence, backup, and configuration details, see docs/docker.md."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    82,
+    36,
+    47
+   ],
+   [
+    "replace",
+    82,
+    83,
+    47,
+    48,
+    [
+     "Open http://localhost:8080. "
+    ]
+   ],
+   [
+    "equal",
+    83,
+    90,
+    48,
+    55
+   ],
+   [
+    "replace",
+    90,
+    91,
+    55,
+    56,
+    [
+     "Open http://localhost:8080. "
+    ]
+   ],
+   [
+    "equal",
+    91,
+    94,
+    56,
+    59
+   ],
+   [
+    "replace",
+    94,
+    95,
+    59,
+    60,
+    [
+     "Windows users can download the `windows-amd64` executable from GitHub Releases. Run it from a dedicated writable folder (for example `%USERPROFILE%\\Scrumboy`); it starts a local Scrumboy server at http://localhost:8080. For exact artifact filenames, checksum and provenance verification, runtime-data location, and other release-install details, see docs/install-from-releases.md."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    98,
+    60,
+    63
+   ],
+   [
+    "replace",
+    98,
+    99,
+    63,
+    64,
+    [
+     "macOS users can download Apple Silicon or Intel builds from GitHub Releases. These binaries require **macOS 12 Monterey or later**. Extract and run `./scrumboy` from a dedicated writable folder; it starts a local Scrumboy server at http://localhost:8080. Current macOS release binaries are not Apple-signed or notarized. For exact artifact filenames, checksum and provenance verification, runtime-data location, Gatekeeper/quarantine troubleshooting, and other release-install details, see docs/install-from-releases.md."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    102,
+    64,
+    67
+   ],
+   [
+    "replace",
+    102,
+    105,
+    67,
+    68,
+    [
+     "Scrumboy includes a native Android client, implemented with Capacitor, under `mobile/capacitor`. It connects to a running Scrumboy server; it does not replace or start the server. Build it from source. Release builds require HTTPS to that server. Prerequisites, web-payload packaging, Gradle commands, device connection, and optional signing are in docs/android.md."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    111,
+    68,
+    74
+   ],
+   [
+    "replace",
+    111,
+    112,
+    74,
+    75,
+    [
+     "- **Outbound Webhooks & Integrations:** In Full Mode, project webhook URLs registered through the API receive JSON events for story lifecycle changes, assignment, and due-soon reminders. Delivery defaults to asynchronous best-effort; `todo.created` subscriptions can opt into bounded SQLite-backed recovery. See Integrations."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    116,
+    75,
+    79
+   ],
+   [
+    "replace",
+    116,
+    118,
+    79,
+    81,
+    [
+     "- **Due Dates & Deadline Notifications:** Give stories optional due dates, spot overdue work on board cards, and sort columns by upcoming due dates. Rule-based reminders email the assignee (requires SMTP configuration and per-user opt-in) and can emit webhook events. See docs/notifications.md.",
+     "- **Story archival:** Archive and restore stories without changing workflow state or history. Archived stories leave board, search, and dashboard reads but stay browseable; restoring requires Maintainer access. Nothing is archived automatically. See API.md."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    81,
+    82
+   ],
+   [
+    "replace",
+    119,
+    124,
+    82,
+    87,
+    [
+     "- Self-service password reset email (optional, requires SMTP + `SCRUMBOY_ENCRYPTION_KEY` + `SCRUMBOY_PUBLIC_BASE_URL`): see docs/smtp.md.",
+     "- Audit trail: append-only `audit_events` table; todo/member/project/link actions logged (see docs/audit-trail.md).",
+     "- Backup: export/import JSON; merge or replace; scope full or single project. JSON export is not a complete `DATA_DIR` disaster-recovery backup (uploaded wallpapers and `audit_events` are omitted); see docs/diagrams/scrumboy_deployment_ops.md.",
+     "- Trello import: migrate an existing Trello board from its JSON export, with a preview before anything is imported (see docs/backup-and-import.md).",
+     "- Mobile: Native Android app (Capacitor client; build from source — docs/android.md) with native VoiceFlow on supported devices, or install the PWA from the browser."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    126,
+    87,
+    89
+   ],
+   [
+    "replace",
+    126,
+    127,
+    89,
+    90,
+    [
+     "- **Public Read-Only Boards:** Once the operator enables public projects, Maintainers can publish durable boards through Settings → Sharing; visitors then browse, search, and filter without an account. Unpublishing revokes access. See docs/public-boards.md."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    90,
+    91
+   ],
+   [
+    "replace",
+    128,
+    129,
+    91,
+    92,
+    [
+     "- VoiceFlow - deterministic voice commands in the browser; on supported Android devices, **AI VoiceFlow** adds on-device speech and Gemini Nano planning with confirmation before mutations (see docs/voiceflow.md, docs/enhanced-voiceflow.md)."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    92,
+    93
+   ],
+   [
+    "replace",
+    130,
+    132,
+    93,
+    95,
+    [
+     "- Agenda - today's events from subscribed ICS feeds on durable boards (see docs/calendar.md). Requires `SCRUMBOY_ENCRYPTION_KEY`.",
+     "- Todo notes Markdown preview (on by default) - **markdown** / **preview** tabs in the todo Notes field; Mermaid diagrams in fenced mermaid blocks in preview only; images pasted or dropped into notes in Full Mode. Each can be turned off by the operator (see FAQ.md, docs/markdown-and-mermaid.md, docs/inline-images.md)."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    136,
+    95,
+    99
+   ],
+   [
+    "replace",
+    136,
+    137,
+    99,
+    100,
+    [
+     "- **Anonymous** (`SCRUMBOY_MODE=anonymous`): No auth. Landing at `/`; live deployment at: https://scrumboy.com/"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    144,
+    100,
+    107
+   ],
+   [
+    "replace",
+    144,
+    145,
+    107,
+    108,
+    [
+     "Owner, Admin, and User control instance-wide capabilities such as user management. Assignment rules and permissions: docs/roles-and-permissions.md."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    148,
+    108,
+    111
+   ],
+   [
+    "replace",
+    148,
+    153,
+    111,
+    112,
+    [
+     "Project access requires project membership. Per-project roles are **Maintainer** (full project management), **Contributor** (limited edits, including body editing on cards assigned to them), and **Viewer** (read-only). Temporary/anonymous boards use a separate link-based permission model instead of these roles. Details: docs/roles-and-permissions.md."
+    ]
+   ],
+   [
+    "equal",
+    153,
+    155,
+    112,
+    114
+   ],
+   [
+    "delete",
+    155,
+    157,
+    114,
+    114
+   ],
+   [
+    "equal",
+    157,
+    164,
+    114,
+    121
+   ],
+   [
+    "replace",
+    164,
+    169,
+    121,
+    122,
+    [
+     "Full names, defaults, requirements, and interactions: docs/environment-variables.md."
+    ]
+   ],
+   [
+    "equal",
+    169,
+    172,
+    122,
+    125
+   ],
+   [
+    "replace",
+    172,
+    173,
+    125,
+    126,
+    [
+     "`SCRUMBOY_ENCRYPTION_KEY` is **not** required for basic Scrumboy startup. It is required for features that store encrypted authentication/security or calendar data, including 2FA and Agenda calendar feeds. Once encrypted data exists, back up and restore the key with the Scrumboy data; do not casually replace it. Details: docs/environment-variables.md and FAQ.md."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    176,
+    126,
+    129
+   ],
+   [
+    "replace",
+    176,
+    177,
+    129,
+    130,
+    [
+     "Optional SMTP enables self-service password-reset email (**Forgot your Scrumboy password?**) for users with a usable Scrumboy-local password; it also depends on `SCRUMBOY_ENCRYPTION_KEY` and a valid `SCRUMBOY_PUBLIC_BASE_URL`. SSO credential recovery remains the identity provider's responsibility. Setup and troubleshooting: docs/smtp.md."
+    ]
+   ],
+   [
+    "equal",
+    177,
+    180,
+    130,
+    133
+   ],
+   [
+    "replace",
+    180,
+    181,
+    133,
+    134,
+    [
+     "Optional email notifications use the same SMTP configuration as password-reset email. They are opt-in per user under Settings → Customization, including per-category choices, and do not require `SCRUMBOY_ENCRYPTION_KEY`. Setup and category/recipient details: docs/notifications.md."
+    ]
+   ],
+   [
+    "equal",
+    181,
+    184,
+    134,
+    137
+   ],
+   [
+    "replace",
+    184,
+    185,
+    137,
+    138,
+    [
+     "Optional OpenID Connect / SSO with a standards-compliant identity provider. Accounts may use a local password, SSO, or both; existing local users connect SSO explicitly, and matching emails are not silently linked. Local authentication remains available unless explicitly disabled. See docs/oidc.md, docs/authentication-api.md, docs/recovery.md, and docs/security.md."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    188,
+    138,
+    141
+   ],
+   [
+    "replace",
+    188,
+    189,
+    141,
+    142,
+    [
+     "If the identity provider is unavailable, a host operator can recover an existing owner's local password via an offline, host-side break-glass path. Stop Scrumboy and back up the database first. Instructions: docs/recovery.md."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    192,
+    142,
+    145
+   ],
+   [
+    "replace",
+    192,
+    193,
+    145,
+    146,
+    [
+     "App-level TLS / HTTPS is optional: Scrumboy enables HTTPS when both `SCRUMBOY_TLS_CERT` and `SCRUMBOY_TLS_KEY` are configured and their files exist; otherwise it runs over HTTP. Details: docs/environment-variables.md."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    196,
+    146,
+    149
+   ],
+   [
+    "replace",
+    196,
+    197,
+    149,
+    150,
+    [
+     "Install Scrumboy from the browser as a **PWA** for a standalone, mobile-friendly experience. Background assignment notifications are available through **Web Push**, which requires server-side **VAPID** configuration and browser notification permission. See docs/pwa.md and docs/vapid.md."
+    ]
+   ],
+   [
+    "equal",
+    197,
+    200,
+    150,
+    153
+   ],
+   [
+    "replace",
+    200,
+    201,
+    153,
+    154,
+    [
+     "Scrumboy supports API access tokens for automation and integrations, including programmatic MCP and API access without a browser session. Both the legacy HTTP MCP interface and the native JSON-RPC MCP interface are supported. See docs/mcp.md and API.md."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    204,
+    154,
+    157
+   ],
+   [
+    "replace",
+    204,
+    205,
+    157,
+    158,
+    [
+     "A command-line client, `scrumboy-cli`, covers everyday board work (list, create, update, move todos; view boards; scripting and CI) with the same API tokens. See docs/cli.md."
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    158,
+    159
+   ],
+   [
+    "replace",
+    206,
+    207,
+    159,
+    160,
+    [
+     "Scrumboy supports native MCP clients such as Cursor and Claude Code over **HTTP** Streamable JSON-RPC at `/mcp/rpc` (stdio is not supported). The older `/mcp` HTTP interface remains available for legacy and programmatic use. Details: docs/mcp.md, docs/oauth.md, and API.md. Compatible agent workspaces can also use the optional Board Operator package in plugins/scrumboy-board-operator."
+    ]
+   ],
+   [
+    "equal",
+    207,
+    210,
+    160,
+    163
+   ],
+   [
+    "replace",
+    210,
+    211,
+    163,
+    164,
+    [
+     "Scrumboy can POST JSON event payloads to URLs you register for **server-side integrations** (your script, gateway, queue worker, and similar). Webhooks are available in **Full mode**; project **maintainers** configure them through the HTTP API or MCP. Best-effort remains the default, while `todo.created` can opt into bounded SQLite-backed durable delivery. Webhooks are separate from in-app notifications, browser/Web Push notifications, and realtime board updates via SSE. Full operator and integration details are in docs/webhooks.md."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    214,
+    164,
+    167
+   ],
+   [
+    "replace",
+    214,
+    219,
+    167,
+    168,
+    [
+     "Scrumboy supports **Full** and **Single-project** JSON export. In Full mode, Full export includes durable projects where you are a **Maintainer** and temporary/expiring boards you created; Anonymous mode uses single-board export instead of Full. Details: docs/backup-and-import.md."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    222,
+    168,
+    171
+   ],
+   [
+    "replace",
+    222,
+    227,
+    171,
+    172,
+    [
+     "Scrumboy supports three JSON import modes: **Replace** (destructive; makes the applicable scope match the backup), **Merge** (matches existing projects by slug when you are a **Maintainer**, otherwise may create new projects), and **Create copy** (always creates new projects without overwriting). Anonymous mode has more limited import behavior. Details: docs/backup-and-import.md."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    230,
+    172,
+    175
+   ],
+   [
+    "replace",
+    230,
+    231,
+    175,
+    176,
+    [
+     "The full documentation set is organized by audience in docs/README.md (operator, feature, security, integration, architecture, and manual-check docs)."
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    176,
+    177
+   ],
+   [
+    "replace",
+    232,
+    237,
+    177,
+    178,
+    [
+     "The live product roadmap is a public Scrumboy kanban board at scrumboy.com/scrumboy."
+    ]
+   ],
+   [
+    "equal",
+    237,
+    239,
+    178,
+    180
+   ],
+   [
+    "replace",
+    239,
+    253,
+    180,
+    181,
+    [
+     "Scrumboy is licensed under the **GNU Affero General Public License v3** (AGPL v3). See LICENSE for the full text."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "31e164c3fdac+2": {
+  "fn": "sakurawwwxh/qq-agent-plus",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "QQ Agent Plus"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    1,
+    6
+   ],
+   [
+    "replace",
+    8,
+    16,
+    6,
+    14,
+    [
+     "CI",
+     "License",
+     "Stars",
+     "Last commit",
+     "Node",
+     "Platform",
+     "OneBot",
+     "LLM"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     "**简体中文** ｜ English"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    22,
+    17,
+    18,
+    [
+     "控制台：消息存档与会话管理"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    28,
+    18,
+    24
+   ],
+   [
+    "replace",
+    28,
+    29,
+    24,
+    25,
+    [
+     "下列能力均来自实际群聊环境中的问题修复，每条对应的失败模式与处理方式记录在改动清单。"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    33,
+    25,
+    29
+   ],
+   [
+    "replace",
+    33,
+    36,
+    29,
+    32,
+    [
+     " 服务端不支持或连接层失败时自动回落 HTTP/1.1；DNS 固定、内网拦截、逐跳重定向校验、",
+     " 跨源凭据剥离、响应体/解压上限与超时都在。POST 仍走 HTTP/1.1，避免重复写入。",
+     " Cloudflare 按 HTTP 版本挑战的站点（e926/e621 等）因此可以直接访问。"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    40,
+    32,
+    36
+   ],
+   [
+    "replace",
+    40,
+    41,
+    36,
+    37,
+    [
+     " 群聊与私聊各自独立计时、掷骰和记录判定，互不占用机会。间隔护栏、跳过原因日志，重启后补齐漏收消息。"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    37,
+    38
+   ],
+   [
+    "replace",
+    42,
+    43,
+    38,
+    39,
+    [
+     " 默认关闭，复用现有主动发言的安静时段、预算与发送队列。见生活层文档。"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    45,
+    39,
+    41
+   ],
+   [
+    "replace",
+    45,
+    54,
+    41,
+    50,
+    [
+     " **默认走 API Key 的托管服务**（预置硅基流动的地址：粘一个 Key、从官网拉一次模型列表就能用；",
+     " 也可一键换成 Groq / 火山 Seed-ASR / 阿里云百炼 / 讯飞 / 腾讯云 / 百度 / 自建，各家对新用户多有免费额度）；",
+     " 也支持**零 Key 的本机 whisper.cpp**（离线、免费，控制台里点一下就能装、也能完整卸载，或跑",
+     " `node scripts/install-asr-local.mjs`）。QQ 语音（SILK）与视频音轨都能吃（SILK 本地解码，不需要协议端转码）；",
+     " 视频还能\"看画面\"：抽 4 帧拼成 2×2 帧条交给视觉模型（另有音轨转写），看到也能听到。",
+     " 反过来也能\"说\"：配好语音合成后它可以发语音回你（默认关，见配置示例）——支持 OpenAI 兼容（硅基流动/自建）、",
+     " 火山豆包大模型语音合成 2.0（音色最自然，只需一把控制台密钥）、火山 v1 与 MiniMax，控制台里有服务预设、",
+     " 模型与音色候选、可调语速与音量。语音的 Key 与搜索各自分开配。",
+     " 转写带每小时次数闸门（全局 + 每会话双闸）；群禁言时发送会直接报因、不再硬发。"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    50,
+    51
+   ],
+   [
+    "replace",
+    55,
+    58,
+    51,
+    54,
+    [
+     " 不用另起一条链路（默认关，见配置示例）。控制台在「语音」页下方有「图片生成」区块与「试画一张」当场验证；",
+     " 预设里有一家**免 Key** 的（Pollinations）可直接试玩。按张计费，闸门是每小时张数上限。",
+     " 换地址后旧的 Key **不会**跟过去（与转写同一套 Key 归属守卫）。"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    54,
+    55
+   ],
+   [
+    "replace",
+    59,
+    69,
+    55,
+    65,
+    [
+     " manifest 只能拿到声明过的能力，且每条能力都由宿主实现 —— 插件读不到你的配置文件，也绕不过发送队列的",
+     " 禁言预检与限频。apiVersion 2 起，插件可以用 manifest 声明**设置面板**（文本/数字/开关/下拉/凭据，控制台",
+     " 统一渲染，作者不写界面代码；凭据 AES-256-GCM 加密落盘、不回显）；会改变外部账号数据的写操作走",
+     " **信任模型**：动作开关默认关、每次执行要管理员批准具体目标、当天有配额、同插件两次写至少隔 60 秒、",
+     " 失败与幂等跳过自动退还，全部写操作留审计。升级前先对比 manifest，权限面变化必须确认；授权绑定",
+     " manifest 哈希，升级后按变化范围重置批准与开关。控制台「插件」页可一键安装（官方索引 13 个，全部零依赖，",
+     " 含 B 站插件：搜索/看懂视频/下载合流发群/互动，写操作需逐次批准），也支持本地包与自己挂的索引；",
+     " **自己写一个**见插件文档（生成骨架 → 真机调试 → 打包自测，三条命令），",
+     " 上架到官方索引走索引仓库的 PR 流程 —— 控制台",
+     " 「插件 → 发布插件」页把这两件事和命令都列在了一处。插件是第三方代码，装之前请在详情页看清它声明的权限。"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    65,
+    66
+   ],
+   [
+    "replace",
+    70,
+    73,
+    66,
+    69,
+    [
+     " `skill_list` 再 `skill_use`；本轮只能调用技能允许的工具。默认关闭，可按群启用，内置群聊总结、视频读懂、",
+     " 评论分析三个示例。",
+     " 「技能市场」可按官方索引预览并安装额外技能（逐文件 sha256 校验、可卸载），见技能文档。"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    69,
+    70
+   ],
+   [
+    "replace",
+    74,
+    75,
+    70,
+    71,
+    [
+     " 默认每人最多 50 条、手写条目不删、默认不按时间过期（可配 0–3650 天）。见记忆文档。"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    71,
+    72
+   ],
+   [
+    "replace",
+    76,
+    77,
+    72,
+    73,
+    [
+     " 支持 JSONL/CSV 导出与 `ops prune`；`/api/metrics` 提供 JSON 与 Prometheus 文本，日志可切结构化 JSON。"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    73,
+    74
+   ],
+   [
+    "replace",
+    78,
+    81,
+    74,
+    77,
+    [
+     "配置项示例见配置示例。运维命令统一收录在 src/ops.js，",
+     "用法见运维工具。本地回归测试位于 test/local/。",
+     "衍生关系与第三方版权说明见 NOTICE。"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    86,
+    77,
+    82
+   ],
+   [
+    "replace",
+    86,
+    94,
+    82,
+    87,
+    [
+     " 总览：机器人、协议端与主机状态",
+     " 消息存档：分群长期归档",
+     "",
+     " 语音回复：MiMo 音色与导演指令",
+     " 插件：运行状态、权限与来源"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    103,
+    87,
+    96
+   ],
+   [
+    "replace",
+    103,
+    119,
+    96,
+    97,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    137,
+    97,
+    115
+   ],
+   [
+    "replace",
+    137,
+    143,
+    115,
+    116,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    161,
+    116,
+    134
+   ],
+   [
+    "replace",
+    161,
+    166,
+    134,
+    135,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    177,
+    135,
+    146
+   ],
+   [
+    "replace",
+    177,
+    178,
+    146,
+    147,
+    [
+     "国内镜像、协议端镜像、从裸机迁移与容器模式限制见 docs/DOCKER.md。"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    199,
+    147,
+    168
+   ],
+   [
+    "replace",
+    199,
+    208,
+    168,
+    177,
+    [
+     "|项目|建议|",
+     "|---|---|",
+     "|系统|Ubuntu 22.04/24.04、Debian 12、Rocky/Alma 9 等带 systemd 的 Linux|",
+     "|CPU|2 核起；1 核会明显拖慢扫码登录和模型回复|",
+     "|内存|2GB 起；1GB 很容易在 SnowLuma/Chromium 启动时 OOM|",
+     "|磁盘|10GB 空闲，本机盘；SQLite 不支持 NFS/SMB|",
+     "|网络|能访问 GitHub；Docker 镜像有国内镜像站兜底|",
+     "|账号|root 或带 sudo 的普通用户；一个 QQ 号|",
+     "|模型|OpenAI Chat Completions 兼容的地址、Key、模型名（可装完再配）|"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    314,
+    177,
+    283
+   ],
+   [
+    "replace",
+    314,
+    315,
+    283,
+    284,
+    [
+     "面板环境（宝塔 / aaPanel）的部署差异见宝塔面板部署：面板仅作为管理界面，进程仍由"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    321,
+    284,
+    290
+   ],
+   [
+    "replace",
+    321,
+    326,
+    290,
+    291,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    390,
+    291,
+    355
+   ],
+   [
+    "replace",
+    390,
+    391,
+    355,
+    356,
+    [
+     "详见自动更新部署。"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    402,
+    356,
+    367
+   ],
+   [
+    "replace",
+    402,
+    409,
+    367,
+    368,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    409,
+    423,
+    368,
+    382
+   ],
+   [
+    "replace",
+    423,
+    431,
+    382,
+    383,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    434,
+    383,
+    386
+   ],
+   [
+    "replace",
+    434,
+    435,
+    386,
+    387,
+    [
+     "`?format=prometheus`；环境变量、常用示例与远程执行说明见运维工具文档。"
+    ]
+   ],
+   [
+    "equal",
+    435,
+    452,
+    387,
+    404
+   ],
+   [
+    "replace",
+    452,
+    453,
+    404,
+    405,
+    [
+     " `docker ps -a | grep snowluma`、`docker logs --tail 50 qq-agent-snowluma`。"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    454,
+    405,
+    406
+   ],
+   [
+    "replace",
+    454,
+    455,
+    406,
+    407,
+    [
+     " 「设置 -> OneBot」的 WS 令牌一致（HTTP 令牌留空则沿用 WS）。"
+    ]
+   ],
+   [
+    "equal",
+    455,
+    458,
+    407,
+    410
+   ],
+   [
+    "replace",
+    458,
+    459,
+    410,
+    411,
+    [
+     " （HTTP 端口 `3000` 不能作为 WS 使用）。"
+    ]
+   ],
+   [
+    "equal",
+    459,
+    463,
+    411,
+    415
+   ],
+   [
+    "replace",
+    463,
+    464,
+    415,
+    416,
+    [
+     " 需执行 `bash manage.sh restart`。"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    466,
+    416,
+    418
+   ],
+   [
+    "replace",
+    466,
+    467,
+    418,
+    419,
+    [
+     " 灰色表示从未连接。"
+    ]
+   ],
+   [
+    "equal",
+    467,
+    506,
+    419,
+    458
+   ],
+   [
+    "replace",
+    506,
+    508,
+    458,
+    460,
+    [
+     " 1024MB（超出按最旧优先删除已结束留档，可能早于 2000 份/90 天限制），索引在",
+     " `sessions/.sessions-index.jsonl`；"
+    ]
+   ],
+   [
+    "equal",
+    508,
+    537,
+    460,
+    489
+   ],
+   [
+    "replace",
+    537,
+    538,
+    489,
+    490,
+    [
+     "单一来源是 `roles/` 目录，一张卡对应一个 markdown 文件，说明见内置角色卡。"
+    ]
+   ],
+   [
+    "equal",
+    538,
+    564,
+    490,
+    516
+   ],
+   [
+    "replace",
+    564,
+    573,
+    516,
+    525,
+    [
+     "|项|省|很省|",
+     "|---|---|---|",
+     "|被艾特 / 全响应读多少条已读|≤80|≤40|",
+     "|关键词 / 随机档读多少条|≤50 / ≤30|≤30 / ≤20|",
+     "|单次运行工具轮数|≤8|≤5|",
+     "|单次运行累计 Token|≤8 万|≤5 万|",
+     "|会话交接注入（字符）|≤2000|≤1200|",
+     "|全局印象注入（字符）|≤3000|≤1500|",
+     "|提示词里的表情清单条数|≤5|≤3|"
+    ]
+   ],
+   [
+    "equal",
+    573,
+    591,
+    525,
+    543
+   ],
+   [
+    "replace",
+    591,
+    592,
+    543,
+    544,
+    [
+     "提示词与设计说明见动态提示词。“生成新草稿”不发布；检查正文后可点击"
+    ]
+   ],
+   [
+    "equal",
+    592,
+    599,
+    544,
+    551
+   ],
+   [
+    "replace",
+    599,
+    600,
+    551,
+    552,
+    [
+     "默认只建立基线，不突然互动历史内容。设计、状态与幂等规则见动态互动。"
+    ]
+   ],
+   [
+    "equal",
+    600,
+    616,
+    552,
+    568
+   ],
+   [
+    "replace",
+    616,
+    618,
+    568,
+    570,
+    [
+     "边界见已知问题；入站好友请求的审批不受影响。实现边界见",
+     "已转正的稳定特性。"
+    ]
+   ],
+   [
+    "equal",
+    618,
+    622,
+    570,
+    574
+   ],
+   [
+    "replace",
+    622,
+    623,
+    574,
+    575,
+    [
+     "资产观测。"
+    ]
+   ],
+   [
+    "equal",
+    623,
+    625,
+    575,
+    577
+   ],
+   [
+    "replace",
+    625,
+    626,
+    577,
+    578,
+    [
+     "黑话，历史配置中的开关不会再生效。见已转正的稳定特性。"
+    ]
+   ],
+   [
+    "equal",
+    626,
+    657,
+    578,
+    609
+   ],
+   [
+    "replace",
+    657,
+    658,
+    609,
+    610,
+    [
+     "当前基线上仍有一批已确认、暂不修的问题；数量与状态以已知问题为准，不要在这里写死条数。"
+    ]
+   ],
+   [
+    "equal",
+    658,
+    659,
+    610,
+    611
+   ],
+   [
+    "replace",
+    659,
+    662,
+    611,
+    614,
+    [
+     "详细说明见 Linux 运维手册，全部文档见文档索引。试验性三模式对话",
+     "引擎见 Conversation Modes；早期参与者续接方案见",
+     "Threaded Conversation Pilot。"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    664,
+    614,
+    616
+   ],
+   [
+    "replace",
+    664,
+    667,
+    616,
+    617,
+    [
+     "本项目使用 MIT 许可（见 LICENSE）；衍生关系与第三方版权见 NOTICE。"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "6f92cded24eb+2": {
+  "fn": "moqui/mr-moqui",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    8,
+    6,
+    8,
+    [
+     "> where files are kept) are not stable. They change without migrations, and a database from an earlier build may",
+     "> need to be emptied and loaded again (`./moq clean-db`, `./moq load`)."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    14,
+    9,
+    14,
+    [
+     "> it to the internet. A security review is under way. Until 0.1.0 its findings, open vulnerabilities included, are",
+     "> recorded openly in this repository (plans/Security-Review.md,",
+     "> docs/security/): with no production systems to protect, the repository is the",
+     "> project's internal disclosure. From 0.1.0 the project follows Moqui Java's policy: a vulnerability is reported",
+     "> privately to the board (SECURITY.md) and kept in the board's private repository until it is fixed."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    25,
+    14,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "under Applications."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    26,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "The app list after signing in, with the IronStone BOSS apps, Marble ERP and the framework's own apps."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    35,
+    28,
+    35
+   ],
+   [
+    "replace",
+    35,
+    39,
+    35,
+    36,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    43,
+    36,
+    40
+   ],
+   [
+    "replace",
+    43,
+    44,
+    40,
+    41,
+    [
+     "It needs the pinned Rust toolchain, Node 22 or 24 LTS (22.13 or later) with npm, git and bash, on Linux, macOS, or Windows (Build). On"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    41,
+    42
+   ],
+   [
+    "replace",
+    45,
+    46,
+    42,
+    43,
+    [
+     "(Windows). The first build takes a few minutes and downloads the embedded Postgres"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    43,
+    44
+   ],
+   [
+    "replace",
+    47,
+    49,
+    44,
+    46,
+    [
+     "package: every feature, embedded Postgres and the dev tools), which `./moq` then uses",
+     "to load data and run. To deploy to a server, a container or a cluster, see Run and Deploy."
+    ]
+   ],
+   [
+    "equal",
+    49,
+    56,
+    46,
+    53
+   ],
+   [
+    "replace",
+    56,
+    61,
+    53,
+    58,
+    [
+     " files, with JavaScript where a script is needed",
+     " (application practices, the JavaScript API).",
+     "- **One screen, several renderings.** The Vue and Quasar client at `/qapps` (Qvt-Client),",
+     " plain HTML at `/apps`, a terminal UI that also runs over SSH (TUI), print HTML sent as PDF, and",
+     " CSV and XLSX (render modes)."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    58,
+    59
+   ],
+   [
+    "replace",
+    62,
+    64,
+    59,
+    61,
+    [
+     " is; search on Postgres full text and JSON, with OpenSearch optional",
+     " (Database and search)."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    61,
+    62
+   ],
+   [
+    "replace",
+    65,
+    67,
+    62,
+    64,
+    [
+     " monitoring and reports (Database, Monitoring,",
+     " Component-Deploy)."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    64,
+    65
+   ],
+   [
+    "replace",
+    68,
+    70,
+    65,
+    67,
+    [
+     " voicemail, SMS and XMPP (Comms, docs/interfaces).",
+     "- **Files and sync.** CalDAV, CardDAV, WebDAV and SFTP for phones and desktop apps (Sync)."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    67,
+    68
+   ],
+   [
+    "replace",
+    71,
+    72,
+    68,
+    69,
+    [
+     " runners (Git-Hosting, Pipelines)."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    69,
+    70
+   ],
+   [
+    "replace",
+    73,
+    75,
+    70,
+    72,
+    [
+     " A2A server and client, and an OpenAI-compatible gateway (Assist, MCP,",
+     " A2A, Gateway)."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    72,
+    73
+   ],
+   [
+    "replace",
+    76,
+    77,
+    73,
+    74,
+    [
+     " (Desktop-Client, Mobile-Client)."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    74,
+    75
+   ],
+   [
+    "replace",
+    78,
+    79,
+    75,
+    76,
+    [
+     " in front of a server with no public port (Run and Deploy)."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    76,
+    77
+   ],
+   [
+    "replace",
+    80,
+    84,
+    77,
+    81,
+    [
+     " (README); type declarations, `check`, `lint` and a language server",
+     " (JS-Types-Tooling); server and browser specs and load scripts in JavaScript",
+     " (JS-Testkit, JS-Test-Client,",
+     " Load-Runner)."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    81,
+    82
+   ],
+   [
+    "replace",
+    85,
+    88,
+    82,
+    85,
+    [
+     " renderers in a `Cargo.toml` and `src/` next to its `component.xml`, which `./moq build` links into the binary",
+     " (Native-Components; `runtime/components/dev/example` has one of each, and the",
+     " screen archetype gallery at `/qapps/gallery`)."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    85,
+    86
+   ],
+   [
+    "replace",
+    89,
+    90,
+    86,
+    87,
+    [
+     "Dev AIDE, the IDE in the browser, with a file of this repository open."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    93,
+    87,
+    90
+   ],
+   [
+    "replace",
+    93,
+    94,
+    90,
+    91,
+    [
+     "Each application is a component in its own repository in the moqui organization, checked"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    96,
+    91,
+    93
+   ],
+   [
+    "replace",
+    96,
+    97,
+    93,
+    94,
+    [
+     "|Repository|What it is|State|"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    94,
+    95
+   ],
+   [
+    "replace",
+    98,
+    105,
+    95,
+    102,
+    [
+     "|mr-mantle|Mantle Business Artifacts: the business data model and the service library the applications share|Built|",
+     "|mr-boss|IronStone BOSS, the Business OS Suite: sixteen apps in one shell, from Commons and Comms (groupware and communication) through Sales, Warehouse, Accounting and People|Built|",
+     "|mr-pass|IronStone PASS, the Public Application Software Suite: Forum, Shop, Smithy (git hosting), and the customer and supplier pages of the BOSS apps|Built|",
+     "|mr-marble|Marble ERP and the Simple Screens library it is built from, ported from Moqui Java|Ported|",
+     "|mr-l10n|Language packs: Spanish and Simplified Chinese|Covers the framework, Mantle, Marble, the BOSS apps, and PASS|",
+     "|mr-home|IronStone HOME: BOSS's capabilities for a household|In design|",
+     "|mr-three|IronStone THREE: 3D in business screens, and a town to walk through to reach them|In design|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    118,
+    102,
+    115
+   ],
+   [
+    "replace",
+    118,
+    120,
+    115,
+    117,
+    [
+     "the phase after that. What is open is in plans/Remaining-Work.md, and what follows 0.1.0 in",
+     "plans/Future-Plans.md."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    123,
+    117,
+    120
+   ],
+   [
+    "replace",
+    123,
+    125,
+    120,
+    122,
+    [
+     "MR Moqui is a rebuild of Moqui Java (moqui-framework and",
+     "moqui-runtime). Most of it follows the Java framework as it was when the"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    127,
+    122,
+    124
+   ],
+   [
+    "replace",
+    127,
+    128,
+    124,
+    125,
+    [
+     "component, start with the Moqui Java migration notes, which also have the"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    130,
+    125,
+    127
+   ],
+   [
+    "replace",
+    130,
+    131,
+    127,
+    128,
+    [
+     "|Repository|Where it came from|"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    128,
+    129
+   ],
+   [
+    "replace",
+    132,
+    136,
+    129,
+    133,
+    [
+     "|mr-moqui|moqui-framework and moqui-runtime|",
+     "|mr-mantle|mantle-udm and mantle-usl, converted from Groovy to JavaScript and merged with the history of both|",
+     "|mr-marble|SimpleScreens and MarbleERP, merged with the history of both|",
+     "|mr-boss, mr-pass, mr-home, mr-three, mr-l10n|New for MR Moqui|"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    144,
+    133,
+    141
+   ],
+   [
+    "replace",
+    144,
+    145,
+    141,
+    142,
+    [
+     "- Use one language (JavaScript) for scripts and templates on the server, and for inline expressions on the client, so that XML Screens can become client-renderable. The engine is quickjs-oxide, a QuickJS-compatible engine in safe Rust."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    153,
+    142,
+    150
+   ],
+   [
+    "replace",
+    153,
+    161,
+    150,
+    158,
+    [
+     "1. **JavaScript for scripts and templates.** Scripts, XML actions, screen macros and text templates are JavaScript on quickjs-oxide; `ec.resource.expand()` is a template literal, and a small `if`/`list`/`assign` renderer (with a locked-down sandbox variant) handles structured text. Plan: Architecture-Proposal (Templating).",
+     "2. **SearchFacade replaces ElasticFacade.** Postgres full-text and JSON are the default backend; OpenSearch is optional. Plan: SearchFacade.",
+     "3. **qvt can be server-static.** With `server-static` set for `qvt`, the server sends a data-free compiled template and the client merges the data. Opt-in. Plan: QvtServerStatic.",
+     "4. **Print HTML is its own render mode.** `html-print` (print CSS and `@page`, also selected by the old `xsl-fo` name) is printed to PDF by one long-lived external Chromium; `/fop/<path>` sends a screen as PDF. Plan: Architecture-Proposal (Tool components and print).",
+     "5. **Cluster coordination uses the shared database.** Members find each other in a table; cache invalidation and notifications fan out over gRPC on client-certificate TLS (HTTP/1.1 POST as the alternative); no Hazelcast or Redis. Plan: Cluster.",
+     "6. **Sessions live in the database** (`moqui.server.HttpSession`, through the entity cache), with an optional guarantee mode so a load balancer without stickiness can fail over. Plan: Architecture-Proposal (Sessions and login).",
+     "7. **Keys are configuration, and unset secrets are generated.** Secrets are conf attributes, set by conf file or environment, never database rows; one still at its `CHANGEME` default is generated and saved to `runtime/.env`, which is loaded at startup like environment variables. Plan: MimoReview (Decisions 1–3).",
+     "8. **Feed registration commits with the entity change.** Search document keys are registered in the entity transaction; assembly and indexing run after commit, and an index failure does not roll back the change. Plan: SearchFacade."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    162,
+    158,
+    159
+   ],
+   [
+    "replace",
+    162,
+    167,
+    159,
+    164,
+    [
+     " Java's `default-property` entries and the `${name}` references to them are gone. Any attribute is set from the",
+     " environment by a name built from its XML path (`moqui_conf__webapp_list__webapp__WEBROOT__http_port`), and named",
+     " elsewhere by the same path as a selector (`webapp-list/webapp[webroot]@http-port`); a component declares a",
+     " top-level element of its own. Guide: Run-Deploy; plan:",
+     " Conf-Paths."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    170,
+    164,
+    167
+   ],
+   [
+    "replace",
+    170,
+    172,
+    167,
+    169,
+    [
+     "Reference guides for built features are in `docs/`, by tier and area with an index in",
+     "`docs/README.md`. The two most people start with:"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    169,
+    170
+   ],
+   [
+    "replace",
+    173,
+    178,
+    170,
+    175,
+    [
+     "- Build and Test: building from source, the build packages and their features, the `./moq`",
+     " tasks, the Rust tests and component specs, and the checks to run before a commit and before a release",
+     " (Validation).",
+     "- Run and Deploy: the runtime directory and conf, HTTPS certificates and ports, production",
+     " archives, clusters, and PASS and team topologies; Podman and systemd are in `podman/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    178,
+    179,
+    175,
+    176
+   ],
+   [
+    "replace",
+    179,
+    182,
+    176,
+    179,
+    [
+     "The practices for application development and Rust",
+     "are in `docs/dev/`. The security policy links to the attack-surface map and the HTTP proof tests.",
+     "Design, status and review documents are in `plans/`, indexed by `plans/README.md`: what"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    195,
+    179,
+    192
+   ],
+   [
+    "replace",
+    195,
+    199,
+    192,
+    193,
+    [
+     "CC0 1.0 Universal with a Grant of Patent License."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "355e7cda3ff2+2": {
+  "fn": "ferrnd/one-quote-a-day",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "**quoteaday.vercel.app** · **Download the Android app** · source in `android/`"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    17,
+    6,
+    17
+   ],
+   [
+    "delete",
+    17,
+    19,
+    17,
+    17
+   ],
+   [
+    "equal",
+    19,
+    20,
+    17,
+    18
+   ],
+   [
+    "replace",
+    20,
+    33,
+    18,
+    19,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    35,
+    19,
+    21
+   ],
+   [
+    "replace",
+    35,
+    46,
+    21,
+    32,
+    [
+     "||On the site|In the app|",
+     "|---|---|---|",
+     "|Quote of the day|slides down at midnight|same, plus a daily notification at the hour you pick|",
+     "|Past days|← → or swipe|swipe|",
+     "|Archive|click **DAY N** to read every day so far, with a countdown to the next|tap **DAY N**|",
+     "|Copy|click the quote|tap the quote|",
+     "|Search|right-click the quote or the author|tap the author|",
+     "|Favorites|long-press (phone) or middle-click (computer)|long-press|",
+     "|Share|WhatsApp, Facebook, X, Telegram, Discord, Instagram, email, link, square image|Android share sheet, image or text, save to gallery|",
+     "|Night|white on black from 21:00 to 06:00, or always light or dark|same, and the launcher icon follows|",
+     "|Settings|theme, text size, animations, background lights, counter, copy format, search engine, language|the same, plus notifications|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    63,
+    32,
+    49
+   ],
+   [
+    "replace",
+    63,
+    64,
+    49,
+    50,
+    [
+     "CONTRIBUTING.md for how to add a language."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    71,
+    50,
+    57
+   ],
+   [
+    "replace",
+    71,
+    80,
+    57,
+    58,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    58,
+    61
+   ],
+   [
+    "replace",
+    83,
+    86,
+    61,
+    64,
+    [
+     " quotes, locales, translations, dedications, calendar) with `STRICT` tables,",
+     " `CHECK` constraints and intake views whose `INSTEAD OF` triggers let seeds",
+     " insert readable rows and fail loudly on a typo."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    87,
+    64,
+    65
+   ],
+   [
+    "replace",
+    87,
+    88,
+    65,
+    66,
+    [
+     " translation."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    66,
+    67
+   ],
+   [
+    "replace",
+    89,
+    92,
+    67,
+    70,
+    [
+     " (integrity, foreign keys, contiguous ids, complete translations), computes",
+     " the schedule and writes `generated/quotes.wat`: the hand-written fragments in",
+     " `src/wat/` plus data segments for every record, string and day."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    94,
+    70,
+    72
+   ],
+   [
+    "replace",
+    94,
+    96,
+    72,
+    74,
+    [
+     " cache-busting hashes and draws the Open Graph image with a pure-Python PNG",
+     " rasteriser."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    74,
+    75
+   ],
+   [
+    "replace",
+    97,
+    99,
+    75,
+    77,
+    [
+     " the local date in the chosen language, decodes the UTF-8 straight out of",
+     " linear memory and sleeps until the next local midnight."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    102,
+    77,
+    80
+   ],
+   [
+    "replace",
+    102,
+    110,
+    80,
+    88,
+    [
+     "|Region|Contents|",
+     "|-----------|---------------------------------------------------------------------|",
+     "|header|128 bytes: magic `QOTD`, format, counts, pointers, FNV-1a of the pool|",
+     "|records|16 bytes per quote per language: text and author pointer/length|",
+     "|locales|code and native name of each language|",
+     "|pool|every string, interned, UTF-8|",
+     "|schedule|one `u16` quote index per day for 146,097 days|",
+     "|dedications|`(day, record)` pairs pinned to a date|"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    147,
+    88,
+    125
+   ],
+   [
+    "replace",
+    147,
+    154,
+    125,
+    132,
+    [
+     "|Command|What it does|",
+     "|---|---|",
+     "|`npm run stats`|quotes per theme|",
+     "|`npm run today`|today's quote, from the Python reference|",
+     "|`npm run today -- 2027-01-01`|any other day|",
+     "|`npm run build:db`|writes `build/quotes.sqlite` for ad-hoc queries|",
+     "|`python -m tools.qotd android`|exports the catalog and golden schedule for the app|"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    162,
+    132,
+    140
+   ],
+   [
+    "replace",
+    162,
+    164,
+    140,
+    142,
+    [
+     " over four centuries, schedule invariants, database constraints, every",
+     " translation, the generated WAT and the Android export being up to date."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    142,
+    143
+   ],
+   [
+    "replace",
+    165,
+    168,
+    143,
+    146,
+    [
+     " `Date`, the embedded table against the live algorithm, no repeats in 400",
+     " years, trap behaviour, a corrupted binary, every language, and midnight/DST",
+     " handling in the clock."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    169,
+    146,
+    147
+   ],
+   [
+    "replace",
+    169,
+    170,
+    147,
+    148,
+    [
+     " whole app driven under Robolectric with screenshots of every screen."
+    ]
+   ],
+   [
+    "equal",
+    170,
+    216,
+    148,
+    194
+   ],
+   [
+    "replace",
+    216,
+    222,
+    194,
+    195,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    225,
+    195,
+    198
+   ],
+   [
+    "delete",
+    225,
+    226,
+    198,
+    198
+   ],
+   [
+    "equal",
+    226,
+    227,
+    198,
+    199
+   ],
+   [
+    "delete",
+    227,
+    228,
+    199,
+    199
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

@@ -3576,5 +3576,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "68ff447187bc": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 OpenRouter 的全网 AI 热点监控与聚合检索工具",
+   "review": "这是一个全栈开源项目，用户配置监控关键词后，系统通过定时任务从 Twitter、Bing、HackerNews、搜狗、B 站等 8 个以上信息源抓取内容，经 OpenRouter 接入的大模型完成查询扩展、真假识别、相关性评分与摘要，并通过 Socket.io 实时推送和邮件通知。仓库分为 client 前端、server 后端、skills 技能包三部分，同时也是一个配套课程的教学实战项目。运行需 Node.js 18+ 与 OpenRouter API Key。",
+   "highlights": [
+    "支持从 Twitter、Bing、HackerNews、搜狗、B 站等 8 个以上信息源聚合抓取内容",
+    "通过 OpenRouter 接入大模型实现查询扩展、真假识别与相关性评分，技能包位于 skills/ 目录，可在 Cursor、VSCode Copilot、Claude Code 中调用",
+    "使用 Socket.io 进行实时推送，支持邮件通知，前端支持按来源、重要程度、时间范围筛选与排序"
+   ],
+   "use_cases": [
+    "配置监控关键词后自动追踪 AI 领域动态并通过实时推送与邮件接收提醒",
+    "输入关键词即时并发检索多个数据源并聚合查看结果",
+    "在 AI 编程工具中安装 skills/ 目录的 Agent Skills 技能包，通过自然语言调用热点抓取与汇总能力"
+   ]
+  },
+  "sha": "68ff447187bc",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a26e5af978d5": {
+  "identity": {
+   "one_liner": "基于 Next.js SSR 与 Spring Boot 的面试刷题平台教学开源项目",
+   "review": "该项目是面试鸭（mianshiya.com）的开源教学版，提供题库与题目管理、在线刷题、分词检索、刷题日历等功能，配套三阶段教程。面向希望实践全栈开发与性能、安全优化的开发者。仓库包含前后端两个工程目录，完整课程资料需加入编程导航获取。",
+   "highlights": [
+    "支持题库/题目批量管理、Elasticsearch 分词检索、在线刷题与 BitMap 刷题记录日历图",
+    "集成 Redis+Caffeine 多级缓存、JD HotKey 热点探测、Redisson 分布式锁与布隆过滤器",
+    "包含 Sentinel 限流熔断、Nacos 动态 IP 黑白名单、Sa-Token 同端登录冲突检测与 Redis 分级反爬虫机制"
+   ],
+   "use_cases": [
+    "学习 Next.js 服务端渲染与 Spring Boot 全栈项目开发",
+    "实践多级缓存、搜索引擎与数据同步等性能优化方案",
+    "参考内容型网站的限流、反爬虫与登录冲突检测实现"
+   ]
+  },
+  "sha": "a26e5af978d5",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3f8fbe48887": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展目录与构建工具，提供目录数据、包矩阵及 RPM/DEB 打包",
+   "review": "pgext 是一个 PostgreSQL 扩展构建与目录工具，包含 Go 应用与目录数据，支撑 pgext.cloud 网站。其 CLI 可收集 APT/RPM 仓库元数据、生成包可用性矩阵，并按 Pigsty 配方直接从源码构建 RPM/DEB 包；serve 命令以 Web 应用和 JSON API 暴露目录。目录覆盖 PG15-19 与 16 种 Linux 目标。限制：本地服务需运行 PostgreSQL 并初始化目录。",
+   "highlights": [
+    "CLI 收集 APT/RPM 仓库元数据并构建包可用性矩阵，目录含 2,818 条扩展条目与 457 个包族",
+    "支持从 Pigsty 配方构建 RPM/DEB 包，无需 PIG 或元数据数据库，可用 --plan 预演构建",
+    "pgext serve 将目录作为内嵌 Web 资源的 JSON API 与 Web 应用提供，数据存储于 PostgreSQL"
+   ],
+   "use_cases": [
+    "按类别、许可证、语言或 PG 版本查找扩展并查阅中英文使用指南",
+    "在 EL/Debian/Ubuntu 的 amd64/arm64 上为 PG15-19 构建扩展 RPM/DEB 包",
+    "通过 pgext repo 管理 Linux 软件源，配置 PGDG 与 Pigsty 仓库"
+   ]
+  },
+  "sha": "c3f8fbe48887",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f22251d4aa32": {
+  "identity": {
+   "one_liner": "本地优先的 AI 业务运营参考系统，含 LangGraph 审批门与 SQLite 验证",
+   "review": "OpsAgent 是一个本地优先的业务运营 Agent 参考系统，面向本地部署场景。模型只能读取数据或暂存提案，提案经 SHA-256 哈希绑定后由人工审批，批准的变更以 SQLite SAVEPOINT 事务原子提交并写入执行台账，再由独立评估器对照提交后的数据库校验不变量，失败则回滚。数据为合成零售数据集，需 Python 3.12、Node.js 20 与本地推理服务器。",
+   "highlights": [
+    "读/提案分离：模型仅能用类型化读取与提案工具，不提供直接写入工具，SQL 由固定参数化查询执行",
+    "人工审批与提案哈希（SHA-256）绑定，批准后后端重新校验业务资格与乐观并发版本，写入与 execution_ledger 台账在同一事务中完成",
+    "LangGraph 工作流以 SQLite 检查点持久化，支持 awaiting_approval 中断、SSE 恢复式事件流及 React/XYFlow 图形界面与 opsagent CLI"
+   ],
+   "use_cases": [
+    "演示或研究带人工审批环节的本地业务运营 Agent 工作流",
+    "本地推理（Ollama 或 OpenAI 兼容服务器）下的工具调用行为追踪与调用轨迹导出分析",
+    "基于固定合成数据集（60 客户、40 SKU、180 订单）与参考时钟的可复现评估"
+   ]
+  },
+  "sha": "f22251d4aa32",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

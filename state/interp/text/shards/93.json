@@ -3339,5 +3339,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ad846a31c050": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的 MCP 记忆服务器，以 5 个动词提供跨会话持久项目记忆。",
+   "review": "该项目是一个 MCP 服务器，为 Cursor、Claude Code 等 AI 编码代理提供跨会话的持久记忆，存储架构决策、不变式与经验教训。默认使用 Node.js 22+ 内置的 SQLite（含 FTS5 与本地向量索引），可选 PostgreSQL 16 + pgvector；检索基于关键词与可选嵌入。注意其定位明确排除代码索引功能。",
+   "highlights": [
+    "仅暴露 5 个 MCP 工具动词：retrieve、remember、revise、nudge、health",
+    "写入采用 5 类封闭分类（decision/invariant/bug/lesson/blocker），并检测相似度 ≥0.85 的近重复记录",
+    "支持 SHA-256 行跨度溯源：代码位移时自动修复行号，内容变更时标记 [DRIFTED]"
+   ],
+   "use_cases": [
+    "在多轮会话间为编码代理保存并检索项目架构决策与不变式规则",
+    "提交前用 nudge 审查差异是否符合活动约束",
+    "单开发者本地使用 SQLite 零依赖运行，或多代理跨机器时切换 PostgreSQL 集中存储"
+   ]
+  },
+  "sha": "ad846a31c050",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b2ae8bfa4ea8": {
+  "identity": {
+   "one_liner": "基于已有数据库的 Go 后台任务队列，支持事务性入队",
+   "review": "goncordia 是 Go 语言的背景任务队列库，将任务存储在使用方已有的数据库中，支持 Postgres、MySQL、SQLite、MongoDB、Redis、Cassandra、ClickHouse、DynamoDB、Firestore 等后端。核心机制是 Driver[TTx] 泛型接口接入各数据库原生事务类型，EnqueueTx 在业务事务内写入任务、提交后对 worker 可见。需 Go 1.26+，v2 按模块拆分驱动依赖。",
+   "highlights": [
+    "EnqueueTx 实现事务性 outbox：任务随业务事务原子提交或回滚，无需独立中继进程",
+    "支持 Futures（Await 处理器返回的带类型结果）、重试退避、优先级队列、唯一任务、cron 定时与保留清理",
+    "提供内嵌管理界面、Prometheus 指标端点、OpenTelemetry，以及内存驱动供无 Docker 单元测试"
+   ],
+   "use_cases": [
+    "发送邮件、通知、Webhook 等需要与业务数据同事务提交的背景任务",
+    "需要获取后台任务返回值的调用场景（future.Func.Call/Await）",
+    "多实例部署下的周期性清理、报表生成等 cron 任务"
+   ]
+  },
+  "sha": "b2ae8bfa4ea8",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "22aa7b81534f": {
+  "identity": {
+   "one_liner": "基于 Spring JDBC 的轻量级 ORM 框架，融合原生 SQL 与实体映射操作。",
+   "review": "tiny-jdbc 是一个基于 Spring JDBC 构建的 ORM 框架，除 Spring JDBC 外无其他第三方依赖。它通过 BaseDao 提供实体映射与原生 SQL 两类操作接口，配合 QueryCriteria/UpdateCriteria 条件构造器（支持 Lambda 调用），内置多种主键生成策略与多数据库分页方言。需注意其分页不支持 SQL Server，实体属性须为驼峰命名。",
+   "highlights": [
+    "提供 BaseDao 通用 CRUD 接口，同时支持原生 SQL 与实体类映射两种操作方式，条件与 SQL 构造器支持 Lambda 形式调用",
+    "内置多种主键生成策略（自增、UUID、雪花ID、NanoId、ULID、SEQUENCE 等），并支持实现 IdGeneratorInterface 自定义",
+    "分页插件支持 MySQL、Oracle、PostgreSQL、达梦、人大金仓等多种数据库方言，可按 JDBC URL 前缀自动识别；兼容 SpringBoot2 与 SpringBoot3"
+   ],
+   "use_cases": [
+    "Spring Boot 项目中需要同时使用原生 SQL 编写与实体类映射的数据库访问层",
+    "使用 MySQL、PostgreSQL、达梦、人大金仓等数据库且需要自动分页方言处理的应用",
+    "批量插入、条件构造查询等常见 CRUD 场景，或需自定义主键生成策略的业务"
+   ]
+  },
+  "sha": "22aa7b81534f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6650dd5dfdc3": {
+  "identity": {
+   "one_liner": "开源自托管的 AI Agent 可观测与诊断平台，基于 OpenTelemetry 追踪会话",
+   "review": "Ant AI Vision 是蚂蚁集团与 OceanBase 联合开发的开源自托管 Agent 可观测平台，用于追踪和诊断 AI Agent 的会话、模型调用、工具执行、记忆检索等。个人可用单容器 All-in-One 部署（内嵌 seekdb），团队可用 Docker/Kubernetes 配合 OceanBase CE 部署。兼容 Langfuse SDK 上报数据；插件支持隐私模式过滤提示词等内容。MCP、Skill、记忆、决策等专项视图处于 beta。",
+   "highlights": [
+    "提供链路追踪视图，支持按 Agent、时长、状态、token 数过滤，并可并排对比两次运行的差异",
+    "包含规则诊断功能，可对存储的 trace 调度检查失败工具调用、重复调用等问题，并在 Quality Board 中回溯记录步骤",
+    "支持 Langfuse SDK 兼容接入，以及 Codex、Claude Code 等应用的采集插件，提供在端侧过滤内容的 Privacy 模式"
+   ],
+   "use_cases": [
+    "排查 Agent 运行问题，如定位耗时较长的调用、重试、token 用量与成本变化",
+    "部署自托管环境追踪自建 Agent（LangGraph、Deep Agents、Eino 等集成示例）或现有应用的日常任务",
+    "对同类任务的新 trace 重复执行验收规则，验证修复是否生效"
+   ]
+  },
+  "sha": "6650dd5dfdc3",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "71e4a253e626": {
+  "identity": {
+   "one_liner": "DSH 社区插件，用多个持久会话组成有负责人的长期 agent 团队",
+   "review": "dsh-agent-lines 是 DeepSeek Harness（DSH）的社区插件，运行在 DSH Host 进程内，把多个 DSH 会话组织为长期团队：每条线有稳定 label 和可替换 Session，支持负责人调度、消息投递确认、交接（handoff/rebind）、租约控制和只读看板。数据存于本地 SQLite，消息投递为至少一次语义。需 DSH >=0.2.1-rc.5 且 Node ^22.19.0 || >=24.0.0；不支持 DAG、跨机多活，网络文件系统会被拒绝。",
+   "highlights": [
+    "每条线由稳定 label 与可替换 sessionId 组成，支持 line_handoff / line_rebind / line_retire 实现换会话不换角色",
+    "基于本地 SQLite 持久化角色、消息与租约，消息投递为至少一次语义，含幂等、查询与手动重投接口",
+    "提供 27 个工具与只读看板（组织树、任务消息流、成本数据），并只读融合 DSH 官方智能体团队插件的 L3 临时小队"
+   ],
+   "use_cases": [
+    "长期项目（小说、视频、研究、运营等）中多个 agent 固定分工、避免每次重讲背景",
+    "任务中断重启后需延续消息与状态的团队协作",
+    "会话满了需交接换人但保留角色记忆与任务状态的场景"
+   ]
+  },
+  "sha": "71e4a253e626",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

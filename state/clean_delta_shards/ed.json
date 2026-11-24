@@ -28743,5 +28743,1202 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "b4edf8a65d34+2": {
+  "fn": "KaelLee335/enterprise-support-agent-v2",
+  "clean_ver": "2",
+  "raw_lines": 18,
+  "ops": [
+   [
+    "equal",
+    0,
+    18,
+    0,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "**当前验证摘要（2026-11-23）：**本机全量 pytest **145 passed**；WSL 实际部署后三容器 healthy，SQLite schema 检查及 Phase 6/V2.1 verifier 通过，认证 `/chat` 对节假日问题返回与 POL-06 一致的直接答复。OOS-v2 15-case 回归中，Hit@4、Macro Recall@4、答案要点筛查、拒答要点筛查和引用来源匹配均为 100%，规则筛查 Bad Case 为 0；这些筛查结果不等于语义准确率，OOS-v2 是已观察回归集而非盲测。逐案例答复与证据留存在 `OOS-v2 答复档案`。人工回看发现并修正 HOLDOUT-07 对已明确退款工作日规则的矛盾拒答。GitHub Actions 负责锁定依赖、全量测试、Vue 构建、Compose 配置和容器 smoke。更多边界和逐例记录见 `OOS-v2 报告` 与 `分诊复核`。"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    26,
+    19,
+    26
+   ],
+   [
+    "replace",
+    26,
+    40,
+    26,
+    27,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    91,
+    27,
+    78
+   ],
+   [
+    "replace",
+    91,
+    92,
+    78,
+    79,
+    [
+     "打开 <http://127.0.0.1:5173>。Vite 将 `/api` 请求转发到本地 FastAPI。页面包含聊天、订单/政策证据、店铺身份切换、资格检查和确认后的演示申请。详细说明见 `docs/vue_frontend.md`。"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    107,
+    79,
+    94
+   ],
+   [
+    "replace",
+    107,
+    108,
+    94,
+    95,
+    [
+     "V2.1 接口说明、测试口径与面试材料见 `API 参考`、`评估记录`、`面试讲解` 和 `架构图`。"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    140,
+    95,
+    127
+   ],
+   [
+    "replace",
+    140,
+    141,
+    127,
+    128,
+    [
+     "运行 `python scripts/evaluate_agent_routes.py` 评估标注路由、订单参数和临时数据库工具结果；运行 `python scripts/evaluate_agent_safety.py` 检查写操作边界；`pytest` 执行故障注入和 API 回归。RAG 评估使用 `python scripts/evaluate_retrieval.py`，需本机配置 SiliconFlow Key。评估口径、已知 Bad Case 和追踪字段见 `docs/evaluation_and_observability.md`。每个 API 响应均带 `X-Trace-ID`，日志为 JSON 并输出到标准输出。"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    128,
+    129
+   ],
+   [
+    "replace",
+    142,
+    143,
+    129,
+    130,
+    [
+     "RAG 答案层增加了可审计的政策约束规则，详细人工复核和 Top-4/Top-8 输出见 `docs/rag_answer_manual_review.md` 与 `data/evaluation/v2_rag_answers_constraints_v3.json`。OOS Markdown 报告同时生成结构化 Bad Case ledger；初筛类别不是根因，须人工复核。最近的 RAG 无关/冲突/注入边界特征测试使用假模型，不计作真实模型安全或正确率证据。"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    146,
+    130,
+    133
+   ],
+   [
+    "replace",
+    146,
+    147,
+    133,
+    134,
+    [
+     "启动、验证订单/租户隔离、政策引用和退款审批的完整步骤见 `docs/demo_runbook.md`。当前 WSL Docker 部署已完成用户实测验收。"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    150,
+    134,
+    137
+   ],
+   [
+    "replace",
+    150,
+    151,
+    137,
+    138,
+    [
+     "系统架构和指标摘要见 `docs/project_story.md`；完整 3/10 分钟讲稿、20 个技术问题与 5 个故障案例见 `docs/interview_kit.md`。中文代码学习手册见 `docs/learning/README.md`，12 类故障案例见 `docs/troubleshooting/fault_cases.md`。"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    152,
+    138,
+    139
+   ],
+   [
+    "replace",
+    152,
+    153,
+    139,
+    140,
+    [
+     "当前已完成/待推进事项见 `docs/project_status.md`；项目代理接续说明与约束见根目录 `AGENTS.md`。"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    183,
+    140,
+    170
+   ],
+   [
+    "replace",
+    183,
+    184,
+    170,
+    171,
+    [
+     "`systemctl is-active docker` 为空而 `is-enabled` 为 `enabled`，systemd 未报告 Docker unit 正在运行。用户实测 Ubuntu WSL 为 Stopped 时触发计划任务后，`dockerd` 就绪、容器 healthy、health 200。当前 Windows 计划任务配置为用户登录时触发，不能据此保证登录前自动恢复。详情见 `docs/wsl_docker_lifecycle.md`。"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    187,
+    171,
+    174
+   ],
+   [
+    "replace",
+    187,
+    188,
+    174,
+    175,
+    [
+     "V1 资产来源、字段差异和 RET-01/QUA-01 对照见 `docs/migration.md`。新规则作为 V2 明确规则单独维护，不修改 V1 原始规则。"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    192,
+    175,
+    179
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "4cfdabfaf18e+2": {
+  "fn": "grunion-ai/weave",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "weave logo: two strands weaving into the mark"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    1,
+    2
+   ],
+   [
+    "replace",
+    7,
+    8,
+    2,
+    3,
+    [
+     " weave "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    3,
+    4
+   ],
+   [
+    "replace",
+    9,
+    12,
+    4,
+    5,
+    [
+     " weave is a portable work system you own, developed in the open. Connected records, documents and automations share one model, with native MCP, REST and CLI access. "
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    5,
+    6
+   ],
+   [
+    "replace",
+    13,
+    19,
+    6,
+    10,
+    [
+     " You already have an agent. weave works natively with it.",
+     " Use your agent and the browser on the same work, locally, on your server,",
+     " or on weave cloud. One Node process, SQLite workspace storage, zero runtime",
+     " dependencies, no build step. MIT."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    10,
+    11
+   ],
+   [
+    "replace",
+    20,
+    23,
+    11,
+    12,
+    [
+     " An agent runs weave build to create a Launch workspace from a spec, the Task table fills with six rows, a row opens with its document beside the table, then an MCP weave_query call returns the two tasks in progress"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    12,
+    13
+   ],
+   [
+    "replace",
+    24,
+    31,
+    13,
+    18,
+    [
+     " License: MIT",
+     " Node &gt;= 22.16",
+     " Runtime dependencies: 0",
+     " Self-hosted",
+     " MCP server included"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    18,
+    19
+   ],
+   [
+    "replace",
+    32,
+    40,
+    19,
+    25,
+    [
+     " For agents ·",
+     " Quickstart ·",
+     " Comparison ·",
+     " Agents &amp; MCP ·",
+     " Self-hosting ·",
+     " FAQ"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    25,
+    26
+   ],
+   [
+    "replace",
+    41,
+    46,
+    26,
+    27,
+    [
+     " weave table view: the Task table of a Launch workspace with Status chips, Owner and Milestone links and an Estimate column, beside the space sidebar"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    53,
+    27,
+    34
+   ],
+   [
+    "replace",
+    53,
+    55,
+    34,
+    36,
+    [
+     " `weave mcp --data <file>`. In Claude Code:",
+     " `claude mcp add weave -- node /path/to/weave/bin/weave.js mcp --data /path/to/workspace.db`"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    36,
+    37
+   ],
+   [
+    "replace",
+    56,
+    59,
+    37,
+    40,
+    [
+     " `--dry-run`.",
+     "- Read AGENTS.md › Using weave first: the primer,",
+     " every tool by job, plans with turn budgets, and common errors with their fixes."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    62,
+    40,
+    43
+   ],
+   [
+    "replace",
+    62,
+    68,
+    43,
+    44,
+    [
+     " weave as a stack of four layers, top to bottom: agents calling weave_query and weave_update_entity over MCP, REST and CLI; documents on every record; tables with relations and rollups; one SQLite file named acme.db"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    77,
+    44,
+    53
+   ],
+   [
+    "replace",
+    77,
+    78,
+    53,
+    54,
+    [
+     "organize the work. The product principles"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    86,
+    54,
+    62
+   ],
+   [
+    "replace",
+    86,
+    88,
+    62,
+    64,
+    [
+     " project, served by one Node process on a laptop or a small VPS behind your",
+     " own TLS and login (see Self-hosting)."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    64,
+    65
+   ],
+   [
+    "replace",
+    89,
+    93,
+    65,
+    69,
+    [
+     " sign-in. A new account starts at `/start`, which sets up a workspace, a",
+     " template and an agent connection. `weave backup --dest weave://<host>/<account>`",
+     " sends a self-hosted install's sealed nightly archive there (the cloud stores",
+     " ciphertext only), and `weave workspace migrate` moves a workspace across."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    69,
+    70
+   ],
+   [
+    "replace",
+    94,
+    95,
+    70,
+    71,
+    [
+     " `node:sqlite`, and the only third-party code is vendored and pinned."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    71,
+    72
+   ],
+   [
+    "replace",
+    96,
+    99,
+    72,
+    75,
+    [
+     " Codex CLI, Cursor, Gemini CLI), a scriptable CLI, row references such as",
+     " `Task#12` everywhere, and markdown documents addressable as plain URLs",
+     " (`/e/Task#12/doc.md`, `.html`, `.pdf`)."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    75,
+    76
+   ],
+   [
+    "replace",
+    100,
+    101,
+    76,
+    77,
+    [
+     " any change to a row: edits, creates, deletes, links and comments."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    77,
+    78
+   ],
+   [
+    "replace",
+    102,
+    105,
+    78,
+    81,
+    [
+     " per editing session), browsable and restorable from the page, `weave",
+     " doc-revisions` / `weave doc-restore`, or the `weave_doc_revisions` /",
+     " `weave_doc_restore` MCP tools."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    108,
+    81,
+    84
+   ],
+   [
+    "replace",
+    108,
+    111,
+    84,
+    87,
+    [
+     "Open source. Open tests. Open roadmap. Inspect the implementation,",
+     "test suites and CI results.",
+     "The development workspace holds the roadmap,"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    118,
+    87,
+    94
+   ],
+   [
+    "replace",
+    118,
+    119,
+    94,
+    95,
+    [
+     "maintenance model separates those"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    194,
+    95,
+    170
+   ],
+   [
+    "replace",
+    194,
+    195,
+    170,
+    171,
+    [
+     "Agents: MCP, REST, and CLI."
+    ]
+   ],
+   [
+    "equal",
+    195,
+    198,
+    171,
+    174
+   ],
+   [
+    "replace",
+    198,
+    202,
+    174,
+    178,
+    [
+     "|Documents on every record|Relation map|Search across workspaces|",
+     "|---|---|---|",
+     "|weave entity page: a markdown document rendered beside the entity|weave relation map of a Launch workspace: Milestone, Person and Task tables with their row counts, joined by relation lines with a cardinality label|weave command-K search palette showing cross-workspace results with copyable permalinks|",
+     "|Every entity carries markdown documents, addressable as `.md`, `.html`, and `.pdf` URLs.|The schema, drawn: each table with its row count, and relations labelled with cardinality. Automations appear on the same map.|⌘K across every workspace, matching names, text, documents and comments, with copyable permalinks.|"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    203,
+    178,
+    179
+   ],
+   [
+    "replace",
+    203,
+    204,
+    179,
+    180,
+    [
+     "weave table with one row opened in the dock beside it, the breadcrumb on one line above the table toolbar"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    207,
+    180,
+    183
+   ],
+   [
+    "replace",
+    207,
+    211,
+    183,
+    187,
+    [
+     "|Kanban board|Phone layout|",
+     "|---|---|",
+     "|weave Task table in a Launch workspace shown as a kanban board grouped by Status, with Todo, Doing, Review and Done columns of task cards that show each task|weave Task table on a 390 px wide phone, each task row showing a status chip and an owner chip, with a floating Search Task bar and a round + button at the bottom of the screen|",
+     "|A table view in board layout, one column per Status. Drag a card into another column to change its Status, with Undo.|The same table at 390 px: status and owner chips on every row, search and + at the bottom. + opens a New row sheet that stays open for the next row.|"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    220,
+    187,
+    196
+   ],
+   [
+    "replace",
+    220,
+    234,
+    196,
+    210,
+    [
+     "|Capability|What weave provides|What to compare|",
+     "|---|---|---|",
+     "|Your existing agent|Native MCP, REST and CLI over the browser's engine|Agent setup, schema access, permissions and recovery, not just whether a product has a chatbot|",
+     "|Documents with a home|Markdown document fields on typed, related records|Keep a brief, its status and its related work together; live co-editing is not provided|",
+     "|Structure as records|Inspectable system records for spaces, tables and fields|Work with both content and the structure that organizes it|",
+     "|Flexible relations|One field can target several allowed record types, including tables and spaces|Multi-target relations have no inverse fields or lookup/rollup support; relationship properties still need a junction record|",
+     "|Integrated listening|Incoming webhooks, API polling, persisted outbound retries and inspectable failures|Turn external changes into records and actions; first-poll baselines and missing deletion events limit synchronization|",
+     "|Stable capture|Forms with stable keys, aliases, server-filled fields and retry receipts|Submit through browser, HTTP, CLI or MCP without general write access; anonymous intake requires operator enablement|",
+     "|Portable operation|SQLite storage, JSON interchange, backup/restore and MIT source|Operate independently; preserve attachments and keystore material with the appropriate backup|",
+     "|Addressable content|ID-based permalinks; document URLs for Markdown, HTML and PDF|Renames preserve ID-based references; moving hosts needs routing or redirects|",
+     "|Customization|Render HTML documents, build against APIs, or modify the source|HTML-document scripts execute on the application origin; trust their authors|",
+     "|Access control|Workspace roles, private spaces, member roles, space-scoped tokens, share links and separate credential grants|No general field-level account permissions; hidden columns are not access controls|",
+     "|Small runtime|One Node process, no separate database server or build step|Simple deployment shape; comparative speed and large-scale performance remain unmeasured|",
+     "|Open development|Public source and tests, plus a roadmap and issue tracker in weave|Inspect implementation, checks and direction; test code is not a passing test result|"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    210,
+    211
+   ],
+   [
+    "replace",
+    235,
+    239,
+    211,
+    215,
+    [
+     "Details: relations,",
+     "listening and automation,",
+     "forms, and product principles.",
+     "Named-product comparisons remain in the comparison guides."
+    ]
+   ],
+   [
+    "equal",
+    239,
+    246,
+    215,
+    222
+   ],
+   [
+    "replace",
+    246,
+    253,
+    222,
+    229,
+    [
+     "|Project|License|Install shape|Optimized for|",
+     "|---|---|---|---|",
+     "|**weave**|MIT|One Node process, one file, no dependencies|Agent access, documents on every row, running from a git checkout|",
+     "|NocoDB|Sustainable Use License (since v0.301.0)|Docker + external DB|Putting a smart-spreadsheet UI on an existing MySQL/Postgres|",
+     "|Baserow|MIT (core; paid tiers separate)|Docker Compose + Postgres|A full Airtable-shaped product, cloud or self-hosted|",
+     "|Grist|Apache-2.0|Docker or Node|Spreadsheet-grade formulas and data analysis|",
+     "|Teable|AGPL-3.0 (core)|Docker + Postgres|Postgres-native scale with an Airtable UI|"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    229,
+    230
+   ],
+   [
+    "replace",
+    254,
+    255,
+    230,
+    231,
+    [
+     "*Licenses and packaging as of August 2026; check each project for current terms.* Pick weave if you want **connected tables plus markdown documents plus an MCP server, with no container, no database server, and no dependency tree**, and evaluate the others if you need richer access policies or a mature plugin ecosystem (see what weave is not)."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    258,
+    231,
+    234
+   ],
+   [
+    "replace",
+    258,
+    274,
+    234,
+    250,
+    [
+     "|Area|Details|",
+     "|---|---|",
+     "|Data model|Spaces → tables → entities. Field types: text, number, rating (icons you click to fill, 0 to a max), date, date range, checkbox, toggle (a switch with two named states), url, email, select, multiselect, workflow states, attachments (files with small previews; one can be the record's cover picture), avatar (a record's face on its chip, card and header), bidirectional relations, lookups, rollups (count, sum, avg, median, min, max, range, stdev, distinct, filled, empty, join, computed over a relation or over a whole table from the space's own record, which is what the grid footer draws), formulas, and any number of markdown document fields per entity.|",
+     "|Statistics|`weave stats ` (also `weave_stats` and `GET /api/tables/:ref/stats`): every column summarised (five-number summary, stdev and a histogram for numbers, ranked distributions for chips, earliest/latest/span for dates), grouped with `--by`, narrowed with `--where`, cut to one column and its rollups with `--field`.|",
+     "|Views|Every table view takes a layout: table, list or board. Board draws kanban columns or a picture gallery with small, medium or large covers and adds swimlanes from a second group level; drag a card to another column or lane to change its field, with Undo. Pick two to four cards to Compare them side by side, or drop a picture on a card to set its cover. The View pane beside the table holds filters, sort (three keys), group (five levels, with subtotals) and saved views, and `weave_query` can name a saved view. Entity pages dock beside the table or open full page, and the relation map draws the schema with its automations. Inline editing everywhere.|",
+     "|Documents|Every doc is a native URL: `.md`, `.mmd`, `.html`, `.pdf`. Mermaid diagrams, raw HTML and math render in place; `[[Table#12]]` mentions resolve to links. Whole-entity export paginates one page per document. Math is KaTeX only (`$…$` / `$$…$$`, vendored + offline); the other fence engines Vditor knows (graphviz, echarts, plantuml, mindmap, abc, flowchart) are deliberately not vendored, so those fences stay plain code blocks.|",
+     "|Automations|Record creation, field/state changes, schedules, polled-source changes and inbound webhooks trigger field/document/comment writes, row upserts, HTTP calls and external runs. Outbound retries persist across restarts; failures are inspectable and replayable. See the automation guide.|",
+     "|Search|Universal ⌘K across workspaces with copyable permalinks, matching names, text values, documents and comments.|",
+     "|Storage|One workspace = one `.db` file (WAL, row-level writes, crash-safe). Legacy JSON workspaces migrate automatically; `exportJSON`/`importJSON` remain the human-readable interchange. CLI, server, and MCP can run concurrently.|",
+     "|Forms|Constrained intake through `/f/<id>`, HTTP JSON or standard form bodies, CLI and MCP. Stable input keys and aliases survive label changes; hidden fields are server-filled. Persisted idempotency receipts protect retries for 24 hours. URL prefilling opens a draft; a POST or Send creates the record. Anonymous intake needs `WEAVE_ANONYMOUS_FORMS=1`. See forms for admission, rate limits and receipt capacity.|",
+     "|Sharing|A share link (a `wvs_` token) opens one row, table, space, saved view or the whole workspace at read, edit or manage access, public or for signed-in accounts only. Architects mint, renew and revoke links. Each lasts thirty days unless renewed, and none reaches the schema or anything outside its scope.|",
+     "|Templates|Forty-two starter templates in thirteen categories at setup, searchable by the tool they resemble (\"asana\", \"jira\"). **Use template** copies a template space, such as the CRM or Money space in the docs workspace, into your workspace.|",
+     "|Phone|Below 720 px, menus, pickers and the Group popover open as bottom sheets and touch targets are 44 px. Search and + float at the bottom, and the New row sheet stays open for the next row. Board columns snap at 85% of the screen width, and a 250 ms hold lifts a card.|",
+     "|Distribution|Every release publishes `ghcr.io/grunion-ai/weave:<version>` and `:latest`, plus an Official MCP Registry entry, `io.github.grunion-ai/weave`, that runs the image over stdio. The repository is also a Claude Code plugin marketplace for weave cloud.|",
+     "|History|Each row's Activity panel lists its events, field diffs and document revisions, with Restore. The audit log records the account behind each write; a signed-in caller cannot write under another name. `PATCH /api/entities/:id` with `If-Match` refuses a stale revision (412) and writes nothing; the grid sends it, so two people editing one cell in the browser cannot overwrite each other.|",
+     "|Interfaces|Web UI (vanilla JS, no build step) · REST API · CLI (`bin/weave.js`) · MCP server: `weave mcp` over stdio, or HTTP with OAuth 2.1 sign-in on an instance with a provider configured. 66 tools, 17 listed by default; `tools/list` names only the tools the caller's role may call.|"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    287,
+    250,
+    263
+   ],
+   [
+    "replace",
+    287,
+    292,
+    263,
+    264,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    327,
+    264,
+    299
+   ],
+   [
+    "replace",
+    327,
+    332,
+    299,
+    300,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    335,
+    300,
+    303
+   ],
+   [
+    "replace",
+    335,
+    336,
+    303,
+    304,
+    [
+     "the API, in documents and in agent tool calls. See AGENTS.md for"
+    ]
+   ],
+   [
+    "equal",
+    336,
+    346,
+    304,
+    314
+   ],
+   [
+    "replace",
+    346,
+    348,
+    314,
+    316,
+    [
+     " (an edge gate, an identity provider) and the rule: the surface is the",
+     " operator's choice. The built-in passkey door, Door B, was removed after 0.4.52."
+    ]
+   ],
+   [
+    "equal",
+    348,
+    349,
+    316,
+    317
+   ],
+   [
+    "replace",
+    349,
+    350,
+    317,
+    318,
+    [
+     " Authelia: one config block and one check each."
+    ]
+   ],
+   [
+    "equal",
+    350,
+    351,
+    318,
+    319
+   ],
+   [
+    "replace",
+    351,
+    355,
+    319,
+    323,
+    [
+     " Auth0, Keycloak, Authentik, Google). `weave account link <name>` mints a",
+     " one-time invite link that opens an account to it; signing in creates none,",
+     " and weave keeps one verified email per sign-in identity, nothing else. `WEAVE_ORIGIN`",
+     " names the origin the provider sends people back to. Agents keep `wv_` tokens."
+    ]
+   ],
+   [
+    "equal",
+    355,
+    356,
+    323,
+    324
+   ],
+   [
+    "replace",
+    356,
+    357,
+    324,
+    325,
+    [
+     " custom domain, one replica."
+    ]
+   ],
+   [
+    "equal",
+    357,
+    358,
+    325,
+    326
+   ],
+   [
+    "replace",
+    358,
+    359,
+    326,
+    327,
+    [
+     " the service unit lives here."
+    ]
+   ],
+   [
+    "equal",
+    359,
+    360,
+    327,
+    328
+   ],
+   [
+    "replace",
+    360,
+    361,
+    328,
+    329,
+    [
+     " and keystore), `weave restore`, the nightly switch, retention."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    362,
+    329,
+    330
+   ],
+   [
+    "replace",
+    362,
+    363,
+    330,
+    331,
+    [
+     " when it is wrong."
+    ]
+   ],
+   [
+    "equal",
+    363,
+    373,
+    331,
+    341
+   ],
+   [
+    "replace",
+    373,
+    374,
+    341,
+    342,
+    [
+     "model behind that rule is in SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    374,
+    380,
+    342,
+    348
+   ],
+   [
+    "replace",
+    380,
+    385,
+    348,
+    353,
+    [
+     " three roles in a workspace: an observer reads and comments, an editor writes",
+     " records, an architect also changes structure, accounts and keys. An architect can",
+     " mint a share link that opens one record, table, space or saved view to whoever",
+     " holds it. Private spaces, member roles and space-scoped tokens narrow access",
+     " by space. Ordinary fields do not have separate read permissions."
+    ]
+   ],
+   [
+    "equal",
+    385,
+    386,
+    353,
+    354
+   ],
+   [
+    "replace",
+    386,
+    389,
+    354,
+    357,
+    [
+     " sign in through one OpenID Connect provider, but only after",
+     " `weave workspace require-auth`. Until then, anyone who reaches the port can do",
+     " everything an architect can."
+    ]
+   ],
+   [
+    "equal",
+    389,
+    390,
+    357,
+    358
+   ],
+   [
+    "replace",
+    390,
+    393,
+    358,
+    361,
+    [
+     " https://weave.grunion.ai runs the code in this repository behind a sign-in.",
+     " `weave backup`, `weave restore` and `weave workspace migrate` carry a",
+     " workspace between your install and weave cloud."
+    ]
+   ],
+   [
+    "equal",
+    393,
+    394,
+    361,
+    362
+   ],
+   [
+    "replace",
+    394,
+    396,
+    362,
+    364,
+    [
+     " Code plugin in Connect your agent installs weave's MCP",
+     " connection into Claude Code and adds nothing to weave."
+    ]
+   ],
+   [
+    "equal",
+    396,
+    397,
+    364,
+    365
+   ],
+   [
+    "replace",
+    397,
+    398,
+    365,
+    366,
+    [
+     " not by years of production mileage across thousands of installs."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    399,
+    366,
+    367
+   ],
+   [
+    "replace",
+    399,
+    401,
+    367,
+    369,
+    [
+     "If those are dealbreakers, Baserow,",
+     "NocoDB, and Grist"
+    ]
+   ],
+   [
+    "equal",
+    401,
+    414,
+    369,
+    382
+   ],
+   [
+    "replace",
+    414,
+    415,
+    382,
+    383,
+    [
+     "file you own. See docs/PARITY.md for the feature-by-feature"
+    ]
+   ],
+   [
+    "equal",
+    415,
+    426,
+    383,
+    394
+   ],
+   [
+    "replace",
+    426,
+    427,
+    394,
+    395,
+    [
+     "listed under Third-party."
+    ]
+   ],
+   [
+    "equal",
+    427,
+    467,
+    395,
+    435
+   ],
+   [
+    "replace",
+    467,
+    468,
+    435,
+    436,
+    [
+     "local docs workspace. See CONTRIBUTING.md before opening a PR;"
+    ]
+   ],
+   [
+    "equal",
+    468,
+    472,
+    436,
+    440
+   ],
+   [
+    "replace",
+    472,
+    486,
+    440,
+    452,
+    [
+     "- mermaid 11.17.2, MIT © Knut Sveidqvist & contributors",
+     "- DOMPurify 3.4.17 (bundled inside mermaid), Apache-2.0 and MPL-2.0 © Cure53 and other contributors",
+     "- Vditor 3.11.3 (pruned: only the assets weave loads), MIT © B3log (full text in `public/vendor/vditor/LICENSE`)",
+     "- KaTeX 0.18.11 (js + css + woff2 fonts + mhchem, inside Vditor), MIT © Khan Academy & contributors",
+     "- highlight.js 11.7.0 (inside Vditor), BSD-3-Clause © Ivan Sagalaev & contributors",
+     "- @tabler/core 1.4.0, MIT © Paweł Kuna & The Tabler Authors",
+     "- Lucide (no version recorded; icon shapes, with motion CSS from movingicons.dev under MIT), ISC © Lucide Contributors",
+     "- DejaVu Sans 2.37 (`DejaVuSans.ttf`, PDF export Unicode fallback), Bitstream Vera license © Bitstream, Inc.; DejaVu changes public domain; Arev glyphs © Tavmjong Bah (full text in `src/vendor/fonts/DejaVuSans-LICENSE.txt`)",
+     "- decklet 0.3.3+cf73916 (the slide engine, pinned by commit), MIT",
+     "- Lobe Icons 1.95.1 (brand marks), MIT © LobeHub",
+     "- Milkdown Crepe 7.23.0 (the document editor behind the `weave.editor` switch, bundled with its MIT, ISC, BSD and MPL-2.0 OR Apache-2.0 dependencies listed in `public/vendor/crepe/THIRD-PARTY.txt`), MIT © Mirone (full text in `public/vendor/crepe/LICENSE`)",
+     "- Tiptap 3.35.0 (the document editor behind `weave.editor` = `tiptap`, bundled with ProseMirror, marked, lowlight and highlight.js; the 54 packages and their MIT and BSD-3-Clause licenses are in `public/vendor/tiptap/THIRD-PARTY.txt`), MIT © Tiptap GmbH (full text in `public/vendor/tiptap/LICENSE`)"
+    ]
+   ],
+   [
+    "equal",
+    486,
+    494,
+    452,
+    460
+   ],
+   [
+    "replace",
+    494,
+    495,
+    460,
+    461,
+    [
+     "Self-hosting) and run `require-auth`. Every page and API route"
+    ]
+   ],
+   [
+    "equal",
+    495,
+    508,
+    461,
+    474
+   ],
+   [
+    "replace",
+    508,
+    509,
+    474,
+    475,
+    [
+     "SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    509,
+    511,
+    475,
+    477
+   ],
+   [
+    "replace",
+    511,
+    513,
+    477,
+    478,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

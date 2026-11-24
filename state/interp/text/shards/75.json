@@ -3173,5 +3173,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "05927d39eea2": {
+  "identity": {
+   "one_liner": "Go 编写的 LLM 代理网关，单二进制运行，含内嵌 Svelte 面板",
+   "review": "9router-go 用单个 Go 二进制实现 LLM 请求代理网关，连接 Claude Code、Cursor、Cline 等 CLI 工具与多种 AI 提供商，默认监听 20130 端口，数据存于 ~/.9router。它读取与 9Router（Node.js 版）相同的 SQLite 数据库，提供 RTK 压缩、组合路由、多账户轮询、代理绑定等功能；不含 Node.js 运行时，支持 Docker、开机自启与后台守护模式。",
+   "highlights": [
+    "提供 fallback、round-robin、sticky、capacity、fusion 等组合路由策略，并支持按 API key 绑定代理池",
+    "内嵌 Svelte 面板，支持 SSE 实时用量与控制台日志流、多币种费用显示、自定义时间窗口用量分析",
+    "读取 9Router 的同一 SQLite 数据库，无需迁移；bootstrap 仅做增量结构变更"
+   ],
+   "use_cases": [
+    "让 Claude Code、Codex、Cursor、Cline 等 CLI 工具通过本地代理端点访问多种 OpenAI/Anthropic/Gemini 兼容提供商",
+    "在 9Router 与 Go 版之间共用同一份数据目录，或以不同端口并行运行",
+    "在无 Node.js 运行时或无 AVX 指令集的环境中以单二进制或 Docker 部署网关"
+   ]
+  },
+  "sha": "05927d39eea2",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7753dcd216b2": {
+  "identity": {
+   "one_liner": "基于 Super Agent 架构的多图+多智能体授权渗透测试平台",
+   "review": "Flotilla 是一个面向授权安全测试的多智能体渗透测试系统，用户输入目标资产、任务目标与授权范围后，由规划器决策、工作节点执行、Watch Dog 纠偏，在授权边界内完成侦察、验证与证据收集并生成报告。系统以 DAG、探索图、资产图与黑板共享记忆，所有流量经 Go 出站代理校验授权范围。部署需 Docker Compose 与 OpenAI 兼容的 LLM API Key。",
+   "highlights": [
+    "采用 Planner/Worker/Watch Dog 分层调度，任务经租约与防双写机制分配，发现需通过六道证据闸复核后方可进入报告",
+    "包含任务依赖图、探索图、资产图、黑板与线索板等多种视图，均由同一份事实数据派生；支持运行中注入提示与审批中心",
+    "目标流量统一经 Go 出站代理，按项目授权校验 URL、域名、IP 与重定向，提供 DNS 重绑定防护与写动作记账"
+   ],
+   "use_cases": [
+    "在明确授权范围内的渗透测试项目执行，包括侦察、漏洞验证与证据收集",
+    "CTF 与安全研究场景下的多智能体自动化测试",
+    "需要审计留痕与授权边界管控的安全测试任务管理"
+   ]
+  },
+  "sha": "7753dcd216b2",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

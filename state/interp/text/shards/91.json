@@ -3174,5 +3174,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "145ffc363a2b": {
+  "identity": {
+   "one_liner": "Rust 编写的关系数据库，可嵌入或作服务器运行，多模型多插件架构",
+   "review": "Turborel 是用 Rust 编写的关系数据库系统，当前为 0.0.0 alpha 版本，构建与协议均可能变更。它可嵌入应用作为库使用，也可作为服务器进程 turboreld 运行，通过命令行客户端 turborel 以 SQL 查询。其存储引擎、索引方法、数据类型、认证、传输协议等均为插件接口，提供内置实现且可替换或扩展；预发布构建覆盖 Linux、macOS 与 Windows，并提供 nightly 容器镜像。",
+   "highlights": [
+    "支持 SQL-86 至 SQL:2023 的标准 SQL，事务默认 READ COMMITTED，可升至 SERIALIZABLE，基于多版本并发控制与预写日志实现崩溃恢复",
+    "存储上每表可选行存或列存，内置 B-link 树、线性哈希与 R 树索引，索引方法可作为插件注册",
+    "提供 SQL/XML、SQL/MM Spatial（27 种几何类型）、SQL/MM Full-Text（43 种语言的全文检索）与 SQL/JSON 等扩展能力"
+   ],
+   "use_cases": [
+    "以库形式嵌入应用，作为进程内数据库使用",
+    "以服务器模式部署为多客户端共享的关系数据库，配合 Viewstamped Replication 实现多数派提交复制",
+    "在单一 SQL 系统中处理结构化、空间、全文与 JSON 多类数据混合的查询场景"
+   ]
+  },
+  "sha": "145ffc363a2b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4c28437ba9e6": {
+  "identity": {
+   "one_liner": "Antigravity 本地伴生工具：遥测聚合、配额监控、只读计费分析与多配置文件管理",
+   "review": "AgyMate 是面向 Antigravity 用户的本地 Go 单二进制工具，提供配额轮询、SQLite 只读令牌计费估算（支持 USD/CNY 与自定义费率）、隔离多账户配置文件管理及 Web 仪表盘/插件界面。安装经脚本校验 SHA256，支持 setup 预览与卸载清理；仅访问本地回环地址，不修改官方客户端文件。",
+   "highlights": [
+    "以只读模式（mode=ro&query_only=1）扫描本地 SQLite 会话数据库，按 today/last_7d 等区间估算等价 API 成本与订阅 ROI",
+    "轮询本地 Language Server Connect-RPC 守护进程，获取 5 小时/周配额、每模型剩余百分比与燃烧率估计",
+    "通过 agymate profile 命令创建、启动、停止和删除隔离配置文件沙箱，对官方 main/ide 槽位只读保护"
+   ],
+   "use_cases": [
+    "同一台机器上使用多个 Antigravity 账户或配置文件，需要分组查看各槽位配额与离线快照",
+    "需要按本地会话数据估算模型用量等价 API 费用，并使用自定义 pricing.json 费率",
+    "希望通过 Telegram 或 Webhook（Slack/Discord/飞书/钉钉等）接收低配额与任务完成通知"
+   ]
+  },
+  "sha": "4c28437ba9e6",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c4c3b825d474": {
+  "identity": {
+   "one_liner": "面向 DBA 的轻量 TiDB 集群管理平台，单二进制、经 SSH 接管 TiUP 集群",
+   "review": "TMP 是一个用 Go + Gin + SQLite 构建的 TiDB 集群管理平台，面向管理 TiUP 部署集群的 DBA。它仅通过 SSH 到 TiUP 中控机执行 tiup cluster display 采集拓扑、版本、实例状态等信息，支持异步任务、内置 6 类 28 项巡检与报告下载。README 标注 MVP 边界：监控趋势、慢查询、告警未接入，定时巡检调度为占位，主机资源仅采集 TiUP 主机自身。",
+   "highlights": [
+    "单二进制交付：Go + Gin + GORM + SQLite 纯 Go 驱动无 CGO，前端产物经 go:embed 内嵌，首次启动自动建 19 张表并初始化巡检模板",
+    "三通道采集：版本用 tiup display 与 SELECT VERSION() 交叉校验，拓扑与实例状态以 display 输出为唯一来源，凭据 AES-256-GCM 加密存储",
+    "内置 admin/operator/viewer 三级角色、统一错误码体系，支持 TMP_MOCK 演示模式无需真实集群走通全流程"
+   ],
+   "use_cases": [
+    "TiUP 部署的 TiDB 集群日常巡检：立即巡检生成可下载报告",
+    "集群信息集中查看：拓扑、实例、用户、参数、会话视图与外部系统链接拼装",
+    "无真实集群的演示或评估：TMP_MOCK=true 使用内置 3 套假集群数据"
+   ]
+  },
+  "sha": "c4c3b825d474",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

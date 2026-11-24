@@ -3545,5 +3545,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6e3e8abc7d16": {
+  "identity": {
+   "one_liner": "基于 Python CLI 的抖音批量下载工具，支持视频、图集、合集与音乐下载及 AI Agent 集成",
+   "review": "douyin-downloader 是一个用于下载抖音视频、图片及音频的开源工具，面向开发者与个人批量归档场景。它提供 CLI 版本和 AI Agent Skill 两种形态：CLI 支持 YAML 配置、增量下载（跳过已存文件）、日期过滤、失败重试与 SQLite 历史去重，可下载创作者主页、合集、收藏、喜欢及音乐；Skill 版供 Claude Code、Codex、Cursor 等调用，可查询热搜、搜索与转录，但下载仍需 CLI 完成。运行需 Python 3.10+，并需通过浏览器登录获取 cookies。",
+   "highlights": [
+    "支持创作者主页、单条/批量作品、合集、收藏/喜欢及音乐的批量下载，内置增量下载与 SQLite 历史去重",
+    "提供热搜榜、关键词搜索、创作者资料查询、直播录制（FFmpeg 分段 MP4）与本地 Whisper 字幕转录功能",
+    "同一命令集可脱离 Agent 直接运行，以 JSON 行输出结果；支持 CLI 参数与 YAML 配置文件"
+   ],
+   "use_cases": [
+    "批量归档指定创作者的视频/图集内容，按日期范围或数量上限筛选",
+    "为 AI Agent（Claude Code、Codex、Cursor 等）接入抖音热搜、搜索与创作者数据查询能力",
+    "录制抖音直播间并转录本地媒体文件字幕"
+   ]
+  },
+  "sha": "6e3e8abc7d16",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec871f1005c2": {
+  "identity": {
+   "one_liner": "可部署在数据旁边的开源多数据库 Web SQL 编辑器",
+   "review": "LibreDB Studio 是一个以 MIT 许可发布的 Web 端 SQL 编辑器，通过 Docker 容器或 npm 包部署在数据所在环境（服务器、Kubernetes、PaaS）中，用户经浏览器访问，无需在各客户端安装桌面工具。它支持连接 PostgreSQL、MySQL、Oracle、SQL Server、MongoDB、Redis、ClickHouse 等多种数据库，提供 SSO 登录与审计日志功能。注意：非 localhost 或 HTTPS 访问时需设置 AUTH_COOKIE_SECURE=false 才能登录。",
+   "highlights": [
+    "支持连接 PostgreSQL、MySQL、Oracle、SQL Server、MongoDB、Redis、ClickHouse、DuckDB 等多种数据库引擎",
+    "提供 SSO 单点登录与审计日志（audit trail），采用 MIT 许可证",
+    "可通过 Docker、npx、npm 包、Helm Chart、Operator 等多种方式部署"
+   ],
+   "use_cases": [
+    "为托管云数据库提供免开公网端口、免 SSH 隧道的 Web 访问入口",
+    "团队环境中需要 SSO 与审计日志的统一数据库管理界面",
+    "嵌入自有产品中作为数据库管理组件（npm 安装）"
+   ]
+  },
+  "sha": "ec871f1005c2",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7cec716fa37": {
+  "identity": {
+   "one_liner": "基于 SQLite 的事件溯源与文档数据库，Marten/Polecat 同源 API 的 Critter Stack 组件",
+   "review": "Fisher 是 JasperFx Critter Stack 中面向 SQLite 的事件存储与文档数据库，提供与 Marten、Polecat 相同的 API，无需数据库服务器，数据存储为本地文件。适用于 .NET 开发者在单进程内使用事件溯源和文档存储。其单元工作为顺序写入，每数据库文件仅支持一个写入者，且不含消息总线。文档含迁移指南，标注与 Marten/Polecat 在并发、排序规则、时间戳精度等行为上的差异。",
+   "highlights": [
+    "提供事件溯源与文档存储，API 与 Marten、Polecat 相同，通过 AddFischer 进行 DI 注册",
+    "支持四种身份类型、LINQ 查询（含 join/分组/分页）、patching、批量插入、软删除、自然键及复合投影",
+    "通过 JasperFx.Events.ComplianceTests 的 74 个套件 994 项测试，附带 AspNetCore 与 EntityFrameworkCore 伴生包"
+   ],
+   "use_cases": [
+    "无需部署数据库服务器的 .NET 应用中实现事件溯源或文档持久化",
+    "数据库每租户（file per tenant）场景下的多租户存储与并发隔离",
+    "本地开发、测试环境：备份即复制文件，测试无需 fixture"
+   ]
+  },
+  "sha": "a7cec716fa37",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "91b56071f9de": {
+  "identity": {
+   "one_liner": "Docker 自部署的多平台 AI 应用自动签到系统，内置多平台适配器",
+   "review": "该项目是一个以 Docker 部署的 Web 系统，用于定时执行 AI 编程平台的签到或活动领取任务。内置 Trae、WorkBuddy、CodeBuddy、ZCode、Qoder、AiPy Pro 六个平台适配器，并提供自定义平台配置接入任意服务。数据存储使用内置 SQLite，无需外部数据库；支持多用户注册、权限隔离、操作审计日志与积分统计。使用前需按各平台说明从客户端或网页获取 Access/JWT Token。",
+   "highlights": [
+    "内置 Trae、WorkBuddy、CodeBuddy、ZCode、Qoder、AiPy Pro 六个平台适配器，支持每日签到与活动领取两种模式，并提供自定义平台接入",
+    "每个账号可单独设置定时签到时间，签到结果留痕，失败自动通知，并自动识别响应中的积分字段汇总统计",
+    "内置 SQLite 存储，通过 Docker Compose 一条命令部署，支持 GHCR 双架构镜像、端口自定义与首次初始化向导"
+   ],
+   "use_cases": [
+    "统一管理多个 AI 编程平台账号的每日签到任务，避免手动逐平台操作",
+    "多用户环境下由管理员统一部署，各用户独立管理自己的平台账号与签到记录",
+    "需要通过自定义平台配置接入其他具备签到接口的服务"
+   ]
+  },
+  "sha": "91b56071f9de",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

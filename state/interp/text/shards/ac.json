@@ -3239,5 +3239,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7c774a746f6d": {
+  "identity": {
+   "one_liner": "基于 pg_stat_statements 与 HTTP 压测对比的 PostgreSQL 性能排查 CLI 工具",
+   "review": "pgpa 是一个 Rust 编写的命令行工具，用于排查 PostgreSQL 查询性能问题：审计数据库能力、按耗时排名 pg_stat_statements 语句、采样锁等待、运行 EXPLAIN、执行启发式诊断，并可从 TOML 清单运行固定速率的 HTTP 工作负载做前后对比，输出离线报告。面向数据库调优与运维人员。要求 PostgreSQL 16–18，统计需启用 pg_stat_statements；单次对比会被标记为不确定结论。",
+   "highlights": [
+    "提供 doctor/inspect/capture/locks/explain/diagnose/run/compare/report 九个子命令，覆盖审计、统计排名、锁采样、计划分析与报告生成",
+    "工作负载引擎以有界速率和并发运行 TOML 定义的 HTTP 压测，compare 验证前后可比性并输出延迟分位数（p50/p95/p99）",
+    "默认不执行查询文本、不修改服务器配置、不写入凭据，远程非回环连接要求 TLS，报告支持 JSON/Markdown/HTML 离线输出"
+   ],
+   "use_cases": [
+    "通过 inspect 与 diagnose 定位高缓冲区读取、行数估算偏差、磁盘溢出等可疑查询",
+    "以锁采样观察等待者与阻塞者关系，排查行锁争用会话",
+    "在数据库调优（如索引变更、查询改写）前后运行可重复 HTTP 工作负载并生成对比报告"
+   ]
+  },
+  "sha": "7c774a746f6d",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

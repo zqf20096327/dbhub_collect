@@ -3185,5 +3185,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8ebcc3964654": {
+  "identity": {
+   "one_liner": "SQL 数据库课程练习集，涵盖建模、查询、存储过程等多主题脚本",
+   "review": "该仓库汇集数据库课程的 SQL 练习材料，包含 ej00 至 ej14 共多个独立场景（新闻、库存、航班、电影租赁等）的脚本，以及 codo a codo 目录下的学校/学生主题练习、CSV 数据和 PDF 说明。练习混合 MySQL 与 T-SQL 语法，各文件方言不通用，需在测试库中按文件分别执行 DDL、插入和查询。",
+   "highlights": [
+    "包含约 15 个独立 SQL 场景练习，覆盖 DDL、DML、JOIN、子查询、聚合、视图、存储过程、触发器与事务",
+    "混合 MySQL（AUTO_INCREMENT、LIMIT）与 SQL Server/T-SQL（#临时表、TRY/CATCH、DATEADD）两种方言",
+    "附带 CSV 示例数据、练习题文本与 PDF 配套材料"
+   ],
+   "use_cases": [
+    "配合数据库课程练习关系建模、约束定义与多表查询",
+    "在 MySQL 或 SQL Server 环境中练习视图、存储过程、触发器与事务语法",
+    "准备数据导入导出场景（CSV 加载、schema 演化脚本）的练手材料"
+   ]
+  },
+  "sha": "8ebcc3964654",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32d89df8fb79": {
+  "identity": {
+   "one_liner": "基于 MochiBerry 引擎、以运行时原生扩展加载 SQLite/Express/Vue 的 Web 生态",
+   "review": "SEVM 是运行在 MochiBerry 引擎之上的 Web 生态：HTTP、SQLite 与 node:* 垫片以 .dll/.so/.lbrct 原生扩展在运行时按 dlopen 模式加载，无需重新编译引擎。项目区分 node_modules（JS 框架包）与 mochi_modules（引擎原生插件）两类模块，原生模块须导出 mbjs_init_module 符号且 import 路径须以 .dll 结尾。核心引擎 stripped 构建约 1.21 MB，每个扩展约 60 KB。供希望在 MochiBerry 上搭建 SQLite+Express+Vue 应用者使用。",
+   "highlights": [
+    "提供 mochinode_net.dll（Winsock2 阻塞式 TCP/HTTP 服务器）与 mochinode_sqlite.dll（sqlite3 3.50.4 桥接、支持 prepared statement）",
+    "包含 node:http、node:sqlite、node:events、node:fs、Express 等垫片与 dynalib 桥接（libdynalib，107/107 测试通过）",
+    "原生模块通过 LoadLibraryA 加载并查找 mbjs_init_module 导出符号，扩展在运行时加载，不增加引擎体积"
+   ],
+   "use_cases": [
+    "在 MochiBerry 引擎上运行 SQLite 后端加 Vue 3 SPA 的演示应用（examples/sevm-app，端口 8080）",
+    "开发面向 MochiBerry 的原生引擎插件（须遵守 mbjs_init_module 契约，且引擎需保留 MBJS_* 导出符号）",
+    "通过 dynalib 桥接在 JS 中调用 .so/.dll/.lbrct 动态库"
+   ]
+  },
+  "sha": "32d89df8fb79",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

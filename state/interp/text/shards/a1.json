@@ -3215,5 +3215,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7eb96ca8de97": {
+  "identity": {
+   "one_liner": "基于 LangGraph 状态机的文档问答助手，逐句核对引用证据后再作答。",
+   "review": "CiteRight 是一个检索问答（RAG）助手，支持上传 PDF、Markdown 与文本文件，混合检索（向量 + BM25、倒数排名融合），答案中的每条事实声明经 grounding 校验映射到证据，无证据或与来源矛盾的内容被移除或拒答。基于 LangGraph（17 个节点）与 FastAPI、React 实现，需 Python 3.11+、Node 22.12+ 及 Groq 或 OpenAI API key，支持 Docker 部署。仓库说明其前身是更广的 agent 平台，编码 agent 等部分保存在 archive/full-platform 分支。",
+   "highlights": [
+    "grounding 校验器将每条声明与证据比对，拒绝未检索到的引用并捕获与来源矛盾的声明；无足够证据时拒答",
+    "17 节点的 LangGraph 状态机路由问题至文档 RAG、知识图谱、经人工审批的网页搜索、计算器或通用对话",
+    "包含约 220 个单元/集成测试及离线评测门禁（路由基准、grounding 案例、证据质量、内存租户隔离），检索基准 28 题中 27 题正确文档进前 3"
+   ],
+   "use_cases": [
+    "需要回答附带可点击页码引用、并过滤无证据声明场景的个人或团队文档问答",
+    "部署 Docker 或 Hugging Face Spaces 演示实例（DEMO_MODE 提供限流与容量上限）",
+    "对每次网页搜索前需人工审批（human-in-the-loop）的检索问答流程"
+   ]
+  },
+  "sha": "7eb96ca8de97",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

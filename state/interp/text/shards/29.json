@@ -3429,5 +3429,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ae517b7d340e": {
+  "identity": {
+   "one_liner": "通过 LINQ 生成 Mango 查询的 CouchDB .NET 驱动",
+   "review": "CouchDB.NET 是面向 .NET/NET Standard 平台（含 ASP.NET Core、Xamarin）的 CouchDB 客户端库，将 LINQ 表达式转换为 Mango JSON 查询。它提供 CRUD、批量操作、Changes Feed（normal/longpoll/continuous）、索引与分区数据库管理、视图查询等接口，支持 Basic、Cookie、Proxy、JWT 四种认证，并允许自定义 HttpClient。未原生支持的 IQueryable 方法会抛出异常。",
+   "highlights": [
+    "支持将 LINQ（Where、OrderBy、Select、Min/Max/Sum 等）转换为 CouchDB Mango 查询 JSON",
+    "支持四种认证方式（Basic、Cookie、Proxy、JWT）与自定义 HttpClient",
+    "提供索引创建（含部分索引、分区索引）、分区数据库、Changes Feed 三种模式及视图查询接口"
+   ],
+   "use_cases": [
+    "在 .NET 应用中使用 LINQ 语法查询 CouchDB 的 Mango 选择器",
+    "需要监听数据库变更（continuous feed）或执行批量文档操作的场景",
+    "使用 CouchDB 分区数据库与索引优化查询的项目"
+   ]
+  },
+  "sha": "ae517b7d340e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ea751df63042": {
+  "identity": {
+   "one_liner": "通过 PDO 为 SQLite 数据库注册 MySQL 兼容函数的 PHP 库",
+   "review": "MySQLite 是一个 PHP 库，用于在通过 PDO 访问的 SQLite 数据库上注册 MySQL 函数。README 说明其适用场景为测试和开发中用 SQLite 替代 MySQL 数据库的情况。使用时调用 MySQLite::createFunctions($pdo) 一步完成注册，无需配置；它仅提供 MySQL 函数的一个有限子集，可通过在 trait 中添加 mysql_ 前缀的静态方法扩展，也可继承 MySQLite 在项目中自行添加。在 PHP 8.4+ 上使用 new PDO('sqlite:...') 方式时，各函数会触发 PHP 8.5 起废弃的方法调用并产生 deprecation 通知，改用 Pdo\\Sqlite 实例可避免。",
+   "highlights": [
+    "调用 MySQLite::createFunctions($pdo) 即可向 SQLite PDO 实例注册 MySQL 函数，无需配置",
+    "通过 MySQLite::getFunctionList() 获取支持的函数列表",
+    "支持两种扩展方式：在 src/Vectorface/MySQLite/MySQL 的 trait 中添加 mysql_[函数名] 静态方法，或继承 MySQLite 在项目中添加"
+   ],
+   "use_cases": [
+    "测试和开发环境中以 SQLite 数据库替代 MySQL 数据库时，使用 MySQL 函数执行查询",
+    "项目中需要 MySQLite 未覆盖的 MySQL 函数时，通过自定义静态方法注册补充",
+    "PHP 8.0 至 8.3 环境下使用 PDO 连接内存 SQLite 数据库"
+   ]
+  },
+  "sha": "ea751df63042",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fa2998692f26": {
+  "identity": {
+   "one_liner": "本地 AI 会话归档系统，统一存储并检索多种 AI 工具的对话历史",
+   "review": "Polylogue 是一个运行于本地的 AI 工作归档系统，用于收集 Claude Code、Codex、Gemini CLI 等编码代理以及 ChatGPT、claude.ai 等 Web 对话的会话记录，保留原始字节并解析为统一的会话模型，支持命令行、MCP 和 Web 界面检索、标注。安装依赖 Nix 或 Cargo 构建，可独立运行（SQLite）或以 Sinex 为主存储的主模式运行。代理通过三个 MCP 工具使用同一查询语法，适用于需要长期保存和审计 AI 会话历史的开发者工作流。",
+   "highlights": [
+    "读取各工具自身写入的数据文件，守护进程无需配置即可开始收集，数据导出文件可用 polylogue import 导入",
+    "保留原始字节，将多来源会话解析为统一的会话及谱系模型，支持全文检索、读取、度量与标注",
+    "提供 CLI、MCP（三个工具）和 Web 工作台三种接口，支持 Tab 补全、--explain 解释查询语法，附带 Morrow 示例归档和 demo 命令"
+   ],
+   "use_cases": [
+    "将分散在 Claude Code、Codex、ChatGPT、Gemini 等工具中的会话历史集中到一个本地可搜索归档",
+    "让编码代理通过 MCP 读取归档，在会话开始时生成基于历史的 brief",
+    "对 AI 会话进行审计追踪、标注（如决策记录）与长期数字存档"
+   ]
+  },
+  "sha": "fa2998692f26",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

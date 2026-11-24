@@ -26045,5 +26045,1647 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "a4f04d2379ac+2": {
+  "fn": "dokku/dokku-mysql",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# dokku mysql Build Status IRC Network"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Official mysql plugin for dokku. Currently defaults to installing mysql 26.10.0."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    22,
+    3,
+    22
+   ],
+   [
+    "replace",
+    22,
+    67,
+    22,
+    23,
+    [
+     "…（45 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    102,
+    23,
+    58
+   ],
+   [
+    "replace",
+    102,
+    103,
+    58,
+    59,
+    [
+     "- `--volume <stringArray>`: a host path or docker volume to mount into the service container, as :<container-dir>[:<options>], repeatable"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    1273,
+    59,
+    1229
+   ],
+   [
+    "replace",
+    1273,
+    1274,
+    1229,
+    1230,
+    [
+     "- `--volume <stringArray>`: a host path or docker volume to mount into the service container, as :<container-dir>[:<options>], repeatable"
+    ]
+   ],
+   [
+    "equal",
+    1274,
+    1349,
+    1230,
+    1305
+   ],
+   [
+    "replace",
+    1349,
+    1350,
+    1305,
+    1306,
+    [
+     "- `--volume <stringArray>`: a host path or docker volume to mount into the service container, as :<container-dir>[:<options>], repeatable"
+    ]
+   ],
+   [
+    "equal",
+    1350,
+    1694,
+    1306,
+    1650
+   ],
+   [
+    "replace",
+    1694,
+    1695,
+    1650,
+    1651,
+    [
+     "Datastore backups are supported via AWS S3 and S3 compatible services like minio and DigitalOcean Spaces."
+    ]
+   ],
+   [
+    "equal",
+    1695,
+    1696,
+    1651,
+    1652
+   ],
+   [
+    "replace",
+    1696,
+    1697,
+    1652,
+    1653,
+    [
+     "The endpoint of an S3 compatible service is passed as the `endpoint-url` argument of `backup-auth`, such as `https://nyc3.digitaloceanspaces.com`, and must not include the bucket. The bucket is passed to `backup` and `backup-schedule` by its name alone, such as `my-s3-bucket` rather than `s3://my-s3-bucket`, and must follow the S3 bucket naming rules."
+    ]
+   ],
+   [
+    "equal",
+    1697,
+    1708,
+    1653,
+    1664
+   ],
+   [
+    "replace",
+    1708,
+    1709,
+    1664,
+    1665,
+    [
+     "The underlying core backup script is present here."
+    ]
+   ],
+   [
+    "equal",
+    1709,
+    2064,
+    1665,
+    2020
+   ],
+   [
+    "replace",
+    2064,
+    2101,
+    2020,
+    2057,
+    [
+     "|Property|Description|Takes effect|",
+     "|---|---|---|",
+     "|`initial-network`|the network the service container is attached to when it is made|after `mysql:stop` and `mysql:start`|",
+     "|`post-create-network`|a comma-separated list of networks the container is attached to once it is made|after `mysql:stop` and `mysql:start`|",
+     "|`post-start-network`|a comma-separated list of networks the container is attached to once it is started|after `mysql:stop` and `mysql:start`|",
+     "|`backup-keyserver`|the keyserver a public key for backup encryption is fetched from|immediately|",
+     "|`backup-storage-class`|the s3 storage class backups are uploaded with|immediately|",
+     "|`backup-object-name`|the name backups are uploaded under|immediately|",
+     "|`backup-timestamp`|`false` to upload every backup to the same key, without a timestamp|immediately|",
+     "|`backup-all-databases`|`true` to back up every database in the service rather than only the one named for it|immediately|",
+     "|`backup-mailto`|who cron mails the output of scheduled backups to|immediately|",
+     "|`backup-access-key-id`|the access key id backups authenticate with|immediately|",
+     "|`backup-secret-access-key`|the secret access key backups authenticate with|immediately|",
+     "|`backup-default-region`|the region backups authenticate against|immediately|",
+     "|`backup-signature-version`|the signature version backups authenticate with|immediately|",
+     "|`backup-endpoint-url`|the endpoint of an s3 compatible service backups are shipped to|immediately|",
+     "|`backup-encryption-passphrase`|the passphrase backups are encrypted with|immediately|",
+     "|`backup-public-key-id`|the gpg public key id backups are encrypted with|immediately|",
+     "|`backup-bucket`|the bucket the scheduled backup is shipped to|immediately|",
+     "|`backup-use-iam`|`true` to have the scheduled backup authenticate with an instance role|immediately|",
+     "|`log-driver`|the docker logging driver the container is run with|after `mysql:stop` and `mysql:start`|",
+     "|`log-opt`|a comma-separated list of docker log options the container is run with|after `mysql:stop` and `mysql:start`|",
+     "|`restart-policy`|the docker restart policy the container is run with|after `mysql:stop` and `mysql:start`|",
+     "|`wait-timeout`|the seconds the service is waited on to become ready|immediately|",
+     "|`port-bind-address`|the address exposed ports without one of their own are published on|after `mysql:reexpose`|",
+     "|`port-source-range`|the only IP address or CIDR the exposed ports accept clients from|after `mysql:reexpose`|",
+     "|`expose-host`|the host the exposed dsn names|immediately|",
+     "|`expose-mode`|`direct` to publish the exposed ports on the service container rather than through an ambassador|after `mysql:reexpose`|",
+     "|`export-args`|extra arguments every export of the service is run with|immediately|",
+     "|`import-args`|extra arguments every import into the service is run with|immediately|",
+     "|`volume-targets`|the container paths the definition's volumes are mounted at in place of its own|after `mysql:stop` and `mysql:start`|",
+     "|`config-options`|extra arguments for the process the service container runs|after `mysql:stop` and `mysql:start`|",
+     "|`custom-env`|semicolon-delimited environment variables the container is run with|after `mysql:stop` and `mysql:start`|",
+     "|`memory`|the container memory limit in megabytes, `0` for no limit|after `mysql:stop` and `mysql:start`|",
+     "|`shm-size`|the shared memory size of the container, such as `64m`|after `mysql:stop` and `mysql:start`|",
+     "|`password`|the password the service and its linked apps use, changed in the datastore and in the url every linked app holds|immediately|",
+     "|`root-password`|the password of the datastore's own administrator, changed in the datastore|immediately|"
+    ]
+   ],
+   [
+    "equal",
+    2101,
+    2144,
+    2057,
+    2100
+   ],
+   [
+    "replace",
+    2144,
+    2148,
+    2100,
+    2104,
+    [
+     "|Definition|Volume|Mounted at|",
+     "|---|---|---|",
+     "|mysql|config|`/etc/mysql/conf.d`|",
+     "|mysql|data|`/var/lib/mysql`|"
+    ]
+   ],
+   [
+    "equal",
+    2148,
+    2160,
+    2104,
+    2116
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "16dc49375991+2": {
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " Awesome Free Dev Tools"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    11,
+    4,
+    9,
+    [
+     "Total Tools",
+     "Online",
+     "Offline",
+     "Auto Update",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    18,
+    9,
+    16
+   ],
+   [
+    "replace",
+    18,
+    19,
+    16,
+    17,
+    [
+     "|Metric|Value|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    17,
+    18
+   ],
+   [
+    "replace",
+    20,
+    26,
+    18,
+    22,
+    [
+     "|Total Tools|55|",
+     "|🟢 Online|55|",
+     "|🔴 Offline|0|",
+     "|Last Updated|11/23/2026, 12:12:18 PM (GMT+7)|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    22,
+    25
+   ],
+   [
+    "replace",
+    29,
+    47,
+    25,
+    26,
+    [
+     "（目录 16 行略）"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    26,
+    29
+   ],
+   [
+    "replace",
+    50,
+    182,
+    29,
+    33,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    33,
+    34
+   ],
+   [
+    "replace",
+    183,
+    184,
+    34,
+    133,
+    [
+     " Qoder ",
+     " Agentic coding platform with autonomous development ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Cursor ",
+     " AI coding agent and software development environment ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Devin (Windsurf) ",
+     " Agentic IDE with Devin cloud agent built-in ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Zed ",
+     " Open-source code editor with agentic editing ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " TraeCode ",
+     " AI coding engineer with IDE and SOLO modes ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Firebase Studio ",
+     " Agentic cloud-based development environment with Gemini ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Google Antigravity ",
+     " Agentic development platform with local and cloud agents ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Kilo Code ",
+     " Open-source AI coding agent for VS Code, JetBrains, CLI ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Cline ",
+     " Open-source coding agent in IDE and terminal ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Continue ",
+     " Open-source AI code agent for VS Code and JetBrains ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Roo Code ",
+     " AI-powered dev team in VS Code (archived) ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " GitHub Copilot ",
+     " AI pair programmer with agent mode ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Amazon Q Developer ",
+     " AWS AI coding assistant with agentic capabilities ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Tabnine ",
+     " Enterprise AI coding assistant (acquired by Tricentis, now AI Workspace) ",
+     " Enterprise ",
+     " 🟢 ",
+     "",
+     " Claude Code ",
+     " Agentic coding tool in terminal, IDE, desktop, browser ",
+     " BYOK ",
+     " 🟢 ",
+     "",
+     " Gemini CLI ",
+     " Open-source AI agent with Gemini in terminal ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " OpenAI Codex CLI ",
+     " Lightweight coding agent from OpenAI for terminal ",
+     " BYOK ",
+     " 🟢 ",
+     "",
+     " Aider ",
+     " AI pair programming in terminal with git integration ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " OpenCode ",
+     " Open-source AI coding agent for terminal, IDE, desktop ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Goose ",
+     " Open-source AI agent for code, workflows, automation ",
+     " Open Source ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    184,
+    187,
+    133,
+    136
+   ],
+   [
+    "replace",
+    187,
+    205,
+    136,
+    140,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    140,
+    141
+   ],
+   [
+    "replace",
+    206,
+    207,
+    141,
+    145,
+    [
+     " Hugging Face ",
+     " AI models, datasets, and Spaces hosting ",
+     " Free Tier ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    207,
+    210,
+    145,
+    148
+   ],
+   [
+    "replace",
+    210,
+    240,
+    148,
+    152,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    240,
+    241,
+    152,
+    153
+   ],
+   [
+    "replace",
+    241,
+    242,
+    153,
+    167,
+    [
+     " Render ",
+     " Application hosting (Web, Worker, Cron) ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Vercel ",
+     " Frontend cloud platform with serverless functions ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Shipvela ",
+     " Publish React, Vite and static sites from GitHub or a CLI; custom domains and managed HTTPS ",
+     " Free Tier: 3 projects, 20 publishes/month ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    242,
+    245,
+    167,
+    170
+   ],
+   [
+    "replace",
+    245,
+    299,
+    170,
+    174,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    174,
+    175
+   ],
+   [
+    "replace",
+    300,
+    301,
+    175,
+    209,
+    [
+     " Supabase ",
+     " PostgreSQL and backend services (Auth, Storage, Realtime) ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Neon ",
+     " Serverless PostgreSQL ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Firebase ",
+     " Authentication and cloud services ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Cloudflare D1 ",
+     " Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Turso ",
+     " Serverless SQLite database with edge replication ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Prisma ",
+     " Type-safe ORM for TypeScript and Node.js ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " DBeaver Community ",
+     " Connect to and manage multiple SQL and NoSQL databases with a graphical interface, SQL editor, and data browser ",
+     " Free: Open Source (Apache-2.0); commercial editions available ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    301,
+    304,
+    209,
+    212
+   ],
+   [
+    "replace",
+    304,
+    340,
+    212,
+    216,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    340,
+    341,
+    216,
+    217
+   ],
+   [
+    "replace",
+    341,
+    342,
+    217,
+    236,
+    [
+     " Webhook.site ",
+     " Instant webhook testing and debugging ",
+     " Free ",
+     " 🟢 ",
+     "",
+     " Agent QA ",
+     " Natural-language web and mobile regression testing with execution memory, CLI and MCP tools ",
+     " Free package; configured model, browser or device costs may apply ",
+     " 🟢 ",
+     "",
+     " Bruno ",
+     " Open-source API client for creating, testing, and organizing API requests with collections stored directly in Git ",
+     " Free: Open Source (MIT); paid plans available for additional features ",
+     " 🟢 ",
+     "",
+     " Mockoon ",
+     " Create and run mock REST APIs locally to develop and test frontend applications without a live backend ",
+     " Free: Open Source (MIT); paid plans available for team and cloud features ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    342,
+    345,
+    236,
+    239
+   ],
+   [
+    "replace",
+    345,
+    369,
+    239,
+    243,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    369,
+    370,
+    243,
+    244
+   ],
+   [
+    "replace",
+    370,
+    371,
+    244,
+    253,
+    [
+     " Dockhand ",
+     " Docker management ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Uptime Kuma ",
+     " Self-hosted monitoring dashboard for websites, APIs, servers, and network services with notifications when services become unavailable ",
+     " Free: Open Source (MIT); self-hosted ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    371,
+    374,
+    253,
+    256
+   ],
+   [
+    "replace",
+    374,
+    392,
+    256,
+    260,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    392,
+    393,
+    260,
+    261
+   ],
+   [
+    "replace",
+    393,
+    394,
+    261,
+    265,
+    [
+     " Resend ",
+     " Transactional email for developers ",
+     " Free Tier ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    394,
+    397,
+    265,
+    268
+   ],
+   [
+    "replace",
+    397,
+    415,
+    268,
+    272,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    415,
+    416,
+    272,
+    273
+   ],
+   [
+    "replace",
+    416,
+    417,
+    273,
+    277,
+    [
+     " Synology ",
+     " NAS for file and backup storage ",
+     " Paid ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    417,
+    420,
+    277,
+    280
+   ],
+   [
+    "replace",
+    420,
+    438,
+    280,
+    284,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    438,
+    439,
+    284,
+    285
+   ],
+   [
+    "replace",
+    439,
+    440,
+    285,
+    289,
+    [
+     " SePay ",
+     " Payment integration (VietQR & Banking) ",
+     " Free ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    440,
+    443,
+    289,
+    292
+   ],
+   [
+    "replace",
+    443,
+    461,
+    292,
+    296,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    461,
+    462,
+    296,
+    297
+   ],
+   [
+    "replace",
+    462,
+    463,
+    297,
+    301,
+    [
+     " Notion ",
+     " Documentation, planning and notes ",
+     " Free Tier ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    463,
+    466,
+    301,
+    304
+   ],
+   [
+    "replace",
+    466,
+    484,
+    304,
+    308,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    484,
+    485,
+    308,
+    309
+   ],
+   [
+    "replace",
+    485,
+    486,
+    309,
+    313,
+    [
+     " Gravatar ",
+     " Globally Recognized User Avatars ",
+     " Free ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    486,
+    489,
+    313,
+    316
+   ],
+   [
+    "replace",
+    489,
+    513,
+    316,
+    320,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    513,
+    514,
+    320,
+    321
+   ],
+   [
+    "replace",
+    514,
+    515,
+    321,
+    330,
+    [
+     " Google reCAPTCHA ",
+     " Anti-bot protection ",
+     " Free ",
+     " 🟢 ",
+     "",
+     " Tailscale ",
+     " Connect personal devices, development machines, and self-hosted services through a secure private network without complex VPN configuration ",
+     " Free Personal plan available; usage and user limits apply ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    515,
+    518,
+    330,
+    333
+   ],
+   [
+    "replace",
+    518,
+    536,
+    333,
+    337,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    536,
+    537,
+    337,
+    338
+   ],
+   [
+    "replace",
+    537,
+    538,
+    338,
+    342,
+    [
+     " Home Assistant ",
+     " Smart Home automation ",
+     " Open Source ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    538,
+    541,
+    342,
+    345
+   ],
+   [
+    "replace",
+    541,
+    595,
+    345,
+    349,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    595,
+    596,
+    349,
+    350
+   ],
+   [
+    "replace",
+    596,
+    597,
+    350,
+    384,
+    [
+     " FacebookBot ",
+     " Facebook automation bot ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " fb-messenger-bot ",
+     " Facebook Messenger bot template ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " messenger-bot ",
+     " Facebook Messenger bot implementation ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " MetaBot ",
+     " Meta (Facebook) bot for automation ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " meta-ai-agent ",
+     " Meta AI agent integration ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " instagram-mcp ",
+     " Instagram MCP (Model Context Protocol) integration ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " messenger-platform-samples ",
+     " Official Facebook Messenger platform samples ",
+     " Open Source ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    597,
+    600,
+    384,
+    387
+   ],
+   [
+    "replace",
+    600,
+    624,
+    387,
+    391,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    624,
+    625,
+    391,
+    392
+   ],
+   [
+    "replace",
+    625,
+    626,
+    392,
+    401,
+    [
+     " Cloudinary ",
+     " Image/Video storage and on-the-fly optimization ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " PicCollages ",
+     " Compress multiple JPG, PNG and WebP images in the browser; adjust output quality and download images individually or as a ZIP ",
+     " Free: No account required ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    626,
+    629,
+    401,
+    404
+   ],
+   [
+    "replace",
+    629,
+    647,
+    404,
+    408,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    647,
+    648,
+    408,
+    409
+   ],
+   [
+    "replace",
+    648,
+    649,
+    409,
+    413,
+    [
+     " UI.RIP ",
+     " Clone/recreate web UI elements ",
+     " Free ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    649,
+    655,
+    413,
+    419
+   ],
+   [
+    "replace",
+    655,
+    656,
+    419,
+    420,
+    [
+     "- All contributions welcome via PR at GitHub."
+    ]
+   ],
+   [
+    "equal",
+    656,
+    657,
+    420,
+    421
+   ],
+   [
+    "replace",
+    657,
+    658,
+    421,
+    422,
+    [
+     " Made with 💜 by the Awesome Free Dev Tools community"
+    ]
+   ],
+   [
+    "equal",
+    658,
+    659,
+    422,
+    423
+   ],
+   [
+    "replace",
+    659,
+    666,
+    423,
+    424,
+    [
+     " 🕐 Last updated: 11/23/2026, 12:12:18 PM"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "aa991871da8f+2": {
+  "fn": "sqlrush/gh_gs_k8s_agent",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "equal",
+    0,
+    11,
+    0,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "|内容|位置|标签|"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    19,
+    13,
+    19,
+    [
+     "|完整源码（构建全部镜像所需）|`main` 的 `agent/`、`docker/`、`frontend/`、`gateway/`、`k8s/`、`release/`、`scripts/`、`acceptance/`、`delivery/`|`agent-v1.5.1`|",
+     "|Fuyao 沙箱模板材料|`main` 的 `e2b/`（模板注册脚本、临时仓库、`Dockerfile.e2b`，与离线包的 `e2b/` 逐字节相同）|`agent-v1.5.1`|",
+     "|面向客户的手册与白名单|`main` 的 `docs/`（白名单在 `docs/delivery/`）|`agent-v1.5.1`|",
+     "|诊断技能包 / 知识库导入技能包|分支 `diag` / `kbimport`（见下表）|`diag-v1.5.1` / `kbimport-v1.5.1`|",
+     "|容器镜像与沙箱模板镜像|`ghcr.io/sqlrush/gaussdb-agent-*:agent-v1.5.1-oc1.18.27`（见下文「Fuyao 沙箱运行模式」）|—|",
+     "|离线交付包（全部文件：镜像、沙箱模板 OCI 包、K8s 清单与手册、发版台、`release.yaml`、校验文件）|发布页 agent-v1.5.1 的附件，下载后 `shasum -a 256 -c *.sha256` 核对|`agent-v1.5.1`|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "代码在开发仓库 gh_agent_k8s 开发，每次发版整体同步到本仓库 `main` 并打同名标签；两个技能包分支由转化脚本 `delivery/transform.py` 从同一发布标签自动生成。**不要在本仓库直接改代码或这两个分支**（转化脚本发现手改会停下），改动在开发仓库做、下次发版同步过来："
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "|分支 / 标签|内容|用在|"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    23,
+    24
+   ],
+   [
+    "replace",
+    24,
+    26,
+    24,
+    26,
+    [
+     "|`diag` / `diag-v1.5.1`|诊断技能包：`AGENTS.md`、`common/`、17 个诊断技能 + `gaussdb-kb`、`scripts/registry/`（白名单脚本定义）、`whitelist/`（132 条白名单 DML、历次增量与清单；从 v1.5.0 升级导 `scripts-delta-20261123.sql`（更新 13 条：M 兼容业务库上报错的脚本改成 A / M 两种兼容模式都能执行的写法，登录探针多取兼容模式），从 v1.4.14 升级先导 `scripts-delta-20261119.sql` 再导 20261123；从 v1.4.14 升级到 v1.5.0 时导的是 `scripts-delta-20261119.sql`（更新 4 条：锁堵塞成对明细、统计信息过期、未使用的索引、内核函数探测的拼接写法），从 v1.4.13 升级先导 `scripts-delta-20261116.sql`（更新 2 条：死元组清单、锁堵塞成对明细的时间差写法）再导 20261119，从 v1.4.11 / v1.4.12 升级先导 `scripts-delta-20261112.sql`（新增 2 条退路脚本；原来 8 条两段 SQL 的脚本不再使用，可以保留）再依次导 20261116、20261119，从 v1.4.10 升级先导 `scripts-delta-20261111.sql`（新增 1、更新 71 条执行库）再导 20261112，从 v1.4.7 ~ v1.4.9 升级依次导 `scripts-delta-20261108.sql`、20261111、20261112，从 v1.4.3 ~ v1.4.6 升级先导 `scripts-delta-20261105.sql`、再依次导 20261108、20261111 与 20261112；更早的版本按上面顺序导完后再依次导 20261116、20261119、20261123；不确定导到哪一份时，把白名单导出交给我方核对）、`rootspec/search_docs.py`（根规范检索脚本）、`补充说明.md`|诊断环境|",
+     "|`kbimport` / `kbimport-v1.5.1`|知识库导入技能包：`AGENTS.md`、`common/`、`gaussdb-kb-import`、`gaussdb-kb-init`、`gaussdb-kb`、`rootspec/search_docs.py`、`补充说明.md`|知识库导入环境|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    26,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "v1.4.7 起诊断站在应用 DBA / 运维 DBA 的角度（指标异常追到引起它的 SQL、会话、应用、表；处置先改应用、再做运维操作，参数只在典型场景给）。v1.4.8 修复 api 模式登录：中间件按实例 IP 固定连一个库、不按库名切换，原来填业务库名一律登录不了；v1.4.9 起库名与 schema 的限制全部放开（库名核对不拦登录；同名表跨 schema 取一个照常跑），中间件固定连 postgres 时业务库的 SQL 按执行历史调优。v1.4.11 按行方切库方案调用中间件时带 `dbName`：登录时给了业务库（`--database <业务库>`），表、索引、执行计划、统计信息、存储过程就在该业务库上取，SQL 执行历史与 WDR 快照仍在 postgres；白名单要导本版增量，登录看到「已直连」即生效。v1.4.12 起行方白名单没导入该增量时也不报错（取数在 postgres 上），查不到慢存储过程时说清是没切到业务库、参数关着还是还没有调用记录。v1.4.13 是上生产前的稳定版：界面上不出现报错原文（中间件地址、接口路径、实例 ID 不显示，原文进本机诊断日志、报错带详情编号），某一项取不到时写「这一部分无法查询」、其余照常给出；不再发两段 SQL；视图没数据时换 SQL 取。v1.4.14 新增交互耗时分析：`python3 $SK/common/timing/cli.py --last 3 --html /tmp/耗时报告.html` 统计一次提问里每一步（模型等首字、思考与输出、工具中的 GRMP 与数据库、运行时空档）用了多久并写出慢在哪，纯脚本统计、不调模型；修复死元组清单与锁堵塞成对明细在 M 兼容业务库上报 un support type。v1.5.0：部署自检不再中途退出（技能目录里漏放 `scripts/` 时，白名单两项标「无法比对」并说明怎么补，其余照常检查）；4 条在业务库执行的脚本把 `||` 拼接改为 `concat`，修复 M 兼容业务库上报「argument of OR must be type boolean」；安装时 `scripts/` 与 `common/` 放同一层、设置 `GSDB_SKILLS_DIR` 列为必做项；cite-check 认官方文档集的引用；部署自检与发版台按白名单实际缺口列出要依次导入的增量；后端新增 Fuyao 沙箱运行模式（预览）与资源大盘（见下文），只装技能包的环境不受影响。v1.5.1：业务库 M 兼容——现场在 M 兼容业务库上报错的诊断脚本（分区体检、表写入计数、统计信息过期、SQL 审查的表 / 索引清单、过程模糊查找等）改成 A / M 两种兼容模式都能执行的写法；登录识别业务库兼容模式并写进登录输出，M 库上存储过程源码不走 ADM_SOURCE、语句检查与取表名按 MySQL 词法；模型按兼容模式写改写语句（根提示词加 3 行、SQL 调优与存储过程调优的技能说明各加半句、新增 M 兼容写法参考）；部署自检加 `--m-trial`，把 41 条业务库脚本各试跑一次（升级后请跑一次并把输出发回）。与 v1.5.0 的代码差异见 docs/delivery/v1.5.0-v1.5.1-代码差异.md，v1.4.14 → v1.5.0 见 docs/delivery/v1.4.14-v1.5.0-代码差异.md。每个分支根目录的 `补充说明.md` 写着：版本对应、包内容与技能版本、依赖（Python 包与系统程序）、环境变量（必填 / 默认值）、SQL 白名单与上一版的差异、"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    41,
+    28,
+    41
+   ],
+   [
+    "replace",
+    41,
+    45,
+    41,
+    42,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    53,
+    42,
+    50
+   ],
+   [
+    "replace",
+    53,
+    54,
+    50,
+    51,
+    [
+     "`main` 上的代码与发布标签 `agent-v1.5.1` 一致：`git clone -b agent-v1.5.1 https://github.com/sqlrush/gh_gs_k8s_agent.git`，按《从源码构建到K8s运行-完整手册》可以自己构建全部镜像。v1.4.6 及以前的部署上线方案照旧按各自的标签使用。"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    51,
+    52
+   ],
+   [
+    "replace",
+    55,
+    56,
+    52,
+    53,
+    [
+     "|文档|给谁|内容|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    53,
+    54
+   ],
+   [
+    "replace",
+    57,
+    77,
+    54,
+    74,
+    [
+     "|docs/部署上线方案-v1.4.6.md（在线查看）|项目经理 / 各方团队|**从拉代码到部署上线的完整方案**（agent-v1.4.6）：**Top SQL 只列业务 SQL、回答里不出现系统 SQL**；两份根提示词、根规范随镜像（推镜像前换成行内正式规范，第 6.1 节）；系统组成与安全设计、各方分工与检查单、构建（或直接拉我方发布的镜像）、白名单导入、部署、开通、验收、固定池化、知识库、统一认证与前端、**发版台**（跳板机上一条命令起：资源扫描、变更预览确认、按槽位在线替换、冒烟验证）、知识库处置的「取代」、从 v1.4.3 / v1.4.2 / v1.4.1 / v1.4.0 / v1.3.x 升级、回滚、运维，附全部 128 条白名单脚本|",
+     "|发版台使用手册（带截图，在线查看）（源 docs/release-console/）|运维|**发版台怎么用，每一步配界面截图**：准备与启动、资源配置、资源扫描、升级计划、变更预览确认、白名单核对、池子在线替换、冒烟、发布报告、暂停 / 续跑 / 回滚、常见问题|",
+     "|docs/发版台-运维手册.md|运维|同上的文字版：跳板机要求、启动、资源配置、扫描、发布 / 续跑 / 回滚、白名单核对两种方式、常见问题|",
+     "|docs/部署上线方案-v1.4.5.md（在线查看）|留档|上一版（agent-v1.4.5）的部署上线方案|",
+     "|docs/部署上线方案-v1.4.4.md（在线查看）|留档|上一版（agent-v1.4.4）的部署上线方案|",
+     "|docs/部署上线方案-v1.4.3.md（在线查看）|留档|上一版（agent-v1.4.3）的部署上线方案|",
+     "|docs/部署上线方案-v1.4.2.md（在线查看）|留档|上一版（agent-v1.4.2）的部署上线方案|",
+     "|docs/部署上线方案-v1.4.1.md（在线查看）|留档|上一版（agent-v1.4.1）的部署上线方案|",
+     "|docs/部署上线方案-v1.4.0.md（在线查看）|留档|上一版（agent-v1.4.0）的部署上线方案|",
+     "|docs/delivery/白名单脚本清单.md|中间件团队|132 条诊断脚本的用途、参数与 SQL 全文；全量 `scripts.sql` 与历次升级增量都在 `docs/delivery/`（诊断技能包的 `whitelist/` 里是同一份）|",
+     "|docs/从源码构建到K8s运行-完整手册.md|实施 / 运维 / 开发|从拉代码（本仓库）、构建镜像、推仓库，到部署进 K8s、开通工号、对话里跑通健康检查；可选的固定池化。每步带实测输出|",
+     "|docs/前端对接接口说明.md|前端|接入后端的全部接口（v1.1）：身份与网关行为、对话接口与事件流、报告接口、大盘链接格式、回答正文的渲染与版式、联调清单|",
+     "|docs/智能体验收方案.md（在线查看）|后端 / 项目经理|**每次升级智能体怎么验收**：11 个方面 53 道题、每题的评分标准（版式、工具、要点、处置、引用、禁止项）、三层评分、失分归因到工具 / 提示词 / 模型、发版门槛；题库在 acceptance/|",
+     "|docs/仓库结构说明.md|后端 / 前端 / 双方的编码智能体|逐个目录说明每个文件的作用、改什么去哪里|",
+     "|docs/ 其余手册|实施 / 运维|《部署手册-从零到上线》《版本说明》《参数手册》《快速搭建-K8s》《对接清单-各方要做什么》《接入手册-SSO与K8s》《固定池化手册》《功能清单-容器版》《单机演示-不用K8s》《现场测试-模拟SSO》《命令卡-测试环境搭建》，与离线包里的 HTML 手册同源|",
+     "|docs/api/|前端 / 后端|机器可读的接口定义：`opencode-1.18.27-openapi.json`（对话接口全集）、`reports-contract.json`（报告字段契约，后端单测逐条核对）|",
+     "|docs/delivery/回答模板化-交付说明.md|平台 / 中间件 / 前端|回答模板化（2026-10-26）要做的事：白名单增量 3 条、镜像升级、前端第二种颜色、装后冒烟|",
+     "|docs/reports/answer-template-comparison-20261026.html|双方|回答模板化前后对比：同一组 11 道题在测试环境改造前后各问一次，格式检查、耗时、生成量与原文并排（在线查看）|",
+     "|docs/reports/qa-flow-v1.4.10-20261109.html|双方 / 项目经理|**一次提问的全流程：步骤、耗时与 token**（agent-v1.4.10 测试环境实测，9 道代表性题目各问 2 次）：从提问进入到回答结束的 14 个步骤、每步每题平均耗时与 token、时间与 token 的构成、一道题逐轮拆解、工具与中间件调用（在线查看）|",
+     "|docs/solutions/kunpeng-pool/index.html|项目经理 / 售前|**基于鲲鹏服务器的池化方案**（技术分析稿）：一次提问从浏览器到硬件的全链路与各段时间占比、模型推理 84.7% 的拆解与鲲鹏加速、全链路中鲲鹏参与的步骤与优势（数值待填）（在线查看）|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    86,
+    74,
+    83
+   ],
+   [
+    "replace",
+    86,
+    87,
+    83,
+    84,
+    [
+     "|交付物|内容|用在|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    84,
+    85
+   ],
+   [
+    "replace",
+    88,
+    91,
+    85,
+    88,
+    [
+     "|5 个 Docker 镜像 + 发版台|`ghcr.io/sqlrush/gaussdb-agent-{gateway,frontend,runtime,kb-import,kbstd}:agent-v1.5.1-oc1.18.27`（amd64 / arm64 双架构），发版台 `gaussdb-agent-release`；离线包里同样有|K8s 集群：网关、前端、状态服务与凭据代理服务（runtime 镜像不同入口）、标准知识库安装 Job|",
+     "|2 个沙箱模板镜像|`ghcr.io/sqlrush/gaussdb-agent-{runtime-e2b,kb-import-e2b}:agent-v1.5.1-oc1.18.27`（本版只出 arm64）；离线包里是同内容的 OCI 包 `gaussdb-agent-v1.5.1-oc1.18.27-e2b-arm64.oci.tar`。从 GHCR 拉的要先导出成 OCI 包，做法见部署手册 §2.3|在平台的模板构建主机上注册成诊断、导入两种沙箱模板|",
+     "|模板注册脚本|本仓库 `e2b/`（与离线包 `e2b/` 相同）：`e2b/scripts/build-e2b-template.py`、`e2b/scripts/oci-serve.py`、`e2b/docker/Dockerfile.e2b`（`--from-oci` 用上面的 OCI 包，本机起临时只读仓库供平台拉取）|模板构建主机（root）|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    88,
+    89
+   ],
+   [
+    "replace",
+    92,
+    93,
+    89,
+    90,
+    [
+     "|文档|给谁|内容|"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    90,
+    91
+   ],
+   [
+    "replace",
+    94,
+    96,
+    91,
+    93,
+    [
+     "|docs/Fuyao沙箱部署手册.md|运维 / 平台管理员|**从零到上线的完整步骤**：部署前检查（平台与安全前提、网络连通矩阵、资源测算）、导入镜像、注册模板、建沙箱组、Secret 与配置、现场 overlay、上线验证、升级与回退、扩容、日常运维、排查、卸载|",
+     "|docs/Fuyao沙箱手册.md|运维 / 后端|Fuyao 模式的形态、生命周期（按需建、闲置暂停、保留期删除）、数据怎么进出 NAS、运维接口与排查|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    99,
+    93,
+    96
+   ],
+   [
+    "replace",
+    99,
+    100,
+    96,
+    97,
+    [
+     "|组件|镜像|形态|说明|"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    97,
+    98
+   ],
+   [
+    "replace",
+    101,
+    108,
+    98,
+    105,
+    [
+     "|接入网关|`gaussdb-agent-gateway`|Deployment，2 副本|认工号（上游 SSO 加的头 + 信任凭据）、按工号分配用户环境、反向代理对话与报告；控制 API `/admin/*`|",
+     "|用户环境|`gaussdb-agent-runtime`|每人一个 Pod，或固定池化的槽位|opencode 1.18.27 + 17 个诊断技能 + 知识库只读查询；凭据代理（中间件令牌、签名私钥、模型 Key 不进模型所在的容器）|",
+     "|知识库导入环境|`gaussdb-agent-kb-import`|每个知识库管理员一个|知识库导入、入库前标准化、官方文档集（CHM）导入；内网网页剪藏（书签 → 剪藏页 → 导入环境）、扫描件 PDF 看图转录、PPT 导入|",
+     "|标准知识库|`gaussdb-agent-kbstd`（我方发布）|部署时跑一次的 Job|GaussDB 官方文档集，`kubectl apply` 后自动装进知识库（同版本跳过、不碰贵方知识）|",
+     "|发版台（可选）|`gaussdb-agent-release`（我方发布）|跳板机上的容器，不进 K8s|首次部署、升级、回滚：发布前扫描资源、变更预览由运维确认、固定池化按槽位在线替换、冒烟验证；见《发版台运维手册》|",
+     "|大盘前端|`gaussdb-agent-frontend`|Deployment|诊断大盘、资源大盘的静态页面（`frontend/`），经网关 `/dash/*` 访问；门户页面按《前端对接接口说明》接入|",
+     "|NAS|—|一个 RWX 卷|唯一的状态所在：`users/<工号>/`（会话、报告）、`kb/`（知识库与索引 `kb/index/store.sqlite`）|"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    110,
+    105,
+    107
+   ],
+   [
+    "replace",
+    110,
+    128,
+    107,
+    108,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    130,
+    108,
+    110
+   ],
+   [
+    "replace",
+    130,
+    131,
+    110,
+    111,
+    [
+     "|范围|负责方|目录|"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    111,
+    112
+   ],
+   [
+    "replace",
+    132,
+    135,
+    112,
+    115,
+    [
+     "|后端：网关、用户镜像、技能、大盘前端、部署清单、发版台、构建与打包脚本、沙箱模板材料、验收题库|我方（开发仓库同步）|`agent/`、`docker/`、`frontend/`、`gateway/`、`k8s/`、`release/`、`scripts/`、`e2b/`、`acceptance/`、`delivery/`|",
+     "|前端：门户页面|前端方|另建目录并登记|",
+     "|接口：对话 / 报告接口、事件、链接格式、报告字段契约|双方共同|`docs/前端对接接口说明.md`、`docs/api/`|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    137,
+    115,
+    117
+   ],
+   [
+    "replace",
+    137,
+    138,
+    117,
+    118,
+    [
+     " 契约测试 `agent/tests/test_frontend_contract_units.py` 会拦住不一致。不兼容的改动要升接口版本（接口说明第 10 章）。"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    141,
+    118,
+    121
+   ],
+   [
+    "replace",
+    141,
+    142,
+    121,
+    122,
+    [
+     " 这些都只在部署时以 Secret / ConfigMap 注入。"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    157,
+    122,
+    137
+   ],
+   [
+    "delete",
+    157,
+    158,
+    137,
+    137
+   ],
+   [
+    "equal",
+    158,
+    159,
+    137,
+    138
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

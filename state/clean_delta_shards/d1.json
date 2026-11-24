@@ -37049,5 +37049,1665 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "bca5381905ba+2": {
+  "fn": "Cec1c/ServerS5A3",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "ServerS5A3 DNF90 Go 游戏服务端"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    1,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     "语言：Go 1.26.5 存储：MariaDB 11.8 运行：Docker Linux CI 许可：GPL-3.0 Stars Release"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    5,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "构建与部署指南 ｜ Docker 运行配置包必读 ｜ 常见假 BUG 速查 ｜ 120 频道表必读 ｜ PVF 与配套客户端"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    15,
+    10,
+    11,
+    [
+     "PurpleMagic 登录器与 GM ｜ 报告问题 ｜ 参与贡献"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    17,
+    11,
+    13
+   ],
+   [
+    "replace",
+    17,
+    18,
+    13,
+    14,
+    [
+     "> **切勿裸跑 `DNF90Server` 二进制或套用旧一键端配置。** 本仓大量已修复的协议与玩法（包括**青龙/黄龙/魂大会刷怪**、V212–V215 双组 Buff 登记与换装重算、史诗分解结果弹窗、城镇同屏加载、公会系统与深渊/组队兼容项）在裸程序源码中默认处于保守关闭态，**请用 `deploy/docker` 配置生成器。配套新实例由首次 `prepare` 应用推荐预设，并校验 120 频道外部 ETC**。公开源码与 PR 唯一权威入口为 GitHub Cec1c/ServerS5A3，GitGud 仅作异步镜像。"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    23,
+    14,
+    19
+   ],
+   [
+    "replace",
+    23,
+    33,
+    19,
+    29,
+    [
+     "|现象（常被误认为代码未修）|真实原因|解决方法（写入 `runtime/docker/instance.json` 后重跑 `up`）|",
+     "|---|---|---|",
+     "|**青龙大会 / 黄龙大会 / 魂大会进图不出怪、直接判通关或翻牌卡住**|源码默认 `dungeon_tournament` 为 `off`，未走 `[tournament enemies]` 4 轮赛程铺怪路径|设 `\"dungeon_tournament\": \"vendor\"`（对应 `DNFBRIDGE_DUNGEON_TOURNAMENT=vendor`；**填 `on`/`true`/`1` 均无效，只认 `vendor`**）|",
+     "|**选角或进城后客户端闪退（赛马活动冲突）**|旧实例或旧数据库曾保存开启 2365 赛马活动|设 `\"joust_event_enabled\": false`；**旧数据库**还必须通过管理接口将活动 **2365** 保存为关闭并重启（库内保存值优先于环境变量）|",
+     "|**登录后无频道、选频道转圈或无法进游戏**|旧实例仍在使用不同频道表或PVF内置目录|新实例默认使用统一外部表；旧实例按迁移说明备份并显式选择 `--channel-info go-server/internal/services/dnfbridge/testdata/channel_info.etc`（120 频道说明）|",
+     "|**积分没有入账或商城余额不刷新**|旧实例保留了关闭配置，或实际客户端没有 427 号余额通知接收能力|按积分与 Buff 配对步骤核对服务端开关和实际 EXE|",
+     "|**双组 Buff 登记不保存、切图清空或换装不重算**|未开启双组 Buff 同步或换装重算开关，或客户端与开关未配对|配套当前累计客户端设 `\"buff_group_sync\": \"on\"` 与 `\"buff_swap_reapply\": \"on\"`（详见 Buff 部署说明）|",
+     "|**史诗分解不弹无色/灵魂结果框（V210+）、城镇非队友加载慢或异常（V211+）**|漏开与新版客户端配套的服务端显示模式|设 `\"disjoint_epic_display\": \"paired-v1\"` 与 `\"town_display_only\": \"on\"`|",
+     "|**公会排行/红包/守护神/精髓无法使用，或深渊锁槽、组队进图掉线/顺序错乱**|公会子系统默认全关，且未注入 `runtime_compatibility` 17 项协议修复|配套旧实例可运行 `prepare --apply-recommended` 补齐缺项，再核对显式关闭项|",
+     "|**NPC 赠礼（好感度 op812）不刷新、黑钻 188 疲劳 / 加百利商店缺失**|服务端提交过旧，或客户端/PVF 未同步到 2026-11-15 公开批次|拉取最新 `master` 重新构建，安装累计公开配套包并核验全部六项组件|"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    29,
+    30
+   ],
+   [
+    "replace",
+    34,
+    35,
+    30,
+    31,
+    [
+     "完整的环境变量映射与线上运行进程只读核对脚本见 **Docker 运行配置与脱敏参考** 及参考文件 `deploy/templates/docker-server.redacted.env`。"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    38,
+    31,
+    34
+   ],
+   [
+    "replace",
+    38,
+    39,
+    34,
+    35,
+    [
+     "先按累计公开功能搭建入口下载并核验完整配套包，再把其中 `DNF.exe` 与 `Script.pvf` 交给搭建入口。累计包已经包含此前分散配方；V212、V215、V216 原版缺少后续功能，不能替代当前累计包。"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    35,
+    38
+   ],
+   [
+    "replace",
+    42,
+    43,
+    38,
+    39,
+    [
+     "准备一台装有 Docker Engine、Compose v2 与 Python 3.10+ 的 Linux 服务器，以及配套的 Windows 客户端目录，把下面这段话发给你的 Agent（详细步骤见《大肥鱼也能看得明白的构建与部署说明》）："
+    ]
+   ],
+   [
+    "equal",
+    43,
+    48,
+    39,
+    44
+   ],
+   [
+    "replace",
+    48,
+    55,
+    44,
+    45,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    65,
+    45,
+    55
+   ],
+   [
+    "replace",
+    65,
+    74,
+    55,
+    56,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    76,
+    56,
+    58
+   ],
+   [
+    "replace",
+    76,
+    77,
+    58,
+    59,
+    [
+     "旧配套实例可用 `prepare --apply-recommended` 补齐缺项。公网或 NAT 搭建另传 `--public-host <服务器公网IPv4>`，私网网卡地址仍传给 `--host-ip`。默认预设与公网通告说明"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    79,
+    59,
+    61
+   ],
+   [
+    "replace",
+    79,
+    80,
+    61,
+    62,
+    [
+     "> 如果在 **4 核 16 GiB** 同机混跑游戏服务与 MariaDB，可在 `runtime/docker/instance.json` 额外加入 `\"performance_profile\": \"shared-4c-16g\"`（自动配置游戏容器 `10g` / `GOMEMLIMIT=8GiB`、数据库容器 `3g` / InnoDB 缓冲池 `1g`）；百人负载还可通过管理维护命令初始化公会持久指纹触发器与升级奖励恢复索引，详见 优化表结构维护 与 热点路径说明。"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    84,
+    62,
+    66
+   ],
+   [
+    "replace",
+    84,
+    85,
+    66,
+    67,
+    [
+     "> **截至目前，2365「竞技大赛（马战竞猜／赛马）」活动仍可能导致客户端闪退，必须保持关闭。** 首次部署通过上面的推荐预设包已将 `joust_event_enabled` 设为 `false`；若是**升级已有旧数据库**，数据库中保存的活动状态优先级高于环境变量，还必须通过 GM 或游戏管理接口把活动 **2365** 保存为 `enabled=false` 并重启游戏容器，详见活动开关与赛马关闭方法。"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    90,
+    67,
+    72
+   ],
+   [
+    "replace",
+    90,
+    91,
+    72,
+    73,
+    [
+     "当前推荐 2026-11-23 累计配套包，包含 EXE、PVF、三个 DLL 与界面 NPK。按累计搭建说明核验清单、安装资源并检查新旧实例配置。"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    73,
+    74
+   ],
+   [
+    "replace",
+    92,
+    93,
+    74,
+    75,
+    [
+     "旧 V212/V215/V216 及历次资源 Release 保留作历史和配方输入。它们不包含全部后续公开修复，不能仅凭 Releases 的 Latest 标记选作当前完整交付。GitGud是异步镜像，权威源码和本批下载以 GitHub 的明确版本及摘要为准。"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    96,
+    75,
+    78
+   ],
+   [
+    "replace",
+    96,
+    102,
+    78,
+    84,
+    [
+     "|模块|职责|",
+     "|---|---|",
+     "|游戏服务 (`cmd/server/dnf90`, `dnfbridge`)|处理账号登录令牌、频道引导与连接、进城同屏、组队 UDP 中继和副本战斗协议|",
+     "|领域与存储 (`internal/modules/dnf`)|实现角色、背包、装备、任务、邮件、拍卖、公会、团本等规则与 MariaDB 增量事务|",
+     "|构建与容器配置 (`deploy/docker`, `deploy/templates`)|提供 Linux Docker 镜像、实例配置生成器 `manage.py`、推荐开关预设包与脱敏环境参考|",
+     "|协议与调查资料 (`Docs/`)|收录客户端函数索引、玩法/协议取证记录、性能优化与发布维护规范|"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    107,
+    84,
+    89
+   ],
+   [
+    "replace",
+    107,
+    116,
+    89,
+    90,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    118,
+    90,
+    92
+   ],
+   [
+    "replace",
+    118,
+    119,
+    92,
+    93,
+    [
+     "**服务端与 GM / 登录器的仓库边界**：本仓库专注维护游戏服务端，不再内嵌启动旧版 GM Web 面板（旧配置中的 `server.gmListen` 仅作兼容忽略）。玩家登录器、自动更新网关与独立 Web GM 推荐使用 **PurpleMagic**，也可按登录令牌协议自行实现："
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    93,
+    94
+   ],
+   [
+    "replace",
+    120,
+    123,
+    94,
+    97,
+    [
+     "- PurpleMagic 中文介绍",
+     "- 网关、独立 GM 与同代 PVF 索引部署",
+     "- 网关接入契约 · 构建自定义登录器"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    97,
+    100
+   ],
+   [
+    "replace",
+    126,
+    127,
+    100,
+    101,
+    [
+     "安装 Go 1.26.5 后，可在仓库根目录跨平台构建二进制产物："
+    ]
+   ],
+   [
+    "equal",
+    127,
+    142,
+    101,
+    116
+   ],
+   [
+    "replace",
+    142,
+    143,
+    116,
+    117,
+    [
+     "修改代码后的验证默认复用 Go 测试缓存、只跑受影响包并执行完整 Linux 服务端构建（详见 本地按范围验证说明）："
+    ]
+   ],
+   [
+    "equal",
+    143,
+    148,
+    117,
+    122
+   ],
+   [
+    "replace",
+    148,
+    154,
+    122,
+    123,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    156,
+    123,
+    125
+   ],
+   [
+    "replace",
+    156,
+    157,
+    125,
+    126,
+    [
+     "需要无缓存全量回归时再显式传入 `--full --fresh`（或 `GO_TEST_UNCACHED=1`）。提交 PR 前请按 变更记录规范 在 `changelog.d/` 添加独立变更片段。"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    160,
+    126,
+    129
+   ],
+   [
+    "replace",
+    160,
+    171,
+    129,
+    140,
+    [
+     "|任务场景|文档入口|",
+     "|---|---|",
+     "|从零搭建测试服 / 复制许愿词给 Agent|《大肥鱼也能看得明白的构建与部署说明》|",
+     "|核对 Docker 环境变量、青龙/黄龙大会与推荐开关包|Docker 运行配置与脱敏参考 · `docker-instance.recommended.json`|",
+     "|Windows 本机 Docker 测试环境|Docker Linux 本地测试环境|",
+     "|选择与核验 120 频道外部 ETC|频道表部署说明|",
+     "|积分商城与双组 Buff 配对|部署配置与客户端资源|",
+     "|查看近期公开的黑钻/加百利/好感度与高峰优化|2026-11-15 公开说明 · 2026-11-11 玩法增量 · 热点优化|",
+     "|数据库持久指纹触发器与升级奖励索引维护|优化表结构维护|",
+     "|本地靶向测试、变更记录与 PR 协作流程|本地 CI/CD · 变更记录规范 · GitHub 权威迁移|",
+     "|客户端协议逆向索引与历史调查档案|客户端函数索引 · Seeker 调查方案 · 历史 changlog.md|"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    174,
+    140,
+    143
+   ],
+   [
+    "replace",
+    174,
+    175,
+    143,
+    144,
+    [
+     "本项目起源于 16ww/servers5a3，当前公开权威仓库为 GitHub Cec1c/ServerS5A3，根目录构建脚本与产物目录组织参考了 rewio/ServerS4A21。感谢上游作者与所有贡献者持续完善协议和玩法。"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    144,
+    145
+   ],
+   [
+    "replace",
+    176,
+    177,
+    145,
+    146,
+    [
+     "本项目采用 **GNU General Public License v3.0（GPL-3.0-only）** 开源，完整条款见 LICENSE；第三方组件保留各自原有许可证与版权声明。"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "579a2b8ce736+2": {
+  "fn": "Clod/llmwiki-marimo",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "CI",
+     "License",
+     "Python",
+     "Ruff",
+     "Version",
+     "Changelog"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "**English** · Español"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    10,
+    13
+   ],
+   [
+    "replace",
+    13,
+    16,
+    13,
+    16,
+    [
+     "Inspired by Karpathy's LLM Wiki idea.",
+     "The PDF-extraction and a few low-level ingestion pieces are adapted from Lucas Astorian's open-source LLM Wiki",
+     "(Apache-2.0); the rest is an independent local-first build on FastAPI, HTMX and SQLite. See `NOTICE`."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "The reading screen of the web interface on the sample finance wiki: the page index on the left, the page \"Plazo fijo UVA\" in the middle, and on the right a conversation with two questions and their answers, each followed by its answering mode"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    21,
+    18,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "*Under the question field, the **Mode** selector has three values (which to pick, and why):*"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    29,
+    22,
+    29
+   ],
+   [
+    "replace",
+    29,
+    30,
+    29,
+    30,
+    [
+     "The History tab of the web interface: a list of seven wiki points, each with its date, message, short git identifier, number of changed pages and a button to return to that point; the newest point is marked as current"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    33,
+    30,
+    33
+   ],
+   [
+    "replace",
+    33,
+    34,
+    33,
+    34,
+    [
+     "▶ **Watch the 1-minute demo**: a generated page, then an answer that compares two tales and cites a page for every claim (4 s), then a question the wiki does not cover, refused **in 0.1 s because the model was never called**."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    34,
+    35
+   ],
+   [
+    "replace",
+    35,
+    38,
+    35,
+    36,
+    [
+     "▶ **Watch the full tour** (Spanish interface, 4:15): the ingestion of a document, the reading screen, the relations, the vocabulary, a data file with its tool, the three chat modes, a refusal and its audit, the save of a conversation, lint and repair, and the history. The spans that wait for the model are sped up, and a badge on screen gives the factor."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    43,
+    36,
+    41
+   ],
+   [
+    "replace",
+    43,
+    44,
+    41,
+    42,
+    [
+     "> **From Idea to Product** — seventeen ways the"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    55,
+    42,
+    53
+   ],
+   [
+    "replace",
+    55,
+    56,
+    53,
+    54,
+    [
+     "ecosystem (see Limitations). It has its own graph of"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    83,
+    54,
+    81
+   ],
+   [
+    "replace",
+    83,
+    84,
+    81,
+    82,
+    [
+     "- **Evidence-based prompting** — the default system prompt (`prompts/system_prompt.<lang>.md`) embeds a worked, fully-cited comparison: a comparison that left points uncited cited every point once the example was added (CHANGELOG, 0.2.x)."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    92,
+    82,
+    90
+   ],
+   [
+    "replace",
+    92,
+    93,
+    90,
+    91,
+    [
+     "- **Security-conscious** — a path-traversal guard on the LLM-callable page reader, an explicit prompt-injection threat model, and a documented `SECURITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    103,
+    91,
+    101
+   ],
+   [
+    "delete",
+    103,
+    105,
+    101,
+    101
+   ],
+   [
+    "equal",
+    105,
+    107,
+    101,
+    103
+   ],
+   [
+    "replace",
+    107,
+    109,
+    103,
+    105,
+    [
+     "Classic RAG (and tools like NotebookLM or ChatGPT file uploads) re-discovers ",
+     "knowledge from scratch on every question: it retrieves chunks at query time and "
+    ]
+   ],
+   [
+    "equal",
+    109,
+    111,
+    105,
+    107
+   ],
+   [
+    "replace",
+    111,
+    116,
+    107,
+    112,
+    [
+     "LLM Wiki **compiles knowledge once and keeps it current**. Each ingested source ",
+     "is read, summarised, and integrated into a persistent, interlinked set of ",
+     "markdown pages — cross-references, contradictions, and synthesis are already ",
+     "written down before you ask anything. The wiki is a compounding artifact that ",
+     "gets richer with every document; the chat agent reads those curated pages first "
+    ]
+   ],
+   [
+    "equal",
+    116,
+    118,
+    112,
+    114
+   ],
+   [
+    "replace",
+    118,
+    119,
+    114,
+    115,
+    [
+     "> Filing cabinet (SQLite + FTS5) vs. encyclopedia (human-readable markdown) — "
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    115,
+    116
+   ],
+   [
+    "delete",
+    120,
+    122,
+    116,
+    116
+   ],
+   [
+    "equal",
+    122,
+    125,
+    116,
+    119
+   ],
+   [
+    "replace",
+    125,
+    126,
+    119,
+    120,
+    [
+     "1. **Ingest** — in the **Ingest** tab, choose PDF, office (`.docx`, `.doc`, `.odt`, `.rtf`), Markdown (`.md`), plain-text (`.txt`) or, when the wiki does not ignore images (see Document formats), image (`.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`) files and click **Ingest**, or copy files to `sources/` and click **Scan sources/ for changes**. The pipeline extracts text page by page, chunks it with overlap, runs structured concept extraction, and creates / updates summary + concept pages plus the catalogue, overview, and timeline — then commits the result to the wiki's own git repo (optional; see What ends up on disk). The same tab lists the sources and deletes a source after a confirmation. Adding documents says what the scan changes, and what happens to a file edited, removed or renamed in `sources/`."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    135,
+    120,
+    129
+   ],
+   [
+    "replace",
+    135,
+    136,
+    129,
+    130,
+    [
+     "The interface is in English and in Spanish: the **EN | ES** switch at the right of the header chooses the language (a cookie; without it, the browser's language; without that, English). This is the language of the labels and messages only. The language of the wiki content is set per wiki and is a different setting (see Wiki content language): a Spanish wiki can be read with the English interface, and the reverse."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    130,
+    131
+   ],
+   [
+    "replace",
+    137,
+    138,
+    131,
+    132,
+    [
+     "> **From marimo to a web interface.** Up to v0.4.0 the interface of this project was a set of marimo notebooks; that release is the one to install for them. marimo re-runs a whole cell whenever one of its widgets changes, which suits a notebook. The application came to need a conversation that survives moving between pages, progress streamed while an ingestion runs, and an address for every page and screen, so it moved to a server-rendered web interface (FastAPI and HTMX). The marimo apps were removed from the repository on 2026-11-15; this documentation describes the web interface only."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    139,
+    132,
+    133
+   ],
+   [
+    "replace",
+    139,
+    143,
+    133,
+    137,
+    [
+     "> **For developers:** the canonical reference is ",
+     "> `docs/manual/programmer_manual.md` — workflows, prompts, ",
+     "> entry points, gaps, and the pending-work roadmap. Earlier design notes are in ",
+     "> `docs/archive/`."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    144,
+    137,
+    138
+   ],
+   [
+    "replace",
+    144,
+    150,
+    138,
+    144,
+    [
+     "> **Want the big picture first?** The ",
+     "> Ingestion Walkthrough follows one small corpus ",
+     "> through its whole lifecycle — first document, second document, a no-op ",
+     "> re-ingest, an edited source, a deletion — showing exactly which wiki pages, DB ",
+     "> rows, citation edges and vocabulary entries each step produces. Its numbers ",
+     "> are not hand-written: they come from a real run, and "
+    ]
+   ],
+   [
+    "equal",
+    150,
+    151,
+    144,
+    145
+   ],
+   [
+    "delete",
+    151,
+    153,
+    145,
+    145
+   ],
+   [
+    "equal",
+    153,
+    160,
+    145,
+    152
+   ],
+   [
+    "replace",
+    160,
+    177,
+    152,
+    153,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    211,
+    153,
+    187
+   ],
+   [
+    "delete",
+    211,
+    213,
+    187,
+    187
+   ],
+   [
+    "equal",
+    213,
+    219,
+    187,
+    193
+   ],
+   [
+    "replace",
+    219,
+    281,
+    193,
+    194,
+    [
+     "…（62 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    282,
+    194,
+    195
+   ],
+   [
+    "delete",
+    282,
+    284,
+    195,
+    195
+   ],
+   [
+    "equal",
+    284,
+    287,
+    195,
+    198
+   ],
+   [
+    "replace",
+    287,
+    288,
+    198,
+    199,
+    [
+     "- **Python 3.12+** and **uv**"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    290,
+    199,
+    201
+   ],
+   [
+    "replace",
+    290,
+    298,
+    201,
+    209,
+    [
+     " `.odt`, `.rtf`): the text extractor (`opendataloader-pdf`) runs a bundled `.jar`",
+     " through the `java` command, and an office file is converted to PDF before that",
+     " same extractor reads it. `.md`, `.txt` and image files need no Java runtime.",
+     " Reading and chatting with a wiki that is already built need no Java runtime,",
+     " which is why the bundled demos open without one:",
+     " - macOS: `brew install --cask temurin`",
+     " - Debian/Ubuntu: `sudo apt install default-jre` (Fedora: `sudo dnf install java-21-openjdk`)",
+     " - Windows: `winget install EclipseAdoptium.Temurin.21.JRE`"
+    ]
+   ],
+   [
+    "equal",
+    298,
+    299,
+    209,
+    210
+   ],
+   [
+    "replace",
+    299,
+    302,
+    210,
+    213,
+    [
+     " - macOS: `brew install --cask libreoffice`",
+     " - Debian/Ubuntu: `sudo apt install libreoffice` (Fedora: `sudo dnf install libreoffice`)",
+     " - Windows: `winget install TheDocumentFoundation.LibreOffice`"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    213,
+    214
+   ],
+   [
+    "delete",
+    303,
+    305,
+    214,
+    214
+   ],
+   [
+    "equal",
+    305,
+    331,
+    214,
+    240
+   ],
+   [
+    "replace",
+    331,
+    332,
+    240,
+    241,
+    [
+     "> The demo lives in `examples/`; browsing its generated pages needs"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    359,
+    241,
+    268
+   ],
+   [
+    "replace",
+    359,
+    362,
+    268,
+    271,
+    [
+     "`WIKI_PATH` is just the **default** — the web interface starts on a wiki picker, and the wiki selector in the header switches between wikis at runtime without editing `.env`. The picker lists ",
+     "the wikis discovered next to `WIKI_PATH` and the recent ones, and opens any ",
+     "other folder by its path. Set `WIKI_HOME=/path/to/wikis` to point discovery at a "
+    ]
+   ],
+   [
+    "equal",
+    362,
+    364,
+    271,
+    273
+   ],
+   [
+    "replace",
+    364,
+    365,
+    273,
+    274,
+    [
+     "See LLM providers for Ollama and LM Studio config."
+    ]
+   ],
+   [
+    "equal",
+    365,
+    372,
+    274,
+    281
+   ],
+   [
+    "replace",
+    372,
+    373,
+    281,
+    282,
+    [
+     "Open http://localhost:8765. The page lists the wikis; open one. The server listens on `localhost` and has no authentication: it is for one user on one machine. Without `uv`, use the `python -m uvicorn web.app:app --port 8765` of an environment that has the `web` group installed."
+    ]
+   ],
+   [
+    "equal",
+    373,
+    376,
+    282,
+    285
+   ],
+   [
+    "replace",
+    376,
+    387,
+    285,
+    296,
+    [
+     "|Tab|What it does|",
+     "|---|---|",
+     "|**Read**|The page index, the open page (edit, relations, verify, history, delete) and the conversation, with its audit page. Documents are not added here.|",
+     "|**Ingest**|Add documents (**Ingest**), ingest the new or changed files of `sources/` (**Scan sources/ for changes**), list the sources and delete one.|",
+     "|**Maintain**|Regenerate the summary pages, **Verify all pages**, **Run Wiki Lint & Repair** (lint and repair), delete stale pages, describe the images, install the local sentence verifier, rebuild the index without the model.|",
+     "|**Relations**|The graph of pages and sources, with a page search, zoom buttons and the neighbourhood of one page.|",
+     "|**Vocabulary**|The names the wiki covers (read only, with a search field), their aliases, the rejected aliases and the blacklist; add, remove or reject an entry. Every change is a point of the history.|",
+     "|**Data**|The data files of the wiki: their metadata and their tables.|",
+     "|**Tools**|The tools the chat can use, with their trace node, arguments and role, and whether each is active in this wiki and why; one closed section per domain, with the source of its calculation functions. Read only.|",
+     "|**History**|The points of the wiki, and the return to an earlier point.|",
+     "|**Settings**|The models, saved in `.env` and shared by every wiki, each with a **Test** button. The keys of `wiki_config.toml`: the system prompt, the pre-retrieval, the verification and the images. The language of the wiki is shown read only.|"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    390,
+    296,
+    299
+   ],
+   [
+    "replace",
+    390,
+    393,
+    299,
+    300,
+    [
+     "The environment variables are listed in `web/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    393,
+    428,
+    300,
+    335
+   ],
+   [
+    "replace",
+    428,
+    432,
+    335,
+    336,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    432,
+    434,
+    336,
+    338
+   ],
+   [
+    "replace",
+    434,
+    435,
+    338,
+    339,
+    [
+     "If `WIKI_LLM_*` are blank, ingestion falls back to `LLM_*`. The vision model (`VISION_*`, see Document formats) falls back to `WIKI_LLM_*` and then to `LLM_*`."
+    ]
+   ],
+   [
+    "equal",
+    435,
+    471,
+    339,
+    375
+   ],
+   [
+    "replace",
+    471,
+    473,
+    375,
+    377,
+    [
+     "> with the datum of the page and cites the page, declines a question the page does",
+     "> not answer, and, in the mode with tools, searches the wiki before it answers."
+    ]
+   ],
+   [
+    "equal",
+    473,
+    474,
+    377,
+    378
+   ],
+   [
+    "replace",
+    474,
+    476,
+    378,
+    380,
+    [
+     "> the summary page and a concept page that names the source, and the lint finds no",
+     "> error."
+    ]
+   ],
+   [
+    "equal",
+    476,
+    477,
+    380,
+    381
+   ],
+   [
+    "replace",
+    477,
+    479,
+    381,
+    383,
+    [
+     "> data of the page are in what the model reads, and the description of the page has",
+     "> the format the product asks for."
+    ]
+   ],
+   [
+    "equal",
+    479,
+    504,
+    383,
+    408
+   ],
+   [
+    "delete",
+    504,
+    506,
+    408,
+    408
+   ],
+   [
+    "equal",
+    506,
+    516,
+    408,
+    418
+   ],
+   [
+    "replace",
+    516,
+    526,
+    418,
+    419,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    526,
+    574,
+    419,
+    467
+   ],
+   [
+    "replace",
+    574,
+    577,
+    467,
+    468,
+    [
+     "See `docs/manual/apps.md` §8."
+    ]
+   ],
+   [
+    "equal",
+    577,
+    580,
+    468,
+    471
+   ],
+   [
+    "replace",
+    580,
+    590,
+    471,
+    481,
+    [
+     "|Format|Parser|Needs|",
+     "|------|------|-----|",
+     "|PDF|opendataloader-pdf|A Java runtime. Text-heavy PDFs work well; a scanned PDF needs an OCR engine (below)|",
+     "|DOCX|LibreOffice → PDF → opendataloader-pdf|LibreOffice **and** a Java runtime|",
+     "|DOC|LibreOffice → PDF → opendataloader-pdf|LibreOffice **and** a Java runtime|",
+     "|ODT|LibreOffice → PDF → opendataloader-pdf|LibreOffice **and** a Java runtime|",
+     "|RTF|LibreOffice → PDF → opendataloader-pdf|LibreOffice **and** a Java runtime|",
+     "|MD|read directly|Nothing. Encoding UTF-8, UTF-8 with BOM or cp1252. Pages split at level-1/2 headings (about 4,000 characters per page, no paragraph cut); the front-matter block is not stored|",
+     "|TXT|read directly|Nothing. Same encodings; pages split at blank-line paragraph boundaries (about 4,000 characters per page)|",
+     "|PNG, JPG, JPEG, WEBP, GIF|kept as an image; its text is the description of a vision model|`ignore = false` in `[images]` (below) and a vision model|"
+    ]
+   ],
+   [
+    "equal",
+    590,
+    605,
+    481,
+    496
+   ],
+   [
+    "replace",
+    605,
+    606,
+    496,
+    497,
+    [
+     "`Imagen, página 3`, and"
+    ]
+   ],
+   [
+    "equal",
+    606,
+    617,
+    497,
+    508
+   ],
+   [
+    "replace",
+    617,
+    618,
+    508,
+    509,
+    [
+     "**Describing the images (opt-in).** With `describe = true` in the `[images]` section of `wiki_config.toml`, a vision model (`VISION_BASE_URL`, `VISION_API_KEY`, `VISION_MODEL`, set in the Settings screen or in `.env`, falling back to the ingestion and then the chat model) describes each kept image. The key `describe` acts only with `ignore = false`. The description is a file beside the image (`<image>.desc.json`, outside git), enters the stored text of the source as a block delimited by ` ` so the search, the ingestion model and the verification see it, and appears in the Figures section of the summary page in a folded block labelled \"Generated description\". The verification marks a sentence supported only by a description with its own state (a dotted underline). Images of a Markdown source (local raster files inside `sources/`) are kept and described the same way, and an image file (`.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`) is a source whose text is its description. The text inside an image is untrusted input: see `SECURITY.md`. Details: `docs/design_image_handling.md`."
+    ]
+   ],
+   [
+    "equal",
+    618,
+    624,
+    509,
+    515
+   ],
+   [
+    "replace",
+    624,
+    629,
+    515,
+    520,
+    [
+     "|`OCR_ENGINE`|What it does|",
+     "|------------|------------|",
+     "|`none` (default)|The ingestion fails with a message that names the setting and the two engines.|",
+     "|`tesseract`|Local: `ocrmypdf` with Tesseract, run as external programs. Install them with `brew install ocrmypdf tesseract tesseract-lang` (macOS) or `sudo apt-get install ocrmypdf tesseract-ocr tesseract-ocr-spa` (Debian, Ubuntu); on Windows follow the ocrmypdf instructions. The language follows the wiki language (`spa` for `es`, `eng` for `en`). The copy with a text layer is kept as `ocr.pdf` in the document's cache directory, and the source viewer shows it.|",
+     "|`vision`|A model with vision reads each page through an OpenAI-compatible API: one model call per page, and the text may vary between runs. Each of `OCR_BASE_URL`, `OCR_API_KEY` and `OCR_MODEL` is the first value that is not blank among `OCR_*`, `VISION_*`, `WIKI_LLM_*` and `LLM_*`, so the vision model of the Settings screen reads the pages unless `OCR_*` is set in `.env`.|"
+    ]
+   ],
+   [
+    "equal",
+    629,
+    636,
+    520,
+    527
+   ],
+   [
+    "delete",
+    636,
+    638,
+    527,
+    527
+   ],
+   [
+    "equal",
+    638,
+    678,
+    527,
+    567
+   ],
+   [
+    "replace",
+    678,
+    679,
+    567,
+    568,
+    [
+     "The acceptance plan, `docs/uat_test_plan.md`, lists the"
+    ]
+   ],
+   [
+    "equal",
+    679,
+    705,
+    568,
+    594
+   ],
+   [
+    "replace",
+    705,
+    708,
+    594,
+    595,
+    [
+     "in `docs/manual/apps.md` §9."
+    ]
+   ],
+   [
+    "equal",
+    708,
+    715,
+    595,
+    602
+   ],
+   [
+    "replace",
+    715,
+    716,
+    602,
+    603,
+    [
+     " re-scanning a large `sources/` folder only re-processes what actually changed."
+    ]
+   ],
+   [
+    "equal",
+    716,
+    717,
+    603,
+    604
+   ],
+   [
+    "replace",
+    717,
+    720,
+    604,
+    607,
+    [
+     " and contradiction checks only look at concept-page *pairs that cite a common",
+     " source*, so their cost scales with how topically interconnected your wiki is —",
+     " not with the raw document count. Unrelated pages are never compared."
+    ]
+   ],
+   [
+    "equal",
+    720,
+    721,
+    607,
+    608
+   ],
+   [
+    "replace",
+    721,
+    722,
+    608,
+    609,
+    [
+     " into the existing overview instead of re-reading the whole corpus."
+    ]
+   ],
+   [
+    "equal",
+    722,
+    728,
+    609,
+    615
+   ],
+   [
+    "delete",
+    728,
+    730,
+    615,
+    615
+   ],
+   [
+    "equal",
+    730,
+    732,
+    615,
+    617
+   ],
+   [
+    "replace",
+    732,
+    735,
+    617,
+    620,
+    [
+     "This is a working proof of concept of the LLM-Wiki pattern, not a finished ",
+     "product. The core loop — ingest → build/maintain wiki → read → chat with ",
+     "citations → lint → repair — is fully implemented. Some ideas from the original "
+    ]
+   ],
+   [
+    "equal",
+    735,
+    737,
+    620,
+    622
+   ],
+   [
+    "replace",
+    737,
+    752,
+    622,
+    637,
+    [
+     "- **No web search.** The chat agent answers only from *your* curated local ",
+     "corpus — it never reaches out to the web, and there is no automatic web→wiki ",
+     "loop. To bring in an outside source, fetch it yourself (e.g. save the article ",
+     "as a PDF) and then **ingest it manually** — dropping a file into `sources/` ",
+     "does nothing on its own. Open the **Ingest** tab and either (a) choose the file in ",
+     "the upload form and click **Ingest**, or (b) put it in ",
+     "`WIKI_PATH/sources/` and click **Scan sources/ for changes**, which detects ",
+     "and ingests anything new or modified. Treat a document from an untrusted origin ",
+     "the way you would treat untrusted code: at ingestion its text is turned into wiki ",
+     "pages automatically — see `SECURITY.md`.",
+     "- **Images are ignored by default.** With `[images] ignore = true`, the default, ",
+     "the images embedded in a document are skipped: not kept, not described. See ",
+     "Document formats.",
+     "- **OCR is off by default.** A scanned / image-only PDF fails with a message until ",
+     "you set `OCR_ENGINE` (see Document formats). The `vision` "
+    ]
+   ],
+   [
+    "equal",
+    752,
+    753,
+    637,
+    638
+   ],
+   [
+    "replace",
+    753,
+    758,
+    638,
+    643,
+    [
+     "- **Output is markdown only — no alternate formats.** The wiki ",
+     "records a full citation/link graph in the database (`document_references`: ",
+     "which page cites which source, which pages link to which), and the ",
+     "**Relations** tab draws it. There are no generators for slide ",
+     "decks (**Marp**) or spatial **canvas** layouts. You read the wiki as linked "
+    ]
+   ],
+   [
+    "equal",
+    758,
+    759,
+    643,
+    644
+   ],
+   [
+    "replace",
+    759,
+    766,
+    644,
+    651,
+    [
+     "- **Ingestion is automated, not a guided conversation.** Karpathy's flow has the ",
+     "LLM discuss a source with you and write pages under your direction; here you ",
+     "drop a file and the pipeline extracts → summarises → files it in one shot, with ",
+     "no mid-ingest review. You steer the wiki *afterwards*: open the resulting page ",
+     "in the **Read** tab, chat about the document, then save the conversation ",
+     "as a wiki page with **Save**. The agent only drafts and proposes — you review ",
+     "the draft in a dialog and the save is your explicit "
+    ]
+   ],
+   [
+    "equal",
+    766,
+    768,
+    651,
+    653
+   ],
+   [
+    "replace",
+    768,
+    784,
+    653,
+    669,
+    [
+     "- **Deleting a source leaves its contribution in the pages it shares.** A page ",
+     "that cites only the deleted source is deleted, and no link to it is left. A page ",
+     "that also cites another source is kept, marked stale, and stops citing the deleted ",
+     "file — but its text and its generated aliases may still hold what that file ",
+     "contributed, because a page does not record which sentence came from which ",
+     "source. This applies equally to a deletion from the **Ingest** tab and to a file ",
+     "removed from `sources/` by hand, which the wiki deletes when you open it. The only ",
+     "way to remove that text is to rebuild the whole wiki from the remaining sources: ",
+     " 1. In the wiki list, create a new wiki in an empty folder. ",
+     " 2. In its **Ingest** tab, upload the remaining source documents. ",
+     " 3. Copy `wiki_config.toml` from the old wiki: it holds the blacklist and the ",
+     " hand-written aliases. ",
+     "",
+     " Changes made by hand in the old wiki (edited pages, removed topics) are not ",
+     " carried over. **Rebuild the index** in the **Maintain** tab does not do this: it ",
+     " rebuilds the search database from the pages as they are."
+    ]
+   ],
+   [
+    "equal",
+    784,
+    787,
+    669,
+    672
+   ],
+   [
+    "replace",
+    787,
+    790,
+    672,
+    673,
+    [
+     "than suspected — are in `ROADMAP.md`."
+    ]
+   ],
+   [
+    "equal",
+    790,
+    793,
+    673,
+    676
+   ],
+   [
+    "replace",
+    793,
+    797,
+    676,
+    678,
+    [
+     "- Contribution setup, test workflow, and conventions: `CONTRIBUTING.md`",
+     "- Security model and how to report issues: `SECURITY.md`"
+    ]
+   ],
+   [
+    "equal",
+    797,
+    799,
+    678,
+    680
+   ],
+   [
+    "delete",
+    799,
+    800,
+    680,
+    680
+   ],
+   [
+    "equal",
+    800,
+    801,
+    680,
+    681
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

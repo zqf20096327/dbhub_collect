@@ -32589,5 +32589,1310 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "b50422be4495+2": {
+  "fn": "ralforion/orionbelt-semantic-layer",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "OrionBelt Semantic Layer logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " OrionBelt&reg; Semantic and Context Layer, Rule Engine, and Semantic Sidecar "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     " Define shared metrics or model a set of questions in YAML. Let agents and BI tools query through one semantic compiler. "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    9,
+    6,
+    7,
+    [
+     " A semantic sidecar: it rides alongside the systems you already run instead of replacing them. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    7,
+    8
+   ],
+   [
+    "replace",
+    10,
+    13,
+    8,
+    9,
+    [
+     "Live Demo"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    9,
+    10
+   ],
+   [
+    "replace",
+    14,
+    23,
+    10,
+    15,
+    [
+     "Version 3.1.1",
+     "PyPI",
+     "Docker pulls",
+     "Python 3.12+",
+     "License: BUSL-1.1"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    26,
+    15,
+    18
+   ],
+   [
+    "replace",
+    26,
+    27,
+    18,
+    19,
+    [
+     "OrionBelt is a **semantic and context layer** with a **rule engine**, and it runs as a **semantic sidecar**. You or an agent declare dimensions, measures, metrics, and joins in YAML, scoped to one task or maintained as a shared model. OrionBelt compiles them into dialect-specific SQL through a real AST, and routes multi-fact queries through a Composite Fact Layer planner that blocks the join paths that produce fan traps. Queries ask for `\"Total Revenue\" by \"Country\"`; physical table and column mappings live in the model."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    36,
+    19,
+    28
+   ],
+   [
+    "replace",
+    36,
+    37,
+    28,
+    29,
+    [
+     "Follow the agent workflow guide for a complete example, or see the one-shot API contract."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    42,
+    29,
+    34
+   ],
+   [
+    "replace",
+    42,
+    43,
+    34,
+    35,
+    [
+     "|Surface|Port|Speaks|Connect with|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    35,
+    36
+   ],
+   [
+    "replace",
+    44,
+    48,
+    36,
+    40,
+    [
+     "|**PostgreSQL wire**|`5432`|Postgres protocol|DuckDB via `ATTACH`, Tableau, Dremio as a federated source, Power BI, Superset, DBeaver, Metabase, `psql`|",
+     "|**Arrow Flight SQL**|`8815`|gRPC + Arrow|DuckDB via `adbc_scanner`, Tableau and Power BI through the Flight SQL JDBC/ODBC drivers, ADBC clients (Python, Go, Java)|",
+     "|**REST**|`8000`|HTTP + JSON|your code, notebooks, `curl`, and the 8 PEP 249 drivers (which compile here, then execute on the warehouse directly)|",
+     "|**MCP**|stdio / HTTP|Model Context Protocol|AI agents: Claude, Cursor, Copilot, Windsurf|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    40,
+    41
+   ],
+   [
+    "replace",
+    49,
+    50,
+    41,
+    42,
+    [
+     "Both SQL surfaces speak OBSQL, so `SELECT \"Region\", \"Total Sales\" FROM sales_model` is the same query whichever one you came in through. ADBC is how you *use* the Flight SQL surface rather than a fifth surface of its own, and DuckDB is a client that can take either SQL surface."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    55,
+    42,
+    47
+   ],
+   [
+    "replace",
+    55,
+    56,
+    47,
+    48,
+    [
+     "**One query across databases (v3.0.0+).** A model's data objects can live in different databases, the orders in MySQL and the customers in PostgreSQL. A query that reads both is split into one query per database, run at once, and combined in an in-memory DuckDB. It returns the answer one database holding all the tables would return, or a named `FEDERATION_*` error, with a few exceptions that are not refused: text and NULL sorting, time zones, and text join keys between two engines that differ only in case, which MySQL matches and the combine step does not. See Federated queries and the results that can differ."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    48,
+    49
+   ],
+   [
+    "replace",
+    57,
+    58,
+    49,
+    50,
+    [
+     "**Files and lakehouse tables, no warehouse needed (v3.1.0+).** A DuckDB data source reads Parquet, CSV and JSON files where they are, on disk or in S3-compatible object storage, and Apache Iceberg tables behind a REST catalog. The model's dialect is `duckdb`; `DUCKDB_ALLOWED_PATHS` lists what a source may read, and `DUCKDB_MEMORY_LIMIT` bounds its memory. When one source's load needs more than one process, its queries can run on DuckDB workers. See Files and lakehouse tables and DuckDB workers."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    65,
+    50,
+    57
+   ],
+   [
+    "replace",
+    65,
+    75,
+    57,
+    58,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    99,
+    58,
+    82
+   ],
+   [
+    "replace",
+    99,
+    130,
+    82,
+    83,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    134,
+    83,
+    87
+   ],
+   [
+    "replace",
+    134,
+    135,
+    87,
+    88,
+    [
+     "**This is checked, not asserted.** 40 TPC-DS queries are built against a single OBML model and compared row by row against each engine's own reference SQL: 39 of 40 match on DuckDB at sf=1, 37 of 40 on ClickHouse at sf=10. Every one of the remaining differences traces to a reference variant rather than a compilation error, and each is documented. See the sweep, or the queries in `examples/tpcds_queries/`."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    140,
+    88,
+    93
+   ],
+   [
+    "replace",
+    140,
+    141,
+    93,
+    94,
+    [
+     "|Expression|What the engines do|What OrionBelt returns|"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    94,
+    95
+   ],
+   [
+    "replace",
+    142,
+    147,
+    95,
+    100,
+    [
+     "|`x / 0`|`inf` on one engine, an error on four, NULL on the rest|NULL, everywhere|",
+     "|`round(2.5)` on a float|ClickHouse, PostgreSQL and MySQL round ties to even and answer 2|3, everywhere|",
+     "|`greatest(1, NULL, 3)`|Four engines skip the NULL and answer 3|NULL, everywhere|",
+     "|`length('äbcd')`|ClickHouse and MySQL count bytes and answer 5|4 characters|",
+     "|`json_value(doc, '$.a')` where `a` is an object|Four engines return the serialized JSON|NULL: the path did not reach a scalar|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    100,
+    101
+   ],
+   [
+    "replace",
+    148,
+    149,
+    101,
+    102,
+    [
+     "Each row is executed against the live engines and asserted, not derived from vendor documentation. Set `expressionMode: portable` and a function outside the portable catalog becomes an error, so a model cannot pick up an engine dependency by accident."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    154,
+    102,
+    107
+   ],
+   [
+    "replace",
+    154,
+    157,
+    107,
+    110,
+    [
+     "- **Apache Ossie both ways.** OSI (Open Semantic Interchange) is the open standard for portable semantic models, now developed as Apache Ossie (incubating). OrionBelt converts OBML to Ossie and back, with schema validation in both directions, over REST, the CLI (`obsl convert`) and the UI. The converter is also a standalone package (`pip install osi-orionbelt`) and is being contributed upstream.",
+     "- **Lineage for every artefact and every query.** What a dimension, measure, metric or rule is built from, and for a query the joins the planner actually chose, its multi-fact `UNION ALL` legs and `exists` subqueries, down to columns and tables. As JSON, Mermaid or Turtle, over REST, the CLI (`obsl lineage`) and the UI.",
+     "- **The model as a standard graph.** Every loaded model exports as RDF (OWL, SHACL, SKOS, PROV) and answers read-only SPARQL, so *\"which measures read this column?\"* is a query rather than a code search, and lineage links into the same graph."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    174,
+    110,
+    127
+   ],
+   [
+    "replace",
+    174,
+    177,
+    127,
+    130,
+    [
+     "- You need pre-aggregation and caching tuned for high-concurrency dashboards at scale. Cube has years of production hardening there that OrionBelt does not.",
+     "- Your metrics already live in dbt and your team is happy there. MetricFlow keeps them where they are.",
+     "- You want an exploratory analysis language rather than a serving layer. Malloy is a better fit."
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    130,
+    131
+   ],
+   [
+    "replace",
+    178,
+    179,
+    131,
+    132,
+    [
+     "**Try the live demo** with a pre-loaded model, or open the Colab notebook and run it against TPC-H data."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    184,
+    132,
+    137
+   ],
+   [
+    "replace",
+    184,
+    188,
+    137,
+    141,
+    [
+     "- **Business rules** state conditions over the model's dimensions, measures and metrics: who counts as a high-value client, which categories must not sell at a loss. The rule engine compiles each rule to the query that reports its members or violations, and evaluates one rule or all of them over REST, MCP, the CLI (`obsl rules evaluate`) and the UI.",
+     "- **External concept mappings** link data objects, dimensions, measures, metrics and rules to the concepts your organisation already governs (schema.org, FIBO, an internal vocabulary), with provenance.",
+     "- **The OBSL graph** exposes every loaded model as RDF, so its artefacts, joins, rules and concept links can be queried with SPARQL.",
+     "- **Lineage** shows what a dimension, measure, metric, rule or query is built from, down to the tables and the joins the planner chose, as JSON, Mermaid, or Turtle linked into the OBSL graph, in the API, the CLI (`obsl lineage`) and the UI."
+    ]
+   ],
+   [
+    "equal",
+    188,
+    202,
+    141,
+    155
+   ],
+   [
+    "replace",
+    202,
+    206,
+    155,
+    156,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    216,
+    156,
+    166
+   ],
+   [
+    "replace",
+    216,
+    223,
+    166,
+    167,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    229,
+    167,
+    173
+   ],
+   [
+    "replace",
+    229,
+    230,
+    173,
+    174,
+    [
+     "Guides: Business Rules, External Concept Mappings, OBSL Graph & SPARQL."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    232,
+    174,
+    176
+   ],
+   [
+    "replace",
+    232,
+    237,
+    176,
+    177,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    241,
+    177,
+    181
+   ],
+   [
+    "replace",
+    241,
+    242,
+    181,
+    182,
+    [
+     "**Open the Live Demo** — Gradio UI with a pre-loaded example model. Paste a query, pick a dialect, see SQL instantly."
+    ]
+   ],
+   [
+    "equal",
+    242,
+    243,
+    182,
+    183
+   ],
+   [
+    "replace",
+    243,
+    244,
+    183,
+    184,
+    [
+     "API explorer: Swagger UI | ReDoc"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    249,
+    184,
+    189
+   ],
+   [
+    "replace",
+    249,
+    253,
+    189,
+    193,
+    [
+     "> -p 8080:8080 -p 5432:5432 -p 8815:8815 \\",
+     "> -e PGWIRE_ENABLED=true \\",
+     "> -e FLIGHT_ENABLED=true \\",
+     "> ralforion/orionbelt-semantic-layer-api:latest"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    193,
+    194
+   ],
+   [
+    "replace",
+    254,
+    255,
+    194,
+    195,
+    [
+     "> # REST + Gradio UI: http://localhost:8080/ui"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    257,
+    195,
+    197
+   ],
+   [
+    "replace",
+    257,
+    258,
+    197,
+    198,
+    [
+     "> -c 'SELECT \"Client Name\", \"Total Sales\" LIMIT 5'"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    268,
+    198,
+    208
+   ],
+   [
+    "replace",
+    268,
+    269,
+    208,
+    209,
+    [
+     "Open In Colab — Interactive notebook with TPC-H data: explore the model, compile queries across dialects, execute against DuckDB, and see results. Requires Python 3.12 runtime."
+    ]
+   ],
+   [
+    "equal",
+    269,
+    282,
+    209,
+    222
+   ],
+   [
+    "replace",
+    282,
+    312,
+    222,
+    223,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    354,
+    223,
+    265
+   ],
+   [
+    "replace",
+    354,
+    358,
+    265,
+    266,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    360,
+    266,
+    268
+   ],
+   [
+    "replace",
+    360,
+    361,
+    268,
+    269,
+    [
+     "See the CLI guide for all commands."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    368,
+    269,
+    276
+   ],
+   [
+    "replace",
+    368,
+    372,
+    276,
+    277,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    382,
+    277,
+    287
+   ],
+   [
+    "replace",
+    382,
+    389,
+    287,
+    288,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    391,
+    288,
+    290
+   ],
+   [
+    "replace",
+    391,
+    392,
+    290,
+    291,
+    [
+     "See the OBSQL reference for the full grammar."
+    ]
+   ],
+   [
+    "equal",
+    392,
+    401,
+    291,
+    300
+   ],
+   [
+    "replace",
+    401,
+    402,
+    300,
+    301,
+    [
+     "Open http://localhost:8080/docs to explore the API."
+    ]
+   ],
+   [
+    "equal",
+    402,
+    409,
+    301,
+    308
+   ],
+   [
+    "replace",
+    409,
+    422,
+    308,
+    309,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    428,
+    309,
+    315
+   ],
+   [
+    "replace",
+    428,
+    429,
+    315,
+    316,
+    [
+     "See `.env.template` for the full environment variable reference."
+    ]
+   ],
+   [
+    "equal",
+    429,
+    432,
+    316,
+    319
+   ],
+   [
+    "replace",
+    432,
+    433,
+    319,
+    320,
+    [
+     "> - MCP via stdio does not work in Docker. Use the MCP HTTP client for containerized deployments."
+    ]
+   ],
+   [
+    "equal",
+    433,
+    440,
+    320,
+    327
+   ],
+   [
+    "replace",
+    440,
+    441,
+    327,
+    328,
+    [
+     "**orionbelt-semantic-layer-mcp**"
+    ]
+   ],
+   [
+    "equal",
+    441,
+    448,
+    328,
+    335
+   ],
+   [
+    "replace",
+    448,
+    453,
+    335,
+    336,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    455,
+    336,
+    338
+   ],
+   [
+    "replace",
+    455,
+    458,
+    338,
+    339,
+    [
+     "Also works with Copilot, Cursor, and Windsurf. See the MCP repo for full setup options."
+    ]
+   ],
+   [
+    "equal",
+    458,
+    461,
+    339,
+    342
+   ],
+   [
+    "replace",
+    461,
+    462,
+    342,
+    343,
+    [
+     "||OrionBelt|dbt Semantic Layer|Cube|Malloy|"
+    ]
+   ],
+   [
+    "equal",
+    462,
+    463,
+    343,
+    344
+   ],
+   [
+    "replace",
+    463,
+    472,
+    344,
+    353,
+    [
+     "|**Model format**|YAML (OBML)|YAML on dbt models|YAML or JavaScript|Malloy language|",
+     "|**Runtime**|Self-hosted service|dbt Cloud|Cube Core (self-hosted) or Cube Cloud|Library, plus the Publisher server|",
+     "|**License**|BUSL-1.1 (converts to Apache 2.0)|Definitions open source; runtime in dbt Cloud|Apache 2.0 core + Cube Cloud|Open source|",
+     "|**Query surfaces**|OBSQL over PostgreSQL wire and Arrow Flight SQL, REST, MCP, DB-API drivers, CLI|GraphQL, JDBC (Cloud)|SQL API (PostgreSQL wire), REST, GraphQL|Malloy language; Publisher REST and MCP|",
+     "|**Multi-fact queries**|`UNION ALL` legs (CFL), fan-trap paths refused|`FULL OUTER JOIN` on shared entities|Per-fact subqueries joined on shared dimensions|Single-rooted sources|",
+     "|**Same answer on every engine**|Pinned and executed (`x/0`, rounding, NULLs, JSON)|Inherits engine semantics|Inherits engine semantics|Partly normalized: `greatest` / `least` NULL if any argument is, `round` half away from zero, `length` in characters; `x / 0` is left to the engine (`inf` on DuckDB), and \"perfect compatibility across all dialects for all functions is not guaranteed\"|",
+     "|**Lineage**|Per artefact and per query, down to columns and the joins chosen|Catalog DAG of semantic models and metrics; no per-query lineage|Cube Cloud Metadata API: lineage from cubes and members to source tables, with database names and SQL expressions, for catalog integrations; no per-query lineage|None documented|",
+     "|**Interchange**|Apache Ossie both ways; the model as RDF with SPARQL|No|Apache Ossie import and export through the Cube CLI and Platform API (Oct 2026; the CLI is in preview, access via Cube support)|No|",
+     "|**Business meaning in the model**|Rules compiled to the query that reports their findings; SKOS links to an external ontology|Column-level data tests; free-form `meta`|Free-form `meta` (`ai_context`)|Annotations, uninterpreted|"
+    ]
+   ],
+   [
+    "equal",
+    472,
+    473,
+    353,
+    354
+   ],
+   [
+    "replace",
+    473,
+    476,
+    354,
+    355,
+    [
+     "Full, two-sided comparisons, including where each of these tools is ahead: dbt, Cube, Malloy, LookML, AtScale."
+    ]
+   ],
+   [
+    "equal",
+    476,
+    486,
+    355,
+    365
+   ],
+   [
+    "replace",
+    486,
+    487,
+    365,
+    366,
+    [
+     "- **OSI Interoperability** — bidirectional conversion between OBML and the Open Semantic Interchange format, now developed as Apache Ossie (incubating)"
+    ]
+   ],
+   [
+    "equal",
+    487,
+    502,
+    366,
+    381
+   ],
+   [
+    "replace",
+    502,
+    503,
+    381,
+    382,
+    [
+     "- **MCP Server** — separate thin client for Claude, Copilot, Cursor, Windsurf"
+    ]
+   ],
+   [
+    "equal",
+    503,
+    506,
+    382,
+    385
+   ],
+   [
+    "replace",
+    506,
+    507,
+    385,
+    386,
+    [
+     "- **DuckDB as a client** (v2.27.1+) - a plain DuckDB shell queries the layer, over either surface. `ATTACH ... (TYPE postgres)` mounts the model as a table (`SELECT ... FROM obsl.sales.model`, after `SET pg_use_text_protocol = true`, and on DuckDB 2.0.1+ `SET pg_enable_remote_pushdown = false`); the `adbc_scanner` community extension does it over Flight SQL with Arrow the whole way. Governed measures join to local tables and land in `CREATE TABLE AS`. Guide"
+    ]
+   ],
+   [
+    "equal",
+    507,
+    511,
+    386,
+    390
+   ],
+   [
+    "replace",
+    511,
+    512,
+    390,
+    391,
+    [
+     "- **One-shot Model + Queries**: submit task-specific OBML and independent sub-questions to `POST /v1/oneshot/batch`; get per-query results and optionally retain the model for follow-ups. See Agent Workflows."
+    ]
+   ],
+   [
+    "equal",
+    512,
+    533,
+    391,
+    412
+   ],
+   [
+    "delete",
+    533,
+    535,
+    412,
+    412
+   ],
+   [
+    "equal",
+    535,
+    543,
+    412,
+    420
+   ],
+   [
+    "replace",
+    543,
+    577,
+    420,
+    421,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    577,
+    585,
+    421,
+    429
+   ],
+   [
+    "replace",
+    585,
+    597,
+    429,
+    430,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    597,
+    599,
+    430,
+    432
+   ],
+   [
+    "replace",
+    599,
+    601,
+    432,
+    433,
+    [
+     " Generated SQL (Postgres) "
+    ]
+   ],
+   [
+    "equal",
+    601,
+    606,
+    433,
+    438
+   ],
+   [
+    "replace",
+    606,
+    610,
+    438,
+    439,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    610,
+    611,
+    439,
+    440
+   ],
+   [
+    "delete",
+    611,
+    613,
+    440,
+    440
+   ],
+   [
+    "equal",
+    613,
+    616,
+    440,
+    443
+   ],
+   [
+    "delete",
+    616,
+    618,
+    443,
+    443
+   ],
+   [
+    "equal",
+    618,
+    620,
+    443,
+    445
+   ],
+   [
+    "replace",
+    620,
+    623,
+    445,
+    446,
+    [
+     " OrionBelt Gradio UI showing side-by-side OBML model editor and compiled SQL output"
+    ]
+   ],
+   [
+    "equal",
+    623,
+    634,
+    446,
+    457
+   ],
+   [
+    "replace",
+    634,
+    637,
+    457,
+    458,
+    [
+     " OrionBelt Business Rules tab listing the model"
+    ]
+   ],
+   [
+    "equal",
+    637,
+    638,
+    458,
+    459
+   ],
+   [
+    "replace",
+    638,
+    641,
+    459,
+    460,
+    [
+     " OrionBelt Ontology Graph tab showing the semantic model as an interactive network of data objects, dimensions, measures, metrics, and join relationships"
+    ]
+   ],
+   [
+    "equal",
+    641,
+    657,
+    460,
+    476
+   ],
+   [
+    "delete",
+    657,
+    659,
+    476,
+    476
+   ],
+   [
+    "equal",
+    659,
+    661,
+    476,
+    478
+   ],
+   [
+    "replace",
+    661,
+    662,
+    478,
+    479,
+    [
+     "|Topic|Link|"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    663,
+    479,
+    480
+   ],
+   [
+    "replace",
+    663,
+    697,
+    480,
+    512,
+    [
+     "|Full docs site|ralforion.com/orionbelt-semantic-layer|",
+     "|Installation|getting-started/installation|",
+     "|Quick Start|getting-started/quickstart|",
+     "|Docker & Deployment|getting-started/docker|",
+     "|Development|getting-started/development|",
+     "|OBML Model Format|guide/model-format|",
+     "|Query Language|guide/query-language|",
+     "|SQL Dialects|guide/dialects|",
+     "|Period-over-Period Metrics|guide/period-over-period|",
+     "|Trend Analysis (rank / lag / lead / ntile, partitioned MAs, statistical aggregates)|guide/trend-analysis|",
+     "|Compilation Pipeline|guide/compilation|",
+     "|OBSL Graph & SPARQL|guide/obsl|",
+     "|Business Rules|guide/business-rules|",
+     "|External Concept Mappings|guide/concept-mappings|",
+     "|Gradio UI|guide/ui|",
+     "|AI Integrations|guide/integrations|",
+     "|OSI Interoperability|guide/osi|",
+     "|REST API Endpoints|api/endpoints|",
+     "|DB-API Drivers & Flight SQL|drivers|",
+     "|Architecture|reference/architecture|",
+     "|Configuration|reference/configuration|",
+     "|Sales Model Walkthrough|examples/sales-model|",
+     "|Multi-Dialect Output|examples/multi-dialect|",
+     "|Multi-Fact: Sales & Returns|examples/multi-fact|",
+     "|TPC-DS Benchmark|examples/tpcds|",
+     "|Quickstart Notebook|examples/quickstart.ipynb|",
+     "|**Comparison: Overview**|comparison/|",
+     "|Comparison: vs. dbt Semantic Layer|comparison/dbt|",
+     "|Comparison: vs. Malloy|comparison/malloy|",
+     "|Comparison: vs. LookML / Looker|comparison/lookml|",
+     "|Comparison: vs. Cube|comparison/cube|",
+     "|Comparison: vs. AtScale|comparison/atscale|"
+    ]
+   ],
+   [
+    "equal",
+    697,
+    700,
+    512,
+    515
+   ],
+   [
+    "replace",
+    700,
+    701,
+    515,
+    516,
+    [
+     "|Status|Area|"
+    ]
+   ],
+   [
+    "equal",
+    701,
+    702,
+    516,
+    517
+   ],
+   [
+    "replace",
+    702,
+    706,
+    517,
+    519,
+    [
+     "|Shipped|8 SQL dialects, REST API, MCP server, Gradio UI, DB-API drivers, Flight SQL, **PostgreSQL wire protocol (v2.5.0+)**: Tableau / DBeaver / Superset / Power BI / `psql` / **Dremio as a federated Postgres source**, OBSL/SPARQL, **Apache Ossie (OSI) 0.3 interop** with bidirectional schema validation, AI integrations (LangChain, CrewAI, ADK, etc.), model inheritance & extends, data types & numerical precision, timezone settings, grain & filter context overrides, **Trend Analysis**: partitioned rolling windows, `MetricType.WINDOW` for rank/lag/lead/ntile, 9 statistical aggregates (CORR, COVAR_*, REGR_*, STDDEV_*, VAR_*), **Unified authentication (v2.12.0)** across REST / Flight / pgwire / UI: `AUTH_MODE=api_key` with shared key store, pgwire SCRAM-SHA-256 + cleartext, **Artefacts Composability Resolution (ACR, v2.14.0)**: a `composables` endpoint that, given the query so far, returns which dimensions / measures / metrics can still be added (including CFL candidates), powering guided query building, **`obsl` CLI (v2.17.0+)** for automation & CI/CD: `validate`, `compile`, `execute`, `describe`, `lineage`, `convert`, `rules` and more, in-process or against a server with `--server`, **Federated queries (v3.0.0+)**: a model's data objects can live in different databases. A query reading more than one is split into one query per data source, run at once, and combined in an in-memory DuckDB, **Files and lakehouse tables (v3.1.0+)**: Parquet, CSV, JSON and Apache Iceberg read in place by a DuckDB data source|",
+     "|Planned|OIDC / SSO authentication & per-token authorization scopes, DDL view generation (CREATE VIEW from queries), additional dialects, additional BI tool integrations, pre-aggregation / materialization layer|"
+    ]
+   ],
+   [
+    "equal",
+    706,
+    716,
+    519,
+    529
+   ],
+   [
+    "replace",
+    716,
+    719,
+    529,
+    530,
+    [
+     "Contact RALFORION d.o.o. for details."
+    ]
+   ],
+   [
+    "equal",
+    719,
+    722,
+    530,
+    533
+   ],
+   [
+    "replace",
+    722,
+    723,
+    533,
+    534,
+    [
+     "### OrionBelt Analytics"
+    ]
+   ],
+   [
+    "equal",
+    723,
+    726,
+    534,
+    537
+   ],
+   [
+    "replace",
+    726,
+    731,
+    537,
+    538,
+    [
+     " Architecture diagram showing OrionBelt Analytics generating ontologies from database schemas, feeding into OrionBelt Semantic Layer for SQL compilation"
+    ]
+   ],
+   [
+    "equal",
+    731,
+    747,
+    538,
+    554
+   ],
+   [
+    "replace",
+    747,
+    756,
+    554,
+    555,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    756,
+    781,
+    555,
+    580
+   ],
+   [
+    "delete",
+    781,
+    783,
+    580,
+    580
+   ],
+   [
+    "equal",
+    783,
+    784,
+    580,
+    581
+   ],
+   [
+    "replace",
+    784,
+    804,
+    581,
+    582,
+    [
+     "Copyright © 2026 RALFORION d.o.o."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

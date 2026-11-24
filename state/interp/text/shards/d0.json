@@ -3493,5 +3493,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "405e8763e339": {
+  "identity": {
+   "one_liner": "针对 Postgres 迁移与 SQL 的 Rust 编写 lint 工具，含格式化与语言服务器",
+   "review": "Squawk 是用 Rust 编写的 Postgres 迁移与 SQL 检查工具，提供 lint、代码格式化（squawk format）与语言服务器。它基于类 rust-analyzer 的解析器生成 CST，再在 AST 上记录告警。可通过 npm、PyPI、Docker、WASM Playground 或 VSCode 插件安装运行，并支持 GitHub PR 评论与 pre-commit 集成。规则可经 --exclude、squawk-ignore 注释或 .squawk.toml 配置文件排除。",
+   "highlights": [
+    "内置多条针对 Postgres 迁移的检查规则，支持通过 --exclude 参数、squawk-ignore 注释或 .squawk.toml 配置文件排除指定规则",
+    "提供 squawk format 子命令对 SQL 文件进行格式化，并附带 VSCode 扩展与浏览器端 WASM Playground",
+    "支持 upload-to-github 子命令在 GitHub Pull Request 上创建评论，也可通过 pre-commit hook 接入 Git 工作流"
+   ],
+   "use_cases": [
+    "在 CI 或本地对 Postgres 迁移 SQL 文件运行检查并输出告警",
+    "通过 GitHub Action 或 upload-to-github 子命令在 Pull Request 中生成检查评论",
+    "使用 pre-commit hook 或 VSCode 插件在开发流程中对迁移文件进行检查"
+   ]
+  },
+  "sha": "405e8763e339",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "981e78ed32a6": {
+  "identity": {
+   "one_liner": "自托管的开源域名与互联网资产管理应用",
+   "review": "DomainMOD 是一个免费开源、自托管的 Web 应用，用于集中管理域名、主机、SSL 证书等互联网资产。它内置数据仓库框架，可导入 WHM/cPanel 服务器的实时数据进行查看、导出和报告；支持 Docker、zip、Git 和 Softaculous 四种安装方式，要求 PHP 8.2-8.5 与 MariaDB/MySQL。定时任务需配置 cron.php 每 10 分钟执行，以实现到期邮件提醒等功能。",
+   "highlights": [
+    "集中管理域名、主机、SSL 证书等互联网资产，支持通过 RDAP、WHOIS 及注册商 API（Domain Queue）导入和刷新域名",
+    "内置数据仓库框架，支持导入 WHM/cPanel 服务器数据并进行查看、导出和报告",
+    "提供任务调度器、到期邮件通知、MFA 多因素认证，支持 Docker 安装（cron 自动配置）"
+   ],
+   "use_cases": [
+    "管理多个域名注册商账户下的域名组合，跟踪域名、主机与 SSL 证书到期时间",
+    "自托管运维场景中查看、导出和报告 WHM/cPanel 服务器的实时数据",
+    "个人或团队在自有服务器上搭建统一的互联网资产台账"
+   ]
+  },
+  "sha": "981e78ed32a6",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d21c88208538": {
+  "identity": {
+   "one_liner": "运行于 Postgres/Supabase 的开源复式记账核心，国家规则以数据形式提供",
+   "review": "Ekwo OS 是一套部署在自有 Supabase/Postgres 上的复式记账核心，采用 AGPL-3.0 许可。它以数据库 schema、迁移和 CLI（ekwo）交付，无需单独运行服务端；通过 MCP 服务器供 AI 代理操作同一套公司数据。借贷平衡与锁定期间由数据库触发器强制执行；各国科目表、税率与申报格式（FEC、Factur-X、Peppol UBL 等）作为国家数据包安装。限制与免责声明见 DISCLAIMER.md。",
+   "highlights": [
+    "复式记账与期间锁定由数据库触发器强制执行，凭证层（EN 16931/Peppol）与账务层分离",
+    "按国家提供数据包，含科目表、税码、申报栏位与报表，经 ekwo init 安装",
+    "提供 CLI 与 MCP 服务器两种访问方式，并含固定资产、预算、企业所得税、电子发票模块"
+   ],
+   "use_cases": [
+    "公司或会计事务所在自有数据库中自持账套并记录交易",
+    "通过 MCP 让 AI 代理在自有数据上录入采购、匹配付款、准备增值税申报",
+    "开发者需要一个税则存于数据而非代码的复式记账核心，或需生成 FEC/电子发票等法定文件"
+   ]
+  },
+  "sha": "d21c88208538",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dad1eca1d23a": {
+  "identity": {
+   "one_liner": "基于 Rust 的联邦 SQL 查询引擎，在查询计划中强制执行治理策略。",
+   "review": "Dataglot 是一个 Rust 编写的联邦 SQL 查询引擎，通过 PostgreSQL wire protocol 提供单一 PG 端点，客户端（psql、DBeaver、Metabase 等）无需专用驱动即可连接。支持跨 PostgreSQL、MySQL、Oracle、Snowflake、S3 文件和 Apache Iceberg 的统一 SQL 查询，列掩码与行过滤在计划阶段编译。目前处于 pre-1.0 阶段，仅覆盖读路径，非通用 PostgreSQL 替代品。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、Oracle、Snowflake、S3/Parquet/CSV、Apache Iceberg 等数据源的联邦查询",
+    "列掩码与行过滤在查询计划阶段编译执行",
+    "提供 in-process 模式（dataglot query/shell）与可选的 Apache Ballista 分布式执行"
+   ],
+   "use_cases": [
+    "用标准 PostgreSQL 客户端（psql、dbt、BI 工具）统一查询多个异构数据库与数据湖",
+    "需要将列级掩码、行级过滤策略编译进查询计划的读路径联邦场景",
+    "本地快速探索：通过 in-process 命令或交互式 REPL 直接运行联邦 SQL"
+   ]
+  },
+  "sha": "dad1eca1d23a",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "01bc79e95ec2": {
+  "identity": {
+   "one_liner": "基于 RAG 的代码库索引问答平台，支持 PR 审查与架构图生成",
+   "review": "DevIntel AI 是一个连接 GitHub 仓库、将其索引入 PostgreSQL 向量库并通过 RAG 与代码库对话的开发者平台，包含 FastAPI 后端、React 前端和 VS Code 扩展三部分。核心机制包括 Tree-sitter 按语法单元分块、pgvector 余弦相似度检索及可选 BM25 混合检索；部署需 PostgreSQL 16、pgvector 扩展和 Gemini 或 OpenAI 的 API key。",
+   "highlights": [
+    "使用 Tree-sitter 沿类、函数、方法等语法边界分块，支持 Python、TypeScript、Go、Rust、Java 等 11 种语言，解析失败时降级为按行切分",
+    "检索基于 pgvector 余弦距离，支持相邻块上下文扩展与向量+BM25 的 RRF 混合检索，embedding 默认用 Gemini（768 维），可选 OpenAI（1536 维）",
+    "异步任务通过 PostgreSQL 任务表加 SELECT FOR UPDATE SKIP LOCKED 排队，最多 3 个并发 worker，处理全量索引、增量更新和代码健康分析"
+   ],
+   "use_cases": [
+    "对已索引的 GitHub 仓库进行流式问答，获取代码解释与重构建议",
+    "解析 Git diff 生成按严重程度分类的 PR 审查，或通过带语法校验和重试的 auto-fix 流程自动生成补丁并开 Pull Request",
+    "从代码索引数据生成 Mermaid.js 架构图和包含复杂度、文档、测试覆盖、安全等维度的 0-100 代码健康评分"
+   ]
+  },
+  "sha": "01bc79e95ec2",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e0a0c5a3be72": {
+  "identity": {
+   "one_liner": "基于 SQLite/FTS5/sqlite-vec 的 LLM 代理本地原文记忆库",
+   "review": "Mnemotree 是一个面向 LLM 代理的本地持久化记忆库，逐字存储消息并召回原文片段。核心机制为 FTS5 BM25 与 sqlite-vec 余弦检索经 RRF 融合，证据按 token 预算打包，读写按命名空间隔离；默认在写入和召回路径不运行 LLM。通过 pip 安装或以 MCP 服务器、HTTP 服务、命令行方式运行，需要 Python 3.11+ 且 SQLite 支持 FTS5。",
+   "highlights": [
+    "FTS5 BM25 与 sqlite-vec 向量检索经 RRF 融合，支持可选重排；来源、分块、索引与幂等回执在单事务内提交",
+    "证据打包进精确 token 预算并输出候选追踪记录；所有读写限定于单一命名空间",
+    "提供 Python 库、MCP 服务器、带 API key 的 HTTP 服务和 mnemotree-evidence 命令行工具；默认嵌入模型本地运行，无需 API key"
+   ],
+   "use_cases": [
+    "为 Claude Code、Claude Desktop、Codex 等 MCP 客户端添加本地长期记忆工具",
+    "通过 HTTP 服务（/v1/memories/* 路由）为自建后端提供按 user_id 隔离的记忆存取",
+    "多用户场景下在同一数据库内按用户保存独立记忆，支持幂等写入与删除"
+   ]
+  },
+  "sha": "e0a0c5a3be72",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5603554e0d31": {
+  "identity": {
+   "one_liner": "TiDB 升级前后执行计划离线采集与比对工具，输出 HTML 报告",
+   "review": "PCC 是面向 TiDB 升级场景的执行计划比对工具，提供 Python CLI 和 SDK。它在生产环境按时间范围从 Statement Summary 导出 SQL 及表结构、统计信息，导入两套目标环境后只执行 EXPLAIN 并生成 HTML 报告，不执行业务 DML。运行需 Linux x86_64、glibc 2.28+，导入步骤需 MySQL 8 客户端，许可证为 Apache-2.0。",
+   "highlights": [
+    "通过导出 SQL、表结构与统计信息构成 CaptureBundle，在离线环境中对同一批 SQL 执行 EXPLAIN 并比对升级前后的执行计划",
+    "内置 64 张规则卡与文本等价规则，报告按一致/存在差异/无法比对分类，支持人工评审勾选、结论归并与 JSON/CSV 导出",
+    "自带 413 条、17 类固定 SQL 用例库，并支持生成可 source 的建表造数文件；返回码区分一致（0）、有变化（1）、部分未完成（3）"
+   ],
+   "use_cases": [
+    "TiDB 版本升级前，在临时环境中比对同一批业务 SQL 在升级前后版本的执行计划",
+    "生产与临时环境分网场景下，传输采集包后在临时端离线导入并比对，无需连接生产",
+    "对 Statement Summary 中指定时间段内的 Top SQL（按执行次数、耗时、扫描量等选取）做计划差异复查"
+   ]
+  },
+  "sha": "5603554e0d31",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

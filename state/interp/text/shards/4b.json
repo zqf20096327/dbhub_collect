@@ -2913,5 +2913,47 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "749f1aa8c5f8": {
+  "identity": {
+   "one_liner": "访问 AWS 私有资源的命令行工具，经 SSM 跳板建立 localhost 隧道并提供受审计的 MCP 服务",
+   "review": "airlock 是一个 Go 编写的命令行工具，面向开发与运维人员，用于从本地访问 AWS 私网中的 RDS、EKS、ElastiCache、DynamoDB、S3 和 CloudWatch Logs。它通过 `aws ssm start-session` 端口转发建立隧道，无需 VPN、SSH 密钥或开放入站端口，并把每个连接同时以 localhost 端口和 MCP 服务器的形式提供。RDS/EKS/ElastiCache 需要账户内运行带指定标签的跳板机，并依赖 AWS CLI v2 与 Session Manager 插件；直连与 Docker 数据库无此要求。采用 Apache License 2.0。",
+   "highlights": [
+    "支持通过 SSM 端口转发隧道访问 RDS、EKS、ElastiCache，并通过 AWS API 访问 DynamoDB、S3、CloudWatch Logs",
+    "每个会话可同时作为受 MCP 服务器向 Claude Code、VS Code、Codex、Cursor、Gemini CLI 等注册，默认只读、调用写入审计日志",
+    "提供交互式向导、并行会话、`.airlock.json` 项目栈（`airlock up`）、IntelliJ 数据源注册与 `airlock doctor` 故障检查"
+   ],
+   "use_cases": [
+    "开发者通过 AWS IAM 短期令牌或 Secrets Manager 登录私网数据库，替代 VPN 或手写 SSM 命令",
+    "让 AI 助手在受控只读模式下查询数据库，调用过程实时展示并记录审计日志",
+    "团队通过 `airlock config export/import` 共享配置，或在项目中提交 `.airlock.json` 批量开启所需目标"
+   ]
+  },
+  "sha": "749f1aa8c5f8",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b03fb08bc302": {
+  "identity": {
+   "one_liner": "名为 tidb-keepalive 的仓库，README 仅含标题",
+   "review": "该仓库标题为 tidb-keepalive，README 正文仅有这一行标题，未提供项目说明、安装方法或使用文档。从名称可推断其与 TiDB 相关并涉及 keepalive（保活）机制，但具体功能、依赖和运行方式在 README 中均不可验证，使用前需查阅代码或其他文档。",
+   "highlights": [
+    "仓库以 tidb-keepalive 命名，名称指向 TiDB 保活用途",
+    "README 仅包含一行标题，不含功能说明或安装指引"
+   ],
+   "use_cases": [
+    "需要了解 TiDB 保活相关实现时的代码查阅",
+    "README 尚未完善，需通过源码确认实际功能"
+   ]
+  },
+  "sha": "b03fb08bc302",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3458,5 +3458,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5109cddb3ad9": {
+  "identity": {
+   "one_liner": "将 GTFS 静态与实时数据导入 SQLite/PostgreSQL/MySQL 并提供查询、导出的 Node.js 工具库",
+   "review": "node-GTFS 读取公交机构发布的 GTFS Schedule（ZIP 内 routes.txt、stops.txt 等文件）并导入数据库，支持 SQLite、PostgreSQL 与 MySQL，同时可存储 GTFS-Realtime 的服务警报与车辆位置。它提供命令行与 JavaScript/TypeScript API 两种使用方式，可生成 GeoJSON、导出 GTFS 文件，并支持导入时可选的静态数据校验。默认不开校验，不提供地图显示或行程规划功能。适合需要在自己的工作流中查询或转换 GTFS 数据的开发者与分析人员。",
+   "highlights": [
+    "读取 GTFS Schedule 与 GTFS-Realtime 数据，支持 TIDES、TODS 等可选扩展，导入时可开启静态数据校验",
+    "支持 SQLite、PostgreSQL、MySQL 三种数据库，可将多个静态 GTFS feed 共存且不改其 GTFS 标识符",
+    "提供命令行导入/导出和 JavaScript/TypeScript API，可生成 GeoJSON 并从任一支持的数据库导出时刻表数据"
+   ],
+   "use_cases": [
+    "将公交机构 GTFS 数据导入本地 SQLite 后用 JavaScript 查询线路、站点、班次与到站时间",
+    "为地图应用生成站点与线路的 GeoJSON，或分析服务频次、统计班次数量",
+    "自动导入更新的时刻表并存储实时服务警报与车辆位置数据，或从数据库导出 GTFS 文件"
+   ]
+  },
+  "sha": "5109cddb3ad9",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3285de495132": {
+  "identity": {
+   "one_liner": "给 DeepSeek Harness 的跨会话记忆插件，写入过审批门、存本地 SQLite、注入冻结快照",
+   "review": "dsh-memento 是 DeepSeek Harness 的社区插件，提供类型安全的 ctx.memory 服务接缝、本地 SQLite 存储和 memory 工具。记忆分 user/agent 两轨、user-global/workspace 两层，并按 agentPreset 隔离，每轨每层有硬字符预算（默认 user 2000 / agent 4000），写满返回结构化错误而不截断。所有写入路径经服务内部审批门，审计由审批事件对与插件审计表构成；下次会话注入冻结快照。零依赖，无构建步骤。",
+   "highlights": [
+    "写入路径（add/replace/remove/seed）强制经过服务内部审批门，writePolicy 支持 ask/auto/off，被拒写入也落审计行",
+    "本地 SQLite 提供方（node:sqlite，WAL，权限 0600），两条轨道×两个层级×按 agentPreset 隔离，各轨各层有硬字符预算",
+    "附带只读 stdio MCP 服务器（dsh-memento-mcp）供外部 MCP 客户端检索，以及 mem0、Hermes、CLAUDE.md 等格式的适配器"
+   ],
+   "use_cases": [
+    "需要 AI 会话跨会话保留用户事实与环境约定，且要求每次写入经人工审批",
+    "需要可重建、可导出的记忆审计链的本地优先部署",
+    "外部 MCP 客户端（如 Claude、Codex）需只读检索同一记忆库"
+   ]
+  },
+  "sha": "3285de495132",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7816cc8e4a8e": {
+  "identity": {
+   "one_liner": "SSMS 22 扩展，提供 SQL 补全、格式化、查询历史与结果导出",
+   "review": "MSSQLTOOL 是面向 SSMS 22 的开源扩展（Apache-2.0，基于 AxialSqlTools 的 fork），提供上下文感知的 SQL 补全、T-SQL 格式化、查询历史、服务器健康监控及结果导出（Excel、邮件、INSERT/CSV/JSON 等）。面向 SQL Server 开发者和 DBA，支持 8 种语言的界面。格式化功能因 SSMS 22 原生支持而停止新增开发；Google Sheets 导出与 GitHub 脚本同步为实验特性。",
+   "highlights": [
+    "上下文感知 SQL 补全：覆盖表、视图、列、存储过程、函数、别名与 UPDATE 目标列，含 F12 跳转定义",
+    "结果集工具：选区统计（计数/求和/均值/最值/去重）、列搜索与冻结列，支持导出 Excel/邮件/临时表及 CSV、JSON 等格式复制",
+    "多语言界面（8 种语言）、查询模板标签搜索、查询历史与服务器健康仪表盘"
+   ],
+   "use_cases": [
+    "在 SSMS 22 中编写 T-SQL 查询需要对象补全与跳转定义的开发者",
+    "需要将查询结果导出为 Excel、邮件发送或生成 INSERT/JSON 等格式的数据处理场景",
+    "DBA 进行服务器健康监控、执行统计查看与多数据库对象快速搜索"
+   ]
+  },
+  "sha": "7816cc8e4a8e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

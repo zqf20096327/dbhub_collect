@@ -27825,5 +27825,503 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "1b852a815a68+2": {
+  "fn": "dokku/dokku-clickhouse",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# dokku clickhouse Build Status IRC Network"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Official clickhouse plugin for dokku. Currently defaults to installing clickhouse/clickhouse-server 26.10.4.207."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "replace",
+    5,
+    10,
+    5,
+    6,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    28,
+    6,
+    24
+   ],
+   [
+    "replace",
+    28,
+    73,
+    24,
+    25,
+    [
+     "…（45 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    108,
+    25,
+    60
+   ],
+   [
+    "replace",
+    108,
+    109,
+    60,
+    61,
+    [
+     "- `--volume <stringArray>`: a host path or docker volume to mount into the service container, as :<container-dir>[:<options>], repeatable"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    1219,
+    61,
+    1171
+   ],
+   [
+    "replace",
+    1219,
+    1220,
+    1171,
+    1172,
+    [
+     "- `--volume <stringArray>`: a host path or docker volume to mount into the service container, as :<container-dir>[:<options>], repeatable"
+    ]
+   ],
+   [
+    "equal",
+    1220,
+    1295,
+    1172,
+    1247
+   ],
+   [
+    "replace",
+    1295,
+    1296,
+    1247,
+    1248,
+    [
+     "- `--volume <stringArray>`: a host path or docker volume to mount into the service container, as :<container-dir>[:<options>], repeatable"
+    ]
+   ],
+   [
+    "equal",
+    1296,
+    1616,
+    1248,
+    1568
+   ],
+   [
+    "replace",
+    1616,
+    1617,
+    1568,
+    1569,
+    [
+     "Datastore backups are supported via AWS S3 and S3 compatible services like minio and DigitalOcean Spaces."
+    ]
+   ],
+   [
+    "equal",
+    1617,
+    1618,
+    1569,
+    1570
+   ],
+   [
+    "replace",
+    1618,
+    1619,
+    1570,
+    1571,
+    [
+     "The endpoint of an S3 compatible service is passed as the `endpoint-url` argument of `backup-auth`, such as `https://nyc3.digitaloceanspaces.com`, and must not include the bucket. The bucket is passed to `backup` and `backup-schedule` by its name alone, such as `my-s3-bucket` rather than `s3://my-s3-bucket`, and must follow the S3 bucket naming rules."
+    ]
+   ],
+   [
+    "equal",
+    1619,
+    1630,
+    1571,
+    1582
+   ],
+   [
+    "replace",
+    1630,
+    1631,
+    1582,
+    1583,
+    [
+     "The underlying core backup script is present here."
+    ]
+   ],
+   [
+    "equal",
+    1631,
+    1986,
+    1583,
+    1938
+   ],
+   [
+    "replace",
+    1986,
+    2020,
+    1938,
+    1972,
+    [
+     "|Property|Description|Takes effect|",
+     "|---|---|---|",
+     "|`initial-network`|the network the service container is attached to when it is made|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`post-create-network`|a comma-separated list of networks the container is attached to once it is made|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`post-start-network`|a comma-separated list of networks the container is attached to once it is started|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`backup-keyserver`|the keyserver a public key for backup encryption is fetched from|immediately|",
+     "|`backup-storage-class`|the s3 storage class backups are uploaded with|immediately|",
+     "|`backup-object-name`|the name backups are uploaded under|immediately|",
+     "|`backup-timestamp`|`false` to upload every backup to the same key, without a timestamp|immediately|",
+     "|`backup-all-databases`|`true` to back up every database in the service rather than only the one named for it|immediately|",
+     "|`backup-mailto`|who cron mails the output of scheduled backups to|immediately|",
+     "|`backup-access-key-id`|the access key id backups authenticate with|immediately|",
+     "|`backup-secret-access-key`|the secret access key backups authenticate with|immediately|",
+     "|`backup-default-region`|the region backups authenticate against|immediately|",
+     "|`backup-signature-version`|the signature version backups authenticate with|immediately|",
+     "|`backup-endpoint-url`|the endpoint of an s3 compatible service backups are shipped to|immediately|",
+     "|`backup-encryption-passphrase`|the passphrase backups are encrypted with|immediately|",
+     "|`backup-public-key-id`|the gpg public key id backups are encrypted with|immediately|",
+     "|`backup-bucket`|the bucket the scheduled backup is shipped to|immediately|",
+     "|`backup-use-iam`|`true` to have the scheduled backup authenticate with an instance role|immediately|",
+     "|`log-driver`|the docker logging driver the container is run with|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`log-opt`|a comma-separated list of docker log options the container is run with|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`restart-policy`|the docker restart policy the container is run with|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`wait-timeout`|the seconds the service is waited on to become ready|immediately|",
+     "|`port-bind-address`|the address exposed ports without one of their own are published on|after `clickhouse:reexpose`|",
+     "|`port-source-range`|the only IP address or CIDR the exposed ports accept clients from|after `clickhouse:reexpose`|",
+     "|`expose-host`|the host the exposed dsn names|immediately|",
+     "|`expose-mode`|`direct` to publish the exposed ports on the service container rather than through an ambassador|after `clickhouse:reexpose`|",
+     "|`volume-targets`|the container paths the definition's volumes are mounted at in place of its own|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`config-options`|extra arguments for the process the service container runs|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`custom-env`|semicolon-delimited environment variables the container is run with|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`memory`|the container memory limit in megabytes, `0` for no limit|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`shm-size`|the shared memory size of the container, such as `64m`|after `clickhouse:stop` and `clickhouse:start`|",
+     "|`password`|the password the service and its linked apps use, changed in the datastore and in the url every linked app holds|once `set` restarts the service, with `--allow-restart`|"
+    ]
+   ],
+   [
+    "equal",
+    2020,
+    2057,
+    1972,
+    2009
+   ],
+   [
+    "replace",
+    2057,
+    2061,
+    2009,
+    2013,
+    [
+     "|Definition|Volume|Mounted at|",
+     "|---|---|---|",
+     "|clickhouse|config|`/etc/clickhouse-server`|",
+     "|clickhouse|data|`/var/lib/clickhouse`|"
+    ]
+   ],
+   [
+    "equal",
+    2061,
+    2073,
+    2013,
+    2025
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "7c774a746f6d+2": {
+  "fn": "ranajahanzaib/postgres-performance-analyzer",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "PostgreSQL Performance Analyzer Overview"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    22,
+    7,
+    22
+   ],
+   [
+    "delete",
+    22,
+    24,
+    22,
+    22
+   ],
+   [
+    "equal",
+    24,
+    26,
+    22,
+    24
+   ],
+   [
+    "replace",
+    26,
+    34,
+    24,
+    30,
+    [
+     "|Feature|Demonstration|",
+     "|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|",
+     "|**Automated Plan & Buffer Diagnosis** Detects filter-heavy sequential scans, row cardinality estimate mismatches, and buffer pressure.|Execution Plan Diagnosis|",
+     "|**Lock Contention Sampling** Samples active waiters and blocker relationships without blocking transactions or running long monitor loops.|Lock Sampling|",
+     "|**Standalone HTML Comparison Report** Self-contained HTML reports featuring matched query deltas, index diffs, and latency quantiles with zero runtime dependencies.|HTML Comparison Report|",
+     "|**Database Capability & Safety Audit** Verifies PostgreSQL configuration, read permissions, extension availability, and timing flags.|Doctor Capability Check|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    43,
+    30,
+    39
+   ],
+   [
+    "replace",
+    43,
+    55,
+    39,
+    40,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    40,
+    41
+   ],
+   [
+    "delete",
+    56,
+    58,
+    41,
+    41
+   ],
+   [
+    "equal",
+    58,
+    74,
+    41,
+    57
+   ],
+   [
+    "delete",
+    74,
+    76,
+    57,
+    57
+   ],
+   [
+    "equal",
+    76,
+    82,
+    57,
+    63
+   ],
+   [
+    "replace",
+    82,
+    90,
+    63,
+    64,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    99,
+    64,
+    73
+   ],
+   [
+    "replace",
+    99,
+    100,
+    73,
+    74,
+    [
+     "- `run` requires an HTTP manifest. The format and measurement limits are documented in docs/benchmarking.md. A run writes `summary.json` for HTTP measurements and environment fingerprints plus `investigation.json` for PostgreSQL counter deltas."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    102,
+    74,
+    76
+   ],
+   [
+    "delete",
+    102,
+    104,
+    76,
+    76
+   ],
+   [
+    "equal",
+    104,
+    113,
+    76,
+    85
+   ],
+   [
+    "replace",
+    113,
+    118,
+    85,
+    86,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    132,
+    86,
+    100
+   ],
+   [
+    "delete",
+    132,
+    134,
+    100,
+    100
+   ],
+   [
+    "equal",
+    134,
+    140,
+    100,
+    106
+   ],
+   [
+    "replace",
+    140,
+    151,
+    106,
+    107,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    154,
+    107,
+    110
+   ],
+   [
+    "delete",
+    154,
+    156,
+    110,
+    110
+   ],
+   [
+    "equal",
+    156,
+    164,
+    110,
+    118
+   ],
+   [
+    "replace",
+    164,
+    168,
+    118,
+    119,
+    [
+     "See docs/limitations.md, docs/safety.md, docs/metrics.md, and docs/troubleshooting.md."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    170,
+    119,
+    121
+   ],
+   [
+    "replace",
+    170,
+    180,
+    121,
+    122,
+    [
+     "Hire me LinkedIn"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

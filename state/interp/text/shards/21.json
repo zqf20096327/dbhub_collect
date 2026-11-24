@@ -3430,5 +3430,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "566fdbd7ca9a": {
+  "identity": {
+   "one_liner": "基于对象存储构建的 LSM 树嵌入式存储引擎，使用 Rust 编写",
+   "review": "SlateDB 是一个以日志结构合并树（LSM-tree）实现的嵌入式存储引擎，数据写入对象存储（如 S3、GCS、ABS、MinIO 等）而非本地磁盘。它面向需要在应用内嵌入键值存储能力的 Rust 开发者，通过 object_store crate 支持任何实现该 trait 的对象存储。写入时先更新内存中的 WAL 和 MemTable，MemTable 周期性刷写为 SST 以批量降低 PUT API 成本；读取则依赖块缓存、压缩、布隆过滤器和本地磁盘缓存来缓解对象存储延迟。需注意其牺牲了本地磁盘的低延迟，且当前不保证编译期 API 兼容性。",
+   "highlights": [
+    "提供 get/put/delete 基础 API，支持范围查询、事务、合并运算符（merge operator）、克隆（clones）、CDC 与数据库拆分/合并",
+    "写入经内存 WAL 与 MemTable 缓存后周期性刷写为 SST，刷写间隔可配置，写入返回 WriteHandle 可等待持久化",
+    "通过 object_store crate 支持任意实现 ObjectStore trait 的对象存储，并提供官方 Go、Java、Node.js/TypeScript、Python 语言绑定"
+   ],
+   "use_cases": [
+    "需要将键值数据直接持久化到对象存储（S3、GCS、ABS、MinIO、Tigris 等）的 Rust 应用",
+    "希望利用对象存储的容量与持久化特性，且可接受其延迟与 API 成本的嵌入式存储场景",
+    "需要通过官方或社区语言绑定（Go、Java、Python、Ruby、.NET 等）在多语言环境中使用的项目"
+   ]
+  },
+  "sha": "566fdbd7ca9a",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "886a456db4c1": {
+  "identity": {
+   "one_liner": "零依赖本地记忆引擎，基于 SQLite FTS5 为 4B 模型提供 MCP 记忆工具",
+   "review": "ZeroMem 是面向开源模型 Qwen3.5-4B-Memory-V2 的本地记忆引擎，仅用 Python 3.9+ 标准库实现，无需外部向量库与 Embedding 模型，数据存于单个 SQLite 文件。提供 CLI/SDK 单次预注（--mode fast）与 MCP 4 工具（--mode mcp）两种接入方式，写入阶段由本地模型完成抽取与脱敏。需 Python 3.9+ 与 Ollama。README 附带的 12 题对照实验为小规模合成语料测试，作者自述不作通用能力排名。",
+   "highlights": [
+    "零第三方 Python 依赖，SQLite 单文件双轨 FTS5（中文 2-gram + 英文词法）检索，支持原文证据溯源",
+    "提供 memory_remember/recall/stats/delete 4 个 MCP 工具，兼容 NDJSON 与 Content-Length 双帧协议，支持 7 款 Agent 客户端接入",
+    "入库前双层凭据脱敏（密钥替换为 [REDACTED]），写入抽取与审校由本地 4B 模型完成，不消耗云端 API"
+   ],
+   "use_cases": [
+    "为 Claude Desktop、Cursor 等 Agent 客户端挂载本地长期记忆",
+    "单主题问答或自动化脚本中以检索预注替代全量历史注入",
+    "断网/内网环境离线导入 GGUF 模型进行本地事实记录与检索"
+   ]
+  },
+  "sha": "886a456db4c1",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ba3eb3009c7c": {
+  "identity": {
+   "one_liner": "面向 Antigravity 的轻量 Token 与上下文监控面板插件，只读本地会话数据。",
+   "review": "agy-token-monitor 是为 Antigravity 构建的 v0.5.4 beta 面板插件，运行在右侧边栏，以只读方式读取本地 SQLite 会话数据。它提供实时 tok/s、409.6k/512k 上下文监控与 /compact 快捷复制、按模型成本与缓存命中率拆分、子代理/Swarm 活动追踪、Side Question 摘要、每日官方定价同步及多时段用量统计，支持中英双语界面，不改写宿主数据库或设置。",
+   "highlights": [
+    "只读读取本地会话数据，不修改 Antigravity 数据库、transcript 或宿主设置",
+    "提供 409.6k/512k 上下文监控、一键复制 /compact、实时 tok/s 与每模型缓存命中率统计",
+    "支持像素工位 Canvas 动画、子代理/Swarm Top-5 折叠列表、Side Question 一键打开、会话收据 PNG 生成"
+   ],
+   "use_cases": [
+    "在 Antigravity 中监控长对话的上下文占用并在接近上限时压缩会话",
+    "按会话、模型、子代理与 Side Question 拆分统计 token 消耗、缓存命中率与等效成本",
+    "以中英双语查看今日/7天/30天/全时段用量趋势与定价信息"
+   ]
+  },
+  "sha": "ba3eb3009c7c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

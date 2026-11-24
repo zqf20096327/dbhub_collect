@@ -3654,5 +3654,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9e5a33499ebb": {
+  "identity": {
+   "one_liner": "单二进制日志分析数据库，使用 OpenSearch PPL 查询本地文件或服务器存储。",
+   "review": "LynxDB 是用 Go 编写的日志分析数据库，以单个二进制分发。它提供两种模式：CLI 模式将本地文件或标准输入载入临时索引用 PPL 查询；服务器模式默认监听 localhost:3100，按时间分区列式存储日志，并接受多种摄取端点。项目处于活跃开发阶段，API、存储格式与查询行为可能在版本间变更。构建需 Go 1.26 或更高版本。",
+   "highlights": [
+    "提供 CLI 与服务器两种运行模式，查询语言为 OpenSearch PPL",
+    "CLI 支持 JSON 字段保留，并从 combined access logs、syslog 等常见文本格式提取时间戳、key=value 对与字段",
+    "服务器将事件存入按时间分区的列式索引，令牌过滤器可跳过无法匹配的数据块；摄取端点支持 NDJSON、Elasticsearch _bulk、OpenTelemetry logs、Splunk HEC 和 syslog"
+   ],
+   "use_cases": [
+    "对本地日志文件或标准输入做即席查询与统计（如按服务统计 HTTP 5xx 数量）",
+    "部署单节点持久化服务器，通过 CLI、REST API 或日志采集器（shipper）持续摄取与查询日志",
+    "从现有日志管道（Splunk HEC、OpenTelemetry、Elasticsearch _bulk 等格式）接入数据"
+   ]
+  },
+  "sha": "9e5a33499ebb",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6091e2864d4b": {
+  "identity": {
+   "one_liner": "基于静态解析的 Django/SQLAlchemy 模型分析工具，提供 ER 图、N+1 检测与迁移风险检查",
+   "review": "orm-lens 通过静态解析 Django 模型与迁移、SQLAlchemy 模型与 Alembic 版本，无需数据库或启动应用即可生成 ER 图、检测 N+1 循环、识别模式漂移和迁移风险。提供 VS Code 扩展、17 个子命令的 CLI 以及 14 个只读 MCP 工具三种形态，面向编辑器用户、CI 流水线和 AI 编码代理。要求 Python 3.9+（MCP 服务端 3.10+），MIT 许可，原名为 django-orm-lens。",
+   "highlights": [
+    "静态解析实现，无需 DJANGO_SETTINGS_MODULE、数据库连接或可用的虚拟环境",
+    "提供三种发行形态：VS Code 扩展（18 条 lint 规则与 QuickFixes）、CLI（支持 SARIF 输出、pre-commit 钩子与 GitHub Action）、MCP 服务端（14 个只读工具）",
+    "包含 ER 图生成、N+1 检测、schema drift 检测、blast-radius 迁移风险分析、impact 跨层影响分析及 factory_boy 工厂代码生成等功能"
+   ],
+   "use_cases": [
+    "在 CI 中对 Django 迁移和 Alembic 版本做风险检查，通过 SARIF 或 PR 注释阻塞高风险变更",
+    "在冷克隆或依赖损坏的项目上快速查看应用与模型结构、模型间关系",
+    "通过 MCP 服务端向 AI 编码代理提供项目 schema 的事实性问答"
+   ]
+  },
+  "sha": "6091e2864d4b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9b99146f3058": {
+  "identity": {
+   "one_liner": "基于 ZFS 克隆的自托管 MySQL/PostgreSQL 秒级数据库分支工具",
+   "review": "db-branch 在自有服务器上为 MySQL 和 PostgreSQL 创建写时复制分支：分支是基础快照的 ZFS 克隆，创建时不复制数据，各自在独立端口运行数据库实例。面向 CI、AI 代理沙箱和迁移测试等一次性场景。支持分支重置、TTL 自动过期、检查点恢复、单分支内逻辑合并及按分支升级。当前为 Beta，不支持跨分支合并；部分扩展模块为闭源付费，需 Apache-2.0 许可的 Ubuntu 24.04/26.04 与 ZFS 环境。",
+   "highlights": [
+    "通过 ZFS 克隆创建分支，创建时复制 0 字节数据，PostgreSQL 分支约 0.5 秒、MySQL 约 3 秒就绪",
+    "提供 CLI、REST API、Web 控制台和内置 MCP 服务器四套统一接口，支持单节点或 Raft 集群部署，可配合 ProxySQL 路由",
+    "支持检查点保存与恢复、分支 fork、分支内历史线 3-way 逻辑合并，以及在不影响基础库的情况下对单个分支做版本升级"
+   ],
+   "use_cases": [
+    "AI 代理沙箱：通过 MCP 服务器让 LLM 代理在独立分支上执行高风险查询或迁移，不触碰生产数据（敏感数据需在基础快照阶段脱敏）",
+    "每个 PR 或 CI 任务获得独立的数据库副本，用 --ttl 在不再需要时自动删除",
+    "版本升级预检：先在单个分支上运行大版本升级并用 --check-only 查看结果，再决定是否升级基础库"
+   ]
+  },
+  "sha": "9b99146f3058",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

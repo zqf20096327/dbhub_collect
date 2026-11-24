@@ -3611,5 +3611,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fb45e3564206": {
+  "identity": {
+   "one_liner": "dbt 的 ClickHouse 适配器插件，将 dbt 数据转换功能接入 ClickHouse。",
+   "review": "dbt-clickhouse 是 dbt 的 ClickHouse 适配器，使 dbt 项目能在 ClickHouse 上运行数据转换，支持 ClickHouse Cloud 和自托管部署。它提供表、视图、增量、物化视图等物化方式，并支持 Codec、TTL、索引等 ClickHouse 特有配置。适用于已使用 dbt 且以 ClickHouse 作为分析数据库的团队。v1.8 起 dbt-core 与适配器需分别安装；dbt 1.10 引入的目录集成（如 Iceberg）暂不原生支持。",
+   "highlights": [
+    "支持表、视图、增量、微批增量、物化视图（TO 形式，实验性）等多种物化方式",
+    "支持 ClickHouse 特有列配置（Codec、TTL）与表设置（索引、投影）",
+    "支持种子、源、测试、快照、文档生成、SQL 用户自定义函数及分布式表物化（实验性）"
+   ],
+   "use_cases": [
+    "在 ClickHouse 上用 dbt 管理 SQL 转换工作流",
+    "利用增量与微批增量物化处理持续更新的数据集",
+    "在 ClickHouse Cloud 或自托管集群中定义含 Codec、TTL、投影等引擎特性的模型表"
+   ]
+  },
+  "sha": "fb45e3564206",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4cde8233aa03": {
+  "identity": {
+   "one_liner": "本地优先的 OpenTelemetry 链路调试器，单 Go 二进制加 SQLite 存储，按失败入口组织链路。",
+   "review": "Geko 是一个面向开发者本机的 OpenTelemetry 链路调试工具：接收 OTLP/HTTP（可选 gRPC）数据，将 span 存入 SQLite，默认在回环地址提供仪表盘。首屏列出记录了异常、HTTP 5xx 或错误状态的请求，而非全部链路；通过 `geko mcp setup` 可向 Claude Code、Cursor、VS Code 注册 MCP 接口，由编码代理调用 `investigate_group` 获取堆栈与对照请求。它只处理链路数据，不含日志和指标；提供数据脱敏与 strict 隐私模式，并支持以 Docker 加令牌方式供团队共用。",
+   "highlights": [
+    "单 Go 二进制运行，接收 OTLP/HTTP 与可选 OTLP/gRPC，span 存入 SQLite 并支持保留期与容量上限，默认仅监听回环地址",
+    "失败优先视图：列出含异常、HTTP 5xx 或错误状态的请求，保留成功响应旁的重试异常证据，并提供版本回归对比与错误分组",
+    "提供隐私过滤（属性白名单、邮箱/卡号/IBAN 等掩码、strict 模式仅保留异常类型与消息哈希）与 Collector Doctor、Telemetry Budget 诊断功能"
+   ],
+   "use_cases": [
+    "开发者在本机排查跨服务请求失败：无需 Docker 或外部后端，指向 4318 端口发送 OTLP 链路后按失败证据定位超时或异常 span",
+    "将失败上下文交给编码代理：通过 MCP 集成 Claude Code、Cursor 或 VS Code，或用 GitHub Action 在 PR 上评论测试运行的失败链路",
+    "团队共用的开发/预发实例：以 Docker 加访问令牌、TLS 反向代理方式部署，配合审核日志与读取/分诊令牌控制权限"
+   ]
+  },
+  "sha": "4cde8233aa03",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

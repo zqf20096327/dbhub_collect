@@ -2969,5 +2969,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3a07ac168e90": {
+  "identity": {
+   "one_liner": "Stellar 测试网桥接事件索引器与 Fastify API，持久化 PostgreSQL 历史",
+   "review": "该项目索引 Hyperion 合约事件，提供转账/认领历史查询、轨道状态轮询，并验证 Axelar ITS 与 Circle CCTP 到 EVM 测试网的目的地付款回执。面向需要在 Stellar 测试网上运营跨链 USDC 路由历史与 API 的部署者。需 Node 22.13+ 与 PostgreSQL，先执行迁移再启动；启动时校验 schema 版本与网络准入。API 实例不运行索引器，需配合定时 catch-up 或持续容器。",
+   "highlights": [
+    "通过有序 RPC 端点列表验证已支付的 ITS 与 CCTP 目的地回执（收款人、代币、金额、终态与确认数），单端点失败时在下一端点重试且不混合证据",
+    "多副本通过带 TTL 的租约机制共享游标，防止重复推进；/ready 健康探针报告租约、Postgres、Redis 与 watcher 状态",
+    "数据库访问按角色分离：API 使用只读凭据并强制 default_transaction_read_only，索引器/keeper 使用独立读写凭据，迁移权限单独配置"
+   ],
+   "use_cases": [
+    "为 Stellar 测试网跨链 USDC 转账提供公开历史查询 API（可部署至 Vercel serverless 或 Docker 容器）",
+    "通过 GitHub Actions 定时任务运行有限预算的补漏索引，游标持久化于 PostgreSQL",
+    "作为 keeper 可选部署，提交签名者背书的 Stellar 维护交易"
+   ]
+  },
+  "sha": "3a07ac168e90",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f04a502ea448": {
+  "identity": {
+   "one_liner": "本地数字取证与事件响应工作台，基于 React、FastAPI 与 SQLite/PostgreSQL。",
+   "review": "CyberTriage 用于管理调查案件、保存证据、追踪发现与时间线并导出报告。前端 React、后端 FastAPI，默认 SQLite，可经 SQLAlchemy 切换 PostgreSQL，并提供迁移脚本。证据以 SHA-256 哈希保存；README 明确说明其文本规则扫描仅作分诊提示，不能替代取证分析。",
+   "highlights": [
+    "提供案件管理、SHA-256 证据保存、基于规则的文本扫描、调查时间线与报告导出功能",
+    "默认使用 SQLite，可通过 DATABASE_URL 切换 PostgreSQL，并附带 SQLite 到 PostgreSQL 的迁移脚本（迁移时校验证据哈希）",
+    "提供 macOS Apple Silicon 桌面安装包构建流程及后端单元测试（可指定 PostgreSQL 测试库）"
+   ],
+   "use_cases": [
+    "为取证与事件响应工作提供本地化调查工作台，管理案件、证据与时间线",
+    "需要将 SQLite 数据迁移到 PostgreSQL 或将应用打包为 macOS 桌面应用的部署场景",
+    "对日志文件运行规则解析与扫描，获得供人工复核的分诊线索"
+   ]
+  },
+  "sha": "f04a502ea448",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

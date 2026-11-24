@@ -3736,5 +3736,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "805eb39672cb": {
+  "identity": {
+   "one_liner": "收录6类车辆品牌与车型的开放数据集，源自各国官方车辆登记册",
+   "review": "VehiclesDB 提供汽车、摩托车、轻便摩托车、厢式车、卡车、客车六类的品牌与车型数据（当前版本 16,441 个车型、978 个品牌），由 18 个国家的官方登记或型式认证数据交叉核对生成，按 CC-BY 4.0 发布。每条记录含各国在册证据与热度分位。收录规则为需两个独立官方来源一致；车型 id 以 (kind, make_slug, model_slug) 三元组为准，重命名通过 former_ids 保留。",
+   "highlights": [
+    "提供 CSV、Parquet、JSON、SQLite 多种格式及 Ruby gem，可经 GitHub Release、CDN 或 Hugging Face 获取",
+    "每个车型带按国家的 availability 证据和 popularity 分位，字段仅追加不重命名",
+    "品牌→车型三级结构的稳定 id：kind + make_slug + model_slug，重命名记录于 former_ids"
+   ],
+   "use_cases": [
+    "配件目录的车型兼容性过滤",
+    "车辆交易市场与车库/预约表单的 make→model 选择器",
+    "车队与车牌类应用的数据底座"
+   ]
+  },
+  "sha": "805eb39672cb",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "968e3653d499": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的治理型状态层，以类型化知识工件和签名 Git 账本管理可信事实。",
+   "review": "Cruxible 是一个本地运行的 AI Agent 状态层，用于以类型化 Claim 记录证据支撑的事实与判断，通过 Python SDK、MCP 或 CLI 读写，变更以提案形式经审批后写入签名 Git 账本。内置 Runbook 流水线按计划拉取外部数据源，仅对受影响的事实重新复核，并区分 found、verified none 与 unknown。要求 Python 3.11+ 与 Git，支持 Linux x86-64、macOS Apple silicon 及 WSL2，内部索引至 SQLite。适用于多 Agent、多会话场景下的团队共享事实与合规审批。",
+   "highlights": [
+    "变更均以提案形式经确定性检查与审批策略确认，写入带逐字段历史的签名 Git 账本",
+    "Runbook 流水线可按计划或触发拉取 API、扫描器等外部数据源，输入变化时仅重检受影响事实，并通过 stale_after 与 citation_drifted 标记过期与引用漂移",
+    "提供 MCP、CLI（含 --json）与 Python SDK 三种客户端，共享 orient/query/get/set/write 等同一组动词，支持双主体 cosign 独立审批"
+   ],
+   "use_cases": [
+    "跨 SBOM、OSV、CISA KEV、EPSS 等多源的漏洞影响研判与豁免（waiver）审批",
+    "多会话、多 Agent 工作流中维护可复核的共享事实与判断历史",
+    "对关键决策要求双人审批与可回溯审计的团队知识治理"
+   ]
+  },
+  "sha": "968e3653d499",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c898fbf34a37": {
+  "identity": {
+   "one_liner": "面向生产环境的客服 Agent 平台，LLM 只提语义提案、服务端确定性执行",
+   "review": "该平台面向客户支持运营团队，提供问答、订单查询、退款/取消、工单创建与人工转接等受控工作流。关键机制是将 LLM 输出限定为语义提案，认证、目标解析、策略、确认、重校验、幂等与执行全部由服务端确定性组件完成，并通过 AgentOps 控制台提供接管、审计与版本化配置。部署依赖 Docker，技术栈含 FastAPI 与 LangGraph。",
+   "highlights": [
+    "采用 LLM 语义提案与确定性控制面分离的架构，认证、策略、确认、重校验、幂等与执行均由服务端实现",
+    "知识问答使用混合检索（稠密向量与 BM25）并做证据落地校验，证据不足时拒答，检索证据不授予执行权限",
+    "内置 AgentOps 运营控制台，支持人工接管对话、运行调查、审计日志以及文章/流程/指引规则的版本化发布"
+   ],
+   "use_cases": [
+    "需要人工确认边界与幂等控制的客服退款、取消等涉资金操作自动化",
+    "客服团队的问答知识库维护，包括知识缺口收集与文章补全",
+    "需要人工接管、审计追踪与运营指标（解决率、转接率、CSAT）度量的客服运营场景"
+   ]
+  },
+  "sha": "c898fbf34a37",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3351,5 +3351,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "762aa17f17fe": {
+  "identity": {
+   "one_liner": "以内嵌库形式运行于自有后端的关系型数据库，含协作富文本与实时查询",
+   "review": "Jazz 是一个以库形式嵌入后端的关系型数据库，提供表、blob、持久流、协作富文本等能力，数据存储在部署平台自有存储上，无需单独数据库服务器。Schema 与权限以部署代码声明，浏览器、移动端及本地优先客户端可直接实时查询同步。当前为 Jazz 2.0 beta，采用全新 API，MIT 许可发布。",
+   "highlights": [
+    "提供关系表、blob、持久化流、协作富文本及声明式权限保护的数据模型",
+    "客户端可在组件中直接实时查询，结果随写入保持更新；可将客户端切换为本地优先模式，在设备端运行同一 Rust 引擎与查询",
+    "通过 jazz-tools generate 生成类型绑定、权限文件与迁移快照，支持 React、React Native 等框架部署于 Vercel 或自有服务器"
+   ],
+   "use_cases": [
+    "在自有云/后端中嵌入数据层，由服务器发起实时查询的应用",
+    "需要浏览器或移动端直连同步的协作应用",
+    "需离线使用与即时读取的本地优先应用"
+   ]
+  },
+  "sha": "762aa17f17fe",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fbd9f4cc51bd": {
+  "identity": {
+   "one_liner": "基于 kubebuilder 的 Kubernetes Operator，用于部署和管理 OceanBase 集群及相关资源。",
+   "review": "ob-operator 是 OceanBase 官方的 Kubernetes Operator，通过自定义资源 obcluster 等管理集群的部署、扩缩容、升级与故障恢复。它提供 YAML、Helm、Terraform 和 okctl 四种安装方式，依赖 cert-manager，并配套 Web 端 Dashboard。仅支持 OceanBase v4.x，不支持 v3.x；运行需 Kubernetes 1.18 以上。",
+   "highlights": [
+    "支持集群管理（引导、拓扑调整、扩缩容、升级、参数修改）与租户管理（创建租户、资源单元、密码管理）",
+    "支持备份恢复（定时备份至 OSS 或 NFS 并可恢复）及物理备库（备库创建、激活、主备切换）",
+    "提供单节点与集群级故障恢复（保留 IP），并附带基于 Web 的 OceanBase Dashboard 图形管理工具"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群上以声明式方式部署和运维 OceanBase v4.x 分布式数据库",
+    "需要定期备份到 OSS/NFS 或搭建主备容灾架构的云原生数据库场景",
+    "通过 Dashboard 对 K8s 上的 OceanBase 集群进行图形化管理和监控"
+   ]
+  },
+  "sha": "fbd9f4cc51bd",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d0c728bcf54a": {
+  "identity": {
+   "one_liner": "纯 SQL 实现的 PostgreSQL DDL 提取扩展，从系统目录生成建表等 DDL 脚本。",
+   "review": "pgddl（ddlx）是仅用 SQL 编写的 PostgreSQL 扩展，读取系统目录生成对象的 DDL 脚本（如 CREATE TABLE），供需要在没有 shell 访问权限时提取 DDL 的 DBA 使用。核心是三个函数：ddlx_create、ddlx_drop、ddlx_script，接受 oid 或 reg* 类型参数，并支持 {ine,noowner} 等选项数组；ddlx_script 可生成包含依赖树的完整脚本。注意 README 说明并非所有对象选项均已支持，且生成的脚本应在生产环境运行前进行检查。",
+   "highlights": [
+    "提供三个主要函数（ddlx_create/ddlx_drop/ddlx_script）用于根据 oid 或 reg* 类型标识符生成 CREATE/DROP/依赖树脚本",
+    "仅由普通 SQL 函数实现，无需安装额外过程语言；支持 9.1 及以上版本安装",
+    "支持约 20 个文本数组选项（如 ine、noowner、nogrants、lite、data）控制生成 DDL 的内容"
+   ],
+   "use_cases": [
+    "在任何仅能执行 SQL 查询的客户端中提取数据库对象的 DDL 脚本",
+    "生成包含依赖对象（视图、函数等）的重建脚本，用于数据库升级或迁移",
+    "通过 WHERE 等 SQL 语义筛选需要导出的对象"
+   ]
+  },
+  "sha": "d0c728bcf54a",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0edde8f31af": {
+  "identity": {
+   "one_liner": "本地优先的 npm 供应链安全扫描器，静态规则加可选 LLM 分析生成 0–100 可解释评分",
+   "review": "npm-safe 是一个在安装前后检查 npm 包的供应链扫描器，通过发布元数据、README 信号及可选的 tarball 深度扫描生成 0-100 分。深度扫描在内存中解析压缩包，不落盘、不执行代码，设有字节与条目上限。适用于命令行、CI、桌面端和 AI 编码代理场景，LLM 分析默认关闭，需 Node.js 20.12+。",
+   "highlights": [
+    "提供 check/install/ci/diff 等子命令，CI 模式支持 lockfile 直接与传递依赖扫描并返回 0/1/2 退出码",
+    "深度扫描验证 npm SRI/shasum 后在内存解析 tarball，含 10 条元数据规则与 17 条内容规则，支持本地 ES module 插件扩展",
+    "可选 LLM 分析与源码审查（OpenAI/Gemini/Anthropic）默认关闭，模型结果不能清除静态告警或提升静态评分；扫描历史存于本地 SQLite"
+   ],
+   "use_cases": [
+    "选包或安装前检查包的安全信号，低于阈值时经手动确认再安装",
+    "在 CI/CD 流水线中按可配置 fail 级别阻断依赖扫描",
+    "为 Codex、Claude Code、Gemini CLI 等 AI 编码代理安装安全技能，或用桌面应用查看风险卡片"
+   ]
+  },
+  "sha": "c0edde8f31af",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "09f180230a8a": {
+  "identity": {
+   "one_liner": "本地运行的 Streamlit SEO 爬虫，为个人网站生成带 HTTP 证据的技术审计报告。",
+   "review": "这是一个针对自有网站的本地技术 SEO 审计工具，通过链接和 sitemap 发现页面、遵守 robots.txt、记录 HTTP 证据，并提供 JSON-LD 校验、内链与图片分析、快照对比和 HTML/CSV/JSON 报告导出，扫描历史存于 SQLite。外部链接检查、PageSpeed、浏览器渲染和 HTML 快照均为可选项且默认关闭。仅适用于自己拥有或获授权审计的站点。",
+   "highlights": [
+    "从链接与 sitemap 发现页面，遵守 robots.txt，记录请求级 HTTP 证据并存入 SQLite",
+    "支持可选的 Playwright 无头浏览器渲染、外链状态检查与 PageSpeed Insights 集成",
+    "提供 JSON-LD 语法/类型校验、sitemap lastmod 与 HTTP Last-Modified 对比及扫描间结果比较"
+   ],
+   "use_cases": [
+    "审计自己个人作品集/网站的技术 SEO 问题",
+    "跟踪多次扫描间的元数据变更与已解决/新增的发现项",
+    "在本地仪表盘中审阅页面元数据、内链结构与图片状况"
+   ]
+  },
+  "sha": "09f180230a8a",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

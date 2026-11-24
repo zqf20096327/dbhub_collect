@@ -3556,5 +3556,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "08f97de93307": {
+  "identity": {
+   "one_liner": "自托管的家用/小团队 AI 代理系统，Rails + SQLite 实现每个代理有邮箱与审批",
+   "review": "Lanyard 是一个自托管的 AI 代理应用，为家庭或小团队部署：每个代理拥有名称、邮箱、独立线程、指令、模型、连接器（Gmail、MCP 服务器）和可选的虚拟机。技术栈为 Rails + SQLite，外加运行在 Pi Durable 上的 Node sidecar。项目处于 1.0 之前，跟踪 Rails main 与实验性依赖，发布间可能有变动。部署需自备服务器（Docker/Kamal）、模型账号和 OpenID Connect 登录提供方，无托管服务。",
+   "highlights": [
+    "每个代理可拥有独立邮箱地址、指令、模型、连接器与定时例程，默认在执行有风险操作前请求确认",
+    "支持 Gmail、Linear 及任意 MCP 服务器作为连接器，并可通过 Concourse 网络与其他厂商的代理通信",
+    "单套模型账号供全部代理使用（Claude/ChatGPT 订阅或 Anthropic API key），登录仅通过 OpenID Connect，应用不存储密码"
+   ],
+   "use_cases": [
+    "在自有服务器上为家庭或小型团队运行共享的 AI 代理，代理可收发邮件并按日程唤醒执行任务",
+    "通过 Gmail/CalDAV/Telegram/iMessage 等通道让代理协助处理邮件、日历、消息等日常事务",
+    "让代理拥有自己的虚拟机（Sprites 或 SSH 机器）在其中运行 shell 与浏览器命令"
+   ]
+  },
+  "sha": "08f97de93307",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b8a4716bcfd1": {
+  "identity": {
+   "one_liner": "OceanBase 的 Go database/sql 驱动，支持 MySQL/Oracle 双兼容模式与 XA。",
+   "review": "该项目为 OceanBase 提供 Go database/sql 驱动，兼容 MySQL 与 Oracle 两种模式，通过标准库 API 支持查询、预处理语句和事务，并在同一包内提供批量执行、LOB、游标和 XA 分支操作。核心构建无需 cgo，需 Go 1.26 及以上。适用对象为需要以 Go 直连或经 OBProxy 访问 OceanBase 的开发者；DSN 拒绝未知选项，TLS 需显式配置 TLSConfig 才启用。",
+   "highlights": [
+    "实现 database/sql 驱动接口，支持两种兼容模式下的位置参数、Oracle 命名参数与 OUT/INOUT 参数",
+    "提供 ExecBatch 批量执行、BLOB/LOB 访问、显式游标及元数据查询",
+    "支持在固定会话上执行 XA 分支操作，由应用侧提供持久化协调器"
+   ],
+   "use_cases": [
+    "Go 应用通过 database/sql 标准接口读写 OceanBase 数据库",
+    "需要 Oracle 兼容模式下访问原生 LOB、对象与集合类型的场景",
+    "应用自行管理 XA 分布式事务协调并需要驱动分支操作支持"
+   ]
+  },
+  "sha": "b8a4716bcfd1",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

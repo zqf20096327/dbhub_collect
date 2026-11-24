@@ -3749,5 +3749,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2cbb10bad670": {
+  "identity": {
+   "one_liner": "VideoDB 的 Node.js/TypeScript SDK，用于上传、索引、搜索和编辑视频",
+   "review": "该 SDK 提供 npm 包 videodb，供 Node.js 与 TypeScript 开发者通过代码调用 VideoDB：可上传本地文件或 URL 媒体、运行理解与索引、跨索引搜索、向视频提问、用时间线编辑剪辑，并生成数字人视频。使用需从 VideoDB 控制台获取 API key；未建索引时搜索结果为空。",
+   "highlights": [
+    "支持通过 uploadURL（YouTube/公共 URL/S3 链接）和 uploadFile（本地文件）上传媒体，返回 Video/Audio/Image 对象",
+    "支持理解流程（spoken_words、vlm 分析器）建立索引，并基于索引执行 search 与 ask 问答",
+    "提供 EditorTimeline 时间线编辑、色彩分级/运动/特效配置，以及基于 heygen 等模型的 generateVideo 数字人生成"
+   ],
+   "use_cases": [
+    "在 Node.js/TypeScript 应用中接入视频上传、索引与语义搜索功能",
+    "通过视频提问（ask）或集合级搜索构建视频内容问答流程",
+    "以时间线 API 程序化剪辑视频或生成口播数字人视频"
+   ]
+  },
+  "sha": "2cbb10bad670",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b1609cce4c64": {
+  "identity": {
+   "one_liner": "openGauss 实验分支：在片上多芯粒 CPU 上研究算子级并行 OLAP 的内存局部性",
+   "review": "该仓库是论文配套的实验产物，基于 openGauss 修改了向量化执行引擎，针对 Kunpeng 920（4 socket、8 chiplet、每 chiplet 24 核）研究内存局部性与共享缓存行为。包含 TPC-H SF100 实验脚本、归档测量数据与绘图脚本，读者可离线复现论文图表。实验需以 HTAP 与 NUMA 支持编译 openGauss，并提供大量 GUC 参数控制数据放置、缓存协调等机制。",
+   "highlights": [
+    "提供访问分析器，按 chiplet 与内存归属记录算子内/算子间逻辑读写，以及逐线程 LLC 读缺失 MPKI 追踪",
+    "实现共享 Radix Hash Join、LLC 内共享 Sonic Hash Aggregate、Hotspot Splitting 与流水线自适应探测预算等优化路径，可经 GUC 切换",
+    "附带按实验分组的归档绘图脚本（含内嵌数据）与可复现的运行脚本，如 run_nps_cache_trace.sh、run_rhj.sh"
+   ],
+   "use_cases": [
+    "在片上多 chiplet/NUMA 服务器上复现或验证 OLAP 内存局部性与共享缓存实验结果",
+    "面向 openGauss 开发者调试和评估算子间数据放置、Stream 缓冲与缓存协调类 GUC 配置",
+    "教学或研究中离线分析归档测量数据并重新绘制论文图表"
+   ]
+  },
+  "sha": "b1609cce4c64",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

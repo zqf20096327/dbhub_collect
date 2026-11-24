@@ -3481,5 +3481,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c1e2d1b7c061": {
+  "identity": {
+   "one_liner": "ClickHouse Cloud 官方 Terraform Provider，以声明式配置管理云资源",
+   "review": "该仓库是 ClickHouse Cloud 的官方 Terraform Provider，用于以基础设施即代码方式管理云服务及其生命周期（自动伸缩、升级窗口）、SQL 控制台访问控制、ClickPipes、ClickStack 可观测性资源和托管 Postgres 服务。使用者需持有 ClickHouse Cloud 账户并通过 API Key 认证。注意它只覆盖 SQL 控制台级权限，数据库级用户与授权需另用 clickhousedbops provider；README 含多版本破坏性变更与迁移说明。",
+   "highlights": [
+    "提供声明式管理三类服务组：ClickHouse Cloud、ClickStack 可观测性资源、托管 Postgres",
+    "支持通过 CLICKHOUSE_CLOUD_API_KEY/SECRET 环境变量进行 API Key 认证（旧变量名已弃用）",
+    "examples 目录提供使用示例，Terraform Registry 提供资源级文档"
+   ],
+   "use_cases": [
+    "以 IaC 方式管理 ClickHouse Cloud 服务生命周期、伸缩策略与升级窗口",
+    "管理 SQL 控制台层面的组织成员、自定义角色与 API Key",
+    "统一管理 ClickStack 告警、仪表盘、连接等可观测性资源"
+   ]
+  },
+  "sha": "c1e2d1b7c061",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cf5d4b29c099": {
+  "identity": {
+   "one_liner": "基于YOLO11s与Supabase的市政垃圾事件检测与闭环处置编排框架",
+   "review": "SafaiOS 是一个面向市政环卫场景的开源系统，覆盖垃圾事件上报、AI 检测、司机派单、清理前后照片双角色核验与 Safai Coins 奖励记账。技术栈为 YOLO11s、PyTorch、FastAPI、PostgreSQL 17/Supabase，全部 16 张表启用 RLS，客户端仅作展示层，状态变更须经服务器校验。适合研究 civic-tech 流程设计与治理机制的开发者。",
+   "highlights": [
+    "内置基于 SafaiOS_Dataset_v10k（10000+ 图像）训练的 YOLO11s 检测模型，支持 5 类材质分类（塑料瓶、塑料袋膜、纸类、玻璃、金属罐），输入分辨率 768px",
+    "实现双角色核验流程：司机提交清理证据，由上报市民核验，7 天未响应自动升级至市政管理员，并禁止清理者自我核验",
+    "数据库层包含 16 个实体，所有表启用 RLS，奖励账本为 append-only 且带幂等键约束，另有 append-only 审计日志"
+   ],
+   "use_cases": [
+    "搭建市民上报垃圾、司机接单清理、管理员复核的市政闭环处置流程",
+    "参考其 YOLO 训练数据集划分（零跨集泄漏）与模型实验记录（E001–E004）进行街头垃圾检测相关开发",
+    "学习 Supabase + PostgreSQL RLS 全表覆盖、append-only 账本与 RBAC 角色分离的数据库安全实现"
+   ]
+  },
+  "sha": "cf5d4b29c099",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d854444af561": {
+  "identity": {
+   "one_liner": "Go 编写的多租户客户数据导出服务，含 PostgreSQL 任务队列与可离线校验的 ZIP 归档",
+   "review": "一个 Go 参考实现服务，供 SaaS 租户管理员请求并获取可携带、可验证的客户记录与附件副本。它用 PostgreSQL 持久化导出任务，worker 以租约方式认领并从 repeatable-read 快照读取数据，生成含 SHA-256 清单的 ZIP 后上传到 S3 兼容存储，并提供 CLI 进行离线校验。README 明确该项目面向本地评估与开发，存在 128 MiB 归档上限、仅支持 HS256 密钥、API 为纯 HTTP 等限制。",
+   "highlights": [
+    "基于 PostgreSQL 的持久化任务队列，支持租约、心跳续期、重试与取消",
+    "导出包含 JSONL 数据集、附件、版本化清单及 SHA-256 完整性校验，可离线验证租户归属、记录数与文件哈希",
+    "提供租户隔离的 API（带幂等键与管理员授权）、仪表盘与 CLI，存储使用 S3 兼容服务（本地为 MinIO）"
+   ],
+   "use_cases": [
+    "SaaS 运营方为租户管理员提供数据导出与可携性功能（如 GDPR 相关流程）的参考实现",
+    "在本地用 Docker Compose 快速搭建包含 PostgreSQL、MinIO、API 与 worker 的导出流水线进行评估",
+    "对导出 ZIP 执行离线完整性校验与篡改检测（exportctl verify）"
+   ]
+  },
+  "sha": "d854444af561",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "01b12dd81778": {
+  "identity": {
+   "one_liner": "用 Rust 编写、运行于 Windows 的 Redis 协议兼容内存数据服务器",
+   "review": "Rexyra 是面向 Windows 的内存键值服务器，实现 RESP2/RESP3 协议与 201 条 Redis 命令，覆盖字符串、哈希（含字段级过期）、列表、集合、有序集合、位图、事务、Pub/Sub 与 Lua 脚本，RDB/AOF 采用 Redis 原生格式可互相加载。提供 MSI 安装为 Windows 服务或单文件直接运行两种方式。为单实例服务器，未实现复制、集群、streams、模块与 TLS，且官方说明尚无已知生产环境运行案例。",
+   "highlights": [
+    "实现 201 条 Redis 命令，支持 RESP2/RESP3 协议，回复与错误信息对照 Redis 7.4 校验",
+    "RDB 快照与 AOF 使用 Redis 自身格式，Redis 与 Rexyra 的数据文件可互相加载；快照写入无需 fork，保存期间命令持续运行",
+    "提供 maxmemory 内存限制与八种 Redis 淘汰策略、密码与 ACL 用户访问控制、键空间通知与客户端缓存（CLIENT TRACKING）"
+   ],
+   "use_cases": [
+    "在 Windows 环境中需要运行 Redis 协议兼容服务器且不使用 WSL/Docker 的场景",
+    "需要以 Windows 服务方式长期运行、由 LocalService 低权限账户管理的内存数据服务",
+    "现有 Redis 客户端库（如 redis-py、Jedis、go-redis）对接本地单实例缓存/键值存储的场景"
+   ]
+  },
+  "sha": "01b12dd81778",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

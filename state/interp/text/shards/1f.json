@@ -3700,5 +3700,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "34af6850a573": {
+  "identity": {
+   "one_liner": "自托管的宠物健康与照护追踪器，SvelteKit 加 SQLite 单容器部署",
+   "review": "EinVault 是一个面向 homelab 用户的自托管宠物健康与照护追踪应用，数据全部保留在本地硬件，无云端与遥测。基于 SvelteKit 和 SQLite 构建，以单个 Docker 容器运行，需自行配置反向代理提供 TLS。提供伴侣档案、健康记录、用药与库存、日记、提醒及 Bearer-token API，按管理员/成员/照护者三种角色区分权限。可选的视频转码功能依赖 ffmpeg 且较耗 CPU，启用时需调高容器资源限制。",
+   "highlights": [
+    "提供健康追踪（就诊、疫苗、用药、体重）与日记、笔记、事件记录等功能，按物种（狗/猫/其他）匹配活动类型",
+    "提供 Bearer-token API 与可撤销的 ICS 日历订阅，支持从脚本、智能按钮和日历应用读写数据",
+    "单 Docker 容器自包含运行，使用 SQLite 数据库，无外部依赖，支持六种语言界面"
+   ],
+   "use_cases": [
+    "在家庭服务器上集中记录多只宠物的健康档案、用药计划与日常活动",
+    "为无账号的临时照护者（如代喂者）生成可打印的照护清单或开放的照护者班次记录",
+    "通过 API 或日历订阅将宠物用药提醒与活动记录接入智能家居（如 Home Assistant）或其他自动化脚本"
+   ]
+  },
+  "sha": "34af6850a573",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6424e47268a6": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 逻辑复制的 .NET 库，将行级变更转为 JSON 流向消息代理或应用",
+   "review": "PgOutput2Json 是一个 .NET 库，通过 PostgreSQL 内置的 pgoutput 逻辑解码插件读取复制槽中的行级变更（INSERT/UPDATE/DELETE），转换为 JSON 后发送到 .NET 应用或 Kafka、RabbitMQ、Redis、MongoDB、ClickHouse 等 11 种输出端。需要 PostgreSQL 14 及以上，需在 postgresql.conf 中设置 wal_level=logical 并重启。消息键取决于表的 REPLICA IDENTITY 设置，投递语义为 at-least-once，消息携带由事务 LSN 和序号组成的去重键。",
+   "highlights": [
+    "复用 PostgreSQL 10+ 内置的 pgoutput 逻辑解码插件，无需额外安装插件",
+    "支持 Kafka、RabbitMQ、Redis、MongoDB、SQLite、ClickHouse、Amazon Kinesis、DynamoDB、Azure Event Hubs、Webhook 及 .NET 委托处理器等多种输出",
+    "消息携带 (事务 LSN, 序号) 去重键，投递为 at-least-once 并按原始顺序重放；提供紧凑模式以省略列名、通过 schema 消息传递列定义"
+   ],
+   "use_cases": [
+    "监听数据库变更触发后台任务或异步日志写入",
+    "对应用缓存进行低延迟更新",
+    "为数据仓库构建基于变更数据捕获的轻量 ETL 管道"
+   ]
+  },
+  "sha": "6424e47268a6",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "13d0ad4a7be6": {
+  "identity": {
+   "one_liner": "面向 MCP 客户端的 PostgreSQL 服务器，默认只读事务运行 SQL 并提供模式内省与性能诊断工具。",
+   "review": "该项目是一个供 Claude Code、Cursor 等 MCP 客户端调用的 PostgreSQL 服务器，通过 npx 启动并经 .mcp.json 配置连接。用户 SQL 默认在 BEGIN READ ONLY 事务中执行，写入需设置 ALLOW_WRITES=1 环境变量；主要访问控制建议使用最小权限的数据库角色。提供 pg_query、pg_explain、pg_health、pg_top_queries 等工具，支持参数化查询与结果行数截断。0.14 版本对只读路径语句检查、结果字节上限和启动角色检查做了变更，并含四项破坏性改动。",
+   "highlights": [
+    "提供 pg_list_schemas、pg_list_tables、pg_describe_table 等模式内省工具，返回列、主键、外键与索引信息",
+    "提供 pg_top_queries、pg_seq_scan_tables、pg_unused_indexes、pg_table_bloat、pg_inspect_locks、pg_replication_status 等性能诊断工具",
+    "用户 SQL 经扩展查询协议发送，每请求限单条语句，支持 $1、$2 参数化查询；结果按 POSTGRES_MAX_ROWS（默认 1000）截断"
+   ],
+   "use_cases": [
+    "在 Claude Code 或 Cursor 中查询和内省 PostgreSQL 数据库结构",
+    "通过 pg_explain 查看查询执行计划，结合 pg_top_queries、pg_table_bloat 等工具排查慢查询",
+    "以只读角色连接数据库，让 agent 执行只读分析；需要写入时配置 ALLOW_WRITES 并建议限定于开发测试库"
+   ]
+  },
+  "sha": "13d0ad4a7be6",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "084ad6e61080": {
+  "identity": {
+   "one_liner": "基于 pi 编码 agent 封装的个人助理运行时，含证据记忆与多通道接入",
+   "review": "Tree-Agent 是在 pi coding agent（@earendil-works/pi-coding-agent）之上封装的个人助理运行时，提供持久记忆、多通道消息接入与工具治理。记忆写入须绑定编号事件与逐字证据，采用四态裁决（create/correct/invalidate/contest）。安装用 npm install --ignore-scripts，通过 CLI worker/serve 命令运行，支持 CLI、Web、Telegram、飞书、QQ 通道。",
+   "highlights": [
+    "记忆每条绑定编号事件与逐字引文证据，来源须为用户消息，置信度不足只存 tentative 且不注入",
+    "支持 CLI/Web/Telegram/飞书/QQ（OneBot v11）多通道接入，以 claimMessage 实现消息幂等去重",
+    "记忆检索使用 bge-m3 向量加 SQLite 余弦，阈值按模型自适应，并提供 eval 记忆抽取评测命令"
+   ],
+   "use_cases": [
+    "需要长期持久记忆与冲突裁决的个人助理场景",
+    "通过飞书、QQ、Telegram 等 IM 接入同一份记忆的多渠道使用",
+    "需要 HITL 审批、自我修改回滚与工具治理的 agent 部署"
+   ]
+  },
+  "sha": "084ad6e61080",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

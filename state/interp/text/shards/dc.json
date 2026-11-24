@@ -2803,5 +2803,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f30df5af9791": {
+  "identity": {
+   "one_liner": "比较 MySQL/PostgreSQL/SQLite 数据库并自动生成双向迁移 SQL 的命令行工具",
+   "review": "DBDiff 读取本地或远程的两个 MySQL、PostgreSQL 或 SQLite 数据库，比较其模式与数据，生成 UP/DOWN 迁移 SQL，用于数据库版本控制，可与 Flyway、Liquibase 配合，也内置 migration:up/down/status 等迁移执行器。通过 --driver 选择数据库，支持 DSN URL、Unix socket 连接，--supabase 一键启用 SSL 并默认读取 public schema；PostgreSQL 可经 --schemas 选定 schema，DDL 渲染可选内置或 pg_dump。SQLite 依赖 pdo_sqlite PHP 扩展，enum 标签删除等少数场景有已知限制。",
+   "highlights": [
+    "比较两个数据库的表、视图、物化视图、触发器、存储过程、枚举类型、RLS 策略与数据，生成含 UP 和 DOWN 的 SQL 迁移文件",
+    "内置迁移执行器，支持 migration:up、down、status、validate、repair、baseline 子命令，兼容 Flyway、Liquibase 等迁移工具",
+    "支持 --driver 切换 MySQL/PostgreSQL/SQLite，通过 --schemas/--ignore-schemas 选定 PostgreSQL schema，--supabase 自动启用 sslmode=require"
+   ],
+   "use_cases": [
+    "团队或企业需要在迁移工具（Flyway、Liquibase 等）流程中生成数据库版本控制的迁移脚本",
+    "对比本地与远程（如 Supabase）环境差异，生成包含 RLS 策略的模式与数据变更 SQL",
+    "对 PostgreSQL 复杂对象（视图依赖的列类型变更、枚举标签增删等）生成可执行且可回滚的多语句迁移"
+   ]
+  },
+  "sha": "f30df5af9791",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1df5b705f40b": {
+  "identity": {
+   "one_liner": "微软官方 Python 驱动，通过 DDBC 直连 SQL Server 与 Azure SQL 数据库",
+   "review": "mssql-python 是微软提供的 Python 数据库驱动，用于连接 SQL Server 和 Azure SQL 系列数据库。它基于 DDBC（直接数据库连接），无需外部驱动管理器，符合 DB API 2.0 规范，要求 Python 3.10 及以上。pip 安装时通过伴随包 mssql-python-odbc 分发 ODBC 驱动二进制，驱动在首次建连时延迟加载。多用户进程中交互式/设备码认证共享单个凭据实例，需注意身份隔离限制。",
+   "highlights": [
+    "支持连接管理、查询执行、事务处理等数据库操作，符合 DB API 2.0 规范",
+    "支持 Microsoft Entra ID 多种认证方式（密码、托管标识、服务主体、交互式、设备码、集成认证等），覆盖 Windows/macOS/Linux",
+    "内置连接池，默认启用，池化取连接带有限时验证与重置机制"
+   ],
+   "use_cases": [
+    "Python 应用连接 SQL Server、Azure SQL Database 或 Azure SQL Managed Instance",
+    "Azure 虚拟机/容器中基于托管标识的无凭据连接场景",
+    "无浏览器环境下通过设备码流程进行认证的部署场景"
+   ]
+  },
+  "sha": "1df5b705f40b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f78771be85dd": {
+  "identity": {
+   "one_liner": "创建 v7 UUID 的轻量级 Postgres 扩展",
+   "review": "pg_uuidv7 是一个用 C 编写的 Postgres 扩展，提供 uuid_generate_v7() 等函数用于生成含 48 位毫秒级 Unix 时间戳的版本 7 UUID。生成的 UUID 为常规 Postgres UUID 类型，可作主键、建索引。README 注明 Postgres 18 已内置 uuidv7() 函数但功能较少。支持 Postgres 13–19，可通过下载预编译文件、make 编译或 Docker 镜像安装，需执行 CREATE EXTENSION 启用。",
+   "highlights": [
+    "提供 uuid_generate_v7() 生成 v7 UUID，uuid_v7_to_timestamptz() 提取时间戳，uuid_timestamptz_to_v7() 将时间戳转为 UUID",
+    "生成的 UUID 是常规 Postgres UUID 类型，可作主键、参与索引和字符串转换",
+    "支持 Postgres 13 至 19，提供预编译二进制、源码 make 构建及 Docker 镜像三种安装方式"
+   ],
+   "use_cases": [
+    "需要按时间排序且含时间戳信息的 UUID 主键生成",
+    "从已有 v7 UUID 中提取生成时间",
+    "在 Postgres 13–17 等尚无内置 uuidv7() 的版本中使用 v7 UUID"
+   ]
+  },
+  "sha": "f78771be85dd",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d3aac786637": {
+  "identity": {
+   "one_liner": "开源 AI 小说创作与阅读平台，内置 Agent 辅助写作并支持发布连载",
+   "review": "Chevoink 是一个集创作与阅读于一体的 AI 小说平台：作者可借助 Agent 4.0 进行资料研究、设定管理、大纲规划、章节起草与审校，并以人物关系网记录作品记忆；读者可在书城找书、追更、TTS 听书并参与社区互动。平台支持接入 OpenAI 兼容服务或 LM Studio、Ollama 等本地模型，提供 Web、Windows、Android 三端，采用 AGPL-3.0 许可，闭源商业化需另行授权。",
+   "highlights": [
+    "支持内置模型、自定义 OpenAI 兼容服务及通过本地连接器接入 LM Studio、Ollama 等本地模型",
+    "提供创作记忆与关系网功能，可按章补记人物、物品和故事线并查看关联",
+    "支持作品发布连载、定时更新，读者端提供书城、追更、TTS 听书与评论互动"
+   ],
+   "use_cases": [
+    "长篇小说作者使用 AI 辅助研究资料、搭建大纲、起草和修订章节",
+    "将写好的作品发布为连载，供读者在书城发现、追更和听书",
+    "需要接入自有 API 或本地模型开展小说创作的用户"
+   ]
+  },
+  "sha": "5d3aac786637",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9ef8327af6ea": {
+  "identity": {
+   "one_liner": "阿里云 PolarDB-X 2020-02-02 版 API 的 Swift SDK",
+   "review": "该仓库提供 Alibaba Cloud polardbx SDK for Swift（模块名 AlibabacloudPolardbx20200202），用于在 iOS/macOS 项目中调用阿里云 PolarDB-X 的 OpenAPI。支持通过 Carthage 或 Swift Package Manager 安装，要求 iOS 13.3+/macOS 10.15+、Xcode 11.3+ 与 Swift 5.6。README 中仓库描述标注为 Go，但正文内容为 Swift 版本，采用 Apache-2.0 许可证。",
+   "highlights": [
+    "封装阿里云 PolarDB-X 20200202 版 OpenAPI，供 Swift 项目调用",
+    "支持 Carthage 与 Swift Package Manager 两种集成方式",
+    "基于 Apache-2.0 许可证发布"
+   ],
+   "use_cases": [
+    "在 iOS 应用中调用阿里云 PolarDB-X 管理 API",
+    "在 macOS 应用（10.15+）中集成 PolarDB-X 云服务操作",
+    "通过 Swift Package Manager 在现有 Xcode 工程中添加该依赖"
+   ]
+  },
+  "sha": "9ef8327af6ea",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

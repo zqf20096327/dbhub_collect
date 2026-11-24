@@ -2928,5 +2928,96 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4c643786408b": {
+  "identity": {
+   "one_liner": "面向编码代理与工程师的 171 个 Markdown 技能文件目录，提供分层工程方法与证据留痕。",
+   "review": "",
+   "highlights": [
+    "提供 171 个活跃技能，分 18 类，另有 78 个已退役名称作为重定向保留",
+    "提供 Auto-agents 2.2.6 顺序执行器与可选并行通道，含依赖验证",
+    "包含 248 条路由测试夹具与 277 项通过测试（3 项跳过，2026-11-17 记录）"
+   ],
+   "use_cases": [
+    "在 Claude Code 中安装插件，为 API 契约设计、安全审计、CI/CD 流水线等任务按名调用技能",
+    "在 AI 辅助开发中执行变更前置验证门并留下可供评审的证据",
+    "通过 Auto-agents 启动多会话顺序执行并记录恢复状态"
+   ],
+   "softened": [
+    "review:『world-class』置空"
+   ]
+  },
+  "sha": "4c643786408b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0f98b13488f": {
+  "identity": {
+   "one_liner": "面向 DeepSeek Harness 的知识库、笔记与工作日报插件",
+   "review": "DSH Knowledge 是一个 DSH 插件，提供知识库（全文检索、项目/会话挂载、按权限召回与回写）、独立笔记和工作日报三类功能，通过单一 knowledge 工具入口暴露 19 项操作，不修改 DSH Agent Loop。数据可存于本地 SQLite 或认证的中央知识服务。需 Node.js >=24.9.0，经 dsh plugin 命令安装后重启对应 Profile。未挂载知识库不召回不回写，日报采集默认关闭。",
+   "highlights": [
+    "会话仅暴露一个 knowledge 工具入口，包含 19 项知识库与笔记操作，不改变挂载和确认权限",
+    "支持本地 SQLite 或认证的中央知识服务，多个客户端可连接同一服务",
+    "回答完成后在后台独立提取知识，提供审核、版本历史、冲突保护与文档封存"
+   ],
+   "use_cases": [
+    "为 DSH 会话挂载项目知识库，实现按权限的文档检索与回写",
+    "编写和分享笔记，通过 @ 引用搜索并引用笔记及文本文件",
+    "按本机工作目录采集、整理并导出工作日报，可搭配日历管理每日目标"
+   ]
+  },
+  "sha": "c0f98b13488f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "519cfe26b2d2": {
+  "identity": {
+   "one_liner": "面向编码代理的本地记忆系统：单一二进制加 SQLite 文件，经 MCP 提供检索",
+   "review": "Palace 是一个用 Rust 编写的本地优先记忆服务，供 Claude Code、Cursor、Codex 等支持 MCP 的编码代理在会话之间保存决策、命令、修复记录和偏好。数据以原文形式存入单个 SQLite 文件，嵌入由 ONNX Runtime 在本地 CPU 生成（默认 all-MiniLM-L6-v2），检索融合 BM25 与向量相似度，结果附带来源引用。检索通过 hooks 在会话开始或收到提示时自动注入。macOS Intel 平台不受支持；Linux 需 glibc 2.39+。",
+   "highlights": [
+    "单二进制部署，数据存于单个 SQLite 文件，嵌入在本地 CPU 上通过 ONNX Runtime 计算，无需 API 密钥",
+    "检索融合 BM25 关键词评分与本地嵌入余弦相似度，按意图分类加权，可选本地 cross-encoder 重排",
+    "提供 wings/rooms/drawers 分层组织、带时间戳的知识图谱、按代理分立的 diary 记录，以及可迁移的嵌入模型管理命令"
+   ],
+   "use_cases": [
+    "让编码代理跨会话记住项目决策、修复过程和代码约定，新会话自动召回相关记忆",
+    "在多个代理客户端之间共享同一份本地记忆库（支持 Claude Code、Cursor、Gem CLI 等）",
+    "通过 creative 与 personal 配置文件用于世界设定、小说、教练记录或家庭笔记等非软件项目场景"
+   ]
+  },
+  "sha": "519cfe26b2d2",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aca7dfd40e77": {
+  "identity": {
+   "one_liner": "一个提供多种 RAG 类型与统一 Python API 的本地检索增强问答框架。",
+   "review": "rag-titan 是一个 Python RAG 框架，通过 rag_type 参数切换 7 种检索增强生成流程（简单、自适应、父子块、HyDE、融合、纠错、迭代），检索支持向量、BM25 与 RRF 混合搜索，索引可存于 SQLite、Chroma 或 Qdrant，可经 Ollama 本地运行或接入 Claude。面向需要在本地对文档构建问答系统的 Python 开发者。要求 Python 3.10+，部分功能（token 分块、向量库、交叉编码器重排）需额外安装可选依赖。",
+   "highlights": [
+    "提供 7 种可用 RAG 类型，每种均有 answer() 与返回各步骤的 run() 接口",
+    "支持向量、BM25 关键词与 RRF 混合检索，混合权重与保留数量可调",
+    "包含 10 种分块器（词、字符、token、递归、结构感知、TextTiling 等）与 4 种文件格式解析"
+   ],
+   "use_cases": [
+    "用 Ollama 在本地对 PDF/Word/Markdown/文本文件建立可引用来源的问答索引",
+    "在同一份测试问题上对比不同分块器与 RAG 类型的组合表现",
+    "接入现有 RAG 管线的各阶段日志，定位分块、检索或生成环节的失败原因"
+   ]
+  },
+  "sha": "aca7dfd40e77",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

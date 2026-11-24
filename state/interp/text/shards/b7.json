@@ -3284,5 +3284,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b4edf8a65d34": {
+  "identity": {
+   "one_liner": "面向企业售后场景的 Python 全栈 Agent 学习演示，含 FastAPI、LangGraph 与 RAG。",
+   "review": "该仓库是一个个人学习与技术演示项目，用虚构数据和固定演示身份展示售后客服 Agent 的完整链路：FastAPI 接入请求，LangGraph 做确定性路由，SQLite 只读订单、Chroma 政策 RAG 与本地模拟物流/电商 API 协同，退款审批通过 LangGraph checkpoint 中断并由独立审批人恢复。适合学习 Agent 工程化实践的开发者。订单查询只读，退款仅记录 approved_demo 状态，不执行真实退款、改址或删除；不含生产认证与生产级 RBAC。",
+   "highlights": [
+    "支持租户内四类角色（Customer/Service/Approver/Admin）权限边界，含审批任务分配与自批拒绝机制",
+    "提供政策 RAG 问答，包含来源引用、证据展示、无证据降级及可审计的约束规则",
+    "提供 OOS-v2 回归评估、pytest 故障注入测试、X-Trace-ID 追踪与 JSON 日志"
+   ],
+   "use_cases": [
+    "学习 LangChain/LangGraph 构建带权限边界与人工审批中断的 Agent 流程",
+    "作为 FastAPI + SQLite + Vue + Docker 全栈演示项目的参考实现",
+    "了解 RAG 检索评估、故障案例与验收脚本的组织方式"
+   ]
+  },
+  "sha": "b4edf8a65d34",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4c8b9af76f63": {
+  "identity": {
+   "one_liner": "基于 Rust 和 Axum 的可扩展 HTTP 身份认证与授权服务器",
+   "review": "Uranium 是一个基于 Rust 和 Axum 构建的身份与访问管理系统，通过 HTTP 提供认证与授权服务，可配合 PostgreSQL 使用。本地开发需准备 Rust、just 和 Docker 环境，通过克隆仓库、复制 .env.example 为 .env.local 并执行 just w 启动。",
+   "highlights": [
+    "提供基于 HTTP 的身份认证与授权服务",
+    "基于 Rust 与 Axum 实现，支持与 PostgreSQL 配合使用",
+    "提供本地开发流程，依赖 Rust、just 与 Docker"
+   ],
+   "use_cases": [
+    "为 Rust/Axum 应用提供独立的认证授权服务",
+    "微服务架构中作为身份与访问管理组件",
+    "需要自托管认证服务的后端项目"
+   ]
+  },
+  "sha": "4c8b9af76f63",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7d20f5db280a": {
+  "identity": {
+   "one_liner": "多来源优惠聚合工具，AI 打分分类并通过微信推送",
+   "review": "Deal Radar 是一个自托管的优惠信息聚合工具，从 V2EX、NodeSeek、小众软件、LINUX DO 及 X 博主主页等 7 个来源抓取优惠内容，经 AI 评分（0~100）与 13 类分类后生成排行榜，高分条目通过息知推送到微信。基于 Bun + SQLite 单进程运行，支持 Docker 部署，所有 AI 和推送配置可选，未配置时退回关键词规则。项目采用 MIT 许可，仅供个人自用。",
+   "highlights": [
+    "聚合 7 个来源（RSS 与 X 博主监听），自动去重并保留近 7 天数据，每 2 小时自动刷新",
+    "AI 价值评分（0~100 分档）与 13 类自动分类，支持自定义决策接口和模型，未配置时退回关键词规则",
+    "微信推送支持高价值筛选、防重复、夜间静默时段（默认 23:00–08:00）和按来源勾选"
+   ],
+   "use_cases": [
+    "个人用户聚合浏览多个优惠/羊毛信息源，替代逐个站点查看",
+    "需要通过微信接收优惠信息通知且希望在特定时段免打扰",
+    "想要自建带 AI 评分和分类的信息聚合服务，并用 Docker 在服务器长期运行"
+   ]
+  },
+  "sha": "7d20f5db280a",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dde6bf750510": {
+  "identity": {
+   "one_liner": "自托管订阅与账单追踪器，单 Docker 容器运行，数据存 SQLite",
+   "review": "Coinio 是一个自托管的订阅与账单追踪应用，用于记录周期性支出并汇总周、月、年度应付金额。适合 homelab 用户及家庭共享场景，支持家庭成员分摊与私密订阅。核心数据为单个 SQLite 数据库置于 /data 目录，通过环境变量配置；提供 Wallos 导入、Firefly III 双向同步、MCP 服务器及 iPhone/Android 桌面小组件。远程 MCP 客户端需 https 公网地址（COINIO_PUBLIC_URL）。",
+   "highlights": [
+    "内置 161 个服务目录，支持周/月/年及每 N 期计费周期，可标记已付、跳过或暂停",
+    "提醒与告警支持邮件、Telegram、Discord、Slack、ntfy、Gotify、Pushover、webhook、Apprise，模板可编辑",
+    "支持 Passkeys/WebAuthn 登录、家庭共享计划、多币种按日汇率换算、CSV/JSON 导入导出"
+   ],
+   "use_cases": [
+    "个人或家庭集中管理订阅、账单与周期性支出，按成员分摊共享计划",
+    "已使用 Firefly III 的用户保持订阅与账单数据双向同步",
+    "通过 MCP 客户端（如 claude.ai、ChatGPT）读取和更新订阅数据"
+   ]
+  },
+  "sha": "dde6bf750510",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9081ad19a059": {
+  "identity": {
+   "one_liner": "自托管控制面板，基于 Docker Swarm 与 Traefik 从网页界面部署应用和数据库。",
+   "review": "Opsifier 是一个 Apache 2.0 许可的自托管控制面板，运行在 Ubuntu/Debian 服务器（x86_64 或 arm64，至少 2GB 内存）上，通过安装脚本部署 Docker Swarm 与 Traefik。状态存储于单个 SQLite 文件，支持从镜像、Git 仓库、Dockerfile 或压缩包部署应用，管理五类数据库与定时备份。项目处于早期开发阶段，README 明确说明尚未可用于生产环境，可能存在破坏性变更。",
+   "highlights": [
+    "支持从 Docker 镜像、Git 仓库、GitHub、内联 Dockerfile 或上传压缩包部署，带签名 webhook 与部署令牌，可一步回滚到此前版本",
+    "内置 Postgres、MySQL、MariaDB、MongoDB、Redis 管理，支持定时备份到本地磁盘、SFTP、FTP、S3 兼容存储、Dropbox 或 Google Drive",
+    "提供 CLI（opsifier push）与 MCP server，与网页面板访问同一 API 且权限一致；无遥测数据，仅在申请 opsifier.dev 地址时外联"
+   ],
+   "use_cases": [
+    "在自有服务器上通过网页界面部署和管理应用与数据库",
+    "为开发、staging、生产角色分配不同的服务器保护策略（非生产环境置于密码之后）",
+    "通过 CLI 脚本或 MCP server（供 AI Agent 调用）以与面板相同的 API 权限执行部署操作"
+   ]
+  },
+  "sha": "9081ad19a059",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3270,5 +3270,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b93156fd86cc": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3、LangChain4j 与 Vue 3 的 AI 零代码应用生成平台",
+   "review": "该项目是编程导航团队出品的开源教学实战项目，用户输入自然语言后由 AI 智能路由与多节点工作流流式生成前后端代码，支持可视化点选编辑、实时预览、Selenium 自动截图与一键云端部署。仓库同时包含单体版本与 Spring Cloud Alibaba/Dubbo 微服务版本，附带 Prometheus/Grafana 监控配置，适合 Java 开发者学习 AI 智能体编排与微服务架构。",
+   "highlights": [
+    "支持自然语言输入，经智能路由与 LangGraph4j 工作流分步生成、写入项目文件，过程通过 SSE 流式回传前端",
+    "提供可视化点选编辑、实时预览、一键云端部署、Selenium 自动封面截图与源码下载功能",
+    "仓库包含单体版本与 Spring Cloud Alibaba + Dubbo 微服务版本，并提供 Prometheus/Grafana 监控配置"
+   ],
+   "use_cases": [
+    "学习 LangChain4j/LangGraph4j 构建 AI 智能体与多步骤工作流",
+    "学习 Spring Cloud Alibaba 与 Dubbo 微服务拆分改造",
+    "作为毕业设计或简历项目，用于研究 AI 代码生成平台的实现方式"
+   ]
+  },
+  "sha": "b93156fd86cc",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f74cdadd4daf": {
+  "identity": {
+   "one_liner": "Rust 编写的属性图数据库，以喷泉码提交流统一 MVCC、时间旅行与分支。",
+   "review": "frankengraphdb 是用 Rust（nightly、禁用 unsafe）实现的属性图数据库，提供嵌入式库 fgdb、服务器 fgdbd 与 CLI 三种形态，使用 GQL（ISO/IEC 39075:2024）语言并支持 openCypher 过渡。需注意 README 明确声明以现在时描述 1.0 目标态设计，即文档内容为规划规格而非已全部落地；README 另给出在 176 MB 测试库上、60 MiB 内存限制下流式查询 6,144 行的实测记录。",
+   "highlights": [
+    "将 MVCC、时间旅行历史（FOR SYSTEM_TIME AS OF/BETWEEN）、git 式分支、复制与变更订阅统一到一个基于 RaptorQ 纠删码的内容寻址提交流",
+    "以 GQL（ISO/IEC 39075:2024）作为查询语言，提供嵌入式库、服务器与 CLI 三种运行形态",
+    "工作区禁用 unsafe 代码，SIMD/arena/VFS 边界须带标量回退并登记台账，依赖为封闭集合（std + 固定 nightly + 三个自有基础库）"
+   ],
+   "use_cases": [
+    "需要通过 GQL 对属性图执行事务读写并支持时间点查询的场景",
+    "在受限内存下读取较大图数据库（如 README 中 60 MiB 限制下的流式查询）",
+    "从源码检出运行内嵌示例（cargo run -p fgdb --example open_a_database）以试用 CLI 与服务器功能"
+   ]
+  },
+  "sha": "f74cdadd4daf",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b0f29e71d2a2": {
+  "identity": {
+   "one_liner": "PostgreSQL 向量相似度搜索扩展，提供 IVF/RaBitQ 与图两类索引",
+   "review": "vchord 是 PostgreSQL 扩展（当前 1.4.0），为 15–19 版本提供磁盘友好的向量相似度搜索，是 pgvecto.rs 的后继项目，依赖 pgvector 的 vector 扩展。内置 vchordrq（IVF/RaBitQ）与 vchordg（图索引）两种索引，支持 L2、内积、余弦、范围搜索及 MaxSim。需加入 shared_preload_libraries 并重启；许可证为 AGPL-3.0。",
+   "highlights": [
+    "提供 vchordrq（IVF/RaBitQ，支持过滤、重排序、外部构建与召回评估）和 vchordg（图索引）两种向量索引",
+    "支持 L2、内积、余弦、范围搜索与多向量 MaxSim 算子，及 vector、halfvec、rabitq4/rabitq8 数据类型",
+    "可组合 vchord_bm25 与 pg_tokenizer 实现向量与全文混合搜索"
+   ],
+   "use_cases": [
+    "PostgreSQL 15–19 中对大规模向量数据建立 ANN 索引并执行相似度查询",
+    "带过滤条件的向量检索场景，如按 tenant_id 过滤的近邻查询",
+    "结合全文检索构建混合搜索（向量 + BM25）应用"
+   ]
+  },
+  "sha": "b0f29e71d2a2",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2fab116187be": {
+  "identity": {
+   "one_liner": "面向 LLM 代理的本地源码图谱与向量知识库，以 MCP 工具提供带 file:line 证据的代码问答",
+   "review": "RAGRAF 是一个本地运行的 MCP 服务器，将代码库索引为图谱和向量存储（SQLite + FTS5 + tree-sitter + 本地 embeddings），供 AI 代理通过 94 个固定操作回答符号定义、调用关系、影响范围等问题，并附带 file:line 引用。需 Python 3.13+，可选的属性图谱层（Java + Joern）解锁切片功能，文档图谱能力需 doc-graph 许可，否则功能会声明降级。",
+   "highlights": [
+    "提供 94 个 MCP 工具（ragraf_* 前缀）和 CLI 两种访问方式，包含 search、symbol、callers/callees、impact、dead_code 等固定操作集",
+    "图谱、FTS5 全文索引与向量存储合并于单一 SQLite，使用 tree-sitter 解析和本地 embeddings（不依赖 torch），完全离线运行",
+    "搜索支持词法与主题两级匹配，返回结果须携带 path:start-end 地址，并提供 write_check、freshness、drift_report 等索引一致性检查操作"
+   ],
+   "use_cases": [
+    "让 AI 代理在不读全文件的情况下定位代码：查找符号定义、调用者/被调用者、入口点与死代码",
+    "修改前的影响评估与写入检查：impact 操作区分明确边与启发式边，write_check 在 SQL 执行前对照 schema 校验",
+    "文档与多语料检索：doc_search_levels 返回带 via_entities/via_chunk 链接的局部与全局两级结果，支持多语料邻居查找"
+   ]
+  },
+  "sha": "2fab116187be",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

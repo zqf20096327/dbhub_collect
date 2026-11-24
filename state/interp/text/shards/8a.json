@@ -3145,5 +3145,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ad3920f2ddd4": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 侧车索引表的 PHP/Symfony 容错全文搜索层",
+   "review": "Fuzzphony 是为已运行 PostgreSQL 的 PHP 8.4+/Symfony 7.4+ 应用提供的搜索库，实现容错、忽略重音、带排序的全文搜索，含过滤、分面与查询语法。索引存于不修改原表的侧车表，支持触发器事务同步或队列 worker 模式。要求启用 pg_trgm 与 unaccent 扩展，仅支持 PostgreSQL。",
+   "highlights": [
+    "支持拼写容错（trigram）、重音折叠及 28 种语言的词干提取，查询语法包含短语、OR、排除、前缀和字段限定",
+    "索引位于侧车表，trigger 模式下索引条目与数据行在同一事务中变更，另有队列 worker 批量同步模式",
+    "内置多租户过滤、字段级授权、速率限制，搜索词以参数绑定并限制查询长度与嵌套深度"
+   ],
+   "use_cases": [
+    "为后台管理面板、CRM、支持工具中基于 LIKE 的搜索提供替代",
+    "无权修改表结构的遗留系统或 ERP 数据，需在现有 PostgreSQL 内增加搜索能力",
+    "共享 schema 的多租户 SaaS，需要强制租户过滤与字段级可见控制"
+   ]
+  },
+  "sha": "ad3920f2ddd4",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "91056b992119": {
+  "identity": {
+   "one_liner": "自托管的 TeslaMate 配套移动/桌面 PWA 仪表盘，只读其 PostgreSQL 数据。",
+   "review": "Mate4Mobile 是面向已有 TeslaMate 用户的自托管 Web 应用，通过受限只读角色读取其 PostgreSQL 数据库，生成手机和桌面可用的仪表盘，可添加到主屏幕作为 PWA。它不调用 Tesla API、不向车辆发送指令，安装脚本创建仅含十张表 SELECT 权限的读者角色，默认绑定 127.0.0.1:8099，HTTPS 需自行通过反向代理配置。",
+   "highlights": [
+    "读取现有 TeslaMate PostgreSQL 数据库，提供车辆、行程、充电、能耗等视图，无需额外 Tesla API 连接或云账户",
+    "安装脚本生成权限受限的读者角色（不含 tokens 表），凭据存入权限 600 的 .env，默认绑定 127.0.0.1:8099",
+    "以 Docker Compose 单容器或原生 Node/systemd 方式部署，支持 PWA 安装、离线加载应用外壳，会话使用签名过期 HttpOnly cookie"
+   ],
+   "use_cases": [
+    "已有 TeslaMate 安装，希望在手机上查看电池状态、行程和充电成本的用户",
+    "希望在自有服务器上托管私有车辆数据仪表盘、并通过 HTTPS 在局域网或 VPN 内访问的场景",
+    "想在保持原有 TeslaMate 日志记录不受影响的前提下，为数据增加移动端浏览界面"
+   ]
+  },
+  "sha": "91056b992119",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

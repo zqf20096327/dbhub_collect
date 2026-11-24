@@ -2853,5 +2853,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b0cc674d290d": {
+  "identity": {
+   "one_liner": "面向美国公路货运承运人的 AI 驱动运输管理系统（TMS）",
+   "review": "Trenova 是一个面向美国中小型公路货运承运人的运输管理系统，将发货、调度、计费、会计与合规整合在同一发货记录上，并包含 AI 代理用于处理覆盖、滞期费、账单等常规工作。提供托管版与免费自托管两种运行方式；代码以 Functional Source License 公开，允许自托管和商用，但不得将其作为托管服务转售，每个发布版两年后转为 Apache 2.0。项目当前处于封闭测试阶段，自托管版本为开发中的预发布软件。",
+   "highlights": [
+    "覆盖订单到收款全流程：发货、调度、计费、账簿总账、燃油与 IFTA 申报在同一发货记录上实现",
+    "支持 EDI 204/210/214/990/997、遥测（Samsara）、PC*MILER 与 AS2 集成，以及 SSO、目录同步、基于角色的权限和审计日志",
+    "提供自托管部署方式：Docker Compose 在自有 Linux 主机上运行，含自动 HTTPS；技术栈为 Go 后端与 React/Bun 前端"
+   ],
+   "use_cases": [
+    "美国中小型公路货运承运人管理发货、调度、司机薪资与 FMCSA 安全合规记录",
+    "需要与交易伙伴交换 EDI 单证（提单、发票、状态更新、投标回复）的货运企业",
+    "希望读取源码、审计并在自有主机上运行 TMS 的团队"
+   ]
+  },
+  "sha": "b0cc674d290d",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "359f1953b339": {
+  "identity": {
+   "one_liner": "Rust 编写的 Python 同步 MySQL/MariaDB 驱动，实现 DB-API 2.0",
+   "review": "rustmy 是用 Rust 实现的 Python 同步 MySQL/MariaDB 驱动，面向 Python 应用及 SQLAlchemy、Django 用户。它遵循 DB-API 2.0（PEP 249），提供 Cursor、DictCursor、SSCursor 与 PrepaaredCursor（二进制协议预处理语句），通过 install_as_MySQLdb() 接入 Django MySQL 后端，提供 mysql+rustmy SQLAlchemy 方言。wheel 内置 rustls 与认证实现，无需安装 libmysqlclient；支持 CPython 3.10–3.15 及自由线程版本，不支持 PyPy，暂无 asyncio API。",
+   "highlights": [
+    "实现 DB-API 2.0（PEP 249），提供 %s/%(name)s 占位符、Cursor、DictCursor、SSCursor 与基于二进制协议的 PreparedCursor",
+    "内置 SQLAlchemy 方言（mysql+rustmy、mariadb+rustmy），并通过 install_as_MySQLdb() 运行 Django 的 MySQL 后端",
+    "读取行时以小批量方式传输并在 Rust 侧转换，网络 I/O 在释放 GIL 下执行；UPDATE/DELETE 的 executemany 按每 256 条语句一次网络往返流水线发送"
+   ],
+   "use_cases": [
+    "为 SQLAlchemy（2.0+）连接 MySQL/MariaDB 的 Python 应用",
+    "通过 settings.py 两行改动接入 Django MySQL 后端的项目",
+    "需要服务端预处理语句、流式游标或自由线程 Python（3.14t/3.15t）支持的数据库访问代码"
+   ]
+  },
+  "sha": "359f1953b339",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c2f1ee577e9d": {
+  "identity": {
+   "one_liner": "本地 SQLite 控制平面，为 AI 编码代理提供持久记忆与 2PC 文件安全",
+   "review": "krusch-stack 是运行于 Node.js 22 的本地零云端控制平面，基于 node:sqlite 为 Claude Code、Cursor 等编码代理提供跨会话持久记忆、Turn-0 工作区落地检查、自旋循环防护和两阶段提交（2PC）文件写入。通过 npx krusch-stack init 安装，提供 memory-only 到 full 四档工具配置档位，各子系统也可作为独立 ESM 子路径导出单独使用。需 Node.js >= 22，另提供含 PostgreSQL 16 + pgvector 的 Docker 部署方式。",
+   "highlights": [
+    "基于 node:sqlite WAL 的持久跨会话记忆，用 SHA-256 校验锚定代码行段并追踪规则的替代继承链",
+    "2PC 阶段化文件写入：编辑先以 unified diff 暂存于 SQLite，经 write-ahead 日志和 POSIX 原子重命名提交，启动时自动回滚被 SIGKILL 中断的写入",
+    "Turn-0 零 LLM 工作区扫描注入 schema 隐患提示，对重复读取做记忆化并阻断自旋循环；提供 5 至 39 工具的四档配置"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Windsurf 等代理主机接入跨会话记忆与规则校验",
+    "需要阶段化、可回滚的多文件编辑提交流程的代理工作流",
+    "通过 Ollama 等运行时配合本地开源权重模型（12-48 GB VRAM）运行的离线编码代理环境"
+   ]
+  },
+  "sha": "c2f1ee577e9d",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

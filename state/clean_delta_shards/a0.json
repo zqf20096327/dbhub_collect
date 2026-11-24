@@ -29338,5 +29338,519 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "929967cae5b2+2": {
+  "fn": "mnbuhl/efcore-locking",
+  "clean_ver": "2",
+  "raw_lines": 24,
+  "ops": [
+   [
+    "equal",
+    0,
+    24,
+    0,
+    24
+   ],
+   [
+    "replace",
+    24,
+    35,
+    24,
+    25,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    53,
+    25,
+    43
+   ],
+   [
+    "replace",
+    53,
+    59,
+    43,
+    44,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    67,
+    44,
+    52
+   ],
+   [
+    "replace",
+    67,
+    97,
+    52,
+    53,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    131,
+    53,
+    87
+   ],
+   [
+    "replace",
+    131,
+    142,
+    87,
+    88,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    146,
+    88,
+    92
+   ],
+   [
+    "replace",
+    146,
+    147,
+    92,
+    93,
+    [
+     "|Method|Generated SQL|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    93,
+    94
+   ],
+   [
+    "replace",
+    148,
+    155,
+    94,
+    101,
+    [
+     "|`ForUpdate()`|`FOR UPDATE` / `WITH (UPDLOCK, HOLDLOCK, ROWLOCK)`|",
+     "|`ForUpdate(LockBehavior.NoWait)`|`FOR UPDATE NOWAIT` / `SET LOCK_TIMEOUT 0`|",
+     "|`ForUpdate(LockBehavior.SkipLocked)`|`FOR UPDATE SKIP LOCKED` (PG/MySQL) / `WITH (UPDLOCK, ROWLOCK, READPAST)` (SQL Server)|",
+     "|`ForUpdate(LockBehavior.Wait, timeout)`|`SET LOCAL lock_timeout` (PG) / `SET SESSION innodb_lock_wait_timeout` (MySQL) / `SET LOCK_TIMEOUT` (SQL Server)|",
+     "|`ForShare()`|`FOR SHARE` (PG/MySQL) / `WITH (HOLDLOCK, ROWLOCK)` (SQL Server)|",
+     "|`ForNoKeyUpdate()`|`FOR NO KEY UPDATE` (PostgreSQL only)|",
+     "|`ForKeyShare()`|`FOR KEY SHARE` (PostgreSQL only)|"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    164,
+    101,
+    110
+   ],
+   [
+    "replace",
+    164,
+    188,
+    110,
+    111,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    198,
+    111,
+    121
+   ],
+   [
+    "replace",
+    198,
+    203,
+    121,
+    122,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    211,
+    122,
+    130
+   ],
+   [
+    "replace",
+    211,
+    217,
+    130,
+    131,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    227,
+    131,
+    141
+   ],
+   [
+    "replace",
+    227,
+    246,
+    141,
+    142,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    246,
+    248,
+    142,
+    144
+   ],
+   [
+    "replace",
+    248,
+    249,
+    144,
+    145,
+    [
+     "|Provider|Native transaction lock|Supported|"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    250,
+    145,
+    146
+   ],
+   [
+    "replace",
+    250,
+    253,
+    146,
+    149,
+    [
+     "|PostgreSQL|`pg_advisory_xact_lock` / `pg_advisory_xact_lock_shared`|Yes|",
+     "|SQL Server|`sp_getapplock @LockOwner='Transaction'`|Yes|",
+     "|MySQL|No native equivalent|No; acquisition throws `LockingConfigurationException`|"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    272,
+    149,
+    168
+   ],
+   [
+    "replace",
+    272,
+    273,
+    168,
+    169,
+    [
+     "|Feature|PostgreSQL|MySQL|SQL Server|"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    274,
+    169,
+    170
+   ],
+   [
+    "replace",
+    274,
+    278,
+    170,
+    174,
+    [
+     "|Native primitive|`pg_advisory_lock`|`GET_LOCK`|`sp_getapplock @LockOwner='Session'`|",
+     "|Shared distributed locks|`pg_advisory_lock_shared`|Not supported by `GET_LOCK`|`sp_getapplock @LockMode='Shared'`|",
+     "|Timeout|`SET LOCAL lock_timeout` (ms)|`GET_LOCK(@key, seconds)` — rounded up to 1 s|`@LockTimeout` ms|",
+     "|Cancellation|Driver-level (best-effort)|`KILL QUERY` side-channel|Attention signal|"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    289,
+    174,
+    185
+   ],
+   [
+    "replace",
+    289,
+    306,
+    185,
+    186,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    313,
+    186,
+    193
+   ],
+   [
+    "replace",
+    313,
+    318,
+    193,
+    198,
+    [
+     " - `LockAcquisitionFailedException`",
+     " - `LockTimeoutException`",
+     " - `DeadlockException`",
+     " - `LockAlreadyHeldException`",
+     " - `LockingConfigurationException`"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    321,
+    198,
+    201
+   ],
+   [
+    "replace",
+    321,
+    322,
+    201,
+    202,
+    [
+     "|Feature|PostgreSQL|MySQL|SQL Server|"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    323,
+    202,
+    203
+   ],
+   [
+    "replace",
+    323,
+    330,
+    203,
+    210,
+    [
+     "|`ForUpdate`|✓|✓|✓|",
+     "|`ForShare`|✓|✓|✓ (Wait / NoWait)|",
+     "|`ForNoKeyUpdate`|✓|✗|✗|",
+     "|`ForKeyShare`|✓|✗|✗|",
+     "|`SkipLocked`|✓|✓|✓ (`ForUpdate` via `READPAST`)|",
+     "|`NoWait`|✓|✓|✓|",
+     "|Wait with timeout|✓ (ms)|✓ (ceil to 1s)|✓ (ms)|"
+    ]
+   ],
+   [
+    "equal",
+    330,
+    335,
+    210,
+    215
+   ],
+   [
+    "replace",
+    335,
+    336,
+    215,
+    216,
+    [
+     "`HOLDLOCK` applies SERIALIZABLE semantics to the hinted table, including key-range locks that may block inserts; this is stronger than PostgreSQL's `FOR SHARE`. It requests locking reads even under `READ_COMMITTED_SNAPSHOT` (RCSI) and SNAPSHOT isolation. `ROWLOCK` requests row/key granularity but does not prevent lock escalation. See SQL Server table hints."
+    ]
+   ],
+   [
+    "equal",
+    336,
+    360,
+    216,
+    240
+   ],
+   [
+    "replace",
+    360,
+    361,
+    240,
+    241,
+    [
+     "|Scenario|Behaviour|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    361,
+    362,
+    241,
+    242
+   ],
+   [
+    "replace",
+    362,
+    367,
+    242,
+    247,
+    [
+     "|`FromSqlRaw` / `FromSql` + `ForUpdate()`|Lock clause appended to the wrapping `SELECT` — works in most cases; may fail if the raw SQL shape prevents composing a valid outer query|Test your specific query|",
+     "|`EF.CompileAsyncQuery` + `ForUpdate()`|**Throws at compile time.** `ForUpdate` is not a translatable LINQ expression and cannot be used inside `EF.CompileAsyncQuery`.|Architectural constraint of EF Core compiled queries|",
+     "|`ExecuteUpdate` / `ExecuteDelete` / `Database.ExecuteSqlRaw`|Locking has no effect — these bypass the query SQL generator|Use `ForUpdate()` only with `IQueryable<T>`|",
+     "|SQL Server nested subqueries|Table hints (`WITH (UPDLOCK, HOLDLOCK, ROWLOCK)`) are applied to all `TableExpression` nodes in the locking `SELECT`, including correlated subqueries|SQL Server requires per-table hints; subquery coverage is correct and intentional|",
+     "|GroupBy + ForUpdate|No compile-time error; the lock clause is applied to the outer `SELECT` that wraps EF Core's subquery translation, so the lock targets the grouping result rows rather than individual base-table rows — semantics may not be what you expect||"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    370,
+    247,
+    250
+   ],
+   [
+    "replace",
+    370,
+    371,
+    250,
+    251,
+    [
+     "|Database|Minimum|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    372,
+    251,
+    252
+   ],
+   [
+    "replace",
+    372,
+    376,
+    252,
+    256,
+    [
+     "|PostgreSQL|14|Default minimum for Npgsql 8.x. PG 12+ works if you call `.SetPostgresVersion(12, 0)` in `UseNpgsql`.|",
+     "|MySQL|8.0|`FOR SHARE`, `SKIP LOCKED`, and `NOWAIT` were introduced in 8.0.1. MySQL 5.7 is not supported.|",
+     "|MariaDB|10.6|`SKIP LOCKED` requires 10.6+. `NOWAIT` requires 10.3+. `ForShare` emits `LOCK IN SHARE MODE`.|",
+     "|SQL Server|2019|Azure SQL Database is also supported.|"
+    ]
+   ],
+   [
+    "equal",
+    376,
+    387,
+    256,
+    267
+   ],
+   [
+    "replace",
+    387,
+    388,
+    267,
+    268,
+    [
+     "|Provider|Dependency|Current verification|"
+    ]
+   ],
+   [
+    "equal",
+    388,
+    389,
+    268,
+    269
+   ],
+   [
+    "replace",
+    389,
+    392,
+    269,
+    272,
+    [
+     "|PostgreSQL|Npgsql `[10.0.0,12.0.0)`|EF Core 10 on .NET 10 and 11; EF Core 11 on .NET 11.|",
+     "|SQL Server|Microsoft SQL Server `[10.0.0,12.0.0)`|EF Core 10 on .NET 10 and 11; EF Core 11 on .NET 11.|",
+     "|MySQL / MariaDB|Microting `[10.0.6,12.0.0)`|EF Core 10 on .NET 10 and 11; EF Core 11 on .NET 11. Microting 10.0.6 requires EF Core 10.0.6–10.0.999; Microting 11.0.0 requires EF Core 11.0.0–11.0.999.|"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    425,
+    272,
+    305
+   ],
+   [
+    "replace",
+    425,
+    426,
+    305,
+    306,
+    [
+     "Latest results: v0.6.1 benchmark summary."
+    ]
+   ],
+   [
+    "equal",
+    426,
+    427,
+    306,
+    307
+   ],
+   [
+    "replace",
+    427,
+    428,
+    307,
+    308,
+    [
+     "Optimization comparison: leading lock-tag scan."
+    ]
+   ],
+   [
+    "equal",
+    428,
+    430,
+    308,
+    310
+   ],
+   [
+    "replace",
+    430,
+    432,
+    310,
+    311,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

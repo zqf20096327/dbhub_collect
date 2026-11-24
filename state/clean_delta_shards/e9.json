@@ -30786,5 +30786,717 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "f5aea8e5fd9f+2": {
+  "fn": "AndreVarandas/transportes-portugal-api",
+  "clean_ver": "2",
+  "raw_lines": 13,
+  "ops": [
+   [
+    "equal",
+    0,
+    13,
+    0,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "Try nearby stop search and query the first stop’s sample **01:01** departure using the interactive API reference or curl:"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    63,
+    14,
+    63
+   ],
+   [
+    "replace",
+    63,
+    67,
+    63,
+    67,
+    [
+     "|Setup|Measured SQLite database size|Recommended free space before setup|",
+     "|---|---:|---:|",
+     "|Carris only (`npm run import -- carris`)|About 0.9 GiB|4 GiB|",
+     "|All nine feeds (`npm run import -- --all`)|About 7 GiB|20 GiB|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    103,
+    67,
+    103
+   ],
+   [
+    "replace",
+    103,
+    114,
+    103,
+    114,
+    [
+     "|Feed key|Provider and source|",
+     "|---|---|",
+     "|`carris`|Carris GTFS|",
+     "|`cp`|Comboios de Portugal GTFS|",
+     "|`fertagus`|Fertagus GTFS|",
+     "|`metro-lisboa`|Metropolitano de Lisboa on dados.gov.pt|",
+     "|`mts`|Metro Transportes do Sul GTFS|",
+     "|`tcb`|Transportes Colectivos do Barreiro open data|",
+     "|`carris-metropolitana`|Carris Metropolitana official GTFS|",
+     "|`stcp`|STCP dataset, Porto open data|",
+     "|`metro-porto`|Metro do Porto operator download page|"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    117,
+    114,
+    117
+   ],
+   [
+    "replace",
+    117,
+    119,
+    117,
+    119,
+    [
+     "- Rodoviária de Lisboa, TST, and Sulfertagus’s former public bus services in the Lisbon metropolitan area are covered by Carris Metropolitana. Operator transition FAQ",
+     "- Transtejo and Soflusa share one TTSL feed. The operator ZIP timed out locally. The Mobility Database archive has a downloadable snapshot from 17 August 2026 for manual use. Verify that snapshot against current operator schedules before relying on it."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    125,
+    119,
+    125
+   ],
+   [
+    "replace",
+    125,
+    126,
+    125,
+    126,
+    [
+     "For expansion, use Portugal’s National Access Point for multimodal transport alongside operator and municipal catalogs. Track each candidate’s publisher, download URL, licence, service dates, and refresh behaviour before adding it to the default registry."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    129,
+    126,
+    129
+   ],
+   [
+    "replace",
+    129,
+    133,
+    129,
+    133,
+    [
+     "|Candidate|Observed service end|Manual import after downloading its ZIP|",
+     "|---|---|---|",
+     "|Transportes Urbanos de Braga|28 February 2027|`npm run import -- braga /path/to/tub.zip`|",
+     "|SMTUC Coimbra|30 December 2026|`npm run import -- coimbra /path/to/smtuc.zip`|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    138,
+    133,
+    138
+   ],
+   [
+    "replace",
+    138,
+    139,
+    138,
+    139,
+    [
+     "After starting the server, open Interactive API reference. Choose **List feeds**, click **Try it out**, and then **Execute**. Copy a feed key into **List routes**, then use a route ID in **List trips for a route**. Swagger UI shows the live response and a curl command for every request."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    139,
+    140
+   ],
+   [
+    "replace",
+    140,
+    141,
+    140,
+    141,
+    [
+     "Download the OpenAPI 3.1 document to import the v2 API into an API client. The reference and its assets are served locally."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    151,
+    141,
+    151
+   ],
+   [
+    "replace",
+    151,
+    173,
+    151,
+    173,
+    [
+     "|GET path|Optional filters|",
+     "|---|---|",
+     "|`/sources`||",
+     "|`/source-health`||",
+     "|`/nearby-stops`|Requires `lat` and `lon`. Optional `radius` in kilometres (default 1, maximum 25).|",
+     "|`/stops`|Requires `q` (2 to 100 characters), matched against stop name and code across all feeds.|",
+     "|`/feeds`, `/feeds/{feedKey}`||",
+     "|`/feeds/{feedKey}/agencies`||",
+     "|`/feeds/{feedKey}/routes`|`agencyId`|",
+     "|`/feeds/{feedKey}/stops`|`routeId`, `tripId`|",
+     "|`/feeds/{feedKey}/trips`|`routeId`, `serviceId`, `directionId`, `serviceDate`|",
+     "|`/feeds/{feedKey}/routes/{routeId}/patterns`||",
+     "|`/feeds/{feedKey}/routes/{routeId}/pattern-schedule`|Required `patternId` from `/patterns`. Optional `from` timestamp.|",
+     "|`/feeds/{feedKey}/routes/{routeId}/trips`|`serviceId`, `directionId`, `serviceDate`|",
+     "|`/feeds/{feedKey}/trips/{tripId}/stop-times`|`stopId`|",
+     "|`/feeds/{feedKey}/stops/{stopId}/departures`|`from`, `minutes`, `limit`, `routeId`|",
+     "|`/feeds/{feedKey}/stops/{stopId}/routes`||",
+     "|`/feeds/{feedKey}/stops/{stopId}/stop-times`|`tripId`, `serviceDate`|",
+     "|`/feeds/{feedKey}/trips/{tripId}/frequencies`||",
+     "|`/feeds/{feedKey}/calendars`|`serviceId`|",
+     "|`/feeds/{feedKey}/calendar-dates`|`serviceId`, `date` in `YYYY-MM-DD`|",
+     "|`/feeds/{feedKey}/shapes`|`routeId`, `tripId`|"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    198,
+    173,
+    198
+   ],
+   [
+    "replace",
+    198,
+    199,
+    198,
+    199,
+    [
+     "GitHub Actions runs lint and tests on pushes and pull requests. After checks pass on the default branch, Release Please uses Conventional Commits to open or update a release pull request. Merging that pull request creates a version tag and GitHub release. The release history starts from the existing `v1.0.2` tag."
+    ]
+   ],
+   [
+    "equal",
+    199,
+    203,
+    199,
+    203
+   ],
+   [
+    "replace",
+    203,
+    206,
+    203,
+    204,
+    [
+     "This project is licensed under the MIT License."
+    ]
+   ],
+   [
+    "equal",
+    206,
+    215,
+    204,
+    213
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "39d7c32db228+2": {
+  "fn": "Thanhh2615/datanoa",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Datanoa Logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " Datanoa Studio — Database Client &amp; SQL Studio for Orca "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     " Browse schemas, edit and import data, design tables, and run SQL or Redis queries over SSH &amp; TLS across SQLite, PostgreSQL, MySQL, MariaDB, CockroachDB, ClickHouse, Redis, LibSQL/Turso, Cloudflare D1, SQL Server (MSSQL), Oracle, and MongoDB — right inside Orca. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    5,
+    6
+   ],
+   [
+    "replace",
+    10,
+    18,
+    6,
+    12,
+    [
+     " Install in Orca",
+     " Listed on Orca Directory",
+     " =1.4.248\" />",
+     " 12+ Database Engines",
+     " MIT License",
+     " Report Bug / Request Feature"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    12,
+    13
+   ],
+   [
+    "replace",
+    19,
+    24,
+    13,
+    14,
+    [
+     " Datanoa Studio — Database Client and SQL Studio for Orca"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    35,
+    14,
+    25
+   ],
+   [
+    "delete",
+    35,
+    37,
+    25,
+    25
+   ],
+   [
+    "equal",
+    37,
+    41,
+    25,
+    29
+   ],
+   [
+    "replace",
+    41,
+    42,
+    29,
+    30,
+    [
+     "|Engine|Default Port|Transport & Security|Highlights|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    30,
+    31
+   ],
+   [
+    "replace",
+    43,
+    52,
+    31,
+    40,
+    [
+     "|**SQLite**|Local file / `:memory:`|Local `.db` / `.sqlite` / `.sqlite3` discovery|Manual & batch transactions, full table migration rebuild|",
+     "|**PostgreSQL**|`5432`|Auto-SSL (Neon, Supabase, RDS, Aiven, Railway), TLS/mTLS, SSH tunnel|Multi-schema browser, query cancellation, `EXPLAIN`, transactions|",
+     "|**MySQL**|`3306`|Auto-SSL (PlanetScale, RDS, Aiven, Railway, TiDB Cloud), TLS/mTLS, SSH tunnel|Pooled connections, query cancellation, transactions|",
+     "|**MariaDB**|`3306`|Auto-SSL, TLS/mTLS, SSH tunnel|MariaDB catalog introspection, transactions, DDL designer|",
+     "|**CockroachDB**|`26257`|TLS by default, custom TLS/mTLS, SSH tunnel|Cluster URI support, distributed SQL transactions, `EXPLAIN`|",
+     "|**ClickHouse**|`8123` / `8443`|HTTP(S), Auto-HTTPS (`8443` / ClickHouse Cloud), TLS/mTLS, SSH tunnel|Streaming queries, mutations, chunked inserts|",
+     "|**Redis**|`6379`|TCP / TLS (`rediss://`, Upstash), TLS/mTLS, SSH tunnel|`SCAN` keyspace browser (`db0`–`db15`), type inspector, command runner|",
+     "|**LibSQL / Turso**|`443`|HTTPS / `libsql://` with token in Orca secrets vault|Batched pipeline writes, SQLite-compatible schema designer|",
+     "|**Cloudflare D1**|`443`|HTTPS API (`d1://`) with Bearer token in Orca secrets vault|Batched REST commits, SQLite-compatible schema browser|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    60,
+    40,
+    48
+   ],
+   [
+    "delete",
+    60,
+    62,
+    48,
+    48
+   ],
+   [
+    "equal",
+    62,
+    66,
+    48,
+    52
+   ],
+   [
+    "replace",
+    66,
+    68,
+    52,
+    54,
+    [
+     "- **Open & Install Datanoa Studio in Orca →**",
+     "- Directory page: **orca.dev/plugins/thanhh2615/datanoa**"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    87,
+    54,
+    73
+   ],
+   [
+    "delete",
+    87,
+    89,
+    73,
+    73
+   ],
+   [
+    "equal",
+    89,
+    94,
+    73,
+    78
+   ],
+   [
+    "delete",
+    94,
+    96,
+    78,
+    78
+   ],
+   [
+    "equal",
+    96,
+    106,
+    78,
+    88
+   ],
+   [
+    "delete",
+    106,
+    108,
+    88,
+    88
+   ],
+   [
+    "equal",
+    108,
+    114,
+    88,
+    94
+   ],
+   [
+    "replace",
+    114,
+    117,
+    94,
+    95,
+    [
+     " Datanoa Studio split view with multi-tab SQL console, transactions, data grid, and JSON inspector"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    122,
+    95,
+    100
+   ],
+   [
+    "replace",
+    122,
+    125,
+    100,
+    101,
+    [
+     " Datanoa Connection Manager with database engines, SSH tunnels, TLS/mTLS, folders, and auto-detect"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    130,
+    101,
+    106
+   ],
+   [
+    "replace",
+    130,
+    133,
+    106,
+    107,
+    [
+     " Datanoa visual table designer showing staged column edits, data types, foreign keys, indexes, and SQL migration preview"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    138,
+    107,
+    112
+   ],
+   [
+    "replace",
+    138,
+    141,
+    112,
+    113,
+    [
+     " Datanoa Studio in light theme with compact table bar, grouped schema objects, pinned columns, and find highlighting"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    146,
+    113,
+    118
+   ],
+   [
+    "replace",
+    146,
+    151,
+    118,
+    119,
+    [
+     " Datanoa Side Panel with schema explorer tree, data grid with live aggregates, and quick SQL runner"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    160,
+    119,
+    128
+   ],
+   [
+    "delete",
+    160,
+    162,
+    128,
+    128
+   ],
+   [
+    "equal",
+    162,
+    164,
+    128,
+    130
+   ],
+   [
+    "replace",
+    164,
+    165,
+    130,
+    131,
+    [
+     "|Shortcut / Gesture|Action|Scope|"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    131,
+    132
+   ],
+   [
+    "replace",
+    166,
+    184,
+    132,
+    148,
+    [
+     "|`Ctrl+Enter` / `Cmd+Enter`|Run SQL statement at caret (or selection)|SQL Console & Side Panel|",
+     "|`Ctrl+Shift+Enter`|Run all statements sequentially|SQL Console & Side Panel|",
+     "|`Ctrl+F` / `Ctrl+H`|Find / Find & Replace in SQL editor|Fullscreen Studio (SQL)|",
+     "|`Ctrl+Shift+[` / `Ctrl+Shift+]`|Fold / Unfold SQL block|Fullscreen Studio (SQL)|",
+     "|`Shift+Alt+F`|Format SQL|SQL Console & Side Panel|",
+     "|`Ctrl+S` / `Cmd+S`|Submit staged data edits or schema migration|Data Grid & Table Designer|",
+     "|`Ctrl+F` / `Cmd+F`|Find in data grid (`Enter` / `Shift+Enter` to cycle)|Data Grid & Side Panel|",
+     "|`Ctrl+K` / `Ctrl+P`|Command Palette / Quick Switcher|Fullscreen Studio & Side Panel|",
+     "|`Ctrl+/`|Keyboard Shortcuts|Fullscreen Studio & Side Panel|",
+     "|`Arrow Keys` / `Shift+Arrow`|Navigate cells and extend selection|Data Grid & Side Panel|",
+     "|`Ctrl+C` / `Ctrl+V` / `Ctrl+Shift+V`|Copy cells / Paste into cells or insert new rows|Data Grid & Side Panel|",
+     "|`Enter` / `F2` / `Double-Click`|Edit cell inline (`Tab` / `Shift+Tab` to move)|Data Grid & Side Panel|",
+     "|`Delete` / `Backspace`|Set selected nullable cells to `NULL`|Data Grid & Side Panel|",
+     "|`Ctrl+Click` (or `↗`)|Jump to referenced Foreign Key row|Data Grid & Side Panel|",
+     "|`Ctrl + Mouse Wheel`|Horizontal scroll|Fullscreen Studio & Side Panel|",
+     "|`Escape`|Clear selection, cancel edit, or close modal|Fullscreen Studio & Side Panel|"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    189,
+    148,
+    153
+   ],
+   [
+    "replace",
+    189,
+    190,
+    153,
+    154,
+    [
+     "|Capability|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    154,
+    155
+   ],
+   [
+    "replace",
+    191,
+    196,
+    155,
+    160,
+    [
+     "|`storage:own`|Saves non-sensitive connection profiles, saved queries, query history, local driver trust records, and session state.|",
+     "|`secrets:own`|Stores passwords, API tokens, TLS passphrases, and SSH credentials in Orca's encrypted secrets vault.|",
+     "|`workspace:read`|Scans workspace `.env`, `docker-compose*.yml`/`compose*.yml`, and local SQLite files when requested.|",
+     "|`workspace:write`|Saves `.datanoa/` session files, user-requested exports, and user-confirmed local driver folders.|",
+     "|`settings:own`|Reads `maxRows` (`1–50,000`) and `queryTimeoutSeconds` (`1–110`).|"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    201,
+    160,
+    165
+   ],
+   [
+    "delete",
+    201,
+    203,
+    165,
+    165
+   ],
+   [
+    "equal",
+    203,
+    206,
+    165,
+    168
+   ],
+   [
+    "replace",
+    206,
+    207,
+    168,
+    169,
+    [
+     "- Or open an issue directly at **github.com/Thanhh2615/datanoa/issues**."
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    169,
+    170
+   ],
+   [
+    "replace",
+    208,
+    211,
+    170,
+    171,
+    [
+     "See CONTRIBUTING.md for development instructions and THIRD-PARTY-NOTICES.md for open-source licenses."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    213,
+    171,
+    173
+   ],
+   [
+    "replace",
+    213,
+    215,
+    173,
+    174,
+    [
+     "Released under the MIT License. Copyright © 2026 Thanhh2615."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

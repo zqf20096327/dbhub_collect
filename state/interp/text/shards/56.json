@@ -3095,5 +3095,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8f4b4c2cb8f8": {
+  "identity": {
+   "one_liner": "基于共享 SQLite 文件的 CLI AI 代理间消息传递工具，用 Bash 实现",
+   "review": "agmsg 让 Claude Code、Codex、Gemini CLI、Copilot CLI 等不同厂商的 CLI AI 代理通过对等会话直接互发消息，省去人工复制粘贴。它不依赖守护进程、网络或 MCP，只要求 bash 和 sqlite3，用 WAL 模式 SQLite 文件作共享存储，消息在会话结束后保留且可回放。适合需要多个 AI 代理协作的命令行开发者；Windows 需经 Git Bash 运行。",
+   "highlights": [
+    "通过共享本地 SQLite 文件在 Claude Code、Codex、Gemini CLI、GitHub Copilot CLI 等代理间传递消息，无需守护进程或网络",
+    "提供多种安装路径（npx/npm、Claude Code 插件市场、直接脚本）和 delivery 模式（monitor 实时推送、可选 agmsgd 常驻服务）",
+    "消息历史持久保存于数据库，history.sh 可将旧房间记录回放给新代理；支持通过自托管参考服务器在两套安装间同步团队"
+   ],
+   "use_cases": [
+    "让多个 CLI AI 代理（如 Claude Code 与 Codex）在团队中直接交换消息，例如请求代码评审",
+    "在无人工介入的场景下让代理互相响应，如两个 Claude Code 实例对弈井字棋",
+    "在不同安装之间通过自托管服务器同步同一团队的消息记录"
+   ]
+  },
+  "sha": "8f4b4c2cb8f8",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2f882543a761": {
+  "identity": {
+   "one_liner": "面向 .NET 的 Postgres 变更数据捕获引擎，基于逻辑复制驱动",
+   "review": "Wallaby 是一个 Postgres CDC 引擎，从逻辑复制流读取行变更，物化为 EF Core 实体、Marten 文档或带注解的 POCO，可转换/富化后投递到搜索索引、Kafka、HTTP 等目标。它根据模型自行配置 publication 与复制槽，支持版本化回填和基于 leader 选举的集群安全。要求 Postgres 15+ 与 .NET 10+。README 提供了快速开始代码与测试说明。",
+   "highlights": [
+    "支持 EF Core 实体、Marten 文档和带注解 POCO 三种存储提供方式，并自动配置 publication 和复制槽",
+    "内置 Elasticsearch、Meilisearch、OpenSearch、Kafka、pgvector、HTTP/webhook 等目标 sink，采用 at-least-once 投递",
+    "提供版本化回填（初始快照与结构变更重建）、leader 选举集群安全、独立控制面与端到端测试工具包"
+   ],
+   "use_cases": [
+    "需将 Postgres 数据变更同步到 Meilisearch、Elasticsearch、OpenSearch 或 pgvector 的 .NET 应用",
+    "通过 Kafka 或 HTTP/webhook 发布 Postgres 行变更的流式集成场景",
+    "使用 Aspire 的团队进行 CDC 流水线的追踪与指标观测演示"
+   ]
+  },
+  "sha": "2f882543a761",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f34ef897e96b": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的开源 PDM/PLM 系统，含检入库、版本、BOM 与变更管理",
+   "review": "TeamCraft 是用 Rust 实现的自托管 PDM/PLM 系统，数据存于用户自己的 PostgreSQL 数据库与文件库。它提供 CAD 文件的检出/检入与版本管理、多级 BOM、变更请求与变更单、浏览器端 3D 预览（STEP、NX 及网格等格式）、仿真管理和 REST API，并提供桌面应用、命令行与 MCP 服务器。项目面向早期硬件初创团队和学生工程团队。项目仍处 0.x 开发阶段，尚无稳定版本，README 明确不建议用于生产数据。",
+   "highlights": [
+    "提供按修订版的独占检出/检入机制，基于过期版本的检入会被拒绝，所有上传均保留为可回滚的新版本",
+    "支持多级 BOM（含质量与成本汇总、修订对比、CSV/Excel 导出）、ECR/ECO 变更流程、四眼审批与发布传播检查",
+    "在浏览器中提供多格式 3D 预览与 CAD 缩略图，识别 160 余种文件格式，并提供 REST API、MCP 服务器和桌面客户端"
+   ],
+   "use_cases": [
+    "早期硬件初创团队在自托管服务器上建立发布修订、审批变更单、BOM 与审计记录",
+    "学生车队、火箭、卫星、机器人等大型团队跨届传承工程数据与移交信息",
+    "通过 REST API 或桌面命令行将检入/检出流程与既有工具链集成"
+   ]
+  },
+  "sha": "f34ef897e96b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "11e212abb476": {
+  "identity": {
+   "one_liner": "基于 Electron 的 AI 运维工作台，集成终端、SSH、AI 助手与批量运维。",
+   "review": "CodeShell 是一款 Electron 桌面应用，将终端、SSH、SFTP、数据库、Docker 管理与 AI 助手整合在同一窗口，面向服务器运维人员。AI 助手可自主规划并执行运维任务，每条命令需人工审批；安全基线检查提供 25 项只读检测。注意：本仓库仅提供安装包与文档，应用源码闭源。",
+   "highlights": [
+    "AI 助手支持任务规划、逐条命令审批、子代理并行与后台长任务，通过 16 个原生工具执行命令、SQL、文件读写等操作",
+    "内置 25 项只读安全基线检测，支持多机并发扫描、AI 分析整改方案并导出 PDF/Word/CSV 报告",
+    "提供批量运维能力：命令广播、公钥下发、跨服务器直传、表数据/结构同步（含跨类型字段映射）与四格分屏同步输入"
+   ],
+   "use_cases": [
+    "需要在一处窗口管理多台服务器 SSH 终端、SFTP 文件与多种数据库的日常运维",
+    "对一批机器执行安全基线扫描并生成整改报告的场景",
+    "向多台服务器批量下发命令、分发文件或同步数据库表结构"
+   ]
+  },
+  "sha": "11e212abb476",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

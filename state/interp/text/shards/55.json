@@ -3521,5 +3521,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b50422be4495": {
+  "identity": {
+   "one_liner": "YAML语义层，将声明式模型编译为多方言SQL并提供规则引擎与语义上下文",
+   "review": "OrionBelt是一个以sidecar方式运行的语义与上下文层，用YAML声明维度、度量、指标与连接，经AST编译为8种SQL方言（BigQuery、Snowflake、DuckDB等），并提供Composite Fact Layer规划器拦截产生fan trap的多事实表连接路径。通过PostgreSQL wire、Arrow Flight SQL、REST和MCP四种接口对外服务，支持跨库联邦查询与Apache Ossie模型互转。安装用pip install orionbelt-semantic-layer，需Python 3.12+，采用BUSL-1.1许可证。",
+   "highlights": [
+    "将声明式YAML模型编译为8种SQL方言，支持跨数据库联邦查询与文件/湖仓表读取",
+    "提供PostgreSQL wire、Arrow Flight SQL、REST、MCP四种接入接口，并实现跨引擎一致的表达式语义",
+    "每个模型可导出为RDF（OWL/SHACL/SKOS/PROV）并回答只读SPARQL查询，提供JSON/Mermaid/Turtle格式的血缘追踪"
+   ],
+   "use_cases": [
+    "AI代理需临时建模并批量提交查询的场景（POST /v1/oneshot/batch一次性提交模型与多条查询）",
+    "自托管多引擎环境，希望一份模型编译到多个数据仓库并保持结果一致",
+    "BI工具需通过已有Postgres驱动接入语义模型，或需展示查询的血缘与join路径"
+   ]
+  },
+  "sha": "b50422be4495",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "030e57d0162b": {
+  "identity": {
+   "one_liner": "基于本体的 MCP 服务器，将数据库模式转为 RDF/OWL 本体以校验 Text-to-SQL",
+   "review": "OrionBelt Analytics 是一个 MCP 服务器，连接 PostgreSQL、Snowflake、ClickHouse、Dremio 等 8 种数据库，分析关系模式并生成带 SQL 映射的 RDF/OWL 本体。执行 SQL 前通过 OBQC 规则校验器做确定性检查（表/列存在、连接有效性、扇出陷阱等），并提供 GraphRAG 模式检索与 SPARQL 查询。需 Python 3.13+ 与 uv，支持 Claude Desktop 等 MCP 客户端。许可证为 BUSL-1.1。",
+   "highlights": [
+    "支持 8 种数据库连接器（PostgreSQL、MySQL、Snowflake、ClickHouse、Dremio、BigQuery、DuckDB/MotherDuck、Databricks SQL），可同时分析多个模式",
+    "OBQC 确定性 SQL 校验涵盖表/列存在、连接有效性、类型兼容、GROUP BY 聚合正确性与扇出陷阱检测，错误会阻止执行",
+    "GraphRAG 结合图遍历（最多 12 跳）与 ChromaDB 本地向量嵌入进行模式发现，另有 SPARQL 1.1 查询接口（Oxigraph 存储）与 Plotly 图表生成"
+   ],
+   "use_cases": [
+    "通过 MCP 客户端（Claude Desktop、Claude Code、LibreChat 等）对已配置的数据库进行自然语言查询",
+    "需要在本体层管理表列语义命名、外键关系与自定义 .ttl 本体的团队",
+    "SQL 执行前需结构化校验（如避免跨一对多连接的聚合错误）的数据分析场景"
+   ]
+  },
+  "sha": "030e57d0162b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "60e7979d5bdd": {
+  "identity": {
+   "one_liner": "自托管数据库备份平台，支持八种引擎及MCP/REST接口",
+   "review": "Steelkeep 是一个自托管的数据库备份与恢复管理系统，基于 TypeScript（TanStack Start、Elysia）构建，通过 Web 仪表盘、REST API 和原生 MCP 服务器提供操作入口。它将连接配置、定时备份、快照管理与恢复流程集中管理，适合需要自行运维数据库备份的团队。项目处于 alpha 阶段，归档有 2 GiB 限制，各引擎有版本与一致性要求，恢复前需经空目标审查并校验 SHA-256。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、MongoDB、SQLite、Redis、ClickHouse、SQL Server 八种引擎的备份配置",
+    "提供原生 MCP 服务器（/mcp）、REST（/api/v1）与 OpenAPI 接口，AI 代理可使用带作用域、有效期与可撤销机制的令牌",
+    "恢复流程包含空目标审查、SHA-256 校验与恢复后验证；支持 Google Drive 作为源或归档存储"
+   ],
+   "use_cases": [
+    "在自有基础设施和 S3 兼容存储上集中管理多种数据库的定时备份与快照保留",
+    "通过 MCP 客户端或 REST 脚本让 AI 代理或自动化流程执行受权限约束的备份、恢复操作",
+    "需要将归档发布到 Google Drive 并在其他服务器上通过可移植恢复描述符导入恢复"
+   ]
+  },
+  "sha": "60e7979d5bdd",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3364,5 +3364,181 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a36fdd71c507": {
+  "identity": {
+   "one_liner": "基于 JSON 模板递归解析生成复杂嵌套 SQL 的纯前端在线工具",
+   "review": "该项目是一个纯前端在线工具，用户编写结构化 JSON 模板，解析引擎从 main 入口递归展开 @规则名() 引用并替换 #{变量} 参数，生成完整 SQL。解析器不限制模板内容格式，因此也可用于生成其他重复文本。核心解析逻辑用 TypeScript 编写，可在浏览器与 Node.js 中运行；本地启动需 Node.js 环境，也提供 Dockerfile 用于容器化部署。",
+   "highlights": [
+    "支持 @规则名() 引用、#{变量} 占位符、params 静态参数、参数透传与多层括号嵌套子查询解析，解析过程记录调用树与替换明细",
+    "内置 Monaco Editor 编辑器，提供 JSON 与 SQL 的语法高亮、语法校验、一键格式化、查找替换及代码块折叠",
+    "核心解析逻辑独立封装，同一套算法可在浏览器端与 Node.js 服务端复用，支持通过 Dockerfile 构建镜像部署"
+   ],
+   "use_cases": [
+    "大数据离线分析与 Hive、Spark 数仓开发中编写含大量相似子查询、多粒度 union 与同环比关联的长 SQL",
+    "日常 MySQL 多层嵌套查询的模块化拆分，公共子查询修改一处即可全局生效",
+    "作为通用重复代码生成器，批量生成相似的业务代码、配置片段或其他文本内容"
+   ]
+  },
+  "sha": "a36fdd71c507",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a0e76e002532": {
+  "identity": {
+   "one_liner": "纯 V 编写的嵌入式事务 SQL 数据库，单文件存储，兼容 PostgreSQL 客户端",
+   "review": "vsql 是一个用纯 V 编写的嵌入式 SQL 数据库，整个数据库存于单个文件或内存中，支持事务、严格类型和 SQL:2023 标准。它可作为库嵌入 V、C、Go、Python、Java、Rust、Node.js 七种语言的程序，也可启动 PostgreSQL 兼容服务端供任意 PostgreSQL 客户端连接，并提供 CLI 与浏览器查询界面。安装为单个二进制文件，无需额外组件。",
+   "highlights": [
+    "遵循 SQL:2023 标准，包含连接、子查询、聚合、索引、主键/外键/UNIQUE/CHECK 约束、序列、游标、ALTER TABLE 和标准 INFORMATION_SCHEMA 视图",
+    "基于 MVCC 的事务机制，支持全部四种标准隔离级别且默认 SERIALIZABLE，使用写前日志（WAL）保障崩溃恢复，多个进程可共享同一数据库文件",
+    "以单二进制或单文件库形式提供 CLI、PostgreSQL 兼容服务端和浏览器数据浏览应用，支持 SQL/CSV/TSV/JSON 的导入导出"
+   ],
+   "use_cases": [
+    "在本地测试中使用 PostgreSQL 风格的标准 SQL 测试应用",
+    "多个连接或多个进程（如带连接池的 Web 服务、后台工作进程）共享同一数据库文件",
+    "将数据库作为单个文件嵌入程序分发，或作为学习标准 SQL 的教学工具"
+   ]
+  },
+  "sha": "a0e76e002532",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fdd3b7456ee0": {
+  "identity": {
+   "one_liner": "基于 Telegram 与 Web 界面的 VPS/独立服务器监控管理机器人",
+   "review": "该项目提供通过 Telegram 机器人和 WebUI/PWA 监控与管理 VPS 或独立服务器的功能，采用 Agent-Client 架构，主节点通过 SQLite 存储节点、用户和指标数据。面向系统管理员、DevOps 工程师和托管服务商。支持多节点接入、systemd 服务管理、自动备份，安装方式包括 Systemd 和 Docker 四种模式，要求 Ubuntu 20.04+/Debian 11+、Python 3.10+，WebUI 登录使用 Telegram Login (OIDC) 或初始随机密码。",
+   "highlights": [
+    "支持多节点服务器管理，实时采集 CPU、RAM、Disk、Network 指标（HTTP/ICMP ping）",
+    "提供 WebUI 与 PWA，通过 SSE 更新图表与日志，包含 Web 终端（SSH）",
+    "实现 systemd 服务管理、定时备份、告警通知及 Fail2Ban 集成"
+   ],
+   "use_cases": [
+    "通过 Telegram 或手机 PWA 远程查看和管理多台 VPS/独立服务器",
+    "监控 systemd 服务状态并执行启动、停止、重启操作",
+    "对服务器 CPU/RAM/Disk 设置阈值告警，配置定时备份与 SSH 登录通知"
+   ]
+  },
+  "sha": "fdd3b7456ee0",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "acf99be1bbe9": {
+  "identity": {
+   "one_liner": "面向国内企业的开源 ITSM 平台，覆盖 ITIL 流程并支持 BPMN 编排与多租户。",
+   "review": "该仓库提供一套 IT 服务管理系统，覆盖事件、问题、变更、SLA、CMDB 和知识库等 ITIL 流程，采用 Go/Gin 后端与 Next.js 前端构建，通过 Docker Compose 部署，支持私有化、SaaS 和 MSP 三种模式。工作流基于 BPMN 2.0，异步操作使用事务加 outbox 模式。README 标明各模块成熟度分可用与预览两级，AI 能力为预览且须可降级，中文界面为优先。",
+   "highlights": [
+    "覆盖工单、事件、问题、变更、SLA、CMDB、知识库等 ITIL 流程，支持 BPMN 2.0 工作流编排与 RBAC 多租户隔离",
+    "异步关键操作采用事务 + outbox 模式，支持重试、死信和投递审计",
+    "提供 MCP server 接入方式，可将命令暴露给 MCP 客户端，并包含告警源 Webhook 与向量存储连接器配置"
+   ],
+   "use_cases": [
+    "IT 服务台统一受理、分派和跟踪员工请求",
+    "运维治理中的事件、CI、SLA、问题与变更闭环管理",
+    "多组织场景下的私有化、SaaS 或 MSP 多租户管理"
+   ]
+  },
+  "sha": "acf99be1bbe9",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4d012fa4f7dc": {
+  "identity": {
+   "one_liner": "面向 .NET 的 ADO.NET 扩展库，用流式命令封装连接、参数与行映射",
+   "review": "Open.Database.Extensions（ODX）是一个 .NET 库，为开发者自己编写的 SQL 处理 ADO.NET 周边代码：创建连接、添加参数、执行命令、映射行、释放资源。核心是扩展方法与从连接工厂起步的流式命令，Map<T>() 按名称将列匹配到属性，无需配置。通过 NuGet 包安装，Core 包适配任意 ADO.NET 提供程序，另提供 Channels、Dataflow 与 SQL Server 专用包，目标框架包括 netstandard2.0/2.1 与 net10/net11，版本 11 为候选发布版，MIT 许可。",
+   "highlights": [
+    "基于 DbConnection、DbCommand、DbDataReader 等标准 ADO.NET 类型的扩展方法，默认应用延迟打开、提前关闭等连接管理实践",
+    "Map<T>() 按名称（忽略大小写和下划线）将列匹配到公开可写属性与构造函数参数，支持 RowMap<T> 声明列重命名映射并复用",
+    "提供将行流入 System.Threading.Channels 或 TPL Dataflow 块的扩展包，并包含 SQL Server（Microsoft.Data.SqlClient）专用包"
+   ],
+   "use_cases": [
+    "在 .NET 应用中直接编写 SQL，并需要库处理连接开闭、参数添加与结果集到对象的映射",
+    "需要将查询行以异步流、Channel 或 Dataflow 方式进行数据流转处理",
+    "需要依赖注入兼容的连接工厂（IDbConnectionFactory<TConnection>）来统一管理数据库连接创建"
+   ]
+  },
+  "sha": "4d012fa4f7dc",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "97da91a54bb1": {
+  "identity": {
+   "one_liner": "导入聊天记录建角色卡的本地 AI 伴侣工作台，含人格版本化与长期记忆。",
+   "review": "PCAR 是面向 Windows 11 x64 与 Android 12+ 的 AI 伴侣工作台，可导入微信或 DeepSeek 聊天记录自动生成角色卡，提供人格版本化、跨会话长期记忆和授权范围内的联网检索，数据保存在本机 SQLite 等本地存储，聊天、建卡与联网查询需自备 DeepSeek 官方 API Key 并消耗其额度。源码采用 AGPL-3.0-only 许可。",
+   "highlights": [
+    "支持从微信（Moect 导出的 .md）或 DeepSeek 聊天记录自动生成角色卡，可核对后保存并带历史开聊",
+    "提供人格版本化与跨会话自动长期记忆，数据保存在本机",
+    "在授权会话内支持联网检索，可选本地优先的向量检索"
+   ],
+   "use_cases": [
+    "从已有微信或 DeepSeek 聊天记录提炼人设并继续对话",
+    "在同一工作台管理多位角色的人设、关系与聊天记录",
+    "长期陪伴场景中跨会话找回旧话题并接续聊天"
+   ]
+  },
+  "sha": "97da91a54bb1",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5ec6318c862c": {
+  "identity": {
+   "one_liner": "本地运行的轻量数据库客户端，含 Web UI 与 MCP 服务器",
+   "review": "altivola-db 是运行在本地电脑上的数据库客户端，通过统一界面连接 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、MongoDB、Redis、Cloudflare D1 及 S3 兼容对象存储，并提供 MCP 服务器供 AI 代理查询数据库。支持 macOS(ARM64)、Windows(x64) 安装包和 Docker 部署（端口 7789）。应用目前未签名，首次打开需手动放行；对象存储连接仅支持列表与元数据查看，需授予 bucket-list 和 object-read 权限。",
+   "highlights": [
+    "一个应用连接 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、MongoDB、Redis、Cloudflare D1 及 S3 兼容对象存储",
+    "内置 MCP 服务器，支持通过 claude mcp add 将数据库查询接入 AI 代理",
+    "支持桌面安装包与 Docker 部署两种运行方式，应用可自行更新"
+   ],
+   "use_cases": [
+    "在本地统一管理多种类型数据库连接并浏览查询数据",
+    "让 MCP 兼容的 AI 代理（如 Claude）读取本地数据库",
+    "通过 S3 URL 连接方式浏览对象存储桶内对象及查看元数据"
+   ]
+  },
+  "sha": "5ec6318c862c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b81526869b26": {
+  "identity": {
+   "one_liner": "开源桌面数据库客户端，内置 SSH 隧道与 MCP 服务器",
+   "review": "SpelaionDB 是基于 Rust 与 Tauri 构建的开源桌面数据库客户端，支持 PostgreSQL、MySQL、MariaDB、SQL Server、SQLite 和 DuckDB 六种引擎。面向需要通过 SSH 隧道连接数据库的开发者与团队，提供 SQL 编辑器、执行计划查看和内置 MCP 服务器供 AI 代理只读查询。当前为预览版，安装包尚未签名，Windows 下 SmartScreen 可能提示。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQL Server、SQLite 和 DuckDB 六种数据库引擎，含远程服务器上的 SQLite 文件",
+    "内置多跳 SSH 隧道，支持 SSH 代理、密钥、密码、2FA、SOCKS5/HTTP 代理及 Kubernetes 端口转发",
+    "通过 spelaiondb mcp 命令提供 MCP 服务器，默认只读、每次调用均有记录，可一键配置到 Claude Desktop、Cursor 等客户端"
+   ],
+   "use_cases": [
+    "需要经 SSH 隧道或多跳堡垒机连接远程数据库进行查询与管理",
+    "团队通过 git 共享不含密码的连接配置文件",
+    "将数据库连接以只读方式暴露给 AI 代理执行查询"
+   ]
+  },
+  "sha": "b81526869b26",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

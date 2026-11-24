@@ -32466,5 +32466,2097 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "acf99be1bbe9+2": {
+  "fn": "heidsoft/itsm",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "ITSM "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    1,
+    6
+   ],
+   [
+    "replace",
+    8,
+    12,
+    6,
+    10,
+    [
+     "Go",
+     "Next.js",
+     "TypeScript",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    10,
+    11
+   ],
+   [
+    "replace",
+    13,
+    20,
+    11,
+    18,
+    [
+     "Release",
+     "Backend CI",
+     "Frontend CI",
+     "Go Report Card",
+     "Docker",
+     "Last Commit",
+     "Stars"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    18,
+    19
+   ],
+   [
+    "replace",
+    21,
+    24,
+    19,
+    20,
+    [
+     "简体中文 · English"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    27,
+    20,
+    23
+   ],
+   [
+    "replace",
+    27,
+    31,
+    23,
+    25,
+    [
+     " Contributors",
+     " Discussions"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    25,
+    26
+   ],
+   [
+    "replace",
+    32,
+    35,
+    26,
+    27,
+    [
+     " Star 增长趋势"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    27,
+    28
+   ],
+   [
+    "replace",
+    36,
+    41,
+    28,
+    29,
+    [
+     "heidsoft"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    29,
+    30
+   ],
+   [
+    "replace",
+    42,
+    47,
+    30,
+    31,
+    [
+     " 🤝 社区驱动 · ⭐ Star 持续增长 —— 了解社区与联系 · 参与讨论"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    49,
+    31,
+    33
+   ],
+   [
+    "replace",
+    49,
+    78,
+    33,
+    34,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    87,
+    34,
+    43
+   ],
+   [
+    "replace",
+    87,
+    88,
+    43,
+    44,
+    [
+     "- **异步操作要可靠**：工作流启动、通知发送等关键操作用事务 + outbox 模式，不依赖 goroutine fire-and-forget"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    44,
+    45
+   ],
+   [
+    "replace",
+    89,
+    90,
+    45,
+    46,
+    [
+     "> **当前版本 v1.6.x**：处于生产加固阶段。核心 ITIL 流程（工单、事件、问题、变更、SLA、CMDB）已经可用，但不同模块成熟度不同。有些功能还在预览阶段，生产使用前建议先看开源产品能力说明。"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    101,
+    46,
+    57
+   ],
+   [
+    "replace",
+    101,
+    102,
+    57,
+    58,
+    [
+     "|能力域|状态|说明|"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    58,
+    59
+   ],
+   [
+    "replace",
+    103,
+    118,
+    59,
+    74,
+    [
+     "|工单与事件|可用|状态流转、分派、SLA、BPMN 绑定、租户隔离已完整|",
+     "|工单类型与动态表单|可用|自定义字段、表单 Preset、Workflow/SLA 绑定|",
+     "|变更管理|可用|风险评估、审批链、回滚清单、PIR；提交门禁已收口（关键 CI/开放事件强制 high 风险等级 + 窗口冲突拦截）；审批主链路已原子化，会签/阈值/多级链在审批端点真实生效（未达阈值返回 pending），终态流转与审批链收口同事务；实施结果可如实记录（失败入口 + 失败/回滚原因必填并落 `outcomeNote`，PIR 仅对 completed/rolled_back/failed 开放）；失败可回退可验证——回滚清单逐项确认（done/skipped/failed + 备注/确认人/时间），未确认完所有步骤不许标记已回滚，实施开始后清单锁定|",
+     "|问题与 Known Error|可用|根因分析、临时方案、关联事件、SLA（与工单/事件同一引擎）、评论、知识沉淀|",
+     "|服务目录与请求|预览|目录管理、请求审批、服务任务；审批由 BPMN 唯一编排（三级审批网关 + 审批计划变量），免审批目录项直接履约；审批入口按当前节点审批人集合门控，非本级审批人看不到审批按钮；交付链路已收口「失败即终态」——执行权原子领取（重复执行 409 不再二次交付）、失败可重试（尝试次数封顶 5 次）、可人工判定并留痕；交付已接阿里云 ECS 真实 Provider（租户凭据库 `secret://` 引用，未配置即失败关闭），目前仅覆盖 ECS，中途失败的回滚补偿尚未实现|",
+     "|CMDB|可用|CI 类型、配置项、关系、拓扑、影响分析|",
+     "|CMDB 云发现|预览|阿里云/腾讯云/AWS/火山引擎/K8s 五类资源自动发现，差异落云资源后按云服务类型回写配置项（表外类型显式跳过、必填属性凑不齐时转人工补全、资源失联只标同步滞后不改生命周期）；覆盖水位线：中断 scope 断点续扫、缺失判定按窗口水位线（补采不误退役）、连续失败自动重置；主流云 API 无修改时间过滤，增量体现为覆盖进度推进；真实账号验收待做|",
+     "|BPMN 与审批|预览|流程定义、实例、任务、变量、执行历史；审批是 BPMN 唯一编排（业务侧无直批通道），三级审批网关 + 审批计划变量驱动，会签/阈值/多级链在审批端点真实生效；审批资格由后端判定并随响应下发，前端据此决定是否渲染审批入口，越权者拿不到可点击的审批按钮|",
+     "|SLA|可用|策略、截止时间、预警、违规统计|",
+     "|知识与 RAG|预览|文章管理、关键词/向量检索、问答降级、问题→知识沉淀（`POST /problems/:id/knowledge`，草稿进评审流）、发布门禁（未过评审不可发布，通过即入检索、驳回即出检索）|",
+     "|AI 辅助|预览|LLM Gateway、分诊、摘要、RAG|",
+     "|通知与连接器|预览|站内通知、投递审计、渠道诊断（通知已达可用）；飞书/企微/钉钉连接器均已实现（预览，部署就绪由 READY 环境变量申报）|",
+     "|应用市场与扩展交付|可用|商品目录、版本行与上下架；连接器与技能是可交付类型，技能安装按版本行 `skill://<技能码>` 激活本进程已注册的运行时技能，装不上即 `status=failed` 并给出可用技能码而不是假成功；`POST /marketplace/items/:id/upgrade` 承担升级与回滚（目标版本可点名、更旧即回滚、升级前按目标版本复核依赖、运行态起不来保持原版本），界面侧以弹窗列出该商品已发布版本供选择并写明「从 vX 变更为 vY」后二次确认，换版本会重新装载运行态；`auto_upgrade` 是可生效的显式开关并由 worker 周期执行；`GET /marketplace/dependency-status` 逐条复核存量安装的前置依赖，缺版本声明的存量商品单列 `declaration_missing` 不并入健康；**插件（plugin）暂不交付**——平台没有宿主运行时，安装/升级返回 `501`、上架返回 `400`；技能随发布分发，制品仓库/签名校验/沙箱执行尚未实现|",
+     "|RBAC/多租户|可用|角色权限、Endpoint ACL、租户隔离、审计日志|",
+     "|报表与运营|预览|SLA 与事件局部指标、Dashboard；管理者统一视图 `GET /reports/service-quality` 单请求聚合 KPI/SLA/满意度/趋势与工单/问题/变更统计（行级 tenant/own 口径），报表中心顶部总览已接入，窗口 30/60/90 天可切换|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    123,
+    74,
+    79
+   ],
+   [
+    "replace",
+    123,
+    124,
+    79,
+    80,
+    [
+     "> **语言说明**：v1.6.x 产品界面为**中文优先**（面向中国私有化部署场景），英文 README 提供入门指引；完整界面多语言（en-US 等）规划在 v1.7，详见 ROADMAP。"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    136,
+    80,
+    92
+   ],
+   [
+    "replace",
+    136,
+    137,
+    92,
+    93,
+    [
+     "|文件|用途|"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    93,
+    94
+   ],
+   [
+    "replace",
+    138,
+    140,
+    94,
+    96,
+    [
+     "|`docker-compose.dev.yml`|本地开发。核心服务默认启动；`--profile ai` 加 Ollama，`--profile monitoring` 加 Prometheus + Grafana|",
+     "|`docker-compose.prod.yml`|生产部署。需要 `.env.prod`，包含 nginx 与后台 worker|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    151,
+    96,
+    107
+   ],
+   [
+    "replace",
+    151,
+    152,
+    107,
+    108,
+    [
+     "|服务|地址|"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    108,
+    109
+   ],
+   [
+    "replace",
+    153,
+    157,
+    109,
+    113,
+    [
+     "|Web|<http://localhost:3000>|",
+     "|后端 API|<http://localhost:8090>|",
+     "|Swagger|<http://localhost:8090/swagger/index.html>|",
+     "|MinIO Console|<http://localhost:9001>|"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    211,
+    113,
+    167
+   ],
+   [
+    "replace",
+    211,
+    212,
+    167,
+    168,
+    [
+     "本机模式、PostgreSQL 17/pgvector 和代理排查见本地开发命令。"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    221,
+    168,
+    177
+   ],
+   [
+    "replace",
+    221,
+    225,
+    177,
+    178,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    239,
+    178,
+    192
+   ],
+   [
+    "replace",
+    239,
+    287,
+    192,
+    193,
+    [
+     "…（48 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    295,
+    193,
+    201
+   ],
+   [
+    "replace",
+    295,
+    317,
+    201,
+    202,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    317,
+    329,
+    202,
+    214
+   ],
+   [
+    "replace",
+    329,
+    335,
+    214,
+    215,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    337,
+    215,
+    217
+   ],
+   [
+    "replace",
+    337,
+    338,
+    217,
+    218,
+    [
+     "启动方式、安全模型、工具清单与排障见 ITSM MCP Server。"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    341,
+    218,
+    221
+   ],
+   [
+    "replace",
+    341,
+    342,
+    221,
+    222,
+    [
+     "|场景|操作|"
+    ]
+   ],
+   [
+    "equal",
+    342,
+    343,
+    222,
+    223
+   ],
+   [
+    "replace",
+    343,
+    349,
+    223,
+    229,
+    [
+     "|创建租户|`POST /api/v1/tenants` 创建租户后，可在该租户下创建用户|",
+     "|配置 SLA|通过 `POST /api/v1/sla/definitions` 创建 SLA 策略，用 `conditions` 按优先级等条件绑定|",
+     "|设计工作流|在前端「工作流」模块设计 BPMN 流程，绑定到业务对象|",
+     "|管理 CMDB|通过 `POST /api/v1/cmdb/cis` 创建配置项，建立 CI 关系|",
+     "|知识库检索|`POST /api/v1/knowledge/search` 搜索知识文章|",
+     "|接入外部告警|配置 `ALERT_SOURCE_CONFIG` 后，通过 `POST /api/v1/alerts/sources/:source/ingest` 接收告警 Webhook|"
+    ]
+   ],
+   [
+    "equal",
+    349,
+    350,
+    229,
+    230
+   ],
+   [
+    "replace",
+    350,
+    351,
+    230,
+    231,
+    [
+     "完整 API 文档见 API 参考。"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    358,
+    231,
+    238
+   ],
+   [
+    "replace",
+    358,
+    364,
+    238,
+    239,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    364,
+    392,
+    239,
+    267
+   ],
+   [
+    "replace",
+    392,
+    400,
+    267,
+    268,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    408,
+    268,
+    276
+   ],
+   [
+    "replace",
+    408,
+    409,
+    276,
+    277,
+    [
+     "|扩展点|当前实现|配置方式|"
+    ]
+   ],
+   [
+    "equal",
+    409,
+    410,
+    277,
+    278
+   ],
+   [
+    "replace",
+    410,
+    412,
+    278,
+    280,
+    [
+     "|告警源|通用 Webhook（支持 Prometheus Alertmanager、PagerDuty 等）|`ALERT_SOURCE_CONFIG` 指向 YAML|",
+     "|向量存储|Milvus、Qdrant、PGVector，以及内存关键词后备|`VECTOR_STORE_CONFIG` 指向 YAML 或内联配置|"
+    ]
+   ],
+   [
+    "equal",
+    412,
+    441,
+    280,
+    309
+   ],
+   [
+    "replace",
+    441,
+    442,
+    309,
+    310,
+    [
+     "工单管理"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    443,
+    310,
+    311
+   ],
+   [
+    "replace",
+    443,
+    444,
+    311,
+    312,
+    [
+     "|事件与问题|变更与 CMDB|"
+    ]
+   ],
+   [
+    "equal",
+    444,
+    445,
+    312,
+    313
+   ],
+   [
+    "replace",
+    445,
+    447,
+    313,
+    315,
+    [
+     "|事件管理|变更管理|",
+     "|问题管理|CMDB|"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    448,
+    315,
+    316
+   ],
+   [
+    "replace",
+    448,
+    449,
+    316,
+    317,
+    [
+     "|服务目录与知识|工作流与权限|"
+    ]
+   ],
+   [
+    "equal",
+    449,
+    450,
+    317,
+    318
+   ],
+   [
+    "replace",
+    450,
+    452,
+    318,
+    320,
+    [
+     "|服务目录|工作流|",
+     "|知识库|角色管理|"
+    ]
+   ],
+   [
+    "equal",
+    452,
+    455,
+    320,
+    323
+   ],
+   [
+    "replace",
+    455,
+    456,
+    323,
+    324,
+    [
+     "|层|技术|"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    457,
+    324,
+    325
+   ],
+   [
+    "replace",
+    457,
+    462,
+    325,
+    330,
+    [
+     "|后端|Go 1.25.13、Gin、Ent、PostgreSQL、Redis|",
+     "|前端|Next.js 15.5、React 19、TypeScript 6、Ant Design 6、Tailwind CSS|",
+     "|工作流|BPMN 2.0、流程定义/实例/任务/变量/历史|",
+     "|AI/RAG|LLM Gateway、pgvector、OpenAI/兼容接口、Ollama 可选|",
+     "|交付|Docker Compose、GHCR、GitHub Actions、Prometheus/Grafana 可选|"
+    ]
+   ],
+   [
+    "equal",
+    462,
+    467,
+    330,
+    335
+   ],
+   [
+    "replace",
+    467,
+    474,
+    335,
+    336,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    474,
+    484,
+    336,
+    346
+   ],
+   [
+    "replace",
+    484,
+    506,
+    346,
+    347,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    506,
+    508,
+    347,
+    349
+   ],
+   [
+    "replace",
+    508,
+    509,
+    349,
+    350,
+    [
+     "详细分层、测试策略和 E2E 用法见本地开发命令（隔离栈见 §2.5）和测试指南。"
+    ]
+   ],
+   [
+    "equal",
+    509,
+    535,
+    350,
+    376
+   ],
+   [
+    "replace",
+    535,
+    536,
+    376,
+    377,
+    [
+     "> 不要把开发默认配置用于生产。详细步骤见生产就绪计划和运维手册。"
+    ]
+   ],
+   [
+    "equal",
+    536,
+    539,
+    377,
+    380
+   ],
+   [
+    "replace",
+    539,
+    540,
+    380,
+    381,
+    [
+     "|文档|用途|"
+    ]
+   ],
+   [
+    "equal",
+    540,
+    541,
+    381,
+    382
+   ],
+   [
+    "replace",
+    541,
+    552,
+    382,
+    393,
+    [
+     "|文档中心|按角色和主题查找资料|",
+     "|开源产品能力说明|角色、业务闭环、成熟度、限制与验收入口|",
+     "|商业能力契约|能力成熟度、商业 MVP 和非目标|",
+     "|商业化架构|生产级总体架构|",
+     "|CMDB 商业 MVP|CMDB 可用/预览边界和验收门槛|",
+     "|Outbox 架构|可靠异步执行规范|",
+     "|API 参考|HTTP 接口文档|",
+     "|本地开发命令|开发命令、调试与故障排查|",
+     "|测试指南|单元、集成、契约和 E2E 测试|",
+     "|Roadmap|当前迭代方向唯一事实源|",
+     "|升级指南|v1.6.x → 最新：破坏性变更、环境变量、迁移与回滚|"
+    ]
+   ],
+   [
+    "equal",
+    552,
+    555,
+    393,
+    396
+   ],
+   [
+    "replace",
+    555,
+    556,
+    396,
+    397,
+    [
+     "欢迎提交 Issue、文档和代码。开始前请阅读 CONTRIBUTING.md。"
+    ]
+   ],
+   [
+    "equal",
+    556,
+    563,
+    397,
+    404
+   ],
+   [
+    "replace",
+    563,
+    581,
+    404,
+    405,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    581,
+    585,
+    405,
+    409
+   ],
+   [
+    "replace",
+    585,
+    586,
+    409,
+    410,
+    [
+     "|方式|说明|"
+    ]
+   ],
+   [
+    "equal",
+    586,
+    587,
+    410,
+    411
+   ],
+   [
+    "replace",
+    587,
+    592,
+    411,
+    416,
+    [
+     "|🐛 报告 Bug|使用 GitHub Issues|",
+     "|💡 提出功能|在 Discussions 中讨论|",
+     "|📖 完善文档|提交文档改进 PR|",
+     "|🔧 提交代码|通过 Pull Request 贡献代码|",
+     "|👀 代码审查|参与 PR 审查|"
+    ]
+   ],
+   [
+    "equal",
+    592,
+    595,
+    416,
+    419
+   ],
+   [
+    "replace",
+    595,
+    596,
+    419,
+    420,
+    [
+     "代码风格（ESLint + gofmt）、提交信息规范、测试要求与 PR 流程见 CONTRIBUTING.md；PR 需通过全部 CI 检查才会合并。"
+    ]
+   ],
+   [
+    "equal",
+    596,
+    599,
+    420,
+    423
+   ],
+   [
+    "replace",
+    599,
+    600,
+    423,
+    424,
+    [
+     "- 查看贡献者"
+    ]
+   ],
+   [
+    "equal",
+    600,
+    605,
+    424,
+    429
+   ],
+   [
+    "replace",
+    605,
+    608,
+    429,
+    432,
+    [
+     "- 🤝 **社区主交流区**：GitHub Discussions（公告 / 问答 / Show and tell）",
+     "- 🐛 **问题反馈**：Issues",
+     "- 🌐 **官网 / 博客**：cloudmesh.top"
+    ]
+   ],
+   [
+    "equal",
+    608,
+    609,
+    432,
+    433
+   ],
+   [
+    "replace",
+    609,
+    610,
+    433,
+    434,
+    [
+     "- 📖 **社区与联系文档**：COMMUNITY.md（含沟通渠道、参与方式与 Star 致谢名单）"
+    ]
+   ],
+   [
+    "equal",
+    610,
+    612,
+    434,
+    436
+   ],
+   [
+    "replace",
+    612,
+    622,
+    436,
+    437,
+    [
+     "本项目采用 Apache License 2.0。允许商业使用、修改和分发；使用时请遵守许可证和 NOTICE 要求。"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "b37369c7a8c2+2": {
+  "fn": "Agent-0808/BA-characters-internal-id",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    6,
+    4,
+    6,
+    [
+     "License: MIT",
+     "License: CC BY-SA 4.0"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    9,
+    7,
+    9,
+    [
+     "GitHub Downloads",
+     "GitHub Downloads (latest)"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    12,
+    10,
+    12,
+    [
+     "GitHub last commit (branch)",
+     "GitHub Release"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    15,
+    12,
+    15
+   ],
+   [
+    "replace",
+    15,
+    18,
+    15,
+    18,
+    [
+     "- 本项目的数据文件（包括缓存内容与输出文件）在 data 分支中保存。",
+     "- 可以从 Release 中下载各版本的数据文件。",
+     "- 数据文件也在 Github Pages 中托管。"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    22,
+    18,
+    22
+   ],
+   [
+    "replace",
+    22,
+    24,
+    22,
+    24,
+    [
+     "- 在 Github Pages 网页在线预览",
+     "- 在 Github Gist 在线预览纯文本 Markdown 表格"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    27,
+    24,
+    27
+   ],
+   [
+    "replace",
+    27,
+    32,
+    27,
+    32,
+    [
+     "- students.json：所有角色的信息列表，字段化（姓与名分离存储），引用spine文件ID。",
+     "- spines.json：所有spine文件ID的列表，包含 Spine 变体的编号与名称。",
+     "- schools.json：学校信息，包含名称与徽标（URL）。",
+     "- students_data.csv：扁平化的角色信息列表，将 Spine 信息进行合并，姓与名分离存储，含拼接好的完整名称列。（主要使用）",
+     "- skipped_ids.csv：因各种因素跳过不获取信息的列表，仅做参考，不受支持。"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    32,
+    33
+   ],
+   [
+    "replace",
+    33,
+    34,
+    33,
+    34,
+    [
+     "详细说明请参考 数据分支。"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    46,
+    34,
+    46
+   ],
+   [
+    "replace",
+    46,
+    50,
+    46,
+    50,
+    [
+     " - 人物模型：`assets-_mx-characters-ch0145-_mxdependency-*_assets_all_*.bundle`",
+     " - 人物立绘：`assets-_mx-spinecharacters-ch0145_spr-_mxdependency-*_assets_all_*.bundle`",
+     " - 回忆大厅：`assets-_mx-spinelobbies-ch0145_home-_mxdependency-*_assets_all_*.bundle`",
+     " - ....."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    54,
+    50,
+    54
+   ],
+   [
+    "replace",
+    54,
+    59,
+    54,
+    55,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    63,
+    55,
+    59
+   ],
+   [
+    "replace",
+    63,
+    65,
+    59,
+    61,
+    [
+     "- **代码**：采用 MIT 协议，您可以自由使用、修改和分发代码",
+     "- **数据**：采用 CC BY-SA 4.0 协议，与数据源 基沃托斯古书馆（ 数据许可协议）保持一致"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    67,
+    61,
+    63
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "3b0ada196f4c+2": {
+  "fn": "sebyx07/better_structure_sql",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    9,
+    2,
+    9,
+    [
+     "CI",
+     "Gem Version",
+     "Gem Downloads",
+     "License",
+     "Ruby",
+     "Maintained by developerz.ai",
+     "Docs"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    16,
+    9,
+    16
+   ],
+   [
+    "replace",
+    16,
+    57,
+    16,
+    17,
+    [
+     "…（41 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    61,
+    17,
+    21
+   ],
+   [
+    "replace",
+    61,
+    62,
+    21,
+    22,
+    [
+     "|Problem with the stock dump|What this gem does|"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    22,
+    23
+   ],
+   [
+    "replace",
+    63,
+    67,
+    23,
+    27,
+    [
+     "|Tool and server versions leak into the file, so every upgrade is a diff|No version comments, a fixed header, sorted objects|",
+     "|Needs the database client binary on every developer machine and in CI|Pure Ruby over the ActiveRecord connection|",
+     "|One file with tens of thousands of lines|Optional multi-file output: numbered directories, ~500-line files|",
+     "|No record of what the schema looked like at a deploy|Optional schema versions stored in the database, browsable in a mounted engine|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    84,
+    27,
+    44
+   ],
+   [
+    "replace",
+    84,
+    85,
+    44,
+    45,
+    [
+     "`rails generate better_structure_sql:install --skip-migration` skips the schema versions table. To make `rails db:schema:dump` and `rails db:schema:load` use this gem, set `replace_default_dump` and `replace_default_load` in the initializer (see Configuration). On MySQL and MariaDB a dump loads only through this gem (`replace_default_load` or `db:schema:load_better`): Rails' own load pipes the file through the `mysql` client, which needs `DELIMITER` directives the dump does not contain."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    88,
+    45,
+    48
+   ],
+   [
+    "replace",
+    88,
+    89,
+    48,
+    49,
+    [
+     "What the code dumps today. A dash means the adapter returns nothing for that object type. Every column is round-trip tested in CI (dump, load into an empty database, dump again, compare); the servers and drivers are the `integration-*` jobs in `.github/workflows/ci.yml`."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    49,
+    50
+   ],
+   [
+    "replace",
+    90,
+    91,
+    50,
+    51,
+    [
+     "|Object|PostgreSQL|MySQL, MariaDB|SQLite|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    51,
+    52
+   ],
+   [
+    "replace",
+    92,
+    108,
+    52,
+    68,
+    [
+     "|Tables, columns, defaults, primary keys|yes, plus `UNLOGGED`, storage parameters (`WITH (fillfactor=70)`) and inheritance (`INHERITS`, parents first)|yes: server column types verbatim (`int unsigned`, `datetime(6)`, `tinyint(1)`), `AUTO_INCREMENT`, `ON UPDATE`, `ENGINE` / `COLLATE` table options|the original `CREATE TABLE` statement, verbatim (`AUTOINCREMENT`, `WITHOUT ROWID`, `STRICT`, collations, composite primary keys)|",
+     "|Identity and generated columns|yes|generated columns|generated columns|",
+     "|Check and unique constraints|yes, plus exclusion constraints and `NOT VALID`|checks (where the server has them), `NOT ENFORCED` kept; unique as indexes|as written in the table: named and unnamed checks, table-level `UNIQUE`|",
+     "|Partitioned tables|`PARTITION BY` and `PARTITION OF ... FOR VALUES`|-|-|",
+     "|Indexes|full definition (method, partial, expression, unique)|full definition (unique, `FULLTEXT`, `SPATIAL`, prefix lengths, `DESC`, functional key parts, `INVISIBLE`)|original `CREATE INDEX` statement, partial and expression included|",
+     "|Foreign keys|`ALTER TABLE ... ADD CONSTRAINT`: composite, `MATCH FULL`, `DEFERRABLE`, `NOT VALID`|`ALTER TABLE ... ADD CONSTRAINT`, composite included|inline in `CREATE TABLE`, composite included|",
+     "|Views|yes, ordered by dependency|yes, from `SHOW CREATE VIEW` (no database name), ordered by dependency|original `CREATE VIEW` statement|",
+     "|Materialized views|yes, with their indexes|-|-|",
+     "|Functions|functions and procedures|stored procedures and functions|-|",
+     "|Triggers|yes|yes, firing order kept|yes|",
+     "|Extensions|yes|-|in their place, the PRAGMAs `application_id`, `auto_vacuum`, `user_version` when non-zero|",
+     "|Enum, composite and range types|`CREATE TYPE`|inline `enum(...)` / `set(...)` column types|-|",
+     "|Domains|`CREATE DOMAIN` with default, `NOT NULL` and checks|-|-|",
+     "|Sequences|`CREATE SEQUENCE`, `OWNED BY` for serial columns|-|-|",
+     "|Comments|tables, columns, indexes, views, functions, procedures|tables (column comments are written as SQL comments)|-|",
+     "|`schema_migrations` rows|yes|yes|yes|"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    116,
+    68,
+    76
+   ],
+   [
+    "replace",
+    116,
+    117,
+    76,
+    77,
+    [
+     "More detail per adapter: docs/features/multi-database.md."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    120,
+    77,
+    80
+   ],
+   [
+    "replace",
+    120,
+    121,
+    80,
+    81,
+    [
+     "`config/initializers/better_structure_sql.rb`. Every option, with the default from `lib/better_structure_sql/configuration.rb`:"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    126,
+    81,
+    86
+   ],
+   [
+    "replace",
+    126,
+    153,
+    86,
+    87,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    159,
+    87,
+    93
+   ],
+   [
+    "replace",
+    159,
+    160,
+    93,
+    94,
+    [
+     "Full reference, validation rules and options that exist but have no effect yet: docs/configuration.md."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    173,
+    94,
+    107
+   ],
+   [
+    "replace",
+    173,
+    185,
+    107,
+    108,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    189,
+    108,
+    112
+   ],
+   [
+    "replace",
+    189,
+    190,
+    112,
+    113,
+    [
+     "Details: docs/features/multi-file-output.md."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    218,
+    113,
+    141
+   ],
+   [
+    "replace",
+    218,
+    222,
+    141,
+    142,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    232,
+    142,
+    152
+   ],
+   [
+    "replace",
+    232,
+    233,
+    152,
+    153,
+    [
+     "Details: docs/schema_versions.md, docs/features/web-ui.md."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    236,
+    153,
+    156
+   ],
+   [
+    "replace",
+    236,
+    237,
+    156,
+    157,
+    [
+     "|Task|Does|"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    238,
+    157,
+    158
+   ],
+   [
+    "replace",
+    238,
+    245,
+    158,
+    165,
+    [
+     "|`db:schema:dump_better`|Dump to `output_path`|",
+     "|`db:schema:load_better`|Load the file or directory at `output_path` (on MySQL, the way to load a dump unless `replace_default_load` is set)|",
+     "|`db:schema:store`|Store the dumped schema as a version (skips unchanged content)|",
+     "|`db:schema:versions`|List stored versions|",
+     "|`db:schema:cleanup`|Delete versions beyond `schema_versions_limit`|",
+     "|`db:schema:restore[ID]`|Replace the database schema with a stored version: purges the database first, needs `CONFIRM=1` (`VERSION_ID=5` also works)|",
+     "|`db:schema:dump`, `db:schema:load`|Use this gem when `replace_default_dump` / `replace_default_load` are set|"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    248,
+    165,
+    168
+   ],
+   [
+    "replace",
+    248,
+    249,
+    168,
+    169,
+    [
+     "|Topic|Where|"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    250,
+    169,
+    170
+   ],
+   [
+    "replace",
+    250,
+    262,
+    170,
+    182,
+    [
+     "|Docs site with tutorials|<https://sebyx07.github.io/better_structure_sql/>|",
+     "|Install|docs/installation.md|",
+     "|Configuration reference|docs/configuration.md|",
+     "|Tasks and Ruby API|docs/usage.md|",
+     "|Schema versions|docs/schema_versions.md|",
+     "|Multi-file output|docs/features/multi-file-output.md|",
+     "|Adapters|docs/features/multi-database.md|",
+     "|Web UI|docs/features/web-ui.md|",
+     "|Moving from `schema.rb`|docs/migration-guides/from-schema-rb-to-structure-sql.md|",
+     "|Internals|docs/architecture.md|",
+     "|One-file reference for coding agents|llms.txt|",
+     "|Changes|CHANGELOG.md|"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    265,
+    182,
+    185
+   ],
+   [
+    "replace",
+    265,
+    266,
+    185,
+    186,
+    [
+     "**This project is maintained by developerz.ai.** Its maintainer agent triages issues, reviews every pull request, merges a pull request once its author marks it ready and CI is green, checks project health daily, and runs a monthly improvement pass. The policy it follows is committed in `.dz/maintainer/maintainer.yml`. Breaking changes and major releases stay with the owner."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    186,
+    187
+   ],
+   [
+    "replace",
+    267,
+    268,
+    187,
+    188,
+    [
+     "- **Using the gem in your app?** Point your agent at `llms.txt`. Paste this into your app's `CLAUDE.md` / `AGENTS.md`:"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    273,
+    188,
+    193
+   ],
+   [
+    "replace",
+    273,
+    274,
+    193,
+    194,
+    [
+     "- **Working on this repo?** `CLAUDE.md` holds the commands, the code map and the rules; CONTRIBUTING.md covers pull requests."
+    ]
+   ],
+   [
+    "equal",
+    274,
+    283,
+    194,
+    203
+   ],
+   [
+    "replace",
+    283,
+    284,
+    203,
+    204,
+    [
+     "Tests need a reachable PostgreSQL. See CONTRIBUTING.md and docs/testing.md."
+    ]
+   ],
+   [
+    "equal",
+    284,
+    285,
+    204,
+    205
+   ],
+   [
+    "replace",
+    285,
+    286,
+    205,
+    206,
+    [
+     "Releases are cut by merging a version bump: see RELEASE.md."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    289,
+    206,
+    209
+   ],
+   [
+    "replace",
+    289,
+    290,
+    209,
+    210,
+    [
+     "Report vulnerabilities privately: SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    292,
+    210,
+    212
+   ],
+   [
+    "replace",
+    292,
+    295,
+    212,
+    213,
+    [
+     "MIT. See LICENSE."
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    213,
+    214
+   ],
+   [
+    "replace",
+    296,
+    298,
+    214,
+    215,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "3fbc726c4274+2": {
+  "fn": "sao-coding/locus",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "Locus"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    1,
+    2
+   ],
+   [
+    "replace",
+    7,
+    13,
+    2,
+    6,
+    [
+     " Release",
+     " CI",
+     " Windows 10 and 11",
+     " License: AGPL-3.0"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    6,
+    7
+   ],
+   [
+    "replace",
+    14,
+    15,
+    7,
+    8,
+    [
+     " English · 简体中文 · 繁體中文 "
+    ]
+   ],
+   [
+    "equal",
+    15,
+    27,
+    8,
+    20
+   ],
+   [
+    "replace",
+    27,
+    28,
+    20,
+    21,
+    [
+     " table does not block typing, scrolling or switching tabs."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    21,
+    22
+   ],
+   [
+    "replace",
+    29,
+    31,
+    22,
+    24,
+    [
+     " Writes need a timed unlock, every writing statement asks for its own confirmation, and each",
+     " one lands in an audit log. The gate classifies the statement text; functions called by a `SELECT` are not checked for side effects, except known built-ins (`nextval`, `pg_terminate_backend`, `GET_LOCK` ...)."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    24,
+    25
+   ],
+   [
+    "replace",
+    32,
+    33,
+    25,
+    26,
+    [
+     " for everything else."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    43,
+    26,
+    36
+   ],
+   [
+    "replace",
+    43,
+    44,
+    36,
+    37,
+    [
+     " a small Go helper (`sidecar.exe`, built into `locus.exe`)"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    49,
+    37,
+    42
+   ],
+   [
+    "replace",
+    49,
+    50,
+    42,
+    43,
+    [
+     " suggestions taken from foreign keys"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    68,
+    43,
+    61
+   ],
+   [
+    "replace",
+    68,
+    69,
+    61,
+    62,
+    [
+     " from the server"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    76,
+    62,
+    69
+   ],
+   [
+    "replace",
+    76,
+    79,
+    69,
+    70,
+    [
+     " Locus (left) and DBeaver (right) loading 1,000,000 rows"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    84,
+    70,
+    75
+   ],
+   [
+    "replace",
+    84,
+    85,
+    75,
+    76,
+    [
+     "||Locus|DBeaver|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    76,
+    77
+   ],
+   [
+    "replace",
+    86,
+    90,
+    77,
+    81,
+    [
+     "|Load time, 1,000,000 rows|1.5 to 1.7 s (3 runs)|2.9 s (1 run; a second run failed with a driver error)|",
+     "|Memory when idle|about 100 MB|about 340 MB|",
+     "|Memory right after the load|about 360 MB|about 1.3 GB (peak 1.4 GB)|",
+     "|Memory after closing the result|about 107 MB, within seconds|about 1.37 GB, not released|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    101,
+    81,
+    92
+   ],
+   [
+    "replace",
+    101,
+    102,
+    92,
+    93,
+    [
+     "Download `locus-<version>-windows-x64.exe` from Releases and run it. It is one portable"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    121,
+    93,
+    112
+   ],
+   [
+    "replace",
+    121,
+    122,
+    112,
+    113,
+    [
+     "|Keys|Action|"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    113,
+    114
+   ],
+   [
+    "replace",
+    123,
+    134,
+    114,
+    125,
+    [
+     "|`Ctrl+K` / `Ctrl+Shift+P`|Command palette|",
+     "|`Ctrl+Enter` / `Ctrl+Shift+Enter`|Run the statement at the cursor / the whole script|",
+     "|`Ctrl+E`|Explain the statement at the cursor|",
+     "|`Ctrl+S`|Save query|",
+     "|`Ctrl+T` / `Ctrl+W`|New tab / close tab|",
+     "|`Ctrl+\\` / `Ctrl+Shift+\\`|Split right / split down|",
+     "|`Ctrl+Shift+M`|Zoom the current pane|",
+     "|`Ctrl+1…9`|Switch Space|",
+     "|`Ctrl+B` / `Ctrl+J`|Sidebar / right panel|",
+     "|`Ctrl+Shift+E`|Export the result|",
+     "|`Ctrl+,`|Settings|"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    145,
+    125,
+    136
+   ],
+   [
+    "replace",
+    145,
+    146,
+    136,
+    137,
+    [
+     "(go-ora), and is built into `locus.exe`, so there is nothing to"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    148,
+    137,
+    139
+   ],
+   [
+    "replace",
+    148,
+    149,
+    139,
+    140,
+    [
+     "**Is my password sent anywhere?** No. See Privacy."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    152,
+    140,
+    143
+   ],
+   [
+    "replace",
+    152,
+    153,
+    143,
+    144,
+    [
+     "Open an issue. Say which database and version you connect to, and"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    144,
+    145
+   ],
+   [
+    "replace",
+    154,
+    155,
+    145,
+    146,
+    [
+     "SECURITY.md and do not open a public issue."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    167,
+    146,
+    158
+   ],
+   [
+    "replace",
+    167,
+    168,
+    158,
+    159,
+    [
+     "More in CONTRIBUTING.md. A map of the source is in docs/README.md."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    179,
+    159,
+    170
+   ],
+   [
+    "replace",
+    179,
+    181,
+    170,
+    172,
+    [
+     "- GPUI and `gpui-kit` for the UI",
+     "- Arc for the idea behind Spaces and vertical tabs"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    182,
+    172,
+    173
+   ],
+   [
+    "replace",
+    182,
+    183,
+    173,
+    174,
+    [
+     "The licenses of all bundled components are in THIRD_PARTY_LICENSES.md."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    185,
+    174,
+    176
+   ],
+   [
+    "replace",
+    185,
+    187,
+    176,
+    177,
+    [
+     "AGPL-3.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

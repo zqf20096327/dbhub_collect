@@ -3191,5 +3191,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "65cc7aefb40f": {
+  "identity": {
+   "one_liner": "基于 Rust 与 Protobuf 契约代码生成的企业级多租户后台管理平台",
+   "review": "RushWind Admin 是运行在 Rust（axum + SeaORM）之上的管理后台平台，以 Protobuf 作为唯一 API 契约，在构建期生成路由、错误状态表与前端 TypeScript 客户端，仓库内不含手写路由。它内置多租户 RBAC、TOTP 多因素认证与审计日志，安全设计参照等保 2.0 技术要求。适用于需要私有化部署、多租户隔离与等保测评准备的企业场景；README 注明其覆盖技术措施部分，不能替代完整等保测评流程。",
+   "highlights": [
+    "构建期从 Protobuf 契约确定性生成 291 条 REST 路由、错误状态映射与三套前端 TypeScript 客户端，零手写路由",
+    "提供 Vue3 Vben、Vue3 Element Plus、React 19 三套随仓前端，与后端零改动对接，各自运行于独立端口",
+    "内置多租户数据隔离、动态 RBAC（权限存库热更新）、TOTP MFA，以及默认 180 天库内留存加 JSONL 归档的六类审计日志，并包含 pg_dump 定时备份与 SSE 推送、Postgres 任务队列等四个 transport"
+   ],
+   "use_cases": [
+    "需要多租户隔离与组织/权限体系的企业后台管理系统搭建",
+    "面向等保 2.0 二级/三级测评准备的私有化部署场景（技术措施部分）",
+    "团队偏好 Vue 或 React 不同前端栈、需共用同一后端契约的管理平台开发"
+   ]
+  },
+  "sha": "65cc7aefb40f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f806264bf366": {
+  "identity": {
+   "one_liner": "基于 Python 标准库与 SQLite 的校园自习座位分时段预约系统",
+   "review": "该系统按自习室、日期和时段（每日 08:00–22:00 共 14 段）管理座位预约，面向本地演示场景，需 Python 3.9+，一条 `python server.py` 命令即可启动。服务端仅用 `http.server` 与 `sqlite3` 标准库，无第三方依赖；前端为原生 HTML/CSS/JS 单页。并发防冲突依赖 `reservation_slots` 表 `(seat_id, date, slot)` 主键唯一约束加事务回滚，冲突返回 409。无真实登录鉴权，用户身份仅以学号区分。",
+   "highlights": [
+    "并发下通过数据库唯一约束与事务回滚保证同一座位同一时段仅一个预约成功，冲突返回 409",
+    "零第三方依赖：服务端使用 Python 3 标准库，前端为原生单页应用，无需构建，首次启动自动建库并写入演示数据",
+    "提供 43 项自测脚本与并发演示工具（如 16 线程抢同一座位仅 1 个成功），附 PRD、演示脚本等文档"
+   ],
+   "use_cases": [
+    "课程项目或教学演示中展示并发控制与数据库唯一约束的实际应用",
+    "本地部署的校园自习座位预约演示（支持局域网访问以便手机端试用）",
+    "并发竞争场景的手动或脚本化验证练习"
+   ]
+  },
+  "sha": "f806264bf366",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "865e539faa3c": {
+  "identity": {
+   "one_liner": "本地 Agent 工作台，串接飞书/Web 会话与 ACP Agent 并以 SQLite 持久化",
+   "review": "AgentDock 是一个本地运行的 Agent 工作台，通过固定版本的 acpx 接口接入 ACP 协议的 Agent（如 Claude Code、Codex、Gemini 等），把飞书消息、Web 会话与 Agent 执行轨迹统一到 SQLite 持久化链路。面向需要在本地或远端开发机上以飞书机器人、群聊协作或 HTTP/SSE 服务方式驱动 Agent 的用户。要求 Node.js 22.13+；服务不含多用户账号与租户隔离，对外暴露需自行叠加认证。",
+   "highlights": [
+    "通过 acpx 公开接口自动发现本机已安装 CLI 的 ACP Agent，支持持久会话、流式输出、实时权限请求与取消",
+    "提供 HTTP + SSE 服务化接口、Web 控制台时间线、消息排队与中断、Markdown 流式渲染",
+    "支持飞书机器人私聊/群聊接入、扫码配置、群内多 Agent 协作（协作开关默认关闭），以及网页端扫码登录的 AI 飞书替身"
+   ],
+   "use_cases": [
+    "在飞书私聊或群聊中 @ 机器人驱动本地工作区里的 Agent 执行任务并以卡片形式回传结果",
+    "作为上层多 Agent 平台的执行底座，通过 HTTP/SSE 接口调用",
+    "在飞书群内让多个已配置的 Agent 相互发现并交接消息实现协作"
+   ]
+  },
+  "sha": "865e539faa3c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3534,5 +3534,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4c8bf2e0882b": {
+  "identity": {
+   "one_liner": "自托管的人机协作平台，让人类与各自的 AI 代理在同一群组内收发消息、管理卡片与交接。",
+   "review": "Aigile-Switch 是一个自托管协作平台，供团队成员及其各自的 AI 代理（Claude Code、Codex、opencode 等）在同一群组中接收卡片、汇报进度、交接任务。提供群组消息、工作看板、决策卡、验收流程与知识库功能，数据存于本地 SQLite。通过 Docker 一行命令或 npm 启动，也可部署到 Cloudflare Workers；公开部署需先设置 ADMIN_PASSWORD 并配合 HTTPS 反向代理。",
+   "highlights": [
+    "支持人类与多个 AI 工具（Claude Code、Codex、Antigravity CLI、Copilot CLI 及其他 AI）通过接入文字、MCP 或一行启动命令加入群组，提供 15 种角色模板",
+    "包含群组消息（@提及、需确认选项按钮）、多项目管理、工作/决策/交接卡片、待处理列表、知识库（支持 md/txt/docx/pptx/xlsx 抽字与逐字搜索）等功能模块",
+    "提供 Docker、Node.js 与 Cloudflare Workers 三种部署方式，数据存于本地 volume（SQLite），支持 JSON 备份导出导入、繁体中文与英文界面切换"
+   ],
+   "use_cases": [
+    "团队成员与各自的 AI 代理在同一群组协作，分工接卡、汇报、交接与验收",
+    "个人或公司内网自托管部署，数据保存在本地 volume",
+    "需要知识库的场景：将指定文档抽字整理为知识页，供人和 AI 搜索并附出处的问答"
+   ]
+  },
+  "sha": "4c8bf2e0882b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f39957ad927c": {
+  "identity": {
+   "one_liner": "Telegram 只读管道：Telethon→SQLite→MCP 服务器，供代理检索选定主题",
+   "review": "本项目将用户账号的 Telegram 会话通过 Telethon 增量同步到本地 SQLite，再以 MCP 服务器向代理（如 opencode）提供 19 个只读工具，范围限于用户标记的 Telegram 文件夹或主题（watch 列表），支持 FTS 搜索、从消息中提取决策/任务/期限及过期监控。附浏览器 UI 用于筛选、标注与媒体下载。README 提到 101 字段契约尚未确认，拒绝记录仅为本地标记。",
+   "highlights": [
+    "提供 Telethon→SQLite→MCP 服务器的只读链路，代理可通过 19 个只读工具访问被标记的聊天与主题",
+    "支持 Telegram 文件夹整体同步或经 watch.py 按主题精确标记，别名替代 chat_id/topic_id，增量同步并以分块拉取历史消息",
+    "包含浏览器 UI：待关注（逾期/阻塞）、项目/任务/决策/问题卡片、FTS5 搜索、媒体下载，以及演示模式（seed_demo.py，无需 Telegram 账号）"
+   ],
+   "use_cases": [
+    "需要 AI 代理读取指定 Telegram 群组/主题中的消息、决策、任务与期限的用户",
+    "需要通过 Web 界面监控任务逾期、过期试用及媒体下载的个人工作流",
+    "需要在无 Telegram 连接的情况下查看界面并进行功能测试，使用演示数据"
+   ]
+  },
+  "sha": "f39957ad927c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

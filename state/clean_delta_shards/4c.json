@@ -34607,5 +34607,1157 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "3a07ac168e90+2": {
+  "fn": "StellarHyperion/stellarhyperion-backend",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "App | Public API health | Contracts and deployment evidence"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    76,
+    3,
+    76
+   ],
+   [
+    "replace",
+    76,
+    77,
+    76,
+    77,
+    [
+     "The `hyperion-backend` Vercel project serves stellarhyperion-backend.vercel.app. Configure its production `API_DATABASE_URL` (a read-only API reader; existing projects may still use `DATABASE_URL`) through Vercel environment variables with a managed PostgreSQL connection and TLS. Keep the value server-side. Set `HYPERION_NETWORK` and `HYPERION_DEPLOYMENTS_FILE` explicitly to the intended network and deployment record. Redis and signing keys are unnecessary while `KEEPER_ENABLED=false`."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    77,
+    78
+   ],
+   [
+    "replace",
+    78,
+    79,
+    78,
+    79,
+    [
+     "`vercel.json` includes the deployment metadata in the API function. Production indexing runs in the testnet indexer workflow, independently of requests to the API. Store the same database connection as the repository Actions secret `HYPERION_DATABASE_URL`. Each run applies pending SQL migrations and runs the real indexer and bridge pollers for 150 seconds, with graceful shutdown and a persisted PostgreSQL cursor. The concurrency group prevents overlapping hosted jobs. No signer is configured."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    112,
+    79,
+    112
+   ],
+   [
+    "replace",
+    112,
+    117,
+    112,
+    117,
+    [
+     "|Variable|Used by|Role|",
+     "|------------------------|---------------------------------------------------------------------|-------------------------------|",
+     "|`API_DATABASE_URL`|The public API (`api/index.ts` and the HTTP server in `dist/main.js`)|Read-only API reader (above)|",
+     "|`DATABASE_URL`|Indexer, rail and keeper writes, and operator CLIs|Worker writer (`read-write`)|",
+     "|`MIGRATION_DATABASE_URL`|`npm run migrate`, `migrate:up`, `migrate:down`|Migration owner with DDL rights|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    119,
+    117,
+    119
+   ],
+   [
+    "replace",
+    119,
+    122,
+    119,
+    122,
+    [
+     " only `API_DATABASE_URL`. Leave `DATABASE_URL` and `MIGRATION_DATABASE_URL` out of that",
+     " environment. If both API and writer URLs are present, an API-only process still opens only",
+     " `API_DATABASE_URL`."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    122,
+    123
+   ],
+   [
+    "replace",
+    123,
+    127,
+    123,
+    127,
+    [
+     " `API_DATABASE_URL` too and the HTTP server reads through a second pool on that credential, with",
+     " `default_transaction_read_only`. Startup checks the role's real Postgres privileges and refuses",
+     " it if it can write. While writers are enabled, `API_DATABASE_URL` must be a different credential",
+     " from `DATABASE_URL`."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    127,
+    128
+   ],
+   [
+    "replace",
+    128,
+    130,
+    128,
+    130,
+    [
+     " setups. They refuse `API_DATABASE_URL`. `bin/migrate.mjs` hands the chosen value to",
+     " node-pg-migrate through a private environment variable, never on the command line."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    130,
+    131
+   ],
+   [
+    "replace",
+    131,
+    133,
+    131,
+    133,
+    [
+     " errors name the variable, never its value. Logs redact `databaseUrl`, `apiDatabaseUrl` and",
+     " `migrationDatabaseUrl`."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    150,
+    133,
+    150
+   ],
+   [
+    "replace",
+    150,
+    151,
+    150,
+    151,
+    [
+     "Background processes must be disabled in serverless functions: `INDEXER_ENABLED=false`, `RAILS_ENABLED=false`, and `KEEPER_ENABLED=false`. Furthermore, database credentials must use `HYPERION_DATABASE_ROLE=read-only`. Configure the function with `API_DATABASE_URL` (see Separate database credentials); it then needs no `DATABASE_URL` at all."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    249,
+    151,
+    249
+   ],
+   [
+    "replace",
+    249,
+    259,
+    249,
+    259,
+    [
+     " `GET /health` reports hosting environment, database role, a stable public configuration digest",
+     " (`configDigest`) and effective-setting provenance (`configProvenance`). The report uses selected",
+     " deployment routers and per-chain commits, with safe names for conflicting overrides.",
+     " `DEPLOYMENT_REVISION` is an expected Git commit and never replaces the selected deployment",
+     " record. Endpoints are reported only as omitted values and their source; database credentials,",
+     " signer material, host/path/process identity and arbitrary metadata are excluded. The digest",
+     " covers public effective settings and selected deployment identities, excluding endpoint",
+     " credentials, diagnostic-only overrides and tuning for disabled workers. Equivalent explicit",
+     " defaults and reordered JSON targets therefore share a digest. Provider health does not",
+     " establish destination delivery."
+    ]
+   ],
+   [
+    "equal",
+    259,
+    260,
+    259,
+    260
+   ],
+   [
+    "replace",
+    260,
+    262,
+    260,
+    262,
+    [
+     " also include an opaque `nextCursor`; pass it back with the same filters for stable keyset",
+     " pagination. Cursors are scoped to the descending transfer-id order and reject mismatched filters."
+    ]
+   ],
+   [
+    "equal",
+    262,
+    283,
+    262,
+    283
+   ],
+   [
+    "replace",
+    283,
+    284,
+    283,
+    284,
+    [
+     "As of October 29, 2026, the public API and scheduled indexer use persistent Neon PostgreSQL. The verified database retained 10 delivered testnet transfers. The successful indexer run advanced its stored Stellar cursor and preserved transfer history after shutdown. These are recorded verification results; current freshness is available through `/v1/metrics`."
+    ]
+   ],
+   [
+    "equal",
+    284,
+    285,
+    284,
+    285
+   ],
+   [
+    "replace",
+    285,
+    286,
+    285,
+    286,
+    [
+     "Signed source transactions and independently checked destination payments are published in the contracts repository's paid ITS evidence, XLM conversion evidence and CCTP evidence for all three destinations."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    287,
+    286,
+    287
+   ],
+   [
+    "replace",
+    287,
+    288,
+    287,
+    288,
+    [
+     "The October 29 CI run passed formatting, lint, types, the production build and all 220 tests. `npm audit` reported zero known vulnerabilities after compatible locked HTTP redirect and test-tooling patches. These results cover dependency and regression checks; they are not a formal security audit."
+    ]
+   ],
+   [
+    "equal",
+    288,
+    598,
+    288,
+    598
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "e0a0c5a3be72+2": {
+  "fn": "kurcontko/mnemotree",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    9,
+    4,
+    9,
+    [
+     "License: MIT",
+     "Python 3.11+",
+     "CI",
+     "Quality Gate Status",
+     "CodeQL"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    12,
+    10,
+    12,
+    [
+     "AML Cycle 2: #2 open-source textual · 60.81",
+     "LoCoMo-Refined: 78.7 · official scorer"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    16,
+    13,
+    14,
+    [
+     " Mnemotree Logo"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    22,
+    14,
+    20
+   ],
+   [
+    "replace",
+    22,
+    23,
+    20,
+    21,
+    [
+     " transaction."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    21,
+    22
+   ],
+   [
+    "replace",
+    24,
+    25,
+    22,
+    23,
+    [
+     " reranking."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    23,
+    24
+   ],
+   [
+    "replace",
+    26,
+    27,
+    24,
+    25,
+    [
+     " candidate, rank and packing loss."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    30,
+    25,
+    28
+   ],
+   [
+    "replace",
+    30,
+    31,
+    28,
+    29,
+    [
+     "Benchmarks for the Agent Memory Leaderboard result and end-to-end"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    43,
+    29,
+    41
+   ],
+   [
+    "replace",
+    43,
+    44,
+    41,
+    42,
+    [
+     "MCP server covers configuration and other clients."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    47,
+    42,
+    45
+   ],
+   [
+    "replace",
+    47,
+    48,
+    45,
+    46,
+    [
+     "of the context sent to Claude. Plugin setup and data handling"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    58,
+    46,
+    56
+   ],
+   [
+    "replace",
+    58,
+    59,
+    56,
+    57,
+    [
+     "vocabulary once; see the guide to run offline."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    57,
+    58
+   ],
+   [
+    "replace",
+    60,
+    66,
+    58,
+    64,
+    [
+     "|Extra|Adds|",
+     "|---|---|",
+     "|`embeddings`|OpenAI-compatible HTTP embedder and extractor|",
+     "|`lite`|Local SentenceTransformer embedder|",
+     "|`serve`|HTTP service: AML Add/Search, plus routes to list, read and delete memories|",
+     "|`all`|All of the above|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    73,
+    64,
+    71
+   ],
+   [
+    "replace",
+    73,
+    81,
+    71,
+    72,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    86,
+    72,
+    77
+   ],
+   [
+    "replace",
+    86,
+    87,
+    77,
+    78,
+    [
+     "examples/ has three scripts to start from:"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    78,
+    79
+   ],
+   [
+    "replace",
+    88,
+    94,
+    79,
+    85,
+    [
+     "- chat_with_memory.py is a chat loop that remembers",
+     " across runs, against any OpenAI-compatible server, Ollama included.",
+     "- multi_user.py keeps one memory per user in a single",
+     " database, with idempotent writes and deletion. It runs offline.",
+     "- service_backend.py calls the HTTP service from your",
+     " own backend."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    98,
+    85,
+    89
+   ],
+   [
+    "replace",
+    98,
+    99,
+    89,
+    90,
+    [
+     " AML Cycle 2: mnemotree second in Textual Memory, open-source methods, score 60.81"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    101,
+    90,
+    92
+   ],
+   [
+    "replace",
+    101,
+    102,
+    92,
+    93,
+    [
+     "On the Agent Memory Leaderboard"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    112,
+    93,
+    103
+   ],
+   [
+    "replace",
+    112,
+    116,
+    103,
+    107,
+    [
+     "|Benchmark|Questions|Mnemotree|Published, gpt-4o-mini answering|",
+     "|---|---:|---:|---|",
+     "|LoCoMo, categories 1 to 4|1,540|72.1|Full context (26K tokens) 72.9, Mem0 with graph 68.4, Mem0 66.9, Zep 66.0, LangMem 58.1 (Mem0 paper, Table 2)|",
+     "|LongMemEval-S|500|60.8|Zep 63.8, full context (115K tokens) 55.4 (Zep paper, Table 2)|"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    118,
+    107,
+    109
+   ],
+   [
+    "replace",
+    118,
+    119,
+    109,
+    110,
+    [
+     "scores 78.7 with the official scorer,"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    121,
+    110,
+    112
+   ],
+   [
+    "replace",
+    121,
+    122,
+    112,
+    113,
+    [
+     "On BEAM we ran BEAM's own answer and scoring"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    126,
+    113,
+    117
+   ],
+   [
+    "replace",
+    126,
+    132,
+    117,
+    123,
+    [
+     "|BEAM conversation length|Questions|Mnemotree|BEAM RAG, same harness|",
+     "|---|---:|---:|---:|",
+     "|100K tokens|400|37.7|32.5|",
+     "|500K tokens|700|41.2|33.4|",
+     "|1M tokens|700|38.5|31.8|",
+     "|10M tokens|200|29.9|21.9|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    138,
+    123,
+    129
+   ],
+   [
+    "replace",
+    138,
+    139,
+    129,
+    130,
+    [
+     "docs/BENCHMARKS.md has the setup, the method, how to size the"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    155,
+    130,
+    146
+   ],
+   [
+    "replace",
+    155,
+    156,
+    146,
+    147,
+    [
+     "lists the file each client reads, and the entry for OpenCode."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    161,
+    147,
+    152
+   ],
+   [
+    "replace",
+    161,
+    166,
+    152,
+    153,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    169,
+    153,
+    156
+   ],
+   [
+    "replace",
+    169,
+    170,
+    156,
+    157,
+    [
+     "granite-embedding-small-english-r2"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    172,
+    157,
+    159
+   ],
+   [
+    "replace",
+    172,
+    179,
+    159,
+    166,
+    [
+     "|Setting|Flag|Default|",
+     "|---|---|---|",
+     "|`MNEMOTREE_DB`|`--db`|`~/.mnemotree/memory.sqlite`|",
+     "|`MNEMOTREE_NAMESPACE`|`--namespace`|`default`|",
+     "|`MNEMOTREE_PROJECT=1`|`--project`|off: one namespace per project when on|",
+     "|`MNEMOTREE_CONFIG`|`--config`|local model|",
+     "|`MNEMOTREE_LEXICAL=1`|`--lexical`|off|"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    192,
+    166,
+    179
+   ],
+   [
+    "replace",
+    192,
+    193,
+    179,
+    180,
+    [
+     "Agent Memory Leaderboard API; four more"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    205,
+    180,
+    192
+   ],
+   [
+    "replace",
+    205,
+    212,
+    192,
+    193,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    214,
+    193,
+    195
+   ],
+   [
+    "replace",
+    214,
+    222,
+    195,
+    203,
+    [
+     "|Route (all `POST`)|Body|Returns|",
+     "|---|---|---|",
+     "|`/v1/memories/add`|`request_id`, `user_id`, `session_id`, `messages`|`ids` of the stored messages|",
+     "|`/v1/memories/search`|`user_id`, `query`, `top_k`|ranked passages with their `source_ids`|",
+     "|`/v1/memories/get`|`user_id`, `ids` (up to 100)|the stored messages, and `missing`|",
+     "|`/v1/memories/list`|`user_id`, optional `session_id`, `limit`, `cursor`|a page of messages, oldest first, and `next_cursor`|",
+     "|`/v1/memories/stats`|`user_id`|counts of memories, chunks and Add requests|",
+     "|`/v1/memories/delete`|`user_id`, `id`|`deleted: true` or `false`|"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    230,
+    203,
+    211
+   ],
+   [
+    "replace",
+    230,
+    231,
+    211,
+    212,
+    [
+     "memories. The guide has the full contract,"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    247,
+    212,
+    228
+   ],
+   [
+    "replace",
+    247,
+    248,
+    228,
+    229,
+    [
+     "docs/GUIDE.md covers the API contract, MCP configuration, embeddings,"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    229,
+    230
+   ],
+   [
+    "replace",
+    249,
+    250,
+    230,
+    231,
+    [
+     "and limits. docs/BENCHMARKS.md records how the benchmark"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    254,
+    231,
+    235
+   ],
+   [
+    "replace",
+    254,
+    255,
+    235,
+    236,
+    [
+     "See upgrading from 0.4.0 in the"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    268,
+    236,
+    249
+   ],
+   [
+    "replace",
+    268,
+    269,
+    249,
+    250,
+    [
+     "See CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    269,
+    271,
+    250,
+    252
+   ],
+   [
+    "replace",
+    271,
+    273,
+    252,
+    253,
+    [
+     "MIT, see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "d711612988a0+2": {
+  "fn": "heyzhu/family-hub",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    5,
+    [
+     " 登录页"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    11,
+    6,
+    7,
+    [
+     " 开箱即用的登录页——第一个注册者自动成为家庭管理员，其余成员自助加入。 "
+    ]
+   ],
+   [
+    "equal",
+    11,
+    16,
+    7,
+    12
+   ],
+   [
+    "replace",
+    16,
+    24,
+    12,
+    18,
+    [
+     "|维度|说明|",
+     "|---|---|",
+     "|目标用户|小家庭 / 合住亲友（家庭共担事务的场景）|",
+     "|核心场景|家庭待办提醒、家庭相册式动态、重要信息存档、共同记账|",
+     "|部署方式|私有部署（Docker 或 Node 直跑），数据完全自持|",
+     "|技术基调|零外部依赖、SQLite 单文件、原生前端，轻量可长期运行|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    76,
+    18,
+    70
+   ],
+   [
+    "delete",
+    76,
+    78,
+    70,
+    70
+   ],
+   [
+    "equal",
+    78,
+    80,
+    70,
+    72
+   ],
+   [
+    "replace",
+    80,
+    81,
+    72,
+    73,
+    [
+     " 下表为产品真实界面截图：手机端竖版按三列排布，右下为桌面端设置页。 "
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    73,
+    74
+   ],
+   [
+    "replace",
+    82,
+    122,
+    74,
+    76,
+    [
+     " 待办列表 ",
+     " 待办列表：筛选、搜索、分页与参与人指定 "
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    76,
+    77
+   ],
+   [
+    "replace",
+    123,
+    124,
+    77,
+    97,
+    [
+     " 万年历视图 ",
+     " 万年历：日历格用圆点标记当日事项 ",
+     "",
+     " 家庭动态 ",
+     " 家庭动态：发帖、搜索、标签筛选合一 ",
+     "",
+     " 重点事项记录本 ",
+     " 记录本：分类、访问密码、附件与勾选清单 ",
+     "",
+     " 一句话记账 ",
+     " 一句话记账：聊天式输入与快捷短语 ",
+     "",
+     " 记账统计 ",
+     " 记账统计：个人 / 全家 × 日 / 月 与分类排行 ",
+     "",
+     " 主题选择 ",
+     " 主题选择：一键切换并实时预览 ",
+     "",
+     " 家庭设置 ",
+     " 家庭设置（桌面端）：基础 / 待办提醒 / 内容通知 / 发件邮箱 / 运行状态 "
+    ]
+   ],
+   [
+    "equal",
+    124,
+    148,
+    97,
+    121
+   ],
+   [
+    "delete",
+    148,
+    150,
+    121,
+    121
+   ],
+   [
+    "equal",
+    150,
+    158,
+    121,
+    129
+   ],
+   [
+    "delete",
+    158,
+    160,
+    129,
+    129
+   ],
+   [
+    "equal",
+    160,
+    166,
+    129,
+    135
+   ],
+   [
+    "replace",
+    166,
+    172,
+    135,
+    141,
+    [
+     "|教程|解决什么问题|大致步骤|",
+     "|---|---|---|",
+     "|**① 邮件推送配置（以 QQ 邮箱为例）**|待办提醒、内容通知、记账报表发到家人信箱。**配置量最小、最容易先跑通**，也是其余通道出问题时的兜底|QQ 邮箱开启 SMTP 取 16 位授权码 → 应用内填服务器 / 端口 / 账号 / 授权码 → 发测试邮件 → 每位成员填自己的收件邮箱|",
+     "|**② 企业微信推送配置（从注册到收发打通）**|推送到企业微信，家人用手机就能收到（装企业微信 App，或开通「微信插件」后直接在微信里看）|注册企业微信 → 记下 CorpId → 建自建应用（AgentId / Secret）→ 配「接收消息」（Token / AESKey）→ 填回调地址 → 账号映射 → 企业可信 IP → 双向验证|",
+     "|**③ 企业微信消息代理（进阶，可按需再读）**|家庭宽带有**动态公网 IP**，而企业微信要求「可信 IP」固定 —— 否则推送全挂并报 `60020 不合法的 IP`|用一台固定出口 IP 的机器（云服务器 / 有固定 IP 的 NAS）部署随附的 `wecom-relay.js` → 在应用中启用「可信 IP 代理」并填代理地址与 Token → 验证转发|",
+     "|**④ 钉钉与飞书推送配置**|推送到钉钉群 / 飞书群。只要一个群机器人 Webhook，不需要建应用|群设置里添加自定义机器人 → 安全设置三选一（加签 / IP / 关键词）→ 把 Webhook 与密钥填进应用 → 成员在「消息推送设置」里选这个通道|"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    141,
+    142
+   ],
+   [
+    "replace",
+    173,
+    174,
+    142,
+    143,
+    [
+     "> 教程③附**可直接部署的完整代码**：`docs/tutorials/tools/wecom-relay.js`（约 130 行，只用 Node 内置模块，无需 `npm install`）。文档里的代码与仓库文件一致，含 systemd 部署、Nginx 反向代理与三条验证命令。"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    177,
+    143,
+    146
+   ],
+   [
+    "replace",
+    177,
+    180,
+    146,
+    149,
+    [
+     "|教程|解决什么问题|大致步骤|",
+     "|---|---|---|",
+     "|**⑤ AI 接入（以通义千问 / 阿里云百炼为例）**|记账时上传截图自动识别金额与分类。出厂默认指向 OpenAI，国内网络下必须改掉|阿里云百炼开通 → 创建 API Key → 应用内填接口地址 / API Key / 模型 ID 三项 → 实测一张账单截图 → 按需调额度上限|"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    185,
+    149,
+    154
+   ],
+   [
+    "delete",
+    185,
+    187,
+    154,
+    154
+   ],
+   [
+    "equal",
+    187,
+    207,
+    154,
+    174
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

@@ -2699,5 +2699,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8e6b3e6d4abe": {
+  "identity": {
+   "one_liner": "基于 SQLite VFS 的多密码算法 SQLite3 加密扩展",
+   "review": "SQLite3MultipleCiphers 实现 SQLite3 的加密扩展，支持多种密码算法（含 AES、AEAD 方案如 aes256gcm）。该项目源自 wxSQLite3 加密扩展的独立版本，基于 SQLite VFS 特性实现以兼容 SQLite 3.32.0 及之后版本。代码主要在 Windows 下开发，也在 Linux 下测试过。文档站点提供支持的密码方案及 C 与 SQL 接口说明。",
+   "highlights": [
+    "基于 SQLite VFS 特性实现，支持 SQLite 3.32.0 及之后版本",
+    "支持多种密码算法方案，并提供 C 和 SQL 接口",
+    "通过 PRAGMA cipher 指定密码配置参数，2.8.0 开发版新增 aes256gcm AEAD 方案"
+   ],
+   "use_cases": [
+    "需要对 SQLite 数据库文件内容进行加密存储的场景",
+    "需要使用特定密码算法方案（如兼容 SQLCipher 格式）的应用",
+    "在 Windows 或 Linux 平台使用加密版 SQLite 的项目"
+   ]
+  },
+  "sha": "8e6b3e6d4abe",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fadc6df674ad": {
+  "identity": {
+   "one_liner": "Gorose ORM 的 Pro 分支，Go 语言的链式链路数据库 ORM，支持嵌套事务与子查询。",
+   "review": "GoRose-ORM-Pro 是 Gorose ORM 的升级分叉项目，通过 go get 安装，提供链式查询、事务、分页及 Struct 映射等能力，支持 MySQL、PostgreSQL、Oracle、MSSQL、SQLite3、ClickHouse 等驱动，可配置读写分离集群。它合入了原版未修复的多项问题，适用于需要处理跨模块事务和复杂查询的商业项目。",
+   "highlights": [
+    "支持嵌套事务、复杂 AND/OR 条件组合、参数化 SubQuery/SubWhere 子查询",
+    "提供多线程分页器 PaginatorWG 与分块读取 ChunkWG，支持集群配置及跨库混用读写路由",
+    "修复原版高并发参数脏数据、Count 与 GroupBy 计数、Oracle 驱动等问题，兼容原版 API 可平滑升级"
+   ],
+   "use_cases": [
+    "使用 MySQL/MariaDB/Oracle 等数据库并需要跨模块嵌套事务的订单、支付类后端开发",
+    "从原版 Gorose 项目平滑升级并获取原版未修复问题的修复",
+    "需要主从读写分离集群路由或多线程分页、分块读取的 Go 数据访问层"
+   ]
+  },
+  "sha": "fadc6df674ad",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "929967cae5b2": {
+  "identity": {
+   "one_liner": "EF Core 悲观锁扩展库，提供行级锁与分布式咨询锁的 LINQ/Database API",
+   "review": "EntityFrameworkCore.Locking 是一个面向 EF Core 的悲观锁库，通过 ForUpdate()/ForShare() 等 LINQ 扩展实现行级锁（FOR UPDATE、UPDLOCK 等），并通过 AcquireDistributedLockAsync() 提供基于应用键的会话级或事务级咨询锁。支持 PostgreSQL、MySQL 和 SQL Server 三种提供程序，需按提供程序安装对应的 NuGet 包并在 Use*() 后调用 UseLocking()。行级锁要求活动事务；MySQL 不支持事务级分布式锁和共享分布式锁。",
+   "highlights": [
+    "提供 ForUpdate()/ForShare() 等 LINQ 扩展，支持 NoWait、SkipLocked、带超时等待等锁定行为，并生成对应原生 SQL",
+    "提供基于应用键的分布式咨询锁，支持会话级与事务级作用域（PostgreSQL/SQL Server）、共享/独占模式、阻塞与非阻塞获取",
+    "包含 PostgreSQL 专有的 FOR NO KEY UPDATE、FOR KEY SHARE 模式，以及 Include 集合时自动生成 FOR UPDATE OF 的处理"
+   ],
+   "use_cases": [
+    "多消费者竞争认领任务的队列处理，可使用 ForUpdate(LockBehavior.SkipLocked) 跳过已锁定行",
+    "需要在事务提交前保护读-检查-写序列的场景，可使用事务级分布式锁",
+    "跨进程协调共享资源（如按键串行化任务），可使用会话级分布式锁"
+   ]
+  },
+  "sha": "929967cae5b2",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9825cdcb37c0": {
+  "identity": {
+   "one_liner": "基于 YAML 声明式配置的反向 ETL CLI 工具，将数仓数据同步到业务工具",
+   "review": "drt（data reverse tool）是反向 ETL 工具，把数仓（如 BigQuery、DuckDB、ClickHouse）中的数据同步回 Slack、HubSpot 等业务系统。同步以 YAML 文件定义、存于用户仓库，经 Git 版本管理与 PR 评审。核心机制包括 drt plan/apply 的先审后写流程、删除比例守卫（如 max_delete_pct）、write_policy: fill_empty 填空策略。Apache 2.0 开源，自托管运行，pip 安装，内置 DuckDB。数据不经托管中介直接写入目标端。",
+   "highlights": [
+    "提供 drt plan / drt apply 先审后写流程，plan 只读生成变更集，apply 在数据或配置变化时拒绝写入",
+    "支持 YAML 声明式同步配置、内置 MCP 服务器与 Claude Code 技能、Mermaid DAG 生成",
+    "提供 fill_empty 写入策略和 max_delete_pct 删除守卫，数据从数仓直接写入目标端"
+   ],
+   "use_cases": [
+    "数据团队需要数仓数据同步到业务系统（CRM、协作工具等）",
+    "需要在写入前进行评审、变更集审批的数据运维流程",
+    "配合 dbt 模型将转换后的数据回写到业务侧"
+   ]
+  },
+  "sha": "9825cdcb37c0",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7d20e5c6485f": {
+  "identity": {
+   "one_liner": "面向已有 TiCDC 链路的 TiDB 迁移切换工具包，提供校验、预检、编排与回退。",
+   "review": "该工具包基于 Python 3.6+ 与 mysql 客户端运行，围绕已有 TiCDC 链路提供数据一致性校验、切换前预检查、正反向 CDC 编排和回退演练四类命令。README 声明切换流程用于隔离环境演练，TGW 调权为模拟，且 cutover --execute 会实际终止会话、修改账号权限并操作 TiCDC。",
+   "highlights": [
+    "支持数据一致性校验（依赖 sync_diff_inspector）、切换前预检查与本地报告生成",
+    "提供 cutover-check、cutover、cutover-resume、cutover-rollback 等切换与回退命令",
+    "内置 lab_mode 与 traffic_workload 模块用于构造数据和模拟业务流量，测试使用模拟后端"
+   ],
+   "use_cases": [
+    "在隔离环境中演练 TiDB 集群间基于 TiCDC 的切换与回退流程",
+    "对已有正向 CDC 链路执行一致性校验与切换前预检查",
+    "构造测试数据并模拟业务流量以验证切换过程"
+   ]
+  },
+  "sha": "7d20e5c6485f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

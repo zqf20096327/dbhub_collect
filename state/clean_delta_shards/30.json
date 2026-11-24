@@ -23252,5 +23252,894 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "9b99146f3058+2": {
+  "fn": "db-branch/db-branch",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "Release",
+     "License",
+     "Stars",
+     "Sponsor"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    11,
+    6,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "Create a branch, see how to connect, save a checkpoint, reset the branch"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    20,
+    12,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "2. **On a Mac or Windows machine, about 2 minutes.** db-branch needs Linux and ZFS, so run it in an Ubuntu VM with Multipass. One command makes the VM, installs db-branch, initialises it on a file-backed ZFS pool and loads a small sample base, `shop` (MySQL 8.4):"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    30,
+    21,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     " On Windows (PowerShell or cmd), put the `multipass launch` command on one line and drop the `\\`:"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    36,
+    31,
+    36
+   ],
+   [
+    "replace",
+    36,
+    42,
+    36,
+    42,
+    [
+     " - The history module is turned on, and the paid modules run for 30 days without a key. `--record` records a branch so it can be restored to any point.",
+     " - The pool is a file, so it is slower and not meant for real data. The first admin password is `admin`; the console asks for a new one at the first sign-in.",
+     " - On Apple Silicon (and other arm64 machines) the setup downloads about 800 MB for MySQL, against 80 MB on Intel, because Oracle ships no minimal build for arm64. `--timeout 900` keeps `launch` from giving up on a slow connection.",
+     " - If the setup fails, `/etc/motd` says so, and `sudo tail -n 30 /var/log/cloud-init-output.log` in the VM shows why.",
+     " - Delete the VM with `multipass delete --purge db-branch-eval`.",
+     "3. **On your own Ubuntu server.** See Install."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    45,
+    42,
+    45
+   ],
+   [
+    "replace",
+    45,
+    46,
+    45,
+    46,
+    [
+     "- **AI agent sandboxes.** The built-in MCP server lets an LLM agent create a branch, run a risky query or migration on it, and delete the branch, so production data is never touched. For sensitive data, mask at the base snapshot stage rather than after branching (see Design notes and trade-offs)."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    61,
+    46,
+    61
+   ],
+   [
+    "replace",
+    61,
+    63,
+    61,
+    63,
+    [
+     "The branches page of the web console",
+     "The branch graph of the web console, showing which branch comes from which base"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    83,
+    63,
+    83
+   ],
+   [
+    "replace",
+    83,
+    88,
+    83,
+    84,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    103,
+    84,
+    99
+   ],
+   [
+    "replace",
+    103,
+    104,
+    99,
+    100,
+    [
+     "- **Disposable by design (no cross-branch merge or rebase).** Branches are block-level ZFS copy-on-write clones, not hooks into the database engine's MVCC. Divergent writes across separate concurrent branches cannot be merged or rebased back into a base or into another branch like Git (within a single branch, `branch merge` can logically 3-way merge row and schema changes between history lines created by `branch restore`; see docs/branch-merge.md). db-branch is built for disposable sandboxes (AI agents, CI runs, migration tests) that you reset or throw away."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    112,
+    100,
+    108
+   ],
+   [
+    "replace",
+    112,
+    113,
+    108,
+    109,
+    [
+     "- **Paid modules** (auth/SSO, audit, history, diff, FSx storage) are separate, closed-source packages, self-hosted and enabled with a license key (monthly or yearly). See docs/modules.md for the extension points they use."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    116,
+    109,
+    112
+   ],
+   [
+    "replace",
+    116,
+    117,
+    112,
+    113,
+    [
+     "Team and Business are not on sale yet and have no price. If you are interested, tell us with this form (which plan, what database, how big, how many nodes). Email to <sales@db-branch.com> works too."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    120,
+    113,
+    116
+   ],
+   [
+    "replace",
+    120,
+    122,
+    116,
+    118,
+    [
+     "- docs/README.md: index of the design and reference documents (written in Japanese)",
+     "- docs/roadmap.md: public roadmap toward 1.0 (written in Japanese)"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    124,
+    118,
+    120
+   ],
+   [
+    "replace",
+    124,
+    126,
+    120,
+    122,
+    [
+     "- api/openapi.yaml: machine-readable REST API definition",
+     "- CHANGELOG.md"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    129,
+    122,
+    125
+   ],
+   [
+    "replace",
+    129,
+    134,
+    125,
+    130,
+    [
+     "- Contributions are welcome: see CONTRIBUTING.md. Commits need a DCO sign-off (`git commit -s`).",
+     "- Security issues: see SECURITY.md. Please use private vulnerability reporting, not public issues.",
+     "- Support: see SUPPORT.md. No support is promised; Issues are read when possible.",
+     "- Sponsor: if db-branch is useful to you, you can support its development on GitHub Sponsors. It is optional and does not buy support or paid modules.",
+     "- Please follow the Code of Conduct."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    136,
+    130,
+    132
+   ],
+   [
+    "replace",
+    136,
+    139,
+    132,
+    133,
+    [
+     "Apache-2.0. See LICENSE and NOTICE."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    143,
+    133,
+    137
+   ],
+   [
+    "replace",
+    143,
+    144,
+    137,
+    138,
+    [
+     "Mac / Windows では、Multipass のコマンド1つで試せます: <https://db-branch.com/ja/docs/getting-started/#multipass-ですぐ試す>。日本語のサイトは <https://db-branch.com/ja/>、設計ドキュメントは docs/ にあります（日本語）。"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    138,
+    139
+   ],
+   [
+    "replace",
+    145,
+    146,
+    139,
+    140,
+    [
+     "開発を支援する場合は、GitHub Sponsors から行えます（任意です。サポートや有償モジュールの提供は伴いません）。"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "fe43db38d31e+2": {
+  "fn": "pgsty/barn",
+  "clean_ver": "2",
+  "raw_lines": 0,
+  "ops": [
+   [
+    "insert",
+    0,
+    0,
+    0,
+    1,
+    [
+     "<a href=\"https://barn.pgsty.com/\">"
+    ]
+   ],
+   [
+    "equal",
+    0,
+    1,
+    1,
+    2
+   ],
+   [
+    "replace",
+    1,
+    9,
+    2,
+    3,
+    [
+     " Barn"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    3,
+    4
+   ],
+   [
+    "replace",
+    10,
+    14,
+    4,
+    5,
+    [
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    5,
+    6
+   ],
+   [
+    "replace",
+    15,
+    25,
+    6,
+    8,
+    [
+     " Bootstrap And Run Nodes ",
+     " Native virtual machines for macOS and Linux."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    8,
+    9
+   ],
+   [
+    "replace",
+    26,
+    33,
+    9,
+    17,
+    [
+     " Website ·",
+     " Quick Start ·",
+     " Documentation ·",
+     " Blog ·",
+     " Changelog ·",
+     " Contributing ·",
+     " Security ·",
+     " 中文"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    17,
+    18
+   ],
+   [
+    "insert",
+    34,
+    34,
+    18,
+    23,
+    [
+     " Website",
+     " CI",
+     " Latest Barn release",
+     " Go version",
+     " License: Apache 2.0"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    40,
+    23,
+    29
+   ],
+   [
+    "replace",
+    40,
+    43,
+    29,
+    32,
+    [
+     " YAML inventory. Barn starts QEMU VMs with fixed IPs,",
+     " SSH access, and test data disks. Use the same inventory with",
+     " Pigsty to deploy PostgreSQL and other services."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    32,
+    33
+   ],
+   [
+    "replace",
+    44,
+    46,
+    33,
+    35,
+    [
+     " with a native desktop, SSH, shared folders, and text clipboard sharing.",
+     " Each machine has its own disk, credentials, and private subnet."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    56,
+    35,
+    45
+   ],
+   [
+    "replace",
+    56,
+    57,
+    45,
+    46,
+    [
+     "should review the upgrade notes before applying"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    61,
+    46,
+    50
+   ],
+   [
+    "replace",
+    61,
+    62,
+    50,
+    51,
+    [
+     "The download installer selects the latest published stable release."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    85,
+    51,
+    74
+   ],
+   [
+    "replace",
+    85,
+    86,
+    74,
+    75,
+    [
+     "installation for requirements"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    145,
+    75,
+    134
+   ],
+   [
+    "replace",
+    145,
+    151,
+    134,
+    140,
+    [
+     "|Command|Image|Architecture|Effect|",
+     "|---|---|---|---|",
+     "|`init`, `setup <template>`|`-I`|`-A`|Write `vm_image`/`vm_arch` into a generated inventory|",
+     "|`validate`|`-I`|`-A`|Validate the inventory with temporary overrides|",
+     "|`image info`, `image pull`|Positional image reference|`-A`|Select the target artifact; legacy `-a` still works|",
+     "|`image import --name local-…`|Positional file path|`-A`|Record the imported image's guest architecture|"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    182,
+    140,
+    171
+   ],
+   [
+    "replace",
+    182,
+    183,
+    171,
+    172,
+    [
+     "Follow the Linux quick start."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    213,
+    172,
+    202
+   ],
+   [
+    "replace",
+    213,
+    214,
+    202,
+    203,
+    [
+     "See the Mac guide for native-component"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    218,
+    203,
+    207
+   ],
+   [
+    "replace",
+    218,
+    219,
+    207,
+    208,
+    [
+     "|Task|Command|"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    208,
+    209
+   ],
+   [
+    "replace",
+    220,
+    233,
+    209,
+    222,
+    [
+     "|Inspect machines|`barn status`|",
+     "|Review inventory changes|`barn plan`|",
+     "|Create nodes or finish interrupted setup|`barn up`|",
+     "|Run a guest command|`barn exec meta -- hostname`|",
+     "|Stop / resume the lab|`barn stop` / `barn start`|",
+     "|Change CPU, memory, or root disk|`barn resize meta`|",
+     "|Apply another changed VM definition|`barn recreate meta`|",
+     "|Delete a VM|`barn destroy meta`|",
+     "|Discard the entire Linux lab immediately|`barn purge`|",
+     "|Review the lab before discarding it|`barn purge --ask`|",
+     "|Inspect available images|`barn image list`|",
+     "|Check or sync guest clocks|`barn time status` / `barn time sync`|",
+     "|Diagnose the host|`barn doctor`|"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    278,
+    222,
+    267
+   ],
+   [
+    "replace",
+    278,
+    279,
+    267,
+    268,
+    [
+     "See storage and access."
+    ]
+   ],
+   [
+    "equal",
+    279,
+    282,
+    268,
+    271
+   ],
+   [
+    "replace",
+    282,
+    289,
+    271,
+    278,
+    [
+     "- Guides — installation, daily operations, images, automation, and troubleshooting.",
+     "- Command reference — every Linux and Mac command, its options, defaults, and examples.",
+     "- Reference — configuration, output, image catalogs, and exit codes.",
+     "- Platforms and limits — host requirements and guest restrictions.",
+     "- Release notes — changes and upgrade instructions for 1.3.0.",
+     "- Design and validation history — design decisions, implementation boundaries, and dated acceptance records.",
+     "- Issues — bug reports and feature requests; use the security policy for vulnerabilities."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    301,
+    278,
+    290
+   ],
+   [
+    "replace",
+    301,
+    303,
+    290,
+    292,
+    [
+     "See CONTRIBUTING.md for the development workflow, design rules,",
+     "and release tooling. Documentation lives in barn.pgsty.com."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    305,
+    292,
+    294
+   ],
+   [
+    "replace",
+    305,
+    308,
+    294,
+    295,
+    [
+     "Barn is licensed under Apache-2.0. Archives and packages include"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "f7a794bd3722+2": {
+  "fn": "Anastylosis/FSS",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "CI",
+     "codecov",
+     "Go Reference",
+     "Release",
+     "License",
+     "Translation status"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    15,
+    8,
+    15
+   ],
+   [
+    "replace",
+    15,
+    18,
+    15,
+    18,
+    [
+     " several storefronts they sell on.",
+     "- **Feeds your library**: pushes metadata into Stash,",
+     " or writes `.nfo` sidecars for Kodi and Jellyfin."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    23,
+    18,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "by platform → · A–Z domain list →"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    35,
+    24,
+    35
+   ],
+   [
+    "replace",
+    35,
+    37,
+    35,
+    37,
+    [
+     "are on the releases page.",
+     "docs/install.md has step-by-step commands for each."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    52,
+    37,
+    52
+   ],
+   [
+    "replace",
+    52,
+    53,
+    52,
+    53,
+    [
+     "usage.md."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    72,
+    53,
+    72
+   ],
+   [
+    "replace",
+    72,
+    73,
+    72,
+    73,
+    [
+     "|Using FSS||"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    73,
+    74
+   ],
+   [
+    "replace",
+    74,
+    81,
+    74,
+    81,
+    [
+     "|install.md|Every install method, step by step|",
+     "|usage.md|Every command and flag, config file, output formats|",
+     "|docker.md|Image tags, volumes, compose with Stash|",
+     "|creators.md · compare.md|Grouping a creator's storefronts; comparing them|",
+     "|stash.md · identify.md|Stash import and revert; NFO sidecars|",
+     "|storage.md · metadata.md|JSON vs SQLite; what a scene records and how re-scrapes change it|",
+     "|translations.md|Help text in other languages|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    81,
+    82
+   ],
+   [
+    "replace",
+    82,
+    83,
+    82,
+    83,
+    [
+     "|Extending FSS||"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    83,
+    84
+   ],
+   [
+    "replace",
+    84,
+    90,
+    84,
+    90,
+    [
+     "|CONTRIBUTING.md|Adding a scraper, tests, releases|",
+     "|architecture.md|Registry, streaming model, stores|",
+     "|platform-detection.md|Which shared package a new site belongs to|",
+     "|library.md|Using FSS as a Go library|",
+     "|enhancements.md|Known gaps and ideas|",
+     "|SECURITY.md|Credentials, network policy, reporting a vulnerability|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    92,
+    90,
+    92
+   ],
+   [
+    "replace",
+    92,
+    94,
+    92,
+    93,
+    [
+     "Copyright (C) 2024-2026 Wasylq · GPL-3.0-only"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

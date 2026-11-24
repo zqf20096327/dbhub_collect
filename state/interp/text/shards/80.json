@@ -3379,5 +3379,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3d1529ce3145": {
+  "identity": {
+   "one_liner": "基于 wasm2go 的免 cgo SQLite Go 绑定库",
+   "review": "该模块将 SQLite 编译为 Wasm 并经 wasm2go 转译为 Go，提供 database/sql 驱动及对多数 C API 的直接访问，仅依赖 Go 与 x/sys。适用于需免 cgo 使用 SQLite 的 Go 开发者；因每个连接运行于 Wasm 沙箱，内存占用高于其他实现。",
+   "highlights": [
+    "提供 database/sql 兼容驱动和 GORM 驱动，直接封装大部分 C SQLite API",
+    "以纯 Go 实现替换 SQLite VFS，支持自定义 VFS、虚拟表、嵌套事务、增量 BLOB I/O 与静态加密",
+    "每次提交在 Linux/macOS/Windows/BSD 等多平台测试，VFS 经 mptest 验证"
+   ],
+   "use_cases": [
+    "不引入 cgo 的 Go 项目中嵌入 SQLite 数据库",
+    "使用 GORM 访问 SQLite",
+    "需要虚拟表、自定义函数或自定义 VFS 等高级 SQLite 特性的场景"
+   ]
+  },
+  "sha": "3d1529ce3145",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "656ab0f10f7e": {
+  "identity": {
+   "one_liner": "自托管的数据库查询审批工具，以类似 PR 的流程审查 SQL 请求与会话",
+   "review": "Kviklet 为生产数据库访问提供类似 Pull Request 的审查与批准流程，支持单条 SQL 审查和限时临时会话两种请求类型。它以 Docker 容器自托管运行，需一个 PostgreSQL 数据库存储元数据。管理员可配置连接权限与审批门槛，执行语句会记入审计日志，用户无需接触数据库凭据。适用于需要多人审批生产库操作的工程团队。",
+   "highlights": [
+    "支持 Postgres、MySQL、MariaDB、SQL Server、MongoDB，提供语句审查、限时访问、审计日志等能力",
+    "支持通过 OIDC（Google、Keycloak）、LDAP、GitHub OAuth 等方式登录认证",
+    "以 Docker 容器部署，通过环境变量配置数据库连接、初始管理员账号与身份提供方"
+   ],
+   "use_cases": [
+    "工程团队对生产数据库的单条 SQL 语句执行前审查与批准",
+    "为开发者开启限时数据库会话并记录其执行语句用于审计",
+    "限制数据库凭据分发，由 Kviklet 代理连接目标数据库"
+   ]
+  },
+  "sha": "656ab0f10f7e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "91ed34f7a732": {
+  "identity": {
+   "one_liner": "基于 FastAPI 和 PostgreSQL/PostGIS 的即配电商暗仓微仓储模块原型",
+   "review": "这是 CSL559 课程小组项目，实现快速商务应用中的暗仓原型：采用模块化单体架构，单一 FastAPI 应用按 HLD 服务边界划分模块，库存变更由统一的 Inventory Service 管理，通过 10 分钟购物车整单持有防止超卖。提供顾客、拣货员、门店运营三个界面及 API 文档、监控指标端点；顾客接口开放但限速约 20 次/秒，其余需员工 token 访问，演示账号密码均为公开默认值。",
+   "highlights": [
+    "提供购物车 10 分钟整单持有机制，支付生成拣货任务，取消或超时归还库存",
+    "支持扫码拣货校验、批量拣货路径排序、补货整车接收和基于 WAPE 对比的周感知预测补货",
+    "包含 Prometheus 指标端点、Grafana 监控面板、压测脚本和覆盖并发竞争等流程的端到端测试"
+   ],
+   "use_cases": [
+    "作为课程演示快速商务微仓储模块的完整流程（选店、下单、拣货、打包、交接、补货）",
+    "通过模拟订单和对比脚本研究拣货批处理、货位优化等履约实验",
+    "按 HLD 服务边界预留模块拆分或接入 Kafka 的代码结构，用于后续重构演练"
+   ]
+  },
+  "sha": "91ed34f7a732",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fbc6b13c9925": {
+  "identity": {
+   "one_liner": "面向音游数据的 OAuth2/OIDC 授权服务器与 BFF 网关，Rust 单二进制实现。",
+   "review": "Re0Auth 是面向音游数据的身份与委托授权层：对下游提供 OAuth 2.0/OIDC 授权与网关能力，对上游作为联邦客户端通过 Connector 持有凭据。玩家授权一次后，下游可分别接入与撤销。项目仍处于最小后端切片阶段，含 SQLite 存储、设备流、管理接口与 SvelteKit 静态 SPA，支持 Docker 自托管。",
+   "highlights": [
+    "后端包含授权码、同意、刷新、设备流、token introspection、外部 OIDC 登录与 14 条 /api/admin/* 管理接口",
+    "单二进制内置编译好的 SPA，镜像以 UID/GID 65532 非 root 运行，仅写入 /app/data，支持 linux/amd64 与 linux/arm64",
+    "界面与服务端页面支持 zh-CN/en，Prometheus /metrics 默认关闭，Playwright E2E 覆盖六条路径（7 个用例）"
+   ],
+   "use_cases": [
+    "为多个下游应用统一代理音游相关登录态，玩家可一次授权、分应用接入并单独撤销",
+    "需要自托管 OIDC 授权中心并通过 Docker 部署的团队",
+    "下游服务通过设备流接入授权与网关调用（examples/python 提供零依赖样例）"
+   ]
+  },
+  "sha": "fbc6b13c9925",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3014,5 +3014,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3188919cb408": {
+  "identity": {
+   "one_liner": "自托管本地优先任务管理应用，Go 单二进制加 SQLite 存储",
+   "review": "OpenTodo 是一个可自行托管的开源任务管理应用，采用本地优先架构：每台设备保存完整任务副本，离线可读写，联网后按字段级操作日志同步。服务端为 Go 二进制加单个 SQLite 文件，无遥测。适合希望数据留在自己服务器、需要离线使用或与家人团队共享任务清单的个人与小团队。",
+   "highlights": [
+    "本地优先：每设备保存完整副本，通过字段级操作日志与混合逻辑时钟同步，离线可编辑",
+    "支持自然语言快速录入、专注计时器（Pomodoro/Flowtime）、项目看板、项目共享（viewer/editor/admin 角色）",
+    "提供 REST API（OpenAPI 3.1）、CalDAV、CLI、可选端到端加密，可从 Todoist、TickTick、Apple Reminders 等导入"
+   ],
+   "use_cases": [
+    "在自有服务器或树莓派上部署个人/家庭任务管理，数据存放于本地",
+    "需要离线使用并在联网后同步的任务管理，手机端通过 App Store/Google Play 或 PWA 使用",
+    "与家人或团队共享项目清单，分配任务并记录变更"
+   ]
+  },
+  "sha": "3188919cb408",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1c996962226f": {
+  "identity": {
+   "one_liner": "基于 universal-ctags 与 SQLite FTS5 的单二进制 C 代码库索引器，面向 AI 编码代理提供符号级检索。",
+   "review": "TokToken 用 universal-ctags 提取符号并存入 SQLite FTS5 索引，AI 代理可通过 MCP 服务器或 CLI 命令按符号名搜索并只取回所需代码片段，而非读取整个文件。支持 49 种语言、导入图追踪、增量索引、死代码检测和 GitHub 仓库直接索引。运行前提是安装 universal-ctags（非 exuberant-ctags），数据存于 ~/.cache/toktoken/ 而非项目内。",
+   "highlights": [
+    "通过 universal-ctags 与 17 个自定义解析器支持 49 种语言的符号提取",
+    "提供导入图追踪命令（find:importers、find:callers、inspect:dependencies）与死代码、循环导入、影响范围分析",
+    "内置 MCP 服务器（toktoken serve）与 GitHub 公开仓库免克隆索引功能"
+   ],
+   "use_cases": [
+    "为支持 MCP 协议的 AI 编码代理（如 Claude Code、Cursor、Copilot）提供代码库符号检索以降低上下文占用",
+    "在大型代码库中定位符号、追踪调用方与跨文件依赖关系",
+    "对 Perl/CGI 代码库进行离线静态安全流分析（source 到 sink 链路）"
+   ]
+  },
+  "sha": "1c996962226f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4cfdabfaf18e": {
+  "identity": {
+   "one_liner": "自托管的关联工作数据库，以 SQLite 单文件存储并提供 MCP/REST/CLI 接口",
+   "review": "weave 是一个以单个 SQLite 文件存储工作区数据的自托管工作系统：空间包含表、行通过双向关系连接，每行附带 markdown 文档、公式、工作流状态与自动化。浏览器、REST、CLI 与内置 MCP 服务器共享同一引擎，供人与其现有 AI 代理协同使用。需 Node ≥ 22.16，零运行时依赖，无需构建步骤，本地运行不需要账号且不发送遥测。",
+   "highlights": [
+    "工作区为单个 SQLite 文件，由一个 Node 进程提供服务，运行时依赖为零，无需构建步骤",
+    "内置 MCP 服务器（默认 17 个工具，可配置列出全部 66 个），任何 stdio 客户端可挂载，并提供 REST API 与 CLI",
+    "支持撤销任意行变更、文档版本修订记录、可打印为关系图的多目标关系，以及 ⌘K 跨工作区搜索"
+   ],
+   "use_cases": [
+    "在本地或自有服务器上为团队与 AI 代理提供共享的表、记录与文档存储",
+    "通过 MCP 将现有代理（如 Claude Code、Cursor）接入工作数据以查询和更新记录",
+    "将工作区备份或迁移到 weave 云，云端仅存储密文归档"
+   ]
+  },
+  "sha": "4cfdabfaf18e",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "597340d6ee92": {
+  "identity": {
+   "one_liner": "Flask+SQLite 评论线索采集与 AI 文案私信话术助手",
+   "review": "面向本地商家的获客系统：从抖音、小红书、快手、微信评论区按意向词筛选线索并导出，附带 AI 图文仿写、AI 视频生成与私信话术助手。采集功能依赖作者另行提供的数据接口（按评论条数计费），AI 功能需用户自配阿里云百炼 Key。支持多用户、额度扣费与管理后台。",
+   "highlights": [
+    "输入关键词抓取评论区，按意向词分 A/B 两级，支持地区、时间筛选与 CSV 导出",
+    "AI 功能使用使用者自己的阿里云百炼 Key，支持文生视频与图生视频（wan 系列）",
+    "多用户隔离，按评论条数扣额度，管理员后台可审核注册、手动充值、查流水"
+   ],
+   "use_cases": [
+    "本地商家从短视频与社交平台评论区收集有购买意向的公开评论线索",
+    "为线索生成公开回复与私信开场白文字，由使用者自行复制发送",
+    "参考对标账号与爆款作品生成原创图文文案和 AI 视频"
+   ]
+  },
+  "sha": "597340d6ee92",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

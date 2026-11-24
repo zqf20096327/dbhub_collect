@@ -3370,5 +3370,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8dd1141c38d7": {
+  "identity": {
+   "one_liner": "单 JAR 运行的异构数据库实时同步引擎，含全量、轮询与日志 CDC",
+   "review": "Jync（捷同）是一个基于 Java 17 与 Spring Boot 的开源异构数据库同步工具，通过单 JAR 启动并在浏览器中完成配置。它在 35 种预设数据库类型间同步结构与数据，支持主键 keyset 分块的全量同步、只读轮询增量及六类源库日志 CDC，另含 ETL 取数、Redis 缓存投影与专属迁移链路。部署需 JDK 17+，默认占用 8080 端口，元数据存于内嵌 H2，支持 Docker 镜像部署；部分数据库（如 GBase、GaussDB 等）需自行准备驱动 jar。",
+   "highlights": [
+    "支持 35 种预设数据库类型同步结构与数据，六类源库可切换日志 CDC（MySQL binlog、Oracle/达梦 LogMiner、PostgreSQL 逻辑解码、SQL Server CDC、崖山 YStream）",
+    "全量同步采用主键 keyset 分块与流式读取，带检查点断点续传与幂等写入，无需 Kafka/ZooKeeper 等外部组件",
+    "内置结构同步、ETL 取数、Redis 投影、七类故障告警推送与三种角色权限模型，可在内网离线环境运行"
+   ],
+   "use_cases": [
+    "信创环境下的异构数据库迁移与数据集成",
+    "无外部消息队列依赖的轻量化实时增量同步部署",
+    "内网离线或私有化环境中的数据库结构/数据同步与 Redis 缓存投影"
+   ]
+  },
+  "sha": "8dd1141c38d7",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a8452f3a4ae0": {
+  "identity": {
+   "one_liner": "用 Roslyn 将 .NET 解决方案索引到 SQLite，为 AI 代理提供可查询的代码语义图谱。",
+   "review": "Lurp 是一个 .NET 全局工具，通过 Roslyn 将 C# 解决方案编译进一个 SQLite 快照库，存储符号、类型化关系、源码区间及证据等级。代理可执行 search/grep/impact/diff/context 等模式查询，context 模式按 token 预算组装代码胶囊。仅支持 Windows 与 Linux，需 .NET 10 运行时，索引需 .NET SDK 且建议先 restore；不执行源生成器。",
+   "highlights": [
+    "提供基于 token 预算的 context 胶囊，缺失层级可单独抓取",
+    "每条关系记录证据等级（compiler_proved 到 runtime_unknown），支持语义 diff 与影响可达性查询",
+    "通过 CLI 与 MCP 双通道对外提供服务，内置 dead-candidates 与 diagnostics 模式"
+   ],
+   "use_cases": [
+    "让 AI 代理以持久化图谱替代逐轮重搜索读取大型 C# 代码库",
+    "查询符号的上游依赖或直接调用者以评估改动影响范围",
+    "对比两次索引快照之间的语义变更"
+   ]
+  },
+  "sha": "a8452f3a4ae0",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

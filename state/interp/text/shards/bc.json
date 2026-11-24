@@ -2970,5 +2970,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "590bc613ae38": {
+  "identity": {
+   "one_liner": "本地插件，将编码代理的工具输出存入 SQLite 索引，按需检索",
+   "review": "Context Mode 是一个运行在本机的开源可用许可插件，支持 Claude Code、Codex、Gemini CLI 等 11 个编码代理。它将工具输出在本地沙箱中执行，完整结果存入 ~/.context-mode 下的 SQLite FTS5 索引，仅向代理返回所请求的部分。需要 Node 24.15.0+，Windows 需 Git Bash；另有独立的托管服务 Context Mode Gateway。",
+   "highlights": [
+    "工具输出在本地沙箱执行，完整结果保存于本地 SQLite（FTS5）索引，代理按需获取片段",
+    "提供 ctx_execute、ctx_index、ctx_search 等 9 个 MCP 工具，并包含 Code Mode：代理写脚本处理数据，仅脚本打印内容进入上下文",
+    "安装后离线运行，无遥测，README 基准记录 36 行样本输出字节中位缩减 99.4%"
+   ],
+   "use_cases": [
+    "代理需要读取大文件、抓取网页或处理大量 JSON 数据时，减少进入上下文的字节数",
+    "长时间会话压缩后恢复，用本地索引检索先前工具输出",
+    "需要数据仅留在本机（离线运行、无遥测）的本地开发环境"
+   ]
+  },
+  "sha": "590bc613ae38",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9ea8cb284568": {
+  "identity": {
+   "one_liner": "本地运行的静态安全扫描器，支持跨文件污点追踪与沙箱动态验证",
+   "review": "Nyx 是一款本地优先的安全扫描工具，基于 tree-sitter 解析 10 种语言，通过两遍式分析做跨文件污点追踪，并对中高置信度发现在沙箱中构建 harness 进行动态验证。结果在仅绑定本机回环地址的浏览器 UI 中查看，分诊状态以 .nyx/triage.json 随代码提交共享；也可通过 CLI 输出 SARIF 接入 CI。C/C++ 为预览层级，深层指针别名不追踪。",
+   "highlights": [
+    "支持 Python、JavaScript/TypeScript 等 10 种语言的跨文件污点分析，覆盖 SQLi、XSS、SSRF、反序列化、路径穿越等检测类目",
+    "对 Medium 及以上置信度发现在沙箱中运行 harness 做动态验证，采用攻击载荷加良性对照的差分判定规则",
+    "提供 CLI（JSON/SARIF/console 输出）与 GitHub Action 用于 CI 流水线，浏览器 UI 仅绑定回环地址并强制 CSRF"
+   ],
+   "use_cases": [
+    "在 CI 流水线中以 SARIF 输出接入 GitHub Code Scanning 并按 fail-on 阈值阻断",
+    "团队需要共享安全告警分诊状态、审计追踪和扫描历史对比",
+    "在无云端、无账号要求下本地浏览与可视化污点传播路径"
+   ]
+  },
+  "sha": "9ea8cb284568",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

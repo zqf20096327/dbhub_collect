@@ -3015,5 +3015,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "84025be5f039": {
+  "identity": {
+   "one_liner": "单二进制 Go MCP 服务器，经 whatsmeow 将个人 WhatsApp 账户暴露为 MCP 工具",
+   "review": "该项目是一个基于 whatsmeow 的本地 MCP 服务器，编译为单个 Go 二进制，通过 HTTP 守护进程（默认 127.0.0.1:8765）维持 WhatsApp 连接和本地 SQLite 缓存，供 Claude Code、Cursor 等 MCP 客户端调用消息收发、群组管理、媒体处理等 43 个工具。需要扫码配对，源码构建依赖 CGO；提供 -read-only 模式移除发送类工具。README 注明与 Meta 无关联。",
+   "highlights": [
+    "默认提供 43 个 MCP 工具，涵盖读取缓存会话、发送文本/文件/语音/投票、群组管理、媒体下载与隐私设置",
+    "单一 HTTP 守护进程维护连接与 SQLite 缓存，多个 MCP 客户端可共享且无状态（无 Mcp-Session-Id），支持 MCP 2026-07-28 及更早版本",
+    "支持 -read-only 模式（15 个工具）与 -enable-labels（WhatsApp Business 标签，4 个只读工具），语音转写需自行配置语音转文字端点"
+   ],
+   "use_cases": [
+    "让支持 HTTP MCP 的客户端（如 Claude Code、Cursor）搜索本地缓存的聊天记录并代发消息、投票、联系人卡片",
+    "需要本地持久化 WhatsApp 会话数据并提供多客户端共享访问的场景",
+    "只需读取能力时以 read-only 模式运行，排除发送与账户变更类工具"
+   ]
+  },
+  "sha": "84025be5f039",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "638865e69404": {
+  "identity": {
+   "one_liner": "基于 k6 的无代码负载测试服务，用可视化画布编排压测场景",
+   "review": "Ballast 以服务方式运行 k6 负载测试，支持多项目并行。用户在画布上绘制场景（请求、变量、条件、断言），系统生成等价 k6 脚本并执行；仅允许对通过 challenge 文件验证所有权的公开可达目标施压，结果以 p95/p99、错误率、吞吐等指标展示。单次运行上限 200 虚拟用户、1 小时，仅支持 HTTP/HTTPS，目前无运行对比与趋势功能。可通过 Docker Compose 自托管，登录依赖 GitHub/Google OAuth。",
+   "highlights": [
+    "提供可视化场景画布，从同一图结构逐字节生成 k6 脚本，也支持直接编写 k6 脚本",
+    "支持导入 OpenAPI、Postman collections、cURL 和 HAR 文件，且不复制文件中发现的密钥",
+    "负载生成器运行在隔离容器中，仅向所有权经验证的目标发送负载，并有虚拟用户数与时长硬限制"
+   ],
+   "use_cases": [
+    "对互联网可达且已验证所有权的环境执行多步 API 场景压测",
+    "团队中非编程成员通过画布构建测试并以日常语言读取 p95/p99 等结果",
+    "通过 API 或 webhook 将压测运行集成进 CI 流水线（CLI、GitHub Action 与 GitLab 模板尚未发布）"
+   ]
+  },
+  "sha": "638865e69404",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

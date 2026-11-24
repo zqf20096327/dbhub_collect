@@ -3131,5 +3131,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "be435a6a019b": {
+  "identity": {
+   "one_liner": "基于 SQLite 的跨平台 LLM 长期记忆库，支持事实提取与语义检索",
+   "review": "Core LLM Wiki 是一组 TypeScript 包，为 LLM 应用提供持久化长期记忆：将对话日志和文档写入 SQLite，转为事实、任务和图边的知识库，提供事实提取、语义搜索与记忆修剪。推理由调用方提供 generateText 函数，适配 OpenAI、Gemini、Claude 或本地模型。提供 Expo/React Native、React、Node.js 多个发行包；core 与 react 包要求 Node.js 20 以上。",
+   "highlights": [
+    "事实、向量与图边存于调用方 SQLite 数据库的 llm_wiki_ 前缀表中，不依赖外部向量库或图数据库",
+    "离线优先：关键词搜索在进程内运行，提供 embed() 后启用语义搜索，网络不可用时回退到关键词搜索",
+    "支持 GraphRAG（带预置本体、traverseGraph() 递归 SQL 遍历）、多实体记忆、OKF v0.2 导入导出及来源引用与删除机制"
+   ],
+   "use_cases": [
+    "为 Expo/React Native、浏览器或 Node.js 应用中的 AI 代理添加持久化情景记忆",
+    "需要数据留在本地 SQLite、无后端的隐私敏感型记忆场景（如离线日志应用）",
+    "构建多实体（多用户/多智能体）知识库并进行加权跨库读取与 GraphRAG 查询"
+   ]
+  },
+  "sha": "be435a6a019b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "894307714e01": {
+  "identity": {
+   "one_liner": "自托管图片后端服务，通过统一 HTTP API 处理图片上传、存储、转换与删除",
+   "review": "Konifer 是一个用 Kotlin 编写、以 Docker 镜像分发的自托管图片后端，提供上传校验、替换与历史记录、基于 libvips 的变体生成及删除等能力，通过单一 HTTP API 供应用调用。部署需要 PostgreSQL 与 S3 兼容存储或持久文件系统，遵循 AGPL 许可证，支持 amd64/arm64 架构并可在负载均衡后水平扩展。",
+   "highlights": [
+    "支持 multipart 上传、S3 对象 ARN 导入及允许域名 URL 三种图片来源，可配置大小、尺寸、像素数与格式限制",
+    "基于 libvips 实现缩放、裁剪与格式转换，支持 JPEG、PNG、WebP、HEIC、AVIF、JPEG XL、GIF（含动图），可定义命名 profile 并在上传后或按需生成变体",
+    "提供应用自定义路径与 image ID 两种寻址模型，含上传历史与版本选取，支持按路径递归删除；可生成 BlurHash 和 ThumbHash 占位图"
+   ],
+   "use_cases": [
+    "为头像、商品图库、租户品牌等应用资产自建图片生命周期管理，避免在各应用中重复实现图片处理逻辑",
+    "按路径为不同图片类别配置不同存储桶、上传限制、变体生成与缓存策略",
+    "为视觉模型工作流提供原始像素缓冲输出，支持 HWC/CHW 布局与色彩空间配置，可选安装 SigLIP2 模型包对上传内容进行分类"
+   ]
+  },
+  "sha": "894307714e01",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0b98350e7d30": {
+  "identity": {
+   "one_liner": "基于 Qt 6/C++ 的 Linux 键盘优先 SQLite 图形客户端与 SQL 编辑器",
+   "review": "Omasql 是面向 Linux 的 SQLite 数据库浏览器和 SQL 编辑器，使用 Qt 6 和 C++ 构建，适配 Omarchy 与 Hyprland 主题，可在 Wayland 或 X11 桌面运行。它提供 SQL 补全、模式浏览、结果网格筛选、外键跳转和多种格式导出，操作以键盘快捷键为主。Arch 用户可通过 pacman 安装发布包，其他环境需从源码编译，依赖 qt6-base、qt6-declarative、qt6-wayland 和 sqlite。",
+   "highlights": [
+    "SQL 编辑器支持表名、列名（含别名后的列）、关键字和函数的输入补全，Ctrl+Enter 运行语句，Esc 取消后台查询",
+    "模式浏览器显示行数、主外键、索引，并可按表和列过滤；结果网格支持输入筛选、排序、块选复制，外键值可 Ctrl+click 跳转到对应行",
+    "结果可复制或导出为 CSV、JSON、Markdown 表格和 SQL INSERT 语句；含查询计划（Ctrl+Shift+E）、行检查器、查询历史和防误操作的 DROP/无 WHERE 删除更新确认"
+   ],
+   "use_cases": [
+    "在 Arch/Omarchy/Hyprland 或其他 Wayland/X11 桌面上浏览和查询本地 SQLite 数据库文件",
+    "编写和调试 SQL：借助补全、查询计划树和错误定位光标功能逐条运行语句",
+    "把查询结果导出为 CSV、JSON、Markdown 或 SQL INSERT 语句，用于报表或数据迁移"
+   ]
+  },
+  "sha": "0b98350e7d30",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -29900,5 +29900,3023 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "d8bf6cbf54d4+2": {
+  "fn": "essmos/nonodb",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "NonoDB"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    1,
+    4
+   ],
+   [
+    "replace",
+    10,
+    12,
+    4,
+    6,
+    [
+     "CI",
+     "Release"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    22,
+    6,
+    16
+   ],
+   [
+    "replace",
+    22,
+    27,
+    16,
+    19,
+    [
+     " <a href=\"docs/gui.md\">",
+     " NoNoDB GUI browsing one million documents",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    19,
+    20
+   ],
+   [
+    "replace",
+    28,
+    30,
+    20,
+    22,
+    [
+     " The embedded GUI browsing a 1,000,000-document database.",
+     "See the GUI guide. "
+    ]
+   ],
+   [
+    "equal",
+    30,
+    43,
+    22,
+    35
+   ],
+   [
+    "replace",
+    43,
+    52,
+    35,
+    44,
+    [
+     "- **Document versioning** — per-collection revision history with global revision IDs and configurable retention.",
+     "- **Tenant encryption** — vault collections with whole-document encryption and per-tenant keys through the native client/HTTP path.",
+     "- **Extremely low RAM usage** — about 5 MB idle with a 1M-document database and three indexes, plus small and tiny profiles for 512 MB–2 GB VMs.",
+     "- **Automatic indexes** — opt-in creation of indexes for frequent query shapes, with cleanup of unused automatic indexes.",
+     "- **Embedded GUI in the box** — a local browser console for documents, a SQL + JSON playground, indexes, backups, credentials, cluster state, and metrics, with no separate frontend service.",
+     "- **Search built in** — BM25 full-text search, fuzzy trigram/Levenshtein search, and exact vector search in the same database.",
+     "- **Asynchronous webhooks** — filtered HTTP delivery with count/sum/avg thresholds, retries, HMAC signing, dead-letter queuing, CLI/API management, and a GUI for deliveries.",
+     "- **SQL when you need it** — SQL queries and writes alongside the document API, plus a SQL + JSON playground in the GUI, without a separate SQL database.",
+     "- **TTL at both levels** — collection defaults, date-field MongoDB TTL, and per-document overrides, with immediate read-time hiding."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    44,
+    45
+   ],
+   [
+    "replace",
+    53,
+    61,
+    45,
+    53,
+    [
+     "- **Simple encrypted backups** — native or restic backups, gzip/age encryption, local/S3/R2 destinations, verification, and restore drills.",
+     "- **Instant CI database branches** — clone a stopped database or data-only snapshot into an independent, writable database with `nonodb-cli branch`; CoW reflink/clonefile keeps it cheap, sidecars are copied or rebuilt, and the source is never modified.",
+     "- **Simple backup scheduling** — durable backup jobs configured through the CLI, API, or GUI.",
+     "- **Simple credential management** — principals, database-qualified scopes, hashed tokens, client certificates, lockout, and reloads.",
+     "- **Streams beyond the local socket** — watch/SSE/NDJSON streams over the TCP/TLS listener, so remote consumers can use them through a secured endpoint.",
+     "- **Schedulers and background jobs** — durable jobs, workers, leases, retries, and scheduler-friendly CLI commands.",
+     "- **Replication and failover** — asynchronous primary/replica/standby replication with durable ordered operations, snapshot bootstrap, lease-gated writes, quorum promotion, automatic election, partition rejoin, and a cluster-wide GUI.",
+     "- **MongoDB-compatible access** — an optional wire endpoint for official PyMongo, Node.js, and Go drivers, without making MongoDB a deployment dependency."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    69,
+    53,
+    61
+   ],
+   [
+    "replace",
+    69,
+    71,
+    61,
+    63,
+    [
+     " files. This removes multi-process mmap, `fork()`, and stale-reader problems.",
+     " Databases are isolated from each other while sharing one daemon and port."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    63,
+    64
+   ],
+   [
+    "replace",
+    72,
+    73,
+    64,
+    65,
+    [
+     " A Python client wraps this in a small, familiar API."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    65,
+    66
+   ],
+   [
+    "replace",
+    74,
+    75,
+    66,
+    67,
+    [
+     " performs one `fsync` per group, while reads are concurrent MVCC snapshots."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    67,
+    68
+   ],
+   [
+    "replace",
+    76,
+    78,
+    68,
+    70,
+    [
+     " indexes, update operators, and upserts follow MongoDB conventions where it",
+     " makes sense."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    70,
+    71
+   ],
+   [
+    "replace",
+    79,
+    80,
+    71,
+    72,
+    [
+     " memory-mapped, and crash-safe. A `kill -9` does not corrupt the database."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    90,
+    72,
+    82
+   ],
+   [
+    "replace",
+    90,
+    91,
+    82,
+    83,
+    [
+     "Multiple databases."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    99,
+    83,
+    91
+   ],
+   [
+    "replace",
+    99,
+    102,
+    91,
+    94,
+    [
+     " `$in`, `$nin`, `$all`, `$size`, `$elemMatch`, `$exists`, `$regex`/`$options`,",
+     " `$type`, `$mod`, `$bitsAllClear`/`$bitsAllSet`/`$bitsAnyClear`/`$bitsAnySet`,",
+     " `$expr`, `$jsonSchema`, `$not`, `$and`, `$or`, `$nor`."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    94,
+    95
+   ],
+   [
+    "replace",
+    103,
+    105,
+    95,
+    97,
+    [
+     " consistent, exact numeric comparison (`30 == 30.0`; large integers stay",
+     " distinct)."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    97,
+    98
+   ],
+   [
+    "replace",
+    106,
+    107,
+    98,
+    99,
+    [
+     " plus multi-field sort, `skip`, and `limit`."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    99,
+    100
+   ],
+   [
+    "replace",
+    108,
+    110,
+    100,
+    102,
+    [
+     " prefilter for simple string/boolean equalities, and `count({})`",
+     " in O(1)."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    102,
+    103
+   ],
+   [
+    "replace",
+    111,
+    113,
+    103,
+    105,
+    [
+     " compound index, with covering projections, `_id` exclusion, internal key",
+     " deduplication, a 64 MiB response cap, and `null` for missing keys."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    105,
+    106
+   ],
+   [
+    "replace",
+    114,
+    120,
+    106,
+    112,
+    [
+     " supports `DISTINCT`, `WHERE`, `GROUP BY`, `HAVING`, aggregates including",
+     " `COUNT`/`SUM`/`AVG`/`MIN`/`MAX(DISTINCT ...)`, `CASE`, scalar functions,",
+     " `ORDER BY`, `LIMIT`/`OFFSET`, positional parameters, and `explain_sql`; simple",
+     " field-only queries use the normal indexed `find` path. Writes use the single",
+     " writer and are atomic per statement, including document expressions in",
+     " `UPDATE SET` and `RETURNING` on writes; there are no joins."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    125,
+    112,
+    117
+   ],
+   [
+    "replace",
+    125,
+    127,
+    117,
+    119,
+    [
+     " `$rename`, `$currentDate`, `$bit`, `$pop`, `$push`, `$pull`, `$pullAll`,",
+     " `$addToSet`, `$setOnInsert`."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    129,
+    119,
+    121
+   ],
+   [
+    "replace",
+    129,
+    130,
+    121,
+    122,
+    [
+     " `$replaceRoot`, and `$replaceWith`."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    122,
+    123
+   ],
+   [
+    "replace",
+    131,
+    132,
+    123,
+    124,
+    [
+     " `$setOnInsert`."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    124,
+    125
+   ],
+   [
+    "replace",
+    133,
+    134,
+    125,
+    126,
+    [
+     " old or new document in one transaction."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    126,
+    127
+   ],
+   [
+    "replace",
+    135,
+    140,
+    127,
+    132,
+    [
+     " actual matched/returned counts. `find`, `find_one`, cursor pages, `explain`,",
+     " `count`, and `aggregate` accept `comment` and `max_time_ms`; find-shaped",
+     " queries also accept `hint`, `$natural` selects natural order, and expired",
+     " budgets return the `timeout` error code. Both find and aggregation cursors",
+     " carry `comment`/`max_time_ms` across their pages."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    144,
+    132,
+    136
+   ],
+   [
+    "replace",
+    144,
+    145,
+    136,
+    137,
+    [
+     " `get_more` and `close_cursor` for large result sets."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    150,
+    137,
+    142
+   ],
+   [
+    "replace",
+    150,
+    151,
+    142,
+    143,
+    [
+     " paths such as `items.price`; compound indexes reject parallel arrays."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    152,
+    143,
+    144
+   ],
+   [
+    "replace",
+    152,
+    153,
+    144,
+    145,
+    [
+     " one transaction."
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    145,
+    146
+   ],
+   [
+    "replace",
+    154,
+    156,
+    146,
+    148,
+    [
+     " multikey index allows duplicate elements inside one document but not across",
+     " documents."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    158,
+    148,
+    150
+   ],
+   [
+    "replace",
+    158,
+    160,
+    150,
+    152,
+    [
+     " sort-only queries with no filter. Multikey sorts use the lowest array element",
+     " ascending and the highest descending."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    152,
+    153
+   ],
+   [
+    "replace",
+    161,
+    162,
+    153,
+    154,
+    [
+     " indexed `$all`, and `$elemMatch` on dotted array paths."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    154,
+    155
+   ],
+   [
+    "replace",
+    163,
+    164,
+    155,
+    156,
+    [
+     " document."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    156,
+    158
+   ],
+   [
+    "replace",
+    166,
+    168,
+    158,
+    160,
+    [
+     " `$geoIntersects`; queries use hierarchical grid ranges plus exact residual",
+     " checks."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    169,
+    160,
+    161
+   ],
+   [
+    "replace",
+    169,
+    170,
+    161,
+    162,
+    [
+     " memory does not grow with collection size."
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    162,
+    163
+   ],
+   [
+    "replace",
+    171,
+    172,
+    163,
+    164,
+    [
+     " rebuilding existing definitions transactionally after an upgrade."
+    ]
+   ],
+   [
+    "equal",
+    172,
+    177,
+    164,
+    169
+   ],
+   [
+    "replace",
+    177,
+    178,
+    169,
+    170,
+    [
+     " (`zażółć` → `zazolc`)."
+    ]
+   ],
+   [
+    "equal",
+    178,
+    181,
+    170,
+    173
+   ],
+   [
+    "replace",
+    181,
+    184,
+    173,
+    176,
+    [
+     " LMDB and queried with an exact top-K scan by default; an optional internal IVF",
+     " sidecar accelerates unfiltered queries. No external vector service is",
+     " required. Results include `_distance`, lowest first."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    189,
+    176,
+    181
+   ],
+   [
+    "replace",
+    189,
+    190,
+    181,
+    182,
+    [
+     " `$out` or `$merge` stage writes the result through the single writer."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    182,
+    183
+   ],
+   [
+    "replace",
+    191,
+    195,
+    183,
+    187,
+    [
+     " `$group`, `$bucket`, `$bucketAuto`, `$sortByCount`, `$replaceRoot`/",
+     " `$replaceWith`, `$sample`, `$facet`, `$lookup`, `$unionWith`, `$graphLookup`,",
+     " `$setWindowFields`, `$densify`, `$fill`, `$sort`, `$skip`, `$limit`,",
+     " `$count`, `$out`, and `$merge`."
+    ]
+   ],
+   [
+    "equal",
+    195,
+    196,
+    187,
+    188
+   ],
+   [
+    "replace",
+    196,
+    197,
+    188,
+    189,
+    [
+     " `$derivative`, and `$integral`."
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    189,
+    190
+   ],
+   [
+    "replace",
+    198,
+    199,
+    190,
+    191,
+    [
+     " `$addToSet`, and `$count`."
+    ]
+   ],
+   [
+    "equal",
+    199,
+    200,
+    191,
+    192
+   ],
+   [
+    "replace",
+    200,
+    201,
+    192,
+    193,
+    [
+     " cardinality-preserving stages and unnecessary document materialization."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    193,
+    194
+   ],
+   [
+    "replace",
+    202,
+    205,
+    194,
+    197,
+    [
+     " bounded top-K heap, and a leading `$group` streams documents directly into",
+     " its accumulators. Order-independent groups use the query index when",
+     " available and fall back to a parallel scan."
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    197,
+    198
+   ],
+   [
+    "replace",
+    206,
+    208,
+    198,
+    200,
+    [
+     " and `_id` ranges. `$sort`+`$limit`, `$skip`, `$limit`, simple `$project`, and",
+     " a lone `$count` are also pushed into the query path where semantics allow."
+    ]
+   ],
+   [
+    "equal",
+    208,
+    209,
+    200,
+    201
+   ],
+   [
+    "replace",
+    209,
+    210,
+    201,
+    202,
+    [
+     " `$ifNull`, arithmetic, `$concat`, `$cond`, and comparison operators."
+    ]
+   ],
+   [
+    "equal",
+    210,
+    215,
+    202,
+    207
+   ],
+   [
+    "replace",
+    215,
+    221,
+    207,
+    208,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    226,
+    208,
+    213
+   ],
+   [
+    "replace",
+    226,
+    227,
+    213,
+    214,
+    [
+     "Aggregation for the full stage list and semantics."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    232,
+    214,
+    219
+   ],
+   [
+    "replace",
+    232,
+    233,
+    219,
+    220,
+    [
+     " revisions to retain per document. `0` disables new history writes."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    235,
+    220,
+    222
+   ],
+   [
+    "replace",
+    235,
+    236,
+    222,
+    223,
+    [
+     " results."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    238,
+    223,
+    225
+   ],
+   [
+    "replace",
+    238,
+    239,
+    225,
+    226,
+    [
+     " `history`/`get_version` helpers in the official clients."
+    ]
+   ],
+   [
+    "equal",
+    239,
+    258,
+    226,
+    245
+   ],
+   [
+    "replace",
+    258,
+    264,
+    245,
+    246,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    266,
+    246,
+    248
+   ],
+   [
+    "replace",
+    266,
+    267,
+    248,
+    249,
+    [
+     "See Document history for the full request and"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    273,
+    249,
+    255
+   ],
+   [
+    "replace",
+    273,
+    274,
+    255,
+    256,
+    [
+     " canonical `$numberLong`, and numeric milliseconds."
+    ]
+   ],
+   [
+    "equal",
+    274,
+    275,
+    256,
+    257
+   ],
+   [
+    "replace",
+    275,
+    276,
+    257,
+    258,
+    [
+     " compare equal."
+    ]
+   ],
+   [
+    "equal",
+    276,
+    277,
+    258,
+    259
+   ],
+   [
+    "replace",
+    277,
+    278,
+    259,
+    260,
+    [
+     " dates."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    260,
+    261
+   ],
+   [
+    "replace",
+    279,
+    283,
+    261,
+    265,
+    [
+     " `$dateTrunc`, `$dateToString`, `$dateFromString`, `$dateFromParts`, and",
+     " `$dateToParts`.",
+     " Time zones use UTC, fixed `+HH:MM` offsets, or IANA zone names with",
+     " daylight-saving rules."
+    ]
+   ],
+   [
+    "equal",
+    283,
+    292,
+    265,
+    274
+   ],
+   [
+    "replace",
+    292,
+    294,
+    274,
+    275,
+    [
+     "See Dates and time zones for formats, indexes, and limitations."
+    ]
+   ],
+   [
+    "equal",
+    294,
+    298,
+    275,
+    279
+   ],
+   [
+    "replace",
+    298,
+    299,
+    279,
+    280,
+    [
+     " type bracket."
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    280,
+    281
+   ],
+   [
+    "replace",
+    300,
+    301,
+    281,
+    282,
+    [
+     " through `f64`."
+    ]
+   ],
+   [
+    "equal",
+    301,
+    303,
+    282,
+    284
+   ],
+   [
+    "replace",
+    303,
+    304,
+    284,
+    285,
+    [
+     " `$subtract`, `$multiply`, and `$divide`."
+    ]
+   ],
+   [
+    "equal",
+    304,
+    305,
+    285,
+    286
+   ],
+   [
+    "replace",
+    305,
+    306,
+    286,
+    287,
+    [
+     " `{\"$numberDouble\": \"Infinity\"}`."
+    ]
+   ],
+   [
+    "equal",
+    306,
+    307,
+    287,
+    288
+   ],
+   [
+    "replace",
+    307,
+    308,
+    288,
+    289,
+    [
+     " preserve their BSON type."
+    ]
+   ],
+   [
+    "equal",
+    308,
+    309,
+    289,
+    290
+   ],
+   [
+    "replace",
+    309,
+    310,
+    290,
+    291,
+    [
+     " ObjectId can also be used as `_id`."
+    ]
+   ],
+   [
+    "equal",
+    310,
+    311,
+    291,
+    292
+   ],
+   [
+    "replace",
+    311,
+    312,
+    292,
+    293,
+    [
+     " including Timestamp, MinKey, and MaxKey."
+    ]
+   ],
+   [
+    "equal",
+    312,
+    314,
+    293,
+    295
+   ],
+   [
+    "replace",
+    314,
+    315,
+    295,
+    296,
+    [
+     "See Numbers and decimals for storage forms, arithmetic,"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    320,
+    296,
+    301
+   ],
+   [
+    "replace",
+    320,
+    321,
+    301,
+    302,
+    [
+     " `_ttl` override."
+    ]
+   ],
+   [
+    "equal",
+    321,
+    322,
+    302,
+    303
+   ],
+   [
+    "replace",
+    322,
+    323,
+    303,
+    304,
+    [
+     " backfill and a MongoDB migration mapping."
+    ]
+   ],
+   [
+    "equal",
+    323,
+    324,
+    304,
+    305
+   ],
+   [
+    "replace",
+    324,
+    325,
+    305,
+    306,
+    [
+     " reads."
+    ]
+   ],
+   [
+    "equal",
+    325,
+    326,
+    306,
+    307
+   ],
+   [
+    "replace",
+    326,
+    327,
+    307,
+    308,
+    [
+     " is explicitly set. Date-field TTL recalculates from the current date value."
+    ]
+   ],
+   [
+    "equal",
+    327,
+    329,
+    308,
+    310
+   ],
+   [
+    "replace",
+    329,
+    330,
+    310,
+    311,
+    [
+     " is enabled; collections can opt into purging stored revisions instead."
+    ]
+   ],
+   [
+    "equal",
+    330,
+    331,
+    311,
+    312
+   ],
+   [
+    "replace",
+    331,
+    332,
+    312,
+    313,
+    [
+     " works for standard collections."
+    ]
+   ],
+   [
+    "equal",
+    332,
+    337,
+    313,
+    318
+   ],
+   [
+    "replace",
+    337,
+    343,
+    318,
+    319,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    343,
+    346,
+    319,
+    322
+   ],
+   [
+    "replace",
+    346,
+    347,
+    322,
+    323,
+    [
+     "Document TTL for date-field TTL, update semantics, maintenance,"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    353,
+    323,
+    329
+   ],
+   [
+    "replace",
+    353,
+    354,
+    329,
+    330,
+    [
+     " plaintext."
+    ]
+   ],
+   [
+    "equal",
+    354,
+    355,
+    330,
+    331
+   ],
+   [
+    "replace",
+    355,
+    356,
+    331,
+    332,
+    [
+     " `X-NonoDB-Key-Id`, `X-NonoDB-Key`."
+    ]
+   ],
+   [
+    "equal",
+    356,
+    358,
+    332,
+    334
+   ],
+   [
+    "replace",
+    358,
+    359,
+    334,
+    335,
+    [
+     " fuzzy, aggregation, secondary indexes, arbitrary filters, or sorting."
+    ]
+   ],
+   [
+    "equal",
+    359,
+    360,
+    335,
+    336
+   ],
+   [
+    "replace",
+    360,
+    362,
+    336,
+    338,
+    [
+     " client/HTTP API for vault collections. See",
+     " tenant encryption."
+    ]
+   ],
+   [
+    "equal",
+    362,
+    363,
+    338,
+    339
+   ],
+   [
+    "replace",
+    363,
+    364,
+    339,
+    340,
+    [
+     " key."
+    ]
+   ],
+   [
+    "equal",
+    364,
+    372,
+    340,
+    348
+   ],
+   [
+    "replace",
+    372,
+    383,
+    348,
+    349,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    388,
+    349,
+    354
+   ],
+   [
+    "replace",
+    388,
+    389,
+    354,
+    355,
+    [
+     "Vault collections for the full contract, limitations, key"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    395,
+    355,
+    361
+   ],
+   [
+    "replace",
+    395,
+    396,
+    361,
+    362,
+    [
+     " peer uid/gid allow-lists, and configurable per-IP failed-login lockout."
+    ]
+   ],
+   [
+    "equal",
+    396,
+    397,
+    362,
+    363
+   ],
+   [
+    "replace",
+    397,
+    398,
+    363,
+    364,
+    [
+     " principals."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    401,
+    364,
+    367
+   ],
+   [
+    "replace",
+    401,
+    402,
+    367,
+    368,
+    [
+     " dedicated nftables firewall table."
+    ]
+   ],
+   [
+    "equal",
+    402,
+    403,
+    368,
+    369
+   ],
+   [
+    "replace",
+    403,
+    404,
+    369,
+    370,
+    [
+     " multi-daemon shells."
+    ]
+   ],
+   [
+    "equal",
+    404,
+    407,
+    370,
+    373
+   ],
+   [
+    "replace",
+    407,
+    408,
+    373,
+    374,
+    [
+     " flush the writer queue, and remove the Unix socket."
+    ]
+   ],
+   [
+    "equal",
+    408,
+    410,
+    374,
+    376
+   ],
+   [
+    "replace",
+    410,
+    411,
+    376,
+    377,
+    [
+     " timeouts."
+    ]
+   ],
+   [
+    "equal",
+    411,
+    412,
+    377,
+    378
+   ],
+   [
+    "replace",
+    412,
+    413,
+    378,
+    379,
+    [
+     " read-replica write routing."
+    ]
+   ],
+   [
+    "equal",
+    413,
+    414,
+    379,
+    380
+   ],
+   [
+    "replace",
+    414,
+    416,
+    380,
+    382,
+    [
+     " `_events`, both handled by external workers; no stored procedures or daemon",
+     " plugins."
+    ]
+   ],
+   [
+    "equal",
+    416,
+    417,
+    382,
+    383
+   ],
+   [
+    "replace",
+    417,
+    418,
+    383,
+    384,
+    [
+     " optional field-change filtering and atomic outbox writes."
+    ]
+   ],
+   [
+    "equal",
+    418,
+    419,
+    384,
+    385
+   ],
+   [
+    "replace",
+    419,
+    421,
+    385,
+    387,
+    [
+     " client-renewed leases, and writer-side evaluation; delivered through the same",
+     " outbox."
+    ]
+   ],
+   [
+    "equal",
+    421,
+    422,
+    387,
+    388
+   ],
+   [
+    "replace",
+    422,
+    424,
+    388,
+    390,
+    [
+     " outbox events, with server-side topics/filters, projections, count thresholds,",
+     " resume tokens, truncation detection, heartbeats, and reconnect helpers."
+    ]
+   ],
+   [
+    "equal",
+    424,
+    425,
+    390,
+    391
+   ],
+   [
+    "replace",
+    425,
+    426,
+    391,
+    392,
+    [
+     " by the writer and pushed directly to the stream without writing to `_events`."
+    ]
+   ],
+   [
+    "equal",
+    426,
+    446,
+    392,
+    412
+   ],
+   [
+    "replace",
+    446,
+    456,
+    412,
+    413,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    471,
+    413,
+    428
+   ],
+   [
+    "replace",
+    471,
+    476,
+    428,
+    429,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    476,
+    496,
+    429,
+    449
+   ],
+   [
+    "replace",
+    496,
+    498,
+    449,
+    451,
+    [
+     "backups, and troubleshooting: Docker Compose. The",
+     "legacy `deploy/docker-compose.yml` variant uses a"
+    ]
+   ],
+   [
+    "equal",
+    498,
+    504,
+    451,
+    457
+   ],
+   [
+    "replace",
+    504,
+    505,
+    457,
+    458,
+    [
+     "More deployment details: Operations — Docker."
+    ]
+   ],
+   [
+    "equal",
+    505,
+    508,
+    458,
+    461
+   ],
+   [
+    "replace",
+    508,
+    509,
+    461,
+    462,
+    [
+     "Volume compression."
+    ]
+   ],
+   [
+    "equal",
+    509,
+    511,
+    462,
+    464
+   ],
+   [
+    "replace",
+    511,
+    512,
+    464,
+    465,
+    [
+     "Free-tier and low-cost VM deployment. It includes"
+    ]
+   ],
+   [
+    "equal",
+    512,
+    520,
+    465,
+    473
+   ],
+   [
+    "replace",
+    520,
+    526,
+    473,
+    479,
+    [
+     "|Platform|Release asset|",
+     "|---|---|",
+     "|Linux x86_64|`nonodb-vX.Y.Z-linux-x86_64.tar.gz`|",
+     "|macOS Apple Silicon|`nonodb-vX.Y.Z-macos-arm64.tar.gz`|",
+     "|macOS Intel|`nonodb-vX.Y.Z-macos-x86_64.tar.gz`|",
+     "|Windows x86_64|`nonodb-vX.Y.Z-windows-x86_64.zip`|"
+    ]
+   ],
+   [
+    "equal",
+    526,
+    529,
+    479,
+    482
+   ],
+   [
+    "replace",
+    529,
+    530,
+    482,
+    483,
+    [
+     "releases page."
+    ]
+   ],
+   [
+    "equal",
+    530,
+    571,
+    483,
+    524
+   ],
+   [
+    "replace",
+    571,
+    575,
+    524,
+    525,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    584,
+    525,
+    534
+   ],
+   [
+    "replace",
+    584,
+    591,
+    534,
+    535,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    591,
+    601,
+    535,
+    545
+   ],
+   [
+    "replace",
+    601,
+    602,
+    545,
+    546,
+    [
+     "unit and installation steps in Operations."
+    ]
+   ],
+   [
+    "equal",
+    602,
+    620,
+    546,
+    564
+   ],
+   [
+    "replace",
+    620,
+    621,
+    564,
+    565,
+    [
+     "Clients: routing writes to the primary."
+    ]
+   ],
+   [
+    "equal",
+    621,
+    630,
+    565,
+    574
+   ],
+   [
+    "replace",
+    630,
+    634,
+    574,
+    575,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    634,
+    668,
+    575,
+    609
+   ],
+   [
+    "replace",
+    668,
+    672,
+    609,
+    610,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    672,
+    694,
+    610,
+    632
+   ],
+   [
+    "replace",
+    694,
+    695,
+    632,
+    633,
+    [
+     " compiler for LMDB."
+    ]
+   ],
+   [
+    "equal",
+    695,
+    697,
+    633,
+    635
+   ],
+   [
+    "replace",
+    697,
+    698,
+    635,
+    636,
+    [
+     " is an optional speedup)."
+    ]
+   ],
+   [
+    "equal",
+    698,
+    737,
+    636,
+    675
+   ],
+   [
+    "replace",
+    737,
+    741,
+    675,
+    677,
+    [
+     " NonoDB GUI overview with database selector",
+     " NonoDB GUI text search over one million documents"
+    ]
+   ],
+   [
+    "equal",
+    741,
+    744,
+    677,
+    680
+   ],
+   [
+    "replace",
+    744,
+    745,
+    680,
+    681,
+    [
+     "and a short walkthrough video are in the GUI console"
+    ]
+   ],
+   [
+    "equal",
+    745,
+    747,
+    681,
+    683
+   ],
+   [
+    "replace",
+    747,
+    748,
+    683,
+    684,
+    [
+     "Watch the 16-second GUI walkthrough."
+    ]
+   ],
+   [
+    "equal",
+    748,
+    751,
+    684,
+    687
+   ],
+   [
+    "replace",
+    751,
+    752,
+    687,
+    688,
+    [
+     "|Document|What it covers|"
+    ]
+   ],
+   [
+    "equal",
+    752,
+    753,
+    688,
+    689
+   ],
+   [
+    "replace",
+    753,
+    789,
+    689,
+    725,
+    [
+     "|Architecture|Daemon model, LMDB layout, write path, indexes, search, concurrency, crash safety|",
+     "|HTTP API|Every operation, request/response shapes, filters, updates, indexes, search, errors|",
+     "|MongoDB compatibility|Feature comparison, practical coverage, and migration caveats|",
+     "|MongoDB wire shadow mode|Prototype dual-write to MongoDB with a JSONL diff report|",
+     "|SQL queries|`SELECT`, `INSERT`, `UPDATE`, `DELETE`, `DISTINCT`, `HAVING`, `CASE`, functions, aggregates, `explain_sql`, parameters, limits, client examples|",
+     "|Clients|Python, Rust, Node.js and Go clients: install, CRUD, batches, indexes, search, TCP/TLS, read-replica write routing, async Python watch/streams|",
+     "|Migration and import|MongoDB, PostgreSQL, SQLite and CSV migration, NDJSON format, import manifest, cutover|",
+     "|Authentication and permissions|Principals, scopes, tokens, certificates, CLI/API/GUI management, lockout, reloads, audit log|",
+     "|Security checks|Local security regression checks, LiveAPISec audit method, results, hardening gaps, production checklist|",
+     "|Mutual TLS|Client certificate setup, private CA, fingerprint mapping, revocation, rotation|",
+     "|Python client|`NonoDB`/`Collection` API, `AsyncNonoDB` watch/streams, caching, retries, TCP/TLS, FastAPI usage|",
+     "|Background jobs|Durable `_jobs`, workers, leases, retries, cron/systemd, language-independent contract|",
+     "|Search and Atlas compatibility|Unified lexical/fuzzy/vector/hybrid search, RRF, and the `$search`/`$searchMeta`/`$vectorSearch` subset|",
+     "|Outbox events|Atomic data + event writes, automatic collection events, source-side filters, polling consumers, checkpoints, event worker CLI, TTL, systemd|",
+     "|Conditional subscriptions|Persistent conditions over collection state, count thresholds, edge-triggered delivery|",
+     "|Streaming outbox events|Long-poll `watch`, NDJSON/SSE streams, server-side filters, count thresholds, resume tokens, truncation, client examples|",
+     "|Vault collections|Optional encrypted tenant data, headers, restrictions, key rotation|",
+     "|Document TTL|Collection defaults, date-field MongoDB TTL, per-document expiry, strict read visibility, update semantics, limits|",
+     "|Dates and time zones|BSON-compatible dates, RFC 3339 input, filtering, indexes, sorting|",
+     "|Numbers and decimals|Exact numeric comparison, Decimal128, arithmetic, NaN/Infinity, index compatibility, long text limits|",
+     "|BSON scalar types|`$numberInt`/`$numberLong`, `$type`, binary/UUID, ObjectId, Timestamp, MinKey/MaxKey, index compatibility|",
+     "|GUI console|Embedded local React console, data editing, collection settings, SQL, map/metrics, authorization|",
+     "|Replication and cluster guide|Primary/replica setup, TLS, CLI, GUI Cluster view, quorum failover, monitoring, troubleshooting|",
+     "|CLI|`ping`, `gui`, `find`, `count`, `map`, `resize`, auth management, backup/verify/restore, `exec`|",
+     "|Operations|Configuration, deployment, security, snapshots, monitoring, capacity, troubleshooting|",
+     "|Docker Compose quick start|Self-contained Compose stack, auth initialization, GUI, updates, backups, troubleshooting|",
+     "|Volume compression|ZFS/Btrfs setup, Docker bind mounts, verification, benchmarks, migration|",
+     "|Encryption at rest|LUKS, ZFS and cloud volume encryption, key separation, backup keys, vault boundaries|",
+     "|Free-tier and low-cost VM deployment|Oracle Cloud, GCP, AWS, DigitalOcean, small profile, Cloud Run read replicas, Spaces backups|",
+     "|Backup and restore|Online backup, snapshots, verification, restore drills, retention, Docker, vault keys, authorization state|",
+     "|Branching a database|Offline CoW clone for CI, snapshot sources, verification, limits|",
+     "|Benchmarks|Test environment, throughput, latency, large data sets, RAM, reproducibility|",
+     "|Development|Repository layout, tests, linting, benchmark scripts, contribution notes|",
+     "|Contributing|Setup, required checks, code guidelines, pull requests|",
+     "|Security policy|Supported versions, private vulnerability reporting, scope|",
+     "|Roadmap and limits|Deliberate limitations, current non-goals, future work|"
+    ]
+   ],
+   [
+    "equal",
+    789,
+    793,
+    725,
+    729
+   ],
+   [
+    "replace",
+    793,
+    794,
+    729,
+    730,
+    [
+     "See Benchmarks for methodology and full tables."
+    ]
+   ],
+   [
+    "equal",
+    794,
+    795,
+    730,
+    731
+   ],
+   [
+    "replace",
+    795,
+    796,
+    731,
+    732,
+    [
+     "|Workload|Result|"
+    ]
+   ],
+   [
+    "equal",
+    796,
+    797,
+    732,
+    733
+   ],
+   [
+    "replace",
+    797,
+    806,
+    733,
+    742,
+    [
+     "|Concurrent inserts, 12 clients|~3.3k ops/s, p50 3.2 ms|",
+     "|`find_one` by `_id`, 12 clients|~6.8k ops/s, p50 1.3 ms|",
+     "|Indexed lookup at 1M / 2M / 4M / 8M docs|0.5–1.5 ms p50|",
+     "|`count({})` at 8M docs|~0.6 ms|",
+     "|1,000 `find_one` calls in read batches|~20 ms (~50k ops/s)|",
+     "|Index-only sort at 1M docs|1–2 ms|",
+     "|Full sort at 1M docs (no index)|250–420 ms|",
+     "|Idle daemon RSS at 1M docs, 3 indexes|~5 MB|",
+     "|Live backup of 8M docs + 1M text docs|5.1 GB in ~10 s|"
+    ]
+   ],
+   [
+    "equal",
+    806,
+    808,
+    742,
+    744
+   ],
+   [
+    "replace",
+    808,
+    821,
+    744,
+    745,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    821,
+    829,
+    745,
+    753
+   ],
+   [
+    "replace",
+    829,
+    831,
+    753,
+    754,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "e4ee481a3386+2": {
+  "fn": "Bryan-Herrera-DEV/tikvoz",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    8,
+    0,
+    6
+   ],
+   [
+    "replace",
+    8,
+    15,
+    6,
+    13,
+    [
+     "Versión",
+     "Rust",
+     "Plataforma",
+     "Licencia",
+     "Precio",
+     "TikTok",
+     "Kick"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    13,
+    14
+   ],
+   [
+    "replace",
+    16,
+    20,
+    14,
+    15,
+    [
+     " Captura de TikVoz leyendo un live (modo demo)"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    15,
+    16
+   ],
+   [
+    "replace",
+    21,
+    26,
+    16,
+    17,
+    [
+     " Captura en modo demo con TikTok y Kick a la vez. Los usuarios son ficticios y los mensajes con groserías ofuscadas salen censurados. GitHub muestra la versión clara u oscura según tu tema. "
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    17,
+    20
+   ],
+   [
+    "replace",
+    29,
+    41,
+    20,
+    21,
+    [
+     "（目录 12 行略）"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    46,
+    21,
+    26
+   ],
+   [
+    "replace",
+    46,
+    47,
+    26,
+    27,
+    [
+     "||TikVoz|Lectores típicos|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    27,
+    28
+   ],
+   [
+    "replace",
+    48,
+    56,
+    28,
+    36,
+    [
+     "|Precio|**Gratis**|Freemium o suscripción|",
+     "|Voz|Local, offline, sin límite|Muchas veces en la nube y con cuota|",
+     "|Latencia de la voz|**~140 ms**|0,5–2 s (ida y vuelta a la nube)|",
+     "|RAM|**~85–105 MB**|250–600 MB (Electron o navegador)|",
+     "|TikTok y Kick en la misma cola de voz|Sí|Una plataforma por app|",
+     "|Filtro de groserías que resiste `p1to`, `pi to`, `4buso`|Sí|Lista simple de palabras|",
+     "|Voz por usuario, VIP, prioridad, diccionario|Sí|Normalmente de pago|",
+     "|Código abierto|Sí|No|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    59,
+    36,
+    39
+   ],
+   [
+    "replace",
+    59,
+    60,
+    39,
+    40,
+    [
+     "Descarga la última versión desde **Releases**. Cada versión trae:"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    40,
+    41
+   ],
+   [
+    "replace",
+    61,
+    62,
+    41,
+    42,
+    [
+     "|Archivo|Qué es|"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    42,
+    43
+   ],
+   [
+    "replace",
+    63,
+    66,
+    43,
+    46,
+    [
+     "|`tikvoz-vX.Y.Z-windows-x64.exe`|El programa listo para usar. Solo descárgalo y ábrelo.|",
+     "|`tikvoz-vX.Y.Z-windows-x64.zip`|El mismo `.exe` con README, licencia y CHANGELOG.|",
+     "|`SHA256SUMS.txt`|Sumas de verificación para comprobar que el archivo no fue alterado.|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    46,
+    47
+   ],
+   [
+    "replace",
+    67,
+    68,
+    47,
+    48,
+    [
+     "No necesita instalador, runtimes ni permisos de administrador. Los cambios de cada versión están en el CHANGELOG."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    48,
+    49
+   ],
+   [
+    "replace",
+    69,
+    71,
+    49,
+    50,
+    [
+     " Verificar la descarga (opcional) "
+    ]
+   ],
+   [
+    "equal",
+    71,
+    77,
+    50,
+    56
+   ],
+   [
+    "replace",
+    77,
+    78,
+    56,
+    57,
+    [
+     "Cada build lo compila GitHub Actions a partir del código de este repositorio y lleva una **atestación de procedencia** firmada. Con la CLI de GitHub puedes comprobar que el `.exe` salió exactamente de este repo:"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    83,
+    57,
+    62
+   ],
+   [
+    "delete",
+    83,
+    85,
+    62,
+    62
+   ],
+   [
+    "equal",
+    85,
+    86,
+    62,
+    63
+   ],
+   [
+    "replace",
+    86,
+    87,
+    63,
+    64,
+    [
+     "> Al ser un ejecutable nuevo y sin firma digital, Windows SmartScreen o Defender pueden avisar la primera vez. El código está aquí completo; si prefieres, compílalo tú mismo."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    147,
+    64,
+    124
+   ],
+   [
+    "replace",
+    147,
+    148,
+    124,
+    125,
+    [
+     "|La gente escribe|Truco|TikVoz lo detecta|"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    125,
+    126
+   ],
+   [
+    "replace",
+    149,
+    163,
+    126,
+    140,
+    [
+     "|`pi to`, `p.i.t.o`, `p-u-t-o`, `a.buso`|separadores|Sí|",
+     "|`p1to`, `4buso`, `P!T0`, `v3rg4`, `@bus0`|leetspeak|Sí|",
+     "|`piiiiito`, `PUTOOOO`|letras repetidas|Sí|",
+     "|`𝓹𝓲𝓽𝓸`, `ｐｉｔｏ`, `ⓟⓘⓣⓞ`|letras \"fancy\"|Sí|",
+     "|`рito` (con **р** cirílica)|homoglifos|Sí|",
+     "|`pu​to` (con espacio invisible)|caracteres de ancho cero|Sí|",
+     "|`p*ta`|comodín|Sí|",
+     "|`berga`, `kabron`, `xingada`|escritura fonética|Sí|",
+     "|`pútö`|acentos|Sí|",
+     "|`ᴘɪᴛᴏ`, `🇵🇮🇹🇴`, `🅿🅸🆃🅾`|versalitas, letras de bandera y en recuadro|Sí|",
+     "|`‮otip` (con `U+202E`), `oʇᴉd`|texto que se **muestra** al revés o de cabeza|Sí|",
+     "|`puㅤto` (relleno Hangul)|rellenos invisibles|Sí|",
+     "|`ptm`, `ctm`, `alv`, `mrd`|abreviaturas sin vocales|Sí|",
+     "|`hijo de puta`, `te voy a matar`|frases|Sí|"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    168,
+    140,
+    145
+   ],
+   [
+    "replace",
+    168,
+    169,
+    145,
+    146,
+    [
+     "|Técnica|Inspirada en|"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    170,
+    146,
+    147
+   ],
+   [
+    "replace",
+    170,
+    176,
+    147,
+    153,
+    [
+     "|Confusables y homoglifos|Unicode UTS #39: datos de *confusables* y algoritmo *skeleton*|",
+     "|Ignorar controles bidireccionales|Ataque Trojan Source (CVE-2021-42574)|",
+     "|Comodines `palabra*`, `*palabra`, `*palabra*` y frases|Discord AutoMod|",
+     "|Excepciones aplicadas **por coincidencia** (no por mensaje)|Evita el bypass conocido de Discord, donde una palabra permitida apaga el filtro del mensaje entero|",
+     "|Categorías activables (insultos, sexual, odio, violencia…)|Twitch AutoMod|",
+     "|Leetspeak, vocales omitidas, fonética, espaciado|Taxonomías académicas de evasión de moderación (WNUT 2022, arXiv 2302.05706)|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    183,
+    153,
+    160
+   ],
+   [
+    "replace",
+    183,
+    193,
+    160,
+    161,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    216,
+    161,
+    184
+   ],
+   [
+    "replace",
+    216,
+    249,
+    184,
+    185,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    257,
+    185,
+    193
+   ],
+   [
+    "replace",
+    257,
+    273,
+    193,
+    194,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    283,
+    194,
+    204
+   ],
+   [
+    "replace",
+    283,
+    301,
+    204,
+    205,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    309,
+    205,
+    213
+   ],
+   [
+    "replace",
+    309,
+    319,
+    213,
+    214,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    319,
+    327,
+    214,
+    222
+   ],
+   [
+    "replace",
+    327,
+    348,
+    222,
+    223,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    361,
+    223,
+    236
+   ],
+   [
+    "replace",
+    361,
+    363,
+    236,
+    237,
+    [
+     " Voz "
+    ]
+   ],
+   [
+    "equal",
+    363,
+    364,
+    237,
+    238
+   ],
+   [
+    "replace",
+    364,
+    365,
+    238,
+    239,
+    [
+     "|Ajuste|Qué hace|Defecto|"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    366,
+    239,
+    240
+   ],
+   [
+    "replace",
+    366,
+    369,
+    240,
+    243,
+    [
+     "|Voz|Cualquier voz instalada en Windows; se prefiere una en español|Primera en español|",
+     "|Velocidad|0,5× a 3×|1,0|",
+     "|Volumen|0 a 1|1,0|"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    370,
+    243,
+    244
+   ],
+   [
+    "replace",
+    370,
+    371,
+    244,
+    245,
+    [
+     " Qué leer "
+    ]
+   ],
+   [
+    "equal",
+    371,
+    372,
+    245,
+    246
+   ],
+   [
+    "replace",
+    372,
+    374,
+    246,
+    256,
+    [
+     "|Ajuste|Variables|Defecto|",
+     "|---|---|---|",
+     "|Comentarios (TikTok y Kick)|`{usuario}` `{mensaje}`|Sí, `{usuario} dice: {mensaje}`|",
+     "|Regalos (TikTok) y Kicks (Kick)|`{usuario}` `{cantidad}` `{regalo}`|Sí, `{usuario} envió {cantidad} {regalo}`|",
+     "|Mínimo de diamantes||1|",
+     "|Suscripciones (Kick)|`{usuario}` `{cantidad}` = meses|Sí, `{usuario} se suscribió`|",
+     "|Suscripciones regaladas (Kick)|`{usuario}` `{cantidad}`|Sí, `{usuario} regaló {cantidad} suscripciones`|",
+     "|Nuevos seguidores (TikTok)|`{usuario}`|No|",
+     "|Compartidos (TikTok)|`{usuario}`|No|",
+     "|Bienvenidas (solo con la cola vacía)|`{usuario}`|No, `Bienvenido {usuario}`|"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    375,
+    256,
+    257
+   ],
+   [
+    "replace",
+    375,
+    385,
+    257,
+    258,
+    [
+     " Audiencia y prioridad "
+    ]
+   ],
+   [
+    "equal",
+    385,
+    386,
+    258,
+    259
+   ],
+   [
+    "replace",
+    386,
+    387,
+    259,
+    267,
+    [
+     "|Ajuste|Defecto|",
+     "|---|---|",
+     "|Voz distinta por usuario (entre las voces del mismo idioma)|No|",
+     "|Regalos, subs y seguidores se adelantan en la cola|Sí|",
+     "|Moderadores con prioridad y sin límites|Sí|",
+     "|Leer solo a quienes te siguen (TikTok)|No|",
+     "|Enfriamiento por usuario (segundos, 0 = sin límite)|0|",
+     "|Usuarios VIP|—|"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    388,
+    267,
+    268
+   ],
+   [
+    "replace",
+    388,
+    390,
+    268,
+    269,
+    [
+     " Groserías "
+    ]
+   ],
+   [
+    "equal",
+    390,
+    391,
+    269,
+    270
+   ],
+   [
+    "replace",
+    391,
+    392,
+    270,
+    271,
+    [
+     "|Ajuste|Defecto|"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    393,
+    271,
+    272
+   ],
+   [
+    "replace",
+    393,
+    399,
+    272,
+    278,
+    [
+     "|Lista (`[categoría]`, `palabra*`, `*palabra`, `*palabra*`, frases)|~90 entradas en 7 categorías (español + inglés)|",
+     "|Categorías activas|todas|",
+     "|Excepciones|—|",
+     "|Leer con \"piip\" en vez de omitir|No (se omite)|",
+     "|Si el nombre es una grosería, decir \"alguien\"|Sí|",
+     "|Silenciar al usuario tras N groserías (0 = nunca)|3|"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    400,
+    278,
+    279
+   ],
+   [
+    "replace",
+    400,
+    401,
+    279,
+    280,
+    [
+     " Filtros "
+    ]
+   ],
+   [
+    "equal",
+    401,
+    402,
+    280,
+    281
+   ],
+   [
+    "replace",
+    402,
+    404,
+    281,
+    290,
+    [
+     "|Ajuste|Defecto|",
+     "|---|---|",
+     "|No repetir el mismo mensaje del mismo usuario (ventana en segundos)|Sí, 60 s|",
+     "|Reemplazar links por \"enlace\"|Sí|",
+     "|Ignorar comandos `!algo`|Sí|",
+     "|Solo leer si empieza con…|(vacío = todos)|",
+     "|Máx. caracteres / mín. letras|200 / 1|",
+     "|Usuarios silenciados|—|",
+     "|Diccionario de pronunciación|13 abreviaturas comunes|"
+    ]
+   ],
+   [
+    "equal",
+    404,
+    405,
+    290,
+    291
+   ],
+   [
+    "replace",
+    405,
+    406,
+    291,
+    294,
+    [
+     " Avanzado ",
+     "",
+     "|Ajuste|Defecto|"
+    ]
+   ],
+   [
+    "equal",
+    406,
+    407,
+    294,
+    295
+   ],
+   [
+    "replace",
+    407,
+    442,
+    295,
+    299,
+    [
+     "|Máx. en cola (se descartan los más viejos)|15|",
+     "|Conectar TikTok y Kick al abrir la app|No|",
+     "|Mostrar consumo (CPU, RAM, GPU)|Sí|",
+     "|API key de Euler Stream (opcional, sube el límite de conexiones)|—|"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    447,
+    299,
+    304
+   ],
+   [
+    "replace",
+    447,
+    448,
+    304,
+    305,
+    [
+     "|Métrica|Valor|"
+    ]
+   ],
+   [
+    "equal",
+    448,
+    449,
+    305,
+    306
+   ],
+   [
+    "replace",
+    449,
+    454,
+    306,
+    311,
+    [
+     "|Tamaño del `.exe`|~7 MB (3,5 MB en el `.zip`)|",
+     "|RAM privada|~85–105 MB, estable en sesiones largas|",
+     "|CPU en reposo / con un live activo|~0 % / < 1 %|",
+     "|Latencia de la voz|~140 ms la primera frase, ~10 ms entre frases|",
+     "|Costo del monitor de consumo|~1,6 ms por segundo + ~6 MB (contadores de Windows)|"
+    ]
+   ],
+   [
+    "equal",
+    454,
+    455,
+    311,
+    312
+   ],
+   [
+    "replace",
+    455,
+    456,
+    312,
+    313,
+    [
+     "Tiempos de CPU por operación (mediana de Criterion, `cargo bench`):"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    457,
+    313,
+    314
+   ],
+   [
+    "replace",
+    457,
+    458,
+    314,
+    315,
+    [
+     "|Operación|Tiempo|"
+    ]
+   ],
+   [
+    "equal",
+    458,
+    459,
+    315,
+    316
+   ],
+   [
+    "replace",
+    459,
+    463,
+    316,
+    320,
+    [
+     "|Revisar un comentario contra el filtro de groserías|~3,5 µs|",
+     "|Limpiar un comentario (links, emojis, repeticiones, diccionario)|~3,6 µs|",
+     "|Parsear un mensaje de Kick|~6 µs|",
+     "|Descomprimir y decodificar un lote de 20 comentarios de TikTok|~18 µs|"
+    ]
+   ],
+   [
+    "equal",
+    463,
+    464,
+    320,
+    321
+   ],
+   [
+    "replace",
+    464,
+    465,
+    321,
+    322,
+    [
+     "Todo lo que se hace con un mensaje antes de leerlo cuesta menos de 0,03 ms, miles de veces menos que la latencia de la voz. Cada pull request se compara contra la rama base en la misma máquina, y el check falla si empeora el rendimiento o el tamaño del `.exe` (ver CONTRIBUTING)."
+    ]
+   ],
+   [
+    "equal",
+    465,
+    471,
+    322,
+    328
+   ],
+   [
+    "replace",
+    471,
+    472,
+    328,
+    329,
+    [
+     "Requisitos: Rust 1.84 o superior (toolchain MSVC) y Windows 10/11."
+    ]
+   ],
+   [
+    "equal",
+    472,
+    484,
+    329,
+    341
+   ],
+   [
+    "replace",
+    484,
+    485,
+    341,
+    342,
+    [
+     "1. Sube la versión en `Cargo.toml` y agrega su sección al CHANGELOG."
+    ]
+   ],
+   [
+    "equal",
+    485,
+    502,
+    342,
+    359
+   ],
+   [
+    "replace",
+    502,
+    519,
+    359,
+    360,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    519,
+    524,
+    360,
+    365
+   ],
+   [
+    "replace",
+    524,
+    525,
+    365,
+    366,
+    [
+     "No. La API key de Euler Stream es opcional. Solo hace falta si ves el mensaje \"límite del servidor de firmas\"; en ese caso créala gratis y pégala en **Avanzado**."
+    ]
+   ],
+   [
+    "equal",
+    525,
+    553,
+    366,
+    394
+   ],
+   [
+    "replace",
+    553,
+    557,
+    394,
+    398,
+    [
+     "- Guía de contribución: entorno, estilo, commits y cómo enviar un pull request.",
+     "- Código de conducta.",
+     "- Política de seguridad: las vulnerabilidades se reportan en privado, no en issues.",
+     "- Abrir un issue: hay plantillas para errores, funciones, plataformas nuevas y el filtro de groserías."
+    ]
+   ],
+   [
+    "equal",
+    557,
+    560,
+    398,
+    401
+   ],
+   [
+    "replace",
+    560,
+    561,
+    401,
+    402,
+    [
+     "MIT. Úsalo, modifícalo y compártelo."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

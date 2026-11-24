@@ -3166,5 +3166,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bbbdbac8c89b": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Python 分布式任务队列库，用数据库存储并调度任务",
+   "review": "Procrastinate 是一个面向 Python 3.11+ 的分布式任务处理库，使用 PostgreSQL 15+ 存储任务定义、管理锁并分发任务。它可在同步和异步代码中使用，提供 Django 集成，并可与 ASGI 框架配合使用。开发者将函数以特定方式调用后，任务被调度到其他地方立即或将来执行，通过命令行启动 worker 运行任务。",
+   "highlights": [
+    "支持同步与异步两种代码调用方式",
+    "支持周期性任务、重试机制和自定义任务锁",
+    "提供 Django 集成，可配合 ASGI 框架使用"
+   ],
+   "use_cases": [
+    "将 Python 函数调度为异步执行的后台任务",
+    "基于 PostgreSQL 基础设施的分布式任务处理",
+    "Django 或 ASGI 应用中需要延迟或定时执行任务的场景"
+   ]
+  },
+  "sha": "bbbdbac8c89b",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a93930c03c9d": {
+  "identity": {
+   "one_liner": "面向 Debian 13 VPS 的 WordPress 专用服务器管理面板，Go 单二进制实现",
+   "review": "WP Panel 是运行于 Debian 13 的 WordPress 托管管理面板，提供网站创建与隔离、SSL 证书、备份迁移、安全防护、监控告警等模块。面向在 VPS 上托管 WordPress 站点的管理员，也支持通用 PHP 网站。采用 Go+Gin 单二进制、SQLite 存储与 systemd 守护，组件经 APT 安装；仅支持 Debian 13 x86_64，站点为系统用户级隔离而非容器隔离，无单站资源配额。",
+   "highlights": [
+    "每个网站运行于独立系统用户、PHP-FPM Pool、MariaDB 数据库与数据库用户，通过 open_basedir 限制 PHP 访问本站目录",
+    "支持 Let's Encrypt 自动申请与到期前 30 天自动续签，网站备份可同步到另一台服务器或 S3 兼容存储",
+    "提供 wpp 命令行工具（重启、重置密码、查看状态、清空 IP 封禁）与只读安装前检查模式"
+   ],
+   "use_cases": [
+    "在 Debian 13 VPS 上托管多个相互隔离的 WordPress 网站",
+    "在两台相同版本面板的服务器之间搬迁 WordPress 或通用 PHP 网站",
+    "管理 WordPress 核心、插件与主题更新，更新前自动备份并在失败时恢复"
+   ]
+  },
+  "sha": "a93930c03c9d",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f8a9e254dc99": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话长期记忆插件，纯本地 SQLite + 混合检索实现。",
+   "review": "dsh-engram 是 DeepSeek Harness 的跨会话长期记忆插件，数据存于本地 SQLite，不依赖外部服务或 API Key。面向使用 DeepSeek Harness 编码代理的用户，提供 23 个窄参数工具，核心机制包括 FTS5 与本地向量 RRF 融合检索、证据门判定、三级来源审计、SM-2 间隔重复复习，以及「房间#桩位」的记忆宫殿信息架构。写入采用 accept/merge/defer/drop 四态处置，支持用户/项目/共享三层分库，入库前自动脱敏密钥与个人信息。提供 Markdown/JSON 及 Obsidian/Logseq 镜像导出。",
+   "highlights": [
+    "混合检索：FTS5（unicode61 + 中文 2-gram）与本地向量模型（Xenova/paraphrase-multilingual-MiniLM-L12-v2，384 维）RRF 融合，嵌入离线推理，失败自动降级纯关键词并标记",
+    "证据门：engram_assess 由代码强制「声称充足 + 有效证据 + nextStrategy=answer」三者齐备才判充足，判定写入审计日志",
+    "来源审计与复习：每条记忆记录来源会话、轮次与 seq，支持取代链、矛盾边与 op_log 流水；SM-2 复习队列只给坐标与门牌线索，不给正文"
+   ],
+   "use_cases": [
+    "跨会话保留用户画像与项目约定，会话开始注入带条数与 token 预算上限的画像摘要",
+    "按 git origin 隔离的项目分库与手动进出共享 scope 的记忆借出，附借阅清单与访问计数",
+    "将历史会话日志按各自 cwd 回填提炼进对应项目库，支持幂等键中断续跑与进度查看"
+   ]
+  },
+  "sha": "f8a9e254dc99",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b3cdab4bc16f": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的学习模式插件，将工作内容转为本地间隔复习",
+   "review": "dsh-explain 是 DSH 的学习模式插件：把已完成的回答或选中文本转为可编辑的解释草稿，安排本地间隔复习，并允许用户查看、纠正或遗忘模型推断出的偏好。数据存储于 $DSH_HOME 下的本地 SQLite。需配置辅助模型提供方；本地存储不等于离线推理，源文本以受限摘要发送给所配置的辅助模型。",
+   "highlights": [
+    "通过 /explain、选中文本、自动评估等入口将完成回答转为解释草稿，不自动提交",
+    "复习按回忆、应用、辨析三个技能阶段推进，由辅助模型判定并按确定性间隔排期",
+    "学习数据存储于本地 SQLite，导出为版本化备份并过滤常见凭据/路径格式"
+   ],
+   "use_cases": [
+    "在 DSH 会话中把完成的回答沉淀为结构化解释并定期复习",
+    "查看并纠正或遗忘模型对个人偏好与主题熟悉度的推断",
+    "以本地导出备份的方式保留学习记录后再分享"
+   ]
+  },
+  "sha": "b3cdab4bc16f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32b29d0d1fff": {
+  "identity": {
+   "one_liner": "面向独立执业律师的自托管案件管理系统，内置确定性期限规则引擎。",
+   "review": "案齐是一个自托管的案件工作台，把案件台账、法定期限、待办、工作日志、律师费与案件文件放在律师自己的电脑或服务器上，数据不经第三方云端。核心机制是规则表驱动的期限引擎：录入送达等触发事件后按规则推算死线并按节假日顺延，人工指定日期不被重算覆盖。采用 Node.js + SQLite 单进程单数据库架构，提供 macOS 桌面版、Android 客户端与 Docker 服务器版。单账号设计，不支持多律师协作；主仓不接收外部 PR。",
+   "highlights": [
+    "期限引擎按 JSON 规则表推算民事、刑事、行政诉讼与行政复议的法定期限，节假日按国务院表顺延，人工指定日期不参与重算",
+    "可选 AI 助理绑定单一案件，AI 写入带「AI 加的」标记且可撤销，AI 填的期限强制「待核」，正式期限仅由规则引擎计算",
+    "支持 macOS 桌面版（DMG）、Android 客户端、Docker 服务器版与 REST /api 接口，数据以 SQLite 单文件加案件夹形式存放于本地"
+   ],
+   "use_cases": [
+    "独立执业律师在个人电脑或自建服务器上集中管理案件的期限、待办、程序阶段与工作日志",
+    "按程序类型推算上诉期、答辩期、申请执行时效等法定期限，并按剩余天数分级提醒",
+    "记录律师费收付与合作分成，并将本地案卷文件夹作为案件文件入口进行浏览与预览"
+   ]
+  },
+  "sha": "32b29d0d1fff",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6bf480ffd811": {
+  "identity": {
+   "one_liner": "基于单一 SSH 连接的集成客户端，整合终端、SFTP、数据库、Docker 与端口转发。",
+   "review": "PuTTYPlus 是用 Rust 与 GTK4 编写的跨平台 SSH 客户端，在一条 SSH 连接上开通道承载终端、双栏 SFTP、PostgreSQL/MySQL 工作台、Docker 管理与端口映射。提供 Windows/Linux 单文件发行，命令行参数兼容 PuTTY，凭据库采用主密码加 argon2 与 AES-GCM 加密。构建依赖 Rust 1.85+、GTK 4.18+，Windows 版需额外注意平台差异。",
+   "highlights": [
+    "终端、SFTP、数据库工作台、Docker 容器管理与端口转发共用同一条 SSH 连接，无需重复登录",
+    "支持 PostgreSQL/MySQL 的对象树、事务化可编辑表格、SQL 编辑器、ER 图及 CSV/JSON/XML/HTML/INSERT SQL 导出",
+    "命令行参数兼容 PuTTY（含 73 条基准回归），提供本地/远程转发与 SOCKS 代理（-L/-R/-D）"
+   ],
+   "use_cases": [
+    "通过堡垒机连接服务器并直接替换 PuTTY 命令行的运维场景",
+    "在同一连接内管理远程文件、执行 SQL 与查看 Docker 容器的日常服务器维护",
+    "需要本地/远程端口转发或 SOCKS 代理的远程访问"
+   ]
+  },
+  "sha": "6bf480ffd811",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

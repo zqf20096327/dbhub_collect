@@ -3942,5 +3942,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "03b872a81596": {
+  "identity": {
+   "one_liner": "单进程运行的 Supabase 兼容本地后端，基于嵌入式 Postgres 实现",
+   "review": "tinbase 用单个进程模拟 Supabase 的 REST、Auth、Storage、Realtime 等接口，官方 supabase-js SDK 可直接连接，无需 Docker。它读取 supabase/migrations 迁移文件与 seed.sql，支持 RLS、auth.uid() 等 Postgres 语义，并提供 native、wasm（PGlite）、pgmem 三种引擎。README 标注为 Alpha，仅适用于本地开发、原型与嵌入式/浏览器场景。",
+   "highlights": [
+    "实现 Supabase 风格的 REST、Auth、Storage（含 S3 协议）、Edge Functions、Realtime、pgmq 队列、cron 与 pg_net 接口",
+    "读取 supabase/migrations/*.sql 与 seed.sql，迁移记录写入 supabase_migrations.schema_migrations",
+    "提供三种引擎：嵌入式 native Postgres 17、PGlite（WASM，可在浏览器运行）、纯 JS 内存引擎 pgmem"
+   ],
+   "use_cases": [
+    "本地开发与原型验证：用 npx tinbase start 启动，替代完整的 Supabase 本地栈",
+    "浏览器内嵌入式后端：将各服务作为 fetch handler 传给 supabase-js 的自定义 fetch，在进程内运行",
+    "以单二进制部署的测试环境：npm run build:binary 生成可执行文件，目标机器无需 Node/npm"
+   ]
+  },
+  "sha": "03b872a81596",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "98307ba4d6d0": {
+  "identity": {
+   "one_liner": "通过 Composer 安装 libSQL PHP 扩展并配置 php.ini 的 CLI 工具",
+   "review": "这是一个基于 Laravel Zero 的 CLI 工具兼 Composer 包，用于在 Linux 和 macOS 上下载预编译的 libSQL PHP 扩展并写入 php.ini。它按 PHP 版本（8.2–8.5）匹配 TS/NTS 构建，附带 token、服务器证书与本地 sqld 环境管理命令及 Laravel Sail stub。CLI 本身要求 PHP 8.2+，已弃用 8.1；Windows 需使用 WSL 或手动下载二进制。",
+   "highlights": [
+    "支持 PHP 8.2–8.5 的 TS 与 NTS 构建，仅从 turso-client-php 安装稳定版本",
+    "提供交互式与非交互式安装模式，可自定义 php.ini 与扩展目录",
+    "附带 token、server、sqld 系列命令及带扩展预检的 Laravel Sail stub"
+   ],
+   "use_cases": [
+    "为 Linux/macOS 上的 PHP 项目安装和更新 libSQL 扩展",
+    "使用 token 与本地 sqld 命令搭建本地开发环境",
+    "在 Laravel Sail 环境中预置扩展配置"
+   ]
+  },
+  "sha": "98307ba4d6d0",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "728ecbadf2f9": {
+  "identity": {
+   "one_liner": "位于编码代理与 Git 之间的 Go 事务运行时，提供 AST 校验与提交拦截。",
+   "review": "Nomos 是一个约 20MB 的静态 Go 二进制（Apache 2.0），置于编码代理（Claude Code、Cursor 等）与 Git 之间，不调用 LLM。初始化一次后，它在 feat/* 分支提交时运行 42 项多语言 AST 检查，拦截跳过测试、空桩、超限函数、泄密等问题并生成修复提示；提供 nomos xray 扫描与 nomos init 基线初始化。",
+   "highlights": [
+    "在 feat/* 分支提交时对 Go、TypeScript、Python、Rust、Java 等 9+ 语言运行 42 项 AST 检查，拦截跳过测试、空桩、超长函数与配置篡改，单文件约 24ms",
+    "提供 nomos xray 只读扫描，覆盖 11 种语言并生成 0-100 评分与 nomos.baseline.json 基线文件",
+    "通过 Git hooks 与 nomos mcp 提供经验记忆库 mneme.db（SQLite），仅在验证通过后记录；支持 --worktrees 隔离工作树与 --ci SARIF 输出"
+   ],
+   "use_cases": [
+    "在使用编码代理开发的仓库中，防止代理跳过测试、写入空桩或篡改配置",
+    "存量代码库（brownfield）希望在冻结既有债务基线的前提下只约束新增改动",
+    "多个代理并行开发时需要 git worktree 隔离与规范先行的任务拆分"
+   ]
+  },
+  "sha": "728ecbadf2f9",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

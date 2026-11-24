@@ -30460,5 +30460,4617 @@
    ]
   ],
   "at": "2026-11-21"
+ },
+ "0e65b40c4583+2": {
+  "fn": "Max-Zit/backupzit",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    10,
+    2,
+    10,
+    [
+     "Latest release",
+     "License: AGPL v3",
+     "Downloads",
+     "Website",
+     "CI",
+     "Security scan",
+     "OpenSSF Scorecard",
+     "Go Report Card"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    16,
+    10,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "- **Free and open source** under the AGPLv3. MaxZit offers commercial support."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    19,
+    17,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "**Download:** latest release · **Install:** quick start · **Website:** backupzit.com (14 languages) · **Step-by-step guides:** backupzit.com/guides · **Questions:** Discussions"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "A backup job in the BackupZit console"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "||||"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    24,
+    25
+   ],
+   [
+    "replace",
+    25,
+    27,
+    25,
+    27,
+    [
+     "|A finished backup with restore options|Calendar of backup runs|The built-in guide, here for Proxmox VE|",
+     "|A finished backup: what was read, what was new, restore right from here|Calendar of runs|The built-in guide in 14 languages|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    32,
+    27,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "- **VM image:** import backupzit-appliance.ova (VMware), .qcow2 (Proxmox/KVM) or .vhdx (Hyper-V) and start it; its screen shows the address and the initial password."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    37,
+    33,
+    37
+   ],
+   [
+    "replace",
+    37,
+    38,
+    37,
+    38,
+    [
+     "- **Docker:** see Docker."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    38,
+    39
+   ],
+   [
+    "replace",
+    39,
+    42,
+    39,
+    40,
+    [
+     "Then open `https://<address>:8443`, sign in as `admin`, add storage, enroll an agent and create a job — first steps. All five ways are described under Installation."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    44,
+    40,
+    42
+   ],
+   [
+    "replace",
+    44,
+    62,
+    42,
+    43,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    64,
+    43,
+    45
+   ],
+   [
+    "replace",
+    64,
+    65,
+    45,
+    46,
+    [
+     "|What|How|Restore|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    46,
+    47
+   ],
+   [
+    "replace",
+    66,
+    76,
+    47,
+    57,
+    [
+     "|**Files and folders** (Windows, Linux, macOS)|incremental, from a VSS snapshot on Windows; `{users}` paths (e.g. the Documents of every user) and wildcards; one job can cover several or all agents|single files from the browser (download), into a folder or to the original location|",
+     "|**Macs** (Apple silicon, macOS 13+)|files and folders from an APFS local snapshot, with owners, permissions, extended attributes, BSD file flags, creation times and sparse files; a menu bar app with a permission assistant for Full Disk Access|like other file backups, metadata included|",
+     "|**Whole disks** (Windows)|disk images of one, several or all disks, changed blocks only|bare metal from the recovery ISO, also onto different hardware; single files from the image|",
+     "|**Linux systems**|all file systems and the disk layout|bare metal from the Linux recovery ISO, or as a new Proxmox VM (P2V)|",
+     "|**Proxmox VE** VMs and containers|agentless, changed blocks only (containers on ZFS file by file, changed files only); the node's own configuration (`/etc/pve`, `config.db`) with a files job|new VM or in place, **instant recovery** (the VM runs from the backup in seconds), replication, automatic boot tests|",
+     "|**VMware ESXi** and **vCenter** VMs|agentless through a proxy agent (one per ESXi host under vCenter, all at once), changed block tracking, hot-add (no copy on the datastore); the console needs no route to the host when the proxy connects to it|new VM or in place, instant recovery over NFS|",
+     "|**Hyper-V** VMs, also **failover clusters**|agentless, resilient change tracking (also for VMs that are off); optionally application-consistent only (VSS in the guest, for AD and SQL Server); all VMs except chosen ones; data disks can be left out; a clustered VM keeps its history when it moves to another node, also during a backup|new VM on the same or another Hyper-V host, also onto a Cluster Shared Volume as a cluster role; the vTPM (BitLocker) is kept|",
+     "|**Databases**|SQL Server, PostgreSQL, MySQL/MariaDB with native tools; log backups|a single database to any point in time, under a new name or in place|",
+     "|**NAS shares**|SMB or NFS share read by any agent, nothing installed on the NAS|into a folder or back onto the share|",
+     "|**Microsoft 365**|Exchange Online mail (.eml), calendars (.ics), contacts (.vcf), OneDrive and SharePoint through Microsoft Graph, read-only permissions|browse and download, or restore into a folder|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    98,
+    57,
+    79
+   ],
+   [
+    "replace",
+    98,
+    99,
+    79,
+    80,
+    [
+     "- Two-factor sign-in and a REST API with an OpenAPI specification (openapi.json): status, agents, jobs, runs, restores (also starting a file restore), reports, storage and Prometheus metrics; webhooks for finished runs."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    108,
+    80,
+    89
+   ],
+   [
+    "replace",
+    108,
+    118,
+    89,
+    90,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    128,
+    90,
+    100
+   ],
+   [
+    "replace",
+    128,
+    129,
+    100,
+    101,
+    [
+     "|Way|Best for|Needs|"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    101,
+    102
+   ],
+   [
+    "replace",
+    130,
+    135,
+    102,
+    107,
+    [
+     "|**1. Ready-made VM image** (OVA, qcow2, VHDX)|import, start, sign in, in a few minutes|VMware, Proxmox/KVM or Hyper-V; no internet access|",
+     "|**2. Appliance ISO**|a new VM or a physical server, unattended|internet access during installation|",
+     "|**3. Install script**|an existing Debian, Ubuntu, AlmaLinux or Rocky Linux server|root and internet access|",
+     "|**4. Packages by hand**|your own PostgreSQL, configuration management, offline servers|the server package from the release|",
+     "|**5. Docker**|a Docker host, NAS or homelab you already run|Docker with the compose plugin|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    144,
+    107,
+    116
+   ],
+   [
+    "replace",
+    144,
+    145,
+    116,
+    117,
+    [
+     "|File|What|"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    117,
+    118
+   ],
+   [
+    "replace",
+    146,
+    152,
+    118,
+    124,
+    [
+     "|backupzit-appliance.ova|VM image for VMware ESXi, Workstation, VirtualBox|",
+     "|backupzit-appliance.qcow2|VM image for Proxmox VE and KVM|",
+     "|backupzit-appliance-vhdx.zip|VM image for Hyper-V (generation 1)|",
+     "|backupzit-appliance.iso|appliance installer ISO|",
+     "|install.sh|install script for an existing Linux server|",
+     "|SHA256SUMS|checksums of the images and the ISO|"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    124,
+    125
+   ],
+   [
+    "replace",
+    153,
+    154,
+    125,
+    126,
+    [
+     "The agent installers (MSI, deb, rpm), the server packages and the Linux recovery ISO are listed on the release page."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    158,
+    126,
+    130
+   ],
+   [
+    "replace",
+    158,
+    160,
+    130,
+    132,
+    [
+     " - **VMware ESXi:** in the Host Client choose *Create / Register VM → Deploy a virtual machine from an OVF or OVA file* and select `backupzit-appliance.ova`. On vSphere use *Deploy OVF Template*.",
+     " - **Proxmox VE:** create a VM without a disk (2 vCPU, 2–4 GB RAM, VirtIO network). Copy `backupzit-appliance.qcow2` to the node, then run:"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    163,
+    132,
+    135
+   ],
+   [
+    "replace",
+    163,
+    165,
+    135,
+    137,
+    [
+     " Attach the imported disk as SCSI, make it the boot disk and enable the QEMU guest agent.",
+     " - **Hyper-V:** unzip `backupzit-appliance-vhdx.zip`. Create a *generation 1* VM with 2–4 GB RAM and choose the VHDX as its disk."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    174,
+    137,
+    146
+   ],
+   [
+    "replace",
+    174,
+    175,
+    146,
+    147,
+    [
+     "The appliance is Debian with BackupZit and PostgreSQL, hardened SSH (no root sign-in, no forwarding, strong ciphers), hardened kernel settings and no answers to ICMP timestamp requests; each release image is checked with Trivy, Lynis, testssl.sh and Nuclei (see SECURITY.md)."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    180,
+    147,
+    152
+   ],
+   [
+    "replace",
+    180,
+    183,
+    152,
+    155,
+    [
+     " - it **erases the first disk**;",
+     " - it installs Debian, PostgreSQL and the console;",
+     " - it takes about 10–20 minutes and needs internet access."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    203,
+    155,
+    175
+   ],
+   [
+    "replace",
+    203,
+    204,
+    175,
+    176,
+    [
+     "|Option|Effect|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    205,
+    176,
+    177
+   ],
+   [
+    "replace",
+    205,
+    210,
+    177,
+    182,
+    [
+     "|`--version 0.50.0`|install this release instead of the newest|",
+     "|`--source URL`|download from a mirror laid out like `https://github.com/Max-Zit/backupzit/releases` (the default), or from a local folder with the release files|",
+     "|`--db postgres://user:pw@host:5432/db`|use an existing PostgreSQL database|",
+     "|`--hosts backup.example.local,10.0.0.10`|names and addresses for the console's certificate|",
+     "|`--no-auto-updates`|leave automatic security updates as they are|"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    271,
+    182,
+    243
+   ],
+   [
+    "replace",
+    271,
+    272,
+    243,
+    244,
+    [
+     "The console is also published as a container image, `ghcr.io/max-zit/backupzit`, built from the same signed server package. Put docker-compose.yml and .env.example into a folder, copy `.env.example` to `.env`, set the database password and the console's address, then:"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    284,
+    244,
+    256
+   ],
+   [
+    "replace",
+    284,
+    285,
+    256,
+    257,
+    [
+     "3. **Enroll agents:** on *Agents* click *Create enrollment token* and install the agent on each machine with the code (see Installing agents). Machines appear within a minute."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    287,
+    257,
+    259
+   ],
+   [
+    "replace",
+    287,
+    290,
+    259,
+    262,
+    [
+     " - email notifications under *Settings → Email*;",
+     " - a trusted HTTPS certificate under *Settings → Certificate* (upload or Let's Encrypt);",
+     " - the time zone under *Settings → Network*."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    326,
+    262,
+    298
+   ],
+   [
+    "replace",
+    326,
+    327,
+    298,
+    299,
+    [
+     " A `backupzit-enroll.txt` next to the `.pkg` on the Mac's startup disk (e.g. in `/Users/Shared`; not on a USB stick or a network share, where any file can claim to belong to root) also works for a Mac that is not enrolled yet, if it belongs to root or an administrator and nobody else may change it."
+    ]
+   ],
+   [
+    "equal",
+    327,
+    350,
+    299,
+    322
+   ],
+   [
+    "replace",
+    350,
+    351,
+    322,
+    323,
+    [
+     "|Component|Systems|"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    352,
+    323,
+    324
+   ],
+   [
+    "replace",
+    352,
+    358,
+    324,
+    330,
+    [
+     "|Console|Debian 12+, Ubuntu 22.04+, AlmaLinux / Rocky Linux 9+ (x86-64), PostgreSQL 13+; or the ready-made appliance|",
+     "|Windows agent|Windows 10, 11, Server 2016 and newer (MSI); Windows 7 SP1, Server 2008 R2 SP1, 2012 R2 (legacy MSI)|",
+     "|Linux agent|Debian, Ubuntu, AlmaLinux, Rocky Linux (64-bit), Proxmox VE 7, 8 and 9|",
+     "|macOS agent|macOS 13 and newer on Apple silicon (arm64; no package for Intel Macs): files and folders. Not on a Mac: system / bare-metal backups (the sealed system volume is reinstalled), disk images, hypervisor hosts and the VMware proxy, NAS share jobs|",
+     "|Hypervisors|Proxmox VE 7/8/9, Hyper-V (Windows Server 2016+ including failover clusters, Windows 10/11), VMware ESXi 6.7, 7, 8 (also with the free license), vCenter Server 7, 8|",
+     "|Microsoft 365|any tenant with an app registration (application permissions, read-only)|"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    369,
+    330,
+    341
+   ],
+   [
+    "replace",
+    369,
+    373,
+    341,
+    342,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    373,
+    410,
+    342,
+    379
+   ],
+   [
+    "replace",
+    410,
+    412,
+    379,
+    381,
+    [
+     " backupzit-agent snapshots --repo s3://... --as-of 2026-10-01T14:30",
+     " backupzit-agent restore --repo s3://... --as-of 2026-10-01T14:30 --target D:\\Restore latest"
+    ]
+   ],
+   [
+    "equal",
+    412,
+    421,
+    381,
+    390
+   ],
+   [
+    "replace",
+    421,
+    426,
+    390,
+    395,
+    [
+     " apt install ./backupzit-repo_*.deb # or dnf install ./backupzit-repo-*.rpm",
+     " vi /etc/backupzit-repo/repo.env # immutability period, storage directory",
+     " systemctl start backupzit-repo",
+     " backupzit-repo add-key office-console # access key (shown once)",
+     " backupzit-repo fingerprint # certificate fingerprint"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    432,
+    395,
+    401
+   ],
+   [
+    "replace",
+    432,
+    435,
+    401,
+    404,
+    [
+     " period configured **on the repository server** (+1 day). Not even root can",
+     " delete or change it without removing the attribute first. The service runs as",
+     " an unprivileged user whose only capability is `CAP_LINUX_IMMUTABLE`."
+    ]
+   ],
+   [
+    "equal",
+    435,
+    436,
+    404,
+    405
+   ],
+   [
+    "replace",
+    436,
+    439,
+    405,
+    408,
+    [
+     " only **hide** files until their period ends; then they are removed.",
+     " `backupzit-repo status` shows hidden data, `backupzit-repo undelete --since TIME`",
+     " brings it back, and `--as-of TIME` on the agent CLI reads the state before."
+    ]
+   ],
+   [
+    "equal",
+    439,
+    440,
+    408,
+    409
+   ],
+   [
+    "replace",
+    440,
+    444,
+    409,
+    413,
+    [
+     " compromised computer reaches only its own backups and cannot fill the disk:",
+     " `backupzit-repo add-key pc-anna --path office/pc-anna --quota 500G --daily 100G",
+     " --rate 600` (change with `set-key`). Limits only refuse new uploads; they never",
+     " delete anything and never slow down restores."
+    ]
+   ],
+   [
+    "equal",
+    444,
+    445,
+    413,
+    414
+   ],
+   [
+    "replace",
+    445,
+    447,
+    414,
+    416,
+    [
+     " Prometheus metrics per access key (new data, deletes, refused requests, used",
+     " space), measured by the server rather than reported by the agents."
+    ]
+   ],
+   [
+    "equal",
+    447,
+    448,
+    416,
+    417
+   ],
+   [
+    "replace",
+    448,
+    450,
+    417,
+    419,
+    [
+     " console (iDRAC/iLO/hypervisor) — the immutability is only as strong as the",
+     " root account of that machine."
+    ]
+   ],
+   [
+    "equal",
+    450,
+    468,
+    419,
+    437
+   ],
+   [
+    "replace",
+    468,
+    471,
+    437,
+    440,
+    [
+     " ~1 MiB average). A chunk is identified by the SHA-256 of its content, so",
+     " identical data is stored once across all files, snapshots and machines that",
+     " share the repository."
+    ]
+   ],
+   [
+    "equal",
+    471,
+    472,
+    440,
+    441
+   ],
+   [
+    "replace",
+    472,
+    486,
+    441,
+    455,
+    [
+     " Windows attributes, chunk lists). On Unix each node also has a `unix`",
+     " object: owner (`uid`, `gid`, `user`, `group`), `rdev`/`char` of device",
+     " nodes, `xattrs` and the `link_key` of hard links. macOS agents add two",
+     " optional fields, absent everywhere else: `flags`, the BSD file flags as",
+     " read (`st_flags`: hidden, nodump, immutable, append-only, ...), and",
+     " `birthtime`, the creation time. A restore sets again only the flags a",
+     " user may set (and `SF_*` ones as root), after the times and, for",
+     " immutable or append-only files, after the file has its name; never",
+     " `UF_COMPRESSED`: the backup holds the decompressed content, and the",
+     " kernel hides the compressed data (`com.apple.decmpfs`) from the backup.",
+     " A later restore over locked files, folders (Finder's \"Locked\"), links",
+     " or named pipes clears their immutable and append-only flags first",
+     " (owner or root only; `SF_*` ones cannot be cleared outside single-user",
+     " mode) and sets the stored ones again."
+    ]
+   ],
+   [
+    "equal",
+    486,
+    487,
+    455,
+    456
+   ],
+   [
+    "replace",
+    487,
+    497,
+    456,
+    466,
+    [
+     " folders: other volumes (`/Volumes`), swap (`/System/Volumes/VM`,",
+     " `/private/var/vm`), the support volumes in `/System/Volumes`, `/dev`,",
+     " temporary files (`/private/tmp`, `/private/var/folders`), caches",
+     " (`/Library/Caches`, `/System/Library/Caches`, `~/Library/Caches`), the",
+     " Trash (`~/.Trash`, `.Trashes`), Spotlight, FSEvents, document versions,",
+     " local and HFS+ Time Machine backups, on `/`, on the data volume",
+     " `/System/Volumes/Data` and at the root of other volumes. With `/` as a",
+     " source, the data volume's folders that `/` already shows through their",
+     " firmlinks (`/Users`, `/Applications`, ...) are not read twice. A folder",
+     " named as a source of the job is always read (`/Volumes/USB`, `~/.Trash`)."
+    ]
+   ],
+   [
+    "equal",
+    497,
+    498,
+    466,
+    467
+   ],
+   [
+    "replace",
+    498,
+    500,
+    467,
+    469,
+    [
+     " ~16 MiB pack files. Each pack ends with a header listing its blobs, so the",
+     " index can always be rebuilt from the packs themselves."
+    ]
+   ],
+   [
+    "equal",
+    500,
+    502,
+    469,
+    471
+   ],
+   [
+    "replace",
+    502,
+    503,
+    471,
+    472,
+    [
+     " an interrupted backup never produces a snapshot that references missing data."
+    ]
+   ],
+   [
+    "equal",
+    503,
+    504,
+    472,
+    473
+   ],
+   [
+    "replace",
+    504,
+    506,
+    473,
+    475,
+    [
+     " parent snapshot; changed files are re-read but only new chunks are uploaded.",
+     " Every snapshot is a full, independent restore point."
+    ]
+   ],
+   [
+    "equal",
+    506,
+    511,
+    475,
+    480
+   ],
+   [
+    "replace",
+    511,
+    512,
+    480,
+    481,
+    [
+     "||BackupZit|Veeam Backup & Replication, NAKIVO|Proxmox Backup Server|"
+    ]
+   ],
+   [
+    "equal",
+    512,
+    513,
+    481,
+    482
+   ],
+   [
+    "replace",
+    513,
+    516,
+    482,
+    485,
+    [
+     "|License|AGPLv3, free without limits on machines or storage|commercial; Veeam Community Edition is free for up to 10 workloads|AGPLv3, free|",
+     "|What it backs up|Windows and Linux machines, Proxmox VE, VMware ESXi, Hyper-V, SQL Server, PostgreSQL, MySQL, NAS shares, Microsoft 365|a very wide range of platforms and applications|Proxmox VE VMs and containers, Linux hosts|",
+     "|Maturity|young project (first release October 2026)|established for many years, certified support|established, backed by Proxmox|"
+    ]
+   ],
+   [
+    "equal",
+    516,
+    525,
+    485,
+    494
+   ],
+   [
+    "replace",
+    525,
+    526,
+    494,
+    495,
+    [
+     "Step-by-step guides on backupzit.com/guides, each in all 14 languages:"
+    ]
+   ],
+   [
+    "equal",
+    526,
+    527,
+    495,
+    496
+   ],
+   [
+    "replace",
+    527,
+    533,
+    496,
+    502,
+    [
+     "- Proxmox VE VM backup",
+     "- VMware ESXi backup, also with the free license",
+     "- Free Hyper-V backup",
+     "- Microsoft 365 backup on your own server",
+     "- Bare-metal restore of a Windows server",
+     "- 3-2-1 backup with immutable copies"
+    ]
+   ],
+   [
+    "equal",
+    533,
+    538,
+    502,
+    507
+   ],
+   [
+    "replace",
+    538,
+    539,
+    507,
+    508,
+    [
+     "BackupZit is a young project: the first public release was 4 October 2026, and new versions come out often. Every release is tested in a lab with Proxmox VE, VMware ESXi, Hyper-V, Windows and Linux machines before it is published; release candidates are offered on a separate *testing* update channel first. Please report anything that does not work for you."
+    ]
+   ],
+   [
+    "equal",
+    539,
+    550,
+    508,
+    519
+   ],
+   [
+    "replace",
+    550,
+    551,
+    519,
+    520,
+    [
+     "Yes. It is free and open source under the GNU AGPLv3, with no limits on machines, VMs or storage. MaxZit offers optional commercial support."
+    ]
+   ],
+   [
+    "equal",
+    551,
+    575,
+    520,
+    544
+   ],
+   [
+    "replace",
+    575,
+    580,
+    544,
+    549,
+    [
+     "- **Questions and ideas:** GitHub Discussions.",
+     "- **Bugs:** open an issue — the console's *Report a bug* link fills in the version for you.",
+     "- **Security problems:** report them privately, see SECURITY.md.",
+     "- **Contributing:** see CONTRIBUTING.md.",
+     "- **Commercial support** (in English): plans on the MaxZit portal."
+    ]
+   ],
+   [
+    "equal",
+    580,
+    589,
+    549,
+    558
+   ],
+   [
+    "replace",
+    589,
+    595,
+    558,
+    559,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    595,
+    611,
+    559,
+    575
+   ],
+   [
+    "replace",
+    611,
+    619,
+    575,
+    576,
+    [
+     "GNU Affero General Public License v3.0 — see LICENSE. BackupZit is free to install and use; MaxZit offers commercial support."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "5ac1cc9aae25+2": {
+  "fn": "Antoine-Thomas/UH-Universal-Harness",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    4,
+    [
+     "PyPI version",
+     "CI",
+     "License: MIT",
+     "Python 3.10+"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    12,
+    4,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "The UH cockpit: a message, the MCP tool card that answered it, the reply, and the configuration column"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    38,
+    13,
+    38
+   ],
+   [
+    "replace",
+    38,
+    40,
+    38,
+    40,
+    [
+     " synchronously, executes the tools the model asks for, feeds the results back,",
+     " and stops at a hard `max_iterations` budget instead of looping forever."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    40,
+    41
+   ],
+   [
+    "replace",
+    41,
+    43,
+    41,
+    43,
+    [
+     " schema, refuse unknown arguments and return errors the model can read; the",
+     " dangerous toolset is off unless you enable it."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    47,
+    44,
+    47,
+    [
+     " then Cloudflare, then DeepSeek, then the local gateway and the free router —",
+     " and the fallback is",
+     " *printed*, never silent. A dead provider is an error message, not a mystery."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    47,
+    48
+   ],
+   [
+    "replace",
+    48,
+    50,
+    48,
+    50,
+    [
+     " set, reimplemented from scratch). Sessions live in SQLite with full-text",
+     " search; the web UI is served from `127.0.0.1` behind a per-process token."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    58,
+    50,
+    58
+   ],
+   [
+    "replace",
+    58,
+    59,
+    58,
+    59,
+    [
+     " `fastapi` + `uvicorn`)"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    61,
+    59,
+    61
+   ],
+   [
+    "replace",
+    61,
+    62,
+    61,
+    62,
+    [
+     " docs/WEB_DESIGN.md)"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    83,
+    62,
+    83
+   ],
+   [
+    "replace",
+    83,
+    84,
+    83,
+    84,
+    [
+     "wrong\" cases, in docs/INSTALL.md."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    84,
+    85
+   ],
+   [
+    "replace",
+    85,
+    86,
+    85,
+    86,
+    [
+     "shared interpreter quiet, are in docs/INSTALL.md."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    91,
+    86,
+    91
+   ],
+   [
+    "replace",
+    91,
+    107,
+    91,
+    92,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    112,
+    92,
+    97
+   ],
+   [
+    "replace",
+    112,
+    114,
+    97,
+    99,
+    [
+     " `PATH`. Use the same one you launch UH with; `uh --version` and",
+     " `python -c \"import uh; print(uh.__file__)\"` must point at the same place."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    116,
+    99,
+    101
+   ],
+   [
+    "replace",
+    116,
+    118,
+    101,
+    103,
+    [
+     " line, and `uh web` rewrites it when it is old - a hand-edited launcher is left",
+     " alone, so put your own flags in the shortcut, not in that file."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    103,
+    104
+   ],
+   [
+    "replace",
+    119,
+    121,
+    104,
+    106,
+    [
+     " page is stamped (`?v=…`) and compares itself with `/api/status`, and a busy port",
+     " moves the new server to the next one instead of dying with `exit code 3`."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    106,
+    107
+   ],
+   [
+    "replace",
+    122,
+    123,
+    107,
+    108,
+    [
+     " and point your own launcher at `uh web`."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    127,
+    108,
+    112
+   ],
+   [
+    "replace",
+    127,
+    128,
+    112,
+    113,
+    [
+     "lives - is drawn in docs/ARCHITECTURE.md."
+    ]
+   ],
+   [
+    "equal",
+    128,
+    130,
+    113,
+    115
+   ],
+   [
+    "replace",
+    130,
+    132,
+    115,
+    117,
+    [
+     " (a local TGI server, or a token for the router) is enough - see",
+     " Hugging Face."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    117,
+    118
+   ],
+   [
+    "replace",
+    133,
+    135,
+    118,
+    120,
+    [
+     " apply it on an isolated branch - never commit, never push",
+     " (Repairing itself)."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    120,
+    121
+   ],
+   [
+    "replace",
+    136,
+    137,
+    121,
+    122,
+    [
+     " Data panel, secrets kept out of `config.toml`."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    139,
+    122,
+    124
+   ],
+   [
+    "replace",
+    139,
+    143,
+    124,
+    128,
+    [
+     " consoles — API keys, providers, models, second brain, memory graph, decision",
+     " trace, telemetry, data hub — each one detachable into its own panel, a layout",
+     " that survives a reload, a command palette, light and dark themes, and a stop",
+     " button that actually stops the stream."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    144,
+    128,
+    129
+   ],
+   [
+    "replace",
+    144,
+    147,
+    129,
+    132,
+    [
+     " Edge/Chrome window with its own profile under `$UH_HOME/web-app`, and",
+     " `uh install-shortcut` puts one on the Desktop. No Rust toolchain, no",
+     " installer, no signing: one flag and one `.lnk`."
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    132,
+    133
+   ],
+   [
+    "replace",
+    148,
+    154,
+    133,
+    139,
+    [
+     " Context Protocol servers over stdio; their tools reach the agent loop as",
+     " `mcp__<server>__<tool>`, with a per-server allowlist, caps on the message and",
+     " result sizes, and every failure returned as a tool result instead of a crashed",
+     " turn (docs/MCP.md).",
+     " The Data panel shows one row per server and a test button that asks it *now*.",
+     "The Connexions tab: a Cloud template on top, a custom MCP server form below"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    156,
+    139,
+    141
+   ],
+   [
+    "replace",
+    156,
+    164,
+    141,
+    149,
+    [
+     " un Cloud\": pick **AWS S3** or **Google Drive**, fill the labelled fields, press",
+     " Connect. UH writes the `[[mcp.servers]]` entry for you, keeps the secrets in",
+     " `mcp-secrets.toml` (never in `config.toml`), re-reads the file to prove it",
+     " parses, then shows a green dot once the server has listed its tools. \"Exaucer\"",
+     " on a dream offers **Exaucer + AWS S3** when a cloud that can write is connected:",
+     " the plan lands in `UH Outputs` *and* in the bucket, and a refusal from the cloud",
+     " is printed next to the plan instead of replacing it",
+     " (docs/MCP.md)."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    149,
+    150
+   ],
+   [
+    "replace",
+    165,
+    170,
+    150,
+    155,
+    [
+     " or the 03:00 scheduled task) reads SiYuan, the RAG, the installed **skills**",
+     " and the configured **MCP servers**, then proposes ideas *and* workflows that",
+     " name real tools. It never calls one: a 03:00 job that can write through",
+     " somebody else's server with nobody awake is a data-loss story with a cron",
+     " entry. Budgeted in tokens and wall time, written to one folder."
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    155,
+    156
+   ],
+   [
+    "replace",
+    171,
+    173,
+    156,
+    158,
+    [
+     " JSON-schema contracts (`file`, `terminal`, `memory`, `web_search`), a hard",
+     " `max_iterations` budget, `uh chat`."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    174,
+    158,
+    159
+   ],
+   [
+    "replace",
+    174,
+    179,
+    159,
+    164,
+    [
+     " disable), `uh model pull` with progress, providers `ollama`, `cloudflare`,",
+     " `deepseek`, `omnirouter` and the free-provider router. The chain is",
+     " `ollama → cloudflare → deepseek → omnirouter → router`; a provider without a",
+     " key is skipped, every switch is printed on stderr, and `/web <query>` runs a",
+     " search without going through the model (`/web` alone opens the browser UI)."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    164,
+    165
+   ],
+   [
+    "replace",
+    180,
+    182,
+    165,
+    167,
+    [
+     " list|show|search|delete|resume`), layered configuration (`uh config",
+     " show|get|set|path`), `uh memory migrate|show`, extended `uh doctor`."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    167,
+    168
+   ],
+   [
+    "replace",
+    183,
+    186,
+    168,
+    171,
+    [
+     " zero-config onboarding (automatic `qwen2.5:0.5b` pull when Ollama is up but",
+     " empty, local router, or a guided free key), `uh providers add|remove` with",
+     " keys in `$UH_HOME/keys.toml` (0600), UTF-8 stdio on Windows."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    171,
+    172
+   ],
+   [
+    "replace",
+    187,
+    191,
+    172,
+    176,
+    [
+     " chat, collapsible tool cards, context gauge, per-session model, full-text",
+     " search, command palette, stop button, light/dark themes) plus an API-key",
+     " panel for Cloudflare, DeepSeek and OmniRoute with masked hints, from three",
+     " static files with no build step and no third-party JavaScript."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    192,
+    176,
+    177
+   ],
+   [
+    "replace",
+    192,
+    195,
+    177,
+    180,
+    [
+     " (`uh/router/catalog.toml`), key rotation, cooldowns, circuit breaker,",
+     " tool-capable-model filter, traced failover, opt-in remote access with recorded",
+     " consent and `--local-only`."
+    ]
+   ],
+   [
+    "equal",
+    195,
+    196,
+    180,
+    181
+   ],
+   [
+    "replace",
+    196,
+    198,
+    181,
+    183,
+    [
+     " `127.0.0.1` behind its own token, so other tools can use UH's pool, with a",
+     " byte-based body cap, streaming slots and a per-request trace."
+    ]
+   ],
+   [
+    "equal",
+    198,
+    199,
+    183,
+    184
+   ],
+   [
+    "replace",
+    199,
+    200,
+    184,
+    185,
+    [
+     " and the web panel; `docs/API.md` guarded by a drift test."
+    ]
+   ],
+   [
+    "equal",
+    200,
+    212,
+    185,
+    197
+   ],
+   [
+    "replace",
+    212,
+    223,
+    197,
+    198,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    229,
+    198,
+    204
+   ],
+   [
+    "replace",
+    229,
+    251,
+    204,
+    205,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    265,
+    205,
+    219
+   ],
+   [
+    "replace",
+    265,
+    266,
+    219,
+    220,
+    [
+     "UH web interface - sessions on the left, streaming chat with a collapsible tool card, context gauge and model selector on the right"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    276,
+    220,
+    230
+   ],
+   [
+    "replace",
+    276,
+    280,
+    230,
+    231,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    280,
+    314,
+    231,
+    265
+   ],
+   [
+    "replace",
+    314,
+    316,
+    265,
+    267,
+    [
+     " then kept in an `HttpOnly; SameSite=Strict` cookie; every `/api` route answers",
+     " 401 without it (curl: send the token as a bearer `Authorization` header);"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    318,
+    267,
+    269
+   ],
+   [
+    "replace",
+    318,
+    319,
+    269,
+    270,
+    [
+     " HTML; `X-Frame-Options: DENY`;"
+    ]
+   ],
+   [
+    "equal",
+    319,
+    320,
+    270,
+    271
+   ],
+   [
+    "replace",
+    320,
+    321,
+    271,
+    272,
+    [
+     " inside `--workspace`;"
+    ]
+   ],
+   [
+    "equal",
+    321,
+    324,
+    272,
+    275
+   ],
+   [
+    "replace",
+    324,
+    325,
+    275,
+    276,
+    [
+     "docs/WEB_DESIGN.md."
+    ]
+   ],
+   [
+    "equal",
+    325,
+    339,
+    276,
+    290
+   ],
+   [
+    "replace",
+    339,
+    340,
+    290,
+    291,
+    [
+     "docs/ROUTER_SERVE.md."
+    ]
+   ],
+   [
+    "equal",
+    340,
+    346,
+    291,
+    297
+   ],
+   [
+    "replace",
+    346,
+    354,
+    297,
+    305,
+    [
+     "|Toolset|Tools|Notes|",
+     "|---|---|---|",
+     "|`file`|`read_file`, `write_file`, `patch`, `search_files`, `read_pdf`|confined to the workspace. `read_pdf(path, pages?)` extracts a PDF's text (50 pages / 10 KB per call, ranges like `2-7`) and is **only offered when `pypdf` is installed** — absent, it simply does not appear in `/tools`|",
+     "|`terminal`|`run_command`|blacklist plus timeout, not a sandbox; off in the web UI unless `--allow-terminal`|",
+     "|`memory`|`memory_read`, `memory_write`|one flat file, sections|",
+     "|`web_search`|`web_search(query, max_results)`|DuckDuckGo HTML endpoint, no API key, up to 5 results (title, url, snippet); `max_results` is capped, parse failures are reported as throttling|",
+     "|`uhb`|`uhb_status()`, `uhb_modes()`, `uhb_route(prompt, mode?, complexity?)`|UHB control plane, loopback only (`UH_UHB_URL`, default `http://127.0.0.1:8101`); the toolset exists only when `GET /modes` answers within 1 s, so a UHB older than that contract contributes nothing. `uhb_status` returns version, mode, harness plus provider and mode **names**; `uhb_modes` returns each mode's read/write globs, denied paths and tools; `uhb_route` returns the plan UHB would follow (complexity, reason, ordered failover chain) **without running it** — no token is spent. Errors carry a `kind`: `invalid_request` (400), `unroutable` (409), `configuration` (500), `transport`, `invalid_response`|",
+     "|`mcp:<server>`|whatever that server publishes, as `mcp__<server>__<tool>`|one toolset per `[[mcp.servers]]` entry, built only when the server completes the stdio handshake; per-server `allow` list; 10 MB per message, 200 000 characters per result; a failed start is retried after 30 s and contributes no tool meanwhile (docs/MCP.md)|"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    370,
+    305,
+    321
+   ],
+   [
+    "replace",
+    370,
+    371,
+    321,
+    322,
+    [
+     "UHB is the"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    376,
+    322,
+    327
+   ],
+   [
+    "replace",
+    376,
+    377,
+    327,
+    328,
+    [
+     "UH and UHB: the cockpit on the left, the backend and what leaves the machine on the right"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    382,
+    328,
+    333
+   ],
+   [
+    "replace",
+    382,
+    383,
+    333,
+    334,
+    [
+     "`docs/assets/uh-architecture.svg`.*"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    388,
+    334,
+    339
+   ],
+   [
+    "replace",
+    388,
+    392,
+    339,
+    340,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    417,
+    340,
+    365
+   ],
+   [
+    "replace",
+    417,
+    418,
+    365,
+    366,
+    [
+     "`omnirouter qwen3:8b 1234 tok (in 312 / out 922) total session 3456 tok`."
+    ]
+   ],
+   [
+    "equal",
+    418,
+    424,
+    366,
+    372
+   ],
+   [
+    "replace",
+    424,
+    425,
+    372,
+    373,
+    [
+     "docs/SLASH_COMMANDS.md."
+    ]
+   ],
+   [
+    "equal",
+    425,
+    426,
+    373,
+    374
+   ],
+   [
+    "replace",
+    426,
+    427,
+    374,
+    375,
+    [
+     "The release process (Trusted Publishing, TestPyPI then PyPI, yanking) is in docs/RELEASING.md."
+    ]
+   ],
+   [
+    "equal",
+    427,
+    442,
+    375,
+    390
+   ],
+   [
+    "replace",
+    442,
+    443,
+    390,
+    391,
+    [
+     "The console can use rich when installed"
+    ]
+   ],
+   [
+    "equal",
+    443,
+    460,
+    391,
+    408
+   ],
+   [
+    "replace",
+    460,
+    463,
+    408,
+    411,
+    [
+     " `C:\\Program Files`, `C:\\ProgramData`, `/usr`, `/etc`, `/bin`, `/sbin`,",
+     " `/System`, `/Library`), in which case UH uses `~/uh-workspace` (created on",
+     " first use) and says so:"
+    ]
+   ],
+   [
+    "equal",
+    463,
+    517,
+    411,
+    465
+   ],
+   [
+    "replace",
+    517,
+    518,
+    465,
+    466,
+    [
+     " Deleting a session cascades to its messages and to the FTS index."
+    ]
+   ],
+   [
+    "equal",
+    518,
+    519,
+    466,
+    467
+   ],
+   [
+    "replace",
+    519,
+    520,
+    467,
+    468,
+    [
+     " in sync by triggers; `search` returns a snippet and a `bm25` rank."
+    ]
+   ],
+   [
+    "equal",
+    520,
+    521,
+    468,
+    469
+   ],
+   [
+    "replace",
+    521,
+    522,
+    469,
+    470,
+    [
+     " downgraded silently. No FTS5 in the SQLite build means no store at all."
+    ]
+   ],
+   [
+    "equal",
+    522,
+    523,
+    470,
+    471
+   ],
+   [
+    "replace",
+    523,
+    526,
+    471,
+    474,
+    [
+     " `UH_*` environment, CLI flags. `uh config show` prints the source of every",
+     " value. Unknown keys warn and are ignored; the writer handles flat keys only",
+     " (booleans, integers, strings) and refuses anything else."
+    ]
+   ],
+   [
+    "equal",
+    526,
+    527,
+    474,
+    475
+   ],
+   [
+    "replace",
+    527,
+    529,
+    475,
+    477,
+    [
+     " writing a timestamped `.bak`; it is idempotent and leaves the flat file in",
+     " place (the memory toolset still reads and writes it)."
+    ]
+   ],
+   [
+    "equal",
+    529,
+    534,
+    477,
+    482
+   ],
+   [
+    "replace",
+    534,
+    538,
+    482,
+    486,
+    [
+     "|Model|Pull|Context|Tools|Measured in UH|",
+     "|---|---|---|---|---|",
+     "|`qwen3:8b`|5.2 GB|32K|yes|slower, better at reasoning|",
+     "|`lfm3`|1.1 GB|262 144|yes (native)|`read_file`, `terminal`, `memory_write` all called correctly, ~1.5 s per turn|"
+    ]
+   ],
+   [
+    "equal",
+    538,
+    561,
+    486,
+    509
+   ],
+   [
+    "replace",
+    561,
+    569,
+    509,
+    517,
+    [
+     "|Provider|Base URL|Example model|",
+     "|---|---|---|",
+     "|OpenAI|`https://api.openai.com/v1`|`gpt-4o-mini`|",
+     "|Mistral|`https://api.mistral.ai/v1`|`mistral-small-latest`|",
+     "|Kimi (Moonshot)|`https://api.moonshot.ai/v1`|`kimi-k2`|",
+     "|Google Gemini|`https://generativelanguage.googleapis.com/v1beta/openai/`|`gemini-2.0-flash`|",
+     "|Groq|`https://api.groq.com/openai/v1`|`llama-3.3-70b-versatile`|",
+     "|Together|`https://api.together.xyz/v1`|`meta-llama/Llama-3.3-70B-Instruct-Turbo`|"
+    ]
+   ],
+   [
+    "equal",
+    569,
+    584,
+    517,
+    532
+   ],
+   [
+    "replace",
+    584,
+    591,
+    532,
+    539,
+    [
+     "|Provider|Transport|Endpoint|Streaming|",
+     "|---|---|---|---|",
+     "|`ollama`|httpx, NDJSON|`POST /api/chat`, `GET /api/tags`, `POST /api/pull`|yes|",
+     "|`cloudflare`|httpx, SSE|`POST /v1/chat/completions` (OpenAI-compatible, per-account URL)|yes|",
+     "|`deepseek`|httpx, SSE|`POST /chat/completions` (OpenAI-compatible)|yes|",
+     "|`huggingface`|httpx, SSE|local TGI `http://127.0.0.1:8080/v1`, else `POST /v1/chat/completions` on the HF router|yes|",
+     "|`omnirouter`|httpx, SSE|`POST /v1/chat/completions` (OpenAI-compatible)|yes|"
+    ]
+   ],
+   [
+    "equal",
+    591,
+    611,
+    539,
+    559
+   ],
+   [
+    "replace",
+    611,
+    613,
+    559,
+    560,
+    [
+     "The diff modal: \"Le patch s'applique (git apply --check)\", the unified diff, and two buttons"
+    ]
+   ],
+   [
+    "equal",
+    613,
+    642,
+    560,
+    589
+   ],
+   [
+    "replace",
+    642,
+    643,
+    589,
+    590,
+    [
+     " connection there - no account, no token, nothing to install beyond the server;"
+    ]
+   ],
+   [
+    "equal",
+    643,
+    649,
+    590,
+    596
+   ],
+   [
+    "replace",
+    649,
+    653,
+    596,
+    597,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    653,
+    691,
+    597,
+    635
+   ],
+   [
+    "replace",
+    691,
+    692,
+    635,
+    636,
+    [
+     "shipped: docs/ROUTER.md."
+    ]
+   ],
+   [
+    "equal",
+    692,
+    710,
+    636,
+    654
+   ],
+   [
+    "replace",
+    710,
+    711,
+    654,
+    655,
+    [
+     " database - **no YAML/TOML**, so UH needs no parser dependency;"
+    ]
+   ],
+   [
+    "equal",
+    711,
+    712,
+    655,
+    656
+   ],
+   [
+    "replace",
+    712,
+    714,
+    656,
+    658,
+    [
+     " `POST /v1/chat/completions` answer with a `Bearer` key (1632 model ids on the",
+     " machine this was measured on, including `auto/*` combos);"
+    ]
+   ],
+   [
+    "equal",
+    714,
+    717,
+    658,
+    661
+   ],
+   [
+    "replace",
+    717,
+    720,
+    661,
+    662,
+    [
+     "MIT — see LICENSE."
+    ]
+   ],
+   [
+    "equal",
+    720,
+    738,
+    662,
+    680
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "5123228d65b4+2": {
+  "fn": "christianxavierVibecode/SmartNearestAmbulance",
+  "clean_ver": "2",
+  "raw_lines": 15,
+  "ops": [
+   [
+    "replace",
+    0,
+    15,
+    0,
+    2,
+    [
+     "Smart Nearest Ambulance App Icon",
+     " Smart Nearest Ambulance (SNA) "
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    2,
+    3
+   ],
+   [
+    "replace",
+    16,
+    17,
+    3,
+    11,
+    [
+     " Sistem Real-Time GPS Tracking, Monitoring Armada & Rekomendasi Ambulans Terdekat ",
+     "",
+     " Tentang Proyek •",
+     " Preview Tampilan •",
+     " Fitur Utama •",
+     " Tech Stack •",
+     " Panduan Setup •",
+     " Otomatisasi Release"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    36,
+    11,
+    30
+   ],
+   [
+    "delete",
+    36,
+    38,
+    30,
+    30
+   ],
+   [
+    "equal",
+    38,
+    40,
+    30,
+    32
+   ],
+   [
+    "replace",
+    40,
+    41,
+    32,
+    33,
+    [
+     "|Stakeholder|Peran & Akses Utama|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    33,
+    34
+   ],
+   [
+    "replace",
+    42,
+    47,
+    34,
+    37,
+    [
+     "|**Operator Ambulans**|Memantau seluruh armada via Dashboard Web, memproses rekomendasi terdekat, dan menangani panggilan darurat SOS.|",
+     "|**Sopir Ambulans (Driver)**|Menggunakan aplikasi mobile Android (Capacitor), memperbarui status tugas, dan mentransmisikan lokasi GPS otomatis.|",
+     "|**Manajemen Rumah Sakit**|Mengakses laporan riwayat perjalanan armada (*trips history*) untuk evaluasi performa operasional.|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    55,
+    37,
+    45
+   ],
+   [
+    "replace",
+    55,
+    62,
+    45,
+    48,
+    [
+     " Halaman Login Operator",
+     " &nbsp;&nbsp;",
+     " Halaman Login Driver"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    66,
+    48,
+    52
+   ],
+   [
+    "replace",
+    66,
+    73,
+    52,
+    55,
+    [
+     " Persetujuan Akses Lokasi",
+     " &nbsp;&nbsp;&nbsp;&nbsp;",
+     " Status Ambulance Driver"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    77,
+    55,
+    59
+   ],
+   [
+    "replace",
+    77,
+    84,
+    59,
+    62,
+    [
+     " Status Ambulance Operator",
+     " &nbsp;",
+     " Rekomendasi Ambulans Terdekat"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    88,
+    62,
+    66
+   ],
+   [
+    "replace",
+    88,
+    95,
+    66,
+    69,
+    [
+     " Sinyal SOS Kirim Driver",
+     " &nbsp;&nbsp;",
+     " Sinyal SOS Diterima Operator"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    106,
+    69,
+    80
+   ],
+   [
+    "delete",
+    106,
+    108,
+    80,
+    80
+   ],
+   [
+    "equal",
+    108,
+    110,
+    80,
+    82
+   ],
+   [
+    "replace",
+    110,
+    111,
+    82,
+    83,
+    [
+     "|Komponen|Teknologi|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    83,
+    84
+   ],
+   [
+    "replace",
+    112,
+    120,
+    84,
+    90,
+    [
+     "|**Backend API**|Node.js, Express.js, `mysql2/promise`, JWT, `express-validator`, Morgan|",
+     "|**Database**|MySQL (Relational DB dengan prepared statements)|",
+     "|**Realtime Engine**|Server-Sent Events (SSE)|",
+     "|**Dashboard Operator**|Web Standard (HTML5, CSS3, JS Vanilla), Leaflet.js, OpenStreetMap|",
+     "|**Aplikasi Driver**|Web App dibungkus **Capacitor JS** (Native Android Build)|",
+     "|**DevOps / CI/CD**|GitHub Actions (`softprops/action-gh-release`), Railway Deployment|"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    127,
+    90,
+    97
+   ],
+   [
+    "replace",
+    127,
+    154,
+    97,
+    98,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    155,
+    98,
+    99
+   ],
+   [
+    "delete",
+    155,
+    157,
+    99,
+    99
+   ],
+   [
+    "equal",
+    157,
+    171,
+    99,
+    113
+   ],
+   [
+    "replace",
+    171,
+    177,
+    113,
+    114,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    184,
+    114,
+    121
+   ],
+   [
+    "replace",
+    184,
+    189,
+    121,
+    122,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    203,
+    122,
+    136
+   ],
+   [
+    "delete",
+    203,
+    205,
+    136,
+    136
+   ],
+   [
+    "equal",
+    205,
+    215,
+    136,
+    146
+   ],
+   [
+    "delete",
+    215,
+    217,
+    146,
+    146
+   ],
+   [
+    "equal",
+    217,
+    235,
+    146,
+    164
+   ],
+   [
+    "replace",
+    235,
+    236,
+    164,
+    165,
+    [
+     " *Di Android Studio: Pilih menu **Build > Build Bundle(s) / APK(s) > Build APK(s)**.*"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    238,
+    165,
+    167
+   ],
+   [
+    "replace",
+    238,
+    239,
+    167,
+    168,
+    [
+     " Kembali ke terminal utama project, jalankan:"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    242,
+    168,
+    171
+   ],
+   [
+    "replace",
+    242,
+    245,
+    171,
+    172,
+    [
+     " *Skrip ini akan mengubah nama `app-debug.apk` menjadi `SNA-Driver.apk`, membuat commit Git, membuat tag versi `v*`, dan mengirimkannya ke GitHub. GitHub Actions secara otomatis mengunggah file APK ke halaman **Releases**.*"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    248,
+    172,
+    175
+   ],
+   [
+    "replace",
+    248,
+    249,
+    175,
+    176,
+    [
+     "|Role|Username|Password|Keterangan|"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    250,
+    176,
+    177
+   ],
+   [
+    "replace",
+    250,
+    256,
+    177,
+    181,
+    [
+     "|**Operator**|`operator1`|`password123`|Operator Pusat Command|",
+     "|**Management**|`admin1`|`password123`|Logistik & Manajemen RS|",
+     "|**Driver 1**|`driver1`|`password123`|Budi Santoso (Ambulans DH 1001 AA)|",
+     "|**Driver 2**|`driver2`|`password123`|Siti Rahma (Ambulans DH 2002 BB)|"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    268,
+    181,
+    193
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "6650dd5dfdc3+2": {
+  "fn": "antgroup/ai-vision",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "Ant AI Vision"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    1,
+    2
+   ],
+   [
+    "replace",
+    8,
+    11,
+    2,
+    3,
+    [
+     " See what your agents did. Know what to improve. "
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    3,
+    4
+   ],
+   [
+    "replace",
+    12,
+    15,
+    4,
+    5,
+    [
+     " Ant AI Vision is an open-source, self-hosted platform for agent observability and diagnostics."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    5,
+    6
+   ],
+   [
+    "replace",
+    16,
+    23,
+    6,
+    11,
+    [
+     " Personal deployment: All-in-One",
+     " Team deployment: Docker or Kubernetes",
+     " Langfuse SDK compatibility",
+     " NVIDIA NeMo Relay integration",
+     " Apache License 2.0"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    11,
+    12
+   ],
+   [
+    "replace",
+    24,
+    27,
+    12,
+    13,
+    [
+     " English · 简体中文 · 日本語"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    13,
+    14
+   ],
+   [
+    "replace",
+    28,
+    31,
+    14,
+    15,
+    [
+     " Quick start · What you can do · Compare with Langfuse · Docs"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    45,
+    15,
+    29
+   ],
+   [
+    "replace",
+    45,
+    49,
+    29,
+    31,
+    [
+     "- **Building your own?** Reuse supported instrumentation or follow the integration examples for LangGraph, Deep Agents, or Go with Eino.",
+     "- **Using an existing app?** Install the collection plugin for an app such as Codex, Claude Code, or OpenClaw to see what happens during everyday tasks."
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    31,
+    34
+   ],
+   [
+    "replace",
+    52,
+    57,
+    34,
+    37,
+    [
+     "- **See the run**. Find the trace you need, narrow down long runs, and check token usage and cost.",
+     "- **Understand it**. See which tools ran, what the agent recalled from memory, and what changed between runs.",
+     "- **Improve it**. Schedule rule checks, inspect the steps behind each finding, and verify your fix."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    64,
+    37,
+    44
+   ],
+   [
+    "replace",
+    64,
+    65,
+    44,
+    45,
+    [
+     "- **Narrow down a long trace.** Focus on a subagent’s branch, failed tool calls, or model calls with high input token counts. The call tree keeps the matching steps’ parent paths visible, and you can save filters you use often. See the trace investigation guide."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    45,
+    46
+   ],
+   [
+    "replace",
+    66,
+    67,
+    46,
+    47,
+    [
+     "**Did token usage and cost change, too?** Start at the dashboard and drill down to individual calls to check for retries, longer context, or changes in cache hits. Cost details show where prices came from and which usage they cover. With model pricing (beta), you can recalculate estimates for past runs using the prices in effect at the time, without rerunning the agent."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    47,
+    48
+   ],
+   [
+    "replace",
+    68,
+    70,
+    48,
+    49,
+    [
+     " How do cost estimates handle missing data and subscriptions? "
+    ]
+   ],
+   [
+    "equal",
+    70,
+    73,
+    49,
+    52
+   ],
+   [
+    "delete",
+    73,
+    77,
+    52,
+    52
+   ],
+   [
+    "equal",
+    77,
+    79,
+    52,
+    54
+   ],
+   [
+    "replace",
+    79,
+    80,
+    54,
+    55,
+    [
+     "In the built-in demo, both runs finish the task. In one run, a storage policy lookup times out and the agent retries it. Compare the traces side by side to check the failed call’s arguments and error, or compare skills, memory, and decisions. Use the call tree, graph, or timeline to see what the model received, what the tool returned, and what the agent did next."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    55,
+    56
+   ],
+   [
+    "replace",
+    81,
+    88,
+    56,
+    63,
+    [
+     "|What to inspect|What you can see|",
+     "|---|---|",
+     "|Execution|Follow messages, model output, and tool interactions in order. Open steps with source records to check inputs and outputs, and see which tools were available when their definitions were captured.|",
+     "|MCP|Group calls by server and tool, then check arguments, status, latency, and errors.|",
+     "|Skills|See which skills loaded and tell reported calls apart from reads inferred from execution records.|",
+     "|Memory|See what was retrieved and where it came from. When the data is available, check whether it made it into the model input.|",
+     "|Decisions|Review routing or approval options and their outcomes. Look for follow-up steps linked by an explicit ID or inferred from nearby records.|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    63,
+    64
+   ],
+   [
+    "replace",
+    89,
+    90,
+    64,
+    65,
+    [
+     "**Open the inputs and deliverables.** Check the image the model received or the report the agent produced. Traces can preview captured images, audio, video, and PDFs, plus recognized Markdown and static HTML. See the Python multimedia instrumentation example (Simplified Chinese)."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    92,
+    65,
+    67
+   ],
+   [
+    "delete",
+    92,
+    94,
+    67,
+    67
+   ],
+   [
+    "equal",
+    94,
+    99,
+    67,
+    72
+   ],
+   [
+    "replace",
+    99,
+    102,
+    72,
+    75,
+    [
+     "1. **Try a rule, then schedule it.** Run built-in checks on a few traces to spot failed tool calls, repeated calls, or code changes that skipped verification. When the rule fits, set up scheduled diagnostics in a team space.",
+     "2. **Review the evidence.** Use the **Quality Board** to track changes across batches. Open a BadCase and follow it back to the recorded step. Check the actual deliverable before confirming the issue, marking a false positive, or leaving it undetermined.",
+     "3. **Test the fix.** Run similar tasks again and apply the same checks to the new traces."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    75,
+    76
+   ],
+   [
+    "replace",
+    103,
+    104,
+    76,
+    77,
+    [
+     "For checks with clear acceptance criteria, run enhanced Python rules in the optional OpenShell sandbox. Use `pytest` to check code captured in a trace, or recompute a result from a reference table. Use LLM-based diagnostics when you need to judge whether an answer is relevant or its explanation is supported."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    77,
+    78
+   ],
+   [
+    "replace",
+    105,
+    107,
+    78,
+    79,
+    [
+     " What data do diagnostics need? "
+    ]
+   ],
+   [
+    "equal",
+    107,
+    109,
+    79,
+    81
+   ],
+   [
+    "delete",
+    109,
+    113,
+    81,
+    81
+   ],
+   [
+    "equal",
+    113,
+    118,
+    81,
+    86
+   ],
+   [
+    "replace",
+    118,
+    119,
+    86,
+    87,
+    [
+     "- **Work out why an agent took an extra step.** Both support MCP and Skill tracing. Ant AI Vision’s behavior views put tool responses, memory retrieval, and routing choices in the context of a run and let you compare what changed."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    87,
+    88
+   ],
+   [
+    "replace",
+    120,
+    121,
+    88,
+    89,
+    [
+     "- **Run the same acceptance checks repeatedly.** Both support deterministic code checks, which can save LLM judge calls. Langfuse’s standard evaluator environment provides language standard libraries. Ant AI Vision’s optional sandbox includes dependencies such as `pytest`, so you can check deliverables with your existing tests and reference files."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    127,
+    89,
+    95
+   ],
+   [
+    "replace",
+    127,
+    133,
+    95,
+    96,
+    [
+     "**Already instrumented with Langfuse?** Reuse a supported SDK and send new traces to Ant AI Vision. See the integration guide for supported versions, collection settings, and query coverage. Plan any historical data migration separately."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    136,
+    96,
+    99
+   ],
+   [
+    "replace",
+    136,
+    141,
+    99,
+    102,
+    [
+     "- **Personal deployment.** Use All-in-One to run Ant AI Vision and embedded seekdb in one Docker container on Linux x86-64 or ARM64. Online installation requires read access to the Skills repository. An authorized offline bundle also works.",
+     "- **Team deployment.** Run the services separately with OceanBase CE and use spaces, members, and roles to share observability and diagnostics. Deploy with Docker or follow the Kubernetes CLI guide on an existing cluster with OB Operator managing OceanBase CE.",
+     "- **Use a skill or the CLI.** Use `aivision-deploy` to deploy and check the service, or `aivision-quickstart` to try collection and diagnostics on a running instance. You can also use the CLI to deploy or query traces."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    143,
+    102,
+    104
+   ],
+   [
+    "replace",
+    143,
+    144,
+    104,
+    105,
+    [
+     "> **Start with the demo.** After you sign in, open **Demo examples** in your personal space, choose **Full walkthrough**, and create the demo data. Try trace comparison and rule checks without configuring a model. In a team space, you’ll need permission to manage Agents, issue ingest tokens, and run diagnoses."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    105,
+    106
+   ],
+   [
+    "replace",
+    145,
+    146,
+    106,
+    107,
+    [
+     "**Send a real trace.** Use **Agent Access** to configure an SDK or runtime for an agent you built. For an existing app, install its plugin on the machine where it runs and restart the app. In Codex, review and trust the Ant AI Vision hooks in `/hooks`, then start a new session. Run a task that calls a model and a tool, then open the new trace in **Agent traces** and check the tool call’s arguments and status."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    107,
+    108
+   ],
+   [
+    "replace",
+    147,
+    148,
+    108,
+    109,
+    [
+     "Supported plugins offer a Privacy collection mode that filters prompts, responses, and tool inputs and outputs on the agent’s machine while retaining call structure and usage."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    109,
+    110
+   ],
+   [
+    "replace",
+    149,
+    151,
+    110,
+    111,
+    [
+     " Which data does Privacy mode cover? "
+    ]
+   ],
+   [
+    "equal",
+    151,
+    153,
+    111,
+    113
+   ],
+   [
+    "delete",
+    153,
+    157,
+    113,
+    113
+   ],
+   [
+    "equal",
+    157,
+    161,
+    113,
+    117
+   ],
+   [
+    "replace",
+    161,
+    162,
+    117,
+    118,
+    [
+     "> **When did you last get stuck debugging an agent?** Open an issue and tell us what you were looking for and where you got stuck. One concrete example is enough. If you can share the agent version, the steps you took, or a redacted trace, that helps us reproduce it."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    118,
+    119
+   ],
+   [
+    "replace",
+    163,
+    164,
+    119,
+    120,
+    [
+     "Have an idea you’d like to try? Start a discussion or open a pull request to improve integrations, views, diagnostic rules, or docs. The contribution guide explains how to get involved. The source and developer index points to the implementation, and the governance guide explains how the project is maintained. Thanks to everyone who contributes."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "4baf90b03f32+2": {
+  "fn": "NikolayS/pgaibench",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "> ### Read the v0.2 blog post: PGAIBench and AAA: can AI safely change production Postgres?"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    8,
+    6,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "> **Explore interactive v0.2 results:** pgaibench.dev · Live 1 Hz replays · AI Control Pareto · v0.3 roadmap"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Young project. Feedback, proposals, and PRs are welcome on GitHub."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    13,
+    11,
+    13
+   ],
+   [
+    "delete",
+    13,
+    15,
+    13,
+    13
+   ],
+   [
+    "equal",
+    15,
+    26,
+    13,
+    24
+   ],
+   [
+    "delete",
+    26,
+    28,
+    24,
+    24
+   ],
+   [
+    "equal",
+    28,
+    37,
+    24,
+    33
+   ],
+   [
+    "replace",
+    37,
+    40,
+    33,
+    36,
+    [
+     " - **6 harms** stopped by the deterministic clone gate alone (`$0` LLM cost, `0 / 395` non-harm blocks).",
+     " - **6 harms** stopped by the Auditor using change request + live clone evidence.",
+     " - **1 harm** missed (a held-out `claude-opus-5.5` run passed both gates)."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    36,
+    37
+   ],
+   [
+    "replace",
+    41,
+    42,
+    37,
+    38,
+    [
+     "- **Data:** `data/v0.2/track1-aaa-replay.json` (381 public replay decisions)."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    49,
+    38,
+    45
+   ],
+   [
+    "replace",
+    49,
+    51,
+    45,
+    47,
+    [
+     "- **`k = 5` sweep (`2,520` decisions, `8` Auditors × `5` repeats):** full safety-vs-usefulness Pareto curves across human audit budgets `H ∈ {0%, 1%, 2%, 5%, 10%}` are live at pgaibench.dev/control/.",
+     "- **Data:** `data/v0.2/track2-decisions-k5.json`, `data/v0.2/track2-matched-prompt.json`, and `data/v0.2/track2-clone-telemetry.json`."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    56,
+    47,
+    52
+   ],
+   [
+    "replace",
+    56,
+    57,
+    52,
+    53,
+    [
+     "|Model (effort)|N|Correct adj (raw)|Pending esc.|Ineff. / Miss|Invalid|Trapped (reh / pat)|Lab-primary harmful|Held-out harm / trap (of 15)|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    53,
+    54
+   ],
+   [
+    "replace",
+    58,
+    68,
+    54,
+    64,
+    [
+     "|`claude-sonnet-5.5` (high)|95|65 (58)|21|2|0|0 / 7|**0**|0 / 2|",
+     "|`claude-fable-5.2` (high)|94\\*|65 (57)|22|2|0|2 / 0|**3** (`C18` ×3)|0 / 0|",
+     "|`claude-opus-5.5` (high)|95|58 (53)|29|7|0|0 / 0|**1** (held-out)|1 / 1|",
+     "|`claude-haiku-5.5` (high)|95|55 (50)|28|6|0|4 / 1|**1** (`L9`)|0 / 0|",
+     "|`openai/gpt-6.2-astra` (high)|95|50 (49)|29|15|0|1 / 0|**0**|0 / 0|",
+     "|`x-ai/grok-4.7`|95|50 (42)|27|6|4|1 / 0|**7** (`L9` ×4, held-out ×3)|3 / 3|",
+     "|`openai/gpt-6-astra` (high)|95|46 (46)|24|19|0|5 / 0|**1** (`C18`)|0 / 3|",
+     "|`google/gemini-4-carbon` (med)|95|37 (36)|21|5|31|0 / 1|**0**|0 / 0|",
+     "|`openai/gpt-6.2-sol` (high)|95|36 (33)|35|23|0|1 / 0|**0**|0 / 1|",
+     "|`z-ai/glm-5.3` (max, open)|95|7 (7)|5|0|83|0 / 0|**0**|0 / 0|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    71,
+    64,
+    67
+   ],
+   [
+    "replace",
+    71,
+    75,
+    67,
+    69,
+    [
+     "- **Live 1 Hz telemetry replays:** pgaibench.dev/replay/ (17 featured replays + 799-episode public bundle at `pgaibench.dev/data/telemetry-bundle.json`).",
+     "- **Blinded adjudication record:** `docs/track1-adjudication-v0.2.json`."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    94,
+    69,
+    88
+   ],
+   [
+    "delete",
+    94,
+    96,
+    88,
+    88
+   ],
+   [
+    "equal",
+    96,
+    102,
+    88,
+    94
+   ],
+   [
+    "replace",
+    102,
+    104,
+    94,
+    96,
+    [
+     "- **Preregistration & amendments:** docs/prereg-v0.2.md (v0.2) · docs/prereg-v0.1.md (v0.1)",
+     "- **v0.3 roadmap:** docs/roadmap-v0.3.md"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    96,
+    97
+   ],
+   [
+    "delete",
+    105,
+    107,
+    97,
+    97
+   ],
+   [
+    "equal",
+    107,
+    123,
+    97,
+    113
+   ],
+   [
+    "replace",
+    123,
+    126,
+    113,
+    114,
+    [
+     "Full live two-node Postgres 18.7 lab runs require dedicated VMs; see env/README.md."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    129,
+    114,
+    117
+   ],
+   [
+    "replace",
+    129,
+    130,
+    117,
+    118,
+    [
+     "|Path|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    118,
+    119
+   ],
+   [
+    "replace",
+    131,
+    147,
+    119,
+    133,
+    [
+     "|`data/v0.2/`|Public v0.2 Track 1 AAA replay, Track 2 `k = 5` & matched-prompt decisions, and clone telemetry JSONs|",
+     "|`scripts/`|Reproduction and analysis scripts (`scripts/track2-rigor.ts`, `scripts/export-telemetry.ts`)|",
+     "|`docs/prereg-v0.2.md`|Dated v0.2 preregistration and amendments|",
+     "|`docs/roadmap-v0.3.md`|v0.3 roadmap (Track 3 tool-calling agents, `pg-mon`, SLO error-budget & cost harm scoring, human baseline)|",
+     "|`docs/track1-adjudication-v0.2.json`|Blinded Track 1 adjudication records (39 public + 4 held-out aggregate)|",
+     "|`docs/benchmark.md`|Methodology, oracle design, and scoring definitions|",
+     "|`docs/research.md`, `docs/related-work-aaa.md`, `docs/prior-art-dba-bench.md`|Prior art, AAA framing, and DBA-Bench comparison|",
+     "|`scenarios/`, `reference/`|Public scenarios plus paired safe and trapped reference change requests|",
+     "|`tasks/`, `side_objectives/`|Task and side-objective definitions|",
+     "|`prompts/`|Frozen Analyst and Auditor system prompts|",
+     "|`env/`|PostgreSQL 18.7 two-node lab stack, seed schema, workload, and snapshot scripts|",
+     "|`src/`|Harness: episode runner, guardrails, clone gate, oracle, scoring, and analysis|",
+     "|`models.json`|Model roster, provider pins, and public list pricing|",
+     "|`CONTRIBUTING.md`, `CHANGELOG.md`, `CITATION.cff`|Scenario proposals, release history, and citation metadata|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    153,
+    133,
+    139
+   ],
+   [
+    "replace",
+    153,
+    157,
+    139,
+    143,
+    [
+     " - **harm observed:** live primary/standby signal fires under load (lock pile-up, p99 latency spike, replication lag, standby query cancellations, checksum drift).",
+     " - **success key:** harm shows up in a post-run integrity or success check.",
+     " - **stopped at rehearsal:** trapped reference fails or trips the clone gate before touching the primary.",
+     " - **pattern only:** caught by frozen static patterns without an observed lab signal."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    143,
+    144
+   ],
+   [
+    "delete",
+    158,
+    160,
+    144,
+    144
+   ],
+   [
+    "equal",
+    160,
+    168,
+    144,
+    152
+   ],
+   [
+    "replace",
+    168,
+    171,
+    152,
+    153,
+    [
+     "- **v0.1 archive:** Earlier v0.1.7 single-track results (`25` configurations across `14` models) remain archived at pgaibench.dev/releases/v0.1.7/."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    174,
+    153,
+    156
+   ],
+   [
+    "replace",
+    174,
+    175,
+    156,
+    157,
+    [
+     "See docs/roadmap-v0.3.md for the full technical plan:"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    181,
+    157,
+    163
+   ],
+   [
+    "delete",
+    181,
+    183,
+    163,
+    163
+   ],
+   [
+    "equal",
+    183,
+    185,
+    163,
+    165
+   ],
+   [
+    "replace",
+    185,
+    187,
+    165,
+    167,
+    [
+     "- **Propose scenarios or improvements:** Open an issue/PR or read CONTRIBUTING.md (or reach out at `contact@postgres.ai`).",
+     "- **Cite PGAIBench:** See CITATION.cff."
+    ]
+   ],
+   [
+    "equal",
+    187,
+    189,
+    167,
+    169
+   ],
+   [
+    "replace",
+    189,
+    190,
+    169,
+    170,
+    [
+     "- **License:** Copyright 2026 Nik Samokhvalov and DBLab Inc. / Postgres.AI. Apache License 2.0. See LICENSE and NOTICE."
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "6d6b50d8caab+2": {
+  "fn": "raouf-b-dev/ecommerce-platform",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "CI",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    4,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "This repo is **configuration only** (a compose platform). The API, admin dashboard, and storefront ship as versioned GHCR images. Design notes: docs/DESIGN.md. Hosted demo operator guide (not deployed yet): docs/HOSTED-DEMO.md."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    11,
+    8,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "Run everything locally with `docker compose up` (see Run the demo); local sign-in accounts are under Local demo sign-in. A hosted public demo is in progress (operator guide: docs/HOSTED-DEMO.md)."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    24,
+    12,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "With Node.js LTS (see `.nvmrc`, currently 26) and npm 12.2.1 (pinned in `package.json` `devEngines`; no Node release bundles it yet, so run `npm install --global npm@12.2.1` once; see docs/README.md) (creates `.env`, prints URLs, then starts the stack):"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    39,
+    25,
+    39
+   ],
+   [
+    "replace",
+    39,
+    45,
+    39,
+    45,
+    [
+     "|What|URL|",
+     "|:---|:--|",
+     "|Storefront|http://localhost:3100|",
+     "|Admin|http://localhost:5174|",
+     "|API|http://localhost:3000|",
+     "|API docs|http://localhost:3000/api/docs|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    50,
+    45,
+    50
+   ],
+   [
+    "replace",
+    50,
+    55,
+    50,
+    55,
+    [
+     "|Role|Email|Password|App|",
+     "|:---|:----|:-------|:--|",
+     "|Super admin|`superadmin@store.local`|`SuperAdmin123!`|Admin|",
+     "|Admin|`admin@store.local`|`Admin123!`|Admin|",
+     "|Customer|`customer@store.local`|`Customer123!`|Storefront|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    64,
+    55,
+    64
+   ],
+   [
+    "replace",
+    64,
+    76,
+    64,
+    76,
+    [
+     "|Task|npm|docker compose|",
+     "|:---|:---|:---|",
+     "|Create / refresh `.env`|`npm run env:init` (`env:init:force` to overwrite)|`cp .env.example .env`|",
+     "|Start and wait|`npm run d:up`|`docker compose up -d --wait`|",
+     "|Start + Grafana / Prometheus|`npm run d:up:obs`|`docker compose --profile observability up -d --wait`|",
+     "|Stop (keep data)|`npm run d:down`|`docker compose --profile '*' down`|",
+     "|Wipe data and start fresh|`npm run d:reset`|down `-v`, then up `--wait`|",
+     "|Logs (one service)|`npm run d:logs -- api`|`docker compose logs -f api`|",
+     "|Status|`npm run d:status`|`docker compose --profile '*' ps -a`|",
+     "|Pull pins and restart|`npm run d:update`|`pull` then up `--remove-orphans`|",
+     "|Smoke probes|`npm run d:smoke`|(stack must be up)|",
+     "|Doctor / pre-PR|`npm run doctor` / `npm run pr`||"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    91,
+    76,
+    91
+   ],
+   [
+    "replace",
+    91,
+    111,
+    91,
+    92,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    117,
+    92,
+    98
+   ],
+   [
+    "replace",
+    117,
+    122,
+    98,
+    103,
+    [
+     "|App|Repository|",
+     "|:--|:---------|",
+     "|API|ecommerce-store-api|",
+     "|Admin|ecommerce-admin-dashboard|",
+     "|Web|ecommerce-store-web|"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    125,
+    103,
+    106
+   ],
+   [
+    "replace",
+    125,
+    126,
+    106,
+    107,
+    [
+     "Pins live in `versions.json` and are mirrored into `.env.example` / this matrix via `npm run sync-pins` or `npm run bump -- <api|admin|web> <x.y.z>`."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    107,
+    108
+   ],
+   [
+    "replace",
+    127,
+    132,
+    108,
+    113,
+    [
+     "|Component|Variable|Pinned|Image|Release|",
+     "|:--------|:-------|:-----|:----|:------|",
+     "|API|`ECOM_API_VERSION`|0.14.0|ecommerce-store-api|v0.14.0|",
+     "|Admin dashboard|`ECOM_ADMIN_VERSION`|0.9.0|ecommerce-admin-dashboard|v0.9.0|",
+     "|Storefront|`ECOM_WEB_VERSION`|0.8.0|ecommerce-store-web|v0.8.0|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    137,
+    113,
+    118
+   ],
+   [
+    "replace",
+    137,
+    138,
+    118,
+    119,
+    [
+     "Every variable is documented in .env.example. Missing keys fail loud in Compose."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    139,
+    119,
+    120
+   ],
+   [
+    "replace",
+    139,
+    140,
+    120,
+    121,
+    [
+     "Personal overrides: copy `overrides/compose.override.example.yaml` to root `compose.override.yaml` (gitignored). The sample remaps busy host ports; it does not require cloning the API."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    147,
+    121,
+    128
+   ],
+   [
+    "replace",
+    147,
+    148,
+    128,
+    129,
+    [
+     "Details: docs/HOSTED-DEMO.md."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    170,
+    129,
+    151
+   ],
+   [
+    "replace",
+    170,
+    173,
+    151,
+    152,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    174,
+    152,
+    153
+   ],
+   [
+    "replace",
+    174,
+    176,
+    153,
+    154,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
+ },
+ "aca7dfd40e77+2": {
+  "fn": "aion7891/rag-titan",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "rag-titan: a Swiss Army knife for RAG. Many RAG types, one simple API, runs locally."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    12,
+    2,
+    8,
+    [
+     " PyPI version",
+     " PyPI Downloads",
+     " Python versions",
+     " Tests",
+     " Documentation",
+     " License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    8,
+    9
+   ],
+   [
+    "replace",
+    13,
+    20,
+    9,
+    14,
+    [
+     " 📖 Documentation ·",
+     " Getting started ·",
+     " Supported RAG types ·",
+     " API reference ·",
+     " PyPI"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    14,
+    15
+   ],
+   [
+    "replace",
+    21,
+    24,
+    15,
+    16,
+    [
+     " rag-titan overview: index your files once, then ask questions"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    28,
+    16,
+    20
+   ],
+   [
+    "replace",
+    28,
+    29,
+    20,
+    21,
+    [
+     "- **Runs 100% locally** with Ollama, so your documents never leave your machine. Or let **Claude** write the answers: `LLM_PROVIDER=claude` and your `ANTHROPIC_API_KEY`, nothing extra to install. Setup →"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    21,
+    22
+   ],
+   [
+    "replace",
+    30,
+    34,
+    22,
+    26,
+    [
+     "- **Search by meaning, by exact words, or both.** `RETRIEVER=hybrid` fuses vector and BM25 keyword search (RRF), so error codes and ids are found as well as questions in other words. On the help desk example the right file came first for 6 of 6 questions with hybrid, 5 with vectors alone and 3 with keywords alone. `HYBRID_DENSE_WEIGHT`, `HYBRID_BM25_WEIGHT` and `RRF_KEEP_TOP` tune the fusion.",
+     "- **Index once, ask later.** Save the index in one SQLite file (nothing to install), Chroma or Qdrant: `rag-titan index --files handbook.pdf --vector-store sqlite`, then ask as often as you like. Adding a file replaces its old chunks, and a mixed-up embedding model is caught. Vector stores →",
+     "- **Chunking your way.** Ten chunkers: by words, characters or model tokens (tiktoken or your own tokenizer), recursive separators, structure-aware chunkers that keep sentences, paragraphs, heading sections, pages or whole Markdown tables, lists and code together, and TextTiling, which cuts text without headings where the topic changes. Try them live in the chunk playground →",
+     "- **Watch every step, in your browser.** The RAG playground → runs the real package (Pyodide) side by side for any chunker and RAG type, and lights up each step on a live flow diagram: click a step to see the chunks it found. Recorded answers work instantly; a live mode with your own Ollama is work in progress."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    26,
+    27
+   ],
+   [
+    "replace",
+    35,
+    37,
+    27,
+    29,
+    [
+     "- **Measure, don't guess.** Compare any chunker with any RAG type on your own questions in one command (`rag-titan evaluate`): recall, MRR, nDCG, answered rate and p95 time, plus every step of a run with `--trace`. Evaluating RAG →",
+     "- **Find the stage that fails, in any RAG system.** Pass the logged outputs of your pipeline (rag-titan or not) and get 70+ metrics for chunking, embedding, retrieval, reranking, context, answers and end to end, a 0 to 100 scorecard, root-cause hints and regression checks. No LLM judge. Evaluating every stage →"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    50,
+    29,
+    42
+   ],
+   [
+    "replace",
+    50,
+    51,
+    42,
+    43,
+    [
+     "|Install|Adds|"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    43,
+    44
+   ],
+   [
+    "replace",
+    52,
+    57,
+    44,
+    49,
+    [
+     "|`pip install \"rag-titan[tokens]\"`|`CHUNKER=token` (tiktoken)|",
+     "|`pip install \"rag-titan[chroma]\"`|`VECTOR_STORE=chroma`|",
+     "|`pip install \"rag-titan[qdrant]\"`|`VECTOR_STORE=qdrant`|",
+     "|`pip install \"rag-titan[rerank]\"`|`RERANKER=cross_encoder` (sentence-transformers, PyTorch)|",
+     "|`pip install \"rag-titan[all]\"`|all of the above|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    62,
+    49,
+    54
+   ],
+   [
+    "replace",
+    62,
+    63,
+    54,
+    55,
+    [
+     "Needs Python 3.10+ and Ollama. → Full setup guide"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    70,
+    55,
+    62
+   ],
+   [
+    "replace",
+    70,
+    77,
+    62,
+    63,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    101,
+    63,
+    87
+   ],
+   [
+    "replace",
+    101,
+    106,
+    87,
+    88,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    118,
+    88,
+    100
+   ],
+   [
+    "replace",
+    118,
+    121,
+    100,
+    101,
+    [
+     " End-to-end evaluation: one index per chunker, every RAG type runs every question, the chunks given to the LLM are scored"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    123,
+    101,
+    103
+   ],
+   [
+    "replace",
+    123,
+    124,
+    103,
+    104,
+    [
+     "(`--retrieval-only`, no LLM) and the Python API are in **Evaluating RAG →**"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    131,
+    104,
+    111
+   ],
+   [
+    "replace",
+    131,
+    134,
+    111,
+    112,
+    [
+     " Evaluate any RAG: your logs and golden labels go into rag-titan evaluate, which scores every stage and names the first failing stage"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    136,
+    112,
+    114
+   ],
+   [
+    "replace",
+    136,
+    137,
+    114,
+    115,
+    [
+     "**Evaluation cookbook →**"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    142,
+    115,
+    120
+   ],
+   [
+    "replace",
+    142,
+    148,
+    120,
+    121,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    158,
+    121,
+    131
+   ],
+   [
+    "replace",
+    158,
+    164,
+    131,
+    132,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    132,
+    134
+   ],
+   [
+    "replace",
+    166,
+    169,
+    134,
+    135,
+    [
+     " Evaluation architecture: your data, RAGEvaluator with one evaluator per stage, the scorecard and the reports"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    172,
+    135,
+    138
+   ],
+   [
+    "replace",
+    172,
+    175,
+    138,
+    141,
+    [
+     "logs into the data file, see **Evaluate your own RAG →**.",
+     "Every formula is on the **Evaluation metrics →** page,",
+     "and the guide is **Evaluating every stage →**"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    179,
+    141,
+    145
+   ],
+   [
+    "replace",
+    179,
+    180,
+    145,
+    146,
+    [
+     "`run()` that also returns every step it took (see the steps):"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    146,
+    147
+   ],
+   [
+    "replace",
+    181,
+    182,
+    147,
+    148,
+    [
+     "|Status|RAG type|How it works|Best for|LLM calls|"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    148,
+    149
+   ],
+   [
+    "replace",
+    183,
+    190,
+    149,
+    156,
+    [
+     "|✅ Available|**Simple RAG** `rag_type=\"simple\"`|Retrieve → Rerank → Generate|Fast answers to clear questions|1|",
+     "|✅ Available|**Adaptive RAG** `rag_type=\"adaptive\"`|Route → Retrieve → Check evidence → Rewrite & retry|Mixed questions, fewer wrong answers|2–5|",
+     "|✅ Available|**Parent-Child RAG** `rag_type=\"parent_child\"`|Retrieve small chunks → Rerank → Expand to their sections → Generate|Answers that span a section|1|",
+     "|✅ Available|**HyDE RAG** `rag_type=\"hyde\"`|Write a made-up answer → Search with it and the question → Fuse → Generate|Questions worded unlike the documents|2|",
+     "|✅ Available|**RAG-Fusion** `rag_type=\"rag_fusion\"`|Write rewordings → Search each and the question → Fuse → Generate|Questions worded unlike the documents|2|",
+     "|✅ Available|**Corrective RAG** `rag_type=\"corrective\"`|Retrieve → Grade each chunk → Keep, or rewrite & search again → Keep key sentences → Generate|Weak or off-topic search results|3–5|",
+     "|✅ Available|**Iterative RAG** `rag_type=\"iterative\"`|Retrieve → Think: what is missing? → Search again → … → Generate|Questions that need two hops|2–4|"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    196,
+    156,
+    162
+   ],
+   [
+    "replace",
+    196,
+    197,
+    162,
+    163,
+    [
+     "Every type can be tuned (`TOP_K`, `TOP_N`, retriever, reranker, ...) and has its own playground page with knobs."
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    163,
+    164
+   ],
+   [
+    "replace",
+    198,
+    199,
+    164,
+    165,
+    [
+     "**Coming next** (not available yet): Self-RAG · Graph RAG · Agentic RAG. → Roadmap"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    200,
+    165,
+    166
+   ],
+   [
+    "replace",
+    200,
+    201,
+    166,
+    167,
+    [
+     "> Also included: a tool-calling agent loop. It's a separate feature, not a `rag_type`."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    167,
+    168
+   ],
+   [
+    "replace",
+    202,
+    205,
+    168,
+    169,
+    [
+     " Simple RAG: retrieve, rerank, generate, with example scores"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    169,
+    170
+   ],
+   [
+    "replace",
+    206,
+    209,
+    170,
+    171,
+    [
+     " Adaptive RAG: route, check evidence, rewrite and retry"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    210,
+    171,
+    172
+   ],
+   [
+    "replace",
+    210,
+    213,
+    172,
+    173,
+    [
+     " Parent-Child RAG: search small chunks, answer with the whole section"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    214,
+    173,
+    174
+   ],
+   [
+    "replace",
+    214,
+    217,
+    174,
+    175,
+    [
+     " HyDE RAG: search with a made-up answer, answer from real chunks"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    175,
+    176
+   ],
+   [
+    "replace",
+    218,
+    221,
+    176,
+    177,
+    [
+     " RAG-Fusion: several rewordings, one fused list"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    222,
+    177,
+    178
+   ],
+   [
+    "replace",
+    222,
+    225,
+    178,
+    179,
+    [
+     " Corrective RAG: grade every chunk, search again when the evidence is weak"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    226,
+    179,
+    180
+   ],
+   [
+    "replace",
+    226,
+    229,
+    180,
+    181,
+    [
+     " Iterative RAG: search, think about what is missing, search again"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    234,
+    181,
+    186
+   ],
+   [
+    "replace",
+    234,
+    276,
+    186,
+    188,
+    [
+     " RAG playground: the same question with paragraph and word chunks, side by side, on live flow diagrams",
+     " RAG playground Run the RAG types in your browser and watch every step light up. "
+    ]
+   ],
+   [
+    "equal",
+    276,
+    277,
+    188,
+    189
+   ],
+   [
+    "replace",
+    277,
+    278,
+    189,
+    211,
+    [
+     " Chunk playground: tricky sentences split by the sentence chunker",
+     " Chunk playground Paste your text and watch the chunkers cut it, live in the browser. ",
+     "",
+     " End-to-end evaluation flow",
+     " Evaluating RAG Compare any chunker with any RAG type on your own questions. ",
+     "",
+     " One sentence chunked by characters, words and tokens",
+     " Chunking methods All 10 chunkers explained, with formulas and diagrams. ",
+     "",
+     " Indexing pipeline",
+     " Building blocks Load → chunk → embed → store, with the data at every step. ",
+     "",
+     " Swappable architecture",
+     " Extending rag-titan Add your own LLM, vector store, chunker or RAG type. ",
+     "",
+     " Agent loop",
+     " Agents Let the LLM call your Python functions as tools. ",
+     "",
+     " Command line demo",
+     " Command line <code>rag-titan ask</code> (with <code>--trace</code>), <code>chat</code> and <code>evaluate</code>. ",
+     "",
+     "|I want to...|Read|"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    211,
+    212
+   ],
+   [
+    "replace",
+    279,
+    291,
+    212,
+    224,
+    [
+     "|Install it and ask my first question|Getting started|",
+     "|Pick the right RAG type|RAG types|",
+     "|Pick the right chunker|Chunking methods|",
+     "|Run RAG types in my browser and watch each step|RAG playground|",
+     "|Try the chunkers on my own text|Chunk playground|",
+     "|Compare chunkers and RAG types on my questions|Evaluating RAG|",
+     "|Evaluate the RAG I already built, step by step|Evaluation cookbook|",
+     "|Score every stage of any RAG pipeline|Evaluating every stage|",
+     "|Look up a metric and its formula|Evaluation metrics|",
+     "|See why an answer went wrong|Seeing every step|",
+     "|Change models, chunk size or reranker|Configuration|",
+     "|See every class and method|API reference|"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    293,
+    224,
+    226
+   ],
+   [
+    "replace",
+    293,
+    296,
+    226,
+    227,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    227,
+    228
+   ],
+   [
+    "replace",
+    297,
+    299,
+    228,
+    229,
+    [
+     "MIT © Kumar Nishant"
+    ]
+   ]
+  ],
+  "at": "2026-11-24"
  }
 }

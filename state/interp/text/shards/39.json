@@ -3186,5 +3186,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f96c0b740f77": {
+  "identity": {
+   "one_liner": "Yjs CRDT 框架的纯 Go 移植，V1/V2 字节级兼容 yjs。",
+   "review": "Ygo 是 Yjs CRDT 框架的纯 Go 实现，已被 Yjs 文档的移植页收录。它以字节级兼容 yjs@13.6.33 的 V1/V2 更新格式为目标，通过数百个跨语言 fixture 在 CI 中双向验证。提供 Map/Array/Text 等共享类型、UndoManager、快照、子文档与离线客户端，附带 yserve WebSocket 服务器（SQLite 持久化）。核心模块需 Go 1.23，SQLite 存储模块需 Go 1.26 且不支持 wasm 等部分平台。",
+   "highlights": [
+    "V1/V2 更新格式与 yjs@13.6.33 双向字节级兼容，由 890 个跨语言 fixture 场景在 CI 中验证（Any 值等例外见 README）",
+    "提供 Map、Array、Text、XML、Awareness、UndoManager、快照、子文档等 Yjs 共享类型，含变更观察者与每事务更新回调",
+    "纯 Go、无 CGO，可编译全部 47 个目标平台；gomobile 可生成 Android AAR 与 iOS xcframework 移动 SDK"
+   ],
+   "use_cases": [
+    "为 Go 后端、机器人、CLI 工具或服务端代理嵌入 Yjs 文档与同步能力",
+    "搭建自托管协作服务器：yserve 单二进制支持 y-websocket 客户端与 SQLite 持久化",
+    "构建 iOS/Android 本地优先协作应用，通过移动 SDK 内置的同步客户端离线编辑并在重连后同步"
+   ]
+  },
+  "sha": "f96c0b740f77",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a30e3642810f": {
+  "identity": {
+   "one_liner": "纯 Raven 编写的 PostgreSQL 客户端，基于 v3 协议直连服务器",
+   "review": "raven-postgres 是用 Raven 语言实现、无原生依赖的 PostgreSQL 客户端库，通过 std/net 上的 v3 前后端协议通信，无需 libpq 或 C 编译器。它提供简单/扩展协议查询、$1 占位符参数绑定、命名预编译语句缓存（每连接上限 512 条）、事务 SQL、NULL 区分与 SQLSTATE 错误保留。当前 v0.1.0/v0.3.1 阶段，仅支持 trust 与明文 password 认证，未实现 MD5、SCRAM-SHA-256、TLS 与 Unix 域套接字；结果行全量驻内存，参数与结果均为文本格式。已在 PostgreSQL 16.9 与 17.5 上做端到端测试。适用于在可信开发网络中让 Raven 程序读写 PostgreSQL。",
+   "highlights": [
+    "以纯 Raven 实现 PostgreSQL v3 协议，无 libpq 等原生依赖",
+    "支持扩展协议 $1/$2 参数绑定与每连接最多 512 条命名预编译语句缓存",
+    "错误结果保留 severity 与 SQLSTATE，语句错误后连接保持可用"
+   ],
+   "use_cases": [
+    "在 Raven 程序中执行 CRUD 查询、INSERT...RETURNING 与事务",
+    "配合 pg_hba.conf 的 trust/password 认证连接本地或可信网络内的 PostgreSQL",
+    "通过 rv.toml 依赖引入并运行 rvpm 单元测试与 Docker 端到端测试脚本"
+   ]
+  },
+  "sha": "a30e3642810f",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

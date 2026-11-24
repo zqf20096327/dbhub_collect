@@ -2949,5 +2949,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5123228d65b4": {
+  "identity": {
+   "one_liner": "基于GPS实时追踪与Haversine算法的救护车队调度管理系统",
+   "review": "该项目面向医院调度员与救护车司机，提供车队实时位置监控、SOS警报与最近车辆推荐。司机端为Capacitor打包的Android应用，每5秒上报GPS坐标；后端采用Express/MySQL，通过SSE向仪表盘推送位置与状态更新，最近车辆计算使用Haversine直线距离并返回Top-3结果。仓库提供SQL初始化脚本与演示账号。",
+   "highlights": [
+    "司机端每5秒自动上报GPS坐标，位置与状态通过SSE流式推送至仪表盘，无需刷新页面",
+    "提供基于Haversine公式的最近救护车计算接口，返回3个距离最近的可用车辆，并支持将Google Maps链接转换为经纬度坐标",
+    "包含JWT认证、司机任务状态管理、SOS警报收发接口，以及GitHub Actions自动打包发布司机端APK的流程"
+   ],
+   "use_cases": [
+    "医院调度员在网页仪表盘上监控车队位置、接收SOS警报并处理最近车辆推荐",
+    "救护车司机通过Android应用持续上报位置并切换可用/任务中/维护/离线等状态",
+    "医院管理层查看车队行程历史记录以评估响应时间"
+   ]
+  },
+  "sha": "5123228d65b4",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c8acf6826fa6": {
+  "identity": {
+   "one_liner": "实时团队聊天加内置问题跟踪器，消息可直接转工单",
+   "review": "Baithak 是面向小型团队的开源团队聊天与问题跟踪应用，基于 Django Channels、MySQL、Redis 与 React/TypeScript 构建，通过 WebSocket 实现实时消息，并支持从任意消息创建工单并保留原线程讨论。当前处于 v0.6.0 预发布阶段，部署依赖 Docker Compose，需 Node 22.12+。",
+   "highlights": [
+    "提供工作区、公开/私有频道、线程、私信、文件上传（ClamAV 病毒扫描与 AES-256-GCM 静态加密）及全文搜索",
+    "内置问题跟踪器，支持项目看板、标签、负责人、优先级与截止日期，工单可从消息创建",
+    "支持 GitHub webhook 将 PR 和 issue 事件投递到频道，并带有邮件与应用内通知"
+   ],
+   "use_cases": [
+    "小型团队需要将频道讨论与工单跟踪放在同一工具中",
+    "开发团队希望通过 GitHub webhook 在频道中接收 PR/issue 事件",
+    "需要本地自托管聊天系统并使用 Docker Compose 运行的团队"
+   ]
+  },
+  "sha": "c8acf6826fa6",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0fac33607ad6": {
+  "identity": {
+   "one_liner": "面向 LLM 提示词与 Agent 配置的 Alembic 式迁移工具，基于 JSON 修订链管理版本",
+   "review": "PromptMigrate 是一个 Python CLI（仅用标准库，无运行时依赖），将提示词和 Agent 配置以 JSON 草稿形式生成有序、可回滚的迁移修订，应用到本地 SQLite 环境，并通过校验和检测漂移，适用于 CI。它是 v0.1 本地原型，不支持远程共享状态或生产部署，修订为纯 JSON，不执行迁移代码。",
+   "highlights": [
+    "每条修订记录完整 before/after 快照，downgrade 行为确定，单个事务内原子应用或回滚多个配置",
+    "已应用修订带校验和，手工改动环境或编辑修订会被 check 判为漂移并以稳定退出码报告",
+    "拒绝新修订中的疑似密钥值，并在 diff/get 输出中脱敏；支持 --output json 与文档化退出码"
+   ],
+   "use_cases": [
+    "在 Git 中跟踪提示词与多 Agent 配置（如 planner.json、reviewer.json）的变更历史并有序回滚",
+    "在 CI 中从零回放全部修订并执行 validate --strict 与 check --require-head 校验",
+    "团队生成修订前需先拉取最新修订链，用于检测环境与历史记录之间的漂移"
+   ]
+  },
+  "sha": "0fac33607ad6",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

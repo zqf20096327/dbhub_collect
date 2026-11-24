@@ -3333,5 +3333,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4faafa5bdc30": {
+  "identity": {
+   "one_liner": "自托管的 AI 代理语义记忆服务，单个 Rust 二进制基于 SQLite，经 MCP 提供跨会话记忆。",
+   "review": "OmniMem 是一个自托管的开源语义记忆服务，为 AI 编码代理提供跨会话、跨项目的持久记忆，通过 MCP 协议（streamable HTTP）与 Claude Code、Cursor 等多个代理客户端交互。7.x 为单一 Rust 二进制，内含 MCP 服务器、嵌入模型（本地 ONNX 运行的 all-MiniLM-L6-v2）、RSS 抓取与 SQLite 存储；可作桌面托盘应用或无界面服务器运行。可选接入 Anthropic API 密钥启用 Haiku 的事实抽取、查询扩展等功能；嵌入默认本地处理，数据存于单个 SQLite 文件，支持 JSON 导出备份。MIT 许可，提供 Windows/macOS/Linux 及 Docker 安装包。",
+   "highlights": [
+    "提供五类记忆（情景记忆、项目上下文、知识、偏好、技能），召回时统一检索，排序公式综合相似度、生命周期状态、时间、经验权重与信任度",
+    "包含 graveyard（记录失败尝试及原因耗时）、经验评分、矛盾检测、语义去重、记忆生命周期（ACTIVE→DEPRIORITISED→ARCHIVED→DELETED）与技能编译器等机制",
+    "支持通过 MCP 服务多代理客户端，提供 49 个工具；桌面端提供 Claude Code/Claude Desktop 的一键接入，服务器端支持反向代理、共享 token 与 OAuth 2.1"
+   ],
+   "use_cases": [
+    "为编码代理（Claude Code、Cursor、Codex CLI 等）提供跨会话的项目记忆，避免重复解释背景与重复踩坑",
+    "在自有服务器或桌面部署，多台机器上的多个代理共享同一份记忆库",
+    "将订阅的 RSS 内容嵌入记忆库，与个人经验一同供代理召回引用"
+   ]
+  },
+  "sha": "4faafa5bdc30",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

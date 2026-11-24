@@ -2883,5 +2883,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "da0119c87963": {
+  "identity": {
+   "one_liner": "Steve Yegge beads 的 Rust 移植版：SQLite 存储加 JSONL 导出的本地 issue 跟踪器",
+   "review": "br 是 beads（Go 版）的 Rust 移植，冻结在作者工具链依赖的 SQLite + JSONL 架构上。任务数据存于仓库内 .beads/ 目录的 SQLite 数据库，并通过 JSONL 导出供 git 协作；默认不执行 commit/push/pull、不装钩子、无后台服务，git 同步交由用户显式操作。面向在本地仓库内跟踪任务的开发者和 AI 编码代理流程，命令为 br 以区别于原版 bd。从源码构建需 Rust nightly。",
+   "highlights": [
+    "提供本地优先的任务跟踪：SQLite 存储本地查询，JSONL 文件默认随修改操作自动刷新导出，用于 git 合并协作",
+    "所有命令支持 --json 机器可读输出，并支持 TOON 格式、MCP 支持、依赖感知的 ready/list 查询及同步与恢复工具",
+    "默认非侵入式：状态限于 .beads/ 目录，不自动 commit/push/pull、不安装钩子、无后台守护进程；提供安装脚本、Homebrew、Scoop 及源码构建（需 nightly）方式"
+   ],
+   "use_cases": [
+    "在 git 仓库内离线跟踪带依赖关系的任务，并通过 JSONL 文件与团队协作同步",
+    "为 AI 编码代理或自动化工作流提供机器可读（--json/TOON）的 issue 查询与操作接口",
+    "需要原版 beads 的 classic SQLite+JSONL 架构快照、且不依赖其自动 git 操作与守护进程的场景"
+   ]
+  },
+  "sha": "da0119c87963",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fa31f99cb29a": {
+  "identity": {
+   "one_liner": "本地优先的桌面日记笔记应用，Rust + GPUI + SQLite 实现 Markdown 双链写作。",
+   "review": "Zorite 是一款桌面端日记笔记应用，按 Logseq 的方式组织页面与双链，但以普通文档方式编辑而非大纲。笔记存于本地 SQLite 文件，支持 [[wiki-links]]、块引用、LaTeX 公式、PDF 阅读/批注/表单填写与无限画板，无云服务和账号，可选 SQLCipher 全库加密。提供 Obsidian 与 Logseq 导入器及整库导出为 Markdown。面向偏好本地存储的桌面用户，Linux 需支持 Vulkan 的 GPU。",
+   "highlights": [
+    "支持 Markdown（CommonMark/GFM）、[[wiki-links]]、块引用与嵌入、LaTeX 公式编辑，以及 PDF 查看、批注与 AcroForm 表单填写",
+    "笔记存储在本地 SQLite 文件中，可用 SQLCipher（AES-256）加密，含 trigram 全文搜索和多种样式的图谱视图",
+    "提供 Obsidian 和 Logseq 导入器，并可将整个笔记本导出为纯 Markdown + 资源文件；支持英/简中界面与 YAML 翻译文件"
+   ],
+   "use_cases": [
+    "以日期流为主的个人日记与知识页面管理，含双链、反链与块级引用",
+    "本地阅读和批注 PDF 并与笔记互链，填写 AcroForm 表单",
+    "从 Obsidian 或 Logseq 迁移笔记库到本地 SQLite 存储，并保留 Markdown 导出通道"
+   ]
+  },
+  "sha": "fa31f99cb29a",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3259,5 +3259,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6f9151b7bf18": {
+  "identity": {
+   "one_liner": "为 Percona Monitoring and Management 添加应用的 sidecar 扩展框架",
+   "review": "PMM Extensions 以 sidecar 容器形式运行在 pmm-server 旁，为 PMM 监控的数据库主机执行任务（如备份）并将结果显示在 PMM 中。镜像内置五个应用，其中 MySQL Backups 与 Support diagnostics 在 PMM 的 Apps 页面提供界面，其余三个供 PMM 内部页面调用；仓库另含十二个未随镜像发布的应用。自 0.13.1 起它不再支持脱离 PMM 运行，无独立部署和界面，版本号与 PMM 保持一致。",
+   "highlights": [
+    "以 sidecar 容器运行，PMM 提供数据库、密钥与登录，其 API 由 PMM 在 /extensions 路径下提供",
+    "镜像内置五个应用，包含 MySQL Backups 和 Support diagnostics 两个带页面应用及三个供 PMM 内部使用的应用",
+    "应用页面通过表单 schema 渲染，由 percona/pmm 仓库中 ui/packages/extensions 包实现"
+   ],
+   "use_cases": [
+    "在 PMM 界面中对被监控的 MySQL 数据库主机执行和管理备份任务",
+    "通过 Support diagnostics 应用在数据库主机上运行诊断脚本并查看结果",
+    "开发者按仓库文档构建、测试新的扩展应用并接入 PMM UI"
+   ]
+  },
+  "sha": "6f9151b7bf18",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3326,5 +3326,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "476b49a4203c": {
+  "identity": {
+   "one_liner": "面向 Text-to-SQL 的感知权限的模式选择器，只把调用者可读的表送进提示词",
+   "review": "schemagate 是一个 Python 库（pip 安装，仅依赖 SQLAlchemy），在 LLM 生成 SQL 之前按调用者的身份和角色过滤数据库目录：无权限的表不会进入提示词，同时通过 BM25 加哈希嵌入的离线选择器裁剪无关表以减少 schema token。支持 Postgres、Oracle、MySQL、SQL Server、SQLite，可与 LangChain、LlamaIndex、MCP 等集成。提供 demo、studio 本地页面与浏览器演示；README 中准确率等数字为其自报数据，需自行验证。",
+   "highlights": [
+    "按调用者 Principal/角色过滤表：无权限的表完全不出现在提示词中，而非仅排名靠后",
+    "选择器不调用模型，使用 BM25 加哈希 n-gram 嵌入，离线运行；可选 join_graph 权重提升 look-alike 表场景召回",
+    "支持 Postgres、Oracle、MySQL、SQL Server、SQLite，提供 LangChain/MCP 集成、CLI、studio 本地页面及无服务器的浏览器版"
+   ],
+   "use_cases": [
+    "为 SQL 代理/Text-to-SQL 流水线缩减 schema 提示词 token（50+ 表的库按 README 数据中位数缩减 91.1%）",
+    "需要按用户身份限制模型可见表范围、避免 RLS 静默过滤导致“查无记录”假阴性答案的私有数据分析场景",
+    "离线或无 API key 环境：hashed 嵌入本地运行，或用 HuggingFace 本地模型，数据不出机器"
+   ]
+  },
+  "sha": "476b49a4203c",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6a667051bc74": {
+  "identity": {
+   "one_liner": "Pocket Code 项目分享社区平台，支持浏览、上传与 remix。",
+   "review": "Catroweb 是 Catrobat 的 Pocket Code 作品分享平台，用户可上传、浏览、下载并 remix 他人项目，并提供社交网络常见功能。技术栈为 PHP/Symfony、JavaScript 与 SQL，使用 Docker 部署（含 Node 22/Yarn 4.12.0 前端构建），公开 HTTP API 有 OpenAPI 文档；生产部署配置在私有仓库中维护。",
+   "highlights": [
+    "提供项目上传、浏览、下载与 remix 功能，并包含社交网络常见特性",
+    "提供公开 HTTP API，配套 OpenAPI 参考文档",
+    "文档在仓库内维护，涵盖开发者快速上手与架构概览；user-docs 部分采用 CC BY-SA 4.0，其余为 AGPL-3.0"
+   ],
+   "use_cases": [
+    "为 Pocket Code 用户提供作品分享与下载社区",
+    "供贡献者基于 Symfony/PHP 技术栈参与 Web 平台开发",
+    "通过公开 API 集成或访问平台项目数据"
+   ]
+  },
+  "sha": "6a667051bc74",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

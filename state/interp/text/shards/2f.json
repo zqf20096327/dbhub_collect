@@ -3602,5 +3602,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a6f19318d9fd": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地长期记忆工具，为多个 AI 助手提供可溯源的会话召回",
+   "review": "Scope Recall 4.0.6 是一个为 Hermes、Codex、Claude Code、WorkBuddy 等助手提供本地长期记忆的工具，将对话存储在 SQLite 中，支持文本检索并附带答案来源证据。它支持单机或跨代理共享存储，可通过 `scope-recall ui` 界面审查、修正或静音记忆，并提供导入导出备份功能。安装需 Python 3.11–3.14，通过 `scope-recall setup` 发现宿主并完成审批。",
+   "highlights": [
+    "将对话记忆存储于本地 SQLite，捕获与文本检索不依赖模型预算",
+    "召回结果附带来源证据，可通过本地 UI 审查、修正或静音记忆",
+    "支持多个宿主集成，Cherry Studio 可通过只读 MCP 入口搜索现有存储"
+   ],
+   "use_cases": [
+    "为本地运行的 AI 编码助手添加跨会话的对话记忆",
+    "在同一台机器或多个代理之间共享统一的会话存储",
+    "需要导入、导出或备份恢复对话记录的本地数据管理"
+   ]
+  },
+  "sha": "a6f19318d9fd",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "579a2b8ce736": {
+  "identity": {
+   "one_liner": "本地运行的 LLM 个人维基：摄取文档、生成带引用的知识库并支持对话",
+   "review": "该项目将用户文档摄取为结构化、带引用的维基知识库，并提供阅读与聊天界面，全部在本机运行、无需云端，基于 FastAPI、HTMX、SQLite/FTS5 与 Marimo，可接入任意 OpenAI 兼容模型。内置 lint 检查与修复、历史回滚、带日期的数据集引擎及三种聊天验证模式。需自行配置模型端点；非 Obsidian 插件，无插件生态。适合想在本地管理个人文档知识库的用户。",
+   "highlights": [
+    "提供三种聊天模式：pre-retrieval（检索不到不调用模型）、agent with evidence check（无证据答案重试并警告）、no verification（直接流式输出）",
+    "包含带 as_of 日期的数据集引擎，数值逐字引用并注明日期与来源，示例叠加层用纯 Python 计算收益",
+    "提供 16 项 lint 检查及安全项自动修复、历史回滚（索引复制点即时返回）、LLM-as-judge 评测包与模型能力检查命令"
+   ],
+   "use_cases": [
+    "将本地文档整理为可阅读、可引用、可回滚的个人知识维基",
+    "对含日期数值数据（如利率、价格）的资料进行有据问答与确定性计算",
+    "在无网络/无云环境下用 OpenAI 兼容端点运行文档问答"
+   ]
+  },
+  "sha": "579a2b8ce736",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5e886a4271a4": {
+  "identity": {
+   "one_liner": "单二进制自托管工作区，整合文档、数据库与实时协作编辑",
+   "review": "form.md 是一个基于 Go 的自托管工作区，将文档编辑、数据库视图和实时协作集成在一个静态二进制与单个 SQLite 文件中，适合希望本地部署文档与数据库的个人和小团队。页面以 CRDT 存储实现多人及 AI 代理的并发编辑，并提供 MCP 服务器、REST API 和命令行供代理读写同一工作区。需要 Go 1.26+ 与 Node.js 22+ 才能从源码构建。",
+   "highlights": [
+    "提供文档块编辑器、多种数据库视图（表格、看板、日历、时间线、图表等）及关系、汇总与公式，模板库含 90 个模板",
+    "内置 MCP 服务器（stdio 与 HTTP）、REST API 和 CLI，代理凭据可设为只读或读写并限定工作区，扩展在沙箱框架中通过 doc.* 命令修改页面",
+    "采用纯 Go SQLite、Yjs 兼容 CRDT，支持 XTS-AES-256 静态加密，可导入 Markdown、HTML、CSV、ENEX 等格式并导出 Markdown、HTML、PDF、CSV"
+   ],
+   "use_cases": [
+    "小团队在自有域名自托管文档与数据库工作区，按邀请管理账号",
+    "让支持 MCP 的 AI 代理（如 Claude Code、Cursor）通过只读或读写凭据操作同一工作区的页面与数据库",
+    "无网络环境下使用离线浏览器演示或单机桌面应用编辑 Markdown 文档与数据库"
+   ]
+  },
+  "sha": "5e886a4271a4",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

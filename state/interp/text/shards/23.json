@@ -3350,5 +3350,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "90ab5d778f72": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的加密复式记账 CLI，内置 MCP 服务器",
+   "review": "Beankeeper 提供 bk 命令行工具和嵌入式 Rust 库，以 SQLCipher 加密的 SQLite 作为账本存储，用于让 AI Agent 执行记账操作。核心机制包括：复式校验强制借贷平衡、--reference 去重防止重试产生重复交易、JSON 结构化响应、防篡改审计链、基于令牌的 Agent 身份验证与细粒度权限（如 ledger/read、ledger/post），并支持期间关闭与锁定。适用于让 AI 助手安全代理记账的个人或小企业。",
+   "highlights": [
+    "写入前强制借贷总额相等的复式校验，--reference 键防止重试产生重复交易",
+    "防篡改审计链（触发器阻止已入账记录变更），bk verify 校验并输出 SHA-256 审计链头",
+    "内置 MCP 服务器与细粒度权限令牌（ledger/read、ledger/post 等同级授权）"
+   ],
+   "use_cases": [
+    "让 AI 助手通过 MCP 或 CLI 代理记账，同时防止产生不平衡账目或重复交易",
+    "需要审计追踪与 Agent 身份归属的个人财务或小企业账簿管理",
+    "通过 propose/approve 流程实现记账提议与业主签核的工作流"
+   ]
+  },
+  "sha": "90ab5d778f72",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b69df29a0912": {
+  "identity": {
+   "one_liner": "基于 node:sqlite 的 MCP 记忆服务器，为 AI 编码代理提供跨会话项目记忆。",
+   "review": "这是一个通过 Model Context Protocol 提供持久化记忆的服务器，面向 Claude Code、Cursor、Windsurf 等 MCP 兼容客户端。它依赖 Node.js 22.5+/24+ 原生 node:sqlite（WAL 模式），无需外部数据库。核心机制包括按项目存储记忆、FTS5 加权 BM25 全文检索、以文件锚定笔记并通过 mtime 提示陈旧、两级死路登记防止重复失败调试，以及对超限工具输出按句边界截断的 token 预算中间件。提供 16 个 MCP 工具。",
+   "highlights": [
+    "提供 16 个 MCP 工具，涵盖项目记忆的保存、检索（FTS5 BM25）、更新、软删除与文件级锚定查询",
+    "两级死路登记区分 error_loop 与 architectural 类失败，支持 reopen_dead_end 重新打开记录",
+    "内置输出 token 预算中间件，按句/词边界截断超限响应，阈值经环境变量或 config.json 配置"
+   ],
+   "use_cases": [
+    "AI 编码代理跨会话保留项目架构决策、环境配置与代码模式",
+    "记录并检索已验证的失败调试路径，避免重复尝试相同修复",
+    "在多仓库/微服务间通过 global.db 共享库框架惯例与已知问题"
+   ]
+  },
+  "sha": "b69df29a0912",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f519cdb3e494": {
+  "identity": {
+   "one_liner": "基于 Ollama 本地模型的多源聚合 AI 问答引擎，完全本地运行。",
+   "review": "DeepEvil 是一个运行在本机（默认 http://127.0.0.1:3000）的 AI 搜索问答引擎，通过 Node.js + Express 后端调用 Ollama 本地模型，聚合多个公开信息源（OpenAlex、ArXiv、Wikipedia、GitHub、HackerNews、DuckDuckGo 等）生成带编号引用的回答，并经 SSE 流式输出。面向需要在本地运行检索问答流程的用户。依赖 Node.js 20+、Ollama 与 Git，通过 ollama pull 拉取模型后 npm install 即可运行；数据存储使用 SQLite WAL 与 Qdrant 向量库（bge-m3，1024 维）。许可证为 Apache-2.0。",
+   "highlights": [
+    "聚合多个信息源（OpenAlex、ArXiv、Wikipedia 多语言、GitHub、HackerNews、DuckDuckGo、Google News RSS 等）进行检索",
+    "通过 Ollama 调用本地模型生成回答，支持列出本地已安装模型并切换，回答经 SSE 流式输出并带编号引用",
+    "提供搜索 JSON 接口（POST /api/search）、结果翻译、Markdown 导出、停止生成与 /health 健康检查等 HTTP 端点"
+   ],
+   "use_cases": [
+    "需要在本机运行检索式问答、生成带来源引用的技术/学术调研结果",
+    "查询学术论文（OpenAlex/ArXiv）、百科词条与 GitHub/HackerNews 内容的聚合检索场景",
+    "需要通过 JSON 接口（/api/search）将多源搜索能力接入本地工具或 SDK 的集成场景"
+   ]
+  },
+  "sha": "f519cdb3e494",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3345,5 +3345,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "884c5fbb6558": {
+  "identity": {
+   "one_liner": "Supabase 的 Swift SDK，封装认证、数据库查询、实时、存储与函数调用等客户端库",
+   "review": "这是 Supabase 官方的 Swift 软件开发工具包，面向 iOS/macOS/tvOS/watchOS/visionOS 开发者，通过 Swift Package Manager 安装。包含 Auth、PostgREST、Realtime、Storage、Functions 等子库，可单独引入。会话默认存于 Keychain；支持 supabase-typegen 生成 @Table 结构体。仅保证兼容各服务最新版本，Android/Linux/Windows 可运行但非官方支持。",
+   "highlights": [
+    "提供 Auth 认证与 PostgREST 数据库查询、Storage 文件上传下载、Realtime WebSocket 订阅、Edge Function 调用（含流式响应）等模块化库，可按需单独引入",
+    "提供 supabase-typegen 可执行文件，通过 `supabase gen types --lang swift` 从 schema 生成 @Table 结构体",
+    "SwiftUI 环境下提供 @Observable 的 AuthModel 用于会话状态管理，handleRedirect 处理 OAuth、魔法链接与密码重置回调"
+   ],
+   "use_cases": [
+    "为 iOS/macOS 等 Apple 平台应用接入 Supabase 后端（认证、数据库、存储、实时）",
+    "需要类型安全的数据库查询，用 typegen 从 schema 生成 Swift 类型",
+    "在 SwiftUI 应用中管理登录会话并处理深链认证回调"
+   ]
+  },
+  "sha": "884c5fbb6558",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17bbd9fc42ae": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Payload CMS 的新闻网站及内容管理系统",
+   "review": "The Pragmatic Papers（pragmaticpapers.com）网站的源码，面向该项目的开发者。技术栈为 Next.js、TypeScript、Payload CMS、Drizzle ORM 与 PostgreSQL，依赖 Docker 和 pnpm 运行。开发库通过管理后台或 pnpm dev:db-seed 写入示例内容，私有展示字体包可选，缺失时回退到系统字体。",
+   "highlights": [
+    "提供开发数据库种子脚本（pnpm dev:db-seed）与重置命令（pnpm dev:db-nuke），开发模式下由 Drizzle push 自动同步数据库结构",
+    "通过 pnpm storybook 浏览区块和组件，并可运行 pnpm test:storybook 执行含无障碍检查的故事测试",
+    "提供 pnpm showcase 命令，可将精选文章推送到 PR 预览或 staging 环境"
+   ],
+   "use_cases": [
+    "为 The Pragmatic Papers 站点进行本地开发与内容管理",
+    "使用 Payload CMS 与 PostgreSQL 搭建包含迁移、Storybook 测试流程的新闻类网站项目",
+    "需要本地种入示例文章、卷、页面与媒体文件的 CMS 开发环境"
+   ]
+  },
+  "sha": "17bbd9fc42ae",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6813da50c989": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的开源工具，以净室方式重现经典 Access 数据库工作流。",
+   "review": "DataCraft 是一个用 Rust 实现的桌面数据库工具，提供功能区、导航窗格、数据表/设计视图、QBE 查询构建器等 Access 风格界面。它读取 Jet3/Jet4 .mdb、ACE .accdb、SQLite、CSV 目录和 Excel 工作簿，支持 Jet4/ACE 与 SQLite 的写入，并提供 CLI 和 MCP/JSON-RPC 端点驱动同一命令总线。项目为 pre-1.0 阶段，兼容性矩阵逐项标明覆盖与限制，与 Microsoft 无关联。",
+   "highlights": [
+    "读取 Jet3/Jet4 .mdb、ACE .accdb、SQLite、CSV 目录及 Excel 工作簿；Jet4/ACE 与 SQLite 写入路径经真实文件验证",
+    "桌面外壳、CLI 与 MCP/JSON-RPC 端点通过同一命令总线执行 GUI 相同的操作命令",
+    "数据表支持暂存批量编辑并在 Ctrl+S 原子写入，报表打印预览可导出为字节级可复现的 PDF"
+   ],
+   "use_cases": [
+    "在 macOS/Windows/Linux 上浏览和编辑 Access（.mdb/.accdb）、SQLite 数据文件",
+    "通过 CLI 或 MCP 端点让脚本与 AI 代理以无头方式操作数据库",
+    "将 Access 数据库整理后通过 Compact 机制重写为新的已验证文件，或导出报表 PDF"
+   ]
+  },
+  "sha": "6813da50c989",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4baf90b03f32": {
+  "identity": {
+   "one_liner": "PGAIBench 是评测 AI 模型在 Postgres 集群上安全执行变更的基准",
+   "review": "PGAIBench 用于评测 LLM 能否在生产级 Postgres 集群上安全执行运维变更。它向模型发放含隐藏陷阱的运维工单（模式迁移、索引构建、配置修改等），在双节点 PostgreSQL 18.7 集群（主库+流复制备库、pgbench 并发负载）上真实执行变更，测量锁等待、延迟、复制延迟与数据完整性。v0.2 包含模型直接操作基线与 AAA（Analyst/Actor/Auditor）职责分离两条评测线，附预注册文档与公开数据。完整实验需专用 VM；复现脚本用 bun 运行。",
+   "highlights": [
+    "在双节点 PostgreSQL 18.7 集群（主库+热备，pgbench 负载）上真实执行模型提出的变更，测量锁等待、延迟、复制延迟、客户端错误与数据完整性",
+    "v0.2 含两条评测线：Track 1 模型独立操作（949 个真实 episode），Track 2 分层监督对比（P0 至 P3，含确定性 clone 门与 Auditor）",
+    "提供 AAA（Analyst/Actor/Auditor）架构：Analyst 提案、Actor 在 live clone 上排练并确定性拦截、Auditor 独立审查"
+   ],
+   "use_cases": [
+    "评测 LLM 在生产 Postgres 运维变更中的安全表现",
+    "对比监督分层（文本 Auditor、clone 门、完整 AAA）对拦截危害与放行安全变更的影响",
+    "基于公开数据与预注册文档复现 Track 2 统计结果或提交新场景/模型提案"
+   ]
+  },
+  "sha": "4baf90b03f32",
+  "source": "readme",
+  "generated_at": "2026-11-24",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
