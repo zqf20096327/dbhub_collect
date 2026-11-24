@@ -3719,15 +3719,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T01:18:28Z",
+  "collected_at": "2026-11-24T07:39:59Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 0,
   "tree": {
-   "sha": "edb7c16bb5f6f859ff3ef696e60d875a1be3c70f",
-   "etag": "W/\"604c10be73ec0bbe943b3d1cc65a5f1c62ae563e9de412baab9c4ba44d71f8c6\"",
+   "sha": "c5ea84b8cc1e06df6f3744761aa7a1a75abb4941",
+   "etag": "W/\"b3883be1f3d086adf33346a1380f5cb74c4c41718b3fd6a27b22ec70a269aec3\"",
    "truncated": false,
-   "path_count": 1544,
+   "path_count": 1562,
    "matched": [
     "Cargo.toml",
     "crates/base/Cargo.toml",
@@ -3797,9 +3797,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "8d7519e2a27ca03c7382437ee8104d0faeb7f8fb",
+    "blob_sha": "3a82c309526f8a819078a267323e998ec6d14c87",
     "ecosystem": "cargo",
-    "bytes": 9445
+    "bytes": 9629
    },
    {
     "path": "crates/base/Cargo.toml",
@@ -3893,9 +3893,9 @@
    {
     "path": "crates/domain/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "8f07ae409f52f247d0240038e98d97b9bd85db41",
+    "blob_sha": "60f968d25da1a5c7a3d5498d6392ecd82f89da9a",
     "ecosystem": "cargo",
-    "bytes": 1228,
+    "bytes": 1369,
     "names": [
      "tidb-base",
      "tidb-kv",
@@ -3903,6 +3903,7 @@
      "tidb-infoschema",
      "tidb-sessionctx",
      "tokio",
+     "tidb-metrics",
      "futures",
      "log"
     ],
@@ -4193,9 +4194,9 @@
    {
     "path": "crates/planner/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "bd3621565c6966d6c2afb60bb6c30f86505557c1",
+    "blob_sha": "c4b1ae407de4e9df01a47dacea39835bb3c73e7f",
     "ecosystem": "cargo",
-    "bytes": 2204,
+    "bytes": 2516,
     "names": [
      "tidb-base",
      "tidb-infoschema",
@@ -4216,7 +4217,11 @@
      "tidb-memory",
      "tipb",
      "log",
-     "parking_lot"
+     "parking_lot",
+     "smallvec",
+     "foldhash",
+     "crossbeam-utils",
+     "tidb-metrics"
     ],
     "dev": [
      "serde_json",
@@ -4281,9 +4286,9 @@
    {
     "path": "crates/session/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "193aafe6d0a901213af501a592c292150549fdec",
+    "blob_sha": "56757cee3566aad56985ab6bed3e9c5da9aab01a",
     "ecosystem": "cargo",
-    "bytes": 1520,
+    "bytes": 1760,
     "names": [
      "tidb-base",
      "tidb-parser",
@@ -4303,7 +4308,10 @@
     ],
     "dev": [
      "tidb-model",
+     "tidb-tablecodec",
+     "tidb-codec",
      "tidb-expression",
+     "tidb-statistics",
      "tidb-executor",
      "tokio",
      "flate2",
@@ -4613,9 +4621,9 @@
    {
     "path": "crates/poc/session/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "fa37a6a1fa85352e98563bbf810a2699853ef914",
+    "blob_sha": "3502ac91c16353144627c82da480212d1483a2b8",
     "ecosystem": "cargo",
-    "bytes": 1690,
+    "bytes": 1918,
     "names": [
      "parking_lot",
      "futures",
@@ -4633,8 +4641,11 @@
      "tidb-expression",
      "tidb-parser",
      "tidb-session",
+     "tidb-store",
      "tidb-server",
      "tidb-domain",
+     "tidb-planner",
+     "tidb-executor",
      "tidb-sessionctx"
     ],
     "dev": [
@@ -4642,8 +4653,7 @@
      "tidb-sessiontxn",
      "tokio",
      "tidb-infoschema",
-     "tidb-model",
-     "tidb-planner"
+     "tidb-model"
     ]
    },
    {
@@ -5066,6 +5076,7 @@
     "crates/store/src/driver/txn/error.rs",
     "crates/store/src/driver/txn/mod.rs",
     "crates/store/src/driver/txn/snapshot.rs",
+    "crates/store/src/driver/txn/txn_driver.rs",
     "crates/planner/tests/vectors/v8.5.8/amd64/optdriver.jsonl.gz",
     "crates/planner/tests/vectors/v8.5.8/arm64/optdriver.jsonl.gz"
    ]
@@ -5283,15 +5294,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:36:39Z",
+  "collected_at": "2026-11-24T06:34:24Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 3765,
   "tree": {
-   "sha": "1cd40244b182410d6b9fbd4922fdacda2a070170",
-   "etag": "W/\"211d7cc130b09b20611b833ae10e9a39262cede0ef5ce841a4396f96f47d4952\"",
+   "sha": "5448a1398230193c0b34824ea875d9ac29260407",
+   "etag": "W/\"b5d052bc3c9e03431a8a6aff5e3e9d32e38024b4d4ac2d89af6fa8060f602e1f\"",
    "truncated": false,
-   "path_count": 2003,
+   "path_count": 1981,
    "matched": [
     "package.json",
     "docs/package.json",
@@ -5489,7 +5500,7 @@
    {
     "path": "examples/cloudflare-todomvc/package.json",
     "kind": "dep",
-    "blob_sha": "199eefbf36d131ce61b5c7771d4c52c71faf2d8e",
+    "blob_sha": "9dc4104c808e8fbebabcefa2ac4d2eff16904aaa",
     "ecosystem": "npm",
     "bytes": 1304,
     "names": [
@@ -5527,7 +5538,7 @@
    {
     "path": "examples/web-email-client/package.json",
     "kind": "dep",
-    "blob_sha": "f7e8db64b54cef62ad48d0214a0cfb3a8afe9ef8",
+    "blob_sha": "152cdaf8bf670b6a5e0e1bf7aa39ac85fb84c86d",
     "ecosystem": "npm",
     "bytes": 1784,
     "names": [
@@ -5559,7 +5570,7 @@
    {
     "path": "examples/web-linearlite/package.json",
     "kind": "dep",
-    "blob_sha": "c29186ec07d7110544286c3ba92ee5b97a446620",
+    "blob_sha": "abe53c657e24e3c1d2e028ab75eff665587f19b3",
     "ecosystem": "npm",
     "bytes": 3090,
     "names": [
@@ -5623,7 +5634,7 @@
    {
     "path": "examples/web-todomvc-script/package.json",
     "kind": "dep",
-    "blob_sha": "25581dc4e2d8d36d1473c9c74152f6a2c603ff06",
+    "blob_sha": "af129ec5fccc5b7de9b6013c5256d6411ea505ea",
     "ecosystem": "npm",
     "bytes": 1578,
     "names": [
@@ -5646,7 +5657,7 @@
    {
     "path": "examples/web-todomvc-sync-cf/package.json",
     "kind": "dep",
-    "blob_sha": "00647575bca16256bf985272dafcf5a83635b35c",
+    "blob_sha": "f5dcf9879535060d764dea018c98d7a037f11ab6",
     "ecosystem": "npm",
     "bytes": 1875,
     "names": [
@@ -5678,7 +5689,7 @@
    {
     "path": "examples/web-todomvc/package.json",
     "kind": "dep",
-    "blob_sha": "8b5ecde69281f236dc6b3fdf8103f4355b81959a",
+    "blob_sha": "0b39dd47a3cf1ea51cf192b6f1d639dadb822dfa",
     "ecosystem": "npm",
     "bytes": 1832,
     "names": [
@@ -5919,7 +5930,7 @@
    {
     "path": "packages/@livestore/adapter-cloudflare/package.json",
     "kind": "dep",
-    "blob_sha": "871facb733c6b77ebe2bd58c37c1850a8827f635",
+    "blob_sha": "72de6bb378e842011409f89a5b1f3da676b72263",
     "ecosystem": "npm",
     "bytes": 1996,
     "names": [
@@ -5948,7 +5959,7 @@
    {
     "path": "packages/@livestore/adapter-web/package.json",
     "kind": "dep",
-    "blob_sha": "47981764ace2569648d733b8c1bfe47e3cb1d466",
+    "blob_sha": "cba2c0bd1753f74b5a4953cb14e79202a5a9229d",
     "ecosystem": "npm",
     "bytes": 2358,
     "names": [
@@ -5976,7 +5987,7 @@
    {
     "path": "packages/@livestore/common-cf/package.json",
     "kind": "dep",
-    "blob_sha": "6310fa01b3c9b329eba086461c554b5a84439cfe",
+    "blob_sha": "b3ea41b5e9f9370ee1f3f5815e5dbf92d50265c8",
     "ecosystem": "npm",
     "bytes": 1487,
     "names": [
@@ -6002,7 +6013,7 @@
    {
     "path": "packages/@livestore/common/package.json",
     "kind": "dep",
-    "blob_sha": "f31f9cd88902e0edd8fdcf362e848b4ad4c02a95",
+    "blob_sha": "47c7dca9c300b3002c1bcd08859d728cd7675c3a",
     "ecosystem": "npm",
     "bytes": 2477,
     "names": [
@@ -6064,7 +6075,7 @@
    {
     "path": "packages/@livestore/framework-toolkit/package.json",
     "kind": "dep",
-    "blob_sha": "cd0699a0f49bb6bd7800891fa5653e9ac1a172a6",
+    "blob_sha": "1bc915c19fca58a279dbe8d2d1f8d713f21d47fe",
     "ecosystem": "npm",
     "bytes": 1836,
     "names": [
@@ -6091,7 +6102,7 @@
    {
     "path": "packages/@livestore/livestore/package.json",
     "kind": "dep",
-    "blob_sha": "1bc6163cf6477b18851d0b377a1ff43695dbd105",
+    "blob_sha": "4c471638982bba2bc392110024a2d304a2e0b30e",
     "ecosystem": "npm",
     "bytes": 2101,
     "names": [
@@ -6121,7 +6132,7 @@
    {
     "path": "packages/@livestore/peer-deps/package.json",
     "kind": "dep",
-    "blob_sha": "359d4d5e8b92149f2a83ae30c655f670baed0b77",
+    "blob_sha": "9718f389d1a6a33b0c9f2c0f606f2f3e755dd6eb",
     "ecosystem": "npm",
     "bytes": 1091,
     "names": [
@@ -6140,7 +6151,7 @@
    {
     "path": "packages/@livestore/react/package.json",
     "kind": "dep",
-    "blob_sha": "8c1b965cba2f7e6db4e444ca5622191eace35151",
+    "blob_sha": "f01cd6b14c8a145ac429b66e96b5ae27472cf90f",
     "ecosystem": "npm",
     "bytes": 2385,
     "names": [
@@ -6181,7 +6192,7 @@
    {
     "path": "packages/@livestore/sqlite-wasm/package.json",
     "kind": "dep",
-    "blob_sha": "2a48ec4e1034ad2418383719237557ac468334a9",
+    "blob_sha": "549dd66373a0c02b21e38acacb1aaa58c731927f",
     "ecosystem": "npm",
     "bytes": 2923,
     "names": [
@@ -6212,7 +6223,7 @@
    {
     "path": "packages/@livestore/sync-cf/package.json",
     "kind": "dep",
-    "blob_sha": "fbaa7a37e90e132ec060bb5cb01f5df8b5221be7",
+    "blob_sha": "bc53f26e6a5d0aa22981f29ba879f11fe0637656",
     "ecosystem": "npm",
     "bytes": 2136,
     "names": [
@@ -6249,7 +6260,7 @@
    {
     "path": "packages/@livestore/utils-dev/package.json",
     "kind": "dep",
-    "blob_sha": "a39079333dddb105263c8a8ff16da42eb36998d4",
+    "blob_sha": "6d9feef5d4220a90e9faa8feb6a2ff092271aad1",
     "ecosystem": "npm",
     "bytes": 2305,
     "names": [
@@ -6289,7 +6300,7 @@
    {
     "path": "packages/@livestore/utils/package.json",
     "kind": "dep",
-    "blob_sha": "684231c16ea363ec304fe5ce65c4f08340d2f8bc",
+    "blob_sha": "4d725cdb4ccb4e2aaf7795098829749ed33438c7",
     "ecosystem": "npm",
     "bytes": 3295,
     "names": [
@@ -6330,7 +6341,7 @@
    {
     "path": "packages/@livestore/wa-sqlite/package.json",
     "kind": "dep",
-    "blob_sha": "66a45f4e771283ec1a2110262125fa8b677b5854",
+    "blob_sha": "8e8d54cf83f8d4b83d2a0f39a18157591f69511e",
     "ecosystem": "npm",
     "bytes": 1765,
     "dev": [
@@ -6349,7 +6360,7 @@
    {
     "path": "packages/@livestore/webmesh/package.json",
     "kind": "dep",
-    "blob_sha": "f1769f747be3f796896ee2351bb428c9a582cf1d",
+    "blob_sha": "9d5edb017a239119186ad75668f66e3f827013bc",
     "ecosystem": "npm",
     "bytes": 1750,
     "names": [
@@ -7047,13 +7058,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:19:46Z",
+  "collected_at": "2026-11-24T06:47:35Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-17",
-  "stars": 507,
+  "pushed_at": "2026-11-23",
+  "stars": 506,
   "tree": {
-   "sha": "075a7ba538580011dc1c9bdecdc83e8a7e0218d7",
-   "etag": "W/\"a7fb42279bcae841ddd79b5109c0800aabe14762574d581403d0efba31962654\"",
+   "sha": "a8497f5b9ea854f7d0f992c97a3fb65768c9b3ca",
+   "etag": "W/\"d34e8699ff03ad936d14f6879756598b50ebdbdf8c6725ca19dd082a05adc91d\"",
    "truncated": false,
    "path_count": 637,
    "matched": [
@@ -7066,9 +7077,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "0774a1c6ce9de3742dbce1bc78733840e712c0d6",
+    "blob_sha": "22df2000ec3e37d7c36965ec62da3e4a4c77f1e3",
     "ecosystem": "npm",
-    "bytes": 7611,
+    "bytes": 7600,
     "names": [
      "@turf/helpers",
      "better-sqlite3",
@@ -7120,8 +7131,8 @@
    {
     "path": ".github/workflows/nodejs.yml",
     "kind": "ci",
-    "blob_sha": "bfdcca4bd8b8cee94ddf265353b08cd9ab09419c",
-    "bytes": 3279,
+    "blob_sha": "ecb785cf5ad220cba44c93b057d205f8837b162a",
+    "bytes": 3284,
     "images": [
      "postgres:17",
      "mysql:8.4"
@@ -10699,15 +10710,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:58:13Z",
+  "collected_at": "2026-11-24T07:07:54Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-24",
   "stars": 56,
   "tree": {
-   "sha": "1e5e7d06eb860e2af9bf27cca7a33a6939a9cc98",
-   "etag": "W/\"78c17c9a08dc0f1b233fe7ce0be5d0a3ee521cce8a5770dd7f23f3b38c90e778\"",
+   "sha": "b86f9e3c6adb1bf973ae5292672e4046bd48d5d0",
+   "etag": "W/\"6e2a63a71fbbbf235c22ee8f6ddfe12ceaf42ce100b9f1df5a7b360ad87d89f9\"",
    "truncated": false,
-   "path_count": 3573,
+   "path_count": 3590,
    "matched": [
     "package.json",
     "adapters/mcp/package.json",
@@ -10728,9 +10739,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "912443b68e1df10761543157ad4dc3e0561b7ea3",
+    "blob_sha": "a9e32f52271032bb82ef0b5c2094b792047671a7",
     "ecosystem": "npm",
-    "bytes": 9745
+    "bytes": 9746
    },
    {
     "path": "adapters/mcp/package.json",
@@ -10769,7 +10780,7 @@
    {
     "path": "packages/setup/package.json",
     "kind": "dep",
-    "blob_sha": "662466d01ad5e82a1d205b5b9abc1de26064f143",
+    "blob_sha": "4e593a7e5aed8f8e698d79d6fd934f3f7c853604",
     "ecosystem": "npm",
     "bytes": 818
    },
@@ -10804,8 +10815,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "0e7ab4961eb888d882956e31320de5bf8324f3bb",
-    "bytes": 15723
+    "blob_sha": "7eedc81697c2dbcf38ef3ef8c95ff2a498d0ed39",
+    "bytes": 15744
    },
    {
     "path": ".github/workflows/core-shard.yml",
@@ -10828,8 +10839,8 @@
    {
     "path": ".github/workflows/npx-setup.yml",
     "kind": "ci",
-    "blob_sha": "a9de4640e20c2c0db935e87fbc9b229b53b06118",
-    "bytes": 2685
+    "blob_sha": "96a3bd0bcbe9e7a885dc7643693587ef12cf7866",
+    "bytes": 2727
    }
   ],
   "clues": {
@@ -10987,6 +10998,7 @@
     "adapters/mcp/test/capture-deadline.test.mjs",
     "adapters/mcp/test/card-current-legacy-deadline.test.mjs",
     "adapters/mcp/test/card-current.test.mjs",
+    "adapters/mcp/test/card-maintenance-provider-pause.test.mjs",
     "adapters/mcp/test/card-review-pty-framing.test.mjs",
     "adapters/mcp/test/card-support.mjs",
     "adapters/mcp/test/classification-recovery.test.mjs",
@@ -11005,6 +11017,7 @@
     "adapters/mcp/test/context-read-default-entropy.test.mjs",
     "adapters/mcp/test/context-read-product-owner-evidence.test.mjs",
     "adapters/mcp/test/context-read-product-provider.test.mjs",
+    "adapters/mcp/test/context-read-raw-semantic.test.mjs",
     "adapters/mcp/test/context-read-sources.test.mjs",
     "adapters/mcp/test/context-read.test.mjs",
     "adapters/mcp/test/context-support.mjs",
@@ -11040,9 +11053,7 @@
     "adapters/mcp/test/local-daemon-static.test.mjs",
     "adapters/mcp/test/local-daemon-store-location.test.mjs",
     "adapters/mcp/test/local-daemon-support.mjs",
-    "adapters/mcp/test/local-daemon-takeover.test.mjs",
-    "adapters/mcp/test/local-daemon-unpublished.test.mjs",
-    "adapters/mcp/test/local-daemon-wire-protocol.test.mjs"
+    "adapters/mcp/test/local-daemon-takeover.test.mjs"
    ]
   },
   "fail_count": 0
@@ -11634,13 +11645,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:57:11Z",
+  "collected_at": "2026-11-24T07:20:35Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-23",
   "stars": 23,
   "tree": {
-   "sha": "39fbf4516c72d11ab7717e4a17449ef24b68b351",
-   "etag": "W/\"3d9175a287e4213a4d93cf73d714a41a52ca7a3f7cc68e08b90d2603073ef090\"",
+   "sha": "0f10ac413c4baad62ff8bd0492aa908a0960bb74",
+   "etag": "W/\"dc0ac778f57e8c3a4e5851a5f06dc4a2e7f9c722634dbf1bfe286daebea346be\"",
    "truncated": false,
    "path_count": 28,
    "matched": [
@@ -11690,13 +11701,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T08:13:26Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-24T07:21:32Z",
   "default_branch": "main",
-  "pushed_at": "2025-09-11",
+  "pushed_at": "2026-11-24",
   "stars": 21,
   "tree": {
    "sha": "827799482dabefead374042962f97a560e612382",
-   "etag": "W/\"f7141e14131d96f2c917b4f4a1c1ce4f10cce093122601565e4738c953b4bb83\"",
+   "etag": "W/\"975f7bec5ab5bdf199fcfdea5b83342dae1ae3485925f89ed5686280693411cf\"",
    "truncated": false,
    "path_count": 93,
    "matched": []
@@ -12449,13 +12461,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:59:49Z",
+  "collected_at": "2026-11-24T07:23:44Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-20",
+  "pushed_at": "2026-11-23",
   "stars": 18,
   "tree": {
-   "sha": "69b8d796f0f498adfd470cfcdcc957642570ca40",
-   "etag": "W/\"a9d3cff527fb222207a44057c4d682e70e35748fb06720542fe677fb32dfd394\"",
+   "sha": "bc758b286147f0ab580a07b3af2a72fc4a389d73",
+   "etag": "W/\"db0eeb5b9c3b8413db85009dcda0fdfc72be78698f00d99fc55b92c27e6a6ae0\"",
    "truncated": false,
    "path_count": 67,
    "matched": [
@@ -12535,7 +12547,7 @@
    {
     "path": "runtime/pom.xml",
     "kind": "dep",
-    "blob_sha": "f2787f9b4ccb9c414e42f286229d24aef4b286d6",
+    "blob_sha": "3b0cec46b444a150e75298681a1a2e4ec7fd8946",
     "ecosystem": "maven",
     "bytes": 3507,
     "names": [

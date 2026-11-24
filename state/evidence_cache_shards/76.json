@@ -1204,41 +1204,60 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:49:10Z",
+  "collected_at": "2026-11-24T06:53:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 232,
   "tree": {
-   "sha": "a170a0c02ae2bcb8dca171792bf59f83a57e4e1d",
-   "etag": "W/\"1eb0e985416f4e31d76647f6b29eaae7307b7db79da8e133f87def52410a7fe4\"",
+   "sha": "6d2f737f6c12f8006c09b4a76be9e6619bbfecd3",
+   "etag": "W/\"d7bb78dc690acdfcdd287a7344b9710b5509a3bed0830db8fabe958951fee6a6\"",
    "truncated": false,
-   "path_count": 350,
+   "path_count": 1121,
    "matched": [
     "Cargo.toml",
+    "pgo_train/Cargo.toml",
     "rastcp/Cargo.toml",
+    "rasterizeddb_client/Cargo.toml",
+    "rasterizeddb_client_derive/Cargo.toml",
     "rasterizeddb_compat/Cargo.toml",
     "rasterizeddb_core/Cargo.toml",
+    "rasterizeddb_embedded/Cargo.toml",
     "rasterizeddb_filter_tests/Cargo.toml",
     "rdb_studio/Cargo.toml",
     "test_client/Cargo.toml",
     "test_db_web/Cargo.toml",
-    ".github/workflows/release.yml"
+    ".github/workflows/ci.yml",
+    ".github/workflows/release-binaries.yml",
+    ".github/workflows/release-client.yml",
+    ".github/workflows/release-server.yml"
    ]
   },
   "files": [
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "e247d938a9091d68c197c97046be273dd5713c3d",
+    "blob_sha": "5d2ab00213493344ea087fd3a139a7c86a7cb713",
     "ecosystem": "cargo",
-    "bytes": 751
+    "bytes": 840
+   },
+   {
+    "path": "pgo_train/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f1b9b8f0da2d60eb8ae21e0f2ed03cf17f5d4366",
+    "ecosystem": "cargo",
+    "bytes": 511,
+    "names": [
+     "rasterizeddb_client",
+     "tokio",
+     "tokio-postgres"
+    ]
    },
    {
     "path": "rastcp/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ac5299e661ae6c1d91e9992e5b5a2800c53bcf72",
+    "blob_sha": "e9934b67a713f7595688eece5f0adbe2e439c8c5",
     "ecosystem": "cargo",
-    "bytes": 969,
+    "bytes": 1284,
     "names": [
      "tokio",
      "rustls",
@@ -1247,7 +1266,6 @@
      "thiserror",
      "log",
      "env_logger",
-     "futures-util",
      "bytes",
      "rcgen",
      "time",
@@ -1255,9 +1273,6 @@
      "webpki-roots",
      "cacheguard",
      "xutex",
-     "opool",
-     "branches",
-     "once_cell",
      "libc",
      "sha2",
      "subtle"
@@ -1270,11 +1285,50 @@
     ]
    },
    {
+    "path": "rasterizeddb_client/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "2f4d5880a7ab75a222304889617f176a6ed21fc3",
+    "ecosystem": "cargo",
+    "bytes": 3331,
+    "names": [
+     "rastcp",
+     "tokio",
+     "libc",
+     "getrandom",
+     "sha2",
+     "hmac",
+     "pbkdf2",
+     "base64",
+     "futures-core",
+     "rasterizeddb_client_derive",
+     "chrono",
+     "uuid",
+     "serde",
+     "serde_json"
+    ],
+    "dev": [
+     "tokio",
+     "serde"
+    ]
+   },
+   {
+    "path": "rasterizeddb_client_derive/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "b35be1fa339cf119a083a6f84809fb434d1e85e6",
+    "ecosystem": "cargo",
+    "bytes": 544,
+    "names": [
+     "syn",
+     "quote",
+     "proc-macro2"
+    ]
+   },
+   {
     "path": "rasterizeddb_compat/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "3754da7b18dd9ab3f8746098f9bb7eaeb6641854",
+    "blob_sha": "85cdcb93b6dda8900081b0243f7def5b8ba38137",
     "ecosystem": "cargo",
-    "bytes": 1492,
+    "bytes": 2890,
     "names": [
      "rasterizeddb_core",
      "rclite",
@@ -1288,21 +1342,38 @@
      "serde_json",
      "anyhow",
      "env_logger"
+    ],
+    "dev": [
+     "tiberius",
+     "tokio-util",
+     "rasterizeddb_core",
+     "tokio-postgres",
+     "postgres-types",
+     "bytes",
+     "futures-util",
+     "libc"
     ]
    },
    {
     "path": "rasterizeddb_core/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "82f470dcee42b8bea396540f1e394e5353382514",
+    "blob_sha": "d01117830b1b86ddeea1872bab3c84f4265ce1ed",
     "ecosystem": "cargo",
-    "bytes": 5046,
+    "bytes": 11924,
     "names": [
+     "jiff",
      "tokio",
      "byteorder",
      "itertools",
      "ahash",
+     "hashbrown",
+     "memchr",
+     "unicode-normalization",
+     "num-bigint",
+     "num-traits",
+     "ryu",
+     "regex",
      "once_cell",
-     "orx-concurrent-vec",
      "stopwatch",
      "futures",
      "async-lazy",
@@ -1312,6 +1383,7 @@
      "rastcp",
      "env_logger",
      "crc",
+     "crc32fast",
      "temp_testdir",
      "memmap2",
      "rand",
@@ -1344,15 +1416,37 @@
     ],
     "dev": [
      "criterion",
+     "tempfile",
+     "rasterizeddb_client",
+     "syn",
+     "proc-macro2",
+     "quote"
+    ]
+   },
+   {
+    "path": "rasterizeddb_embedded/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "5b1e2bbdd5618bf40aaa35513bc78949fe6e36de",
+    "ecosystem": "cargo",
+    "bytes": 1155,
+    "names": [
+     "rasterizeddb_core",
+     "rasterizeddb_client",
+     "tokio",
+     "rclite",
+     "log"
+    ],
+    "dev": [
+     "tokio",
      "tempfile"
     ]
    },
    {
     "path": "rasterizeddb_filter_tests/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "340f533a392b9be7fb6859268badc17ead707bf8",
+    "blob_sha": "2f66d9e6bfcaa34d1b75c5a9780c105ebf53b9e4",
     "ecosystem": "cargo",
-    "bytes": 675,
+    "bytes": 965,
     "names": [
      "rasterizeddb_core",
      "smallvec",
@@ -1360,35 +1454,43 @@
      "tokio",
      "fastrand",
      "tempfile"
+    ],
+    "dev": [
+     "rasterizeddb_core"
     ]
    },
    {
     "path": "rdb_studio/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "03affef94cb791b488e862adc2d681e3e232b184",
+    "blob_sha": "c3b88e03195c4ee20eda16a947f44644b4e227f5",
     "ecosystem": "cargo",
-    "bytes": 702,
+    "bytes": 1372,
     "names": [
      "iced",
      "tokio",
      "tokio-postgres",
+     "rasterizeddb_client",
+     "futures-core",
      "tokio-postgres-rustls",
+     "webpki-roots",
      "rustls",
      "rustls-pki-types",
      "serde",
      "serde_json",
      "dirs",
+     "keyring",
      "rfd"
     ]
    },
    {
     "path": "test_client/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "e318fbdeced27473ad31f2bcda1f2495c14b7cfb",
+    "blob_sha": "2fc8a2d54a0d74bdce444410327dce8b638371a9",
     "ecosystem": "cargo",
-    "bytes": 454,
+    "bytes": 738,
     "names": [
      "rasterizeddb_core",
+     "rasterizeddb_client",
      "tokio",
      "stopwatch",
      "env_logger",
@@ -1401,24 +1503,41 @@
    {
     "path": "test_db_web/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "97fbf59a2d81d701785a0ce90ba111c21969c600",
+    "blob_sha": "842ec57ff58970b931254bda7c611c43eeadd197",
     "ecosystem": "cargo",
-    "bytes": 321,
+    "bytes": 400,
     "names": [
      "axum",
      "tokio",
-     "rasterizeddb_core",
+     "rasterizeddb_client",
      "tower",
-     "once_cell",
      "async-lazy",
      "rand"
     ]
    },
    {
-    "path": ".github/workflows/release.yml",
+    "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "fc1dfa0a2332b2d2b34a2828468ba78b5f42f52c",
-    "bytes": 6649
+    "blob_sha": "4e212bb945e1c70e103a9d35f1b3b966542528f2",
+    "bytes": 7517
+   },
+   {
+    "path": ".github/workflows/release-binaries.yml",
+    "kind": "ci",
+    "blob_sha": "5b89051846e61dae1b5661b51340c8ae1cfbc186",
+    "bytes": 8805
+   },
+   {
+    "path": ".github/workflows/release-client.yml",
+    "kind": "ci",
+    "blob_sha": "a4fefdb0c44be571726c659b109d550469dfe5ed",
+    "bytes": 3860
+   },
+   {
+    "path": ".github/workflows/release-server.yml",
+    "kind": "ci",
+    "blob_sha": "cff9f1c17d52639dc2335ae70d63cc62eac2c301",
+    "bytes": 4384
    }
   ],
   "clues": {
@@ -1428,6 +1547,9 @@
     "docs/postgres-compatibility.md"
    ],
    "paths": [
+    "rasterizeddb_compat/tests/driver_catalog_and_copy.rs",
+    "rasterizeddb_compat/tests/driver_matrix.rs",
+    "rasterizeddb_compat/tests/driver_notify_explain.rs",
     "rdb_studio/src/dialect.rs",
     "rdb_studio/tests/live_dialect.rs"
    ]
@@ -10231,13 +10353,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T03:16:11Z",
+  "collected_at": "2026-11-24T07:21:36Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
-  "stars": 19,
+  "pushed_at": "2026-11-23",
+  "stars": 21,
   "tree": {
-   "sha": "3f377406d23a22533dcc127834e64a5a6a2a720f",
-   "etag": "W/\"a0c05265e7b65c90fff17884aa967bc8d58aaf11f17db97a8c740fd023f7a6b6\"",
+   "sha": "3d64a2a2eb19a4b820525ef2bea2aaa5239e2433",
+   "etag": "W/\"0243fac99244c516c085864c88377fa820e820bcd9ffac4c5751c04b5bc9413f\"",
    "truncated": false,
    "path_count": 8,
    "matched": []
@@ -13222,13 +13344,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T06:01:53Z",
+  "collected_at": "2026-11-24T07:33:06Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-23",
   "stars": 10,
   "tree": {
    "sha": "91dce235611483cd18123b70a1d40f00d9596c6f",
-   "etag": "W/\"0898aa57f3c9bf4bb7c9ae4de28f3947083446bb708677c28d57dcf7b6c12921\"",
+   "etag": "W/\"b55837ac2f8bd7a2809c0b6c66655cf8d0db249fc6dc8a1f47b5ed1861a10ef3\"",
    "truncated": false,
    "path_count": 58,
    "matched": [
@@ -13824,15 +13946,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T01:10:09Z",
+  "collected_at": "2026-11-24T07:26:58Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 14,
   "tree": {
-   "sha": "c98ed997fe10a699c8da054db2952ab987132f39",
-   "etag": "W/\"1623a6355c0bcc6d0b15cafbb82695a44db4aee301dfaa59b024e97f9bb24109\"",
+   "sha": "a32446ec8fdd80edd6792f9e10a81a1270516e24",
+   "etag": "W/\"6031e887a31f3ef27634915b4f0904a46c15f6c8d7c887df100ebc72eab0b5ee\"",
    "truncated": false,
-   "path_count": 2105,
+   "path_count": 2165,
    "matched": [
     "go.mod",
     "longbowclientsdk/pyproject.toml",
@@ -13845,7 +13967,6 @@
     "Dockerfile.emlgo-nvidia",
     "Dockerfile.metal",
     "Dockerfile.nvidia",
-    "Dockerfile.tpu",
     "docker-compose.yml",
     "helm/longbow/values.yaml",
     ".github/workflows/ci.yml"
@@ -14101,16 +14222,6 @@
     ]
    },
    {
-    "path": "Dockerfile.tpu",
-    "kind": "image",
-    "blob_sha": "13972d741448debf5bec050ccfc8610cbb249c64",
-    "bytes": 2137,
-    "images": [
-     "golang:1.27.4-bookworm",
-     "debian:bookworm-slim"
-    ]
-   },
-   {
     "path": "docker-compose.yml",
     "kind": "image",
     "blob_sha": "77888015a0317b37de06f2266d92ac9ce569d8bf",
@@ -14133,8 +14244,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "30d51c095a232905861a14a3df0cfd4c508f0b5d",
-    "bytes": 26689,
+    "blob_sha": "e2a9270972e7e9a7c64328ae475aaab26c5f546e",
+    "bytes": 36476,
     "images": [
      "${{"
     ]
@@ -14150,12 +14261,14 @@
     "internal/adbc/driver_test.go",
     "internal/query/hnsw_predicate_adapter.go",
     "internal/storage/parquet_adapter_test.go",
-    "internal/store/streaming_connectors.go",
-    "internal/store/streaming_connectors_test.go",
-    "internal/store/streaming_drivers.go",
     "tests/adbc/test_driver_so.py",
-    "internal/store/index/pluggable_index_adapters.go",
-    "internal/store/index/pluggable_index_adapters_test.go"
+    "internal/store/engine/apihandler_adapters.go",
+    "internal/store/engine/host_adapters.go",
+    "internal/store/engine/streaming_connectors_test.go",
+    "internal/store/streaming/streaming_connectors.go",
+    "internal/store/streaming/streaming_drivers.go",
+    "internal/store/index/hnsw/pluggable_index_adapters.go",
+    "internal/store/index/hnsw/pluggable_index_adapters_test.go"
    ]
   },
   "fail_count": 0
@@ -14276,15 +14389,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:41:21Z",
+  "collected_at": "2026-11-24T06:56:32Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
-  "stars": 49,
+  "pushed_at": "2026-11-23",
+  "stars": 167,
   "tree": {
-   "sha": "beece0e6532e9cc7bbc86bbd46406632318d2e07",
-   "etag": "W/\"dd424b4e2074bf0b07476f19dc3e3074c915967a66d6cc543084a72833a3dc5d\"",
+   "sha": "57ad22588211cd3bb60c18e7fbdd70ab9bb7337d",
+   "etag": "W/\"54b17a4b144e35127de39c5e7bd0ee827e25e271b079e5106541945f99f4bc0f\"",
    "truncated": false,
-   "path_count": 153,
+   "path_count": 154,
    "matched": [
     "package.json",
     "apps/web/package.json",
@@ -14692,15 +14805,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:28:31Z",
+  "collected_at": "2026-11-24T07:38:25Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 3,
   "tree": {
-   "sha": "7f2e83f17d039961fcc91f7949200c5cdfc352d5",
-   "etag": "W/\"e75ef47870dbb414bafda34ee3a3e63dfebed5f3010838e98441bbda6f8aaa8d\"",
+   "sha": "71213fd0667b84b4aa991814de4737c98453cea6",
+   "etag": "W/\"9250e576edfe0306baac86df2c6a12cbb3c260a5300d6da9688ec2860926c632\"",
    "truncated": false,
-   "path_count": 528,
+   "path_count": 530,
    "matched": [
     "Cargo.toml",
     "spikes/Cargo.toml",
@@ -14726,7 +14839,7 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b560e08418d1beabdf4fe133dea2f9ffce36bcaa",
+    "blob_sha": "4910137b6c023aec0d79884c052bc8433cd23c14",
     "ecosystem": "cargo",
     "bytes": 1020
    },
@@ -14940,8 +15053,8 @@
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "0f05f38e2791978fcf3e134878abeff5f9eee9d1",
-    "bytes": 8676
+    "blob_sha": "8444c73012e082330460253c41e31fb58e838023",
+    "bytes": 11031
    }
   ],
   "clues": {

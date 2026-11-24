@@ -1127,13 +1127,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:51:38Z",
+  "collected_at": "2026-11-24T06:57:14Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-24",
   "stars": 156,
   "tree": {
    "sha": "c30654c6a4949fe6707be167b78024cb48ee2263",
-   "etag": "W/\"ce30b7fa4767e9a1c16fbb4dbf77abee680ce0ccf585a517693ffbb902a582a0\"",
+   "etag": "W/\"5a5351918ab94d54ae3ed32afd38744c5509369bea76e3e4a0256d7c755099ac\"",
    "truncated": false,
    "path_count": 811,
    "matched": [
@@ -1379,21 +1379,20 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:53:48Z",
+  "collected_at": "2026-11-24T07:00:27Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
-  "stars": 117,
+  "pushed_at": "2026-11-23",
+  "stars": 119,
   "tree": {
-   "sha": "3058184f94e1f94c733d6ebcade3225d93f822a7",
-   "etag": "W/\"8e6893ef6b442b189724b6ad97f32abfddda2f36c9febf0a96efc87116c927c8\"",
+   "sha": "9d7326700e9b94837e87414ec4c60cbb249f8fbf",
+   "etag": "W/\"79cc8f90f3fa2275e336e8dc88d9e69fd5431b914049e5ed3cca5f6cd10419a1\"",
    "truncated": false,
-   "path_count": 1925,
+   "path_count": 1585,
    "matched": [
     "package.json",
     "apps/agent/package.json",
     "apps/api/package.json",
     "apps/dashboard/package.json",
-    "apps/runtime/package.json",
     "apps/www/package.json",
     "packages/analytics/package.json",
     "packages/api-client/package.json",
@@ -1405,6 +1404,7 @@
     "packages/cli/package.json",
     "packages/deploy-link/package.json",
     "packages/global-constants/package.json",
+    "packages/guest-sqlite/package.json",
     "packages/internal-scripts/package.json",
     "packages/pack-utils/package.json",
     "packages/protocol/package.json",
@@ -1418,10 +1418,9 @@
     "docker-compose.yml",
     "apps/api/Dockerfile",
     "apps/api/Dockerfile.dockerignore",
-    "apps/runtime/Dockerfile",
-    "infra/guest-image/Dockerfile",
     "infra/nibrunner-guest-image/Dockerfile",
     "infra/pg-backup/Dockerfile",
+    "packages/guest-sqlite/Dockerfile",
     ".github/workflows/build.yml",
     ".github/workflows/cd.yml",
     ".github/workflows/check-pr-title.yml",
@@ -1454,9 +1453,9 @@
    {
     "path": "apps/agent/package.json",
     "kind": "dep",
-    "blob_sha": "64ab96930c08e5de6740e3f60dc679391e007247",
+    "blob_sha": "c64fd86be7f2c864a16cbb74638255f6f1860b42",
     "ecosystem": "npm",
-    "bytes": 840,
+    "bytes": 797,
     "names": [
      "@effect/platform",
      "@effect/platform-bun",
@@ -1468,7 +1467,6 @@
      "effect"
     ],
     "dev": [
-     "@repo/app-operations",
      "@repo/internal-scripts",
      "@repo/typescript-config",
      "typescript"
@@ -1556,21 +1554,11 @@
     ]
    },
    {
-    "path": "apps/runtime/package.json",
-    "kind": "dep",
-    "blob_sha": "1f991151134b75196a8e75c057c2e342adada437",
-    "ecosystem": "npm",
-    "bytes": 207,
-    "dev": [
-     "@libsql/client"
-    ]
-   },
-   {
     "path": "apps/www/package.json",
     "kind": "dep",
-    "blob_sha": "128dde1b9948d3b2c2379bac13bb1b29cf8cfc0f",
+    "blob_sha": "3f5a10c5c214a33ec6bfad80a13b8523dc7e0cf7",
     "ecosystem": "npm",
-    "bytes": 1651,
+    "bytes": 1705,
     "names": [
      "@repo/binary-handoff",
      "@repo/deploy-link",
@@ -1589,7 +1577,8 @@
     "dev": [
      "@fontsource-variable/space-grotesk",
      "@cloudflare/vite-plugin",
-     "@fontsource/space-grotesk",
+     "@expo-google-fonts/space-grotesk",
+     "@expo-google-fonts/space-mono",
      "@fontsource/space-mono",
      "@repo/typescript-config",
      "@resvg/resvg-js",
@@ -1758,11 +1747,21 @@
     ]
    },
    {
+    "path": "packages/guest-sqlite/package.json",
+    "kind": "dep",
+    "blob_sha": "15f2e56725155bb49f689b2e548294e0d764271d",
+    "ecosystem": "npm",
+    "bytes": 212,
+    "dev": [
+     "@libsql/client"
+    ]
+   },
+   {
     "path": "packages/internal-scripts/package.json",
     "kind": "dep",
-    "blob_sha": "e5f041fa5427275ad56fe8daab95a1963ad6c8f3",
+    "blob_sha": "ae2b595b20d6e0a2beb38fcca1a647a9861c1f94",
     "ecosystem": "npm",
-    "bytes": 1862,
+    "bytes": 1596,
     "names": [
      "@actions/core",
      "@repo/global-constants",
@@ -1947,34 +1946,12 @@
     "bytes": 298
    },
    {
-    "path": "apps/runtime/Dockerfile",
-    "kind": "image",
-    "blob_sha": "96e27a3c50ddaaaca79df90ce65d6b1aff4a8a1e",
-    "bytes": 5082,
-    "images": [
-     "${BUILDER_IMAGE}",
-     "toolchain",
-     "tests",
-     "block-devices"
-    ]
-   },
-   {
-    "path": "infra/guest-image/Dockerfile",
-    "kind": "image",
-    "blob_sha": "0784a81fbe93fd55f6d0fc73e5287151c554434f",
-    "bytes": 3489,
-    "images": [
-     "${BUILDER_IMAGE}",
-     "debian"
-    ]
-   },
-   {
     "path": "infra/nibrunner-guest-image/Dockerfile",
     "kind": "image",
-    "blob_sha": "fd0a901d900aeece16cc1cf33350a3004861a563",
-    "bytes": 1331,
+    "blob_sha": "56ddcafe989d1ae3eea204ad785376dd9fee54d8",
+    "bytes": 1343,
     "images": [
-     "${RUNTIME_TOOLCHAIN}"
+     "${GUEST_SQLITE_BUILDER}"
     ]
    },
    {
@@ -1987,6 +1964,18 @@
     ]
    },
    {
+    "path": "packages/guest-sqlite/Dockerfile",
+    "kind": "image",
+    "blob_sha": "b77fdedcc8c2db7b3776c06c6c5b6925382a92b7",
+    "bytes": 2900,
+    "images": [
+     "${BUILDER_IMAGE}",
+     "toolchain",
+     "build",
+     "tests"
+    ]
+   },
+   {
     "path": ".github/workflows/build.yml",
     "kind": "ci",
     "blob_sha": "7f5f37bab13f6aa0bf665c040f2264c90f01bdcb",
@@ -1995,8 +1984,8 @@
    {
     "path": ".github/workflows/cd.yml",
     "kind": "ci",
-    "blob_sha": "a362db04d1d49718ff9c3734651ec9f5cfda9601",
-    "bytes": 13614
+    "blob_sha": "def27d219a5905b7e848198bc74282d9530763be",
+    "bytes": 11245
    },
    {
     "path": ".github/workflows/check-pr-title.yml",
@@ -2007,14 +1996,14 @@
    {
     "path": ".github/workflows/checks.yml",
     "kind": "ci",
-    "blob_sha": "a89fbcd4acaf32811b80b8db43c8333de1c4e5ac",
-    "bytes": 3180
+    "blob_sha": "b67dac33e227151a59e5131906d71b2e6e0ee3a0",
+    "bytes": 2080
    },
    {
     "path": ".github/workflows/infra.yml",
     "kind": "ci",
-    "blob_sha": "c23ca927b4ad0a9688dcadcaa0a0c86ad45f6bef",
-    "bytes": 5398
+    "blob_sha": "d7a0bbb104b13cfcca98bdd0718b84c89ecbe269",
+    "bytes": 5327
    },
    {
     "path": ".github/workflows/install-smoke.yml",
@@ -6387,13 +6376,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:22:21Z",
+  "collected_at": "2026-11-24T06:49:36Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-20",
-  "stars": 386,
+  "pushed_at": "2026-11-23",
+  "stars": 385,
   "tree": {
    "sha": "95151a8f8ca34bfa750f0181de804fdd553d57de",
-   "etag": "W/\"a2eb8a0533c6ead958f87592135c962db682af2cfebc3ddc060e65cca8206f49\"",
+   "etag": "W/\"70fab2bef345426aaa5885adb25811b54d785e56a2906f50631a7e1b6714f753\"",
    "truncated": false,
    "path_count": 469,
    "matched": [
@@ -8549,13 +8538,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:56:36Z",
+  "collected_at": "2026-11-24T07:05:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-24",
   "stars": 72,
   "tree": {
    "sha": "4c02cc1d6cd67722b007b01d699f216b055086a6",
-   "etag": "W/\"94a54be37e0e24ad8b96410bf5ab9b6fb2ac6899af62c1b85fb9544fe0dfc14b\"",
+   "etag": "W/\"c9795e4779dfa4365b5cf37091da1b6768f8177e693c2b04b5bed6f3aaeadb7b\"",
    "truncated": false,
    "path_count": 55,
    "matched": [
@@ -9606,13 +9595,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:52:51Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-24T07:13:30Z",
   "default_branch": "master",
-  "pushed_at": "2026-01-22",
+  "pushed_at": "2026-11-23",
   "stars": 36,
   "tree": {
-   "sha": "4bcb1d221aec1da50508709076835d988a48c6ab",
-   "etag": "W/\"ff1ce5293e2dc2080021ead84eb21ce6a7b10412f161789409bfc44561cebfc5\"",
+   "sha": "00b045280e6657485aa26be1ca31fcd010f80ea3",
+   "etag": "W/\"745733844c64239c6f4af4edc0711d2c0dea4dd3ade2f84243a768c42d51a32d\"",
    "truncated": false,
    "path_count": 103,
    "matched": [
@@ -12768,15 +12758,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T01:12:36Z",
+  "collected_at": "2026-11-24T07:31:10Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 12,
   "tree": {
-   "sha": "4b7287d5b13a0785e20f965f50101b2066300097",
-   "etag": "W/\"a5bc38c81890d54ef32c50217f13b25ce0fb1cace996bbcd40852e07c4714194\"",
+   "sha": "fae2fa5f086d02d0e9db1d181791b8fd4899432b",
+   "etag": "W/\"42d65fa752a27c13d8418e325f710ed5765b9a349c35fd5202e0528ebcee0bf7\"",
    "truncated": false,
-   "path_count": 1750,
+   "path_count": 1754,
    "matched": [
     "package.json",
     "apps/cli/package.json",
@@ -12811,9 +12801,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "c0906f063f3573e01848b6d8f24350fab8f51ae0",
+    "blob_sha": "9da3000842d0ff008d0e4c4c0eab8637295e0b0d",
     "ecosystem": "npm",
-    "bytes": 5963,
+    "bytes": 6018,
     "dev": [
      "@testing-library/react",
      "eslint",
@@ -12832,7 +12822,7 @@
    {
     "path": "apps/cli/package.json",
     "kind": "dep",
-    "blob_sha": "b72c70e90fbeb9fbcfecf1f563b4361235aa5e08",
+    "blob_sha": "e7d83ff952bd4d4be395c1dd7c5b4e2115271fc4",
     "ecosystem": "npm",
     "bytes": 1723,
     "names": [
@@ -12864,7 +12854,7 @@
    {
     "path": "apps/e2e/package.json",
     "kind": "dep",
-    "blob_sha": "52d5299d11dc0e089f4f4ab19e0d4007bbe70cd0",
+    "blob_sha": "f4ff51c0ffc2dc7f32d471c711cc352d584688f3",
     "ecosystem": "npm",
     "bytes": 8028,
     "dev": [
@@ -12875,7 +12865,7 @@
    {
     "path": "apps/web/package.json",
     "kind": "dep",
-    "blob_sha": "ef5733569d2ba9f447184ab5217fa2acbf0010b1",
+    "blob_sha": "e2ed548cfb7609e06720837114ea60d25967cf03",
     "ecosystem": "npm",
     "bytes": 2779,
     "names": [
@@ -12960,7 +12950,7 @@
    {
     "path": "packages/server/package.json",
     "kind": "dep",
-    "blob_sha": "b4980cad174089216212af981da2d0f9fb2af05e",
+    "blob_sha": "bdaa9d0fdb8d6229c8c8bd1f24df651f8691a53c",
     "ecosystem": "npm",
     "bytes": 1270,
     "names": [
@@ -13006,7 +12996,7 @@
    {
     "path": "packages/workflow-engine/package.json",
     "kind": "dep",
-    "blob_sha": "c712bcae889b50dec7bd353148e1bf881d364446",
+    "blob_sha": "c73d5b9317e15c6b3d9f050a640dcf2cde63cd47",
     "ecosystem": "npm",
     "bytes": 793,
     "names": [
@@ -13094,8 +13084,8 @@
    {
     "path": ".github/workflows/npm-publish.yml",
     "kind": "ci",
-    "blob_sha": "227c5f390110e7a41991636136b03a6d0f6cb14b",
-    "bytes": 2959
+    "blob_sha": "108f14db61d15983f7a26a6134c6af383a2236e1",
+    "bytes": 3330
    },
    {
     "path": ".github/workflows/release-checksums.yml",
@@ -13118,8 +13108,8 @@
    {
     "path": ".github/workflows/ship-release.yml",
     "kind": "ci",
-    "blob_sha": "8a87f78ef908cef09bdd1696b2f1b4a0bdea7fe8",
-    "bytes": 5022
+    "blob_sha": "23710332291e1921bb0a21c52b346340fd0d69bf",
+    "bytes": 5393
    },
    {
     "path": ".github/workflows/test-ids.yml",
@@ -15453,15 +15443,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T01:11:08Z",
+  "collected_at": "2026-11-24T07:28:34Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 14,
   "tree": {
-   "sha": "3d1a31a1ba2e2319e00f4a276ef4e4a27bb8a207",
-   "etag": "W/\"53932ca0ec12ef9e360a1a0c2a675602b1864aa702bec1f2a397857d98acba0c\"",
+   "sha": "b7854558f3f79e20bb9b439c76d2c3dd271aefd0",
+   "etag": "W/\"a56786c39e8059e6c4641701fb9c96abc082bff1d16af06bdd33f77ce16d71f9\"",
    "truncated": false,
-   "path_count": 8940,
+   "path_count": 9002,
    "matched": [
     ".github/workflows/ci.yml",
     ".github/workflows/observability.yml",

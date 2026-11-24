@@ -915,13 +915,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:42:12Z",
+  "collected_at": "2026-11-24T07:40:26Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-04",
+  "pushed_at": "2026-11-23",
   "stars": 0,
   "tree": {
-   "sha": "c2865a82af30622fd1592874d77ce805cca99531",
-   "etag": "W/\"715bdfee690591b0f274d9152d98de2317e85451edbe7e4952aad834abfdb930\"",
+   "sha": "c229ee11729f5c12aafb4be28dc87df2fc358ec9",
+   "etag": "W/\"f49de02d0527b02af6d989a56831f024cee1b08bf01d31e5daf686e527856599\"",
    "truncated": false,
    "path_count": 635,
    "matched": []
@@ -2661,17 +2661,18 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T01:12:27Z",
+  "collected_at": "2026-11-24T07:30:58Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 12,
   "tree": {
-   "sha": "33d5f5d74e1d66a8a5cdf7e9919cd89dc15937cd",
-   "etag": "W/\"0933306cb71168b8bd303540ee38984879934662c2dc2444069cccc087c7bc6f\"",
+   "sha": "f6f4666da85ae2d6843a1862214990cc7605aba8",
+   "etag": "W/\"07ee7df03b3aa41889d8ea930d1985418e8f1a64e2266b0b6bbfb37d93c7667f\"",
    "truncated": false,
-   "path_count": 90,
+   "path_count": 95,
    "matched": [
     "test/pom.xml",
+    "logservice/Dockerfile",
     "ob-configserver/Dockerfile",
     "obagent/Dockerfile",
     "obbinlog-ce/Dockerfile",
@@ -2680,15 +2681,16 @@
     "oceanbase-ce/Dockerfile",
     "oceanbase-ce/Dockerfile.pre",
     "oceanbase-cloud-native/Dockerfile",
+    "oceanseek/Dockerfile",
     "seekdb/Dockerfile",
     "archive/obdiag-builder/Dockerfile",
     "archive/oblogproxy-ce/Dockerfile",
     "charts/seekdb/values.yaml",
-    ".github/workflows/publish-oceanseek-logservice.yml",
     ".github/workflows/publish-reviewed-minio-mc.yml",
     ".github/workflows/release-charts.yml",
     ".github/workflows/release-latest-lts-oceanbase-ce.yml",
     ".github/workflows/release-latest-obdiag.yml",
+    ".github/workflows/release-logservice.yml",
     ".github/workflows/release-lts-oceanbase-ce.yml",
     ".github/workflows/release-ob-configserver.yml",
     ".github/workflows/release-obagent.yml",
@@ -2697,6 +2699,7 @@
     ".github/workflows/release-obproxy-ce.yml",
     ".github/workflows/release-oceanbase-ce.yml",
     ".github/workflows/release-oceanbase-cloud-native.yml",
+    ".github/workflows/release-oceanseek.yml",
     ".github/workflows/release-seekdb.yml",
     ".github/workflows/reusable-build-and-release-oceanbase-ce.yml",
     ".github/workflows/reusable-build-and-test-obdiag.yml",
@@ -2723,6 +2726,16 @@
      "com.oceanbase:oblogclient-logproxy",
      "org.junit.jupiter:junit-jupiter",
      "org.apache.logging.log4j:log4j-slf4j-impl"
+    ]
+   },
+   {
+    "path": "logservice/Dockerfile",
+    "kind": "image",
+    "blob_sha": "e5ab8472fda712a0250247d3c73bb0822ad3bb76",
+    "bytes": 1793,
+    "images": [
+     "quay.io/oceanbase/oceanbase-helper:2.4.0@sha256:df32d0d10ea3c16b941fcf15dbbf1e9de85205505a9077b5b882a7f9809c91ac",
+     "alibaba-cloud-linux-3-registry.cn-hangzhou.cr.aliyuncs.com/alinux3/alinux3@sha256:e5791e41fc76bcd6de81842fd808f07a12913869315f150c7b07f9ed28cef9e7"
     ]
    },
    {
@@ -2798,6 +2811,17 @@
     ]
    },
    {
+    "path": "oceanseek/Dockerfile",
+    "kind": "image",
+    "blob_sha": "cb9ed7fbcff30eacce034efbb0ae88821b74dbb0",
+    "bytes": 3087,
+    "images": [
+     "quay.io/oceanbase/oceanbase-helper:2.4.0@sha256:df32d0d10ea3c16b941fcf15dbbf1e9de85205505a9077b5b882a7f9809c91ac",
+     "obshell-${TARGETARCH}",
+     "alibaba-cloud-linux-3-registry.cn-hangzhou.cr.aliyuncs.com/alinux3/alinux3@sha256:e5791e41fc76bcd6de81842fd808f07a12913869315f150c7b07f9ed28cef9e7"
+    ]
+   },
+   {
     "path": "seekdb/Dockerfile",
     "kind": "image",
     "blob_sha": "0f64e067322bb27cf4959319746f35f7dc53dff3",
@@ -2834,15 +2858,6 @@
     ]
    },
    {
-    "path": ".github/workflows/publish-oceanseek-logservice.yml",
-    "kind": "ci",
-    "blob_sha": "bcc5f7d8b7b21762acd8a71cc47164b26f2b6984",
-    "bytes": 3897,
-    "images": [
-     "${{"
-    ]
-   },
-   {
     "path": ".github/workflows/publish-reviewed-minio-mc.yml",
     "kind": "ci",
     "blob_sha": "8c411b6dc0b3768d91bd375f2180add49e2f8c97",
@@ -2868,6 +2883,12 @@
     "kind": "ci",
     "blob_sha": "f4a9dce9fa0e1f97ecef689c0c11279ab940d848",
     "bytes": 326
+   },
+   {
+    "path": ".github/workflows/release-logservice.yml",
+    "kind": "ci",
+    "blob_sha": "8c3ddd560e045e1f6f7295ad0ab60995caae6fd9",
+    "bytes": 1908
    },
    {
     "path": ".github/workflows/release-lts-oceanbase-ce.yml",
@@ -2916,6 +2937,12 @@
     "kind": "ci",
     "blob_sha": "f69a9df0a7e465ca7cf01b40fee0c46a90faddf7",
     "bytes": 2169
+   },
+   {
+    "path": ".github/workflows/release-oceanseek.yml",
+    "kind": "ci",
+    "blob_sha": "1b4c8cf2cf5d75b930a8f2faf447a392624986cd",
+    "bytes": 1899
    },
    {
     "path": ".github/workflows/release-seekdb.yml",
@@ -3907,13 +3934,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:38:34Z",
+  "collected_at": "2026-11-24T06:37:25Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-22",
-  "stars": 2296,
+  "pushed_at": "2026-11-23",
+  "stars": 2297,
   "tree": {
    "sha": "6e5eedf45edefc4ceca17e8be4eb1d58089a1782",
-   "etag": "W/\"122a0ed2a3e20b34f32b5a34baec105ea185664f22ff084e7cdd56d7f9acb367\"",
+   "etag": "W/\"ab2a28e3c7267fcf7c81faafd0d911b6b1cc662df498922f6aa817b02b42aaef\"",
    "truncated": false,
    "path_count": 879,
    "matched": [
@@ -5180,15 +5207,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:54:43Z",
+  "collected_at": "2026-11-24T07:02:01Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 100,
   "tree": {
-   "sha": "3cf481e93f44513e84c48263ed8093ee093c1df6",
-   "etag": "W/\"69c92c8a4cbfb1ac8d2363db48f45de65388b69fbcb7148d269553bdb27e60b4\"",
+   "sha": "1bd7658ea29f9a682e2a25e0c6838987d5eefcba",
+   "etag": "W/\"fc26358071d14db84eec83c728620f3550eca268f2b09ac08d691f04955c8afc\"",
    "truncated": false,
-   "path_count": 3335,
+   "path_count": 3339,
    "matched": [
     "package.json",
     "packages/cli/package.json",
@@ -5824,15 +5851,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:57:43Z",
+  "collected_at": "2026-11-24T07:06:58Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-24",
   "stars": 63,
   "tree": {
-   "sha": "73ca33e2b7fa524eb24f85eb816ff2bec5e5b162",
-   "etag": "W/\"94cca5482d21720b9bc1fea49330a829deffec29b9d213d47db65ff908f0c800\"",
+   "sha": "74cc86690150c159cdf5ae07656bd6d16f9c15fa",
+   "etag": "W/\"adccb382da9da8715d34d1d10db170f06f99bdfa96442cb4c54c6ce03ab47a32\"",
    "truncated": false,
-   "path_count": 1538,
+   "path_count": 1587,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -6158,9 +6185,9 @@
    {
     "path": "packages/helpers/package.json",
     "kind": "dep",
-    "blob_sha": "0a917d52c8e1fe834d40b471742f0c28c448e081",
+    "blob_sha": "067b3ebd9351ca1c4d96808e61d6706e5509ab1c",
     "ecosystem": "npm",
-    "bytes": 2441,
+    "bytes": 2487,
     "names": [
      "dequal",
      "react",
@@ -6202,9 +6229,9 @@
    {
     "path": "packages/limesync/package.json",
     "kind": "dep",
-    "blob_sha": "b6f22f057641ed20f535fdc8a56f16b2b6986b87",
+    "blob_sha": "06ed92c992aaaefa678e4dab4633e117ebe5893b",
     "ecosystem": "npm",
-    "bytes": 8649,
+    "bytes": 9548,
     "names": [
      "@babel/parser",
      "@noble/ciphers",
@@ -6220,11 +6247,12 @@
      "orez-sync-cf-host",
      "orez-sync-executor",
      "typescript",
-     "valibot",
      "ws",
      "orez-sync-native",
      "vite",
-     "react"
+     "react",
+     "better-auth",
+     "one"
     ],
     "dev": [
      "@types/bun",
@@ -6235,7 +6263,8 @@
      "@types/react",
      "jsdom",
      "react",
-     "react-dom"
+     "react-dom",
+     "better-auth"
     ]
    },
    {
@@ -6264,11 +6293,15 @@
    {
     "path": "packages/native/package.json",
     "kind": "dep",
-    "blob_sha": "cdc27d7978b929af0fb3cb023c32ff90099fb602",
+    "blob_sha": "fcb29497162d48ebbf92374192b295668875945b",
     "ecosystem": "npm",
-    "bytes": 473,
+    "bytes": 760,
     "names": [
-     "expo-crypto"
+     "expo-crypto",
+     "react-native-nitro-modules"
+    ],
+    "dev": [
+     "nitrogen"
     ]
    },
    {
@@ -6339,9 +6372,9 @@
    {
     "path": "packages/sync-cf-host/package.json",
     "kind": "dep",
-    "blob_sha": "b5552fb1025aa742409b994a9fa87b1821f19f27",
+    "blob_sha": "82d026b2ce97b9ee95e6bffef38f6150b2e4d395",
     "ecosystem": "npm",
-    "bytes": 4128,
+    "bytes": 4214,
     "names": [
      "@opentelemetry/api",
      "orez-sync-executor",
@@ -6450,8 +6483,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "f9d3539efb7be224586f8a3d92cc640aed268f2d",
-    "bytes": 29088
+    "blob_sha": "37631614afcdf88d26015a2bf7c32380020f080d",
+    "bytes": 29255
    },
    {
     "path": ".github/workflows/deployed-qualification.yml",
@@ -7293,13 +7326,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:38:41Z",
+  "collected_at": "2026-11-24T07:09:59Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-23",
   "stars": 48,
   "tree": {
-   "sha": "f79e617825a83ef1e33caa5e254259b0175fd9d2",
-   "etag": "W/\"fd4923f04d0cf1100fe01bff2d5ee69db1c2207ab91a2afa925001d0ec41299e\"",
+   "sha": "b1848d50fe36d1b9486014bdc12f57ce7d6b0b2c",
+   "etag": "W/\"2a8d43ca3742fbf373f8c20bbb6adae9118de1e6bad4a726b473206cbeea5888\"",
    "truncated": false,
    "path_count": 506,
    "matched": [
@@ -7315,7 +7348,7 @@
    {
     "path": "build.gradle.kts",
     "kind": "dep",
-    "blob_sha": "ffe7683e47c2880bbded789e34505d6090575430",
+    "blob_sha": "3bb201026b571d8ba90d8e99ceccdcdaa45e3d42",
     "ecosystem": "gradle",
     "bytes": 3473
    },
@@ -11948,13 +11981,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:26:52Z",
+  "collected_at": "2026-11-24T06:59:00Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-23",
   "stars": 132,
   "tree": {
    "sha": "9f88ca12a97980e48adc02e3bbed3602ff29b376",
-   "etag": "W/\"865a1243604c555b071ea3f63666e658d8bfb014f4acbbd8d9fb257c2a1f7df8\"",
+   "etag": "W/\"0457871764286d2b64b1e8a73d9b89285754dd83ecb215d5a665e9891f088e0a\"",
    "truncated": false,
    "path_count": 2619,
    "matched": [
@@ -12424,13 +12457,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:46:10Z",
+  "collected_at": "2026-11-24T07:10:54Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-20",
+  "pushed_at": "2026-11-23",
   "stars": 44,
   "tree": {
-   "sha": "2ebfdfd25fb39420499cfd89d36c709b9afd7ce0",
-   "etag": "W/\"93247f2e54cb3ee03c33981f98f4b92835c07873eb76f12f03896598d02228dd\"",
+   "sha": "4b29e5c9f92286ee8f63ffabcd08990621a76041",
+   "etag": "W/\"ff8682413dfd19ff701a1a7600f9be24a35f68358f28830d6df8b39527c5e574\"",
    "truncated": false,
    "path_count": 80,
    "matched": [
@@ -12988,15 +13021,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:45:18Z",
+  "collected_at": "2026-11-24T06:47:42Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 488,
   "tree": {
-   "sha": "f1c945f79f1620407a714318a419e38f4989ecb3",
-   "etag": "W/\"a5a248a9d739f87e6df8074d3e721ad9ea02653d0ddbda021600bc0c49baf8d8\"",
+   "sha": "458c5ba480504869deecddef7e3a92fbe8017eb9",
+   "etag": "W/\"fa42ab7de5895c25b280660841240d6b54e3b2a521ac006368e0f4138527186a\"",
    "truncated": false,
-   "path_count": 6408,
+   "path_count": 6414,
    "matched": [
     ".github/workflows/linux.yml"
    ]

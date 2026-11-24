@@ -2239,13 +2239,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:57:50Z",
+  "collected_at": "2026-11-24T07:07:07Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-24",
   "stars": 61,
   "tree": {
-   "sha": "9467cf7859fe3941de1ccbbd2a3cc5c5de2c5945",
-   "etag": "W/\"61ffc0a2c0547feb8864c614293f58665e29a8e4efb376bec091e61d6d61a7ac\"",
+   "sha": "1faa7696c6fc5d446c9393d6451fc0f2373ebfbe",
+   "etag": "W/\"43449ee10e390f0fb19eab36019689842f740ba3a215d7f0081e80491a279037\"",
    "truncated": false,
    "path_count": 6,
    "matched": [
@@ -2344,44 +2344,65 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T00:44:53Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-24T07:10:56Z",
   "default_branch": "master",
-  "pushed_at": "2025-07-05",
+  "pushed_at": "2026-11-23",
   "stars": 44,
   "tree": {
-   "sha": "8a0fc9eba82300831ab1144862a300ff2aa4241d",
-   "etag": "W/\"034f24de3494c426307931ba5cf25376914d4e6d76e97337cca97f5b4324518a\"",
+   "sha": "f5c4727318f914069c8c53b1575314072f74ea1b",
+   "etag": "W/\"9381f977a7d85233442dc6a5ace5e859233bf5887f2f3ddec230e74726c59823\"",
    "truncated": false,
-   "path_count": 74,
+   "path_count": 127,
    "matched": [
     "Cargo.toml",
+    "entities/Cargo.toml",
+    "macros/Cargo.toml",
+    "migration/Cargo.toml",
+    "scripts/package.json",
     "docker-compose.yaml",
-    "docker/dev/Dockerfile",
-    "docker/prod/Dockerfile"
+    "docker/dev/Dockerfile.app",
+    "docker/dev/Dockerfile.cli",
+    "docker/prod/Dockerfile.app",
+    "docker/prod/Dockerfile.cli",
+    "docker/prod/Dockerfile.web"
    ]
   },
   "files": [
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "42bbba7f25b8127649297843bd3e823299d56ebe",
+    "blob_sha": "5cf44dc36ad5300243a86c8249679b73a2a384f5",
     "ecosystem": "cargo",
-    "bytes": 962,
+    "bytes": 2115,
     "names": [
+     "aes-gcm",
+     "askama",
      "axum",
      "axum-extra",
+     "axum-governor",
+     "base64",
      "bcrypt",
      "chrono",
+     "entities",
+     "hex",
      "jsonwebtoken",
+     "lettre",
      "log",
+     "migration",
+     "rand",
+     "redis",
+     "sea-orm",
+     "secrecy",
      "serde",
      "serde_json",
-     "sqlx",
+     "sha2",
      "thiserror",
      "tokio",
      "tower-http",
      "tracing",
      "tracing-subscriber",
+     "url",
      "uuid",
      "validator"
     ],
@@ -2391,31 +2412,107 @@
     ]
    },
    {
+    "path": "entities/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "12cb8c73d9ea97c00eae373cec46e10f6b9b7813",
+    "ecosystem": "cargo",
+    "bytes": 279,
+    "names": [
+     "sea-orm",
+     "sea-orm-migration",
+     "serde",
+     "serde_json",
+     "tokio",
+     "ulid"
+    ]
+   },
+   {
+    "path": "macros/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "6d095d6a935b7c9b7408315d6a68ea59bd1d415e",
+    "ecosystem": "cargo",
+    "bytes": 85
+   },
+   {
+    "path": "migration/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "991028c3e45192ce6d739c5cd036fba2ba904929",
+    "ecosystem": "cargo",
+    "bytes": 397,
+    "names": [
+     "sea-orm",
+     "sea-orm-migration",
+     "serde",
+     "serde_json",
+     "tokio",
+     "ulid"
+    ]
+   },
+   {
+    "path": "scripts/package.json",
+    "kind": "dep",
+    "blob_sha": "d7c07db09d0214b16ffcaf3855d5742c1bee11b0",
+    "ecosystem": "npm",
+    "bytes": 315,
+    "names": [
+     "nunjucks",
+     "ulid"
+    ]
+   },
+   {
     "path": "docker-compose.yaml",
     "kind": "image",
-    "blob_sha": "8e39b6b9fcc9c2f8bf81c69c79a605ca1e825b80",
-    "bytes": 1505,
+    "blob_sha": "6785901c8c32d938eb374241949596b46a2edadb",
+    "bytes": 2853,
     "images": [
-     "postgres:15-alpine"
+     "postgres:15-alpine",
+     "redis:7-alpine",
+     "redis/redisinsight:3.8",
+     "maildev/maildev"
     ]
    },
    {
-    "path": "docker/dev/Dockerfile",
+    "path": "docker/dev/Dockerfile.app",
     "kind": "image",
-    "blob_sha": "ff0b96d3567749bedcb2050f6b81d533afc5781a",
-    "bytes": 417,
+    "blob_sha": "aaad293e669f8edabb1c76f4d472f6f5a31503ac",
+    "bytes": 516,
     "images": [
-     "rust:1.86.0-slim-bullseye"
+     "rust:1.97"
     ]
    },
    {
-    "path": "docker/prod/Dockerfile",
+    "path": "docker/dev/Dockerfile.cli",
     "kind": "image",
-    "blob_sha": "4264bd3ac719209964f3648b41f8172fe73008db",
-    "bytes": 361,
+    "blob_sha": "cd67e766960b4dd7c5978d1e599faa11aad0742a",
+    "bytes": 525,
     "images": [
-     "rust:${RUST_VERSION}",
-     "ubuntu"
+     "rust:1.94"
+    ]
+   },
+   {
+    "path": "docker/prod/Dockerfile.app",
+    "kind": "image",
+    "blob_sha": "09776e9027509620020f309c04b2ba1368acac5f",
+    "bytes": 1333,
+    "images": [
+     "rust:1.94-slim-bookworm",
+     "debian:bookworm-slim"
+    ]
+   },
+   {
+    "path": "docker/prod/Dockerfile.cli",
+    "kind": "image",
+    "blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "bytes": 0
+   },
+   {
+    "path": "docker/prod/Dockerfile.web",
+    "kind": "image",
+    "blob_sha": "22559449137d39786e6f95b7c29936f0801ebad2",
+    "bytes": 2709,
+    "images": [
+     "rust:1.94-slim-bookworm",
+     "node:22-slim"
     ]
    }
   ],
@@ -2424,16 +2521,11 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "src/adapters/auth_request.rs",
+    "src/adapters/auth_response.rs",
+    "src/adapters/message.rs",
     "src/adapters/mod.rs",
-    "src/adapters/dto/jwt.rs",
-    "src/adapters/dto/mod.rs",
-    "src/adapters/dto/otp.rs",
-    "src/adapters/dto/user.rs",
-    "src/adapters/requests/auth.rs",
-    "src/adapters/requests/mod.rs",
-    "src/adapters/response/api_response.rs",
-    "src/adapters/response/auth.rs",
-    "src/adapters/response/mod.rs"
+    "src/adapters/user.rs"
    ]
   },
   "fail_count": 0
@@ -4757,15 +4849,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T01:11:17Z",
+  "collected_at": "2026-11-24T07:28:49Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-23",
   "stars": 13,
   "tree": {
-   "sha": "f481ccc8cbbb4819e8d643b8a5947cffc8e845e1",
-   "etag": "W/\"4f304b9989e09c1e79fbcee1eed9bad1b73b558c1ca35679582d32be59419ce3\"",
+   "sha": "8c0b3e5ae8e0b492c62610c630604efbdfe6d565",
+   "etag": "W/\"da7eaea2e0e2d83ad2b0e5fec773add055c90efe2afd88c9a8df15f1267fd08c\"",
    "truncated": false,
-   "path_count": 1712,
+   "path_count": 1736,
    "matched": [
     "go.mod",
     "odbc/go.mod",
@@ -5333,8 +5425,8 @@
    {
     "path": ".github/workflows/pages.yml",
     "kind": "ci",
-    "blob_sha": "45a055ab9c092b23cfd702e81fef320f7ffe68d1",
-    "bytes": 2873
+    "blob_sha": "51fd2c94d93bd8bc89f30f74a8f85a14be685c10",
+    "bytes": 2831
    }
   ],
   "clues": {
@@ -5441,13 +5533,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T01:12:34Z",
+  "collected_at": "2026-11-24T07:29:53Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
-  "stars": 12,
+  "pushed_at": "2026-11-24",
+  "stars": 13,
   "tree": {
    "sha": "02e3633d18058a58ccad68b7703080b361bbcf65",
-   "etag": "W/\"72bb2929e6eefbd7fb915694e2abfab58cda2eea70a98f52abd3ac71340d88dd\"",
+   "etag": "W/\"266bd6007b856265e261d07ba0188fa92410fd07fc865399ea8dd295d052ca75\"",
    "truncated": false,
    "path_count": 2489,
    "matched": [
@@ -8735,15 +8827,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T00:34:12Z",
+  "collected_at": "2026-11-24T06:30:57Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-24",
   "stars": 7695,
   "tree": {
-   "sha": "2ef6d46ebcf3f76ff31da0240ba609ad362e03a1",
-   "etag": "W/\"9eaf4426324553eeec938bc785f9952b436fa322cf95e49056f2ad744b2c021a\"",
+   "sha": "0121d3919565f4f714100aec6e95df2c996a69a5",
+   "etag": "W/\"cc293df54985cc92073e24ed84ce61baa44503032cc25e6b0df567c42f61f5bf\"",
    "truncated": false,
-   "path_count": 17764,
+   "path_count": 17783,
    "matched": [
     "requirements.txt",
     "blog/Gemfile",
@@ -9031,9 +9123,9 @@
    {
     "path": "clients/android/NewsBlur/app/build.gradle.kts",
     "kind": "dep",
-    "blob_sha": "31aa537e79a0c453d594146a66a09ef423b90eb1",
+    "blob_sha": "50ec95a7f095ae0050e77373c54f1439da54c611",
     "ecosystem": "gradle",
-    "bytes": 5398
+    "bytes": 8055
    },
    {
     "path": "clients/android/NewsBlur/app/benchmark/build.gradle.kts",
@@ -10078,13 +10170,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:19:36Z",
+  "collected_at": "2026-11-24T06:51:40Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
-  "stars": 301,
+  "pushed_at": "2026-11-23",
+  "stars": 302,
   "tree": {
-   "sha": "0974495b6a640f3313824004e103cc3f53645ba0",
-   "etag": "W/\"dbc2f5d212a61faf2eaa23dabd15b257b86245081952da221b436194a757e009\"",
+   "sha": "1d0818ec36a23a87d9aee40483577e031b20e8cf",
+   "etag": "W/\"fa4305c38e2af970c2d25f37e7854bc493f22e6a20d9f9df12e66a47a4076785\"",
    "truncated": false,
    "path_count": 293,
    "matched": [
@@ -10625,13 +10717,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-17T05:34:40Z",
+  "collected_at": "2026-11-24T07:06:18Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-16",
+  "pushed_at": "2026-11-23",
   "stars": 67,
   "tree": {
    "sha": "2c79149cdeb6f13ab44e0b82a23979140d86be67",
-   "etag": "W/\"b2c584ed7d69b0656e3dda8d64eeb725e5deed0eedefd2c4fad5bf48535564be\"",
+   "etag": "W/\"014c66f47fa383727430a9a4e1b77c8379b0d5eaf36d63ec39a95014710cf313\"",
    "truncated": false,
    "path_count": 170,
    "matched": [
@@ -15771,13 +15863,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T20:07:27Z",
+  "collected_at": "2026-11-24T07:31:27Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-19",
+  "pushed_at": "2026-11-23",
   "stars": 11,
   "tree": {
-   "sha": "c1ccfa5b41a279c0b22e6dd2e55b491690eeff8c",
-   "etag": "W/\"0d843b45c8c671b4d29e8a40b52cb53d6fb315a9f72f51260da3b04c9d42b011\"",
+   "sha": "c1ad957eba4d5fbb7331d46dd5a502bdf3fcc31c",
+   "etag": "W/\"477374c086b5bbf265fa7b77c734700e79e44afaba415c319e6b26e037a20f19\"",
    "truncated": false,
    "path_count": 473,
    "matched": [
@@ -19813,15 +19905,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:58:11Z",
+  "collected_at": "2026-11-24T07:38:49Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
-  "stars": 1,
+  "pushed_at": "2026-11-23",
+  "stars": 3,
   "tree": {
-   "sha": "77636f82c864eb06c2c8f782330a32a9b5e16a19",
-   "etag": "W/\"0be21dc799a9e1bdd3892efdab3e2f8c892ce9fe926eff9ffc046ce31ebc4b1c\"",
+   "sha": "65bc26ae438a2fc1c4f286e3cc2b86e6d230b30b",
+   "etag": "W/\"7fa564e662235afe56e829f8c03fcf5f84497e5e2c38f03a44cc4a410754f170\"",
    "truncated": false,
-   "path_count": 27,
+   "path_count": 28,
    "matched": []
   },
   "files": [],
