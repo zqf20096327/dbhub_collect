@@ -25,6 +25,7 @@ werden muss, bleibt bis Fristende unverändert, und danach löschst du es nachwe
 [Dokumentation](https://belegt.store/) •
 [Entwicklung](#entwicklung)
 
+🖱️ **[Demo ausprobieren](https://belegt.store/demo/)**: mit Beispieldaten, im Browser, ohne Installation •
 🖼️ **[Rundgang in Bildern](https://belegt.store/)**
 
 <sub>English: self-hosted document archive with a GoBD mode for German businesses: mails (IMAP, JMAP, Microsoft 365, Google, SMTP journal, PST), e-invoices (ZUGFeRD, XRechnung), scans with OCR and any other file, immutable until the end of the legal retention period, with auditor access and the data medium for tax audits. The app is in German and English; the [documentation](https://belegt.store/) is in German.</sub>

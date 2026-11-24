@@ -37,12 +37,13 @@ A desktop database client for **MySQL, PostgreSQL, SQLite, Redis, MongoDB and Cl
   and test up to four connections at once. Stop cancels waiting checks while running checks
   finish; the latest result appears on each card. Editing returns to the results; saving clears
   only the edited connection's result. SQLite checks do not create missing files.
+- **New connection from URL…** (⇧⌘I) fills an editable draft. Saving creates a new connection and stores the password in Keychain.
 - **Import…** (⌘O) detects the format:
   - a DBDock export (`dbdock.connections` JSON, plain or passphrase-encrypted),
   - TablePlus `Connections.plist` (offered directly when TablePlus is installed; groups
     and tags kept; passwords stay in TablePlus),
   - DBeaver `data-sources.json` (folders, types, SSH tunnels),
-  - text / `.env` with connection URLs, or pasted (⇧⌘I): `postgres://`, `mysql://`,
+  - text / `.env` with connection URLs, including pasted batches: `postgres://`, `mysql://`,
     `redis://`, `mongodb+srv://`, `sqlite:///path`, `jdbc:…`. URL passwords go to the
     Keychain; importing the same URL again updates it.
 - **Export…** (⇧⌘E) with or without passwords; with a passphrase the file is encrypted

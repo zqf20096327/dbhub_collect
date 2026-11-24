@@ -81,7 +81,7 @@ server does not implement A2A.
 
 ## Why minymaton
 
-**Four base tools:** `stream`, `subscription`, `publish`, `receive`. One
+**Five base tools:** `stream`, `subscription`, `publish`, `purge`, `receive`. One
 standalone native Rust waiter (`minymaton-wait`, built for 6 targets) and one
 portable Python 3 stdlib waiter (`tools/minymaton-wait.py`) bridge a parked
 receive to background-job completion. Task boards, squads, file reservations and
@@ -630,6 +630,7 @@ not make it optional for every action.
 | `stream` | Create, list, delete, or sweep the streams you may use. `create` with `members` makes a private stream; `grant` and `revoke` change its members; `delete`, atomic `delete_bulk`, and state-driven `sweep_idle` (never time-based; protects `agents`, bound channels, `--description-stream`, inaccessible private streams, `keep`, and streams with active `waiting: true` or `follow`-bound subscriptions) remove unused streams. Messages keep commit order |
 | `subscription` | Create, recover, delete, bulk-delete, sweep, or list subscriptions in a stream. Omit the label on creation to atomically claim `agent-N` (optional `start_at: "latest" \| "earliest"` and `metadata`); `delete_bulk` atomically removes multiple labels, and state-driven `sweep_idle` (never time-based) removes idle subscriptions while protecting `waiting: true` guards, `follow` bindings, `--description-subscription`, and `keep` |
 | `publish` | Commit one message, any JSON value, with optional `from` (suppresses self-echo), `to` (direct recipient), transactional `ack` (`batch_id`), and `claims` (`message_id` to claim for `from`; first claim wins). Retrying with the same `idempotency_key` and payload returns the original result; reusing the key with a different payload is refused |
+| `purge` | Permanently delete history in explicit `streams` at or before an absolute RFC 3339 `cutoff` with a timezone. The caller computes the cutoff: Minymaton has no default, TTL, relative duration, timer or heuristic. The stream and subscription records remain. Pending batches intersecting deleted messages are invalidated and reported; their ACK IDs no longer work, while newer messages reseal on receive |
 | `receive` | Next batch, bounded by `max_events` and `max_bytes` (at most 16384), with event-driven `wait` (`true` or `false`). Carries `ack` for the previous batch |
 | `ack` | Description delivery only. Acknowledges the batch shown in the description |
 | `message_<batch_id>` | Tools delivery only. Acknowledges that batch |
@@ -719,7 +720,7 @@ Qualified on 2026-10-16, tools mode, `--batch-bytes 65536`, stock clients with n
 cargo test --workspace
 ```
 
-Integration tests start the real server binary on a loopback port and drive it with the rmcp client over Streamable HTTP, across all three protocol revisions. They cover idempotent publish, redelivery, purely event-driven `receive` (`wait: true` and `wait: false`), the 16 KiB result cap, push, tool-set delivery, both deliveries at once, supersede, per-agent `follow`, route-derived `initialize.instructions`, bearer-token authentication, flat action-enum input schemas with strict per-action request validation, paginated lock-free discovery, concurrent label claims, subscription identity `metadata`, subscription deletion (`action: "delete"`), `start_at` (`"latest"` vs `"earliest"`), self-echo suppression (`from`), direct addressing (`to`), transactional `ack` on `publish`, private streams (member-only access, grant/revoke, `publisher` on every event), first-claim-wins `claims` across concurrent publishes and restarts, and recovery after actual isolated `SQLITE_FULL` and `SQLITE_BUSY` write failures. Further integration tests exercise real compiler acceptance/rejection and real filesystem/webhook alert transitions, including failed delivery and retry.
+Integration tests start the real server binary on a loopback port and drive it with the rmcp client over Streamable HTTP, across all three protocol revisions. They cover idempotent publish, redelivery, purely event-driven `receive` (`wait: true` and `wait: false`), the 16 KiB result cap, push, tool-set delivery, both deliveries at once, supersede, per-agent `follow`, route-derived `initialize.instructions`, bearer-token authentication, flat action-enum input schemas with strict per-action request validation, paginated lock-free discovery, concurrent label claims, subscription identity `metadata`, subscription deletion (`action: "delete"`), `start_at` (`"latest"` vs `"earliest"`), self-echo suppression (`from`), direct addressing (`to`), transactional `ack` on `publish`, explicit-cutoff message purge with pending-batch invalidation on SQLite and Orsino, private streams (member-only access, grant/revoke, `publisher` on every event), first-claim-wins `claims` across concurrent publishes and restarts, and recovery after actual isolated `SQLITE_FULL` and `SQLITE_BUSY` write failures. Further integration tests exercise real compiler acceptance/rejection and real filesystem/webhook alert transitions, including failed delivery and retry.
 
 Waiter regressions run Cargo's actual compiled Rust binary and the portable
 Python 3 stdlib helper (`tools/minymaton-wait.py`) with an empty child
@@ -766,7 +767,7 @@ Android and iOS against live loopback `minymaton-server` processes.
 
 `Queue` in `minymaton-core` (`Queue::open` and `Queue::with_backend`) decouples MCP protocol dispatch and in-memory event signaling (`Signals`) from durable persistence through two traits at the atomic queue-command boundary:
 
-- **`QueueStore` (`Send`)**: Dispatches all atomic queue commands and receive lifecycle transitions: `create_stream`, `change_member`, `claim_subscription`, `recover_subscription`, `delete_subscription`, `delete_subscriptions_bulk`, `sweep_idle_subscriptions`, `follow_stream`, `ensure_subscription`, `provision_channel`, `supports_idle_sweep`, `delete_stream`, `delete_stream_for_access`, `delete_streams`, `sweep_idle_streams`, `activate_enrollment`, `publish` (`Publication<'_>`), `admit`, `select`, `release`, `read_inbox`, `read_description`, and `pending_description`.
+- **`QueueStore` (`Send`)**: Dispatches all atomic queue commands and receive lifecycle transitions: `create_stream`, `change_member`, `claim_subscription`, `recover_subscription`, `delete_subscription`, `delete_subscriptions_bulk`, `sweep_idle_subscriptions`, `follow_stream`, `ensure_subscription`, `provision_channel`, `supports_idle_sweep`, `delete_stream`, `delete_stream_for_access`, `delete_streams`, `sweep_idle_streams`, `purge_events`, `activate_enrollment`, `publish` (`Publication<'_>`), `admit`, `select`, `release`, `read_inbox`, `read_description`, and `pending_description`.
 - **`QueueReader` (`Send`)**: Dispatches read-only discovery and inbox queries: `list_streams`, `list_subscriptions`, `agent_binding`, `inbox_unread`, and `inbox`.
 - **`Signals`**: Manages event-driven per-stream commit watch channels, per-subscription ownership generation watch channels, and RAII `WaitGuard` active-wait tracking in memory within the `Queue` process.
 - **Bundled SQLite WAL backend**: The repository ships the single-node bundled `SQLite` WAL (`synchronous=FULL`, `busy_timeout=0`) `Store` and `Reader` types implementing `QueueStore` and `QueueReader`. `Queue::with_backend` takes any other implementation of those traits; `Signals` wake receives parked in the same process, so a backend shared by several server processes must also raise them from the other processes' commits. See [`deploy/README.md`](deploy/README.md) for the operator deployment topology.
@@ -784,7 +785,7 @@ flowchart TB
     subgraph server["minymaton-server | loopback HTTP"]
         auth["Bearer authentication<br/>Enrolled token digests"]
         routes["/mcp and /mcp/agent/name<br/>Route-derived instructions"]
-        tools["Tools and flat action-enum schemas<br/>stream | subscription | publish | receive<br/>follow on agent endpoints"]
+        tools["Tools and flat action-enum schemas<br/>stream | subscription | publish | purge | receive<br/>follow on agent endpoints"]
         delivery["Delivery surfaces<br/>receive | message tools | descriptions | inbox resource"]
         cancel["Request cancellation / disconnect<br/>Drop parked WaitGuard"]
     end

@@ -30,7 +30,7 @@ import (
     "gorm.io/gorm"
 )
 
-db, err := gorm.Open(oceanbase.Open("oceanbase://user:pass@127.0.0.1:2881/db?mode=mysql"), &gorm.Config{})
+db, err := gorm.Open(oceanbase.Open("oceanbase://user:pass@127.0.0.1:2881/db?compatibilityMode=mysql"), &gorm.Config{})
 ```
 
 Structured configuration (use either this or a DSN):
@@ -45,7 +45,7 @@ if err != nil {
 
 db, err := gorm.Open(oceanbase.New(oceanbase.Config{
     DSNConfig: &cfg,
-    Mode:      ob.ModeOracle,
+    Mode:      ob.CompatibilityModeOracle,
 }), &gorm.Config{})
 ```
 
@@ -57,10 +57,10 @@ Dialector can safely be constructed during application configuration.
 Precedence is as follows; a zero value means "unspecified":
 
 ```
-Config.Mode (nonzero) > explicit DSN mode / nonzero DSNConfig.Mode > MySQL default
+Config.Mode (nonzero) > explicit DSN compatibilityMode / nonzero DSNConfig.CompatibilityMode > MySQL default
 ```
 
-- Use the DSN parameter `mode=auto` to detect the tenant compatibility mode. Detection reads
+- Use the DSN parameter `compatibilityMode=auto` to detect the tenant compatibility mode. Detection reads
   `ob_compatibility_mode` on a temporary connection and accepts only non-NULL `MYSQL`/`ORACLE` values.
   Unknown values, NULL, timeouts, and permission errors all cause initialization to fail.
 - A GORM `DB` instance uses exactly one compatibility mode; tenants with mixed modes are unsupported.

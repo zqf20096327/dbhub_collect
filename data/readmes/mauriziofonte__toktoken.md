@@ -34,7 +34,7 @@ Works with Claude Code, Cursor, Windsurf, Copilot, Gemini, Codex, **and any MCP-
 
 ## Features
 
-- **49 languages** via [universal-ctags](https://ctags.io/) + 16 custom parsers (see [docs/LANGUAGES.md](docs/LANGUAGES.md))
+- **49 languages** via [universal-ctags](https://ctags.io/) + 17 custom parsers (see [docs/LANGUAGES.md](docs/LANGUAGES.md))
 - **Import graph**: cross-file dependency tracking with `find:importers`, `find:references`, `find:callers`, and `inspect:dependencies`
 - **FTS5 search** with relevance scoring, cascading query strategies, and token-budget-aware result slicing
 - **Incremental indexing** using content hashing -- re-indexes only changed files, including single-file reindex
@@ -48,6 +48,7 @@ Works with Claude Code, Cursor, Windsurf, Copilot, Gemini, Codex, **and any MCP-
 - **GitHub repo indexing** (`toktoken index:github owner/repo`) -- index any public repo without cloning
 - **Smart filtering**: excludes non-code files (CSS, HTML) and vendored directories by default, with selective `--include` override
 - **Security**: symlink escape detection, secret pattern filtering, binary exclusion
+- **Perl/CGI security queries**: a dedicated Perl parser records command-execution sinks, request/environment/config sources, sanitizers and ACL gates; `security:flow` chains sources to sinks across subroutine calls and files (static, offline: the target code is never executed)
 - **Token savings tracking**: cumulative metrics via the `stats` command
 - **Auto-update**: `--self-update` with SHA-256 verification and atomic binary replacement
 - **Cross-platform**: Linux (x64/ARM64/ARMv7), macOS (Intel/Apple Silicon), Windows (x64)
@@ -110,7 +111,7 @@ toktoken index:update
 | `index:file <file>` | Reindex a single file |
 | `index:github <repo>` | Clone and index a GitHub repository |
 | `search:symbols <query>` | Search symbols by name (FTS5 + scoring + centrality ranking) |
-| `search:text <query>` | Full-text search across files (ripgrep + fallback) |
+| `search:text <query>` | Full-text search across files (in-process; `--regex` uses POSIX extended regex, grep -E semantics) |
 | `search:cooccurrence <a>,<b>` | Find symbols that co-occur in the same file |
 | `search:similar <id>` | Find symbols similar to a given one |
 | `inspect:outline <file>` | Show file symbol hierarchy |
@@ -124,13 +125,18 @@ toktoken index:update
 | `find:references <id>` | Find import references to an identifier. Use `--check` for boolean reference check |
 | `find:callers <id>` | Find symbols that likely call a given function/method |
 | `find:dead` | Find symbols with no callers or importers (dead code detection) |
+| `security:sinks [scope]` | Command execution, file writes, `eval STRING` (Perl/CGI) with origins, params and entry-point flags |
+| `security:sources [scope]` | `$in{}`, `%ENV`, `@ARGV`, `<STDIN>`, `$config{}`, `read_file*` inputs (Perl/CGI) |
+| `security:sanitizers [scope]` | Escaping/validation calls (`quotemeta`, `html_escape`, `can_*`, ...) |
+| `security:acl-gates [scope]` | Access-control checks (`get_module_acl`, `$access{}`, `foreign_available`, ...) |
+| `security:flow [scope]` | Source -> sink chains within N call hops, with unresolvable tainted calls listed as `unknown` |
 | `inspect:blast <id>` | Symbol blast radius analysis (files transitively affected by a change) |
 | `inspect:cycles` | Detect circular import chains in the dependency graph |
 | `help [command]` | List all tools or show detailed usage for a specific tool |
 | `suggest` | Onboarding discovery: top keywords, kind/language distribution, most-imported files, example queries |
 | `stats` | Index statistics + token savings report |
 | `cache:clear` | Delete current project index. With `--all --force`: delete all TokToken data |
-| `codebase:detect [path]` | Detect if directory is a codebase |
+| `codebase:detect [path]` | Detect if directory is a codebase; language census (`primary`, `secondary`), ordered ecosystems, manifests |
 | `repos:list` | List cloned GitHub repositories |
 | `repos:remove <repo>` | Remove a cloned repository |
 | `repos:clear` | Remove all cloned repositories |
@@ -153,7 +159,7 @@ Used with `index:create`, `index:update`, and `index:github`.
 | `-f` | `--full` | | Disable the smart filter. By default, TokToken excludes non-code files (CSS, HTML, SVG, YAML, XML, TOML, GraphQL) and vendored subdirectories to reduce noise. Markdown files (`.md`, `.markdown`, `.mdx`) are always indexed regardless of the smart filter, producing documentation-specific kinds (`chapter`, `section`, `subsection`). With `--full`, everything is indexed. |
 | `-I` | `--include` | `<dir>` | Force-include a normally-skipped directory (e.g. `vendor`). Repeatable: `-I vendor -I node_modules`. VCS dirs (`.git`, `.svn`, `.hg`) cannot be included. The override persists across `index:update` cycles. Unlike `--full`, this only un-skips the named directory — the smart filter still applies to file extensions inside it. |
 | `-i` | `--ignore` | `<pattern>` | Add an extra ignore pattern. Files/directories matching this glob are skipped during discovery. Repeatable: `-i vendor -i dist -i .cache`. |
-| | `--languages` | `<list>` | Comma-separated list of languages to index. Only files detected as one of these languages are processed. Example: `--languages c,python,rust`. |
+| | `--languages` | `<list>` | Comma-separated list of languages to index. Only files detected as one of these languages are processed. Example: `--languages c,python,rust`. Without it, a project whose code files are at least 50% Perl is indexed with the Perl profile (`perl`, `javascript`, `bash`, `markdown`); `--full` disables the profile. The applied focus is reported as `language_focus` in the output. |
 | `-X` | `--diagnostic` | | Enable structured diagnostic output. Emits JSONL events to stderr with per-phase timing, worker progress, memory snapshots, and pipeline metrics. See [Diagnostic Mode](#diagnostic-mode). |
 
 #### Search options
@@ -162,16 +168,17 @@ Used with `search:symbols` and `search:text`.
 
 | Short | Long | Argument | Description |
 | ----- | ---- | -------- | ----------- |
-| `-k` | `--kind` | `<types>` | Filter results by symbol kind. Comma-separated. Code: `function`, `class`, `method`, `variable`, `constant`, `type`, `enum`, `interface`, `trait`, `property`, `namespace`, `directive`. Documentation: `chapter`, `section`, `subsection`. Example: `-k function,method` returns only functions and methods. |
+| `-k` | `--kind` | `<types>` | Filter results by symbol kind. Comma-separated. Code: `function`, `class`, `method`, `variable`, `constant`, `type`, `enum`, `interface`, `trait`, `property`, `namespace`, `directive`, `subroutine` (Perl, Fortran). Documentation: `chapter`, `section`, `subsection`. As a filter, `function` also matches `subroutine`; `subroutine` matches only subroutines. Example: `-k function,method` returns functions, subroutines and methods. |
 | `-L` | `--language` | `<lang>` | Filter results to a specific language. Example: `-L python` returns only Python symbols. |
-| `-n` | `--count` | | Return only the match count, not the results themselves. Useful for checking whether a term exists in the codebase without fetching data. Output: `{"q":"term","count":42}`. |
+| `-n` | `--count` | | Return only the match count, not the results themselves. Useful for checking whether a term exists in the codebase without fetching data. Output: `{"q":"term","count":42}`. For identifier queries `search:symbols` also returns `definitions` (symbols named exactly like the query) and, when the index holds call-site data (Perl), `references` and `reference_files` (distinct `file:line` call sites). |
 | `-g` | `--group-by` | `file` | Group `search:text` results by file path instead of listing individual lines. Returns per-file hit counts. |
 | `-C` | `--context` | `<n>` | Include `n` lines of surrounding context before and after each match. Only applies to `search:text`. |
-| `-r` | `--regex` | | Treat the search query as a regular expression instead of a plain text/FTS query. |
+| `-r` | `--regex` | | Treat the search query as a regular expression instead of a plain text/FTS query. `search:text` uses POSIX extended regex (grep -E semantics); on platforms without `regex.h` (Windows) it goes through ripgrep. |
 | `-s` | `--case-sensitive` | | Force case-sensitive matching. By default, searches are case-insensitive. |
 | `-D` | `--debug` | | Include per-field scoring breakdown in `search:symbols` results. Shows how name, signature, summary, and qualified_name contribute to the final score. |
 | | `--no-sig` | | Omit symbol signatures from results. Reduces output size for discovery queries where only names and locations matter. |
 | | `--no-summary` | | Omit symbol summaries from results. Combine with `--no-sig` for minimal output. |
+| | `--defs` | | `search:symbols` only: resolve exact names instead of running a fuzzy search. Accepts several names in one call. Keeps real definitions and drops struct members, parameters, and header prototypes whose body is indexed in a source file. Names with nothing left are listed in `not_found`. |
 
 #### Inspect options
 
@@ -180,7 +187,21 @@ Used with `inspect:file`, `inspect:tree`, and `inspect:bundle`.
 | Short | Long | Argument | Description |
 | ----- | ---- | -------- | ----------- |
 | | `--lines` | `<start-end>` | Return only a specific line range from `inspect:file`. Example: `--lines 10-50` returns lines 10 through 50. |
+| | `--grep` | `<pat>` | With `-o text` on `inspect:symbol`, print only the body lines matching the pattern. Case-insensitive, pipe-separated alternatives. Each line keeps its real file line number and the header records the cut as `[grep: K of N lines]`. |
+| | `--members` | | With `-o text` on `inspect:symbol`, reduce a type symbol (`class`, `struct`, `union`, `enum`, `type`, `interface`, `trait`) to one row per member instead of its full source: `LINE: declaration`, with the count in the header as `[member: N]`. Multi-line declarations are joined, nested bodies collapse to `{...}`, and comments and preprocessor lines are dropped. |
 | `-d` | `--depth` | `<n>` | Limit directory depth for `inspect:tree`. Example: `-d 2` shows only top-level and one level of subdirectories. |
+
+#### Security options
+
+Used with `security:sinks`, `security:sources`, `security:sanitizers`, `security:acl-gates` and `security:flow`. The optional positional `scope` restricts results to a directory, a file or a glob (e.g. `cron`, `cron/*.cgi`); `--filter`, `--exclude`, `--file`, `--limit` (default 100, 50 for flows), `--token-budget`, `--count` and `--compact` apply as well. Output is ordered by file and line.
+
+| Short | Long | Argument | Description |
+| ----- | ---- | -------- | ----------- |
+| `-k` | `--kind` | `<names>` | Site names (`system,open_pipe`, `in,ENV`) or sink classes (`command`, `file_write`). For `security:flow`, the sinks to reach. |
+| | `--taint` | `<list>` | Origins: `in` (CGI request), `env`, `argv`, `config`, `file`, `stdin`, `param` (positional parameters, sinks only) or `any`. Sinks: keep those whose argument carries one of them. Flow: follow only these sources (default: all). |
+| | `--unsanitized` | | Drop sinks and flows whose argument expression contains a sanitizer call. |
+| | `--entry` | `<type>` | Keep entry-point files only: `cgi` (CGI script), `unauth` (reachable before authentication, from Webmin `unauthcgi` defaults), `script`. |
+| `-d` | `--depth` | `<n>` | `security:flow` only: maximum call hops between source and sink (default 3, max 6). |
 
 #### Global options
 
@@ -189,11 +210,12 @@ Available for all commands.
 | Short | Long | Argument | Description |
 | ----- | ---- | -------- | ----------- |
 | `-p` | `--path` | `<dir>` | Set the project directory. Defaults to the current working directory. |
-| `-o` | `--format` | `<fmt>` | Output format: `json` (default) or `table` (human-readable columnar output). |
+| `-o` | `--format` | `<fmt>` | Output format: `json` (default), `table` (human-readable columnar output), or `text` (grep-style agent lines, see [Text Output](#text-output--format-text)). |
 | | `--filter` | `<pattern>` | Include only files whose path matches this pattern. Pipe-separated for OR: `--filter "src\|lib"`. Case-insensitive. |
 | `-e` | `--exclude` | `<pattern>` | Exclude files whose path matches this pattern. Pipe-separated for OR: `-e "vendor\|node_modules"`. Case-insensitive. |
 | `-l` | `--limit` | `<n>` | Cap the number of results returned. Applies to all search and list commands. |
 | `-c` | `--compact` | | Compact JSON output. Removes whitespace and shortens field names, reducing response size by ~47%. Recommended for AI agent usage. |
+| | `--no-comments` | | With `-o text`, drop blank lines and lines that contain only a C-family comment. Applies to `inspect:symbol`, `inspect:file`, and the context lines of `search:text`; hit lines and real line numbers are kept. |
 | `-u` | `--unique` | | Deduplicate results by symbol name. |
 | `-S` | `--sort` | `<field>` | Sort results by the given field. Default: `score` (relevance). Other options depend on the command. |
 | `-t` | `--truncate` | `<n>` | Truncate output lines to `n` characters. Default: 120. Minimum: 20. |
@@ -206,6 +228,9 @@ Available for all commands.
 ```bash
 # Search symbols, compact + count only
 toktoken search:symbols "auth" -cn
+
+# Resolve exact definitions by name, as one cheap call
+toktoken search:symbols widget_draw widget_reset --defs -o text
 
 # Search functions in Python, limit 20, compact
 toktoken search:symbols "parse" -ck function -L python -l20
@@ -225,10 +250,123 @@ toktoken index:create -f
 # Tree with depth 2, compact
 toktoken inspect:tree -cd2
 
+# Perl/CGI: unsanitized command sinks fed by the CGI request in one module
+toktoken security:sinks cron --kind command --taint in --unsanitized
+
+# Source -> sink chains starting in unauthenticated CGIs
+toktoken security:flow --entry unauth --taint in -c
+
 # All boolean flags combined
 toktoken search:symbols "init" -cnrs
 # equivalent to: --compact --count --regex --case-sensitive
 ```
+
+## Text Output
+
+`-o text` prints grep-style lines instead of a JSON document: same data,
+fewer bytes, no braces, no repeated field names, no string escaping. Use it
+when something is reading the result rather than parsing it.
+
+```bash
+toktoken search:symbols "widget_draw" -o text
+# src/widget.c:17:function widget_draw
+# n=1
+
+toktoken search:text "clamp" -C1 -o text
+# src/widget.c-4-// Internal helper.
+# src/widget.c:5:static int clamp(int v, int lo, int hi)
+# src/widget.c-6-{
+# n=1
+
+toktoken inspect:symbol "src/widget.c::widget_draw#function" -o text
+# // src/widget.c:17-25 function widget_draw
+# int widget_draw(Widget *w, const char *label)
+# {
+#     ...
+
+toktoken inspect:file src/widget.c --lines 17-20 -o text
+# 17: int widget_draw(Widget *w, const char *label)
+# 18: {
+# 19:     /* nothing to draw */
+# 20:     if (!w || !label)
+
+toktoken inspect:symbol "src/widget.c::widget_draw#function" -o text --grep "clamp|memcpy"
+# // src/widget.c:17-25 function widget_draw [grep: 2 of 9 lines]
+# 22:     int len = clamp((int)strlen(label), 0, w->width);
+# 23:     memcpy(w->name, label, len);
+
+toktoken inspect:symbol "src/widget.h::Widget#class" -o text --members
+# // src/widget.h:5-10 class Widget [member: 4]
+# 6: int width
+# 7: int height
+# 8: int (*draw)(struct Widget *w, const char *label)
+# 9: char name[32]
+
+toktoken search:text "clamp|width" -o text
+# src/widget.c:
+# 5:static int clamp(int v, int lo, int hi)
+# 22:int len = clamp((int)strlen(label), 0, w->width);
+# 31:w->width = 0;
+# src/widget.h:6:int width;
+# n=4
+```
+
+Line shapes:
+
+| Command | Shape |
+| ------- | ----- |
+| `search:symbols` | `file:line:kind name`. The symbol id is appended as ` id=...` only when it carries information the line does not already show (qualified names such as a parameter or a struct member, overload suffixes). |
+| `search:text` | `file:line:text` for hits, `file-line-text` for `-C` context lines (grep's own separator), then an `n=<count>` trailer. A file with two or more hits is printed once under a `file:` header, with `line:text` and `line-text` rows below it. |
+| `inspect:symbol` | `// file:line-end kind name` header, then the symbol's source. Misses in a batch print as `// not found: <id>`. |
+| `inspect:file` | `N: line`, using the file's real line numbers. |
+
+Both searches end with `n=<count>`. Modes with no grep equivalent
+(`--count`, `--group-by`) keep JSON output. The JSON contract itself is
+unchanged: `text` is a rendering of the same result, so MCP clients,
+savings tracking and scripts that parse JSON are unaffected.
+
+Add `--no-comments` to drop blank lines and lines that hold only a
+C-family comment:
+
+```bash
+toktoken inspect:file src/widget.c --lines 14-25 -o text --no-comments
+# 17: int widget_draw(Widget *w, const char *label)
+# 18: {
+# 20:     if (!w || !label)
+# 21:         return -1;
+```
+
+The line numbers still match the file, so a dropped comment never shifts
+them. Block comments are tracked across lines, which keeps a dereference
+such as `*p = 0;` while dropping the comment around it. Preprocessor
+directives are not comments and are kept.
+
+## Definition Lookup
+
+`--defs` turns `search:symbols` into an exact-name definition lookup. Pass
+several names in one call and get back only the definitions, without the
+noise a fuzzy search returns around them.
+
+```bash
+toktoken search:symbols widget_draw widget_reset nope --defs -o text
+# src/widget.c:17:function widget_draw
+# src/widget.c:27:function widget_reset
+# // not found: nope
+# n=2
+```
+
+What it drops, per name:
+
+- struct members and parameters (`variable`, `property`, and any qualified
+  name such as `Widget.draw` or `widget_draw.label`) when the name itself
+  has a real definition;
+- header prototypes when the same name is defined in a source file, so a
+  `.h` declaration and its `.c` body are not both paid for. A type that
+  only exists in a header is kept — it is the definition.
+
+Names left with nothing are reported in `not_found` (JSON) or as
+`// not found: <name>` (text). Combine with `-o text` and `--kind` for the
+cheapest way to pin down a symbol before an `inspect:symbol`.
 
 ## Diagnostic Mode
 
@@ -271,6 +409,24 @@ TokToken runs as a Model Context Protocol server for native integration with AI 
 ```bash
 toktoken serve
 ```
+
+### Text output from MCP tools
+
+`search_symbols`, `search_text`, `inspect_symbol` and `inspect_file` accept
+`format: "text"`. The server then sends the grep-style agent lines described
+in [Text Output](#text-output--format-text) as the tool result, instead of a
+JSON-escaped document — same data, fewer tokens.
+
+```json
+{ "name": "search_symbols",
+  "arguments": { "query": "widget_draw,widget_reset", "defs": true, "format": "text" } }
+// -> "src/widget.c:17:function widget_draw\nsrc/widget.c:27:function widget_reset\nn=2\n"
+```
+
+The matching options work in both transports: `defs` (exact-name definitions,
+several names comma-separated), `no_comments`, `grep`, and `members`. Text
+results carry no `_ttk` envelope — the envelope is what the flag is there to
+avoid. Omit `format` and the tool returns JSON exactly as before.
 
 ### Claude Code
 
@@ -329,7 +485,7 @@ For Cursor, Windsurf, Gemini CLI, Gemini Code Assist, and Claude Desktop, add th
 | Gemini Code Assist | `.gemini/settings.json` in project root | [setup](docs/setup/gemini-code-assist.md) |
 | OpenAI Codex CLI | `AGENTS.md` in project root (no MCP) | [setup](docs/setup/codex-cli.md) |
 
-Exposes 27 tools: `codebase_detect`, `index_create`, `index_update`, `index_file`, `index_github`, `search_symbols`, `search_text`, `search_cooccurrence`, `search_similar`, `inspect_outline`, `inspect_symbol`, `inspect_file`, `inspect_tree`, `inspect_bundle`, `inspect_dependencies`, `inspect_hierarchy`, `inspect_cycles`, `inspect_blast_radius`, `find_importers`, `find_references`, `find_callers`, `find_dead`, `suggest`, `stats`, `projects_list`, `cache_clear`, `help`.
+Exposes 32 tools: `codebase_detect`, `index_create`, `index_update`, `index_file`, `index_github`, `search_symbols`, `search_text`, `search_cooccurrence`, `search_similar`, `inspect_outline`, `inspect_symbol`, `inspect_file`, `inspect_tree`, `inspect_bundle`, `inspect_dependencies`, `inspect_hierarchy`, `inspect_cycles`, `inspect_blast_radius`, `find_importers`, `find_references`, `find_callers`, `find_dead`, `suggest`, `stats`, `projects_list`, `cache_clear`, `security_sinks`, `security_sources`, `security_sanitizers`, `security_acl_gates`, `security_flow`, `help`. Every MCP tool has a CLI equivalent with the same parameters.
 
 ## AI Agent Setup
 
@@ -390,7 +546,7 @@ Home directory resolution: on Unix, `$HOME`; on Windows, `%USERPROFILE%` with `S
 ~/.cache/toktoken/
     projects/
         <hash>/                 Project directory (hash = first 12 hex chars of xxhash of canonical path)
-            db.sqlite           SQLite database (schema v4, WAL mode)
+            db.sqlite           SQLite database (schema v5, WAL mode)
             db.sqlite-wal       WAL journal (auto-managed by SQLite)
             db.sqlite-shm       Shared memory file (auto-managed by SQLite)
     gh-repos/
@@ -404,12 +560,15 @@ Home directory resolution: on Unix, `$HOME`; on Windows, `%USERPROFILE%` with `S
 
 | Table | Purpose |
 | ----- | ------- |
-| `metadata` | Key-value store: `project_path`, `schema_version`, `toktoken_version`, `indexed_at`, `git_head`, `full_index` |
-| `files` | Indexed files with path, content hash, language, summary, size, mtime |
+| `metadata` | Key-value store: `project_path`, `schema_version`, `index_format`, `toktoken_version`, `indexed_at`, `git_head`, `full_index`, `language_focus` |
+| `files` | Indexed files with path, content hash, language, summary, size, mtime, entry-point flags (CGI, unauthenticated, script) |
 | `symbols` | Extracted symbols: name, qualified name, kind, signature, docstring, line range |
 | `symbols_fts` | FTS5 virtual table for full-text symbol search |
-| `imports` | Import/dependency edges between files |
+| `imports` | Import/dependency edges between files, with line, `dynamic` flag and `confidence` (Webmin `foreign_require`, computed `do $script`) |
+| `sites` | Security-relevant sites recorded by the Perl parser: sinks, sources, sanitizers, ACL gates, calls (with per-argument origin masks) |
 | `file_centrality` | PageRank-style centrality scores per file |
+
+When the content format changes (for example Perl subs moving from `#variable` to `#subroutine` IDs), the stored `index_format` no longer matches and the index is rebuilt automatically on the next query or `index:update`, so symbol IDs never mix formats.
 
 ### Configuration files
 

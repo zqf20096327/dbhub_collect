@@ -68,7 +68,7 @@ See [Installation](https://jespino.github.io/gopgext/docs/install/) for details.
 | [SQL functions](https://jespino.github.io/gopgext/docs/functions/) | type mapping, function options, `NULL`s, sets, rows, errors |
 | [Data types](https://jespino.github.io/gopgext/docs/types/) | SQL data types backed by Go types, composite and polymorphic types |
 | [The pg package](https://jespino.github.io/gopgext/docs/pg/) | SPI queries, errors with SQLSTATE codes, logging, settings |
-| [Frameworks](https://jespino.github.io/gopgext/docs/frameworks/) | triggers, aggregates, GiST/GIN/SP-GiST/BRIN, access methods, FDWs, hooks, ... |
+| [Frameworks](https://jespino.github.io/gopgext/docs/frameworks/) | triggers, aggregates, GiST/GIN/SP-GiST/BRIN, access methods, FDWs, hooks, background workers, transaction callbacks, UPDATE interception, ... |
 | [API reference](https://jespino.github.io/gopgext/api/) | every exported identifier of the Go packages |
 | [Examples and contrib ports](https://jespino.github.io/gopgext/docs/examples/) | complete extensions, including ports of PostgreSQL's contrib modules |
 | [How it works](https://jespino.github.io/gopgext/docs/internals/) | the build pipeline and the runtime model |

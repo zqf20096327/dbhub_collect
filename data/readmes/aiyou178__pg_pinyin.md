@@ -27,7 +27,7 @@ server and build headers**:
 Later minor releases within each stable major are supported. These minimums
 include PostgreSQL's composite-datum security fix; binaries built with these
 headers cannot load on earlier minor releases. PG14 support is removed.
-Source builds require Rust 1.99.1 and cargo-pgrx 0.20.0.
+Source builds require Rust 1.99.1 and cargo-pgrx 0.20.1.
 
 After installing the 0.0.9 binary and migration SQL, use a new connection:
 
@@ -344,20 +344,25 @@ migration, then upgrade from a new connection. No additional version bump is mad
 
 ## Token Arrays and Document Batches
 
-The unreleased development version 0.0.9 reads real `text[]` tokenizer input directly in Rust,
-without the previous SPI/JSON serialization. Existing `anyelement` signatures,
-function OIDs and generated-column bindings are unchanged; castable non-`text[]`
-inputs retain the legacy fallback. Tokens are trimmed, empty tokens dropped,
-and wholly ASCII-alphanumeric tokens lowercased. NULL token elements still raise
-an error. Array dimensions/lower bounds do not affect row-major token order.
+Real `text[]` tokenizer input is read directly in Rust, without SPI/JSON
+serialization. The current development tree also directly invokes eligible
+immutable, parallel-safe casts such as `pdb.icu`, preserving EXECUTE privileges;
+other cast pathways use typed
+SPI without JSON. Existing `anyelement` signatures, function OIDs and
+generated-column bindings are unchanged. Mixed Han/ASCII tokens use the same
+normalization as plain text: ASCII runs are lowercased, punctuation is dropped,
+and Han chunks participate in greedy phrase lookup. NULL token elements still
+raise an error. Array dimensions/lower bounds do not affect row-major token order.
 
 The new `pinyin_word_romanize_batch` API has different semantics: each element
 is a complete, independent plain-text document, not a token to concatenate.
 It reuses one live dictionary-version check and dictionary snapshot per explicit
-batch. Ordinary calls still check the version on every invocation. Cache identity
-also includes the metadata row's `xmin`, preventing reused version counters
-after savepoint rollback from serving an earlier uncommitted dictionary. Suffix
-overrides follow the existing cache-clear and base-version invalidation rules.
+batch. Ordinary calls now reuse a version check only within the same active MVCC
+snapshot and command state, not for an entire transaction. Snapshot changes,
+nested SPI command advances and transaction/savepoint boundaries invalidate
+that check. Dictionary identity also includes the metadata row's `xmin`.
+Suffix creation/drop/recreation is detected through relation OIDs; suffix table
+DML still requires the existing explicit cache-clear API.
 The batch functions are `STABLE`, `STRICT`, `PARALLEL SAFE` Rust functions; use
 the existing scalar `IMMUTABLE` API for stored generated columns.
 
@@ -549,12 +554,11 @@ Rust extension tests:
 cargo pgrx test pg18 --features pg18
 ```
 
-The current build requires Rust 1.99.1 and `cargo-pgrx` 0.20.0, matching the
+The current build requires Rust 1.99.1 and `cargo-pgrx` 0.20.1, matching the
 library dependency. Install `clang`, `llvm` and `libclang-dev` from the same LLVM
 release. Supported PostgreSQL majors are 15-19; PG14 is no longer supported.
 Build against patched headers (15.20, 16.16, 17.12, 18.7 or 19.0 or newer).
-Use the installed PostgreSQL 19 release's `pg_config` explicitly; the
-`cargo pgrx init --pg19=download` default in pgrx 0.20.0 is still 19rc2:
+Point `cargo pgrx` at the installed PostgreSQL 19 release's `pg_config`:
 
 ```bash
 cargo pgrx init --pg19=/usr/lib/postgresql/19/bin/pg_config
@@ -618,15 +622,13 @@ docker build -f docker/Dockerfile.test-trixie -t pg_pinyin/test:trixie \
 #   --build-arg PG_SEARCH_VERSION=0.26.1 -f docker/Dockerfile.test-trixie -t pg_pinyin/test:trixie .
 ```
 
-Build the PostgreSQL 19 core test image. Until the
-[official PG19 GA tag is published](https://github.com/docker-library/official-images/pull/22805),
-first build the runtime from its pinned upstream recipe using PGDG over HTTPS.
-The test layer adds headers and tooling.
+Build the PostgreSQL 19 core test image from the
+[official PostgreSQL 19.0 runtime](https://hub.docker.com/_/postgres).
+The published tag supports both amd64 and arm64; the test layer adds headers and tooling.
 
 ```bash
-bash scripts/build_pg19_runtime.sh
 docker build -f docker/Dockerfile.test-core-trixie \
-  --build-arg BASE_IMAGE=pg-pinyin-postgres:19.0-trixie \
+  --build-arg BASE_IMAGE=postgres:19.0-trixie \
   --build-arg TARGET_PG_MAJOR=19 -t pg_pinyin/test:pg19 .
 ```
 
@@ -657,6 +659,65 @@ DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile.test-trixie -t pg_pinyin/tes
 ```
 
 ## Benchmark
+
+### pgrx 0.20.1 and Runtime Optimization
+
+The [pgrx 0.20.1 benchmark report](benchmarks/pgrx_0201.md) compares
+`origin/main` (`pgrx` 0.20.0) against `pgrx` 0.20.1 plus compact arena/trie
+dictionaries, delta-only suffix overlays with syscache relation lookup,
+per-query direct-cast caching, and flat ASCII parser tries across 3 fresh
+rotated rounds (20k documents; 2k Top-10 queries on PG18.7 + `pg_search` 0.27.0;
+core-only on PG19.0). Median wall times:
+
+| Workload | PG18 Before / After (ms) | PG19 Before / After (ms) |
+| --- | ---: | ---: |
+| Character text, 20k rows | 12.617 / 6.086 (-51.8%) | 11.707 / 5.487 (-53.1%) |
+| Word text, 20k rows | 17.449 / 8.564 (-50.9%) | 16.795 / 9.365 (-44.2%) |
+| Native `text[]` tokens | 22.473 / 13.829 (-38.5%) | 19.001 / 13.024 (-31.5%) |
+| Batch 512 | 26.554 / 16.416 (-38.2%) | 21.163 / 15.097 (-28.7%) |
+| Real `pdb.icu` cast | 68.780 / 49.412 (-28.2%) | n/a |
+| Dynamic legacy patterns | 17.264 / 12.848 (-25.6%) | 16.194 / 13.816 (-14.7%) |
+| COPY with generated pinyin (+ BM25 on PG18) | 197.600 / 124.549 (-37.0%) | 173.232 / 105.427 (-39.1%) |
+| Ranked Top-10, 2k queries | 1458.338 / 1419.671 (-2.6%) | n/a |
+
+First-backend `word_text` cold load dropped 52.0% on both PG18 (154.045 ->
+73.950 ms) and PG19 (161.252 -> 77.414 ms), while word-backend RSS growth fell
+by ~34% (76.887 -> 50.957 MiB on PG18; 70.066 -> 45.953 MiB on PG19). On PG18,
+suffix-overlay lookups dropped ~90-91% (135.357 -> 13.504 ms present, 136.801
+-> 11.780 ms missing), and loading five distinct small suffix overlays cut
+backend RSS growth by 82.6% (236.121 -> 41.105 MiB). These gains come from the
+data-structure and runtime changes rather than the `pgrx` 0.20.1 patch alone.
+
+### Dictionary Remediation
+
+The [remediation spec](spec/pinyin-remediation-and-perf.md) and
+[benchmark report](benchmarks/remediation_20261122.md) record development changes
+without changing extension version. Three fresh rotated rounds used 20k
+documents and, on PG18, 2k default-regex queries. Median wall times:
+
+| Workload | PG18 Before / After (ms) | PG19 Before / After (ms) |
+| --- | ---: | ---: |
+| Word text, 20k rows | 239.993 / 12.135 | 144.873 / 11.613 |
+| Native text[] tokens | 222.162 / 16.807 | 141.707 / 16.067 |
+| Batch, 512 documents per call | 25.201 / 21.084 | 19.775 / 16.095 |
+| COPY with generated pinyin + BM25 | 364.523 / 160.579 | n/a |
+| Ranked Top-10, 2k queries | 1402.255 / 1414.842 | n/a |
+
+PG18 used 18.7 + pg_search 0.27.0; PG19.0 was core-only. Search outputs and index
+sizes were unchanged. This improves conversion/import, not search latency.
+The prefix index costs about 10 MiB extra backend RSS in the word workload;
+the first batch was 4.8% slower on PG18 despite its 16.3% warm improvement.
+Real ICU inputs also improved, with dictionary-gold inconsistencies falling
+from 120/20,000 to zero; that is a corrected pipeline, not equivalent-output CPU.
+
+To add current dictionary entries after installing the matching binary, run
+`python3 scripts/sync_dictionary.py --dsn "$PGURL"` with psycopg 3 installed.
+Existing keys always win; this does not replace customized readings or delete rows.
+It also preserves existing token categories and legacy-only rows, so an upgraded
+dictionary need not have exactly the same row count as a fresh installation.
+SQL `characters2romanize` / `icu_romanize_tokens` now consistently emit piped
+tokens, including whole phrases. Regenerate existing stored SQL-backend columns
+and rebuild their indexes before pairing them with legacy generated-mode queries.
 
 ### PostgreSQL 19 GA and pg_search 0.27.0
 

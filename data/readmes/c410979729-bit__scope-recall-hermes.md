@@ -1,6 +1,6 @@
 # Scope Recall
 
-Scope Recall `4.0.5` lets your assistants find earlier conversations and show where an answer came from.
+Scope Recall `4.0.6` lets your assistants find earlier conversations and show where an answer came from.
 You can keep memory on one computer or share a store across your own agents. Capture and text search work without a model budget.
 
 ## Quick start
@@ -9,7 +9,7 @@ You can keep memory on one computer or share a store across your own agents. Cap
 2. Run `scope-recall setup`, review the hosts and store it found, and confirm the plan.
 3. Approve the integration in your host and open a new session. Tell it a distinctive test phrase, finish the turn, then ask for that phrase in a second session.
 
-To try the development checkout (`4.0.6.dev0`), run `python -m pip install -U ".[codex]"` from the repository root.
+To install from source, run `python -m pip install -U ".[codex]"` from the repository root.
 
 | Host | Setup and host-specific approval |
 |---|---|

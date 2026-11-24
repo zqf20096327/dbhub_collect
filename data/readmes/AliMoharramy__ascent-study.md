@@ -30,6 +30,7 @@ English headings. The app works fully **without any AI key**; remote AI is an op
 - **Safe to run for months:** verified, encrypted backups, an atomic restore and a restore drill.
 - **Deploy anywhere:** Vercel + Neon (free tiers work), or Docker Compose on your own server.
 - **Calm by default:** no guilt, no streak-shaming; penalties start only after you confirm your baseline week.
+- **Native Windows focus widget:** a lightweight Rust + Slint companion with server-synced focus sessions, task titles, and opt-in AI suggestions. See [`desktop/windows-widget/README.md`](desktop/windows-widget/README.md) for setup and packaging.
 - **~400 automated tests** (unit, PostgreSQL integration/concurrency) plus a page-level smoke test in CI.
 
 ## A look around
@@ -96,7 +97,7 @@ biggest piece of planned work and a great place to contribute — see [CONTRIBUT
 
 ## Project links
 
-- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md)
+- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md) · [Windows widget](desktop/windows-widget/README.md)
 - Architecture (English): [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · design docs (Persian): [`docs/README.md`](docs/README.md) · decisions: [`docs/adr.md`](docs/adr.md)
 - Operations & recovery: [`docs/runbook.md`](docs/runbook.md) · deployment: [`docs/deploy.md`](docs/deploy.md)
 - Licenses & third-party content: [`LICENSE`](LICENSE) (MIT, code) · [`NOTICE`](NOTICE) · [`public/art/LICENSE.md`](public/art/LICENSE.md) (artwork, CC BY 4.0)
@@ -139,7 +140,7 @@ biggest piece of planned work and a great place to contribute — see [CONTRIBUT
 | R5 | Final ascent: animations/sound/calm mode, offline sync, second-theme polish + a11y AA + visual regression, Web Push/Telegram, perf & security pass, final-week kit, cheat-sheet PDF, share card + monthly PDF, freeze docs (#106–#115) | ✅ done |
 
 **Open backlog (#116–#124)** — optional future work, not blockers: IDEA epics (browser extension for detour capture,
-voice/local-AI coach, companion pet, desktop tray timer & mobile widgets, chapter cinematics, post-exam prestige),
+voice/local-AI coach, companion pet, mobile widgets, chapter cinematics, post-exam prestige),
 display-only Focus Energy (#122), real candidate course-session data (#123), and server deployment (#124).
 
 Deployment is **prepared for local, Docker, and Vercel + managed PostgreSQL (Database V2)**, but has not been deployed; see [Deployment](#deployment).
@@ -371,6 +372,7 @@ npm run visual           # pixelmatch visual regression vs baselines (needs an i
 | `make login` | Print URL + test username |
 | `make db-stop` | Stop the local PostgreSQL container (data kept) |
 | `make test` / `make test-pg` / `make lint` / `make typecheck` / `make build` | Pass-through to the npm scripts (`test-pg` starts the local database first) |
+| `make start` / `make stop` | Build and launch the Windows widget detached / stop its process |
 
 | Variable | Default | Meaning |
 |---|---|---|
@@ -519,7 +521,8 @@ app/(app)/        pages: today, map (+[id]), arena (+exam), forge, sheets, plan,
                   codex, deck, run, baseline, report/monthly, playground, settings
 app/              focus, login, offline, onboarding (outside the (app) shell) · root redirect
 app/api/          route handlers (auth, quests, tests, focus, plan, habits, forge,
-                  ideas, arena, rest, reviews, shop, codex, undo, insights, wrapped, notify, …)
+                  ideas, arena, rest, reviews, shop, codex, undo, insights, wrapped, notify, personal-tasks, …)
+desktop/          native Windows focus widget (Rust + Slint; see desktop/windows-widget/README.md)
 src/domain/       pure, unit-tested game logic (xp, score, levels, quests, capacity,
                   triage, planner, mastery, rival, boss, review, sleep, habits, pillars, …)
 src/events/       event store + projections (XP/SS/Gold/Gems ledgers, replay)

@@ -6,7 +6,7 @@
 [![Self-Hosted](https://img.shields.io/badge/100%25-Self--Hosted-2563eb?style=flat-square)](#quick-start)
 [![Docker](https://img.shields.io/badge/Deployment-Single%20Container-2496ed?style=flat-square&logo=docker&logoColor=white)](#quick-start)
 [![License](https://img.shields.io/badge/License-AGPLv3-6b7280?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-v0.99.0-16a34a?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-v0.99.3-16a34a?style=flat-square)](CHANGELOG.md)
 
 **Nested notes you write together, tasks with a board and a calendar, shared lists, and an inbox for everything that has no place yet.**
 One container, one SQLite file, your server.
@@ -230,6 +230,8 @@ The most important settings (all of them are in [`.env.example`](.env.example); 
 | `STT_*` | admin UI decides | Your own Whisper server for voice input (address, key, model, limits, and `STT_CHUNKED` / `STT_CHUNK_SECONDS`: send the recording in pieces while speaking, every 8 s by default); each one set fixes its field in the admin UI. `STT_DEFAULT_MODEL` only presets the model |
 | `MINDSIFT_DEMO` | `false` | Demo accounts `admin/admin` and `user/user` with sample data. **Never on a server with real data!** |
 
+Yes/no variables take `true`/`false`, `1`/`0`, `yes`/`no` or `on`/`off`, in any case. Any other value, and a number outside its range, is ignored with a warning in the log and the default applies.
+
 * **First admin:** with `ADMIN_USER` and `ADMIN_PASSWORD` (at least 8 characters, or `ADMIN_PASSWORD_FILE`), the admin exists before the server accepts connections; unusable values stop the start with a reason in the log. They act only while the database has no account ([details](Doku/operations.md#first-admin)).
 * **Language:** the app follows the browser if it speaks that language, and everyone can pick their own. `DEFAULT_LANGUAGE` covers the rest; unset, it is German, so for an English instance set `en` or pick it in the setup wizard.
 * **Reverse proxy:** pass through WebSocket upgrades and unbuffered SSE if you can; otherwise MindSift falls back to long polling. Examples for nginx, Traefik, Caddy and Cloudflare: [Doku/reverse-proxy.md](Doku/reverse-proxy.md).
@@ -257,8 +259,8 @@ No telemetry, no third-party services; fonts and icons ship with the app. The se
 
 MindSift is written with a lot of AI help (see the note at the top). One person decides what goes in and tries it on real devices. What keeps the code honest is that it gets checked:
 
-* **Tests:** more than 1,400 frontend tests and more than 950 backend tests run locally before every push (`ci/local-checks.sh`) and again in the build of GitHub `main`; if one fails there, no `:latest` image is published, and a release is tagged only on a `main` commit whose build is green. Other builds (`:dev`) only build the image; pull requests run the tests of the image build plus gofmt and golangci-lint.
-* **Browser tests:** more than a dozen runs with over 600 checks cover what is hard to unit-test: two people editing the same note at once, offline and back online, sharing, locks and conflict copies, tables, copy & paste as Markdown in Chromium and Firefox, live drawing, two-factor sign-in, passkeys, sign-in through an OpenID Connect provider (against Dex) and connections behind proxies that block WebSockets ([e2e/](e2e/README.md)). They run locally before every release and every change to these areas, not in the pipelines.
+* **Tests:** more than 1,400 frontend tests and more than 950 backend tests run locally before every release, in one full run with the browser tests, gofmt and golangci-lint (`E2E=1 ci/local-checks.sh`); the build of GitHub `main` runs them again, and if one fails there, no `:latest` image is published, and a release is tagged only on a `main` commit whose build is green. Other builds (`:dev`) only build the image; pull requests run the tests of the image build plus gofmt and golangci-lint.
+* **Browser tests:** more than a dozen runs with over 600 checks cover what is hard to unit-test: two people editing the same note at once, offline and back online, sharing, locks and conflict copies, tables, copy & paste as Markdown in Chromium and Firefox, live drawing, transcription in the background, full backups and their restore, two-factor sign-in, passkeys, sign-in through an OpenID Connect provider (against Dex) and connections behind proxies that block WebSockets ([e2e/](e2e/README.md)). They run locally before every release and every change to these areas, not in the pipelines.
 * **Static checks:** TypeScript, ESLint, gofmt, `go vet` and [golangci-lint](https://golangci-lint.run) with its standard linters (staticcheck among them) ([.golangci.yml](.golangci.yml)), in the same local run as the tests; the build of `main` repeats TypeScript, ESLint and `go vet`.
 * **Security:** code reviews and four penetration tests with fuzzing in November 2026, every finding fixed or documented as an accepted trade-off ([report](Doku/security-report.md)); every tagged release is scanned with Trivy ([Security scan](#security-scan)).
 

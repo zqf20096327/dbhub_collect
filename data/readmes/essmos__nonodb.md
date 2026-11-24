@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="docs/assets/nonodb-logo.svg" alt="NonoDB" width="360">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/nonodb-logo.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/nonodb-logo-light.svg">
+    <img src="docs/assets/nonodb-logo.svg" alt="NonoDB" width="360">
+  </picture>
 </p>
 
 # NoNoDB
@@ -41,11 +45,14 @@ feature gates:
 - **[Tenant encryption](docs/vault.md)** — vault collections with whole-document encryption and per-tenant keys through the native client/HTTP path.
 - **[Extremely low RAM usage](docs/operations.md#capacity-and-memory)** — about 5 MB idle with a 1M-document database and three indexes, plus [small and tiny profiles](docs/operations.md#small-deployment-profiles) for 512 MB–2 GB VMs.
 - **[Automatic indexes](docs/operations.md#automatic-indexes)** — opt-in creation of indexes for frequent query shapes, with cleanup of unused automatic indexes.
-- **[Embedded GUI in the box](docs/gui.md)** — a local browser console for documents, SQL, indexes, backups, credentials, cluster state, and metrics, with no separate frontend service.
+- **[Embedded GUI in the box](docs/gui.md)** — a local browser console for documents, a SQL + JSON playground, indexes, backups, credentials, cluster state, and metrics, with no separate frontend service.
 - **Search built in** — [BM25 full-text search](docs/api.md#full-text-indexes), [fuzzy trigram/Levenshtein search](docs/api.md#fuzzy-indexes), and [exact vector search](docs/api.md#vector-indexes) in the same database.
-- **SQL when you need it** — [SQL queries and writes](docs/sql.md) alongside the document API, without a separate SQL database.
-- **[TTL at both levels](docs/ttl.md)** — collection defaults and per-document overrides, with background expiry.
+- **[Asynchronous webhooks](docs/webhooks.md)** — filtered HTTP delivery with count/sum/avg thresholds, retries, HMAC signing, dead-letter queuing, CLI/API management, and a GUI for deliveries.
+- **SQL when you need it** — [SQL queries and writes](docs/sql.md) alongside the document API, plus a [SQL + JSON playground](docs/gui.md#playground-sql--json) in the GUI, without a separate SQL database.
+- **[TTL at both levels](docs/ttl.md)** — collection defaults, date-field MongoDB TTL, and per-document overrides, with immediate read-time hiding.
+- **Versioned capabilities endpoint** — `GET /v1/capabilities` for clients and migration tools.
 - **[Simple encrypted backups](docs/backup.md#encryption)** — [native or restic backups](docs/backup.md#restic-engine), gzip/age encryption, local/S3/R2 destinations, verification, and restore drills.
+- **[Instant CI database branches](docs/branching.md)** — clone a stopped database or data-only snapshot into an independent, writable database with `nonodb-cli branch`; CoW reflink/clonefile keeps it cheap, sidecars are copied or rebuilt, and the source is never modified.
 - **[Simple backup scheduling](docs/backup.md#scheduled-backups-from-the-daemon-and-gui)** — durable backup jobs configured through the CLI, API, or GUI.
 - **[Simple credential management](docs/auth.md)** — principals, database-qualified scopes, hashed tokens, client certificates, lockout, and reloads.
 - **[Streams beyond the local socket](docs/streams.md#continuous-stream)** — watch/SSE/NDJSON streams over the TCP/TLS listener, so remote consumers can use them through a secured endpoint.
@@ -106,11 +113,11 @@ single-database directories are migrated to `default/` on startup. See
   deduplication, a 64 MiB response cap, and `null` for missing keys.
 - SQL `SELECT`, `INSERT`, `UPDATE`, and `DELETE` over one collection. `SELECT`
   supports `DISTINCT`, `WHERE`, `GROUP BY`, `HAVING`, aggregates including
-  `COUNT(DISTINCT field)`, `CASE`, scalar functions, `ORDER BY`,
-  `LIMIT`/`OFFSET`, positional parameters, and `explain_sql`; simple field-only
-  queries use the normal indexed `find` path. Writes use the single writer and
-  are atomic per statement, including document expressions in `UPDATE SET`;
-  there are no joins.
+  `COUNT`/`SUM`/`AVG`/`MIN`/`MAX(DISTINCT ...)`, `CASE`, scalar functions,
+  `ORDER BY`, `LIMIT`/`OFFSET`, positional parameters, and `explain_sql`; simple
+  field-only queries use the normal indexed `find` path. Writes use the single
+  writer and are atomic per statement, including document expressions in
+  `UPDATE SET` and `RETURNING` on writes; there are no joins.
 
 ### Writes and updates
 
@@ -272,8 +279,8 @@ retention semantics.
 - Aggregation expressions include `$dateAdd`, `$dateSubtract`, `$dateDiff`,
   `$dateTrunc`, `$dateToString`, `$dateFromString`, `$dateFromParts`, and
   `$dateToParts`.
-  Time zones use UTC or fixed `+HH:MM` offsets; IANA zone names are not
-  implemented.
+  Time zones use UTC, fixed `+HH:MM` offsets, or IANA zone names with
+  daylight-saving rules.
 - Naive local datetimes are rejected as ambiguous.
 
 ```bash
@@ -310,14 +317,19 @@ index compatibility, and limits.
 
 ### Document TTL
 
-- Optional collection default (`ttl_seconds`) and per-document `_ttl` override.
+- Optional insertion-based collection default (`ttl_seconds`) and per-document
+  `_ttl` override.
+- Date-field TTL for MongoDB-compatible `expireAfterSeconds`, with bounded
+  backfill and a MongoDB migration mapping.
 - Expiry metadata is stored outside the document; `_ttl` is not returned by
   reads.
-- Updates preserve the current TTL unless `_ttl` is explicitly set.
+- With insertion-based TTL, updates preserve the current expiry unless `_ttl`
+  is explicitly set. Date-field TTL recalculates from the current date value.
 - Background maintenance sweeps due documents through the single writer.
 - TTL deletes remove index entries and append a history tombstone when history
   is enabled; collections can opt into purging stored revisions instead.
-- Works for standard and vault collections.
+- Insertion-based TTL works for standard and vault collections. Date-field TTL
+  works for standard collections.
 
 ```bash
 curl -s --unix-socket /tmp/nonodb.sock \
@@ -331,8 +343,9 @@ curl -s --unix-socket /tmp/nonodb.sock \
   -d '{"op":"insert","coll":"sessions","doc":{"_id":"s1","user":7,"_ttl":300}}'
 ```
 
-TTL is eventual: a document can be visible briefly after its expiry. See
-[Document TTL](docs/ttl.md) for update semantics, maintenance, and limits.
+Expired documents are hidden from reads immediately. See
+[Document TTL](docs/ttl.md) for date-field TTL, update semantics, maintenance,
+and limits.
 
 ### Vault collections (optional encryption)
 
@@ -440,7 +453,7 @@ docker run -d --name nonodb \
   --group-add "$(id -g)" \
   -v "$NONODB_AUTH_FILE:/etc/nonodb/auth.json:ro" \
   -v nonodb-data:/var/lib/nonodb \
-  ghcr.io/essmos/nonodb:0.29.1
+  ghcr.io/essmos/nonodb:0.32.0
 ```
 
 Check health and logs:
@@ -524,7 +537,7 @@ listener, so the Windows daemon requires TCP plus `NONODB_AUTH_FILE`.
 Download, verify, and extract the x86_64 archive:
 
 ```bash
-TAG=v0.29.1
+TAG=v0.32.0
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/nonodb-$TAG-linux-x86_64.tar.gz"
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/nonodb-$TAG-linux-x86_64.tar.gz.sha256"
 sha256sum -c "nonodb-$TAG-linux-x86_64.tar.gz.sha256"
@@ -562,12 +575,12 @@ curl -s --unix-socket "$NONODB_SOCK" -H 'content-type: application/json' \
   -d '{"op":"find","coll":"users","filter":{"age":{"$gte":18}},"sort":[["age",-1]]}'
 ```
 
-Use the optional Python client. It is not included in the binary archive, so
-clone the repository once and point `PYTHONPATH` at its `client` directory:
+Use the optional Python client. It is not included in the binary archive. The
+repository packages it as `nonodb-client`; install it from a checkout:
 
 ```bash
 git clone --depth 1 https://github.com/essmos/nonodb.git
-export PYTHONPATH="$PWD/nonodb/client"
+python3 -m pip install ./nonodb/client
 python3 - <<'PY'
 from nonodb import NonoDB
 
@@ -612,7 +625,7 @@ connection failures, or `5xx`. You can also set `write_url` explicitly. See
 Download the archive matching your CPU (`uname -m` prints `arm64` or `x86_64`):
 
 ```bash
-TAG=v0.29.1
+TAG=v0.32.0
 ARCHIVE="nonodb-$TAG-macos-arm64.tar.gz"   # use macos-x86_64 on Intel
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/$ARCHIVE"
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/$ARCHIVE.sha256"
@@ -741,6 +754,7 @@ documentation.
 | [Architecture](docs/architecture.md) | Daemon model, LMDB layout, write path, indexes, search, concurrency, crash safety |
 | [HTTP API](docs/api.md) | Every operation, request/response shapes, filters, updates, indexes, search, errors |
 | [MongoDB compatibility](docs/mongodb-compatibility.md) | Feature comparison, practical coverage, and migration caveats |
+| [MongoDB wire shadow mode](docs/mongodb-shadow.md) | Prototype dual-write to MongoDB with a JSONL diff report |
 | [SQL queries](docs/sql.md) | `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `DISTINCT`, `HAVING`, `CASE`, functions, aggregates, `explain_sql`, parameters, limits, client examples |
 | [Clients](docs/clients.md) | Python, Rust, Node.js and Go clients: install, CRUD, batches, indexes, search, TCP/TLS, read-replica write routing, async Python watch/streams |
 | [Migration and import](docs/migration.md) | MongoDB, PostgreSQL, SQLite and CSV migration, NDJSON format, import manifest, cutover |
@@ -749,11 +763,12 @@ documentation.
 | [Mutual TLS](docs/mtls.md) | Client certificate setup, private CA, fingerprint mapping, revocation, rotation |
 | [Python client](docs/python-client.md) | `NonoDB`/`Collection` API, `AsyncNonoDB` watch/streams, caching, retries, TCP/TLS, FastAPI usage |
 | [Background jobs](docs/workers.md) | Durable `_jobs`, workers, leases, retries, cron/systemd, language-independent contract |
+| [Search and Atlas compatibility](docs/search.md) | Unified lexical/fuzzy/vector/hybrid search, RRF, and the `$search`/`$searchMeta`/`$vectorSearch` subset |
 | [Outbox events](docs/events.md) | Atomic data + event writes, automatic collection events, source-side filters, polling consumers, checkpoints, event worker CLI, TTL, systemd |
 | [Conditional subscriptions](docs/subscriptions.md) | Persistent conditions over collection state, count thresholds, edge-triggered delivery |
 | [Streaming outbox events](docs/streams.md) | Long-poll `watch`, NDJSON/SSE streams, server-side filters, count thresholds, resume tokens, truncation, client examples |
 | [Vault collections](docs/vault.md) | Optional encrypted tenant data, headers, restrictions, key rotation |
-| [Document TTL](docs/ttl.md) | Collection defaults, per-document expiry, update semantics, maintenance |
+| [Document TTL](docs/ttl.md) | Collection defaults, date-field MongoDB TTL, per-document expiry, strict read visibility, update semantics, limits |
 | [Dates and time zones](docs/dates.md) | BSON-compatible dates, RFC 3339 input, filtering, indexes, sorting |
 | [Numbers and decimals](docs/numerics.md) | Exact numeric comparison, Decimal128, arithmetic, NaN/Infinity, index compatibility, long text limits |
 | [BSON scalar types](docs/bson-types.md) | `$numberInt`/`$numberLong`, `$type`, binary/UUID, ObjectId, Timestamp, MinKey/MaxKey, index compatibility |
@@ -763,8 +778,10 @@ documentation.
 | [Operations](docs/operations.md) | Configuration, deployment, security, snapshots, monitoring, capacity, troubleshooting |
 | [Docker Compose quick start](docs/docker-compose.md) | Self-contained Compose stack, auth initialization, GUI, updates, backups, troubleshooting |
 | [Volume compression](docs/volume-compression.md) | ZFS/Btrfs setup, Docker bind mounts, verification, benchmarks, migration |
+| [Encryption at rest](docs/encryption-at-rest.md) | LUKS, ZFS and cloud volume encryption, key separation, backup keys, vault boundaries |
 | [Free-tier and low-cost VM deployment](docs/free-tier-deployment.md) | Oracle Cloud, GCP, AWS, DigitalOcean, small profile, Cloud Run read replicas, Spaces backups |
 | [Backup and restore](docs/backup.md) | Online backup, snapshots, verification, restore drills, retention, Docker, vault keys, authorization state |
+| [Branching a database](docs/branching.md) | Offline CoW clone for CI, snapshot sources, verification, limits |
 | [Benchmarks](docs/benchmarks.md) | Test environment, throughput, latency, large data sets, RAM, reproducibility |
 | [Development](docs/development.md) | Repository layout, tests, linting, benchmark scripts, contribution notes |
 | [Contributing](CONTRIBUTING.md) | Setup, required checks, code guidelines, pull requests |
@@ -804,7 +821,7 @@ results. Visit [liveapisec.com](https://liveapisec.com) to learn more.
 
 ## Status
 
-nonodb is an early-stage project (`0.29.1`). Its core storage, query, index,
+nonodb is an early-stage project (`0.32.0`). Its core storage, query, index,
 search, batching, security, snapshot, and operational paths are covered by unit,
 property-based, end-to-end, concurrency, crash, and large-data tests. The API
 may still change before a stable release.

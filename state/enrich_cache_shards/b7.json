@@ -1,11 +1,11 @@
 {
  "paradedb/paradedb": {
-  "commit_7d": 101,
-  "commit_90d": 689,
+  "commit_7d": 83,
+  "commit_90d": 672,
   "rel_ver": "v0.27.0",
   "rel_pub": "2026-11-19",
-  "rel_days": 3,
-  "rel_n90": 25,
+  "rel_days": 5,
+  "rel_n90": 24,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 137,
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "lang": {
    "Rust": 86,
    "PLpgSQL": 14,
@@ -23,8 +23,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261027"
   },
   "rel_notes": [
@@ -80,7 +80,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"10d2d05e84f736e0fa052022aa04d96d4bf2160c86a8e91317521bebc7f81078\""
+   "release": "W/\"360027bdc9e93d83bc67178bf64842f40156848d22259e39902fb26d2622e6e8\""
   },
   "rel_dates": [
    "2026-11-19",
@@ -106,16 +106,15 @@
    "2026-08-27",
    "2026-08-27",
    "2026-08-27",
-   "2026-08-27",
-   "2026-08-25"
+   "2026-08-27"
   ]
  },
  "patroni/patroni": {
-  "commit_7d": 20,
-  "commit_90d": 59,
+  "commit_7d": 21,
+  "commit_90d": 61,
   "rel_ver": "v4.1.5",
   "rel_pub": "2026-08-12",
-  "rel_days": 102,
+  "rel_days": 104,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -124,7 +123,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 217,
-  "enriched_at": "20261121",
+  "enriched_at": "20261124",
   "lang": {
    "Python": 96,
    "Gherkin": 3,
@@ -134,8 +133,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261121",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261027"
   },
   "rel_notes": [
@@ -156,17 +155,17 @@
    }
   ],
   "etag": {
-   "release": "W/\"0cbb208b33be1462dccefedf54654f0c3af89bc15b5364589c0cbf7fb074b096\""
+   "release": "W/\"c08944528f46238f4d06abe3e65e4e357fe1f7b8da815f094801ab153a532cb5\""
   },
   "rel_dates": []
  },
  "lukevella/rallly": {
-  "commit_7d": 62,
-  "commit_90d": 675,
-  "rel_ver": "v4.17.1",
-  "rel_pub": "2026-11-17",
-  "rel_days": 5,
-  "rel_n90": 16,
+  "commit_7d": 56,
+  "commit_90d": 663,
+  "rel_ver": "v4.17.2",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
+  "rel_n90": 15,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 14,
@@ -183,7 +182,7 @@
    "GHSA-pchc-v5hg-f5gp(CVE-2025-65028,medium)"
   ],
   "contrib_n": 34,
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "lang": {
    "TypeScript": 94,
    "MDX": 4,
@@ -193,11 +192,16 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261121"
   },
   "rel_notes": [
+   {
+    "t": "v4.17.2",
+    "d": "2026-11-23",
+    "n": "## 🔒 Security update: uploaded images\r\n\r\n*This patch fixes a moderate severity issue on instances with S3 storage configured. The impact is limited to uploaded images, and we recommend upgrading.*\r\n\r\nA signed in user could remove an uploaded image that was not theirs: another user's profile picture, a space icon or the instance logo. No data could be read and no account could be accessed. A removed image can be uploaded again from settings.\r\n\r\nRallly now deletes a stored profile picture only when it belo"
+   },
    {
     "t": "v4.17.1",
     "d": "2026-11-17",
@@ -242,18 +246,14 @@
     "t": "v4.15.4",
     "d": "2026-10-06",
     "n": "## 🔒 Critical security fix: remote code execution in poll preview images\r\n\r\n*This patch fixes a critical vulnerability in an upstream dependency. Please upgrade as soon as possible.*\r\n\r\nRallly v4.8.0 through v4.15.3 ship a version of Next.js affected by [GHSA-vcvr-r3jv-pc5j](https://github.com/advisories/GHSA-vcvr-r3jv-pc5j) (critical, CVSS 9.5). The `ImageResponse` renderer from `next/og` can be made to execute code on the server when attacker-controlled text reaches the image it renders.\r\n\r\nRallly uses"
-   },
-   {
-    "t": "v4.15.3",
-    "d": "2026-09-29",
-    "n": "Rallly converts times on the server and in each viewer's browser, and each reads its own copy of the time zone database. Until both have the new rules, times after November 1 could appear an hour off. Saving a correction could then shift them again.\n**Manitoba polls are corrected automatically.** No time zone database had Manitoba's change yet, so times after November 1 in existing Manitoba polls were stored an hour late while still displaying correctly. A migration corrects them on upgrade, so they keep sh"
    }
   ],
   "etag": {
-   "release": "W/\"4cf03cfe6937b3e70c8c7ddb363e4ad82b7e6c822656a616e20d5d40477a103f\"",
+   "release": "W/\"4945f0c643ce02e693ef2bf68bbf1087fa899bedc612357b2ac284876be82bb0\"",
    "security": "W/\"eae5d98834b3b6cefb2284ad80742d2b733c5fab05cc82cdb65df3ca69684dac\""
   },
   "rel_dates": [
+   "2026-11-23",
    "2026-11-17",
    "2026-11-11",
    "2026-11-01",
@@ -267,9 +267,7 @@
    "2026-09-21",
    "2026-09-13",
    "2026-09-09",
-   "2026-09-03",
-   "2026-08-25",
-   "2026-08-24"
+   "2026-09-03"
   ]
  },
  "bytebase/dbhub": {
@@ -277,7 +275,7 @@
   "commit_90d": 111,
   "rel_ver": "v2.1.0",
   "rel_pub": "2026-11-21",
-  "rel_days": 1,
+  "rel_days": 3,
   "rel_n90": 17,
   "rel_pre": false,
   "rel_none": false,
@@ -381,11 +379,11 @@
   ]
  },
  "noborus/trdsql": {
-  "commit_7d": 2,
+  "commit_7d": 0,
   "commit_90d": 14,
   "rel_ver": "v1.2.3",
   "rel_pub": "2026-05-29",
-  "rel_days": 177,
+  "rel_days": 179,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -430,11 +428,11 @@
   "rel_dates": []
  },
  "EhTagTranslation/Database": {
-  "commit_90d": 2528,
-  "commit_7d": 318,
-  "rel_ver": "v7.30228.1",
-  "rel_pub": "2026-11-22",
-  "rel_days": 0,
+  "commit_90d": 2579,
+  "commit_7d": 315,
+  "rel_ver": "v7.30239.1",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -447,13 +445,28 @@
    "PowerShell": 61,
    "Shell": 39
   },
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261102"
   },
   "rel_notes": [
+   {
+    "t": "v7.30239.1",
+    "d": "2026-11-23",
+    "n": "上次发布以来的更改 https://github.com/EhTagTranslation/Database/compare/037fced26b39bbe168c1f32b6e145b714d032845...568e68b6e8e5811016fddd8d4d0c7a491ad1e663\n也可以从 [`EhTagTranslation/Database@bda9c78`](https://github.com/EhTagTranslation/Database/tree/bda9c78e8031837a591c6e2e328647e08574bb84) 获取"
+   },
+   {
+    "t": "v7.30237.1",
+    "d": "2026-11-23",
+    "n": "上次发布以来的更改 https://github.com/EhTagTranslation/Database/compare/d4ba91438ba882020f784bdba17ba08496cdbcc6...037fced26b39bbe168c1f32b6e145b714d032845\n也可以从 [`EhTagTranslation/Database@06c5f1e`](https://github.com/EhTagTranslation/Database/tree/06c5f1e051becf32bfeefc37a1eb5afff25401ce) 获取\n\"before\": \"d4ba91438ba882020f784bdba17ba08496cdbcc6\","
+   },
+   {
+    "t": "v7.30236.1",
+    "d": "2026-11-23",
+    "n": "上次发布以来的更改 https://github.com/EhTagTranslation/Database/compare/3472de211f2acad994c19da095aa90aed2e9be31...d4ba91438ba882020f784bdba17ba08496cdbcc6\n也可以从 [`EhTagTranslation/Database@d457069`](https://github.com/EhTagTranslation/Database/tree/d457069e9d6fefee5f8cdae1951b9107cde1cf9c) 获取\n\"after\": \"d4ba91438ba882020f784bdba17ba08496cdbcc6\","
+   },
    {
     "t": "v7.30228.1",
     "d": "2026-11-22",
@@ -488,30 +501,15 @@
     "t": "v7.30121.1",
     "d": "2026-11-20",
     "n": "上次发布以来的更改 https://github.com/EhTagTranslation/Database/compare/35e2b524fc2e23345352486232d91471b5990887...44685f981e64ed94c75c5d160217f3cb0aee457e\n也可以从 [`EhTagTranslation/Database@10eea26`](https://github.com/EhTagTranslation/Database/tree/10eea26563462806016197660c8e58c8507a19ae) 获取"
-   },
-   {
-    "t": "v7.30120.1",
-    "d": "2026-11-19",
-    "n": "上次发布以来的更改 https://github.com/EhTagTranslation/Database/compare/b979be6785378845972d86dc726ffe917ff59476...35e2b524fc2e23345352486232d91471b5990887\n也可以从 [`EhTagTranslation/Database@932608f`](https://github.com/EhTagTranslation/Database/tree/932608f817bcbe709a56248d2b7fd954b898b009) 获取"
-   },
-   {
-    "t": "v7.30119.1",
-    "d": "2026-11-19",
-    "n": "上次发布以来的更改 https://github.com/EhTagTranslation/Database/compare/6c4d048d59d3826e49452f28f5b12eb77e688038...b979be6785378845972d86dc726ffe917ff59476\n也可以从 [`EhTagTranslation/Database@d207274`](https://github.com/EhTagTranslation/Database/tree/d207274d92b8ee39ee57568047bca8cb22cba418) 获取"
-   },
-   {
-    "t": "v7.30111.1",
-    "d": "2026-11-18",
-    "n": "上次发布以来的更改 https://github.com/EhTagTranslation/Database/compare/22770c0c40ef54fb12d2348530be7b51cd0d794c...8cd982060c73f88d969c033f96b04ff7ee48eb57\n也可以从 [`EhTagTranslation/Database@e1c52c8`](https://github.com/EhTagTranslation/Database/tree/e1c52c8f01a6a12f9d26cf3cbe74a2299d3613cb) 获取"
    }
   ],
   "etag": {
-   "release": "W/\"fb38e4f778a15c46b1a2ed9082bc8fc669b6844e2af53ee411de7eacf34eefa8\""
+   "release": "W/\"1d2b3b586509ed8d7c47590ba8c9ca112462495099cdb6cbb38ff52294015f18\""
   },
   "rel_dates": [
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22"
+   "2026-11-23",
+   "2026-11-23",
+   "2026-11-23"
   ]
  },
  "PaulSonOfLars/tgbot": {
@@ -531,12 +529,12 @@
   "enriched_at": "20260927"
  },
  "signal18/replication-manager": {
-  "commit_90d": 2143,
-  "commit_7d": 215,
-  "rel_ver": "v3.1.48",
-  "rel_pub": "2026-11-04",
-  "rel_days": 18,
-  "rel_n90": 8,
+  "commit_90d": 2332,
+  "commit_7d": 126,
+  "rel_ver": "v3.1.52",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
+  "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -551,15 +549,19 @@
    "HTML": 3,
    "Shell": 2
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"7b064ba2c771db6b256bbe05217189cb9506489daf61b8f7238c50b7f7f16fd6\""
+   "release": "W/\"483ca96e75c5f23808cabb65ab5a2dd30b7d18b3986cb554b011f0c51853b58e\""
   },
   "rel_dates": [
+   "2026-11-23",
+   "2026-11-18",
+   "2026-11-17",
+   "2026-11-14",
    "2026-11-04",
    "2026-11-01",
    "2026-10-23",
@@ -567,11 +569,29 @@
    "2026-10-15",
    "2026-10-08",
    "2026-09-18",
-   "2026-08-31",
-   "2026-08-19",
-   "2026-08-14"
+   "2026-08-31"
   ],
   "rel_notes": [
+   {
+    "t": "v3.1.52",
+    "d": "2026-11-23",
+    "n": "* Kubernetes: install the generated etc/mysql tree on a service-dirs-v1 PVC layout, as OpenSVC does (#2395) by @caffeinated92 in https://github.com/signal18/replication-manager/pull/2396\n* Kubernetes: use jobs-key credentials for database init and DBJobs by @caffeinated92 in https://github.com/signal18/replication-manager/pull/2410\n* Apps follow an APU plan change live through the database resize path (prov-app-dynamic-resource) by @svaroqui in https://github.com/signal18/replication-manager/pull/2417"
+   },
+   {
+    "t": "v3.1.51",
+    "d": "2026-11-18",
+    "n": "## What's Changed\n* Image builds: serve replication-manager-cli from disk, the init container's config fetch failed on 404 (#2403) by @svaroqui in https://github.com/signal18/replication-manager/pull/2404\n\n\n**Full Changelog**: https://github.com/signal18/replication-manager/compare/v3.1.50...v3.1.51"
+   },
+   {
+    "t": "v3.1.50",
+    "d": "2026-11-17",
+    "n": "* Kubernetes database lifecycle: Recreate strategy, PVC-consumer guards and foreground-deletion synchronization (#2389) by @caffeinated92 in https://github.com/signal18/replication-manager/pull/2390\n* A standby never fails over while its active peer is alive; preserved memory variables follow the dynamic resize by @svaroqui in https://github.com/signal18/replication-manager/pull/2399"
+   },
+   {
+    "t": "v3.1.49",
+    "d": "2026-11-14",
+    "n": "* Kubernetes: align database memory cap with OpenSVC and remove DBJobs memory limits (#2369) by @caffeinated92 in https://github.com/signal18/replication-manager/pull/2384\n* MySQL 8.4 behind ProxySQL 3: client logins, and the default admin login by orchestrator (#2360) by @svaroqui in https://github.com/signal18/replication-manager/pull/2364\n* Cloud18: the admin assigns or clears a cluster's external SysOps / DBOps directly (#2371) by @svaroqui in https://github.com/signal18/replication-manager/pull/2372\n* "
+   },
    {
     "t": "v3.1.48",
     "d": "2026-11-04",
@@ -601,35 +621,15 @@
     "t": "v3.1.43",
     "d": "2026-10-08",
     "n": "* Add PostgreSQL support to ProxySQL (#1893) by @caffeinated92 in https://github.com/signal18/replication-manager/pull/1926\n* resize: the redo log follows a live memory step (MariaDB 10.9+, MySQL/Percona 8.0.30+), restart cookie otherwise by @svaroqui in https://github.com/signal18/replication-manager/pull/1821\n* resource sensor freshness gate: a reading older than 3 min withholds the dynamic resize (WARN0215, DBU series gap) by @svaroqui in https://github.com/signal18/replication-manager/pull/1810\n* fix(ar"
-   },
-   {
-    "t": "v3.1.42",
-    "d": "2026-09-18",
-    "n": "* feat(prov): jemalloc preload + derived MALLOC_ARENA_MAX in the db container service sheet by @svaroqui in https://github.com/signal18/replication-manager/pull/1751\n* fix(k8s): make database upgrade actions apply deployment image updates by @caffeinated92 in https://github.com/signal18/replication-manager/pull/1764\n* resize: the cap follows the load both ways (over-plan grow, DBU-aligned shrink, undercommit floor), refusal as state, Kubernetes wired, #1795 settle wait fixed by @svaroqui in https://github.c"
-   },
-   {
-    "t": "v3.1.41",
-    "d": "2026-08-31",
-    "n": "## Highlights\n\n- **Cloud18 offline license for air-gapped / PCI DSS instances** (#1715): a signed `license.json` + `license.sig` pair, verified locally against the embedded plugin-signing public key — no outbound network needed in production. New `cloud18-license-file` setting sources the subscription plan offline (identity-bound to the instance's domain/sub-domain/zone, plan-locked, monitoring never blocked). Registration and delivery are self-service: see [Installation → Registration](https://docs.sig"
-   },
-   {
-    "t": "v3.0.33",
-    "d": "2026-08-19",
-    "n": "## What's Changed\r\n* fix(cluster): protect staging standalone recovery from read-only by @caffeinated92 in https://github.com/signal18/replication-manager/pull/1711\r\n\r\n\r\n**Full Changelog**: https://github.com/signal18/replication-manager/compare/v3.0.32...v3.0.33"
-   },
-   {
-    "t": "v3.1.40",
-    "d": "2026-08-14",
-    "n": "* fix(jobs): converge stale DB log job state in API and SQL modes by @caffeinated92 in https://github.com/signal18/replication-manager/pull/1692\n* fix(cluster): harden logical mysqldump reseed flow by @caffeinated92 in https://github.com/signal18/replication-manager/pull/1705"
    }
   ]
  },
  "apecloud/ape-dts": {
-  "commit_90d": 25,
-  "commit_7d": 5,
+  "commit_90d": 23,
+  "commit_7d": 3,
   "rel_ver": "v2.0.26.1",
   "rel_pub": "2026-09-29",
-  "rel_days": 54,
+  "rel_days": 56,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -645,13 +645,13 @@
    "Lua": 1,
    "PLpgSQL": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"405d69460dc3e04da23e551537c0c63a501a862fe171d7a0f5e8748490906a93\""
+   "release": "W/\"8e3709c2726a3123a29df261789a6625a039acbca731965e7bfcd415c1c3fda9\""
   },
   "rel_dates": [
    "2026-09-29"
@@ -669,7 +669,7 @@
   "commit_7d": 0,
   "rel_ver": "2020-01-01",
   "rel_pub": "2020-02-13",
-  "rel_days": 2474,
+  "rel_days": 2476,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -685,11 +685,11 @@
   "enriched_at": "20260927"
  },
  "osalvador/ReplicaDB": {
-  "commit_90d": 229,
-  "commit_7d": 20,
+  "commit_90d": 166,
+  "commit_7d": 9,
   "rel_ver": "v1.0.3",
   "rel_pub": "2026-10-19",
-  "rel_days": 34,
+  "rel_days": 36,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -705,21 +705,18 @@
    "JavaScript": 1,
    "PLSQL": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"83adad773e44ed18579f1583f0aa0ad899b4499ff7cbfb751286ae94fab57c3f\""
+   "release": "W/\"7b3b19090d9c63df60dfe74ff5c8a245efd4cac44ac195e206e14a926e690196\""
   },
   "rel_dates": [
    "2026-10-19",
    "2026-09-15",
-   "2026-09-06",
-   "2026-08-13",
-   "2026-08-13",
-   "2026-08-12"
+   "2026-09-06"
   ],
   "rel_notes": [
    {
@@ -772,7 +769,7 @@
   "commit_7d": 0,
   "rel_ver": "0.13.1",
   "rel_pub": "2026-10-16",
-  "rel_days": 37,
+  "rel_days": 39,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -787,13 +784,13 @@
    "Mako": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"aa97ec57ec23445da44696a3239fc994913befd4633a5260ad0d351d44814d80\""
+   "release": "W/\"7366e146d3823b2e405b3582a25d6296a057fb1b020ab0393312d8e8fbcb737b\""
   },
   "rel_dates": [
    "2026-10-16",
@@ -812,7 +809,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.1",
   "rel_pub": "2026-09-08",
-  "rel_days": 75,
+  "rel_days": 77,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -879,7 +876,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.76",
   "rel_pub": "2024-10-18",
-  "rel_days": 765,
+  "rel_days": 767,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -917,7 +914,7 @@
   "commit_7d": 0,
   "rel_ver": "data_paper_v1.0",
   "rel_pub": "2018-01-02",
-  "rel_days": 3246,
+  "rel_days": 3248,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -957,7 +954,7 @@
   "commit_7d": 0,
   "rel_ver": "v4.0.11",
   "rel_pub": "2021-02-26",
-  "rel_days": 2095,
+  "rel_days": 2097,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -980,7 +977,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.29",
   "rel_pub": "2026-10-12",
-  "rel_days": 41,
+  "rel_days": 43,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1007,7 +1004,7 @@
   "commit_7d": 0,
   "rel_ver": "v4.1.0",
   "rel_pub": "2026-06-06",
-  "rel_days": 169,
+  "rel_days": 171,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1042,7 +1039,7 @@
   "commit_7d": 0,
   "rel_ver": "v2026.0.0",
   "rel_pub": "2026-05-01",
-  "rel_days": 205,
+  "rel_days": 207,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1094,7 +1091,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.15",
   "rel_pub": "2026-10-09",
-  "rel_days": 44,
+  "rel_days": 46,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1121,7 +1118,7 @@
   "commit_7d": 0,
   "rel_ver": "v17.1.2",
   "rel_pub": "2026-10-22",
-  "rel_days": 31,
+  "rel_days": 33,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -1135,13 +1132,13 @@
    "Makefile": 2,
    "Dockerfile": 1
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"d9090a2afb4385c1f814cff1cef5f2ca944770dfb4ec0ed1e69103648a636856\""
+   "release": "W/\"906596424d38435b1e4b15251a7b89a9db2be2f91b9104a83cb175bede7583b0\""
   },
   "rel_dates": [
    "2026-10-22",
@@ -1215,7 +1212,7 @@
  "OldBlackJoe/mybatis-mapper": {
   "rel_ver": "0.6.7",
   "rel_pub": "2022-03-22",
-  "rel_days": 1706,
+  "rel_days": 1708,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1278,7 +1275,7 @@
  "dev-osrose/osIROSE-new": {
   "rel_ver": "0.3.0",
   "rel_pub": "2019-02-10",
-  "rel_days": 2842,
+  "rel_days": 2844,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1299,7 +1296,7 @@
  "fevrok/laravel-translatable": {
   "rel_ver": "2.0.0",
   "rel_pub": "2021-12-26",
-  "rel_days": 1792,
+  "rel_days": 1794,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1383,7 +1380,7 @@
  "supabase-community/postgrest-kt": {
   "rel_ver": "0.2.0",
   "rel_pub": "2021-02-03",
-  "rel_days": 2118,
+  "rel_days": 2120,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1429,7 +1426,7 @@
  "oracle/content-and-experience-toolkit": {
   "rel_ver": "24.8.1",
   "rel_pub": "2024-10-08",
-  "rel_days": 775,
+  "rel_days": 777,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1450,7 +1447,7 @@
  "CyCraft/magnetar": {
   "rel_ver": "v1.5.7",
   "rel_pub": "2026-09-25",
-  "rel_days": 58,
+  "rel_days": 60,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1485,7 +1482,7 @@
  "danvergara/seeder": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2022-09-22",
-  "rel_days": 1522,
+  "rel_days": 1524,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1516,7 +1513,7 @@
  "maeharin/factlin": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2019-01-21",
-  "rel_days": 2862,
+  "rel_days": 2864,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1535,7 +1532,7 @@
  "DeepSQLAI/deepsql": {
   "rel_ver": "desktop-v1.0.2",
   "rel_pub": "2026-09-01",
-  "rel_days": 82,
+  "rel_days": 84,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1570,7 +1567,7 @@
  "portapps/oracle-jdk-portable": {
   "rel_ver": "15.0.1-21",
   "rel_pub": "2021-01-28",
-  "rel_days": 2124,
+  "rel_days": 2126,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1588,7 +1585,7 @@
  "TheAcharya/Airlift": {
   "rel_ver": "v1.4.2",
   "rel_pub": "2026-06-04",
-  "rel_days": 171,
+  "rel_days": 173,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1622,7 +1619,7 @@
  "pal-tamas/rask": {
   "rel_ver": "nightly",
   "rel_pub": "2026-09-25",
-  "rel_days": 58,
+  "rel_days": 60,
   "rel_n90": 11,
   "rel_pre": true,
   "rel_none": false,
@@ -1675,7 +1672,7 @@
  "chotchki/feophant": {
   "rel_ver": "v0.9.0",
   "rel_pub": "2021-10-10",
-  "rel_days": 1869,
+  "rel_days": 1871,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1692,7 +1689,7 @@
  "Pierre-Alexandre35/vallorium": {
   "rel_ver": "v0.10.0",
   "rel_pub": "2026-09-20",
-  "rel_days": 63,
+  "rel_days": 65,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1728,7 +1725,7 @@
  "MartinKalema/horizontal-scaling-convex": {
   "rel_ver": "v2.1.0-alpha.1",
   "rel_pub": "2026-06-10",
-  "rel_days": 165,
+  "rel_days": 167,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1749,7 +1746,7 @@
  "DeBukkIt/SimpleFileStorage": {
   "rel_ver": "1.2.0",
   "rel_pub": "2018-03-03",
-  "rel_days": 3186,
+  "rel_days": 3188,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1800,7 +1797,7 @@
  "nheeren/material_intensity_db": {
   "rel_ver": "v1.2",
   "rel_pub": "2023-11-15",
-  "rel_days": 1103,
+  "rel_days": 1105,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1858,7 +1855,7 @@
  "TencentCloud/tencentcloud-speech-sdk-go": {
   "rel_ver": "v1.0.25",
   "rel_pub": "2026-05-21",
-  "rel_days": 185,
+  "rel_days": 187,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1908,7 +1905,7 @@
  "bordoley/SQLitePCL.pretty": {
   "rel_ver": "1.1.0",
   "rel_pub": "2016-11-02",
-  "rel_days": 3672,
+  "rel_days": 3674,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1938,7 +1935,7 @@
  "nfrastack/container-mariadb": {
   "rel_ver": "12.3-5.1.5",
   "rel_pub": "2026-09-16",
-  "rel_days": 67,
+  "rel_days": 69,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1955,7 +1952,7 @@
  "wfg2513148/rapid-apex": {
   "rel_ver": "v1.2.16",
   "rel_pub": "2026-06-25",
-  "rel_days": 150,
+  "rel_days": 152,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1989,7 +1986,7 @@
  "andrewl/uk-rail-schedule-api": {
   "rel_ver": "v1.0.2",
   "rel_pub": "2026-05-19",
-  "rel_days": 187,
+  "rel_days": 189,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2010,7 +2007,7 @@
  "LibraryCarpentry/lc-sql": {
   "rel_ver": "2023.05",
   "rel_pub": "2023-05-02",
-  "rel_days": 1300,
+  "rel_days": 1302,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2041,7 +2038,7 @@
  "maru44/scheman": {
   "rel_ver": "v1.3.1",
   "rel_pub": "2023-02-24",
-  "rel_days": 1367,
+  "rel_days": 1369,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2122,7 +2119,7 @@
  "neverinfamous/db-mcp": {
   "rel_ver": "v5.0.1",
   "rel_pub": "2026-06-12",
-  "rel_days": 163,
+  "rel_days": 165,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2157,7 +2154,7 @@
  "CyrusZhou-CN/openGauss_master_slave": {
   "rel_ver": "3.0.0",
   "rel_pub": "2022-04-22",
-  "rel_days": 1675,
+  "rel_days": 1677,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2200,7 +2197,7 @@
  "stratif-io/stratif.io": {
   "rel_ver": "v0.41.2",
   "rel_pub": "2026-04-30",
-  "rel_days": 206,
+  "rel_days": 208,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2251,7 +2248,7 @@
   "commit_7d": 0,
   "rel_ver": "DataPie4",
   "rel_pub": "2018-01-14",
-  "rel_days": 3234,
+  "rel_days": 3236,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2294,7 +2291,7 @@
  "couchbase/couchbase-lite-java-native": {
   "rel_ver": "1.4.4",
   "rel_pub": "2018-10-16",
-  "rel_days": 2959,
+  "rel_days": 2961,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2365,7 +2362,7 @@
  "jestatsio/skillroute": {
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-09-30",
-  "rel_days": 53,
+  "rel_days": 55,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2392,7 +2389,7 @@
  "youdie006/sessionwiki": {
   "rel_ver": "v0.30.1",
   "rel_pub": "2026-09-30",
-  "rel_days": 53,
+  "rel_days": 55,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2419,7 +2416,7 @@
  "redbase-app/redb-identity": {
   "rel_ver": "v4.1.1",
   "rel_pub": "2026-09-25",
-  "rel_days": 58,
+  "rel_days": 60,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2492,7 +2489,7 @@
   "commit_7d": 0,
   "rel_ver": "版本V2.6",
   "rel_pub": "2023-05-29",
-  "rel_days": 1273,
+  "rel_days": 1275,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2518,7 +2515,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.6",
   "rel_pub": "2024-01-24",
-  "rel_days": 1033,
+  "rel_days": 1035,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3014,7 +3011,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.1",
   "rel_pub": "2026-05-12",
-  "rel_days": 194,
+  "rel_days": 196,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3122,7 +3119,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-08-31",
-  "rel_days": 83,
+  "rel_days": 85,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3259,7 +3256,7 @@
  "bilustek/secretdrop": {
   "rel_ver": "v0.7.2",
   "rel_pub": "2026-06-06",
-  "rel_days": 169,
+  "rel_days": 171,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3306,7 +3303,7 @@
  "llwand1/xuelian-agent": {
   "rel_ver": "desktop-v0.2.201",
   "rel_pub": "2026-10-14",
-  "rel_days": 39,
+  "rel_days": 41,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3412,7 +3409,7 @@
  "moseleydev/tracelet": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-19",
-  "rel_days": 34,
+  "rel_days": 36,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3439,7 +3436,7 @@
  "mtalavi/coolify-mirror": {
   "rel_ver": "v1.9.5",
   "rel_pub": "2026-10-25",
-  "rel_days": 28,
+  "rel_days": 30,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3543,7 +3540,7 @@
   },
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-11-11",
-  "rel_days": 11,
+  "rel_days": 13,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -3649,7 +3646,7 @@
   },
   "rel_ver": "v0.7.0",
   "rel_pub": "2025-03-24",
-  "rel_days": 608,
+  "rel_days": 610,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3677,7 +3674,7 @@
   },
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-11-17",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

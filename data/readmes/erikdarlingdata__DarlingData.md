@@ -35,12 +35,14 @@
 ## Installing
 To install every procedure in the list above except sp_QueryStoreCleanup, run [Install-All/DarlingData.sql](Install-All/DarlingData.sql). To install one procedure, run the .sql file in its folder. sp_QueryStoreCleanup is not in the bundle because it removes queries from Query Store. Install it from its own folder.
 
-## Utility scripts
-These folders each have their own READ
+The [monthly releases](https://github.com/erikdarlingdata
 
 [...截断...]
 
-ME:
+/DarlingData/releases) are the stable way to install. To try a fix before the next release, download DarlingData.sql from the [dev-latest pre-release](https://github.com/erikdarlingdata/DarlingData/releases/tag/dev-latest).
+
+## Utility scripts
+These folders each have their own README:
  - [Clear Token Perm](Clear%20Token%20Perm): Monitor and clear the security token cache
  - [Export-SqlResults](Export-SqlResults): Run a query and export every result set to CSV
  - [Helper Views](Helper%20Views): Views and functions for diagnosing performance issues
@@ -50,12 +52,24 @@ ME:
  - [String Functions](String%20Functions): Functions that extract or remove characters from strings
  - [TestBackupPerformance](TestBackupPerformance): Test backup settings to find the fastest combination
 
+## Other scripts
+These folders hold plain SQL scripts and have no README. Each file has a comment at the top.
+ - [Alerts](Alerts): Create SQL Agent alerts for severity 19 to 25 errors and for errors 823, 824 and 825. Set your operator name in the script first
+ - [Create Long IN List](Create%20Long%20IN%20List): A demo procedure that builds a very long IN list, to show how long IN lists hurt query performance
+ - [Dynamic SQL Logging](Dynamic%20SQL%20Logging): A procedure that logs CPU time, elapsed time and reads for dynamic SQL to a table
+ - [Inline Financial Functions](Inline%20Financial%20Functions): Inline table-valued functions for common financial calculations, such as Payment and FutureValue
+ - [SQL Debug Example](SQL%20Debug%20Example): An example procedure that shows one way to add debug output to a stored procedure
+ - [Stack Column Store Database](Stack%20Column%20Store%20Database): A personal demo build script that makes a columnstore copy of the Stack Overflow database. It has hard-coded file paths and is not meant to run as is
+
 ## Who are these scripts for?
 You need to troubleshoot performance problems with SQL Server, and you need to do it now. 
 
 You don't have time to track down a bunch of DMVs, figure out Extended Events, wrestle with terrible SSMS interfaces, or learn XML.
 
 These scripts aren't a replacement for a mature monitoring tool, but they do a good job of capturing important issues and reporting on existing diagnostic data
+
+## Training and consulting
+I teach database teams to work with AI agents on their own databases, in a [one-day workshop](https://erikdarling.com/ai-for-database-teams-workshop/), a [video course](https://training.erikdarling.com/work-with-your-databases-the-way-i-do), and [one-on-one for a day](https://erikdarling.com/work-with-me-for-a-day/). I also do [SQL Server performance consulting](https://erikdarling.com/sql-server-performance-consulting/).
 
 ## Support
 Right now, all support and Q&A is handled on GitHub. Please be patient; it's just me over here answering questions, fixing bugs, and adding new features.
@@ -79,23 +93,4 @@ All you need to do is hit F5 to get information about:
  * Database file size, stall, and activity
  * tempdb configuration details
  * Memory consumers
- * Low memory indicators
- * Memory configuration and allocation
- * Current query memory grants, along with other execution details
- * CPU configuration and retained utilization details
- * Thread count and current usage 
- * Any current THREADPOOL waits (best observed with the DAC)
- * Currently executing queries, along with other execution details
- * Blocking chains with lead blockers (@troubleshoot_blocking = 1)
- * Optional logging to permanent tables (@log_to_table = 1)
-
-For a video walkthrough of the script and the results, [head over here](https://www.erikdarling.com/sp_pressuredetector/).
-
-Current valid parameter details:
-
-|       parameter_name       | data_type |                                  description                                   |                     valid_inputs                     |   defaults   |
-|----------------------------|-----------|--------------------------------------------------------------------------------|------------------------------------------------------|--------------|
-| @what_to_check             | varchar   | areas to check for pressure                                                    | "all", "cpu", and "memory"                           | all          |
-| @skip_queries              | bit       | if you want to skip looking at running queries                                 | 0 or 1                                               | 0            |
-| @skip_plan_xml             | bit       | if you want to skip getting plan XML                                           | 0 or 1                                               | 0            |
-| @minimum_disk_latency_ms   | smallint  | low bound for reporting disk latency                                           | a reasonable number of milliseconds for disk latency | 100         
+ * 

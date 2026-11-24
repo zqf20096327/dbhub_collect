@@ -70,7 +70,7 @@ To build this module:
 
     make
 
-This builds extension for your particular version of Postgres in a file like `ddlx--0.32.sql`.
+This builds extension for your particular version of Postgres in a file like `ddlx--0.33.sql`.
 
     make install
     make install installcheck
@@ -99,7 +99,7 @@ This of course requires superuser privileges.
 If for some reason you are unable to use this as an extension, you can simply load generated SQL file
 into your database by any regular means:
 
-    $ psql my_database -1 -f ddlx--0.32.sql
+    $ psql my_database -1 -f ddlx--0.33.sql
 
 Using
 -----
@@ -147,6 +147,7 @@ Options are optional and are passed as text array, for example `{ine,nodcl}`. Th
 * `nogrants` - do not include `grant` statements
 * `nodcl` - include neither `alter set owner` nor grants
 * `noalter` - include neither `alter` nor DCL (grant) statements
+* `nosecrets` - exclude passwords and such
 * `ine` - add `if not exists` in bunch of places
 * `ie` - add `if exists` in a bunch of places
 * `ext` - include extension contents instead of `create extension`.

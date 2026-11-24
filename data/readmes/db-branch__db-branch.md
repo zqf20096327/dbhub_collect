@@ -5,17 +5,19 @@
 [![Stars](https://img.shields.io/github/stars/db-branch/db-branch?style=flat)](https://github.com/db-branch/db-branch/stargazers)
 [![Sponsor](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa?logo=githubsponsors)](https://github.com/sponsors/MaSuCcHI)
 
-Instant database branches for MySQL and PostgreSQL, on your own servers.
+**Instant database branches for MySQL and PostgreSQL, on your own servers.** Create a copy-on-write branch of a large database in seconds, break it, reset it, throw it away.
 
-Test a migration, let an AI agent loose, or give every pull request its own copy of the database. db-branch creates a copy-on-write branch of a large database in seconds, with nothing copied. Break it, reset it, throw it away. Built on ZFS clones, self-hosted, Apache-2.0.
+**Try it in your browser in 10 seconds: <https://demo.db-branch.com/from/readme>** (nothing real is created).
+
+![Create a branch, see how to connect, save a checkpoint, reset the branch](docs/assets/demo.gif)
+
+Test a migration, let an AI agent loose, or give every pull request its own copy of the database. db-branch creates a branch with nothing copied. Built on ZFS clones, self-hosted, Apache-2.0.
 
 **Status: Beta.** db-branch is usable today, but APIs and command-line details may still change before 1.0. It is an independent open-source project, built from scratch.
 
-![Create a branch, drop a table, reset the branch, delete it](docs/assets/demo.gif)
-
 ## Try it
 
-1. **In your browser, 0 minutes.** A live console demo runs entirely in the page (nothing real is created): <https://demo.db-branch.com/>
+1. **In your browser, 0 minutes.** A live console demo runs entirely in the page (nothing real is created): <https://demo.db-branch.com/from/readme>
 2. **On a Mac or Windows machine, about 2 minutes.** db-branch needs Linux and ZFS, so run it in an Ubuntu VM with [Multipass](https://multipass.run/). One command makes the VM, installs db-branch, initialises it on a file-backed ZFS pool and loads a small sample base, `shop` (MySQL 8.4):
 
    ```sh
@@ -49,7 +51,7 @@ Test a migration, let an AI agent loose, or give every pull request its own copy
 
 - **Branches in seconds.** On our own 3-node test cluster a PostgreSQL branch is ready in about 0.5 s and a MySQL branch in about 3 s, with 0 bytes copied at creation (copy-on-write).
 - **Reset and expire.** `branch reset` returns a branch to its creation state; `--ttl` deletes it automatically.
-- **Checkpoints.** `branch checkpoint` saves a running branch's state instantly; `branch restore` puts it back. Restoring replaces the current state, and every checkpoint you already have stays restorable.
+- **Checkpoints, fork and line merge.** `branch checkpoint` saves a running branch's state instantly; `branch restore` puts it back (restoring replaces the current state, and every checkpoint you already have stays restorable). `branch fork` clones a running or paused branch (or one of its checkpoints) into a new independent branch. Within a single branch, `branch merge` logically merges changes from an older history line (left behind by `branch restore`) into the live line, aborting without modifying live data if any conflict is detected.
 - **Per-branch upgrades.** `branch upgrade` moves one branch to a newer MySQL or PostgreSQL version while the base and the other branches stay put. A checkpoint is saved first, and a failed upgrade rolls back by itself.
 - **MySQL and PostgreSQL, several versions at once.** Engine runtimes are installed by version and can live side by side.
 - **One interface everywhere.** CLI, REST API, web console and an MCP server (so LLM agents can create and query their own branches) all use the same API.
@@ -99,18 +101,20 @@ A base is a ZFS dataset holding a loaded database. A branch is a ZFS clone of a 
 
 ### Design notes and trade-offs
 
-- **Disposable by design (no merge or rebase).** Branches are block-level ZFS copy-on-write clones, not hooks into the database engine's MVCC. Divergent writes across concurrent branches cannot be merged or rebased back into a base or another branch like Git. db-branch is built for disposable sandboxes (AI agents, CI runs, migration tests) that you reset or throw away.
+- **Disposable by design (no cross-branch merge or rebase).** Branches are block-level ZFS copy-on-write clones, not hooks into the database engine's MVCC. Divergent writes across separate concurrent branches cannot be merged or rebased back into a base or into another branch like Git (within a single branch, `branch merge` can logically 3-way merge row and schema changes between history lines created by `branch restore`; see [docs/branch-merge.md](docs/branch-merge.md)). db-branch is built for disposable sandboxes (AI agents, CI runs, migration tests) that you reset or throw away.
 - **Clean-shutdown vs. live snapshots.** Because PostgreSQL and MySQL (InnoDB) are crash-consistent, an atomic ZFS snapshot of a running instance (with data files and WAL/redo logs on the same volume) does work—and db-branch uses crash-consistent live snapshots for running-branch checkpoints. However, starting a branch from a live snapshot triggers crash recovery (WAL/redo log replay), which added about 10 s of startup latency in our MySQL testing. Base snapshots are therefore taken after a clean shutdown to keep branch creation sub-second / a few seconds.
-- **Mask at the base, not after branching.** Branches isolate writes from production, but an AI agent or user with access to a branch can still *read* everything in it. If you load unmasked production data, sensitive records remain exposed to `SELECT` queries. Mask data when creating the base snapshot (using a masked dump or a masker module distributed separately, such as `greenmask`, `greenmask-mysql`, or `anon`) rather than relying on post-branch masking.
+- **Mask at the base, not after branching.** Branches isolate writes from production, but an AI agent or user with access to a branch can still *read* everything in it. If you load unmasked production data, sensitive records remain exposed to `SELECT` queries. Load masked data when creating the base (using a masked dump) rather than relying on post-branch masking.
 - **ZFS `recordsize` tuning.** ZFS's default `recordsize` (128K) does not match database page sizes, causing double copy-on-write / `fsync` write amplification and hurting random I/O. Matching `recordsize` to the engine's page size—`16K` for MySQL/InnoDB and `8K` for PostgreSQL—avoids this overhead. (`db-branch` automatically sets `recordsize=16K` on base datasets, matching InnoDB; for PostgreSQL workloads sensitive to random I/O, `8K` is the page-matched setting, trading some `lz4` compression efficiency.)
 
 ## Editions
 
 - **Core (this repository), Apache-2.0:** branches, bases, runtimes, clustering, CLI, API, web console, MCP, monitoring, notifications, anonymous (no sign-in) branches with limits, scheduled base refresh, backup of cluster state.
-- **Free modules** in the same apt repository: `proxysql` (routing). Data masking modules (`greenmask`, `greenmask-mysql`, `anon`) are distributed separately from this repository.
-- **Paid modules** (auth/SSO, audit, history, diff, FSx storage) are separate, closed-source packages, self-hosted and enabled with a license key (monthly or yearly). A governed masking workflow is planned as an opt-in beta and is not part of any plan yet. See [docs/modules.md](docs/modules.md) for the extension points they use.
+- **Free modules** in the same apt repository: `proxysql` (routing).
+- **Paid modules** (auth/SSO, audit, history, diff, FSx storage) are separate, closed-source packages, self-hosted and enabled with a license key (monthly or yearly). See [docs/modules.md](docs/modules.md) for the extension points they use.
 
 There is no hosted or cloud version of db-branch.
+
+Team and Business are not on sale yet and have no price. If you are interested, tell us with [this form](https://demo.db-branch.com/go/interest) (which plan, what database, how big, how many nodes). Email to <sales@db-branch.com> works too.
 
 ## Documentation
 

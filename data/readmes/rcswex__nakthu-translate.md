@@ -49,7 +49,7 @@ That is all. **The skill is self-contained: the Nakthu archive it translates fro
 
 ### What is bundled
 
-`skills/nakthu-translate/archive/language/` is a snapshot (2026-11-21, ≈ 2.7 MB) of the project's core knowledge, so Claude can look every word and rule up instead of guessing:
+`skills/nakthu-translate/archive/language/` is a snapshot (2026-11-22, ≈ 2.7 MB) of the project's core knowledge, so Claude can look every word and rule up instead of guessing:
 
 | File | Role |
 |---|---|
@@ -201,7 +201,7 @@ install.ps1 · install.sh       local installers
 
 ### 内置了什么
 
-`skills/nakthu-translate/archive/language/` 是项目核心知识的快照（2026-11-21，约 2.7 MB），Claude 译写时逐词逐规则查档案，而不是凭印象：
+`skills/nakthu-translate/archive/language/` 是项目核心知识的快照（2026-11-22，约 2.7 MB），Claude 译写时逐词逐规则查档案，而不是凭印象：
 
 | 文件 | 作用 |
 |---|---|

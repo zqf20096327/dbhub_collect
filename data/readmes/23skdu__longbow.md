@@ -78,7 +78,7 @@ docker build -f Dockerfile.nvidia -t longbow:nvidia .
 
 # EMLGo builds (high-performance SIMD math backend)
 docker build -f Dockerfile.emlgo-cpu -t longbow:emlgo-cpu .
-docker build -f Dockerfile.emlgo-gpu -t longbow:emlgo-gpu .
+docker build -f Dockerfile.emlgo-nvidia -t longbow:emlgo-nvidia .
 ```
 
 ## Configuration
@@ -207,7 +207,7 @@ docker run -p 3000:3000 -p 3001:3001 -p 9090:9090 longbow
 - [CLI Reference (`longbow-cli`)](docs/cli.md)
 - [Deployment & Configuration](docs/deploy.md)
 - [Features & Competitive Landscape](docs/features.md)
-- [Feature Parity Roadmap](docs/development/roadmap.md)
+- [Roadmap](docs/roadmap.md)
 - [Security & Compliance](docs/security-compliance.md)
 - [Serverless, Edge SDKs & WASM Client](docs/edge-wasm.md)
 - [Performance Benchmarks](docs/development/performance.md)

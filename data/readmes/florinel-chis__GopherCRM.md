@@ -11,8 +11,11 @@ Go backend, React UI, SQLite or MySQL.
 a server they control, without per-seat licence fees.
 
 - **A complete CRM.** Leads that convert into customers, companies, deals on a five-stage pipeline
-  with a full stage history, support tickets, tasks with labels, and four roles (admin, sales,
-  support, customer).
+  with a full stage history, support tickets, tasks with labels, four fixed system roles (Admin,
+  Sales, Support, Customer) plus custom roles managed in Settings → Roles.
+- **Access control and sign-in.** Custom roles built from the permission catalogue, single sign-on
+  through OpenID Connect (for example Microsoft Entra ID or Okta), SCIM 2.0 provisioning of staff
+  accounts, signed outbound webhooks, and the sign-in and role audit logs.
 - **Lead capture built in.** Build forms in the CRM and embed them on any website with one script
   tag. Submissions become leads, behind layered spam protection (time trap, origin allowlist,
   honeypot, rate limits, optional reCAPTCHA v3) and an optional double opt-in. A double opt-in
@@ -41,30 +44,24 @@ Open http://localhost:3000 and sign in as `admin@example.com` / `ChangeMe!2345`,
 password under **Settings > Profile**. Port 3000 taken? Put `UI_PORT=3001` in front of the `up`
 command and open http://localhost:3001 instead.
 
-**Docs:** [Docker](docs/DOCKER.md) · [Setup](docs/SETUP.md) · [Features](docs/FEATURES.md) ·
-[Developer guide](docs/DEVELOPMENT.md) · [Data model](docs/datamodel.md) ·
-[Screenshots](docs/SCREENSHOTS.md) · [API reference](api/index.html) ([spec](api/swagger.yaml)) · [Roadmap](docs/ROADMAP.md) ·
-[Changelog](CHANGELOG.md) · [Releases](https://github.com/florinel-chis/GopherCRM/releases) · [Validation and release workflow](docs/VALIDATION_RELEASE.md) · [Documentation maintenance](docs/DOCUMENTATION_WORKFLOW.md)
+Every guide is listed in the [Documentation](#documentation) table below.
 
 If it's useful, a star helps others find it.
 
 ## Fork it
 
 GopherCRM is meant to be forked and adapted. A fork starts with the modules listed under Features,
-four roles (admin, sales, support, customer), and the machinery that keeps them working: 990
-top-level Go test functions, 22 Playwright specs, 12 MySQL migration pairs checked against
-MySQL 8 and MariaDB 10.11, and 5 CI workflows (measured on `4dfe404`; commands in
+four fixed system roles (Admin, Sales, Support, Customer) plus custom roles built from the
+permission catalogue in Settings → Roles or through the API, and the machinery that keeps them
+working:
+2155 top-level Go test functions, 35 Playwright specs, 46 MySQL migration pairs checked against
+MySQL 8 and MariaDB 10.11, and
+6 CI workflows (measured on `bbc5c81f`; commands in
 [FORKING.md](docs/FORKING.md#9-why-fork-instead-of-rebuild)).
 
-- [docs/FORKING.md](docs/FORKING.md) — first run, rebranding, configuration, deployment, CI and
-  staying in sync with upstream.
-- [docs/SERVER_PROVISIONING.md](docs/SERVER_PROVISIONING.md) — preparing a fresh systemd/nginx
-  server (MySQL or MariaDB) for the release-tarball deploy path.
-- [docs/USE_CASES.md](docs/USE_CASES.md) — worked recipes for concrete deployments, with their gaps.
-- [docs/EXTENDING.md](docs/EXTENDING.md) — adding or removing entities, routes, migrations and modules.
-- [docs/CONCURRENCY.md](docs/CONCURRENCY.md) — lock order and retry rule for multi-table writes.
-- [docs/AUTHORIZATION.md](docs/AUTHORIZATION.md) — permission catalogue, system-role matrix, custom roles and the phase 2 sign-in design note.
-- [docs/user-guide/permissions-access/overview.md](docs/user-guide/permissions-access/overview.md) — administrator guide to roles, permissions and single sign-on (OpenID Connect, with a Microsoft Entra ID walk-through).
+Start with [docs/FORKING.md](docs/FORKING.md) — first run, rebranding, configuration,
+deployment, CI and staying in sync with upstream; the other guides are in the
+[Documentation](#documentation) table.
 
 Three things catch most first runs from source (`cp .env.example .env`, then `go run ./cmd` or
 `make run`):
@@ -82,7 +79,11 @@ Three things catch most first runs from source (`cp .env.example .env`, then `go
 <details>
 <summary>The full feature list</summary>
 
-- 🔐 **Authentication**: JWT tokens and HMAC-SHA256 API Keys with role-based access control
+- 🔐 **Authentication**: JWT tokens and HMAC-SHA256 API Keys with role-based access control; API keys expire (at most one year)
+- 🪪 **Single Sign-On**: OpenID Connect sign-in (for example Microsoft Entra ID or Okta); the provider's groups or app roles map to the GopherCRM role at each sign-in; the client authenticates with a client secret or a client certificate; signing out also ends the identity-provider session, and front-channel logout ends the GopherCRM session when the person signs out at the provider ([single sign-on guide](docs/user-guide/permissions-access/single-sign-on.md))
+- 🔄 **SCIM Provisioning**: SCIM 2.0 create, update and deactivate of staff accounts and of the membership of the mapped groups; tokens under Settings → SCIM tokens ([SCIM provisioning guide](docs/user-guide/permissions-access/scim-provisioning.md))
+- 📡 **Webhooks**: Signed outbound events with a delivery log, a test ping, secret rotation and redelivery ([webhooks guide](docs/user-guide/permissions-access/webhooks.md))
+- 📜 **Audit Logs**: Settings → Sign-in audit and Settings → Role audit screens; sign-in audit rows are kept for `AUTH_AUDIT_RETENTION_DAYS`
 - 🛡️ **Security**: Account lockout, password complexity, sort-column allowlists against SQL injection, rate limiting with trusted-proxy handling
 - 🧹 **Right to Erasure**: Deleting a person overwrites their personal data before the row is soft-deleted (GDPR Art. 17)
 - 👥 **Lead Management**: Lead tracking with conversion to customers
@@ -98,7 +99,7 @@ Three things catch most first runs from source (`cp .env.example .env`, then `go
 - 📝 **Forms**: Build contact, quote-request and lead-capture forms in the CRM and embed them on any website with one script tag — submissions land in the CRM, create leads, and can require double opt-in email confirmation before delivering gated content; layered spam protection (honeypot, time trap, rate limits, optional invisible reCAPTCHA v3). A double opt-in form can instead open a support ticket for the customer whose email matches the confirmed address (fixed ticket text, no submitted value), deduplicated by an `idempotency_key` that API clients send with the submission (the embed script sends one key per rendered form on every submission of the render: the hosted view's per-render key, or one it generates)
 - 🎨 **Modern UI**: React TypeScript frontend with Material-UI
 - 📊 **Dashboard**: Analytics and activity overview
-- 👤 **Role-Based Access**: four system roles (Admin, Sales, Support, Customer) plus custom roles built from the permission catalogue through the role API ([docs/AUTHORIZATION.md](docs/AUTHORIZATION.md)); administrator guide: [docs/user-guide/permissions-access/overview.md](docs/user-guide/permissions-access/overview.md)
+- 👤 **Role-Based Access**: four system roles (Admin, Sales, Support, Customer) plus custom roles built from the permission catalogue in Settings → Roles or through the API ([docs/AUTHORIZATION.md](docs/AUTHORIZATION.md)); administrator guide: [docs/user-guide/permissions-access/overview.md](docs/user-guide/permissions-access/overview.md)
 - 🔌 **RESTful API**: Clean architecture with comprehensive endpoints
 
 </details>
@@ -130,7 +131,7 @@ with the database in a file on a named volume ([docs/DOCKER.md](docs/DOCKER.md#s
 - Make (optional, for using Makefile commands)
 
 ### Frontend
-- Node.js 20 or newer (React Router 7 requires Node >= 20) and npm
+- Node.js 22 or later and npm
 - Modern web browser
 
 ## Setup Instructions
@@ -182,26 +183,9 @@ Things to know before relying on it:
 - **Back up before upgrading.** On SQLite the schema advances only through the
   auto-migration that runs at startup — the `migrations/` SQL is MySQL-only — and
   auto-migration is not reversible. Take the offline copy or the `VACUUM INTO`
-  snapshot above first. Upgrading from v1.2.0 rewrites `leads` and `customers`
-  in place (the driver drops and copies each table to add the company link).
-  The two rebuilds run one after the other, each in its own transaction, so the
-  first start needs free disk for a full copy of one table at a time, while the
-  WAL accumulates both rebuilds until the next checkpoint. Auto-migration runs
-  with foreign-key enforcement off, as SQLite prescribes for table rebuilds,
-  checks every foreign key afterwards and refuses to start if the check finds a
-  dangling reference. A refused start has already committed the schema change;
-  only the data violation is left. Restore the backup, or fix the offending rows
-  (the message names the tables as `child -> parent`), and start again. The
-  v1.2.0 binary still opens the upgraded file — it ignores the extra tables and
-  columns — so the binary can be rolled back even though the schema is not.
-  The deals release adds the `deals` and `deal_stage_changes` tables only: it
-  rebuilds no existing table, and the previous binary still opens the file.
-  The quotes release does the same with `products`, `quotes`, `quote_lines` and
-  `quote_status_changes`: four new tables, no existing table touched. The
-  task-to-deal link release rebuilds `tasks` (drop and copy) to add
-  `fk_tasks_deal`, so its first start needs free disk for a full copy of that
-  table; every existing task keeps `deal_id` NULL, and the previous binary still
-  opens the file, ignoring the extra column.
+  snapshot above first. What each release changes in the file, and the free disk
+  its first start needs, is in
+  [docs/DOCKER.md](docs/DOCKER.md#upgrading-the-sqlite-database).
 - `DB_PATH` must not contain `?`; the connector appends its own pragma query
   string, so startup rejects a path that already carries one.
 
@@ -300,11 +284,32 @@ the `create-admin` CLI. The registration endpoint ignores any role supplied by t
 Tokens are stored in `sessionStorage` and expire with the browser tab unless you tick **Remember
 me** at login, which moves them to `localStorage`.
 
-### Admin Features
-Admin users have access to additional features:
-- User management
-- System configuration
-- All data access across the system
+### Administration and settings
+
+Screens are shown by permission, not by role: a user sees a screen when their role holds the
+permission it needs, and the system Admin role holds all of them. The administrator guide is
+[docs/user-guide/permissions-access/overview.md](docs/user-guide/permissions-access/overview.md).
+
+- **Users** (`users.view`): the user list and user pages; activating and deactivating an account
+  needs `users.activate`.
+- **Profile** (all users): your account details and the password change.
+- **API Keys** (own keys, staff accounts only): create and revoke your own API keys; a key
+  expires after at most one year; see
+  [docs/user-guide/permissions-access/api-keys.md](docs/user-guide/permissions-access/api-keys.md).
+- **Configuration** (`settings.view`; changes need `settings.update`): the system settings by
+  category tab (see below).
+- **Roles** (`roles.view`; creating, cloning, editing and deleting need `roles.manage`): system and
+  custom roles and their permissions.
+- **Webhooks** (`webhooks.manage`): outbound webhook endpoints and the delivery log; see
+  [docs/user-guide/permissions-access/webhooks.md](docs/user-guide/permissions-access/webhooks.md).
+- **Single sign-on** (`settings.sso_manage`): the OpenID Connect issuer, client and role mapping.
+- **Sign-in audit** (`audit.sign_ins_view`): password, single sign-on, refresh and API-key sign-in
+  outcomes; see
+  [docs/user-guide/permissions-access/sign-in-audit.md](docs/user-guide/permissions-access/sign-in-audit.md).
+- **Role audit** (`roles.audit_view`): role changes and account activation, deactivation, erasure
+  and email changes.
+- **SCIM tokens** (`settings.scim_manage`): the bearer tokens an identity provider's SCIM client
+  uses.
 
 ### Configuration Management
 
@@ -323,6 +328,7 @@ GopherCRM includes a powerful configuration management system that allows admini
    - **Customers**: Customer management settings
    - **Tickets**: Support ticket configuration
    - **Tasks**: Task management settings
+   - **Deals**: Deal settings (default currency)
    - **Integration**: Third-party integrations
 
 #### Configuration Features
@@ -460,143 +466,13 @@ It spends real credit, so it is never part of CI. Test cases: `docs/testing/11-a
 
 ## Integrations: webhooks
 
-Integrations no longer need to poll for new records. An admin registers an HTTPS endpoint in
-**Settings > Webhooks** (`/settings/webhooks`) or with `POST /api/v1/webhooks/endpoints` and picks
-any of twenty-one event types:
-
-| Event | Sent when |
-|---|---|
-| `lead.created` | a lead is created through the API, or a form creates a new lead (a repeat enquiry to an existing lead sends nothing) |
-| `customer.created` | a customer is created through the API or by converting a lead |
-| `ticket.created` | a ticket is created through the API, or a confirmed form submission opens one (a duplicate key sends nothing) |
-| `deal.created` | a deal is created with `POST /api/v1/deals` |
-| `task.created` | a task is created with `POST /api/v1/tasks`, or by an automation create-task step |
-| `company.created` | a company is created with `POST /api/v1/companies` |
-| `quote.created` | a quote is created with `POST /api/v1/quotes` |
-| `lead.updated` | `PUT /api/v1/leads/{id}` changed at least one stored value of the lead, `POST /api/v1/leads/{id}/assign` changed its owner, `POST /api/v1/leads/{id}/convert` converted it (next to `customer.created`), `POST /api/v1/leads/bulk/status` changed its status (one event per lead), or an automation assign-owner step changed its owner |
-| `customer.updated` | `PUT /api/v1/customers/{id}` changed at least one stored value of the customer |
-| `ticket.updated` | `PUT /api/v1/tickets/{id}` changed at least one stored value of the ticket, `POST /api/v1/tickets/bulk/status` changed its status (one event per ticket), or an automation assign-owner step changed its assignee |
-| `deal.updated` | `PUT /api/v1/deals/{id}` changed at least one stored value of the deal, `POST /api/v1/deals/{id}/stage` moved it to another stage, or an automation assign-owner step changed its owner |
-| `task.updated` | `PUT /api/v1/tasks/{id}` changed at least one stored value of the task or its label set (order and repeats of `label_ids` do not count), or `POST /api/v1/tasks/bulk/status` changed its status (one event per task) |
-| `company.updated` | `PUT /api/v1/companies/{id}` changed at least one stored value of the company |
-| `quote.updated` | `PUT /api/v1/quotes/{id}` changed at least one stored value of the quote, a line was added (`POST /api/v1/quotes/{id}/lines`) or removed (`DELETE /api/v1/quotes/{id}/lines/{lineId}`), `PUT /api/v1/quotes/{id}/lines/{lineId}` changed at least one stored value of the line, `POST /api/v1/quotes/{id}/status` moved it to another status, or the client accepted or declined it through its response link (`POST /api/v1/quotes/public/response`) |
-| `lead.deleted` | `DELETE /api/v1/leads/{id}`, and every erasure that reaches the lead: erasing the customer it was converted into, or that customer's login (`DELETE /api/v1/customers/{id}`, `DELETE /api/v1/users/{id}`) |
-| `customer.deleted` | `DELETE /api/v1/customers/{id}`, and the erasure of a lead converted into the customer or of the customer's login (`DELETE /api/v1/leads/{id}` by an admin, `DELETE /api/v1/users/{id}`) |
-| `ticket.deleted` | `DELETE /api/v1/tickets/{id}` |
-| `deal.deleted` | `DELETE /api/v1/deals/{id}` |
-| `task.deleted` | `DELETE /api/v1/tasks/{id}` (sent once: a delete that loses a race with another delete of the same task answers 404 and sends nothing) |
-| `company.deleted` | `DELETE /api/v1/companies/{id}` (the only event it sends: the leads, customers and deals it unlinks get no updated event) |
-| `quote.deleted` | `DELETE /api/v1/quotes/{id}` |
-
-An update that sends only the values already stored answers 200 and sends nothing, and assigning
-a lead to its current owner sends nothing either, nor does moving a deal to the stage it is already
-in. The updated events come from the `PUT` routes in the table (`PUT /api/v1/tasks/{id}` also when only
-the label set changed), lead assignment and conversion, the deal stage endpoint, the quote line
-endpoints, the quote status endpoint and the client's quote response, the three bulk
-status endpoints and the automation assign-owner step only: emailing a quote, the erasure of a
-customer or lead that overwrites the text of the quotes linked to it, deleting or erasing a record,
-assigning a customer, a ticket comment, a repeat form enquiry, the other automation steps, a
-company delete that unlinks its leads, customers and deals (it sends `company.deleted` only), the erasure of a customer or lead that
-overwrites the text of the deals linked to it, and a label delete, which removes the label from
-every task carrying it, send no updated event. The event says that the record changed, not what
-changed: fetch the record to see its current state.
-
-A deleted event goes to every active endpoint subscribed to it, whether or not that endpoint
-received an earlier event for the record: an endpoint subscribed to `lead.deleted` alone hears of
-every deleted lead, and an endpoint registered after a record was created, or whose earlier
-deliveries of it were pruned, still gets the deleted event. An erasure sends the same deleted event as a delete, with no reason and no personal
-data: one event per lead or customer the erasure removed, cascades included, and none for a record
-that had already been deleted.
-
-**Settings > Webhooks.** The screen lists the endpoints with their events and active flag, and
-creates, edits, activates, deactivates and deletes them. It is shown to users whose role holds the
-`webhooks.manage` permission (the admin role, unless a custom role is given it). The signing secret
-of a new endpoint is shown once, right after it is created, with a copy button: it is not kept in
-the browser and neither the screen nor the API can show it again, so store it then. Deleting an
-endpoint removes its delivery log with it. The URL rules are checked by the server, and the form
-shows its refusal as is.
-
-**Thin payloads.** The body is exactly
-`{"id":"evt_<32 hex>","type":"lead.created","occurred_at":"2026-11-20T09:30:00.123Z","record_id":42}`:
-no name, address or other personal data. Fetch the record through the API with your own
-credentials; visibility and erasure apply at that moment, so nothing personal leaves after a
-person is erased.
-
-**Delivery.** The event row is written in the same transaction as the record, so a create, an
-update or a delete that rolls back sends nothing. A background sender delivers committed events about every 5 seconds as a
-`POST` with `Content-Type: application/json` and `User-Agent: GopherCRM-Webhooks/1`. Any 2xx answer
-is success. A non-2xx answer, a redirect (never followed), a timeout (10 seconds), a connection
-failure or a refused destination is retried after 1, 2, 4, … minutes (at most 6 hours apart) until
-10 attempts have been made (about 8.5 hours); the event is then marked failed. Delivery is at least
-once. A sender works on several endpoints at a time but sends one endpoint's events one at a time,
-oldest first, so a slow endpoint does not hold up the others. A retry or a second replica can still
-deliver an endpoint's events out of order: deduplicate on `webhook-id` and do not rely on order.
-An endpoint whose sent requests fail 3 times in a row is paused: the sender skips all its events
-for 1 minute, then 2, 4, … up to 1 hour after each further failure, and the first 2xx answer ends
-the pause. The endpoint shows `consecutive_failures` and `paused_until`. Neither a redelivery nor
-a change to the endpoint ends a pause early, and the test ping ignores it.
-
-**Test ping.** `POST /api/v1/webhooks/endpoints/:id/test` sends one signed request to the endpoint
-at once, active or not, and answers with the outcome: `{"event_id":"evt_…","outcome":"succeeded",
-"http_status":200,"error_code":null}`, or `outcome` `failed` with the error code of a delivery
-(`http_status`, `redirect`, `timeout`, `connection_failed`, `destination_refused`) or
-`secret_unavailable`, and `http_status` null when no answer arrived. Its body is
-`{"id":"evt_<32 hex>","type":"webhook.ping","occurred_at":"…"}`, without `record_id`, signed like a
-delivery. It follows the same egress rules, 10-second timeout and no-redirect rule, is never
-retried, and is not written to the delivery log. `webhook.ping` is not an event type an endpoint
-can subscribe to.
-
-**Rotating the signing secret.** `POST /api/v1/webhooks/endpoints/:id/rotate-secret` generates a
-new secret and answers 200 with the endpoint, the new `secret` (shown this once) and
-`previous_secret_expires_at`, 24 hours from now. Until then the replaced secret keeps signing next
-to the new one: every delivery, retry, redelivery and test ping carries two signatures,
-`webhook-signature: v1,<new> v1,<previous>`, so a consumer can switch to the new secret at any
-moment in that window without refusing a request. From `previous_secret_expires_at` on only the
-new signature is sent, and the next delivery clears the replaced secret. A second rotation inside
-the window replaces the previous secret: at most two secrets ever sign. Rotation works on an
-inactive endpoint and never reads the stored secrets, so it also repairs an endpoint whose secret
-became unreadable. It is API-only for now: the Settings screen has no rotate control.
-
-**Verifying the signature** (Standard Webhooks). Each request carries `webhook-id` (the event id),
-`webhook-timestamp` (Unix seconds of this attempt; a retry is re-signed) and `webhook-signature`:
-one `v1,<base64>` value, or two space-separated ones (`v1,<new> v1,<previous>`) during a rotation
-window. Recompute it with your secret and accept the request when any value matches; the example
-below does:
-
-```python
-import base64, hashlib, hmac, time
-
-def verify(secret, headers, body: bytes, tolerance=300):
-    key = base64.b64decode(secret.removeprefix("whsec_"))
-    msg_id, ts = headers["webhook-id"], headers["webhook-timestamp"]
-    if abs(time.time() - int(ts)) > tolerance:      # refuse replays older than 5 minutes
-        return False
-    signed = f"{msg_id}.{ts}.".encode() + body
-    expected = base64.b64encode(hmac.new(key, signed, hashlib.sha256).digest()).decode()
-    return any(hmac.compare_digest(expected, s.split(",", 1)[1])
-               for s in headers["webhook-signature"].split() if s.startswith("v1,"))
-```
-
-**Egress rules.** The URL must be `https`, at most 2048 characters, without credentials, query
-string or fragment. Every connection resolves the host again and refuses private, loopback, CGNAT,
-unique-local, link-local, metadata, multicast and unspecified addresses; proxy variables are
-ignored. The AEO egress allowlists do not apply to webhooks. The secret is stored encrypted with
-`API_KEY_SECRET` (or `JWT_SECRET`). After that secret changes, the sender holds the deliveries of
-every endpoint whose secret it can no longer open: they stay `pending` with their attempts
-unchanged, and go out once the secret can be read again, after a restart with the previous key or
-after the endpoint's secret is rotated. Meanwhile `GET /health` reports `webhooks.state` `paused`
-and one error line per held endpoint is logged.
-
-**Delivery log.** The "Delivery log" tab of Settings > Webhooks lists each event per endpoint,
-newest first, with its event type, record id, status, attempts, last attempt time and last
-response code, and filters by endpoint, status and event type. `GET /api/v1/webhooks/deliveries`
-returns the same rows (status `pending`, `sending`, `succeeded` or `failed`) and adds the error
-code and the next attempt. Finished rows are deleted 30 days after their last change.
-`POST /api/v1/webhooks/deliveries/:id/redeliver` sends a `succeeded` or `failed` delivery again:
-the same row goes back to `pending` with 0 attempts, due at once, and keeps its event id
-(`webhook-id`), so a consumer that deduplicates sees a repeat; a `pending` or `sending` delivery,
-or one whose endpoint is deleted or inactive, is refused with 409. The routes are listed under
-[API Documentation](#webhooks-admin-only-sales-support-and-customer-get-403).
+Integrations no longer need to poll for new records: GopherCRM sends a small signed HTTPS request
+to a registered endpoint when a lead, customer, ticket, deal, task, company or quote is created,
+updated or deleted (twenty-one event types). Endpoints, the test ping, secret rotation and the
+delivery log with redelivery are managed in **Settings > Webhooks** by users holding
+`webhooks.manage`, or through the API. The event table, delivery, retries and pausing, and how a
+receiving system verifies the signature are described in
+[docs/user-guide/permissions-access/webhooks.md](docs/user-guide/permissions-access/webhooks.md).
 
 ## Privacy: deleting a person erases their data
 
@@ -703,8 +579,11 @@ npm run lint
 
 ## API Documentation
 
-All application routes are mounted under `/api/v1` (configurable via `API_PREFIX`). Every endpoint
-returns the unified envelope `{ success, data, error, meta }`.
+All application routes are mounted under `/api/v1` (configurable via `API_PREFIX`), except
+`/health` and the SCIM 2.0 server at `/scim/v2`. Every endpoint under the prefix returns the unified
+envelope `{ success, data, error, meta }`. The SCIM 2.0 server at `/scim/v2/...` is not in the
+swagger spec; see
+[docs/user-guide/permissions-access/scim-provisioning.md](docs/user-guide/permissions-access/scim-provisioning.md).
 
 The complete reference, with every operation's roles, parameters, error codes and schemas, is
 generated into `api/`: open `api/index.html` in a browser (a static page that works offline,
@@ -746,6 +625,10 @@ top-level `status` stays `healthy` and the answer stays 200 either way.
   looked up: a background queue (one worker, up to 100 waiting requests) issues the link and
   mails it, normally within seconds. Changing an account's login email ends the reset links issued
   before the change.
+- `GET /api/v1/auth/oidc/frontchannel-logout` - Single sign-on front-channel sign-out: the identity
+  provider loads it in the browser when the person signs out there, and it logs out the accounts
+  whose single sign-on session it names *(unauthenticated; 200 whether or not a session ended)*. Details in the
+  [API reference](api/index.html).
 - `POST /api/v1/auth/password-reset/confirm` - Redeem a single-use reset token (1 h expiry) and set
   a new password. The token claim, the password update, the lockout reset and the revocation of
   all refresh tokens are one transaction: a failed or rejected confirmation leaves the link
@@ -758,7 +641,10 @@ authentication and live on the moderate tier:
   the optional `{refresh_token}` body) and end every access token issued to the caller before the
   logout, in one transaction: `users.token_version` is incremented, and an older JWT then answers
   `401 Invalid credentials` like an expired one. This holds for Bearer and API-key callers, with or
-  without a body; API keys themselves keep working.
+  without a body; API keys themselves keep working. With single sign-on on, an optional
+  `id_token_hint` (the ID token `POST /auth/oidc/callback` returned) makes the answer also carry
+  `end_session_url`, the provider's sign-out URL, so the browser can end the provider's session
+  too.
 - `POST /api/v1/auth/change-password` - Verify the current password and set a new one (same
   complexity policy) in one transaction with the revocation of the user's refresh tokens; a
   failure before the commit leaves the password and every session unchanged (a failed COMMIT is
@@ -778,6 +664,11 @@ authentication and live on the moderate tier:
 - `PUT /api/v1/users/me` - Update current user profile
 - `GET /api/v1/users/:id` - Get specific user *(self or admin)*
 - `PUT /api/v1/users/:id` - Update user *(self or admin; only admins may change `role` or `is_active`; for a custom role, changing the email of a customer login with a linked customer record also needs `customers.update`)*
+- `POST /api/v1/users/:id/activate` - Activate a user, so the account can sign in again *(needs
+  `users.activate`; the admin system role holds it)*
+- `POST /api/v1/users/:id/deactivate` - Deactivate a user, the reversible alternative to erasure;
+  its tokens and API keys stop working *(needs `users.activate`; not your own account; never the
+  last active admin)*
 - `DELETE /api/v1/users/:id` - **Erase** user *(admin; cannot delete yourself; a customer-role user takes its customer records along; for a custom role, erasing a customer login with a linked customer record also needs `customers.delete`)*
 
 ### Leads *(entire group requires admin or sales)*
@@ -1025,8 +916,10 @@ expired, or if its owner has been deactivated or erased.
 
 ### Dashboard *(entire group requires admin, sales or support)*
 - `GET /api/v1/dashboard/stats` - Aggregate counts (total leads, customers, open tickets, pending tasks, conversion rate)
-- `GET /api/v1/dashboard/leads-by-status` / `tickets-by-priority` / `tasks-by-status` - Grouped
-  counts in a chart-friendly `{labels, datasets}` shape
+- `GET /api/v1/dashboard/leads-by-status` - Lead counts per status in a chart-friendly
+  `{labels, datasets}` shape
+- `GET /api/v1/dashboard/tickets-by-priority` - Ticket counts per priority, same shape
+- `GET /api/v1/dashboard/tasks-by-status` - Task counts per status, same shape
 - `GET /api/v1/dashboard/sales-performance?period=week|month|quarter|year` - Lead conversions over
   time, bucketed per period
 - `GET /api/v1/dashboard/activities` - Recent activity feed synthesized from lead/ticket/task events
@@ -1039,7 +932,7 @@ expired, or if its owner has been deactivated or erased.
   `won_this_month` (count and amounts per currency of the deals won in the current calendar month,
   UTC) *(admin sees all deals, sales its own; support and customer get 403 — no deal access)*
 
-### AEO *(entire group requires admin, sales or support; the profile, prompt and run routes are in the [API reference](api/index.html))*
+### AEO *(entire group requires admin, sales or support; all other AEO routes are in the [API reference](api/index.html))*
 - `GET /api/v1/aeo/export?format=csv|json&run_id=<id>|days=7|30|90` - Download one run's answers
   and citations, or a window's (default 30 days), as a CSV (one row per citation, no answer text)
   or JSON (runs, answers with their text and citations) attachment; at most 10,000 answers, a
@@ -1084,8 +977,9 @@ expired, or if its owner has been deactivated or erased.
 - `PUT /api/v1/automation/rules/:id` - Replace a rule *(one transaction: version + 1, steps replaced,
   the rule's pending, waiting and running runs cancelled with `rule_changed`; the same 400 answers
   and `error.details.fields` as the create)*
-- `POST /api/v1/automation/rules/:id/enable` / `disable` - Switch a rule *(disabling cancels its
-  active runs with `rule_disabled`)*
+- `POST /api/v1/automation/rules/:id/enable` - Switch a rule on
+- `POST /api/v1/automation/rules/:id/disable` - Switch a rule off *(cancels its active runs with
+  `rule_disabled`)*
 - `DELETE /api/v1/automation/rules/:id` - Soft-delete a rule *(its active runs are cancelled with
   `rule_deleted`; runs and their logs stay)*
 - `POST /api/v1/automation/rules/:id/dry-run` - Simulate the rule `{entity_type, entity_id}` and get a
@@ -1132,10 +1026,59 @@ expired, or if its owner has been deactivated or erased.
   the new `secret`, shown only here, and `previous_secret_expires_at` (now + 24 h), until which
   every request is signed under both secrets (`v1,<new> v1,<previous>`)
 - `GET /api/v1/webhooks/deliveries` - The delivery log, newest first, filtered by `endpoint_id`,
-  `status` and `event_type`; see [Integrations: webhooks](#integrations-webhooks)
+  `status` and `event_type`; see the
+  [webhooks guide](docs/user-guide/permissions-access/webhooks.md#delivery-log)
 - `POST /api/v1/webhooks/deliveries/:id/redeliver` - Queue a `succeeded` or `failed` delivery
   again (same row and event id, 0 attempts, due at once); 409 for a `pending` or `sending` delivery
   or a deleted or inactive endpoint
+
+### Roles and permissions *(details in the [API reference](api/index.html))*
+- `GET /api/v1/permissions/catalogue` - The permission tree a role can hold *(needs `roles.view` or
+  `users.assign_role`)*
+- `GET|POST /api/v1/roles` - List roles, system and custom, with their permissions and user count
+  *(`roles.view` or `users.assign_role`)*; create a custom role *(`roles.manage`)*
+- `GET|PUT|DELETE /api/v1/roles/:id` - Read a role *(`roles.view` or `users.assign_role`)*; rename
+  a custom role or replace its permissions, or delete one no live user holds *(`roles.manage`;
+  system roles are fixed)*
+- `POST /api/v1/roles/:id/clone` - Copy a role's permissions into a new custom role
+  *(`roles.manage`)*
+- `GET /api/v1/roles/audit` - The append-only role audit log *(`roles.audit_view`)*
+
+### Single sign-on and SCIM settings *(admin only: `settings.sso_manage` and `settings.scim_manage` belong to the admin system role; details in the [API reference](api/index.html))*
+- `GET|PUT /api/v1/settings/sso` - Read or replace the OpenID Connect settings; the client secret
+  and the client certificate are never returned
+- `GET|POST /api/v1/settings/scim/tokens` - List the SCIM provider tokens, or create one (shown
+  once, in that answer)
+- `DELETE /api/v1/settings/scim/tokens/:id` - Revoke a SCIM provider token (the row is kept)
+
+### Audit *(details in the [API reference](api/index.html))*
+- `GET /api/v1/audit/sign-ins` - The sign-in audit log, newest first *(`audit.sign_ins_view`; among
+  the system roles, admin only)*
+
+### Forms *(read: admin, sales, support; write: admin, sales; delete: admin; details in the [API reference](api/index.html))*
+- `GET|POST /api/v1/forms` - List forms with their submission counts; create a form *(admin,
+  sales)*
+- `GET|PUT|DELETE /api/v1/forms/:id` - Read a form; replace it *(admin, sales)*; soft-delete it
+  *(admin)*
+- `GET /api/v1/forms/:id/submissions` - The submissions of one form, spam included, newest first
+- `GET /api/v1/forms/submissions/:id` - One submission
+- `POST /api/v1/forms/deliveries/:id/retry` - Send a failed or stuck form mail again *(admin,
+  sales)*
+
+Public, unauthenticated routes, used by the embed script and the confirmation mail:
+
+- `GET /api/v1/forms/public/:key` - The definition of a published form
+- `GET /api/v1/forms/public/:key/view` - A hosted HTML page that shows the form
+- `POST /api/v1/forms/public/:key/submissions` - Submit a form
+- `GET /api/v1/forms/public/confirm` - The double opt-in confirmation page (never spends the token)
+- `POST /api/v1/forms/public/confirm` - Confirm a double opt-in submission
+- `GET /api/v1/forms/public/embed.js` - The embed script
+
+### Labels *(details in the [API reference](api/index.html))*
+- `GET|POST /api/v1/labels` - List every label *(every system role)*; create one *(admin, sales,
+  support)*
+- `PUT|DELETE /api/v1/labels/:id` - Rename or recolour a label *(admin, sales, support)*; delete
+  it and detach it from its tasks *(admin)*
 
 ### Bulk operations
 
@@ -1160,7 +1103,18 @@ gophercrm/
 │   ├── create-admin/            # CLI that provisions an admin account
 │   └── migrate/                 # Migration runner
 ├── internal/
+│   ├── aeo/                     # Answer engine providers, run engine and scheduler
 │   ├── config/                  # Environment configuration
+│   ├── database/                # The one place a database connection is opened
+│   ├── egress/                  # Outbound-request guard for AEO providers and webhooks
+│   ├── forms/                   # Form time-trap challenge and captcha verifier
+│   ├── idkit/                   # OpenID Connect sign-in, claim-to-role mapping and SCIM
+│   ├── integration/             # Permission and visibility integration tests
+│   ├── lifecycle/               # Start/stop types shared by the background runtimes
+│   ├── mailer/                  # Transactional mail (SMTP or log-only)
+│   ├── permissions/             # Permission catalogue and system-role matrices
+│   ├── testsupport/             # Test database helpers (SQLite, TEST_MYSQL_DSN)
+│   ├── webhook/                 # Webhook event catalogue and outbox emitter
 │   ├── models/                  # Domain models and database schemas
 │   ├── repository/              # Data access layer (incl. erasure.go, erasure_cascade.go)
 │   ├── service/                 # Business logic layer
@@ -1223,15 +1177,28 @@ gophercrm/
 
 | Document | Contents |
 |---|---|
-| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Developer guide: commands, architecture layers, key patterns, configuration, deletion semantics |
+| [docs/FORKING.md](docs/FORKING.md) | Running your own copy: first run, rebranding, configuration, deployment, CI and staying in sync with upstream |
 | [docs/SETUP.md](docs/SETUP.md) | Backend and frontend setup walkthrough |
+| [docs/DOCKER.md](docs/DOCKER.md) | Running with Docker Compose (MySQL or SQLite), backups and SQLite upgrade notes, the production override example and the image's quote PDF browser |
+| [docs/SERVER_PROVISIONING.md](docs/SERVER_PROVISIONING.md) | Preparing a fresh systemd server (MySQL or MariaDB) for the release-tarball deploy path, quote PDF setup, and the [Reverse proxy and TLS](docs/SERVER_PROVISIONING.md#reverse-proxy-and-tls) sites for nginx or Apache 2.4 |
+| [docs/USE_CASES.md](docs/USE_CASES.md) | Worked recipes for concrete deployments, with their gaps |
+| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Developer guide: commands, architecture layers, key patterns, configuration, deletion semantics |
+| [docs/EXTENDING.md](docs/EXTENDING.md) | Adding or removing entities, routes, migrations and modules |
+| [docs/CONCURRENCY.md](docs/CONCURRENCY.md) | Lock order and retry rule for multi-table writes |
 | [docs/FEATURES.md](docs/FEATURES.md) | Feature and test-coverage matrix with known issues |
 | [docs/datamodel.md](docs/datamodel.md) | Entity model and relationships |
 | [docs/AUTHORIZATION.md](docs/AUTHORIZATION.md) | Permission catalogue, system-role matrix, custom roles, role-change rules and the phase 2 sign-in design note |
-| [docs/user-guide/permissions-access/overview.md](docs/user-guide/permissions-access/overview.md) | Administrator guide: roles and permissions, single sign-on, a Microsoft Entra ID walk-through and an FAQ |
-| [docs/ADMIN_TESTING.md](docs/ADMIN_TESTING.md) | Admin E2E page objects and fixtures |
+| [docs/user-guide/permissions-access/overview.md](docs/user-guide/permissions-access/overview.md) | Administrator guide: roles and permissions, single sign-on, a Microsoft Entra ID walk-through, API keys, the sign-in audit, webhooks and an FAQ |
+| [docs/AEO_SECURITY.md](docs/AEO_SECURITY.md) | AEO provider egress policy, operator migration steps and failure diagnostics |
+| [api/index.html](api/index.html) | Offline API reference, generated from the OpenAPI spec [api/swagger.yaml](api/swagger.yaml) |
+| [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md) | Screenshot catalog of every user-facing screen |
+| [docs/testing/README.md](docs/testing/README.md) | Test-case catalog: end-to-end cases per feature, automated, planned and blocked |
+| [gocrm-ui/e2e/README.md](gocrm-ui/e2e/README.md) | End-to-end suite: make e2e, running by hand, the seeded admin account, spec coverage and conventions |
+| [docs/VALIDATION_RELEASE.md](docs/VALIDATION_RELEASE.md) | Contextual validation profiles, the release workflow and deploys |
+| [docs/DOCUMENTATION_WORKFLOW.md](docs/DOCUMENTATION_WORKFLOW.md) | How documentation is assessed and updated with each pull request |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Ideas that are not implemented yet |
 | [CHANGELOG.md](CHANGELOG.md) | Notable changes |
+| [Releases](https://github.com/florinel-chis/GopherCRM/releases) | Published releases and their artifacts |
 
 ## Known Limitations
 
@@ -1261,13 +1228,10 @@ gophercrm/
   automation email step is logged as `succeeded`, although nothing was delivered. Form mail and
   ticket comment mail (`email_customer`) are the exception: each delivery is recorded `log_only`,
   not `sent`. Fine for development, useless in production.
-- **Quote PDF output needs a browser on the server.** The PDF of a quote (download and email
-  attachment) is printed by a headless browser named by `QUOTE_PDF_CHROME_PATH`
-  (`chrome-headless-shell`, or a full Chrome or Chromium).
-  Without it, and in the two development Compose stacks, PDF output is off: the quote email is
-  text only and the download answers 503 `PDF_UNAVAILABLE`. The Docker image ships
-  `chrome-headless-shell` and a font; a full Chrome or Chromium is accepted as well. The limits
-  of the renderer are listed in `docs/ROADMAP.md`.
+- **Quote PDF output needs a browser on the server.** Without a headless browser named by
+  `QUOTE_PDF_CHROME_PATH`, and in the two development Compose stacks, PDF output is off and quote
+  emails are text only; setup is in
+  [docs/SERVER_PROVISIONING.md](docs/SERVER_PROVISIONING.md#quote-pdf-output).
 - **Form mail is retried by hand only.** Every form mail (confirmation, follow-up, one notification
   per address) is recorded and shown on the submission and in `GET /api/v1/forms/deliveries`;
   admin and sales retry a failed, log-only or stuck one with

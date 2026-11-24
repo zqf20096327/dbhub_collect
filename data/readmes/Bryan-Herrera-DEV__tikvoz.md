@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🔊 TikVoz
+# TikVoz
 
 **Lee en voz alta el chat de tu live de TikTok y Kick, al mismo tiempo. Gratis, local y casi sin retraso.**
 
@@ -11,8 +11,8 @@ Un solo `.exe` de ~7 MB · Interfaz nativa (sin Electron ni navegador) · Voces 
 ![Plataforma](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 ![Licencia](https://img.shields.io/badge/licencia-MIT-green)
 ![Precio](https://img.shields.io/badge/precio-gratis-brightgreen)
-![TikTok](https://img.shields.io/badge/TikTok%20LIVE-✔-fe2c55)
-![Kick](https://img.shields.io/badge/Kick-✔-53fc18)
+![TikTok](https://img.shields.io/badge/TikTok%20LIVE-soportado-fe2c55)
+![Kick](https://img.shields.io/badge/Kick-soportado-53fc18)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/captura-oscuro.png">
@@ -31,13 +31,14 @@ Un solo `.exe` de ~7 MB · Interfaz nativa (sin Electron ni navegador) · Voces 
 - [Instalación](#instalación)
 - [Uso rápido](#uso-rápido)
 - [Funciones](#funciones)
-- [Anti-groserías avanzado](#-anti-groserías-avanzado)
+- [Anti-groserías avanzado](#anti-groserías-avanzado)
 - [Cómo funciona por dentro](#cómo-funciona-por-dentro)
 - [Configuración completa](#configuración-completa)
 - [Rendimiento](#rendimiento)
 - [Compilar desde el código](#compilar-desde-el-código)
 - [Preguntas frecuentes](#preguntas-frecuentes)
 - [Hoja de ruta](#hoja-de-ruta)
+- [Contribuir](#contribuir)
 
 ## ¿Por qué TikVoz?
 
@@ -49,10 +50,10 @@ La mayoría de los lectores de chat para lives son webs, apps Electron de ciento
 | Voz | Local, offline, sin límite | Muchas veces en la nube y con cuota |
 | Latencia de la voz | **~140 ms** | 0,5–2 s (ida y vuelta a la nube) |
 | RAM | **~85–105 MB** | 250–600 MB (Electron o navegador) |
-| TikTok y Kick en la misma cola de voz | ✅ | Una plataforma por app |
-| Filtro de groserías que resiste `p1to`, `pi to`, `4buso` | ✅ | Lista simple de palabras |
-| Voz por usuario, VIP, prioridad, diccionario | ✅ | 💰 normalmente de pago |
-| Código abierto | ✅ | ❌ |
+| TikTok y Kick en la misma cola de voz | Sí | Una plataforma por app |
+| Filtro de groserías que resiste `p1to`, `pi to`, `4buso` | Sí | Lista simple de palabras |
+| Voz por usuario, VIP, prioridad, diccionario | Sí | Normalmente de pago |
+| Código abierto | Sí | No |
 
 ## Instalación
 
@@ -89,7 +90,7 @@ gh attestation verify tikvoz-v1.0.0-windows-x64.exe --repo <dueño>/<repo>
 
 1. Escribe tu `@usuario` de **TikTok** y/o tu canal de **Kick** y pulsa **▶ Conectar** en cada uno. Puedes usar los dos a la vez: los mensajes entran a una sola cola y en el feed se distinguen por color.
 2. Elige la voz, la velocidad y el volumen. Pulsa **Probar** para escucharla.
-3. ¿No estás en vivo? Pulsa **🎭 Demo** para simular un live (TikTok + Kick) y ajustar todo con calma.
+3. ¿No estás en vivo? Pulsa **Demo** para simular un live (TikTok + Kick) y ajustar todo con calma.
 
 Accesos directos útiles:
 
@@ -102,7 +103,7 @@ tikvoz.exe --config D:\TikVoz          # modo portable: guarda los ajustes en es
 
 ## Funciones
 
-### 🗣️ Qué se lee
+### Qué se lee
 
 - **TikTok:** comentarios, regalos, nuevos seguidores, compartidos y bienvenidas.
 - **Kick:** comentarios (los emotes `[emote:…]` se quitan antes de leer), suscripciones, suscripciones regaladas y Kicks.
@@ -111,55 +112,55 @@ tikvoz.exe --config D:\TikVoz          # modo portable: guarda los ajustes en es
 - **Mínimo de diamantes:** ignora los regalos baratos si quieres.
 - **Bienvenidas inteligentes:** solo se leen cuando la cola está vacía, para no tapar los comentarios.
 
-### ⭐ Audiencia y prioridad
+### Audiencia y prioridad
 
 - **Voz distinta por usuario:** cada `@usuario` suena siempre con la misma voz, para que se distinga quién habla.
-- **Usuarios VIP:** siempre se leen, se saltan los límites y se adelantan en la cola. Se agregan con un clic en ⭐ desde el feed.
-- **Moderadores con prioridad** (🛡 en el feed).
+- **Usuarios VIP:** siempre se leen, se saltan los límites y se adelantan en la cola. Se agregan con un clic desde el feed.
+- **Moderadores con prioridad**, marcados en el feed.
 - **Solo seguidores** (TikTok): lee únicamente a quienes te siguen.
 - **Enfriamiento por usuario:** evita que una sola persona acapare la voz.
 - **Regalos y seguidores se adelantan** a los comentarios normales.
 
-### 🧹 Filtros y limpieza
+### Filtros y limpieza
 
 - Quita emojis y símbolos que la voz deletrearía.
 - Reemplaza los links por "enlace".
 - Acorta `jajajajajaja` a `jajaja` y `holaaaaa` a `holaaa`.
 - Corta los mensajes largos sin partir palabras.
 - **Anti-spam:** no repite el mismo mensaje del mismo usuario dentro de una ventana configurable.
-- **Usuarios silenciados** (🚫 desde el feed).
+- **Usuarios silenciados** con un clic desde el feed.
 - **Modo prefijo:** solo lee los comentarios que empiezan con, por ejemplo, `!v`.
 - **Diccionario de pronunciación** editable: `xd → equis de`, `tqm → te quiero mucho`, `pq → porque`…
 
-### 🎛️ Control y app
+### Control y aplicación
 
-- Pausar, saltar, vaciar la cola, y 🔊 para releer cualquier mensaje del feed.
+- Pausar, saltar, vaciar la cola y volver a leer cualquier mensaje del feed.
 - **Cola con tope:** si el chat va más rápido que la voz, se descartan los mensajes *más viejos*, así nunca vas minutos atrasado.
-- **Tema claro, oscuro o del sistema** (☀ 🌙 💻).
+- **Tema claro, oscuro o del sistema.**
 - **Monitor de consumo** de CPU, RAM, GPU y VRAM del propio programa, en la esquina inferior izquierda.
 - **Reconexión automática** con backoff exponencial y espera si el live termina.
 - Los ajustes se guardan solos en `%APPDATA%\TikVoz`.
 
-## 🤬 Anti-groserías avanzado
+## Anti-groserías avanzado
 
 Las listas de palabras prohibidas típicas se saltan con trucos triviales. TikVoz normaliza cada mensaje antes de compararlo, igual en **TikTok y Kick**:
 
 | La gente escribe | Truco | TikVoz lo detecta |
 |---|---|:---:|
-| `pi to`, `p.i.t.o`, `p-u-t-o`, `a.buso` | separadores | ✅ |
-| `p1to`, `4buso`, `P!T0`, `v3rg4`, `@bus0` | leetspeak | ✅ |
-| `piiiiito`, `PUTOOOO` | letras repetidas | ✅ |
-| `𝓹𝓲𝓽𝓸`, `ｐｉｔｏ`, `ⓟⓘⓣⓞ` | letras "fancy" | ✅ |
-| `рito` (con **р** cirílica) | homoglifos | ✅ |
-| `pu​to` (con espacio invisible) | caracteres de ancho cero | ✅ |
-| `p*ta` | comodín | ✅ |
-| `berga`, `kabron`, `xingada` | escritura fonética | ✅ |
-| `pútö` | acentos | ✅ |
-| `ᴘɪᴛᴏ`, `🇵🇮🇹🇴`, `🅿🅸🆃🅾` | versalitas, letras de bandera y en recuadro | ✅ |
-| `‮otip` (con `U+202E`), `oʇᴉd` | texto que se **muestra** al revés o de cabeza | ✅ |
-| `puㅤto` (relleno Hangul) | rellenos invisibles | ✅ |
-| `ptm`, `ctm`, `alv`, `mrd` | abreviaturas sin vocales | ✅ |
-| `hijo de puta`, `te voy a matar` | frases | ✅ |
+| `pi to`, `p.i.t.o`, `p-u-t-o`, `a.buso` | separadores | Sí |
+| `p1to`, `4buso`, `P!T0`, `v3rg4`, `@bus0` | leetspeak | Sí |
+| `piiiiito`, `PUTOOOO` | letras repetidas | Sí |
+| `𝓹𝓲𝓽𝓸`, `ｐｉｔｏ`, `ⓟⓘⓣⓞ` | letras "fancy" | Sí |
+| `рito` (con **р** cirílica) | homoglifos | Sí |
+| `pu​to` (con espacio invisible) | caracteres de ancho cero | Sí |
+| `p*ta` | comodín | Sí |
+| `berga`, `kabron`, `xingada` | escritura fonética | Sí |
+| `pútö` | acentos | Sí |
+| `ᴘɪᴛᴏ`, `🇵🇮🇹🇴`, `🅿🅸🆃🅾` | versalitas, letras de bandera y en recuadro | Sí |
+| `‮otip` (con `U+202E`), `oʇᴉd` | texto que se **muestra** al revés o de cabeza | Sí |
+| `puㅤto` (relleno Hangul) | rellenos invisibles | Sí |
+| `ptm`, `ctm`, `alv`, `mrd` | abreviaturas sin vocales | Sí |
+| `hijo de puta`, `te voy a matar` | frases | Sí |
 
 Y **no** se equivoca con palabras normales: `computo`, `disputa`, `repito`, `papi tomo`, `pitón`, `pera`, `nacional`, `rapero`, `la vergüenza`, `Álvaro`, `carbón`… pasan limpias. Hay decenas de casos de cada tipo cubiertos por tests.
 
@@ -178,14 +179,14 @@ Lo que **no** se hace a propósito: detectar letras desordenadas (`ptio`). En es
 
 ```mermaid
 flowchart LR
-    A["eres un pi to 😂"] --> B["Unicode<br/>NFKC · sin acentos ·<br/>sin invisibles"]
+    A["eres un pi to jaja"] --> B["Unicode<br/>NFKC · sin acentos ·<br/>sin invisibles"]
     B --> C["Homoglifos<br/>р→p · а→a"]
     C --> D["Leetspeak<br/>1→i · 4→a · @→a · 0→o"]
     D --> E["Fonética<br/>v→b · z→s · c/q→k · ch→ç"]
     E --> F["Rachas<br/>piiito → pi×3 to"]
     F --> G{"¿Coincide alineado<br/>a fragmentos?<br/>pi|to = pito"}
-    G -- sí --> H["🤬 grosería"]
-    G -- no --> I["✔ limpio"]
+    G -- sí --> H["Grosería"]
+    G -- no --> I["Limpio"]
     H --> J{"¿Censurar?"}
     J -- sí --> K["eres un piip"]
     J -- no --> L["Omitido"]
@@ -201,7 +202,7 @@ Qué puedes hacer con una grosería detectada:
 - **Categorías** que se activan y desactivan por separado: insultos, vulgar, sexual, odio, violencia, abreviaturas e inglés.
 - **Excepciones** para palabras que en tu comunidad no son ofensivas.
 - Editar la lista: una palabra por línea o separadas por coma. `[categoría]` agrupa; `palabra*` detecta lo que empieza así (`pendej*` → pendejo, pendejada…), `*palabra` lo que termina así y `*palabra*` lo que la contiene.
-- **Probar el filtro** escribiendo cualquier texto en la caja de prueba de la sección **⚠ Groserías**.
+- **Probar el filtro** escribiendo cualquier texto en la caja de prueba de la sección **Groserías**.
 
 ## Cómo funciona por dentro
 
@@ -211,26 +212,26 @@ Hilos independientes que solo se comunican por mensajes, sin locks compartidos e
 
 ```mermaid
 flowchart LR
-    subgraph UI["🖥️ Hilo UI · egui"]
+    subgraph UI["Hilo UI · egui"]
         APP["app.rs<br/>feed · ajustes · reglas"]
         FIL["filter.rs<br/>limpieza · diccionario"]
         PROF["profanity.rs<br/>anti-groserías"]
         MON["monitor.rs<br/>CPU · RAM · GPU"]
     end
 
-    subgraph NET["🌐 Hilo tiktok · tokio"]
+    subgraph NET["Hilo tiktok · tokio"]
         API["api.rs<br/>room id + firma"]
         SES["session.rs<br/>protobuf · heartbeat · ack"]
     end
 
-    subgraph KNET["🟩 Hilo kick · tokio"]
+    subgraph KNET["Hilo kick · tokio"]
         KAPI["mod.rs<br/>canal + token invitado"]
         KSES["session.rs<br/>Centrifugo · ping · refresh"]
     end
 
     DEMO["demo.rs<br/>live simulado"]
 
-    subgraph VOZ["🔊 Hilo voz"]
+    subgraph VOZ["Hilo voz"]
         Q["Cola acotada<br/>prioridad + normal"]
         TTS["WinRT SpeechSynthesizer"]
     end
@@ -245,7 +246,7 @@ flowchart LR
     DEMO -. "LiveEvent" .-> APP
     APP --> PROF
     APP --> FIL
-    APP -- "Utterance" --> Q --> TTS --> SPK(("🔈"))
+    APP -- "Utterance" --> Q --> TTS --> SPK(("Altavoz"))
 ```
 
 ### Conexión a un live de TikTok
@@ -322,7 +323,7 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    C["💬 Comentario recibido"] --> H{"¿Es historial<br/>(antes de conectar)?"}
+    C["Comentario recibido"] --> H{"¿Es historial<br/>(antes de conectar)?"}
     H -- sí --> F1["Se muestra, no se lee"]
     H -- no --> G{"¿Grosería?"}
     G -- "sí, omitir" --> XG["Omitido + falta"]
@@ -342,9 +343,9 @@ flowchart TD
     Q --> PR{"¿Prioritario?"}
     PR -- sí --> QP["Cola de prioridad"]
     PR -- no --> QN["Cola normal"]
-    QP --> T["🔊 Voz"]
+    QP --> T["Voz"]
     QN --> T
-    QN -. "si se llena, se descartan<br/>los más viejos" .-> D["🗑"]
+    QN -. "si se llena, se descartan<br/>los más viejos" .-> D["Descartado"]
 ```
 
 ### Por qué es tan liviano
@@ -359,7 +360,7 @@ flowchart TD
 ## Configuración completa
 
 <details>
-<summary><b>🔊 Voz</b></summary>
+<summary><b>Voz</b></summary>
 
 | Ajuste | Qué hace | Defecto |
 |---|---|---|
@@ -370,57 +371,57 @@ flowchart TD
 </details>
 
 <details>
-<summary><b>💬 Qué leer</b></summary>
+<summary><b>Qué leer</b></summary>
 
 | Ajuste | Variables | Defecto |
 |---|---|---|
-| Comentarios (TikTok y Kick) | `{usuario}` `{mensaje}` | ✅ `{usuario} dice: {mensaje}` |
-| Regalos (TikTok) y Kicks (Kick) | `{usuario}` `{cantidad}` `{regalo}` | ✅ `{usuario} envió {cantidad} {regalo}` |
+| Comentarios (TikTok y Kick) | `{usuario}` `{mensaje}` | Sí, `{usuario} dice: {mensaje}` |
+| Regalos (TikTok) y Kicks (Kick) | `{usuario}` `{cantidad}` `{regalo}` | Sí, `{usuario} envió {cantidad} {regalo}` |
 | Mínimo de diamantes | | 1 |
-| Suscripciones (Kick) | `{usuario}` `{cantidad}` = meses | ✅ `{usuario} se suscribió` |
-| Suscripciones regaladas (Kick) | `{usuario}` `{cantidad}` | ✅ `{usuario} regaló {cantidad} suscripciones` |
-| Nuevos seguidores (TikTok) | `{usuario}` | ❌ |
-| Compartidos (TikTok) | `{usuario}` | ❌ |
-| Bienvenidas (solo con la cola vacía) | `{usuario}` | ❌ `Bienvenido {usuario}` |
+| Suscripciones (Kick) | `{usuario}` `{cantidad}` = meses | Sí, `{usuario} se suscribió` |
+| Suscripciones regaladas (Kick) | `{usuario}` `{cantidad}` | Sí, `{usuario} regaló {cantidad} suscripciones` |
+| Nuevos seguidores (TikTok) | `{usuario}` | No |
+| Compartidos (TikTok) | `{usuario}` | No |
+| Bienvenidas (solo con la cola vacía) | `{usuario}` | No, `Bienvenido {usuario}` |
 
 </details>
 
 <details>
-<summary><b>⭐ Audiencia y prioridad</b></summary>
+<summary><b>Audiencia y prioridad</b></summary>
 
 | Ajuste | Defecto |
 |---|---|
-| Voz distinta por usuario (entre las voces del mismo idioma) | ❌ |
-| Regalos, subs y seguidores se adelantan en la cola | ✅ |
-| Moderadores con prioridad y sin límites | ✅ |
-| Leer solo a quienes te siguen (TikTok) | ❌ |
+| Voz distinta por usuario (entre las voces del mismo idioma) | No |
+| Regalos, subs y seguidores se adelantan en la cola | Sí |
+| Moderadores con prioridad y sin límites | Sí |
+| Leer solo a quienes te siguen (TikTok) | No |
 | Enfriamiento por usuario (segundos, 0 = sin límite) | 0 |
 | Usuarios VIP | — |
 
 </details>
 
 <details>
-<summary><b>⚠ Groserías</b></summary>
+<summary><b>Groserías</b></summary>
 
 | Ajuste | Defecto |
 |---|---|
 | Lista (`[categoría]`, `palabra*`, `*palabra`, `*palabra*`, frases) | ~90 entradas en 7 categorías (español + inglés) |
 | Categorías activas | todas |
 | Excepciones | — |
-| Leer con "piip" en vez de omitir | ❌ (se omite) |
-| Si el nombre es una grosería, decir "alguien" | ✅ |
+| Leer con "piip" en vez de omitir | No (se omite) |
+| Si el nombre es una grosería, decir "alguien" | Sí |
 | Silenciar al usuario tras N groserías (0 = nunca) | 3 |
 
 </details>
 
 <details>
-<summary><b>🚫 Filtros</b></summary>
+<summary><b>Filtros</b></summary>
 
 | Ajuste | Defecto |
 |---|---|
-| No repetir el mismo mensaje del mismo usuario (ventana en segundos) | ✅ 60 s |
-| Reemplazar links por "enlace" | ✅ |
-| Ignorar comandos `!algo` | ✅ |
+| No repetir el mismo mensaje del mismo usuario (ventana en segundos) | Sí, 60 s |
+| Reemplazar links por "enlace" | Sí |
+| Ignorar comandos `!algo` | Sí |
 | Solo leer si empieza con… | (vacío = todos) |
 | Máx. caracteres / mín. letras | 200 / 1 |
 | Usuarios silenciados | — |
@@ -429,13 +430,13 @@ flowchart TD
 </details>
 
 <details>
-<summary><b>⚙ Avanzado</b></summary>
+<summary><b>Avanzado</b></summary>
 
 | Ajuste | Defecto |
 |---|---|
 | Máx. en cola (se descartan los más viejos) | 15 |
-| Conectar TikTok y Kick al abrir la app | ❌ |
-| Mostrar consumo (CPU, RAM, GPU) | ✅ |
+| Conectar TikTok y Kick al abrir la app | No |
+| Mostrar consumo (CPU, RAM, GPU) | Sí |
 | API key de Euler Stream (opcional, sube el límite de conexiones) | — |
 
 </details>
@@ -452,6 +453,17 @@ Medido con el binario de release en Windows 11, con un live real y en modo demo:
 | Latencia de la voz | ~140 ms la primera frase, ~10 ms entre frases |
 | Costo del monitor de consumo | ~1,6 ms por segundo + ~6 MB (contadores de Windows) |
 
+Tiempos de CPU por operación (mediana de [Criterion](https://github.com/bheisler/criterion.rs), `cargo bench`):
+
+| Operación | Tiempo |
+|---|---:|
+| Revisar un comentario contra el filtro de groserías | ~3,5 µs |
+| Limpiar un comentario (links, emojis, repeticiones, diccionario) | ~3,6 µs |
+| Parsear un mensaje de Kick | ~6 µs |
+| Descomprimir y decodificar un lote de 20 comentarios de TikTok | ~18 µs |
+
+Todo lo que se hace con un mensaje antes de leerlo cuesta menos de 0,03 ms, miles de veces menos que la latencia de la voz. Cada pull request se compara contra la rama base en la misma máquina, y el check falla si empeora el rendimiento o el tamaño del `.exe` (ver [CONTRIBUTING](CONTRIBUTING.md#benchmarks-y-rendimiento)).
+
 > [!TIP]
 > La mayor parte de la RAM es el driver de OpenGL, la base de cualquier interfaz acelerada por GPU. Si apagas el monitor en **Avanzado**, su hilo deja de medir.
 
@@ -464,6 +476,7 @@ git clone <url-de-este-repo>
 cd tikvoz
 cargo build --release      # → target/release/tikvoz.exe
 cargo test                 # pruebas unitarias
+cargo bench                # benchmarks (ver CONTRIBUTING)
 pwsh scripts/package.ps1   # → dist/: .exe, .zip, SHA256SUMS.txt y notas (lo mismo que publica CI)
 ```
 
@@ -494,6 +507,7 @@ src/
 ├── profanity.rs     detector de groserías resistente a ofuscación (con tests)
 ├── speech.rs        hilo de voz y cola con prioridad
 ├── monitor.rs       CPU/RAM/GPU del proceso (API nativa de Windows)
+├── lib.rs           biblioteca (la usan main.rs y los benchmarks)
 ├── tiktok/
 │   ├── mod.rs       supervisor con reconexión
 │   ├── api.rs       room id + servidor de firmas
@@ -532,6 +546,15 @@ No. Son integraciones no oficiales con TikTok LIVE y con el chat de Kick. Si alg
 - [ ] Overlay para OBS con el mensaje que se está leyendo.
 - [ ] Más plataformas: YouTube Live y Twitch.
 - [ ] Builds para Linux y macOS.
+
+## Contribuir
+
+Las contribuciones son bienvenidas: reportes de errores, ideas, palabras para el filtro, nuevas plataformas o mejoras de la documentación.
+
+- [Guía de contribución](CONTRIBUTING.md): entorno, estilo, commits y cómo enviar un pull request.
+- [Código de conducta](CODE_OF_CONDUCT.md).
+- [Política de seguridad](SECURITY.md): las vulnerabilidades se reportan en privado, no en issues.
+- [Abrir un issue](../../issues/new/choose): hay plantillas para errores, funciones, plataformas nuevas y el filtro de groserías.
 
 ## Licencia
 

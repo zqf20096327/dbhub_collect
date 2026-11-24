@@ -3,97 +3,146 @@
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-REST%20v1%20%2B%20WS-009688.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-19%20%2B%20TypeScript-61DAFB.svg)](https://react.dev/)
-[![Database](https://img.shields.io/badge/Database-TiDB%20Cloud%20%2F%20MySQL%208-00758F.svg)](https://www.pingcap.com/tidb-cloud/)
-[![Version](https://img.shields.io/badge/Changelog-v2.1.0-blue.svg)](CHANGELOG.md)
+[![Database](https://img.shields.io/badge/Database-TiDB%20Cloud%20%2F%20MySQL%208%20(13%20tables)-00758F.svg)](https://www.pingcap.com/tidb-cloud/)
+[![Version](https://img.shields.io/badge/Changelog-v2.2.0-blue.svg)](docs/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## 1. Giới thiệu
 
-Hệ thống quản lý bãi đỗ xe thông minh (**Smart Parking PTIT**) phát triển trên kiến trúc Full-Stack hiện đại: **FastAPI (`/api/v1`) + WebSocket thời gian thực**, giao diện **React 19 + TypeScript + Tailwind CSS v4**, và cơ sở dữ liệu quan hệ **`dbptit`** (16 bảng trên TiDB Cloud / MySQL 8 với migration có phiên bản và khóa giao dịch đồng thời `SELECT ... FOR UPDATE`).
+**Smart Parking PTIT** là hệ thống quản lý bãi đỗ xe thông minh phục vụ học phần **Cơ sở dữ liệu (PTIT)**, phát triển trên kiến trúc Full-Stack gồm **FastAPI (`/api/v1`) + WebSocket `/ws/live`**, giao diện **React 19 + TypeScript + Tailwind CSS v4**, và cơ sở dữ liệu quan hệ **`dbptit`** gồm đúng **13 bảng chuẩn ERD** trên TiDB Cloud / MySQL 8.
 
-Phiên bản **v2.1.0** tách rõ tầng nghiệp vụ domain, bổ sung xác thực RBAC (`ADMIN` / `ACCOUNTANT` / `OPERATOR`) kèm refresh token rotation, đổi mật khẩu trực tiếp trên giao diện, đối soát ca trực thu ngân, nhật ký kiểm toán nguyên tử, mã thanh toán VietQR chuẩn EMVCo/NAPAS, in phiếu nhiệt 80mm, kiểm thử tự động đa tầng (`pytest` + `vitest`) và GitHub Actions CI.
+Phiên bản **v2.2.0** tinh gọn toàn bộ mô hình vận hành dành cho **một người quản lý duy nhất** trên máy trạm hoặc mạng LAN nội bộ: bỏ lớp đăng nhập, phân quyền và bảng ca làm việc thừa để vào thẳng bàn điều hành, đồng thời giữ nguyên cơ chế **ghi nhận nhân viên thực hiện (`nhanvien.id`)** trên từng thao tác tại cổng (tự động chọn sẵn *Bảo vệ* phụ trách bãi khi check-in, *Thu ngân* phụ trách bãi khi check-out / đăng ký / gia hạn vé tháng, kèm tùy chọn đổi tay khi cần) và bổ sung bộ khởi chạy **1-click `Mo_SmartParking.bat`** cho Windows.
 
-## 2. Tính năng chính
+## 2. Cơ sở dữ liệu `dbptit` (13 bảng ERD)
 
-1. **Cổng Vào / Ra (Gate POS):** Check-in / check-out nguyên tử theo thứ tự khóa chống deadlock, phím tắt vận hành (`F2`, `F3`/`/`, `1–3`, `Enter`, `Esc`), mã QR chuyển khoản chuẩn EMVCo/NAPAS VietQR, xử lý mất thẻ (kèm cấp đổi thẻ cho vé tháng), chuyển vị trí đỗ và in phiếu/biên lai 80mm qua trình duyệt.
-2. **Tổng quan & Sơ đồ bãi trực tiếp:** KPI theo thời gian thực (đồng bộ qua WebSocket xác thực bằng single-use ticket), thanh công suất bãi/khu vực, lưới vị trí lọc tại SQL, bật/tắt bảo trì và công cụ đối soát giải phóng ô đỗ & thẻ RFID mồ côi.
-3. **Vé tháng & Bảng giá:** Đăng ký, gia hạn nhiều tháng, đổi xe/thẻ, hủy trước hạn và quản lý bảng giá với kiểm tra trùng vé/thẻ trong transaction.
-4. **Giao dịch & Ca trực thu ngân:** Tra cứu lịch sử giao dịch có phân trang và lọc từ khóa trực tiếp tại SQL, xuất CSV phía máy chủ, mở/chốt ca bàn giao quỹ tiền mặt – chuyển khoản – hoàn tiền.
-5. **Phân tích Doanh thu (Recharts):** Biểu đồ doanh thu & lưu lượng theo ngày (múi giờ Việt Nam UTC+7), cơ cấu theo loại phương tiện và theo bãi đỗ (gộp đầy đủ cả lượt ngày và đăng ký/gia hạn vé tháng).
-6. **Quản trị RBAC & Kiểm toán:** Quản lý tài khoản đăng nhập (thu hồi phiên tức thì qua `token_version`, chặn khóa ADMIN cuối cùng), danh bạ nhân sự/khách hàng/phương tiện (ẩn PII đối với `OPERATOR`), kho thẻ RFID, hạ tầng bãi/khu và nhật ký `audit_logs` ghi kèm IP trong cùng transaction.
+![Sơ đồ thực thể quan hệ CSDL dbptit](docs/assets/so_do.png)
 
-## 3. Cấu trúc dự án
+Lược đồ hoàn chỉnh lưu tại [`database/Dump20261118.sql`](database/Dump20261118.sql) với đúng **13 bảng nghiệp vụ**, không sinh thêm bảng phụ lúc khởi động:
+
+| Nhóm bảng | Các bảng trong `dbptit` | Vai trò nghiệp vụ |
+| --- | --- | --- |
+| **Hạ tầng & Biểu giá (6)** | `baidoxe`, `khuvucdo`, `vitrido`, `loaiphuongtien`, `loaikhachhang`, `banggia` | Bãi đỗ, khu vực, trạng thái từng ô đỗ và ma trận đơn giá vé ngày / vé tháng |
+| **Nhân sự, Khách, Xe & Thẻ (5)** | `nhanvien`, `khachhang`, `phuongtien`, `thexe`, `vethang` | Danh bạ nhân sự phụ trách bãi, chủ xe, phương tiện, kho thẻ RFID và vé tháng |
+| **Vận hành & Hóa đơn (2)** | `luotdo`, `thanhtoan` | Lượt gửi xe vào/ra (`luotdo.idnv`) và hóa đơn thanh toán lượt ngày / vé tháng (`thanhtoan.idnv`) |
+
+**Kỹ thuật CSDL áp dụng trong `src/services/`:**
+- **Chống tranh chấp & Deadlock:** Mọi giao dịch đa bảng chạy trong `DBService.transaction()` với `SELECT ... FOR UPDATE` theo thứ tự khóa cố định `phuongtien -> vitrido -> thexe -> luotdo`, tự động retry các mã xung đột TiDB/MySQL (`1205`, `1213`, `8028`, `9007`).
+- **Chống nhân bản JOIN & Cấp phát ID an toàn:** Dùng `ROW_NUMBER()` tách đúng 1 vé tháng còn hạn mới nhất cho mỗi thẻ/xe và cấp phát `nhanvien.id` bằng `COALESCE(MAX(id), 0) + 1` dưới khóa `FOR UPDATE`.
+- **Chuẩn hóa UTC & Sargable Index:** Mọi cột `DATETIME` lưu ở UTC (`+00:00`); thống kê và lọc ngày kinh doanh Việt Nam (`Asia/Ho_Chi_Minh`, UTC+7) quy đổi bằng ranh giới `vn_day_utc_bounds()` (`>= start_utc AND < end_utc`) để tận dụng index thay vì bọc `DATE()` lên cột.
+
+## 3. Tính năng chính (6 phân hệ SPA)
+
+1. **Cổng Vào / Ra — Gate POS (`/gate`):** Check-in / check-out nguyên tử; tự nhận diện biển số vé tháng còn hạn và gắn đúng thẻ RFID; tự chọn *Bảo vệ* (check-in) hoặc *Thu ngân* (check-out) theo bãi đỗ nhưng vẫn đổi tay được; phím tắt vận hành (`F2`, `F3`/`/`, `1–3`, `Ctrl+Enter`, `Esc`); mã chuyển khoản **VietQR chuẩn EMVCo/NAPAS**; xử lý mất thẻ (hỗ trợ cấp đổi thẻ mới cho vé tháng); chuyển ô đỗ; hủy lượt nhập nhầm; và in phiếu/biên lai khổ nhiệt **80mm**.
+2. **Tổng quan & Sơ đồ bãi trực tiếp (`/overview`):** KPI thời gian thực qua WebSocket `/ws/live`, thanh công suất theo bãi/khu vực, lưới ô đỗ lọc trực tiếp tại SQL, bật/tắt bảo trì, thêm ô đỗ hàng loạt (1–50 ô) và công cụ đối soát giải phóng ô đỗ hoặc thẻ RFID bị kẹt mồ côi.
+3. **Vé tháng & Bảng giá (`/passes`):** Đăng ký mới, gia hạn nhiều tháng (cộng dồn từ `max(ngày hết hạn, hôm nay)`), hủy trước hạn, chọn nhân viên thu ngân thực hiện (`employee_id`) và chỉnh sửa trực tiếp ma trận đơn giá vé ngày / vé tháng.
+4. **Lịch sử Giao dịch (`/transactions`):** Lọc đa tiêu chí tại SQL theo khoảng ngày kinh doanh UTC+7, từ khóa, **nhân viên thu ngân (`employee_id`)**, **phương thức thanh toán** (`Tiền mặt` / `Chuyển khoản`); cập nhật trạng thái (`Thành công`, `Hoàn tiền`, `Thất bại`); in lại biên lai; và xuất file CSV UTF-8 BOM trực tiếp từ backend (`/api/v1/transactions/export`).
+5. **Phân tích Doanh thu (`/analytics`):** Biểu đồ Recharts doanh thu và lưu lượng theo ngày (UTC+7), cơ cấu theo loại phương tiện và theo bãi đỗ (gộp đủ cả hóa đơn lượt ngày và đăng ký/gia hạn vé tháng).
+6. **Quản trị Danh mục & Hạ tầng (`/admin` — 3 tab):** Quản lý **Nhân sự & Danh bạ** (nhân viên, khách hàng, phương tiện), **Kho thẻ RFID** (phát hành, theo dõi thẻ đang gắn lượt/vé tháng, chuyển `Sẵn sàng` / `Mất - Hỏng`), và **Hạ tầng bãi/khu** (tạo bãi đỗ, thêm khu vực đỗ).
+
+## 4. Cấu trúc dự án
 
 ```text
 SmartParkingDemo/
-├── .github/workflows/ci.yml      # CI tự động: ruff, mypy, pytest, oxlint, tsc, vitest, vite build
-├── pyproject.toml                # Cấu hình đóng gói, pytest, coverage, ruff, mypy
-├── .env.example                  # Mẫu biến môi trường (TIDB_*, AUTH_SECRET_KEY, VIETQR_*, CORS_*)
-├── Dump20261118.sql              # Lược đồ nền 13 bảng & dữ liệu mẫu dbptit
+├── .github/
+│   ├── CONTRIBUTING.md           # Quy chuẩn kiến trúc, kiểm thử và commit
+│   └── workflows/ci.yml          # CI tự động: ruff, mypy, pytest --cov>=80%, Prettier, oxlint, tsc, vitest, vite build
+├── database/
+│   └── Dump20261118.sql          # Lược đồ chuẩn 13 bảng & dữ liệu mẫu dbptit
+├── scripts/
+│   ├── launch_app.py             # Launcher Python (probe /health/live, auto npm run build, mở http://127.0.0.1:8000)
+│   └── Tao_Shortcut_Desktop.bat  # Tùy chọn tạo shortcut "Smart Parking PTIT" trên Desktop Windows
+├── docs/
+│   ├── assets/                   # Logo & sơ đồ thực thể quan hệ (so_do.png)
+│   ├── index.html & 404.html     # Trang giới thiệu tĩnh cho GitHub Pages
+│   ├── architecture.md           # Kiến trúc phân tầng & quy ước giao dịch CSDL
+│   ├── setup-guide.md            # Hướng dẫn cài đặt cục bộ & mạng LAN
+│   ├── user-guide.md             # Hướng dẫn vận hành 6 phân hệ SPA
+│   ├── CHANGELOG.md              # Lịch sử phiên bản dự án
+│   └── Bao_cao_du_an.pdf, ...    # Tài liệu báo cáo, kịch bản demo & slide thuyết trình PTIT
+├── Mo_SmartParking.bat           # File chạy 1-click trên Windows: tự kiểm tra build, mở server & trình duyệt
+├── pyproject.toml                # Cấu hình đóng gói v2.2.0, pytest, coverage, ruff, mypy
+├── .env.example                  # Mẫu biến môi trường (TIDB_*, CORS_ALLOWED_ORIGINS, VIETQR_*)
 ├── src/
-│   ├── core/                     # Settings (pydantic-settings), Exceptions, JSON Logging
-│   ├── models/                   # Canonical Pydantic v2 entities (16 bảng) & response DTOs
+│   ├── core/                     # Settings (pydantic-settings), Domain Exceptions, JSON Logging
+│   ├── models/                   # Pydantic v2 entities cho 13 bảng dbptit & response DTOs
 │   ├── services/
-│   │   ├── db_service.py         # Connection pool an toàn, UTC +00:00, TiDB conflict retry
-│   │   ├── migration_service.py  # Runner migration có phiên bản (schema_migrations + GET_LOCK)
-│   │   ├── auth_service.py       # PBKDF2 600k, JWT HS256, Refresh rotation, WS tickets
+│   │   ├── db_service.py         # MySQLConnectionPool, cleanup an toàn, UTC +00:00, TiDB conflict retry
 │   │   ├── parking_service.py    # Facade tương thích ngược
-│   │   └── domain/               # 6 domain service: gate, infra, pass, billing, directory, analytics
-│   ├── api/
-│   │   ├── main.py               # FastAPI app factory, error envelopes, SPA fallback
-│   │   ├── deps.py               # DI, RBAC, lot scoping
-│   │   ├── middleware.py         # Request-ID, Security Headers, Sliding-window Rate Limiter
-│   │   ├── ws.py                 # WebSocket xác thực ticket, broadcast song song, heartbeat
-│   │   └── v1/routers/           # 8 module router REST /api/v1/*
+│   │   └── domain/               # 6 domain service: gate, infrastructure, pass, billing, directory, analytics
+│   └── api/
+│       ├── main.py               # FastAPI factory (/api/v1 + alias /api), error envelopes, SPA fallback
+│       ├── deps.py               # DI wiring cho DBService & ParkingService
+│       ├── middleware.py         # Request-ID & Security Headers
+│       ├── ws.py                 # WebSocket /ws/live (origin check, heartbeat, concurrent broadcast)
+│       ├── schemas.py            # Request schemas (/api/v1/*)
+│       └── v1/routers/           # 7 router REST: health, infrastructure, turns, billing, passes, directory, analytics
 ├── frontend/                     # React 19 + TypeScript (strict) + Vite 8 + Tailwind v4 SPA
 │   └── src/
-│       ├── context/              # AuthContext, ToastContext, ThemeContext (Dark Mode)
-│       ├── hooks/                # useLiveSocket (ticket auth + targeted React Query invalidation)
-│       ├── lib/                  # API client (refresh interceptor), VietQR EMVCo TLV, CSV
-│       ├── components/           # UI primitives (Modal, ConfirmDialog, Pagination) & Gate/Admin modules
-│       ├── pages/                # 6 trang nghiệp vụ lazy-loaded + LoginPage
+│       ├── context/              # ToastContext, ThemeContext (Light / Dark Mode)
+│       ├── hooks/                # useLiveSocket (WebSocket -> targeted React Query invalidation)
+│       ├── lib/                  # API client, employee default selector, VietQR EMVCo TLV, CSV
+│       ├── components/           # UI primitives, TicketPrintModal 80mm, Gate POS, Passes, Admin tabs
+│       ├── pages/                # 6 trang vận hành lazy-loaded
 │       └── test/                 # Bộ kiểm thử Vitest + React Testing Library
-├── tests/                        # Bộ kiểm thử Pytest (Unit, Security, RBAC, WebSocket)
-└── docs/                         # Tài liệu kỹ thuật, hướng dẫn cài đặt & sử dụng (user-guide.md)
+└── tests/                        # Bộ kiểm thử Pytest (Domain, API v1, Security headers, WebSocket, MySQL integration)
 ```
 
-## 4. Hướng dẫn cài đặt và sử dụng (Windows PowerShell)
+## 5. Khởi chạy nhanh & Cài đặt (Windows PowerShell)
 
-> Xem thêm hướng dẫn thao tác chi tiết theo từng phân hệ và vai trò tại **[docs/user-guide.md](docs/user-guide.md)** và hướng dẫn cài đặt đầy đủ tại **[docs/setup-guide.md](docs/setup-guide.md)**.
+> Xem thêm hướng dẫn chi tiết từng bước tại [`docs/setup-guide.md`](docs/setup-guide.md) và hướng dẫn vận hành giao diện tại [`docs/user-guide.md`](docs/user-guide.md).
 
-1. **Cấu hình môi trường:** Sao chép `.env.example` thành `.env` và điền thông tin TiDB Cloud / MySQL cùng `AUTH_SECRET_KEY`.
-2. **Cài đặt và chạy Backend FastAPI:**
+### Cách 1 — Chạy 1-click trên Windows (Khuyến nghị cho Demo & Vận hành)
+
+1. Chuẩn bị môi trường một lần duy nhất:
    ```powershell
+   copy .env.example .env   # Điền TIDB_HOST, TIDB_USER, TIDB_PASSWORD
    python -m venv .venv
    .\.venv\Scripts\pip.exe install -r requirements-dev.txt
-   .\.venv\Scripts\uvicorn.exe src.api.main:app --reload --port 8000
    ```
-   Tài liệu Swagger OpenAPI tại `http://127.0.0.1:8000/docs` (tài khoản dev mặc định sau seed: `admin` / `thungan` / `baove` — mật khẩu `123456`).
-3. **Cài đặt và chạy Frontend SPA:**
-   ```powershell
-   Set-Location frontend
-   npm install
-   npm run dev
-   ```
-   Truy cập `http://localhost:5173` (Vite tự proxy `/api`, `/ws`, `/health` về cổng `8000`), hoặc chạy `npm run build` để FastAPI phục vụ trực tiếp bản build tại `http://127.0.0.1:8000`.
+2. Nhấp đúp **`Mo_SmartParking.bat`**: script tự động kiểm tra (hoặc build `frontend/dist/` nếu chưa có), khởi động FastAPI ở `http://127.0.0.1:8000` và mở thẳng trình duyệt vào hệ thống.
+3. *(Tùy chọn)* Nhấp đúp **`scripts\Tao_Shortcut_Desktop.bat`** để tạo lối tắt **Smart Parking PTIT** ngoài Desktop.
 
-## 5. Kiểm thử & Kiểm tra chất lượng mã
+### Cách 2 — Chạy tách Backend / Frontend khi phát triển hoặc qua mạng LAN
 
 ```powershell
-# Backend lint, typecheck & pytest + coverage
-.\.venv\Scripts\python.exe -m ruff check src tests
-.\.venv\Scripts\python.exe -m mypy src
-.\.venv\Scripts\python.exe -m pytest tests --cov=src -v
+# Terminal 1: Backend FastAPI + Swagger UI tại http://127.0.0.1:8000/docs
+.\.venv\Scripts\uvicorn.exe src.api.main:app --reload --port 8000
 
-# Frontend lint, strict typecheck, Vitest & production build
+# Terminal 2: Frontend Vite dev server tại http://localhost:5173 (proxy /api, /ws, /health -> 8000)
 Set-Location frontend
+npm install
+npm run dev
+```
+
+Để mở cho máy trạm / điện thoại trong cùng mạng LAN truy cập:
+```powershell
+Set-Location frontend; npm run build; Set-Location ..
+.\.venv\Scripts\uvicorn.exe src.api.main:app --host 0.0.0.0 --port 8000
+```
+
+## 6. Kiểm thử & Kiểm tra chất lượng mã
+
+```powershell
+# Backend: Ruff lint, Mypy typecheck & Pytest + coverage (>= 80%)
+.\.venv\Scripts\python.exe -m ruff check src tests scripts
+.\.venv\Scripts\python.exe -m mypy src scripts
+.\.venv\Scripts\python.exe -m pytest tests -m "not integration" --cov=src --cov-report=term-missing --cov-fail-under=80 -v
+
+# Frontend: Prettier format check, Oxlint (0 warnings), TypeScript strict, Vitest & Vite build
+Set-Location frontend
+npm run format:check
 npm run lint
 npm run typecheck
 npm run test
 npm run build
 ```
 
-## 6. Thành viên nhóm 10 (Lớp D24CQCE04-B — GVHD: Nguyễn Trọng Khánh)
+## 7. Tài liệu & Thành viên Nhóm 10
+
+- **Tài liệu kỹ thuật:** [`docs/architecture.md`](docs/architecture.md) · [`docs/setup-guide.md`](docs/setup-guide.md) · [`docs/user-guide.md`](docs/user-guide.md) · [`docs/CHANGELOG.md`](docs/CHANGELOG.md) · [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md)
+- **Tài liệu đồ án:** [`docs/Bao_cao_du_an.pdf`](docs/Bao_cao_du_an.pdf) · [`docs/Kich_ban_demo.pdf`](docs/Kich_ban_demo.pdf) · [`docs/Cơ sở dữ liệu.pptx`](docs/Cơ%20sở%20dữ%20liệu.pptx)
+
+**Thành viên Nhóm 10 (Lớp D24CQCE04-B — GVHD: Nguyễn Trọng Khánh):**
 - **Nguyễn Hoàng Tùng** — `B24DCCE284` (Trưởng nhóm)
 - **Nguyễn Bá Minh Đức** — `B24DCCE053`
 - **Trần Anh Tú** — `B24DCCE277`

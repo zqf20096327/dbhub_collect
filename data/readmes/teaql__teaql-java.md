@@ -74,7 +74,7 @@ own Java APIs.
 These application-code excerpts assume the example's generated imports, trusted
 Context and an existing object identity. `Q` and `E` belong to the generated
 domain library, not a generic runtime object with arbitrary field strings.
-See the [application source](examples/school-management/src/main/java/com/example/schoolmanagementservice/SchoolLifecycleVerifier.java) for complete setup.
+See the [application source](examples/school-management/java-app-console/src/main/java/com/example/schoolmanagementservice/SchoolLifecycleVerifier.java) for complete setup.
 
 ```java
 var schoolTypeDetails = Q.schoolTypesWithMinimalFields().selectCode();
@@ -349,6 +349,8 @@ Request JSON is not allowed to replace those trusted capabilities.
 - [Shared load state](examples/shared-load-state/README.md)
 - [Binary object storage and temporary S3 URLs](examples/object-storage/README.md)
 - [Context-owned HTTP with bounded retries and safe diagnostics](examples/http-resilience/README.md)
+- [Transactional committed-event Outbox from a real SQLite graph save](examples/committed-events/README.md)
+- [Supplier onboarding in 15 locales](examples/supplier-onboarding-i18n/README.md)
 - [Extension points](https://github.com/teaql/teaql-conformance/blob/main/design/runtime-customization-p0-p1-matrix.md)
 
 ## Safe troubleshooting

@@ -1,10 +1,10 @@
 {
  "dragonflydb/dragonfly": {
-  "commit_7d": 32,
-  "commit_90d": 454,
+  "commit_7d": 33,
+  "commit_90d": 442,
   "rel_ver": "v2.1",
   "rel_pub": "2026-11-04",
-  "rel_days": 18,
+  "rel_days": 20,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -21,7 +21,7 @@
    "GHSA-h77h-c6hc-qc9h(CVE-2026-47206,low)"
   ],
   "contrib_n": 178,
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "lang": {
    "C++": 73,
    "Python": 16,
@@ -31,12 +31,12 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261122"
   },
   "etag": {
-   "release": "W/\"b4afef9c8d46e6c7428fe666f6e2c4575dd6e14e9bb946f0628686270b645fdf\"",
+   "release": "W/\"03a2705c0f92c68fa5a51435b635e263ff31d97e43a602487705284bf67d0c50\"",
    "security": "W/\"56d648abbd72b4f94055a1ee557339acd7fece214ebb7113f052b94016bde88a\""
   },
   "rel_dates": [
@@ -95,7 +95,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2018-11-04",
-  "rel_days": 2940,
+  "rel_days": 2942,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -156,7 +156,7 @@
   "commit_7d": 3,
   "rel_ver": "v2.0.0",
   "rel_pub": "2024-04-04",
-  "rel_days": 962,
+  "rel_days": 964,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -187,7 +187,7 @@
   "commit_7d": 0,
   "rel_ver": "0.2.0",
   "rel_pub": "2018-09-05",
-  "rel_days": 3000,
+  "rel_days": 3002,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -206,7 +206,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.0.0",
   "rel_pub": "2018-04-17",
-  "rel_days": 3141,
+  "rel_days": 3143,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -222,12 +222,12 @@
   "enriched_at": "20260927"
  },
  "openclaw/slacrawl": {
-  "commit_90d": 107,
-  "commit_7d": 9,
-  "rel_ver": "v0.10.6",
-  "rel_pub": "2026-11-06",
-  "rel_days": 16,
-  "rel_n90": 11,
+  "commit_90d": 144,
+  "commit_7d": 22,
+  "rel_ver": "v0.11.0",
+  "rel_pub": "2026-11-16",
+  "rel_days": 8,
+  "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -242,15 +242,16 @@
    "Makefile": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"f691d95032f3f320150c706952a25354a5d7f4fc727ca40dabc23d6f86d5d1e2\""
+   "release": "W/\"c0aff48a24c688d259ecef88d68a01acf27760778e7ca5452a153c1f0664bb49\""
   },
   "rel_dates": [
+   "2026-11-16",
    "2026-11-06",
    "2026-10-24",
    "2026-10-21",
@@ -261,11 +262,14 @@
    "2026-09-12",
    "2026-09-09",
    "2026-09-05",
-   "2026-08-31",
-   "2026-08-14",
-   "2026-08-13"
+   "2026-08-31"
   ],
   "rel_notes": [
+   {
+    "t": "v0.11.0",
+    "d": "2026-11-16",
+    "n": "- Add a private SQLite delivery outbox that stages complete captures as exact bounded parts, resumes them after process exits and advances completed cursors only with matching receipts. No dispatcher, live registration or retention activation is included.\n- Record transactional native change keys and removals in SQLite schema 9, expose journal generation/sequence metadata in status JSON, and invalidate delivery baselines after repair or exact share restore. Delivery workers and journal compaction remain def"
+   },
    {
     "t": "v0.10.6",
     "d": "2026-11-06",
@@ -310,11 +314,6 @@
     "t": "v0.9.0",
     "d": "2026-09-09",
     "n": "## 0.9.0 - 2026-09-09\n\n- Migrate archives to schema v8 on first writable open, invalidating pre-v8 API history checkpoints once while retaining messages and retention state. Checkpoints are now local-only in Git shares; restore leaves coverage unknown. The next sync may repeat retention-bounded history requests, or all accessible history without a floor. Stop old processes and keep a consistent pre-upgrade backup; in-place downgrade is unsupported. See [archive schema upgrades](docs/configuration.md#archive"
-   },
-   {
-    "t": "v0.8.7",
-    "d": "2026-09-05",
-    "n": "- Updated the preferred Go build toolchain and container to 1.27.1, Dockerfile frontend to 1.27, CrawlKit to 0.14.9, SQLite driver to 1.58.0, terminal width handling to go-runewidth 0.0.29, and TruffleHog to 3.97.4; the minimum Go version remains 1.27.0."
    }
   ]
  },
@@ -334,8 +333,8 @@
   "enriched_at": "20260927"
  },
  "oracle/solaris-userland": {
-  "commit_90d": 253,
-  "commit_7d": 32,
+  "commit_90d": 292,
+  "commit_7d": 20,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -350,13 +349,13 @@
    "Roff": 12,
    "Shell": 3
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+   "release": "\"762e2c0051d46df55651d0a8007177f761482b4bae3f04f76016388eb8928fcb\""
   },
   "rel_dates": [],
   "rel_n90": 0
@@ -364,9 +363,9 @@
  "ShayanAbbas1/dbdelve": {
   "commit_90d": 423,
   "commit_7d": 14,
-  "rel_ver": "v0.7.4-nightly.20261120.48",
-  "rel_pub": "2026-11-20",
-  "rel_days": 2,
+  "rel_ver": "v0.7.4-nightly.20261123.51",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": true,
   "rel_none": false,
@@ -382,17 +381,18 @@
    "PLpgSQL": 1,
    "HTML": 1
   },
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "dim_ts": {
    "commit": "20261122",
-   "release": "20261122",
+   "release": "20261124",
    "security": "20261111"
   },
   "etag": {
-   "release": "W/\"cd708cac3f494e84c870ed9bd2d0292be2f27cf76f4a9e71395664a0b7df8e8c\"",
+   "release": "W/\"8d4fb3381e8b4424e885aa9b2e7d11fb7c8d578ee634386c03c62df93edb2df3\"",
    "security": "\"2442c31fe7795c6d824092b579433fa02653c665513670d2c7de6f4769564a23\""
   },
   "rel_dates": [
+   "2026-11-23",
    "2026-11-20",
    "2026-11-19",
    "2026-11-18",
@@ -421,10 +421,14 @@
    "2026-10-04",
    "2026-10-03",
    "2026-10-03",
-   "2026-09-27",
-   "2026-09-26"
+   "2026-09-27"
   ],
   "rel_notes": [
+   {
+    "t": "v0.7.4-nightly.20261123.51",
+    "d": "2026-11-23",
+    "n": "Missing something? [Request it or upvote others' ideas](https://github.com/ShayanAbbas1/dbdelve/discussions/42).\n## What's Changed\n* fix(theme): default to matching system appearance by @Ascaveth in https://github.com/ShayanAbbas1/dbdelve/pull/311\n* feat(tabs): back query tabs with .sql files by @ShayanAbbas1 in https://github.com/ShayanAbbas1/dbdelve/pull/310\n\n\n**Full Changelog**: https://github.com/ShayanAbbas1/dbdelve/compare/v0.7.4-nightly.20261120.48...v0.7.4-nightly.20261123.51"
+   },
    {
     "t": "v0.7.4-nightly.20261120.48",
     "d": "2026-11-20",
@@ -469,11 +473,6 @@
     "t": "v0.7.1",
     "d": "2026-11-09",
     "n": "* feat(export): add table formats to copy results by @Ascaveth in https://github.com/ShayanAbbas1/dbdelve/pull/209\n* feat(connections): disconnect to a home that lists every connection by @ShayanAbbas1 in https://github.com/ShayanAbbas1/dbdelve/pull/211\n* feat(editing): edit rows read through an ODBC plugin driver by @ShayanAbbas1 in https://github.com/ShayanAbbas1/dbdelve/pull/221\nMissing something? [Request it or upvote others' ideas](https://github.com/ShayanAbbas1/dbdelve/discussions/42).\n* feat(ui): ri"
-   },
-   {
-    "t": "v0.7.0",
-    "d": "2026-11-05",
-    "n": "* feat(postgres): connect through a libpq service name by @gkze in https://github.com/ShayanAbbas1/dbdelve/pull/200\nMissing something? [Request it or upvote others' ideas](https://github.com/ShayanAbbas1/dbdelve/discussions/42).\nThe ODBC plugin ships on Windows untested. On Linux it needs the `unixodbc` package (`apt install unixodbc`); macOS carries its own.\n* fix(palette): minimize the window with cmd-m on macOS by @ienev in https://github.com/ShayanAbbas1/dbdelve/pull/202\n* fix(explorer): keep the Pinned"
    }
   ]
  },
@@ -497,7 +496,7 @@
   "commit_7d": 0,
   "rel_ver": "1.9.1",
   "rel_pub": "2026-05-24",
-  "rel_days": 182,
+  "rel_days": 184,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -575,7 +574,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-03-19",
-  "rel_days": 248,
+  "rel_days": 250,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -595,7 +594,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0",
   "rel_pub": "2017-03-16",
-  "rel_days": 3538,
+  "rel_days": 3540,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -615,7 +614,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.9.12",
   "rel_pub": "2026-08-12",
-  "rel_days": 102,
+  "rel_days": 104,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -654,7 +653,8 @@
   "dim_ts": {
    "commit": "20261122",
    "release": "20261122"
-  }
+  },
+  "rel_n90": 0
  },
  "bdcht/ccrawl": {
   "commit_90d": 0,
@@ -676,11 +676,11 @@
   "enriched_at": "20260927"
  },
  "growupanand/ConvoForm": {
-  "commit_90d": 51,
-  "commit_7d": 20,
+  "commit_90d": 57,
+  "commit_7d": 1,
   "rel_ver": "0.20.0",
   "rel_pub": "2026-11-09",
-  "rel_days": 13,
+  "rel_days": 15,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -696,13 +696,13 @@
    "Python": 1,
    "Shell": 1
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"638e3342a8f7a8d9e74c6ffc9f7880aeff5a5a1bb3111d9f60590789b6cf6635\""
+   "release": "W/\"0e0aef3e24923f5d121f36904d710f0843efabf548fb3131878ed27609b5283d\""
   },
   "rel_dates": [
    "2026-11-09"
@@ -761,7 +761,7 @@
  "godoes/gorm-oracle": {
   "rel_ver": "v1.6.20",
   "rel_pub": "2026-07-23",
-  "rel_days": 122,
+  "rel_days": 124,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -803,7 +803,7 @@
  "scribe-org/Scribe-Data": {
   "rel_ver": "5.1.4",
   "rel_pub": "2025-08-20",
-  "rel_days": 459,
+  "rel_days": 461,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -867,7 +867,7 @@
  "yinshuwei/osm": {
   "rel_ver": "v2.0.15",
   "rel_pub": "2026-06-18",
-  "rel_days": 157,
+  "rel_days": 159,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -940,7 +940,7 @@
  "sqg-dev/sqg": {
   "rel_ver": "v0.25.0",
   "rel_pub": "2026-09-08",
-  "rel_days": 75,
+  "rel_days": 77,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1007,7 +1007,7 @@
  "playzero/substrate-graph": {
   "rel_ver": "v0.3",
   "rel_pub": "2020-07-23",
-  "rel_days": 2313,
+  "rel_days": 2315,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1028,7 +1028,7 @@
  "Gercekefsane/whiteout-survival-bot": {
   "rel_ver": "v5.0.0",
   "rel_pub": "2026-07-23",
-  "rel_days": 122,
+  "rel_days": 124,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1045,7 +1045,7 @@
  "bejaminjones/bear-notes-mcp": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2025-06-29",
-  "rel_days": 511,
+  "rel_days": 513,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1077,7 +1077,7 @@
  "Tomas2D/knex-firebird-dialect": {
   "rel_ver": "v2.1.4",
   "rel_pub": "2025-11-08",
-  "rel_days": 379,
+  "rel_days": 381,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1094,7 +1094,7 @@
  "aalhour/beachdb": {
   "rel_ver": "v0.0.5",
   "rel_pub": "2026-05-29",
-  "rel_days": 177,
+  "rel_days": 179,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1146,7 +1146,7 @@
  "mrcrypster/mysqly": {
   "rel_ver": "1.0",
   "rel_pub": "2022-01-27",
-  "rel_days": 1760,
+  "rel_days": 1762,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1206,7 +1206,7 @@
  "Selbi182/SpotifyDiscoveryBot": {
   "rel_ver": "v2.0",
   "rel_pub": "2026-03-09",
-  "rel_days": 258,
+  "rel_days": 260,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1241,7 +1241,7 @@
  "buildlucid/lucid-cms": {
   "rel_ver": "v0.19.0-alpha.0",
   "rel_pub": "2026-09-23",
-  "rel_days": 60,
+  "rel_days": 62,
   "rel_n90": 7,
   "rel_pre": true,
   "rel_none": false,
@@ -1279,7 +1279,7 @@
  "LandRegistry/govuk-frontend-flask": {
   "rel_ver": "1.0.0",
   "rel_pub": "2025-10-21",
-  "rel_days": 397,
+  "rel_days": 399,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1300,7 +1300,7 @@
  "sqlitecloud/sqlitecloud-py": {
   "rel_ver": "v0.0.84",
   "rel_pub": "2025-05-26",
-  "rel_days": 545,
+  "rel_days": 547,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1395,7 +1395,7 @@
  "Khuwn-Soulutions/supabase_codegen": {
   "rel_ver": "v3.0.1",
   "rel_pub": "2025-10-12",
-  "rel_days": 406,
+  "rel_days": 408,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1416,7 +1416,7 @@
  "bdurand/capture_migration_sql": {
   "rel_ver": "v1.0.5",
   "rel_pub": "2026-07-21",
-  "rel_days": 124,
+  "rel_days": 126,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1433,7 +1433,7 @@
  "alexberriman/newtondb": {
   "rel_ver": "v0.3.4",
   "rel_pub": "2023-04-24",
-  "rel_days": 1308,
+  "rel_days": 1310,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1498,7 +1498,7 @@
  "rocicorp/zero-sqlite3": {
   "rel_ver": "v1.1.4",
   "rel_pub": "2026-08-13",
-  "rel_days": 101,
+  "rel_days": 103,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1518,7 +1518,7 @@
  "binier/dgraphium": {
   "rel_ver": "@dgraphium/core@0.3.3",
   "rel_pub": "2020-10-28",
-  "rel_days": 2216,
+  "rel_days": 2218,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1538,7 +1538,7 @@
  "oracle-samples/gorm-oracle": {
   "rel_ver": "v1.1.3",
   "rel_pub": "2026-07-07",
-  "rel_days": 138,
+  "rel_days": 140,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1573,7 +1573,7 @@
  "spaghettidba/ExtendedTSQLCollector": {
   "rel_ver": "v1.9.0",
   "rel_pub": "2018-03-22",
-  "rel_days": 3167,
+  "rel_days": 3169,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1594,7 +1594,7 @@
  "aboodi332/Lead-generation-n8n-email-FULLSTACK": {
   "rel_ver": "3.1.0",
   "rel_pub": "2025-06-01",
-  "rel_days": 539,
+  "rel_days": 541,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1776,7 +1776,7 @@
  "fdns/dnszeppelin-clickhouse": {
   "rel_ver": "v1.0.6",
   "rel_pub": "2017-11-21",
-  "rel_days": 3288,
+  "rel_days": 3290,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2109,7 +2109,7 @@
  "myisaak/sqlitemongo": {
   "rel_ver": "v1.1.15",
   "rel_pub": "2022-12-26",
-  "rel_days": 1427,
+  "rel_days": 1429,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2133,7 +2133,7 @@
  "groot007/flippio": {
   "rel_ver": "v0.4.8",
   "rel_pub": "2026-08-14",
-  "rel_days": 100,
+  "rel_days": 102,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2182,7 +2182,7 @@
  "A3hiK/MikroDex": {
   "rel_ver": "v.1.2.1",
   "rel_pub": "2026-05-27",
-  "rel_days": 179,
+  "rel_days": 181,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2772,7 +2772,7 @@
  "infinitydb-ai/infinitydb": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-17",
-  "rel_days": 36,
+  "rel_days": 38,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2844,7 +2844,7 @@
  "PulsHealth/pulshealth": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-09-18",
-  "rel_days": 65,
+  "rel_days": 67,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2974,7 +2974,7 @@
  "abdvlrqhman/DevDash-AgenticOS": {
   "rel_ver": "app-v0.1.12",
   "rel_pub": "2026-10-30",
-  "rel_days": 23,
+  "rel_days": 25,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -3013,7 +3013,7 @@
  "fabs-reis/Negocio-do-bem": {
   "rel_ver": "pre-cloudflare",
   "rel_pub": "2026-10-30",
-  "rel_days": 23,
+  "rel_days": 25,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

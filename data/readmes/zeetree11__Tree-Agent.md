@@ -104,8 +104,8 @@ node src/cli.ts serve --channel web
 | 文档知识 | 切分 → 向量 → `knowledge_search` / `knowledge_add` | `knowledge.ts`，与记忆严格分离 |
 | 上下文 | 分段预算、稳定性、淘汰顺序、跨段去重、冲突提示、token 校准 | `compose.ts` |
 | 人格 | `SOUL.md`（怎么说）+ `CONTRACTS.md`（怎么干），独立字符预算 | `persona.ts` |
-| 工具 | `fetch` / `search` / `memory_search` / `knowledge_*` / `fanout` / `note_*` / `lock_*` / `send` / `propose_self_edit` | 六个手写 MCP server |
-| 多智能体 | 模型自主 `fanout`，子任务独立线程、共享便签、冲突仲裁、失败重试 | `fanout.ts` + `api.ts` |
+| 工具 | `fetch` / `search` / `memory_search` / `knowledge_*` / `orchestrate` / `note_*` / `lock_*` / `send` / `propose_self_edit` | 四个手写 MCP server |
+| 多智能体 | 模型调用 `orchestrate`，编排器按依赖派发、可追加任务；子任务独立线程、共享便签、失败重试 | `orchestrator.ts` + `api.ts` |
 | 治理 | 死循环状态指纹、HITL 审批、并发文件锁、凭据守卫、SSRF 防护 | `loop-guard.ts` / `approval.ts` / `file-lock.ts` |
 | 自我修改 | 改人格与 MCP 配置需人工批准，可回滚，代码永不可改 | `proposal.ts` |
 | 可观测 | span 树、工具审计、事件日志、`doctor`、`context_plan` | `trace.ts` / `tools-report.ts` |
@@ -646,9 +646,9 @@ pi 自带 MCP 客户端（`pi mcp add`，配置在 `data/pi/mcp.json`）。我�
 | `fetch-server` | `fetch` `search` | HttpOnly + SSRF 防御；搜索优先 Bing（DDG 在境内不可达） |
 | `memory-server` | `memory_search` | 只读打开数据库，只返回 `active`，强制同 embedding 空间 |
 | `knowledge-server` | `knowledge_search` `knowledge_list` `knowledge_add` | 文档切分 600 字符 / 80 重叠，同名覆盖 |
-| `spawn-server` | `fanout` `note_write` `note_read` `lock_file` `unlock_file` `list_locks` `send` `propose_self_edit` | 派生、共享便签、路径锁、主动播报、自改申请 |
+| `spawn-server` | `orchestrate` `note_write` `note_read` `lock_file` `unlock_file` `list_locks` `send` `propose_self_edit` | 编排子 agent、共享便签、路径锁、主动播报、自改申请 |
 
-运行时还暴露一个本地控制 API（`127.0.0.1:8899`）：`/fanout` `/notes` `/lock` `/send` `/proposal` `/health`。
+运行时还暴露一个本地控制 API（`127.0.0.1:8899`）：`/orchestrate` `/notes` `/lock` `/send` `/proposal` `/health`。
 **调度权只在运行时一处**——MCP server 是薄客户端，否则会出现两个进程抢同一个队列。
 
 ## 自我修改：改能力面，不改代码
@@ -901,7 +901,7 @@ recency      事实 90 天、事件 365 天、偏好约 2 年（半衰期）
 | 参数 | 位置 | 默认 | 为什么 |
 |---|---|---|---|
 | `timeout` | `mcp.json` 每个 server | 60s | **pi 的 MCP 请求超时**。子 agent 和编排是分钟级的，60 秒会把正常任务判成超时；设 900 |
-| `PI_RT_FANOUT_MAX_MS` | 环境变量 | 900000 | 派发租约。卡住的子任务不会永久挡住后续请求，超时自动放行 |
+| `PI_RT_ORCHESTRATE_MAX_MS` | 环境变量 | 900000 | 编排租约。卡住的编排不会永久挡住后续请求，超时自动放行 |
 
 这两条都是被真实故障逼出来的：先出现「子 agent 60 秒超时」，修完才发现**超时之后队列会锁死**——因为并发标志是一个布尔值，只在 `finally` 里清零。现在改成带过期时间的租约。
 
@@ -927,7 +927,7 @@ recency      事实 90 天、事件 365 天、偏好约 2 年（半衰期）
 - 置信度：`confidence.ts` 接进 `apply()`，`tentative` 永不注入，手写记忆跳过评分
 - 死循环：状态指纹（工具 + 参数稳定哈希），连续 3 次告警 / 6 次中止
 - HITL：`<!--ask:-->` 挂起 → 同意/拒绝/超时 → 重跑原请求
-- 多智能体：模型自主 `fanout`、子任务独立线程、共享便签、冲突仲裁（最后写入 + 显式上报）、失败重试一次
+- 多智能体：模型调用 `orchestrate`、编排器按依赖派发并可追加任务、子任务独立线程、共享便签、失败重试一次
 - 主动播报：`send` 工具，每任务 3 条上限，只能发当前会话
 - 并发文件锁：路径级租约 + TTL 自愈 + 跑前跑后哈希对比（不依赖配合的冲突发现）
 - 文档知识库：切分 / 向量 / `knowledge_search`，与记忆严格分离

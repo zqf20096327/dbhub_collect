@@ -68,6 +68,9 @@ or problems.
 - `query_map()` for local reads for `structs` that implement `impl From<&mut hiqlite::Row<'_>>`
   which is the more flexible method with more manual work
 - a `FromRow` derive macro with different optional `column` attributes to reduce boilderplate
+- a `sql!()` macro that prepares your query against your `migrations` directory at compile time, so
+  a query SQLite cannot prepare fails the build instead of the query; `sql_map!()` also checks the
+  columns it returns against the fields of the type you map it into
 - in addition to SQLite, multiple in-memory K/V caches with optional independent TTL per entry per
   cache - K/V caches are disk-backed and store their WAL file + Snapshots on disk, which means they
   are easy on your memory, and they can rebuild their in-memory data after a restart
@@ -372,18 +375,18 @@ always matches the version Hiqlite was compiled against.
 
 This feature enables the regular Hiqlite cluster features apart from the `server` feature:
 
-- auto-heal
-- backup
-- cache
-- counters
-- dashboard
-- dlock
-- listen_notify
-- s3
-- shutdown-handle
-- sqlite
-- toml
-- webpki-roots
+- `auto-heal`
+- `backup`
+- `cache`
+- `counters`
+- `dashboard`
+- `dlock`
+- `listen_notify`
+- `s3`
+- `shutdown-handle`
+- `sqlite`
+- `toml`
+- `webpki-roots`
 
 ### `in-memory-snapshots`
 

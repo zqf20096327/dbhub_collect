@@ -1,7 +1,7 @@
 # retrofit
 
 [![release](https://img.shields.io/github/v/release/MonotonicHQ/retrofit?display_name=release&label=release)](https://github.com/MonotonicHQ/retrofit/releases/latest)
-[![wip](https://img.shields.io/github/v/release/MonotonicHQ/retrofit?include_prereleases&display_name=release&label=wip)](https://github.com/MonotonicHQ/retrofit/releases)
+[![wip](https://img.shields.io/github/v/release/MonotonicHQ/retrofit?include_prereleases&sort=semver&display_name=release&label=wip)](https://github.com/MonotonicHQ/retrofit/releases)
 [![PostgreSQL 15 to 18](https://img.shields.io/badge/PostgreSQL-15%20to%2018-336791)](#install)
 [![macOS, Linux](https://img.shields.io/badge/platform-macOS%2C%20Linux-lightgrey)](#install)
 [![license: binary only](https://img.shields.io/badge/license-binary%20only-lightgrey)](LICENSE)

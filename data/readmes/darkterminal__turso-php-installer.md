@@ -1,18 +1,48 @@
 <p align="center">
-  <a href="https://discord.gg/turso">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://i.imgur.com/UhuW3zm.png">
-      <source media="(prefers-color-scheme: light)" srcset="https://i.imgur.com/vljWbfr.png">
-      <img alt="Shows a black logo in light color mode and a white one in dark color mode." src="https://i.imgur.com/vGCC0I4.png">
-    </picture>
-  </a>
+  <img alt="Turso PHP Installer" src="art/turso-php-installer-banner.png" width="800">
 </p>
 
-# Turso PHP Installer
+<h1 align="center">Turso PHP Installer</h1>
+<p align="center">
+  A Composer package and Laravel Zero CLI that installs the native <a href="https://github.com/tursodatabase/turso-client-php">libSQL PHP extension</a> on Linux and macOS.
+</p>
 
-This is the Turso/libSQL Extension for PHP installer script for Linux and MacOS. Make sure you already have PHP minimal version 8.2.
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/darkterminal/turso-php-installer?color=fcb61e" alt="MIT License"></a>
+  <a href="https://github.com/darkterminal/turso-php-installer/releases"><img src="https://img.shields.io/github/v/release/darkterminal/turso-php-installer?color=fcb61e" alt="Release"></a>
+  <a href="https://packagist.org/packages/darkterminal/turso-php-installer"><img src="https://img.shields.io/packagist/dt/darkterminal/turso-php-installer?color=F05340" alt="Total downloads" /></a>
+  <a href="https://github.com/darkterminal/turso-php-installer/graphs/contributors"><img src="https://img.shields.io/github/contributors/darkterminal/turso-php-installer?color=fcb61e" alt="Contributors"></a>
+</p>
 
-> Release assets of the extension currently cover PHP **8.1–8.5** (NTS and TS builds) — the installer always reads the latest release automatically.
+---
+
+## Overview
+
+**turso-php-installer** downloads the prebuilt [libSQL extension](https://github.com/tursodatabase/turso-client-php) for your PHP runtime and wires it into `php.ini`. It also ships local development helpers: database tokens, server certificates and local `sqld` environments.
+
+- Installs the NTS or TS build matching your PHP version
+- Stable releases only, from `tursodatabase/turso-client-php`
+- Interactive and non-interactive modes
+- Laravel Sail stubs with a fail-hard extension preflight
+
+---
+
+## Supported Versions
+
+| PHP Versions | Build Versions |
+| ------------ | -------------- |
+| 8.2          | TS / NTS       |
+| 8.3          | TS / NTS       |
+| 8.4          | TS / NTS       |
+| 8.5          | TS / NTS       |
+
+**TS** = Thread Safe, **NTS** = Non Thread Safe
+
+Supported on Linux (`x86_64`, `arm64`) and macOS. On Windows, use WSL or download the extension binary from the [extension releases](https://github.com/tursodatabase/turso-client-php/releases).
+
+The CLI itself requires PHP 8.2 or newer. PHP 8.1 support was dropped; `--php-version=8.1` is rejected.
+
+---
 
 ## Installation
 
@@ -20,130 +50,78 @@ This is the Turso/libSQL Extension for PHP installer script for Linux and MacOS.
 composer global require darkterminal/turso-php-installer
 ```
 
-## Laravel Sail
-
-Copy and Paste the stubs from [here](/docs/laravel-sail.md)
-
-----
-
-make sure the installer is available in `PATH` environment variable:
+Add the Composer global bin directory to your `PATH`:
 
 ```bash
-export PATH="$HOME/.composer/vendor/bin:$PATH"
-# or
-export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+export PATH="$(composer config --global home)/vendor/bin:$PATH"
 ```
 
-## Usage & Overview
-
-```bash
-USAGE:  <command> [options] [arguments]
-
-install                    Install Turso libSQL Extension for PHP
-uninstall                  Uninstall Turso libSQL Extension for PHP
-update                     Update Turso libSQL Extension for PHP
-version                    Display Turso PHP Installer version
-
-token:create               Create libSQL Server Database token for Local Development
-token:delete               Delete a database token
-token:list                 Display all generated database tokens
-token:show                 Show libSQL Server Database token for Local Development
-```
-Unix Only Command
-```bash
-server:ca-cert-create      Generate CA certificate
-server:ca-cert-delete      Delete a CA certificate from the global store location
-server:ca-cert-list        List all generated CA certificates
-server:ca-cert-show        Show raw CA certificate and private key
-server:ca-peer-cert-create Create a peer certificate
-server:cert-store-get      Get the cert store location
-server:cert-store-set      Set/overwrite global certificate store, to use by the server later. Default is same as {installation_dir}/certs
-server:check               Check server requirement, this will check if python3 pip and cryptography lib are installed
-
-sqld:env-delete            Delete an environment by name or ID
-sqld:env-edit              Edit an existing environment by ID or name
-sqld:env-list              List all created environments
-sqld:env-new               Create new sqld environment, save for future use.
-sqld:env-show              Show detail of environment
-sqld:open-db               Open database using Turso CLI based on environment id or name and database
-sqld:server-run            Run sqld server based on environment id or name
-sqld:daemon-list           List all running sqld daemons
-sqld:daemon-kill           Kill a running sqld daemon
-```
-
-## Install Extension
-
-**Interactive Mode**
+Install interactively:
 
 ```bash
 turso-php-installer install
 ```
 
-**Non Interactive Mode**
-
-**PHP NTS (Non Thread-Safe) Build**
-
-By default the installer will install the **stable** version of libSQL Client from `tursodatabase/turso-client-php` release with NTS (Non Thread-Safe) build version.
-```bash
-turso-php-installer install -n --php-version=8.3 --php-ini=/etc/php/<version>/cli/php.ini --extension-dir=/path/to/your-custom/extensions/directory
-```
-
-But, if you want to use the **unstable** version (which is the development) version of libSQL Client, the installer will install from another source `pandanotabear/turso-client-php` release with NTS (Non Thread-Safe) build version. (Btw, Panda is my another pet in GitHub)
-```bash
-turso-php-installer install -n --unstable --php-version=8.3 --php-ini=/etc/php/<version>/cli/php.ini --extension-dir=/path/to/your-custom/extensions/directory
-```
-
-**PHP TS (Thread-Safe) Build**
-
-**Stable** version build - libSQL Client from `tursodatabase/turso-client-php` release with TS (Thread-Safe) build version.
-```bash
-turso-php-installer install -n --thread-safe --php-version=8.3 --php-ini=/etc/php/<version>/cli/php.ini --extension-dir=/path/to/your-custom/extensions/directory
-```
-**Unstable** version build - libSQL Client, the installer will install from another source `pandanotabear/turso-client-php` release with TS (Thread-Safe) build version.
-```bash
-turso-php-installer install -n --unstable --thread-safe --php-version=8.3 --php-ini=/etc/php/<version>/cli/php.ini --extension-dir=/path/to/your-custom/extensions/directory
-```
-
-> See `turso-php-installer install --help`
-
-## Uninstall Extension
+Or non-interactively (example for PHP 8.3):
 
 ```bash
-turso-php-installer uninstall
+turso-php-installer install -n --php-version=8.3
 ```
 
-## Update Extension
+Custom `php.ini` and extension directory:
 
 ```bash
-turso-php-installer update
+turso-php-installer install -n --php-version=8.3 \
+  --php-ini=/etc/php/8.3/cli/php.ini \
+  --extension-dir=/path/to/extensions
 ```
 
-## Using Local LibSQL for Development
+Verify the extension is loaded:
 
-**Create Database Token**
-
-Create libSQL Server Database token for Local Development (an Ed25519-signed JWT pair for local sqld use)
 ```bash
-turso-php-installer token:create <db-name>
+php -m | grep libsql
 ```
 
-**Show Database Token**
+Other commands: `uninstall`, `update` (extension only, not the CLI), `version`, `token:*`, `server:*`, `sqld:*`. Run `turso-php-installer list` for the full surface.
 
-Show libSQL Server Database token for Local Development
+---
+
+## Documentation
+
+Full documentation is published on GitHub Pages: **<https://darkterminal.github.io/turso-php-installer/>**
+
+- [Getting started](https://darkterminal.github.io/turso-php-installer/user-manual/getting-started/)
+- [Install](https://darkterminal.github.io/turso-php-installer/user-manual/install/)
+- [Update](https://darkterminal.github.io/turso-php-installer/user-manual/update/)
+- [Uninstall](https://darkterminal.github.io/turso-php-installer/user-manual/uninstall/)
+- [Local development workflow](https://darkterminal.github.io/turso-php-installer/user-manual/local-development-workflow/)
+- [Tokens & local development](https://darkterminal.github.io/turso-php-installer/user-manual/tokens/)
+- [Server certificates](https://darkterminal.github.io/turso-php-installer/user-manual/server-certificates/)
+- [sqld local environments](https://darkterminal.github.io/turso-php-installer/user-manual/sqld/)
+- [Laravel Sail guide](https://darkterminal.github.io/turso-php-installer/user-manual/laravel-sail/)
+
+Canonical Sail stubs live in [`stubs/sail/`](stubs/sail/README.md).
+
+---
+
+## Development
+
 ```bash
-turso-php-installer token:show <db-name>
+composer install
+vendor/bin/pest
+bash -n stubs/sail/run_turso stubs/sail/sail-entrypoint
+python3 scripts/check_docs.py
 ```
-This command will show all tokens and secrets of that database. You can also read individual secrets via `turso-php-installer token:show <db-name> --fat | --roa | --pkp | --pkb`
 
-> [See detail explanation](https://gist.github.com/darkterminal/c272bf2a572bc5d7378f31cf4aea5f19)
+---
 
-## FAQ
+## Community & Support
 
-**The Extension Is Not Working in Windows**
+- Report issues on [GitHub Issues](https://github.com/darkterminal/turso-php-installer/issues)
+- Sponsor via [GitHub Sponsors](https://github.com/sponsors/darkterminal) or [Saweria](https://saweria.co/darkterminal)
 
-Please, download the official release extension binary from [Turso Client PHP](https://github.com/tursodatabase/turso-client-php/releases) GitHub Release Page. Or you can use WSL, or you can use [Turso Docker PHP](https://github.com/darkterminal/turso-docker-php)
+---
 
-## Give Me a Coffee
+## License
 
-- GitHub Sponsors
-- Direct Paypal
+This project is open-sourced under the [MIT License](LICENSE).

@@ -181,7 +181,7 @@ ARTEX_TARGETS=linux/amd64,windows/amd64 ./build.sh --release
 
 ### 本仓库的 Release 更新源
 
-页面一键更新固定从 [bcyw/ARTEX Releases](https://github.com/bcyw/ARTEX/releases) 检查和下载版本（写死在 `selfupdate/github.go` 的 `Repo`）。克隆或通过 Git 更新源码也使用 `bcyw/ARTEX`；原项目的 Go module 路径保持不变。
+页面一键更新固定从 [bcyw/ARTEX Releases](https://github.com/bcyw/ARTEX/releases) 检查和下载版本（写死在 `selfupdate/github.go` 的 `Repo`）。克隆或通过 Git 更新源码也使用 `bcyw/ARTEX`；Go module 路径为 `github.com/bcyw/artex`。
 
 > 安全提示：一键更新会安装该仓库 Release 里的任意二进制，`SHA256SUMS` 与安装包来自同一个 Release，只防传输损坏、不防发布者。**只能指向自己完全控制的仓库**，不要改成第三方 fork。
 

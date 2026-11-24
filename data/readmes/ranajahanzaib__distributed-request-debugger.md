@@ -175,3 +175,16 @@ Integration tests require a running Compose stack and `DDR_INTEGRATION=1`; `make
 This is an educational local deployment. The demo identity accepts only seeded input, and payment is simulated. Do not expose the stack publicly: it has no user authentication or TLS. A production deployment would need access control, secret management, telemetry redaction, retention policy, and deliberate sampling. Incomplete traces can result from sampling or propagation gaps; the analyzer reports uncertainty rather than reconstructing missing evidence. p95/p99 metrics are unstable with small sample counts.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md), [tracing](docs/tracing.md), [diagnosis](docs/diagnosis.md), [demo scenarios](docs/demo-scenarios.md), [troubleshooting](docs/troubleshooting.md), and [CONTRIBUTING.md](CONTRIBUTING.md).
+
+
+## License & Custom Work
+
+[![Hire me](https://img.shields.io/badge/Open%20to%20work-work%40withrana.com-brightgreen)](mailto:work@withrana.com) [![LinkedIn](https://img.shields.io/badge/LinkedIn-workwithrana-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/workwithrana)
+[![Upwork](https://img.shields.io/badge/Upwork-Hire%20Me-14A800?style=flat&logo=upwork&logoColor=white)](https://www.upwork.com/freelancers/~01bbcf6edb91a8df5f)
+[![Contra](https://img.shields.io/badge/Contra-Hire%20Me-000000?style=flat)](https://contra.com/ranajahanzaib/)
+
+**License:** MIT, see [LICENSE](LICENSE). Free for personal and commercial use.
+
+**Author:** Rana Jahanzaib
+
+**Need this built for your stack?** Email me what you're working on: work@withrana.com

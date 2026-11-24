@@ -4,7 +4,7 @@
   "commit_90d": 20,
   "rel_ver": "v1.6.3",
   "rel_pub": "2026-11-02",
-  "rel_days": 20,
+  "rel_days": 22,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -50,8 +50,8 @@
   "commit_90d": 181,
   "rel_ver": "v6.29.3",
   "rel_pub": "2026-11-05",
-  "rel_days": 17,
-  "rel_n90": 5,
+  "rel_days": 19,
+  "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 14,
@@ -146,7 +146,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.4.0",
   "rel_pub": "2025-10-27",
-  "rel_days": 391,
+  "rel_days": 393,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -170,7 +170,7 @@
   "commit_7d": 0,
   "rel_ver": "1.5.7",
   "rel_pub": "2019-01-03",
-  "rel_days": 2880,
+  "rel_days": 2882,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -189,7 +189,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0",
   "rel_pub": "2020-10-08",
-  "rel_days": 2236,
+  "rel_days": 2238,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -244,12 +244,12 @@
   "enriched_at": "20260927"
  },
  "SirAllap/agentglass": {
-  "commit_90d": 2030,
-  "commit_7d": 3,
-  "rel_ver": "v1.0.0",
-  "rel_pub": "2026-11-03",
-  "rel_days": 19,
-  "rel_n90": 21,
+  "commit_90d": 1800,
+  "commit_7d": 10,
+  "rel_ver": "v1.1.1",
+  "rel_pub": "2026-11-18",
+  "rel_days": 6,
+  "rel_n90": 22,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -264,15 +264,17 @@
    "HTML": 1,
    "CSS": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"cbe4e3b91a9e0fe476895af9d1e4b5326c413204f5f8ecf63e1746a5271f97f2\""
+   "release": "W/\"afe273b54f64354df91fb5df6df11f07476e9fdbede865e7a70c1349511ce8f3\""
   },
   "rel_dates": [
+   "2026-11-18",
+   "2026-11-18",
    "2026-11-03",
    "2026-10-26",
    "2026-10-25",
@@ -292,11 +294,19 @@
    "2026-09-05",
    "2026-09-05",
    "2026-08-28",
-   "2026-08-28",
-   "2026-08-24",
-   "2026-08-15"
+   "2026-08-28"
   ],
   "rel_notes": [
+   {
+    "t": "v1.1.1",
+    "d": "2026-11-18",
+    "n": "agentglass v1.1.1 — moving a Jira card from the app works again\n\nA fix for one regression in v1.1.0.\n\n### Jira\n- **Card moves, comments and edits are yours again.** v1.1.0 read the person's own Jira writes from the desktop window as an agent's and refused them with \"Only the person changes cards in Jira; an agent cannot.\" The window now sends the desktop key on every person-only Jira write, and a test fails if a new one is left out.\n\nFull changelog: https://github.com/SirAllap/agentglass/compare/v1.1.0..."
+   },
+   {
+    "t": "v1.1.0",
+    "d": "2026-11-18",
+    "n": "- **Walls.** Builders run in a sandbox, a worker with no read wall runs under bwrap with the app config hidden or is refused, and the sandbox hides the user's control sockets.\n- **Git.** A sandboxed worker cannot move main, plant a hook or config in the shared .git, write packed-refs, or steer the deny list through .gitmodules; the deny list follows linked worktrees and symlinks.\n- **Database.** A read-only reader process, WAL checkpoints on a worker thread, and retention that cuts old events in short slice"
+   },
    {
     "t": "v1.0.0",
     "d": "2026-11-03",
@@ -336,16 +346,6 @@
     "t": "v0.23.1",
     "d": "2026-10-09",
     "n": "agentglass v0.23.1 — fixes from testing v0.23.0 by hand\n\nA day of hands-on testing on isolated instances turned up a handful of real problems in v0.23.0. This patch fixes them: the tmux restore order, a crash on the phone, a few places where a screen said more than it knew, and some contrast. Nothing else changes.\n\n### Terminal restore\n- **Panes come back in the order they were captured.** A window of three or more panes is restored with each pane in its own slot, in both resume modes. Before, panes two o"
-   },
-   {
-    "t": "v0.23.0",
-    "d": "2026-10-09",
-    "n": "agentglass v0.23.0 — Pull requests that say whose move it is, and a front door for agents\n\n14 pull requests since v0.22.0. Every panel now draws from one set of controls, borders and surfaces, and the pull request, the Git view and the file finder were reworked around one question: what is waiting, and on whom. ClickUp is no longer assumed, plugins can draw live panels, the phone app grew, and agents get a documented way to drive the app's own window. A pre-release review covered the server, the web UI, t"
-   },
-   {
-    "t": "v0.22.0",
-    "d": "2026-09-27",
-    "n": "reorganization; plugins that declare a sandbox are now actually held to it,\n- **Sandbox is enforced.** A plugin that declares a sandbox in its manifest\n- **The sandbox's network box holds under review.** A networked plugin box\nmanifest with no sandbox block now runs in the default box rather than\nplugin's consent to run outside its sandbox is a separate, revocable choice."
    }
   ]
  },
@@ -354,7 +354,7 @@
   "commit_7d": 26,
   "rel_ver": "4.4.4",
   "rel_pub": "2026-06-08",
-  "rel_days": 167,
+  "rel_days": 169,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -408,8 +408,8 @@
   "enriched_at": "20260927"
  },
  "liyupi/father": {
-  "commit_90d": 0,
-  "commit_7d": 0,
+  "commit_90d": 1,
+  "commit_7d": 1,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -424,14 +424,22 @@
    "HTML": 1,
    "Dockerfile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261124",
+  "etag": {
+   "release": "\"762e2c0051d46df55651d0a8007177f761482b4bae3f04f76016388eb8928fcb\""
+  },
+  "rel_dates": [],
+  "dim_ts": {
+   "commit": "20261124",
+   "release": "20261124"
+  }
  },
  "huaweicloud/huaweicloud-sdk-java-obs": {
   "commit_90d": 9,
   "commit_7d": 0,
   "rel_ver": "v3.26.9",
   "rel_pub": "2026-10-10",
-  "rel_days": 43,
+  "rel_days": 45,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -511,7 +519,7 @@
  "raeudigerRaeffi/turbular": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2025-05-24",
-  "rel_days": 547,
+  "rel_days": 549,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -530,7 +538,7 @@
  "eabz/evm-indexer": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2025-11-29",
-  "rel_days": 358,
+  "rel_days": 360,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -621,7 +629,7 @@
  "Aclify/aclify": {
   "rel_ver": "v2.2.0",
   "rel_pub": "2020-09-25",
-  "rel_days": 2249,
+  "rel_days": 2251,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -640,7 +648,7 @@
  "cristianst85/GeoNuclearData": {
   "rel_ver": "0.17.17",
   "rel_pub": "2024-03-03",
-  "rel_days": 994,
+  "rel_days": 996,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -655,7 +663,7 @@
  "CrimsonNynja/monster-hunter-DB": {
   "rel_ver": "3.0.0",
   "rel_pub": "2023-08-14",
-  "rel_days": 1196,
+  "rel_days": 1198,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -683,7 +691,7 @@
  "tines/rails-pg-adapter": {
   "rel_ver": "v0.1.14",
   "rel_pub": "2024-02-06",
-  "rel_days": 1020,
+  "rel_days": 1022,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -701,7 +709,7 @@
  "Tomato6966/discord-leveling-system-ranking-system": {
   "rel_ver": "v2.0-master",
   "rel_pub": "2020-11-10",
-  "rel_days": 2203,
+  "rel_days": 2205,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -719,7 +727,7 @@
  "fictadvisor/fictadvisor": {
   "rel_ver": "2.6.0",
   "rel_pub": "2025-01-19",
-  "rel_days": 672,
+  "rel_days": 674,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -757,7 +765,7 @@
  "metrico/otel-collector": {
   "rel_ver": "0.0.59",
   "rel_pub": "2026-09-22",
-  "rel_days": 61,
+  "rel_days": 63,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -790,7 +798,7 @@
  "Fl1yd/LightDB": {
   "rel_ver": "2.0",
   "rel_pub": "2024-07-07",
-  "rel_days": 868,
+  "rel_days": 870,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -807,7 +815,7 @@
  "skaiworldwide-oss/AGViewer": {
   "rel_ver": "2.0.0",
   "rel_pub": "2025-09-12",
-  "rel_days": 436,
+  "rel_days": 438,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -828,7 +836,7 @@
  "SadeghHayeri/pgkit": {
   "rel_ver": "2.3.0",
   "rel_pub": "2023-10-01",
-  "rel_days": 1148,
+  "rel_days": 1150,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -847,7 +855,7 @@
  "edrdo/dbdia": {
   "rel_ver": "0.6",
   "rel_pub": "2022-10-05",
-  "rel_days": 1509,
+  "rel_days": 1511,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -881,7 +889,7 @@
  "herrkaefer/psycopgr": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2017-11-17",
-  "rel_days": 3292,
+  "rel_days": 3294,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -911,7 +919,7 @@
  "managedcode/Database": {
   "rel_ver": "v2.0.2",
   "rel_pub": "2023-04-18",
-  "rel_days": 1314,
+  "rel_days": 1316,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -972,7 +980,7 @@
  "simonw/sqlite-generate": {
   "rel_ver": "1.1.1",
   "rel_pub": "2020-06-23",
-  "rel_days": 2343,
+  "rel_days": 2345,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1006,7 +1014,7 @@
  "kekland/lapisdb": {
   "rel_ver": "v0.4.2",
   "rel_pub": "2019-06-30",
-  "rel_days": 2702,
+  "rel_days": 2704,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1088,7 +1096,7 @@
  "Agent-0808/BA-characters-internal-id": {
   "rel_ver": "2026-09-24-v3.2.1",
   "rel_pub": "2026-09-24",
-  "rel_days": 59,
+  "rel_days": 61,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1147,7 +1155,7 @@
  "callofduty4x/mysql": {
   "rel_ver": "v1.1",
   "rel_pub": "2016-09-30",
-  "rel_days": 3705,
+  "rel_days": 3707,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1212,7 +1220,7 @@
  "remcostoeten/dora": {
   "rel_ver": "v0.42.1",
   "rel_pub": "2026-09-22",
-  "rel_days": 61,
+  "rel_days": 63,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1233,7 +1241,7 @@
  "schubergphilis/data-migrator": {
   "rel_ver": "v0.6.2",
   "rel_pub": "2017-12-16",
-  "rel_days": 3263,
+  "rel_days": 3265,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1297,7 +1305,7 @@
  "0xJaksun/lithium-core": {
   "rel_ver": "v0.0.5",
   "rel_pub": "2026-05-29",
-  "rel_days": 177,
+  "rel_days": 179,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1329,7 +1337,7 @@
  "tursodatabase/libsql-shell-go": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2023-03-16",
-  "rel_days": 1347,
+  "rel_days": 1349,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1468,7 +1476,7 @@
  "vearutop/flatjsonl": {
   "rel_ver": "v0.10.6",
   "rel_pub": "2026-04-30",
-  "rel_days": 206,
+  "rel_days": 208,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1486,7 +1494,7 @@
  "tac0x2a/nayco": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2020-10-04",
-  "rel_days": 2240,
+  "rel_days": 2242,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1507,7 +1515,7 @@
  "temilaj/CityScape": {
   "rel_ver": "v0.5",
   "rel_pub": "2017-09-04",
-  "rel_days": 3366,
+  "rel_days": 3368,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1543,7 +1551,7 @@
  "threadly/auroraArc": {
   "rel_ver": "release-0.16",
   "rel_pub": "2022-01-31",
-  "rel_days": 1756,
+  "rel_days": 1758,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1587,7 +1595,7 @@
  "lvcas-dotcom/pgfathom": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-08-19",
-  "rel_days": 95,
+  "rel_days": 97,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1620,7 +1628,7 @@
  "turbot/steampipe-plugin-grafana": {
   "rel_ver": "v1.3.0",
   "rel_pub": "2025-10-27",
-  "rel_days": 391,
+  "rel_days": 393,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1682,7 +1690,7 @@
  "htlin222/mcq-bank": {
   "rel_ver": "mcq-v0.8.0",
   "rel_pub": "2026-09-02",
-  "rel_days": 81,
+  "rel_days": 83,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1703,7 +1711,7 @@
  "datnguye/dbt-translate": {
   "rel_ver": "1.0.1",
   "rel_pub": "2023-04-09",
-  "rel_days": 1323,
+  "rel_days": 1325,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1738,10 +1746,10 @@
  },
  "nette/database": {
   "commit_90d": 131,
-  "commit_7d": 66,
+  "commit_7d": 0,
   "rel_ver": "v3.2.10",
   "rel_pub": "2026-10-27",
-  "rel_days": 26,
+  "rel_days": 28,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1782,7 +1790,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.1.1",
   "rel_pub": "2017-02-12",
-  "rel_days": 3570,
+  "rel_days": 3572,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1806,7 +1814,7 @@
  "adamghill/dj-lite": {
   "rel_ver": "1.3.0",
   "rel_pub": "2025-09-14",
-  "rel_days": 434,
+  "rel_days": 436,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1853,7 +1861,7 @@
   "commit_90d": 98,
   "commit_7d": 3,
   "rel_pub": "2026-10-01",
-  "rel_days": 52,
+  "rel_days": 54,
   "rel_n90": 13,
   "rel_pre": false,
   "etag": {
@@ -1974,7 +1982,7 @@
  "dongyuwei/tagged-github-stars": {
   "rel_ver": "v0.0.3",
   "rel_pub": "2020-07-10",
-  "rel_days": 2326,
+  "rel_days": 2328,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2036,7 +2044,7 @@
  "FactionMaster/FactionMaster": {
   "rel_ver": "v4.2.0",
   "rel_pub": "2022-03-06",
-  "rel_days": 1722,
+  "rel_days": 1724,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2078,7 +2086,7 @@
  "felipfr/nestjs-nx-modular-monolith-microservices": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2025-04-11",
-  "rel_days": 590,
+  "rel_days": 592,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2102,7 +2110,7 @@
  "max-au/sqlite": {
   "rel_ver": "2.0.0",
   "rel_pub": "2023-02-21",
-  "rel_days": 1370,
+  "rel_days": 1372,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2471,7 +2479,7 @@
  },
  "colbyham/tidbyt-healthchecks": {
   "commit_90d": 2,
-  "commit_7d": 2,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2887,11 +2895,11 @@
   }
  },
  "wannabespace/tamery": {
-  "commit_90d": 287,
-  "commit_7d": 11,
+  "commit_90d": 282,
+  "commit_7d": 7,
   "rel_ver": "cli-v0.99.3",
   "rel_pub": "2026-11-17",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2907,10 +2915,10 @@
    "JavaScript": 0,
    "HTML": 0
   },
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261121",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261117",
    "contrib": "20261018",
    "lang": "20261018"
@@ -2968,7 +2976,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"449da585aaa67ccf7840f6890678ff0e4436b7a1d89e46a6015068cb5e2361ba\"",
+   "release": "W/\"77a94c6b78e5a007bc7b6e3a3f9789ebbdd37768cbcde21bf00a3e1b5d0add55\"",
    "security": "\"94eeeab27b6341769075417309712d7496ad8ab5c308f94ade8d64dd3fe54db1\""
   },
   "rel_dates": [
@@ -3074,7 +3082,7 @@
  "Akin01/wasche": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-11-03",
-  "rel_days": 19,
+  "rel_days": 21,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3134,10 +3142,10 @@
   "rel_n90": 0
  },
  "Sma-444/duban": {
-  "commit_90d": 2,
-  "commit_7d": 2,
+  "commit_90d": 3,
+  "commit_7d": 0,
   "etag": {
-   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\"",
+   "release": "\"762e2c0051d46df55651d0a8007177f761482b4bae3f04f76016388eb8928fcb\"",
    "security": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
   },
   "rel_ver": null,
@@ -3155,10 +3163,10 @@
    "JavaScript": 8,
    "Makefile": 1
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261110",
    "contrib": "20261110",
    "lang": "20261110"
@@ -3199,7 +3207,7 @@
   },
   "rel_ver": "v0.3.5",
   "rel_pub": "2026-11-12",
-  "rel_days": 10,
+  "rel_days": 12,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -3282,7 +3290,7 @@
   },
   "rel_ver": "v1.2.1",
   "rel_pub": "2026-11-19",
-  "rel_days": 3,
+  "rel_days": 5,
   "rel_n90": 18,
   "rel_pre": false,
   "rel_none": false,
@@ -3385,7 +3393,7 @@
   },
   "rel_ver": "v2.3.0",
   "rel_pub": "2026-11-07",
-  "rel_days": 15,
+  "rel_days": 17,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -3423,6 +3431,33 @@
    "security": "20261121",
    "contrib": "20261121",
    "lang": "20261121"
+  }
+ },
+ "mx9014/chbenchmark.tidb.ticat": {
+  "commit_90d": 0,
+  "commit_7d": 0,
+  "etag": {
+   "release": "\"762e2c0051d46df55651d0a8007177f761482b4bae3f04f76016388eb8928fcb\"",
+   "security": "\"762e2c0051d46df55651d0a8007177f761482b4bae3f04f76016388eb8928fcb\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Shell": 100
+  },
+  "enriched_at": "20261124",
+  "dim_ts": {
+   "commit": "20261124",
+   "release": "20261124",
+   "security": "20261124",
+   "contrib": "20261124",
+   "lang": "20261124"
   }
  }
 }

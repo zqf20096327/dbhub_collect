@@ -463,6 +463,27 @@ Contributions to SafaiOS are warmly welcomed! Whether you are optimizing compute
 | 🗺️ [**Product Roadmap**](docs/ROADMAP.md) | Strategic milestone tracking across Foundation, Dispatch, and Governance | Product Leads, Community |
 | 📋 [**Final Architecture Sign-Off**](Application/Documentation/FINAL_ARCHITECTURE_SIGNOFF.md) | Approved product decisions, lifecycle state machine, and boundaries | System Architects |
 | 🤖 [**ML Integration Contract**](Application/Documentation/ML_INTEGRATION_CONTRACT.md) | Checkpoint hashes, YOLO11s hyperparameters, and inference schemas | ML Engineers |
+| 🏛️ [**Contributors Hall of Fame**](CONTRIBUTORS.md) | Permanent recognition of community contributors, live sync badges, and inductees | All Contributors |
+
+---
+
+<div align="center">
+  <h2>Contributors & Community</h2>
+</div>
+
+SafaiOS is built with care by an open-source community dedicated to autonomous municipal intelligence, computer vision innovation, and cleaner, greener cities.
+
+<div align="center">
+
+[![Contributors Count](https://img.shields.io/github/contributors/TheVicky1/Safai_OS?style=for-the-badge&color=00c853)](https://github.com/TheVicky1/Safai_OS/graphs/contributors)
+
+[![SafaiOS Contributors](https://contrib.rocks/image?repo=TheVicky1/Safai_OS)](https://github.com/TheVicky1/Safai_OS/graphs/contributors)
+
+*A huge thank you to all open-source developers who contribute to SafaiOS!*
+
+👉 [**View all contributors on GitHub**](https://github.com/TheVicky1/Safai_OS/graphs/contributors) • [**Contributors Hall of Fame**](CONTRIBUTORS.md)
+
+</div>
 
 ---
 

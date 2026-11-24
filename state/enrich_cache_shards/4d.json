@@ -1,11 +1,11 @@
 {
  "VictoriaMetrics/VictoriaMetrics": {
-  "commit_7d": 34,
-  "commit_90d": 367,
-  "rel_ver": "v1.156.0",
-  "rel_pub": "2026-11-09",
-  "rel_days": 13,
-  "rel_n90": 14,
+  "commit_7d": 29,
+  "commit_90d": 369,
+  "rel_ver": "v1.157.0",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
+  "rel_n90": 16,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 11,
@@ -22,7 +22,7 @@
    "GHSA-8mjx-cc46-grxv(-,medium)"
   ],
   "contrib_n": 398,
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "lang": {
    "Go": 88,
    "TypeScript": 9,
@@ -32,15 +32,16 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261121",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261122"
   },
   "etag": {
-   "release": "W/\"f63a2b98e33afc6fec7b53f1eba365561a6c9dcd6219a296731cde0b19d0f6b0\"",
+   "release": "W/\"722623c23245b5750543a8fd2c9971f5915bf3b95fa80eed45858822e81b0a74\"",
    "security": "W/\"0a918cb5cd8038a987da6b48185d774f7daf4b4c4a8b9af434d5e834884db1a5\""
   },
   "rel_dates": [
+   "2026-11-23",
    "2026-11-09",
    "2026-10-26",
    "2026-10-20",
@@ -48,6 +49,7 @@
    "2026-09-28",
    "2026-09-14",
    "2026-08-31",
+   "2026-11-23",
    "2026-11-09",
    "2026-10-26",
    "2026-10-20",
@@ -57,6 +59,16 @@
    "2026-08-31"
   ],
   "rel_notes": [
+   {
+    "t": "v1.157.0",
+    "d": "2026-11-23",
+    "n": "* FEATURE: [vmrestore](https://docs.victoriametrics.com/victoriametrics/vmrestore/): add `-restoreSince` and `-restorePartitions` command-line flags for restoring only a subset of monthly partitions from a backup. This reduces download time and disk usage when only part of the data is needed, e.g. when restoring a few production partitions into a test environment. Local partitions in `-storageDataPath` that aren't restored are removed. Partial restore never restores the legacy non-partitioned IndexDB from b"
+   },
+   {
+    "t": "v1.148.10",
+    "d": "2026-11-23",
+    "n": "* BUGFIX: [vmagent](https://docs.victoriametrics.com/victoriametrics/vmagent/): prevent HTTP connection leaks when [service discovery](https://docs.victoriametrics.com/victoriametrics/sd_configs/) configs are reloaded or removed for Hetzner, Marathon, PuppetDB and Vultr SDs. See [#4724](https://github.com/VictoriaMetrics/VictoriaMetrics/issues/4724)."
+   },
    {
     "t": "v1.156.0",
     "d": "2026-11-09",
@@ -96,25 +108,15 @@
     "t": "v1.148.6",
     "d": "2026-10-12",
     "n": "* BUGFIX: all VictoriaMetrics components: properly match regexps that start with an alternation or a character class and continue with `.*foo.*` or `.+foo.+`, for example `(a|b).*foo.*`. Previously the leading part was ignored when matching [relabeling](https://docs.victoriametrics.com/victoriametrics/relabeling/) `regex` and `if` filters and [stream aggregation](https://docs.victoriametrics.com/victoriametrics/stream-aggregation/) `match` filters, so such rules matched more series than intended. See [#1171"
-   },
-   {
-    "t": "v1.153.0",
-    "d": "2026-09-28",
-    "n": "* BUGFIX: [vmagent](https://docs.victoriametrics.com/victoriametrics/vmagent/): add missing `X-Influxdb-Version` HTTP header to [influxdb](https://docs.victoriametrics.com/victoriametrics/integrations/influxdb/) API responses. See [#11570](https://github.com/VictoriaMetrics/VictoriaMetrics/issues/11570)."
-   },
-   {
-    "t": "v1.152.0",
-    "d": "2026-09-14",
-    "n": "* BUGFIX: `vmselect` in [VictoriaMetrics cluster](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/): allow access to `/prometheus/api/v1/admin/tsdb/delete_series` and `graphite/tags/delSeries` using only the corresponding `-deleteAuthKey`, even when `-httpAuth.*` is also configured, without additionally requiring `-httpAuth.*` credentials. See [#11512](https://github.com/VictoriaMetrics/VictoriaMetrics/pull/11512)."
    }
   ]
  },
  "FalkorDB/FalkorDB": {
-  "commit_7d": 56,
-  "commit_90d": 336,
+  "commit_7d": 57,
+  "commit_90d": 332,
   "rel_ver": "v6.2.0",
   "rel_pub": "2026-11-22",
-  "rel_days": 0,
+  "rel_days": 2,
   "rel_n90": 14,
   "rel_pre": false,
   "rel_none": false,
@@ -123,7 +125,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 67,
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "lang": {
    "Rust": 47,
    "Python": 28,
@@ -133,12 +135,12 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261108"
   },
   "etag": {
-   "release": "W/\"6a9960d92797b19ba45f4a1ca471918a55089789c6519634a19cfea2adb3904d\"",
+   "release": "W/\"d03eea684e4f01f84378e49f01b3908373aefc369ef68e035e403df8eda04153\"",
    "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
   },
   "rel_dates": [
@@ -212,10 +214,10 @@
  },
  "heavyai/heavydb": {
   "commit_7d": 2,
-  "commit_90d": 31,
+  "commit_90d": 26,
   "rel_ver": "v10.0.0",
   "rel_pub": "2026-10-08",
-  "rel_days": 45,
+  "rel_days": 47,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -224,7 +226,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 80,
-  "enriched_at": "20261120",
+  "enriched_at": "20261124",
   "lang": {
    "C++": 82,
    "Java": 9,
@@ -234,12 +236,12 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261120",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261108"
   },
   "etag": {
-   "release": "W/\"6353c03242d91efb669e829f24019bddca949a1ec8d8f7a939016443d641ee5d\"",
+   "release": "W/\"768308807bd08dced42467ac681962315e7ac71e68cf9f39b53682ee951fca9d\"",
    "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
   },
   "rel_dates": [
@@ -378,12 +380,12 @@
   "enriched_at": "20260927"
  },
  "rush-db/rushdb": {
-  "commit_90d": 73,
-  "commit_7d": 26,
-  "rel_ver": "v3.0.7",
-  "rel_pub": "2026-11-09",
-  "rel_days": 13,
-  "rel_n90": 9,
+  "commit_90d": 197,
+  "commit_7d": 125,
+  "rel_ver": "v3.0.15",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
+  "rel_n90": 17,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -398,15 +400,23 @@
    "JavaScript": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"777f2ec93f2bd21ccf5941e58c4a568d9f151b72c8aed4366f462ac51c2c7879\""
+   "release": "W/\"45a144775d1bcd3d61f31f0e8f3ff8801ae93304833a1eefa8dae3a1400c377e\""
   },
   "rel_dates": [
+   "2026-11-23",
+   "2026-11-23",
+   "2026-11-20",
+   "2026-11-17",
+   "2026-11-17",
+   "2026-11-13",
+   "2026-11-11",
+   "2026-11-10",
    "2026-11-09",
    "2026-11-08",
    "2026-11-07",
@@ -415,12 +425,49 @@
    "2026-11-01",
    "2026-11-01",
    "2026-10-28",
-   "2026-08-31",
-   "2026-08-18",
-   "2026-08-18",
-   "2026-08-18"
+   "2026-08-31"
   ],
   "rel_notes": [
+   {
+    "t": "v3.0.15",
+    "d": "2026-11-23",
+    "n": "A patch release for unique indexes.\n\n### Fixed\n\n- **A write during a unique index's build could repeat a value.** A value\n  already stored was claimed only once the build reached its record, so a\n  write sent while the index was `building` could give a second record that\n  value, and the build then dropped the index without a word. Declaring a\n  unique index now claims every value of the label in the declaring commit:\n  a write during the build is refused with `409 conflict` like any other,\n  and the index "
+   },
+   {
+    "t": "v3.0.14",
+    "d": "2026-11-23",
+    "n": "- **Breaking: building RushDB from source needs Rust 1.100** (was 1.91 as\n[Properties and types](https://github.com/rush-db/rushdb/blob/v3.0.14/docs/manual/data-model/properties-and-types.md)).\nPostgreSQL point text. Over the PostgreSQL wire they are `timestamptz`,\nPostgreSQL reads it). A Metabase \"UNIX timestamp (milliseconds)\" cast on\n0.5.44). Until Grafeo 0.6.4 is released, RushDB builds Grafeo's\nGrafeoDB/grafeo#807 (named zero-length paths, grouping keys inside maps,\nRushDB's text indexes outside a push"
+   },
+   {
+    "t": "v3.0.13",
+    "d": "2026-11-20",
+    "n": "- **`rushdb up` no longer keeps its data beside the installed binary.**\nfound`: the binary goes to `~/.rushdb/bin`, and the `PATH` line added to\n`rushdb_storage_unmaterialized_bytes` and commit phase `gap_push`;\nfixed:5000`, `RUSHDB_VECTOR_EXACT_MAX_POOL=fixed:5000`) to keep it. New\n- **`rushdb` works right after the one-line installer, in the same shell.**\n`curl -fsSL .../install.sh | sh && rushdb up` failed with `command not\nlinks `rushdb` into the first of `~/.local/bin`, `~/bin`,\nown link there, never a"
+   },
+   {
+    "t": "v3.0.12",
+    "d": "2026-11-17",
+    "n": "`RUSHDB_PLANNER_STATS_IDLE_SECONDS`, `RUSHDB_PLANNER_STATS_MAX_AGE_COMMITS`."
+   },
+   {
+    "t": "v3.0.11",
+    "d": "2026-11-17",
+    "n": "variables `RUSHDB_PLANNER_STATS_IDLE_SECONDS`,\n`RUSHDB_PLANNER_STATS_MAX_AGE_COMMITS`) are gone, and a configuration\n`planner-stats-bytes` stays. The gauges `rushdb_planner_stats_bytes` and\n`rushdb_planner_stats_entries` are replaced by\n`rushdb_resident_bytes{layer=\"planner-stats\"}` and\n`rushdb_resident_entries{layer=\"planner-stats\"}`.\na byte budget and reports `rushdb_resident_*{layer}` metrics; answers are\n`rushdb_resident_verify_mismatch_total`)."
+   },
+   {
+    "t": "v3.0.10",
+    "d": "2026-11-13",
+    "n": "Derived state heals itself: a read that finds a label's derived rows inconsistent logs it, counts it in `rushdb_derived_inconsistency_total`, answers that label from its base rows, and repairs it with a logged re-derive every node applies the same way; the suspect marker survives restarts until the repair. **Removed:** `rushdb serve --verify`; there is no manual check or repair step.\nPostgreSQL BI tools connect: transaction settings, read-only `BEGIN`/`COMMIT` blocks, `pg_catalog` and `information_schema` ("
+   },
+   {
+    "t": "v3.0.9",
+    "d": "2026-11-11",
+    "n": "No stored-format change: 3.0.9 and 3.0.8 read the same store, so an upgrade can be rolled back. See [CHANGELOG](https://github.com/rush-db/rushdb/blob/main/CHANGELOG.md).\n* release: RushDB 3.0.9 by @1pxone in https://github.com/rush-db/rushdb/pull/441\n**Full Changelog**: https://github.com/rush-db/rushdb/compare/v3.0.8...v3.0.9"
+   },
+   {
+    "t": "v3.0.8",
+    "d": "2026-11-10",
+    "n": "Performance: an unfiltered `describe.properties` with full detail reads its sample values through each property's presence rows instead of every occurrence of the first 10,000 records, stopping once each property's samples are complete; describing a 10,000-document schema in four calls drops from about 55 ms to 13 ms. The response is unchanged. No stored-format change: 3.0.8 and 3.0.7 read the same store, so an upgrade can be rolled back. See [CHANGELOG](https://github.com/rush-db/rushdb/blob/main/CHANGELOG"
+   },
    {
     "t": "v3.0.7",
     "d": "2026-11-09",
@@ -430,55 +477,15 @@
     "t": "v3.0.6",
     "d": "2026-11-08",
     "n": "Security: `--pgwire-port 0` disables the PostgreSQL wire listener (it bound an ephemeral port and bypassed the listen guard). Fixes: Bolt selects the tenant from `BEGIN`/`RUN` `db` as drivers send it, with tenant-bound capability tokens; `neo4j://` routing works. See [CHANGELOG](https://github.com/rush-db/rushdb/blob/main/CHANGELOG.md).\n* fix(bolt): select the tenant from BEGIN/RUN db, as drivers send it by @1pxone in https://github.com/rush-db/rushdb/pull/432\n* Bump tantivy from 0.26.1 to 0.27.0 by @depend"
-   },
-   {
-    "t": "v3.0.5",
-    "d": "2026-11-07",
-    "n": "Fixes: dropping a vector index frees its vector space (tenants that reached the 256-space limit through create/drop cycles recover on upgrade, and the limit is now reported as `resource_exhausted`); concurrent transactions that create records no longer conflict with each other. See [CHANGELOG](https://github.com/rush-db/rushdb/blob/main/CHANGELOG.md).\n* fix: free a dropped vector index's space; stop record-creating transactions from conflicting by @1pxone in https://github.com/rush-db/rushdb/pull/424\n* docs"
-   },
-   {
-    "t": "v3.0.4",
-    "d": "2026-11-07",
-    "n": "TLS and tenant-bound capability tokens on the PostgreSQL, gRPC and Bolt listeners; typed relationship properties (a `types` map on relationship updates and links stores ISO strings as datetimes, and relationship reads return `propertyTypes`, advertised by the `relationshipPropertyTypes` capability); aggregate catalog and collect projection fixes. See [CHANGELOG](https://github.com/rush-db/rushdb/blob/main/CHANGELOG.md).\n* ci: publish crates from their own workflow by @1pxone in https://github.com/rush-db/ru"
-   },
-   {
-    "t": "v3.0.3",
-    "d": "2026-11-05",
-    "n": "Documentation-only release: the binary behaves exactly like 3.0.2. The Bolt and Cypher manual pages enable Cypher with `--languages sql,cypher`; `--languages` replaces the default set, so `--languages cypher` alone turned SQL off. See [CHANGELOG](https://github.com/rush-db/rushdb/blob/main/CHANGELOG.md).\n* docs(manual): keep sql when enabling Cypher (--languages sql,cypher) by @1pxone in https://github.com/rush-db/rushdb/pull/417\n* release: RushDB 3.0.3 by @1pxone in https://github.com/rush-db/rushdb/pull/4"
-   },
-   {
-    "t": "v3.0.2",
-    "d": "2026-11-01",
-    "n": "Metadata-only release: the binary behaves exactly like 3.0.1. Package and image descriptions use RushDB's current wording (\"the database for AI\"), and the Apple silicon binary is built on macOS 15. See [CHANGELOG](https://github.com/rush-db/rushdb/blob/main/CHANGELOG.md).\n* ci: build the Apple silicon binary on macos-15 by @1pxone in https://github.com/rush-db/rushdb/pull/405\n* Align README and package metadata with the database-for-AI wording by @1pxone in https://github.com/rush-db/rushdb/pull/406\n* relea"
-   },
-   {
-    "t": "v3.0.1",
-    "d": "2026-11-01",
-    "n": "* Bump actions/download-artifact from 4.3.0 to 8.0.2 by @dependabot[bot] in https://github.com/rush-db/rushdb/pull/381\n* Bump actions/checkout from 4.4.0 to 7.0.1 by @dependabot[bot] in https://github.com/rush-db/rushdb/pull/382\n* Bump softprops/action-gh-release from 2.6.2 to 3.0.3 by @dependabot[bot] in https://github.com/rush-db/rushdb/pull/383\n* Bump actions/upload-artifact from 4.6.2 to 7.0.2 by @dependabot[bot] in https://github.com/rush-db/rushdb/pull/384\n* Bump sigstore/cosign-installer from 4.1.0 t"
-   },
-   {
-    "t": "v3.0.0",
-    "d": "2026-10-28",
-    "n": "## What's Changed\n* Fix prometheus metrics module import by @1pxone in https://github.com/rush-db/rushdb/pull/376\n* chore(release): version packages by @github-actions[bot] in https://github.com/rush-db/rushdb/pull/377\n* feat!: RushDB 3.0 — Rust engine (LMPG) by @1pxone in https://github.com/rush-db/rushdb/pull/380\n\n\n**Full Changelog**: https://github.com/rush-db/rushdb/compare/@rushdb/mcp-server@2.13.0...v3.0.0"
-   },
-   {
-    "t": "@rushdb/mcp-server@2.13.0",
-    "d": "2026-08-31",
-    "n": "### Minor Changes\n\n- 5544dbc: Add metrics"
-   },
-   {
-    "t": "@rushdb/skills@2.12.0",
-    "d": "2026-08-18",
-    "n": "### Minor Changes\n\n- abeb65c: Update skills for agent memory and add memory contract packages for further integrations."
    }
   ]
  },
  "lanedirt/OGameX": {
-  "commit_90d": 157,
+  "commit_90d": 142,
   "commit_7d": 10,
   "rel_ver": "0.15.0",
   "rel_pub": "2026-10-22",
-  "rel_days": 31,
+  "rel_days": 33,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -494,13 +501,13 @@
    "Shell": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"1c4184df5245c8c3e16cdf60c42e6dd5d00c5c002df25008a4fdfa848962bc66\""
+   "release": "W/\"3872429a0422ad4e19de3a57d8a12068284a8e6aae84e57a9ecd21744ce4a205\""
   },
   "rel_dates": [
    "2026-10-22"
@@ -537,7 +544,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 33,
+  "rel_days": 35,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -592,7 +599,7 @@
   "commit_7d": 0,
   "rel_ver": "0.2.1",
   "rel_pub": "2026-03-01",
-  "rel_days": 266,
+  "rel_days": 268,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -613,7 +620,7 @@
   "commit_7d": 0,
   "rel_ver": "0.4.0",
   "rel_pub": "2025-11-20",
-  "rel_days": 367,
+  "rel_days": 369,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -651,7 +658,7 @@
  "segasai/q3c": {
   "rel_ver": "v2.0.5",
   "rel_pub": "2026-08-08",
-  "rel_days": 106,
+  "rel_days": 108,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -672,7 +679,7 @@
  "jeyrce/ishare": {
   "rel_ver": "v1.0.3-final",
   "rel_pub": "2024-04-22",
-  "rel_days": 944,
+  "rel_days": 946,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -693,7 +700,7 @@
  "PraxisMapper/PraxisMapper": {
   "rel_ver": "Release13",
   "rel_pub": "2025-03-04",
-  "rel_days": 628,
+  "rel_days": 630,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -728,7 +735,7 @@
  "ngudbhav/TriCo-electron-app": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2023-01-22",
-  "rel_days": 1400,
+  "rel_days": 1402,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -791,7 +798,7 @@
  "rejot-dev/rejot": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2025-05-19",
-  "rel_days": 552,
+  "rel_days": 554,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -839,7 +846,7 @@
  "oracle/navarkos": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2017-12-06",
-  "rel_days": 3273,
+  "rel_days": 3275,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -890,7 +897,7 @@
  "Galarzaa90/tibiawiki-sql": {
   "rel_ver": "v9.0.0",
   "rel_pub": "2026-07-22",
-  "rel_days": 123,
+  "rel_days": 125,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -988,7 +995,7 @@
  "verygoodplugins/mcp-local-wp": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-01-04",
-  "rel_days": 322,
+  "rel_days": 324,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1006,7 +1013,7 @@
  "Yupcha/memXT": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-07-18",
-  "rel_days": 127,
+  "rel_days": 129,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1027,7 +1034,7 @@
  "NoelDeMartin/soukai": {
   "rel_ver": "v0.7.1",
   "rel_pub": "2025-12-14",
-  "rel_days": 343,
+  "rel_days": 345,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1124,7 +1131,7 @@
  "CairnCMS/cairncms": {
   "rel_ver": "v1.5.0",
   "rel_pub": "2026-08-29",
-  "rel_days": 85,
+  "rel_days": 87,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1202,7 +1209,7 @@
  "pg-tools/pgcompare": {
   "rel_ver": "v1.2.4",
   "rel_pub": "2026-05-10",
-  "rel_days": 196,
+  "rel_days": 198,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1236,7 +1243,7 @@
  "NtimYeboah/laravel-database-trigger": {
   "rel_ver": "v8.5.0",
   "rel_pub": "2025-02-24",
-  "rel_days": 636,
+  "rel_days": 638,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1297,7 +1304,7 @@
  "SvenskaSpel/cobra-policytool": {
   "rel_ver": "v1.1.6",
   "rel_pub": "2019-05-23",
-  "rel_days": 2740,
+  "rel_days": 2742,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1358,7 +1365,7 @@
  "mbarre/schemacrawler-additional-lints": {
   "rel_ver": "1.06.11",
   "rel_pub": "2020-12-07",
-  "rel_days": 2176,
+  "rel_days": 2178,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1442,7 +1449,7 @@
  "paperhive/octonom": {
   "rel_ver": "v1.0.0-alpha.4",
   "rel_pub": "2017-08-28",
-  "rel_days": 3373,
+  "rel_days": 3375,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1477,7 +1484,7 @@
  "ZeroCoolHacker/FactoryManagment": {
   "rel_ver": "1",
   "rel_pub": "2019-03-22",
-  "rel_days": 2802,
+  "rel_days": 2804,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1495,7 +1502,7 @@
  "boxed-code/laravel-scout-database": {
   "rel_ver": "1.2",
   "rel_pub": "2021-05-23",
-  "rel_days": 2009,
+  "rel_days": 2011,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1540,7 +1547,7 @@
  "NotCompsky/rscraper": {
   "rel_ver": "0.4.0",
   "rel_pub": "2020-08-04",
-  "rel_days": 2301,
+  "rel_days": 2303,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1561,7 +1568,7 @@
  "yamdev07/HotelManagement": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-02-06",
-  "rel_days": 289,
+  "rel_days": 291,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1634,7 +1641,7 @@
  "huaweicloud-samples/database-gaussdb-hibernate-orm": {
   "rel_ver": "7.0.1",
   "rel_pub": "2025-07-09",
-  "rel_days": 501,
+  "rel_days": 503,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1708,8 +1715,8 @@
   "commit_7d": 189,
   "rel_ver": "v0.3.40",
   "rel_pub": "2026-11-01",
-  "rel_days": 21,
-  "rel_n90": 11,
+  "rel_days": 23,
+  "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -1808,7 +1815,7 @@
  "cdeust/Cortex": {
   "rel_ver": "v4.23.5",
   "rel_pub": "2026-09-23",
-  "rel_days": 60,
+  "rel_days": 62,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1840,7 +1847,7 @@
  "mcollina/sqlite-pool": {
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-08-13",
-  "rel_days": 101,
+  "rel_days": 103,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1904,7 +1911,7 @@
  "codenamev/claude_memory": {
   "rel_ver": "v0.13.2",
   "rel_pub": "2026-06-27",
-  "rel_days": 148,
+  "rel_days": 150,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2488,7 +2495,7 @@
  "fclairamb/solidping": {
   "rel_ver": "v0.37.0",
   "rel_pub": "2026-09-30",
-  "rel_days": 53,
+  "rel_days": 55,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2557,7 +2564,7 @@
   "commit_7d": 0,
   "rel_ver": "1.8.2320",
   "rel_pub": "2025-10-17",
-  "rel_days": 401,
+  "rel_days": 403,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2792,7 +2799,7 @@
   "commit_7d": 1,
   "rel_ver": "v5.0.5",
   "rel_pub": "2026-11-15",
-  "rel_days": 7,
+  "rel_days": 9,
   "rel_n90": 16,
   "rel_pre": false,
   "rel_none": false,
@@ -2993,7 +3000,7 @@
   },
   "rel_ver": "v0.1.0-alpha.1",
   "rel_pub": "2026-11-07",
-  "rel_days": 15,
+  "rel_days": 17,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -3036,7 +3043,7 @@
   },
   "rel_ver": "v3.0.0-native-test",
   "rel_pub": "2026-11-16",
-  "rel_days": 6,
+  "rel_days": 8,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3293,7 +3300,8 @@
    "security": "20261122",
    "contrib": "20261122",
    "lang": "20261122"
-  }
+  },
+  "rel_n90": 0
  },
  "JuliaQUBO/QUBOLib.jl": {
   "etag": {
@@ -3302,7 +3310,7 @@
   },
   "rel_ver": "v0.2.9",
   "rel_pub": "2026-11-21",
-  "rel_days": 1,
+  "rel_days": 3,
   "rel_n90": 14,
   "rel_pre": false,
   "rel_none": false,

@@ -2,6 +2,8 @@
 
 # Omasql — a fast SQLite GUI client for Linux
 
+[![CI](https://github.com/FabianJ-L/omasql/actions/workflows/ci.yml/badge.svg)](https://github.com/FabianJ-L/omasql/actions/workflows/ci.yml)
+
 **Omasql** is a light, keyboard-first SQLite database browser and SQL editor
 for Linux. Write queries with autocomplete, browse tables and the schema, and
 read results without leaving the keyboard. Built with Qt 6 and C++, made for
@@ -38,13 +40,23 @@ bin/build && build/omasql some.db
 - **Ctrl+Enter** runs the statement under the cursor (or the selection);
   queries run in the background and **Esc** cancels them. Errors put the
   cursor where SQLite found the problem.
+- **Fix with AI**: when a statement fails, the button beside the error (or
+  **Ctrl+.**) sends it, SQLite's error, and the schema to the coding agent the
+  system is set up with (`omarchy default agent`; Claude and Codex answer in
+  the background) and puts the corrected statement in its place, selected, for
+  you to check and run. Ctrl+Z takes it back. Other agents open in their own
+  window with the error. `OMASQL_AGENT` picks a different one. The first time
+  for each agent, Omasql asks before sending anything: the statement, the
+  error, and the table definitions go out, never the rows.
 - **Schema browser** with row counts, primary and foreign keys, indexes, and
   a filter over tables and columns. Click a table to see its rows, click its
   arrow to open or close it, click a column to insert its name.
 - **Results grid** with typed headers, NULLs and numbers set apart, click to
   sort, drag a column edge to resize, arrows to move. **Ctrl+F** filters the
   rows as you type; Shift+arrows select a block that Ctrl+C copies in a form
-  spreadsheets paste.
+  spreadsheets paste. A query shows its first 20,000 rows; when it only
+  reads, **Load 20,000 more** fetches the next ones and keeps your sort,
+  filter, and column widths.
 - **Foreign keys are links**: Ctrl+click a value (or press Enter on it, or
   use the link in the row inspector) to open the row it points to.
 - **Query plans**: Ctrl+Shift+E shows how SQLite will run the statement
@@ -64,12 +76,13 @@ bin/build && build/omasql some.db
 | Ctrl+Enter | Run the statement under the cursor, or the selection |
 | Ctrl+Shift+Enter | Run everything in the editor |
 | Ctrl+Shift+E | Show the query plan for the statement under the cursor |
+| Ctrl+. | Let the AI agent fix the statement that failed |
 | Esc | Cancel a running query, close lists |
 | Ctrl+Space | Suggest tables, columns, keywords |
 | Tab | Insert a suggestion (Enter too, once picked with the arrows) |
 | Ctrl+/ | Comment or uncomment lines |
 | Tab / Shift+Tab | Indent or outdent lines |
-| Ctrl+Z / Ctrl+Shift+Z | Undo, redo |
+| Ctrl+Z / Ctrl+Y (or Ctrl+Shift+Z) | Undo, redo; completions, comment toggles and AI fixes undo in one step |
 | Ctrl+H | Query history |
 | Ctrl+K | Filter tables and columns |
 | Ctrl+1 / 2 / 3 | Focus tables, editor, results |

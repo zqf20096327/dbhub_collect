@@ -10,7 +10,7 @@
   <img alt="Rust 1.82+" src="https://img.shields.io/badge/rust-1.82%2B-orange?logo=rust">
   <a href="https://registry.modelcontextprotocol.io"><img alt="Listed in the MCP registry" src="https://img.shields.io/badge/MCP-registry-8250df"></a>
   <a href="https://mcpservers.org/servers/ancientice/palace-rs"><img alt="Listed on mcpservers.org" src="https://mcpservers.org/badge.svg"></a>
-  <img alt="Works with Claude Code, Codex, Cursor, Gemini CLI, VS Code, OpenCode, Cline, Zed, Goose, Windsurf and Claude Desktop" src="https://img.shields.io/badge/works%20with-11%20AI%20agents-8A2BE2">
+  <img alt="Works with Claude Code, Codex, Cursor, Gemini CLI, VS Code, OpenCode, Cline, Zed, Goose, Windsurf, Antigravity and Claude Desktop" src="https://img.shields.io/badge/works%20with-12%20AI%20agents-8A2BE2">
 </p>
 
 <p align="center">
@@ -32,7 +32,7 @@
 ---
 
 Palace gives Claude Code, Codex, Cursor, Gemini CLI, VS Code, OpenCode,
-Cline, Zed, Goose, Windsurf, and Claude Desktop a memory that
+Cline, Zed, Goose, Windsurf, Antigravity, and Claude Desktop a memory that
 lasts between sessions. It stores what happened verbatim, recalls it
 automatically when it's relevant, and cites where each answer came from.
 
@@ -115,6 +115,22 @@ brew update && brew upgrade palace
 
 When a release changes the memory protocol rule (the CHANGELOG says so), run
 `palace install` again afterwards so your agents get the new rule text.
+
+**Claude Code plugin.** After installing the binary with one of the methods
+above, Claude Code users can add Palace as a plugin instead of running
+`palace install --client claude`:
+
+```
+/plugin marketplace add AncientiCe/palace-rs
+/plugin install palace@palace-rs
+```
+
+The plugin brings the MCP server and the memory hooks, and calls `palace` from
+your `PATH`. It can't write `~/.claude/CLAUDE.md`, so run `palace install` too
+if you want the always-on rule. While the plugin is enabled, `palace install`
+writes only the rule and removes its own Claude Code MCP entry and hooks, so
+nothing runs twice. Hooks left in `settings.json` by an earlier install stay
+silent while the plugin is on.
 
 **MCP registry / MCPB bundle.** Palace is listed in the official
 [MCP registry](https://registry.modelcontextprotocol.io) as
@@ -326,7 +342,7 @@ behind tool search.
 ## 🔌 Supported clients
 
 `palace install` configures every supported client by default
-(`--client all`). Gemini CLI, VS Code, Windsurf, OpenCode, Cline, Zed and
+(`--client all`). Gemini CLI, VS Code, Windsurf, Antigravity, OpenCode, Cline, Zed and
 Goose are included only when their config folder exists, so Palace never sets up an agent you don't
 have. Use `--client <name>` to configure one explicitly.
 
@@ -342,6 +358,7 @@ have. Use `--client <name>` to configure one explicitly.
 | Zed | `zed` | Zed `settings.json` (`context_servers`) | Zed's global `AGENTS.md` | None. Zed's agent has no hooks; external agents in Zed use their own Palace setup. |
 | Goose | `goose` | Goose `config.yaml` (`extensions`) | Goose `.goosehints` | `~/.agents/plugins/palace` (save nudge only; Goose hooks can't inject context; needs `sh` on Windows) |
 | Windsurf | `windsurf` | `~/.codeium/windsurf/mcp_config.json` | `~/.codeium/windsurf/memories/global_rules.md` | None. Cascade hooks can't inject context. Devin Local reuses the Claude Code hooks. |
+| Antigravity | `antigravity` | `~/.gemini/config/mcp_config.json` | `~/.gemini/config/rules/palace.md` (always on; `~/.gemini/GEMINI.md` is left to Gemini CLI) | None yet. The always-on rule carries the protocol. |
 | Claude Desktop | `claude-desktop` | `claude_desktop_config.json` | `~/.claude/CLAUDE.md` | None. Use the [MCP prompts](#mcp-prompts) instead. |
 
 Rule files are written as a managed block. Your existing content is kept.
@@ -356,9 +373,10 @@ palace uninstall                                     # undo everything
 
 With `--scope project`, rules go to `<project>/CLAUDE.md`, `<project>/AGENTS.md`
 (Codex, OpenCode, Cline, Zed and Goose), `<project>/GEMINI.md`, `<project>/.github/copilot-instructions.md`,
-`<project>/.windsurf/rules/palace.md`, and `<project>/.cursor/rules/palace.mdc`.
-Cursor, VS Code and OpenCode also get a project MCP config
-(`.cursor/mcp.json`, `.vscode/mcp.json`, `opencode.json`).
+`<project>/.windsurf/rules/palace.md`, `<project>/.agents/rules/palace.md`
+(Antigravity), and `<project>/.cursor/rules/palace.mdc`.
+Cursor, VS Code, Antigravity and OpenCode also get a project MCP config
+(`.cursor/mcp.json`, `.vscode/mcp.json`, `.agents/mcp_config.json`, `opencode.json`).
 
 <details>
 <summary>Manual MCP config</summary>

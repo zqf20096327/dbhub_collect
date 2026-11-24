@@ -75,7 +75,7 @@ The map behind the dashboard, the layout editor, the offline view, the HV batter
 - **Homepage widget** -- A read-only API endpoint for the [gethomepage.dev](https://gethomepage.dev) Custom API widget, exposing key vehicle stats at a glance, along with the APK days left, open recalls, the maintenance due next and the last trip.
 - **Log viewer** -- The Logs page shows the entries of the API's and the Worker's log files, newest first and older ones loading as you scroll, filtered by service, level and text, with exceptions folded open on request and a live mode that adds what was written every ten seconds. The files themselves stay on the server, one per day (`LOG_RETAINED_FILES`).
 - **Full data export** -- Settings > Data & API > Your data downloads everything GarageStack keeps as one zip: per car its trips, maintenance, schedules, places and every telemetry reading (as CSV), and your notifications and settings.
-- **Diagnostics for a bug report** -- Settings > Data & API > Diagnostics downloads a small anonymized zip to attach to an issue: the version, which parts are on and healthy, the car's type and configuration codes, the last week of readings without positions, and the last week of warnings from the logs. VINs become car-1, car-2, and plates, email and IP addresses, URLs and coordinates are taken out.
+- **Diagnostics for a bug report** -- Settings > Data & API > Diagnostics downloads a small anonymized zip to attach to an issue: the version, which parts are on and healthy, the car's type and configuration codes, the last week of readings without positions, and the last week of warnings from the logs. VINs become car-1, car-2, and plates, email and IP addresses, URLs, host names, sign-in names and coordinates are taken out.
 - **Calendar feed** -- Subscribe to the APK expiry date, maintenance due dates and the coming climate schedules in Google Calendar, Apple Calendar, Outlook or any other calendar app. See [Calendar feed](#calendar-feed).
 - **Read-only API tokens** -- Make a token under Settings > Data & API > API tokens and let a script, a dashboard or a watch read what the app shows, without signing in. A token can only read: it cannot send commands or change anything, and the full data export, the logs and the diagnostics stay with a signed-in session.
 - **Home Assistant** -- Your car appears in Home Assistant automatically through MQTT discovery, sharing GarageStack's broker and MG session instead of needing a second integration. GarageStack adds sensors of its own to the car: the APK and its days left, open recalls, the maintenance due next and the last trip. See [`HOME_ASSISTANT.md`](documentation/HOME_ASSISTANT.md).
@@ -90,7 +90,7 @@ The map behind the dashboard, the layout editor, the offline view, the HV batter
 - **Themed vector basemap** -- Every map is drawn from OpenStreetMap vector tiles by MapLibre GL, in a dark or light style that follows the interface theme (or in full colour, if you prefer) and with labels in the interface language. Served by [OpenFreeMap](https://openfreemap.org) without an API key, point it at your own tile server if you prefer, and it falls back to raster tiles where WebGL is unavailable.
 - **Single sign-on** -- Sign in through your own identity provider (Authentik, Authelia, Keycloak, Pocket ID, Google, and anything else speaking OpenID Connect), with optional auto-login and group or email based access restrictions. A built-in username/password login remains available for installs without a provider. See [`AUTHENTICATION.md`](documentation/AUTHENTICATION.md).
 - **Multi-language support** -- Interface available in English, Dutch, Spanish, Brazilian Portuguese and European Portuguese. It follows the browser's language until you pick one under Settings, and the choice then follows your account. Push notifications are sent in `NOTIFICATION_LANGUAGE` (`en`, `nl`, `es`, `pt` for Brazilian or `pt-PT` for European Portuguese).
-- **Region and units** -- Kilometres or miles, Celsius or Fahrenheit, bar, psi or kPa for tyres, L/100 km or miles per UK or US gallon for fuel, and a 24-hour or 12-hour clock. Each one follows the region the browser is in (taken from its time zone, so an English browser in the Netherlands still gets kilometres and 14:05), and can be set by hand under Settings > General > Region and units, as can the region itself, which also sets the date order. Everything is stored in metric and converted only for display, so switching back and forth loses nothing; the trip log's CSV export follows the chosen distance unit and clock. The homepage widget, Home Assistant and the `TYRE_PRESSURE_*_BAR` thresholds stay metric, and notifications use a 24-hour clock.
+- **Region and units** -- Kilometres or miles, Celsius or Fahrenheit, bar, psi or kPa for tyres, L/100 km or miles per UK or US gallon for fuel, a 24-hour or 12-hour clock, and the currency maintenance costs show in. Each one follows the region the browser is in (taken from its time zone, so an English browser in the Netherlands still gets kilometres and 14:05), and can be set by hand under Settings > General > Region and units, as can the region itself, which also sets the date order. Everything is stored in metric and converted only for display, so switching back and forth loses nothing; the trip log's CSV export follows the chosen distance unit and clock. The homepage widget, Home Assistant and the `TYRE_PRESSURE_*_BAR` thresholds stay metric, and notifications use a 24-hour clock.
 - **Settings follow you** -- Theme, language, units, the dashboard layout and the map's layers and filters are saved to your account, so every phone, tablet and computer you sign in on looks the same. The theme can also be set to System, which lets each device follow its own light or dark setting. Each browser keeps a copy too, so pages open instantly and the login page keeps your theme and language. After upgrading, the first device to sign in brings its settings along.
 - **Grouped settings** -- Settings is divided into General, Vehicle, Map, Phone GPS, Notifications and Data & API tabs. A tab with nothing to set for your car or deployment is left out, and switching tabs keeps unsaved edits.
 - **Self-hosted** -- Runs entirely on your own infrastructure via Docker (all-in-one container or Docker Compose). No cloud account or subscription required beyond the SAIC iSmart API.
@@ -111,7 +111,7 @@ Cards are shown or hidden automatically based on vehicle type (HEV / PHEV / BEV)
 | Doors | Lock status and door states; lock, unlock and open the boot, or open and close it on a car with a power tailgate (switched on under Settings > Vehicle) | All |
 | Windows | Window and sunroof states | All |
 | Sunroof | Sunroof open/closed | All (off by default) |
-| Climate | Temperature, seat heating, defroster | All |
+| Climate | Temperature, seat heating, steering wheel heating, defroster | All |
 | HV Battery | State of charge, voltage, current, power (kWh too, with `HV_BATTERY_CAPACITY_KWH` set); on a plug-in car also the charge current limit and the charge target, both settable | All |
 | Find My Car | Horn + lights to locate the car | All |
 | Lights | Main beam, low beam, sidelights | All |
@@ -132,6 +132,8 @@ Cards are shown or hidden automatically based on vehicle type (HEV / PHEV / BEV)
 ### Statistics insights
 
 The Statistics view shows insight cards and charts for a period of its own: the last 7, 30 or 90 days, this or last month, this or last year, or custom dates. Charts show a point per day up to about three months, per week up to a year, and per month beyond that. A period longer than a month also gets a table of trips, distance and energy per month. Cards are draggable and individually toggleable.
+
+**Consumption by outside temperature** groups the period's days by their average outside temperature, five degrees to a bar, and shows what the car used per distance on them: L/100 km on a plain hybrid, kWh/100 km on a plug-in car. It shows how much more the car takes in winter. A bar needs at least 5 km of driving on its days, and a longer period, such as this year, fills more of them.
 
 | Insight | Description |
 | ------- | ----------- |
@@ -399,6 +401,15 @@ GarageStack checks your vehicle's state every 5 minutes and sends both a browser
 | MG app message | The official MG app receives a message, such as an alarm or a reminder (sent as it arrives, once per message) |
 | Scheduled climate | A climate schedule ran: climate started, the car refused, or it did not answer (nothing is sent for a run skipped because the car was in use or the day was mild) |
 
+Two more are summaries rather than alerts, and are off until you switch them on:
+
+| Summary | When |
+| ------- | ---- |
+| Weekly summary | Monday from 08:00, for Monday to Sunday before: the trips, the distance, and on a plain hybrid the fuel burned and the L/100 km, on a full electric car the kWh and kWh/100 km (a plug-in hybrid's kWh are left out, as its counter comes on a nominal pack) |
+| Monthly summary | The 1st from 08:00, for the month before, with the same figures |
+
+Days are counted in the time zone the worker runs in (`TZ`), as the other alerts' are. A period without driving sends nothing, and while no device has switched a summary on, the worker does not send or keep it at all.
+
 Push notifications require VAPID keys to be configured (`VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY`). Without them, alerts still appear in the in-app notification panel. While GarageStack is open in a browser that allowed notifications but is not subscribed to push, the same alerts show up as system notifications too; a subscribed browser gets them through push instead, so nothing arrives twice.
 
 Two alerts carry a button, on Android and in desktop Chrome and Edge (Safari on iOS shows no notification buttons, and tapping the notification opens the app as before):
@@ -408,7 +419,7 @@ Two alerts carry a button, on Android and in desktop Chrome and Edge (Safari on 
 
 The notification then says the command was sent or the service logged. When it could not be done (no connection, signed out, the car busy with another command), the app opens instead. The button sends its request from your browser like the app's own buttons, so `CORS_ORIGIN` must match the address you use, as for every command.
 
-Settings > Notifications has a push switch for the device you are on and a per-type checklist for these alerts, which offers only the types the car's drivetrain can produce: the plug-in alerts (low EV battery, charging complete, charging interrupted) are left out for a plain hybrid, low fuel for a full electric car, and the RDW type (APK, recalls and insurance) wherever `RDW_ENABLED` is off. Both are kept per device: a type switched off on your phone still reaches your laptop, and still shows up in the notification panel. Only the switch turns push on or off; the checklist never asks the browser for permission.
+Settings > Notifications has a push switch for the device you are on and a per-type checklist for these alerts, which offers only the types the car's drivetrain can produce: the plug-in alerts (low EV battery, charging complete, charging interrupted) are left out for a plain hybrid, low fuel for a full electric car, and the RDW type (APK, recalls and insurance) wherever `RDW_ENABLED` is off. Both are kept per device: a type switched off on your phone still reaches your laptop, and still shows up in the notification panel. The weekly and monthly summaries are the other way round: a device gets them, in push and in its notification panel, only once it has switched them on, and **All on** and **All off** leave them as they are. Only the switch turns push on or off; the checklist never asks the browser for permission.
 
 Notification texts are written by the background worker, which has no browser to take a language from, so their language is a deployment setting: `NOTIFICATION_LANGUAGE=en` (default), `nl`, `es` or `pt`. The web UI's language selection does not affect them.
 
@@ -445,11 +456,14 @@ Note: "keys left in the car" is not currently supported because the SAIC MQTT ga
 - **Hide a trip.** A trip the GPS got wrong, or one that should not count, can be hidden: it leaves the map, the statistics, the dashboard, the totals and the export, and is listed only once **Show hidden trips** is switched on under **Filters**, where **Show again** brings it back. Nothing is deleted.
 - **Join two trips.** A short stop, such as filling up on the way to work, splits one drive into two trips. **Join with next trip** (tap twice) makes them one, from the first one's start to the second one's end, with both notes kept. A purpose you chose for either is kept; otherwise it is labelled again from the new ends, so home to the fuel station to work becomes a commute. A join cannot be undone.
 - **Edit the route.** When the car reported its first position some way down the road, or the line cuts through places you never drove, **Edit route** (the pen on a trip's route preview in the trip log, or under the selected trip on the map) opens the trip on a map of its own. Move the start or the end by tapping the map or dragging the marker, use the parking spot before or after the trip with one tap, and add or remove points in between. Every step can be undone, and **Reset to recorded** goes back to the route as the car reported it. The car's own positions are never moved, only added to, and points you placed are drawn dashed. Saving updates the map, the addresses and the speeds; the distance in the log stays the one the odometer counted. Leaving with unsaved changes asks first.
-- **Totals.** The distance per purpose for the period is shown at the top. On a phone only the total shows until you open **Show the purposes**. Click **All trips** for the driving time, the average and longest trip and the average speed.
+- **Totals.** The distance per purpose for the period is shown at the top. On a phone only the total shows until you open **Show the purposes**. Click **All trips** for the driving time, the average and longest trip and the average speed, and on a hybrid the fuel used and the average consumption.
 - **Trip details.** On a computer the selected trip's details stand beside the list and never reach past the bottom of the window; what does not fit scrolls inside them. On a phone or tablet a trip opens its details in a dialog.
+- **GPX.** **GPX** under a trip's details saves its route as a GPX track, for a route planner, a sports app or geotagging photos: every point the route preview draws, with its time and the speed the car reported. It is built in the browser from the route already loaded, so it works offline too.
+- **Elevation.** Under the speed chart, a trip's details show its height profile, in metres or in feet with miles, from the height the car's GPS reported along the way. It is read from the recorded telemetry rather than kept with the trip, so trips saved earlier have one too, as long as their telemetry is kept. A GPS height is rough, a few metres either way; readings no road could be at are left out, and a car that reports no height shows no profile.
 - **Distance.** A trip counts for the distance on its odometer when the car reported a reading at both ends. Otherwise it counts for the distance along its GPS fixes, which is a little short because the fixes cut corners.
+- **Fuel on a hybrid.** On a plain hybrid each trip's details show the fuel it burned and its consumption, from the trip computer's own fuel counter between leaving and parking, and **All trips** adds them up for the period. The counter starts again every day, which a trip past midnight takes in its stride. A trip shorter than 1 km shows no consumption, as there it is mostly rounding. Trips saved before this existed get their figures the next time the Worker tidies up, from the telemetry that is still kept. Other drivetrains count energy on that counter rather than fuel, so they show neither.
 - **Addresses** are looked up once through the same OpenStreetMap geocoder as the map, and then kept with the trip for good, so a log exported next year still shows them. With place names switched off (Settings > Map, or `GEOCODING__ENABLED=false`), ends show as coordinates and no lookups are made.
-- **Export.** **Settings > Data & API > Trip log** saves a month or a year, hidden trips left out, as a spreadsheet: date, departure and arrival time, from and to address, odometer start and end, distance, purpose and notes. The file follows the interface language: comma-separated in English, and semicolon-separated with decimal commas in Dutch, Spanish and Portuguese, so it opens in columns in Excel either way. Addresses that were never looked up are looked up before the file is saved, which can take a while the first time a whole year is exported.
+- **Export.** **Settings > Data & API > Trip log** saves a month or a year, hidden trips left out, as a spreadsheet: date, departure and arrival time, from and to address, odometer start and end, distance, on a hybrid the fuel each trip used, purpose and notes. The file follows the interface language: comma-separated in English, and semicolon-separated with decimal commas in Dutch, Spanish and Portuguese, so it opens in columns in Excel either way. Addresses that were never looked up are looked up before the file is saved, which can take a while the first time a whole year is exported.
 
 Only trips the Worker has saved can be logged, so the trip being driven, and one finished in the last few minutes, appear once the car has been parked for a while.
 
@@ -481,7 +495,8 @@ Commands sent by hand at the same moment as a scheduled run share the car's one 
 
 - **Intervals.** Each item has a distance interval, a time interval, or both; with both, it is due at whichever comes first.
 - **When it is due.** From the last service you logged and the car's odometer, an item is *OK*, *due soon* once 90 % of its interval has passed, or *overdue*. One without a service logged yet is *not tracked yet*.
-- **Logging a service.** Record the date, the odometer reading (the current one is filled in) and notes. The item's interval starts again from there, and its history is kept.
+- **Logging a service.** Record the date, the odometer reading (the current one is filled in), what it cost and notes. The item's interval starts again from there, and its history is kept.
+- **Costs.** Once a service has a cost, the top of the page shows what was spent this year, with last year and the total under it, added up by the year each service was done. Costs are kept as plain amounts and shown in the currency under **Settings > General > Region and units**, which follows the region unless you pick one; changing it relabels the amounts and does not convert them. They are part of the data export.
 - **Where it shows.** The dashboard's maintenance card shows the most urgent item, and so do the [Homepage widget](#homepage-dashboard-widget) and [Home Assistant](documentation/HOME_ASSISTANT.md#garagestacks-own-sensors). A notification comes when an item becomes due soon or overdue (checked every 6 hours, at most once a week per item).
 
 ---
@@ -558,7 +573,7 @@ Opening an external map or map app shares the destination coordinates with it. N
 
 ## Map overlays
 
-The map view supports four POI overlay layers: charging stations, fuel stations, motorway service areas and speed cameras. All data is cached in the database and served instantly on subsequent visits. Open the **Filters** panel (sliders icon, top-right of the map) to toggle each layer and adjust filters.
+The map view supports eight POI overlay layers: charging stations, fuel stations, motorway service areas, speed cameras, car parks, car washes, air pumps and garages. All data is cached in the database and served instantly on subsequent visits. Open the **Filters** panel (sliders icon, top-right of the map) to toggle each layer and adjust filters.
 
 ### Basemap
 
@@ -610,6 +625,16 @@ Sourced from OpenStreetMap (`highway=speed_camera`) via the Overpass API -- no A
 - Positions on a map, not warnings: GarageStack is a dashboard of the car's state, and nothing here alerts you to a camera ahead while driving.
 - Several countries restrict pointing a driver at camera positions, France and Germany among them. Set `SPEEDCAMERAS__ENABLED=false` to remove the layer from the deployment: the toggle then disappears from the layer panel, the endpoint serves nothing, and the Worker fetches no camera data either.
 - Same DB-backed cache and Worker pre-population as fuel stations. The same Overpass slowness applies for uncached tiles outside the pre-populated radius -- see the note in the Fuel stations section above.
+
+### Car parks, car washes, air pumps and garages
+
+Sourced from OpenStreetMap via the Overpass API -- no API key required. Four layers of their own in the map's layer panel, all off by default and offered to every car.
+
+- **Car parks** shows multi-storey and underground car parks, park and ride, and car parks with a name (`amenity=parking`), none that is closed to the public. The many small unnamed lots a city holds are left out, as they would bury the map. A popup names the kind of car park, whether it charges, its height limit (`maxheight`) and its spaces, where OSM has them.
+- **Car washes** (`amenity=car_wash`), with self-service and automatic washes marked.
+- **Air pumps** (`amenity=compressed_air`, and fuel stations tagged `compressed_air=yes`), for topping up the tyres after a low tyre pressure alert.
+- **Garages**: car repair shops and tyre shops (`shop=car_repair`, `shop=tyres`), with their brand, so an MG dealer that is mapped as one says so.
+- Same DB-backed cache as the other layers, but not pre-populated by the Worker: a tile is looked up the first time the map shows it with the layer on, to keep the load on the shared public Overpass instance down. The first look at a new area can therefore take a moment.
 
 ### Place names (reverse geocoding)
 

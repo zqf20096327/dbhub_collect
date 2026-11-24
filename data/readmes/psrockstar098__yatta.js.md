@@ -97,13 +97,13 @@ Bun's `smol` heap. Queued tasks are micro-batched — up to 32 per IPC message
 <!-- BENCHMARKS:START -->
 | Framework | Requests/sec | vs Yatta | Spread | p50 | p95 | p99 |
 |-----------|-------------:|---------:|-------:|----:|----:|----:|
-| Yatta     |      58,193 |     1.00x |     7% | 1.75ms | 2.59ms | 3.04ms |
-| Raw Bun   |      51,081 |     0.88x |    25% | 1.71ms | 3.71ms | 3.97ms |
-| Hono      |      61,849 |     1.06x |    21% | 1.61ms | 2.33ms | 3.36ms |
-| Elysia    |      56,588 |     0.97x |    18% | 1.57ms | 3.32ms | 3.87ms |
-| Express   |      23,480 |     0.40x |     4% | 3.97ms | 7.39ms | 8.58ms |
-| Fastify   |      31,533 |     0.54x |     9% | 2.70ms | 5.21ms | 6.45ms |
-| Koa       |      26,299 |     0.45x |    12% | 3.44ms | 6.51ms | 7.61ms |
+| Yatta     |      93,377 |     1.00x |     6% | 1.11ms | 1.60ms | 2.13ms |
+| Raw Bun   |     121,328 |     1.30x |     5% | 0.92ms | 1.15ms | 1.55ms |
+| Hono      |     107,467 |     1.15x |    11% | 1.02ms | 1.44ms | 1.91ms |
+| Elysia    |     115,496 |     1.24x |     3% | 0.93ms | 1.30ms | 1.69ms |
+| Express   |      43,423 |     0.47x |     3% | 2.15ms | 4.27ms | 5.45ms |
+| Fastify   |      55,881 |     0.60x |     5% | 1.56ms | 3.31ms | 4.22ms |
+| Koa       |      49,082 |     0.53x |     2% | 1.93ms | 3.60ms | 4.35ms |
 <!-- BENCHMARKS:END -->
 
 `GET /json` head-to-head, 20,000 requests at 100 concurrent connections.
@@ -484,6 +484,32 @@ docker run -p 4000:4000 \
   -e STORAGE_SECRET="$(openssl rand -hex 32)" \
   yatta
 ```
+
+One command sets a project up for a platform instead:
+
+```bash
+yatta deploy [--platform docker|railway|northflank|render] [--registry ghcr|dockerhub] [--dry-run] [--yes]
+```
+
+It shows a plan first — exactly which files it will write, plus
+`.yatta/deploy.json` — and writes them only after you confirm (or with
+`--yes`). It never overwrites a file that already exists with different
+content (a conflict refuses the whole run), never pushes (you push; CI or
+the platform deploys from that push), and never writes secrets, only
+references them. `--dry-run` prints the plan and exits.
+
+What each platform gets: Docker writes a `Dockerfile`, `.dockerignore`,
+and a GitHub workflow; Railway writes `.railway/railway.ts` (not the
+deprecated `railway.json` / `railway.toml`) and a workflow; Render writes
+a `render.yaml` Blueprint — link it in the Render dashboard (New →
+Blueprint), committing it alone deploys nothing; Northflank writes a
+GitHub workflow that builds to GHCR and deploys with
+`northflank/deploy-to-northflank@v1` (needs `NORTHFLANK_PROJECT_ID` and
+`NORTHFLANK_SERVICE_ID` secrets).
+
+`yatta deploy providers` lists the four platforms, `yatta deploy config`
+shows the saved configuration, `yatta deploy status` shows the current
+state, and `yatta deploy doctor` checks the setup. Fly is not supported.
 
 The image runs non-root and ships a `HEALTHCHECK` wired to `/healthz`. Mount
 `Database/` and `storage/uploads` as volumes to persist data.

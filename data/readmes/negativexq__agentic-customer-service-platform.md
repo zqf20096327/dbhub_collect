@@ -8,13 +8,40 @@ Unlike a typical tool-calling chatbot, the LLM never receives direct mutation au
 
 > **The LLM proposes. Deterministic software decides what may execute.**
 
-![Agent Playground — a refund request and its bounded decision flow](docs/assets/screenshots/playground-desktop.png)
+![AgentOps overview: conversations, AI resolution rate, handoff rate, CSAT, resolutions per day and the customers waiting for a person](docs/assets/screenshots/console/overview.png)
 
-| Investigate a decision | Understand the architecture |
+## Product tour
+
+The operator console, AgentOps, is where a support team watches the assistant work, steps in when a customer needs a person, and shapes how the assistant behaves. All screenshots are real 2x captures of the local stack with a live model.
+
+### Operate: watch the assistant and step in
+
+| Live handoff | Resolved by a person |
 | --- | --- |
-| ![Run investigation with outcome, decision flow, and evidence tabs](docs/assets/screenshots/investigation-desktop.png) | ![Reference architecture and execution authority boundaries](docs/assets/screenshots/architecture-desktop.png) |
+| ![A high-priority handoff waiting for an operator, with the reason and first-reply deadline](docs/assets/screenshots/console/conversations-handoff.png) | ![A duplicate-charge conversation handed straight to the team and resolved by an operator](docs/assets/screenshots/console/conversation-resolved-by-person.png) |
+| The assistant hands sensitive requests straight to the queue with a priority, a reason and a first-reply deadline. | An operator takes over, replies, and resolves; the customer sees one continuous thread. |
 
-Actual browser captures from the local integration environment. [UI behavior and screenshot reproduction](docs/operator-ui-polish.md).
+| Run investigation | Audit log |
+| --- | --- |
+| ![A refund request stopped at the confirmation boundary: intent, LLM proposal, system decision, authority and execution](docs/assets/screenshots/console/run-refund-confirmation.png) | ![Every assistant decision, handoff, takeover and close, grouped by day](docs/assets/screenshots/console/audit-log.png) |
+| Every decision shows what the model proposed, what the control plane decided and what was allowed to run. | Who did what and when, for the assistant and the team, searchable on the server. |
+
+### Train: shape what the assistant knows and does
+
+| Procedures | Knowledge gaps |
+| --- | --- |
+| ![The refund procedure: validate, ask for confirmation, call request_refund once, with linked action and article](docs/assets/screenshots/console/procedures.png) | ![Unanswered customer questions with the article they belong in and one-click actions](docs/assets/screenshots/console/knowledge-unanswered.png) |
+| Each request type is a readable step-by-step workflow; actions, articles and guidance are one click away. | Questions the assistant could not answer, ranked by how often they were asked, become new article sections. |
+
+| Guidance | Performance |
+| --- | --- |
+| ![Versioned operator guidance rules scoped to request types](docs/assets/screenshots/console/guidance.png) | ![30-day resolution, handoff rate and CSAT with resolutions per day](docs/assets/screenshots/console/performance.png) |
+| Plain-language rules change how requests are read, never what is authorized. Every change is a published version. | How often the assistant resolves on its own, when people step in, and how customers rate both. |
+
+| Safety evidence | Sign in |
+| --- | --- |
+| ![Release evidence: zero unsafe executions, confirmation bypasses, unauthorized or duplicate mutations](docs/assets/screenshots/console/safety.png) | ![The sign-in page with a live preview of a refund handled end to end](docs/assets/screenshots/console/sign-in.png) |
+| The release gates behind the control plane, kept as separate denominators. | A demo workspace that opens straight into the console. |
 
 ## What the platform does
 
@@ -37,6 +64,13 @@ Actual browser captures from the local integration environment. [UI behavior and
   restarts.
 - Revalidate business state and exact action arguments before execution.
 - Prevent duplicate business effects with idempotency and database constraints.
+
+### Operator console
+
+- Take over live conversations, reply, add internal notes, and hand back to the assistant.
+- Investigate any run from proposal to authority to outcome, and follow it in the audit log.
+- Edit knowledge articles, guidance rules, procedures and action modes as published, versioned changes.
+- Track resolution, handoff rate, CSAT, quality flags and the questions nobody could answer.
 
 ## How a request moves through the system
 
@@ -145,19 +179,19 @@ These are deterministic projections from the existing operator console, not live
 
 ### Controlled mutation: refund confirmation
 
-A refund proposal is held behind confirmation; its exact pending payload is revalidated before the typed tool runs.
+A refund proposal is held behind confirmation; its exact pending payload is revalidated before the typed tool runs (see the run investigation in the product tour above).
 
 ### Security boundary: instruction-override denial
 
 An instruction-override attempt is rejected before it becomes an authorized workflow; the projection separates deny, authority, and execution state.
 
-![Security boundary containing an instruction override](docs/demo/security-boundary.png)
+![An instruction override denied: the LLM proposal is recorded, the system decision is deny, nothing is authorized](docs/assets/screenshots/console/run-injection-denied.png)
 
 ### Grounded intelligence: RAG evidence
 
 A policy answer is shown beside retrieved sources and grounding status. Evidence supports response generation; it does not grant authority.
 
-![RAG grounded response and evidence](docs/demo/rag-grounded-faq-conversation.png)
+![RAG grounding with cited chunks and scores beside bounded memory context](docs/assets/screenshots/console/run-rag-grounding.png)
 
 More scenarios are in the [demo walkthrough](docs/demo/walkthrough.md).
 
@@ -210,16 +244,69 @@ Runtime acceptance exercises real SIGTERM shutdown, in-flight request draining, 
 
 ## Run locally
 
-Requirements: Docker Compose, Python 3.12 with [uv](https://docs.astral.sh/uv/), Node.js, and npm.
+Running the stack needs only Docker with Docker Compose v2. Python 3.12 with [uv](https://docs.astral.sh/uv/), Node.js, and npm are needed only to run the tests below.
+
+### 1. Get the code and create `.env`
 
 ~~~bash
+git clone https://github.com/negativexq/agentic-customer-service-platform.git
+cd agentic-customer-service-platform
 cp .env.example .env
+~~~
+
+`.env` is ignored by git, so keys you put there stay on your machine.
+
+### 2. Choose a model
+
+The console and the knowledge base work without a model. The assistant needs an OpenAI-compatible model to answer new messages; without one, new runs fail safely and nothing is executed.
+
+**OpenAI.** In `.env`, set:
+
+~~~bash
+LLM_MODEL=gpt-6-luna
+LLM_REASONING_EFFORT=low
+COMPOSE_LLM_BASE_URL=https://api.openai.com/v1
+LLM_API_KEY=sk-...
+~~~
+
+`gpt-6-luna` is a reasoning model: it accepts only its default temperature, and `LLM_REASONING_EFFORT` set to `low`, `medium`, or `high` stops the temperature from being sent. Models without reasoning, such as `gpt-4.1-mini`, need only the other three lines.
+
+To keep the key out of the file, write `LLM_API_KEY=${OPENAI_API_KEY}` instead and export `OPENAI_API_KEY` in the shell before every `docker compose up`. If it is not set, Compose warns that the variable is not set and the assistant runs without a key.
+
+**Ollama on your machine.** Run `ollama pull qwen2.5:7b`, then set `LLM_MODEL=qwen2.5:7b` and `LLM_API_KEY=ollama` in `.env`. The default `COMPOSE_LLM_BASE_URL` already points the backend container at Ollama on the host, on macOS, Windows, and Linux.
+
+Reasoning models and the Responses API are covered in [deployment](docs/deployment.md).
+
+### 3. Start the stack
+
+~~~bash
 docker compose up --build --detach
 ~~~
 
-Open <http://localhost:5173>. Setup applies migrations, seeds records, and loads the bundled knowledge base; stop with `docker compose down`. The optional live path uses an OpenAI-compatible provider for semantic proposals only; grounding, compilation, policy, confirmation, idempotency, and execution authority remain server-owned.
+The first build takes a few minutes. A one-off `demo-setup` container applies the database migrations, seeds demo customers and orders, and loads the bundled knowledge base, then exits. The backend and the console start after it.
 
-See [deployment](docs/deployment.md) for health, readiness, and topology details.
+| Service | Address | Change the port with |
+|---|---|---|
+| Operator console | <http://localhost:5173> | `FRONTEND_PORT` |
+| Backend API | <http://localhost:8000> | `BACKEND_PORT` |
+| PostgreSQL | `localhost:5432` | `POSTGRES_PORT` |
+| Qdrant | <http://localhost:6333> | `QDRANT_HTTP_PORT`, `QDRANT_GRPC_PORT` |
+| Jaeger traces | <http://localhost:16686> | `JAEGER_UI_PORT` |
+
+If a port is already taken, set its variable in `.env` (for example `FRONTEND_PORT=5174`) and run the command again.
+
+### 4. Sign in and try it
+
+Open <http://localhost:5173>. The sign-in form is filled in with the demo account; select **Sign in**. This is a local demo gate, not production authentication. Then open **Playground** and run the refund scenario: the assistant proposes a refund and waits for confirmation before anything changes.
+
+### Stop or reset
+
+~~~bash
+docker compose down      # stop; data is kept
+docker compose down -v   # stop and delete the database and knowledge index
+~~~
+
+The live path uses the model for semantic proposals only; grounding, compilation, policy, confirmation, idempotency, and execution authority remain server-owned. See [deployment](docs/deployment.md) for health, readiness, and topology details.
 
 To enable optional domain and native HTTP metrics:
 
@@ -282,8 +369,7 @@ Makefile             Development and verification commands
 - [Observability architecture and rollback](docs/observability.md)
 - [Telemetry runtime and TLS evidence](docs/fastapi-native-otel-t5-runtime-release-evidence.md)
 - [Deployment expectations](docs/deployment.md)
-- [Production demo walkthrough](docs/demo/walkthrough.md)
-- [Frontend design guidelines](docs/frontend-design-guidelines.md)
+- [Demo walkthrough](docs/demo/walkthrough.md)
 
 ## License
 

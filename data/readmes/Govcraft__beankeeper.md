@@ -76,6 +76,12 @@ token; HTTP accepts a bearer token per request and always requires verification.
 Both recheck every call. Invalid, expired or revoked supplied tokens return
 `UNAUTHORIZED` (exit 6 for CLI, HTTP 401 at the HTTP boundary).
 
+With enforcement off, writes without a token can record an unverified client
+hint from known runtime environment markers. The hint records only allowlisted
+marker names and leaves the actor label independent. See it in `bk audit log`
+and MCP `audit_log`. Use `--quiet` to suppress the stderr notice on CLI
+commands or when launching a stdio MCP server.
+
 Enforcement defaults to off. CLI 0.24.0 adds `bk policy show` and
 `bk policy set --enforce on|off`. Bootstrap by issuing a token with
 `ledger/read,ledger/admin`, saving it, then enabling as a named actor. Once on,
@@ -103,6 +109,8 @@ writes. Back up before schema v18 upgrades: existing hashes remain intact, but
 older binaries cannot append the new v3 audit format. `init --force` requires an
 admin to disable enforcement first. See
 [agent identity setup, capability map, and limits](docs/agent-identity.md).
+Embedded hosts can
+[rotate a managed credential atomically and recover by token ID](docs/agent-identity.md#rotate-a-managed-credential-in-an-embedded-host).
 
 ### Period close and locking
 
@@ -126,13 +134,46 @@ appending. Close/reopen events record the actor and before/after state; `verify`
 checks cutoff integrity. See [period commands](docs/beankeeper/references/commands.md#period-close-and-locking)
 for output fields, history, and retry behavior.
 
-### Spend limits and approval gates
+### Set up books over the agent connection
 
-CLI 0.26.0 adds per-agent, per-company spend limits and pending proposals:
+Bookkeepers can create or initialize books, add accounts, and apply a chart on
+their normal connection in either write mode. Direct bookkeepers also post
+opening balances and import CSV or OFX/QFX statement contents immediately.
+The agent reports completed changes and offers one-step owner undo using the
+receipt ID, with an optional Desktop detail path. Statement undo reverses the
+postings that import created.
+
+If the owner opted into propose-only, the same tools submit an opening
+proposal and one proposal per new statement row for the existing transaction
+sign-off. Existing bookkeeper credentials gain this setup access automatically.
+
+[CLI and MCP onboarding commands](docs/beankeeper/references/commands.md#direct-onboarding)
+
+### Direct posting and optional sign-off
+
+The bookkeeper preset posts directly with `bk txn post` or MCP `txn_post`,
+including when ledger enforcement is on. The result identifies the posted
+transaction. Tell the owner what was posted and give them the transaction ID
+to undo it. An owner with `ledger/reverse` can run `bk txn reverse ID` or call
+`txn_reverse`. The undo appends a linked reversal immediately and preserves
+the original. Use `bk audit log --by-actor` or `audit_log` with `actor` to find
+both actions.
+
+Ask what changed using `bk --company acme --json audit receipts` or MCP
+`audit_receipts`. The result groups related events and includes a saved cursor
+and an optional Desktop detail path. To undo an eligible change, use
+`bk --company acme audit undo RECEIPT` or MCP `audit_undo` with the owner's
+signed `ledger/admin` token. Undo immediately appends a linked reversal or
+archives the account while retaining its history. [Audit receipts and owner undo](docs/beankeeper/references/json-api.md#audit-receipts)
+
+To opt one credential into sign-off, issue it with `--write-mode propose-only`.
+The same posting command or tool then returns a pending proposal with a
+`proposal_…` ID. A separate reviewer approves it with `bk txn approve` or MCP
+`txn_approve`.
 
 ```sh
-bk agent limit set "$AGENT_URI" --company acme --currency USD --max-post 500 --daily-limit 2000
-bk --agent-token "$POSTER_TOKEN" --company acme txn propose \
+bk agent issue --name bookkeeper --public-key "$AGENT_PUBLIC_KEY" --write-mode propose-only
+bk --agent-token "$PROPOSER_TOKEN" --company acme txn post \
   -d "Equipment purchase" --debit 5000:750 --credit 1000:750 --reference equipment-001
 bk --agent-token "$REVIEWER_TOKEN" --company acme txn proposals
 bk --agent-token "$REVIEWER_TOKEN" --company acme txn approve PROPOSAL_ID
@@ -145,6 +186,8 @@ token, reserves its reference, and stays outside posted transactions and their
 audit chain until resolution. Approval posts atomically with the approver's
 identity and a reserved `proposal_id` metadata link; its audit record preserves
 the proposer and the reviewed payload.
+
+### Existing spend limits
 
 Limits measure total debits, including split entries, and apply through the
 shared posting path, including imports, loans, investments and schedules.
@@ -483,7 +526,9 @@ mutation tools are absent and cannot be called.
 | Tools | Purpose |
 | --- | --- |
 | `ledger_setup_begin`, `ledger_setup_finish`, `ledger_setup_revoke` | Use a live owner Admin credential to issue or end an encrypted ledger's setup session |
-| `ledger_setup_book_create`, `ledger_setup_book_initialize`, `ledger_setup_book_update`, `ledger_setup_chart_apply`, `ledger_setup_account_add` | Configure personal and business books, charts, and accounts with an active setup grant |
+| `ledger_setup_book_create`, `ledger_setup_book_initialize`, `ledger_setup_chart_apply`, `ledger_setup_account_add` | Configure books and accounts on the normal bookkeeper connection or in an opted-in setup session |
+| `ledger_setup_book_update` | Record a new profile revision in an active setup session |
+| `ledger_setup_opening_post`, `ledger_setup_statement_import` | Post opening balances or import statement contents immediately and return an owner undo receipt |
 | `ledger_setup_opening_preview` | Validate a balanced opening journal within an active setup generation |
 | `ledger_setup_opening_reserve` | Hold the exact previewed opening journal for the existing approval workflow |
 | `ledger_setup_statement_preview` | Freeze the entries parsed from bounded CSV, OFX, or QFX content for review |
@@ -494,7 +539,7 @@ mutation tools are absent and cannot be called.
 | `company_create` | Create and audit a company by slug and name, with an optional description |
 | `company_delete` | Confirm and audit deletion of a company with no retained data |
 | `account_list`, `account_show`, `account_create` | Inspect and create accounts |
-| `txn_post`, `txn_reverse`, `txn_meta_set`, `txn_meta_unset` | Post, reverse and annotate transactions |
+| `txn_post`, `txn_reverse`, `txn_meta_set`, `txn_meta_unset` | Record a transaction using the grant's write mode, undo a posting, or edit annotations |
 | `txn_list`, `txn_show`, `txn_clear`, `txn_reconcile` | Inspect transactions, clear entries and check intercompany links |
 | `txn_propose`, `txn_proposals`, `txn_approve`, `txn_reject` | Submit, inspect and resolve pending proposals |
 | `security_create`, `security_list`, `security_price` | Register securities and record prices |
@@ -503,12 +548,20 @@ mutation tools are absent and cannot be called.
 | `ledger_setup_status` | Read ledger readiness, including company, account, and transaction counts and whether the approval key is configured. Takes no arguments. |
 | `ledger_setup_book_show` | Read a book's current profile, fiscal year, base currency, and named accounts |
 | `report` | Run CLI reports |
+| `rule_list`, `rule_create`, `rule_amend`, `rule_undo`, `rule_delete` | Read and manage company categorization rules with audit history |
+| `rule_match` | Preview the winning rule for a candidate description |
+| `bookkeeping_policy_show`, `bookkeeping_policy_set` | Read or save standing sales-tax and processor-fee instructions |
+| `inform_preference_show`, `inform_preference_set` | Read or save how often the owner hears about completed changes |
 | `budget_list`, `budget_set`, `budget_delete` | Inspect and manage budgets |
 | `verify`, `audit_log` | Verify integrity and inspect the audit trail |
+| `audit_receipts`, `audit_undo` | Read grouped changes and undo an eligible receipt under the owner's signed grant |
 
-This catalog covers the full router. Capability enforcement can restrict discovery
-further. Company-scoped tools require a `company` argument. `report` takes a `kind`
-and its options, with all 13 CLI report kinds available, including `schedule-c`,
+MCP discovery publishes input schemas and read-only hints from the ledger
+operation catalog. Input schemas describe nested fields inline. Send objects and
+arrays directly. Clients that encode a structured field as JSON text can send
+the same arguments and receive the same validation. Capability enforcement can
+restrict discovery further. Company-scoped tools require a `company` argument.
+`report` takes a `kind` and its options, with all 13 CLI report kinds available, including `schedule-c`,
 `1099` and `trend`. See the [report-kind list](docs/beankeeper/references/commands.md#report-kinds).
 For `trial-balance`, `balance`, `balance-sheet`, and `reconciliation`, use
 `as_of` or `to` in MCP and `--as-of` or `--to` in the CLI. Use `as_of` for
@@ -615,9 +668,10 @@ configuration locations and environment substitution. The token is issued by
 this ledger, not an OAuth provider; OAuth discovery is not implemented.
 
 Prefer per-request headers when agents share a server. A process-level
-`--agent-token` or `BK_AGENT_TOKEN` is a fallback only when the Authorization header
-is absent. An invalid or malformed explicit header never falls back. Missing,
-expired, revoked, and untrusted tokens return HTTP 401 with `UNAUTHORIZED`.
+`--agent-token` or `BK_AGENT_TOKEN` is a fallback for startup ledger requests
+with no Authorization header. An invalid or malformed explicit header never
+falls back. Missing, expired, revoked, and untrusted tokens return HTTP 401
+with `UNAUTHORIZED`.
 When `bk policy set --enforce on` is active, tool discovery reflects the requesting
 token's grants and calls without the required capability return `FORBIDDEN`.
 Policy and credentials are rechecked for every call; MCP session IDs confer no
@@ -650,11 +704,40 @@ keeps the same MCP authentication. It works across platforms without a file
 descriptor bridge or plaintext passphrase file. Drop the secret after opening
 both connections. See its Rustdoc for an example.
 
+Rust hosts can call `beankeeper_cli::db::current_schema_version()` before
+opening a ledger to get the schema version that `Db::open_snapshot` expects.
+Convert the result with `i64::from` to compare it with `get_schema_version`,
+which reads the version stored in an open ledger.
+
 Hosts can add application tools with `http_router_with_host_tools` and a
 `HostToolHandler`. Beankeeper filters their discovery and dispatch using the
 current request's verified grants, revocations, and read-only ceiling. Navigation
 uses an explicit `ui/navigate` grant on a separate UI-scoped token. See the
 [host tool API and example](docs/mcp-host-tools.md).
+
+### Select a ledger by name
+
+Bind an existing ledger to a name with `--ledger TARGET=PATH`. To use it in a
+local command or a stdio MCP process, select it with `--ledger-target TARGET`.
+
+```sh
+bk --ledger demo=/absolute/path/demo.db --ledger-target demo --json company list
+bk --db /absolute/path/books.db --ledger demo=/absolute/path/demo.db mcp serve --http
+```
+
+On HTTP, send `Beankeeper-Ledger-Target: demo` and a bearer issued by the demo
+ledger with each request to it. Omitting the header selects the startup ledger
+at `--db`. An existing MCP session can switch ledgers request by request. The
+CLI HTTP server opens all configured ledgers with its resolved startup
+passphrase. Hosts with per-ledger keys can pass already-opened databases to
+`LedgerTargets` and register them while clients are connected. See the
+[multi-ledger host guide](docs/mcp-host-tools.md#dispatch-to-another-ledger).
+
+An embedded host can register separate books as a `HostOwnedTarget`. The agent
+uses the same startup bearer and MCP session, with its signed grants, posting
+mode, and audit identity. Hosts can detach a named target and wait for active
+calls to finish before removing its file. Named MCP tool results carry
+`_meta["beankeeper/ledgerTarget"]`, and CLI JSON carries `meta.ledger_target`.
 
 ## Demo Mode
 
@@ -669,6 +752,11 @@ fictional counterparties and securities. Use the explicit dates below: reports
 that default to the current year can be empty after 2025. Generated IDs and audit
 timestamps vary between runs; the sample dates, amounts, and report totals stay
 the same.
+
+Generated audit activity and postings are credited to `demo`. The initializer's
+actor is recorded on the three company creations and one ledger-wide `demo_seed`
+event. Each generated posting has `beankeeper_source` set to `demo` in its
+metadata. [Demo report and audit notes](docs/reports.md)
 
 | Company | Slug | Examples |
 |---------|------|----------|
@@ -979,11 +1067,13 @@ to future CSV and OFX/QFX imports:
 ```sh
 bk --company personal rule create --contains Starbucks --account 5000 --priority 10
 bk --company personal rule list --json
+bk --company personal rule match --description 'STARBUCKS 102'
+bk --company personal rule amend "$RULE_ID" --contains Starbucks --account 5100 --priority 10
 bk --company personal txn import --file checking.ofx --account 1000 --suspense 9000
 bk --company personal rule delete rule_01h455vb4pex5vsknk084sn02q --force
 ```
 
-Use the rule ID returned by `create` or `list` when deleting a rule. Rules belong
+Use the active rule ID returned by `create`, `amend` or `list` when changing a rule. Rules belong
 to one company and select an existing account in that company. Matching trims
 the pattern, lowercases it and the imported description using Unicode lowercase,
 then checks for a literal substring. `%` and `_` have no special meaning. CSV
@@ -996,14 +1086,40 @@ which remains required. Destination account tax defaults apply. A rule selecting
 the import's bank account is rejected. JSON journal batches keep their explicit
 entries.
 
-Rules apply during `--dry-run` too. Creating or deleting rules does not change
-existing postings or their references. CSV generated references are calculated
-before rule selection, so rule changes do not duplicate previously imported
-rows. To change a mapping, delete its rule and create a replacement. These
-operations are audited (`--entity rule`, actions `create` and `rule-delete`).
-Delete referencing rules before deleting an account. Rule commands support
-table, JSON and CSV output; they are available through the CLI, with no new MCP
-tools.
+Rules apply during `--dry-run` too. Changes affect future imports and keep
+existing postings and references intact. Amend with a full replacement
+pattern, account and optional priority. The replacement gets a new ID and the
+audit trail records both versions under `rule-supersede`. An explicit delete
+removes the rule from future matching and records its last version.
+`rule match` previews the winning rule or returns `no_match` without posting.
+
+Use `bk --company COMPANY rule undo RULE_ID` or MCP `rule_undo` with a signed
+`ledger/admin` credential to undo a creation in one step. The rule stops
+matching immediately. The original rule and the linked undo receipt stay in
+the ledger, and a retry returns the same receipt. For an amendment, restore
+the earlier terms with another `rule amend` or `rule_amend` call.
+
+Agents can also call `rule_list`, `rule_create`, `rule_amend`, `rule_match` and
+`rule_delete` over MCP. The same operations are available in the CLI.
+
+### Standing bookkeeping and inform preferences
+
+```sh
+bk --company personal bookkeeping-policy show
+bk --company personal bookkeeping-policy set sales-tax=track-liability
+bk --company personal bookkeeping-policy set processor-fees=separate-expense
+bk --company personal inform-preference show
+bk --company personal inform-preference set daily-digest
+```
+
+Agents can use `bookkeeping_policy_show`, `bookkeeping_policy_set`,
+`inform_preference_show` and `inform_preference_set` over MCP. These settings
+record company-specific instructions for the agent. Posting logic and capability
+enforcement continue to follow the existing ledger rules. The inform preference
+defaults to `per-change` and also supports `daily-digest` and `weekly-digest`.
+The agent saves changes directly, tells the owner what changed, and can restore
+prior values with the same set operation. Use `unset` to clear a bookkeeping
+instruction. See the [full CLI and MCP contract](docs/beankeeper/references/commands.md#standing-bookkeeping-and-inform-preferences).
 
 ### OFX / QFX Bank Statement Import
 
@@ -1222,6 +1338,9 @@ standing balances, income/spending comparisons, spending movers and attention
 counts with chartable amounts and an optional Desktop target. No app is required.
 The default is this month to date versus the full previous calendar month.
 `--from`, `--to`, `--compare-from`, `--compare-to` and `--currency` select the scope.
+Use real calendar dates in `YYYY-MM-DD` format for CLI and MCP report and
+summary filters. When the end date defaults to today, Beankeeper uses the local
+date. Invalid dates return `VALIDATION`.
 
 The CLI and MCP tool return the same full envelope. Overdue status is explicitly
 unavailable because the ledger has no payment due dates; older open items are

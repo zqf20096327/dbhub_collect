@@ -5,6 +5,8 @@ and alerts in one place. DataCat runs on your infrastructure, stores data in Pos
 ClickHouse, if you choose; see docs/SELF_HOSTING.md), and accepts OpenTelemetry and Datadog-compatible agent traffic.
 No hosted account or external service is required.
 
+Built using [Replit Missions](https://replit.com/blog/introducing-replit-missions).
+
 ## Features
 
 - Metrics explorer, formulas, dashboards and host maps

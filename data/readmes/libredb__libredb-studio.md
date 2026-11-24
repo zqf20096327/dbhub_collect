@@ -56,15 +56,16 @@
   <a href="https://etcd.io/docs/v3.7/integrations/#:~:text=LibreDB%20Studio">etcd</a>,
   <a href="https://prometheus.io/docs/operating/integrations/#:~:text=LibreDB%20Studio">Prometheus</a>,
   <a href="https://docs.influxdata.com/influxdb/v2/tools/libredb-studio/">InfluxDB</a>,
+  <a href="https://www.rabbitmq.com/client-libraries/devtools#:~:text=LibreDB%20Studio">RabbitMQ</a>,
   <a href="https://cloudberry.apache.org/docs/ecosystem/sql-clients/libredb-studio/">Apache Cloudberry</a>,
   <a href="https://doris.apache.org/docs/4.x/connection-integration/data-integration/libredb-studio/">Apache Doris</a>,
   <a href="https://cwiki.apache.org/confluence/display/KAFKA/Ecosystem#:~:text=LibreDB%20Studio">Apache Kafka</a>,
-  <a href="https://cassandra.apache.org/_/ecosystem.html">Apache Cassandra</a>,
-  <a href="https://druid.apache.org/libraries/
+  <a href="https://cassa
 
 [...截断...]
 
-#:~:text=LibreDB%20Studio">Apache Druid</a>
+ndra.apache.org/_/ecosystem.html">Apache Cassandra</a>,
+  <a href="https://druid.apache.org/libraries/#:~:text=LibreDB%20Studio">Apache Druid</a>
   and
   <a href="https://github.com/oxia-db/oxia/blob/main/ADOPTERS.md#adopters-list">Oxia</a>
   docs
@@ -138,4 +139,4 @@ You create a Postgres on a managed platform. It is ready in forty seconds. Then 
 
 LibreDB Studio goes the other way. It deploys next to the data: a container, a Helm chart, an operator, a one-click template on your PaaS, or `npm i @libredb/studio` inside your own product. Nothing has to face outward.
 
-Forty-two engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchba
+Forty-two engines share one inte

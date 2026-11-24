@@ -7,6 +7,7 @@
 [![Go version](https://img.shields.io/github/go-mod/go-version/kirimatt/goncordia)](go.mod)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go#messaging)
+[![Context7](https://img.shields.io/badge/Context7-%2Fkirimatt%2Fgoncordia-blue)](https://context7.com/kirimatt/goncordia)
 
 [Documentation](https://goncordia.docs7.io) · [Changelog](CHANGELOG.md) · [API reference](https://pkg.go.dev/github.com/kirimatt/goncordia/v2) · [Migrating to v2](MIGRATING_TO_V2.md) · [Who uses it](ADOPTERS.md)
 
@@ -89,11 +90,44 @@ tx.Commit(ctx)  // job and order appear atomically
 | Scheduled / cron jobs | ✅ | ✅ | ✅ | ✅ |
 | Unique jobs | ✅ | ✅ | ✅ | ❌ |
 | Priority queues | ✅ | ✅ | ✅ | ❌ |
-| Push notifications | ✅ LISTEN/NOTIFY, Change Streams, Pub/Sub | ✅ LISTEN/NOTIFY | ✅ Pub/Sub | ❌ polling |
+| New-job wake-up | ✅ LISTEN/NOTIFY, Change Streams, Pub/Sub; polling elsewhere | ✅ LISTEN/NOTIFY | ❌ polling (`TaskCheckInterval`, 1 s) | ✅ blocking pop on Redis (`BLPOP`); broker-dependent |
 | Web UI | ✅ embeddable | ✅ (River UI, Pro) | ✅ (asynqmon) | ❌ |
 | Await a job's typed result | ✅ `future.Func.Call` / `Await` | ❌ | stores results, no await | ✅ `AsyncResult.Get` |
 | Unit tests without Docker | ✅ in-memory driver + `gontest` | needs Postgres | needs Redis | needs a broker |
 | Workflow primitives (chains, chords) | ❌ | ❌ | ❌ | ✅ |
+
+### Performance
+
+Same workloads on the same servers, every library with its default settings
+(full method, `-tuned` variants and latency in
+[Against river, asynq and machinery](#against-river-asynq-and-machinery);
+code in [`bench/compare`](bench/compare)). Jobs per second, higher is better:
+
+| Postgres | goncordia (pgxv5) | River | River, 10 ms fetch interval |
+|---|---|---|---|
+| Enqueue, one per call | **1,044** | 671 | 670 |
+| Enqueue, batches of 100 | 31,237 | 34,427 | **34,827** |
+| Drain 20,000 jobs, 10 workers | **5,801** | 99 | 4,726 |
+| Drain 20,000 jobs, 100 workers | 20,610 | 999 | **22,588** |
+| Idle pickup latency, p50 | **2.8 ms** | 100 ms | 15 ms |
+
+| Redis | goncordia (redis) | Asynq | Machinery |
+|---|---|---|---|
+| Enqueue, one per call | 3,232 | **3,669** | 1,910 |
+| Enqueue, batches of 100 | **61,826** | no batch API | no batch API |
+| Drain 20,000 jobs, 10 workers | **11,450** | 3,040 | 2,263 |
+| Drain 20,000 jobs, 100 workers | **21,205** | 3,021 | 2,243 |
+| Idle pickup latency, p50 | **0.7 ms** | 1,036 ms | 1.6 ms |
+
+On Postgres goncordia is on par with River once River's fetch interval is
+lowered (River's default 100 ms `FetchCooldown` caps a drain at about
+10 × workers jobs/s); River is ~10% ahead on batch inserts and on a drain with
+100 workers. On Redis goncordia drains 4–9× faster than Asynq and Machinery;
+Asynq is ~10% ahead on single inserts. Asynq's idle latency follows its
+`TaskCheckInterval` (1 s by default; 11 ms with 10 ms). Every drain is checked
+for exactly-once execution; no library ran a job twice. Other goncordia
+backends are not in this table because River runs only on Postgres and Asynq
+only on Redis; their own numbers are in [Benchmarks](#benchmarks).
 
 **Choose goncordia** when you want the transactional outbox pattern and don't want to introduce Redis or a dedicated Postgres instance — it works with whatever database your application already uses. It also fits when a caller needs the value a background job returns (`future.Func.Call`), or when you want unit tests of enqueue and worker code without Docker.
 
@@ -107,46 +141,80 @@ Moving over from one of them? Migration guides: [Asynq](https://goncordia.docs7.
 
 ---
 
+## Using goncordia with AI coding agents
+
+Up-to-date, version-specific docs for Cursor, Claude Code, Copilot, Windsurf
+and other agents:
+
+- **Context7 MCP**: library ID `/kirimatt/goncordia`. With the
+  [Context7 MCP server](https://github.com/upstash/context7) installed, add
+  `use context7` or `use library /kirimatt/goncordia` to your prompt.
+  Versions are indexed per release (`/kirimatt/goncordia/v2.11.0`).
+- **Plain text, no MCP**: [context7.com/kirimatt/goncordia/llms.txt](https://context7.com/kirimatt/goncordia/llms.txt)
+  (add `?topic=EnqueueTx` to narrow it) and
+  [goncordia.docs7.io/llms.txt](https://goncordia.docs7.io/llms.txt).
+- **In your repository**: copy the rules from [AGENTS.md](AGENTS.md) into
+  your own `AGENTS.md` / `CLAUDE.md` / `.cursor/rules`, so the agent uses
+  `EnqueueTx`, the `/v2` import paths and the in-memory test driver.
+
+### Let the agent operate your queue (MCP server)
+
+The [`mcpserver`](mcpserver) module serves your queues and jobs over MCP, so an
+agent can find failed jobs, read their errors and retry them, without you
+opening the dashboard:
+
+```go
+import "github.com/kirimatt/goncordia/mcpserver/v2"
+
+srv := mcpserver.New(d)                                  // read-only tools
+mux.Handle("/mcp", requireAdmin(mcpserver.Handler(srv))) // or srv.Run(ctx, &mcp.StdioTransport{})
+```
+
+Tools: `list_queues`, `list_jobs`, `get_job`, `get_metrics`, and with
+`mcpserver.WithWriteTools()` also `retry_job`, `reschedule_job`, `cancel_job`,
+`delete_job`, `pause_queue`, `resume_queue`. Payloads are hidden by default.
+See [the MCP guide](https://goncordia.docs7.io/mcp).
+
 ## Installation
 
 Requires Go 1.26 or newer.
 
 ```bash
-go get github.com/kirimatt/goncordia/v2@v2.8.0
+go get github.com/kirimatt/goncordia/v2@v2.11.0
 ```
 
 Pick a driver:
 
 ```bash
 # PostgreSQL via pgx v5
-go get github.com/kirimatt/goncordia/driver/pgxv5/v2@v2.8.0
+go get github.com/kirimatt/goncordia/driver/pgxv5/v2@v2.10.0
 
 # PostgreSQL / MySQL / MariaDB / SQLite via database/sql
-go get github.com/kirimatt/goncordia/driver/stdlib/v2@v2.8.0
+go get github.com/kirimatt/goncordia/driver/stdlib/v2@v2.9.0
 
 # gorm adapter
-go get github.com/kirimatt/goncordia/driver/gorm/v2@v2.8.0
+go get github.com/kirimatt/goncordia/driver/gorm/v2@v2.9.0
 
 # bun adapter
-go get github.com/kirimatt/goncordia/driver/bun/v2@v2.8.0
+go get github.com/kirimatt/goncordia/driver/bun/v2@v2.9.0
 
 # MongoDB (replica set required)
-go get github.com/kirimatt/goncordia/driver/mongodbv2/v2@v2.8.0
+go get github.com/kirimatt/goncordia/driver/mongodbv2/v2@v2.10.0
 
 # Redis
-go get github.com/kirimatt/goncordia/driver/redis/v2@v2.7.1
+go get github.com/kirimatt/goncordia/driver/redis/v2@v2.9.0
 
 # Cassandra / ScyllaDB
-go get github.com/kirimatt/goncordia/driver/cassandra/v2@v2.7.1
+go get github.com/kirimatt/goncordia/driver/cassandra/v2@v2.10.0
 
 # ClickHouse
-go get github.com/kirimatt/goncordia/driver/clickhouse/v2@v2.7.0
+go get github.com/kirimatt/goncordia/driver/clickhouse/v2@v2.10.0
 
 # Amazon DynamoDB
-go get github.com/kirimatt/goncordia/driver/dynamodb/v2@v2.7.1
+go get github.com/kirimatt/goncordia/driver/dynamodb/v2@v2.10.0
 
 # Cloud Firestore
-go get github.com/kirimatt/goncordia/driver/firestore/v2@v2.7.1
+go get github.com/kirimatt/goncordia/driver/firestore/v2@v2.10.0
 ```
 
 The root v1 module intentionally does not download every database SDK. Driver,
@@ -1100,72 +1168,121 @@ See [`driver/driver.go`](driver/driver.go) for the full core interface and optio
 ## Benchmarks
 
 ```
-go test ./bench/... -bench=. -benchmem -benchtime=5s -timeout=15m
+cd bench && go test . -run '^$' -bench . -benchmem -benchtime=5s -timeout 90m
 ```
 
-Apple M5, single process. Memory/SQLite are in-process (no network); Postgres/MongoDB/Redis run in Docker on localhost.
+v2.10.0 drivers, Ryzen 5 5600X, WSL2, single process. Memory and SQLite run
+in-process; every other backend runs in Docker on localhost (testcontainers;
+DynamoDB Local and the Firestore emulator stand in for the cloud services).
+Each benchmark starts from an empty backend. Loopback through WSL2 adds about
+0.2 ms per round trip, so network-bound numbers are higher than on a native
+Linux host.
 
 **Enqueue — single job**
 
-| Backend | ns/op | Notes |
+| Backend | per job | Notes |
 |---|---|---|
-| Memory | 0.57 µs | in-process mutex, no I/O |
-| SQLite | 27 µs | WAL mode, single connection |
-| Redis | 109 µs | ZADD over localhost |
-| Postgres (pgx v5) | 129 µs | INSERT over localhost |
-| MongoDB | 338 µs | insertOne over localhost |
-| DynamoDB | 632 µs | PutItem over localhost |
-| Firestore | 1 195 µs | RunTransaction + Create over emulator |
-| ClickHouse | 1 378 µs | INSERT + new data part over localhost |
-| Cassandra | 7 216 µs | LWT requires Paxos quorum (3 round trips) |
+| Memory | 1.5 µs | in-process mutex, no I/O |
+| SQLite | 67 µs | WAL mode, single connection |
+| Redis | 328 µs | one script call |
+| Postgres (pgx v5) | 392 µs | INSERT |
+| DynamoDB | 1.4 ms | PutItem + queue row |
+| MongoDB | 1.6 ms | insertOne |
+| Firestore | 2.3 ms | Create on the emulator |
+| ClickHouse | 6.8 ms | INSERT, one new data part |
+| Cassandra | 7.2 ms | lightweight transactions (Paxos) |
 
 **EnqueueBatch(100) — 100 jobs per call**
 
-| Backend | ms/batch | jobs/s |
+| Backend | per batch | jobs/s |
 |---|---|---|
-| Memory | 0.06 ms | ~1 775 000 |
-| SQLite | 2.8 ms | ~35 300 |
-| Redis | 10.9 ms | ~9 200 |
-| Postgres (pgx v5) | 12.8 ms | ~7 800 |
-| MongoDB | 34.9 ms | ~2 900 |
-| DynamoDB | 62.9 ms | ~1 590 |
-| Firestore | 93.5 ms | ~1 070 |
-| ClickHouse | 150 ms | ~665 |
-| Cassandra | 708 ms | ~141 |
+| Memory | 0.13 ms | ~800 000 |
+| Redis | 1.9 ms | ~54 000 |
+| Postgres (pgx v5) | 2.0 ms | ~49 000 |
+| MongoDB | 4.3 ms | ~23 000 |
+| SQLite | 6.6 ms | ~15 000 |
+| ClickHouse | 7.4 ms | ~13 500 |
+| Cassandra | 19.9 ms | ~5 000 |
+| DynamoDB | 28.0 ms | ~3 600 |
+| Firestore | 47.4 ms | ~2 100 |
 
-**FetchAndComplete — hot worker loop path**
+**FetchAndComplete — claim one job and complete it, one at a time**
 
-| Backend | µs/op | Notes |
+| Backend | per job | Notes |
 |---|---|---|
-| SQLite | 53 µs | indexed; faster than memory at scale |
-| Memory | 520 µs | O(N) linear scan |
-| Redis | 729 µs | Lua ZPOPMIN + HSET |
-| DynamoDB | 1 731 µs | Query GSI + conditional UpdateItem |
-| MongoDB | 2 475 µs | findAndModify + updateOne |
-| Postgres (pgx v5) | 12 190 µs | SELECT SKIP LOCKED + UPDATE |
-| ClickHouse | 14 416 µs | SELECT FINAL + INSERT new version |
-| Cassandra | 18 813 µs | SELECT avail + LWT UPDATE per job |
-| Firestore | 140 943 µs | Query + per-job RunTransaction on emulator |
+| SQLite | 0.23 ms | |
+| Redis | 0.74 ms | claim and complete scripts |
+| Memory | 0.94 ms | linear scan over b.N jobs |
+| Postgres (pgx v5) | 1.0 ms | UPDATE … SKIP LOCKED + UPDATE |
+| MongoDB | 6.1 ms | find + claim + complete |
+| DynamoDB | 8.8 ms | GSI query + conditional updates |
+| Cassandra | 19.5 ms | lightweight transactions per claim |
+| ClickHouse | 27.1 ms | SELECT … FINAL + new row version |
+| Firestore | 36.6 ms | query + transaction on the emulator |
 
-**End-to-end — full WorkerPool**
+**End-to-end — full WorkerPool, 1 000 jobs enqueued with `EnqueueMany` and processed**
 
-| Backend | workload | concurrency | jobs/s | Notes |
+| Backend | concurrency | jobs/s | Wake-up |
+|---|---|---|---|
+| Redis | c=4 | ~6 200 | Pub/Sub |
+| Memory | c=10 | ~4 900 | in-process |
+| SQLite | c=4 | ~4 700 | polling |
+| Postgres (pgx v5) | c=4 | ~4 300 | LISTEN/NOTIFY |
+| MongoDB | c=4 | ~870 | Change Streams |
+| Cassandra | c=4 | ~655 | polling |
+| DynamoDB | c=4 | ~430 | polling |
+| ClickHouse | c=4 | ~310 | polling |
+| Firestore | c=4 | ~230 | polling, emulator |
+
+The end-to-end time includes enqueueing the 1 000 jobs. The pool polls every
+5 ms; a backlog is fetched again as soon as slots free up, so the poll
+interval matters only when the queue is empty. With 1 worker: Memory ~820,
+SQLite ~2 100 jobs/s. For Postgres and Redis against river, asynq and
+machinery under heavier load, see the comparison below.
+
+> **History.** v2.8.0 made Postgres fetch from a partial index in fetch order, batched pgx inserts, claimed several jobs per query and batched completions (32 workers: ~880 → ~9 300 jobs/s on embedded Postgres 18). v2.9.0 kept fetching while a backlog lasts (with the default 1 s poll a backlog used to drain at ~40 jobs/s per process), freed the handler slot before the state write, batched `started_at` writes, and claimed batches in a few round trips on Redis, MongoDB, Cassandra, DynamoDB and Firestore. v2.10.0 stopped making the handler wait for `started_at`, made pgxv5 `EnqueueMany` one statement, made batch inserts single or parallel requests on MongoDB, DynamoDB, Cassandra and Firestore (100 jobs: 180 → 4 ms, 174 → 28 ms, 566 → 20 ms, 212 → 47 ms), and batched ClickHouse completions.
+
+Cassandra's per-operation latency comes from lightweight-transaction consensus (Paxos, about three round trips per claim); batches hide it by running jobs in parallel. ClickHouse pays for `SELECT … FINAL` deduplication and a new row version per state change, which is why completions and start marks are written in batches. DynamoDB and Firestore costs are HTTP round trips, measured here against DynamoDB Local and the Firestore emulator; the emulators scan where the services use indexes, so the cloud services are faster per call but add network latency. These four backends fit workloads where horizontal scale matters more than per-job latency.
+
+### Against river, asynq and machinery
+
+`bench/compare` runs the same workloads against each library on the same
+servers (Postgres 17 and Redis 7 in Docker, WSL2, Ryzen 5 5600X, all in one
+run). Every library keeps its default settings; only the worker concurrency
+is set. `-tuned` rows lower the fetch interval (river: `FetchCooldown` 1 ms,
+`FetchPollInterval` 10 ms; asynq: `TaskCheckInterval` 10 ms). Drain runs
+check that every job ran exactly once; none ran twice.
+
+```
+cd bench/compare
+go run . -pg postgres://... -redis localhost:6379 -systems all
+```
+
+Postgres, jobs/s:
+
+| | goncordia (pgxv5) | river | river-tuned |
+|---|---|---|---|
+| enqueue, one per call | 1,044 | 671 | 670 |
+| enqueue, batches of 100 | 31,237 | 34,427 | 34,827 |
+| drain 20,000 jobs, 10 workers | 5,801 | 99 | 4,726 |
+| drain 20,000 jobs, 100 workers | 20,610 | 999 | 22,588 |
+| idle pickup latency p50 / p99 | 2.8 / 6.0 ms | 100 / 991 ms | 15 / 20.5 ms |
+
+Redis, jobs/s:
+
+| | goncordia (redis) | asynq | asynq-tuned | machinery |
 |---|---|---|---|---|
-| Memory | 1 000 | c=10 | ~2 020 | |
-| Redis | 1 000 | c=4 | ~1 084 | Pub/Sub notifications |
-| SQLite | 1 000 | c=4 | ~800 | |
-| DynamoDB | 1 000 | c=4 | ~780 | polling; GSI query overhead |
-| MongoDB | 1 000 | c=4 | ~452 | Change Streams |
-| Postgres (pgx v5) | 1 000 | c=4 | ~179 | LISTEN/NOTIFY |
-| Cassandra | 1 000 | c=4 | ~153 | polling; LWT overhead |
-| ClickHouse | 1 000 | c=4 | ~148 | polling; SELECT FINAL overhead |
-| Firestore | 200 | c=4 | ~14 | polling; per-job RunTransaction on emulator |
+| enqueue, one per call | 3,232 | 3,669 | 3,548 | 1,910 |
+| enqueue, batches of 100 | 61,826 | no batch API | no batch API | no batch API |
+| drain 20,000 jobs, 10 workers | 11,450 | 3,040 | 3,050 | 2,263 |
+| drain 20,000 jobs, 100 workers | 21,205 | 3,021 | 3,044 | 2,243 |
+| idle pickup latency p50 / p99 | 0.7 / 1.1 ms | 1,036 / 1,495 ms | 11.1 / 16.4 ms | 1.6 / 2.4 ms |
 
-End-to-end throughput is bounded by the 5 ms poll interval used in the benchmark. In production the pgxv5 driver uses LISTEN/NOTIFY and the Redis driver uses Pub/Sub, eliminating poll latency entirely — real throughput matches the FetchAndComplete numbers above.
+With defaults, river's drain is bounded by `FetchCooldown` (100 ms between
+fetches, at most one fetch's worth of free slots each time) and asynq's idle
+latency by `TaskCheckInterval` (1 s). goncordia wakes on LISTEN/NOTIFY
+(pgxv5) or Pub/Sub (Redis) and keeps fetching while a backlog lasts.
 
-> **v2.8.0 changed the SQL hot path; the tables above predate it.** On Postgres the fetch query now reads a partial index in fetch order instead of sorting the backlog, `EnqueueMany` sends one pgx batch, the worker pool claims several jobs per query, and completions are written in batches (pgxv5, stdlib on Postgres/SQLite, gorm, bun, mongodbv2). Measured on another machine (embedded Postgres 18, Windows, localhost), so compare ratios only: fetch query with a 20k backlog 4.9 ms → 0.05 ms; `EnqueueBatch(100)` 28 ms → 6 ms; end-to-end, 5 000 jobs, 32 workers, ~880 → ~8 000–9 700 jobs/s with ~4× fewer database transactions.
-
-Cassandra's high per-operation latency comes from Lightweight Transaction consensus (Paxos, ~3 network round trips per claim). ClickHouse's overhead comes from `SELECT … FINAL` deduplication at query time. DynamoDB's per-operation cost is dominated by HTTP/JSON round trips to the service — measured against DynamoDB Local on localhost, so real AWS numbers include additional network latency. Firestore's per-job `RunTransaction` for claiming is the primary bottleneck on the emulator; production GCP Firestore will be faster due to lower round-trip latency, but the sequential-per-job claiming model inherently limits throughput. All four backends are best suited for workloads where horizontal scale matters more than raw per-job latency.
 
 ---
 
@@ -1271,7 +1388,7 @@ _ = pool.Shutdown(context.Background())
 ## Observability (OpenTelemetry)
 
 ```bash
-go get github.com/kirimatt/goncordia/otel/v2@v2.6.0
+go get github.com/kirimatt/goncordia/otel/v2@v2.7.0
 ```
 
 ```go
@@ -1325,6 +1442,25 @@ The instrumentation produces:
 Panics are recovered, converted to errors, recorded on the span, and persisted
 with their stack trace in `driver.AttemptError.Trace` before retry/discard. The
 worker pool always stays alive.
+
+### One trace from request to worker
+
+Set `ContextTags` on the client and the job carries the W3C trace context of
+its enqueue span (as `traceparent=...` and `tracestate=...` tags). The
+middleware continues that trace, so the request that enqueued the job, the
+`goncordia.enqueue` span and every `goncordia.process` attempt share one trace
+ID, on every backend and without a schema change:
+
+```go
+client := pgxdriver.NewClient(d, goncordia.ClientConfig{
+    Observer:    instrumentation,
+    ContextTags: otelgoncordia.TraceContextTags,
+})
+```
+
+The admin API and the [MCP server](https://goncordia.docs7.io/mcp) show the tags; `get_job` in the MCP
+server returns the `trace_id` directly. `otelgoncordia.ExtractTraceContext`
+reads the context back from a job's tags in your own code.
 
 ### Futures
 

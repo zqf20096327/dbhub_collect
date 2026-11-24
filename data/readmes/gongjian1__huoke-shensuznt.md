@@ -18,17 +18,13 @@ AI 功能用的是**使用者自己的阿里云百炼 Key**（加密保存在数
 
 ## 数据接口 Key
 
-评论、作品等数据来自第三方数据接口（TikHub）。**本仓库不包含任何 Key，也不提供公共的 Key。**
+评论、作品等数据来自作者提供的数据接口服务。**本仓库不包含任何 Key 和接口地址，也不提供公共的 Key。**
 
-需要使用采集功能，请联系作者获取接口 Key：
+需要使用采集功能，请联系作者开通接口，会给你一个**接口地址**和一个**接口 Key**，按评论条数计费（¥10 / 1000 条评论）：
 
 > **联系方式（微信）：shensu8**
 
-拿到 Key 后，登录后在「管理后台 → 设置」里填写（或写进 `.env` 的 `TIKHUB_API_KEY`）。没有填 Key 时，系统可以正常打开，但采集会提示"还没有配置数据接口 Key"。
-
-作者发的是**子 Key**（`hk_` 开头）时，还要在同一个页面把「接口地址」填成作者给你的网关地址；直接用 TikHub 自己的 Key 则留空。
-
-想自己给别人发 Key 的话，仓库里带了一个中转网关，见 [`gateway/README.md`](gateway/README.md)：真 Key 只放在你的服务器上，每个人一个子 Key，有次数额度、到期时间和限速，随时可停用。
+拿到后，登录后在「管理后台 → 系统设置」里填写「数据接口 Key」和「接口地址」（也可以写进 `.env` 的 `DATA_API_KEY`、`DATA_API_BASE`）。没有填时，系统可以正常打开，但采集会提示"还没有配置数据接口"。
 
 ## 本地运行
 
@@ -60,7 +56,7 @@ sudo bash deploy.sh 你的域名.com
 
 ## 配置
 
-见 [`.env.example`](.env.example)。常用的是 `TIKHUB_API_KEY`、`HUOKE_SECRET`；放在 gunicorn + 反向代理 + HTTPS 后面时再加 `HUOKE_SCHEDULER=1`、`HUOKE_BEHIND_PROXY=1`、`HUOKE_HTTPS=1`（gunicorn 只能开 1 个 worker）。
+见 [`.env.example`](.env.example)。常用的是 `DATA_API_BASE`、`DATA_API_KEY`、`HUOKE_SECRET`；放在 gunicorn + 反向代理 + HTTPS 后面时再加 `HUOKE_SCHEDULER=1`、`HUOKE_BEHIND_PROXY=1`、`HUOKE_HTTPS=1`（gunicorn 只能开 1 个 worker）。
 
 意向词、价格、注册方式、AI 默认模型都在登录后的「管理后台 → 设置」里改。
 

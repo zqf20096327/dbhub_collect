@@ -2,52 +2,39 @@
 
 **English** · [简体中文](README.zh-CN.md)
 
-Self-hosted publishing hub for people who write in Chinese and publish everywhere.
-Write once, ship to fifteen platforms, and keep every published copy in sync — with AI
-drafting, a compliance gate, and a human in the loop when a platform fights back.
+A self-hosted publishing hub for people who write in more than one place.
+Write a piece once, send it to the platforms you already use, and keep every copy in sync.
+Accounts, drafts and history stay on your machine.
 
 [![CI](https://github.com/badhope/harbor/actions/workflows/ci.yml/badge.svg)](https://github.com/badhope/harbor/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-![Write workspace](docs/screenshots/01-write.png)
+![Harbor walkthrough](docs/screenshots/harbor-demo.gif)
 
----
+*Animated walkthrough. [Open the MP4](docs/screenshots/harbor-demo.mp4) if the GIF does not play.*
 
-## What it does
+## Why Harbor
 
-| | |
-|---|---|
-| **Fifteen platforms, one publish action** | Zhihu, Juejin, CSDN, Bilibili, Cnblogs, Toutiao, OSChina, SegmentFault, 51CTO, MetaWeblog blogs, WeChat Official Accounts, GitHub Pages, Dev.to, Telegraph, Xiaohongshu. Each adapter declares what it can actually do — publish, draft, update, tags, cover, Q&A — and the UI greys out the rest. |
-| **Update in place** | Edit once; every already-published copy is updated rather than duplicated. |
-| **AI drafting with a compliance gate** | Seven provider routes with failover, plus a four-stage gate before anything ships: safety scan → AIGC disclosure → dual-model review → human confirmation. |
-| **Pauses instead of guessing** | CAPTCHA, risk control, expired session: the task stops, tells you, and resumes where it left off. |
-| **Session persistence** | Log in once per platform. Cookies live in a local profile plus an atomic snapshot, so a wiped profile does not force a re-scan. |
-| **MCP server, 33 tools** | Drive the whole pipeline from Claude Code, Cursor or any MCP client. stdio, streamable-http or legacy SSE; any non-loopback transport requires a bearer token. |
-| **Everything local, and portable out** | SQLite with FTS5 full-text search, local media store with content-addressed dedupe, no vendor account, no telemetry. Export any article — or the whole library — as Markdown with YAML front-matter for Hexo, Hugo or Obsidian. |
-| **A live view that survives reconnects** | Task and article changes stream over SSE with monotonic event ids; after a dropped connection the client replays what it missed via `Last-Event-ID` instead of showing a stale "stuck" task. |
-| **Measured, not asserted** | `/metrics` exports real Prometheus histograms, every release runs eight gates, and the desktop build is a tested single-file executable — not a claim in a README. |
+- **One draft, many places.** Write in Markdown, choose the platforms that fit the piece, and publish from one rail that shows what each platform can actually do.
+- **Edit once, update everywhere.** Where the platform supports it, a published copy is updated in place instead of being posted again.
+- **Stop when a platform stops you.** CAPTCHA, risk control or an expired session pauses the task, tells you what happened, and resumes where it stopped.
+- **Local by default.** Accounts, cookies and drafts live on the machine running Harbor. No hosted account and no telemetry.
+- **Yours to adjust.** A content profile holds your voice, posting windows and engagement limits. Every platform has an SOP you can read, edit or reset.
+- **Optional AI, not a requirement.** AI drafting, review and MCP access are there when you want them; the publishing flow works without them.
 
-## Screens
+## A closer look
 
-| Publish center | Task center |
-|---|---|
-| ![Publish](docs/screenshots/02-publish.png) | ![Tasks](docs/screenshots/03-tasks.png) |
+![Content profile](docs/screenshots/09-profile.png)
 
-| Settings | Mobile |
-|---|---|
-| ![Settings](docs/screenshots/04-settings.png) | ![Mobile](docs/screenshots/05-mobile.png) |
+*A content profile: writing direction, voice, quotas, posting windows, and a personal SOP for each platform.*
 
-![Platform accounts](docs/screenshots/06-platforms.png)
+![Platform accounts](docs/screenshots/10-platforms.png)
 
-*Fifteen adapters, each declaring what it can actually do. Greyed-out actions are not supported by that platform, not missing features.*
-
-![Tag governance](docs/screenshots/07-tags.png)
-
-*Tag governance finds near-duplicate tags (`Python` / `python` / `Pyhton`) and merges them in one click.*
+*Platform accounts: browser logins for sites that need them, credential forms for API-based sites.*
 
 ## Quick start
 
-Requires Python 3.10+, [uv](https://docs.astral.sh/uv/), Node 20+ and pnpm.
+Requires Python 3.11+, [uv](https://docs.astral.sh/uv/), Node 20+ and pnpm.
 
 ```bash
 git clone https://github.com/badhope/harbor.git
@@ -64,171 +51,37 @@ pnpm install
 pnpm dev            # http://127.0.0.1:5173
 ```
 
-Open <http://127.0.0.1:5173>. The Vite dev server proxies `/api` to port 8000.
+Open <http://127.0.0.1:5173>. The dev server proxies `/api` to port 8000.
 
-### Command line
+The first launch opens a three-step setup: create a profile, connect platforms, copy the MCP config. The same profile and SOP files can be created from the CLI:
 
 ```bash
 uv run --project backed python -m backed.cli init --name demo --platforms juejin,csdn
-uv run --project backed python -m backed.cli add-platforms --name demo --platforms bilibili,toutiao
-uv run --project backed python -m backed.cli status                 # library + account overview
-uv run --project backed python -m backed.cli list                   # newest articles
-uv run --project backed python -m backed.cli create --title "..." --content "..."
-uv run --project backed python -m backed.cli publish --id 12 --platforms juejin,csdn
-uv run --project backed python -m backed.cli export --all --out ./markdown
 ```
 
-On first launch, the web UI / desktop app opens a three-step setup wizard: create
-your profile, log in to platforms, then copy the MCP config. The `init` command
-above produces the same profile and SOP files if you prefer the CLI.
+## Platform support
 
-### Desktop shell (experimental)
+Adapters ship for Zhihu, Juejin, CSDN, Bilibili, Cnblogs, Toutiao, OSChina, SegmentFault, 51CTO, MetaWeblog blogs (WordPress/Typecho), WeChat Official Accounts, GitHub Pages, Dev.to, Telegraph and Xiaohongshu.
 
-```bash
-cd web
-pnpm install
-pnpm run tauri dev
-```
+Browser-login platforms store their session in a local profile. API platforms take credentials in *Settings → Platform accounts → Configure credentials*; the key is written locally and shown only as a mask. See [PLATFORM_CONNECTION.md](PLATFORM_CONNECTION.md) for the field list and CLI equivalents.
 
-For a release build, stage the sidecar under the name Tauri expects first:
-
-```bash
-uv run --project backed python scripts/stage_sidecar.py   # copies dist/ -> binaries/<triple>
-cd web && pnpm tauri build
-```
-
-Tauri launches the Python backend as a sidecar and reads its port from a handshake
-file. **Verified on Windows** (2026-11-07): `tauri build` compiles, the app starts,
-the sidecar binds a loopback port, and the data directory is created under
-`%APPDATA%`. macOS and Linux are untested — see [Known limits](#known-limits).
-
-## Make it yours (and keep your data out of the repo)
-
-Harbor is built to be re-run by anyone, not just its author. Each deployment is single-user and
-self-hosted: cookies, accounts and drafts never leave your machine.
-
-- `profiles/` is your private space. Copy `profiles/example.yaml` to
-  `profiles/<name>/profile.yaml` and put real accounts, report links and progress files there.
-  Everything under `profiles/` except the README and the example is `.gitignore`d.
-- `playbooks/` ships **templates** for daily operations (Cnblogs, Zhihu, CSDN, Juejin).
-  Copy one into `profiles/<name>/playbooks/`, fill `{{profile.*}}`, and point your scheduler
-  at the copy.
-- `python scripts/scan_privacy.py` (also run in CI) blocks commits containing account IDs,
-  Feishu document links or absolute local paths.
-
-One instance serves one person by design: publishing needs your login state, so multi-tenant
-hosting would be a liability, not a feature.
-
-> **Login happens on the machine running Harbor, never in your AI client's browser.**
-> See [docs/guides/login.md](docs/guides/login.md) for local, LAN and headless deployments,
-> and [docs/guides/mcp-clients.md](docs/guides/mcp-clients.md) for connecting an MCP client.
-
-## Connect a platform
-
-Two connection styles, decided per platform:
-
-**Browser login** — for platforms without a usable API. Open *Settings → Platform
-accounts*, click **Log in** on the platform, and complete the scan or password step in
-the window that opens. The session is stored in a local profile and reused.
-
-```bash
-uv run --project backed python -m backed.cli --headed login --platform zhihu
-```
-
-**Protocol credentials** — for platforms with a stable API. Fill in
-`platforms.<name>` in `config.json`; no browser needed. See
-[PLATFORM_CONNECTION.md](PLATFORM_CONNECTION.md) for the field list per platform.
-
-```bash
-uv run --project backed python -m backed.cli publish --id <article-id> --platforms zhihu,juejin
-```
-
-## Configuration
-
-Edit `backed/config.json`, or use environment variables:
-
-| Variable | Purpose | Default |
-|---|---|---|
-| `HARBOR_API_TOKEN` | REST authentication token | Auto-generated on loopback; **required** in production/Docker |
-| `SECRET_KEY` / `HARBOR_SECRET_KEY` | Signing / JWT key | **Required** in production; no public default |
-| `TRUSTED_NETS` | Client networks exempt from the API token | Loopback only |
-| `TRUSTED_PROXIES` | Reverse proxies whose `X-Forwarded-For` is trusted | Empty |
-| `CORS_ORIGINS` | Allowed cross-origin origins | Same-origin |
-| `ALLOWED_HOSTS` | Accepted `Host` headers | Loopback |
-| `HUB_DATA_DIR` | Persistent root for DB, media, profiles, config | Repo-local `data/` |
-| `HUB_BROWSER_CHANNEL` | Reuse a system browser (`msedge` / `chrome`) | Bundled Chromium |
-| `PUBLIC_BASE_URL` | Public base URL for hosted media | Empty (media stored, not rewritten) |
-| `DEMO=1` | Demo mode: no browser, no external API calls | Off |
-
-## Deployment
-
-Docker Compose runs the backend behind nginx, with the token injected server-side:
-
-```bash
-export SECRET_KEY=$(openssl rand -hex 32)
-export HARBOR_API_TOKEN=$(openssl rand -hex 32)
-docker compose -f deploy/docker-compose.yml --profile web up -d --build
-```
-
-The backend is not exposed to the host; nginx terminates and injects the token. Data
-lives in the `hub_data` volume.
-
-## Testing
-
-```bash
-bash scripts/check_all.sh          # all gates; Linux/macOS
-pwsh -File scripts/check_all.ps1   # all gates; Windows
-
-cd backed && uv run pytest -q      # backend only
-pnpm --dir web test                # frontend only
-```
-
-`check_all` runs eight gates: compileall, ruff, version consistency, secret scan,
-pytest, eslint, vitest, vite build.
-
-## Architecture
-
-```
-Vue 3 SPA  ──REST/SSE──►  FastAPI  ──►  Publishing hub
-(Tauri shell)             (uvicorn)      ├── 15 platform adapters
-                                         ├── task engine + scheduler
-                                         ├── SQLite (WAL + FTS5)
-                                         └── MCP bridge (stdio/SSE)
-```
-
-Details in [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md).
-
-## Known limits
-
-Read this before trusting any claim above.
-
-- **Browser fetch and screenshot are enabled but network-restricted.** The target host
-  is pinned to its validated public IP inside Chromium and every sub-resource is
-  checked. Private, loopback and link-local targets are rejected.
-- **Real publishing is not regression-tested against live platform DOM.** Adapters pass
-  a static contract probe; only Juejin has a captured DOM sample. Verify with a draft
-  before relying on any platform.
-- **Tauri is verified on Windows only.** `tauri build --no-bundle` compiles, the app
-  launches, and the sidecar serves `/api/v1/hub/health` on a loopback port
-  (2026-11-07). macOS/Linux and installer packaging (NSIS/MSI) are untested.
-- **Docker is still unverified.** The daemon is unavailable on this machine; the
-  compose file and Dockerfiles are lint-checked but have never produced a running
-  container here.
-- **No auto-update, no signed release manifest, no cross-platform installer.**
+> Login happens on the machine running Harbor, never inside an AI client's browser. An MCP client can read status and publish, but cannot log in for you.
 
 ## Documentation
 
-| | |
-|---|---|
-| [Project management](docs/PROJECT_MANAGEMENT.md) | Branch model, DoD, gates, five-remote sync |
-| [Versioning](docs/VERSIONING.md) | SemVer policy and release checklist |
-| [Roadmap](docs/ROADMAP.md) | Shipped, next, backlog, out of scope |
-| [Platform guide](PLATFORM_CONNECTION.md) | Per-platform credentials and CLI |
-| [Architecture](docs/architecture/ARCHITECTURE.md) | Module boundaries and data flow |
-| [Verification records](docs/verification/index.md) | Dated evidence from real platforms, installers and deployments |
-| [Audit reports](docs/audit/AUDIT.md) | Historical defect audits and fixes |
-| [Contributing](CONTRIBUTING.md) | How to send a change |
-| [Security](SECURITY.md) | Reporting vulnerabilities |
+Start at [docs/README.md](docs/README.md). The short list:
+
+- [Login and sessions](docs/guides/login.md)
+- [MCP clients](docs/guides/mcp-clients.md)
+- [Platform connections](PLATFORM_CONNECTION.md)
+- [Architecture](docs/architecture/ARCHITECTURE.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Audit reports](docs/audit/AUDIT.md)
+- [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+
+## Acknowledgements
+
+Harbor stands on open-source work. The MCP servers, libraries and tools it uses are listed in [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md).
 
 ## License
 

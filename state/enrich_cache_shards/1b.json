@@ -1,10 +1,10 @@
 {
  "thedotmack/claude-mem": {
-  "commit_7d": 229,
-  "commit_90d": 2403,
-  "rel_ver": "v16.0.4",
-  "rel_pub": "2026-11-22",
-  "rel_days": 0,
+  "commit_7d": 202,
+  "commit_90d": 2464,
+  "rel_ver": "v16.1.1",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 143,
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "lang": {
    "TypeScript": 46,
    "JavaScript": 40,
@@ -23,11 +23,21 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v16.1.1",
+    "d": "2026-11-23",
+    "n": "### Cloud Sync setup\n\n- Select **Try Cloud Sync free for 30 days** from your focus areas to open monthly checkout. The trial requires a card and costs $0 today, then $12/month after 30 days.\n- Setup preselects detected agents. You can discover your recent work or start with your next session. Annual Cloud Sync ($99 upfront) and free local setup are available before checkout. If you already have Cloud Sync, connect your device with your existing plan.\n- After Cloud Sync activates, setup shows token usage fro"
+   },
+   {
+    "t": "v16.1.0",
+    "d": "2026-11-23",
+    "n": "### Standalone Cloud Sync in the installer\n\n- Run `npx claude-mem install` and choose Cloud Sync to connect your devices while keeping your current memory provider. The monthly plan requires a card and includes a full 30-day trial, followed by $12 per month. The annual plan costs $99 upfront.\n- The installer carries your chosen plan into checkout and verifies that cmem.ai confirms the same offer. Hosted tokens are a separate, optional purchase. Existing bundled Pro setups keep their saved settings.\n- You ca"
+   },
    {
     "t": "v16.0.4",
     "d": "2026-11-22",
@@ -67,22 +77,14 @@
     "t": "v15.19.0",
     "d": "2026-11-16",
     "n": "- **The claude-mem data folder is owner-only** (#6091, thanks @DeryFerd). On macOS and Linux, `~/.claude-mem` (database, settings, `.env`, hook spool, backups) was created with a plain `mkdir`, so under the common `022` umask other accounts on the machine could read it. It is now created as `0700`, an existing folder is tightened on the next start, and new hook spool entries are written as `0600`.\n- **Closing the database releases it** (#6090, thanks @DeryFerd). Cached prepared statements kept the connectio"
-   },
-   {
-    "t": "v15.18.5",
-    "d": "2026-11-15",
-    "n": "## Critical fixes\n\n- **The tree-sitter CLI installs on networks where its download script keeps failing** (#6110, thanks @rigel905, closes #6109). On some networks tree-sitter-cli's own `install.js` had its request reset every time, or exited 0 on a truncated file. The pinned SHA-256 check correctly refused the file, but nothing recovered after that, so `smart_search`, `smart_outline`, `smart_unfold` and the File Read Gate stayed off on every worker start, and `npx claude-mem repair` aborted. Now, when the "
-   },
-   {
-    "t": "v15.18.4",
-    "d": "2026-11-15",
-    "n": "- **Faster project-filtered session lists in the viewer** (#6053, thanks @Afloat16). A new index on project, start time and id lets the viewer read one page of a long project history without sorting every session. Existing databases get the index on the next worker start.\n- **Worker listing endpoints stop at offset 10,000** (#6083, thanks @xunguangzlj-cloud). `/api/observations`, `/api/summaries`, `/api/prompts`, the session feeds and `/api/tool-uses` used to pass any offset straight into SQLite, where a de"
    }
   ],
   "etag": {
-   "release": "W/\"002ae529c7db0f475f26f96e65b858289c52dabbc58ac798e4f504bbadfb0266\""
+   "release": "W/\"71fa76760b88f821fdd8e4c1b67035d4445be5c538e89505be08cc3882eabe68\""
   },
   "rel_dates": [
+   "2026-11-23",
+   "2026-11-23",
    "2026-11-22",
    "2026-11-21",
    "2026-11-20",
@@ -110,17 +112,15 @@
    "2026-11-07",
    "2026-11-07",
    "2026-11-06",
-   "2026-11-06",
-   "2026-11-05",
-   "2026-11-02"
+   "2026-11-06"
   ]
  },
  "porsager/postgres": {
-  "commit_7d": 5,
-  "commit_90d": 89,
+  "commit_7d": 7,
+  "commit_90d": 91,
   "rel_ver": "v4.1.1",
   "rel_pub": "2026-11-11",
-  "rel_days": 11,
+  "rel_days": 13,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -129,15 +129,15 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 77,
-  "enriched_at": "20261121",
+  "enriched_at": "20261124",
   "lang": {
    "JavaScript": 100
   },
   "dim_ts": {
    "lang": "20260929",
    "security": "20261027",
-   "commit": "20261121",
-   "release": "20261121"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "rel_notes": [
    {
@@ -162,7 +162,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"1d8cf45aaed5e2ed5ac6accbd40c2a41710f39e75fab1ddb1ef822c19efe75a7\""
+   "release": "W/\"552bf935a3a65f633d915291efed7f671051a53faffc9cd2233f38ad32aebd86\""
   },
   "rel_dates": [
    "2026-11-11",
@@ -194,11 +194,11 @@
   }
  },
  "ydb-platform/ydb": {
-  "commit_7d": 472,
-  "commit_90d": 6095,
+  "commit_7d": 487,
+  "commit_90d": 6082,
   "rel_ver": "26.2.1.16",
   "rel_pub": "2026-11-20",
-  "rel_days": 2,
+  "rel_days": 4,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -207,7 +207,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 233,
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "lang": {
    "C++": 53,
    "C": 25,
@@ -217,8 +217,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261027"
   },
   "rel_notes": [
@@ -244,7 +244,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"fbc01818d07ffccdde3dd9dc080d88a2f42fc6c9ef376e4ce5f56c6acc7ab631\""
+   "release": "W/\"7c29954bb773c92b48d2939a9c63603175f7761ce45f55c1a6249db73d5fd632\""
   },
   "rel_dates": [
    "2026-11-20",
@@ -257,7 +257,7 @@
   "commit_90d": 0,
   "rel_ver": "v0.5.41",
   "rel_pub": "2025-07-11",
-  "rel_days": 499,
+  "rel_days": 501,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -296,13 +296,13 @@
    "Kotlin": 2,
    "TypeScript": 2
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+   "release": "\"762e2c0051d46df55651d0a8007177f761482b4bae3f04f76016388eb8928fcb\""
   },
   "rel_dates": [],
   "rel_n90": 0
@@ -332,8 +332,8 @@
   "rel_n90": 0
  },
  "dbfixtures/pytest-postgresql": {
-  "commit_90d": 156,
-  "commit_7d": 12,
+  "commit_90d": 149,
+  "commit_7d": 2,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -344,13 +344,13 @@
   "lang": {
    "Python": 100
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+   "release": "\"762e2c0051d46df55651d0a8007177f761482b4bae3f04f76016388eb8928fcb\""
   },
   "rel_dates": [],
   "rel_n90": 0
@@ -360,7 +360,7 @@
   "commit_7d": 0,
   "rel_ver": "v4.0",
   "rel_pub": "2023-09-06",
-  "rel_days": 1173,
+  "rel_days": 1175,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -379,8 +379,8 @@
   "enriched_at": "20260927"
  },
  "oracle/migrate-to-ol": {
-  "commit_90d": 0,
-  "commit_7d": 0,
+  "commit_90d": 1,
+  "commit_7d": 1,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -393,14 +393,22 @@
    "HTML": 34,
    "Makefile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261124",
+  "etag": {
+   "release": "\"762e2c0051d46df55651d0a8007177f761482b4bae3f04f76016388eb8928fcb\""
+  },
+  "rel_dates": [],
+  "dim_ts": {
+   "commit": "20261124",
+   "release": "20261124"
+  }
  },
  "surrealdb/surrealdb.js": {
   "commit_90d": 71,
   "commit_7d": 0,
   "rel_ver": "v2.2.2",
   "rel_pub": "2026-11-04",
-  "rel_days": 18,
+  "rel_days": 20,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -518,10 +526,10 @@
   "enriched_at": "20260927"
  },
  "Shannon-Data/ShannonBase": {
-  "commit_90d": 162,
-  "commit_7d": 16,
-  "rel_ver": null,
-  "rel_none": true,
+  "commit_90d": 160,
+  "commit_7d": 2,
+  "rel_ver": "shannonbase-v0.1.0",
+  "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
   "sec_last": null,
@@ -534,20 +542,32 @@
    "C#": 2,
    "CMake": 1
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+   "release": "W/\"cf34e64485c38ac583327f3bb1cd70f186a60251522747a8169d8303dcd132e5\""
   },
-  "rel_dates": [],
-  "rel_n90": 0
+  "rel_dates": [
+   "2026-11-16"
+  ],
+  "rel_n90": 1,
+  "rel_pub": "2026-11-16",
+  "rel_days": 8,
+  "rel_pre": true,
+  "rel_notes": [
+   {
+    "t": "shannonbase-v0.1.0",
+    "d": "2026-11-16",
+    "n": "**Baseline:** MySQL 8.4.11 LTS\n- **MySQL 8.4.11 LTS baseline.** The server has been rebased from 8.4.8 to 8.4.11, with the tree adapted to the upstream changes.\n- Upgraded the MySQL baseline from 8.4.8 to 8.4.11 LTS, and adapted the build and the affected subsystems to it.\n- A datadir produced by an earlier build must be backed up before the upgrade; the 8.4.11 upgrade procedure is the same as upstream MySQL.\n- Spilled hash-join output is served through `ReadBatch`.\n- Query semantics are asserted against In"
+   }
+  ]
  },
  "jurerotar/Pillage-First-Ask-Questions-Later": {
-  "commit_90d": 184,
-  "commit_7d": 8,
+  "commit_90d": 183,
+  "commit_7d": 7,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -562,13 +582,13 @@
    "CSS": 0,
    "JavaScript": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+   "release": "\"762e2c0051d46df55651d0a8007177f761482b4bae3f04f76016388eb8928fcb\""
   },
   "rel_dates": [],
   "rel_n90": 0
@@ -612,7 +632,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.9",
   "rel_pub": "2025-03-19",
-  "rel_days": 613,
+  "rel_days": 615,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -631,7 +651,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.2",
   "rel_pub": "2017-08-05",
-  "rel_days": 3396,
+  "rel_days": 3398,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -698,7 +718,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-04-02",
-  "rel_days": 234,
+  "rel_days": 236,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -719,7 +739,7 @@
   "commit_7d": 3,
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-10-18",
-  "rel_days": 1131,
+  "rel_days": 1133,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -754,7 +774,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.9",
   "rel_pub": "2023-11-08",
-  "rel_days": 1110,
+  "rel_days": 1112,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -797,7 +817,7 @@
  "simonw/markdown-to-sqlite": {
   "rel_ver": "1.0",
   "rel_pub": "2021-06-13",
-  "rel_days": 1988,
+  "rel_days": 1990,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -845,7 +865,7 @@
  "kkrisz1/staruml-reverse-db": {
   "rel_ver": "v2.1.8",
   "rel_pub": "2023-08-27",
-  "rel_days": 1183,
+  "rel_days": 1185,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -863,7 +883,7 @@
  "dan-kimani/mysql-mongo-etl": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2020-03-29",
-  "rel_days": 2429,
+  "rel_days": 2431,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -896,7 +916,7 @@
  "truenormis/savvy": {
   "rel_ver": "v1.3.1",
   "rel_pub": "2026-09-08",
-  "rel_days": 75,
+  "rel_days": 77,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -930,7 +950,7 @@
  "daobab-projects/daobab-core": {
   "rel_ver": "Daobab",
   "rel_pub": "2023-11-29",
-  "rel_days": 1089,
+  "rel_days": 1091,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1038,7 +1058,7 @@
  "tikv/migration": {
   "rel_ver": "br-v1.0.2",
   "rel_pub": "2025-04-17",
-  "rel_days": 584,
+  "rel_days": 586,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1107,7 +1127,7 @@
  "epost/purescript-node-postgres": {
   "rel_ver": "v4.1.0",
   "rel_pub": "2017-12-16",
-  "rel_days": 3263,
+  "rel_days": 3265,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1126,7 +1146,7 @@
  "go-fries/fries": {
   "rel_ver": "v4.2.0",
   "rel_pub": "2026-09-14",
-  "rel_days": 69,
+  "rel_days": 71,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1173,7 +1193,7 @@
  "majiayu000/remem": {
   "rel_ver": "v0.6.98",
   "rel_pub": "2026-09-27",
-  "rel_days": 56,
+  "rel_days": 58,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1194,7 +1214,7 @@
  "datreant/MDSynthesis": {
   "rel_ver": "0.6.1",
   "rel_pub": "2016-05-17",
-  "rel_days": 3841,
+  "rel_days": 3843,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1398,7 +1418,7 @@
  "kowala-tech/kcoin": {
   "rel_ver": "3.0.0",
   "rel_pub": "2018-10-04",
-  "rel_days": 2971,
+  "rel_days": 2973,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1509,7 +1529,7 @@
  "elky84/light": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-01-02",
-  "rel_days": 1785,
+  "rel_days": 1787,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1542,7 +1562,7 @@
  "oracle-quickstart/oci-elastic": {
   "rel_ver": "v2.0",
   "rel_pub": "2022-02-01",
-  "rel_days": 1755,
+  "rel_days": 1757,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1560,7 +1580,7 @@
  "nativeapptemplate/nativeapptemplateapi": {
   "rel_ver": "v1.0.0-with-nfc",
   "rel_pub": "2026-04-23",
-  "rel_days": 213,
+  "rel_days": 215,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1581,7 +1601,7 @@
  "ozankasikci/global-agent-memory": {
   "rel_ver": "v0.1.7",
   "rel_pub": "2026-08-31",
-  "rel_days": 83,
+  "rel_days": 85,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1615,7 +1635,7 @@
  "Dani3lSun/apex-plugin-videoplayer": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2016-02-24",
-  "rel_days": 3924,
+  "rel_days": 3926,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1658,7 +1678,7 @@
  "claranet/ansible-role-patroni": {
   "rel_ver": "1.1.0",
   "rel_pub": "2026-07-24",
-  "rel_days": 121,
+  "rel_days": 123,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1677,7 +1697,7 @@
  "HenryJi529/OpenMorningstar": {
   "rel_ver": "v0.2.14",
   "rel_pub": "2024-03-04",
-  "rel_days": 993,
+  "rel_days": 995,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1742,7 +1762,7 @@
  "oceanbase/spark-connector-oceanbase": {
   "rel_ver": "v1.5",
   "rel_pub": "2026-07-22",
-  "rel_days": 123,
+  "rel_days": 125,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1766,7 +1786,7 @@
  "gz08/database": {
   "rel_ver": "v1.0-final",
   "rel_pub": "2026-06-20",
-  "rel_days": 155,
+  "rel_days": 157,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1789,7 +1809,7 @@
  "huaweicloud-samples/database-dify-gaussdb": {
   "rel_ver": "v1.16.1-gaussdb",
   "rel_pub": "2026-08-15",
-  "rel_days": 99,
+  "rel_days": 101,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1855,7 +1875,7 @@
  "Linuxndroid/WhatsApp-Viewer": {
   "rel_ver": "v.1.0",
   "rel_pub": "2025-10-23",
-  "rel_days": 395,
+  "rel_days": 397,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1906,7 +1926,7 @@
   "commit_7d": 0,
   "rel_ver": "flink-connector-jdbc-dameng_20250331_(适用于v3.3及以上版本)",
   "rel_pub": "2025-03-31",
-  "rel_days": 601,
+  "rel_days": 603,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2710,7 +2730,7 @@
  "macolszewski/dbeast_manager": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 35,
+  "rel_days": 37,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2757,7 +2777,7 @@
  "Paul0Franca/lurkqvd": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-24",
-  "rel_days": 29,
+  "rel_days": 31,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2823,7 +2843,7 @@
    "release": "W/\"7177ba5862f9a0c637b636b6639cb3c47c1a919a9feddd6c8374275dc96706a6\""
   },
   "rel_pub": "2026-11-15",
-  "rel_days": 7,
+  "rel_days": 9,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_dates": [
@@ -2895,7 +2915,7 @@
  "BalianWang/busytok": {
   "rel_ver": "v0.0.16",
   "rel_pub": "2026-07-15",
-  "rel_days": 130,
+  "rel_days": 132,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2939,7 +2959,7 @@
  "EnriqueMuhammad/Zephix-DBStudio": {
   "rel_ver": "v0.3.2",
   "rel_pub": "2026-11-01",
-  "rel_days": 21,
+  "rel_days": 23,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -3082,7 +3102,7 @@
   },
   "rel_ver": "v2.12.0",
   "rel_pub": "2026-11-10",
-  "rel_days": 12,
+  "rel_days": 14,
   "rel_n90": 17,
   "rel_pre": false,
   "rel_none": false,
@@ -3211,7 +3231,7 @@
   },
   "rel_ver": "@tidblink/server@0.3.0-rc.0",
   "rel_pub": "2026-11-11",
-  "rel_days": 11,
+  "rel_days": 13,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -3250,7 +3270,7 @@
   },
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-11-13",
-  "rel_days": 9,
+  "rel_days": 11,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3291,7 +3311,7 @@
   },
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-29",
-  "rel_days": 24,
+  "rel_days": 26,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -3368,7 +3388,7 @@
   },
   "rel_ver": "v0.10.1",
   "rel_pub": "2026-11-14",
-  "rel_days": 8,
+  "rel_days": 10,
   "rel_n90": 16,
   "rel_pre": false,
   "rel_none": false,
@@ -3469,7 +3489,7 @@
   },
   "rel_ver": "v0.0.1-alpha.9",
   "rel_pub": "2026-11-19",
-  "rel_days": 3,
+  "rel_days": 5,
   "rel_n90": 8,
   "rel_pre": true,
   "rel_none": false,
@@ -3552,7 +3572,7 @@
   },
   "rel_ver": "v0.9.37",
   "rel_pub": "2026-11-19",
-  "rel_days": 3,
+  "rel_days": 5,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

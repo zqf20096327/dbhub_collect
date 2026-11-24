@@ -1,6 +1,6 @@
 # agy-token-monitor
 
-![Version](https://img.shields.io/badge/version-v0.5.1--beta-4285F4) ![Platform](https://img.shields.io/badge/Antigravity-Aux%20Pane-6366F1) ![Mode](https://img.shields.io/badge/mode-Read--Only-10B981)
+![Version](https://img.shields.io/badge/version-v0.5.4--beta-4285F4) ![Platform](https://img.shields.io/badge/Antigravity-Aux%20Pane-6366F1) ![Mode](https://img.shields.io/badge/mode-Read--Only-10B981)
 
 [English](#english) | [中文](#中文)
 
@@ -8,11 +8,28 @@
 
 ## English
 
-**agy-token-monitor** is a lightweight Token & Context monitor plugin built for **Antigravity** (`v0.5.1 beta`). It runs in the right-hand side panel with a low memory footprint, reading local session data in read-only mode without modifying any Antigravity databases, transcripts, or host settings.
+**agy-token-monitor** is a lightweight Token & Context monitor plugin built for **Antigravity** (`v0.5.4 beta`). It runs in the right-hand side panel with a low memory footprint, reading local session data in read-only mode without modifying any Antigravity databases, transcripts, or host settings.
 
 ### Changelog
 
-- **v0.5.1 Performance, Polish & Project Insights (Latest)**:
+- **v0.5.4 Configurable Model Name Display Mode (Latest)**:
+  - **Switch Between Canonical Names and Exact Routed Slugs**: Added a Model Name Display selector in Settings so you can choose between **Canonical Name (Default)** (such as `Gemini 4 Hydrogen` or `Claude Opus 5.5`) and **Exact Routed Slug** (such as `gemini-flash-worker-agy`, `gemini-4-hydrogen`, `claude-opus-5-5-high`, or `claude-opus-5-5-low`).
+  - **Split Tab 1 & Tab 2 Model Tables with Identical Totals**: In Exact Routed Slug mode, both the Current Session and Usage Statistics model breakdown tables split into separate rows per routed slug while keeping canonical pricing, model color dots, token totals, and total costs mathematically identical (showing the canonical model family and rate in row tooltips).
+  - **Synced Across Panel Surfaces While Keeping Canvas Clean**: Switching modes updates the top header model pill, subagent and Swarm worker rows, Side Questions rows, Usage Statistics recent sessions and model filter dropdown, Pixel Office click-to-inspect details card, and the checkout receipt primary model — while keeping the Pixel Office canvas mini-nameplates short and uncluttered.
+  - **Automatic Ledger v6 Upgrade**: Upgraded `usage_ledger.json` to schema `v6` (`LEDGER_SCHEMA_VERSION = 6`) to store per-raw-model daily buckets (`byRawModel`) alongside canonical attribution, automatically rebuilding existing `v5` ledgers cleanly on startup.
+- **v0.5.3 Collapsible Cards Across All Panels**:
+  - **Collapse Any Card Across Both Tabs**: Every card in Current Session and Usage Statistics (all 13 cards, unified with Pixel Office) can now be collapsed or expanded individually so you can focus on the metrics you need most.
+  - **Compact Collapsed Summary Header**: When collapsed, each card folds into a clean single-row header showing its key live metric — such as speed, cost, context percentage, cache hit rate, worker/model counts, or session count — while keeping healthy, warning, and critical alert colors clearly visible.
+  - **Clickable Header & Rotating Chevron Icon**: Click anywhere on a card header (without blocking action buttons, switches, or links inside it) or use the compact rotating chevron button on the right to collapse and expand smoothly.
+  - **Persistent State & Automatic Pixel Office Migration**: Collapsed card states are saved automatically in `monitor_state.json` under `collapsedCards` and kept in two-way sync with legacy `pixelOfficeCollapsed`, migrating existing Pixel Office preferences seamlessly.
+  - **On-Demand Expand All Bar**: Whenever one or more visible cards on the active tab are collapsed, a lightweight bar appears at the top of that tab with a one-click Expand all button (and disappears completely when all cards are open).
+  - **Zero Idle Overhead for Collapsed Cards**: Collapsed cards skip body DOM updates and pause Pixel Office rendering to avoid wasted CPU work, while preserving Tab 2 search and filter inputs when expanded again.
+- **v0.5.2 Cache Pricing & Provider Accuracy**:
+  - **Accurate Claude Opus 5.5, Sonnet 5.5 & GPT-OSS 120B Cache-Read Pricing**: Fixed the LiteLLM fallback sync to read the real `cache_read_input_token_cost` field (with legacy fallback) so Claude Opus 5.5 (`$0.20/1M`), Claude Sonnet 5.5 (`$0.10/1M`), and GPT-OSS 120B (`$0.075/1M`) charge their true cached input prices instead of full input prices (eliminating up to 20x cache-read cost inflation).
+  - **Official Provider Priority Over Resellers**: Ranked official Google, Vertex AI, Anthropic, and OpenAI feeds strictly above third-party resellers like DeepInfra and OpenRouter so Gemini 3.1 Pro preserves its official `>200k` long-context tier and GPT-OSS 120B prefers providers with genuine cache discounts.
+  - **Family Cache-Discount Fallback**: When an upstream feed omits cache-read pricing, Gemini, Claude (`5%` for Opus/Sonnet 5.5, `10%` for other Claude models), and GPT-OSS (`50%`) now fall back to safe family cache rates instead of charging full input price.
+  - **Automatic Local Cache Self-Healing**: Upgraded `pricing_cache.json` to schema `v3` with non-destructive `v1`/`v2` migration that repairs poisoned Claude and GPT-OSS cache rates offline immediately, drops third-party reseller Gemini 3.1 Pro entries missing `>200k` tiering, preserves saved exchange rates, and triggers an immediate fresh sync on startup.
+- **v0.5.1 Performance, Polish & Project Insights**:
   - **Much Faster with Big Swarm Sessions**: Removed redundant full-disk scans per child session and eliminated per-poll summary map cloning, cutting large Swarm session refresh time by over 90% and making Usage Statistics refresh noticeably snappier.
   - **Lower Background CPU, GPU & Disk Usage**: Automatically pauses snapshot polling when the panel is hidden, renders only the active tab with signature-skip caching on Tab 2, stops the 100ms live timer when idle, watches only active non-ended sessions on disk, redraws idle Pixel Office cats at their real 3-second frame pace without reallocating canvas memory, and stops animations when reduced motion is enabled.
   - **More Reliable Saving on Windows**: Added safe fallback writes with automatic temp-file cleanup when antivirus or another process briefly locks settings, pricing cache, or ledger files, and widened streaming ledger saves to every 8 seconds (flushing immediately on exit).
@@ -63,12 +80,12 @@
   - Computes strictly fork-deduplicated incremental steps, tokens, cache hit rate, and cost per side question (excluding cloned parent history via `isClonedFromParent` and parent `botId` sets so main-session totals and checkout receipts stay clean).
   - Provides a one-click **`↗ Open`** button on each row to jump straight into that Side Question in Antigravity, while clicking any row inspects it inside Token Monitor with a **`Side Q`** badge, **`Side Question Only`** isolated billing, and a **`← Back to Main Chat`** header banner button.
 - **Daily Official Model & Pricing Sync (Google Markdoc + Flat 1M Gemini 4 Rates)**:
-  - Syncs official model lists, Paid Tier token pricing (including Google Markdoc `<noscript><pre>` SPA extraction on `ai.google.dev`, `models.dev`, and `litellm` fallback into `pricing_cache.json` `v2`), and `USD / CNY` ECB reference exchange rates once per day when opened, caching results locally with a `↻ Sync Now` button and offline fallback (`8s` timeout).
+  - Syncs official model lists, Paid Tier token pricing (including Google Markdoc `<noscript><pre>` SPA extraction on `ai.google.dev`, `models.dev`, and `litellm` fallback into `pricing_cache.json` `v3` with non-destructive `v1`/`v2` self-healing migration), and `USD / CNY` ECB reference exchange rates once per day when opened, caching results locally with a `↻ Sync Now` button and offline fallback (`8s` timeout).
   - Built-in Gemini 4 rates match Google Standard Paid Tier flat 1M-context pricing (`longContextTier: false`) with 95% cache discounts (`Gemini 4 Neon` `$3.00`/`$0.15`/`$15.00`, `Gemini 4 Carbon`/`Argon` `$2.00`/`$0.10`/`$10.00`, `Gemini 4 Hydrogen` `$1.50`/`$0.075`/`$7.50`), while `Gemini 3.1 Pro` preserves `>200k` tiering (`×2` / `×1.5`).
   - Custom per-model price edits (`*`) and manual FX rate locks always take priority over auto-synced defaults, and clicking any row in the rate table loads that model for quick editing.
 - **Multi-Period Usage Analytics**:
   - Aggregates usage across **Today** (24-hour bars), **7 Days**, **30 Days**, and **All Time** with two-line KPI summaries (active days / archived sessions and daily average / output tokens) in horizontally scrollable, mouse-draggable trend charts with a compact left Y-axis and a unified canonical model breakdown table featuring the per-model **`Hit %` (`命中率`)** column right after `Cache` (with `Cache Read / Total Input (%)` hover tooltips) plus clickable **Total** / **Cost** sorting (with raw model slugs surfaced in row tooltips).
-  - Deduplicates forked, branched, and rewound conversations so inherited history is never double-counted, and automatically rebuilds historical model attribution via `usage_ledger.json` schema `v5`.
+  - Deduplicates forked, branched, and rewound conversations so inherited history is never double-counted, and automatically rebuilds historical model attribution and per-raw-model daily buckets via `usage_ledger.json` schema `v6` (supporting optional Exact Routed Slug table splitting in Settings with identical totals).
 - **Bilingual UI & Flexible Token Units**:
   - Switch between **English** and **Chinese** (`EN / 中`) in one click from the top bar.
   - Choose between `K / M / B`, `万 / 亿`, exact integers (`1,234,567`), or fixed `M` token units.
@@ -88,7 +105,7 @@
 
 **Option 1 — Download Release Archive**
 
-Download `agy-token-monitor-v0.5.1.zip` from [GitHub Releases](https://github.com/JefferyL1ang/agy-token-monitor/releases) and extract the `agy-token-monitor` folder into:
+Download `agy-token-monitor-v0.5.4.zip` from [GitHub Releases](https://github.com/JefferyL1ang/agy-token-monitor/releases) and extract the `agy-token-monitor` folder into:
 - Windows: `%USERPROFILE%\.gemini\config\plugins\agy-token-monitor`
 - macOS / Linux: `~/.gemini/config/plugins/agy-token-monitor`
 
@@ -159,11 +176,28 @@ node --test tests/parser.test.mjs
 
 ## 中文
 
-**agy-token-monitor** 是一个面向 **Antigravity** 的轻量级 Token 与上下文监控插件（`v0.5.1 beta`）。它运行在右侧辅助面板中，内存占用低，仅以只读方式读取本地会话数据，不修改任何 Antigravity 数据库、聊天记录或全局配置。
+**agy-token-monitor** 是一个面向 **Antigravity** 的轻量级 Token 与上下文监控插件（`v0.5.4 beta`）。它运行在右侧辅助面板中，内存占用低，仅以只读方式读取本地会话数据，不修改任何 Antigravity 数据库、聊天记录或全局配置。
 
 ### 更新日志
 
-- **v0.5.1 性能优化与项目统计（最新）**：
+- **v0.5.4 模型名称显示模式切换（最新）**：
+  - **支持在笼统名称与具体路由型号间自由切换**：在设置抽屉新增「模型名称显示」选项，可在 **笼统名称 (默认)**（如 `Gemini 4 Hydrogen`、`Claude Opus 5.5`）与 **具体路由型号**（如 `gemini-flash-worker-agy`、`gemini-4-hydrogen`、`claude-opus-5-5-high`、`claude-opus-5-5-low`）之间一键切换。
+  - **当前会话与用量统计双表按路由型号拆分且总额完全守恒**：切换为具体路由型号模式后，当前会话（Tab 1）与用量统计（Tab 2）的模型分布明细表均按真实路由型号独立分行展示，同时保持规范定价、模型色点、总 Token 数与总费用数学完全一致（行悬停提示展示所属规范模型家族与费率）。
+  - **全界面联动同步且保持像素工位画布简洁**：切换显示模式后，顶部模型胶囊、子代理与 Swarm 节点列表、支线问题列表、历史会话列表及模型筛选下拉框、像素工位点击详情卡与结账收工票根主力模型均同步生效；像素工位画布上的猫咪短名牌保持精炼简洁不遮挡画面。
+  - **历史账本自动升级至 v6**：将 `usage_ledger.json` 升级至 `v6`（`LEDGER_SCHEMA_VERSION = 6`），在保留规范模型归因的同时新增每日按原始路由型号统计桶（`byRawModel`），升级启动时自动无损重建旧版 `v5` 账本。
+- **v0.5.3 全局卡片自由折叠**：
+  - **双标签全部 13 张卡片均可自由折叠**：当前会话（Tab 1）与用量统计（Tab 2）全部 13 张卡片均已统一支持独立折叠与展开（与像素工位保持统一交互），方便按需精简右侧面板视图。
+  - **收起态核心指标与告警摘要**：卡片折叠后收拢为紧凑单行标题栏，右侧实时显示关键指标（如速率、花费、上下文占比、缓存命中率、子代理/模型数或会话数），并保留正常、提醒与告警配色，关键状态一目了然。
+  - **可点击标题栏与旋转箭头图标**：直接点击卡片标题栏空白区域或右侧旋转箭头按钮即可平滑折叠/展开，同时不影响标题栏内按钮、切换开关与链接的正常点击。
+  - **折叠状态持久化与像素工位自动迁移**：折叠布局自动保存到 `monitor_state.json` 的 `collapsedCards` 字段，并与旧版 `pixelOfficeCollapsed` 双向同步，升级后自动继承原有的像素工位收起状态。
+  - **按需出现的全部展开栏**：仅当当前标签页至少有 1 张可见卡片处于折叠状态时，顶部才会显示轻量的「全部展开」提示条，卡片全部展开时不占任何版面空间。
+  - **折叠零闲置开销**：折叠后的卡片自动跳过主体内容渲染并在像素工位收起时暂停绘制，减少无谓的 CPU 与重绘开销；历史会话卡片折叠后重新展开仍完整保留已输入的搜索词与筛选条件。
+- **v0.5.2 缓存定价与数据源准确性修复**：
+  - **修复 Claude Opus 5.5、Sonnet 5.5 与 GPT-OSS 120B 缓存读取计费**：修正 LiteLLM 兜底数据源读取缓存价格字段名偏差的问题（支持 `cache_read_input_token_cost` 并保留旧字段兼容），使 Claude Opus 5.5（`$0.20/1M`）、Claude Sonnet 5.5（`$0.10/1M`）与 GPT-OSS 120B（`$0.075/1M`）恢复真实缓存折扣价，避免缓存读取按全额输入价计算造成最高 20 倍费用虚高。
+  - **官方渠道优先于第三方转售商**：调整数据源优先级，使 Google、Vertex AI、Anthropic 与 OpenAI 官方渠道严格高于 DeepInfra、OpenRouter 等第三方转售商，确保 Gemini 3.1 Pro 保留官方 `>200k` 长上下文分档，并让 GPT-OSS 120B 优先选择带真实缓存折扣的数据源。
+  - **按模型家族兜底缓存折扣**：当上游数据源缺少缓存读取单价字段时，Gemini、Claude（Opus/Sonnet 5.5 按 `5%`，其余 Claude 模型按 `10%`）与 GPT-OSS（按 `50%`）自动回退到各自家族的安全默认缓存折扣，不再误按 100% 输入价计费。
+  - **本地价格缓存自动修复**：将本地 `pricing_cache.json` 升级至 `v3` 并支持 `v1`/`v2` 无损迁移，升级启动后即可离线修复旧缓存中异常的 Claude 与 GPT-OSS 缓存单价、清除缺少 `>200k` 分档的第三方 Gemini 3.1 Pro 记录、保留已同步汇率，并立即触发一次最新价格同步。
+- **v0.5.1 性能优化与项目统计**：
   - **大型 Swarm 会话刷新大幅提速**：移除每个子代理重复全盘扫描与用量统计重复克隆摘要表，大型 Swarm 会话单次刷新耗时降低超 90%，切换与刷新「用量统计」明显更流畅。
   - **更低的后台 CPU、显卡与磁盘占用**：面板隐藏或切到后台时自动暂停轮询，仅渲染当前可见页并为「用量统计」加上内容无变化跳过；对话空闲时关闭 100ms 计时器，后台文件监听只盯活跃未结束会话；像素工位全员空闲时按 3 秒实际换帧节奏重绘且不再反复重分配画布显存，开启系统「减弱动态效果」后全面静止。
   - **Windows 保存更稳妥**：为设置、价格缓存与历史账本的原子写入增加文件短暂占用时的安全回退与临时文件清理，并将流式输出期间的账本落盘节流放宽至 8 秒（退出时仍立即刷盘）。
@@ -214,12 +248,12 @@ node --test tests/parser.test.mjs
   - 对每条支线严格执行分支去重（剔除克隆自主对话的历史步骤与父 `botId`），仅汇总支线自身的增量步数、Token、缓存命中率与费用，且不污染主会话总计与结账收工票根。
   - 每行内置一键 **`↗ 打开会话`** 按钮直接在 Antigravity 中打开该支线对话；点击整行可在 Token Monitor 面板内独立查看详情，配合 **`支线问题`** 徽章、**`支线独立计费`** 费用隔离及顶部 **`← 返回主对话`** 横幅按钮。
 - **每日同步官方模型、价格与汇率（Google Markdoc + Gemini 4 1M 统一单价）**：
-  - 每天首次打开面板时自动同步现役模型单价与实时 `USD / CNY` 汇率（支持 `ai.google.dev` Google Markdoc `<noscript><pre>` 页面提取、`models.dev`、`litellm` 兜底及欧洲央行参考汇率，落盘至 `pricing_cache.json` `v2` 并无损迁移旧缓存），支持离线缓存回退（`8s` 超时）与 **`↻ 立即同步`** 按钮。
+  - 每天首次打开面板时自动同步现役模型单价与实时 `USD / CNY` 汇率（支持 `ai.google.dev` Google Markdoc `<noscript><pre>` 页面提取、`models.dev`、`litellm` 兜底及欧洲央行参考汇率，落盘至 `pricing_cache.json` `v3` 并支持 `v1`/`v2` 无损自动修复迁移），支持离线缓存回退（`8s` 超时）与 **`↻ 立即同步`** 按钮。
   - 内置 Gemini 4 标准付费档费率采用 1M 统一上下文单价（`longContextTier: false`）与 95% 缓存折扣（`Gemini 4 Neon` `$3.00`/`$0.15`/`$15.00`、`Gemini 4 Carbon`/`Argon` `$2.00`/`$0.10`/`$10.00`、`Gemini 4 Hydrogen` `$1.50`/`$0.075`/`$7.50`），`Gemini 3.1 Pro` 保留 `>200k` 阶梯（`×2` / `×1.5`）。
   - 手动修改过的模型单价（带 `*` 标记）与手动固定汇率始终优先于自动同步值；展开下方费率表后可直接点击任意模型行切换编辑。
 - **多周期历史统计与分支去重**：
   - 支持查看 **今日**（24 小时分时）、**近 7 天**、**近 30 天** 与 **全部历史** 用量趋势，概览 KPI 采用双行摘要展示（含已归档会话数与日均/输出用量），柱状图左侧固定显示紧凑 Y 轴刻度并支持鼠标按住横向拖动与滚轮横滑；周期模型明细表同样按规范名称合并展示（悬停提示显示合并的原始 slug），内置分模型 **`命中率`（`Hit %`）** 列（位于 `缓存` 列右侧，悬停显示 `缓存读取 / 总输入 (%)`）并支持点击 **总计 / 费用** 列头排序。
-  - 自动识别分支（Fork）、并行对比及回退重生的会话，避免继承的历史步骤被重复计费；`usage_ledger.json`（`v5`）会在启动时自动无损重建历史模型归因。
+  - 自动识别分支（Fork）、并行对比及回退重生的会话，避免继承的历史步骤被重复计费；`usage_ledger.json`（`v6`）会在启动时自动无损重建历史模型归因与每日按原始路由型号分桶（支持在设置中切换为具体路由型号拆分明细表且总计完全一致）。
 - **中英双语切换与多种 Token 单位**：
   - 顶部栏设置按钮旁支持一键切换 **中文 / 英文**（`EN / 中`）。
   - 支持 `K / M / B`、`万 / 亿`、精确整数（`1,234,567`）和固定 `M` 四种 Token 显示单位。
@@ -239,7 +273,7 @@ node --test tests/parser.test.mjs
 
 **方式一 — 下载 Release 压缩包**
 
-前往 [GitHub Releases](https://github.com/JefferyL1ang/agy-token-monitor/releases) 下载 `agy-token-monitor-v0.5.1.zip`，将其中的 `agy-token-monitor` 文件夹解压至：
+前往 [GitHub Releases](https://github.com/JefferyL1ang/agy-token-monitor/releases) 下载 `agy-token-monitor-v0.5.4.zip`，将其中的 `agy-token-monitor` 文件夹解压至：
 - Windows：`%USERPROFILE%\.gemini\config\plugins\agy-token-monitor`
 - macOS / Linux：`~/.gemini/config/plugins/agy-token-monitor`
 

@@ -16,7 +16,7 @@
   <img src="https://img.shields.io/badge/data-local-blue?style=flat-square" alt="Local only">
   <img src="https://img.shields.io/badge/tests-181-brightgreen?style=flat-square" alt="181 tests">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT License">
-  <img src="https://img.shields.io/badge/status-0.7.1-lightgrey?style=flat-square" alt="Status 0.7.1">
+  <img src="https://img.shields.io/badge/status-0.7.2-lightgrey?style=flat-square" alt="Status 0.7.2">
 </p>
 
 <p align="center">
@@ -27,42 +27,52 @@
 
 Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据全部保存在本机。它没有登录、没有云同步、不依赖任何第三方库；默认不联网，只有手动检查更新或在设置里开启自动检查时才会访问 GitHub。
 
-当前版本：**0.7.1**（功能和数据结构仍可能调整）
+当前版本：**0.7.2**（功能和数据结构仍可能调整）
 
-### 0.7.1 新增
+### 0.7.2 新增
 
-- 设置 → 通用新增「菜单栏」开关，可以关掉常驻的菜单栏图标；关闭后仍可从「Mindscape」菜单回到设置重新打开
+- 设置 → 通用新增「语言」：可选「跟随系统 / 简体中文 / English」，选完点「重新打开」即生效；只写本 App 的 `AppleLanguages`，不改系统语言
+- 英文文案补齐约 190 条：AI Agent 面板、设置里的「菜单栏」分组、画布操作提示、历史快照、空状态、图标名等，英文界面不再夹生中文
+- 回收站新增「清空回收站…」：一键彻底删除全部已删除导图，带二次确认与数量提示；清空后列表、侧栏计数同步更新
 
 ---
 
 ## 截图
 
-截图使用示例数据；部分截图来自 0.5.x 早期版本，快捷键与界面细节以当前版本为准。
+截图和 GIF 全部来自 **0.7.2**（示例数据），在 macOS 虚拟机里实拍。
 
 <p align="center">
-  <img src="docs/screenshots/main.png" width="100%" alt="Mindscape 主界面">
+  <img src="docs/screenshots/main.png" width="100%" alt="主界面：目录、画布与 27 个节点的路线图">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/drag-sort.png" width="100%" alt="拖动排序：整棵子树的虚线预览与磁吸目标">
+  <img src="docs/gifs/drag.gif" width="100%" alt="拖动节点：拖到另一个节点上即可换层级，整棵子树跟着走">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/layout-memory.png" width="100%" alt="分支排列：记住布局 / 平衡布局">
+  <img src="docs/gifs/layouts.gif" width="100%" alt="切换布局：思维导图 → 逻辑图 → 组织架构图 → 时间轴 → 括号图">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/inspector.png" width="49%" alt="节点属性与图标库">
-  <img src="docs/screenshots/dark.png" width="49%" alt="深色主题与逻辑图布局">
+  <img src="docs/screenshots/layout-memory.png" width="100%" alt="分支排列：记住布局 / 平衡布局，右侧是 8 套主题">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/export.png" width="28%" alt="导出与分享">
-  <img src="docs/screenshots/settings.png" width="49%" alt="设置">
+  <img src="docs/screenshots/inspector.png" width="49%" alt="节点属性：文字、备注、图标库与颜色">
+  <img src="docs/screenshots/dark.png" width="49%" alt="深色主题「深空」配逻辑图布局">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/shortcuts.png" width="49%" alt="快捷键设置">
+  <img src="docs/screenshots/settings.png" width="49%" alt="设置：语言可只对本 App 切换中英文">
+  <img src="docs/screenshots/export.png" width="30%" alt="导出：PNG / PDF / Markdown / OPML / JSON">
+</p>
+
+<p align="center">
+  <img src="docs/gifs/input.gif" width="78%" alt="键盘输入：回车同级、Tab 子级，边打边成图">
+</p>
+
+<p align="center">
+  <img src="docs/gifs/shortcuts.gif" width="78%" alt="常用快捷键：⌘F 图内搜索、⇧⌘O 大纲，以及完整的快捷键设置页">
 </p>
 
 <p align="center">
@@ -182,7 +192,7 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 ### 无障碍与语言
 
 - 画布节点暴露为 VoiceOver 元素，可读出层级、折叠状态和备注
-- 界面中英双语，跟随系统语言切换
+- 界面中英双语，默认跟随系统语言；也可以在「设置 → 通用 → 语言」里单独指定简体中文或 English（切换后点「重新打开」生效）
 
 ### 快捷键
 
@@ -243,7 +253,7 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 
 ### 下载
 
-**下载**：[`Mindscape-0.7.1.dmg`](https://github.com/jiuxianzai/Mindscape/releases/download/v0.7.1/Mindscape-0.7.1.dmg)，打开后把 Mindscape 拖进 Applications。
+**下载**：[`Mindscape-0.7.2.dmg`](https://github.com/jiuxianzai/Mindscape/releases/download/v0.7.2/Mindscape-0.7.2.dmg)，打开后把 Mindscape 拖进 Applications。
 
 当前构建为 **ad-hoc 签名**，没有 notarization。首次打开如果被 Gatekeeper 拦下：
 
@@ -271,7 +281,7 @@ open Mindscape.xcodeproj
 打包与本地安装：
 
 ```bash
-make package    # 生成 dist/Mindscape-0.7.1.dmg、.zip 和 .dmg.sha256
+make package    # 生成 dist/Mindscape-0.7.2.dmg、.zip 和 .dmg.sha256
 make publish    # 用 gh 创建 GitHub Release（需已 gh auth login）
 make install    # 安装到 /Applications 并启动
 ```

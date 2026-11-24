@@ -174,7 +174,13 @@ Pythia's settings, connections and saved passwords.
 - Schema compare with structural table diffs and safe, ordered sync
   scripts; data compare by key with sync DML.
 - Export tables: pick tables, a WHERE per table, CSV/TSV/JSON/INSERT/
-  Markdown, one file per table plus DDL, streamed with progress.
+  Markdown, one file per table plus DDL, streamed with progress. The list
+  shows each table's rows and size (MB, with its indexes) from the
+  statistics and sorts by name, rows or size. INSERTs can go into *One
+  file*, a dump to import elsewhere with the database's client (`mysql db
+  < dump.sql`, `psql`, `sqlcmd`, `sqlite3`, SQL*Plus): the tables after
+  the ones their foreign keys reference, optionally dropped first, the
+  rows a hundred an INSERT and committed every 10,000.
 - Import CSV/Excel: drop a file, check inferred types (decimal commas,
   date formats), import into a new or existing table with array DML.
   Per column: trim, date format, SQL expression (`upper(:value)`,
@@ -259,8 +265,9 @@ Pythia's settings, connections and saved passwords.
 - *Connect through SSH* forwards the connection over an SSH server, like
   `ssh -L` or HeidiSQL's SSH tunnel; the database address is then as the
   SSH server sees it (often `localhost:3306/database`). Log in with a
-  password, a key file (OpenSSH or PuTTY `.ppk`) or the SSH agent (Pageant
-  or Windows' OpenSSH agent). Host keys come from `~/.ssh/known_hosts`; an
+  password, a key file (OpenSSH or PuTTY `.ppk`, and the `ecdsa-sk` and
+  `ed25519-sk` files of security keys such as YubiKeys) or the SSH agent
+  (Pageant or Windows' OpenSSH agent). Host keys come from `~/.ssh/known_hosts`; an
   unknown one is shown with its fingerprint to trust once.
 - SQL windows with results, fetching on demand, Break, explain plan,
   *Execute to file*, completion with columns and comments, and
@@ -300,7 +307,9 @@ Pythia's settings, connections and saved passwords.
   `SHOW CREATE TABLE`), each streamed from the session. *Read: Table by
   table* reads each table as of its own query; *Consistent* all of them
   in one transaction `WITH CONSISTENT SNAPSHOT` (InnoDB tables). INSERTs
-  leave out generated columns.
+  leave out generated columns. *One file* writes a dump for `mysql db <
+  dump.sql`, as mysqldump's: UTF-8, foreign and unique key checks off
+  while it imports, an id 0 kept.
 - Everything built on Oracle's dictionary or PL/SQL — debugger, profiler,
   the rest of the monitor, reports, scheduler jobs, compare, import,
   the other form editors — isn't offered on MySQL connections. End a
@@ -491,6 +500,35 @@ WSLg's compositor crashes on Wayland windows like DbCraft's
 `DBCRAFT_WAYLAND=1` keeps Wayland. Through X11 the window starts at 96 DPI
 whatever Windows' display scaling; on a scaled display, size the UI with
 Settings → UI scale (or Ctrl + / Ctrl −).
+
+**Connecting from the command line:** a MySQL/MariaDB or PostgreSQL URL as
+argument connects to it on start instead of showing the connect dialog,
+for a local development database's launcher:
+
+```sh
+dbcraft "mysql://root:root@127.0.0.1:32768/db?name=ddev-shop"
+dbcraft "postgres://db:db@127.0.0.1:32769/db?sslmode=disable"
+```
+
+`mysql://`, `mariadb://`, `postgres://` and `postgresql://` are taken; the
+user and password are percent-encoded, `name` names the connection and the
+other query parameters are the connect string's. The connection isn't saved
+and its password not kept. A [DDEV](https://ddev.com) host command,
+`~/.ddev/commands/host/dbcraft`, starts it with the project's database:
+
+```bash
+#!/usr/bin/env bash
+## Description: Open the project's database in DbCraft
+## Usage: dbcraft
+## Example: "ddev dbcraft"
+## DBTypes: mysql,mariadb,postgres
+type="${DDEV_DATABASE%%:*}"
+case "$type" in
+  postgres) url="postgres://db:db@127.0.0.1:${DDEV_HOST_DB_PORT}/db" ;;
+  *) url="mysql://root:root@127.0.0.1:${DDEV_HOST_DB_PORT}/db" ;;
+esac
+dbcraft "${url}?name=ddev-${DDEV_PROJECT}" &>/dev/null & disown
+```
 
 ## Building from source
 

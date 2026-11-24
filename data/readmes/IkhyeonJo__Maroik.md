@@ -144,6 +144,9 @@ tar xJf ~/Maroik-Backup-YYYY-MM-DD-HH-MM-SS.tar.xz --strip-components=1 -C ~/Mar
 bash Maroik.DeployOps/Deploy.sh
 ```
 
+`Undeploy.sh` also removes the `ollama-data` volume, so after a redeploy `Maroik.Ollama` downloads the AI chat's model again
+(about 8 GB); until it has, the chat answers that the AI is not available.
+
 ## Introduction
 Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, spreadsheet-style budgets, calendar management with e-mail reminders, bulletin boards, a personal Kanban board, a personal file drive, and role-based user management.
 
@@ -212,7 +215,7 @@ Maroik is a modern web application built with ASP.NET Core MVC, featuring a comp
 - Per-account time zone and default monetary unit; English and Korean UI
 
 ### 8. Admin Dashboard
-- User management — role change, lock/unlock, e-mail confirmation, terms agreement, soft delete/restore, password reset with a forced change at next login, File Manager quota and per-account virus-scan switch; role, lock and delete changes are audit-logged with the acting admin
+- User management — role change, lock/unlock, e-mail confirmation, terms agreement, soft delete/restore, password reset with a forced change at next login, File Manager quota, per-account virus-scan switch and AI chat switch; role, lock and delete changes are audit-logged with the acting admin
 - Safeguards: an administrator cannot lock, delete or demote their own account or the last active administrator
 - Navigation menu management (the menu doubles as the access-control list); a change that would cut administrators off from menu management is refused
 - Account export to Excel without password hashes or registration/reset tokens
@@ -232,6 +235,15 @@ simpler method on five years of the author's own records (8,649 expenditures, 58
   currency (the box-plot rule on log amounts, groups of at least 8): 1.9 % of the records, against 4.8 % on raw amounts.
 - **Amounts in each currency's own decimals.** KRW and JPY without decimals, USD and EUR with two; a currency label that
   is not a known code keeps every stored decimal.
+
+### 10. AI Chat
+- Ask about your own account book in plain words ("How much did I spend on food last month?"); the answer streams in as it is
+  written. A local model (Google Gemma 4 12B on Ollama, CPU only) runs on the server, so no record leaves it.
+- Function calling only: the model reads the records through six read-only tools (assets, incomes, expenditures, expenditure
+  totals by class, fixed incomes, fixed expenditures), each limited to the signed-in account. The server works out the days of
+  "this month" or "last week" and adds up every total; the model only puts the tools' answers into words, and cannot change
+  anything.
+- Off until an administrator turns it on for the account; the chat is kept in the browser, not on the server.
 
 ### Error messages
 - A refused write shows its actual reason, localized in English and Korean (e.g. "Only zip extension allowed.", "Cannot add a comment to a locked post.", "Role must be Admin, User or Anonymous.").
@@ -294,7 +306,13 @@ Maroik has been built by one developer since May 2021. It was developed in a pri
 | 2026-09 | Client scripts migrated to TypeScript; repository and E2E tests on real PostgreSQL (Testcontainers); a series of whole-solution reviews fixing race conditions and security gaps; strict TDD and logging rules; mutation testing (Domain 78 % → 92 %) |
 | 2026-09-28 | Moved from the private repository to this public repository, where all development continues; the private repository's cleaned history was merged here in 2026-11 and the private repository deleted |
 | 2026-10 | Service mutation score 70 % → 96 %; TLS ended at Cloudflare through a Cloudflare Tunnel; RSA replaced with ASP.NET Core Data Protection; memory-safety, logging-template, security and banned-API analyzers as build errors; admin and menu safeguards against locking administrators out; GitHub Actions CI (coverage gate, isolated E2E run), release-only minified client scripts, semver from Conventional Commits, images published to GHCR and pulled by the server; calendar reminders delivered by e-mail (scheduled by the domain, sent once a minute by the worker through the mail queue); one pinned .NET SDK with a weekly bump pull request; personal Kanban board; personal File Manager (chunked uploads, quotas, background virus scan, download progress); Income and Expenditure Budget sheets with an Excel-compatible formula engine; `Deploy.sh` hosting modes (Cloudflare Tunnel, port forwarding behind Caddy, no domain) |
-| 2026-11 | Income and expenditure class suggestion with ML.NET (logistic regression on character n-grams, chosen over naive Bayes on the author's own records; trained by the worker, stored in the file storage); unusual-amount marks in the expenditure list; amounts shown in each currency's own decimals |
+| 2026-11 | Income and expenditure class suggestion with ML.NET (logistic regression on character n-grams, chosen over naive Bayes on the author's own records; trained by the worker, stored in the file storage); unusual-amount marks in the expenditure list; amounts shown in each currency's own decimals; a CSS fix reported upstream to NonFactors Mvc.Grid ships in 8.1.0 (see Open Source Contributions) |
+
+## Open Source Contributions
+
+| Project | Contribution | Released in |
+|---|---|---|
+| [NonFactors Mvc.Grid](https://gitlab.com/NonFactors/AspNetCore.Grid) | Reported a bug, with its fix, in `mvc-grid.css`: the filter popup's inputs set a white background but no text color, so on a dark page theme (AdminLTE dark mode) they inherited a light color and showed white text on white. The suggested fix — set the text color next to the background — is the one-line change Maroik had run since 2021. The maintainer took it in and extended it into dark-mode colors for the whole grid (`light-dark()`). Reported by e-mail (the repository takes no issues or merge requests), 2026-11-19. | 8.1.0 (2026-11) |
 
 ## Architecture
 
@@ -379,6 +397,7 @@ flowchart LR
     Worker -- "mail status · due reminders<br/>abandoned uploads" --> PostgreSQL
     Worker -- "abort abandoned uploads" --> FileStorage
     Worker -- "send mail" --> SMTP["SMTP relay"]
+    Website -- "AI chat (streamed, tool calls)" --> Ollama["Ollama<br/>Gemma 4 12B · CPU"]
 ```
 
 Every service runs as a container under Docker Compose. Uploads are scanned by ClamAV before they are stored (File

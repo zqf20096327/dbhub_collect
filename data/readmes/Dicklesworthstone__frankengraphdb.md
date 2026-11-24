@@ -14,11 +14,13 @@
 </div>
 
 ```bash
-# What runs today, from a source checkout (there are no releases or installer yet — see Installation):
+# Run the embedded example from a source checkout
 git clone https://github.com/Dicklesworthstone/frankengraphdb
 cd frankengraphdb
 cargo run -p fgdb --example open_a_database
 ```
+
+The CLI and server can write a graph, query the new state, and recover it after restart. On a 176 MB test database, `fgdb query --buffered` streamed 6,144 rows under a 60 MiB memory limit. An ordinary local query exhausted that limit while opening the same database, even with `LIMIT 0`. The [reality check and bridge plan](docs/REALITY_CHECK_AND_BRIDGE_PLAN.md) records the tested revisions, commands, and open qualification work.
 
 > **A note on tense (read this first).** This README is written in the **present tense, as if the entire design in [`COMPREHENSIVE_PLAN_FOR_THE_DESIGN_OF_FRANKENGRAPHDB.md`](./COMPREHENSIVE_PLAN_FOR_THE_DESIGN_OF_FRANKENGRAPHDB.md) is fully realized**: the 1.0 target state where every performance gate is green and every subsystem is live. This is a deliberate choice. It lets the document describe the *finished* system so it gets **trued-up in place as milestones land** (§19's gates G1→G4) rather than rewritten from scratch later. Where the plan itself stages something as genuinely future work (horizontal sharding, covered under [Limitations](#limitations)), the README says so plainly. Everything else below is the spec of the system this repository builds.
 
@@ -28,17 +30,17 @@ cargo run -p fgdb --example open_a_database
 
 **The problem.** Every graph database on the market is a compromise fossilized around one old decision. Neo4j chose pointer-chasing on the JVM (great ergonomics, painful memory, a runtime that took 15 years to vectorize). TigerGraph chose MPP with a proprietary language and a platform-sized footprint. Kùzu got the *query* story right (columnar CSR + vectorization + factorization + worst-case-optimal joins), and then it left the commons: Apple acquired Kùzu Inc. (agreed October 2025, disclosed February 2026 via Apple's EU DMA filing) and the upstream repository was archived read-only — community forks carry the architecture forward while inheriting its gaps, and no engine in the space has the durability, temporal, multi-writer, or verification story. Memgraph/FalkorDB are fast in-memory engines with thin durability. JanusGraph/NebulaGraph pay a permanent impedance tax on a generic KV underlay. The academic frontier has solved essentially every hard subproblem *in isolation*, yet **no shipping system has ever composed them**.
 
-**The solution.** `frankengraphdb` composes them. One codebase, three postures: an embedded library (`fgdb`), a server (`fgdbd`), and a CLI (`fgdb`), all speaking **GQL** (ISO/IEC 39075:2024) with an openCypher on-ramp. Larger-than-memory is first-class everywhere. It is, in a precise sense, *a database written in the asupersync programming model*, the way FoundationDB is a database written in Flow: structured concurrency, capability contexts, fountain coding, and a deterministic lab runtime are the substrate, not add-ons.
+**The solution.** `frankengraphdb` composes them. One codebase, three postures: an embedded library (`fgdb`), a server (`fgdbd`), and a CLI (`fgdb`), all speaking **GQL** (ISO/IEC 39075:2024) with an openCypher on-ramp. Larger-than-memory is first-class everywhere. It is, in a precise sense, *a da
+
+[...截断...]
+
+tabase written in the asupersync programming model*, the way FoundationDB is a database written in Flow: structured concurrency, capability contexts, fountain coding, and a deterministic lab runtime are the substrate, not add-ons.
 
 **Why `frankengraphdb`:**
 
 | | `frankengraphdb` |
 |---|---|
-| Durability | Content-addressed, RaptorQ-erasure-coded commit stream. **No double-write
-
-[...截断...]
-
- journaling anywhere**; bit-rot is a maintenance event, not an outage. |
+| Durability | Content-addressed, RaptorQ-erasure-coded commit stream. **No double-write journaling anywhere**; bit-rot is a maintenance event, not an outage. |
 | Time | Unbounded, queryable history (`FOR SYSTEM_TIME AS OF/BETWEEN`) as a *corollary* of how MVCC works, not a bolt-on temporal engine. |
 | Branches | `git`-style database branches: O(1), zero-copy, 10k+ concurrent. Fork, mutate, run analytics, merge or discard. |
 | Storage | Three temperature tiers per vertex: inline micro-adjacency → sorted delta blocks → sealed compressed CSR runs. Hot minority pays delta cost; cold majority sits *below* raw CSR. |
@@ -87,11 +89,4 @@ CALL hybrid.search(
   text   => 'computing pioneers',  text_property => 'bio',
   vector => $query_embedding,      vector_properties => ['e0', 'e1', 'e2'],
   seeds  => $ada, relation => 'KNOWS', max_hops => 2,
-  k => 20, fusion => 'RRF'
-) YIELD node, score RETURN node.name, score ORDER BY score DESC;
-
--- Every result is auditable: get its plan certificate
-EXPLAIN (CERTIFICATE) MATCH (a:Person)-[:KNOWS]->(b) RETURN count(*);
-```
-
-> **Target state.** Checked 2026-09-28, 2026-10-05 and 2026-10-17 by running each statement through the `fgdb` CLI on a fresh database: 6 of these 11 statements run as written:
+  k => 20, fusion =

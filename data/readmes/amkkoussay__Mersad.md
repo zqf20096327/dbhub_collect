@@ -13,6 +13,7 @@
 [![Release downloads](https://img.shields.io/github/downloads/amkkoussay/Mersad/total?label=release%20downloads)](https://github.com/amkkoussay/Mersad/releases)
 [![M8ven Score](https://m8ven.ai/badge/mcp/amkkoussay-mersad-qvj17r?v=6ae4cc333e2e157573e90df7c29c6c68)](https://m8ven.ai/mcp/amkkoussay-mersad-qvj17r?s=readme)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16853/badge)](https://www.bestpractices.dev/projects/16853)
+[![amkkoussay/Mersad MCP server](https://glama.ai/mcp/servers/amkkoussay/Mersad/badges/score.svg)](https://glama.ai/mcp/servers/amkkoussay/Mersad)
 
 <sub>The OpenSSF badge is a best-practices self-attestation by the project, not a security certification or an independent audit.</sub>
 

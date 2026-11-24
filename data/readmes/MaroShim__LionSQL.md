@@ -2,7 +2,7 @@
 
 Single-binary, high-concurrency OLTP database server supporting T-SQL and stored procedures
 
-[![Version](https://img.shields.io/badge/version-v0.93.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v0.94.0-blue.svg)](CHANGELOG.md)
 [![Go Version](https://img.shields.io/badge/Go-1.26%2B-00ADD8.svg?logo=go&logoColor=white)](go.mod)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](README.md)
@@ -19,7 +19,7 @@ Single-binary, high-concurrency OLTP database server supporting T-SQL and stored
 LionSQL is a high-performance, embedded OLTP database engine that natively compiles and executes Microsoft SQL Server T-SQL & stored procedures and complex business logic on a sub-microsecond VDBE bytecode virtual machine, while simultaneously offering broad compatibility with PostgreSQL SQL dialects and the standard PGWire v3 protocol. It comes fully equipped with a built-in web management studio for real-time telemetry and schema administration, an embedded static SPA web server (`--app`) to host frontend web applications with zero CORS without Nginx, and an integrated goroutine connection pooler capable of handling tens of thousands of concurrent connections—eliminating the need for additional software to achieve a complete full-stack database and web hosting environment. Packaging this complete enterprise feature set into a single, ultra-compact static binary under 100MB (currently ~50MB) with zero external dependencies, LionSQL delivers blazing-fast transaction throughput of tens of thousands of transactions per second with predictable sub-millisecond latency and non-blocking snapshot isolation.
 
 > [!NOTE]
-> **Supported Operating Systems**: LionSQL officially supports **macOS** and **Linux** (`x86_64` and `arm64`). Standalone single-binary builds for **Windows** (`bin/lionsql.exe`, in-memory OCC engine) are also available.
+> **Supported Operating Systems**: LionSQL officially supports **macOS**, **Linux**, and **Windows** (`x86_64` and `arm64`). Standalone single-binary builds (`bin/lionsql` / `bin/lionsql.exe`) support both WiredTiger MVCC disk B+Tree storage (with automatic runtime dynamic loading of `wiredtiger.dll` on Windows) and high-throughput In-Memory OCC engine across all platforms.
 
 
 ```
@@ -137,6 +137,15 @@ LionSQL's core capabilities are organized across five foundational architectural
   Lightweight client SDK served directly by the standalone executable, supporting Browsers, Node.js, Bun, and Deno.
 - **Row-Level Security (RLS) & Automation**:
   Authentication-based data access control (RLS), asynchronous webhooks, 5-field cron automation scheduler, and built-in SMTP mailer.
+
+### 2.7. Self-Checking 6-Scenario Duality-Driven Cross-Verification (`ARCH-DUALITY-CROSS-VERIFICATION-1`)
+LionSQL overcomes the traditional database test oracle problem by coupling independent implementation tracks into an autonomous, self-checking living oracle ([Specification](doc/internal/DUALITY_DRIVEN_CROSS_VERIFICATION_SPEC.md)):
+- **Scenario A (Dual-Wire Symmetry)**: Concurrently runs 10,706 core SQLLogicTest queries across PGWire (`:5433`) and TDS (`:1433`), asserting 100% byte-for-byte result symmetry (`pkg/slt/wire_duality_test.go`).
+- **Scenario B (Dual-Storage Twin-Engine)**: Cross-executes 21,412 queries between In-Memory OCC and WiredTiger MVCC disk B+Tree, verifying zero relational divergence (`pkg/slt/storage_duality_test.go`).
+- **Scenario C (Dual-Parser 2-Tier Parity)**: Proves 100% AST node equivalence between the sub-microsecond Native Pratt parser and official Microsoft T-SQL ANTLR4 grammar across 64 suites (`pkg/proc/parser_duality_test.go`).
+- **Scenario D (T-SQL Procedure Wire Duality)**: Asserts 100% RPC packet framing and state symmetry between TDS network wire and in-process execution across 30 core suites (`test/slt_proc/proc_wire_duality_test.go`).
+- **Scenario E (Protocol Dual-Path Symmetry)**: Verifies parameter binding symmetry between PGWire Simple ('Q') vs Extended ('PBE') paths and TDS SQL Batch vs RPC `sp_executesql` paths (`pkg/slt/dualpath_duality_test.go`).
+- **Scenario F (PlanCache Mutation Safety)**: Asserts zero cache mutation and 100% result parity between cold compilation and hot PlanCache hits with 0 data races (`pkg/slt/plancache_duality_test.go`).
 
 ---
 
@@ -555,6 +564,7 @@ Step-by-step zero-modification deployment and integration guides for 10 producti
 - **[Storage Engine Mechanics (WiredTiger & Memory OCC)](doc/internal/STORAGE.md)**: Lock-free B+Trees, hazard pointers, OCC validation, and AOF log compaction.
 - **[Cost-Based Optimizer & Volcano Pipeline Internals](doc/internal/CBO_VOLCANO.md)**: Equi-depth histograms, physical cost formulas, and external merge sort.
 - **[Multi-Wire Protocol Internals](doc/internal/WIRE_PROTOCOLS.md)**: Binary framing for PostgreSQL v3, TDS 7.x/8.0, and goroutine connection pooler.
+- **[4-Layer Architectural Duality as an Autonomous Ground Truth Specification](doc/internal/DUALITY_DRIVEN_CROSS_VERIFICATION_SPEC.md)** ([Korean](doc/internal/DUALITY_DRIVEN_CROSS_VERIFICATION_SPEC.ko.md)): Complete specification for 6-scenario cross-verification across Wire, Storage, Parser, Stored Procedures, Dual-Path, and PlanCache.
 - **[Virtual System Catalog & Data Dictionary](doc/DATA_DICTIONARY.md)**: System views (`sys.*`, `information_schema.*`), data types, and tool compatibility.
 - **[High Availability & Disaster Recovery](doc/HIGH_AVAILABILITY.md)**: Multi-node replication topology, 1-writer multi-reader WAL streaming, failover, and recovery SLAs.
 - **[Extension & Driver Development Guide](doc/EXTENSIONS.md)**: Dual-track UDFs (Go native SPI + Wasm sandbox), pluggable storage engines, and fallback parsers.

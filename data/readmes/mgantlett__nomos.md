@@ -88,11 +88,21 @@ Every single-repository governance capability ships locally in the open-source `
 # Linux, macOS & WSL2 (SHA-256 verified release binary):
 curl -fsSL https://sophialabs.ca/install | bash
 
-# macOS & Linux (Homebrew):
+# macOS & Linux (Homebrew) or Windows (Scoop):
 brew install --cask mgantlett/tap/nomos
+scoop bucket add mgantlett https://github.com/mgantlett/scoop-bucket && scoop install nomos
 
-# Zero-install Node.js / Cloud Agent Sandbox Launcher (SHA-256 verified):
+# Polyglot Tool Version Managers (mise / aqua):
+mise use -g aqua:mgantlett/nomos
+
+# Zero-install Node.js / Python Cloud Agent Sandbox Launchers (SHA-256 verified):
 npx --yes @mgantlett/nomos xray .
+uvx nomos-cli xray .
+
+# NixOS / Nix Flakes, Dev Containers & Multi-Arch OCI Container (Codespaces / GitLab CI / Dagger):
+nix run github:mgantlett/nomos -- xray .
+docker run --rm -v "$PWD:/repo" -w /repo ghcr.io/mgantlett/nomos:v4 xray .
+# Devcontainer Feature (.devcontainer/devcontainer.json): "ghcr.io/mgantlett/devcontainer-features/nomos:1": {}
 
 # Arch Linux / Omarchy (verified PKGBUILD):
 (tmp="$(mktemp -d)" && cd "$tmp" && curl -fsSLO https://raw.githubusercontent.com/mgantlett/nomos/main/packaging/aur/PKGBUILD && makepkg -si && rm -rf "$tmp")
@@ -104,6 +114,7 @@ GOTOOLCHAIN=auto CGO_ENABLED=0 go install github.com/mgantlett/nomos/substrate/c
 npx skills add mgantlett/nomos
 claude mcp add --transport http nomos https://sophialabs.ca/mcp
 # Or inside Claude Code: /plugin marketplace add mgantlett/nomos && /plugin install nomos
+# pre-commit / prek (.pre-commit-config.yaml): repo: https://github.com/mgantlett/nomos (hooks: nomos-verify, nomos-xray)
 ```
 
 Update or cleanly uninstall anytime:
@@ -130,7 +141,7 @@ Enforce zero-trust PR mutation proofs in GitHub Actions ([GitHub Marketplace](ht
 ```yaml
 - uses: actions/checkout@v4
   with: { fetch-depth: 0 }
-- uses: mgantlett/nomos@v4.30.0
+- uses: mgantlett/nomos@v4.31.0
   with: { base-ref: origin/main, mutate-diff: 'true' }
 ```
 
@@ -198,8 +209,10 @@ Across `108` paired zero-hint brownfield episodes (`54` Stock vs. `54` Nomos `v4
 
 </details>
 
+> **Complete Capabilities & Subsystem Map (Page 0 SSoT):** Inspect every engine, CLI subcommand/flag, `nomos.yaml` contract, MCP schema, and all `42` gate `ProbeID`s in [`CAPABILITIES.md`](CAPABILITIES.md) or on Developer Docs at [**sophialabs.ca/docs/specs/capabilities**](https://sophialabs.ca/docs/specs/capabilities).
+
 <details>
-<summary><b>Expand Architecture Blueprint, Worktrees (`INT`/`SUB`), CLI Surface & Specifications</b></summary>
+<summary><b>Expand Architecture Blueprint, Worktrees (`INT`/`SUB`), Full 16-Command CLI & MCP Surface</b></summary>
 
 <br />
 
@@ -209,37 +222,38 @@ Across `108` paired zero-hint brownfield episodes (`54` Stock vs. `54` Nomos `v4
 
 When your team scales beyond single-branch workflows (`nomos init --worktrees`):
 - **Hermetic Worktree Isolation:** Direct edits in the root checkout fail closed; `nomos task chore` / `nomos task start` mints `capbac.Lease` capabilities inside disposable `worktrees/<repo>-<task>` sandboxes (`PLAN -> EDIT -> REVIEW -> SYNC -> LEARN`).
-- **Two-Plane Spec-vs-Code Separation (`INT`/`SUB`) & `2PC` Sync:** Separates human specifications (`INT-*`) from substrate implementation (`SUB-*`), while `nomos task sync` runs `42` gates, fast-forwards `main`, records a SHA-256 Git Notes receipt (`refs/notes/nomos/releases`), and prunes the worktree.
-- **Multi-Worktree AST Collision Radar (`MTPO`) & `NCTE-100`:** `nomos physics` computes live exported symbol hulls across active sandboxes to prevent merge collisions, and `nomos directive --lint` enforces unambiguous controlled English in `intent/` specs.
+- **Two-Plane Spec-vs-Code Separation (`INT`/`SUB`) & `2PC` Sync:** Separates human specifications (`INT-*`) from substrate implementation (`SUB-*`), while `nomos task sync` runs `42` gates, verifies `MTPO` serializability, fast-forwards `main`, records a SHA-256 Git Notes receipt (`refs/notes/nomos/releases` + `SpecDigests`), and prunes the worktree.
+- **Multi-Worktree AST Collision Radar (`MTPO`), `HotScopeReflex` & `NCTE-100`:** `nomos physics` computes AST File Mass, viscosity, and live exported symbol hulls (`GREEN`/`YELLOW`/`RED`) across active sandboxes; `HotScopeReflex` dynamically tightens `PostToolUse` radar (`80% -> 65%`) in pitfall-dense directories; and `nomos directive --lint` enforces unambiguous controlled English in `intent/` specs.
 
-| Capability | Canonical CLI Surface | Architecture Specification |
+| Capability | Canonical CLI & Declarative Surface | Architecture Specification |
 | :--- | :--- | :--- |
-| **Brownfield X-Ray, Indirect Control & Hooks** | `nomos xray`, `nomos init [--baseline]`, `nomos handshake`, `nomos hook install \| session-start \| pre-tool \| post-tool \| stop` | [`intent.md`](intent/intent.md) · [`tree_sitter_ast_gate_spec.md`](intent/architecture/specs/tree_sitter_ast_gate_spec.md) |
-| **Worktrees, `MTPO` Collision Radar, DAG & 2PC** | `nomos task chore \| pair \| create \| start \| edit \| review \| dag \| sync`, `nomos physics` | [`nomos_hermetic_worktree_spec.md`](intent/architecture/specs/nomos_hermetic_worktree_spec.md) · [`task_lifecycle_cli_spec.md`](intent/architecture/specs/task_lifecycle_cli_spec.md) · [`software_physics_engine_spec.md`](intent/architecture/specs/software_physics_engine_spec.md) |
-| **42-Gate AST, PR Receipts & Mutation Proofs** | `nomos verify [--pr] [--mutate-diff]`, `nomos verify proof`, `nomos status` | [`tree_sitter_ast_gate_spec.md`](intent/architecture/specs/tree_sitter_ast_gate_spec.md) · [`nomos_intent_traceability_spec.md`](intent/architecture/specs/nomos_intent_traceability_spec.md) |
-| **NCTE-100 Directives & Config SSoT** | `nomos directive [--lint \| --lexicon]`, `nomos update --sync-workspace` (`nomos.schema.json`) | [`nomos_controlled_technical_english_spec.md`](intent/architecture/specs/nomos_controlled_technical_english_spec.md) · [`go_ssot_and_json_schema_spec.md`](intent/architecture/specs/go_ssot_and_json_schema_spec.md) |
-| **Receipt-Gated Episodic Memory** | `nomos mem save \| recall \| list \| dismiss`, `nomos mcp`, `nomos issue` | [`mneme_memory_spec.md`](intent/architecture/specs/mneme_memory_spec.md) |
+| **Brownfield X-Ray, Indirect Control & Hooks** | `nomos xray [--markdown \| --sarif]`, `nomos init [--local \| --ci \| --worktrees \| --strict]`, `nomos handshake`, `nomos hook install \| session-start \| pre-tool \| post-tool \| stop \| post-commit` (`--container-sandbox`, `--hermetic-dir`) | [`CAPABILITIES.md`](CAPABILITIES.md) · [`intent.md`](intent/intent.md) · [`tree_sitter_ast_gate_spec.md`](intent/architecture/specs/tree_sitter_ast_gate_spec.md) |
+| **Worktrees, `$ref` Batch DAG, `MTPO` & 2PC** | `nomos task chore \| pair \| batch \| create \| dag \| start \| edit \| commit \| review \| sync \| abort \| list \| show \| project \| prune`, `nomos physics` | [`nomos_hermetic_worktree_spec.md`](intent/architecture/specs/nomos_hermetic_worktree_spec.md) · [`task_lifecycle_cli_spec.md`](intent/architecture/specs/task_lifecycle_cli_spec.md) · [`software_physics_engine_spec.md`](intent/architecture/specs/software_physics_engine_spec.md) |
+| **42-Gate AST, Wire-Drift, PR & Gate Proofs** | `nomos verify [--pr] [--mutate-diff] [--sarif] [--impact] [--range] [--fast-file]`, `nomos verify proof`, `nomos status`, `nomos capabilities [probe_id]` | [`tree_sitter_ast_gate_spec.md`](intent/architecture/specs/tree_sitter_ast_gate_spec.md) · [`nomos_intent_traceability_spec.md`](intent/architecture/specs/nomos_intent_traceability_spec.md) |
+| **NCTE-100 Directives, Egress & Schema SSoT** | `nomos directive [--lint \| --lexicon \| --term]`, `nomos update [--check \| --sync-workspace]`, [`nomos.schema.json`](nomos.schema.json) (`ratchet_mode: "upstream"`, `egress_mode`, `credential_read_mode`, `contracts.membrane` / `infra`) | [`nomos_controlled_technical_english_spec.md`](intent/architecture/specs/nomos_controlled_technical_english_spec.md) · [`go_ssot_and_json_schema_spec.md`](intent/architecture/specs/go_ssot_and_json_schema_spec.md) |
+| **Mneme Memory, MCP & Sentinel PRM Sessions** | `nomos mem save \| recall \| list \| dismiss [--stale]`, `nomos session list \| show \| name \| visual \| export` (RLVR/DPO/SFT JSONL + `SentinelScorecard`), `nomos mcp` (`7` tools, `3` `nomos://` resources, `3` prompts), `nomos issue`, `nomos version`, `nomos completion` | [`mneme_memory_spec.md`](intent/architecture/specs/mneme_memory_spec.md) · [`software_physics_engine_spec.md`](intent/architecture/specs/software_physics_engine_spec.md) |
 
-- **Scope of Proof:** Nomos verifies `<5ms` compiled structural and traceability invariants (import boundaries, contract field parity, anti-shim AST checks, `TC-*` test bindings, and SHA-256 spec digests) rather than LLM-as-a-Judge critics or formal theorem provers (`Coq`, `Lean`, `TLA+`); runtime semantics remain governed by your test suite.
+- **MCP Directory & Inspection Score:** [![mgantlett/nomos MCP server](https://glama.ai/mcp/servers/mgantlett/nomos/badges/score.svg)](https://glama.ai/mcp/servers/mgantlett/nomos)
+- **Scope of Proof:** Nomos verifies `<5ms` compiled structural and traceability invariants (import boundaries, contract/membrane/infra field parity, anti-shim AST checks, `TC-*` test bindings, and SHA-256 spec digests) rather than LLM-as-a-Judge critics or formal theorem provers (`Coq`, `Lean`, `TLA+`); runtime semantics remain governed by your test suite.
 
 </details>
 
 <details>
-<summary><b>Expand The 7 Laws of Nomos (42-Gate Invariant Matrix)</b></summary>
+<summary><b>Expand The 7 Laws of Nomos (`7x3 = 21` Cells · All `42` Gate `ProbeID`s)</b></summary>
 
 <br />
 
-Full 42-gate matrix in [`nomos_intent_traceability_spec.md`](intent/architecture/specs/nomos_intent_traceability_spec.md):
+Full 21-cell / 42-probe breakdown in [`CAPABILITIES.md`](CAPABILITIES.md) ([Developer Docs](https://sophialabs.ca/docs/specs/capabilities)) and [`nomos_intent_traceability_spec.md`](intent/architecture/specs/nomos_intent_traceability_spec.md):
 
-| Law | Name | What It Prevents |
-| :---: | :--- | :--- |
-| **1** | **Dual-Core Inversion** | Unverified agent execution outside the phase state machine (`PhaseDisciplineGate`). |
-| **2** | **Non-Verbal Proof** | Conversational "tests pass" claims, `// TODO` shims, and empty function stubs (`AntiShimGate`). |
-| **3** | **Hermetic Worktree** | Direct commits on `main` and path escapes outside the task worktree (`HermeticWorktreeGate`, `StagedBoundariesGate`). |
-| **4** | **Single Source of Truth** | Broken documentation links, orphaned specs, and unaligned schemas (`BrokenWireGate`, `ContractParityGate`). |
-| **5** | **Zero Hardcoded Paths** | Machine-specific absolute paths and secret literals (`ForbiddenLiteralsGate`). |
-| **6** | **Canonical Singularity** | Duplicate CLI aliases, rogue task keys, and filesystem symlinks (`ZeroAliasGate`, `ZeroFilesystemAliasGate`). |
-| **7** | **Fail-Closed Pre-Flight** | Cross-plane drift, test coverage drops, static-analysis regressions, and vulnerability leaks (`PlaneSeparationGate`). |
+| Law | Name | Ring 1 (`Syntactic`) | Ring 2 (`Dynamic`) | Ring 3 (`Cryptographic`) |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | **Dual-Core Inversion** | `complexity`, `max_file_loc`, `cognitive_debt`, `boundary`, `ui_anti_mask` | `phase_discipline` | `capbac_lease` |
+| **2** | **Non-Verbal Proof** | `tdd`, `anti_shim`, `docstrings`, `dead_code`, `uasset_dependency` | `go_toolchain`, `coverage`, `visual_regression` | `review_receipt`, `gate_integrity_proof` |
+| **3** | **Hermetic Worktree** | `staged_boundaries` | `hermetic_worktree`, `git_hygiene`, `ecosystem_drift` | `release_receipt` |
+| **4** | **Single Source of Truth** | `broken_wire`, `intent_traceability`, `intent_steelman` | `contract_parity` | `intent_parity` |
+| **5** | **Zero Hardcoded Paths** | `forbidden_literals`, `ip_leak`, `magic_strings`, `magic_string_duplication` | `infra_ingress` | `topology_parity` |
+| **6** | **Canonical Singularity** | `commit_schema` | `zero_alias`, `zero_filesystem_alias` | `canonical_singularity` |
+| **7** | **Fail-Closed Pre-Flight** | `secret`, `config_immutability`, `plane_separation` | `unchecked_errors` | `threshold_integrity` |
 
 </details>
 

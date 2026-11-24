@@ -1,10 +1,10 @@
 {
  "timgit/pg-boss": {
-  "commit_7d": 2,
-  "commit_90d": 470,
+  "commit_7d": 71,
+  "commit_90d": 523,
   "rel_ver": "12.39.0",
   "rel_pub": "2026-11-21",
-  "rel_days": 1,
+  "rel_days": 3,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 94,
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "lang": {
    "TypeScript": 97,
    "JavaScript": 2,
@@ -22,8 +22,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261027"
   },
   "rel_notes": [
@@ -79,7 +79,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"ff0359b38995b9f79ac1db44898a904d6579e0fe2aa47c5ca7a624c34f6771ac\""
+   "release": "W/\"e6cdba8c0621406304ff4fa45b137647b86e57a26814a00926456e3b785eeaaa\""
   },
   "rel_dates": [
    "2026-11-21",
@@ -115,11 +115,11 @@
   ]
  },
  "JasperFx/marten": {
-  "commit_7d": 314,
-  "commit_90d": 836,
-  "rel_ver": "V9.62.0",
-  "rel_pub": "2026-11-16",
-  "rel_days": 6,
+  "commit_7d": 258,
+  "commit_90d": 956,
+  "rel_ver": "V9.63.0",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -131,7 +131,7 @@
    "GHSA-vmw2-qwm8-x84c(CVE-2026-45288,critical)"
   ],
   "contrib_n": 257,
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "lang": {
    "C#": 99,
    "HTML": 0,
@@ -141,11 +141,21 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261121"
   },
   "rel_notes": [
+   {
+    "t": "V9.63.0",
+    "d": "2026-11-23",
+    "n": "Marten 9.63.0 is a bug-fix release from the 9.0 branch. Most of these fixes are for bugs reported by people outside the core team, and they're backported from the Marten 10 work.\n\n## Fixes\n\n### Aggregates read back in the same session\n- **`ProjectLatest` on an Async aggregate no longer stores a snapshot for the daemon to fold again** (#6145, #6157). The stored snapshot ended up counting the session's events twice once the daemon caught up. `FetchLatest` still returns the current state right after the commit"
+   },
+   {
+    "t": "V10.0.0-rc.2",
+    "d": "2026-11-23",
+    "n": "- **`IEventStore.RegisteredAggregateTypes()` and `IEventDatabase.FetchAggregateStreamStatsAsync()`** (#6152, #6161). These give stream counts and lengths by aggregate type, in one round trip over `mt_streams`, for CritterWatch's aggregate health view."
+   },
    {
     "t": "V9.62.0",
     "d": "2026-11-16",
@@ -185,23 +195,15 @@
     "t": "v9.56.0",
     "d": "2026-10-31",
     "n": "## What's Changed\n* JasperFx 2.97.0 by @jeremydmiller in https://github.com/JasperFx/marten/pull/5793\n* Implement IReadOnlyEventStore.QueryRawEvents (IQueryable<IEvent>) by @jeremydmiller in https://github.com/JasperFx/marten/pull/5794\n* Bump version to 9.56.0 by @jeremydmiller in https://github.com/JasperFx/marten/pull/5795\n\n\n**Full Changelog**: https://github.com/JasperFx/marten/compare/V9.55.0...v9.56.0"
-   },
-   {
-    "t": "V9.55.0",
-    "d": "2026-10-28",
-    "n": "* **HiLo ids recover after an outage (#5784).** If the first id allocation on a fresh store hit a database outage, every later allocation on that store rethrew the same exception after the database came back. Thanks to @kentcooper for the report and the reproduction the regression test is built from.\n* **Weasel 9.47.1** fixes index readback for a `DatabaseSchemaName` that is a reserved word or contains uppercase. Before, every schema apply after the first failed with `42P07` (weasel#750, contributed by @mar"
-   },
-   {
-    "t": "v9.54.2",
-    "d": "2026-10-26",
-    "n": "## What's Changed\r\n* Bobcat 1.0.0-rc.4 by @jeremydmiller in https://github.com/JasperFx/marten/pull/5769\r\n* Match tabs and line breaks in string.IsNullOrWhiteSpace() queries by @johnkaram02 in https://github.com/JasperFx/marten/pull/5760\r\n* Escape LIKE wildcards in EqualsIgnoreCase() queries by @johnkaram02 in https://github.com/JasperFx/marten/pull/5758\r\n* Pin that removing a tenant from its shard takes its natural key rows by @lahma in https://github.com/JasperFx/marten/pull/5770\r\n* Weasel 9.47.0 by @jere"
    }
   ],
   "etag": {
-   "release": "W/\"e9edf554185239dc45345ebbc322e3314240baa99856a084acd2a1ee3f0fe9fa\"",
+   "release": "W/\"a104c4d368bf6cd2ecb3843e82e99f3271ba3a0a80527b23b33ec80a896ae27e\"",
    "security": "W/\"0208c5608e0647cfc6a3de882bf7e70d5ed412c6ab6dfc6e603342aee90b3c2a\""
   },
   "rel_dates": [
+   "2026-11-23",
+   "2026-11-23",
    "2026-11-16",
    "2026-11-16",
    "2026-11-15",
@@ -229,17 +231,15 @@
    "2026-10-01",
    "2026-09-30",
    "2026-09-29",
-   "2026-09-29",
-   "2026-09-27",
-   "2026-09-24"
+   "2026-09-29"
   ]
  },
  "oschwald/geoip2-golang": {
-  "commit_7d": 0,
-  "commit_90d": 35,
+  "commit_7d": 3,
+  "commit_90d": 39,
   "rel_ver": "v2.5.0",
   "rel_pub": "2026-10-12",
-  "rel_days": 41,
+  "rel_days": 43,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -248,15 +248,15 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 18,
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "lang": {
    "Go": 94,
    "Shell": 6
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261102"
   },
   "rel_notes": [
@@ -277,7 +277,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"65cd995341ddf9f90f1d2a5f89d665dff0c7b9f68e873fdc865ce6c1548d93aa\""
+   "release": "W/\"4d20583d7181f7f000a35e0d1d5970f4f497d42be7f370758470642134be8107\""
   },
   "rel_dates": [
    "2026-10-12",
@@ -289,7 +289,7 @@
   "commit_90d": 5,
   "rel_ver": "4.2.1",
   "rel_pub": "2026-08-13",
-  "rel_days": 101,
+  "rel_days": 103,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -316,11 +316,11 @@
   "rel_dates": []
  },
  "ts-safeql/safeql": {
-  "commit_90d": 16,
-  "commit_7d": 8,
+  "commit_90d": 18,
+  "commit_7d": 5,
   "rel_ver": "@ts-safeql/zod-annotator@5.0.5",
   "rel_pub": "2026-10-18",
-  "rel_days": 35,
+  "rel_days": 37,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -333,14 +333,14 @@
    "TypeScript": 100,
    "JavaScript": 0
   },
-  "enriched_at": "20261120",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261120",
-   "release": "20261120",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261027"
   },
   "etag": {
-   "release": "W/\"66038a6cda29fb708cad60adb7094a1cbb6a25e4ad10dea7706f70a697696f81\""
+   "release": "W/\"945cd9992bf5c39077d87ad71cd739177887097630ab58cd82b78437bbf48449\""
   },
   "rel_dates": [
    "2026-10-18",
@@ -405,7 +405,7 @@
   "commit_7d": 0,
   "rel_ver": "3.5.0",
   "rel_pub": "2025-10-23",
-  "rel_days": 395,
+  "rel_days": 397,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -428,7 +428,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-09-19",
-  "rel_days": 64,
+  "rel_days": 66,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -455,7 +455,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.6.0",
   "rel_pub": "2026-02-21",
-  "rel_days": 274,
+  "rel_days": 276,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -472,12 +472,12 @@
   "enriched_at": "20260927"
  },
  "naw103/foremerge": {
-  "commit_90d": 147,
-  "commit_7d": 7,
-  "rel_ver": "v0.6.0",
-  "rel_pub": "2026-10-25",
-  "rel_days": 28,
-  "rel_n90": 9,
+  "commit_90d": 102,
+  "commit_7d": 0,
+  "rel_ver": "v0.7.0",
+  "rel_pub": "2026-11-12",
+  "rel_days": 12,
+  "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -490,28 +490,30 @@
    "Shell": 0,
    "Makefile": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"87489aa8d6dd7fccfa82df9df4799e400b5fecb98c0d42d08db6e405e37c730c\""
+   "release": "W/\"97e9d1d3303a3f7b69a11de972722de56d31b5487ff1c4267d424f3317d5c15e\""
   },
   "rel_dates": [
+   "2026-11-12",
    "2026-10-25",
    "2026-10-03",
    "2026-09-23",
    "2026-09-18",
    "2026-09-17",
    "2026-09-16",
-   "2026-08-26",
-   "2026-08-25",
-   "2026-08-24",
-   "2026-08-21",
-   "2026-08-21"
+   "2026-08-26"
   ],
   "rel_notes": [
+   {
+    "t": "v0.7.0",
+    "d": "2026-11-12",
+    "n": "update can fix. One advisory remains, in the bundled SQLite; see Security.\n- Not fixed in this release: RUSTSEC-2026-0459, in the SQLite that\nlibsqlite3-sys 0.35 bundles. A process can read stale memory when it opens a\ndatabase together with a crafted `-wal` file of a different page size, so\nexposure needs a database and its `-wal` file supplied or modified by a less\ntrusted party: a ledger named with `--database`, a backup restored with\nwrite to its `.git` directory. The fix is in libsqlite3-sys 0.39, whic"
+   },
    {
     "t": "v0.6.0",
     "d": "2026-10-25",
@@ -556,11 +558,6 @@
     "t": "v0.3.0",
     "d": "2026-08-24",
     "n": "> ## Known defect: use 0.3.1 instead\n>\n> Every time this version opens a coordination store it writes a duplicate\n> \"detection\" row for any conflict that already recorded one, so a single\n> detection shows two observations while the event log records one. The\n> duplicate cannot be deleted afterwards, because the append-only trigger that\n> protects those rows blocks removal.\n>\n> This version also has three further defects fixed in 0.3.1: a validation could\n> pass using an excluded generated file that is not "
-   },
-   {
-    "t": "v0.2.0",
-    "d": "2026-08-21",
-    "n": "**Full Changelog**: https://github.com/naw103/foremerge/compare/v0.1.0...v0.2.0"
    }
   ]
  },
@@ -608,7 +605,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.0",
   "rel_pub": "2018-07-30",
-  "rel_days": 3037,
+  "rel_days": 3039,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -631,7 +628,7 @@
   "commit_7d": 0,
   "rel_ver": "1.6.1",
   "rel_pub": "2023-05-24",
-  "rel_days": 1278,
+  "rel_days": 1280,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -688,7 +685,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.8",
   "rel_pub": "2024-03-20",
-  "rel_days": 977,
+  "rel_days": 979,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -708,7 +705,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.15",
   "rel_pub": "2026-04-06",
-  "rel_days": 230,
+  "rel_days": 232,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -767,8 +764,8 @@
   "enriched_at": "20260927"
  },
  "picodata/picodata": {
-  "commit_90d": 598,
-  "commit_7d": 51,
+  "commit_90d": 659,
+  "commit_7d": 64,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -783,13 +780,13 @@
    "PLpgSQL": 2,
    "Lua": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+   "release": "\"762e2c0051d46df55651d0a8007177f761482b4bae3f04f76016388eb8928fcb\""
   },
   "rel_dates": [],
   "rel_n90": 0
@@ -830,7 +827,7 @@
   "commit_7d": 0,
   "rel_ver": "main-latest",
   "rel_pub": "2026-08-01",
-  "rel_days": 113,
+  "rel_days": 115,
   "rel_n90": 3,
   "rel_pre": true,
   "rel_none": false,
@@ -851,7 +848,7 @@
  "kosame-rs/kosame": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2025-12-10",
-  "rel_days": 347,
+  "rel_days": 349,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -898,7 +895,7 @@
  "Pure-Peace/peace": {
   "rel_ver": "v0.12.0",
   "rel_pub": "2021-06-16",
-  "rel_days": 1985,
+  "rel_days": 1987,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -917,7 +914,7 @@
  "thijsmie/pocketbase": {
   "rel_ver": "0.12.0",
   "rel_pub": "2025-02-02",
-  "rel_days": 658,
+  "rel_days": 660,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -977,7 +974,7 @@
  "depyronick/clickhouse-client": {
   "rel_ver": "2.1.0",
   "rel_pub": "2026-01-21",
-  "rel_days": 305,
+  "rel_days": 307,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -995,7 +992,7 @@
  "EddieHubCommunity/CreatorsRegistry": {
   "rel_ver": "v0.26.3",
   "rel_pub": "2024-08-12",
-  "rel_days": 832,
+  "rel_days": 834,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1129,7 +1126,7 @@
  "antifailure/antifailure": {
   "rel_ver": "v1.8.1",
   "rel_pub": "2026-09-27",
-  "rel_days": 56,
+  "rel_days": 58,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1150,7 +1147,7 @@
  "hxlog/balanced-portfolio": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-07-17",
-  "rel_days": 128,
+  "rel_days": 130,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1171,7 +1168,7 @@
  "bilaschandra/laravel-coreui": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2024-09-27",
-  "rel_days": 786,
+  "rel_days": 788,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1191,7 +1188,7 @@
  "rapidloop/rapidrows": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-09-29",
-  "rel_days": 1515,
+  "rel_days": 1517,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1224,7 +1221,7 @@
  "CEDStandards/CEDS-Data-Warehouse": {
   "rel_ver": "v14.1.0.0",
   "rel_pub": "2026-06-18",
-  "rel_days": 157,
+  "rel_days": 159,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1254,7 +1251,7 @@
  "agis/pglockanalyze": {
   "rel_ver": "v0.0.4",
   "rel_pub": "2025-09-26",
-  "rel_days": 422,
+  "rel_days": 424,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1272,7 +1269,7 @@
  "basxsoftwareassociation/basxconnect": {
   "rel_ver": "v0.4.62",
   "rel_pub": "2024-04-24",
-  "rel_days": 942,
+  "rel_days": 944,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1334,7 +1331,7 @@
  "bnomei/kirby3-pageviewcounter": {
   "rel_ver": "v5.4.0",
   "rel_pub": "2026-05-13",
-  "rel_days": 193,
+  "rel_days": 195,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1352,7 +1349,7 @@
  "Point72/polars-io-tools": {
   "rel_ver": "v0.2.4",
   "rel_pub": "2026-09-26",
-  "rel_days": 57,
+  "rel_days": 59,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -1414,7 +1411,7 @@
  "dzwvip/oracle": {
   "rel_ver": "v1.3.2",
   "rel_pub": "2024-12-31",
-  "rel_days": 691,
+  "rel_days": 693,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1431,7 +1428,7 @@
  "kungfux/business-accounting-desktop": {
   "rel_ver": "1.4.1",
   "rel_pub": "2019-10-11",
-  "rel_days": 2599,
+  "rel_days": 2601,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1478,7 +1475,7 @@
  "radkawar/screenlogger": {
   "rel_ver": "v0.1.15",
   "rel_pub": "2026-08-21",
-  "rel_days": 93,
+  "rel_days": 95,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1544,7 +1541,7 @@
  "chanukyasds/pg_math": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-10-16",
-  "rel_days": 402,
+  "rel_days": 404,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1577,7 +1574,7 @@
  "r2hu1/cavio": {
   "rel_ver": "v2.2",
   "rel_pub": "2026-02-14",
-  "rel_days": 281,
+  "rel_days": 283,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1596,7 +1593,7 @@
  "banghuazhao/longevity-master": {
   "rel_ver": "v1.6.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 59,
+  "rel_days": 61,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1630,7 +1627,7 @@
  "kingrishabdugar/Green-Leaf-Gourmet": {
   "rel_ver": "v2.5.1",
   "rel_pub": "2023-02-14",
-  "rel_days": 1377,
+  "rel_days": 1379,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1675,7 +1672,7 @@
  "CNVioletTech/image2-ai": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-07-11",
-  "rel_days": 134,
+  "rel_days": 136,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1709,7 +1706,7 @@
  "gewebe/TecdocBundle": {
   "rel_ver": "v0.9.1",
   "rel_pub": "2019-05-19",
-  "rel_days": 2744,
+  "rel_days": 2746,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1726,7 +1723,7 @@
  "DavLagoHern/LakeDB": {
   "rel_ver": "v1.0.0-beta.6.3",
   "rel_pub": "2026-09-22",
-  "rel_days": 61,
+  "rel_days": 63,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1759,7 +1756,7 @@
  "frerich/pg_large_objects": {
   "rel_ver": "v0.2.7",
   "rel_pub": "2026-05-17",
-  "rel_days": 189,
+  "rel_days": 191,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1790,7 +1787,7 @@
  "KillerAery/ForAlive": {
   "rel_ver": "v0.213",
   "rel_pub": "2018-05-15",
-  "rel_days": 3113,
+  "rel_days": 3115,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1914,7 +1911,7 @@
  "IITDBGroup/gprom": {
   "rel_ver": "v1.0.5",
   "rel_pub": "2026-04-03",
-  "rel_days": 233,
+  "rel_days": 235,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1996,7 +1993,7 @@
  "deadislove/nestJS-modular-monolith-cqrs-event-sourcing-architecture-template": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2025-05-11",
-  "rel_days": 560,
+  "rel_days": 562,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2077,7 +2074,7 @@
  "SaberSz/College-System-2-Attendance-Management-Systems": {
   "rel_ver": "v1.0",
   "rel_pub": "2017-11-15",
-  "rel_days": 3294,
+  "rel_days": 3296,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2113,7 +2110,7 @@
  "Holo795/CBMCoolifyBackup": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-07-03",
-  "rel_days": 142,
+  "rel_days": 144,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2146,7 +2143,7 @@
  "jince-boy/php-ccenote-blog-api": {
   "rel_ver": "laravel",
   "rel_pub": "2023-02-28",
-  "rel_days": 1363,
+  "rel_days": 1365,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2187,7 +2184,7 @@
  "hieutdo/policyfs": {
   "rel_ver": "v1.0.8",
   "rel_pub": "2026-08-28",
-  "rel_days": 86,
+  "rel_days": 88,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2255,7 +2252,7 @@
  "bbkane/enventory": {
   "rel_ver": "v0.0.28",
   "rel_pub": "2026-06-20",
-  "rel_days": 155,
+  "rel_days": 157,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2280,7 +2277,7 @@
  "Salve-Software/react-native-salve-db": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-09-04",
-  "rel_days": 79,
+  "rel_days": 81,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2326,7 +2323,7 @@
  "budiadiono/sqlite-ts": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2019-02-10",
-  "rel_days": 2842,
+  "rel_days": 2844,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2770,7 +2767,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-09-01",
-  "rel_days": 82,
+  "rel_days": 84,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -3059,7 +3056,7 @@
  "sucraft-hub/homeledger": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 59,
+  "rel_days": 61,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3086,7 +3083,7 @@
  "paperkite-hq/stork": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-04-06",
-  "rel_days": 230,
+  "rel_days": 232,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3178,7 +3175,7 @@
  "DavidBelicza/semantic-search": {
   "rel_ver": "v1.9.0",
   "rel_pub": "2026-08-18",
-  "rel_days": 96,
+  "rel_days": 98,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -3221,7 +3218,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.6.7",
   "rel_pub": "2026-11-11",
-  "rel_days": 11,
+  "rel_days": 13,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -3314,7 +3311,7 @@
   },
   "rel_ver": "v1.3.2",
   "rel_pub": "2026-10-29",
-  "rel_days": 24,
+  "rel_days": 26,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,

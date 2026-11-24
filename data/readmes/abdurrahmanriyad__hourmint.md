@@ -61,7 +61,7 @@ Updates install from inside the app after that.
 
 ## Contributing
 
-Bug reports, ideas and pull requests are welcome.
+Bug reports, ideas and pull requests are welcome. And if Hourmint saves you time, a star on GitHub helps other freelancers find it.
 
 - Found a bug? [Open an issue](https://github.com/abdurrahmanriyad/hourmint/issues/new/choose), or use **Report a problem** in the app's Settings.
 - Want to help? Look for issues labelled [good first issue](https://github.com/abdurrahmanriyad/hourmint/labels/good%20first%20issue) or [help wanted](https://github.com/abdurrahmanriyad/hourmint/labels/help%20wanted).

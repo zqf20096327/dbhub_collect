@@ -58,7 +58,7 @@ before a restore writes data. Use the dashboard or give a scoped AI agent access
 
 | Engine | Current profile | Capture and prerequisites |
 | --- | --- | --- |
-| PostgreSQL | 17 | Exported snapshot; `pg_dump` / `pg_restore` 17. Sequence changes during capture refuse publication. |
+| PostgreSQL | 17 / 18 | Exported snapshot; exact matching-major clients and restore target. Sequence changes during capture refuse publication. [Qualification](docs/server-postgres18.md). |
 | MySQL | 8.0, ordinary InnoDB tables | Real MySQL 8 clients and an explicitly permitted server-wide read lock. |
 | MariaDB | 11, ordinary InnoDB tables | Separate MariaDB 11 clients and an explicitly permitted server-wide read lock. |
 | MongoDB | 8.0 standalone | Database Tools 100.20; explicitly permitted, journaled server-wide fsync lock. |
@@ -82,6 +82,34 @@ Read the [full profiles](docs/engine-profiles.md), [native tooling](docs/native-
 and [independent runtime evidence](docs/server-runtime.md).
 
 </details>
+
+## Google Drive
+
+Back up a selected Google Drive folder, or use Drive to store database and file
+archives. Connect once with Google OAuth from **Connections → Add connection → Google Drive**,
+then choose a source folder, backup storage, or both.
+
+Drive publications include a portable recovery descriptor. On another server,
+connect the old archive folder, import a chosen copy with full SHA-256 verification,
+and review a separate empty restore target. The old Steelkeep metadata database
+isn't required. Encrypted Drive-file archives use a separately saved recovery key.
+
+The initial file profile supports My Drive, ordinary files and portable
+Docs/Sheets/Slides exports. Read the [Google Drive setup and recovery guide](docs/google-drive.md)
+for OAuth configuration, exact limits, provider requirements and qualification status.
+
+## Workspace controls
+
+Resize the desktop sidebar by dragging its edge or using the focused separator's
+arrow keys; collapse it to an icon rail when you want more room. Width and collapse
+preferences are saved in your browser. Theme and sign-out stay beside the account.
+
+The saved light/dark preference is applied before the first paint, with dark as the
+default. Dialogs keep their own scroll area and hold the background in place; internal
+navigation keeps the current application document. See the
+[interface quality ledger](docs/interface-quality-pass.md) for exact acceptance evidence
+and the [connectivity reference review](docs/databasement-connectivity-parity.md) for
+the remaining SSH and remote-worker scope.
 
 ## Self-host
 
@@ -188,6 +216,7 @@ Snapshot availability HEAD checks inspect object metadata, not downloaded bytes.
 | [Installation](docs/server-installation.md) | [Architecture](docs/architecture.md) |
 | [Engine profiles and permissions](docs/engine-profiles.md) | [Native tooling](docs/native-tooling.md) |
 | [Sign-in and AI agents](docs/authentication.md) | [Recovery acceptance evidence](docs/acceptance.md) |
+| [Google Drive and portable recovery](docs/google-drive.md) | [Drive setup and limitations](docs/google-drive.md#initial-file-profile-and-limits) |
 | [Retention policies](docs/retention.md) | [Runtime qualification](docs/server-runtime.md) |
 | [Snapshot downloads](docs/snapshot-downloads.md) | [Feature parity and remaining work](docs/databasement-parity.md) |
 | [Reviewed deletion](docs/snapshot-deletion.md) | [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) |

@@ -4,6 +4,8 @@
 
 **Quarterdeck keeps Claude on top of things for you.**
 
+[![shannonbay/Quarterdeck MCP server](https://glama.ai/mcp/servers/shannonbay/Quarterdeck/badges/score.svg)](https://glama.ai/mcp/servers/shannonbay/Quarterdeck)
+
 One prompt, `/goal-new Sell my birdcage on Facebook Marketplace`, and it sold for the asking price the next day. Claude wrote and posted the listing, answered five buyers and lined up the pick-up, and every message waited for my OK first.
 
 ![The birdcage sale: the /goal-new prompt, the listing waiting for approval in the Goals pane, the listing live on Facebook, approved replies to buyers, two buyers wanting it at once, the sale confirmed, and the listing marked out of stock](docs/birdcage-sale.gif)

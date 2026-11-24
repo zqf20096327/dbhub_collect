@@ -1,3 +1,5 @@
+> **0.2.0 独立测试版**：工作区默认 Agent，可在同一会话切换纯对话；对话标签固定纯对话；已接入轻量内核。运行方式、架构与限制见 [ALPHA.md](ALPHA.md)。下文未更新的性能数字和平台说明属于原项目历史，不能视为此 Alpha 的实测结果。
+
 <div align="center">
   <img src="docs/icon.png" alt="RikkaHub Desktop PLUS" width="96" />
 
@@ -6,7 +8,7 @@
   <p>Windows、Linux 与 Docker 自托管的 LLM 桌面客户端 · 多供应商 · 本地数据优先</p>
 
   <p>
-    <a href="LICENSE"><img alt="Version" src="https://img.shields.io/badge/version-0.1.4-2f81f7"></a>
+    <a href="LICENSE"><img alt="Version" src="https://img.shields.io/badge/version-0.2.0-2f81f7"></a>
     <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-AGPL--3.0%20%7C%20Commercial-2f81f7"></a>
     <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20Docker-3fb950">
     <img alt="Runtime" src="https://img.shields.io/badge/runtime-Bun%201.4.2-f472b6">
@@ -24,9 +26,9 @@
 - **工作区与工具链。** 会话可以绑定真实文件夹或 SSH 远程目录，模型获得读写文件、shell、grep 等工具；新增 Skills、stdio MCP、并行子智能体和内置终端。
 - **部署。** 容器运行时使用 Debian slim，自带 bash、zip/unzip 与字体注册；加入面向飞牛 OS 等 Linux NAS 的编排，并提供 Windows 本地与容器两种系统级写入边界。
 
-版本目前是 0.1.4。从 0.0.2 算起，累计变更 393 个文件、新增约 5.6 万行。下面的功能清单按模块整理，构建与部署细节在后面的章节和 `docs/` 里。
+本目录版本为 0.2.0。原项目 0.1.4 的历史说明：从 0.0.2 算起，累计变更 393 个文件、新增约 5.6 万行。下面的功能清单按模块整理，构建与部署细节在后面的章节和 `docs/` 里。
 
-Windows 便携版在本仓库的 [Releases](https://github.com/ODO-TECH/Rikkahub-desktoPLUS/releases) 提供，应用内的更新检查也指向本仓库。项目名里的 PLUS 只代表本分支的增量，不属于上游品牌；数据目录、环境变量前缀与技术标识符与上游保持一致，可以和上游版本共用同一份 `pc-data/`。
+Windows 便携版在本仓库的 [Releases](https://github.com/ODO-TECH/Rikkahub-desktop-PLUS/releases) 提供，应用内的更新检查也指向本仓库。项目名里的 PLUS 只代表本分支的增量，不属于上游品牌；数据目录、环境变量前缀与技术标识符与上游保持一致，可以和上游版本共用同一份 `pc-data/`。
 
 ## 目录
 
@@ -105,17 +107,17 @@ Windows 便携版在本仓库的 [Releases](https://github.com/ODO-TECH/Rikkahub
 
 内置 21 个供应商预设（OpenAI、ChatGPT、Anthropic、Claude、Gemini、xAI、Grok、DeepSeek、智谱、月之暗面、Kimi Code、阿里云百炼、火山引擎、腾讯混元、MiniMax、MIMO、阶跃星辰、OpenRouter、Vercel、Copilot、钠API），也支持任意 OpenAI / Anthropic / Google 兼容端点。三种协议族可以互相切换，各厂商的端点路径有实测表；单个模型还能通过 `providerOverwrite` 单独指定网关、base 和 key。
 
-场景模型共 9 个位置：聊天、快速、翻译、OCR、压缩、提示词优化、嵌入、重排、记忆。压缩提示词对「对话引擎」和「工作区引擎」分别可编辑。订阅制账号走 OAuth，提供浏览器回调和设备码两种方式，凭据不会下发到浏览器。测试面板覆盖 non-stream、stream、tools、embeddings、rerank 和图像输出，配额与余额可以直接查询。推理强度支持到 `xhigh` 和 `max`（给 pi 引擎打了补丁），历史思考可以回灌，提示词缓存带 TTL 和 `prompt_cache_key`。
+场景模型共 9 个位置：聊天、快速、翻译、OCR、压缩、提示词优化、嵌入、重排、记忆。OCR 位置可以再挂 DeepSeek 官方 OCR 当主引擎（默认关，单独填官方 Key）：图片优先官方识别，文档只在本地解析读不出文字时才升级去识别，纯文本型 PDF/Word/PPT 照常本地解析不花钱；官方接口失败自动回落到所配的视觉模型，Key 不进安卓备份。压缩提示词对「对话引擎」和「工作区引擎」分别可编辑。订阅制账号走 OAuth，提供浏览器回调和设备码两种方式，凭据不会下发到浏览器。测试面板覆盖 non-stream、stream、tools、embeddings、rerank 和图像输出，配额与余额可以直接查询。推理强度支持到 `xhigh` 和 `max`（给 pi 引擎打了补丁），历史思考可以回灌，提示词缓存带 TTL 和 `prompt_cache_key`。
 
 ### 语音与媒体生成
 
-TTS 有 11 类（含系统语音），带音色、情绪、语速、稳定性预设，以及朗读过滤规则（只读引号台词、跳过括号）。ASR 走 WebSocket 实时通道，免提模式分聆听、转写、播报三种状态。MiMo 没有 realtime 和 VAD 端点，所以只提供分段听写，选中它时通话入口会隐藏，避免出现入口可见但用不了的情况。
+TTS 有 14 类（含系统语音与桌面端本地油库里），带音色、情绪、语速、稳定性预设，以及朗读过滤规则（只读引号台词、跳过括号）。ASR 有两种形态：WebSocket 实时通道，以及 MiMo / DeepSeek 这类只有 HTTP 单次接口的分段式（攒够一段上传、按序拼接），免提模式分聆听、转写、播报三种状态。这两家没有 realtime 和 VAD 端点，所以只提供分段听写，选中它们时通话入口会隐藏，避免出现入口可见但用不了的情况。DeepSeek 的合成走官方 `/v1/tools/tts`（stella 女声 / tide 男声，取裸 PCM 自己补 WAV 头），识别走 `/v1/tools/asr`（单次 120 秒 / 8 MiB 上限）。
 
 媒体生成是独立的工作台（`/images`），分图片和视频两类任务，支持 OpenAI、阿里云、火山、MiniMax、OpenRouter 五类供应商。最多 16 张参考图，数量、分辨率、比例、时长、是否生成音频、seed、提示词增强逐项可控，提示词可以交给聊天模型或指定模型改写。任务有排队、进行、失败三种状态，可以取消；产物支持批量下载，也能一键插回当前对话。需要外链素材的供应商会自动走 S3 上传存储。
 
 ### 联网检索
 
-默认提供 18 个搜索引擎和服务：Bing、RikkaHub 中继（可自建实例）、智谱、豆包、Tavily、Exa、SearXNG、LinkUp、Brave、秘塔、Ollama、Perplexity、Firecrawl、Jina、博查、Grok、Tinyfish、Serper。另有 Custom JS，可以写脚本接入自己的服务。深度档位、结果数、API Key 健康检查（配额、密钥、网络分别报错）和多 Key 故障转移都已具备。模型侧可以选择用模型自带的搜索，也可以用应用内配置的引擎。
+默认提供 19 个搜索引擎和服务：Bing、RikkaHub 中继（可自建实例）、智谱、豆包、Tavily、Exa、SearXNG、LinkUp、Brave、秘塔、Ollama、Perplexity、Firecrawl、Jina、博查、Grok、Tinyfish、Serper、DeepSeek（官方 `/v1/tools/search` + `/v1/tools/fetch`，与聊天模型共用同一个 Key）。另有 Custom JS，可以写脚本接入自己的服务。深度档位、结果数、API Key 健康检查（配额、密钥、网络分别报错）和多 Key 故障转移都已具备。模型侧可以选择用模型自带的搜索，也可以用应用内配置的引擎。
 
 ### 工具与扩展
 
@@ -248,7 +250,7 @@ docker run -d --name rikkahub-plus --restart unless-stopped \
   -p 11451:11451 \
   -e RIKKAHUB_PASSWORD='换成你的密码' \
   -v "$PWD/pc-data:/app/pc-data" \
-  rikkahub-desktop-plus:0.1.6
+  rikkahub-desktop-plus:0.2.0
 ```
 
 只有 `/app/pc-data` 必须挂载。不要把宿主目录挂到 `/app` 或 `/app/web-ui`，那会覆盖镜像里的程序文件。要交给 agent 使用的 NAS 目录，通过挂载表划边界：
@@ -346,6 +348,7 @@ Kelivo 方向是双向的：导入支持 8 类数据，导出遵循 schema v3 �
 | **0.1.4** | 修复设置页卡顿：移除弹窗全屏实时模糊，鼠标移动不再反复重采样背景，交互恢复到约 60fps；背景仍压暗，顶带窗控保持清晰可点 |
 | **0.1.5** | 工作区工具面实验契约（默认全关）：`read` 行号/revision/续读、`edit` 版本前置与 dryRun、`read_files` 批量读、重读去重、搜索覆盖率摘要、截断结果落盘续读、MCP 描述截断、`search_tools` 按需发现；受限沙盒支持声明额外可写目录（全局 + 每个 stdio MCP 服务器），重启生效，撤销声明自动还原 |
 | **0.1.6** | 显式任务图：`update_plan` 支持步骤依赖（`depends_on`）、环与未知依赖拒绝、步骤级失败重试预算（1–5 次）与未验证不计完成；任务生命周期：崩溃遗留的运行在启动时收敛为中断态并可显式恢复（不自动续跑），会话级 once / 固定间隔定时任务，跨会话运行审计与脱敏 JSONL 导出；移除桌面伴侣实验 |
+| **0.2.0** | Agent 内核重构：不再挂载 pi Agent，改用与安卓版思路一致的自建轻量内核；页面逻辑大幅整理；实验功能 AgentBot 选项整合实装；DeepSeek 全系 API、油库里 TTS（SDK 需自备）、萌娘百科检索支持；上下文压缩机制优化与问题修复 |
 
 同批修复里值得一提的：微信「已连接但收不到消息」（入站消息被误判为机器人回声）、点击停止后排队项悬挂导致 IM 串行回复链冻结、导入手机备份重置 PC 专属配置、压缩模型未配置时误兜底到 `gpt-4o-mini`、压缩后上下文用量不降反升，以及 SSH 凭据声称不导出安卓而实际从未剥离（已修复并有测试锁定）。
 

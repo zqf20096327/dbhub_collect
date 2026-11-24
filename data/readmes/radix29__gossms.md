@@ -228,7 +228,12 @@ failed peer connection never retries with another server's credentials.
 
 ## Object Explorer
 
-**Group by Schema** (View menu, **Alt+G**, or the button at the right end of
+The `[x]` in the top-right corner, after Group by Schema, hides Object Explorer without
+disconnecting or clearing its tree. **View > Object Explorer** shows and
+focuses it when hidden, or only focuses it when already visible. Reopening
+restores its previous width; hidden, it leaves the full width to the panels.
+
+**Group by Schema** (View menu, **Alt+G**, or the button before `[x]` in
 the Object Explorer title: `[⋮]` flat, `[Σ]` grouped) lists Tables, Views,
 Synonyms, Stored Procedures, Functions and Sequences under one node per schema,
 as SSMS does, and so do the System, File, External and Graph Tables folders,
@@ -244,7 +249,10 @@ Role, Server Role, Sequence or Synonym; each dialog checks your permissions firs
 result grid, double-click a cell for Show Value and click a row number to
 select the row; right-click the blank cell above the row numbers (or any cell,
 or use File > Export Results) to export the result set on screen, in the order
-shown, to a CSV, tab-separated, JSON or XML file. Show Value on a `varbinary`/`image` cell that holds a picture
+shown, to a CSV, tab-separated, JSON or XML file. CSV and tab-separated
+exports (and Results To File) put a `'` before a text cell starting with `=`,
+`+`, `-` or `@`, so a spreadsheet does not run a database value as a formula;
+Tools > Options turns that off for a byte-exact file. Show Value on a `varbinary`/`image` cell that holds a picture
 (PNG, JPEG, GIF, BMP, TIFF or WebP) opens it in its own tab as terminal art,
 as does File > Open of a picture file (recognized by its content, not its
 extension), with fit, zoom, pan, brightness and contrast, and Save; pictures render in Unicode block sextants, with
@@ -446,9 +454,19 @@ and ORDER BY alone on their lines with the joins indented under FROM, and
 writes `expr AS name` as `name = expr` — the Edit menu's cascade formats once in either), grid and text
 column widths, indent size, Max fetch rows (rows kept per result
 set in grid, text and file mode, 0 = unlimited; reaching it cancels the rest
-of the script, later GO batches included, and the results status line says so) and
-IntelliSense. Unsaved query tabs are recovered to the `recovered` folder beside
+of the script, later GO batches included, and the results status line says so),
+IntelliSense, and whether CSV/TSV exports neutralize spreadsheet formulas (on). Unsaved query tabs are recovered to the `recovered` folder beside
 `config.json` after a crash.
+
+Built-in completion distinguishes Fabric Warehouse/SQL analytics endpoint AI
+functions from SQL Server/Azure SQL/Fabric SQL database embeddings and chunking.
+Argument suggestions include `OPENROWSET(BULK)` options by engine, file format
+and parser version, AI `ON ERROR`, and JSON null-handling and return clauses.
+Selecting `OPENROWSET` starts `OPENROWSET(BULK '')` with the caret inside the quotes.
+`SINGLE_BLOB`, `SINGLE_CLOB` and `SINGLE_NCLOB` are not offered on Fabric
+Warehouse/SQL analytics endpoints. Known database compatibility levels also
+filter chunking; service policies, permissions and external-model setup remain
+the server's authority.
 
 Saved passwords are encrypted with AES-256-GCM using `gossms.key` in the same
 folder; delete both files to reset. Editing a connection's server, port, user,

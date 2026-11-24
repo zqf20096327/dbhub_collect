@@ -1,8 +1,8 @@
-# Fexu
+# Fexu 0.2.0
 
 **Build model-driven web applications in Rust.**
 
-A Django-inspired, experimental web framework built with **Axum**, **Tera**, **SeaQuery**, **rusqlite** (SQLite), and **SQLx PostgreSQL**. Define typed models, manage migrations, use SQLite or PostgreSQL, and work with a server-rendered admin — without requiring React, Vite, or Node.js for the admin.
+Fexu is a Django-inspired, **experimental** web framework on **Axum**, **Tera**, **SeaQuery**, **rusqlite** (SQLite), and **SQLx PostgreSQL**. You define typed models, run versioned migrations, choose SQLite or PostgreSQL, and ship a server-rendered admin without a separate JavaScript admin build.
 
 [![Rust CI](https://github.com/Iam-Sanja/fexu-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/Iam-Sanja/fexu-rs/actions/workflows/ci.yml)
 [![Security audit](https://github.com/Iam-Sanja/fexu-rs/actions/workflows/security.yml/badge.svg)](https://github.com/Iam-Sanja/fexu-rs/actions/workflows/security.yml)
@@ -12,101 +12,85 @@ A Django-inspired, experimental web framework built with **Axum**, **Tera**, **S
 ![MSRV: 1.89](https://img.shields.io/badge/MSRV-1.89-informational)
 ![Workspace: 16 crates](https://img.shields.io/badge/workspace-16%20crates-informational)
 
-[**Quick start**](#quick-start) · [**Features**](#why-fexu) · [**Documentation source**](docs/index.md) · [**Contribute**](#help-build-fexu) · [**Roadmap**](docs/roadmap.md) · [**Documentation site setup**](docs/documentation-maintenance.md)
+[**Quick start**](#quick-start) · [**Features**](#features) · [**Install**](#install-fexu-020) · [**Roadmap 0.3.0**](docs/roadmap.md) · [**Upgrade from 0.1.2**](#upgrade-from-012) · [**Documentation**](https://iam-sanja.github.io/fexu-rs/) · [**Contributing**](#contributing) · [**License**](#license)
 
 > [!IMPORTANT]
-> **Fexu 0.1.2 is published on crates.io but remains experimental and is not production-ready.** APIs, configuration and migrations may change. The version badges show the latest crates.io releases. The `main` branch uses the **unpublished `0.2.0-dev.1` workspace version** and may contain newer changes; features added after the `v0.1.2` tag are not part of the published 0.1.2 packages. The `-dev.1` version is a development marker, not a registry release or an approved 0.2.0 release candidate. Do not expose a demo application directly to the public internet.
+> **Latest published release: Fexu 0.2.0.** All 16 crates were released together. Fexu remains experimental and is not declared production-ready. **Next milestone: v0.3.0** ([roadmap](docs/roadmap.md)); planned features are not yet included in v0.2.0. Development changes and their documentation are reviewed together. The current main branch includes the merged SeaQuery, SQLx, rusqlite and Argon2 upgrades for v0.3.0; these are not part of published v0.2.0.
 
-## Why Fexu?
+## Features
 
-Rust brings strong typing, performance and explicit control. Fexu aims to bring familiar framework ergonomics to those strengths: one place for models and validation, consistent database access, built-in application features, and a native admin.
+| Area | What Fexu provides |
+|---|---|
+| **Models & ORM** | `#[derive(FexuModel)]`, validation, repositories, SeaQuery SQL, SQLite + PostgreSQL |
+| **Migrations** | JSON migration plans, checksums, guarded SQLite rebuilds, `migrate plan` / `migrate up` / `migrate down` |
+| **HTTP & API** | Axum apps, generated CRUD, OpenAPI + Swagger UI, problem+json errors |
+| **Auth** | Argon2id passwords, server-side sessions, login CSRF, roles and permissions |
+| **Admin** | Native Tera admin for registered models, filters, actions, relation pickers |
+| **Apps** | Forms, static files, storage/uploads, mail outbox, persistent jobs + cron worker |
+| **CLI** | `fexu new`, `generate`, `migrate`, `admin`, `dev`, `worker`, `doctor`, `check` |
 
-| | Feature | What is available |
-|---|---|---|---|
-| 🧱 | **Typed models** | `#[derive(FexuModel)]`, validation and generated CRUD endpoints |
-| 🗃️ | **Database layer** | SQLite by default, PostgreSQL, composable model queries and batched relation reads |
-| 🔄 | **Migrations** | Versioned schema changes, dependency checks and guarded SQLite table rebuilds |
-| 🔐 | **Authentication** | User accounts, permissions, server-side sessions and cookie-CSRF protection |
-| 🛠️ | **Native admin** | Server-rendered admin for models, with app grouping, actions and filters |
-| 🧩 | **App building blocks** | Forms, templates, named routes, fixtures, custom commands, mail and persistent jobs |
+Documented limits: public model routes must be opted in; admin and API CSRF policies depend on configuration; production HTTPS, proxy trust, and cookie flags need explicit setup. See [security](docs/security.md) and [deployment](manual/how-to/deployment.md).
 
-These features have **documented limitations**. In particular, public model routes must be configured deliberately, and CSRF protection depends on the request and route policy. See [security](docs/security.md), [capability matrix](docs/django-capability-matrix.md), and [current limitations](#current-status).
+## Workspace crates (16)
 
-## Workspace crates
+Fexu ships as a **16-crate workspace**. Each row links to the crate source; its dynamic badge shows the **latest version actually available on crates.io**, independently of any future development version.
 
-Fexu is developed as a **16-crate Rust workspace**. Each version badge below reflects the latest version reported by crates.io. The `main` branch is currently `0.2.0-dev.1` (unpublished), and can contain changes not yet released to the registry. The CLI generator still deliberately pins registry-generated projects to published `0.1.2` unless `--fexu-path` is supplied.
+| Crate | Role | crates.io |
+|---|---|---|
+| [`fexu`](crates/fexu/) | Framework entry, `prelude`, app builder | [![crates.io](https://img.shields.io/crates/v/fexu.svg)](https://crates.io/crates/fexu) |
+| [`fexu-cli`](crates/fexu-cli/) | `fexu` binary, scaffolding, migrations CLI | [![crates.io](https://img.shields.io/crates/v/fexu-cli.svg)](https://crates.io/crates/fexu-cli) |
+| [`fexu-core`](crates/fexu-core/) | Model contracts, validation, query scopes | [![crates.io](https://img.shields.io/crates/v/fexu-core.svg)](https://crates.io/crates/fexu-core) |
+| [`fexu-macros`](crates/fexu-macros/) | `FexuModel` / `FexuForm` derives | [![crates.io](https://img.shields.io/crates/v/fexu-macros.svg)](https://crates.io/crates/fexu-macros) |
+| [`fexu-db`](crates/fexu-db/) | SQLite + PostgreSQL connections, repositories | [![crates.io](https://img.shields.io/crates/v/fexu-db.svg)](https://crates.io/crates/fexu-db) |
+| [`fexu-migrations`](crates/fexu-migrations/) | Migration engine and project discovery | [![crates.io](https://img.shields.io/crates/v/fexu-migrations.svg)](https://crates.io/crates/fexu-migrations) |
+| [`fexu-auth`](crates/fexu-auth/) | Users, sessions, CSRF, MFA, password reset | [![crates.io](https://img.shields.io/crates/v/fexu-auth.svg)](https://crates.io/crates/fexu-auth) |
+| [`fexu-api`](crates/fexu-api/) | HTTP runtime, routes, OpenAPI | [![crates.io](https://img.shields.io/crates/v/fexu-api.svg)](https://crates.io/crates/fexu-api) |
+| [`fexu-admin`](crates/fexu-admin/) | Server-rendered admin UI | [![crates.io](https://img.shields.io/crates/v/fexu-admin.svg)](https://crates.io/crates/fexu-admin) |
+| [`fexu-forms`](crates/fexu-forms/) | Form binding and HTML widgets | [![crates.io](https://img.shields.io/crates/v/fexu-forms.svg)](https://crates.io/crates/fexu-forms) |
+| [`fexu-static`](crates/fexu-static/) | Static file serving | [![crates.io](https://img.shields.io/crates/v/fexu-static.svg)](https://crates.io/crates/fexu-static) |
+| [`fexu-storage`](crates/fexu-storage/) | Uploads and signed downloads | [![crates.io](https://img.shields.io/crates/v/fexu-storage.svg)](https://crates.io/crates/fexu-storage) |
+| [`fexu-cache`](crates/fexu-cache/) | Typed in-memory caches | [![crates.io](https://img.shields.io/crates/v/fexu-cache.svg)](https://crates.io/crates/fexu-cache) |
+| [`fexu-mail`](crates/fexu-mail/) | SMTP and outbox mail | [![crates.io](https://img.shields.io/crates/v/fexu-mail.svg)](https://crates.io/crates/fexu-mail) |
+| [`fexu-jobs`](crates/fexu-jobs/) | Persistent jobs and cron worker | [![crates.io](https://img.shields.io/crates/v/fexu-jobs.svg)](https://crates.io/crates/fexu-jobs) |
+| [`fexu-middleware`](crates/fexu-middleware/) | Security headers and request logging | [![crates.io](https://img.shields.io/crates/v/fexu-middleware.svg)](https://crates.io/crates/fexu-middleware) |
 
-| Crate | Purpose | Latest published on crates.io | Next coordinated release (planned) |
-|---|---|---|---|
-| [`fexu`](crates/fexu/) | Framework entry point and application builder | [![fexu version](https://img.shields.io/crates/v/fexu.svg?label=version)](https://crates.io/crates/fexu) | `0.2.0` (candidate, not published) |
-| [`fexu-cli`](crates/fexu-cli/) | Command-line tools and project scaffolding | [![fexu-cli version](https://img.shields.io/crates/v/fexu-cli.svg?label=version)](https://crates.io/crates/fexu-cli) | `0.2.0` (candidate, not published) |
-| [`fexu-core`](crates/fexu-core/) | Core model types and framework primitives | [![fexu-core version](https://img.shields.io/crates/v/fexu-core.svg?label=version)](https://crates.io/crates/fexu-core) | `0.2.0` (candidate, not published) |
-| [`fexu-macros`](crates/fexu-macros/) | Model derive and procedural macros | [![fexu-macros version](https://img.shields.io/crates/v/fexu-macros.svg?label=version)](https://crates.io/crates/fexu-macros) | `0.2.0` (candidate, not published) |
-| [`fexu-db`](crates/fexu-db/) | SQLite and PostgreSQL database access | [![fexu-db version](https://img.shields.io/crates/v/fexu-db.svg?label=version)](https://crates.io/crates/fexu-db) | `0.2.0` (candidate, not published) |
-| [`fexu-migrations`](crates/fexu-migrations/) | Versioned database migrations | [![fexu-migrations version](https://img.shields.io/crates/v/fexu-migrations.svg?label=version)](https://crates.io/crates/fexu-migrations) | `0.2.0` (candidate, not published) |
-| [`fexu-auth`](crates/fexu-auth/) | Authentication, sessions and CSRF protection | [![fexu-auth version](https://img.shields.io/crates/v/fexu-auth.svg?label=version)](https://crates.io/crates/fexu-auth) | `0.2.0` (candidate, not published) |
-| [`fexu-api`](crates/fexu-api/) | HTTP API, routing and OpenAPI | [![fexu-api version](https://img.shields.io/crates/v/fexu-api.svg?label=version)](https://crates.io/crates/fexu-api) | `0.2.0` (candidate, not published) |
-| [`fexu-admin`](crates/fexu-admin/) | Server-rendered administration | [![fexu-admin version](https://img.shields.io/crates/v/fexu-admin.svg?label=version)](https://crates.io/crates/fexu-admin) | `0.2.0` (candidate, not published) |
-| [`fexu-cache`](crates/fexu-cache/) | Opt-in typed caching | [![fexu-cache version](https://img.shields.io/crates/v/fexu-cache.svg?label=version)](https://crates.io/crates/fexu-cache) | `0.2.0` (candidate, not published) |
-| [`fexu-forms`](crates/fexu-forms/) | Form handling and validation | [![fexu-forms version](https://img.shields.io/crates/v/fexu-forms.svg?label=version)](https://crates.io/crates/fexu-forms) | `0.2.0` (candidate, not published) |
-| [`fexu-static`](crates/fexu-static/) | Static assets and ETags | [![fexu-static version](https://img.shields.io/crates/v/fexu-static.svg?label=version)](https://crates.io/crates/fexu-static) | `0.2.0` (candidate, not published) |
-| [`fexu-storage`](crates/fexu-storage/) | File storage and signed downloads | [![fexu-storage version](https://img.shields.io/crates/v/fexu-storage.svg?label=version)](https://crates.io/crates/fexu-storage) | `0.2.0` (candidate, not published) |
-| [`fexu-middleware`](crates/fexu-middleware/) | Common HTTP middleware | [![fexu-middleware version](https://img.shields.io/crates/v/fexu-middleware.svg?label=version)](https://crates.io/crates/fexu-middleware) | `0.2.0` (candidate, not published) |
-| [`fexu-mail`](crates/fexu-mail/) | Email utilities | [![fexu-mail version](https://img.shields.io/crates/v/fexu-mail.svg?label=version)](https://crates.io/crates/fexu-mail) | `0.2.0` (candidate, not published) |
-| [`fexu-jobs`](crates/fexu-jobs/) | Persistent background jobs | [![fexu-jobs version](https://img.shields.io/crates/v/fexu-jobs.svg?label=version)](https://crates.io/crates/fexu-jobs) | `0.2.0` (candidate, not published) |
+## Install Fexu 0.2.0
 
-All **16** workspace crates currently have a published `0.1.2` release on crates.io. On `main`, the shared Cargo version is **`0.2.0-dev.1`**, while the next coordinated stable release is planned as **`0.2.0`** and remains unpublished. The badges deliberately reflect real registry versions, while the last column describes the release target. Use compatible published versions when building an independent project. Features merged into `main` after `v0.1.2` require a source checkout until the next release.
+**Requires Rust 1.89.0+** (MSRV). SQLite needs no extra server; PostgreSQL needs a disposable database for experiments.
+
+### Install the published release
+
+```bash
+cargo install fexu-cli --version 0.2.0 --locked
+fexu --version
+fexu new project demo --template fullstack
+cd demo
+fexu migrate plan
+fexu migrate up
+fexu admin create-user --email admin@example.com --staff --superuser
+fexu dev
+```
+
+Generated registry projects pin `fexu = "=0.2.0"` in `Cargo.toml`. To work with **unreleased development source**, clone the repository and install the CLI via `cargo install --path crates/fexu-cli --locked`, then create projects with `--fexu-path` pointing to that checkout. Development source may have a different prerelease version and must not be confused with published crates.io packages.
 
 ## Quick start
 
-**Requirements:** Rust **1.89.0 or newer** and Cargo. For the default SQLite setup, you do not need to install a database server.
-
-Clone the repository and try the included MyShop example:
+Try the in-repo **MyShop** example (source checkout):
 
 ```bash
-git clone https://github.com/Iam-Sanja/fexu-rs.git
 cd fexu-rs
 cargo run -p fexu-cli -- migrate up
 cargo run -p myshop
 ```
-
-Then, in another terminal:
 
 ```bash
 curl http://127.0.0.1:3000/healthz
 curl http://127.0.0.1:3000/api/v1/products
 ```
 
-SQLite defaults to `sqlite://db.sqlite3?mode=rwc` in the current working directory when `DATABASE_URL` is unset. The example uses the migration directory configured in `fexu.toml`.
+Default SQLite URL when `DATABASE_URL` is unset: `sqlite://db.sqlite3?mode=rwc` in the process working directory.
 
-### Create your own application
-
-Install the published Fexu CLI 0.1.2 from crates.io. It generates standalone projects using the published `fexu` 0.1.2 dependency; no local framework checkout is needed.
-
-```powershell
-cargo install fexu-cli --version 0.1.2 --locked
-fexu new project demo
-Set-Location demo
-fexu migrate up
-fexu admin create-user --email admin@example.com --staff --superuser
-fexu dev
-```
-
-`fexu new demo` is the same command. The 0.1.2 fullstack template writes `fexu = { version = "=0.1.2", features = ["admin-ui"] }`; `--template api` writes `fexu = "=0.1.2"`. Both resolve from crates.io. To try unreleased framework changes from `main`, use a local checkout and `--fexu-path`.
-
-To compile against a local Fexu checkout, pass the workspace root or `crates/fexu`:
-
-```powershell
-cargo install --path crates/fexu-cli
-$fexuRepo = (Get-Location).Path
-Set-Location ..
-fexu new project demo --template fullstack --fexu-path $fexuRepo
-```
-
-The CLI prompts for the admin password; there is **no default password**. New projects do not include shop-specific business models. The short command list, and which of those commands this repository actually ran, is in [quickstart](docs/quickstart.md). See [project generation](docs/project-generator.md) and [CLI reference](docs/cli.md).
-
-> [!NOTE]
-> Independent projects do not add a `[patch.crates-io]` entry. SQLite is rusqlite inside Fexu. Published `sqlx-sqlite` cannot be added beside this graph, because both bindings set `links = "sqlite3"`. See [SQLite consumer instructions](docs/security/sqlite-rustsec-2026-0459.md).
+Full command walkthrough: [manual quickstart](manual/getting-started/quickstart.md) · [docs quickstart](docs/quickstart.md).
 
 ## A model in Rust
 
@@ -118,63 +102,64 @@ use fexu::prelude::*;
 pub struct Product {
     #[field(primary_key, auto)]
     pub id: Uuid,
-
     #[field(required, index, min_length = 3, max_length = 150)]
     pub name: String,
-
     #[field(min = 0)]
     pub price_cents: i64,
-
     #[field(default = true)]
     pub active: bool,
 }
 ```
 
-Register the model explicitly with `App::new(db).register::<Product>()`. Fexu then mounts list, detail, create, patch and delete routes for its API path. **`allow_anonymous = true` is only for intentionally public routes**; protected business data should use authentication, permissions and object policies.
+Register with `App::new(db).register::<Product>()`. **`allow_anonymous = true` only for intentionally public routes.**
 
-Learn more: [models](docs/models.md) · [database](docs/database.md) · [relations](docs/relations.md) · [migrations](docs/migrations.md) · [admin](docs/admin.md).
+More: [models](docs/models.md) · [database](docs/database.md) · [migrations](docs/migrations.md) · [admin](docs/admin.md).
+
+## Databases
+
+- **SQLite** — bundled rusqlite; file URL relative to cwd.
+- **PostgreSQL** — SQLx 0.8.x; set `database.url` in `fexu.toml` or `DATABASE_URL`.
+
+Migrations are shared; backend-specific rebuild rules apply on SQLite. See [database](docs/database.md) and [migrations](docs/migrations.md).
+
+## Authentication and permissions
+
+Argon2id password hashing, staff/superuser flags, role and permission tables, cookie sessions, login CSRF, optional MFA and password reset flows. Admin routes enforce staff and object policies when configured. See [auth](docs/auth.md) and [manual auth & admin](manual/topics/auth-and-admin.md).
 
 ## Native admin
 
-Fexu includes a **server-rendered admin**, built with Axum and Tera. No separate JavaScript frontend build is needed for basic administration.
+Server-rendered Axum + Tera admin for registered models: lists, filters, CRUD, relation pickers, session flash, audit hooks. No separate Node admin bundle. See [admin](docs/admin.md).
 
-The published `0.1.2` release includes the native admin. The current `main` branch also contains the newer modular admin merged in [PR #140](https://github.com/Iam-Sanja/fexu-rs/pull/140), including configurable dashboard boards, account management, roles, branding, inline list editing and record image uploads. These post-release features are **not** included in crates.io `0.1.2`.
+## Project layout and CLI
 
-Verified admin screenshots and a visual walkthrough are planned. For now, see the [admin documentation](docs/admin.md) for workflows and restrictions.
+Typical generated **fullstack** project: `fexu.toml`, `Cargo.toml`, `apps/*/models`, `migrations/`, `src/`, `templates/`. Commands: `fexu new`, `new app`, `generate model`, `migrate`, `admin`, `dev`, `worker`, `doctor`, `check`, `upgrade`. Reference: [CLI](docs/cli.md) · [manual CLI](manual/reference/cli.md).
 
-## Current status
+## Upgrade from 0.1.2
 
-Fexu is a **work in progress**, not a drop-in Django replacement.
+Published **0.1.2** consumers need explicit source edits; `fexu upgrade` reports drift but does **not** fully rewrite application Rust or databases. Proven paths: published CLI → current checkout on disposable SQLite/PostgreSQL (see acceptance scripts and [upgrade guide](manual/how-to/upgrade-0.1.2-to-0.2.md)). Backup before migrating production data.
 
-The published `0.1.2` release is available on crates.io. The development branch `main` also includes newer, unreleased admin improvements. Model-derived OpenAPI, keyset pagination, many-to-many loading, `migrate down`, and SQLite/PostgreSQL support remain part of the framework. See the [Django capability matrix](docs/django-capability-matrix.md) and [roadmap](docs/roadmap.md) for known gaps. Fexu has **not** been declared production-ready.
+## Current status and limits
 
-## Help build Fexu
+- **Experimental** — not production-ready; APIs and migrations may change.
+- **Published stable release:** `v0.2.0` (all 16 crates). **Next planned milestone:** `v0.3.0`, not yet released. The source workspace starts from 0.2.0; future development version changes must be coordinated across all publishable crates and dependencies.
+- See [roadmap](docs/roadmap.md), [capability matrix](docs/django-capability-matrix.md), [release process](docs/crates-io-release.md).
+- Do not expose a demo on the public internet without hardening.
 
-**You don't need to know the whole framework to contribute.** Useful contributions include reproducible bug reports, smaller documentation fixes, tests, examples and focused feature improvements.
+## Contributing
 
-- 🐛 [Report a bug](https://github.com/Iam-Sanja/fexu-rs/issues/new/choose) — include a minimal reproduction and your Rust/OS/database versions.
-- 💡 [Suggest an improvement](https://github.com/Iam-Sanja/fexu-rs/issues/new/choose) — explain the problem and the developer experience you want.
-- 💬 [Ask a question or share an idea](https://github.com/Iam-Sanja/fexu-rs/discussions) — discussions are welcome before you write code.
-- 🌱 [Find a first contribution](https://github.com/Iam-Sanja/fexu-rs/labels/good%20first%20issue) — or read the [first contribution guide](docs/first-contribution.md).
-- 🔧 [Open a pull request](CONTRIBUTING.md) — small, well-tested changes are welcome.
+- [Contributing](CONTRIBUTING.md) · [first contribution](docs/first-contribution.md) · [good first issues](https://github.com/Iam-Sanja/fexu-rs/labels/good%20first%20issue)
+- Report security issues per [SECURITY.md](SECURITY.md), not public issues.
 
-Please use [private security reporting guidance](SECURITY.md) for vulnerabilities rather than opening a public issue. All participation follows the [Code of Conduct](CODE_OF_CONDUCT.md).
-
-## Documentation and development
-
-Start with the [documentation index](docs/index.md). The manual is being prepared for a **versioned GitHub Pages site**; no public documentation deployment is claimed until Pages is enabled and a release version is explicitly published. See [documentation maintenance](docs/documentation-maintenance.md) for review and publishing rules. Other useful entry points: [architecture](docs/architecture.md), [configuration](docs/configuration.md), [security](docs/security.md), [testing](docs/testing.md) and [implementation guide](docs/implementation-guide.md).
+Development checks from the repository root:
 
 ```bash
 cargo fmt --all -- --check
-cargo clippy --workspace --all-targets -- -D warnings
-cargo test --workspace
-cargo build --workspace
+cargo clippy --workspace --all-targets --locked -- -D warnings
+cargo test --workspace --locked
 ```
 
-PostgreSQL runtime tests require a **disposable** PostgreSQL database and an explicit `DATABASE_URL`; the default workspace test command does not run ignored PostgreSQL tests. Never run destructive test migrations against real application data.
+PostgreSQL tests need `DATABASE_URL` on a **disposable** database. Do not point tests at production or TestShop data.
 
-Fexu is currently licensed under [MIT](LICENSE-MIT). See [governance](GOVERNANCE.md) and [contribution guidelines](CONTRIBUTING.md).
+## License
 
----
-
-**Interested in Rust web frameworks?** Try the example, tell us what was confusing, and open an issue or discussion. Early feedback is valuable — even if you haven't written a line of Fexu code.
+[MIT](LICENSE-MIT). See [GOVERNANCE.md](GOVERNANCE.md).

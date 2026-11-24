@@ -19,6 +19,10 @@
 
 ---
 
+## Built by
+
+[**Vantyr**](https://vantyr.sourav.com.bd/), a software company in Dhaka, Bangladesh. Software that leads the way.
+
 ## Why this exists
 
 Government and private circulars in Bangladesh are scattered across PDFs, newspaper scans and agency sites. People miss

@@ -240,9 +240,11 @@ curl -i -X POST http://localhost:8080/api/v1/orders \
   }'
 # HTTP/1.1 201
 # Location: http://localhost:8080/api/v1/orders/1
+# X-Correlation-Id: checkout-1
 # {"id":1,"customerId":1001,"status":"CREATED","total":26.25,"createdAt":"...","cancelledAt":null,"items":[...]}
 ```
 
+Every response echoes `X-Correlation-Id` (or returns a generated UUID when omitted), matching the service logs.
 An order takes up to 50 items, each with a whole quantity of at most 1000 and a price with at most 12 integer and 2
 fraction digits; anything else is answered with `400` and the offending field named.
 

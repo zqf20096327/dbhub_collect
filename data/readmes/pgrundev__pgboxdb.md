@@ -27,6 +27,12 @@
   <a href="#documentation">Docs</a>
 </p>
 
+> **Coming from PGX?** PGX is now PGBoxDB: same runtime, new name. Install
+> PGBoxDB (`curl -fsSL https://pgboxdb.com/install | sh` or `npx pgboxdb@latest`),
+> then run `pgboxdb migrate` to keep your databases. The `pgx` command, the
+> `pgxdb` npm package and the `pgx` plugin get no more updates.
+> [Upgrade guide](docs/pgboxdb/local-dev/upgrading.md).
+
 <p align="center">
   <strong>Install one Skill. Your coding agent handles the database.</strong><br>
   No Docker required · Native Mac &amp; Linux · Automatic cleanup

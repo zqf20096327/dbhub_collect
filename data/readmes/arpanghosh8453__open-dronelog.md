@@ -52,6 +52,8 @@
 - [Profiles and Password Protection](#profiles-and-password-protection)
 - [Security Warning (Web/Docker)](#security-warning-webdocker)
 - [Configuration](#configuration)
+- [Flight Chat](#flight-chat)
+- [External agents with MCP](#external-agents-with-mcp)
 - [Context Management](#context-management)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
@@ -87,6 +89,8 @@
 ## Features
 
 - **High-Performance Analytics**: DuckDB-powered queries with automatic downsampling for large datasets. Free, open source, no subscription required.
+- **AI-Assisted Flight Log Analysis**: Ask questions about your profile's logs in the [Chat tab](#flight-chat) using your own OpenAI-compatible API key. Find warning messages, compare flights and batteries, investigate anomalies, and explore summaries with tables and charts through read-only analysis tools.
+- **External AI Agents via MCP**: Connect Codex, Claude Code, or another MCP client to the same analysis tools using [profile-specific, revocable tokens](#external-agents-with-mcp). Available on desktop and Docker, with read-only access to flight data and guidance on application features.
 - **Multi-Format Support**: Import DJI logs (`.txt`), DroneDeploy Flight Recorder logs (`.log`/`.tsv`), Litchi CSV, Airdata CSV, and Open DroneLog CSV exports. Units are normalized automatically, and optional external parser plugins can be configured via `parsers.json`.
 - **Smart Deduplication**: Prevents duplicate imports based on drone serial, battery serial, and start time.
 - **Interactive Flight Maps**: 3D terrain, map-type selection (Satellite, Topographic, OpenStreetMap), flight replay with speed control (0.5x-16x), live telemetry overlay, and RC joystick visualization.
@@ -368,6 +372,10 @@ When `KEEP_UPLOADED_FILES=true` is set, original log files are preserved in an `
 | `PROFILE_CREATION_PASS` | (not set) | Master password required for creating or deleting profiles in web/Docker mode. When unset, anyone can create and delete profiles. |
 | `MANAGER_OVERVIEW` | (not set) | Set to `true` to offer a read-only overview of every profile's flight totals, unlocked with the master password. Needs `PROFILE_CREATION_PASS`. |
 | `DEFAULT_PROFILE_PASSWORD` | (not set) | Optional one-time initializer for the `default` profile password at startup. If a default password already exists, it is not overwritten and startup logs that initialization was skipped. If unset or empty (and no existing password), the default profile remains unprotected. |
+| `CHAT_ALLOW_PRIVATE_PROVIDERS` | `false` | Allow trusted private/loopback model providers from Docker. Cloud metadata addresses remain blocked. |
+| `ODL_MCP_ENABLED` | `false` | Enable the authenticated, read-only MCP endpoint in Docker. Tokens are created per profile in Settings. |
+| `ODL_MCP_PUBLIC_URL` | unset | Optional absolute external MCP URL, ending in `/mcp`, displayed in Settings. Set this when using a reverse proxy or URL prefix. |
+| `ODL_MCP_PORT` | `48765` | Desktop-only loopback MCP port. The desktop listener is enabled in Settings. |
 | `SESSION_TTL_HOURS` | `24`           | Session token lifetime in hours. After expiry the user must re-authenticate. |
 
 ### Automatic log sync (Docker)
@@ -483,6 +491,25 @@ For production deployments, a reverse proxy with TLS is essential.
 - **Database Location**: Stored in the platform-specific app data directory (e.g., AppData on Windows, Application Support on macOS, and local share on Linux). In Docker mode, data is stored in `/data/drone-logbook` (persisted via a Docker volume).
 - **API Guide**: Available API request paths and response structure is provided in the [API documentation](/docs/api-guide.md) page. 
 - **Log Files**: App logs are written to the platform-specific log directory and surfaced in Settings. In Docker mode, logs are written to stdout.
+
+## Flight Chat
+
+The **Chat** tab provides read-only analysis of the current profile using your own OpenAI or OpenAI-compatible API key. Discover models, use their default reasoning behavior, test tool calling, and ask for filtered flight searches, advanced grouped statistics, tables, or bar/line/donut charts. Chat can also explain how to use available features. Credentials and conversations use encrypted storage separate from flight backups in both desktop and Docker deployments.
+
+![Open DroneLog chat interface showing a low-battery warning search with flight results and export controls](screenshots/chat_interface.png)
+
+See the [flight chat guide](docs/chat.md) for setup, privacy, encryption-key persistence, local providers, query semantics and limits.
+
+To test functionality, use an [OpenRouter API key](https://openrouter.ai/settings/keys) with the `openrouter/free` model. Free models have usage limits and variable availability. For regular use and complex analysis, we recommend a funded API key with a paid model for more reliable access and stronger reasoning. The [OpenRouter setup instructions](docs/chat.md#try-it-with-openrouter) show the required connection settings.
+
+## External agents with MCP
+
+Open **Settings → External agents** to connect Codex, Claude Code or another MCP client to the selected profile. On desktop, enable the local MCP server and keep the application running with that profile unlocked. Docker operators must first set `ODL_MCP_ENABLED=true` and recreate the container. The HTTP endpoint is `/mcp` on the existing application server; desktop binds only to `127.0.0.1` on port 48765 by default.
+
+Generate a named token in Settings and copy it when shown. Tokens expire after 90 days, apply to exactly one profile, and can be revoked individually. Password changes invalidate existing tokens. Only token hashes are stored, separately from flight backups and chat provider keys. The Settings panel includes the endpoint and Codex/Claude Code configuration. See [MCP access](docs/mcp.md) for deployment and client setup.
+
+MCP exposes the same bounded, read-only analytics and feature-guidance tools as the built-in chat. It cannot change logs, accounts, passwords, settings or interface controls. External agents use their own model connection; the application’s saved model API key and chat history are never exposed. Chart specifications and tables are returned as structured data; rendering depends on the client.
+
 
 ## Context Management
 

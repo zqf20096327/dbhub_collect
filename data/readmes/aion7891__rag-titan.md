@@ -4,6 +4,7 @@
 
 <p align="center">
   <a href="https://pypi.org/project/rag-titan/"><img src="https://img.shields.io/pypi/v/rag-titan?label=pypi" alt="PyPI version"></a>
+  <a href="https://pepy.tech/projects/rag-titan"><img src="https://static.pepy.tech/personalized-badge/rag-titan?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads" alt="PyPI Downloads"></a>
   <a href="https://pypi.org/project/rag-titan/"><img src="https://img.shields.io/pypi/pyversions/rag-titan" alt="Python versions"></a>
   <a href="https://github.com/aion7891/rag-titan/actions/workflows/tests.yml"><img src="https://github.com/aion7891/rag-titan/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
   <a href="https://aion7891.github.io/rag-titan/"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg" alt="Documentation"></a>
@@ -27,9 +28,9 @@
 - **Many RAG types, one API.** Two today (`simple`, `adaptive`), with more on the way. Switch with one word: `rag_type="adaptive"`.
 - **Runs 100% locally** with [Ollama](https://ollama.com), so your documents never leave your machine. Or let **Claude** write the answers: `LLM_PROVIDER=claude` and your `ANTHROPIC_API_KEY`, nothing extra to install. [Setup →](https://aion7891.github.io/rag-titan/configuration/#claude-anthropic)
 - **Grounded answers.** The model answers only from your files and cites the chunks it used.
-- **Search by meaning, by exact words, or both.** `RETRIEVER=hybrid` fuses vector and BM25 keyword search (RRF), so error codes and ids are found as well as questions in other words. On the [help desk example](https://aion7891.github.io/rag-titan/retrieval/) the right file came first for 6 of 6 questions with hybrid, 5 with vectors alone and 3 with keywords alone.
+- **Search by meaning, by exact words, or both.** `RETRIEVER=hybrid` fuses vector and BM25 keyword search (RRF), so error codes and ids are found as well as questions in other words. On the [help desk example](https://aion7891.github.io/rag-titan/retrieval/) the right file came first for 6 of 6 questions with hybrid, 5 with vectors alone and 3 with keywords alone. `HYBRID_DENSE_WEIGHT`, `HYBRID_BM25_WEIGHT` and `RRF_KEEP_TOP` tune the fusion.
 - **Index once, ask later.** Save the index in one SQLite file (nothing to install), Chroma or Qdrant: `rag-titan index --files handbook.pdf --vector-store sqlite`, then ask as often as you like. Adding a file replaces its old chunks, and a mixed-up embedding model is caught. [Vector stores →](https://aion7891.github.io/rag-titan/vector-stores/)
-- **Chunking your way.** Eight chunkers: by words, characters or model tokens (tiktoken or your own tokenizer), recursive separators, and structure-aware chunkers that keep sentences, paragraphs, heading sections or pages whole. [Try them live in the chunk playground →](https://aion7891.github.io/rag-titan/playground/)
+- **Chunking your way.** Ten chunkers: by words, characters or model tokens (tiktoken or your own tokenizer), recursive separators, structure-aware chunkers that keep sentences, paragraphs, heading sections, pages or whole Markdown tables, lists and code together, and TextTiling, which cuts text without headings where the topic changes. [Try them live in the chunk playground →](https://aion7891.github.io/rag-titan/playground/)
 - **Watch every step, in your browser.** The [RAG playground →](https://aion7891.github.io/rag-titan/rag-playground/) runs the real package (Pyodide) side by side for any chunker and RAG type, and lights up each step on a live flow diagram: click a step to see the chunks it found. Recorded answers work instantly; a live mode with your own Ollama is work in progress.
 - **PDF, Word, Markdown and text files**, with paragraphs, headings and pages kept for the chunkers.
 - **Measure, don't guess.** Compare any chunker with any RAG type on your own questions in one command (`rag-titan evaluate`): recall, MRR, nDCG, answered rate and p95 time, plus every step of a run with `--trace`. [Evaluating RAG →](https://aion7891.github.io/rag-titan/evaluation/)
@@ -249,7 +250,7 @@ Click any picture to open its page.
     </td>
     <td width="50%" valign="top">
       <a href="https://aion7891.github.io/rag-titan/chunking/"><img src="https://cdn.jsdelivr.net/gh/aion7891/rag-titan@main/docs/assets/images/fixed-chunkers.svg" alt="One sentence chunked by characters, words and tokens"></a>
-      <p><b><a href="https://aion7891.github.io/rag-titan/chunking/">Chunking methods</a></b><br>All 8 chunkers explained, with formulas and animated diagrams.</p>
+      <p><b><a href="https://aion7891.github.io/rag-titan/chunking/">Chunking methods</a></b><br>All 10 chunkers explained, with formulas and diagrams.</p>
     </td>
   </tr>
   <tr>

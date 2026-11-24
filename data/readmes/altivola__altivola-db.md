@@ -1,7 +1,7 @@
 # altivola-db
 
 A light database client that runs on your own computer. One app for **PostgreSQL**, **MySQL/MariaDB**, **SQLite**,
-**SQL Server**, **MongoDB**, **Redis** and **Cloudflare D1**, plus an MCP server so AI agents can query your databases.
+**SQL Server**, **MongoDB**, **Redis** and **Cloudflare D1**, and **S3-compatible object storage**, plus an MCP server so AI agents can query your databases.
 
 ## Download
 
@@ -31,6 +31,19 @@ Then open http://localhost:7789.
 ```sh
 claude mcp add altivola-db -- docker exec -i altivola-db altivola-db mcp
 ```
+
+## Connect to object storage
+
+Add one connection per bucket. For Amazon S3, use
+`s3://<access-key>:<secret-key>@<bucket>?region=<region>`. URL-encode the
+credentials, and add `sessionToken` for temporary credentials. For an
+S3-compatible service, add `endpoint` with its S3 API URL. Cloudflare R2
+uses region `auto`.
+
+Select **Objects** to browse the bucket. Use `LIST photos/` to limit the
+list to a prefix, or `HEAD photos/banner.jpg` to inspect its metadata.
+The connection supports listing and metadata only. Grant bucket-list and
+object-read permissions to its credentials.
 
 ## More
 

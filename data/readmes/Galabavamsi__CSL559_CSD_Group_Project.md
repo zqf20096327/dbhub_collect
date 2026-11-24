@@ -4,9 +4,12 @@ A working prototype of the **micro-warehousing module** of a Blinkit-style quick
 It follows the team's High-Level Design (HLD): one module per HLD service, one Inventory Service
 that owns every stock change, and a checkout hold that makes overselling impossible.
 
-It is a *modular monolith*: a single FastAPI app with SQLite, so anyone can run it in two minutes
-with no setup. The module boundaries are the same as the HLD's service boundaries, so each part
-can later be split out, moved to PostgreSQL, or put behind Kafka without a redesign.
+It is a *modular monolith*: a single FastAPI app on PostgreSQL with PostGIS. The module boundaries are the same as
+the HLD's service boundaries, so each part can later be split out or put behind Kafka without a redesign.
+
+> **This repository is being rebuilt into JustInTimeFarm2Home** (farm to local hub to pooled home delivery, for
+> Bhilai and Bangalore). The dark-store prototype as the group left it is the tag `darkstore-final`. Until the
+> rebuild reaches each part, the text below still describes the dark-store version.
 
 ## Live demo
 
@@ -42,7 +45,12 @@ Automated tests cover these flows and the permission rules, including twenty buy
 
 ## Quick start
 
-You need Python 3.10 or newer.
+You need Python 3.10 or newer and a PostgreSQL 16 database with the PostGIS extension. With Docker, this starts one
+on `localhost:5432` (user, password and database are all `darkstore`, the app's default):
+
+```bash
+docker compose up -d postgres
+```
 
 ```bash
 # 1. Create and activate a virtual environment
@@ -52,9 +60,11 @@ source .venv/bin/activate          # Windows: .venv\Scripts\activate
 # 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Run the app (the database and demo data are created on first start)
+# 3. Run the app (the tables and demo data are created on first start)
 python -m uvicorn app.main:app --reload
 ```
+
+For a database somewhere else, set `DARKSTORE_DB=postgresql://user:password@host:5432/database` first.
 
 Then open:
 
@@ -80,8 +90,8 @@ To pick on a real phone, start the app with `python -m uvicorn app.main:app --ho
 `http://<laptop-ip>:8000/picker.html?store=1` on a phone on the same Wi-Fi. Do this only on a network you trust:
 every demo account has the same password.
 
-Two fulfilment experiments run on a throwaway copy of the demo data, so they need no server and leave
-`darkstore.db` alone: `python scripts/compare_picking.py` compares walking with and without batch picking, and
+Two fulfilment experiments run on a throwaway database beside the app's (`scripts/scratch.py`), so they need no
+server and leave its data alone: `python scripts/compare_picking.py` compares walking with and without batch picking, and
 `python scripts/simulate_orders.py` has scripted pickers clear 100 paid orders through the API, then prints the
 fulfilment KPIs beside their HLD 12 targets (`--pickers 3`, `--single`, `--step 0.2` to change the run).
 `python scripts/compare_slotting.py` does the same for slotting: the walk of 200 random orders before and after
@@ -92,23 +102,16 @@ To see where a new store should go, run `python scripts/generate_demand.py`, the
 
 ### With Docker
 
-If you have Docker, one command builds and starts the app on http://localhost:8000
-(the SQLite file is kept in a Docker volume, so data survives restarts):
+If you have Docker, one command builds and starts the app with its database on http://localhost:8000
+(the data is kept in a Docker volume, so it survives restarts):
 
 ```bash
 docker compose up --build
 ```
 
-To run the app on PostgreSQL, the HLD's database, instead of the SQLite file:
-
-```bash
-DARKSTORE_DB=postgresql://darkstore:darkstore@postgres:5432/darkstore docker compose --profile postgres up --build
-```
-
-`DARKSTORE_DB` is the only setting that changes: any PostgreSQL URL works, including a hosted database such as
-Amazon RDS (then leave out `--profile postgres`). Without Docker, set `DARKSTORE_DB` the same way before
-`python -m uvicorn app.main:app`. The app creates its tables in an empty database and migrates an existing one
-when it starts (`CONTRIBUTING.md`, "When you change the database tables").
+To use a hosted database such as Amazon RDS instead (it must have PostGIS), set `DARKSTORE_DB` to its URL. The app
+creates its tables in an empty database and migrates an existing one when it starts (`CONTRIBUTING.md`, "When you
+change the database tables").
 
 To also start Prometheus and Grafana (HLD 12 monitoring):
 
@@ -205,7 +208,7 @@ docs/                architecture notes, team plan and one guide per team member
 | 10 Network Planning | `network_planning` | Orders and turned-away lookups per H3 cell, greedy max-coverage site suggestions, no-go cells, map at `/network.html` | Demand is generated (`scripts/generate_demand.py`); no-go cells are a config list, not a zoning check |
 | 11 Rider Handoff | `fulfilment` (`riders.py`) | A rider assigned when the order is packed; `POST /v1/riders/{id}/arrive` gives the crate slot; handover takes `rider_id` and `scanned_order_id` and refuses a wrong bag (`409 wrong_bag`) or rider (`409 wrong_rider`); packed-to-handover p90 in the fulfilment KPIs | No real rider system: riders are made up from a fixed list; the desk checks riders in and scans for them |
 | Kafka | `events.py` | Events written to an outbox table; a relay pushes them to sinks (a WebSocket feed per store) and marks them published; lag shown on the dashboard | No broker yet; the relay runs inside the app |
-| PostgreSQL + Redis | `db.py`, `cache.py`, `migrations/` | SQLite by default, PostgreSQL when `DARKSTORE_DB` is a `postgresql://` URL (the tests pass on both); Alembic migrations, applied at start-up; ATP cache in each app process (Redis stand-in) | No sharding (every stock query already filters by `store_id`); on an empty database, start one app instance first (two starting together would both load the demo data); each app instance has its own cache, so another instance can be up to 2 s behind |
+| PostgreSQL + Redis | `db.py`, `cache.py`, `migrations/` | PostgreSQL with PostGIS (`DARKSTORE_DB`); cities, and hub locations as PostGIS points with a GiST index; Alembic migrations, applied at start-up; ATP cache in each app process (Redis stand-in) | No sharding (every stock query already filters by `store_id`); on an empty database, start one app instance first (two starting together would both load the demo data); each app instance has its own cache, so another instance can be up to 2 s behind |
 | Auth, gateway | `auth.py` | Login with a signed token; roles and own-store checks on every staff endpoint; audit log of staff calls (`GET /v1/audit`); per-client rate limit on the open endpoints (`429`) | No gateway or mutual TLS; the rate limit is per process and per IP address; the audit log is never pruned and skips calls with no valid token; customer endpoints are open; demo accounts share one password |
 
 Every "simplified" cell is a task in one of the member guides.

@@ -15,8 +15,9 @@ Local, source-first memory for LLM agents: SQLite, FTS5 and sqlite-vec.
   <img src="assets/mnemotree-logo.png" alt="Mnemotree Logo" width="300">
 </p>
 
-Mnemotree keeps every message exactly as written and recalls attributed source spans
-instead of rewritten summaries.
+Mnemotree stores every message exactly as written and recalls the original passages
+with their speaker and time. By default it runs no LLM on write or on recall, so you
+get back what was said, not a model's summary of it.
 
 - **Durable:** sources, chunks, both indexes and an idempotency receipt commit in one
   transaction.
@@ -30,7 +31,25 @@ The default install needs only Pydantic, sqlite-vec and tiktoken. See
 [Benchmarks](#benchmarks) for the Agent Memory Leaderboard result and end-to-end
 results on LoCoMo and LongMemEval.
 
+## Try it in Claude Code
+
+Add the published MCP server to give Claude local memory tools.
+
+```bash
+claude mcp add mnemotree -- uvx mnemotree-mcp
+```
+
+Ask Claude to remember something, start a new session, and ask about it.
+The default embedding model runs locally and needs no API key.
+[MCP server](#mcp-server) covers configuration and other clients.
+
+The Claude Code plugin adds automatic capture and recall per project. Its marketplace
+launcher requires `mnemotree-mcp` 1.2.0 or later on PyPI. Recalled passages become part
+of the context sent to Claude. [Plugin setup and data handling](docs/GUIDE.md#claude-code-plugin)
+
 ## Install
+
+For the Python library:
 
 ```bash
 pip install mnemotree
@@ -64,6 +83,15 @@ asyncio.run(main())
 
 `Memory` binds one namespace and offers `remember`, `remember_many`, `recall`, `get`
 and `forget`. Pass an `embedder` for hybrid retrieval.
+
+[examples/](examples) has three scripts to start from:
+
+- [chat_with_memory.py](examples/chat_with_memory.py) is a chat loop that remembers
+  across runs, against any OpenAI-compatible server, Ollama included.
+- [multi_user.py](examples/multi_user.py) keeps one memory per user in a single
+  database, with idempotent writes and deletion. It runs offline.
+- [service_backend.py](examples/service_backend.py) calls the HTTP service from your
+  own backend.
 
 ## Benchmarks
 
@@ -119,7 +147,23 @@ same five tools over stdio, with semantic search on a local embedding model. It
 needs no API key or configuration:
 
 ```bash
-claude mcp add mnemotree -- uvx mnemotree-mcp
+claude mcp add mnemotree -- uvx mnemotree-mcp   # Claude Code
+codex mcp add mnemotree -- uvx mnemotree-mcp    # Codex
+pi mcp add mnemotree -- uvx mnemotree-mcp       # Pi
+```
+
+Claude Desktop, Cursor and VS Code take the same command as a JSON entry. The guide
+lists [the file each client reads](docs/GUIDE.md#client-setup), and the entry for OpenCode.
+
+```json
+{
+  "mcpServers": {
+    "mnemotree": {
+      "command": "uvx",
+      "args": ["mnemotree-mcp"]
+    }
+  }
+}
 ```
 
 The first start downloads the English-only
@@ -130,6 +174,7 @@ model (about 200 MB) to `~/.mnemotree/models`; the server answers while it loads
 | --- | --- | --- |
 | `MNEMOTREE_DB` | `--db` | `~/.mnemotree/memory.sqlite` |
 | `MNEMOTREE_NAMESPACE` | `--namespace` | `default` |
+| `MNEMOTREE_PROJECT=1` | `--project` | off: one namespace per project when on |
 | `MNEMOTREE_CONFIG` | `--config` | local model |
 | `MNEMOTREE_LEXICAL=1` | `--lexical` | off |
 

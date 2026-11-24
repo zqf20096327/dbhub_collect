@@ -33,7 +33,7 @@
   <a href="docs/providers.md">Provider notes</a>
 </p>
 
-> **Status: beta.** The `--json` contract is versioned (currently `1.5.0`, JSON
+> **Status: beta.** The `--json` contract is versioned (currently `1.6.0`, JSON
 > Schema published in [`schema/`](schema/)) and breaking changes to it are
 > treated as breaking changes to the tool. The human-readable report is **not**
 > a stable interface — parse `--json`, not the terminal output.
@@ -255,6 +255,7 @@ Every command takes the connection the same way — an argument, `$DATABASE_URL`
 | `ask "…"` · `explain` | a plain-language AI reading of the same deterministic findings |
 | `explain-finding <id>` | the catalogue page for a finding, offline |
 | `mcp` | serve the findings to an AI agent over MCP |
+| `monitor` | scheduled checks with native notifications on your Mac (macOS only) — see [PgBot Monitor](#pgbot-monitor--macos-notifications) |
 | `config` · `baselines` | manage `.pgbot.toml` and the local baseline store |
 
 Key `inspect` flags:
@@ -755,7 +756,8 @@ are case-insensitive).
   placeholders need no values; older servers plan queries with literal values.
 - Only a **single plain SELECT** is accepted — no writes, no `WITH`, no multiple
   statements (exit 64 otherwise). pgbot never uses the executing form of EXPLAIN.
-- `--json` prints the raw `EXPLAIN (FORMAT JSON)` output.
+- `--json` prints the raw `EXPLAIN (FORMAT JSON)` output; it cannot be combined
+  with `--ai` (exit 64).
 - `--ai` appends a model's prose reading of the same rendered plan, behind the
   disclosure prompt below. Unlike the findings, **your SQL text can carry literal
   values**, so the prompt names exactly what is sent: the query and its plan.
@@ -772,8 +774,9 @@ or the key is unset, the deterministic report still stands.
 
 With a remote model, this sends the same PII-free Context shown by
 `inspect --json`. Before sending it, pgbot identifies the provider, host, and
-model and asks for confirmation. Local endpoints are identified as local and do
-not require confirmation.
+model and asks for confirmation. When stdin is not a terminal (CI, a pipe, a
+container) there is no one to ask, so pgbot refuses to send unless `--yes` is
+given. Local endpoints are identified as local and do not require confirmation.
 
 | Provider | Key | Default model | API |
 |---|---|---|---|
@@ -907,13 +910,13 @@ rates; the rest are point-in-time reads trended against the baseline.
 ## The `--json` contract
 
 `--json` (and `--format=json`) is the interface to build on — a versioned,
-PII-free document (`schema_version`, currently `1.5.0`) whose machine-checkable
+PII-free document (`schema_version`, currently `1.6.0`) whose machine-checkable
 JSON Schema is published in [`schema/`](schema/). Every section carries an
 `exactness` label — `sampled`, `cumulative`, `scraped`, or `unavailable` — so a
 consumer never mistakes a cumulative total for a live rate.
 
 Versioning policy: additive fields bump the minor version and are not breaking —
-a `1.4.0` consumer parses `1.5.0` output unchanged; breaking changes to the
+a `1.5.0` consumer parses `1.6.0` output unchanged; breaking changes to the
 contract are treated as breaking changes to the tool. `pgbot advise --json` has
 its own schema
 ([`schema/pgbot-advise-1.0.0.json`](schema/pgbot-advise-1.0.0.json)).
@@ -1082,6 +1085,106 @@ of reach over SQL — that's their boundary, not a pgbot flag away.
 > connectable database on the server. Cluster-wide findings (settings, replication,
 > archiving, wraparound) are reported once; per-database findings appear per
 > database. Serial by default (`--parallel N` to fan out).
+
+## PgBot Monitor — macOS notifications
+
+One command turns pgbot into a personal health assistant for one database:
+
+```
+pgbot monitor
+```
+
+It walks you through setup — pick up `$DATABASE_URL` (or paste a URL, input
+hidden), choose how often to check, choose what's worth a notification — then
+checks on a schedule and tells you in Notification Center when something
+changes. No daemon, no cloud, no account, no API key, nothing installed in your
+database.
+
+```
+🐘 PgBot Monitor
+─────────────────────────────────
+✓ Database connection found
+  Host            db.example.com
+  Database        production
+Use this database? [Y/n]
+✓ Connected successfully!   PostgreSQL 18.1 · Read-only sessions · pg_monitor ✓
+
+How often should I check your database?
+    1. Every hour
+    2. Every 6 hours
+  ❯ 3. Every day (Recommended)
+    4. Every week
+…
+🐘 PgBot is watching your Postgres!
+Health score: 98/100 · Next check: Tomorrow at 9:00 AM
+You can safely close this terminal.
+```
+
+A notification looks like:
+
+> **⚠️ PgBot · Production needs attention**
+> Health 82/100. Connection usage reached 87%. Queries are 3.2× slower.
+
+**What you're told about.** By default (*Important changes only*): a new warning
+or critical, a warning that becomes critical, issues that resolve, and the
+database becoming unreachable or reachable again — once each, never the same
+unchanged problem on every run. *Critical issues only* narrows that to
+criticals and connectivity; *Every health check* sends a summary after each
+run. Findings are compared by finding id + object, the same identity
+`.pgbot.toml` `[[ignore]]` rules use, and suppressed findings never notify. Every
+number in a notification comes from the same deterministic findings and health
+score `pgbot inspect` prints; a check that couldn't see everything (for example
+a role without `pg_monitor`) never claims "healthy".
+
+| Command | |
+|---|---|
+| `pgbot monitor status` | state, last result, next check, recent activity |
+| `pgbot monitor now` | run a check immediately |
+| `pgbot monitor test` | send a test notification |
+| `pgbot monitor edit` | change database, schedule or notifications |
+| `pgbot monitor pause` · `resume` | stop / restart the schedule, keeping settings (`resume` also repairs a moved pgbot binary) |
+| `pgbot monitor stop` | remove the schedule; asks whether to delete settings and the saved connection (`--purge` to do so non-interactively) |
+
+**How scheduling works.** Setup installs a per-user launchd LaunchAgent,
+`~/Library/LaunchAgents/dev.pgbot.monitor.plist`, which starts
+`pgbot monitor _run`; it runs one inspection, compares it with the previous one,
+notifies if needed, and exits. Hourly and 6-hourly checks use `StartInterval`;
+daily and weekly use `StartCalendarInterval` in your Mac's time zone (9:00 AM
+stays 9:00 AM across daylight saving). No `sudo`, no background process between
+checks. The schedule points at a durable pgbot path — running from an `npx`
+cache is refused with install instructions (`brew install pgrundev/tap/pgbot`
+or `npm i -g @pgbot/cli`).
+
+**When your Mac is asleep or off.** Checks only run while the Mac is awake and
+you're logged in. A daily or weekly check missed during sleep runs once on
+wake; hourly and 6-hourly checks skip the missed interval and continue on the
+next one. Nothing runs while the Mac is off or you're logged out. This is a scheduled check-up from your
+laptop, **not** 24/7 server monitoring — for paging on production, use a
+server-side monitoring system (pgbot's `--format=prometheus` can feed one).
+
+**Enabling notifications.** Banners come from **PgBot** — with the elephant
+icon — via a tiny helper app pgbot builds on first use at
+`~/Library/Application Support/PgBot/PgBot.app` (an AppleScript applet made with
+the tools that ship with macOS; nothing is downloaded). The first banner makes
+macOS ask whether PgBot may send notifications: click **Allow**. If
+`pgbot monitor test` shows nothing: System Settings → Notifications → PgBot →
+Allow Notifications, and check that a Focus mode isn't silencing it. (If the
+helper can't be built, pgbot falls back to `osascript`, and banners appear under
+**Script Editor** instead.) pgbot can tell that macOS *accepted* a notification,
+never that you *saw* it — setup asks you.
+
+**Credentials.** The connection string is stored only in your login Keychain
+(service `dev.pgbot.monitor`), with your explicit consent during setup. It is
+never written to the plist, config, state, logs or a command line. Non-secret
+settings live in `~/Library/Application Support/PgBot/monitor/` (`config.json`,
+`state.json`, mode 0600); the log is `~/Library/Logs/PgBot/monitor.log` (kept
+small, secrets redacted). `~/.pgpass` and `PGSERVICE` connections keep working:
+their file locations are remembered, not their contents. Access stays read-only
+— the same role and read-only sessions as `pgbot inspect`.
+
+**Uninstall.** `pgbot monitor stop --purge` removes the LaunchAgent, the
+Keychain item, the PgBot.app notifier and the monitor's settings. Your baseline history (used by
+`inspect`, `diff`, `why`) is left alone.
 
 ## CI integration
 

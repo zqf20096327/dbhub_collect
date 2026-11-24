@@ -6,7 +6,7 @@
 
 - **端到端请求链路**：虚构请求人/审批人身份与租户校验 → FastAPI → LangGraph 确定性路由 → SQLite 只读订单、政策 RAG、本地模拟物流 HTTP API 或演示审批 → 结构化答复与运行记录。
 - **可核验的政策问答**：政策来源引用、证据展示、无证据安全降级，以及针对退款时限、质量问题、物流和隐私边界的约束规则。
-- **可靠性与安全边界**：租户隔离、审批人演示角色、自批拒绝、提示注入拒答、checkpoint 完整性预检、锁文件与 CI。
+- **可靠性与安全边界**：Customer/Service/Approver/Admin 的租户内权限、审批任务分配与自批拒绝、checkpoint 完整性预检、锁文件与 CI。RAG 引用白名单不等于语义 grounding；离线边界测试记录了无关/冲突/注入证据的剩余风险。
 - **可运行的演示界面**：Vue 3 + Vite 展示对话、平台订单/物流、售后资格和明确确认后的 MockShop 演示申请。
 - **学习材料与验收证据**：五章代码导读、故障案例库、需求追踪矩阵和运行验证记录。
 
@@ -16,7 +16,7 @@
 
 **技术栈：** Python 3.12 · FastAPI · SQLite · LangChain · LangGraph · Chroma · SiliconFlow/Qwen · Vue 3 · Vite · Docker
 
-**当前验证摘要：**本机 V2.1 电商扩展全量 pytest 93 项通过、Vue production build 和 Compose 静态配置通过；Agent 路由 35/35、订单参数 8/8。本轮新代码尚未同步到 WSL，因此不能将新 MockShop 容器链路标记为已验收。历史 WSL/V2.1 reinforcement 结果见项目状态文档。
+**当前验证摘要（2026-11-23）：**本机全量 pytest **145 passed**；WSL 实际部署后三容器 healthy，SQLite schema 检查及 Phase 6/V2.1 verifier 通过，认证 `/chat` 对节假日问题返回与 POL-06 一致的直接答复。OOS-v2 15-case 回归中，Hit@4、Macro Recall@4、答案要点筛查、拒答要点筛查和引用来源匹配均为 100%，规则筛查 Bad Case 为 0；这些筛查结果不等于语义准确率，OOS-v2 是已观察回归集而非盲测。逐案例答复与证据留存在 [`OOS-v2 答复档案`](data/evaluation/oos/rag_oos_v2_holdout_answers.json)。人工回看发现并修正 HOLDOUT-07 对已明确退款工作日规则的矛盾拒答。GitHub Actions 负责锁定依赖、全量测试、Vue 构建、Compose 配置和容器 smoke。更多边界和逐例记录见 [`OOS-v2 报告`](data/evaluation/oos/rag_oos_v2_holdout_report.md) 与 [`分诊复核`](data/evaluation/oos/rag_oos_v2_manual_triage.md)。
 
 ## 项目架构
 
@@ -24,13 +24,15 @@
 flowchart LR
   U[访客 / Vue 3 页面] -->|Bearer Demo Token + JSON| V[Vite /api 代理]
   V --> F[FastAPI API]
-  F --> A[演示身份与租户校验]
+  F --> A[Bearer 主体 → tenant membership / role / customer]
   A --> G[LangGraph 路由与状态流]
   G -->|订单查询| S[(SQLite 订单与运行记录)]
   G -->|政策问答| R[LangChain RAG]
   R --> C[(Chroma 政策向量库)]
   R --> M[SiliconFlow Embedding / Qwen]
   G -->|退款申请| H[SQLite Checkpoint / 演示审批]
+  H --> T[(SQLite assigned approval tasks)]
+  A -->|Customer owner / Service grant / Admin scope| S
   G -->|物流查询| L[本地模拟 Logistics HTTP API]
   G -->|电商订单 / 售后资格| I[MockShop Adapter]
   I -->|HTTP| P[本地 MockShop API]
@@ -38,7 +40,7 @@ flowchart LR
   G --> F --> V --> U
 ```
 
-Vue 只调用本地 FastAPI；模型 Key 保留在后端 `.env`。订单查询为只读；退款批准只记录演示状态 `approved_demo`。Docker/WSL 用于运行后端与持久化数据，开发前端单独通过 Vite 启动。
+Vue 只调用本地 FastAPI；模型 Key 保留在后端 `.env`。Customer 只读本人订单，Service 需要客户授权，Approver 仅访问分配任务，Admin 管理操作受 tenant 限制。订单查询为只读；退款批准只记录演示状态 `approved_demo`。Docker/WSL 用于运行后端与持久化数据，开发前端单独通过 Vite 启动。
 
 项目重视真实理解与工程取舍，不堆叠技术；通过代码、运行观察和评估展示完整链路。当前使用模拟数据，不是生产客服系统，不执行真实退款、改址或删除操作。
 
@@ -67,10 +69,13 @@ uv sync --locked --extra dev --default-index https://mirrors.aliyun.com/pypi/sim
 
 - `demo-a-local-token` → `user-demo-a` → `demo-a`
 - `demo-a-approver-local-token` → `user-demo-a-approver` → `demo-a` → 演示审批人
+- `demo-a-approver-alt-local-token` → 同租户备用演示审批人
+- `demo-a-service-local-token` → 同租户客服；只可访问管理员授予的客户范围
+- `demo-a-admin-local-token` → 同租户管理员；可管理本租户用户角色/客服授权/审批分配，但不能因此读取所有订单
 - `demo-b-local-token` → `user-demo-b` → `demo-b` → 店铺 B 请求人
 - `legacy-demo-local-token` → `user-legacy-demo` → `legacy-demo`
 
-请求使用 `Authorization: Bearer demo-a-local-token`。服务端从令牌映射虚构用户、租户和演示角色，不信任调用方传入的 `X-Tenant-ID`。请求人不能批准自己的请求；同租户的另一个演示审批身份可以记录批准或拒绝。可在本地 `.env` 覆盖四枚 Demo Token。它们是公开的演示选择器，不是真实认证凭据，不用于保护真实数据。
+请求使用 `Authorization: Bearer demo-a-local-token`。令牌只映射主体；服务端从 SQLite 的租户成员表读取角色和客户绑定，不信任调用方传入的 user/tenant/role。Customer 只读自己的订单；Service 需同租户有效客户授权；Approver 仅能查看分配给自己的审批任务；Admin 管理范围被限制在所属租户且不自动获得订单权限。审批决定只写入演示任务状态，不执行真实退款。公开令牌仍是演示选择器，不是真实认证凭据，不用于保护真实数据。
 
 SQLite 默认写入 `data/support_agent.db`。删除该文件会重建演示数据库；它是本地运行数据，不应提交到 Git。
 
@@ -125,7 +130,7 @@ python scripts/ask_policy.py "定制商品出现质量问题怎么办？"
 
 ## 人工审批（阶段 4）
 
-退款请求会暂停并保存在 `data/checkpoints.sqlite`，等待显式批准或拒绝。批准只写入 `approved_demo` 状态，不修改订单、不执行退款。`POST /chat` 返回待审批 `thread_id` 后，可通过 Swagger 查看状态并调用 `POST /approvals/{thread_id}/decision` 恢复流程。决定接口要求同租户独立的演示审批身份并阻止请求人自批；令牌仍为公开演示值，不构成生产 RBAC。
+退款请求会暂停并保存在 `data/checkpoints.sqlite`，同时建立带 tenant、requester、actor、approver 和状态的 SQLite 审批任务。只有被分配的独立演示审批人能查看/决定；审批人自己发起的请求在创建任务前以 `forbidden_role` 拒绝。批准只写入 `approved_demo` 状态，不修改订单、不执行退款。`POST /chat` 返回待审批 `thread_id` 后，可通过 Swagger 查看状态并调用 `POST /approvals/{thread_id}/decision` 恢复流程；恢复前会按当前认证身份重新核验分配。令牌仍为公开演示值，不构成生产 RBAC。
 
 ### 本地模拟物流 API
 
@@ -135,7 +140,7 @@ Compose 启动 `mock-logistics`、`mock-shop` 和 Agent 三个本地服务。Age
 
 运行 `python scripts/evaluate_agent_routes.py` 评估标注路由、订单参数和临时数据库工具结果；运行 `python scripts/evaluate_agent_safety.py` 检查写操作边界；`pytest` 执行故障注入和 API 回归。RAG 评估使用 `python scripts/evaluate_retrieval.py`，需本机配置 SiliconFlow Key。评估口径、已知 Bad Case 和追踪字段见 [`docs/evaluation_and_observability.md`](docs/evaluation_and_observability.md)。每个 API 响应均带 `X-Trace-ID`，日志为 JSON 并输出到标准输出。
 
-RAG 答案层增加了可审计的政策约束规则，详细人工复核和 Top-4/Top-8 输出见 [`docs/rag_answer_manual_review.md`](docs/rag_answer_manual_review.md) 与 `data/evaluation/v2_rag_answers_constraints_v3.json`。用户于 2026-11-16 报告该约束层已同步到 WSL，健康检查通过且 11 个业务用例全部 PASS。
+RAG 答案层增加了可审计的政策约束规则，详细人工复核和 Top-4/Top-8 输出见 [`docs/rag_answer_manual_review.md`](docs/rag_answer_manual_review.md) 与 `data/evaluation/v2_rag_answers_constraints_v3.json`。OOS Markdown 报告同时生成结构化 Bad Case ledger；初筛类别不是根因，须人工复核。最近的 RAG 无关/冲突/注入边界特征测试使用假模型，不计作真实模型安全或正确率证据。
 
 ## 端到端演示
 
@@ -159,9 +164,9 @@ docker compose ps
 
 首次 Docker 部署前，在项目虚拟环境中先运行一次 `python scripts/index_policies.py`，生成本机 `data/vector_store/`；该向量库被 Git 和 Docker 构建上下文排除，避免依赖未跟踪的本机文件。Compose 会从 `.env` 读取模型凭据和数据路径；订单库、审批 checkpoint 和 Chroma 向量库都保存在挂载的数据目录。等待容器状态为 `healthy` 后再打开 API 文档。
 
-从 WSL `/opt/project2` 运行 `bash scripts/verify_phase6.sh` 可检查原有 Agent 主链。新增 `bash scripts/verify_v21.sh` 覆盖两店铺隔离、售后资格与幂等申请、Webhook 签名、重复事件和状态同步。更新脚本会依次运行这两份验收；失败时返回非零状态。
+从 WSL `/opt/project2` 运行 `bash scripts/verify_phase6.sh` 可检查原有 Agent 主链。新增 `bash scripts/verify_v21.sh` 覆盖两店铺隔离、售后资格与幂等申请、Webhook 签名、重复事件和状态同步。`scripts/update_wsl_and_verify.sh` 会先等待服务健康，再只读核验 SQLite 完整性、schema version 和店铺范围复合主键，最后运行 RAG smoke 与两份业务验收；失败时返回非零状态。
 
-上一版政策约束层曾在 WSL `/opt/project2` 完成验收（health 200、11 项通过）。本次 V2.1 电商集成尚未同步验证。若 D 盘源码有改动，可在 Ubuntu WSL 会话运行 `bash /mnt/d/project_2/scripts/update_wsl_and_verify.sh`，将新 Adapter/MockShop 文件同步到 `/opt/project2`、重建 Compose 服务并运行两份验收；该操作会短暂重启服务，并保留 D 盘 `data/` 挂载。不要从 Windows checkout 执行 Compose `up`。
+2026-11-23 实际 WSL 验收：三容器 healthy，SQLite `integrity_check=ok`、`user_version=1`，Webhook event 和平台订单状态主键包含平台/租户/店铺维度；Phase 6 与 V2.1 verifier 全 PASS。后端变更继续使用既有 WSL 同步流程，不要从 Windows checkout 执行 Compose `up`。
 
 Dockerfile 将依赖安装与本地源码安装分层，修改源码时可复用依赖缓存；pip 使用 TUNA 镜像并放宽下载超时。
 
@@ -184,4 +189,4 @@ V1 资产来源、字段差异和 RET-01/QUA-01 对照见 [`docs/migration.md`](
 
 ## 当前边界
 
-Bearer 演示令牌映射到固定虚构用户和租户；它不是生产认证。`GET /agent-runs/{run_id}` 只返回当前身份租户内的最小执行记录，不保存原始问题。退款审批只记录演示状态，不执行真实业务操作。用户于 2026-11-16 报告演示 Bearer 身份接口已同步到 WSL，健康检查通过且 11 个业务用例全部 PASS；这是用户提供的运行验收结果。
+Bearer 演示令牌映射到固定虚构用户和租户；它不是生产认证。`GET /agent-runs/{run_id}` 只返回当前身份拥有的最小执行记录，不保存原始问题。退款审批只记录演示状态，不执行真实业务操作。最新 WSL 运行验收是用户报告结果：三容器 healthy，phase6 与 V2.1 verifier 全通过；不代表生产认证或真实平台集成。

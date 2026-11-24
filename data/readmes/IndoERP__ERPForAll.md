@@ -155,27 +155,31 @@ packaging.
 
 ## Get started
 
-You need Rust (rustup installs the version pinned in `rust-toolchain.toml`), PostgreSQL 18, and for the web client
-Node and pnpm at the versions pinned in `scripts/web-toolchain.sh`. It runs on Unix-like systems (Linux, macOS); Windows is not supported.
+On Linux (x86_64) or macOS (Apple silicon) with Rust (via [rustup](https://rustup.rs)), git, rsync and curl, and
+either Docker or a local PostgreSQL 18, one command builds ERPForAll, creates a database with demo data and starts
+the server:
 
 ```sh
 git clone https://github.com/IndoERP/ERPForAll.git
 cd ERPForAll
-cargo build --release -p erp-cli --bin erp -p erp-ui-compiler-cli --bin erp-ui-compile
+scripts/install.sh
 ```
 
-From there, [docs/install.md](docs/install.md) takes you step by step to a running server with the web client:
-database roles, the web client build, the configuration, `erp db init` and `erp server`. To check a change:
-`scripts/check.sh` (format, lints, build), `scripts/check.sh --tests` to add the test suites.
+The first run compiles the project, which takes a while; the script prints the build time. When it finishes it prints
+the address (<http://127.0.0.1:8069/erp>), the login `admin` and the file that holds the generated password. Run it
+again later to start what is stopped, and `scripts/install.sh --reset --yes` to remove what it created. Everything it
+owns lives under `~/.erpforall/local`. `scripts/install.sh --help` lists the flags (a PostgreSQL server of your own,
+another port, another module list, `--dry-run`).
 
-A one-command local setup with demo data is not available yet. It is one of the first things we would like help with.
+The script automates the manual steps in [docs/install.md](docs/install.md), which stay the reference for a custom
+setup: database roles, the web client build, the configuration, `erp db init` and `erp server`. To check a change:
+`scripts/check.sh` (format, lints, build), `scripts/check.sh --tests` to add the test suites.
 
 ## Roadmap
 
 - **Now:** complete the early business applications: deeper order-to-invoice and purchase-to-bill workflows,
   bank statements and warehouse traceability.
-- **Next:** the remaining view types (gantt, map and others), a design pass over the whole web client, and a simple
-  local setup.
+- **Next:** the remaining view types (gantt, map and others), and a design pass over the whole web client.
 - **Later:** measured performance work, and more business applications built as addons.
 
 ## Contributing

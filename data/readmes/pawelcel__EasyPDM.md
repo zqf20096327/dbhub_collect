@@ -13,9 +13,10 @@
 [3. Projects and structure](https://youtu.be/ZB3pXQY6-e0) ·
 [4. From CAD to PDM — the upload macro](https://youtu.be/vMQPxwWQrGc) ·
 [5. A whole assembly — upload, download, update and drawings](https://youtu.be/vXHYbRlPu_s) ·
-[6. Every field of a part — statuses, locks, materials and processes](https://youtu.be/JxMLm7bmuck)
+[6. Every field of a part — statuses, locks, materials and processes](https://youtu.be/JxMLm7bmuck) ·
+[7. PDM → Drawing — the title block fills itself in](https://youtu.be/ZJiMQNJRsB0)
 
-📖 **[Wiki](https://github.com/pawelcel/EasyPDM/wiki)** — installation, using EasyPDM, the CAD integrations (with where the drawing sheets are), settings; with screenshots. The FreeCAD and SolidWorks add-ons have wikis of their own: [FreeCAD](https://github.com/pawelcel/EasyPDM-FreeCAD-Addon/wiki), [SolidWorks](https://github.com/pawelcel/EasyPDM-SolidWorks-Addon/wiki); SolidCraft, step by step: [its page on this wiki](https://github.com/pawelcel/EasyPDM/wiki/SolidCraft).
+📖 **[Wiki](https://github.com/pawelcel/EasyPDM/wiki)** — installation, using EasyPDM, the CAD integrations (with where the drawing sheets are), settings; with screenshots. The FreeCAD, SolidWorks and SolidCraft add-ons have wikis of their own: [FreeCAD](https://github.com/pawelcel/EasyPDM-FreeCAD-Addon/wiki), [SolidWorks](https://github.com/pawelcel/EasyPDM-SolidWorks-Addon/wiki), [SolidCraft](https://github.com/pawelcel/EasyPDM-SolidCraft-Addon/wiki).
 
 EasyPDM is where your Parts and Assemblies get one, shared order for the whole team:
 every item has its own number, revision, status and change history, and assemblies get
@@ -42,6 +43,11 @@ my own use, and since it already exists and works — why not share it with othe
   in by hand every time, so names don't drift apart between projects.
 - **Search across the whole company database**, not just the current project — handy
   when you want to check whether a similar part already exists somewhere.
+- **Drawing sheets filled in for you** — in FreeCAD and SolidWorks the title block takes the
+  name, drawing number, revision, material, processes and company logo straight from EasyPDM,
+  and who drew and who approved the drawing are written into its PDF at review and release.
+  An assembly drawing in FreeCAD also gets a parts list, numbered as the structure in EasyPDM,
+  and its balloons the same numbers ([details and screenshots](https://github.com/pawelcel/EasyPDM/wiki/CAD-Integrations#drawing-sheets)).
 - **Item locking** — while you're working on something, no one else can overwrite your
   changes without your consent (an administrator can take over or release someone
   else's lock if needed — e.g. when the owner is away).
@@ -123,7 +129,7 @@ Installation and details:
 - SolidWorks (add-in with an EasyPDM tab and document panel, macros, drawing sheet; in its own repository): [pawelcel/EasyPDM-SolidWorks-Addon](https://github.com/pawelcel/EasyPDM-SolidWorks-Addon), with [its wiki](https://github.com/pawelcel/EasyPDM-SolidWorks-Addon/wiki)
 - Autodesk Inventor: [`EasyPDM.Inventor/README.md`](EasyPDM.Inventor/README.md)
 - SolidCraft (plugin + the EasyPDM SolidCraft companion, since SolidCraft plugins have no network):
-  **[installing step by step](https://github.com/pawelcel/EasyPDM/wiki/SolidCraft)** on the wiki; in its own
+  **[installing step by step](https://github.com/pawelcel/EasyPDM-SolidCraft-Addon/wiki/Installation)** on its wiki; in its own
   repository, [pawelcel/EasyPDM-SolidCraft-Addon](https://github.com/pawelcel/EasyPDM-SolidCraft-Addon)
 
 **Upload** — you have a saved file open, you click Upload. Your browser opens

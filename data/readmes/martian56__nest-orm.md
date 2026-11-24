@@ -22,6 +22,8 @@ with PostgreSQL 16 and 17, MySQL 8.0.43, and bundled SQLite.
 - INSERT ... RETURNING on PostgreSQL and SQLite to read generated columns.
 - Transactions: begin, commit, rollback, and a transaction() helper that commits
   on success and rolls back on error.
+- A connection pool, shared between goroutines, that replaces broken
+  connections.
 - Typed text, integer, decimal, boolean, and SQL NULL values.
 - A common result type with indexed and named row access.
 - Compile-time model mapping through `FromRow`.
@@ -142,6 +144,37 @@ MySQL does not support `INSERT ... RETURNING`; Nest reports that combination at
 query compilation, and MySQL-generated ids remain available as
 `last_insert_id`.
 
+## Aggregates, locks, upserts, and more
+
+```rust
+// Aggregates and grouping.
+let revenue = fetch_all(db, select("orders").column("store_id").count_as("orders").sum_as("total_cents", "revenue").group_by("store_id"))?
+let n = count(db, select("products").where_eq("active", boolean(true)))?
+let taken = exists(db, select("users").where_eq("email", text(email)))?
+
+// Typed fetches.
+let user: Option[User] = fetch_one(db, select("users").where_eq("id", integer(id)))?
+let items: list[Item] = fetch_models(db, select("items").where_ilike("name", text("%mug%")).page(2, 20))?
+
+// Row locks inside a transaction, and claiming queue work.
+fetch_all(tx, select("inventory").where_eq("variant_id", integer(v)).for_update())?
+fetch_all(tx, select("jobs").where_eq("state", text("ready")).limit(1).for_update_skip_locked())?
+
+// Atomic counters with a guard, and RETURNING on update and delete.
+update_all(tx, update("inventory").decrement("on_hand", qty).where_eq("variant_id", integer(v)).where_raw("on_hand >= ?", [integer(qty)]).returning("on_hand"))?
+
+// Upserts.
+insert_one(db, insert_into("cart_items").value("cart_id", integer(c)).value("variant_id", integer(v)).value("qty", integer(1)).on_conflict_update(["cart_id", "variant_id"], ["qty"]))?
+```
+
+- `count_as`, `count_column_as`, `sum_as`, `avg_as`, `min_as`, `max_as`, `distinct`, and `group_by` on selects.
+- `for_update`, `for_update_skip_locked`, `for_update_nowait`, and `for_share` on PostgreSQL and MySQL; SQLite reports an error, since it locks the whole database.
+- `where_ilike` matches case-insensitively on every dialect. `where_raw(sql, values)` and `or_where_raw` take a fragment with `?` for each value and always bind the values as parameters.
+- `page(page, per_page)` sets LIMIT and OFFSET.
+- `increment` and `decrement` on updates, and `returning` on updates and deletes, as well as inserts.
+- `on_conflict_do_nothing(columns)` and `on_conflict_update(columns, updates)` on inserts, translated to `ON DUPLICATE KEY UPDATE` on MySQL.
+- `fetch_models`, `fetch_one`, `count`, and `exists`.
+
 ## Transactions
 
 Use `transaction` to commit a successful closure or roll back its error:
@@ -159,6 +192,49 @@ let result = transaction(
 `begin`, `commit`, and `rollback` are also public for explicit control. The
 helper preserves the closure's original error if its best-effort rollback also
 fails.
+
+## Connection pools
+
+A server handles many requests at once, and one database connection runs one
+query at a time. `pool` keeps up to `max_size` connections and hands one to
+each caller:
+
+```rust
+from "github.com/martian56/nest-orm" import fetch_all, select
+from "github.com/martian56/nest-orm/pool" import pool
+from "github.com/martian56/nest-orm/postgres" import Postgres, postgres
+from "github.com/martian56/raven-postgres" import connect
+
+let db = pool(
+    10,
+    () => match connect("127.0.0.1", 5432, "app", "secret", "shop") {
+        case Ok(c) { Ok(postgres(c)) }
+        case Err(e) { Err(e) }
+    },
+)?
+
+let users = fetch_all(db, select("users"))?
+db.transaction((tx: Postgres) -> Result[QueryResult, Error] => place_order(tx, cart))?
+```
+
+A `Pool` is an `Executor`, so every query helper takes it directly and runs
+the query on one pooled connection. Use `db.transaction(body)` or
+`db.with(body)` when several statements must share a connection. Share one
+pool between goroutines: callers wait while all connections are in use.
+
+Transactions and migrations need one connection, so use `db.transaction(body)`
+and `db.migrate(migrations)` on a pool; the free `transaction`, `begin`, and
+`migrate` functions refuse one.
+
+`pool` opens one connection immediately, so a wrong address or password fails
+at startup. A connection that fails in a way that ends its session (a network
+error, or a Postgres `FATAL`) is closed instead of reused, and a replacement
+opens on demand; an ordinary SQL error keeps the connection. `db.stats()`
+reports open, idle, and in-use counts, and `db.shutdown()` closes the pool.
+
+An adapter decides which errors end a connection through
+`Executor.reusable_after(error)`, and releases its handle in
+`Executor.close()`. Both have defaults.
 
 ## MySQL SQL modes
 
@@ -238,6 +314,10 @@ trait Executor {
     fun dialect(self) -> Dialect
 
     fun run(self, query: CompiledQuery) -> Result[QueryResult, Error]
+
+    fun close(self) {}                                    // optional
+
+    fun reusable_after(self, error: Error) -> bool { ... } // optional
 }
 ```
 
@@ -274,7 +354,7 @@ shell script to keep the database containers running after tests.
 
 - Values use the text parameter formats exposed by the three current drivers.
 - Results are collected in memory; streaming cursors are not implemented.
-- Upserts, aggregates, subqueries, connection pools, relations, eager loading,
+- Subqueries, relations, eager loading,
   and derive-generated model mappings are not implemented yet.
 - Migration SQL is intentionally explicit because column types and many DDL
   operations differ across databases.

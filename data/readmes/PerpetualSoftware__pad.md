@@ -208,7 +208,7 @@ make build
 cp pad ~/.local/bin/   # or /usr/local/bin/
 ```
 
-Requires Go 1.26+ and Node.js 22+. Alternatively, `nix develop` provides a shell with the exact Go and Node versions pinned — see the [Nix](#nix) section below.
+Requires Go 1.27+ and Node.js 22+. Alternatively, `nix develop` provides a shell with the exact Go and Node versions pinned — see the [Nix](#nix) section below.
 
 The `go install github.com/PerpetualSoftware/pad/cmd/pad@latest` path is not supported for the full Pad binary, because the web UI must be built and embedded during the source build.
 
@@ -402,11 +402,11 @@ directory for `claude-code`, and an `[mcp_servers.pad]` table in
 project-scoped, it's install-on-request only — `--all` and `pad mcp status` cover
 the per-user clients (including Codex) and skip it.
 
-**Tool catalog (v0.126)** — twelve resource × action tools plus `pad_set_workspace`, and `pad_board` on remote HTTP with Apps enabled. Undeclared input keys are rejected with a structured error rather than silently dropped, and field values are typed against the collection schema on the server:
+**Tool catalog (v0.127)** — twelve resource × action tools plus `pad_set_workspace`, and `pad_board` on remote HTTP with Apps enabled. Undeclared input keys are rejected with a structured error rather than silently dropped, and field values are typed against the collection schema on the server:
 
 | Tool | Actions |
 |---|---|
-| `pad_item` | `create`, `update`, `delete`, `get`, `list`, `move`, `restore`, `link`, `unlink`, `deps`, `context`, `star`, `unstar`, `starred`, `comment`, `list-comments`, `edit-comment`, `delete-comment`, `backlinks`, `bulk-update`, `note`, `decide`, `export`, `import`, `history`, `remind`, `ack-reminder`, `reminders`, `unremind`, `schedule`, `schedule-forecast`, `schedule-edit`, `schedule-resolve`, `schedule-reopen`, `schedule-renegotiate`, `schedule-link`, `schedule-unlink`, `schedule-move`, `schedule-gate`, `schedule-dismiss`, `schedule-delete`, `agenda`, `link-pr`, `unlink-pr`, `claim`, `release`, `patch` |
+| `pad_item` | `create`, `update`, `delete`, `get`, `list`, `move`, `restore`, `link`, `unlink`, `deps`, `context`, `star`, `unstar`, `starred`, `comment`, `list-comments`, `edit-comment`, `delete-comment`, `backlinks`, `bulk-update`, `note`, `decide`, `export`, `import`, `history`, `remind`, `ack-reminder`, `reminders`, `unremind`, `schedule`, `schedule-forecast`, `schedule-child`, `schedule-edit`, `schedule-resolve`, `schedule-reopen`, `schedule-renegotiate`, `schedule-link`, `schedule-unlink`, `schedule-move`, `schedule-gate`, `schedule-dismiss`, `schedule-delete`, `agenda`, `link-pr`, `unlink-pr`, `claim`, `release`, `patch` |
 | `pad_workspace` | `list`, `members`, `invite`, `storage`, `audit-log`, `create`, `claim`, `deleted`, `restore`, `rename` |
 | `pad_collection` | `list`, `create`, `update`, `delete`, `list-archived`, `restore` |
 | `pad_project` | `dashboard`, `next`, `ready`, `stale`, `standup`, `changelog`, `report`, `activity`, `catch-up` |
@@ -429,7 +429,7 @@ Plus resources at `pad://workspaces`, `pad://workspace/{ws}/dashboard`,
 and `pad://_meta/version`.
 
 **Stability contract.** The catalog is versioned
-(`tool_surface_version: "0.126"`) and advertised in the initialize handshake and at
+(`tool_surface_version: "0.127"`) and advertised in the initialize handshake and at
 `pad://_meta/version`, so external agents can pin against it; the per-version
 changelog lives in [`internal/mcp/version.go`](internal/mcp/version.go). Errors
 come back as structured envelopes (`{error: {code, message, hint, ...}}`) from a

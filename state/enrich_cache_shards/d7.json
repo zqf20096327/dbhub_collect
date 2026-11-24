@@ -2,10 +2,10 @@
  "influxdata/influxdb": {
   "commit_7d": 0,
   "commit_90d": 2,
-  "rel_ver": "v2.10.1",
-  "rel_pub": "2026-11-17",
-  "rel_days": 5,
-  "rel_n90": 14,
+  "rel_ver": "v3.12.3",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
+  "rel_n90": 16,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 314,
-  "enriched_at": "20261121",
+  "enriched_at": "20261124",
   "lang": {
    "Rust": 96,
    "Answer Set Programming": 2,
@@ -23,15 +23,17 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261121",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261108"
   },
   "etag": {
-   "release": "W/\"4145954202a60e503888cab10be69fc34efbc54685d00697e7cc71337fc2d9f5\"",
+   "release": "W/\"497c1be9b667f40d34487c1c156b6462ea4c26eb8b74afe47fd6220bb07af799\"",
    "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
   },
   "rel_dates": [
+   "2026-11-23",
+   "2026-11-23",
    "2026-11-17",
    "2026-11-02",
    "2026-11-02",
@@ -48,6 +50,16 @@
    "2026-09-09"
   ],
   "rel_notes": [
+   {
+    "t": "v3.12.3",
+    "d": "2026-11-23",
+    "n": "- **Uninstall Processing Engine packages**: The new [`influxdb3 uninstall package`](https://docs.influxdata.com/influxdb3/enterprise/reference/cli/influxdb3/uninstall/package/) command and `POST /api/v3/configure/plugin_environment/uninstall_packages` endpoint remove packages from the Processing Engine environment on the node that receives the request. Dependencies stay installed, and you can't remove `pip`, `setuptools`, or `wheel`. Previously, you had to run pip in the virtual environment yourself.\n- **`i"
+   },
+   {
+    "t": "v3.11.10",
+    "d": "2026-11-23",
+    "n": "The following are some highlighted updates with the newest release for InfluxDB 3. Learn more via our full [Release Notes](https://docs.influxdata.com/influxdb3/core/release-notes/#v31110).\n- **Compactor ran out of memory during a hard delete (upgraded storage engine)**: While a database or table hard delete is pending, the compactor now shares the input files that the delete doesn't change. Previously, it copied them for each compaction task, so the compactor could run out of memory on every restart.\n- **S"
+   },
    {
     "t": "v2.10.1",
     "d": "2026-11-17",
@@ -87,16 +99,6 @@
     "t": "v3.11.5",
     "d": "2026-10-15",
     "n": "- **Missing rows from tag queries after a compactor restart (Parquet engine)**: Removing a generation now removes only that generation's [file index](https://docs.influxdata.com/influxdb3/enterprise/admin/file-index/) entries. Previously, a compact-only node numbered its files from zero again after a restart, so removing an older generation also removed the index entries for a live file with the same number, and queries that filter on an indexed tag value skipped that file and returned incomplete results.\n-"
-   },
-   {
-    "t": "v3.11.4",
-    "d": "2026-09-08",
-    "n": "The following are some highlighted updates with the newest release for InfluxDB 3. Learn more via our full [Release Notes](https://docs.influxdata.com/influxdb3/core/release-notes/).\n- **Plugin source retained after a database was deleted**: Deleting a database now evicts its triggers' cached plugin source. Previously it stayed resident until the server restarted.\n- **Privilege escalation through role assignment**: Creating, updating, and deleting a role, and assigning roles to a user, now require admin aut"
-   },
-   {
-    "t": "v3.11.3",
-    "d": "2026-09-08",
-    "n": "The following are some highlighted updates with the newest release for InfluxDB 3. Learn more via our full [Release Notes](https://docs.influxdata.com/influxdb3/core/release-notes/).\n- **Missing rows from an `OR` predicate against a [file index](/influxdb3/enterprise/admin/file-index/)**:\n[`--recover-deferred-snapshots-in-flight-limit`](/influxdb3/enterprise/reference/storage-engine-config-options/#deferred-snapshot-recovery)"
    }
   ]
  },
@@ -105,7 +107,7 @@
   "commit_90d": 0,
   "rel_ver": "V3.3.0",
   "rel_pub": "2020-05-04",
-  "rel_days": 2393,
+  "rel_days": 2395,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -130,7 +132,7 @@
   "commit_90d": 0,
   "rel_ver": "realm-react-v0.20.0",
   "rel_pub": "2025-10-17",
-  "rel_days": 401,
+  "rel_days": 403,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -180,7 +182,7 @@
   "commit_90d": 9,
   "rel_ver": "v1.18.7",
   "rel_pub": "2026-07-02",
-  "rel_days": 143,
+  "rel_days": 145,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -230,7 +232,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.2",
   "rel_pub": "2025-02-12",
-  "rel_days": 648,
+  "rel_days": 650,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -278,7 +280,7 @@
   "commit_7d": 4,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-05-14",
-  "rel_days": 192,
+  "rel_days": 194,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -317,7 +319,7 @@
   "commit_7d": 0,
   "rel_ver": "3.0.6",
   "rel_pub": "2016-01-01",
-  "rel_days": 3978,
+  "rel_days": 3980,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -345,7 +347,7 @@
   "commit_7d": 5,
   "rel_ver": "v5.5.4",
   "rel_pub": "2026-11-15",
-  "rel_days": 7,
+  "rel_days": 9,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -444,7 +446,7 @@
   "commit_7d": 16,
   "rel_ver": "9.17.1",
   "rel_pub": "2026-11-19",
-  "rel_days": 3,
+  "rel_days": 5,
   "rel_n90": 25,
   "rel_pre": false,
   "rel_none": false,
@@ -569,7 +571,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.2",
   "rel_pub": "2020-01-23",
-  "rel_days": 2495,
+  "rel_days": 2497,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -607,7 +609,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.6.0",
   "rel_pub": "2023-05-30",
-  "rel_days": 1272,
+  "rel_days": 1274,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -630,7 +632,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.7",
   "rel_pub": "2020-08-02",
-  "rel_days": 2303,
+  "rel_days": 2305,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -653,7 +655,7 @@
   "commit_7d": 2,
   "rel_ver": "v1.3.2",
   "rel_pub": "2026-11-09",
-  "rel_days": 13,
+  "rel_days": 15,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -726,7 +728,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.1",
   "rel_pub": "2017-12-24",
-  "rel_days": 3255,
+  "rel_days": 3257,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -747,7 +749,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.2",
   "rel_pub": "2023-01-17",
-  "rel_days": 1405,
+  "rel_days": 1407,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -763,12 +765,12 @@
   "enriched_at": "20260927"
  },
  "AfterShip/clickhouse-sql-parser": {
-  "commit_90d": 19,
-  "commit_7d": 1,
-  "rel_ver": "v0.5.6",
-  "rel_pub": "2026-08-12",
-  "rel_days": 102,
-  "rel_n90": 0,
+  "commit_90d": 26,
+  "commit_7d": 5,
+  "rel_ver": "v0.5.7",
+  "rel_pub": "2026-11-12",
+  "rel_days": 12,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -780,18 +782,23 @@
    "Go": 100,
    "Makefile": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"d8aa0cfdb0929fec408401fe019e00ad85311ed7e1ea393ad3ef6d11e621e100\""
+   "release": "W/\"c2565a2e224c6bc3664202c4f3ef74da21c285ee7b428790aef9d35f8d9786ba\""
   },
   "rel_dates": [
-   "2026-08-12"
+   "2026-11-12"
   ],
   "rel_notes": [
+   {
+    "t": "v0.5.7",
+    "d": "2026-11-12",
+    "n": "* Add support for CREATE OR REPLACE MATERIALIZED VIEW and TTL GROUP BY by @marre in https://github.com/AfterShip/clickhouse-sql-parser/pull/316\n* Support function expressions in table settings by @sharadgaur in https://github.com/AfterShip/clickhouse-sql-parser/pull/317\n* Support SETTINGS in ALTER TABLE ADD INDEX and fix IF NOT EXISTS placement by @Lance726 in https://github.com/AfterShip/clickhouse-sql-parser/pull/319\n* Add support for named data type parameters by @blinkzz in https://github.com/AfterShip/"
+   },
    {
     "t": "v0.5.6",
     "d": "2026-08-12",
@@ -804,7 +811,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.8.6",
   "rel_pub": "2025-12-30",
-  "rel_days": 327,
+  "rel_days": 329,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -825,7 +832,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.7.0",
   "rel_pub": "2025-08-05",
-  "rel_days": 474,
+  "rel_days": 476,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -842,11 +849,11 @@
   "enriched_at": "20260927"
  },
  "percona/percona-server-mysql-operator": {
-  "commit_90d": 287,
-  "commit_7d": 4,
+  "commit_90d": 265,
+  "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2026-10-29",
-  "rel_days": 24,
+  "rel_days": 26,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -861,13 +868,13 @@
    "Makefile": 1,
    "Dockerfile": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"53f20d10d5e29e1a4c231e30e4a0b1a9cb36ce9e588613793878815792c0d894\""
+   "release": "W/\"5c6df5a5d5ca7cbf8608912b14b178804cc9c3953a0240b34932c800005be11e\""
   },
   "rel_dates": [
    "2026-10-29"
@@ -904,7 +911,7 @@
   "commit_7d": 0,
   "rel_ver": "0.3.0-alpha",
   "rel_pub": "2017-08-28",
-  "rel_days": 3373,
+  "rel_days": 3375,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -923,7 +930,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0-beta",
   "rel_pub": "2017-05-18",
-  "rel_days": 3475,
+  "rel_days": 3477,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -939,12 +946,12 @@
   "enriched_at": "20260927"
  },
  "sue445/plant_erd": {
-  "commit_90d": 43,
+  "commit_90d": 38,
   "commit_7d": 5,
-  "rel_ver": "v0.4.12",
-  "rel_pub": "2026-08-21",
-  "rel_days": 93,
-  "rel_n90": 0,
+  "rel_ver": "v0.4.13",
+  "rel_pub": "2026-11-20",
+  "rel_days": 4,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -958,18 +965,23 @@
    "Makefile": 1,
    "Dockerfile": 1
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"2f7193ba27397ce4bdcc52e49bafa7701103d484992ccc4ed8c60a1439de857d\""
+   "release": "W/\"d950bd62736dd05de7b364e9c3e81906ecec7fbb614e8f5c9b79ae8edba0886b\""
   },
   "rel_dates": [
-   "2026-08-21"
+   "2026-11-20"
   ],
   "rel_notes": [
+   {
+    "t": "v0.4.13",
+    "d": "2026-11-20",
+    "n": "* Bump github.com/go-sql-driver/mysql from 1.10.0 to 1.10.1 by @dependabot[bot] in https://github.com/sue445/plant_erd/pull/369\n* Bump github.com/mattn/go-sqlite3 from 1.14.49 to 1.14.50 by @dependabot[bot] in https://github.com/sue445/plant_erd/pull/365\n* Bump github.com/mattn/go-sqlite3 from 1.14.50 to 1.14.52 by @dependabot[bot] in https://github.com/sue445/plant_erd/pull/370\n* Bump github.com/mattn/go-sqlite3 from 1.14.52 to 1.14.53 by @dependabot[bot] in https://github.com/sue445/plant_erd/pull/383"
+   },
    {
     "t": "v0.4.12",
     "d": "2026-08-21",
@@ -997,7 +1009,7 @@
   "commit_7d": 0,
   "rel_ver": "v8.2.0",
   "rel_pub": "2024-09-23",
-  "rel_days": 790,
+  "rel_days": 792,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1020,7 +1032,7 @@
   "commit_7d": 0,
   "rel_ver": "1.3.6",
   "rel_pub": "2026-11-01",
-  "rel_days": 21,
+  "rel_days": 23,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1059,7 +1071,7 @@
   "commit_7d": 0,
   "rel_ver": "1.1.0",
   "rel_pub": "2026-05-14",
-  "rel_days": 192,
+  "rel_days": 194,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1097,7 +1109,7 @@
  "plexidev/quickmongo": {
   "rel_ver": "v5.2.0",
   "rel_pub": "2022-09-18",
-  "rel_days": 1526,
+  "rel_days": 1528,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1133,7 +1145,7 @@
  "monoclex/StringDB": {
   "rel_ver": "10.0.3",
   "rel_pub": "2019-05-07",
-  "rel_days": 2756,
+  "rel_days": 2758,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1150,7 +1162,7 @@
  "levinsv/pgadmin3": {
   "rel_ver": "v1.27.0",
   "rel_pub": "2026-09-19",
-  "rel_days": 64,
+  "rel_days": 66,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1198,7 +1210,7 @@
  "solana-rpc/superbank": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 59,
+  "rel_days": 61,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1219,7 +1231,7 @@
  "samdark/wnmp-dev": {
   "rel_ver": "1.1.1",
   "rel_pub": "2020-10-27",
-  "rel_days": 2217,
+  "rel_days": 2219,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1238,7 +1250,7 @@
  "aerogo/nano": {
   "rel_ver": "v0.3.1",
   "rel_pub": "2019-05-25",
-  "rel_days": 2738,
+  "rel_days": 2740,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1255,7 +1267,7 @@
  "rizwansoaib/face-attendence": {
   "rel_ver": "0.1",
   "rel_pub": "2019-03-03",
-  "rel_days": 2821,
+  "rel_days": 2823,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1348,7 +1360,7 @@
  "roboticforce/remembrallmcp": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-07-28",
-  "rel_days": 117,
+  "rel_days": 119,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1382,7 +1394,7 @@
  "ststeiger/sql_profiler": {
   "rel_ver": "1.0",
   "rel_pub": "2018-02-08",
-  "rel_days": 3209,
+  "rel_days": 3211,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1504,7 +1516,7 @@
  "JDBDT/jdbdt": {
   "rel_ver": "1.4.1",
   "rel_pub": "2021-09-25",
-  "rel_days": 1884,
+  "rel_days": 1886,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1523,7 +1535,7 @@
  "elitan/terradb": {
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-08-27",
-  "rel_days": 87,
+  "rel_days": 89,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1571,7 +1583,7 @@
  "basicmachines-co/basic-foundation": {
   "rel_ver": "v0.1.9",
   "rel_pub": "2024-09-28",
-  "rel_days": 785,
+  "rel_days": 787,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1669,7 +1681,7 @@
  "CrunchyData/pgSimload": {
   "rel_ver": "v.1.4.8",
   "rel_pub": "2025-08-04",
-  "rel_days": 475,
+  "rel_days": 477,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1711,7 +1723,7 @@
  "RamaAditya49/titen": {
   "rel_ver": "v0.10.3",
   "rel_pub": "2026-09-25",
-  "rel_days": 58,
+  "rel_days": 60,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1732,7 +1744,7 @@
  "pingcap/dbt-tidb": {
   "rel_ver": "v.1.6.4",
   "rel_pub": "2023-12-14",
-  "rel_days": 1074,
+  "rel_days": 1076,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1803,7 +1815,7 @@
  "iSemary/cursus-meester": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-12-24",
-  "rel_days": 1064,
+  "rel_days": 1066,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1841,7 +1853,7 @@
  "pratik0197/Ticket-Booking": {
   "rel_ver": "1.0",
   "rel_pub": "2020-06-14",
-  "rel_days": 2352,
+  "rel_days": 2354,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1878,7 +1890,7 @@
  "Kinjalrk2k/prisma-extension-pg-trgm": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2023-11-28",
-  "rel_days": 1090,
+  "rel_days": 1092,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1927,7 +1939,7 @@
  "gggeek/db-3v4l": {
   "rel_ver": "0.17.0",
   "rel_pub": "2020-10-22",
-  "rel_days": 2222,
+  "rel_days": 2224,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2059,7 +2071,7 @@
  "Afdaan/Alya-Bot-Telegram": {
   "rel_ver": "1.0.0",
   "rel_pub": "2026-03-19",
-  "rel_days": 248,
+  "rel_days": 250,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2106,7 +2118,7 @@
  "regeda/turboql": {
   "rel_ver": "v0.0.0-alpha.3",
   "rel_pub": "2025-01-06",
-  "rel_days": 685,
+  "rel_days": 687,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2194,7 +2206,7 @@
  "SethPyle376/hiraeth": {
   "rel_ver": "v0.3",
   "rel_pub": "2026-05-14",
-  "rel_days": 192,
+  "rel_days": 194,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2307,7 +2319,7 @@
  "bingzer/DbQuery": {
   "rel_ver": "v2.2.0",
   "rel_pub": "2016-06-09",
-  "rel_days": 3818,
+  "rel_days": 3820,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2417,7 +2429,7 @@
   "commit_7d": 0,
   "rel_ver": "nightly",
   "rel_pub": "2024-10-04",
-  "rel_days": 779,
+  "rel_days": 781,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2474,7 +2486,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.8",
   "rel_pub": "2023-02-24",
-  "rel_days": 1367,
+  "rel_days": 1369,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3004,7 +3016,7 @@
  "powertime-org/pgdeclare": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2026-10-18",
-  "rel_days": 35,
+  "rel_days": 37,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3049,7 +3061,7 @@
  "Manannikov-Nikita/miracle": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-23",
-  "rel_days": 30,
+  "rel_days": 32,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3076,7 +3088,7 @@
  "Koimsurai/sora-to-ki": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-10-30",
-  "rel_days": 23,
+  "rel_days": 25,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -3115,7 +3127,7 @@
  "studycom69-debug/momsafe": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-08-07",
-  "rel_days": 107,
+  "rel_days": 109,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3196,13 +3208,18 @@
  "rustrak/rustrak": {
   "commit_90d": 1004,
   "commit_7d": 88,
-  "rel_ver": "v0.31.0",
-  "rel_pub": "2026-11-22",
-  "rel_days": 0,
+  "rel_ver": "v0.32.0",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "rel_notes": [
+   {
+    "t": "v0.32.0",
+    "d": "2026-11-23",
+    "n": "- A migration adds a `web_vitals` table on PostgreSQL and SQLite. Vitals are recorded from this version on, so page loads ingested before the upgrade have none\nrustrak/rustrak-server:v0.32.0-postgres\nAlso tagged `latest` and `postgres` on Docker Hub."
+   },
    {
     "t": "v0.31.0",
     "d": "2026-11-22",
@@ -3247,11 +3264,6 @@
     "t": "v0.25.0",
     "d": "2026-11-06",
     "n": "rustrak/rustrak-server:v0.25.0-postgres\nAlso tagged `latest` and `postgres` on Docker Hub."
-   },
-   {
-    "t": "v0.24.0",
-    "d": "2026-11-02",
-    "n": "rustrak/rustrak-server:v0.24.0-postgres\nAlso tagged `latest` and `postgres` on Docker Hub."
    }
   ],
   "sec_n": 0,
@@ -3266,18 +3278,19 @@
    "CSS": 1,
    "JavaScript": 0
   },
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "dim_ts": {
    "commit": "20261122",
-   "release": "20261122",
+   "release": "20261124",
    "security": "20261104",
    "contrib": "20261104",
    "lang": "20261104"
   },
   "etag": {
-   "release": "W/\"a94e7b69c5c5ecc9efa9338c83b567b18283cfe63d25a744add3b23495653fa1\""
+   "release": "W/\"7df0132cacc87a231283841924ed35a19d443e99fc0e0e117b981c681c35d978\""
   },
   "rel_dates": [
+   "2026-11-23",
    "2026-11-22",
    "2026-11-20",
    "2026-11-20",
@@ -3306,8 +3319,7 @@
    "2026-10-08",
    "2026-10-07",
    "2026-09-30",
-   "2026-09-28",
-   "2026-09-25"
+   "2026-09-28"
   ]
  },
  "Mac-XK/telegram-xiuxian": {

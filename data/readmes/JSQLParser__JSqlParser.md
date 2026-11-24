@@ -145,10 +145,12 @@ and missing syntax gets added on demand — [open an issue](https://github.com/J
 | **DML** | `INSERT` · `UPDATE` · `UPSERT` · `MERGE` · `DELETE` · `TRUNCATE TABLE` |
 | **Oracle RETURNING** | Named output binds (`INTO :name`), JDBC output parameters (`INTO ?`), and `BULK COLLECT INTO` |
 | **DDL** | `CREATE …` · `ALTER …` · `DROP …` |
+| **DuckDB macro removal** | `DROP MACRO [IF EXISTS] name` · `DROP MACRO TABLE [IF EXISTS] name` |
 | **Oracle vector types** | `VECTOR(*, *)` · `VECTOR(*, FLOAT32)` · `VECTOR(3, *)`, including dense and sparse storage formats |
 | **PostgreSQL ownership** | `DROP OWNED` · `REASSIGN OWNED` |
 | **Two-phase commit** | PostgreSQL `PREPARE TRANSACTION` · `COMMIT PREPARED` · `ROLLBACK PREPARED` · MySQL `XA START`/`END`/`PREPARE`/`COMMIT`/`ROLLBACK`/`RECOVER` |
 | **PostgreSQL maintenance** | `VACUUM` · `ANALYZE` · `CLUSTER` · `CHECKPOINT` |
+| **DuckDB type aliases** | `CREATE TYPE name AS data_type`, including scalar, array, and struct types |
 | **Prepared-statement query plans** | `EXPLAIN EXECUTE` with optional arguments and PostgreSQL `EXPLAIN` options |
 | **PostgreSQL session statements** | `DISCARD` · `LISTEN` · `UNLISTEN` · `SHOW`/`RESET TIME ZONE`/`TRANSACTION ISOLATION LEVEL`/`SESSION AUTHORIZATION` · `COPY` options from before 9.0 |
 | **PostgreSQL foreign schema import** | `IMPORT FOREIGN SCHEMA … [LIMIT TO \| EXCEPT (…)] FROM SERVER … INTO … [OPTIONS (…)]` |

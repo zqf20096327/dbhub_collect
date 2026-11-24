@@ -1,9 +1,9 @@
 # Deal Radar · 每日优惠情报
 
-多来源羊毛 / 优惠聚合：自动从 V2EX、NodeSeek、LINUX DO、小众软件等 6 个来源抓取最新优惠，**AI 打价值分、自动分类、生成排行榜**，值得看的新优惠通过微信推送给你。
+多来源羊毛 / 优惠聚合：自动从 V2EX、NodeSeek、LINUX DO、小众软件及 X（Twitter）AI/羊毛博主主页等 7 个来源抓取最新优惠，**AI 打价值分、自动分类、生成排行榜**，值得看的新优惠通过微信推送给你。
 
-- 🗂 聚合 6 个来源，去重，只保留近 7 天，按发布时间排序
-- 🤖 AI 价值评分（0~100）+ AI 分类（12 类），「AI 排行榜」一眼看出最值的羊毛
+- 🗂 聚合 7 个来源（含 X 上 Tibo Codex 负责人、OpenCode CEO/创始人、OpenRouter 等博主主页监听），去重，只保留近 7 天，按发布时间排序
+- 🤖 AI 价值评分（0~100）+ AI 分类（13 类，含「X 博主」），「AI 排行榜」一眼看出最值的羊毛
 - 🔎 搜索、按来源 / 类别筛选，讨论帖和交易帖默认隐藏
 - ✅ 标记已领、收藏，刷新不会覆盖
 - 📮 微信推送：只推高价值的，不重复，夜间静默，可按网站选择推哪些
@@ -117,7 +117,8 @@ docker compose up -d --build
 | `DECISION_ENDPOINT` | System One 决策接口完整地址，可自定义为任意兼容服务 | `https://openrouter.ai/api/alpha/decisions` |
 | `DECISION_MODEL` | 决策模型名 | `perplexity/pplx-decider-v1.3:free` |
 | `DECISION_API_KEY` | 决策接口 Key；OpenRouter 接口可留空复用 `OPENROUTER_API_KEY` | 空 |
-| `JINA_API_KEY` | Jina Reader Key，LINUX DO 被限流（HTTP 429）时配置，[免费申请](https://jina.ai/reader) | 空 |
+| `JINA_API_KEY` | Jina Reader Key，LINUX DO / X 博主监听被限流（HTTP 429）时配置，[免费申请](https://jina.ai/reader) | 空 |
+| `X_ACCOUNTS` | 监听的 X（Twitter）博主名单（逗号分隔 `用户名:备注`），也可直接在页面「设置」中修改 | 内置 Tibo、Dax、OpenCode、Jay V、OpenRouter、Logan |
 
 修改 `.env` 后重启服务生效。启动时 Key 会写入数据库 `app_settings` 表，服务端只从那里读取，**永远不会发到前端**。
 
@@ -146,6 +147,7 @@ docker compose up -d --build
 | 果核剥壳 | RSS `https://www.ghxi.com/feed` |
 | 异次元软件世界 | RSS `https://www.iplaysoft.com/feed` |
 | LINUX DO 福利羊毛 | 直连会被 Cloudflare 拦截（403），改走 [Jina Reader](https://jina.ai/reader) 代理 `https://r.jina.ai/https://linux.do/c/welfare/36.rss`，并带请求头 `X-Return-Format: html` 让它原样返回 RSS，这样能拿到正文摘要 |
+| X 博主监听 | 监听 X（Twitter）AI 博主与羊毛博主主页（默认含 `@thsottiaux` Tibo Codex 负责人、`@thdxr` OpenCode 创始人、`@opencode` 官方、`@jayair` OpenCode CEO、`@OpenRouter`、`@OfficialLoganK`），经 Jina Reader 渲染 `<article>` + Twitter Syndication 双通道抓取，自动识别「额度重置」「限免福利」「优惠福利」与「AI 动态」并过滤日常水帖；可在页面「设置」自定义监听名单 |
 
 单个来源失败不影响其他来源，页面上会如实显示每个来源的状态。来源定义在 `server/src/actions.ts` 的 `SOURCES` 数组，加一个 RSS 源只需加一行。
 
@@ -158,7 +160,7 @@ docker compose up -d --build
 - 点「测试 AI 评分」会用固定样例分别验证已配置的决策接口与备用对话模型，并显示各自结果。密钥仅在服务端保存，页面只返回配置状态与末 4 位。
 - 旧版数据库中的 Jev Key / 模型会通过 `0007_generic_decision_settings.sql` 自动迁移，已填写的新决策配置优先；旧环境变量 `TYPESAFE_API_KEY` / `TYPESAFE_MODEL` 在未填写新 `DECISION_*` 配置时继续生效。已有历史评分不会重写。
 - **分档**（页面和推送显示的 0~100 分）：≥80 高价值、≥60 值得看、≥30 一般，其余价值低；推送门槛 60 分。
-- **类别**：免费白嫖、限免、低价优惠、会员订阅、游戏、AI 相关、VPS/云服务、代理/机场、软件工具、交易/求购、讨论/资讯、其他。
+- **类别**：免费白嫖、限免、低价优惠、会员订阅、游戏、AI 相关、X 博主、VPS/云服务、代理/机场、软件工具、交易/求购、讨论/资讯、其他。
   - 分类置信度不够时，退回关键词规则。
   - 标题特征明确的交易帖（出 / 收 / 求开头）和讨论帖（问句结尾），以规则为准。
 

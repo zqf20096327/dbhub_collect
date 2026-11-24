@@ -116,15 +116,26 @@ The error stack trace indicates *where* the code broke, but fails to answer the 
 - How long did the request run before failing?
 - What application logs (`stdout`, `stderr`, debug traces) were emitted during that specific execution window?
 
-```mermaid
-flowchart TD
-    Err["Production 500 Error"] --> Legacy["Standard Logging"]
-    Legacy --> Miss["Missing Payload, Headers & Client IP"]
-    Miss --> Guess["Guesswork & Speculation ❌"]
-    
-    Err --> TN["TracerNest Flight Recorder"]
-    TN --> Ctx["Exact Request Body + Headers + Status + Duration"]
-    Ctx --> Fix["Instant Local Reproduction & Verified Fix ✅"]
+```text
+                          ┌──────────────────────────┐
+                          │   Production 500 Error   │
+                          └─────────────┬────────────┘
+                                        │
+           ┌────────────────────────────┴───────────────────────────┐
+           ▼                                                        ▼
+┌───────────────────────────┐                            ┌───────────────────────────┐
+│     Standard Logging      │                            │ TracerNest Flight Recorder│
+└─────────────┬─────────────┘                            └─────────────┬─────────────┘
+              ▼                                                        ▼
+┌───────────────────────────┐                            ┌───────────────────────────┐
+│ Missing Body & Headers    │                            │ Exact Request Body, IP,   │
+│ Incomplete Execution Log  │                            │ Headers, Duration & State │
+└─────────────┬─────────────┘                            └─────────────┬─────────────┘
+              ▼                                                        ▼
+┌───────────────────────────┐                            ┌───────────────────────────┐
+│  Guesswork & Speculation  │                            │ Instant Local Reproduction│
+│             ❌            │                            │     & Verified Fix ✅     │
+└───────────────────────────┘                            └───────────────────────────┘
 ```
 
 Without execution context, reproducing the bug locally is pure speculation. Developers spend hours writing defensive code blindly or adding temporary log lines and waiting for the failure to strike again.
@@ -165,15 +176,30 @@ Many observability libraries drag dozens of external dependencies into your runt
 
 TracerNest resides in-process alongside your application code, handling both application traffic and operations inspection through a unified pipeline:
 
-```mermaid
-flowchart LR
-    Client["Incoming Request"] --> App["Node.js Application (Port 3000)"]
-    App --> Route{"Path Check"}
-    Route -->|"/tracernest"| Dash["Embedded Dashboard UI"]
-    Route -->|"/api/*"| Handler["Application Route Handlers"]
-    Handler --> Telemetry["TracerNest Middleware Interceptor"]
-    Telemetry --> Storage[("Encrypted SQL & Memory RingBuffer")]
-    Storage -.->|SSE Real-Time Feed| Dash
+```text
+Incoming Request
+       │
+       ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                    Node.js Application (Port 3000)                     │
+│                                                                        │
+│                      Path / Route Check                                │
+│                         ┌───────────┴───────────┐                      │
+│                         ▼                       ▼                      │
+│                    /tracernest               /api/*                    │
+│             ┌─────────────────┐     ┌─────────────────────┐            │
+│             │    Embedded     │     │  App Route Handlers │            │
+│             │  Dashboard UI   │     └──────────┬──────────┘            │
+│             └────────▲────────┘                ▼                       │
+│                      │              ┌─────────────────────┐            │
+│                      │              │ TracerNest Intercept│            │
+│                      │              └──────────┬──────────┘            │
+│                      │                         ▼                       │
+│                      │  SSE Stream  ┌─────────────────────┐            │
+│                      └──────────────┤ Encrypted SQL Store │            │
+│                                     │  & Memory RingBuffer│            │
+│                                     └─────────────────────┘            │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -235,14 +261,24 @@ TracerNest features a dark-mode operations console engineered for clarity under 
 - **Automated Cooldown Throttling:** Built-in 30-second cooldown per channel prevents notification flooding during cascade failures.
 - **Interactive UI Testing:** Operators can trigger live test alerts directly from dashboard settings.
 
-```mermaid
-flowchart LR
-    Event["Telemetry Event"] --> Buffer["Memory RingBuffer"]
-    Buffer --> SSE["Live SSE Stream"]
-    Buffer --> DB[("Encrypted SQL Store")]
-    Buffer --> AlertCheck{"Is Error/Warn?"}
-    AlertCheck -->|"30s Cooldown"| Email["SMTP Email"]
-    AlertCheck -->|"30s Cooldown"| Teams["MS Teams Webhook"]
+```text
+┌─────────────────┐
+│ Telemetry Event │
+└────────┬────────┘
+         ▼
+┌─────────────────────────┐
+│   Memory RingBuffer     │──────► Live SSE Stream (Dashboard)
+└────────┬────────┬───────┘
+         │        └──────────────► Encrypted SQL Store (SQLite / MySQL)
+         ▼
+┌─────────────────────────┐
+│ Severity Check          │
+│ (Level: Error / Warn)   │
+└────────┬────────────────┘
+         │
+         ├──────[ 30s Cooldown ]──────► Zero-Dependency SMTP Email
+         │
+         └──────[ 30s Cooldown ]──────► Microsoft Teams Webhook
 ```
 
 ---
@@ -251,17 +287,46 @@ flowchart LR
 
 TracerNest instruments the request-response lifecycle from entry to exit:
 
-```mermaid
-flowchart TD
-    A["1. Incoming HTTP Request"] --> B["2. TracerNest Middleware"]
-    B --> C["3. Extract Client IP & Sanitize Query/Headers"]
-    C --> D["4. Buffer Request Body Stream"]
-    D --> E["5. Application Route Execution"]
-    E --> F["6. Generate Response (res.json / res.send)"]
-    F --> G["7. Capture Response Body & Calculate Latency"]
-    G --> H["8. Assemble Structured Telemetry Record"]
-    H --> I["9. Memory RingBuffer & Encrypted SQL"]
-    I --> J["10. Live SSE Broadcast & Alert Dispatch"]
+```text
+┌────────────────────────────────────────────────────────────────────────┐
+│ 1. Incoming HTTP Request                                               │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ 2. TracerNest Middleware Interception                                  │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ 3. Extract Client IP (SEC-10) & Sanitize Query Strings & Headers       │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ 4. Buffer Request Body Stream (Memory-Bounded Capacity - SEC-09)       │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ 5. Application Route Execution (Controller / Business Logic)           │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ 6. Generate Response (res.json / res.send)                             │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ 7. Capture Response Body & Calculate Latency (durationMs)              │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ 8. Assemble Structured Telemetry Record                                │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ 9. Commit to Memory RingBuffer & Encrypted SQL Store (AES-256-GCM)     │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ 10. Live SSE Broadcast to Dashboard & Incident Alert Dispatch          │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Realistic Execution Boundaries
@@ -759,7 +824,7 @@ TracerNest Logger follows [Semantic Versioning (SemVer)](https://semver.org/):
 - **Minor (1.X.0):** New features, performance enhancements, and backward-compatible additions.
 - **Patch (1.0.X):** Bug fixes, security hardening, and documentation updates.
 
-Current Release: **`1.8.6`**
+Current Release: **`1.8.9`**
 
 ---
 

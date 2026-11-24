@@ -9,8 +9,8 @@ Copy and paste these instructions into Claude Code or Codex to complete the inst
 <div align="left">
 
 ```text
-Set up AgentCake 0.6.0 for this website.
-Use curl or the GitHub CLI to download the guide at https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/v0.6.0/INSTALL.md and follow its steps.
+Set up AgentCake 0.6.1 for this website.
+Use curl or the GitHub CLI to download the guide at https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/v0.6.1/INSTALL.md and follow its steps.
 If the download fails, ask for network access.
 ```
 
@@ -18,9 +18,9 @@ If the download fails, ask for network access.
 
 [![Releases: download](https://img.shields.io/badge/Releases-download-ff5c8a?style=flat)](https://github.com/tartini-ai/agent-traffic-analytics/releases)
 [![Issues: report a bug](https://img.shields.io/badge/Issues-report%20a%20bug-ff5c8a?style=flat)](https://github.com/tartini-ai/agent-traffic-analytics/issues)
-[![License: MIT](https://img.shields.io/badge/License-MIT-ff5c8a?style=flat)](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-ff5c8a?style=flat)](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/LICENSE)
 
-**English** · [简体中文](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/docs/locales/zh-CN/README.md)
+**English** · [简体中文](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/docs/locales/zh-CN/README.md)
 
 </div>
 
@@ -140,12 +140,12 @@ Open Claude Code, Codex, or another coding agent in your website's code folder. 
 as Shopify, use a new, empty folder instead. Then paste these instructions:
 
 ```text
-Set up AgentCake 0.6.0 for this website.
-Use curl or the GitHub CLI to download the guide at https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/v0.6.0/INSTALL.md and follow its steps.
+Set up AgentCake 0.6.1 for this website.
+Use curl or the GitHub CLI to download the guide at https://raw.githubusercontent.com/tartini-ai/agent-traffic-analytics/v0.6.1/INSTALL.md and follow its steps.
 If the download fails, ask for network access.
 ```
 
-- Tell the agent about your site. It recommends a setup and lists [each monthly cost and the total](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/docs/hosting.md).
+- Tell the agent about your site. It recommends a setup and lists [each monthly cost and the total](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/docs/hosting.md).
   AgentCake is free, but a public website needs a server to record its visits.
 - Once you approve, the agent installs AgentCake, connects your site and checks it with `agentcake doctor`. It can also create a server and add a DNS record. You handle sign-in, new accounts, payment, and terms.
 - To try AgentCake without a server, choose your computer when the agent asks where to run it. On your computer,
@@ -162,7 +162,7 @@ AgentCake checks four kinds of evidence on your computer or server.
 - **Environment.** Does the browser show signs of automation, a spoofed identity or a marker left by an agent?
 - **Behavior.** What do pointer movements, keyboard timing and scrolling tell us about who was in control?
 
-We tested with 1,118 agent sessions we recorded and 7,122 human sessions. Some visits are misclassified. [See the evaluation results](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/eval/README.md).
+We tested with 1,118 agent sessions we recorded and 7,122 human sessions. Some visits are misclassified. [See the evaluation results](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/eval/README.md).
 
 ## Your data stays yours
 
@@ -173,18 +173,18 @@ Visit data goes only to your AgentCake installation. AgentCake sends no usage te
 - Visit recording works before registration. Choosing **Register and continue** sends your registration details to Tartini AI once.
 - AgentCake goes online for site checks and monthly downloads of public agent lists and, on servers, a city database. You can turn off these downloads in **Settings**.
 
-[Privacy details](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/PRIVACY.md) · [Privacy notice template for your website](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/docs/privacy-notice-template.md)
+[Privacy details](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/PRIVACY.md) · [Privacy notice template for your website](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/docs/privacy-notice-template.md)
 
 ## Help and contributing
 
-- Have a setup or usage question? [Read the FAQ](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/docs/FAQ.md).
+- Have a setup or usage question? [Read the FAQ](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/docs/FAQ.md).
 - Wrong classification or missing agent name? Describe the session without visitor data. [Report a classification issue](https://github.com/tartini-ai/agent-traffic-analytics/issues/new?template=wrong_verdict.yml).
-- For rule or model changes, include `agentcake eval` results from before and after the change. Your change must not misclassify more humans as agents. [Contributing guide](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/CONTRIBUTING.md) · [Instructions for coding agents](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/AGENTS.md)
-- Report security issues privately by email. [admin@tartini.ai](mailto:admin@tartini.ai) · [Security policy](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/SECURITY.md)
+- For rule or model changes, include `agentcake eval` results from before and after the change. Your change must not misclassify more humans as agents. [Contributing guide](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/CONTRIBUTING.md) · [Instructions for coding agents](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/AGENTS.md)
+- Report security issues privately by email. [admin@tartini.ai](mailto:admin@tartini.ai) · [Security policy](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/SECURITY.md)
 
 ## License
 
-Copyright Tartini AI. [MIT License](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/LICENSE) · [Third-party licenses](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.0/THIRD_PARTY.md)
+Copyright Tartini AI. [MIT License](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/LICENSE) · [Third-party licenses](https://github.com/tartini-ai/agent-traffic-analytics/blob/v0.6.1/THIRD_PARTY.md)
 
 <sub>AgentCake is an independent product and isn't affiliated with the developers of the agents and tools it names.
 Those developers don't endorse or sponsor AgentCake. All trademarks belong to their owners.</sub>

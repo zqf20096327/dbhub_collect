@@ -26,7 +26,7 @@ Roundcube is webmail bolted onto one mailbox. Thunderbird does not run in a
 browser. Commercial clients want to pull your mail onto their servers. nexmail
 is the third option — and if you can use Outlook, you should feel at home.
 
-> **Version 0.31.1.** It reads, writes, searches, sorts, labels, sends,
+> **Version 0.32.0.** It reads, writes, searches, sorts, labels, sends,
 > schedules, prints, answers for you while you are away, keeps a calendar and
 > your address books in sync with iCloud or Google, invites people to your own
 > appointments, rephrases a draft with an AI service of your choice, backs
@@ -46,7 +46,7 @@ Every address in them is under `example.com`, `example.org` or
 **Mail.** Several mailboxes side by side, plus a merged *All inboxes* view.
 Read, reply, reply-all, forward, move, archive, delete, mark, flag, undo. Drag
 and drop between folders. Keyboard: `Del` to trash, `E` to archive, and
-`Ctrl+K` opens a command palette that finds every action and folder. Which
+`Ctrl+K` jumps to the search field, and `Ctrl+Shift+P` opens a command palette that finds every action and folder. Which
 folder is the trash or the archive nexmail reads from the server's SPECIAL-USE
 flags and from the usual names; where a server has neither, right-click the
 folder and pick *Use as* (on a phone: the *…* next to the folder). Folders

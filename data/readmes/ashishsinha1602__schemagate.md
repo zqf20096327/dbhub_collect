@@ -13,8 +13,11 @@
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/schemagate?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/schemagate)
 [![MCP Registry](https://img.shields.io/badge/MCP%20Registry-listed-16a34a.svg)](https://registry.modelcontextprotocol.io/v0/servers?search=io.github.ashishsinha1602/schemagate)
 [![Try it in the browser](https://img.shields.io/badge/demo-in%20your%20browser-0F7B6C)](https://ashishsinha1602.github.io/schemagate/)
+[![Hosted app: schemagate.app](https://img.shields.io/badge/hosted%20app-schemagate.app-2563EB)](https://schemagate.app)
 
 Most text-to-SQL prompts carry the whole schema, and on a big database that is most of the prompt, on every question. schemagate sends the model only the tables the question needs: **91.1% fewer schema tokens (median) on databases with 50+ tables** ([benchmark](BENCHMARKS.md)). It filters by the caller's grants first, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, LlamaIndex, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite.
+
+> **Don't want to run it yourself?** [schemagate.app](https://schemagate.app) is the hosted version. Connect PostgreSQL, MySQL, SQL Server, Oracle or a spreadsheet, invite your team, and everyone asks questions in plain English, each person seeing only the data they're allowed to. Free 7-day trial, no card needed.
 
 ![One question on a 1,201-object schema: the whole schema is 146,695 prompt tokens; schemagate sends 12 tables, including all 3 the query needs, in 1,348.](https://raw.githubusercontent.com/ashishsinha1602/schemagate/main/docs/media/token-savings.gif)
 
@@ -28,7 +31,7 @@ If it cut your prompt, a ⭐ helps other people building SQL agents find it.
 
 With row-level security alone the failure is quiet: the model writes valid SQL against a table the caller cannot read, RLS strips every row, and the user is told "no records found" — indistinguishable from "this data does not exist."
 
-[Demo](https://ashishsinha1602.github.io/schemagate/) · [Install](https://ashishsinha1602.github.io/schemagate/install/) · [Benchmarks](https://ashishsinha1602.github.io/schemagate/benchmarks/) · [Local models](https://ashishsinha1602.github.io/schemagate/local-models/) · [What it costs](https://ashishsinha1602.github.io/schemagate/cost/) · [Coming from Vanna](https://ashishsinha1602.github.io/schemagate/vanna-alternative/)
+[Demo](https://ashishsinha1602.github.io/schemagate/) · [Hosted app](https://schemagate.app) · [Install](https://ashishsinha1602.github.io/schemagate/install/) · [Benchmarks](https://ashishsinha1602.github.io/schemagate/benchmarks/) · [Local models](https://ashishsinha1602.github.io/schemagate/local-models/) · [What it costs](https://ashishsinha1602.github.io/schemagate/cost/) · [Coming from Vanna](https://ashishsinha1602.github.io/schemagate/vanna-alternative/)
 
 Same question, two callers, no database and no key:
 
@@ -146,7 +149,10 @@ BIRD questions against 81.0% and 89.4%
 On Snowflake's SQL-Schema-Retrieval benchmark (table level, recall@10) the
 hashed embedder scores Spider 100.0, BIRD 99.2, BEAVER 65.9, LiveSQLBench 95.3
 and LiveSQLBench-Large 64.9 (73.9 with all-MiniLM-L6-v2), above the paper's best
-model on four of the five and below Qwen3-Embedding-4B (75.8) on the fifth
+model on four of the five. On a schema crowded with look-alike tables like
+LiveSQLBench-Large, the opt-in join graph (`Catalog.join_weight = 0.25`) raises it
+to 74.9 hashed and 79.3 with MiniLM, past Qwen3-Embedding-4B (75.8); it is off by
+default because it costs recall on questions asked in business words
 ([details](BENCHMARKS.md#schema-retrieval-scored-by-snowflakes-benchmark)).
 Worked example, with a price you should replace with your own: a 260-object
 schema, 5,000 questions a day, an input price of $3 per million tokens. Full
@@ -523,7 +529,7 @@ they disagree, which is the point of showing both.
 | schema | objects | recall@6, literal | recall@6, business words |
 |---|---|---|---|
 | commerce | 42 | 100% | 50.0% |
-| clinical claims | 27 | 100% | 46.7% |
+| clinical claims | 27 | 100% | 53.3% |
 | claims warehouse (star) | 51 | 100% | 58.3% |
 | bank ledger and trading | 39 | 100% | 64.3% |
 | IoT telemetry | 40 | 100% | 60.0% |
@@ -534,7 +540,7 @@ they disagree, which is the point of showing both.
 | real table beats its backup/staging copy, 19 cases across schemas | 19/19 |
 | recall without foreign-key expansion | 100% |
 | prompt tokens, full schema every call | 2,812 |
-| prompt tokens, schemagate average | 757 (−73.1%) |
+| prompt tokens, schemagate average | 818 (−70.9%) |
 
 Measured with the **hashed embedder** — what `pip install schemagate` gives
 you, no extras. `schemagate[huggingface]` swaps in sentence-transformers and

@@ -10,7 +10,7 @@ It is built with **Rust** (the engine: sync, search, encryption) and **React**
 (the interface), which makes it small and fast: a 14 MB download that starts in
 about half a second.
 
-Gmail and any IMAP account, one inbox for all of them, search that reaches back
+Gmail, Outlook and any IMAP account, one inbox for all of them, search that reaches back
 years, and protection against trackers and phishing built in.
 
 **If you like it, please star it.** It is the simplest way to help the project
@@ -192,6 +192,8 @@ If you ran `scripts/install-launcher.sh` from a source checkout, undo it with
 - **Gmail:** choose Google, then follow the three steps to create an app
   password in your Google account (it needs 2-step verification). Advanced:
   sign in with Google using your own OAuth client ID.
+- **Outlook, Hotmail, Live and Microsoft 365:** choose Outlook and sign in with
+  Microsoft in your browser. Microsoft accepts no password for mail.
 - **Any other account:** enter your address and password; the server names are
   guessed from the address and can be corrected.
 
@@ -337,7 +339,7 @@ src-tauri/src/       engine (Rust)
   sync.rs imap.rs    keeping the local database in step with the server
   db.rs              all the SQL
   parse.rs           reading and cleaning mail
-  smtp.rs oauth.rs   sending, Google sign-in
+  smtp.rs oauth.rs   sending, Google and Microsoft sign-in
 stats/               the usage counter (Cloudflare Worker)
 website/             openwren.app (Astro)
 ```
@@ -379,6 +381,10 @@ reporting a vulnerability privately.
   a certificate yet, so both systems warn on first start.
 - One-click "Sign in with Google" for everyone needs Google's approval of the
   app, which has not been requested yet. Until then Gmail uses an app password.
+- Outlook sign-in is new. A work or school account may answer "needs admin
+  approval": the organisation's administrator has to allow OpenWren once, or you
+  enter a client ID from your own organisation in Settings, Accounts. Some
+  organisations switch off sending over SMTP, which OpenWren uses.
 - Categories, pins and snoozes are stored on this computer, not on the server.
 - Server-side search understands plain ASCII words only.
 - HTML mail is always shown on a white background, also in the dark theme.

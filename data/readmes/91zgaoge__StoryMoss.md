@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.99.13-gold"></a>
+  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.99.14-gold"></a>
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-ISC-blue.svg"></a>
   <a href="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml"><img alt="Build" src="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml/badge.svg"></a>
   <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg">
@@ -120,6 +120,11 @@ npm run build
 
 LOG.md`](./CHANGELOG.md)。
 
+### v0.99.14 · 续写训练沙盒章号沿用原书
+
+- **问题**：训练沙盒把上下文按 1..N 编号、续写从 `context_n+1` 起；原书第 134–143 章作上下文时，续写首个 scene 是第 11 章（自动取名「第十一章 …」），报告也写「沙盒第 11 章 vs 原书第 144 章」，与真实续写章号错位。
+- **结果**：上下文 scene/chapter 序号改用原书真实章号（134–143），续写首章取真实后续基准首章（143 章后起续写 → **第 144 章**）；训练指令、报告区间与编审总评统一使用真实章号。新增 2 条回归测试（首章号推导、报告区间）。
+
 ### v0.99.13 · 切章保存不再误丢稿 / 更新检查不再假报错（日志巡检）
 
 - **问题**：v0.99.10 日志包（11-17～11-22）里 27 条 ERROR 集中在两处。第一，10 次「正文已被另一窗口更新，拒绝用旧快照覆盖」的保存冲突，全部发生在切章后 10–50ms，冲突对象都是**上一章**——上一章在途保存被换成新章的 CAS 基线，后端正确拒绝、前端却误报「另一窗口已更新」并停止重试，切章前最后几次编辑因此丢失。第二，12 次「检查更新失败」+3 次「安装更新失败」：本机 GitHub 源不可达、官网已明确返回「无更新」，但旧裁决把「任一源失败」整体升级成更新失败，用户每次启动都看到报错。
@@ -162,9 +167,4 @@ LOG.md`](./CHANGELOG.md)。
 
 ### v0.99.5 · 用量统计与功能使用页签修复（日志巡检）
 
-- **问题**：用量统计查询 `llm_calls.cost`，但该表从未有 `cost` 列，数据洞察页每次加载都报 `no such column: cost`；功能使用页签调用的 `get_feature_usage_stats` 命令后端从未注册，恒报 `Command not found`（均来自 v0.99.0 真机日志）。
-- **结果**：统计 SQL 只聚合次数与 token（金额字段保留恒 0），`'global'` 恢复跨故事汇总语义；补齐并注册 `get_feature_usage_stats` 命令（默认 30 天、限幅 1–365）；新增 4 条回归测试。
-
-### v0.99.4 · 官网 Release 保留策略 5→3（修复 552 Disk full）
-
-- **问题**：v0.99.2 三平台构建成功，但 `upload-to-website` 在 macOS 更新包 `.sig` 报 `552 Disk full`；retentio
+- **问题**：用量统计查询 `llm_calls.cost`，但该表从未有 `cost` 列，数据洞察页每次加载都报 `no such column: cost`；功能使用页签调用的 `get_feature_usage_stats` 命令后端从未注册，恒报 `Command n

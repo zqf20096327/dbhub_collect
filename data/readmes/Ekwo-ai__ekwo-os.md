@@ -501,6 +501,14 @@ because something has to be kept alive for it — a contract, a certificate, a
 credential, a machine. [`docs/cloud-services.md`](docs/cloud-services.md) lists
 them, and says what will never be sold.
 
+Upgrades follow the same line. On your Supabase, you upgrade with
+`ekwo migrate`, when you decide, and nobody else does. A project Ekwo hosts
+is upgraded by Ekwo at every release, after a copy of every company and a
+rehearsal. A project of your own that you linked to Ekwo Cloud is upgraded
+for you only if you chose it. An installation that is not upgraded keeps
+working, and newer clients keep reading it down to a stated floor:
+[`docs/upgrades.md`](docs/upgrades.md).
+
 ## Support
 
 Three ways to get help, from the open to the dedicated:

@@ -25,6 +25,8 @@ Measured against paperless-ngx 3.4.2 on the same small arm64 board (NVIDIA Jetso
 documents, same database – details and limits below:
 
 - **17× faster consuming:** 230 documents in 1 min 46 s instead of 29 min 56 s.
+- **Raspberry Pi 5:** 230 documents in 3 min 05 s instead of 27 min 07 s, with a twelfth of the processor
+  time (100 instead of 1,253 CPU seconds) – [report](results/benchmark/2026-11-22-pi5/bericht.md) (German).
 - **16× faster first start** (3.3 s instead of 53 s); a restart answers after 0.6 s instead of 34 s.
 - **12–19× faster answers with several users at once** (median, 1–10 people, no errors) –
   [report](results/benchmark/2026-11-20-jetson/s2s3-rerun/bericht.md) (German).
@@ -60,7 +62,7 @@ cleaning and deskewing scans:
 **Where PaperRust is worse:** its database uses more memory (74 instead of 49 MiB after consuming)
 and more disk (logically 28.4 instead of 18.2 MB, the database volume 11 % more), and the memory peak
 while consuming (800 MiB) is only slightly below paperless-ngx (838 MiB). Only one device and clean
-test documents were measured; do not over-interpret differences below about 10 %.
+test documents were measured in this table (Raspberry Pi 5: see above); do not over-interpret differences below about 10 %.
 
 Full report with method and limits (German):
 [results/benchmark/2026-11-20-jetson/bericht.md](results/benchmark/2026-11-20-jetson/bericht.md),

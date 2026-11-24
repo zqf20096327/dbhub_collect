@@ -2,7 +2,7 @@
   <img src="./uvcpp.svg" alt="libuvcpp logo" width="160" height="160">
 </p>
 
-[![version](https://img.shields.io/badge/version-1.10.0--dev-blue.svg)](./RELEASE.md)
+[![version](https://img.shields.io/badge/version-1.11.0-blue.svg)](./RELEASE.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![CI · Linux · Ubuntu](https://github.com/Antruly/libuvcpp/actions/workflows/ci-linux-ubuntu.yml/badge.svg)](https://github.com/Antruly/libuvcpp/actions/workflows/ci-linux-ubuntu.yml)
 [![CI · Windows · MSVC](https://github.com/Antruly/libuvcpp/actions/workflows/ci-windows-msvc.yml/badge.svg)](https://github.com/Antruly/libuvcpp/actions/workflows/ci-windows-msvc.yml)
@@ -14,25 +14,25 @@
 🔧 Modern C++11 wrapper for [libuv](https://github.com/libuv/libuv) — event-driven I/O with
 object-oriented APIs, dual-mode async/sync support, HTTP/1.1, WebSocket (RFC 6455), and SSL/TLS.
 
-- **Version**: `1.10.0-dev` — **Author**: `zhuweiye` — **License**: `MIT`
+- **Version**: `1.11.0` — **Author**: `zhuweiye` — **License**: `MIT`
 - **Languages**: [English](./README.md) · [中文](./README.zh.md)
 
 ## Download
 
 <!-- downloads:start -->
-The newest release is **v1.9.1** (source tree: `1.10.0-dev`). Six prebuilt packages, each one self-contained — the
+The newest release is **v1.11.0**. Six prebuilt packages, each one self-contained — the
 Release and Debug builds of the library, all the public headers, `uvcpp.pc` and the CMake
 package files, and no extra DLLs or `.so` files to ship alongside. Which modules a given
 package enables is recorded per version in [CHANGELOG.md](./CHANGELOG.md).
 
 | Platform | Toolchain | Package |
 |---|---|---|
-| Windows x64 | MSVC 2022 | [libuvcpp-1.9.1-msvc-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.9.1/libuvcpp-1.9.1-msvc-x64.zip) · 24.4 MB |
-| Windows arm64 | MSVC 2022 | [libuvcpp-1.9.1-msvc-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.9.1/libuvcpp-1.9.1-msvc-arm64.zip) · 25.3 MB |
-| Windows x64 | MinGW-w64 (GCC) | [libuvcpp-1.9.1-mingw-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.9.1/libuvcpp-1.9.1-mingw-x64.zip) · 30.3 MB |
-| Windows arm64 | MinGW-w64 (clang + libc++) | [libuvcpp-1.9.1-mingw-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.9.1/libuvcpp-1.9.1-mingw-arm64.zip) · 23.0 MB |
-| Linux x64 | GCC | [libuvcpp-1.9.1-linux-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.9.1/libuvcpp-1.9.1-linux-x64.zip) · 27.8 MB |
-| Linux arm64 | GCC | [libuvcpp-1.9.1-linux-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.9.1/libuvcpp-1.9.1-linux-arm64.zip) · 28.0 MB |
+| Windows x64 | MSVC 2022 | [libuvcpp-1.11.0-msvc-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.11.0/libuvcpp-1.11.0-msvc-x64.zip) · 26.1 MB |
+| Windows arm64 | MSVC 2022 | [libuvcpp-1.11.0-msvc-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.11.0/libuvcpp-1.11.0-msvc-arm64.zip) · 27.1 MB |
+| Windows x64 | MinGW-w64 (GCC) | [libuvcpp-1.11.0-mingw-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.11.0/libuvcpp-1.11.0-mingw-x64.zip) · 32.8 MB |
+| Windows arm64 | MinGW-w64 (clang + libc++) | [libuvcpp-1.11.0-mingw-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.11.0/libuvcpp-1.11.0-mingw-arm64.zip) · 24.7 MB |
+| Linux x64 | GCC | [libuvcpp-1.11.0-linux-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.11.0/libuvcpp-1.11.0-linux-x64.zip) · 29.9 MB |
+| Linux arm64 | GCC | [libuvcpp-1.11.0-linux-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.11.0/libuvcpp-1.11.0-linux-arm64.zip) · 30.1 MB |
 
 Every earlier release is on the **[Releases page](https://github.com/Antruly/libuvcpp/releases)**.
 What a package contains, and why it is laid out that way:
@@ -311,7 +311,7 @@ CI** (`tests/tools/check_doc_snippets.py`), so they are safe to copy.
 | SOCKS5 | [doc/socks5-guide.md](doc/socks5-guide.md) | A complete client and server: CONNECT / BIND / UDP ASSOCIATE, no-auth and RFC 1929, IPv4/IPv6/domains; the transparent CONNECT proxy built into `uvcpp_tcp_client` / HTTP / WS clients, the UDP data plane, backpressure and timeouts, and the "the defaults are an open proxy" warning |
 | web (HTTP half) | [doc/web-http-guide.md](doc/web-http-guide.md) | HTTP server/client/parser/static server; why shutdown takes two calls |
 | web (WS half) | [doc/web-ws-guide.md](doc/web-ws-guide.md) | WebSocket handshake, frames, close codes |
-| webapp (framework) | [doc/webapp-guide.md](doc/webapp-guide.md) | Routing, middleware, request/response, upload, static, WebSocket, logging — multi-loop scaling (§19), metrics/health endpoints (§20), WebSocket rooms (§21), sessions (§22) and RBAC/CSRF (§23) |
+| webapp (framework) | [doc/webapp-guide.md](doc/webapp-guide.md) | Routing, middleware, request/response, upload, static, WebSocket, logging — multi-loop scaling (§19), metrics/health endpoints (§20), WebSocket rooms (§21), sessions (§22), RBAC/CSRF (§23) and service deployment (§24) |
 | webapp (support types) | [doc/webapp-support-guide.md](doc/webapp-support-guide.md) | The seven types under the framework: connection identity, web utilities, MIME, multipart, file transfer, per-request context, console logging |
 | ssl | [doc/ssl-guide.md](doc/ssl-guide.md) | TLS context and per-connection wrapper — the shortest header set and the easiest to get wrong |
 | http2 | [doc/http2-guide.md](doc/http2-guide.md) | Using the low-level session/connection layer |
@@ -327,7 +327,7 @@ CI** (`tests/tools/check_doc_snippets.py`), so they are safe to copy.
 | Build & packaging | [doc/build-guide.md](doc/build-guide.md) | What every switch means and how the switches combine, the build trees, the platform dependencies, the repository layout, and the failures worth recognising |
 | Performance | [doc/benchmark.md](doc/benchmark.md) | Measured per-connection memory, throughput and stability |
 | Benchmark rig | [doc/benchmark-rig.md](doc/benchmark-rig.md) | How to size and pin a benchmark run, and which scaling readings are valid rather than noise |
-| Tests | [doc/testing-guide.md](doc/testing-guide.md) | The three test layers, filename-as-filter-key, the `tests/tools/` index, and the gate exit codes |
+| Tests | [doc/testing-guide.md](doc/testing-guide.md) | The three test layers, filename-as-filter-key, the integration harness (DB / job queue / WebSocket rooms / process supervisor in one process), the `tests/tools/` index, and the gate exit codes |
 | CI | [doc/ci-guide.md](doc/ci-guide.md) | The CI job matrix for ordinary pushes, and the runner-side setup it depends on |
 | Release process | [doc/release-process.md](doc/release-process.md) | How a release is cut, what the six build legs produce, and what the pipeline does not check |
 | Multi-loop design | [doc/multiloop-design.md](doc/multiloop-design.md) | The reasoning behind `set_loops(n)`: the two placement shapes, what had to be split per loop, and what is still open |
@@ -366,6 +366,7 @@ OpenSSL ≥ 3.2 with the QUIC API for QUIC and HTTP/3), and how the switches int
 |--------|---------|-------------|
 | `UVCPP_BUILD_TESTS` | `ON` | Build test executables |
 | `UVCPP_BUILD_FUNCTIONAL` | `ON` | Build the functional test suite (only read when `UVCPP_BUILD_TESTS=ON`) |
+| `UVCPP_TEST_SERVICE_SCM` | `OFF` | Build `web_app_service_scm_func`, which really installs/starts/terminates/uninstalls a Windows service. Needs Administrator; CI turns it on only in the MSVC `web` leg |
 | `BUILD_SHARED_LIBS` | `ON` | Build shared libraries |
 | `UVCPP_BUILD_STATIC` | auto | Build static uvcpp library |
 | `UVCPP_BUILD_SHARED` | auto | Build shared uvcpp library |

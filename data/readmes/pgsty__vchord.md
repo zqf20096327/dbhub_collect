@@ -3,12 +3,12 @@
 [![Website: vchord.pgsty.com](https://img.shields.io/badge/Website-vchord.pgsty.com-slategray?style=flat&logo=cilium&logoColor=white)](https://vchord.pgsty.com/)
 [![Docs: vchord](https://img.shields.io/badge/Docs-vchord-slategray?style=flat)](https://vchord.pgsty.com/docs/vchord/)
 [![Catalog: vchord](https://img.shields.io/badge/Catalog-vchord-%233E668F?style=flat&logo=postgresql&logoColor=white&labelColor=3E668F)](https://pgext.cloud/ext/vchord)
-[![Version: v1.4.0](https://img.shields.io/badge/Version-v1.4.0-slategray?style=flat)](https://github.com/pgsty/vchord/releases)
+[![Version: 1.4.0](https://img.shields.io/badge/Version-1.4.0-slategray?style=flat)](docs/release-notes/1.4.0.md)
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-slategray?style=flat&logo=gnu&logoColor=white)](https://github.com/pgsty/vchord/blob/main/LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/pgsty/vchord?style=flat&logo=github&logoColor=black&color=slategray)](https://star-history.com/#pgsty/vchord&Date)
 [![PostgreSQL: 15-19](https://img.shields.io/badge/PostgreSQL-15--19-%233E668F?style=flat&logo=postgresql&logoColor=white&labelColor=3E668F)](#build-from-source)
 
-Disk-friendly vector similarity search for PostgreSQL 15–19 on `x86_64` and `aarch64`, built on [pgvector](https://github.com/pgvector/pgvector).
+vchord 1.4.0 provides disk-friendly vector similarity search for PostgreSQL 15–19 on `x86_64` and `aarch64`. It requires the `vector` extension from [pgvector](https://github.com/pgvector/pgvector).
 
 [Documentation](https://vchord.pgsty.com/docs/vchord/) · [Releases](https://github.com/pgsty/vchord/releases) · [Issues](https://github.com/pgsty/vchord/issues)
 
@@ -32,7 +32,7 @@ pig repo add pgsql -u
 pig ext add vchord
 ```
 
-Packages and source archives are also available from [GitHub Releases](https://github.com/pgsty/vchord/releases). See the [installation guide](https://vchord.pgsty.com/docs/vchord/getting-started/installation/) for platform details.
+The GitHub release workflow builds Linux `.deb` and `.zip` packages on Ubuntu 22.04 for PostgreSQL 15–19 on both architectures. The `.deb` packages require `libc6 >= 2.35`. Choose the package for your PostgreSQL major version and CPU architecture. See [GitHub Releases](https://github.com/pgsty/vchord/releases) and the [installation guide](https://vchord.pgsty.com/docs/vchord/getting-started/installation/).
 
 Add `vchord` to `shared_preload_libraries`, restart PostgreSQL, and enable the extension:
 
@@ -56,12 +56,18 @@ SELECT * FROM items ORDER BY embedding <-> '[3, 1, 2]' LIMIT 5;
 
 Use `USING vchordg` for a graph index. See [indexing](https://vchord.pgsty.com/docs/vchord/usage/indexing/), [graph search](https://vchord.pgsty.com/docs/vchord/usage/graph-index/), and [parameter tuning](https://vchord.pgsty.com/docs/vchord/usage/partitioning-tuning/) for configuration.
 
+For a query such as `WHERE tenant_id = 42 ORDER BY embedding <-> $1 LIMIT 10`, an RQ index on `(embedding vector_l2_ops, tenant_id)` can filter candidates inside each IVF list. `vchordrq.probes` selects the initial lists, and the scan streams and reranks lazily from those lists first. Only when the current round runs out of candidates does a pushed-down filter key expand to further lists, doubling probes each round up to `vchordrq.max_probes` (default `-1`, no cap; initial probes are always honored).
+
+Because further lists are read lazily only after earlier rounds are exhausted, rows from later rounds can be nearer than rows already returned, and RQ ranks candidates using `f32` distances. If strict SQL distance order is required, overfetch in a materialized CTE or subquery and re-sort by the SQL distance operator. Set `vchordrq.max_probes` to cap worst-case expansion on very selective or absent keys (or to `0` to disable expansion beyond the initial probes).
+
+Sphere searches through either ANN index can miss matching rows. PostgreSQL rechecks the strict radius for candidates the index returns. For an exhaustive range query, use `EXPLAIN` to verify that a sequential scan evaluates the sphere predicate on the table. See [issue #29](https://github.com/pgsty/vchord/issues/29).
+
 ## Build from Source
 
-Requires PostgreSQL 15–19 development headers, pgvector, Rust 1.99.1+, GNU Make, and matching Clang, libclang, and LLVM tools on `x86_64` or `aarch64`. Built with pgrx 0.20.0.
+Requires PostgreSQL 15–19 development headers, pgvector, Rust 1.100.0+, GNU Make, and matching Clang, libclang, and LLVM tools on `x86_64` or `aarch64`. Built with pgrx 0.20.1.
 
 ```bash
-git clone https://github.com/pgsty/vchord.git
+git clone --branch 1.4.0 --depth 1 https://github.com/pgsty/vchord.git
 cd vchord
 PG_CONFIG=/path/to/pg_config make build
 sudo make PG_CONFIG=/path/to/pg_config install
@@ -77,7 +83,7 @@ Install the new library and SQL files, restart PostgreSQL, then run in each data
 ALTER EXTENSION vchord UPDATE;
 ```
 
-See [release notes](https://vchord.pgsty.com/blog/release/) for migration requirements.
+1.4.0 reads ordinary 1.3.0 RQ indexes and writes the same format (`1001`). Adding filter key columns requires a new RQ index, which uses format `1003`. Before restoring a 1.3.0 binary, remove or replace every keyed index while 1.4.0 is still running, and restore a compatible 1.3.0 extension catalog or database backup. The distribution provides a forward SQL upgrade. PostgreSQL 14 installations must also move to a supported server major. See the [1.4.0 release notes](docs/release-notes/1.4.0.md).
 
 ## Testing
 

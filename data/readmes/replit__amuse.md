@@ -5,6 +5,8 @@ over, runs reminders and background checks, tracks goals and builds small apps y
 asks before it sends, submits or pays for anything. Amuse runs on your own computer for one person.
 It needs an OpenAI API key and PostgreSQL. No account, hosted service or other API key is required.
 
+Built using [Replit Missions](https://replit.com/blog/introducing-replit-missions).
+
 ## Features
 
 - Chat with an agent you name and shape, with side chats for separate topics

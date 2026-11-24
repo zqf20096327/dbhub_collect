@@ -1,12 +1,12 @@
 # DeepORG — One AI Agent for Your Whole Organization
 
 [![Apache 2.0](https://img.shields.io/github/license/dosco/deeporg.svg?style=for-the-badge)](https://github.com/dosco/deeporg/blob/master/LICENSE)
-[![NPM Package](https://img.shields.io/npm/v/graphjin?style=for-the-badge)](https://www.npmjs.com/package/graphjin)
+[![NPM Package](https://img.shields.io/npm/v/deeporg?style=for-the-badge)](https://www.npmjs.com/package/deeporg)
 [![Docker Pulls](https://img.shields.io/docker/pulls/dosco/graphjin?style=for-the-badge)](https://hub.docker.com/r/dosco/graphjin/tags)
 [![Discord Chat](https://img.shields.io/discord/628796009539043348.svg?style=for-the-badge&logo=discord)](https://discord.gg/6pSWCTZ)
 [![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=for-the-badge&logo=go)](https://pkg.go.dev/github.com/dosco/graphjin/core/v3)
 
-> **DeepORG was formerly GraphJin.** The Go module, the npm package and the Docker images keep the `graphjin` name for now.
+> **DeepORG was formerly GraphJin.** The Go module keeps the `graphjin` name for now. The npm package and the Docker images are published as `deeporg`, and under the old name as well.
 
 DeepORG is an AI agent that answers questions and makes changes across the
 systems your company already runs: databases, warehouses, APIs, files and
@@ -46,15 +46,18 @@ own right.
 
 ```bash
 curl -fsSL https://deeporg.io/install.sh | bash   # macOS and Linux
-npm install -g graphjin                           # any platform
-brew install dosco/graphjin/deeporg               # macOS
+npm install -g deeporg                            # any platform
+brew install dosco/deeporg/deeporg                # macOS
 ```
 
 The command is `deeporg`. The old name, `graphjin`, still works as an alias.
 
-Windows: use `npm install -g graphjin`, or download the Windows archive from
+If you installed the `graphjin` npm package before, run `npm uninstall -g graphjin`
+first: both packages install the same two commands.
+
+Windows: use `npm install -g deeporg`, or download the Windows archive from
 the [releases page](https://github.com/dosco/deeporg/releases). Linux packages
-are on the same page, and Docker is `docker pull dosco/graphjin`.
+are on the same page, and Docker is `docker pull dosco/deeporg`.
 
 ## Try it
 

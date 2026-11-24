@@ -27,17 +27,19 @@ TMP_MOCK=true ./bin/tmp
 TMP_ADDR=:9000 ./bin/tmp        # 自定义端口
 ```
 
-### 接管真实集群的两种形态
+### 接管真实集群
 
-| TiUP 部署位置 | 「TiUP 地址」怎么填 | 说明 |
-| --- | --- | --- |
-| 与 TMP 同机 | `127.0.0.1`（或本机 IP/hostname） | 平台**本地直读** `~/.tiup/.../meta.yaml`，无需本机开启 sshd；若元数据不在默认目录，用「TiUP 部署目录」显式指定 |
-| 独立跳板机 | 该机器 IP + SSH 账号/密码或私钥 | 通过 SSH 读取 `meta.yaml`，读不到时回退 `tiup cluster display -n <cluster> -T` |
+平台**只通过 SSH** 到 TiUP 中控机执行 `tiup cluster display`（自动定位 tiup 绝对路径，不依赖登录 shell 的 PATH），**没有「本机直读」模式**——即使 TiUP 与平台同机，也请在「TiUP 地址」填该机器地址并开启 sshd。
+
+| 「TiUP 地址」怎么填 | 说明 |
+| --- | --- |
+| TiUP 中控机 IP + SSH 账号/密码或私钥 | SSH 用户必须是部署该集群的 TiUP 属主用户（`tidb` 或 `root`），否则 tiup 看不到该集群；单条命令默认 30s 超时，可在「系统设置 → 采集配置 → SSH 命令超时」调整 |
+| `127.0.0.1` | 仅当平台与 TiUP 同机、且本机 sshd 可登录时可用；平台仍按 SSH 处理，不做本地直读 |
 
 采集侧字段全部来自真实来源：
 
-- **版本**：`meta.yaml` 的 `tidb_version`（如 `v8.5.5`），并与 MySQL `SELECT VERSION()` 交叉校验；
-- **拓扑/实例数**：`topology` 段下的 `pd_servers` / `tidb_servers` / `tikv_servers` / `tiflash_servers` / `tiproxy_servers` / `monitoring_servers` / `grafana_servers`（PD 用 `client_port`/`peer_port` 而非 `port`）；
+- **版本**：`tiup cluster display` 的 `cluster_version`（如 `v8.5.5`），并与 MySQL `SELECT VERSION()` 交叉校验；
+- **拓扑/实例数**：display 输出的 `pd_servers` / `tidb_servers` / `tikv_servers` / `tiflash_servers` / `tiproxy_servers` / `monitoring_servers` / `grafana_servers` 与实例状态列（状态唯一来源，PD / MySQL 不参与状态赋值）；
 - **架构**：服务级 `arch` 字段，缺失时用 `uname -m` 兜底；
 - **部署模式**：PD `/pd/api/v1/cluster/status` 的复制模式；
 - **外部系统地址**：按各 server 实际端口拼装 Dashboard / Prometheus / Grafana / Alertmanager 链接。

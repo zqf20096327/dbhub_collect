@@ -1,10 +1,10 @@
 {
  "wal-g/wal-g": {
-  "commit_7d": 23,
-  "commit_90d": 263,
+  "commit_7d": 17,
+  "commit_90d": 261,
   "rel_ver": "v3.0.10",
   "rel_pub": "2026-11-17",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 256,
-  "enriched_at": "20261121",
+  "enriched_at": "20261124",
   "lang": {
    "Go": 87,
    "Shell": 11,
@@ -23,8 +23,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261120",
-   "release": "20261121",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261027"
   },
   "rel_notes": [
@@ -50,7 +50,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"2775c61c4e1365eef1ea4f65b6b694d788d04729bca938c2535ecaf34e7a18c9\""
+   "release": "W/\"30e983529ae0cac17224fd5fd78a31f02f7facee984ad7be596bd5c671e9232b\""
   },
   "rel_dates": [
    "2026-11-17"
@@ -103,11 +103,11 @@
   }
  },
  "matrixorigin/matrixone": {
-  "commit_90d": 1965,
-  "commit_7d": 78,
-  "rel_ver": "v4.2.8-hotfix-20261119",
-  "rel_pub": "2026-11-19",
-  "rel_days": 3,
+  "commit_90d": 1958,
+  "commit_7d": 95,
+  "rel_ver": "v4.2.9",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -123,13 +123,23 @@
    "C++": 2,
    "PLpgSQL": 1
   },
-  "enriched_at": "20261122",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261120",
-   "release": "20261122",
+   "commit": "20261124",
+   "release": "20261124",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v4.2.9",
+    "d": "2026-11-23",
+    "n": "Release date: November 23, 2026  \nMatrixOne version: v4.2.9\n\nThis patch release reduces memory pressure on compute nodes (CNs) and fixes correctness issues in table clones, CDC, and schema changes.\n\n## Key Improvements\n\n- CNs use less memory when replaying the catalog at startup. For queries that spill to disk, spill runs are now bounded by bytes, which helps with wide rows.\n- Incremental backups can reuse immutable objects from earlier backups.\n\n## Key Bug Fixes\n\n- Deletes on cloned tables are scoped to th"
+   },
+   {
+    "t": "v4.1.6-hotfix-20261123",
+    "d": "2026-11-23",
+    "n": "Release date: November 23, 2026\n\nMaintenance release from `4.1.6-hotfix` at commit `fb242b78757e1377c1afb94b0010a34dc6f50966`. It contains one change since `v4.1.6-hotfix-20261119`.\n\n## What's Changed\n\n- Fix an optimizer loop when binding a rewritten `IN` predicate expands it back into an `OR` of equalities. The optimizer keeps the existing predicate and stops reporting progress for that rewrite. This backports #27793. [#33092](https://github.com/matrixorigin/matrixone/pull/33092)\n\n## Validation\n\n- #33092 r"
+   },
    {
     "t": "v4.2.8-hotfix-20261119",
     "d": "2026-11-19",
@@ -169,22 +179,14 @@
     "t": "v4.1.6-hotfix-20261110",
     "d": "2026-11-10",
     "n": "- Shared UNION type reconciliation remains tracked in #32326; this release does not claim full SELECT/CTAS type equivalence with MySQL."
-   },
-   {
-    "t": "v4.1.6-hotfix-20261107",
-    "d": "2026-11-07",
-    "n": "- Shared UNION type reconciliation remains tracked in #32326; this release does not claim full SELECT/CTAS type equivalence with MySQL."
-   },
-   {
-    "t": "v4.2.8",
-    "d": "2026-11-04",
-    "n": "Release date: November 4, 2026  \nMatrixOne version: v4.2.8\n\nMatrixOne 4.2.8 is a patch release on the 4.2 line, adding query-level IVF search tuning and fixing concurrent writes, DELETE planning, transaction-local scan visibility, role grants, and FileService HTTP tracing.\n\n## Key Improvements\n\n### Vector Search\n\n* **Query-Level IVF nprobe**: Override the session probe setting for individual IVFFLAT and IVFPQ queries. Defaults are unchanged; increasing nprobe can increase search cost. Invalid or unknown ran"
    }
   ],
   "etag": {
-   "release": "W/\"7f48726d6259dd1e26d71eb9a26fe3dda94521e5b6d3f0f3eb8eb2127bd6ba8d\""
+   "release": "W/\"ea98b4834143218ef01526353a489369ec2490536981c00699d0010ff6f5db3b\""
   },
   "rel_dates": [
+   "2026-11-23",
+   "2026-11-23",
    "2026-11-19",
    "2026-11-19",
    "2026-11-17",
@@ -212,9 +214,7 @@
    "2026-09-28",
    "2026-09-28",
    "2026-09-17",
-   "2026-09-16",
-   "2026-09-10",
-   "2026-09-09"
+   "2026-09-16"
   ]
  },
  "quentinhardy/odat": {
@@ -222,7 +222,7 @@
   "commit_7d": 0,
   "rel_ver": "5.1.1",
   "rel_pub": "2022-04-27",
-  "rel_days": 1670,
+  "rel_days": 1672,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -246,7 +246,7 @@
   "commit_7d": 2,
   "rel_ver": "19.0",
   "rel_pub": "2026-11-17",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -317,7 +317,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.4.5",
   "rel_pub": "2026-10-28",
-  "rel_days": 25,
+  "rel_days": 27,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -389,7 +389,7 @@
   "commit_7d": 0,
   "rel_ver": "1.5.2",
   "rel_pub": "2026-03-08",
-  "rel_days": 259,
+  "rel_days": 261,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -412,7 +412,7 @@
   "commit_7d": 2,
   "rel_ver": "v1.17.1",
   "rel_pub": "2026-09-08",
-  "rel_days": 75,
+  "rel_days": 77,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -468,7 +468,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.4.0",
   "rel_pub": "2025-10-28",
-  "rel_days": 390,
+  "rel_days": 392,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -525,7 +525,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.93.2",
   "rel_pub": "2024-08-02",
-  "rel_days": 842,
+  "rel_days": 844,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -581,7 +581,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.12.1",
   "rel_pub": "2026-09-08",
-  "rel_days": 75,
+  "rel_days": 77,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -603,7 +603,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.1",
   "rel_pub": "2020-07-16",
-  "rel_days": 2320,
+  "rel_days": 2322,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -668,12 +668,12 @@
   "enriched_at": "20260927"
  },
  "cljoly/rusqlite_migration": {
-  "commit_90d": 13,
-  "commit_7d": 0,
-  "rel_ver": "v2.6.0",
-  "rel_pub": "2026-05-28",
-  "rel_days": 178,
-  "rel_n90": 0,
+  "commit_90d": 20,
+  "commit_7d": 2,
+  "rel_ver": "v2.9.0",
+  "rel_pub": "2026-11-23",
+  "rel_days": 1,
+  "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -685,15 +685,36 @@
    "Rust": 99,
    "Shell": 1
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261124",
   "dim_ts": {
-   "commit": "20261110",
-   "release": "20261110"
+   "commit": "20261124",
+   "release": "20261124"
   },
   "etag": {
-   "release": "W/\"f974e0c224472ea12ba0df8faafdafa9e73a56ceab2f5781a6213762dd0c25a1\""
+   "release": "W/\"6897da55ce3df8e8f772ffdc9046a393fc8f2522c92b123ad5561c8f18f72c28\""
   },
-  "rel_dates": []
+  "rel_dates": [
+   "2026-11-23",
+   "2026-11-23",
+   "2026-11-10"
+  ],
+  "rel_notes": [
+   {
+    "t": "v2.9.0",
+    "d": "2026-11-23",
+    "n": "Dependencies\n------------\n\nRusqlite was updated from 0.42.0 to 0.43.0.\nPlease see [the release notes for 0.43.0](https://github.com/rusqlite/rusqlite/releases/tag/v0.43.0)."
+   },
+   {
+    "t": "v2.8.0",
+    "d": "2026-11-23",
+    "n": "Dependencies\r\n------------\r\n\r\nRusqlite was updated from 0.41.0 to 0.42.0.\r\nPlease see [the release notes for 0.42.0](https://github.com/rusqlite/rusqlite/releases/tag/v0.42.0)."
+   },
+   {
+    "t": "v2.7.0",
+    "d": "2026-11-10",
+    "n": "Rusqlite was updated from 0.40.0 to 0.41.0.\nPlease see [the release notes for 0.41.0](https://github.com/rusqlite/rusqlite/releases/tag/v0.41.0).\nrusqlite lowered the MSRV to 1.89.0[^188-189] (from 1.95.0), this crate follows suit.\n[^188-189]: The changelog mentions 1.88, but a [later commit](https://github.com/rusqlite/rusqlite/commit/92a7d4965b12d0bab61d0c0447d91931f1d48461) changed it further to 1.89.0."
+   }
+  ]
  },
  "JiamingMai/clickhouse-ast-parser": {
   "rel_ver": null,
@@ -725,7 +746,7 @@
  "Axial-SQL/AxialSqlTools": {
   "rel_ver": "4.13",
   "rel_pub": "2026-09-19",
-  "rel_days": 64,
+  "rel_days": 66,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -773,7 +794,7 @@
  "imanuelcostigan/RSQLServer": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2017-06-17",
-  "rel_days": 3445,
+  "rel_days": 3447,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -792,7 +813,7 @@
  "xraypy/XrayDB": {
   "rel_ver": "4.5.8",
   "rel_pub": "2025-07-18",
-  "rel_days": 492,
+  "rel_days": 494,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -812,7 +833,7 @@
  "metrico/fluXpipe": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-10-03",
-  "rel_days": 1146,
+  "rel_days": 1148,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -858,7 +879,7 @@
  "Zhwt/go-mcp-mysql": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2025-03-19",
-  "rel_days": 613,
+  "rel_days": 615,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -875,7 +896,7 @@
  "dofusdude/doduda": {
   "rel_ver": "v0.7.3",
   "rel_pub": "2026-05-19",
-  "rel_days": 187,
+  "rel_days": 189,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -908,7 +929,7 @@
  "proj-airi/duckdb-wasm": {
   "rel_ver": "v0.4.29",
   "rel_pub": "2025-10-11",
-  "rel_days": 407,
+  "rel_days": 409,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -928,7 +949,7 @@
  "vcian/php-db-auditor": {
   "rel_ver": "v2.1.0",
   "rel_pub": "2023-11-21",
-  "rel_days": 1097,
+  "rel_days": 1099,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -958,7 +979,7 @@
  "FuturistiCoder/LiteDB.Realtime": {
   "rel_ver": "v1.1.1",
   "rel_pub": "2022-11-11",
-  "rel_days": 1472,
+  "rel_days": 1474,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -989,7 +1010,7 @@
  "orbitdb-archive/orbit-db-http-api": {
   "rel_ver": "0.3.0-rc.4",
   "rel_pub": "2019-07-10",
-  "rel_days": 2692,
+  "rel_days": 2694,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1036,7 +1057,7 @@
  "nycmeshnet/meshdb": {
   "rel_ver": "v0.0",
   "rel_pub": "2023-09-08",
-  "rel_days": 1171,
+  "rel_days": 1173,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1101,7 +1122,7 @@
  "InPhyT/COVID19-Italy-Integrated-Surveillance-Data": {
   "rel_ver": "v42.0.0",
   "rel_pub": "2022-11-02",
-  "rel_days": 1481,
+  "rel_days": 1483,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1178,7 +1199,7 @@
  "patrick-zippenfenig/ClickHouseNIO": {
   "rel_ver": "v1.6.1",
   "rel_pub": "2026-04-16",
-  "rel_days": 220,
+  "rel_days": 222,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1195,7 +1216,7 @@
  "mnemosyne-systems/billetsys": {
   "rel_ver": "0.3.0",
   "rel_pub": "2026-06-03",
-  "rel_days": 172,
+  "rel_days": 174,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1216,7 +1237,7 @@
  "kocoygroup-id/AsaDB": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2026-07-23",
-  "rel_days": 122,
+  "rel_days": 124,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1266,7 +1287,7 @@
  "catman85/JavaFX-Student-Management-System": {
   "rel_ver": "1.0.0",
   "rel_pub": "2018-11-17",
-  "rel_days": 2927,
+  "rel_days": 2929,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1301,7 +1322,7 @@
  "open-enterprise-solutions/enterprise": {
   "rel_ver": "nightly",
   "rel_pub": "2026-09-27",
-  "rel_days": 56,
+  "rel_days": 58,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -1335,7 +1356,7 @@
  "FreeLeh/PyFreeDB": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2025-01-25",
-  "rel_days": 666,
+  "rel_days": 668,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1353,7 +1374,7 @@
  "WowoEngine/SawitDB-PHP": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-01-05",
-  "rel_days": 321,
+  "rel_days": 323,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1437,7 +1458,7 @@
  "thermondo/django-heroku-connect": {
   "rel_ver": "6.0.0",
   "rel_pub": "2025-12-22",
-  "rel_days": 335,
+  "rel_days": 337,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1454,7 +1475,7 @@
  "zikwall/clickhouse-buffer": {
   "rel_ver": "v4.0.5",
   "rel_pub": "2023-11-30",
-  "rel_days": 1088,
+  "rel_days": 1090,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1484,7 +1505,7 @@
  "thoven87/strand": {
   "rel_ver": "1.0.0-alpha2",
   "rel_pub": "2026-09-28",
-  "rel_days": 55,
+  "rel_days": 57,
   "rel_n90": 2,
   "rel_pre": true,
   "rel_none": false,
@@ -1505,7 +1526,7 @@
  "OrcaPracticas/GQL": {
   "rel_ver": "api",
   "rel_pub": "2018-08-31",
-  "rel_days": 3005,
+  "rel_days": 3007,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1556,7 +1577,7 @@
  "sensu-plugins/sensu-plugins-postgres": {
   "rel_ver": "4.3.0",
   "rel_pub": "2021-09-16",
-  "rel_days": 1893,
+  "rel_days": 1895,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1588,7 +1609,7 @@
  "fifthlang/fifthlang": {
   "rel_ver": "v0.10.0",
   "rel_pub": "2026-03-26",
-  "rel_days": 241,
+  "rel_days": 243,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1664,7 +1685,7 @@
  "tibordp/pyncette": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-10-20",
-  "rel_days": 398,
+  "rel_days": 400,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1728,7 +1749,7 @@
  "MeGustas-5427/SQL_Tutorials": {
   "rel_ver": "0.01",
   "rel_pub": "2021-01-14",
-  "rel_days": 2138,
+  "rel_days": 2140,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1759,7 +1780,7 @@
  "dmarc-analyzer-net/DmarcAnalyzerApp": {
   "rel_ver": "v0.13.0",
   "rel_pub": "2026-08-31",
-  "rel_days": 83,
+  "rel_days": 85,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1793,7 +1814,7 @@
  "LucaMozzo/DbDataReaderMapper": {
   "rel_ver": "1.3.0",
   "rel_pub": "2025-01-31",
-  "rel_days": 660,
+  "rel_days": 662,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1810,7 +1831,7 @@
  "a179346/knex-tree": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2021-09-11",
-  "rel_days": 1898,
+  "rel_days": 1900,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2435,7 +2456,7 @@
  "osvaldoandrade/ledgerdb": {
   "rel_ver": "v0.2.20",
   "rel_pub": "2026-06-10",
-  "rel_days": 165,
+  "rel_days": 167,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2486,7 +2507,7 @@
  "DejavuMoe/sani": {
   "rel_ver": "v0.9.6",
   "rel_pub": "2026-10-10",
-  "rel_days": 43,
+  "rel_days": 45,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2622,7 +2643,7 @@
  "anipottsbuilds/imessage-mcp": {
   "rel_ver": "v3.3.2",
   "rel_pub": "2026-10-23",
-  "rel_days": 30,
+  "rel_days": 32,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2719,7 +2740,7 @@
   "commit_7d": 27,
   "rel_ver": "v1.0.1",
   "rel_pub": "2026-11-09",
-  "rel_days": 13,
+  "rel_days": 15,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2801,7 +2822,7 @@
   },
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-11-14",
-  "rel_days": 8,
+  "rel_days": 10,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2871,7 +2892,7 @@
   },
   "rel_ver": "v0.1.4",
   "rel_pub": "2026-07-23",
-  "rel_days": 122,
+  "rel_days": 124,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2928,7 +2949,7 @@
   },
   "rel_ver": "5.0.0",
   "rel_pub": "2026-11-22",
-  "rel_days": 0,
+  "rel_days": 2,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2969,7 +2990,7 @@
   },
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-07-15",
-  "rel_days": 130,
+  "rel_days": 132,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,

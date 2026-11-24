@@ -101,6 +101,7 @@ Refresh **Failures** and open **POST /checkout**. More examples:
 | Example | What it sends |
 | --- | --- |
 | [Go checkout](examples/go/README.md) | Real HTTP requests through the OpenTelemetry SDK, with success, failure, and retry routes. |
+| [Node, Python, Java and .NET SDKs](examples/sdk/README.md) | Real SDK exporters, successful/failing loopback requests, resource metadata, run IDs and explicit shutdown. |
 | [OTLP/HTTP JSON](examples/otlp-json/README.md) | A synthetic HTTP 503 trace from Node.js, Python, Java, or .NET, using only the standard library. |
 | [Service map](examples/service-map/README.md) | One synthetic trace across five services, for exploring the map and waterfall. |
 
@@ -118,7 +119,7 @@ Refresh **Failures** and open **POST /checkout**. More examples:
 
 The install scripts verify the archive against the release's `checksums.txt`
 and take `GEKO_VERSION` to pin a release. `geko demo` and `serve --open` are
-in releases after v0.1.0.
+in releases from v0.2.0.
 
 To run Geko for a team, in Docker with a token or on a server behind TLS, see
 [Run Geko for a team](docs/server.md).

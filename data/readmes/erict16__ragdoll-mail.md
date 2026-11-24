@@ -2,7 +2,7 @@
 
 <h1 align="center">Ragdoll Mail</h1>
 
-<p align="center"><b>The free mail app your AI agent can use.<br>A desktop app for Mac and Windows with a command line built in: Claude Code, Codex and other agents can search your mail and write replies, and you press Send.</b></p>
+<p align="center"><b>The free mail app your AI agent can use.<br>A desktop app for Mac and Windows with a command line built in: Claude Code, Codex and other agents can search your mail, write replies and send them once you say yes.</b></p>
 
 <p align="center">Works with Tencent Exmail (腾讯企业邮箱), QQ Mail, 163, Gmail, iCloud, Fastmail and any other IMAP mailbox.</p>
 
@@ -19,11 +19,11 @@
   <a href="README.zh-CN.md"><b>简体中文</b></a>
 </p>
 
-<p align="center"><img src="docs/demo.gif" width="860" alt="Ragdoll Mail on a Mac: an AI agent in a terminal writes a reply with the ragdoll command, the draft opens in the app, the send is undone and set for tomorrow, and search finds mail as you type"></p>
+<p align="center"><img src="docs/demo.gif" width="860" alt="Ragdoll Mail on a Mac: an AI agent in a terminal writes a reply with the ragdoll command, you read the draft in the app, the agent sends it when you say yes, it shows in Sent, and search finds mail as you type"></p>
 
 ## What is Ragdoll Mail?
 
-Ragdoll Mail is a mail app for Mac and Windows, like Apple Mail or Outlook, with one difference: it comes with `ragdoll`, a command line that AI agents such as Claude Code and Codex can use. Your agent can search your mail, read whole conversations and write replies. Each reply is saved as a draft and opens in the app, and nothing is sent until you press Send.
+Ragdoll Mail is a mail app for Mac and Windows, like Apple Mail or Outlook, with one difference: it comes with `ragdoll`, a command line that AI agents such as Claude Code and Codex can use. Your agent can search your mail, read whole conversations and write replies. Each reply is saved as a draft. The agent sends it when you say yes in the chat, or you open it in the app and press Send yourself.
 
 Search runs on your own computer. Ragdoll Mail keeps a full-text index of your mailbox in SQLite, so a search takes milliseconds instead of a trip to the mail server, and it still works offline. That matters on mailboxes such as Tencent Exmail, whose own search sends back the whole folder whatever you type.
 
@@ -108,11 +108,11 @@ The first time, the app reads your mailbox. For a big mailbox this takes a few m
 
 |  | **Ragdoll Mail** | Apple Mail | Outlook (new) | Thunderbird | Foxmail | Spark |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|
-| Price | free | free | free with ads, or paid | free | free | free plan, paid plan |
+| Price | free | free | free with ads, or paid | free | free | free plan; Plus and Pro are paid |
 | Mac and Windows | both | Mac only | both | both | both | both |
 | Mail goes straight between you and your mail server | ✅ | ✅ | a copy is kept in Microsoft's cloud | ✅ | ✅ | goes through Spark's servers |
 | Open code that anyone can check | ✅ | no | no | ✅ | no | no |
-| Your own AI assistant can use the mailbox | ✅ | no | no | no | no | no |
+| Your own AI assistant can use the mailbox | ✅ | no | no | no | no | yes, sending needs Pro |
 | Phone app | no | ✅ | ✅ | Android | no | ✅ |
 | Several mailboxes in one window | not yet | ✅ | ✅ | ✅ | ✅ | ✅ |
 
@@ -147,13 +147,15 @@ Yes. It is open source under the MIT license.
 
 ## For AI assistants and the command line
 
-Ragdoll Mail also comes as a command, `ragdoll`. An AI assistant such as Claude Code or Codex can use it to find mail and write drafts for you. It cannot send by itself: every mail waits in your Drafts folder until you say yes.
+Ragdoll Mail also comes as a command, `ragdoll`. An AI assistant such as Claude Code or Codex can use it to find mail and write drafts for you. It can also send them: every mail first waits in your Drafts folder, is checked, and goes out only after you say yes to that draft (`ragdoll send <draft> --yes`, or `ragdoll schedule` for later). Or open the draft in the app and press Send yourself.
 
 ```console
 you    › Reply to Jane and attach the signed quote.
 agent  $ ragdoll search Jane quote --json
 agent  $ ragdoll draft --reply inbox:312 --body reply.html --attach Quote.pdf
 agent  › The draft is in your Drafts folder. Shall I send it?
+you    › Yes.
+agent  $ ragdoll send drafts:14 --yes
 ```
 
 To get the command: **Settings → Command line → Install** in the app. To get only the command, without the app, on a Mac: `brew tap erict16/tap`, `brew trust erict16/tap`, `brew install ragdoll`. It needs no Apple signature, so macOS shows no warning. Every command and how it compares with the Gmail API: **[the command-line guide](docs/command-line.md)**.

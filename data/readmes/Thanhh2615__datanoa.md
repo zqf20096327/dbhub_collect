@@ -29,8 +29,8 @@ Work with your databases without leaving **Orca** (`>=1.4.248`).
 
 - **Side Panel & Fullscreen Studio:** Inspect tables beside your code in Orca's **Right Sidebar Panel**, or open a fullscreen **Datanoa Studio** tab (`.datanoa` / `.sql`) from Orca's `+` Tab Bar menu.
 - **12+ Database Engines:** Connect directly to **SQLite**, **PostgreSQL**, **MySQL**, **MariaDB**, **CockroachDB**, **ClickHouse**, **Redis**, **LibSQL / Turso**, and **Cloudflare D1**, plus **SQL Server (MSSQL)**, **Oracle**, **MongoDB**, and custom local drivers.
-- **SSH Tunnels, TLS / mTLS & Auto-Detect:** Connect through `ssh -N -L` bastion tunnels, configure custom CA / mTLS, organize profiles by folder and workspace, and auto-detect `.env` URIs and local SQLite files.
-- **Multi-Tab SQL Console & Transactions:** Run queries across persisted SQL tabs with schema autocomplete, bind parameters (`:name`, `@name`, `$1`, `?`, `{{var}}`), saved queries, query history, manual transactions (`Auto-Commit`, `BEGIN`, `COMMIT`, `ROLLBACK`), and destructive-SQL confirmation (`DROP`, `TRUNCATE`, unfiltered `DELETE`/`UPDATE`).
+- **SSH Tunnels, TLS / mTLS & Workspace Auto-Discovery:** Connect through `ssh -N -L` bastion tunnels, configure custom CA / mTLS, organize profiles by folder and workspace, and auto-detect `.env` URIs, Docker Compose services/YAML files, and local SQLite `.db` files in separated, searchable, collapsible cards.
+- **Multi-Tab SQL Console, Multi-Result & Multi-EXPLAIN:** Run or `EXPLAIN` single or multiple SQL statements across persisted CodeMirror 6 tabs (in both Fullscreen Studio and Side Panel) with schema autocomplete, independent per-statement result tabs, bind parameters (`:name`, `@name`, `$1`, `?`, `{{var}}`), saved queries, query history, manual transactions (`Auto-Commit`, `BEGIN`, `COMMIT`, `ROLLBACK`), and destructive-SQL confirmation (`DROP`, `TRUNCATE`, unfiltered `DELETE`/`UPDATE`).
 - **Data Grid, Import & Visual Table Designer:** Filter and edit table or single-table `SELECT` results inline inside transactions, import `CSV`/`TSV`/`JSON`/`NDJSON`, export schema DDL, and design table migrations with live SQL preview.
 
 ---
@@ -72,7 +72,7 @@ Or in **Orca**, open **Settings → Plugins → Community Plugins**, search **`D
 ### Via Orca CLI
 
 ```bash
-orca plugin install https://github.com/Thanhh2615/datanoa#v1.1.1
+orca plugin install https://github.com/Thanhh2615/datanoa#v1.1.2
 ```
 
 ### Local Development
@@ -91,7 +91,18 @@ orca plugin dev load .
 
 1. **Fullscreen Studio:** Click **`+`** on Orca's tab bar and choose **Datanoa Studio**, or open any `.sql` / `.datanoa` file.
 2. **Side Panel:** Click the **Datanoa** icon in Orca's Right Sidebar Panel.
-3. **Connect:** Paste a connection URI (`postgres://`, `mysql://`, `redis://`, `libsql://`, `d1://`, `clickhouse://`, `sqlite://`), pick an engine, or click **`Auto-Detect (.env & .db)`**.
+3. **Connect:** Paste a connection URI (`postgres://`, `mysql://`, `redis://`, `libsql://`, `d1://`, `clickhouse://`, `sqlite://`), pick an engine, or click **`Auto-Detect (.env, Docker, .db)`**.
+
+---
+
+## Workspace Auto-Discovery
+
+Clicking **`Auto-Detect (.env, Docker, .db)`** (or **`Scan Folder...`**) in either **Fullscreen Studio** or the **Side Panel** groups discovered databases into three separated, collapsible, and live-searchable cards:
+
+- **`.env Connections`:** Reads root-level `.env`, `.env.local`, and `.env.development` files for database URIs (`DATABASE_URL`, `POSTGRES_URL`, `REDIS_URL`, `TURSO_DATABASE_URL`, etc.) with masked secret previews.
+- **Docker Compose:** Combines read-only Docker CLI container inspection (`docker ps -a` + `docker inspect`, cross-platform across Windows, macOS, and Linux) with static `docker-compose*.yml` / `compose*.yml` and `env_file` / `.env` parsing (`${VAR:-default}` variable interpolation) across **10 engines** (`PostgreSQL`, `MySQL`, `MariaDB`, `CockroachDB`, `ClickHouse`, `Redis`, `LibSQL`, `SQL Server`, `Oracle`, `MongoDB`). Shows runtime status (`running`, `exited`, `compose file`), prioritizes workspace-matched projects first, warns on unpublished ports or `*_PASSWORD_FILE` secrets, and deduplicates live containers with static compose definitions.
+- **SQLite Files (`.db`):** Scans workspace folders within a bounded async budget for `.db`, `.sqlite`, and `.sqlite3` files. On non-SQLite engine tabs, the SQLite card stays cleanly collapsed at the bottom (and **`Browse DB File...`** stays hidden) to keep server forms uncluttered while remaining one click—or one search query—away.
+- **Unified Search & Smart Collapse:** Filter `.env`, Docker Compose, and `.db` entries simultaneously from one search bar (matching groups auto-expand while searching; passwords are never displayed in chips or matched in search). Use **`Clear`** anytime next to **`Cancel`** to reset all form fields from scratch.
 
 ---
 
@@ -107,7 +118,7 @@ Write queries across persisted SQL tabs with bind parameters and manual transact
 
 ### Connection Manager — Built-In & Local Engines, SSH Tunnels & TLS / mTLS
 
-Connect to local or cloud databases, auto-detect `.env` and SQLite files, configure SSH tunnels and TLS/mTLS, and organize profiles with folders and environment tags.
+Connect to local or cloud databases, auto-detect `.env`, Docker Compose, and SQLite files, configure SSH tunnels and TLS/mTLS, and organize profiles with folders and environment tags.
 
 <p align="center">
   <img src="images/studio-connection-modal.webp" alt="Datanoa Connection Manager with database engines, SSH tunnels, TLS/mTLS, folders, and auto-detect" width="100%" />
@@ -144,7 +155,8 @@ Browse connections and schemas, stage inline edits, and run quick SQL or Redis c
 - **Data Grid:** Virtualized browsing, multi-cell selection with live aggregates (`Count`, `Sum`, `Avg`, `Min`, `Max`), column pinning/resizing, column filters, foreign-key jump (`Ctrl+Click` / `↗`), and a Value/JSON Inspector drawer.
 - **Transactional Editing:** Stage inline edits, inserts, clones, and deletes on tables or editable single-table `SELECT` results, review SQL in **`DML Preview`**, and commit atomically (`Ctrl+S`).
 - **Import & Export:** Import `CSV`, `TSV`, `JSON`, and `NDJSON` files (up to `25 MB`) with column mapping and chunked commits; export data as `CSV`, `JSON`, `NDJSON`, `SQL`, or `Markdown`, and export dependency-ordered schema DDL.
-- **SQL Console:** Up to 20 persisted tabs, multi-result sets, Find & Replace (`Ctrl+F` / `Ctrl+H`), code folding, formatting (`Shift+Alt+F`), schema autocomplete, bind parameters, saved queries, query history, `EXPLAIN`, manual transactions, and destructive-SQL prompts.
+- **SQL Console:** Up to 20 persisted CodeMirror 6 SQL tabs (across both Fullscreen Studio and Side Panel), independent multi-result tabs (`Result 1`, `Result 2`, ...), multi-statement `EXPLAIN` (one query-plan tab per statement), Find & Replace (`Ctrl+F` / `Ctrl+H`), code folding, formatting (`Shift+Alt+F`), schema autocomplete, bind parameters, saved queries, query history, manual transactions, and destructive-SQL prompts.
+- **Schema Inspector:** Grouped searchable table switcher in the Side Panel and Fullscreen Studio to inspect and edit columns, indexes, foreign keys, and DDL across connections.
 
 ---
 
@@ -179,12 +191,12 @@ Datanoa runs as an Orca `trusted-worker` plugin with the following capabilities:
 |---|---|
 | `storage:own` | Saves non-sensitive connection profiles, saved queries, query history, local driver trust records, and session state. |
 | `secrets:own` | Stores passwords, API tokens, TLS passphrases, and SSH credentials in Orca's encrypted secrets vault. |
-| `workspace:read` | Scans workspace `.env` files and local SQLite files when requested. |
+| `workspace:read` | Scans workspace `.env`, `docker-compose*.yml`/`compose*.yml`, and local SQLite files when requested. |
 | `workspace:write` | Saves `.datanoa/` session files, user-requested exports, and user-confirmed local driver folders. |
 | `settings:own` | Reads `maxRows` (`1–50,000`) and `queryTimeoutSeconds` (`1–110`). |
 
-- **External OS commands:** invokes `ssh` (and a temporary `askpass` script when using SSH password/passphrase auth) only when connecting through an SSH bastion tunnel.
-- **Safety Guards:** Read-Only profiles block mutating queries in the worker; destructive queries require confirmation; query history skips credential statements and masks secrets in error text.
+- **External OS commands:** Invokes `ssh` (and a temporary `askpass` script when using SSH password/passphrase auth) only when connecting through an SSH bastion tunnel, and read-only `docker ps -a` / `docker inspect` (with no shell) only when **Workspace Auto-Discovery** runs (gracefully skipped if Docker is unavailable).
+- **Safety Guards:** Read-Only profiles block mutating queries in the worker; destructive queries require confirmation; query history skips credential statements and masks secrets in error text; discovery chips mask URIs and never display or search raw passwords.
 - **Zero Telemetry:** Datanoa collects no analytics or telemetry and connects only to endpoints you configure.
 
 ---

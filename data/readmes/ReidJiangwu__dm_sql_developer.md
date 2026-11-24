@@ -8,7 +8,7 @@
 
 ## 下载安装
 
-在 [GitHub Releases](https://github.com/ReidJiangwu/dm_sql_developer/releases) 下载对应平台的社区版安装包，对照发布页的 SHA-256 核验下载文件。安装包随附达梦 DM8 开发版 DPI 运行库和调试器组件，使用这些组件须遵守达梦适用许可。
+从 [GitHub Release v1.4.49](https://github.com/ReidJiangwu/dm_sql_developer/releases/tag/v1.4.49) 下载对应平台的安装包，对照发布页的 SHA-256 核验文件。当前源码版本为 1.4.50。安装包随附达梦 DM8 开发版 DPI 运行库和调试器组件，使用这些组件须遵守达梦适用许可。
 
 - **Windows x64**：运行 `GzydDmTools-Community-1.4.49-windows-x64-setup.exe`，按向导安装。
 - **macOS**：打开 `GzydDmTools-Community-1.4.49-macos-x64.pkg`，按系统安装器提示操作。安装包内含 Wine。Apple 芯片 Mac 需要 Rosetta 2。
@@ -117,7 +117,7 @@ ctest --test-dir build/qt --output-on-failure
 .\build\qt\GzydDmToolsCli.exe --version
 ```
 
-上述是供维护者执行的命令，不表示本次源码已经通过它们。CMake 注册的社区边界检查应确认私有功能、业务片段和内部更新凭据不可用。自动检查不能代替真实数据库权限、事务、主备、输入法、窗口切换和缩放验收。
+CMake 注册的社区边界检查覆盖公共业务、版本说明及菜单隔离。
 
 ## 开始使用
 
@@ -132,10 +132,10 @@ macOS 安装包通过内置 Wine 运行 Windows 客户端。
 
 ## 更新与许可
 
-新版本及下载见 [GitHub Releases](https://github.com/ReidJiangwu/dm_sql_developer/releases)，完整变更见 [更新说明](release-notes.json)。
+从 [GitHub Releases](https://github.com/ReidJiangwu/dm_sql_developer/releases) 下载新版本。变更记录可在应用的「帮助 → 版本说明」或 [更新说明](release-notes.json) 中查看。
 
 自有代码采用 Apache-2.0 许可证，第三方资源沿用各自的许可。详见 [许可证范围](LICENSE-SCOPE.md) 和 [第三方说明](docs/third-party-notices.md)。
 
 ## 反馈问题
 
-提供版本、平台、复现步骤、预期和实际结果、脱敏错误及日志。未响应问题尽量保留现场和主线程调用栈；不要上传连接密码、完整用户数据目录或未脱敏转储。
+请在 [GitHub Issues](https://github.com/ReidJiangwu/dm_sql_developer/issues) 提供版本、平台、复现步骤、预期与实际结果，以及脱敏后的错误信息和日志。若应用未响应，可附上脱敏的主线程调用栈。
