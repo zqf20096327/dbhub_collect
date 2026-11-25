@@ -4821,15 +4821,15 @@
   "epoch": "sweep-1",
   "status": "partial",
   "caps_v": 2,
-  "collected_at": "2026-11-24T06:24:32Z",
+  "collected_at": "2026-11-25T03:12:28Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-24",
-  "stars": 51086,
+  "pushed_at": "2026-11-25",
+  "stars": 51112,
   "tree": {
-   "sha": "a1ba052310408e660e5662e399013fa4b0145e62",
-   "etag": "W/\"58011923013685c031384496889168b70c586544aef85f5615c4c4acb0696dfe\"",
+   "sha": "515c1baee633456f5b78f4da9d725578473155d1",
+   "etag": "W/\"49a2a518458d631d637b15e1e40247b7696d8b30fd1cf2e84c27d422eb92c87d\"",
    "truncated": true,
-   "path_count": 56116,
+   "path_count": 56090,
    "matched": [
     "pyproject.toml",
     "ci/pyproject.toml",
@@ -4864,6 +4864,7 @@
     "docker/server/Dockerfile",
     "docker/server/Dockerfile.alpine",
     "docker/server/Dockerfile.distroless",
+    "docker/server/Dockerfile.scratch",
     "docker/server/Dockerfile.ubuntu",
     "ci/docker/binary-builder/Dockerfile",
     "ci/docker/cctools/Dockerfile",
@@ -4879,7 +4880,6 @@
     "ci/docker/style-test/Dockerfile",
     "ci/docker/test-base/Dockerfile",
     "ci/docker/utils/Dockerfile",
-    "ci/docker/wasm-builder/Dockerfile",
     ".github/workflows/auto_releases.yml",
     ".github/workflows/backfill_distroless.yml",
     ".github/workflows/backport_branches.yml",
@@ -4996,9 +4996,9 @@
    {
     "path": "contrib/rust-contrib-workspace/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "02653061b23ded5a22ca0472b2cbdce3e2356fc2",
+    "blob_sha": "5c9848c9da1bd84a720c9a31d3a684d06240d376",
     "ecosystem": "cargo",
-    "bytes": 1307,
+    "bytes": 3190,
     "names": [
      "_ch_rust_prql",
      "_ch_rust_polyglot",
@@ -5012,9 +5012,9 @@
    {
     "path": "contrib/vortex-cmake/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "91670a622025c862e77adfa1c5bf35f875f0fd0a",
+    "blob_sha": "bd13b4e2d0114c043d4422a40f6ec5ee1959cc8c",
     "ecosystem": "cargo",
-    "bytes": 1444,
+    "bytes": 1717,
     "names": [
      "arrow-array",
      "arrow-schema",
@@ -5026,7 +5026,9 @@
      "vortex"
     ],
     "dev": [
-     "cbindgen"
+     "cbindgen",
+     "serde",
+     "toml"
     ]
    },
    {
@@ -5438,8 +5440,8 @@
    {
     "path": "docker/keeper/Dockerfile",
     "kind": "image",
-    "blob_sha": "55ac7f6b04740e6d51d35bc21f8dd6e2e856839a",
-    "bytes": 4919,
+    "blob_sha": "efa032dd856e38d5fd014495fa0ed4862b021d0d",
+    "bytes": 4920,
     "images": [
      "alpine"
     ]
@@ -5453,8 +5455,8 @@
    {
     "path": "docker/keeper/Dockerfile.distroless",
     "kind": "image",
-    "blob_sha": "a7214b7e64f66e45eb17e45df3b52b4db8fcd5b3",
-    "bytes": 11016,
+    "blob_sha": "d61ca3594fb9eb82e322ee7c3646258c46b76b17",
+    "bytes": 11017,
     "images": [
      "ubuntu:22.04",
      "gcr.io/distroless/base-nossl-debian13:debug-nonroot@sha256:12224264396c6637ae850ff7f82fb5c759115d9aa4c8b55f4aa7d40059c2e6f1",
@@ -5470,14 +5472,14 @@
    {
     "path": "docker/server/Dockerfile",
     "kind": "image",
-    "blob_sha": "fd45f0f7c7cdb70f0100788107ef60d6e5f6fbdf",
-    "bytes": 17
+    "blob_sha": "25d763feca5fd0b3507f1df004d200076cb5ee28",
+    "bytes": 18
    },
    {
     "path": "docker/server/Dockerfile.alpine",
     "kind": "image",
-    "blob_sha": "2d5976c1a5673b0e1b3d3d82ce7dfc5df9806832",
-    "bytes": 4688,
+    "blob_sha": "f18a88261114cbcd8d0b28610ecf36047513675d",
+    "bytes": 4689,
     "images": [
      "alpine"
     ]
@@ -5485,8 +5487,8 @@
    {
     "path": "docker/server/Dockerfile.distroless",
     "kind": "image",
-    "blob_sha": "29882f1dff3d4aa2d019eeabfd918f86a59e514a",
-    "bytes": 12228,
+    "blob_sha": "11ec22788c5e9e18fa6b19bfdabb6d71fd9f0848",
+    "bytes": 12229,
     "images": [
      "ubuntu:22.04",
      "gcr.io/distroless/base-nossl-debian13:debug-nonroot@sha256:12224264396c6637ae850ff7f82fb5c759115d9aa4c8b55f4aa7d40059c2e6f1",
@@ -5494,10 +5496,19 @@
     ]
    },
    {
+    "path": "docker/server/Dockerfile.scratch",
+    "kind": "image",
+    "blob_sha": "00a1e6e13d84928e6bc0af69eb1b54c5645ddd28",
+    "bytes": 13389,
+    "images": [
+     "ubuntu:22.04"
+    ]
+   },
+   {
     "path": "docker/server/Dockerfile.ubuntu",
     "kind": "image",
-    "blob_sha": "e1c61cf368ea0439e2986e415006c1bdea7f935d",
-    "bytes": 8247,
+    "blob_sha": "7d2eeb3eddcdceb33e5c73c7e6c6e4404b506f52",
+    "bytes": 8248,
     "images": [
      "ubuntu:22.04"
     ]
@@ -5632,15 +5643,6 @@
     "bytes": 1426,
     "images": [
      "clickhouse/fasttest:$FROM_TAG"
-    ]
-   },
-   {
-    "path": "ci/docker/wasm-builder/Dockerfile",
-    "kind": "image",
-    "blob_sha": "72a0eab4d9344958862a4ca10107c66ce5614a9b",
-    "bytes": 3342,
-    "images": [
-     "node:22-bookworm-slim"
     ]
    },
    {
@@ -7520,13 +7522,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-24T06:37:38Z",
+  "collected_at": "2026-11-25T03:24:12Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
-  "stars": 2220,
+  "pushed_at": "2026-11-25",
+  "stars": 2221,
   "tree": {
-   "sha": "91ad93455c0f1a80abb2fee53b08fb30528e2ad3",
-   "etag": "W/\"f3edf2c05074ce26036e652f537e9cff9819c806bbeb75e5fd05889d1f2320bf\"",
+   "sha": "1f1bacc4c1c76a9bf1679bfc918235a17e09c8e0",
+   "etag": "W/\"46e4d83f0e06817ce490cb37ddd68d97faf23ebee34b7014fc60692bcf7cbf4c\"",
    "truncated": false,
    "path_count": 2887,
    "matched": [
@@ -7575,7 +7577,7 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "ddc540202aa432ff47f106d374f189251f550dd8",
+    "blob_sha": "e9ec8d93fbe5c30be96183b04735f9eeabba5485",
     "ecosystem": "go",
     "bytes": 11830,
     "names": [
@@ -8140,13 +8142,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-24T06:40:06Z",
+  "collected_at": "2026-11-25T03:25:55Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-23",
-  "stars": 1485,
+  "pushed_at": "2026-11-24",
+  "stars": 1486,
   "tree": {
-   "sha": "30f3ba2b8ee004fef547455c086cc566e8d0a907",
-   "etag": "W/\"3cbf50ffd95c8eba5daf2b573a6979a1ee7d8d543c06e2f7ada9e3c588afb7d2\"",
+   "sha": "92a3844e9b228274daaa6b8d55b3f5480595aa1e",
+   "etag": "W/\"56bd2f63bac2726b833740dd54540debffa4fa1cdf2665cc9219579f42ec40cf\"",
    "truncated": false,
    "path_count": 1124,
    "matched": [
@@ -9986,15 +9988,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-24T06:58:56Z",
+  "collected_at": "2026-11-25T03:41:10Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-23",
-  "stars": 133,
+  "pushed_at": "2026-11-24",
+  "stars": 134,
   "tree": {
-   "sha": "0a9b7300127b6af5f075717fa3902534da5fe7f1",
-   "etag": "W/\"7b32a7e72f0a1e3cb80c8a1757f51095d4bc66b4c9eb6565db8c4596c577c129\"",
+   "sha": "dd87ef44c0cbef3d950656cf21e1d9e55adf3903",
+   "etag": "W/\"10aaa511fe56232ac8f4dd2aa51889c764969a9fffd4d0b5fd4b6be68e1d8f5a\"",
    "truncated": false,
-   "path_count": 3654,
+   "path_count": 3688,
    "matched": [
     "backend/pyproject.toml",
     "frontend/package.json",
@@ -10016,9 +10018,9 @@
    {
     "path": "backend/pyproject.toml",
     "kind": "dep",
-    "blob_sha": "6a318f912b9f395d32486cea7148629f4ad863b0",
+    "blob_sha": "fab1cfca47a11cce9674d39571107f57bc916335",
     "ecosystem": "pyproject",
-    "bytes": 7226,
+    "bytes": 7247,
     "names": [
      "fastapi",
      "uvicorn",
@@ -10051,15 +10053,16 @@
      "numpy",
      "sentry-sdk",
      "pywebpush",
-     "boto3"
+     "boto3",
+     "altcha"
     ]
    },
    {
     "path": "frontend/package.json",
     "kind": "dep",
-    "blob_sha": "bb6fe0c0f984be9659d6cb5c0f129ff15e94d16e",
+    "blob_sha": "576b1945dc843dacf7cf9afaf79b42e935252c6b",
     "ecosystem": "npm",
-    "bytes": 1423,
+    "bytes": 1482,
     "names": [
      "@fontsource-variable/cairo",
      "@fontsource-variable/inter",
@@ -10067,7 +10070,9 @@
      "@nuxt/ui",
      "@nuxtjs/i18n",
      "@types/nprogress",
+     "altcha",
      "isomorphic-dompurify",
+     "libphonenumber-js",
      "marked",
      "nprogress",
      "nuxt",
@@ -10174,8 +10179,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "94bd17b1d612fba30e86196e87c9f09ef61d9601",
-    "bytes": 21064,
+    "blob_sha": "3554f01e867df979ef21ae734cc395333945d170",
+    "bytes": 21453,
     "images": [
      "postgres:15-alpine"
     ]
@@ -18130,21 +18135,22 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T20:14:50Z",
+  "collected_at": "2026-11-25T04:10:12Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-19",
-  "stars": 3,
+  "pushed_at": "2026-11-25",
+  "stars": 5,
   "tree": {
-   "sha": "028e38fadd94b57930f00d407186e7c25673d756",
-   "etag": "W/\"353c12e322811ae887da1cdb81894dd2485aefc86ea21e879a6efea0c7931dfd\"",
+   "sha": "830f387fc2e67a0ae17c12b3910db24007dbdbc5",
+   "etag": "W/\"c0326c84df73b848d42b04b27ea8eeee5755aab922a7ed3a59fb18ee8278a0ca\"",
    "truncated": false,
-   "path_count": 1215,
+   "path_count": 1403,
    "matched": [
     "Cargo.toml",
     "web/package.json",
     "crates/sn-app/Cargo.toml",
     "crates/sn-bot/Cargo.toml",
     "crates/sn-domain/Cargo.toml",
+    "crates/sn-egress/Cargo.toml",
     "crates/sn-modules/Cargo.toml",
     "crates/sn-payments/Cargo.toml",
     "crates/sn-remnawave/Cargo.toml",
@@ -18160,9 +18166,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "052255ccfd99a8c808db2df360914a39a867f8f1",
+    "blob_sha": "dca5f29df11cde6e151ad86c6747dd49d0f1c818",
     "ecosystem": "cargo",
-    "bytes": 2703
+    "bytes": 2982
    },
    {
     "path": "web/package.json",
@@ -18189,11 +18195,12 @@
    {
     "path": "crates/sn-app/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "2d077cdd1da8ba76617f7641ac8d5b5c76c963e4",
+    "blob_sha": "8c1f77560524dc4aeebc486260321e26ec1b69f5",
     "ecosystem": "cargo",
-    "bytes": 785,
+    "bytes": 812,
     "names": [
      "sn-domain.workspace",
+     "sn-egress.workspace",
      "sn-store.workspace",
      "sn-remnawave.workspace",
      "sn-payments.workspace",
@@ -18218,11 +18225,12 @@
    {
     "path": "crates/sn-bot/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ee11631cab99a2e0b8fc3ac495a5465df7050973",
+    "blob_sha": "7cf29bb3f3724e7364e476e9cb5dd8eff6402042",
     "ecosystem": "cargo",
-    "bytes": 868,
+    "bytes": 895,
     "names": [
      "sn-domain.workspace",
+     "sn-egress.workspace",
      "sn-store.workspace",
      "sn-payments.workspace",
      "sn-modules.workspace",
@@ -18252,26 +18260,47 @@
    {
     "path": "crates/sn-domain/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c9f6abbbf76a169aa09dbd3a7212a907a83c9b30",
+    "blob_sha": "50c3e505265952f11672dfcd7cd7d9241e32037b",
     "ecosystem": "cargo",
-    "bytes": 348,
+    "bytes": 400,
     "names": [
      "serde.workspace",
      "serde_json.workspace",
      "chrono.workspace",
      "uuid.workspace",
      "thiserror.workspace",
-     "tokio.workspace"
+     "tokio.workspace",
+     "ammonia.workspace",
+     "cssparser.workspace"
+    ]
+   },
+   {
+    "path": "crates/sn-egress/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1b622225f9bc8490d251da2676627ff2911aedf4",
+    "ecosystem": "cargo",
+    "bytes": 399,
+    "names": [
+     "reqwest.workspace",
+     "serde.workspace",
+     "tokio.workspace",
+     "tracing.workspace"
+    ],
+    "dev": [
+     "serde_json.workspace",
+     "base64.workspace",
+     "tokio-rustls.workspace"
     ]
    },
    {
     "path": "crates/sn-modules/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "4548dc9ad71370db28bf5d8fe5ea1fd8330393a2",
+    "blob_sha": "e873492783321e034ca46be41c5968aabb649e2b",
     "ecosystem": "cargo",
-    "bytes": 802,
+    "bytes": 829,
     "names": [
      "sn-domain.workspace",
+     "sn-egress.workspace",
      "sn-store.workspace",
      "async-trait.workspace",
      "axum.workspace",
@@ -18299,11 +18328,12 @@
    {
     "path": "crates/sn-payments/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "76a23e88bfb250eabc4d794c07f258bd9489c6a4",
+    "blob_sha": "5d16e90fa2f356b57c9eb7bc44cb3bb4b1a67446",
     "ecosystem": "cargo",
-    "bytes": 696,
+    "bytes": 744,
     "names": [
      "sn-domain.workspace",
+     "sn-egress.workspace",
      "async-trait.workspace",
      "reqwest.workspace",
      "serde.workspace",
@@ -18318,6 +18348,7 @@
      "hex.workspace",
      "base64.workspace",
      "jsonwebtoken.workspace",
+     "rsa.workspace",
      "tracing.workspace",
      "tokio.workspace"
     ],
@@ -18355,9 +18386,9 @@
    {
     "path": "crates/sn-server/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "bd784cd76fa0265789d4974f4f89b2c4c34cf990",
+    "blob_sha": "e6d6adccecffbd2e7cf7ae55e29ca810c699cfe8",
     "ecosystem": "cargo",
-    "bytes": 910,
+    "bytes": 937,
     "names": [
      "sn-domain.workspace",
      "sn-store.workspace",
@@ -18379,6 +18410,7 @@
      "futures-util.workspace"
     ],
     "dev": [
+     "sn-egress.workspace",
      "base64.workspace",
      "jsonwebtoken.workspace",
      "sn-store",
@@ -18390,11 +18422,12 @@
    {
     "path": "crates/sn-services/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "bc4f6b4aa5693032738a8048011918979118daeb",
+    "blob_sha": "20bbe1d7fb3f0980d95a974083cd8854b9283667",
     "ecosystem": "cargo",
-    "bytes": 1202,
+    "bytes": 1251,
     "names": [
      "sn-domain.workspace",
+     "sn-egress.workspace",
      "sn-store.workspace",
      "sn-remnawave.workspace",
      "sn-payments.workspace",
@@ -18426,7 +18459,8 @@
      "aes-gcm.workspace",
      "scrypt.workspace",
      "bytes.workspace",
-     "futures-util.workspace"
+     "futures-util.workspace",
+     "ring.workspace"
     ],
     "dev": [
      "sn-remnawave",
@@ -18464,16 +18498,18 @@
    {
     "path": "crates/sn-worker/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7e24e82b70d999a1c3cc81d5eaf5ab003ac75476",
+    "blob_sha": "a60a86e07f2263b7e204ea5729fd4754f2ccb64c",
     "ecosystem": "cargo",
-    "bytes": 659,
+    "bytes": 716,
     "names": [
      "sn-domain.workspace",
+     "sn-egress.workspace",
      "sn-store.workspace",
      "sn-services.workspace",
      "async-trait.workspace",
      "tokio.workspace",
      "tokio-util.workspace",
+     "futures-util.workspace",
      "chrono.workspace",
      "serde_json.workspace",
      "thiserror.workspace",
@@ -18500,8 +18536,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "30d22aea3accd87d5d28a9743bc200822e5170f4",
-    "bytes": 19555,
+    "blob_sha": "141688d5949a4586f5676d36b03e78ed73010cb5",
+    "bytes": 23671,
     "images": [
      "postgres:16-alpine",
      "ghcr.io/stealthnet-app/stealthnet-rw-system"
@@ -18514,7 +18550,8 @@
    "docs_matrix": [
     "docs/changes/2026-11-18-ai-support.md",
     "docs/changes/2026-11-18-cabinet-sections-support.md",
-    "docs/changes/2026-11-18-support-list.md"
+    "docs/changes/2026-11-18-support-list.md",
+    "docs/changes/2026-11-24-support-home-utm.md"
    ],
    "paths": []
   },
