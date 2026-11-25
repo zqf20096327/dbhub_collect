@@ -3112,5 +3112,48 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b166df12b2c2": {
+  "identity": {
+   "one_liner": "面向高阶关联的持久化原生向量-超图数据库，以COW B+树直接存储超边结构",
+   "review": "HStore 是 JVM 平台上的持久化超图存储引擎与数据库，用原生超边（带角色、权重、有效期、嵌套成员）直接存储高阶关联，底层为 copy-on-write B+树与代际快照。数据层之上提供 HQL 查询语言、超图关系算子、嵌入向量索引、多租户与 Web 控制台。用 Java 25 编写，以单个 GraalVM 原生可执行文件发布。Docker 镜像为私有包，需登录 GHCR 拉取。",
+   "highlights": [
+    "支持任意基数的集合与有序超边（含百万级成员大边）、逐成员角色/权重/有效期，以及超边嵌套超边；成员与关联索引为带 monoid 摘要的 copy-on-write 计数 B+树",
+    "提交仅记录变更键（数百字节）并发布不可变代际快照，读操作固定代际且不加锁；支持快照隔离与请求式 SERIALIZABLE、分支/DIFF/三方 MERGE",
+    "提供 HQL 声明式查询与基于代价的规划器、超图关系算子、持久化 HNSW 嵌入索引（内置哈希编码器及 OpenAI/Ollama 端点）、多租户与内置 Web 控制台 HStore Studio"
+   ],
+   "use_cases": [
+    "需要直接建模高阶关联的场景，如 README 示例中的临床理赔：处方与理赔为带角色超边、诊疗路径为有序超边、调查为理赔之上的超边",
+    "需要时间旅行查询（AT GENERATION / AS OF）、假设分析分支与合并的工作流",
+    "将文档存为修订并进行语义检索的应用，可参考仓库 examples/memory 的 Compose 与 Python 客户端示例"
+   ]
+  },
+  "sha": "b166df12b2c2",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6a05756132e3": {
+  "identity": {
+   "one_liner": "阿里云 PolarDB 2017-08-01 API 的 Swift SDK",
+   "review": "该仓库提供阿里云 PolarDB（API 版本 2017-08-01）的 Swift SDK，模块名为 AlibabacloudPolardb20170801，面向 iOS/macOS 开发者。要求 iOS 13.3+/macOS 10.15+、Xcode 11.3+、Swift 5.6。可通过 Carthage 或 Swift Package Manager 安装，示例版本为 8.5.3，采用 Apache-2.0 许可证。",
+   "highlights": [
+    "支持 Carthage 与 Swift Package Manager 两种安装方式",
+    "要求 Swift 5.6、Xcode 11.3+，支持 iOS 13.3+ 与 macOS 10.15+",
+    "采用 Apache-2.0 许可证发布"
+   ],
+   "use_cases": [
+    "在 iOS 或 macOS 应用中调用阿里云 PolarDB 2017-08-01 版 API",
+    "在 Swift 5.6 项目中通过 SPM 或 Carthage 集成阿里云 PolarDB SDK"
+   ]
+  },
+  "sha": "6a05756132e3",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

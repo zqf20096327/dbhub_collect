@@ -3014,5 +3014,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fca0f886fcc9": {
+  "identity": {
+   "one_liner": "自托管 PaaS 平台，单个 Go 二进制配合 Docker 运行，提供 Railway 风格部署流程",
+   "review": "Aven 是一个可部署在自有 Linux 服务器上的 PaaS 平台，采用 Railway 风格的画布与服务工作流。它由单个 aven-server 进程组成，与 Docker 同机运行，可通过 aven-agent 接入更多机器，无需 Kubernetes 集群。项目读取 railway.json/railway.toml 并提供 Railway 形状的 GraphQL API，支持从 Railway 迁移项目。许可证为 AGPL-3.0-only，仓库内软件无使用费用与付费功能层级。安装脚本需要 systemd、Docker 以及用于自动 TLS 的域名 DNS，端口 80/443（含 443/udp）需空闲。项目尚处早期，各版本间界面与设置可能变动。",
+   "highlights": [
+    "单 Go 二进制（aven-server）配合 Docker 运行，多机扩展使用 aven-agent，无需 Kubernetes",
+    "支持 GitHub push 部署、pull-request 预览环境，以及 Postgres、MySQL、Redis、MongoDB 的一键部署",
+    "读取 railway.json / railway.toml 并响应 Railway 形状的 GraphQL 查询，使用 Caddy 作为代理容器，通过 HTTP-01 或 TLS-ALPN 按需签发各主机名证书"
+   ],
+   "use_cases": [
+    "在自己运行的服务器上部署和管理 Web 服务与数据库，且各版本间可能变更（须自行承担服务器与域名费用）",
+    "从 Railway 迁移现有项目，保留 railway.json 配置与画布式工作流",
+    "搭建多节点部署环境，通过 Tailscale/WireGuard 等私有网络使跨机器服务互联"
+   ]
+  },
+  "sha": "fca0f886fcc9",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

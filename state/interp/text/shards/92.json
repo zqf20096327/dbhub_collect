@@ -3434,5 +3434,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "39c85cfa33c5": {
+  "identity": {
+   "one_liner": "用 SQL 接口查询 Go 测试结果的命令行工具",
+   "review": "TestQuery（tq）是一个用 SQL 查询 Go 测试结果的命令行工具，设计动机源自 Gophercon 2024 关于老旧代码库中测试难以追踪的讨论，面向熟悉 SQL 的开发者。它提供 build、query、shell 三个命令，底层将测试信息写入 SQLite 数据库，支持内存模式（不留文件）和文件模式（可复用数据库）。项目仍在开发中，目前仅支持测试通过/失败、整体覆盖率和单测试覆盖率等基础信息查询。",
+   "highlights": [
+    "提供 build、query、shell 三个命令，分别用于构建 SQLite 数据库文件、执行单次查询和启动交互式 SQL shell",
+    "支持两种运行模式：默认的内存模式不产生磁盘文件，文件模式可通过预建数据库执行多次查询",
+    "提供可查询的表包括 all_tests、passed_tests、failed_tests、all_coverage、test_coverage"
+   ],
+   "use_cases": [
+    "对 Go 包的测试结果执行 SQL 查询，如筛选失败测试",
+    "通过 test_coverage 表查看单个测试提供的覆盖率",
+    "在交互式 shell 中对预构建的数据库文件进行多次分析查询"
+   ]
+  },
+  "sha": "39c85cfa33c5",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e8fd99915c30": {
+  "identity": {
+   "one_liner": "面向长周期 AI 代理的本地优先记忆层，摄入时不用 LLM，基于 SQLite 存储。",
+   "review": "Midas 是一个运行在本地的 AI 代理记忆层，提供 Python SDK 和 MCP 服务器，使用 SQLite 存储记忆。它在摄入和查询阶段不调用 LLM，返回的召回内容为原始来源对话轮次并带溯源信息，支持信念修订、选择性遗忘，以及通过 provenance 守卫阻止未确认的破坏性操作。适用于让多个 MCP 客户端（如 Claude Code、Cursor）共享同一记忆文件的场景；按其文档，整段对话的聚合摘要能力为设计上不支持。安装方式为 uv tool install 或 pip，亦可经 npx 使用 TypeScript 移植版。",
+   "highlights": [
+    "摄入与查询全程无 LLM 调用，本地运行并返回可溯源的原始来源轮次",
+    "支持类型化信念修订、选择性遗忘，以及阻止记忆未确认的破坏性外部操作的 provenance 守卫",
+    "提供 MCP 服务器，可将 Claude Code、Cursor、Codex 等多个客户端连接到同一 SQLite 记忆文件，并支持从 CLAUDE.md、cursorrules、mem0、zep 等格式导入"
+   ],
+   "use_cases": [
+    "为跨会话编码代理保存决策、约定和历史修复记录，供后续会话检索",
+    "多个 MCP 客户端共享一份本地记忆文件的集中管理",
+    "需要在离线环境运行、且要求记忆内容可审计溯源的代理工作流"
+   ]
+  },
+  "sha": "e8fd99915c30",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "039251637d00": {
+  "identity": {
+   "one_liner": "本地优先的 AI 会话归档系统，统一采集并检索多工具会话历史。",
+   "review": "Polylogue 是一个运行在本地的 AI 会话归档与检索工具，将 Claude Code、Codex、Gemini CLI 等编码代理的原生记录与 ChatGPT、claude.ai 等网页对话的导出/浏览器扩展采集统一为一个可全文搜索、可注记的档案库。保留原始字节，支持独立（SQLite）与 Sinex 主模式两种部署；CLI 与三个 MCP 工具使用同一查询语法，代理与用户可执行相同操作。安装依赖 Nix 或 Cargo 构建。",
+   "highlights": [
+    "读取各工具自身写入的本地数据文件，无需配置即可由守护进程采集，导出文件经 polylogue import 导入",
+    "保留原始字节并解析为统一的会话与谱系模型，支持全文搜索、读取、度量与注记",
+    "提供 CLI、MCP 三工具与 Python 客户端三种访问方式，代理使用与用户相同的命令语法"
+   ],
+   "use_cases": [
+    "将多个 AI 工具的会话历史集中归档以便统一检索与审计",
+    "为编码代理提供会话档案查询能力，会话开始时从档案生成简报",
+    "基于自带 Morrow 合成示例档案学习或测试系统功能"
+   ]
+  },
+  "sha": "039251637d00",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "71007b1d3111": {
+  "identity": {
+   "one_liner": "基于 LangGraph 的开源 AI 聊天助手，FastAPI 后端加 React 前端。",
+   "review": "OpenGPT 是用 LangGraph 构建的开源聊天助手，含 FastAPI 后端与 React 前端，会话持久化于 MySQL。它接入任何 OpenAI 或 Anthropic 兼容 API（含本地模型），提供网页搜索、天气、股价等工具调用、FAISS 本地 RAG 文档问答与多线程持久聊天。Agent 页面与浏览器引擎仍处预览状态，README 声明未经完整测试。",
+   "highlights": [
+    "支持 OpenAI 与 Anthropic 兼容端点，可通过 LLM_BASE_URL 接入本地模型（Ollama、LM Studio 等）",
+    "内置 RAG 文档问答：上传 PDF、Markdown、文本文件，使用 FAISS 与本地 HuggingFace 嵌入检索",
+    "会话保存于 MySQL（自定义 LangGraph checkpoint saver），支持临时聊天、项目分组、置顶与分享链接"
+   ],
+   "use_cases": [
+    "自托管个人 AI 工作区，需多轮持久对话与跨会话记忆、知识库",
+    "基于本地或自建模型端点搭建聊天助手，要求模型供应商可配置",
+    "上传文档进行检索问答（RAG），以及生成可编辑下载的研究报告和博客文章"
+   ]
+  },
+  "sha": "71007b1d3111",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ac60f426d255": {
+  "identity": {
+   "one_liner": "单二进制 Rust 自托管音乐流媒体服务器，内置网页播放器并兼容 OpenSubsonic API。",
+   "review": "WaveFlow Server 是一个用 Rust 编写的自托管音乐服务器，扫描用户指定的音乐文件夹并对外提供流媒体播放，供想在自己服务器、NAS 或树莓派上管理音频文件的音频库用户使用。数据存储仅依赖单个 SQLite 文件和密钥文件，需 FFmpeg 用于音频转码（MP3/Opus/AAC）。它实现 OpenSubsonic API，现有 Subsonic 客户端可直接连接；项目采用 AGPL-3.0 许可证，通过 Docker 镜像（amd64/arm64）或预编译压缩包部署，首次启动需数据目录中的一次性令牌完成管理员设置。",
+   "highlights": [
+    "实现 OpenSubsonic API，README 记录了 Symfonium、Feishin、DSub、Juliet 等客户端的实际运行结果",
+    "支持原始码流或即时转码为 MP3/Opus/AAC，含转码内定位与服务端 ReplayGain 音量均衡；支持 .lrc 同步歌词并可选接入 LRCLIB",
+    "库扫描只重读变更内容并带文件监视器；专辑/艺术家 ID 由标签派生，重建目录后 ID 不变；音频数据仅读取不改写"
+   ],
+   "use_cases": [
+    "在服务器、NAS 或 Raspberry Pi 4/5 上自托管个人音乐库，通过浏览器或 Subsonic 客户端收听",
+    "需要离线收听、m3u 导入导出、分享链接（可设过期与访问次数上限）或 ListenBrainz/Last.fm/Maloja scrobble 的用户",
+    "在 Home Assistant OS 上以附加应用形式运行音乐服务，从 media/share 目录只读读取音乐"
+   ]
+  },
+  "sha": "ac60f426d255",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "65ddb94736b2": {
+  "identity": {
+   "one_liner": "基于 Tauri 2 的 macOS 桌面数据库客户端，内置 SSH 隧道",
+   "review": "DBDock 是一款运行于 macOS（Apple Silicon）的桌面数据库客户端，支持 MySQL、PostgreSQL、SQLite、Redis、MongoDB 和 Cloudflare D1 六种数据库。它通过 Rust/Tauri 2 与 React 构建，提供 SSH 隧道（支持 ssh-agent、密钥文件或密码）、连接分组与环境标签、SQL 补全与执行计划可视化、CSV/JSON 导入导出等功能。密码存于 macOS Keychain。适合需要在本地统一管理多类数据库连接的开发者。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、SQLite、Redis、MongoDB、Cloudflare D1 六种数据库连接，内置 SSH 隧道（ssh-agent、密钥文件或密码认证）",
+    "提供上下文感知 SQL 补全、可视化执行计划、带主键表格的网格编辑，以及 CSV/JSON 数据导入导出",
+    "支持连接分组树、环境标签、批量健康检查，可导入 TablePlus/DBeaver 配置及连接 URL，导出文件可用 AES-256-GCM 加密"
+   ],
+   "use_cases": [
+    "需要通过 SSH 隧道访问远程 MySQL/PostgreSQL/Redis/MongoDB 的本地开发场景",
+    "管理本地、dev、staging、production 等多环境数据库连接并进行批量健康检查",
+    "通过 Cloudflare REST API 操作 Cloudflare D1 数据库，或从 TablePlus/DBeaver 迁移连接配置"
+   ]
+  },
+  "sha": "65ddb94736b2",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

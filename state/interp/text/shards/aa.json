@@ -3553,5 +3553,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "73aa6f7d68af": {
+  "identity": {
+   "one_liner": "基于 PHP/MySQL 的卡密授权验证服务端，提供 AES-256-GCM 加密 API",
+   "review": "GuYi Access Pro 是部署在 PHP/MySQL 环境上的卡密授权验证平台，通过 JSON 格式的 REST 接口向多语言客户端提供验证服务。管理后台支持多应用隔离，每个应用有独立 AppKey 与卡密库；验证流程结合 AES-256-GCM 加密、设备指纹和 IP 黑名单。项目源码公开但采用 PolyForm Perimeter 许可证，不提供免费商业技术支持，适用于需要自建验证服务的开发者。",
+   "highlights": [
+    "验证接口使用 AES-256-GCM 认证加密，支持可选的设备指纹 hash 与 IP 全局黑名单",
+    "单后台管理多个应用，每个应用拥有独立 AppKey、卡密库、动态变量与审核策略",
+    "支持应用、卡密、变量、黑名单、配置的 JSON 导出与跨服务器还原，客户端覆盖 C/C++、Flutter、易语言、Python、Go 等语言"
+   ],
+   "use_cases": [
+    "为桌面或移动客户端软件搭建卡密授权验证服务",
+    "需要多应用隔离管理卡密、设备绑定与黑名单的授权场景",
+    "源码可见授权系统的技术学习与研究"
+   ]
+  },
+  "sha": "73aa6f7d68af",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c7031351dc58": {
+  "identity": {
+   "one_liner": "面向 SQL 数据库、默认对查询结果做敏感数据脱敏的 MCP 服务器",
+   "review": "dbmcp 是一个面向 SQL 数据库的 MCP 服务器，在数据返回 AI 客户端之前进行脱敏。内置 47 种数据类型的模式检测（含校验和验证），支持按列名配置改写规则，可在别名、视图、CTE、联接等路径下生效。支持 MySQL、MariaDB、PostgreSQL、SQLite，默认只读，通过 stdio 或 HTTP 传输连接 Claude Desktop、Cursor 等 MCP 客户端。",
+   "highlights": [
+    "默认脱敏：邮箱、电话、银行卡号、身份证号、API 密钥等在服务器内被替换为带键令牌（如 <EMAIL_ADDRESS_4e1f0dd69c51e84c>），相同值映射为相同令牌，保留计数、分组与联接能力",
+    "按列名配置的改写规则覆盖别名、表达式、视图、CTE、联接、union 等取数路径，无法证明安全的语句在执行前被拒绝",
+    "提供 schema 发现、readQuery/writeQuery、DDL 与 explainQuery 等 MCP 工具；只读模式下隐藏写入类工具；支持 stdio 与 HTTP 传输、SSH 隧道及分层配置"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor、Claude Code 等 MCP 客户端中让 AI 助手查询含敏感字段的生产或业务数据库",
+    "需要向 AI 客户端隐藏邮箱、证件号、密钥等数据的合规场景（如 GDPR 相关的数据脱敏需求）",
+    "通过 SSH 堡垒机或 HTTP（含 bearer token）方式远程访问 MySQL/MariaDB/PostgreSQL 数据库"
+   ]
+  },
+  "sha": "c7031351dc58",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

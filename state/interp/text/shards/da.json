@@ -3569,5 +3569,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5514937bbdfc": {
+  "identity": {
+   "one_liner": "OpenEverest 的 TiDB provider，将 Instance 资源转换为 TiDB Operator v2 的原生资源",
+   "review": "该仓库是 OpenEverest 的 TiDB provider，监听 spec.providerRef.name 为 tidb 的 Instance 资源，生成共享 Cluster 及各组件的 TiDB Operator v2 资源（PDGroup、TiKVGroup、TiDBGroup 等），生命周期全部委托给 operator。需先安装 OpenEverest 核心，本身不能独立运行。项目处于 pre-alpha 阶段，无受支持的版本升级路径，README 标明不用于生产环境。",
+   "highlights": [
+    "支持水平/垂直扩缩容、按组件内联 TOML 配置、调度策略、版本升级、TLS、监控、可选 TiFlash 与 TiProxy",
+    "有状态组件支持持久存储扩容（需 StorageClass 开启 allowVolumeExpansion）、S3 兼容存储的按需与定时备份、时间点恢复",
+    "Helm chart 自包含：捆绑 TiDB Operator v2，通过 pre-install hook 安装 CRD，并注册 admission webhook 校验 Instance"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上通过统一 Instance API 部署与管理 MySQL 协议的分布式 TiDB 集群",
+    "需要组件级 TLS、监控指标上报或 S3 备份/恢复能力的集群运维场景",
+    "需要 TiFlash 列式副本支撑分析查询或 TiProxy 连接代理的场景"
+   ]
+  },
+  "sha": "5514937bbdfc",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5334da05bdde": {
+  "identity": {
+   "one_liner": "基于 TI DM8168 双核架构的实时空间音效语音处理系统",
+   "review": "该项目在 TI DM8168 上实现 ARM+DSP 异构音频处理：ARM 端运行 Linux 负责 ALSA 采集播放与调度，DSP 端运行 SYS/BIOS 执行 Q15 定点 HRIR 卷积生成空间音效。数据经 SharedRegion 零拷贝传递，以共享 head/tail 环形索引同步。面向使用该开发板进行双核协同开发或音频处理的开发者。需 TI 完整工具链（SYS/BIOS、SysLink、CGT 编译器）并部署至开发板运行。",
+   "highlights": [
+    "ARM 运行 Linux 处理 ALSA 采集播放，DSP 运行 SYS/BIOS 执行 512 阶 Q15 定点 HRIR 卷积",
+    "PCM 数据位于 SharedRegion 实现零拷贝传递，核间仅交换 head/tail 块索引，无锁数据面",
+    "支持 44.1 kHz 单声道采集/双声道播放，16 位小端，每块 1024 帧，缓冲深度 400 ms"
+   ],
+   "use_cases": [
+    "在 TI DM8168 开发板上实现实时空间音效（双耳 FIR）处理",
+    "学习或验证 ARM+DSP 异构多核的共享内存与 IPC 通信机制",
+    "作为含需求、设计、测试文档的嵌入式音频处理课程或实验项目"
+   ]
+  },
+  "sha": "5334da05bdde",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

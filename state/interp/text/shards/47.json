@@ -3302,5 +3302,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "31549c050569": {
+  "identity": {
+   "one_liner": "数据与AI代理间的替身代理层，查询返回保真假值",
+   "review": "Sosie 以代理方式插在数据源与 AI 代理之间：代理、应用和工具像查询真实数据一样查询它，返回值被替换为类型、格式一致的假值，同一真实值始终对应同一假值，因此关联查询成立。它支持 PostgreSQL、MySQL、MongoDB、SQL Server、REST 与 GraphQL 六类数据源，写入请求被拒绝。凭证与连接串保存在用户终端侧，代理无法读取；sosie.yml 是唯一配置文件，无命令行参数。",
+   "highlights": [
+    "同一真实值始终映射为同一假值，跨数据源和查询保持关联关系",
+    "连接串与令牌仅通过隐藏提示输入或环境变量读取，不写入配置文件与 shell 历史",
+    "支持 PostgreSQL 15–18、MySQL 8.4/9、MongoDB 6.0–8.0、SQL Server 2019–2025、REST（OpenAPI）与 GraphQL（内省）六类数据源，并提供面向 Claude Code、Copilot、Cursor 等 7 个代理的 MCP 插件"
+   ],
+   "use_cases": [
+    "让 AI 编码代理（Claude Code 等）在真实数据库上开发调试，而不接触真实记录、凭证和主机名",
+    "代理与应用共用同一替身地址，基于假值编写的代码无需修改即可运行在真实数据上",
+    "用 sosie scan 检查代理会话转录中是否泄漏真实值"
+   ]
+  },
+  "sha": "31549c050569",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c6dbe1a0b1d1": {
+  "identity": {
+   "one_liner": "生成式 AI 结构化提取单据，经人工校验后由 Playwright 机器人写入 ERP 与 Excel 的数据录入自动化系统",
+   "review": "DataPick 是一个文档数据录入自动化项目：上传 PDF、图片或邮件文本后，系统按文本层→Tesseract OCR→Gemini 多模态的顺序提取字段，输出带置信度的 JSON；人工校验后由 Playwright 机器人向 ERP 演示页面录入并回读凭证号确认成功，同时以文档 ID 幂等写入 Excel 台账。面向需要处理收据、发票、交易邮件并录入 ERP/Excel 的用户。README 未提供定量准确率数据，准确度测量尚待建立标注集。",
+   "highlights": [
+    "分阶段文本提取：文本层（pypdf）→ Tesseract OCR（kor+eng）→ Gemini 多模态，输出符合 Pydantic 模式的 JSON 并附置信度；无键时回退规则解析器",
+    "RPA 录入结果验证：保存后检查 ERP 结果元素的 data-status 与凭证号才记录成功；Excel 台账按文档 ID upsert 实现幂等",
+    "包含报价单比较、合同红线标注、体检趋势三个 AI 工具，AI 仅负责读取与摘录，比较/评分/判定由规则代码实现；含 55 个 pytest 测试与 CI/CD"
+   ],
+   "use_cases": [
+    "将收据、税单、交易邮件等非结构化文档提取后录入 ERP 或 Excel 台账",
+    "扫描件或无文本层图片的 OCR 结构化提取与人工复核",
+    "比较报价单、标注合同风险条款、对比多次体检结果的文档分析"
+   ]
+  },
+  "sha": "c6dbe1a0b1d1",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

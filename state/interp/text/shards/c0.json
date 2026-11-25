@@ -3254,5 +3254,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "120aa342aa3f": {
+  "identity": {
+   "one_liner": "Rust 编写的面向自主 agent 的 issue 看板，支持 MCP/CLI/HTTP 协同",
+   "review": "Soulsteads Agent Workboard 是一个用 Rust 实现的单二进制 issue 看板，使用内嵌 SQLite 存储，用于多 agent 之间的任务规划与认领协调。提供 epic/story/bug、依赖与阻塞链接、原子认领、租约心跳、修订冲突检查和审计记录。agent 可通过 MCP、JSON CLI 或带鉴权的 HTTP API 操作，另有每三秒刷新的只读 Web 仪表盘。README 说明其处于早期源码发布阶段，仅记录证据与评审决定，不验证外部结果。",
+   "highlights": [
+    "支持 36 种操作，通过 MCP（含资源与 prompt）、JSON CLI 和 Bearer 鉴权 HTTP API 三种接口访问",
+    "实现原子 issue_claim 认领、可过期租约、心跳、租约令牌拒绝过期 worker，以及修订号防止并发覆盖",
+    "支持全文检索（词干化、短语、通配符、OR、保存的搜索）、SSE 事件流与签名 webhook，评审环节拒绝自审"
+   ],
+   "use_cases": [
+    "需要多个自主 agent 认领、执行并交接任务的团队协调场景",
+    "为 LLM/agent 框架提供 MCP 任务看板，各 worker 使用独立 key 和租约执行工作",
+    "需要在同一看板上追踪进度、依赖与活动历史的本地或远程 agent 编排部署"
+   ]
+  },
+  "sha": "120aa342aa3f",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

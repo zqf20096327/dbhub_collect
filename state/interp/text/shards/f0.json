@@ -3441,5 +3441,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4de90fdbf02f": {
+  "identity": {
+   "one_liner": "自托管的离线优先卡路里与营养素追踪 PWA",
+   "review": "openCalory 是基于 Next.js 构建的渐进式 Web 应用，用于记录卡路里、宏量与微量营养素。数据默认存于浏览器 IndexedDB，可选通过 SQLite/Turso 跨设备同步。内置约 14.7 万条去重食物的 SQLite FTS5 离线目录，AI 识别功能依赖用户自备的 OpenAI 兼容 API 密钥。支持 Node.js、Docker 和 Vercel+Turso 三种部署方式。",
+   "highlights": [
+    "内置 147,674 条去重食物的 SQLite FTS5 离线目录（21.31 MB 压缩包），基于 SQLite-WASM 在 OPFS Web Worker 中运行离线全文搜索，支持条码查询",
+    "支持任意 OpenAI 兼容 API 的餐食照片扫描、营养标签 OCR 与餐食建议，可配置多个备选密钥与模型自动故障转移",
+    "数据写入直接落 IndexedDB 实现离线运行，同步采用墓碑记录（保留 90 天）避免多设备合并时删除条目复现；支持 JSON 全量备份/导入与 CSV 导出"
+   ],
+   "use_cases": [
+    "希望本地或自托管记录饮食与宏量营养素、不依赖第三方账号的个人用户",
+    "在 VPS/家庭服务器（Docker）或 Vercel+Turso 上部署以实现跨设备同步",
+    "配置自备 API 密钥后使用餐食照片识别与营养标签 OCR 辅助录入"
+   ]
+  },
+  "sha": "4de90fdbf02f",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "844f21d0c99f": {
+  "identity": {
+   "one_liner": "本地运行的个人资产看板与市场分析工具，数据存于本机 SQLite",
+   "review": "licai 是一个本地运行的个人资产看板与市场分析工具，将 A 股、港美股、基金、理财、现金、数字资产与量化机器人汇总在同一界面，按统一口径计算成本、盈亏与风险敞口。技术栈为 Python FastAPI、React 与 SQLite，行情取自公开接口，账本存于本机单个 SQLite 文件，无云端与账号体系。输出限定为客观信息与历史统计，不提供买卖建议。适合希望跨平台汇总头寸并进行市场数据查询与复盘的个人使用者。",
+   "highlights": [
+    "支持 A 股、港美股、场内/场外基金、银行理财、现金、数字资产与网格/定投机器人的统一记账，成本口径含佣金、印花税、过户费等费用",
+    "提供市场问答 agent（约 50 个基础工具）、盯盘员、全市场榜单、板块成交份额、情绪周期、穿透同源风险与复盘归因等功能",
+    "数据保存在本机单个 SQLite 文件中，服务默认监听 0.0.0.0:8888，支持演示数据生成与 macOS 开机自启"
+   ],
+   "use_cases": [
+    "分散在多个券商、银行与交易所平台的资产需要按统一口径汇总计算成本、盈亏与风险敞口",
+    "交易日需要查看全市场榜单、盘口异动、龙虎榜、板块情绪并进行收盘复盘",
+    "通过市场问答 agent 查询个股行情、资金流、基本面、公告及本人持仓与成交流水"
+   ]
+  },
+  "sha": "844f21d0c99f",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "739f8a715248": {
+  "identity": {
+   "one_liner": "自托管的车辆保养记录与 DIY 维修追踪器，单 Docker 容器运行。",
+   "review": "torq 是一个自托管的保养记录本与维修追踪应用，使用 Go 编写、SQLite 存储，通过单个 Docker 容器部署，面向自己动手维护汽车、摩托车的用户。它提供保养日志、维修项目看板、按距离或时间的提醒、离线车辆目录（含德国 HSN/TSN 查询）及 webhook 通知。需注意：首次启动后应立即创建管理员账户，备份 /data 目录前建议先停止容器。",
+   "highlights": [
+    "保养条目可记录品牌、规格、数量、零件号与费用，并重置对应提醒；提醒按距离、时间或两者先到者触发，随里程更新重新检查",
+    "维修项目以看板管理（从计划到完成），支持 OBD2 故障码、扭矩规格、零件清单、照片、自定义优先级与标签过滤",
+    "车辆目录离线运行，数据来自 KBA FZ 6、vehicle-makes-models（ODbL 1.0）与 RDW Open Data；另提供 REST API（openapi.yaml）、JSON/CSV 导出报告，以及面向 Discord、ntfy、Gotify、Home Assistant 的 webhook 通知"
+   ],
+   "use_cases": [
+    "为自有汽车或摩托车记录换油、滤芯、刹车等保养历史及费用",
+    "在家用服务器或小型 VPS 上集中管理多辆车的里程/工时提醒",
+    "需要离线填写车辆技术规格（机油容量、胎压、螺栓扭矩等）并生成可打印历史报告的场景"
+   ]
+  },
+  "sha": "739f8a715248",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63b53be22a70": {
+  "identity": {
+   "one_liner": "基于 openEuler/openGauss 的 12 个虚拟实验室基础设施项目集。",
+   "review": "该仓库收录 12 个在 VirtualBox 私有网络中运行的 Linux 基础设施项目，运行于 openEuler 24.03 LTS，内容覆盖 Web 托管与 DNS、备份、监控、Ansible 部署、高可用、数据库故障转移等。作者是 Huawei Club Academy 的 HCIA/HCIP 学员，每个项目附带章程、架构图、验收要求、故障演练记录与重建 runbook。目前仅 P1 完成第 1 个里程碑（共 8 个），其余项目处于规划状态。",
+   "highlights": [
+    "12 个项目均要求包含章程、架构图、命令级验收要求、故障演练与重建 runbook 文档",
+    "P1 项目使用 Apache、NGINX、BIND、TLS、MySQL、firewalld、SELinux，规划有 8 个里程碑",
+    "全部实验运行在 VirtualBox 私有网络（192.168.56.0/24）中，不对外暴露，AI 工具使用受 AGENTS.md 书面规则约束"
+   ],
+   "use_cases": [
+    "跟随 HCIA/HCIP openEuler/openGauss 学习路径时的配套实践项目",
+    "需要按章程—构建—故障演练—runbook 流程搭建 Linux 基础设施实验环境的场景",
+    "在本地虚拟机私有网络中练习 DNS、备份、监控、高可用等运维技能"
+   ]
+  },
+  "sha": "63b53be22a70",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

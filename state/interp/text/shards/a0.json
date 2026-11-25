@@ -3498,5 +3498,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c904900a24a7": {
+  "identity": {
+   "one_liner": "内嵌式 SQLite 数据库，通过 Raft 集群实现复制、高可用与缓存",
+   "review": "Hiqlite 是一个 Rust 编写的可内嵌 SQLite 数据库库，基于 rusqlite 与 openraft 构建，支持组建 Raft 集群以提供复制、自动 leader 切换和自愈能力，并附带磁盘 backed 的内存 K/V 缓存。面向希望以嵌入式方式使用 SQLite 同时获得集群高可用能力的 Rust 应用开发者。写操作经 Raft 复制，单写者模型受 SQLite 限制。",
+   "highlights": [
+    "支持 Raft 集群部署，提供强一致的复制 EXECUTE 查询、自动 leader 故障切换与节点自愈（含数据卷丢失后的恢复）",
+    "提供磁盘 backed 或纯内存两种 K/V 缓存，支持逐条 TTL，重启后可从 WAL 与快照重建缓存数据",
+    "内置分布式锁（dlock）、分布式计数器、listen/notify 消息、自动迁移、S3 加密备份以及编译期 SQL 校验的 sql!() 宏"
+   ],
+   "use_cases": [
+    "需要在 Rust 应用中以嵌入式方式使用 SQLite，且要求多节点复制与自动故障切换的场景",
+    "应用内需要带持久化能力的分布式 K/V 缓存或分布式锁、计数器的场景",
+    "希望以单二进制方式（server feature）运行独立节点、集群或作为现有集群代理的场景"
+   ]
+  },
+  "sha": "c904900a24a7",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

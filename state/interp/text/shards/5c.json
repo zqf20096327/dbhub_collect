@@ -2919,5 +2919,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ca0fe4cdca4d": {
+  "identity": {
+   "one_liner": "Rust 编写的 AI 治理控制面库，提供身份、模型网关、MCP 工具执行与审计。",
+   "review": "SystemPrompt Core 是一个 Rust 库，用于搭建 AI 治理控制面，涵盖身份认证（OAuth2/OIDC）、Anthropic 兼容模型网关、受治理的 MCP 工具访问、A2A 传输及 PostgreSQL 审计记录。扩展通过 inventory 在编译期注册，以 facade 加 feature 门控的 crate 发布。当前为 pre-1.0，采用 BSL-1.1 许可，生产使用需商业授权，部署要求 PostgreSQL 18+。",
+   "highlights": [
+    "提供 OAuth2/OIDC 身份、模型网关、MCP 工具治理、凭据模式检测、限流与关联审计记录",
+    "通过 inventory 在编译/链接期注册扩展，可贡献路由、提供者、定时任务、schema 与迁移",
+    "以 systemprompt facade 发布，支持 core/database/api/cli/files-office/full 等特性组合"
+   ],
+   "use_cases": [
+    "企业需将 MCP 工具调用绑定到用户身份并记录审计的场景",
+    "在私有网络或气隙环境中运行模型网关与托管代理",
+    "基于扩展契约编译包含自有业务能力的定制运行时"
+   ]
+  },
+  "sha": "ca0fe4cdca4d",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32816a89bf6c": {
+  "identity": {
+   "one_liner": "OptiBuild 建筑工地管理平台的工程案例解读，含AI工程量清单解析与成本模块",
+   "review": "该仓库是商业产品 OptiBuild 的案例文档，不含源码。平台将工程量清单（computo metrico）经 Python 分块提取与应用层语义解析为结构化行项，驱动报价、成本、进度报表、物资、人员、文档归档与仪表盘等七个模块共享同一数据。技术栈为 React/Vite 前端、Laravel/PHP 8.2 API、Capacitor 移动端、关系型数据层（170+ 表，8 角色行级安全与审计）。适合关注建筑数字化与文档 AI 架构的读者。",
+   "highlights": [
+    "PDF 与交换格式（DCF）的工程量清单解析管线：Python 分块提取与应用层语义解释分离，500+ 页文档分段处理",
+    "单一结构化数据源支撑报价、成本、进度报表与仪表盘七个模块",
+    "数据层实现 8 角色行级权限与审计记录；同一 Web 应用经 Capacitor 打包为 iOS/Android，含地理定位、PDF 生成、二维码与电子发票输出"
+   ],
+   "use_cases": [
+    "建筑承包方将长篇工程量清单 PDF 转为结构化行项，用于报价、成本与进度报表",
+    "工地现场人员通过移动端查看任务分配、进度与文档",
+    "需要按角色限定数据可见范围并保留审计记录的施工管理场景"
+   ]
+  },
+  "sha": "32816a89bf6c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8e7579752daa": {
+  "identity": {
+   "one_liner": "本地优先的 OpenTelemetry 追踪调试器，单二进制以失败为入口检索追踪。",
+   "review": "Geko 是一个 Go 编写的单二进制本地追踪调试器：接收 OTLP/HTTP（可选 gRPC），将 span 存入 SQLite（含保留期与容量上限），默认在回环地址提供仪表盘。首页列出记录了异常、HTTP 5xx 或错误状态的请求，并可通过 MCP 与 Claude Code、Cursor 等编码代理集成。安装方式包括脚本、Homebrew、Scoop、Docker、go install 等，采用 MIT 许可。",
+   "highlights": [
+    "以失败优先展示：首屏列出记录了异常、HTTP 5xx 或错误状态的请求，并区分请求结果与异常证据",
+    "单进程运行：接收 OTLP/HTTP 与可选 OTLP/gRPC，span 存入 SQLite，含保留期、容量上限与隐私过滤（属性白名单、敏感字段脱敏、strict 模式）",
+    "通过 geko mcp setup 注册到 Claude Code、Cursor、VS Code，提供 investigate_group 调用；附带 Collector Doctor 与 Telemetry Budget 功能"
+   ],
+   "use_cases": [
+    "开发者在本机排查跨服务的失败请求与异常，查看证据 span、服务地图与瀑布图",
+    "通过 MCP 将失败证据（堆栈、可对比的成功请求、版本回归）交给编码代理调查",
+    "在 Docker 加 token 或 TLS 反代后部署为团队共享的 dev/staging 追踪查看实例"
+   ]
+  },
+  "sha": "8e7579752daa",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3015,5 +3015,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1b0c7770ed2c": {
+  "identity": {
+   "one_liner": "Go 编写的自托管 OAuth2/OIDC 身份提供方，单二进制内置 SQLite",
+   "review": "Auténtico 是一个用 Go 实现的 OAuth 2.0 / OIDC Identity Provider，以单个二进制加一个 SQLite 文件运行，无需外部数据库或缓存等基础设施。它覆盖登录、MFA、Passkeys、会话管理、令牌签发与管理界面，支持 OIDC Discovery、RS256 JWT、PKCE、令牌内省与撤销。README 明确指出其局限：SQLite 写入串行化且单实例不能跨主机，不面向需要水平扩展、多区域部署或 SCIM/LDAP 的组织。适合小型团队、自托管服务及作为 OIDC 测试环境使用。",
+   "highlights": [
+    "实现 Authorization Code + PKCE（默认强制 S256）、Refresh Token、令牌内省（RFC 7662）与撤销（RFC 7009），令牌为 RS256 签名的 JWT",
+    "认证方式包含密码、WebAuthn Passkeys、TOTP 与邮件 OTP，三种认证模式可在运行时切换，无需重启",
+    "提供内置 React 管理 UI、动态客户端注册、Keycloak 兼容路径，并提供随目录文档与在线 Demo"
+   ],
+   "use_cases": [
+    "小型团队或独立开发者为产品添加自托管的 OAuth2/OIDC 用户认证",
+    "内部工具与自托管应用集中管理用户、会话与客户端",
+    "作为 CI/测试套件中的真实 OIDC 提供方（README 称启动约 375ms，无需 Docker 或 mock）"
+   ]
+  },
+  "sha": "1b0c7770ed2c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2a67284d5c52": {
+  "identity": {
+   "one_liner": "将 Windows PC 转为 Teams 会议专用控制台的会议室应用",
+   "review": "Microsoft Teams Rooms 是运行在 Windows 10/11 IoT Enterprise 专用硬件上的会议室控制台软件，用于加入 Teams 会议、共享内容并控制摄像头、麦克风等外设。面向标准化会议室的设施团队与远程管理房间的 IT 管理员。需绑定 Teams Rooms Pro/Basic 许可证的资源账户，不支持普通 Windows Pro 版本，且依赖网络连接方可加入会议。",
+   "highlights": [
+    "支持一键加入日程会议、HDMI 线缆接入与 Teams Cast 无线投屏两种内容共享方式",
+    "通过 Pro Management Portal 注册房间，提供远程健康监控、告警与更新推送",
+    "接入 Exchange 与 Microsoft 365 会议室日历，并支持 Intune/组策略配置与条件访问"
+   ],
+   "use_cases": [
+    "企业会议室、小型会议空间和培训室的专用会议主机部署",
+    "IT 团队对楼宇内多个房间进行集中镜像、监控与远程更新",
+    "将已有 Windows 迷你 PC 或 Surface 硬件配置为带触控界面的会议控制台"
+   ]
+  },
+  "sha": "2a67284d5c52",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b559826679f8": {
+  "identity": {
+   "one_liner": "基于 Redis 缓存层与 PostgreSQL 的用户资料读写演示应用",
+   "review": "这是一个 Node.js/Express 演示项目，以用户资料系统为例展示缓存机制：读取时先查 Redis，未命中则查 PostgreSQL 并写入缓存（1 小时过期）；更新数据库后使对应缓存失效。项目还包含分页列表、按名称或邮箱搜索、速率限制等功能。适合想了解读多写少场景下缓存读写与失效流程的开发者。需自行配置 PostgreSQL 连接参数并本地运行 Redis。",
+   "highlights": [
+    "提供 GET /user/:id 接口，命中缓存时从 Redis 返回数据，未命中时查询 PostgreSQL 并缓存结果 1 小时",
+    "更新用户时删除对应 Redis 缓存条目，实现缓存失效",
+    "包含分页列表、用户搜索（按名称或邮箱）、速率限制及反向代理下的真实客户端 IP 获取"
+   ],
+   "use_cases": [
+    "学习 Redis 作为缓存层与 PostgreSQL 配合的读写流程",
+    "参考缓存命中、未命中与失效的实现示例",
+    "作为 Node.js/Express 连接 Redis 与 PostgreSQL 的运行样例"
+   ]
+  },
+  "sha": "b559826679f8",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41458051c076": {
+  "identity": {
+   "one_liner": "免费无广告的宏量与卡路里追踪应用，数据本地存储",
+   "review": "MacroBandit 是一款面向 Android 的宏量营养素与卡路里追踪应用，无需账号，数据以 SQLite 形式存于设备本地。内置 7,140 种离线基础食物（德国 BLS 4.0 数据库），支持条码扫描与 Open Food Facts 在线搜索（唯一联网功能，按需触发）。提供 TDEE 计算、周/月统计、体重追踪及 JSON 备份/CSV 导出。签名 APK 发布于 releases 页面，F-Droid 版本尚在准备中，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "支持快速输入语法（如 200g milk 3.5），自动识别分量并计算卡路里与宏量营养素",
+    "内置 BLS 4.0 的 7,140 种基础食物可离线使用，条码扫描基于 zxing，不依赖 Google 服务",
+    "支持自定义食物与餐食模板、周/月统计、体重追踪（含 7 天趋势）、JSON 备份恢复与 CSV 导出"
+   ],
+   "use_cases": [
+    "需要在无网络、无账号环境下记录日常饮食宏量与卡路里的用户",
+    "使用德国食品数据库（BLS）并希望结合 Open Food Facts 条码查询的用户",
+    "需要计算 TDEE 目标并追踪体重趋势的用户"
+   ]
+  },
+  "sha": "41458051c076",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8d0d7ac664dd": {
+  "identity": {
+   "one_liner": "TiDB 拆批/跑批引擎的 Go 库，.tsk 脚本经解析器转为可执行作业 Spec",
+   "review": "tidbshard 是一个以 Go 库形态提供的 TiDB 拆批与跑批引擎，供上层调度系统嵌入调用。作业用 .tsk 脚本编写，由内置 lexer/parser 解析为可序列化的 Spec；目前处于 M0/M1 阶段，ParseFile/Parse 可用，而 Check/Run 仍返回 ErrNotImplemented，尚不能实际执行作业。",
+   "highlights": [
+    "提供 Spec、BatchSplit/BatchRun、SQL/If/For/Try 等步骤类型与 Engine 多实例并发运行能力",
+    "内置 .tsk 脚本 lexer/parser，解析错误带行号列号，Diagnostic 提供带位置的校验信息",
+    "设计约束包括日志走 slog.Logger、返回 error 而非 os.Exit、context.Context 贯穿支持取消"
+   ],
+   "use_cases": [
+    "需要对 TiDB 大表按拆批列分批处理并跑批执行的数据作业场景",
+    "上层调度系统以 Go 库方式生成、序列化并存储作业 Spec 的集成场景",
+    "通过 Secret/SecretFromEnv 管理凭据、避免凭据写入源码的作业配置场景"
+   ]
+  },
+  "sha": "8d0d7ac664dd",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

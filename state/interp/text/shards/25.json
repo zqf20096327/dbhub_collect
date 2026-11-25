@@ -3546,5 +3546,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7d77fa0e410b": {
+  "identity": {
+   "one_liner": "自托管的 From→To 备份管理 Web 应用，覆盖本地、SSH 服务器与 S3 端点。",
+   "review": "LazyBackup 是一个自托管 Web 应用，用于在本地主机、SSH 服务器、S3 兼容存储和 Git 远端之间执行路径、Docker 卷、数据库逻辑导出和 Git 裸镜像的备份，支持 server→server 直连或经本机中转。基于 Next.js、SQLite 与 rsync 实现，提供 cron 调度、基于数量/时间的保留策略、History 恢复和 age 加密，面向 homelab 与 VPS 运维场景。",
+   "highlights": [
+    "支持文件路径、Docker 卷、Postgres/MySQL/MariaDB/SQLite 数据库导出及 Git 裸镜像作为备份对象，目标可为本地、SSH 服务器或 S3 兼容存储",
+    "提供 cron 调度、时间戳版本快照、基于数量的自动保留、按文件年龄的清理，以及从 History 一键恢复到源路径、SSH 主机或 S3 前缀",
+    "包含 age 加密（密钥库与恢复收件人）、失败 webhook 与成功 ping、WebAuthn passkey 登录，以及供 AI 代理使用的 Streamable HTTP MCP 接口和 API token"
+   ],
+   "use_cases": [
+    "homelab 用户通过 Docker 或 Unraid/TrueNAS SCALE 安装目录部署，集中管理多台服务器的定时备份",
+    "在无法直连的服务器之间执行 server→server 传输（直连 rsync 或经 LazyBackup 主机中转），并将备份落地到 MinIO/R2/B2 等 S3 存储",
+    "需要加密备份、失败通知（Discord/Telegram/ntfy 等）或让 Cursor/Claude 等代理通过 MCP 管理备份任务的个人实例"
+   ]
+  },
+  "sha": "7d77fa0e410b",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a272ddedd7be": {
+  "identity": {
+   "one_liner": "基于 Git 规范与 MCP 协议的 AI 研发记忆库，支持代码锚点与混合检索",
+   "review": "该项目为使用 Claude Code、Codex、Cursor 等工具的多仓库协同研发团队提供上下文与经验管理服务。通过 Git 维护 AGENTS.md 规范，经 MCP 协议沉淀带代码锚点与 Playbook 的笔记，采用 SQLite FTS5 (BM25) 与本地中文 Embedding 混合检索，并提供 MkDocs 知识站供浏览器查阅。支持 Docker Compose 或 uv 本机部署，笔记按 repository 元数据隔离，锚点漂移可离线巡检。",
+   "highlights": [
+    "支持 FTS5 (BM25) 与 bge-small-zh-v1.5 本地向量的三路混合检索（text/vector/hybrid）",
+    "笔记绑定代码锚点与 Playbook（probe 诊断探针、verify 回归命令），提供 draft/verified/stale/promoted 四态状态流转",
+    "服务端提供 coding_memory.drift 离线批量巡检锚点三级漂移状态（CLEAN/MODIFIED_SAFE/DRIFTED）"
+   ],
+   "use_cases": [
+    "多个微服务仓库共享同一记忆库、按 repository 隔离的团队知识沉淀场景",
+    "疑难故障排查与跨会话续接时按需检索历史排障笔记",
+    "团队需要浏览器端查阅同一批 Markdown 笔记的知识站场景"
+   ]
+  },
+  "sha": "a272ddedd7be",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "586d292f452c": {
+  "identity": {
+   "one_liner": "基于 Flutter+Rust+BASS+SQLite(FTS5) 的 Windows 本地音乐播放器",
+   "review": "Lamp Player 是面向 Windows 10+（64 位）的本地音乐播放器，采用 Flutter 构建 Material 3 界面，Rust 通过 flutter_rust_bridge 负责文件扫描、元数据解析与曲库管理，音频输出基于 BASS 2.4。曲库存储于内置 SQLite 并启用 FTS5 全文检索。当前版本支持 mp3、flac、wav、ogg、m4a/aac、ape、opus 格式；开发需 Flutter SDK、Rust MSVC 工具链与 Visual Studio，BASS 等闭源库由脚本下载并以 MIT 许可发布代码。",
+   "highlights": [
+    "通过 flutter_rust_bridge 桥接 Rust 核心逻辑：walkdir 目录扫描、lofty 元数据解析、rusqlite 内置 SQLite+FTS5 曲库检索",
+    "支持 WASAPI 独占输出（basswasapi+bassmix）、ReplayGain 响度、10 段均衡器与逐字染色增强 LRC 歌词",
+    "提供歌单导入导出 M3U/M3U8、元数据 12 字段写回文件标签、便携 zip 与 Inno Setup 安装包打包脚本"
+   ],
+   "use_cases": [
+    "在 Windows 上管理并播放本地多格式音乐文件（含 flac/ape 等无损格式）",
+    "需要 FTS5 检索、拼音搜索与万级曲目虚拟滚动的较大本地曲库场景",
+    "需要 WASAPI 独占输出、ReplayGain 与 LRC 逐字歌词的本地回放环境"
+   ]
+  },
+  "sha": "586d292f452c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a69aec938a6c": {
+  "identity": {
+   "one_liner": "面向授权项目的团队版 Web 安全评估与漏洞管理平台，含五种角色工作流。",
+   "review": "AIVERA Pro 是一个 Web 安全评估与漏洞管理应用，覆盖项目范围界定、侦察扫描、证据复核、修复追踪、复测审批与 PDF 报告，供管理员、安全负责人、评估员、修复负责人与查看者五类角色协作使用。前端为 React 19 + Vite，后端为 Express + Prisma + SQLite，支持浏览器演示（合成数据）与 API 模式（本地运行，需授权目标）；AI 仅辅助解读，每条发现由人工确认或驳回。README 未含安装命令细节。",
+   "highlights": [
+    "实现范围界定、评估、人工验证、修复复测四阶段流程，支持五种团队角色与权限检查",
+    "API 模式将项目与发现存储于 SQLite，评估需显式启用且仅针对授权的实验目标",
+    "提供 80 张五角色界面截图（合成数据），并可选接入 Gemini 辅助证据解读"
+   ],
+   "use_cases": [
+    "安全团队对已授权目标执行评估、证据复核与报告的协作流程",
+    "跟踪漏洞修复、发起复测并管理审批",
+    "教学或演示环境中以合成数据浏览安全评估工作流"
+   ]
+  },
+  "sha": "a69aec938a6c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "af3b5ccf36f0": {
+  "identity": {
+   "one_liner": "基于 React、Node.js、Express 与 TiDB 的全栈任务管理应用",
+   "review": "该项目实现任务管理功能，前端使用 React，后端为 Node.js + Express 的 REST API，数据库为 MySQL 兼容的 TiDB，认证采用 JWT 与 bcryptjs。项目分为 frontend/backend 两个目录，需在 backend 配置含数据库凭据和 JWT_SECRET 的 .env 文件后分别启动前后端。README 提供本地运行步骤，适合作为全栈开发项目使用。",
+   "highlights": [
+    "提供用户注册、登录及基于 JWT 的认证与授权",
+    "支持任务的增删改查及标记完成状态",
+    "使用 MySQL 兼容的 TiDB 作为数据库，前后端均需 npm install 后本地启动"
+   ],
+   "use_cases": [
+    "本地部署的个人任务管理与记录",
+    "学习 React + Express + TiDB 全栈项目结构的示例",
+    "需要用户登录隔离任务数据的多人使用场景"
+   ]
+  },
+  "sha": "af3b5ccf36f0",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

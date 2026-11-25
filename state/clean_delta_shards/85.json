@@ -31189,5 +31189,411 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "b559826679f8+2": {
+  "fn": "JawherKl/user-caching-app",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    13,
+    5,
+    6,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    38,
+    6,
+    31
+   ],
+   [
+    "replace",
+    38,
+    39,
+    31,
+    32,
+    [
+     " CREATE DATABASE userdb;"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    41,
+    32,
+    34
+   ],
+   [
+    "replace",
+    41,
+    46,
+    34,
+    39,
+    [
+     " CREATE TABLE users (",
+     " id SERIAL PRIMARY KEY,",
+     " name VARCHAR(100),",
+     " email VARCHAR(100)",
+     " );"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    48,
+    39,
+    41
+   ],
+   [
+    "replace",
+    48,
+    51,
+    41,
+    44,
+    [
+     " INSERT INTO users (name, email) VALUES ",
+     " ('John Doe', 'john@example.com'),",
+     " ('Jane Smith', 'jane@example.com');"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    53,
+    44,
+    46
+   ],
+   [
+    "replace",
+    53,
+    60,
+    46,
+    53,
+    [
+     " const pgPool = new Pool({",
+     " user: 'your_pg_user',",
+     " host: 'localhost',",
+     " database: 'userdb',",
+     " password: 'your_pg_password',",
+     " port: 5432",
+     " });"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    74,
+    53,
+    67
+   ],
+   [
+    "delete",
+    74,
+    75,
+    67,
+    67
+   ],
+   [
+    "equal",
+    75,
+    83,
+    67,
+    75
+   ],
+   [
+    "replace",
+    83,
+    84,
+    75,
+    76,
+    [
+     " Example Request:"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    87,
+    76,
+    79
+   ],
+   [
+    "replace",
+    87,
+    95,
+    79,
+    87,
+    [
+     " Example Response (Cache Miss, Fetched from PostgreSQL):",
+     "",
+     " {",
+     " \"id\": 1,",
+     " \"name\": \"John Doe\",",
+     " \"email\": \"john@example.com\"",
+     " }",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    87,
+    88
+   ],
+   [
+    "replace",
+    96,
+    102,
+    88,
+    94,
+    [
+     "",
+     " {",
+     " \"id\": 1,",
+     " \"name\": \"John Doe\",",
+     " \"email\": \"john@example.com\"",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    116,
+    94,
+    108
+   ],
+   [
+    "replace",
+    116,
+    122,
+    108,
+    114,
+    [
+     "",
+     " {",
+     " \"id\": 1,",
+     " \"name\": \"John Updated\",",
+     " \"email\": \"johnnew@example.com\"",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    126,
+    114,
+    118
+   ],
+   [
+    "replace",
+    126,
+    127,
+    118,
+    119,
+    [
+     " If a user profile is already cached in Redis, the server returns the cached data, avoiding a PostgreSQL query. This reduces latency and improves performance for repeated read requests."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    129,
+    119,
+    121
+   ],
+   [
+    "replace",
+    129,
+    130,
+    121,
+    122,
+    [
+     " If the user profile is not found in Redis (cache miss), the server fetches the data from PostgreSQL, caches the result in Redis for 1 hour, and then returns the data."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    132,
+    122,
+    124
+   ],
+   [
+    "replace",
+    132,
+    133,
+    124,
+    125,
+    [
+     " When a user profile is updated, the corresponding cache entry is deleted from Redis. The updated data will be fetched from PostgreSQL and cached again on the next read request."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    146,
+    125,
+    138
+   ],
+   [
+    "replace",
+    146,
+    147,
+    138,
+    139,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    147,
+    153,
+    139,
+    145
+   ],
+   [
+    "replace",
+    153,
+    154,
+    145,
+    146,
+    [
+     " The cache will be invalidated, and the profile will be updated in PostgreSQL."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    161,
+    146,
+    153
+   ],
+   [
+    "replace",
+    161,
+    162,
+    153,
+    154,
+    [
+     "One"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    154,
+    155
+   ],
+   [
+    "replace",
+    163,
+    164,
+    155,
+    156,
+    [
+     "Two"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    156,
+    157
+   ],
+   [
+    "replace",
+    165,
+    166,
+    157,
+    158,
+    [
+     "Three"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    167,
+    158,
+    159
+   ],
+   [
+    "replace",
+    167,
+    168,
+    159,
+    160,
+    [
+     "Four"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    172,
+    160,
+    164
+   ],
+   [
+    "replace",
+    172,
+    174,
+    164,
+    166,
+    [
+     "",
+     " redisClient.connect().catch(console.error);"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    180,
+    166,
+    172
+   ],
+   [
+    "replace",
+    180,
+    181,
+    172,
+    173,
+    [
+     " If Redis is running, the response will be PONG."
+    ]
+   ],
+   [
+    "equal",
+    181,
+    204,
+    173,
+    196
+   ],
+   [
+    "delete",
+    204,
+    207,
+    196,
+    196
+   ]
+  ],
+  "at": "2026-11-25"
  }
 }

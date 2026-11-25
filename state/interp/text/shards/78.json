@@ -2864,5 +2864,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "77c95a102feb": {
+  "identity": {
+   "one_liner": "将 SQLite 扩展为分布式数据层的库，基于语言无关规范与 TypeScript 参考实现。",
+   "review": "Sirannon 是一个 TypeScript 库，在应用从本地 SQLite 文件扩展到 HTTP/WebSocket 服务、主从复制和离线设备同步时保持同一套 SQL。核心引擎提供事务、CDC、live queries、迁移、备份、加密与多租户生命周期；驱动覆盖 Node、浏览器、Bun 和 React Native。规范位于 packages/spec，仓库内 TypeScript 包是其参考实现。",
+   "highlights": [
+    "提供基于 SQLite 触发器的变更数据捕获（CDC）与增量应用的 live queries",
+    "设备端可先写本地库，通过 push/拉取/快照重同步实现双向离线同步",
+    "主节点以 HLC 时间戳通过 gRPC（mutual TLS）向副本发送变更，etcd 协调器记录写权限并支持故障转移"
+   ],
+   "use_cases": [
+    "单机 SQLite 应用向 HTTP/WebSocket 远程访问与读写副本拓扑演进",
+    "离线优先的移动/桌面设备与服务器双向数据同步",
+    "需要主节点故障转移的多节点集群数据层"
+   ]
+  },
+  "sha": "77c95a102feb",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "adcd1aa9e41f": {
+  "identity": {
+   "one_liner": "自托管的 NNTP 新闻组阅读器，提供现代 Web 界面，以单容器运行",
+   "review": "Wardroom 是一个以 Java 实现的免费开源新闻组阅读器，通过浏览器访问，可连接任意支持 NNTP 协议的服务器读取和发布文本帖子。它将文章按线程展示为对话，支持按活跃度排序分组、本地缓存与订阅管理；只处理文本讨论，不下载二进制或附件。面向自托管用户，通过 Docker Compose 部署，首次启动需配置账户与 NNTP 服务器连接信息。",
+   "highlights": [
+    "支持连接任何 NNTP 服务器（Usenet 提供商或独立新闻服务器），可读取和发布文章",
+    "支持按日期定位历史文章，以及按每日文章数对分组按活跃度排序",
+    "包含本地缓存、订阅与未读计数、作者/线程屏蔽功能"
+   ],
+   "use_cases": [
+    "在浏览器中浏览和参与 Usenet 新闻组的文本讨论",
+    "阅读项目、公司或个人自建 NNTP 服务器上的讨论组",
+    "在 amd64 或 arm64（如树莓派）设备上以单 Docker 容器自托管部署"
+   ]
+  },
+  "sha": "adcd1aa9e41f",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

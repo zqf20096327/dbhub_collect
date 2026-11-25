@@ -3524,5 +3524,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a53bb80b36c7": {
+  "identity": {
+   "one_liner": "基于 Rust 的 PostgreSQL 审计追踪引擎，通过触发器记录变更前后值",
+   "review": "Auditstream 是用 Rust 编写的开源 PostgreSQL 审计追踪引擎，应用代码不直接写审计行，由适配器通过 SQL 注释或 set_config 附带操作者信息，生成的触发器将变更（含前后值）写入 auditstream.changes 表，CLI 读取并导出历史。适用于需要对数据库变更做合规留痕的团队；限制包括不支持 Aurora DSQL 与 CockroachDB，单语句批量 UPDATE 按行执行，且禁用触发器可绕过捕获（可用 verify 检测）。",
+   "highlights": [
+    "通过生成的数据库触发器捕获变更，记录操作者及变更前后的值，无需应用代码自行写审计行",
+    "CLI 支持 init 与 export，导出 JSONL，含列排除与脱敏导出能力",
+    "提供 TypeScript 适配器（@auditstream/node、prisma、drizzle），发布物附带 SLSA 构建证明"
+   ],
+   "use_cases": [
+    "需要记录数据库谁改了什么的合规审计场景",
+    "多应用通过 Prisma/Drizzle 等 ORM 接入并统一附加操作者身份",
+    "通过 CLI 将审计历史导出为 JSONL 供下游系统消费"
+   ]
+  },
+  "sha": "a53bb80b36c7",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

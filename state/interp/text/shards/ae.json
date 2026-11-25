@@ -3150,5 +3150,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ebf30e6bc937": {
+  "identity": {
+   "one_liner": "基于 Go 和 GORM 的电影 CRUD REST API 示例项目",
+   "review": "该项目是一个使用 Go 与 GORM 编写的电影管理 REST API 示例，提供电影的增删改查接口，并包含 JWT 认证、速率限制、分页过滤排序等功能。运行需 Go 1.16 以上版本和 PostgreSQL 数据库，通过 .env 文件配置数据库连接与 JWT 密钥后执行 go run main.go 启动，服务默认运行在 8080 端口。适合学习 Go Web API 开发的开发者参考使用，采用 MIT 许可证。",
+   "highlights": [
+    "提供电影资源的完整 CRUD 接口（POST/GET/PUT/DELETE /movies）",
+    "包含 JWT 认证登录接口与速率限制功能",
+    "支持电影列表的分页、过滤与排序参数（page/limit/sort）"
+   ],
+   "use_cases": [
+    "学习 Go 语言 REST API 开发的示例参考",
+    "作为 GORM + PostgreSQL 的后端项目模板",
+    "演示 JWT 认证与速率限制在 API 中的集成方式"
+   ]
+  },
+  "sha": "ebf30e6bc937",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "325af7ac91ba": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的多副本应用持久化工作队列，提供命名队列与围栏租约机制。",
+   "review": "Workhold 是一个面向多副本应用的持久化工作队列服务，后端为 PostgreSQL 18，要求 Python 3.13+。它提供命名队列、幂等入队、带轮换令牌的围栏租约、重试与死信处理，任务按 at-least-once 语义投递，README 明确不承诺 exactly-once 或跨库分布式事务。运行时镜像含 api/migrate/maintain/relay/apply 角色，Python 客户端按 producer/consumer/admin 角色拆分发布至 PyPI，采用 MIT 许可，支持长轮询和 complete+spawn 原子后续任务。",
+   "highlights": [
+    "支持命名队列、幂等入队、优先级排序与一次性未来调度",
+    "实现围栏租约、心跳续租与 worker 崩溃后的 at-least-once 恢复",
+    "complete 与 spawn[] 后续任务在同一数据库事务中原子提交，并提供版本化重试策略、延迟重试与死信检查"
+   ],
+   "use_cases": [
+    "在多副本间分发 CPU 或 I/O 密集型后台任务并安全重试",
+    "多阶段处理：完成任务时原子地向其他命名队列生成下一阶段任务",
+    "无业务数据库的应用直接入队，由 Workhold 提供持久化存储"
+   ]
+  },
+  "sha": "325af7ac91ba",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

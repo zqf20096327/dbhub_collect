@@ -3331,5 +3331,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e56d74251f0a": {
+  "identity": {
+   "one_liner": "聚合多来源 CVE PoC 与漏洞情报的零 API 索引数据库",
+   "review": "该仓库每日通过 GitHub Actions 聚合并规范化来自 CVEProject/cvelistV5、Nuclei、Exploit-DB、Metasploit、Vulhub、CISA KEV 与 EPSS 的漏洞与 PoC 数据，生成包含约 15.7 万条 CVE 条目的 JSON 索引，并为每条记录计算 0-100 风险分（基于 KEV、EPSS、CVSS、PoC 证据与时间）。数据以压缩 JSON 格式提供，面向安全运维、渗透测试与威胁情报分析人员，可本地用 curl/jq 查询，无需 API 密钥。许可证为 MIT。",
+   "highlights": [
+    "每日通过 GitHub Actions 聚合多来源数据，覆盖 1999 年起的 CVE 记录，不调用外部 API",
+    "提供压缩 JSON 数据格式，README 中给出每条 CVE 约 980 token 的占用统计",
+    "为每条 CVE 计算综合 KEV、EPSS、CVSS、PoC 证据的 0-100 风险分，评分规则见 docs/SCORING.md"
+   ],
+   "use_cases": [
+    "本地用 curl 与标准命令行工具检索特定 CVE 的 PoC 与 Exploit-DB 链接",
+    "为 RAG/LLM 威胁情报流水线提供低 token 占用的 CVE 结构化数据源",
+    "按 KEV 状态、EPSS 分数与风险分追踪在野利用情况与新增漏洞"
+   ]
+  },
+  "sha": "e56d74251f0a",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e1ee713e734c": {
+  "identity": {
+   "one_liner": "Windows 桌面端模块化游戏资产管线工具，可将源文件处理为引擎可用的资源包。",
+   "review": "Mari Foundry 是一个面向 Windows 10/11 的桌面应用，用于将网格、纹理和材质定义经可配置的处理模块链转换为经校验、可直接导出到 Unity/Unreal/Godot 等引擎的资源包。它面向技术美术、独立团队和管线工程师，提供批处理队列、规则校验、通道打包与 LOD 生成等机制。项目以纯文件夹形式在磁盘上存储状态，支持完全离线运行，采用 MIT 许可证。",
+   "highlights": [
+    "提供模块化管线，支持链式组合导入、变换、校验和导出模块并可复用配置",
+    "支持 FBX、OBJ、glTF、PNG、TGA、EXR 等源格式，并可生成适配 Unity、Unreal Engine、Godot 的资源包布局",
+    "内置批量处理队列，可无人值守运行数百个资产，逐文件记录日志，并将校验规则作为导出前的阻断条件"
+   ],
+   "use_cases": [
+    "需要以统一命名、缩放和材质规范批量处理 3D 资源的技术美术或管线工程师",
+    "需要将扫描或源文件转换为带清单文件的引擎就绪资源包的独立团队或小型工作室",
+    "需要在导出前对网格、UV 和打包纹理进行实时预览检查并按规则阻断不合格批次的场景"
+   ]
+  },
+  "sha": "e1ee713e734c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e473ab676e1a": {
+  "identity": {
+   "one_liner": "Rust 编写的终端 AI 助手，以 shell 为核心工具并本地保存会话",
+   "review": "Shellboy 是运行于终端的 AI 助手，会话以 Threads 形式保存在本地 SQLite 中，模型通过 shell 操作文件与命令；同一 shellboy CLI 可检索历史并委派任务给其他 agent。请求在执行前即被保存，失败需显式恢复。安装需配置兼容端点的 base_url、模型 ID 与凭据，支持 macOS、Linux、Windows 单二进制运行，当前为 pre-1.0 版本。",
+   "highlights": [
+    "核心为单可执行文件，使用本地 SQLite 存储会话（Threads）",
+    "提供 /threads、Ctrl+T 恢复历史会话，shellboy CLI 支持检索历史与委派任务",
+    "请求在执行前保存；支持 shellboy config check 检查配置，安装脚本验证 SHA-256"
+   ],
+   "use_cases": [
+    "在指定文件夹内通过 shell 让 AI 助手读取、处理文件与执行命令",
+    "需要本地保存、回顾并继续长期任务的终端工作流",
+    "在 WSL 或无 sudo 权限环境中安装运行（WSL 内使用 Linux 构建）"
+   ]
+  },
+  "sha": "e473ab676e1a",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3630,5 +3630,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5a01d44f1607": {
+  "identity": {
+   "one_liner": "Perl 编写的 Zabbix MySQL/MariaDB 数据库按时间分区分发脚本",
+   "review": "该脚本用 MySQL/MariaDB 原生分区功能，将 Zabbix 的 history、trends 等表按天/周/月时间块分区，用于替代 Zabbix 自带的 housekeeper 进程。适用于使用 MySQL/MariaDB 后端、监控数据量增长后 housekeeper 处理变慢的 Zabbix 环境。使用前需先按官方博客对数据库完成初始分区，且需按 Zabbix 版本（6.x/7.x/8.0）注释或取消注释对应表的配置行。",
+   "highlights": [
+    "支持 MySQL 与 MariaDB，运行时可配置 DBI 驱动（perl-DBD-mysql 或 perl-DBD-MariaDB）",
+    "默认 history 表按天分区、trends 表按月分区，可改为按周分区并自定义分区命名",
+    "支持直接部署（cron 定时执行）或 Docker 容器运行，并提供 zbx_mysql_partitioning_template.yaml 模板用于执行结果上报与触发告警"
+   ],
+   "use_cases": [
+    "以 MySQL/MariaDB 为后端的 Zabbix 监控环境中，替代 housekeeper 进行历史数据清理",
+    "数据库规模增长后需要固定 history/trend 存储周期并按时间分区管理的场景",
+    "通过 cron 或 Docker 容器定时执行分区维护，并结合 Zabbix 模板监控脚本执行状态"
+   ]
+  },
+  "sha": "5a01d44f1607",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e65907fedec6": {
+  "identity": {
+   "one_liner": "面向 Windows 的达梦数据库可视化迁移工具，基于官方 dexp/dimp 执行表迁移",
+   "review": "DM-Migration 是一个运行于 Windows x64 的达梦数据库图形化迁移工具，通过调用官方 dexp.exe 与 dimp.exe 实现“源库指定表→本机转储文件→目标库”的流程，并经进程内加载 dodbc.dll 读取元数据。面向需要在达梦实例间迁移选定表的用户，支持 Schema 映射、四种已有表处理策略、并行度设置与任务日志。限制包括：目标 Schema 需事先存在，程序不自动创建账号或表空间；仅支持 Windows x64，Linux/ARM64 需单独适配。",
+   "highlights": [
+    "通过进程调用官方 dexp/dimp 工具执行导出导入，支持指定表、Schema 映射及四种已有表处理策略（跳过/追加/清空/替换）",
+    "提供便携版、内置工具单 EXE 与仅可视化程序三种发布形式，附 SHA-256 校验文件",
+    "界面服务仅监听 127.0.0.1，密码经标准输入传入官方工具，不出现在命令行与日志中"
+   ],
+   "use_cases": [
+    "在达梦数据库实例间迁移指定表并进行 Schema 映射",
+    "仅导出源表为 .dmp 转储文件或从本机 .dmp 文件导入数据",
+    "对已有表按跳过/追加/清空/替换策略执行导入并保留任务日志"
+   ]
+  },
+  "sha": "e65907fedec6",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

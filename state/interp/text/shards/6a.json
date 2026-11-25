@@ -3293,5 +3293,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b12760e1b67d": {
+  "identity": {
+   "one_liner": "基于数据库的 Django Tasks 后端，队列即表，无需独立消息代理",
+   "review": "django-ox 将 Django Tasks 框架的队列落在应用已有的数据库中，通过一条迁移建表并运行 ox_worker 进程处理任务。README 说明其适用于已使用数据库、希望减少独立服务的 Django 项目。要求 Python 3.12+，支持 Django 5.2 LTS 至 6.1，采用 BSD 3-Clause 许可证；执行语义为 at-least-once，任务需可安全重入。",
+   "highlights": [
+    "在 PostgreSQL 与 MySQL 8+ 上以 SELECT ... FOR UPDATE SKIP LOCKED 认领任务，SQLite 使用原子 compare-and-set UPDATE；worker 死亡后由 reaper 将未完成任务按重试预算放回队列",
+    "入队为单条 INSERT，可在 transaction.atomic() 内随业务数据一起提交或回滚；失败任务默认按指数退避重试并保留每次尝试的 traceback",
+    "提供 Django admin 中的任务检查与重试、循环调度（无独立 scheduler 进程）、ox_health 健康检查、django_ox.stats 与 /ox/metrics 监控及 ox_prune 清理；可选 oxpull 应用提供唯一任务、批次、速率限制、并发限制与工作流（后两项为 provisional，需 Django 6.0+）"
+   ],
+   "use_cases": [
+    "已运行 PostgreSQL、MySQL 或 SQLite 的 Django 项目需要后台任务能力，且以数据库表承载队列",
+    "需要任务入队与业务数据在同一事务中提交或回滚的场景",
+    "部署了多 worker 且需要任务重试预算、循环调度或健康检查退出码的队列运维场景"
+   ]
+  },
+  "sha": "b12760e1b67d",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4431450360aa": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 RabbitMQ 的订单库存微服务示例系统",
+   "review": "该项目以 Monorepo 形式实现订单与库存微服务系统，包含用户、商品、订单、库存、通知五个服务及 API 网关，服务间通过 RabbitMQ 事件通信，网关用 REST 转发并校验 JWT。技术栈混用 NestJS 与 ExpressJS，数据库按服务分为 PostgreSQL 与 MongoDB。使用前需手动创建 Docker 网络并运行 docker-compose。MIT 许可，监控、Swagger 文档等仍在路线图中。",
+   "highlights": [
+    "包含用户、商品、订单、库存、通知五个微服务和一个 API 网关，各服务使用 NestJS 或 ExpressJS 实现",
+    "服务间通过 RabbitMQ 以 order_created 等事件通信，网关与服务间采用 REST，网关支持 JWT 验证和路由",
+    "提供 docker-compose.yml 一键编排全部服务、PostgreSQL、MongoDB、RabbitMQ 及可选的 pgAdmin、Mongo Express 管理界面"
+   ],
+   "use_cases": [
+    "学习和演示事件驱动的微服务架构与容器化部署流程",
+    "作为电商类订单、库存、通知场景的参考实现或开发起点",
+    "用于本地搭建含 API 网关与消息总线的多服务联调环境"
+   ]
+  },
+  "sha": "4431450360aa",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

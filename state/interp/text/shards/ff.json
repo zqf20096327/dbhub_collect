@@ -3543,5 +3543,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "602a5aee4921": {
+  "identity": {
+   "one_liner": "面向 CUBRID 数据库的 SQLAlchemy 方言，提供 ORM、Alembic 迁移与异步支持",
+   "review": "sqlalchemy-cubrid 是 SQLAlchemy 与 CUBRID 数据库之间的方言实现，支持 SQLAlchemy 2.0–2.1、CUBRID 10.2–11.4 与 Python 3.11–3.15。它包含 ORM、模式反射、Alembic 迁移、异步驱动和 CUBRID 特有 DML 构造，适用于在 Python 应用中操作 CUBRID 数据库的开发者。需注意 CUBRID 服务器需另行部署，且不支持 RETURNING 子句和序列。",
+   "highlights": [
+    "提供三种驱动选项：纯 Python pycubrid、异步 aiopycubrid 和 CUBRIDdb C 扩展，通过 cubrid+pycubrid://、cubrid+aiopycubrid://、cubrid:// 等 URL 使用",
+    "实现 CUBRID 特有 DML 构造（ON DUPLICATE KEY UPDATE、MERGE、REPLACE INTO）、DDL 支持、模式反射与三种 MVCC 隔离级别",
+    "包含离线测试套件与并发压力测试，CI 设置 95% 行覆盖率门槛，并在 4 个 CUBRID 版本 × Python 3.11–3.15 上测试"
+   ],
+   "use_cases": [
+    "使用 SQLAlchemy ORM 或 Core 访问已部署的 CUBRID 数据库的 Python 应用",
+    "对 CUBRID 数据表执行 Alembic 管理的数据库迁移",
+    "需要 asyncio 异步数据库访问或 ORM 插入后获取自增主键的场景"
+   ]
+  },
+  "sha": "602a5aee4921",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "339e014c5ca0": {
+  "identity": {
+   "one_liner": "开放车辆品牌车型数据集，由多国官方车辆登记簿交叉核对生成",
+   "review": "VehiclesDB 是一个开放车辆数据集（CC BY 4.0），收录 6 类车辆（轿车、摩托、轻便摩托、厢式车、卡车、客车）的 16,442 个车型、978 个品牌，覆盖 18 个国家，数据来自各国官方登记簿或型式认证目录。收录条件是两个独立官方来源一致，或单一来源数量足够大。提供 CSV、Parquet、JSON、SQLite 格式与 Ruby gem，以 (kind, make_slug, model_slug) 作为永久稳定 ID。",
+   "highlights": [
+    "收录 16,442 个车型、978 个品牌、6 类车辆，基于 18 个国家的官方车辆登记簿或型式认证目录数据",
+    "提供 CSV、Parquet、JSON、SQLite 文件与 Ruby gem，支持 Postgres/MySQL/SQL Server、DuckDB、pandas 等加载方式，文件可在 GitHub Release、jsDelivr CDN 与 Hugging Face 获取",
+    "以 (kind, make_slug, model_slug) 三元组为 ID，重命名时旧 ID 记入 former_ids，2026.07.2 起列只增不改名不重排"
+   ],
+   "use_cases": [
+    "零部件目录的车型兼容性筛选",
+    "车辆交易市场与车库预约表单",
+    "车队管理与车牌相关应用中缺少本地车辆目录的市场"
+   ]
+  },
+  "sha": "339e014c5ca0",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "184bfa8f11de": {
+  "identity": {
+   "one_liner": "一个面向小型虚拟机与边缘设备的 JSON 文档数据库守护进程",
+   "review": "NonoDB 是一个用 Rust 编写的 JSON 文档数据库，通过单一守护进程管理 LMDB 存储文件，对外提供 HTTP/JSON 接口和可选的 MongoDB 兼容端点。面向需要在小型虚拟机或边缘设备上管理共享 JSON 状态的应用开发者。README 称空闲时内存占用约 5 MB（100 万文档加三个索引），内置 BM25/模糊/向量搜索、SQL、GUI、备份与复制；SQL 查询不支持 join。",
+   "highlights": [
+    "内置 BM25 全文搜索、模糊 trigram/Levenshtein 搜索与精确向量搜索，支持 SQL SELECT/INSERT/UPDATE/DELETE（无 join）",
+    "提供 MongoDB 兼容端点，官方 PyMongo、Node.js、Go 驱动可直接连接；支持单字段/复合/多键/唯一/覆盖/GeoJSON 索引",
+    "采用 LMDB 存储与单写线程分组 fsync，读取走并发 MVCC 快照；单守护进程可托管多个相互隔离的数据库"
+   ],
+   "use_cases": [
+    "在 512 MB–2 GB 内存的虚拟机或边缘设备上运行 JSON 文档存储",
+    "用 PyMongo、Node.js 或 Go 官方驱动访问本地文档数据库而不部署 MongoDB",
+    "为 CI 流程克隆数据库分支，或需要加密备份、副本复制与故障转移的小型部署"
+   ]
+  },
+  "sha": "184bfa8f11de",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

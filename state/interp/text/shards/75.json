@@ -3217,5 +3217,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2bfbe114edc9": {
+  "identity": {
+   "one_liner": "基于FastAPI与Vue的企业级AI问数BI平台，含语义层与指标治理",
+   "review": "Smart BI 是一个开源 BI 平台，将数据源接入、语义数据集、可信指标、自然语言问数、看板、大屏、复杂报表、预警与审计整合在一个产品中，采用 Vue 3 + TypeScript 前端、Python 3.12 + FastAPI 后端、PostgreSQL 存储和可选 Apache Doris OLAP 加速，通过 OpenAI 兼容 API 接入大模型。部署基于 Docker Compose，提供开发、生产两套配置；生产模式拒绝占位符 JWT_SECRET、不创建演示账号。适合需要在权限和指标口径约束下使用自然语言分析的企业团队。",
+   "highlights": [
+    "提供自然语言问数、语义数据集、指标认证与血缘、看板、复杂报表、预警等模块，AI 结果基于已发布数据集、可信指标和 SQL 安全护栏生成",
+    "内置多租户 RBAC、菜单/操作权限分离、RLS 基础、审计日志和安全删除保护；生产环境强制替换 JWT_SECRET 并通过环境变量创建首个管理员",
+    "支持 Docker Compose 一键部署与 demo-seed 自动导入示例数据，可通过 profile 启用 Doris OLAP 物化和 GoView 大屏集成"
+   ],
+   "use_cases": [
+    "业务人员用自然语言查询数据，同时受企业权限与指标口径约束的场景",
+    "已有数据源和报表但缺少统一语义层与可信指标管理的团队",
+    "需要将问数结果沉淀为看板、预警、报告与行动项的运营闭环场景"
+   ]
+  },
+  "sha": "2bfbe114edc9",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "808db3e77afc": {
+  "identity": {
+   "one_liner": "确定性 IDA Pro 提取网关：批量产出 schema-v1 JSON 并幂等写入 SQLite",
+   "review": "icepick 位于 IDA Pro 9.4+ 与下游分析库（含 toothpick）之间，在隔离 worker 进程中批量提取函数、基本块、调用关系、xrefs、RTTI 和伪代码，生成排序、Top-K 截断、SHA-256 摘要的 schema-v1 JSON，再幂等写入 SQLite。桥接包仅用标准库，ingest/show/diff-import 无需安装 IDA。适用于逆向工程与批量二进制分析流水线搭建者；需 Python 3.11+ 与 uv，extract 须在一次性 VM 中运行，加密/加壳 .text 会产生失真结果。",
+   "highlights": [
+    "批量提取生成带排序、Top-K 上限（默认 500）与 SHA-256 摘要的确定性 schema-v1 JSON，并幂等写入 SQLite",
+    "每个 IDB 使用独立 worker 进程，超时时回收整个进程树；队列失败返回确定性错误码",
+    "手工标签（source='manual'）在重新提取时不会被 IDA 结果覆盖；支持从 Diaphora SQLite 导入 diff 候选"
+   ],
+   "use_cases": [
+    "在无人值守流水线中批量提取二进制/IDB 并汇入 SQLite 分析库",
+    "在 VM 内为 agent 或 IDAPython 会话提供有界的提取输出（truncate_text/cap_sequence）",
+    "基于 Diaphora 结果导出排序的 rebase 候选记录"
+   ]
+  },
+  "sha": "808db3e77afc",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

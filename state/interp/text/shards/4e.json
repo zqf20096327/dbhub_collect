@@ -3430,5 +3430,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7fe34c0d9e68": {
+  "identity": {
+   "one_liner": "PostgreSQL 泰语全文搜索扩展，基于 libthai 实现分词",
+   "review": "pg-search-thai 是 PostgreSQL 扩展，为泰语提供全文搜索支持。泰语不以空格分词，该扩展内置 thai_parser 解析器（依赖 libthai）与 thaicfg 搜索配置，将泰语切分为词并生成 tsvector；自 1.1.0 起同时索引英文与数字。仅支持 UTF-8 数据库，可经 Docker 或源码（make）安装，采用 GPLv2 许可。README 提示英文标点会附着在 token 上，需自行预处理。",
+   "highlights": [
+    "提供 thai_parser 解析器与 thaicfg 文本搜索配置，通过 libthai 在无空格文本中切分泰语词",
+    "thaicfg 自 1.1.0 起同时索引泰语词、英文词与数字（经 simple 字典小写化），支持 &、|、! 及括号的布尔查询",
+    "附带 Thai hunspell 词典文件（th_th.dict/th_th.affix）供自定义归一化配置使用"
+   ],
+   "use_cases": [
+    "对含泰语文本（如维基文章、新闻）的 PostgreSQL 表建立 GIN 索引并执行全文查询",
+    "泰英混排文本（含街道名、品牌、CCTV/BTS 等英文词）的检索",
+    "需在应用（Node.js pg / Python psycopg / Go pgx）中以参数绑定方式执行泰语全文搜索的场景"
+   ]
+  },
+  "sha": "7fe34c0d9e68",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "da4f6bdaa307": {
+  "identity": {
+   "one_liner": "面向财务的开源知识图谱，把总账与XBRL申报以可追溯结构化数据供AI代理使用",
+   "review": "RoboSystems是一个面向财务场景的开源知识图谱平台，提供三类图：自身公司账簿或投资组合的实体图、8,000余家SEC申报机构构成的共享公共数据仓库，以及用户自定义模式的通用图（Parquet导入，Cypher查询）。它面向需要将AI代理接入财务数据的团队，支持MCP协议，图数据库独立实例部署，可自托管或部署于自己的AWS账户。扩展产品RoboLedger提供事件块式总账与XBRL 2.1报表输出。采用Apache 2.0许可。",
+   "highlights": [
+    "提供三类图：实体图、共享SEC仓库（8,000+申报机构）与自定义模式通用图，共享仓库只读",
+    "每个租户独立图数据库实例与PostgreSQL schema，图URL即MCP服务器，支持OAuth或API key",
+    "报表可序列化为holon（RDF命名图）、DataBook（Markdown）或XBRL 2.1，含事件块/信息块/分类块结构"
+   ],
+   "use_cases": [
+    "将公司账簿与SEC申报数据以结构化形式接入AI代理，进行同行基准比较与公司研究",
+    "用RoboLedger记录总账并生成多期财务报告，每个数字可追溯至原始分录",
+    "从Parquet按自定义schema构建图数据，通过Cypher与MCP查询分析"
+   ]
+  },
+  "sha": "da4f6bdaa307",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c2fc1cc549c3": {
+  "identity": {
+   "one_liner": "连接 DuckDB 2.0 Quack 远程协议的纯 Go ADBC 驱动，直接返回 Arrow 数据",
+   "review": "该驱动实现 Quack 协议版本 3，以纯 Go 编写，客户端无需安装 DuckDB 库。它从远程 DuckDB 2.0 服务器读取查询结果并返回 Apache Arrow RecordBatch，支持按批次流式获取大结果集和通过 APPEND_REQUEST 批量导入 Arrow 数据。支持 token 认证、TLS 证书指纹校验和心跳保活。提供 Go 模块、Python wheel（3.11–3.15）及 C 共享库三种分发形式。仅兼容协议版本 3，不兼容 DuckDB 1.5 预览版协议。",
+   "highlights": [
+    "以纯 Go 实现 Quack 协议版本 3，客户端无需 DuckDB 库",
+    "支持流式返回 RecordBatch，内存占用与批次大小相关而非结果总量",
+    "支持四种 ADBC ingest 模式（create/append/replace/create_append）向 DuckDB 表批量导入 Arrow 数据"
+   ],
+   "use_cases": [
+    "从远程 DuckDB 2.0 服务器以 Arrow 格式流式读取查询结果",
+    "在 Python、Go、C、Rust、R 等语言中通过 ADBC 接口访问 DuckDB 远程数据",
+    "将 Arrow 表数据批量写入远程 DuckDB 表"
+   ]
+  },
+  "sha": "c2fc1cc549c3",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3495,5 +3495,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b182fe347df3": {
+  "identity": {
+   "one_liner": "开源 CLI，将 Supabase 项目备份到自有 S3/R2/B2 存储桶并执行恢复演练验证。",
+   "review": "该 CLI 使用 pg_dump 将 Supabase 的 Postgres 数据库（可选 Auth 用户与 Storage 文件）备份到用户自有的 S3 兼容存储桶，生成带校验和的 manifest.json；drill 命令将快照恢复到临时 Postgres 以验证可恢复性。数据流经本机或 CI 直达存储桶，需要 Node.js ≥20 与版本匹配的 pg_dump。它是 backupdrill.com 托管服务的引擎，托管层提供调度与告警。",
+   "highlights": [
+    "backup 命令将 Postgres 数据库（可选 Auth 用户与 Storage 文件）备份到自有 S3/R2/B2 桶，生成带校验和的 manifest.json",
+    "drill 命令将快照恢复到临时 Postgres 实例以验证备份可恢复，estimate 命令可预估备份流量与费用",
+    "通过 env 变量、配置文件或 flags 配置（优先级 flags > env > file），并提供 Claude Code、Cursor、Pi 插件"
+   ],
+   "use_cases": [
+    "将 Supabase 数据库与 Storage 文件备份到自有控制的 S3 兼容存储桶",
+    "定期运行恢复演练验证备份文件可实际恢复",
+    "在 CI 流水线中执行备份，并通过 Healthchecks.io ping URL 接入告警"
+   ]
+  },
+  "sha": "b182fe347df3",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

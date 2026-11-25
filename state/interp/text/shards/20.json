@@ -3027,5 +3027,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e73dcdbd0a09": {
+  "identity": {
+   "one_liner": "面向 AI 代理的代码搜索 MCP 服务器，用 tree-sitter 构建 SQLite 索引，以单个二进制运行。",
+   "review": "code-index-mcp 是一个基于 Rust 的 MCP 服务器，预先将源码解析为语法树并存入 SQLite 索引，向 MCP 客户端提供搜索、调用图、文件读取和 Git 历史等工具。支持 1C:Enterprise（Configurator 与 EDT 导出）的版本包含元数据、表单、权限与调用图等附加工具。服务器通过 HTTP（默认仅监听 127.0.0.1）或 stdio 运行，需后台索引守护进程维护索引。适用于需要按符号查询代码的 MCP 客户端用户。",
+   "highlights": [
+    "提供 32 个 MCP 工具（描述所述），README 列出函数/类搜索、符号查找、调用方/被调用方查询、调用树、grep、带行范围的文件读取及 git_log/git_diff 等 Git 工具；1C 版本增加对象结构、表单事件处理器、数据链接图等工具",
+    "索引存储于 SQLite，包含压缩的代码内容与调用图；serve 进程只读索引，由独立的 daemon 后台进程构建，daemon 未运行时工具返回 daemon_offline",
+    "以单二进制分发（无 1C 约 39 MB，含 1C 约 41 MB），提供 Windows 安装脚本、npm 包、Linux/macOS 归档与 Docker/systemd 部署文件"
+   ],
+   "use_cases": [
+    "在 Claude Code、Cursor、VS Code、LibreChat 等 MCP 客户端中通过函数名、符号或全文检索代码，并查询调用关系",
+    "浏览和分析 1C:Enterprise 配置导出（BSL/OneScript），包括元数据对象、表单处理器和对象间数据引用",
+    "为团队部署共享索引服务器（HTTP 多仓库，通过仓库别名访问），或使用 code-index-guard 钩子引导代理走索引读取"
+   ]
+  },
+  "sha": "e73dcdbd0a09",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "60af10c0a0f8": {
+  "identity": {
+   "one_liner": "面向巴基斯坦影院的 Laravel 12 + React 19 全栈订票平台，支持实时选座与二维码电子票。",
+   "review": "BookMyMovie 是一个用于巴基斯坦影院售票的全栈平台，供观众购票和票房人员检票、退款使用。技术栈为 Laravel 12、React 19 与 Inertia 2、MySQL 8，含 56 张表和 9 个报表视图。座位通过实时座位图选择并以 10 分钟持锁防止超卖；电子票为签名二维码，可离线使用并加入 Apple/Google Wallet。项目状态为已完成的作品集项目，未部署托管，需克隆后本地运行。",
+   "highlights": [
+    "支持实时座位图、3D 影厅模型选座、行档定价、10 分钟座位锁定与等待名单",
+    "电子票包含签名二维码、Apple Wallet/Google Wallet 凭证，通过 PWA 支持离线访问",
+    "包含英文/乌尔都语（RTL）切换、会员积分、礼品卡、优惠券、零食附加、员工角色管理与审计日志"
+   ],
+   "use_cases": [
+    "影院售票与线上选座订票业务场景",
+    "本地部署学习和全栈作品集参考",
+    "票房扫码检票、退款与会员管理后台使用"
+   ]
+  },
+  "sha": "60af10c0a0f8",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e254e84acf22": {
+  "identity": {
+   "one_liner": "基于单文件 SQLite 的 AI 代理持久化记忆库，支持混合检索",
+   "review": "agentmem 是一个用 Python 编写的 AI 代理持久化记忆存储库，数据保存在单个 SQLite 文件中，通过 FTS5 关键词与向量语义检索结合实现混合查询。它提供 Python API、CLI、MCP 服务器（16 个工具）和 HTTP REST 接口（14 个端点），适合为跨会话运行的 AI 代理接入长期记忆。项目提供 5 层记忆分级、命名空间隔离、时间版本链等机制；README 中标注的性能数字未附独立验证来源。",
+   "highlights": [
+    "以单个 SQLite 文件存储，安装体积 0-12MB，可选无第三方依赖的纯标准库模式",
+    "提供 16 个 MCP 工具和 14 个 HTTP 端点，包含 recall、remember、consolidate、process_conversation 等操作",
+    "支持 5 层记忆分级（core/procedural/learned/episodic/working）、命名空间隔离与基于正则的实体提取和事实版本链"
+   ],
+   "use_cases": [
+    "为基于 MCP 协议的 AI 代理客户端配置持久化记忆服务器",
+    "多用户或多代理场景下按命名空间隔离各自的记忆数据",
+    "对聊天历史自动抽取事实、决策与待办事项并入库留存"
+   ]
+  },
+  "sha": "e254e84acf22",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

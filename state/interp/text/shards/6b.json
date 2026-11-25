@@ -3063,5 +3063,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8392d08d54ca": {
+  "identity": {
+   "one_liner": "基于自然语言生成 SQL 的数据分析台：上传 CSV/Excel，提问后返回 SQL、表格与图表",
+   "review": "SIFT 是一个 text-to-SQL 数据分析平台，面向不编写 SQL 的业务用户。用户通过 Google 或邮箱登录后上传 CSV/Excel/.sql 文件，用印尼语或英语提问，由 Groq（主）与 Gemini（备）生成 SQL 并在 PostgreSQL 执行，返回表格和图表。每个账号对应独立 PostgreSQL schema（ws_<hex>），只允许 SELECT/WITH 与 DML，DML 需用户在界面确认后才执行，SELECT 在 READ ONLY 事务中运行并设 60 秒超时。自建部署需 Python 3.11+、Node.js 18+、PostgreSQL 13+ 和 Groq API key；公共站点为 login-only 模式，每账号每日默认 15 次提问配额。",
+   "highlights": [
+    "支持上传 CSV、Excel（仅第一个工作表）和 .sql 脚本（原子事务执行），本地默认限制 10MB/5MB、20 万行、300 列",
+    "SQL 校验只放行单条 SELECT/WITH 或 UPDATE/DELETE（须带 WHERE），拒绝 DDL 与跨 schema 引用；DML 返回待确认状态，需在 /api/execute_confirmed 重新校验后执行",
+    "每账号独立 PostgreSQL schema 实现数据隔离，登录支持 Google OAuth、邮箱魔法链接/OTP 与密码方式"
+   ],
+   "use_cases": [
+    "无 SQL 经验的业务人员用自然语言查询自己上传的 CSV/Excel 数据",
+    "需要将查询结果自动可视化为折线图或柱状图的数据浏览场景",
+    "需要对数据变更（INSERT/UPDATE/DELETE）保留人工确认环节的受控分析环境"
+   ]
+  },
+  "sha": "8392d08d54ca",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

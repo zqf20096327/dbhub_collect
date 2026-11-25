@@ -3710,5 +3710,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c9af28c2fed0": {
+  "identity": {
+   "one_liner": "D 语言的数据库连接器库，提供类似 JDBC 的接口访问多种数据库",
+   "review": "DDBC 是 D 语言的数据库连接库，通过 dub 配置编译驱动，支持 MySQL、PostgreSQL、SQLite、SQL Server、Oracle、ClickHouse。驱动可选基于 C 库（libpq、ODBC、sqlite3）或纯 D 原生实现，原生驱动可运行于线程或 vibe.d fiber 模式。适合 D 开发者需要统一 SQL 连接接口的场景；一次构建只能选一种驱动配置，不可混用。",
+   "highlights": [
+    "提供类似 JDBC 的接口，通过 URL 方案（如 mysql://、pgnative://）在已编译的驱动中选择连接方式",
+    "驱动经 dub subConfigurations 编译选择，纯 D 原生驱动（PGNATIVE/MSSQL/ORACLE/ClickHouse）无需 C 库，原生驱动与 MySQL 支持 vibe.d fiber 模式",
+    "getDecimal/setDecimal 以最多 76 位的 Decimal 精确读写 DECIMAL/NUMERIC 值；ddbc.pods 支持 POD 结构体结果集映射与自动生成 SELECT"
+   ],
+   "use_cases": [
+    "为 D 语言应用连接 MySQL、PostgreSQL、SQLite、SQL Server、Oracle 或 ClickHouse 数据库",
+    "在 vibe.d 服务端以 fiber 模式运行原生数据库驱动连接",
+    "需要精确处理 DECIMAL/NUMERIC 数值的财务类数据读写场景"
+   ]
+  },
+  "sha": "c9af28c2fed0",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "23e1ceb95e1c": {
+  "identity": {
+   "one_liner": "基于原生 PostgreSQL 的自托管后端平台，提供实时 SQL 订阅与 REST API",
+   "review": "pgStack 是一套可自托管的开源后端平台，在原生 PostgreSQL 之上提供认证、PostgREST 兼容的 REST API、实时订阅、边缘函数、文件存储和 Studio 管理界面，以多个 Docker 容器发布，可单机或接入自有反向代理部署。实时层由 pg_reactive PG 扩展驱动，将 SELECT 变为可订阅的 live query 并通过 NOTIFY 推送增量；该扩展也可单独安装于 PostgreSQL 15–18 集群。",
+   "highlights": [
+    "提供 PostgREST 兼容 REST API（过滤、FK 嵌入、分页、RPC、事务批量）与实时 SELECT 订阅，增量经 NOTIFY 通道推送",
+    "支持邮箱+OAuth 认证（Argon2id、多种 OIDC 提供方）、边缘函数五种运行时、文件存储、Webhook 及 Studio 管理界面",
+    "支持 `npx pgstack init` 脚手架、npm SDK、Docker 镜像部署，扩展可经 PGXN 单独安装"
+   ],
+   "use_cases": [
+    "在自有 VPS 上以 docker compose 运行包含认证、REST、实时、存储的后端服务",
+    "在已有 PostgreSQL 15–18 集群中单独启用 pg_reactive，为任意 LISTEN 客户端提供 live query 增量",
+    "在现有应用中通过 @pgstack/sdk 接入 pgStack 实例的 REST、认证、实时与函数调用"
+   ]
+  },
+  "sha": "23e1ceb95e1c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

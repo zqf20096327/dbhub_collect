@@ -3343,5 +3343,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "eb0c44a6ee60": {
+  "identity": {
+   "one_liner": "Docker 化 Python 脚本，抓取 Garmin 健康数据写入 InfluxDB 供 Grafana 展示",
+   "review": "该项目是一个独立开源工具，通过 Docker 容器内运行的 Python 脚本，定时从 Garmin 服务器抓取心率、睡眠、压力、GPS 轨迹等健康指标，写入本地 InfluxDB，并自动配置 Grafana 仪表盘用于长期趋势查看。面向希望自托管和本地保存 Garmin 数据的用户。首次运行仅回填最近 7 天数据，更早数据需手动指定日期区间补抓；Windows 需通过 WSL 运行。",
+   "highlights": [
+    "定时自动抓取 Garmin 健康数据，包括心率、步数、睡眠（SpO2、呼吸率、HRV）、压力、Body Battery、卡路里及运动 GPS 轨迹等指标",
+    "支持历史数据回填，可通过环境变量指定起止日期手动补抓",
+    "提供 helper 脚本自动安装与 Docker Compose 手动安装两种部署方式，Grafana 仪表盘自动配置"
+   ],
+   "use_cases": [
+    "在本地 InfluxDB 中保存 Garmin 健康数据的完整备份",
+    "使用 Grafana 构建自定义仪表盘，查看长期健康趋势",
+    "在无第三方数据共享的自托管环境中查看 Garmin 数据"
+   ]
+  },
+  "sha": "eb0c44a6ee60",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "12dad5007fef": {
+  "identity": {
+   "one_liner": ".NET 数据中间件，基于 XML 模型生成实体并提供 CRUD、缓存与分表分库",
+   "review": "NewLife.XCode 是面向 .NET 平台的数据中间件，通过 db.xml 定义模型，由 xcodetool 生成数据类与业务类双实体文件，无需手写 SQL 即可完成增删改查。它内置 33 个数据库提供程序、多级缓存与原 生分表策略，适配 net45 及以上版本，适合需要跨多种数据库（含国产与时序库）的单表业务场景，部署时自动同步表结构。",
+   "highlights": [
+    "内置 33 个通信协议提供程序，覆盖 55 个数据库，含 MySQL/SQLite/SqlServer/Oracle/PostgreSQL/达梦等，协议兼容库通过别名复用提供程序",
+    "通过 db.xml 模型生成数据类（每次覆盖）与业务类（首次生成后不覆盖），并提供 CheckTables() 自动同步表结构",
+    "提供 IQueryable LINQ 查询、WhereExpression 链式条件、窗口函数、多级缓存（EntityCache 全表缓存建议少于 1000 行）及原生分表分库策略"
+   ],
+   "use_cases": [
+    "以单表实体操作为主的 .NET 业务系统，使用 dotnet add package NewLife.XCode 或 NewLife.Templates 模板快速搭建数据层",
+    "需要同时对接多种数据库的项目，包括时序库（TDengine/InfluxDB）、列存库（ClickHouse）及 TiDB、openGauss 等协议兼容数据库",
+    "单表数据量大的场景，可使用内置分页与表级/时间/主键分片策略进行拆分"
+   ]
+  },
+  "sha": "12dad5007fef",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

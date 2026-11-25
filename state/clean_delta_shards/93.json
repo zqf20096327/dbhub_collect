@@ -20030,5 +20030,1611 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "6b5891939487+2": {
+  "fn": "Astrmira/TriviumDB",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "TriviumDB Banner"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "delete",
+    2,
+    7,
+    2,
+    2
+   ],
+   [
+    "equal",
+    7,
+    8,
+    2,
+    3
+   ],
+   [
+    "replace",
+    8,
+    9,
+    3,
+    4,
+    [
+     " Slogan"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    4,
+    5
+   ],
+   [
+    "delete",
+    10,
+    12,
+    5,
+    5
+   ],
+   [
+    "equal",
+    12,
+    23,
+    5,
+    16
+   ],
+   [
+    "replace",
+    23,
+    29,
+    16,
+    22,
+    [
+     "Rust",
+     "Python 3.9–3.15",
+     "License",
+     "QuIVer arXiv",
+     "Pelorus arXiv",
+     "Ask DeepWiki"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    22,
+    23
+   ],
+   [
+    "replace",
+    30,
+    31,
+    23,
+    24,
+    [
+     "**中文** | **English**"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    24,
+    25
+   ],
+   [
+    "replace",
+    32,
+    33,
+    25,
+    26,
+    [
+     "当前预发布版本 **0.9.4-beta.2** 新增单条与批量 ID 检索，支持独立配置 QuIVer 精排预算，并改进图查询、WAL 恢复与内存准入。安装命令和升级步骤见双语发布说明。"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    26,
+    27
+   ],
+   [
+    "replace",
+    34,
+    35,
+    27,
+    28,
+    [
+     "SDK 的支持范围见 SDK 正式接口清单，历史磁盘格式通过外部迁移工具升级。"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    28,
+    29
+   ],
+   [
+    "replace",
+    36,
+    41,
+    29,
+    30,
+    [
+     "向量检索的数据选型与精确检索入口见 QuIVer 适用范围。"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    55,
+    30,
+    44
+   ],
+   [
+    "replace",
+    55,
+    56,
+    44,
+    45,
+    [
+     "- 🛡️ **四层数据安全保障** —— 原子替换 + WAL日志 + 事务干跑验证（Dry-Run）+ Mmap COW 隔离，`.flush_ok` v3 绑定 `.tdb/.vec/.pld`，发布前旧代备份与撤销日志支持中断恢复；备份增加磁盘读写与临时空间，损坏输入仍 fail-closed，详见恢复协议"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    64,
+    45,
+    53
+   ],
+   [
+    "replace",
+    64,
+    77,
+    53,
+    54,
+    [
+     " TriviumDB Count"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    88,
+    54,
+    65
+   ],
+   [
+    "replace",
+    88,
+    124,
+    65,
+    66,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    130,
+    66,
+    72
+   ],
+   [
+    "replace",
+    130,
+    137,
+    72,
+    79,
+    [
+     "|步骤|传统三库方案|TriviumDB|",
+     "|------------|----------------------------|----------------------------------|",
+     "|① 存语义向量|调 Qdrant API 写入 embedding|`db.insert(vec, payload)` 一步完成|",
+     "|② 存数据|调 SQLite 写入时间、场景|↑ 同一步，payload 里就是 JSON|",
+     "|③ 存关系|调 Neo4j: 用户→地点→人物|`db.link(user, cafe, \"went_to\")`|",
+     "|④ 后续召回|3 次跨库查询 + 手写合并|`db.search(vec, expand_depth=2)`|",
+     "|⑤ 迁移数据|导出 3 份 + 写转换脚本|使用快照 API 捕获、校验并恢复完整文件组|"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    140,
+    79,
+    82
+   ],
+   [
+    "replace",
+    140,
+    149,
+    82,
+    89,
+    [
+     "|场景|怎么用 TriviumDB|",
+     "|------------------------|-----------------------------------------------------------------------------------------------------|",
+     "|🤖 **AI Agent 长期记忆**|每条对话存为节点（embedding + 原文 + 时间戳），人物/地点/事件之间建边，召回时先向量匹配再沿关系链扩散|",
+     "|🎮 **游戏 NPC 认知引擎**|NPC 观察到的事件存为带向量的节点，NPC 之间的关系用图谱表达，对话时检索相关记忆自动生成回应|",
+     "|📚 **个人知识库**|Markdown 笔记切片后存入，概念之间手动或自动连边，语义搜索 + 知识图谱导航双模式浏览|",
+     "|🔬 **小型推荐系统**|用户和物品各为节点，交互行为存为带权边，混合检索实现「相似用户喜欢的 + 你的社交圈在看的」|",
+     "|🧬 **生物信息学**|基因/蛋白质序列的 embedding + 互作关系网络，一库搜到相似序列并自动追溯代谢通路|"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    160,
+    89,
+    100
+   ],
+   [
+    "replace",
+    160,
+    161,
+    100,
+    101,
+    [
+     "推荐使用超快的 uv （只需毫秒级）："
+    ]
+   ],
+   [
+    "equal",
+    161,
+    190,
+    101,
+    130
+   ],
+   [
+    "replace",
+    190,
+    191,
+    130,
+    131,
+    [
+     "本页示例使用 `0.9.4-beta.2`（PyPI 为 `0.9.4b2`，npm 通道为 `beta`）。0.9.3 当前格式数据库可直接打开。若返回 `TDB_MIGRATION_REQUIRED`，请按外部迁移指南创建并核验目标库。"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    192,
+    131,
+    132
+   ],
+   [
+    "replace",
+    192,
+    193,
+    132,
+    133,
+    [
+     "需要为嵌入式应用提供管理前端时，按Console 宿主接入复用同一实例和文件锁；现有 HTML 仍需前端传输适配，资源包会标明这一条件及 CDN 依赖。"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    133,
+    134
+   ],
+   [
+    "replace",
+    194,
+    195,
+    134,
+    135,
+    [
+     "> 🧪 **尝鲜：HTTP 服务端版（nightly）** —— TriviumDB 的正式产品形态始终是**嵌入式数据库**（进程内 Library，即装即用，无需部署）。仓库中的 `triviumdb-server` 提供了一个可选的 HTTP 壳（多客户端并发读写、OCC、流式 NDJSON 等），目前处于 **nightly 预览状态**，仅供尝鲜和跟踪演进方向，协议随时可能变更，请勿用于生产。详见 Server 说明（nightly）；一切 API 与用法说明仍以嵌入式版本为准。"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    202,
+    135,
+    142
+   ],
+   [
+    "replace",
+    202,
+    209,
+    142,
+    143,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    229,
+    143,
+    163
+   ],
+   [
+    "replace",
+    229,
+    230,
+    163,
+    164,
+    [
+     "> 📖 完整 API 参考、高级用法和 Rust 示例请查看 **API 参考文档**。"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    231,
+    164,
+    165
+   ],
+   [
+    "replace",
+    231,
+    234,
+    165,
+    166,
+    [
+     "> 📖 深入了解架构设计和技术细节请查看 **支持特性详解**。"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    258,
+    166,
+    190
+   ],
+   [
+    "replace",
+    258,
+    262,
+    190,
+    191,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    272,
+    191,
+    201
+   ],
+   [
+    "replace",
+    272,
+    303,
+    201,
+    202,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    316,
+    202,
+    215
+   ],
+   [
+    "replace",
+    316,
+    317,
+    215,
+    216,
+    [
+     "Rust / Python / Node.js 三语言共享同一套 TQL、Prepared、四类属性索引与一等查询值；HTTP Server 另提供有界邻域子图、方向化边分页、批量节点读取和带逐跳边信息的路径端点。详细语法参见 **TQL 查询语言参考**。"
+    ]
+   ],
+   [
+    "equal",
+    317,
+    320,
+    216,
+    219
+   ],
+   [
+    "replace",
+    320,
+    333,
+    219,
+    232,
+    [
+     "|查询方式|核心语义|典型用途|",
+     "|--------|--------|--------|",
+     "|**图模式匹配（MATCH）**|按节点属性、边方向、label 和路径模式匹配结构|知识图谱查询、关系筛选、结构化联结|",
+     "|**Reachability**|按方向、label 和深度执行 BFS，返回确定性最短路径与逐跳 label|依赖链、权限链、数据血缘、可达性分析|",
+     "|**GraphFirst（MATCH + RANK）**|先由图结构产生合法 anchor，再在候选集合内精确向量 Top-K|“只在某类关系约束内找最相似对象”|",
+     "|**向量 + 结构扩展（SEARCH + EXPAND）**|先用向量定位语义锚点，再沿 `OUTGOING`、`INCOMING` 或 `BOTH` 收集结构候选|语义检索后补充上下游上下文|",
+     "|**SA-PPR 图谱扩散**|从向量/文本锚点沿带权边传播相关性能量，可启用抑制、疲劳和重启|Agent 联想记忆、RAG 上下文扩展、推荐召回|",
+     "|**文本与认知算子（TQL）**|`TEXT BM25/AC/HYBRID`、`RESIDUAL`、`SA_PPR_CONFIG`、`DIVERSIFY`、`TOPICS` 可独立编排，并投影各自分数|自定义 RAG、Agent 记忆、主题分析与多样化检索|",
+     "|**混合检索（search_hybrid）**|AC 自动机 + BM25 稀疏文本 + Dense Vector 多路召回，再进行图扩散与重排|专有名词与语义兼顾的生产级检索|",
+     "|**图算法管线（WITH + 算子）**|`pagerank` / `wcc` / `degree` / `leiden` / `label_propagation` / `sa_ppr` 对 NodeSet 打分，`graph_score()` 直接投影|影响力排序、社区发现、图谱分析|",
+     "|**路径查询（ALL_PATHS / SHORTEST_PATHS）**|有界全路径与批量最短路径，支持标签序列、避让节点与路径聚合|血缘追踪、依赖分析、权限链|",
+     "|**集合代数（UNION / INTERSECT / EXCEPT）**|多路候选 NodeSet 的确定性并 / 交 / 差|多路召回融合、候选收敛|",
+     "|**Prepared TQL**|参数化查询，缺参 / 多参 / 非法值一律 fail-closed|高频业务查询的安全复用|"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    335,
+    232,
+    234
+   ],
+   [
+    "delete",
+    335,
+    337,
+    234,
+    234
+   ],
+   [
+    "equal",
+    337,
+    353,
+    234,
+    250
+   ],
+   [
+    "replace",
+    353,
+    365,
+    250,
+    251,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    369,
+    251,
+    255
+   ],
+   [
+    "replace",
+    369,
+    370,
+    255,
+    256,
+    [
+     "`0.9.0-beta.2` 的关闭完成点涵盖文件句柄、内存映射、数据库 Hook 与配额释放，并支持分组提交异常后的状态恢复。Rust 数据读取与 `set_hook()` 使用 `Result` 传播错误，Python/Node 在关闭后抛出关闭错误。迁移方式见版本变更。"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    371,
+    256,
+    257
+   ],
+   [
+    "replace",
+    371,
+    374,
+    257,
+    258,
+    [
+     "详见共享资源与实例诊断和关闭、快照与恢复。"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    381,
+    258,
+    265
+   ],
+   [
+    "replace",
+    381,
+    382,
+    265,
+    266,
+    [
+     "> 📖 QuIVer 架构与配置 · 基准测试指南 · 0.9.0 变更说明"
+    ]
+   ],
+   [
+    "equal",
+    382,
+    385,
+    266,
+    269
+   ],
+   [
+    "replace",
+    385,
+    386,
+    269,
+    270,
+    [
+     "QuIVer ANN 面向主流 embedding 模型输出的真实语义向量，服务于文本、代码和图像等语义近邻检索。查询向量与库向量应处于模型约定的匹配检索空间。公开评测覆盖 Cohere、BGE-M3、MiniLM、Nomic、Jina 等模型产生的数据，各数据集的召回、吞吐和参数均单独记录。评测数据与论文"
+    ]
+   ],
+   [
+    "equal",
+    386,
+    387,
+    270,
+    271
+   ],
+   [
+    "replace",
+    387,
+    388,
+    271,
+    272,
+    [
+     "随机合成向量、手工设计或拼接的特征、传统非负描述子等数据，建议使用全量精确检索。TriviumDB 对符合 dtype 与维度契约的向量提供存储和精确查询，Python／Rust 使用 `search_exact`，Node 使用 `searchExact`。`0.9.2` 另提供 Python `exact=True`、Rust `SearchConfig::with_exact(true)` 与 Node 对应的 `exact` 参数。精确检索 API"
+    ]
+   ],
+   [
+    "equal",
+    388,
+    395,
+    272,
+    279
+   ],
+   [
+    "replace",
+    395,
+    396,
+    279,
+    280,
+    [
+     "|阶段|引擎|激活条件|特点|"
+    ]
+   ],
+   [
+    "equal",
+    396,
+    397,
+    280,
+    281
+   ],
+   [
+    "replace",
+    397,
+    399,
+    281,
+    283,
+    [
+     "|**小规模热区**|BruteForce|节点数低于当前维度的动态阈值，或 QuIVer 未就绪|100% 精确召回，rayon 多核|",
+     "|**大规模冷区**|**QuIVer**|维度 ≤ 3072 且达到动态阈值（209–834 节点）|BQ 构图 + SM-L2 导航 + 原始向量余弦精排|"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    415,
+    283,
+    299
+   ],
+   [
+    "replace",
+    415,
+    418,
+    299,
+    300,
+    [
+     "**持久化与重载**：内核将 QuIVer 图和默认 SM 紧凑路由快照保存于统一 `.idx` 容器。打开时验证检查点身份、组件校验和事实绑定，按运行时配置加载路由及重排数据。完整文件组、备份和资源条件见存储布局与QuIVer 重载说明。"
+    ]
+   ],
+   [
+    "equal",
+    418,
+    431,
+    300,
+    313
+   ],
+   [
+    "replace",
+    431,
+    432,
+    313,
+    314,
+    [
+     "构建步骤、精确检索选项和 Hot／Mmap／SSD 驻留配置见 Pelorus 使用说明。"
+    ]
+   ],
+   [
+    "equal",
+    432,
+    433,
+    314,
+    315
+   ],
+   [
+    "replace",
+    433,
+    436,
+    315,
+    316,
+    [
+     "Pelorus 论文（arXiv） · Pelorus 源码仓库（GitHub）"
+    ]
+   ],
+   [
+    "equal",
+    436,
+    439,
+    316,
+    319
+   ],
+   [
+    "replace",
+    439,
+    440,
+    319,
+    320,
+    [
+     "应用通过 TQL／Planner 和正式 `search*` 入口组合向量、属性、文本与图查询，统一使用内核预算、错误和生命周期契约。使用方式见 TQL 参考。TSNG 算法对照及旧构图消融保存在独立研究快照中；研究成果按公共契约和算法证据验收后接入正式执行层。QuIVer 复现归档保留已发表测量及其来源身份。"
+    ]
+   ],
+   [
+    "equal",
+    440,
+    445,
+    320,
+    325
+   ],
+   [
+    "delete",
+    445,
+    447,
+    325,
+    325
+   ],
+   [
+    "equal",
+    447,
+    454,
+    325,
+    332
+   ],
+   [
+    "replace",
+    454,
+    533,
+    332,
+    333,
+    [
+     "…（79 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    533,
+    534,
+    333,
+    334
+   ],
+   [
+    "delete",
+    534,
+    536,
+    334,
+    334
+   ],
+   [
+    "equal",
+    536,
+    539,
+    334,
+    337
+   ],
+   [
+    "replace",
+    539,
+    552,
+    337,
+    350,
+    [
+     "|维度|SQLite|pgvector|Kùzu|Qdrant|Neo4j|SurrealDB|LanceDB|**TriviumDB**|",
+     "|----------------|------------|-----------|-----------|-----------|-----------|------------|-----------|-------------------------------|",
+     "|并发多写模型|⚠️ 单写多读（WAL）|✅ MVCC 多写|⚠️ 单进程单写|✅ 服务端并发写|✅ 并发事务写|✅ 分布式多写节点|✅ MVCC+OCC 并发写|⚠️ 单写多读 + 共享只读/不可换代际|",
+     "|文档型数据|✅ SQL|✅ SQL+JSONB|⚠️ 需预定义表 Schema|❌ 仅过滤|⚠️ 属性键值|✅ SurrealQL|✅ Arrow Schema|✅ 自由 JSON + `$op` 全家桶|",
+     "|向量检索|⚠️ 需外挂|✅ HNSW/IVFFlat|✅ HNSW 扩展|✅ HNSW|✅ 原生 HNSW|✅ MTree/HNSW|✅ IVF+量化|✅ 自研 QuIVer (BQ 构图 + SM-L2)|",
+     "|图谱遍历|⚠️ JOIN 模拟|⚠️ 递归 CTE|✅ Cypher|❌ 无图原语|✅ Cypher|✅ 图查询|❌ 无图原语|✅ 原生邻接表 + 图目录组件|",
+     "|嵌入式便携存储|✅ 单文件|❌ PG 服务|✅ 单文件|⚠️ 内存/目录嵌入式|❌ JVM 服务|✅ 可切换|⚠️ 目录嵌入式|✅ Rom / Mmap 同代文件组及快照|",
+     "|混合查询自由度|❌|⚠️ SQL JOIN 组合|⚠️ 过滤式向量搜索|❌ 单模向量|⚠️ SEARCH 过滤式|⚠️ 手动实现|⚠️ 向量+FTS+SQL|✅ WITH 管线自由编排|",
+     "|属性索引体系|✅ B+Tree|✅ B/GIN/BRIN 全家桶|⚠️ 表 Schema 内索引|⚠️ Payload 索引|⚠️ Label+属性 Range/Text|⚠️ Unique/全文/ANN 为主|⚠️ 标量索引|✅ Hash/ART/复合/Bitmap 四类|",
+     "|查询优化器|✅|✅|✅|❌ API 调用式|✅|⚠️ EXPLAIN 有限|⚠️ DataFusion SQL|✅ Cascades + EXPLAIN|",
+     "|图算法库|❌|⚠️ 外部扩展|⚠️ algo 扩展|❌|⚠️ GDS 插件|❌|❌|✅ 7 种查询内直调|",
+     "|路径 / 集合查询|⚠️ 递归 CTE|⚠️ 递归 CTE|✅ `*SHORTEST` + UNION|❌|✅ shortestPath|⚠️ 无路径原语|❌|✅ ALL/SHORTEST_PATHS + 集合|",
+     "|零外部依赖|✅|✅|✅|✅|❌ JVM|❌ RocksDB|⚠️ Arrow/对象存储生态|✅ 纯 Rust|"
+    ]
+   ],
+   [
+    "equal",
+    552,
+    556,
+    350,
+    354
+   ],
+   [
+    "delete",
+    556,
+    558,
+    354,
+    354
+   ],
+   [
+    "equal",
+    558,
+    566,
+    354,
+    362
+   ],
+   [
+    "replace",
+    566,
+    567,
+    362,
+    363,
+    [
+     "6. **Rust 安全契约**：mmap、SIMD、裸指针和手工 `Send/Sync` 路径按长度、对齐、生命周期和并发条件审核，并结合 ASan、TSan 与 Miri 验证。执行范围见安全文档与测试实践。"
+    ]
+   ],
+   [
+    "equal",
+    567,
+    568,
+    363,
+    364
+   ],
+   [
+    "delete",
+    568,
+    570,
+    364,
+    364
+   ],
+   [
+    "equal",
+    570,
+    573,
+    364,
+    367
+   ],
+   [
+    "replace",
+    573,
+    592,
+    367,
+    384,
+    [
+     "|文档|说明|",
+     "|---------------------------------------------|------------------------------------------------------|",
+     "|**LLM 项目索引**|产品概览、功能、使用场景与文档入口|",
+     "|**API 完整参考**|全部 Python / Node.js / Rust API、参数说明、返回值类型|",
+     "|**支持特性详解**|架构设计、存储引擎、索引策略、崩溃恢复等技术细节|",
+     "|**最佳实践**|数据建模范式、性能调优、Hook 使用指南、避坑指南|",
+     "|**共享资源与实例诊断**|配额、维护保护额度、线程池、预算余额与结构化错误|",
+     "|**关闭、快照与恢复**|关闭请求、限时等待、一致快照、校验与目录恢复|",
+     "|**文档来源与结构**|来源修订、原子更新、分组 BM25、短语／邻近和原文证据|",
+     "|**文档解析与分批发布**|自动解析、来源回映射、外部解析接入与持久化候选|",
+     "|**命名图**|共享成员、跨图独立边、条件编辑、显式联合和遍历|",
+     "|**TQL 查询语言参考**|MATCH / FIND / SEARCH 语法、DML 写操作、属性索引|",
+     "|**Hook 开发指南**|C/C++ FFI 插件编写、Rust Hook 实现、管线诊断实战|",
+     "|**测试实践**|四层测试体系、属性测试、变异测试、覆盖率度量与 CI 建议|",
+     "|**安全设计说明**|并发安全、数据完整性、unsafe 审计、FFI 安全边界|",
+     "|**CLI 工具指南**|`tdb` 命令行工具安装、用法、REPL/TUI 模式、配置文件|",
+     "|**Server 说明（nightly）**|HTTP 服务端版预览：并发模型、OCC、幂等、指标与限制|"
+    ]
+   ],
+   [
+    "equal",
+    592,
+    623,
+    384,
+    415
+   ],
+   [
+    "replace",
+    623,
+    627,
+    415,
+    416,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    627,
+    635,
+    416,
+    424
+   ],
+   [
+    "replace",
+    635,
+    639,
+    424,
+    425,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    639,
+    641,
+    425,
+    427
+   ],
+   [
+    "delete",
+    641,
+    643,
+    427,
+    427
+   ],
+   [
+    "equal",
+    643,
+    644,
+    427,
+    428
+   ],
+   [
+    "delete",
+    644,
+    645,
+    428,
+    428
+   ],
+   [
+    "equal",
+    645,
+    646,
+    428,
+    429
+   ],
+   [
+    "delete",
+    646,
+    651,
+    429,
+    429
+   ],
+   [
+    "equal",
+    651,
+    652,
+    429,
+    430
+   ],
+   [
+    "replace",
+    652,
+    659,
+    430,
+    431,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    659,
+    661,
+    431,
+    433
+   ],
+   [
+    "replace",
+    661,
+    668,
+    433,
+    434,
+    [
+     "Star History Chart"
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
+ },
+ "f8a21beef2f1+2": {
+  "fn": "wwwescape/VideoGameTrackarr",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "VideoGameTrackarr logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " VideoGameTrackarr "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    11,
+    4,
+    7,
+    [
+     " A self-hosted web app for tracking your video game collection — what you own, what you want,",
+     " what you're playing, and how it's going — with Steam sync, wishlist sale alerts, and in-browser",
+     " play for the games you own."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    7,
+    8
+   ],
+   [
+    "replace",
+    12,
+    17,
+    8,
+    11,
+    [
+     " GitHub release",
+     " GitHub last commit",
+     " GitHub code size"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    19,
+    11,
+    13
+   ],
+   [
+    "delete",
+    19,
+    27,
+    13,
+    13
+   ],
+   [
+    "equal",
+    27,
+    31,
+    13,
+    17
+   ],
+   [
+    "replace",
+    31,
+    33,
+    17,
+    19,
+    [
+     " (physical, digital, ISO, ROM, or Abandonware), with edition, storefront, steelbook, notes,",
+     " and purchase or target price."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    19,
+    20
+   ],
+   [
+    "replace",
+    34,
+    36,
+    20,
+    22,
+    [
+     " at once. Genres, companies, platforms, media, release dates, store links, collections, series,",
+     " and addons (DLC, expansions, and packs) all come along."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    22,
+    23
+   ],
+   [
+    "replace",
+    37,
+    39,
+    23,
+    25,
+    [
+     " your own 1–10 star rating per game (shown beside IGDB's member and critic ratings), notes, and",
+     " colored tags (with a Tag Manager and bulk tagging)."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    25,
+    26
+   ],
+   [
+    "replace",
+    40,
+    43,
+    26,
+    29,
+    [
+     " (.docx), Markdown, or text file, or save a link, optionally for one platform. Files open in a",
+     " built-in reader with find on page, and it remembers where you left off. See",
+     " docs/guides.md."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    29,
+    30
+   ],
+   [
+    "replace",
+    44,
+    48,
+    30,
+    34,
+    [
+     " filter by platform, format, storefront, tag, ownership, play status, game type, source,",
+     " steelbook, collection, or series (each with an Exclude option), or, with the Screensaver lab",
+     " on, whether a game is shown in the screensaver; sort by name or release date. Pages remember",
+     " your search, filters, and sort."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    34,
+    35
+   ],
+   [
+    "replace",
+    49,
+    53,
+    35,
+    39,
+    [
+     " each on, drawn at their real relative sizes in each platform's spine colours and logo, with",
+     " the usual search, filters, and sort, plus a scale slider. Cases come from a curated list of",
+     " standard retail cases (cartridge-only systems have none); turn a platform's cases on or",
+     " off in **Settings → Game Cases**, where each preview opens large."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    39,
+    40
+   ],
+   [
+    "replace",
+    54,
+    57,
+    40,
+    43,
+    [
+     " after another, with the VideoGameTrackarr badge in the corner; swipe to browse, tap a cover",
+     " to open the game. Set the time per cover in **Settings → Screensaver**, and hide a game from",
+     " its page, or many at once from the Games list. Handy on a wall-mounted tablet."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    43,
+    44
+   ],
+   [
+    "replace",
+    58,
+    59,
+    44,
+    45,
+    [
+     " **Settings → Labs**."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    45,
+    46
+   ],
+   [
+    "replace",
+    60,
+    61,
+    46,
+    47,
+    [
+     " catalog, with product photos."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    47,
+    48
+   ],
+   [
+    "replace",
+    62,
+    63,
+    48,
+    49,
+    [
+     " yet, shown once per account."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    49,
+    50
+   ],
+   [
+    "replace",
+    64,
+    66,
+    50,
+    52,
+    [
+     " for your copies (owned or wishlisted, with a price and notes), your rating, tags, and notes;",
+     " the game's page lists them in place of its add-ons."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    52,
+    53
+   ],
+   [
+    "replace",
+    67,
+    68,
+    53,
+    54,
+    [
+     " before it's applied, and relink or unlink mismatched entries."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    54,
+    55
+   ],
+   [
+    "replace",
+    69,
+    71,
+    55,
+    57,
+    [
+     " download GOG's DRM-free offline installers to your server, then to any device. See",
+     " docs/gog.md."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    57,
+    58
+   ],
+   [
+    "replace",
+    72,
+    73,
+    58,
+    59,
+    [
+     " Android) and PlatPrices (PlayStation), with target prices and an **On Sale** page."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    59,
+    60
+   ],
+   [
+    "replace",
+    74,
+    75,
+    60,
+    61,
+    [
+     " your library."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    61,
+    62
+   ],
+   [
+    "replace",
+    76,
+    78,
+    62,
+    64,
+    [
+     " browser, with a self-hosted emulator and saves kept on your server. See",
+     " docs/emulation.md."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    80,
+    64,
+    66
+   ],
+   [
+    "replace",
+    80,
+    83,
+    66,
+    69,
+    [
+     " worth filling on the Overview; breakdowns by play status, platform, genre, and hardware on",
+     " Insights; plus release calendars, duplicate detection, missing addons, orphaned accessories,",
+     " and side-by-side game comparison."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    69,
+    70
+   ],
+   [
+    "replace",
+    84,
+    85,
+    70,
+    71,
+    [
+     " collection."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    71,
+    72
+   ],
+   [
+    "replace",
+    86,
+    87,
+    72,
+    73,
+    [
+     " progress, a log of each run, and catch-up of runs missed while the app was down."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    73,
+    74
+   ],
+   [
+    "replace",
+    88,
+    92,
+    74,
+    78,
+    [
+     " or a `.zip` that also carries your pick of ROMs and saves, BIOS files, uploaded images and",
+     " guide files, with an automatic safety snapshot before every restore.",
+     "- **PWA** — installable (see Installing the app), works offline for",
+     " anything you've already viewed, and syncs offline edits when you reconnect."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    78,
+    79
+   ],
+   [
+    "replace",
+    93,
+    95,
+    79,
+    81,
+    [
+     " color schemes), a sidebar that becomes a drawer on phones, and virtualized lists for large",
+     " collections."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    107,
+    81,
+    93
+   ],
+   [
+    "replace",
+    107,
+    120,
+    93,
+    94,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    122,
+    94,
+    96
+   ],
+   [
+    "replace",
+    122,
+    123,
+    96,
+    97,
+    [
+     "Create a `.env` file next to it (see Configuration), then start it:"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    137,
+    97,
+    111
+   ],
+   [
+    "replace",
+    137,
+    138,
+    111,
+    112,
+    [
+     "docs/deployment/."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    159,
+    112,
+    133
+   ],
+   [
+    "replace",
+    159,
+    160,
+    133,
+    134,
+    [
+     "Settings live in `.env` (see .env.example for every option). Only IGDB and a JWT"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    175,
+    134,
+    149
+   ],
+   [
+    "replace",
+    175,
+    180,
+    149,
+    154,
+    [
+     "|Integration|Setting|Get a key|Notes|",
+     "|--------------|--------------------|-----------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|Steam|`STEAM_API_KEY`|steamcommunity.com/dev/apikey|Your SteamID64 is set in-app, under **Settings → Integrations**.|",
+     "|IsThereAnyDeal|`ITAD_API_KEY`|isthereanydeal.com/apps/my|PC, Mac, Linux, and Android prices. `ITAD_COUNTRY` (two-letter code, default `US`) sets the store country.|",
+     "|PlatPrices|`PLATPRICES_API_KEY`|platprices.com/api-request|PlayStation prices. The free tier tracks any 2 PS Store regions, chosen on your PlatPrices dashboard. `PLATPRICES_REGION` (two-letter code such as `GB` or `IN`, default `US`) must be one of them.|"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    191,
+    154,
+    165
+   ],
+   [
+    "replace",
+    191,
+    193,
+    165,
+    167,
+    [
+     "Requires Git, Node.js 22+,",
+     "and Python 3.12+."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    198,
+    167,
+    172
+   ],
+   [
+    "replace",
+    198,
+    203,
+    172,
+    173,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    205,
+    173,
+    175
+   ],
+   [
+    "replace",
+    205,
+    206,
+    175,
+    176,
+    [
+     "Create `.env` in the project root as described in Configuration, then run the"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    226,
+    176,
+    196
+   ],
+   [
+    "replace",
+    226,
+    227,
+    196,
+    197,
+    [
+     "pre-release check — see e2e/README.md."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    248,
+    197,
+    218
+   ],
+   [
+    "replace",
+    248,
+    250,
+    218,
+    220,
+    [
+     "See docs/developer-guide.md for conventions, and",
+     "CONTRIBUTING.md if you're sending a PR."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    252,
+    220,
+    222
+   ],
+   [
+    "replace",
+    252,
+    255,
+    222,
+    223,
+    [
+     "GPL-3.0 — see LICENSE."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    256,
+    223,
+    224
+   ],
+   [
+    "replace",
+    256,
+    260,
+    224,
+    225,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
  }
 }

@@ -3578,5 +3578,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a39bf73543ab": {
+  "identity": {
+   "one_liner": "面向 DM8 的数据基线采集与一致性校验 CLI，用证据类型标记区分离线与在线结果",
+   "review": "dm8-verify 是达梦 DM8 数据基线与一致性校验工具，用 Python 标准库实现，供需要验证数据库备份恢复结果的运维/测试人员使用。它采集 SOURCE、DATABASE、FIXTURE、RESTORED 四类证据基线，通过 SHA-256 多重集摘要比较数据差异，以 PASS/FAIL/INCOMPLETE 报告结果，本身不执行备份或恢复。注意其在线 disql 采集尚未联调。",
+   "highlights": [
+    "提供 collect-source、collect-db、compare、demo 等 CLI 子命令，基线输出为 baseline.json 和 tables.csv",
+    "数据经 UTF-8、固定列顺序与类型规范化后做 SHA-256 多重集摘要，输入行顺序变化不影响结果",
+    "提供 ROW_COUNT、DATA_ONLY、FULL 三级验证等级，缺失必需证据一律返回 INCOMPLETE"
+   ],
+   "use_cases": [
+    "备份恢复前后生成 DATABASE 与 RESTORED 基线并配对比较，验证恢复一致性",
+    "比较两次离线数据采集结果，检测行数、主键、数据摘要及表结构/约束差异",
+    "作为 P3/P4 备份恢复流程的比较与报告组件，复用 baseline.json 作为输入"
+   ]
+  },
+  "sha": "a39bf73543ab",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

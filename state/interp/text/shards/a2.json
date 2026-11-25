@@ -3518,5 +3518,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2addcaf795a8": {
+  "identity": {
+   "one_liner": "D 语言的 ORM 框架，通过 DDBC 抽象层操作多种 SQL 数据库",
+   "review": "HibernateD 是 D 语言的 ORM 库，接口设计类似 Java 的 Hibernate。它通过 DDBC 库连接底层数据库，当前直接支持 SQLite、MySQL、Postgres 和 ClickHouse 四种方言，并提供 @EmbeddedId 复合主键、HQL 查询、会话缓存等特性。适用于使用 D 语言开发数据库应用的程序员；但复合主键的自动建表和多对多关联等能力尚未实现。",
+   "highlights": [
+    "基于 DDBC 抽象层运行，支持 SQLite（v3.7.11+）、MySQL、Postgres 和 ClickHouse（23.8+），并可经 ODBC 扩展支持 SQL Server 与 Oracle",
+    "提供 @EmbeddedId/@Embeddable 注解实现复合主键映射，支持 HQL 查询和 Session 事务接口",
+    "针对 ClickHouse 提供专门方言：MergeTree 建表、ALTER TABLE ... UPDATE 同步更新、客户端生成 @Generated 键、日期存为 Date32/DateTime64(0)（1900–2299 年）"
+   ],
+   "use_cases": [
+    "使用 D 语言开发需要读写 SQLite、MySQL 或 Postgres 的应用程序",
+    "在 ClickHouse 分析型数据库上映射实体并进行 HQL 查询（无事务、更新开销大）",
+    "访问含有复合主键表的既有数据库（需自行建表并实现 opEquals）"
+   ]
+  },
+  "sha": "2addcaf795a8",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "03f67dad33fc": {
+  "identity": {
+   "one_liner": "终端表格查询工具，支持多格式浏览编辑并内置 MCP 服务器",
+   "review": "rowq 是一个 Rust 编写的终端工具，用于打开和查询 CSV、JSON、YAML、TOML、Parquet、Excel、SQLite、DuckDB 等格式的数据，提供筛选、排序、透视、JOIN、计算列和终端图表功能，JSON/YAML/TOML 编辑会写回原文档结构。可通过 --mcp 启动 MCP 服务器供 AI 助手调用同一引擎。通过 cargo、Homebrew、AUR、APT 或预编译二进制安装。",
+   "highlights": [
+    "支持 CSV、JSON、JSONL、YAML、TOML、Parquet、Arrow/Feather、Excel、SQLite、DuckDB 等格式的读取与导出，可从 stdin 管道读入",
+    "提供 Vim 风格导航、透视表、跨文件 JOIN、git diff 式表格对比、窗口函数与终端内图表（直方图、柱状、折线）",
+    "包含 MCP 服务器（rowq --mcp），带 --mcp-write 时写操作先返回 SQL 语句待确认，不单次直接写入"
+   ],
+   "use_cases": [
+    "在终端中浏览、筛选和分析大型 CSV/JSONL 数据文件",
+    "直接编辑 SQLite/DuckDB 表并保存，每次保存前确认生成的 SQL 语句",
+    "让 AI 助手通过 MCP 协议对本地文件和数据库执行计算"
+   ]
+  },
+  "sha": "03f67dad33fc",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

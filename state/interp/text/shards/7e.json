@@ -4063,5 +4063,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "008af723ff1b": {
+  "identity": {
+   "one_liner": "本地优先的多智能体任务编排板，基于 SQLite 队列与 MCP 协调多套编码 Agent 工具",
+   "review": "Sugar 是运行在本地的编码 Agent 队列与监控基础设施，面向同时使用 Claude Code、Codex、Cursor、Goose 等多种工具的开发者。它提供原子任务认领与租约心跳机制、Web/macOS 仪表盘、追加式事件历史，以及七类项目记忆。任务状态、事件与记忆均存储为本机 SQLite 文件，默认无需账号，遥测覆盖深度因工具而异。",
+   "highlights": [
+    "提供 SQLite 持久队列，支持原子认领、租约、心跳、重试与任务依赖，进程崩溃后由 reaper 重新入队",
+    "通过 MCP 服务器、REST+SSE、CLI 三种接口暴露任务与记忆，支持 Claude Code、Codex、Cursor、Goose、OpenCode 等客户端接入",
+    "维护追加式事件历史（~/.sugar/events.db），可生成带 SHA-256 清单和可选 HMAC 签名的审计导出，并按 harness 报告归集 token 与成本"
+   ],
+   "use_cases": [
+    "多个 Agent 工具并行处理同一仓库任务，需要避免重复认领和相互覆盖",
+    "需要查询每个任务的执行者、所用工具、事件记录与成本归属，并导出审计数据",
+    "为 Agent 提供跨会话的项目记忆（决策、偏好、错误模式等），通过 MCP 读写语义检索"
+   ]
+  },
+  "sha": "008af723ff1b",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

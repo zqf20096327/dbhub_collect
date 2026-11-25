@@ -3414,5 +3414,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bf228ae00cb5": {
+  "identity": {
+   "one_liner": "通过 SSH 在多台服务器上续期 SSL/TLS 证书的 Go CLI 工具",
+   "review": "sslsync 是一个命令行工具，用一份 .env 配置主机、端口、路径和密码，从本地机器经 SSH 连接多台服务器，先检查 SSH、sudo、路径与权限，再替换证书文件并重载服务，最后逐字节比对端口实际返回的证书；失败时自动回滚文件、Kubernetes secrets 及权限。支持 Nginx、Apache、HAProxy、MinIO、PostgreSQL、Kubernetes secrets 和普通文件，输出每次运行与服务器的日志及 summary.json，MIT 许可，提供脚本、Homebrew、go install、deb/rpm/apk 与 Docker 等安装方式。",
+   "highlights": [
+    "支持通过 SSH 批量更新多台服务器上的证书，并重载 Nginx、Apache、HAProxy、MinIO、PostgreSQL 等服务",
+    "提供前置检查（SSH、sudo、服务健康、路径与权限）与替换后逐字节验证端口证书的机制",
+    "失败时自动回滚文件、Kubernetes secrets 和权限并重载服务，生成每次运行和每台服务器的日志及 summary.json"
+   ],
+   "use_cases": [
+    "在多台服务器上以同一份证书文件统一执行证书续期替换",
+    "需要 Kubernetes secrets 证书更新及失败自动回滚的运维流程",
+    "需要为每次证书更新保留可审计日志与摘要文件的场景"
+   ]
+  },
+  "sha": "bf228ae00cb5",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

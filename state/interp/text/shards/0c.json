@@ -3793,5 +3793,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b8c42fb9d74c": {
+  "identity": {
+   "one_liner": "基于 SlateDB 的 Datalog 三元组数据库，支持历史与增量查询",
+   "review": "Triplox 是一个以对象存储（S3）为单一事实来源的 Datalog 数据库，数据模型、事务语义和查询 API 参照 Datomic。底层使用 SlateDB 键值存储，增量查询基于 Feldera 的 DBSP crate 实现，采用客户端/服务器架构，查询在服务端执行。项目为 alpha 阶段，索引编码尚未稳定，当前为单写入者，不处理 schema 更新，面向 OLTP 读多写少的工作负载。",
+   "highlights": [
+    "基于 SlateDB 在对象存储上运行，支持单写入者多读者的存算分离架构",
+    "支持增量 Datalog 查询，可用标准查询引擎的全部构造（or/or-join、not/not-join、谓词、函数、聚合），底层使用 DBSP crate",
+    "提供 Rust、Clojure、Java 客户端，通过 HTTP/2 上的自定义 MessagePack 编码通信"
+   ],
+   "use_cases": [
+    "需要以 S3 等对象存储部署的读多写少 OLTP 场景",
+    "需要动态订阅和增量更新 Datalog 查询结果、并在此基础上构建视图的应用",
+    "熟悉 Datomic 数据模型和查询 API 的 Clojure/JVM 生态开发者（非 JVM 客户端生态也在路线中）"
+   ]
+  },
+  "sha": "b8c42fb9d74c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

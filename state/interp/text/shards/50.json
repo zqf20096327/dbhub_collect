@@ -3498,5 +3498,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2529d028ae51": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 GraphRAG 库，用 LLM 抽取实体关系并结合向量、图遍历与全文检索回答问题",
+   "review": "post-graph-rag 是一个 Python 编写的 GraphRAG 库，运行在 PostgreSQL 16/18 与 pgvector 之上，无需独立向量库或图数据库。它用 LLM 从文档抽取实体与三元组，存为属性图并支持双时态（valid/belief time）查询，后写入的文档可关闭早期事实（supersession）。检索融合向量相似度、图遍历与全文搜索。需 Python 3.11+，通过 pip 安装，并提供 MCP 服务器接入 AI 客户端。",
+   "highlights": [
+    "在单一 PostgreSQL 中存储向量段落、知识图谱三元组与文档元数据，检索融合向量相似度、图遍历与全文搜索",
+    "支持双时态查询（as_of 有效时间与 as_believed_at 信念时间），后文档可按顺序关闭（supersede）先前事实",
+    "提供 MCP 服务器（stdio 与 Streamable HTTP），内含 7 个工具，可在 Claude、Gemini CLI、Cursor 等客户端中使用"
+   ],
+   "use_cases": [
+    "需要跟踪事实随时间变更的长期对话记忆场景，如架构决策记录的摄入与按时间点回溯查询",
+    "财报电话会议记录等指标按季度重述、需区分日期版本的文档问答",
+    "希望在现有 PostgreSQL 上构建 GraphRAG、由应用事务统一覆盖图与应用表的项目"
+   ]
+  },
+  "sha": "2529d028ae51",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

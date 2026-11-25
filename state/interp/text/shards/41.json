@@ -2942,5 +2942,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "44bf998c020f": {
+  "identity": {
+   "one_liner": "为 GitLab CI 提供 Kubernetes、RabbitMQ、PostgreSQL 等可复用脚本函数的 Shell 库",
+   "review": "该项目是一组 Shell 脚本函数集合，供 GitLab CI 流水线以 Git Submodule 方式引入，用于按 $CI_COMMIT_REF_SLUG 创建动态环境，涵盖 Rancher 项目命名空间、RabbitMQ vhost、PostgreSQL 数据库及 Docker Registry 并行登录，kubectl/rancher cli/helm 调用声明为并行任务安全。另含 misc.sh 通过 Salt 和 SSH 管理 Docker 应用部署。使用前需配置 RANCHER_PROJECT 等环境变量。",
+   "highlights": [
+    "按 $CI_COMMIT_REF_SLUG 创建动态环境：Rancher 项目命名空间、RabbitMQ 虚拟主机、PostgreSQL 数据库",
+    "支持 Docker Registry 并行登录；kubectl、rancher cli、helm 调用声明为并行 job 安全",
+    "misc.sh 提供基于 Salt 的 Docker 部署函数：镜像更新、文件按需上传（changed/unchanged）、容器健康等待等"
+   ],
+   "use_cases": [
+    "GitLab CI 流水线中为每个分支/引用自动创建隔离的 Kubernetes、RabbitMQ、PostgreSQL 环境",
+    "通过 Salt 管理的主机上以 SSH 方式部署 Docker 应用并等待健康检查",
+    "多个流水线并行运行时复用同一套 CI 脚本函数"
+   ]
+  },
+  "sha": "44bf998c020f",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

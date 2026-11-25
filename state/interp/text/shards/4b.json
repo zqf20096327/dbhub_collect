@@ -2955,5 +2955,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "781ad5910ac2": {
+  "identity": {
+   "one_liner": "单页 Streamlit 应用，集成四个 LangChain 工具示例",
+   "review": "这是一个 Streamlit 单页应用，包含网页研究代理、文本/网页/PDF 摘要、新闻摘要和文档问答四个 LangChain 工具。使用 OpenAI 模型和可选搜索 API，向量存储默认用 Postgres+pgvector，也可选 Pinecone。适合已持有 OpenAI 及搜索服务 API 密钥、想部署或本地运行这些工具的开发者。README 提示若在服务器端配置密钥需设置 APP_PASSWORD，否则任何访问者可使用这些密钥并读写文档库。",
+   "highlights": [
+    "包含四个工具：网页研究代理（带引用来源）、摘要生成、新闻摘要、文档问答（页级引用）",
+    "向量存储支持 Postgres+pgvector（默认）或 Pinecone，支持 Tavily/Exa/Firecrawl 等多种搜索 API",
+    "提供 Railway 部署模板，也可通过 Docker 在任意 VPS 上运行"
+   ],
+   "use_cases": [
+    "部署私有网页研究与新闻摘要工具",
+    "基于 PDF/文本/Markdown 文档库的问答检索",
+    "学习 LangChain agent、RAG 与 pgvector 集成的参考示例"
+   ]
+  },
+  "sha": "781ad5910ac2",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b1924ea2f6e4": {
+  "identity": {
+   "one_liner": "Oracle 数据库的 Kubernetes Operator，通过自定义资源管理数据库生命周期",
+   "review": "该项目为 Oracle 数据库提供 Kubernetes Operator（原名 Oracle Database Operator），通过扩展 Kubernetes API 的自定义资源与控制器，实现数据库的声明式部署与生命周期管理，供数据库团队、平台工程师及 DevOps/GitOps 流程使用。安装前需准备 cert-manager（用于 webhook TLS 证书）、持久存储与镜像仓库凭证；最低要求 Kubernetes 1.33，RAC 控制器在 OCNE 1.9 上另有兼容路径。",
+   "highlights": [
+    "提供多类控制器，覆盖单实例数据库、RAC、Data Guard、Autonomous Database、备份恢复、分库等负载管理",
+    "v2.3.0 新增 AgentFactory 控制器，包含 TLS 处理、证书轮换与状态跟踪；CMAN 与可观测性功能处于预览阶段",
+    "使用 admission webhook 校验用户输入，依赖 cert-manager 管理 TLS 证书；支持命名空间级安装与多命名空间监听"
+   ],
+   "use_cases": [
+    "在 Kubernetes/OKE/OpenShift/GKE/EKS/AKS 等集群上以声明式资源部署和管理 Oracle 数据库负载",
+    "结合 GitOps 流程，用标准 Kubernetes 工具链统一管理数据库的配置与生命周期",
+    "通过 Data Guard Broker 与 SingleInstanceDatabase 等控制器配置 Data Guard、TCPS 及克隆恢复等数据库操作"
+   ]
+  },
+  "sha": "b1924ea2f6e4",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "15ab98c4ecf1": {
+  "identity": {
+   "one_liner": "为 Claude Code 和 Codex 提供可查验、可更正的跨会话共享记忆的 MCP 服务器",
+   "review": "Cairn.ink Memory 是一个 MCP 服务器，让 Claude Code 与 Codex 共用同一份跨会话记忆。每条记忆附带保存时的源文本，供用户查验、更正或遗忘。支持本地 SQLite 与 cairn.ink 云端两种模式，一条 `npx @cairn-ink/memory setup` 命令即可安装，需 Node 22.16+。项目处于开发者预览阶段，README 列出了已知限制（如特定 Node 版本搜索变慢、遗忘并非安全擦除）。",
+   "highlights": [
+    "提供 remember/inspect/correct/forget 等记忆工具，每条记忆保留 Source Receipt 源文本",
+    "本地模式数据存于本机明文 SQLite 数据库，无需账号；云端模式跨设备同步",
+    "按对话、记忆、卡片三层组织数据；关键词搜索不调用模型，语义搜索需自备 OpenAI 密钥"
+   ],
+   "use_cases": [
+    "让 Claude Code 和 Codex 在多个会话间延续用户偏好与项目决策",
+    "本地保存并检索代理对话记录，如查询上周的数据库迁移决定",
+    "需要在更换设备时通过 cairn.ink 账号同步同一份代理记忆的场景"
+   ]
+  },
+  "sha": "15ab98c4ecf1",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

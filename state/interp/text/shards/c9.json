@@ -2914,5 +2914,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d9f27305d607": {
+  "identity": {
+   "one_liner": "Rust + egui 桌面数据工作台，按需惰性解析 GB 级 JSON/NDJSON",
+   "review": "Thoth 是一款用 Rust 与 egui 构建的桌面数据浏览工具，可打开 GB 级 JSON/NDJSON 文件（惰性解析、LRU 缓存、并行搜索），并通过沙盒化 WASM 插件加载 CSV、调用 REST API、连接 PostgreSQL 与 MySQL 执行 SQL。面向需要本地查看与检索大数据文件的开发者和数据工程师。提供 MCP Server，可被 Claude、Cursor 等 AI 助手调用；macOS 构建未签名，首次启动需手动移除隔离属性。",
+   "highlights": [
+    "惰性解析仅读取当前查看的文件片段，以文件偏移量代替整文件加载，并配 LRU 缓存",
+    "内置 JSONPath 与正则搜索，使用 Rayon 并行处理，搜索在后台线程运行",
+    "沙盒化 WebAssembly 插件系统，配套 thoth-plugin-sdk；通过 MCP Server 向 AI 助手暴露加载器、搜索与 JSONPath"
+   ],
+   "use_cases": [
+    "打开和浏览超出常规编辑器容量的 GB 级 JSON/NDJSON 文件",
+    "连接 PostgreSQL/MySQL 浏览 schema、运行 SQL 并查看带查询计划的结果",
+    "通过 MCP 将本地数据检索能力接入 Claude、Cursor 等 AI 助手工作流"
+   ]
+  },
+  "sha": "d9f27305d607",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1548cee88ff7": {
+  "identity": {
+   "one_liner": "开源桌面数据库客户端，内置 SSH 隧道与面向 AI 代理的 MCP 服务器",
+   "review": "SpelaionDB 是一款基于 Rust 与 Tauri 构建的开源桌面数据库客户端，支持 PostgreSQL、MySQL、MariaDB、SQL Server、SQLite 和 DuckDB 六种引擎。面向需要通过 SSH 隧道连接数据库并让 AI 代理只读访问 SQL 数据的开发者与团队，当前处于 preview 阶段，安装包尚未签名。",
+   "highlights": [
+    "支持六种数据库引擎，含多跳 SSH 隧道、SOCKS5/HTTP 代理与 Kubernetes 端口转发，主机密钥变更时阻断连接",
+    "内置 MCP 服务器（spelaiondb mcp），默认只读，每次调用均记录，可一键配置到 Claude Desktop、Cursor 等客户端",
+    "连接配置以不含密码的纯文件存于 .spelaion/ 目录，可经 git 在团队间共享，并支持从 DBeaver、DataGrip 等工具导入"
+   ],
+   "use_cases": [
+    "需要经多跳 SSH 隧道或堡垒机访问远端数据库的日常 SQL 查询与数据编辑",
+    "将数据库连接以只读方式暴露给 Claude Desktop、Codex、Cursor 等 AI 编码代理",
+    "团队通过 git 共享不含密码的连接配置，并对生产库变更设置确认与只读保护"
+   ]
+  },
+  "sha": "1548cee88ff7",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

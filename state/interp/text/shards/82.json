@@ -3512,5 +3512,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4605a16d1652": {
+  "identity": {
+   "one_liner": "基于 Rust 的持久化工作流引擎，以 PostgreSQL 记录步骤日志实现崩溃恢复",
+   "review": "ORCHER 是一个用 Rust 编写的持久化执行引擎，将 Rust、Python 或 TypeScript 编写的异步工作流逐步记录在 PostgreSQL 中，worker 崩溃或重新部署后可从最后完成的步骤恢复运行。部署仅需一个引擎进程和一个 PostgreSQL 14+ 数据库，引擎通过 gRPC(50051) 服务 SDK，通过 HTTP(8080) 提供 REST API、仪表盘和指标，worker 主动轮询取任务。默认需认证，无认证模式仅限本机地址。",
+   "highlights": [
+    "支持 Rust、Python、TypeScript 三种 SDK，共享同一核心并使用同一 gRPC API",
+    "已完成步骤只记录一次，运行恢复时不重复执行，并提供持久化定时器、cron 计划、事件、子工作流、任务队列与命名空间",
+    "仅依赖 PostgreSQL 14+，提供仪表盘、REST API、健康检查和指标"
+   ],
+   "use_cases": [
+    "需要进程崩溃后从断点恢复的长流程工作流编排",
+    "跨 Rust/Python/TypeScript 服务的任务队列与定时任务调度",
+    "需要通过 REST API 或仪表盘查询执行状态、日志并支持取消/重置操作的运行管理"
+   ]
+  },
+  "sha": "4605a16d1652",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

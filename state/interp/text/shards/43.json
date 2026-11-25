@@ -2892,5 +2892,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ed9e9eae08c5": {
+  "identity": {
+   "one_liner": "Android 原生实现的本地 API 网关，将 WorkBuddy/CodeBuddy 额度转为 OpenAI/Anthropic 兼容接口",
+   "review": "一个运行在 Android 手机上的本地 API 网关，用 Kotlin 实现，无 Python/Docker 依赖，APK 约 1.7 MB。它将 WorkBuddy/CodeBuddy 账号的模型额度封装为 OpenAI Chat、Anthropic Messages、OpenAI Responses 三种协议的本地 HTTP 接口（默认端口 8788），供局域网内电脑或其他客户端调用。支持多账号加权轮换、每日自动签到、SQLite 用量记录与 AES-GCM 加密的 Key 管理。README 明确声明仅供学习研究，禁止商业用途，使用者须自行遵守上游服务条款。",
+   "highlights": [
+    "提供 OpenAI Chat、Anthropic Messages、OpenAI Responses 三种协议端点，均支持流式与非流式响应",
+    "实现多账号加权随机轮换（含余额、到期时间、成功率、闲置时长因子）、失败冷却与自动重试",
+    "包含前台服务、WakeLock、开机自启与精确闹钟等保活机制，用量数据存入 SQLite 并支持 AES-GCM 加密的 API Key 管理"
+   ],
+   "use_cases": [
+    "在局域网内让 Claude Code、Cherry Studio、Codex CLI 等客户端通过 Base URL 指向手机端口调用模型接口",
+    "需要每日定时自动签到领取额度的多账号管理场景",
+    "记录并统计每次请求的输入、输出与思维链用量数据（SQLite 存储，支持筛选与保留天数清理）"
+   ]
+  },
+  "sha": "ed9e9eae08c5",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3099,5 +3099,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a096e8f1abcc": {
+  "identity": {
+   "one_liner": "自托管的开源团队知识库，集成文档、数据库、白板与日志",
+   "review": "Flowplan 是一个采用 AGPL-3.0 许可证的开源自托管工作空间，提供块编辑器文档、具有多种视图的数据库、白板、每日日志、项目工单和调查表等功能，可通过单容器配合 SQLite 或 PostgreSQL 部署，并支持通过 OIDC 或 LDAP 进行 SSO 登录。它面向需要文档、数据库和项目管理且通过 Docker 自托管的团队。README 中记载的限制包括：SQLite 模式要求每个数据目录仅运行一个容器，且 AI 功能默认处于关闭状态。",
+   "highlights": [
+    "在一个页面树结构中包含带有斜杠菜单和版本历史的块编辑器、具有多种视图的数据库、白板、每日日志和项目工单",
+    "支持部署为带有 SQLite 的单个容器，或使用 PostgreSQL、Redis 和 S3 进行集群部署；提供 Helm chart 和 linux/amd64 与 linux/arm64 镜像",
+    "支持从 Notion、Confluence、AppFlowy、Obsidian 等工具导入数据，并支持导出为 Markdown、CSV、PDF 和 Word 格式"
+   ],
+   "use_cases": [
+    "自托管团队知识库，支持实时协作编辑文档和数据库",
+    "具有工单和冲刺功能的团队项目管理",
+    "通过 Docker 或 Kubernetes 进行私有部署，并支持 OIDC/LDAP SSO"
+   ]
+  },
+  "sha": "a096e8f1abcc",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5cbadeab08c6": {
+  "identity": {
+   "one_liner": "ClickHouse 备份工具，将 MergeTree 表备份至 S3 兼容存储并支持恢复",
+   "review": "ch-backup 是 Yandex 开源的 ClickHouse 备份恢复工具，用 Python 编写，可将 MergeTree 系列表备份到 S3 兼容存储并在数据损坏时恢复。备份默认启用 part 级去重；恢复提供 --keep-going、--skip-cloud-storage、--schema-only 等模式，支持副本表分片恢复与存储策略/TTL 规则适配。仅适用于 MergeTree 引擎表。",
+   "highlights": [
+    "支持向 S3 兼容存储备份及从备份恢复，默认启用 part 级粒度去重，可设置起始时间排除较早备份",
+    "恢复流程提供 --keep-going 续行、失败部件重试、--skip-cloud-storage 跳过云端部件、--parts-from-backup 加速副本恢复等模式",
+    "ch-backup check 可在不写入数据、不使用 ClickHouse 与 ZooKeeper 的情况下校验备份的完整可恢复性，支持 --deep 深度校验"
+   ],
+   "use_cases": [
+    "对使用 MergeTree 引擎族的 ClickHouse 数据执行定期备份并在数据损坏时恢复",
+    "副本集群分片恢复：在一个副本上恢复数据，其余副本用 --schema-only --parts-from-backup 加速",
+    "运维校验既有备份是否可完整恢复，或在不依赖云存储的本地环境重建表数据"
+   ]
+  },
+  "sha": "5cbadeab08c6",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "890ef6f85056": {
+  "identity": {
+   "one_liner": "自托管 MG 车辆仪表盘，对接 SAIC iSmart API 提供遥测与远程控制",
+   "review": "GarageStack 是一个面向 SAIC 旗下现代 MG 车型（MG4、MG5、ZS EV、HS PHEV 等）的开源自托管 Web 应用，登录官方 iSmart API 获取车辆数据。提供实时仪表盘、行程记录与地图、充电历史、保养跟踪、远程控制与预约空调、推送通知等功能。以 Docker 单容器或 Compose 部署，支持 MQTT、OIDC 单点登录。限制：与 MG 官方 App 不能同时登录同一账号，不适用于 SAIC 收购前的经典 MG 老车。",
+   "highlights": [
+    "读取 SAIC iSmart API 遥测，提供燃料、电池、胎压、门窗、空调等实时卡片，按 HEV/PHEV/BEV 车型自动调整",
+    "保存行程并绘制地图，支持行程标记（公务/通勤/私人）与按月/年导出电子表格",
+    "提供远程指令（空调预热、锁车、鸣笛闪灯、启停充电）并回报执行结果，支持定时空调计划"
+   ],
+   "use_cases": [
+    "MG iSmart 用户自托管车辆数据面板与行程日志",
+    "需要按月/年导出行程表格用于报税记录的车主",
+    "家庭实验室（homelab）环境中集成 Home Assistant 与单点登录的自托管部署"
+   ]
+  },
+  "sha": "890ef6f85056",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

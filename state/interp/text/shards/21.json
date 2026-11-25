@@ -3496,5 +3496,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f0f49c883269": {
+  "identity": {
+   "one_liner": "数据质量 CLI：剖析数据生成契约，在 CI 中校验新批次",
+   "review": "dq-doctor 是一个 Python 编写的命令行数据质量工具（Python 3.12+，MIT 许可），支持 DuckDB、PostgreSQL、MySQL 及 CSV/Parquet/JSON 文件。其流程分三步：先剖析表结构生成剖析报告，再将期望固定为可版本化的 YAML/JSON 契约，之后在 CI 中用该契约校验新批次。适用于数据工程团队在 ETL 管道中做质量门禁。",
+   "highlights": [
+    "支持 not_null、unique、range、freshness、sql 等 9 种规则类型，可导出为 dbt、Great Expectations、SodaCL、Deequ、Markdown 五种格式",
+    "提供 HTML/JSON/JUnit 输出与确定性退出码（0/1/2），并提供 Airflow operator、run_gate() 与 stdio MCP server",
+    "契约模式下通过只读会话、单条 SELECT/WITH 语句限制与基线（baseline v2）记录规则哈希和孤儿行数来执行门禁"
+   ],
+   "use_cases": [
+    "在 CI 流水线中以固定契约校验新数据批次，失败时阻断（exit 1）",
+    "对生产/参考批次做数据剖析，生成含类型、空值、基数、PII 信号的剖析报告",
+    "通过 Airflow operator 或 run_gate() 将质量检查嵌入调度任务"
+   ]
+  },
+  "sha": "f0f49c883269",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

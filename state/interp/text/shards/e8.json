@@ -3197,5 +3197,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a356a7f8b61": {
+  "identity": {
+   "one_liner": "单二进制的日志分析数据库，支持本地查询或服务端存储，查询语言为 OpenSearch PPL。",
+   "review": "LynxDB 是用 Go 编写的单二进制日志分析数据库，提供两种运行模式：CLI 读取本地文件或标准输入进行临时查询，或以服务端模式将日志存入磁盘索引。查询使用 OpenSearch PPL 语言；服务端默认监听 localhost:3100，按时间分区存储列式索引。README 注明项目处于活跃开发期，API、存储格式与查询行为可能在版本间变化。构建需 Go 1.26 及以上。",
+   "highlights": [
+    "CLI 可从文件或标准输入加载 JSON，并从 combined access log、syslog 等文本格式提取时间戳与 key=value 字段",
+    "服务端以时间分区的列式索引存储事件，token filter 使搜索可跳过不匹配的块",
+    "摄取端点支持 NDJSON、Elasticsearch _bulk、OpenTelemetry logs、Splunk HEC 和 syslog"
+   ],
+   "use_cases": [
+    "对本地日志文件或管道输入运行 PPL 查询，如按服务统计 HTTP 5xx 数量",
+    "运行单节点服务端，通过 CLI 或 shipper 摄取并查询日志索引",
+    "接入多种日志摄取协议（Elasticsearch _bulk、OpenTelemetry、Splunk HEC、syslog）的日志收集场景"
+   ]
+  },
+  "sha": "1a356a7f8b61",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "57abe198d979": {
+  "identity": {
+   "one_liner": "多类型 RAG 的 Python 库，含 10 种分块器与分阶段评估",
+   "review": "rag-titan 是一个 Python RAG 库，提供 7 种 RAG 类型（simple、adaptive、parent_child、hyde 等），通过 rag_type 参数切换。支持 SQLite/Chroma/Qdrant 向量存储，可混合向量与 BM25 检索（RRF 融合），也可接入 Claude、OpenAI 等云端 LLM。附带 RAGEvaluator，对任意 RAG 流水线的各阶段输出 70+ 指标。需 Python 3.10+；本地运行需 Ollama；部分功能（如 cross_encoder 重排）需额外安装依赖。",
+   "highlights": [
+    "提供 7 种 RAG 类型和 10 种分块器（按词、字符、token、标题结构、TextTiling 等），通过 rag_type 参数切换",
+    "支持 SQLite、Chroma、Qdrant 三种向量存储，混合检索用 RRF 融合向量与 BM25 结果",
+    "内置 RAGEvaluator，可对任意 RAG 流水线的分块、检索、重排、生成等阶段计算 70+ 指标并输出评分卡，不使用 LLM 评审"
+   ],
+   "use_cases": [
+    "需要本地运行 RAG、处理 PDF/Word/Markdown/文本文档并要求答案附带引用来源的场景",
+    "需要对比不同分块器与 RAG 类型组合在自己问答集上的 recall、MRR、nDCG 等指标",
+    "已有 RAG 流水线需要定位哪个阶段（检索/重排/生成）失败，进行回归检查"
+   ]
+  },
+  "sha": "57abe198d979",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -34652,5 +34652,1278 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "1b0c7770ed2c+2": {
+  "fn": "eugenioenko/autentico",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "Go Version",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    4,
+    7
+   ],
+   [
+    "replace",
+    7,
+    10,
+    7,
+    8,
+    [
+     " Auténtico first-run onboarding and admin UI"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    8,
+    9
+   ],
+   [
+    "replace",
+    11,
+    16,
+    9,
+    12,
+    [
+     " From an empty directory to a running identity provider. ",
+     " Onboarding, self-signup, registering a client, 2FA enrollment, and the audit log. ",
+     " Same walkthrough as an MP4 → "
+    ]
+   ],
+   [
+    "equal",
+    16,
+    23,
+    12,
+    19
+   ],
+   [
+    "delete",
+    23,
+    25,
+    19,
+    19
+   ],
+   [
+    "equal",
+    25,
+    27,
+    19,
+    21
+   ],
+   [
+    "replace",
+    27,
+    28,
+    21,
+    22,
+    [
+     "Access the full documentation at getautentico.dev"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    22,
+    25
+   ],
+   [
+    "replace",
+    31,
+    32,
+    25,
+    26,
+    [
+     "Try Autentico instantly: Launch a Live Demo"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    38,
+    26,
+    32
+   ],
+   [
+    "replace",
+    38,
+    41,
+    32,
+    33,
+    [
+     "Share your use case in Discussions"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    58,
+    33,
+    50
+   ],
+   [
+    "delete",
+    58,
+    60,
+    50,
+    50
+   ],
+   [
+    "equal",
+    60,
+    72,
+    50,
+    62
+   ],
+   [
+    "delete",
+    72,
+    74,
+    62,
+    62
+   ],
+   [
+    "equal",
+    74,
+    75,
+    62,
+    63
+   ],
+   [
+    "replace",
+    75,
+    105,
+    63,
+    64,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    124,
+    64,
+    83
+   ],
+   [
+    "replace",
+    124,
+    125,
+    83,
+    84,
+    [
+     "- **Resource Owner Password Credentials** — supported for legacy client compatibility (see ROPC note); required email verification also applies to non-admin password grants"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    168,
+    84,
+    127
+   ],
+   [
+    "delete",
+    168,
+    170,
+    127,
+    127
+   ],
+   [
+    "equal",
+    170,
+    172,
+    127,
+    129
+   ],
+   [
+    "replace",
+    172,
+    185,
+    129,
+    140,
+    [
+     "|Layer|Choice|Rationale|",
+     "|-----------|-----------------------------|-------------------------------------------------------------|",
+     "|Language|Go 1.25|Single-binary deployment, strong concurrency, type safety|",
+     "|Database|SQLite (`modernc.org/sqlite`)|No CGo, no external server, sufficient for IdP write patterns|",
+     "|JWT Signing|RS256 (RSA 2048)|Asymmetric — relying parties verify without holding secrets|",
+     "|WebAuthn|`go-webauthn/webauthn`|Standards-compliant FIDO2/WebAuthn implementation|",
+     "|TOTP|RFC 6238 compliant|Compatible with Google Authenticator, Authy, 1Password, etc.|",
+     "|CSRF|`gorilla/csrf`|Protects browser-facing form endpoints|",
+     "|Admin UI|React + yarcl (Vite)|Embedded into the binary via `go:embed`|",
+     "|Testing|Testify + in-memory SQLite|Isolated, fast unit and integration tests|",
+     "|Docs|Swagger/OpenAPI|Interactive API reference|"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    192,
+    140,
+    147
+   ],
+   [
+    "replace",
+    192,
+    219,
+    147,
+    174,
+    [
+     "|Package|Role|",
+     "|-------------------|--------------------------------------------------------------------------------|",
+     "|`pkg/authorize`|Authorization endpoint — renders login page, validates client and redirect URI|",
+     "|`pkg/login`|Login form submission, credential validation, MFA challenge creation|",
+     "|`pkg/mfa`|MFA challenge verification, TOTP enrollment, email OTP delivery|",
+     "|`pkg/passkey`|WebAuthn registration and authentication ceremony handlers|",
+     "|`pkg/trusteddevice`|Trusted device token issuance and cookie management|",
+     "|`pkg/token`|Token endpoint — authorization code exchange, refresh, revocation|",
+     "|`pkg/session`|OAuth2 session lifecycle and admin session management|",
+     "|`pkg/idpsession`|IdP-level SSO sessions — cross-request browser sessions|",
+     "|`pkg/client`|OAuth2 client registration, CRUD, and authentication|",
+     "|`pkg/user`|User identity management — CRUD, authentication, lockout|",
+     "|`pkg/groupclaim`|Group custom claims — admin CRUD, inherited through membership|",
+     "|`pkg/userclaim`|Custom per-user claims — CRUD and token/UserInfo embedding|",
+     "|`pkg/signup`|Self-service user registration flow|",
+     "|`pkg/onboarding`|First-run admin account creation|",
+     "|`pkg/appsettings`|Runtime settings — DB persistence, loading into config|",
+     "|`pkg/introspect`|Token introspection endpoint|",
+     "|`pkg/userinfo`|UserInfo endpoint|",
+     "|`pkg/wellknown`|OIDC discovery document and JWKS|",
+     "|`pkg/middleware`|CORS, CSRF, logging, admin auth, audience validation|",
+     "|`pkg/cleanup`|Background goroutine for expired record purging|",
+     "|`pkg/account`|Account self-service API and embedded React Account UI (from `pkg/account/dist`)|",
+     "|`pkg/admin`|Embedded Admin UI (static files + stats handler)|",
+     "|`pkg/config`|Bootstrap and runtime configuration|",
+     "|`pkg/db`|SQLite initialization, schema, and incremental migrations|",
+     "|`pkg/key`|RSA key loading (env or ephemeral) and JWK Set generation|"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    236,
+    174,
+    191
+   ],
+   [
+    "replace",
+    236,
+    237,
+    191,
+    192,
+    [
+     "|Concurrency|Error rate|Login p95|Token p95|Assessment|"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    238,
+    192,
+    193
+   ],
+   [
+    "replace",
+    238,
+    242,
+    193,
+    197,
+    [
+     "|20 VUs|0%|248ms|300ms|Comfortable — imperceptible to users|",
+     "|100 VUs|0%|1.19s|1.56s|Sustained load — fully functional|",
+     "|200 VUs|0%|2.37s|2.94s|Moderate pressure — noticeable but acceptable|",
+     "|500 VUs|0%|5.76s|7.34s|Stress ceiling — degraded experience|"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    245,
+    197,
+    200
+   ],
+   [
+    "replace",
+    245,
+    246,
+    200,
+    201,
+    [
+     "See `stress/README.md` for the full methodology and how to reproduce these numbers."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    254,
+    201,
+    209
+   ],
+   [
+    "delete",
+    254,
+    256,
+    209,
+    209
+   ],
+   [
+    "equal",
+    256,
+    269,
+    209,
+    222
+   ],
+   [
+    "replace",
+    269,
+    270,
+    222,
+    223,
+    [
+     "Download the latest binary from GitHub Releases, then:"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    275,
+    223,
+    228
+   ],
+   [
+    "replace",
+    275,
+    280,
+    228,
+    229,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    280,
+    343,
+    229,
+    292
+   ],
+   [
+    "delete",
+    343,
+    345,
+    292,
+    292
+   ],
+   [
+    "equal",
+    345,
+    358,
+    292,
+    305
+   ],
+   [
+    "replace",
+    358,
+    385,
+    305,
+    332,
+    [
+     "|Variable|Description|Default|",
+     "|--------------------------------|--------------------------------------------------------------|-----------------------|",
+     "|`AUTENTICO_APP_URL`|Base URL (used to derive issuer, domain, port)|`http://localhost:9999`|",
+     "|`AUTENTICO_APP_OAUTH_PATH`|Path prefix for OAuth2 endpoints|`/oauth2`|",
+     "|`AUTENTICO_DB_FILE_PATH`|SQLite database file path|`./autentico.db`|",
+     "|`AUTENTICO_PRIVATE_KEY`|Base64-encoded RSA private key PEM|_(generated by init)_|",
+     "|`AUTENTICO_TOTP_ENCRYPTION_KEY`|Required persistent base64-encoded 32-byte TOTP encryption key; generated by init|_(generated by init)_|",
+     "|`AUTENTICO_ACCESS_TOKEN_SECRET`|HMAC secret for access token signing|_(generated by init)_|",
+     "|`AUTENTICO_REFRESH_TOKEN_SECRET`|HMAC secret for refresh token signing|_(generated by init)_|",
+     "|`AUTENTICO_CSRF_SECRET_KEY`|Secret for CSRF token generation|_(generated by init)_|",
+     "|`AUTENTICO_CSRF_COOKIE_NAME`|CSRF cookie name|`_gorilla_csrf`|",
+     "|`AUTENTICO_TRUSTED_DEVICE_COOKIE_NAME`|Trusted-device cookie name|`autentico_trusted_device`|",
+     "|`AUTENTICO_FEDERATION_COOKIE_NAME`|Federation browser-cookie base name (automatic secure `__Host-` prefix)|`autentico_federation`|",
+     "|`AUTENTICO_SIGNUP_INVITE_COOKIE_NAME`|Signup invitation cookie base name (automatic secure `__Host-` prefix)|`autentico_signup_invite`|",
+     "|`AUTENTICO_PASSKEY_REGISTRATION_COOKIE_NAME`|Passkey-registration cookie base name (automatic secure `__Host-` prefix)|`autentico_passkey_registration`|",
+     "|`AUTENTICO_FORWARD_AUTH_COOKIE_PREFIX`|App-session/flow cookie prefix (automatic `__Host-` for HTTPS apps)|`autentico_fa_`|",
+     "|`AUTENTICO_CSRF_SECURE_COOKIE`|Require Secure flag on CSRF cookie|`true`|",
+     "|`AUTENTICO_REFRESH_TOKEN_COOKIE_ONLY`|**Opt-in security enhancement.** Delivers the refresh token as an `HttpOnly` cookie instead of in the JSON response body, preventing JavaScript (including XSS) from reading it. Non-standard — only enable if your client reads the refresh token from a cookie.|`false`|",
+     "|`AUTENTICO_IDP_SESSION_SECURE`|Require Secure flag on IdP session cookie|`true`|",
+     "|`AUTENTICO_JWK_CERT_KEY_ID`|Key ID (`kid`) in the JWK Set|`autentico-key-1`|",
+     "|`AUTENTICO_TRUSTED_PROXIES`|Comma-separated proxy CIDRs allowed to supply client IPs via X-Forwarded-For; empty uses network peer|_(empty)_|",
+     "|`AUTENTICO_RATE_LIMIT_RPS`|Sustained requests/sec per IP on auth endpoints (0 = disabled)|`5`|",
+     "|`AUTENTICO_RATE_LIMIT_BURST`|Burst size for the per-second limiter|`10`|",
+     "|`AUTENTICO_RATE_LIMIT_RPM`|Sustained requests/min per IP (long-term cap)|`20`|",
+     "|`AUTENTICO_RATE_LIMIT_RPM_BURST`|Burst size for the per-minute limiter|`20`|",
+     "|`AUTENTICO_ANTI_TIMING_MIN_MS`|Minimum random delay (ms) on auth responses to prevent timing-based user enumeration (0 + 0 = disabled)|`50`|",
+     "|`AUTENTICO_ANTI_TIMING_MAX_MS`|Maximum random delay (ms); must be > min, otherwise disabled|`150`|"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    392,
+    332,
+    339
+   ],
+   [
+    "replace",
+    392,
+    427,
+    339,
+    374,
+    [
+     "|Setting Key|Description|Default|",
+     "|--------------------------------|------------------------------------------------------|----------------|",
+     "|`access_token_expiration`|Access token lifetime|`15m`|",
+     "|`refresh_token_expiration`|Refresh token lifetime|`720h` (30 days)|",
+     "|`authorization_code_expiration`|Auth code lifetime|`10m`|",
+     "|`access_token_audience`|JWT `aud` claim (JSON array)|`[]`|",
+     "|`auth_mode`|`password` \\|`password_and_passkey` \\|`passkey_only`|`password`|",
+     "|`mfa_enabled`|Require MFA for all users|`false`|",
+     "|`mfa_method`|`totp` \\|`email`|`totp`|",
+     "|`trust_device_enabled`|Allow users to bypass MFA on trusted devices|`false`|",
+     "|`trust_device_expiration`|Trusted device token lifetime|`720h` (30 days)|",
+     "|`sso_session_idle_timeout`|IdP session idle timeout (`0` = disabled); resets on login and token refresh|`4h`|",
+     "|`sso_session_max_age`|Absolute max session lifetime (`0` = disabled)|`720h` (30 days)|",
+     "|`allow_self_signup`|Allow end users to register their own accounts|`false`|",
+     "|`account_lockout_max_attempts`|Failed logins before account lock|`5`|",
+     "|`account_lockout_duration`|How long the account stays locked|`15m`|",
+     "|`passkey_rp_name`|WebAuthn relying party name shown to users|`Autentico`|",
+     "|`cleanup_interval`|How often expired records are purged|`6h`|",
+     "|`cleanup_retention`|Minimum age for a record to be eligible for cleanup|`24h`|",
+     "|`validation_min_username_length`|Minimum username length|`4`|",
+     "|`validation_max_username_length`|Maximum username length|`64`|",
+     "|`validation_min_password_length`|Minimum password length|`6`|",
+     "|`validation_max_password_length`|Maximum password length|`64`|",
+     "|`validation_username_is_email`|Require username to be a valid email format|`false`|",
+     "|`validation_email_required`|Require email field at registration|`false`|",
+     "|`smtp_host`|SMTP server hostname|_(empty)_|",
+     "|`smtp_port`|SMTP server port|`587`|",
+     "|`smtp_username`|SMTP authentication username|_(empty)_|",
+     "|`smtp_password`|SMTP authentication password|_(empty)_|",
+     "|`smtp_from`|From address for outbound email|_(empty)_|",
+     "|`theme_title`|Page title shown on login/MFA pages|`Autentico`|",
+     "|`theme_logo_url`|URL to a logo image displayed on login page|_(empty)_|",
+     "|`theme_css_inline`|Inline CSS injected into login page `<style>`|_(empty)_|",
+     "|`theme_css_file`|Path to a CSS file loaded at runtime|_(empty)_|",
+     "|`footer_links`|JSON array of `{label, url}` links for login footer|`[]`|"
+    ]
+   ],
+   [
+    "equal",
+    427,
+    432,
+    374,
+    379
+   ],
+   [
+    "replace",
+    432,
+    444,
+    379,
+    389,
+    [
+     "|Field|Description|",
+     "|-------------------------------|---------------------------------------------------------------|",
+     "|`access_token_expiration`|Token lifetime for this client's tokens|",
+     "|`refresh_token_expiration`|Refresh token lifetime for this client|",
+     "|`authorization_code_expiration`|Auth code TTL|",
+     "|`allowed_audiences`|Additional `aud` values in tokens for this client|",
+     "|`allow_self_signup`|Override self-signup in both the login page and signup submission|",
+     "|`sso_session_idle_timeout`|Override idle timeout for this client's login page (not enforced by the background cleanup sweep, which uses the global value)|",
+     "|`trust_device_enabled`|Override password/magic-link MFA bypass and device creation for this client|",
+     "|`trust_device_expiration`|Trust duration for this client's users|"
+    ]
+   ],
+   [
+    "equal",
+    444,
+    449,
+    389,
+    394
+   ],
+   [
+    "replace",
+    449,
+    456,
+    394,
+    399,
+    [
+     "|Mode|Behavior|",
+     "|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`password`|Standard username + password. MFA is applied on top if `mfa_enabled` is true.|",
+     "|`password_and_passkey`|Users can authenticate with either password or a registered passkey. Password flow optionally includes MFA.|",
+     "|`passkey_only`|Password authentication is disabled. Users authenticate exclusively with passkeys. New users can sign up when self-signup is enabled.|"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    475,
+    399,
+    418
+   ],
+   [
+    "delete",
+    475,
+    477,
+    418,
+    418
+   ],
+   [
+    "equal",
+    477,
+    482,
+    418,
+    423
+   ],
+   [
+    "delete",
+    482,
+    484,
+    423,
+    423
+   ],
+   [
+    "equal",
+    484,
+    527,
+    423,
+    466
+   ],
+   [
+    "replace",
+    527,
+    533,
+    466,
+    467,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    533,
+    559,
+    467,
+    493
+   ],
+   [
+    "delete",
+    559,
+    561,
+    493,
+    493
+   ],
+   [
+    "equal",
+    561,
+    577,
+    493,
+    509
+   ],
+   [
+    "replace",
+    577,
+    581,
+    509,
+    513,
+    [
+     " - Username (if `allow_username_change` is enabled)",
+     " - Email (if `allow_email_change` is enabled)",
+     " - First name, last name, phone number, profile picture URL, locale",
+     " - Street address, city, state/region, postal code, country"
+    ]
+   ],
+   [
+    "equal",
+    581,
+    630,
+    513,
+    562
+   ],
+   [
+    "delete",
+    630,
+    632,
+    562,
+    562
+   ],
+   [
+    "equal",
+    632,
+    636,
+    562,
+    566
+   ],
+   [
+    "replace",
+    636,
+    649,
+    566,
+    579,
+    [
+     "|Endpoint|Method|Description|",
+     "|------------------------------------------|--------|---------------------------------------------|",
+     "|`/.well-known/openid-configuration`|GET|OIDC discovery document|",
+     "|`/oauth2/.well-known/jwks.json`|GET|JWK Set — public keys for token verification|",
+     "|`/oauth2/certs`|GET|Alias for JWKS (legacy path)|",
+     "|`/oauth2/authorize`|GET|Authorization endpoint — renders login page|",
+     "|`/oauth2/token`|POST|Token endpoint — code exchange, refresh, ROPC|",
+     "|`/oauth2/protocol/openid-connect/token`|POST|Keycloak-compatible token path|",
+     "|`/oauth2/userinfo`|GET/POST|UserInfo endpoint|",
+     "|`/oauth2/protocol/openid-connect/userinfo`|GET/POST|Keycloak-compatible userinfo path|",
+     "|`/oauth2/introspect`|POST|Token introspection (RFC 7662)|",
+     "|`/oauth2/revoke`|POST|Token revocation (RFC 7009)|",
+     "|`/oauth2/logout`|POST|Session logout|"
+    ]
+   ],
+   [
+    "equal",
+    649,
+    652,
+    579,
+    582
+   ],
+   [
+    "replace",
+    652,
+    661,
+    582,
+    591,
+    [
+     "|Endpoint|Method|Description|",
+     "|---------------------------------|--------|---------------------------------------------------|",
+     "|`/oauth2/login`|POST|Username/password form submission|",
+     "|`/oauth2/mfa`|GET/POST|MFA challenge render and verification|",
+     "|`/oauth2/signup`|GET/POST|Self-service user registration (when enabled)|",
+     "|`/onboard`|GET/POST|First-run admin onboarding (disabled after first user)|",
+     "|`/oauth2/passkey/login/begin`|GET|Begin WebAuthn authentication/registration ceremony|",
+     "|`/oauth2/passkey/login/finish`|POST|Complete WebAuthn authentication ceremony|",
+     "|`/oauth2/passkey/register/finish`|POST|Complete WebAuthn registration ceremony|"
+    ]
+   ],
+   [
+    "equal",
+    661,
+    664,
+    591,
+    594
+   ],
+   [
+    "replace",
+    664,
+    671,
+    594,
+    601,
+    [
+     "|Endpoint|Method|Description|",
+     "|------------------------------|------|-------------------------------|",
+     "|`/oauth2/register`|POST|Register a new OAuth2 client|",
+     "|`/oauth2/register`|GET|List all registered clients|",
+     "|`/oauth2/register/{client_id}`|GET|Get a specific client|",
+     "|`/oauth2/register/{client_id}`|PUT|Update a client's configuration|",
+     "|`/oauth2/register/{client_id}`|DELETE|Deactivate a client|"
+    ]
+   ],
+   [
+    "equal",
+    671,
+    674,
+    601,
+    604
+   ],
+   [
+    "replace",
+    674,
+    683,
+    604,
+    613,
+    [
+     "|Endpoint|Method|Description|",
+     "|-------------------------|-------------------|----------------------------|",
+     "|`/admin/api/users`|GET/POST|List or create users|",
+     "|`/admin/api/users`|PUT/DELETE|Update or deactivate users|",
+     "|`/admin/api/users/unlock`|POST|Unlock a locked user account|",
+     "|`/admin/api/clients`|GET/POST/PUT/DELETE|Client management|",
+     "|`/admin/api/sessions`|GET/DELETE|Session management|",
+     "|`/admin/api/stats`|GET|Dashboard statistics|",
+     "|`/admin/api/settings`|GET/PUT|Read/update runtime settings|"
+    ]
+   ],
+   [
+    "equal",
+    683,
+    686,
+    613,
+    616
+   ],
+   [
+    "replace",
+    686,
+    689,
+    616,
+    619,
+    [
+     "|Endpoint|Method|Description|",
+     "|--------|------|-------------------------------------------|",
+     "|`/user`|POST|Create a user (for API-driven provisioning)|"
+    ]
+   ],
+   [
+    "equal",
+    689,
+    692,
+    619,
+    622
+   ],
+   [
+    "replace",
+    692,
+    713,
+    622,
+    641,
+    [
+     "|Endpoint|Method|Description|",
+     "|---------------------------------------|------------|----------------------------------------------|",
+     "|`/account/api/settings`|GET|UI configuration (auth mode, field visibility)|",
+     "|`/account/api/profile`|GET / PUT|Get or update user profile|",
+     "|`/account/api/password`|POST|Change password|",
+     "|`/account/api/sessions`|GET|List active OAuth sessions|",
+     "|`/account/api/sessions/{id}`|DELETE|Revoke a session|",
+     "|`/account/api/passkeys`|GET|List registered passkeys|",
+     "|`/account/api/passkeys/register/begin`|POST|Begin WebAuthn registration ceremony|",
+     "|`/account/api/passkeys/register/finish`|POST|Complete WebAuthn registration ceremony|",
+     "|`/account/api/passkeys/{id}`|PATCH/DELETE|Rename or remove a passkey|",
+     "|`/account/api/mfa`|GET|Get MFA status|",
+     "|`/account/api/mfa/totp/setup`|POST|Initialize TOTP enrollment (returns QR code)|",
+     "|`/account/api/mfa/totp/verify`|POST|Confirm TOTP enrollment with a 6-digit code|",
+     "|`/account/api/mfa/totp`|DELETE|Disable TOTP|",
+     "|`/account/api/trusted-devices`|GET|List trusted devices|",
+     "|`/account/api/trusted-devices/{id}`|DELETE|Revoke a trusted device|",
+     "|`/account/api/connected-providers`|GET|List connected external providers|",
+     "|`/account/api/connected-providers/{id}`|DELETE|Disconnect an external provider|"
+    ]
+   ],
+   [
+    "equal",
+    713,
+    716,
+    641,
+    644
+   ],
+   [
+    "replace",
+    716,
+    723,
+    644,
+    649,
+    [
+     "|Grant Type|Use Case|",
+     "|-----------------------------|---------------------------------------------------------------|",
+     "|`authorization_code` (+ PKCE)|Web apps, SPAs, native apps. The recommended default.|",
+     "|`refresh_token`|Obtaining new access tokens without re-authenticating the user.|",
+     "|`password` (ROPC)|Legacy clients and trusted internal tooling. Use with caution.|"
+    ]
+   ],
+   [
+    "equal",
+    723,
+    732,
+    649,
+    658
+   ],
+   [
+    "replace",
+    732,
+    746,
+    658,
+    659,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    746,
+    756,
+    659,
+    669
+   ],
+   [
+    "replace",
+    756,
+    763,
+    669,
+    670,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    763,
+    771,
+    670,
+    678
+   ],
+   [
+    "replace",
+    771,
+    802,
+    678,
+    679,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    802,
+    810,
+    679,
+    687
+   ],
+   [
+    "replace",
+    810,
+    817,
+    687,
+    688,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    817,
+    820,
+    688,
+    691
+   ],
+   [
+    "delete",
+    820,
+    822,
+    691,
+    691
+   ],
+   [
+    "equal",
+    822,
+    849,
+    691,
+    718
+   ],
+   [
+    "delete",
+    849,
+    851,
+    718,
+    718
+   ],
+   [
+    "equal",
+    851,
+    871,
+    718,
+    738
+   ],
+   [
+    "replace",
+    871,
+    879,
+    738,
+    739,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    879,
+    891,
+    739,
+    751
+   ],
+   [
+    "replace",
+    891,
+    892,
+    751,
+    752,
+    [
+     "A Helm chart is included in `deploy/helm/autentico`. Release builds package it as a `.tgz` archive, attach it to the GitHub release, and publish it to GitHub Container Registry as an OCI artifact."
+    ]
+   ],
+   [
+    "equal",
+    892,
+    918,
+    752,
+    778
+   ],
+   [
+    "replace",
+    918,
+    927,
+    778,
+    779,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    927,
+    929,
+    779,
+    781
+   ],
+   [
+    "replace",
+    929,
+    930,
+    781,
+    782,
+    [
+     "See the chart README for persistence options, backups, migrations, and all supported values. After installation, run `helm test autentico -n autentico` to check the `/healthz` endpoint."
+    ]
+   ],
+   [
+    "equal",
+    930,
+    949,
+    782,
+    801
+   ],
+   [
+    "replace",
+    949,
+    968,
+    801,
+    802,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    968,
+    997,
+    802,
+    831
+   ],
+   [
+    "replace",
+    997,
+    998,
+    831,
+    832,
+    [
+     "**Upgrading to v3 (schemas 15 and 17):** schema 15 invalidates all existing tokens and OAuth/SSO sessions; schema 17 encrypts existing TOTP enrollments without resetting them. Stop the application and prepare a persistent `AUTENTICO_TOTP_ENCRYPTION_KEY` first (run `autentico init` on an existing `.env`, or supply the key through the environment). Run `autentico migrate`, read the warnings, and type the target schema shown (`19`). For unattended deployments, use `autentico migrate --approve-major=15,17` (or `--approve-major=17` from schema 15 or 16). These are database schema numbers, not release numbers. Restart only after migration succeeds, and keep the encryption key for future restarts and restores. Docker users should run migration as a one-off container against the existing database volume. See the v3 migration guide for key setup, Docker Compose commands, backup behavior, and recovery."
+    ]
+   ],
+   [
+    "equal",
+    998,
+    1026,
+    832,
+    860
+   ],
+   [
+    "delete",
+    1026,
+    1028,
+    860,
+    860
+   ],
+   [
+    "equal",
+    1028,
+    1032,
+    860,
+    864
+   ],
+   [
+    "replace",
+    1032,
+    1033,
+    864,
+    865,
+    [
+     "See the ForwardAuth integration guide for the proxy contract, complete tested configurations, cookie handling and the Docker/Chromium black-box suite (`python3 tests/proxy/run.py --binary \"$PWD/autentico\"`)."
+    ]
+   ],
+   [
+    "equal",
+    1033,
+    1082,
+    865,
+    914
+   ],
+   [
+    "replace",
+    1082,
+    1083,
+    914,
+    915,
+    [
+     "|Phase|Spec|Status|"
+    ]
+   ],
+   [
+    "equal",
+    1083,
+    1084,
+    915,
+    916
+   ],
+   [
+    "replace",
+    1084,
+    1094,
+    916,
+    926,
+    [
+     "|1|RFC 6749 — OAuth 2.0 Core|✅ Done|",
+     "|2|RFC 6750 — Bearer Token Usage|✅ Done|",
+     "|3|RFC 7636 — PKCE|✅ Done|",
+     "|4|RFC 7009 — Token Revocation|✅ Done|",
+     "|5|RFC 7662 — Token Introspection|✅ Done|",
+     "|6|OIDC Core 1.0|✅ Done|",
+     "|7|OIDC Discovery 1.0|✅ Done|",
+     "|8|OIDC RP-Initiated Logout 1.0|✅ Done|",
+     "|9|RFC 7591 — Dynamic Client Registration|✅ Done|",
+     "|10|RFC 8414 — Authorization Server Metadata|✅ Done|"
+    ]
+   ],
+   [
+    "equal",
+    1094,
+    1103,
+    926,
+    935
+   ],
+   [
+    "replace",
+    1103,
+    1104,
+    935,
+    936,
+    [
+     "These were identified *by reading the RFCs line-by-line*, not by observing runtime failures — a class of issues that typical test suites miss. See `rfc/rfc.md` for the full bug inventory, MUST/SHOULD/MAY compliance tables, and per-phase test lists. All protocol-facing code now carries inline comments referencing the exact spec section that mandates the behavior."
+    ]
+   ],
+   [
+    "equal",
+    1104,
+    1107,
+    936,
+    939
+   ],
+   [
+    "replace",
+    1107,
+    1108,
+    939,
+    940,
+    [
+     "Auténtico passes the OpenID Foundation `oidcc-basic-certification-test-plan` — the official conformance test suite for Basic OpenID Providers. The suite covers the full Authorization Code flow: discovery, authorization, token exchange, token refresh, ID token validation, UserInfo, and session management."
+    ]
+   ],
+   [
+    "equal",
+    1108,
+    1121,
+    940,
+    953
+   ],
+   [
+    "replace",
+    1121,
+    1122,
+    953,
+    954,
+    [
+     "Stress tests using k6 exercise the full PKCE auth code flow (authorize → login → token exchange → introspect → refresh). See the performance benchmarks for results and `stress/README.md` for the full methodology, test profiles, and how to reproduce."
+    ]
+   ],
+   [
+    "equal",
+    1122,
+    1128,
+    954,
+    960
+   ],
+   [
+    "replace",
+    1128,
+    1129,
+    960,
+    961,
+    [
+     "- RFC audit artifacts: see `rfc/rfc.md`"
+    ]
+   ],
+   [
+    "equal",
+    1129,
+    1130,
+    961,
+    962
+   ],
+   [
+    "replace",
+    1130,
+    1131,
+    962,
+    963,
+    [
+     "- Load testing: see `stress/README.md`"
+    ]
+   ],
+   [
+    "equal",
+    1131,
+    1133,
+    963,
+    965
+   ],
+   [
+    "delete",
+    1133,
+    1135,
+    965,
+    965
+   ],
+   [
+    "equal",
+    1135,
+    1158,
+    965,
+    988
+   ],
+   [
+    "replace",
+    1158,
+    1170,
+    988,
+    989,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1170,
+    1176,
+    989,
+    995
+   ],
+   [
+    "replace",
+    1176,
+    1179,
+    995,
+    996,
+    [
+     "For a complete working example using Playwright, see the test fixture guide in the documentation."
+    ]
+   ],
+   [
+    "equal",
+    1179,
+    1191,
+    996,
+    1008
+   ],
+   [
+    "replace",
+    1191,
+    1194,
+    1008,
+    1009,
+    [
+     "The pre-generated HTML API reference is available at `/docs/index.html` in the repository, and hosted at GitHub Pages."
+    ]
+   ],
+   [
+    "equal",
+    1194,
+    1196,
+    1009,
+    1011
+   ],
+   [
+    "replace",
+    1196,
+    1204,
+    1011,
+    1012,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1204,
+    1205,
+    1012,
+    1013
+   ],
+   [
+    "replace",
+    1205,
+    1210,
+    1013,
+    1014,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1210,
+    1211,
+    1014,
+    1015
+   ],
+   [
+    "replace",
+    1211,
+    1214,
+    1015,
+    1016,
+    [
+     "GNU GENERAL PUBLIC LICENSE. See `LICENSE` for the full text."
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
  }
 }

@@ -3433,5 +3433,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0738ac8bd215": {
+  "identity": {
+   "one_liner": "面向 Go database/sql 的无 cgo SQLite 驱动，以 Go 汇编实现 SQLite C 代码",
+   "review": "liustack/sqlite 是一个通过 LLVM 将 SQLite 的 C 代码编译为 Go 汇编实现的数据库驱动，兼容 Go database/sql 接口，可在 CGO_ENABLED=0 下构建静态二进制。面向使用 SQLite 的 Go 程序。README 中给出的基准数据显示其在多数工作负载下快于 cgo 驱动，但连接聚合(join)与读取大文本值等场景中其他驱动仍更快。当前版本为 v0.1，API 在 v1 前可能变更；需 Go 1.26.6 至 1.27，支持 linux/darwin/windows 的 amd64 和 arm64。内置基于 S3/R2 的实时备份复制功能，写入按进程内顺序排队等待锁，减少 database is locked 报错。",
+   "highlights": [
+    "以 CGO_ENABLED=0 构建，支持跨平台编译与 scratch 容器镜像",
+    "实现进程内写操作排队机制，多个写入按顺序等待而非竞争 busy handler",
+    "内置 S3/Cloudflare R2/MinIO 实时备份，复制格式与 Litestream 布局兼容，可在恢复时校验文件并执行 PRAGMA integrity_check"
+   ],
+   "use_cases": [
+    "需要在无 C 编译器环境下（如 scratch 容器或跨平台编译）部署 SQLite 的 Go 单二进制应用",
+    "单 VPS 部署且需要向 S3/R2 持续备份数据的场景",
+    "同一进程内多 goroutine 并发读写 SQLite，需减少 database is locked 错误的应用"
+   ]
+  },
+  "sha": "0738ac8bd215",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

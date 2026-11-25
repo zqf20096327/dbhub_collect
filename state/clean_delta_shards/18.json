@@ -29533,5 +29533,606 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "6f238371c601+2": {
+  "fn": "shkyyy18/mi_fitness_data_bridge",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "> English: README.en.md"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Glama score"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    10,
+    5,
+    10
+   ],
+   [
+    "replace",
+    10,
+    13,
+    10,
+    11,
+    [
+     "**▶ 不用登录，先看合成数据导出演示** · 兼容性与上手限制 · English"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    23,
+    11,
+    21
+   ],
+   [
+    "replace",
+    23,
+    24,
+    21,
+    22,
+    [
+     "**关于登录方式：** 当前 CLI 使用交互式 `setup` 配置已有的 `user_id` 和 `passToken`，本项目本身不提供扫码登录或一键授权流程。如果你通过其他工具获取凭证，那一步的数据去向和安全性需单独核实，不能由本项目的本地存储说明作保证。详见凭证前提。"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    22,
+    23
+   ],
+   [
+    "replace",
+    25,
+    26,
+    23,
+    24,
+    [
+     "简而言之：**源码公开 ≠ 个人数据公开；本地 MCP ≠ AI 全流程离线。** 以上说明适用于当前项目实现，不是对设备、第三方客户端或所有部署方式的零风险承诺。安全问题请按 SECURITY.md 私下报告，不要附真实凭证或健康记录。"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    31,
+    24,
+    29
+   ],
+   [
+    "replace",
+    31,
+    32,
+    29,
+    30,
+    [
+     "- **想同步自己的数据？** 先阅读兼容性和凭证前提。当前没有一键账号授权流程，也不能保证所有设备和地区可用。"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    35,
+    30,
+    33
+   ],
+   [
+    "replace",
+    35,
+    36,
+    33,
+    34,
+    [
+     "合成睡眠记录导出预览：无需账号，可下载 CSV 和 JSON"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    41,
+    34,
+    39
+   ],
+   [
+    "replace",
+    41,
+    47,
+    39,
+    45,
+    [
+     "|功能|说明|",
+     "|---|---|",
+     "|本地缓存|将同步并规范化后的记录保存到你的本机 SQLite 数据库。|",
+     "|可移植导出|导出 JSON 或 CSV 文件，便于备份、交给自己的分析工具或导入大模型；不会导出已保存的 `passToken`。|",
+     "|本地 MCP 服务|通过标准输入/输出（stdio）提供个人自动化和本地 AI 工作流所需的查询工具。|",
+     "|Python 集成|保留 `mi_fitness_mcp` 命名空间，兼容既有下游使用者。|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    149,
+    45,
+    147
+   ],
+   [
+    "replace",
+    149,
+    150,
+    147,
+    148,
+    [
+     "以上为日期范围示例；跨午夜的睡眠可把范围前后各放宽一天。查询汇总按本地醒来日期，导出仍按原有 `start_at` 筛选，详见 导出格式。如仍为空，仅反馈设备型号、账户地区、安装版本、App 是否有评分及同步状态；不要上传凭证、真实健康数据、数据库或日志。"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    175,
+    148,
+    173
+   ],
+   [
+    "replace",
+    175,
+    176,
+    173,
+    174,
+    [
+     "详见 导出格式说明（英文），其中描述 JSON 信封、CSV 布局及包含边界的日期筛选规则。"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    199,
+    174,
+    197
+   ],
+   [
+    "replace",
+    199,
+    204,
+    197,
+    198,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    206,
+    198,
+    200
+   ],
+   [
+    "replace",
+    206,
+    209,
+    200,
+    201,
+    [
+     "完成 `workout_detail` 同步后，可通过 `workout_detail_series` 查询设备提供的秒级心率、步频、配速及速度曲线，并通过 `workout_gps` 导出 GPS 轨迹。默认全量同步会回填缓存中缺少明细的运动，`force_full_sync` 可重新抓取已覆盖的运动。非官方 FDS 协议仍受设备及固件版本限制，详见 运动明细可行性说明。"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    238,
+    201,
+    230
+   ],
+   [
+    "replace",
+    238,
+    239,
+    230,
+    231,
+    [
+     "Issue、测试、文档和截图中只可使用合成数据。安全问题请遵循 SECURITY.md；发布步骤请见 docs/release-checklist.md。"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    246,
+    231,
+    238
+   ],
+   [
+    "replace",
+    246,
+    247,
+    238,
+    239,
+    [
+     "- 上游来源和 MIT 归属见 THIRD_PARTY_NOTICES.md。"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    248,
+    239,
+    240
+   ],
+   [
+    "replace",
+    248,
+    249,
+    240,
+    241,
+    [
+     "当前版本采用 **AGPL-3.0-only** 许可证；2026-08-03 之前发布的版本为 MIT。详见 LICENSE。"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    252,
+    241,
+    244
+   ],
+   [
+    "replace",
+    252,
+    253,
+    244,
+    245,
+    [
+     "如果这个工具对你有用，欢迎点一个 **Star**，帮助有相同需求的人发现它。更有价值的是安全反馈兼容性、改进安装文档或提供合成复现。请勿上传凭证或真实健康数据。"
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
+ },
+ "7882d15c8035+2": {
+  "fn": "sdsrss/claude-mem-lite",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "English | 中文"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "`claude-mem-lite` is a **persistent memory** (also called *long-term memory* or *cross-session context*) system for **Claude Code** — Anthropic's CLI coding agent. It runs as an **MCP server** plus a set of Claude Code hooks, automatically capturing coding observations, decisions, and bug fixes during sessions, then providing full-text search with query expansion to recall them later."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    8,
+    6,
+    8,
+    [
+     "Compared to general-purpose LLM memory frameworks like `mem0` or the MCP reference `memory` server, claude-mem-lite is purpose-built for Claude Code's hook lifecycle: episode batching cuts LLM calls 7–10× vs the original claude-mem (an estimated ~600× lower total cost — see the cost model below; this is an architecture estimate, not a measured benchmark), while the FTS5 retriever benchmarks at 0.90 Recall@10 / 0.85 Precision@10",
+     "(see Search Quality for the reproduction command)."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "> 中文简介：claude-mem-lite 是 Claude Code 的轻量级**持久化记忆 / 长期记忆 / 跨会话上下文**插件，基于 MCP 协议 + 钩子机制，自动捕获编码会话中的决策、修复和上下文，并通过 FTS5 全文检索召回。详见 中文 README。"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    15,
+    10,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "A ground-up redesign of claude-mem, replacing its heavyweight architecture with a smarter, leaner approach."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    16,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "||claude-mem (original)|claude-mem-lite|"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    29,
+    21,
+    29,
+    [
+     "|**LLM calls**|Every tool use triggers a Sonnet call|Only on episode flush (5-10 ops batched)|",
+     "|**LLM input**|Raw `tool_input` + `tool_output` JSON|Pre-processed action summaries|",
+     "|**Conversation**|Multi-turn, accumulates full history|Stateless single-turn extraction|",
+     "|**Noise filtering**|LLM decides via \"WHEN TO SKIP\" prompt|Deterministic code-level Tier 1 filter|",
+     "|**Runtime**|Long-running worker process (1.8MB .cjs)|On-demand spawn, exits immediately|",
+     "|**Dependencies**|Bun + Python/uv + Chroma vector DB|Node.js only (3 npm packages)|",
+     "|**Source size**|~2.3MB compiled bundles|~50KB readable source|",
+     "|**Data directory**|`~/.claude-mem/`|`~/.claude-mem-lite/` (hidden, auto-migrates)|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    36,
+    29,
+    36
+   ],
+   [
+    "replace",
+    36,
+    37,
+    36,
+    37,
+    [
+     "||claude-mem|claude-mem-lite|Ratio (estimated)|"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    37,
+    38
+   ],
+   [
+    "replace",
+    38,
+    43,
+    38,
+    43,
+    [
+     "|LLM calls|~50 (every tool use)|~5-8 (per episode)|**~7-10x fewer**|",
+     "|Tokens per call|1,000-5,000 (raw JSON + history)|200-500 (summaries only)|**~5-10x smaller**|",
+     "|Total tokens|~100K-250K|~1K-4K|**~50-100x less**|",
+     "|Model cost|Sonnet ($3/$15 per M)|Haiku ($0.25/$1.25 per M)|**~12x cheaper**|",
+     "|Combined savings|||**~600x lower cost (estimated)**|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    43,
+    46
+   ],
+   [
+    "replace",
+    46,
+    47,
+    46,
+    47,
+    [
+     "|Dimension|Winner|Why|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    47,
+    48
+   ],
+   [
+    "replace",
+    48,
+    54,
+    48,
+    54,
+    [
+     "|**Classification accuracy**|Tie|Both produce correct type/title/narrative|",
+     "|**Noise filtering**|**lite**|Code-level filtering is deterministic; LLM \"WHEN TO SKIP\" is unreliable|",
+     "|**Observation coherence**|**lite**|Episode batching groups related edits into one coherent observation|",
+     "|**Code-level detail**|original|Sees full diffs, but rarely useful for memory search|",
+     "|**Search recall**|Tie|Users search semantic concepts (\"auth bug\"), not code lines|",
+     "|**Hook latency**|**lite**|Async background workers; original blocks 2-5s per hook|"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    67,
+    54,
+    67
+   ],
+   [
+    "replace",
+    67,
+    68,
+    67,
+    68,
+    [
+     "||**claude-mem-lite**|`mem0`|MCP reference `memory`|claude-mem (original)|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    68,
+    69
+   ],
+   [
+    "replace",
+    69,
+    76,
+    69,
+    76,
+    [
+     "|**Target client**|Claude Code only|Any LLM app via SDK|Any MCP client|Claude Code only|",
+     "|**Capture model**|Auto via hooks|Manual `memory.add()`|Manual tool calls (`create_entities`, `add_observations`)|Auto via hooks|",
+     "|**Code-aware retrieval**|FTS5 + 100+ synonym pairs (incl. CJK↔EN)|General-purpose|Generic graph nodes|Code-aware|",
+     "|**Search**|FTS5 BM25 + query expansion (PRF, concept co-occurrence)|Hybrid: semantic + BM25 + entity linking|Knowledge-graph traversal|FTS5 + Chroma vector|",
+     "|**Storage**|Single local SQLite|Pluggable; Qdrant or configurable vector store|Single JSONL file (knowledge graph)|SQLite + Chroma|",
+     "|**LLM dependency**|Haiku per episode (5–10 ops batched)|LLM per add/search op|None (graph CRUD only)|Sonnet per tool call|",
+     "|**Setup**|One command (`/plugin install` or `npx`)|SDK integration + vector store config|MCP install (per-client)|Bun + Python + Chroma|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    95,
+    76,
+    95
+   ]
+  ],
+  "at": "2026-11-25"
+ },
+ "6231eafd77e2+2": {
+  "fn": "MUUQ7ING/tongpin-music",
+  "clean_ver": "2",
+  "raw_lines": 17,
+  "ops": [
+   [
+    "equal",
+    0,
+    17,
+    0,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "|目录|内容|"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    25,
+    19,
+    25,
+    [
+     "|实验一|建库、九张业务表、约束、数据维护、查询和视图|",
+     "|实验二|权限、加歌存储过程、歌单审计触发器、备份恢复|",
+     "|实验三|Web 源码、迁移、测试、部署示例和音乐资料|",
+     "|实验一报告|数据库设计与基础操作|",
+     "|实验二报告|维护、管理及恢复验证|",
+     "|实验三报告|数据模型、12 张表、应用实现与最终界面|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    55,
+    25,
+    55
+   ],
+   [
+    "replace",
+    55,
+    56,
+    55,
+    56,
+    [
+     "部署配置是 ECS 实测配置示例，路径默认 /opt/music-platform，数据库端口 26000。使用前调整路径、运行用户、ffprobe、反向代理与服务依赖；Nginx 示例以独立源码安装位置为准。网站当前部署方案使用 HTTP，正式公开运营前应增加 HTTPS。"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    58,
+    56,
+    58
+   ]
+  ],
+  "at": "2026-11-25"
  }
 }

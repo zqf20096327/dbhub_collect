@@ -2981,5 +2981,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5be7b4083063": {
+  "identity": {
+   "one_liner": "PHP+SQLite 开源 CMS，页面以静态 HTML 供出，支持人和 AI 代理经 MCP 编辑",
+   "review": "AgeCMS 是基于 PHP 8.1+ 与 SQLite 的开源内容管理系统（Apache 2.0），无 composer 依赖、无需 cron。页面以静态 HTML 文件由 nginx/Apache 直接供出；管理员可在后台点击页面文本编辑，AI 代理则通过 MCP 网关（JSON-RPC 2.0、Bearer 令牌、角色）操作，所有修改写入带 SHA-256 链的修订日志，可一键回滚。面向自有及客户站点运营者。提供 WordPress、OpenCart 等迁移工具。",
+   "highlights": [
+    "Shadow Cache 机制将页面生成为 assets/cache/<slug>.html 静态文件，由 Web 服务器直接返回",
+    "所有编辑（人和代理）写入 RFC 6902 补丁修订日志，SHA-256 链由 SQLite 触发器禁止篡改与删除，支持回滚",
+    "熔断机制：单个令牌 24 小时内修改超过 15% 页面时自动回滚、冻结记录并通过 Telegram 通知"
+   ],
+   "use_cases": [
+    "需要让 AI 代理在权限与回滚保护下参与网站编辑的个人或客户站点",
+    "Debian/Ubuntu 服务器上一条命令部署、包含 HTTPS 证书与夜间备份的站点搭建",
+    "从 WordPress、OpenCart 等系统迁移内容（支持按地址抓取或上传抓取包）"
+   ]
+  },
+  "sha": "5be7b4083063",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

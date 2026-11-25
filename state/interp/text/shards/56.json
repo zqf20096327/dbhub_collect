@@ -3183,5 +3183,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9e7169c03f1a": {
+  "identity": {
+   "one_liner": "纯 Java 实现的 JDBC 驱动，通过 Jackcess 与 HSQLDB 读写 Microsoft Access 数据库文件。",
+   "review": "UCanAccess 是开源纯 Java JDBC 驱动，用于读写 .accdb/.mdb 文件，无需 Windows 原生库。基于 Jackcess 5.2.0 与 HSQLDB 2.7.4 构建，要求 Java 11+，通过 Maven/Gradle 引入后使用标准 JDBC URL（jdbc:ucanaccess://）连接。支持 SELECT/INSERT/UPDATE/DELETE 及 ALTER TABLE 等 DDL，内置 IIf、Nz、PMT 等 Access 函数；默认拒绝指向网络 UNC 路径的链接表，需 allowRemoteLinks 属性显式开启。附交互式 SQL 控制台与 CSV 导出。",
+   "highlights": [
+    "纯 Java 实现，无原生依赖，运行于 Java 11 及以上（测试覆盖 11/17/21）",
+    "基于 Jackcess 5.2.0 和 HSQLDB 2.7.4，支持 SELECT/INSERT/UPDATE/DELETE 及 ALTER TABLE 等 DDL 操作，内置 IIf、Nz、PMT、PV 等 Access 函数",
+    "提供交互式 SQL 控制台（uber jar），支持执行单条 SQL 和导出结果/表到 CSV"
+   ],
+   "use_cases": [
+    "Java 程序（如 OpenOffice、LibreOffice、Matlab、SQuirreL）需要读取或写入 Access 数据库文件",
+    "将依赖旧 net.sf.ucanaccess 构件的项目迁移到持续维护的新坐标 io.github.spannm:ucanaccess",
+    "无代码环境下查看 .accdb/.mdb 内容或将表数据导出为 CSV"
+   ]
+  },
+  "sha": "9e7169c03f1a",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cf4a46cbd2cb": {
+  "identity": {
+   "one_liner": "把 Web 应用作为 Flutter 原生外壳界面的混合应用框架，支持签名 OTA 更新",
+   "review": "Valence 让 SPA 构建的 Web 应用充当 Flutter 应用的 UI：原生核心经应用商店发布一次，后续 UI 以签名 OTA 包更新，按 10%→50%→100% 分阶段推送，启动失败 15 秒内自动回滚。数据存于原生 SQLite 离线使用，通过 schema 生成 Dart 与 TypeScript 的类型化桥接。支持 Android，iOS 路径已实现但尚无实际运行记录，需视为实验性。通过 npm create valence@latest 初始化，CLI 与 Claude Code 技能均可独立使用。",
+   "highlights": [
+    "UI 更新以签名 bundle OTA 分发，按 hash 增量下载，调用 ready() 提交，失败自动回滚并最终回退到内置版本",
+    "数据存于原生 SQLite，从应用内置 seed 启动并按序列号增量同步；令牌保存在 Android Keystore，页面不可读取",
+    "单一 schema 同时生成 Dart 主机接口与 TypeScript 客户端；WebView 页面经 per-launch nonce 与签名 manifest 中的 CSP 限制桥接访问"
+   ],
+   "use_cases": [
+    "已有 SvelteKit、Next.js 静态导出、Astro 或 Vite 构建的 SPA，希望复用为 Android 应用的界面",
+    "需要离线可用的移动应用，数据本地存储并按序列号增量同步",
+    "希望 UI 变更不走商店审核、通过签名 OTA 包分阶段推送的团队"
+   ]
+  },
+  "sha": "cf4a46cbd2cb",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "baefe1c0d478": {
+  "identity": {
+   "one_liner": "用 Rust 与 GPUI 实现的 macOS 数据库图形客户端，复刻 Navicat 界面",
+   "review": "Naviduck 是一个以 macOS 优先的数据库图形客户端，基于 gpui-kit 实现，不依赖 Electron。它为 MySQL/MariaDB、PostgreSQL、SQLite、达梦 DM8 提供连接、对象浏览、表编辑与查询功能，适合需要在图形界面中管理多类数据库的开发者。构建需 Rust 1.99 与 Xcode；DM8 的 SSL 连接与迁移回滚存在限制，达梦驱动依赖的 dm-pure 上游已失效，相关行为在实库测试中自动跳过。",
+   "highlights": [
+    "支持 MySQL/MariaDB、PostgreSQL、SQLite、达梦 DM8 的连接、对象浏览、表查看器、查询编辑器与表设计器",
+    "支持常规与 SSH 隧道连接、密码钥匙串存储、连接组与颜色",
+    "查询编辑器提供语法高亮、代码补全、格式化、多结果集、参数与历史日志；表设计器支持差异迁移与 SQL 预览"
+   ],
+   "use_cases": [
+    "macOS 上通过图形界面浏览和编辑多类数据库的表数据",
+    "编写、格式化并执行 SQL 查询，查看多结果集与解释视图",
+    "通过结构化表单设计表结构并生成迁移 SQL"
+   ]
+  },
+  "sha": "baefe1c0d478",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

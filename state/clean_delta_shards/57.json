@@ -32354,5 +32354,862 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "e8fd99915c30+2": {
+  "fn": "vornicx/Midas",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Midas "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " The local memory layer for long-horizon AI agents — remembers across sessions, keeps what's current, and won't act on stale memory. No LLM at ingest · $0 per message · fully local · every recall traces to its source. "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    11,
+    4,
+    9,
+    [
+     " tests",
+     " PyPI",
+     " npm",
+     " Python 3.11+",
+     " License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    26,
+    9,
+    24
+   ],
+   [
+    "replace",
+    26,
+    37,
+    24,
+    31,
+    [
+     " Install in your agent ",
+     " ·",
+     " See the benchmarks ",
+     " ·",
+     " Complete overview ",
+     " ·",
+     " Roadmap "
+    ]
+   ],
+   [
+    "equal",
+    37,
+    45,
+    31,
+    39
+   ],
+   [
+    "replace",
+    45,
+    46,
+    39,
+    40,
+    [
+     " machine, fast local ops (~tens of ms, no per-turn network round-trip)."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    40,
+    41
+   ],
+   [
+    "replace",
+    47,
+    48,
+    41,
+    42,
+    [
+     " so there's no extraction step that can silently hallucinate a \"fact\" you never said."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    42,
+    43
+   ],
+   [
+    "replace",
+    49,
+    50,
+    43,
+    44,
+    [
+     " duplicates; selective forgetting keeps it bounded — all with no LLM."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    44,
+    45
+   ],
+   [
+    "replace",
+    51,
+    53,
+    45,
+    47,
+    [
+     " memory-justified external or destructive actions** unless you explicitly confirmed them — and a",
+     " *superseded* memory can't authorize an action at all."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    47,
+    48
+   ],
+   [
+    "replace",
+    54,
+    55,
+    48,
+    49,
+    [
+     " share one live memory."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    49,
+    50
+   ],
+   [
+    "replace",
+    56,
+    57,
+    50,
+    51,
+    [
+     " failed.*"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    62,
+    51,
+    56
+   ],
+   [
+    "replace",
+    62,
+    63,
+    56,
+    57,
+    [
+     "documented in BENCHMARKS.md."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    57,
+    58
+   ],
+   [
+    "replace",
+    64,
+    65,
+    58,
+    59,
+    [
+     "||**Midas**|LLM-at-ingest systems (Mem0, Zep, Hindsight)|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    59,
+    60
+   ],
+   [
+    "replace",
+    66,
+    75,
+    60,
+    69,
+    [
+     "|LLM calls at ingest|**0**|≥1 per session|",
+     "|Cost per message|**$0**|per-token API spend, forever|",
+     "|Data egress at ingest|**None**|every turn leaves the box|",
+     "|Ingest latency|**~16–116 ms**, local, embed-bound|~668 ms + API round-trip|",
+     "|Recall returns|**verbatim source turn**, traceable|LLM-rewritten facts (source `recall@k` not computable)|",
+     "|Deterministic & reproducible|**yes — every number, one command**|no|",
+     "|Works fully offline|**yes** (measured end-to-end with a local Ollama reader)|no|",
+     "|LongMemEval-`s` judged answer (gpt-4o)|**0.84**|0.84 — Observational Memory, with LLM ingest|",
+     "|Whole-conversation aggregation / summarization|❌ **by design** — top-k retrieval can't cover it (documented)|✅ their structural edge|"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    84,
+    69,
+    78
+   ],
+   [
+    "replace",
+    84,
+    85,
+    78,
+    79,
+    [
+     "|You ask…|Midas answers with|Why top-k recall can't|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    79,
+    80
+   ],
+   [
+    "replace",
+    86,
+    90,
+    80,
+    84,
+    [
+     "|*\"Can I run this destructive migration?\"*|**Guard**: allowed only if **you** confirmed it, and only if that confirmation is still current|provenance + currency aren't a similarity match|",
+     "|*\"What's the current state of project Apollo?\"*|**`memory_state`**: the live, non-superseded decisions / constraints / facts|a broad \"current state\" query matches no single turn|",
+     "|*\"What changed since our last session?\"*|**`memory_diff`**: beliefs added, and beliefs revised (old → new)|\"what's new\" isn't a content query at all|",
+     "|*\"How do I speed up the transactions list?\"*|the **prior fix** resurfaces, so the agent doesn't re-diagnose it|—|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    84,
+    85
+   ],
+   [
+    "replace",
+    91,
+    92,
+    85,
+    86,
+    [
+     "These properties are measured, not asserted — the **agent-memory bench suite**"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    108,
+    86,
+    102
+   ],
+   [
+    "replace",
+    108,
+    109,
+    102,
+    103,
+    [
+     "|Benchmark (full set)|baseline|**Midas**|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    103,
+    104
+   ],
+   [
+    "replace",
+    110,
+    113,
+    104,
+    107,
+    [
+     "|**LongMemEval-`s`** — 500 questions, 246,750 turns|0.01|**0.92**|",
+     "|**LoCoMo** — 10 conversations, n=1,540|0.05|**0.73**|",
+     "|**BEAM** — frontier benchmark, 100K → **10M tokens**|0.00|**0.56 → 0.32**|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    116,
+    107,
+    110
+   ],
+   [
+    "replace",
+    116,
+    117,
+    110,
+    111,
+    [
+     "|Judged answer|baseline|**Midas**|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    111,
+    112
+   ],
+   [
+    "replace",
+    118,
+    120,
+    112,
+    114,
+    [
+     "|LongMemEval-`s` (gpt-4o reader, ties LLM-ingest SOTA at **$0 ingest**)|—|**0.84**|",
+     "|BEAM-100K (gpt-4o judge, raw-turn floor, $0 ingest)|0.05|**0.40**|"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    122,
+    114,
+    116
+   ],
+   [
+    "replace",
+    122,
+    123,
+    116,
+    117,
+    [
+     "reproduce commands, and the head-to-head vs Mem0/Zep/Mastra are in **BENCHMARKS.md**."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    127,
+    117,
+    121
+   ],
+   [
+    "replace",
+    127,
+    130,
+    121,
+    122,
+    [
+     "> `docs/frontier-2026.md`."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    196,
+    122,
+    188
+   ],
+   [
+    "replace",
+    196,
+    198,
+    188,
+    189,
+    [
+     " Manual setup — any client, or to customize (click to expand) "
+    ]
+   ],
+   [
+    "equal",
+    198,
+    206,
+    189,
+    197
+   ],
+   [
+    "replace",
+    206,
+    207,
+    197,
+    198,
+    [
+     "|Client|Where the config goes|"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    198,
+    199
+   ],
+   [
+    "replace",
+    208,
+    220,
+    199,
+    211,
+    [
+     "|**Claude Code**|`claude mcp add midas -s user -e MIDAS_MCP_EMBEDDER=local -- midas-mcp`|",
+     "|**Cursor**|`~/.cursor/mcp.json` — paste the JSON block|",
+     "|**Claude Desktop**|Settings → Developer → Edit Config (`claude_desktop_config.json`) — paste, restart|",
+     "|**Codex CLI**|`codex mcp add midas -- midas-mcp`|",
+     "|**Grok Build**|`grok mcp add --scope user midas -e MIDAS_MCP_EMBEDDER=local -e MIDAS_MCP_CLIENT=grok-build -- midas-mcp`|",
+     "|**Windsurf**|`~/.codeium/windsurf/mcp_config.json` — paste the block|",
+     "|**VS Code**|user `mcp.json` (`servers` key, `\"type\": \"stdio\"`) — `midas init` writes it|",
+     "|**Gemini CLI**|`~/.gemini/settings.json` (`mcpServers` key) — `midas init` writes it|",
+     "|**Cline**|`cline_mcp_settings.json` in VS Code global storage — `midas init` writes it|",
+     "|**Zed**|`settings.json` → `context_servers` — `midas init` writes it|",
+     "|**Anything else**|point it at command `midas-mcp`|",
+     "|**No Python**|`npx -y midas-memory-mcp` — the TypeScript port (experimental; semantic embeddings via optional `@huggingface/transformers`)|"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    226,
+    211,
+    217
+   ],
+   [
+    "delete",
+    226,
+    228,
+    217,
+    217
+   ],
+   [
+    "equal",
+    228,
+    259,
+    217,
+    248
+   ],
+   [
+    "replace",
+    259,
+    262,
+    248,
+    249,
+    [
+     " Two live processes share one Midas SQLite file: a recall that finds nothing, a capture from a different process, then the same never-restarted session recalls it"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    263,
+    249,
+    250
+   ],
+   [
+    "replace",
+    263,
+    264,
+    250,
+    251,
+    [
+     " Real run, reconstructed chrome — the capture/recall lines are verbatim output of two separate processes sharing one file. "
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    251,
+    252
+   ],
+   [
+    "replace",
+    265,
+    267,
+    252,
+    253,
+    [
+     " All tools & env knobs "
+    ]
+   ],
+   [
+    "equal",
+    267,
+    284,
+    253,
+    270
+   ],
+   [
+    "delete",
+    284,
+    286,
+    270,
+    270
+   ],
+   [
+    "equal",
+    286,
+    298,
+    270,
+    282
+   ],
+   [
+    "replace",
+    298,
+    299,
+    282,
+    283,
+    [
+     "|Symptom|Likely cause & fix|"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    283,
+    284
+   ],
+   [
+    "replace",
+    300,
+    304,
+    284,
+    288,
+    [
+     "|Client says **\"command not found\"**|GUI apps don't inherit your shell `PATH`. Use the absolute path from `which midas-mcp` in the client config.|",
+     "|**Recall feels weak / lexical**|The offline hashing embedder is in use. Install the local embedder: `uv tool install \"midas-memory[mcp,local]\"` (or `pip install \"midas-memory[local]\"`). `midas doctor` flags this.|",
+     "|A client **doesn't see** another's memory|Confirm both point at the same store — `midas status` shows the path; the wiring receipt (`midas status --json`) shows each client's exact command + env.|",
+     "|**MCP server won't start**|The SDK is installed but the `[mcp]` extra isn't — `pip install \"midas-memory[mcp]\"`. `midas doctor` calls this out specifically.|"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    305,
+    288,
+    289
+   ],
+   [
+    "replace",
+    305,
+    309,
+    289,
+    291,
+    [
+     "Still stuck? Open a bug report",
+     "(it pre-fills the `midas doctor` block) or ask in Discussions."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    316,
+    291,
+    298
+   ],
+   [
+    "replace",
+    316,
+    324,
+    298,
+    299,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    324,
+    326,
+    299,
+    301
+   ],
+   [
+    "replace",
+    326,
+    328,
+    301,
+    302,
+    [
+     " Project state & diff · belief revision · forgetting · namespaces · bitemporal · LangGraph "
+    ]
+   ],
+   [
+    "equal",
+    328,
+    333,
+    302,
+    307
+   ],
+   [
+    "replace",
+    333,
+    353,
+    307,
+    308,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    354,
+    308,
+    309
+   ],
+   [
+    "delete",
+    354,
+    358,
+    309,
+    309
+   ],
+   [
+    "equal",
+    358,
+    371,
+    309,
+    322
+   ],
+   [
+    "replace",
+    371,
+    373,
+    322,
+    324,
+    [
+     " each kind and provenance color-coded *consistently across every view* (a fixed categorical palette,",
+     " validated for colorblind-safe contrast in both themes — never color-only, every value keeps its label)."
+    ]
+   ],
+   [
+    "equal",
+    373,
+    374,
+    324,
+    325
+   ],
+   [
+    "replace",
+    374,
+    375,
+    325,
+    326,
+    [
+     " and sort order."
+    ]
+   ],
+   [
+    "equal",
+    375,
+    379,
+    326,
+    330
+   ],
+   [
+    "replace",
+    379,
+    380,
+    330,
+    331,
+    [
+     " with one-click resolve/close from the UI."
+    ]
+   ],
+   [
+    "equal",
+    380,
+    382,
+    331,
+    333
+   ],
+   [
+    "replace",
+    382,
+    383,
+    333,
+    334,
+    [
+     " anywhere or search, **/** to focus search), and a responsive layout down to phone width."
+    ]
+   ],
+   [
+    "equal",
+    383,
+    392,
+    334,
+    343
+   ],
+   [
+    "replace",
+    392,
+    394,
+    343,
+    345,
+    [
+     "Midas is **fully free and open source under MIT** — the memory engine, the guard, the",
+     "MCP server, the CLI, the inspector, the TypeScript port, and the entire bench suite."
+    ]
+   ],
+   [
+    "equal",
+    394,
+    398,
+    345,
+    349
+   ],
+   [
+    "replace",
+    398,
+    400,
+    349,
+    351,
+    [
+     "reproduced benchmark number, a bug report, or a",
+     "measured contribution — see the roadmap for where help matters most."
+    ]
+   ],
+   [
+    "equal",
+    400,
+    406,
+    351,
+    357
+   ],
+   [
+    "replace",
+    406,
+    408,
+    357,
+    359,
+    [
+     " *and* by the frontier papers (the retriever is not the bottleneck). The benchmark numbers above are the",
+     " result."
+    ]
+   ],
+   [
+    "equal",
+    408,
+    409,
+    359,
+    360
+   ],
+   [
+    "replace",
+    409,
+    413,
+    360,
+    364,
+    [
+     " deliberately won't run at ingest.** We built the judged harness and measured it on BEAM's summarization",
+     " category: a small local extractor doesn't help (raw 0.28 vs replace 0.07 rubric coverage), and the lift",
+     " is gated on a strong model — so it belongs to *the agent's* model, not Midas's. The optional distillation",
+     " dial ships **off by default**; we don't claim it as a win. (Details: `docs/frontier-2026.md` §2b.)"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    414,
+    364,
+    365
+   ],
+   [
+    "replace",
+    414,
+    417,
+    365,
+    368,
+    [
+     " the provenance guard that won't act on stale or unconfirmed memory, and the",
+     " Agent Continuity Bench that measures those properties. Local, auditable, and",
+     " honest about what's proven."
+    ]
+   ],
+   [
+    "equal",
+    417,
+    425,
+    368,
+    376
+   ],
+   [
+    "replace",
+    425,
+    426,
+    376,
+    377,
+    [
+     "`docs/methodology.md`."
+    ]
+   ],
+   [
+    "equal",
+    426,
+    441,
+    377,
+    392
+   ],
+   [
+    "replace",
+    441,
+    442,
+    392,
+    393,
+    [
+     "plaintext). Full details in `PRIVACY.md` · MIT."
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
  }
 }

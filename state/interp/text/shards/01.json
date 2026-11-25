@@ -3357,5 +3357,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6c262d434bb8": {
+  "identity": {
+   "one_liner": "基于本体的MCP服务器，将数据库模式转为RDF/OWL本体并生成SQL映射",
+   "review": "OrionBelt Analytics 是一个基于 MCP 协议的服务器，连接 PostgreSQL、Snowflake、ClickHouse、Dremio 等数据库，分析关系模式并生成带 SQL 映射注解的 RDF/OWL 本体，供 MCP 客户端进行关系感知的 Text-to-SQL。核心机制包括确定性 SQL 校验器 OBQC（检查表/列存在、连接有效性与扇形陷阱）、基于图遍历与 ChromaDB 向量嵌入的 GraphRAG、Oxigraph 上的 SPARQL 查询接口，共提供 26 个工具。需 Python 3.13+ 与 uv，通过 HTTP 传输运行在 9000 端口，适用于 Claude Desktop、Claude Code、LibreChat 等客户端。许可证为 BUSL-1.1。",
+   "highlights": [
+    "提供 8 种数据库连接器（PostgreSQL、MySQL、Snowflake、ClickHouse、Dremio、BigQuery、DuckDB/MotherDuck、Databricks SQL），支持多模式同时分析且本体与 GraphRAG 状态按模式隔离",
+    "OBQC 校验器以确定性规则在查询执行前检查表/列存在性、连接有效性、类型兼容性、GROUP BY 聚合正确性与扇形陷阱，错误阻止执行、警告附加返回",
+    "GraphRAG 结合最多 12 跳的图遍历与本地 ChromaDB 向量嵌入进行模式发现，并通过 Oxigraph 提供 SPARQL 1.1 查询接口"
+   ],
+   "use_cases": [
+    "在 MCP 兼容 AI 客户端（如 Claude Desktop）中对既有关系数据库做自然语言查询，并依赖 OBQC 拦截扇形陷阱与结构性 SQL 错误",
+    "从数据库模式生成本体与 R2RML 映射工件，供语义层、知识图谱或其他工具复用",
+    "跨语言团队查找模式：通过多语言向量检索以其他语言提问定位对应英文名称的表与列"
+   ]
+  },
+  "sha": "6c262d434bb8",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "48f60da26ff2": {
+  "identity": {
+   "one_liner": "Rust 单二进制门控：在 AI 代理执行 shell 命令前预览后果、备份并按策略放行或拒绝。",
+   "review": "Termaxa 是一个 Rust 编写的单二进制命令门控工具，部署在 Claude Code、Codex、Cursor、Copilot CLI 等编码代理的 hook 路径中。它按仓库内的策略文件对每条命令判定允许、询问或拒绝，预览命令将删除的文件、丢弃的提交或数据库行，执行前创建可用 `termaxa rollback` 恢复的备份，并以追加式哈希链日志记录决策。无模型、无服务、无账号，支持 observe 观察模式先行。",
+   "highlights": [
+    "支持按策略对命令分级判定（allow/ask/deny），首条匹配规则生效，未匹配命令默认询问",
+    "提供执行前备份机制，覆盖文件删除、git reset --hard、force push、数据库 DROP 等场景，可通过 rollback 恢复",
+    "包含跨 shell 语法的熔断器，按破坏性意图计数（阈值默认 2），跨会话持续，需带理由释放"
+   ],
+   "use_cases": [
+    "为 Claude Code/Codex/Cursor 等代理会话加命令门控，包括无人值守运行场景",
+    "用 replay/observe/report 先评估历史与现状，再决定是否启用 enforce 强制模式",
+    "审计代理执行过的破坏性命令，保留哈希链决策日志"
+   ]
+  },
+  "sha": "48f60da26ff2",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dfadbb179d0a": {
+  "identity": {
+   "one_liner": "面向拖延与注意力困难人群的任务管理应用，支持自托管，集成游戏化与精力感知任务选择",
+   "review": "Momo 是一款基于 Next.js 与 PostgreSQL 的任务管理应用，面向有回避、拖延与日常任务过载困扰的用户，提供每日任务、精力感知选择、习惯追踪、任务延迟计数与提醒推送等功能。可通过 Docker 自托管，也提供 momotask.app 在线版本，附带 REST API、iCal 日历订阅与 PWA 离线支持。",
+   "highlights": [
+    "提供精力感知的每日任务选择：按高/中/低精力状态自动替换每日任务，并记录每次签到用于 14 天精力趋势统计",
+    "支持间隔、星期、月度、年度四种循环任务类型，提供 GitHub 风格年度习惯热力图与连续打卡统计",
+    "通过 Web Push、ntfy.sh、Pushover、Telegram 或 Email 发送提醒，提供 REST API、Swagger 文档界面与 iCal 订阅源"
+   ],
+   "use_cases": [
+    "需要以小步骤方式管理日常任务、减少任务积压的个人用户",
+    "需要追踪重复性习惯（如家务、锻炼）并通过热力图查看完成记录的场景",
+    "希望用 Docker 自托管、并通过 REST API 或日历订阅集成到自有工作流的用户"
+   ]
+  },
+  "sha": "dfadbb179d0a",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6fce15e53a41": {
+  "identity": {
+   "one_liner": "从生产代码回写、按工程流程治理的后端×AI 知识库",
+   "review": "一个以 Markdown 仓库与 VitePress 电子书双形态组织的知识库，含 7 轨道、396 篇文章，覆盖 Java、MySQL、Redis、Kafka、分布式、DDD、信贷业务、K8s 与 AI 工程等主题。文章引用真实类名与文件路径，配有 133 题自测清单、kb-upkeep 巡检脚本与构建期敏感词检查，适合后端工程师面试备考与系统学习。",
+   "highlights": [
+    "包含 7 个轨道共 396 篇文章与 639 张本地化配图，克隆仓库即可离线阅读",
+    "kb-upkeep 脚本在发布前检查空壳页、死链、死图及 README 数字，push 到 master 自动重建电子书",
+    "深度文章附「追问链 + 面试官视角小结」，全库按 133 题自测清单索引并带掌握度标记"
+   ],
+   "use_cases": [
+    "面试备考：按 133 题自测清单逐题定位答案并季度复查",
+    "系统学习：按轨道阅读导航与推荐路径学习某一领域",
+    "背景核验：通过引用的真实类名、commit 记录与治理台账查阅内容来源"
+   ]
+  },
+  "sha": "6fce15e53a41",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3305,5 +3305,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "45de1d293148": {
+  "identity": {
+   "one_liner": "基于 ZFS 克隆的 MySQL/PostgreSQL 秒级数据库分支工具，自托管并支持集群。",
+   "review": "db-branch 是一个自托管的数据库分支工具，支持 MySQL 和 PostgreSQL。分支为基快照的 ZFS 克隆，创建时不复制数据；支持重置、TTL 过期、检查点、fork、单分支内逻辑合并及按分支升级引擎版本，并提供 CLI、REST API、Web 控制台和 MCP 服务器。限制包括不支持跨分支合并、live 快照启动需崩溃恢复（MySQL 测试约增加 10 秒），核心版为 Apache-2.0，部分模块为付费闭源。适用人群是需要一次性数据库沙箱（AI 代理、CI、迁移测试）的开发与运维团队。",
+   "highlights": [
+    "分支为 ZFS 写时复制克隆，创建时零字节复制，官方测试集群上 PostgreSQL 分支约 0.5 秒、MySQL 约 3 秒可用",
+    "通过 CLI、REST API、Web 控台和内置 MCP 服务器提供统一接口，支持 Raft 多节点集群与可选 ProxySQL 路由",
+    "支持检查点/恢复、fork、按分支单独升级引擎版本（失败自动回滚）及 --ttl 自动删除"
+   ],
+   "use_cases": [
+    "为 AI 代理提供一次性沙箱：代理经 MCP 创建分支执行高风险查询或迁移后删除，不触碰生产数据",
+    "每个 PR 或 CI 任务获得独立数据库副本，结束后由 TTL 自动清理",
+    "在单个分支上先用 --check-only 预演大版本升级，再对基库实施"
+   ]
+  },
+  "sha": "45de1d293148",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c32d7ac1454b": {
+  "identity": {
+   "one_liner": "Tauri+Rust 桌面 AI 小说创作软件，含知识图谱与多代理质检工作流",
+   "review": "StoryMoss（草苔）是一款基于 Tauri、React 与 Rust 构建的桌面小说写作应用，面向小说创作者，提供幕前沉浸写作与幕后故事资产管理双界面。其机制包括多代理创作与加权质量门校验、知识图谱、伏笔看板、风格样本注入，以及接入 OpenAI、Anthropic、Ollama 等多种模型。可下载预构建版本或以 Node.js 20 与 Rust 1.95.0 从源码构建运行。",
+   "highlights": [
+    "提供幕前「墨纸」写作界面与幕后故事资产工作台，管理角色、世界观、场景、知识图谱与伏笔看板",
+    "实现主创/管理/编辑审计多代理协作，每章经 Gate v2 加权质量门（阈值 0.75）校验后交付",
+    "支持 OpenAI、Anthropic、Ollama、本地 API 多模型接入，并按角色 × 任务进行模型路由"
+   ],
+   "use_cases": [
+    "长篇小说的连载写作与续写，依赖前文检索、卷级计划与伏笔追踪维持前后文一致",
+    "故事资产管理与知识图谱维护，正文生成后自动提取角色、关系、世界观回流资产库",
+    "已有文稿的风格化续写，通过原文语体样本注入与文风漂移探针进行质检修订"
+   ]
+  },
+  "sha": "c32d7ac1454b",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fb720546cd51": {
+  "identity": {
+   "one_liner": "为个人自托管 T3 Code 服务器提供 Rust 组件与遥测禁用的套件",
+   "review": "该仓库包含 Rust bridge 二进制、原生 sqlite 绑定、maki 代码工具 CLI、systemd drop-in 模板及遥测 opt-in 补丁，用于在个人环境运行 T3 Code 服务器。通过环境变量与源码补丁双重机制停止遥测发送，并配合 jemalloc 与 V8 内存设置及 systemd 内存上限运行。会话与密钥保留在 T3CODE_HOME 下，可回滚还原。需要 Rust 工具链、Node.js 及可构建的 T3 Code 服务器源码。",
+   "highlights": [
+    "提供原生 sqlite 绑定与 Rust bridge 二进制，通过 T3_NATIVE_SQLITE_PATH 与 T3_RUST_BRIDGE_BIN 环境变量接入",
+    "默认通过环境变量关闭产品遥测与 relay OTLP tracing，另附可选源码补丁使遥测改为 opt-in",
+    "包含 code_index / code_slice / code_grep 三个 CLI 工具及 apply/rollback staging 脚本"
+   ],
+   "use_cases": [
+    "在个人设备上以自建组件运行 T3 Code 服务器并关闭遥测上报",
+    "为 T3 Code 服务器配置 systemd 用户级内存上限部署",
+    "需要可回滚地替换服务器二进制并保留原有会话与密钥的环境"
+   ]
+  },
+  "sha": "fb720546cd51",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

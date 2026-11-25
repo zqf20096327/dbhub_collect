@@ -3334,5 +3334,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f784abfcca47": {
+  "identity": {
+   "one_liner": "自托管的德式合规文档归档，含 GoBD 模式与哈希链、保留期锁定",
+   "review": "Belegt 是一个自托管文档归档应用，将邮件、电子发票（ZUGFeRD、XRechnung）、OCR 扫描件及任意文件集中存储并提供全文检索。面向德国企业，其 GoBD 模式基于 PostgreSQL 中的印章与哈希链、§ 147 AO 期限计算、双人确认删除、审计员访问及 RFC 3161 时间戳实现留存期内不可变。项目处于 Beta 阶段，迁移不可回滚；文档为德文。",
+   "highlights": [
+    "支持 IMAP、JMAP、Microsoft 365、Google、SMTP 日志、PST 等多种邮件来源，识别 XRechnung 与 ZUGFeRD 电子发票，并可用 KoSIT Validator 验证",
+    "印章与哈希链存于 PostgreSQL，可选 S3 Object Lock 与每日 RFC 3161 时间戳；按 § 147 AO 计算期限并在期后以双人确认删除",
+    "提供 REST API（OpenAPI）、Webhook、MCP 接口、OpenID Connect 登录，可从 Paperless-ngx 迁移标签、字段与笔记"
+   ],
+   "use_cases": [
+    "需按德国法律期限留存发票、银行对账单、商业信函并在税务审计中出示证据的企业",
+    "税务顾问/审计员远程查看指定期间文档并作为第二人确认删除",
+    "需要将邮件、电子发票、扫描件与任意文件集中归档、全文检索并接入 AI 助手或自建程序的团队"
+   ]
+  },
+  "sha": "f784abfcca47",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e296ba02956a": {
+  "identity": {
+   "one_liner": "openGauss 的托管 .NET 数据提供程序，实现 ADO.NET 提供程序模型。",
+   "review": "OpenGaussConnector 是面向 openGauss 数据库的托管 .NET 数据提供程序，移植自上游 ADO.NET 驱动（快照 ba5e8ba）并保留原有类型名。提供连接、命令、读取器、事务、批处理、数据源与连接字符串构建器，含依赖注入及五个扩展包。当前为 0.1.0 预发布，尚未发布到 NuGet，历史中未对真实服务器运行过测试，需数据库的测试须本地执行。",
+   "highlights": [
+    "实现 ADO.NET 提供程序模型：连接、命令、读取器、事务、批处理、数据源与连接字符串构建器，支持 netstandard2.0/2.1、net8.0/9.0/10.0 五个目标框架",
+    "包含 7 个包：核心提供程序、IServiceCollection 依赖注入集成，以及 GeoJSON、Json.NET、NetTopologySuite、NodaTime、OpenTelemetry 五个扩展包",
+    "在 .NET 8 及以上提供 OpenGaussDataSource，拥有独立连接池并发放连接字符串不可变的连接；CI 采用 NuGet trusted publishing（OIDC 短期密钥）"
+   ],
+   "use_cases": [
+    "在 .NET 应用中通过 ADO.NET 接口连接和操作 openGauss 数据库",
+    "使用依赖注入的项目中通过 AddOpenGaussConnection/AddOpenGaussDataSource 注册连接或数据源",
+    "需要 PostGIS 空间类型、json/jsonb、NodaTime 类型映射或命令链路追踪（ActivitySource）的应用集成相应扩展包"
+   ]
+  },
+  "sha": "e296ba02956a",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

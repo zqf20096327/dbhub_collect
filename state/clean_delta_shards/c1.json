@@ -30053,5 +30053,515 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "7fe34c0d9e68+2": {
+  "fn": "zdk/pg-search-thai",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    14,
+    1,
+    13
+   ],
+   [
+    "replace",
+    14,
+    15,
+    13,
+    14,
+    [
+     "Query latency by kind — pg-search-thai vs Elasticsearch"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    14,
+    15
+   ],
+   [
+    "replace",
+    16,
+    17,
+    15,
+    16,
+    [
+     "|Metric|pg-search-thai|ES (thai analyzer)|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    16,
+    17
+   ],
+   [
+    "replace",
+    18,
+    23,
+    17,
+    22,
+    [
+     "|Single-term query (p50 / p95)|**1.4 ms / 4.3 ms**|5.7 ms / 18.9 ms|",
+     "|Boolean AND (p50 / p95)|**1.6 ms / 5.8 ms**|6.7 ms / 9.8 ms|",
+     "|Boolean OR (p50 / p95)|**2.6 ms / 3.2 ms**|6.1 ms / 9.6 ms|",
+     "|Index size|**105 MB**|427 MB|",
+     "|Write → searchable lag|0 ms (transactional)|~1 s (refresh interval)|"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    22,
+    23
+   ],
+   [
+    "replace",
+    24,
+    26,
+    23,
+    25,
+    [
+     "Full reproducible harness, methodology, and caveats: see `bench/BENCHMARKS.md`",
+     "and `bench/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    33,
+    25,
+    32
+   ],
+   [
+    "replace",
+    33,
+    36,
+    32,
+    35,
+    [
+     " git clone https://github.com/zdk/pg-search-thai.git",
+     " cd pg-search-thai",
+     " docker compose up -d"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    39,
+    35,
+    38
+   ],
+   [
+    "replace",
+    39,
+    41,
+    38,
+    40,
+    [
+     " psql -h localhost -U testuser -d testdb \\",
+     " -c \"SELECT * FROM ts_parse('thai_parser', 'ต้มยำกุ้ง');\""
+    ]
+   ],
+   [
+    "equal",
+    41,
+    46,
+    40,
+    45
+   ],
+   [
+    "replace",
+    46,
+    48,
+    45,
+    47,
+    [
+     " # Debian / Ubuntu",
+     " sudo apt install -y build-essential libthai-dev postgresql-server-dev-all"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    47,
+    48
+   ],
+   [
+    "replace",
+    49,
+    51,
+    48,
+    50,
+    [
+     " # macOS (Homebrew)",
+     " brew install libthai libdatrie"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    50,
+    53
+   ],
+   [
+    "replace",
+    54,
+    58,
+    53,
+    57,
+    [
+     " git clone https://github.com/zdk/pg-search-thai.git",
+     " cd pg-search-thai",
+     " make",
+     " sudo make install"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    61,
+    57,
+    60
+   ],
+   [
+    "replace",
+    61,
+    62,
+    60,
+    61,
+    [
+     " cd thai_parser && make && sudo make install"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    67,
+    61,
+    66
+   ],
+   [
+    "replace",
+    67,
+    68,
+    66,
+    67,
+    [
+     " CREATE EXTENSION thai_parser;"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    81,
+    67,
+    80
+   ],
+   [
+    "replace",
+    81,
+    89,
+    80,
+    81,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    109,
+    81,
+    101
+   ],
+   [
+    "replace",
+    109,
+    110,
+    101,
+    102,
+    [
+     "Upgrading from 1.0.0."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    148,
+    102,
+    140
+   ],
+   [
+    "replace",
+    148,
+    166,
+    140,
+    141,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    172,
+    141,
+    147
+   ],
+   [
+    "replace",
+    172,
+    173,
+    147,
+    148,
+    [
+     "**Node.js** (`pg`)"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    178,
+    148,
+    153
+   ],
+   [
+    "replace",
+    178,
+    188,
+    153,
+    154,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    190,
+    154,
+    156
+   ],
+   [
+    "replace",
+    190,
+    191,
+    156,
+    157,
+    [
+     "**Python** (`psycopg` v3)"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    196,
+    157,
+    162
+   ],
+   [
+    "replace",
+    196,
+    204,
+    162,
+    163,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    206,
+    163,
+    165
+   ],
+   [
+    "replace",
+    206,
+    207,
+    165,
+    166,
+    [
+     "**Go** (`pgx` v5)"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    212,
+    166,
+    171
+   ],
+   [
+    "replace",
+    212,
+    225,
+    171,
+    172,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    236,
+    172,
+    183
+   ],
+   [
+    "replace",
+    236,
+    243,
+    183,
+    190,
+    [
+     " CREATE TEXT SEARCH DICTIONARY thai_hunspell (",
+     " TEMPLATE = ispell,",
+     " DictFile = th_th,",
+     " AffFile = th_th,",
+     " StopWords = english",
+     " );",
+     " SELECT ts_lexize('thai_hunspell', 'ทดสอบ'); -- {ทดสอบ}"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    244,
+    190,
+    191
+   ],
+   [
+    "replace",
+    244,
+    249,
+    191,
+    196,
+    [
+     " -- Your own configuration, copied from thaicfg:",
+     " CREATE TEXT SEARCH CONFIGURATION thaicfg_hunspell (COPY = thaicfg);",
+     " ALTER TEXT SEARCH CONFIGURATION thaicfg_hunspell",
+     " ALTER MAPPING FOR a WITH thai_hunspell, simple;",
+     " SELECT to_tsvector('thaicfg_hunspell', 'ทดสอบการตัดคำ');"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    253,
+    196,
+    200
+   ],
+   [
+    "replace",
+    253,
+    254,
+    200,
+    201,
+    [
+     " `ADD MAPPING FOR a` fails with a duplicate key error."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    255,
+    201,
+    202
+   ],
+   [
+    "replace",
+    255,
+    257,
+    202,
+    204,
+    [
+     " order and stops at the first one that recognizes the word. `simple`",
+     " recognizes every word, so anything after it is never consulted."
+    ]
+   ],
+   [
+    "equal",
+    257,
+    258,
+    204,
+    205
+   ],
+   [
+    "replace",
+    258,
+    261,
+    205,
+    208,
+    [
+     " `pg_dump` does not dump changes made to an extension's own objects, so a",
+     " mapping altered on `thaicfg` is silently gone after a dump and restore. A",
+     " configuration you created yourself is dumped normally."
+    ]
+   ],
+   [
+    "equal",
+    261,
+    282,
+    208,
+    229
+   ],
+   [
+    "replace",
+    282,
+    286,
+    229,
+    233,
+    [
+     " release may hold damaged English words. An English word or number at the very",
+     " end of a text used to absorb stray bytes (`soup` stored as `soupcctv`), so a",
+     " search for the real word misses the row. That was a bug in the C code, fixed",
+     " in the same release; `ALTER EXTENSION` does not repair data it produced."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    326,
+    233,
+    273
+   ],
+   [
+    "replace",
+    326,
+    327,
+    273,
+    274,
+    [
+     "Refer to License FAQ for more information."
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
  }
 }

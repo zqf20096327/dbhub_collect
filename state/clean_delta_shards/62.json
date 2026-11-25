@@ -29552,5 +29552,663 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "b182fe347df3+2": {
+  "fn": "backupdrill/cli",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "> This is the exact engine the hosted service runs in production. Want it on a schedule, with drills that run themselves, alerts, and emailed reports? That's **backupdrill.com**. This CLI is the DIY layer; the cloud adds scheduling, alerting, and reports on top."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "🎥 Prefer watching? Where do your backups actually go — explained in about a minute."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    35,
+    11,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "The `plugin/` folder is a plugin for Claude Code and Cursor. It teaches the agent to run `estimate`, `backup`, `drill` and `restore` for you. Its instructions keep your keys in a gitignored `.env.backupdrill` that the agent is told never to open, and have it do a dry run before every restore. In Claude Code:"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    42,
+    36,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "Details are in plugin/README.md."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    52,
+    43,
+    52
+   ],
+   [
+    "replace",
+    52,
+    53,
+    52,
+    53,
+    [
+     "Start a new Pi session and ask it to back up your Supabase project or run a restore drill. The skill runs the CLI through `npx`, so Node.js 20 or newer has to be on your `PATH`. Everything else it needs, and where your keys go, is in plugin/README.md."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    64,
+    53,
+    64
+   ],
+   [
+    "replace",
+    64,
+    70,
+    64,
+    65,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    74,
+    65,
+    69
+   ],
+   [
+    "replace",
+    74,
+    75,
+    69,
+    70,
+    [
+     "|Variable|Purpose|Default|"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    70,
+    71
+   ],
+   [
+    "replace",
+    76,
+    92,
+    71,
+    87,
+    [
+     "|`BACKUPDRILL_DATABASE_URL`|Source connection string (falls back to `DATABASE_URL`)|— (required)|",
+     "|`BACKUPDRILL_PROJECT_NAME`|Readable name used in object keys and the manifest|`supabase`|",
+     "|`BACKUPDRILL_SCHEMAS`|Comma-separated schemas to dump. If the list includes `auth`, `dump.pgcustom` copies the Auth tables as-is, including any pending password-reset and confirmation tokens, and BackupDrill skips the separate `auth.dump`. When BackupDrill writes a separate `auth.dump`, it clears those tokens before upload|`public`|",
+     "|`BACKUPDRILL_AUTH`|Supabase Auth users (`auth.users` + `auth.identities`) go into `auth.dump` next to the database dump whenever the role can read them. `off` leaves them out. `on` makes a backup that can't include them exit with code 3; the database backup still completes either way. Also `--auth` / `--no-auth`, or `\"auth\": true/false` in the config file|on when possible|",
+     "|`BACKUPDRILL_S3_ENDPOINT`|S3-compatible endpoint (R2/B2/self-hosted; omit for AWS S3)|—|",
+     "|`BACKUPDRILL_S3_REGION`|Destination bucket region|`auto`|",
+     "|`BACKUPDRILL_S3_BUCKET`|Destination bucket|— (required)|",
+     "|`BACKUPDRILL_S3_ACCESS_KEY_ID`, `BACKUPDRILL_S3_SECRET_ACCESS_KEY`|Destination credentials|— (required)|",
+     "|`BACKUPDRILL_S3_PREFIX`|Key prefix inside the bucket|`backupdrill`|",
+     "|`BACKUPDRILL_S3_FORCE_PATH_STYLE`|`true`/`false` — path-style addressing (R2/MinIO)|`true` when an endpoint is set|",
+     "|`BACKUPDRILL_SUPABASE_STORAGE_*`|Storage-file source (endpoint/region/keys/buckets) — see Backing up Storage files|—|",
+     "|`BACKUPDRILL_PG_DUMP`|Path to the `pg_dump` binary to use|`pg_dump` on `PATH`|",
+     "|`BACKUPDRILL_PG_RESTORE`|Path to `pg_restore` (used by `drill` and `restore`)|next to `BACKUPDRILL_PG_DUMP`, else `pg_restore` on `PATH`|",
+     "|`BACKUPDRILL_PSQL`|Path to `psql`, which `restore` uses for snapshots with Auth users|next to `pg_restore`, else `psql` on `PATH`|",
+     "|`BACKUPDRILL_STATE_DIR`|Where `restore` keeps its record of restores with Auth users, for `--status` and `--finish`|`~/.backupdrill/restores`|",
+     "|`BACKUPDRILL_PING_URL`|Healthchecks.io ping URL for `backup` and `drill` — see Alerts with Healthchecks.io|—|"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    111,
+    87,
+    106
+   ],
+   [
+    "replace",
+    111,
+    115,
+    106,
+    107,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    137,
+    107,
+    129
+   ],
+   [
+    "replace",
+    137,
+    138,
+    129,
+    130,
+    [
+     "A backup pulls data **out** of Supabase, which counts as **egress on your Supabase bill**. Verified rates (2026-07-10, egress docs + pricing):"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    147,
+    130,
+    139
+   ],
+   [
+    "replace",
+    147,
+    148,
+    139,
+    140,
+    [
+     "|DB + Storage|Weekly|Daily|"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    140,
+    141
+   ],
+   [
+    "replace",
+    149,
+    151,
+    141,
+    143,
+    [
+     "|10 GB|$0/month (within 250 GB)|~$4.50/month|",
+     "|50 GB|~$0/month|**~$112/month** ⚠|"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    164,
+    143,
+    156
+   ],
+   [
+    "replace",
+    164,
+    168,
+    156,
+    157,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    183,
+    157,
+    172
+   ],
+   [
+    "replace",
+    183,
+    184,
+    172,
+    173,
+    [
+     "If you also keep a written record of each drill for your team or an audit (which snapshot, how long the restore took, who checked the app afterwards), there's a free restore drill log template on Tally with those fields. `--record` below stores the machine-readable side of the same result in your bucket."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    205,
+    173,
+    194
+   ],
+   [
+    "replace",
+    205,
+    206,
+    194,
+    195,
+    [
+     "**What this can and cannot verify, honestly:** `BACKUPDRILL_SANDBOX_URL` connects as the sandbox **superuser**, and superusers bypass row-level security. The sandbox does carry a stub of the Supabase runtime — an `auth` schema whose `uid()`/`jwt()`/`role()`/`email()` return null, and the `anon`/`authenticated`/`service_role` roles — so functions, column defaults and policies that reference them restore instead of being skipped. The sandbox deliberately does not create Supabase-managed *tables* such as `auth.users`: an index, constraint or policy that points at one is reported as a skipped managed object (these are restored in a second, post-data pass where that exemption applies). A skipped foreign key into `auth.users` still matters for a real restore, see Tables that reference auth.users. A *view* over one is created in the strict first pass instead, and fails the drill — a real gap in what a public-only backup can rebuild, shown rather than hidden. A function *body* that selects from `auth.users` is different: PostgreSQL does not validate string-literal bodies (`AS $$ … $$`) during a restore (`check_function_bodies` is off in every dump), so such a function is recreated and the drill passes — it would only fail when called. The exception is an SQL-standard `BEGIN ATOMIC … END` body, which is parsed and dependency-checked at creation regardless of that setting, so one of those referencing a managed table fails the drill like a view does. That is exactly what `--check-cmd` is for: if your application depends on such a function, call it there. So use `--check-cmd` for data and business invariants (\"orders reference existing users\", \"the row count I care about is sane\"). It is **not** an RLS behavior test — `auth.uid()` is a stub and you are a superuser; verifying RLS takes an authenticated client stack with real JWTs, which no restore sandbox can fake generically."
+    ]
+   ],
+   [
+    "equal",
+    206,
+    221,
+    195,
+    210
+   ],
+   [
+    "replace",
+    221,
+    222,
+    210,
+    211,
+    [
+     "`--dry-run` writes nothing to the target. Besides checking the target (not the source project, schemas empty, Postgres and `pg_restore` versions, extensions available), it downloads the dump to a temporary directory, checks its sha256 and looks for foreign keys that point outside the backup (see Tables that reference auth.users). The real run repeats those checks before it writes anything; a foreign key into a table that one of the recorded extensions creates is checked again once the extensions are installed. The database restore then runs in a single transaction: if any statement fails, nothing from the snapshot stays on the target, and you can run it again on the same project once you've fixed the cause. (If the connection drops while it commits, the error says so and asks you to check the target first.) Right after that transaction commits, the grants for `anon`, `authenticated` and `service_role` are set in a transaction of their own (see Grants for anon, authenticated and service_role). Foreign keys between two tables in the backup are the exception to the single transaction: they're added after that, in one more. If rows in your data already break one of them (deleting with triggers switched off, for example under `session_replication_role = replica`, can leave rows like that), the key is added as `NOT VALID` instead of failing the restore. Those rows come back as they are, new writes are still checked, and the report names the key and, when it can count them, how many rows break it. Keys on or into partitioned tables, keys into an extension's tables, and every key in an archive whose foreign key statements BackupDrill can't fully read stay in the main transaction, so a broken one rolls the whole restore back. A key over a generated column is added in the second step but is never relaxed, because the restore recomputes those values; if it breaks, that step fails. Keys added as `NOT VALID` don't fail a drill: the drill passes and lists them in its report. If a step after the main transaction fails for any other reason, the tables and data are already on the target and the error says so. Extensions the run installed stay installed, since the next run needs them too, and the empty-target check doesn't count objects that belong to an extension (except an extension's configuration tables, whose rows a dump can carry). One transaction holds a lock on every table, index and sequence until it commits, so a very large schema can run out of lock slots: on Supabase's smallest compute size, about a thousand tables (partitions count as tables). The restore then stops with nothing written and tells you how to raise `max_locks_per_transaction`."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    240,
+    211,
+    229
+   ],
+   [
+    "replace",
+    240,
+    241,
+    229,
+    230,
+    [
+     "One error is expected and harmless: `schema \"public\" already exists` — the target always has it. An error on a foreign key into `auth.users` means the users have to be copied in first (see Tables that reference auth.users). After that, set the grants yourself (next section). Don't use `--clean` against a Supabase project: it drops and recreates the `public` schema, and with it the grants Supabase put on it. The `backupdrill restore` command above handles all of this (plus verification) for you."
+    ]
+   ],
+   [
+    "equal",
+    241,
+    246,
+    230,
+    235
+   ],
+   [
+    "replace",
+    246,
+    247,
+    235,
+    236,
+    [
+     "The dump doesn't carry grants, so a restored table only gets what the target project hands out by default. Supabase used to grant every new table in `public` to all three roles. It stopped doing that for new projects on May 30, 2026, and for existing projects on October 30, 2026 (Supabase's announcement). On a project that has switched, a plain `pg_restore` brings back every table and row, and the app still gets `42501` on all of them. On a project that hasn't switched yet, it does the opposite: every restored table is open to `anon`, including the ones you had closed."
+    ]
+   ],
+   [
+    "equal",
+    247,
+    291,
+    236,
+    280
+   ],
+   [
+    "replace",
+    291,
+    293,
+    280,
+    282,
+    [
+     " (or let the hidden prompt ask) and pass `--database` to say you want the",
+     " database restored."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    282,
+    283
+   ],
+   [
+    "replace",
+    294,
+    295,
+    283,
+    284,
+    [
+     " target project's ref to confirm. Run `--dry-run` first to preview every check."
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    284,
+    285
+   ],
+   [
+    "replace",
+    296,
+    297,
+    285,
+    286,
+    [
+     " `BACKUPDRILL_TARGET_SERVICE_ROLE_KEY` (or the hidden prompt), never a flag."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    302,
+    286,
+    291
+   ],
+   [
+    "replace",
+    302,
+    303,
+    291,
+    292,
+    [
+     "Want this running on a schedule without paying for a server? Use the Supabase Backup with BackupDrill action. It installs `pg_dump` 17 from the PostgreSQL apt repo (PGDG), runs `backupdrill backup` with the newest 2.x release of this CLI, and with `drill: \"true\"` restores the new snapshot into a throwaway Postgres on the runner and checks it."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    308,
+    292,
+    297
+   ],
+   [
+    "replace",
+    308,
+    329,
+    297,
+    298,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    335,
+    298,
+    304
+   ],
+   [
+    "replace",
+    335,
+    336,
+    304,
+    305,
+    [
+     "- **Optional (alerts):** `BACKUPDRILL_PING_URL`, passed as `ping-url`. See Alerts with Healthchecks.io."
+    ]
+   ],
+   [
+    "equal",
+    336,
+    340,
+    305,
+    309
+   ],
+   [
+    "replace",
+    340,
+    341,
+    309,
+    310,
+    [
+     "Prefer a plain workflow file? `examples/scheduled-backup.yml` runs the backup without the action and without a drill. Copy it into your own repo at `.github/workflows/scheduled-backup.yml` and add the same secrets. (It lives under `examples/` here so GitHub doesn't try to run it in this repo.) It runs daily and can also be started by hand from the Actions tab."
+    ]
+   ],
+   [
+    "equal",
+    341,
+    354,
+    310,
+    323
+   ],
+   [
+    "replace",
+    354,
+    362,
+    323,
+    324,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    362,
+    372,
+    324,
+    334
+   ],
+   [
+    "replace",
+    372,
+    373,
+    334,
+    335,
+    [
+     "A scheduled backup can fail quietly, or not run at all: a cron entry that never fires, a runner that dies, a workflow GitHub disabled. `backup` and `drill` can report every run to a Healthchecks.io check (a self-hosted Healthchecks works the same), and Healthchecks alerts you when a run fails or a success ping doesn't arrive on time."
+    ]
+   ],
+   [
+    "equal",
+    373,
+    393,
+    335,
+    355
+   ],
+   [
+    "replace",
+    393,
+    394,
+    355,
+    356,
+    [
+     "`backupdrill exporter` serves Prometheus metrics about the backups in your bucket, and about the restore drills you run with `--record`. It reads the bucket each time Prometheus scrapes it and never writes, so a key with read-only access to the bucket is enough."
+    ]
+   ],
+   [
+    "equal",
+    394,
+    415,
+    356,
+    377
+   ],
+   [
+    "replace",
+    415,
+    419,
+    377,
+    378,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    419,
+    423,
+    378,
+    382
+   ],
+   [
+    "replace",
+    423,
+    424,
+    382,
+    383,
+    [
+     "|Metric|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    424,
+    425,
+    383,
+    384
+   ],
+   [
+    "replace",
+    425,
+    437,
+    384,
+    396,
+    [
+     "|`backupdrill_up`|1 if the bucket was read, 0 if not (the reason goes to the exporter's log)|",
+     "|`backupdrill_scrape_duration_seconds`|How long reading the bucket took|",
+     "|`backupdrill_build_info{version}`|CLI version, always 1|",
+     "|`backupdrill_snapshots`|Snapshot folders for the project, complete or not|",
+     "|`backupdrill_backup_last_success_timestamp_seconds`|When the newest complete snapshot finished (`createdAt` in its `manifest.json`); 0 if there is none|",
+     "|`backupdrill_latest_snapshot_dump_bytes`|Size of the database dump in that snapshot|",
+     "|`backupdrill_latest_snapshot_storage_files`, `_storage_bytes`|Storage files in that snapshot and their total size; 0 for a database-only backup|",
+     "|`backupdrill_latest_snapshot_tables`, `_estimated_rows`|Tables captured, and the row count Postgres estimated at backup time|",
+     "|`backupdrill_drill_last_run_timestamp_seconds`|When the last recorded drill finished, passed or not; 0 if none|",
+     "|`backupdrill_drill_last_run_passed`|1 if that drill passed, 0 if not|",
+     "|`backupdrill_drill_last_success_timestamp_seconds`|When the last recorded drill that passed finished; 0 if none|",
+     "|`backupdrill_drill_last_success_restore_duration_seconds`|How long the database restore took in that drill|"
+    ]
+   ],
+   [
+    "equal",
+    437,
+    446,
+    396,
+    405
+   ],
+   [
+    "replace",
+    446,
+    461,
+    405,
+    406,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    461,
+    466,
+    406,
+    411
+   ],
+   [
+    "replace",
+    466,
+    479,
+    411,
+    412,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    479,
+    481,
+    412,
+    414
+   ],
+   [
+    "replace",
+    481,
+    482,
+    414,
+    415,
+    [
+     "`backupdrill` follows semantic versioning. From **1.0.0** onwards the"
+    ]
+   ],
+   [
+    "equal",
+    482,
+    499,
+    415,
+    432
+   ],
+   [
+    "replace",
+    499,
+    506,
+    432,
+    439,
+    [
+     "- The PostgreSQL.org software catalogue lists backupdrill under Administration/development tools.",
+     "- The pgAdmin blog aggregator carries our guide to backing up a Supabase database with pgAdmin's Backup and Restore dialogs.",
+     "- backupdrill on StackShare.",
+     "- A ZAP success story describes the weekly ZAP baseline scan we run against our website.",
+     "- The agent skill in `plugin/` is also published on the Tessl registry and LobeHub.",
+     "- The backupdrill/supabase-backup orb runs backups and restore drills in CircleCI pipelines.",
+     "- Our HackerNoon author page, with an article on five ways Supabase backups fail and how to test restores for each."
+    ]
+   ],
+   [
+    "equal",
+    506,
+    508,
+    439,
+    441
+   ],
+   [
+    "delete",
+    508,
+    509,
+    441,
+    441
+   ],
+   [
+    "equal",
+    509,
+    510,
+    441,
+    442
+   ]
+  ],
+  "at": "2026-11-25"
  }
 }

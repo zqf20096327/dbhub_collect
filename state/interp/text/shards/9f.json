@@ -3638,5 +3638,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c7b59fc9364c": {
+  "identity": {
+   "one_liner": "基于 Java Swing 与 MSSQL 的药房防损桌面系统，按批次 FEFO 出库。",
+   "review": "Curo 是一个 Java Swing 桌面应用，配合 Microsoft SQL Server 数据库，用于药店的销售与库存管理。核心机制包括按批次记录库存并按最早过期批次优先扣减（FEFO）、过期前 7 个月预警、基于 7 天销售速度的自适应补货阈值、处方药核验标记，以及仅限 Owner 角色的账单取消与库存回滚。使用 JDK 17+，需先在 SSMS 中执行 curoDB.sql 初始化数据库并配置 db.properties 凭据。",
+   "highlights": [
+    "按批次（batch_number、exp_date）管理库存，销售时自动从最早未过期批次扣减，跨批次滚动结算",
+    "基于角色（OWNER/CASHIER）的访问控制，账单取消与处方覆盖需 Owner 授权，取消操作在 SQL 事务中将数量回滚到原批次并记录审计日志",
+    "在内存中运行通知管理器，提供 7 个月提前期过期警告与基于 7 天销售速度的低库存提醒，并生成 .txt 热敏小票"
+   ],
+   "use_cases": [
+    "药店日常销售（POS）与批次库存管理",
+    "需要处方核验与账单取消授权留痕的合规场景",
+    "临期药品预警与补货阈值监控"
+   ]
+  },
+  "sha": "c7b59fc9364c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bbd268d1e8c7": {
+  "identity": {
+   "one_liner": "人與 AI 在同一群組協作的自架平台，以訊息、卡片、交接串接工作流程",
+   "review": "Aigile-Switch 是一个让团队成员与其各自的 AI（Claude Code、Codex、opencode 等）在同一群组内收发消息、接卡、回报进度的协作平台，通过 Docker 一行命令自架部署。README 说明 AI 通过接入文字或一行启动命令加入，工作以卡片、验收、交接方式流转；支持 Node 直跑或部署到 Cloudflare Workers。公开部署前需设置 ADMIN_PASSWORD 并置于 HTTPS 反代之后。",
+   "highlights": [
+    "提供群组消息、工作看板（卡片含负责人、状态、交接记录）、「要你处理」汇总页与团队状态页，界面支持繁体中文与英文",
+    "提供多种部署方式：Docker（含 ghcr.io 镜像，amd64/arm64）、Node 22 以上直接 npm start、Cloudflare Workers 一键部署；数据存 SQLite（可选 Postgres），附件与文档存 volume 或 R2",
+    "内置知识库功能：自动抽取 md/txt/docx/pptx/xlsx 文字并分段索引，提供 aigile_kb_read/aigile_kb_search 等 MCP 工具供人和 AI 查询，回答附出处"
+   ],
+   "use_cases": [
+    "团队希望人与各自的 AI CLI 工具在同一群组内协作，通过卡片指派、验收、退回的方式管理工作流转",
+    "需要自架部署并将数据保留在自己服务器或内网的场景，可选用 Docker、Node 或 Cloudflare Workers",
+    "需要将项目文档整理成可搜索知识页，供人类成员和 AI 通过 MCP 工具检索引用的场景"
+   ]
+  },
+  "sha": "bbd268d1e8c7",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

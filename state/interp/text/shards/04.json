@@ -3405,5 +3405,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4cabbe2859d7": {
+  "identity": {
+   "one_liner": "为 Docker Compose 全栈提供单一虚拟时钟的集成测试工具",
+   "review": "ChronoStack 面向 SaaS 开发者，用于在集成测试中统一推进 Postgres、Redis 及各服务容器的虚拟时间，并触发依赖时间的定时任务。它通过 LD_PRELOAD 加载的 C 库拦截时钟读取，无需修改应用代码；基于现有 compose.yml 在独立副本上运行。当前为 Alpha 版（v0.1.0-alpha.10），不支持 Go 等静态链接程序，时间只能前进。",
+   "highlights": [
+    "通过 LD_PRELOAD 库使 now()、Date.now()、Redis 过期等读取返回虚拟时间，单次读取开销约 12–26 纳秒（CI 中有基准与无挂起测试）",
+    "advance 停留在每个虚拟时间点执行声明的 triggers，并等待 BullMQ、Sidekiq、Celery 等队列屏障排空后再继续",
+    "支持 YAML 场景脚本（含虚拟时间内的 HTTP 故障注入、SQL/Redis/HTTP/exec 断言），生成 JSON/Markdown/JUnit 报告，并提供 17 个工具的 MCP 服务器"
+   ],
+   "use_cases": [
+    "测试试用期到期、会话超时、续费、webhook 重试等时间相关逻辑在整栈中的真实行为",
+    "在 CI 中以虚拟时间运行可重复的场景测试，并对比两次运行的报告差异",
+    "模拟 HTTP 依赖在特定虚拟日期时段的宕机、慢响应或按比例失败"
+   ]
+  },
+  "sha": "4cabbe2859d7",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

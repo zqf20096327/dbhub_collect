@@ -3459,5 +3459,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6c905f5552ae": {
+  "identity": {
+   "one_liner": "协调 OpenStreetMap 众包制图任务划分与质检的 Web 应用",
+   "review": "Tasking Manager 是由 Humanitarian OpenStreetMap Team 开发的开源 Web 应用，用于将指定地理区域划分为小任务，供团队协作绘制地图并进行质量复核。它由 Python FastAPI 后端、React 前端和 PostgreSQL/PostGIS 数据库组成，README 提供开发环境搭建指引，用户也可自行部署实例，HOT、TeachOSM、OpenStreetMap US 等多个组织运行着各自的实例。",
+   "highlights": [
+    "将兴趣区域划分为可快速完成的小任务，并标注待绘制与待质量复核的区域",
+    "后端已迁移至 FastAPI（v5），并集成 ohsome Now 统计、iD/Rapid 编辑器与 MapLibre 库",
+    "支持自建实例，README 列出生产/预发布环境及多个第三方部署实例"
+   ],
+   "use_cases": [
+    "灾害响应等人道主义制图活动的任务分发与协作",
+    "社区组织运行 mapathon 或培训场景的制图项目管理",
+    "需要独立部署任务协调平台以运营本地 OSM 制图工作的团队"
+   ]
+  },
+  "sha": "6c905f5552ae",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3b7b174e7a4d": {
+  "identity": {
+   "one_liner": "自托管单用户基础设施支出面板，通过托管商 API 自动同步余额与费用",
+   "review": "面向自建服务器、域名、CDN 等资源的个人用户，用于记录基础设施支出。面板调用 Timeweb Cloud、Hetzner、Vultr、AWS 等 30 余家托管商的 API，定时或手动同步账户余额、资源列表与扣费日期并保存每日快照；无 API 的托管商需手工录入。部署依赖 Docker、PostgreSQL 和带 TLS 的反向代理——会话 Cookie 带 Secure 标记，无 HTTPS 无法登录。",
+   "highlights": [
+    "支持 30 余家托管商的 API 自动同步（余额、资源列表、扣费日期）及每日余额快照，无 API 的托管商可手动维护",
+    "提供按托管商/国家/类型/币种维度的月度与年度支出分析、未来扣费预测；支持多币种换算（可使用俄罗斯央行汇率或手动汇率）",
+    "登录方式包括密码、passkey（WebAuthn）和 Telegram（OpenID Connect），托管商令牌以 AES-256-GCM 加密存储；另提供 REST API 与 MCP 服务器（/api/mcp）"
+   ],
+   "use_cases": [
+    "个人用户集中跟踪散布在多家托管商的 VPS、独立服务器、域名、CDN、对象存储等资源的余额与支出",
+    "需要定期接收低余额、即将扣费、同步失败等 Telegram 通知的场景（支持 SOCKS5 代理）",
+    "通过 REST API 或 MCP 客户端以编程方式读取支出、余额与服务数据"
+   ]
+  },
+  "sha": "3b7b174e7a4d",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "830c87e45647": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL/PostGIS 的 NASA GISTEMP v4 温度异常 SQL 分析平台",
+   "review": "该项目将 NASA GISTEMP v4 的 2500 万条网格观测数据载入 PostgreSQL/PostGIS，提供 78 个 SQL 分析库、ENSO 回归模型和 Streamlit 应用（含地图、图表与只读 SQL Playground）。数据管线含清洗与 SHA-256 清单，Playground 通过 sqlglot 校验、只读角色和 EXPLAIN 成本门控限制查询。需 Python 3.11+、Docker 及约 3 GB 磁盘。",
+   "highlights": [
+    "内置 78 个带注释的 SQL 查询，涵盖基础、高级窗口函数、PostGIS 空间连接和 ENSO 相关分析，且全部在 CI 中运行",
+    "SQL Playground 提供只读访问，含 sqlglot 校验器、3 秒超时的受限角色、EXPLAIN 成本门控和 15 个自动校验的挑战题",
+    "性能研究文档对比了五种索引策略，生产设计采用十年分区 + BRIN 索引 + 物化视图"
+   ],
+   "use_cases": [
+    "以 SQL 探索和验证全球及区域温度趋势、纬度带增温速率等气候数据问题",
+    "学习 PostGIS 空间连接、窗口函数及千万行表的索引与分区优化实践",
+    "教学场景中通过 Playground 的示例查询与自动校验挑战练习 SQL"
+   ]
+  },
+  "sha": "830c87e45647",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3655,5 +3655,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "04448d6a7f40": {
+  "identity": {
+   "one_liner": "纯 C 零依赖的嵌入式列式分析引擎，列式分析与图遍历在同一执行 DAG 中融合。",
+   "review": "Rayforce 是一个纯 C 编写的零依赖嵌入式分析引擎，查询以惰性 DAG 构建，经多遍优化器改写后，在执行期编译为字节码，按 1024 行 morsel 分批并行执行。它提供 C API、静态/动态库、Rayfall REPL 查询语言、图算法、HNSW 向量搜索及 mmap 列式存储，MIT 协议，可用 Homebrew 或源码 make 安装。适合需要在应用内嵌入列式分析、图遍历或向量检索能力的开发者。注意其头文件与 API 无跨版本稳定性承诺。",
+   "highlights": [
+    "列式分析与图遍历共享单一操作 DAG，经多遍优化器（常量折叠、谓词下推、分区裁剪等）后以 morsel 驱动字节码并行执行",
+    "图引擎支持 BFS、DFS、Dijkstra、A*、PageRank、Louvain 等，采用双向索引 CSR 存储；另提供多度量 HNSW 向量索引及引擎内文本向量化",
+    "内置 buddy 分配器与线程本地 arena，不使用系统分配器；提供 C API、静态库 librayforce.a、共享库及 Rayfall REPL"
+   ],
+   "use_cases": [
+    "在 C/C++ 或经 FFI 绑定（Python、JS、JVM 等共享库宿主）的应用中嵌入列式分析能力",
+    "需要对图数据执行遍历、PageRank、社区发现等算法的场景",
+    "结合 HNSW 索引进行带过滤条件的向量近邻检索，以及处理时序/市场数据类列式表"
+   ]
+  },
+  "sha": "04448d6a7f40",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

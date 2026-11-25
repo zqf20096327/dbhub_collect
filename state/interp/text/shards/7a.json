@@ -4071,5 +4071,70 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4f35f5e11b26": {
+  "identity": {
+   "one_liner": "基于 Chrome CDP 驱动 Google AI Flow 的命令行工具，含 SQLite 资产目录。",
+   "review": "gflow-cli 是一个 Node.js 命令行工具，通过本机 Chrome 的 CDP 协议访问 Google AI Flow（labs.google/fx/tools/flow），用 Gmail 账号登录后生成图片与视频。视频等消耗积分的操作需显式传入 --confirm-credits 才执行。所有输出记录在 SQLite 目录中，包含 prompt、模型、SHA-256 等元数据。命令支持 --json 输出，并提供 Antigravity 插件目录供 AI 代理使用。安装通过 git clone 后 npm install && npm link 完成。",
+   "highlights": [
+    "提供 --json 参数与 gflow schema 命令，输出机器可读结果",
+    "支持 nano-banana、imagen-4 等图片模型与 veo-3.1 系列视频模型，消耗积分操作需 --confirm-credits 确认",
+    "每次生成以唯一 ID 记录于 SQLite，含 prompt 历史、SHA-256、parentId 谱系信息"
+   ],
+   "use_cases": [
+    "通过命令行批量生成图片/视频，使用 JSON manifest 进行 --resume 与 --dedupe 管理",
+    "供 AI 代理或自动化脚本调用，以 JSON 获取 schema 与生成结果",
+    "维护本地生成资产的 SQLite 编目，按项目、标签与谱系检索"
+   ]
+  },
+  "sha": "4f35f5e11b26",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5cdc7fac83c8": {
+  "identity": {
+   "one_liner": "openGauss 的基于 Web 的可视化运维平台，通过插件整合部署、监控等工具",
+   "review": "DataKit 是 openGauss 社区的 Web 可视化平台，提供一键部署卸载、组件化安装、多版本升级、监控告警、SQL 诊断、数据迁移等功能，面向 openGauss 初级用户和运维人员。平台采用插件机制，插件须装在平台之上；后台默认使用 Intarkdb 内置库，可切换为 openGauss（需专用库及 sysadmin 权限用户）。安装脚本禁止 root 直接执行，启动需提供 AES 密钥。",
+   "highlights": [
+    "提供完整包与最小化包两种发行形式，最小化包可在插件管理页面按需在线或离线下载插件（版本需与平台一致）",
+    "安装脚本支持常规与特权两种模式，特权模式对安装目录、数据目录、密钥文件实行分离属主与权限控制",
+    "后台数据库默认使用内置 Intarkdb，可修改配置文件切换为支持远程连接的 openGauss"
+   ],
+   "use_cases": [
+    "为初级用户或测试使用者提供图形化方式体验 openGauss 功能，降低安装使用门槛",
+    "供运维人员在企业环境中部署、卸载 openGauss 集群并执行日常运维与监控",
+    "开发者基于插件开发脚手架项目开发与平台适配的运维监控插件"
+   ]
+  },
+  "sha": "5cdc7fac83c8",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "df77ac8e1e2a": {
+  "identity": {
+   "one_liner": "为 TORO Server 构建仅含官方可执行文件的最小容器镜像并发布到 GHCR 的仓库",
+   "review": "该仓库用于构建 TORO Server 所用的 Docker 镜像，从官方镜像中仅提取可执行文件，去除 shell 与包管理工具后发布到 ghcr.io/toro-server/。镜像版本跟随上游 FROM 标签，更新由 Dependabot 自动提交（pingcap 三个镜像需手动）。选择哪个镜像由使用方仓库决定。",
+   "highlights": [
+    "从官方镜像中提取可执行文件，生成不含 shell 和包管理工具的最小镜像",
+    "镜像版本直接沿用各 Dockerfile 首个 FROM 的标签，发布至 GHCR",
+    "通过 GitHub Actions 工作流（.github/workflows/images.yml）自动化发布，依赖更新由 Dependabot 提交 PR"
+   ],
+   "use_cases": [
+    "为 TORO Server 相关部署提供 Caddy、Cloudflared、TiDB 等组件的精简镜像",
+    "需要固定、可追溯上游版本号的容器镜像来源"
+   ]
+  },
+  "sha": "df77ac8e1e2a",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

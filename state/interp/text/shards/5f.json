@@ -3433,5 +3433,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "51c17b2f4aec": {
+  "identity": {
+   "one_liner": "用 Rust 标准库从零实现的 SQL 数据库，含双存储引擎与分层架构",
+   "review": "onyxdb 是一个用 Rust 仅凭标准库从零编写的 SQL 数据库，目标是理解数据库内部机制，每层设计附有工程笔记与 ADR。目前存储基础（vfs、pagefile、bufpool、kv）已完成，支持校验和分页、缓冲池和写前日志，每个写操作都在内存文件系统上做崩溃测试；B+树、LSM、MVCC、SQL、服务端等仍在规划中。适合想逐层阅读数据库实现的开发者。",
+   "highlights": [
+    "已完成的 crate 提供 checksummed 固定大小页、freelist、缓冲池和写前日志，fsync 失败后停止写入",
+    "所有层基于简单模型测试，每次写操作后在内存文件系统上模拟崩溃",
+    "每个存储引擎共用一个 kv 接口，含可崩溃的模型引擎；仅依赖 Rust 标准库"
+   ],
+   "use_cases": [
+    "逐层学习数据库内部机制（页、WAL、缓冲池、B树、LSM、MVCC）",
+    "作为教学或阅读项目，配套 engineering-notes 与 ADR 文档",
+    "基于可崩溃测试的存储组件进行二次实验"
+   ]
+  },
+  "sha": "51c17b2f4aec",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

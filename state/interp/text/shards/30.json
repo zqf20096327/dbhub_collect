@@ -3229,5 +3229,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "167aa9d09bf7": {
+  "identity": {
+   "one_liner": "直连公司 ATS 抓取职位、去重归一后的开源职位搜索引擎",
+   "review": "freehire 是一个用 Go 编写的开源职位搜索引擎，直接从 Workday、Greenhouse、Lever 等 ATS 平台抓取公司官网职位，归一化后按稳定键去重，通过 Meilisearch 提供分面全文检索。供求职者自建使用，也提供免密钥 HTTP API、CLI 和 MCP 服务。抓取、富化、索引等为独立 cron worker；LLM 功能需自行配置端点。",
+   "highlights": [
+    "从 ATS 平台抓取公司官网职位并链接原始发布页，职位按稳定键去重",
+    "提供分面全文搜索（地区、工作方式、资历、技能、薪资）及免密钥公开 HTTP API、CLI 和 MCP 服务",
+    "服务器只提供 API，抓取/富化/索引/通知均为独立一次性 worker，支持 Docker Compose 一键启动"
+   ],
+   "use_cases": [
+    "求职者按地区、工作方式、资历等维度检索原始职位来源",
+    "自托管部署，为个人或团队搭建职位目录",
+    "基于公开 API 或 MCP 服务构建职位搜索类工具与代理集成"
+   ]
+  },
+  "sha": "167aa9d09bf7",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "589585f5dc68": {
+  "identity": {
+   "one_liner": "Tempo 链索引器，以 PostgreSQL+ClickHouse 混合存储提供 SQL/API/CLI 查询。",
+   "review": "tidx 是 Tempo 链的索引器，从 Tempo 节点摄取区块、交易和日志，通过 SQL、HTTP API 和 CLI 提供查询。它采用分层存储：PostgreSQL 保存热窗口数据支持 OLTP 点查，ClickHouse 保存全量归档支持 OLAP 分析，并通过 engine/source 参数路由查询。部署方式包括 Docker 或 Rust 源码编译，支持 sync/serve 分离运行以独立扩展只读 API。",
+   "highlights": [
+    "分层存储：PostgreSQL 热窗口（可配置如 30 天）+ ClickHouse 全量归档，统一查询路由",
+    "支持按 ABI 签名解码事件与函数 calldata，无需预注册",
+    "提供 REST、SQL、CLI 三种查询入口，并支持物化视图管理"
+   ],
+   "use_cases": [
+    "分析仪表盘与代币、DEX 活动追踪",
+    "区块浏览器与钱包余额查询",
+    "为基于 Tempo 构建的应用提供结构化链上数据服务"
+   ]
+  },
+  "sha": "589585f5dc68",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "de51e4266e2c": {
+  "identity": {
+   "one_liner": "错题笔记本（WQN）：基于 Next.js 与 Supabase 的错题追踪复习 Web 应用",
+   "review": "WQN 是一个 Web 应用，供学生按笔记本记录、组织并复习答错的题目。支持三种题型、富文本编辑、标签分类、基于会话的复习流程，并提供统计仪表盘与 AI 题目提取。项目采用 Next.js + TypeScript + Supabase（PostgreSQL/Auth/Storage），依赖 Google Gemini 与 Cloudflare Turnstile 等外部服务，遵循 GPL-3.0 协议。",
+   "highlights": [
+    "支持多色笔记本、三种题型（选择/简答/扩展题）、TipTap 富文本与 LaTeX 公式、图片 PDF 附件及自动判分",
+    "提供 Smart Sets 题组、可暂停恢复的复习会话、基于 PostgreSQL 全文检索的公开发现页及社交互动统计",
+    "包含统计仪表盘（热力图、状态环形图、进度折线图）、Gemini AI 图片提取题目、Turnstile 验证码与 GDPR cookie 合规机制"
+   ],
+   "use_cases": [
+    "学生按学科笔记本管理错题并跟踪 Wrong/Needs Review/Mastered 状态",
+    "定期开展结构化复习会话并查看掌握度统计",
+    "教师或学生发布公开题组供他人检索与收藏"
+   ]
+  },
+  "sha": "de51e4266e2c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

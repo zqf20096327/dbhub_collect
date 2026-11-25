@@ -2844,5 +2844,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7a268b4235d3": {
+  "identity": {
+   "one_liner": "对 Claude Code 会话历史做按项目语义搜索的 Go CLI",
+   "review": "session-indexer 是一个 Go 编写的 CLI 工具，把 Claude Code 的 JSONL 会话记录解析入项目内 .claude/sessions.db（SQLite），检索用 bge-m3 向量（经 Ollama），Ollama 不可用时回退 FTS5 BM25。面向单机单人开发者，检索通过 /recall 或 search 命令手动触发；Stop 钩子在会话结束自动 mine，mine 幂等可重放。还提供可选的 distill/facts 层从片段中抽取三元组事实，并有基于 LoCoMo 基准的检索评估命令。",
+   "highlights": [
+    "将 JSONL 会话记录经 mine 命令写入每项目独立 SQLite 库，插入幂等，可整库重建",
+    "语义检索用 Ollama 的 bge-m3 嵌入（1024 维），无嵌入时自动回退 FTS5 BM25，Score 输出余弦相似度或 BM25 排名",
+    "提供 distill/facts 事实层（--context-cap、--batch 成本控制参数）及 sessions/list/show 等无查询浏览命令"
+   ],
+   "use_cases": [
+    "隔周回到某项目时，按语义查找历史会话中关于某决定的讨论内容",
+    "会话结束时自动归档 transcript，并通过 /session-end 保存接续交接（session-state.md）",
+    "需要离线、按项目隔离的本地会话检索，不依赖集中式记忆服务"
+   ]
+  },
+  "sha": "7a268b4235d3",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "91d92e976bc1": {
+  "identity": {
+   "one_liner": "基于 Tauri v2 的跨平台本地开发环境管理桌面应用",
+   "review": "Workbench 是一个用 Tauri v2、Rust 与 SvelteKit 构建的桌面应用，用于管理本地 Web 服务（Caddy、Apache、MariaDB、Redis 等）、PHP/Node.js 等运行时多版本、.test 本地 HTTPS 域名及开发工作区。面向本地 Web 开发者；通过 workbench-shim 将 CLI 调用路由到默认版本或项目 .workbench.toml 固定版本。macOS 公测版为 ad-hoc 签名，非 Developer ID 公证，安装时可能需处理 Gatekeeper 限制。",
+   "highlights": [
+    "支持安装、启停和监控 Caddy、Apache HTTP、MariaDB、Redis、phpMyAdmin，含日志实时流与系统托盘控制",
+    "提供 PHP、Composer、Node.js、Flutter 多版本下载与切换，及 rustup 工具链管理",
+    "支持扫描工作区中的 Laravel/PHP/SvelteKit/Node.js/Flutter/Rust 项目，通过移除 node_modules、vendor 等可重建产物实现存储休眠"
+   ],
+   "use_cases": [
+    "在 macOS、Linux 或 Windows 上统一管理本地 Web 服务与多版本运行时",
+    "为不同项目通过 .workbench.toml 固定各自的 PHP/Node.js 版本",
+    "通过休眠闲置项目（删除可重建产物）释放磁盘空间，并按需恢复"
+   ]
+  },
+  "sha": "91d92e976bc1",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

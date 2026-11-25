@@ -3375,5 +3375,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4a7894e8d1ad": {
+  "identity": {
+   "one_liner": "面向多格式构建产物的对抗 AI 逆向代理的防御 MCP 服务器与 CLI",
+   "review": "BLA 是一个开源的 MCP 服务器与 CLI 工具，用于对 JS/TS、Electron ASAR、WASM、Python、原生二进制、SQLite、GGUF/Safetensors、Android DEX 等构建产物进行加固，旨在对抗 AI 逆向工程代理。工作流程为 audit → protect → verify，通过注入格式合法的诱饵数据、触发分析器资源预算等机制实现。适用于保护自有软件发布物的开发者与安全团队，仅限防御用途。CLI 通过 npx 运行，也可通过 setup 命令注册到编码代理，或作为 Vite/Rollup/Webpack/esbuild 插件在打包阶段使用。",
+   "highlights": [
+    "支持对 JS/TS、Electron ASAR、WASM、SQLite、GGUF/Safetensors、Android DEX 等多种格式执行 audit → protect → verify 流程",
+    "提供 MCP 工具（bla_weave_plan、bla_harden、bla_verify 等），可注册到 Claude Code、Cursor、Codex 等编码代理实现代理驱动的闭环防御",
+    "提供 Vite/Rollup/Webpack/esbuild 打包插件，可在构建阶段处理 JS chunk、替换 SourceMaps 为 VLQ v3 honey maps 并加固 WASM 资产"
+   ],
+   "use_cases": [
+    "对自有软件的发布产物（如 Electron 应用、原生二进制）进行防 AI 逆向加固",
+    "在打包构建流程中集成防御（替换 SourceMaps、加固 WASM 等）",
+    "通过编码代理（如 Claude Code）以自然语言提示触发自动化加固工作流"
+   ]
+  },
+  "sha": "4a7894e8d1ad",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "81fdd35559f3": {
+  "identity": {
+   "one_liner": "开源 SaaS 生命周期邮件引擎，流程由提示词编译，基于 Postgres 自托管。",
+   "review": "Claros 是一个自托管的生命周期邮件引擎，面向 SaaS 团队。用户用自然语言描述流程，LLM 仅在编译和内容生成阶段介入，生成确定性执行计划后由纯 Postgres 引擎运行，无需 Redis 或消息队列。AI 起草的邮件默认进入人工审批队列；部署只需一个 Docker 镜像和一个 Postgres 数据库。",
+   "highlights": [
+    "提示词定义的流程被 LLM 编译为确定性执行计划，执行路径不涉及 LLM 调用",
+    "AI 起草的邮件默认进入审批队列，支持按流程设置自动发送",
+    "支持 Resend 和 SMTP 传输、Segment 兼容的事件接入接口、RFC 8058 一键退订"
+   ],
+   "use_cases": [
+    "需要自托管并掌控用户数据与邮件传输通道的 SaaS 生命周期邮件运营",
+    "希望 AI 起草邮件但要求人工审批后发送的团队",
+    "通过 Segment 兼容接口接收事件并基于生命周期状态或留存网格分群触发流程"
+   ]
+  },
+  "sha": "81fdd35559f3",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

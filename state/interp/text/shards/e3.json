@@ -3420,5 +3420,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1882361d933a": {
+  "identity": {
+   "one_liner": "面向 F&B B2B 的内部 ERP，用 NLP 将文本订单解析为菜单项并管理库存。",
+   "review": "面向食品饮料 B2B 业务的内部 ERP 系统，将 WhatsApp/邮件/电话中的自由文本订单经 NLP 解析为菜单项与数量，在 PostgreSQL 中按配方核算库存并以事务扣减（含乐观锁），Redis 缓存快照与解析结果（失效时 fail-open），PHP 8.2 仪表盘渲染订单、库存与预测数据。以 Docker Compose 编排四个服务，支持 Vercel + Neon 免费层部署。默认仪表盘完全公开，可配置登录模式与按 IP 限流；项目定位为 AI Engineer 作品集。",
+   "highlights": [
+    "NLP 订单解析器将自由文本转为菜单项与数量，输出 MENU_NOT_FOUND、QTY_MISSING、QTY_AMBIGUOUS、DUPLICATE_LINE、LOW_CONFIDENCE 等警告",
+    "库存扣减在单个 PostgreSQL 事务中完成，防止负库存并支持基于 version 的乐观锁，订单须所有 item 的 qc_logs 为 pass 才能置为 fulfilled",
+    "提供 REST API（解析订单、库存查询、订单确认/QC/取消/分配、预测等 16 个端点）、按 IP 限流（默认读 120/分、写 30/分）及 GitHub Actions CI（php -l、ruff、pytest）"
+   ],
+   "use_cases": [
+    "F&B B2B 场景中将 WhatsApp、邮件、电话来的文本订单快速转为结构化菜单项并核对库存",
+    "需要本地 Docker Compose 一键启动或通过 Vercel + Neon 免费层在线演示 ERP 订单流转的展示项目",
+    "演示订单全生命周期管理（解析→下单→确认→QC→库存分配→取消）及按菜单需求预测的内部运营仪表盘"
+   ]
+  },
+  "sha": "1882361d933a",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -4081,5 +4081,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c9701ba3eb26": {
+  "identity": {
+   "one_liner": "用 Rust 从零实现的 schemafull 存储引擎，走 PostgreSQL 线协议",
+   "review": "RasterizedDB 是用 Rust 编写的 schema-full 数据库，实现 PostgreSQL v3 线协议，psql、驱动与 ORM 可直接连接；提供 MVCC 事务、WAL 崩溃恢复、位切片 SIMD 过滤索引和后台空间回收。x86-64 版本要求 AVX2 指令集，SQL 支持范围见 docs/postgres-compatibility.md。",
+   "highlights": [
+    "实现 PostgreSQL、MySQL/MariaDB、SQL Server（TDS 7.4/8.0）及自有原生四种线协议，可同时运行",
+    "支持 MVCC 事务、savepoints、WAL 检查点、多主复制（TLS 1.3）、S3 备份与 PITR、数据库分支",
+    "子 subsystem 以 Cargo feature 划分，可通过 --no-default-features 裁剪构建；行扫描使用 512 行每 SIMD 寄存器的位切片指纹索引"
+   ],
+   "use_cases": [
+    "以 PostgreSQL 客户端协议接入的现有驱动/ORM 应用，需迁移到独立存储引擎",
+    "需在备份、分支、KV 存储、MySQL/TDS 协议等功能上按需裁剪体积的自托管部署",
+    "通过 Docker、Arch 包或 musl 静态二进制在 Linux/Windows x86-64 与 ARM64 上部署"
+   ]
+  },
+  "sha": "c9701ba3eb26",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "135d10dd8787": {
+  "identity": {
+   "one_liner": "基于 ClickHouse 服务器的管理与诊断工具集，含管理与监控组件",
+   "review": "clickhouse-tools 是 Yandex 维护的 ClickHouse 管理与诊断工具集，包含 chadmin（管理）、ch-monitoring（监控）和 keeper-monitoring（Keeper/ZooKeeper 监控）三个组件。工具须在与 ClickHouse 服务器相同的主机上运行；通过匿名文件（0600）向 clickhouse-client 传递 TCP/TLS 凭据，退出后清理。构建依赖 make，产出 Python wheel 包，用 pip 或 uv tool install 安装。",
+   "highlights": [
+    "提供 chadmin、ch-monitoring、keeper-monitoring 三个组件，覆盖管理与监控",
+    "通过 0600 权限匿名文件传递 TCP/TLS 凭据，客户端退出后清理描述符与目录，错误仅报告退出码",
+    "通过 make build 构建为 Python wheel 包，支持 pip install 或 uv tool install 安装"
+   ],
+   "use_cases": [
+    "运维人员在与 ClickHouse 服务器同主机上执行管理与诊断操作",
+    "对 ClickHouse 及 ClickHouse Keeper / ZooKeeper 进行监控",
+    "需要凭据不经命令行参数或环境变量明文暴露的客户端调用场景"
+   ]
+  },
+  "sha": "135d10dd8787",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1b7ebcbd8ed9": {
+  "identity": {
+   "one_liner": "阿拉伯语RTL虚拟总部模拟平台，以11层楼层与32表数据库驱动。",
+   "review": "这是一个交互式Web模拟平台，用于呈现MOTRIX AI工作室（埃及亚历山大）的虚拟总部，包含L1-L11共11个楼层：AI员工与代理、实时会议、审批制组织架构、CEO指挥中心及半自主运营引擎。数据在请求时从实际数据库表派生，演示数据标记为demo；依赖OAuth登录与TiDB数据库，冷启动首个请求需约10-25秒。",
+   "highlights": [
+    "实现11个已验证楼层，包含AI员工、实时会议、审批门控组织架构与CEO指挥中心",
+    "采用React 19/Vite 7/tRPC v11/Drizzle ORM栈，单一32表数据库支撑所有界面与测试",
+    "提供serverless部署配置，支持Vercel以catch-all函数方式部署Express应用"
+   ],
+   "use_cases": [
+    "需要部署交互式虚拟总部演示站点的团队",
+    "希望以数据库实时派生数据驱动界面展示的场景",
+    "需要支持阿拉伯语RTL界面的Web应用项目"
+   ]
+  },
+  "sha": "1b7ebcbd8ed9",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

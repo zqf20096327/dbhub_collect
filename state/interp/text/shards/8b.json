@@ -3050,5 +3050,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "914169ae5f9c": {
+  "identity": {
+   "one_liner": "Text-to-SQL 的感知权限的 schema 选择器，只把调用者可读的表送入提示词",
+   "review": "schemagate 是一个面向 text-to-SQL 流程的 schema 选择库：先按调用者身份和角色过滤目录，再从剩余表中选取问题相关表生成 DDL 提示，支持 Postgres、Oracle、MySQL、SQL Server、SQLite，并可接入 LangChain、LlamaIndex、MCP 等代理。选择器基于 BM25 与离线哈希嵌入器，不调用模型；依赖仅 SQLAlchemy，pip 即可安装。注意 README 说明在小 schema（如 BIRD 中位 7 表）削减空间有限，且被选表可能遗漏查询所需表。",
+   "highlights": [
+    "按调用者身份先过滤目录，无权表不出现在提示词中",
+    "选择器本地离线运行（BM25 加哈希嵌入器），不调用模型",
+    "支持 Postgres、Oracle、MySQL、SQL Server、SQLite，可配合 LangChain、LlamaIndex、MCP 使用"
+   ],
+   "use_cases": [
+    "为 text-to-SQL 代理在生成 SQL 前做权限感知的表裁剪",
+    "大型数据库上缩减每次提问携带的 schema token",
+    "在无 API key 环境下生成可选表的 DDL 提示词"
+   ]
+  },
+  "sha": "914169ae5f9c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c7fd9e976562": {
+  "identity": {
+   "one_liner": "基于 Next.js 的开源实时任务管理器，含看板、冲刺、文档与 MCP 服务器。",
+   "review": "Orbit 是一个 Apache-2.0 许可的开源任务管理器，提供 issue、看板、冲刺、项目、文档与分析功能，变更通过 websocket 实时同步。技术栈为 TypeScript、Next.js、Drizzle、Postgres，运行于 Cloudflare Worker 或 Node/Docker。仓库目前处于自托管 Preview 阶段，README 明确说明尚未达到受支持的生产版本，部署需要 Postgres 与 S3 兼容存储，生产构建要求至少配置一种登录方式。",
+   "highlights": [
+    "支持 issue、冲刺、项目、里程碑、文档、看板视图与范围/吞吐/流失等分析",
+    "内置 MCP 服务器，提供约六十余个工具，仅经 OAuth 授权，权限继承授权人策略",
+    "变更写入 Postgres 后经同步枢纽按权限扇出，客户端采用缓存补丁方式更新"
+   ],
+   "use_cases": [
+    "团队用 issue、冲刺与看板跟踪开发工作并查看燃尽与分析数据",
+    "在文档中记录与 issue 关联的项目说明并可生成自包含 HTML 页面",
+    "让支持 MCP 的 AI 助手读取看板、创建或查询任务"
+   ]
+  },
+  "sha": "c7fd9e976562",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

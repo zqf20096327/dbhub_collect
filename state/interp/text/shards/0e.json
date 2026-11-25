@@ -3340,5 +3340,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "58d06d33100b": {
+  "identity": {
+   "one_liner": "面向 Claude Code/Codex 的本地会话记忆工具，SQLite 存储，MCP 提供 10 个工具",
+   "review": "CogniCore 为 Claude Code 和 Codex 提供本地优先的会话记忆：hooks 在会话结束时提取决策、待办和具体值，存入 SQLite（默认 ~/.cognicore/mcp，保存前脱敏），下次会话启动时提供约 700 token 的简报，agent 可用 cognicore_recall 补查。检索用进程内 BM25 加多跳，不依赖向量库或 embedding 服务，无需模型 API key。面向在同一项目中跨会话、跨 agent 接续工作的开发者。安装为 pipx install cognicore-env[mcp] 后运行 cognicore install；支持 hosted 同步连接器和 Python SDK；Apache 2.0。",
+   "highlights": [
+    "hooks 自动捕获会话中的决策、开放任务和精确值（工单 ID、文件路径），检测到的机密在保存前脱敏",
+    "按 Git 仓库分组会话（含子目录与 worktree），BM25 + 多跳检索在进程内运行，无需向量库或 embedding 服务器",
+    "提供本地 stdio MCP 服务器与可选 hosted 同步连接器，另有 Python SDK（SQLiteBackend）及只读会话查看器"
+   ],
+   "use_cases": [
+    "在 Claude Code 与 Codex 之间交接编码任务：新会话启动简报包含上次的后续事项及背景",
+    "团队将长期决策与规则保存在 .cognicore/context.md，通过 pull request 审查变更",
+    "用 Python SDK 给自有 agent 加可搜索的 SQLite 记忆存储，记录成败与原因"
+   ]
+  },
+  "sha": "58d06d33100b",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49b6a79f9bc0": {
+  "identity": {
+   "one_liner": "纯 PHP+MySQL 的高校官网与四角色门户系统，含申请到入学全流程",
+   "review": "这是一个虚构院校的作品集项目，用原生 PHP 与 MySQL 8 实现高校官网及申请人、学生、教师、职员、管理员五类门户，覆盖申请、审核、录取、课表考勤成绩等完整招生周期。已归档为只读，v2.0.0 为最终版本，提供 Docker 与 XAMPP 两种部署方式。缓存依赖 Redis，缺省回退到 APCu；ClamAV 未就绪时按配置拒绝上传。",
+   "highlights": [
+    "支持申请人注册、选报最多三个专业、上传材料，管理员审核后发放学号与临时密码并自动注册第一学期课程",
+    "上传管线包含文件类型白名单、魔数校验、ClamAV 扫描、内容重建（WebP 重编码/Ghostscript 重建 PDF）及按所有权授权下载",
+    "数据库含 30 张表与 2 个视图，通过唯一约束、CHECK 约束和 SELECT ... FOR UPDATE 处理唯一性与并发"
+   ],
+   "use_cases": [
+    "作为高校招生到教务全流程（申请、审核、录取、课表、成绩、缴费）的参考实现",
+    "作为 PHP 8 项目中安全控制（CSP、CSRF、会话管理、上传加固）与 Playwright E2E 测试的学习样本",
+    "需要 Docker 或 XAMPP 快速部署的多角色门户系统演示环境"
+   ]
+  },
+  "sha": "49b6a79f9bc0",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "195273e14b67": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 服务器与 CLI，用 SQLite 向量检索实现可持久化的智能体内存",
+   "review": "MemLite MCP 提供仅在本机运行的 MCP 服务器和命令行工具，用于给 AI 智能体保存跨会话记忆。它基于 libSQL 存储数据并内建向量检索，用 FastEmbed 在设备上通过 ONNX 生成嵌入，Rust 编译为单一二进制文件，无需容器或独立数据库服务。记忆按项目路径分库，支持 12 个 MCP 工具，也可直接用 CLI 管理。",
+   "highlights": [
+    "本地运行：SQLite 存储，嵌入由 FastEmbed/ONNX 在设备端 CPU 生成",
+    "语义检索：DiskANN 检索加关键词重排，支持带元数据过滤的精确余弦扫描",
+    "知识图谱：支持有向关系、邻居、遍历、最短路径与统计，记忆含 8 种类型、信任分数与可选时间衰减"
+   ],
+   "use_cases": [
+    "为跨会话工作的 AI 编码智能体持久化项目决策、惯例与尝试记录",
+    "多智能体共享同一项目的记忆数据库（按项目路径隔离，含 worker 选举与代理接管机制）",
+    "不依赖托管服务、在本地管理可检索记忆：可通过 `memlite tool` 等 CLI 命令直接列表与搜索"
+   ]
+  },
+  "sha": "195273e14b67",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

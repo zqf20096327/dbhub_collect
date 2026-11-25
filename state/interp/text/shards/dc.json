@@ -2913,5 +2913,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "90d6e7e77440": {
+  "identity": {
+   "one_liner": "为 PostgREST 补充 /txn 端点，在单个原子事务中执行多项 CRUD。",
+   "review": "PostgRESTxn 提供 HTTP 端点，通过请求 DSL 在单个事务中对 Postgres 执行多项 CRUD 操作，支持操作间引用与 JSON 过滤器，访问控制沿用 PostgREST 的角色+JWT（RLS）架构。用 Elixir 编写，以无状态 OCI 镜像分发，需自行配置 anon 角色与暴露 schema。README 注明 DSL 尚不支持 RPC，过滤与操作符仍在扩展中。",
+   "highlights": [
+    "单一 HTTP 端点在原子事务中执行多项 CRUD 操作，事务遵循 RLS 策略",
+    "DSL 支持跨操作引用与多种操作符和过滤器，JWKS/OIDC 公钥获取",
+    "无状态服务，提供 Admin API 输出 Prometheus 性能指标"
+   ],
+   "use_cases": [
+    "需要将多个读写操作作为一个原子事务提交的 REST 客户端",
+    "已使用 PostgREST 角色/RLS/JWT 架构的 Postgres 应用",
+    "可水平扩展的无状态部署（k8s、VM、serverless 等）"
+   ]
+  },
+  "sha": "90d6e7e77440",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

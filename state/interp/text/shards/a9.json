@@ -3622,5 +3622,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a17f2e2aabab": {
+  "identity": {
+   "one_liner": "自托管的漏洞赏金范围追踪器，聚合四大平台项目与范围变更历史",
+   "review": "HuntDeck 是一个以单个 Docker 容器运行的自托管范围追踪工具，用用户自己的凭据从 HackerOne、Bugcrowd、Intigriti、YesWeHack 拉取项目（含私人邀请），将范围与变更历史存入本地 SQLite 数据库，并提供 HuntScore 排名、recon 导出、REST API 与通知。它无登录机制，仅发布在 127.0.0.1，通过 Docker Compose 安装，首次启动会下载约 35 MB 的公开项目历史种子数据。",
+   "highlights": [
+    "用用户凭据聚合 HackerOne、Bugcrowd、Intigriti、YesWeHack 四平台的项目与私人邀请，保存范围及含词级差异的变更历史",
+    "提供 HuntScore 排名、子域名枚举结果的范围检查接口、Burp/ZAP/Caido 范围文件导出、REST API 与 OpenAPI 描述",
+    "支持 Discord、Telegram 和 webhook 通知，凭据在数据库中加密存储，容器以非 root 用户和只读根文件系统运行"
+   ],
+   "use_cases": [
+    "漏洞赏金猎人集中查看多平台项目范围、新增范围变化与待接受邀请",
+    "将范围数据接入 recon 管道，过滤 subfinder 等工具输出中的在范围内目标",
+    "跟踪自己提交的报告状态、验收率与收入统计，并通过通知渠道接收范围更新提醒"
+   ]
+  },
+  "sha": "a17f2e2aabab",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7882d15c8035": {
+  "identity": {
+   "one_liner": "基于 MCP 与 hooks 的 Claude Code 持久化记忆插件，单 SQLite 库提供 FTS5 检索",
+   "review": "claude-mem-lite 是面向 Claude Code 的跨会话记忆系统，以 MCP 服务器形式运行，通过七类 hook 事件自动捕获会话中的决策、修复与上下文，存入单一 SQLite 数据库并用 FTS5 BM25 加查询扩展检索。README 注明成本节省数字为架构估算而非实测基准，检索指标 0.90 Recall@10 附复现命令。",
+   "highlights": [
+    "通过 SessionStart、PreToolUse、PostToolUse、Stop 等七个 hook 事件自动记录观察，无需手动调用记忆工具",
+    "检索实现包含 FTS5 BM25、AND→OR 救援、伪相关反馈与概念共现；--deep 模式用 Reciprocal Rank Fusion 融合多个 LLM 改写查询",
+    "零外部服务依赖，仅需 Node.js 与 3 个 npm 包，数据存储于单一本地 SQLite 数据库"
+   ],
+   "use_cases": [
+    "在多次 Claude Code 会话间保留编码决策、bugfix 记录与项目上下文",
+    "Bash 命令出错时自动检索记忆中相关历史修复，编辑文件时展示该文件的历史观察",
+    "需要按时间线浏览观察记录、按 decision/bugfix/feature 等类型与重要性分级归档的项目记忆管理"
+   ]
+  },
+  "sha": "7882d15c8035",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "862151959bf4": {
+  "identity": {
+   "one_liner": "用 Roslyn 将 .NET 解决方案索引到 SQLite 的语义图谱 CLI，供 AI agent 查询代码。",
+   "review": "Lurp 通过 Roslyn 加载 .NET 解决方案，将符号、类型化关系、源码区间和证据等级持久化到 SQLite 数据库，随后提供上下文胶囊、影响面分析、语义 diff、全文检索等查询。面向需要在 C# 代码库中工作的 AI agent 和开发者。需要 .NET 10 运行时，仅支持 Windows 和 Linux；索引前须先 restore，未执行源码生成器，快照默认保留 3 份。",
+   "highlights": [
+    "提供 context、impact、diff、search、grep、dead-candidates 等 17 个 CLI/MCP 查询模式，返回带 provenance（compiler_proved 到 runtime_unknown）的证据等级",
+    "context 模式按 token 预算组装代码胶囊，被省略的层级会具名标注，可单独按 tier 无预算拉取",
+    "支持快照绑定索引与语义 diff，默认保留最新 3 个完整快照，可用 pin-snapshot 额外固定快照"
+   ],
+   "use_cases": [
+    "为 AI agent 提供按需检索的代码上下文，替代每轮重新搜索解析整个解决方案",
+    "在改动前查询符号的上游依赖与影响范围（impact --direction=upstream）",
+    "对比两次索引快照间的语义变化，或查找死代码候选（dead-candidates）"
+   ]
+  },
+  "sha": "862151959bf4",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "280267a0fb5a": {
+  "identity": {
+   "one_liner": "自托管于个人 AWS 账户的 AI 代理长期记忆存储，MCP 服务形式",
+   "review": "Memrain Lite 是单人格式长期记忆存储，把笔记、决策和聊天记录存为带版本历史的页面，供 Claude、ChatGPT、Codex 等 MCP 客户端搜索。每次检索返回带来源指针的段落；代理负责撰写答案，本身不提供聊天功能。部署需 AWS 账户与 Bedrock 访问权限、Terraform 和一个域名；无 AWS 时可仅以关键词模式在本地 Docker 运行。MIT 许可。",
+   "highlights": [
+    "提供 29 个 MCP 工具，覆盖搜索、页面读写、版本回滚、链接与标签管理",
+    "混合检索：关键词与 Bedrock Titan 向量嵌入融合排序，另含精确短语查询；无 AWS 时仅关键词可用",
+    "入口剥离 API 密钥、令牌和数据库密码；每个客户端密钥独立授权、可撤销，支持每日模型花费上限"
+   ],
+   "use_cases": [
+    "将个人笔记、决策记录与 ChatGPT/Claude/Codex 聊天导出导入为可搜索页面，供代理检索引用",
+    "需要每条检索结果附带来源出处以便核对的代理工作流",
+    "希望数据保留在自己 AWS 账户内、避免第三方遥测的个人用户"
+   ]
+  },
+  "sha": "280267a0fb5a",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

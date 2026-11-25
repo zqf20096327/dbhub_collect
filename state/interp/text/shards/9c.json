@@ -3720,5 +3720,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ba416f233b16": {
+  "identity": {
+   "one_liner": "孟加拉国行政区划数据的 npm 包与多数据库导出库",
+   "review": "该包内置孟加拉国 8 个分区、64 个县、495 个乌帕齐拉和 26 个都市辖区数据，提供级联查询、名称校验、反向查询、别名拼写与搜索 API，数据捆绑本地加载无网络调用，支持 CommonJS、ESM 与 TypeScript 并含类型定义；同一数据另提供 MySQL、PostgreSQL、SQLite、MongoDB 导出文件及 CDN 上的 JSON 接口，供非 JavaScript 项目使用。",
+   "highlights": [
+    "零依赖 npm 包，内置数据，所有函数为同步调用，无网络请求",
+    "支持 2018 年官方拼写别名（如 Cumilla/Comilla），名称大小写不敏感且自动去除空白",
+    "提供 MySQL、PostgreSQL、SQLite、MongoDB 四种导出格式及 jsDelivr CDN 的 JSON 数据 URL"
+   ],
+   "use_cases": [
+    "构建孟加拉国地址表单的分区-县-乌帕齐拉级联下拉选择",
+    "校验用户输入的行政区划名称或查询某地所属县与分区",
+    "非 JavaScript 项目通过 SQL 导入或 HTTP JSON 接口使用该数据集"
+   ]
+  },
+  "sha": "ba416f233b16",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b409f6f4dcd5": {
+  "identity": {
+   "one_liner": "纯 Go 的 database/sql 驱动，接收 PostgreSQL 语法并转译到底层 SQLite 执行",
+   "review": "go-postgres 注册为 \"pglike\" 驱动，通过 ncruces/go-sqlite3 将面向 PostgreSQL 编写的 SQL 在本地 SQLite 文件上执行。它做 DDL 类型映射（SERIAL、UUID、NUMERIC 等）、表达式与函数转译、三种 ALTER TABLE 重建实现、PG 风格 information_schema/pg_* 目录视图。NUMERIC 精确视图依赖其自定义函数，文件被其他 SQLite 工具打开时该类视图无法编译。",
+   "highlights": [
+    "接受 PostgreSQL DSN 与 SQL 语法，转译后在 SQLite 文件上执行，文件保持 SQLite 兼容",
+    "提供 DDL 类型映射、表达式/函数转译、ALTER TABLE 重建及 PG 风格目录视图（information_schema、pg_tables 等）",
+    "NUMERIC 使用基于 math/big 的精确十进制函数，支持聚合与 CREATE VIEW 内改写"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 编写的 Go 应用的本地测试与开发环境",
+    "嵌入式使用与 CLI 工具",
+    "需要用本地 SQLite 文件替代 PG 连接的场景"
+   ]
+  },
+  "sha": "b409f6f4dcd5",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

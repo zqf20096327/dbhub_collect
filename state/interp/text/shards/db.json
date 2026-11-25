@@ -3013,5 +3013,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "56a771166332": {
+  "identity": {
+   "one_liner": "基于 PGlite 的 PostgreSQL 竞态复现与 Supabase 迁移 RLS 检查工具",
+   "review": "VibeRaven 是一个 CLI/MCP 工具，用于复现两人并发预订类 PostgreSQL 竞态，并检查 Supabase 迁移中缺失的 RLS 与 Data API 授权。它将迁移文件载入固定的 PostgreSQL 18.6（PGlite WASM 实例），枚举有界语句顺序并按规则断言，失败顺序可逐字节重放。check 需 Node 20+，race 需 Node 24+（启用 JSPI）。README 明示其非安全审计、不覆盖外部 I/O。",
+   "highlights": [
+    "race 命令在单个 PGlite WebAssembly 实例中运行两个带真实锁的独立会话，枚举有界语句顺序并断言规则，失败顺序可逐字节重放",
+    "check 命令读取迁移、客户端代码与环境文件，对每个缺口标注文件和行号",
+    "提供 MCP 接入：本地 stdio 包 @viberaven/mcp 与托管端点 viberaven.dev/mcp，并含本地 Studio 界面（含 Race test 标签页）"
+   ],
+   "use_cases": [
+    "复现并修复两人同时预订最后名额导致的超卖类竞态，验证守卫行等修复方案",
+    "在发布前审查 Supabase 迁移文件中缺失的行级安全（RLS）与 Data API 授权",
+    "配合 Claude Code、Codex 或 Cursor 等编码代理，为项目注入检查指令并通过 MCP 调用工具"
+   ]
+  },
+  "sha": "56a771166332",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "695d81befb8f": {
+  "identity": {
+   "one_liner": "浏览器中的数据库表结构设计器，实时生成多方言 DDL/DCL/ORM 代码",
+   "review": "DDLBuilder（筑表师）是在浏览器中运行的数据库表结构设计工具，用户通过表格定义字段、索引与关系，实时生成 MySQL、PostgreSQL、Oracle 等 16 种方言的建表 DDL、授权 DCL 和 Prisma、TypeORM、SQLAlchemy、GORM、JPA 等 ORM 代码。支持 SQL/CSV/Excel/OpenAPI 导入、schema 对比与 AI 辅助（登录按额度计费）。技术栈为 React 19 + TypeScript + Vite，后端基于 Cloudflare Worker，部分数据保存在当前浏览器本地。",
+   "highlights": [
+    "支持 16 种数据库方言的 DDL/DCL 生成，含 MySQL、PostgreSQL、SQL Server、Oracle、TiDB、达梦、OceanBase 等",
+    "支持解析已有 SQL 导入、ER 图外键配置、MySQL/MariaDB/TiDB 分区表定义，以及五种 ORM 框架模型代码生成",
+    "提供 Schema 规范检查、结构对比迁移 SQL、Mock 数据生成与 AI 建表/索引建议（AI 功能需登录并按额度计费）"
+   ],
+   "use_cases": [
+    "需要为多种数据库方言同时生成建表语句和 ORM 模型的表结构设计工作",
+    "从已有 DDL、CSV/Excel 清单或 OpenAPI 定义导入并整理表结构",
+    "设计分区表、Citus 分布式表，或导出数据字典与结构对比迁移 SQL"
+   ]
+  },
+  "sha": "695d81befb8f",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

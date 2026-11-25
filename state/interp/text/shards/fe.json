@@ -3633,5 +3633,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4fd3bd79a73f": {
+  "identity": {
+   "one_liner": "基于 NestJS 官方认证授权包的登录鉴权脚手架模板",
+   "review": "这是一个基于 @nestjs/authentication 与 @nestjs/authorization 官方包构建的 NestJS 12 认证授权启动模板，面向需要自建认证体系的后端开发者。仓库实现了各协议的 Postgres 存储层、登录/2FA/Passkey/OAuth/API key 等完整路由，并附 100+ 测试。使用需 Node 24.9+、pnpm 与 Docker，v2 相比 v1 为重写，客户端需调整。",
+   "highlights": [
+    "提供会话 cookie、Bearer/刷新令牌、TOTP 2FA、Passkeys、魔法链接、Google/GitHub 登录与个人 API key 等多种登录方式",
+    "基于 Prisma 实现六个存储接口并通过包自带的契约套件测试，支持通过实现接口替换数据库层",
+    "功能开关可关闭对应路由，配置经 zod 校验，错误统一返回 RFC 9457 格式"
+   ],
+   "use_cases": [
+    "需要基于官方包为 NestJS 后端搭建完整登录鉴权流程的项目",
+    "需要会话、令牌轮换、2FA、Passkey、OAuth 与 API key 多种认证方式组合的场景",
+    "需要可作为参考实现自行定制存储层或邮件模板的认证代码库"
+   ]
+  },
+  "sha": "4fd3bd79a73f",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c001160705bb": {
+  "identity": {
+   "one_liner": "本地优先的端侧 AI Agent 持久化执行引擎，以持久化步骤实现崩溃恢复",
+   "review": "LarkX 是嵌入式持久化执行引擎，用于在手机等端侧设备运行 AI Agent 工作流。工作流用 TypeScript 编写，每个操作作为持久化步骤，结果先写入 SQLite 再继续，崩溃后通过 recover() 重放并返回已提交结果。当前处于早期实现阶段，仅支持本地步骤，混合调度未实现。",
+   "highlights": [
+    "提供步骤级持久化与重放机制，已提交步骤在重放时不再执行处理函数",
+    "支持内存存储与 SQLite 存储，纯/幂等/非幂等三类副作用策略",
+    "提供 Node 适配器、React Native/Expo 适配器与 Cactus 模型适配器"
+   ],
+   "use_cases": [
+    "在移动设备上运行需要跨进程中断恢复的端侧 Agent 应用",
+    "设备可能被系统杀死或离线时需保留中间结果的工作流",
+    "需要通过租约与 pid 文件协调单一所有者执行的本地任务引擎"
+   ]
+  },
+  "sha": "c001160705bb",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

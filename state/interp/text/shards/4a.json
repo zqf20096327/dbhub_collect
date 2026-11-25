@@ -3394,5 +3394,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c4b2a9cc86a5": {
+  "identity": {
+   "one_liner": "Go 的 PostgreSQL 任务队列与事务性 Outbox 库",
+   "review": "taskmill 是一个基于 PostgreSQL 的 Go 任务队列与事务性 outbox 库，使用 pgx 或 database/sql 在业务事务中写入任务，事务回滚则任务不产生。任务至少执行一次，支持按 key 顺序执行、死任务保留重试、cron、去重、OpenTelemetry 等。唯一直接依赖 pgx，需 Go 1.26+ 与 PostgreSQL 15+，采用 MIT 许可。",
+   "highlights": [
+    "任务可与业务数据在同一事务内添加，事务回滚则任务不存在",
+    "任务至少执行一次，worker 崩溃后任务由其他 worker 接管，持续失败的任务保留为死任务可重试",
+    "内置 Dashboard 用于查看、重试、取消、删除任务，并支持向 Kafka、NATS、RabbitMQ 发布事件的 outbox"
+   ],
+   "use_cases": [
+    "已使用 PostgreSQL 的 Go 服务需要在事务中调度后台任务",
+    "需要事务性 outbox 模式向消息队列发布事件的场景",
+    "需要任务按 key 有序执行或崩溃后任务不丢失的应用"
+   ]
+  },
+  "sha": "c4b2a9cc86a5",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0f5c6e56b7a": {
+  "identity": {
+   "one_liner": "Rust+React+SQLite 全栈框架，编译为单个二进制，从数据库到 UI 全程类型化。",
+   "review": "northstack 是一个开源全栈 Web 框架，后端用 Rust（axum、sqlx），前端为 React 并采用文件夹式路由，数据层使用 WAL 模式的 SQLite。类型从 SQLite 表结构生成 Rust 类型与 TypeScript 客户端，SQL 查询在编译期校验。整个服务、前端和数据库引擎构建为一个二进制文件，无独立数据库服务。不提供 SSR，页面在浏览器渲染，不适合单机多副本负载均衡部署。",
+   "highlights": [
+    "类型端到端生成：表结构生成 Rust 类型，Rust 过程生成类型化 TypeScript 客户端，SQL 查询编译期检查",
+    "服务器、前端与 SQLite 引擎构建为单个二进制文件，包含后台任务队列与调度器",
+    "通过 just check 运行迁移、代码生成与编译检查，并输出诊断信息"
+   ],
+   "use_cases": [
+    "需要登录的后台应用，如仪表盘、内部工具、SaaS",
+    "在单台服务器上运行多个小型自托管应用",
+    "由编码代理（如 Claude Code、Codex、Cursor）编写和维护的应用项目"
+   ]
+  },
+  "sha": "c0f5c6e56b7a",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

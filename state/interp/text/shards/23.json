@@ -3416,5 +3416,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "23ff49610d93": {
+  "identity": {
+   "one_liner": "自托管的友人小群聊天应用：一个二进制加一个 SQLite 文件，提供文字、语音房间与文件分享。",
+   "review": "Linger 是一个面向熟人小群体的自托管聊天服务端与客户端项目，基于 Rust、Tauri 2 与 React 构建，AGPL-3.0 许可。一人运行服务器，朋友安装应用并凭邀请链接接入，支持 Windows、Linux 和 Android。服务器由一个二进制、一个 SQLite 数据库和上传文件夹组成。当前版本 0.5.5 处于朋友内测阶段，跨网络语音和部分桌面环境仍待验证，且未实现端到端加密，服务器管理员可查看服务器上的数据。",
+   "highlights": [
+    "提供文字房间、语音房间（最多 60 人同时通话，经主机服务器中继）、私信、500 MB 文件上传、屏幕共享（30/60 帧）和语音消息（最长 5 分钟）",
+    "声明零遥测：无分析或崩溃上报（应用仅连接 GitHub 检查更新），上传的图片剥离 EXIF/GPS，语音与屏幕共享不录制",
+    "服务器数据可整体备份迁移，支持导出公开房间与自己的私信（含文件），可在浏览器中打开查看；支持同时连接多个服务器"
+   ],
+   "use_cases": [
+    "想自行运行服务器、供熟朋友圈使用的文字与语音聊天",
+    "需要文件分享、屏幕共享、表情回应、投票等功能的私人小群交流",
+    "希望数据可自主备份与导出、不接受遥测的自托管部署场景"
+   ]
+  },
+  "sha": "23ff49610d93",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "636deae50035": {
+  "identity": {
+   "one_liner": "自托管后端，用单个 Go 二进制加 PostgreSQL 兼容官方 Firebase SDK",
+   "review": "Aruma 是一个自托管后端，通过实现官方 Firebase SDK 的协议，提供 Auth、Realtime Database、Firestore 兼容文档数据库、Cloud Storage 和安全规则服务。面向希望在后端自行运行 Firebase 服务、数据存于自有 PostgreSQL 的开发者和团队。应用通常只需改配置文件；部分平台（iOS Storage、Flutter）需少量适配，Cloud Functions 未实现。项目处于 1.0 之前阶段（v0.5.0），Apache 2.0 许可。",
+   "highlights": [
+    "单个 Go 二进制内置 Next.js 管理面板，依赖 PostgreSQL 18，支持 Docker 部署",
+    "实现 Firebase Auth、Realtime Database、Firestore 兼容文档库、Cloud Storage 与 Security Rules，并提供管理 API",
+    "官方 Firebase 测试套件可直接对 Aruma 运行，已知差异见文档"
+   ],
+   "use_cases": [
+    "在自有 VPS 或服务器上运行与官方 SDK 兼容的 Firebase 类服务",
+    "需要将应用数据保存在自行控制的 PostgreSQL 中的团队",
+    "基于 Firebase SDK 开发、希望只改配置而不改应用代码的项目"
+   ]
+  },
+  "sha": "636deae50035",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79fb1253c6cc": {
+  "identity": {
+   "one_liner": "开源企业内部请求运营门户，流程即数据（H-P-D-I）",
+   "review": "Corelens 是一个面向企业的开源内部请求运营门户，用于集中受理报修、软件申请、证明开具、采购提议等请求。流程状态、步骤、角色与约束存于数据库表而非硬编码；时限按工作日历计算并支持超期升级；每次状态流转写入只增事件日志，可重建实际运行流程并定位瓶颈。核心平台以 /core/v1 API 供其他应用调用。采用 MIT/AGPL-3.0 双许可（流程挖掘服务因使用 PM4Py 为 AGPL）。运行需 Docker 与 Compose v2。",
+   "highlights": [
+    "流程以数据形式存储：状态、步骤、角色、约束与数值均在表中，修改流程不需改动代码",
+    "记录只增事件日志，支持重建实际运行流程并识别流程挖掘中的瓶颈点",
+    "核心平台提供 /core/v1 API，其他应用可通过服务账号调用；可选本地 LLM 仅输出建议，需人工确认后生效"
+   ],
+   "use_cases": [
+    "企业内部报修、软件申请、证明开具、采购提议等请求的集中受理与分派",
+    "需要按工作日历和节假日计算时限、超期自动升级的流程管理场景",
+    "通过 API 平台将请求处理能力集成到其他内部应用的场景"
+   ]
+  },
+  "sha": "79fb1253c6cc",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

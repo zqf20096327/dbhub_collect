@@ -3179,5 +3179,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c04ba426f2cb": {
+  "identity": {
+   "one_liner": "单二进制多节点 Xray 集中管理面板，经 SSH 纳管无 Agent 节点",
+   "review": "xray-panel 是面向个人的多节点 Xray 集中管理面板，以单文件二进制部署（内嵌 Web 界面与 SQLite，无外部依赖），通过 SSH 管理多台节点，节点仅运行官方 Xray 与 Caddy，无需安装面板进程。功能涵盖自动签发证书、三条互补线路配置、节点间中转、多用户订阅下发与双口径流量统计。面板默认只监听本地回环，对外需经反向代理提供 HTTPS；端口被非 Caddy 程序占用时纳管会停止并报出原因。",
+   "highlights": [
+    "单文件二进制内嵌 Web 界面与 SQLite，被管节点仅运行官方原版 Xray 与 Caddy，经 SSH 推送部署，节点无需访问 GitHub",
+    "每台节点提供 Hysteria2（UDP）、VLESS + XHTTP + REALITY（TCP 直连）、VLESS Encryption + XHTTP + TLS（Cloudflare CDN）三条线路，支持节点间 Shadowsocks 2022 中转落地",
+    "通过 REST JSON 接口提供纳管、回读、自检、授权与流量查询，自适应下发 v2rayN 与 Mihomo/Clash 订阅"
+   ],
+   "use_cases": [
+    "在一台面板机上集中管理多台代理节点，统一完成证书签发、线路配置与订阅下发",
+    "节点 IP 被封时切换 CDN 兜底线路，或经入口节点中转至落地节点复用现有端口",
+    "将纳管、线路自检与流量查询等 REST 接口交给脚本或 AI Agent 调用维护"
+   ]
+  },
+  "sha": "c04ba426f2cb",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

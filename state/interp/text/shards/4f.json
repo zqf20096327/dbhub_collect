@@ -3591,5 +3591,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "741170a0e964": {
+  "identity": {
+   "one_liner": "位于编码代理与 Git 之间的 Go 事务运行时，用 42 项 AST 门禁拦截违规提交。",
+   "review": "Nomos 是一个约 20MB 的 Apache 2.0 静态 Go 二进制，安装在编码代理（Claude Code、Cursor、Gemini CLI 等）与 Git 之间。运行 `nomos init` 后，它在 feat/* 分支的 git commit 上执行 42 项多语言 AST 检查（约 24ms 单文件），拦截跳过的测试、空桩函数与泄露的密钥等，并将修复建议返回给代理。基线文件冻结存量债务，只对触及文件设限；不改变用户的现有工作流。",
+   "highlights": [
+    "对 Go、TypeScript、Python、Rust、Ruby、C/C++、Java、Kotlin、C# 等 11 种语言运行 42 项 AST 门禁检查，全部流程不消耗 LLM token",
+    "提供 nomos xray 只读扫描（生成 0-100 评分与热点报告）、pre-tool 安全拦截（阻止读取 ~/.ssh 等敏感路径与 SSRF）以及基于 SQLite 的 mneme.db 经验证记忆（只读 stdio MCP）",
+    "支持可选的 CI 差异变异证明（输出 SARIF 2.1.0）与 --worktrees 隔离 git worktree、INT/SUB 规格先行的多代理并行模式"
+   ],
+   "use_cases": [
+    "在编码代理自动提交代码时自动拦截跳过测试、空桩、超长函数与密钥泄露等行为",
+    "对已有存量代码仓库做基线增量治理：冻结 Day-0 债务上限，仅约束新增改动",
+    "多代理并行开发时用隔离 git worktree 与规格先行（INT/SUB）流程组织任务"
+   ]
+  },
+  "sha": "741170a0e964",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

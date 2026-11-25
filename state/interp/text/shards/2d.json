@@ -3271,5 +3271,51 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "95d3108fd104": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Rust 后端任务队列，移植自 Graphile Worker",
+   "review": "Graphile Worker RS 是 Graphile Worker 的 Rust 重写版，让 Rust 应用以 PostgreSQL 作为队列和协调后端运行持久化后台任务。提供类型化任务处理器、延迟任务、优先级、命名队列、重试、cron 定时任务、CLI 与管理 UI。适用于需要在 Rust 服务或已有 PostgreSQL 触发器场景中处理任务队列的团队。许可为 MIT，默认启用 Tokio、rustls 和 SQLx。",
+   "highlights": [
+    "以 PostgreSQL 为持久化队列，使用 SKIP LOCKED 认领任务，并通过 LISTEN/NOTIFY 实现低延迟唤醒",
+    "支持类型化及批量任务处理器、延迟任务、优先级、重试、job key、命名队列与 cron 定时任务"
+   ],
+   "use_cases": [
+    "在 Rust 应用中运行持久化后台任务（重试、定时、优先级队列）",
+    "将 PostgreSQL 触发器/函数产生的任务导出到独立的工作队列",
+    "与 Node.js 版 Graphile Worker 共享同一 PostgreSQL schema 并行运行"
+   ],
+   "softened": [
+    "highlights:『优雅』删条x1"
+   ]
+  },
+  "sha": "95d3108fd104",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ae6a74b6f273": {
+  "identity": {
+   "one_liner": "WP-CLI 的 wp db 命令包，用 wp-config.php 凭据执行数据库操作",
+   "review": "wp-cli/db-command 是 WP-CLI 的一个命令包，实现 wp db 系列命令，读取 wp-config.php 中的 DB_HOST、DB_NAME 等凭据，执行建库、删库、重置、查询、优化、修复等数据库操作。部分命令依赖 mysql/mysqlcheck 客户端二进制文件；query 命令在客户端不可用时可回退到 WordPress 的 wpdb 执行。适用于已安装 WP-CLI 的 WordPress 站点维护者。",
+   "highlights": [
+    "提供 wp db create/drop/reset/clean/check/optimize/repair/prefix/cli/query 等子命令",
+    "数据库凭据从 wp-config.php 读取，可用 --dbuser/--dbpass 覆盖",
+    "wp db query 在 MySQL/MariaDB 客户端不可用时回退到 WordPress 的 wpdb 执行"
+   ],
+   "use_cases": [
+    "通过 wp db query 在命令行执行 SQL 文件或查询",
+    "检查、优化或修复 WordPress 数据库表",
+    "重置或按 $table_prefix 清理站点数据库表"
+   ]
+  },
+  "sha": "ae6a74b6f273",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

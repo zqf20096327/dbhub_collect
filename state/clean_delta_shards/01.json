@@ -27688,5 +27688,620 @@
    ]
   ],
   "at": "2026-11-22"
+ },
+ "45de1d293148+2": {
+  "fn": "db-branch/db-branch",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "Release",
+     "License",
+     "Stars",
+     "Sponsor"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    11,
+    6,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "Create a branch, see how to connect, save a checkpoint, reset the branch"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    20,
+    12,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "2. **On a Mac or Windows machine, about 2 minutes.** db-branch needs Linux and ZFS, so run it in an Ubuntu VM with Multipass. One command makes the VM, installs db-branch, initialises it on a file-backed ZFS pool and loads a small sample base, `shop` (MySQL 8.4):"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    30,
+    21,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     " On Windows (PowerShell or cmd), put the `multipass launch` command on one line and drop the `\\`:"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    36,
+    31,
+    36
+   ],
+   [
+    "replace",
+    36,
+    42,
+    36,
+    42,
+    [
+     " - The history module is turned on, and the paid modules run for 30 days without a key. `--record` records a branch so it can be restored to any point.",
+     " - The pool is a file, so it is slower and not meant for real data. The first admin password is `admin`; the console asks for a new one at the first sign-in.",
+     " - On Apple Silicon (and other arm64 machines) the setup downloads about 800 MB for MySQL, against 80 MB on Intel, because Oracle ships no minimal build for arm64. `--timeout 900` keeps `launch` from giving up on a slow connection.",
+     " - If the setup fails, `/etc/motd` says so, and `sudo tail -n 30 /var/log/cloud-init-output.log` in the VM shows why.",
+     " - Delete the VM with `multipass delete --purge db-branch-eval`.",
+     "3. **On your own Ubuntu server.** See Install."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    45,
+    42,
+    45
+   ],
+   [
+    "replace",
+    45,
+    46,
+    45,
+    46,
+    [
+     "- **AI agent sandboxes.** The built-in MCP server lets an LLM agent create a branch, run a risky query or migration on it, and delete the branch, so production data is never touched. For sensitive data, mask at the base snapshot stage rather than after branching (see Design notes and trade-offs)."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    61,
+    46,
+    61
+   ],
+   [
+    "replace",
+    61,
+    63,
+    61,
+    63,
+    [
+     "The branches page of the web console",
+     "The branch graph of the web console, showing which branch comes from which base"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    83,
+    63,
+    83
+   ],
+   [
+    "replace",
+    83,
+    88,
+    83,
+    84,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    103,
+    84,
+    99
+   ],
+   [
+    "replace",
+    103,
+    104,
+    99,
+    100,
+    [
+     "- **Disposable by design (no cross-branch merge or rebase).** Branches are block-level ZFS copy-on-write clones, not hooks into the database engine's MVCC. Divergent writes across separate concurrent branches cannot be merged or rebased back into a base or into another branch like Git (within a single branch, `branch merge` can logically 3-way merge row and schema changes between history lines created by `branch restore`; see docs/branch-merge.md). db-branch is built for disposable sandboxes (AI agents, CI runs, migration tests) that you reset or throw away."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    112,
+    100,
+    108
+   ],
+   [
+    "replace",
+    112,
+    113,
+    108,
+    109,
+    [
+     "- **Paid modules** (auth/SSO, audit, history, diff, FSx storage) are separate, closed-source packages, self-hosted and enabled with a license key (monthly or yearly). See docs/modules.md for the extension points they use."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    116,
+    109,
+    112
+   ],
+   [
+    "replace",
+    116,
+    117,
+    112,
+    113,
+    [
+     "Team and Business are not on sale yet and have no price. If you are interested, tell us with this form (which plan, what database, how big, how many nodes). Email to <sales@db-branch.com> works too."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    120,
+    113,
+    116
+   ],
+   [
+    "replace",
+    120,
+    122,
+    116,
+    118,
+    [
+     "- docs/README.md: index of the design and reference documents (written in Japanese)",
+     "- docs/roadmap.md: public roadmap toward 1.0 (written in Japanese)"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    124,
+    118,
+    120
+   ],
+   [
+    "replace",
+    124,
+    126,
+    120,
+    122,
+    [
+     "- api/openapi.yaml: machine-readable REST API definition",
+     "- CHANGELOG.md"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    129,
+    122,
+    125
+   ],
+   [
+    "replace",
+    129,
+    134,
+    125,
+    130,
+    [
+     "- Contributions are welcome: see CONTRIBUTING.md. Commits need a DCO sign-off (`git commit -s`).",
+     "- Security issues: see SECURITY.md. Please use private vulnerability reporting, not public issues.",
+     "- Support: see SUPPORT.md. No support is promised; Issues are read when possible.",
+     "- Sponsor: if db-branch is useful to you, you can support its development on GitHub Sponsors. It is optional and does not buy support or paid modules.",
+     "- Please follow the Code of Conduct."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    136,
+    130,
+    132
+   ],
+   [
+    "replace",
+    136,
+    139,
+    132,
+    133,
+    [
+     "Apache-2.0. See LICENSE and NOTICE."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    143,
+    133,
+    137
+   ],
+   [
+    "replace",
+    143,
+    144,
+    137,
+    138,
+    [
+     "Mac / Windows では、Multipass のコマンド1つで試せます: <https://db-branch.com/ja/docs/getting-started/#multipass-ですぐ試す>。日本語のサイトは <https://db-branch.com/ja/>、設計ドキュメントは docs/ にあります（日本語）。"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    138,
+    139
+   ],
+   [
+    "replace",
+    145,
+    146,
+    139,
+    140,
+    [
+     "開発を支援する場合は、GitHub Sponsors から行えます（任意です。サポートや有償モジュールの提供は伴いません）。"
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
+ },
+ "808db3e77afc+2": {
+  "fn": "walkthestars/icepick",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    4,
+    [
+     "Python 3.11+",
+     " License: AGPL-3.0-only",
+     " IDA Pro 9.4+",
+     " Dependencies: stdlib only"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    4,
+    5
+   ],
+   [
+    "replace",
+    7,
+    8,
+    5,
+    6,
+    [
+     " icepick "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    6,
+    7
+   ],
+   [
+    "replace",
+    9,
+    11,
+    7,
+    9,
+    [
+     " A deterministic IDA Pro extraction gateway in pure Python. ",
+     "Batch-extracts IDA databases into versioned, provenance-tagged JSON and ingests them into SQLite. "
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    19,
+    10,
+    15,
+    [
+     " Quick start ·",
+     " Architecture ·",
+     " CLI ·",
+     " Schema Reference ·",
+     " Operations Guide"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    15,
+    16
+   ],
+   [
+    "replace",
+    20,
+    23,
+    16,
+    17,
+    [
+     "`icepick` sits between IDA Pro 9.4+ and downstream analysis databases (including `toothpick`). Instead of letting agents or scripts query a live, single-threaded IDA process with unbounded dumps, `icepick` runs batch extraction inside isolated worker processes, emits deterministic `schema-v1` JSON documents (sorted, top-K capped, SHA-256 digested), and ingests them idempotently into SQLite."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    30,
+    17,
+    24
+   ],
+   [
+    "replace",
+    30,
+    31,
+    24,
+    25,
+    [
+     "- **Python**: 3.11+ managed by `uv`"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    25,
+    26
+   ],
+   [
+    "replace",
+    32,
+    33,
+    26,
+    27,
+    [
+     " To enable the `idalib` backend on Windows, install the wheel shipped with your IDA distribution into your Python environment:"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    51,
+    27,
+    45
+   ],
+   [
+    "replace",
+    51,
+    64,
+    45,
+    46,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    72,
+    46,
+    54
+   ],
+   [
+    "replace",
+    72,
+    94,
+    54,
+    55,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    105,
+    55,
+    66
+   ],
+   [
+    "replace",
+    105,
+    106,
+    66,
+    67,
+    [
+     "See docs/CLI.md for the full option reference and exit codes."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    67,
+    68
+   ],
+   [
+    "replace",
+    107,
+    108,
+    68,
+    69,
+    [
+     "|Command|Input → Output|Description|"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    69,
+    70
+   ],
+   [
+    "replace",
+    109,
+    114,
+    70,
+    75,
+    [
+     "|`icepick extract <input>`|Binary/IDB → `schema-v1` JSON|Runs IDA auto-analysis (`idalib` or `idat`), applies optional FLIRT `--sigs`, extracts functions, blocks, callers, callees, xrefs, RTTI refs, and Hex-Rays pseudocode capped at `--top-k` (default `500`).|",
+     "|`icepick ingest <db> <doc...>`|Extract JSON → SQLite `DB`|Validates and ingests one or more `ida_extract.v1` documents. Re-running an identical digest is a no-op (`already-ingested`) unless `--force` is passed. Supports `--dry-run` and `--json`.|",
+     "|`icepick ingest-manual <db> <doc...>`|Labels JSON → SQLite `DB`|Validates and ingests `external_labels.v1` documents (`source='manual'`), outranking IDA-generated names.|",
+     "|`icepick show <db>`|SQLite `DB` → Summary|Prints function, edge, label, and per-document provenance counts (`--json` for machine output).|",
+     "|`icepick diff-import <sqlite>`|Diaphora DB → Candidates JSON|Reads a Diaphora SQLite export (`results` table) and emits ranked rebase candidate records (`--min-score`, `--limit`, `--out`).|"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    123,
+    75,
+    84
+   ],
+   [
+    "replace",
+    123,
+    130,
+    84,
+    85,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    136,
+    85,
+    91
+   ],
+   [
+    "replace",
+    136,
+    137,
+    91,
+    92,
+    [
+     "When operating a live IDAPython or `ida-mcp` session inside a VM, `icepick.trim` provides Unicode-safe two-axis truncation (`truncate_text`, `cap_sequence`, `candidate_card`) enforcing `DEFAULT_MAX_LINES = 200`, `DEFAULT_MAX_CHARS = 8000`, and `DEFAULT_MAX_ITEMS = 50`. Ready-to-paste bounded IDAPython snippets are included in `skills/ida-extract.md` and `skills/ida-domain.md`."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    149,
+    92,
+    104
+   ],
+   [
+    "replace",
+    149,
+    151,
+    104,
+    106,
+    [
+     "- **Run `extract` in a disposable VM**: IDA Pro loaders and processor modules parse untrusted binary headers with full user privileges. Always run `icepick extract` inside a snapshotted VM with no host credentials. See SECURITY.md.",
+     "- **Encrypted or packed `.text` sections**: Running static IDA auto-analysis on an executable whose `.text` section is encrypted on disk (entropy near `8.0` bits/byte) produces spurious function boundaries and empty call graphs. Check section entropy first; for runtime-decrypted binaries, capture a memory dump and extract from the reconstructed image. See docs/OPERATIONS.md."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    153,
+    106,
+    108
+   ],
+   [
+    "replace",
+    153,
+    156,
+    108,
+    109,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    109,
+    110
+   ],
+   [
+    "replace",
+    157,
+    161,
+    110,
+    111,
+    [
+     "AGPL-3.0-only, with commercial/enterprise dual licensing available. See LICENSE, COPYRIGHT, and CLA.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
  }
 }

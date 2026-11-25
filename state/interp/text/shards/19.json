@@ -3610,5 +3610,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "86ef7f26040d": {
+  "identity": {
+   "one_liner": "自托管咖啡冲煮记录应用，FastAPI + React 单容器部署",
+   "review": "Bloom 是一个自托管的精品咖啡冲煮记录系统，记录购买的咖啡豆、每次冲煮参数与品鉴评价，面向家庭冲煮者和咖啡店吧台用户。数据模型区分 coffee（豆）、lot（每袋购买）、recipe（可复用配方）与 brew（冲煮），采用共享日志模式：所有认证用户可读全部内容并新增记录，仅创建者或管理员可编辑删除。部署为单容器加 Postgres，通过环境变量配置，无公开注册，账号由管理员创建，支持 OIDC 单点登录和邮件密码重置。AGPL-3.0 许可。",
+   "highlights": [
+    "单容器部署（API + Web UI），启动时自动等待数据库、执行迁移并引导首个管理员，唯一必需配置为 JWT_SECRET",
+    "支持 OIDC 单点登录（Keycloak、Authentik、Entra ID 等），可从提供商组映射角色；无 SMTP 时密码重置链接写入日志",
+    "前端 API 客户端从 OpenAPI schema 生成，CI 检测漂移；镜像内 UI 使用相对 URL，无需重建即可部署于 localhost、局域网或反向代理之后"
+   ],
+   "use_cases": [
+    "家庭咖啡冲煮者记录咖啡豆批次、冲煮参数与萃取率诊断，追踪口感复现条件",
+    "咖啡店吧台团队共享冲煮日志与配方，管理员统一管理成员账号",
+    "homelab 环境中通过 Docker Compose 与已有 Postgres/OIDC 体系集成的自托管部署"
+   ]
+  },
+  "sha": "86ef7f26040d",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

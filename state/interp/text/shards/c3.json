@@ -3604,5 +3604,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7ffda2605631": {
+  "identity": {
+   "one_liner": "基于 MCP 的 AI 代理长期记忆服务器，数据存于单个本地 SQLite 文件。",
+   "review": "CPersona 是一个 MCP 服务器，让 Claude Code、Codex、Cursor 等 MCP 客户端跨会话读写记忆。数据保存在单个本地 SQLite 文件，无账号和云依赖；存储与召回过程不调用生成式模型，摘要由代理自己写入。检索融合向量、全文与关键词三种方式，并支持 project_id 与 channel 隔离多代理、多项目。无嵌入服务器时退化为关键词搜索并在召回结果中标注。",
+   "highlights": [
+    "混合检索：向量、全文与关键词搜索并行运行，支持日语等无空格文字中的精确标识符匹配",
+    "reconstruct 工具返回每条答案背后的存储记录来源，结果可追溯",
+    "内置 cpersona dashboard 只读面板，展示最近存储、高频召回与全部记忆内容"
+   ],
+   "use_cases": [
+    "为编码代理跨会话保存决策、原因与历史事件记录",
+    "多个代理或多个项目共享一个记忆库并按 project_id/channel 隔离",
+    "本地化部署场景下备份与迁移记忆数据（通过 sqlite3 .backup）"
+   ]
+  },
+  "sha": "7ffda2605631",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3565,5 +3565,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5639e01b6ff7": {
+  "identity": {
+   "one_liner": "基于 Go 与嵌入式 SQLite 的墨西哥邮政编码与地理坐标查询 REST API 微服务",
+   "review": "Go-MexPost 是用 Go 编写的微服务，用于查询墨西哥的殖民区、邮政编码和地理坐标，数据来自 SEPOMEX 与 Open Mexico GeoJSON。它采用六边形架构和嵌入式 SQLite 数据库，无需安装 MySQL 或 PostgreSQL，数据库构建由外部 ETL 仓库完成。提供轻量版与含 GeoJSON 多边形的 spatial 版两种数据库，支持 Docker 部署和预编译可执行文件下载。适合需要墨西哥邮政/地理数据的开发者与研究人员。",
+   "highlights": [
+    "支持按邮政编码（精确或模糊如 067%）、殖民区名称（忽略大小写）、州与市镇组合过滤查询，并支持按 codigo_id 精确查找与分页返回",
+    "提供基于 GeoJSON 多边形的反地理编码（Point-in-Polygon）查询和按 codigo_id 或 cp 获取邻近殖民区排序列表",
+    "内置按 IP 的令牌桶限流（通过 RATE_LIMIT、RATE_BURST 环境变量配置），支持 PORT 与 CORS_ALLOWED_ORIGINS 环境变量设置"
+   ],
+   "use_cases": [
+    "为涉及墨西哥地址的表单提供邮政编码与殖民区名称查询接口",
+    "基于坐标进行反地理编码，根据经纬度定位对应的殖民区",
+    "通过 Docker 或预编译二进制快速部署本地邮政/地理数据查询服务，用于地图类应用（使用 geo 版数据库）"
+   ]
+  },
+  "sha": "5639e01b6ff7",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c434d4cc8591": {
+  "identity": {
+   "one_liner": "基于图结构的共享任务跟踪器，通过 MCP 服务于人与 AI 代理协作",
+   "review": "Skein 是一个面向 AI 编码代理（Claude Code、Codex、Cursor 等 MCP 客户端）与人类的共享任务管理系统，将任务、对话、决策与知识集中存储，跨项目、机器和会话保留。核心机制包括任务依赖图与原子认领（两个代理不会认领同一任务）、任务内实时代理对话、语义搜索与重复检测。采用 BSL 1.1 许可，代码分四个仓库，可自托管（Docker Compose/Kubernetes）或使用云版。依赖 PostgreSQL、Valkey、NATS 与 S3 兼容存储，语义搜索需自建 Ollama 服务。",
+   "highlights": [
+    "提供 MCP 服务器接口，代理通过 API 密钥连接，任务认领为原子操作",
+    "支持人员到代理再到代理的逐级委派，任务历史集中保留，含任务内实时对话",
+    "提供语义搜索与重复检测，任务/决策/笔记跨会话持久化为共享知识库"
+   ],
+   "use_cases": [
+    "团队中人类与多个 AI 编码代理协作分配和跟踪开发任务",
+    "自托管部署，为使用 Claude Code、Cursor 等 MCP 客户端的团队提供任务管理",
+    "将历史决策与研究记录沉淀为跨会话共享的项目知识库"
+   ]
+  },
+  "sha": "c434d4cc8591",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

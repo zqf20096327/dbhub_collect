@@ -2994,5 +2994,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d21e445419b6": {
+  "identity": {
+   "one_liner": "EF Core 批量 CRUD 扩展库，为多种数据库提供 Bulk 与 Batch 操作",
+   "review": "EFCore.BulkExtensions 为 EF Core 提供 Bulk 与 Batch 扩展方法，支持 Insert、Update、Delete、Read、Upsert、Sync、SaveChanges 及 Truncate 操作，面向需要在 .NET 应用中处理大量实体数据的开发者。库针对不同数据库使用不同底层机制：SQL Server 用 SqlBulkCopy 与 MERGE，PostgreSQL 用 COPY BINARY 配合 ON CONFLICT，MySQL 用 MySqlBulkCopy 配合 ON DUPLICATE，SQLite 用 SQL UPSERT。批量操作需创建临时表，小数据集存在额外开销，README 建议集合超过 1000 条时使用 Bulk 操作。",
+   "highlights": [
+    "提供 BulkInsert、BulkInsertOrUpdate、BulkRead、BulkSaveChanges 等 CRUD 扩展方法，含同步与异步版本",
+    "支持 SQL Server、SQLite、PostgreSQL、MySQL、Oracle、GBase 数据库，各提供单一 provider 的适配器 NuGet 包",
+    "Bulk 方法接受可选 BulkConfig 参数，可配置 PropertiesToInclude、SetSynchronizeFilter、OnSaveChangesSetFK 等属性"
+   ],
+   "use_cases": [
+    "需要向数据库批量插入、更新或同步大量实体数据的 .NET EF Core 应用",
+    "需要基于大列表做条件查询时，用 BulkRead 替代 IN 子句或内存 JOIN 的场景",
+    "在数据库不支持原生 Sync 时，通过 BulkRead 拆分列表再分别调用 Bulk 方法实现部分同步"
+   ]
+  },
+  "sha": "d21e445419b6",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5c77dd050a38": {
+  "identity": {
+   "one_liner": "本地优先的算法刷题桌面追踪器，自带目录、自适应计划与 Markdown 笔记",
+   "review": "LeetCode Tracker 是一款本地优先的 Tauri 桌面应用，用户自行提供 JSONL 题目目录（不内置题库或爬虫），据此制定每周刷题计划、记录练习、查看进度热力图并维护 Markdown 笔记。数据存于本地 SQLite，支持 Windows 11 x64 与 Apple Silicon macOS 安装包，以及导出 Snapshot Bundle 实现跨设备迁移。计划推荐与笔记格式化由本地代码完成，Gemini/OpenAI/DeepSeek 仅为可选辅助。",
+   "highlights": [
+    "支持 BYOD JSONL 题目目录导入、每日计划生成、内置计时器与练习记录（含时长与结果反馈）",
+    "提供 365 天活动热力图、难度掌握、Topic Insights 等进度统计，支持修正或撤销单条记录",
+    "Markdown 笔记支持 Edit/Split/Preview 模式、本地格式化及 Markdown/Obsidian ZIP/Notion CSV 导出与跨设备迁移包"
+   ],
+   "use_cases": [
+    "需要本地记录算法练习进度、坚持间隔复习的开发者",
+    "想在 Windows 与 macOS 间迁移刷题数据与笔记的用户",
+    "希望结合自有题目目录与自定义周计划安排练习的用户"
+   ]
+  },
+  "sha": "5c77dd050a38",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

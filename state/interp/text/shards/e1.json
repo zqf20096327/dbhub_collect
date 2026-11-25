@@ -3236,5 +3236,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8c2e07d0a4db": {
+  "identity": {
+   "one_liner": "基于 Rust 与 GTK4 的 PostgreSQL 和 MySQL/MariaDB 原生 Linux 图形客户端",
+   "review": "DBased 是用 Rust、GTK4 与 Libadwaita 编写的 Linux 桌面数据库客户端，连接 PostgreSQL 与 MySQL/MariaDB。它提供表格数据浏览与内联编辑、表结构与索引管理、外键导航、用户权限管理，以及支持 Vim 模式的 SQL 编辑器。项目要求 rustc >= 1.85 及 GTK4 相关开发库，仅面向 Linux 平台。",
+   "highlights": [
+    "通过 sqlx 与 tokio 实现异步驱动连接 PostgreSQL 和 MySQL/MariaDB",
+    "内置 SSH 隧道（russh），支持密码或私钥认证，凭据存于系统 keyring（oo7/Secret Service）",
+    "提供支持 Vim 模态编辑的 SQL 与 JSON/JSONB 单元格编辑器，以及表格数据的批量事务提交（Ctrl+S）"
+   ],
+   "use_cases": [
+    "在 Linux/GNOME 桌面环境中浏览、编辑 PostgreSQL 或 MySQL/MariaDB 表数据",
+    "通过 SSH 堡垒机连接远程数据库并管理连接书签",
+    "在图形界面中编写执行 SQL 查询并导出为 SQL/CSV/JSON"
+   ]
+  },
+  "sha": "8c2e07d0a4db",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8b7800c3c3a3": {
+  "identity": {
+   "one_liner": "Flow Steward 的 OceanBase 读写连接器，基于 MySQL 兼容接口。",
+   "review": "该仓库是 Flow Steward 的可安装 OceanBase 扩展（版本 1.3.16），提供 Dataset 只读查询和 execute_write 工作流写操作（INSERT/UPDATE/DELETE，命名参数）。仅支持 OceanBase MySQL 兼容端点，不含 Oracle 模式。读取上限 100 行、480 KiB；SQL 支持受限子集，不含模式管理、事务脚本和触发器。需配置 host、port、database、user 并在 secrets 中存储非空密码。",
+   "highlights": [
+    "Dataset 连接器支持连接测试、类型化表模式内省、保存 SQL、结果预览与只读执行，读取上限 100 行和 480 KiB",
+    "execute_write 动作运行单条 INSERT/UPDATE/DELETE，参数值与 SQL 分离并通过原生驱动绑定，支持可选 JSON 参数模式",
+    "保存的读取支持最多三个表源带显式连接条件，单语句执行截止时间为最多五秒并提供语句级并发限制"
+   ],
+   "use_cases": [
+    "在 Flow Steward 工作流中查询 OceanBase 应用数据，将查询结果供后续步骤使用",
+    "通过参数化写操作在工作流中保存输出或更新 OceanBase 中的现有记录",
+    "复用保存的 SQL 进行受限的报表查询与数据提取"
+   ]
+  },
+  "sha": "8b7800c3c3a3",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

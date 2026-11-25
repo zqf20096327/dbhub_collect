@@ -39260,5 +39260,842 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "9ba7df07585a+2": {
+  "fn": "psrockstar098/yatta.js",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    1,
+    [
+     "Yatta"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    1,
+    4
+   ],
+   [
+    "replace",
+    7,
+    8,
+    4,
+    5,
+    [
+     "**Production-grade backend framework for Bun.**"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    12,
+    5,
+    9
+   ],
+   [
+    "replace",
+    12,
+    15,
+    9,
+    12,
+    [
+     "CI",
+     "Benchmarks",
+     "npm"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    20,
+    12,
+    17
+   ],
+   [
+    "delete",
+    20,
+    23,
+    17,
+    17
+   ],
+   [
+    "equal",
+    23,
+    31,
+    17,
+    25
+   ],
+   [
+    "replace",
+    31,
+    51,
+    25,
+    26,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    68,
+    26,
+    43
+   ],
+   [
+    "replace",
+    68,
+    69,
+    43,
+    44,
+    [
+     "|Pool|Sizing|Concurrency per worker|For|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    44,
+    45
+   ],
+   [
+    "replace",
+    70,
+    72,
+    45,
+    47,
+    [
+     "|`cpu-pool`|`cores * 0.35`|`1`|Password hashing, crypto, transforms|",
+     "|`io-pool`|`min(16, cores * 0.8)`|`500`|DB queries, network, mail|"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    77,
+    47,
+    52
+   ],
+   [
+    "replace",
+    77,
+    88,
+    52,
+    53,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    96,
+    53,
+    61
+   ],
+   [
+    "replace",
+    96,
+    98,
+    61,
+    62,
+    [
+     "|Framework|Requests/sec|vs Yatta|Spread|p50|p95|p99|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    62,
+    63
+   ],
+   [
+    "replace",
+    99,
+    107,
+    63,
+    70,
+    [
+     "|Yatta|63,689|1.00x|14%|1.52ms|2.88ms|3.42ms|",
+     "|Raw Bun|53,437|0.84x|29%|1.62ms|3.32ms|3.40ms|",
+     "|Hono|69,283|1.09x|24%|1.31ms|1.83ms|3.01ms|",
+     "|Elysia|60,104|0.94x|22%|1.34ms|3.25ms|3.60ms|",
+     "|Express|36,256|0.57x|9%|2.62ms|4.63ms|5.67ms|",
+     "|Fastify|49,090|0.77x|5%|2.04ms|3.30ms|4.78ms|",
+     "|Koa|42,161|0.66x|4%|2.39ms|4.25ms|6.34ms|"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    109,
+    70,
+    72
+   ],
+   [
+    "replace",
+    109,
+    110,
+    72,
+    73,
+    [
+     "Full results, throughput ladders and workload profiles: BENCHMARKS.md."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    116,
+    73,
+    79
+   ],
+   [
+    "replace",
+    116,
+    117,
+    79,
+    80,
+    [
+     "|Module|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    80,
+    81
+   ],
+   [
+    "replace",
+    118,
+    129,
+    81,
+    92,
+    [
+     "|`yatta/api`|Unified API: router with onion middleware, typed params, schema validation (Zod/Valibot/ArkType), CORS, cookies, streaming, typed client, universal routes (define once, call directly or over HTTP), path utilities, DataLoader batching|",
+     "|`yatta/db`|`bun:sqlite` ORM — column builder, relations, transactions with savepoints, pagination, cursor pagination, schema sync, backup/restore|",
+     "|`yatta/auth`|Argon2id, rotating access/refresh JWTs, AES-256-GCM sessions, TOTP 2FA (one code, one use — replays are refused, including racing requests; enrolment needs a recently authenticated session, so the request is **required** by `mfa.beginSetup`/`confirmSetup` — no request, no enrolment), WebAuthn passkeys, hashed API keys, RBAC, rate-limit lockouts|",
+     "|`yatta/jwt`|Fast stateless HS256 verification — `Bun.CryptoHasher` HMAC, no caching, reference-compatible error strings|",
+     "|`yatta/jobs`|Job queue, worker pools, cron (Vixie semantics, tz-aware; day-of-week accepts 0–7, where 7 is Sunday, same as 0), event bus, atomic leases, DLQ, backoff + jitter|",
+     "|`yatta/cache`|L1 LRU + SQLite L2, singleflight, stale-while-revalidate, tag invalidation; plus an O(1) priority queue|",
+     "|`yatta/storage`|Local + S3 drivers, RFC 9110 range streaming, magic-byte inspection, HMAC signed URLs|",
+     "|`yatta/mail`|SMTP/Resend/Postmark/SendGrid/SES/Gmail, layouts, pipe templating, md→html, RFC 8058 unsubscribe|",
+     "|`yatta/realtime`|Unified SSE + WebSocket, topic pub/sub, AI token streaming, job tracking, backpressure. The scaffolded `/realtime` endpoint requires a signed-in Yatta session — unauthenticated WebSocket and SSE connections are refused.|",
+     "|`yatta/observe`|Tracing, metrics, logs, issue grouping, incident correlation, adaptive baselines, SLOs, N+1 detection, golden traces|",
+     "|`yatta/otel`|OpenTelemetry bridge — Yatta spans flow to any OTel backend (Jaeger, Tempo, Datadog)|"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    138,
+    92,
+    101
+   ],
+   [
+    "replace",
+    138,
+    139,
+    101,
+    102,
+    [
+     "|Import|Served at|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    102,
+    103
+   ],
+   [
+    "replace",
+    140,
+    147,
+    103,
+    110,
+    [
+     "|`yatta.js/grpcweb`|`/grpc-web`|gRPC-Web unary calls — protobuf codec, framing, trailers, a client, and a health check|",
+     "|`yatta.js/webdav`|`/dav`|WebDAV (RFC 4918) over the storage engine — Finder, Explorer, Word, davfs2|",
+     "|`yatta.js/doh`|`/dns-query`|DNS over HTTPS (RFC 8484), wire and JSON shapes, A and AAAA|",
+     "|`yatta.js/webfinger`|`/.well-known/webfinger`|WebFinger (RFC 7033) discovery for auth-store accounts|",
+     "|`yatta.js/oauth`|`/oauth/*`|OAuth 2.0 server — code + PKCE, client credentials, rotating refresh tokens|",
+     "|`yatta.js/oidc`|`/oauth/jwks`, `/oauth/userinfo`, `/.well-known/openid-configuration`|OpenID Connect on top of OAuth — RS256 ID tokens, discovery, JWKS|",
+     "|`yatta.js/mcp`|`/mcp`|MCP server whose tools are generated from your collections|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    152,
+    110,
+    115
+   ],
+   [
+    "replace",
+    152,
+    156,
+    115,
+    116,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    191,
+    116,
+    151
+   ],
+   [
+    "replace",
+    191,
+    206,
+    151,
+    152,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    276,
+    152,
+    222
+   ],
+   [
+    "replace",
+    276,
+    280,
+    222,
+    223,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    280,
+    289,
+    223,
+    232
+   ],
+   [
+    "replace",
+    289,
+    290,
+    232,
+    233,
+    [
+     "|Situation|Result|"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    291,
+    233,
+    234
+   ],
+   [
+    "replace",
+    291,
+    297,
+    234,
+    240,
+    [
+     "|Fewer than 20 samples for a baseline|`confidence: \"unknown\"`, no anomaly claimed|",
+     "|Metric with zero observed variance|`z: null`, explains it cannot be scored|",
+     "|Zero baseline for a ratio|`changePct: null`, not `Infinity`|",
+     "|SLO with fewer than 20 requests|`status: \"no-data\"`, no compliance claimed|",
+     "|First release with nothing to compare|`status: \"unknown\"`, not \"healthy\"|",
+     "|Memory trend with a weak fit|`verdict: \"stable\"`, reports the R²|"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    300,
+    240,
+    243
+   ],
+   [
+    "replace",
+    300,
+    301,
+    243,
+    244,
+    [
+     "|Call|Returns|"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    302,
+    244,
+    245
+   ],
+   [
+    "replace",
+    302,
+    313,
+    245,
+    256,
+    [
+     "|`analyzeIncident(fp)`|Timeline, suspects with evidence, suggested actions|",
+     "|`releaseHealth()`|Per-release errors, p50/p95/p99, slow queries, new errors|",
+     "|`whatChanged()`|The running release against the previous one|",
+     "|`serviceMap()`|Dependency graph inferred from spans, with its own limitations|",
+     "|`detectNPlusOne()`|Repeated identical queries under one parent|",
+     "|`detectAnomalies()`|Current values against their own history|",
+     "|`memoryTrend()`|Least-squares growth with fit quality|",
+     "|`evaluateSlos()`|Availability, error budget, burn rate|",
+     "|`jobHealth()`|Queue depth, success rate, backlog direction|",
+     "|`incidentReport(fp)`|Self-contained JSON for a model or a colleague|",
+     "|`compareToGolden(name, traceId)`|Drift against a known-good baseline|"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    353,
+    256,
+    296
+   ],
+   [
+    "replace",
+    353,
+    358,
+    296,
+    297,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    365,
+    297,
+    304
+   ],
+   [
+    "replace",
+    365,
+    366,
+    304,
+    305,
+    [
+     "|Endpoint|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    366,
+    367,
+    305,
+    306
+   ],
+   [
+    "replace",
+    367,
+    373,
+    306,
+    312,
+    [
+     "|`GET /_yatta/api/analysis/state`|Every analysis in one call|",
+     "|`GET /_yatta/api/analysis/incident/:fp`|One incident analysis|",
+     "|`GET /_yatta/api/analysis/report/:fp`|Full incident report for export|",
+     "|`GET/POST /_yatta/api/analysis/goldens/:name`|List or save a golden trace|",
+     "|`GET /_yatta/api/analysis/compare/:name?trace=`|Compare against a baseline|",
+     "|`POST /_yatta/api/analysis/action/:kind`|Guarded action|"
+    ]
+   ],
+   [
+    "equal",
+    373,
+    381,
+    312,
+    320
+   ],
+   [
+    "replace",
+    381,
+    382,
+    320,
+    321,
+    [
+     " precisely so the observer cannot become the leak it is meant to diagnose."
+    ]
+   ],
+   [
+    "equal",
+    382,
+    383,
+    321,
+    322
+   ],
+   [
+    "replace",
+    383,
+    384,
+    322,
+    323,
+    [
+     " limitation; external dependencies appear only if a call site was wrapped."
+    ]
+   ],
+   [
+    "equal",
+    384,
+    385,
+    323,
+    324
+   ],
+   [
+    "replace",
+    385,
+    386,
+    324,
+    325,
+    [
+     " and the resolver refuses any path outside the project root."
+    ]
+   ],
+   [
+    "equal",
+    386,
+    395,
+    325,
+    334
+   ],
+   [
+    "replace",
+    395,
+    399,
+    334,
+    335,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    408,
+    335,
+    344
+   ],
+   [
+    "replace",
+    408,
+    409,
+    344,
+    345,
+    [
+     "|Variable|Default|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    409,
+    410,
+    345,
+    346
+   ],
+   [
+    "replace",
+    410,
+    414,
+    346,
+    350,
+    [
+     "|`PORT`|`4000`|Must be 1–65535|",
+     "|`NODE_ENV`|`development`|`production` \\|`development` \\|`test`|",
+     "|`STORAGE_SECRET`|*ephemeral*|**Required in production**|",
+     "|`DATABASE_URL`|`Database/app.db`|Shared volume / managed SQLite file|"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    420,
+    350,
+    356
+   ],
+   [
+    "replace",
+    420,
+    421,
+    356,
+    357,
+    [
+     "|Endpoint|Meaning|Status|"
+    ]
+   ],
+   [
+    "equal",
+    421,
+    422,
+    357,
+    358
+   ],
+   [
+    "replace",
+    422,
+    424,
+    358,
+    360,
+    [
+     "|`/healthz`|Liveness. Never touches the worker pool.|`200 {\"status\":\"ok\"}`|",
+     "|`/readyz`|Readiness: fleet mounted and serving.|`200` ready / `503` degraded|"
+    ]
+   ],
+   [
+    "equal",
+    424,
+    522,
+    360,
+    458
+   ],
+   [
+    "replace",
+    522,
+    524,
+    458,
+    460,
+    [
+     " probing an untested surface, and each fix was reverted briefly to confirm the new test",
+     " actually goes red. A test that passes before and after proves nothing."
+    ]
+   ],
+   [
+    "equal",
+    524,
+    525,
+    460,
+    461
+   ],
+   [
+    "replace",
+    525,
+    529,
+    461,
+    464,
+    [
+     " a size cap, a cache TTL, and a rate limiter each ended up with no limit at all, all",
+     " reachable from `Number(process.env.SOMETHING)` with the variable unset. Validate at",
+     " the boundary rather than trusting a downstream comparison."
+    ]
+   ],
+   [
+    "equal",
+    529,
+    531,
+    464,
+    466
+   ],
+   [
+    "replace",
+    531,
+    533,
+    466,
+    468,
+    [
+     " with `WorkerCrashError`; a replacement is spawned and remounts its graphs.",
+     " Recovery survives cascading crashes."
+    ]
+   ],
+   [
+    "equal",
+    533,
+    534,
+    468,
+    469
+   ],
+   [
+    "replace",
+    534,
+    536,
+    469,
+    471,
+    [
+     " per-subsystem override). A hung task rejects with `TaskTimeoutError` instead",
+     " of pinning a promise forever. `timeoutMs: 0` opts out."
+    ]
+   ],
+   [
+    "equal",
+    536,
+    537,
+    471,
+    472
+   ],
+   [
+    "replace",
+    537,
+    543,
+    472,
+    478,
+    [
+     " in-flight work, then terminates threads and stops the observer. The drain",
+     " budget is 30s — deliberately longer than the default task deadline, so a",
+     " legitimately long task is not reported as a failed drain. A fatal fault",
+     " (`uncaughtException`/`unhandledRejection`) skips the 5s pre-stop wait and",
+     " exits 1 instead of 0, so an orchestrator reads the crash as a crash; a second",
+     " signal during shutdown exits immediately."
+    ]
+   ],
+   [
+    "equal",
+    543,
+    600,
+    478,
+    535
+   ],
+   [
+    "replace",
+    600,
+    601,
+    535,
+    536,
+    [
+     "|Command|Does|"
+    ]
+   ],
+   [
+    "equal",
+    601,
+    602,
+    536,
+    537
+   ],
+   [
+    "replace",
+    602,
+    609,
+    537,
+    544,
+    [
+     "|`bun run dev`|Watch mode|",
+     "|`bun run start`|Production server|",
+     "|`bun run cluster`|Multi-process mode|",
+     "|`bun test`|Full suite|",
+     "|`bun run typecheck`|`tsc --noEmit`|",
+     "|`bun run check`|Typecheck + tests|",
+     "|`bun run benchmark`|Scheduler/IPC microbenchmarks|"
+    ]
+   ],
+   [
+    "equal",
+    609,
+    612,
+    544,
+    547
+   ],
+   [
+    "replace",
+    612,
+    613,
+    547,
+    548,
+    [
+     "|Command|Does|"
+    ]
+   ],
+   [
+    "equal",
+    613,
+    614,
+    548,
+    549
+   ],
+   [
+    "replace",
+    614,
+    620,
+    549,
+    555,
+    [
+     "|`yatta doctor`|Diagnose project health|",
+     "|`yatta migrate`|Run pending migrations|",
+     "|`yatta migrate:make <name>`|Create migration file|",
+     "|`yatta migrate:status`|Show migration status|",
+     "|`yatta db:backup`|Backup SQLite database|",
+     "|`yatta db:restore <file>`|Restore from backup|"
+    ]
+   ],
+   [
+    "equal",
+    620,
+    622,
+    555,
+    557
+   ],
+   [
+    "replace",
+    622,
+    631,
+    557,
+    558,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    631,
+    641,
+    558,
+    568
+   ],
+   [
+    "replace",
+    641,
+    645,
+    568,
+    569,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    645,
+    646,
+    569,
+    570
+   ],
+   [
+    "delete",
+    646,
+    647,
+    570,
+    570
+   ],
+   [
+    "equal",
+    647,
+    649,
+    570,
+    572
+   ]
+  ],
+  "at": "2026-11-25"
  }
 }

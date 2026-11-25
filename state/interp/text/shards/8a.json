@@ -3189,5 +3189,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9cdd789dd5da": {
+  "identity": {
+   "one_liner": "自托管 PostgreSQL 备份验证工具，隔离恢复容器+SQL检查",
+   "review": "Restivra 是自托管的 PostgreSQL 17 备份验证工具，用 Go 和 React 实现。它将 pg_dump -Fc 生成的自定义格式转储恢复到临时网络隔离容器中，执行只读 SQL 检查并记录结果，适合小团队和代理机构。仅支持 PostgreSQL 17 转储，早期 MVP 面向无人值守的本地开发者试点，通过 Docker Compose 安装。",
+   "highlights": [
+    "将自定义格式转储恢复到临时网络隔离容器，执行只读 SQL 检查（含存在性、最小行数、数据新鲜度等模板），并通过 PostgreSQL 会话级咨询锁强制每数据库一个恢复 worker",
+    "支持每日调度（IANA 时区）、SHA-256 指纹、文件年龄警告、失败 webhook、CSV 导出和可打印的证据报告，界面提供英语与土耳其语",
+    "API 无 Docker socket 与备份挂载权限，SQL 检查在只读事务中以受限角色运行（10 秒语句超时、2 秒锁超时）"
+   ],
+   "use_cases": [
+    "定期验证备份文件可逻辑恢复并满足行数/数据新鲜度等检查",
+    "通过每日调度与可审计历史记录，留存验证证据供检查报告使用",
+    "从本地文件或 S3 兼容存储读取现有归档并做一次性 CLI 验证"
+   ]
+  },
+  "sha": "9cdd789dd5da",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

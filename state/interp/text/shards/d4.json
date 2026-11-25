@@ -3059,5 +3059,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "37198fe7add0": {
+  "identity": {
+   "one_liner": "自托管多智能体 PR 审修工作台，两阶段受控远端写绑定 head SHA 与补丁哈希",
+   "review": "MergePilot 通过 GitHub App 与 Gitee 连接接入仓库，将 PR 事件、静态规则与 LLM 二阶段的审查发现、修复建议及验证证据汇集到自托管 Console。Reviewer/Fixer/Verifier/Leader 四角色分工，评论、修复提交、合并三类远端写均需维护者逐次「预览→确认」。项目自 2026-10-26 起处于冻结维护态，仅接受安全补丁。部署依赖 Docker Compose、Node.js ≥ 20 与自备 LLM 端点。",
+   "highlights": [
+    "三类远端写（审查评论/应用修复/确认合并）经 preview→confirm 两阶段确认，强绑定 expected_remote_head 与 expected_patch_digest，合并资格门同时核验 Commit Statuses 与 Check Runs",
+    "五角色非递增 RBAC，platform_admin 无源码读取与审批/应用/合并权限；租户级出站策略门控，未授权时 LLM 零网络请求",
+    "交付物含 OCI Digest 钉死的镜像、CycloneDX SBOM（48 组件）、SHA256SUMS 与 Trivy 扫描记录；可选本地 RAG 检索团队规范"
+   ],
+   "use_cases": [
+    "自托管团队需要将多智能体代码审查发现与验证证据集中留存并逐次人工确认后写回 GitHub/Gitee 仓库",
+    "部署者要求高危发现修复经具名审批票全批准、机器人提交与合并分别独立确认的流程",
+    "需要 Gitee 与 GitHub 双平台 PR 审查接入，并以邀请制 OAuth 登录和多租户应用层隔离管理成员"
+   ]
+  },
+  "sha": "37198fe7add0",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e48bab4260f3": {
+  "identity": {
+   "one_liner": "DSH 社区插件，用多个会话组成带持久记忆的长期 agent 团队",
+   "review": "dsh-agent-lines 是 DeepSeek Harness（DSH）的社区插件，运行在 DSH Host 进程内，用本地 SQLite 存储角色线、消息与租约。它把团队组织为负责人线+成员线的多个 DSH 会话：每个成员有稳定 label、可替换 sessionId，支持任务派发、消息投递与确认、跨会话交接（line_handoff/rebind）。适用 DSH >=0.2.1-rc.5 且 Node 22/24 环境；不做 DAG 编排、不支持跨机部署。",
+   "highlights": [
+    "以 line = label + sessionId 为核心结构，支持会话满后交接换新会话而角色身份不变",
+    "消息投递为至少一次语义，提供 line_messages/line_trace/line_redeliver 查询与重投工具",
+    "提供只读看板，并可只读融合 DSH 官方智能体团队插件的任务与成员数据"
+   ],
+   "use_cases": [
+    "长期项目需要多个 agent 固定分工且保留各自会话记忆，避免每次重讲背景",
+    "任务进行中需关机/重启，恢复后消息与状态可从本地 SQLite 续接",
+    "小说、视频、研究、运营等非开发团队的'负责人+长期成员'协作组织"
+   ]
+  },
+  "sha": "e48bab4260f3",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4830b20b1e08": {
+  "identity": {
+   "one_liner": "基于大模型 Agent 的自动化渗透测试平台，以对话驱动漏洞验证",
+   "review": "K7so 是一个 Web 端渗透测试平台：输入目标域名后，由大模型 Agent 自主抓取页面、整理接口，按用户勾选的测试能力逐项验证，输出包含请求包与响应包的漏洞清单。技术栈为 FastAPI、原生 HTML/CSS/JS 和 SQLite，运行时仅依赖 4 个 Python 包，数据存于本机 data 目录。支持接入 15 家模型连接器、28 个外部服务，包含 24 个内置工具。README 明确限定仅用于授权测试，为单用户模型，不建议暴露公网。",
+   "highlights": [
+    "提供 64 项测试能力，分 7 组（注入、执行与文件、认证访问控制、业务逻辑、云组件、客户端传输、信息泄露），勾选项须全部验完才结束一轮任务",
+    "内置 24 个工具供模型调用，含 HTTP 请求、shell 命令、Python 脚本执行及漏洞归档，工具层拒绝格式化、爆破、内网横向等破坏性操作",
+    "接入 28 个连接器（15 家大模型、6 家测绘、2 家情报、2 家漏洞平台），并支持 Nmap/Nuclei/HTTPX 本地检测"
+   ],
+   "use_cases": [
+    "对已获书面授权的域名执行对话式自动化漏洞验证，生成带报文的漏洞清单",
+    "通过资产监管功能解析文档提取域名与 IP，进行子域收集与按月资产对比",
+    "使用批量作业模式在无对话交互下执行测绘、存活检测、端口扫描与模板检测流水线"
+   ]
+  },
+  "sha": "4830b20b1e08",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

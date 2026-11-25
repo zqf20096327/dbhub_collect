@@ -3457,5 +3457,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f8a21beef2f1": {
+  "identity": {
+   "one_liner": "自托管游戏收藏追踪 Web 应用，集成 IGDB 目录、Steam/GOG 同步与浏览器模拟器。",
+   "review": "VideoGameTrackarr 是一个自托管的单管理员 Web 应用，用于记录拥有的游戏、愿望单、游玩进度和评价，目录数据来自 IGDB，支持导入 Steam/GOG 库与愿望单，并通过 IsThereAnyDeal/PlatPrices 追踪愿望单降价。前端 React 配合 Material UI 与 PWA，后端 FastAPI 使用 SQLite（可配 Redis），通过 Docker 镜像以单容器部署，首次访问需输入一次性设置码创建管理员。浏览器游戏功能需自行上传所拥有游戏的 ROM。",
+   "highlights": [
+    "支持 IGDB 目录搜索与批量添加，按平台、格式、店面、标签等过滤排序，页面记忆搜索条件",
+    "提供 Steam 与 GOG 库/愿望单导入（应用前可审核变更）、基于 IsThereAnyDeal 与 PlatPrices 的降价追踪，以及 JSON 或 zip 备份/恢复",
+    "内置自托管模拟器支持 25 个以上系统的浏览器游玩，保存数据存于服务器；支持 PWA 离线安装，界面提供英/西/法/葡四种语言"
+   ],
+   "use_cases": [
+    "在家庭服务器（homelab）上用 Docker 部署，集中管理跨平台的实体和数字游戏收藏",
+    "导入 Steam/GOG 库并设置目标价，通过 On Sale 页面关注愿望单游戏的打折情况",
+    "上传所拥有游戏的 ROM，在浏览器中游玩并将存档保留在自己的服务器上"
+   ]
+  },
+  "sha": "f8a21beef2f1",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9ece3a1a82bf": {
+  "identity": {
+   "one_liner": "自托管的 Steam 账号管理控制台，通过 Docker 运行单用户管理界面。",
+   "review": "SteamBee 是一个面向个人用户的自托管 Steam 账号运维控制台，以单容器部署，提供 QR/移动端确认登录、加密 refresh token 存储、多账号会话控制、周计划排程、库存与卡牌挂机等管理功能。它不持久化 Steam 密码或 Steam Guard 共享密钥，也不提供多用户托管模式。README 明确提示传统的挂时长功能存在违反 Steam 订阅协议的风险，可能导致账号受限。技术栈为 Fastify 后端与 React 前端，数据存于 SQLite 与 /data 持久卷，默认监听 3000 端口，建议置于反向代理后运行。",
+   "highlights": [
+    "支持多 Steam 账号接入、QR 登录与一次性凭据回退，refresh token 以加密形式存储于 /data",
+    "提供按账号的会话启停控制、周计划时间线、会话安全限额与自动恢复机制（含重试与冷却策略）",
+    "包含库存徽章卡牌套装展示、市场挂单确认与批量出售、可选两阶段卡牌挂机流程"
+   ],
+   "use_cases": [
+    "在自有 VPS、Unraid 或通用 Docker 主机上集中管理多个自己的 Steam 账号",
+    "需要对 Steam 会话进行计划排程、恢复健康监控与安全限额控制的个人用户",
+    "需查看库存卡牌、执行市场挂单与批量出售、或浏览限时免费游戏信息的用户"
+   ]
+  },
+  "sha": "9ece3a1a82bf",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3e01ca9a670": {
+  "identity": {
+   "one_liner": "面向 Orca 编辑器的数据库客户端与 SQL 工作台，内置 12 种数据库引擎",
+   "review": "Datanoa Studio 是 Orca（>=1.4.248）的插件，用于在编辑器内连接并操作 SQLite、PostgreSQL、MySQL、ClickHouse、MongoDB、Redis 等 12 种数据库，另提供 7 个本地 BYOD 驱动槽位（如 DuckDB、BigQuery）。支持多标签 SQL 控制台、数据网格编辑、可视化表设计器、SSH 隧道与 TLS/mTLS 连接，以及自动发现 .env、Docker Compose 和本地 SQLite 文件。通过 Orca 目录或 CLI 安装。",
+   "highlights": [
+    "内置 12 种数据库引擎连接支持，并提供 7 个本地 BYOD 驱动槽位，通过 npm 安装适配器并以 SHA-256 校验入口文件",
+    "提供多标签 SQL 控制台，支持多语句执行、EXPLAIN、绑定参数、保存查询、查询历史及面板隔离的手动事务",
+    "支持 SSH 隧道、默认开启证书验证的 fail-closed TLS/mTLS，并可自动发现 .env、Docker Compose 与本地 .db 文件"
+   ],
+   "use_cases": [
+    "在 Orca 编辑器的侧边栏面板或全屏标签中直接查询和编辑本地或云端数据库",
+    "浏览 Docker Compose 服务或 .env 文件中定义的数据库连接并快速接入",
+    "使用可视化表设计器编辑列、索引与外键并预览生成的迁移 SQL"
+   ]
+  },
+  "sha": "c3e01ca9a670",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

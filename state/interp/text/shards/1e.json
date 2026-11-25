@@ -3282,5 +3282,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b4d8891202b1": {
+  "identity": {
+   "one_liner": "基于对象存储的嵌入式 LSM-tree 存储引擎，用 Rust 编写",
+   "review": "SlateDB 是一个 Rust 编写的嵌入式存储引擎，实现 LSM-tree 结构，将 SST 写入 S3、GCS 等对象存储而非本地磁盘。面向需要在应用内嵌入键值存储、且以对象存储作为持久层的开发者。其通过批量刷新 MemTable 降低 PUT 成本，通过块缓存、布隆过滤器、磁盘缓存缓解读延迟；当前不保证编译期 API 兼容性。",
+   "highlights": [
+    "提供 get/put/delete 基础 API、范围查询、事务、合并算子与 CDC",
+    "支持实现 ObjectStore trait 的任意对象存储，并提供 Go、Java、Python、Node.js 等官方语言绑定",
+    "写入先更新内存 WAL 与 MemTable，按可配置间隔刷为 SST，支持块缓存、压缩、布隆过滤器与本地磁盘缓存"
+   ],
+   "use_cases": [
+    "需要将键值数据持久化到 S3/GCS/ABS 等对象存储的 Rust 应用",
+    "希望利用对象存储实现数据复制与持久化、可接受较高延迟与 API 成本的场景",
+    "需要按约两个月节奏发布、并支持回滚式滚动升级的嵌入式存储场景"
+   ]
+  },
+  "sha": "b4d8891202b1",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "58820b5d969e": {
+  "identity": {
+   "one_liner": "轻量级 REST 服务，用 HTTP 请求替代遗留系统中的 ADODB 数据库调用",
+   "review": "sql_proxy 是用 Golang 编写的 REST 服务，面向支持 Web 请求的遗留软件（如 1C:Enterprise），将其 ADODB COM 调用替换为 HTTP API，SELECT 结果以可变列的 JSON 返回。支持 PostgreSQL、MSSQL、MySQL，无需安装驱动或配置 ODBC。API 当前版本 1.2，服务版本 1.5.0，可用 make prod 编译，经环境变量配置或 systemd 运行。",
+   "highlights": [
+    "支持 PostgreSQL、Microsoft SQL Server、MySQL，可按需集成其他 Golang 标准数据库驱动，无需安装驱动包或配置 ODBC 数据源",
+    "提供共享可复用的 SQL 连接池（含自动清理失效连接）、可配置的并发连接数上限、SELECT 行数限制、预编译语句及 BLOB 读写",
+    "支持 HTTPS、不存储 SQL 凭据、提供 Prometheus 监控指标，可独立运行或容器化部署于 k8s 等环境"
+   ],
+   "use_cases": [
+    "将 1C:Enterprise 等遗留系统中的 ADODB COM 调用迁移为 Web 请求，以去除 Linux 不兼容组件",
+    "在不安装 ODBC 驱动的环境下通过 REST API 执行 SQL 并获取 JSON 格式结果集",
+    "以默认绑定 localhost 的方式与遗留软件同机部署，并通过数据库权限配置实现访问控制"
+   ]
+  },
+  "sha": "58820b5d969e",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5e28b5a6d268": {
+  "identity": {
+   "one_liner": "自托管图集管理程序：图片存 Telegram 私有频道，经短码网关转发并发布 Telegraph 图集页",
+   "review": "SeSeGraph 是一个自托管的私人图册发布与管理程序，面向想自建图集画廊的个人用户。它通过自有 Telegram Bot 将图片、GIF、ZIP 或短视频存入私有频道，本地仅保存 SQLite 数据与缩略图；对外经 /i/{short_code} 网关流式转发媒体并自动生成 Telegraph 图集页。使用前需准备 Bot Token、私有频道编号和 HTTPS 域名，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "支持静态图、动图（保留动画）、MP4 短视频及 ZIP 压缩包（浏览器端解压、排序与元信息预填）上传",
+    "通过 /i/{short_code} 网关流式转发媒体，不暴露 Bot Token、频道 ID 或原始 file_id，MP4 支持 Range 拖动播放",
+    "单二进制（约 15MB，go:embed 前端）内置 SQLite（WAL 模式），支持月度流量预警/503 熔断与每日定时备份推送至频道"
+   ],
+   "use_cases": [
+    "将本地图片或 ZIP 素材整理为可对外分享的图集画廊",
+    "需要无需登录访问的 Telegraph 图集外链与 /rss.xml 订阅",
+    "以 Telegram 私有频道为存储介质、减少服务器磁盘占用的个人图床部署"
+   ]
+  },
+  "sha": "5e28b5a6d268",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

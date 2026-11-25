@@ -32236,5 +32236,4386 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "589585f5dc68+2": {
+  "fn": "tempoxyz/tidx",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "tidx"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    1,
+    2
+   ],
+   [
+    "replace",
+    8,
+    16,
+    2,
+    8,
+    [
+     " Quickstart •",
+     " Installation •",
+     " Configuration •",
+     " CLI •",
+     " API •",
+     " Queries"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    8,
+    9
+   ],
+   [
+    "replace",
+    17,
+    20,
+    9,
+    10,
+    [
+     "**tidx** is Tempo's chain indexer. It ingests blocks, transactions, and logs from a Tempo node, then makes them queryable through SQL, an HTTP API, and a CLI. Its hybrid PostgreSQL and ClickHouse architecture supports fast point lookups (OLTP) and large analytical queries (OLAP)."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    30,
+    10,
+    20
+   ],
+   [
+    "replace",
+    30,
+    43,
+    20,
+    21,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    59,
+    21,
+    37
+   ],
+   [
+    "replace",
+    59,
+    84,
+    37,
+    38,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    88,
+    38,
+    42
+   ],
+   [
+    "replace",
+    88,
+    89,
+    42,
+    43,
+    [
+     "|`engine`|`source`|Route|"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    43,
+    44
+   ],
+   [
+    "replace",
+    90,
+    94,
+    44,
+    48,
+    [
+     "|`postgres`*|`postgres-clickhouse`*|**Tiered:** hot reads on PostgreSQL, cold/analytical reads on native ClickHouse; provably-safe shapes split at the prune boundary, everything else falls back to `pg_clickhouse` (FDW)|",
+     "|`postgres`*|`postgres`|Plain PostgreSQL (hot window only when retention is enabled)|",
+     "|`postgres`*|`clickhouse`|PostgreSQL planner over the full ClickHouse archive via `pg_clickhouse` foreign tables|",
+     "|`clickhouse`|`clickhouse`*|Native ClickHouse (full archive + materialized views)|"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    98,
+    48,
+    52
+   ],
+   [
+    "replace",
+    98,
+    99,
+    52,
+    53,
+    [
+     "> FDW routes require a `pg_clickhouse` build with ClickHouse/pg_clickhouse#296 (unreleased 0.4): 0.3.2 crashes PostgreSQL on LATERAL / correlated subqueries over foreign tables. `ghcr.io/tempoxyz/pg_clickhouse:16-02505c4` ships a pinned build (see `.github/workflows/pg-clickhouse.yml`). Aggregates pushed to ClickHouse (e.g. `avg`) compute in Float64 and can differ from PostgreSQL `numeric` in the last decimal."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    104,
+    53,
+    58
+   ],
+   [
+    "replace",
+    104,
+    123,
+    58,
+    59,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    127,
+    59,
+    63
+   ],
+   [
+    "replace",
+    127,
+    130,
+    63,
+    66,
+    [
+     "- Tempo developer documentation: guides for building on Tempo",
+     "- tempoxyz/tempo: Tempo node and protocol implementation",
+     "- tempoxyz/tempo-apps: Tempo applications, including the block explorer"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    158,
+    66,
+    94
+   ],
+   [
+    "replace",
+    158,
+    197,
+    94,
+    95,
+    [
+     "…（39 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    205,
+    95,
+    103
+   ],
+   [
+    "replace",
+    205,
+    232,
+    103,
+    104,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    240,
+    104,
+    112
+   ],
+   [
+    "replace",
+    240,
+    254,
+    112,
+    113,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    262,
+    113,
+    121
+   ],
+   [
+    "replace",
+    262,
+    267,
+    121,
+    122,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    275,
+    122,
+    130
+   ],
+   [
+    "replace",
+    275,
+    279,
+    130,
+    131,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    292,
+    131,
+    144
+   ],
+   [
+    "replace",
+    292,
+    293,
+    144,
+    145,
+    [
+     "|Setting|Default|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    145,
+    146
+   ],
+   [
+    "replace",
+    294,
+    300,
+    146,
+    152,
+    [
+     "|`http.max_concurrent_queries`|32|API statements that may run at once in one process|",
+     "|`http.max_live_connections`|20|Live query streams one process accepts|",
+     "|`chains.postgres.api_pool_size`|16|Connections in the API's own pool (`api_url` and `serve`)|",
+     "|`chains.postgres.api_pool_wait_ms`|none|`serve` only: fail a request that waits this long for a connection|",
+     "|`chains.clickhouse.api_user` / `api_password_env`|`user` / `password_env`|`serve` only: ClickHouse user for queries. Use `readonly = 2` or SELECT-only grants: tidx sets query settings on every request, which `readonly = 1` refuses|",
+     "|`chains.clickhouse.api_url` / `api_failover_urls`|`url` / `failover_urls`|`serve` only: ClickHouse URL for queries, such as a replica that serves only API reads, and the URLs to fail over to (such as the writers). Serve returns to `api_url` within 30 seconds of its `/replicas_status` reporting healthy (up and caught up). Tiered-storage queries that PostgreSQL runs through pg_clickhouse use `fdw_url` instead|"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    307,
+    152,
+    159
+   ],
+   [
+    "replace",
+    307,
+    312,
+    159,
+    160,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    320,
+    160,
+    168
+   ],
+   [
+    "replace",
+    320,
+    326,
+    168,
+    169,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    334,
+    169,
+    177
+   ],
+   [
+    "replace",
+    334,
+    349,
+    177,
+    178,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    349,
+    375,
+    178,
+    204
+   ],
+   [
+    "replace",
+    375,
+    385,
+    204,
+    205,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    403,
+    205,
+    223
+   ],
+   [
+    "replace",
+    403,
+    426,
+    223,
+    224,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    449,
+    224,
+    247
+   ],
+   [
+    "replace",
+    449,
+    457,
+    247,
+    248,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    457,
+    465,
+    248,
+    256
+   ],
+   [
+    "replace",
+    465,
+    478,
+    256,
+    257,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    478,
+    496,
+    257,
+    275
+   ],
+   [
+    "replace",
+    496,
+    508,
+    275,
+    276,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    508,
+    516,
+    276,
+    284
+   ],
+   [
+    "replace",
+    516,
+    521,
+    284,
+    285,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    521,
+    523,
+    285,
+    287
+   ],
+   [
+    "replace",
+    523,
+    524,
+    287,
+    288,
+    [
+     "|Field|Required|Description|"
+    ]
+   ],
+   [
+    "equal",
+    524,
+    525,
+    288,
+    289
+   ],
+   [
+    "replace",
+    525,
+    530,
+    289,
+    294,
+    [
+     "|`chainId`|yes|Target chain ID|",
+     "|`name`|yes|View name (alphanumeric + underscore)|",
+     "|`sql`|yes|SELECT statement for the view|",
+     "|`orderBy`|yes|Primary key columns for table sorting|",
+     "|`engine`|no|ClickHouse engine (default: `SummingMergeTree()`)|"
+    ]
+   ],
+   [
+    "equal",
+    530,
+    577,
+    294,
+    341
+   ],
+   [
+    "replace",
+    577,
+    580,
+    341,
+    344,
+    [
+     "- **Base Tables:** raw chain data written by the sync engine, available in both PostgreSQL and ClickHouse.",
+     "- **Event Tables:** virtual, decoded-at-query-time tables generated from `?signature=Event(...)`. Available in both engines.",
+     "- **Materialized Tables:** precomputed token, holder, and DEX analytics maintained by ClickHouse. Available only with `engine=clickhouse`, alongside user-defined views registered through the `/views` API."
+    ]
+   ],
+   [
+    "equal",
+    580,
+    587,
+    344,
+    351
+   ],
+   [
+    "replace",
+    587,
+    588,
+    351,
+    352,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    588,
+    589,
+    352,
+    353
+   ],
+   [
+    "replace",
+    589,
+    599,
+    353,
+    363,
+    [
+     "|`num`|`INT8`|Block number|",
+     "|`hash`|`BYTEA`|Block hash|",
+     "|`parent_hash`|`BYTEA`|Parent block hash|",
+     "|`timestamp`|`TIMESTAMPTZ`|Block timestamp|",
+     "|`timestamp_ms`|`INT8`|Block timestamp (milliseconds)|",
+     "|`gas_limit`|`INT8`|Gas limit|",
+     "|`gas_used`|`INT8`|Gas used|",
+     "|`miner`|`BYTEA`|Block producer|",
+     "|`extra_data`|`BYTEA`|Extra data field|",
+     "|`consensus_proposer`|`BYTEA`|Ed25519 consensus proposer pubkey (TIP-1031, NULL pre-fork)|"
+    ]
+   ],
+   [
+    "equal",
+    599,
+    602,
+    363,
+    366
+   ],
+   [
+    "replace",
+    602,
+    603,
+    366,
+    367,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    603,
+    604,
+    367,
+    368
+   ],
+   [
+    "replace",
+    604,
+    625,
+    368,
+    389,
+    [
+     "|`block_num`|`INT8`|Block number|",
+     "|`block_timestamp`|`TIMESTAMPTZ`|Block timestamp|",
+     "|`idx`|`INT4`|Transaction index|",
+     "|`hash`|`BYTEA`|Transaction hash|",
+     "|`type`|`INT2`|Transaction type|",
+     "|`from`|`BYTEA`|Sender address|",
+     "|`to`|`BYTEA`|Recipient address|",
+     "|`value`|`TEXT`|Transfer value (wei)|",
+     "|`input`|`BYTEA`|Calldata|",
+     "|`gas_limit`|`INT8`|Gas limit|",
+     "|`max_fee_per_gas`|`TEXT`|Max fee per gas|",
+     "|`max_priority_fee_per_gas`|`TEXT`|Max priority fee|",
+     "|`gas_used`|`INT8`|Gas consumed|",
+     "|`nonce_key`|`BYTEA`|Nonce key (2D nonces)|",
+     "|`nonce`|`INT8`|Nonce value|",
+     "|`fee_token`|`BYTEA`|Fee token address|",
+     "|`calls`|`JSONB`|Batch call data|",
+     "|`call_count`|`INT2`|Number of calls|",
+     "|`valid_before`|`INT8`|Validity window start|",
+     "|`valid_after`|`INT8`|Validity window end|",
+     "|`signature_type`|`INT2`|Signature type: 0 = secp256k1, 1 = P256, 2 = WebAuthn, 3 = configurable account (keychain transactions use the access key's type)|"
+    ]
+   ],
+   [
+    "equal",
+    625,
+    628,
+    389,
+    392
+   ],
+   [
+    "replace",
+    628,
+    629,
+    392,
+    393,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    629,
+    630,
+    393,
+    394
+   ],
+   [
+    "replace",
+    630,
+    639,
+    394,
+    403,
+    [
+     "|`block_num`|`INT8`|Block number|",
+     "|`block_timestamp`|`TIMESTAMPTZ`|Block timestamp|",
+     "|`log_idx`|`INT4`|Log index|",
+     "|`tx_idx`|`INT4`|Transaction index|",
+     "|`tx_hash`|`BYTEA`|Transaction hash|",
+     "|`address`|`BYTEA`|Emitting contract|",
+     "|`selector`|`BYTEA`|Event selector (topic0)|",
+     "|`topics`|`BYTEA[]`|All topics|",
+     "|`data`|`BYTEA`|Event data|"
+    ]
+   ],
+   [
+    "equal",
+    639,
+    642,
+    403,
+    406
+   ],
+   [
+    "replace",
+    642,
+    643,
+    406,
+    407,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    643,
+    644,
+    407,
+    408
+   ],
+   [
+    "replace",
+    644,
+    656,
+    408,
+    420,
+    [
+     "|`block_num`|`INT8`|Block number|",
+     "|`block_timestamp`|`TIMESTAMPTZ`|Block timestamp|",
+     "|`tx_idx`|`INT4`|Transaction index|",
+     "|`tx_hash`|`BYTEA`|Transaction hash|",
+     "|`from`|`BYTEA`|Sender address|",
+     "|`to`|`BYTEA`|Recipient address|",
+     "|`contract_address`|`BYTEA`|Created contract (if deploy)|",
+     "|`gas_used`|`INT8`|Gas consumed|",
+     "|`cumulative_gas_used`|`INT8`|Cumulative gas in block|",
+     "|`effective_gas_price`|`TEXT`|Actual gas price paid|",
+     "|`status`|`INT2`|Success (1) or failure (0)|",
+     "|`fee_payer`|`BYTEA`|Tempo fee payer (if sponsored)|"
+    ]
+   ],
+   [
+    "equal",
+    656,
+    661,
+    420,
+    425
+   ],
+   [
+    "replace",
+    661,
+    662,
+    425,
+    426,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    663,
+    426,
+    427
+   ],
+   [
+    "replace",
+    663,
+    674,
+    427,
+    438,
+    [
+     "|`chain_id`|`INT8`|Chain identifier|",
+     "|`head_num`|`INT8`|Remote chain head from RPC|",
+     "|`synced_num`|`INT8`|Highest contiguous block (no gaps from backfill_num to here)|",
+     "|`tip_num`|`INT8`|Highest block near chain head (realtime follows this)|",
+     "|`backfill_num`|`INT8`|Lowest synced block going backwards (NULL=not started, 0=complete)|",
+     "|`archive_tip_num`|`INT8`|Highest block in the contiguous ClickHouse archive interval|",
+     "|`archive_backfill_num`|`INT8`|Lowest block in the contiguous ClickHouse archive interval (NULL=not started)|",
+     "|`pruned_below`|`INT8`|Current PostgreSQL hot-tier boundary; rows at or below it route to ClickHouse|",
+     "|`pruned_below_ts`|`TIMESTAMPTZ`|Timestamp boundary used for tiered constraint exclusion|",
+     "|`started_at`|`TIMESTAMPTZ`|Sync start time|",
+     "|`updated_at`|`TIMESTAMPTZ`|Last update time|"
+    ]
+   ],
+   [
+    "equal",
+    674,
+    683,
+    438,
+    447
+   ],
+   [
+    "replace",
+    683,
+    688,
+    447,
+    448,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    688,
+    690,
+    448,
+    450
+   ],
+   [
+    "replace",
+    690,
+    691,
+    450,
+    451,
+    [
+     "For Transfer logs specifically, `token_transfers` is pre-decoded and cheaper."
+    ]
+   ],
+   [
+    "equal",
+    691,
+    703,
+    451,
+    463
+   ],
+   [
+    "replace",
+    703,
+    704,
+    463,
+    464,
+    [
+     "|Name|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    704,
+    705,
+    464,
+    465
+   ],
+   [
+    "replace",
+    705,
+    721,
+    465,
+    481,
+    [
+     "|`address_balances`|Current positive balance per `(holder, token)`.|",
+     "|`address_balances_snapshot`|Pre-aggregated `address_balances`, refreshed on a schedule.|",
+     "|`address_holder_deltas`|Holder-first mirror of `token_holder_deltas`.|",
+     "|`dex_fills`|Decoded stablecoin-DEX `OrderFilled` events.|",
+     "|`dex_ohlc_1m`|1-minute OHLC candles per pair, refreshed on a schedule.|",
+     "|`dex_orders`|Decoded stablecoin-DEX `OrderPlaced` events.|",
+     "|`dex_pair_liquidity`|Pairs joined to their on-DEX base liquidity.|",
+     "|`dex_pairs`|Decoded stablecoin-DEX `PairCreated` events.|",
+     "|`token_balances`|Current positive balance per `(token, holder)`.|",
+     "|`token_balances_snapshot`|Pre-aggregated `token_balances`, refreshed on a schedule.|",
+     "|`token_holder_counts`|Holder count per token, refreshed on a schedule.|",
+     "|`token_holder_deltas`|Per-event ± balance change, two rows per transfer.|",
+     "|`token_metadata`|Per-token first/last seen + lifetime transfer count.|",
+     "|`token_supply`|Per-token mints − burns (zero-address legs).|",
+     "|`token_transfer_stats`|Per-`(day, token)` count, volume, unique senders/recipients.|",
+     "|`token_transfers`|Decoded `Transfer` events.|"
+    ]
+   ],
+   [
+    "equal",
+    721,
+    722,
+    481,
+    482
+   ],
+   [
+    "replace",
+    722,
+    723,
+    482,
+    483,
+    [
+     "User-defined views registered through the `/views` API live alongside these in `analytics_{chainId}` and are queryable the same way."
+    ]
+   ],
+   [
+    "equal",
+    723,
+    731,
+    483,
+    491
+   ],
+   [
+    "replace",
+    731,
+    732,
+    491,
+    492,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    732,
+    733,
+    492,
+    493
+   ],
+   [
+    "replace",
+    733,
+    736,
+    493,
+    496,
+    [
+     "|`holder`|`String`|Holder address|",
+     "|`token`|`String`|Token contract|",
+     "|`balance`|`Int256`|Current balance (positive only)|"
+    ]
+   ],
+   [
+    "equal",
+    736,
+    741,
+    496,
+    501
+   ],
+   [
+    "replace",
+    741,
+    745,
+    501,
+    502,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    745,
+    752,
+    502,
+    509
+   ],
+   [
+    "replace",
+    752,
+    753,
+    509,
+    510,
+    [
+     "Same `(holder, token, balance)` rollup as `address_balances`, but stored in its own `MergeTree` ordered by `(holder, balance, token)` so account balance pages and counts resolve via a holder-keyed range instead of re-aggregating the full delta history on every read. Use this for hot addresses where the live `address_balances` view would time out; results are up to one refresh interval stale."
+    ]
+   ],
+   [
+    "equal",
+    753,
+    754,
+    510,
+    511
+   ],
+   [
+    "replace",
+    754,
+    755,
+    511,
+    512,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    755,
+    756,
+    512,
+    513
+   ],
+   [
+    "replace",
+    756,
+    759,
+    513,
+    516,
+    [
+     "|`holder`|`String`|Holder address|",
+     "|`token`|`String`|Token contract|",
+     "|`balance`|`Int256`|Current balance (positive only)|"
+    ]
+   ],
+   [
+    "equal",
+    759,
+    764,
+    516,
+    521
+   ],
+   [
+    "replace",
+    764,
+    769,
+    521,
+    522,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    769,
+    778,
+    522,
+    531
+   ],
+   [
+    "replace",
+    778,
+    779,
+    531,
+    532,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    779,
+    780,
+    532,
+    533
+   ],
+   [
+    "replace",
+    780,
+    789,
+    533,
+    541,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`holder`|`String`|Holder address|",
+     "|`token`|`String`|Token contract|",
+     "|`leg`|`Int8`|`+1` for credit, `-1` for debit|",
+     "|`balance_delta`|`Int256`|Signed delta applied to `(holder, token)`|"
+    ]
+   ],
+   [
+    "equal",
+    789,
+    797,
+    541,
+    549
+   ],
+   [
+    "replace",
+    797,
+    798,
+    549,
+    550,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    798,
+    799,
+    550,
+    551
+   ],
+   [
+    "replace",
+    799,
+    808,
+    551,
+    560,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_idx`|`Int32`|Transaction index|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`address`|`String`|Emitting contract (the DEX precompile)|",
+     "|`key`|`String`|Pair key (`bytes32`)|",
+     "|`base`|`String`|Base token address|",
+     "|`quote`|`String`|Quote token address|"
+    ]
+   ],
+   [
+    "equal",
+    808,
+    816,
+    560,
+    568
+   ],
+   [
+    "replace",
+    816,
+    817,
+    568,
+    569,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    817,
+    818,
+    569,
+    570
+   ],
+   [
+    "replace",
+    818,
+    832,
+    570,
+    584,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_idx`|`Int32`|Transaction index|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`address`|`String`|Emitting contract (the DEX precompile)|",
+     "|`orderId`|`UInt256`|Order id|",
+     "|`maker`|`String`|Order maker|",
+     "|`token`|`String`|Pair base token|",
+     "|`amount`|`UInt256`|Order amount|",
+     "|`isBid`|`UInt8`|1 = bid, 0 = ask|",
+     "|`tick`|`Int16`|Order price tick|",
+     "|`isFlipOrder`|`UInt8`|1 = flip order|",
+     "|`flipTick`|`Int16`|Flip order price tick|"
+    ]
+   ],
+   [
+    "equal",
+    832,
+    838,
+    584,
+    590
+   ],
+   [
+    "replace",
+    838,
+    839,
+    590,
+    591,
+    [
+     "Decoded `OrderFilled(uint128 indexed orderId, address indexed maker, address indexed taker, uint128 amountFilled, bool partialFill)` events. The pair (`token`/`isBid`/`tick`) is not on this event. Join `orderId` to `dex_orders`. `ReplacingMergeTree` ordered by `(orderId, block_num, log_idx)` so the join probes by sort key, with bloom indexes on `maker`/`taker`/`tx_hash`."
+    ]
+   ],
+   [
+    "equal",
+    839,
+    840,
+    591,
+    592
+   ],
+   [
+    "replace",
+    840,
+    841,
+    592,
+    593,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    841,
+    842,
+    593,
+    594
+   ],
+   [
+    "replace",
+    842,
+    853,
+    594,
+    605,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_idx`|`Int32`|Transaction index|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`address`|`String`|Emitting contract (the DEX precompile)|",
+     "|`orderId`|`UInt256`|Order id (join key to `dex_orders`)|",
+     "|`maker`|`String`|Fill maker|",
+     "|`taker`|`String`|Fill taker|",
+     "|`amountFilled`|`UInt256`|Amount filled|",
+     "|`partialFill`|`UInt8`|1 = partial fill|"
+    ]
+   ],
+   [
+    "equal",
+    853,
+    858,
+    605,
+    610
+   ],
+   [
+    "replace",
+    858,
+    864,
+    610,
+    611,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    864,
+    875,
+    611,
+    622
+   ],
+   [
+    "replace",
+    875,
+    876,
+    622,
+    623,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    876,
+    877,
+    623,
+    624
+   ],
+   [
+    "replace",
+    877,
+    886,
+    624,
+    633,
+    [
+     "|`bucket`|`DateTime('UTC')`|Start of the 1-minute bucket|",
+     "|`token`|`String`|Pair base token|",
+     "|`open`|`Float64`|Rate of the first fill in the bucket|",
+     "|`high`|`Float64`|Highest fill rate in the bucket|",
+     "|`low`|`Float64`|Lowest fill rate in the bucket|",
+     "|`close`|`Float64`|Rate of the last fill in the bucket|",
+     "|`base_volume`|`UInt256`|Sum of base-token amounts filled|",
+     "|`quote_volume`|`UInt256`|Sum of quote-token amounts|",
+     "|`fill_count`|`UInt64`|Number of fills in the bucket|"
+    ]
+   ],
+   [
+    "equal",
+    886,
+    891,
+    633,
+    638
+   ],
+   [
+    "replace",
+    891,
+    896,
+    638,
+    639,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    896,
+    905,
+    639,
+    648
+   ],
+   [
+    "replace",
+    905,
+    906,
+    648,
+    649,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    906,
+    907,
+    649,
+    650
+   ],
+   [
+    "replace",
+    907,
+    915,
+    650,
+    658,
+    [
+     "|`key`|`String`|Pair key (`bytes32`)|",
+     "|`base`|`String`|Base token address|",
+     "|`quote`|`String`|Quote token address|",
+     "|`block_num`|`Int64`|Pair creation block|",
+     "|`log_idx`|`Int32`|Pair creation log index|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Pair creation timestamp|",
+     "|`tx_hash`|`String`|Pair creation tx hash|",
+     "|`liquidity`|`Int256`|Base-token balance escrowed on the DEX|"
+    ]
+   ],
+   [
+    "equal",
+    915,
+    920,
+    658,
+    663
+   ],
+   [
+    "replace",
+    920,
+    924,
+    663,
+    664,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    924,
+    925,
+    664,
+    665
+   ],
+   [
+    "delete",
+    925,
+    926,
+    665,
+    665
+   ],
+   [
+    "equal",
+    926,
+    934,
+    665,
+    673
+   ],
+   [
+    "replace",
+    934,
+    935,
+    673,
+    674,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    935,
+    936,
+    674,
+    675
+   ],
+   [
+    "replace",
+    936,
+    939,
+    675,
+    678,
+    [
+     "|`token`|`String`|Token contract|",
+     "|`holder`|`String`|Holder address|",
+     "|`balance`|`Int256`|Current balance (positive only)|"
+    ]
+   ],
+   [
+    "equal",
+    939,
+    944,
+    678,
+    683
+   ],
+   [
+    "replace",
+    944,
+    949,
+    683,
+    684,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    949,
+    955,
+    684,
+    690
+   ],
+   [
+    "replace",
+    955,
+    959,
+    690,
+    691,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    959,
+    966,
+    691,
+    698
+   ],
+   [
+    "replace",
+    966,
+    967,
+    698,
+    699,
+    [
+     "Same `(token, holder, balance)` rollup as `token_balances`, but stored in its own `MergeTree` ordered by `(token, balance)` so holder counts and \"top holders by balance\" resolve via a sort-key seek instead of re-aggregating the full delta history on every read. Use this for high-cardinality tokens where the live `token_balances` view would time out; results are up to one refresh interval stale."
+    ]
+   ],
+   [
+    "equal",
+    967,
+    968,
+    699,
+    700
+   ],
+   [
+    "replace",
+    968,
+    969,
+    700,
+    701,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    969,
+    970,
+    701,
+    702
+   ],
+   [
+    "replace",
+    970,
+    973,
+    702,
+    705,
+    [
+     "|`token`|`String`|Token contract|",
+     "|`holder`|`String`|Holder address|",
+     "|`balance`|`Int256`|Current balance (positive only)|"
+    ]
+   ],
+   [
+    "equal",
+    973,
+    986,
+    705,
+    718
+   ],
+   [
+    "replace",
+    986,
+    987,
+    718,
+    719,
+    [
+     "> Refreshable materialized view over `token_balances_snapshot`, recomputed on a schedule (every 15 minutes) rather than on insert."
+    ]
+   ],
+   [
+    "equal",
+    987,
+    990,
+    719,
+    722
+   ],
+   [
+    "replace",
+    990,
+    991,
+    722,
+    723,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    991,
+    992,
+    723,
+    724
+   ],
+   [
+    "replace",
+    992,
+    994,
+    724,
+    726,
+    [
+     "|`token`|`String`|Token contract|",
+     "|`holder_count`|`UInt64`|Number of holders with a positive balance|"
+    ]
+   ],
+   [
+    "equal",
+    994,
+    1011,
+    726,
+    743
+   ],
+   [
+    "replace",
+    1011,
+    1012,
+    743,
+    744,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1012,
+    1013,
+    744,
+    745
+   ],
+   [
+    "replace",
+    1013,
+    1021,
+    745,
+    753,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`token`|`String`|Token contract|",
+     "|`holder`|`String`|Holder address (sender or recipient)|",
+     "|`leg`|`Int8`|`+1` for recipient credit, `-1` for sender debit|",
+     "|`balance_delta`|`Int256`|Signed delta applied to `holder` for `token` at this block|"
+    ]
+   ],
+   [
+    "equal",
+    1021,
+    1026,
+    753,
+    758
+   ],
+   [
+    "replace",
+    1026,
+    1032,
+    758,
+    759,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1032,
+    1038,
+    759,
+    765
+   ],
+   [
+    "replace",
+    1038,
+    1042,
+    765,
+    766,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1042,
+    1059,
+    766,
+    783
+   ],
+   [
+    "replace",
+    1059,
+    1060,
+    783,
+    784,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1060,
+    1061,
+    784,
+    785
+   ],
+   [
+    "replace",
+    1061,
+    1067,
+    785,
+    791,
+    [
+     "|`token`|`String`|Token contract|",
+     "|`first_seen_block`|`Int64`|Block of the first observed `Transfer`|",
+     "|`last_seen_block`|`Int64`|Block of the most recent `Transfer`|",
+     "|`first_seen_timestamp`|`DateTime64(3, 'UTC')`|Timestamp of the first `Transfer`|",
+     "|`last_seen_timestamp`|`DateTime64(3, 'UTC')`|Timestamp of the most recent `Transfer`|",
+     "|`transfer_count`|`UInt64`|Total `Transfer` events ever emitted by this token|"
+    ]
+   ],
+   [
+    "equal",
+    1067,
+    1072,
+    791,
+    796
+   ],
+   [
+    "replace",
+    1072,
+    1076,
+    796,
+    797,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1076,
+    1085,
+    797,
+    806
+   ],
+   [
+    "replace",
+    1085,
+    1086,
+    806,
+    807,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1086,
+    1087,
+    807,
+    808
+   ],
+   [
+    "replace",
+    1087,
+    1089,
+    808,
+    810,
+    [
+     "|`token`|`String`|Token contract|",
+     "|`supply`|`Int256`|Cumulative mints − cumulative burns|"
+    ]
+   ],
+   [
+    "equal",
+    1089,
+    1094,
+    810,
+    815
+   ],
+   [
+    "replace",
+    1094,
+    1098,
+    815,
+    816,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1098,
+    1114,
+    816,
+    832
+   ],
+   [
+    "replace",
+    1114,
+    1115,
+    832,
+    833,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1115,
+    1116,
+    833,
+    834
+   ],
+   [
+    "replace",
+    1116,
+    1122,
+    834,
+    840,
+    [
+     "|`day`|`Date`|Day (UTC) bucket from `block_timestamp`|",
+     "|`token`|`String`|Token contract|",
+     "|`transfer_count`|`UInt64`|Number of `Transfer` events on that day|",
+     "|`volume`|`UInt256`|Sum of `amount` across all transfers on that day|",
+     "|`unique_senders`|`UInt64`|Distinct `from` addresses on that day|",
+     "|`unique_recipients`|`UInt64`|Distinct `to` addresses on that day|"
+    ]
+   ],
+   [
+    "equal",
+    1122,
+    1127,
+    840,
+    845
+   ],
+   [
+    "replace",
+    1127,
+    1132,
+    845,
+    846,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1132,
+    1149,
+    846,
+    863
+   ],
+   [
+    "replace",
+    1149,
+    1150,
+    863,
+    864,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1150,
+    1151,
+    864,
+    865
+   ],
+   [
+    "replace",
+    1151,
+    1161,
+    865,
+    875,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_idx`|`Int32`|Transaction index|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`token`|`String`|Emitting token contract|",
+     "|`from`|`String`|Sender address|",
+     "|`to`|`String`|Recipient address|",
+     "|`amount`|`UInt256`|Transfer amount|",
+     "|`is_virtual_forward`|`UInt8`|1 if this transfer was inserted via a virtual-forward path|"
+    ]
+   ],
+   [
+    "equal",
+    1161,
+    1166,
+    875,
+    880
+   ],
+   [
+    "replace",
+    1166,
+    1171,
+    880,
+    881,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1171,
+    1189,
+    881,
+    899
+   ],
+   [
+    "replace",
+    1189,
+    1208,
+    899,
+    900,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1208,
+    1210,
+    900,
+    902
+   ],
+   [
+    "replace",
+    1210,
+    1211,
+    902,
+    903,
+    [
+     "|Operation|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1211,
+    1212,
+    903,
+    904
+   ],
+   [
+    "replace",
+    1212,
+    1214,
+    904,
+    906,
+    [
+     "|**Realtime**|Follows chain head immediately, maintains ~0 lag|",
+     "|**Gap Sync**|Detects all gaps, fills from most recent to earliest|"
+    ]
+   ],
+   [
+    "equal",
+    1214,
+    1221,
+    906,
+    913
+   ],
+   [
+    "replace",
+    1221,
+    1225,
+    913,
+    917,
+    [
+     "- Rust 1.75+",
+     "- Docker",
+     "- PostgreSQL",
+     "- ClickHouse 25.11+ when ClickHouse OLAP is enabled"
+    ]
+   ],
+   [
+    "equal",
+    1225,
+    1232,
+    917,
+    924
+   ],
+   [
+    "replace",
+    1232,
+    1240,
+    924,
+    925,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1240,
+    1243,
+    925,
+    928
+   ],
+   [
+    "replace",
+    1243,
+    1246,
+    928,
+    929,
+    [
+     "LICENSE"
+    ]
+   ],
+   [
+    "equal",
+    1246,
+    1247,
+    929,
+    930
+   ],
+   [
+    "replace",
+    1247,
+    1249,
+    930,
+    931,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
+ },
+ "eb0f675f2cda+2": {
+  "fn": "ahmershahdev/ahmershahdev",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "delete",
+    0,
+    5,
+    0,
+    0
+   ],
+   [
+    "equal",
+    5,
+    6,
+    0,
+    1
+   ],
+   [
+    "replace",
+    6,
+    7,
+    1,
+    2,
+    [
+     " Syed Ahmer Shah — Software Engineer and Full-Stack Developer from Hyderabad, Pakistan. Designing order within the digital wilderness."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    9,
+    2,
+    4
+   ],
+   [
+    "replace",
+    9,
+    12,
+    4,
+    5,
+    [
+     " Software Engineer · Full-Stack Developer · Laravel · Django · React · MySQL"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    5,
+    6
+   ],
+   [
+    "replace",
+    13,
+    17,
+    6,
+    8,
+    [
+     " I design, build and ship web applications end to end — schema, backend, interface, security and deployment. ",
+     " In 2026 I built eight production-grade platforms solo and completed a full-stack internship at XCL Technologies ."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    8,
+    9
+   ],
+   [
+    "replace",
+    18,
+    25,
+    9,
+    14,
+    [
+     " Portfolio — ahmershah.dev",
+     " Resume (PDF)",
+     " Syed Ahmer Shah on LinkedIn",
+     " 676 LeetCode problems solved",
+     " Hire Syed Ahmer Shah on Fiverr"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    14,
+    15
+   ],
+   [
+    "replace",
+    26,
+    33,
+    15,
+    20,
+    [
+     " 8 platforms built solo",
+     " 13 verified certificates",
+     " 63 articles published",
+     " GitHub followers",
+     " Profile views"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    20,
+    21
+   ],
+   [
+    "replace",
+    34,
+    37,
+    21,
+    22,
+    [
+     " About &nbsp;·&nbsp; Selected work &nbsp;·&nbsp; Stack &nbsp;·&nbsp; Certifications &nbsp;·&nbsp; Education &nbsp;·&nbsp; Find me online "
+    ]
+   ],
+   [
+    "equal",
+    37,
+    46,
+    22,
+    31
+   ],
+   [
+    "replace",
+    46,
+    53,
+    31,
+    32,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    32,
+    33
+   ],
+   [
+    "delete",
+    54,
+    56,
+    33,
+    33
+   ],
+   [
+    "equal",
+    56,
+    59,
+    33,
+    36
+   ],
+   [
+    "replace",
+    59,
+    60,
+    36,
+    37,
+    [
+     "Eight platforms built solo in 2026. Every one has a case study and a narrated walkthrough on ahmershah.dev/projects."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    37,
+    38
+   ],
+   [
+    "replace",
+    61,
+    70,
+    38,
+    44,
+    [
+     "Karobar ERP — Stock, Sales, Accounts and Payroll for Small Shops — screenshot",
+     "",
+     " 01 · Karobar ERP — Stock, Sales, Accounts and Payroll for Small Shops",
+     "",
+     " Every rupee and every unit, in balance. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    44,
+    45
+   ],
+   [
+    "replace",
+    71,
+    81,
+    45,
+    54,
+    [
+     "",
+     "Case study · Video 1:34 · Source",
+     "",
+     "OfflineShelf — Wikipedia Reading Lists for Offline Use — screenshot",
+     "",
+     " 02 · OfflineShelf — Wikipedia Reading Lists for Offline Use",
+     "",
+     " Millions of articles. Choose the ones that matter. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    54,
+    55
+   ],
+   [
+    "replace",
+    82,
+    94,
+    55,
+    64,
+    [
+     "",
+     "Case study · Video 2:08 · Source",
+     "",
+     "MarketClock — Trading Days and Settlement Dates for 30 Exchanges — screenshot",
+     "",
+     " 03 · MarketClock — Trading Days API",
+     "",
+     " Every trading day, every settlement date. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    64,
+    65
+   ],
+   [
+    "replace",
+    95,
+    105,
+    65,
+    74,
+    [
+     "",
+     "Case study · Video 1:41 · Source",
+     "",
+     "HolidayOps — Working-Days API for 250 Countries — screenshot",
+     "",
+     " 04 · HolidayOps — Working Days API",
+     "",
+     " Every working day, in every country. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    74,
+    75
+   ],
+   [
+    "replace",
+    106,
+    118,
+    75,
+    84,
+    [
+     "",
+     "Case study · Video 1:34 · Source",
+     "",
+     "Zovita+ — Online Pharmacy Platform — screenshot",
+     "",
+     " 05 · Zovita+ — Online Pharmacy Platform",
+     "",
+     " Care, delivered with calm — a pharmacy that notices what you need. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    84,
+    85
+   ],
+   [
+    "replace",
+    119,
+    129,
+    85,
+    94,
+    [
+     "",
+     "Case study · Video 1:38 · Source",
+     "",
+     "BookMyMovie — Cinema Ticketing Platform — screenshot",
+     "",
+     " 06 · BookMyMovie — Cinema Ticketing Platform",
+     "",
+     " Pick your seat, watch the trailer, and never share it with a stranger. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    94,
+    95
+   ],
+   [
+    "replace",
+    130,
+    142,
+    95,
+    104,
+    [
+     "",
+     "Case study · Video 1:27 · Source",
+     "",
+     "GleanGrid — Farmers-Market Pre-Orders · Aptech TechWiz 7 — screenshot",
+     "",
+     " 07 · GleanGrid — Farmers Market Pre-Orders",
+     "",
+     " Reserve this week’s harvest online, pay the farmer at the stall. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    104,
+    105
+   ],
+   [
+    "replace",
+    143,
+    153,
+    105,
+    114,
+    [
+     "",
+     "Case study · Video 1:37 · Source",
+     "",
+     "Commerza — Security-First E-commerce Engine — screenshot",
+     "",
+     " 08 · Commerza — E-Commerce Store",
+     "",
+     " A security-first e-commerce engine, built without a framework. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    114,
+    115
+   ],
+   [
+    "delete",
+    154,
+    159,
+    115,
+    115
+   ],
+   [
+    "equal",
+    159,
+    160,
+    115,
+    116
+   ],
+   [
+    "replace",
+    160,
+    161,
+    116,
+    117,
+    [
+     "Case study · Video 1:08 · Source · Wiki"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    164,
+    117,
+    120
+   ],
+   [
+    "replace",
+    164,
+    172,
+    120,
+    121,
+    [
+     " <a href=\"https://ahmershah.dev/#skills\">"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    121,
+    122
+   ],
+   [
+    "replace",
+    173,
+    174,
+    122,
+    127,
+    [
+     " Stack: PHP, Laravel, Java, Python, Django, JavaScript, TypeScript, React, HTML5, CSS3, Tailwind CSS, Bootstrap, Node.js, Express, MongoDB, MySQL, Flask, Next.js, Redis, Docker, Vite, Three.js, Git, GitHub, Vercel",
+     "",
+     " </a>",
+     "",
+     "|Area|Skill · level — same scale as ahmershah.dev|"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    127,
+    128
+   ],
+   [
+    "replace",
+    175,
+    184,
+    128,
+    135,
+    [
+     "|**Languages**|HTML5 `●●●●●` · CSS3 `●●●●●` · JavaScript `●●●●●` · Java `●●●●○` · PHP `●●●○○` · Python `●●●○○`|",
+     "|**Frameworks & UI**|Bootstrap `●●●●●` · React `●●●●○` · Laravel `●●●○○` · Tailwind CSS `●●○○○`|",
+     "|**Backend & data**|Node.js `●●●●○` · Express `●●●●○` · MySQL `●●●○○` · MongoDB `●●●○○` · SQL Server `●●●○○` · Django `●●●○○`|",
+     "|**Fundamentals**|Data structures & algorithms `●●●●○` · OOP `●●●○○`|",
+     "|**Platforms & tools**|Git `●●●●●` · GitHub `●●●●●` · SEO `●●●●●` · Shopify `●●●○○`|",
+     "|**AI toolkit**|ChatGPT · Claude · Claude Code · Codex · Gemini · DeepSeek|",
+     "|**Also in the eight projects**|TypeScript · Flask · Django REST Framework · Next.js · Inertia · Redis · Celery · Docker · Vite · Three.js · Playwright · Stripe · GitHub Actions|"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    187,
+    135,
+    138
+   ],
+   [
+    "replace",
+    187,
+    188,
+    138,
+    139,
+    [
+     "The same 13 credentials shown on ahmershah.dev — every one links to the issuer's own verification page."
+    ]
+   ],
+   [
+    "equal",
+    188,
+    189,
+    139,
+    140
+   ],
+   [
+    "replace",
+    189,
+    190,
+    140,
+    141,
+    [
+     "|Certificate|Issuer|Issued|Verify|"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    141,
+    142
+   ],
+   [
+    "replace",
+    191,
+    206,
+    142,
+    155,
+    [
+     "|Amazon Junior Software Developer|Amazon · Coursera|Mar 2026|Verify ↗|",
+     "|Full Stack Web Development|Amazon · Coursera|Mar 2025|Verify ↗|",
+     "|Full-Stack Web Development (PHP, HTML, CSS & JavaScript)|Board Infinity · Coursera|Mar 2026|Verify ↗|",
+     "|IBM DevOps and Software Engineering|IBM · Coursera|Mar 2026|Verify ↗|",
+     "|Meta Full Stack Developer (Front-End & Back-End)|Meta · Coursera|Mar 2026|Verify ↗|",
+     "|Microsoft Full-Stack Developer|Microsoft · Coursera|Mar 2026|Verify ↗|",
+     "|Fullstack Development|Scrimba · Coursera|Mar 2026|Verify ↗|",
+     "|Become a Software Developer|LinkedIn Learning|Mar 2025|Verify ↗|",
+     "|Learning SQL Programming|LinkedIn Learning|Mar 2025|Verify ↗|",
+     "|Succeeding in Web Development: Full Stack & Front End|LinkedIn Learning|Mar 2025|Verify ↗|",
+     "|JavaScript (Intermediate)|HackerRank|Mar 2026|Verify ↗|",
+     "|SQL (Advanced)|HackerRank|Mar 2026|Verify ↗|",
+     "|Software Engineer Intern|HackerRank|Mar 2026|Verify ↗|"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    209,
+    155,
+    158
+   ],
+   [
+    "replace",
+    209,
+    210,
+    158,
+    159,
+    [
+     "|Period|Institution|Program|"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    159,
+    160
+   ],
+   [
+    "replace",
+    211,
+    217,
+    160,
+    164,
+    [
+     "|Nov 2024 – Dec 2028|Hyderabad Institute for Technology & Management Sciences (HITMS)|Bachelor's in Software Engineering|",
+     "|Aug 2025 – Sep 2028|Aptech Pakistan|Advanced Diploma in Software Engineering (ADSE)|",
+     "|Jul 2022 – Jul 2024|Superior College of Science, Hyderabad|HSC, Pre-Engineering · Grade A|",
+     "|Apr 2012 – Jul 2022|St. Bonaventure's High School, Hyderabad|SSC, Computer Science · A-1|"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    220,
+    164,
+    167
+   ],
+   [
+    "replace",
+    220,
+    225,
+    167,
+    170,
+    [
+     " Website",
+     " Email support@ahmershah.dev",
+     " Book a call on Calendly"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    226,
+    170,
+    171
+   ],
+   [
+    "replace",
+    226,
+    227,
+    171,
+    172,
+    [
+     "|Purpose|Profiles|"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    172,
+    173
+   ],
+   [
+    "replace",
+    228,
+    236,
+    173,
+    181,
+    [
+     "|**Hire me**|Fiverr Upwork Freelancer Contra PeoplePerHour Guru|",
+     "|**Career**|LinkedIn Wellfound Arc.dev Crunchbase The Org Google Play|",
+     "|**Code & proof**|GitHub GitLab LeetCode · 676 solved HackerRank Credly Coursera|",
+     "|**Writing**|Blog · Engineering Logs Medium dev.to Hashnode HackerNoon Substack AWS Builder CoderLegion Sessionize|",
+     "|**Reviews & business**|Clutch Trustpilot G2 DesignRush TechBehemoths Google Business|",
+     "|**Social · @ahmershahdev**|Instagram YouTube X TikTok Facebook Bluesky Pinterest|",
+     "|**Design**|Dribbble Behance|",
+     "|**Links**|Linktree Beacons Gravatar|"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    181,
+    182
+   ],
+   [
+    "replace",
+    237,
+    238,
+    182,
+    183,
+    [
+     " Syed Ahmer Shah logo"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    239,
+    183,
+    184
+   ],
+   [
+    "replace",
+    239,
+    242,
+    184,
+    185,
+    [
+     " \"Designing order within the digital wilderness.\" <code>— Syed Ahmer Shah</code> "
+    ]
+   ],
+   [
+    "equal",
+    242,
+    243,
+    185,
+    186
+   ],
+   [
+    "replace",
+    243,
+    244,
+    186,
+    187,
+    [
+     " Let"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    245,
+    187,
+    188
+   ],
+   [
+    "replace",
+    245,
+    250,
+    188,
+    189,
+    [
+     " <code>© 2026 Syed Ahmer Shah</code>"
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
+ },
+ "f920be3ce462+2": {
+  "fn": "jaydip187/mcp-forge",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "Release",
+     "CI",
+     "License: MIT OR Apache-2.0",
+     "Website"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    9,
+    6,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     " Asked how many stars rust-lang/rust has, Claude calls the get_repo tool; mcp-forge sends GET to the GitHub API, trims about a hundred fields to three with a jq shape, and Claude answers. "
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    10,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "The mcp-forge web UI: a project's MCP URL and its tools, each with its method, path and description"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    19,
+    14,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     " collection, a HAR file or curl commands, then rename, trim and reshape what agents see (jq)."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     " the operations to offer; the variables become the agent's arguments."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    25,
+    23,
+    25,
+    [
+     " parameters, optional schema exploration and agent-written SQL, all read-only by default, with",
+     " writes as a deliberate opt-in."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     " the same opt-in exploration tools, read-only by default."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     " checks every SQL statement before it reaches your database."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    34,
+    29,
+    34
+   ],
+   [
+    "delete",
+    34,
+    36,
+    34,
+    34
+   ],
+   [
+    "equal",
+    36,
+    37,
+    34,
+    35
+   ],
+   [
+    "replace",
+    37,
+    59,
+    35,
+    36,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    75,
+    36,
+    52
+   ],
+   [
+    "replace",
+    75,
+    76,
+    52,
+    53,
+    [
+     "releases page, unpack it and put the binary"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    85,
+    53,
+    62
+   ],
+   [
+    "replace",
+    85,
+    86,
+    62,
+    63,
+    [
+     "Docker users: see Docker."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    111,
+    63,
+    88
+   ],
+   [
+    "replace",
+    111,
+    112,
+    88,
+    89,
+    [
+     "|Step|Fill in|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    89,
+    90
+   ],
+   [
+    "replace",
+    113,
+    118,
+    90,
+    95,
+    [
+     "|What the agent sees|Name `get_repo`, description `Look up a GitHub repository: stars, language, open issues.`|",
+     "|Request|Method `GET`, base URL `https://api.github.com`, path `/repos/{owner}/{repo}`|",
+     "|Parameters|Nothing to do: `owner` and `repo` were added from the path|",
+     "|Body|Nothing for a GET|",
+     "|Response|Optionally, a response shape (below)|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    147,
+    95,
+    124
+   ],
+   [
+    "replace",
+    147,
+    149,
+    124,
+    126,
+    [
+     " collection variables with values are filled in (`{{baseUrl}}`), `:id` and unresolved",
+     " `{{var}}` path segments become parameters, and auth blocks become suggested auth."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    150,
+    126,
+    127
+   ],
+   [
+    "replace",
+    150,
+    152,
+    127,
+    129,
+    [
+     " responses, or anything but GET); repeats of the same endpoint merge, and id-like path segments",
+     " (`/users/42`, UUIDs) become parameters."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    129,
+    130
+   ],
+   [
+    "replace",
+    153,
+    154,
+    130,
+    131,
+    [
+     " work). `-X`, `-H`, `-d`/`--data*`, `--json`, `-G`, `-u` and `-F` are understood."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    216,
+    131,
+    193
+   ],
+   [
+    "replace",
+    216,
+    217,
+    193,
+    194,
+    [
+     " instead of the admin token."
+    ]
+   ],
+   [
+    "equal",
+    217,
+    220,
+    194,
+    197
+   ],
+   [
+    "replace",
+    220,
+    221,
+    197,
+    198,
+    [
+     " used."
+    ]
+   ],
+   [
+    "equal",
+    221,
+    229,
+    198,
+    206
+   ],
+   [
+    "replace",
+    229,
+    230,
+    206,
+    207,
+    [
+     " names mcp-forge itself as the authorization server (`/.well-known/oauth-authorization-server`)."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    231,
+    207,
+    208
+   ],
+   [
+    "replace",
+    231,
+    233,
+    208,
+    210,
+    [
+     " against `/oauth/authorize` and `/oauth/token`. Access tokens last an hour; refresh tokens 30 days",
+     " and are replaced on every use. `/oauth/revoke` revokes. Only hashes of tokens are stored."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    210,
+    211
+   ],
+   [
+    "replace",
+    234,
+    235,
+    211,
+    212,
+    [
+     " still wait. **Connect → Connected apps** lists who approved what and disconnects apps."
+    ]
+   ],
+   [
+    "equal",
+    235,
+    236,
+    212,
+    213
+   ],
+   [
+    "replace",
+    236,
+    238,
+    213,
+    215,
+    [
+     " with `--admin-token`, and have the proxy send `X-Forwarded-Proto: https`). Addresses in the",
+     " metadata come from the request's `Host` header."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    247,
+    215,
+    224
+   ],
+   [
+    "replace",
+    247,
+    248,
+    224,
+    225,
+    [
+     "|Reference|Where the value comes from|"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    225,
+    226
+   ],
+   [
+    "replace",
+    249,
+    251,
+    226,
+    228,
+    [
+     "|`env:NAME`|Environment variable `NAME` of the mcp-forge process (or of the stdio client).|",
+     "|`keyring:NAME`|Your OS keychain: service `mcp-forge`, account `NAME` (macOS Keychain, Windows Credential Manager, Secret Service on Linux).|"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    272,
+    228,
+    249
+   ],
+   [
+    "replace",
+    272,
+    276,
+    249,
+    253,
+    [
+     " authorization URL, token URL, client ID and scopes, and register the redirect URL the form shows",
+     " (`http://127.0.0.1:7410/oauth/callback` by default) with the provider. Save, then click",
+     " **Connect** in the list: you sign in at the provider and come back to mcp-forge. PKCE is always",
+     " used."
+    ]
+   ],
+   [
+    "equal",
+    276,
+    277,
+    253,
+    254
+   ],
+   [
+    "replace",
+    277,
+    278,
+    254,
+    255,
+    [
+     " scopes and an optional audience. No sign-in step."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    319,
+    255,
+    296
+   ],
+   [
+    "replace",
+    319,
+    320,
+    296,
+    297,
+    [
+     " hides them."
+    ]
+   ],
+   [
+    "equal",
+    320,
+    321,
+    297,
+    298
+   ],
+   [
+    "replace",
+    321,
+    322,
+    298,
+    299,
+    [
+     " fails the call with each message and its path, plus any partial data."
+    ]
+   ],
+   [
+    "equal",
+    322,
+    327,
+    299,
+    304
+   ],
+   [
+    "replace",
+    327,
+    328,
+    304,
+    305,
+    [
+     "|Database|Value of the referenced variable|"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    329,
+    305,
+    306
+   ],
+   [
+    "replace",
+    329,
+    334,
+    306,
+    311,
+    [
+     "|PostgreSQL|`postgres://readonly:PASSWORD@db.example.com:5432/shop`|",
+     "|MySQL|`mysql://readonly:PASSWORD@db.example.com:3306/shop`|",
+     "|SQLite|`/path/to/shop.db`|",
+     "|SQL Server|`mssql://reader:PASSWORD@db.example.com:1433/shop` (ADO.NET `Server=…;` and `jdbc:sqlserver://…` strings work too; add `?trust_server_certificate=true` for self-signed certificates)|",
+     "|ClickHouse|`https://reader:PASSWORD@db.example.com:8443/shop` (the HTTP interface)|"
+    ]
+   ],
+   [
+    "equal",
+    334,
+    358,
+    311,
+    335
+   ],
+   [
+    "replace",
+    358,
+    360,
+    335,
+    337,
+    [
+     " runs in a transaction that is rolled back. *Test* warns when the login can write; a login with only",
+     " `db_datareader` is the safest choice."
+    ]
+   ],
+   [
+    "equal",
+    360,
+    361,
+    337,
+    338
+   ],
+   [
+    "replace",
+    361,
+    362,
+    338,
+    339,
+    [
+     " connections are always read-only."
+    ]
+   ],
+   [
+    "equal",
+    362,
+    368,
+    339,
+    345
+   ],
+   [
+    "replace",
+    368,
+    369,
+    345,
+    346,
+    [
+     "|Mode|Saved queries|Agent `run_sql`|"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    370,
+    346,
+    347
+   ],
+   [
+    "replace",
+    370,
+    373,
+    347,
+    350,
+    [
+     "|Read only (default)|read|read|",
+     "|Saved writes|read and write|read|",
+     "|Full access|read and write|read and write|"
+    ]
+   ],
+   [
+    "equal",
+    373,
+    379,
+    350,
+    356
+   ],
+   [
+    "replace",
+    379,
+    380,
+    356,
+    357,
+    [
+     " write may change*, default 100);"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    383,
+    357,
+    360
+   ],
+   [
+    "replace",
+    383,
+    384,
+    360,
+    361,
+    [
+     " committed, undone or failed."
+    ]
+   ],
+   [
+    "equal",
+    384,
+    389,
+    361,
+    366
+   ],
+   [
+    "replace",
+    389,
+    390,
+    366,
+    367,
+    [
+     "|Database|Value of the referenced variable|"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    391,
+    367,
+    368
+   ],
+   [
+    "replace",
+    391,
+    395,
+    368,
+    372,
+    [
+     "|MongoDB|`mongodb://reader:PASSWORD@db.example.com:27017/shop` (or `mongodb+srv://…/shop`; the database name is required)|",
+     "|Redis|`redis://:PASSWORD@cache.example.com:6379/0` (`rediss://` for TLS)|",
+     "|DynamoDB|`dynamodb://ACCESS_KEY_ID:SECRET@us-east-1` (percent-encode `/` and `+` in the secret; `?session_token=…`, or `?endpoint=http://localhost:8000` for DynamoDB Local)|",
+     "|Elasticsearch|`https://reader:PASSWORD@search.example.com:9200` (or `?api_key=KEY`; OpenSearch works too)|"
+    ]
+   ],
+   [
+    "equal",
+    395,
+    398,
+    372,
+    375
+   ],
+   [
+    "replace",
+    398,
+    399,
+    375,
+    376,
+    [
+     "|Database|Operations|Target|Body, for example|"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    400,
+    376,
+    377
+   ],
+   [
+    "replace",
+    400,
+    404,
+    377,
+    381,
+    [
+     "|MongoDB|`find`, `find_one`, `aggregate`, `count`, `distinct`; writes `insert_one`, `update_one/many`, `delete_one/many`|collection|`{\"filter\": {\"email\": \"{{email}}\"}, \"limit\": 20}`|",
+     "|Redis|`GET`, `HGETALL`, `LRANGE`, `SMEMBERS`, `ZRANGE`, … ; writes `SET`, `DEL`, `HSET`, `EXPIRE`, …|key, e.g. `user:{{id}}`|`[0, 49]` (extra arguments)|",
+     "|DynamoDB|`GetItem`, `Query`, `Scan`; writes `PutItem`, `UpdateItem`, `DeleteItem`|table|`{\"KeyConditionExpression\": \"customer = :c\", \"ExpressionAttributeValues\": {\":c\": \"{{customer}}\"}}`|",
+     "|Elasticsearch|`search`, `count`, `get`; writes `index`, `update`, `delete`|index|`{\"query\": {\"match\": {\"title\": \"{{q}}\"}}}`|"
+    ]
+   ],
+   [
+    "equal",
+    404,
+    414,
+    381,
+    391
+   ],
+   [
+    "replace",
+    414,
+    416,
+    391,
+    393,
+    [
+     " no MongoDB `$where`, `$function`, `$out` or `$merge`). `$lookup` and `$unionWith` may only read",
+     " allowed collections."
+    ]
+   ],
+   [
+    "equal",
+    416,
+    417,
+    393,
+    394
+   ],
+   [
+    "replace",
+    417,
+    418,
+    394,
+    395,
+    [
+     " system names (`system.*`, `.security`, …) are always off limits."
+    ]
+   ],
+   [
+    "equal",
+    418,
+    419,
+    395,
+    396
+   ],
+   [
+    "replace",
+    419,
+    420,
+    396,
+    397,
+    [
+     " can't mention them."
+    ]
+   ],
+   [
+    "equal",
+    420,
+    421,
+    397,
+    398
+   ],
+   [
+    "replace",
+    421,
+    422,
+    398,
+    399,
+    [
+     " Redis scans instead of `HGETALL`/`SMEMBERS` on huge values) and the time limit."
+    ]
+   ],
+   [
+    "equal",
+    422,
+    423,
+    399,
+    400
+   ],
+   [
+    "replace",
+    423,
+    426,
+    400,
+    403,
+    [
+     " in `run_query` too. At most *Most items one write may change* change per call (MongoDB counts the",
+     " matches first), `dry_run` reports the count without changing anything, and every write is on the",
+     " **Audit** tab."
+    ]
+   ],
+   [
+    "equal",
+    426,
+    427,
+    403,
+    404
+   ],
+   [
+    "replace",
+    427,
+    428,
+    404,
+    405,
+    [
+     " ACL, Elasticsearch index privileges; DynamoDB permissions come from IAM)."
+    ]
+   ],
+   [
+    "equal",
+    428,
+    441,
+    405,
+    418
+   ],
+   [
+    "replace",
+    441,
+    442,
+    418,
+    419,
+    [
+     " mcp-forge, such as a style guide, a glossary or a runbook."
+    ]
+   ],
+   [
+    "equal",
+    442,
+    443,
+    419,
+    420
+   ],
+   [
+    "replace",
+    443,
+    445,
+    420,
+    422,
+    [
+     " fields, built from the connection's exploration queries. Offered only while that connection's",
+     " *Describe* agent tool is on, and limited to the allowed tables, with masks applied."
+    ]
+   ],
+   [
+    "equal",
+    445,
+    446,
+    422,
+    423
+   ],
+   [
+    "replace",
+    446,
+    447,
+    423,
+    424,
+    [
+     " *Share imported specs* is on."
+    ]
+   ],
+   [
+    "equal",
+    447,
+    469,
+    424,
+    446
+   ],
+   [
+    "replace",
+    469,
+    470,
+    446,
+    447,
+    [
+     " shown as a step of the chain's call."
+    ]
+   ],
+   [
+    "equal",
+    470,
+    472,
+    447,
+    449
+   ],
+   [
+    "replace",
+    472,
+    473,
+    449,
+    450,
+    [
+     " missing tools and jq that doesn't compile are refused when you save."
+    ]
+   ],
+   [
+    "equal",
+    473,
+    475,
+    450,
+    452
+   ],
+   [
+    "replace",
+    475,
+    477,
+    452,
+    454,
+    [
+     " gets a `dry_run` argument (database steps report what they'd change; other writing steps are",
+     " skipped). The test console shows each step's arguments and result."
+    ]
+   ],
+   [
+    "equal",
+    477,
+    504,
+    454,
+    481
+   ],
+   [
+    "replace",
+    504,
+    506,
+    481,
+    483,
+    [
+     " toast pops up in any open mcp-forge tab), with the tool, arguments and client. Approve runs it;",
+     " Deny refuses it."
+    ]
+   ],
+   [
+    "equal",
+    506,
+    507,
+    483,
+    484
+   ],
+   [
+    "replace",
+    507,
+    508,
+    484,
+    485,
+    [
+     " Whichever answer comes first wins, and the other prompt closes."
+    ]
+   ],
+   [
+    "equal",
+    508,
+    509,
+    485,
+    486
+   ],
+   [
+    "replace",
+    509,
+    510,
+    486,
+    487,
+    [
+     " refuses the call. Refused calls never reach the API or database, and the agent is told why."
+    ]
+   ],
+   [
+    "equal",
+    510,
+    511,
+    487,
+    488
+   ],
+   [
+    "replace",
+    511,
+    512,
+    488,
+    489,
+    [
+     " elicitation can approve; others get a clear refusal."
+    ]
+   ],
+   [
+    "equal",
+    512,
+    513,
+    489,
+    490
+   ],
+   [
+    "replace",
+    513,
+    514,
+    490,
+    491,
+    [
+     " decision, who made it, and how long the call waited."
+    ]
+   ],
+   [
+    "equal",
+    514,
+    524,
+    491,
+    501
+   ],
+   [
+    "replace",
+    524,
+    526,
+    501,
+    503,
+    [
+     " `cookie`, …) are stored as `[redacted]`. Arguments are cut to 4 000 characters and error text to",
+     " 1 000."
+    ]
+   ],
+   [
+    "equal",
+    526,
+    528,
+    503,
+    505
+   ],
+   [
+    "replace",
+    528,
+    529,
+    505,
+    506,
+    [
+     " recording and clears the log within the hour. Each project keeps at most 100 000 calls."
+    ]
+   ],
+   [
+    "equal",
+    529,
+    531,
+    506,
+    508
+   ],
+   [
+    "replace",
+    531,
+    532,
+    508,
+    509,
+    [
+     " `GET /api/projects/{id}/calls/{call_id}` and `GET /api/projects/{id}/calls/summary?window=24h|7d|30d`."
+    ]
+   ],
+   [
+    "equal",
+    532,
+    540,
+    509,
+    517
+   ],
+   [
+    "replace",
+    540,
+    541,
+    517,
+    518,
+    [
+     " DNS-rebinding attacks from web pages you visit."
+    ]
+   ],
+   [
+    "equal",
+    541,
+    542,
+    518,
+    519
+   ],
+   [
+    "replace",
+    542,
+    545,
+    519,
+    522,
+    [
+     " `MCP_FORGE_ADMIN_TOKEN` or `--admin-token`). MCP clients must send it (or a project's",
+     " access key) on `/mcp`; scripts may send it on `/api` instead of signing in. `/healthz` stays open. Put TLS in front (a reverse proxy) if the",
+     " server is reachable from other machines."
+    ]
+   ],
+   [
+    "equal",
+    545,
+    549,
+    522,
+    526
+   ],
+   [
+    "replace",
+    549,
+    551,
+    526,
+    528,
+    [
+     " setup code from the server log, so nobody else on the network can claim it first. More accounts,",
+     " password resets and removal: the **Users** page (admins), or `mcp-forge user …` on the server."
+    ]
+   ],
+   [
+    "equal",
+    551,
+    552,
+    528,
+    529
+   ],
+   [
+    "replace",
+    552,
+    559,
+    529,
+    536,
+    [
+     " projects an admin gives them, each with **Can view** (read: tools, specs, auth references,",
+     " databases, calls, audit log, connect snippets) or **Can change** (write: edits, the test console,",
+     " access keys, connected apps, approvals and app sign-ins for that project). Deleting a project",
+     " stays with admins. The server enforces this on every `/api` call; the UI hides what you can't do.",
+     " Each project's **Settings → People** shows who has access. The first account is an admin,",
+     " accounts from before roles existed are admins, the last admin can't be removed or demoted, and",
+     " the admin token counts as admin. MCP access (keys, sign-in, stdio) doesn't depend on roles."
+    ]
+   ],
+   [
+    "equal",
+    559,
+    560,
+    536,
+    537
+   ],
+   [
+    "replace",
+    560,
+    563,
+    537,
+    540,
+    [
+     " the same answer in the same time. After 5 failed attempts for a username (20 per client address)",
+     " sign-in backs off, from 30 seconds doubling to 15 minutes; the backoff is stored, so restarting",
+     " the server doesn't reset it."
+    ]
+   ],
+   [
+    "equal",
+    563,
+    564,
+    540,
+    541
+   ],
+   [
+    "replace",
+    564,
+    568,
+    541,
+    545,
+    [
+     " an HTTPS proxy that sets `X-Forwarded-Proto`); only its SHA-256 is stored. Sessions end after",
+     " 7 days idle or 30 days in all, on sign-out, or when the password changes (other sessions only).",
+     " The cookie name includes the port (`mcp_forge_session_7410`), so servers on different ports",
+     " keep separate sign-ins."
+    ]
+   ],
+   [
+    "equal",
+    568,
+    569,
+    545,
+    546
+   ],
+   [
+    "replace",
+    569,
+    570,
+    546,
+    547,
+    [
+     " pages can't add without a CORS preflight that the server never grants."
+    ]
+   ],
+   [
+    "equal",
+    570,
+    571,
+    547,
+    548
+   ],
+   [
+    "replace",
+    571,
+    572,
+    548,
+    549,
+    [
+     " key) and needs the admin token or a project access key elsewhere. stdio is unaffected."
+    ]
+   ],
+   [
+    "equal",
+    572,
+    573,
+    549,
+    550
+   ],
+   [
+    "replace",
+    573,
+    574,
+    550,
+    551,
+    [
+     "**Secrets**: references only (see Secrets); raw values are refused, redacted in output,"
+    ]
+   ],
+   [
+    "equal",
+    574,
+    584,
+    551,
+    561
+   ],
+   [
+    "replace",
+    584,
+    586,
+    561,
+    563,
+    [
+     " PostgreSQL `BEGIN READ ONLY` + `statement_timeout`, MySQL `START TRANSACTION READ ONLY` +",
+     " `max_execution_time`, SQLite opened read-only with `query_only`. Everything is rolled back."
+    ]
+   ],
+   [
+    "equal",
+    586,
+    587,
+    563,
+    564
+   ],
+   [
+    "replace",
+    587,
+    589,
+    564,
+    566,
+    [
+     " read, write, schema change or admin, and checked against the access mode. Writes hidden in CTEs",
+     " are refused."
+    ]
+   ],
+   [
+    "equal",
+    589,
+    590,
+    566,
+    567
+   ],
+   [
+    "replace",
+    590,
+    592,
+    567,
+    569,
+    [
+     " take locks (`pg_read_file`, `dblink`, `lo_*`, `nextval`, `SLEEP`, `LOAD_FILE`, `load_extension`,",
+     " …) are refused."
+    ]
+   ],
+   [
+    "equal",
+    592,
+    593,
+    569,
+    570
+   ],
+   [
+    "replace",
+    593,
+    594,
+    570,
+    571,
+    [
+     " and for writes the row cap, dry run and audit log."
+    ]
+   ],
+   [
+    "equal",
+    594,
+    598,
+    571,
+    575
+   ],
+   [
+    "replace",
+    598,
+    600,
+    575,
+    577,
+    [
+     " masked column's position (`ORDER BY 3`), can get around the allowlist or masks. For hard isolation, give the login access",
+     " only to the tables and columns agents should see."
+    ]
+   ],
+   [
+    "equal",
+    600,
+    601,
+    577,
+    578
+   ],
+   [
+    "replace",
+    601,
+    602,
+    578,
+    579,
+    [
+     " cascading deletes aren't counted, and MySQL counts rows actually changed, not rows matched."
+    ]
+   ],
+   [
+    "equal",
+    602,
+    603,
+    579,
+    580
+   ],
+   [
+    "replace",
+    603,
+    604,
+    580,
+    581,
+    [
+     " mcp-forge, but the database keeps working on it until that finishes."
+    ]
+   ],
+   [
+    "equal",
+    604,
+    605,
+    581,
+    582
+   ],
+   [
+    "replace",
+    605,
+    606,
+    582,
+    583,
+    [
+     " column. Agent-written SQL is checked strictly."
+    ]
+   ],
+   [
+    "equal",
+    606,
+    624,
+    583,
+    601
+   ],
+   [
+    "replace",
+    624,
+    625,
+    601,
+    602,
+    [
+     " `docker exec mcp-forge printenv MCP_FORGE_ADMIN_TOKEN` for MCP clients and scripts."
+    ]
+   ],
+   [
+    "equal",
+    625,
+    626,
+    602,
+    603
+   ],
+   [
+    "replace",
+    626,
+    627,
+    603,
+    604,
+    [
+     " accounts with `docker exec -it mcp-forge mcp-forge user …`."
+    ]
+   ],
+   [
+    "equal",
+    627,
+    628,
+    604,
+    605
+   ],
+   [
+    "replace",
+    628,
+    629,
+    605,
+    606,
+    [
+     " There is no OS keychain inside a container."
+    ]
+   ],
+   [
+    "equal",
+    629,
+    630,
+    606,
+    607
+   ],
+   [
+    "replace",
+    630,
+    631,
+    607,
+    608,
+    [
+     " client's machine."
+    ]
+   ],
+   [
+    "equal",
+    631,
+    638,
+    608,
+    615
+   ],
+   [
+    "replace",
+    638,
+    643,
+    615,
+    616,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    643,
+    648,
+    616,
+    621
+   ],
+   [
+    "replace",
+    648,
+    649,
+    621,
+    622,
+    [
+     "|Variable|Same as|"
+    ]
+   ],
+   [
+    "equal",
+    649,
+    650,
+    622,
+    623
+   ],
+   [
+    "replace",
+    650,
+    655,
+    623,
+    628,
+    [
+     "|`MCP_FORGE_BIND`|`--bind`|",
+     "|`MCP_FORGE_ADMIN_TOKEN`|`--admin-token`|",
+     "|`MCP_FORGE_DATA_DIR`|`--data-dir`|",
+     "|`MCP_FORGE_PROJECT`|`stdio --project`|",
+     "|`RUST_LOG`|log level, e.g. `info,mcp_forge=debug` (logs go to stderr)|"
+    ]
+   ],
+   [
+    "equal",
+    655,
+    672,
+    628,
+    645
+   ],
+   [
+    "replace",
+    672,
+    674,
+    645,
+    647,
+    [
+     " environment of the process running the tool: the `serve` process, or for stdio the MCP client that",
+     " starts mcp-forge."
+    ]
+   ],
+   [
+    "equal",
+    674,
+    675,
+    647,
+    648
+   ],
+   [
+    "replace",
+    675,
+    677,
+    648,
+    650,
+    [
+     " `mcp-forge serve` is running, and, with an admin token, that the client sends the `Authorization`",
+     " header."
+    ]
+   ],
+   [
+    "equal",
+    677,
+    678,
+    650,
+    651
+   ],
+   [
+    "replace",
+    678,
+    679,
+    651,
+    652,
+    [
+     " The Tools tab says why next to each hidden tool."
+    ]
+   ],
+   [
+    "equal",
+    679,
+    680,
+    652,
+    653
+   ],
+   [
+    "replace",
+    680,
+    681,
+    653,
+    654,
+    [
+     " Allow writes on the connection if this tool should write."
+    ]
+   ],
+   [
+    "equal",
+    681,
+    682,
+    654,
+    655
+   ],
+   [
+    "replace",
+    682,
+    683,
+    655,
+    656,
+    [
+     " Docker image does) needs `MCP_FORGE_ADMIN_TOKEN`. Set one, or bind to `127.0.0.1`."
+    ]
+   ],
+   [
+    "equal",
+    683,
+    684,
+    656,
+    657
+   ],
+   [
+    "replace",
+    684,
+    685,
+    657,
+    658,
+    [
+     " create the account directly: `mcp-forge user add <name>`."
+    ]
+   ],
+   [
+    "equal",
+    685,
+    687,
+    658,
+    660
+   ],
+   [
+    "replace",
+    687,
+    688,
+    660,
+    661,
+    [
+     " reset the password with `mcp-forge user passwd <name>`, which also lifts it."
+    ]
+   ],
+   [
+    "equal",
+    688,
+    704,
+    661,
+    677
+   ],
+   [
+    "replace",
+    704,
+    705,
+    677,
+    678,
+    [
+     "Releases are built by cargo-dist: pushing a tag like"
+    ]
+   ],
+   [
+    "equal",
+    705,
+    708,
+    678,
+    681
+   ],
+   [
+    "delete",
+    708,
+    709,
+    681,
+    681
+   ],
+   [
+    "equal",
+    709,
+    710,
+    681,
+    682
+   ]
+  ],
+  "at": "2026-11-25"
+ },
+ "6a05756132e3+2": {
+  "fn": "alibabacloud-sdk-swift/polardb-20170801",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "English | 简体中文"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    16,
+    1,
+    14
+   ],
+   [
+    "replace",
+    16,
+    17,
+    14,
+    15,
+    [
+     "To integrate `AlibabacloudPolardb20170801` into your Xcode project using Carthage, specify it in your `Cartfile`:"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    24,
+    15,
+    22
+   ],
+   [
+    "replace",
+    24,
+    25,
+    22,
+    23,
+    [
+     "To integrate `AlibabacloudPolardb20170801` into your Xcode project using Swift Package Manager , adding `AlibabacloudPolardb20170801` to the `dependencies` value of your `Package.swift`."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    44,
+    23,
+    42
+   ],
+   [
+    "replace",
+    44,
+    45,
+    42,
+    43,
+    [
+     "Opening an Issue, Issues not conforming to the guidelines may be closed immediately."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    47,
+    43,
+    45
+   ],
+   [
+    "replace",
+    47,
+    50,
+    45,
+    46,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    52,
+    46,
+    48
+   ],
+   [
+    "replace",
+    52,
+    54,
+    48,
+    50,
+    [
+     "* OpenAPI Developer Portal",
+     "- Latest Release"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    56,
+    50,
+    52
+   ],
+   [
+    "replace",
+    56,
+    60,
+    52,
+    53,
+    [
+     "Apache-2.0"
+    ]
+   ]
+  ],
+  "at": "2026-11-25"
  }
 }

@@ -3142,5 +3142,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c536527556d7": {
+  "identity": {
+   "one_liner": "面向 AI 代理的搜索引擎，按 agentic readiness 信号对站点排序",
+   "review": "Not Human Search 是一个面向 AI 代理的搜索引擎，索引站点并按 agentic readiness（llms.txt、OpenAPI、ai-plugin、MCP 等 7 项信号）打分排序，供需要机器可读接口的代理系统与开发者使用。提供 MCP server、REST API 和网页查询，已索引 8,000+ 站点含 500+ MCP server。服务以 Go 单二进制实现，通过每日重爬与每周自动发现更新索引，代码采用 MIT 许可证。",
+   "highlights": [
+    "按 7 项 agentic 信号评分（llms.txt 25 分、ai-plugin.json 20 分、OpenAPI spec 20 分、结构化 API 15 分、MCP server 10 分、robots.txt 5 分、Schema.org 5 分，满分 100）",
+    "提供 MCP server（含 search_agents、find_mcp_servers、verify_mcp、check_url 等工具）与 REST API（/api/v1/search）两种访问方式，另有全文搜索",
+    "通过每日重爬与每周自动发现流水线持续更新；MCP server 的 500+ 条目经 JSON-RPC 探测验证"
+   ],
+   "use_cases": [
+    "为 AI 代理接入 MCP server 或 HTTP API，按 agentic readiness 查找站点与 MCP 服务器",
+    "开发者在接入前用 /score 页面或 check_url 工具检查某 URL 的机器可读信号得分",
+    "网站所有者查询自身站点的信号分解并嵌入评分徽章"
+   ]
+  },
+  "sha": "c536527556d7",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c4d1d8246a1c": {
+  "identity": {
+   "one_liner": "本地优先的 AI 虚拟陪伴读书室，内置 MCP Server 支持三协议外接",
+   "review": "ClouDrift 是一个基于 Node.js 与 SQLite 的本地优先 AI 陪伴自习室 Web 应用，提供番茄钟专注、内置小手机通讯、共享书架阅读器（PDF/TXT/DOCX）、便利贴、留声机、桌宠与 2D 像素家园等功能，适合想与 OpenAI 格式 API 兼容模型角色共读互动的用户。每个角色卡在 data/memory/ 下有独立 SQLite 库实现记忆隔离；通过填入 API Key 即可独立运行于 localhost:3000，也可切换 MCP 模式，以 Streamable HTTP、Legacy SSE 或 Stdio 三种方式接入 AstrBot、Claude Desktop、Cursor 等外部客户端。",
+   "highlights": [
+    "内置零依赖 MCP Server（mcp-bridge.js + mcp-stdio.js），支持 Streamable HTTP（/mcp）、Legacy SSE（/mcp/sse）与 Stdio 三种接入方式，开放 8 项工具与 2 项资源",
+    "每个角色卡在 data/memory/ 下拥有独立 SQLite 数据库，上下文窗口上限 200 轮，支持滑窗、批量抛弃与动态备忘录提炼",
+    "支持导入 PDF/TXT/DOCX 阅读、四种划线批注模式、MiniMax TTS 语音消息、Tavily 联网搜索，以及同一 Wi-Fi 下手机与电脑双端局域网直连同步"
+   ],
+   "use_cases": [
+    "填入 OpenAI 格式 API 在本地独立运行 AI 陪伴自习室，配合番茄钟与阅读器进行专注学习",
+    "将自习室作为外部 AI 框架（AstrBot、Cherry Studio、Claude Desktop、Cursor）的 MCP 工具端，读取房间状态并回复消息、批注、审批切歌",
+    "局域网内手机浏览器直连电脑端，实现聊天、便利贴、记忆与番茄钟的双端同步使用"
+   ]
+  },
+  "sha": "c4d1d8246a1c",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

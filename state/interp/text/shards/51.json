@@ -3476,5 +3476,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f00efacfbdfc": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编程会话账本，记录 Claude Code、Codex、Cursor 与 Grok 的操作、成本与代码留存",
+   "review": "Sessionly 是一个运行在本地的 Rust CLI，通过钩子或读取智能体自身会话文件，把 Claude Code、Codex、Cursor 和 Grok 的会话统一归一化为本地 SQLite 账本，记录工具调用、文件变更、成本，并统计智能体写入行在后续文件和 PR 评审后的留存率。数据默认不上传，源代码永不发送；可选连接服务器生成团队仪表盘。适用于个人或团队需要审计 AI 编程会话记录的场景。",
+   "highlights": [
+    "将四种智能体（Claude Code、Codex、Cursor、Grok）的会话映射为统一的会话记录，含提示、工具调用、文件、子智能体与成本",
+    "统计会话写入行的留存率，即在后续文件中及 PR 评审后仍在的行数",
+    "捕获、解析与脱敏在本地完成，上传为可选功能，默认上传不含提示、命令或文件文本，源代码不发送；账本为派生数据，可删除后用 sessionly sync --force 重建"
+   ],
+   "use_cases": [
+    "记录并查询本地 AI 编程智能体的会话历史、成本与文件变更",
+    "配合 GitHub Action 分析各 PR 中智能体编写行数及在评审后的留存情况",
+    "自建或使用托管服务器生成团队仪表盘，查看按用户、仓库、模型、工具或日期汇总的数据"
+   ]
+  },
+  "sha": "f00efacfbdfc",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63d9bca99614": {
+  "identity": {
+   "one_liner": "自托管统一指挥平台，整合战术地图、OSINT、SIEM、数字取证与 Android 现场代理应用",
+   "review": "TFAEL-OMNI 是一个自托管的统一指挥中心平台，将战术地图（含 Cell-ID 三角定位）、九类指标 OSINT 检索、情报知识图谱、映射 MITRE ATT&CK 的网络-物理 SIEM、哈希链取证与社交媒体协调行为检测汇总在单一界面。服务器基于 Python 标准库 HTTP 与 SQLite，前端为 React/TypeScript，另提供 Kotlin Android 代理应用。README 标明其当前为原型状态，部分功能依赖外部服务，可通过 OMNI_AIRGAP=1 关闭出站调用。",
+   "highlights": [
+    "包含 C4ISR 战术地图、OSINT（九类指标检索）、Intel Graph、SIEM、DFIR、SITREP、BotRadar 等模块，默认填充虚构示例数据（OMNI_DEMO=0 可关闭）",
+    "服务器使用 Python 标准库 HTTP 与 SQLite 存储，支持环境变量配置如 OMNI_AIRGAP、OMNI_ALLOWED_ORIGINS、登录失败锁定等",
+    "Android 代理应用基于 Kotlin，使用 osmdroid 提供 2D 地图、MapLibre GL JS 提供 3D 地图，上报位置、电量与蜂窝信号"
+   ],
+   "use_cases": [
+    "在本地服务器上自托管部署，用于查阅整合的态势图、OSINT 检索与情报图谱（README 提示用于真实用途前需阅读当前限制与路线图）",
+    "配合 Android 现场代理应用上报现场单元位置、电量与信号数据，并在战术地图上查看",
+    "以 OMNI_AIRGAP=1 运行关闭外部服务调用（GeoIP、BMKG、社交媒体等）的环境"
+   ]
+  },
+  "sha": "63d9bca99614",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3655,5 +3655,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5584ca59ad55": {
+  "identity": {
+   "one_liner": "基于 ClickHouse 与 OpenTelemetry 的统一可观测性平台",
+   "review": "ClickStack（原 HyperDock/HyperDX）是一个开源可观测性平台，将日志、指标、追踪、会话回放与错误聚合在同一界面中检索，数据存储于 ClickHouse 集群。面向需要排查生产问题的工程师，支持既有 ClickHouse schema、全文与属性搜索语法、告警与仪表盘。提供 all-in-one Docker 镜像（含 ClickHouse、UI、OTel Collector、MongoDB），另有 @hyperdx/cli 提供 TUI 与 NDJSON 输出。部署时需开放 8080/8000/4318 端口，测试建议至少 4GB 内存。默认收集匿名使用数据，可通过环境变量关闭。",
+   "highlights": [
+    "统一检索与关联日志、指标、会话回放与追踪，兼容 OpenTelemetry 标准",
+    "schema 无关，可运行在既有 ClickHouse 集群上，支持全文与属性搜索语法及原生 JSON 字符串查询",
+    "提供 all-in-one Docker 镜像一键部署，以及支持 NDJSON 输出与 SQL 查询的 CLI/TUI 工具"
+   ],
+   "use_cases": [
+    "排查生产环境问题，集中查询日志、追踪与错误",
+    "接入 OpenTelemetry 采集 Kubernetes、浏览器及多语言应用遥测数据",
+    "在已有 ClickHouse 基础设施上构建日志与指标检索界面"
+   ]
+  },
+  "sha": "5584ca59ad55",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fdff741e197b": {
+  "identity": {
+   "one_liner": "ClickHouse 官方纯 Rust 类型化客户端，基于 HTTP 与 serde 编解码",
+   "review": "clickhouse-rs 是 ClickHouse 官方的纯 Rust 类型化客户端，基于 tokio 异步运行时，通过 HTTP 传输使用 RowBinary 系列格式收发数据。行类型经 serde 派生，默认开启数据库 schema 校验，可通过 with_validation(false) 切换以换取潜在性能提升。提供查询、批量插入、无限流式插入（inserter feature）、DDL 及单元测试 mock。",
+   "highlights": [
+    "使用 serde 编解码行数据，支持 skip_serializing/rename 等属性，默认经 RowBinaryWithNamesAndTypes 做数据库 schema 校验",
+    "提供查询、批量插入与基于阈值的无限插入 API，支持 LZ4/ZSTD 压缩、TLS（native-tls/rustls）及单元测试 mock",
+    "覆盖整型、Decimal、UUID、IPv4/IPv6、Date/Date32、Enum、JSON 等 ClickHouse 数据类型与 Rust 类型的映射"
+   ],
+   "use_cases": [
+    "在 Rust 异步服务（tokio）中向 ClickHouse 执行参数化查询与 DDL",
+    "持续向 ClickHouse 流式写入数据，按字节数/行数/时间周期阈值分批提交",
+    "需要按环境启用 TLS、压缩或 OpenTelemetry 上下文传递的 ClickHouse 接入场景"
+   ]
+  },
+  "sha": "fdff741e197b",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cb3a2fac2e9e": {
+  "identity": {
+   "one_liner": "直接读取 PostgreSQL 数据文件与 WAL 的开源数据恢复工具",
+   "review": "PDU（PostgreSQL Data Unloader）是面向 PostgreSQL 14-18 的开源恢复工具，用于实例损坏、误删行、误更新、表被删除等场景。它无需运行数据库实例，直接解析堆/TOAST 数据文件，或扫描 WAL 归档提取删除前/更新前的行，结果导出为 CSV。通过修改 basic.h 中的 PG_VERSION_NUM 编译，依赖 LZ4/zlib。不支持枚举、复合、范围等类型。",
+   "highlights": [
+    "以只读方式直接解析 PGDATA 中的 heap/TOAST 数据文件，不依赖运行中的数据库实例，支持 LZ4 解压",
+    "扫描 WAL 归档恢复被 DELETE 的行或 UPDATE 前的值，支持按事务 ID 或时间范围过滤",
+    "提供 psql 风格交互命令行，可导出表/模式为 CSV，生成 DDL 与 COPY 语句，支持 utf8/gbk 输出编码"
+   ],
+   "use_cases": [
+    "系统目录或数据文件损坏导致实例无法启动时，从磁盘文件直接导出数据",
+    "生产环境误执行 DELETE/UPDATE 后，基于 WAL 归档找回删除行或更新前值",
+    "无备份场景下对被 DROP/TRUNCATE 的表进行元数据扫描与数据挖掘（部分命令为 Pro/Enterprise 版本）"
+   ]
+  },
+  "sha": "cb3a2fac2e9e",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "55cf306e9b39": {
+  "identity": {
+   "one_liner": "基于 Tauri 2 的桌面调试工具，通过 ADB 与 CDP 调试 Android WebView 应用。",
+   "review": "Capubridge 是一个面向调试 Android Chromium WebView 应用的开发者的桌面工具，整合 ADB 设备管理、CDP 目标发现、存储浏览（IndexedDB、LocalStorage、Cache API、OPFS、SQLite）、网络检查、Logcat、性能监控与屏幕镜像。前端 Vue 3，运行时状态由 Rust 后端持有。要求设备开启 USB 调试且 WebView 可调试；React Native Hermes 与 iOS WebKit 不在当前范围内。",
+   "highlights": [
+    "支持 ADB 设备自动发现（USB 与 TCP/IP）及每设备自动 CDP 端口转发",
+    "提供 IndexedDB、LocalStorage、Cache API、OPFS 与 SQLite 的存储浏览，CDP 写入直达设备",
+    "包含基于 scrcpy 的屏幕镜像、lease 生命周期的 Logcat 流与性能监控"
+   ],
+   "use_cases": [
+    "调试运行在物理 Android 设备上的 Capacitor、Ionic 或 WebView 应用",
+    "在单一 GUI 中管理 ADB 设备、Shell 命令与包管理，替代多终端流程",
+    "检查并修改设备端 WebView 的 IndexedDB、SQLite 等存储数据"
+   ]
+  },
+  "sha": "55cf306e9b39",
+  "source": "readme",
+  "generated_at": "2026-11-25",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
