@@ -210,6 +210,21 @@ roles) under **Settings** in the sidebar, photo upload on menu items, and
 an English/Spanish/French language switcher on the guest-facing QR
 ordering page and staff sidebar.
 
+### What's new (1.42.1 and 1.42.2)
+
+Integrity and safety fixes from the November 2026 pull-request review (1.42.2 also fixes a rare checkout stall that 1.42.1 could show when several payments for one bill arrived at the same moment; update straight to 1.42.2):
+
+- **Two tills can no longer overpay one bill.** Partial and final payments on the same open bill are serialised; a retried request is a replay, never a second charge.
+- **Gift-card refunds credit exactly what the refund says.** A refund to a gift card is capped at what was paid by card (a ₹100 bill paid ₹60 card + ₹40 cash can send at most ₹60 back to the card) and is refused on bills paid without one.
+- **Online-payment refunds are safer.** An unclear answer from the provider (timeout, 409, 429, 5xx) keeps the hold for review instead of risking a second refund, a provider-pending refund stays reconcilable, and owners can close a reviewed entry from Settings → Payments.
+- **Permissions:** a DENY override now also removes a permission that was only implied by another one, and editing someone's overrides respects the same "nobody can touch an account stronger than their own" rule as roles.
+- **Reports and accounting:** the GST report reconciles to the tax stored on each bill (loyalty points are tender, not a discount); bank lines that are money-in can't be matched to an expense, and one expense can't back two bank lines.
+- **Customer dues** cover every open bill without loading them all at once; if the detail list is capped the page says so and the totals still include everything.
+- **Stock:** goods received into negative stock keep the balance equal to the movement history; a stock take sent twice applies once; emptying the recipe of a recipe-tracked dish is refused.
+- **Phone POS:** a failed save during checkout no longer leaves stock half-deducted, and restoring a backup (including older ones) continues receipt, order and KOT numbering instead of restarting at 001.
+- **Stored credentials:** the S3 backup secret and the sync API key are now encrypted at rest (existing values keep working and are re-encrypted the next time they are saved).
+- **CI** now runs the manufacturing e2e suite that a flag-matching bug had been skipping.
+
 ### What's new (1.31)
 
 - **Manufacturing costs.** Record a production batch from what was really used and made, add labour/packaging/fuel, and see the cost per finished unit. Posting is one transaction; history never changes when prices change later. Optionally set the menu selling price from the same screen (separate permission, conflict-safe, with price history). Reports by day, item, ingredient, cost category, and price changes. Mobile-first five-step flow.

@@ -5,15 +5,15 @@
 <h1 align="center">Graphite</h1>
 
 <p align="center">
-  A fast, keyboard-friendly desktop client for <b>24 databases</b>: SQL, NoSQL and cloud warehouses<br>
-  with an AI assistant and an MCP server for your own agents.
+  A free, open-source and keyboard-friendly database client (GUI) for <b>24 databases</b>: SQL, NoSQL and cloud warehouses<br>
+  on macOS, Windows and Linux, with an AI assistant and an MCP server for your own agents.
 </p>
 
 <p align="center">
   <a href="https://github.com/julioczn/graphite/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/julioczn/graphite?label=release&color=555"></a>
   <a href="https://github.com/julioczn/graphite/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/julioczn/graphite/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-555"></a>
-  <img alt="macOS and Linux" src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux-555">
+  <img alt="macOS, Windows and Linux" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-555">
 </p>
 
 <p align="center">
@@ -169,6 +169,16 @@ With **Use SSL**, pick how the server certificate is checked: *encrypt only*, *v
 host name* (the default for new connections). Point to a **CA certificate** (else the system's trusted CAs are used)
 and, for mutual TLS, a **client certificate and key** (PEM files; Graphite stores only their paths). Firebird encrypts
 its own protocol instead; MongoDB takes its TLS options in the connection URL (`tls=true&tlsCAFile=…`).
+
+### SSH tunnel
+
+For a database behind a bastion, tick **Connect through an SSH tunnel** and enter the SSH server, user and how to log
+in: a **private key** (empty = `~/.ssh/id_ed25519`, `id_ecdsa` or `id_rsa`; a passphrase if it has one), a
+**password**, or the **SSH agent**. The database's host and port are then as seen from the SSH server (`localhost` if
+the database runs on it). TLS still checks the certificate against the real host name. The SSH server's key is
+recorded on the first connection and a changed key is refused. Works for every engine reached at a host and port, and
+for MongoDB with a `mongodb://` URL (one host). The password or passphrase is saved encrypted like the database
+password and never goes to GitHub; the import from other tools brings the tunnel settings along.
 
 ### Updates
 

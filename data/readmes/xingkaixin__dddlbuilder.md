@@ -1,0 +1,237 @@
+# DDLBuilder —— 多数据库建表语句生成器
+
+DDLBuilder（筑表师）是在浏览器中使用的数据库表结构设计工具。用户通过表单和表格定义表结构，实时得到多种数据库的建表 DDL、授权 DCL 和 ORM 模型代码。
+
+## 功能特性
+
+- 支持数据库：MySQL、PostgreSQL、PostgreSQL Citus、SQL Server、Oracle、MariaDB、TiDB、达梦 (Dameng)、OceanBase (MySQL/Oracle 模式)、Kingbase、GBase、PolarDB、GaussDB、Hive、SQLite / Cloudflare D1（建模与初始化导出）
+- 多标签页工作区：每张表在独立标签页中编辑；关闭标签页时，当前改动自动保存为草稿
+- MySQL、MariaDB、TiDB 分区表
+  - 分区类型：RANGE、RANGE COLUMNS、LIST、LIST COLUMNS、HASH、KEY
+  - 支持分区表达式（如 `YEAR(col)`、`dayofmonth(col)`）
+  - RANGE 分区可按年、月、日批量生成分区定义
+- PostgreSQL Citus：支持副本表 (Reference Table) 和分片表 (Distributed Table)，生成对应 DDL
+- 字段标准库与业务词典：定义业务名称、单位和标准字段属性，支持字段引用、偏差检查与 JSON 导入导出；标准库保存在当前浏览器，引用随表保存与同步
+- 逻辑关系：在 ER 关系向导中记录业务关联、基数、可选性与说明，以虚线显示，不生成物理外键、索引，也不更改字段可空性
+- 外键与 ER 图：配置表间外键、级联规则与约束名；在 ER 图中拖动字段连接点后，通过关系向导确认基数、可选性和必要的索引
+- ORM 模型代码：Prisma、TypeORM、SQLAlchemy、GORM、JPA；SQLite 另有 Drizzle
+- 表注释与列注释
+- 视图与 Routine：生成 CREATE VIEW，以及存储过程、函数、触发器的骨架代码
+- 索引、主键与授权配置
+- Schema 规范检查（Lint）：按命名规范和类型规则检查表、字段与索引
+- 字段校验：重复字段名或数据库保留字会高亮告警
+- 类型别名识别与映射（如 varchar/varchar2、json/jsonb、serial/identity 等）
+- 逻辑枚举编辑器：字段可配置逻辑枚举值，支持内联编辑枚举项、拖拽排序、设置颜色
+- 表格编辑：序号自动维护、批量添加行、复制粘贴「是否为空」列（支持 YNyn 输入）；支持冻结列
+- 字段默认值与更新策略（如 UUID、当前时间戳）
+- 字段类型变更风险提示：修改已有字段类型时，若存在数据兼容性风险会弹出确认提示
+- 表结构导入：解析 SQL（CREATE TABLE / INDEX / ALTER / GRANT），导入 CSV / Excel 字段定义清单、JSON Schema、Swagger 或 OpenAPI 定义
+- 整表蓝本：把当前表的字段、索引和表级配置保存为蓝本（存在当前浏览器），之后在新草稿标签页中套用
+- 业务数据导入：在浏览器内读取 CSV／Excel 业务记录，推断新表或对照已有表校验，导出完整 INSERT SQL 与错误清单，并保存列映射配置供复用；[使用指南](apps/docs/zh/advanced/business-data-import.md)
+- AI 辅助（需登录，按额度计费）：AI 建表、AI 修改当前表、AI 索引优化顾问、AI 注释、DDL 评审与 SQL 解释
+  - AI 修改当前表：用自然语言描述改动，逐项确认字段、索引和表级变更后再应用
+  - AI 索引优化顾问：粘贴典型查询或慢查询 SQL，生成缺失索引、冗余索引、列顺序和查询改写建议
+- 查询设计与业务建模：按关系生成参数化 SELECT，整组创建 RBAC、预约和库存模块，导出 SQLite/D1 初始化项目与 Drizzle schema，分析字段依赖；[使用指南](apps/docs/zh/advanced/modeling-workflows.md)
+- 数据库工具：多表数据字典导出（Markdown／离线 HTML）、MySQL／PostgreSQL 两份 SQL 的结构对比与迁移 SQL、遵守外键和唯一键的可重复关联测试数据、固定链接的项目文档、结构快照刷新、固定版本的变更提案与评论、可保存的测试数据场景，以及 MySQL 到 PostgreSQL 的兼容性报告；[使用指南](apps/docs/zh/advanced/database-tools.md)
+- Mock 数据生成：按字段类型与约束生成测试数据，支持批量导出
+- 已保存表回收站：软删除、单条恢复与批量清空
+- 登录后工作区自动同步：草稿、已保存表、文件夹和回收站随账号同步，设置页显示同步状态并可重试
+- 清空所有：一键清空当前配置并重置
+- 一键复制 DDL、DCL、ORM 代码；代码高亮随明暗主题切换
+- 帮助文档入口，按语言跳转对应文档并查看更新说明
+
+## 开发与构建
+
+依赖 Node.js 与 pnpm：
+
+```bash
+# 安装依赖
+pnpm install
+
+# 本地开发（应用，支持热更新）
+pnpm dev
+
+# 仅启动前端开发服务
+pnpm dev:app
+
+# Worker 运行时调试
+pnpm dev:worker
+
+# 产物构建
+pnpm build
+
+# 部署（自动读取 .deploy.secrets）
+pnpm deploy:cf
+```
+
+开发命令说明：
+
+- `pnpm dev`：启动前端开发服务、Worker 运行时与文档开发服务，入口为 `http://localhost:3000`，修改页面代码会通过 Vite 自动热更新。
+- `pnpm dev:app`：仅启动前端开发服务（Vite）。
+- `pnpm dev:worker`：先应用本地 D1 pending migrations、构建 Worker 产物，再用全局 `cf dev` 在 `http://localhost:8787` 启动运行时调试服务。
+- `pnpm db:migrate:local`：初始化或升级本地 D1 用户系统 schema。
+- `pnpm db:seed:local`：写入本地 D1 最小种子数据。
+- `pnpm db:reset:local`：清空并重建本地 D1 schema，再重新 seed。
+- `pnpm db:inspect:local`：查看本地 D1 当前表与索引。
+- `pnpm db:migrate:remote` / `pnpm db:inspect:remote`：显式连接 remote D1 执行迁移或检查。
+- `pnpm dev:docs`：仅启动文档开发服务（`http://127.0.0.1:5174/docs/`）。
+- `pnpm dev` 运行时，`/docs` 会自动代理到 docs dev server；如果只运行 `pnpm dev:app`，需要再单独运行 `pnpm dev:docs` 才能通过 `http://localhost:3000/docs/` 查看文档。
+- `pnpm dev` 或 `pnpm dev:app` 运行时，前端的 `/api/*` 请求会代理到 `http://127.0.0.1:8787`。如果没有启动 `pnpm dev:worker`，D1 / KV / Better Auth 都不会生效。
+
+注册后通过邮件中的六位验证码激活账号，默认要求邮箱验证。注册接口保留 IP 限流，无需配置人机验证码。
+
+### 部署 secrets
+
+`apps/worker/cloudflare.config.ts` 定义 Worker 绑定、静态资源、Durable Object 和定时任务。`cloudflare.deploy.json` 只保存生产资源 ID、域名和公开变量；secrets 单独保存。
+
+通过 mise 提供全局 `cf`（版本见 `mise.toml`），项目不安装 cf npm 依赖。开发机首次使用时执行 `cf login`；已有登录可直接复用。CI 由 mise 安装同一版本。
+
+部署步骤：
+
+1. 复制 `apps/worker/cloudflare.deploy.example.json` 为 `apps/worker/cloudflare.deploy.json`，填写生产 D1 / KV ID、`domain` 自定义域名和公开变量；生产配置关闭 `workers.dev` 与版本预览地址
+2. 复制 `.deploy.secrets.example` 为 `.deploy.secrets`
+3. 在 `.deploy.secrets` 中填写生产 secrets
+4. 执行 `pnpm deploy:cf`
+
+`pnpm deploy:cf` 构建网站后，先校验 Cloudflare 配置和 AI 额度回收 Cron，再通过 `cf deploy --mode production --dry-run` 检查部署产物。随后记录 D1 Time Travel 恢复点、使用 cf 执行远程 pending migrations、验证运行时必需表，最后通过 `cf deploy --mode production --prebuilt` 部署同一份产物。检测到 `.deploy.secrets` 时，会一并上传 secrets。
+
+开发、生产和端到端测试分别使用 `development`、`production` 和 `e2e` mode。Worker 绑定类型直接从配置推导，无需生成类型文件。
+
+cf 1.0.0-beta.12 的 `d1 query --local` 尚无对应接口；本机验证 `d1 raw --local` 能返回结果，但进程未正常退出。项目暂时保留 Wrangler 仅用于本地 D1。开发和部署使用 cf 的官方 Vite 插件，`apps/worker/vite.config.ts` 配置静态资源目录和本地存储；本地 D1 配置由同一份 Cloudflare 配置生成到 `.wrangler/`。本地状态目录保留 `.wrangler/state/dev`，可通过 `CF_PERSIST_DIR` 覆盖。e2e 使用独立目录 `.wrangler/state/e2e`，并禁用本地 `.env` / `.dev.vars` 文件加载。
+
+`.deploy.secrets` 使用标准 `.env` 格式，例如：
+
+```bash
+ANTHROPIC_API_KEY=xxx
+BETTER_AUTH_SECRET=xxx
+ADMIN_CONSOLE_PASSWORD=xxx
+ADMIN_SESSION_SECRET=xxx
+```
+
+这个文件已加入 `.gitignore`，不会被提交。
+
+启用管理员控制台时，`ADMIN_CONSOLE_PASSWORD` 和 `ADMIN_SESSION_SECRET` 必须同时配置。`ADMIN_SESSION_SECRET` 至少为 32 UTF-8 bytes，必须独立于管理员密码生成，例如运行 `openssl rand -hex 32`。修改该密钥会立即使现有管理员 cookie 失效。
+
+如果你想把 secrets 文件放在别处，部署时可通过环境变量覆盖：
+
+```bash
+CF_SECRETS_FILE=/absolute/path/to/prod.secrets pnpm deploy:cf
+```
+
+### 环境变量
+
+本地 Worker 变量示例见 `.env.vars.example`；复制为项目根目录下的 `.dev.vars` 后按需填写：
+
+- `ANTHROPIC_API_KEY`：Anthropic 服务端密钥
+- `AI_PROVIDER`：当前支持 `anthropic`
+- `AI_MODEL`：默认 `claude-haiku-5-5`
+- `AI_THINKING_ENABLED`：默认 `false`；开启后输出供应商提供的 thinking 摘要
+- `AI_THINKING_LEVEL`：`low` / `medium` / `high`，默认 `low`，仅开启 thinking 时生效
+- `CORS_ALLOWED_ORIGINS`：允许跨域来源，多个来源用逗号分隔
+- `BETTER_AUTH_SECRET`：Better Auth 签名密钥
+- `BETTER_AUTH_URL`：Better Auth 对外基址，必须填写用户浏览器实际访问的公开站点。Vite + Worker 本地联调时应使用 `http://localhost:3000`，不要填 Worker 内部端口如 `http://127.0.0.1:8787`
+- `AUTH_REQUIRE_EMAIL_VERIFICATION`：是否要求邮箱验证，默认 `true`；生产环境应保持开启，隔离的自动化测试运行时可设为 `false`
+- `RESEND_API_KEY`：Resend API key
+- `RESEND_FROM_EMAIL`：认证邮件发件地址
+- `RESEND_FROM_NAME`：认证邮件发件名
+- `SIGNUP_BONUS_CREDITS`：注册赠送额度
+- `ADMIN_CONSOLE_PASSWORD`：管理员控制台登录密码；配置后还必须配置独立的 `ADMIN_SESSION_SECRET`
+- `ADMIN_SESSION_SECRET`：管理员 session cookie 签名密钥，至少为 32 UTF-8 bytes，不能与管理员密码相同
+- `VITE_BETTER_AUTH_URL`：前端 Better Auth 基址，默认可与站点同源
+- `OPENAI_RATELIMIT_ENABLED`：是否启用 AI 接口限流
+- `OPENAI_RATELIMIT_WINDOW_MS`：限流窗口时长（毫秒）
+- `OPENAI_RATELIMIT_EXPLAIN_MAX` / `OPENAI_RATELIMIT_REVIEW_MAX` / `OPENAI_RATELIMIT_GENERATE_MAX`：各 AI 路由窗口内最大请求数
+- `OPENAI_DAILY_BUDGET_ENABLED`：是否启用每日预算控制
+- `OPENAI_DAILY_BUDGET_MAX_TOKENS`：每日预算上限（估算 token）
+- `TELEGRAM_NOTIFY_ENABLED`：是否启用 AI usage Telegram 通知（默认 `false`）
+- `TELEGRAM_BOT_TOKEN`：Telegram Bot Token
+- `TELEGRAM_CHAT_ID`：Telegram 接收消息的 chat id
+- `CSP_ENABLE`：是否启用 CSP 响应头
+- `CSP_MODE`：CSP 灰度模式（`off` / `report-only` / `enforce` / `both`）
+- `CSP_POLICY`：自定义 CSP 策略文本（可选，不配置则使用内置默认策略）
+
+`CSP_*` 配置在本地 Node 服务端与 API 运行时生效。Cloudflare 静态页面的 CSP 由 `scripts/prepare-static-assets.ts` 在构建后写入 `_headers`，复用内置策略并加入构建产物中内联脚本的 SHA-256 哈希。修改脚本或策略后必须重新构建，静态页面不读取运行时的 `CSP_*` 变量。
+
+- `VITE_ENABLE_CNY_FIREWORKS`：是否启用春节烟花入口与节日动效（默认 `false`，设为 `true` 后恢复 Header 入口和烟花 overlay）
+- `VITE_ENABLE_AI_STREAM_DEBUG`：是否启用前端 AI streaming 调试日志（构建时变量，默认 `false`）
+
+认证说明：
+
+- 当前认证链路为 `Better Auth + D1 + Resend + Cookie Session`
+- 注册 / 登录默认使用邮箱 + 密码
+- 邮箱验证、忘记密码、重置密码邮件由 `Resend` 发送
+- 前端所有需要登录态的请求都通过 `credentials: 'include'` 携带 cookie，不再发送 bearer token
+- 业务用户主键直接使用 Better Auth 的 `user.id`
+
+AI 运行时：
+
+AI 使用 pi-durable 内置 Conversation 和 GenerationTask，状态持久化到独立的 SQLite Durable Object。建表、修改、审查、解释、注释和索引建议共用这条链路。审查在切换表或刷新页面时只分离观察，回到同一表且 DDL 未变时在原面板恢复；其余面板关闭或主动点击停止时取消执行。会话保留 30 天。服务端重启可能重新调用模型，不承诺从上一个 token 接着生成。
+
+`OPENAI_RATELIMIT_*` 和 `OPENAI_DAILY_BUDGET_*` 为兼容现有部署配置继续有效；旧供应商、重试和超时变量不再控制新运行时。一轮最多两次物理模型调用，总期限五分钟，SDK 自动重试关闭。
+
+本地先运行 `pnpm db:migrate:local` 应用新迁移。生产发布仍须先应用 D1 迁移，再发布包含 `AIConversationDurableObject` 导出及 `AI_CONVERSATIONS` 绑定的 Worker；回退版本时保留该导出、绑定和 Cron 直到在途任务完成结算。勿删除新表或重建 DO 存储来回退。
+
+配置 `ANTHROPIC_API_KEY` 后可运行 `pnpm exec tsx scripts/verify-ai-conversation.ts` 做真实模型验收（会产生供应商用量）；`AI_SMOKE_ROUTE` 可限制场景。该脚本使用隔离的本地 SQLite，不接触生产账本。密钥只从环境读取。
+
+- 前端 `VITE_ENABLE_AI_STREAM_DEBUG` 是构建时变量；如果只是临时本地排查，可直接在浏览器控制台执行：
+
+```js
+localStorage.setItem('ddlbuilder:ai-stream-debug', 'true');
+```
+
+### 用户系统本地联调
+
+`pnpm dev` 和 `pnpm dev:worker` 会在 Worker 启动前自动应用本地 pending migrations。若需要预置最小种子数据，按下面顺序执行：
+
+```bash
+pnpm db:migrate:local
+pnpm db:seed:local
+pnpm dev:worker
+```
+
+如果需要回到干净状态：
+
+```bash
+pnpm db:reset:local
+```
+
+说明：
+
+- 默认所有 D1 命令都操作 local simulation。
+- remote D1 只允许通过显式的 `:remote` 命令访问。
+- `pnpm dev:worker` 和 `pnpm db:*:local` 共享同一份本地 D1，持久化目录都是 `.wrangler/state/dev`。
+- `pnpm deploy:cf` 会在部署 Worker 前自动执行 remote pending migrations 并验证必需表；也可以通过 `pnpm db:migrate:remote` 单独执行远程迁移。
+
+## 使用说明
+
+1. 填写表名与表中文名，选择数据库类型；或点击顶部的“导入结构”按钮，粘贴已有 DDL 导入。
+2. 在表格中按列填写：字段名、字段中文名、字段类型、是否为空。
+3. 右侧实时生成对应数据库的建表 DDL，点击“复制DDL”复制。
+
+### 字段类型与空值规则
+
+- 类型别名示例：
+  - 文本类：varchar/nvarchar/char/nchar/text/mediumtext/longtext/clob
+  - 数值类：tinyint/smallint/int/bigint/decimal(18,2)/float/double/real/number
+  - 日期时间：date/time/timetz/timestamp/timestamptz/datetime/datetime2
+  - 其它：uuid/json/jsonb/blob/varbinary/raw/xml/serial
+- “是否为空”支持值：是/否、y/yes/true/1/√（其余视为否）。
+
+### 各数据库生成规则要点（摘录）
+
+- MySQL：列注释使用 COMMENT；text/json 等类型直接映射；serial → BIGINT UNSIGNED AUTO_INCREMENT。
+- PostgreSQL：表与列注释使用 COMMENT 语句；json → jsonb；timestamp/time 带/不带时区遵循输入。
+- PostgreSQL Citus：支持副本表 (`create_reference_table`) 和分片表 (`create_distributed_table`) 模式。
+- SQL Server：text/json 使用 NVARCHAR(MAX)；日期时间使用 DATETIME2；注释用扩展属性 sp_addextendedproperty；uuid → UNIQUEIDENTIFIER；自增为 IDENTITY。
+- Oracle：varchar → VARCHAR2，nvarchar → NVARCHAR2；整型映射为 NUMBER(n)；长文本用 CLOB，二进制用 BLOB；自增为 NUMBER GENERATED ALWAYS AS IDENTITY。
+- MariaDB：基于 MySQL 语法，支持 MariaDB 特有关键字。
+- TiDB：兼容 MySQL 语法，支持 TiDB 特有关键字。
+- 达梦 (Dameng)：类 Oracle 语法，支持达梦特有类型映射。
+- OceanBase：支持 MySQL 模式和 Oracle 模式，根据模式选择对应语法。
+
+## 技术栈
+
+- React 19、TypeScript 7、Vite 8
+- UI 与交互：TanStack Table、Base UI、Hugeicons、Tailwind CSS
+- SQL 代码高亮：Shiki（支持明暗主题）
+

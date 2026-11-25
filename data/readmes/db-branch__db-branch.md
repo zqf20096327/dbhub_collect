@@ -13,7 +13,7 @@
 
 Test a migration, let an AI agent loose, or give every pull request its own copy of the database. db-branch creates a branch with nothing copied. Built on ZFS clones, self-hosted, Apache-2.0.
 
-**Status: Beta.** db-branch is usable today, but APIs and command-line details may still change before 1.0. It is an independent open-source project, built from scratch.
+**Status: 1.0 (GA).** Independent open-source project, built from scratch and following Semantic Versioning from 1.0.
 
 ## Try it
 
@@ -139,7 +139,7 @@ Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 ## 日本語
 
-db-branch は、ZFS クローンで MySQL / PostgreSQL のデータベースブランチを発行・リセット・破棄するツールです。現在は Beta で、1.0 までに API が変わる可能性があります。コアは Apache-2.0 で、有償モジュール（認証/SSO・監査・履歴・差分・FSx ストレージ）は別パッケージ（クローズドソース、セルフホスト、ライセンスキー）です。
+db-branch は、ZFS クローンで MySQL / PostgreSQL のデータベースブランチを発行・リセット・破棄するツールです。コアは Apache-2.0 で、有償モジュール（認証/SSO・監査・履歴・差分・FSx ストレージ）は別パッケージ（クローズドソース、セルフホスト、ライセンスキー）です。
 
 Mac / Windows では、Multipass のコマンド1つで試せます: <https://db-branch.com/ja/docs/getting-started/#multipass-ですぐ試す>。日本語のサイトは <https://db-branch.com/ja/>、設計ドキュメントは [docs/](docs/) にあります（日本語）。
 

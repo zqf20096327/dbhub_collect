@@ -64,9 +64,9 @@ Then open `https://<address>:8443`, sign in as `admin`, add storage, enroll an a
 
 | What | How | Restore |
 |---|---|---|
-| **Files and folders** (Windows, Linux, macOS) | incremental, from a VSS snapshot on Windows; `{users}` paths (e.g. the Documents of every user) and wildcards; one job can cover several or all agents | single files from the browser (download), into a folder or to the original location |
-| **Macs** (Apple silicon, macOS 13+) | files and folders from an APFS local snapshot, with owners, permissions, extended attributes, BSD file flags, creation times and sparse files; a menu bar app with a permission assistant for Full Disk Access | like other file backups, metadata included |
-| **Whole disks** (Windows) | disk images of one, several or all disks, changed blocks only | bare metal from the recovery ISO, also onto different hardware; single files from the image |
+| **Files and folders** (Windows, Linux, macOS) | incremental, from a VSS snapshot on Windows; `{users}` paths (e.g. the Documents of every user) and wildcards; one job can cover several or all agents; files that are only in the cloud (OneDrive online-only, iCloud Drive) are never downloaded | single files from the browser (download), into a folder or to the original location |
+| **Macs** (Apple silicon and Intel, macOS 13+) | files and folders from an APFS local snapshot, with owners, permissions, extended attributes, BSD file flags, creation times and sparse files; a menu bar app with a permission assistant for Full Disk Access | like other file backups, metadata included |
+| **Whole disks** (Windows) | disk images of one, several or all disks, changed blocks only | bare metal from the recovery ISO (graphical, also without the console), onto different hardware or a smaller or larger disk, single partitions, GPT↔MBR, boot repair; single files from the image |
 | **Linux systems** | all file systems and the disk layout | bare metal from the Linux recovery ISO, or as a new Proxmox VM (P2V) |
 | **Proxmox VE** VMs and containers | agentless, changed blocks only (containers on ZFS file by file, changed files only); the node's own configuration (`/etc/pve`, `config.db`) with a files job | new VM or in place, **instant recovery** (the VM runs from the backup in seconds), replication, automatic boot tests |
 | **VMware ESXi** and **vCenter** VMs | agentless through a proxy agent (one per ESXi host under vCenter, all at once), changed block tracking, hot-add (no copy on the datastore); the console needs no route to the host when the proxy connects to it | new VM or in place, instant recovery over NFS |
@@ -75,7 +75,7 @@ Then open `https://<address>:8443`, sign in as `admin`, add storage, enroll an a
 | **NAS shares** | SMB or NFS share read by any agent, nothing installed on the NAS | into a folder or back onto the share |
 | **Microsoft 365** | Exchange Online mail (.eml), calendars (.ics), contacts (.vcf), OneDrive and SharePoint through Microsoft Graph, read-only permissions | browse and download, or restore into a folder |
 
-**Storage:** SFTP, S3-compatible storage (AWS, Wasabi, Backblaze B2, MinIO, Google Cloud Storage), SMB shares, Azure Blob Storage, rotating USB disks, local disks, and the **BackupZit hardened repository** (a write-once Linux server). Backup copy jobs keep a second copy elsewhere (3-2-1). *Find backups* adds backups that are already on a storage target (for example after a reinstall of the console), so they can be restored.
+**Storage:** SFTP, S3-compatible storage (AWS, Wasabi, Backblaze B2, MinIO, Google Cloud Storage), SMB shares, Azure Blob Storage, rotating USB disks, local disks, and the **BackupZit hardened repository** (a write-once Linux server). Backup copy jobs keep a second copy elsewhere (3-2-1). *Find backups* adds backups that are already on a storage target (for example after a reinstall of the console), so they can be restored. A target can be marked *reachable by agents only* (for example a NAS at a site the console cannot reach): the console then never connects to it, and its connection test runs on an agent.
 
 **Protection against ransomware and mistakes:**
 - AES-256 encryption with a recovery key.
@@ -281,7 +281,7 @@ Open `https://<host>:8443` and sign in as `admin`. To update: `docker compose pu
 ## First steps
 
 1. **Sign in** at `https://<console>:8443` as `admin` and change the password (*My account*).
-2. **Add storage:** open *Storage → Add storage target* and choose, for example, an SFTP server, S3 bucket, SMB share or hardened repository. The console tests the connection when you save. Write down the **recovery key** it shows: with it, backups can be restored even without the console.
+2. **Add storage:** open *Storage → Add storage target* and choose, for example, an SFTP server, S3 bucket, SMB share or hardened repository. The connection is tested when you save, by the console or by an agent of your choice. Write down the **recovery key** it shows: with it, backups can be restored even without the console.
 3. **Enroll agents:** on *Agents* click *Create enrollment token* and install the agent on each machine with the code (see [Installing agents](#installing-agents)). Machines appear within a minute.
 4. **Create a backup job** under *Backup jobs*: choose the agent, what to back up, the storage, a schedule (e.g. daily at 22:00) and the retention (e.g. 14 daily, 8 weekly, 12 monthly).
 5. Optionally:
@@ -311,9 +311,9 @@ backupzit-agent enroll --code "BZ1-..."
 systemctl enable --now backupzit-agent
 ```
 
-**macOS** (Macs with Apple silicon, macOS 13 and newer):
-- Download `backupzit-agent_<version>_darwin_arm64.pkg` from the *Agents* page, open it and follow the installer. It installs the agent service (a LaunchDaemon, running as root from boot) and the BackupZit menu bar app.
-- Enroll in Terminal:
+**macOS** (Macs with Apple silicon or Intel, macOS 13 and newer):
+- Download `backupzit-agent_<version>_darwin_universal.pkg` from the *Agents* page, open it and follow the installer. It installs the agent service (a LaunchDaemon, running as root from boot) and the BackupZit menu bar app, which then asks for the enrollment code.
+- Paste the code into the menu bar app (later: *Enroll this Mac…* in its menu); macOS asks for an administrator's password. In Terminal it works too:
 
 ```
 sudo /Library/BackupZit/bin/backupzit-agent enroll --code "BZ1-..."
@@ -353,7 +353,7 @@ Without internet access, upload the release files on the same page. Updating wit
 | Console | Debian 12+, Ubuntu 22.04+, AlmaLinux / Rocky Linux 9+ (x86-64), PostgreSQL 13+; or the ready-made appliance |
 | Windows agent | Windows 10, 11, Server 2016 and newer (MSI); Windows 7 SP1, Server 2008 R2 SP1, 2012 R2 (legacy MSI) |
 | Linux agent | Debian, Ubuntu, AlmaLinux, Rocky Linux (64-bit), Proxmox VE 7, 8 and 9 |
-| macOS agent | macOS 13 and newer on Apple silicon (arm64; no package for Intel Macs): files and folders. Not on a Mac: system / bare-metal backups (the sealed system volume is reinstalled), disk images, hypervisor hosts and the VMware proxy, NAS share jobs |
+| macOS agent | macOS 13 and newer on Apple silicon and Intel (one universal package): files and folders. Not on a Mac: system / bare-metal backups (the sealed system volume is reinstalled), disk images, hypervisor hosts and the VMware proxy, NAS share jobs |
 | Hypervisors | Proxmox VE 7/8/9, Hyper-V (Windows Server 2016+ including failover clusters, Windows 10/11), VMware ESXi 6.7, 7, 8 (also with the free license), vCenter Server 7, 8 |
 | Microsoft 365 | any tenant with an app registration (application permissions, read-only) |
 
@@ -512,7 +512,7 @@ BackupZit is meant for organizations that want one free backup product for a mix
 | | BackupZit | Veeam Backup & Replication, NAKIVO | Proxmox Backup Server |
 |---|---|---|---|
 | License | AGPLv3, free without limits on machines or storage | commercial; Veeam Community Edition is free for up to 10 workloads | AGPLv3, free |
-| What it backs up | Windows and Linux machines, Proxmox VE, VMware ESXi, Hyper-V, SQL Server, PostgreSQL, MySQL, NAS shares, Microsoft 365 | a very wide range of platforms and applications | Proxmox VE VMs and containers, Linux hosts |
+| What it backs up | Windows, Linux and macOS (preview) machines, Proxmox VE, VMware ESXi, Hyper-V, SQL Server, PostgreSQL, MySQL, NAS shares, Microsoft 365 | a very wide range of platforms and applications | Proxmox VE VMs and containers, Linux hosts |
 | Maturity | young project (first release October 2026) | established for many years, certified support | established, backed by Proxmox |
 
 Where the others are the better choice:
@@ -536,7 +536,7 @@ The complete reference is the guide built into the console (*Documentation*).
 
 ## Project status and limits
 
-BackupZit is a young project: the first public release was 4 October 2026, and new versions come out often. Every release is tested in a lab with Proxmox VE, VMware ESXi, Hyper-V, Windows and Linux machines before it is published; release candidates are offered on a separate *testing* update channel first. Please [report](https://github.com/Max-Zit/backupzit/issues/new/choose) anything that does not work for you.
+BackupZit is a young project: the first public release was 4 October 2026, and new versions come out often. Every release is tested in a lab with Proxmox VE, VMware ESXi, Hyper-V, Windows and Linux machines (the macOS agent by its contributor on Macs and in our build pipeline on macOS) before it is published; release candidates are offered on a separate *testing* update channel first. Please [report](https://github.com/Max-Zit/backupzit/issues/new/choose) anything that does not work for you.
 
 Not supported yet (see *Not yet included* in each chapter of the built-in guide):
 - macOS: the agent is new. NAS share jobs are not available on a Mac yet (use a Windows or Linux agent), PostgreSQL and MySQL jobs have not been validated on macOS, and packages signed with an Apple Developer ID (which keep Full Disk Access across updates) have not been tested in the field yet; unsigned builds lose Full Disk Access with each update.
@@ -587,7 +587,7 @@ If BackupZit is useful to you, a ⭐ on GitHub helps other administrators find i
 go test ./...                      # end-to-end tests (local + in-memory SFTP, server + embedded PostgreSQL)
 go build -o bin/ ./cmd/...                     # agent + server
 .\packaging\windows\build-msi.ps1 -Version X.Y.Z   # Windows MSI (WiX 5)
-sh packaging/macos/build-pkg.sh X.Y.Z            # macOS .pkg for Apple silicon, on a Mac (Go, Xcode command line tools)
+sh packaging/macos/build-pkg.sh X.Y.Z            # macOS .pkg (universal: Apple silicon and Intel), on a Mac (Go, Xcode command line tools)
 sh packaging/linux/build-packages.sh X.Y.Z       # .deb/.rpm (nfpm); carries the .pkg from dist/ (NO_PKG=1: without it)
 sh packaging/appliance/build-iso.sh dist/backupzit-server_X.Y.Z_amd64.deb   # appliance ISO (on Debian: xorriso, isolinux)
 sh packaging/appliance/build-images.sh dist/backupzit-server_X.Y.Z_amd64.deb   # OVA, qcow2, VHDX (on a Proxmox VE host)
@@ -595,7 +595,7 @@ sh packaging/publish-release.sh X.Y.Z /path/to/release.key notes.txt   # sign an
 go run ./tools/release sign -key release.key -version X.Y.Z -dir <release folder>   # signed update manifest
 ```
 
-`build-pkg.sh` writes `dist/backupzit-agent_X.Y.Z_darwin_arm64.pkg`. Without signing variables its
+`build-pkg.sh` writes `dist/backupzit-agent_X.Y.Z_darwin_universal.pkg`. Without signing variables its
 programs are signed ad hoc, and macOS drops their Full Disk Access after each update. To sign
 with an Apple Developer ID, set `BACKUPZIT_MAC_APP_IDENTITY` ("Developer ID Application: ...")
 and `BACKUPZIT_MAC_INSTALLER_IDENTITY` ("Developer ID Installer: ..."), and to notarize,

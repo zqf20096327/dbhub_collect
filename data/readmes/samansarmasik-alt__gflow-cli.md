@@ -5,6 +5,7 @@ Google hesabınızla (Gmail) **Google AI Flow** (`labs.google/fx/tools/flow`) ü
 ## Özellikler
 
 - **Doğal Google Oturumu (Chrome CDP):** Bot korumasına takılmadan bilgisayardaki gerçek Chrome'u izole bir profille (`~/.gflow/chrome-profile`) açar. Varsayılan **headless** (arka planda görünmez), `--headed` ile görünür.
+- **Seed Bazlı İnsansı Etkileşim (Humanizer):** Her çalıştırmada rastgele bir seed seçip o seed'e özel kübik Bézier fare eğrileri, Fitts's Law hızlanma/yavaşlama, overshoot düzeltmesi, mikro titreme ve doğal klavye ritmi uygular (varsayılan açık; `--human-seed <seed>` ile sabitlenebilir, `--no-humanize` ile kapatılabilir).
 - **Ücretsiz Fotoğraf Üretimi:** `nano-banana`, `nano-banana-pro` (2.1), `imagen-4` modelleriyle varsayılan 0 kredi üretim.
 - **Agent Mode & Modal Koruması:** Google Flow Ajan Modu varsayılan kapalı tutulur (`--agent-mode` ile açılır); güncelleme / "Yenilikler" dialog'ları otomatik kapatılır.
 - **Kredi Güvenlik Kilidi:** Video üretimi (`veo-3.1-lite`, `veo-3.1-fast`, `veo-3.1-quality`, `omni-flash-1.2`) ve 0'dan fazla kredi harcayan tüm işlemler `--confirm-credits` olmadan **asla** çalışmaz (`exit code 2`).

@@ -97,13 +97,13 @@ Bun's `smol` heap. Queued tasks are micro-batched — up to 32 per IPC message
 <!-- BENCHMARKS:START -->
 | Framework | Requests/sec | vs Yatta | Spread | p50 | p95 | p99 |
 |-----------|-------------:|---------:|-------:|----:|----:|----:|
-| Yatta     |      93,377 |     1.00x |     6% | 1.11ms | 1.60ms | 2.13ms |
-| Raw Bun   |     121,328 |     1.30x |     5% | 0.92ms | 1.15ms | 1.55ms |
-| Hono      |     107,467 |     1.15x |    11% | 1.02ms | 1.44ms | 1.91ms |
-| Elysia    |     115,496 |     1.24x |     3% | 0.93ms | 1.30ms | 1.69ms |
-| Express   |      43,423 |     0.47x |     3% | 2.15ms | 4.27ms | 5.45ms |
-| Fastify   |      55,881 |     0.60x |     5% | 1.56ms | 3.31ms | 4.22ms |
-| Koa       |      49,082 |     0.53x |     2% | 1.93ms | 3.60ms | 4.35ms |
+| Yatta     |      63,689 |     1.00x |    14% | 1.52ms | 2.88ms | 3.42ms |
+| Raw Bun   |      53,437 |     0.84x |    29% | 1.62ms | 3.32ms | 3.40ms |
+| Hono      |      69,283 |     1.09x |    24% | 1.31ms | 1.83ms | 3.01ms |
+| Elysia    |      60,104 |     0.94x |    22% | 1.34ms | 3.25ms | 3.60ms |
+| Express   |      36,256 |     0.57x |     9% | 2.62ms | 4.63ms | 5.67ms |
+| Fastify   |      49,090 |     0.77x |     5% | 2.04ms | 3.30ms | 4.78ms |
+| Koa       |      42,161 |     0.66x |     4% | 2.39ms | 4.25ms | 6.34ms |
 <!-- BENCHMARKS:END -->
 
 `GET /json` head-to-head, 20,000 requests at 100 concurrent connections.
@@ -118,13 +118,13 @@ persistent stores, and supports TypeScript module augmentation for typed keys.
 |--------|--------------|
 | `yatta/api` | Unified API: router with onion middleware, typed params, schema validation (Zod/Valibot/ArkType), CORS, cookies, streaming, typed client, universal routes (define once, call directly or over HTTP), path utilities, DataLoader batching |
 | `yatta/db` | `bun:sqlite` ORM — column builder, relations, transactions with savepoints, pagination, cursor pagination, schema sync, backup/restore |
-| `yatta/auth` | Argon2id, rotating access/refresh JWTs, AES-256-GCM sessions, TOTP 2FA, WebAuthn passkeys, hashed API keys, RBAC, rate-limit lockouts |
+| `yatta/auth` | Argon2id, rotating access/refresh JWTs, AES-256-GCM sessions, TOTP 2FA (one code, one use — replays are refused, including racing requests; enrolment needs a recently authenticated session, so the request is **required** by `mfa.beginSetup`/`confirmSetup` — no request, no enrolment), WebAuthn passkeys, hashed API keys, RBAC, rate-limit lockouts |
 | `yatta/jwt` | Fast stateless HS256 verification — `Bun.CryptoHasher` HMAC, no caching, reference-compatible error strings |
-| `yatta/jobs` | Job queue, worker pools, cron (Vixie semantics, tz-aware), event bus, atomic leases, DLQ, backoff + jitter |
+| `yatta/jobs` | Job queue, worker pools, cron (Vixie semantics, tz-aware; day-of-week accepts 0–7, where 7 is Sunday, same as 0), event bus, atomic leases, DLQ, backoff + jitter |
 | `yatta/cache` | L1 LRU + SQLite L2, singleflight, stale-while-revalidate, tag invalidation; plus an O(1) priority queue |
 | `yatta/storage` | Local + S3 drivers, RFC 9110 range streaming, magic-byte inspection, HMAC signed URLs |
 | `yatta/mail` | SMTP/Resend/Postmark/SendGrid/SES/Gmail, layouts, pipe templating, md→html, RFC 8058 unsubscribe |
-| `yatta/realtime` | Unified SSE + WebSocket, topic pub/sub, AI token streaming, job tracking, backpressure |
+| `yatta/realtime` | Unified SSE + WebSocket, topic pub/sub, AI token streaming, job tracking, backpressure. The scaffolded `/realtime` endpoint requires a signed-in Yatta session — unauthenticated WebSocket and SSE connections are refused. |
 | `yatta/observe` | Tracing, metrics, logs, issue grouping, incident correlation, adaptive baselines, SLOs, N+1 detection, golden traces |
 | `yatta/otel` | OpenTelemetry bridge — Yatta spans flow to any OTel backend (Jaeger, Tempo, Datadog) |
 
@@ -161,6 +161,12 @@ authentication** of its own: pass `authenticate`, or keep it behind the auth
 wall you already run. WebDAV locks live in the process, so they are not shared
 between nodes and do not survive a restart. OAuth and OIDC state is in memory by
 default for the same reason.
+
+Two defaults worth knowing as well. `/oauth/token` (and `/oauth/revoke`) are
+rate-limited to 5 requests per minute per IP in the default wiring
+(`oauthTokenRateLimit()`), and WebFinger only answers for the app's own host
+(derived from `APP_URL`) — without that scope it would answer
+account-existence questions for any domain.
 
 ### Typed keys
 
@@ -246,6 +252,16 @@ const incident = observer.analyzeIncident(fingerprint);
 ```
 
 The dashboard lives at `/_yatta` and answers `/_yatta/api/*`.
+
+### Access
+
+The dashboard is gated by `YATTA_OBSERVE_TOKEN` — a header
+(`x-yatta-observe-token`) for probes, or a `?token=` query parameter for a
+browser you cannot add headers to. The gate is open only in development; in
+every other environment without a token the surface answers 404 with a generic
+body that names nothing. A token sent over the query string is warned about in
+the logs only after it has verified, so a scanner probing `?token=anything`
+cannot flood them.
 
 ### It tells you what it does not know
 
@@ -421,7 +437,59 @@ with a 5s busy timeout and `synchronous = NORMAL`, so concurrent processes share
 one file safely. For multi-*node* deployments, point `storage` at the S3 driver —
 local disk does not sync across machines.
 
+Single-node servers do not share their port: `reusePort` is on only for cluster
+workers, so a second process on the same port fails with `EADDRINUSE` instead of
+silently sharing it. An empty `CLUSTER_WORKER_ID` counts as unset — single node,
+not worker #.
+
 ## Reliability guarantees
+
+Subsystem graphs never see the host's full environment: each graph gets an
+allowlist of non-secret variables plus exactly the `env` its subsystem
+definition passes. The framework's own subsystems get the validated config
+(`STORAGE_SECRET`, `AUTH_SECRET`, `DATABASE_URL`, `APP_URL`, S3 credentials,
+`CLUSTER_WORKER_ID`) from `main.ts` — anything else a subsystem reads from
+`process.env` is invisible inside the graph, by design.
+
+`db.migrate()` holds a write lock (`BEGIN IMMEDIATE`) across all migrations,
+so two processes migrating at once cannot double-apply one; the loser waits
+on `busy_timeout`, then fails loudly. `db.restore()` only accepts a backup holding at least one table (an empty
+SQLite file is rejected), checkpoints the WAL before the swap, and keeps
+the rollback copy (with its WAL) until the swap succeeds.
+
+Strict inputs fail fast instead of failing silently: `findMany({ select })`
+rejects unknown columns, `duration()` and `parseSize()` throw on NaN,
+negative, or unparseable values, a timeseries `deleteRaw` is only allowed
+on the coarsest tier, `defineSubsystem` rejects `replicas < 1`, and a
+`Batch` rejects a concurrent `run()`. An outbox publish that times out
+counts as a failed attempt (and retries with backoff); if the slow publish
+later succeeds, the row is still marked published, so it is not delivered
+twice. Edge-cache purges are fire-and-forget: local invalidation returns
+immediately and the purge runs in the background.
+
+Full-text search verifies each table's index counts once per process open
+instead of on every search, and caches the typo-correction vocabulary
+(invalidated on every index write) — searches on a 5k-row table went from
+~1.3 ms to ~0.1 ms, and typo-corrected searches from ~7.9 ms to ~0.13 ms.
+Inserts into searchable tables skip the full-scan FTS delete for the fresh
+row, so insert cost stays flat as the table grows.
+
+The compiled-binary router groups routes at construction — exact patterns
+in a map, only param patterns through the segment matcher — so a static
+hit or a miss no longer walks the whole table (at 281 routes a param match
+went from ~55 µs to ~9 µs, a miss from ~46 µs to ~5 µs, measured on the
+dev VM). The `/mcp` and WebFinger handlers are built once and reused
+instead of re-importing auth/MCP and re-reading `package.json` per request
+(`/mcp` tools/list through the router went from ~38 µs to ~14 µs); the
+MCP surface itself is still computed per request, so a table added by a
+migration appears on the next call. Realtime and the worker registry
+import the auth engine lazily, so importing them no longer pulls ~260 ms
+of auth import time (measured); server boot itself did not measurably
+change, because boot waits on the auth subsystem worker anyway. WebDAV
+no longer stats a file twice per GET, and a missing directory is no
+longer glob-scanned (GET on a missing file went from ~338 µs to ~245 µs
+on the dev VM, where a filesystem stat costs ~35–40 µs — the saving is
+a few microseconds on a real disk).
 
 ## Verifying a change
 
@@ -469,7 +537,10 @@ Two smaller rules that follow from the same episode:
 - **Graceful shutdown.** `SIGINT`/`SIGTERM` stops accepting connections, drains
   in-flight work, then terminates threads and stops the observer. The drain
   budget is 30s — deliberately longer than the default task deadline, so a
-  legitimately long task is not reported as a failed drain.
+  legitimately long task is not reported as a failed drain. A fatal fault
+  (`uncaughtException`/`unhandledRejection`) skips the 5s pre-stop wait and
+  exits 1 instead of 0, so an orchestrator reads the crash as a crash; a second
+  signal during shutdown exits immediately.
 
 > Note: JavaScript cannot preempt a blocking loop inside a worker. A deadline
 > frees the host-side promise and scheduler bookkeeping, but the wedged thread
@@ -510,6 +581,12 @@ GitHub workflow that builds to GHCR and deploys with
 `yatta deploy providers` lists the four platforms, `yatta deploy config`
 shows the saved configuration, `yatta deploy status` shows the current
 state, and `yatta deploy doctor` checks the setup. Fly is not supported.
+`--registry` only applies to `--platform docker`; on any other platform it
+warns and is ignored. A hand-edited `.yatta/deploy.json` that is incomplete
+or corrupt is reported as such by `status`, `config`, and `doctor` instead
+of crashing. And `yatta new .` refuses to scaffold over an existing
+`package.json`, `tsconfig.json`, or `yatta/main.ts` rather than overwriting
+them.
 
 The image runs non-root and ships a `HEALTHCHECK` wired to `/healthz`. Mount
 `Database/` and `storage/uploads` as volumes to persist data.

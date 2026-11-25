@@ -58,10 +58,12 @@ A deployed site needs `VELOCITY_CMS_SECRET` and its address (`site` in the Astro
 
 `init` writes the CMS's rules for coding agents (`.agents/cms.md`) and nine skills (`cms-add-section`, `cms-add-form`, `cms-import-content` and the rest) into the site, in both `.agents/skills/` and `.claude/skills/`, and points `AGENTS.md` at them. `npx velocity-cms agents` brings them up to date after an upgrade, and `npx velocity-cms check` names every rule the site breaks, the file, and the fix.
 
-To let an agent work with the content itself, make an access token in the editor (Settings, Access tokens) or with `npx velocity-cms token "Claude on my laptop" --save`. A token acts as an editor or an author, writes drafts unless it may publish, and sees contacts and submissions only when it is allowed personal data. Then:
+To let Claude or ChatGPT work with the content, add the site's MCP address (`https://your-site/api/cms/mcp`) to the app as a custom connector: it sends you to the editor, you sign in, choose what it may do and press Allow. Connected apps are listed, and disconnected, under Settings, Access tokens.
+
+For an agent or a script that takes a token (Claude Code, Cursor, your own code), make an access token in the editor (Settings, Access tokens) or with `npx velocity-cms token "Claude on my laptop" --save`. A token acts as an editor or an author, writes drafts unless it may publish, and sees contacts and submissions only when it is allowed personal data. Then:
 
 - `npx velocity-cms entries pages`, `create`, `update`, `publish`, `import`, `export` and `upload` work over the site's API, on this computer or the live site.
-- Every site serves an MCP server at `/api/cms/mcp`, for an agent that speaks HTTP with the token as a bearer. `npx velocity-cms mcp` is the same server on standard input and output. Its tools build pages from the template's sections, with their own fields and named looks. For an idea no section can show, `design_new_section` hands the agent the site's colours, fonts and blocks and the steps to add a new kind of section in the site's code, where it stays on the theme and editable.
+- Every site serves an MCP server at `/api/cms/mcp`, for an app that signs in by itself (OAuth) or an agent that sends the token as a bearer. `npx velocity-cms mcp` is the same server on standard input and output. Its tools build pages from the template's sections, with their own fields and named looks. For an idea no section can show, `design_new_section` hands the agent the site's colours, fonts and blocks and the steps to add a new kind of section in the site's code, where it stays on the theme and editable.
 
 ## Run the starter
 

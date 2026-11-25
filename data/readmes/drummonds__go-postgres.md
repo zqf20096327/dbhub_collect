@@ -1,0 +1,340 @@
+# go-postgres
+
+A lightweight, pure Go `database/sql` driver that accepts PostgreSQL SQL syntax but executes against SQLite under the hood via [ncruces/go-sqlite3](https://github.com/ncruces/go-sqlite3). This lets Go applications written for PostgreSQL run against a local SQLite file -- ideal for testing, embedded use, CLI tools, and development environments. Files remain SQLite-compatible.
+
+The driver registers as `"pglike"` to avoid conflicts with existing PG drivers (`lib/pq`, `pgx`).
+
+## Installation
+
+```bash
+go get git.bytestone.uk/hum3/go-postgres
+```
+
+## Quick Start
+
+```go
+package main
+
+import (
+    "database/sql"
+    "fmt"
+    _ "git.bytestone.uk/hum3/go-postgres"
+)
+
+func main() {
+    db, _ := sql.Open("pglike", "example.db")
+    defer db.Close()
+
+    db.Exec(`CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(255) UNIQUE,
+        active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT NOW()
+    )`)
+
+    db.Exec("INSERT INTO users (name, email) VALUES ($1, $2)", "Alice", "alice@example.com")
+
+    rows, _ := db.Query("SELECT id, name, active FROM users WHERE active = TRUE")
+    defer rows.Close()
+    for rows.Next() {
+        var id int64
+        var name string
+        var active int64
+        rows.Scan(&id, &name, &active)
+        fmt.Printf("id=%d name=%s active=%d\n", id, name, active)
+    }
+}
+```
+
+## Architecture
+
+```
+User Go Code
+    |  sql.Open("pglike", "myapp.db")
+    v
+database/sql
+    |
+    v
+go-postgres driver (this project)
+    |  1. Translate PG SQL -> SQLite SQL
+    |  2. Register PG-compatible functions
+    |  3. Delegate to SQLite engine
+    v
+ncruces/go-sqlite3 (SQLite via wasm2go — no CGo)
+    |
+    v
+SQLite database file
+```
+
+## DSN Formats
+
+The driver accepts several DSN formats:
+
+| Format | Example | Behaviour |
+|--------|---------|-----------|
+| SQLite file path | `myapp.db` | Opens the file directly |
+| SQLite URI | `file:myapp.db?_pragma=busy_timeout(5000)` | Passed through to SQLite (foreign keys are already on by default) |
+| In-memory | `:memory:` | SQLite in-memory database (pooling handled automatically) |
+| PostgreSQL URL | `postgres://user:pass@localhost/myapp` | Extracts `myapp` as filename `myapp.db` |
+| PG key=value | `host=localhost dbname=myapp` | Extracts `myapp` as filename `myapp.db` |
+
+## DDL Type Mappings
+
+| PostgreSQL | SQLite |
+|---|---|
+| `SERIAL` / `BIGSERIAL` / `SMALLSERIAL` | `INTEGER PRIMARY KEY AUTOINCREMENT` |
+| `BOOLEAN` / `BOOL` | `INTEGER` |
+| `VARCHAR(n)` / `CHARACTER VARYING(n)` | `TEXT` |
+| `CHAR(n)` / `CHARACTER(n)` | `TEXT` |
+| `TIMESTAMP` / `TIMESTAMP WITH TIME ZONE` / `TIMESTAMPTZ` | `TEXT` |
+| `DATE` | `TEXT` |
+| `TIME` / `TIME WITH TIME ZONE` / `TIMETZ` | `TEXT` |
+| `UUID` | `TEXT COLLATE NOCASE` with a `CHECK` that the value is a UUID (see below) |
+| `BYTEA` | `BLOB` |
+| `JSON` / `JSONB` | `TEXT` |
+| `SMALLINT` / `INT2` | `INTEGER` |
+| `INTEGER` / `INT` / `INT4` | `INTEGER` |
+| `BIGINT` / `INT8` | `INTEGER` |
+| `REAL` / `FLOAT4` | `REAL` |
+| `DOUBLE PRECISION` / `FLOAT8` | `REAL` |
+| `NUMERIC(p,s)` / `DECIMAL(p,s)` | `TEXT` (exact; see numeric expressions below) |
+| `TEXT` | `TEXT` |
+| `INTERVAL` | `TEXT` |
+
+A `UUID` column behaves as PG's `uuid` type: a lookup matches whatever the
+case of either side, and a value that is not a hyphenated UUID is rejected
+with SQLSTATE `22P02`. `NULL` is allowed. The value is stored as the text
+given, so it reads back in the case it was written, where PG would
+lower-case it.
+
+Three `ALTER TABLE` forms SQLite has no statement for are run by the
+driver, which rebuilds the table: the rows are kept in a temporary copy,
+the table is dropped and created again from its rewritten definition, the
+rows are put back, and the table's indexes and triggers are recreated.
+Views over the table are untouched. The rebuild runs in a savepoint, so it
+rolls back with an enclosing transaction, with foreign keys deferred so a
+referenced table nets to no violation; a change that leaves a child row
+without a parent fails where the transaction ends, as it would in PG.
+
+| Statement | Rewrite |
+|---|---|
+| `ALTER TABLE t ALTER COLUMN c [SET DATA] TYPE type [USING expr] [, ALTER COLUMN ...]` | The columns' types, in one rebuild; rows come back through each `expr` |
+| `ALTER TABLE t DROP CONSTRAINT [IF EXISTS] name` | The constraint named `name`, or the foreign key the catalogs call `name`, is removed (`42704` if neither) |
+| `ALTER TABLE t ADD CONSTRAINT name FOREIGN KEY (cols) REFERENCES p (cols) [actions]` | The constraint is appended as written |
+
+To retype a key that a foreign key references, as PG also requires: drop
+the foreign key, retype both columns, add it back.
+
+## Expression Translations
+
+| PostgreSQL | SQLite |
+|---|---|
+| `expr::type` | `CAST(expr AS mapped_type)` |
+| `ILIKE` | `LIKE` |
+| `TRUE` | `1` |
+| `FALSE` | `0` |
+| `E'escape\nstring'` | `'escape' \|\| char(10) \|\| 'string'` |
+| `expr IS TRUE` | `expr = 1` |
+| `expr IS FALSE` | `expr = 0` |
+| `expr IS NOT TRUE` | `expr != 1` |
+| `expr IS NOT FALSE` | `expr != 0` |
+| `$1`, `$2`, ... | `?` |
+| `DEFAULT NOW()` | `DEFAULT (datetime('now'))` |
+| `expr::numeric`, `CAST(expr AS NUMERIC)` | `pg_numeric(expr)` — exact decimal text |
+| `expr::numeric(p,s)` | `pg_numeric_round(expr, s)` |
+| numeric `+` `-` `*` `/` | `pg_numeric_add/sub/mul/div(a, b)` with PG's result scales |
+| `round(numeric, n)` | `pg_numeric_round(expr, n)` |
+| numeric `=` `<` `>` ... | `pg_numeric_cmp(a, b) <op> 0` |
+| `sum/avg/min/max(numeric)` | `pg_numeric_sum/avg/min/max(expr)` — exact aggregates |
+| `sum/avg/min/max(col)`, `col` declared NUMERIC | `pg_numeric_sum/avg/min/max(col)` — rewritten by the driver from the column's declared type |
+
+An expression is numeric when it has a `::numeric` or `CAST(... AS NUMERIC)`
+operand; the property carries through arithmetic, parentheses, `round()`,
+the aggregates and pass-through calls such as `coalesce()`. The functions
+are exact (`math/big`) and may be used in views. A bare NUMERIC column is
+TEXT in SQLite. Its aggregates are exact: the driver knows which columns
+were declared NUMERIC (from the `/*pg:numeric*/` annotation it leaves in
+`sqlite_master`) and rewrites `sum(amount)` over such a column, including a
+qualified `l.amount` in a join and inside a `CREATE VIEW`. Comparisons,
+`ORDER BY` and arithmetic on a bare NUMERIC column, and decimal literals
+with no cast, are not rewritten: write the cast.
+
+The `pg_numeric_*` functions exist only on pglike's own connections. A view
+that uses them is stored in the SQLite file with those calls, so another
+SQLite library opening the same file (tbls, the `sqlite3` shell, a DB
+browser) cannot compile that view and fails with `no such function:
+pg_numeric`. SQLite has no exact decimal type to translate to instead, so
+this is the price of exactness: treat a pglike file with numeric views as
+readable through pglike only, and generate schema documentation from
+PostgreSQL or through pglike itself.
+
+## Function Translations
+
+| PostgreSQL | SQLite |
+|---|---|
+| `NOW()` | `datetime('now')` |
+| `CURRENT_DATE` | `date('now')` |
+| `CURRENT_TIME` | `time('now')` |
+| `CURRENT_TIMESTAMP` | `datetime('now')` |
+| `date_trunc('day', expr)` | `date(expr)` |
+| `date_trunc('hour', expr)` | `strftime('%Y-%m-%d %H:00:00', expr)` |
+| `date_trunc('minute', expr)` | `strftime('%Y-%m-%d %H:%M:00', expr)` |
+| `date_trunc('month', expr)` | `strftime('%Y-%m-01', expr)` |
+| `date_trunc('year', expr)` | `strftime('%Y-01-01', expr)` |
+| `EXTRACT(field FROM expr)` | `CAST(strftime(fmt, expr) AS INTEGER)` |
+| `date_part('field', expr)` | `CAST(strftime(fmt, expr) AS INTEGER)` |
+| `left(str, n)` | `substr(str, 1, n)` |
+| `right(str, n)` | `substr(str, -n)` |
+| `concat(a, b, ...)` | `(COALESCE(a,'') \|\| COALESCE(b,'') \|\| ...)` |
+| `string_agg(expr, sep)` | `group_concat(expr, sep)` |
+| `array_agg(expr)` | `json_group_array(expr)` |
+| `to_char(ts, fmt)` | `strftime(mapped_fmt, ts)` |
+
+## Registered PG-Compatible Functions
+
+These functions are registered as SQLite custom functions and can be called directly:
+
+| Function | Description |
+|---|---|
+| `gen_random_uuid()` | Returns a random UUID v4 string |
+| `md5(string)` | Returns the hex-encoded MD5 hash |
+| `split_part(string, delimiter, field)` | Returns the nth field (1-indexed) |
+| `pg_typeof(expr)` | Returns the SQLite type name of the expression |
+| `current_schema()` | Returns `'public'` |
+| `current_database()` | Returns `'main'` |
+
+## Catalog Views
+
+PG-style catalog queries work out of the box. On every new connection, the driver installs `TEMP VIEW`s that expose the same shape as PostgreSQL's `information_schema`, `pg_tables`, `pg_views` and `pg_indexes`, backed by SQLite's own catalog (`sqlite_master`, `pragma_table_info`, `pragma_foreign_key_list`, `pragma_index_list`/`_info`). The translator rewrites canonical PG references to the underlying view names so the same SQL runs on pglike and real Postgres.
+
+| Catalog reference | Notes |
+|---|---|
+| `information_schema.schemata` | `public` plus schemas made with `CREATE SCHEMA` |
+| `information_schema.tables` | `table_catalog`, `table_schema`, `table_name`, `table_type` (`BASE TABLE` or `VIEW`) |
+| `information_schema.columns` | `column_name`, `data_type`/`udt_name` (the PG type as declared, e.g. `bigint`/`int8`), `is_nullable`, `ordinal_position` (1-based), `column_default` |
+| `information_schema.table_constraints` | `PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE` rows; constraint names synthesised as PG names an unnamed one (`<table>_pkey`, `<table>_<columns>_fkey`) |
+| `information_schema.key_column_usage` | One row per column in a PK or FK |
+| `information_schema.referential_constraints` | FK metadata: `update_rule`, `delete_rule` |
+| `information_schema.constraint_column_usage` | Columns referenced by a constraint (parent-side for FKs) |
+| `pg_tables` | `schemaname`, `tablename`, `hasindexes`; owner/tablespace are NULL |
+| `pg_views` | `schemaname`, `viewname`, `definition` (raw `CREATE VIEW` text) |
+| `pg_indexes` | `schemaname`, `tablename`, `indexname`, `indexdef` (raw `CREATE INDEX` text; PK indexes synthesised as `<table>_pkey` in PG's shape) |
+| `pg_index_columns` | pglike-specific: index columns flat — `indexname`, `column_name`, `ordinal_position`, `is_unique` |
+
+Example — list tables and find the FK columns of a table:
+
+```go
+db, _ := sql.Open("pglike", ":memory:")
+db.Query(`SELECT table_name FROM information_schema.tables
+          WHERE table_schema = current_schema()`)
+
+db.Query(`SELECT kcu.column_name, ccu.table_name, ccu.column_name
+          FROM information_schema.referential_constraints rc
+          JOIN information_schema.key_column_usage kcu
+            ON rc.constraint_name = kcu.constraint_name
+          JOIN information_schema.constraint_column_usage ccu
+            ON rc.unique_constraint_name = ccu.constraint_name
+          WHERE kcu.table_name = $1`, "posts")
+```
+
+The same queries run against real Postgres without modification.
+
+## Schemas
+
+`CREATE SCHEMA`, `DROP SCHEMA [CASCADE]` and schema-qualified names work. Everything stays in one SQLite database: a relation in schema `crm` is stored as the table `"crm.customers"`, and `public.t` is plain `t`. Cross-schema joins, foreign keys, views and transactions therefore behave as they do within one schema.
+
+```sql
+CREATE SCHEMA crm;
+CREATE TABLE crm.customers (id INTEGER PRIMARY KEY, name TEXT);
+CREATE TABLE sales.orders (id INTEGER PRIMARY KEY,
+                           customer_id INTEGER REFERENCES crm.customers(id));
+SELECT customers.name FROM sales.orders o JOIN crm.customers ON customers.id = o.customer_id;
+```
+
+The catalogs report each relation under its schema. The rewrite is syntactic: two-part names are rewritten only where a relation is expected (after `FROM`, `JOIN`, `INTO`, `UPDATE`, `TABLE`, `VIEW`, `INDEX`, `REFERENCES`). `ATTACH DATABASE` was rejected as the mechanism because SQLite can't have foreign keys or permanent views across attached databases.
+
+Not supported: `SET search_path` (unqualified names always mean `public`), schema-qualified sequences and functions, `ALTER ... SET SCHEMA`, `ALTER TABLE crm.t RENAME TO u` (the new name lands in `public`), and dropping `public`. Creating a table in a schema that was never created isn't an error. `DROP SCHEMA ... CASCADE` drops the schema's own tables and views, but it can't remove a foreign key that another schema's table holds into it.
+
+## WASM Support
+
+The driver works under `GOOS=wasip1 GOARCH=wasm`. The underlying SQLite engine (`ncruces/go-sqlite3`) embeds SQLite compiled to Go via wasm2go, so there is no CGo or runtime WASM interpreter dependency.
+
+### `:memory:` connection pooling
+
+Go's `database/sql` connection pool can open multiple connections. With `:memory:`, each connection normally gets its own empty database. The driver handles this automatically by backing every in-memory DSN with the pure-Go `memdb` VFS from `ncruces/go-sqlite3`: all pool connections share one named in-memory database with real locking, identically on native, `wasip1` and browser WASM. Note that memdb allows a single writer at a time; heavily concurrent writers serialise via the busy handler.
+
+No user configuration is needed — `sql.Open("pglike", ":memory:")` works correctly in every environment.
+
+### Running tests under WASM
+
+```bash
+task test:wasm
+```
+
+## File Structure
+
+```
+go-postgres/
+  driver.go                 Driver, connector, DSN parsing, connection pooling
+  driver_go18.go            Context-aware interfaces
+  translate.go              Core tokenizer + translation pipeline
+  translate_ddl.go          DDL type mappings (SERIAL, BOOLEAN, VARCHAR, etc.)
+  translate_expr.go         Expression translations (::cast, ILIKE, TRUE/FALSE, E'strings')
+  translate_func.go         Function translations (NOW, date_trunc, EXTRACT, etc.)
+  translate_genseries.go    generate_series() → recursive CTE rewriting
+  translate_interval.go     INTERVAL literal parsing and arithmetic
+  translate_order.go        NULLS FIRST/LAST ordering support
+  translate_sequence.go     CREATE/DROP SEQUENCE emulation
+  translate_catalog.go      information_schema/pg_catalog reference rewriting
+  catalog.go                TEMP VIEW DDLs for information_schema and pg_indexes
+  catalog_types.go          PG column types and schema names for the catalog views
+  translate_schema.go       schema.name → "schema.name" rewriting
+  schema_ddl.go             CREATE/DROP SCHEMA
+  pgfuncs.go                PG-compat functions registered in SQLite
+  pgerror.go                PG SQLSTATE error code wrapping
+  foreign_key_test.go       Foreign key constraint tests
+  soak_test.go              Soak / stress tests
+  driver_test.go            Integration tests (full SQL round-trips)
+  translate_test.go         Unit tests for all translations
+  wasm_test.go              WASM cross-compilation tests
+  example/main.go           Usage example
+```
+
+## Links
+
+| | |
+|---|---|
+| Documentation | https://go-postgres.docs.bytestone.uk/ |
+| Source (Forgejo) | https://git.bytestone.uk/hum3/go-postgres |
+| Mirror (GitHub) | https://github.com/drummonds/go-postgres |
+
+## License
+
+MIT
+
+## Alternatives survey (checked 2026-09-29)
+
+Other ways to get PostgreSQL SQL in pure Go or WASM. All of the real-Postgres options run [PGlite](https://pglite.dev)'s WASM build of Postgres.
+
+| Project | Engine / runtime | Pure Go | Browser (`GOOS=js`) | Maturity |
+|---|---|---|---|---|
+| **pglike** (this repo) | PG→SQLite translation on ncruces/go-sqlite3 (wasm2go) | Yes | Yes, and `wasip1` | In use |
+| [pglite-go](https://github.com/moriyoshi/pglite-go) | Real PG 18. wasmtime (cgo), wazero, or `-tags aot` (wasm2go → ~14M lines of generated Go, no WASM runtime) | wazero and `aot` builds | Not claimed. `aot` is the only plausible route | 8 stars. Single connection. `aot` merged 2026-09-25, can't create a new cluster, not in CI |
+| [wasipg](https://github.com/moznion/wasipg) | Real PG 17.5 on wazero | Yes | No (WASI only) | Pre-alpha, no release |
+| [gopglite](https://pkg.go.dev/github.com/bobTheBuilder7/gopglite) | Real PG 16 on wazero | Yes | Not claimed | Small |
+| [PGlite](https://pglite.dev) via `syscall/js` | Real PG in the browser's JS engine | No (JS dependency) | Yes, ~3 MB gzipped | Mature |
+
+Running wazero inside `GOOS=js` puts a WASM interpreter inside WASM, so the wazero-based options aren't a practical browser route. Re-check pglite-go `aot` for browser use.
+
+### Cost of pglike in a WASM binary
+
+Measured with Go 1.26.4 and go-sqlite3 v0.35.3, built with `-trimpath -ldflags="-s -w"`. The test program opens `:memory:` and runs `SELECT 1`.
+
+| Build (`GOOS=js`) | Raw | gzip -9 |
+|---|---|---|
+| Baseline (`database/sql` + `fmt`) | 2.5 MB | 0.7 MB |
+| + ncruces/go-sqlite3 only | 16.5 MB | 4.5 MB |
+| + pglike (includes SQLite) | 17.6 MB | 4.7 MB |
+
+SQLite adds ~14 MB raw (~3.8 MB gzipped). pglike's translation layer on top of that adds ~1.1 MB (~0.2 MB gzipped). `wasip1` sizes are within 0.1 MB of these.

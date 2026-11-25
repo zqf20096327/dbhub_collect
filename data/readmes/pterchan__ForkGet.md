@@ -1,20 +1,23 @@
 # Forkget
 
+English · [简体中文](README.zh-CN.md)
+
 Disposable database workspaces for applications and agents.
 
+![Forkget comic: fork, test, diff, discard](doc/assets/intro-comic.svg)
+
 Forkget creates isolated branches from a pinned snapshot of MySQL,
-PostgreSQL, TiDB or MongoDB. Connect through an admitted native client,
+PostgreSQL or MongoDB. Connect through an admitted native client,
 inspect typed changes, save a complete result and replay it against its retained
 baseline. Branches have explicit permissions, row budgets and expiry.
 
-This source is being prepared for **v0.1.0-rc.1**. No release binaries or container
-archives are currently published. The candidate is experimental and is not a
-production or managed-service qualification.
+Choose a version from [GitHub Releases](https://github.com/pterchan/ForkGet/releases)
+and read its qualification status and known limitations. Use prereleases with
+disposable, non-production data. The release page lists the source, Linux x86_64
+binaries, Console and checksums available for that tag.
 
-**TiDB correctness limitation:** concurrent parent deletion and child insertion
-can leave a committed orphan on TiDB 8.5.8, including with real TiKV. Forkget
-currently neither repairs nor reliably refuses that race. Concurrent foreign-key
-integrity remains a release blocker; serial application success does not close it.
+TiDB is outside the v0.1.1 release scope because of the unresolved concurrent
+foreign-key integrity issue. See [known limitations](doc/limitations.md).
 
 ## Get started
 
@@ -27,10 +30,13 @@ integrity remains a release blocker; serial application success does not close i
 
 ```sh
 forkget fork review-task --write
-# Wait for the returned immutable branch ID to become active, then connect.
-forkget diff review-task --output changes.json
-forkget drop review-task
+forkget status --id 42
+# Wait until the branch is active, then connect and run your workload.
+forkget diff --id 42 --output changes.json
+forkget drop --id 42
 ```
+
+Replace `42` with the immutable branch ID returned by `forkget fork`.
 
 Omitting `--write` creates a read-only branch. Writable SQL branches materialize
 native copies; their provisioning time and space grow with the snapshot.

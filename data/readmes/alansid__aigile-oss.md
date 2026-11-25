@@ -43,7 +43,7 @@ docker compose up -d     # http://localhost:3000，帳號 admin、密碼 admin�
 <details>
 <summary><b>不用 clone：直接用映像啟動</b></summary>
 
-每個正式版都有建好的映像 `ghcr.io/alansid/aigile-oss`（amd64 與 arm64；`latest` 是最新版，也可以指定版本例如 `1.0.7`）。資料一定要掛 volume 到 `/data`，不然刪掉容器資料就沒了。
+每個正式版都有建好的映像 `ghcr.io/alansid/aigile-oss`（amd64 與 arm64；`latest` 是最新版，也可以指定版本例如 `1.0.8`）。資料一定要掛 volume 到 `/data`，不然刪掉容器資料就沒了。
 
 用 `docker run`：
 
@@ -178,7 +178,7 @@ volumes:
 
 ## 本機啟動（不用 Docker）
 
-需要 Node.js 22.13 以上（建議 24），不用 `npm install`（改用 Postgres 才要，見「用 Postgres」）：
+需要 Node.js 22.13 以上（建議 24），不用 `npm install` 即可啟動。要抽 PDF 文字或使用 Postgres，請先 `npm install`。
 
 ```bash
 npm start            # http://localhost:3000，資料放 ./data
@@ -242,6 +242,7 @@ npm start -- -p 8080 --host 127.0.0.1    # 只給這台電腦連；沒指定就�
 | `STALE_MINUTES` | `20` | ✓ | ✓ | AI 多久沒出現算「可能斷線」 |
 | `UNANSWERED_MINUTES` | `20` | ✓ | ✓ | 指派多久沒讀算「尚未回應」 |
 | `CARD_STALE_HOURS` | `24` | ✓ | ✓ | 卡片多久沒更新算停滯 |
+| `AIGILE_BOARD_LIMIT` | `200` | ✓ | ✓ | 看板一次最多載入幾張卡片（左邊未結案欄位優先，剩餘名額補最近已完成） |
 | `TEAM_CACHE_MS` | `180000` | ✓ | | 團隊狀態快取時間（毫秒） |
 | `ARCHIVE_EVERY_MS` | `600000` | ✓ | | 多久檢查一次自動封存（毫秒） |
 | `RATE_LIMIT_PER_MIN` | `120` | ✓ | | 每人每分鐘請求上限（Workers 固定 120） |

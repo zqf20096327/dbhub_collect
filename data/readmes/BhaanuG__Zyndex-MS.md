@@ -19,11 +19,14 @@
 <p align="center">
   <a href="#core-architectural-highlights"><img src="https://img.shields.io/badge/Architecture-Poly--Service%20Microservices-blueviolet?style=for-the-badge" alt="Architecture" /></a>
   <a href="#backend-runtime-specifications"><img src="https://img.shields.io/badge/Java-21%20LTS-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 21 LTS" /></a>
-  <a href="#backend-runtime-specifications"><img src="https://img.shields.io/badge/Spring%20Boot-3.4.2-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot 3.4.2" /></a>
-  <a href="#backend-runtime-specifications"><img src="https://img.shields.io/badge/Spring%20Cloud-2024.0.0-6DB33F?style=for-the-badge&logo=spring&logoColor=white" alt="Spring Cloud" /></a>
+  <a href="#backend-runtime-specifications"><img src="https://img.shields.io/badge/Spring%20Boot-3.4.3-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot 3.4.3" /></a>
+  <a href="#backend-runtime-specifications"><img src="https://img.shields.io/badge/Spring%20Cloud-2024.0.1-6DB33F?style=for-the-badge&logo=spring&logoColor=white" alt="Spring Cloud 2024.0.1" /></a>
   <a href="#frontend-runtime-specifications"><img src="https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 18" /></a>
-  <a href="#frontend-runtime-specifications"><img src="https://img.shields.io/badge/Vite-6.0.5-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 6" /></a>
+  <a href="#frontend-runtime-specifications"><img src="https://img.shields.io/badge/Vite-6.4.6-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 6" /></a>
+  <a href="#frontend-runtime-specifications"><img src="https://img.shields.io/badge/Tailwind%20CSS-4.1.12-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" /></a>
   <a href="#database-runtime-specifications"><img src="https://img.shields.io/badge/MySQL-8.4%20LTS-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL 8.4" /></a>
+  <a href="#containerization--orchestration"><img src="https://img.shields.io/badge/Docker-28.0%20Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker & Compose" /></a>
+  <a href="#frontend-runtime-specifications"><img src="https://img.shields.io/badge/Nginx-Reverse%20Proxy-009639?style=for-the-badge&logo=nginx&logoColor=white" alt="Nginx" /></a>
 </p>
 
 <p align="center">
@@ -47,15 +50,15 @@
 
 ---
 
-### Executive Architectural Abstract
-
-**Zyndex** is a production-grade, distributed academic learning and digital resource management platform designed for universities, campus libraries, research labs, and academic consortia. The platform eliminates content redistribution risks and resolves fragmented student entitlements through:
-
-- **Strict Cryptographic Perimeter**: Dynamic 4-digit TLS-relayed OTP authentication, multi-device session management with real-time active session monitoring, 24-hour trusted device recognition with daily midnight IST reset, single-session token ve
+### Exec
 
 [...截断...]
 
-rsion enforcement (`session_token_version`), and stateless HMAC-SHA256 JWT access tokens.
+utive Architectural Abstract
+
+**Zyndex** is a production-grade, distributed academic learning and digital resource management platform designed for universities, campus libraries, research labs, and academic consortia. The platform eliminates content redistribution risks and resolves fragmented student entitlements through:
+
+- **Strict Cryptographic Perimeter**: Dynamic 4-digit TLS-relayed OTP authentication, multi-device session management with real-time active session monitoring, 24-hour trusted device recognition with daily midnight IST reset, single-session token version enforcement (`session_token_version`), and stateless HMAC-SHA256 JWT access tokens.
 
 - **Zero-Leakage In-Memory PDF Slicing**: Proprietary academic documents are sliced on-the-fly in heap memory via Apache PDFBox for unverified and evaluation tiers, preventing client-side retrieval of complete files.
 
@@ -100,7 +103,7 @@ flowchart TD
         EUREKA["Eureka Service Registry (Port 8761)\nHeartbeat Monitoring & Distributed Registry"]
     end
 
-    subgraph ServiceMesh["⚙️ Autonomous Domain Microservices (Java 21 LTS + Spring Boot 3.4.2)"]
+    subgraph ServiceMesh["⚙️ Autonomous Domain Microservices (Java 21 LTS + Spring Boot 3.4.3)"]
         AUTH["auth-service (8081)\nIdentity, 4-Digit OTP, 24h Trust, BCrypt"]
         CONTENT["content-service (8082)\nCatalog, PDFBox Slicing, Metadata"]
         ACCESS["access-service (8083)\nTier Entitlements, Quotas, Token Issuance"]
@@ -109,24 +112,4 @@ flowchart TD
     end
 
     subgraph StorageTier["💾 Persistence & State Store"]
-        DB[("MySQL 8.4 Enterprise RDBMS\nACID Distributed Schemas")]
-    end
-
-    UI -->|"HTTPS / REST"| GW
-    GW -.->|"Service Discovery"| EUREKA
-    AUTH -.->|"Self-Registration"| EUREKA
-    CONTENT -.->|"Self-Registration"| EUREKA
-    ACCESS -.->|"Self-Registration"| EUREKA
-    USAGE -.->|"Self-Registration"| EUREKA
-    SUB -.->|"Self-Registration"| EUREKA
-
-    GW -->|"X-Gateway-Secret"| AUTH
-    GW -->|"X-Gateway-Secret"| CONTENT
-    GW -->|"X-Gateway-Secret"| ACCESS
-    GW -->|"X-Gateway-Secret"| USAGE
-    GW -->|"X-Gateway-Secret"| SUB
-
-    AUTH --> DB
-    CONTENT --> DB
-    ACCESS --> DB
-    USAGE --> DB
+        DB[("MySQL 8.4 Enterprise RDBMS\nACI

@@ -47,6 +47,10 @@ feature gates:
 - **[Automatic indexes](docs/operations.md#automatic-indexes)** — opt-in creation of indexes for frequent query shapes, with cleanup of unused automatic indexes.
 - **[Embedded GUI in the box](docs/gui.md)** — a local browser console for documents, a SQL + JSON playground, indexes, backups, credentials, cluster state, and metrics, with no separate frontend service.
 - **Search built in** — [BM25 full-text search](docs/api.md#full-text-indexes), [fuzzy trigram/Levenshtein search](docs/api.md#fuzzy-indexes), and [exact vector search](docs/api.md#vector-indexes) in the same database.
+- **Graph traversal and analytics** — [native graph queries](docs/graph.md)
+  with adjacency indexes, BFS/DFS traversal, shortest paths, pattern matching,
+  hybrid vector+graph ranking, graph algorithms, background analytics jobs,
+  and [read-only Cypher](docs/cypher.md).
 - **[Asynchronous webhooks](docs/webhooks.md)** — filtered HTTP delivery with count/sum/avg thresholds, retries, HMAC signing, dead-letter queuing, CLI/API management, and a GUI for deliveries.
 - **SQL when you need it** — [SQL queries and writes](docs/sql.md) alongside the document API, plus a [SQL + JSON playground](docs/gui.md#playground-sql--json) in the GUI, without a separate SQL database.
 - **[TTL at both levels](docs/ttl.md)** — collection defaults, date-field MongoDB TTL, and per-document overrides, with immediate read-time hiding.
@@ -183,6 +187,38 @@ single-database directories are migrated to `default/` on startup. See
   sidecar accelerates unfiltered queries. No external vector service is
   required. Results include `_distance`, lowest first.
 - All search indexes are maintained in the same transaction as the document.
+
+### Graph
+
+- Nodes and edges are ordinary documents; a graph definition names the edge
+  collection and endpoint/label/weight fields.
+- Native `out`/`in` adjacency slots are maintained in the same transaction as
+  every edge insert, update, delete, TTL expiry, and replication apply.
+- `traverse` supports BFS/DFS, directions, label/edge/node filters, temporal
+  `as_of` windows, projection, cycle markers, tree or flat output, hard
+  node/edge/byte budgets, and vector-search seeds.
+- `neighbors` returns one-hop filtered neighbors without building a tree.
+- `shortest_path` uses BFS by hops or Dijkstra over edge weights;
+  `all_shortest_paths` returns every shortest path with bounded path/node budgets.
+- `graph_match` matches linear variable-length patterns with per-step direction,
+  labels, node/edge filters, and relationship uniqueness.
+- `graph_algorithm` computes bounded PageRank, degree centrality, weakly
+  connected components, label propagation, k-core, and degree distribution.
+- `start_graph_job` runs the same algorithms as bounded background jobs with
+  progress, cancellation, result retrieval, and atomic collection export.
+- `hybrid_search` reranks vector hits and their graph neighborhood with
+  deterministic `vector_weight`/`graph_weight` scoring.
+- `$graphLookup` uses the adjacency fast path when the lookup fields match the
+  configured graph, with a safe fallback.
+- Online `reindex_graph` builds a new adjacency generation into temporary slots
+  and atomically swaps it after a complete scan; reads keep using the old
+  generation and edge writes are mirrored meanwhile.
+- Graph configuration and traversal are available through the HTTP API, Python
+  client, and the GUI Graph tab. See [Graph traversal](docs/graph.md).
+- Read-only Cypher compatibility (`cypher` / `Collection.cypher()`), including
+  `MATCH`/`WHERE`/`WITH`/`UNWIND`, variable-length paths, shortest paths, and
+  GDS-style PageRank/degree/components/similarity/label-propagation/k-core/
+  degree-distribution procedures. See [Read-only Cypher](docs/cypher.md).
 
 ### Aggregation
 
@@ -453,7 +489,7 @@ docker run -d --name nonodb \
   --group-add "$(id -g)" \
   -v "$NONODB_AUTH_FILE:/etc/nonodb/auth.json:ro" \
   -v nonodb-data:/var/lib/nonodb \
-  ghcr.io/essmos/nonodb:0.32.0
+  ghcr.io/essmos/nonodb:0.33.0
 ```
 
 Check health and logs:
@@ -537,7 +573,7 @@ listener, so the Windows daemon requires TCP plus `NONODB_AUTH_FILE`.
 Download, verify, and extract the x86_64 archive:
 
 ```bash
-TAG=v0.32.0
+TAG=v0.33.0
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/nonodb-$TAG-linux-x86_64.tar.gz"
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/nonodb-$TAG-linux-x86_64.tar.gz.sha256"
 sha256sum -c "nonodb-$TAG-linux-x86_64.tar.gz.sha256"
@@ -625,7 +661,7 @@ connection failures, or `5xx`. You can also set `write_url` explicitly. See
 Download the archive matching your CPU (`uname -m` prints `arm64` or `x86_64`):
 
 ```bash
-TAG=v0.32.0
+TAG=v0.33.0
 ARCHIVE="nonodb-$TAG-macos-arm64.tar.gz"   # use macos-x86_64 on Intel
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/$ARCHIVE"
 curl -LO "https://github.com/essmos/nonodb/releases/download/$TAG/$ARCHIVE.sha256"
@@ -783,6 +819,8 @@ documentation.
 | [Backup and restore](docs/backup.md) | Online backup, snapshots, verification, restore drills, retention, Docker, vault keys, authorization state |
 | [Branching a database](docs/branching.md) | Offline CoW clone for CI, snapshot sources, verification, limits |
 | [Benchmarks](docs/benchmarks.md) | Test environment, throughput, latency, large data sets, RAM, reproducibility |
+| [Graph benchmark](docs/graph-benchmark.md) | NonoDB vs Neo4j Community graph ingest/traversal methodology and results |
+| [Graph analytics benchmark](docs/graph-analytics-benchmark.md) | Reproducible 100k/500k/1M-node analytics timings, memory, and method |
 | [Development](docs/development.md) | Repository layout, tests, linting, benchmark scripts, contribution notes |
 | [Contributing](CONTRIBUTING.md) | Setup, required checks, code guidelines, pull requests |
 | [Security policy](SECURITY.md) | Supported versions, private vulnerability reporting, scope |
@@ -821,7 +859,7 @@ results. Visit [liveapisec.com](https://liveapisec.com) to learn more.
 
 ## Status
 
-nonodb is an early-stage project (`0.32.0`). Its core storage, query, index,
+nonodb is an early-stage project (`0.33.0`). Its core storage, query, index,
 search, batching, security, snapshot, and operational paths are covered by unit,
 property-based, end-to-end, concurrency, crash, and large-data tests. The API
 may still change before a stable release.

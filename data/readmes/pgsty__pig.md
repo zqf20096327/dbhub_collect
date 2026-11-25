@@ -5,21 +5,21 @@
 [![Version: v1.11.0](https://img.shields.io/badge/version-v1.11.0-slategray?style=flat)](https://github.com/pgsty/pig/releases/tag/v1.11.0)
 [![Pigsty: v4.6.0](https://img.shields.io/badge/Pigsty-v4.6.0-slategray?style=flat)](https://pigsty.io/docs/about/release)
 [![License: Apache-2.0](https://img.shields.io/github/license/pgsty/pig?logo=opensourceinitiative&logoColor=green&color=slategray)](https://github.com/pgsty/pig/blob/main/LICENSE)
-[![Extensions: 625](https://img.shields.io/badge/extensions-625-%233E668F?style=flat&logo=postgresql&logoColor=white&labelColor=3E668F)](https://pigsty.io/ext/list)
+[![Extensions: 627](https://img.shields.io/badge/extensions-627-%233E668F?style=flat&logo=postgresql&logoColor=white&labelColor=3E668F)](https://pigsty.io/ext/list)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/pgsty/pig)
 
 [**pig**](https://pig.pgsty.com/intro/) is an open-source PostgreSQL and extension package manager for [mainstream](https://pigsty.io/ext/os/) (EL/Debian/Ubuntu) Linux.
 
-Install PostgreSQL 14–18 and explore a catalog of [625 packaged entries](https://pigsty.io/ext/list) on `amd64` or `arm64` hosts through the native OS package manager.
+Install PostgreSQL 15–19 and explore a catalog of [627 packaged entries](https://pigsty.io/ext/list) on `amd64` or `arm64` hosts through the native OS package manager.
 
 PIG-owned commands can emit self-describing structured results with `-o json` or `-o yaml`, making it an **Agent-Friendly** PostgreSQL CLI tool. Native passthrough commands retain their own interaction and output contract.
-Also explore the full [**PGEXT.CLOUD directory**](https://pgext.cloud/) of 2,733 catalogued PostgreSQL extensions.
+Also explore the full [**PGEXT.CLOUD directory**](https://pgext.cloud/) of 2,818 catalogued PostgreSQL extensions.
 
 ## Current catalog snapshot
 
-The current public catalog metric is **625 packaged entries**. The entries map to **518** distinct package names when PostgreSQL contrib modules are included, and the package view used for availability reports covers **457** non-contrib package families. The full PGEXT.CLOUD directory contains **2,733** ecosystem entries, including packaged, source-only, and provider-specific extensions.
+The current public catalog metric is **627 packaged entries**. The entries map to **520** distinct package names when PostgreSQL contrib modules are included, and the package view used for availability reports covers **457** non-contrib package families. The full PGEXT.CLOUD directory contains **2,818** ecosystem entries, including packaged, source-only, and provider-specific extensions.
 
-The count follows the catalog directory-entry contract: it measures coverage, while package names, platform availability, PostgreSQL-major support, and database enablement remain separate properties. The `v1.11.0` release uses the **2026-11-10 625-entry** public metric; later catalog data can be loaded with `pig ext reload`.
+The count follows the catalog directory-entry contract: it measures coverage, while package names, platform availability, PostgreSQL-major support, and database enablement remain separate properties. The bundled snapshot uses the **2026-11-23 627-entry** public metric; later catalog data can be loaded with `pig ext reload`.
 
 [![PostgreSQL Extension Ecosystem](https://pigsty.io/img/pigsty/ecosystem.jpg)](https://medium.com/@fengruohang/postgres-is-eating-the-database-world-157c204dcfc4)
 
@@ -28,7 +28,7 @@ The count follows the catalog directory-entry contract: it measures coverage, wh
 
 ## Get Started
 
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18,17,16,15,14-%233E668F?style=flat&logo=postgresql&labelColor=3E668F&logoColor=white)](https://pig.pgsty.com/pg/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-19,18,17,16,15-%233E668F?style=flat&logo=postgresql&labelColor=3E668F&logoColor=white)](https://pig.pgsty.com/pg/)
 [![Linux](https://img.shields.io/badge/Linux-amd64/arm64-%23FCC624?style=flat&logo=linux&labelColor=FCC624&logoColor=black)](https://pig.pgsty.com/intro/#linux-compatibility)
 [![EL Support: 8/9/10](https://img.shields.io/badge/EL-8/9/10-red?style=flat&logo=redhat&logoColor=red)](https://pig.pgsty.com/intro/#linux-compatibility)
 [![Debian Support: 12/13](https://img.shields.io/badge/Debian-12/13-%23A81D33?style=flat&logo=debian&logoColor=%23A81D33)](https://pig.pgsty.com/intro/#linux-compatibility)
@@ -48,7 +48,7 @@ $ pig install pg18              # install PostgreSQL 18 kernel packages
 $ pig ext add pg_duckdb -v 18   # install the pg_duckdb extension (for current pg18)
 ```
 
-These commands install host packages. Creating or configuring an extension inside a database is a separate PostgreSQL operation. Check the [advanced usage](#advanced-usage) for details and the [full list of 625 catalog entries](https://pigsty.io/ext/list/).
+These commands install host packages. Creating or configuring an extension inside a database is a separate PostgreSQL operation. Check the [advanced usage](#advanced-usage) for details and the [full list of 627 catalog entries](https://pigsty.io/ext/list/).
 
 [![asciicast](https://asciinema.org/a/695902.svg)](https://asciinema.org/a/695902)
 
@@ -157,7 +157,7 @@ pig build repo [module...]       # initialize required build repositories
 pig build tool  [mini|full|...]  # init build toolset
 pig build proxy [id@host:port]   # install/verify Xray; also has client/server modes
 pig build rust  [-m] [-y]        # install Rust and Cargo, optionally use mirrors
-pig build pgrx  [-v 0.19.3]      # install and initialize cargo-pgrx
+pig build pgrx  [-v 0.20.1]      # install and initialize cargo-pgrx
 pig build spec                   # init build spec repo
 pig build get   <pkg...>         # download named source tarballs
 pig build dep   <pkg...>         # install extension build dependencies
@@ -354,33 +354,33 @@ vagrant@meta:~$ pig ext ls olap
 ✓ Found 27 extensions matching 'olap'
 Name                  Status     Version  Cate  Flags   License            Repo     PGVer  Package                       Description
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-citus                 available  14.3-1   OLAP  -dsl--  AGPL-3.0-only      PIGSTY   16-18  postgresql-18-citus           Distributed PostgreSQL as an extension
-citus_columnar        available  14.3-1   OLAP  -ds---  AGPL-3.0-only      PIGSTY   16-18  postgresql-18-citus           Citus columnar storage engine
-columnar              not_avail  1.1.2    OLAP  -ds---  AGPL-3.0           PIGSTY   14-16  postgresql-18-hydra           Hydra Columnar extension
-pg_duckdb             available  1.1.1    OLAP  -dsl--  MIT                PIGSTY   14-18  postgresql-18-pg-duckdb       DuckDB Embedded in Postgres
-pg_mooncake           available  0.2.0    OLAP  -dsl--  MIT                PIGSTY   14-18  postgresql-18-pg-mooncake     Columnstore Table in Postgres
-storage_engine        available  2.4.0    OLAP  -dsl--  AGPL-3.0           PIGSTY   15-18  postgresql-18-storage-engine  colcompress and rowcompress Table Access Methods with vectorized
-pg_clickhouse          available  0.11     OLAP  -ds--r  Apache-2.0         PIGSTY   14-18  postgresql-18-clickhouse      Interfaces to query ClickHouse databases from PostgreSQL
-duckdb_fdw             available  2.0.2    OLAP  -ds--r  MIT                PIGSTY   15-18  postgresql-18-duckdb-fdw      DuckDB Foreign Data Wrapper
-pg_parquet             available  0.5.1    OLAP  -dsl--  PostgreSQL         PIGSTY   14-18  postgresql-18-pg-parquet      copy data between Postgres and Parquet
-pg_ducklake            available  1.0.3    OLAP  -dsl--  MIT                PIGSTY   14-18  postgresql-18-pg-ducklake     DuckLake lakehouse extension for PostgreSQL, backed by DuckDB and Parquet
-pg_fkpart              available  1.7.0    OLAP  -d----  GPL-2.0            PIGSTY   14-18  postgresql-18-pg-fkpart       Table partitioning by foreign key utility
-pg_partman             available  5.5.0    OLAP  -ds---  PostgreSQL         PGDG     14-18  postgresql-18-partman         Extension to manage partitioned tables by time or ID
-plproxy               available  2.12.0   OLAP  -ds---  ISC                PGDG     14-18  postgresql-18-plproxy         Database partitioning implemented as procedural language
-pg_strom              not_avail  6.1      OLAP  -ds---  PostgreSQL                  15-18                                PG-Strom - big-data processing acceleration using GPU and NVME
-pg_orca                available  1.0.0    OLAP  -dsl--  Apache-2.0         PIGSTY   18     postgresql-18-pg-orca         ORCA query optimizer as a PostgreSQL extension
-pg_sorted_heap         available  0.14.0   OLAP  -dsl--  PostgreSQL         PIGSTY   16-18  postgresql-18-pg-sorted-heap  Sorted heap table AM with zone map scan pruning and built-in vectorization
-pg_lake                available  3.5      OLAP  bdsl--  Apache-2.0         PIGSTY   16-18  postgresql-18-pg-lake         Data lake extension by Snowflake
-pg_extension_base      available  3.5      OLAP  -dsl--  Apache-2.0         PIGSTY   16-18  postgresql-18-pg-lake         Extension development kit by Snowflake
-pg_extension_updater   available  3.5      OLAP  -dsl--  Apache-2.0         PIGSTY   16-18  postgresql-18-pg-lake         Automatic extension updater
-pg_map                 available  3.5      OLAP  -ds---  Apache-2.0         PIGSTY   16-18  postgresql-18-pg-lake         Map type for PostgreSQL, bundled as a required pg_lake component
-pg_lake_engine         available  3.5      OLAP  -dsl--  Apache-2.0         PIGSTY   16-18  postgresql-18-pg-lake         Query engine for data lake queries
-pg_lake_iceberg        available  3.5      OLAP  -ds---  Apache-2.0         PIGSTY   16-18  postgresql-18-pg-lake         Iceberg implementation in Postgres
-pg_lake_table          available  3.5      OLAP  -dsl--  Apache-2.0         PIGSTY   16-18  postgresql-18-pg-lake         Data lake tables and Iceberg tables
-pg_lake_copy           available  3.5      OLAP  -dsl--  Apache-2.0         PIGSTY   16-18  postgresql-18-pg-lake         Copy to/from data lake files
-pg_table_range         not_avail  0.1.2    OLAP  -ds---  MIT                         16-18                                Planning-time partition pruning by per-partition data ranges
-pg_improv              available  0.12.1   OLAP  -ds---  Apache-2.0 OR MIT  PIGSTY   15-18  postgresql-18-pg-improv       Incremental multidimensional models and formula functions over PostgreSQL
-tablefunc              available  1.0      OLAP  -ds-tr  PostgreSQL         CONTRIB  14-18  postgresql-18                 functions that manipulate whole tables, including crosstab
+citus                 available  14.3.0   OLAP  -dsl--  AGPL-3.0-only      PIGSTY   16-18  postgresql-18-citus           Distributed PostgreSQL as an extension
+citus_columnar        available  14.3.0   OLAP  -ds---  AGPL-3.0-only      PIGSTY   16-18  postgresql-18-citus           Citus columnar storage engine
+columnar              not_avail  1.1.2    OLAP  -ds---  AGPL-3.0           PIGSTY   15-16  postgresql-18-hydra           Hydra Columnar extension
+pg_duckdb             available  1.2.2    OLAP  -dsl--  MIT                PIGSTY   15-19  postgresql-18-pg-duckdb       DuckDB Embedded in Postgres
+pg_mooncake           available  0.3.4    OLAP  -dsl--  MIT                PIGSTY   15-19  postgresql-18-pg-mooncake     Columnstore Table in Postgres
+storage_engine        available  2.4.0    OLAP  -dsl--  AGPL-3.0           PIGSTY   15-19  postgresql-18-storage-engine  colcompress and rowcompress Table Access Methods with vectorized
+pg_clickhouse         available  0.11     OLAP  -ds--r  Apache-2.0         PIGSTY   15-19  postgresql-18-clickhouse      Interfaces to query ClickHouse databases from PostgreSQL
+duckdb_fdw            available  2.0.2    OLAP  -ds--r  MIT                PIGSTY   15-19  postgresql-18-duckdb-fdw      DuckDB Foreign Data Wrapper
+pg_parquet            available  0.6.1    OLAP  -dsl--  PostgreSQL         PIGSTY   15-19  postgresql-18-pg-parquet      copy data between Postgres and Parquet
+pg_ducklake           available  1.0.3    OLAP  -dsl--  MIT                PIGSTY   15-18  postgresql-18-pg-ducklake     DuckLake lakehouse extension for PostgreSQL, backed by DuckDB and Parquet
+pg_fkpart             available  1.7.0    OLAP  -d----  GPL-2.0            MIXED    15-19  postgresql-18-pg-fkpart       Table partitioning by foreign key utility
+pg_partman            available  5.5.1    OLAP  bds---  PostgreSQL         PGDG     15-19  postgresql-18-partman         Extension to manage partitioned tables by time or ID
+plproxy               available  2.12.0   OLAP  -ds---  ISC                PGDG     15-19  postgresql-18-plproxy         Database partitioning implemented as procedural language
+pg_strom              not_avail  6.1      OLAP  bdsl--  PostgreSQL                  15-18                                PG-Strom - big-data processing acceleration using GPU and NVME
+pg_orca               available  1.1.0    OLAP  -dsl--  Apache-2.0         PIGSTY   18-19  postgresql-18-pg-orca         ORCA query optimizer as a PostgreSQL extension
+pg_sorted_heap        available  0.14.0   OLAP  -dsl--  PostgreSQL         PIGSTY   16-18  postgresql-18-pg-sorted-heap  Sorted heap table AM with zone map scan pruning and built-in vectorization
+pg_lake               available  3.7      OLAP  bdsl--  Apache-2.0         PIGSTY   16-19  postgresql-18-pg-lake         Data lake extension by Snowflake
+pg_extension_base     available  3.7      OLAP  -dsl--  Apache-2.0         PIGSTY   16-19  postgresql-18-pg-lake         Extension development kit by Snowflake
+pg_extension_updater  available  3.7      OLAP  -dsl--  Apache-2.0         PIGSTY   16-19  postgresql-18-pg-lake         Automatic extension updater
+pg_map                available  3.7      OLAP  -ds---  Apache-2.0         PIGSTY   16-19  postgresql-18-pg-lake         Map type for PostgreSQL, bundled as a required pg_lake component
+pg_lake_engine        available  3.7      OLAP  -dsl--  Apache-2.0         PIGSTY   16-19  postgresql-18-pg-lake         Query engine for data lake queries
+pg_lake_iceberg       available  3.7      OLAP  -ds---  Apache-2.0         PIGSTY   16-19  postgresql-18-pg-lake         Iceberg implementation in Postgres
+pg_lake_table         available  3.7      OLAP  -dsl--  Apache-2.0         PIGSTY   16-19  postgresql-18-pg-lake         Data lake tables and Iceberg tables
+pg_lake_copy          available  3.7      OLAP  -dsl--  Apache-2.0         PIGSTY   16-19  postgresql-18-pg-lake         Copy to/from data lake files
+pg_table_range        available  0.1.2    OLAP  -ds---  MIT                PIGSTY   16-19  postgresql-18-pg-table-range  Planning-time partition pruning by per-partition data ranges
+pg_improv             available  0.15.0   OLAP  -ds---  Apache-2.0 OR MIT  PIGSTY   15-19  postgresql-18-pg-improv       Incremental multidimensional models and formula functions over PostgreSQL
+tablefunc             available  1.0      OLAP  -ds-tr  PostgreSQL         CONTRIB  15-19  postgresql-18                 functions that manipulate whole tables, including crosstab
 
 (27 Rows)
 ```
@@ -399,31 +399,31 @@ $ pig ext avail                      # show all packages availability on current
 
 ```bash
 vagrant@meta:~$ pig ext avail
-✓ Found 444 packages available on u24.arm64
+✓ Found 449 packages available on u24.arm64
 
 Extension Availability on u24.aarch64 : https://pigsty.io/ext/os/u24.aarch64
-Showing 457 packages with 625 extensions  (green = PIGSTY, blue = PGDG)
+Showing 457 packages with 627 extensions  (green = PIGSTY, blue = PGDG)
 
-Pkg                     18          17          16          15          14
-timescaledb             2.31.0      2.31.0      2.31.0      2.28.3      2.19.3
-timescaledb_toolkit     1.23.0      1.23.0      1.23.0      1.23.0      1.19.0
+Pkg                     19          18          17          16          15
+timescaledb             -           2.32.1      2.32.1      2.32.1      2.28.3
+timescaledb_toolkit     1.28.0      1.28.0      1.28.0      1.28.0      1.27.0
 pg_timeseries           0.2.1       0.2.1       0.2.1       0.2.1       0.2.1
-periods                 1.2.3       1.2.3       1.2.3       1.2.3       1.2.3
+periods                             1.2.3       1.2.3       1.2.3       1.2.3
 temporal_tables         1.2.2       1.2.2       1.2.2       1.2.2       1.2.2
-emaj                    5.0.0       5.0.0       5.0.0       5.0.0       5.0.0
+emaj                    5.0.1       5.0.1       5.0.1       5.0.1       5.0.1
 table_version           1.11.1      1.11.1      1.11.1      1.11.1      1.11.1
 pg_cron                 1.6.8       1.6.8       1.6.8       1.6.8       1.6.8
 pg_task                 3.0.0       3.0.0       3.0.0       3.0.0       3.0.0
 pg_later                0.4.0       0.4.0       0.4.0       0.4.0       0.4.0
 pg_dispatch             0.1.5       0.1.5       0.1.5       0.1.5       0.1.5
-pg_background           2.0.4       2.0.4       2.0.4       2.0.4       2.0.4
-pg_when                 0.1.10      0.1.10      0.1.10      0.1.10      0.1.10
-edtf_postgres           1.3.2       1.3.2       1.3.2       1.3.2       1.3.2
-pg_stl                  1.0.0       1.0.0       1.0.0       -           -
+pg_background           2.0.5       2.0.5       2.0.5       2.0.5       2.0.5
+pg_when                 0.1.11      0.1.11      0.1.11      0.1.11      0.1.11
+edtf_postgres           1.3.5       1.3.5       1.3.5       1.3.5       1.3.5
+pg_stl                  1.0.0       1.0.0       1.0.0       1.0.0       -
 cron_utils              0.1.0       0.1.0       0.1.0       0.1.0       0.1.0
 postgis                 3.7.0       3.7.0       3.7.0       3.7.0       3.7.0
-pgrouting               4.0.1       4.0.1       4.0.1       4.0.1       4.0.1
-pointcloud              1.2.5       1.2.5       1.2.5       1.2.5       1.2.5
+pgrouting               4.0.2       4.0.2       4.0.2       4.0.2       4.0.2
+pointcloud                          1.2.5       1.2.5       1.2.5       1.2.5
 ...
 
 ```
@@ -567,7 +567,7 @@ repo_upstream:  # Available Repo: 23
   - { name: backports      ,description: 'Ubuntu Backports'   ,module: node     ,releases: [22,24,26]          ,arch: [aarch64]         ,baseurl: 'http://ports.ubuntu.com/ubuntu-ports/ ${distro_codename}-backports   main restricted universe multiverse' }
   - { name: security       ,description: 'Ubuntu Security'    ,module: node     ,releases: [22,24,26]          ,arch: [aarch64]         ,baseurl: 'http://ports.ubuntu.com/ubuntu-ports/ ${distro_codename}-security    main restricted universe multiverse' }
   - { name: pgdg           ,description: 'PGDG'               ,module: pgsql    ,releases: [11,12,13,22,24,26] ,arch: [x86_64, aarch64] ,baseurl: 'http://apt.postgresql.org/pub/repos/apt/ ${distro_codename}-pgdg main' }
-  - { name: pgdg-beta      ,description: 'PGDG Beta'          ,module: beta     ,releases: [11,12,13,22,24,26] ,arch: [x86_64, aarch64] ,baseurl: 'http://apt.postgresql.org/pub/repos/apt/ ${distro_codename}-pgdg-testing main 19' }
+  - { name: pgdg-beta      ,description: 'PGDG Beta'          ,module: beta     ,releases: [12,13,22,24,26]    ,arch: [x86_64, aarch64] ,baseurl: 'http://apt.postgresql.org/pub/repos/apt/ ${distro_codename}-pgdg-testing main 20' }
   - { name: timescaledb    ,description: 'TimescaleDB'        ,module: extra    ,releases: [11,12,13,22,24,26] ,arch: [x86_64, aarch64] ,baseurl: 'https://packagecloud.io/timescale/timescaledb/${distro_name}/ ${distro_codename} main' }
   - { name: percona        ,description: 'Percona TDE'        ,module: percona  ,releases: [12,13,22,24,26]    ,arch: [x86_64, aarch64] ,baseurl: 'https://repo.percona.com/ppg-18.4/apt ${distro_codename} main' }
   - { name: groonga        ,description: 'Groonga Ubuntu'     ,module: groonga  ,releases: [22,24]             ,arch: [x86_64, aarch64] ,baseurl: 'https://ppa.launchpadcontent.net/groonga/ppa/ubuntu/ ${distro_codename} main' }
@@ -635,7 +635,7 @@ RUN pig repo set && pig install -y -v 18 pgsql pg_duckdb timescaledb postgis pgv
 
 **Build Extension**
 
-You can even build RPM / DEB packages directly with the `pig build` subcommand. Source builds use Go 1.27.4 or later for the PIG CLI, and the default cargo-pgrx version is 0.19.3.
+You can even build RPM / DEB packages directly with the `pig build` subcommand. Source builds use Go 1.27.4 or later for the PIG CLI, and the default cargo-pgrx version is 0.20.1.
 
 Build targets are explicit extension or package names. Debug packages are produced by default; pass `--nodbg` when they are not wanted. `pig build proxy` installs or verifies Xray, while `pig build proxy client --from ./client.uri` configures an HTTP/SOCKS client and `pig build proxy server --host ... --target ... --export ./client.uri` configures a VLESS/REALITY server. The legacy `id@host:port` client form remains available.
 
@@ -651,7 +651,7 @@ CMD ["/bin/bash"]
 
 RUN apt update && apt install -y ca-certificates vim ncdu wget curl rsync unzip && \
     curl https://repo.pigsty.io/pig | bash -s && pig repo set && apt clean
-RUN pig build tool && pig build spec && pig build rust && pig build pgrx -v 0.19.3
+RUN pig build tool && pig build spec && pig build rust && pig build pgrx -v 0.20.1
 ```
 
 ```bash
@@ -680,14 +680,14 @@ The macOS binary can query the catalog and operate on supported local files such
 
 |   Code   | Distribution                      |  `x86_64`  | `aarch64`  |
 |:--------:|-----------------------------------|:----------:|:----------:|
-| **el10** | RHEL 10 / Rocky10 / Alma10  / ... | PG 18 - 14 | PG 18 - 14 |
-| **el9**  | RHEL 9 / Rocky9 / Alma9  / ...    | PG 18 - 14 | PG 18 - 14 |
-| **el8**  | RHEL 8 / Rocky8 / Alma8 / ...     | PG 18 - 14 | PG 18 - 14 |
-| **u26**  | Ubuntu 26.04 (`resolute`)         | PG 18 - 14 | PG 18 - 14 |
-| **u24**  | Ubuntu 24.04 (`noble`)            | PG 18 - 14 | PG 18 - 14 |
-| **u22**  | Ubuntu 22.04 (`jammy`)            | PG 18 - 14 | PG 18 - 14 |
-| **d13**  | Debian 13 (`trixie`)              | PG 18 - 14 | PG 18 - 14 |
-| **d12**  | Debian 12 (`bookworm`)            | PG 18 - 14 | PG 18 - 14 |
+| **el10** | RHEL 10 / Rocky10 / Alma10  / ... | PG 19 - 15 | PG 19 - 15 |
+| **el9**  | RHEL 9 / Rocky9 / Alma9  / ...    | PG 19 - 15 | PG 19 - 15 |
+| **el8**  | RHEL 8 / Rocky8 / Alma8 / ...     | PG 18 - 15 | PG 18 - 15 |
+| **u26**  | Ubuntu 26.04 (`resolute`)         | PG 19 - 15 | PG 19 - 15 |
+| **u24**  | Ubuntu 24.04 (`noble`)            | PG 19 - 15 | PG 19 - 15 |
+| **u22**  | Ubuntu 22.04 (`jammy`)            | PG 19 - 15 | PG 19 - 15 |
+| **d13**  | Debian 13 (`trixie`)              | PG 19 - 15 | PG 19 - 15 |
+| **d12**  | Debian 12 (`bookworm`)            | PG 19 - 15 | PG 19 - 15 |
 
 
 --------

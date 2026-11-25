@@ -10,7 +10,7 @@
 
 With Sirannon, you keep SQLite underneath your application as it grows, so the SQL that you write against a file on your laptop keeps working when you serve that file over HTTP and WebSocket or replicate it from a primary to its read replicas. The wire formats, the value encodings, and the replication invariants that every implementation must follow are in the language-agnostic specification under [`packages/spec`](packages/spec/). The TypeScript package in this repository is the reference implementation of that specification.
 
-Read the [documentation](https://sirannon.sondelali.com/docs), or start the [distributed entitlements example](packages/ts/examples/distributed-entitlements/) on your own machine to watch a three-node cluster keep serving requests after its primary fails.
+Read the [documentation](https://sirannon.sondelali.com/docs), or start the [distributed entitlements example](packages/ts/examples/distributed-entitlements/) on your machine to watch a three-node cluster keep serving requests after its primary fails.
 
 > *sirannon* means 'gate-stream' in Sindarin.
 
@@ -18,9 +18,9 @@ Read the [documentation](https://sirannon.sondelali.com/docs), or start the [dis
 
 | Part | Status | Details |
 | --- | --- | --- |
-| Core engine ([`@delali/sirannon-db`](packages/ts/)) | Stable | With the core engine, you get queries, transactions, connection pooling, change data capture, live queries, migrations, backups, hooks, metrics, and a multi-tenant lifecycle. Continuous integration tests it on Node 22 and 24. |
+| Core engine ([`@delali/sirannon-db`](packages/ts/)) | Stable | With the core engine, you get queries, transactions, connection pooling, change data capture, live queries, migrations, backups, hooks, metrics, and a multi-tenant lifecycle. Continuous integration tests it on Node 22.20.0 and Node 24. |
 | Server and client (`@delali/sirannon-db/server`, `/client`) | Stable | Applications reach a database over HTTP and WebSocket through the client, which reconnects after a dropped connection and restores its subscriptions. The server rejects SQL from the network until you set `acceptSql: true`. |
-| Device sync (`@delali/sirannon-db/client`) | Stable | A device writes to its own local database first, so it can go on writing while it's offline. The device sync controller then keeps that database in step with a server in both directions, through a push, a live pull, a snapshot resync, and a migration handshake. |
+| Device sync (`@delali/sirannon-db/client`) | Stable | A device writes to its local database first, so it can go on writing while it's offline. The device sync controller then keeps that database in step with a server in both directions, through a push, a live pull, a snapshot resync, and a migration handshake. |
 | Primary-replica replication (`@delali/sirannon-db/replication`) | Stable | A primary stamps each change with a Hybrid Logical Clock and sends it to its replicas over gRPC with mutual TLS. The same export also provides conflict resolvers, first sync, and write concerns. |
 | Coordinator-backed failover (`/replication/coordinator/etcd`) | Stable | etcd records write authority, primary terms, and the in-sync set. On every pull request, continuous integration executes a Docker conformance suite that injects faults. |
 | Drivers | Stable: better-sqlite3, Node, wa-sqlite, Expo. Experimental: Bun | The published package includes TypeScript declarations for all five drivers. |
@@ -35,7 +35,7 @@ pnpm add -E @delali/sirannon-db better-sqlite3
 
 You'll use `better-sqlite3` on Node.js in the quick start below, so install it alongside the core package. For any other runtime, pick a driver from the [driver table](#pluggable-drivers).
 
-To serve databases over HTTP and WebSocket through `@delali/sirannon-db/server`, install uWebSockets.js as well. The npm registry has no package named `uWebSockets.js`, so install the tagged GitHub release v20.69.0, which is the version in Sirannon's own development dependencies:
+To serve databases over HTTP and WebSocket through `@delali/sirannon-db/server`, install uWebSockets.js as well. The npm registry has no package named `uWebSockets.js`, so install the tagged GitHub release v20.69.0, which is the version in Sirannon's development dependencies:
 
 ```bash
 pnpm add -E "uWebSockets.js@github:uNetworking/uWebSockets.js#v20.69.0"
@@ -75,7 +75,7 @@ const users = await db.query<{ id: number; name: string }>('SELECT * FROM users'
 | Driver | Import | Runtime |
 | --- | --- | --- |
 | better-sqlite3 | `@delali/sirannon-db/driver/better-sqlite3` | Node.js |
-| Node built-in | `@delali/sirannon-db/driver/node` | Node.js >= 22 |
+| Node built-in | `@delali/sirannon-db/driver/node` | Node.js >= 22.20.0 |
 | wa-sqlite | `@delali/sirannon-db/driver/wa-sqlite` | Browser (IndexedDB persistence) |
 | Bun | `@delali/sirannon-db/driver/bun` | Bun |
 | Expo | `@delali/sirannon-db/driver/expo` | React Native |
@@ -141,12 +141,12 @@ The wire formats, the value encodings, and the replication invariants are in the
 
 | Example | Runtime | What it demonstrates |
 | --- | --- | --- |
-| [`node`](packages/ts/examples/node/) | Node.js >= 22 | Core features, live queries, and the multi-tenant lifecycle on either `better-sqlite3` or Node's built-in SQLite driver |
+| [`node`](packages/ts/examples/node/) | Node.js >= 22.20.0 | Core features, live queries, and the multi-tenant lifecycle on either `better-sqlite3` or Node's built-in SQLite driver |
 | [`web-wa-sqlite`](packages/ts/examples/web-wa-sqlite/) | Browser and Node.js | Offline-first device sync with a local database in the browser, snapshot load, offline writes, conflict resolution, and a local live query |
 | [`web-client`](packages/ts/examples/web-client/) | Browser and Node.js | Live queries and the React hooks over registered operations, with no SQL in any request |
 | [`distributed-entitlements`](packages/ts/examples/distributed-entitlements/) | Node.js and browser | Three-node coordinator-backed replication with etcd, gRPC, mTLS, and Toxiproxy failure controls |
 
-Every example imports the built package, so build it from the repository root before you start one. To bring up the three-node cluster and its dashboard with the commands below, you need Docker with Compose and Node.js 22 or newer.
+Every example imports the built package, so build it from the repository root before you start one. To bring up the three-node cluster and its dashboard with the commands below, you need Docker with Compose and Node.js 22.20.0 or newer.
 
 ```bash
 pnpm install && pnpm --filter @delali/sirannon-db build

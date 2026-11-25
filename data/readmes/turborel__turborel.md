@@ -86,6 +86,8 @@ behind it, and each can be replaced or added to.
   queries of a hundred tables, on statistics of most common values, a
   sample of rows for correlated conditions and indexes' joint key counts,
   joins estimated by keys and bounded, index joins chosen robustly.
+- [Column statistics](doc/sql/07-information-schema.md#column-statistics)
+  in a view: what the planner holds of each column, and each index's keys.
 - [Range joins](doc/sql/06-queries.md#how-joins-are-planned-extension) of
   bands and overlapping periods, one table sorted and searched by the other.
 - [Predicate transfer](doc/sql/06-queries.md#how-joins-are-planned-extension)
@@ -95,6 +97,8 @@ behind it, and each can be replaced or added to.
   query or a data change and shows each operator's rows beside its
   estimate, its batches, spills and index reads, and a program may give
   the planner true row counts to test its plans.
+- [EXPLAIN of a data change](doc/sql/statements/explain.md#explain-of-a-data-change)
+  shows its plan, indexes, cascades, triggers and point path, running nothing.
 - Correlated subqueries of every form unnested into joins, and SQL
   functions that return one value inlined, so each is computed once
   rather than once for each row.
@@ -238,6 +242,9 @@ behind it, and each can be replaced or added to.
 - Stored procedures and functions in SQL/PSM, with variables, cursors,
   handlers, loops and SIGNAL, grouped into modules if wished, and
   polymorphic table functions that take whole tables as arguments.
+- [A routine debugger](doc/user/11-debugging.md): one connection attaches
+  to another's session and steps through its procedures, functions and
+  triggers by breakpoints, reading their stack and variables.
   A procedure's body is compiled as it is first called, its key reads
   and its changes run straight by the plans kept of them.
 - Triggers before, after and instead of a change, for each row or
@@ -248,6 +255,7 @@ behind it, and each can be replaced or added to.
   checked or copied a row at a time.
 - Import and export of CSV and tab-separated files through the client, large objects as their values.
 - Prepared CALLs that describe each `?` with its parameter's mode, through the API, DESCRIBE and the protocol.
+- Procedure parameters with default values, taken by DEFAULT, by arguments left out or by names not named.
 - A command-line client with line editing, completion, describe commands,
   variables, scripting and seven output formats ([guide](doc/client/05-turborel-commands.md)).
 - Library, embedded modes

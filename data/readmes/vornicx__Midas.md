@@ -21,7 +21,7 @@ uv tool install "midas-memory[mcp,local]"   # install
 midas init                                  # create the shared memory + wire up your MCP clients
 # or, no Python:    npx -y midas-memory-mcp     # TypeScript port
 # or, as a library: pip install "midas-memory[local]"
-uv tool upgrade midas-memory   # Update Midas
+midas update                   # Update Midas
 ```
 
 <p align="center">
@@ -147,22 +147,52 @@ detects — **Claude Code, Codex, Grok Build, Cursor, Claude Desktop, Windsurf, 
 Cline, Zed** — at it. So all your agents read and write the **same** memory, autonomously, with no
 per-client paths to keep in sync.
 
-Prefer a single endpoint over per-client launches? Run one server and give your clients an **MCP URL**:
+`midas-mcp` starts one local worker per SQLite database and connects all compatible sessions to it.
+Stdio clients launch a small relay. The worker loads the memory engine on its first tool call and
+exits 30 seconds after the last connection closes. After upgrading, restart open MCP clients once
+to replace the old per-session servers. The SQLite database and client commands carry over.
+
+Sessions sharing a database use the same engine settings. Client identity, actor, project scope,
+and conversation IDs stay separate. Set `MIDAS_MCP_DB=:memory:` for an isolated ephemeral session,
+or `MIDAS_MCP_MODE=standalone` when you need a separate stdio engine with its own settings.
+
+If your clients use a direct **MCP URL**, you can run a dedicated HTTP server:
 
 ```bash
 midas serve --http        # → http://127.0.0.1:7077/mcp   (one server, one memory, every client shares it)
 midas serve --http --token <secret>   # require `Authorization: Bearer <secret>` on every request
 ```
 
-Keep Midas current with **`midas update`**. See your memory anytime with **`midas inspect`**.
+**`midas status`** and **`midas doctor`** flag newer stable Python releases. The shared MCP worker
+refreshes the same check on connection, and MCP clients can surface a cached notice in their logs.
+Automatic checks use a local 24-hour cache. Run **`midas update --check`** to refresh it on demand,
+or **`midas update`** to install through your current package manager. Close and reopen your
+MCP clients after updating. If the previous shared worker is still active, give it up to 30 seconds
+to exit after the last session closes. Set **`MIDAS_UPDATE_CHECK=0`** to disable automatic checks.
+
+See your memory anytime with **`midas inspect`**.
 
 Already carrying agent memory in files? **`midas import --from claude-md CLAUDE.md`** (or
 `--from cursorrules`, `--from jsonl`, `--from mem0`, `--from zep`) turns those rules and exports into
 first-class, recallable, governable memories — tagged with where they came from, idempotent on re-run.
 
-Want memory even when the agent never calls `capture`? **`midas init --claude-hook`** installs a
-Claude Code SessionEnd hook that offers each session's user turns to memory — Midas's no-LLM policy
-still decides what is actually kept.
+To bring over native Claude Code or Codex memories, run the preview from the target repository:
+
+```bash
+midas import --from claude-memory "/path/to/claude/project/memory" --preview
+midas import --from codex-memory "/path/to/codex/memories_v2" --preview
+midas import --from codex-memory "/path/to/codex/memories_v2" --apply --select PREVIEW_ID
+```
+
+`--select` can be repeated. Use `--into DIRECTORY` to choose another target repo or `--json` for
+a machine-readable preview. Both Codex memory directories work. Imported records keep the source
+file and line, use observation provenance, and deduplicate within the target repository. Set
+`MIDAS_MCP_EMBEDDER` to the mode used by your clients if they use a custom model or hashing.
+
+For automatic capture while sessions are open, run **`midas init --claude-hook --codex-hook`**.
+Each flag enables the respective client. The hooks offer new user prompts to the local shared
+worker, where the existing capture policy decides what to keep. Codex requires you to trust the
+installed hook in `/hooks`. Rerun `midas init --claude-hook` to migrate an older SessionEnd hook.
 
 <details>
 <summary><b>Manual setup</b> — any client, or to customize (click to expand)</summary>
@@ -206,13 +236,26 @@ current).
 
 ### One memory, many clients
 
-By default every client shares **one live memory** (`~/.midas/memory.sqlite3`) — each detects the others'
-writes (SQLite `data_version`) and refreshes, so a fact captured in your IDE is recallable from your chat
-app seconds later, no restarts.
+By default the shared worker holds **one live memory** (`~/.midas/memory.sqlite3`). A fact captured
+in one connected client is available to other clients in the same scope as soon as it is stored.
 
-Want **per-project** separation instead? **`midas init --project-scoped`** (or `MIDAS_MCP_NAMESPACE=auto`)
-gives each project its own partition in the same store — the scope is derived from the git repo / cwd the
-server runs in. Or scope it manually per project/agent/user with `MIDAS_MCP_NAMESPACE`.
+**`midas init --project-scoped`** (or `MIDAS_MCP_NAMESPACE=auto`) gives each project its own
+partition. Linked Git worktrees use the same local Git directory identity. Outside Git, the
+canonical directory is the identity. Run **`midas scope`** to see the current ID. Explicit named
+namespaces remain available through `MIDAS_MCP_NAMESPACE`.
+
+Earlier versions used the folder name. To adopt records from that namespace, preview them with
+`midas scope --adopt-legacy OLD_NAME`, then repeat the command with `--apply --record RECORD_ID`
+for each selected ID. Select both sides of any linked revision or commitment when moving it.
+
+SQLite exact search reads vectors in bounded batches. An index helps scoped searches skip other
+projects. The on-disk format and existing embeddings carry over. Warm search can take longer on
+large corpora because it reads vectors from disk on each query.
+The optional `MIDAS_MCP_ANN=1` mode builds an in-memory index. To measure disk mode locally from
+a checkout, install `psutil` and run `python -m eval.bench_sqlite_disk --records 100000 --scoped`.
+
+If the local reranker fails, queries keep using the semantic embedder. In the default local mode,
+an existing store containing only legacy hashing vectors keeps using hashing for compatibility.
 
 <p align="center">
   <img src="docs/demo-multi-client.gif" alt="Two live processes share one Midas SQLite file: a recall that finds nothing, a capture from a different process, then the same never-restarted session recalls it" width="820">
@@ -391,8 +434,9 @@ python -m eval.continuity                                                      #
 ## Privacy & license
 
 Local-first: every memory lives in a SQLite file on your machine, recall returns the exact stored text,
-and capture/recall/forget make **no network calls**. No account, API key, or telemetry. The only outbound
-traffic is a one-time embedding-model download (for the `local` backend) and the package install.
+and capture/recall/forget make **no network calls**. No account, API key, or telemetry. Outbound
+traffic is limited to model downloads, package installation and updates, and the public PyPI
+version check. Set `MIDAS_UPDATE_CHECK=0` for offline use with cached models or hashing.
 Optional **encryption at rest**: set `MIDAS_MCP_KEY` with the `[encrypted]` extra and the store is a
 SQLCipher database — unreadable without the key (and Midas fails closed rather than silently writing
 plaintext). Full details in [`PRIVACY.md`](PRIVACY.md) · [MIT](LICENSE).

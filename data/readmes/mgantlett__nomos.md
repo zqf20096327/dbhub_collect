@@ -141,7 +141,7 @@ Enforce zero-trust PR mutation proofs in GitHub Actions ([GitHub Marketplace](ht
 ```yaml
 - uses: actions/checkout@v4
   with: { fetch-depth: 0 }
-- uses: mgantlett/nomos@v4.31.0
+- uses: mgantlett/nomos@v4.32.0
   with: { base-ref: origin/main, mutate-diff: 'true' }
 ```
 
@@ -233,7 +233,7 @@ When your team scales beyond single-branch workflows (`nomos init --worktrees`):
 | **NCTE-100 Directives, Egress & Schema SSoT** | `nomos directive [--lint \| --lexicon \| --term]`, `nomos update [--check \| --sync-workspace]`, [`nomos.schema.json`](nomos.schema.json) (`ratchet_mode: "upstream"`, `egress_mode`, `credential_read_mode`, `contracts.membrane` / `infra`) | [`nomos_controlled_technical_english_spec.md`](intent/architecture/specs/nomos_controlled_technical_english_spec.md) · [`go_ssot_and_json_schema_spec.md`](intent/architecture/specs/go_ssot_and_json_schema_spec.md) |
 | **Mneme Memory, MCP & Sentinel PRM Sessions** | `nomos mem save \| recall \| list \| dismiss [--stale]`, `nomos session list \| show \| name \| visual \| export` (RLVR/DPO/SFT JSONL + `SentinelScorecard`), `nomos mcp` (`7` tools, `3` `nomos://` resources, `3` prompts), `nomos issue`, `nomos version`, `nomos completion` | [`mneme_memory_spec.md`](intent/architecture/specs/mneme_memory_spec.md) · [`software_physics_engine_spec.md`](intent/architecture/specs/software_physics_engine_spec.md) |
 
-- **MCP Directory & Inspection Score:** [![mgantlett/nomos MCP server](https://glama.ai/mcp/servers/mgantlett/nomos/badges/score.svg)](https://glama.ai/mcp/servers/mgantlett/nomos)
+- **MCP Directory & Inspection Score:** [![mgantlett/nomos MCP server](https://glama.ai/mcp/servers/mgantlett/nomos/badges/score.svg)](https://glama.ai/mcp/servers/mgantlett/nomos) · [Remote HTTP MCP Connector](https://glama.ai/mcp/connectors/io.github.mgantlett/nomos)
 - **Scope of Proof:** Nomos verifies `<5ms` compiled structural and traceability invariants (import boundaries, contract/membrane/infra field parity, anti-shim AST checks, `TC-*` test bindings, and SHA-256 spec digests) rather than LLM-as-a-Judge critics or formal theorem provers (`Coq`, `Lean`, `TLA+`); runtime semantics remain governed by your test suite.
 
 </details>
@@ -273,7 +273,7 @@ Nomos Community Edition is **100% open-source under Apache 2.0** with zero telem
 | **Nomos Mneme Receipt-Gated Episodic Memory & Sanitized Issues** (`nomos mem`, `nomos issue`, local `mneme.db` hybrid vector/lexical recall + automatic 2PC `trap -> fix` pitfall distillation) | ✅ Included (Local Repo `mneme.db`) | ✅ + Sophia Memory Curation, Dream Cycle Synthesis, Mneme Cortex HUD & Squad Mesh |
 | **Sophia & Nomos 4-Pillar Workbench & Sophia Flight Deck** (Principal Architect & Orthogonal Critic over BYOK Cloud APIs or Local `14B-32B` SLMs, Unified Workfront, X-Ray Debt Atlas, PR Proof Deck, `MTPO` Radar, 7x3 Verify Matrix & Security Radar) | Not Included (Lipgloss Terminal HUD Included) | 🔒 Sovereign Edition ([Explore Tour](https://sophialabs.ca/sovereign)) |
 | **Headless Tier 2 Autonomous Worker Fleet & Adversarial Conformance Critic** (`nomos code run \| route \| --burndown`, Dual-Sided `nomos code review`, Intent-to-Code Twin Parity, `$0` Local GPU Burndown) | Not Included | 🔒 Sovereign Edition ([Interactive Demo](https://sophialabs.ca/sovereign#nomos-code)) |
-| **Turnkey Air-Gapped NixOS GPU Appliances & Offline Ed25519 Entitlement** | Not Included | 🔒 Regulated & Enterprise ([Adoption Profiles](https://sophialabs.ca/editions)) |
+| **SLSA v1.0 DSSE Provenance, Encrypted Git Squad Sync, Offline Ed25519 Keys & Air-Gapped NixOS Appliances** | Not Included (Git Notes + SARIF Included) | 🔒 Sovereign Pro, Squad & Air-Gap ([Editions](https://sophialabs.ca/editions)) |
 
 ---
 

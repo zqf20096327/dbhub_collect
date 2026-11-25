@@ -47,8 +47,10 @@ Ezután nyisd meg: `http://<szerver-ip>:8096`. Az első indításkor egy varázs
 majd végigvezet a médiamappákon (a mappaválasztó eleve a `/media` mappában nyílik meg, add hozzá a `/media/movies` és `/media/shows`
 mappát), a TMDB-kulcson, a hardveres gyorsítás tesztjén, a letöltőkliensen és az indexeren, végül a távoli elérésen. Minden lépés
 kihagyható, és később pótolható az Admin oldalon; a varázsló az **Admin → Beállítások** oldalról újra megnyitható.
-Az admin fiókot az hozza létre, aki elsőként megnyitja a szervert, ezért a beállítást azelőtt végezd el, hogy a szervert kívülről
-elérhetővé tennéd.
+Az admin fiókot az hozza létre, aki elsőként beállítja a szervert. Ezért a Kinora a kezdő beállítást csak a helyi hálózatról
+(vagy Tailscale-en át) fogadja el; ha mégis kívülről kell, `KINORA_ALLOW_REMOTE_SETUP=1`. Ahol minden kliens privát címről
+érkezik (egyes Docker-beállítások), ez a szűrés nem tud különbséget tenni, ezért a beállítást így is érdemes azelőtt elvégezni,
+hogy a szervert kívülről elérhetővé tennéd.
 
 | Mappa a konténerben | Mire való | Mentsd? |
 |---|---|---|
@@ -90,6 +92,7 @@ Minden beállítás megadható környezeti változóval is. Ilyenkor az admin fe
 | `KINORA_JELLYFIN_ADDR` | `:8097` | a Jellyfin-kompatibilis API címe |
 | `KINORA_MAX_TRANSCODES` | – | egyszerre futó átkódolások felső korlátja az egész szerveren (fiókonként mindig legfeljebb 8) |
 | `KINORA_ALLOW_NEWER_DB` | – | `1` = egy újabb Kinora-verzió adatbázisát is megnyitja (visszalépés után; saját felelősségre) |
+| `KINORA_ALLOW_REMOTE_SETUP` | – | `1` = a kezdő beállítás (az első admin fiók) bármilyen címről elvégezhető; alapból csak a helyi hálózatról, loopbackről vagy Tailscale-ről |
 | `TZ`, `PUID`, `PGID` | `UTC`, `1000`, `1000` | időzóna, a fájlok tulajdonosa |
 
 ### Melyik image-et válaszd?

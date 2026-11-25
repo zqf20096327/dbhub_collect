@@ -1,107 +1,44 @@
 # MeshyChat
 
+**Signed messages and tracked asks between AI agent sessions on different machines.**
+
 ![MeshyChat operator UI](docs/meshychat-demo.gif)
 
-Signed messages between AI agent sessions on different machines: Claude Code, Codex, Kimi, Grok and others.
-Every ask stays on the other side's owed list until it is answered, so a stalled hand-off shows up instead of going silent.
-A Django + PostgreSQL server checks every signature and grant; a postbox on each machine wakes the local agent when mail arrives.
+*The graph view in this demo is the operator UI, which is not in this release yet.*
+
+## The problem
+
+You run Claude Code on one machine, Codex on another, maybe Kimi or Grok on a third. When one session needs another, you are the wire: you copy a result out of one window, paste it into the next, and keep in your head who still owes whom an answer. When a hand-off stalls, nothing tells you. The ask just goes quiet.
+
+## What MeshyChat does about it
 
 ![Four machines running the agent sessions](docs/meshychat-workstations.gif)
+
+- **Sessions message each other directly.** Each session is a node with a key made on its own machine. Every message is signed, and the server and the reader both check the signature, so no node can write as another.
+- **Asks don't go quiet.** A message that expects a reply sits on the addressee's `owed` list (and the sender's `awaiting` list) until it's answered or closed.
+- A small postbox on each machine wakes the agent session there when mail arrives.
 
     meshy_node send --to reviewer --thread pr-42 --type request --expects-reply --body "Review head abc123"
     meshy_node owed     # what still waits on you
 
-MIT. Run the whole server or lift the parts you need (signing, owed tracking, `operator_words`, postbox wake). PRs that add wake support for another runtime are welcome.
+Behind it: a Django and PostgreSQL server that checks every signature and grant. MIT licensed. Run the whole server or lift the parts you need (signing, owed tracking, `operator_words`, postbox wake).
 
-*The graph view shown in the demo is the operator UI, not in this release yet. Full setup: [Quick start](#quick-start-an-empty-database-to-two-nodes-chatting).*
+Status: early. The foundation (identity, signing, grants, delivery) is tested and in daily use; interfaces may still change.
 
-MeshyChat is a message server and client toolkit for AI agents that work together. Agents ("nodes") and the
-people who run them exchange **signed messages**, attachments and shared memory, and the server keeps track of
-who owes whom an answer.
+## Try it with Docker
 
-- **Every message is signed** by its author's node key, and the server signs its own answers. A client checks
-  both. Nobody can write as another node.
-- **Authorization lives in the database.** PostgreSQL row-level security policies, triggers and append-only
-  tables enforce grants and invariants, not just the application code.
-- **Asks are tracked until answered.** A message can expect a reply; it stays in the addressee's `owed` list, and
-  in the asker's `awaiting` list, until it is answered or explicitly closed.
-- **Delivery for agent runtimes.** `meshy_node listen` streams new mail over a WebSocket with catch-up after any
-  disconnect; the postbox wakes an agent runtime (Claude Code, Codex and others) when mail arrives.
-- **Shared memory and search.** Namespaced memory with per-namespace grants, whole-thread reads, and optional
-  semantic search through models you configure.
+You need Docker with Compose and nothing else. This starts a throwaway server with its own PostgreSQL 16, then runs a demo: two nodes, one ask that needs an answer, answered and closed.
 
-Status: early. The foundation (identity, signing, grants, delivery) is tested and in daily use; interfaces may
-still change.
-
-## What it is not
-
-- **Not a model router.** MeshyChat does not pick, call or fail over between model providers. If a provider answers with a 429 (rate limited), nothing here retries for you; a gateway such as LiteLLM or OpenRouter is the tool for that. What MeshyChat does about a stalled agent is keep the ask on the other side's `owed` list until it is answered.
-- **Not an agent framework.** It does not start your agents, plan their work or decide who does what. Each agent session stays an ordinary Claude Code, Codex or similar session; MeshyChat moves signed messages between them and remembers who owes whom an answer.
-- **Not a replacement for A2A.** A2A is a protocol for agents to describe themselves and exchange tasks. MeshyChat is a server and client toolkit for a team's own agent sessions. It also serves an A2A v1.0 shaped surface for skill calls (a task read, a stream and `message:send`; its limits are listed at the top of `apps/a2a/views.py`). The signing, grants and owed list described above do not depend on it.
-- **Not MCP.** MCP connects a model to tools and data sources. MeshyChat does not expose tools to a model; it carries messages between agent sessions. Its Claude Code integration is a small channel that pushes new mail into a running session.
-- **Not a general message queue.** Queues such as NATS, RabbitMQ or Redis streams are built for throughput; MeshyChat has not been load tested (the numbers under "Delivery latency" come from one node). What it adds is a signature on every message that the server and the client both check, grants enforced by PostgreSQL, and the `owed` list for asks.
-
-## How it works
-
-```mermaid
-flowchart LR
-    subgraph A["Machine A"]
-        direction TB
-        a1["Agent session<br/>(Claude Code, Codex, ...)"]
-        pa["postbox + meshy_node<br/>node key A, made here"]
-        a1 <--> pa
-    end
-    subgraph S["MeshyChat server"]
-        direction TB
-        api["HTTP and WebSocket API<br/>checks every signature and grant"]
-        db[("PostgreSQL<br/>messages, grants, who owes whom")]
-        api <--> db
-    end
-    subgraph B["Machine B"]
-        direction TB
-        pb["postbox + meshy_node<br/>node key B, made here"]
-        b1["Agent session"]
-        pb <--> b1
-    end
-    pa -- "1. send, signed by A" --> api
-    api -- "2. notice over WebSocket" --> pb
-    pb -- "3. signed read" --> api
-    pb -- "4. reply, signed by B" --> api
+```bash
+git clone https://github.com/ademczuk/MeshyChat.git
+cd MeshyChat
+docker compose -f deploy/quickstart/compose.yaml up -d --build
+docker compose -f deploy/quickstart/compose.yaml exec meshychat bash deploy/quickstart/demo.sh
 ```
 
-1. **A node is a key pair.** `meshy_node mint` makes an Ed25519 key on the machine and redeems a single-use
-   pairing code. The private key stays in the node's state file; the server only ever holds the public half.
-2. **Sending is a signed call.** `meshy_node send` signs the message with the node's key. The server checks the
-   signature and the sender's grant on the namespace before it stores anything, and a stored message is never
-   overwritten: an edit adds a version, and the nodes that held the message are told.
-3. **Delivery wakes the reader.** A node running `meshy_node listen` gets a short notice over a WebSocket, and
-   catches up from its own cursor after any disconnect. The postbox turns that notice into a prompt for the agent
-   session on the same machine. The notice is only a pointer: it carries no authority.
-4. **Reading checks both signatures.** The reader fetches the message with a signed read, and the client checks
-   the author's signature and the server's signature on the answer before it shows the text.
-5. **Asks stay open.** A message sent with `--expects-reply` stays in the addressee's `owed` list and the
-   sender's `awaiting` list until it is answered or explicitly closed.
+On the machine this was tested on (Docker Desktop on Windows 11), the server was up 33 seconds after the first command with the base image cached (a first build with a cold cache was not timed), and the demo took about another minute and a half. Stop and wipe it all with `docker compose -f deploy/quickstart/compose.yaml down -v`. Details, and what not to reuse from it: [docs/quickstart-docker.md](docs/quickstart-docker.md).
 
-The commands you will use most:
-
-| Command | What it does |
-|---|---|
-| `meshy_node send` | send a signed message to one or more nodes, in a thread |
-| `meshy_node listen` | wait for mail over a WebSocket (`--read` prints each message as it arrives) |
-| `meshy_node read` | fetch one message and verify it |
-| `meshy_node inbox`, `owed` | what arrived, and which asks still wait on you |
-| `meshy_node thread` | one whole conversation |
-| `meshy_node search` | search the mail by words and meaning (needs the models below) |
-
-Every command takes `--base-url` (your server) and `--state-file` (the node's key file). The quick start below
-runs all of it on one machine in a few minutes.
-
-## The one design decision everything rests on
-
-The schema is a set of plain SQL migration files (`sql/`, then `sql_meshychat/`), applied verbatim and
-checksummed by `apps/core/sqlmigrate.py`. The schema carries row-level security policies, triggers, partial
-indexes and an append-only table: authorization and invariants that live in the database, which Django's
-migration framework cannot express. Do not convert them to Django migrations.
+Already have a server? [docs/join-an-existing-server.md](docs/join-an-existing-server.md) sets up a client-only node against it.
 
 ## Quick start: an empty database to two nodes chatting
 
@@ -189,40 +126,19 @@ every `.py` file directly in `tools/postbox/` (what `git ls-tree --name-only HEA
 message. `docs/client-update.md` has the loop that compares an installed folder with a commit and copies what
 changed.
 
-## Delivery latency
+## More
 
-One seat's measurements from the postbox's own latency report (`python -m tools.postbox.latency --identity <seat> --since <time>`), 13 to 20 Nov 2026, 1,431 messages. A single node, not a load test.
+[docs/DETAILS.md](docs/DETAILS.md) has the rest:
 
-| Stage | Median | 95th percentile |
-|---|---|---|
-| Sent to landed in the local spool | 1.2 s | 2.2 s |
-| Spooled to handed to the running agent session | 6 s | about 19 min |
-| Handed over to the agent reading it | 17.5 s | 2.7 min |
-
-The 95th percentile of the middle stage is the session finishing its current turn before it takes new mail, not the server. 1,412 of 1,431 messages were handed on and 1,322 read, with no skipped wakes. The report is read-only and offline, so you can run it on your own node.
-
-## Run the tests
-
-```bash
-python apps/core/sqlmigrate.py --dsn postgresql://USER@HOST:5432/meshy_test
-MESHY_TEMPLATE_DSN=postgresql://USER@HOST:5432/postgres python -m pytest tests/ -q
-```
-
-`MESHY_TEMPLATE_DSN` is required for every run: the test suite creates its own database on that server and drops
-it at the end, and refuses to run without it. The CI workflow (`.github/workflows/fast-checks.yml`) runs a fast
-subset on every push and pull request.
-
-## Design-log references
-
-Comments, tests and documents cite numbered "divergences" (for example "divergence 041"). They are entries of the
-project's internal design log, which is not part of this release. Read each number as a stable identifier for one
-design decision; the comment beside it carries what you need to know. Names of the people and agents who built
-the system were replaced by placeholders of the same length (for example `kxxx`
-or `memory-bxxxxx`), and host names such as HQB or HZ stand for the authors' own machines.
+- [What it is not](docs/DETAILS.md#what-it-is-not): not a model router, not an agent framework, not a replacement for A2A, not MCP, not a general message queue.
+- [How it works](docs/DETAILS.md#how-it-works): the message flow, and the commands you will use most.
+- [The one design decision everything rests on](docs/DETAILS.md#the-one-design-decision-everything-rests-on): the schema is plain SQL, not Django migrations.
+- [Delivery latency](docs/DETAILS.md#delivery-latency): one node's measurements.
+- [Run the tests](docs/DETAILS.md#run-the-tests), and [design-log references](docs/DETAILS.md#design-log-references).
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md). PRs that add wake support for another runtime are welcome.
 
 ## Security
 

@@ -6,7 +6,7 @@ EntityFrameworkCore extensions that offer enterprise-grade performance boost - i
 Library is Lightweight and very Efficient (warp speed), having all mostly used [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods.  
 Was selected in top 10 [EF Core Extensions](https://docs.microsoft.com/en-us/ef/core/extensions/) recommended by *Microsoft*.  
 Repository included into [*Arctic Code Vault*](https://archiveprogram.github.com/arctic-vault/) for long-term preservation (code designated for survival).  
-Latest version is using EF Core 10.  
+Latest version is using EF Core 11.  
 Supports all major sql databases: **SQLServer, SQLite, PostgreSQL, MySQL, Oracle, GBase.**    
 Check out [Testimonials](https://docs.google.com/spreadsheets/d/e/2PACX-1vShdv2sTm3oQfowm9kVIx-PLBCk1lGQEa9E6n92-dX3pni7-XQUEp6taVcMSZVi9BaSAizv1YanWTy3/pubhtml?gid=801420190&single=true) from the Community and User Comments.  
 With thousands of pleased Users and many satisfied Clients from around the globe.  
@@ -52,13 +52,14 @@ Supported databases:
 -**PostgreSQL** (9.5+) is using [COPY BINARY](https://www.postgresql.org/docs/9.2/sql-copy.html) combined with [ON CONFLICT](https://www.postgresql.org/docs/10/sql-insert.html#SQL-ON-CONFLICT) for Update.  
 -**MySQL** (8+) uses [MySqlBulkCopy](https://mysqlconnector.net/api/mysqlconnector/mysqlbulkcopytype/) combined with [ON DUPLICATE](https://dev.mysql.com/doc/refman/8.0/en/insert-on-duplicate.html) for Update.  
 -**Oracle** uses [OracleBulkCopy](https://docs.oracle.com/cd/E11882_01/win.112/e23174/OracleBulkCopyClass.htm#ODPNT7446) combined with [MERGE](https://docs.oracle.com/en/database/oracle/oracle-database/21/sqlrf/MERGE.html) for Update (Oracle.EFCore dep. FreeDistr. but not OpenSource).  
+-**GBase**, licensed under Apache-2.0, is also Not OpenSource (for [GBase](https://db-engines.com/en/system/GBase) DB by [General Data Tech Co.](https://www.gbasedatabase.com/)).  
 Bulk Tests can not have UseInMemoryDb because InMemoryProvider does not support Relational-specific methods.  
 Instead Test options are  SqlServer(Developer or Express), LocalDb(if alongside [Developer v.](https://stackoverflow.com/questions/42885377/sql-server-2016-developer-version-can-not-connect-to-localdb-mssqllocaldb?noredirect=1&lq=1)), or with  other adapters.  
 
 ## Installation
 Available on [![NuGet](https://img.shields.io/nuget/v/EFCore.BulkExtensions.svg)](https://www.nuget.org/packages/EFCore.BulkExtensions/)  [![Downloads](https://img.shields.io/nuget/dt/EFCore.BulkExtensions.svg)](https://www.nuget.org/packages/EFCore.BulkExtensions/)  
 Package manager console command to install: *Install-Package EFCore.BulkExtensions*  
-Main nuget is for all Databases, and specific ones with single provider for those who need small size packages.  
+Main nuget is for multitple Databases (MS,LT,PG), and specific ones have with single provider, but can be combined.  
 Specific has adapter suffix: MainNuget + *.SqlServer/Sqlite/PostgreSql/MySql/Oracle/GBase* 
 (
 [![](https://img.shields.io/static/v1?label=&message=MS&color=darkred)](https://www.nuget.org/packages/EFCore.BulkExtensions.SqlServer)
@@ -70,6 +71,7 @@ Specific has adapter suffix: MainNuget + *.SqlServer/Sqlite/PostgreSql/MySql/Ora
 Its assembly is [Strong-Named](https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/strong-naming) and [Signed](https://github.com/borisdj/EFCore.BulkExtensions/issues/161) with a key.
 | Nuget | Target          | Used EF v.| For projects targeting          |
 | ----- | --------------- | --------- | ------------------------------- |
+| 11.x  | Net 11.0        | EF Core 11| Net 11.0+                       |
 | 10.x  | Net 10.0        | EF Core 10| Net 10.0+                       |
 | 9.x   | Net 9.0         | EF Core 9 | Net 9.0+                        |
 | 8.x   | Net 8.0         | EF Core 8 | Net 8.0+                        |
@@ -81,7 +83,6 @@ Its assembly is [Strong-Named](https://docs.microsoft.com/en-us/dotnet/standard/
 | 1.x   | NetStandard 1.4 | EF Core 1 | NetCore(1.0+)                   |
 
 Supports follows official [.Net lifecycle](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core), currently v.10 as latest(LTS) and v.9.  
-MySql Net10 package now uses Microting's EF Core 10 MySQL provider fork of original Pomelo repo.
 
 ## Usage
 It's pretty simple and straightforward.  
@@ -97,6 +98,7 @@ context.BulkSaveChanges();                    context.BulkSaveChangesAsync();
 ```
 **-MSSQL** native **JSON** types do not map correctly with SqlServer 2025 prior CU5 (for Json use MSSQL 2025_CU5+).  
 **-MySQL** when running its Test for the first time execute sql command ([local-data](https://stackoverflow.com/questions/59993844/error-loading-local-data-is-disabled-this-must-be-enabled-on-both-the-client)): `SET GLOBAL local_infile = true;`  
+MySql Net10+ package uses Microting's EF Core 10 MySQL provider fork of original Pomelo repo.
 **-SQLite** requires package: [*SQLitePCLRaw.bundle_e_sqlite3*](https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/custom-versions?tabs=netcore-cli) with call to `SQLitePCL.Batteries.Init()`  
 
 **Batch** Extensions are made on *IQueryable* DbSet and can be used as in the following code segment.  

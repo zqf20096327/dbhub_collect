@@ -2,9 +2,11 @@
 
 # Qiao TavoloFlow
 
-A self-hostable QR table-ordering app for small restaurants. Guests scan the table's QR code and order
-from their phones; the kitchen and the pass see the dishes as they arrive; the owner closes the bill
-after taking payment at the till.
+A self-hostable QR table-ordering app for small restaurants, which can also take online orders for
+pickup or delivery. Guests scan the table's QR code and order from their phones; customers elsewhere
+order from the restaurant's own link, and staff accept each online order before it reaches the
+kitchen. The kitchen and the pass see the dishes as they arrive; the owner closes the bill after
+taking payment at the till, at pickup or on delivery.
 
 [![CI](https://github.com/lorenzoyang/TavoloFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/lorenzoyang/TavoloFlow/actions/workflows/ci.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
@@ -15,24 +17,45 @@ after taking payment at the till.
 ![The Kitchen screen on a tablet, with the guest menu on a phone](docs/images/hero-en.webp)
 
 Every interface (guest, staff, administrator) is available in English, Italian and Chinese. The staff
-area installs as a PWA on phones and kitchen tablets. The app does not process online payments and
-does not replace a fiscal cash register.
+area installs as a PWA on phones and kitchen tablets, and can show lock-screen notifications of new
+online orders. The administrator area installs as a PWA for lock-screen renewal reminders. The app
+does not process online payments and does not replace a fiscal cash register.
 
 ## What it does
 
 - **Guests** scan the table's fixed QR code, browse the menu with photos and allergens, join the
   table's visit with a four-character code, and order as many times as they like during the meal.
-- **Staff** open tables on the Floor, follow orders in the Kitchen (grouped by dish or by order, with
-  an alert sound and per-screen category filters), and mark dishes served on the Pass screen.
+- **Online customers** order from the restaurant's link for immediate pickup, scheduled pickup when
+  enabled, or delivery where offered.
+  When checkout can calculate the fee for their address, they see it before ordering. Otherwise
+  they see the price list by distance and the restaurant confirms the fee on acceptance. If the
+  calculation finds the address is out of range, checkout blocks delivery. Customers can use a
+  coupon for a percentage off the dishes, pay on collection or delivery, and follow their order
+  on a status page.
+- **Staff** open tables and take orders for guests on the Floor, even while guest QR ordering is paused.
+  They follow orders in the Kitchen (grouped by dish or by order, with
+  an alert sound and per-screen category filters), and mark dishes served on the Pass screen. They
+  accept or reject online orders, choosing the estimated time for immediate orders or when the
+  kitchen should start preparing a scheduled pickup. For deliveries without a quote they also choose
+  the fee band. A banner rings on every staff page while orders wait, and devices that turn
+  them on also get lock-screen notifications.
 - **Owners** manage the menu, with shared options such as drink sizes, sugar, toppings or spice
-  levels that can add to the price, and the tables, download QR codes and printable table cards, close
-  the bill after payment and browse the bill history.
+  levels that can add to the price, and sale prices that every menu shows beside the struck-through
+  regular price, and the tables, download QR codes and printable table cards, close the bill after
+  payment and browse the bill history. For online ordering they set the public phone, weekly hours,
+  advance notice for scheduled pickup and delivery rules. Each distance band can waive its fee once
+  the food subtotal after coupons reaches its threshold. A separate optional minimum applies to all
+  deliveries. Owners create coupon codes, correct delivery fees and
+  close collected or delivered orders. From Home, owners can read and acknowledge their restaurant's
+  subscription notices.
 - **Platform administrators** create restaurants and their accounts, choose each restaurant's color
-  theme and record service periods and annual fees paid offline.
+  theme, and turn QR dine-in and online ordering on for each restaurant with its online link. They set
+  the monthly fee, register one or more months in a single period and confirm payments received
+  outside the app.
 
-There are no order printers, online payments, split bills, stock management, takeaway or push
-notifications. The [product requirements](docs/reference/product-requirements.md) describe the full
-scope.
+There are no order printers, online payments, split bills, stock management, loyalty programmes or
+third-party delivery platforms. Deliveries are prepared as soon as possible. The
+[product requirements](docs/reference/product-requirements.md) describe the full scope.
 
 ## Screenshots
 
@@ -45,9 +68,20 @@ kitchen, the pass and the bill.
 
 ![Guest menu, option picker and cart on a phone](docs/images/guest-en.webp)
 
-**Staff and owner**: Floor, Pass, Bill and dish editing on a tablet.
+**One online order, start to finish** (about 25 seconds): a customer opens the restaurant's link,
+calculates the delivery fee at checkout and places the order. Staff accept it by choosing an estimated
+delivery time, then it goes through the kitchen, the pass and the bill.
 
-![Floor, Pass, Bill and dish editing on a tablet](docs/images/staff-en.webp)
+![An online delivery: the customer orders, staff accept it, kitchen, pass and bill](docs/images/walkthrough-online-en.webp)
+
+**Online customers**: the restaurant's online menu, checkout with a coupon code and pickup or
+delivery, and the order status page.
+
+![Online menu, delivery checkout with a coupon and order status on a phone](docs/images/online-en.webp)
+
+**Staff and owner**: Online orders, Pass, Bill and dish editing on a tablet.
+
+![Online orders, Pass, Bill and dish editing on a tablet](docs/images/staff-en.webp)
 
 **Themes**: five colour presets, chosen per restaurant by the platform administrator.
 
@@ -88,6 +122,7 @@ reset it and change its data.
 ```mermaid
 flowchart LR
   G["Guest<br>/q/{token}"] --> C
+  O["Online customer<br>/r/{slug}, /o/{token}"] --> C
   S["Staff and owner<br>/staff/*"] --> C
   P["Administrator<br>/platform/*"] --> C
   C["Caddy<br>HTTPS and SPA files"] -->|"/api/*"| A["ASP.NET Core API"]
@@ -97,8 +132,10 @@ flowchart LR
 
 A React single-page app and an ASP.NET Core API share one HTTPS origin behind Caddy, so there is no
 CORS and cookies never cross domains. One API process serves three kinds of users, and the request
-path decides which cookie identity applies: `/api/public` for guests, `/api/platform` for
-administrators, everything else for restaurant staff.
+path decides which cookie identity applies: `/api/public` for guests and online customers,
+`/api/platform` for administrators, everything else for restaurant staff. The API also sends
+lock-screen notifications through the browsers' push services and, where configured, prices
+deliveries with Geoapify and checks online orders with Cloudflare Turnstile.
 
 Most design choices answer two questions: what happens when two people act at the same moment, and
 what happens when the network drops halfway through a write? The
@@ -184,7 +221,9 @@ PUBLIC_ORIGIN=https://app.example.com bash deploy/build-release.sh
 ```
 
 The [self-hosting guide](docs/en/self-hosting.md) walks through a first installation on an Ubuntu
-VPS, DNS and HTTPS, explicit migrations, nightly backups, restores and rollbacks.
+VPS, DNS and HTTPS, explicit migrations, nightly backups, restores and rollbacks. The
+[releasing guide](docs/en/releasing.md) covers everyday releases with two scripts: one uploads the
+package from your computer, the other installs it on the server.
 
 ## Tests
 
@@ -202,8 +241,8 @@ Each backend test class starts its own throwaway PostgreSQL with the real migrat
 
 ## Documentation
 
-- **Guides**, written in Italian and translated: development notes, local development and
-  self-hosting, in [English](docs/en/), [Italian](docs/it/) and [Chinese](docs/zh-CN/).
+- **Guides**, written in Italian and translated: development notes, local development,
+  self-hosting and releasing, in [English](docs/en/), [Italian](docs/it/) and [Chinese](docs/zh-CN/).
 - **Reference**, in English: [product requirements](docs/reference/product-requirements.md), the
   [database schema](docs/reference/er-diagram.png) and the feature contracts listed in the
   [documentation index](docs/README.md).

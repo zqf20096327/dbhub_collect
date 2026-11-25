@@ -10,7 +10,11 @@ A self-hosted subscription and bill tracker: one Docker container, one data fold
 
 [Website](https://getcoinio.me) · [Documentation](https://docs.getcoinio.me) · [Live demo](https://getcoinio.me/demo/) · [Free hosted app](https://app.getcoinio.me/signup)
 
-![Coinio: every subscription, one calm page](docs/banner.en.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/banner.en.dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/banner.en.light.png">
+  <img src="docs/banner.en.dark.png" alt="Coinio: every subscription, one calm page">
+</picture>
 
 Coinio keeps every recurring payment on one page: streaming, cloud storage, the gym, rent, the domain you renew once a year. You see what is due this week, what is left to pay this month and what the whole year costs, converted to your main currency. There is no account on someone else's server, no telemetry and no paid tier.
 
@@ -58,7 +62,7 @@ Coinio keeps every recurring payment on one page: streaming, cloud storage, the 
 - **Passkeys (WebAuthn).** Sign in without a password using Face ID, Touch ID, Windows Hello or a security key alongside two-factor authentication.
 - **Firefly III.** Two-way sync with your own [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly): subscriptions become bills, and payments go both ways.
 - **AI assistants (MCP).** A built-in MCP server with OAuth, so Claude, ChatGPT and other MCP clients can read and update your subscriptions.
-- **iPhone widget.** Home Screen and Lock Screen widgets through Scriptable, no App Store app needed.
+- **Phone widgets (iPhone & Android).** Home Screen and Lock Screen widgets through [Scriptable](https://scriptable.app) on iPhone and [ScriptWidget](https://github.com/everettjf/scriptwidget) on Android — no App Store or Play Store app needed.
 - **Your own look.** Themes, accent colour, fonts, density, dashboard cards, custom CSS and sandboxed HTML cards.
 - **Eight languages:** English, Turkish, German, French, Spanish, Brazilian Portuguese, Simplified Chinese and Japanese. Installable as a web app.
 
@@ -118,7 +122,7 @@ In Docker, leave `PORT` and `COINIO_DATA_DIR` alone: publish another port (`-p 9
 
 ## HTTPS and remote access
 
-On your home network or a VPN, `http://<server-ip>:8080` is enough. The iPhone widget (away from home) and the claude.ai / ChatGPT connectors need a public **https** address:
+On your home network or a VPN, `http://<server-ip>:8080` is enough. Phone widgets (away from home) and the claude.ai / ChatGPT connectors need a public **https** address:
 
 - **Cloudflare Tunnel:** the install script asks for a tunnel token and starts `cloudflared` next to Coinio, so you get https without opening any ports.
 - **Reverse proxy:** if you already run Caddy, Traefik, Nginx or Dokploy, point a domain at port 8080.
@@ -129,11 +133,10 @@ Either way, set `COINIO_PUBLIC_URL` to that https address. See [Expose to the in
 
 The MCP server lives at your Coinio address plus `/mcp`. Cloud apps such as claude.ai and ChatGPT sign in with OAuth (needs `COINIO_PUBLIC_URL` on https); tools on your own machine use an API key from **Settings › Integrations › API keys**. **Settings › Integrations** shows ready-made snippets. Guide: [docs.getcoinio.me/docs/integrations/mcp](https://docs.getcoinio.me/docs/integrations/mcp).
 
-## iPhone widget
+## Phone widgets (iPhone & Android)
 
-[`widget/coinio-widget.js`](widget/coinio-widget.js) is a [Scriptable](https://scriptable.app) script for small, medium and large Home Screen widgets and Lock Screen widgets. Create a read-only API key, paste the script, fill in `SERVER_URL` and `API_KEY`. Guide: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
-
-**Android:** the Coinio widget runs in the free [ScriptWidget](https://github.com/everettjf/scriptwidget) app; **Settings › Integrations › Android widget** gives you the parameter to paste. Guide: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+- **iPhone (Scriptable):** [`widget/coinio-widget.js`](widget/coinio-widget.js) is a [Scriptable](https://scriptable.app) script for small, medium and large Home Screen widgets and Lock Screen widgets. Create a read-only API key, paste the script, and fill in `SERVER_URL` and `API_KEY`. Guide: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
+- **Android (ScriptWidget):** runs in the free [ScriptWidget](https://github.com/everettjf/scriptwidget) app; **Settings › Integrations › Android widget** gives you the parameter to paste. Guide: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
 
 ## Firefly III
 
@@ -183,7 +186,7 @@ pnpm build        # dist/server and dist/web
 pnpm build:demo   # browser-only demo into dist/demo/
 ```
 
-The docs site is a separate package: `cd docs-site && pnpm install && pnpm dev`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the rest.
+The marketing site and documentation live in separate repositories: [getcoinio/website](https://github.com/getcoinio/website) and [getcoinio/docs](https://github.com/getcoinio/docs). See [CONTRIBUTING.md](CONTRIBUTING.md) for the rest.
 
 ## Project structure
 
@@ -192,7 +195,7 @@ src/server/     Express API, SQLite (Drizzle), auth, OAuth, MCP server, schedule
 src/web/        React + Vite web app (routes, dashboard cards, settings, i18n, demo backend)
 src/shared/     Logic shared by server, web and demo: schedule, catalog, appearance, types
 tests/          Server tests (web tests sit next to their components)
-widget/         Scriptable iPhone widget
+widget/         iPhone (Scriptable) and Android (ScriptWidget) widgets
 deploy/         Unraid, CasaOS and Portainer templates
 getcoinio/website  Landing page (getcoinio.me) & install script (separate repo)
 getcoinio/docs     Documentation (docs.getcoinio.me, separate repo)

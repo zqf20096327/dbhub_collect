@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="editor-web/public/assets/branding/dbstudio-cat-only.png" width="96" alt="DBStudio logo">
+  <img src="editor-web/public/assets/branding/dbstudio-logo-rounded.png" width="96" alt="DBStudio logo">
 </p>
 
 <h1 align="center">DBStudio</h1>
@@ -30,7 +30,7 @@ DBStudio is developed through a **Vibe Coding** workflow, with **GPT-5.6 Sol** a
 - Database object explorer for tables, views, indexes, constraints, triggers, procedures, functions, packages, sequences, synonyms, and types where supported
 - Streaming query execution with cancellation, execution history, elapsed-time feedback, and transaction controls
 - Virtualized result grid with paging, filtering, copying, comparison, large-value viewing, and editable result sets
-- CSV import and result export workflows, plus Excel-based connection import and export
+- CSV import and result export workflows, plus Excel / Navicat / DBeaver connection import with batch classification and Excel connection export ([import guide](docs/connection-import.md))
 - Multiple workspaces, editor recovery, connection grouping, appearance settings, and light/dark themes
 - Local credential protection through macOS Keychain or Windows Credential Manager
 - Extensible database provider architecture for connection, metadata, SQL dialect, and capability differences
@@ -142,6 +142,15 @@ Run the full test suite:
 ```
 
 Unit tests and server security tests do not require Docker. MySQL integration tests use Testcontainers with pinned MySQL 8.0 and 8.4 images and cover connections, metadata, DDL/DML, transactions, routines, editable results, and CSV workflows.
+
+Shortcut persistence and frontend/backend contract tests run against the packaged server:
+
+```shell
+./mvnw -pl server-app -am package -DskipTests
+npm --prefix editor-web run test:e2e:backend
+```
+
+This browser suite starts its own loopback server on port 4174 with a temporary database and log directory, then removes that data when the server stops. It requires no database connection and runs separately from the mock browser suite.
 
 ## Architecture
 

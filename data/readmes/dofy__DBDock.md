@@ -190,6 +190,12 @@ Frontend language and help coverage: `node --test tests/*.test.mjs` (Node 22.18+
 
 ## Changelog
 
+### 1.2.0 — 2026-11-24
+
+- Added automatic checks for signed updates. In **Settings → Updates**, turn off automatic checks or select **Check for Updates**. Installing and restarting require confirmation.
+- A single pasted connection URL opens an editable draft before saving.
+- Separated connection, session, menu and SQL command handling into smaller modules and expanded WebKit regression coverage.
+
 ### 1.1.1 — 2026-11-19
 
 - Fixed the command palette running an action when Return confirms English text in a Chinese input method.

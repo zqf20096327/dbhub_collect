@@ -1,0 +1,122 @@
+# GuYi Access Pro
+**高性能、高颜值、支持跨语言的源码可见卡密授权验证引擎**
+
+> 专注于跨语言、高安全性的生命周期授权管控。支持 C/C++、Flutter、易语言、Python、Go 等多语言客户端，提供完善的对接源码。
+
+---
+## 使用须知
+
+本项目为源码公开的技术学习与研究项目，提供基础验证功能及对接示例，不提供免费商业技术支持。请勿将源码公开视为免费商业服务。
+
+- **对接文档：** 使用前请先阅读[官方开发文档](https://guyi-access-wed.pages.dev/docs)，了解接口规范及对接流程。
+- **新手建议：** 缺乏编程或接口对接经验，可借助 ChatGPT、DeepSeek、Claude、Gemini 等 AI 工具辅助理解文档、编写代码和排查问题，生成的内容请自行验证。
+- **商业用途：** 如用于正式商业项目，请自行评估许可证及使用风险，建议购买正规商业闭源验证方案。
+- **技术支持：** 作者不承诺免费答疑，也没有义务解决所有使用问题。文档及 AI 仍无法解决的问题，可联系作者咨询付费技术支持。
+
+请尊重开发者的时间与劳动，合理使用项目资源。感谢理解与支持。
+
+---
+
+![GuYi Access Dashboard](assets/Picture.png)
+
+---
+
+[官方网站](https://guyi-access-wed.pages.dev/) · [备用线路](https://guyiovo.github.io/GuYi-Access-wed/) · [TG频道](https://t.me/GuYi0u0)
+
+---
+## 核心特性
+
+* **全链路安全**：AES-256-GCM 认证加密 + 防高频刷 + 设备指纹 hash + IP 全局黑名单。
+* **应用隔离**：单后台支持无限应用，每个应用拥有独立 AppKey、卡密库、动态变量与审核策略。
+* **现代界面**：Glassmorphism 毛玻璃视觉设计，响应式布局，内置仪表盘与日志审计。
+* **无损迁移**：支持应用、卡密、变量、黑名单、配置的一键 JSON 导出与跨服务器还原。
+
+---
+
+## 快速部署
+
+### 环境要求
+* **PHP** ≥ 7.2（推荐 7.4 / 8.x）
+* **MySQL**（需启用 PDO 扩展）
+* **JSON 扩展**
+
+### 安装步骤
+1. 将源码上传至服务器网站根目录。
+2. 访问 `http://您的域名/install.php` 运行安装向导。
+3. 输入数据库与管理员信息，安装完成后自动销毁安装入口。
+
+---
+
+## 客户端对接
+
+### 1. 获取 AppKey
+登录后台【应用管理】，创建新应用并获取 `64位 AppKey` 与接口地址。
+
+> 建议在客户端对密钥做混淆或加壳保护。
+### 2. 接口说明
+* **请求地址**：`POST /Verifyfile/api.php`
+* **Content-Type**：`application/json`
+
+**请求示例**
+```json
+{
+  "app_key": "您的64位十六进制密钥",
+  "card_code": "用户输入的卡密",
+  "device_hash": "可选的硬件机器码"
+}
+```
+
+**响应示例**
+```json
+{
+  "status": "success",
+  "message": "验证成功",
+  "data": {
+    "expire_time": "2026-12-31 23:59:59",
+    "variables": {
+      "update_url": "https://...",
+      "notice": "欢迎使用！"
+    }
+  }
+}
+```
+### 3. PHP 对接的 iOS Web App 环境限制
+
+只有 PHP 对接需要执行这项限制时，验证请求才额外传入 `client_language: "php"`（也可使用请求头 `X-Guyi-Client-Language: php`）。未声明该字段的其他语言对接不会触发这项限制。
+
+PHP 对接示例（在原请求 JSON 中增加该字段）：
+```json
+{
+  "app_key": "您的64位十六进制密钥",
+  "card_code": "用户输入的卡密",
+  "device_hash": "可选的硬件机器码",
+  "client_language": "php"
+}
+```
+当 PHP 对接声明此字段时，若请求的 `User-Agent` 不含 `[IOS_WEBAPP_VERIFIED]` 且卡密未开放浏览器白名单，中央验证会拒绝该请求。配套的 GuYi PHP WebApp 对接包还会在非 iOS 设备访问入口、或 iOS 普通浏览器未处于主屏幕独立模式时，主动调用中央云黑接口提交访客 IP 与环境指纹；如果验证违规请求同时提供卡密，则还会封禁该卡密。其他语言不声明 `client_language=php` 时不会触发这项 iOS 环境判断。
+
+注意：中央云黑名单是全局名单；IP/设备一旦拉黑，使用相同 IP/设备的其他语言客户端也可能被黑名单规则拦截。`client_language` 由请求方声明，并不能可靠证明实际编程语言；更强的隔离需要服务端持有的独立凭据或按应用隔离的黑名单策略。
+
+更多语言对接示例（C++, Rust, Go, Flutter, 易语言 等）请查看 [官方 API 文档](https://guyi-access-wed.pages.dev/#docs)。
+
+---
+## 生态矩阵
+
+| 客户端平台 | 服务端 / 脚本 |
+| --- | --- |
+| C / C++ · Rust · C# · VB.NET | Go · Node.js · Java · PHP |
+| Flutter · Swift · Kotlin · Vue · React | 易语言 · Python · Lua · Shell |
+
+---
+## 许可证与使用边界
+
+本项目采用 [PolyForm Perimeter License 1.0.1](https://polyformproject.org/licenses/perimeter/1.0.1) 授权。项目源码公开供查看、评估以及在许可证允许范围内使用；但本项目**不是 OSI 认可的开放源代码软件**，PolyForm Perimeter 属于源码可见（Source Available）许可证。
+
+在许可证规定范围内，你可以使用、修改、制作衍生作品并分发本软件；但不得将本软件或基于本软件制作的产品，用于向他人提供与 GuYi Access Pro 竞争的产品或服务。
+
+许可证对“竞争”的判断不只看产品名称、技术栈、运行平台或收费方式：如果将某个产品作为本软件功能或价值的替代品进行推广，即可能构成竞争；即使该产品免费提供，也不当然豁免。具体定义及适用条件以仓库根目录 `LICENSE` 文件中的完整条款为准。
+
+分发本软件或其修改版本时，必须按许可证要求向接收者提供完整许可证文本，以及权利人提供的 `Required Notice:` 声明。请勿删除或遗漏这些内容。
+**特别说明：** PolyForm Perimeter 并非全面禁止商业使用，也不禁止所有二次开发；其核心限制是不得向他人提供与本软件构成竞争的产品。该许可证也不授予 GuYi Access、GuYi Access Pro、GuYiovo 名称、Logo 或其他商标的使用权。
+
+如需获得超出许可证范围的授权，请事先联系权利人并取得书面许可。

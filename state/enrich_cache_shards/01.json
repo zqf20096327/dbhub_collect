@@ -4,7 +4,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.2",
   "rel_pub": "2025-10-22",
-  "rel_days": 398,
+  "rel_days": 399,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -89,7 +89,7 @@
   "commit_7d": 2,
   "rel_ver": "v1.7.5.3555",
   "rel_pub": "2026-11-06",
-  "rel_days": 18,
+  "rel_days": 19,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -163,9 +163,9 @@
  "strelov1/freehire": {
   "commit_90d": 2921,
   "commit_7d": 299,
-  "rel_ver": "web-v0.1.5",
-  "rel_pub": "2026-11-23",
-  "rel_days": 1,
+  "rel_ver": "deploy-20261125-0114",
+  "rel_pub": "2026-11-25",
+  "rel_days": 0,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -181,13 +181,38 @@
    "HTML": 1,
    "JavaScript": 1
   },
-  "enriched_at": "20261124",
+  "enriched_at": "20261125",
   "dim_ts": {
    "commit": "20261124",
-   "release": "20261124",
+   "release": "20261125",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "deploy-20261125-0114",
+    "d": "2026-11-25",
+    "n": "- #5153 refactor(db): drop four dead columns and their last references\n- Before release: the data in the four dropped columns was archived (row counts matched the live counts); nothing else in the code, the other repositories or the database objects reads them."
+   },
+   {
+    "t": "deploy-20261125-0041",
+    "d": "2026-11-25",
+    "n": "## Changes\n- #5157 refactor(engage): share one runner between the inbox and application digests\n- #5166 refactor: clean up low-severity review findings\n- #5167 chore: auto-merge once the pipeline is green and the review is clear\n\n## How it was verified\n- Pre-flight: CI green on the target (32 checks success, 7 skipped, 0 failed). No migrations, no search settings change, no new env vars, routes or cmd binaries. No release, backup or long transaction running; load 5.5.\n- After the flip: the live color and th"
+   },
+   {
+    "t": "deploy-20261125-0012",
+    "d": "2026-11-25",
+    "n": "## Changes\n- #5160 refactor(engage): share the founder-letter envelope in foundermail\n\n## How it was verified\n- Pre-flight: CI green on the target (23 success, 7 skipped, 0 failed); no migrations, no search settings change, no new env vars, routes or cmd binaries; no release, pg_dump or invalid index in flight, load 8.8.\n- After the flip: the live color serves the target commit, nginx reloaded (0 emerg), mail-ingest, search-drain and facetd run on the new build; /jobs, /pricing, /companies, /api/v1/jobs, /h"
+   },
+   {
+    "t": "deploy-20261124-2340",
+    "d": "2026-11-24",
+    "n": "## Changes\n- #5159 refactor(outbox): one StopOnCancel claimer and ClaimFunc adapter\n- #5151 ci(migrations): name the colliding file a merge added and document what closes the race\n\n## How it was verified\n- Pre-flight: CI green on the target (23 success, 7 skipped, 0 failed); no migrations, no search settings change, no new cmd, no new env vars or routes; no release, backup or invalid index in progress, load 10.8.\n- After the flip: the live color serves the target commit, the other color the previous build; "
+   },
+   {
+    "t": "deploy-20261124-2311",
+    "d": "2026-11-24",
+    "n": "- #5155 docs(db): say that account deletion erases usage by cascade, not by these queries"
+   },
    {
     "t": "web-v0.1.5",
     "d": "2026-11-23",
@@ -212,37 +237,17 @@
     "t": "deploy-20261123-1149",
     "d": "2026-11-23",
     "n": "## Changes\n- #5043 feat(ingest): log unresolved LinkedIn ATS discovery\n- #5044 fix(ingest): retry Jobs.ac.uk pagination on listing drift\n\n## How it was verified\n- Pre-flight: CI green on the target commit (23 checks success, 0 failed); no migrations, no search settings change, no new cmd, no new env vars, no new routes; no release/dump/long transaction running, load 8.\n- After the flip: live color serves the target commit, previous color the old build; nginx reloaded (workers newer than the flip, no emerg);"
-   },
-   {
-    "t": "deploy-20261123-0433",
-    "d": "2026-11-23",
-    "n": "## Changes\n- #5038 fix(matches): enforce saved-search constraints and source isolation\n- #5039 fix(location): respect worldwide remote scope and country exclusions\n\n## How it was verified\n- Pre-flight: CI green on the target commit (23 success, 7 skipped, 0 failed). No migrations, no Meilisearch settings change, no new cmd, env vars or routes outside /api.\n- After the flip: the live color serves the target commit, the other color the previous build; nginx reloaded (new workers, no emerg); daemons on the new"
-   },
-   {
-    "t": "deploy-20261123-0329",
-    "d": "2026-11-23",
-    "n": "- Not verified: a signed-in match source choice, a real interview transcription upload and the spoken first question, browser rendering of the new copy and menu, live crawls of Jobs.ac.uk, CharityJob and oracle boards.\n- #5031 fix(ingest): hydrate oracle boards and complete listings past the 10k offset cap"
-   },
-   {
-    "t": "deploy-20261123-0200",
-    "d": "2026-11-23",
-    "n": "- #5028 fix(interviews): refresh feedback across browser tabs\n- #5029 fix(interviews): ignore refreshes older than completed feedback\n- #5030 fix(interviews): preserve the transcript when protecting feedback\n- #5028, #5029, #5030: web-only interview feedback logic; not exercised (no signed-in rehearsal session).\n- Not verified: signed-in employer workspace, join-page copy, interview feedback across tabs, a real busy-queue 503."
-   },
-   {
-    "t": "deploy-20261123-0137",
-    "d": "2026-11-23",
-    "n": "- CI on the release commit was green, and the six new database migrations are additive only.\n- #5026 Interview prep: voice playback, a feedback report and a repeat-question mode (voice stays off until it is configured)."
-   },
-   {
-    "t": "backend-v0.1.5",
-    "d": "2026-11-23",
-    "n": "* fix(db): renumber the jobs index drops past 0290_feed_state (#5017) (211f52d98)\n* perf(db): drop three redundant jobs indexes (#5014) (dc45a8070)\n* fix(boardcatalog): refuse Oracle boards whose site the tenant does not list (#5059) (bd14d352b)\n* fix(liveness,jobmatch): route LinkedIn liveness through Scrapling; count git hosts and postgresql as their generic skills (#5046) (4eb256e78)\n* fix(inbox): limit scheduling pilots to a recruiter address (#5053) (f1107db2d)\n* perf(db): read whole-catalogue scans of"
    }
   ],
   "etag": {
-   "release": "W/\"8319f1514c856353b1be45a2f9cfc7daa3632aec77609a2e083410dc8813c11d\""
+   "release": "W/\"b07e4b32556e32484f8cf5f145fb2dd26e8eb84258efa45636559de372caff9f\""
   },
   "rel_dates": [
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-24",
+   "2026-11-24",
    "2026-11-23",
    "2026-11-23",
    "2026-11-23",
@@ -267,12 +272,7 @@
    "2026-11-22",
    "2026-11-21",
    "2026-11-21",
-   "2026-11-21",
-   "2026-11-21",
-   "2026-11-21",
-   "2026-11-21",
-   "2026-11-21",
-   "2026-11-20"
+   "2026-11-21"
   ]
  },
  "proofrock/ws4sqlite": {
@@ -280,7 +280,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.16.6",
   "rel_pub": "2025-10-31",
-  "rel_days": 389,
+  "rel_days": 390,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -316,7 +316,7 @@
   "commit_7d": 3,
   "rel_ver": "v1.38.10",
   "rel_pub": "2026-10-18",
-  "rel_days": 37,
+  "rel_days": 38,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -390,7 +390,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.4.11",
   "rel_pub": "2026-09-22",
-  "rel_days": 63,
+  "rel_days": 64,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -412,7 +412,7 @@
   "commit_7d": 0,
   "rel_ver": "0.14.0",
   "rel_pub": "2025-05-21",
-  "rel_days": 552,
+  "rel_days": 553,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -452,7 +452,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1.0",
   "rel_pub": "2020-01-10",
-  "rel_days": 2510,
+  "rel_days": 2511,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -471,7 +471,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2021-04-21",
-  "rel_days": 2043,
+  "rel_days": 2044,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -494,7 +494,7 @@
   "commit_7d": 0,
   "rel_ver": "2.3.0",
   "rel_pub": "2018-10-22",
-  "rel_days": 2955,
+  "rel_days": 2956,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -514,7 +514,7 @@
   "commit_7d": 99,
   "rel_ver": "v3.1",
   "rel_pub": "2026-11-09",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -572,7 +572,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.1",
   "rel_pub": "2025-09-05",
-  "rel_days": 445,
+  "rel_days": 446,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -621,7 +621,7 @@
   "commit_7d": 0,
   "rel_ver": "0.40.1",
   "rel_pub": "2026-05-04",
-  "rel_days": 204,
+  "rel_days": 205,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -643,7 +643,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.9.0",
   "rel_pub": "2018-12-15",
-  "rel_days": 2901,
+  "rel_days": 2902,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -701,7 +701,7 @@
  "pomm-project/pomm-bundle": {
   "rel_ver": "3.0.0",
   "rel_pub": "2020-10-18",
-  "rel_days": 2228,
+  "rel_days": 2229,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -720,7 +720,7 @@
  "VMDashboard/vmdashboard": {
   "rel_ver": "v19.01.03",
   "rel_pub": "2020-11-25",
-  "rel_days": 2190,
+  "rel_days": 2191,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -741,7 +741,7 @@
  "andrei-polukhin/pgdbtemplate": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2026-05-07",
-  "rel_days": 201,
+  "rel_days": 202,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -775,7 +775,7 @@
  "simonw/paginate-json": {
   "rel_ver": "1.0",
   "rel_pub": "2023-08-30",
-  "rel_days": 1182,
+  "rel_days": 1183,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -866,7 +866,7 @@
  "jpazvd/wbopendata": {
   "rel_ver": "v18.8.0",
   "rel_pub": "2026-08-08",
-  "rel_days": 108,
+  "rel_days": 109,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -914,7 +914,7 @@
  "TeamDerUntergang/Telegram-UserBot": {
   "rel_ver": "v3.4",
   "rel_pub": "2020-06-18",
-  "rel_days": 2350,
+  "rel_days": 2351,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -999,7 +999,7 @@
  "ansible-collections/community.elastic": {
   "rel_ver": "latest",
   "rel_pub": "2024-04-18",
-  "rel_days": 950,
+  "rel_days": 951,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1181,7 +1181,7 @@
  "oceanbase/dify-on-mysql": {
   "rel_ver": "1.8.0",
   "rel_pub": "2025-09-16",
-  "rel_days": 434,
+  "rel_days": 435,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1237,7 +1237,7 @@
  "Lombiq/UI-Testing-Toolbox": {
   "rel_ver": "v15.0.0",
   "rel_pub": "2026-07-18",
-  "rel_days": 129,
+  "rel_days": 130,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1273,7 +1273,7 @@
  "LuckyIndraEfendi/Mangazuna": {
   "rel_ver": "3.1",
   "rel_pub": "2024-02-09",
-  "rel_days": 1019,
+  "rel_days": 1020,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1321,7 +1321,7 @@
  "pierreforstmann/pg_readonly": {
   "rel_ver": "1.0.6",
   "rel_pub": "2026-07-15",
-  "rel_days": 132,
+  "rel_days": 133,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1353,7 +1353,7 @@
  "circuitsacul/apgorm": {
   "rel_ver": "v1.0.0-b.14",
   "rel_pub": "2022-11-22",
-  "rel_days": 1463,
+  "rel_days": 1464,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1396,7 +1396,7 @@
  "JumpCodeFrog/telegram-shop-bot": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-09-25",
-  "rel_days": 60,
+  "rel_days": 61,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1444,7 +1444,7 @@
  "kbennett2000/lan-games": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-05-28",
-  "rel_days": 180,
+  "rel_days": 181,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1481,7 +1481,7 @@
  "raw-lab/NFixDB": {
   "rel_ver": "v2.1",
   "rel_pub": "2024-04-23",
-  "rel_days": 945,
+  "rel_days": 946,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1541,7 +1541,7 @@
  "SiavashGolchoobian/SqlDeep": {
   "rel_ver": "v3.0.0.7",
   "rel_pub": "2025-01-03",
-  "rel_days": 690,
+  "rel_days": 691,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1663,7 +1663,7 @@
  "Marco-Sulla/ewa": {
   "rel_ver": "v1.5.7",
   "rel_pub": "2019-05-29",
-  "rel_days": 2736,
+  "rel_days": 2737,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1724,7 +1724,7 @@
   "commit_7d": 7,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-06-12",
-  "rel_days": 165,
+  "rel_days": 166,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2416,7 +2416,7 @@
  "DerKezorm/nexlore": {
   "rel_ver": "v1.5.1",
   "rel_pub": "2026-10-06",
-  "rel_days": 49,
+  "rel_days": 50,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -2466,7 +2466,7 @@
  "Vincentkeio/clover-mail": {
   "rel_ver": "v2.0.2",
   "rel_pub": "2026-10-15",
-  "rel_days": 40,
+  "rel_days": 41,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2545,7 +2545,7 @@
  "directus/monospace-starter": {
   "rel_ver": "monoerp@0.1.1",
   "rel_pub": "2026-11-03",
-  "rel_days": 21,
+  "rel_days": 22,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2584,7 +2584,7 @@
  "XWJ-z/ZXDesk": {
   "rel_ver": "v0.9.7",
   "rel_pub": "2026-11-05",
-  "rel_days": 19,
+  "rel_days": 20,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2628,7 +2628,7 @@
  "catzoidhub/DevCatz": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-11-04",
-  "rel_days": 20,
+  "rel_days": 21,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2725,7 +2725,7 @@
   },
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-11-06",
-  "rel_days": 18,
+  "rel_days": 19,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2808,6 +2808,7 @@
    "security": "20261124",
    "contrib": "20261124",
    "lang": "20261124"
-  }
+  },
+  "rel_n90": 0
  }
 }

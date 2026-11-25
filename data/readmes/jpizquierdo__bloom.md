@@ -24,17 +24,42 @@ treat it as a playground, not as storage.
 
 ## Screenshots
 
-The shared dashboard — coffees, brews and recent extractions at a glance:
+Each screenshot follows your GitHub theme, light or dark, like the app itself.
 
-![Bloom dashboard](docs/screenshots/dashboard.png)
+Your dashboard: totals for the shared log and your most recent brews, with your own star
+rating and the control-chart verdict on each:
 
-| Beans, filterable by roaster | A coffee: its lots and its brews |
-| :--: | :--: |
-| ![Beans list](docs/screenshots/beans.png) | ![Bean detail](docs/screenshots/bean-detail.png) |
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/dashboard-dark.png">
+  <img alt="Bloom dashboard" src="docs/screenshots/dashboard.png">
+</picture>
+
+The coffee catalog, filterable by roaster, roast type and origin, and a single coffee with
+its recipes, lots and brews:
+
+<table>
+  <tr>
+    <td>
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/beans-dark.png">
+        <img alt="Beans list" src="docs/screenshots/beans.png">
+      </picture>
+    </td>
+    <td>
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/bean-detail-dark.png">
+        <img alt="Bean detail" src="docs/screenshots/bean-detail.png">
+      </picture>
+    </td>
+  </tr>
+</table>
 
 A brew with its preparation details, extraction-yield diagnostics and a tasting:
 
-![Brew detail](docs/screenshots/brew-detail.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/brew-detail-dark.png">
+  <img alt="Brew detail" src="docs/screenshots/brew-detail.png">
+</picture>
 
 ## Quick start
 
@@ -53,8 +78,8 @@ Open **http://localhost:8000** — the web UI, with the API under `/api/v1` and 
 Swagger docs at **`/docs`**.
 
 On startup Bloom waits for the database, applies any pending migrations, and bootstraps the
-first admin — there is no separate migration step. It runs as a **single instance**, which
-keeps migrating in-process simple and safe.
+first admin — there is no separate migration step. If several processes start at once they
+take turns on a database lock, so only the first one migrates.
 
 > Compose pulls the published `jpizquierdo/bloom` image. To build it yourself, run the app from
 > source, or hack on it, see [Development](#development).
@@ -68,7 +93,7 @@ Settings come from environment variables or a local `.env` (copy `.env.example`)
 | `POSTGRES_USER` / `POSTGRES_PASSWORD` | Postgres credentials (default `bloom` / `bloom`). |
 | `POSTGRES_SERVER` / `POSTGRES_PORT` / `POSTGRES_DB` | Postgres host, port and database (default `localhost` / `5432` / `bloom`). |
 | `JWT_SECRET` | Access-token signing key, at least 32 characters — **required**: the app refuses to start without it. Generate one with `openssl rand -hex 32`. |
-| `ACCESS_TOKEN_EXPIRE_HOURS` | Access-token lifetime in hours; generous by default for self-hosted use — set it lower for shorter sessions. |
+| `ACCESS_TOKEN_EXPIRE_HOURS` | Access-token lifetime in hours (default 12): how often people sign in again, since there is no refresh flow. |
 | `RESET_TOKEN_EXPIRE_MINUTES` | Lifetime of a password-reset link (default 30). |
 | `SMTP_HOST` / `SMTP_PORT` | Outgoing mail server (default port `587`). Leave the host blank to disable sending — links are written to the log instead. |
 | `SMTP_USER` / `SMTP_PASSWORD` | SMTP credentials, if the server needs them. |
@@ -78,6 +103,7 @@ Settings come from environment variables or a local `.env` (copy `.env.example`)
 | `FRONTEND_HOST` | Origin of the Vite dev server, allowed by CORS (default `http://localhost:5173`). Also the base of the links in outgoing emails, so set it to your public URL in production. |
 | `BACKEND_CORS_ORIGINS` | Comma-separated list of extra browser origins allowed by CORS. |
 | `BLOOM_ADMIN_EMAIL` / `BLOOM_ADMIN_PASSWORD` | First admin, bootstrapped on startup if absent. |
+| `OIDC_*`, `DISABLE_LOCAL_AUTH` | Single sign-on — see [docs/SSO.md](docs/SSO.md). |
 
 ## Authentication
 
@@ -100,11 +126,20 @@ curl -s -X POST http://localhost:8000/api/v1/auth/token \
 curl http://localhost:8000/api/v1/auth/me -H "Authorization: Bearer <token>"
 ```
 
+### Single sign-on (OIDC)
+
+Bloom can also log people in through an OpenID Connect provider (Keycloak, Authentik, Entra ID…),
+alongside passwords or instead of them, with roles mapped from the provider's groups. Existing
+accounts are linked by email on their first SSO login. See [docs/SSO.md](docs/SSO.md) for the
+settings, provider notes and troubleshooting.
+
 ### Email in development
 
 `docker/docker-compose.yml` ships [Mailpit](https://mailpit.axllent.org/): it accepts
 everything on port 1025 and delivers nothing, so you can read the real rendered mail at
-<http://localhost:8025>. The templates live in `bloom/templates/email/`.
+<http://localhost:8025>. The templates live in `bloom/templates/email/`. Mailpit and Postgres
+are published on `127.0.0.1` only (the inbox contains password-reset links); to reach them from
+another machine, use an SSH tunnel rather than opening the ports.
 
 ## API overview
 

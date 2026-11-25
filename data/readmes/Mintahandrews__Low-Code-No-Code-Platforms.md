@@ -2360,3 +2360,7 @@ If this repository helped you discover amazing low-code/no-code platforms, pleas
 [⬆ Back to Top](#-awesome-low-codeno-code-platforms)
 
 </div>
+
+---
+
+Built by [Andrews Mintah](https://codemintah.dev) · [codemintah](https://github.com/Mintahandrews)

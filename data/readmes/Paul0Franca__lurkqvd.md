@@ -7,6 +7,9 @@ Gerar o QVD fora da Qlik significa que só o arquivo final entra na cota de capa
 transformação não consomem o seu tenant.
 
 [![Licença: Apache 2.0](https://img.shields.io/badge/licen%C3%A7a-Apache%202.0-blue.svg)](LICENSE)
+[![Página do produto](https://img.shields.io/badge/site-datalurk.com.br%2Flurkqvd-3CCB8F.svg)](https://datalurk.com.br/lurkqvd)
+
+Um produto da [DataLurk](https://datalurk.com.br/lurkqvd). Conheça o LurkQVD em **[datalurk.com.br/lurkqvd](https://datalurk.com.br/lurkqvd)**.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/img/painel-escuro.png">
@@ -240,7 +243,7 @@ Tudo pelo `.env` (veja os comentários em [`.env.example`](.env.example)). O res
 | `LURKQVD_MEMORIA_SEM_HISTORICO_MB` | `1024` | reserva de uma carga que ainda não rodou |
 | `LURKQVD_ESPERA_MAX_MIN` | `15` | depois disso esperando memória, uma carga não é mais ultrapassada |
 | `LURKQVD_MAQUINA` | `servidor` | workers com o mesmo nome dividem a mesma RAM; um nome por máquina |
-| `LURKQVD_LIMITE_ENVIO_DIRETO_MB` | `500` | acima disso, o upload para a Qlik é em pedaços retomáveis |
+| `LURKQVD_LIMITE_ENVIO_DIRETO_MB` | `100` | acima disso (ou se o envio direto cair), o upload para a Qlik é em pedaços retomáveis; máximo da Qlik: 500 |
 
 ## Operação
 

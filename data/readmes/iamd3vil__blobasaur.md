@@ -174,8 +174,10 @@ just build-linux
    ```toml
    data_dir = "./data"
    num_shards = 4
-   addr = "0.0.0.0:6379"
+   addr = "127.0.0.1:6379"
    ```
+
+   Blobasaur has no authentication or ACLs and is meant for trusted internal networks only. See [SECURITY.md](SECURITY.md) before binding to a non-loopback interface.
 
 2. **Run the server:**
    ```bash
@@ -360,13 +362,13 @@ Use namespaces to organize data into logical groups.
 > **Namespace format:** `namespace` must be non-empty, case-sensitive (`Users` and `users` are distinct), and contain only ASCII letters, numbers, and underscore (`[A-Za-z0-9_]`).
 > Examples: `users`, `users123`, `users_123`.
 
-- **`HSET namespace key value`**: Store in namespace
+- **`HSET namespace key value`**: Store in namespace and clear any previous field expiry
   ```bash
   redis-cli HSET users_123 name "John Doe"
   redis-cli HSET users_123 email "john@example.com"
   ```
 
-- **`HSETEX key [options] FIELDS numfields field value [field value ...]`**: Store fields with TTL
+- **`HSETEX key [options] FIELDS numfields field value [field value ...]`**: Store fields with an optional expiry. An overwrite clears the previous expiry unless you specify `KEEPTTL` or a new expiry.
   ```bash
   # Set single field with 60 second expiration
   redis-cli HSETEX sessions EX 60 FIELDS 1 user123 "session_data"
@@ -614,7 +616,7 @@ CREATE TABLE blobs (
 - **Automatic Expiry**: Expired keys and hash fields count as missing for reads (`GET`, `EXISTS`, `TTL`, `HGET`, `HEXISTS`) and for writes (`EXPIRE`, `DEL`, `HSET`, `HSETEX`, `HDEL`, `HEXPIRE`), even before cleanup removes them
 - **Background Cleanup**: Per-shard cleanup tasks run every 60 seconds (`cleanup_interval_secs`) to remove expired keys
 - **Efficient Storage**: Uses indexed `expires_at` timestamps for fast expiry queries
-- **Second Resolution**: Expiry is stored in whole seconds, so `PX` TTLs are rounded up (`PX 500` lives for 1 second). `EX 0`, `PX 0` and out-of-range TTLs are rejected, as in Redis
+- **Second Resolution**: Expiry is stored in whole seconds, so `PX` TTLs are rounded up (`PX 500` lives for 1 second). `SET` rejects a zero TTL. `HSETEX EX 0` and `HSETEX PX 0` expire matching fields immediately.
 - **UTF-8 Keys**: Keys, namespaces and other string arguments must be valid UTF-8 (values can be any bytes)
 
 **Implementation Details:**

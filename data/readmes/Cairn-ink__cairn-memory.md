@@ -10,6 +10,7 @@
 <p align="center"><strong>Memory for Claude Code and Codex that you can inspect, correct and forget.</strong></p>
 
 <p align="center">
+  <a href="https://glama.ai/mcp/servers/Cairn-ink/cairn-memory"><img alt="Cairn-ink/cairn-memory MCP server" src="https://glama.ai/mcp/servers/Cairn-ink/cairn-memory/badges/score.svg"></a>
   <a href="https://github.com/Cairn-ink/cairn-memory/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Cairn-ink/cairn-memory/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://www.npmjs.com/package/@cairn-ink/memory"><img alt="npm version" src="https://img.shields.io/npm/v/%40cairn-ink%2Fmemory"></a>
   <a href="LICENSE"><img alt="Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue"></a>
@@ -194,7 +195,7 @@ hosted MCP endpoint, the Codex rules and the plugin's privacy contract.
   saved. This can hide an unrelated conversation and miss a related one, so use
   `raw delete` to remove a specific conversation.
 - **Uninstalling.** `npx @cairn-ink/memory uninstall --local` disconnects the
-  tools and keeps your data on disk. From installer 0.6.11, on Linux, an uninstall
+  tools and keeps your data on disk. In installer 0.6.12, on Linux, an uninstall
   that removes the engine first asks the store's running shared servers to stop.
   The stop request is best effort, and uninstall proceeds regardless of the outcome.
   Uninstalling Cloud keeps your memories on cairn.ink.
@@ -214,7 +215,7 @@ or for stores under `/mnt/` or on network filesystems, each session starts
 its own server. If the shared server can't start, the session automatically
 starts its own server.
 
-Installer 0.6.11 adds `npx @cairn-ink/memory daemon status --local` for a local
+Installer 0.6.12 supports `npx @cairn-ink/memory daemon status --local` for a local
 store whose installed engine supports shared servers. On Linux it returns JSON
 with each published server's short store ID, running state, build and last
 reported session count, when available. An endpoint without a published server

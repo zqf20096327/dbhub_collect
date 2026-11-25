@@ -10,10 +10,15 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/licence-Apache--2.0-6331fb" alt="Licence: Apache-2.0"></a>
+  <a href="https://github.com/louvain-ai/louvain-engine/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/louvain-ai/louvain-engine/ci.yml?branch=main&label=CI" alt="CI status"></a>
 </p>
 
 The open retrieval engine behind Louvain: it finds the right document in your company’s files, behind a permission
 fence, and hands it to your agent with its source, self-hosted, over MCP and HTTP.
+
+<p align="center">
+  <img src="assets/two-readers.svg" width="760" alt="The same search as two readers. alice, granted the sample corpus and a board collection, gets the board's minutes first, then lease-renewal and facilities-agreement. bob, granted only the sample corpus, gets lease-renewal and facilities-agreement; the board's minutes are never ranked, counted or returned for him.">
+</p>
 
 Louvain's own build scored **91.32%** (preliminary, on a 100-question development sample); this repository doesn't reproduce it yet. EnterpriseRAG-Bench asks enterprise questions over a large company corpus and judges each answer on
 whether it is correct and complete. [How it was measured](https://louvain.ai/benchmarks)
@@ -30,6 +35,25 @@ may read, in config; Louvain syncs real permissions from your tools.
 
 **Fits your stack.** MCP tools for your agents, plugins as plain functions, and Postgres underneath. Open source,
 under Apache-2.0.
+
+## Why not just filter results after retrieval?
+
+Because the search's limit runs before your filter, and everything it worked out on the way was worked out over
+documents the reader may not see.
+
+- **Top-k starvation.** Take the top 10 and drop what the reader may not read, and someone who can read 5% of the
+  corpus keeps about half a document. Ask for more to make up for it and you pay for every hidden candidate, with no
+  floor: a narrow reader needs hundreds of times k. [pg_rebac's planner study](https://pgrebac.com/docs/performance/)
+  measures the same failure inside Postgres on 500,000 passages: a filter applied after an HNSW scan returned 8%,
+  20% and 62% of k for readers of 5%, 10% and 30% breadth, with no error.
+- **Counts, snippets and suggestions leak.** A total, a "did you mean", a snippet or an identifier lookup computed
+  before the filter says something about documents the reader cannot open. Here the fence sits in each statement's
+  `WHERE` clause, so a hidden document is never ranked, counted, limited into a page or returned, its identifier is
+  answered as one that does not exist, and a word only it holds is never offered as a spelling correction.
+- **What is not hidden, said plainly.** The keyword index weighs a word by how many of a workspace's documents hold
+  it, readable or not, so a hidden document in the same workspace can change the order of a reader's results and
+  which fragment a snippet shows. The [security model](docs/security-model.md) lists this and every other limit, with
+  the test behind each guarantee.
 
 ## How it works
 
@@ -263,4 +287,4 @@ an agent and its guidance, each listed in [docs/benchmark-method.md](docs/benchm
 
 `CONTRIBUTING.md` explains how a change reaches this repository and `CODE_OF_CONDUCT.md` how we work together. Report
 a vulnerability privately, as `SECURITY.md` describes, never in a public issue. The code is licensed under Apache-2.0
-(`LICENSE`, `NOTICE`). The name and logo are trademarks of Louvain AI Ltd: `TRADEMARKS.md` says how to use them.
+(`LICENSE`, `NOTICE`). The name and brand artwork are trademarks of Louvain AI Ltd: `TRADEMARKS.md` says how to use them.

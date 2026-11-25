@@ -65,10 +65,7 @@ But Alpine/Debian/Disto X supports this already? Sorry, we aren't going to compr
 
 ## Getting Help
 
-If you need help with MariaDB on Docker, the [Docker and MariaDB](https://mariadb.com/kb/en/docker-and-mariadb/) section of the MariaDB Knowledge Base contains lots of helpful info. The Knowledge Base also has a page where you can [Ask a Question](https://mariadb.com/kb/en/docker-and-mariadb/ask). Also see the [Getting Help with MariaDB](https://mariadb.com/kb/en/getting-help-with-mariadb/) article.
-
-On StackExchange, questions tagged with 'mariadb' and 'docker' on the Database Administrators (DBA) StackExchange can be found [here](https://dba.stackexchange.com/questions/tagged/docker+mariadb).
-
+If you need help with MariaDB Containers, the [MariaDB Containers](https://mariadb.com/docs/server/server-management/automated-mariadb-deployment-and-administration/docker-and-mariadb) section of the MariaDB Documentation contains lots of helpful info. Also see the [Getting Help with MariaDB](https://mariadb.com/docs/general-resources/community/community/faq/getting-help-with-mariadb) article.
 
 ## Reporting a Bug / Feature Request
 
@@ -100,7 +97,7 @@ There are two permanent branches:
 * master - changes that work with the currently released MariaDB packages go here.
 * next - changes that work with currently unreleased MariaDB code changes, including unreleased MariaDB versions.
 
-The "next" branch may be rebased on master occasionally and will be used in the [buildbot testing](https://buildbot.mariadb.org/#/builders/amd64-rhel8-dockerlibrary).
+The "next" branch may be merged with master occasionally and will be used in the [buildbot testing](https://buildbot.mariadb.org/#/builders/amd64-rhel8-dockerlibrary).
 
 ### Testing Changes
 
@@ -206,6 +203,10 @@ Bug fixes are most welcome and should include a full description of the problem 
 Before investing too much time in a feature request, please discuss its use on a [JIRA issue](https://jira.mariadb.org), a [github issue](https://github.com/MariaDB/mariadb-docker/issues), or with someone on [Zulip](https://mariadb.zulipchat.com/#narrow/stream/118759-general) (create a New Topic).
 
 After a feature is written, please help get it used by improving the documentation to detail how to use the newly added feature.
+
+## Releasing
+
+Maintainers publishing new MariaDB versions: see [RELEASING.md](RELEASING.md) for how images are released and where they are built (Docker Library, GitHub CI, Buildbot).
 
 ## Improving the Documentation
 

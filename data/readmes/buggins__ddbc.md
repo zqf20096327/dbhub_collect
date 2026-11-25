@@ -22,7 +22,7 @@ ddbc's drivers are compiled in by dub configurations. An application picks one w
 `dub.json`:
 
 ```json
-"dependencies": { "ddbc": "~>0.14" },
+"dependencies": { "ddbc": "~>0.15.0" },
 "subConfigurations": { "ddbc": "PGNATIVE" }
 ```
 
@@ -114,6 +114,13 @@ int main(string[] args) {
     return 0;
 }
 ```
+
+### NULL values
+
+A NULL reads as the getter type's default (`0`, a null string or array, `Decimal.init`, `SysTime.init`,
+`DateTime.init`, ...) with `wasNull()` true: check `wasNull()` (or `isNull(column)`) to tell a NULL from a real
+value. Before ddbc 0.15, `getSysTime` and `getDateTime` returned the current time for a NULL in the MySQL, libpq,
+ODBC and SQLite drivers (#86, #226).
 
 ### Exact decimals
 
@@ -211,6 +218,35 @@ An in memory database can be configured by specifying **:memory:** instead of a 
 ddbc:sqlite::memory:
 ```
 
+SQLite has no date or time types; the driver stores dates and times as text in the forms SQLite's date and time
+functions understand: `setDate` writes `YYYY-MM-DD`, `setDateTime` `YYYY-MM-DD HH:MM:SS`, `setTime` `HH:MM:SS`.
+Before ddbc 0.15, `setDate` wrote `YYYYMMDD` and `setDateTime` `YYYYMMDDTHHMMSS` (and before 0.14.2, `setTime`
+wrote `HHMMSS`). The getters still read those forms as text, but SQLite compares text byte by byte, so a column
+holding both forms doesn't match, sort or filter consistently. In a column with numeric or integer affinity
+(declared `DATE`, `TIME`, `DATETIME`, `INT`, ...), SQLite stored the old date and time values as integers, and the
+getters can't read those that lost a leading zero (`011500` became `11500`). Convert old values once, for each such
+column (the statements expect the values stored as text or integers, and don't check that they are valid dates or
+times: run them only on columns that ddbc wrote):
+
+```sql
+UPDATE t SET d = substr(printf('%08d', d), 1, 4) || '-' || substr(printf('%08d', d), 5, 2) || '-'
+              || substr(printf('%08d', d), 7, 2)
+ WHERE (typeof(d) = 'integer' AND d BETWEEN 101 AND 99991231)
+    OR (typeof(d) = 'text' AND d GLOB '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]');
+UPDATE t SET dt = substr(dt, 1, 4) || '-' || substr(dt, 5, 2) || '-' || substr(dt, 7, 2) || ' '
+               || substr(dt, 10, 2) || ':' || substr(dt, 12, 2) || ':' || substr(dt, 14, 2)
+ WHERE dt GLOB '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]T[0-9][0-9][0-9][0-9][0-9][0-9]';
+UPDATE t SET tm = substr(printf('%06d', tm), 1, 2) || ':' || substr(printf('%06d', tm), 3, 2) || ':'
+               || substr(printf('%06d', tm), 5, 2)
+ WHERE (typeof(tm) = 'integer' AND tm BETWEEN 0 AND 235959)
+    OR (typeof(tm) = 'text' AND tm GLOB '[0-9][0-9][0-9][0-9][0-9][0-9]');
+```
+
+`setSysTime` and the SQL literals that `ddbc.pods` builds still write a `T` between the date and the time, and
+`setVariant` with a `SysTime` writes its `toString` form (`2019-Sep-15 15:18:51Z` in UTC, with an offset for other
+zones, no zone for local time; fractions when there are any). So don't mix them with `setDateTime` in one column
+(#224 for pods, #225 for `setSysTime` and `setVariant`).
+
 ### MySQL
 
 ```
@@ -281,7 +317,7 @@ ddbc:clickhouse://abc123.eu-west-1.aws.clickhouse.cloud/default?user=default,pas
 
 TLS uses the system's OpenSSL library, loaded at run time only when a secure connection is made; see the [clickhoused README](https://github.com/buggins/clickhoused#tls) for the TLS options (`tls_ca_file`, client certificates, ...) and where to get OpenSSL on each OS.
 
-ClickHouse has no transactions (auto-commit only) and no auto-increment keys. Result sets are forward-only and streamed; prepared statement parameters are sent as typed server-side query parameters.
+ClickHouse has no transactions (auto-commit only) and no auto-increment keys. Result sets are forward-only and streamed; prepared statement parameters are sent as typed server-side query parameters. String and byte parameters arrive unchanged since ddbc 0.15.1; before, the server decoded backslash sequences in them (`\N`, `\t`, `\xFF`) and refused a newline or tab ([#233](https://github.com/buggins/ddbc/issues/233)).
 
 All column types of clickhoused 0.9 can be read: besides numbers, strings, dates and UUIDs also `Decimal` (reported as `DECIMAL`, with precision and scale), 128/256-bit integers (`NUMERIC`), `BFloat16` (`FLOAT`), `Time`/`Time64` (`TIME`; `getTime` for values from 00:00:00 to 23:59:59), `LowCardinality`, `IPv4`/`IPv6`, and `Array`, `Tuple`, `Map`, the geo types, `Variant`, `Dynamic` and `JSON` (`OTHER`, as text, e.g. `[1,2]`, `{'k':1}`, `(1.5,-2)`, `{"a":1}`; `getVariant` gives a Variant/Dynamic cell's value). JSON needs ClickHouse 24.10 or newer. For typed access to composite values, use `getNativeConnection()` and clickhoused's struct mapping. clickhoused 0.6 decodes strings, `Bool`/`UUID`/`Nullable` columns and LZ4-compressed results several times faster, and `getString` of floating-point values about 10–20 times faster.
 

@@ -5,6 +5,7 @@ A modern **Java Swing (GUI)** desktop application engineered for proactive pharm
 ---
 
 ## 📌 Project Overview
+
 The **Curo Engine** (*Curo Smart Pharmacy Management System*) transforms traditional pharmacy operations into a zero-wastage, risk-controlled workflow. Unlike generic stock trackers, Curo enforces batch-level **FEFO (First Expired, First Out)** deductions, triggers a **7-month advance expiry re-export shield**, dynamically adapts reorder thresholds based on **7-day sales velocity**, enforces **prescription verification rules**, generates **`.txt` thermal receipts**, and protects financial integrity through **owner-authorized bill cancellations and stock reversals**.
 
 ---
@@ -19,30 +20,46 @@ The **Curo Engine** (*Curo Smart Pharmacy Management System*) transforms traditi
 
 ---
 
-## 📸 System Screenshots
+## 📸 System Screenshots & Diagrams
 
-> *(Add your UI screenshots inside a `screenshots/` folder in the repository root using the filenames below to display them automatically on GitHub)*
+> *(Place your architecture diagram and UI screenshots inside the `screenshots/` folder in the repository root using the filenames below so they render automatically on GitHub)*
 
-| Login & Authentication | Main Dashboard Overview |
-| :---: | :---: |
-| ![Login Screen](screenshot/login.jpg) | ![Dashboard](screenshot/dashboard.jpg) |
+![3-Tier Architecture](screenshot/architecture.jpg) 
 
-| FEFO Billing (POS) & Thermal Receipt | Batch-Wise Inventory & Smart Alerts |
-| :---: | :---: |
-| ![Billing POS](screenshot/pos.jpg) | ![Inventory & Alerts](screenshot/inventory.jpg) |
+
+  
+
+| Login & Authentication |
+| :---: |
+| ![Login Screen](screenshot/login.jpg) |
+
+
+| Main Dashboard Overview | 
+| :---: | 
+| ![Dashboard](screenshot/dashboard.jpg) | 
+
+
+| FEFO Billing (POS) & Thermal Receipt |
+| :---: |
+| ![Billing POS](screenshot/pos.jpg) |
+
+
+| Batch-Wise Inventory & Smart Alerts | 
+| :---: | 
+| ![Inventory & Alerts](screenshot/inventory.jpg) | 
 
 ---
 
 ## 🧩 OOP Concepts Covered
 
-- **Encapsulation:** Model classes (`Medicine`, `StaffMember`, `Bill`, `BillItem`, `CanceledBill`, `Notification`) strictly protect data using `private` fields, defensive collection copies (`Bill.getItems()`), and validated Getters/Setters (e.g., auto-defaulting `moving_type` to `"SLOW"` and empty cancellation reasons).
+- **Encapsulation:** Model classes (`Medicine`, `StaffMember`, `Bill`, `BillItem`, `CanceledBill`, `Notification`) strictly protect data using `private` fields, defensive collection copies (`Bill.getItems()`), and validated getters/setters (such as auto-defaulting `moving_type` to `"SLOW"` and empty cancellation reasons).
 - **Abstraction:** Abstract `BaseDAO` class and DAO layers (`BillingDAO`, `InventoryDAO`, `UserDAO`) encapsulate all SQL queries, JDBC transactions, and multi-batch FEFO algorithms away from the UI.
 - **Inheritance:** Custom exception hierarchy (`PharmacyException` extended by `ExpiredMedicineException`, `OutOfStockException`, `InvalidStaffIdException`, `UnauthorizedAccessException`), DAOs extending `BaseDAO`, and modular UI views extending `JFrame` and `JPanel`.
 - **Polymorphism:** Runtime polymorphism (Dynamic Method Dispatch) via `BaseDAO` references (`getTableName()`), constructor/method overloading, and dynamic billing workflows.
 - **Exception Handling:** ACID-compliant SQL transactions (`setAutoCommit(false)`, `commit()`, `rollback()`) paired with domain-specific checked exceptions (`UnauthorizedAccessException`, `OutOfStockException`, `ExpiredMedicineException`, `InvalidStaffIdException`).
 - **Collections & Generics:** Generic `Repository<T, ID>` interface implemented by `InventoryDAO`, alongside `ArrayList`, `LinkedHashMap`, `HashMap`, and thread-safe `CopyOnWriteArrayList`.
-- **File Handling:** External credential loading via `FileInputStream` & `Properties` (`db.properties`) and automated `.txt` receipt writing/reading via `BufferedWriter` & `FileWriter` (`ReceiptWriter.java`).
-- **Interfaces & Packages:** Custom `Repository<T, ID>` interface, Observer pattern listeners in `NotificationManager`, and clean modular separation across 8 packages (`models`, `exceptions`, `database`, `auth`, `inventory`, `billing`, `alerts`, `ui`).
+- **File Handling:** External credential loading via `FileInputStream` and `Properties` (`db.properties`) and automated `.txt` receipt writing/reading via `BufferedWriter`, `FileWriter`, `BufferedReader`, and `FileReader` (`ReceiptWriter.java`).
+- **Interfaces & Packages:** Custom `Repository<T, ID>` interface, observer pattern listeners in `NotificationManager`, and clean modular separation across 8 packages (`models`, `exceptions`, `database`, `auth`, `inventory`, `billing`, `alerts`, `ui`).
 
 ---
 
@@ -51,14 +68,14 @@ The **Curo Engine** (*Curo Smart Pharmacy Management System*) transforms traditi
 - **Role-Based Access Control (RBAC):** Secure GUI authentication separating **Owners (`OWNER`)** and **Cashiers (`CASHIER`)**, blocking unauthorized access to Staff Management, Bill Cancellations, Free Issues, and Prescription Overrides via `UnauthorizedAccessException`.
 - **Zero-Wastage Batch & FEFO Engine:**
   - Tracks inventory by individual batch (`batch_number`, `stock_date`, `exp_date`)—restocking inserts new batch records rather than overwriting existing batches.
-  - Auto-suggests medicines as you type (`SuggestBox`) and automatically deducts stock from the earliest non-expired batch first (rolling over seamlessly across multiple batches if needed).
+  - Auto-suggests medicines as you type (`SuggestBox`) and automatically deducts stock from the earliest non-expired batch first, rolling over across multiple batches when required.
 - **Compliance-Driven Dual-Path POS & Receipt Generator:**
   - Supports **Normal Billing** (with single-condition 5% discount tracking: *Bill > Rs. 1000*, *Senior Citizen > 55*, *Regular Customer*, or *Bulk Order*) and Owner-authorized **Free Issue** billing (`Net Total = 0.00`).
   - Enforces prescription verification (`is_prescription_checked`) for prescription-only medicines with Owner-only override privileges.
   - Exports formatted `.txt` receipts (including the marketing discount reason while omitting internal prescription flags) into `receipts/` and displays a Virtual Thermal Receipt preview.
 - **Proactive Smart Alerts & Self-Adapting Velocity (In-Memory RAM):**
-  - Triggers **7-month advance expiry warnings** (giving pharmacies a 1-month window before the 6-month supplier re-export cutoff).
-  - Evaluates **7-day sales velocity** and enforces **50% low-stock restock thresholds** (`FAST` > 300 units/week -> target 5000 / alert < 2500; `SLOW` -> target 200 / alert < 100) in real time via `NotificationManager`[cite: 13].
+  - Triggers **7-month advance expiry warnings**, giving pharmacies a 1-month window before the 6-month supplier re-export cutoff.
+  - Evaluates **7-day sales velocity** and enforces **50% low-stock restock thresholds** (`FAST` > 300 units/week -> target 5000 / alert < 2500; `SLOW` -> target 200 / alert < 100) in real time via `NotificationManager`.
 - **Owner-Authorized Bill Cancellations:** Reverses billed quantities back into their exact inventory batches inside an atomic SQL transaction and logs the audit trail in `canceled_bills`.
 
 ---
@@ -88,10 +105,9 @@ The **Curo Engine** (*Curo Smart Pharmacy Management System*) transforms traditi
 
 ## 🛠️ System Architecture & Tech Stack
 
-- **User Interface:** Java Swing (GUI) with FlatLaf Modern Look & Feel (`flatlaf.jar`)
-- **Programming Language:** Java (JDK 17+)
-- **Database Management System:** Microsoft SQL Server Express Edition (MSSQL)
-- **JDBC Driver:** Microsoft JDBC Driver for SQL Server (`mssql-jdbc.jar`)
+- **Presentation Layer (UI):** Java Swing (GUI) with FlatLaf Modern Look & Feel (`flatlaf.jar`), modular frames (`LoginFrame`, `DashboardFrame`), and workspace panels (`BillingPanel`, `InventoryPanel`, `AlertsPanel`, `StaffPanel`, `CancelBillPanel`).
+- **Business Logic & Data Access Layer:** Java (JDK 17+) featuring `BillingDAO` (automated FEFO & ACID SQL transactions), `InventoryDAO` (auto-suggest & 7-day velocity engine), `UserDAO`, `NotificationManager` (in-memory RAM alerts), `ReceiptWriter`, and domain-specific custom exceptions.
+- **Data Persistence & Storage Layer:** Microsoft SQL Server Express Edition (`curo_db` via `mssql-jdbc.jar`) paired with local configuration and receipt files (`db.properties`, `receipts/*.txt`).
 - **Version Control:** Git & GitHub
 
 ---
@@ -104,10 +120,11 @@ curo-pharmacy-system/
 │   ├── flatlaf.jar
 │   └── mssql-jdbc.jar
 ├── screenshots/
-│   ├── login.png
-│   ├── dashboard.png
-│   ├── billing.png
-│   └── inventory.png
+│   ├── architecture.jpg
+│   ├── login.jpg
+│   ├── dashboard.jpg
+│   ├── billing.jpg
+│   └── inventory.jpg
 ├── src/
 │   ├── Main.java
 │   ├── alerts/
@@ -155,6 +172,7 @@ curo-pharmacy-system/
 ├── db.properties.example
 ├── run.bat
 ├── .gitignore
+├── curo_engine_user_guide.pdf
 └── README.md
 ```
 
@@ -180,12 +198,12 @@ cd curo-pharmacy-system
    - Navigate to **SQL Server Services** -> Ensure **SQL Server Browser** is Running (*Start Mode: Automatic*), then right-click **SQL Server (SQLEXPRESS01)** and click **Restart**.
 
 ### 4. Configure Local Database Credentials
-1. Copy `db.properties.example` in the project root directory and rename the copy to `db.properties` (keep it in the root folder alongside `curoDB.sql` and `run.bat`).
+1. Copy `db.properties.example` in the project root directory and rename the copy to `db.properties` (do not rename the original `db.properties.example` template so it remains in the repository, and keep `db.properties` in the root folder alongside `curoDB.sql` and `run.bat`).
 2. Open `db.properties` and update your local SQL Server instance name (using double backslashes `\\`) and password:
 ```properties
 db.url=jdbc:sqlserver://localhost\\SQLEXPRESS01;databaseName=curo_db;encrypt=true;trustServerCertificate=true;
 db.user=curoAdmin
-db.password=ict25954
+db.password=YOUR_PASSWORD
 ```
 
 ### 5. Launch the Application
@@ -203,7 +221,7 @@ db.password=ict25954
 
 ---
 
-### 📄 Printable User Guide (English)
+### 📄 User Guide
 For pharmacy staff and owners, a printable **User Manual** (covering daily POS operations, FEFO rules, 7-month expiry re-export workflow, and weekly database backups) is included in this repository:
 
 👉 **[📖 View / Download Printable User Guide (PDF)](curo_engine_user_guide.pdf)**

@@ -6,30 +6,46 @@
 [![GHCR](https://github.com/oinzc/flame-contractor/actions/workflows/publish-ghcr.yml/badge.svg)](https://github.com/oinzc/flame-contractor/pkgs/container/flame-contractor)
 [![Release](https://img.shields.io/github/v/release/oinzc/flame-contractor)](https://github.com/oinzc/flame-contractor/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
+![Windows](https://img.shields.io/badge/Windows-Desktop_Installer-0078D4?logo=windows&logoColor=white)
+![Android](https://img.shields.io/badge/Android-8.0%2B_Standalone-3DDC84?logo=android&logoColor=white)
 ![Self-hosted](https://img.shields.io/badge/self--hosted-Docker-2496ED?logo=docker&logoColor=white)
 
 ![控制台总览：单抖音号续火工作台、今日排程状态、待处理提醒与好友火花直展列表](docs/assets/screenshots/dashboard.png)
 
-<sub>截图均来自内置的[演示实例](#演示实例)，昵称与数据全部虚构。</sub>
+<sub>本文所有截图与界面展示图均使用内置[演示实例](#演示实例)的虚构数据（日常号 · 晚风 / 小满 / 阿哲等），与任何真实账号或好友无关。</sub>
 
-本机优先的抖音「续火」控制台：按你设定的时刻，每天给指定的几位好友或群聊发出一条消息，防止连续互动记录断掉。所有数据、登录态与浏览器 Profile 都留在你自己的机器上，没有云端账号，也没有第三方服务器。
+本机优先的多端抖音「续火」工具（支持 **Android 手机 / 平板独立端**、**Windows 免 Docker 桌面安装包** 与 **Docker 服务器常驻**）：按你设定的时刻，每天给指定的几位好友或群聊发出一条消息，防止连续互动记录断掉。所有业务数据、登录态与浏览器 Profile 都留在你自己的设备上，没有云端账号，也没有第三方业务服务器。
 
 **适用范围：单人、少量好友、低频发送。** 它不是一个群发系统，也不是营销或养号工具。
 
 ## 它做什么
 
-- **多账号**：一台机器上管理多个抖音账号，各自独立浏览器 Profile 与调度。
+- **三端独立运行与含图 `.zip` 互迁**：提供 Android 独立 APK（手机 / 平板免电脑离屏运行）、Windows 独立安装包（免 Docker 双击即用）与 Docker 多架构镜像（`amd64` / `arm64`）；三端均支持含去 EXIF 图片模板的 `.zip` 完整备份包与 `.json` 双向无损迁移（严禁包含登录态与 Bark 密钥）。
+- **多账号隔离**：一台设备管理多个抖音账号，各自独立浏览器 / WebView Profile、调度时刻与通知隔离。
 - **严格好友定位**：按 `platform_user_id` 精确定位好友，群聊按 `platform_conversation_id`，两类身份绝不混用。
-- **扫码登录**：有头窗口扫码或容器内「截图扫码」，登录态持久化在 Profile 里；失效时自动标记并通知。
-- **写作与模板**：文案池 + 多模板，支持图片与原生表情；每个好友可绑定独立文案。
-- **准点发送**：账号级与好友级固定时刻；到点抢租约、真实发送，并以终态确认结果。
-- **每日防重复**：同一天同一好友只发一次；结果无法确认时记为「待人工复核」，**绝不自动重发**。
-- **自动调度**：后台每分钟对齐整分钟派发；失败重试、连续失败熔断、登录失效自动停。
-- **异常通知**：接入 Bark，按 `critical` / `timeSensitive` / `active` 分级推送登录失效、待人工复核与已启用好友火花告急只读提醒；支持在「系统与调度」页面直接配置（脱敏回显、不进备份）与一键测试连通性。
-- **会话扫描与对账**：只读扫描官方火花状态用于展示，产出状态变化 / 无火花 / 新会话 / 未观察到 / 无变化五类对账，删除与导入都要你手动确认。
-- **可观测与防改版热修**：侧边栏后台任务栈实时展示发送与扫描进度，诊断截图按天保留；内置零副作用页面结构体检，支持将自定义 DOM 定位规则持久化至 `data` 卷在线热生效。
+- **扫码登录**：有头窗口扫码、手机页内扫码或容器内「截图扫码」，登录态持久化在本地沙盒；失效时自动标记并通知。
+- **写作与多形态模板**：固定文案、星期轮换 LRU 文案池、本地图片模板（自动缩放去 EXIF）与抖音原生表情；每个好友可绑定独立模板与时刻。
+- **准点发送与每日防重复**：账号级与好友级固定时刻；到点抢租约、真实发送，并以终态确认结果；同一天同一好友按账号自然日最多累计 `+1`，结果无法确认时记为「待人工复核」并留存现场截图，**绝不自动重发**。
+- **Android 5 款原生桌面小组件家族**：提供 `2×2` 进度圆环、`4×1` 极简状态条、`4×2` 圆环全景卡 / 7 日连胜卡 / 好友火花榜，支持跟随 App / 深色碳黑 / 浅色纯白 / 半透明深色玻璃 4 种独立外观、手点实时旋转刷新回执与好友首字隐私脱敏。
+- **异常通知与会话对账**：接入 Bark 与 Android 本机分级通知，推送登录失效、待人工复核与官方火花告急只读提醒；支持只读扫描官方火花快照并按五类对账单手动确认导入。
+- **可观测、热修与应用内直连反馈**：保留失败 / 待复核现场截图灯箱与 30 日趋势审计；内置零副作用页面结构体检与自定义定位词热覆写；Android 与 Web / 桌面端均内置国内直连的问题反馈表单（免代理、免登录 GitHub 即可提交）与 GitHub 源码直达入口。
 
 ## 界面一览
+
+### Android 独立客户端与 5 款原生桌面小组件
+
+![Android 独立客户端四屏全景：今日工作台、好友火花与扫描对账、30 日趋势与审计、应用内免魔法直连反馈](docs/assets/screenshots/android-app.png)
+
+- **四栏悬浮胶囊导航 & 浅色 / 深色碳黑双主题**：手机端采用悬浮圆角底栏（`今日 / 好友 / 模板 / 记录`），平板端自动切换左侧 `NavigationRail`；支持浅色 / 深色碳黑 / 跟随系统无闪烁切换、微动效触感反馈与系统减弱动画兼容。
+- **免电脑离屏执行与 30 日审计**：内置桌面模式 Chromium `WebView` 离屏引擎、`AlarmManager` + `WorkManager` 定时保活、失败 / 待人工复核现场截图灯箱、30 日趋势堆叠柱状图与脱敏 CSV 导出。
+- **应用内免魔法直连反馈**：在 `设置 → 关于与反馈` 可直接提交 Bug 报告、功能建议或使用疑问，并可选自动附带脱敏运行环境摘要，无需登录 GitHub 账号。
+
+![Android 5 款多尺寸原生桌面小组件家族：2×2 进度圆环、4×1 极简状态条、4×2 圆环全景卡 / 7 日连胜卡 / 好友火花榜](docs/assets/screenshots/android-widgets.png)
+
+- **5 款尺寸自由组合**：`2×2` 进度圆环、`4×1` 极简状态条、`4×2` 圆环全景卡 / 7 日连胜卡 / 好友火花榜，全部零新增依赖原生绘制。
+- **4 种独立外观与即时回执**：在 `设置 → 外观与主题` 一键切换「跟随 App / 深色碳黑 / 浅色纯白 / 半透明深色玻璃」并即时联动桌面，支持好友火花榜**首字隐私脱敏**、一键防重复添加到桌面、手点原生旋转刷新回执（`同步中… → ✓ 已刷新`）与「待人工复核」红框强提醒直达终裁。
+
+### Windows 桌面端 / Web 控制台
 
 <table>
   <tr>
@@ -41,7 +57,7 @@
     <td><img src="docs/assets/screenshots/jobs.png" alt="记录与统计"><br><b>记录与统计</b>：汇总近 30 日成功率与连续成功天数，结果无法确认的任务单独筛出，等你人工复核。</td>
   </tr>
   <tr>
-    <td colspan="2"><img src="docs/assets/screenshots/accounts.png" alt="多账号切换、系统调度与深色主题"><br><b>多账号切换、系统调度与三态主题</b>：左上角秒切各自独立浏览器 Profile 的抖音账号（失效账号醒目标红并停发），支持浅色 / 深色 / 跟随系统无闪烁切换。</td>
+    <td colspan="2"><img src="docs/assets/screenshots/accounts.png" alt="多账号切换、系统调度与深色主题"><br><b>多账号切换、系统调度与三态主题</b>：左上角秒切各自独立浏览器 Profile 的抖音账号（失效账号醒目标红并停发），支持浅色 / 深色 / 跟随系统无闪烁切换、Bark 内联配置、`.zip` 含图完整备份恢复与应用内直连反馈。</td>
   </tr>
 </table>
 
@@ -101,14 +117,17 @@ cd desktop && npm ci && npm run build
 - **系统要求**：Android 8.0+（`minSdk 26`），并保持设备系统 **Android System WebView** 更新至较新版本（内置桌面模式 Chromium `WebView` 离屏执行引擎，无需电脑或 Docker）。
 - **下载安装与使用流程**：
   1. 在 [GitHub Releases](https://github.com/oinzc/flame-contractor/releases) 下载 `FlameContractor-*-android-universal-release.apk`（也可由 CI 构建调试包或在本地编译安装）。
-  2. 打开 App 在「今日」页点 `[扫码/重登]`，使用另一台设备上的抖音扫码登录网页聊天端（遇到风控时直接在页内完成身份验证；已登录状态切换账号时会先提示保留或清理旧号目标后再继续）。
-  3. 切到「好友」页点右上角「手动扫描同步」，在抽屉中按官方火花置顶与唯一 ID 消歧结果勾选要续火的好友导入；在「模板」页维护固定文案、星期轮换 LRU 文案池或原生「比心」表情模板。
-  4. 在「设置」页配置每日同日发送窗口（`00:00–23:55`，不支持跨午夜）与可选 Bark 通知，并按 **后台稳定性体检** 引导完成以下 4 项授权以防国产系统误杀：
-     - 允许通知权限（开启 `daily_summary` 与 `alerts_urgent` 告警通道）
-     - 电池省电策略设为「无限制 / 忽略电池优化」
-     - 允许「精确闹钟（`SCHEDULE_EXACT_ALARM`）」权限
-     - **小米 / MIUI / HyperOS** 设备务必在系统设置中开启 **自启动** 并关闭对应省电限制
-- **零打扰定时执行与安全不变量**：到点由 `AlarmManager` + 30 分钟纯 SQLite `WorkManager` 兜底拉起短时离屏 `dataSync` 前台服务，息屏/桌面状态下静默完成续火并自动释放；发送超时或中断统一收敛为「待人工复核 (`UNKNOWN_REQUIRES_REVIEW`)」，未人工终裁前全路径硬禁止重复发送。
+  2. 打开 App 在「今日」页主状态卡或左上角账号抽屉发起扫码登录网页聊天端（遇到风控时直接在页内完成身份验证；支持多账号独立 Profile 切换）。
+  3. 底部悬浮胶囊导航栏包含「今日 / 好友 / 模板 / 记录」四栏：在「好友」页点右上角「扫描对账」，按官方火花置顶与唯一 ID 消歧结果勾选好友导入；在「模板」页通过全屏编辑器维护固定文案、星期轮换 LRU 文案池、图文或原生「比心」表情模板。
+  4. 点击任意主页面右上角齿轮进入二级「设置」：
+     - **外观与桌面小组件**：支持跟随系统 / 浅色 / 深色碳黑三态主题；内置 **5 款多尺寸桌面小组件中心**（`2×2` 进度圆环、`4×1` 极简状态条、`4×2` 圆环全景 / 7 日连胜 / 好友火花榜），支持 4 种独立外观（含半透明深色玻璃）、好友首字隐私脱敏、防重复一键添加到桌面与手点旋转刷新回执；
+     - **关于与反馈**：内置免魔法国内直连反馈表单（可选附带脱敏环境摘要）与 GitHub 项目源码直达；
+     - **定时、通知与保活**：配置每日同日发送窗口（`00:00–23:55`，不支持跨午夜）与可选 Bark 通知，并在 **后台保活与权限** 中完成以下 4 项授权以防国产系统误杀：
+       - 允许通知权限（开启 `daily_summary` 与 `alerts_urgent` 告警通道）
+       - 电池省电策略设为「无限制 / 忽略电池优化」
+       - 允许「精确闹钟（`SCHEDULE_EXACT_ALARM`）」权限
+       - **小米 / MIUI / HyperOS** 设备务必在系统设置中开启 **自启动** 并关闭对应省电限制
+- **零打扰定时执行与安全不变量**：到点由 `AlarmManager` + 30 分钟纯 SQLite `WorkManager` 兜底拉起短时离屏 `dataSync` 前台服务，息屏 / 桌面状态下静默完成续火并自动释放；发送超时或中断统一收敛为「待人工复核 (`UNKNOWN_REQUIRES_REVIEW`)」，未人工终裁前全路径硬禁止重复发送，并在应用私域沙盒保留 7 天失败 / 待复核现场截图供抽屉内灯箱核对。支持 Android 13+ `<monochrome>` 主题单色图标、桌面长按快捷方式与 5 款多尺寸原生状态小组件，随时一眼查看今日进度与异常提醒。
 
 ### 本地自行构建 Android APK
 
@@ -236,7 +255,7 @@ python -m venv .venv
 - 登录态在同一卷的 `profiles/` 下，是完整浏览器 Profile；换机或重建卷时必须一起拷走。
 - 诊断截图在命名卷 `flame-contractor_artifacts`。
 - `docker compose down` 会保留卷；**不要用 `docker compose down -v`**，那会连数据一起删除。
-- 控制台「系统与调度」页的「导出 JSON 备份」可导出业务数据（不含登录态）；整卷备份请在停掉应用后打包卷目录。
+- 控制台「系统与调度」页与 Android「数据备份与迁移」均支持导出/导入 `.zip` 完整备份包（含去元数据后的图片模板）与纯 `.json` 备份，三端双向无损互迁（均不含登录态与 Bark 密钥）；整卷备份请在停掉应用后打包卷目录。
 
 ## 本地开发
 
@@ -261,7 +280,7 @@ npm test         # node --test 领域纯函数单测
 npm run build    # tsc --noEmit && vite build
 ```
 
-测试：`cd backend && .venv/Scripts/python.exe -m pytest -q`（298 项，无需真实浏览器）。
+测试：`cd backend && .venv/Scripts/python.exe -m pytest -q`（332 项，无需真实浏览器）。
 
 ## 目录结构
 
@@ -270,7 +289,7 @@ backend/    FastAPI + SQLModel + SQLite + Alembic + asyncio 调度 + Playwright
 frontend/   React + TypeScript + Vite 控制台
 desktop/    Tauri v2 Windows 独立窗口桌面壳与 NSIS 打包配置
 android/    Kotlin + Jetpack Compose + Room + 桌面模式 WebView 独立 Android 客户端
-docs/       PRD、技术设计、API 文档、数据库 Schema、Docker 部署
+docs/       PRD、技术设计、API 文档、数据库 Schema、Docker 部署与轻量反馈中转脚本
 ```
 
 ## 常见问题
@@ -282,6 +301,12 @@ docs/       PRD、技术设计、API 文档、数据库 Schema、Docker 部署
 **凌晨没发出去？** 检查发送时刻是否落在账号窗口内，以及 `FLAME_FIXED_TIME_GRACE_MINUTES` 是否给足；`skip` 策略下错过时刻不会补发。
 
 **能不能多台机器同时跑？** 不建议。同一账号的浏览器 Profile 不能被两个进程同时使用。
+
+## 问题反馈与开源协作
+
+- **国内免代理直填反馈**：官方发布的 Android APK 与 Windows 安装包均已内置国内直连反馈入口（Android：`设置 → 关于与反馈`；Web / 桌面端：侧边栏「反馈问题」或「系统与调度」），无需登录 GitHub 即可直接提交 Bug 与建议，系统会自动脱敏环境信息。
+- **GitHub Issues**：如果你有 GitHub 账号，也欢迎直接在 [Issues](https://github.com/oinzc/flame-contractor/issues) 提交复现步骤或参与讨论。
+- **自建反馈中转**：如果你 Fork 了本仓库并希望自定义反馈接收中转，可直接参考 [docs/feedback-relay/README.md](docs/feedback-relay/README.md) 部署零依赖 Cloudflare Worker。
 
 ## 免责声明
 

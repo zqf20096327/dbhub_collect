@@ -1,13 +1,13 @@
 <div align="center">   
-              
+                
 # Silvaxs                 
-                   
+                     
 ### Angehende Fachinformatikerin · Python · SQL · Web · Android     
           
 Ich suche eine **Ausbildung als Fachinformatikerin** ab 2027.   
 
 [![English](https://img.shields.io/badge/English_version-README.md-0A66C2?style=flat-square)](README.en.md)
-[![E-Mail](https://img.shields.io/badge/E--Mail-leilaeltousy%40gmail.com-EA4335?style=flat-square&logo=gmail&logoColor=white)](mailto:leilaeltousy@gmail.com)
+[![E-Mail](https://img.shields.io/badge/E--Mail-nexusovertex%40gmail.com-EA4335?style=flat-square&logo=gmail&logoColor=white)](mailto:nexusovertex@gmail.com)
 [![Portfolio](https://img.shields.io/badge/Portfolio-el--tousy.github.io-8A2BE2?style=flat-square)](https://el-tousy.github.io)
 [![GitLab](https://img.shields.io/badge/GitLab-El--Tousy-FC6D26?style=flat-square&logo=gitlab&logoColor=white)](https://gitlab.com/El-Tousy)
 
@@ -86,6 +86,6 @@ Ich programmiere gern Anwendungen und arbeite mit Daten, zum Beispiel mit SQL, D
 
 Ich freue mich über Nachrichten von Unternehmen, die eine Ausbildung in der Anwendungsentwicklung anbieten.
 
-[![E-Mail](https://img.shields.io/badge/E--Mail-D14836?style=flat&logo=gmail&logoColor=white)](mailto:leilaeltousy@gmail.com)
+[![E-Mail](https://img.shields.io/badge/E--Mail-D14836?style=flat&logo=gmail&logoColor=white)](mailto:nexusovertex@gmail.com)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/El-Tousy)
 [![GitLab](https://img.shields.io/badge/GitLab-FC6D26?style=flat&logo=gitlab&logoColor=white)](https://gitlab.com/El-Tousy)

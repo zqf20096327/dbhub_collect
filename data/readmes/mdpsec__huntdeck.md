@@ -7,7 +7,8 @@ programs from **HackerOne, Bugcrowd, Intigriti and YesWeHack** with your own
 credentials, **private invites included**, keeps their scope and its history
 in a local database, and tells you where the fresh attack surface is. One
 Docker container, no account, no cloud: your private program data never
-leaves your machine.
+leaves your machine (HuntMail, if you use it, runs on your own Cloudflare
+account).
 
 **[See it live: HuntDeck Public at huntdeck.io →](https://huntdeck.io)**
 
@@ -36,11 +37,35 @@ copy adds yours.
   Burp, ZAP and Caido scope files, CSV, Atom feeds, a scope check for
   subfinder output (`… | curl --data-binary @- …/api/v1/match?format=txt`),
   and a REST API with an OpenAPI description.
+- **Your reports and your numbers.** Your own reports on HackerOne, Bugcrowd
+  and Intigriti, read with the logins HuntDeck already has (titles, states,
+  severities, dates and bounties; never write-ups or comments), plus any you
+  add by hand: which need your reply, which have gone quiet, and Analytics:
+  acceptance and duplicate rates, earnings by month, how triage treats the
+  severities you submit, and your times against the ones programs publish.
+- **Email for signups.** With [HuntMail](https://github.com/mdpsec/huntmail)
+  (a catch-all inbox on your own Cloudflare account), each program gets an
+  Email tab: make a fresh address for it in one click, and read its mail with
+  the one-time codes and links ready to copy, newsletters kept out of the
+  way, and senders you're done with blocked. HuntDeck sets HuntMail up for
+  you: a domain on Cloudflare and an API token are all it takes.
 - **Notifications.** Discord, Telegram or webhooks: new invites, launches,
-  new scope, bounty raises, as they happen or as a daily digest.
+  new scope, bounty raises, and on your own reports a bounty, a new state or
+  a question for you, as they happen or as a daily digest.
 - **Polite to platforms.** Per-platform rate limits, `Retry-After`, bounded
   retries, and a removal is only recorded from a complete listing, so a
   failed poll never makes your programs look gone.
+
+<p>
+  <a href="docs/screenshots/reports.png"><img src="docs/screenshots/reports.png" alt="Reports: your reports across the four platforms, with what needs your reply, what has gone quiet and what you earned" width="49%"></a>
+  <a href="docs/screenshots/analytics.png"><img src="docs/screenshots/analytics.png" alt="Analytics: acceptance and duplicate rates, reports and earnings per month, earnings over time" width="49%"></a>
+  <a href="docs/screenshots/email.png"><img src="docs/screenshots/email.png" alt="Email: your HuntMail inbox with each message's program, code or verify link, and a message open beside the list" width="49%"></a>
+  <a href="docs/screenshots/huntmail.png"><img src="docs/screenshots/huntmail.png" alt="The HuntMail page: mail per day and per domain, storage, and the blocks that turn mail away" width="49%"></a>
+</p>
+
+<sub>Reports, Analytics, Email and the HuntMail page, with made-up programs,
+reports and mail. They're your own data, so HuntDeck Public doesn't show
+them.</sub>
 
 ## Quick start
 
@@ -129,6 +154,9 @@ scope tracker, on this machine with Docker Compose, then check it works.
 | YesWeHack | Email, password and authenticator secret (`YWH_EMAIL`, `YWH_PASSWORD`, `YWH_TOTP_SECRET`), or `YWH_PUBLIC_ONLY=true` | The API the website uses |
 | Anything else | A script of yours that writes a JSON document | [Custom sources](docs/custom-sources.md) |
 
+Your own reports (Reports, Analytics) come with the HackerOne token, the
+Bugcrowd login and the Intigriti website login; YesWeHack's aren't read yet.
+
 Programs that aren't on any platform can be added by hand (**Add program** on
 Programs). Where HuntDeck reads a platform's website rather than an official
 API, that's unofficial: it can break when the site changes, and whether it
@@ -179,8 +207,10 @@ To report a vulnerability, see [SECURITY.md](SECURITY.md).
 
 ## Privacy
 
-- No telemetry. HuntDeck talks only to the platforms you configure and the
-  notification channels you add, plus, once, a new install's download of the
+- No telemetry. HuntDeck talks only to the platforms you configure, the
+  notification channels you add and your HuntMail Worker if you set one up
+  (plus Cloudflare's API, `api.cloudflare.com`, only while HuntDeck sets
+  HuntMail up or updates it), and, once, a new install's download of the
   public starter seed from GitHub (`HUNTDECK_SEED_URL=off` skips it; the
   request carries nothing of yours).
 - Credentials live in `.env`, or encrypted in the database when entered in
@@ -188,7 +218,8 @@ To report a vulnerability, see [SECURITY.md](SECURITY.md).
   never logged or shown again.
 - Private program scope is confidential under each platform's terms. Don't
   share your database; a seed (`huntdeck seed export`) holds only public
-  programs that were never private, without your account's data.
+  programs that were never private, without your account's data. Your own
+  reports are never in a seed.
 
 ## Development
 

@@ -1,0 +1,261 @@
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
+
+<br />
+<p align="center">
+  <h1 align="center">Go-MexPost 🇲🇽🚀</h1>
+
+  <!-- <div align="center">
+    <img align="center" src="assets/mex-post.png" alt="MexPost Logo">
+  </div> -->
+
+  <p align="center">
+    Microservicio ultrarrápido para consulta de colonias, códigos postales y coordenadas de México.
+    <br />
+    <a href="https://github.com/open-mexico/go-mexpost/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/open-mexico/go-mexpost/issues">Request Feature</a>
+  </p>
+</p>
+
+---
+
+## 🔑 Abstract (English)
+
+**Go-MexPost** is a blazing-fast, open-source microservice built in Golang, designed to simplify access to postal and geographic data in Mexico. Formerly built on Node.js, this project was completely rewritten from scratch using a strict **Hexagonal Architecture** and an embedded SQLite database to achieve extreme performance, high concurrency, and minimal memory footprint.
+
+The data generation process has been decoupled into an external ETL pipeline, making this API fully agnostic and effortlessly maintainable. Users can search by postal code, partial names, or perform reverse geocoding to find neighborhoods based on geographic coordinates using GeoJSON polygons.
+
+## 📍 Descripción
+
+**Go-MexPost** es la evolución de nuestro proyecto original. Hemos reescrito el motor por completo utilizando **Golang** para ofrecer un microservicio ultrarrápido, capaz de manejar miles de peticiones por segundo consumiendo muy poca memoria RAM.
+
+Para facilitar su mantenimiento, hemos separado la construcción de la base de datos a un [repositorio externo (ETL)](https://github.com/open-mexico/sepomex-db-generator). Esto permite que Go-MexPost funcione mediante una base de datos embebida (SQLite), lo que significa que puedes desplegar este microservicio en cualquier servidor en segundos, sin necesidad de configurar gestores de bases de datos complejos.
+
+## 🎯 Objetivo
+
+Proveer una API REST robusta, eficiente y de nivel empresarial para desarrolladores, investigadores y empresas que requieran consultar y gestionar datos de colonias en México de forma instantánea. Todo esto respaldado por un diseño modular, pruebas unitarias exhaustivas y código limpio.
+
+## 🔍 Características
+
+- ⚡ **Rendimiento Extremo:** Gracias a Go y Gin-Gonic, las respuestas se sirven en milisegundos.
+- 📦 **Base de Datos Embebida (SQLite):** No requiere instalar MySQL ni PostgreSQL. Descarga la base de datos lista para usar y arranca el servidor.
+- 🔎 **Búsquedas Flexibles y Optimizadas:**
+  - Por Código Postal exacto o parcial (ej. `067%`).
+  - Por Nombre de Colonia exacto o parcial (ignorando mayúsculas y minúsculas).
+  - Filtros combinados por Estado y Municipio (`municipio_id` o `municipio_uid`).
+- 🆔 **Lookup por ID único de colonia (`codigo_id`):** Endpoint directo para resolver una colonia exacta sin ambigüedades.
+- 📌 **Colonias Cercanas:** Obtén colonias vecinas ordenadas de la más cercana a la más lejana usando `codigo_id` o `cp`.
+- 📄 **Paginación completa:** Todos los resultados de `/colonias` incluyen `pagina`, `total_paginas`, `pagina_anterior` y `pagina_siguiente` para navegar grandes conjuntos de datos.
+- 🛡️ **Rate Limiting por IP:** Protección integrada contra abuso mediante token bucket. Configurable con variables de entorno (`RATE_LIMIT`, `RATE_BURST`) sin recompilar.
+- 🗺️ **Soporte Geoespacial (GeoJSON):** Capacidad de descargar una versión espacial de la base de datos que incluye los polígonos de cada código postal.
+- 📍 **Geocodificación Inversa:** Búsqueda de colonias mediante coordenadas (Point-in-Polygon) y obtención de centroides geográficos.
+- 🏗️ **Arquitectura Hexagonal:** Código desacoplado, testeable y preparado para escalar.
+
+## 🚀 Instalación y Uso
+
+Configurar el proyecto en tu máquina local es increíblemente sencillo gracias a nuestro script de inicialización integrado.
+
+---
+
+### ⚡ Opción Rápida: Probar sin programar (Releases)
+
+Si no deseas instalar Go o compilar el código por tu cuenta, hemos preparado versiones precompiladas listas para usarse. ¡No requieren configuración!
+
+- **Paso 1:** Ve a nuestra página de [Releases](https://github.com/open-mexico/go-mexpost/releases).
+- **Paso 2:** Descarga el archivo `.zip` correspondiente a tu sistema operativo (`windows`, `mac`, o `linux`).
+- **Paso 3:** Descomprime el archivo. Asegúrate de que tanto el ejecutable como el archivo de la base de datos (`mapa.db`) estén en la misma carpeta.
+- **Paso 4:** Inicia el servidor:
+
+
+  - **🪟 Windows:** Haz doble clic sobre el archivo `go-mexpost-api.exe`.
+  - **🐧 Linux / 🍏 Mac:** Abre una terminal en esa carpeta, otorga permisos de ejecución y arráncalo con estos comandos:
+  ```bash
+  chmod +x go-mexpost-api
+  ./go-mexpost-api
+  ```
+
+---
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/open-mexico/go-mexpost.git
+cd go-mexpost
+```
+
+### 2. Instalar dependencias
+
+```bash
+go mod tidy
+```
+
+### 3. Descargar la Base de Datos
+
+Go-MexPost cuenta con un comando especial para descargar la base de datos oficial (generada en nuestro repo ETL) directamente a tu proyecto.
+
+Opción A (Ligera): Solo datos postales y de texto (ideal para formularios).
+
+```bash
+go run ./cmd/setup/main.go
+```
+
+Opción B (Espacial) - **Recomendada**: Datos postales + Polígonos GeoJSON (ideal para mapas).
+
+```bash
+go run ./cmd/setup/main.go -geo=true
+```
+
+### 4. Iniciar el Servidor
+
+```bash
+go run ./cmd/api/main.go
+```
+
+La API estará corriendo en http://localhost:8080.
+
+Ejemplos rápidos:
+
+```bash
+# Búsqueda tradicional
+curl "http://localhost:8080/colonias?cp=067&incluir_municipio=true"
+
+# Búsqueda directa por ID único de colonia
+curl "http://localhost:8080/colonias/id/09-015-06700-ROMA%20NORTE"
+
+# Colonias cercanas por ID único
+curl "http://localhost:8080/colonias/cercanas?codigo_id=09-015-06700-ROMA%20NORTE&limit=10"
+```
+
+### 5. Variables de entorno (opcionales)
+
+| Variable               | Default | Descripción                                                                                   |
+| ---------------------- | ------- | --------------------------------------------------------------------------------------------- |
+| `PORT`                 | `8080`  | Puerto en el que escucha el servidor                                                          |
+| `RATE_LIMIT`           | `10`    | Solicitudes por segundo permitidas por IP                                                     |
+| `RATE_BURST`           | `30`    | Ráfaga máxima instantánea por IP                                                              |
+| `CORS_ALLOWED_ORIGINS` | `*`     | Orígenes permitidos (CORS), separados por coma. Ejemplo: `https://midominio.com,http://localhost:3000` |
+
+```bash
+# Ejemplo con configuración personalizada
+PORT=3000 RATE_LIMIT=5 RATE_BURST=15 go run ./cmd/api/main.go
+```
+
+---
+
+### 🐳 Opción C: Despliegue en Producción (Docker)
+
+Si deseas usar Go-MexPost en producción sin configurar Go, puedes usar nuestras imágenes Docker públicas. La base de datos viene embebida y optimizada.
+
+**1. Versión Ligera (Solo datos, recomendada para formularios):**
+```bash
+docker pull macarthuror/go-mexpost:lite
+docker run -d -p 8080:8080 --name go-mexpost-api macarthuror/go-mexpost:lite
+```
+
+**2. Versión Espacial (Incluye polígonos GeoJSON para mapas):**
+```bash
+docker pull macarthuror/go-mexpost:geo
+docker run -d -p 8080:8080 --name go-mexpost-api macarthuror/go-mexpost:geo
+```
+
+*(Para desarrolladores: Puedes compilar estas imágenes tú mismo localmente usando `make docker-lite` o `make docker-geo`).*
+
+🛠️ Herramientas y Tecnologías
+`Golang` (1.26+): Lenguaje principal.
+
+Gin-Gonic: Framework web HTTP de alto rendimiento.
+
+SQLite (modernc.org): Driver de base de datos embebida 100% en Go (CGO-free).
+
+Testify: Herramientas para pruebas unitarias (Mocks y Asserts).
+
+golang.org/x/time/rate: Token bucket para rate limiting por IP.
+
+## 📊 Fuente de Datos
+
+La información es extraída, limpiada y optimizada desde las fuentes oficiales del Servicio Postal Mexicano (SEPOMEX/Correos de México) y cruzada con límites espaciales de Open Mexico GeoJSON.
+
+## 🔑 Palabras Clave
+
+- Golang
+- Microservicio
+- Códigos Postales México
+- SEPOMEX API
+- GeoJSON México
+- Georreferenciación
+- SQLite
+- Arquitectura Hexagonal
+- API REST México
+- Open Source
+
+## 🤖 Guía para IA (LLM Agents)
+
+Si vas a usar agentes LLM para contribuir código en este repositorio:
+
+- Revisa la guía principal del repositorio: **AGENTS.md**
+- Revisa la guía en documentación: **docs/agentes-llm.md**
+- Si el agente solo consumirá la API, usa también: **docs/llm-endpoints.md**
+
+### Gate mínimo de calidad (obligatorio)
+
+```bash
+make fmt
+make build
+make test
+make lint
+make verify
+```
+
+> Todo cambio que altere comportamiento observable debe reflejarse en `docs` y, de ser necesario, en este `README`.
+
+## 🤝 Contribuir
+
+¡Las contribuciones son lo que hace a la comunidad de código abierto un lugar increíble! Si tienes una sugerencia para mejorar esto, por favor haz un fork del repositorio y crea un pull request.
+
+Haz un Fork del proyecto
+
+Crea tu rama de característica (git checkout -b feature/CaracteristicaIncreible)
+
+Haz commit de tus cambios usando preferentemente **[Gitmoji](https://gitmoji.dev)** para los mensajes de commit:
+
+```bash
+git commit -m '✨ Añadir CaracteristicaIncreible'
+```
+
+Haz Push a la rama (git push origin feature/CaracteristicaIncreible)
+
+Abre un Pull Request
+
+> 💡 Usamos [Gitmoji](https://gitmoji.dev) como convención para los mensajes de commit. Agrega el emoji correspondiente al tipo de cambio (✨ nueva función, 🐛 bug fix, 📝 documentación, ♻️ refactor, etc.).
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia BSD-3 - mira el archivo LICENSE para más detalles.
+
+## 🤗 Expresiones de Gratitud
+
+Comparte este proyecto con otros desarrolladores 🗣📢
+
+Invítame una cerveza 🍺 o un café ☕
+
+Da una estrella ⭐ al repositorio si te ha sido útil.
+
+Made with ❤️ by macarthuror - @MacarthurOr - arturo.ortegaro@gmail.com
+
+[contributors-shield]: https://img.shields.io/github/contributors/open-mexico/go-mexpost.svg?style=flat-square
+[contributors-url]: https://github.com/open-mexico/go-mexpost/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/open-mexico/go-mexpost.svg?style=flat-square
+[forks-url]: https://github.com/open-mexico/go-mexpost/network/members
+[stars-shield]: https://img.shields.io/github/stars/open-mexico/go-mexpost.svg?style=flat-square
+[stars-url]: https://github.com/open-mexico/go-mexpost/stargazers
+[issues-shield]: https://img.shields.io/github/issues/open-mexico/go-mexpost.svg?style=flat-square
+[issues-url]: https://github.com/open-mexico/go-mexpost/issues
+[license-shield]: https://img.shields.io/github/license/open-mexico/go-mexpost.svg?style=flat-square
+[license-url]: https://github.com/open-mexico/go-mexpost/blob/main/LICENSE
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/macarthuror/

@@ -30,7 +30,7 @@
 
 **中文** | [**English**](README_EN.md)
 
-当前预发布版本 **0.9.4-beta.1** 扩展了 Python 和 Node.js 的批量向量接口，并修复检索预算、存储约束和迁移重试。安装命令和升级步骤见[双语发布说明](docs/changes/0.9.4-beta.1.md)。
+当前预发布版本 **0.9.4-beta.2** 新增单条与批量 ID 检索，支持独立配置 QuIVer 精排预算，并改进图查询、WAL 恢复与内存准入。安装命令和升级步骤见[双语发布说明](docs/changes/0.9.4-beta.2.md)。
 
 SDK 的支持范围见 [SDK 正式接口清单](docs/sdk-contract.md)，历史磁盘格式通过[外部迁移工具](docs/migration.md)升级。
 
@@ -161,13 +161,13 @@ flowchart TD
 推荐使用超快的 [uv](https://github.com/astral-sh/uv) （只需毫秒级）：
 
 ```bash
-uv pip install "triviumdb==0.9.4b1"
+uv pip install "triviumdb==0.9.4b2"
 ```
 
 或者使用传统 pip：
 
 ```bash
-pip install "triviumdb==0.9.4b1"
+pip install "triviumdb==0.9.4b2"
 ```
 
 ### 🌐 Node.js / 前端用户
@@ -175,9 +175,9 @@ pip install "triviumdb==0.9.4b1"
 跨平台包已自带 `*.node` 预编译拓展，并含有完整的 TypeScript 补全：
 
 ```bash
-npm install triviumdb@0.9.4-beta.1
+npm install triviumdb@0.9.4-beta.2
 # 或者
-pnpm add triviumdb@0.9.4-beta.1
+pnpm add triviumdb@0.9.4-beta.2
 ```
 
 ### 🦀 Rust 原生用户
@@ -185,10 +185,10 @@ pnpm add triviumdb@0.9.4-beta.1
 直接把我们当成 Library 依赖：
 
 ```bash
-cargo add triviumdb@0.9.4-beta.1
+cargo add triviumdb@0.9.4-beta.2
 ```
 
-本页示例使用 `0.9.4-beta.1`（PyPI 为 `0.9.4b1`，npm 通道为 `beta`）。0.9.3 当前格式数据库可直接打开。若返回 `TDB_MIGRATION_REQUIRED`，请按[外部迁移指南](docs/migration.md)创建并核验目标库。
+本页示例使用 `0.9.4-beta.2`（PyPI 为 `0.9.4b2`，npm 通道为 `beta`）。0.9.3 当前格式数据库可直接打开。若返回 `TDB_MIGRATION_REQUIRED`，请按[外部迁移指南](docs/migration.md)创建并核验目标库。
 
 需要为嵌入式应用提供管理前端时，按[Console 宿主接入](docs/embedded-console.md)复用同一实例和文件锁；现有 HTML 仍需前端传输适配，资源包会标明这一条件及 CDN 依赖。
 

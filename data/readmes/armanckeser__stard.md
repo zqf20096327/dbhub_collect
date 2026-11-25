@@ -62,7 +62,21 @@ Three ways to make one:
 - **With your agent.** `npx skills add armanckeser/stard`, then ask Claude Code or Codex to "make my Stard profile". The agent asks which repos are your favorites and why, and writes the README with you. The **Profile** screen has a copy-paste prompt for agents without skills.
 - **On your own machine.** `npx github-stars-organizer` runs the full app on localhost with your [GitHub CLI](https://cli.github.com/) login (`gh auth login`). Ratings and notes you already keep there become your reviews.
 
-## Getting started
+## Your 2026 in stars
+
+<p align="center">
+  <a href="https://stard.armanckeser.com/wrapped/armanckeser"><img src="https://stard.armanckeser.com/api/card/wrapped.svg?user=armanckeser" alt="armanckeser's 2026 in GitHub stars: repos starred, stars by month, top languages, earliest find and how many are still alive" width="880" /></a>
+</p>
+
+Every year-in-review sums up commits. This one sums up what you starred. Open `https://stard.armanckeser.com/wrapped/<username>`: no sign-in, public stars only.
+
+- How many repos you starred this year, and the month you starred most.
+- Your top three languages.
+- Your earliest find: the most-starred repo you starred within 30 days of its creation.
+- How many of the year's stars are still alive: pushed to in the last 90 days and not archived.
+
+The page has a card for your README, buttons to post it on X or Bluesky, and a link to sort those stars into Lists. Stars are read once a day and counted by UTC month; a year past 1,000 stars shows as "1,000+".
+
 
 ### Option A: npx (recommended)
 

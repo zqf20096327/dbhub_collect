@@ -12,7 +12,7 @@
 
 **The open-source Counter-REA Blue Defense MCP & CLI that protects software releases against AI reverse-engineering agents (`morluto/rea`, autonomous decompilers, and LLM recon pipelines) — verified across 14 showcase benchmark targets.**
 
-[![npm version](https://img.shields.io/badge/npm-bla--agents_v3.5.9-2563eb?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/package/bla-agents)
+[![npm version](https://img.shields.io/badge/npm-bla--agents_v3.6.0-2563eb?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/package/bla-agents)
 [![GitHub Trending](https://img.shields.io/badge/GitHub_Trending-%235_Daily-7c3aed?style=for-the-badge&logo=github&logoColor=white)](https://trendshift.io/repositories/323569)
 [![MCP Server](https://img.shields.io/badge/MCP-31_Defense_Tools-0ea5e9?style=for-the-badge)](docs/cli-and-mcp.md)
 [![Formats](https://img.shields.io/badge/Formats-26_Artifacts-0284c7?style=for-the-badge)](#format-coverage)
@@ -105,7 +105,7 @@ import { defineConfig } from "vite";
 import { blaVitePlugin } from "bla-agents/bundler";
 
 export default defineConfig({
-  plugins: [blaVitePlugin({ intensity: "bankrupt", enableHoneySourceMaps: true })],
+  plugins: [blaVitePlugin({ intensity: "bankrupt", honeySourceMap: true })],
 });
 ```
 
@@ -331,6 +331,11 @@ node scripts/verify-website.mjs
 
 - 🎯 **[Public BLA CrackMe Arena (`challenge/v6` – `v9`)](challenge/v6/README.md)**
 - 💬 **[LINUX DO (`linux.do`)](https://linux.do/)** — 新的理想型社区
+
+## 🧩 More Projects by [@qybaihe](https://github.com/qybaihe)
+
+- 🤖 **[BotArk](https://github.com/qybaihe/botark)** — Native macOS, Windows, iOS & Android workspace unifying **Grok Bot**, **Google Antigravity**, **ChatGPT Dot**, **Meta Muse**, **Hark**, **Cue**, and **Hermes** with multi-agent collaboration rooms, per-account proxy isolation, and approval-gated local MCP.
+- 🧠 **[mu (μ)](https://github.com/qybaihe/mu)** — Coding agent harness with a tiny judgment kernel (`+9.5pp` on Terminal-Bench 2.1).
 
 ## 📄 License
 

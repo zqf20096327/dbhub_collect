@@ -9,10 +9,11 @@ become threads that the whole team can see: agent conversations, worktree
 diffs, approvals and questions, all in one place. Teammates watch a run live,
 comment on any line of the diff, answer the agent's questions, or take over.
 
-Threadbase is not another agent runtime. It drives the CLIs you already use —
-Codex, Claude Code, opencode, pi — through the
-[Agent Client Protocol](https://agentclientprotocol.com), and adds the layer
-they don't have: identity, presence, review, and a shared, ordered event log.
+Threadbase is not another agent runtime. It drives the CLIs you already use:
+Codex and Claude Code natively (their own session stores and protocols), and
+opencode and pi over the [Agent Client Protocol](https://agentclientprotocol.com).
+It adds the layer they don't have: identity, presence, review, session import,
+and a shared, ordered event log.
 
 <p align="center">
   <img src="docs/assets/desktop-changes.png" width="920" alt="A Threadbase thread on the desktop: the agent's turn streams on the left while the changes panel reviews the diff it produced">
@@ -79,16 +80,22 @@ threadbase doctor   # node, git, database, and each agent adapter
 
 Agent adapters are ordinary commands on `PATH`:
 
-| Agent | Adapter command | Install |
+| Agent | Command | Install |
 | --- | --- | --- |
-| Codex | `codex-acp` | `npm i -g @agentclientprotocol/codex-acp` |
-| Claude Code | `claude-agent-acp` | `npm i -g @agentclientprotocol/claude-agent-acp` |
+| Codex | `codex` | install the Codex CLI (`npm i -g @openai/codex` or its installer) |
+| Claude Code | `claude` | install Claude Code with its official installer |
 | opencode | `opencode acp` | install `opencode` itself |
 | pi | `pi-acp` | `npm i -g pi-acp` |
 
-Missing adapters fall back to `npx` (slower to start); `threadbase doctor`
-tells you when that happens. Everyone on the instance shares the agent
-accounts signed in on the host machine.
+Codex and Claude Code run through their own protocols, so their sessions are
+shared with the CLIs: a thread can continue a conversation started in the Codex
+TUI or `claude`, and creating a thread lists existing sessions to import.
+Threadbase imports the history once and keeps driving the same session
+afterwards; rewind/fork stay with the agent for those threads.
+
+Only `pi-acp` falls back to `npx` (slower to start); `threadbase doctor` tells
+you when that happens. Everyone on the instance shares the agent accounts
+signed in on the host machine.
 
 ## Deployment: Tailscale is the front door
 

@@ -8,7 +8,7 @@ Configure the host, port, database and user and store a nonempty password in sec
 
 ## Runtime and operation requirements
 
-Connect **OceanBase** datasets and run parameterized workflow writes. This repository contains one installable OceanBase extension, version **1.3.15**, with separate Linux AMD64 and ARM64 archives. No other database can be selected or installed from this package.
+Connect **OceanBase** datasets and run parameterized workflow writes. This repository contains one installable OceanBase extension, version **1.3.16**, with separate Linux AMD64 and ARM64 archives. No other database can be selected or installed from this package.
 
 ## Set up a OceanBase connection
 
@@ -45,7 +45,7 @@ The visible name is OceanBase. The legacy extension ID `flowsteward.data-connect
 
 ## Technical implementation and packaging
 
-Google MCP Toolbox is implementation tooling, pinned to tag `v1.17.0`, commit `45ed205cc8682ed066c82e0b65bcd0e8fc3becce`. Its fixed native build registers only this repository's OceanBase interfaces. Installation and runtime download no drivers. Native binaries are rebuilt with Go 1.27.4 and the reviewed module baseline; toolbox-provenance.json records exact patches, dependencies and binary digests.
+Google MCP Toolbox is implementation tooling, pinned to tag `v1.18.0`, commit `24762d91babd43d91afc3daeeece1cb446266c54`. Its fixed native build registers only this repository's OceanBase interfaces. Installation and runtime download no drivers. Native binaries are rebuilt with Go 1.27.4 and the reviewed module baseline; toolbox-provenance.json records exact patches, dependencies and binary digests.
 
 To package the existing verified binaries:
 
@@ -67,8 +67,8 @@ Pushes to `main` and pull requests run the shared extension build workflow. The 
 After the versioned release commit is on `main`, publish by pushing its version tag:
 
 ```sh
-git tag v1.3.15
-git push origin v1.3.15
+git tag v1.3.16
+git push origin v1.3.16
 ```
 
 The release workflow runs the shared checks, builds the target archives and publishes the GitHub release and checksums. Do not move an existing tag. To rerun a release for an existing tag, dispatch the same workflow:

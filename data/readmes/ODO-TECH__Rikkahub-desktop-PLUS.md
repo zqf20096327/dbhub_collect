@@ -1,18 +1,18 @@
-> **0.2.0 独立测试版**：工作区默认 Agent，可在同一会话切换纯对话；对话标签固定纯对话；已接入轻量内核。运行方式、架构与限制见 [ALPHA.md](ALPHA.md)。下文未更新的性能数字和平台说明属于原项目历史，不能视为此 Alpha 的实测结果。
+> **0.2.1 版本**：工作区默认 Agent，可在同一会话切换纯对话；对话标签固定纯对话；已接入轻量内核。运行方式、架构与限制见 [ALPHA.md](ALPHA.md)。下文未更新的性能数字和平台说明属于原项目历史，不能视为此 Alpha 的实测结果。
 
 <div align="center">
   <img src="docs/icon.png" alt="RikkaHub Desktop PLUS" width="96" />
 
   <h1>RikkaHub Desktop PLUS</h1>
 
-  <p>Windows、Linux 与 Docker 自托管的 LLM 桌面客户端 · 多供应商 · 本地数据优先</p>
+  <p>Windows 桌面客户端、Linux x64 服务端与 Docker 自托管 · 多供应商 · 本地数据优先</p>
 
   <p>
-    <a href="LICENSE"><img alt="Version" src="https://img.shields.io/badge/version-0.2.0-2f81f7"></a>
+    <a href="LICENSE"><img alt="Version" src="https://img.shields.io/badge/version-0.2.1-2f81f7"></a>
     <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-AGPL--3.0%20%7C%20Commercial-2f81f7"></a>
     <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20Docker-3fb950">
     <img alt="Runtime" src="https://img.shields.io/badge/runtime-Bun%201.4.2-f472b6">
-    <img alt="Shell" src="https://img.shields.io/badge/shell-WinForms%20%2B%20WebView2-0078d4">
+    <img alt="Shell" src="https://img.shields.io/badge/shell-Tauri%20%2B%20Rust-24c8db">
     <img alt="Storage" src="https://img.shields.io/badge/storage-SQLite%20%2B%20FTS5%20%2B%20vector-ffa657">
   </p>
 </div>
@@ -21,12 +21,12 @@
 
 **RikkaHub Desktop PLUS** 是 [RikkaHub Desktop](https://github.com/yuh-G/rikkahub-desktop) 的社区增强分支，由 [@ODO-TECH](https://github.com/ODO-TECH) 维护。上游已经提供了完整的客户端基础，包括多供应商接入、助手与提示词体系、MCP、联网搜索以及安卓端的数据格式。本分支在这个基础上主要做了四件事：
 
-- **Windows 桌面形态。** 新增 WinForms + 系统 Edge WebView2 的原生壳，不额外打包浏览器内核，冷启动从 6.3 秒降到 1.9 秒。
+- **Windows 桌面形态。** 新增 Tauri + Rust 原生壳，Windows 复用系统 Edge WebView2，不额外打包浏览器内核，冷启动从 6.3 秒降到 1.9 秒。
 - **本地数据。** 会话、消息、工作区与记忆迁入 SQLite（含 FTS5 全文索引），备份粒度细化到 12 个可选项，统一作用于本地、WebDAV、S3 与 Kelivo。
 - **工作区与工具链。** 会话可以绑定真实文件夹或 SSH 远程目录，模型获得读写文件、shell、grep 等工具；新增 Skills、stdio MCP、并行子智能体和内置终端。
 - **部署。** 容器运行时使用 Debian slim，自带 bash、zip/unzip 与字体注册；加入面向飞牛 OS 等 Linux NAS 的编排，并提供 Windows 本地与容器两种系统级写入边界。
 
-本目录版本为 0.2.0。原项目 0.1.4 的历史说明：从 0.0.2 算起，累计变更 393 个文件、新增约 5.6 万行。下面的功能清单按模块整理，构建与部署细节在后面的章节和 `docs/` 里。
+本目录版本为 0.2.1。原项目 0.1.4 的历史说明：从 0.0.2 算起，累计变更 393 个文件、新增约 5.6 万行。下面的功能清单按模块整理，构建与部署细节在后面的章节和 `docs/` 里。
 
 Windows 便携版在本仓库的 [Releases](https://github.com/ODO-TECH/Rikkahub-desktop-PLUS/releases) 提供，应用内的更新检查也指向本仓库。项目名里的 PLUS 只代表本分支的增量，不属于上游品牌；数据目录、环境变量前缀与技术标识符与上游保持一致，可以和上游版本共用同一份 `pc-data/`。
 
@@ -165,16 +165,16 @@ Web 暴露面的处理：默认只监听 `127.0.0.1` 和 `::1`（双栈成组绑
 
 原因是 Bun 在 Windows 上首次调用 `Bun.spawn` / `spawnSync` 会同步阻塞约 3.1 秒，而连接不可用的回环端口需要 0.6 到 2 秒才失败。同一条链路上也量出了不需要再优化的部分：前端 JS 体积、`loadState()`（17 ms）、WebView2 初始化（约 0.6 秒）都不是瓶颈。细节和「不要优化这些」的清单写在 [docs/BUILD.md](docs/BUILD.md)。
 
-桌面壳还负责这些事：隐藏拉起后端、启动屏、托盘常驻或直接退出、用 Job Object 防止孤儿子进程、`rikkahub://restart` 协议自重启，以及向页面注入 `window.__RIKKAHUB_SHELL__`。壳用系统自带的 `csc.exe` 单文件编译，不需要 Visual Studio。上游的 Tauri 壳保留着（Linux 打包和 NSIS 安装包依赖它），两种壳可以共存。
+桌面壳统一为 Tauri + Rust：隐藏拉起后端、启动屏、托盘常驻或直接退出、用 Job Object 防止孤儿子进程、单实例与窗口状态记忆。便携包用 exe 同级的 `shell.ini` 指定数据目录与最小化行为。原 C# WebView2 薄壳已退役，不再保留源码或构建分支。
 
 ## 平台支持
 
 | 平台 / 形态 | 状态 | 说明 |
 | --- | --- | --- |
-| Windows 10 / 11 x64 便携版 | 主要目标，Release 提供成品 | `RikkaHub.exe` 加内嵌单文件后端，解压即用，`pc-data/` 就在旁边 |
+| Windows 10 / 11 x64 便携版 | 主要目标，Release 提供成品 | `RikkaHub.exe`（Tauri）加 `rikkahub-pc.exe` 后端，解压即用，`shell.ini` 默认落 `alpha-data/` |
 | Docker（amd64 / arm64） | 支持 | `debian:bookworm-slim` 运行时，自带 bash、zip/unzip 和 fontconfig，非 root 加只读根，compose 面向飞牛 OS 等 Linux NAS |
-| Linux x64 | 构建链完整 | CI 产出 `Rikkahub_<ver>_linux_x64.tar.gz`，多架构镜像由 CI 构建并签名 |
-| Windows Tauri NSIS 安装包 | 保留 | 需要 MSVC 和 Rust 工具链 |
+| Linux x64 | 提供独立 tar.gz | `Rikkahub_<ver>_linux_x64.tar.gz` 内含 Bun 服务端和前端静态资源；启动后通过浏览器访问，不提供 AppImage 或 Linux 桌面壳 |
+| Windows Tauri NSIS 安装包 | 默认构建产物 | 需要 MSVC 和 Rust 工具链；产物恢复应用内自动更新 |
 | macOS | 不发布 | 没有设备可以构建与签名，上游的 mac 配置原样保留 |
 | Android | 使用上游 RikkaHub | 本项目专注桌面与 NAS，数据与安卓端双向兼容 |
 
@@ -219,13 +219,12 @@ cd web-ui && bun install && bun run dev
 ## 构建
 
 ```bash
-cd pc-server     && bun run compile              # → dist/rikkahub-pc.exe（单文件，约 117 MB）
-cd pc-server     && bun run compile:linux        # → dist/rikkahub-pc
-cd web-ui        && bun run build                # → web-ui/build/client
-cd desktop-shell && fetch-sdk.cmd && build.cmd   # → desktop-shell/dist/RikkaHub.exe
+powershell -ExecutionPolicy Bypass -File scripts/build-alpha.ps1   # dist + Tauri 壳 + NSIS 一次出齐
+bash scripts/build-linux.sh                    # 在 Linux x86_64 中生成 tar.gz
+cd web-ui        && bun run build                # 仅重建前端 → web-ui/build/client
 ```
 
-前端改动必须先 `bun run build`，17455 上的界面才会更新。版本号只有一个入口：`cd pc-server && bun run version:bump X.Y.Z`，它会同步 `updates/index.ts`、`tauri.conf.json`、`Cargo.toml`、`Cargo.lock` 和关于页，CI 里的版本一致性检查会拦住手改。
+前端改动必须先 `bun run build`，17455 上的界面才会更新。版本号只有一个入口：`cd pc-server && bun run version:bump X.Y.Z`，它会同步 `updates/index.ts`、`tauri.conf.json`、`Cargo.toml`、`Cargo.lock`、关于页与 `alpha-manifest.json`，CI 里的版本一致性检查会拦住手改。
 
 Tauri NSIS 流程、内嵌 bash bundle 的生成、便携版目录布局和打包注意事项（例如 `.cmd` 必须是 CRLF + ASCII）见 [docs/BUILD.md](docs/BUILD.md)。
 
@@ -250,7 +249,7 @@ docker run -d --name rikkahub-plus --restart unless-stopped \
   -p 11451:11451 \
   -e RIKKAHUB_PASSWORD='换成你的密码' \
   -v "$PWD/pc-data:/app/pc-data" \
-  rikkahub-desktop-plus:0.2.0
+  rikkahub-desktop-plus:0.2.1
 ```
 
 只有 `/app/pc-data` 必须挂载。不要把宿主目录挂到 `/app` 或 `/app/web-ui`，那会覆盖镜像里的程序文件。要交给 agent 使用的 NAS 目录，通过挂载表划边界：
@@ -349,6 +348,7 @@ Kelivo 方向是双向的：导入支持 8 类数据，导出遵循 schema v3 �
 | **0.1.5** | 工作区工具面实验契约（默认全关）：`read` 行号/revision/续读、`edit` 版本前置与 dryRun、`read_files` 批量读、重读去重、搜索覆盖率摘要、截断结果落盘续读、MCP 描述截断、`search_tools` 按需发现；受限沙盒支持声明额外可写目录（全局 + 每个 stdio MCP 服务器），重启生效，撤销声明自动还原 |
 | **0.1.6** | 显式任务图：`update_plan` 支持步骤依赖（`depends_on`）、环与未知依赖拒绝、步骤级失败重试预算（1–5 次）与未验证不计完成；任务生命周期：崩溃遗留的运行在启动时收敛为中断态并可显式恢复（不自动续跑），会话级 once / 固定间隔定时任务，跨会话运行审计与脱敏 JSONL 导出；移除桌面伴侣实验 |
 | **0.2.0** | Agent 内核重构：不再挂载 pi Agent，改用与安卓版思路一致的自建轻量内核；页面逻辑大幅整理；实验功能 AgentBot 选项整合实装；DeepSeek 全系 API、油库里 TTS（SDK 需自备）、萌娘百科检索支持；上下文压缩机制优化与问题修复 |
+| **0.2.1** | 为前端与 Tauri 桌面端适配完成类型检查、591 项前端单测和生产构建；Linux x64 仅发布 tar.gz；Docker 镜像完成构建及容器启动验证 |
 
 同批修复里值得一提的：微信「已连接但收不到消息」（入站消息被误判为机器人回声）、点击停止后排队项悬挂导致 IM 串行回复链冻结、导入手机备份重置 PC 专属配置、压缩模型未配置时误兜底到 `gpt-4o-mini`、压缩后上下文用量不降反升，以及 SSH 凭据声称不导出安卓而实际从未剥离（已修复并有测试锁定）。
 
@@ -367,7 +367,7 @@ cd web-ui    && bun run typecheck && bun run test:unit && bunx oxlint app
 | 最近一次全量跑测（2026-10-28） | 后端 2069 通过 / 8 跳过，前端 509 通过，两侧 typecheck 0 错，4 条冒烟全部通过 |
 | 0.0.2 → 0.1.1 变更量 | 393 个文件，+56,167 / −3,891 |
 
-仓库带四条 CI 工作流：`ci.yml` 负责后端 typecheck、单测、冒烟和版本一致性，以及前端 typecheck、单测和构建；`docker-publish.yml` 用 QEMU 构建多架构镜像并推送到 ghcr；`build-linux.yml` 产出 Linux tar.gz 并附加到 Release；`rust-check.yml` 在 Tauri 目录有改动时跑 `cargo check`。测试通过 `bunfig.toml` 预加载夹具，不会写到真实的 `pc-data/`。合入前要求三关全过：typecheck 零错、单测通过、便携版实机冒烟通过。
+仓库带四条 CI 工作流：`ci.yml` 负责后端 typecheck、单测、冒烟和版本一致性，以及前端 typecheck、单测和构建；`docker-publish.yml` 用 QEMU 构建多架构镜像并推送到 ghcr；`build-linux.yml` 只产出 Linux x64 tar.gz 并附加到 Release；`rust-check.yml` 在 Tauri 目录有改动时跑 `cargo check`。测试通过 `bunfig.toml` 预加载夹具，不会写到真实的 `pc-data/`。合入前要求三关全过：typecheck 零错、单测通过、便携版实机冒烟通过。
 
 ## 与上游的关系
 
@@ -422,7 +422,7 @@ Bug 和功能建议请开 Issue，并按仓库内的模板填写环境与复现�
 
 **RikkaHub Desktop PLUS** is a community-enhanced fork of **RikkaHub Desktop**, maintained by [@ODO-TECH](https://github.com/ODO-TECH). The upstream project provides a complete client: multi-provider chat, assistants and prompt tooling, MCP, web search and the Android data format. This fork adds four things on top of it.
 
-- **A native Windows shell.** WinForms on the system Edge WebView2 runtime, with no bundled browser engine. Cold start went from about 6.3 s to about 1.9 s after locating two platform-level defects.
+- **A native Windows shell.** Tauri + Rust, reusing the system Edge WebView2 runtime with no bundled browser engine. Cold start went from about 6.3 s to about 1.9 s after locating two platform-level defects.
 - **Structured local data.** Conversations, messages, workspaces and memory live in SQLite with FTS5, and the backup scope is broken into 12 selectable items that apply uniformly to local, WebDAV, S3 and Kelivo backups.
 - **Workspaces and tooling.** A conversation can be bound to a real folder or an SSH directory. The model gets `read` / `write` / `edit` / `bash` / `grep` / `find` / `ls` behind an approval gate, plus Skills, stdio MCP, parallel subagents and a built-in terminal.
 - **Deployment.** A `debian:bookworm-slim` runtime with bash, zip/unzip and fontconfig, a compose file for Linux NAS (non-root, read-only root, mandatory password), and a Windows low-integrity sandbox tier that needs no elevation.

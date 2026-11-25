@@ -136,7 +136,7 @@ Test-Restore), `journal` (SMTP-Journal), `ftp` (für Scanner), `validator` (E-Re
 > Refresh-Tokens und Webhook-Geheimnisse nach einer Wiederherstellung nicht mehr lesen.
 
 Keinen eigenen Server oder keine eigene IT? Belegt gibt es auf Anfrage gehostet oder über einen IT-Dienstleister
-aus dem [Partnerprogramm](https://speicherstadt.app/partner/).
+aus dem [Partnerprogramm](https://speicherstadt.org/partner/).
 
 ## FAQ
 
@@ -240,7 +240,7 @@ Open-Source-Buchhaltung desselben Projekts.
 
 ## Mehr von uns
 
-Weitere Open-Source-Apps für deinen eigenen Server, etwa für Buchhaltung, Mail, Office-Dokumente und mehr: **[speicherstadt.app](https://speicherstadt.app)**
+Weitere Open-Source-Apps für deinen eigenen Server, etwa für Buchhaltung, Mail, Office-Dokumente und mehr: **[speicherstadt.org](https://speicherstadt.org)**
 
 ## Mitwirken
 
@@ -268,7 +268,7 @@ Sicherheitslücken bitte privat melden, siehe [SECURITY.md](SECURITY.md). Wie du
 
 <sub>Lizenz: <a href="LICENSE">AGPL-3.0</a> · © Tristan Teufel und Mitwirkende<br>
 Wer eine veränderte Fassung von Belegt für andere übers Netz betreibt, muss ihnen den Quellcode anbieten (§ 13 AGPL).<br>
-Für IT-Dienstleister und Hoster: <a href="https://speicherstadt.app/partner/">Partnerprogramm</a>.<br>
+Für IT-Dienstleister und Hoster: <a href="https://speicherstadt.org/partner/">Partnerprogramm</a>.<br>
 Belegt ist keine Steuer- oder Rechtsberatung. Aufbewahrung und Verfahrensdokumentation vor dem Echtbetrieb mit deiner Steuerberatung abgleichen.<br>
 Paperless-ngx ist ein Projekt seiner Entwickler; Belegt steht mit ihm in keiner Verbindung.</sub>
 

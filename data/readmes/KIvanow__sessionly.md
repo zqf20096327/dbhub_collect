@@ -193,7 +193,8 @@ Everything is at [docs.sessionly.dev](https://docs.sessionly.dev), built from
 
 Everything outside `ee/` is Apache-2.0 ([`LICENSE`](LICENSE)): the `sessionly` binary, the server
 and the dashboard. It never needs a license key. `ee/` ([`LICENSE-EE`](LICENSE-EE)) holds the
-Business and Enterprise features. More: [Editions and license](docs-site/editions.md).
+Business and Enterprise features, and what runs Sessionly as a service for many organisations
+(signing up, signing in with Google or GitHub). More: [Editions and license](docs-site/editions.md).
 
 ## Contributing
 

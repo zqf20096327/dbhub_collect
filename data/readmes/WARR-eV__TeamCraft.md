@@ -241,9 +241,10 @@ backups are described under [Enterprise management](#enterprise-management).
   by role – viewers learn why they see no editing buttons.
 - **Desktop app** – a Linux, macOS and Windows client with a local working
   folder:
-    - **Getting started** – a wizard after the first sign-in (working folder,
-      *Get* of your project groups, the daily loop), *Get* of whole
-      assemblies and an import wizard.
+    - **Getting started** – a read-only wizard after the first sign-in that
+      ends on a real assembly of your group with *Check out and open* in
+      front of you (it creates no files and works for every CAD program),
+      *Get* of whole assemblies and an import wizard.
     - ***Files* view** of each project group, with *New item here* on every
       folder; it can start in a favourite folder, e.g. the one with the
       Inventor project file.
