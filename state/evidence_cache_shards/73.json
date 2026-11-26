@@ -1525,15 +1525,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:22:43Z",
+  "collected_at": "2026-11-26T10:14:31Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
-  "stars": 3046,
+  "pushed_at": "2026-11-25",
+  "stars": 3045,
   "tree": {
-   "sha": "469e8f43eba3eed51cae8f0a2e4e3da1362ede54",
-   "etag": "W/\"a698d24a1d7dfb5a90976c1e38fd355cb3315e910eabc8ca25dccd736e95cb26\"",
+   "sha": "8a7d09538f34cb090a3c11a15b0c7812c533adfa",
+   "etag": "W/\"23e6e98e6c60b8af78d14558f631886f3b954b501085dc3380a691bf1eb3f644\"",
    "truncated": false,
-   "path_count": 1493,
+   "path_count": 1495,
    "matched": [
     "go.mod",
     "web/package.json",
@@ -3253,15 +3253,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-24T06:35:21Z",
+  "collected_at": "2026-11-26T10:14:09Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-24",
-  "stars": 3255,
+  "pushed_at": "2026-11-25",
+  "stars": 3257,
   "tree": {
-   "sha": "712652979e7980e812b73f0d57561585f922297e",
-   "etag": "W/\"5cf187aae36684340af083aa9fc8e4f550b3a0131b67b8363caadadee3d65b08\"",
+   "sha": "48cfcf587ef4aae7b951b23e42f339e96f6a9eac",
+   "etag": "W/\"3b07679f8f902045bad092e6e48fc5ce0e199cd61f6a13c8c9980120fae26e16\"",
    "truncated": false,
-   "path_count": 7535,
+   "path_count": 7458,
    "matched": [
     "Cargo.toml",
     "docs/requirements.txt",
@@ -3269,6 +3269,7 @@
     "rust/compression/Cargo.toml",
     "rust/config/Cargo.toml",
     "rust/crypto/Cargo.toml",
+    "rust/file-io/Cargo.toml",
     "rust/http-client/Cargo.toml",
     "rust/in-process/Cargo.toml",
     "rust/json/Cargo.toml",
@@ -3285,8 +3286,10 @@
     "rust/spatial-covering/Cargo.toml",
     "rust/sql-nio/Cargo.toml",
     "rust/standby-rpc/Cargo.toml",
+    "rust/storage-io/Cargo.toml",
     "rust/uuid-generator/Cargo.toml",
     "rust/vector-kernels/Cargo.toml",
+    "rust/wal/Cargo.toml",
     "rust/xml-parser/Cargo.toml",
     ".devcontainer/Dockerfile",
     ".github/workflows/codeql.yml",
@@ -3368,6 +3371,18 @@
     ]
    },
    {
+    "path": "rust/file-io/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "48db1d91711cca0119f3847e4614de2c851fd495",
+    "ecosystem": "cargo",
+    "bytes": 493,
+    "names": [
+     "tokio",
+     "cxx",
+     "libc"
+    ]
+   },
+   {
     "path": "rust/http-client/Cargo.toml",
     "kind": "dep",
     "blob_sha": "0ecdf1bdc0a321367c75bba6dc13497e0418cf55",
@@ -3383,10 +3398,11 @@
    {
     "path": "rust/in-process/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "5106c00203fd81dce25e9542718593b0f5f5d9e7",
+    "blob_sha": "7fb9c23d431b181a5958dce39f6574ced0fe8a99",
     "ecosystem": "cargo",
-    "bytes": 277,
+    "bytes": 311,
     "names": [
+     "file-io",
      "cxx",
      "libc"
     ]
@@ -3408,17 +3424,21 @@
    {
     "path": "rust/kv/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "2caa61929a7df1e901716798eae910a7d1dfed7c",
+    "blob_sha": "58a6a783aeb81657913da25ce0096fe7cb0c6c7b",
     "ecosystem": "cargo",
-    "bytes": 321
+    "bytes": 237,
+    "names": [
+     "file-io"
+    ]
    },
    {
     "path": "rust/local/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "dda9fefb9c3ece9bbd05f996ab03f4a56ff0c652",
+    "blob_sha": "b7e758fc04667c0fabbf6536486fb7568432c7f9",
     "ecosystem": "cargo",
-    "bytes": 155,
+    "bytes": 209,
     "names": [
+     "file-io",
      "kv",
      "cxx"
     ]
@@ -3426,10 +3446,11 @@
    {
     "path": "rust/logger/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d3e3c0870776e09b928768c8b2373a980b4acfd3",
+    "blob_sha": "c6c2cc1ff104de1303ac95722e5b6f8284ad95ab",
     "ecosystem": "cargo",
-    "bytes": 647,
+    "bytes": 521,
     "names": [
+     "file-io",
      "spdlog-rs",
      "chrono",
      "libc",
@@ -3513,11 +3534,14 @@
    {
     "path": "rust/seekdb-rust/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9479ab57e4b83b510a587c77353d63be46fc3f39",
+    "blob_sha": "3b4d35aaa1eaa70dec1e14bd9d06948f8d2b949f",
     "ecosystem": "cargo",
-    "bytes": 1078,
+    "bytes": 1218,
     "names": [
+     "wal",
      "mvt",
+     "file-io",
+     "storage-io",
      "sql-nio",
      "logger",
      "number-parser",
@@ -3577,6 +3601,21 @@
     ]
    },
    {
+    "path": "rust/storage-io/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "525ce23fbc91db78fc71f90b8e0f41f4fff15855",
+    "ecosystem": "cargo",
+    "bytes": 479,
+    "names": [
+     "tokio",
+     "file-io",
+     "cxx"
+    ],
+    "dev": [
+     "libc"
+    ]
+   },
+   {
     "path": "rust/uuid-generator/Cargo.toml",
     "kind": "dep",
     "blob_sha": "e45938834e04cfcc6f6213debfd74fd558c80e88",
@@ -3597,6 +3636,18 @@
     "names": [
      "cxx",
      "simsimd"
+    ]
+   },
+   {
+    "path": "rust/wal/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "ffe6697177231f5d1c56fe19ecf282215a5bef5e",
+    "ecosystem": "cargo",
+    "bytes": 175,
+    "names": [
+     "cxx",
+     "file-io",
+     "log"
     ]
    },
    {
@@ -3622,8 +3673,8 @@
    {
     "path": ".github/workflows/codeql.yml",
     "kind": "ci",
-    "blob_sha": "03b5b490b953379cc5dda6c6e3e9934c1f56df70",
-    "bytes": 1699
+    "blob_sha": "e8227a7eece63b422654318b9777f0ae4dac247c",
+    "bytes": 1603
    },
    {
     "path": ".github/workflows/community-label.yml",
@@ -3646,8 +3697,8 @@
    {
     "path": ".github/workflows/package.yml",
     "kind": "ci",
-    "blob_sha": "c08a8bd41de269482c9b6d46ddd3de4dfce3be32",
-    "bytes": 12695
+    "blob_sha": "44baee4a4dafde566d16afecb69fbb92348f5604",
+    "bytes": 11631
    },
    {
     "path": ".github/workflows/rust-checks.yml",
@@ -3658,8 +3709,8 @@
    {
     "path": ".github/workflows/seekdb.yml",
     "kind": "ci",
-    "blob_sha": "a64a664cdcab10df59d706dee355071ec4338f4e",
-    "bytes": 13575,
+    "blob_sha": "58af16ab81b71db817ff5545ef221ff3cc532393",
+    "bytes": 5884,
     "images": [
      "harbor.oceanbase-dev.com/obrde-test/ob-actions-runner-worker:0.0.2"
     ]
@@ -3689,8 +3740,6 @@
     "src/observer/mysql/ob_sync_cmd_driver.h",
     "src/observer/mysql/ob_sync_plan_driver.cpp",
     "src/observer/mysql/ob_sync_plan_driver.h",
-    "tools/deploy/mysql_test/t/driver5114_bug.test",
-    "tools/deploy/mysql_test/r/mysql/driver5114_bug.result",
     "src/observer/ob_internal_table_refresh_adapter.cpp",
     "src/observer/ob_internal_table_refresh_adapter.h",
     "src/observer/ob_ls_runtime_adapter.cpp",
@@ -3702,8 +3751,17 @@
     "src/wasm/futex_wait_adapter.cpp",
     "src/wasm/wasmfs_adapter.cpp",
     "src/wasm/wasmfs_fd_adapter.cpp",
-    "src/logservice/palf/log_io_adapter.cpp",
-    "src/logservice/palf/log_io_adapter.h",
+    "rust/storage-io/include/callback_adapter.h",
+    "src/logservice/wal_adapter/callback.h",
+    "src/logservice/wal_adapter/callback_wrapper.cpp",
+    "src/logservice/wal_adapter/callback_wrapper.h",
+    "src/logservice/wal_adapter/env.cpp",
+    "src/logservice/wal_adapter/env.h",
+    "src/logservice/wal_adapter/handle.cpp",
+    "src/logservice/wal_adapter/handle.h",
+    "src/logservice/wal_adapter/handle_impl.cpp",
+    "src/logservice/wal_adapter/handle_impl.h",
+    "src/logservice/wal_adapter/iterator.h",
     "src/observer/change_stream/ob_change_stream_plugin.cpp",
     "src/observer/change_stream/ob_change_stream_plugin.h",
     "src/observer/change_stream/ob_cs_plugin_async_index.cpp",
@@ -3732,6 +3790,8 @@
     "src/storage/multi_data_source/adapter_define/mds_dump_node.h",
     "src/storage/multi_data_source/adapter_define/mds_dump_obj_printer.h",
     "src/storage/tx/deadlock_adapter/ob_session_id_pair.h",
+    "tests/mysqltest/cases/r/driver5114_bug.result",
+    "tests/mysqltest/cases/t/driver5114_bug.test",
     "src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp",
     "src/sql/engine/pdml/static/ob_pdml_op_data_driver.h"
    ],
@@ -5231,15 +5291,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:34:11Z",
+  "collected_at": "2026-11-26T10:26:53Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
-  "stars": 363,
+  "pushed_at": "2026-11-25",
+  "stars": 364,
   "tree": {
-   "sha": "d020ca164c626a407cecec1470297a745b9d89d8",
-   "etag": "W/\"8f5ac0b1d2fa6c43483dadfa291732aea7f21c2467e56ab01d88229d75c511e3\"",
+   "sha": "c320b4701463375a87361b324e98272642995f54",
+   "etag": "W/\"bc2a2ecab494a1646f86d7a20fa008f36f6c1933b1a3da8ae5fc33fc9d10effd\"",
    "truncated": false,
-   "path_count": 347,
+   "path_count": 350,
    "matched": [
     "package.json",
     "admin-ui/package.json",
@@ -5252,7 +5312,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "d2b3d23a8a6c5d10628923839045f1ab435834b4",
+    "blob_sha": "7d2ce9775ab54359bd40bdb388453ed71fbd96cb",
     "ecosystem": "npm",
     "bytes": 2048,
     "names": [
@@ -5645,17 +5705,18 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-24T06:55:40Z",
+  "collected_at": "2026-11-26T10:31:22Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-23",
-  "stars": 191,
+  "pushed_at": "2026-11-25",
+  "stars": 192,
   "tree": {
-   "sha": "2c4a7275aa0d5e32c3035ba9037bf6b7d7773121",
-   "etag": "W/\"8cdb85a31090bff19be6f935ab8658cf3d96121a2b88e34e76f938cd10b99685\"",
+   "sha": "c0c35344be38752ca9f87d08e59f5419199a737d",
+   "etag": "W/\"3787d6fffd4b15ba7831d86f754cd66e59ddfebbb6551606ffdb69a14e0d3448\"",
    "truncated": false,
-   "path_count": 407,
+   "path_count": 422,
    "matched": [
     "build.gradle",
+    "fqlite-mcp/build.gradle",
     ".github/workflows/build.yml",
     ".github/workflows/build_secure.yml"
    ]
@@ -5664,9 +5725,9 @@
    {
     "path": "build.gradle",
     "kind": "dep",
-    "blob_sha": "c2e7d8fc9a69e7bdf09f1fcb1a3847ec413cbca2",
+    "blob_sha": "c44e950d8ebe9bba79497fd992c85e4e796a0f5c",
     "ecosystem": "gradle",
-    "bytes": 15003,
+    "bytes": 15419,
     "names": [
      "org.mapsforge:mapsforge-map-awt",
      "org.mapsforge:mapsforge-themes",
@@ -5675,16 +5736,28 @@
     ]
    },
    {
+    "path": "fqlite-mcp/build.gradle",
+    "kind": "dep",
+    "blob_sha": "a99b5af517ad98978953e39d61f3adaffbd65d39",
+    "ecosystem": "gradle",
+    "bytes": 3504,
+    "names": [
+     "org.antlr:antlr4-runtime",
+     "org.openjfx:javafx-base",
+     "com.google.code.gson:gson"
+    ]
+   },
+   {
     "path": ".github/workflows/build.yml",
     "kind": "ci",
-    "blob_sha": "14203ee60642a6aca42a9c382ce0d3c55ef5a5f2",
-    "bytes": 14552
+    "blob_sha": "6bfd9f028e1d089641c6de8576b0c1a826697349",
+    "bytes": 18012
    },
    {
     "path": ".github/workflows/build_secure.yml",
     "kind": "ci",
-    "blob_sha": "14203ee60642a6aca42a9c382ce0d3c55ef5a5f2",
-    "bytes": 14552
+    "blob_sha": "6bfd9f028e1d089641c6de8576b0c1a826697349",
+    "bytes": 18012
    }
   ],
   "clues": {
@@ -6704,13 +6777,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-24T06:57:18Z",
+  "collected_at": "2026-11-26T10:32:53Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-24",
+  "pushed_at": "2026-11-25",
   "stars": 156,
   "tree": {
-   "sha": "a67bb6209765b5722ed08255a26fdd94eca134a3",
-   "etag": "W/\"51b935bfd9fc826e97096f0ac7570f99c1faeff7b0460eaaa32b65c3cf6906e0\"",
+   "sha": "207b5680d3f15ac347aeda7d85dfbe8ecb601cd8",
+   "etag": "W/\"a8bb86c5f2a98e70824b44c3a058169a446413a96be6f018f11e6ef2141ef26f\"",
    "truncated": false,
    "path_count": 83,
    "matched": []
@@ -7769,15 +7842,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-24T07:05:03Z",
+  "collected_at": "2026-11-26T10:39:23Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
+  "pushed_at": "2026-11-26",
   "stars": 74,
   "tree": {
-   "sha": "3b592bb21d6980349a848f1e9e726a6c31a112cf",
-   "etag": "W/\"082fbe5a807371c07e2e3a852b37527ddb13f21e1c0b7f9407c5e6b3820fa188\"",
+   "sha": "0f30c27b822cccef0688683b88ef549477b400b2",
+   "etag": "W/\"ec3f34c256b9b9e6b7de073468d6bc72d8b7f08cb2fea78c7ffb46d8b4947a2a\"",
    "truncated": false,
-   "path_count": 4184,
+   "path_count": 4272,
    "matched": [
     "go.mod",
     "test/console-e2e/package.json",
@@ -8052,8 +8125,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "90f788355b230815f444fb94e6ee7691dd74dedb",
-    "bytes": 80009
+    "blob_sha": "cb164851e2d598327786e7c0a60e6c11f27207ba",
+    "bytes": 85785
    },
    {
     "path": ".github/workflows/console-base-image.yml",
@@ -8082,14 +8155,14 @@
    {
     "path": ".github/workflows/docs-links.yml",
     "kind": "ci",
-    "blob_sha": "5b1ffc35cf8b17fec7b5ab6072bd77dd7b7fc280",
-    "bytes": 1146
+    "blob_sha": "3e1a440b56391d44eda2ff2c5ef9ebab4cad4763",
+    "bytes": 1344
    },
    {
     "path": ".github/workflows/managed-pg-smoke.yml",
     "kind": "ci",
-    "blob_sha": "af64dce9d2f8375c25ab6b0fce923e3003460a49",
-    "bytes": 12141
+    "blob_sha": "407571a6967b329b7d2d11acfbc436239dd2a627",
+    "bytes": 12339
    },
    {
     "path": ".github/workflows/mirror-ci-images.yml",
@@ -8106,8 +8179,8 @@
    {
     "path": ".github/workflows/release.yaml",
     "kind": "ci",
-    "blob_sha": "d7bdb7eff1350fb9fc3c5b33cf07cc00872e4e1b",
-    "bytes": 35142
+    "blob_sha": "9299df3d283ffcee62c18234d298c6fdd764b0f5",
+    "bytes": 4628
    }
   ],
   "clues": {
@@ -8836,13 +8909,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-19T04:45:02Z",
+  "collected_at": "2026-11-26T10:43:36Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-18",
+  "pushed_at": "2026-11-25",
   "stars": 48,
   "tree": {
    "sha": "4780e3e4a6098aae868c8cf116553458d4027e04",
-   "etag": "W/\"93d50432a43454aefead451d337bd980602a5cb005001f5b45a0a3ffe894463d\"",
+   "etag": "W/\"811da9766f3fca1509a4c97757f784dce5dbb039aa566cc2815d4bd2422bc4fd\"",
    "truncated": false,
    "path_count": 184,
    "matched": [
@@ -13291,15 +13364,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-24T07:32:39Z",
+  "collected_at": "2026-11-26T11:01:52Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-23",
+  "pushed_at": "2026-11-25",
   "stars": 11,
   "tree": {
-   "sha": "80fd84639b79fd8bd66fe719f7b177a9ab9bf803",
-   "etag": "W/\"2122e5cfe9f0591503a897c96bce86ccee9d1af80024862b497dc0d36dd65dc6\"",
+   "sha": "9c21a5f4fd1fc5e985c45ca6c6019e01429460e6",
+   "etag": "W/\"2be505066bf6d59c21dfe1a48f2b585c29f1895b3a823eb7aa4b43a2545fe439\"",
    "truncated": false,
-   "path_count": 247,
+   "path_count": 248,
    "matched": [
     "server/package.json",
     "Dockerfile",
@@ -13311,7 +13384,7 @@
    {
     "path": "server/package.json",
     "kind": "dep",
-    "blob_sha": "438fdc53a1ed9fc5b6e77018656e78471a9089fa",
+    "blob_sha": "bc312edfaeb3c85baed9e5887731dfddb2064f64",
     "ecosystem": "npm",
     "bytes": 493,
     "names": [
@@ -13331,11 +13404,11 @@
    {
     "path": "docker-compose.yml",
     "kind": "image",
-    "blob_sha": "984c10de3313443914fa8adb9acc3853e9ebde22",
+    "blob_sha": "15f4220cf828d371962a414777675af0de74577b",
     "bytes": 3170,
     "images": [
      "postgres:16-alpine",
-     "ghcr.io/pental-io/report:${REPORT_VERSION:-0.1.51}",
+     "ghcr.io/pental-io/report:${REPORT_VERSION:-0.1.52}",
      "caddy:2-alpine"
     ]
    },
@@ -13633,13 +13706,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:44:56Z",
+  "collected_at": "2026-11-26T10:37:56Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-24",
+  "pushed_at": "2026-11-25",
   "stars": 87,
   "tree": {
    "sha": "aa5514946b912982e45d5d378dd4edae0252d79b",
-   "etag": "W/\"cd3c3217c4f9b43f33efcf76d22d009667b25cb691f1bd8a766bab93f58505cf\"",
+   "etag": "W/\"fbf13375527abc6c11cb36ca2b9792cca415971b4d76a574b13f2ebbdcfb0e54\"",
    "truncated": false,
    "path_count": 308,
    "matched": [
@@ -13778,13 +13851,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T08:41:32Z",
+  "collected_at": "2026-11-26T10:43:07Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-27",
+  "pushed_at": "2026-11-25",
   "stars": 50,
   "tree": {
-   "sha": "344b069f6d2fd97f6cd626f553b8f278e2c56adb",
-   "etag": "W/\"7afa28f3c7be02fbc91e7fd0a2cf0bd48a8c478a5ef16b094bb24af3625492b5\"",
+   "sha": "88adf55121c63020a30085c9a56d59b3d4f5108d",
+   "etag": "W/\"9d5beb6b5527e2218984ae33f8713ef487850a5c0434b748290aef1c65765b2d\"",
    "truncated": false,
    "path_count": 144,
    "matched": [
@@ -15132,15 +15205,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:39:55Z",
+  "collected_at": "2026-11-26T10:32:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
-  "stars": 158,
+  "pushed_at": "2026-11-25",
+  "stars": 162,
   "tree": {
-   "sha": "c101b342b56dad11ccf30402fc4c00068c476255",
-   "etag": "W/\"9eb27b40cc041a0c3560027756ddf8fdef2792dae42a384c2c0370471cc4dc89\"",
+   "sha": "45a46fbe732496d9848df0d582f4f8695c1fac93",
+   "etag": "W/\"aa489399bedec05dcd7cce9e79d4a5114cc7548141df458432da25a68ea3e8f9\"",
    "truncated": false,
-   "path_count": 1505,
+   "path_count": 1546,
    "matched": [
     "package.json",
     "apps/panel/package.json",
@@ -15169,7 +15242,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "9778ffdd10f77096886ea085ff0fd367318be6b8",
+    "blob_sha": "1eca646e1a81b2203b6c65947a4635304c720fc4",
     "ecosystem": "npm",
     "bytes": 1137,
     "dev": [
@@ -15225,7 +15298,7 @@
    {
     "path": "apps/voice/package.json",
     "kind": "dep",
-    "blob_sha": "d2ce8f89185f437c5ba7e977091ebcccae19837d",
+    "blob_sha": "d884d2e32d0cd10ca6920679409775df9866cd86",
     "ecosystem": "npm",
     "bytes": 378,
     "names": [
@@ -15754,15 +15827,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:38:53Z",
+  "collected_at": "2026-11-26T10:31:24Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
+  "pushed_at": "2026-11-25",
   "stars": 189,
   "tree": {
-   "sha": "6978fb9894e7145063f675a648f2e5bfdabcd621",
-   "etag": "W/\"1f7ba1ca15aa3770b8a9c79e0f63725faa9d7695963f7013b3aa765b0980589f\"",
+   "sha": "bd7844309059af5f78ec6730fa601dc729997007",
+   "etag": "W/\"ea56d139db3a64aac5cde7901693d3d623f4df9f8346f456d285f50ce6847ab6\"",
    "truncated": false,
-   "path_count": 255,
+   "path_count": 258,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -15800,7 +15873,7 @@
    {
     "path": "action/package.json",
     "kind": "dep",
-    "blob_sha": "1f8a9758ca63e1ea6512875cd2a6d9d3420d0818",
+    "blob_sha": "e0bf23e7c99e83266605ca24083c5ac875c0e56a",
     "ecosystem": "npm",
     "bytes": 310
    },
@@ -15878,7 +15951,7 @@
    {
     "path": "crates/sessionly/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "272f75d2334f731f503b1688d35b77700bae1fea",
+    "blob_sha": "fcaeee6482f0aa549ce43802b60ad2cd5e7e81c7",
     "ecosystem": "cargo",
     "bytes": 1115,
     "names": [
@@ -15963,7 +16036,7 @@
    {
     "path": ".github/workflows/sessionly.yml",
     "kind": "ci",
-    "blob_sha": "9e9eeb83d4e62db13e196e418485e11a32706e4a",
+    "blob_sha": "87149ec68f2b58fd070a5a1eda6bc97333d4ba22",
     "bytes": 2258
    }
   ],
@@ -15972,6 +16045,121 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
+  },
+  "fail_count": 0
+ },
+ "zhexin233-ui/double11-radar": {
+  "fn": "zhexin233-ui/double11-radar",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-26T10:03:06Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-25",
+  "stars": 3,
+  "tree": {
+   "sha": "e0a4d1d1451abf6cb2cb63eff6c00392f9a73043",
+   "etag": "W/\"908240c00bdda0dc42df99ed86e08e0815e00b068c13088a2dcb00ca417dd7ef\"",
+   "truncated": false,
+   "path_count": 424,
+   "matched": [
+    "package.json",
+    "deploy/laya/requirements.txt",
+    "Dockerfile",
+    "docker-compose.yml",
+    "deploy/laya/Dockerfile"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "21a5cfadd69feceac310eb46ce1c681ab9940113",
+    "ecosystem": "npm",
+    "bytes": 1272,
+    "names": [
+     "@mantine/core",
+     "@mantine/hooks",
+     "better-sqlite3",
+     "next",
+     "react",
+     "react-dom",
+     "undici",
+     "zod"
+    ],
+    "dev": [
+     "@types/better-sqlite3",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "eslint",
+     "eslint-config-next",
+     "postcss",
+     "postcss-preset-mantine",
+     "tsx",
+     "typescript",
+     "typescript-eslint",
+     "vitest"
+    ]
+   },
+   {
+    "path": "deploy/laya/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "22924a0c9e682395ea32754f1e10ebe00e6b7123",
+    "ecosystem": "pypi",
+    "bytes": 248,
+    "names": [
+     "laya",
+     "transformers",
+     "huggingface-hub",
+     "safetensors",
+     "numpy",
+     "fastapi",
+     "uvicorn",
+     "python-multipart"
+    ]
+   },
+   {
+    "path": "Dockerfile",
+    "kind": "image",
+    "blob_sha": "217311815f46a5726768cf2e95cb42bf094a62ab",
+    "bytes": 1550,
+    "images": [
+     "${NODE_IMAGE}",
+     "base"
+    ]
+   },
+   {
+    "path": "docker-compose.yml",
+    "kind": "image",
+    "blob_sha": "70a8bd44ed6aca8579c03b3d5374a9a3819d1681",
+    "bytes": 1599,
+    "images": [
+     "xianbao-needs-matching:local"
+    ]
+   },
+   {
+    "path": "deploy/laya/Dockerfile",
+    "kind": "image",
+    "blob_sha": "448c5eadb5b26b5cabf2d85039df3a8b0abce5e0",
+    "bytes": 794,
+    "images": [
+     "${PYTHON_IMAGE}"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [
+    "scripts/README-git-privacy.md"
+   ],
+   "docs_matrix": [],
+   "paths": [
+    "tests/agent/external-adapters.test.ts",
+    "src/lib/agent/tools/http-adapter.ts",
+    "src/lib/agent/tools/mcp-adapter.ts"
+   ]
   },
   "fail_count": 0
  }

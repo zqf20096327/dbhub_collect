@@ -5,21 +5,22 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:59:27Z",
+  "collected_at": "2026-11-26T10:53:42Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
+  "pushed_at": "2026-11-25",
   "stars": 20,
   "tree": {
-   "sha": "6115249c8f20554e2fba08067bdf851ddc11052b",
-   "etag": "W/\"44d23a2d3a59fec7bd0b4a7dd09f4175e5f9a98802da2f35bf10a8bf9dc6a5b7\"",
+   "sha": "cc455413b3d8e2b5babd581e520a4e845542f652",
+   "etag": "W/\"1380002ee133eb8f59452318638bb92d87fb169bbad6504e52b8b298c8a9839d\"",
    "truncated": false,
-   "path_count": 1858,
+   "path_count": 1862,
    "matched": [
     "tools/gomod-sync/go.mod",
     "tools/list-go-dependencies/go.mod",
     "scripts/ops/parse-jenkins-build-log/requirements.txt",
     "tools/deprecated/release-check-version/requirements.txt",
     "tools/deprecated/release-checker/checker/requirements.txt",
+    "dockerfiles/ci/actions-runner/Dockerfile",
     "dockerfiles/ci/base/Dockerfile",
     "dockerfiles/ci/jenkins/Dockerfile",
     "dockerfiles/ci/tici/Dockerfile",
@@ -111,6 +112,15 @@
     ]
    },
    {
+    "path": "dockerfiles/ci/actions-runner/Dockerfile",
+    "kind": "image",
+    "blob_sha": "8094f6fec56d2d888c62c8c4e80d30bf5eddc460",
+    "bytes": 727,
+    "images": [
+     "ghcr.io/actions/actions-runner:2.338.2@sha256:6d0b2d80d80f143f77dcb676e50920100bbb547e39e883454d57f45ab8c31300"
+    ]
+   },
+   {
     "path": "dockerfiles/ci/base/Dockerfile",
     "kind": "image",
     "blob_sha": "f05f0f9ca4ec6106538ca4f4f76df8cb121aef69",
@@ -178,8 +188,8 @@
    {
     "path": "dockerfiles/ci/jenkins/tikv/Dockerfile",
     "kind": "image",
-    "blob_sha": "1e40095a5db72eae277760beffac795845690f2c",
-    "bytes": 1841,
+    "blob_sha": "ef4f340e28a99ae6ae5829f5885dca55ff147741",
+    "bytes": 1877,
     "images": [
      "$BASE_IMG"
     ]
@@ -223,8 +233,8 @@
    {
     "path": ".github/workflows/pull-ci-runtime-images.yaml",
     "kind": "ci",
-    "blob_sha": "4d4acf5be073caf80128da3203b19e818027bbdb",
-    "bytes": 8617
+    "blob_sha": "a13baa69752ee31c3f2a71ac45f08eb1878d22aa",
+    "bytes": 10359
    },
    {
     "path": ".github/workflows/pull-serverless-builds.yaml",
@@ -235,8 +245,11 @@
    {
     "path": ".github/workflows/release-ci-runtime-images.yaml",
     "kind": "ci",
-    "blob_sha": "ee61e91062021a50eefdfd207e99f356aebc9309",
-    "bytes": 8629
+    "blob_sha": "fc74306fd213d7c49f2b0d1c0ee2ea12307bc6fa",
+    "bytes": 13103,
+    "images": [
+     "ghcr.io/pingcap-qe/ci/actions-runner"
+    ]
    },
    {
     "path": ".github/workflows/weekly-release.yaml",
@@ -878,13 +891,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:52:05Z",
+  "collected_at": "2026-11-26T10:45:16Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
+  "pushed_at": "2026-11-25",
   "stars": 40,
   "tree": {
    "sha": "d8238dbdfee8e01e1aaccff13ee3df220c6712b6",
-   "etag": "W/\"01cfe0c884e971323617ceea0aef4aba2fe8f60141b43ac4c94f910143809eda\"",
+   "etag": "W/\"004446dc4532990e409f1560b9d319f7f1fc1960d84673a233b5f4b3288f98cf\"",
    "truncated": false,
    "path_count": 240,
    "matched": [
@@ -3140,15 +3153,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:27:24Z",
+  "collected_at": "2026-11-26T10:20:03Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
+  "pushed_at": "2026-11-25",
   "stars": 1169,
   "tree": {
-   "sha": "ae6520f45987f0c8634ec8dbde0652aed13a4199",
-   "etag": "W/\"d203dd81e09e23db571f0d6b2c5738e4c2a55201b7f6dcb53c865655ee435d4b\"",
+   "sha": "7105ac20bf61a3b84abea4dd3935a3552ab565e8",
+   "etag": "W/\"6de4f612b77f8e7f22da0ffa52f00174cf61834115864a159686e8d1f65ae106\"",
    "truncated": false,
-   "path_count": 2782,
+   "path_count": 2786,
    "matched": [
     "package.json",
     "dsh-plugin/package.json",
@@ -3162,6 +3175,7 @@
     ".github/workflows/ai-dev.yaml",
     ".github/workflows/build-zips.yml",
     ".github/workflows/bump-expert-versions.yml",
+    ".github/workflows/check-error-codes.yml",
     ".github/workflows/check-prompts-sync.yml",
     ".github/workflows/check-usage-modules.yml",
     ".github/workflows/compat-check.yml",
@@ -3197,17 +3211,16 @@
     ".github/workflows/sync-derived-branches.yml",
     ".github/workflows/sync-main-to-examples.yml",
     ".github/workflows/sync-to-cnb.yml",
-    ".github/workflows/tool-pipeline-invariants.yml",
-    ".github/workflows/update-activity-card.yml"
+    ".github/workflows/tool-pipeline-invariants.yml"
    ]
   },
   "files": [
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "5227ee37342da09a0e08b751c05e3662fbe3084e",
+    "blob_sha": "a6e07d99656f8519b84b550e2447357445011e3e",
     "ecosystem": "npm",
-    "bytes": 5060,
+    "bytes": 5123,
     "names": [
      "@cloudbase/manager-node"
     ],
@@ -3384,6 +3397,12 @@
     "kind": "ci",
     "blob_sha": "c981b73396ff8bbeb6d510a2c1842f7055e1313b",
     "bytes": 1606
+   },
+   {
+    "path": ".github/workflows/check-error-codes.yml",
+    "kind": "ci",
+    "blob_sha": "49baeba9dbce5ae4f613c49bf66cd5cba5eec040",
+    "bytes": 2092
    },
    {
     "path": ".github/workflows/check-prompts-sync.yml",
@@ -3600,12 +3619,6 @@
     "kind": "ci",
     "blob_sha": "22238ae4d13f88814e6bf628bafb0970394de962",
     "bytes": 688
-   },
-   {
-    "path": ".github/workflows/update-activity-card.yml",
-    "kind": "ci",
-    "blob_sha": "3dd71ae9c49d9b34000f4b07ce9048d5a2ed9638",
-    "bytes": 2300
    }
   ],
   "clues": {
@@ -3899,15 +3912,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:14:08Z",
+  "collected_at": "2026-11-26T10:21:30Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
-  "stars": 818,
+  "pushed_at": "2026-11-25",
+  "stars": 822,
   "tree": {
-   "sha": "573c50a84922e81f6e19be688b44091d9903a05f",
-   "etag": "W/\"fd5ddb9caedf7601794027532d1d93d694a39f1578b3360ac7de74aa09555b65\"",
+   "sha": "a48d4c5f3105b29adced61b6379108471b9b0224",
+   "etag": "W/\"499e2a561161caf3791c503981833edc511fc5fd296a7b73876984a933cb2c30\"",
    "truncated": false,
-   "path_count": 475,
+   "path_count": 477,
    "matched": [
     "pyproject.toml",
     ".github/workflows/cd.yml",
@@ -3925,7 +3938,7 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "387f69e5e44df99f044411351fe9a148352905d1",
+    "blob_sha": "3160851b3c65557b493acd11af0a7ef4bdcc2eae",
     "ecosystem": "pyproject",
     "bytes": 24104,
     "names": [
@@ -3964,8 +3977,8 @@
    {
     "path": ".github/workflows/docs.yml",
     "kind": "ci",
-    "blob_sha": "fb542d0459f77e63494a1a5c28360371092b346f",
-    "bytes": 1283
+    "blob_sha": "34bb4f2b56c14b23c89481b6e36adaec663aa884",
+    "bytes": 1744
    },
    {
     "path": ".github/workflows/pr-labeler.yml",
@@ -4276,15 +4289,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:33:05Z",
+  "collected_at": "2026-11-26T10:25:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
-  "stars": 442,
+  "pushed_at": "2026-11-25",
+  "stars": 445,
   "tree": {
-   "sha": "c470d7ed2e645158761bf0ec3e6cdc422ba07d0b",
-   "etag": "W/\"9e91452bf1e0c9fb77af79fe67d056deb5d97776fa9dd9928b6e17193da740c3\"",
+   "sha": "72b3cf2322790cac9e7224b9a643de7b7b295e06",
+   "etag": "W/\"f93e12bfa645d817b65542aa45d9eb971f64d3ed41eb090f7d7d6ec06aa09413\"",
    "truncated": false,
-   "path_count": 6027,
+   "path_count": 6127,
    "matched": [
     "pyproject.toml",
     "backend/requirements.txt",
@@ -6384,15 +6397,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:48:52Z",
+  "collected_at": "2026-11-26T10:42:10Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
+  "pushed_at": "2026-11-26",
   "stars": 55,
   "tree": {
-   "sha": "ba6ac08cf45f70f91936d7d1ad54ca1a49e6a044",
-   "etag": "W/\"d3ea5bb3a7bdc33d9aefb3160ad61b88c4f8840ec42a0b8bff6325e6a03135a9\"",
+   "sha": "ca929d4bfecbdc3a2bfdbeeb8a719fafb11bba5d",
+   "etag": "W/\"fe67cfb8681dc0723d14a026952c3d50a533a849310413b1ed9c71cc426bbf02\"",
    "truncated": false,
-   "path_count": 881,
+   "path_count": 898,
    "matched": [
     "Cargo.toml",
     "fuzz/Cargo.toml",
@@ -6444,9 +6457,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "795746cb37c458e4d739cbd97b34f1e9d66e571e",
+    "blob_sha": "b5def0effa47ae856b9e5c8e8ac6c9c23ca25171",
     "ecosystem": "cargo",
-    "bytes": 61444
+    "bytes": 61562
    },
    {
     "path": "fuzz/Cargo.toml",
@@ -6777,9 +6790,9 @@
    {
     "path": "crates/ephpm-server/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "67ea4edf6b1f6843ef9a12b020086f4633f853ff",
+    "blob_sha": "a62f7b8523e60e5b242aba87d24fcd974ece93bf",
     "ecosystem": "cargo",
-    "bytes": 10264,
+    "bytes": 11394,
     "names": [
      "async-trait.workspace",
      "ephpm-cluster.workspace",
@@ -7057,8 +7070,8 @@
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "3051784351287c117b5e7059e2f982eb2ff12fc1",
-    "bytes": 50850,
+    "blob_sha": "d7989154310dc6f56e98a36c6f3c42c9285855c5",
+    "bytes": 52767,
     "images": [
      "latest"
     ]
@@ -9680,15 +9693,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T07:41:16Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-26T10:48:36Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-23",
-  "stars": 28,
+  "pushed_at": "2026-11-25",
+  "stars": 31,
   "tree": {
-   "sha": "6b522c9219c7d9f2959215847128d15bf3aaa5b5",
-   "etag": "W/\"4fdaec4b1b17aea7e29862060110abd249c1d55ea8ee62bd36172b755e7c77b1\"",
+   "sha": "5fd71d5ce8ba65c77180c2ee276939c48170762e",
+   "etag": "W/\"8efeb5920dcd28d48564657de06ec3ad9a66992ed8e9deded055ad222fc7e41f\"",
    "truncated": false,
-   "path_count": 183,
+   "path_count": 188,
    "matched": [
     "src/EFCore.ClickHouse/EFCore.ClickHouse.csproj",
     "test/EFCore.ClickHouse.DesignSmoke/EFCore.ClickHouse.DesignSmoke.csproj",
@@ -11591,13 +11605,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:53:06Z",
+  "collected_at": "2026-11-26T10:53:57Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-25",
   "stars": 20,
   "tree": {
    "sha": "301b100a4af4d465208c3ae6074402d7537f1b98",
-   "etag": "W/\"b64f8eb61903609af71a241b73acefc2a4dda41cea84510dcec66ec5d5111a1e\"",
+   "etag": "W/\"86bd64069380adb6de041503e7e1109379543312cb758f711729240916a863d2\"",
    "truncated": false,
    "path_count": 868,
    "matched": [
@@ -14326,15 +14340,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T04:09:13Z",
+  "collected_at": "2026-11-26T11:04:30Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
+  "pushed_at": "2026-11-25",
   "stars": 8,
   "tree": {
-   "sha": "deaff78170e50e75503b556ef4645b134270e3b0",
-   "etag": "W/\"05eee32531677dfe1b2914ed49d6785143361e1796ff280bdd91e4f9129c478d\"",
+   "sha": "d39a7b6eec65e58a614ea27a4c82d08e481f2687",
+   "etag": "W/\"84c6337f430eeec2da284e85c84386cff2cce2caa22e32b5cb8e91a2f5b706fc\"",
    "truncated": false,
-   "path_count": 234,
+   "path_count": 242,
    "matched": [
     "package.json",
     "pom.xml",
@@ -14583,8 +14597,8 @@
    {
     "path": "docker-compose.prod.yml",
     "kind": "image",
-    "blob_sha": "e0fa13aff5cd92712e18a33f33900a91d49af413",
-    "bytes": 10171,
+    "blob_sha": "33caee974929594e251821c49fed43654d9936bb",
+    "bytes": 10249,
     "images": [
      "mysql:8.4"
     ]
@@ -14601,6 +14615,773 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
+  },
+  "fail_count": 0
+ },
+ "byteswalk/datluma": {
+  "fn": "byteswalk/datluma",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-26T10:00:45Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-25",
+  "stars": 0,
+  "tree": {
+   "sha": "5057fa12eb46b9a0305f5939bbf709938daa1637",
+   "etag": "W/\"998d6595c1a4b227c91b0e6133df230c2afdb69f20faa8a9dac603025e7ee0ca\"",
+   "truncated": false,
+   "path_count": 1035,
+   "matched": [
+    "Cargo.toml",
+    "web/package.json",
+    "crates/datluma-ai/Cargo.toml",
+    "crates/datluma-api/Cargo.toml",
+    "crates/datluma-core/Cargo.toml",
+    "crates/datluma-desktop/Cargo.toml",
+    "crates/datluma-dialect/Cargo.toml",
+    "crates/datluma-driver-jdbc/Cargo.toml",
+    "crates/datluma-driver-mysql/Cargo.toml",
+    "crates/datluma-driver-oracle/Cargo.toml",
+    "crates/datluma-driver-postgres/Cargo.toml",
+    "crates/datluma-driver-sqlite/Cargo.toml",
+    "crates/datluma-driver-sqlserver/Cargo.toml",
+    "crates/datluma-driver/Cargo.toml",
+    "crates/datluma-lint/Cargo.toml",
+    "crates/datluma-mcp/Cargo.toml",
+    "crates/datluma-server/Cargo.toml",
+    "crates/datluma-service/Cargo.toml",
+    "vendor/postgres-protocol/Cargo.toml",
+    "vendor/tiberius/Cargo.toml",
+    "vendor/tokio-postgres/Cargo.toml"
+   ]
+  },
+  "files": [
+   {
+    "path": "Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f04b0cfcf7a8e92f80bf52b4397d610dee2c268b",
+    "ecosystem": "cargo",
+    "bytes": 4120
+   },
+   {
+    "path": "web/package.json",
+    "kind": "dep",
+    "blob_sha": "ede767e1b80a52bc24994b9caa0150a9e6d543e2",
+    "ecosystem": "npm",
+    "bytes": 2017,
+    "names": [
+     "@ant-design/cssinjs",
+     "@ant-design/icons",
+     "@dagrejs/dagre",
+     "@glideapps/glide-data-grid",
+     "@monaco-editor/react",
+     "@tabler/icons-react",
+     "@tanstack/react-query",
+     "@tauri-apps/api",
+     "@xyflow/react",
+     "antd",
+     "antlr4-c3",
+     "antlr4ng",
+     "dt-sql-parser",
+     "elkjs",
+     "html-to-image",
+     "i18next",
+     "monaco-editor",
+     "react",
+     "react-dom",
+     "react-i18next",
+     "react-resizable-panels",
+     "simple-icons",
+     "sql-formatter",
+     "zustand"
+    ],
+    "dev": [
+     "@tauri-apps/cli",
+     "@testing-library/dom",
+     "@testing-library/react",
+     "@testing-library/user-event",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-legacy",
+     "@vitejs/plugin-react",
+     "antlr-ng",
+     "jsdom",
+     "typescript",
+     "vite",
+     "vitest"
+    ]
+   },
+   {
+    "path": "crates/datluma-ai/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "c48d153f44d533bce63e6c18f2fe73aedfc034ce",
+    "ecosystem": "cargo",
+    "bytes": 434,
+    "names": [
+     "datluma-core.workspace",
+     "reqwest.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "tokio",
+     "uuid.workspace"
+    ],
+    "dev": [
+     "axum.workspace",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/datluma-api/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "323c2a96f2ea7410446a99e76955e7d0749e93b6",
+    "ecosystem": "cargo",
+    "bytes": 765,
+    "names": [
+     "axum.workspace",
+     "base64.workspace",
+     "datluma-ai.workspace",
+     "datluma-core.workspace",
+     "datluma-dialect.workspace",
+     "datluma-driver.workspace",
+     "datluma-lint.workspace",
+     "datluma-service.workspace",
+     "futures.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "tokio",
+     "tracing.workspace",
+     "uuid.workspace"
+    ],
+    "dev": [
+     "datluma-service",
+     "http-body-util.workspace",
+     "tempfile.workspace",
+     "tokio-tungstenite.workspace",
+     "tower.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-core/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "299accb4456772c68e312fce2a5967ea925386b7",
+    "ecosystem": "cargo",
+    "bytes": 352,
+    "names": [
+     "base64.workspace",
+     "chrono.workspace",
+     "rust-i18n.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "sys-locale.workspace",
+     "tokio.workspace",
+     "uuid.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-desktop/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "350b2ebc2c32a7cc5a5590be3d73c1bf26f592d4",
+    "ecosystem": "cargo",
+    "bytes": 1047,
+    "names": [
+     "datluma-api.workspace",
+     "datluma-core.workspace",
+     "datluma-mcp.workspace",
+     "datluma-service.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "tauri",
+     "tauri-plugin-dialog.workspace",
+     "tauri-plugin-global-shortcut.workspace",
+     "tauri-plugin-single-instance.workspace",
+     "tauri-plugin-updater.workspace",
+     "tokio.workspace",
+     "tracing.workspace",
+     "tracing-appender.workspace",
+     "tracing-subscriber.workspace"
+    ],
+    "dev": [
+     "tauri-build.workspace",
+     "tempfile.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-dialect/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "0e9c5694339e8158fa8d3b167d96e9d31947663e",
+    "ecosystem": "cargo",
+    "bytes": 648,
+    "names": [
+     "datluma-core.workspace",
+     "datluma-driver.workspace",
+     "minijinja.workspace",
+     "serde.workspace"
+    ],
+    "dev": [
+     "chrono.workspace",
+     "datluma-driver-jdbc.workspace",
+     "datluma-driver-mysql.workspace",
+     "datluma-driver-oracle.workspace",
+     "datluma-driver-postgres.workspace",
+     "datluma-driver-sqlserver.workspace",
+     "datluma-driver-sqlite.workspace",
+     "insta.workspace",
+     "serde_json.workspace",
+     "tempfile.workspace",
+     "tokio.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-driver-jdbc/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "9a582af34dee88af59bf8245c2f40a165c2a2548",
+    "ecosystem": "cargo",
+    "bytes": 456,
+    "names": [
+     "async-trait.workspace",
+     "chrono.workspace",
+     "datluma-core.workspace",
+     "datluma-driver.workspace",
+     "tokio.workspace",
+     "tracing.workspace"
+    ],
+    "dev": [
+     "datluma-driver",
+     "chrono.workspace",
+     "tokio.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-driver-mysql/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1a5a9a5d30ff82813be6f6af1af3fa17ab09b5ef",
+    "ecosystem": "cargo",
+    "bytes": 722,
+    "names": [
+     "async-trait.workspace",
+     "chrono.workspace",
+     "datluma-core.workspace",
+     "datluma-driver.workspace",
+     "mysql_async.workspace",
+     "serde_json.workspace",
+     "tokio.workspace"
+    ],
+    "dev": [
+     "datluma-driver",
+     "serde_json.workspace",
+     "tokio.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-driver-oracle/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "ecbc4a94df97277955bb298baa69e63b81369a26",
+    "ecosystem": "cargo",
+    "bytes": 433,
+    "names": [
+     "async-trait.workspace",
+     "chrono.workspace",
+     "datluma-core.workspace",
+     "datluma-driver.workspace",
+     "oracle.workspace",
+     "tokio.workspace"
+    ],
+    "dev": [
+     "datluma-driver",
+     "tokio.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-driver-postgres/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "169f10fa26c74a975d4a878123a54f0fa4a4f042",
+    "ecosystem": "cargo",
+    "bytes": 662,
+    "names": [
+     "async-trait.workspace",
+     "bytes.workspace",
+     "chrono.workspace",
+     "datluma-core.workspace",
+     "datluma-driver.workspace",
+     "futures.workspace",
+     "rustls.workspace",
+     "serde_json.workspace",
+     "tokio.workspace",
+     "tokio-postgres.workspace",
+     "tokio-postgres-rustls.workspace",
+     "uuid.workspace",
+     "webpki-roots.workspace"
+    ],
+    "dev": [
+     "datluma-driver",
+     "serde_json.workspace",
+     "tokio.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-driver-sqlite/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "a11445d3a78a59d5c81e96fd1e69dd1fcf93d17b",
+    "ecosystem": "cargo",
+    "bytes": 499,
+    "names": [
+     "async-trait.workspace",
+     "chrono.workspace",
+     "datluma-core.workspace",
+     "datluma-driver.workspace",
+     "rusqlite",
+     "tokio.workspace"
+    ],
+    "dev": [
+     "datluma-driver",
+     "tempfile.workspace",
+     "tokio.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-driver-sqlserver/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "3833bf002a49c2e8861c02fb47b3c691a6b7e311",
+    "ecosystem": "cargo",
+    "bytes": 539,
+    "names": [
+     "async-trait.workspace",
+     "chrono.workspace",
+     "datluma-core.workspace",
+     "datluma-driver.workspace",
+     "futures.workspace",
+     "tiberius.workspace",
+     "tokio",
+     "tokio-util.workspace",
+     "uuid.workspace"
+    ],
+    "dev": [
+     "datluma-driver",
+     "tokio.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-driver/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "d27ad4d95555092ea644da8c076efcd097a6a747",
+    "ecosystem": "cargo",
+    "bytes": 440,
+    "names": [
+     "async-trait.workspace",
+     "datluma-core.workspace",
+     "futures.workspace",
+     "percent-encoding.workspace",
+     "serde.workspace",
+     "tokio.workspace",
+     "url.workspace"
+    ],
+    "dev": [
+     "serde_json.workspace",
+     "tokio.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-lint/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "8b32007b0067b313609e112ebf88bcb5b2be4e7a",
+    "ecosystem": "cargo",
+    "bytes": 363,
+    "names": [
+     "datluma-core.workspace",
+     "datluma-dialect.workspace",
+     "regex.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "serde-saphyr.workspace"
+    ],
+    "dev": [
+     "insta.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-mcp/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "22d100c5d691ae846ba5206ea55519503c26e55d",
+    "ecosystem": "cargo",
+    "bytes": 734,
+    "names": [
+     "datluma-core.workspace",
+     "datluma-dialect.workspace",
+     "datluma-service.workspace",
+     "rmcp",
+     "schemars",
+     "serde.workspace",
+     "serde_json.workspace",
+     "tokio"
+    ],
+    "dev": [
+     "datluma-service",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/datluma-server/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "a131bca1b8c9577f3fd2836dbfdb1f26dc969a5b",
+    "ecosystem": "cargo",
+    "bytes": 506,
+    "names": [
+     "datluma-api.workspace",
+     "datluma-core.workspace",
+     "datluma-mcp.workspace",
+     "datluma-service.workspace",
+     "reqwest.workspace",
+     "semver.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "tokio.workspace",
+     "tracing.workspace",
+     "tracing-subscriber.workspace"
+    ],
+    "dev": [
+     "tempfile.workspace"
+    ]
+   },
+   {
+    "path": "crates/datluma-service/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "92f7937576a1b0de9a9bfb3a4b05c871d18ccb3b",
+    "ecosystem": "cargo",
+    "bytes": 1838,
+    "names": [
+     "argon2.workspace",
+     "async-trait.workspace",
+     "base64.workspace",
+     "chacha20poly1305.workspace",
+     "calamine.workspace",
+     "chrono.workspace",
+     "csv.workspace",
+     "datluma-ai.workspace",
+     "datluma-core.workspace",
+     "datluma-dialect.workspace",
+     "datluma-lint.workspace",
+     "datluma-driver.workspace",
+     "datluma-driver-mysql",
+     "datluma-driver-oracle",
+     "datluma-driver-postgres",
+     "datluma-driver-sqlserver",
+     "datluma-driver-jdbc",
+     "datluma-driver-sqlite",
+     "directories.workspace",
+     "encoding_rs.workspace",
+     "encoding_rs_io.workspace",
+     "keyring.workspace",
+     "minijinja",
+     "quick-xml.workspace",
+     "rusqlite.workspace",
+     "rust_xlsxwriter.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "serde-saphyr.workspace",
+     "sqlparser.workspace",
+     "tokio.workspace",
+     "tracing.workspace",
+     "uuid.workspace",
+     "zip.workspace"
+    ],
+    "dev": [
+     "csv.workspace",
+     "insta.workspace",
+     "tempfile.workspace"
+    ]
+   },
+   {
+    "path": "vendor/postgres-protocol/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "99681d9faa2b484d60082107c3ffd3001715970f",
+    "ecosystem": "cargo",
+    "bytes": 1502
+   },
+   {
+    "path": "vendor/tiberius/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "2cb36cfafb7fab171f563d5d5405e1889cedde6c",
+    "ecosystem": "cargo",
+    "bytes": 5522
+   },
+   {
+    "path": "vendor/tokio-postgres/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "da950763311cdb030adfe74f826894e0a5b13a04",
+    "ecosystem": "cargo",
+    "bytes": 4784
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "vendor/tiberius/CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [
+    "docs/notes/dameng-compat.md",
+    "docs/superpowers/plans/2026-10-22-m0-1-core-and-native-drivers.md",
+    "docs/superpowers/plans/2026-10-22-m0-2-dameng-and-oracle-drivers.md"
+   ],
+   "paths": [
+    "crates/datluma-dialect/sql/dameng.sql",
+    "crates/datluma-dialect/sql/gbase8a.sql",
+    "crates/datluma-dialect/sql/goldendb.sql",
+    "crates/datluma-dialect/sql/mariadb.sql",
+    "crates/datluma-dialect/sql/mysql.sql",
+    "crates/datluma-dialect/sql/oceanbase.sql",
+    "crates/datluma-dialect/sql/oceanbase_oracle.sql",
+    "crates/datluma-dialect/sql/opengauss.sql",
+    "crates/datluma-dialect/sql/oracle.sql",
+    "crates/datluma-dialect/sql/postgres.sql",
+    "crates/datluma-dialect/sql/sqlite.sql",
+    "crates/datluma-dialect/sql/sqlserver.sql",
+    "crates/datluma-dialect/sql/tidb.sql",
+    "crates/datluma-driver-jdbc/tests/dameng.rs",
+    "crates/datluma-driver-jdbc/tests/oracle.rs",
+    "crates/datluma-driver/src/mysql_syntax.rs",
+    "crates/datluma-dialect/sql/ops/dameng.sql",
+    "crates/datluma-dialect/sql/ops/gbase8a.sql",
+    "crates/datluma-dialect/sql/ops/goldendb.sql",
+    "crates/datluma-dialect/sql/ops/mariadb.sql",
+    "crates/datluma-dialect/sql/ops/mysql.sql",
+    "crates/datluma-dialect/sql/ops/oceanbase.sql",
+    "crates/datluma-dialect/sql/ops/oceanbase_oracle.sql",
+    "crates/datluma-dialect/sql/ops/opengauss.sql",
+    "crates/datluma-dialect/sql/ops/oracle.sql",
+    "crates/datluma-dialect/sql/ops/postgres.sql",
+    "crates/datluma-dialect/sql/ops/sqlite.sql",
+    "crates/datluma-dialect/sql/ops/sqlserver.sql",
+    "crates/datluma-dialect/sql/ops/tidb.sql",
+    "crates/datluma-dialect/sql/privilege/dameng.sql",
+    "crates/datluma-dialect/sql/privilege/gbase8a.sql",
+    "crates/datluma-dialect/sql/privilege/mariadb.sql",
+    "crates/datluma-dialect/sql/privilege/mysql.sql",
+    "crates/datluma-dialect/sql/privilege/oceanbase.sql",
+    "crates/datluma-dialect/sql/privilege/oceanbase_oracle.sql",
+    "crates/datluma-dialect/sql/privilege/opengauss.sql",
+    "crates/datluma-dialect/sql/privilege/oracle.sql",
+    "crates/datluma-dialect/sql/privilege/postgres.sql",
+    "crates/datluma-dialect/sql/privilege/sqlserver.sql",
+    "crates/datluma-dialect/sql/privilege/tidb.sql",
+    "crates/datluma-dialect/src/design/mysql.rs",
+    "crates/datluma-dialect/src/design/oracle.rs",
+    "crates/datluma-dialect/src/design/postgres.rs",
+    "crates/datluma-dialect/src/design/sqlite.rs",
+    "crates/datluma-dialect/src/design/sqlserver.rs",
+    "crates/datluma-dialect/src/meta/sqlite.rs",
+    "crates/datluma-dialect/tests/fixtures/dameng.sql",
+    "crates/datluma-dialect/tests/fixtures/gbase8s.sql",
+    "crates/datluma-dialect/tests/fixtures/mariadb_only.sql",
+    "crates/datluma-dialect/tests/fixtures/mysql.sql",
+    "crates/datluma-dialect/tests/fixtures/mysql_only.sql",
+    "crates/datluma-dialect/tests/fixtures/opengauss.sql",
+    "crates/datluma-dialect/tests/fixtures/oracle.sql",
+    "crates/datluma-dialect/tests/fixtures/postgres.sql",
+    "crates/datluma-dialect/tests/fixtures/sqlite.sql",
+    "crates/datluma-dialect/tests/fixtures/sqlserver.sql",
+    "crates/datluma-dialect/Cargo.toml",
+    "crates/datluma-driver-jdbc/Cargo.toml",
+    "crates/datluma-driver-mysql/Cargo.toml",
+    "crates/datluma-driver-oracle/Cargo.toml",
+    "crates/datluma-driver-postgres/Cargo.toml",
+    "crates/datluma-driver-sqlite/Cargo.toml",
+    "crates/datluma-driver-sqlserver/Cargo.toml",
+    "crates/datluma-driver/Cargo.toml",
+    "crates/datluma-dialect/sql/informix.sql",
+    "crates/datluma-dialect/sql/kingbase.sql",
+    "crates/datluma-dialect/src/browse.rs",
+    "crates/datluma-dialect/src/changes.rs",
+    "crates/datluma-dialect/src/ddl.rs",
+    "crates/datluma-dialect/src/dml.rs",
+    "crates/datluma-dialect/src/ident.rs",
+    "crates/datluma-dialect/src/import.rs",
+    "crates/datluma-dialect/src/lib.rs",
+    "crates/datluma-dialect/src/literal.rs",
+    "crates/datluma-dialect/src/namespace.rs",
+    "crates/datluma-dialect/src/ops.rs",
+    "crates/datluma-dialect/src/session.rs",
+    "crates/datluma-dialect/src/split.rs",
+    "crates/datluma-dialect/src/types.rs",
+    "crates/datluma-dialect/src/variant.rs",
+    "crates/datluma-dialect/src/version.rs",
+    "crates/datluma-dialect/tests/meta_live.rs",
+    "crates/datluma-dialect/tests/meta_snapshots.rs",
+    "crates/datluma-driver-jdbc/src/conn.rs",
+    "crates/datluma-driver-jdbc/src/drivers.rs",
+    "crates/datluma-driver-jdbc/src/error.rs",
+    "crates/datluma-driver-jdbc/src/frame.rs",
+    "crates/datluma-driver-jdbc/src/lib.rs",
+    "crates/datluma-driver-jdbc/src/position.rs",
+    "crates/datluma-driver-jdbc/src/process.rs",
+    "crates/datluma-driver-jdbc/tests/conformance.rs",
+    "crates/datluma-driver-mysql/src/conn.rs",
+    "crates/datluma-driver-mysql/src/error.rs",
+    "crates/datluma-driver-mysql/src/exec.rs",
+    "crates/datluma-driver-mysql/src/lib.rs",
+    "crates/datluma-driver-mysql/src/value.rs",
+    "crates/datluma-driver-mysql/tests/conformance.rs",
+    "crates/datluma-driver-mysql/tests/tls.rs",
+    "crates/datluma-driver-oracle/src/conn.rs",
+    "crates/datluma-driver-oracle/src/error.rs",
+    "crates/datluma-driver-oracle/src/lib.rs",
+    "crates/datluma-driver-oracle/src/value.rs",
+    "crates/datluma-driver-oracle/tests/conformance.rs",
+    "crates/datluma-driver-postgres/src/conn.rs",
+    "crates/datluma-driver-postgres/src/error.rs",
+    "crates/datluma-driver-postgres/src/exec.rs",
+    "crates/datluma-driver-postgres/src/lib.rs",
+    "crates/datluma-driver-postgres/src/tls.rs",
+    "crates/datluma-driver-postgres/src/types.rs",
+    "crates/datluma-driver-postgres/tests/conformance.rs",
+    "crates/datluma-driver-postgres/tests/tls.rs",
+    "crates/datluma-driver-sqlite/src/conn.rs",
+    "crates/datluma-driver-sqlite/src/error.rs",
+    "crates/datluma-driver-sqlite/src/lib.rs",
+    "crates/datluma-driver-sqlite/src/value.rs",
+    "crates/datluma-driver-sqlite/tests/conformance.rs",
+    "crates/datluma-driver-sqlserver/src/actor.rs",
+    "crates/datluma-driver-sqlserver/src/conn.rs",
+    "crates/datluma-driver-sqlserver/src/error.rs",
+    "crates/datluma-driver-sqlserver/src/exec.rs",
+    "crates/datluma-driver-sqlserver/src/lib.rs",
+    "crates/datluma-driver-sqlserver/src/types.rs",
+    "crates/datluma-driver-sqlserver/tests/conformance.rs",
+    "crates/datluma-driver/src/blocking.rs",
+    "crates/datluma-driver/src/cancel.rs",
+    "crates/datluma-driver/src/conformance.rs",
+    "crates/datluma-driver/src/exec.rs",
+    "crates/datluma-driver/src/lib.rs",
+    "crates/datluma-driver/src/native.rs",
+    "crates/datluma-driver/src/params.rs",
+    "crates/datluma-driver/src/traits.rs",
+    "crates/datluma-driver/tests/blocking.rs",
+    "crates/datluma-driver/tests/fake_driver.rs",
+    "docs/superpowers/plans/2026-10-22-m0-1-core-and-native-drivers.md",
+    "docs/superpowers/plans/2026-10-22-m0-2-dameng-and-oracle-drivers.md",
+    "docs/superpowers/plans/2026-10-22-m0-3a-dialect-core.md",
+    "crates/datluma-dialect/sql/ops/informix.sql",
+    "crates/datluma-dialect/sql/privilege/informix.sql",
+    "crates/datluma-dialect/src/compare/apply.rs",
+    "crates/datluma-dialect/src/compare/mod.rs",
+    "crates/datluma-dialect/src/compare/normalize.rs",
+    "crates/datluma-dialect/src/compare/sync.rs",
+    "crates/datluma-dialect/src/compare/tests.rs",
+    "crates/datluma-dialect/src/design/catalog.rs",
+    "crates/datluma-dialect/src/design/diff.rs",
+    "crates/datluma-dialect/src/design/informix.rs",
+    "crates/datluma-dialect/src/design/mod.rs",
+    "crates/datluma-dialect/src/design/rebuild.rs",
+    "crates/datluma-dialect/src/design/sql.rs",
+    "crates/datluma-dialect/src/meta/assemble.rs",
+    "crates/datluma-dialect/src/meta/coltype.rs",
+    "crates/datluma-dialect/src/meta/mod.rs",
+    "crates/datluma-dialect/src/meta/rows.rs",
+    "crates/datluma-dialect/src/meta/template.rs",
+    "crates/datluma-dialect/src/migrate/data.rs",
+    "crates/datluma-dialect/src/migrate/expr.rs",
+    "crates/datluma-dialect/src/migrate/mod.rs",
+    "crates/datluma-dialect/src/migrate/names.rs",
+    "crates/datluma-dialect/src/migrate/script.rs",
+    "crates/datluma-dialect/src/migrate/tests.rs",
+    "crates/datluma-dialect/src/migrate/types.rs",
+    "crates/datluma-dialect/src/privilege/change.rs",
+    "crates/datluma-dialect/src/privilege/effective.rs",
+    "crates/datluma-dialect/src/privilege/mod.rs",
+    "crates/datluma-dialect/src/privilege/redact.rs",
+    "crates/datluma-dialect/src/privilege/rows.rs",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__dameng.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__gbase8s.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__kingbase.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__mariadb.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__mysql.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__oceanbase.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__oceanbaseoracle.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__opengauss.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__oracle.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__postgres.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__sqlite.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__sqlserver.snap",
+    "crates/datluma-dialect/tests/snapshots/meta_snapshots__tidb.snap",
+    "web/src/features/editor/dialect.test.ts",
+    "web/src/features/editor/dialect.ts",
+    "web/src/features/sql/dialects.test.ts",
+    "web/src/features/sql/dialects.ts",
+    "crates/datluma-dialect/src/compare/snapshots/datluma_dialect__compare__tests__sync_mysql.snap",
+    "crates/datluma-dialect/src/compare/snapshots/datluma_dialect__compare__tests__sync_pg.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__mysql__tests__mysql56_everything.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__mysql__tests__mysql56_move.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__mysql__tests__mysql_alter.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__mysql__tests__mysql_create.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__mysql__tests__mysql_everything.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__mysql__tests__mysql_move.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__oracle__tests__dameng_alter.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__oracle__tests__dameng_create.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__oracle__tests__dameng_everything.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__oracle__tests__oracle_alter.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__oracle__tests__oracle_create.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__oracle__tests__oracle_everything.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__postgres__tests__pg_alter.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__postgres__tests__pg_create.snap",
+    "crates/datluma-dialect/src/design/snapshots/datluma_dialect__design__postgres__tests__pg_everything.snap"
+   ]
+  },
+  "fail_count": 0
+ },
+ "NoMoreFood/Crypture": {
+  "fn": "NoMoreFood/Crypture",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-26T10:01:19Z",
+  "default_branch": "master",
+  "pushed_at": "2026-11-18",
+  "stars": 22,
+  "tree": {
+   "sha": "5cd757baaa08829a744ce24f03feea9ddc597c22",
+   "etag": "W/\"55dceb7a8c2084e8bd122a38df815873855640b5d48809ab0d0fd2acaf01ed90\"",
+   "truncated": false,
+   "path_count": 114,
+   "matched": [
+    "Code/Crypture.csproj",
+    "Tests/Crypture.Tests.csproj"
+   ]
+  },
+  "files": [
+   {
+    "path": "Code/Crypture.csproj",
+    "kind": "dep",
+    "blob_sha": "59a06f33895ba8c6a3e3c52c3ba4766cb8b8e26c",
+    "ecosystem": "csproj",
+    "bytes": 3020,
+    "names": [
+     "Microsoft.EntityFrameworkCore.Sqlite",
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "Microsoft.Data.SqlClient",
+     "SQLitePCLRaw.bundle_e_sqlite3"
+    ]
+   },
+   {
+    "path": "Tests/Crypture.Tests.csproj",
+    "kind": "dep",
+    "blob_sha": "6a892280fd3018b77df15458d945f04ef8bf6a44",
+    "ecosystem": "csproj",
+    "bytes": 751,
+    "names": [
+     "Microsoft.Data.SqlClient"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [],
+   "matrix_urls": [
+    "https://devblogs.microsoft.com/dotnet/post-quantum-cryptography-in-dotnet/"
+   ]
   },
   "fail_count": 0
  }
