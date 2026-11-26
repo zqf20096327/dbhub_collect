@@ -98,7 +98,7 @@ Databasus performs a real restore to confirm backups are usable, not just intact
 - **Zero-trust storage**: Backups are encrypted and remain useless to attackers, so you can safely store them in shared storage like S3, Azure Blob Storage, etc.
 - **Encryption for secrets**: Any sensitive data is encrypted and never exposed, even in logs or error messages
 - **Read-only user**: Databasus uses a read-only user by default for backups and never stores anything that can modify your data
-- **Two-factor authentication**: Password sign-in can require a six-digit code emailed to the account. Sign-in through Google or GitHub keeps relying on the provider's own checks
+- **Two-factor authentication**: sign-in can require a code sent by email or a code from an authenticator app (TOTP)
 
 ### 👥 **Suitable for teams** <a href="https://databasus.com/access-management">(docs)</a>
 
@@ -116,7 +116,7 @@ Databasus performs a real restore to confirm backups are usable, not just intact
 
 ### 💾 **Supported databases**
 
-- **PostgreSQL**: 14, 15, 16, 17 and 18 (physical and logical)
+- **PostgreSQL**: 12 to 19 (logical), 17 to 19 (physical)
 - **MySQL**: 5.7, 8.0, 8.4, 9 and 26 (logical only)
 - **MariaDB**: 5.5, 10, 11, 12 and 13 (logical only)
 - **MongoDB**: 4.2+, 5, 6, 7, 8 and 9 (logical only)

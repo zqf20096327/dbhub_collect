@@ -9,12 +9,22 @@ So we're actively developing Joomla 3.x UTD as an up-to-date distribution of the
 
 If you are a Joomla extension developer still supporting Joomla 3.x and you are reading this, please do your users a favour and make sure your extension update XML files don't stop at Joomla 3.10.x.
 
-**New in 3.17: work with your site through AI assistants and the command line.** Joomla 3.x UTD has a built-in MCP server and a command line with 100 commands. See the guide, **[AI Assistants & the Command Line](AI-GUIDE.md)**, to connect Claude, ChatGPT/Codex, Gemini, Copilot, Cursor, Devin Desktop and other assistants, and to use the command line for pretty much anything.
+**New in 3.17: work with your site through AI assistants and the command line.** Joomla 3.x UTD has a built-in MCP server and a command line with 101 commands. See the guide, **[AI Assistants & the Command Line](AI-GUIDE.md)**, to connect Claude, ChatGPT/Codex, Gemini, Copilot, Cursor, Devin Desktop and other assistants, and to use the command line for pretty much anything.
+
+## DOCUMENTATION
+- **[README.md](README.md)** (this file): what Joomla 3.x UTD is, a short summary of each release, upgrading and installing, supported PHP versions and databases.
+- **[CHANGELOG.md](CHANGELOG.md):** every change of every release in detail (security fixes, new features, improvements, bug fixes), for developers.
+- **[AI-GUIDE.md](AI-GUIDE.md):** AI assistants through the built-in MCP server, and the command line (`cli/joomla.php`): setting up a client, permissions, recipes, the command reference.
+- **[CLI-GUIDE.md](CLI-GUIDE.md):** for extension developers: adding your own commands to the command line (and the MCP server) through a console plugin.
+- **[API-GUIDE.md](API-GUIDE.md):** for extension and template developers: what this distribution adds to Joomla 3's PHP and JavaScript API (the document head, scripts at the end of the page, the shared `CMS` script, helpers).
+- **[LICENSE.txt](LICENSE.txt):** GNU General Public License, version 2 or later.
 
 ---
 
 ## CONTENTS
+- [Documentation](#documentation)
 - [Changelog](#changelog)
+  - [Version 3.19 - released November 25th, 2026](#version-319---released-november-25th-2026)
   - [Version 3.18 - released November 5th, 2026](#version-318---released-november-5th-2026)
   - [Version 3.17 - released October 10th, 2026](#version-317---released-october-10th-2026)
   - [Version 3.16 - released October 3rd, 2026](#version-316---released-october-3rd-2026)
@@ -41,6 +51,107 @@ If you are a Joomla extension developer still supporting Joomla 3.x and you are 
 ## CHANGELOG
 
 A short overview of each release. Every change is described in detail in [CHANGELOG.md](CHANGELOG.md).
+
+## Version 3.19 - released November 25th, 2026
+Summary of changes:
+- **Joomla's November 2026 security release, for Joomla 3:** all 58 issues of Joomla 6.2.1 and 5.4.11 were checked, and the 32 that also affect Joomla 3 are fixed (harmful code in names and pages, missing access checks, slowdowns from specially made texts and more), most of them old Joomla 3 issues that Joomla listed only for its newer versions
+- **Editors that grow with your text** in the administrator, with their toolbars at the top of the window and the editor buttons at its foot
+- **Instant pages:** the Page Cache lets Chrome, Edge and Opera load a page in the background when a visitor is about to open it, and tells CDNs and Varnish how long to keep it
+- **Prothero:** switch between light and dark from the user menu, as in Joomla 6
+- **Picking images and PDF files with the Media Manager itself**, in the folder you used last
+- **System Update** (formerly Joomla! Update), in the System menu
+- **Extensions by Joomdonation work again** (3.18 had removed a part of Joomla 3 they use), Regular Labs' editor button windows too, and many more fixes for extensions such as K2 and Kunena, PostgreSQL, PHP 8 and the administrator templates
+- **TinyMCE 8.11 and PHPMailer 7.2**, their latest releases
+
+Every change is described in detail in [CHANGELOG.md](CHANGELOG.md).
+
+**New features:**
+- The editors grow with your text, as in WordPress' Classic Editor: TinyMCE, TinyMCE (legacy) and the plain text box no longer scroll inside a fixed box. Markdown and Blocks already did. The editors' toolbars stay at the top of the window and the row of editor buttons (Article, Image, Read More...) at its foot, so they're at hand in long texts. Each editor has a Grow with Content option to turn it off. This is for the administrator: when editing on the site, the editors keep their fixed height
+- The Page Cache can load a page in the background when a visitor is about to open it (in Chrome, Edge and Opera), so it shows at once; on by default, for visitors who aren't logged in
+- Prothero: switch between light and dark (or follow your device) from the user menu at the top right, as in Joomla 6's Atum; the choice applies at once and is remembered in that browser, login page included
+- Command line: one command updates every extension and template that has an update (`extension:update --all`, with `--dry-run` to see first what it would do)
+
+**Improvements:**
+- TinyMCE updated to 8.11.0 (editing fixes for accordions, lists, tables, images and right-to-left text) the mail library PHPMailer to 7.2.0 (fixes for long address lists and signed messages), and marked, which turns Markdown into HTML in the Markdown editor, to 18.3.0 (parsing fixes, faster on long texts)
+- The Page Cache tells caches in front of the site (a CDN, Varnish) how long they may keep each page (1 minute for the home page, 3 for the others), while browsers still check for a fresh copy every time; set it to 0 to turn it off
+- Joomla! Update is now **System Update**, in the System menu above System Information (it's no longer listed under Components), with the new name everywhere in the administrator, its update notifications included
+- A contact's Miscellaneous Information is edited in the first tab, below the other details, instead of a tab of its own
+- Prothero and Isis have a Page Transitions option, on by default, to turn off the fade between administrator pages
+- The installer and Joomla Update no longer advise turning PHP's output buffering off: it's on at most hosts and does Joomla no harm. System Information shows how it's set (off, on in pieces of a given size, or on without a limit)
+- Templates: Options accept WebP, AVIF, SVG and ICO images and WOFF2 fonts, and uploads of up to 8 MB (updated sites get these once; BMP, an outdated format, comes off the list)
+- Extensions: Manage and Discover also find extensions by their author or copyright, not only by name
+- The Image and PDF buttons and image fields open the Media Manager itself, showing only images (or only PDF files): its folder tree, uploads, new folders, renaming, cropping and thumbnail sizes are there while you pick; a click picks a file, a double click inserts it. It works the same when editing on the site, where it looks the same whatever the template
+- Global Configuration can turn off the hints the site sends to browsers ahead of each page (Resource Hints in HTTP Headers, on by default), for servers, CDNs or optimising extensions that send their own
+- Global Configuration has a Frontend Settings section on its first tab, gathering the settings that only concern the site: Site Offline, Inline Editing, the site's default editor, the default CAPTCHA and the feed settings
+- The window for choosing a module position (used by extensions) looks and works like the other pickers in Isis and Prothero, with Search Tools and a larger window
+- The windows for choosing an article, category, contact, news feed, menu item or module position, and those for creating or editing one from a field, share one piece of code instead of a copy each, and 15 files Joomla 3 hadn't used since 2016 are gone; they work as before
+
+**Security fixes:**
+- Multilingual Associations: a crafted link opened by a logged-in administrator could add code to the page that picks an item to associate (an old Joomla 3 issue)
+- Joomla's security release of November 2026 (Joomla 6.2.1 and 5.4.11): all 58 issues were checked, and the 32 that also affect Joomla 3 are fixed here (all old Joomla 3 issues):
+  - Harmful code can no longer be saved through the names of contacts, news feeds, banners, banner clients and modules, or slipped into Smart Search's search page, the administrator menu, the language installer, Content History and template archives
+  - Visitors can no longer send messages to unpublished or restricted contacts, see restricted contacts, news feeds, tags or associated items, rate articles they can't see, or send privacy requests without logging in; the site no longer opens the administrator's menu item list to visitors
+  - Editors can no longer move items into categories, or fields into other components, where they aren't allowed to create them, nor set a contact's publishing dates without the right to publish; administrators without access to Users can no longer log other users out
+  - A crafted language setting can no longer make the site run files from elsewhere, an account named like the recovery user's ID no longer gets its rights, and password reset links stop working once the password or email changes
+  - Long specially made texts no longer slow the site down (text filtering, email cloaking, Smart Search); log files always keep their protective first line; Install from Web no longer sends your form's security token to extension providers
+
+**Bug fixes:**
+- **Extensions:**
+  - Windows opened by older extensions' buttons (such as Regular Labs' Tooltips, Tabs and Sliders in the editor) open as they did before 3.18 again, instead of empty or with a form that didn't work ([#36](https://github.com/joomlaworks/joomla-3.x/issues/36))
+  - Extensions by Joomdonation (Payment Form, Events Booking, Membership Pro, Docman and others built on its OSL library) work again: 3.18 had removed a part of Joomla 3 they rely on (the Framework's "DI" container), and this update brings it back
+- **Administrator:**
+  - Prothero: messages that extensions show over the page (such as K2's) are no longer faint and half hidden under the toolbar
+  - Prothero on phones: the end of the opened menu is no longer hidden when the status bar at the bottom takes two lines
+  - Isis and Prothero: the filters shown by Search Tools are lined up in even columns, as many to a line as fit, instead of wide lists out of line, with the search field as wide as one of them; the ordering and number of items sit at the right of the search bar, on the same line in the windows for picking items
+  - Menus whose top level item went missing from the database (no new menu item could be saved, and Rebuild failed) are repaired by clicking Rebuild
+  - The list for picking a contact (for a menu item or in an editor) no longer shows each contact's name twice
+  - Multilingual Associations: Select Target and Change Target list the target language's items again (they showed nothing since 3.18)
+  - The editors' Fields button no longer shares its search and filters with Fields: Manage
+  - The list for picking a menu item no longer gives an item without a language the language of the item above it
+  - Searching the list of module positions also finds the positions templates declare
+  - The Joomla logo at the top right stays in the middle of the header when an extension makes its title taller, and the icons of large buttons (such as Reset Messages) and of Log out in the status bar line up with their text (Prothero and Isis)
+- **Site and templates:**
+  - Windows opened over a page (such as the image picker) are no longer cut off at their right edge on Hammond, Finch and Rookwood
+  - Long tooltips (such as an extension's preview of a list item) open above the pointer when there's no room below, instead of making the page jump
+  - Templates using the name "collapse" for their own layout (such as Foundation-based templates' rows) no longer lose whole sections of the page
+  - Hammond, Finch and Rookwood: their script no longer holds up the first view of the page on phones (PageSpeed counted it as blocking the page)
+  - Hammond: the menu button can be read by screen readers on phones, World's and Energy's category labels are darker for readability, the "Most read" list's labels are easier to tap, and each "More" link says what it leads to for screen readers and search engines
+  - Rookwood: the violet sections (such as the Studio set's figures) are a little deeper in the dark theme, so their white text is easier to read, and each "View all" link says what it leads to for screen readers
+  - Hammond, Finch and Rookwood: screen readers are told which page links can't be used (Start and Prev on the first page)
+- **Media Manager:**
+  - The Media Manager and its pickers open in the folder you used last, so adding several images from one folder no longer means finding it each time
+  - Long folder names wrap in the folder tree instead of running over the list
+- **Caching:**
+  - Browsers are no longer told to download a page's files in advance when another extension removed or replaced them after the page was put together (such as Regular Labs' extensions or optimisers), which wasted downloads and filled Chrome's console with warnings
+  - The Page Cache also answers header-only requests (as `curl -I` and uptime monitors send), which got "don't cache" headers while the page itself was cached
+- **Installing and uninstalling:**
+  - Extensions with long descriptions (such as AllVideos) no longer show a tooltip running off the screen in Extensions: Manage, Discover, Update and Update Sites: it shows the first few lines as plain text
+  - Uninstalling a package removes all the extensions it installed, also those its own list names wrongly (the Web Links package left its editor button plugin behind)
+  - Packages whose install script checks the minimum PHP version (such as Web Links) can be installed from the command line
+- **Command line:**
+  - `config:set` can set options a recent update added, before Global Configuration has been saved
+- **Templates:**
+  - Opening a BMP, WebP, AVIF or SVG image in a template's files no longer gives an error page: images are shown whatever their format, and WebP and AVIF can be cropped and resized too (AVIF with PHP 8.1 or newer)
+- **Editors:**
+  - TinyMCE now starts in K2's extra fields that use an editor (it stayed a plain text box), and K2 items with such fields no longer jump down to the full text editor a second after opening
+  - TinyMCE in a tab that isn't open when the page loads (such as a contact's Miscellaneous Information) no longer comes up broken, with its menu stacked at the window's edge and its buttons missing
+- **Databases:**
+  - PostgreSQL: extensions that start new items from their table's defaults (such as Kunena, whose user profiles broke registration) work again, and text columns keep their own defaults
+- **PHP compatibility:**
+  - No more PHP 8 deprecation notices from lists of numbers that extensions build (such as Kunena's) or when installing libraries and packages
+
+**Joomla 3 bugs fixed:**
+- **Media Manager:** it forgot the folder you used, so picking several images from one folder meant finding it each time
+- **Media Manager:** long folder names ran out of the folder tree
+- **Databases:** on PostgreSQL, extensions starting new items from their table's defaults failed to save them
+- **PHP compatibility:** deprecation notices on PHP 8 from lists of numbers and when installing libraries and packages
+- **Caching:** header-only requests (HEAD) bypassed the Page Cache and were told not to cache the page
+- **Administrator:** Rebuild repairs menus that lost their top level item, which stopped new menu items from being saved
+- **Administrator:** the list for picking a contact showed each contact's name twice
+- **Administrator:** searching the list of module positions missed the positions templates declare
+- **Administrator:** the editors' Fields button shared its search and filters with Fields: Manage; the list for picking a menu item could give an item another item's language
+- **Installing and uninstalling:** a package whose list of extensions misnames one leaves it behind when uninstalled; long extension descriptions made the installer's tooltips run off the screen
+- **Templates:** template images other than GIF, JPEG and PNG (BMP was even in the default list) opened on an error page instead of the image
 
 ## Version 3.18 - released November 5th, 2026
 Summary of changes:
@@ -322,8 +433,8 @@ For detailed changelog, please visit: https://github.com/joomlaworks/joomla-3.x/
 
 ## HOW TO UPGRADE FOR EXISTING JOOMLA 3.X SITES
 
-### Using the Joomla Update component in the backend (Web UI method)
-In the Joomla backend, adjust the options for the Joomla Update component (either from the component's "Options" or through Joomla's "Global Configuration") and use the following update URL in the "Custom URL" field, along with these settings:
+### Using System Update in the backend (Web UI method)
+In the Joomla backend, adjust the options of System Update (System → System Update; on stock Joomla 3 and releases before 3.19 it is the Joomla! Update component under Components) (either from the component's "Options" or through Joomla's "Global Configuration") and use the following update URL in the "Custom URL" field, along with these settings:
 
 - Update Channel: Custom URL
 - Minimum Stability: Stable
@@ -337,14 +448,16 @@ Happy updating!
 
 
 ### Using a terminal (CLI method)
-Using your server's terminal, extract the latest rolling release https://github.com/joomlaworks/joomla-3.x/releases/download/rolling/joomla-latest.zip on top of an existing Joomla 3.x installation.
-
-Remember to remove the `/installation` folder afterwards.
-
-In a typical Linux based server, you can easily do the upgrade using the following one-liner command (after you "cd" into your Joomla site's folder):
+On a site already running Joomla 3.x UTD 3.17 or newer, one command does it all (from the site's folder):
 ```
-wget -qO- https://github.com/joomlaworks/joomla-3.x/archive/refs/heads/main.tar.gz | tar -xz --strip-components=1 && rm -rf installation .github .gitignore *.md
+php cli/joomla.php core:update
 ```
+
+On any other Joomla 3.x site (stock 3.10.x included), extract the latest release https://github.com/joomlaworks/joomla-3.x/releases/download/rolling/joomla-latest.zip on top of it, remove the `installation` folder, then finish the update, which applies the database changes and cleans up old files (copying the files alone leaves the database as it was):
+```
+wget -q https://github.com/joomlaworks/joomla-3.x/releases/download/rolling/joomla-latest.zip && unzip -oq joomla-latest.zip && rm -rf joomla-latest.zip installation && php cli/joomla.php core:update:finalise
+```
+Run it as the user the site's files belong to (or fix their owner afterwards).
 
 
 ## HOW TO INSTALL (FOR NEW SITES)
@@ -367,7 +480,7 @@ Installing sites like this needs PHP 7.4 or newer with the `pdo_sqlite` extensio
 ## PHP COMPATIBILITY
 This distribution targets at least PHP 7.4. This is the baseline version we use for broader compatibility with hosts and the Joomla 3.x ecosystem (e.g. other extensions and templates that are actively maintained). Using at least PHP 7.4 we can also guarantee compatibility with all supported databases (as of v3.17): MySQL/MariaDB, Postgres & SQLite.
 
-Sites on PHP 7.1 through 7.3 will still be offered updates to this distribution through the Joomla Update component - 7.4 is our recommended baseline, not a hard cutoff - so these sites can keep receiving security patches even before upgrading their PHP version. PHP 7.0 and below is not supported; the update won't be offered and installing manually isn't recommended.
+Sites on PHP 7.1 through 7.3 will still be offered updates to this distribution through System Update (Joomla! Update before 3.19) - 7.4 is our recommended baseline, not a hard cutoff - so these sites can keep receiving security patches even before upgrading their PHP version. PHP 7.0 and below is not supported; the update won't be offered and installing manually isn't recommended.
 
 **For end users:**
 If your site's server/webspace is configured with PHP 7.0 to 7.3, upgrading to PHP 7.4 is typically a safe switch. The same applies to sites on PHP 5.6, just make sure your extensions and templates are not holding you back.
@@ -415,7 +528,7 @@ sql_mode = ""
 Joomla 3 has always had PostgreSQL drivers, but they fell behind: the main one stopped working on PHP 8.1, and parts of Joomla broke on recent PostgreSQL versions. Since 3.17, PostgreSQL is fully supported again and tested against PostgreSQL 18, with both drivers: "PostgreSQL" (PHP's `pgsql` extension) and "PostgreSQL (PDO)" (`pdo_pgsql`).
 
 - **Versions:** PostgreSQL 9.5 is the minimum (9.0 until 3.17), but use a recent version: 16 or newer, preferably 18.
-- **Installing and updating:** choose either PostgreSQL driver in the installer. Joomla Update, Extensions: Database and the "Restore uninstalled core extensions" option work as on MySQL.
+- **Installing and updating:** choose either PostgreSQL driver in the installer. System Update, Extensions: Database and the "Restore uninstalled core extensions" option work as on MySQL.
 - **Command line:** `php cli/joomla.php database:export` and `database:import` work on PostgreSQL, and `database:convert` moves a site between MySQL/MariaDB, PostgreSQL and SQLite, in any direction (e.g. `php cli/joomla.php database:convert --to=postgresql --user=... --password=... --database=...`). Converting translates column types and Joomla's "no date" values, which differ between MySQL and PostgreSQL, checks that every table has all its rows, and fixes the new database's structure as Extensions: Database would. The site is offline while its database is copied, and the old database is left as it is. Tables of MySQL-only extensions get the defaults MySQL would apply, so their code keeps working on PostgreSQL.
 - **Core extensions:** we've gone the extra mile and added the PostgreSQL install scripts that Banners, Contacts and News Feeds never had, so these can be uninstalled and installed again on PostgreSQL too.
 - **Usernames:** checks that a username or email address isn't taken ignore case, as on MySQL, but not accents: `Àdmin` and `admin` are two users on PostgreSQL (and SQL Server), one on MySQL/MariaDB.

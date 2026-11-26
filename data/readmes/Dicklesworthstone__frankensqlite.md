@@ -70,7 +70,7 @@ signature fails closed rather than silently downgrading authenticity.
 | Data races | Possible (careful C) | Prevented inside the Rust engine by ownership and type-system checks |
 | File format | SQLite 3.x | SQLite 3.x layout; UTF-8 and UTF-16le/be text encodings are admitted for reads and writes, with parity verification deepest on the UTF-8 surface |
 | Self-healing storage | No | Opt-in (`PRAGMA raptorq_repair_symbols = N`, default 0): native file-backed connections with a blocking pool generate WAL repair symbols asynchronously, and a writable open of an opted-in database repairs damaged WAL frames from them; the main database file is not covered |
-| Page-level encryption | No (commercial SEE extension) | Not currently available: the XChaCha20-Poly1305 DEK/KEK implementation exists in `fsqlite-pager`, but no `PRAGMA key`/`rekey` dispatch is wired into `Connection` |
+| Page-level encryption | No (commercial SEE extension) | Built-in compatibility page-level encryption (XChaCha20-Poly1305 DEK/KEK, Argon2id, `<db>-key` sidecar, `PRAGMA key`/`hexkey`/`rekey`/`hexrekey` with O(1) KEK re-wrap); `fsqlite-c-api` has no `sqlite3_key`/`sqlite3_rekey` yet and Native ECS encrypt-then-code remains design-only |
 | SQL dialect | Full | Large and growing subset; parser coverage exceeds full execution parity today |
 | Extensions | FTS3/4/5, R-tree, JSON1, etc. | FTS5, JSON1, R-tree/geopoly, ICU, and misc (`generate_series`) wired in live engine; session is a library facade; FTS3/4 are helper-level only |
 | Cross-process MVCC | No | Partial (shared-memory coordination, bounded by the measured harness scale) |
@@ -98,4 +98,4 @@ Most of the workspace inherits `unsafe_code = "forbid"` from the root Cargo work
 
 ### 4. File Format Compatibility Is Non-Negotiable
 
-Compatibility with existing SQLite databases is a core goal of the current runtime. FrankenSQLite is built around standard `.db` plus rollback-journal/WAL files, and a major part of the harness exists to drive byte- and behavior-level parity against C SQLite. The runtime admits databases whose header declares encoding 1 (UTF-8) or encodings 2/3 (UTF-16le/UTF-16be) for both reads and writes. Parity verification is deepest on the UTF-8 sur
+Compatibility with existing SQLite databases is a core goal of the current runtime. FrankenSQLite is built around standard `.db` plus rollback-journal/WAL files, and a major part of the harness exists to drive byte- and behavior-level parity against C SQLite. The runtime admits databases whose header declares encoding 1 (U

@@ -190,7 +190,17 @@ contains only Users, Roles, and Schemas. Context menus drop what Fabric does
 not support: Back Up, Restore, Backup History, Rename, Delete and Shrink on a
 database; Back Up and Restore on **Databases**; New User on **Users**; Rebuild
 All Indexes and Full-Text index on a table. This layout is per connection; other
-connected servers keep their usual folders.
+connected servers keep their usual folders. The Fabric server menu also omits
+Activity Monitor and View SQL Server Log.
+
+Azure SQL Database is identified by the server's reported engine edition, not
+its connection address. Object Explorer omits unsupported instance folders,
+Service Broker, CLR assemblies/types, FileTables, External Libraries and SQL
+Server Audit specifications, plus native Back Up/Restore/Backup History and
+New Server Role menu actions. Database triggers, table/view triggers, CHECK
+constraints, indexes, Query Store, supported security objects and Storage remain;
+Extended Events lives under each database. Object Explorer Details uses the
+same folder rules. Managed Instance keeps its separate instance-level features.
 
 Fabric statistics lists use `sys.stats` and `STATS_DATE`, without the unsupported
 `sys.dm_db_stats_properties` DMV. Selecting a statistic shows its
@@ -228,8 +238,8 @@ failed peer connection never retries with another server's credentials.
 
 ## Object Explorer
 
-The current database of the active query tab has a `✓` before its name,
-followed by one space, in every icon style.
+The current database of the active query tab is drawn in bold (bright yellow in
+the dark theme, the title color in the others), in every icon style.
 **Use Database**, the first item in a database's right-click
 menu, changes that tab's existing session without editing its SQL or clearing
 its results. It is disabled while busy, for another connection identity, and

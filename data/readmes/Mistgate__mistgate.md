@@ -134,7 +134,7 @@ Also in the box:
 
 - When some networks cannot reach a server, people get to it through another of your nodes, which only forwards the encrypted traffic. The panel checks the path before switching it on and watches it afterwards; Ways in on the node page is a graph of how people reach the server, and the Nodes page maps the whole fleet. [Relays](docs/en/guide/relays.md)
 - Optional checks of whether your servers open from inside a country, network by network: Globalping probes on home and mobile networks over IPv4 and IPv6, volunteer and SIM probes, block lists and a TSPU probe from your own node. Most sources work only in Russia. [Reachability](docs/en/operations/reachability.md)
-- No Docker, no database server. The panel idles at 16-20 MiB of memory on a 1 vCPU / 1 GB server. [Benchmarks](docs/en/reference/benchmarks.md), including where Mistgate is slower.
+- No Docker, no database server. The panel idles at 39-44 MiB of memory on a 1 vCPU / 1 GB server. [Benchmarks](docs/en/reference/benchmarks.md), including where Mistgate is slower.
 - Strangers who open the panel's address see a decoy site; the admin is behind a secret path or host name.
 - Who gets which server: a node goes to everyone, to chosen groups or to nobody yet, and a person can be in several groups. [Groups](docs/en/guide/users-and-groups.md)
 - A desktop app for Windows, [Mistgate](https://github.com/Mistgate/mistgate-client), works with these panels and with plain subscription links.
@@ -207,20 +207,28 @@ An AI agent that can run `ssh` can do these steps with the prompt in the [AI age
 |:--|:--|:--|:--|:--|:--|:--|
 | Runs without Docker | ✅ | ✅ | ❌ | ✅ | 🟡 partial | ✅ |
 | Database | SQLite | SQLite or PostgreSQL | PostgreSQL + Redis | MySQL + Redis | SQLite, MySQL, MariaDB or PostgreSQL | SQLite |
-| Panel RAM, idle | 16-20 MiB¹ | 68-74 MiB¹ | 426-454 MiB¹ | not measured | 262-265 MiB¹ | not measured |
+| Panel RAM, idle | 39-44 MiB¹ | 73-76 MiB¹ | 436-464 MiB¹ | not measured | 273-277 MiB¹ | not measured |
 | Add a node from the panel (SSH) | ✅ | ❌ | ❌ | ❌ | ❌ | ? |
-| Hysteria2 | ✅ | ✅ | 🟡 partial | ✅ | ✅ | ✅ |
-| VLESS REALITY | ✅ | ✅ | ✅ | ✅ | ✅ | ? |
-| AmneziaWG | ✅ 2.0 and 3.1 | ✅ 3.1 | ? | ? | ? | ? |
+| Hysteria2 | ✅ native | ✅ | 🟡 partial | ✅ | ✅ | ✅ |
+| VLESS REALITY | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| AmneziaWG | ✅ native, 2.0 and 3.1 | ✅ 3.1 | ❌ | ❌ | ❌ | ❌ |
+| TrustTunnel | ✅ experimental | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Telegram proxy (MTProto) | ✅ experimental | ✅ | ❌ | ✅ | ✅ in the source | ❌ |
+| WireGuard | ❌ | ✅ | 🟡 core config only | ✅ | ✅ | ✅ |
+| TUIC | ❌ | ✅ | ❌ | ✅ | 🟡 sing-box core, only in the source | ✅ |
 | VMess, Trojan, Shadowsocks | ❌ | ✅ | 🟡 partial | ✅ | ✅ | ✅ |
-| Xray JSON or sing-box subscriptions | ✅ both | Xray JSON | ✅ both | ✅ both | sing-box | sing-box |
-| Health checks and alerts | ✅ client-eye checks, node doctor, reachability from a country | ✅ tunnel monitor (opt-in) | ✅ status, Prometheus | 🟡 partial | 🟡 partial | ? |
-| Telegram bot | 🟡 alerts only | ✅ | 🟡 partial | ✅ | ✅ | ? |
-| Built-in MCP server for AI agents | ✅ | ? | ❌ | ? | ? | ? |
+| Xray JSON or sing-box subscriptions | ✅ both | Xray JSON | ✅ both | ✅ both | ✅ both | sing-box |
+| Relay through an entry node | ✅ | 🟡 outbound chaining | 🟡 bridge by hand | ✅ relay domains | ? | ? |
+| Decoy site | ✅ | 🟡 Hysteria2 only | ? | ✅ | ? | ? |
+| Device limit | ✅ | ✅ | ✅ | ? | ✅ | ? |
+| Several admins with roles | ❌ one admin | ? | ❌ | ✅ | ✅ | ? |
+| Health checks and alerts | ✅ client-eye checks, node doctor, reachability from a country | ✅ tunnel monitor (opt-in) | ✅ status, Prometheus | 🟡 partial | 🟡 partial | 🟡 status only |
+| Telegram bot | 🟡 alerts only | ✅ | 🟡 partial | ✅ | ✅ | 🟡 third-party bot |
+| Built-in MCP server for AI agents | ✅ | ❌ | ❌ | ? | ? | ? |
 
-¹ Private memory of the whole panel group, idle, 0 to 200 users, no node attached, on a 1 vCPU / 1 GB test server (3x-ui includes its Xray core and fail2ban). Method, versions and limits: [Benchmarks](docs/en/reference/benchmarks.md). "?" means the project's own README and docs do not say.
+¹ Private memory of the whole panel group, idle, 0 to 200 users, no node attached, on a 1 vCPU / 1 GB test server (3x-ui includes its Xray core and fail2ban). Method, versions and limits: [Benchmarks](docs/en/reference/benchmarks.md). "?" means the project's own README and docs do not say. "❌" for another project means it says so itself, or its source code does not mention the feature (a code search on 2026-11-24). "native" means the protocol's own core runs on the node, not a reimplementation inside Xray or sing-box.
 
-Others are ahead in protocol breadth, community size and full Telegram bots. The full table with sources, checked on 2026-10-09, is in [Comparison with other panels](docs/en/reference/comparison.md).
+Others are ahead in protocol breadth, community size, admin roles and full Telegram bots. The full table with sources, checked on 2026-10-09 and in part again on 2026-11-24, is in [Comparison with other panels](docs/en/reference/comparison.md).
 
 ## Documentation
 

@@ -10,7 +10,7 @@
 ## Try it in 30 seconds
 
 ```bash
-dotnet add package DataVo.Core --prerelease
+dotnet add package DataVo.Core
 ```
 
 ```csharp
@@ -78,13 +78,14 @@ Full tables, methodology, cross-platform CI runs, and raw outputs:
 
 ## Install
 
-Latest prereleases on [nuget.org](https://www.nuget.org/packages/DataVo.Core/) (**0.4.0-rc.1**, 17 November 2026 — shipping both the **v0.3** and **v0.4** milestones; see the [roadmap](https://arintonakos.github.io/DataVo-DBMS/manual/getting-started/roadmap)):
+Current release on [nuget.org](https://www.nuget.org/packages/DataVo.Core/): **0.5.0** (25 November 2026; see the [roadmap](https://arintonakos.github.io/DataVo-DBMS/manual/getting-started/roadmap)):
 
 ```bash
-dotnet add package DataVo.Core --prerelease
-dotnet add package DataVo.Data --prerelease                  # ADO.NET provider, also used by Dapper
-dotnet add package DataVo.Generators --prerelease            # compiled LINQ, no EF Core dependency
-dotnet add package DataVo.EntityFrameworkCore --prerelease   # EF Core bridge (not a full provider)
+dotnet add package DataVo.Core
+dotnet add package DataVo.Data                  # ADO.NET provider, also used by Dapper
+dotnet add package DataVo.Generators            # compiled LINQ, no EF Core dependency
+dotnet add package DataVo.EntityFrameworkCore   # EF Core bridge (not a full provider)
+dotnet add package DataVo.VectorData            # Microsoft.Extensions.VectorData vector store
 ```
 
 To build packages locally from this repository:
@@ -97,6 +98,12 @@ dotnet add package DataVo.Core --source ./artifacts/packages
 Releases are published from CI with [NuGet Trusted Publishing](https://learn.microsoft.com/nuget/nuget-org/trusted-publishing) when a `v*.*.*` tag is pushed.
 
 ## More Examples
+
+Three runnable demos live under [`examples/`](examples) (`dotnet run -c Release` in any of them):
+
+- [**HybridVectorRagAot**](examples/HybridVectorRagAot): hybrid retrieval with SQL metadata filters (`Category`, `CreatedAt DATETIME`) and HNSW vector similarity, published as one Native AOT binary with no native library beside it.
+- [**MicrosoftAiLocalRag**](examples/MicrosoftAiLocalRag): local RAG retrieval over this repository's manual with `IEmbeddingGenerator<string, Embedding<float>>` and `DataVoVectorStore` (Microsoft.Extensions.VectorData): semantic and filtered hybrid search, `EXPLAIN`, and an LSM reopen. Runs offline; `--ollama` uses a local model.
+- [**LiveReactiveLeaderboard**](examples/LiveReactiveLeaderboard): high-frequency game events feeding incremental `GROUP BY`, top-N and `JOIN` views through `SubscribeZeroAlloc`, checked against a full re-query.
 
 ### Compiled LINQ over a typed table (`DataVo.Generators`)
 
@@ -159,7 +166,7 @@ while (reader.Read())
 
 ## How It Works
 
-- **Two active storage engines:** `InMemory` packs rows into contiguous fixed-width cells (`FlatRowStore`). `Lsm` appends commits to a WAL (flushed to stable storage when `LsmStrictFsync = true`), applies them to an arena-backed MemTable, flushes immutable memory-mapped SSTables at 32 MB in the background, and compacts them asynchronously. Single-column `INT`/`GUID` primary keys are clustered; secondary indexes are keyed SSTables committed atomically with their rows; HNSW graphs snapshot on close and catch up from the WAL on open. (`Disk`, an earlier paged engine, is legacy.)
+- **Two storage modes:** `InMemory` packs rows into contiguous fixed-width cells (`FlatRowStore`). `Lsm` appends commits to a WAL (flushed to stable storage when `LsmStrictFsync = true`), applies them to an arena-backed MemTable, flushes immutable memory-mapped SSTables at 32 MB in the background, and compacts them asynchronously. Single-column `INT`/`GUID` primary keys are clustered; secondary indexes are keyed SSTables committed atomically with their rows; HNSW graphs snapshot on close and catch up from the WAL on open. (`Disk`, an earlier paged engine, is legacy.)
 - **Columnar indexes:** `CREATE INDEX ... USING COLUMNAR` keeps chosen columns as contiguous buffers, persisted into LSM SSTables as 4,096-row segments with per-chunk min/max zone maps so aggregates skip excluded chunks out of core without rebuilding on open.
 - **Typed execution fast paths:** SQL is first offered to typed paths reading directly from stored bytes (single-table scans with `AND`/`OR`/`LIKE`, UTF-8 byte comparisons, unboxed grouping, in-place top-k, key ranges, integer-key hash joins, index-driven joins, dense bit-set anti-joins, columnar aggregates, and cost-based vector search). Any unsupported shape cleanly falls back to the general evaluator.
 - **Hybrid vector search:** Filtered `VECTOR(n)` queries test predicates on stored candidate rows, automatically switch from HNSW to an exact SIMD scan when selectivity makes graph traversal more expensive, and fall back to a filter-first exact scan rather than returning too few rows.
@@ -168,7 +175,7 @@ while (reader.Read())
 
 - **.NET 10** is the supported runtime. The published `DataVo.Core` package currently ships a `net10.0` asset; multi-target packages (`net8.0`, `net9.0`, `net10.0`, `netstandard2.1`) are planned for v0.5.
 - **Native AOT:** `DataVo.Core`, `DataVo.Data`, and `DataVo.Generators` output publish cleanly with `PublishAot=true`. The EF Core preview bridge is excluded from AOT.
-- **Unity** is an evaluation target, not a supported runtime. `DataVoEnablePortableTarget=true` builds an experimental local `netstandard2.1` candidate; a narrow smoke (in-memory, LSM and Disk save/reopen) passes in the Unity 6000.5.4f1 macOS Editor and a macOS IL2CPP Player. Windows IL2CPP is unverified and direct Burst calls are unsupported by design.
+- **Unity** is an evaluation target, not a supported runtime. the package ships a `netstandard2.1` asset (alongside `net8.0`, `net9.0` and `net10.0`); a narrow smoke (in-memory and LSM save/reopen) passes in the Unity 6000.5.4f1 macOS Editor and a macOS IL2CPP Player. Windows IL2CPP is unverified and direct Burst calls are unsupported by design.
 - **Browser / WebAssembly:** `DataVo.Browser` powers the documentation site's playground. It is experimental and not published on npm. To run it locally: `bash ./scripts/deploy-browser-wasm.sh`, then `cd docs && npm install && npm run docs:dev`.
 
 ## Commercial Add-On: DataVo Sync
@@ -192,7 +199,7 @@ The full manual is live at [arintonakos.github.io/DataVo-DBMS](https://arintonak
 
 ## Status
 
-DataVo is prerelease software (`0.4.0-rc.1`). The documented SQL dialect and C# APIs are the release-candidate surface being verified; the on-disk format does not yet carry a long-term cross-version compatibility guarantee, so keep an export or seed script for important data. Validate your own workload before relying on it in production.
+DataVo `0.5.0` is a pre-1.0 release. The documented SQL dialect and C# APIs may still change between minor versions, and the on-disk format does not yet carry a long-term cross-version compatibility guarantee, so keep an export or seed script for important data. Validate your own workload before relying on it in production.
 
 ## License
 

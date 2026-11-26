@@ -183,7 +183,7 @@ by phase.
 | 12 | Branch Management — branch switcher, cross-branch overview, branch-to-branch stock transfers | ✅ |
 | 13 | Analytics — live dashboard plus 18 reports (peak hours, food cost & margins, retention…) with print, CSV, Excel and PDF export, and scheduled report emails | ✅ |
 | 14 | Marketing — coupons, happy-hour discounts, email (your SMTP) / SMS / WhatsApp campaigns with opt-out | ✅ |
-| 15 | Finance — daily cash closing, expenses, monthly budgets | ✅ · 🚧 petty cash, expense approvals |
+| 15 | Finance — daily cash closing, expenses with approval (submit, approve or reject with a reason, audit trail), petty cash box (top-ups, vouchers, counts), monthly budgets; see [docs/FINANCE.md](docs/FINANCE.md) | ✅ |
 | 16 | Maintenance — equipment register, service schedules with overdue flags | ✅ |
 | 17 | Documents — SOPs, contracts, recipes, purchase paperwork, with file attachments (PDF, images, Office) | ✅ |
 | 18 | Security — RBAC, audit log, two-factor sign-in with recovery codes, backup/restore, session expiry, PIN login | ✅ |
@@ -207,8 +207,12 @@ a Settings area (restaurant + branch details, per-branch tax regime — India
 GST/US Sales Tax/EU VAT/Spain IVA, tax-inclusive or -exclusive menu
 pricing) and staff account management (create/deactivate staff, assign
 roles) under **Settings** in the sidebar, photo upload on menu items, and
-an English/Spanish/French language switcher on the guest-facing QR
+a language switcher for English, Spanish, French and Brazilian Portuguese on the guest-facing QR
 ordering page and staff sidebar.
+
+### What's new in 1.44.0
+
+Reports rebuilt: a day book listing every bill with totals, drill-down from each day to its bills, quick date ranges and totals in every export. Order history searches any date range, admins can delete a finished bill from its detail window, and the Audit Log can be exported and can no longer be edited or deleted by anyone. See [CHANGELOG-1.44.0](docs/CHANGELOG-1.44.0.md).
 
 ### What's new (1.42.1 and 1.42.2)
 
@@ -350,7 +354,7 @@ Postgres over the originally-specced SQLite — is in
 | Tables | TanStack Table |
 | Charts | Recharts |
 | Drag & drop | dnd-kit (floor designer, KDS columns) |
-| i18n | Lightweight client-side context (`apps/web/lib/i18n`) — English/Spanish/French so far, no routing/middleware |
+| i18n | Lightweight client-side context (`apps/web/lib/i18n`) — English, Spanish, French and Brazilian Portuguese, no routing/middleware |
 | Auth | JWT (httpOnly cookie) + PIN quick-switch, optional TOTP 2FA |
 | Containers | Docker + Docker Compose |
 
@@ -416,11 +420,13 @@ git clone https://github.com/Raktim94/nodedr-restaurant-pos.git && cd nodedr-res
 
 [`install.sh`](install.sh) generates a `.env` with random secrets (only if
 one doesn't already exist — safe to re-run), builds the backend + web Docker
-images, starts the stack, and waits for the backend to report healthy. Re-run
-it any time after `git pull` to rebuild.
+images, starts the stack, and waits up to 90 seconds for the backend to report healthy. Re-run
+it any time after `git pull` to rebuild. Run `./install.sh --help` to see the
+available options before starting an installation.
 
-Open **http://localhost:1995** and create your restaurant at `/signup` — no
-demo data is loaded by default. To try the app with sample data instead, run
+Open the URL printed by the installer (**http://localhost:1995** by default)
+and create your restaurant at `/signup` — no demo data is loaded by default.
+To try the app with sample data instead, run
 `./install.sh --demo` and sign in with `owner@demo.local` / `Password123!`.
 
 The backend API and Swagger docs are reachable only through the web app's
@@ -560,6 +566,8 @@ changes without silently re-litigating a decision already recorded in
 `PROJECT.md`/`ARCHITECTURE.md`.
 
 This project follows the [Contributor Covenant](./CODE_OF_CONDUCT.md).
+
+Thanks to everyone who has contributed: see [CONTRIBUTORS.md](./CONTRIBUTORS.md).
 
 ## License
 

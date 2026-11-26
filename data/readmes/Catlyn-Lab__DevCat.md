@@ -201,6 +201,9 @@ of these step by step, with every keyboard shortcut on
 - **Hide the sidebar**: click the active icon in the left bar, the toggle at its bottom, or press ⌘B (Ctrl+B).
 - **Notes**: Markdown notes with Edit / Preview, saved as you type. Each note belongs to a project (shown only
   while that project is focused) or to General (shown everywhere); pin, search and move them between projects.
+- **To do**: the list your coding agents keep for each project (`todo_write` / `todo_list` over MCP and in the DevCat
+  Agent): Running, Next, Waiting on others, Waiting on you, Done, with links to PRs, issues and files. It outlives
+  agent sessions; tick items done or move them in the sidebar.
 - **Automatic updates**: DevCat checks GitHub releases and offers new versions in a popup (Update and restart / Later /
   Skip this version), or use *DevCat → Check for Updates…* (macOS menu bar), *Check for updates…* in the project menu
   or click the version in the status bar. Updates are

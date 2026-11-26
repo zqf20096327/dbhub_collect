@@ -34,7 +34,7 @@ python3 wikitila.py --root /pfad/zum/projekt-ordner manifest
 python3 wikitila.py --root /pfad/zum/projekt-ordner check
 ```
 
-Jede Antwort trägt `answer_status` (`belegt` · `widersprüchlich` · `belegt_gueltigkeit_unbestaetigt` · `nicht_belegt`), Flags wie `kanonisch` / `überholt durch` / `veraltet` und die Originalpassagen (`passages`).
+Jede Antwort trägt `answer_status` (`belegt` · `widersprüchlich` · `belegt_gueltigkeit_unbestaetigt` · `nicht_belegt`), Flags wie `kanonisch` / `überholt durch` / `veraltet`, die Originalpassagen (`passages`) sowie eine Coverage-Note (`term_coverage`/`uncovered`) und einen `trace`.
 
 ## Installation
 
@@ -45,10 +45,10 @@ Für KI-Agenten: [docs/agentic-setup.de.md](docs/agentic-setup.de.md) — Instal
 
 ```
 LLM-Wikitila/
-├── wikitila.py                # Hauptwerkzeug: build · search · status · manifest · check · eval · embed
+├── wikitila.py                # Hauptwerkzeug: build · search · coverage · status · manifest · check · eval · embed
 ├── wikitila_graph.py          # optional: lokale Graphify-Extraktion (Ollama, ohne Thinking)
 ├── validate_catalog.py        # Validierung gegen einen Fragenkatalog (3 Messebenen)
-├── test_wikitila.py           # 32 Unit-Tests (synthetischer Korpus, ohne Netz/Ollama)
+├── test_wikitila.py           # 39 Unit-Tests (synthetischer Korpus, ohne Netz/Ollama)
 ├── install.sh                 # Installer für einen Ziel-Ordner
 ├── config.example.toml        # Beispielkonfiguration (→ wikitila.toml)
 ├── authority_register.example.json  # Vorlage für das Authority-Register

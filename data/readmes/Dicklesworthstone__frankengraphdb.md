@@ -30,11 +30,11 @@ The CLI and server can write a graph, query the new state, and recover it after 
 
 **The problem.** Every graph database on the market is a compromise fossilized around one old decision. Neo4j chose pointer-chasing on the JVM (great ergonomics, painful memory, a runtime that took 15 years to vectorize). TigerGraph chose MPP with a proprietary language and a platform-sized footprint. Kùzu got the *query* story right (columnar CSR + vectorization + factorization + worst-case-optimal joins), and then it left the commons: Apple acquired Kùzu Inc. (agreed October 2025, disclosed February 2026 via Apple's EU DMA filing) and the upstream repository was archived read-only — community forks carry the architecture forward while inheriting its gaps, and no engine in the space has the durability, temporal, multi-writer, or verification story. Memgraph/FalkorDB are fast in-memory engines with thin durability. JanusGraph/NebulaGraph pay a permanent impedance tax on a generic KV underlay. The academic frontier has solved essentially every hard subproblem *in isolation*, yet **no shipping system has ever composed them**.
 
-**The solution.** `frankengraphdb` composes them. One codebase, three postures: an embedded library (`fgdb`), a server (`fgdbd`), and a CLI (`fgdb`), all speaking **GQL** (ISO/IEC 39075:2024) with an openCypher on-ramp. Larger-than-memory is first-class everywhere. It is, in a precise sense, *a da
+**The solution.** `frankengraphdb` composes them in an embedded library (`fgdb`), a server (`fgdbd`) and a CLI (`fgdb`). They share a GQL engine with an openCypher compatibility surface. The project targets larger-than-memory operation in all three. Today, local `query --buffered` can stream suppo
 
 [...截断...]
 
-tabase written in the asupersync programming model*, the way FoundationDB is a database written in Flow: structured concurrency, capability contexts, fountain coding, and a deterministic lab runtime are the substrate, not add-ons.
+rted scans from disk under a memory limit. Ordinary database open still materializes the snapshot. Structured concurrency, capability contexts, fountain coding and a deterministic lab runtime come from asupersync.
 
 **Why `frankengraphdb`:**
 
@@ -58,7 +58,7 @@ tabase written in the asupersync programming model*, the way FoundationDB is a d
 ## Quick example
 
 ```gql
--- Create a graph and write some data (serializable by default)
+-- Create a graph and write some data
 CREATE GRAPH social;
 
 INSERT (:Person {name: 'Ada',  born: 1815})
@@ -89,4 +89,5 @@ CALL hybrid.search(
   text   => 'computing pioneers',  text_property => 'bio',
   vector => $query_embedding,      vector_properties => ['e0', 'e1', 'e2'],
   seeds  => $ada, relation => 'KNOWS', max_hops => 2,
-  k => 20, fusion =
+  k => 20, fusion => 'RRF'
+) YIELD node, score RETURN node.nam

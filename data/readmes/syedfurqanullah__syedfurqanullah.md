@@ -39,9 +39,9 @@ Continuously learning new technologies, exploring modern web development practic
 <a href="https://github.com/syedfurqanullah">
   <img src="https://img.shields.io/badge/GitHub-24283B?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
 </a>
-<a href="https://www.facebook.com/syed.furqanullahh">
+<!-- <a href="https://www.facebook.com/syed.furqanullahh">
   <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook">
-</a>
+</a> -->
 <a href="https://x.com/syedfurqanullah">
   <img src="https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white" alt="X">
 </a>

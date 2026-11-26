@@ -82,6 +82,7 @@ The control plane and the data plane talk over the `ControlPlane` gRPC service (
 - **Request / response rewriting** — headers, paths, query strings, status codes and body search/replace.
 - **Custom error pages** rendered with Tera templates — including edge-generated responses such as WAF blocks and paused sites.
 - **Pause a site** from the console: every request gets a `503` maintenance page while the certificate keeps serving and traffic stays logged.
+- **Tunnels** — reach a service inside a private network with **no inbound port and no public IP**: a standalone `pingwaf-tunnel` connector dials out to an edge, and an origin pool bound to the tunnel is served through the normal request path (WAF, rate limiting, cache, logs, certificates). Pairing and management live in **Agents → Tunnels**; see [user-guide.md](docs/user-guide.md#tunnels-internal-services-without-an-inbound-port).
 
 ### 🔐 TLS & Certificates
 - **Automatic ACME / Let's Encrypt** issuance and renewal on the edge (HTTP-01 and DNS-01).

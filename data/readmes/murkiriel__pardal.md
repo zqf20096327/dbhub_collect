@@ -284,7 +284,7 @@ id e limitações em [`docs/FORMATO_SQLITE.md`](docs/FORMATO_SQLITE.md).
 **Catálogo (`catalogo.json`, `schema` 2):** `built_at` (a geração, em UTC), `source_dates` (a data do dado de cada
 fonte), `ufs_geojson` (o contorno dos estados) e `ufs`, com uma entrada por UF e uma `BR` (o Brasil inteiro). Cada
 entrada traz `name`, `bbox`, `built_at`, `coverage` (`level`: de que esfera vêm os radares, `federal`, `state` e
-`municipal`, juntos com `+`; `sources`: as fontes), `counts` e, para cada arquivo, `file`, `bytes`, `sha256` e
+`municipal`, juntos com `+`; `sources`: as fontes que entraram no pacote da UF, **inclusive as de órgão de um estado vizinho cujo radar está colado na divisa**, como o `SEINFRA-BA` em PE: o `level` só conta o órgão da própria UF, o `sources` não filtra por UF), `counts` e, para cada arquivo, `file`, `bytes`, `sha256` e
 `count`; os que só existem na release (`limit_lines`, `sqlite`) trazem `release_asset` no lugar de `file`. O `bbox` é
 `[lat_min, lon_min, lat_max, lon_max]`, **latitude primeiro**, no WGS84, ao contrário do GeoJSON. É um retângulo
 aproximado da UF: difere em até 0,07° do retângulo da malha do IBGE e deixa de fora as ilhas oceânicas de PE e do
@@ -468,11 +468,13 @@ O **código** (pastas `gerador/` e `scripts/`) é **MIT** ([`gerador/LICENSE`](g
 | ANTT — Radar | Radares das concessões federais, com situação e sentido | CC-BY |
 | ANTT — Sinalização | Placas de velocidade máxima das concessões federais, por sentido | CC-BY |
 | Inmetro — PSIE, medidores de velocidade | Situação da aferição (ativo/inativo) e, nas rodovias federais e nas estaduais de SP (DER-SP), o limite do radar que não trazia nenhum; nos medidores com endereço urbano, a confirmação do radar, o limite e os radares que nenhuma outra fonte tem | Creative Commons |
-| DER-SP / Artesp, DER-GO (Goinfra), DER-PE | Radares das rodovias estaduais, com o sentido fiscalizado (SP e GO) | Dado aberto governamental |
+| DER-SP / Artesp | Radares das rodovias estaduais, com o sentido fiscalizado | Dado aberto governamental |
+| Goinfra (DER-GO) — lista de equipamentos de fiscalização eletrônica ativos | Radares fixos e lombadas eletrônicas das rodovias estaduais de Goiás, com limite e o sentido fiscalizado (PDF da página "Relatório de equipamentos de monitoramento") | Sem licença escrita: publicação oficial da Goinfra, sem termo de reuso (ver `gerador/FONTES.md`) |
+| DER-PE | Lombadas e redutores eletrônicos (limite 40 ou 60 km/h) e equipamentos mistos das rodovias estaduais de Pernambuco, em duas listas do site do DER | Dado aberto governamental |
 | DER-SE, AGETO-TO, Detran-MA, SEINFRA-BA | Radares e lombadas eletrônicas das rodovias estaduais de Sergipe, Tocantins, Maranhão e Bahia, com limite | Dado aberto governamental |
 | DER-MG | Radares fixos das rodovias estaduais e federais delegadas de Minas Gerais (rodovia + km, postos na via pela malha estadual da IDE-Sisema e pelo SNV, conferidos pelo município) | Dado aberto governamental |
 | IDE-Sisema (SEMAD-MG) — rodovias estaduais e federais de Minas Gerais | Quilometragem das MG, para pôr os radares do DER-MG na via | Dado aberto governamental |
-| Goinfra — malha rodoviária estadual | Quilometragem das rodovias de Goiás, para converter o sentido em rumo | Dado aberto governamental |
+| Goinfra — malha rodoviária estadual (KMZ do mapa rodoviário) | Quilometragem das rodovias de Goiás, para converter o sentido em rumo | Sem licença escrita: publicação oficial da Goinfra, sem termo de reuso |
 | IBGE — malha das unidades da federação (API de malhas) | Contorno de cada estado, para decidir em que estado fica cada ponto | Dado aberto governamental |
 | IBGE — CNEFE, cadastro de endereços do Censo 2022 | Coordenada do endereço dos medidores do Inmetro que só informam rua e número ou um cruzamento | Dado aberto governamental |
 | Prefeitura do Rio de Janeiro (IPP, SMTR/CET-Rio) | Limite por trecho de rua e radares da cidade | CC-BY 4.0 |
@@ -483,6 +485,7 @@ O **código** (pastas `gerador/` e `scripts/`) é **MIT** ([`gerador/LICENSE`](g
 | EPTC (Porto Alegre) | Radares fixos, lombadas eletrônicas e detectores de avanço de sinal, com limite (relatório público da EPTC) | Dado aberto municipal |
 | Transalvador (Salvador) | Radares fixos, com limite (mapa de equipamentos da Transalvador) | Dado aberto municipal |
 | SEMTRAN (Porto Velho) | Radares fixos, com a validade da aferição (planilha publicada pela SEMTRAN) | Dado aberto municipal |
+| Prefeitura de Mogi das Cruzes (Secretaria de Mobilidade Urbana) | Radares fixos, lombadas eletrônicas e detectores de avanço de sinal, com limite e situação (lista do portal de dados abertos) | Dado aberto municipal (o portal não declara licença) |
 
 ## Projetos irmãos
 

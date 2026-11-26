@@ -6,14 +6,13 @@
 [![Coverage][badge-coverage]][url-sonar]<br>
 [![unsafe forbidden][badge-unsafe]][url-unsafe]
 [![Release][badge-release]][url-release]
-[![PostgreSQL 15–19][badge-pg]][url-pg]
 [![License: MIT][badge-license]][url-license]
 
-Auditstream is an open-source PostgreSQL audit trail engine written in Rust.
+Auditstream is an open-source database audit trail engine written in Rust.
 Application code never writes audit rows itself.
 Adapters attach the actor to each query, generated triggers record changes in `auditstream.changes`, and the CLI reads and exports history.
 
-**[auditstream.dev](https://auditstream.dev)** · **[Documentation](https://auditstream.dev/docs)** · **[Quickstart](https://auditstream.dev/docs/getting-started)** · **[Benchmarks](https://auditstream.dev/docs/evidence)** · **[TypeScript SDKs](https://github.com/auditstream/auditstream-js)**
+**[auditstream.dev](https://auditstream.dev)** · **[Documentation](https://auditstream.dev/docs/)** · **[Quickstart](https://auditstream.dev/docs/getting-started/)** · **[TypeScript SDK](https://auditstream.dev/docs/typescript/)** · **[Benchmarks](https://auditstream.dev/docs/evidence/)**
 
 **Status:** CLI v0.1.0 · Spec v0.1.1 (pre-1.0; breaking changes bump minor). See [Version policy](docs/handbook/releases.md#version-policy).
 
@@ -21,7 +20,7 @@ Adapters attach the actor to each query, generated triggers record changes in `a
 
 ```mermaid
 flowchart LR
-  App["Application + Adapter"] -- "SQL + actor" --> Tables["PostgreSQL tables"]
+  App["Application + Adapter"] -- "SQL + actor" --> Tables["Database tables"]
   Tables --> Triggers["Generated triggers"]
   Triggers --> Changes["auditstream.changes"]
   CLI["auditstream CLI (Rust)"] -- "init / verify" --> Tables
@@ -86,12 +85,13 @@ Measured on 2026-11-24 against PostgreSQL 19.0 and PgBouncer 1.26.1 ([full bench
 
 ## Supported versions
 
-| Dependency | Supported in v0.1 |
-| --- | --- |
-| PostgreSQL | 15 to 19 (14 reached end of life on 2026-11-12) |
-| Node.js | 22.12 or newer; tested on 22, 24, and 26 |
-| Prisma | `@prisma/client` 7.1 and newer within 7.x; Prisma 8 after its stable release |
-| Drizzle | 0.45 and 1.x |
+| Target | Status | Details |
+| --- | --- | --- |
+| PostgreSQL | Supported & tested | 15 to 19 (14 reached end of life on 2026-11-12) |
+| MySQL | Evaluating | Not supported yet — PostgreSQL is the only engine in v0.1 |
+| TypeScript SDK | Supported | Node.js 22.12+ (tested on 22, 24, and 26), `@prisma/client` 7.1+ (7.x; Prisma 8 after stable release), Drizzle 0.45 and 1.x |
+| Python SDK | Planned | No native SDK yet — works today via [`psycopg` and SQL comments](https://auditstream.dev/docs/python/) |
+| Plain SQL | Supported | Any language or driver (Go, Ruby, Java, `psql`) via [SQL comments or `set_config`](https://auditstream.dev/docs/plain-sql/) |
 
 ## Limits
 
@@ -104,7 +104,7 @@ Measured on 2026-11-24 against PostgreSQL 19.0 and PgBouncer 1.26.1 ([full bench
 
 ## Documentation
 
-- [Documentation site (`auditstream.dev/docs`)](https://auditstream.dev/docs) — getting started, adapter guides, CLI reference, and benchmark evidence
+- [Documentation site (`auditstream.dev/docs`)](https://auditstream.dev/docs/) — getting started, TypeScript / Python / Plain SQL guides, CLI reference, and benchmark evidence
 - [User guide](docs/README.md) — tutorials, how-to guides, CLI and schema reference, and capture explanation
 - [Engineering handbook](docs/handbook/README.md) — architecture, capture design, evidence, and release process
 - [Specification 0.1.1](spec/README.md) — normative actor, transport, history table, and export contract
@@ -137,7 +137,5 @@ Auditstream is licensed under the [MIT License](LICENSE).
 [url-unsafe]: https://github.com/auditstream/auditstream/blob/main/Cargo.toml#L41-L42
 [badge-release]: https://img.shields.io/github/v/release/auditstream/auditstream?filter=auditstream-*&style=flat&label=release
 [url-release]: https://github.com/auditstream/auditstream/releases/latest
-[badge-pg]: https://img.shields.io/badge/PostgreSQL-15--19-336791?style=flat&logo=postgresql&logoColor=white
-[url-pg]: #supported-versions
 [badge-license]: https://img.shields.io/github/license/auditstream/auditstream?style=flat
 [url-license]: LICENSE

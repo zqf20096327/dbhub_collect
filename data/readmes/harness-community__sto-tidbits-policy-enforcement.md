@@ -6,7 +6,12 @@
 
 > ## ⚠️ This repo pins vulnerable dependencies on purpose
 >
-> `requirements.txt` is pinned to old versions with known CVEs so the scan reports more than five High and Critical findings. **Do not** copy it into a real project.
+> Both branches pin old libraries with known CVEs. **Do not** copy `requirements.txt` into a real project.
+>
+> | Branch | What the scan is for |
+> |---|---|
+> | `main` | **Pass.** A Harness Trivy scan reported 1 Critical and 4 High. The total is 5, and the policy allows 5. |
+> | `more-than-five-critical` | **Fail.** Older pins, including Django 1.11, Pillow 6.2.0, and PyJWT 1.5.3, so the High + Critical total is greater than 5. |
 
 ---
 
@@ -33,9 +38,12 @@ Before you start, make sure you have:
 
 ---
 
-## Step 1 — Look at the scan target
+## Step 1 — Look at the two scan targets
 
-The scan input is [`requirements.txt`](./requirements.txt). The pipeline clones this public repo. You do not need a fork.
+The scan input is [`requirements.txt`](./requirements.txt). The same pipeline runs either branch. You do not need a fork.
+
+- **`main`** keeps a small pin set. The recorded scan is 1 Critical and 4 High, total 5, so the policy allows it.
+- **`more-than-five-critical`** swaps in older pins (Django 1.11, Pillow 6.2.0, PyYAML 5.1, cryptography 2.3, lxml 4.2.1, PyJWT 1.5.3, paramiko 2.0.0, pycrypto 2.6.1, and similar) so the total is greater than 5.
 
 If you do not have a GitHub connector yet, create one in the [connector usage tidbit](https://university-registration.harness.io/self-paced-training-tidbit-introduction-to-cd-connector-usage).
 
@@ -68,20 +76,28 @@ That file adds `CRITICAL` and `HIGH` from the scan output. `total > 5` → deny.
 
 1. **Pipelines → Create a Pipeline** → YAML.
 2. Paste [`.harness/pipeline.yaml`](./.harness/pipeline.yaml).
-3. Set org and project. `repoName` stays `harness-community/sto-tidbits-policy-enforcement`.
+3. Set org and project. `repoName` stays `harness-community/sto-tidbits-policy-enforcement`. Branch is a runtime input.
 4. Save.
 
 `fail_on_severity` is `none`, so Trivy publishes results and the scan command itself does not fail the step. Under **Policy Enforcement**, `enforce.policySets` lists `STO_High_Critical_Over_Five`. That set is what blocks the step when the count is greater than 5.
 
 ---
 
-## Step 5 — Run (expect a RED build)
+## Step 5 — Run both branches
 
-**Run.** Git connector, repo, branch `main`.
+**Run** twice. Same Git connector and repo. Change only the branch.
 
-Trivy finds more than five High and Critical issues on the pinned libraries (the exact list follows Trivy’s DB). The scan command finishes. Open the **Trivy SCA** step, then **Policy Enforcement**. The set denies with `Fail: N High/Critical issue(s). Threshold is 5.` The pipeline is red.
+### Pass — branch `main`
 
-**Red is the correct outcome.** The policy blocked the build because the combined count is greater than 5. This tidbit does not bump the pins or re-run for a green build.
+Trivy finishes. Open **Trivy SCA**, then **Policy Enforcement**. The recorded counts are 1 Critical and 4 High. The total is 5, and the rule is `total > 5`, so the set allows the step. The pipeline is green.
+
+**Green is the correct outcome on `main`.**
+
+### Fail — branch `more-than-five-critical`
+
+Run again and set the branch to `more-than-five-critical`. Trivy finishes. Policy Enforcement denies with `Fail: N High/Critical issue(s). Threshold is 5.` The pipeline is red.
+
+**Red is the correct outcome on this branch.** The scan still published the findings. The policy stopped the pipeline. The exact count follows Trivy’s database.
 
 ---
 
@@ -102,13 +118,15 @@ deny[msg] {
 }
 ```
 
-[`.harness/pipeline.yaml`](./.harness/pipeline.yaml) — Aqua Trivy on this public repo, `fail_on_severity: none`, and `enforce.policySets: STO_High_Critical_Over_Five`.
+[`.harness/pipeline.yaml`](./.harness/pipeline.yaml) — Aqua Trivy on this public repo, branch `<+input>`, `fail_on_severity: none`, and `enforce.policySets: STO_High_Critical_Over_Five`.
 
 ---
 
 ## Common Issues & Tips
 
-**Scan is green, pipeline is still red.** That is the policy. Open the step’s policy evaluation and check the High + Critical total.
+**`main` is green.** That is the pass case. 1 Critical + 4 High is not greater than 5.
+
+**`more-than-five-critical` is red.** That is the fail case. Open the step’s policy evaluation and read the High + Critical total.
 
 **Pipeline is green and Security Tests shows more than five High or Critical findings.** The step’s `enforce.policySets` id does not match the set, the set is not Enforced, the entity is not **Security Tests**, or the event is not **On Step**. **Pipeline / On Run** evaluates the pipeline, not the scan output, so that set stays green.
 

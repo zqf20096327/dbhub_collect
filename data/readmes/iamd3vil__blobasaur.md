@@ -344,7 +344,8 @@ Blobasaur implements core Redis commands for blob operations:
   # Returns:
   # -1 if key exists but has no expiration
   # -2 if key does not exist or has expired
-  # positive number: remaining TTL in seconds
+  # 0 or a positive number: remaining TTL in whole seconds, rounded down
+  # (0 during the key's last second)
   ```
 
 - **`EXPIRE key seconds`**: Set expiration time for an existing key
@@ -464,6 +465,7 @@ blobasaur --config /path/to/config.toml shard migrate 4 8
 2. **Preparation**: Creates new SQLite databases for target configuration
 3. **Data Transfer**: Migrates data in batches using new hash ring
 4. **Verification** (optional): Compares data integrity between old and new shards
+5. **Cleanup**: A shrink removes each retired shard once its `blobs` and namespace tables are empty. If cleanup fails, resolve the reported error and rerun the same migration command. For example, release a lock on `shard_4.db` and rerun `blobasaur shard migrate 5 3 --verify`. The server refuses to start until cleanup finishes.
 
 ### Best Practices
 

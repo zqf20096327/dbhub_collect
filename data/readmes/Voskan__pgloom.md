@@ -215,10 +215,9 @@ without any service at all.
 ```
 
 * **Wire turns.** The proxy groups client messages into *turns*: a simple
-  query, or an extended-protocol pipeline up to `Sync`. Each turn completes
-  with exactly one `ReadyForQuery`, so a turn is the atomic unit of
-  scheduling. Prepared statements are tracked per connection, so a `Bind`
-  without `Parse` still reports its SQL and parameters. Driver chatter
+  query, an extended-protocol pipeline up to `Sync`, or a portal batch up to
+  `Execute` + `Flush`. Prepared statements are tracked per connection, so a
+  `Bind` without `Parse` still reports its SQL and parameters. Driver chatter
   (`SET`, `SHOW`, catalog lookups) passes through unscheduled.
 * **One decision per turn.** Exactly one worker runs application code at a
   time; every other worker is held at the gate, parked on a lock, or waiting
@@ -250,8 +249,10 @@ without any service at all.
   one schedule from every class of equivalent interleavings, so the verdict
   matches plain `exhaustive` in a fraction of the schedules. It is not
   combined with preemption bounding, whose budget is not preserved by
-  reordering. The database must be the only state the workers share: a
-  service that keeps shared state in memory needs `reduction: none`.
+  reordering. The database must be the only state the workers share: clear any
+  cross-schedule in-memory cache via `target.reset_http` (`POST`), and use
+  `reduction: none` when workers share mutable in-memory state within a
+  schedule.
 * **Shrinking and replay.** A failing schedule is minimized before it is
   reported, then saved with the scenario it came from in
   `.pgloom-repro.json`. `pgloom replay` re-executes exactly that schedule; if

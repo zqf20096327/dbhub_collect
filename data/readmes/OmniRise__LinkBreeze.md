@@ -194,7 +194,7 @@ One-click installs from your platform's app store. Updates arrive through the sa
 - **Runtipi** (v4+): Settings → App Stores → add `https://github.com/OmniRise/LinkBreeze-Runtipi-Store`, then install **LinkBreeze**
 - **Unraid**: **Apps** tab → search **LinkBreeze** → **Install**
 - **CasaOS / ZimaOS**: in review, App Store PR [#1112](https://github.com/IceWhaleTech/CasaOS-AppStore/pull/1112)
-- **TrueNAS** (24.10+): in review on the official catalog, PR [#6617](https://github.com/truenas/apps/pull/6617)
+- **TrueNAS** (24.10+): **Apps** → **Discover Apps** → search **LinkBreeze** → **Install**
 
 </details>
 
@@ -384,6 +384,7 @@ All configuration is via environment variables. **[`.env.example`](.env.example)
 | `BACKUP_DIR` | `./data/backups` | Scheduled-backup storage directory (keep inside the persistent `./data` volume) |
 | `BACKUP_MIN_FREE_MB` | `50` | Skip writing backups when free space drops below this |
 | `SECRET_KEY` | Auto-generated | HMAC signing key for sessions |
+| `LINKBREEZE_TRUST_X_FORWARDED_FOR` | `false` | Rate-limit/audit client identity: trust the LAST `X-Forwarded-For` hop - only enable behind a proxy you control that overwrites or appends the real client IP (nginx, Caddy); on a direct bind the header is attacker-controlled and is not trusted |
 | `EXTRA_SCRIPT_SRC` | _(empty)_ | Space-separated analytics domains for CSP (e.g. `plausible.io umami.is`) |
 | `LINKBREEZE_PRIMARY_HOST` | _(empty)_ | Primary host your admin lives on; the custom-domains admin lock 404s every other host (env beats the admin setting) |
 | `LINKBREEZE_TRUST_X_FORWARDED_HOST` | `false` | Trust `X-Forwarded-Host` for domain routing - only enable behind a proxy that OVERWRITES it (nginx, Caddy); the default `Host` header cannot be spoofed |

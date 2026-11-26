@@ -1,0 +1,140 @@
+# SmartClip
+
+<p align="center">
+  <strong>English</strong> · <a href="README-DE.md">Deutsch</a> · <a href="README-ZH.md">中文</a> · <a href="README-JA.md">日本語</a> · <a href="README-KO.md">한국어</a>
+</p>
+
+<div align="center">
+  <img src="Resources/AppIcon.png" width="112" alt="SmartClip app icon">
+
+  **A private, encrypted clipboard history that feels at home on macOS.**
+
+  [![CI](https://img.shields.io/github/actions/workflow/status/reathloo/smartClip/ci.yml?branch=main&style=flat-square&label=checks)](https://github.com/reathloo/smartClip/actions/workflows/ci.yml)
+  [![Release](https://img.shields.io/github/v/release/reathloo/smartClip?include_prereleases&style=flat-square)](https://github.com/reathloo/smartClip/releases)
+  ![macOS](https://img.shields.io/badge/macOS-14%2B-111827?style=flat-square&logo=apple)
+  ![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-arm64-0b8f87?style=flat-square)
+  [![MIT](https://img.shields.io/badge/license-MIT-0b8f87?style=flat-square)](LICENSE)
+
+  [Screenshots](#screenshots) · [Features](#features) · [Install](#install) · [Privacy](#privacy-by-design) · [Development](#development) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+</div>
+
+SmartClip lives in the menu bar and keeps copied text, links, code, images, and
+file references close at hand. Everything stays on your Mac: no account, cloud
+service, telemetry, or remote processing.
+
+## Screenshots
+
+SmartClip supports light and dark appearances, list and card layouts, and an
+optional experimental translucent interface.
+
+<p align="center">
+  <img src="docs/screenshots/clipboard-dark-translucent.jpg" width="820" alt="SmartClip clipboard history in the dark translucent appearance">
+</p>
+
+| Light list layout | Light card layout |
+| --- | --- |
+| <img src="docs/screenshots/clipboard-light-list.jpg" alt="SmartClip clipboard history in the light list layout"> | <img src="docs/screenshots/clipboard-light-cards.jpg" alt="SmartClip clipboard history in the light card layout"> |
+
+| General settings | History settings |
+| --- | --- |
+| <img src="docs/screenshots/settings-general.jpg" alt="SmartClip general settings with the experimental translucent interface option"> | <img src="docs/screenshots/settings-history.jpg" alt="SmartClip history layout, storage, and retention settings"> |
+
+| Privacy settings | About and updates |
+| --- | --- |
+| <img src="docs/screenshots/settings-privacy.jpg" alt="SmartClip sensitive-content and excluded-app privacy settings"> | <img src="docs/screenshots/settings-about.jpg" alt="SmartClip version, system requirements, and update controls"> |
+
+## Why SmartClip?
+
+- **Private by default.** Clipboard payloads are encrypted with AES-GCM and the
+  key is stored in the macOS Keychain.
+- **Fast to reach.** Open the history from the menu bar or a configurable global
+  shortcut, then search and copy without leaving your workflow.
+- **Native on macOS.** Built with SwiftUI and AppKit, with light and dark modes,
+  launch at login, native keyboard behavior, and Accessibility-aware paste.
+- **Localized interface.** Follows the preferred macOS app language in English,
+  German, Simplified Chinese, Japanese, and Korean.
+- **Careful with sensitive data.** Concealed clipboard markers, valid card
+  numbers, and common credential formats are masked and receive shorter
+  retention limits.
+
+## Features
+
+| History | Workflow | Privacy and control |
+| --- | --- | --- |
+| Text, URLs, email, code, images, and file references | Search by type, time, source app, and favorites | Encrypted local payloads |
+| Duplicate handling and source-app estimate | Keyboard actions, drag-and-drop, exact or relative timestamps, and automatic paste | Sensitive-content masking or complete exclusion |
+| File type, size, and modification details in preview | Encrypted notes, named favorites, and per-entry retention | Capture pauses, permission checks, and excluded apps |
+| Automatic cleanup and storage limits | Menu-bar status and launch at login | Keep-favorites cleanup and no telemetry |
+
+> [!NOTE]
+> SmartClip stores references to files rather than copying them. Source-app,
+> code, and sensitive-content detection are intentionally best-effort.
+
+## Install
+
+SmartClip currently supports **Apple Silicon Macs running macOS 14 or newer**.
+
+1. Download the newest DMG from [GitHub Releases](https://github.com/reathloo/smartClip/releases).
+2. Open the DMG and drag **SmartClip** to **Applications**.
+3. Launch SmartClip and complete the short setup.
+
+> [!WARNING]
+> The current free release is not signed with an Apple Developer ID or notarized.
+> On first launch, macOS requires **System Settings → Privacy & Security → Open
+> Anyway**. See the [installation guide](docs/INSTALLATION.md) for every step.
+
+Published builds check the signed SmartClip update feed hourly. Trusted updates
+can download in the background and install when SmartClip restarts; you can turn
+automatic installation off in Settings or choose **Check for Updates …** at any
+time.
+
+## Privacy by design
+
+SmartClip uses a local SQLite database for metadata and AES-GCM for clipboard
+payloads. The encryption key is kept in Keychain. Sensitive entries stay masked,
+are excluded from full-text search, and expire after a shorter period even when
+pinned. You can also configure SmartClip to never store detected sensitive
+clipboard content.
+
+Some metadata—such as type, timestamps, and estimated source-app name—remains
+unencrypted so the app can organize the history. Read the complete
+[privacy explanation](PRIVACY.md) before using SmartClip with sensitive data.
+
+## Development
+
+Prerequisites:
+
+- macOS 14 or newer
+- Swift 6 toolchain from Xcode or Command Line Tools
+
+```sh
+git clone https://github.com/reathloo/smartClip.git
+cd smartClip
+zsh scripts/run-dev.sh --check
+```
+
+Useful commands:
+
+```sh
+zsh scripts/run-dev.sh          # build and restart the real app
+zsh scripts/run-dev.sh --ui     # isolated UI preview with sample data
+zsh scripts/test.sh             # run all 143 core checks
+zsh scripts/build-app.sh        # create dist/SmartClip.app
+```
+
+The UI preview uses a private pasteboard and isolated temporary data. Use the
+real app only for integration tests involving Keychain, Accessibility, the
+global shortcut, or launch at login.
+
+## Release process
+
+A pushed `v*` tag triggers the release workflow. It runs the checks, builds the
+styled DMG, verifies the package, signs the update with Sparkle EdDSA, creates a
+GitHub Release, and publishes the appcast through GitHub Pages.
+
+```sh
+zsh scripts/package-release.sh v0.5.1
+```
+
+See the [release guide](docs/RELEASE.md), [test report](docs/TEST_REPORT.md), and
+[third-party notices](THIRD_PARTY_NOTICES.md) for the complete details.

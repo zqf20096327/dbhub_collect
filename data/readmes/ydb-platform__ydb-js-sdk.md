@@ -37,7 +37,11 @@ Modern, modular SDK for YDB in TypeScript/JavaScript.
 npm install @ydbjs/core @ydbjs/query
 ```
 
-TypeScript projects require TypeScript 7 or later.
+Requires Node.js `^22.23.5 || ^24.22.3 || >=26.13.1`. TypeScript projects require TypeScript 7 or later.
+
+Each push to `main` publishes its head commit with the short SHA as the package version. When a reviewer with write access approves the current head of a PR targeting `main`, the version includes the PR number, for example `123-abc1234`.
+Open the commit’s **Continuous Releases** check or the pkg.pr.new comment on the PR for install commands.
+If the same SHA is published again from another PR or from `main`, pkg.pr.new replaces the archive at that SHA’s URL.
 
 ### 2) Connect and Query
 

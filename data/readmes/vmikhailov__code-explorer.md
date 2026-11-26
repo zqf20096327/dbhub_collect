@@ -1,6 +1,12 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/vmikhailov/code-explorer/main/media/github-social-preview.png" alt="CodeExplorer" width="80%" />
 
+
+<p align="center">
+  Author &amp; Contact: <strong>Viacheslav Mikhailov</strong> — <a href="https://www.linkedin.com/in/vgmikhailov">LinkedIn</a> • <a href="https://t.me/vmikhailov">Telegram (@vmikhailov)</a>
+</p>
+
+
 [![Website](https://img.shields.io/badge/Website-code--explorer.app-8b5cf6.svg)](https://code-explorer.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/vmikhailov/code-explorer/blob/main/LICENSE)
 [![Homebrew](https://img.shields.io/badge/Homebrew-vmikhailov%2Ftap%2Fce-orange.svg)](https://github.com/vmikhailov/homebrew-tap)
@@ -8,6 +14,8 @@
 [![VS Marketplace](https://vsmarketplacebadges.dev/version/vmikhailov.code-explorer-vscode.svg?label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=vmikhailov.code-explorer-vscode)
 [![Open VSX](https://img.shields.io/open-vsx/v/vmikhailov/code-explorer-vscode?label=Open%20VSX)](https://open-vsx.org/extension/vmikhailov/code-explorer-vscode)
 [![vmikhailov/code-explorer MCP server](https://glama.ai/mcp/servers/vmikhailov/code-explorer/badges/score.svg)](https://glama.ai/mcp/servers/vmikhailov/code-explorer)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Viacheslav_Mikhailov-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vgmikhailov)
+[![Telegram](https://img.shields.io/badge/Telegram-@vmikhailov-26A5E4?logo=telegram&logoColor=white)](https://t.me/vmikhailov)
 
 </div>
 
@@ -46,7 +54,7 @@ brew install vmikhailov/tap/ce
 code --install-extension vmikhailov.code-explorer-vscode
 
 # Standalone binary installer (macOS / Linux)
-curl -fsSL https://code-explorer.app/install.sh | bash
+curl -fsSL https://code-explorer.app/install.sh | sh
 
 # Standalone binary installer (Windows PowerShell)
 irm https://code-explorer.app/install.ps1 | iex
@@ -126,14 +134,19 @@ Linters check syntax and style within single files. Semantic Invariant Gates (SI
 id: SIG-P-B-001
 name: Clean Architecture Layer Isolation
 category: Architectural
+platform: agnostic
+scope: Module
+dimension: Boundaries
 severity: Error
+target: "{target.name}"
+message: "Core project '{source.name}' cannot depend on '{target.name}'"
 query: |
   MATCH (source:Project)-[:DEPENDS_ON]->(target:Project)
   WHERE source.name CONTAINS "Core" AND target.name CONTAINS "Infrastructure"
-  RETURN
-    coalesce(source.path, "workspace") AS file, 1 AS line, 1 AS column,
-    source.name AS symbol, target.name AS target,
-    "Core project '" + source.name + "' cannot depend on '" + target.name + "'" AS message
+  RETURN source, target
+ratchet:
+  enabled: true
+  baseline: baselines/SIG-P-B-001.json
 ```
 
 To adopt strict rules in brownfield repositories without fixing legacy violations upfront, gates support **SHA-256 ratchet baselines** (`.codeexplorer/baselines/*.json`):
@@ -166,7 +179,7 @@ Every entity in `.codeexplorer/graph.db` belongs to a 5-layer schema (interactiv
 
 1. Layer 1 (Physical): `Workspace`, `Folder`, `File`, `GitSettings`.
 2. Layer 2 (Project): `Project`, `Package`, `EntryPoint`, `DEPENDS_ON`.
-3. Layer 3 (Syntactic & Dataflow): `Type`, `Function`, `Member`, `Parameter`, `CallArgument`, `CallLiteral`, `CatchClause`, `CALLS`, `IMPLEMENTS`.
+3. Layer 3 (Syntactic & Dataflow): `Type`, `Function`, `Member`, `Parameter`, `CallArgument`, `CallLiteral`, `Scope`, `CALLS`, `IMPLEMENTS`.
 4. Layer 4 (Semantic Architecture): `Workload` (`Service`, `App`, `Worker`, `CliTool`), `Module` (`Library`, `TestSuite`), `Endpoint`, `Message`, `Topic`, `ExternalService`, `Policy`, `Job`, `Cache`, `Transaction`, `Database`, `DbSchema`, `Table`, `Query`, `Procedure`, `Cloud`, `CloudResource`.
 5. Layer 5 (Cross-Service & Domain): Resolved cross-project `CALLS`, `HANDLES_QUERY`, `HANDLES_COMMAND`, `HANDLES_EVENT`, `PUBLISHES_TO`, `SUBSCRIBES_TO`, `READS_FROM`, `WRITES_TO`, `OWNS`, plus `Domain` and `BoundedContext` groupings.
 

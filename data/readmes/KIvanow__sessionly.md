@@ -41,21 +41,21 @@ connect it to a server, and source code never does.
 ## The live demo
 
 The [demo](https://app.sessionly.dev/#/demo) is Sessionly's own repository, built with the agents
-it measures. Sign in with Google or GitHub to open it; it is read-only. As of 22 Nov 2026:
+it measures. Sign in with Google or GitHub to open it; it is read-only. As of 25 Nov 2026:
 
-| Agent       | Sessions | Cost    | Lines still there |
-|-------------|---------:|--------:|------------------:|
-| Claude Code | 16       | $888.06 | 73%               |
-| Grok        | 8        | $40.65  | 17%               |
-| Codex       | 2        | no cost | 89%               |
-| Cursor      | 1        | no cost | 100%              |
-| **Total**   | **27**   | **$928.71** | **63%**       |
+| Agent       | Sessions | Cost      | Lines still there |
+|-------------|---------:|----------:|------------------:|
+| Claude Code | 21       | $1,207.32 | 72%               |
+| Grok        | 13       | $53.23    | 17%               |
+| Codex       | 3        | $0.25     | 89%               |
+| Cursor      | 2        | no cost   | 100%              |
+| **Total**   | **39**   | **$1,260.80** | **63%**       |
 
-27 sessions, 37h 12m active, 688 files changed. 5 of the 27 costs are estimates, and 4 sessions
-have no cost figure: the Codex ones were imported before Sessionly estimated Codex costs from
-their tokens, and the Cursor session and one Grok session reported none. One repository and
-one developer over nine days: a record of this work, not a benchmark of the agents. The demo is
-brought up to date every day, so its figures have moved on since.
+39 sessions, 66h 2m active, 928 files changed. 9 of the 39 costs are estimates, Codex's from its
+tokens, and 3 sessions have no cost figure: the two Cursor sessions and one Grok session
+reported none. One repository and one developer over thirteen days: a record of this work, not a
+benchmark of the agents. The demo is brought up to date every day, so its figures have moved on
+since.
 
 ## Why Sessionly
 

@@ -2,9 +2,9 @@
  "timgit/pg-boss": {
   "commit_7d": 71,
   "commit_90d": 523,
-  "rel_ver": "12.39.0",
-  "rel_pub": "2026-11-21",
-  "rel_days": 4,
+  "rel_ver": "12.40.0",
+  "rel_pub": "2026-11-25",
+  "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 94,
-  "enriched_at": "20261124",
+  "enriched_at": "20261126",
   "lang": {
    "TypeScript": 97,
    "JavaScript": 2,
@@ -23,10 +23,25 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261124",
-   "release": "20261124",
-   "security": "20261027"
+   "release": "20261126",
+   "security": "20261126"
   },
   "rel_notes": [
+   {
+    "t": "12.40.0",
+    "d": "2026-11-25",
+    "n": "* A worker whose `complete()` or `fail()` loses its database connection runs it again, up to two more times, before it fails the batch. Each run is limited to the attempt the worker fetched. A statement that landed before the drop therefore doesn't settle the job twice. A transactional worker's completion is not run again, since the handler's writes were on the connection that dropped.\n* A worker retries a completion or failure that loses its database connection.\n* Fix: a second instance started with the sa"
+   },
+   {
+    "t": "proxy-1.15.0",
+    "d": "2026-11-25",
+    "n": "Requires pg-boss **12.40.0** or later.\r\n\r\n* `GET /api/getSubscriptions` lists event subscriptions, as `getSubscriptions()` does. It takes an optional `event`, a `limit`, and `afterEvent` with `afterName` to read the next page. The OpenAPI spec lists it with the other event routes.\r\n* `GET /api/getWarnings` lists persisted warnings, newest first, as `getWarnings()` does. It takes an optional `type`, a `limit`, and `after` with the last warning's `id` to read the next page. The OpenAPI spec lists it with the "
+   },
+   {
+    "t": "dashboard-1.15.0",
+    "d": "2026-11-25",
+    "n": "* Built with pg-boss 12.40.0. Move to 1.15.0 when the application moves to 12.40. Against a 12.39 database (schema 47), opening, cancelling, resuming or deleting a job, sending a job, creating a queue, and adding or removing a schedule fail with `pg-boss database requires migrations`. Stay on 1.14.x until the application upgrades. See [Matching pg-boss versions](https://pgboss.io/dashboard#matching-pg-boss-versions)."
+   },
    {
     "t": "12.39.0",
     "d": "2026-11-21",
@@ -61,27 +76,16 @@
     "t": "dashboard-1.13.0",
     "d": "2026-10-27",
     "n": "createDashboardHandler({ databases, siteUrl: 'https://admin.example.com' })"
-   },
-   {
-    "t": "proxy-1.13.0",
-    "d": "2026-10-15",
-    "n": "DATABASE_URL=postgres://user:pass@host/database \\\nNaming each deployment is useful when several proxies share a database, or when one runs with\nA service's `app` mounted with `parent.route('/db/a', app)` now links its root page, docs and spec\nper database and `prefix: ''`, one app serves several databases at `/db/<name>/send`."
-   },
-   {
-    "t": "dashboard-1.12.1",
-    "d": "2026-10-15",
-    "n": "* The dashboard registers in the instance registry as `pg-boss-dashboard`.\r\n* Updated deps"
-   },
-   {
-    "t": "proxy-1.12.0",
-    "d": "2026-10-14",
-    "n": "Requires pg-boss **12.38.0** or later.\r\n\r\n* The list routes take `limit` and page with `after`, as the pg-boss 12.38 list reads do.\r\n* `previewRedrive` takes `limit`.\r\n* `deleteQueuedJobs`, `deleteStoredJobs` and `deleteAllJobs` return how many jobs they deleted.\r\n\r\n## Highlights\r\n\r\n### Bounded list routes\r\n\r\npg-boss 12.38 returns at most 1,000 rows from its list reads unless given a `limit`, in a fixed\r\norder, and continues a list past the last row of the previous page with `after`. The GET routes pass\r\nbo"
    }
   ],
   "etag": {
-   "release": "W/\"e6cdba8c0621406304ff4fa45b137647b86e57a26814a00926456e3b785eeaaa\""
+   "release": "W/\"66d365e322ba8d62078e442e5a3e3d4f4de60d52d0e7b1a944a1cd7d8a70f644\"",
+   "security": "\"ce67373f957f03a279d5edf7222119911d714536c38d028c60cdb25f0cac3220\""
   },
   "rel_dates": [
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
    "2026-11-21",
    "2026-11-21",
    "2026-11-21",
@@ -108,10 +112,7 @@
    "2026-09-23",
    "2026-09-22",
    "2026-09-22",
-   "2026-09-21",
-   "2026-09-21",
-   "2026-09-19",
-   "2026-09-18"
+   "2026-09-21"
   ]
  },
  "JasperFx/marten": {
@@ -119,7 +120,7 @@
   "commit_90d": 956,
   "rel_ver": "V9.63.0",
   "rel_pub": "2026-11-23",
-  "rel_days": 2,
+  "rel_days": 3,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -239,7 +240,7 @@
   "commit_90d": 39,
   "rel_ver": "v2.5.0",
   "rel_pub": "2026-10-12",
-  "rel_days": 44,
+  "rel_days": 45,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -289,7 +290,7 @@
   "commit_90d": 5,
   "rel_ver": "4.2.1",
   "rel_pub": "2026-08-13",
-  "rel_days": 104,
+  "rel_days": 105,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -298,7 +299,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 54,
-  "enriched_at": "20261112",
+  "enriched_at": "20261126",
   "lang": {
    "Python": 100,
    "C": 0,
@@ -308,10 +309,11 @@
    "lang": "20260929",
    "commit": "20261112",
    "release": "20261112",
-   "security": "20261027"
+   "security": "20261126"
   },
   "etag": {
-   "release": "W/\"31b4626e3f2a58a8e48622ec85bc4e0c6e9138b1bf09393e016ed09725454483\""
+   "release": "W/\"31b4626e3f2a58a8e48622ec85bc4e0c6e9138b1bf09393e016ed09725454483\"",
+   "security": "\"ce67373f957f03a279d5edf7222119911d714536c38d028c60cdb25f0cac3220\""
   },
   "rel_dates": []
  },
@@ -320,7 +322,7 @@
   "commit_7d": 5,
   "rel_ver": "@ts-safeql/zod-annotator@5.0.5",
   "rel_pub": "2026-10-18",
-  "rel_days": 38,
+  "rel_days": 39,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -333,14 +335,15 @@
    "TypeScript": 100,
    "JavaScript": 0
   },
-  "enriched_at": "20261124",
+  "enriched_at": "20261126",
   "dim_ts": {
    "commit": "20261124",
    "release": "20261124",
-   "security": "20261027"
+   "security": "20261126"
   },
   "etag": {
-   "release": "W/\"945cd9992bf5c39077d87ad71cd739177887097630ab58cd82b78437bbf48449\""
+   "release": "W/\"945cd9992bf5c39077d87ad71cd739177887097630ab58cd82b78437bbf48449\"",
+   "security": "\"ce67373f957f03a279d5edf7222119911d714536c38d028c60cdb25f0cac3220\""
   },
   "rel_dates": [
    "2026-10-18",
@@ -405,7 +408,7 @@
   "commit_7d": 0,
   "rel_ver": "3.5.0",
   "rel_pub": "2025-10-23",
-  "rel_days": 398,
+  "rel_days": 399,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -428,7 +431,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-09-19",
-  "rel_days": 67,
+  "rel_days": 68,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -455,7 +458,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.6.0",
   "rel_pub": "2026-02-21",
-  "rel_days": 277,
+  "rel_days": 278,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -476,7 +479,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-11-12",
-  "rel_days": 13,
+  "rel_days": 14,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -605,7 +608,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.0",
   "rel_pub": "2018-07-30",
-  "rel_days": 3040,
+  "rel_days": 3041,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -628,7 +631,7 @@
   "commit_7d": 0,
   "rel_ver": "1.6.1",
   "rel_pub": "2023-05-24",
-  "rel_days": 1281,
+  "rel_days": 1282,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -685,7 +688,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.8",
   "rel_pub": "2024-03-20",
-  "rel_days": 980,
+  "rel_days": 981,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -705,7 +708,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.15",
   "rel_pub": "2026-04-06",
-  "rel_days": 233,
+  "rel_days": 234,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -827,7 +830,7 @@
   "commit_7d": 0,
   "rel_ver": "main-latest",
   "rel_pub": "2026-08-01",
-  "rel_days": 116,
+  "rel_days": 117,
   "rel_n90": 3,
   "rel_pre": true,
   "rel_none": false,
@@ -848,7 +851,7 @@
  "kosame-rs/kosame": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2025-12-10",
-  "rel_days": 350,
+  "rel_days": 351,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -895,7 +898,7 @@
  "Pure-Peace/peace": {
   "rel_ver": "v0.12.0",
   "rel_pub": "2021-06-16",
-  "rel_days": 1988,
+  "rel_days": 1989,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -914,7 +917,7 @@
  "thijsmie/pocketbase": {
   "rel_ver": "0.12.0",
   "rel_pub": "2025-02-02",
-  "rel_days": 661,
+  "rel_days": 662,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -974,7 +977,7 @@
  "depyronick/clickhouse-client": {
   "rel_ver": "2.1.0",
   "rel_pub": "2026-01-21",
-  "rel_days": 308,
+  "rel_days": 309,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -992,7 +995,7 @@
  "EddieHubCommunity/CreatorsRegistry": {
   "rel_ver": "v0.26.3",
   "rel_pub": "2024-08-12",
-  "rel_days": 835,
+  "rel_days": 836,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1066,15 +1069,15 @@
    "Shell": 2,
    "Yacc": 1
   },
-  "enriched_at": "20261121",
+  "enriched_at": "20261126",
   "commit_90d": 1,
   "commit_7d": 0,
   "dim_ts": {
    "commit": "20261121",
-   "release": "20261110"
+   "release": "20261126"
   },
   "etag": {
-   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+   "release": "\"ce67373f957f03a279d5edf7222119911d714536c38d028c60cdb25f0cac3220\""
   },
   "rel_dates": [],
   "rel_n90": 0
@@ -1126,7 +1129,7 @@
  "antifailure/antifailure": {
   "rel_ver": "v1.8.1",
   "rel_pub": "2026-09-27",
-  "rel_days": 59,
+  "rel_days": 60,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1147,7 +1150,7 @@
  "hxlog/balanced-portfolio": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-07-17",
-  "rel_days": 131,
+  "rel_days": 132,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1168,7 +1171,7 @@
  "bilaschandra/laravel-coreui": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2024-09-27",
-  "rel_days": 789,
+  "rel_days": 790,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1188,7 +1191,7 @@
  "rapidloop/rapidrows": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-09-29",
-  "rel_days": 1518,
+  "rel_days": 1519,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1221,7 +1224,7 @@
  "CEDStandards/CEDS-Data-Warehouse": {
   "rel_ver": "v14.1.0.0",
   "rel_pub": "2026-06-18",
-  "rel_days": 160,
+  "rel_days": 161,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1251,7 +1254,7 @@
  "agis/pglockanalyze": {
   "rel_ver": "v0.0.4",
   "rel_pub": "2025-09-26",
-  "rel_days": 425,
+  "rel_days": 426,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1269,7 +1272,7 @@
  "basxsoftwareassociation/basxconnect": {
   "rel_ver": "v0.4.62",
   "rel_pub": "2024-04-24",
-  "rel_days": 945,
+  "rel_days": 946,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1331,7 +1334,7 @@
  "bnomei/kirby3-pageviewcounter": {
   "rel_ver": "v5.4.0",
   "rel_pub": "2026-05-13",
-  "rel_days": 196,
+  "rel_days": 197,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1349,7 +1352,7 @@
  "Point72/polars-io-tools": {
   "rel_ver": "v0.2.4",
   "rel_pub": "2026-09-26",
-  "rel_days": 60,
+  "rel_days": 61,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -1411,7 +1414,7 @@
  "dzwvip/oracle": {
   "rel_ver": "v1.3.2",
   "rel_pub": "2024-12-31",
-  "rel_days": 694,
+  "rel_days": 695,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1428,7 +1431,7 @@
  "kungfux/business-accounting-desktop": {
   "rel_ver": "1.4.1",
   "rel_pub": "2019-10-11",
-  "rel_days": 2602,
+  "rel_days": 2603,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1475,7 +1478,7 @@
  "radkawar/screenlogger": {
   "rel_ver": "v0.1.15",
   "rel_pub": "2026-08-21",
-  "rel_days": 96,
+  "rel_days": 97,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1541,7 +1544,7 @@
  "chanukyasds/pg_math": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-10-16",
-  "rel_days": 405,
+  "rel_days": 406,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1574,7 +1577,7 @@
  "r2hu1/cavio": {
   "rel_ver": "v2.2",
   "rel_pub": "2026-02-14",
-  "rel_days": 284,
+  "rel_days": 285,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1593,7 +1596,7 @@
  "banghuazhao/longevity-master": {
   "rel_ver": "v1.6.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 62,
+  "rel_days": 63,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1627,7 +1630,7 @@
  "kingrishabdugar/Green-Leaf-Gourmet": {
   "rel_ver": "v2.5.1",
   "rel_pub": "2023-02-14",
-  "rel_days": 1380,
+  "rel_days": 1381,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1672,7 +1675,7 @@
  "CNVioletTech/image2-ai": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-07-11",
-  "rel_days": 137,
+  "rel_days": 138,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1706,7 +1709,7 @@
  "gewebe/TecdocBundle": {
   "rel_ver": "v0.9.1",
   "rel_pub": "2019-05-19",
-  "rel_days": 2747,
+  "rel_days": 2748,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1723,7 +1726,7 @@
  "DavLagoHern/LakeDB": {
   "rel_ver": "v1.0.0-beta.6.3",
   "rel_pub": "2026-09-22",
-  "rel_days": 64,
+  "rel_days": 65,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1756,7 +1759,7 @@
  "frerich/pg_large_objects": {
   "rel_ver": "v0.2.7",
   "rel_pub": "2026-05-17",
-  "rel_days": 192,
+  "rel_days": 193,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1787,7 +1790,7 @@
  "KillerAery/ForAlive": {
   "rel_ver": "v0.213",
   "rel_pub": "2018-05-15",
-  "rel_days": 3116,
+  "rel_days": 3117,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1911,7 +1914,7 @@
  "IITDBGroup/gprom": {
   "rel_ver": "v1.0.5",
   "rel_pub": "2026-04-03",
-  "rel_days": 236,
+  "rel_days": 237,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1993,7 +1996,7 @@
  "deadislove/nestJS-modular-monolith-cqrs-event-sourcing-architecture-template": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2025-05-11",
-  "rel_days": 563,
+  "rel_days": 564,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2074,7 +2077,7 @@
  "SaberSz/College-System-2-Attendance-Management-Systems": {
   "rel_ver": "v1.0",
   "rel_pub": "2017-11-15",
-  "rel_days": 3297,
+  "rel_days": 3298,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2110,7 +2113,7 @@
  "Holo795/CBMCoolifyBackup": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-07-03",
-  "rel_days": 145,
+  "rel_days": 146,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2143,7 +2146,7 @@
  "jince-boy/php-ccenote-blog-api": {
   "rel_ver": "laravel",
   "rel_pub": "2023-02-28",
-  "rel_days": 1366,
+  "rel_days": 1367,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2184,7 +2187,7 @@
  "hieutdo/policyfs": {
   "rel_ver": "v1.0.8",
   "rel_pub": "2026-08-28",
-  "rel_days": 89,
+  "rel_days": 90,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2252,7 +2255,7 @@
  "bbkane/enventory": {
   "rel_ver": "v0.0.28",
   "rel_pub": "2026-06-20",
-  "rel_days": 158,
+  "rel_days": 159,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2277,7 +2280,7 @@
  "Salve-Software/react-native-salve-db": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-09-04",
-  "rel_days": 82,
+  "rel_days": 83,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2323,7 +2326,7 @@
  "budiadiono/sqlite-ts": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2019-02-10",
-  "rel_days": 2845,
+  "rel_days": 2846,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2767,7 +2770,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-09-01",
-  "rel_days": 85,
+  "rel_days": 86,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -3056,7 +3059,7 @@
  "sucraft-hub/homeledger": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 62,
+  "rel_days": 63,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3083,7 +3086,7 @@
  "paperkite-hq/stork": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-04-06",
-  "rel_days": 233,
+  "rel_days": 234,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3175,7 +3178,7 @@
  "DavidBelicza/semantic-search": {
   "rel_ver": "v1.9.0",
   "rel_pub": "2026-08-18",
-  "rel_days": 99,
+  "rel_days": 100,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -3218,7 +3221,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.6.7",
   "rel_pub": "2026-11-11",
-  "rel_days": 14,
+  "rel_days": 15,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -3311,7 +3314,7 @@
   },
   "rel_ver": "v1.3.2",
   "rel_pub": "2026-10-29",
-  "rel_days": 27,
+  "rel_days": 28,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -3358,7 +3361,7 @@
   },
   "rel_ver": "v0.1.0-pilot.5",
   "rel_pub": "2026-11-24",
-  "rel_days": 1,
+  "rel_days": 2,
   "rel_n90": 5,
   "rel_pre": true,
   "rel_none": false,
@@ -3414,6 +3417,73 @@
    "security": "20261125",
    "contrib": "20261125",
    "lang": "20261125"
+  }
+ },
+ "cristobalmitchell/pokedex": {
+  "etag": {
+   "release": "\"ce67373f957f03a279d5edf7222119911d714536c38d028c60cdb25f0cac3220\"",
+   "security": "\"ce67373f957f03a279d5edf7222119911d714536c38d028c60cdb25f0cac3220\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 2,
+  "lang": {
+   "Jupyter Notebook": 86,
+   "Python": 14,
+   "Shell": 0
+  },
+  "enriched_at": "20261126",
+  "dim_ts": {
+   "release": "20261126",
+   "security": "20261126",
+   "contrib": "20261126",
+   "lang": "20261126"
+  }
+ },
+ "Rusty-Hope/traceforge": {
+  "etag": {
+   "release": "W/\"4a69cd07d728efbb74a18c38151d0b3e772a0f61a5110a9cb8d4dba7444fc015\"",
+   "security": "\"ce67373f957f03a279d5edf7222119911d714536c38d028c60cdb25f0cac3220\""
+  },
+  "rel_ver": "v0.4.0",
+  "rel_pub": "2026-11-18",
+  "rel_days": 8,
+  "rel_n90": 1,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_dates": [
+   "2026-11-18"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.4.0",
+    "d": "2026-11-18",
+    "n": "* `LogClusterer.warm_start` and `warm_engines` startup hydration from SQLite (`Incident` + `LogEvent`) so restarts preserve cluster state.\n* Persistent cluster merge synchronization (`LogClusterer.drain_merges` → `_apply_cluster_merges`) consolidating merged `Incident` and `LogEvent` rows in SQLite."
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Python": 72,
+   "TypeScript": 25,
+   "JavaScript": 2,
+   "Dockerfile": 1,
+   "Makefile": 1
+  },
+  "enriched_at": "20261126",
+  "dim_ts": {
+   "release": "20261126",
+   "security": "20261126",
+   "contrib": "20261126",
+   "lang": "20261126"
   }
  }
 }

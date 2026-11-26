@@ -21,11 +21,14 @@ The 51-second walkthrough creates a project, runs a restore test, opens the repo
 | --- | --- |
 | ![Verification report with one failed SQL check](docs/screenshots/report.jpg) | ![Dashboard on a 390 px wide screen](docs/screenshots/dashboard-mobile.jpg) |
 
+![Trends page: run strip, archive size and restore time per project, with signals](docs/screenshots/trends.jpg)
+
 The video and all screenshots use synthetic demo projects. The [sign-in page](docs/screenshots/sign-in.jpg) and the [Turkish interface](docs/screenshots/dashboard-tr.jpg) have their own captures.
 
 ## Features
 
 - React dashboard in English and Turkish: overview, project settings, recent runs, report details and JSON downloads.
+- Trends page: per-project run strip, pass rate, archive size and restore time sparklines, with signals for a sharply smaller archive, repeated failures, an unchanged archive and unusually slow restores.
 - Search all retained runs with result/date filters, cursor pagination, shareable filter links and CSV exports.
 - Browse archived projects and restore their settings/history with scheduling disabled.
 - Search every active or archived project with cursor pages; the dashboard shows the newest projects and complete totals.
@@ -131,7 +134,8 @@ Setup generates `.env` with independent random database/access credentials, a un
 | `COMPOSE_PROJECT_NAME` | Generated unique Compose project on fresh setup; keep stable to retain the selected containers/volumes. |
 | `RESTIVRA_PORT` | `7474`; Compose host port, always bound to 127.0.0.1. |
 | `RESTIVRA_RETENTION_DAYS` | `30`; completed-job retention, 1–3650 days. Pending notifications are retained. |
-| `RESTIVRA_WEBHOOK_URL` | Optional public HTTPS webhook on port 443. |
+| `RESTIVRA_WEBHOOK_URL` | Optional public HTTPS webhook on port 443. Slack incoming webhooks and Discord webhooks get a readable message with the checks that did not pass, mentions disabled; other URLs get JSON with `event`, `job_id`, `project`, `status`, `error_code`, `failed_checks` and `text`. |
+| `RESTIVRA_WEBHOOK_WARNINGS` | `0`; set `1` to also notify when a run passes but its archive is at most half the median size of earlier runs (generic event `restivra.verification.warning`). |
 | `RESTIVRA_DATABASE_URL` | Required for direct service execution; supplied by Compose. |
 | `RESTIVRA_BACKUP_ROOT` | `backups` directly; `/backups` in Compose. |
 | `RESTIVRA_WORK_DIR` | `work/jobs` directly; `/work/jobs` in Compose. |
@@ -252,6 +256,42 @@ go run ./cmd/restivra cleanup --run-id <32-character-run-id>
 ```
 
 Manual cleanup verifies the exact ownership label. Do not target active jobs. Hard-killed standalone snapshots may need removal from their CLI work directory; worker recovery does not touch unrelated CLI work.
+
+### Prometheus metrics
+
+`GET /metrics` returns Prometheus text format. With an access token configured, send it as a bearer token; a signed-in browser session also works.
+
+```yaml
+scrape_configs:
+  - job_name: restivra
+    metrics_path: /metrics
+    authorization:
+      credentials_file: /etc/prometheus/restivra-token   # contents of RESTIVRA_AUTH_TOKEN
+    static_configs:
+      - targets: ["127.0.0.1:7474"]
+```
+
+| Metric | Meaning |
+| --- | --- |
+| `restivra_up` | API and metadata database answered. |
+| `restivra_worker_online`, `restivra_worker_heartbeat_age_seconds` | Restore worker heartbeat. |
+| `restivra_jobs{status}` | Retained runs by status. |
+| `restivra_notifications_failed` | Failure notifications not delivered after all attempts. |
+| `restivra_project_last_run_passed{project_id,project}` | 1 or 0 for the newest finished run of each active project. |
+| `restivra_project_last_run_timestamp_seconds`, `restivra_project_last_success_timestamp_seconds` | When the newest run and the newest passed run finished. |
+| `restivra_project_last_restore_duration_seconds`, `restivra_project_last_backup_bytes` | Duration and archive size of the newest finished run. |
+
+An alert for a project that has not passed a restore test for two days:
+
+```yaml
+- alert: RestivraNoRecentPassingRestore
+  expr: time() - restivra_project_last_success_timestamp_seconds > 2 * 86400
+  for: 30m
+```
+
+Compose binds the port to 127.0.0.1, so Prometheus must run on the same host or reach it through your own tunnel or proxy.
+
+Ready-made [alert rules](deploy/monitoring/restivra-alerts.yaml) (worker offline, last restore failed, no passing restore for two days, archive shrank, undelivered notifications) and a [Grafana dashboard](deploy/monitoring/grafana-dashboard.json) are in `deploy/monitoring`. Import the dashboard and pick your Prometheus data source.
 
 ## Brand
 

@@ -13,7 +13,7 @@ One Go binary and Postgres. Ollama or any OpenAI-compatible model, knowledge sea
 [![Postgres](docs/images/badge-postgres.svg)](https://github.com/pgvector/pgvector)
 [![Docker image](docs/images/badge-docker.svg)](https://github.com/cdmx-in/kera/pkgs/container/kera)
 
-[🚀 Quick start](#quick-start) · [💡 Why Kera](#why-kera) · [⚖️ Comparison](docs/comparison.md) · [✨ Features](#features) · [📸 Screenshots](#screenshots) · [🧩 Architecture](#architecture) · [📚 Docs](docs/README.md) · [💬 Discussions](https://github.com/cdmx-in/kera/discussions)
+[🚀 Quick start](#quick-start) · [💡 Why Kera](#why-kera) · [⚖️ Comparison](docs/comparison.md) · [✨ Features](#features) · [📸 Screenshots](#screenshots) · [🧩 Architecture](#architecture) · [🔎 How it answers](#how-it-answers) · [📚 Docs](docs/README.md) · [💬 Discussions](https://github.com/cdmx-in/kera/discussions)
 
 </div>
 
@@ -84,11 +84,12 @@ How it differs from Open WebUI, LibreChat, AnythingLLM and Onyx, row by row and 
 - 🧰 **Tools.** OpenAPI and MCP tool servers, with per-user OAuth for services like Google Sheets, Gmail and Docs. Built-in web search (SearXNG, Brave or DuckDuckGo).
 - 🧪 **Code interpreter.** With a Jupyter server, runs Python, Node.js, TypeScript, Bash, PHP, Ruby, Go, Java and R, and returns the files and images the code creates.
 - 🖥️ **Cowork.** A task mode in which the model drives a sandboxed Linux desktop (browser and shell). You watch it live and can take over at any time.
-- **Scheduled tasks.** Save a Cowork task with a timetable (hourly, daily, weekdays, weekly) and the server runs it by itself as you, with your connected apps. Each run is a normal task, and the task keeps notes from run to run.
+- **Scheduled tasks.** A step-by-step wizard (goal, assistant, apps, schedule, review) starts a Cowork task or saves it with a timetable (hourly, daily, weekdays, weekly); the server runs it by itself as you, with your connected apps. A read-only test run on the last step shows what it would do before anything is scheduled. Each run is a normal task, and the task keeps notes from run to run (see [docs/cowork.md](docs/cowork.md)).
 - 🧠 **Memory.** Automatic memory capture, which users manage in Settings.
 - 🛡️ **Guardrails.** Personal-data redaction or blocking, prompt-injection and blocklist checks, and optional moderation on every model call, with an audit trail (see below).
+- 🧾 **Audit log.** Who did what and when: sign-ins, admin changes, stored secrets, pipelines and sharing, one plain sentence per event under Admin > Audit, with filters, a CSV export and a retention setting. Names of what changed are kept, values never are (see [docs/audit.md](docs/audit.md)).
 - 🔗 **Integrations.** Scheduled directory sync from Google Workspace: users come in, departments become groups, and suspended or deleted users are disabled (see [docs/integrations.md](docs/integrations.md)).
-- 🔄 **Pipelines.** Keep a knowledge collection in sync with a source on a schedule, from your own script or with one command. A flow view shows each run step by step, with its logs and errors (see [docs/pipelines.md](docs/pipelines.md)).
+- 🔄 **Pipelines.** Keep a knowledge collection in sync with a source on a schedule, from your own script or with one command. A flow view shows each run step by step, with its logs and errors (see [docs/pipelines.md](docs/pipelines.md)). Or let Kera run the script too: the Compose stack includes a runner, so a timetable, a notebook editor and checks work with no setup ([docs/kera-run-pipelines.md](docs/kera-run-pipelines.md)).
 - 🎨 **Branding.** Your own name, logos and colours, set from the admin console.
 
 <a id="screenshots"></a>
@@ -184,6 +185,38 @@ The screenshots follow your light or dark theme. They show a demo workspace for 
   </tr>
 </table>
 
+**Pipelines up close.** A scratch workspace with five invented pipelines whose scripts really ran on two runners: run times, a run that waited for a runner, the step that failed. More screens, and where each timing shows up, are in [Pipelines in pictures](docs/pipelines.md#pipelines-in-pictures).
+
+<table>
+  <tr>
+    <td width="50%">
+      <a href="docs/pipelines.md#pipelines-in-pictures"><img src="docs/images/pipelines-overview-light.png" alt="The Pipelines page with five pipelines: Invoice check failed, Nightly report with a warning, Knowledge base refresh running, Docs sync and Ticket digest OK, each with its timetable, next run and last run" width="100%"></a>
+      <br>
+      <sub><b>The list.</b> State, timetable, next run and last run for each pipeline.</sub>
+    </td>
+    <td width="50%">
+      <a href="docs/pipelines.md#a-finished-run"><picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/images/pipeline-run-ok-dark.png">
+        <img src="docs/images/pipeline-run-ok-light.png" alt="A finished Docs sync run: Finished OK in 1 min 35 s, a progress bar with four green segments, and a step waterfall with four steps and their durations" width="100%">
+      </picture></a>
+      <br>
+      <sub><b>A finished run.</b> Total time, the usual time, and how long each step took.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <a href="docs/pipelines.md#a-run-in-progress"><img src="docs/images/pipeline-run-live-light.png" alt="A Knowledge base refresh run in progress: Running, step 2 of 4, an elapsed clock at 2 min 23 s, and the open step with a striped bar and a growing log" width="100%"></a>
+      <br>
+      <sub><b>A run in progress.</b> The elapsed clock, the open step and its log.</sub>
+    </td>
+    <td width="50%">
+      <a href="docs/pipelines.md#a-failed-run"><img src="docs/images/pipeline-run-failed-light.png" alt="A failed Invoice check run: Failed at Validate invoices, the error in a red block, the failing step open with its log lines, and two steps skipped" width="100%"></a>
+      <br>
+      <sub><b>A failed run.</b> Which step failed, why, and the last log lines.</sub>
+    </td>
+  </tr>
+</table>
+
 <a id="architecture"></a>
 ## 🧩 Architecture
 
@@ -193,13 +226,36 @@ The screenshots follow your light or dark theme. They show a demo workspace for 
 
 Only Postgres is required. The sidecars (document extraction, reranking, code sandbox, Cowork desktop) are HTTP services: the Compose stack starts the document extraction one for you, and you start the others when you need them; the table in [Quick start](#quick-start) says which feature needs which.
 
+<a id="how-it-answers"></a>
+## 🔎 How it answers
+
+From your message to the saved reply. Each colour is a stage and the numbers are the steps of **Admin > Help**. The amber blocks are the guardrails and the violet one is the model call; everything inside the dashed frame repeats in every round of the tool loop, so the guard runs again each time the model is called.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/how-it-answers-flow-dark.svg">
+    <img src="docs/images/how-it-answers-flow-light.svg" alt="The flow from a message to the saved reply in twelve numbered steps: the message and context are prepared, the knowledge mode chooses between retrieving passages, using whole documents or adding nothing, then a loop of guardrails, model call, tool calls and fitting the prompt to the window repeats every round until the model answers, and the cited answer is scanned by the guardrails, saved and traced" width="880">
+  </picture>
+</p>
+
+When the assistant has knowledge, the search runs three rankings (by meaning, by words, and by file name and heading), fuses them, optionally reranks, adds the neighbouring chunks of each hit, and numbers the passages so that a citation like [2] means the same passage everywhere in the run.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/how-it-answers-retrieval-dark.svg">
+    <img src="docs/images/how-it-answers-retrieval-light.svg" alt="The retrieval pipeline in eight numbered steps: the queries feed vector, keyword and heading search side by side, their rankings are fused into one list, an optional reranker re-reads the best candidates, neighbouring chunks are added, and the passages are numbered for citation" width="880">
+  </picture>
+</p>
+
+Every box has settings, defaults and a place to look when it misbehaves. Admins find them in **Admin > Help**; [docs/how-it-answers.md](docs/how-it-answers.md) has the same diagrams, a worked example with numbers, the agent loop and a table of symptoms and the settings to try.
+
 <a id="configuration"></a>
 ## ⚙️ Configuration
 
 | Variable | Purpose |
 |---|---|
-| `KERA_DATABASE_URL` | Postgres connection string (required) |
-| `KERA_SECRET_KEY` | 32-byte hex key that signs sessions and encrypts stored secrets (required; rotating it signs everyone out) |
+| `KERA_DATABASE_URL` | Postgres connection string (required). `KERA_DATABASE_URL_FILE` names a file that holds it instead (Docker or Kubernetes secrets; the file wins) |
+| `KERA_SECRET_KEY` | 32-byte hex key that signs sessions and encrypts stored secrets (required; changing it signs everyone out, and `kera secrets rotate` re-encrypts what is stored, see [docs/deploy.md](docs/deploy.md#the-secret-key)). `KERA_SECRET_KEY_FILE` names a file that holds it instead |
 | `KERA_URL` | Public URL of the server, used for sign-in redirects |
 | `KERA_CALLBACK_URL` | Callback base URL for tools and sidecars, if different from `KERA_URL` |
 | `KERA_LISTEN` | Listen address, default `:8080` |
@@ -225,7 +281,7 @@ Every call to a model server (chats, background tasks, memory, embeddings) goes 
 | `guardrails.moderation` / `.model` | off, log, block | Classifies the latest user message with a moderation model on the same connection (`/v1/moderations`). |
 | `guardrails.local_exempt` | bool | Skips every check for local (Ollama) models. |
 
-A blocked call fails with HTTP 400 and the code `guardrail_blocked`. Each event records the rule, action, count, user and model, never the matched text. Events are listed in the admin console and in the `guardrail_event` table. A model preset can override any key with `features: {guardrails: {pii: off}}`. For custom checks, use a hook server.
+With `rag.placement` set to `data`, retrieved passages travel as a reference message that the guard scans like tool output (injection phrases in it are logged as `injection.data`, never blocking), see [docs/run-trace.md](docs/run-trace.md). A blocked call fails with HTTP 400 and the code `guardrail_blocked`. Each event records the rule, action, count, user and model, never the matched text. Events are listed in the admin console and in the `guardrail_event` table. A model preset can override any key with `features: {guardrails: {pii: off}}`. For custom checks, use a hook server.
 
 <a id="status-and-limits"></a>
 ## 🧭 Status and limits
@@ -243,7 +299,7 @@ Found a gap that is not listed here? [Open an issue](https://github.com/cdmx-in/
 <a id="documentation"></a>
 ## 📚 Documentation
 
-[docs/README.md](docs/README.md) is the index. The main pages: [deploy](docs/deploy.md) (Compose, HTTPS, backups, troubleshooting), [LiteLLM and spend](docs/litellm.md), [pipelines](docs/pipelines.md), [integrations](docs/integrations.md), [comparison with other projects](docs/comparison.md), and the [Open WebUI API compatibility notes](docs/compat/openwebui-api.md).
+[docs/README.md](docs/README.md) is the index. The main pages: [deploy](docs/deploy.md) (Compose, HTTPS, backups, troubleshooting), [how it answers](docs/how-it-answers.md) (the flow, retrieval and the tool loop as diagrams), [LiteLLM and spend](docs/litellm.md), [pipelines](docs/pipelines.md), [integrations](docs/integrations.md), [comparison with other projects](docs/comparison.md), and the [Open WebUI API compatibility notes](docs/compat/openwebui-api.md).
 
 <a id="layout"></a>
 ## 🗂️ Layout

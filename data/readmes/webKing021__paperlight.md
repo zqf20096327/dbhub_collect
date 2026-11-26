@@ -88,6 +88,12 @@ There are good search tools already. Which one fits depends on what you are look
 
 ## Install
 
+> **Official downloads only.** Paperlight is published in three places: the
+> [releases of this repository](https://github.com/webKing021/paperlight/releases), winget
+> (`webKing021.Paperlight`) and [paperlight.vercel.app](https://paperlight.vercel.app). A
+> "Paperlight" download offered anywhere else, such as a `.zip` on another page or in a copy
+> of this repository, is not from this project. Please don't run it.
+
 With [winget](https://learn.microsoft.com/windows/package-manager/winget/), which comes with
 Windows 10 and 11:
 

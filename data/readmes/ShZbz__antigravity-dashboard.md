@@ -7,9 +7,9 @@
 Token throughput, cache hits and context usage in the model selector row. Hover over context for five-hour and weekly quotas too.<br>
 Keep the summary visible. Hover for the details.
 
-[![Version 0.12.6](https://img.shields.io/badge/version-0.12.6-91adff?style=flat-square&labelColor=252936)](CHANGELOG.md)
+[![Version 0.12.7](https://img.shields.io/badge/version-0.12.7-91adff?style=flat-square&labelColor=252936)](CHANGELOG.md)
 [![Platforms](https://img.shields.io/badge/host-Windows%20%7C%20Linux%20%7C%20macOS-83d8b9?style=flat-square&labelColor=252936)](COMPATIBILITY.md)
-[![Antigravity 2.21.1 - 2.34.0](https://img.shields.io/badge/Antigravity-2.21.1%20--%202.34.0-c5a0ff?style=flat-square&labelColor=252936)](COMPATIBILITY.md)
+[![Antigravity 2.21.1 - 2.35.1](https://img.shields.io/badge/Antigravity-2.21.1%20--%202.35.1-c5a0ff?style=flat-square&labelColor=252936)](COMPATIBILITY.md)
 [![MIT](https://img.shields.io/badge/license-MIT-d4d9e6?style=flat-square&labelColor=252936)](LICENSE)
 
 [Preview](#preview) · [IDE](#antigravity-ide) · [CLI](#antigravity-cli-status-line) · [Install](#install) · [Enable or remove](#plug-and-unplug) · [Compatibility](#compatibility) · [FAQ](#faq) · [中文](README.zh-CN.md)
@@ -21,6 +21,8 @@ Keep the summary visible. Hover for the details.
 
 > [!IMPORTANT]
 > **Rust Native Engine in `v0.12.0` (`pulse-accel`) & Fallback Guidance:** `v0.12.0` introduces an optional Rust N-API native engine (`pulse-accel`) that dramatically speeds up UI responsiveness, SQLite conversation backfills, ledger queries, transcript scanning, and SVG rendering while substantially reducing V8 heap memory usage. As this is a major new native engine, if you run into any unexpected glitches or regressions, please [open an issue](https://github.com/ShZbz/antigravity-dashboard/issues) promptly with reproduction details. You can immediately fall back to the pure TypeScript runtime by setting `PULSE_DISABLE_NATIVE_ACCEL=1` in the environment, or roll back to release **`v0.11.0`** if the issue prevents normal use.
+
+**v0.12.7:** Add **Antigravity `v2.34.0+` MCP Apps** integration — open the full-width, full-page **Token Usage** dashboard directly from **Plugins → Token Usage** in the left sidebar with zero CDP debug flags and live host theme sync, backed by an on-demand zero-runtime-dependency stdio MCP server (`mcp/server.mjs`) and self-contained single-file HTML bundle (`mcp/apps/usage.html`) sharing the existing ledger and Rust native engine; expose read-only Agent query tools (`query_usage_stats`, `get_quota_and_session`), normalize `plugin.json` for `agy plugin validate --strict`, and add Windows rename-swap handling for locked `pulse-accel.node` updates during `manage.mjs install`.
 
 **v0.12.6:** Fix hover tooltip displacement across the Token Usage modal by promoting `#tip` to the top layer (`popover="manual"`) immune to `#usage-dashboard`'s `scale: 1` containing block, anchoring bar tooltips to `.stack` with below-target fallback, and displaying every `1..30/31` calendar day label on the daily chart; also add stale-file pruning during desktop reinstalls.
 
@@ -96,7 +98,7 @@ Keep the summary visible. Hover for the details.
 ## Antigravity IDE
 
 **v0.7.0+** includes a separate VSIX for Google's standalone Antigravity IDE. Download
-`antigrative-dashboard-ide-0.12.6.vsix` from the release and choose **Install from VSIX…**
+`antigrative-dashboard-ide-0.12.7.vsix` from the release and choose **Install from VSIX…**
 in the IDE's Extensions view. No desktop App installation is required.
 
 Fully quit the IDE, then start it with

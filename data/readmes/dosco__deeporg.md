@@ -62,30 +62,32 @@ are on the same page, and Docker is `docker pull dosco/deeporg`.
 ## Try it
 
 ```bash
-deeporg serve --demo
+deeporg
 ```
 
-This starts a demo SaaS company (accounts, subscriptions, invoices, support
-tickets) with seeded data. Put a model key in `./.env` (`OPENAI_API_KEY`,
-`ANTHROPIC_API_KEY` or `GOOGLE_API_KEY`) and ask it something:
+This starts DeepORG and opens a setup page in your browser. You create an admin
+account, connect a database or choose the sample data, and pick a model. Then
+you ask a question. There is no config file to write: DeepORG keeps its own
+files in `~/.deeporg/`.
+
+The setup steps are in the [quick start](https://deeporg.io/start/quick-start/).
+For a larger demo company with routines and saved work already in it, run
+`deeporg serve --demo`; see [Demos](https://deeporg.io/start/demos/).
+
+## Use it from Claude Code
+
+Open **Connect** in the console and copy the command it shows:
 
 ```bash
-curl -sS localhost:8083/api/v1/agent \
-  -H 'content-type: application/json' \
-  -d '{"instruction": "Which account is most at risk of churning?"}'
+claude mcp add --transport http --scope user deeporg http://127.0.0.1:8080/api/v1/mcp
 ```
 
-Or chat with it at <http://localhost:8083/agent>. More demos:
-[Demos](https://deeporg.io/start/demos/).
+Then type `/mcp` in Claude Code, choose `deeporg` and Authenticate. Your browser
+opens on DeepORG, where you choose Allow. There is no token to copy. Claude Code
+asks DeepORG's built-in agent, so choose a model during setup first.
 
-## Use it from Claude, Codex or any MCP client
-
-```bash
-deeporg mcp add claude http://localhost:8083
-```
-
-Other clients: [MCP](https://deeporg.io/agentic/mcp/). Hosted servers with sign-in:
-[MCP OAuth](https://deeporg.io/agentic/oauth/).
+Other clients: [MCP](https://deeporg.io/agentic/mcp/). Servers that sign people
+in through an identity provider: [MCP OAuth](https://deeporg.io/agentic/oauth/).
 
 ## Learn more
 

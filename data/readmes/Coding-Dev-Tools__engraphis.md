@@ -1,0 +1,139 @@
+# Engraphis
+
+[![PyPI version](https://img.shields.io/pypi/v/engraphis.svg)](https://pypi.org/project/engraphis/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/engraphis.svg)](https://pypi.org/project/engraphis/)
+[![Coding-Dev-Tools/engraphis MCP server](https://glama.ai/mcp/servers/Coding-Dev-Tools/engraphis/badges/score.svg)](https://glama.ai/mcp/servers/Coding-Dev-Tools/engraphis)
+[![GitHub stars](https://img.shields.io/github/stars/Coding-Dev-Tools/engraphis.svg?style=social)](https://github.com/Coding-Dev-Tools/engraphis/stargazers)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/LICENSE)
+
+**Your coding agent forgets decisions between sessions. Engraphis gives MCP-capable coding agents one local memory store with receipts.**
+
+Engraphis stores scoped project knowledge in SQLite, keeps temporal history instead of silently overwriting it, and returns bounded context with citations, or abstains when the evidence is weak. The local core is Apache-2.0 and works offline.
+
+[Watch the demo](https://www.youtube.com/watch?v=qw-rTnAA_Z4) · [Open the interactive demo](https://engraphis.com/demo) · [See how it compares](https://engraphis.com/product#comparison)
+
+[Star the repo](https://github.com/Coding-Dev-Tools/engraphis/stargazers) so other coding-agent users can find it.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Coding-Dev-Tools/engraphis/c935c95a7c6ac4e0080c56d2a71ccf4a87a35bd4/docs/images/dashboard-overview.png" alt="Engraphis dashboard Graph and Relations view at 127.0.0.1:8700" width="100%">
+  <br>
+  <sup>The Graph &amp; Relations view at 127.0.0.1:8700. The full local dashboard is in the details below.</sup>
+</p>
+
+## Install and connect an agent in three commands
+
+The MCP server and `[all]` extras need Python 3.10 or newer. The NumPy-only core still supports Python 3.9+.
+
+```bash
+python -m pip install "engraphis[mcp]"
+engraphis-init
+claude mcp add engraphis -- engraphis-mcp
+```
+
+`engraphis-init` writes a local config, generates an API token, and prints ready-to-paste setup for Claude Code, Codex, Cursor, Cline, Zed, and Windsurf. Use the exact command it prints for your machine, including the database path. Restart your agent, then ask it to remember a project decision and recall it in a new session.
+
+If your client times out while the local embedding model loads, run `engraphis-init --prefetch` once.
+
+For Cursor, Cline, Zed, or Windsurf, paste the JSON block printed by `engraphis-init` into the client's MCP configuration. Read the [agent setup guide](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/AGENT_CONNECT.md) for the full setup.
+
+<details>
+<summary>Prefer the full local dashboard or the graph view?</summary>
+
+```bash
+python -m pip install "engraphis[all]"
+engraphis-dashboard
+```
+
+The dashboard opens at [http://127.0.0.1:8700](http://127.0.0.1:8700). The `[all]` extra adds the embedding model, document import, and transcription dependencies. Most coding-agent users only need `[mcp]`. Local use needs no cloud account or API key.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Coding-Dev-Tools/engraphis/522def372c45a26d46bc7a05829964ae0240f3a9/docs/images/knowledge-graph.png" alt="Engraphis local knowledge graph showing relationships between remembered entities" width="100%">
+  <br>
+  <sup>Explore memories and their relationships in the local dashboard.</sup>
+</p>
+
+</details>
+
+## Use the Python service directly
+
+```python
+from engraphis.service import MemoryService
+
+memory = MemoryService.create("engraphis.db")
+memory.remember("Auth migrated from JWT to PASETO.", workspace="acme", repo="api")
+hit = memory.recall("Why did we change auth?", workspace="acme", repo="api")
+print(hit["context"])
+```
+
+## What it provides
+
+- **Continuity:** Organize memories by workspace, repository, and session, with a last-session handoff.
+- **Useful recall:** Combine vector, lexical, graph, and code-aware retrieval, then pack results to a hard context budget.
+- **Grounded answers:** Preserve provenance and temporal history; cite support or abstain when it is insufficient.
+- **Temporal history:** Timeline can select known versions whose validity has ended before result limits. The dashboard uses `closed_only=true` on `GET /api/timeline` for “Only superseded versions.” Closed history prioritizes lexical matches (the literal query and up to 32 expanded terms, using the final ranker's Unicode lowercasing) before scoring at most 500 eligible candidates; semantic-only matches outside that window can be omitted. SQLite may scan and sort more rows than this candidate cap.
+- **Spec Studio:** Inspect prompt specifications and scoped memory clusters with deterministic coverage, ambiguity, and conflict checks; review suggestions before changing memory.
+- **Operator control:** Keep the core local and offline-capable, with explicit controls for hosted services and external LLM providers.
+- **Included AI LLM & Jev on paid and trial plans:** Pro and Team automatically include up to 100 free OpenRouter AI LLM calls per person per day (for automatic structured fact and entity extraction, cited context synthesis, grounded Q&A, and structured consolidation) plus up to 250 managed Jev decision calls per person per day, with no personal provider keys.
+
+## Why upgrade to Pro or Team
+
+The local core stays free and offline-capable. Pro and Team add automatic AI enhancements and hosted workflows the moment you start a free trial or subscribe:
+
+- **Automatic AI memory enhancement (100 calls/day included):** Connect your Pro or Team account (paid or trial) and Engraphis automatically activates its included zero-cost OpenRouter AI LLM with zero API key setup. Unstructured session notes are automatically distilled into clean atomic facts, entities, and knowledge-graph relations on ingest, proactive context briefings and grounded Q&A gain citation-backed synthesis, and consolidation produces sharper structured facts. If offline or at the daily limit, Engraphis seamlessly falls back to deterministic local processing with zero lost memories and zero overage charges.
+- **See memory health:** Analytics surfaces growth, retention, and decay forecasts so you can review what is becoming stale before it affects recall.
+- **Keep memory maintained:** Schedule Auto Consolidation and Auto Dreaming. They produce proposals for you to review, and local governance still decides what changes.
+- **Sync across machines:** Opt into encrypted Cloud Sync for eligible workspaces with a key you hold. Sync and readable managed processing are separate choices.
+- **Give a team an operating picture:** Named seats, admin/member/viewer roles, scoped credentials, and a 30-day account activity log visible to owners and admins. Shared hosted Team memory and hosted MCP are not yet available.
+- **Add judgment with Jev (250 calls/day included):** Pro and Team automatically include up to 250 managed Jev calls per person per day: typed, advisory checks for risky commands, contradictory memories, evidence support, and completion claims. No personal TypeSafe key or overage charge. Jev helps an agent separate safe from risky actions, contradictory from reinforcing memories, supported from unsupported answers, and complete from unfinished work, while permissions and tests stay in charge.
+
+Pro is $10/month or $100/year for one owner. Team is $20/seat/month or $200/seat/year. Both start with an email-confirmed, no-card trial (7 active days for Pro, 14 active days for Team) with full access to the 100/day AI LLM and 250/day Jev allowances from day one. After copying a device connect token from your account portal, connect and verify both allowances in one command: `engraphis connect --token <CONNECT_TOKEN> --verify`. [Compare plans](https://github.com/Coding-Dev-Tools/engraphis/blob/main/docs/HOSTED_PLANS.md) &middot; [Start a Pro trial](https://api.engraphis.com/account?plan=pro&interval=monthly&utm_source=engraphis&utm_medium=readme&utm_campaign=pro_conversion&utm_content=readme_upgrade#billing) &middot; [Start a Team trial](https://api.engraphis.com/account?plan=team&interval=monthly&seats=5&utm_source=engraphis&utm_medium=readme&utm_campaign=pro_conversion&utm_content=readme_team_upgrade#billing).
+
+## Benchmarks
+
+The current registered artifact contains three deterministic offline fixture runs. It separates context size, retrieval quality, and grounded decision checks; these small fixtures do not establish general task performance.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Coding-Dev-Tools/engraphis/99af3855bd6b685cbac4a4489b44b3c374129053/docs/images/context-efficiency.svg" alt="Three registered offline fixtures: structure-aware chunking reduced mean retrieved context from 740.3 to 214.3 tokens per question (71.1%, 18 questions); the serialized JSON-shape proxy fell from 24,590 to 11,138 tokens across 26 payload samples and 260 recalls. Candidate and packed retrieval quality (Recall@5, Hit@5, and answer-token recall) are shown separately (each 1.000). Grounded checks show 5/5 answerable queries grounded and 6/6 abstention queries rejected, including a 1/1 quarantined-evidence probe; 11/11 decisions were correct. MCP transport and provider billing were not measured. Artifact SHA-256 prefix 18f4aabad8de; see the benchmark guide for the full checksum." width="100%">
+  <br>
+  <sup>Three offline fixtures separate context reduction, candidate and packed retrieval quality, and grounded behavior. The chart shows the artifact checksum prefix; see the benchmark guide for the full checksum and reproduction steps.</sup>
+</p>
+
+| Fixture | Result | Quality check |
+|---|---|---|
+| Structure-aware chunking | Mean retrieved top-5 context: 740.3 → 214.3 tokens per question (71.1% lower, 18 questions) | Recall@5 = 1.000 in both modes |
+| Recall payload proxy | JSON-shape proxy: 24,590 → 11,138 tokens (54.71% lower, 26 samples; 260 timed recalls) | Candidate and packed Recall@5, Hit@5, and answer-token recall are each 1.000 |
+| Grounded decisions | 5/5 answerable queries grounded; 6/6 abstention queries rejected, including 1/1 quarantined-evidence check | 11/11 decisions correct |
+
+The payload figure is a serialized JSON-shape estimate, not an MCP transport measurement or provider billing total. See the [Benchmark methodology](https://github.com/Coding-Dev-Tools/engraphis/blob/99af3855bd6b685cbac4a4489b44b3c374129053/BENCHMARKS.md) for artifact identity, counting methods, reproduction commands, external-evaluation boundaries, and limitations.
+
+## Optional Jev assistance
+
+**Jev is included free with every paid plan: Pro and Team.** Every legitimate Pro user and each eligible Team named seat, including paid viewers, with an active paid, trial, or test entitlement receives managed Jev at no additional customer charge and without a personal provider key. Local advisory decisions stay free for everyone; BYOK, a personal TypeSafe key, is optional for non-paid or direct use and its provider charges may apply. Managed Jev is available for paid plans; the hosted control service enables it with its provider key.
+
+Each paid individual receives up to **250 Jev calls per person per day**, free, plus up to **100 AI LLM calls per person per day** via OpenRouter's free tier, active automatically on both paid subscriptions and free trials. Usage is per person, not pooled across a Team and not monthly. Each evaluated call counts once, including a batched request; calls beyond the daily maximum are not served. Admitted attempts that fail or are interrupted remain counted, and no overage is charged. The account portal reports that member's remaining calls for the current day.
+
+Use **Review with Jev** in the local dashboard for evidence-support and contradiction checks; the MCP decision tool covers command and completion reviews. Remote calls need per-call consent plus a `public` or `internal` classification, and Jev cannot write memories, change grounded-recall requirements, authorize commands, or certify completion.
+
+Recall route selection is experimental and BYOK-only: `engraphis_recall_context` with `allow_remote=true`, or classic MCP with `planning="auto"` and `jev_assisted=true`. On 40 public synthetic tasks it changed no retrieval quality, so no retrieval-quality improvement is claimed.
+
+See [hosted plans and Jev details](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/HOSTED_PLANS.md#included-system-1-decision-engine-jev).
+
+## Guides
+
+- [Configuration reference](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/CONFIGURATION.md)
+- [MCP tool reference](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/MCP_TOOLS.md)
+- [Agent and LLM provider setup](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/LLM_PROVIDERS.md)
+- [Architecture and query planning](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/ARCHITECTURE_V3.md#query-planning)
+- [Docker deployment](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/DOCKER.md)
+- [Document import](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/DOCUMENT_IMPORT.md)
+- [Cloud Sync](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/SYNC.md)
+- [Pi extension](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/integrations/pi/README.md)
+- [Spec Crawl and Spec Studio](https://github.com/Coding-Dev-Tools/engraphis/blob/99af3855bd6b685cbac4a4489b44b3c374129053/docs/SPEC_CRAWL.md)
+- [Memory write review](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/WRITE_REVIEW.md)
+- [Coding-agent file protection](https://github.com/Coding-Dev-Tools/engraphis/blob/99af3855bd6b685cbac4a4489b44b3c374129053/docs/FILE_PROTECTION.md)
+- [Security policy](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/SECURITY.md)
+- [Hosted plans and licensing](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/HOSTED_PLANS.md)
+
+## License
+
+Engraphis is licensed under Apache-2.0. The license does not grant trademark rights. See [LICENSE](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/LICENSE), [NOTICE](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/NOTICE), and the [licensing guide](https://github.com/Coding-Dev-Tools/engraphis/blob/522def372c45a26d46bc7a05829964ae0240f3a9/docs/LICENSING.md). The hosted control plane and managed services are private services.

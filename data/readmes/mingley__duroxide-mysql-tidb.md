@@ -120,6 +120,26 @@ let provider = MysqlProvider::new_with_config(config).await?;
 # }
 ```
 
+### Dynamic Pool Resolution (DNS SRV, Proxy Rotation, and TLS Reloads)
+
+When an external connection manager owns multiple per-host `MySqlPool`s (for example, DNS SRV discovery, proxy rotation, or rotating mTLS/credentials), avoid pinning a single startup pool via `from_pool`. Use `MysqlProvider::from_pool_fn` (or implement [`PoolResolver`]) so every storage operation resolves a currently live pool:
+
+```rust,no_run
+use std::sync::Arc;
+use duroxide_mysql_tidb::{MySqlPool, MysqlProvider};
+
+# async fn configure(pick_pool: impl Fn() -> Result<MySqlPool, String> + Send + Sync + 'static)
+# -> Result<(), Box<dyn std::error::Error>> {
+let provider = Arc::new(
+    MysqlProvider::from_pool_fn(pick_pool, "orders_", false).await?,
+);
+# let _ = provider;
+# Ok(())
+# }
+```
+
+If the resolver returns `Err`, `MysqlProvider` surfaces a retryable `ProviderError` so the Duroxide runtime backs off and retries until a healthy pool is available.
+
 ## In-Memory Provider (`memory` Feature)
 
 Enable the optional `memory` feature to use `MemoryProvider` — a zero-C, pure-Rust in-memory implementation of `Provider` and `ProviderAdmin` for fast unit and integration tests without MySQL, TiDB, or SQLite:

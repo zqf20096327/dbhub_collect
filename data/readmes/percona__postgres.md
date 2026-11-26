@@ -34,3 +34,16 @@ Unique - do not duplicate existing tickets
 
 Scoped to a single issue - only one issue per report
 
+Repository structure
+---
+
+The default branch only contains Github Actions
+
+The stable branches can be found in:
+
+* REL_PSP_16_STABLE
+* REL_PSP_17_STABLE
+* REL_PSP_18_STABLE
+* REL_PSP_19_STABLE
+
+And master is the development branch

@@ -55,15 +55,15 @@ An example how to include this role as a task:
 #### Compatibility matrix
 
 
-| Distribution / PostgreSQL |     11     |     12     |         13         |         14         |         15         |         16         |        17          |
-| ------------------------- | :--------: | :--------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: |
-| Debian 11.x               | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Debian 12.x               | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Debian 13.x               | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Rockylinux 8.x            | :no_entry: | :no_entry: |     :warning:      |     :warning:      |     :warning:      |     :warning:      |     :warning:      |
-| Rockylinux 9.x            | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |     :warning:      |
-| Ubuntu 22.04.x            | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Ubuntu 24.04.x            | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Distribution / PostgreSQL |     11     |     12     |         13         |         14         |         15         |         16         |        17          |        18          |
+| ------------------------- | :--------: | :--------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: |
+| Debian 12.x               | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Debian 13.x               | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Rockylinux 8.x            | :no_entry: | :no_entry: |     :warning:      |     :warning:      |     :warning:      |     :warning:      |     :warning:      |     :warning:      |
+| Rockylinux 9.x            | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |     :warning:      |     :warning:      |
+| Ubuntu 22.04.x            | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Ubuntu 24.04.x            | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Ubuntu 26.04.x            | :no_entry: | :no_entry: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 
 - :white_check_mark: - works fine
@@ -79,6 +79,13 @@ postgresql_version: 17
 postgresql_encoding: "UTF-8"
 postgresql_locale: "en_US.UTF-8"
 postgresql_ctype: "en_US.UTF-8"
+# Data checksums of the clusters the role creates (postgresql_cluster_reset: true).
+# null (default): initdb's own default, off up to PostgreSQL 17 and on from 18, like the cluster created by
+# the Debian/Ubuntu package. true: --data-checksums. false: --no-data-checksums on 18+, e.g. before a
+# pg_upgrade from a cluster without checksums (pg_upgrade needs the same setting on both clusters).
+# The cluster created by the package itself follows /etc/postgresql-common/createcluster.conf
+# (initdb_options), not this variable.
+postgresql_data_checksums: null
 
 postgresql_admin_user: "postgres"
 postgresql_default_auth_method: "peer"

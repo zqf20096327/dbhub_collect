@@ -2,7 +2,7 @@
 
 **在 DeepSeek Harness 对话里完成 140 题人生调研，并把回答蒸馏成数字人档案。**
 
-Host-only DSH plugin. It adds five tools and stores answers locally; there is no separate web page.
+Host-only DSH plugin. It adds six tools and stores answers locally; there is no separate web page.
 
 ## Tools
 
@@ -12,9 +12,21 @@ Host-only DSH plugin. It adds five tools and stores answers locally; there is no
 | `dameng_guide` | interview protocol: one question at a time, follow-ups, safety |
 | `dameng_questions` | fetch next questions by chapter / core / deep / all |
 | `dameng_answer` | record an answer verbatim, or skip |
+| `dameng_import` | merge an Answers backup exported by the web app or plugin; never overwrites existing answers |
 | `dameng_export` | write life archive, distillation brief, coverage report, backup, next steps |
 
 Try saying: **“开始大梦访谈”**. The agent reads the guide, asks one question, records the answer, and continues.
+
+## Privacy: private layer is omitted by default
+
+Answers tagged `private` (trauma, shame, secrets) are part of the interview, but a normal export is a **public version**:
+
+- the private question keeps its title and prompt;
+- the answer is replaced with `[Private layer, omitted]` (localized);
+- the backup JSON omits those answers;
+- the distillation prompt therefore cannot leak them.
+
+To include the raw private text, call `dameng_export` with `includePrivate: true`. The exported dossier then carries a warning and should not be shared. The web app exposes the same choice as an unchecked “include private layer” box.
 
 ## Languages
 
@@ -37,6 +49,12 @@ Once listed in the Open Plugin Market, install from **Plugins → Discover**. Fo
 3. Restart DSH if the plugin row does not appear immediately.
 
 The package declares `dsh.bundle.patch`; the patch inserts the `dameng` row.
+
+## Tests
+
+```bash
+node --test
+```
 
 ## Limits
 

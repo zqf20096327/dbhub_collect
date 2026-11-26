@@ -4,22 +4,23 @@
 
 WordPress with SQLite, ready to use out of the box.
 
-> **Published release:** [`2026.11.11-r1`](https://github.com/soulteary/docker-sqlite-wordpress/releases/tag/2026.11.11-r1)
+> **Published release:** [`2026.11.26-r1`](https://github.com/soulteary/docker-sqlite-wordpress/releases/tag/2026.11.26-r1)
 > is available from Docker Hub and GHCR as matching five-platform indexes at
-> `sha256:3081fea3813932baeef817fea17c360b86f24e78ae16074ec90638b8211276bf`. Per-platform SBOM/provenance and
-> both registry signatures passed verification.
+> `sha256:622f0892a27f9fbe3f458de229e6fd2b4dcc45e6528d409377d7978e796b4991`. Per-platform SBOM/provenance and
+> both registry signatures passed the [release verification](https://github.com/soulteary/docker-sqlite-wordpress/actions/runs/45671769104).
 
 - Based on [official image](https://hub.docker.com/_/wordpress), Easier and more sustainable solution.
 - DockerHub Page: https://hub.docker.com/r/soulteary/sqlite-wordpress
 - GHCR Page: https://github.com/soulteary/docker-sqlite-wordpress/pkgs/container/sqlite-wordpress
 - Uses the upstream PHP MySQL parser on all supported architectures.
 
-<!-- release-availability: pending -->
-> **Unreleased candidate:** `soulteary/sqlite-wordpress:2026.11.19-r1` upgrades the
-> source build to WordPress 7.1.5 and refreshes the pinned official PHP 8.5
-> Apache base. The tag has not been published; the repository Compose file
-> builds `sqlite-wordpress:main` locally until release validation completes.
-> The published release and pull examples below remain at `2026.11.11-r1`.
+<!-- release-availability: published -->
+> **Available now:** `soulteary/sqlite-wordpress:2026.11.26-r1` bundles WordPress 7.1.5,
+> PHP 8.5.13/Apache and SQLite Database Integration 3.1.3. The repository Compose
+> file and pull examples use this verified immutable release. Back up the full
+> document root and SQLite database with WAL/SHM sidecars before upgrading.
+> Existing full-docroot volumes need a separate WordPress core update through
+> the normal updater. See [the changelog](CHANGELOG.md) for release history.
 
 ## MySQL Parser
 
@@ -67,11 +68,11 @@ reproducible deployments:
 # Docker Hub: use latest
 docker pull soulteary/sqlite-wordpress
 # Docker Hub: use an immutable release
-docker pull soulteary/sqlite-wordpress:2026.11.11-r1
+docker pull soulteary/sqlite-wordpress:2026.11.26-r1
 # GHCR: use latest
 docker pull ghcr.io/soulteary/sqlite-wordpress:latest
 # GHCR: use an immutable release
-docker pull ghcr.io/soulteary/sqlite-wordpress:2026.11.11-r1
+docker pull ghcr.io/soulteary/sqlite-wordpress:2026.11.26-r1
 ```
 
 Launch the published image on port `8080`:
@@ -79,7 +80,7 @@ Launch the published image on port `8080`:
 ```bash
 docker run --rm -it -p 127.0.0.1:8080:80 \
   -v "$(pwd)/wordpress:/var/www/html" \
-  soulteary/sqlite-wordpress:2026.11.11-r1
+  soulteary/sqlite-wordpress:2026.11.26-r1
 ```
 
 You can also use Docker Compose to start WordPress:
@@ -88,7 +89,7 @@ You can also use Docker Compose to start WordPress:
 services:
 
   wordpress:
-    image: soulteary/sqlite-wordpress:2026.11.11-r1
+    image: soulteary/sqlite-wordpress:2026.11.26-r1
     restart: always
     ports:
       # Safe local default. Change this only when intentionally publishing the
@@ -366,7 +367,7 @@ chmod 600 secrets/site-url-update-token
 services:
 
   wordpress:
-    image: soulteary/sqlite-wordpress:2026.11.11-r1
+    image: soulteary/sqlite-wordpress:2026.11.26-r1
     ports:
       - 127.0.0.1:8080:80
     environment:
@@ -396,7 +397,7 @@ export WORDPRESS_SITE_URL_UPDATE_PASSWORD="$(openssl rand -base64 24)"
 services:
 
   wordpress:
-    image: soulteary/sqlite-wordpress:2026.11.11-r1
+    image: soulteary/sqlite-wordpress:2026.11.26-r1
     ports:
       - 127.0.0.1:8080:80
     environment:
@@ -424,7 +425,7 @@ docker run --rm -it \
   --volume "$(pwd)/secrets/site-url-update-token:/run/secrets/site-url-update-token:ro" \
   --env WORDPRESS_SITE_URL_UPDATE_TOOL_ENABLED=true \
   --env WORDPRESS_SITE_URL_UPDATE_TOKEN_FILE=/run/secrets/site-url-update-token \
-  soulteary/sqlite-wordpress:2026.11.11-r1
+  soulteary/sqlite-wordpress:2026.11.26-r1
 ```
 
 For PASSWORD, export a fresh value and pass only the variable name so the shell
@@ -438,7 +439,7 @@ docker run --rm -it \
   --volume "$(pwd)/wordpress:/var/www/html" \
   --env WORDPRESS_SITE_URL_UPDATE_TOOL_ENABLED=true \
   --env WORDPRESS_SITE_URL_UPDATE_PASSWORD \
-  soulteary/sqlite-wordpress:2026.11.11-r1
+  soulteary/sqlite-wordpress:2026.11.26-r1
 ```
 
 After the update, stop this temporary container and start the normal deployment
@@ -639,7 +640,7 @@ docker run --rm --user 0:0 \
   --mount type=bind,source="$(pwd)/wordpress",target=/source,readonly \
   --mount type=bind,source="$(pwd)/backups",target=/backup \
   --env "BACKUP_NAME=${backup_name}" \
-  soulteary/sqlite-wordpress:2026.11.11-r1 \
+  soulteary/sqlite-wordpress:2026.11.26-r1 \
   -Eeuo pipefail -c '
     [[ -n "${BACKUP_NAME}" && "${BACKUP_NAME}" != */* ]]
     archive="/backup/${BACKUP_NAME}"
@@ -674,7 +675,7 @@ docker run --rm --user 0:0 \
   --mount "type=volume,source=${wordpress_volume},target=/source,readonly" \
   --mount type=bind,source="$(pwd)/backups",target=/backup \
   --env "BACKUP_NAME=${backup_name}" \
-  soulteary/sqlite-wordpress:2026.11.11-r1 \
+  soulteary/sqlite-wordpress:2026.11.26-r1 \
   -Eeuo pipefail -c '
     [[ -n "${BACKUP_NAME}" && "${BACKUP_NAME}" != */* ]]
     archive="/backup/${BACKUP_NAME}"
@@ -707,7 +708,7 @@ docker run --rm --user 0:0 \
   --mount type=bind,source="$(pwd)/wordpress",target=/source \
   --mount type=bind,source="$(pwd)/backups",target=/backup,readonly \
   --env "BACKUP_NAME=${backup_name}" \
-  soulteary/sqlite-wordpress:2026.11.11-r1 \
+  soulteary/sqlite-wordpress:2026.11.26-r1 \
   -Eeuo pipefail -c '
     [[ -n "${BACKUP_NAME}" && "${BACKUP_NAME}" != */* ]]
     archive="/backup/${BACKUP_NAME}"
@@ -745,7 +746,7 @@ docker run --rm --user 0:0 \
   --mount "type=volume,source=${wordpress_volume},target=/source" \
   --mount type=bind,source="$(pwd)/backups",target=/backup,readonly \
   --env "BACKUP_NAME=${backup_name}" \
-  soulteary/sqlite-wordpress:2026.11.11-r1 \
+  soulteary/sqlite-wordpress:2026.11.26-r1 \
   -Eeuo pipefail -c '
     [[ -n "${BACKUP_NAME}" && "${BACKUP_NAME}" != */* ]]
     archive="/backup/${BACKUP_NAME}"

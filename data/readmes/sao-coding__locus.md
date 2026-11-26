@@ -18,9 +18,32 @@
 
 A database client for Windows that stays smooth. GPU-rendered, written in Rust, one small exe.
 
-Locus talks to MySQL / MariaDB, PostgreSQL, SQLite, Redis and Oracle. Results stream into the
-grid while the query is still running, cancelling really stops the query on the server, and the
-UI is built to hold the frame rate of a 143 Hz screen.
+Locus talks to MySQL / MariaDB, PostgreSQL, SQLite, Redis, Oracle and SQL Server. Results stream into the
+grid while the query is still running, and cancelling really stops the query on the server.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/screenshots/hero-dark.png">
+    <img src=".github/assets/screenshots/hero-light.png" alt="Locus running a query over 300,000 rows" width="900">
+  </picture>
+</p>
+
+<table>
+  <tr>
+    <td width="50%">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset=".github/assets/screenshots/prod-dark.png">
+        <img src=".github/assets/screenshots/prod-light.png" alt="A Production connection blocks a write until it is unlocked">
+      </picture>
+    </td>
+    <td width="50%">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset=".github/assets/screenshots/split-dark.png">
+        <img src=".github/assets/screenshots/split-light.png" alt="Two query panes side by side">
+      </picture>
+    </td>
+  </tr>
+</table>
 
 ## Why Locus
 
@@ -40,7 +63,7 @@ UI is built to hold the frame rate of a 143 Hz screen.
 - Command palette (`Ctrl+K`), query history, light / dark / system theme, English, 简体中文 and 繁體中文
 
 **Connections**
-- MySQL / MariaDB, PostgreSQL, SQLite and Redis connect directly from Rust; Oracle goes through
+- MySQL / MariaDB, PostgreSQL, SQLite and Redis connect directly from Rust; Oracle and SQL Server go through
   a small Go helper (`sidecar.exe`, built into `locus.exe`)
 - SSH tunnels; passwords are stored in the Windows Credential Manager
 - Production protection: read-only by default, timed unlock, audit log
@@ -99,8 +122,10 @@ result both were done in under a second.
 
 ## Install
 
-Download `locus-<version>-windows-x64.exe` from [Releases](../../releases) and run it. It is one portable
-file, there is no installer. Oracle support is built in, no extra file needed: the first Oracle
+Download from [Releases](../../releases) and either run the installer
+`locus-<version>-windows-x64-setup.exe` (per user, no admin, with a Start menu entry and an
+uninstaller) or run the portable `locus-<version>-windows-x64.exe`, one file with nothing to
+install. Oracle and SQL Server support is built in, no extra file needed: the first Oracle or SQL Server
 connection unpacks a small helper into `%LOCALAPPDATA%\Locus\sidecar\`.
 
 The builds are not code-signed, so SmartScreen may warn the first time. To check a download:
@@ -111,11 +136,19 @@ Get-FileHash .\locus-<version>-windows-x64.exe -Algorithm SHA256
 
 # build provenance, with the GitHub CLI
 gh attestation verify .\locus-<version>-windows-x64.exe --repo sao-coding/locus
+
+# minisign signature (the key is also in minisign.pub)
+minisign -Vm .\locus-<version>-windows-x64.exe -P RWRDNREpYa8EZ59rUGsAnTVNIMjNfUWhciyq6SgS2MpNZvMGj0yVAZ0s
 ```
 
 Settings, saved connections and history live in `%APPDATA%\Locus`. Delete the folder to reset. The
 Oracle helper is the only file outside it (`%LOCALAPPDATA%\Locus\sidecar\`); delete that folder too
 to remove everything.
+
+About once a day Locus asks GitHub whether a newer release exists (only `User-Agent: Locus/<version>`
+is sent) and shows it in the status bar. A new version is downloaded in the background and installed
+only when you pick Restart and update; it is installed only if its minisign signature is from the
+key in `minisign.pub`. A Scoop install is left to `scoop update`. Both are switched in Settings › About.
 
 ## Keyboard
 
@@ -139,8 +172,8 @@ Settings has the full list.
 
 **Which Windows versions work?** Windows 10 and 11, 64-bit.
 
-**Which databases?** MySQL, MariaDB, PostgreSQL, SQLite, Redis and Oracle. There is no
-ClickHouse, SQL Server or MongoDB support.
+**Which databases?** MySQL, MariaDB, PostgreSQL, SQLite, Redis, Oracle and SQL Server. There is no
+ClickHouse or MongoDB support.
 
 **Does Oracle need an Oracle client?** No. The helper uses a pure-Go driver
 ([go-ora](https://github.com/sijms/go-ora)), and is built into `locus.exe`, so there is nothing to

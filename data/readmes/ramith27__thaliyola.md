@@ -50,7 +50,11 @@ A project can declare that it **uses** an item from the library or from another 
 
 [...截断...]
 
-ions and findings. Defaults to the current project + team + library |
+ions and findings. Defaults to the current project + team + library. `as_of: YYYY-MM-DD` searches what was true on that date |
+| `set_valid_dates` | When an article or finding is true: `valid_from`, `valid_until`. Expired items leave search; superseding one sets its end date on its own |
+| `get_architecture` | A Mermaid diagram of a project from what Thaliyola knows: repositories, the contracts each provides and who consumes them (other projects included, hidden ones unnamed), contracts it consumes, Library items it uses |
+| `rate_source` | After using an article or finding: helpful, or outdated / wrong with what's changed. Helpful items rank higher; the owner hears about reports, and two people's reports mark it possibly stale |
+| `answer_sources` | Evidence for answering a question: the best sections, numbered for citing, each with how fresh it is (possibly stale, old, or facts that no longer match the code), where sources disagree (two decisions on the same question, a project item and a Library one, a known issue newer than the doc), open incidents and pull requests on the topic, and the experts when little is known. Claude writes the answer from them |
 | `get_article` | One article, or one section of it, with relations, source links and entities |
 | `get_finding` | One finding with relations, source links and review history |
 | `browse_kb` | Folder tree of articles in a scope |
@@ -75,14 +79,4 @@ ions and findings. Defaults to the current project + team + library |
 | `verify_entry` | Mark an entry still valid (applied immediately; refreshes freshness but never moves an article's review date), or propose that it is superseded |
 | `link_entries` | Add a typed link: `uses`, `provided_by`, `consumed_by`, `depends_on`, `related`, `same_root_cause`, `supersedes` |
 | `add_source_link` | Attach a Figma frame, PR, Sentry issue or dashboard to an item |
-| `upload_asset` | Attach a screenshot (PNG/JPEG/WebP/GIF), token JSON, markdown or PDF. Text files are redacted; images can't be |
-| `share_to_library` | Propose publishing a project item to the library. On approval by someone who can review in the library, a copy (with its links and files) is created and the project is linked to it |
-
-**Approval tools.** A person who may review decides through Claude, with exactly the permissions they have in the web app, while **Approvals from Claude** is on (see [Review](#review)):
-
-| Tool | Purpose |
-|---|---|
-| `get_proposal` | One proposal: the item now (`current`) and what it would become (`proposed`), who wrote it, whether it's stale and whether you may decide it (`can_review`) |
-| `review_proposal` | Approve (optionally with `edits`) or reject (with a `reason`) a proposal. Your own proposal written through Claude in the last 10 minutes needs `confirmed_by_user: true` |
-| `list_skill_reviews` / `get_skill_version` | Skill versions waiting for review with `can_approve`, flags and import groups / one version's files and diff |
-| `review_skill_version` | Approve or r
+| `upload_asset` 

@@ -90,7 +90,7 @@ Kuroshiro isn't the only way to run a TRMNL: the device also works with the offi
 |---|---|---|---|
 | Hosting | Self-hosted, one Docker image (NestJS + Vue) + your own Postgres | Self-hosted (Docker/K8s/Raspberry Pi), Ruby/Hanami + Postgres + Redis/Sidekiq | Managed SaaS, closed source |
 | Cost | Free, MIT-licensed | Free, MIT-licensed | Free tier + paid "Developer Edition" for custom plugins; device sold separately |
-| Accounts | Single admin, no login | Multi-user accounts with email verification | Cloud account required |
+| Accounts | Single admin, optional password | Multi-user accounts with email verification | Cloud account required |
 | Device models & palettes | Full official catalog synced daily, plus admin-created custom colour Palettes | Device models & palettes supported | Defines the catalog—sells the hardware |
 | Plugins | `Poll` (multiple named Data Sources, each fetched or a literal value) & `Webhook` (3 merge strategies) | "Extensions"/Exchanges, single- or multi-source polling | 1,000+ native, community & private plugins |
 | Recipe import | Browse, search and sort the trmnl.com catalog in the admin UI and import in one click, or paste an id—serverless-transform Recipes included, which Terminus's importer rejects | Imports via its Extension Gallery | Native—it's the source catalog |
@@ -271,6 +271,8 @@ An entry that is not a host name, an address or a CIDR range is ignored with a l
    - Or, start Postgres manually and run: `pnpm run dev`
 
 `pnpm run dev` starts the API on `KUROSHIRO_PORT` (`3000` when unset) and, once that port answers, the admin UI's Vite dev server on [http://localhost:5173](http://localhost:5173), which proxies `/api` and `/screens` to the same port. The API runs pending migrations every time it starts, in dev as in the image.
+
+Set `KUROSHIRO_ADMIN_PASSWORD` to make the admin UI and API ask for a password (scripts send `Authorization: Bearer <password>`); Devices, Webhook senders and scrapers never sign in. Unset, the admin UI is open.
 
 Set `KUROSHIRO_DEMO_MODE=true` in your `.env` to start with a furnished instance instead of an empty one — Kuroshiro seeds a showcase Device, Plugins and Screens the first time it boots against an empty database.
 

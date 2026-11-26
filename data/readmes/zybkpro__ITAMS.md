@@ -4,9 +4,9 @@
 [![Demo](https://img.shields.io/badge/demo-GitHub%20Pages-53c9ff)](https://zybkpro.github.io/ITAMS/)
 [![Release](https://img.shields.io/github/v/release/zybkpro/ITAMS)](https://github.com/zybkpro/ITAMS/releases)
 
-> **关键词：** IT 资产管理 · 本地优先 · 局域网 H5 盘点 · Electron · Vue3 · SQLite
+> **关键词：** IT 资产管理 · 本地优先 · 二维码盘点 · 局域网 H5 · Electron · Vue3 · SQLite
 
-把公司「家底」管成一本看得见的明白账：桌面主机 + 手机 H5 共享同一份本地数据，台账、变更留痕、现场盘点，全部自己掌控。
+把公司「家底」管成一本看得见的明白账：桌面主机 + 手机 H5 同库；V1.3 已支持资产二维码、PC 盘点任务与 H5 扫码盘点。
 
 ## 在线演示
 
@@ -22,8 +22,8 @@
 ## 适用场景
 
 - 中小团队 IT 设备台账（在用 / 闲置 / 故障 / 报废）
-- 办公室局域网现场盘点，无需公网与云账号
-- 需要变更留痕、本地备份、绿色版免安装的场景
+- 贴码扫码、定期盘点、仓库交接
+- 办公室局域网协同，数据落在自己电脑
 
 ## Star
 

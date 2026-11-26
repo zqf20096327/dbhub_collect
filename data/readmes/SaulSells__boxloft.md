@@ -13,7 +13,8 @@ It came out of a real resale warehouse with 2 people on the floor. Most of the h
 - **Arriving.** Amazon orders, store orders from your Gmail, and Walmart orders, by expected date, with tracking. Scan the carrier label on a box that showed up and it lists what's inside.
 - **Orders.** Amazon (SP-API) and eBay sales sync every 15 minutes. Walmart sales, and anything else, come in as a CSV file (Orders, Import orders). Each order shows the photo, the box to pick from and the ship box that fits. Orders the marketplace already shipped get scanned out by themselves.
 - **Stock audit.** Per ASIN: bought, minus sent back, minus sold on Amazon, is what should be on your shelves. Scan the boxes and it tells you what's missing.
-- **Listings.** What's in your A boxes that isn't listed, what's listed with 0 in a box, what Amazon won't let you sell.
+- **Listings.** What's in your A boxes that isn't listed, what's listed with 0 in a box, what Amazon won't let you sell. "Check again" (one row) and "Check all with Amazon now" ask Amazon again whether you can sell an item. "List in Seller Central" opens Amazon's Add offer page for the ASIN.
+- **Copy SKU.** One tap copies a Seller Central SKU made from the buy: purchase date and price paid (10.12.26-10.15). An item with no dated, priced buy gets one from what is known plus its item number (11.17.26-S60). The first copy saves it, so it never changes after.
 - **Labels.** 4x6 box labels and 2x1 unit labels from the browser (Rollo or any label printer). Phones send labels to a print queue, and the computer with the printer prints them.
 - **Two people at once.** A save from a screen that showed old numbers is refused with who changed it. Nothing double counts.
 
@@ -60,7 +61,7 @@ The link starts with `BOXLOFT_PUBLIC_URL`, so its port has to match the server's
 
 `BOXLOFT_DEV=1` lets the sign-in cookie work over plain HTTP, and it also makes the server listen on every network interface (0.0.0.0), so other devices on your network can reach it. That's handy for trying it on a phone at home. Don't use it on public Wi-Fi, and leave it off on a server.
 
-Run the tests with `.venv/bin/python -m pytest -q tests`: about 600 pass and a few skip, in about a minute. The skips need private sample pages or a case the demo data doesn't have.
+Run the tests with `.venv/bin/python -m pytest -q tests`: about 730 pass and a few skip, in about 4 minutes. The skips need private sample pages or a case the demo data doesn't have.
 
 ## Put it on a server
 

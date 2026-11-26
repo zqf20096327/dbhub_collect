@@ -23,19 +23,51 @@ Overview:
 
 Supported tags and respective `Dockerfile` links:
 
-- `11.8`, `11`, `latest` [_(Dockerfile)_](https://github.com/wodby/mariadb/tree/master/11/Dockerfile)
+- `12.3`, `12`, `latest` [_(Dockerfile)_](https://github.com/wodby/mariadb/tree/master/12/Dockerfile)
+- `11.8`, `11` [_(Dockerfile)_](https://github.com/wodby/mariadb/tree/master/11/Dockerfile)
 - `11.4` [_(Dockerfile)_](https://github.com/wodby/mariadb/tree/master/11/Dockerfile)
 - `10.11`, `10` [_(Dockerfile)_](https://github.com/wodby/mariadb/tree/master/10/Dockerfile)
-- `10.6` [_(Dockerfile)_](https://github.com/wodby/mariadb/tree/master/10/Dockerfile)
 
 Credits to the Alpine Linux team for patches for better musl compatibility of MariaDB. Patches taken from
 Alpine's [package repository](https://pkgs.alpinelinux.org/packages).
 
 All images built for `linux/amd64` and `linux/arm64`.
 
+### Ubuntu variant
+
+The `ubuntu` directory builds a second kind of image on top of the official [`mariadb`](https://hub.docker.com/_/mariadb)
+image: MariaDB's own server and Galera packages on Ubuntu, with the [orchestration actions](#orchestration-actions)
+of this repository added. Use it where the upstream build matters more than image size or a shared base, for example
+for Galera clusters or under a Kubernetes operator written for the official image.
+
+It differs from the Alpine images in these ways:
+
+- **Configuration.** The server is configured as in the official image, with `.cnf` files mounted into
+  `/etc/mysql/conf.d`. The [environment variables](#environment-variables) that tune `my.cnf` do not apply.
+- **Initialization.** The entrypoint of the official image runs unchanged, with its variables (`MARIADB_ROOT_PASSWORD`
+  and the others, or their `MYSQL_` names) and its `/docker-entrypoint-initdb.d` file types. Archives (`.zip`,
+  `.tar.gz`) are not loaded from that directory; the `import` action still accepts them.
+- **Galera.** The Galera library (`/usr/lib/galera/libgalera_smm.so`) and `garbd` are included. Galera is switched on
+  with a configuration file, not with `WSREP_ON`.
+- **User.** The server runs as `mysql` with UID and GID 999, not 100 and 101.
+- **Versions.** A version becomes available once the official image for it is published, which can be later than the
+  Alpine image built from source.
+
+Tags and respective `Dockerfile` links:
+
+- `12.3-ubuntu`, `12-ubuntu` [_(Dockerfile)_](https://github.com/wodby/mariadb/tree/master/ubuntu/Dockerfile)
+- `11.8-ubuntu`, `11-ubuntu` [_(Dockerfile)_](https://github.com/wodby/mariadb/tree/master/ubuntu/Dockerfile)
+- `11.4-ubuntu` [_(Dockerfile)_](https://github.com/wodby/mariadb/tree/master/ubuntu/Dockerfile)
+
+Image revision tags work as for the Alpine images, with the suffix kept: `11.8-ubuntu-rN`, and
+`11.8.9-ubuntu-rN` for an exact upstream version.
+
+The versions are set in the workflow (`MARIADB118_UBUNTU` and the others) and the official image digests are pinned in
+`ubuntu/base-images.mk`.
+
 ## Environment Variables
 
-| Variable                                 | 11.8, 11.4           | 10.11, 10.6          |
+| Variable                                 | 12.3, 11.8, 11.4     | 10.11                |
 |------------------------------------------|----------------------|----------------------|
 | [`MARIADB_PLUGIN_LOAD`]                  |                      |                      |
 | [`MARIADB_SSL_CERT`]                     |                      |                      |
@@ -124,6 +156,31 @@ Default value for all versions:
 ibdata1:10M:autoextend:max:10G"
 ```
 
+### Official image variable names
+
+The initialization variables of the official `mariadb` image are accepted as well, so tools written for that image,
+such as Kubernetes operators, can run this one:
+
+| Official name                       | Same as                      |
+|-------------------------------------|------------------------------|
+| `MARIADB_ROOT_PASSWORD`             | `MYSQL_ROOT_PASSWORD`        |
+| `MARIADB_ROOT_HOST`                 | `MYSQL_ROOT_HOST`            |
+| `MARIADB_DATABASE`                  | `MYSQL_DATABASE`             |
+| `MARIADB_USER`                      | `MYSQL_USER`                 |
+| `MARIADB_PASSWORD`                  | `MYSQL_PASSWORD`             |
+| `MARIADB_ALLOW_EMPTY_ROOT_PASSWORD` | `MYSQL_ALLOW_EMPTY_PASSWORD` |
+| `MARIADB_RANDOM_ROOT_PASSWORD`      | `MYSQL_RANDOM_ROOT_PASSWORD` |
+| `MARIADB_INITDB_SKIP_TZINFO`        | `MYSQL_INITDB_SKIP_TZINFO`   |
+
+When both names are set, the `MARIADB_` value is used. The [orchestration actions](#orchestration-actions) read the
+same names for their default parameters.
+
+### Drop-in configuration
+
+`/etc/mysql/my.cnf` is generated from the environment variables above every time the container starts. To set an
+option that has no variable, mount a `.cnf` file into `/etc/mysql/mariadb.conf.d` or `/etc/mysql/conf.d`. Both
+directories are read after the generated file, in that order, so their settings win.
+
 ### Additional Galera environment variables
 
 | Variable                                 | Value               |
@@ -146,7 +203,7 @@ ibdata1:10M:autoextend:max:10G"
 | [`WSREP_GTID_DOMAIN_ID`]                 | `0`                 |
 | [`WSREP_GTID_MODE`]                      | `OFF`               |
 | [`WSREP_IGNORE_APPLY_ERRORS`]            | `0`                 |
-| [`WSREP_LOAD_DATA_SPLITTING`]            | `OFF` (N/A in 11.8) |
+| [`WSREP_LOAD_DATA_SPLITTING`]            | `OFF` (N/A in 12.3 and 11.8) |
 | [`WSREP_LOG_CONFLICTS`]                  | `OFF`               |
 | [`WSREP_MAX_WS_ROWS`]                    | `0`                 |
 | [`WSREP_MAX_WS_SIZE`]                    | `2G`                |
@@ -282,10 +339,10 @@ commands:
     revoke-user-db username db
 
 default params values:
-    user $MYSQL_USER
-    password $MYSQL_PASSWORD
-    db $MYSQL_DATABASE
-    root_password $MYSQL_ROOT_PASSWORD
+    user $MARIADB_USER or $MYSQL_USER
+    password $MARIADB_PASSWORD or $MYSQL_PASSWORD
+    db $MARIADB_DATABASE or $MYSQL_DATABASE
+    root_password $MARIADB_ROOT_PASSWORD or $MYSQL_ROOT_PASSWORD
     host localhost
     max_try 1
     wait_seconds 1

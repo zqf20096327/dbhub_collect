@@ -187,11 +187,15 @@ docker run -d --name 9router-go --restart unless-stopped \
 
 - 🖥️ Native Svelte 5 dashboard: providers, OAuth, combos, proxy pools, API keys, usage, quota, settings, plans, per-entry sidebar visibility
 - 💱 Cost display in USD, IDR, EUR and ten more currencies — editable rate table, dual display, one-click refresh from a public provider
-- 🔌 OpenAI Chat, Claude Messages, Gemini, Ollama-compatible, Responses, embeddings, media, search, web tools
+- 🔌 OpenAI Chat, Claude Messages, Gemini, Ollama-compatible, Responses, embeddings, media, search, web tools, rerank
 - 🔁 Combos with fallback, round-robin, sticky routing, fusion, capability-aware reordering
 - 👥 Per-provider executors, OAuth refresh, reactive 401 retry
 - 📡 Live usage + console-log SSE streams, stall detection
+- 🩺 Per-model circuit breakers: a model that keeps failing sits out its cooldown while the rest of its provider keeps serving — a provider outage never parks the whole model list, and one throttled account never parks a model the others serve fine. See the **Model Breakers** page, or [Advanced Features](wiki/advanced-features.html)
 - 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation
+- 💰 Per-key budget enforcement (USD + tokens, four periods, hard cutoff) and `/api/usage/export` — from [new-api](wiki/new-api-ports.md)
+- 📡 Uptime heartbeat (Push-Monitor / Uptime Kuma) — from [new-api](wiki/new-api-ports.md)
+- 🔀 Vertex `v1beta1` per-connection switch, and an optional HTTP/2 PING health check for idle upstream connections — from [new-api](wiki/new-api-ports.md)
 
 For sequential combo routing, set **Model response timeout** in seconds (decimals
 such as `5.3` are fine) in the combo's Edit dialog, or from the compact field on the
@@ -369,6 +373,7 @@ For Claude Messages clients: `ANTHROPIC_BASE_URL=http://localhost:20130/v1`.
 | `PPROF_ENABLED` | `false` | Expose `/debug/pprof/*` (keep off on untrusted networks) |
 | `TRUST_PROXY` / `TRUST_CLOUDFLARE` | unset | Trust forwarded client-IP headers |
 | `TRUSTED_PROXIES` | unset | CIDR list of the reverse proxies whose forwarded client-IP headers are trusted |
+| `MAX_JSON_BODY_SIZE_MB` | `10` | Request body ceiling for JSON APIs (`/v1/responses`, `/v1/chat/completions`, …), whole MiB from `1` to `1024`. Raise it (e.g. `64`) for long Codex / Claude Code sessions with images or large tool outputs; bodies are buffered in memory, so each in-flight request may hold up to this much. An invalid value fails startup. Media uploads keep their own `128` MiB ceiling unless this is higher |
 | `GEMINI_WEB_ROTATION` | `on` | Renew the Gemini Web session cookie in the background (see below) |
 
 #### Gemini Web session renewal
@@ -484,6 +489,8 @@ Repository references:
 ## Credits
 
 - [9Router](https://github.com/decolua/9router) — original Next.js gateway & dashboard this Go port preserves compatibility with
+- [9Router Pro](https://github.com/giienew/9router-pro) — community edition; its per-model circuit breaker is ported here ([what was ported](wiki/advanced-features.html))
+- [arewedaks/9router-go](https://github.com/arewedaks/9router-go) · [mydisha/keirouter](https://github.com/mydisha/keirouter) — sources of the ported features listed in [Advanced Features](wiki/advanced-features.html)
 
 ## 📄 License
 

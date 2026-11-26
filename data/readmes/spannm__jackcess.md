@@ -19,7 +19,7 @@ Jackcess is not an application. There is no GUI. It's a library, intended for ot
 
 <div align="center"> ──────────────────── </div>
 
-## ✨ Key Features
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/list-check-dark.svg"><img src=".github/icons/list-check.svg" height="20" alt=""></picture> Key Features
 
 * **Pure Java**: 100% Java implementation. No native dependencies, no DLLs, no MS Access installation required.
 
@@ -31,7 +31,7 @@ Jackcess is not an application. There is no GUI. It's a library, intended for ot
 
 <p style="height: 20px;">&nbsp;</p>
 
-## 🛠 Tech Stack & Dependencies
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/stack-2-dark.svg"><img src=".github/icons/stack-2.svg" height="20" alt=""></picture> Tech Stack & Dependencies
 
 * **Java Version**: 8 or higher. As of 5.2.0 Jackcess runs on Java 8 again (versions 5.0.0 to 5.1.7 required Java 11). LTS versions like Java 17 and 21 are fully supported, the tests run on Java 8 and 21.
 
@@ -44,7 +44,7 @@ Jackcess is not an application. There is no GUI. It's a library, intended for ot
 
 <p style="height: 20px;">&nbsp;</p>
 
-## 📦 Installation
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/package-dark.svg"><img src=".github/icons/package.svg" height="20" alt=""></picture> Installation
 
 To use Jackcess in your project, add the following dependency.
 
@@ -64,7 +64,7 @@ To use Jackcess in your project, add the following dependency.
 implementation 'io.github.spannm:jackcess:5.2.0'
 ```
 
-## 🚦 Usage Example
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/rocket-dark.svg"><img src=".github/icons/rocket.svg" height="20" alt=""></picture> Usage Example
 
 Jackcess is a library for developers. Here is a quick look at the API for reading rows:
 
@@ -82,7 +82,7 @@ try (Database db = DatabaseBuilder.open(new File("database.accdb"))) {
 
 ```
 
-## ⚡ Performance Tips
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/bolt-dark.svg"><img src=".github/icons/bolt.svg" height="20" alt=""></picture> Performance Tips
 
 Jackcess flushes every write to disk immediately by default (`autoSync=true`), so the database file is left in a consistent state after each call to `addRow`, `updateRow`, or `deleteRow`. This safety comes at a real cost: each of these calls ends with an `fsync`-style flush, which on typical hardware can dominate the call's runtime (roughly two to three orders of magnitude slower than a flush-free write in local benchmarking).
 
@@ -105,7 +105,7 @@ If your workload issues many individual row mutations, consider:
 
 A small [JMH](https://github.com/openjdk/jmh) benchmark suite (`src/jmh`) is included to measure this and other operations; it is not part of the regular build and can be run on demand via `mvn -Pjmh clean package && java -jar target/benchmarks.jar`.
 
-## ❤️ Origin & Maintenance
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/heart-dark.svg"><img src=".github/icons/heart.svg" height="20" alt=""></picture> Origin & Maintenance
 
 This project is a modern fork of the original [Jackcess project on SourceForge](https://sourceforge.net/projects/jackcess/), originally created and maintained by [James Ahlborn](https://sourceforge.net/u/jahlborn/profile/),
 specifically created to ensure compatibility with modern Java versions, minimize dependencies and to serve as the foundation for [UCanAccess](https://github.com/spannm/ucanaccess).
@@ -118,7 +118,7 @@ Beyond tracking the upstream project, this fork also offers:
 * Complete Javadoc on the core public API
 * Has picked up a number of new smaller fixes since forking
 
-### ⚖️ License
+### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/scale-dark.svg"><img src=".github/icons/scale.svg" height="20" alt=""></picture> License
 
 Jackcess is licensed under the **Apache License, Version 2.0**.
 
@@ -128,7 +128,7 @@ Jackcess is licensed under the **Apache License, Version 2.0**.
 <table style="border-collapse: collapse;">
   <tr>
     <td style="padding: 40px; border: 2px solid #3a82c2;">
-      <strong>Enjoying Jackcess? Please leave a 🌟 to support the project!</strong>
+      <strong>Enjoying Jackcess? Please leave a star to support the project!</strong>
     </td>
   </tr>
 </table>

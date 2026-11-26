@@ -7,7 +7,7 @@
 <b>***** Unofficial release *****</b>
 
 <hr>
-See <a href="https://github.com/andreiramani/pgvector_pgsql_windows/releases">releases</a> for available version and read the <a href="https://github.com/andreiramani/pgvector_pgsql_windows/wiki">wiki</a>
+See <a href="https://github.com/andreiramani/pgvector_pgsql_windows/releases#release-0.8.7">latest releases</a> for available version and read the <a href="https://github.com/andreiramani/pgvector_pgsql_windows/wiki">wiki</a>
 <br><br><p></p>
 <b>How to's v0.8.x</b>:
 <br>

@@ -128,7 +128,7 @@ the web UI with headless Chrome, TeamCraft Desktop on a virtual X display.
   SOLIDWORKS, Inventor, CATIA, Creo, Rhino, SketchUp, JT and Fusion files.
 - **Thumbnails in every list** – the picture of the main model heads the
   revision page and every row of the item list, the search results, the vault
-  explorer and the desktop app's Home views (lazy-loaded, cached by content hash).
+  explorer and the desktop app's *Files* views (lazy-loaded, cached by content hash).
 - **FEA/CFD results** – VTK, VTU/VTP and CalculiX results coloured by a result
   field, with legend.
 - **Search** – ranked full-text search over numbers, names, materials, file
@@ -235,7 +235,9 @@ backups are described under [Enterprise management](#enterprise-management).
 ### Clients and integrations
 
 - **Web UI** – light and dark design that follows the operating system, plus
-  distribution skins; responsive down to phone width. English and German
+  distribution skins; responsive down to phone width, with a bottom bar of
+  the sections a reviewer needs on phones; the revision page shows one tab at
+  a time, linkable by `#hash`, and reviewers decide after the evidence. English and German
   (first part): the header and the empty states follow the browser's language,
   the desktop app has *Settings → Language*. Empty lists name the next step,
   by role – viewers learn why they see no editing buttons.
@@ -243,8 +245,11 @@ backups are described under [Enterprise management](#enterprise-management).
   folder:
     - **Getting started** – a read-only wizard after the first sign-in that
       ends on a real assembly of your group with *Check out and open* in
-      front of you (it creates no files and works for every CAD program),
+      front of you (it creates no files and works for every CAD program;
+      closed early, its steps stay on *Home* as a card that ticks itself),
       *Get* of whole assemblies and an import wizard.
+    - ***Home*** tab with what waits, what you opened lately and the recent
+      activity, and a one-row toolbar with *Check out and open ▾*.
     - ***Files* view** of each project group, with *New item here* on every
       folder; it can start in a favourite folder, e.g. the one with the
       Inventor project file.

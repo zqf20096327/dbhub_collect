@@ -58,7 +58,7 @@ SmartParkingDemo/
 │   ├── setup-guide.md            # Hướng dẫn cài đặt cục bộ & mạng LAN
 │   ├── user-guide.md             # Hướng dẫn vận hành 6 phân hệ SPA
 │   ├── CHANGELOG.md              # Lịch sử phiên bản dự án
-│   └── Bao_cao_du_an.pdf, ...    # Tài liệu báo cáo, kịch bản demo & slide thuyết trình PTIT
+│   └── Bao_cao_du_an.pdf, ...    # Báo cáo bài tập lớn & slide thuyết trình PTIT
 ├── Mo_SmartParking.bat           # File chạy 1-click trên Windows: tự kiểm tra build, mở server & trình duyệt
 ├── pyproject.toml                # Cấu hình đóng gói v2.2.0, pytest, coverage, ruff, mypy
 ├── .env.example                  # Mẫu biến môi trường (TIDB_*, CORS_ALLOWED_ORIGINS, VIETQR_*)
@@ -140,7 +140,7 @@ npm run build
 ## 7. Tài liệu & Thành viên Nhóm 10
 
 - **Tài liệu kỹ thuật:** [`docs/architecture.md`](docs/architecture.md) · [`docs/setup-guide.md`](docs/setup-guide.md) · [`docs/user-guide.md`](docs/user-guide.md) · [`docs/CHANGELOG.md`](docs/CHANGELOG.md) · [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md)
-- **Tài liệu đồ án:** [`docs/Bao_cao_du_an.pdf`](docs/Bao_cao_du_an.pdf) · [`docs/Kich_ban_demo.pdf`](docs/Kich_ban_demo.pdf) · [`docs/Cơ sở dữ liệu.pptx`](docs/Cơ%20sở%20dữ%20liệu.pptx)
+- **Tài liệu đồ án:** [`docs/Bao_cao_du_an.pdf`](docs/Bao_cao_du_an.pdf) · [`docs/Cơ sở dữ liệu (final).pptx`](docs/Cơ%20sở%20dữ%20liệu%20(final).pptx)
 
 **Thành viên Nhóm 10 (Lớp D24CQCE04-B — GVHD: Nguyễn Trọng Khánh):**
 - **Nguyễn Hoàng Tùng** — `B24DCCE284` (Trưởng nhóm)

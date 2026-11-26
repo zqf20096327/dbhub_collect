@@ -195,7 +195,10 @@ Profile, Archives. The pages'
 own words — the join window, the pager, the Post window, every message
 — are in English, Simplified Chinese or Japanese: `?lang=en`, `?lang=zh`
 or `?lang=ja` when the address says, else the browser's first language,
-else English; the posts stay as written or translated. `/p/` also takes the first eight characters or more
+else English; the posts stay as written or translated. The pages are
+light or dark as the reader's system is, and the Appearance menu beside
+the language menu chooses Light, Dark or Auto and keeps the choice in
+the browser. `/p/` also takes the first eight characters or more
 of an id and redirects to the whole one, as long as only one post ever
 began that way. They are
 server-rendered, shaped like an
@@ -218,6 +221,11 @@ page still comes from the hub. Posting needs the network. A push also
 keeps the page it tells of, so its notification opens with no signal;
 and a page left open through a deploy loads itself anew once that
 interrupts nothing, so an installed copy is never a build behind.
+
+A profile is a feed too: `/u/{id}/feed.rss`, `/u/{id}/feed.atom` and
+`/u/{id}/feed.json` carry its posts that began a thread, newest first,
+each drawn as HTML with its pictures, for Planet, NetNewsWire or any
+feed reader; the profile page names the three in its head.
 
 `/stats` is the hub's own analytics — visitors, page views, sessions,
 bounce rate and session time against the span before, a chart, who is

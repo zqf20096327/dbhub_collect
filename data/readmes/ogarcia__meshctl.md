@@ -48,9 +48,14 @@ server, in a container, as a desktop app, or as an app on your phone.
   map.
 - **Chat:** channels and direct messages, with history kept while you were away.
 - **Traceroutes:** on demand, with their history.
+- **Automatic replies:** if someone writes this, answer with that, where you
+  say, from the daemon: a ping with the hops it took and its signal, say.
+- **Notifications:** of the messages heard where you say, a channel's maybe
+  only when it mentions you; in the browser, and from the apps with their
+  window closed.
 - **One binary**, small enough for a Raspberry Pi or a router, with the web
-  interface built in; and a desktop app, for Windows and Linux, with the same
-  inside.
+  interface built in; and a desktop app, for Windows and Linux, and an Android
+  app, with the same inside.
 - **An API** that every client uses, the web interface included, documented at
   `/api/docs`.
 
@@ -59,7 +64,7 @@ server, in a container, as a desktop app, or as an app on your phone.
 Written down so that they stay that way. A feature request for any of these is
 a reason to point at another tool, not to grow this one.
 
-- Bots, automations, auto-responders or scheduled messages.
+- Bots, automations or scheduled messages.
 - MQTT, Matrix or any other bridge. See
   [loratrix](https://github.com/ogarcia/loratrix) for that.
 - Telemetry dashboards, charts or statistics beyond what a node says about
@@ -85,12 +90,33 @@ Each [release](https://github.com/ogarcia/meshctl/releases) brings:
   can write to and run `meshctl.exe`. What it keeps goes beside it.
 - **The desktop app** for Linux, as a Flatpak:
   `flatpak install --user meshctl-*-linux-x86_64.flatpak`.
+- **The Android app**, an APK: `android-arm64` for nearly every phone,
+  `android-arm` for older 32-bit ones.
 - **A container image**, below.
 
 The desktop app runs the daemon within itself, on this machine alone, and
 shows the panel in its own window. Closing it keeps it listening to your
-radios: in the tray on Windows, as a background app on Linux. `meshcore://`
-links open in it, to add the node or channel they hold.
+radios, and notifying you, unless you say otherwise in its settings: in the
+tray on Windows, as a background app on Linux. `meshcore://` links open in
+it, to add the node or channel they hold.
+
+The Android app does the same on the phone: radios over the network, by USB
+(with a cable or an OTG adapter) and by Bluetooth, picked from those plugged
+in or heard nearby. It keeps listening with the app closed if you say so in
+its settings, with a notification that tells it is. `meshcore://` links, and
+links shared to it from the Meshtastic or MeshCore apps, open in it. Android
+asks, the first time, to let the browser or the files app install it.
+
+To have it kept up to date, [Obtainium](https://github.com/ImranR98/Obtainium)
+follows the releases. From the phone, add it set up already, for [nearly
+every phone][obtainium-arm64] or for [an older 32-bit one][obtainium-arm]; or
+by hand: add `https://github.com/ogarcia/meshctl` as an app and, as each
+release brings both APKs, set its *Filter APKs by regular expression* to
+`android-arm64\.apk$` (`android-arm\.apk$` on a 32-bit phone). It tells when
+a new one is out, and installs it over the one you have.
+
+[obtainium-arm64]: https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22me.ogarcia.meshctl%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fogarcia%2Fmeshctl%22%2C%22author%22%3A%22ogarcia%22%2C%22name%22%3A%22meshctl%22%2C%22additionalSettings%22%3A%22%7B%5C%22apkFilterRegEx%5C%22%3A%5C%22android-arm64%5C%5C%5C%5C.apk%24%5C%22%7D%22%7D
+[obtainium-arm]: https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22me.ogarcia.meshctl%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fogarcia%2Fmeshctl%22%2C%22author%22%3A%22ogarcia%22%2C%22name%22%3A%22meshctl%22%2C%22additionalSettings%22%3A%22%7B%5C%22apkFilterRegEx%5C%22%3A%5C%22android-arm%5C%5C%5C%5C.apk%24%5C%22%7D%22%7D
 
 ## Running
 
@@ -123,7 +149,7 @@ in front and give meshctl its address instead.
 ### In a container
 
 Each release, and every push to master, builds an image, for amd64 and arm64:
-`latest` is the last release (`0.1.0`, `0.1` name them too), `master` the
+`latest` is the last release (`0.4.0`, `0.4` name them too), `master` the
 last commit. To try it on your own machine:
 
 ```sh
@@ -133,7 +159,9 @@ podman run -d --name meshctl -p 127.0.0.1:7434:7434 \
 ```
 
 In the container, meshctl listens on every interface, port 7434, and keeps its
-database in `/var/lib/meshctl`, the volume above. The port above is published
+database in `/var/lib/meshctl`, the volume above. Its clock is in UTC, which
+is the time automatic replies tell: give it yours with `-e TZ=Europe/Madrid`,
+say. The port above is published
 on this machine alone, so no token is needed. To reach it from elsewhere,
 publish it as `-p 7434:7434` and set a token (`-e MESHCTL_TOKEN=a-long-secret`)
 or put a proxy in front (see [Access](#access)).
@@ -155,13 +183,14 @@ docker run â€¦ --device /dev/ttyACM0 --group-add "$(stat -c %g /dev/ttyACM0)" â€
 open the database an older one made. If it does not start after an update,
 remove the volume and add your radios again.
 
-### As an app on your phone
+### As an app from a phone's browser
 
-The panel installs as an app, from the browser's menu, with its own icon and
-window; on Android, links shared to it (from the Meshtastic or MeshCore apps,
-say) open it to add what they hold. Browsers allow that, and the camera that
-reads QR codes, over HTTPS or on this very machine: put meshctl behind a proxy
-with HTTPS to have them from elsewhere.
+Where meshctl runs elsewhere, on a server or a Raspberry Pi, the panel installs
+as an app on any phone, from the browser's menu, with its own icon and window;
+on Android, links shared to it (from the Meshtastic or MeshCore apps, say) open
+it to add what they hold. Browsers allow that, and the camera that reads QR
+codes, over HTTPS or on this very machine: put meshctl behind a proxy with
+HTTPS to have them from elsewhere.
 
 ## Access
 
@@ -219,6 +248,18 @@ The desktop app is `cargo build --release -p meshctl-desktop`, after the
 interface; on Linux it needs WebKitGTK's development files (`webkit2gtk-4.1`).
 `desktop/flatpak/build.sh` builds it for the Flatpak, and says how to pack
 it.
+
+The Android app needs the Android SDK and NDK, Java 17 or later and the Tauri
+CLI (`cargo install tauri-cli`); after the interface:
+
+```sh
+cd desktop
+ANDROID_HOME=~/Android/Sdk NDK_HOME=~/Android/Sdk/ndk/<version> \
+  cargo tauri android build --apk --split-per-abi --target aarch64
+```
+
+Signed with your key if `desktop/gen/android/keystore.properties` says where
+it is (`storeFile`, `keyAlias` and `password`), unsigned if not.
 
 ## Development
 

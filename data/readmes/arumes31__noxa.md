@@ -9,7 +9,6 @@
 *Go server, Windows desktop client, installable mobile/web PWA, and PostgreSQL persistence.*
 
 [![CI](https://github.com/arumes31/noxa/actions/workflows/ci.yml/badge.svg)](https://github.com/arumes31/noxa/actions/workflows/ci.yml)
-[![golangci-lint](https://github.com/arumes31/noxa/actions/workflows/golangci-lint.yml/badge.svg)](https://github.com/arumes31/noxa/actions/workflows/golangci-lint.yml)
 [![Security Analysis](https://github.com/arumes31/noxa/actions/workflows/security.yml/badge.svg)](https://github.com/arumes31/noxa/actions/workflows/security.yml)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/arumes31/noxa)](https://go.dev/)
 [![Container Image](https://img.shields.io/badge/container-ghcr.io-blue?logo=docker)](https://github.com/arumes31/noxa/pkgs/container/noxa)
@@ -70,13 +69,13 @@ system permissions determine the available voice, camera and notification tools.
 </details>
 
 > [!NOTE]
-> **Encryption boundaries** (details in [E
+> **Encryption boundaries** (details in [Encryption](#encryption)): direct
+> messages and private groups are end-to-end encrypted with Olm (vodozemac),
+> and channel voice, video and screen sharing are end-to-en
 
 [...截断...]
 
-ncryption](#encryption)): direct
-> messages and private groups are end-to-end encrypted with Olm (vodozemac),
-> and channel voice, video and screen sharing are end-to-end encrypted with a
+d encrypted with a
 > key shared by the channel's members. Private calls (direct and group) are
 > end-to-end encrypted with per-call keys sent over Olm. Channel/global chat
 > and forum bodies are **not** end-to-end encrypted yet. Upgrading? Deploy the
@@ -138,4 +137,6 @@ app:
 
 **Channel voice, video and screen sharing (`noxa-media-e2ee-v1`).** On a
 server that advertises this capability, every channel microphone, camera,
-screen and screen-audio frame is encrypted o
+screen and screen-audio frame is encrypted on the sending device before it
+reaches the server's media relay (SFU), and decrypted only on the receiving
+device. The frame cipher is the maintained LiveKit FrameCrypto

@@ -1,0 +1,735 @@
+<p align="center">
+  <picture>
+    <source srcset="site/assets/logo.svg" type="image/svg+xml">
+    <img src="site/assets/logo.png" alt="oxilite logo" width="160">
+  </picture>
+</p>
+
+# oxilite
+
+**An Oxigraph-compatible RDF database and SPARQL engine that uses SQLite as its storage engine. It runs anywhere SQLite runs, including Cloudflare D1.**
+
+**[oxilitedb.com](https://oxilitedb.com)** · [crates.io](https://crates.io/crates/oxilite) · [docs.rs](https://docs.rs/oxilite) · [npm](https://www.npmjs.com/package/@oxilite/node)
+
+> **Status: version 0.9, milestones M1–M8 and M9 phase 1 done.** Full SPARQL 1.1 query and update compiled to SQL, on bundled SQLite, your own `libsqlite3`, [Turso](#vector-search-on-turso) and [Cloudflare D1](#using-oxilite-with-cloudflare-d1); RDFS / OWL reasoning; SHACL / ShEx validation; [openCypher](#cypher-and-property-graphs), [Datalog](#datalog-your-own-recursive-rules), [Synalog](https://oxilitedb.com/articles/synalog-agents), [N3 rules](https://oxilitedb.com/articles/n3-rules) and [λProlog](https://oxilitedb.com/articles/elpi-lambda-prolog) over the same data; [JSON-LD and Verifiable Credentials](#json-ld-and-verifiable-credentials); a [schema registry](#reasoning-and-validation) stored as RDF; [versioning and time travel](#versioning-history-and-time-travel); [vector search and host functions](#vector-search-on-turso); bindings for [Node.js, Workers](#nodejs-typescript), [Python](#python) and [the JVM](bindings/jvm/README.md) (Java, Kotlin, Scala, Clojure); and [oxilite studio](#oxilite-studio), a VS Code workbench. Next: branches and merge, then push/pull between stores. See [Roadmap](#roadmap).
+
+---
+
+## Why oxilite?
+
+[Oxigraph](https://github.com/oxigraph/oxigraph) is an excellent Rust SPARQL database. It stores data in RocksDB, which needs a native storage engine and a local filesystem. That rules it out in exactly the places where many modern apps run:
+
+- **Cloudflare D1 and similar edge databases.** You get a managed SQLite you can send SQL to, but you can't install extensions, load native libraries, or run RocksDB.
+- **Hosts that ship their own SQLite.** Mobile apps, embedded devices, sandboxes, and platforms where the SQLite library is provided and extensions are disabled.
+- **Apps that already use SQLite** and want a knowledge graph in the same file, backed up and replicated with the same tools.
+
+oxilite gives you the Oxigraph experience (same data model, same SPARQL semantics, the same Rust API) using **only plain SQL on a standard SQLite**. It needs no extensions, no custom functions (they're optional, used when available), and no filesystem access beyond what the host SQLite provides.
+
+### What makes it fast
+
+Using SQLite as a triple store is not new. What oxilite adds is a design built around how SQLite executes queries, and around the costs of a *remote* SQLite:
+
+| Technique | Why it matters |
+|---|---|
+| **Hash ids computed in Rust.** Each term becomes a tagged 64-bit integer (xxh3). | Writes never read anything back. SPARQL constants become integer literals at compile time, with no dictionary lookup. |
+| **Inline values.** Canonical integers and booleans live inside the id, and integer ids sort by value. | `FILTER(?age > 30)` on inline integers needs no join, and ranges become id ranges. |
+| **Covering `WITHOUT ROWID` indexes.** `quads` is clustered on `spog`, with `posg`, `ospg` and an optional `gspo`. | Every triple-pattern scan is index-only. Only 3–4 B-trees are written per quad, which matters because D1 bills every index entry. |
+| **One SQL statement per query.** Joins, OPTIONAL, UNION, MINUS, aggregates, property paths (recursive CTEs) and ORDER BY/LIMIT all compile into a single `SELECT`. | On D1 each round-trip is milliseconds. A query costs 1–2 round-trips, not one per triple pattern or per row. |
+| **Our own join ordering.** Per-predicate and per-class statistics drive a greedy planner, enforced with `CROSS JOIN`. | SQLite's planner can't tell `rdf:type` from a rare predicate in an N-way self-join. Choosing the order ourselves avoids scans that are 1000× too large. |
+| **Typed side columns.** `num`, `nt` and `ts` columns (with partial indexes) sit on the term dictionary. | Numeric and date comparisons never re-parse lexical forms. |
+| **Atomic = one batch.** Every write, including `DELETE/INSERT … WHERE`, compiles to self-reading SQL that fits in one transaction. | D1 has no interactive transactions; `batch()` is its only atomic unit. |
+
+The full rationale is in [`lat.md/decisions.md`](lat.md/decisions.md) and [`lat.md/architecture.md`](lat.md/architecture.md).
+
+### A "super combo" of existing Rust RDF crates
+
+oxilite reuses the RDF ecosystem wherever it can:
+
+| From | Reused for |
+|---|---|
+| **Oxigraph 0.5 family**: `oxrdf`, `oxrdfio`/`oxttl`, `spargebra`, `sparesults`, `oxsdatatypes`, `spareval` | Data model, all RDF parsers and serializers, the SPARQL parser and algebra, result formats, XSD datatypes, and a fallback evaluator for anything the SQL compiler can't express |
+| **[rudof](https://github.com/rudof-project/rudof)**: `srdf`, `shacl_validation`, `shex_validation` | SHACL and ShEx validation over the store (same Oxigraph crate family, so no conversions) |
+| **[reasonable](https://github.com/gtfierro/reasonable)** | OWL 2 RL materialization on native backends |
+| **SQLite itself** | Storage, indexes, transactions, recursive CTEs, FTS5 |
+
+---
+
+## How it works
+
+```
+  Rust · Node.js · Python · Workers · CLI · studio (LSP, MCP)
+                             │
+     ┌───────────────┬───────┴───────┬───────────────┐
+     ▼               ▼               ▼               ▼
+SPARQL 1.1      openCypher        Datalog      JSON-LD / VCs
+     └───────────────┴───────┬───────┴───────────────┘
+     ┌───────────────────────▼───────────────────────┐
+     │                  oxilite-core                 │  sans-IO: never touches a database
+     │  algebra → planner → SQL compiler → Request   │
+     │  reasoning · schema registry · versioning     │
+     │  (as-of reads, history) · vectors · functions │
+     │  Response → decoder → results                 │
+     └───────────────────────┬───────────────────────┘
+                             │  Request { statements, Read | Atomic }
+    ┌─────────────┬──────────┴───┬──────────────┬─────────────────┐
+    ▼             ▼              ▼              ▼                 ▼
+ rusqlite      dylib (dlopen   Turso (SQLite   D1 (Rust Worker,  wasm core + TS driver
+ (bundled)     your libsqlite3) in Rust,       worker::D1)       on env.DB or a Durable
+                               vectors)                          Object's SQLite
+```
+
+The core is **sans-IO**. Every operation yields SQL `Request`s and consumes `Response`s. That's why the same compiler serves native SQLite, a SQLite library loaded from a path at runtime, Turso, and D1 over the network. A backend is only "run these statements, atomically if asked". Cypher and Datalog compile through the same core, so reasoning, the planner, versioning and every backend apply to them too.
+
+### Storage schema
+
+```sql
+CREATE TABLE quads (s INTEGER NOT NULL, p INTEGER NOT NULL, o INTEGER NOT NULL,
+                    g INTEGER NOT NULL DEFAULT 0,              -- 0 = default graph
+                    PRIMARY KEY (s, p, o, g)) WITHOUT ROWID, STRICT;
+CREATE INDEX quads_posg ON quads(p, o, s, g);
+CREATE INDEX quads_ospg ON quads(o, s, p, g);
+CREATE INDEX quads_gspo ON quads(g, s, p, o);                  -- optional
+
+CREATE TABLE terms (id INTEGER PRIMARY KEY, lex TEXT NOT NULL, dt TEXT, lang TEXT,
+                    dir INTEGER, num REAL, nt INTEGER, ts REAL) STRICT;
+-- + triple_terms (RDF 1.2), graphs, stats_pred / stats_class / stats_po (planner),
+--   tbox_closure, quads_inf + quads_inf_src (inferences and who derived them),
+--   shapes_index / shapes_in (compiled SHACL), datalog_work, update_buffer, oxilite_meta
+```
+
+A versioned store adds its history next to `quads`, which always stays the present. Nothing below exists at the default level `off`:
+
+```sql
+-- stamped: a store clock. One tick per atomic write, and the tick that added each quad.
+CREATE TABLE ticks (t INTEGER PRIMARY KEY, time REAL NOT NULL, kind INTEGER NOT NULL DEFAULT 0,
+                    author TEXT, message TEXT, ...) STRICT;       -- kind > 0: level change, purge
+ALTER TABLE quads ADD COLUMN t INTEGER NOT NULL DEFAULT 0;        -- not indexed: scans stay index-only
+
+-- log: an immutable change log, written by triggers on quads
+CREATE TABLE quad_log (s INTEGER NOT NULL, p INTEGER NOT NULL, o INTEGER NOT NULL, g INTEGER NOT NULL,
+                       tx INTEGER NOT NULL,                        -- the tick
+                       op INTEGER NOT NULL,                        -- 1 added, 0 removed
+                       PRIMARY KEY (s, p, o, g, tx)) WITHOUT ROWID, STRICT;
+CREATE INDEX quad_log_tx ON quad_log(tx);                          -- one commit's changes
+CREATE TABLE commits (tx INTEGER PRIMARY KEY) STRICT;              -- ticks that changed something
+CREATE INDEX quad_log_posg ON quad_log(p, o, s, g, tx);            -- optional as-of index
+CREATE INDEX quad_log_ospg ON quad_log(o, s, p, g, tx);
+-- + AFTER INSERT / AFTER DELETE triggers on quads, and triggers that make history immutable
+```
+
+See [Versioning](#versioning-history-and-time-travel) for how a query reads the past from these tables.
+
+### What a query becomes
+
+```sparql
+SELECT ?name WHERE {
+  ?p a ex:Person ; ex:age ?age ; ex:name ?name .
+  FILTER(?age > 30)
+}
+```
+
+compiles to a single statement, with the planner choosing `ex:age` first because statistics say it's more selective than `rdf:type`:
+
+```sql
+SELECT q2.o AS v2
+FROM quads q1 CROSS JOIN quads q0 CROSS JOIN quads q2
+WHERE q1.p = 2305843... AND +q1.g = 0
+  AND (CASE (q1.o >> 59) WHEN 6 THEN (q1.o & 576460752303423487) - 288230376151711744
+       WHEN 5 THEN (SELECT num FROM terms WHERE id = q1.o AND nt IS NOT NULL) END) > 30
+  AND q0.s = q1.s AND q0.p = 2305843... AND q0.o = 2305843... AND +q0.g = 0
+  AND q2.s = q1.s AND q2.p = 2305843... AND +q2.g = 0
+```
+
+The filter is applied right after the first scan, before any join. The unary `+` on graph conditions keeps SQLite from choosing the graph index for `g = 0` (which nearly every quad matches), so each alias uses the right covering permutation. Inline integers are compared arithmetically; only non-inline numbers (decimals, doubles) look up `terms`. `store.explain(query)` shows the SQL, the join order and the estimates.
+
+### Planner benchmark (M1)
+
+`cargo run --release -p oxilite --example planner_bench` loads 350 010 quads and runs three join-heavy queries with oxilite's planner and with SQLite's own (Apple Silicon laptop, in-process SQLite):
+
+| query | oxilite planner | SQLite planner |
+|---|---|---|
+| star with a rare badge | 75 µs | 7.2 ms |
+| friends of badged people | 96 µs | 87 µs |
+| city + age range filter | 478 µs | 7.8 ms |
+
+---
+
+## Usage
+
+```bash
+cargo add oxilite                      # Rust (features: rusqlite (default), dylib, d1, turso, cypher, datalog, n3, elpi, jsonld, vc, reasonable)
+cargo install oxilite-cli              # the `oxilite` command and SPARQL endpoint
+npm install @oxilite/node              # Node.js (prebuilt for macOS arm64)
+npm install @oxilite/d1                # Cloudflare D1 (WebAssembly)
+pip install oxilite                    # Python ≥ 3.9 (pyoxigraph's API)
+```
+
+Every package has its own README with installation, examples and its API:
+
+| Package | What it is for |
+|---|---|
+| [`oxilite`](crates/oxilite/README.md) | The store: a drop-in for `oxigraph::store::Store`, plus `AsyncStore` for D1 |
+| [`oxilite-core`](crates/oxilite-core/README.md) | The sans-IO core: term encoding, schema, SPARQL → SQL compiler and planner |
+| [`oxilite-rusqlite`](crates/oxilite-rusqlite/README.md) | In-process backend with a bundled SQLite (the default) |
+| [`oxilite-dylib`](crates/oxilite-dylib/README.md) | Backend that loads your own `libsqlite3` at runtime |
+| [`oxilite-turso`](crates/oxilite-turso/README.md) | Backend on Turso (SQLite rewritten in Rust), with vector indexes searchable from SPARQL, Cypher and Datalog |
+| [`oxilite-d1`](crates/oxilite-d1/README.md) | Cloudflare D1 backend for Rust Workers |
+| [`oxilite-cypher`](crates/oxilite-cypher/README.md) | openCypher over the same data, OWL- and SHACL-aware |
+| [`oxilite-datalog`](crates/oxilite-datalog/README.md) | Datalog rules over the same data: recursion, stratified negation, aggregation |
+| [`oxilite-synalog`](crates/oxilite-synalog/README.md) | [Synalog](https://github.com/SynaLinks/synalog), the Datalog-family language for AI agents, run over the store as relational tables |
+| [`oxilite-n3`](crates/oxilite-n3/README.md) | Notation3 rules run by [eyeron](https://crates.io/crates/eyeron): ask what follows, or store it as inferences (every backend, D1 included) |
+| [`oxilite-elpi`](crates/oxilite-elpi/README.md) | λProlog programs run by [lean-elpi](https://github.com/Volland/lean-elpi): goals, hypothetical reasoning, checks and materialization |
+| [`oxilite-jsonld`](crates/oxilite-jsonld/README.md) | JSON-LD documents stored verbatim, one named graph each |
+| [`oxilite-vc`](crates/oxilite-vc/README.md) | Verifiable Credentials: stored under their id, indexed, queryable |
+| [`oxilite-reason`](crates/oxilite-reason/README.md) | OWL 2 RL materialization with `reasonable` |
+| [`oxilite-validate`](crates/oxilite-validate/README.md) | SHACL and ShEx validation with rudof |
+| [`oxilite-cli`](crates/oxilite-cli/README.md) | The `oxilite` command: an interactive shell, a SPARQL endpoint like `oxigraph serve`, and the studio's language server and MCP tools |
+| [`@oxilite/node`](bindings/node/README.md) | Node.js bindings, API of Oxigraph's JS package |
+| [`@oxilite/d1`](packages/d1/README.md) | Cloudflare D1 and Durable Objects from TypeScript (WebAssembly core) |
+| [`@oxilite/common`](packages/common/README.md) | RDF/JS terms and shared TypeScript types |
+| [`oxilite` on PyPI](bindings/python/README.md) | Python bindings, API of pyoxigraph |
+
+### Rust: drop-in for `oxigraph::store::Store`
+
+```toml
+[dependencies]
+oxilite = "0.9"          # bundled SQLite via rusqlite
+```
+
+```rust
+use oxilite::store::Store;             // was: use oxigraph::store::Store;
+use oxilite::io::RdfFormat;
+use oxilite::sparql::QueryResults;
+
+let store = Store::open("data.sqlite")?;             // or Store::new() for in-memory
+store.load_from_reader(RdfFormat::Turtle, TURTLE.as_bytes())?;
+
+if let QueryResults::Solutions(solutions) =
+    store.query("SELECT ?s WHERE { ?s a <http://schema.org/Person> }")?
+{
+    for s in solutions {
+        println!("{}", s?.get("s").unwrap());
+    }
+}
+
+store.update("INSERT DATA { <http://ex/a> <http://ex/p> 42 }")?;
+store.optimize()?;          // refresh planner statistics (replaces RocksDB compact)
+println!("{}", store.explain("SELECT * WHERE { ?s ?p ?o } LIMIT 1")?);
+```
+
+### Rust: your own SQLite library, loaded at runtime
+
+```rust
+use oxilite::dylib::DylibBackend;
+
+// features = ["dylib"]
+let store = oxilite::store::Store::open_with_library("/opt/vendor/lib/libsqlite3.so", "data.sqlite")?;
+// or: Store::with_backend(DylibBackend::open(library, database)?)
+```
+
+Only the stable SQLite C API is bound (`open_v2`, `prepare_v2`, `step`, `column_*`, `finalize`, `errmsg`, `changes`, `exec`, and optionally `create_function_v2`), so any SQLite ≥ 3.37 works.
+
+### Node.js (TypeScript)
+
+```ts
+import { Store, type Term } from "@oxilite/node";
+
+const store = new Store("data.sqlite");               // new Store() in memory, new Store(quads) like Oxigraph
+// or: new Store({ path: "data.sqlite", library: "/opt/vendor/lib/libsqlite3.so", graphIndex: false })
+store.load(`@prefix ex: <http://ex/> . ex:a ex:knows ex:b .`, { format: "text/turtle" });
+console.log(store.size);                               // a getter, as in Oxigraph
+
+for (const row of store.query("SELECT ?x WHERE { ?x ?p ?o }") as Map<string, Term>[]) {
+  console.log(row.get("x")?.value);
+}
+store.update("DELETE WHERE { ?s <http://ex/knows> ?o }");
+```
+
+The API mirrors Oxigraph's JS package (`query`, `update`, `load`, `dump`, `add`, `delete`, `has`, `match`, `size`), with RDF/JS terms, plus `explain`, `explainUpdate`, `bulkLoad`, `optimize` and `backup`. Oxigraph's own `store.test.ts` runs unchanged against it. Build the native addon from a checkout with `npm run build:native -w @oxilite/node`.
+
+### Python
+
+```python
+from oxilite import Store, NamedNode, Literal, Quad, RdfFormat   # was: from pyoxigraph import …
+
+store = Store("data.sqlite")                     # Store() in memory; a directory holds oxilite.sqlite
+store.load("@prefix ex: <http://ex/> . ex:a ex:knows ex:b .", RdfFormat.TURTLE)
+store.add(Quad(NamedNode("http://ex/b"), NamedNode("http://ex/name"), Literal("Bea")))
+
+for solution in store.query("SELECT ?x ?name WHERE { ?x <http://ex/name> ?name }"):
+    print(solution["x"], solution["name"].value)
+
+store.cypher("MATCH (p {name: $n}) RETURN p", {"n": "Bea"}, base="http://ex/")   # openCypher
+store.datalog("@prefix ex: <http://ex/> .\n?- ex:knows(?a, ?b).")                 # Datalog
+store.query("ASK { ?x a <http://ex/Animal> }", reasoning="rdfs")                  # entailment
+```
+
+The API is pyoxigraph's (`Store`, terms, `RdfFormat`, `QuerySolutions`, `parse`, `serialize`, `parse_query_results`), so `import oxilite as pyoxigraph` runs existing code on a SQLite file. pyoxigraph's own test suite runs against it; its three failures are allow-listed (custom Python functions in SPARQL and remote `LOAD`, which a query compiled to SQL cannot do). Everything oxilite adds is there too, with typed results: `explain`, Cypher, Datalog, `materialize`, the schema registry, JSON-LD documents and credentials, versioning (`with store.commit(author=…):`, `as_of=`, `history`, `diff`), full-text search and `library=` for a system SQLite. Calls release the GIL. Wheels are `abi3` for Linux, macOS and Windows. See the [Python reference](docs/python.md) and [how to build and publish the package](docs/python-publishing.md).
+
+---
+
+### Command line and SPARQL endpoint
+
+```bash
+cargo install oxilite-cli                               # the `oxilite` binary
+oxilite data.sqlite                                    # interactive SPARQL shell, like sqlite3
+oxilite load  -l data.sqlite -f dump.nt                # bulk load, then refresh statistics
+oxilite query -l data.sqlite -q 'SELECT * WHERE { ?s ?p ?o } LIMIT 5'
+oxilite explain -l data.sqlite -q '…'                  # the SQL and the join order
+oxilite serve -l data.sqlite -b 127.0.0.1:7879         # /query, /update, /store like `oxigraph serve`
+oxilite serve -l data.sqlite --library /usr/lib/libsqlite3.dylib   # same file, system SQLite
+oxilite update -l data.sqlite -m "close t1" -u '…'   # a commit message (versioned stores)
+oxilite query -l data.sqlite --as-of HEAD~1 -q '…'   # the store as it was one commit ago
+oxilite versioning log -l data.sqlite                 # the history; also status, set, diff, changes, purge
+oxilite datalog -l data.sqlite -f rules.dl            # run a Datalog program (--explain, --materialize)
+oxilite synalog Pred -l data.sqlite -f rules.l        # run a Synalog predicate (--sql, --engine duckdb)
+oxilite n3 -l data.sqlite -f rules.n3                # run N3 rules with eyeron (--materialize, --proof)
+oxilite elpi -l data.sqlite -f rules.elpi --goal G    # run a λProlog goal (--check, --materialize; CLI feature elpi)
+oxilite registry register -l data.sqlite http://ex/onto --role ontology --file onto.ttl   # schema registry
+oxilite query --turso -l data.db -q '…'              # the same, on Turso
+```
+
+With no subcommand, `oxilite` is a shell: tab completion from the store's vocabulary, session prefixes, history, and dot-commands for reasoning (`.reasoning rdfs`), the registry, Datalog, vectors and functions (`.vector`, `.functions`), and output modes. Piped input runs as a script and exits non-zero if a statement fails.
+
+### Full-text search
+
+Create the store with the text index (`StoreOptions { text_index: true, .. }`, `--text-index`, or `{ textIndex: true }` in JavaScript) and match literals with FTS5:
+
+```sparql
+PREFIX oxl: <https://oxilite.dev/ns#>
+SELECT ?product WHERE { ?product rdfs:label ?label FILTER(oxl:textMatch(?label, "graph data*")) }
+```
+
+With the index this is an FTS5 `MATCH` (on D1 too). Without it, native stores still answer through the fallback evaluator with the same word matching.
+
+### Vector search on Turso
+
+On the Turso backend (`Store::open_turso`, `--turso`), embeddings stored as literals get vector indexes, defined as RDF in `<oxilite:vectors>` and searched from SPARQL, Cypher and Datalog inside the query's one SQL statement:
+
+```sparql
+PREFIX oxl: <https://oxilite.dev/ns#>
+SELECT ?text ?score WHERE {
+  SERVICE <oxilite:vector/memories> { [] oxl:query "[0.85, 0.2, 0.05, 0.1]" ; oxl:k 20 ; oxl:node ?m ; oxl:score ?score }
+  ?m ex:visibleTo ex:alice ; ex:text ?text .
+} ORDER BY DESC(?score) LIMIT 5
+```
+
+Indexes are declared by writing their definition (from SPARQL, Cypher, Datalog or the API), kept in step with the data by triggers, and searched with the same `SERVICE` form in every language. See [`oxilite-turso`](crates/oxilite-turso/README.md), the guide [Agent memory on Turso](https://oxilitedb.com/articles/agent-memory-turso) and the design note [Vectors that know where they are](https://oxilitedb.com/articles/turso-vectors).
+
+### Host functions
+
+Application code can be called from SPARQL, Cypher and Datalog on the Rust `Store`, whatever its backend (bundled SQLite, a system SQLite or Turso). Register a function from RDF terms to a term under an IRI; only the calls leave SQL, and the rest of the query still compiles to one statement:
+
+```rust
+use oxilite::functions::HostFunction;
+
+store.register_function(
+    HostFunction::new("http://example.com/fn#slugify", |args| { /* &[Term] -> Option<Term> */ })
+        .cypher_name("ex.slugify").arity(1, 1).description("URL-safe slug of a string"),
+)?;
+// SPARQL:  SELECT ?slug WHERE { ?p ex:name ?n BIND(fn:slugify(?n) AS ?slug) }
+// Cypher:  MATCH (p:Person) RETURN ex.slugify(p.name) AS slug
+// Datalog: slug(?p, ?s) :- ex:name(?p, ?n), ?s = fn:slugify(?n).
+```
+
+Functions live on the store handle and its clones, and are not saved in the database.
+
+---
+
+## oxilite studio
+
+[oxilite studio](https://marketplace.visualstudio.com/items?itemName=pavlyshyn.oxilite-studio) is a VS Code workbench for a knowledge-graph project: Turtle, SPARQL, SHACL, Cypher and Datalog files with completion from the project's own vocabulary, live SHACL diagnostics with file and line, reasoning with "why?" justifications, knowledge-graph tests in the Test Explorer, notebooks, a Store Explorer, a schema registry view, a Datalog debugger, and connections to SQLite and D1 stores.
+
+The engine behind it ships in `oxilite-cli`, so CI and agents get the same answers as the editor:
+
+```bash
+oxilite studio-server              # the language server the extension starts (LSP over stdio)
+oxilite check .                    # load the project, report load errors, SHACL results and tests; exit 1 on failure
+oxilite mcp --root .               # the same operations as Model Context Protocol tools for agents
+```
+
+The tour is the article [oxilite studio](https://oxilitedb.com/articles/oxilite-studio).
+
+## Using oxilite with Cloudflare D1
+
+D1 is a managed, serverless SQLite. You can't load extensions or native code, and every call is a network round-trip billed per row read and written. oxilite is designed around exactly these constraints.
+
+### 1. Create the database and apply the schema
+
+```bash
+npx wrangler d1 create my-graph
+npx wrangler d1 migrations create my-graph oxilite-schema
+npx oxilite-d1 schema > migrations/0001_oxilite-schema.sql     # schema as a D1 migration
+npx wrangler d1 migrations apply my-graph --remote
+```
+
+For a store that keeps its history, add `--versioning log` (or `stamped`) to `schema`. An existing database changes level with a migration from `npx oxilite-d1 versioning-migration --from off --to log` (see [Versioning](#versioning-history-and-time-travel)).
+
+```toml
+# wrangler.toml
+[[d1_databases]]
+binding = "DB"
+database_name = "my-graph"
+database_id = "<id>"
+```
+
+### 2a. TypeScript Worker
+
+```ts
+import { D1Store } from "@oxilite/d1";
+import wasm from "@oxilite/d1/oxilite.wasm";            // the oxilite core, compiled to WebAssembly
+
+export default {
+  async fetch(req: Request, env: { DB: D1Database }): Promise<Response> {
+    // `migrated: true` skips the (idempotent) schema DDL when the migration was applied.
+    const store = await D1Store.open(env.DB, { wasm, migrated: true });
+    const url = new URL(req.url);
+
+    if (req.method === "POST" && url.pathname === "/update") {
+      await store.update(await req.text());             // one atomic D1 batch
+      return new Response(null, { status: 204 });
+    }
+    const q = url.searchParams.get("query") ?? "SELECT * WHERE { ?s ?p ?o } LIMIT 10";
+    return new Response(await store.queryJson(q), {
+      headers: { "content-type": "application/sparql-results+json" },
+    });
+  },
+};
+```
+
+A complete endpoint with its `wrangler.toml`, migration and a Miniflare end-to-end test is in [`examples/d1-worker-ts`](examples/d1-worker-ts/).
+
+`@oxilite/d1` runs the oxilite core as WebAssembly. The core compiles SPARQL to SQL, the driver sends it to `env.DB`, and the core decodes the rows. No Rust toolchain is needed in your Worker project.
+
+### 2b. Rust Worker
+
+```rust
+use oxilite::{d1::D1Backend, AsyncStore};
+use worker::*;
+
+// oxilite = { version = "0.9", default-features = false, features = ["d1"] }
+#[event(fetch)]
+async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    let store = AsyncStore::open_existing(D1Backend::new(env.d1("DB")?)).await.map_err(|e| e.to_string())?;
+    let q = req.url()?.query_pairs().find(|(k, _)| k == "query").map(|(_, v)| v.into_owned())
+        .unwrap_or_else(|| "ASK { ?s ?p ?o }".into());
+    let out = store.query_output(q.as_str(), &Default::default()).await.map_err(|e| e.to_string())?;
+    Response::ok(oxilite_core::json::output_to_sparql_json(&out).map_err(|e| e.to_string())?)
+}
+```
+
+A complete endpoint (`/sparql`, `/update`, `/load`, `/explain`) with its `wrangler.toml` and migration is in [`examples/d1-worker`](examples/d1-worker/); build it with `worker-build --release`.
+
+### 2c. Durable Objects
+
+The same `@oxilite/d1` package runs on a Durable Object's embedded SQLite through a small adapter over `ctx.storage.sql` (atomic batches use `transactionSync`). That gives each agent or user a private graph. [`examples/do-agent-memory-ts`](examples/do-agent-memory-ts/) is a tested agent-memory Worker built this way; the [article](site/articles/agent-memory-durable-objects.html) walks through it.
+
+### What oxilite does differently on D1
+
+| D1 constraint | How oxilite handles it |
+|---|---|
+| No extensions or user-defined functions | Every SPARQL function has a pure-SQL form or a rewrite. The few that don't (general `REGEX`, `REPLACE`, hashes) return a clear "unsupported on this backend" error, and `explain()` flags them. |
+| No interactive transactions; `batch()` is the only atomic unit | Every write is one batch. `DELETE/INSERT … WHERE` stages its WHERE results in `update_buffer` inside the same batch, so SPARQL's evaluate-then-apply semantics hold. |
+| Statement size limit (100 KB), 100 bound parameters, 50 statements per batch | Constants are inlined as escaped SQL literals and never bound. Generated SQL is kept under 90 KB (larger queries report `unsupported`), and large inserts are split into statements and batches under the limits. |
+| Parser limits: at most 5 terms in a compound SELECT, GLOB patterns up to 50 bytes | Large UNIONs are nested into groups of at most five, and lexical-form checks split their GLOB patterns into short pieces. |
+| JavaScript numbers lose precision above 2^53 | Ids (60-bit) are selected as TEXT and parsed in the core. |
+| Billed per row read and written | Few indexes, read-free writes, no per-write statistics updates, one statement per query, and deduplicated term resolution. |
+| Per-invocation query limits | Queries use 1–2 requests; bulk loads are chunked (and documented as non-atomic across chunks, like Oxigraph's `BulkLoader`). |
+
+Check [Cloudflare's current D1 limits](https://developers.cloudflare.com/d1/platform/limits/); oxilite's `Capabilities::d1()` defaults are kept below them and can be tuned.
+
+**Tips for D1:**
+- Run `store.optimize()` after large imports. It refreshes planner statistics in one batch that reads the whole table, so don't call it on every request.
+- Create the store without the graph index (`graph_index: false`) if you only use the default graph. That saves one index write per quad.
+- Use `explain()` in development to confirm your queries compile fully to SQL.
+
+---
+
+## Compatibility with Oxigraph
+
+"Behaves like Oxigraph" is tested, not assumed. The [`oxigraph-compat-harness`](openspec/changes/archive/2026-09-22-oxigraph-compat-harness/) runs:
+- **Oxigraph's own W3C manifest runner**, ported from `oxigraph/testsuite`, over `rdf-tests` and Oxigraph's `oxigraph-tests`. Each test gets three verdicts: oxilite vs. expected, Oxigraph vs. expected, and oxilite vs. Oxigraph.
+- **Oxigraph's store API tests** (`lib/oxigraph/tests/store.rs`) against `oxilite::blocking::Store`, changing only the import.
+- **Oxigraph's JS tests** (`js/test/store.test.ts`) against `@oxilite/node`.
+- **A differential corpus**: seeded datasets and query families run on both engines, with statistics on and off and with our planner and SQLite's. The results must match.
+- **An allow-list** of justified divergences, each linked to a decision, and a generated `COMPATIBILITY.md`.
+
+Intentional differences:
+- `backup` is `VACUUM INTO` and `compact` is `optimize()`; RocksDB-specific methods are absent.
+- On D1, queries that need the Rust fallback evaluator return an "unsupported" error instead of running.
+- Decimal values are compared as IEEE doubles (the lexical form is always preserved exactly).
+
+---
+
+## Performance
+
+Measured with the [Berlin SPARQL Benchmark](http://wbsg.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/) and its official tools against Oxigraph 0.5.11 (RocksDB), on one laptop. Run `bench/bsbm.sh [products] [parallelism] [runs]` to reproduce, then `cargo run -p oxilite-bench --bin bsbm-report` to regenerate this table. QMpH is query mixes per hour, so higher is better.
+
+<!-- bsbm-results:begin -->
+
+**1000 products (374911 triples)**
+
+| engine | load (s) | size (MB) | explore QMpH | business intelligence QMpH |
+|---|---|---|---|---|
+| oxigraph | 0.30 | 43.9 | 489260 | 520 |
+| oxilite | 4.80 | 85.4 | 335015 | 899 |
+| oxilite-d1 | 16.55 | – | 7982 | 841 |
+| oxilite-dylib | 2.85 | 85.6 | 348838 | 1233 |
+
+| explore query (avg ms) | oxigraph | oxilite | oxilite-d1 | oxilite-dylib |
+|---|---|---|---|---|
+| Q1 | 0.43 | 0.82 | 56.45 | 0.82 |
+| Q2 | 0.96 | 1.82 | 59.13 | 2.09 |
+| Q3 | 0.43 | 0.89 | 59.00 | 0.81 |
+| Q4 | 0.53 | 0.94 | 52.94 | 0.85 |
+| Q5 | 4.92 | 1.64 | 64.81 | 1.60 |
+| Q7 | 1.07 | 1.92 | 65.76 | 1.85 |
+| Q8 | 0.78 | 1.62 | 92.17 | 1.51 |
+| Q9 | 0.21 | 0.91 | 103.55 | 0.82 |
+| Q10 | 0.73 | 1.34 | 80.12 | 1.26 |
+| Q11 | 0.31 | 1.01 | 61.89 | 0.94 |
+| Q12 | 0.34 | 0.88 | 57.24 | 0.94 |
+
+<!-- bsbm-results:end -->
+
+Every query returned the same results on all engines; explore Q9 (a DESCRIBE) differs only in RDF/XML byte size, because oxilite writes the same triples in a different order. `oxilite-d1` runs on a local D1 (Miniflare) behind an HTTP sidecar, so each query pays about 55 ms of round trips; it measures the D1 code path, not Cloudflare's latency. oxilite trades load speed and file size (three covering indexes over integer ids in one SQLite file) for running anywhere SQLite runs; on the aggregate-heavy business-intelligence mix it is faster than Oxigraph.
+
+**D1 write cost.** Rows written per inserted triple (D1's billing unit, index entries included), measured on a local D1 by `cargo run -p oxilite-bench --bin write-cost`:
+
+| schema | rows written per triple |
+|---|---|
+| graph index (default) | 4.81 |
+| without the graph index (`graphIndex: false`) | 3.81 |
+| graph index + text index | 5.01 |
+
+## Reasoning and validation
+
+- **Reasoning (M4).** Per-query `Rdfs` / `OwlQl` entailment by rewriting against a small materialized TBox closure. Queries stay single statements and there are no extra writes. OWL 2 RL materialization is available on request via `materialize()`, using SQL fixpoint rules everywhere (D1 included) and, natively, `reasonable` (feature `reasonable`), with identical results.
+- **Schema registry.** A named graph can be declared to hold an ontology, a SHACL shapes graph or a ShEx schema, and mapped to the data graphs it applies to. Its triples stay ordinary RDF, but reasoning then reads only the active ontologies that apply to each graph, SHACL shapes are compiled into an index that Cypher and rudof both read, and `QueryOptions::include_schema_graphs = false` keeps axioms out of queries over the data. The registry is itself RDF, in the system graph `<oxilite:schema>`, described with the [`oxl:` vocabulary](https://oxilitedb.com/ns/) and checked by its own SHACL shapes: SPARQL can read and change it, it survives an N-Quads dump, and the same updates run on Oxigraph. A store that registers nothing is unchanged. Reference: [`docs/schema-registry.md`](docs/schema-registry.md).
+- **Inference provenance.** Each materialized inference records the producer that derived it (OWL 2 RL or a named Datalog rule set), so one producer can be recomputed without discarding the others' conclusions.
+
+```rust
+use oxilite::sparql::{QueryOptions, Reasoning};
+
+// ex:Dog rdfs:subClassOf ex:Animal . ex:rex a ex:Dog .
+let opts = QueryOptions { reasoning: Reasoning::Rdfs, ..Default::default() };
+let out = store.query_output("SELECT ?x WHERE { ?x a <http://ex/Animal> }", &opts)?;   // ex:rex
+
+store.materialize()?;                                   // OWL 2 RL closure into quads_inf
+let opts = QueryOptions { include_inferred: true, ..Default::default() };
+```
+
+```ts
+store.query("SELECT ?x WHERE { ?x a ex:Animal }", { reasoning: "rdfs" });    // or "owl-ql"
+await d1store.materialize();                                                  // SQL rules, one D1 batch per round
+d1store.query(q, { include_inferred: true });
+```
+
+The schema closure is refreshed by `optimize()` and automatically, in the same transaction, by any write that touches `rdfs:subClassOf`, `rdfs:subPropertyOf`, `rdfs:domain`, `rdfs:range`, `owl:equivalentClass`, `owl:equivalentProperty`, `owl:inverseOf` or symmetric/transitive property declarations. Materialized inferences are not maintained: re-run `materialize()` after changing data. D1 databases created by an older migration need the new `tbox_closure` and `quads_inf` tables (re-run `npx oxilite-d1 schema`; every statement is `IF NOT EXISTS`).
+- **Validation (M5).** SHACL and ShEx through rudof, unchanged, in the `oxilite-validate` crate. Native stores implement rudof's RDF traits directly, so rudof's SPARQL-mode validation runs through the oxilite compiler; on the W3C SHACL core suite and the shexTest suite the results are identical to rudof's in-memory graph. rudof does not build its validators for wasm32, so D1 is validated from native code (a CLI, a server, CI) over the D1 HTTP API: the subgraph the shapes need is prefetched in a few batched requests, with a size limit that fails loudly.
+
+```rust
+use oxilite_validate::{validate_shacl, validate_shex, ShaclValidationMode};
+
+let report = validate_shacl(&store, shapes_ttl, &ShaclValidationMode::Native)?;
+if !report.conforms() { println!("{report}"); }
+let results = validate_shex(&store, shexc, "http://example.com/", "<http://example.com/alice>@<http://example.com/Person>")?;
+
+// D1 (any AsyncBackend): bounded prefetch, then validation in memory
+let report = oxilite_validate::prefetch::validate_shacl_async(&d1_store, shapes_ttl, &ShaclValidationMode::Native, &Default::default()).await?;
+```
+
+## Cypher and property graphs
+
+The same dataset is also a property graph you can query with **openCypher** (M7, feature `cypher`, crate `oxilite-cypher`). Nodes are IRIs, labels are `rdf:type`, properties are literal triples, and relationships are triples; a relationship's properties live on an RDF 1.2 reifier (`?r rdf:reifies <<( ?a :KNOWS ?b )>>`), created only when needed. Data written with Cypher is plain RDF for SPARQL, and RDF loaded from Turtle is a graph for Cypher.
+
+```rust
+use oxilite::cypher::{CypherOptions, Params, Vocabulary};
+
+let opts = CypherOptions { vocabulary: Vocabulary::new("http://example.com/"), ..Default::default() };
+store.cypher_with("CREATE (:Person {name: 'Ada'})-[:KNOWS {since: 2020}]->(:Person {name: 'Alan'})", &Params::new(), &opts)?;
+let r = store.cypher_with("MATCH (a:Person)-[k:KNOWS]->(b) RETURN b.name, k.since", &Params::new(), &opts)?;
+// SPARQL sees the same data: ASK { ?a ex:KNOWS ?b . ?r rdf:reifies <<( ?a ex:KNOWS ?b )>> ; ex:since 2020 }
+```
+
+```ts
+const r = store.cypher("MATCH p = shortestPath((a:Station {id: $from})-[:LINE*]-(b:Station {id: $to})) RETURN length(p) AS hops", { from: 1, to: 9 });
+await d1store.cypher("UNWIND $rows AS row MERGE (p:Person {id: row.id}) SET p.name = row.name", { rows });
+```
+
+- **How it runs.** Reading clauses become one SPARQL query, compiled to SQL by the same compiler and planner (reasoning and the fallback included). What SQL cannot express — writes, lists, maps, `collect()`, temporal arithmetic — runs in Rust over the rows. A writing statement reads once and applies its changes as **one atomic request** (one D1 batch). `shortestPath` is a breadth-first search, one SQL request per level, so it works on D1. `explain_cypher()` shows the SPARQL and the SQL.
+- **OWL and SHACL aware.** With `reasoning: "rdfs"` / `"owl-ql"`, labels match subclasses and relationship types their subproperties and inverses. SHACL shapes stored in the dataset are the graph's schema: writes that break `sh:datatype`, cardinality, `sh:in` or `sh:pattern` are rejected before anything is written, `sh:minCount 1` properties join without `OPTIONAL`, `sh:datatype` types comparisons for the compiler, and `CALL db.labels()` / `db.schema.nodeTypeProperties()` read shapes and data.
+- **Coverage.** 3733 of the 3880 [openCypher TCK](https://github.com/opencypher/openCypher/tree/main/tck) scenarios pass (read-only 96.4%, temporal functions 100%), on the bundled SQLite; the failures (user-defined procedures, reading after a write in one statement, errors on deleted entities…) are listed in [`crates/oxilite-cypher/tck-allowlist.txt`](crates/oxilite-cypher/tck-allowlist.txt).
+
+## Datalog: your own recursive rules
+
+SPARQL's only recursion is a property path: one predicate, a fixed regular expression, no way to join another relation or filter part-way through. Datalog removes that ceiling (feature `datalog`, crate `oxilite-datalog`). A program is a list of rules over the same quads, checked and then compiled to **one SQL statement** — so linear recursion is still one round trip, on D1 too.
+
+```rust
+let r = store.datalog(r#"
+  @prefix ex: <http://example.org/> .
+
+  ancestor(?x, ?y) :- ex:parent(?x, ?y).
+  ancestor(?x, ?z) :- ex:parent(?x, ?y), ancestor(?y, ?z).   // recursion with a body
+
+  adult(?x, ?y)    :- ancestor(?x, ?y), ex:age(?y, ?a), ?a >= 18.
+  orphan(?x)       :- ex:Person(?x), not ancestor(_, ?x).    // stratified negation
+  lines(?x, COUNT(?y)) :- ancestor(?x, ?y).                  // aggregation
+
+  ?- adult(?x, ?y).
+"#)?;
+```
+
+- **Atoms are RDF.** An IRI with two arguments is a predicate, so `ex:parent(?x, ?y)` *is* the triple pattern `?x ex:parent ?y`; with one it is a class, so `ex:Person(?x)` is `?x rdf:type ex:Person`. `triple(?s, ?p, ?o)` and `triple(?s, ?p, ?o, ?g)` reach the quad table directly, predicate variable and all. A predicate any rule defines is derived, never also read from the store.
+- **Constraints are SPARQL's.** Comparison, arithmetic, string and regex functions, typed literals and dates, pushed into the join rather than applied to its rows. Term equality stays id equality, which is the cheapest comparison the encoding has.
+- **SQLite's limits are Datalog's safety conditions.** `WITH RECURSIVE` allows one self-reference per recursive term and none under `NOT EXISTS`, which is exactly "rules must be linear" and "negation must be stratified". The compiler reports them as rule diagnostics before any SQL exists: an unstratified program names its cycle, an unsafe rule names its variable. Mutual recursion compiles to one member with a discriminant column (SQLite 3.34+, declared per backend).
+- **Non-linear rules still run.** `path(?x,?z) :- path(?x,?y), path(?y,?z).` has no single-statement form, so it is iterated to a fixpoint in a work table — one request per round, driven by the same step machine as everything else, so it works on D1 too. The result reports the rounds each component took, `max_iterations` bounds them, and the rows are scoped to the run and deleted afterwards. `explain_datalog()` says when a component had to be iterated and what that costs.
+- **Rules can be stored.** `datalog_materialize()` writes what a program derives into `quads_inf`, the table OWL 2 RL materialization already uses, in one atomic request. SPARQL and Cypher then see those facts under `include_inferred` — user rules extend the reasoner instead of running beside it. Each inference records its producer, so a run replaces only its own rule set's conclusions and leaves OWL 2 RL's and other rule sets' alone.
+- **Everywhere else too.** `oxilite datalog -l db.sqlite -f rules.dl` runs a program from the CLI (`--explain`, `--materialize`, or piped in on stdin). `@oxilite/node` and `@oxilite/d1` expose `datalog()`, `datalogMaterialize()` and `explainDatalog()`, returning RDF/JS terms; in the WebAssembly core the dialect is an off-by-default feature (~0.2 MB), so a Worker that does not use rules does not carry it.
+
+Recursion is tested against two oracles: linear recursion must return exactly what the equivalent SPARQL property path returns (`ancestor` above equals `?x ex:parent+ ?y`), and non-linear recursion must agree with its linear formulation.
+
+```ts
+const r = store.datalog(`
+  @prefix ex: <http://example.org/> .
+  reaches(?x, ?y) :- ex:link(?x, ?y).
+  reaches(?x, ?z) :- reaches(?x, ?y), reaches(?y, ?z).   // non-linear: iterated
+  ?- reaches(ex:a, ?y).
+`);
+r.records.map((row) => row.y?.value);   // RDF/JS terms
+r.rounds;                               // rounds the iterated component took
+```
+
+## JSON-LD and Verifiable Credentials
+
+oxilite stores JSON-LD documents and W3C Verifiable Credentials as they are, and makes their RDF queryable (features `jsonld` and `vc`, crates [`oxilite-jsonld`](crates/oxilite-jsonld/README.md) and [`oxilite-vc`](crates/oxilite-vc/README.md)). Each document is kept **byte for byte** in a keyed table, and its RDF goes into a **named graph of its own**. By default the key and the graph are both the document's `id`, so a credential is found under its own IRI in both.
+
+```rust
+let vcs = store.credentials()?;
+let id = vcs.put_credential(credential_json)?;           // checked (VCDM 1.1 / 2.0), stored, converted
+store.query(format!("SELECT * WHERE {{ GRAPH <{id}> {{ ?s ?p ?o }} }}"))?;  // the claims
+let raw = vcs.get_credential(&id)?.unwrap().json;        // the exact bytes, e.g. to verify
+let valid = vcs.find_credentials(&CredentialFilter { issuer: Some(did), valid_at: Some(now), ..Default::default() })?;
+```
+
+```ts
+const vcs = store.credentials();                         // @oxilite/node (sync) or @oxilite/d1 (async)
+await vcs.put(credential);
+await vcs.putPresentation(presentation);                 // stores the embedded credentials too
+await vcs.find({ issuer: "did:example:issuer", validAt: new Date() });
+```
+
+- **Configurable keys and graphs.** The key can be the `id` (the default), a JSON Pointer such as `/credentialSubject/id`, a content hash or an explicit value. The graph can be the key (the default), an IRI template, one fixed graph or the default graph. Credentials without an `id` get `urn:oxilite:doc:sha256:<hex>`.
+- **Built for credentials.** Proofs live in their own graphs, owned by the credential, so claims never mix with signatures. Issuer, subject, types and validity are indexed columns, and which indexes exist is configurable, since D1 bills index writes. Presentations also store each embedded credential. The W3C credential, security and DID contexts are bundled, so nothing needs the network, on D1 either. Proofs are **not** verified.
+- **Standard JSON-LD.** Conversion uses the [`json-ld`](https://crates.io/crates/json-ld) crate: 450 tests of the W3C JSON-LD 1.1 `toRdf` suite pass (4 allow-listed crate limitations). Contexts load offline. Register them in memory, or persist them in the store with `putContext`. Network loading is opt-in, and Node-only on the JavaScript side.
+- **Atomic and consistent.** Put, replace and remove are each one atomic request (one D1 batch) and clear exactly the document's triples. The JSON is the source of truth: `check_documents()` finds graphs edited by SPARQL UPDATE, and `rebuild_graph()` restores them.
+
+---
+
+## Versioning: history and time travel
+
+A store can keep its own history. Versioning is off by default and costs nothing when it is off: the store has the same schema, the same SQL and the same D1 bill. Turn it on per store, at one of three levels:
+
+| Level | What you get | Rows written per triple on D1 (measured) |
+|---|---|---|
+| `off` (default) | the plain store | 4.81 |
+| `stamped` | a store clock: every write is a *tick* (time, author, message), and every quad records the tick that added it: "what was added since…", incremental export | 4.82 (+0.2 %; 3 rows per batch) |
+| `log` | an immutable change log: every addition and removal, queries on any past version, diffs, history as a change feed | 6.82 (+42 %) |
+| `log` + as-of index | as-of queries indexed on every pattern | 8.82 (+83 %) |
+
+```rust
+use oxilite::version::{CommitInfo, Versioning};
+let store = Store::open_with_options("kb.sqlite", StoreOptions { versioning: Versioning::Log, ..Default::default() })?;
+store.with_commit(CommitInfo { author: Some("ada".into()), message: Some("seed".into()) }, |s| s.update(seed))?;
+store.update(close_ticket)?;                                              // one update = one commit
+let before = store.query_opt(q, QueryOptions { as_of: Some("HEAD~1".into()), ..Default::default() })?;
+let changes = store.diff("HEAD~1", "HEAD")?;                              // quads added and removed
+```
+
+### How time travel works
+
+Every atomic write opens a tick, and triggers on `quads` copy each effective change into `quad_log`. The present is still read from `quads`; a past version is read from the log (tables in [Storage schema](#storage-schema)):
+
+```mermaid
+flowchart LR
+  W["Any write<br/>SPARQL, Cypher, bulk load,<br/>JSON-LD, studio"]
+  W -->|"1 opens a tick"| T[("ticks<br/>t, time, author, message")]
+  W -->|"2 changes"| Q[("quads<br/>the present")]
+  Q -->|"3 triggers record<br/>+ added / − removed"| L[("quad_log<br/>s, p, o, g, tx, op")]
+  P["Query now"] -.->|reads| Q
+  A["Query as of HEAD~1, #42 or @time<br/>SERVICE oxilite:version/…"] -.->|reads| L
+  H["GRAPH oxilite:history<br/>Datalog commit / added / removed"] -.->|reads| T
+  H -.->|reads| L
+```
+
+The store at tick T is every quad whose latest change at or before T is an addition. That is one `NOT EXISTS` probe on the log's key, and the compiler substitutes it for `quads` in the query's single SQL statement:
+
+```sql
+SELECT l.s, l.p, l.o, l.g FROM quad_log l
+WHERE l.tx <= :T AND l.op = 1
+  AND NOT EXISTS (SELECT 1 FROM quad_log r
+                  WHERE r.s = l.s AND r.p = l.p AND r.o = l.o AND r.g = l.g
+                    AND r.tx > l.tx AND r.tx <= :T)
+```
+
+For example, three commits (tick numbers simplified):
+
+| tick | commit | `quad_log` rows |
+|---|---|---|
+| 1 | `seed` by ada | `+ ex:alice ex:role ex:admin`, `+ ex:bob ex:role ex:editor` |
+| 2 | `promote bob` by ada | `+ ex:bob ex:role ex:admin` |
+| 3 | `revoke alice` by bob | `− ex:alice ex:role ex:admin` |
+
+As of `HEAD~1` (the `promote bob` commit) the store has all three roles. At `HEAD` alice is no longer an admin, and `GRAPH <oxilite:history>` says bob removed the role in `revoke alice`. A change undone inside the same tick leaves no row, and re-adding a quad that is already there records nothing.
+
+- **Time travel in every dialect.** SPARQL takes `as_of` (`HEAD~2`, a tick `#42`, or `@2026-09-01T12:00:00Z`). One query can compare versions with `SERVICE <oxilite:version/HEAD~1> { … }`. Datalog takes `@version "HEAD~1" .` for a whole program, or `at "HEAD~1"` / `at ?c` per atom. Cypher takes `asOf`. The CLI takes `--as-of`, and `oxilite serve` answers `/query?version=…`.
+- **History as data.** `GRAPH <oxilite:history>` describes commits with PROV-O (time, author, message, the commit before) and their changes as `oxl:added` / `oxl:removed` triple terms. `SELECT ?who { GRAPH <oxilite:history> { ?c oxl:removed <<( ex:alice ex:role ex:admin )>> ; prov:wasAssociatedWith ?who } }` asks who revoked a role. Datalog has `commit`, `added`, `removed` and `branch` relations.
+- **Immutable by construction.** Triggers on `quads` record every effective change, so every writer is captured: SPARQL, bulk loads, Cypher, JSON-LD documents and the studio. Re-adding a present quad records nothing. Log rows cannot be updated or deleted, and the only exception is an audited `purge` for erasure requests.
+- **Present queries are unchanged.** `quads` stays the current state. Only queries that ask for a past version read the log.
+- **Levels are explicit.** Opening a store never changes its level. `set_versioning` (or `oxilite versioning set`, or a D1 migration) raises or lowers it. An upgrade never loses data: `log` records the whole store as its genesis commit. A downgrade freezes the history and deletes it only with `allow_loss`. Raising the level again records the gap as one commit, and asking for a version inside the gap is an error, not a wrong answer.
+- **D1-native.** A D1 batch is one commit. The clock needs no coordination because D1 has a single writer, and versioned batches keep two of D1's 50 statements for the tick. `npx oxilite-d1 versioning-migration` writes the migration.
+
+Reading the past: current-state queries cost the same at every level. Past versions take about 3× as long for subject-bound queries. With the as-of index (`as_of_index`, `--as-of-index`), selective patterns take 1–3.6× as long; without it they scan the log (10–100×). Aggregates over a predicate's whole history take about 17× as long (`bench/results/as-of-latency.json`).
+
+Not yet: branches and merge ([`version-branches`](openspec/changes/version-branches/), gated on confirming as-of latency on BEAR-B and a decision on checkpoints) and push/pull between stores ([`version-sync`](openspec/changes/version-sync/)). Phase 1's design, measurements and assessment are in [`openspec/changes/archive/2026-09-25-versioned-store`](openspec/changes/archive/2026-09-25-versioned-store/), and the history graph, Datalog `at` and Cypher `asOf` in [`2026-09-25-version-history-queries`](openspec/changes/archive/2026-09-25-version-history-queries/). Reference: [`docs/versioning.md`](docs/versioning.md). Articles: [A knowledge graph with a memory](https://oxilitedb.com/articles/versioning-knowledge-graph-memory) (overview and use cases), [Time travel for your knowledge graph](https://oxilitedb.com/articles/time-travel) (walkthrough), [How much does versioning slow oxilite down?](https://oxilitedb.com/articles/versioning-benchmarks) (benchmarks) and [What history costs on D1](https://oxilitedb.com/articles/versioning-on-d1) (design).
+
+---
+
+## Roadmap
+
+| Milestone | Scope | Done when | Status |
+|---|---|---|---|
+| Compat harness | Oxigraph test ports + differential corpus | runs in CI for every milestone | ✅ done: W3C suites, Rust and JS store API ports, differential corpus, D1 variant |
+| **M1** Storage core | encoding, schema, backends, load/dump, BGP+FILTER → SQL, planner | W3C syntax suites + ported store API tests pass | ✅ done |
+| **M2** Full SPARQL 1.1 query | OPTIONAL, UNION, MINUS, aggregates, paths, subqueries, `explain()` | ≥ 95% W3C query suite | ✅ done: 100% pass, 95% of evaluations fully in SQL ([COMPATIBILITY.md](COMPATIBILITY.md)) |
+| **M3** Update + D1 | atomic SPARQL UPDATE, `oxilite-d1`, wasm core | W3C update suite on rusqlite and local D1 | ✅ done: W3C update suites pass on every backend, D1 included |
+| TS bindings | `@oxilite/node`, `@oxilite/d1` | test suites + Oxigraph JS tests | ✅ done: Oxigraph `store.test.ts` 32/33 (1 allow-listed), both example Workers tested on Miniflare |
+| **M4** Reasoning | TBox closure, rewriting, OWL 2 RL | entailment tests; agreement with `reasonable` | ✅ done: RDFS/OWL QL rewriting, SQL OWL 2 RL rules on every backend, identical to `reasonable` |
+| **M5** Validation | rudof SHACL/ShEx | rudof suites over oxilite | ✅ done: W3C SHACL core and shexTest results identical to rudof in memory; bounded D1 prefetch |
+| **M6** Performance | BSBM vs Oxigraph, tuning, FTS5 | published comparison | ✅ done: BSBM results in [Performance](#performance), D1 write-cost report, FTS5 text search |
+| **M7** Cypher | openCypher over the RDF store, OWL- and SHACL-aware | ≥ 80% of read-only TCK scenarios | ✅ done: 96.2% of the TCK (read-only 96.4%), on bundled SQLite, system SQLite and D1 |
+| JSON-LD / VC | verbatim JSON-LD documents and Verifiable Credentials, a named graph each | W3C `toRdf` suite + VC scenarios on every backend | ✅ done: 450 `toRdf` tests pass, scenarios pass on bundled SQLite, system SQLite and Miniflare D1 |
+| **M8** Datalog | recursive rules, stratified negation, constraints, aggregation, materialization | recursion agrees with the equivalent property path | ✅ done: language and checks, linear and mutual recursion in one statement, non-linear recursion iterated, negation, constraints, aggregation, materialization into `quads_inf`, CLI subcommand, wasm and JS bindings, D1 limits checked |
+| Python bindings | `oxilite` on PyPI with pyoxigraph's API | pyoxigraph's tests pass; wheels for Linux, macOS, Windows | ✅ done: pyoxigraph's store, model and IO tests run verbatim (3 allow-listed), every extension tested, `mypy --strict`, abi3 wheels |
+| Schema registry | ontologies, SHACL and ShEx graphs by role, scoped reasoning, compiled shape index; the registry as RDF | a store that registers nothing is unchanged | ✅ done: registry graph `<oxilite:schema>` with the `oxl:` vocabulary 2.1 and its own shapes, per-graph scopes, system graphs, CLI and bindings |
+| CLI shell | `oxilite` as an interactive SPARQL shell | — | ✅ done: completion, session prefixes, reasoning and registry dot-commands, script mode |
+| Studio server | language server, `check` and MCP for oxilite studio | — | ✅ done: completion, live SHACL, justifications, tests, notebooks, registry view, Datalog debugger, D1 connections |
+| Inference provenance | inferences attributed to their producers | — | ✅ done: OWL 2 RL and each rule set recompute independently |
+| **M9** Versioning, phase 1 | store clock, immutable change log, time travel, history queries | as-of results equal snapshots after every commit, native and D1 | ✅ done: levels `off`/`stamped`/`log`, as-of in SPARQL, Datalog and Cypher, `SERVICE` version comparison, `<oxilite:history>`, diff, purge, level changes and D1 migrations, CLI, JS and Python |
+| Turso, vectors, host functions | the Turso backend, vector indexes as RDF, application functions | the bundled-SQLite query surface passes on Turso; indexes searchable from every language | ✅ done: `oxilite-turso`, vector search from SPARQL, Cypher and Datalog in one statement, host functions in all three |
+| **M9** Versioning, phase 2 | branches and merge | gated: as-of latency on BEAR-B, checkpoint decision | 🔜 planned ([`version-branches`](openspec/changes/version-branches/)) |
+| **M9** Versioning, phase 3 | push/pull between stores | depends on branches | 🔜 planned ([`version-sync`](openspec/changes/version-sync/)) |
+
+---
+
+## Project documentation
+
+- [`site/`](site/): the project website, [oxilitedb.com](https://oxilitedb.com) (static, deployed to GitHub Pages by `.github/workflows/pages.yml`). The logo is [`site/assets/logo.svg`](site/assets/logo.svg), with a PNG at [`site/assets/logo.png`](site/assets/logo.png).
+- [`docs/`](docs/): feature references: [versioning](docs/versioning.md), [schema registry](docs/schema-registry.md), [Python](docs/python.md) and [publishing the Python package](docs/python-publishing.md).
+- [`examples/`](examples/): runnable, tested walkthroughs — D1 Workers in Rust and TypeScript, agent memory on Durable Objects, Cypher, JSON-LD queries, Verifiable Credentials and Python.
+- [`lat.md/`](lat.md/): the architecture knowledge graph (architecture, decisions, milestones, tests, test plan), checked by `lat check`.
+- [`openspec/changes/`](openspec/changes/): one change per milestone, each with a proposal, requirement specs with scenarios, a design, and a task list (`openspec validate --all --strict`).
+
+## License
+
+Dual-licensed under MIT or Apache-2.0, like Oxigraph.

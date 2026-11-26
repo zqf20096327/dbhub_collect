@@ -292,6 +292,64 @@ docker compose -f docker/compose.servlet.yml up -d --wait
 requests above work the same on these ports. The first start builds the service images from the sources, which
 takes a few minutes. `docker compose -f docker/compose.servlet.yml down` removes the stack.
 
+**Monitoring.** Both compose files take `--profile observability`, which adds the monitoring of
+[`monitoring/compose.yml`](monitoring/compose.yml): with the root file it watches the services started on the
+host and their databases, with the servlet stack the services and databases in it, on host ports of its own so
+both can run at once.
+
+```bash
+docker compose --profile observability up -d
+TRACING_EXPORT_ENABLED=true docker compose -f docker/compose.servlet.yml --profile observability up -d --wait
+```
+
+Traces go to Grafana Tempo. In the servlet stack `TRACING_EXPORT_ENABLED=true` switches their export on; it is
+off by default, so a stack started without the profile does not keep failing to reach a Tempo that is not there.
+A service started on the host exports them once pointed at the Tempo of the root file, the notification service
+with `DB_PORT=5433` as before:
+
+```bash
+MANAGEMENT_OTLP_TRACING_ENDPOINT=http://localhost:4318/v1/traces \
+  mvn -pl order-service spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+| | Services on the host | Servlet stack |
+|---|---|---|
+| Grafana (`admin` / `admin`) | http://localhost:3000 | http://localhost:3100 |
+| Prometheus | http://localhost:9090 | http://localhost:9190 |
+| Tempo, OTLP over HTTP | http://localhost:4318 | http://localhost:4418 |
+| OpenSearch, on this machine only | http://localhost:9200 | http://localhost:9210 |
+| OpenSearch Dashboards, on this machine only | http://localhost:5601 | http://localhost:5701 |
+
+With the `json-file` profile a service writes its JSON lines to a file as well, which Fluent Bit tails and ships
+to OpenSearch, one `service-logs-<date>` index a day, each deleted after a week. The servlet stack runs
+its services with the profile and their files in a volume; a service started on the host joins with the profile
+and the `logs` directory of the repository:
+
+```bash
+APP_LOGGING_JSON_FILE_DIR=$PWD/logs \
+  mvn -pl order-service spring-boot:run -Dspring-boot.run.profiles=local,json-file
+```
+
+OpenSearch Dashboards opens on the `service-logs-*` index pattern, with saved searches in Discover: **Orders
+created**, **Orders cancelled**, **Order across both services** (every line naming an order, narrowed with
+`orderId:<id>`) and **Order service errors**.
+
+Grafana comes with its dashboards provisioned from [`monitoring/grafana/dashboards`](monitoring/grafana/dashboards):
+
+- **Outbox** - the events waiting in the table, the rate they reach Kafka, the pollers and the dead letter queue;
+- **Inbox** - the events handled for the first time, the duplicates skipped, failed handling, the dead letter
+  topic and the consumer lag;
+- **Orders and notifications** - orders placed and cancelled, requests turned away, the HTTP API, the connection
+  pools and the JVM of both services;
+- **PostgreSQL** - connections, transactions, cache and locks of both databases, and the size, dead rows and
+  vacuum state of their tables, the outbox and inbox tables among them;
+- **Traces** - the latency of the order API with exemplars that open the trace of a request, and the recent and
+  failed traces of both services.
+
+Stop it with the same profile, or its containers are left running: `docker compose --profile observability down`,
+and `docker compose -f docker/compose.servlet.yml --profile observability down` for the servlet stack. `down -v`
+also drops the collected data.
+
 ## 🔁 See the inbox at work
 
 Send the last `order-created` event to Kafka **once more, under its original id** - exactly what a lost
@@ -344,9 +402,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the test conventions.
 |--------|---------|
 | `events-contract` | event types and the sealed `OrderEvent` payload records shared by both services |
 | `order-service` | orders API, transactional outbox, outbox DLQ API |
-| `order-service-e2e-tests` | end-to-end tests of `order-service`, including a Kafka outage |
+| `tests/order-service-e2e-tests` | end-to-end tests of `order-service`, including a Kafka outage |
 | `notification-service` | transactional inbox, notifications and their API, dead letter topic |
-| `notification-service-e2e-tests` | end-to-end tests of `notification-service`: redelivery, failures, dead letters |
+| `tests/notification-service-e2e-tests` | end-to-end tests of `notification-service`: redelivery, failures, dead letters |
 
 ## 🤝 Contributing
 

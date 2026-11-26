@@ -40,9 +40,12 @@ Self-hosted · one small Docker container · your data stays on your server
 - 🏍️ **Cars and motorcycles**: motorcycles get their own spec sheet fields (final drive, sprockets, chain, fork oil, valve clearance) and service categories (chain care, valve clearance, fork oil).
 - 🚗 **Vehicle catalog that works offline**: enter the HSN/TSN from the German registration certificate, or pick make → model → chassis code (W203, E46, Golf IV) → engine to fill in the technical data. Motorcycles go make → model → version.
 - 📋 **Spec sheet** with oil and fluid specs, capacities, lug torque and tyre pressure, filled in from the web on request, with a source link for every value.
+- 🏷️ **QR code and public link per vehicle**: stick a label on the vehicle that opens it in torq, or turn on a read-only link (off by default) so a workshop or a buyer can see the service history and upcoming maintenance without an account. Costs, license plate and VIN only when you include them; renew or turn it off at any time.
 - 🔔 **Notifications** via webhooks to Discord, ntfy, Gotify, Home Assistant or any JSON endpoint.
 - 📊 **Reports**: costs per vehicle, service vs. repair, cost per km, a timeline and a printable history with JSON/CSV export.
 - 📱 **On your phone like an app**: add torq to the home screen, no app store and no extra install.
+- 👥 **Roles and permissions**: several users share one garage; administrators decide per role what may be changed (read only, add service entries but not delete them, …) and whether a user sees every vehicle or only the ones assigned to them.
+- 🔐 **Two-factor sign-in and passkeys**: authenticator apps with recovery codes, and passkeys that sign you in with a fingerprint or face, no password needed. Administrators can require a second factor per role or per user.
 - 🌍 English and German; metric, US or UK units per user (each vehicle keeps its own km or mile odometer); multiple users per garage.
 
 ## Quick start
@@ -75,7 +78,7 @@ All settings are optional environment variables. The most common ones:
 | Variable | Default | Purpose |
 |---|---|---|
 | `TZ` | `UTC` | Time zone for reminder dates and digests |
-| `TORQ_BASE_URL` | *(empty)* | Public URL, e.g. `https://torq.example.com`. Enables links in notifications and, with https, `Secure` cookies (also set for any request that arrives over HTTPS) |
+| `TORQ_BASE_URL` | *(empty)* | Public URL, e.g. `https://torq.example.com`. Enables links in notifications, passkeys and, with https, `Secure` cookies (also set for any request that arrives over HTTPS) |
 | `TORQ_TRUSTED_PROXIES` | *(empty)* | CIDRs of your reverse proxy, so login throttling sees real client IPs and `X-Forwarded-Proto` is trusted |
 | `TORQ_MAX_UPLOAD_MB` | `25` | Per-file upload limit (JPEG, PNG, WebP, HEIC, PDF) |
 | `TAVILY_API_KEY`, `GEMINI_API_KEY` | *(empty)* | Both together enable the optional spec-sheet auto-fill |
@@ -89,7 +92,7 @@ Apps and scripts use the same REST API as the web app. A mobile app is in develo
 
 ## Data and backups
 
-Everything lives in the data directory (`/data` in the container): the SQLite database, uploaded photos and PDFs, and automatic copies taken before each schema upgrade.
+Everything lives in the data directory (`/data` in the container): the SQLite database, uploaded photos and PDFs, `secret.key` (it encrypts the authenticator-app secrets for two-factor sign-in) and automatic copies taken before each schema upgrade. Back up the whole directory: without `secret.key`, authenticator codes stop working and users sign in with a recovery code.
 
 > [!WARNING]
 > Back up `/data` regularly. Copying it while torq is running can catch the database mid-write: stop the container first, or use the [online backup command](https://github.com/app-torq/torq/wiki/Data-and-Backups#backups) from the wiki.

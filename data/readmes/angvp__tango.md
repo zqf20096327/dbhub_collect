@@ -24,7 +24,7 @@ go run .
 
 To add tanGO to an existing module instead, run `go get github.com/angvp/tango`. The `tango` CLI is optional but recommended: it wraps `go run`/`go build` with a few conventions the framework expects your `main.go` to implement.
 
-![The tanGO admin listing posts, with search and per-row edit and delete](docs/images/admin-post-list.png)
+![The tanGO admin in the light theme, listing posts with a search box, row selection and a bulk-delete bar, and per-row edit and delete](docs/images/admin-post-list.png)
 
 *The server-rendered admin over two models, from [`examples/api-with-admin`](examples/api-with-admin).*
 
@@ -66,7 +66,7 @@ curl http://localhost:8000/greetings/World/
 - **Admin**: server-rendered list, create, edit and delete with pagination, search, filters and ordering, behind a session-cookie login with CSRF protection and a rate-limited login. Accounts are managed with `tango admin create/resetpassword/deactivate`.
 - **Batteries, each optional**: accounts with password reset, email verification and a JSON mode for single-page apps; SMTP `mail`; `storage` with local-disk and S3 stores; `cache` with in-process, Redis and Memcached stores; WebSocket rooms; a token-bucket rate limiter.
 - **OpenAPI 3.1** generated from your routes, with Swagger UI (`openapi.New`, or `openapi.Dev` to serve it only while developing).
-- **A CLI** (`tango run/check/makemigrations/migrate/newproject/newapp/tui/shell/admin`) that wraps ordinary `go build` and `go run` rather than replacing them.
+- **A CLI** (`tango run/check/makemigrations/openapi/migrate/newproject/newapp/tui/shell/admin`) that wraps ordinary `go build` and `go run` rather than replacing them.
 
 ## Principles
 
@@ -82,7 +82,7 @@ curl http://localhost:8000/greetings/World/
 ## Where to continue
 
 - **[Tutorial](docs/tutorial/01-bootstrap-routing-json.md)** — build one application, a bulletin board, from an empty directory to a deployed container in ten parts: routing and JSON views, persistence and migrations, the HTML admin, foreign keys, server-rendered pages, accounts and forms, API tokens and rate limits, a live WebSocket feed, background jobs and graceful shutdown, and testing and deployment.
-- **[Guides](docs/guides/)** — standalone, task-oriented references: project structure, application architecture, configuration, models and tags, routing, `Context`, persistence, migrations, admin, app checks, OpenAPI documentation, background jobs, accounts, mail, uploads, caching, rate limiting, realtime, dialect setup, reusable apps, and relationships/admin foreign keys.
+- **[Guides](docs/guides/)** — standalone, task-oriented references: project structure, application architecture, configuration, models and tags, routing, `Context`, persistence, migrations, admin, app checks, security headers and Content-Security-Policy, OpenAPI documentation, background jobs, accounts, mail, uploads, caching, rate limiting, realtime, dialect setup, reusable apps, and relationships/admin foreign keys.
 - **[API reference](docs/reference.md)** — the supported public surface, linked to runnable examples. Generated package docs are also available via `go doc` or [pkg.go.dev](https://pkg.go.dev/github.com/angvp/tango).
 - **[Examples](examples/)**, each with a README giving its purpose and commands:
   - [`jsonapi`](examples/jsonapi): the smallest JSON application, one hand-written app;
@@ -98,6 +98,7 @@ curl http://localhost:8000/greetings/World/
   - [`board`](examples/board): the tutorial's finished application, deployable as a container.
 - **[Versioning and compatibility](docs/compatibility.md)** — what each release promises not to break, deprecations, and the [changelog](CHANGELOG.md).
 - **[Limitations](docs/limitations.md)** — non-goals, security boundaries, and dialect differences.
+- **[Upgrading](docs/upgrading.md)** — what a host application changes in each release.
 
 ## Contributing
 

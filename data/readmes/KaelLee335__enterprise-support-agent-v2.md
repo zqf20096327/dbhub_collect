@@ -1,28 +1,37 @@
 # Enterprise Support Agent V2｜企业售后智能客服 Agent
 
-一个面向售后场景的 Python 全栈 Agent 演示项目，展示如何将自然语言请求接入可追踪、可评估、具备权限边界的业务流程。项目从 Dify 工作流迁移到代码实现，覆盖 FastAPI、SQLite、LangChain、LangGraph、RAG、自动化测试、Docker 与 Vue 演示界面。
+一个面向电商售后场景的 Python 全栈 Agent 工程演示：把订单查询、政策问答、物流查询与人工审批组织成可观察、可评估、带租户边界的工作流。项目将 Dify 原型迁移为代码实现，覆盖 FastAPI、SQLite、LangChain、LangGraph、Chroma RAG、Langfuse、pytest、Docker Compose 和 Vue 3。
 
-## 项目亮点
+## 项目概览
 
-- **端到端请求链路**：虚构请求人/审批人身份与租户校验 → FastAPI → LangGraph 确定性路由 → SQLite 只读订单、政策 RAG、本地模拟物流 HTTP API 或演示审批 → 结构化答复与运行记录。
-- **可核验的政策问答**：政策来源引用、证据展示、无证据安全降级，以及针对退款时限、质量问题、物流和隐私边界的约束规则。
-- **可靠性与安全边界**：Customer/Service/Approver/Admin 的租户内权限、审批任务分配与自批拒绝、checkpoint 完整性预检、锁文件与 CI。RAG 引用白名单不等于语义 grounding；离线边界测试记录了无关/冲突/注入证据的剩余风险。
-- **可运行的演示界面**：Vue 3 + Vite 展示对话、平台订单/物流、售后资格和明确确认后的 MockShop 演示申请。
-- **学习材料与验收证据**：五章代码导读、故障案例库、需求追踪矩阵和运行验证记录。
+- **业务流程**：身份与租户校验 → FastAPI → LangGraph 路由 → 订单查询、政策 RAG、模拟物流或审批流程。
+- **Vue 工作台**：Dashboard、智能客服、订单、审批、知识库、评估和可观测性页面。
+- **RAG 与观测**：Chroma Top-K 检索、政策来源与证据展示；Langfuse 可记录请求、Graph 节点和模型 Generation。
+- **工程验证**：角色与租户隔离、审批任务分配、pytest、GitHub Actions 和 Docker Compose。
 
-## 项目定位
+**技术栈：** Python 3.12 · FastAPI · SQLite · LangChain · LangGraph · Chroma · Langfuse · Vue 3 · Vite · Docker Compose
 
-本仓库是个人学习与技术演示项目，使用虚构数据和固定演示身份，不是生产客服系统。订单查询为只读；退款审批只记录 `approved_demo`，不会退款、改址或删除数据。真实身份认证、生产级 RBAC 与多实例部署不在当前范围。
+## 业务流程与演示
 
-**技术栈：** Python 3.12 · FastAPI · SQLite · LangChain · LangGraph · Chroma · SiliconFlow/Qwen · Vue 3 · Vite · Docker
+**Vue 工作台 → FastAPI 身份与租户校验 → LangGraph → SQLite 订单 / Chroma 政策 RAG / 模拟物流 / 审批中断 → 答复与运行记录**
 
-**当前验证摘要（2026-11-23）：**本机全量 pytest **145 passed**；WSL 实际部署后三容器 healthy，SQLite schema 检查及 Phase 6/V2.1 verifier 通过，认证 `/chat` 对节假日问题返回与 POL-06 一致的直接答复。OOS-v2 15-case 回归中，Hit@4、Macro Recall@4、答案要点筛查、拒答要点筛查和引用来源匹配均为 100%，规则筛查 Bad Case 为 0；这些筛查结果不等于语义准确率，OOS-v2 是已观察回归集而非盲测。逐案例答复与证据留存在 [`OOS-v2 答复档案`](data/evaluation/oos/rag_oos_v2_holdout_answers.json)。人工回看发现并修正 HOLDOUT-07 对已明确退款工作日规则的矛盾拒答。GitHub Actions 负责锁定依赖、全量测试、Vue 构建、Compose 配置和容器 smoke。更多边界和逐例记录见 [`OOS-v2 报告`](data/evaluation/oos/rag_oos_v2_holdout_report.md) 与 [`分诊复核`](data/evaluation/oos/rag_oos_v2_manual_triage.md)。
+| 功能 | 演示内容 |
+|---|---|
+| 智能客服 | 订单查询、政策问答、引用证据和节点执行事件 |
+| 人工审批 | 请求人提交后暂停，由分配的审批人恢复处理 |
+| 电商与物流 | MockShop Adapter、虚构售后资格、模拟物流 API 和 Webhook 幂等 |
+| 工作台与评估 | 按当前身份展示订单、运行记录、开发集和已观察的 OOS 结果 |
+| 可观测性 | 本地运行记录；启用 Langfuse 后查看请求、Graph 节点和模型调用 |
+
+本地可以从“查询订单1001”或“退款多久能到账？”开始体验；审批流程使用 `approved_demo` 状态。订单、身份和物流均为虚构演示数据。
+
+**验证记录：**本机 pytest **157 passed**，Vue 生产构建通过；合成政策请求已在 Langfuse Cloud 生成包含请求根 Span、Graph 节点和 `ChatOpenAI` Generation 的 Trace。2026-11-23 WSL 部署版本的 Phase 6 与 V2.1 验收通过。RAG 回归结果与评估口径见 [`评估记录`](docs/evaluation_and_observability.md)。
 
 ## 项目架构
 
 ```mermaid
 flowchart LR
-  U[访客 / Vue 3 页面] -->|Bearer Demo Token + JSON| V[Vite /api 代理]
+  U[Vue 3 工作台] -->|Bearer Demo Token + JSON| V[Vite /api 代理]
   V --> F[FastAPI API]
   F --> A[Bearer 主体 → tenant membership / role / customer]
   A --> G[LangGraph 路由与状态流]
@@ -40,9 +49,7 @@ flowchart LR
   G --> F --> V --> U
 ```
 
-Vue 只调用本地 FastAPI；模型 Key 保留在后端 `.env`。Customer 只读本人订单，Service 需要客户授权，Approver 仅访问分配任务，Admin 管理操作受 tenant 限制。订单查询为只读；退款批准只记录演示状态 `approved_demo`。Docker/WSL 用于运行后端与持久化数据，开发前端单独通过 Vite 启动。
-
-项目重视真实理解与工程取舍，不堆叠技术；通过代码、运行观察和评估展示完整链路。当前使用模拟数据，不是生产客服系统，不执行真实退款、改址或删除操作。
+Vue 通过本地 FastAPI 调用后端；模型 Key 存放在后端 `.env`。Customer 查询本人订单，Service 需客户授权，Approver 处理分配任务，Admin 管理范围受租户约束。退款审批只记录 `approved_demo`，不调用外部电商平台执行退款。
 
 ## 本地运行
 
@@ -65,7 +72,7 @@ uv sync --locked --extra dev --default-index https://mirrors.aliyun.com/pypi/sim
 
 ### 本地演示身份
 
-默认演示令牌（只用于本地学习，公开且不是生产凭据）：
+固定演示令牌用于复现角色和租户边界：
 
 - `demo-a-local-token` → `user-demo-a` → `demo-a`
 - `demo-a-approver-local-token` → `user-demo-a-approver` → `demo-a` → 演示审批人
@@ -75,7 +82,7 @@ uv sync --locked --extra dev --default-index https://mirrors.aliyun.com/pypi/sim
 - `demo-b-local-token` → `user-demo-b` → `demo-b` → 店铺 B 请求人
 - `legacy-demo-local-token` → `user-legacy-demo` → `legacy-demo`
 
-请求使用 `Authorization: Bearer demo-a-local-token`。令牌只映射主体；服务端从 SQLite 的租户成员表读取角色和客户绑定，不信任调用方传入的 user/tenant/role。Customer 只读自己的订单；Service 需同租户有效客户授权；Approver 仅能查看分配给自己的审批任务；Admin 管理范围被限制在所属租户且不自动获得订单权限。审批决定只写入演示任务状态，不执行真实退款。公开令牌仍是演示选择器，不是真实认证凭据，不用于保护真实数据。
+请求使用 `Authorization: Bearer demo-a-local-token`。令牌映射主体，服务端从 SQLite 租户成员记录读取角色和客户绑定；权限由数据库查询和 API 共同校验。
 
 SQLite 默认写入 `data/support_agent.db`。删除该文件会重建演示数据库；它是本地运行数据，不应提交到 Git。
 
@@ -89,23 +96,20 @@ npm install --legacy-peer-deps
 npm run dev
 ```
 
-打开 <http://127.0.0.1:5173>。Vite 将 `/api` 请求转发到本地 FastAPI。页面包含聊天、订单/政策证据、店铺身份切换、资格检查和确认后的演示申请。详细说明见 [`docs/vue_frontend.md`](docs/vue_frontend.md)。
+打开 <http://127.0.0.1:5173>。Vite 将 `/api` 请求转发到本地 FastAPI。工作台含 Dashboard、智能客服、订单、审批、RAG 知识库、评估中心和可观测性页面。详细说明见 [`docs/vue_frontend.md`](docs/vue_frontend.md) 与 [`企业工作台 / Langfuse 指南`](docs/enterprise_workbench_guide.md)。
 
-## 演示方式
+## 演示流程
 
-1. **确认后端就绪**：打开 <http://127.0.0.1:8000/health> 应返回 `{"status":"ok"}`；Swagger 接口文档在 <http://127.0.0.1:8000/docs>。
-2. **启动前端**：在 `frontend/` 运行 `npm run dev`，浏览器进入 <http://127.0.0.1:5173>。Demo Token 默认预填 `demo-a-local-token`，仅用于本地演示。
-3. **展示确定性订单查询**：输入“查询订单1001”，页面应显示订单状态与订单卡片。
-4. **展示政策 RAG**：输入“退款多久能到账？”，查看回答中的政策编号和可展开的证据来源。
-5. **展示模拟物流 API**：输入“查询订单1001物流”，LangGraph 在完成租户订单校验后，经 HTTP 请求本地虚构 Logistics API，页面显示模拟运单与轨迹；其他租户查该订单不会调用物流服务。
-6. **展示审批中断与恢复**：请求人输入“帮我给订单1001申请退款”，先确认请求人身份不能自批，再切换到“审批人”角色作出决定。批准只记录 `approved_demo`，不会执行真实退款。
-7. **展示电商 Adapter**：以店铺 A 请求人选择虚构订单 `2003`，或切到店铺 B 请求人选择 `2006`；另一店铺的订单应不可见。
-8. **展示资格与申请边界**：侧栏输入 `2003` 和虚构原因，检查资格后通过明确按钮创建 `pending_demo`。该状态不代表平台已批准或退款完成。
-9. **Webhook**：使用本地模拟服务/验收流程发送签名事件；重复 event_id 不应重复改变业务状态。
+1. 确认 <http://127.0.0.1:8000/health> 返回 `{"status":"ok"}`，启动 Vue 前端并打开 <http://127.0.0.1:5173>。
+2. 在智能客服输入“查询订单1001”，查看订单状态与权限范围。
+3. 输入“退款多久能到账？”，查看政策回答、来源编号和检索证据。
+4. 输入“查询订单1001物流”，查看本地模拟物流服务返回的轨迹。
+5. 输入“帮我给订单1001申请退款”，然后切换到审批人处理待办。
+6. 在售后演示面板检查订单 `2003` 或 `2006` 的资格并创建模拟申请。
 
-演示问题仅用虚构项目数据。政策问答会由后端调用 `.env` 配置的模型服务；不要输入个人信息、真实客户问题或秘密内容。模型请求额度依服务商账户配置而定。
+完整启动步骤见 [`演示指南`](docs/demo_runbook.md)。所有订单、身份和物流信息均为虚构样例；审批流程不会调用真实退款接口。运行配置的政策问答会请求对应模型服务。
 
-V2.1 接口说明、测试口径与面试材料见 [`API 参考`](docs/api_reference_v2_1.md)、[`评估记录`](docs/evaluation_v2_1.md)、[`面试讲解`](docs/interview_guide_v2_1.md) 和 [`架构图`](ARCHITECTURE.md)。
+接口和评估口径见 [`API 参考`](docs/api_reference_v2_1.md)、[`评估记录`](docs/evaluation_v2_1.md)、[`架构图`](ARCHITECTURE.md)。
 
 ## 测试
 
@@ -115,7 +119,7 @@ uv run --locked pytest
 
 ## 政策检索（阶段 2）
 
-复制 `.env.example` 为 `.env`，在本机 `.env` 中填写 SiliconFlow API Key；不要把真实 Key 发到聊天或提交到 Git。Windows + WSL 用户可保持 `PROJECT_DATA_DIR` 留空，默认使用本项目的 `/mnt/d/project_2/data`；其他环境在 `.env` 中将其设置为项目内的数据路径，例如 `PROJECT_DATA_DIR=./data`。Docker 部署时该数据目录必须预先存在；若路径写错，Compose 会阻止挂载，不会静默创建空目录。然后在项目虚拟环境运行：
+复制 `.env.example` 为 `.env`，设置 `SILICONFLOW_API_KEY`。Docker Compose 部署时还要将 `PROJECT_DATA_DIR` 设为本机已存在的数据目录，例如 `./data`。密钥保存在本机 `.env`，不要提交到 Git。然后在项目虚拟环境运行：
 
 ```powershell
 if (!(Test-Path .env)) { Copy-Item .env.example .env }
@@ -126,67 +130,88 @@ python scripts/search_policies.py "定制商品出现质量问题怎么办？"
 python scripts/ask_policy.py "定制商品出现质量问题怎么办？"
 ```
 
-当前政策较短，第一版每个政策文件形成一个检索块；向量索引保存在 `data/vector_store/`。`ask_policy.py` 和 `POST /chat` 会把召回证据传给配置的聊天模型并检查引用是否来自本次检索结果；引用检查不是完整事实核验，仍需结合评估集检查回答是否被证据支持。
+每个短政策文件形成一个检索块；向量索引保存在 `data/vector_store/`。`ask_policy.py` 和 `POST /chat` 将召回证据传给配置的聊天模型，并检查回答引用是否来自本次检索结果。
 
 ## 人工审批（阶段 4）
 
-退款请求会暂停并保存在 `data/checkpoints.sqlite`，同时建立带 tenant、requester、actor、approver 和状态的 SQLite 审批任务。只有被分配的独立演示审批人能查看/决定；审批人自己发起的请求在创建任务前以 `forbidden_role` 拒绝。批准只写入 `approved_demo` 状态，不修改订单、不执行退款。`POST /chat` 返回待审批 `thread_id` 后，可通过 Swagger 查看状态并调用 `POST /approvals/{thread_id}/decision` 恢复流程；恢复前会按当前认证身份重新核验分配。令牌仍为公开演示值，不构成生产 RBAC。
+退款请求会暂停并保存在 `data/checkpoints.sqlite`，同时建立包含 tenant、requester、actor 和 approver 的 SQLite 审批任务。只有分配的审批人能查看和决定；请求人自批会在建任务前被拒绝。决定只更新 `approved_demo` 演示状态。
 
 ### 本地模拟物流 API
 
-Compose 启动 `mock-logistics`、`mock-shop` 和 Agent 三个本地服务。Agent 先校验当前身份的 tenant/store/customer 范围，再通过 typed HTTP client 和 Adapter 请求 MockShop；物流服务使用 `X-Demo-Service-Key`，并解析校验 JSON 轨迹。所有订单和轨迹都是固定虚构样例，不访问商业 API。配置项见 `.env.example`。
+Compose 启动 `mock-logistics`、`mock-shop` 和 Agent 三个服务。Agent 校验 tenant/store/customer 范围后通过 Adapter 请求 MockShop；物流服务使用服务密钥并返回 JSON 轨迹。配置项见 `.env.example`。
 
 ## 评估与追踪（阶段 5）
 
 运行 `python scripts/evaluate_agent_routes.py` 评估标注路由、订单参数和临时数据库工具结果；运行 `python scripts/evaluate_agent_safety.py` 检查写操作边界；`pytest` 执行故障注入和 API 回归。RAG 评估使用 `python scripts/evaluate_retrieval.py`，需本机配置 SiliconFlow Key。评估口径、已知 Bad Case 和追踪字段见 [`docs/evaluation_and_observability.md`](docs/evaluation_and_observability.md)。每个 API 响应均带 `X-Trace-ID`，日志为 JSON 并输出到标准输出。
 
-RAG 答案层增加了可审计的政策约束规则，详细人工复核和 Top-4/Top-8 输出见 [`docs/rag_answer_manual_review.md`](docs/rag_answer_manual_review.md) 与 `data/evaluation/v2_rag_answers_constraints_v3.json`。OOS Markdown 报告同时生成结构化 Bad Case ledger；初筛类别不是根因，须人工复核。最近的 RAG 无关/冲突/注入边界特征测试使用假模型，不计作真实模型安全或正确率证据。
+RAG 评估报告、答复样例和 Bad Case 记录见 [`评估记录`](docs/evaluation_and_observability.md) 与 [`答复复核`](docs/rag_answer_manual_review.md)。
 
 ## 端到端演示
 
-启动、验证订单/租户隔离、政策引用和退款审批的完整步骤见 [`docs/demo_runbook.md`](docs/demo_runbook.md)。当前 WSL Docker 部署已完成用户实测验收。
+启动和体验完整流程的步骤见 [`演示指南`](docs/demo_runbook.md)。
 
-## 项目架构与讲解
+## 架构与接口
 
-系统架构和指标摘要见 [`docs/project_story.md`](docs/project_story.md)；完整 3/10 分钟讲稿、20 个技术问题与 5 个故障案例见 [`docs/interview_kit.md`](docs/interview_kit.md)。中文代码学习手册见 [`docs/learning/README.md`](docs/learning/README.md)，12 类故障案例见 [`docs/troubleshooting/fault_cases.md`](docs/troubleshooting/fault_cases.md)。
+系统结构见 [`架构图`](ARCHITECTURE.md)，接口约定见 [`API 参考`](docs/api_reference_v2_1.md)，完整运行步骤见 [`演示指南`](docs/demo_runbook.md)。代码学习材料和故障记录分别见 [`学习目录`](docs/learning/README.md) 与 [`故障案例`](docs/troubleshooting/fault_cases.md)。
 
-当前已完成/待推进事项见 [`docs/project_status.md`](docs/project_status.md)；项目代理接续说明与约束见根目录 [`AGENTS.md`](AGENTS.md)。
+## Docker Compose
 
-## Docker（WSL）
+适用于安装了 Docker Engine 或 Docker Desktop，并带有 Docker Compose 插件的 Linux、macOS 和 Windows 环境。首次运行前，在仓库根目录准备后端 `.env` 和宿主机数据目录。
 
-确保项目根目录已有本机 `.env`，且 `PROJECT_DATA_DIR` 指向已存在的数据目录。为避开 `/mnt/d` 上的 BuildKit 权限问题，在 WSL 中从 `/opt/project2` 构建；Compose 将数据目录绝对挂载到 Windows 同源的 `/mnt/d/project_2/data`。数据目录必须预先存在；路径错误会使容器启动失败，不会自动建一个空目录：
+Linux/macOS 示例：
 
 ```bash
-cd /opt/project2
+cp .env.example .env
+mkdir -p data
+```
+
+在 `.env` 中设置 `PROJECT_DATA_DIR=./data` 和 `SILICONFLOW_API_KEY`。Windows PowerShell 示例：
+
+```powershell
+Copy-Item .env.example .env
+New-Item -ItemType Directory -Force data
+```
+
+Windows Docker Desktop 可将 `PROJECT_DATA_DIR` 设为绝对路径，例如 `D:/projects/enterprise-support-agent-v2/data`；确认 Docker Desktop 已允许访问该盘。所有平台都要求目标数据目录预先存在，因为 Compose 使用显式 bind mount。
+
+首次启动前，用本机 Python 环境生成政策向量索引：
+
+```bash
+uv sync --locked --extra dev
+uv run python scripts/index_policies.py
+```
+
+随后构建并启动三个容器：
+
+```bash
+docker compose config --quiet
 docker compose up --build -d
 docker compose ps
 ```
 
-首次 Docker 部署前，在项目虚拟环境中先运行一次 `python scripts/index_policies.py`，生成本机 `data/vector_store/`；该向量库被 Git 和 Docker 构建上下文排除，避免依赖未跟踪的本机文件。Compose 会从 `.env` 读取模型凭据和数据路径；订单库、审批 checkpoint 和 Chroma 向量库都保存在挂载的数据目录。等待容器状态为 `healthy` 后再打开 API 文档。
-
-从 WSL `/opt/project2` 运行 `bash scripts/verify_phase6.sh` 可检查原有 Agent 主链。新增 `bash scripts/verify_v21.sh` 覆盖两店铺隔离、售后资格与幂等申请、Webhook 签名、重复事件和状态同步。`scripts/update_wsl_and_verify.sh` 会先等待服务健康，再只读核验 SQLite 完整性、schema version 和店铺范围复合主键，最后运行 RAG smoke 与两份业务验收；失败时返回非零状态。
-
-2026-11-23 实际 WSL 验收：三容器 healthy，SQLite `integrity_check=ok`、`user_version=1`，Webhook event 和平台订单状态主键包含平台/租户/店铺维度；Phase 6 与 V2.1 verifier 全 PASS。后端变更继续使用既有 WSL 同步流程，不要从 Windows checkout 执行 Compose `up`。
-
-Dockerfile 将依赖安装与本地源码安装分层，修改源码时可复用依赖缓存；pip 使用 TUNA 镜像并放宽下载超时。
-
-API 地址为 <http://localhost:8000/docs>。订单数据库保存在宿主机 `data/support_agent.db`，容器重建后仍会保留。查看日志和停止服务：
+待 `support-agent` 健康后，打开 <http://localhost:8000/health> 和 <http://localhost:8000/docs>。若 8000 端口已被占用，可在 `compose.yaml` 将宿主机端口左侧改为空闲端口，例如 `8001:8000`，并使用对应地址。查看日志或停止服务：
 
 ```bash
-docker compose logs -f
+docker compose logs -f support-agent
 docker compose down
 ```
 
-`/opt/project2` 中需放置与 Windows `D:\project_2` 同步的代码、Dockerfile、Compose 和政策文件。当前 WSL 配置默认将 `/mnt/d/project_2/data` 挂载到容器 `/app/data`；可用 `.env` 的 `PROJECT_DATA_DIR` 覆盖。订单库、审批 checkpoint 与 Chroma 索引均从此数据目录读取并保存。
+数据库、checkpoint 和 Chroma 索引保存在 `PROJECT_DATA_DIR` 指定的宿主机目录中，容器重建或 `docker compose down` 后仍保留。删除该数据目录会删除本地运行数据。Dockerfile 分层安装锁定依赖和项目源码，修改源码时可以复用依赖缓存。
 
-容器中的相对路径配置（`DATABASE_PATH`、`CHECKPOINT_DB_PATH`、`VECTOR_STORE_PATH`）按工作目录 `/app` 解析，不依赖 pip 安装后 `site-packages` 中的源码位置。`.env` 从当前工作目录向上加载。
+### WSL 环境
 
-`systemctl is-active docker` 为空而 `is-enabled` 为 `enabled`，systemd 未报告 Docker unit 正在运行。用户实测 Ubuntu WSL 为 Stopped 时触发计划任务后，`dockerd` 就绪、容器 healthy、health 200。当前 Windows 计划任务配置为用户登录时触发，不能据此保证登录前自动恢复。详情见 [`docs/wsl_docker_lifecycle.md`](docs/wsl_docker_lifecycle.md)。
+当前 Windows + WSL 部署使用 WSL Linux 文件系统目录 `/opt/project2` 构建，并把持久数据挂载到 `/mnt/d/project_2/data`。在 `.env` 设置 `PROJECT_DATA_DIR=/mnt/d/project_2/data`，从 `/opt/project2` 运行 Compose。该构建目录用于避开本机在 `/mnt/d` 上遇到的 BuildKit 权限问题；其他 Docker 环境不需要 WSL 或 `/opt/project2`。WSL 专用验收脚本见 `scripts/verify_phase6.sh`、`scripts/verify_v21.sh` 和 `scripts/update_wsl_and_verify.sh`。
 
 ## 迁移说明
 
 V1 资产来源、字段差异和 RET-01/QUA-01 对照见 [`docs/migration.md`](docs/migration.md)。新规则作为 V2 明确规则单独维护，不修改 V1 原始规则。
 
-## 当前边界
+## 企业工作台与 Langfuse
 
-Bearer 演示令牌映射到固定虚构用户和租户；它不是生产认证。`GET /agent-runs/{run_id}` 只返回当前身份拥有的最小执行记录，不保存原始问题。退款审批只记录演示状态，不执行真实业务操作。最新 WSL 运行验收是用户报告结果：三容器 healthy，phase6 与 V2.1 verifier 全通过；不代表生产认证或真实平台集成。
+Vue 工作台现含 Dashboard、智能客服、订单、人工审批、RAG 知识库、评估中心和本地可观测性。仪表盘、订单与审批列表来自经过身份/租户范围校验的 FastAPI 和 SQLite 查询；聊天时间线由真实 LangGraph 节点包装器生成。节点事件随请求响应返回，当前不支持 token 流式输出。
+
+Langfuse 使用 Python SDK v5 和 LangChain CallbackHandler，默认关闭。启用时在后端 `.env` 设置 `LANGFUSE_ENABLED=true`、`LANGFUSE_PUBLIC_KEY`、`LANGFUSE_SECRET_KEY` 和 `LANGFUSE_BASE_URL`；密钥只由后端读取。已用合成政策问题验证 Cloud Trace，包含请求、Graph 节点和 `ChatOpenAI` Generation。
+
+评估页面读取仓库中的开发集、报告和 OOS 回归文件；这些数据集分开展示。评估口径、观测字段和工作台结构见 [`评估与可观测性说明`](docs/evaluation_and_observability.md) 和 [`工作台指南`](docs/enterprise_workbench_guide.md)。
+
+本机验证记录：后端全量测试 **157 passed**，Vue 生产构建、Python compileall 与 Compose 静态配置通过；Langfuse 合成 Trace 验收通过。当前工作台版本尚未部署到 WSL；此前 WSL 验收对应 2026-11-23 的部署版本。

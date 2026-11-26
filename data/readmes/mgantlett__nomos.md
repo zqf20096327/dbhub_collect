@@ -66,7 +66,8 @@ Every single-repository governance capability ships locally in the open-source `
 
 ### 1. What You Touch Once (`30` Seconds: `nomos xray`, `nomos init`)
 - **On-Demand 5s Stethoscope (`nomos xray . [--markdown]`):** Walks `git ls-files` across 11 languages for an `AI Hangover Score` (`0-100`, `Grade A-F`), clones, monoliths (`>400 LOC`), stubs, swallowed errors, secret/host-path leaks, CWE sinks, and ready-to-lock `architecture_boundaries` with **zero repository writes**. Run it on Day 0 or whenever you want a codebase report card.
-- **Non-Breaking Legacy Drop-In (`nomos init`):** Automatically freezes Day-0 debt bounds in `nomos.baseline.json` (`strict_mode: false` on brownfield, strict anywhere via `--strict`) so **zero existing legacy files fail**, ratcheting only touched files (`<= 0` added complexity/debt, `>= 0` coverage delta, `0` new clones or swallowed errors; self-hosted `nomos` holds `0/100 Grade A` under `strict_mode: true`). Auto-detects installed agents, scaffolds a compact `~13`-line `AGENTS.md` Branch Guard block, and wires native lifecycle + Git hooks (`nomos --help` shows everyday commands and hides internal agent RPCs; `nomos --help-agent` reveals them).
+- **Ratchet-by-Default Drop-In (`nomos init`):** Always starts in safe **Ratchet mode** (`strict_mode: false`, compact `~18`-line `nomos.yaml`, `nomos.baseline.json` auto-locked whenever Day-0 debt exists) so **zero existing legacy files fail** and clean scratch repos never hit surprise strict blowups (self-hosted `nomos` holds `0/100 Grade A` under `strict_mode: true`). Auto-detects installed agents across repo, `$PATH`, and `$HOME` without dumping unused IDE folders, scaffolds a compact `~13`-line `AGENTS.md` Branch Guard block, and wires native lifecycle + Git hooks (`nomos --help` shows everyday commands; `nomos --help-agent` reveals internal agent RPCs). Promote anytime with `nomos init --strict`.
+- **Visible Saves & Guided Graduation (`nomos status`):** Hooks stay silent on clean edits, then surface real value at natural checkpoints: `post-commit` prints a 1-line Shield Receipt on your first verified commit or whenever shortcuts were caught / lessons distilled, and `nomos status` renders your **Shield Scorecard** (blocked shortcuts by category, verified commits, distilled lessons, baseline anchor) plus a 4-rung graduation ladder (`Stealth` -> `Branch Guard` -> `CI PR Proofs` -> `Strict / Worktrees`).
 - **Zero-Footprint Stealth Trial (`nomos init --local`):** Registers generated configs and hooks in `.git/info/exclude` instead of `.gitignore`, leaving `git status` 100% clean while you evaluate solo; promote anytime with `nomos init`.
 
 ### 2. What Runs Invisibly Underneath Every Agent Turn (`0` Commands to Learn)
@@ -141,7 +142,7 @@ Enforce zero-trust PR mutation proofs in GitHub Actions ([GitHub Marketplace](ht
 ```yaml
 - uses: actions/checkout@v4
   with: { fetch-depth: 0 }
-- uses: mgantlett/nomos@v4.32.0
+- uses: mgantlett/nomos@v4.33.0
   with: { base-ref: origin/main, mutate-diff: 'true' }
 ```
 

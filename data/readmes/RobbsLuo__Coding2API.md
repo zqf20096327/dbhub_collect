@@ -72,7 +72,7 @@ docker compose up -d --build
 docker compose exec coding2api python scripts/create_user.py admin --role admin
 ```
 
-拉镜像：`docker compose pull`（或 `docker pull ghcr.io/robbsluo/coding2api:v0.14.2`）。tag `v*` 推 main → `.github/workflows/publish.yml` → 发 `<tag>` + `:latest`。有公网 IP 的 VPS 要 https → 见「[公网部署](#公网部署docker--caddy-自动-https)」。
+拉镜像：`docker compose pull`（或 `docker pull ghcr.io/robbsluo/coding2api:v0.14.3`）。tag `v*` 推 main → `.github/workflows/publish.yml` → 发 `<tag>` + `:latest`。有公网 IP 的 VPS 要 https → 见「[公网部署](#公网部署docker--caddy-自动-https)」。
 
 ## 用户与角色
 
@@ -411,6 +411,7 @@ curl -X POST http://127.0.0.1:8000/v1/fetch \
 - **请求路由只认这份缓存**：目录能证明归属 → 候选只有那些渠道，全不可用 → 503；模型完全不在目录 → 仍按全部候选路由；直连指定与 Key 渠道绑定不受影响。
 - **落盘与启动即用**：进程内 TTL 缓存（只有服务层一层，TTL 见 `MODEL_LIST_TTL_SECONDS`）之外，每次拉取成功写 `DATA_DIR/model_catalog.json`，启动时同步读回；快照损坏或超 7 天只丢缓存。`MODEL_CATALOG_MINUTES` 任务兜底。
 - **stale-while-revalidate**：有缓存立刻回旧列表，TTL 到期后台刷新；连续失败按 2^(n-1)×TTL 退避（封顶 2 小时），日志只在首次失败打 WARNING。
+- **静态表兜底是可见的降级**：TRAE / CodeBuddy 在动态拉取失败时会回退内置静态表并照常返回。该渠道会被记为失败（带原因），`/metrics` 出 `coding2api_model_list_degraded{provider}`，`GET /api/models/probes` 的 `degraded` 字段列出渠道与原因——否则「这个渠道一直没拿到上游真值」只能靠翻日志发现。
 - **管理台「模型列表」页**（`GET /api/model-catalog`）：只读展示 OpenRouter 公开目录（刊例价、上下文 / 输出上限、模态、能力、知识截止、AA 三项指数，非本服务实测），带 `available` 与「只看当前渠道」开关。浮动别名取同族最新快照的分（按 `canonical_slug` 日期）。
 - **疑似下线视图**（`GET /api/models/availability`，operator）：最近 N 天（默认 7）的 `upstream_blocked` / `model_not_found` / `invalid_request` 按 `(渠道, 模型)` 聚合，行内可「加入黑名单」→ `model_blocklist` + 审计。
 - **主动探活**（`GET /api/models/probes`，operator）：探「仍被 `blocked` 负缓存锁住」与「已判死（`state='failed'`）」两类。**成功** → 清负缓存、回列表（唯一恢复入口）；**`failed`** → 留负缓存 + 累加；**`inconclusive`**（额度 / 限流 / 网络 / 超时 / 空流）→ 绝不禁用，连续失败归零。探活直连 `provider.stream_chat`，不写 `usage_events`、不动冷却表。判死模型只从该 (渠道, 模型) 摘掉，**隐藏没有到期时间**——恢复只靠复探成功（周期 `MODEL_PROBE_MINUTES` 默认 0 = 关）。**人工接管**（`POST /api/models/probes/manual`）让自动探活跳过该行但不改负缓存。
@@ -454,7 +455,7 @@ curl -X POST http://127.0.0.1:8000/v1/fetch \
 - **缓存命中率**：命中 token ÷ 输入 token（1 位小数），未上报或输入 0 → `—`。
 - **输出速度** = `token 总量 ÷ 生成时间总和`（非逐条比值平均）。两口径：**正文速度** `output_tokens - reasoning_tokens`、**总产出速度**含思考。仅算经本服务路由、产出 ≥1 token 的成功请求；生成时间 = `latency_ms - ttfb_ms`，剔除窗口 <200ms 或单条 >1000 tok/s。无样本 → 估算口径（前置 `≈`），两口径皆无 → `—`。
 - **图表**：请求次数 / Token / 成本 / 单请求成本 / 耗时 / 首字延迟 / 成功率 / 缓存命中率。派生指标按 `sum ÷ sum` 算，无样本给 `—`（断线）不画 0；耗时 / 首字另配分位图（P50 + P95，读明细，仅 90 天）。时间轴按小时补齐。`metric` 取值域外显式 400；自定义范围非法时暂停取数。
-- **压缩收益面板**：触发次数（tool 输出 / 上下文体裁剪）、省下的字符与 token（下界估算）、同期前缀缓存命中率、两个压缩开关状态，同屏展示。省 token 必须与缓存代价一起看，否则无法判断「该开还是该关」；`GET /api/stats/compression`（operator+，O(1) 只读计数）。
+- **压缩收益面板**：触发次数（tool 输出 / 上下文体裁剪）、省下的字符与 token（下界估算）、同期前缀缓存命中率、两个压缩开关状态，同屏展示。省 token 必须与缓存代价一起看，否则无法判断「该开还是该关」；`GET /api/stats/compression?since=&until=`（operator+，按小时桶汇总，与总览同时间窗；不传两端为终身累计）。小时桶与终身累计落盘到 `DATA_DIR/compress_buckets.json`（60s 节流、退出补写），重启续接、保留 90 天。
 
 ### 积分与签到记录
 
@@ -592,6 +593,7 @@ python3 scripts/restore_db.py data/backups/coding2api-20261014-030000.sqlite3 --
 | `QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS` | `604800` | 次到期窗口；`≤0` 关闭 |
 | `CONVERSATION_STICKY_SECONDS` | `3600` | 会话粘性 TTL。优先级：请求体会话标识 > 请求头 > 消息前缀指纹；pin 最高。`≤0` 关 |
 | `MODEL_BLOCKLIST` | 见 `src/config.py` | 列表黑名单（fnmatch，仅影响展示），按归一后写法匹配 |
+| `TRAE_ACCOUNT_IDENTITIES` | `0` | TRAE 本账号拥有的访问身份（`0`=免费档，`1/2/3/5/100`=各档付费/团队/内部）。白名单不含本账号身份的会员模型选中必回 1005，故拉取时过滤；留空 = 不过滤。可热更 |
 | `MODEL_FALLBACK_GROUPS` | `""` | 跨渠道 fallback 组：`组名=成员1,成员2;…`。留空不启用 |
 | `ALLOWED_HOSTS` | 空 | Host 白名单，防 DNS rebinding |
 | `ALLOW_TEST_HOST` | `false` | 放行 `testserver`，仅测试用 |

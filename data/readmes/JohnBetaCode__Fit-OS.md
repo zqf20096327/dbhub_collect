@@ -62,6 +62,12 @@ in a SQLite file you own and encrypted backups only you can open.
   and an import that flags ambiguous values for review instead of guessing.
 - **Profile** (goal, days, times, injuries, equipment per place) and **Settings** (morning plan, quiet
   hours, rest timers, RIR target, program template).
+- **Smart scale (optional)**: link a Renpho account in Integrations and every weigh-in comes in on its own
+  (weight, body fat, muscle, water, visceral fat, BMR…), one per day, shown in Progress and read by the coach.
+  Renpho has no official API, so this may break when they change theirs.
+- **WHOOP (optional)**: each person links their WHOOP in Integrations (official API, OAuth: Fit-OS never sees
+  the password). Recovery, HRV, resting heart rate, sleep and day strain come in every hour; the morning
+  message turns the day's recovery into a call (push, as planned, or ease off) and Progress shows it.
 - **Coach** chat with Claude when enabled, with a daily budget; **Integrations** placeholders for Whoop,
   Apple Health and Garmin.
 

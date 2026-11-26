@@ -88,7 +88,9 @@ python3 distill.py --name 我
 | `人生档案.md` | 原始证据，按 14 章编排；未答的题单列成「尚未采集」 |
 | `蒸馏指令.md` | 完整的蒸馏任务书 + 档案；整份交给强模型 |
 | `覆盖报告.md` | 进度、分章厚度、下一轮补什么 |
-| `回答备份.json` | 换电脑/重装时导入 |
+| `回答备份.json` | 换电脑/重装时导入；默认省略私密题答案 |
+
+默认生成的是**公开版**：标注「私密」的题目只保留题面和标签，回答替换为「（私密层，未导出）」，备份也会省略这些答案。确实需要完整材料时才加 `--include-private`（文件会带警告，不要分享），或在网页导出弹窗里勾选「包含私密层」。
 
 ### 第 3 步：蒸馏
 
@@ -134,7 +136,7 @@ python3 distill.py --name 我
 ├── tools/
 │   ├── record.py             命令行记录工具
 │   └── i18n_build.py         合并/检查语言包
-├── plugin/dameng/            DSH Host 插件（对话里直接做调研）
+├── plugin/                   DSH 插件指路（插件源码在独立仓库）
 ├── twin/
 │   ├── system_prompt.md      数字人运行规则（模板）
 │   ├── exam.md               25 题校验考试 + 盲测
@@ -176,15 +178,26 @@ python3 distill.py --sample examples/sample_answers.json --out examples/沈知�
 
 ## DSH 插件
 
-同一套题库也打包成了 DSH Host 插件 `dsh-dameng`，已安装到当前 profile：
+同一套题库也打包成了 DSH Host 插件 `dsh-dameng`，已安装到当前 profile。插件源码、安装说明和市场条目都在独立仓库：
+
+**https://github.com/Xcpyk/dsh-dameng**
 
 - 在对话里说「开始大梦访谈」，agent 会调用 `dameng_guide`，再按 `dameng_questions` 一次问一题。
 - `dameng_answer` 逐字记录回答，`skip: true` 标记跳过。
 - `dameng_status` 看进度，`dameng_export` 生成中文/英文/日文/韩文档案。
+- `dameng_import` 导入网页或插件导出的《回答备份.json》，只补未答，不覆盖已有答案。
+- 导出默认隐去私密层原文；确实需要完整材料时才加 `includePrivate: true`，导出文件会带警告。
 - 回答默认存 `~/.dsh/dameng/answers.json`，导出到 `~/.dsh/dameng/exports/`，不进入工作区或 Git。
-- 源码在 [`plugin/dameng/`](plugin/dameng/)；本地安装：**Plugins → Add plugin → 选这个目录**。
 
-这是 **agent 插件**：没有独立的网页界面，访谈在对话里完成。原来的本地网页仍然保留，两边数据相互独立；这次安装时已把网页里已有的回答迁进了 `~/.dsh/dameng/answers.json`。
+这是 **agent 插件**：没有独立的网页界面，访谈在对话里完成。原来的本地网页仍然保留，两边数据独立，可用备份 JSON 互相导入。
+
+网页端也支持同样的隐私开关：导出弹窗里勾选「包含私密层」才会写入私密题原文，默认不勾。
+
+### 测试
+
+```bash
+python3 -m unittest discover -s tests -v
+```
 
 ## 语言
 
@@ -202,7 +215,7 @@ python3 distill.py --sample examples/sample_answers.json --out examples/沈知�
 
 - 服务只绑定 `127.0.0.1`，页面不联网。
 - 回答存 `data/dream.db`；导出是明文 Markdown/JSON，自己保管。
-- 私密题（创伤、羞耻、秘密）在档案里标为「私密」，默认不进入对外对话。
+- 私密题（创伤、羞耻、秘密）在档案里标为「私密」；默认导出会隐去回答原文，只保留题面和标签。只有显式 `--include-private` / 勾选「包含私密层」才会把原文写入导出，文件会带警告。
 - 如果让 agent 访谈，对话内容也会留在会话记录里；介意的话用网页自己写。
 - 想清空：删除 `data/dream.db` 即可；导出目录同理。
 - 不要把 `data/` 或 `exports/` 提交到公开仓库（`.gitignore` 已忽略）。
@@ -249,7 +262,7 @@ python3 distill.py --sample examples/sample_answers.json --out examples/沈知�
 - [ ] 多轮访谈的自动追问（agent 读答案后现场生成下一问）
 - [ ] 版本对比：v1 vs v2 的盲测分数
 - [ ] 关系人视角包：让朋友/家人各填一份「他眼中的你」，用于校正自我叙述
-- [ ] 加密存储与一键脱敏导出
+- [ ] 加密存储（导出默认脱敏已完成）
 
 ## 发布与隐私
 

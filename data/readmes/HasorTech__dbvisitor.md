@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
-	<a href="https://www.dbvisitor.net"><b>Website</b></a> •
-	<a href="https://www.dbvisitor.net/docs/guides/overview"><b>Documentation</b></a> •
-    <a href="https://www.dbvisitor.net/blog"><b>Blog</b></a> •
-    <a href="https://www.dbvisitor.net/llms.txt"><b>AI 文档索引</b></a>
+	<a href="https://www.hasor.net/dbvisitor/"><b>Website</b></a> •
+	<a href="https://www.hasor.net/cn/dbvisitor/docs/guides/overview"><b>Documentation</b></a> •
+    <a href="https://www.hasor.net/cn/blog/dbvisitor/"><b>Blog</b></a> •
+    <a href="https://www.hasor.net/cn/dbvisitor/llms.txt"><b>AI 文档索引</b></a>
 </p>
 
 <p align="center">
@@ -18,11 +18,11 @@
     <a target="_blank" href="LICENSE.txt">
 		<img src="https://img.shields.io/:License-Apache2-blue.svg" alt="Apache 2" />
 	</a>
-    <a target="_blank" href='https://gitee.com/zycgit/dbvisitor/stargazers'>
-		<img src='https://gitee.com/zycgit/dbvisitor/badge/star.svg' alt='gitee star'/>
+    <a target="_blank" href='https://gitee.com/hasortech/dbvisitor/stargazers'>
+		<img src='https://gitee.com/hasortech/dbvisitor/badge/star.svg' alt='gitee star'/>
 	</a>
-    <a target="_blank" href='https://github.com/zycgit/dbvisitor/stargazers'>
-		<img src="https://img.shields.io/github/stars/zycgit/dbvisitor.svg?style=flat&logo=github" alt="github star"/>
+    <a target="_blank" href='https://github.com/HasorTech/dbvisitor/stargazers'>
+		<img src="https://img.shields.io/github/stars/HasorTech/dbvisitor.svg?style=flat&logo=github" alt="github star"/>
 	</a>
     <br />
     <a href="https://qm.qq.com/cgi-bin/qm/qr?k=-ha3lrkHrAddrZMINYbmxj4W7ZrrWW2b&jump_from=webapi&authKey=BtyfWIjWF7uhOf/ZPur+pr5p1efOZyjGESLynkPzbJ9IMd/j/T/pR1SDLcJKC972">
@@ -68,49 +68,49 @@ dbVisitor 提供了多层次的 API 抽象，允许在 **简单性** 与 **灵�
 ### 🔋 基础能力 (Capabilities)
 
 - **API 分层抽象**：
-  - [编程式 API](https://www.dbvisitor.net/docs/guides/api/program_api)，通过编程方式实现对数据库的访问，最大特点是具有强大的灵活性。
-  - [声明式 API](https://www.dbvisitor.net/docs/guides/api/declarative_api)，通过接口可以对 SQL 的维护更加集中，使代码结构变得更加清晰。
-  - [通用 Mapper](https://www.dbvisitor.net/docs/guides/api/base_mapper)，通用 Mapper 可以让您的程序在数据访问层变得更加精炼。
-  - [构造器 API](https://www.dbvisitor.net/docs/guides/api/lambda_api)，通过链式调用的方式构造查询条件，避免了手写 SQL 的繁琐。
-  - [文件 Mapper](https://www.dbvisitor.net/docs/guides/api/file_mapper)，通过文件的方式编写 SQL 或 DSL，使得 SQL 逻辑与代码完全分离。
-  - [JDBC 适配器](https://www.dbvisitor.net/docs/guides/drivers/about)，提供对 JDBC 的标准封装，支持各类非关系型数据库的接入。
+  - [编程式 API](https://www.hasor.net/cn/dbvisitor/docs/guides/api/jdbc)，通过编程方式实现对数据库的访问，最大特点是具有强大的灵活性。
+  - [声明式 API](https://www.hasor.net/cn/dbvisitor/docs/guides/core/mapper/annotation_query)，通过接口可以对 SQL 的维护更加集中，使代码结构变得更加清晰。
+  - [通用 Mapper](https://www.hasor.net/cn/dbvisitor/docs/guides/api/mapper)，通用 Mapper 可以让您的程序在数据访问层变得更加精炼。
+  - [构造器 API](https://www.hasor.net/cn/dbvisitor/docs/guides/api/lambda)，通过链式调用的方式构造查询条件，避免了手写 SQL 的繁琐。
+  - [文件 Mapper](https://www.hasor.net/cn/dbvisitor/docs/guides/api/file_mapper)，通过文件的方式编写 SQL 或 DSL，使得 SQL 逻辑与代码完全分离。
+  - [JDBC 适配器](https://www.hasor.net/cn/dbvisitor/docs/drivers/about)，提供对 JDBC 的标准封装，支持各类非关系型数据库的接入。
 - **对象映射**：
-    - [一套 API](https://www.dbvisitor.net/docs/guides/core/mapping/about) 应对不同类型数据源，学习曲线平稳，无需掌握复杂的概念。
-    - 支持智能结果集映射，自动处理 [驼峰转换](https://www.dbvisitor.net/docs/guides/core/mapping/camel_case) 与属性填充。
-    - 内置 6 种 [主键生成器](https://www.dbvisitor.net/docs/guides/core/mapping/keytype)，不够还可以自定义
+    - [一套 API](https://www.hasor.net/cn/dbvisitor/docs/guides/core/mapping/about) 应对不同类型数据源，学习曲线平稳，无需掌握复杂的概念。
+    - 支持智能结果集映射，自动处理 [驼峰转换](https://www.hasor.net/cn/dbvisitor/docs/guides/core/mapping/camel_case) 与属性填充。
+    - 内置 6 种 [主键生成器](https://www.hasor.net/cn/dbvisitor/docs/guides/core/mapping/key_generator)，不够还可以自定义
     - Tips：不支持关系映射，如：一对一、一对多、多对一、多对多。
 - **SQL Rules**：
-    - [动态 SQL 简化](https://www.dbvisitor.net/docs/guides/rules/about)，引入 `@{...}` 规则语法，大幅简化动态 SQL 拼接逻辑，告别繁琐的 XML 标签。
-    - [SQL 增强规则](https://www.dbvisitor.net/docs/guides/rules/dynamic_rule)，内置 `@{and}`, `@{or}`, `@{in}` 等规则，自动根据参数空值情况判定条件是否生效。
-    - [参数处理规则](https://www.dbvisitor.net/docs/guides/rules/args_rule)，支持 `@{md5}`, `@{uuid}` 等指令，在 SQL 执行前对参数进行预处理。
+    - [动态 SQL 简化](https://www.hasor.net/cn/dbvisitor/docs/guides/rules/about)，引入 `@{...}` 规则语法，大幅简化动态 SQL 拼接逻辑，告别繁琐的 XML 标签。
+    - [SQL 增强规则](https://www.hasor.net/cn/dbvisitor/docs/guides/rules/dynamic_rule)，内置 `@{and}`, `@{or}`, `@{in}` 等规则，自动根据参数空值情况判定条件是否生效。
+    - [参数处理规则](https://www.hasor.net/cn/dbvisitor/docs/guides/rules/dynamic_rule#md5)，支持 `@{md5}`, `@{uuid}` 等指令，在 SQL 执行前对参数进行预处理。
 - **参数处理**：
-    - 支持 [位置参数](https://www.dbvisitor.net/docs/guides/args/position)，语句中使用 “?” 标记参数，可以将值绑定到相应索引（从 0 开始）的参数。
-    - 支持 [名称参数](https://www.dbvisitor.net/docs/guides/args/named)，语句中使用如 :name、&name 或 #{...} 写法，可以将 SQL 中的参数名称化。
-    - 支持 [SQL 注入](https://www.dbvisitor.net/docs/guides/args/inject)，语句中使用 ${...} 写法，可以对已名称化的参数进行取值，并将结果注入到 SQL 语句中。
-    - 支持 [规则传参](https://www.dbvisitor.net/docs/guides/args/rule)，语句中通过 @{...} 写法，可以借助 规则 机制，优雅的处理一些常见动态 SQL 场景。
-    - 支持 [接口方式](https://www.dbvisitor.net/docs/guides/args/interface)，通过接口实现方式让参数设置更加具有定制化，以满足一些特殊的场景。
+    - 支持 [位置参数](https://www.hasor.net/cn/dbvisitor/docs/guides/args/position)，语句中使用 “?” 标记参数，可以将值绑定到相应索引（从 0 开始）的参数。
+    - 支持 [名称参数](https://www.hasor.net/cn/dbvisitor/docs/guides/args/named)，语句中使用如 :name、&name 或 #{...} 写法，可以将 SQL 中的参数名称化。
+    - 支持 [SQL 注入](https://www.hasor.net/cn/dbvisitor/docs/guides/args/inject)，语句中使用 ${...} 写法，可以对已名称化的参数进行取值，并将结果注入到 SQL 语句中。
+    - 支持 [规则传参](https://www.hasor.net/cn/dbvisitor/docs/guides/args/rule)，语句中通过 @{...} 写法，可以借助 规则 机制，优雅的处理一些常见动态 SQL 场景。
+    - 支持 [接口方式](https://www.hasor.net/cn/dbvisitor/docs/guides/args/interface)，通过接口实现方式让参数设置更加具有定制化，以满足一些特殊的场景。
 - **TypeHandler**：
   - 灵活的类型转换系统，自动处理复杂映射。
-  - 丰富的类型支持，涵盖 [基础类型](https://www.dbvisitor.net/docs/guides/types/handlers/about)、
-    [JSON](https://www.dbvisitor.net/docs/guides/types/json-serialization)、
-    [枚举](https://www.dbvisitor.net/docs/guides/types/enum-handler)、
-    [数组](https://www.dbvisitor.net/docs/guides/types/array-handler)、
-    [时间类型](https://www.dbvisitor.net/docs/guides/types/handlers/datetime-handler)、
-    [地理信息类型](https://www.dbvisitor.net/docs/guides/types/gis-handler)、
-    [流类型](https://www.dbvisitor.net/docs/guides/types/stream-handler)、
-    [字节类型](https://www.dbvisitor.net/docs/guides/types/handlers/bytes-handler) 等。
+  - 丰富的类型支持，涵盖 [基础类型](https://www.hasor.net/cn/dbvisitor/docs/guides/types/handlers/about)、
+    [JSON](https://www.hasor.net/cn/dbvisitor/docs/guides/types/json-serialization)、
+    [枚举](https://www.hasor.net/cn/dbvisitor/docs/guides/types/enum-handler)、
+    [数组](https://www.hasor.net/cn/dbvisitor/docs/guides/types/array-handler)、
+    [时间类型](https://www.hasor.net/cn/dbvisitor/docs/guides/types/handlers/datetime-handler)、
+    [地理信息类型](https://www.hasor.net/cn/dbvisitor/docs/guides/types/gis-handler)、
+    [流类型](https://www.hasor.net/cn/dbvisitor/docs/guides/types/stream-handler)、
+    [字节类型](https://www.hasor.net/cn/dbvisitor/docs/guides/types/handlers/bytes-handler) 等。
 - **接收结果**：
     - 在所有类型数据源上提供多种方式处理查询结果。
-    - 常见结果处理有 [Bean映射](https://www.dbvisitor.net/docs/guides/core/mapping/about)、
-      [RowMapper](https://www.dbvisitor.net/docs/guides/result/for_mapper)、
-      [RowCallbackHandler](https://www.dbvisitor.net/docs/guides/result/row_callback)、
-      [ResultSetExtractor](https://www.dbvisitor.net/docs/guides/result/for_extractor)
+    - 常见结果处理有 [Bean映射](https://www.hasor.net/cn/dbvisitor/docs/guides/core/mapping/about)、
+      [RowMapper](https://www.hasor.net/cn/dbvisitor/docs/guides/result/for_mapper)、
+      [RowCallbackHandler](https://www.hasor.net/cn/dbvisitor/docs/guides/result/row_callback)、
+      [ResultSetExtractor](https://www.hasor.net/cn/dbvisitor/docs/guides/result/for_extractor)
 - **Session/Transaction**：
   - 支持多数据源事物管理（非分布式事务）
-  - 支持和 Spring 一样的事务控制能力，包括 [7 种事物传播行为](https://www.dbvisitor.net/docs/guides/transaction/propagation)。
-  - 支持通过 [编程式](https://www.dbvisitor.net/docs/guides/transaction/program)、
-    [注解式](https://www.dbvisitor.net/docs/guides/transaction/annotation)、
-    [模版方法](https://www.dbvisitor.net/docs/guides/transaction/template) 几种方式控制事务。
+  - 支持和 Spring 一样的事务控制能力，包括 [7 种事物传播行为](https://www.hasor.net/cn/dbvisitor/docs/guides/transaction/propagation)。
+  - 支持通过 [编程式](https://www.hasor.net/cn/dbvisitor/docs/guides/transaction/program)、
+    [注解式](https://www.hasor.net/cn/dbvisitor/docs/guides/transaction/annotation)、
+    [模版方法](https://www.hasor.net/cn/dbvisitor/docs/guides/transaction/template) 几种方式控制事务。
   - Tips：尽管 dbVisitor 统一了事务等调用形式，但它不能改变底层数据库的物理特性。
 - **高级特性**：
   - Map 结构亲和力强，支持多种结果集格式：
@@ -120,9 +120,9 @@ dbVisitor 提供了多层次的 API 抽象，允许在 **简单性** 与 **灵�
 - **驱动适配器**：
   - 可化身为独立的 JDBC Driver，让 MyBatis/Hibernate 也能操作 NoSQL。
   - 支持通过标准 JDBC URL 连接各类数据库。
-  - 已经适配，支持 [Redis](https://www.dbvisitor.net/docs/guides/drivers/redis/about)、
-    [MongoDB](https://www.dbvisitor.net/docs/guides/drivers/mongo/about)、
-    [ElasticSearch](https://www.dbvisitor.net/docs/guides/drivers/elastic/about) 等。
+  - 已经适配，支持 [Redis](https://www.hasor.net/cn/dbvisitor/docs/drivers/redis/about)、
+    [MongoDB](https://www.hasor.net/cn/dbvisitor/docs/drivers/mongo/about)、
+    [ElasticSearch](https://www.hasor.net/cn/dbvisitor/docs/drivers/elastic/about) 等。
 
 ## 💡 为何选择 dbVisitor？ | Why dbVisitor
 
@@ -235,9 +235,9 @@ T resultList = jdbcTemplate.execute((ConnectionCallback<T>) con -> {
 
 ## 📚 文档与资源 | Resources
 
-- **官方网站**: [https://www.dbvisitor.net](https://www.dbvisitor.net)
-- **文档指南**: [https://www.dbvisitor.net/docs/guides](https://www.dbvisitor.net/docs/guides)
-- **博客文章**: [https://www.dbvisitor.net/blog](https://www.dbvisitor.net/blog)
+- **官方网站**: [https://www.hasor.net/dbvisitor/](https://www.hasor.net/dbvisitor/)
+- **文档指南**: [https://www.hasor.net/cn/dbvisitor/docs/guides/overview](https://www.hasor.net/cn/dbvisitor/docs/guides/overview)
+- **博客文章**: [https://www.hasor.net/cn/blog/dbvisitor/](https://www.hasor.net/cn/blog/dbvisitor/)
 
 ## 📄 许可证 | License
 

@@ -27,110 +27,149 @@
 
 ## 🚀 Overview
 
-**Ktor-E-Commerce** is a robust, scalable, and high-performance backend solution designed for modern e-commerce applications. Leveraging the power of [Kotlin](https://kotlinlang.org) and [Ktor](https://ktor.io), it provides an efficient service for handling complex e-commerce workflows, from multi-role authentication to advanced order processing and real-time inventory management.
+**Ktor-E-Commerce** is a production-oriented e-commerce backend built with Kotlin and Ktor: JWT/RBAC auth, catalog and variants, cart/checkout, orders, payments and refunds, inventory and warehouses, seller tools, B2B, subscriptions, notifications, audit logs and admin analytics.
 
-### Key Pillars
-- **Performance**: Built with Ktor's asynchronous engine for non-blocking I/O.
-- **Security**: JWT-based auth, rate limiting, and password complexity enforcement.
-- **Quality**: Strict static analysis with Ktlint and Detekt integrated.
+### Highlights
 
-# Features
+- **Secure by default**: JWT access/refresh tokens, scoped RBAC, API keys, rate limiting, account lockout and password policy.
+- **Commerce core**: multi-seller catalog, cart, tax/shipping quotes, coupons/promotions, wallet/loyalty, idempotent checkout and transactional outbox events.
+- **Operations ready**: Flyway migrations, health/readiness probes, Prometheus metrics, graceful shutdown, optional Redis cache/shared rate limits and worker leader election.
+- **Quality gates**: route/unit tests, PostgreSQL integration tests, JaCoCo coverage, ktlint, detekt and architecture tests.
 
-### 1. Role-Based Access Control
+## 🧱 Architecture
 
-- **Account Types**: Customer, Seller and Admin. `SUPER_ADMIN` is a legacy value mapped to the platform super-admin role.
-- **Database-Backed Roles**: Create custom roles, assign permission bundles and edit permissions without a deploy.
-- **Scoped Permissions**: Platform (`GLOBAL`) and shop (`SHOP`) roles using `resource:action` codes such as `order:manage`.
-- **Seller Staff**: Shop memberships, invitations and role-based staff access.
-- **Effective Permissions**: `GET /api/v1/me/permissions` exposes roles, memberships and resolved permissions.
-- **Least Privilege**: Admin route groups require explicit permissions; mixed customer/seller/admin routes guard admin access separately.
-- **Auditable Changes**: Role, permission and membership changes are audited and bump `authz_version` to invalidate cached permissions.
+A modular monolith organized into vertical feature slices:
 
-### 2. User Accounts and Authentication
+- **Routes** (`feature/*/*Routes.kt`) — HTTP wiring, auth scopes and OpenAPI metadata only.
+- **Services / use cases** — business orchestration and validation.
+- **Repositories** — Exposed queries and transaction boundaries.
+- **Mappers / DTOs** — DAO-to-API mapping and request/response models.
+- **Cross-cutting** — Ktor plugins, outbox/event bus, background workers and shared utilities.
 
-- **User Registration**: Allow customers to create accounts. Users can register with the same email for different roles (customer and seller).
-- **User Authentication**: Implement JWT-based authentication for user sessions.
-- **User Profiles**: Enable users to view and update their profiles.
+See [Architecture](docs/architecture.md) for dependency rules, events, transactions and decisions.
 
-### 3. Product Management
+## 🛠 Built with
 
-- **Product Listings**: Create, update, and delete product listings.
-- **Categories**: Organize products into categories and brands for easy navigation.
-- **Inventory Control**: Keep track of product availability and stock levels.
+Kotlin · Ktor · Exposed · PostgreSQL · Flyway · Koin · HikariCP · Micrometer/Prometheus · Swagger/OpenAPI · ktlint · Detekt · JaCoCo
 
-### 4. Shopping Cart and Checkout
+## ✅ Requirements
 
-- **Shopping Cart**: Add and remove products, update quantities, and calculate totals.
-- **Checkout Summary**: Retrieve detailed checkout summary with subtotal, shipping, tax, and discount breakdown.
-- **Checkout**: Streamline the checkout process with consolidated shipping address and method selection.
-- **Stock Validation**: Automatic stock validation during checkout using effective
+- JDK 17+
+- PostgreSQL 14+ (tested on 14 and 16)
+- Docker (optional, for Testcontainers-based integration tests)
+
+## 🚀 Quick start
+
+```bash
+git clone git@github.com:piashcse/ktor-E-Commerce.git
+cd ktor-E-Commerce
+cp .env.example .env       # set DB_* and JWT_SECRET
+./gradlew run
+```
+
+Swagger UI: `http://localhost:8080/swagger`
+
+Minimum `.env` values:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=ktor-ecommerce
+DB_USER=postgres
+DB_PASSWORD=change-me
+JWT_SECRET=<openssl rand -base64 48>
+```
+
+See [.env.example](.env.example) for every supported setting (email, payments, shipping, uploads, Redis, rate limits).
+
+## 🧪 Tests
+
+```bash
+./gradlew test                 # unit + route tests
+./gradlew jacocoTestReport     # coverage report
+```
+
+PostgreSQL integration tests use `DB_*` when provided and otherwise reuse a Testcontainers instance. CI enforces the coverage gate.
+
+## 📡 API conventions
+
+- S
 
 [...截断...]
 
- inventory levels.
-- **Price Validation**: Order totals validated against database prices to prevent tampering.
-- **Cart Clearing**: Automatic cart clearing after successful order placement.
+uccess responses return the payload directly; list endpoints use `{ "data": [...], "metadata": {...} }`.
+- Errors use the `ApiError` envelope with `message`, `code`, `errors`, `requestId` and RFC 9457 aliases.
+- Mutating endpoints accept `Idempotency-Key` where retries matter (checkout, payments, refunds, payouts).
+- Collection endpoints prefer `page`/`perPage`; `limit`/`offset` remain supported.
 
-### 5. Order Management
+See [API Contracts](docs/api-contracts.md) and [Errors](docs/errors.md).
 
-- **Order Processing**: Handle order creation, status updates, and order history.
-- **Order Status History**: Comprehensive audit trail for every status transition (Placed, Confirmed, Shipped, etc.).
-- **Automatic Taxation**: Configurable tax calculation (default 5%) applied automatically during checkout.
-- **Order Cancellation**: Customers can cancel PENDING/CONFIRMED orders with automatic stock restoration.
-- **Seller Orders**: Sellers can view and manage orders from their shop.
-- **Admin Orders**: Admins can view all orders with advanced filters (status, date range).
-- **Human-Readable Order Numbers**: Date-prefixed order numbers in `ORD-YYYYMMDD-XXXX-XXXXXXXX` format (random suffix guarantees uniqueness under concurrency).
-- **Idempotency Support**: Prevent duplicate orders with idempotency keys.
-- **Payment Integration**: Integrate with popular payment gateways for seamless transactions.
-- **Payment Validation**: Payment amounts validated against order totals.
-- **Payment History**: Track all payments for each order.
+### 📖 MkDocs Documentation
 
-### 6. Discount & Coupon System
+Comprehensive API documentation is maintained using [MkDocs](https://www.mkdocs.org/) and available in the `docs/` directory. To view the documentation locally:
 
-- **Promo Codes**: Create and manage fixed or percentage-based discount coupons.
-- **Usage Limits**: Enforce expiration dates, usage limits per coupon, and minimum order amounts.
-- **Admin Controls**: Dedicated administrative interface for managing the coupon lifecycle.
+1. Install MkDocs: `pip install mkdocs-material`
+2. Run the documentation server: `mkdocs serve`
+3. Open [http://localhost:8000](http://localhost:8000) in your browser
 
-### 7. Refund Management
+### 🔗 API Endpoints
 
-- **Refund Requests**: Customers can request refunds for order items with reasons and evidence images.
-- **Refund Approval**: Sellers and admins can approve, reject, or process refunds.
-- **Return Shipping**: Customers can mark approved refunds as shipped with tracking numbers.
-- **Refund Tracking**: Complete refund lifecycle tracking from request to resolution.
+The API is organized into the following modules:
 
-### 8. Scalability and Performance
+- **Authentication** - Login, register, OTP, password reset, refresh, logout
+- **Profile** - User profile and profile image
+- **Shop** - Public shop discovery, seller shop management, admin approval
+- **Shop Category** - Shop category taxonomy
+- **Brand** - Brand management
+- **Product Category / Subcategory** - Catalog taxonomy
+- **Product** - Catalog, search, variants, options and recommendations
+- **Recommendation** - Personalized recommendation feed
+- **Review & Rating** - Product reviews and helpful votes
+- **Wishlist** - Wishlist and move-to-cart
+- **Cart** - Shopping cart operations and summary
+- **Checkout** - Shipping addresses, checkout summary, guest checkout, order placement
+- **Order** - Order processing, tracking, cancellation, seller/admin order views
+- **Payment** - Payment intents, history and admin confirmation
+- **Coupon** - Coupon validation and administration
+- **Shipping Method** - Delivery methods and prices
+- **Inventory** - Seller/admin stock management across warehouses
+- **Warehouse** - Seller physical locations
+- **Refund Request** - Refund lifecycle, private evidence and seller/admin actions
+- **RMA** - Returns, exchanges, replacement orders
+- **Notification** - Inbox, announcements and per-event preferences
+- **Seller KYC** - Business/bank verification workflow
+- **Payout** - Seller balance, payout requests, statements, admin payouts
+- **Tax Rules** - Country/category tax rules
+- **FX Rates** - Multi-currency rates
+- **API Keys** - Scoped self-service API keys bounded by effective permissions
+- **Feature Flags** - Runtime feature switches
+- **Outbox** - Outbox health and dead-letter replay
+- **Privacy Policy / Consent** - Policy lifecycle and GDPR consent
+- **Privacy** - GDPR export and account erasure
+- **Dashboard** - Admin and seller analytics
+- **Audit Log** - Admin audit trail and activity tracking
+- **Health** - Liveness and readiness probes
 
-- **Asynchronous Processing**: Leverage Ktor's async capabilities for high performance.
-- **Load Balancing**: Easily scale your application to accommodate increased traffic.
+Each module has its own page under [`docs/`](docs/index.md) with its **464** operations,
+methods, paths, access levels and request/response examples. Those pages mirror the same
+OpenAPI document that powers Swagger UI.
 
-### 9. Security
+### 🌐 Swagger/OpenAPI
 
-- **JWT Tokens**: Implement JSON Web Tokens for secure authentication.
-- **Refresh Tokens**: Secure token refresh with hashed storage and automatic revocation.
-- **Rate Limiting**: Auth endpoints protected against brute-force attacks (5 req/10min).
-- **Account Lockout**: Automatic 30-minute lockout after 5 failed login attempts.
-- **Password Strength**: Enforced password complexity requirements (min 8 chars, mixed case, digit, special char).
-- **Input Validation**: Protect against common web vulnerabilities like SQL injection and cross-site scripting (XSS).
-- **Atomic Stock Operations**: Thread-safe inventory updates within database transactions.
+Interactive API documentation is available via Swagger UI at `http://localhost:8080/swagger` when the application is running.
 
-### 10. Dashboard Analytics
+> **API contract note:** common operations are documented below as `<details>` blocks with
+> Description, Curl, Request URL and Response. The generated specification currently exposes
+> 464 operations; the module pages under [`docs/`](docs/index.md) document the same surface.
+> Success responses return data directly and errors use the `ApiError` shape; some older
+> examples may still show a legacy `data`/`message` wrapper, so use the generated blocks and
+> Swagger as the canonical contract.
 
-- **Summary Statistics**: Quick overview of revenue, orders, users, products, and shops.
-- **Revenue Analytics**: Detailed revenue breakdown with daily trends and average order value.
-- **Order Statistics**: Order status distribution and recent order activity.
-- **User Growth**: User registration trends with breakdown by role and daily signups.
-- **Top Products**: Best-selling products ranked by sales volume and revenue.
-- **Activity Feed**: Recent platform activity including orders and user registrations.
+### ROLE MANAGEMENT
 
-### 11. Audit Logging
+<details>
+<summary>Account types, roles and permissions </summary>
 
-- **Action Tracking**: Records every admin action with actor identity, action type, and target resource.
-- **Rich Context**: Captures actor email, role, IP address, user agent, and outcome for full audit trail.
-- **Filterable Queries**: Search audit logs by actor, action type, resource, or outcome.
-- **Immutable Records**: Append-only log records that cannot be modified or deleted.
-
-### 12. Code Quality & Static Analysis
-
-- **Ktlint**: Automated Kotlin linting to ensure consistent code style.
-- **Detekt**: Static code analysis for finding potential bugs and code smells.
-- **Pre-commit Hooks*
+- <b>Customer:</b> Self-service shopping, orders, refunds, reviews, addresses and API keys.
+- <b>Seller:</b> Shop owner/staff portal. Staff access is controlled by shop memberships and shop roles.
+- <b>Admin:</b> Platform consol

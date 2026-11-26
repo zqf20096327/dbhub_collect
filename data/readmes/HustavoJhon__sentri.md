@@ -87,6 +87,7 @@ deciding **which opportunity deserves your time**.
 | | |
 |---|---|
 | **Unified feed** | Opportunities and news in one place, with filters, search, and sorting by relevance, date or deadline. |
+| **Personalized onboarding** | On first run, the Observer ward awakens while SENTRI starts, then a short wizard asks for your GitHub user (optional), country, city, time zone, how far to look and what interests you. Every answer is optional, saved as you go, and editable later. |
 | **Rule-based scoring** | Interests, categories, city, country, modality, eligibility, free courses, certificates, prizes, travel and deadlines. No black boxes. |
 | **Learned affinity** | Likes, saves, dismissals and applications adjust recommendations by category, tag and kind of opportunity. |
 | **Clear interactions** | Like, save, dismiss, interesting, applied, enrolled and completed, with an append-only history. |
@@ -127,13 +128,37 @@ cargo run -p sentri-cli -- --help   # lists the commands
 ### First run
 
 ```sh
-sentri config init   # writes the commented configuration (never overwrites)
-sentri               # opens the TUI and collects from the enabled sources
+sentri               # first run: the Observer awakens, then a setup wizard
 ```
+
+While SENTRI starts, an observation console opens: the Observer, an original
+3D ward drawn with terminal characters (depth-shaded, no images), wakes up,
+lights up and turns a full 360° with energy rings, a radar sweep and drifting
+motes. Around it, the real startup steps (left), an event log of what actually
+happened (right) and a status bar with progress, location and local · national
+· global discovery. Its eye opens in stages but never ahead of real progress.
+It lasts about 7 seconds (`[onboarding] startup_style = "brief"`: ~1.5 s), any
+key skips it, and the dashboard loads behind it from the first instant. On the first run, a six-page wizard then asks for:
+
+1. your **GitHub username** (optional; public profile only, never a token);
+2. your **location**: ISO country code, city, region and time zone (detected
+   from the system);
+3. **where to look**: local, national, international, remote, hybrid or in
+   person;
+4. your **interests**: events, courses, hackathons, scholarships,
+   competitions, communities, open source, CFPs, tech news, jobs.
+
+Each page is saved when you continue, so quitting halfway resumes there next
+time. Existing configurations are never sent through the wizard; run it again
+with `O` in Settings or `sentri onboarding`. The animation can be turned off
+with `[onboarding] startup_animation = false` and is replaced by a static
+screen when `SENTRI_NO_ANIMATION` is set, and by ASCII when the terminal lacks
+Unicode. Details: [docs/onboarding.md](docs/onboarding.md).
 
 On an empty database the TUI starts collecting right away and fills each
 section as sources answer. `sentri collect` does the same from the command
-line.
+line, and `sentri config init` writes the commented configuration (never
+overwrites).
 
 ## Usage
 
@@ -154,6 +179,7 @@ sentri collect --source hn-front-page
 sentri sources
 sentri status
 sentri terminal                         # explains how this terminal draws images
+sentri onboarding                       # run the setup wizard again next start
 sentri daemon --interval 120            # continuous collection
 sentri backup ~/backups/sentri.db
 ```
@@ -177,6 +203,7 @@ sentri backup ~/backups/sentri.db
 | `sentri collect` | Collects now from the enabled sources. |
 | `sentri daemon` | Collects in the background (made for systemd). |
 | `sentri terminal` | Shows the detected terminal, graphics protocol, image renderer and why. |
+| `sentri onboarding` | Opens the setup wizard again the next time the TUI starts (answers are kept). |
 | `sentri config init/path/check` | Manages and validates the configuration. |
 | `sentri backup FILE` | Consistent copy of the database. |
 
@@ -230,16 +257,31 @@ categories = ["hackathon", "fellowship"]
 priority = "high"          # low ×1 · medium ×2 · high ×3
 ```
 
-Set your own city, country and GitHub user (all optional):
+The onboarding wizard fills in your profile; you can also edit it by hand
+(every field is optional):
 
 ```toml
 [profile]
+country_code = "PE"            # ISO 3166-1 alpha-2; adds "Peru" and "Perú" to matching
 home_city = "Your city"
-country = "Your country"
+region = "Your region"
+timezone = "America/Lima"      # empty: the system time zone
+preferred_modalities = ["online", "hybrid", "in_person"]
+
+[discovery]
+local = true                   # bonus for your city
+national = true                # bonus for your country
+international = true           # bonus for opportunities abroad open to you
+topics = ["hackathons", "open_source", "jobs"]
 
 [github]
-username = "your-github-user"   # public profile and avatar only, no token
+username = "your-github-user"  # public profile, avatar and repo languages; no token
 ```
+
+Personalization only reorders the feed: nothing is hidden, international and
+remote opportunities stay visible, and every bonus shows its reason
+("Takes place in your city", "Matches your interest in Hackathons", "Matches
+interest 'your GitHub languages: rust, go'").
 
 Scoring weights (`home_city`, `travel`, `deadline_soon`, `not_eligible`,
 `avoid_keyword`…) are configurable, and every recommendation can be explained
@@ -348,6 +390,10 @@ directly; external content is validated, truncated and never executed. See
 - **No scraping** of restricted platforms and no personal account cookies.
 - **Profile display:** IP addresses found in your public GitHub profile
   fields are never shown.
+- **Onboarding data stays local:** your location, time zone, scopes and
+  interests live only in `config.toml`. Only the GitHub username leaves your
+  computer, in anonymous requests to GitHub's public API; logs never include
+  your profile. See [docs/privacy.md](docs/privacy.md).
 
 See [docs/security.md](docs/security.md).
 
@@ -365,7 +411,7 @@ explainable rules. Full disclosure: [AI_USAGE.md](AI_USAGE.md).
 |---|---|---|
 | 0–4 | Workspace, models, SQLite, search, interactions, TUI | Done |
 | 5 | Connectors (RSS/Atom, GitHub, Hacker News, iCalendar, Peruvian ecosystem, Get on Board…) | In progress |
-| 6 | Interests, scoring, explanations and personalization | In progress |
+| 6 | Interests, scoring, explanations and personalization | Onboarding profile, scopes and GitHub languages done |
 | 7 | Events and Google Calendar (OAuth2) | Local calendar done; Google not connected |
 | 8–10 | Courses, jobs, professional profile and help with sign-ups | Pending |
 | 11 | Daemon, systemd, retries and supervision | Base done |

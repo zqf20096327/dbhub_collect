@@ -29,8 +29,10 @@
 - **SQLite, PostgreSQL, MySQL, MariaDB, TiDB, CockroachDB, GreengageDB and LibSQL/Turso** ([full list](#supported-databases)) with saved connections (passwords encrypted by the OS keychain), a
   **Test** button, **Import from URL** (paste `postgres://…`, `mysql://…`, `mongodb+srv://…`, JDBC, `DATABASE_URL=…`,
   libpq or ADO.NET strings and the form fills itself in) and a ready-to-use **demo** database.
+- **Several connections at once**: each open connection gets a tab on top and keeps its own tabs, results and
+  transaction. **Side by side** (`⌘/Ctrl+\`) shows two of them next to each other, handy for comparing databases.
 - **SQL editor** (CodeMirror 6): table/column autocomplete, current-statement highlight, several results per run,
-  inline errors. `⌘/Ctrl+Enter` runs everything or the selection, `⌘/Ctrl+Shift+Enter` runs the statement under the cursor.
+  inline errors, results capped at 100 rows by default (change it in the status bar). `⌘/Ctrl+Enter` runs everything or the selection, `⌘/Ctrl+Shift+Enter` runs the statement under the cursor.
 - **SQL snippets**: type a shortcut (`sel`, `ij`, `ups`, `ct`…) and pick it from autocomplete; templates adapt to each database.
 - **Table browser**: pagination, sorting, `WHERE` filter, structure tab (columns, indexes, DDL).
 - **Inline editing** of tables and query results (when the primary key is in the result), applied in a single
@@ -41,7 +43,8 @@
 - **ER diagram** with automatic layout, inferred relations, search, keys-only mode and SVG/PNG export.
 - **Backup and restore** in `.sql` / `.sql.gz` without `pg_dump` or `mysqldump`, streamed, with progress and cancel.
 - **Export** tables or full query results to CSV, JSON, JSON Lines or SQL `INSERT`s, with no row limit.
-- History per connection, saved queries, quick search (`⌘/Ctrl+P`), tabs.
+- History per connection, saved queries, quick search (`⌘/Ctrl+P`), tabs, and the full list of keyboard shortcuts
+  (`⌘/Ctrl+Shift+/` or the keyboard button).
 - **English, Português (Brasil) and Español**: follows the system language, switch any time from the globe icon.
 
 <details>

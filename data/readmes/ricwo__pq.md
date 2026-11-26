@@ -82,8 +82,10 @@ pq.enqueue(task, priority=Priority.BATCH)     # 0 - runs last
 
 ```python
 task_id = pq.enqueue(my_task)
-pq.cancel(task_id)
+pq.cancel(task_id)  # True if the task was deleted
 ```
+
+`cancel()` deletes a task that is waiting or finished. A task that is running is left alone and `cancel()` returns `False`: pq does not stop a run in progress.
 
 ### Client IDs
 
@@ -118,7 +120,7 @@ def backfill(offset: int) -> None:
             client.upsert(backfill, offset=offset + 1000, client_id="backfill")
 ```
 
-If the worker running the task dies, the queued version runs after the stale-task reaper picks up the row (`stale_task_timeout`, default 1 hour). Keep `stale_task_timeout` longer than your longest run: if the reaper picks up a run that is still alive, the queued version can start next to it.
+If the worker running the task dies, the queued version runs once another worker notices, about a minute later (see [Dead workers](#dead-workers)).
 
 For a batch, `upsert_many()` takes a list of `Upsert` items and writes them in one transaction:
 
@@ -142,6 +144,8 @@ def heartbeat() -> None:
 
 pq.schedule(heartbeat, run_every=timedelta(minutes=5))
 ```
+
+Call `schedule()` on every application start: it creates the schedule or updates it. A schedule whose `run_every` or `cron` did not change keeps its next run time, so a restart does not run the task again, and a cron time that came due during the restart still runs. A new schedule, one whose timing changed, and one that was inactive first run right away (`run_every`) or at the next cron time.
 
 ### Cron expressions
 
@@ -197,6 +201,56 @@ pq.run_worker(poll_interval=1.0)           # Run forever
 processed = pq.run_worker_once()            # Process single task (for testing)
 ```
 
+`run_worker_once()` is one claim and one run. It has no heartbeat, cleanup, stale reaper or signal handling; a program that loops over it calls `pq.reap_stale_tasks()` itself.
+
+### Stopping
+
+On `SIGTERM` or `SIGINT` the worker stops claiming, waits up to `drain_timeout` seconds (default 20) for the tasks in flight, then kills what is still running and marks it failed. `pq.stop_worker()` starts the same shutdown from code. A worker that runs outside the main thread gets no signals, so there it is the only way:
+
+```python
+thread = threading.Thread(target=pq.run_worker)
+thread.start()
+...
+pq.stop_worker()
+thread.join()
+```
+
+`stop_worker()` also works before the worker has got going: the next `run_worker` in the process then stops as soon as it starts.
+
+### Failed tasks
+
+A failed task has `status == TaskStatus.FAILED`, the text of the failure in `error`, and its cause in `failure_kind`:
+
+| `FailureKind` | Cause |
+|---|---|
+| `ERROR` | The task raised, or its process exited with an error |
+| `TIMEOUT` | It ran past its max runtime |
+| `OOM` | Its process was killed from outside with `SIGKILL`, most likely for memory |
+| `KILLED` | Its process was ended by another signal |
+| `SHUTDOWN` | The worker's drain ran out and killed it |
+| `WORKER_LOST` | Its worker stopped sending heartbeats |
+| `STALE` | It was still marked running past its stale window |
+
+pq does not retry. To run tasks again that a deploy interrupted, select them by cause:
+
+```python
+from pq import FailureKind
+
+for task in pq.list_failed():
+    if task.failure_kind == FailureKind.SHUTDOWN:
+        ...
+```
+
+### Dead workers
+
+Each worker keeps a row in `pq_workers` and extends a lease there every 15 seconds. When a worker dies without shutting down (the machine is lost, the process is killed), its lease runs out after 60 seconds. Any other worker then fails the tasks it was running with `FailureKind.WORKER_LOST`, or re-queues them if an `upsert()` had queued a new version.
+
+On Linux the kernel kills a task's process when its worker dies, so a task marked this way is not running any more. On other systems it can run on to its end.
+
+A worker that is alive but cut off from the database for more than 60 seconds is taken for dead as well, by the workers that can reach it. Its tasks keep running. If one of them finishes and its row is still failed as `WORKER_LOST`, its real result replaces that. If your application re-queued the row in between, the task has run twice.
+
+The stale reaper (`stale_task_timeout`, default 1 hour) remains for what the heartbeat cannot see: a task run by `run_worker_once()`, or a run whose result could not be written. A task counts as stale once it has been running for longer than `stale_task_timeout` and twice the max runtime of its run.
+
 ### Timeout
 
 Kill tasks that run too long:
@@ -204,6 +258,8 @@ Kill tasks that run too long:
 ```python
 pq.run_worker(max_runtime=300)  # 5 minute timeout per task
 ```
+
+The task's process stops itself at `max_runtime`. If it cannot (it is blocked in native code, or the task changed its own `SIGALRM` handling), the worker kills it 10 seconds later, with anything it started. A `TimeoutError` raised by the task itself is an ordinary failure, with its traceback.
 
 ### Priority-dedicated workers
 
@@ -235,6 +291,8 @@ pq.run_worker(pre_execute=setup_tracing, post_execute=flush_tracing)
 
 Hooks run in the forked child, making them safe for fork-unsafe resources like OpenTelemetry.
 
+The task's result is settled when its function returns. `post_execute` runs after that and does not change it: if the hook raises, hangs or is killed, a task that finished stays `COMPLETED`. The hook has until 10 seconds after `max_runtime`, then the worker kills the process.
+
 ### Calling pq from a task
 
 A task can use your application's `PQ` instance, for example to enqueue a follow-up task. Each forked child gets a fresh connection pool, opens its own connections, and closes them when the task ends. A child killed by its timeout or by a signal exits without closing them.
@@ -260,8 +318,8 @@ Arguments are serialized automatically:
 | Type | Method |
 |------|--------|
 | JSON-serializable (str, int, list, dict) | JSON |
-| Pydantic models | `model_dump()` → JSON |
-| Custom objects, lambdas | dill (pickle) |
+| Pydantic models | `model_dump(mode="json")` → JSON (the task receives a dict) |
+| Custom objects, lambdas, `NaN`, strings with a NUL character | dill (pickle) |
 
 ## Async tasks
 
@@ -304,6 +362,10 @@ Worker (parent)
 ```
 
 The parent monitors via `os.wait4()` and detects timeout, OOM (SIGKILL), and signal-based crashes. The child process exits after every task, giving you true memory isolation.
+
+A child shares the worker's memory until it writes to it. The child freezes what it inherited for the garbage collector (`gc.freeze()`), so a collection in the child does not copy those pages: in a measurement with a 730 MB worker, one collection copied 390 MB without the freeze and 24 MB with it.
+
+One-off tasks and periodic schedules form one queue: the highest priority runs first, and within a priority whichever came due first. A backlog of one-off tasks delays a schedule of the same priority no more than it delays a task that came due at the same time. Give a schedule a higher priority to keep it on time under load.
 
 Multiple workers can run in parallel. Tasks are claimed atomically with PostgreSQL's `FOR UPDATE SKIP LOCKED`, so each task runs exactly once.
 
