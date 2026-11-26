@@ -3711,5 +3711,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d3c9b9f9d99e": {
+  "identity": {
+   "one_liner": "YDB 的 TypeScript/JavaScript 模块化 SDK，用于连接与查询。",
+   "review": "该项目是 YDB 数据库面向 JavaScript/TypeScript 生态的 SDK，按功能拆分为 core、query、value、auth、retry 等多个 npm 包，通过 Driver 建立连接，以 tagged template 方式编写 YQL 查询并自动绑定参数、管理事务。要求 Node.js 特定版本（^22.23.5 || ^24.22.3 || >=26.13.1）及 TypeScript 7 以上；版本发布采用 main 分支每次 push 即发布短 SHA 版本的持续发布机制。",
+   "highlights": [
+    "通过 tagged template 编写类型安全的 YQL 查询，自动进行参数绑定与事务管理",
+    "按模块拆分为 8 个 npm 包，覆盖连接、查询、协调节点、类型系统、gRPC 定义、错误处理、认证与重试策略",
+    "packages/query/ai-instructions/ 提供多种 AI 助手配置示例文件，用于生成遵循 YDB 安全实践的 YQL 代码"
+   ],
+   "use_cases": [
+    "在 Node.js、Bun 或 Deno 项目中连接并操作 YDB 数据库",
+    "需要参数化查询、事务和分布式信号量等数据库协调能力的 TypeScript 应用",
+    "为使用 YDB SDK 的项目配置 AI 代码助手以生成 YQL 代码"
+   ]
+  },
+  "sha": "d3c9b9f9d99e",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a249b3719b75": {
+  "identity": {
+   "one_liner": "单 Go 二进制的公开 feed 服务，ed25519 签名消息 + SQLite 存储",
+   "review": "exe-hub 是一个打包为单个 Go 二进制的公开 feed 服务：写入是 ed25519 签名信封（公钥即账户，无注册），读取为公开 HTTP，状态存于 SQLite（WAL 模式，append-only 消息表为唯一事实来源），图片经 kubo 节点存入 IPFS 并按引用计数 pin。发帖权限由 JSON 配置决定，可开放或以 Solana 代币余额作门槛。支持 hub 间单跳手动复制、可选 Ollama 驱动的语言标注与三语翻译、Web Push、SSE 实时事件与 PWA 公开页。",
+   "highlights": [
+    "所有写入为 ed25519 签名消息信封，以内容 SHA-256 为 id，seq 单调递增防重放，读取为公开 HTTP API（含 SSE、搜索、feed 分页）",
+    "图片与头像经签名上传后 pin 至 IPFS（kubo），pin 按引用计数管理，删除至零引用即 unpin",
+    "配置可选开放或 Solana 代币余额发帖门槛，支持 hub 间一跳复制与 Ollama 驱动的语言检测和 zh/en/ja 翻译"
+   ],
+   "use_cases": [
+    "个人或社区自托管小型公开 feed 站点（单二进制或 Docker Compose 部署）",
+    "需要以代币持有作为发帖准入的 feed 服务",
+    "为 exe 节点（公钥即账户）提供 hub 存储与互相复制的内容节点"
+   ]
+  },
+  "sha": "a249b3719b75",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "33a7a77bde23": {
+  "identity": {
+   "one_liner": "Windows 平台的数据库客户端，Rust + GPUI 编写，GPU 渲染单 exe。",
+   "review": "Locus 是面向 Windows 10/11 64 位的数据库客户端，用 Rust 和 GPUI 实现 GPU 渲染，打包为单个 exe。它连接 MySQL/MariaDB、PostgreSQL、SQLite、Redis、Oracle 和 SQL Server，查询结果流式写入虚拟化表格，并支持服务器端取消。生产环境连接默认只读，写入需限时解锁并记录审计日志；安装包未做代码签名，许可证为 AGPL-3.0。",
+   "highlights": [
+    "支持 MySQL/MariaDB、PostgreSQL、SQLite、Redis 直连，Oracle 与 SQL Server 通过内嵌 Go helper（sidecar）连接",
+    "查询结果流式加载至虚拟化表格，支持在查询运行期间取消服务器端执行",
+    "生产连接默认只读，写入需定时解锁、逐条确认并写入审计日志"
+   ],
+   "use_cases": [
+    "在 Windows 上日常管理多种数据库并执行 SQL 查询与结果编辑",
+    "需要只读保护、确认与审计日志的生产库运维操作",
+    "通过 SSH 隧道连接远程数据库，或进行 CSV/Excel 数据导入导出"
+   ]
+  },
+  "sha": "33a7a77bde23",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

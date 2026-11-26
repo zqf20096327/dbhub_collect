@@ -3013,5 +3013,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "790ed9f931aa": {
+  "identity": {
+   "one_liner": "RaccoonX（原DBCheck）：开源数据库巡检与运维平台，支持22类数据库与839条巡检规则",
+   "review": "RaccoonX（前身为DBCheck）是面向DBA、数据库工程师、DevOps与基础设施团队的跨平台数据库巡检运维平台。它将数据库连接、巡检、慢SQL分析、锁诊断、报告生成等任务整合到一个平台，内置839条巡检规则并提供自动生成Word报告的能力。平台采用可扩展插件架构，AI诊断可接入本地Ollama或云端API。部署方式以Docker为主，镜像支持amd64与arm64双架构，也可通过Linux二进制包（要求glibc≥2.28）或源码（Python 3.10+）安装。",
+   "highlights": [
+    "支持22类数据库与数据系统，包含MySQL、PostgreSQL、Oracle、SQL Server、DM8、TiDB、OceanBase、Redis、MongoDB、ClickHouse等，内置839条巡检规则",
+    "提供慢查询分析、锁诊断、索引健康、配置基线对比、历史趋势分析、Oracle AWR解析、定时任务（Cron+Email/Webhook通知）等功能，并可自动生成Word巡检报告与免登录分享链接",
+    "内置MCP Server（12个工具，9只读+3个需审批的写操作）、RAG知识库、多语言UI（9种语言），支持Docker Compose部署及银河麒麟/ARM64（aarch64）服务器部署"
+   ],
+   "use_cases": [
+    "对混合数据库环境（含信创数据库如DM8、KingbaseES、Vastbase等）执行批量巡检并自动生成巡检报告",
+    "分析慢SQL、锁阻塞、死锁、长事务及索引缺失/冗余问题，配合AI诊断进行辅助分析",
+    "通过MCP Server将数据库巡检能力接入Claude、Cursor等MCP客户端，或通过Cron定时巡检并经Email/Webhook接收通知"
+   ]
+  },
+  "sha": "790ed9f931aa",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f5668bce3a04": {
+  "identity": {
+   "one_liner": "基于SQLite FTS5索引乌兹别克斯坦商品交易所现货数据的双语AI问答代理",
+   "review": "该项目是一个Telegram机器人和FastAPI REST服务，面向乌兹别克斯坦共和国商品交易所（UZEX）的用户，支持乌兹别克语和俄语。它以SQLite+FTS5索引约50万条现货交易（2022–2026）及合同、参与企业、经纪商和美元汇率数据，平均查询延迟约11.5ms（README基准）。可选接入DeepSeek V3仅用于对数据库查得的事实做语言合成，temperature设为0；无API密钥时回退到确定性SQL格式化输出。查询无结果时返回不含数字与虚构实体名的固定拒答文本。安装需Python环境，先运行db_builder.py生成数据库，再配置.env中的令牌，分别启动bot.py或web_service.py。采用Apache-2.0许可证。",
+   "highlights": [
+    "用SQLite+FTS5索引50万条交易、6616份合同、14392家企业与120家经纪商，README基准显示平均查询延迟11.54ms、最大70.29ms",
+    "DeepSeek V3仅接收SQLite查出的JSON事实（temperature=0.0），数据库无结果时不调用LLM；无API密钥或网络延迟时自动切换为确定性SQL格式化器离线运行",
+    "包含18项自动化测试，未配置Telegram令牌时以CLI交互模式运行"
+   ],
+   "use_cases": [
+    "以乌兹别克语或俄语自然语言查询交易、合同、企业、经纪商与商品价格等交易所注册数据",
+    "通过Swagger API（/docs）或Web聊天面板以REST方式集成查询服务",
+    "部署为Telegram机器人，提供交易所数据的自然语言检索入口"
+   ]
+  },
+  "sha": "f5668bce3a04",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

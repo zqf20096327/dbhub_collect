@@ -3633,5 +3633,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4b52d0b21925": {
+  "identity": {
+   "one_liner": "连接 ClickHouse 与 Grafana 的数据源插件，经 HTTP 执行 SQL 查询。",
+   "review": "该项目为 Grafana 提供将 ClickHouse 作为后端数据库的数据源插件，最初由 Vertamedia 开发，自 2020 年起由 Altinity 维护，支持 Grafana 4.6 及以上版本。插件通过 HTTP/HTTPS 访问 ClickHouse，提供查询构建器与原始 SQL 编辑器两种方式，并内置宏与函数将查询结果转换为时间序列。使用 3.4.9+ 版本时，若连接用户 readonly=1 需改为 readonly=2。",
+   "highlights": [
+    "支持通过 HTTP/HTTPS 访问 ClickHouse，提供查询构建器、原始 SQL 编辑器与查询格式化功能",
+    "提供 $table、$timeFilter、$timeSeries、$rate、$columns、$lttb、$perSecond 等宏与函数，用于时间过滤与时间序列转换",
+    "支持 Table、SingleStat、Histogram、Logs、Flamegraph、Traces 展示及 Ad-hoc 过滤、Annotations 与 Alerts"
+   ],
+   "use_cases": [
+    "在 Grafana 面板中查询 ClickHouse 数据绘制时序图表、表格与直方图",
+    "基于 ClickHouse 中的 Counter 类指标计算区间变化率（$rate/$perSecond 等函数）",
+    "通过可选的 CHProxy 为 Grafana 请求配置 HTTPS 访问、并发限制、请求排队与响应缓存"
+   ]
+  },
+  "sha": "4b52d0b21925",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "25182da77384": {
+  "identity": {
+   "one_liner": "ClickHouse 数据库备份工具，支持备份到 S3 兼容存储并可从备份恢复数据。",
+   "review": "ch-backup 是面向 ClickHouse 的备份与恢复工具，由 Python 编写，可将 MergeTree 系列表引擎的表备份至 S3 兼容存储，并在原数据损坏时从备份恢复。备份默认启用 part 级别的去重，可通过配置文件调整，并支持设置起始时间以排除更早的备份。安装方式为通过 make build 构建 wheel 包后用 pip 或 uv tool install 安装。",
+   "highlights": [
+    "支持将 MergeTree 系列表引擎的表备份到 S3 兼容存储，并在数据损坏时从备份恢复。",
+    "在 part 粒度上实现去重，默认启用，可通过配置文件设置，并支持设定起始时间排除更早备份。",
+    "提供 ch-backup check 命令，可校验备份的完整性，支持 --deep 深度校验下载并比对文件和 checksums.txt。"
+   ],
+   "use_cases": [
+    "需要将 ClickHouse 数据定期备份到 S3 兼容对象存储的运维场景。",
+    "原始数据损坏后，需要从备份恢复 MergeTree 表数据的场景。",
+    "需要校验已有备份是否可完整恢复的日常巡检场景。"
+   ]
+  },
+  "sha": "25182da77384",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a6ae0eb8f4e7": {
+  "identity": {
+   "one_liner": "基于终端的 SQL Server 管理工具，单可执行文件分发",
+   "review": "goSSMS 是用 Go 编写的终端 TUI 应用，用于在 Linux、macOS 和 Windows 上管理 SQL Server。它以单个可执行文件分发，不需要安装器、SQL 客户端工具或独立数据库驱动，可通过 Homebrew、APT 或直接下载安装。连接支持 SQL Server 身份验证、Windows 集成认证及多种 Microsoft Entra ID 方式。限制包括：Windows 需使用 Windows Terminal 以避免旧控制台的显示问题，二进制未经平台签名需通过 checksums 和 cosign 验证完整性。",
+   "highlights": [
+    "以单个可执行文件分发，无需安装器、SQL 客户端工具或独立驱动，支持 Windows/Linux/macOS 的 amd64 与 arm64",
+    "支持 SQL Server、Windows 集成及多种 Microsoft Entra ID 认证方式（MFA、设备码、服务主体、托管标识等），默认强制加密",
+    "针对 Azure SQL Database 与 Fabric Data Warehouse 提供不同的对象浏览器布局，按平台支持情况调整可用菜单与属性页"
+   ],
+   "use_cases": [
+    "在 Linux 或 macOS 终端环境中连接和管理 SQL Server 实例",
+    "通过命令行模式运行连接操作或查询，配合 `gossms help` 使用",
+    "使用 Entra ID（含 MFA、设备码）连接 Azure SQL 或 Fabric 数据仓库"
+   ]
+  },
+  "sha": "a6ae0eb8f4e7",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

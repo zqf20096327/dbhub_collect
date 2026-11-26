@@ -3566,5 +3566,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aefe48002d0a": {
+  "identity": {
+   "one_liner": "混合ML与后台LLM的遥测事件分诊引擎，本地scikit-learn优先，OpenRouter辅助",
+   "review": "TraceForge 是一个遥测摄取与事件分诊引擎：用本地 scikit-learn 模型做异常检测并将堆栈日志聚类为事件指纹，仅对确认且未去重的新指纹调用 OpenRouter 后台 LLM 生成结构化根因分诊，LLM 不出现在界面上。后端为 FastAPI + SQLite，前端为 React + TypeScript 仪表盘。无 API key 时可运行纯本地 ML 模式，原始事件按保留期裁剪。",
+   "highlights": [
+    "热路径全部本地执行：IsolationForest + 稳健 z 分数异常检测、TF-IDF 余弦聚类生成事件指纹，无 API 开销",
+    "仅对统计确认且未命中 SHA-256 去重缓存的新指纹调用 LLM，LLM 只接收约15行统计摘要，按调用记录 token 用量",
+    "提供 p95 漂移预测、跨服务爆炸半径相关性计算、webhook 告警、Markdown 事后报告导出及人工反馈接口"
+   ],
+   "use_cases": [
+    "通过 POST /api/ingest 接入 Vector / Fluent Bit 或自研服务的外部遥测进行事件分诊",
+    "使用内置混沌模拟器（延迟尖峰、内存泄漏、连接池耗尽、级联故障）演示或测试检测管线",
+    "在离线或零 token 环境下以纯本地 ML 模式运行异常检测与日志指纹聚类"
+   ]
+  },
+  "sha": "aefe48002d0a",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

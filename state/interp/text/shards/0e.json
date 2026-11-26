@@ -3406,5 +3406,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7e274fa712f6": {
+  "identity": {
+   "one_liner": "Oracle 官方维护的 Node.js Oracle 数据库驱动模块",
+   "review": "node-oracledb 是 Oracle 公司维护的开源 Node.js 驱动，用于在 JavaScript 和 TypeScript 应用中连接 Oracle Database。安装通过 npm install oracledb 完成，要求 Node.js 18.12 及以上。自 6.0 起默认以 Thin 模式直连数据库（无需客户端库，要求 Oracle Database 12.1+），加载可选的 Oracle Client 库后可切换 Thick 模式以使用部分高级功能。注意该版本为开发中版本，信息可能不完整。",
+   "highlights": [
+    "支持 SQL 与 PL/SQL 语句执行、快速数据写入、NoSQL 风格文档 API、消息队列、数据库通知及数据库启停操作",
+    "默认 Thin 模式直接连接 Oracle Database，可选加载 Oracle Client 库 19 及以上版本以启用 Thick 模式",
+    "提供 TypeScript 与 JavaScript 支持，支持数据库操作的流水线（pipelined）执行及高可用与安全相关特性"
+   ],
+   "use_cases": [
+    "在 Node.js 18.12+ 的 JavaScript 或 TypeScript 应用中连接 Oracle Database 12.1 及以上版本执行数据库操作",
+    "为 SQL 生成器、ORM 及各类 JavaScript/TypeScript 框架提供 Oracle 数据库连接能力",
+    "需要消息队列、数据库通知或数据库启停管理等 Oracle Client 高级功能的场景（Thick 模式）"
+   ]
+  },
+  "sha": "7e274fa712f6",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8e2133d44868": {
+  "identity": {
+   "one_liner": "面向 Linux 的 QQ 群聊 Agent，经 OneBot v11 连接协议端并调用 OpenAI 兼容模型",
+   "review": "该项目是一个运行在 Linux 上的 QQ 群聊机器人，连接外部 OneBot v11 协议端，每次触发使用独立的 OpenAI Chat Completions 会话。它面向自托管用户，提供分条发言、表情包收发、长期记忆（SQLite FTS5 检索）、主动发言、语音转写与合成、插件与技能包等能力。提供 Docker、全栈一键安装脚本（install.sh/deploy-all.sh）及仅部署 Agent 的 deploy.sh 三种部署方式，服务以 systemd 用户服务运行并降权为普通用户。",
+   "highlights": [
+    "支持分条发言、贴纸系统、主动发言（三条链路可独立开关）与持久化提醒（支持 cron 与 IANA 时区）",
+    "内置 SQLite/WAL 消息状态机、游标分页消息接口、加密备份、/api/metrics（JSON 与 Prometheus 格式）与 ops.js 运维命令",
+    "插件运行于独立子进程，能力由 manifest 声明且由宿主实现；语音支持 API 托管转写与本机 whisper.cpp，语音合成支持 OpenAI 兼容、火山、MiniMax 等服务"
+   ],
+   "use_cases": [
+    "在自有 Linux 服务器上自托管 QQ 群聊机器人，接入 OpenAI Chat Completions 兼容的模型服务",
+    "需要长期消息归档、会话管理与可观测性（Prometheus 指标、结构化日志、备份恢复）的群聊 Agent 部署",
+    "已有 OneBot v11 协议端、只需部署或更新 Agent 本体的场景（使用 deploy.sh）"
+   ]
+  },
+  "sha": "8e2133d44868",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f591d5daf810": {
+  "identity": {
+   "one_liner": "对 Claude Code 会话历史做按项目语义检索的 Go CLI，JSONL 入 SQLite，bge-m3 嵌入加 FTS5 回退。",
+   "review": "session-indexer 将 Claude Code 的 JSONL 会话转录提取为分块，存入项目内 .claude/sessions.db，通过 Ollama 的 bge-m3 嵌入做语义检索，Ollama 不可用时回退 FTS5 BM25。面向单机单开发者的个人会话回溯，检索仅按需触发，不自动注入；数据库可由 mine 幂等重建。",
+   "highlights": [
+    "mine/search/embed/distill 等子命令，SQLite 按项目隔离存储，INSERT OR IGNORE 去重，mine 幂等可重建数据库",
+    "bge-m3（1024 维）嵌入检索，Ollama 不可用或零嵌入时回退 FTS5 BM25，并提供 /recall 入口",
+    "distill 通过 LLM 抽取主谓宾事实层，支持 --context-cap 与 --batch 调整调用成本，批处理失败整批保持待处理"
+   ],
+   "use_cases": [
+    "隔周回到某项目，按语义相似度检索历次会话中关于某决定的讨论",
+    "通过 Stop 钩子在会话结束时自动采集转录，事后用 /recall 或 search 查询",
+    "用 distill 提炼持久事实并回溯其来源文本，或运行 eval 对比余弦、BM25 与基线的检索指标"
+   ]
+  },
+  "sha": "f591d5daf810",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "221232dfb873": {
+  "identity": {
+   "one_liner": "以 SurrealDB 承载数字银行全部后端的数据库课程项目，含 iOS 客户端",
+   "review": "这是 Universidad Francisco de Vitoria 数据库课程的交付项目：账户、只追加账本、转账、权限、HTTP API 与实时反欺诈检测全部实现在 SurrealDB 3.2.4 模式中，无应用服务器层，经 HAProxy 访问无状态节点，存储可运行于单节点或三副本 TiKV 集群。外端为 SwiftUI iOS 应用，默认使用模拟数据，通过启动参数连接数据库；需 SurrealDB 3.2.4，集群另需 TiUP 与 HAProxy。",
+   "highlights": [
+    "账本、权限、API 与欺诈检测逻辑全部置于 SurrealDB 模式内，架构中不含应用服务器",
+    "存储层支持单节点或由 PD 与三个 TiKV store 组成的 Raft 集群，并通过 HAProxy 前置访问",
+    "内置基于 LIVE SELECT 的欺诈告警（环账户冻结、拆分取现送审）与不可绕过的事件审计，并用 IBM 公开反洗钱数据集验证"
+   ],
+   "use_cases": [
+    "学习 SurrealDB 模式、权限、函数与 LIVE SELECT 在真实业务中的组织方式",
+    "研究 TiKV 集群下节点与存储 leader 故障时的写入行为与一致性测试方法",
+    "作为 SwiftUI MVVM 应用通过 HTTP API 与数据库直连的集成示例"
+   ]
+  },
+  "sha": "221232dfb873",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

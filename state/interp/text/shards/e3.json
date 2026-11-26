@@ -3442,5 +3442,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "64e582038e99": {
+  "identity": {
+   "one_liner": "终端里的个人机会聚合器，收集打分类并组织奖学金、黑客松、职位等信息",
+   "review": "SENTRI 是一个 Rust 编写的终端 TUI 应用，将奖学金、黑客松、课程、职位、志愿、开源项目等来源聚合为单一信息流，按兴趣规则打分并排序。适用于想集中追踪机会的学生和开发者。数据存储在本机内嵌 SQLite，无账户和云服务；依赖 Linux 和 Rust 1.89+，通过 cargo 从源码安装，连接器失败不影响其他来源采集。",
+   "highlights": [
+    "通过 RSS/Atom、iCalendar、GitHub、Hacker News、GDG、Devpost、Kaggle、Get on Board 等连接器采集，并对条目进行去重与基于规则的可解释评分",
+    "本地优先：数据存于内嵌编译的 SQLite 数据库，无需账户或外部服务；likes、saves、dismissals 等交互会调整推荐",
+    "支持 `sentri add URL` 读取页面公开元数据、日历视图（月/周/日/议程）、后台 daemon 定时采集及 HTTP 客户端的 SSRF 防护与内容清洗"
+   ],
+   "use_cases": [
+    "在终端中统一浏览和筛选奖学金、黑客松、职位、课程等多类机会",
+    "在 SSH 或无 Nerd Fonts 的终端环境下运行，并支持 Kitty/Sixel 图像显示",
+    "通过配置文件和交互记录维护个人化的机会列表与日历安排"
+   ]
+  },
+  "sha": "64e582038e99",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "81f4c9891eb7": {
+  "identity": {
+   "one_liner": "以 wire 协议代理模型检查 PostgreSQL 服务的事务交错竞态",
+   "review": "PgLoom 是一个运行在服务与 PostgreSQL 之间的 wire-protocol 代理式模型检查器。它按协议 round trip 粒度控制事务交错，系统性探索调度，发现双花、丢失更新、死锁等问题时输出精确调度和可确定性复现的文件。通过 DATABASE_URL 指向代理即可使用，无需修改代码，适用于任何说 PostgreSQL v3 协议的语言。需要 PostgreSQL 12+ 且连接角色需 CREATE 与信号后端权限。",
+   "highlights": [
+    "以代理形式拦截 pgwire 流量，按 turn（简单查询、扩展协议管线至 Sync、portal 批次至 Execute+Flush）调度，无需 SDK 或代码改动，支持任意 PostgreSQL v3 协议客户端语言",
+    "提供 bounded（迭代 preemption bounding，类似 CHESS）、exhaustive（含 DPOR 部分序约简）与 seeded random 三种探索策略；事务真实提交，调度间从 _pgloom_snap 快照恢复被写表",
+    "发现违例时先缩减（shrink）调度，写入 .pgloom-repro.json，可用 pgloom replay 精确重放；死锁在 PostgreSQL deadlock_timeout 触发前通过 pg_blocking_pids 与等待图判环报告"
+   ],
+   "use_cases": [
+    "CI 中运行（GitHub Actions + PostgreSQL service container），exit code 1 表示发现违例并生成复现文件，可本地 replay",
+    "检测 check-then-act 竞态、READ COMMITTED 双花、丢失更新、write skew、phantom insert 与锁序死锁",
+    "纯 SQL 场景（sql-transfer 示例）无需任何服务即可探索存储过程/脚本间的事务交错"
+   ]
+  },
+  "sha": "81f4c9891eb7",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

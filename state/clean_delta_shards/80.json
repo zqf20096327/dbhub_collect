@@ -35930,5 +35930,1524 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "e790b030432a+2": {
+  "fn": "cristobalmitchell/pokedex",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "delete",
+    0,
+    5,
+    0,
+    0
+   ],
+   [
+    "equal",
+    5,
+    11,
+    0,
+    6
+   ],
+   [
+    "replace",
+    11,
+    12,
+    6,
+    7,
+    [
+     "It also has **7,696 images** in seven art styles and **2,024 cries**, all linked by key and also packaged as one SQLite database. It is on Kaggle as The Complete Pokédex Dataset. The companion Pokémon TCG dataset links every English trading card to these species."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    7,
+    8
+   ],
+   [
+    "replace",
+    13,
+    14,
+    8,
+    9,
+    [
+     "Species data is scraped from Serebii's Pokédex, with official descriptions from pokemon.com and artwork from Bulbapedia. The other tables are built from PokéAPI, Pokémon Showdown and Smogon's usage statistics. Every pipeline is in `scripts/` and can be re-run."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    17,
+    9,
+    12
+   ],
+   [
+    "replace",
+    17,
+    18,
+    12,
+    13,
+    [
+     "|File|Rows|One row per|"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    13,
+    14
+   ],
+   [
+    "replace",
+    19,
+    46,
+    14,
+    41,
+    [
+     "|**Pokémon**|||",
+     "|`data/pokemon_utf8.csv`|1,025|species (72 columns). **Start here**|",
+     "|`data/pokemon.csv`|1,025|the same, in the original UTF-16, tab-separated format (`encoding='utf-16', sep='\\t'`)|",
+     "|`data/pokemon_forms.csv`|1,578|form (Megas, Gigantamax, regional, alternate, cosmetic), each with its own stats, types, abilities and matchups|",
+     "|`data/evolutions.csv`|702|evolution method, with structured conditions and a readable sentence|",
+     "|`data/pokemon_stats.csv`|6,150|(species, base stat), long format|",
+     "|**Battle**|||",
+     "|`data/moves.csv`|920|move|",
+     "|`data/pokemon_moves.csv`|665,810|learnset entry, every game from Red/Green to Legends: Z-A|",
+     "|`data/abilities.csv`|314|ability, with effect and in-game text|",
+     "|`data/pokemon_abilities.csv`|2,943|(variety, ability, slot)|",
+     "|`data/natures.csv`|25|nature|",
+     "|`data/type_chart.csv`|324|(attacking type, defending type)|",
+     "|`data/competitive_tiers.csv`|1,380|Pokémon Showdown entry: current singles, doubles and National Dex tiers|",
+     "|`data/smogon_usage.csv`|520,661|(month, format, Pokémon): Smogon usage at the standard and top-ladder cutoffs|",
+     "|**World**|||",
+     "|`data/pokedex_entries.csv`|98,396|Pokédex entry, every game, 11 languages|",
+     "|`data/pokemon_names.csv`|12,300|(species, language): name and category|",
+     "|`data/encounters.csv`|117,585|wild encounter: game, location, method, levels, rate, conditions|",
+     "|`data/items.csv`|2,221|item|",
+     "|`data/machines.csv`|2,508|(game, TM/HM/TR): the move it teaches|",
+     "|`data/pokedex_numbers.csv`|8,010|(species, regional Pokédex): number|",
+     "|`data/version_groups.csv`|32|game group (lookup)|",
+     "|**Images and audio**|||",
+     "|`data/images.csv`|7,696|image: the form shown, its types, size and a fixed train/val/test split|",
+     "|`data/cries.csv`|2,024|cry: form, format, duration and split|",
+     "|`data/pokedex.sqlite`||every table above, with keys *(built by `scripts/build_sqlite.py`; published on Kaggle, not stored in git)*|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    41,
+    42
+   ],
+   [
+    "replace",
+    47,
+    48,
+    42,
+    43,
+    [
+     "`dataset-metadata.json` documents every column of every file. It is the data dictionary Kaggle shows, and `scripts/validate.py` checks that it matches the files."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    54,
+    43,
+    49
+   ],
+   [
+    "replace",
+    54,
+    58,
+    49,
+    50,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    64,
+    50,
+    56
+   ],
+   [
+    "replace",
+    64,
+    65,
+    56,
+    57,
+    [
+     "|Folder|Files|What|In git|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    57,
+    58
+   ],
+   [
+    "replace",
+    66,
+    76,
+    58,
+    68,
+    [
+     "|`images/small_images`|1,025|official artwork of every primary form, 215 × 215|yes|",
+     "|`images/large_images`|1,025|high-resolution artwork, 300–1280 px|yes|",
+     "|`images/alt_images`|360|variant forms: regional, Mega (incl. Legends: Z-A), Gigantamax, ...|yes|",
+     "|`images/shiny_images`|1,340|shiny official artwork|Kaggle only|",
+     "|`images/home_images`|1,335|Pokémon HOME 3D renders, 512 × 512|Kaggle only|",
+     "|`images/home_shiny_images`|1,328|Pokémon HOME 3D renders, shiny|Kaggle only|",
+     "|`images/animated_sprites`|1,283|animated battle sprites (GIF)|Kaggle only|",
+     "|`audio/cries`|1,351|current cries (Ogg Vorbis; 116 MP3)|yes|",
+     "|`audio/cries_legacy`|673|original Gen I–V cries|yes|",
+     "|`images/type_icons`|18|type icons|yes|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    84,
+    68,
+    76
+   ],
+   [
+    "replace",
+    84,
+    85,
+    76,
+    77,
+    [
+     "|Script|Builds|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    77,
+    78
+   ],
+   [
+    "replace",
+    86,
+    94,
+    78,
+    86,
+    [
+     "|`build_tables.py`|species fixes and enrichment, forms, evolutions, moves, learnsets, abilities, items, natures, type chart, Pokédex entries, names, encounters, regional dex numbers, machines (from the PokéAPI CSV database)|",
+     "|`build_competitive.py`|`competitive_tiers.csv` (Pokémon Showdown) and `smogon_usage.csv` (downloads Smogon's monthly files once, then caches them; `--min-usage 0` keeps the full long tail, about 2.5 million rows)|",
+     "|`build_media.py`|the image sets, cries, `images.csv` and `cries.csv` (from PokéAPI sprites and cries)|",
+     "|`build_sqlite.py`|`data/pokedex.sqlite`|",
+     "|`build_metadata.py`|`dataset-metadata.json` from the column docs and `docs/kaggle_description.md`|",
+     "|`validate.py`|the integrity checks; run before every upload|",
+     "|`stage_kaggle.py`|`kaggle_upload/`: everything to drag into Kaggle's web uploader (data files at the root, one zip per image and audio folder), plus `UPLOAD.md` (step-by-step), `COLUMNS.md` (every column description, ready to paste), the description and the cover|",
+     "|`build_cover.py`|`dataset-cover-image.png`, the 1280 × 640 Kaggle cover, with its summary line computed from the data|"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    134,
+    86,
+    126
+   ],
+   [
+    "replace",
+    134,
+    136,
+    126,
+    128,
+    [
+     " - `form_category` is one of default, mega, primal, gigantamax, regional, totem, battle-only, alternate or cosmetic.",
+     " - `is_default_form == 1` gives one row per variety (1,351 rows). Adding `is_default_variety == 1` gives one row per species."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    140,
+    128,
+    132
+   ],
+   [
+    "replace",
+    140,
+    143,
+    132,
+    135,
+    [
+     " - **Coverage:** monthly usage since November 2014 for 170 standard formats across every generation (OU to ZU, Ubers, LC, Monotype, Doubles, National Dex, Anything Goes, 1v1, VGC, Battle Stadium and Battle Spot). Before July 2017, Smogon's unprefixed formats were Gen VI, so they are stored as `gen6...`.",
+     " - **What each row holds:** weighted usage at Smogon's standard 1500 cutoff (`usage_pct`) and at the format's top-ladder cutoff (`usage_pct_top`), with the number of teams that used it and the number of times it was sent into battle.",
+     " - **The 1% filter:** a Pokémon is kept for a month if at least 1% of teams used it at either cutoff. That drops the long tail of near-zero entries, which would be about 2.5 million rows."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    147,
+    135,
+    139
+   ],
+   [
+    "replace",
+    147,
+    152,
+    139,
+    140,
+    [
+     "* **Code** (`scripts/`, `notebooks/`, `pokedex.ipynb`): MIT; see `LICENSE`."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    140,
+    141
+   ],
+   [
+    "replace",
+    153,
+    159,
+    141,
+    147,
+    [
+     "* **Species data:** Serebii.net",
+     "* **Pokédex descriptions:** pokemon.com",
+     "* **Bundled artwork:** Bulbapedia",
+     "* **PokéAPI database:** the source of the forms, evolutions, moves, learnsets, abilities, items, natures, type chart, Pokédex entries, names, encounters, regional dex numbers, machines and the added species fields. Copyright © 2013–2023 Paul Hallett and PokéAPI contributors, used under the BSD-3-Clause license; see `LICENSE-PokeAPI.md`.",
+     "* **Shiny, HOME and animated sprites, and cries:** the PokéAPI sprites and cries repositories (CC0 as compilations; the contents are © The Pokémon Company).",
+     "* **Competitive tiers:** Pokémon Showdown (MIT). **Usage statistics:** Smogon."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    162,
+    147,
+    150
+   ],
+   [
+    "replace",
+    162,
+    163,
+    150,
+    151,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    165,
+    151,
+    153
+   ],
+   [
+    "replace",
+    165,
+    168,
+    153,
+    156,
+    [
+     " * **Abilities corrected on 34 species.** Other forms' abilities had leaked into the base species (Raichu's \"Surge Surfer (Alola Form)\", the Galarian birds, the Therian formes, Kyurem, Zygarde, Calyrex). There was garbled text (\"Snow Cloak- Slush Rush\" for Sandshrew, \"Snow Cloak- Snow Warning\" for Vulpix), missed Gen IX changes (Piplup's line now has Competitive, Shiftry Wind Rider, Gallade Sharpness) and old spellings (\"Compoundeyes\").",
+     " * **Classification corrected on 19 species** to the current English category (e.g. Weedle \"Hairy Bug Pokémon\"; typos such as \"Tiny Racoon\" and \"Wickid\" fixed).",
+     " * Added `japanese_name_kana` and `japanese_name_official`."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    169,
+    156,
+    157
+   ],
+   [
+    "replace",
+    169,
+    173,
+    157,
+    161,
+    [
+     " * `abilities.csv` and `pokemon_abilities.csv`",
+     " * `items.csv`, `natures.csv` and `type_chart.csv`",
+     " * `pokedex_entries.csv` (98,396 entries, 11 languages) and `pokemon_names.csv`",
+     " * `encounters.csv` (117,585 rows), `pokedex_numbers.csv`, `machines.csv` and `version_groups.csv`"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    175,
+    161,
+    163
+   ],
+   [
+    "replace",
+    175,
+    178,
+    163,
+    166,
+    [
+     " * new image sets: shiny artwork, HOME renders (normal and shiny) and animated sprites, 5,286 images in all",
+     " * 2,024 cries; 116 upstream files named `.ogg` are really MP3 and now have the right extension",
+     " * `cries.csv`; `images.csv` now covers all seven image sets"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    187,
+    166,
+    175
+   ],
+   [
+    "replace",
+    187,
+    191,
+    175,
+    179,
+    [
+     " * `pokemon_forms.csv` (1,578 forms with their own stats, types, abilities and matchups)",
+     " * `evolutions.csv` (702 methods with structured conditions)",
+     " * `moves.csv` (920) and `pokemon_moves.csv` (665,810 learnset rows covering every game)",
+     " * `images.csv` (the image manifest with a fixed split) and `pokedex.sqlite`"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    194,
+    179,
+    182
+   ],
+   [
+    "replace",
+    194,
+    197,
+    182,
+    185,
+    [
+     " * Cresselia's Defense and Special Defense (120/130 → 110/120), and Zacian's and Zamazenta's Attack (130 → 120), as changed in Scarlet/Violet",
+     " * Melmetal and Zarude are now flagged Mythical",
+     " * Minior's `capture_rate` is now the integer 30"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    208,
+    185,
+    196
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "e2b89a9f5412+2": {
+  "fn": "Fish-under-sea/Prismux",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    3,
+    [
+     "中文 ",
+     " English ",
+     " 快速开始 "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    3,
+    4
+   ],
+   [
+    "replace",
+    2,
+    7,
+    4,
+    5,
+    [
+     " Prismux — 纯本地零遥测的液态玻璃 AI 超级工作台与 24 小时常驻秘书"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    12,
+    6,
+    10,
+    [
+     " VERSION：v0.2.2-RC.1（纯本地零遥测 · Win x64） ",
+     " VISUAL：0 TOKEN（8 分区液态玻璃） ",
+     " MEMORY：SQLITE VEC（单文件物理隔离） ",
+     " PLUGINS：2 PLUGINS（默认不预装） "
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    10,
+    11
+   ],
+   [
+    "replace",
+    13,
+    19,
+    11,
+    17,
+    [
+     " Electron 44",
+     " TypeScript 5.8",
+     " React 19",
+     " = 24.12\">",
+     " License MIT",
+     " Release Prismux v0.2.2-RC.1"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    17,
+    18
+   ],
+   [
+    "replace",
+    20,
+    28,
+    18,
+    21,
+    [
+     " Prismux · 纯本地零遥测的 8 分区液态玻璃 AI 超级工作台与 24 小时常驻秘书 ",
+     "基于统一第一方 <code>@prismux/*</code> Monorepo（Electron 44 + Effect + TypeScript + React 19） ，在一个桌面窗口里统一驾驭原生 CLI 身份的 Claude Code、Codex、Antigravity、跨盘自动发现的 <code>dsh</code>（DeepSeek Harness）、<code>Pi</code> 与 OpenCode；集 6 款诗意液态玻璃主题基底 、 Steam Web / 4K-8K Scene（<code>scene.pkg</code>）实时壁纸引擎与全局静音守卫 、双层磨砂 5 秒订阅免责门禁、最大化内圆角画框与主题化文件树、全宽设置中心与清透思考头、DSH 对话遥测与通用 API 中转站配额、一级 Gitee 源码托管、Orca 2×2 全要素任意分屏及单文件 SQLite 混合记忆于一身。 ",
+     "默认全栈零遥测、纯本地扫码远控（零云端账号绑定）、官方插件严格按需零预装——把效率、质感与隐私控制权完完整整还给你。 "
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    21,
+    22
+   ],
+   [
+    "replace",
+    29,
+    32,
+    22,
+    25,
+    [
+     " 下载 / Releases ",
+     " 更新记录 ",
+     " 反馈 / Issues "
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    25,
+    26
+   ],
+   [
+    "replace",
+    33,
+    38,
+    26,
+    27,
+    [
+     " Prismux v0.2.2-RC.1 8 秒实机 GPU 动态演示：8 分区液态玻璃实时折射、Codex 奔跑小人 7 档推理滑条与 Fast/Ultra Fast 切换、2×2 Orca 任意分屏与 24h 动态天穹昼夜渐变"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    27,
+    28
+   ],
+   [
+    "replace",
+    39,
+    40,
+    28,
+    29,
+    [
+     " 8 秒实机 Electron 44 GPU 动态实录 （查看 1200×750 16 FPS 高清 Animated WebP）：① 右侧壁纸抽屉实时调节 8 分区液态玻璃 折射通透度；② Codex 模型选择器滑动 <code>dsh-fish</code> 奔跑小人 7 档推理强度条 （<code>Mini → Ultra</code>）并秒切 <code>Fast / Ultra Fast</code>；③ 一键展开 2×2 Orca 全要素任意分屏 （内部零圆角、<code>1 px</code> 细线）与 24 小时动态天穹 昼夜平滑演化。 "
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    29,
+    30
+   ],
+   [
+    "replace",
+    41,
+    50,
+    30,
+    31,
+    [
+     " INTRO · 简介 "
+    ]
+   ],
+   [
+    "equal",
+    50,
+    68,
+    31,
+    49
+   ],
+   [
+    "replace",
+    68,
+    69,
+    49,
+    50,
+    [
+     " PREVIEW · 界面实景 "
+    ]
+   ],
+   [
+    "equal",
+    69,
+    72,
+    50,
+    53
+   ],
+   [
+    "replace",
+    72,
+    110,
+    53,
+    54,
+    [
+     " Prismux Orca 紧凑侧边栏、真实 OS 用户名问候、24 小时天穹右缘虚化与 8 分区液态玻璃主工作台"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    54,
+    55
+   ],
+   [
+    "replace",
+    111,
+    112,
+    55,
+    56,
+    [
+     " Orca 紧凑侧边栏 + 真实 OS 问候 + 24h 天穹右缘虚化 ：左侧呈现宿主机分组胶囊、工作区卡片与规范化模型简称（<code>Opus 5.5</code> / <code>6.2 Astra</code> / <code>Fable 5.2</code>），24 小时动态天穹柔和消融至首标签左缘，主画布以真实系统用户名问候并搭配白昼黑箭头发送键与 <code>20 px</code> 额度状态栏。 "
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    56,
+    57
+   ],
+   [
+    "replace",
+    113,
+    158,
+    57,
+    58,
+    [
+     " Prismux 8 分区液态玻璃方向性 Fresnel 银白微光用户气泡、独立清透概览卡片与默认 KaTeX 公式"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    58,
+    59
+   ],
+   [
+    "replace",
+    159,
+    160,
+    59,
+    110,
+    [
+     " 8 分区液态玻璃：方向性 Fresnel 微光气泡 + 独立清透概览 ：新增 <code>userBubble</code> 与 <code>overviewPanel</code> 独立分区，用户消息胶囊采用左上受光渐弱的银白折射弧边（已移除上游 <code>Copy prompt link</code>），开箱支持 KaTeX 行内公式，夜空下发送箭头自动翻白保高对比。 ",
+     "",
+     " Prismux 2×2 Orca 全要素任意分屏网格、内部零圆角与 1 px 细微边界分割线",
+     "",
+     " 旗舰 2×2 Orca 全要素任意分屏（Split Anything） ：多 Agent 对话与多终端自由并排/上下递归拆分，仅保留外画布圆角、全部分屏内部交界严格零圆角（<code>rounded-none</code>），搭配 <code>1 px</code> 细微边界线与流畅拖拽调比，在动态壁纸与液态玻璃下零闪烁。 ",
+     "",
+     " Prismux Codex 模型选择器、7 档零截断 dsh-fish 奔跑小人推理强度滑条与互斥 Fast / Ultra Fast 开关",
+     "",
+     " Codex 7 档零截断 <code>dsh-fish</code> 奔跑小人滑条 + <code>Fast / Ultra Fast</code> ：常驻纯 Logo 一键切换代理，7 档推理强度规范缩写为 <code>Mini / Low / Med / High / XHigh / Max / Ultra</code> 零省略号截断，底部仅保留英文首字母大写互斥加速开关。 ",
+     "",
+     " Prismux 右侧壁纸与外观抽屉中实时调节 8 大工作台分区独立液态玻璃参数",
+     "",
+     " 右侧壁纸与 8 分区实时玻璃工作台 ：在工作台内就地展开「外观与玻璃」抽屉，无需离开当前对话即可实时微调窗口外框、右侧边栏、主内容画布、工作面板、输入框、弹窗、 用户消息气泡 与 概览面板 8 大分区的通透度与模糊半径。 ",
+     "",
+     " Prismux 精简 4 分组设置导航、prismux 终端字体预览与 DSH 工作步骤 3 项原生控制",
+     "",
+     " 4 分组精简设置导航 + DSH 完整思考与工具步骤控制 ：设置侧栏瘦身并彻底清除 T3 Connect 与重复项，终端字体预览统一品牌为 <code>prismux git:(main)</code>，界面区原生收编工作步骤展示、收起时机与收起后显示回复 3 项控制并默认开启条形强度与 KaTeX。 ",
+     "",
+     " FEATURES · 核心能力 ",
+     "",
+     " 1. 多 Agent 统一驾驭、原生 <code>dsh</code> 实连与订阅编排护栏 ",
+     " Electron 44 桌面端托管 24 小时守护进程 <code>@prismux/daemon</code>，支持 Claude Code、Codex、Antigravity（官方 <code>agy acp</code> + 事件驱动按需额度刷新，零凭据窃读）、原生 Windows 实机直连的 <code>DeepSeek Harness (dsh)</code> 与 OpenCode 同台并行并随时接任 <code>Chief Thread Slot</code> 主秘书（已彻底移除冗余 <code>omp</code>）。 ",
+     " 内置 <code>PrismuxProviderProbeService</code>（CCS / Magpie 中转零误判）与合并订阅风险免责中心；支持提供方与模型拖拽排序并全局同步、AGY 像素蜂群、Claude / Codex 只读协作侧边栏与 <code>/btw</code> 旁路提问；手机远控仅保留局域网 / Tailscale 纯二维码配对。 ",
+     "",
+     " 2. Orca 侧边栏、全要素任意分屏、DSH 工作流与五大内化原语 ",
+     " 全面落地 Orca 树状紧凑侧边栏（宿主机分组、工作区卡片、模型简称规范化、每轮简体中文自动总结命名与用户改名锁）、 Split Anything 2×2+ 递归任意分屏 （内部零圆角 + <code>1 px</code> 可拖分割线）及 DSH 思考与工具调用完整流程 （3 项展示与收起策略）。 ",
+     " 坚持克制减法（永久排除脱离会话的重型看板、AgentTeam DAG、Skill Lens 与 Visual Companion），聚焦五大核心原语： ",
+     "",
+     " <code>PersistentPtyPool</code>：每终端 <code>2 MB</code> 环形缓冲与断线无损回放 ",
+     " <code>HandoffEngine</code>：<code>/handoff</code> 上下文提纯交接与 <code>agent / oracle / review</code> 三档拨盘 ",
+     " <code>CollectorAndGuard</code>：多格式切片、传输层身份注入与 <code>60 s</code> 熔断保护 ",
+     " <code>LifecycleHookBus</code>：6 类生命周期钩子、退出码 <code>2</code> 拦截与默认 <code>onFailure: \"block\"</code> ",
+     " <code>WorktreeSandbox</code>：OS 级写隔离、默认 <code>prismux</code> 分支前缀与域名白名单网关 ",
+     "",
+     " 3. 单文件混合记忆、主秘书定制与左侧栏夜间全自动工场 ",
+     " 全部长期记忆收敛于单文件 <code>~/.prismux/data/memory.db</code>（SQLite WAL + FTS5 + <code>sqlite-vec</code>，非 <code>.asar</code> <code>vec0.dll</code> 开箱可用），融合 Mnemopi Prompt-Cache 友好召回、主秘书自定义命名与 <code>~/.prismux/chief/AGENTS.md</code> 持久规则，并支持 Obsidian Vault 策展迁移；传输层 <code>forwardIdentity</code> 物理锁定群聊作用域，杜绝读取私密与工作区记忆。 ",
+     " <code>夜间工场与邮箱</code> 升级为左侧主导航独立工作面板（与任务面板 / 工作区板 / 定时任务及左下角 Issue / PR 均支持原按钮 Toggle 关闭与统一圆角画框），自动完成邮件立项 → 记忆补全 → Worktree 编码 → Oracle 只读评审 → HTML 完工早报回信。 ",
+     "",
+     " 4. 0 Token 8 分区液态玻璃、24h 动态天穹与多源壁纸舞台 ",
+     " <code>@prismux/appearance</code> 提供全宽 1:1 光学天体三态胶囊、 8 大工作台分区独立实时液态玻璃 （窗口外框、右侧功能边栏、主内容画布、工作面板、输入框与卡片、弹窗与设置、方向性 Fresnel 微光 用户消息气泡 、独立通透 概览面板 ）与 ≥ 4.5:1 对比度自动钳制，并内嵌 <code>dsh-fish</code> 7 档奔跑小人思考滑条。 ",
+     " 顶部 24 小时 288 帧声明式 SVG 动态天穹向右柔和虚化消融至首标签左缘，发送按钮箭头按昼夜自动切换黑白；<code>@prismux/wallpaper</code> 驱动 Z-0 多源舞台（图片 / 视频 / 网页 / WebWallGL / Steam <code>431960</code>），SHA-256 永久去重与遮挡 <code>0 FPS</code> 挂起，对大模型严格保持 0 Token 开销 。 ",
+     "",
+     " 5. 桌面微交互、20 px 信息底栏与真实 OS 欢迎体验 ",
+     " 欢迎页直接读取本机真实 <code>osUsername</code>（告别路径硬猜与云端账号依赖）；收起态为 <code>54 px</code> 图标导轨配共享 <code>100 ms</code> 右侧气泡；右侧辅助边栏 7 项精简并支持双向拖拽排序，内置浏览器配置完整汉化（<code>默认配置 / 无痕模式</code>）。 ",
+     " <code>20 px</code> 底部状态栏整合实时日用量、Orca 多窗口额度条、Electron + Daemon + PTY 进程资源归因、本机端口监控、真 Electron <code>powerSaveBlocker</code> 防休眠（<code>开启 / 代理 / 关闭</code>）、Windows 系统托盘、零依赖手机模拟器与四级液态玻璃服务体检。 ",
+     "",
+     " 6. Cordis 按需插件、端到端加密同步与双源升级清扫体系 ",
+     " <code>@prismux/cordis-kernel</code> 强制校验顶层 <code>engines.prismux</code> SemVer，以 <code>ctx.effect()</code> 保障卸载零残留；内置 <code>512 KiB</code> 预算声明式液态玻璃 UI、托管单写锁与 <code>0600</code> 独立加密凭据；社区 npm 导入免本机 Git 且禁用安装脚本。 ",
+     " <code>@prismux/sync-vault</code> 使用跨运行时 <code>PRXC02</code> <code>aes-256-gcm</code> / Argon2id+AEAD 密封 <code>.prismux-backup</code>（支持 WebDAV / S3 / GitHub 独立开关、<code>If-Match</code> 乐观锁与便携 <code>data/</code> 模式）；双源更新器在 GitHub ↔ Gitee 与 npm ↔ npmmirror 间测速切换，NSIS 安装包与启动迁移钩子自动清扫旧版残留且严格守护记忆库与凭据零丢失。 ",
+     "",
+     " PLUGINS · 官方独立插件 "
+    ]
+   ],
+   [
+    "equal",
+    160,
+    166,
+    110,
+    116
+   ],
+   [
+    "replace",
+    166,
+    170,
+    116,
+    120,
+    [
+     "|插件 ID|独立归档包（`.wb-plugin`）|npm 包名（无作用域 / GitHub Packages）|运行域（`realms`）|核心能力与隔离边界|",
+     "|:---|:---|:---|:---|:---|",
+     "|`qq`|`prismux-plugin-qq-0.2.2-rc.1.wb-plugin` （`88,738 bytes` · SHA-256：`8a246f2e5535f98314d94f073fa8b6b8af1e2f38e1e6ba25ae1880e2b0dd336d`）|`prismux-plugin-qq` <code>@fish-under-sea/prismux-plugin-qq</code>|`daemon`、`ui`|OneBot v11 正 / 反向 WebSocket 自动探测（NapCatQQ / Lagrange.Core）；私聊主人直连主秘书，群聊启用防刷屏节奏器并硬隔离至 <code>social/qq-group-&lt;gid&gt;</code>|",
+     "|`fishdock-hook`|`prismux-plugin-fishdock-hook-0.2.2-rc.1.wb-plugin` （`37,458 bytes` · SHA-256：`6f2ac11e612e6e898eb720f53e2c9becbf261708562d3460bbd96b1578b6f4af`）|`prismux-plugin-fishdock-hook` <code>@fish-under-sea/prismux-plugin-fishdock-hook</code>|`daemon`|FISH-Dock 灵动岛桥接插件；将 `PreToolUse` 中文风险审批、重要邮件提醒与夜间工场完工回执推送至灵动岛卡片并支持快捷放行或驳回|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    175,
+    120,
+    125
+   ],
+   [
+    "replace",
+    175,
+    177,
+    125,
+    127,
+    [
+     "- **《Prismux 插件创作完全指南》**：`docs/plugins/plugin-development-guide.md` — 涵盖 Cordis 双域内核、`engines.prismux` 顶层校验、`ctx.effect()` 卸载零残留、`ui: \"components\"` 声明式液态玻璃 UI、`0600` 加密凭据、`pnpm plugin:pack` 打包回环自检与最小可运行骨架。",
+     "- **《官方 Hook 钩子与浅色 / 深色 / 液态玻璃主题样式参考》**：`docs/plugins/official-hooks-and-theme-tokens.md` — 涵盖 `LifecycleHookBus` 6 大生命周期钩子（`SessionStart` / `PreToolUse` / `PostToolUse` / `Notification` / `SubagentStop` / `Stop`）、退出码 `2` 拦截与四档权限矩阵，以及 **8 大液态玻璃分区**与浅色 / 深色 / 玻璃语义样式 Token 全清单。"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    127,
+    128
+   ],
+   [
+    "replace",
+    178,
+    179,
+    128,
+    129,
+    [
+     " INSTALL · 下载与双源更新 "
+    ]
+   ],
+   [
+    "equal",
+    179,
+    182,
+    129,
+    132
+   ],
+   [
+    "replace",
+    182,
+    187,
+    132,
+    137,
+    [
+     "|分发渠道|适用场景|入口与下载说明|",
+     "|:---|:---|:---|",
+     "|**GitHub Releases**（国际直连）|海外网络 / GitHub CLI 环境|Prismux v0.2.2-RC.1 发布页 · 直下 `Prismux-Setup-0.2.2-rc.1-win-x64.exe`|",
+     "|**Gitee Releases**（国内镜像）|中国大陆直连加速下载|Prismux v0.2.2-RC.1 发布页（含 `80 MB` 7z 无损分卷、分卷汇总校验与全部活跃官方插件归档）|",
+     "|**软件内更新中心**（推荐）|自动测速 GitHub / Gitee、分卷实时加权下载与 SHA-256 强制校验|在工作台打开 **设置 → 关于与更新**（`/settings/about#prismux-updates`），在 `智能测速 / 国内优先 / 国际优先` 间秒切，查看完整富文本更新日志并一键安装重启|"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    190,
+    137,
+    140
+   ],
+   [
+    "replace",
+    190,
+    197,
+    140,
+    147,
+    [
+     "|平台 / 发行资产|文件名 / 状态|说明与隔离策略|",
+     "|:---|:---|:---|",
+     "|**Windows x64 安装包（Electron 44 NSIS）**|`Prismux-Setup-0.2.2-rc.1-win-x64.exe` （`197.41 MB` · `207,001,495 bytes` · Gitee 同步提供 3 卷 80 MB `.7z` 分卷）|SHA-256：`0094ba3267bc2abef47288aaff0b6623d420b35c163bcb1221b78b1ce9a49196`；内含完整 Electron 44 桌面端、内置 `resources/prismux-daemon/`、非 `.asar` `resources/native/sqlite-vec/vec0.dll`、`resources/tools/7za.exe` 与任务管理器级 `t3-resource-monitor.exe`；升级自动清扫旧版与历史残留文件且严守 `~/.prismux/` 核心数据零丢失；默认安装至 `%LOCALAPPDATA%\\Programs\\Prismux`（支持界面改路径与 `/D=<目录>`）；**官方独立插件零预装**|",
+     "|**macOS（Apple Silicon / Intel）**|`暂未发布（已预留通道）`|后续版本将提供 `.dmg` 安装镜像，遵循同一套 `0-Token` 视觉与 `~/.prismux/` 隔离规范|",
+     "|**Linux（x86_64 / arm64）**|`暂未发布（已预留通道）`|后续版本将提供 `.AppImage` / `.deb` 发行包，同样支持双源更新与独立插件验签导入|",
+     "|**2 款官方独立插件包**|`prismux-plugin-{qq,fishdock-hook}-0.2.2-rc.1.wb-plugin` 与 `prismux-plugins-official.json`|确定性 ustar + gzip 归档，下载后在 **设置 → 插件中心**（`/settings/plugins`）按需验签导入（`pet` / `ssh` 已停用：已被内置功能取代）|",
+     "|**分离式合并校验清单**|`Prismux-0.2.2-rc.1-SHA256SUMS.txt` 与 `prismux-plugins-0.2.2-rc.1-SHA256SUMS.txt`|手动下载后可通过 `Get-FileHash Prismux-Setup-0.2.2-rc.1-win-x64.exe -Algorithm SHA256` 或 `7z t` 核对完整性|"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    147,
+    148
+   ],
+   [
+    "replace",
+    198,
+    199,
+    148,
+    149,
+    [
+     " PACKAGES · npm 与国内镜像 "
+    ]
+   ],
+   [
+    "equal",
+    199,
+    206,
+    149,
+    156
+   ],
+   [
+    "replace",
+    206,
+    210,
+    156,
+    157,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    215,
+    157,
+    162
+   ],
+   [
+    "replace",
+    215,
+    216,
+    162,
+    163,
+    [
+     " DEVELOP · 开发与验收 "
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    163,
+    164
+   ],
+   [
+    "replace",
+    217,
+    218,
+    164,
+    165,
+    [
+     "> **前置工具链**：`Node.js >= 24.12.0`、`pnpm >= 10.0.0`（仓库锁定 `pnpm@12.3.4`）、`Electron 44`、`React 19`、`vite-plus`（`vp`）与 `Rust >= 1.85`（仅用于编译 `native/resource-monitor` 原生资源监控二进制；Windows 下运行 Cargo 请固定传入 `-j 1` 与 `NO_PROXY=*`）。开工前请先阅读 `AGENTS.md`、`THIRD_PARTY_NOTICES.md` 与对应的本机环境档案 `docs/agents/local/<规范化用户名>.md`。"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    223,
+    165,
+    170
+   ],
+   [
+    "replace",
+    223,
+    238,
+    170,
+    171,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    240,
+    171,
+    173
+   ],
+   [
+    "replace",
+    240,
+    242,
+    173,
+    174,
+    [
+     " 展开查看：统一第一方 Monorepo 目录树 "
+    ]
+   ],
+   [
+    "equal",
+    242,
+    247,
+    174,
+    179
+   ],
+   [
+    "replace",
+    247,
+    287,
+    179,
+    180,
+    [
+     "…（40 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    289,
+    180,
+    182
+   ],
+   [
+    "replace",
+    289,
+    293,
+    182,
+    183,
+    [
+     " 展开查看：绝对工程红线 "
+    ]
+   ],
+   [
+    "equal",
+    293,
+    301,
+    183,
+    191
+   ],
+   [
+    "replace",
+    301,
+    302,
+    191,
+    192,
+    [
+     " 展开查看：M1–M5 与 v0.1.0 ~ v0.2.2-RC.1 演进里程碑 "
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    192,
+    193
+   ],
+   [
+    "replace",
+    303,
+    305,
+    193,
+    207,
+    [
+     "|里程碑|核心交付内容|验收状态|",
+     "|:---|:---|:---|",
+     "|**M1**|Monorepo 骨架、核心服务端桥接、`apps/daemon` 进程监督、环境变量净化、主秘书槽位与 `2 MB` 环形 `PersistentPtyPool`|已完成并通过门禁|",
+     "|**M2**|单文件 SQLite WAL + FTS5 + `sqlite-vec` 混合记忆（非 `.asar` `vec0.dll` 开箱即用）、Mnemopi 召回与分域缓存、`forwardIdentity` 隔离、`LifecycleHookBus`、`HandoffEngine` 与 `WorktreeSandbox`|已完成并通过门禁|",
+     "|**M3**|`cordis-kernel`（预发布兼容 SemVer 校验、`ctx.effect()` 零残留、多源验签与免 Git 流式安装、声明式液态玻璃 UI）与 `sync-vault`（Argon2id + AEAD、`If-Match` 乐观锁、`60 s` 看门狗、便携 `data/` 模式）|已完成并通过门禁|",
+     "|**M4 / v0.1.0–v0.1.2**|`@prismux/appearance` 与 `@prismux/wallpaper` 外置沉淀、Electron 44 桌面运行时融合、全宽天体胶囊、`dsh-fish` 思考条、Windows Codex 零壳直启、官方 `agy acp` 额度联动、NSIS 用户目录安装包与插件中心重设计|已完成并通过实机签收|",
+     "|**M5**|`OvernightFactory` 夜间全自动工场前后端闭环、两大活跃官方独立插件（`qq`、`fishdock-hook`）确定性打包验签与双源分卷自动更新体系（`pet` / `ssh` 已停用并移除）|已完成并通过门禁|",
+     "|**v0.1.3-Preview.1~3**|全栈零静默遥测硬切断、AGY 蜂群与 Claude/Codex 只读协作侧边栏、右侧栏 7 项精简与双向拖拽、1:1 原生 `/btw` 旁路提问、24 小时 288 帧动态天穹、常驻纯 Logo 切代理与双语图标 `/` 面板、`54 px` 图标导轨、`20 px` 多窗口额度状态栏与 Electron 44 BoringSSL 端到端加密同步加固|已完成并通过实机签收|",
+     "|**v0.2.0-RC.1**|Orca 紧凑树状侧边栏与模型简称规范化、中文每轮自动总结命名、**2×2+ Orca 全要素任意分屏（内部零圆角 + 1 px 拖拽分割线）**、**8 分区液态玻璃（独立 Fresnel 微光用户气泡与通透概览）**、24h 天穹右缘渐弱虚化与昼夜发送箭头自适应、DSH 完整思考与工具步骤 3 项设置、原生一级接入 `dsh` 与提供方/模型拖拽排序、Claude/Codex 加速参数精简大写与 7 档零截断标签、全面去云端独立化纯二维码远控与设置瘦身、真实 OS 用户名问候、统一 Monorepo 收编与 NSIS 升级残留清扫|已完成并通过实机签收|",
+     "|**v0.2.0-RC.2**|**统一第一方 `@prismux/*` Monorepo 物理收编与彻底去 T3 / `omp` 化**、**`PrismuxProviderProbeService`（CCS / Magpie 零误判）+ 合并订阅编排风险免责中心**、**DSH / CC / Codex 标杆级展开工作步骤（单向箭头、`pwsh.exe` 剥离、磨砂详情卡与 Diff）与 GPT 推理摘要**、跟随 `--pmx-accent` 的行内文件链接、Antigravity 事件驱动按需额度刷新、Windows `dsh` 实机直连与 Electron IPC 真 UI 调度双后门、**17 页低密度分段设置中心重构**、精简顶栏 `⋯` 分屏菜单与模态框取色器焦点隔离修复|已完成并通过实机签收|",
+     "|**v0.2.0-RC.3**|**浮空概览面板豁免底部输入框**、**全局右下角浮空液态玻璃撤销弹窗**、**精简 4 分组无分割线设置侧栏（「智能体配置」「秘书与记忆」「项目与归档」）+ 3 标签「智能体配置」**、**纯蓝鲸 DSH 图标 + `Pi` 回归 & `fx` 移除**、**实连 DSH 4 斜杠命令 & 14 本地技能 + 语义化 ACP 适配**、**任务管理器级 Windows CPU% 与专用工作集资源监测 + 统一探针驱动底栏用量端点标签**、通用全宽思考强度滑条、全宽定时任务、双语工作区板与侧栏悬停 3 键快捷操作|已完成并通过实机签收|",
+     "|**v0.2.1-RC.1**|**全局智能体单一真相源（23 处面板同步排序与自定义命名）**、**1:1 DSH NEXT 思考/命令层级与 4 档透明工作步骤 + 100% 中文动作 + 丝滑动效与三态玻璃适配**、**DSH 同款思考过程汉化（默认 Bing + 双侧智能中文免翻，支持 Google 与文本模型）**、**全 6 家 Agent 实时 AGY 风格中文 TodoList + 1:1 DSH `SearchBlock` / `WebBlock`**、**独立 `/diagnostics` 服务体检与全宽夜间工场（默认 IMAP/SMTP & Gmail 模板）**、主秘书与文本生成统一遵循 AGY 免责锁 + DSH 本地 `app.asar` 版本实探、新会话标签错配与幻影标签修复 + 12 类中文错误诊断卡、主次字色层级重构与外观实时配色预览、更新通道补齐 `Preview（Alpha / Beta / RC）` 与全套官方 Prismux Logo、清理历史 T3 图标目录并根治 Windows 单测 `D:\\tmp` / `D:\\Microsoft` 残留|已完成并通过全量验收|",
+     "|**v0.2.1-RC.2**|**DSH 对话遥测与 `/usage` 历史 Zstd 扫描全量打通（真实 TTFT/Decode/缓存/TPS）**、**DSH / Antigravity 跨盘零配置自动发现 + Tab 2 纯独立 API 文本生成（OpenAI/Anthropic/Gemini/自定义）**、**壁纸无 Cookie 路径令牌路由 + HEVC 4K + 真实分辨率与防闪烁 16:9 重构**、**Prismux 原生通用 API 中转站配额面板（New API/One API/OpenAI 兼容 + `cliproxy` 兼容）**、**一级 `Gitee` OpenAPI v5 源码托管集成（彻底移除 `Cursor Origin`）**、**夜间工场接入腾讯 `Agent 邮箱`（`agently-cli`）与网易 `163/126`**、ACP 全家桶官方品牌图标、时间线思考与工具图标主题强调色、更新弹窗进度条吸顶与侧栏语义配色、`/diagnostics` 紧凑卡片统一、精简右侧辅助面板并修复已禁用提供方误报未安装 CLI 缺陷|已完成并通过全量验收|",
+     "|**v0.2.2-RC.1**|**6 款诗意液态玻璃主题基底（`纯净官方 / 星语紫夜 / 翠星漫野 / 樱雪浮岚 / 沧海浮光 / 鎏金织月`）双向同步与 0 Token 隔离**、**Steam Web（零 Referer `../` 越界钳制 + 画布尺寸/就绪投放守卫）与 4K/8K Scene（`scene.pkg` 零拷贝字节范围流 MP4、视口缩放舞台与骨骼偶动画/DXT 安全回退）实时引擎 + `HTMLMediaElement`/`AudioContext` 全局静音控制器**、**全代理原生 CLI 身份保持（移除 Codex/Claude Code 身份覆写）**、**订阅风控免责弹窗双层磨砂模糊 + 5 秒倒计时 + 完整原文确认门禁**、**最大化右侧边栏 14px 内圆角画框覆盖、文件树全量主题强调色与玻璃适配、全宽 `/settings/*` 统一布局及展开思考透明头**|已完成并通过全量验收|"
+    ]
+   ],
+   [
+    "equal",
+    305,
+    306,
+    207,
+    208
+   ],
+   [
+    "replace",
+    306,
+    324,
+    208,
+    209,
+    [
+     " THANKS · 致谢与边界 "
+    ]
+   ],
+   [
+    "equal",
+    324,
+    327,
+    209,
+    212
+   ],
+   [
+    "replace",
+    327,
+    337,
+    212,
+    222,
+    [
+     "|文档|说明|",
+     "|:---|:---|",
+     "|`AGENTS.md`|跨机器统配入口、绝对工程红线、统一 Monorepo 架构、脚本与插件打包契约及提交流程|",
+     "|`THIRD_PARTY_NOTICES.md`|第三方开源许可、核心运行时依赖清单与历史归属声明|",
+     "|`docs/plugins/plugin-development-guide.md`|Prismux 插件创作完全指南（Cordis 双域、声明式 UI、凭据隔离与打包发布）|",
+     "|`docs/plugins/official-hooks-and-theme-tokens.md`|官方 6 大生命周期 Hook 钩子与浅色 / 深色 / 8 分区液态玻璃主题样式 Token 参考|",
+     "|`docs/specs/ui-ux-design-mandate.md`|世界级 UI/UX、天体三态胶囊、液态玻璃同步契约与安装包强制设计规范|",
+     "|`docs/specs/master-prompt-v1.3.md`|Prismux 全栈自主施工总指令书（架构宪法）|",
+     "|`docs/agents/README.md`|贡献者本机环境档案命名规范、模板与维护流程|",
+     "|`assets/readme/MAINTAINING.md`|README 立体像素头图、分栏横幅与动态演示维护指南|"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    340,
+    222,
+    225
+   ],
+   [
+    "replace",
+    340,
+    347,
+    225,
+    232,
+    [
+     "- stablyai/orca（MIT）：提供紧凑树状项目/工作区侧边栏、全要素任意分屏（Split Anything）、端口扫描与资源监控、超紧凑状态栏、多窗口额度条与声明式插件 UI 参考对标。",
+     "- can1357/oh-my-pi（MIT）：提供 Mnemopi Prompt-Cache 召回与分域缓存及状态栏刻度参考。",
+     "- `dsh-better-reasoning-effort-fish`（HanaAyane/dsh-reasoning-effort PR #9 + HaoyueQin/dsh-better-reasoning-effort，MIT）与 `DeepSeek Harness (dsh)`：提供模型自动识别动态思考强度滑条（`<PrismuxReasoningEffortSlider />`、8 大家族主题与 RGBA WebP 奔跑小人）及对话思考与工具调用工作步骤展示参考。",
+     "- yetone/magpie：启发口令密封 AEAD 加密同步、`If-Match` 乐观锁、60 秒停滞看门狗与便携模式设计规范。",
+     "- Amp：启发 `/handoff` 上下文提纯交接与 `agent / oracle / review` 三档角色拨盘工作流。",
+     "- FISH-Dock：提供 Warm Paper / Dark Olive 立体像素视觉体系、1:1 光学天体胶囊与 360° Fresnel 液态玻璃主题规范及灵动岛审批回执联动灵感。",
+     "- 更多历史开源基础归属及全部核心依赖许可清单详见 `THIRD_PARTY_NOTICES.md`。"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    350,
+    232,
+    235
+   ],
+   [
+    "replace",
+    350,
+    351,
+    235,
+    236,
+    [
+     "Prismux 本仓核心代码与排版工具链遵循 **MIT License**（见仓库根 `LICENSE`）；随视觉资产分发的像素字体 `Jersey20-Regular.ttf` 遵循 SIL Open Font License 1.1；所有开源基础与参考组件均在 `THIRD_PARTY_NOTICES.md` 中严格保留各自原始许可证与版权归属声明。"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    352,
+    236,
+    237
+   ],
+   [
+    "replace",
+    352,
+    353,
+    237,
+    238,
+    [
+     " Prismux v0.2.2-RC.1 · Electron 44 + TypeScript + React 19 · 纯本地零遥测 · 8 分区液态玻璃 · Orca 任意分屏 · 2 款按需官方插件"
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "472859cf4ad5+2": {
+  "fn": "SamiKhan43/roadmap-hub",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "Roadmap Hub"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    1,
+    4
+   ],
+   [
+    "replace",
+    10,
+    14,
+    4,
+    8,
+    [
+     "Live Demo",
+     "License: MIT",
+     "PRs Welcome",
+     "Hosted on GitHub Pages"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    8,
+    9
+   ],
+   [
+    "replace",
+    15,
+    20,
+    9,
+    10,
+    [
+     "Live Demo · Explore Roadmaps · Quick Start · Add a New Path · Contributing"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    10,
+    12
+   ],
+   [
+    "replace",
+    22,
+    40,
+    12,
+    13,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    55,
+    13,
+    28
+   ],
+   [
+    "delete",
+    55,
+    57,
+    28,
+    28
+   ],
+   [
+    "equal",
+    57,
+    59,
+    28,
+    30
+   ],
+   [
+    "replace",
+    59,
+    72,
+    30,
+    41,
+    [
+     "|Feature|Description|",
+     "|:---|:---|",
+     "|**Dynamic Roadmap Picker**|Filter and search through available paths directly from an intuitive dashboard card system.|",
+     "|**Interactive Lesson Drawer**|Access concept overviews, multi-language syntax blueprints, and concrete, real-world analogies.|",
+     "|**Targeted Practice Challenges**|Reinforce your learning with custom problems, progressive hints, and step-by-step solutions.|",
+     "|**Milestone Level Projects**|Cap off each learning level by building an independent, portfolio-grade practical application.|",
+     "|**Local Progress Tracking**|Automatically track completed topics and modules. Progress is safely saved inside your browser storage.|",
+     "|**Contextual Theme Accents**|Enjoy a cohesive, modern dark layout where each individual path carries its own custom accent branding.|",
+     "|**Power-User Shortcuts**|Fast keyboard navigation: press `/` to search, `←` `→` to traverse topics, and `Esc` to exit drawers.|",
+     "|**Fully Responsive Layout**|Clean, responsive UI optimized for mobile devices, tablets, and ultra-wide desktops.|",
+     "|**Contributor-Friendly**|One JSON file per topic, a ready-made template, and automatic validation on every pull request.|"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    77,
+    41,
+    46
+   ],
+   [
+    "replace",
+    77,
+    88,
+    46,
+    57,
+    [
+     "|Learning Path|Levels|Total Topics|Release Status|",
+     "|:---|:---:|:---:|:---|",
+     "|SQL|5|32|**Production Live**|",
+     "|PostgreSQL|5|39|**Production Live**|",
+     "|FastAPI|6|39|**Production Live**|",
+     "|Authentication & Authorization|6|26|**Production Live**|",
+     "|Backend Engineer|12|56|**Production Live**|",
+     "|HTTP|7|32|**Production Live**|",
+     "|Protocols|7|35|**Production Live**|",
+     "|Data Structures & Algorithms|6|139|**Production Live**|",
+     "|Git & GitHub|—|—|**Reference Guide**|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    93,
+    57,
+    62
+   ],
+   [
+    "replace",
+    93,
+    94,
+    62,
+    63,
+    [
+     "The Setup Guides page is separate from the learning roadmaps and is featured on the homepage."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    103,
+    63,
+    72
+   ],
+   [
+    "replace",
+    103,
+    104,
+    72,
+    73,
+    [
+     "The Architecture Library collects in-depth explanations of how developer tools and systems work internally."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    106,
+    73,
+    75
+   ],
+   [
+    "delete",
+    106,
+    108,
+    75,
+    75
+   ],
+   [
+    "equal",
+    108,
+    138,
+    75,
+    105
+   ],
+   [
+    "delete",
+    138,
+    140,
+    105,
+    105
+   ],
+   [
+    "equal",
+    140,
+    148,
+    105,
+    113
+   ],
+   [
+    "replace",
+    148,
+    177,
+    113,
+    114,
+    [
+     "…（29 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    180,
+    114,
+    117
+   ],
+   [
+    "delete",
+    180,
+    182,
+    117,
+    117
+   ],
+   [
+    "equal",
+    182,
+    217,
+    117,
+    152
+   ],
+   [
+    "replace",
+    217,
+    225,
+    152,
+    153,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    230,
+    153,
+    158
+   ],
+   [
+    "replace",
+    230,
+    231,
+    158,
+    159,
+    [
+     "- Update the row in the Available Roadmaps table."
+    ]
+   ],
+   [
+    "equal",
+    231,
+    237,
+    159,
+    165
+   ],
+   [
+    "delete",
+    237,
+    239,
+    165,
+    165
+   ],
+   [
+    "equal",
+    239,
+    250,
+    165,
+    176
+   ],
+   [
+    "delete",
+    250,
+    252,
+    176,
+    176
+   ],
+   [
+    "equal",
+    252,
+    255,
+    176,
+    179
+   ],
+   [
+    "replace",
+    255,
+    257,
+    179,
+    181,
+    [
+     "- **Styling Architecture:** Tailwind CSS (distributed via CDN).",
+     "- **Iconography:** Lucide (distributed via CDN)."
+    ]
+   ],
+   [
+    "equal",
+    257,
+    260,
+    181,
+    184
+   ],
+   [
+    "replace",
+    260,
+    263,
+    184,
+    185,
+    [
+     "## Security & Privacy"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    278,
+    185,
+    200
+   ],
+   [
+    "replace",
+    278,
+    281,
+    200,
+    201,
+    [
+     "See SECURITY.md for details and limitations."
+    ]
+   ],
+   [
+    "equal",
+    281,
+    283,
+    201,
+    203
+   ],
+   [
+    "replace",
+    283,
+    304,
+    203,
+    204,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    310,
+    204,
+    210
+   ],
+   [
+    "delete",
+    310,
+    312,
+    210,
+    210
+   ],
+   [
+    "equal",
+    312,
+    313,
+    210,
+    211
+   ],
+   [
+    "replace",
+    313,
+    325,
+    211,
+    212,
+    [
+     "This project is open-source software distributed under the terms of the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "3e2a797c9b80+2": {
+  "fn": "qizhibang777888/Javainfo",
+  "clean_ver": "2",
+  "raw_lines": 190,
+  "ops": [
+   [
+    "equal",
+    0,
+    190,
+    0,
+    190
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

@@ -3334,5 +3334,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6550f0903b31": {
+  "identity": {
+   "one_liner": "Rust 编写的开源图数据库，内置向量检索与 BM25 全文搜索",
+   "review": "HelixDB 是 Apache 2.0 开源的图数据库，用 Rust 构建，底层基于对象存储，将实体、关系、嵌入向量和文本存放在同一个事务引擎中。它提供本地服务器（需 Docker 或 Podman）、内嵌进程和 Helix Cloud 三种运行方式，查询通过 REST 端点 POST /v2/query 提交。源码构建另支持 openCypher 子集的读取和 CRUD。",
+   "highlights": [
+    "以标签属性图建模，向量作为节点和边的属性原生索引，支持经图遍历预过滤的近似最近邻搜索，并对节点和边属性执行 BM25 关键词搜索",
+    "提供 Rust、TypeScript、Python、Go 四种 SDK，统一生成相同格式的 JSON 请求发送到 POST /v2/query；本地默认存内存，--disk 参数可将数据持久化到磁盘",
+    "内置 helix chef 命令可安装查询技能与文档 MCP、脚手架项目并交接给编码代理（按 Claude Code、Codex、OpenCode、Cursor 顺序查找）；嵌入模式可免服务器在自身进程内运行"
+   ],
+   "use_cases": [
+    "为 AI 应用构建长期代理记忆与检索层",
+    "GraphRAG 与混合 RAG，在单次查询中组合图遍历、向量相似度与 BM25 搜索",
+    "将文档、人员、工具与决策关联起来的内部知识图谱"
+   ]
+  },
+  "sha": "6550f0903b31",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8c0eb9b21489": {
+  "identity": {
+   "one_liner": "本地代码库索引 CLI 与 MCP 服务器，为 AI 编码代理提供代码图与检查",
+   "review": "roam-code 是运行在本地的代码分析 CLI 与 MCP 服务器，基于 SQLite 为 28 种语言构建可复用代码图索引，供 AI 编码代理通过命令行或 259 个 MCP 工具（默认 core 预设 17 个）调用。提供符号搜索、影响分析、模式发现等 288 个命令。要求 Python 3.11+ 和 Git 2.24+，本地分析无需 API 密钥；README 明确指出分析结果是线索而非结论，不替代项目必需测试。",
+   "highlights": [
+    "支持 28 种语言的 SQLite 代码图索引，包含 288 个命令（281 个规范命令 + 7 个别名）和 259 个 MCP 工具，分为 8 个可选预设",
+    "本地静态检查不调用模型或付费 API，无自动源代码或遥测上传，所有命令支持 --json 与 --sarif（39 个命令）输出",
+    "提供 roam guard-pr 汇总 PR 变更的审查记录，以及 roam verify --auto 为变更文件选择检查"
+   ],
+   "use_cases": [
+    "让 AI 编码代理（Claude Code、Cursor、Windsurf、VS Code 等）通过 MCP 直接查询代码索引、依赖追踪与影响分析",
+    "在 CI 流水线（GitHub、GitLab、Jenkins、Azure、Bitbucket）中以 SARIF 格式输出健康、复杂度、死代码、污点等检查结果",
+    "变更评审前执行 roam critique 或 preflight，查看补丁影响的相关代码与所需测试线索"
+   ]
+  },
+  "sha": "8c0eb9b21489",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4480b29db03a": {
+  "identity": {
+   "one_liner": "阿里云 PolarDB-X 的 Swift 版 SDK，封装 2020-02-02 版 OpenAPI",
+   "review": "该仓库提供 AlibabacloudPolardbx20200202 库，用于在 Swift 项目中调用阿里云 PolarDB-X（2020-02-02 版）OpenAPI。README 说明其面向 iOS 13.3+/macOS 10.15+ 平台，要求 Swift 5.6 与 Xcode 11.3+，可通过 Carthage 或 Swift Package Manager 安装，当前版本 3.14.2，采用 Apache-2.0 许可。注意仓库描述写作 Go，而 README 内容为 Swift SDK，以 README 为准。",
+   "highlights": [
+    "支持 Carthage 与 Swift Package Manager 两种安装方式，版本 3.14.2",
+    "运行环境要求 iOS 13.3+ / macOS 10.15+、Xcode 11.3+、Swift 5.6",
+    "采用 Apache-2.0 许可证发布"
+   ],
+   "use_cases": [
+    "在 iOS 或 macOS 应用中调用阿里云 PolarDB-X 2020-02-02 版 OpenAPI",
+    "使用 Swift Package Manager 管理依赖的 Swift 工程集成阿里云 SDK",
+    "需要通过 Carthage 引入阿里云云服务 API 封装库的项目"
+   ]
+  },
+  "sha": "4480b29db03a",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

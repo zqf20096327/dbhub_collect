@@ -3467,5 +3467,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ffc5999758c2": {
+  "identity": {
+   "one_liner": "基于日月周期生成希伯来历的 Windows 桌面软件，含安息日与节期提醒。",
+   "review": "这是一款 C#/.NET WinForms 开源程序，用于根据太阳与月亮周期生成日历，标注新年及 Torah 节期，并提醒安息日和五大节庆。使用 SQLite 存储数据，提供月视图、文本报表、数据网格等查看方式，支持日期书签与导出。运行环境为 Windows 10 21H2 x64 及 .NET Framework 4.8.1。README 说明极地附近城市的月相数据可能不一致，且生成日期与传统希伯来历可能存在偏差。",
+   "highlights": [
+    "生成包含日出日落与月出月落时间的日历，支持表格文本、月视图和数据网格三种查看方式",
+    "提供安息日及 Pessa'h、Shavuot、Rosh Hashanah、Kippur、Sukkot 节期的托盘气泡提醒，并显示每周读经段落",
+    "支持按 TXT、CSV、JSON、PNG、JPG、TIFF、BMP 格式导出，界面提供英语和法语"
+   ],
+   "use_cases": [
+    "需要按天文日月周期查看节期与新月日期的希伯来历使用者",
+    "需要在桌面端接收安息日和节期提醒、查看每周 parashah 的用户",
+    "需要导出或打印带日月升落数据的日历报告的本地部署场景"
+   ]
+  },
+  "sha": "ffc5999758c2",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4860bfd54ca3": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 服务器，为 coding agent 按语义检索技能，使技能集合不进入上下文",
+   "review": "the_librarian 是一个本地优先的 MCP 服务器，用 Ollama 嵌入加 SQLite 让 agent 按意图语义检索磁盘上的 SKILL.md 集合，而无需把技能载入上下文。它提供 find/get/brainstorm/report/reindex/stats 六个工具，agent 只读推荐、只写结果报告，排序与清洗决策留给人类。需 Python 3.12+ 与 Ollama，可选 Apple Intelligence 本地模型重排。",
+   "highlights": [
+    "提供 librarian_find 等六个 MCP 工具：按意图返回排序候选、移交完整技能、记录成功/失败结果，报告为 append-only",
+    "检索流程含 Ollama 嵌入、余弦相似度、MMR 多样性选择与近期推荐衰减（每次出现惩罚 0.15，可调）",
+    "全部本地运行：Ollama + SQLite，可选 Apple Intelligence AFM 重排（约 5–12 秒），失败或超时回退到纯嵌入排序"
+   ],
+   "use_cases": [
+    "维护大型技能集合（README 中约 900–3000 个 SKILL.md）但不希望全部装入 agent 上下文",
+    "通过 librarian_stats 查看从未被召回或低成功率的技能，作为人类清洗决策的依据",
+    "在 Claude Code 中接入，且可通过 served-skills.txt 原生提供少量技能到 / 菜单"
+   ]
+  },
+  "sha": "4860bfd54ca3",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0c3fc13f6208": {
+  "identity": {
+   "one_liner": "Harness STO 教程仓库，演示用 Rego 策略按 High+Critical 计数阈值拦截流水线。",
+   "review": "该仓库是 Harness STO（Security Tests Orchestration）的一个简短教程，演示如何用 OPA Rego 策略在扫描完成后按 High 与 Critical 合计是否超过 5 来决定放行或终止流水线。仓库包含两个分支：main 分支的依赖扫描结果合计为 5（通过），more-than-five-critical 分支刻意固定含已知 CVE 的旧版本依赖（合计超过 5，被拦截）。读者需具备 Harness 账号、STO 模块、创建 Policies/Policy Sets 的权限、可克隆该仓库的 GitHub 连接器以及 Harness Cloud 构建额度。README 明确警告 requirements.txt 中的依赖是刻意固定的，不应复制到真实项目。",
+   "highlights": [
+    "提供一份 Rego 策略文件（fail-high-critical-over-five.rego），按扫描输出中 HIGH 与 CRITICAL 计数执行 total > 5 则 deny",
+    "提供 .harness/pipeline.yaml，使用 Aqua Trivy 步骤并设置 fail_on_severity: none、enforce.policySets: STO_High_Critical_Over_Five",
+    "包含 main 与 more-than-five-critical 两个分支，分别对应通过与拦截两种可复现的运行结果"
+   ],
+   "use_cases": [
+    "在 Harness STO 中配置基于漏洞计数阈值（而非单条严重级别）的流水线门禁",
+    "学习 Policy 与 Policy Set 的创建流程，包括实体类型 Security Tests 与事件 On Step 的搭配",
+    "对比运行两个分支，验证策略在通过与拦截两种场景下的实际行为"
+   ]
+  },
+  "sha": "0c3fc13f6208",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

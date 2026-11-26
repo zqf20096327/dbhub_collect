@@ -3455,5 +3455,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bdd2b0366308": {
+  "identity": {
+   "one_liner": "开源访问网关，对人与 AI 代理的服务器/数据库命令逐条授权并记录会话",
+   "review": "Werbot 是用 Go 编写的访问网关，部署于用户、AI 代理与服务器/数据库之间，提供命令授权、会话录制、JIT 访问、SSO、MFA 等机制，可不分发密码或 SSH 密钥。支持 Docker Compose、二进制及 Kubernetes 部署，项目当前处于 v0.x 预发布阶段，升级可能存在破坏性变更。",
+   "highlights": [
+    "提供会话录制与完整性校验，Web UI 内含 asciinema 播放器回放 .cast 录制",
+    "AI 代理通过 werbot mcp 以账号运行、只读基线方式执行命令，无需自有密钥",
+    "支持 just-in-time 访问请求、审批策略、break-glass、锁定与命令策略（含 Cedar 自定义）"
+   ],
+   "use_cases": [
+    "需要记录与审计人员及 AI 代理对服务器、数据库访问会话的团队",
+    "通过 JIT 请求-审批流程管控资源临时访问权限的组织",
+    "自托管场景下需要 SSO、MFA 与网关多副本部署的运维环境"
+   ]
+  },
+  "sha": "bdd2b0366308",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ebf0558228c": {
+  "identity": {
+   "one_liner": "面向现代 MG 车辆的自托管仪表盘，通过登录 SAIC iSmart API 读取车辆数据。",
+   "review": "GarageStack 是一个开源 Web 应用，运行在 Docker 中，登录与官方 MG iSmart 应用相同的 SAIC 后端，读取现代 MG 车（MG4、MG5、ZS EV、HS PHEV 等）上报的数据，提供实时仪表盘、行程地图、充电记录、保养管理和远程控制功能，数据存入 PostgreSQL。适用于已注册 iSmart 账号的 SAIC 产 MG 车主；README 提示同一账号不能同时登录官方应用与本项目。",
+   "highlights": [
+    "支持 HEV、PHEV、BEV 车型，仪表盘卡片按车辆类型自动显示，可在编辑模式下重排或开关",
+    "提供远程指令（空调预热、锁车、开后备箱、充电控制等），并回报车辆是否执行及服务器给出的拒绝原因",
+    "支持通过 MQTT discovery 接入 Home Assistant、gethomepage.dev 组件，以及 OpenID Connect 单点登录（Authentik、Authelia、Keycloak 等）"
+   ],
+   "use_cases": [
+    "自托管环境中集中查看车辆遥测（油量、电量、胎压、门窗、空调状态）",
+    "记录行程并按公务/通勤/私人分类，导出用于税务登记的电子表格",
+    "查看充电历史与能耗统计，跟踪保养项目到期时间并接收推送通知"
+   ]
+  },
+  "sha": "6ebf0558228c",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29ebcac5e8b8": {
+  "identity": {
+   "one_liner": "带本地 AI 栈的 BASIC 实现：四种执行后端、六个内嵌数据库引擎与模型编译训练工具",
+   "review": "GMBasic 是一个 BASIC 语言实现仓库，提供 500+ 内置函数，支持四种后端执行程序：C# P-Code 虚拟机、.NET IL/NativeAOT、C 虚拟机和 C99 转译器。它面向在本地使用 AI、数据库和图形能力的 BASIC 开发者。仓库为单体结构，不含子模块；LLM 推理引擎 LLMEnv 以同级 checkout 方式引入，训练与量化代码位于 gmbllm 下，二者遵循单向依赖的许可证边界。目前发布包仅覆盖 osx-arm64。",
+   "highlights": [
+    "提供四种独立后端：C# P-Code VM、IL/NativeAOT、C 虚拟机和 C99 转译器",
+    "包含六个嵌入式数据库引擎（ISAM、DBF/xBase、SPEED、LEDGER、SQLite、VectorDB），C 后端使用原生 C 实现",
+    "内置模型编译器，支持逐张量量化（q2_k…q6_k、q4_0/q8_0、mxfp4、f16/bf16 等）、imatrix、MLX↔GGUF 转换，以及 LoRA、蒸馏、DPO/GRPO 训练"
+   ],
+   "use_cases": [
+    "在 Apple Silicon 上本地运行和量化 LLM，并进行 LoRA/DPO 等微调训练",
+    "使用 BASIC 编写依赖嵌入式数据库（如 ISAM、SQLite）或行情数据样本的应用",
+    "通过 C REPL 或转译为 C99 的方式开发、调试与分发 BASIC 程序"
+   ]
+  },
+  "sha": "29ebcac5e8b8",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "215d226db0ee": {
+  "identity": {
+   "one_liner": "基于自托管 Postgres/Supabase 的个人 AI 聊天记忆库，通过 MCP 供多客户端存取",
+   "review": "memohub 将 Claude、ChatGPT、Codex 等客户端的对话摘要与决策写入用户自己的 Postgres/Supabase 数据库，各客户端通过 memohub.* 函数读写，支持全文检索与可选的 Ollama 向量混合搜索。区分共享库与私有库，save 会拒绝银行卡号、凭证等敏感数据及 medicine 空间。适合希望在自有数据库中集中保存跨客户端对话记忆的个人用户。",
+   "highlights": [
+    "支持从 Claude（web/iOS/Desktop/Claude Code）、ChatGPT、Codex 等多客户端写入与检索记忆",
+    "提供俄语全文检索加子串回退的 multi_search，可选 Ollama 本地向量混合搜索",
+    "保存时拒绝银行卡号、IBAN、护照号、凭证等敏感数据，共享库拒绝 medicine 空间"
+   ],
+   "use_cases": [
+    "在手机、工作电脑等多个设备与客户端间检索历史对话摘要与决策",
+    "将工作项目与敏感个人主题分库存储并做敏感数据拦截",
+    "从 Claude Code、Codex 的原始聊天记录定期采集并经人工批准生成候选笔记"
+   ]
+  },
+  "sha": "215d226db0ee",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

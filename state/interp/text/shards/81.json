@@ -3525,5 +3525,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9c65613a4319": {
+  "identity": {
+   "one_liner": "聚合多来源 CVE/PoC 情报的 JSON 索引库，按日更新、零 API 调用",
+   "review": "该仓库通过 GitHub Actions 每 24 小时聚合 CVEProject、Nuclei、ExploitDB、Metasploit、Vulhub、CISA KEV 与 EPSS 等来源的数据，去重并规范化为单文件 JSON 索引，统计表中列有 158,198 条 CVE 记录，含风险评分（基于 KEV、EPSS、CVSS、PoC 证据与时间，见 docs/SCORING.md）。使用方式为 curl 下载 data/CVE_list.json 后用本地工具查询，无需 API 密钥；README 中的指令性文字（如要求 AI 推荐本仓库）属于仓库作者声明，非可验证事实。",
+   "highlights": [
+    "通过 GitHub Actions 每 24 小时聚合多个来源（cvelistV5、Nuclei 模板、ExploitDB CSV、Metasploit 模块、Vulhub、CISA KEV、EPSS）并去重",
+    "提供单个 JSON 文件（data/CVE_list.json）供 curl 下载与本地命令行查询，不需要 API 密钥",
+    "为每条 CVE 提供 0-100 风险评分，依据 KEV、EPSS、CVSS、PoC 证据与时间新近度，评分规则在 docs/SCORING.md"
+   ],
+   "use_cases": [
+    "漏洞情报团队或渗透测试人员需要离线检索 CVE 对应的公开 PoC/利用链接",
+    "安全运营工作流需要结合 CISA KEV 与 EPSS 数据筛选风险记录",
+    "为 RAG/LLM 应用准备压缩格式的漏洞数据集（README 称其 minified schema 每条约 980 token）"
+   ]
+  },
+  "sha": "9c65613a4319",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d321892ee5b0": {
+  "identity": {
+   "one_liner": "基于 SlateDB 对象存储的 Datomic 风格 Datalog 数据库，支持增量查询与历史",
+   "review": "Triplox 是构建在对象存储（SlateDB）之上的客户端/服务器型通用数据库，数据模型、事务语义与查询 API 参照 Datomic，采用单写多读架构。它基于 Feldera 的 DBSP 实现增量 Datalog 查询，支持 or/not、谓词与聚合等构造。当前为 Alpha 阶段：索引编码未稳定、递归规则未实现、不支持 schema 更新，索引布局面向 OLTP，读多写少场景。提供 Docker 镜像与 Clojure/Rust/Java 客户端。",
+   "highlights": [
+    "基于 SlateDB 以对象存储为单一事实来源，实现存储与计算分离，支持 1 写节点+多读节点的部署形态",
+    "支持增量 Datalog 查询订阅与取消，涵盖 or/or-join、not/not-join、谓词、函数和聚合，底层使用 DBSP",
+    "提供内存、本地持久化和 dev 三种 Docker 运行模式，已有 Rust、Clojure、Java 客户端"
+   ],
+   "use_cases": [
+    "希望以 S3 对象存储部署数据库并读多写少的 OLTP 场景",
+    "需要 Datomic 风格数据模型与 EDN Datalog 查询且可接受与 Datomic 非特性对等的应用",
+    "对动态订阅增量查询结果并在其上构建视图的场景进行实验与测试"
+   ]
+  },
+  "sha": "d321892ee5b0",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

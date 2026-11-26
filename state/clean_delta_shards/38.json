@@ -45358,5 +45358,722 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "77631b0e6f4d+2": {
+  "fn": "percona/pds",
+  "clean_ver": "2",
+  "raw_lines": 14,
+  "ops": [
+   [
+    "equal",
+    0,
+    14,
+    0,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     " overrides inside fixed bounds:"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    21,
+    16,
+    21,
+    [
+     "|Profile|Members|CPU|Memory|Storage|Backups|",
+     "|---------|---------|-----|--------|---------|---------|",
+     "|Dev|1|1|2 GB|20 GB|On demand|",
+     "|Staging|3|2|8 GB|100 GB|Daily|",
+     "|Prod|3|4|16 GB|250 GB|Daily|"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    25,
+    22,
+    25,
+    [
+     " The sizes are defined in `adapter/internal/engine/oe/profiles.go`, next to",
+     " the bounds, and again in the presets the chart installs",
+     " (`charts/pds/templates/instance-presets.yaml`)."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    28,
+    26,
+    28,
+    [
+     " the clipboard. A database is reachable inside its network by default, or",
+     " publicly from an allow list."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    28,
+    29
+   ],
+   [
+    "replace",
+    29,
+    31,
+    29,
+    31,
+    [
+     " schedule, **restore** into a new database, **delete** with a typed",
+     " confirmation."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    33,
+    31,
+    33
+   ],
+   [
+    "replace",
+    33,
+    34,
+    33,
+    34,
+    [
+     " with an assistant using your own Claude or Cursor key."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    44,
+    34,
+    44
+   ],
+   [
+    "replace",
+    44,
+    52,
+    44,
+    45,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    54,
+    45,
+    47
+   ],
+   [
+    "replace",
+    54,
+    55,
+    47,
+    48,
+    [
+     "|Component|Role|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    48,
+    49
+   ],
+   [
+    "replace",
+    56,
+    61,
+    49,
+    54,
+    [
+     "|UI (`apps/ui`)|React app served by nginx on the hub. It talks to nothing but `/api` on its own origin.|",
+     "|Adapter (`adapter`)|One Go binary. The HTTP role is the hub API: it validates every request, writes desired state, and keeps login, sessions and sealed credentials in its own PostgreSQL. The agent role runs on a connected environment, heartbeats to the hub, and calls OpenEverest there.|",
+     "|OpenEverest|On each connected environment, reconciles Instances into Percona Operator for MySQL and PostgreSQL clusters. The agent calls its REST API with a token it mints itself.|",
+     "|PMM|Percona Monitoring and Management, on the connected environment. A pmm-client sidecar on each database feeds it. The agent reads metrics and the hub charts those readings.|",
+     "|Helm chart (`charts/pds`)|One release is a hub or a connected environment, in namespace `everest-system`. Databases land in namespace `pds` on the connected environment.|"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    72,
+    54,
+    65
+   ],
+   [
+    "replace",
+    72,
+    73,
+    65,
+    66,
+    [
+     "docs/architecture.md covers the routes, credentials,"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    66,
+    67
+   ],
+   [
+    "replace",
+    74,
+    76,
+    67,
+    69,
+    [
+     "docs/mcp-server-design.md and",
+     "docs/mcp-server-tool-catalog.md describe the"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    83,
+    69,
+    76
+   ],
+   [
+    "replace",
+    83,
+    84,
+    76,
+    77,
+    [
+     "|Piece|What it is|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    77,
+    78
+   ],
+   [
+    "replace",
+    85,
+    90,
+    78,
+    83,
+    [
+     "|kind cluster `hub`|The UI, the adapter and the adapter database|",
+     "|kind cluster `spoke-a`|One connected environment, joined with the command a customer runs plus `--local`, so nothing is created in AWS|",
+     "|Gitea, in Docker on port 3000|Serves the Git tree the hub writes and Flux reads|",
+     "|`cloud-provider-kind`, in Docker|Gives each database's `LoadBalancer` Service an address. Without one a database never reaches ready|",
+     "|A port-forward on `127.0.0.1:18080`|The UI|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    94,
+    83,
+    87
+   ],
+   [
+    "replace",
+    94,
+    95,
+    87,
+    88,
+    [
+     " start below that."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    159,
+    88,
+    152
+   ],
+   [
+    "replace",
+    159,
+    160,
+    152,
+    153,
+    [
+     " says so and continues, and metrics stay pending."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    163,
+    153,
+    156
+   ],
+   [
+    "replace",
+    163,
+    164,
+    156,
+    157,
+    [
+     " `scripts/up.sh`."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    157,
+    158
+   ],
+   [
+    "replace",
+    165,
+    166,
+    158,
+    159,
+    [
+     "docs/deployment.md has the lab's other settings"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    174,
+    159,
+    167
+   ],
+   [
+    "replace",
+    174,
+    181,
+    167,
+    168,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    185,
+    168,
+    172
+   ],
+   [
+    "replace",
+    185,
+    186,
+    172,
+    173,
+    [
+     "|To|You need|"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    173,
+    174
+   ],
+   [
+    "replace",
+    187,
+    191,
+    174,
+    178,
+    [
+     "|Develop the UI or the adapter|Go 1.26.11+, Node.js 22.23.4, 24.22.1 or 26.12.1 or later, Docker|",
+     "|Run the lab on a laptop|See Quick start on local Kubernetes|",
+     "|Install a hub on a cluster|Kubernetes 1.27+ and a default StorageClass|",
+     "|Join an environment|`kubectl` and `helm`, plus `aws` and `eksctl` unless you pass `--local`|"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    201,
+    178,
+    188
+   ],
+   [
+    "replace",
+    201,
+    202,
+    188,
+    189,
+    [
+     "screens need the lab: a database id is `<environment>/<namespace>.<name>`, and"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    210,
+    189,
+    197
+   ],
+   [
+    "replace",
+    210,
+    220,
+    197,
+    198,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    251,
+    198,
+    229
+   ],
+   [
+    "replace",
+    251,
+    252,
+    229,
+    230,
+    [
+     "Hub on one host."
+    ]
+   ],
+   [
+    "equal",
+    252,
+    257,
+    230,
+    235
+   ],
+   [
+    "replace",
+    257,
+    265,
+    235,
+    236,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    276,
+    236,
+    247
+   ],
+   [
+    "replace",
+    276,
+    277,
+    247,
+    248,
+    [
+     "docs/deployment.md has the Secret and"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    281,
+    248,
+    252
+   ],
+   [
+    "replace",
+    281,
+    282,
+    252,
+    253,
+    [
+     "Create an environment."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    295,
+    253,
+    266
+   ],
+   [
+    "replace",
+    295,
+    296,
+    266,
+    267,
+    [
+     "plugins/pds/README.md. The repository has to be readable by the person"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    306,
+    267,
+    277
+   ],
+   [
+    "replace",
+    306,
+    307,
+    277,
+    278,
+    [
+     " it controls, and where your answer goes. Check them before you go on."
+    ]
+   ],
+   [
+    "equal",
+    307,
+    308,
+    278,
+    279
+   ],
+   [
+    "replace",
+    308,
+    310,
+    279,
+    281,
+    [
+     " pick any Team of the Organization). Pick what the app may do: read only is selected, and change, or",
+     " change and delete, are offered up to what the Organization allows."
+    ]
+   ],
+   [
+    "equal",
+    310,
+    311,
+    281,
+    282
+   ],
+   [
+    "replace",
+    311,
+    313,
+    282,
+    284,
+    [
+     " unticked until you tick them: fetch database passwords into this computer's keychain, and change",
+     " data with SQL."
+    ]
+   ],
+   [
+    "equal",
+    313,
+    314,
+    284,
+    285
+   ],
+   [
+    "replace",
+    314,
+    315,
+    285,
+    286,
+    [
+     " waits 10 minutes and can be answered once."
+    ]
+   ],
+   [
+    "equal",
+    315,
+    316,
+    286,
+    287
+   ],
+   [
+    "replace",
+    316,
+    318,
+    287,
+    289,
+    [
+     "docs/architecture.md has the details, and",
+     "docs/deployment.md what has to be reachable."
+    ]
+   ],
+   [
+    "equal",
+    318,
+    341,
+    289,
+    312
+   ],
+   [
+    "replace",
+    341,
+    342,
+    312,
+    313,
+    [
+     " hub. The other `values-*.yaml` files are the connected environment and the lab."
+    ]
+   ],
+   [
+    "equal",
+    342,
+    343,
+    313,
+    314
+   ],
+   [
+    "replace",
+    343,
+    344,
+    314,
+    315,
+    [
+     " validates every variable; `.env.example` shows the common ones."
+    ]
+   ],
+   [
+    "equal",
+    344,
+    345,
+    315,
+    316
+   ],
+   [
+    "replace",
+    345,
+    348,
+    316,
+    319,
+    [
+     " that is off answers 501 and disappears from the UI. `mcp` is the exception:",
+     " it hides the AI agents page (`/agents`) and turns off the agent sign in",
+     " endpoints, which answer 404."
+    ]
+   ],
+   [
+    "equal",
+    348,
+    349,
+    319,
+    320
+   ],
+   [
+    "replace",
+    349,
+    352,
+    320,
+    323,
+    [
+     " operators and PMM are pinned together in `charts/pds/compatibility.yaml`.",
+     " Only a fresh install of the pin is supported; see",
+     " docs/compatibility.md."
+    ]
+   ],
+   [
+    "equal",
+    352,
+    356,
+    323,
+    327
+   ],
+   [
+    "replace",
+    356,
+    358,
+    327,
+    329,
+    [
+     " set. An identity with no membership is refused unless signup is on",
+     " (`SIGNUP_ENABLED`, see docs/deployment.md). Keep the UI on a network you trust."
+    ]
+   ],
+   [
+    "equal",
+    358,
+    359,
+    329,
+    330
+   ],
+   [
+    "replace",
+    359,
+    361,
+    330,
+    332,
+    [
+     " connected environment to the control plane's release at your own risk; see",
+     " docs/compatibility.md."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    365,
+    332,
+    336
+   ],
+   [
+    "replace",
+    365,
+    372,
+    336,
+    337,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    373,
+    337,
+    338
+   ],
+   [
+    "replace",
+    373,
+    375,
+    338,
+    339,
+    [
+     "Apache License 2.0. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

@@ -3416,5 +3416,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6f7712eae3f7": {
+  "identity": {
+   "one_liner": "本地优先的编码代理记忆 MCP 服务器，单二进制加单个 SQLite 文件",
+   "review": "palace-rs 是 Rust 编写的 MCP 服务器，为编码代理提供跨会话记忆：按 wing/room/drawer 层级存储原文文本，结合 BM25 与本地嵌入检索，附时间戳知识图谱与代理日记。嵌入由 ONNX Runtime 在 CPU 上运行，无需 API 密钥或云服务。提供 palace install 自动接入 Claude Code、Cursor 等客户端；macOS Intel 平台不受支持，Linux 需 glibc 2.39+。",
+   "highlights": [
+    "检索融合 BM25 关键词评分与本地嵌入余弦相似度，支持意图分类与可选本地 cross-encoder 重排",
+    "嵌入模型运行于 ONNX Runtime，默认 all-MiniLM-L6-v2 int8，可在多模型间迁移并带回滚",
+    "每个结果附带来源引用；提供 CLI（doctor/init/search）与 palace_embeddings 等 MCP 工具"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、Cursor 等代理在会话间保存决策、修复记录、命令与偏好",
+    "在终端用 palace search 查询项目历史决策与上下文",
+    "通过 creative/personal 配置用于世界观构建、小说、笔记等非软件项目场景"
+   ]
+  },
+  "sha": "6f7712eae3f7",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab820816cd4e": {
+  "identity": {
+   "one_liner": "基于 PHP 8.1+ 和 SQLite 的开源 CMS，页面以静态 HTML 文件输出，人类与 AI 代理通过 MCP 共同编辑",
+   "review": "AgeCMS 是一个以 PHP 8.1+ 与 SQLite 构建的免费 CMS（Apache 2.0 许可），无外部依赖，页面以静态 HTML 文件形式由 Web 服务器直接输出。管理员可在页面上一键编辑，AI 代理则通过 MCP 网关（JSON-RPC 2.0、Bearer 令牌）访问，所有修改写入带 SHA-256 链的修订日志，并内置超 15% 页面/日的熔断回滚机制与 Telegram 通知。适合希望让 AI 代理参与站点维护、且需要在 Debian/Ubuntu 服务器或无 SSH 虚拟主机上部署的用户。",
+   "highlights": [
+    "提供 MCP 网关（POST /admin/mcp.php，JSON-RPC 2.0、Bearer 令牌、角色权限），代理凭一次性代码换取令牌，指令位于 /AGENT.md",
+    "修订记录以 RFC 6902 补丁存储，含 SHA-256 链与 SQLite 触发器禁止修改/删除，支持一键回滚；超过每日 15% 页面（且≥3 页）的代理修改自动回滚并冻结",
+    "Shadow Cache：页面写入 assets/cache/<slug>.html，由 nginx/Apache 直接输出，无需 PHP；并包含 TOTP 双因素登录、CSRF 防护、Ed25519 签名模块、WebP/AVIF 图片压缩、FTS5 全文搜索"
+   ],
+   "use_cases": [
+    "在 Debian/Ubuntu 服务器上一条命令部署站点（install.sh 自动安装 PHP、nginx/Apache、Let's Encrypt 证书并启用夜间备份）",
+    "让 AI 代理以受控方式编辑网站内容：一次性授权码、独立令牌与角色、修订日志回滚、超限熔断与 Telegram 通知",
+    "无 SSH 的共享虚拟主机：通过 FTP 上传文件并在 install.key 写入密钥后经三步向导安装"
+   ]
+  },
+  "sha": "ab820816cd4e",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a80e60e68037": {
+  "identity": {
+   "one_liner": "OpenCode V1/V2 插件，用于 AI 代理任务的定时调度与工作流编排",
+   "review": "agent-steward 是一个 OpenCode 插件，用于调度和编排 AI 代理任务，支持 cron、单次运行、DAG 依赖管线、矩阵构建和质量门控，历史记录存入本地 SQLite 并提供本地 Web 仪表盘。面向使用 OpenCode（V1 ≥ 1.18.29 或 V2）且需 Node.js 22.22+ 的用户；V1/V2 的配置键不同（plugin/plugins），GUI 和 RPC 仅 V2 支持，cron 与单次任务注册到系统原生调度器，可在 OpenCode 未运行时触发。MIT 许可，无遥测与账户。",
+   "highlights": [
+    "支持 cron 表达式、单次运行、git 提交/文件变更/MCP 事件/Webhook 触发，cron 与单次任务注册到 Windows Task Scheduler、launchd、crontab 等原生系统调度器",
+    "提供 dependsOn DAG 依赖、成功/错误链式任务、矩阵扇出（并行/顺序、并发限制、聚合任务）和质量门控命令",
+    "包含 34 个代理工具、SQLite 运行历史、Prometheus /metrics 与 OTLP 导出、本地 Web 仪表盘（14 天分析、CSV/JSON 导出）"
+   ],
+   "use_cases": [
+    "通过自然语言向代理注册定时任务，如每日总结 git 提交并生成报告",
+    "将多仓库的代理作业编排为带依赖和并发控制的 DAG 管线或矩阵构建",
+    "需要质量门控、重试、超时硬终止、运行历史与本地可观测性的代理作业运维场景"
+   ]
+  },
+  "sha": "a80e60e68037",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

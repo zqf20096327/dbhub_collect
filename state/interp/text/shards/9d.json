@@ -3379,5 +3379,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6c059b2065e3": {
+  "identity": {
+   "one_liner": "自托管的好友群聊服务器，含文字/语音房间与文件分享",
+   "review": "Linger 是一个自托管聊天应用，由一人运行服务器（单个二进制文件加一个 SQLite 数据库），好友安装客户端连接，用于文字房间、语音房间、私信和文件分享。技术栈为 Rust、Tauri 2 和 React，语音经 WebRTC 走服务器中转。它不支持联邦和账号互通，也未做端到端加密，服务器运行者可读取其上的数据；许可证为 AGPL-3.0。",
+   "highlights": [
+    "提供文字房间、语音房间、私信、好友列表和最大 500 MB 的文件上传，语音房间最多 60 人同时讲话，支持桌面屏幕共享",
+    "服务端由单个二进制文件和一个 SQLite 数据库加上传目录组成，可备份与迁移；应用内可导出公开房间与自己的私信（含文件）为浏览器可打开的格式",
+    "上传的图片与视频剥离 EXIF（含 GPS），无遥测或崩溃报告；支持 Windows、Linux、Android 和 iPhone 客户端，macOS 需从源码构建"
+   ],
+   "use_cases": [
+    "由一人搭建服务器供小型熟人圈子使用，替代商业化聊天平台",
+    "好友间进行语音聊天、屏幕共享和文件、媒体分享",
+    "希望服务器数据（单文件 SQLite 与上传目录）可自行备份、迁移或导出的场景"
+   ]
+  },
+  "sha": "6c059b2065e3",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "455a0f585023": {
+  "identity": {
+   "one_liner": "基于 Wails 与 SQLite 的桌面乐谱管理器，支持 PDF/Guitar Pro/MusicXML 查看与播放。",
+   "review": "HAYA-TAB 是一款桌面乐谱管理应用，用于集中整理、查看和播放 PDF、Guitar Pro、MusicXML 文件。内置 PDF 阅读器与 AlphaTab 播放器，支持非破坏性批注、段落循环、变速、自动滚动及 WebDAV 云同步。macOS 版本未经 Apple 开发者证书签名，需手动放行才能运行。",
+   "highlights": [
+    "支持 PDF、Guitar Pro（.gp/.gp5/.gpx）、MusicXML 格式的库内搜索与管理",
+    "PDF 支持自动滚动与非破坏性批注层；乐谱文件经 AlphaTab 实现播放、循环与变速",
+    "支持 WebDAV 远程库浏览、按需流式读取、离线下载与元数据同步，并可映射 MIDI 脚踏控制器"
+   ],
+   "use_cases": [
+    "吉他手或乐手集中管理本地与云端的乐谱文件库",
+    "练习时需要批注 PDF 乐谱、播放并循环 Guitar Pro/MusicXML 段落",
+    "在多台电脑间通过 WebDAV 保持同一份乐谱库与元数据"
+   ]
+  },
+  "sha": "455a0f585023",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2e1c594601b9": {
+  "identity": {
+   "one_liner": "Rust 编写的数据库审计追踪引擎，通过触发器记录变更",
+   "review": "auditstream 是一个面向 PostgreSQL 的开源审计追踪引擎。应用代码不直接写审计行，而是由适配器在查询中附加操作者身份，数据库触发器将变更（含前后值）写入 auditstream.changes 表，CLI 负责读取并导出历史。v0.1 仅支持 PostgreSQL 15–19，MySQL 尚在评估中；禁用或删除触发器会绕过采集。适合需要在数据库层面留下操作者与变更记录的团队使用。",
+   "highlights": [
+    "通过生成的触发器捕获数据变更，记录操作者及前后值，存入 auditstream.changes 表",
+    "提供 CLI（v0.1.0）用于初始化、导出（JSONL）和触发器漂移检测（verify）",
+    "支持通过 SQL 注释、set_config 或 TypeScript SDK（Prisma/Drizzle/Node）附加操作者身份"
+   ],
+   "use_cases": [
+    "合规场景下需要记录数据库中谁改了什么及变更前后值的团队",
+    "需要导出审计历史（JSONL、按记录哈希查询）用于分析或存档的应用",
+    "通过 Prisma、Drizzle 或任意 SQL 驱动接入 Postgres 并需附加操作者信息的项目"
+   ]
+  },
+  "sha": "2e1c594601b9",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

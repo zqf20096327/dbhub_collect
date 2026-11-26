@@ -3632,5 +3632,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ee982f9d1c96": {
+  "identity": {
+   "one_liner": "连接 PostgreSQL 的 Python 接口模块，封装 C 库 libpq",
+   "review": "PyGreSQL 是一个通过封装 libpq C 库实现 Python 与 PostgreSQL 数据库交互的模块，适用于需要在 Python 中访问 PostgreSQL 的开发者。项目基于 Pascal Andre 的 PyGres95 代码发展而来，由 D'Arcy J.M. Cain 更名并维护，Christoph Zwerschke 自 3.8 版起为主要贡献者。当前版本支持 Python 3.10-3.15 和 PostgreSQL 12-19 服务端；客户端需可访问 libpq 共享库，Windows 提供预编译 wheel，其他平台经 pip 从源码构建时需要 C 编译器、Python 头文件及 libpq 头文件（pg_config）。",
+   "highlights": [
+    "封装 libpq C API，提供 Python 访问 PostgreSQL 的接口",
+    "支持 Python 3.10-3.15 与 PostgreSQL 12-19 服务端",
+    "可通过 pip 安装，Windows 提供预编译 wheel"
+   ],
+   "use_cases": [
+    "在 Python 应用中连接和操作 PostgreSQL 数据库",
+    "部署环境已具备 libpq 及编译工具链、需数据库适配器的场景",
+    "需要兼容较新 Python 版本（3.x）的 PostgreSQL 客户端开发"
+   ]
+  },
+  "sha": "ee982f9d1c96",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0f6051dbb347": {
+  "identity": {
+   "one_liner": "受 Django 启发的 Rust 实验性 Web 框架，基于 Axum，含类型化 ORM 与内置管理后台。",
+   "review": "Fexu 是一个由 16 个 crate 组成 workspace 的 Rust Web 框架，开发者通过 `#[derive(FexuModel)]` 定义类型化模型，经版本化迁移在 SQLite 或 PostgreSQL 上生成 CRUD API、OpenAPI 文档与服务端渲染管理后台。当前版本 0.2.0，README 明确标注为实验性质、未达到生产可用状态，MSRV 为 1.89，许可证为 MIT。",
+   "highlights": [
+    "提供 `#[derive(FexuModel)]` 类型化 ORM，基于 SeaQuery 生成 SQL，支持 SQLite 与 PostgreSQL 两种后端",
+    "包含迁移引擎（JSON 迁移计划、校验和、`migrate plan/up/down`）、Argon2id 认证、会话、角色权限以及服务端渲染的 Tera 管理后台",
+    "提供 CLI 工具链：`fexu new`、`generate`、`migrate`、`admin`、`dev`、`worker`、`doctor`、`check` 等命令"
+   ],
+   "use_cases": [
+    "以模型驱动方式搭建服务端渲染的 Rust Web 应用，无需单独的 JavaScript 管理后台构建",
+    "在 SQLite（无需额外服务）或 PostgreSQL 上进行带版本化迁移的模型与 API 开发",
+    "通过内置管理后台管理已注册模型的数据列表、筛选、CRUD 与关联选择"
+   ]
+  },
+  "sha": "0f6051dbb347",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

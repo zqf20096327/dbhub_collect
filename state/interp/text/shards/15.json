@@ -3607,5 +3607,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "93e99cf1ad8f": {
+  "identity": {
+   "one_liner": "通过 HBase 0.94/1.x/2.x API 访问 OceanBase 数据的 Java 客户端库",
+   "review": "该库提供 Java 客户端，使应用以 HBase API 读写 OceanBase 数据。使用前需在 OceanBase 中建表组及对应表，表中映射 HBase 表名与列族名。支持直连模式和 ODP 模式，通过 hbase-site.xml 配置连接实现类、用户名（格式为 user@tenant#cluster）、密码及路由相关参数。采用 MulanPSL-2.0 许可证。",
+   "highlights": [
+    "支持 HBase 0.94、1.x 和 2.x API 访问 OceanBase 数据",
+    "提供直连模式和 ODP 模式两种连接方式，通过 hbase-site.xml 配置切换",
+    "通过 Maven 依赖引入，当前示例版本为 1.7.0，许可为 MulanPSL-2.0"
+   ],
+   "use_cases": [
+    "现有 HBase 应用需将数据存储后端指向 OceanBase",
+    "以 HBase 表/列族模型读写 OceanBase 中的数据",
+    "在直连或经 ODP 代理方式接入 OceanBase OBKV 的场景"
+   ]
+  },
+  "sha": "93e99cf1ad8f",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "22237a984f0e": {
+  "identity": {
+   "one_liner": "以 Markdown 文件存储、带半衰期遗忘机制的 MCP 长期记忆服务器",
+   "review": "halflife-mcp 是一个通过 MCP 协议为 AI 代理提供本地长期记忆的 Python 服务器。记忆分为偏好、流程、事实、情景、轨迹五类，各自按半衰期衰减；未使用的记忆被归档而非删除，推断记忆需确认后生效，修正以取代而非覆盖的方式处理。数据以 Markdown 文件为本源，配套 SQLite 索引，支持关键词、向量与图检索。需 uv 运行，适用于 Claude Code、Cursor 等可启动 stdio 服务器的 MCP 客户端，无账户与遥测；README 说明 claude.ai 网页版因无法访问 localhost 而不可用，且 MCP 服务器无法感知对话，记忆使用依赖模型遵循指令。",
+   "highlights": [
+    "五类记忆（preference/procedural/fact/episodic/trace）按 180/365/180/30/7 天半衰期衰减，未用记忆归档而非删除",
+    "默认提供 BM25 关键词与图搜索，可选 fastembed 向量检索，通过倒数排序融合混合查询",
+    "记忆以 Markdown 文件为本源、可手工编辑，SQLite 索引可由 rebuild 命令重建；写入疑似密钥的内容会被拒绝"
+   ],
+   "use_cases": [
+    "为 Claude Code、Claude Desktop、Cursor、Zed、VS Code 等 stdio MCP 客户端添加本地持久记忆",
+    "按项目路径（归一化到 git 根目录）区分项目级与全局级记忆，供多项目开发使用",
+    "通过 CLI 命令 stats/brief/recall/maintain/rebuild 离线查看与维护记忆数据"
+   ]
+  },
+  "sha": "22237a984f0e",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

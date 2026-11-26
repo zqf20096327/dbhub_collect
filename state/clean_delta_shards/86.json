@@ -36563,5 +36563,773 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "599d7fbb00a3+2": {
+  "fn": "1321928757/dsh-mysql",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    4,
+    [
+     " MySQL connections and guarded database tools for DeepSeek Harness ",
+     " Configure connections once, choose one or more per conversation, and let your agent route each call to a selected data source."
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    4,
+    5
+   ],
+   [
+    "replace",
+    7,
+    13,
+    5,
+    9,
+    [
+     " GitHub release",
+     " GitHub stars",
+     " MIT license",
+     " DSH plugin"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    9,
+    10
+   ],
+   [
+    "replace",
+    14,
+    15,
+    10,
+    11,
+    [
+     "English | 中文"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    11,
+    12
+   ],
+   [
+    "replace",
+    16,
+    17,
+    12,
+    13,
+    [
+     "`dsh-mysql` is a profile bundle for DeepSeek Harness (DSH). It adds a settings page for multiple MySQL connections, a per-session connection picker beside the composer, and four guarded tools that every agent preset can use. No preset edits are required."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    22,
+    13,
+    18
+   ],
+   [
+    "replace",
+    22,
+    27,
+    18,
+    23,
+    [
+     "|Surface|What it provides|",
+     "|---|---|",
+     "|**Settings → MySQL 数据库**|Add, edit, delete, and test connections. Configure host, port, user, password, default database, table scope, row-write permission, and independent schema-change permission.|",
+     "|**Composer database button**|Select or deselect one or more data sources for the current session. Each click takes effect immediately; the composer pill shows the single name or a compact selected count.|",
+     "|**Agent tools + runtime context**|`mysql_tables`, `mysql_query`, `mysql_execute`, and `mysql_ddl`, plus a per-turn context snapshot listing this session's selected sources and capabilities.|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    41,
+    23,
+    37
+   ],
+   [
+    "replace",
+    41,
+    47,
+    37,
+    43,
+    [
+     "|Tool|Accepted input and behavior|",
+     "|---|---|",
+     "|`mysql_tables`|Lists columns from one selected database through `information_schema`. Pass `connectionId` when multiple sources are selected; it may be omitted when exactly one is selected. Optional `table` filtering is case-insensitive. Results respect that source's table allowlist.|",
+     "|`mysql_query`|Executes one read-only `SELECT`, `SHOW`, `DESCRIBE`/`DESC`, or `EXPLAIN` statement against one selected source. Pass `connectionId` when multiple sources are selected; it may be omitted for a single selection. Optional `?` parameters are supported. It rejects multi-statement SQL, applies the target source's table-scope check, and returns up to 2,000 serialized rows with a `truncated` flag.|",
+     "|`mysql_execute`|Executes one `INSERT`, `UPDATE`, or `DELETE` statement against one selected source. Pass `connectionId` when multiple sources are selected; it may be omitted for a single selection. Requires that target's `allowWrite: true`; DDL, transaction-control statements, multi-statement SQL, and other statement types are rejected.|",
+     "|`mysql_ddl`|Executes one `CREATE`/`ALTER`/`DROP`/`RENAME`/`TRUNCATE` statement on tables, views, or indexes in one selected source. Pass `connectionId` when multiple sources are selected; it may be omitted for a single selection. It requires that target's independent `allowDdl: true` setting; changed/deleted targets obey its allowlist and all explicit database qualifiers must match its default database. Account/privilege statements and database-level DDL are always rejected.|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    121,
+    43,
+    117
+   ],
+   [
+    "replace",
+    121,
+    123,
+    117,
+    118,
+    [
+     " Update or install from a local checkout "
+    ]
+   ],
+   [
+    "equal",
+    123,
+    136,
+    118,
+    131
+   ],
+   [
+    "delete",
+    136,
+    138,
+    131,
+    131
+   ],
+   [
+    "equal",
+    138,
+    153,
+    131,
+    146
+   ],
+   [
+    "replace",
+    153,
+    154,
+    146,
+    147,
+    [
+     "MySQL settings page"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    157,
+    147,
+    150
+   ],
+   [
+    "replace",
+    157,
+    158,
+    150,
+    151,
+    [
+     "Add MySQL connection form"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    163,
+    151,
+    156
+   ],
+   [
+    "replace",
+    163,
+    164,
+    156,
+    157,
+    [
+     "Composer without a selected database connection"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    167,
+    157,
+    160
+   ],
+   [
+    "replace",
+    167,
+    168,
+    160,
+    161,
+    [
+     "Per-session database connection picker"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    171,
+    161,
+    164
+   ],
+   [
+    "replace",
+    171,
+    172,
+    164,
+    165,
+    [
+     "Selected connection in conversation context"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    175,
+    165,
+    168
+   ],
+   [
+    "replace",
+    175,
+    176,
+    168,
+    169,
+    [
+     "MySQL query result"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    181,
+    169,
+    174
+   ],
+   [
+    "replace",
+    181,
+    190,
+    174,
+    183,
+    [
+     "|Guardrail|What is enforced|Important boundary|",
+     "|---|---|---|",
+     "|Statement type|`mysql_query` accepts read statements; `mysql_execute` accepts only `INSERT`/`UPDATE`/`DELETE`; `mysql_ddl` accepts the supported table/view/index schema changes.|The tool layer is not a general SQL console.|",
+     "|Row-write permission|`mysql_execute` requires the selected connection's `allowWrite` flag.|Per connection, default off, with a separate risk acknowledgement.|",
+     "|Schema-change permission|`mysql_ddl` requires the independent `allowDdl` flag; changed/deleted targets obey the allowlist, and explicit database qualifiers must match the default database.|Default off with a separate acknowledgement; account/privilege and database-level statements stay refused.|",
+     "|Multi-statement SQL|Multiple statements and transaction/control statements are rejected.|Schema changes are issued one statement per call.|",
+     "|Table allowlist|Checks table references detected after `FROM`, `JOIN`, `UPDATE`, and `INTO`. An empty list means no configured table restriction.|This is a lexical check, not a full SQL parser. Forms such as `DESCRIBE t` or `SHOW CREATE TABLE t` do not use those reference keywords; combine the allowlist with database-level grants.|",
+     "|Result size|The serialized tool response contains at most 2,000 rows and reports `truncated: true` when rows were omitted.|The query is fetched before the response is truncated; this is not a server-side scan or network limit.|",
+     "|Credential exposure|Passwords are stored in local `connections.json`; the browser receives only `hasPassword`.|Query results, schema, and tool arguments are still sent to the configured LLM provider.|"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    209,
+    183,
+    202
+   ],
+   [
+    "replace",
+    209,
+    213,
+    202,
+    203,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    230,
+    203,
+    220
+   ],
+   [
+    "replace",
+    230,
+    232,
+    220,
+    221,
+    [
+     " The database button is missing "
+    ]
+   ],
+   [
+    "equal",
+    232,
+    235,
+    221,
+    224
+   ],
+   [
+    "replace",
+    235,
+    239,
+    224,
+    225,
+    [
+     " “No MySQL connection is configured” or “this session has not selected a connection” "
+    ]
+   ],
+   [
+    "equal",
+    239,
+    242,
+    225,
+    228
+   ],
+   [
+    "replace",
+    242,
+    246,
+    228,
+    229,
+    [
+     " Connection tests fail "
+    ]
+   ],
+   [
+    "equal",
+    246,
+    249,
+    229,
+    232
+   ],
+   [
+    "replace",
+    249,
+    253,
+    232,
+    233,
+    [
+     " The table list is empty "
+    ]
+   ],
+   [
+    "equal",
+    253,
+    256,
+    233,
+    236
+   ],
+   [
+    "replace",
+    256,
+    260,
+    236,
+    237,
+    [
+     " A write, DDL, multi-statement, or allowlist query was rejected "
+    ]
+   ],
+   [
+    "equal",
+    260,
+    263,
+    237,
+    240
+   ],
+   [
+    "replace",
+    263,
+    267,
+    240,
+    241,
+    [
+     " Does the browser receive my password? "
+    ]
+   ],
+   [
+    "equal",
+    267,
+    269,
+    241,
+    243
+   ],
+   [
+    "delete",
+    269,
+    271,
+    243,
+    243
+   ],
+   [
+    "equal",
+    271,
+    306,
+    243,
+    278
+   ],
+   [
+    "replace",
+    306,
+    308,
+    278,
+    279,
+    [
+     "MIT. This project is not affiliated with DeepSeek. Installing the plugin runs third-party code on your machine; review the source before use."
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "7ef7cee5b6a2+2": {
+  "fn": "josephfung/curia",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Curia"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    7,
+    2,
+    3,
+    [
+     " An open-source Digital Office of the CEO — communications, scheduling, research, and knowledge work with governance-first architecture. "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    3,
+    4
+   ],
+   [
+    "replace",
+    8,
+    16,
+    4,
+    10,
+    [
+     " Version: 0.45.0",
+     " License: MIT",
+     " = 26\" />",
+     " TypeScript ESM",
+     " OpenSSF Scorecard",
+     " OpenSSF Best Practices"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    10,
+    11
+   ],
+   [
+    "replace",
+    17,
+    25,
+    11,
+    15,
+    [
+     " Website &middot;",
+     " Documentation &middot;",
+     " Contributing &middot;",
+     " Security"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    34,
+    15,
+    24
+   ],
+   [
+    "replace",
+    34,
+    35,
+    24,
+    25,
+    [
+     "||Typical Agent Framework|Curia|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    25,
+    26
+   ],
+   [
+    "replace",
+    36,
+    46,
+    26,
+    34,
+    [
+     "|**Security model**|\"Trust the agent\"|Hard-enforced layer separation — channel adapters *physically cannot* invoke tools|",
+     "|**Self-modification**|Agents can edit their own prompts, tools, and code at runtime|Agents cannot modify themselves — new skills, agents, and prompts always require human approval|",
+     "|**Audit trail**|Console.log|Append-only Postgres with causal tracing across every event|",
+     "|**Institutional memory**|Conversation history + flat files (lost or stale across restarts)|Knowledge graph + entity memory + temporal decay (survives restarts, ages gracefully)|",
+     "|**Error handling**|Retry and hope|Error budgets, state continuity, pattern detection — agents resume, not restart|",
+     "|**Agent coordination**|Agents work in isolation|The Bullpen — structured, auditable, threaded inter-agent discussions|",
+     "|**Multi-channel**|Many channels, often without consistent security boundaries|Email, Signal, SMS, Slack, voice, web chat, CLI, HTTP API — every channel shares the same security model and audit trail|",
+     "|**Autonomy**|All or nothing|Five configurable bands — from advisory-only to fully independent, with intent drift detection|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    51,
+    34,
+    39
+   ],
+   [
+    "replace",
+    51,
+    54,
+    39,
+    40,
+    [
+     " Curia Architecture — 5 layers connected by message bus"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    40,
+    41
+   ],
+   [
+    "replace",
+    55,
+    58,
+    41,
+    42,
+    [
+     "**Full architecture guide →**"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    67,
+    42,
+    51
+   ],
+   [
+    "replace",
+    67,
+    85,
+    51,
+    52,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    91,
+    52,
+    58
+   ],
+   [
+    "replace",
+    91,
+    94,
+    58,
+    59,
+    [
+     "**Agents →** &middot; **Skills →** &middot; **Channels →** &middot; **Security →**"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    102,
+    59,
+    67
+   ],
+   [
+    "replace",
+    102,
+    103,
+    67,
+    68,
+    [
+     "**What to expect →** (who does what, time, costs, and what you'll need)"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    106,
+    68,
+    71
+   ],
+   [
+    "replace",
+    106,
+    107,
+    71,
+    72,
+    [
+     "The installer needs Docker (with the Compose plugin) and `curl`, plus credentials for one model provider. It asks which provider to use:"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    72,
+    73
+   ],
+   [
+    "replace",
+    108,
+    110,
+    73,
+    75,
+    [
+     "- **Anthropic** (the default): an Anthropic API key.",
+     "- **OpenRouter**: an OpenRouter API key. The installer then offers models for each tier, with a recommended set."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    153,
+    75,
+    118
+   ],
+   [
+    "replace",
+    153,
+    154,
+    118,
+    119,
+    [
+     "For contributing or hacking on the code. Requires Node >= 24, pnpm, and Docker (with the Compose plugin) for the Postgres container."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    161,
+    119,
+    126
+   ],
+   [
+    "replace",
+    161,
+    162,
+    126,
+    127,
+    [
+     "**→ Full installation guide** "
+    ]
+   ],
+   [
+    "equal",
+    162,
+    166,
+    127,
+    131
+   ],
+   [
+    "replace",
+    166,
+    167,
+    131,
+    132,
+    [
+     "Every published release is signed with cosign (keyless, via GitHub OIDC — no long-lived signing key). The SBOM, source tarball, and the install bundle's `SHA256SUMS` manifest each ship with a `.sigstore` bundle, verifiable against GitHub's OIDC issuer:"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    188,
+    132,
+    153
+   ],
+   [
+    "delete",
+    188,
+    190,
+    153,
+    153
+   ],
+   [
+    "equal",
+    190,
+    191,
+    153,
+    154
+   ],
+   [
+    "replace",
+    191,
+    204,
+    154,
+    155,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    205,
+    155,
+    156
+   ],
+   [
+    "replace",
+    205,
+    207,
+    156,
+    157,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

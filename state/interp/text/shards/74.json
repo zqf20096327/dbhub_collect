@@ -3187,5 +3187,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b9e86d5f1c81": {
+  "identity": {
+   "one_liner": "达梦数据库的 EF Core 提供程序，基于 EF Core 规范测试套件验收",
+   "review": "该项目为达梦（DM）数据库提供 Entity Framework Core 提供程序，原始实现，MIT 许可。单一 NuGet 包按版本号对应 EF Core 8、9、10 三条支持线，入口为 UseDm()，沿用此前提供程序的公共命名空间，迁移只需更换 PackageReference 并重编译。能力以 EF Core 规范测试套件为验收门槛，未在真实达梦实例上验证的能力标注为待验证。",
+   "highlights": [
+    "通过 dotnet add package Sharp.DM.EntityFrameworkCore 安装，仅依赖 EF Core Relational 包与 DM.DmProvider ADO.NET 驱动，均从 nuget.org 还原",
+    "按 EF Core 8/9/10 维护独立版本分支，每条线有对应包版本；EF Core 8、9 已过官方支持期，仅按需提供缺陷修复与能力回移",
+    "离线验证含构建、单元与 SQL 形状测试、迁移脚本生成、打包冒烟四步；实时验收需达梦实例，连接串经 user secrets、环境变量或参数传入"
+   ],
+   "use_cases": [
+    ".NET 应用通过 EF Core 访问达梦数据库",
+    "从既有达梦 EF Core 提供程序迁移，仅需更换一个 PackageReference 并重编译",
+    "需要基于 EF Core 规范测试套件验证达梦方言兼容性的场景"
+   ]
+  },
+  "sha": "b9e86d5f1c81",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

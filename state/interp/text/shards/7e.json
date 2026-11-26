@@ -4085,5 +4085,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1381efc281ea": {
+  "identity": {
+   "one_liner": "基于 DuckDB/SQLite 与 Apache Arrow Flight SQL 协议的 SQL 数据库服务器",
+   "review": "GizmoSQL 是一个 SQL 服务器，以 DuckDB 或 SQLite 作为查询执行后端，通过 Arrow Flight SQL 协议对外提供服务，支持 TLS/mTLS 与 JWT 认证，可通过 Docker、Homebrew、Windows MSI 或源码构建运行。README 声明项目处于维护模式，建议改用 Hardcharger。Core 版采用 Apache 2.0 许可，Enterprise 版需商业授权。",
+   "highlights": [
+    "支持 DuckDB 与 SQLite 双后端，可在启动时通过 -B 参数切换",
+    "使用 Apache Arrow Flight SQL 协议进行数据传输，内置基于 JWT 的认证与可选 TLS/mTLS",
+    "提供 JDBC、Python ADBC、CLI 客户端，并支持 SQLAlchemy、Ibis、dbt 等集成"
+   ],
+   "use_cases": [
+    "需要在容器或 Kubernetes 中部署的 SQL 服务端，供 BI 工具（Superset、Grafana、Power BI）或 Python 客户端通过 Flight SQL 访问",
+    "复用已有的 DuckDB（.duckdb）或 SQLite（.sqlite）数据库文件并对其提供网络服务",
+    "iOS 上的本地开发、学习与原型验证场景（README 注明不适用于生产负载）"
+   ]
+  },
+  "sha": "1381efc281ea",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c10ac6268276": {
+  "identity": {
+   "one_liner": "Windows 密码与机密管理器，支持文件/SQL Server 保险库与多种加密保护",
+   "review": "Crypture 将密码和敏感数据存入加密文件保险库（.cryptdb）或 SQL Server 保险库。条目可通过 Windows 用户与安全组（CNG DPAPI-NG）、证书或 FIDO2 安全密钥保护，SQL Server 保险库不支持 FIDO2 与本地作用域。分发包含 .NET 运行时，提供 x64/arm64 的 MSI 和便携 ZIP。适合 Windows 用户保存或共享机密。",
+   "highlights": [
+    "支持文本机密、富文本机密、TOTP 验证器和文件附件四类条目，文件保险库可用 FIDO2 密钥加密",
+    "证书保护支持 RSA（≥2048 位）、ECC/ECDH（P-256/384/521）及 ML-KEM（512/768/1024），并内置自签名证书生成器",
+    "内置密码生成器，长度 1–1024 可配置，支持字符类型、排除字符与相似字符选项"
+   ],
+   "use_cases": [
+    "在无 Active Directory 环境下通过证书与指定用户共享加密条目",
+    "使用 FIDO2 安全密钥或 Windows 用户/组保护文件保险库中的敏感数据",
+    "通过 SQL Server 保险库集中存储机密，并按 Windows 接收者限制数据库内访问"
+   ]
+  },
+  "sha": "c10ac6268276",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec01dbb08963": {
+  "identity": {
+   "one_liner": "面向私人导师的多租户教学管理 SaaS，Angular + ASP.NET Core + PostgreSQL 实现",
+   "review": "Talmidon 是为私人导师设计的多租户 SaaS 平台，导师可独立管理学生、课程表、教学笔记与按课时计费的收款，家长和学生各有受限的只读为主视图，并提供无需登录的公开导师目录供潜在学生筛选联系。技术栈为 Angular 21 + PrimeNG 前端、ASP.NET Core（.NET 10）+ EF Core + PostgreSQL 后端、JWT 认证与 Hangfire 后台任务。README 说明产品为希伯来语 RTL 界面，按以色列时区和犹太历设计。",
+   "highlights": [
+    "基于角色的访问控制：访客、导师、家长、学生、管理员五种角色，租户间数据隔离，笔记可见性由服务端强制",
+    "课程日历支持周期性系列课程（滚动 8 周生成独立课时），生成时用 .NET HebrewCalendar 跳过犹太节日",
+    "按课时计费、付款与课时提醒后台任务（Hangfire），月度收入与出勤报告可导出带 UTF-8 BOM 的 CSV"
+   ],
+   "use_cases": [
+    "私人导师独立管理排课、教学记录与收款",
+    "家长和学生查看课表、共享笔记与学习资料",
+    "为以色列地区的家教业务提供含犹太历感知的排课与计费流程"
+   ]
+  },
+  "sha": "ec01dbb08963",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

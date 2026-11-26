@@ -3878,5 +3878,70 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3aff6a481c86": {
+  "identity": {
+   "one_liner": "Ballerina CDC 库的 PostgreSQL 驱动包，封装 Debezium 连接器依赖。",
+   "review": "该库为 Ballerina CDC 库提供支撑，打包了 Debezium PostgreSQL 连接器所需的驱动依赖，使 Ballerina 项目能够监听 PostgreSQL 数据库的变更数据。使用时只需在项目中导入 cdc 模块和本模块即可，无需额外配置。当前兼容 Ballerina 2201.12.0 和 Debezium Postgres Driver 3.5.1.Final。",
+   "highlights": [
+    "打包 Debezium PostgreSQL 连接器依赖，供 Ballerina CDC 库使用",
+    "导入后即可使用，无需额外配置",
+    "兼容 Ballerina 2201.12.0 与 Debezium Postgres Driver 3.5.1.Final"
+   ],
+   "use_cases": [
+    "在 Ballerina 项目中监听 PostgreSQL 数据库的变更数据（CDC）",
+    "为基于 Ballerina CDC 库的集成流程提供 PostgreSQL 驱动依赖"
+   ]
+  },
+  "sha": "3aff6a481c86",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5bcd85e2a02a": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 Python 任务队列，用 fork 子进程隔离任务执行。",
+   "review": "pq 是一个以 Postgres 为后端的 Python 任务队列，借助 SELECT ... FOR UPDATE SKIP LOCKED 实现任务抢占，无需额外 broker。任务在 fork 出的子进程中运行，子进程崩溃不影响 worker。要求 Python 3.13+ 与 Postgres。注意它不做自动重试，失败任务需按 failure_kind 自行筛选重跑；Linux 上 worker 死亡会终止任务进程，其他系统则可能跑完。",
+   "highlights": [
+    "支持事务内入队、五级优先级、定时任务（timedelta 间隔与 cron 表达式）、延迟执行、取消与按 client_id 的 upsert 去重",
+    "每个任务在 fork 子进程中运行并提供 pre_execute/post_execute 生命周期钩子，支持 max_runtime 超时终止与优先级专用 worker",
+    "通过 worker 心跳租约（15 秒续期、60 秒过期）与 stale reaper 检测死 worker 和僵死任务"
+   ],
+   "use_cases": [
+    "已运行 Postgres 的应用需要后台任务处理且不想额外部署 Redis/RabbitMQ",
+    "需要入队与业务写入在同一事务中保证一致性的场景",
+    "需要周期任务、防抖更新或自续任务的批处理流程"
+   ]
+  },
+  "sha": "5bcd85e2a02a",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d43846043d7b": {
+  "identity": {
+   "one_liner": "TiDB SQL 语法定义库，供 Breeze Studio 生成与执行 DDL 语句",
+   "review": "该项目为 Breeze Studio 提供 TiDB SQL 语法定义文件，每个文件描述一类语句族，用 CASE 标记 Studio Runner 可准备、预览与执行的变体，可用性受权限、服务器版本和目标状态约束。内容涵盖数据库、表、列、索引、约束、分区、视图 DDL 及账号管理、授权和表维护。需从 Studio 检出中初始化子模块，运行 pnpm build:snf 生成 JSON 与站点资源。",
+   "highlights": [
+    "覆盖数据库、表、列、索引、约束、分区、视图 DDL，以及账号管理、授权与表维护语句",
+    "通过 CASE 标识 Studio Runner 可准备、预览和执行的语句变体",
+    "编辑 .snf 源文件后由构建生成对应的 .snf.json 文件及 /tidb 站点资源"
+   ],
+   "use_cases": [
+    "为 Breeze Studio 补充或扩展 TiDB SQL 语句模板",
+    "在 Studio 中预览和执行 TiDB DDL、账号管理与授权语句",
+    "维护与 TiDB SQL 参考文档对应的语法定义源文件"
+   ]
+  },
+  "sha": "d43846043d7b",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

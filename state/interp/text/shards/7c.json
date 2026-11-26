@@ -3208,5 +3208,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bc8436533b83": {
+  "identity": {
+   "one_liner": "运行于 DeepSeek Harness 的红队测试智能体编排插件，含本机 SQLite 事实库。",
+   "review": "该项目是一个运行在 DeepSeek Harness 中的插件，用于组织已授权红队测试流程：按信息收集、资产梳理、漏洞发现、漏洞利用、内网收集与渗透的顺序调度 7 个角色，资产、凭据、证据等数据写入本机 SQLite。要求 Node.js ≥ 22.13，仅限已获书面授权的攻防演练场景使用，攻击工具需使用者自行准备。",
+   "highlights": [
+    "包含 63 个工具、41 个技能和 7 个角色，主会话负责计划与派活，执行角色为叶子节点不再向下委派",
+    "资产、端口、漏洞、凭据、WebShell、证据截图等数据写入本机 SQLite，面板与报告共用同一份数据，无遥测或云端同步",
+    "右侧控制台提供态势、资产、成果、报告、资源五个分区共 9 个页面，面板跟随当前会话绑定的靶标"
+   ],
+   "use_cases": [
+    "已获书面授权的攻防演练中对指定靶标单位按阶段组织渗透测试流程",
+    "以单个资产为单位逐项执行漏洞发现与深挖，跟踪内网覆盖度并生成可复现交付报告",
+    "在专供演练的 Kali 虚拟机中记录资产、战果、得分与证据，交付前核对清理台账"
+   ]
+  },
+  "sha": "bc8436533b83",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c09816504ab": {
+  "identity": {
+   "one_liner": "自托管的构建产物与包仓库，支持 UPack、OCI、npm、Git LFS 协议与大文件分块传输。",
+   "review": "Arkvory 是部署在自有服务器上的制品仓库，用于存储构建产物、包、容器镜像和大文件，并向部署代理、CI/CD 流水线和开发者分发。它提供 HTTP API、命令行客户端和 TypeScript SDK，兼容 OCI registry、Git LFS 和 npm 协议。核心版本免费，去重与增量传输功能为付费的 Pro 模块；HA 集群仅限 Linux 单站点部署，S3 存储未实现。",
+   "highlights": [
+    "分块上传可在断线或重启后继续，下载支持 HTTP Range 续传，单个对象约最大 10 TiB，文件以 SHA-256 校验",
+    "实现 OCI registry、Git LFS 服务器和 npm registry 协议，支持 Docker、Podman、Helm、Unity Package Manager 等客户端",
+    "提供构建阶段标记与晋升、保留策略、配额、定时备份、只读镜像，以及基于 DRBD/Pacemaker 的双或三节点高可用集群"
+   ],
+   "use_cases": [
+    "存储 CI/CD 流水线产出的构建文件，供部署代理按版本范围获取最新 release 构建",
+    "作为 Docker/Podman 镜像仓库或 Git LFS 服务器，管理游戏项目（Unity/Unreal）的大资产文件",
+    "在自有服务器上托管 npm/Unity 包的私有 scoped registry"
+   ]
+  },
+  "sha": "2c09816504ab",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "544ad0d816e6": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的加密复式记账 CLI，内置 MCP 服务器",
+   "review": "Beankeeper 提供 bk 命令行工具与 Rust 库，以 SQLCipher 加密的 SQLite 存储复式账簿，通过 MCP 服务器供 AI Agent 记账、查询与出报告。核心机制包括：拒绝不平衡分录、--reference 幂等防重、触发器防篡改审计链、agent token 与细粒度授权（ledger/read、post 等）。防篡改校验不构成外部信任锚；强制认证默认关闭。",
+   "highlights": [
+    "复式记账写入须通过验证，借贷款项与币种在保存点内校验，不平衡交易返回 VALIDATION 错误码",
+    "--reference 参数按公司唯一去重，重试记账不会产生重复交易，冲突时可返回原交易 ID 或以 --on-conflict skip 跳过",
+    "JSON 输出统一信封格式，金额保留整数最小单位并附十进制字符串，支持 meta.pagination 分页"
+   ],
+   "use_cases": [
+    "让 AI Agent 通过 MCP 或 CLI 代管个人或小企业账簿，同时依赖校验机制防止生成不平衡账目",
+    "批量导入银行流水等可能失败重试的场景，利用 --reference 实现幂等写入",
+    "需要审计留痕与 agent 身份归属的记账环境，用 verify 与 audit log 核对账目完整性"
+   ]
+  },
+  "sha": "544ad0d816e6",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0eca5b0f80c6": {
+  "identity": {
+   "one_liner": "自托管的开源渗透测试报告工具，支持AI草拟与PDF/Word导出",
+   "review": "Pental Report 是一个自托管的渗透测试报告平台，用 Docker 安装并自带 PostgreSQL。面向安全测试团队，提供客户与项目（engagement）管理、测试日历、可自定义的发现字段、CVSS 3.1/4.0 打分、复查记录，以及带企业品牌（logo、配色）的 PDF/Word 报告导出。AI 草拟发现使用用户自己的 API key 和提示词。需注意 Windows 上依赖 Docker Desktop（不支持 Windows Server），且 Docker Desktop 对部分商业用途需付费订阅。",
+   "highlights": [
+    "提供 Docker 一键安装脚本（macOS/Linux/Windows），可经 Tailscale 或自有域名以 HTTPS 共享给团队",
+    "支持项目（engagement）、阶段、客户、测试日历管理，内置 22 个清单和 21 个 runbook 方法论库",
+    "发现条目支持自定义字段（十种样式）、CVSS 3.1 与 4.0 评分、复查（retest）记录，可导出带品牌的 PDF/Word 报告"
+   ],
+   "use_cases": [
+    "渗透测试公司集中管理多个客户项目的发现并生成带企业品牌的交付报告",
+    "测试团队通过 Tailscale 内网协作撰写发现，不暴露到公网",
+    "按 OSSTMM、PTES、OWASP WSTG/ASVS 等框架清单逐项执行测试并记录证据"
+   ]
+  },
+  "sha": "0eca5b0f80c6",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fce22694164b": {
+  "identity": {
+   "one_liner": "基于 Go 与 mygo 的本地优先桌面数据库客户端，单可执行文件支持四类数据源",
+   "review": "DB-G 是一个本地运行的桌面 SQL 客户端，使用 Go 与 mygo 框架实现，无需 Java 或 Electron 运行时。它支持 SQLite、MySQL、PostgreSQL 和 ClickHouse（只读）四类数据源，提供对象树、SQL 编辑、结果编辑、导出、执行计划与 AI 辅助功能，通过 Release 提供的 Windows 与 Linux 安装包运行。",
+   "highlights": [
+    "单个可执行文件支持 SQLite、MySQL、PostgreSQL、ClickHouse 四类数据源，共用对象树、补全、结果表格与导出流程",
+    "元数据按页加载并带 24 小时磁盘缓存，连接密码采用 AES-256-GCM 本机加密，日志自动脱敏且无遥测",
+    "支持 Ctrl+双击编辑结果单元格（单事务提交）、执行计划树展示，以及基于 Ollama 或 OpenAI 兼容服务的 AI 助手/补全/修复"
+   ],
+   "use_cases": [
+    "需要在本机管理多种数据库连接、执行查询与导出数据的开发与运维人员",
+    "需要在无 Java/Electron 运行时的 Windows 或 Linux 桌面环境使用 SQL 客户端的场景",
+    "需要在断网或本机优先环境下处理 SQLite 文件或远程数据库连接的场景"
+   ]
+  },
+  "sha": "fce22694164b",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

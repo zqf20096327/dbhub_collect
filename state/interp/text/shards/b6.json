@@ -3342,5 +3342,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bfbbb30b9f75": {
+  "identity": {
+   "one_liner": "asyncmy 是基于 Cython 协议核心的 asyncio MySQL/MariaDB 驱动",
+   "review": "asyncmy 是面向 Python 3.10+ 的 asyncio MySQL/MariaDB 驱动，提供与 aiomysql 相同的 API 和游标类型，协议核心用 Cython 实现。支持服务端预编译语句（二进制协议）、内置连接池、binlog 复制流、类型存根及轮换凭据回调。默认 autocommit=False 且 stmt_cache_size=0，二进制协议下 FLOAT 列返回精确存储值，相关性能数据由 README 自带的基准测试提供。",
+   "highlights": [
+    "保持 aiomysql 兼容 API（含 DictCursor、SSCursor 及连接池语义），提供 create_pool 连接池",
+    "支持服务端预编译语句与 stmt_cache_size 透明缓存模式，不可预编译的查询自动回退文本协议",
+    "实现 asyncio 上的 MySQL 复制协议（BinLogStream），提供 password_creator 凭据轮换与 query_callback 语句日志"
+   ],
+   "use_cases": [
+    "在 asyncio 应用中替代 aiomysql 访问 MySQL/MariaDB 而无需改动调用代码",
+    "需要订阅 MySQL/MariaDB binlog 变更的异步数据同步场景",
+    "使用 AWS RDS IAM 等短期令牌的连接池场景，或需语句耗时回调做 SQL 日志监控"
+   ]
+  },
+  "sha": "bfbbb30b9f75",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

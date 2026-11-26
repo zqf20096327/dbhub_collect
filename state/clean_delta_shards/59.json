@@ -44417,5 +44417,1955 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "6457d89980fe+2": {
+  "fn": "cdmx-in/kera",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Kera: a self-hosted AI chat for teams"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    3,
+    [
+     "**Self-hosted AI chat for teams.** "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    9,
+    3,
+    5
+   ],
+   [
+    "replace",
+    9,
+    14,
+    5,
+    10,
+    [
+     "ci",
+     "License: Apache-2.0",
+     "Go",
+     "Postgres",
+     "Docker image"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    10,
+    11
+   ],
+   [
+    "replace",
+    15,
+    16,
+    11,
+    12,
+    [
+     "🚀 Quick start · 💡 Why Kera · ⚖️ Comparison · ✨ Features · 📸 Screenshots · 🧩 Architecture · 🔎 How it answers · 📚 Docs · 💬 Discussions"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    12,
+    13
+   ],
+   [
+    "replace",
+    17,
+    22,
+    13,
+    14,
+    [
+     " Animated demo: an assistant searches a knowledge collection and answers with cited sources, then the Cowork task list with a finished task and its output file, the scheduled tasks with one failed run, and the admin settings tabs"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    14,
+    17
+   ],
+   [
+    "replace",
+    25,
+    26,
+    17,
+    18,
+    [
+     "It is for a team that wants its own AI chat on its own server, with sign-in, groups, access control, an audit trail and spend per person. It is not a desktop or mobile app, and the interface is in English only (see Status and limits)."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    18,
+    19
+   ],
+   [
+    "delete",
+    27,
+    28,
+    19,
+    19
+   ],
+   [
+    "equal",
+    28,
+    38,
+    19,
+    29
+   ],
+   [
+    "replace",
+    38,
+    39,
+    29,
+    30,
+    [
+     "Open http://localhost:8080 and sign in with that email and the printed password. That is the first admin; add the others in Admin > Users (email, name, role, initial password), and everyone can change their own password under Settings > Account. After the first start, delete the two `KERA_ADMIN_` lines from `.env`: Kera uses them only while it has no users. Lost the password? `docker compose exec kera kera user login-link you@example.com` prints a one-time sign-in link (it needs shell access to the server, so it is safe). For a team, add a Google or OIDC provider in Admin > Settings; password sign-in then switches itself off unless you keep it on. Details and the risks of a password in `.env`: docs/deploy.md."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    30,
+    31
+   ],
+   [
+    "replace",
+    40,
+    41,
+    31,
+    32,
+    [
+     "The compose file expects Ollama on the host at port 11434. No Ollama? Name the profile in the first command, `KERA_ADMIN_EMAIL=you@example.com ./init.sh ollama`, and the stack gets an Ollama server with a small chat and embedding model (about 6 GB to download once). Want LiteLLM in front of your models, with the spend log wired to Admin > Spend? `./init.sh ollama litellm`. `init.sh` writes `.env` once and leaves an existing one alone. HTTPS, backups and troubleshooting: docs/deploy.md."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    32,
+    33
+   ],
+   [
+    "replace",
+    42,
+    43,
+    33,
+    34,
+    [
+     "The stack also runs the extraction service next to Kera and points Kera at it, so PDF, DOCX, PPTX and ODT uploads and OCR of scanned pages work with no further step. It costs about 33 MB of memory and an image download of about 113 MB; docs/deploy.md says how to turn it off or add OCR languages."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    34,
+    37
+   ],
+   [
+    "replace",
+    46,
+    47,
+    37,
+    38,
+    [
+     "|Works after the quick start|Needs a service you start yourself|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    38,
+    39
+   ],
+   [
+    "replace",
+    48,
+    52,
+    39,
+    43,
+    [
+     "|Chat with Ollama or any OpenAI-compatible model, Markdown, citations, folders, temporary chats|Reranking: the rerank sidecar|",
+     "|Knowledge from PDF, DOCX, PPTX, ODT, text, HTML and spreadsheet files, OCR of scanned pages (English; more languages are an image rebuild), hybrid search, groups and access grants, guardrails, config as code|Code interpreter: a Jupyter server you run, set in `code_interpreter.url`|",
+     "|Web search (DuckDuckGo by default; SearXNG with `./init.sh searxng`, or Brave, in settings), OpenAPI and MCP tool servers, pipelines, directory sync|Cowork tasks that drive a desktop: the desktop sidecar. Scheduled Cowork tasks are on for admins and off for other users until you turn on `features.cowork_schedule`|",
+     "|Spend per user with `./init.sh litellm`||"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    64,
+    43,
+    55
+   ],
+   [
+    "delete",
+    64,
+    65,
+    55,
+    55
+   ],
+   [
+    "equal",
+    65,
+    67,
+    55,
+    57
+   ],
+   [
+    "replace",
+    67,
+    68,
+    57,
+    58,
+    [
+     "- 🪶 **Small to run.** One Go binary and Postgres with pgvector, plus a small stateless service that reads documents in the Compose stack. There is no Redis, vector database, document store or queue to look after, and the binary has nine direct Go dependencies. Measured idle on a small stack: Kera about 20 MB of memory (more for a moment during a burst of sign-ins), its Postgres about 50 MB, the document service about 33 MB (docs/deploy.md)."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    74,
+    58,
+    64
+   ],
+   [
+    "replace",
+    74,
+    75,
+    64,
+    65,
+    [
+     "How it differs from Open WebUI, LibreChat, AnythingLLM and Onyx, row by row and with sources, is in docs/comparison.md. Most of the features below exist in those projects too; the difference is the footprint, the licence, and having guardrails, spend and knowledge sync in the base install. If you want one container and no database, some of them start with less than Kera does."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    65,
+    66
+   ],
+   [
+    "delete",
+    76,
+    77,
+    66,
+    66
+   ],
+   [
+    "equal",
+    77,
+    80,
+    66,
+    69
+   ],
+   [
+    "replace",
+    80,
+    81,
+    69,
+    70,
+    [
+     "- 👥 **Team management.** Email and password, Google or any OIDC sign-in, groups, per-resource access grants, personal API keys, and an OpenAI-compatible API. A subset of the Open WebUI HTTP API is served as well, so existing scripts and clients keep working (docs/compat)."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    86,
+    70,
+    75
+   ],
+   [
+    "replace",
+    86,
+    87,
+    75,
+    76,
+    [
+     "- **Scheduled tasks.** A step-by-step wizard (goal, assistant, apps, schedule, review) starts a Cowork task or saves it with a timetable (hourly, daily, weekdays, weekly); the server runs it by itself as you, with your connected apps. A read-only test run on the last step shows what it would do before anything is scheduled. Each run is a normal task, and the task keeps notes from run to run (see docs/cowork.md)."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    89,
+    76,
+    78
+   ],
+   [
+    "replace",
+    89,
+    92,
+    78,
+    81,
+    [
+     "- 🧾 **Audit log.** Who did what and when: sign-ins, admin changes, stored secrets, pipelines and sharing, one plain sentence per event under Admin > Audit, with filters, a CSV export and a retention setting. Names of what changed are kept, values never are (see docs/audit.md).",
+     "- 🔗 **Integrations.** Scheduled directory sync from Google Workspace: users come in, departments become groups, and suspended or deleted users are disabled (see docs/integrations.md).",
+     "- 🔄 **Pipelines.** Keep a knowledge collection in sync with a source on a schedule, from your own script or with one command. A flow view shows each run step by step, with its logs and errors (see docs/pipelines.md). Or let Kera run the script too: the Compose stack includes a runner, so a timetable, a notebook editor and checks work with no setup (docs/kera-run-pipelines.md)."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    94,
+    81,
+    83
+   ],
+   [
+    "delete",
+    94,
+    97,
+    83,
+    83
+   ],
+   [
+    "equal",
+    97,
+    101,
+    83,
+    87
+   ],
+   [
+    "replace",
+    101,
+    186,
+    87,
+    88,
+    [
+     " A chat in which the assistant searched the product docs, then answered with a heading, bullets, a table, numbered citations and a sources button"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    88,
+    89
+   ],
+   [
+    "replace",
+    187,
+    188,
+    89,
+    90,
+    [
+     " Chat. The assistant searches the knowledge, answers in Markdown and cites its sources. "
+    ]
+   ],
+   [
+    "equal",
+    188,
+    189,
+    90,
+    91
+   ],
+   [
+    "replace",
+    189,
+    218,
+    91,
+    92,
+    [
+     " A knowledge collection called Product docs with five indexed Markdown files"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    219,
+    92,
+    93
+   ],
+   [
+    "replace",
+    219,
+    220,
+    93,
+    144,
+    [
+     " Knowledge. A collection of files, indexed for hybrid search. ",
+     "",
+     " The Workspace models page listing six assistant presets as cards with their knowledge and tool counts",
+     "",
+     " Assistants. Presets with their own prompt, tools and knowledge. ",
+     "",
+     " The Cowork task list with tasks that are running, waiting for input, done and failed",
+     "",
+     " Cowork. Tasks that run on their own, finish, or wait for an answer. ",
+     "",
+     " A finished Cowork task with its expanded step timeline and the Markdown file it produced in the Outputs panel",
+     "",
+     " A finished task. Its steps, its report and the file it produced. ",
+     "",
+     " The Scheduled tab with five scheduled tasks, their next and last runs, and one failed run with its reason",
+     "",
+     " Scheduled tasks. A timetable per task, and the reason when a run fails. ",
+     "",
+     " Admin settings on the Guardrails tab with personal data, prompt injection and blocklist options",
+     "",
+     " Admin. Settings, here the guardrails every model call goes through. ",
+     "",
+     " The Pipelines page with five pipelines in different states: failed, late, warning, never run and OK, each with its last run",
+     "",
+     " Pipelines. Collections kept in sync with their sources, and which runs failed or are late. ",
+     "",
+     " A failed pipeline run with the error in plain words and the last log lines, above the flow of steps with the build step in red",
+     "",
+     " A failed run. The flow of steps, the step that broke and why. ",
+     "",
+     "**Pipelines up close.** A scratch workspace with five invented pipelines whose scripts really ran on two runners: run times, a run that waited for a runner, the step that failed. More screens, and where each timing shows up, are in Pipelines in pictures.",
+     "",
+     " The Pipelines page with five pipelines: Invoice check failed, Nightly report with a warning, Knowledge base refresh running, Docs sync and Ticket digest OK, each with its timetable, next run and last run",
+     "",
+     " The list. State, timetable, next run and last run for each pipeline. ",
+     "",
+     " <a href=\"docs/pipelines.md#a-finished-run\"> ",
+     "",
+     " A finished Docs sync run: Finished OK in 1 min 35 s, a progress bar with four green segments, and a step waterfall with four steps and their durations",
+     " </a>",
+     "",
+     " A finished run. Total time, the usual time, and how long each step took. ",
+     "",
+     " A Knowledge base refresh run in progress: Running, step 2 of 4, an elapsed clock at 2 min 23 s, and the open step with a striped bar and a growing log",
+     "",
+     " A run in progress. The elapsed clock, the open step and its log. ",
+     "",
+     " A failed Invoice check run: Failed at Validate invoices, the error in a red block, the failing step open with its log lines, and two steps skipped",
+     "",
+     " A failed run. Which step failed, why, and the last log lines. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    220,
+    222,
+    144,
+    146
+   ],
+   [
+    "replace",
+    222,
+    225,
+    146,
+    147,
+    [
+     " Architecture: clients talk to one Kera binary with guardrails, a chat engine, tools and skills, knowledge search, an admin console and Cowork tasks. Kera uses Postgres with pgvector, model servers, tool servers and sidecars for code, desktop and document extraction."
+    ]
+   ],
+   [
+    "equal",
+    225,
+    226,
+    147,
+    148
+   ],
+   [
+    "replace",
+    226,
+    227,
+    148,
+    149,
+    [
+     "Only Postgres is required. The sidecars (document extraction, reranking, code sandbox, Cowork desktop) are HTTP services: the Compose stack starts the document extraction one for you, and you start the others when you need them; the table in Quick start says which feature needs which."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    149,
+    150
+   ],
+   [
+    "delete",
+    228,
+    229,
+    150,
+    150
+   ],
+   [
+    "equal",
+    229,
+    233,
+    150,
+    154
+   ],
+   [
+    "replace",
+    233,
+    239,
+    154,
+    155,
+    [
+     " The flow from a message to the saved reply in twelve numbered steps: the message and context are prepared, the knowledge mode chooses between retrieving passages, using whole documents or adding nothing, then a loop of guardrails, model call, tool calls and fitting the prompt to the window repeats every round until the model answers, and the cited answer is scanned by the guardrails, saved and traced"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    242,
+    155,
+    158
+   ],
+   [
+    "replace",
+    242,
+    248,
+    158,
+    159,
+    [
+     " The retrieval pipeline in eight numbered steps: the queries feed vector, keyword and heading search side by side, their rankings are fused into one list, an optional reranker re-reads the best candidates, neighbouring chunks are added, and the passages are numbered for citation"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    159,
+    160
+   ],
+   [
+    "replace",
+    249,
+    250,
+    160,
+    161,
+    [
+     "Every box has settings, defaults and a place to look when it misbehaves. Admins find them in **Admin > Help**; docs/how-it-answers.md has the same diagrams, a worked example with numbers, the agent loop and a table of symptoms and the settings to try."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    251,
+    161,
+    162
+   ],
+   [
+    "delete",
+    251,
+    252,
+    162,
+    162
+   ],
+   [
+    "equal",
+    252,
+    254,
+    162,
+    164
+   ],
+   [
+    "replace",
+    254,
+    255,
+    164,
+    165,
+    [
+     "|Variable|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    256,
+    165,
+    166
+   ],
+   [
+    "replace",
+    256,
+    266,
+    166,
+    176,
+    [
+     "|`KERA_DATABASE_URL`|Postgres connection string (required). `KERA_DATABASE_URL_FILE` names a file that holds it instead (Docker or Kubernetes secrets; the file wins)|",
+     "|`KERA_SECRET_KEY`|32-byte hex key that signs sessions and encrypts stored secrets (required; changing it signs everyone out, and `kera secrets rotate` re-encrypts what is stored, see docs/deploy.md). `KERA_SECRET_KEY_FILE` names a file that holds it instead|",
+     "|`KERA_URL`|Public URL of the server, used for sign-in redirects|",
+     "|`KERA_CALLBACK_URL`|Callback base URL for tools and sidecars, if different from `KERA_URL`|",
+     "|`KERA_LISTEN`|Listen address, default `:8080`|",
+     "|`KERA_DATA_DIR`|Where uploaded files live, default `/data`|",
+     "|`OLLAMA_BASE_URL`|Ollama server, default `http://host.docker.internal:11434` in the compose file|",
+     "|`KERA_ADMIN_EMAIL`, `KERA_ADMIN_PASSWORD`|Create the first admin when Kera starts with no users (ignored once any user exists); `deploy/init.sh` writes them|",
+     "|`KERA_EXTRACTOR_URL`|Default address of the document extraction service, used until one is saved in Admin > Settings > Retrieval; the compose file sets `http://extract:8000`, empty means none|",
+     "|`KERA_TRUSTED_PROXIES`|CDNs (addresses or CIDRs) whose `X-Forwarded-For` is believed for sign-in rate limits; proxies on private addresses are always trusted for it too|"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    269,
+    176,
+    179
+   ],
+   [
+    "delete",
+    269,
+    270,
+    179,
+    179
+   ],
+   [
+    "equal",
+    270,
+    274,
+    179,
+    183
+   ],
+   [
+    "replace",
+    274,
+    275,
+    183,
+    184,
+    [
+     "|Key|Modes|What it checks|"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    276,
+    184,
+    185
+   ],
+   [
+    "replace",
+    276,
+    282,
+    185,
+    191,
+    [
+     "|`guardrails.pii`|off, log, redact, block|Email, phone, card (Luhn), PAN, Aadhaar (Verhoeff check digit), IBAN (mod 97), SSN and UK National Insurance number (NINO) in messages, tool results and embedding texts. Redacted values become `[card]`, `[email]`, ...|",
+     "|`guardrails.output_pii`|off, log, redact|The same detectors on the model's reply. A short hold-back catches values split across stream chunks.|",
+     "|`guardrails.injection`|off, log, block|Phrases that try to override the system prompt.|",
+     "|`guardrails.blocklist`|list of regexes|Case-insensitive; a match in a user message always blocks.|",
+     "|`guardrails.moderation` / `.model`|off, log, block|Classifies the latest user message with a moderation model on the same connection (`/v1/moderations`).|",
+     "|`guardrails.local_exempt`|bool|Skips every check for local (Ollama) models.|"
+    ]
+   ],
+   [
+    "equal",
+    282,
+    283,
+    191,
+    192
+   ],
+   [
+    "replace",
+    283,
+    284,
+    192,
+    193,
+    [
+     "With `rag.placement` set to `data`, retrieved passages travel as a reference message that the guard scans like tool output (injection phrases in it are logged as `injection.data`, never blocking), see docs/run-trace.md. A blocked call fails with HTTP 400 and the code `guardrail_blocked`. Each event records the rule, action, count, user and model, never the matched text. Events are listed in the admin console and in the `guardrail_event` table. A model preset can override any key with `features: {guardrails: {pii: off}}`. For custom checks, use a hook server."
+    ]
+   ],
+   [
+    "equal",
+    284,
+    285,
+    193,
+    194
+   ],
+   [
+    "delete",
+    285,
+    286,
+    194,
+    194
+   ],
+   [
+    "equal",
+    286,
+    288,
+    194,
+    196
+   ],
+   [
+    "replace",
+    288,
+    289,
+    196,
+    197,
+    [
+     "Kera is young: v1.0.0 was released on 2026-11-21. Schema migrations run on start and only move forward, so keep a `pg_dump` before upgrading (docs/deploy.md). Things to know before you choose it:"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    292,
+    197,
+    200
+   ],
+   [
+    "replace",
+    292,
+    293,
+    200,
+    201,
+    [
+     "- The default stack runs Kera, Postgres and the document extraction service. Reranking, the code interpreter's Jupyter server and the Cowork desktop are separate services (see Quick start). OCR reads English until you add languages to the extraction image."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    296,
+    201,
+    204
+   ],
+   [
+    "replace",
+    296,
+    297,
+    204,
+    205,
+    [
+     "Found a gap that is not listed here? Open an issue or start a discussion."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    205,
+    206
+   ],
+   [
+    "delete",
+    298,
+    299,
+    206,
+    206
+   ],
+   [
+    "equal",
+    299,
+    301,
+    206,
+    208
+   ],
+   [
+    "replace",
+    301,
+    302,
+    208,
+    209,
+    [
+     "docs/README.md is the index. The main pages: deploy (Compose, HTTPS, backups, troubleshooting), how it answers (the flow, retrieval and the tool loop as diagrams), LiteLLM and spend, pipelines, integrations, comparison with other projects, and the Open WebUI API compatibility notes."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    209,
+    210
+   ],
+   [
+    "delete",
+    303,
+    304,
+    210,
+    210
+   ],
+   [
+    "equal",
+    304,
+    306,
+    210,
+    212
+   ],
+   [
+    "replace",
+    306,
+    307,
+    212,
+    213,
+    [
+     "|Path|What|"
+    ]
+   ],
+   [
+    "equal",
+    307,
+    308,
+    213,
+    214
+   ],
+   [
+    "replace",
+    308,
+    314,
+    214,
+    220,
+    [
+     "|`cmd/kera`|the binary: `serve`, `db`, `apply`, `export`, `user`, `pipeline`, `health`, ...|",
+     "|`internal/`|server packages, one per feature|",
+     "|`web/`|React + Vite app, embedded into the binary|",
+     "|`sidecars/`|helper services: document extraction (in the Compose stack), reranking, Cowork desktop|",
+     "|`deploy/`|Docker Compose example, with opt-in Ollama and LiteLLM profiles|",
+     "|`docs/`|documentation|"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    315,
+    220,
+    221
+   ],
+   [
+    "delete",
+    315,
+    316,
+    221,
+    221
+   ],
+   [
+    "equal",
+    316,
+    318,
+    221,
+    223
+   ],
+   [
+    "replace",
+    318,
+    320,
+    223,
+    225,
+    [
+     "- Questions and ideas: GitHub Discussions",
+     "- Bugs: open an issue"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    322,
+    225,
+    227
+   ],
+   [
+    "delete",
+    322,
+    323,
+    227,
+    227
+   ],
+   [
+    "equal",
+    323,
+    325,
+    227,
+    229
+   ],
+   [
+    "replace",
+    325,
+    326,
+    229,
+    230,
+    [
+     "Issues and pull requests are welcome. CONTRIBUTING.md has the rules (DCO sign-off, clean-room rule) and a list of places to start. Report security problems privately as described in SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    230,
+    231
+   ],
+   [
+    "delete",
+    327,
+    328,
+    231,
+    231
+   ],
+   [
+    "equal",
+    328,
+    330,
+    231,
+    233
+   ],
+   [
+    "replace",
+    330,
+    331,
+    233,
+    234,
+    [
+     "Apache License 2.0. See LICENSE and NOTICE."
+    ]
+   ],
+   [
+    "equal",
+    331,
+    332,
+    234,
+    235
+   ],
+   [
+    "replace",
+    332,
+    333,
+    235,
+    236,
+    [
+     "Built and maintained by CodeMax IT Solutions Pvt. Ltd."
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "18d389548b6f+2": {
+  "fn": "Minokun/wiki-context",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "English | 简体中文"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    12,
+    6,
+    10,
+    [
+     "License: MIT",
+     "Python 3.11+",
+     "Dependencies: Zero",
+     "Protocol: MCP"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    26,
+    10,
+    24
+   ],
+   [
+    "replace",
+    26,
+    37,
+    24,
+    25,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    25,
+    26
+   ],
+   [
+    "delete",
+    38,
+    40,
+    26,
+    26
+   ],
+   [
+    "equal",
+    40,
+    62,
+    26,
+    48
+   ],
+   [
+    "replace",
+    62,
+    66,
+    48,
+    52,
+    [
+     " - **Code-Preserving Bilingual FTS5 + Per-Source IDF**: Keeps intact identifiers (`RFC-042`, `350mm`, `v2.4`), segments CJK bigrams without external NLP deps, and computes IDF over **distinct source documents (`df_sources`)** rather than chunks.",
+     " - **Controlled 1-Hop Wiki Provenance**: High-confidence Wiki hits contribute synthesized guidance **and** boost (`1.25×`) their cited primary documents — *only* when the primary chunk independently matches a high-IDF query concept, preventing broad overview pages from dragging in noise.",
+     " - **Header-Discounted Table Windowing**: Oversized table sections are sliced with `table_header` **pinned automatically at the top of every window**, while discounting header tokens during window scoring so deep target rows are never missed.",
+     " - **Zero-Hit Anti-Hallucination & Provenance-Inherited ACL**: Unmatched core query terms trigger a mandatory `⚠️ Missing-Concept Alert`. Under `PrefixACLPolicy`, a Wiki page is visible *if and only if* the caller is authorized to read **every** primary document listed in its `sources:`."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    69,
+    52,
+    55
+   ],
+   [
+    "replace",
+    69,
+    83,
+    55,
+    67,
+    [
+     "|Dimension|Traditional Vector RAG|Pure LLM Wiki (Agent-Browsed)|**`wiki-context`**|",
+     "|:---|:---|:---|:---|",
+     "|**Core Paradigm**|Chunking + Dense Embeddings + Reranker|Markdown Wiki + Multi-turn Agent `read`/`grep`|**Offline Compiled Wiki + Deterministic Dual-Layer FTS5**|",
+     "|**Exact Codes & IDs (`RFC-042`, `HTTP-429`)**|Weak (semantic embedding blur)|Exact only if agent guesses right `grep`|**Exact** (code-preserving FTS5 + per-source `df_sources` IDF)|",
+     "|**Deep Tables (CSV / XLSX / MD)**|Loses column headers mid-table|Wiki summaries omit long-tail rows|**Pinned `table_header`** on every window + header-discounted slicing|",
+     "|**Cross-Document Synthesis**|Weak (isolated top-K fragments)|**Strong** (curated synthesis pages)|**Strong** (24% Wiki synthesis + 76% 1-hop primary ground truth)|",
+     "|**Colloquial -> Domain Jargon**|Fuzzy vector proximity (black-box)|Depends on agent guessing keywords|**Hot-reloaded `synonyms.json`** (deterministic 1-way concept merge)|",
+     "|**Stale Summary Detection**|N/A (no synthesis layer)|Manual discipline (silent drift risk)|**Automatic SHA-256 `source_hashes`** (`stale` badge + `0.5×` demotion)|",
+     "|**Unanswerable Query Defense**|High hallucination risk (feeds nearest chunks)|Depends on agent stopping on time|**Explicit `⚠️ Missing-Concept Alert`** + unmirrored boundary notes|",
+     "|**Online Latency & Token Cost**|1–5 s + Embedding/Rerank API calls|15–40 s (3–6 tool calls, ~30k–40k tokens)|**1 tool call, ~2–35 ms, 2.6k–4.8k tokens, 0 LLM calls**|",
+     "|**Access Control (RBAC)**|Chunk metadata filter (often leaky)|File-level OS permissions only|**Hot-reloaded `PrefixACLPolicy` + 100% Wiki provenance inheritance**|",
+     "|**Runtime Footprint**|Heavy (Milvus/Qdrant + Docker + SDKs)|Plain folder|**Zero dependencies** (Python 3.11+ stdlib + immutable SQLite FTS5)|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    94,
+    67,
+    78
+   ],
+   [
+    "replace",
+    94,
+    108,
+    78,
+    79,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    119,
+    79,
+    90
+   ],
+   [
+    "replace",
+    119,
+    123,
+    90,
+    91,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    91,
+    92
+   ],
+   [
+    "delete",
+    124,
+    126,
+    92,
+    92
+   ],
+   [
+    "equal",
+    126,
+    131,
+    92,
+    97
+   ],
+   [
+    "replace",
+    131,
+    133,
+    97,
+    99,
+    [
+     " - English (`--layout en`): `sources/`, `mirrors/`, `wiki/`, `index.md`, `log.md`",
+     " - Chinese Obsidian (`--layout zh`): `史料/`, `史料_md/`, `知识库/`, `目录.md`, `日志.md` (auto-detected with zero config on existing Obsidian LLM Wiki vaults)."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    135,
+    99,
+    101
+   ],
+   [
+    "delete",
+    135,
+    137,
+    101,
+    101
+   ],
+   [
+    "equal",
+    137,
+    146,
+    101,
+    110
+   ],
+   [
+    "replace",
+    146,
+    155,
+    110,
+    111,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    176,
+    111,
+    132
+   ],
+   [
+    "replace",
+    176,
+    184,
+    132,
+    133,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    192,
+    133,
+    141
+   ],
+   [
+    "replace",
+    192,
+    204,
+    141,
+    142,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    205,
+    142,
+    143
+   ],
+   [
+    "delete",
+    205,
+    207,
+    143,
+    143
+   ],
+   [
+    "equal",
+    207,
+    212,
+    143,
+    148
+   ],
+   [
+    "replace",
+    212,
+    221,
+    148,
+    155,
+    [
+     "|Scenario|Recommended Setup|Client / Host Requirements|When to Use|",
+     "|:---|:---|:---|:---|",
+     "|**1. Personal Local Use**|**Desktop App** or **`wctx ui` (Web Console)**|Desktop App (or `wctx` CLI) locally|Drop folders in, auto-build indexes, auto-scan & connect 19 mainstream AI clients|",
+     "|**2. Personal Multi-Device / LAN**|Desktop App / `wctx ui` LAN sharing|Desktop App or `wctx` on both machines|5-minute single-use pairing code — zero manual IP or token copy-paste|",
+     "|**3. Team Server (Admin)**|**`wctx gateway`** + **`wctx service install`**|Python 3.11+, `wctx` (optional `poppler`) on server|Multi-vault hosting, SHA-256 Bearer auth, folder ACLs; open `wctx ui` via SSH tunnel if needed|",
+     "|**4. Pure-MCP Client (HTTP MCP)**|**Direct Streamable HTTP MCP**|**Zero install** (no Python, no `wctx`, no app)|Just put the server URL + Bearer token `wctx_...` into Claude Code / Cursor / VS Code / WorkBuddy|",
+     "|**5. Pure-MCP Client (stdio-only / Auto-Sync)**|**`wctx remote add`** or **`wctx bridge`**|`wctx` CLI (or Desktop App) locally|Auto-discover & configure all local AI clients, or bridge stdio-only clients over HTTPS|"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    224,
+    155,
+    158
+   ],
+   [
+    "replace",
+    224,
+    231,
+    158,
+    165,
+    [
+     "- **Desktop App (Recommended)** ",
+     " Launch `wiki-context.app`, drag your local folders in (Markdown, PDF, DOCX, XLSX, PPTX), configure your LLM API key under **Model Settings** to enable automatic Wiki synthesis, and enable folder watching / tray mode. Open **Devices & Clients** to automatically scan installed tools across **19 mainstream AI agents** and connect/update/disconnect without disturbing existing MCP servers:",
+     " - **IDE Editors**: **Cursor, VS Code (Copilot), Windsurf, Trae, Kiro, Cline, Roo Code, Antigravity (AGY), Zed**",
+     " - **Terminal CLIs**: **Claude Code, Codex CLI, Gemini CLI, Qwen Code, Kimi CLI, OpenCode**",
+     " - **Desktop Apps**: **Claude Desktop, WorkBuddy, LM Studio, DeepSeek Harness (DSH)**",
+     "- **Built-in Web Console (`wctx ui`)** ",
+     " Prefer running without the Desktop wrapper? The exact same Web UI is already bundled inside the Python package (**zero Node.js or separate frontend build needed**):"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    237,
+    165,
+    171
+   ],
+   [
+    "replace",
+    237,
+    238,
+    171,
+    172,
+    [
+     "> **What is `poppler` and do I need it?** "
+    ]
+   ],
+   [
+    "equal",
+    238,
+    241,
+    172,
+    175
+   ],
+   [
+    "delete",
+    241,
+    243,
+    175,
+    175
+   ],
+   [
+    "equal",
+    243,
+    249,
+    175,
+    181
+   ],
+   [
+    "delete",
+    249,
+    251,
+    181,
+    181
+   ],
+   [
+    "equal",
+    251,
+    267,
+    181,
+    197
+   ],
+   [
+    "replace",
+    267,
+    272,
+    197,
+    198,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    280,
+    198,
+    206
+   ],
+   [
+    "replace",
+    280,
+    286,
+    206,
+    207,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    292,
+    207,
+    213
+   ],
+   [
+    "replace",
+    292,
+    294,
+    213,
+    215,
+    [
+     "- **Option A (Recommended: Administer `wctx ui` safely over SSH tunnel)**: ",
+     " Keep `wctx ui` bound to `127.0.0.1:8765` on the server and forward it locally:"
+    ]
+   ],
+   [
+    "equal",
+    294,
+    300,
+    215,
+    221
+   ],
+   [
+    "replace",
+    300,
+    301,
+    221,
+    222,
+    [
+     " Open `http://127.0.0.1:8765` in your local browser to onboard vaults, configure folder ACLs, and issue tokens (or place Nginx HTTPS + HTTP Basic Auth / SSO in front of `127.0.0.1:8765`)."
+    ]
+   ],
+   [
+    "equal",
+    301,
+    305,
+    222,
+    226
+   ],
+   [
+    "replace",
+    305,
+    306,
+    226,
+    227,
+    [
+     " Write `/etc/wiki-context/tokens.json` (`chmod 600`):"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    310,
+    227,
+    231
+   ],
+   [
+    "replace",
+    310,
+    329,
+    231,
+    232,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    337,
+    232,
+    240
+   ],
+   [
+    "replace",
+    337,
+    349,
+    240,
+    241,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    349,
+    351,
+    241,
+    243
+   ],
+   [
+    "replace",
+    351,
+    352,
+    243,
+    244,
+    [
+     "- **Exposing to teammates**: Front `127.0.0.1:8090` with Nginx HTTPS (`proxy_buffering off;` and forwarding `Authorization` — see docs/gateway-and-acl.md), or run over **Tailscale** on port `8090` with zero TLS setup."
+    ]
+   ],
+   [
+    "equal",
+    352,
+    357,
+    244,
+    249
+   ],
+   [
+    "delete",
+    357,
+    359,
+    249,
+    249
+   ],
+   [
+    "equal",
+    359,
+    373,
+    249,
+    263
+   ],
+   [
+    "replace",
+    373,
+    374,
+    263,
+    264,
+    [
+     " Equivalent `~/.claude.json`:"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    378,
+    264,
+    268
+   ],
+   [
+    "replace",
+    378,
+    386,
+    268,
+    269,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    386,
+    392,
+    269,
+    275
+   ],
+   [
+    "replace",
+    392,
+    400,
+    275,
+    276,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    406,
+    276,
+    282
+   ],
+   [
+    "replace",
+    406,
+    413,
+    282,
+    283,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    430,
+    283,
+    300
+   ],
+   [
+    "replace",
+    430,
+    431,
+    300,
+    301,
+    [
+     " Probes all vaults your token can access and losslessly updates all detected local AI client configs."
+    ]
+   ],
+   [
+    "equal",
+    431,
+    432,
+    301,
+    302
+   ],
+   [
+    "replace",
+    432,
+    433,
+    302,
+    303,
+    [
+     " - **Codex CLI (`~/.codex/config.toml`)**:"
+    ]
+   ],
+   [
+    "equal",
+    433,
+    439,
+    303,
+    309
+   ],
+   [
+    "replace",
+    439,
+    440,
+    309,
+    310,
+    [
+     " - **Generic Stdio JSON**:"
+    ]
+   ],
+   [
+    "equal",
+    440,
+    444,
+    310,
+    314
+   ],
+   [
+    "replace",
+    444,
+    450,
+    314,
+    315,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    450,
+    451,
+    315,
+    316
+   ],
+   [
+    "delete",
+    451,
+    453,
+    316,
+    316
+   ],
+   [
+    "equal",
+    453,
+    468,
+    316,
+    331
+   ],
+   [
+    "replace",
+    468,
+    494,
+    331,
+    332,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    494,
+    496,
+    332,
+    334
+   ],
+   [
+    "replace",
+    496,
+    505,
+    334,
+    341,
+    [
+     "|Layer / File|Maintained By|Role & Golden Rule|Commit to Git?|",
+     "|:---|:---:|:---|:---:|",
+     "|**`sources/` (`史料/`)**|**Humans only**|Immutable ground truth; **never modified, renamed, or deleted** by `wctx` or agents|Yes for Markdown/CSVs; Git LFS or shared storage for large binaries|",
+     "|**`mirrors/` (`史料_md/`)**|**`wctx sync` (Auto)**|Derived Markdown mirrors, `.assets/` figures, and `bm25.sqlite`; 100% reproducible|**Ignore `.index/`** (or ignore `mirrors/` entirely)|",
+     "|**`wiki/` (`知识库/`)**|**Agent / Human / `wctx compile`**|Cross-document architecture synthesis, trade-offs & caveats; **keep flat (`wiki/*.md`)**|**Yes** (plain Markdown, easy PR review)|",
+     "|**`notes/` (`记忆/`)**|**`wiki_remember` / `wctx remember`**|Domain session findings & read-only spec `📌 Errata Pins` (inherits `PrefixACLPolicy`; keep cross-project user habits in external memory like `magpie-memory`)|**Yes** (plain Markdown; consolidates into `wiki/` via `wctx compile`)|",
+     "|**`index.md` / `vault.json` / `synonyms.json`**|**Agent / Human / `wctx synonyms mine`**|Topic hierarchy catalog, vault policy config, and colloquial synonym map|**Yes**|"
+    ]
+   ],
+   [
+    "equal",
+    505,
+    522,
+    341,
+    358
+   ],
+   [
+    "replace",
+    522,
+    525,
+    358,
+    361,
+    [
+     " - **Admitted natively**: `.md`, `.markdown`, `.txt`, `.rst`, `.csv`, `.tsv`, `.docx`, `.pptx`, `.xlsx`, and `.pdf` (when `pdftotext` is installed).",
+     " - **Skipped safely**: Credentials & keys (`.env`, `*.pem`, `*.key`, `id_rsa`, `credentials.json`), machine dumps/logs (`.log`, `.json`, `.yaml`, `.sql`, `.sqlite`), media/archives, hidden/asset directories (`.git`, `.obsidian`, `*.assets`), and oversized files (`>2 MiB` by default, configurable via `max_doc_bytes`) are excluded with transparent reasons in `wiki_status`. Byte-identical copies (e.g., `spec (1).docx`) are automatically folded during indexing.",
+     " - **Targeted Image / Scan OCR**: Inline decorative images are skipped by default; to OCR architecture diagrams or scanned contracts in specific folders, add `\"ocr_image_dirs\": [\"03-diagrams-and-scans\"]` in `vault.json` and set `WCTX_OCR_CMD`."
+    ]
+   ],
+   [
+    "equal",
+    525,
+    540,
+    361,
+    376
+   ],
+   [
+    "replace",
+    540,
+    558,
+    376,
+    377,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    558,
+    559,
+    377,
+    378
+   ],
+   [
+    "replace",
+    559,
+    560,
+    378,
+    379,
+    [
+     " *(Note: Never compute `source_hashes` manually — `wctx compile` or `wctx freshness --vault ./my-kb snapshot` writes them automatically.)*"
+    ]
+   ],
+   [
+    "equal",
+    560,
+    566,
+    379,
+    385
+   ],
+   [
+    "replace",
+    566,
+    572,
+    385,
+    386,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    572,
+    579,
+    386,
+    393
+   ],
+   [
+    "replace",
+    579,
+    590,
+    393,
+    394,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    590,
+    596,
+    394,
+    400
+   ],
+   [
+    "replace",
+    596,
+    598,
+    400,
+    402,
+    [
+     " - **Automated CLI**: Run `wctx compile --vault ./my-kb` to compile new mirrors, refresh `stale` Wiki pages, snapshot hashes, run `lint`, and hot-swap `bm25.sqlite`.",
+     " - **Agent-in-the-Loop**: Ask Claude Code / Codex / DSH to update the relevant `wiki/*.md` page and `index.md`, then seal it with:"
+    ]
+   ],
+   [
+    "equal",
+    598,
+    603,
+    402,
+    407
+   ],
+   [
+    "replace",
+    603,
+    606,
+    407,
+    408,
+    [
+     " Running `wctx serve` or `wctx gateway` instances automatically hot-swap to the new snapshot on the very next request with zero downtime."
+    ]
+   ],
+   [
+    "equal",
+    606,
+    611,
+    408,
+    413
+   ],
+   [
+    "replace",
+    611,
+    622,
+    413,
+    424,
+    [
+     "|MCP Tool|Purpose|",
+     "|:---|:---|",
+     "|**`wiki_context`**|**Preferred default (answers 95% of queries in 1 call)**: assembles Wiki synthesis + primary evidence + table headers + visual hints + 1-hop Errata Pins + gap alerts|",
+     "|`wiki_inspect_visual`|**Native Multimodal Diagram Viewer**: returns embedded Office figures, standalone images, or rendered PDF visual pages as MCP `image` (base64) blocks|",
+     "|`wiki_remember`|**Layer-4 Operational Memory & Errata**: saves domain learnings or `errata` overrides into `notes/` (`记忆/`) with secret scrubbing & provenance ACL inheritance|",
+     "|`wiki_forget`|Archives/retracts obsolete or mistaken Layer-4 memory notes|",
+     "|`wiki_search`|Fine-grained BM25/FTS5 search with optional `section` / `page` / `wiki` unit filtering|",
+     "|`wiki_read`|Sandboxed exact line-range (`<=400` lines) or `page_num` reader over mirrors, Wiki pages, and `index.md`|",
+     "|`wiki_route`|Classifies query complexity (`fact` 2.6k budget vs. `complex` 4.8k budget)|",
+     "|`wiki_list`|Lists indexed documents and extraction methods with path filtering|",
+     "|`wiki_status`|Reports active index generation, document/chunk counts, active memory notes, skipped files, and coverage boundaries|"
+    ]
+   ],
+   [
+    "equal",
+    622,
+    631,
+    424,
+    433
+   ],
+   [
+    "replace",
+    631,
+    637,
+    433,
+    434,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    637,
+    662,
+    434,
+    459
+   ],
+   [
+    "replace",
+    662,
+    665,
+    459,
+    460,
+    [
+     "- **One-Command Sync & Stdio Bridge**: Teammates can run `wctx remote add --url https://kb.example.com --token <TOKEN>` to auto-configure all local AI clients, or bridge stdio-only clients via `wctx bridge --url https://kb.example.com/mcp/eng` with `WCTX_TOKEN` in `env`. See Scenarios 3 & 4 above and docs/gateway-and-acl.md."
+    ]
+   ],
+   [
+    "equal",
+    665,
+    677,
+    460,
+    472
+   ],
+   [
+    "replace",
+    677,
+    682,
+    472,
+    473,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    682,
+    692,
+    473,
+    483
+   ],
+   [
+    "replace",
+    692,
+    697,
+    483,
+    484,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    697,
+    701,
+    484,
+    488
+   ],
+   [
+    "delete",
+    701,
+    703,
+    488,
+    488
+   ],
+   [
+    "equal",
+    703,
+    705,
+    488,
+    490
+   ],
+   [
+    "replace",
+    705,
+    730,
+    490,
+    513,
+    [
+     "|Command|Description|",
+     "|:---|:---|",
+     "|`wctx ui [--port 8765]`|Launch the local loopback Web Control Console + dev Gateway (`wctx console`)|",
+     "|`wctx doctor [--json] [--probe-tls]`|Diagnose Python, the HTTPS CA trust store, `wctx` PATH, `poppler` (`pdftotext`/`pdftoppm`), AI clients & services; `--probe-tls` performs a real TLS handshake against the compiler host|",
+     "|`wctx service [status\\|render\\|install\\|uninstall]`|Generate or install a `launchd` / `systemd --user` background service for `gateway` or `ui`|",
+     "|`wctx init <path> [--layout en\\|zh]`|Initialize a four-layer vault (`sources/`, `mirrors/`, `wiki/`, `notes/`)|",
+     "|`wctx sync --vault <V> [--list]`|Incrementally extract changed documents & rebuild FTS5|",
+     "|`wctx index --vault <V> [--check --deep]`|Build or verify immutable `gen-<id>/bm25.sqlite` snapshot|",
+     "|`wctx context --vault <V> -q \"<Q>\"`|Assemble a single-call citation-anchored `<wiki_context>` pack|",
+     "|`wctx search --vault <V> -q \"<Q>\"`|Run raw BM25/FTS5 search or `--route` complexity classification|",
+     "|`wctx compile --vault <V> [--dry-run]`|Compile unindexed mirrors, refresh `stale` Wiki pages & consolidate Layer-4 notes|",
+     "|`wctx remember --vault <V> -t \"<T>\"`|Save an operational insight or `--kind errata` source pin into `notes/` (`记忆/`)|",
+     "|`wctx notes [list\\|forget\\|import] --vault <V>`|Inspect, archive, or import external JSON memories into Layer-4 `notes/`|",
+     "|`wctx synonyms mine --vault <V> [--apply]`|Auto-extract bilingual glossary tables & inline acronyms into `synonyms.json`|",
+     "|`wctx eval --vault <V> [--questions Q.json]`|Run quantitative Strict Recall, MRR, Latency, and Guardrail benchmark|",
+     "|`wctx freshness --vault <V> [check\\|snapshot]`|Detect `stale` Wiki pages when underlying primary sources change|",
+     "|`wctx lint --vault <V>`|Verify broken `[[wikilinks]]`, missing sources, and catalog drift|",
+     "|`wctx serve --vault <V> [--test]`|Run local stdio MCP server (9 tools, secret-scrubbed)|",
+     "|`wctx gateway --vault id=path [--test]`|Run multi-user, multi-vault Streamable HTTP MCP + REST gateway|",
+     "|`wctx remote [add\\|list\\|probe\\|remove]`|Connect to a remote gateway (`--url` + `--token`) & auto-configure local AI clients|",
+     "|`wctx remote pair <wctx1_code>`|Redeem a one-time pairing code (LAN / Tailscale) for a device-scoped token, register remote vaults & auto-configure local AI clients; powers the console's \"AI install prompt\"|",
+     "|`wctx bridge --url <URL> --token <T>`|Bridge local stdio MCP clients to a remote HTTP gateway|",
+     "|`wctx bridge --vault <local_id>`|Bridge a remote vault registered via `remote add/pair`; URL & token are read from wctx's own store, no plaintext token in client configs|"
+    ]
+   ],
+   [
+    "equal",
+    730,
+    733,
+    513,
+    516
+   ],
+   [
+    "replace",
+    733,
+    737,
+    516,
+    520,
+    [
+     "- Retrieval Engine Technical Advancement & Breakthroughs (vs. Elasticsearch / Vector RAG)",
+     "- Architecture & 5-Step Retrieval Design",
+     "- Vault Layout, Synonyms & SHA-256 Freshness Spec",
+     "- Multi-Vault Gateway, Authentication & Prefix ACL"
+    ]
+   ],
+   [
+    "equal",
+    737,
+    739,
+    520,
+    522
+   ],
+   [
+    "replace",
+    739,
+    741,
+    522,
+    523,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

@@ -3520,5 +3520,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b48779beda8a": {
+  "identity": {
+   "one_liner": "微软官方的 Python SQL Server 驱动，基于 DDBC 直连数据库",
+   "review": "mssql-python 是微软发布的 Python 驱动，用于连接 SQL Server 与 Azure SQL 系列数据库，现已 GA 可用于生产。它通过 DDBC 直接连接数据库，无需外部驱动管理器，遵循 DB API 2.0 规范，要求 Python >= 3.10。pip 安装时 ODBC 驱动二进制由配套包 mssql-python-odbc 提供，批量复制与备用 Rust ODBC 提供程序由 mssql-python-rs 提供。",
+   "highlights": [
+    "基于 DDBC 实现无需外部驱动管理器的直接连接，兼容 DB API 2.0 规范",
+    "支持 Microsoft Entra ID 多种认证方式，包括托管标识、服务主体、设备码流等",
+    "内置连接池（默认启用），并支持通过模块属性或环境变量选择原生 ODBC 提供程序"
+   ],
+   "use_cases": [
+    "Python 应用连接 SQL Server 或 Azure SQL Database/Managed Instance",
+    "在 Azure 虚拟机或容器中使用托管标识进行免密认证的场景",
+    "macOS 或 Linux 上访问 SQL Server 并需要 Entra ID 认证的开发场景"
+   ]
+  },
+  "sha": "b48779beda8a",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8d5e4e4a2504": {
+  "identity": {
+   "one_liner": "基于 GitHub 活动数据生成游戏化积分、段位与排行榜的开源开发者看板",
+   "review": "DevTrack 是一个开源的 GitHub 活动看板，将用户的提交、PR、评审和连续记录换算为 0–1000 分、Bronze 到 Legend 六个段位和 XP 等级，并生成全球排行榜、用户对战、README 徽章等功能。技术栈为 Next.js 16、React、TypeScript、Tailwind、Supabase（PostgreSQL，含行级安全）和 GitHub GraphQL/REST API，认证通过 NextAuth.js 的 GitHub OAuth。项目提供演示模式，无需 Supabase 项目或 API 密钥即可运行公共页面；完整登录看板需按 DEVELOPMENT.md 配置。支持 MIT 协议下的自托管。",
+   "highlights": [
+    "将 commits、PR、reviews、streak 等指标聚合为 0–1000 的分数、六档段位、XP 等级和全球排行榜，支持按语言/国家/时间范围筛选",
+    "提供 README 徽章 API（rank/streak/commits 端点）、任意两用户的对战功能、贡献热力图、PR/CI 分析和目标管理",
+    "演示模式（pnpm dev:demo）无需 Supabase、GitHub App 或 API 密钥即可在 localhost:3000 运行公共页面"
+   ],
+   "use_cases": [
+    "开发者查看自己的 GitHub 活动统计、连续记录和排行榜排名",
+    "在个人 README 中嵌入实时更新的排名/提交徽章",
+    "贡献者参与开源：项目带 good first issue 标签、贡献指南和多份开发/自托管文档"
+   ]
+  },
+  "sha": "8d5e4e4a2504",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "52621052e116": {
+  "identity": {
+   "one_liner": "D 语言数据库连接器库，提供类 JDBC 的统一 SQL 访问接口",
+   "review": "DDBC 是 D 语言的数据库连接器，通过 dub 配置选择驱动：full 配置依赖 libpq/ODBC/sqlite3 等 C 库，full-native 及 PGNATIVE、MSSQL、ORACLE、ClickHouse 等配置使用纯 D 客户端。连接以 URL 字符串指定，支持 PreparedStatement、NULL 判定（wasNull）、精确 Decimal 读写及 POD 结构体的 SELECT 映射，配套 ORM 库 hibernated。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、SQLite、SQL Server、Oracle、ClickHouse，可通过 libpq/ODBC 等 C 库或纯 D 原生客户端（PGNATIVE、MSSQL、ORACLE、ClickHouse 配置）接入",
+    "原生驱动和 MySQL 支持 vibe.d fiber 模式，构建依赖 vibe-core 时自动启用，可用 io_mode 参数指定",
+    "提供 getDecimal/setDecimal 精确读写 DECIMAL/NUMERIC（最多 76 位数字），并支持 POD 结构体结果集映射与自动生成 SELECT 语句"
+   ],
+   "use_cases": [
+    "在 D 项目中通过统一 URL 连接字符串访问多种关系数据库",
+    "在 vibe.d 应用中以 fiber 模式使用 PostgreSQL、SQL Server、Oracle、ClickHouse 或 MySQL 连接",
+    "需要精确处理 DECIMAL/NUMERIC 数值或将查询结果映射到 D 结构体的应用"
+   ]
+  },
+  "sha": "52621052e116",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "43d1e6a6c1a4": {
+  "identity": {
+   "one_liner": "Rust 编写的属性图数据库，以喷泉码提交流统一 MVCC、时间旅行、分支与复制。",
+   "review": "该项目提供嵌入式库 fgdb、服务器 fgdbd 和 CLI，使用 GQL（ISO/IEC 39075:2024）查询语言并提供 openCypher 兼容接口。它将 MVCC、历史查询、git 式分支、复制与变更订阅合并到单一内容寻址提交流中。注意：README 以目标完成的现在时撰写，多数设计仍在按 G1→G4 里程碑推进中，如普通打开数据库仍会物化快照。",
+   "highlights": [
+    "支持 FOR SYSTEM_TIME AS OF/BETWEEN 时间旅行查询、零拷贝 O(1) 数据库分支，以及带 plan certificate 的确定性可重放查询结果",
+    "工作区禁止 unsafe 代码，仅对 SIMD/arena/VFS 边界设置带台账的例外并各配标量回退实现",
+    "依赖为封闭集合：std + 固定 nightly 工具链 + 三个自有基础库，通过 deny.toml 枚举并固定传递依赖"
+   ],
+   "use_cases": [
+    "需要历史状态查询和可审计结果回放的图数据应用",
+    "利用 git 式分支进行 fork-分析-合并或丢弃的图分析实验",
+    "在内存限制下从磁盘流式扫描超内存图数据集"
+   ]
+  },
+  "sha": "43d1e6a6c1a4",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

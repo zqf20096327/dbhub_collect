@@ -3643,5 +3643,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6656ec3e647e": {
+  "identity": {
+   "one_liner": "单 PowerShell 脚本在 Windows 上无 GUI 运行 HTTPDebugger 服务捕获 HTTP/HTTPS 流量",
+   "review": "NetSnitch 通过模拟 HTTPDebugger GUI 与服务之间的命名共享内存 IPC，直接读写内核环形缓冲区，实现无需 GUI 的 HTTP/HTTPS 明文捕获，并经系统信任的 CA 解密 TLS。需 Windows 10/11 x64 与管理员权限（PowerShell 5.1），依赖已安装的 HTTPDebugger 服务；支持后台运行、开机任务持久化及可选的 SQLite + Web UI 收集端。",
+   "highlights": [
+    "通过 kernel32 文件映射 P/Invoke 直接操作服务的命名共享内存环形缓冲区，不使用驱动句柄或服务 API",
+    "安装 CA 到系统信任存储以解密 TLS，输出请求/响应头与完整正文，支持 HTTP/2 到 HTTP/1 的桥接解码",
+    "可选纯 Python 3 标准库收集端，SQLite 存储，提供分页 Web UI、全字段搜索、图表过滤及 NDJSON 上传接口"
+   ],
+   "use_cases": [
+    "Windows 上无 GUI 地记录本机进程的 HTTP/HTTPS 请求与响应事务",
+    "通过 -Server 将多台机器的捕获流式上传到中心收集端集中浏览检索",
+    "以 -Background/-Persistence 在后台或开机后持续捕获，并用 -Domains 过滤目标域名"
+   ]
+  },
+  "sha": "6656ec3e647e",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

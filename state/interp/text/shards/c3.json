@@ -3626,5 +3626,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ecce21b31bd4": {
+  "identity": {
+   "one_liner": "异步多代理编排框架，内置SQLite持久化与代理间任务移交",
+   "review": "这是一个 Python 异步框架，用于在 WhatsApp（Meta Cloud API）、Telegram、Webhook 和 CLI 渠道上运行多代理对话工作流。核心依赖仅 pydantic 与 httpx，各 LLM 引擎经原生 httpx REST 调用；内置每会话 asyncio.Lock、回合失败/超时的历史回滚和 SQLite 文件存储的工作线程卸载。需要 Python 3.10+，pip install chatflow-agent 安装，渠道相关依赖按需选用。",
+   "highlights": [
+    "支持 Google Gemini、OpenAI、Claude、xAI Grok、DeepSeek、Groq 及通过 Ollama/vLLM 接入本地模型，可在同一多代理系统中混用不同提供商",
+    "提供代理间自主移交（handoff），会在跨回合与服务器重启后持久化当前专家代理与会话元数据",
+    "实现回合级事务回滚、自动重试、HMAC webhook 校验以及针对 Meta Cloud API 的防 500 响应机制"
+   ],
+   "use_cases": [
+    "为 WhatsApp 或 Telegram 构建多代理对话机器人",
+    "通过自定义 webhook（示例基于 Starlette）接入企业消息应用",
+    "使用 Ollama/vLLM 本地模型运行离线或自托管的代理应用"
+   ]
+  },
+  "sha": "ecce21b31bd4",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

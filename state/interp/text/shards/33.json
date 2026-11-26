@@ -3041,5 +3041,73 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d9caea4c2d9f": {
+  "identity": {
+   "one_liner": "用于在 DuckDB 中解析域名、URI 与路径的社区扩展",
+   "review": "DuckDB 社区扩展，提供 extract_domain、extract_tld、extract_query_parameters 等宏函数与表函数，用于在 SQL 中解析域名、URI 各部分及 IP 地址。TLD 查找基于 Mozilla Public Suffix List 编译为 gperf 哈希表；Tranco 排名需调用 update_tranco 下载列表，IP 相关 ipcalc 为实验性函数。安装需开启 allow_community_extensions。",
+   "highlights": [
+    "提供域名、主机、路径、TLD、SLD、子域名、端口、查询参数、fragment 等提取函数",
+    "包含 IP 校验、私网判断、版本识别、IP 与整数互转及实验性 ipcalc 表函数"
+   ],
+   "use_cases": [
+    "在 SQL 查询中直接拆解和分析 URL 数据集",
+    "通过 Tranco 列表关联查询域名的排名与排名区间",
+    "校验、分类 IP 地址并计算子网信息"
+   ],
+   "softened": [
+    "highlights:『完美』删条x1"
+   ]
+  },
+  "sha": "d9caea4c2d9f",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49254d4c258b": {
+  "identity": {
+   "one_liner": "基于 Java/JavaFX 的跨平台多协议连接客户端",
+   "review": "EasyShell 是一个运行于 Windows、macOS、Linux 的桌面客户端，将 SSH、FTP/SFTP、S3、SMB、VNC、RDP 等远程连接与 Redis、MySQL、PostgreSQL、达梦等多种数据库客户端集成在同一 JavaFX 程序中，并提供大模型会话、连接与密钥管理、片段执行等功能。用户通过 Releases 页面下载使用，构建与打包方式见 dev.README.md。",
+   "highlights": [
+    "支持 SSH、FTP、SFTP、S3、SMB、WebDAV、VNC、RDP、Telnet、RLogin、Mosh、串口、本地终端等多种连接方式",
+    "包含 Redis、Valkey、ZooKeeper、MongoDB 及 MySQL、PostgreSQL、Oracle、达梦等数据库客户端，提供查询、导入导出、传输、终端等操作",
+    "提供大模型管理，包含 Agent 编排、MCP 服务、Skill、供应商与模型管理及本地会话"
+   ],
+   "use_cases": [
+    "需要在一个桌面程序中同时管理服务器终端、远程桌面和文件传输的场景",
+    "需要连接多种数据库（含国产达梦数据库）进行查询和导入导出操作",
+    "需要使用大模型会话、Agent 编排与本地协议操作结合的工作流"
+   ]
+  },
+  "sha": "49254d4c258b",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ff7b4e10a01": {
+  "identity": {
+   "one_liner": "本地 Agent 工作台，通过 ACP 连接 Lark、Web 与 HTTP 调用编码代理",
+   "review": "AgentDock 是一个本地运行的 agent 工作台，将 Lark、Web 控制台和 HTTP API 接入 Claude Code、Codex 等支持 ACP 的编码代理，会话、事件与权限记录持久化于 SQLite 并可回放。面向需要在本地工作区驱动多个 CLI 代理并集中查看执行过程的开发者。默认监听 0.0.0.0，无多用户隔离，文档以中文为主。",
+   "highlights": [
+    "自动发现本机已安装的 ACP 代理（Claude Code、Codex、Cursor、Gemini 等），通过固定的 acpx 运行时处理握手、持久会话、重连与权限请求",
+    "主会话以「小猫」机制拆分任务给侧会话并跟进结果，上下文累积后可通过交接生成新会话继承未完成便签",
+    "提供 daemon 生命周期 CLI（start/stop/restart/update/autostart）、HTTP+SSE API，以及 UI 内的命令拦截、成员白名单等防护设置"
+   ],
+   "use_cases": [
+    "在 Lark 单聊或群聊中 @ 机器人，让本地代理在项目工作区执行任务并接收进度流",
+    "通过 Web 控制台查看流式输出、工具调用与权限请求，排队、中断或重试任务，扫码在手机上继续",
+    "使用 agent-dock dev up 提供的隔离沙箱让代理自行修改和端到端验证 AgentDock 本身"
+   ]
+  },
+  "sha": "6ff7b4e10a01",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

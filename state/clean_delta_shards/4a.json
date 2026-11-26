@@ -36355,5 +36355,1086 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "44e7844af15f+2": {
+  "fn": "anyproto/any-store",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Go Reference",
+     "Go Report Card",
+     "MIT License"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    11,
+    5,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "* **Mongo-style queries** — `$eq/$in/$gt/...`, logical operators, dot-path fields, modifiers (`$set`, `$inc`, ...). Formal semantics in docs/query-filter-contract.md."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    12,
+    14
+   ],
+   [
+    "replace",
+    14,
+    19,
+    14,
+    19,
+    [
+     "* **Full-text search** — btree-resident inverted index with BM25 ranking via `$text`: phrases, prefixes, anchored and per-field matching for search-as-you-type. See docs/full-text-search.md.",
+     "* **Vector search** — btree-resident ANN indexes (IVF-SQ, HNSW, brute-force) via `$knn`. See docs/vector-search.md and docs/vector-engine.md.",
+     "* **Aggregation** — MongoDB-style pipelines: shaping (`$match`, `$group`, `$sort`, `$unwind`, `$facet`, ...), computed expressions (arithmetic, conditionals, comparisons, date math), field-to-field `$expr` predicates, primary-key `$lookup` joins, and materialization via `$merge`/`$out` — with planner pushdown. See docs/aggregation.md.",
+     "* **ACID transactions** — snapshot-isolated read transactions, single-writer write transactions. On an operating system's file system, a commit survives a process crash by default and reaches the disk with a later checkpoint, as in SQLite's WAL mode at `synchronous=NORMAL`, and `CommitSync` syncs every commit, the per-commit guarantee; the wasm example's IndexedDB file system gives neither (see Durability).",
+     "* **Multi-process** — SQLite-like contract on Linux and Darwin, amd64 and arm64: any number of OS processes may open, read and write the same database file at any time (WAL + shared-memory index, busy handling, cross-process DDL reconciliation). Other targets run one process at a time (see Multi-process)."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    19,
+    21
+   ],
+   [
+    "replace",
+    21,
+    23,
+    21,
+    23,
+    [
+     "* **Streaming iterators** — low-memory scans with a cursor API; AnyEnc arena encoding minimizes GC churn.",
+     "* **Cross-platform** — pure Go, no CGO; builds for every Go target but AIX and Solaris, `js/wasm` and `wasip1` included (see wasm/), with multi-process access on Linux and Darwin, amd64 and arm64."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    45,
+    23,
+    45
+   ],
+   [
+    "replace",
+    45,
+    86,
+    45,
+    46,
+    [
+     "…（41 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    88,
+    46,
+    48
+   ],
+   [
+    "replace",
+    88,
+    89,
+    48,
+    49,
+    [
+     "The full end-to-end example lives in `example/` and the API docs."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    94,
+    49,
+    54
+   ],
+   [
+    "replace",
+    94,
+    95,
+    54,
+    55,
+    [
+     "> **Numbers are float64.** Every number is stored as a float64, as in JSON: integers are exact up to 2^53 (9,007,199,254,740,992) in magnitude, and a larger one, written as a plain integer in JSON or given as a Go integer, becomes the nearest float64, in a document, a filter and an id alike (a JSON number with an exponent can round to another one: query contract, item 18). A filter given as a Go value is encoded as JSON, which takes every integer type, `uintptr` and named types included. An integer id given to `FindId` and the other id calls, or an integer operand of `query.NewComp`, is an `int`, `uint` or sized integer (`int64`, `uint64`, …): a `uintptr`, or a value of a named type such as `type myInt int64`, panics. Two such integers can then be one value, and as ids one document: with a document of id 2^53 in the collection, inserting id 2^53+1 fails with `ErrDocExists`, `UpsertOne` with it replaces that document, and `FindId(2^53+1)` returns it. Store integers that can go past 2^53, such as 64-bit hashes, as strings."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    127,
+    55,
+    87
+   ],
+   [
+    "replace",
+    127,
+    132,
+    87,
+    88,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    146,
+    88,
+    102
+   ],
+   [
+    "replace",
+    146,
+    153,
+    102,
+    103,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    163,
+    103,
+    113
+   ],
+   [
+    "replace",
+    163,
+    186,
+    113,
+    114,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    196,
+    114,
+    124
+   ],
+   [
+    "replace",
+    196,
+    202,
+    124,
+    125,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    204,
+    125,
+    127
+   ],
+   [
+    "replace",
+    204,
+    205,
+    127,
+    128,
+    [
+     "`$match`/`$sort`/`$limit` prefixes are pushed down into the index planner; the rest streams through the pipeline. Expressions compute derived values in `$project`/`$addFields`/`$group` (arithmetic, `$cond`/`$switch`, comparisons, `$dateDiff`-family date math over the first-class dateTime type); `$expr` brings field-to-field predicates into `$match`; `$lookup` resolves object-id relations as primary-key point lookups; `$facet` runs N sub-pipelines over one scan; `$merge`/`$out` materialize results into a collection where they are indexable like any other data. Operator reference and Mongo divergences: docs/aggregation.md."
+    ]
+   ],
+   [
+    "equal",
+    205,
+    210,
+    128,
+    133
+   ],
+   [
+    "replace",
+    210,
+    211,
+    133,
+    134,
+    [
+     "Every other target runs a database in one process at a time, with its WAL index in that process's memory. On Windows and the other Unix systems — FreeBSD and the other BSDs, illumos, and Linux on other architectures, 32-bit ones included — the process that opens the file first holds an exclusive lock on it, and another process's `Open` fails. On `js/wasm`, `wasip1` and Plan 9 any-store takes no lock: it does not stop a second process, or a second browser tab, from opening the file. The file system can: the OPFS file system of the wasm example opens a file through an exclusive sync access handle, which the browser refuses to a second opener. Where the file system does not, the application has to prevent it. AIX and Solaris are not supported: their `syscall` package has no `flock`, and the library does not build there."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    218,
+    134,
+    141
+   ],
+   [
+    "replace",
+    218,
+    219,
+    141,
+    142,
+    [
+     "The IndexedDB file system of the wasm example gives no durability guarantee, with `CommitSync` or without: it keeps each file in memory and stores it in IndexedDB only when the file is synced or closed, and its sync returns before IndexedDB has committed what it stores. A closed tab or a killed worker can lose commits that returned without error, as a power loss can elsewhere."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    226,
+    142,
+    149
+   ],
+   [
+    "replace",
+    226,
+    242,
+    149,
+    150,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    252,
+    150,
+    160
+   ],
+   [
+    "replace",
+    252,
+    253,
+    160,
+    161,
+    [
+     "Conceptually mirrors SQLite's `cksumvfs`, generalized to also surface AEAD failures via the same API."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    258,
+    161,
+    166
+   ],
+   [
+    "replace",
+    258,
+    268,
+    166,
+    167,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    270,
+    167,
+    169
+   ],
+   [
+    "replace",
+    270,
+    271,
+    169,
+    170,
+    [
+     "The page-1 DB header (first 100 bytes) is outside the per-page hash; its invariants are validated separately at open. Full design: docs/btree/specs/integrity.md."
+    ]
+   ],
+   [
+    "equal",
+    271,
+    276,
+    170,
+    175
+   ],
+   [
+    "replace",
+    276,
+    277,
+    175,
+    176,
+    [
+     "|Error|When|"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    278,
+    176,
+    177
+   ],
+   [
+    "replace",
+    278,
+    281,
+    177,
+    180,
+    [
+     "|`ErrHeaderCorrupt`|`Open`: the file header is unusable.|",
+     "|`ErrPageIntegrity`|A page fails its checksum or its AEAD authentication, on the read that meets it.|",
+     "|`ErrQuickCheckFailed`|`Open` after an unclean shutdown (`Durability.Sentinel`): the quick check, or the open's read of the catalog before it, found damage.|"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    301,
+    180,
+    200
+   ],
+   [
+    "replace",
+    301,
+    302,
+    200,
+    201,
+    [
+     "|Error|When|"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    201,
+    202
+   ],
+   [
+    "replace",
+    303,
+    306,
+    202,
+    205,
+    [
+     "|`ErrEncryptionKeyRequired`|The file is encrypted and `Config.Encryption` is empty.|",
+     "|`ErrNotEncrypted`|The file is not encrypted and `Config.Encryption` is not empty.|",
+     "|`ErrWrongKey`|`Config.Encryption` does not open the file: another passphrase or key than the file's, or another cipher.|"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    311,
+    205,
+    210
+   ],
+   [
+    "replace",
+    311,
+    312,
+    210,
+    211,
+    [
+     "An independent Go implementation following design conventions from SQLCipher (BSD-3-Clause) — reserved-tail page overhead, the page-1 plaintext-prefix rule, PBKDF2-HMAC-SHA256 key derivation. No SQLCipher code is included; the cryptography is Go-native and uses AEAD rather than SQLCipher's encrypt-then-MAC construction. Not SQLCipher-compatible on disk. See NOTICE.md."
+    ]
+   ],
+   [
+    "equal",
+    312,
+    317,
+    211,
+    216
+   ],
+   [
+    "replace",
+    317,
+    321,
+    216,
+    220,
+    [
+     "|Format|Created by|Opened by|",
+     "|------|----------|---------|",
+     "|5|v2.0.0 – v2.4.x|every v2 release|",
+     "|6|v2.5.0 and later|v2.5.0 and later|"
+    ]
+   ],
+   [
+    "equal",
+    321,
+    328,
+    220,
+    227
+   ],
+   [
+    "replace",
+    328,
+    329,
+    227,
+    228,
+    [
+     "`SchemaFormat` reports the format of an open database, and `CopyToLatestFormat` copies a database into a new file in the latest format. Moving a format 5 database onto format 6 is optional; docs/migration-format-5-to-6.md describes when to do it, what can differ in the copy, and how to put the copy in the old file's place."
+    ]
+   ],
+   [
+    "equal",
+    329,
+    332,
+    228,
+    231
+   ],
+   [
+    "replace",
+    332,
+    337,
+    231,
+    236,
+    [
+     "* **API reference** — pkg.go.dev/github.com/anyproto/any-store/v2",
+     "* **Query semantics** — docs/query-filter-contract.md",
+     "* **Full-text search** — docs/full-text-search.md",
+     "* **Vector search** — docs/vector-search.md, docs/vector-engine.md",
+     "* **Aggregation** — docs/aggregation.md"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    340,
+    236,
+    239
+   ],
+   [
+    "replace",
+    340,
+    354,
+    239,
+    240,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    356,
+    240,
+    242
+   ],
+   [
+    "replace",
+    356,
+    357,
+    242,
+    243,
+    [
+     "Any Store is released under the MIT License — see LICENSE.md."
+    ]
+   ],
+   [
+    "equal",
+    357,
+    358,
+    243,
+    244
+   ],
+   [
+    "replace",
+    358,
+    359,
+    244,
+    245,
+    [
+     "The storage engine derives from SQLite (public domain) and follows page-encryption design conventions from SQLCipher (BSD-3-Clause). Neither project's source is included. Attribution and scope: NOTICE.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "4561a6ec3ea2+2": {
+  "fn": "aashishvanand/airport-data-js",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "|Import|Contents|Size (minified)|"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    17,
+    14,
+    17,
+    [
+     "|`airport-data-js`|Full dataset (~18,800 airports, all fields)|~1.3 MB|",
+     "|`airport-data-js/lite`|Same API, only airports with an IATA code (~10,200), without the `wikipedia`/`website`/tracker URL fields; coordinates rounded to 4 decimals (~11 m)|~540 KB|",
+     "|`airport-data-js/tools`|LLM tool definitions (JSON Schema)|~12 KB|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    56,
+    17,
+    56
+   ],
+   [
+    "replace",
+    56,
+    76,
+    56,
+    57,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    84,
+    57,
+    65
+   ],
+   [
+    "replace",
+    84,
+    103,
+    65,
+    66,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    128,
+    66,
+    91
+   ],
+   [
+    "replace",
+    128,
+    129,
+    91,
+    92,
+    [
+     "Searches for airports by name (case- and accent-insensitive, minimum 2 characters). For city-aware, ranked results use `search`."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    146,
+    92,
+    109
+   ],
+   [
+    "replace",
+    146,
+    151,
+    109,
+    110,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    191,
+    110,
+    150
+   ],
+   [
+    "replace",
+    191,
+    198,
+    150,
+    151,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    256,
+    151,
+    209
+   ],
+   [
+    "replace",
+    256,
+    262,
+    209,
+    210,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    281,
+    210,
+    229
+   ],
+   [
+    "replace",
+    281,
+    289,
+    229,
+    230,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    308,
+    230,
+    249
+   ],
+   [
+    "replace",
+    308,
+    314,
+    249,
+    250,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    325,
+    250,
+    261
+   ],
+   [
+    "replace",
+    325,
+    336,
+    261,
+    262,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    336,
+    376,
+    262,
+    302
+   ],
+   [
+    "replace",
+    376,
+    387,
+    302,
+    303,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    396,
+    303,
+    312
+   ],
+   [
+    "replace",
+    396,
+    402,
+    312,
+    313,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    402,
+    430,
+    313,
+    341
+   ],
+   [
+    "replace",
+    430,
+    435,
+    341,
+    342,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    435,
+    478,
+    342,
+    385
+   ],
+   [
+    "replace",
+    478,
+    482,
+    385,
+    386,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    482,
+    506,
+    386,
+    410
+   ],
+   [
+    "replace",
+    506,
+    512,
+    410,
+    411,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    512,
+    519,
+    411,
+    418
+   ],
+   [
+    "replace",
+    519,
+    528,
+    418,
+    419,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    528,
+    535,
+    419,
+    426
+   ],
+   [
+    "replace",
+    535,
+    542,
+    426,
+    427,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    542,
+    549,
+    427,
+    434
+   ],
+   [
+    "replace",
+    549,
+    555,
+    434,
+    435,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    555,
+    558,
+    435,
+    438
+   ],
+   [
+    "replace",
+    558,
+    561,
+    438,
+    439,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    561,
+    566,
+    439,
+    444
+   ],
+   [
+    "replace",
+    566,
+    569,
+    444,
+    445,
+    [
+     "This project is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) - see the LICENSE file for details."
+    ]
+   ],
+   [
+    "equal",
+    569,
+    570,
+    445,
+    446
+   ],
+   [
+    "replace",
+    570,
+    573,
+    446,
+    447,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    573,
+    579,
+    447,
+    453
+   ],
+   [
+    "replace",
+    579,
+    588,
+    453,
+    454,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    588,
+    596,
+    454,
+    462
+   ],
+   [
+    "replace",
+    596,
+    625,
+    462,
+    463,
+    [
+     "…（29 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    625,
+    627,
+    463,
+    465
+   ],
+   [
+    "replace",
+    627,
+    628,
+    465,
+    466,
+    [
+     "Scripts are plain TypeScript run directly via `tsx` (no separate compile step needed for dev tooling)."
+    ]
+   ],
+   [
+    "equal",
+    628,
+    631,
+    466,
+    469
+   ],
+   [
+    "replace",
+    631,
+    632,
+    469,
+    470,
+    [
+     "|Command|Description|"
+    ]
+   ],
+   [
+    "equal",
+    632,
+    633,
+    470,
+    471
+   ],
+   [
+    "replace",
+    633,
+    645,
+    471,
+    483,
+    [
+     "|`npm test`|Run the Vitest test suite|",
+     "|`npm run build`|Build declarations, transpile, then bundle Node.js (`lib/`) and browser (`dist/`) output|",
+     "|`npm run build:lib`|Build only the Node.js bundle|",
+     "|`npm run build:dist`|Build only the browser bundles|",
+     "|`npm run build:esm`|Build only the ESM bundles (`lib/*.mjs`)|",
+     "|`npm run build:payload`|Write the shared dataset modules (`lib/payload.full.js`, `lib/payload.lite.js`)|",
+     "|`npm run refresh:data`|Diff against the latest OurAirports export (dry run; add `-- --write` to save, `-- --add FSH,BZJ` to force-add codes)|",
+     "|`npm run upgrade:https`|Probe `http://` links and upgrade hosts that support HTTPS (dry run; add `-- --write` to save)|",
+     "|`npm run check:duplicates`|Validate the dataset: duplicate IATA/ICAO codes, coordinate ranges, continent/type enums, country code format, `scheduled_service`/`utc` types, plus a data-completeness report|",
+     "|`npm run generate:json`|Regenerate `data/airports.json` from `data/airports.csv`|",
+     "|`npm run generate:compressed`|Regenerate `src/airports.data.json` and `src/airports.lite.data.json` from `data/airports.json`|",
+     "|`npm run benchmark`|Run performance benchmarks against the built browser bundle|"
+    ]
+   ],
+   [
+    "equal",
+    645,
+    657,
+    483,
+    495
+   ],
+   [
+    "replace",
+    657,
+    658,
+    495,
+    496,
+    [
+     "A weekly workflow compares the dataset with OurAirports every Monday without changing it, and opens an issue (label `data-refresh`) when there is something to review: new scheduled-service airports (with links to their OurAirports pages), newly assigned IATA codes on existing records, continent changes, city updates, and IATA codes that differ between the two. Airports are never added automatically. After checking them, run the workflow from the Actions tab with `mode: apply` and the checked IATA codes in `add` (e.g. `FSH,BZJ`); it opens a PR with those airports plus the routine updates. IATA mismatches are never changed automatically."
+    ]
+   ],
+   [
+    "equal",
+    658,
+    672,
+    496,
+    510
+   ],
+   [
+    "replace",
+    672,
+    673,
+    510,
+    511,
+    [
+     "Releases are automated via the release workflow. To publish a new version:"
+    ]
+   ],
+   [
+    "equal",
+    673,
+    674,
+    511,
+    512
+   ],
+   [
+    "replace",
+    674,
+    676,
+    512,
+    514,
+    [
+     "1. **Update the version** in `package.json` (follow Semantic Versioning)",
+     "2. **Update `CHANGELOG.md`** with a new section for the version (follow Keep a Changelog format)"
+    ]
+   ],
+   [
+    "equal",
+    676,
+    682,
+    514,
+    520
+   ],
+   [
+    "replace",
+    682,
+    689,
+    520,
+    527,
+    [
+     " - Run tests across Node.js 22.x and 24.x",
+     " - Run a security audit (`npm audit --audit-level=critical`)",
+     " - Check for duplicate airport codes",
+     " - Build the package",
+     " - Compare the version in `package.json` against the published npm version",
+     " - **Publish to npm** with provenance (if the version is new)",
+     " - **Create a GitHub Release** with notes extracted from `CHANGELOG.md`"
+    ]
+   ],
+   [
+    "equal",
+    689,
+    697,
+    527,
+    535
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

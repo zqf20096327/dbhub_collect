@@ -3494,5 +3494,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "17b344d5a017": {
+  "identity": {
+   "one_liner": "基于 Java 21 的嵌入式/客户端-服务器数据库引擎，含 ARIES 恢复、WAL 与 MVCC/SSI",
+   "review": "DieselDB 是用 Java 21 编写的可嵌入和客户端-服务器数据库引擎，当前版本 3.3.99。它实现 ARIES 崩溃恢复、分段 WAL 与 group commit、带 BufferPool（LRU）的页式存储、MVCC 加 SSI 串行化、在线 ALTER TABLE、RBAC 与 TLS/mTLS/SNI，并提供 libpq 协议兼容（端口 5432）及 JDBC/Python/Node.js/Go/Rust 驱动。逻辑复制、外键、JSON 类型、CTE、窗口函数等功能仍在开发中（见 Roadmap）。",
+   "highlights": [
+    "支持 ARIES 三阶段崩溃恢复（Analysis→Redo→Undo）、分段 WAL、CRC32C 校验、group commit 与 4 种 fsync 策略",
+    "提供页式存储（BufferPool LRU、slotted page）、6 种索引类型（BTree/Hash/Unique/Composite/Covering 等）与 5 种存储后端（in-memory/CSV/TSV/JSONL/AVRO）",
+    "兼容 PostgreSQL 线协议（libpq，SCRAM-SHA-256），并发布 JDBC、Python、Node.js、Go、Rust 五种官方驱动"
+   ],
+   "use_cases": [
+    "需要通过 psql 或 JDBC/Python 等现有客户端接入的 Java 应用数据存储",
+    "需要流复制、PITR、增量物理备份与 Prometheus/JMX 监控的部署环境",
+    "多租户场景下需要 RBAC、TLS 1.3/mTLS 与 SNI 按主机名路由的数据库服务"
+   ]
+  },
+  "sha": "17b344d5a017",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

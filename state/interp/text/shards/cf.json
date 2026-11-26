@@ -3743,5 +3743,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "68476b071cc6": {
+  "identity": {
+   "one_liner": "自托管 MCP 服务器，为 AI 编码助手提供持久化项目知识库",
+   "review": "mxLore 是一个用 Delphi 编写、以 MariaDB 存储的自托管 MCP 服务器，为 Claude Code、Cursor、Windsurf 及 claude.ai 等 MCP 客户端提供跨会话的项目记忆，包含决策记录、经验教训和知识图谱。运行于 Windows x64，需 MariaDB 10.6+，语义搜索依赖 MariaDB 11.6+ 的 VECTOR 支持；未装 Node.js 时部分钩子保持静默。编码类客户端经本地代理直连服务器，无需公网端点。",
+   "highlights": [
+    "提供 46 个 MCP 工具和 13 个技能，支持跨项目搜索、知识图谱与基于收件箱的多智能体消息传递（代理投递、接收端确认）",
+    "混合向量与全文语义搜索（需 MariaDB 11.6+），文档记录创建者与机器归属，项目支持私有化与只追加访问审计日志",
+    "编码客户端通过本地无依赖代理（Windows/macOS）经 stdio-HTTP 桥接直连服务器，服务器可停留在 localhost 或局域网"
+   ],
+   "use_cases": [
+    "为使用 Claude Code、Cursor、Windsurf 等工具的开发团队在自建基础设施上维护跨会话的项目决策与经验记录",
+    "多个 AI 助手跨项目协作：通过服务器收件箱传递任务与状态，代理推送到等待中的会话",
+    "让 CTO、PM 等非终端用户经 claude.ai 聊天窗口与开发者访问同一知识库"
+   ]
+  },
+  "sha": "68476b071cc6",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1114d9f18207": {
+  "identity": {
+   "one_liner": "macOS 菜单栏剪贴板历史工具，AES-GCM 加密本地存储",
+   "review": "SmartClip 是一款运行在 macOS 菜单栏的剪贴板历史应用，记录文本、链接、代码、图片和文件引用，数据仅存本地，无账号与遥测。剪贴板内容用 AES-GCM 加密，密钥存于 Keychain，元数据以 SQLite 明文保存以便检索。支持按类型、时间、来源应用搜索，可对敏感内容掩码或排除。仅支持 Apple Silicon 且需 macOS 14+，当前发行版未经 Apple 公证，首次启动需在系统设置中手动放行。",
+   "highlights": [
+    "剪贴板载荷使用 AES-GCM 加密，密钥存于 macOS Keychain",
+    "支持文本、URL、代码、图片、文件引用的历史记录，可按类型、时间、来源应用和收藏搜索",
+    "敏感内容（卡片号、凭证格式）自动掩码、排除全文搜索并缩短保留期"
+   ],
+   "use_cases": [
+    "需要本地保存和管理 macOS 剪贴板历史的用户",
+    "处理包含密码、卡号等敏感内容并希望自动掩码或排除存储的场景",
+    "无网络环境下使用，无需账号或云服务的工作流"
+   ]
+  },
+  "sha": "1114d9f18207",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9642c4b9388c": {
+  "identity": {
+   "one_liner": "基于纯 Markdown 与 node:sqlite 的零推理确定性 AI 记忆引擎",
+   "review": "HebbMesh 是一个面向 AI Agent 的本地记忆引擎，将记忆存为带状态标记的 Markdown 文件，用 Node.js 内置 node:sqlite（WAL 模式）实现赫布式权重持久化与扩散激活检索，无需 embeddings、LLM 调用、Docker 或 npm 依赖。写入时通过 | sem: 后缀人工注入同义词实现语义匹配，并提供 privacy firewall 隔离 private_vault.md。适用于需在本地 CPU 上检索 Agent 历史记忆的场景。",
+   "highlights": [
+    "基于纯 Markdown 文件与 node:sqlite WAL 存储记忆，无外部依赖、无需 Docker 或 API 密钥",
+    "通过 | sem: 写时语义种子替代 embedding 模型，支持 lessons/graph/milestones/profile/private_vault 等多种记忆文件类型",
+    "提供 CLI 与 Node.js API 两种调用方式，内置 3D 可视化 viewer 与 bridge 跨主题查询命令"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等编程 Agent 提供 SessionStart 钩子式的本地记忆检索",
+    "在无法运行向量数据库或 GPU 的环境中为 LLM 应用持久化对话记忆",
+    "需要将部分记忆条目严格隔离（private_vault）的多用户/隐私场景"
+   ]
+  },
+  "sha": "9642c4b9388c",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

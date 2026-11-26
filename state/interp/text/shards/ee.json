@@ -3537,5 +3537,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5e3c281f569f": {
+  "identity": {
+   "one_liner": "自托管的数据库备份工具，支持PITR与恢复验证",
+   "review": "Databasus 是一个开源（Apache 2.0）自托管备份工具，主要面向 PostgreSQL（12-19），也支持 MySQL、MariaDB、MongoDB 的逻辑备份。它提供物理备份（含增量与 WAL 流式传输以实现时间点恢复）、定时调度、多种存储目的地（S3、Azure Blob、FTP 等）及通知渠道，并可在容器中执行真实恢复来验证备份可用。部署方式包括安装脚本、Docker、Docker Compose 和 Helm。",
+   "highlights": [
+    "支持物理备份（全量+增量+WAL 流）实现 PITR，兼容 Patroni 与 CloudNativePG 的时间线切换",
+    "提供恢复验证：启动数据库容器执行真实恢复并输出逐表行数报告",
+    "支持本地/S3/Azure Blob/FTP 等多种存储目的地，AES-256-GCM 加密与保留策略（含 GFS）"
+   ],
+   "use_cases": [
+    "需要对 PostgreSQL 做时间点恢复与灾难恢复的自托管环境",
+    "使用 Patroni/CNPG 高可用集群并需在主从切换后延续备份链的场景",
+    "需要定时备份、保留策略与 Slack/Telegram 等通知的 DevOps 团队备份管理"
+   ]
+  },
+  "sha": "5e3c281f569f",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ff5cfff7475": {
+  "identity": {
+   "one_liner": "Rust 编写的日志结构嵌入式持久化存储引擎，专为 Multi-Raft 日志存储设计",
+   "review": "Raft Engine 是一个嵌入式持久化存储引擎，采用类 bitcask 的日志结构设计，为 TiKV 存储多 Raft 组日志。它将内存中的 memtable 与顺序追加的日志文件结合，多个 Raft 组共享同一日志流，通过协作式垃圾回收（由用户定时调用 purge_expired_files()）物理删除已截断的日志并回收空间。使用时需在 Cargo.toml 中引入 raft-engine 依赖。",
+   "highlights": [
+    "提供以连续索引存取 protobuf 日志条目的 API，并按 Raft 组进行键值存储",
+    "支持原子写批处理、lz4 压缩、同步/异步写入（同步写调用 fdatasync）",
+    "采用协作式 GC：用户调用 purge_expired_files() 触发，并返回持有过期日志的 Raft 组列表"
+   ],
+   "use_cases": [
+    "为基于 Multi-Raft 的分布式系统持久化 Raft 日志",
+    "在需要嵌入式日志存储且关注写放大的场景中作为存储组件",
+    "作为 Rust crate 集成，可按需启用 prost-codec、scripting、failpoints 等特性"
+   ]
+  },
+  "sha": "6ff5cfff7475",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1753376090a4": {
+  "identity": {
+   "one_liner": "自托管车辆管理仪表盘，基于 Flask，追踪油耗、费用、保养与出行。",
+   "review": "OdoDash 是 May 项目的 fork，沿用其数据模型、REST API 和导入格式，May 备份可直接恢复，在其基础上重新设计了界面。用于追踪多辆车的油耗/充电、费用、保养计划、行程和提醒，支持多用户角色共享。通过 Docker Compose 部署，默认端口 5050，也可用 Python/venv 手动安装；首次登录密码由日志生成，需及时修改。",
+   "highlights": [
+    "支持多车辆（汽车、面包车、摩托车）与燃油、EV 充电记录，自动计算油耗（L/100km、MPG）",
+    "支持费用分类、按里程/小时/日期的保养计划、行程记录，及邮件/ntfy/Pushover/webhook 提醒",
+    "提供 REST API、Home Assistant 集成（经 HACS）、Telegram 记录、日历订阅，支持 May 备份与 Fuelly CSV 导入及 JSON/CSV 导出"
+   ],
+   "use_cases": [
+    "家庭或个人自托管记录多辆燃油车与电动车的加油/充电、费用与保养历史",
+    "通过 Home Assistant 集成查看里程、油耗、成本传感器及保养到期提醒",
+    "从 May 或 Fuelly 迁移已有车辆数据的用户，直接导入备份或 CSV"
+   ]
+  },
+  "sha": "1753376090a4",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

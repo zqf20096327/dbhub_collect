@@ -3482,5 +3482,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c5e9f980c712": {
+  "identity": {
+   "one_liner": "面向 Hermes Agent 的非侵入式 AST 级补丁工具，提供 Token 计量、中文菜单等增强。",
+   "review": "hermes-patches 是针对 Hermes Agent 的补丁集合，通过 AST 级代码注入在本地源码上添加 Token 统计页脚、Telegram 菜单汉化、长消息切分等功能。面向自部署 Hermes Agent 的用户，提供 pip、一键脚本、交互控制台三种安装方式，内置备份回滚与幂等机制。v2.0.0 起移除了已被上游原生覆盖的四个补丁。",
+   "highlights": [
+    "采用非侵入式 AST 注入，修改前经 py_compile 编译预检并生成 .bak 备份，支持 --uninstall 一键回滚",
+    "提供 pip 安装、curl 一键脚本、交互式中文控制台三种部署方式，支持 --only/--skip/--status/--dry-run 参数",
+    "通过 systemd ExecStartPre 守护实现版本升级后自动重应用补丁，并自动重启 hermes-gateway 服务"
+   ],
+   "use_cases": [
+    "为自部署的 Hermes Agent 增加 Prompt 总量、缓存命中率、输出 Token 等运行时页脚统计",
+    "将 Telegram Bot 的快捷命令菜单本地化为中文，并对超长消息按段落边界切分",
+    "在 Hermes 源码升级后自动重应用补丁，或用 --dry-run 预检补丁应用状态"
+   ]
+  },
+  "sha": "c5e9f980c712",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

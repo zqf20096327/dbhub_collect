@@ -23878,5 +23878,644 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "00feed03e206+2": {
+  "fn": "xo/dburl",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "delete",
+    10,
+    18,
+    10,
+    10
+   ],
+   [
+    "equal",
+    18,
+    21,
+    10,
+    13
+   ],
+   [
+    "delete",
+    21,
+    28,
+    13,
+    13
+   ],
+   [
+    "equal",
+    28,
+    40,
+    13,
+    25
+   ],
+   [
+    "replace",
+    40,
+    49,
+    25,
+    34,
+    [
+     "|Component|Description|",
+     "|-------------------|------------------------------------------------------------------------------------|",
+     "|protocol|driver name or alias (see below)|",
+     "|transport|\"tcp\", \"udp\", \"unix\", \"http\", \"https\", or a driver name for odbc|",
+     "|user|username|",
+     "|pass|password|",
+     "|host|host|",
+     "|dbname \\*|database, instance, or service name to connect to|",
+     "|?opt1=...|additional database driver options (see respective SQL driver for available options)|"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    34,
+    35
+   ],
+   [
+    "replace",
+    50,
+    51,
+    35,
+    36,
+    [
+     " \\* For Microsoft SQL Server, `/dbname` can be"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    53,
+    36,
+    38
+   ],
+   [
+    "replace",
+    53,
+    54,
+    38,
+    39,
+    [
+     "Write a `/` that is part of a service name as `%2F`. See the examples below. "
+    ]
+   ],
+   [
+    "equal",
+    54,
+    90,
+    39,
+    75
+   ],
+   [
+    "replace",
+    90,
+    102,
+    75,
+    76,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    114,
+    76,
+    88
+   ],
+   [
+    "replace",
+    114,
+    115,
+    88,
+    149,
+    [
+     "|Database|Scheme / Tag|Scheme Aliases|Driver Package / Notes|",
+     "|----------------------|-----------------|--------------------------------------------------|---------------------------------------------------------------------------------------------|",
+     "|PostgreSQL|`postgres`|`pg`, `pgsql`, `postgresql`|[github.com/jackc/pgx/v5/stdlib][d-postgres]|",
+     "|MySQL|`mysql`|`my`, `maria`, `aurora`, `mariadb`, `percona`|[github.com/go-sql-driver/mysql][d-mysql]|",
+     "|Microsoft SQL Server|`sqlserver`|`ms`, `mssql`, `azuresql`|[github.com/microsoft/go-mssqldb][d-sqlserver]|",
+     "|Oracle Database|`oracle`|`or`, `ora`, `oci`, `oci8`, `odpi`, `odpi-c`|[github.com/xo/oracle][d-oracle]|",
+     "|SQLite3|`sqlite3`|`sq`, `sqlite`, `file`|[github.com/mattn/go-sqlite3][d-sqlite3] [†][f-cgo] [§][f-embedded]|",
+     "|DuckDB|`duckdb`|`dk`, `ddb`, `duck`, `file`|[github.com/duckdb/duckdb-go/v2][d-duckdb] [†][f-cgo] [§][f-embedded]|",
+     "|ClickHouse|`clickhouse`|`ch`|[github.com/xo/dbimp/clickhouse][d-clickhouse]|",
+     "|CSVQ|`csvq`|`cs`, `csv`, `tsv`, `json`|[github.com/mithrandie/csvq-driver][d-csvq] [§][f-embedded]|",
+     "|||||",
+     "|Alibaba MaxCompute|`maxcompute`|`mc`|[github.com/xo/dbimp/maxcompute][d-maxcompute] [¶][f-hosted]|",
+     "|Alibaba Tablestore|`tablestore`|`ot`, `ots`|[github.com/xo/dbimp/tablestore][d-tablestore] [¶][f-hosted]|",
+     "|Amazon Athena|`athena`|`s3`, `aws`, `awsathena`|[github.com/xo/dbimp/athena][d-athena] [¶][f-hosted]|",
+     "|Amazon Redshift|`redshift`|`rs`|[github.com/jackc/pgx/v5/stdlib][d-redshift] [¶][f-hosted]|",
+     "|Apache Avatica|`avatica`|`av`, `phoenix`|[github.com/xo/dbimp/avatica][d-avatica]|",
+     "|Apache Drill|`drill`|`dl`|[github.com/xo/dbimp/drill][d-drill]|",
+     "|Apache Druid|`druid`|`dr`|[github.com/xo/dbimp/druid][d-druid]|",
+     "|Apache Hive|`hive`|`hi`, `hive2`|[github.com/xo/dbimp/hive][d-hive]|",
+     "|Apache Impala|`impala`|`im`|[github.com/xo/dbimp/hive][d-impala]|",
+     "|Apache Pinot|`pinot`|`pi`|[github.com/xo/dbimp/pinot][d-pinot]|",
+     "|Apache Solr|`solr`|`so`|[github.com/xo/dbimp/solr][d-solr]|",
+     "|ArangoDB|`arangodb`|`ar`, `arango`|[github.com/xo/dbimp/arangodb][d-arangodb]|",
+     "|Azure Cosmos DB|`cosmos`|`cm`|[github.com/xo/dbimp/cosmos][d-cosmos] [¶][f-hosted]|",
+     "|Cassandra|`cassandra`|`ca`, `cql`, `scy`, `cass`, `scylla`, `datastax`|[github.com/xo/cassandra][d-cassandra]|",
+     "|ChaiSQL|`chai`|`ci`, `genji`, `chaisql`|[github.com/chaisql/chai][d-chai] [§][f-embedded]|",
+     "|CockroachDB|`cockroachdb`|`cr`, `cdb`, `crdb`, `cockroach`|[github.com/jackc/pgx/v5/stdlib][d-cockroachdb]|",
+     "|Couchbase|`couchbase`|`n1`, `n1ql`|[github.com/xo/dbimp/couchbase][d-couchbase]|",
+     "|CrateDB|`cratedb`|`ct`, `crate`|[github.com/jackc/pgx/v5/stdlib][d-cratedb]|",
+     "|Databend|`databend`|`dd`, `bend`|[github.com/xo/dbimp/databend][d-databend]|",
+     "|Databricks|`databricks`|`br`, `brick`, `bricks`, `databrick`|[github.com/xo/dbimp/databricks][d-databricks] [¶][f-hosted]|",
+     "|DynamoDB|`dynamodb`|`dy`, `dyn`, `dynamo`|[github.com/xo/dbimp/dynamodb][d-dynamodb]|",
+     "|Elasticsearch|`elasticsearch`|`es`, `elastic`|[github.com/xo/dbimp/elasticsearch][d-elasticsearch]|",
+     "|Exasol|`exasol`|`ex`, `exa`|[github.com/xo/dbimp/exasol][d-exasol]|",
+     "|Firebird|`firebirdsql`|`fb`, `firebird`|[github.com/nakagami/firebirdsql][d-firebirdsql]|",
+     "|FlightSQL|`flightsql`|`fl`, `flight`|[github.com/apache/arrow-go/v18/arrow/flight/flightsql/driver][d-flightsql]|",
+     "|Google BigQuery|`bigquery`|`bq`|[github.com/xo/dbimp/bigquery][d-bigquery] [¶][f-hosted]|",
+     "|Google Spanner|`spanner`|`sp`|[github.com/xo/dbimp/spanner][d-spanner] [¶][f-hosted]|",
+     "|InfluxDB|`influxdb`|`in`, `influx`|[github.com/xo/dbimp/influxdb][d-influxdb]|",
+     "|InfluxDB InfluxQL|`influxql`|`iq`|[github.com/xo/dbimp/influxdb][d-influxql]|",
+     "|Kubernetes|`k8s`|`k`, `kc`, `k8`, `kube`, `kubernetes`|[github.com/xo/dbfwd][d-k8s]|",
+     "|libSQL|`libsql`|`ls`, `turso`|[github.com/xo/dbimp/libsql][d-libsql]|",
+     "|ModernC SQLite3|`moderncsqlite`|`mq`, `modernsqlite`|[modernc.org/sqlite][d-moderncsqlite] [§][f-embedded]|",
+     "|Neo4j|`neo4j`|`nj`, `neo`, `n4j`|[github.com/xo/dbimp/neo4j][d-neo4j]|",
+     "|ODBC|`odbc`|`od`|[github.com/xo/odbc][d-odbc]|",
+     "|OpenSearch|`opensearch`|`os`, `open`|[github.com/xo/dbimp/opensearch][d-opensearch]|",
+     "|PostgreSQL lib/pq|`pq`|`libpq`|[github.com/lib/pq][d-pq]|",
+     "|PostgreSQL PGX|`pgx`|`px`|[github.com/jackc/pgx/v5/stdlib][d-pgx]|",
+     "|Presto|`presto`|`pr`, `prestodb`|[github.com/xo/dbimp/trino][d-presto]|",
+     "|QuestDB|`questdb`|`qs`|[github.com/jackc/pgx/v5/stdlib][d-questdb]|",
+     "|rqlite|`rqlite`|`rq`|[github.com/xo/dbimp/rqlite][d-rqlite]|",
+     "|SAP HANA|`hdb`|`sa`, `sap`, `hana`, `saphana`|[github.com/SAP/go-hdb/driver][d-hdb]|",
+     "|SingleStore MemSQL|`memsql`|`me`|[github.com/go-sql-driver/mysql][d-memsql]|",
+     "|Snowflake|`snowflake`|`sf`|[github.com/xo/dbimp/snowflake][d-snowflake] [¶][f-hosted]|",
+     "|SurrealDB|`surrealdb`|`sr`, `sur`, `surreal`|[github.com/xo/dbimp/surrealdb][d-surrealdb]|",
+     "|TiDB|`tidb`|`ti`|[github.com/go-sql-driver/mysql][d-tidb]|",
+     "|Trino|`trino`|`tr`|[github.com/xo/dbimp/trino][d-trino]|",
+     "|Vertica|`vertica`|`ve`|[github.com/vertica/vertica-sql-go][d-vertica]|",
+     "|Vitess Database|`vitess`|`vt`|[github.com/go-sql-driver/mysql][d-vitess]|",
+     "|VoltDB|`voltdb`|`vo`, `vdb`, `volt`|[github.com/VoltDB/voltdb-client-go/voltdbclient][d-voltdb]|",
+     "|YDB|`ydb`|`yd`|[github.com/ydb-platform/ydb-go-sdk/v3][d-ydb]|"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    149,
+    150
+   ],
+   [
+    "replace",
+    116,
+    250,
+    150,
+    153,
+    [
+     " † Requires CGO ",
+     " § Embedded, with no server to run ",
+     " ¶ Hosted service, with no server you can run"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    290,
+    153,
+    193
+   ],
+   [
+    "replace",
+    290,
+    291,
+    193,
+    194,
+    [
+     "A full example:"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    296,
+    194,
+    199
+   ],
+   [
+    "replace",
+    296,
+    315,
+    199,
+    200,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    325,
+    200,
+    210
+   ],
+   [
+    "replace",
+    325,
+    326,
+    210,
+    211,
+    [
+     " `sqlite3:` or a `duckdb:` URL."
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    211,
+    212
+   ],
+   [
+    "replace",
+    327,
+    328,
+    212,
+    213,
+    [
+     " the known `sqlite3:` and `duckdb:` extensions."
+    ]
+   ],
+   [
+    "equal",
+    328,
+    349,
+    213,
+    234
+   ],
+   [
+    "replace",
+    349,
+    373,
+    234,
+    243,
+    [
+     " usql |",
+     " dburl |",
+     " dbmeta |",
+     " dbimp |",
+     " cassandra |",
+     " dbtpl |",
+     " tblfmt |",
+     " rline |",
+     " transit"
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "7afe8767a8ce+2": {
+  "fn": "Velocity-Astro/velocity-cms",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "A content management system for Astro sites, built for Velocity. People edit at `/admin`, the content lives in a small SQLite database beside the site, and a change is on the site about a second after it is published, with no rebuild."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "**Try the demo** · **Read the docs** · **Add it to a site**"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    10,
+    6,
+    7,
+    [
+     " The editor: a page as a list of sections, with the live page beside the form"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    17,
+    7,
+    14
+   ],
+   [
+    "replace",
+    17,
+    18,
+    14,
+    15,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    15,
+    16
+   ],
+   [
+    "replace",
+    19,
+    30,
+    16,
+    27,
+    [
+     "|**Content**|Content types made in a visual builder or described in code. Drafts and published versions, trash, duplicate, history with restore, scheduled publishing, preview links, several languages.|",
+     "|**Pages**|Pages built from sections, with the live page beside the form, or a visual editor that gives the page the window: words typed on the page, sections moved, added and removed there. Pages under pages, a home page, menus edited in the CMS.|",
+     "|**Theme**|A site's colors and fonts set in the editor: a color picker with the template's palette, the template's fonts, tried on the page before they are published.|",
+     "|**Media**|An image library with uploads, kept in a folder, any S3-compatible bucket, or on Cloudflare Workers an R2 bucket the Worker is bound to. Each upload is made lighter and kept as WebP.|",
+     "|**Forms**|A form builder, forms as page sections, spam marking, an optional Cloudflare Turnstile check, notices by email, export and erase of what a person sent.|",
+     "|**CRM**|Contacts with a timeline and notes, a pipeline board, owners and follow-up days, deals with a forecast, custom fields, CSV import.|",
+     "|**Plugins**|A plugin API with settings, secrets and retried background work. Seven come with it, off until an owner switches one on: SEO (search titles, share image, Search Console and Bing codes), Analytics (Google Analytics, Tag Manager, cookie consent), Redirects, Webhooks, and the experimental Mailchimp, Slack and HubSpot.|",
+     "|**People**|Sign-in by email link or passkey, no passwords. Owner, editor and author roles. Invitations.|",
+     "|**Editor**|A home that says what is waiting, one bar at the top of every screen, search with Ctrl or Command and K, light and dark, and a layout that fits a phone.|",
+     "|**AI agents**|Rules and skills for coding agents, installed into every site and kept to the CMS's version. A `check` command that names each rule a site breaks and how to fix it. Access tokens, content commands and an MCP server that builds pages from the template's own sections.|",
+     "|**Site**|Live pages from a cache that a publish clears. Search and the sitemap follow. A fully static build is an option.|"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    33,
+    27,
+    30
+   ],
+   [
+    "replace",
+    33,
+    34,
+    30,
+    31,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    31,
+    32
+   ],
+   [
+    "replace",
+    35,
+    43,
+    32,
+    40,
+    [
+     "|Home: a greeting that says what is waiting, the home page beside it, and cards with charts|The visual editor: the page|",
+     "|**Home.** What is waiting, the home page as visitors see it, and how the content, the forms and the deals stand.|**Visual editor.** The page has the window: type on it, move its sections, and try the site's colors and fonts before publishing.|",
+     "|Contacts as a board by stage|Deals by stage with what is open, forecast and won|",
+     "|**Contacts.** Everyone who wrote in through a form, by stage, with an owner and a day to follow up.|**Deals.** What each contact may buy, added up by stage and by how likely it is.|",
+     "|A form and its fields|A content type and its fields in the builder|",
+     "|**Forms.** Built in the editor, placed on a page as a section, and every sender becomes a contact.|**Content types.** Made in a visual builder or described in code, and changed without losing content.|",
+     "|A list of entries with status and languages|Plugins an owner switches on and off|",
+     "|**Content.** Drafts and published versions, history, scheduling, and a version per language.|**Plugins.** Switched on by an owner in the editor, with no rebuild.|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    52,
+    40,
+    49
+   ],
+   [
+    "replace",
+    52,
+    53,
+    49,
+    50,
+    [
+     "It installs the CMS, writes a secret to `.env`, keeps it out of git, adds `velocityCms()` to the Astro config and makes you the owner. It prints a link that signs you in at `/admin`. It can be run again and changes nothing that is there. What a site then needs is what the starter has: a description of its content (`cms/model.mjs`), a route that draws pages, and a component for each kind of section. The docs walk through each, and Converting a template takes an existing Astro site there step by step, for a person or a coding agent."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    64,
+    50,
+    61
+   ],
+   [
+    "replace",
+    64,
+    68,
+    61,
+    62,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    83,
+    62,
+    77
+   ],
+   [
+    "replace",
+    83,
+    84,
+    77,
+    78,
+    [
+     "`examples/starter` runs this way with `npm run check:workers`."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    98,
+    78,
+    92
+   ],
+   [
+    "replace",
+    98,
+    99,
+    92,
+    93,
+    [
+     "`examples/starter` is a small site on the CMS to read and copy from: its README says what is where. Node 22.23.4 or newer and pnpm 10."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    104,
+    93,
+    98
+   ],
+   [
+    "replace",
+    104,
+    110,
+    98,
+    99,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    122,
+    99,
+    111
+   ],
+   [
+    "replace",
+    122,
+    123,
+    111,
+    112,
+    [
+     "- No outside security review yet. See SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    112,
+    115
+   ],
+   [
+    "replace",
+    126,
+    127,
+    115,
+    116,
+    [
+     "|Package|What it owns|"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    116,
+    117
+   ],
+   [
+    "replace",
+    128,
+    136,
+    117,
+    125,
+    [
+     "|`cms-core`|The content model and every rule about it: types, fields, entries, forms, contacts, deals, plugins, permissions, events. Knows nothing about a database, Astro or HTTP.|",
+     "|`cms-db`|SQLite and libSQL storage: tables, migrations, search.|",
+     "|`cms-api`|The CMS over HTTP, on web-standard `Request` and `Response`.|",
+     "|`cms-auth`|Sign-in: email links and passkeys.|",
+     "|`cms-ui`|The editor's design system.|",
+     "|`cms-admin`|The editor's screens.|",
+     "|`cms-plugins`|The plugins that come with the CMS.|",
+     "|`cms-astro`|The Astro integration, the live loader and the `velocity-cms` command.|"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    125,
+    126
+   ],
+   [
+    "replace",
+    137,
+    138,
+    126,
+    127,
+    [
+     "Five rules shape the code. `AGENTS.md` has the detail, for people and for coding agents alike."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    146,
+    127,
+    135
+   ],
+   [
+    "replace",
+    146,
+    149,
+    135,
+    136,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    150,
+    136,
+    137
+   ],
+   [
+    "replace",
+    150,
+    152,
+    137,
+    138,
+    [
+     "The code is MIT. The names \"Velocity\" and \"Velocity CMS\" and the logo are not part of that licence: see TRADEMARKS.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

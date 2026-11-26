@@ -3587,5 +3587,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1c86af529cb4": {
+  "identity": {
+   "one_liner": "基于 NestJS 12 + Vue 3.5 + Element Plus 的 monorepo 全栈管理后台模板",
+   "review": "栖梧（qiwu-vue-admin）是一个 MIT 许可的管理后台模板，采用 pnpm workspace 组织服务端（NestJS）、Web 端与共享契约包（zod 校验前后端共用），面向需要后台系统的开发者。内置 RBAC 与五种数据权限、BPMN 工作流、代码生成、多租户与 MCP 等可选模块；需 Node 22、MySQL 与 Redis，部署目前仅支持构建产物方式，不提供 Docker。",
+   "highlights": [
+    "zod 校验规则写在 @qiwu/shared，前后端表单与接口共用同一套规则",
+    "提供 CRUD、树形、主子表代码生成，同时输出前后端代码与端到端测试",
+    "多租户、微信公众号、MCP 接入、即时通讯等模块默认关闭，关闭时不加载"
+   ],
+   "use_cases": [
+    "开发需要用户/角色/部门/数据权限体系的中后台系统",
+    "需要 BPMN 审批流、动态表单的业务流程场景",
+    "基于模板快速创建新项目，可选 uni-app 移动端（H5/App/微信小程序）或仅保留 PC 端"
+   ]
+  },
+  "sha": "1c86af529cb4",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9f53c9046f0d": {
+  "identity": {
+   "one_liner": "Spring Boot 3 + Vue 3 的 B2C 商城，内置秒杀与多 Agent 智能客服",
+   "review": "该项目是一个包含后端、双前端与独立智能客服四个模块的全栈电商系统，覆盖注册登录、商品浏览、购物车、下单到支付的流程。支付为模拟实现，未接入真实第三方渠道。本地启动依赖 Docker 提供中间件，需 Java 17、Node 18 与 MySQL/Redis/RabbitMQ/Elasticsearch 等组件；智能客服为可选模块，需配置 LLM API 密钥。",
+   "highlights": [
+    "秒杀流程采用 Redis Lua 原子扣减库存、RabbitMQ 异步下单与消费失败自动重试回滚库存",
+    "智能客服基于 LangGraph Supervisor 编排，支持 FAQ 短路、向量+BM25 混合检索、工单处理与 SSE 流式响应",
+    "订单超时通过 RabbitMQ 延迟队列自动取消并恢复库存，商品搜索由 Elasticsearch 文档同步实现"
+   ],
+   "use_cases": [
+    "作为 B2C 商城业务的完整实现供开发与部署运行",
+    "运行秒杀高并发方案与多 Agent 客服的代码参考",
+    "学习 Spring Boot 3、Vue 3、LangChain 等技术栈集成的项目样例"
+   ]
+  },
+  "sha": "9f53c9046f0d",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c044efebabf2": {
+  "identity": {
+   "one_liner": "面向金融场景的开源知识图谱平台，以图数据库承载账簿、投资组合与SEC申报数据供AI代理查询。",
+   "review": "RoboSystems 是一个运行于自有基础设施的开源金融知识图谱平台，包含实体图、共享SEC资料库（8,000+申报主体）与自定义图三类，均运行在 LadybugDB 上并支持 MCP 访问。其上构建了总账应用 RoboLedger（事件块、rs-gaap 分类法、XBRL 2.1/RDF 输出）与投资应用 RoboInvestor。每租户独享图数据库实例，写操作采用命名操作加 Idempotency-Key 机制。基于 Apache 2.0 许可，需 Docker、8 GB 内存部署。",
+   "highlights": [
+    "三类图共用一套本体，XBRL 标准术语标注，报告可序列化为 XBRL 2.1、RDF holon、DataBook（Markdown）或 Excel",
+    "每个租户独享 LadybugDB 图数据库实例与独立 PostgreSQL schema，隔离键为 graph_id；共享资料库只读",
+    "图 URL 即 MCP 服务器，提供 AI Operators、全文与语义搜索、子图工作区；核心 API 写操作支持幂等键与 SSE 进度"
+   ],
+   "use_cases": [
+    "将公司账簿或基金持仓加载为知识图谱，供 AI 代理通过 MCP 查询分析",
+    "以 SEC 共享资料库对标上市公司同业数据、研究单一公司或比较多家申报主体",
+    "在自有 AWS 账户或本地部署总账与投资组合系统，输出 XBRL 或 RDF 格式报告"
+   ]
+  },
+  "sha": "c044efebabf2",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d8d3d3289ca": {
+  "identity": {
+   "one_liner": "基于 Django 与 HTMX 的社交网络项目，含帖文、评论与 WebSocket 实时消息",
+   "review": "这是一个用 Django 构建的社交网络，提供帖文、评论、订阅动态、WebSocket 实时消息与搜索功能，支持英语和俄语界面。项目通过 Docker Compose 部署，使用 PostgreSQL 存储、Valkey/Redis 作缓存与 Channels 后端，前端采用 HTMX 与 Bootstrap 5。后端含 Rust 编写的 Markdown 渲染与 HTML 消毒组件（socnet_rs）。适合作为 Django 全栈开发参考或二次开发基础，MIT 协议。",
+   "highlights": [
+    "提供邮箱确认注册、双因素认证（TOTP）、订阅与关注者动态等账号与社交功能",
+    "通过 Django Channels 与 WebSocket 实现实时消息，帖文、评论与消息支持 Markdown 和 HTML，图片经 viewerjs 以画廊形式查看",
+    "技术栈包含 Django 6.1、django-allauth、django-ninja、HTMX 2、Bootstrap 5、PostgreSQL 与 Caddy，本地与生产均可经 Docker Compose 运行"
+   ],
+   "use_cases": [
+    "需要本地搭建并运行一套包含帖文、评论与实时消息的社交网络站点",
+    "作为 Django Channels、HTMX 与 Docker Compose 组合的完整项目源码参考",
+    "在现有代码基础上定制开发自有社交或社区类 Web 应用"
+   ]
+  },
+  "sha": "5d8d3d3289ca",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4772e01fd68b": {
+  "identity": {
+   "one_liner": "fzql：将 sqlite3 查询结果经管道交给 fzf 进行模糊全文搜索的 bash 脚本",
+   "review": "fzql 是一个 bash 脚本，把 sqlite3 的查询输出通过管道传给 fzf，对查询结果做交互式模糊全文搜索。适合想在不知道字段名或值可能位于多个字段时检索 SQLite 数据的用户。它不依赖 SQLite 的 FTS 虚拟表，可对任意查询结果即时搜索；使用前需在 PATH 中安装 fzf 和 sqlite3 两个依赖。",
+   "highlights": [
+    "无需预先建立 FTS 虚拟表，即可对查询结果进行即时全文搜索",
+    "支持模糊搜索，搜索过程中始终显示表头",
+    "可通过 Tab 键多选行，回车后显示所选结果并保留表头"
+   ],
+   "use_cases": [
+    "对未建立 FTS 表的 SQLite 数据库做临时全文检索",
+    "不知道字段名、或目标值可能出现在多个字段时的探索性查询",
+    "从邮编信息等数据库中交互式筛选并多选若干行（如查找 Springfield）"
+   ]
+  },
+  "sha": "4772e01fd68b",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

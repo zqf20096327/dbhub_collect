@@ -3832,5 +3832,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "17a1cb0d6271": {
+  "identity": {
+   "one_liner": "Oracle 官方纯 Go 实现的 database/sql 驱动，支持 Oracle 19c 及以上",
+   "review": "go-oracledb 是 Oracle 官方发布的原生 Go 驱动，实现 Go database/sql/driver 接口，供 Go 应用访问 Oracle Database 19c 及以上版本。支持 EZConnect 和 TNS Connect Descriptor 两种连接串、TCP/TCPS 协议，配置可来自 DSN、环境变量、CLI 标志或 Connector，按优先级生效。注意 JSON 类型需 21c+，且尚未覆盖全部 Oracle 数据类型。",
+   "highlights": [
+    "原生 Go 实现 database/sql/driver 接口，驱动名为 oracledb，支持 PL/SQL In/Out 参数、REF_CURSOR、BLOB/CLOB 预取及 Oracle JSON（21c+）",
+    "支持 EZConnect 与 Connect Descriptor 连接串、TCP/TCPS 协议、用户名密码及 token 认证、标准与会话级事务",
+    "配置支持 DSN、环境变量、CLI 标志、Connector 四种来源并按优先级生效，配置项与 OracleDriverConfig 结构体字段直接映射"
+   ],
+   "use_cases": [
+    "Go 应用通过 database/sql API 访问 Oracle Database 19c 及以上版本",
+    "需以环境变量或 CLI 标志方式注入连接配置的部署环境",
+    "涉及 PL/SQL 存储过程调用、LOB 读写或 Oracle JSON 数据存取的应用"
+   ]
+  },
+  "sha": "17a1cb0d6271",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "96f384d7d0f0": {
+  "identity": {
+   "one_liner": "基于公共食品营养数据的个人膳食目标分析Web服务",
+   "review": "vitapick 是一个医疗健康类 Web 服务：每周通过 GitHub Actions 从韩国食药处食品营养数据库 API 采集数据，换算为 100g 基准值存入 TiDB（upsert 保证幂等），用户按身体信息以 Mifflin-St Jeor 公式计算热量与三大营养素目标。后端 FastAPI + 22 个端点，前端 React + Vite，含三级 RBAC 和 Google/Naver/Kakao OAuth。仓库未指定开源许可证。",
+   "highlights": [
+    "提供 AI 句子式膳食记录（Gemini，失败时回退内置韩语规则分析器），热量等营养值由服务器按公共数据 100g 基准 × 摄取量计算",
+    "实现三级 RBAC（普通用户/管理员/只读测试管理员）、Argon2 密码认证、OAuth 一次性交换码机制",
+    "包含 15 个 pytest 后端测试及部署后端到端验证流程"
+   ],
+   "use_cases": [
+    "需要用公共数据源构建营养/膳食追踪应用的参考实现",
+    "个人营养目标计算与每日摄入进度、近 7 日热量图表查看",
+    "学习 FastAPI + React 分离部署（Netlify/Render/GitHub Actions 批处理）的架构样本"
+   ]
+  },
+  "sha": "96f384d7d0f0",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

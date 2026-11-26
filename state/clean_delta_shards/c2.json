@@ -25395,5 +25395,864 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "a4e04b0a04aa+2": {
+  "fn": "nooriegarg/ContribIQ",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "delete",
+    6,
+    8,
+    6,
+    6
+   ],
+   [
+    "equal",
+    8,
+    9,
+    6,
+    7
+   ],
+   [
+    "replace",
+    9,
+    18,
+    7,
+    8,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    20,
+    8,
+    10
+   ],
+   [
+    "replace",
+    20,
+    21,
+    10,
+    11,
+    [
+     "|Document|What it covers|"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    11,
+    12
+   ],
+   [
+    "replace",
+    22,
+    30,
+    12,
+    18,
+    [
+     "|docs/REQUIREMENTS.md|Problem statement, functional and non-functional requirements|",
+     "|docs/ARCHITECTURE.md|Architecture overview and decision records (ADRs)|",
+     "|CHANGELOG.md|Release history and notable changes per version|",
+     "|CONTRIBUTING.md|How to set up the project and open a pull request|",
+     "|SECURITY.md|How to report security vulnerabilities|",
+     "|CODE_OF_CONDUCT.md|Community conduct expectations|"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    35,
+    18,
+    23
+   ],
+   [
+    "replace",
+    35,
+    36,
+    23,
+    24,
+    [
+     "|Tool / approach|What it does|What ContribIQ adds|"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    24,
+    25
+   ],
+   [
+    "replace",
+    37,
+    42,
+    25,
+    30,
+    [
+     "|**GitHub's \"good first issue\" label**|Tags issues for newcomers|ContribIQ scores each open issue against *your* skill profile and ranks them by fit — not just difficulty|",
+     "|**Swimm / CodeSee**|In-repo documentation and code walkthroughs|ContribIQ is external — it analyses *any* public repo without the maintainer needing to opt in|",
+     "|**GitHub Copilot \"explain this\"**|Answers code questions in the editor|ContribIQ builds a RAG index of the repo and answers questions in a browser — no IDE required, and with the default Ollama setup no code leaves your machine|",
+     "|**OpenDigger / DevStats**|Repository health and contribution metrics|ContribIQ focuses on the *individual contributor onboarding experience*, not aggregate project statistics|",
+     "|**Raw LLM chat (ChatGPT / Claude)**|General-purpose Q&A|ContribIQ grounds answers in the repository's own source files via pgvector retrieval, which reduces made-up file names and function signatures (small local models can still get things wrong)|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    30,
+    31
+   ],
+   [
+    "replace",
+    43,
+    46,
+    31,
+    32,
+    [
+     "The key design constraint that makes these differences possible: **LLM inference runs locally via Ollama by default**. With that setup, no repository code, user questions, or contributor profile data are sent to an external LLM provider. Repository files are still read from GitHub, and if you point LiteLLM at a hosted model, that data goes to that provider. This matters for contributors analysing private forks or employer codebases. See ADR-01 and ADR-05 for the architectural decisions behind this."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    55,
+    32,
+    41
+   ],
+   [
+    "replace",
+    55,
+    104,
+    41,
+    42,
+    [
+     "…（49 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    134,
+    42,
+    72
+   ],
+   [
+    "replace",
+    134,
+    137,
+    72,
+    73,
+    [
+     "> The diagram shows connections found in the code. It is a map for contributors, not a complete list of every module. Features marked in the Feature Areas tables as not dispatched, not mounted or not shown in the UI are intentionally left out of the arrows."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    144,
+    73,
+    80
+   ],
+   [
+    "replace",
+    144,
+    147,
+    80,
+    83,
+    [
+     "- PostgreSQL 16 with the pgvector extension",
+     "- Valkey 8+ (or any Redis-protocol-compatible server)",
+     "- Ollama with `qwen2.5-coder:7b` pulled"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    154,
+    83,
+    90
+   ],
+   [
+    "replace",
+    154,
+    158,
+    90,
+    91,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    194,
+    91,
+    127
+   ],
+   [
+    "delete",
+    194,
+    196,
+    127,
+    127
+   ],
+   [
+    "equal",
+    196,
+    210,
+    127,
+    141
+   ],
+   [
+    "replace",
+    210,
+    211,
+    141,
+    142,
+    [
+     "|Test file|Covers|"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    212,
+    142,
+    143
+   ],
+   [
+    "replace",
+    212,
+    231,
+    143,
+    162,
+    [
+     "|`test_readiness_service.py`|All five dimension scorers + `calculate_readiness`|",
+     "|`test_cache_service.py`|Cache key format, hit/miss, TTL enforcement|",
+     "|`test_onboarding_service.py`|Command safety whitelist, sanitization, fallback plan, LLM mocking|",
+     "|`test_tech_stack_service.py`|File-based tech detection, directory mapping|",
+     "|`test_issue_detail_service.py`|PR filtering, impact chain parsing, error fallbacks|",
+     "|`test_valkey_client.py`|`set_key`, `get_key`, `delete_key`, `key_exists`|",
+     "|`test_jwt.py`|Access/refresh token creation and decoding|",
+     "|`test_security.py`|bcrypt hash and verify (skipped on Python 3.14)|",
+     "|`test_repo_service.py`|Repository metadata fetching and error handling|",
+     "|`test_issues_matching.py`|Issue difficulty scoring and profile matching|",
+     "|`test_github_issues.py`|GitHub issues client|",
+     "|`test_score_issues.py`|Background scoring task|",
+     "|`test_analysis_flow.py`|Analysis pipeline flow|",
+     "|`test_architecture.py`|Architecture context collection|",
+     "|`test_auth_token_type.py`|JWT token type field|",
+     "|`test_login_rate_limit.py`|Per-client rate limiting|",
+     "|`test_oauth_routes_registered.py`|OAuth routes registration|",
+     "|`test_qa_route.py` / `test_qa_service.py`|`POST /qa/ask` validation and the Q&A retrieval pipeline|",
+     "|`test_pytest_cov_and_coverage.py`|Test-file counting and coverage measurement in `analyze_repository`|"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    234,
+    162,
+    165
+   ],
+   [
+    "replace",
+    234,
+    235,
+    165,
+    166,
+    [
+     "Tests run with Vitest + React Testing Library."
+    ]
+   ],
+   [
+    "equal",
+    235,
+    245,
+    166,
+    176
+   ],
+   [
+    "replace",
+    245,
+    246,
+    176,
+    177,
+    [
+     "|Test file|Covers|"
+    ]
+   ],
+   [
+    "equal",
+    246,
+    247,
+    177,
+    178
+   ],
+   [
+    "replace",
+    247,
+    267,
+    178,
+    196,
+    [
+     "|`utils/format.test.ts`|`formatCount` number formatting|",
+     "|`utils/validation.test.ts`|`validateEmail`, `parseGitHubRepository`|",
+     "|`utils/issues.test.ts`|`getOpenIssues`, `getIssueLoadError`|",
+     "|`api/client.test.ts`|`apiCall` — headers, auth, error handling|",
+     "|`api/auth.test.ts`|`loginWithEmail`, `registerWithEmail`, `getGitHubOAuthUrl`|",
+     "|`api/analyze.test.ts`|`startAnalysis`, `getAnalysisResult`, `getIssueDetail`, `getReadinessScore`|",
+     "|`api/onboarding-profile.test.ts`|`getOnboardingPlan`, `getProfile`, `updateProfile`|",
+     "|`context/AuthContext.test.tsx`|Login/logout state, localStorage/sessionStorage, `useAuth` guard|",
+     "|`components/components-basic.test.tsx`|`DifficultyDots`, `MatchRing`, `ReadinessScore`, `Alert`, `WorkflowIcon`, `WorkflowHeader`, `CodeBlock`, `FileReadList`, `TechStack`, `DirectoryMap`, `TimelineSkeleton`|",
+     "|`components/components-interactive.test.tsx`|`ChipSelector`, `Checklist`, `IssueCard`, `SimilarPRs`, `ImpactChain`, `GitHubButton`, `IssuePreviewCard`, `RepoStats`, `RepoBanner`, `ExperienceSelector`|",
+     "|`components/RepoStats.test.tsx`|Test Coverage tile: percentage, test-file-count fallback, \"Not available\"|",
+     "|`components/WorkflowLayout-switcher.test.tsx` / `WorkflowLayout-delete.test.tsx`|Repository switcher, locked state, and remove-from-history modal|",
+     "|`components/WorkflowLayout-taskid-reset.test.tsx`|Switching taskId resets stale result, loading, error, maxStep, and analysisReady state|",
+     "|`hooks/useAnalysis-history.test.ts`|Per-user repository history in `localStorage`|",
+     "|`pages/DashboardPage-duplicate.test.tsx`|\"Analysis already exists\" prompt|",
+     "|`pages/LoginPage-redirect.test.ts`|Post-login redirect to the latest analysis|",
+     "|`pages/OnboardingPage-cache.test.tsx`|Cache versioning (v2 key served, v1 ignored) and regenerate-button behaviour|",
+     "|`pages/ProfileBack-navigate.test.tsx`|Back button uses `navigate(-1)`, not a hardcoded link|"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    274,
+    196,
+    203
+   ],
+   [
+    "replace",
+    274,
+    275,
+    203,
+    204,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    276,
+    204,
+    205
+   ],
+   [
+    "replace",
+    276,
+    281,
+    205,
+    210,
+    [
+     "|Login / signup UI|Done|`frontend/src/pages/LoginPage.tsx`, `frontend/src/components/LoginForm.tsx`, `frontend/src/components/SignupForm.tsx`|",
+     "|Email register & login endpoints|Done|`backend/api/routes/auth.py`|",
+     "|JWT access + refresh tokens|Done|`backend/core/jwt.py`, `backend/core/security.py`|",
+     "|Auth state (React context)|Done|`frontend/src/context/AuthContext.tsx`|",
+     "|Base API client (fetch wrapper)|Done|`frontend/src/api/client.ts`|"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    313,
+    210,
+    242
+   ],
+   [
+    "replace",
+    313,
+    314,
+    242,
+    243,
+    [
+     "The workflow follows the design in the HTML mockup:"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    345,
+    243,
+    274
+   ],
+   [
+    "delete",
+    345,
+    347,
+    274,
+    274
+   ],
+   [
+    "equal",
+    347,
+    349,
+    274,
+    276
+   ],
+   [
+    "replace",
+    349,
+    350,
+    276,
+    277,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    351,
+    277,
+    278
+   ],
+   [
+    "replace",
+    351,
+    357,
+    278,
+    282,
+    [
+     "|OAuth login redirect|Done|`backend/api/routes/oauth.py`|",
+     "|OAuth callback + user upsert|Done|`backend/api/routes/oauth.py`|",
+     "|CSRF state validation (Valkey)|Done|`backend/services/valkey_client.py`|",
+     "|Frontend callback handler|Done|`frontend/src/pages/AuthCallbackPage.tsx`, routed at `/auth/callback` in `frontend/src/App.tsx`|"
+    ]
+   ],
+   [
+    "equal",
+    357,
+    360,
+    282,
+    285
+   ],
+   [
+    "replace",
+    360,
+    361,
+    285,
+    286,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    361,
+    362,
+    286,
+    287
+   ],
+   [
+    "replace",
+    362,
+    369,
+    287,
+    292,
+    [
+     "|Profile model + migration|Done|`backend/models/profile.py`, `alembic/versions/0005_create_contributor_profiles.py`|",
+     "|`GET /users/me/profile`|Done|`backend/api/routes/profile.py`|",
+     "|`PUT /users/me/profile`|Done|`backend/api/routes/profile.py`|",
+     "|Profile React screen|Done|`frontend/src/pages/ProfilePage.tsx` — language/interest chips, experience radio, profile API updates, and navigation to issues|",
+     "|Profile back navigation|Done|Both `ProfilePage.tsx` (workflow step 3) and `UserProfilePage.tsx` (`/profile`) use `navigate(-1)` to return to the calling page instead of a hardcoded link|"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    374,
+    292,
+    297
+   ],
+   [
+    "replace",
+    374,
+    375,
+    297,
+    298,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    375,
+    376,
+    298,
+    299
+   ],
+   [
+    "replace",
+    376,
+    385,
+    299,
+    306,
+    [
+     "|GitHub API client (REST + GraphQL)|Done|`backend/services/github_client.py`|",
+     "|Repository model + metadata fetching|Done|`backend/models/repository.py`, `backend/services/repo_service.py`, `alembic/versions/0006_create_repositories.py`|",
+     "|TaskIQ + Valkey task queue|Done|`backend/worker/broker.py`, `backend/worker/tasks/__init__.py`, `docker-compose.yml`|",
+     "|Analysis pipeline tasks (file tree → tech stack → directories)|Done|`backend/worker/tasks/analyze.py`, `backend/services/tech_stack_service.py`|",
+     "|SSE progress endpoint|Done|`backend/api/routes/analysis.py` (`POST /analysis/start`, `GET /analysis/stream/{task_id}`, `GET /analysis/result/{task_id}`), `frontend/src/api/analyze.ts`, `frontend/src/hooks/useAnalysis.ts`|",
+     "|Worker tasks registered with TaskIQ|Done|`backend/worker/tasks/__init__.py` registers `analyze_repository`, `generate_diagram` and `score_issues`. Only `analyze_repository` and `generate_diagram` are dispatched by the API today (`.kiq()` in `analysis.py`)|",
+     "|Analysis result caching (Valkey, 24 h TTL)|Done|`backend/services/cache_service.py` — cache key is `analysis:{owner}:{repo}:{sha}`, 24 h TTL, wired into `analyze_repository` task|"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    388,
+    306,
+    309
+   ],
+   [
+    "replace",
+    388,
+    389,
+    309,
+    310,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    390,
+    310,
+    311
+   ],
+   [
+    "replace",
+    390,
+    394,
+    311,
+    313,
+    [
+     "|Overview page (React)|Done|`frontend/src/pages/OverviewPage.tsx`, `frontend/src/components/RepoBanner.tsx`, `frontend/src/components/TechStack.tsx`, `frontend/src/components/DirectoryMap.tsx`, `frontend/src/components/RepoStats.tsx`, `frontend/src/utils/format.ts`|",
+     "|AI-generated architecture diagram (Mermaid via LiteLLM + Ollama)|Done|`backend/services/architecture_service.py` (samples source files), `backend/services/ai_service.py` (prompt + validation + Mermaid output), `backend/worker/tasks/generate_diagram.py`, `frontend/src/components/ArchDiagram.tsx`. Endpoints: `POST /analysis/{task_id}/diagram` starts the task, `GET /analysis/diagram/{diagram_task_id}` returns the result|"
+    ]
+   ],
+   [
+    "equal",
+    394,
+    399,
+    313,
+    318
+   ],
+   [
+    "replace",
+    399,
+    400,
+    318,
+    319,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    401,
+    319,
+    320
+   ],
+   [
+    "replace",
+    401,
+    405,
+    320,
+    322,
+    [
+     "|Onboarding plan generation (LLM)|Done (synchronous)|`backend/services/onboarding_service.py`, served by `GET /analysis/result/{task_id}/onboarding` in `backend/api/routes/analysis.py`. Runs in the API request (not a worker task) through LiteLLM + Ollama, sanitises suggested shell commands, and returns a fallback plan if the model output is unusable|",
+     "|Onboarding path React screen|Done|`frontend/src/pages/OnboardingPage.tsx`, `frontend/src/components/Timeline.tsx`, `frontend/src/components/CodeBlock.tsx`, `frontend/src/components/FileReadList.tsx`, `frontend/src/components/IssuePreviewCard.tsx`; previews not found in the analysis are marked as unverified AI suggestions|"
+    ]
+   ],
+   [
+    "equal",
+    405,
+    410,
+    322,
+    327
+   ],
+   [
+    "replace",
+    410,
+    411,
+    327,
+    328,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    411,
+    412,
+    328,
+    329
+   ],
+   [
+    "replace",
+    412,
+    415,
+    329,
+    332,
+    [
+     "|Issue model + difficulty scoring|Done|`backend/models/issue.py`, `backend/services/issues_service.py`, `backend/services/difficulty_service.py`, `backend/worker/tasks/score_issues.py`, `alembic/versions/0007_create_issues.py`. Difficulty is a 1–5 average across files affected, cyclomatic complexity (radon), dependency count (tree-sitter), domain keywords, and estimated line changes|",
+     "|AI issue matching (LLM ranks issues against profile)|Done|`backend/schemas/match.py`, `backend/services/matching_service.py`. Match score rounded and clamped to 0–100, with exactly 3 non-empty plain-language reasons per issue|",
+     "|Issue discovery React screen|Done|`frontend/src/pages/IssuesPage.tsx`; search, label filters, real GitHub issues, difficulty dots, and match score ring with ranked display|"
+    ]
+   ],
+   [
+    "equal",
+    415,
+    434,
+    332,
+    351
+   ],
+   [
+    "delete",
+    434,
+    436,
+    351,
+    351
+   ],
+   [
+    "equal",
+    436,
+    440,
+    351,
+    355
+   ],
+   [
+    "replace",
+    440,
+    441,
+    355,
+    356,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    441,
+    442,
+    356,
+    357
+   ],
+   [
+    "replace",
+    442,
+    447,
+    357,
+    360,
+    [
+     "|pgvector + fastembed embedding pipeline|Done|`backend/db/vector.py`, `backend/models/code_chunk.py`, `backend/services/embedding_service.py`, `backend/worker/tasks/embed_repo.py`, `backend/worker/tasks/analyze.py`, `alembic/versions/0008_create_code_chunks.py`. fastembed `BAAI/bge-small-en-v1.5` model (384 dims), filters to text files ≤ 100 KB and embeds them in batches of 20. `analyze_repository` upserts the `repositories` row and queues `embed_repository`. Existing databases created with the earlier 768-dim column need a migration and re-embedding|",
+     "|Issue deep-dive backend|Done|`backend/services/issue_detail_service.py`, `backend/api/routes/issues.py` (`GET /issues/{issue_number}/detail?owner=&repo=`). AI explanation + impact chain via Ollama, similar PRs from GitHub API. Requires `score_issues` to have run first (issues table must be populated)|",
+     "|Issue deep-dive React screen|Done|`frontend/src/pages/IssueDetailPage.tsx`, `frontend/src/components/Checklist.tsx`, `frontend/src/components/ReadinessScore.tsx`, `frontend/src/components/SimilarPRs.tsx`, `frontend/src/components/ImpactChain.tsx`. All tabs (Understanding, Similar PRs, Readiness) are wired to backend endpoints|"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    452,
+    360,
+    365
+   ],
+   [
+    "replace",
+    452,
+    453,
+    365,
+    366,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    454,
+    366,
+    367
+   ],
+   [
+    "replace",
+    454,
+    458,
+    367,
+    369,
+    [
+     "|Q&A backend (RAG pipeline)|Done; needs indexed repository|`backend/services/qa_service.py`, `backend/api/routes/qa.py` (`POST /qa/ask` with `{task_id, question}`). The route returns 400 until the analysis is complete and 404 until the repository is indexed. Pipeline: embed question → top-20 chunks by cosine similarity, one per file (max 12) → file-path manifest added for listing/structure questions → prompt with 5,000-token budget → LiteLLM answer using `qwen2.5-coder:1.5b`|",
+     "|Q&A panel (React)|Done|`frontend/src/components/QAPanel.tsx`, rendered on the overview page (`OverviewPage.tsx`). Answers need `code_chunks` filled by the embedding task above|"
+    ]
+   ],
+   [
+    "equal",
+    458,
+    463,
+    369,
+    374
+   ],
+   [
+    "replace",
+    463,
+    464,
+    374,
+    375,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    465,
+    375,
+    376
+   ],
+   [
+    "replace",
+    465,
+    468,
+    376,
+    377,
+    [
+     "|Readiness score calculation|Done|`backend/services/readiness_service.py`, `GET /analysis/result/{task_id}/readiness/{issue_number}`. Five weighted dimensions: Repository Understanding (25%), Environment Setup (20%), Code Understanding (25%), Testing Knowledge (15%), Issue Understanding (15%). Displayed in the Readiness tab of the issue detail page via `frontend/src/components/ReadinessScore.tsx` — loaded lazily when the tab is first opened|"
+    ]
+   ],
+   [
+    "equal",
+    468,
+    471,
+    377,
+    380
+   ],
+   [
+    "replace",
+    471,
+    472,
+    380,
+    381,
+    [
+     "|Sub-feature|Status|Key files|"
+    ]
+   ],
+   [
+    "equal",
+    472,
+    473,
+    381,
+    382
+   ],
+   [
+    "replace",
+    473,
+    478,
+    382,
+    387,
+    [
+     "|Docker Compose file|Done|`docker-compose.yml` defines `db`, `valkey`, `api`, `worker`, `frontend`, and `ollama` services with health checks|",
+     "|Backend Dockerfile|Done|`backend/Dockerfile` — Python 3.12-slim, installs requirements, copies source|",
+     "|Frontend Dockerfile|Done|`frontend/Dockerfile` — multi-stage: Vite build then nginx serve|",
+     "|nginx config|Done|`frontend/nginx.conf` — serves React SPA, proxies `/api` to backend|",
+     "|Makefile|Done|`Makefile` — `make dev`, `make stop`, `make migrate`, `make pull-model`, `make logs-api`, `make logs-worker`|"
+    ]
+   ],
+   [
+    "equal",
+    478,
+    493,
+    387,
+    402
+   ],
+   [
+    "delete",
+    493,
+    495,
+    402,
+    402
+   ],
+   [
+    "equal",
+    495,
+    496,
+    402,
+    403
+   ],
+   [
+    "replace",
+    496,
+    513,
+    403,
+    404,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    513,
+    515,
+    404,
+    406
+   ],
+   [
+    "replace",
+    515,
+    516,
+    406,
+    407,
+    [
+     "|Layer|Technology|Why|"
+    ]
+   ],
+   [
+    "equal",
+    516,
+    517,
+    407,
+    408
+   ],
+   [
+    "replace",
+    517,
+    528,
+    408,
+    419,
+    [
+     "|Backend framework|FastAPI|Async-native, automatic OpenAPI docs|",
+     "|Database|PostgreSQL 16 + pgvector|SQL + vector similarity in one place|",
+     "|ORM / migrations|SQLAlchemy (async) + Alembic|Typed models, version-controlled schema|",
+     "|Cache / task broker|Valkey 8|BSD-3-Clause Redis-compatible fork; `taskiq-redis` client connects to it over the Redis wire protocol|",
+     "|Task queue|TaskIQ|Async-native, no Celery overhead|",
+     "|LLM interface|LiteLLM|Single API for Ollama, Anthropic, OpenAI — swap via env var|",
+     "|Local LLM|Ollama + Qwen2.5-Coder (7B for diagrams/onboarding, 1.5B for Q&A)|Runs entirely on-device; no data leaves the machine|",
+     "|Embeddings|fastembed (`BAAI/bge-small-en-v1.5`)|CPU-only, lightweight, 384 dims|",
+     "|Frontend|React 18 + TypeScript + Vite|Fast HMR, strict types|",
+     "|Auth|JWT (python-jose) + bcrypt (passlib)|Stateless access tokens, 7-day refresh tokens|",
+     "|GitHub auth|OAuth2 + CSRF state (Valkey)|Standard flow, state stored server-side|"
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

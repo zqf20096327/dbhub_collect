@@ -3335,5 +3335,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "18c7c89236bd": {
+  "identity": {
+   "one_liner": "单 JAR 部署的异构数据库结构与数据实时同步工具，含日志 CDC 与 ETL",
+   "review": "Jync 是面向信创迁移与异构数据集成的开源同步工具，支持 35 种数据库间的结构与数据同步。单 JAR 启动，浏览器配置任务，无需 Kafka、Flink、ZooKeeper。提供全量分块并行、轮询增量、六类日志 CDC、ETL 与 Redis 投影。需 Java 17+，部分数据库驱动需自备 jar。",
+   "highlights": [
+    "内置 35 种数据库预设类型（含 19 种国产/信创库），并支持通过 JDBC URL、驱动类名与 jar 自定义数据库类型",
+    "六类日志 CDC：MySQL binlog、Oracle LogMiner、达梦 LogMiner、PostgreSQL 逻辑解码、SQL Server CDC、崖山 YStream；默认轮询模式只需只读账号",
+    "全量同步采用主键 keyset 分块与逐块提交检查点，支持断点续传与写入幂等"
+   ],
+   "use_cases": [
+    "内网离线环境下的私有化数据同步与信创数据库迁移",
+    "目标库缺表场景下自动建表、建索引并同步表/字段注释的结构与数据同步",
+    "将源库变更按 CDC 投影为 Redis JSON/HASH 缓存"
+   ]
+  },
+  "sha": "18c7c89236bd",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d8593e50bce5": {
+  "identity": {
+   "one_liner": "纯 C# .NET 嵌入式数据库，内置 LSM 存储、列式索引与 HNSW 向量搜索",
+   "review": "DataVo 是面向 .NET 10 的纯托管进程内数据库，通过 NuGet 包安装后以 DataVoContext 运行，支持 InMemory 与断电安全的 LSM 两种存储模式，提供 SQL、编译期 LINQ、向量搜索与增量视图维护。它非客户端/服务器架构，单进程持有数据库目录，事务为 MVCC 快照隔离，SQL 方言为其自有实现。",
+   "highlights": [
+    "提供 InMemory 与 LSM 双存储模式，LSM 支持 WAL 与 strict fsync 断电持久化",
+    "支持 VECTOR(n) 列的 FLAT 与 HNSW 向量索引（余弦/欧氏距离），与常规数据共用 WAL 和事务边界",
+    "DataVo.Generators 通过 Roslyn 源生成器在编译期编译 LINQ 查询，核心包可 Native AOT 发布"
+   ],
+   "use_cases": [
+    "需要进程内嵌入、随应用分发的本地数据存储场景",
+    "需在 SQL 过滤条件基础上混合向量相似度检索的检索/生成场景",
+    "高频写入下维护实时聚合视图（如排行榜、仪表盘）的场景"
+   ]
+  },
+  "sha": "d8593e50bce5",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

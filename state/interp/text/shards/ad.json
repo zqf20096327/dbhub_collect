@@ -3284,5 +3284,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8e08a0100d15": {
+  "identity": {
+   "one_liner": "基于 oncebox 的 Spring Boot 事务性发件箱/收件箱示例服务，用于 Kafka",
+   "review": "该仓库包含 order-service 和 notification-service 两个 Spring Boot 服务，演示事务性 outbox 与 inbox 模式：订单与事件在同一数据库事务中提交，由轮询器投递到 Kafka，消费端以事件 ID 去重。基于 oncebox-starter 构建，支持 Kafka 与 RabbitMQ、PostgreSQL/MySQL/Oracle，含每事件类型独立轮询配置、重试退避、DLQ REST 管理接口与定时表清理。不保证跨跳的事件顺序。",
+   "highlights": [
+    "事件与业务变更在同一数据库事务中提交，轮询器以 FOR UPDATE SKIP LOCKED 锁定批次，支持多实例并行运行",
+    "提供编程式 OutboxPublisher.publish 与声明式 @OutboxPublish 两种发布方式，每事件类型可配置独立批次大小、轮询模式与重试退避",
+    "消费端通过 @TransactionalConsumer 收件箱在同一事务中记录事件 ID 与处理结果，实现去重；失败事件经分类重试后进入 outbox_dlq_events 表或 order-events-dlt，DLQ 提供 REST API 用于查看与重新投递"
+   ],
+   "use_cases": [
+    "需要在订单等业务写入与 Kafka/RabbitMQ 事件发布之间保证一致性的 Spring Boot 服务",
+    "消费端需要按事件 ID 去重、避免重复消息产生重复副作用的场景",
+    "需要将重试耗尽的事件存入死信表并通过 REST API 排查与重发的运维场景"
+   ]
+  },
+  "sha": "8e08a0100d15",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "977fd375bb15": {
+  "identity": {
+   "one_liner": "自托管 AI 员工管理系统，FastAPI+PostgreSQL/pgvector+Docker 架构",
+   "review": "Deminic 是一个 MIT 许可的学生项目，提供招聘、考勤、薪资、任务、视频会议、聊天和商城模块，可自托管运行。AI 部分支持本地 vLLM+Gemma 3 或按密钥切换 Claude。README 明确说明项目未经审计、不提供担保，薪资资金不经应用流转，需 Windows 11 环境通过 start.cmd 一键部署。",
+   "highlights": [
+    "提供入职、考勤、薪资、任务、视频会议、聊天和商城等模块，支持九种语言界面",
+    "AI 功能可在本地 vLLM+Gemma 3 12B 与 Claude 之间切换，支持 ID 核验徽章与网络搜索",
+    "通过 start.cmd 一键部署，自动安装 uv、Docker、Redis、ClamAV、PostgreSQL 等；薪资资金不经应用流转"
+   ],
+   "use_cases": [
+    "需要本地部署并保留数据在企业内部的团队管理场景",
+    "本地显卡（约 16GB 显存）满足要求时的离线 AI 辅助办公",
+    "测试/学习 FastAPI+pgvector+vLLM 自托管系统架构"
+   ]
+  },
+  "sha": "977fd375bb15",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

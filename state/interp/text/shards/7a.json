@@ -4136,5 +4136,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cc2d5e9405da": {
+  "identity": {
+   "one_liner": "seekdb 是面向 AI Agent 的搜索数据库，统一向量、全文、结构化数据的单引擎存储。",
+   "review": "seekdb 由 OceanBase 开源，定位为 AI Agent 的状态存储。它基于 OceanBase SQL 引擎构建，兼容 MySQL 协议并支持 ACID 事务；核心机制包括 Change Stream 异步索引流水线与增量+快照两级 HNSW 索引，写入不等待索引构建，以及内核级 Copy-on-Write 的 FORK DATABASE/MERGE 沙箱机制。提供嵌入式（Python/Node.js/Go SDK）、单机、Docker 等部署方式，README 中基准数据（如 1,523 QPS）为项目自述，需自行验证。",
+   "highlights": [
+    "单条 SQL 中组合向量检索（l2_distance）、全文检索（MATCH AGAINST）与标量过滤，并支持 APPROXIMATE 近似排序",
+    "提供内核级 COW 沙箱：FORK DATABASE 快照数据库，MERGE TABLE 合并或 DROP 回滚",
+    "通过 Change Stream 异步索引与两级 HNSW 实现写入后向量立即可查，支持 MySQL 协议与嵌入式运行（数据存于本地目录）"
+   ],
+   "use_cases": [
+    "Agent 记忆与状态存储：持续写入观察结果并在毫秒级检索上下文",
+    "Agent 探索沙箱：用 FORK/MERGE 进行可回滚的实验性写操作",
+    "RAG 与知识检索：向量、全文与标量过滤的混合查询场景"
+   ]
+  },
+  "sha": "cc2d5e9405da",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

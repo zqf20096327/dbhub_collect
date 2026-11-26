@@ -3609,5 +3609,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "959b40e21456": {
+  "identity": {
+   "one_liner": "面向端侧 AI Agent 的持久化执行引擎，用 SQLite 记录并恢复运行",
+   "review": "LarkX 提供 C++ 运行时与 Node.js、React Native SDK，将 Agent 的每步模型与工具调用存入 SQLite；进程被杀后可按运行 ID 恢复，已提交步骤不重复执行。原生模块需源码编译，仅支持 Linux x64 与 macOS，不支持 Windows；真机验证、远程委派、Swift/Kotlin SDK 均未实现。",
+   "highlights": [
+    "C++ 运行时统一实现编次、SQLite 持久化、重放、重试、取消与 reconcile，Node.js 与 React Native 共用同一核心",
+    "非幂等步骤中断后标记 UNKNOWN_OUTCOME 并保持 BLOCKED，应用通过 run.reconcile 决定后续处理",
+    "自带 Cactus 模型适配器（含 per-model 队列），并包含 SIGKILL 进程终止后重开数据库的测试"
+   ],
+   "use_cases": [
+    "在手机或边缘设备上运行多步 Agent 工作流，且进程可能随时被挂起或终止的场景",
+    "工具调用含本地副作用、需要避免重复执行副作用的应用",
+    "需要边端与云端混合编排、由应用自行部署远程 Agent 的项目"
+   ]
+  },
+  "sha": "959b40e21456",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b0cfa780c119": {
+  "identity": {
+   "one_liner": "自托管跑团 GM 工作台，集成 NPC 关系图、地图与实时协作编辑",
+   "review": "Maze 是面向跑团主持人（含多人共同主持）的自托管 Web 应用，以 Docker 单容器加 SQLite 运行。它提供 NPC/派系关系图、层级地点与可交互地图、支持实时协同和离线合并的剧本编辑器，以及可选时间线。界面支持法语和英语，文档以法语为主，需自备 HTTPS 反向代理。",
+   "highlights": [
+    "NPC 与派系存储于关系图，支持自由布局、自动排版与 PNG 导出；地点按任意层级组织并支持最高 8192px 的可交互地图",
+    "剧本编辑器含朗读框、GM 密语框、@提及、锚定评论、命名版本历史，多名 GM 可实时同页编辑并在重连时合并离线修改",
+    "提供 Claude（MCP）连接器与 Foundry VTT 导入模块，支持战役 .zip 导出导入、Web 界面备份恢复与一键更新"
+   ],
+   "use_cases": [
+    "单人或多名 GM 协作准备与共同撰写战役剧本",
+    "整理 NPC、派系、地点及其关系，并以交互地图呈现场所结构",
+    "将素材从 Maze 导入 Foundry VTT 世界，或通过 MCP 连接器由 Claude 读取战役数据"
+   ]
+  },
+  "sha": "b0cfa780c119",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3294,5 +3294,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "939677623d30": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码会话台账，记录四大代理的工具调用、成本与代码存留率",
+   "review": "Sessionly 是一个用 Rust 编写的本地命令行工具，为 Claude Code、Codex、Cursor 和 Grok 的编码会话建立台账，记录工具调用、文件变更、成本，并在后续同步时统计代理写入的行有多少仍留在文件和已合并的 PR 中。数据存于本地 SQLite（~/.sessionly），通过 hook 捕获事件；上传到服务器为可选功能且默认不含源代码。适合需要本地审计 AI 会话记录的开发者与团队。需 Rust 1.89+ 或使用预编译二进制。",
+   "highlights": [
+    "通过 hook 以只读方式捕获会话事件（写入本地文件约 2-4 ms），不阻断或修改会话",
+    "将四种代理的会话归一化为统一记录，存入 ~/.sessionly 的 SQLite 台账，可删除后由 sessionly sync --force 重建",
+    "支持统计会话写入行的存留率（文件中及 PR 评审后），PR 通过行哈希匹配，不发送源代码"
+   ],
+   "use_cases": [
+    "按用户、仓库、模型、工具或日期汇总本地 AI 编码会话的成本与文件变更",
+    "通过可选的团队服务器（自托管 Docker 或托管服务）生成团队仪表盘，跟踪 PR 中代理编写内容的评审后存留情况",
+    "通过仓库内置 hook 捕获 Claude Code、Cursor、Codex 的云端会话"
+   ]
+  },
+  "sha": "939677623d30",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

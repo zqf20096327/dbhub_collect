@@ -3636,5 +3636,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a9ca69f888a8": {
+  "identity": {
+   "one_liner": "受 Microsoft.Extensions.VectorData 启发的 Go 向量存储库，支持多后端存储与向量检索",
+   "review": "go-vectorstore 是一个 Go 语言的向量存储库，用于将带类型的 Go 结构体存入 SQLite、PostgreSQL、Redis、Qdrant 及内存集合并按向量检索。它提供模型驱动 API（vectordata 标签、类型化 CRUD、过滤检索）和 Record API，支持余弦、L2、内积、L1、Hamming 及稀疏搜索，PostgreSQL 端依赖 pgvector 扩展并支持 HNSW/IVFFlat 索引与混合搜索。SQLite 提供方无需数据库服务器或 C 工具链。要求 Go 1.26+（v0.5.0 支持 1.25）。",
+   "highlights": [
+    "通过统一的核心接口（vectordata）支持 SQLite、PostgreSQL、Redis、Qdrant 与内存等多种后端，可从 SQLite 文件起步",
+    "提供带 vectordata 标签的模型驱动 API，支持类型化 CRUD、元数据过滤、生成键、多向量、稀疏向量、二进制向量及 float16 存储选项",
+    "PostgreSQL 实现基于 pgxpool 与 pgvector，支持 HNSW/IVFFlat 索引、混合搜索、模式迁移规划与漂移检测；SearchByVector 支持过滤、距离阈值、投影控制和每请求 HNSW/IVFFlat 调优"
+   ],
+   "use_cases": [
+    "在 Go 应用中为结构化记录构建向量检索（如语义搜索、typed RAG），可先用 SQLite 嵌入式存储，后切换到 PostgreSQL",
+    "需要跨多个向量数据库后端运行同一套模型 API、并按后端能力（索引、混合搜索）做能力探测的场景",
+    "离线或无 API key 的开发与契约测试场景：内存集合与确定性教学式 embedder 样例可直接运行"
+   ]
+  },
+  "sha": "a9ca69f888a8",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "75117d0d2f39": {
+  "identity": {
+   "one_liner": "Auditstream 的 TypeScript 适配器，通过 SQL 注释传递操作者实现审计追踪。",
+   "review": "auditstream-js 是开源数据库审计引擎 Auditstream 的 TypeScript 适配器集合，包含 @auditstream/node、@auditstream/prisma、@auditstream/drizzle 三个 ESM 包。应用代码不直接写审计行，而是用 AsyncLocalStorage 把操作者（含 onBehalfOf 委托场景）附加到 SQL 语句，由数据库捕获触发器记录前后值。适用于 Prisma 7.1+ 与 Drizzle 0.45/1.x、PostgreSQL 15–19 的 Node.js 项目；数据库触发器与迁移由 Rust 引擎 CLI 负责。",
+   "highlights": [
+    "通过 AsyncLocalStorage 将操作者自动附加到每条 SQL，支持 onBehalfOf 委托 AI 代理场景",
+    "三个包均为 ESM-only、运行时零依赖，以 Changesets fixed 组同步发布",
+    "@auditstream/node 提供 audit.as()/audit.log()/audit.query() 及 Express、Hono、Next.js 集成；Prisma 提供 SQL 注释插件与 set_config 回退"
+   ],
+   "use_cases": [
+    "需要记录数据库变更前后值及操作者身份的 Prisma 或 Drizzle 应用",
+    "为 Node.js Web 服务（Express/Hono/Next.js）补充审计日志能力",
+    "在 Prisma Accelerate 或剥离 SQL 注释的代理环境下用 set_config 回退传递操作者"
+   ]
+  },
+  "sha": "75117d0d2f39",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1bf81f3e78a8": {
+  "identity": {
+   "one_liner": "本地运行的140题人生问卷，用于蒸馏生成个人数字人persona",
+   "review": "大梦是一个本地网页问卷程序，通过14章140题（主线64题）的结构化问答采集个人材料，导出《人生档案》《蒸馏指令》等Markdown文件，交给任意大模型按六步流程生成persona，并附带25题校验考试与校准日志用于迭代。服务绑定127.0.0.1不联网，需Python 3.10+，./run.sh启动，界面支持中英日韩四种语言，另有DSH对话插件版。",
+   "highlights": [
+    "14章140题题库（主线64题），网页答题自动保存，答案仅存本机SQLite，服务绑定127.0.0.1",
+    "一键导出人生档案、蒸馏指令、覆盖报告与JSON备份，私密题默认隐去原文",
+    "内置数字人运行规则、25题校验考试与校准流程，界面和题库支持中/英/日/韩切换"
+   ],
+   "use_cases": [
+    "想为自己构建数字persona并经考试、盲测迭代校准的个人用户",
+    "不方便打字、希望由agent按协议逐题访谈并追问的用户",
+    "已有日记、聊天记录等材料，想整理成JSON批量导入建档的用户"
+   ]
+  },
+  "sha": "1bf81f3e78a8",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

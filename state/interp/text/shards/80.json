@@ -3489,5 +3489,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a968a5cafb7": {
+  "identity": {
+   "one_liner": "面向企业技术支持的 RAG 问答与受控工单 Agent 后端",
+   "review": "该项目是一个 FastAPI 后端，面向企业技术支持场景，提供带来源回答或拒答的 RAG 问答，以及预览-人工确认后才真实建单的工单 Agent。核心语料为 TechQA（28,481 篇文档、910 条问答记录），检索链路为 Dense+BM25 融合加 qwen3-rerank。依赖 DashScope 凭据、SQLite/Chroma 存储，提供 Docker Compose 部署，需 JWT 认证，支持租户与分类过滤。",
+   "highlights": [
+    "支持 Hybrid 检索链路：Dense100 + BM25100 → RRF(k=60) Top100 → qwen3-rerank → Top14，并提供显式 Dense 回退",
+    "工单 Agent 采用预览/确认分离机制，真实建单使用服务端持久化草稿，并记录审批链路",
+    "提供 /rag/search 与 /rag/ask 接口，支持来源级证据门控、无上下文与低相关拒答、tenant_id/category 元数据过滤及检索审计日志"
+   ],
+   "use_cases": [
+    "需要基于知识库检索返回带来源回答或在证据不足时拒答的技术支持问答场景",
+    "需要人工审批后才执行真实建单的问题升级流程",
+    "需要按租户隔离文档检索并保留运行/审批审计记录的企业内部支持系统"
+   ]
+  },
+  "sha": "1a968a5cafb7",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "472859cf4ad5": {
+  "identity": {
+   "one_liner": "零依赖静态学习站点，用 JSON 内容源生成分主题交互式开发者路线图页面",
+   "review": "Roadmap Hub 是一个纯静态的学习路线图站点，收录 SQL、PostgreSQL、FastAPI、HTTP、认证授权、数据结构与算法等八条已发布路径，每级含课程导读、练习挑战和项目任务。站点由原生 HTML/CSS/JS 构成，贡献者编写 JSON 后经 Python 脚本生成页面；可选 Supabase 账号登录，未登录时进度存于 localStorage。适合自学者与希望以 JSON 添加新路径的贡献者。",
+   "highlights": [
+    "包含 SQL、PostgreSQL、FastAPI、认证授权、后端工程师、HTTP、协议、数据结构与算法等路径，含 139 个主题的数据结构条目",
+    "零框架零后端依赖，内容以 JSON 编写并由 Python 3 脚本构建为静态页面，可本地打开或部署到 GitHub Pages",
+    "提供搜索、键盘快捷键、localStorage 进度追踪，以及基于 Supabase Auth 的可选登录与 PostgreSQL RLS 数据隔离"
+   ],
+   "use_cases": [
+    "系统学习数据库、API 与后端基础的开发者",
+    "想通过自建 JSON 路径分享学习内容的贡献者",
+    "需要免费静态托管的教学内容发布场景"
+   ]
+  },
+  "sha": "472859cf4ad5",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

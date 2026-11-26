@@ -3225,5 +3225,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "417797923397": {
+  "identity": {
+   "one_liner": "自托管分布式任务调度与编排系统，基于 Docker 执行舰队运行工作流",
+   "review": "Chronoverse 是一个可部署在自有基础设施上的分布式任务调度器与编排器，用于定时和手动触发容器化工作流。其消息驱动微服务架构由 HTTP 网关、gRPC 服务、Kafka 事件、多个后台 worker 组成，依赖 PostgreSQL、Redis、Kafka、ClickHouse、Meilisearch 等组件，通过 Docker Compose 或 Kubernetes（需 KEDA）部署。运行时要求执行节点具备 Docker 引擎，仅 containerd 的集群不受支持。",
+   "highlights": [
+    "支持 HEARTBEAT 与 CONTAINER 两类工作流，按分钟间隔调度或按需手动触发，任务状态含排队、运行、完成、失败与取消，并对系统故障自动重试",
+    "实现幂等键、工作流代次、事务性 outbox、持久化任务租约、worker 重试与过期事件守卫等重放安全机制",
+    "任务日志存于 ClickHouse 并由 Meilisearch 建立搜索索引，支持原始日志下载、流过滤、可分享行选区和 SSE 实时输出，并可按工作流设置保留策略"
+   ],
+   "use_cases": [
+    "在自有基础设施上定时运行容器化任务并保留、检索其执行日志",
+    "需要按需触发、监控工作流执行状态并接收通知与执行时长统计的运维场景",
+    "基于 Kubernetes 集群部署多节点 Docker 运行时舰队，配合 KEDA 按消费延迟扩展 worker"
+   ]
+  },
+  "sha": "417797923397",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7fb249197d2e": {
+  "identity": {
+   "one_liner": "收录55个免费开发者工具的在线清单，状态由GitHub Actions每晚自动检查",
+   "review": "这是一个面向开发者与Vibe Coder的免费工具清单，收录55个工具，覆盖AI编程IDE与Agent、云托管、数据库、DevOps、支付、安全、自托管等16个类别，每项标注用途、定价模式（Free Tier/开源/Freemium等）与在线状态。状态由GitHub Actions每晚自动检测；仓库采用MIT许可证，接受PR贡献。",
+   "highlights": [
+    "收录55个工具，按16个类别组织，每项标注用途、定价模式与在线状态",
+    "在线状态由GitHub Actions每晚自动检查（Online为状态码<500）",
+    "采用MIT许可证，可通过Pull Request或Issue贡献新工具"
+   ],
+   "use_cases": [
+    "查找特定类别（如AI编程Agent、Serverless数据库、API测试）的免费工具",
+    "按Free Tier、开源、Freemium等定价模式筛选工具",
+    "搭建应用时选型托管、数据库、邮件、支付等服务"
+   ]
+  },
+  "sha": "7fb249197d2e",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "18d389548b6f": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的离线编译 Wiki + SQLite FTS5 检索 MCP 服务器",
+   "review": "wiki-context 是一个基于 Python 3.11+ 标准库、零第三方依赖的 MCP 服务器，将 PDF/DOCX/XLSX/CSV 等原始文档离线编译为 Markdown Wiki 并建立 SQLite FTS5 索引。查询时通过 wiki_context 工具单次返回 Wiki 摘要与带表头的主源摘录，并基于 SHA-256 源哈希标记过期内容。运行时无 LLM 调用与外部 API，适合在 Claude Code、Cursor 等 Agent 环境中提供只读知识检索。",
+   "highlights": [
+    "运行时零依赖、零 LLM 调用与外部 API，单次 wiki_context 调用组装 24% Wiki 合成与 76% 主源摘录的双层上下文",
+    "保留代码标识符的中英双语 FTS5 检索， oversized 表格切片自动钉住表头，并按源文档粒度计算 IDF",
+    "基于 SHA-256 source_hashes 的过期检测（stale 标记与 0.5× 降权）、未命中概念的 Missing-Concept Alert，以及继承主源权限的 PrefixACLPolicy"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供 RFC、ADR、产品规格、SOP 等只读工程知识库检索",
+    "需要在检索中精确定位 CSV/Excel 深处表格行并保留列头的场景",
+    "中英双语 Obsidian Wiki 知识库的自动索引与 MCP 接入"
+   ]
+  },
+  "sha": "18d389548b6f",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

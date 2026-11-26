@@ -3438,5 +3438,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "00feed03e206": {
+  "identity": {
+   "one_liner": "Go 语言包，以 URL 风格解析并打开 SQL 数据库连接字符串",
+   "review": "dburl 是面向 Go 开发者的连接字符串处理库，将 protocol+transport://user:pass@host/dbname?opt=… 形式的 URL 解析并打开为标准 sql.DB 连接，内置数十种数据库 scheme、别名及其对应驱动映射。它本身不导入任何 SQL 驱动，需使用者自行 import；解析基于 net/url 标准类型，非 Windows 系统支持按路径/文件头自动识别 sqlite3/duckdb 等 scheme。",
+   "highlights": [
+    "提供 dburl.Parse 与 dburl.Open 两个入口函数，解析 URL 并返回标准 sql.DB 连接",
+    "内置覆盖 PostgreSQL、MySQL、Oracle、SQL Server、SQLite3、DuckDB、ClickHouse 等的 scheme 与别名表",
+    "支持 scheme resolution：可根据目录、Unix socket、文件头或扩展名自动解析为对应驱动"
+   ],
+   "use_cases": [
+    "Go 项目中需要统一处理多种数据库连接字符串格式",
+    "命令行工具或服务需根据 URL/文件路径自动识别目标数据库类型",
+    "需要通过 scheme 别名（如 pg、mysql、mssql）映射到相应 Go 驱动并调用 sql.Open"
+   ]
+  },
+  "sha": "00feed03e206",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "815f0799b422": {
+  "identity": {
+   "one_liner": "开源社交图形设计编辑器，基于 Fabric.js 与 Hono + SQLite 自托管运行",
+   "review": "OpenDesign 是一个面向社交平台图形设计的编辑器，用于制作 LinkedIn 帖子、轮播 PDF、引言卡片等，可自托管并嵌入 SaaS 产品。前端采用 Preact 与 Fabric.js（支持 retina 渲染），后端为 Hono + SQLite。提供模板字段 API 供数据或 AI 代理批量填充文案与图片，支持 `{{name}}` 文内变量、自定义字体导入与品牌套件 JSON 导出；无服务端栅格化，变体保存量级在数百以内。",
+   "highlights": [
+    "提供 REST API 的模板字段填充机制，支持文本内 `{{变量}}` 与 Shrink to fit 自适应缩字",
+    "支持 LinkedIn 轮播多页 PDF 导出与 2x PNG 导出，导出在浏览器端组装",
+    "提供 `?agent=true` 的代理友好界面与语义化控件标签，适配 AI 代理操作"
+   ],
+   "use_cases": [
+    "团队或个人自托管制作 LinkedIn、Instagram 等平台的社交图形与轮播帖",
+    "通过 API 或 AI 代理（如 Claude Code）按数据行批量填充模板字段生成变体",
+    "将品牌套件（配色、字体、Logo）以 JSON 导入导出，在多个安装间复用"
+   ]
+  },
+  "sha": "815f0799b422",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a4e04b0a04aa": {
+  "identity": {
+   "one_liner": "本地运行的开源贡献者上手助手，分析 GitHub 仓库并生成个性化入门路径",
+   "review": "ContribIQ 是一个面向开源贡献者的 Web 应用：指向任意 GitHub 仓库后，它会分析代码库、生成个性化入门路径、按用户技能画像对开放 issue 打分排序，并通过 RAG 用自然语言回答代码问题。默认通过 Ollama 本地推理，仓库代码不出本机；架构图与入门计划由 qwen2.5-coder 模型生成，issue 打分等任务经 Valkey 队列由后台 worker 执行。分析结果在 Valkey 中缓存 24 小时。README 明确 issues 数据表尚未填充，架构图为基于源码样本的概览而非完整分析。",
+   "highlights": [
+    "对任意公开 GitHub 仓库生成入门路径、架构图（Mermaid，附源文件依据）与按技能画像排序的 issue 匹配",
+    "默认 LLM 推理经 Ollama 本地运行，配合 PostgreSQL/pgvector 做代码块检索问答",
+    "FastAPI + React 18 架构，Valkey/TaskIQ 处理后台任务并通过 SSE 推送进度，后端 pytest 与前端 Vitest 均可离线运行"
+   ],
+   "use_cases": [
+    "为准备向陌生开源项目提交首个 PR 的贡献者生成入门计划与上手步骤",
+    "在本地分析私有 fork 或雇主代码库，默认配置下代码与提问数据不发送到外部 LLM 服务",
+    "通过浏览器以自然语言查询仓库代码，无需 IDE 插件"
+   ]
+  },
+  "sha": "a4e04b0a04aa",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

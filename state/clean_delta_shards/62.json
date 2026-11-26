@@ -30210,5 +30210,1529 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "43d1e6a6c1a4+2": {
+  "fn": "Dicklesworthstone/frankengraphdb",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    10,
+    2,
+    8,
+    [
+     "License: MIT + Rider",
+     "Rust Edition",
+     "toolchain: nightly",
+     "unsafe: forbidden*",
+     "language: GQL ISO/IEC 39075:2024",
+     "deps: closed universe"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    12,
+    8,
+    10
+   ],
+   [
+    "delete",
+    12,
+    14,
+    10,
+    10
+   ],
+   [
+    "equal",
+    14,
+    22,
+    10,
+    18
+   ],
+   [
+    "replace",
+    22,
+    23,
+    18,
+    19,
+    [
+     "The CLI and server can write a graph, query the new state, and recover it after restart. On a 176 MB test database, `fgdb query --buffered` streamed 6,144 rows under a 60 MiB memory limit. An ordinary local query exhausted that limit while opening the same database, even with `LIMIT 0`. The reality check and bridge plan records the tested revisions, commands, and open qualification work."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    19,
+    20
+   ],
+   [
+    "replace",
+    24,
+    27,
+    20,
+    21,
+    [
+     "> **A note on tense (read this first).** This README is written in the **present tense, as if the entire design in `COMPREHENSIVE_PLAN_FOR_THE_DESIGN_OF_FRANKENGRAPHDB.md` is fully realized**: the 1.0 target state where every performance gate is green and every subsystem is live. This is a deliberate choice. It lets the document describe the *finished* system so it gets **trued-up in place as milestones land** (§19's gates G1→G4) rather than rewritten from scratch later. Where the plan itself stages something as genuinely future work (horizontal sharding, covered under Limitations), the README says so plainly. Everything else below is the spec of the system this repository builds."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    40,
+    21,
+    34
+   ],
+   [
+    "replace",
+    40,
+    41,
+    34,
+    35,
+    [
+     "||`frankengraphdb`|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    35,
+    36
+   ],
+   [
+    "replace",
+    42,
+    56,
+    36,
+    48,
+    [
+     "|Durability|Content-addressed, RaptorQ-erasure-coded commit stream. **No double-write journaling anywhere**; bit-rot is a maintenance event, not an outage.|",
+     "|Time|Unbounded, queryable history (`FOR SYSTEM_TIME AS OF/BETWEEN`) as a *corollary* of how MVCC works, not a bolt-on temporal engine.|",
+     "|Branches|`git`-style database branches: O(1), zero-copy, 10k+ concurrent. Fork, mutate, run analytics, merge or discard.|",
+     "|Storage|Three temperature tiers per vertex: inline micro-adjacency → sorted delta blocks → sealed compressed CSR runs. Hot minority pays delta cost; cold majority sits *below* raw CSR.|",
+     "|Execution|One Free-Join operator family: binary hash joins, worst-case-optimal multiway joins, and factorized intermediates in one continuum, over runs that *are already tries*.|",
+     "|Incremental|One DBSP-style Z-set engine drives recursion, materialized views, subscriptions, and incremental analytics; the commit stream *is* the delta stream.|",
+     "|Determinism|Same state + same query + same policy ⇒ byte-identical results, *including order*. Every result ships an auditable, replayable **plan certificate**.|",
+     "|Verification|The whole database runs under a deterministic lab runtime: virtual time, DPOR schedule exploration, chaos injection, seed-replayable failures. FoundationDB-class, largely by inheritance.|",
+     "|Governance|Capability tokens (macaroons) with graph caveats compile to **planner-enforced** row/subgraph security, applied before expansion, never as a post-filter.|",
+     "|Retrieval|`hybrid.search(text, vector, seeds, expand)` fuses ANN + BM25 + graph expansion *inside one planner*: GraphRAG's retrieval step as one optimized operator, transactional and time-travelable.|",
+     "|Safety|`unsafe_code = \"forbid\"` workspace-wide, with a ledgered boundary for the few SIMD/arena/VFS islands, each carrying a bit-identical scalar fallback.|",
+     "|Dependencies|**Closed universe.** `std` + the pinned nightly + three owned foundations. No serde, no tokio, no rocksdb, no arrow, no tantivy, no hnswlib in first-party code or on any new dependency path. Ever. (The foundations' own transitive dependencies, which do include serde, are enumerated and pinned in `deny.toml`.)|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    63,
+    48,
+    55
+   ],
+   [
+    "replace",
+    63,
+    92,
+    55,
+    56,
+    [
+     "…（29 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    56,
+    57
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "3ea30ec954ff+2": {
+  "fn": "webKing021/paperlight",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Paperlight logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " Paperlight "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    11,
+    4,
+    7,
+    [
+     " Every document on your PC, one search away. ",
+     " Find any PDF, Word, Excel or PowerPoint file by name, folder or the words inside it. ",
+     " Fast, private, and it never touches your files."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    7,
+    8
+   ],
+   [
+    "replace",
+    12,
+    19,
+    8,
+    13,
+    [
+     " Download for Windows ·",
+     " Linux (beta) ·",
+     " Features ·",
+     " Compare ·",
+     " Contribute"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    13,
+    14
+   ],
+   [
+    "replace",
+    20,
+    26,
+    14,
+    18,
+    [
+     " Latest release",
+     " CI",
+     " winget install webKing021.Paperlight",
+     " MIT license"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    18,
+    19
+   ],
+   [
+    "replace",
+    27,
+    28,
+    19,
+    20,
+    [
+     "Paperlight overview: a tile per document type, the list below and a PDF preview"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    20,
+    21
+   ],
+   [
+    "replace",
+    29,
+    30,
+    21,
+    22,
+    [
+     "Watch the Paperlight film"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    40,
+    22,
+    32
+   ],
+   [
+    "replace",
+    40,
+    42,
+    32,
+    34,
+    [
+     " files, typo-tolerant, with the matching passage highlighted. Whole documents, not just the",
+     " first pages."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    34,
+    35
+   ],
+   [
+    "replace",
+    43,
+    44,
+    35,
+    36,
+    [
+     " file with Ctrl + C ."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    36,
+    37
+   ],
+   [
+    "replace",
+    45,
+    47,
+    37,
+    39,
+    [
+     " each with its own search.",
+     "- **Quick search from anywhere.** Alt + Space in any app (or a hotkey you choose), then Enter to open."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    52,
+    39,
+    44
+   ],
+   [
+    "replace",
+    52,
+    53,
+    44,
+    45,
+    [
+     " keeping your index, favourites and tags. Paperlight works offline either way."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    45,
+    46
+   ],
+   [
+    "replace",
+    54,
+    56,
+    46,
+    48,
+    [
+     " short welcome that sets everything up on first run. A Linux beta is",
+     " available too."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    61,
+    48,
+    53
+   ],
+   [
+    "replace",
+    61,
+    63,
+    53,
+    55,
+    [
+     "- **Any file, by name:** Everything lists every file on your",
+     " drives instantly. Use it when you know the name. Paperlight only looks at documents."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    55,
+    56
+   ],
+   [
+    "replace",
+    64,
+    67,
+    56,
+    59,
+    [
+     " DocFetcher, AnyTXT Searcher",
+     " and Recoll are mature full-text tools that read more formats",
+     " than Paperlight does."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    59,
+    60
+   ],
+   [
+    "replace",
+    68,
+    71,
+    60,
+    63,
+    [
+     " to configure, no background service, an index that follows your files as they change, a",
+     " launcher on a hotkey, and all of it open source under MIT. It reads PDF, Word, Excel and",
+     " PowerPoint (and plain text if you turn it on), and it does not do OCR."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    74,
+    63,
+    66
+   ],
+   [
+    "replace",
+    74,
+    75,
+    66,
+    67,
+    [
+     "|Search inside documents|Quick search ( Alt + Space )|"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    67,
+    68
+   ],
+   [
+    "replace",
+    76,
+    83,
+    68,
+    75,
+    [
+     "|Search results with matching passages|Quick search launcher|",
+     "|**Duplicates**|**Storage**|",
+     "|Identical copies grouped|Size by type and largest documents|",
+     "|**Settings: formats and folders**|**Dark theme**|",
+     "|Choose file formats|Dark theme|",
+     "|**Welcome on first run**|**Set up in a minute**|",
+     "|Welcome screen|Setup finished: documents found|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    75,
+    78
+   ],
+   [
+    "replace",
+    86,
+    87,
+    78,
+    79,
+    [
+     "A new version offered inside Paperlight, with what's new"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    91,
+    79,
+    83
+   ],
+   [
+    "replace",
+    91,
+    93,
+    83,
+    85,
+    [
+     "> releases of this repository, winget",
+     "> (`webKing021.Paperlight`) and paperlight.vercel.app. A"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    96,
+    85,
+    88
+   ],
+   [
+    "replace",
+    96,
+    97,
+    88,
+    89,
+    [
+     "With winget, which comes with"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    105,
+    89,
+    97
+   ],
+   [
+    "replace",
+    105,
+    106,
+    97,
+    98,
+    [
+     "1. Download `Paperlight_x.y.z_x64-setup.exe` from the latest release."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    98,
+    99
+   ],
+   [
+    "replace",
+    107,
+    108,
+    99,
+    100,
+    [
+     " installer isn't code-signed yet: *More info → Run anyway*."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    115,
+    100,
+    107
+   ],
+   [
+    "replace",
+    115,
+    116,
+    107,
+    108,
+    [
+     "Each release also has Linux"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    121,
+    108,
+    113
+   ],
+   [
+    "replace",
+    121,
+    122,
+    113,
+    114,
+    [
+     " larger than the packages because it carries its own web engine."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    127,
+    114,
+    119
+   ],
+   [
+    "replace",
+    127,
+    128,
+    119,
+    120,
+    [
+     "Issues."
+    ]
+   ],
+   [
+    "equal",
+    128,
+    136,
+    120,
+    128
+   ],
+   [
+    "replace",
+    136,
+    138,
+    128,
+    130,
+    [
+     " No telemetry, no account. It only goes online to check for a new version, and updating is",
+     " optional: skip it, or turn the check off in Settings → About."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    143,
+    130,
+    135
+   ],
+   [
+    "replace",
+    143,
+    147,
+    135,
+    139,
+    [
+     " Ctrl + K search · Enter open · Ctrl + Enter show in folder ·",
+     " Ctrl + C copy file · Ctrl + Shift + C copy path ·",
+     " Ctrl + D favourite · Ctrl + T tag ·",
+     " Ctrl + B sidebar · Ctrl + I details"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    163,
+    139,
+    155
+   ],
+   [
+    "replace",
+    163,
+    164,
+    155,
+    156,
+    [
+     "Tauri 2, Rust, SQLite FTS5 and React."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    156,
+    158
+   ],
+   [
+    "replace",
+    166,
+    171,
+    158,
+    159,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    172,
+    159,
+    160
+   ],
+   [
+    "replace",
+    172,
+    177,
+    160,
+    161,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    161,
+    162
+   ],
+   [
+    "replace",
+    178,
+    191,
+    162,
+    163,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "944828de5dc8+2": {
+  "fn": "murkiriel/pardal",
+  "clean_ver": "2",
+  "raw_lines": 15,
+  "ops": [
+   [
+    "equal",
+    0,
+    15,
+    0,
+    15
+   ],
+   [
+    "replace",
+    15,
+    21,
+    15,
+    21,
+    [
+     "**Brasil inteiro:** `radares.csv` · `radares.gpx` ·",
+     "`radares.kml` · `radares.geojson` ·",
+     "`limites.csv` · `limites_estimados.csv` ·",
+     "`estruturas.csv` · `ufs.geojson` (contorno dos estados)",
+     "**Por estado:** pasta `estados/`, por exemplo `estados/SP/`.",
+     "**Índice:** `catalogo.json` · **Versão do dia:** release mais recente"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    26,
+    21,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "|Item|Como está|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    34,
+    28,
+    34,
+    [
+     "|Release mais recente|`dados-2026-11-10`, com dados de 2026-11-10 (20.809 radares no Brasil). O link `releases/latest/download/` aponta sempre para a mais nova|",
+     "|Arquivos do repositório|Os do commit semanal de 2026-11-08 (`built_at` do `catalogo.json`); o próximo sai a partir do domingo, 2026-11-15|",
+     "|Banco SQLite por estado|Entra a partir da próxima release: o código foi para o `main` em 2026-11-11, e as releases até `dados-2026-11-10` ainda não têm o `pardal-<UF>.sqlite.zst`|",
+     "|Geração|A agendada de 2026-11-11 falhou; a issue \"Geração falhando\" fica aberta até a próxima passar, e a release anterior continua no ar|",
+     "|Cadência|Geração todo dia, com release quando algum dado muda; commit no repositório uma vez por semana; releases guardadas por 90 dias, menos as semanais (Geração e reprodutibilidade)|",
+     "|Formato|CSV, GeoJSON, KML e GPX; SQLite (`schema_version` 1) na release; catálogo no `schema` 2|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    40,
+    34,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     " arquivo solto pelo navegador ou acompanhar o histórico;"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    41,
+    42
+   ],
+   [
+    "replace",
+    42,
+    45,
+    42,
+    45,
+    [
+     " estado, inclusive o `limites_trechos.csv`), `pardal-<UF>.sqlite.zst` (o estado num banco SQLite, a partir da",
+     " próxima release), `pardal-brasil.zip`, `pardal-brasil-radares.zip`, `catalogo.json` e `SHA256SUMS.txt`. O link",
+     " `https://github.com/Murkiriel/pardal/releases/latest/download/pardal-<UF>.zip` traz sempre a mais nova."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    55,
+    45,
+    55
+   ],
+   [
+    "replace",
+    55,
+    82,
+    55,
+    56,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    125,
+    56,
+    99
+   ],
+   [
+    "replace",
+    125,
+    126,
+    99,
+    100,
+    [
+     "|Coluna|Significado|"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    100,
+    101
+   ],
+   [
+    "replace",
+    127,
+    132,
+    101,
+    106,
+    [
+     "|`kind`|`FIXED` (radar de velocidade ou lombada eletrônica), `SECTION` (radar de trecho, com o fim em `end_lat,end_lng`), `RED_LIGHT` (avanço de sinal)|",
+     "|`limit_kmh`|Limite fiscalizado, quando a fonte informa (veículo leve)|",
+     "|`source`|De onde veio o ponto (`OSM`, `DNIT`, `ANTT`, `DER-SP`, `RIO`, `INMETRO`, `PRF`…). Quando mais de uma fonte traz o mesmo radar, elas vêm juntas com `+` (ex.: `DNIT+OSM`, confirmado por duas fontes independentes). `INMETRO` sozinho é um radar que só o cadastro de aferições do Inmetro conhece, com a posição tirada do endereço (ver as perguntas frequentes)|",
+     "|`active`|`0` quando o radar está desativado ou com a aferição do Inmetro vencida|",
+     "|`direction_deg`|Sentido fiscalizado: rumo do trânsito que o radar fiscaliza, inteiro de 0 a 359 em graus a partir do norte (0 = norte, 90 = leste, 180 = sul, 270 = oeste). **Vazio não quer dizer \"os dois sentidos\"**: ver \"Sentido do radar\" abaixo|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    147,
+    106,
+    121
+   ],
+   [
+    "replace",
+    147,
+    150,
+    121,
+    124,
+    [
+     " diz isso, ou duas fontes trazem o mesmo radar em sentidos opostos) **ou** o sentido é desconhecido (a",
+     " fonte não informa, ou informa mas o rumo não pôde ser calculado). Trate vazio como \"pode valer para os",
+     " dois sentidos\" e avise nos dois."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    151,
+    124,
+    125
+   ],
+   [
+    "replace",
+    151,
+    154,
+    125,
+    128,
+    [
+     " sentidos que diferem em mais de 90°: duas fontes com o radar no mesmo ponto e sentidos opostos viram",
+     " um radar sem sentido (os dois), e dois radares próximos (o do OpenStreetMap e o oficial, ou os de dois",
+     " órgãos) só viram um se os sentidos conhecidos diferirem em até 90°."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    155,
+    128,
+    129
+   ],
+   [
+    "replace",
+    155,
+    158,
+    129,
+    132,
+    [
+     " radar só se o rumo do veículo diferir dele em mais de 60°, e só com GPS preciso e em movimento. É",
+     " uma sugestão, não uma propriedade do dado; a margem é mais estreita que os 90° porque, perto de 90°,",
+     " o veículo está atravessando a via do radar, não seguindo por ela."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    164,
+    132,
+    138
+   ],
+   [
+    "replace",
+    164,
+    165,
+    138,
+    139,
+    [
+     "|Coluna|Significado|"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    139,
+    140
+   ],
+   [
+    "replace",
+    166,
+    170,
+    140,
+    144,
+    [
+     "|`source`|`ANTT`, `RIO`, `CET-SP`, `OSM` (valor sinalizado no mapa), `OSM:zone` ou `OSM:class` (estimados)|",
+     "|`estimated`|`1` quando o valor **não é sinalizado**: foi estimado pela regra do Código de Trânsito para aquele tipo de via (rodovia, avenida, via local), porque a via não tem limite cadastrado. `0` para valor sinalizado ou oficial|",
+     "|`limit_low_kmh`|Só nos estimados: a mesma estimativa pelo lado baixo da faixa legal, para quem prefere errar para o lado cauteloso (ex.: 80 onde o típico é 100)|",
+     "|`direction_deg`|Preenchido quando a placa vale só para um sentido (rumo do trânsito em graus, como nos radares). Nas rodovias concedidas em que cada sentido tem um limite diferente, e nas vias do OpenStreetMap marcadas com um limite por sentido (`maxspeed:forward`/`maxspeed:backward`), há um ponto para cada sentido no mesmo lugar. Vazio = vale para os dois sentidos|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    179,
+    144,
+    153
+   ],
+   [
+    "replace",
+    179,
+    180,
+    153,
+    154,
+    [
+     "|Coluna|Significado|"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    154,
+    155
+   ],
+   [
+    "replace",
+    181,
+    187,
+    155,
+    161,
+    [
+     "|`limit_kmh`|Limite do trecho|",
+     "|`source`|Como em `limites.csv`: `ANTT`, `RIO`, `CET-SP`, `OSM`, `OSM:zone` ou `OSM:class`|",
+     "|`estimated`|`1` quando o valor foi estimado pelo tipo da via (não é sinalizado), como em `limites.csv`; `limit_low_kmh` é a estimativa do lado baixo|",
+     "|`direction_deg`|Preenchido quando o limite vale só para um sentido (placa de um lado, `maxspeed:forward`/`backward` diferentes): rumo médio do trânsito, 0-359. Nesses trechos a linha vem **desenhada no sentido do trânsito**; para casar, use o rumo do segmento da linha mais perto da posição, não só este resumo. Vazio = vale para os dois sentidos|",
+     "|`highway`|Classe da via no OpenStreetMap (`motorway`, `primary`, `residential`...); vazia nas fontes oficiais que não a informam (`ANTT`, `RIO`, `CET-SP`). Serve para casar a via do app (ou do roteador) com o trecho e para escolher entre vias paralelas|",
+     "|`oneway`|`1` via de mão única (a linha segue o trânsito), `0` mão dupla (o sentido do desenho não quer dizer nada); vazio na fonte oficial que não informa|"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    281,
+    161,
+    255
+   ],
+   [
+    "replace",
+    281,
+    282,
+    255,
+    256,
+    [
+     "id e limitações em `docs/FORMATO_SQLITE.md`."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    301,
+    256,
+    275
+   ],
+   [
+    "replace",
+    301,
+    303,
+    275,
+    277,
+    [
+     " geração (`built_at`). Baixe só quando o `sha256` mudar e confira o arquivo antes de trocar o que o aparelho já tem; assim",
+     " o app funciona sem internet e não fica com um arquivo pela metade. Mostre ao usuário quando a base estiver velha."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    304,
+    277,
+    278
+   ],
+   [
+    "replace",
+    304,
+    306,
+    278,
+    280,
+    [
+     " próximo à frente pela distância ao longo da rota (uns 500 m): o radar de uma rua paralela ou de um viaduto não",
+     " dispara. Sem rota, use um raio pequeno e só os radares à frente do veículo."
+    ]
+   ],
+   [
+    "equal",
+    306,
+    307,
+    280,
+    281
+   ],
+   [
+    "replace",
+    307,
+    310,
+    281,
+    284,
+    [
+     " 60°, mas só com o GPS preciso (precisão de 15 m ou melhor) e em movimento: parado ou com GPS ruim, o rumo não é",
+     " confiável. Vazio = avisar nos dois sentidos (vazio pode ser \"os dois sentidos\" ou \"sentido desconhecido\"; ver",
+     " \"Sentido do radar\")."
+    ]
+   ],
+   [
+    "equal",
+    310,
+    311,
+    284,
+    285
+   ],
+   [
+    "replace",
+    311,
+    314,
+    285,
+    288,
+    [
+     " na divisa). Ache o estado pelo ponto dentro do polígono; a menos de ~5 km de uma divisa, ou fora de todos os polígonos (mar,",
+     " ponte), tenha também os pacotes vizinhos. Em vez de baixar o `brasil/` inteiro, baixe só o estado onde o usuário está e os",
+     " vizinhos da rota."
+    ]
+   ],
+   [
+    "equal",
+    314,
+    315,
+    288,
+    289
+   ],
+   [
+    "replace",
+    315,
+    322,
+    289,
+    296,
+    [
+     " catálogo) traz o trecho da via com o limite: encaixe a posição",
+     " (GPS) no trecho mais perto cuja direção combine com o rumo do veículo (diferença de até uns 30°, e, onde `direction_deg`",
+     " vier preenchido, só o trecho do seu sentido: a linha vem desenhada no sentido do trânsito). Com mais de um trecho a poucos",
+     " metros (vias paralelas, marginal, viaduto), prefira a fonte oficial (`ANTT`, `RIO`, `CET-SP`) ao `OSM`, o valor sinalizado",
+     " (`estimated=0`) ao estimado (`estimated=1`), e mantenha o trecho em que você já estava enquanto ele ainda combinar (evita",
+     " alternar de via a cada leitura do GPS). `highway` e `oneway` ajudam a desempatar quando o app sabe a classe da via. Onde",
+     " não há trecho (estados sem arquivo, vias sem limite nem estimativa), use os pontos do `limites.csv` como antes."
+    ]
+   ],
+   [
+    "equal",
+    322,
+    323,
+    296,
+    297
+   ],
+   [
+    "replace",
+    323,
+    326,
+    297,
+    300,
+    [
+     " (`RED_LIGHT`), perigos na via (lombadas, buracos, passagens de nível, curvas), pontos de atenção (pedágio, área",
+     " escolar, travessia de animais, radar portátil) e câmeras de outras infrações (`cameras_fiscalizacao.csv`: faixa exclusiva,",
+     " conversão proibida, rodízio; por `kind`)."
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    300,
+    301
+   ],
+   [
+    "replace",
+    327,
+    328,
+    301,
+    302,
+    [
+     " `active = 0` não deve avisar."
+    ]
+   ],
+   [
+    "equal",
+    328,
+    394,
+    302,
+    368
+   ],
+   [
+    "replace",
+    394,
+    395,
+    368,
+    369,
+    [
+     " removido ou desligado pode demorar a aparecer, e o radar que nenhuma fonte publica não está aqui."
+    ]
+   ],
+   [
+    "equal",
+    395,
+    396,
+    369,
+    370
+   ],
+   [
+    "replace",
+    396,
+    398,
+    370,
+    372,
+    [
+     " RN, RR e SC) os radares vêm só das fontes federais e do OpenStreetMap, sem órgão estadual nem municipal. O",
+     " `coverage` de cada UF no catálogo diz quais fontes entraram."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    399,
+    372,
+    373
+   ],
+   [
+    "replace",
+    399,
+    400,
+    373,
+    374,
+    [
+     " sentidos\" de \"desconhecido\" (ver \"Sentido do radar\")."
+    ]
+   ],
+   [
+    "equal",
+    400,
+    401,
+    374,
+    375
+   ],
+   [
+    "replace",
+    401,
+    403,
+    375,
+    377,
+    [
+     " e nos trechos postos pelo km do SNV (radar portátil, buracos, acidentes com moto); o banco SQLite traz essa margem",
+     " em `position_accuracy_m`."
+    ]
+   ],
+   [
+    "equal",
+    403,
+    404,
+    377,
+    378
+   ],
+   [
+    "replace",
+    404,
+    405,
+    378,
+    379,
+    [
+     " existe na rede principal."
+    ]
+   ],
+   [
+    "equal",
+    405,
+    406,
+    379,
+    380
+   ],
+   [
+    "replace",
+    406,
+    407,
+    380,
+    381,
+    [
+     " coordenada); **pedágios sem preço**."
+    ]
+   ],
+   [
+    "equal",
+    407,
+    408,
+    381,
+    382
+   ],
+   [
+    "replace",
+    408,
+    409,
+    382,
+    383,
+    [
+     " existem na release."
+    ]
+   ],
+   [
+    "equal",
+    409,
+    414,
+    383,
+    388
+   ],
+   [
+    "replace",
+    414,
+    417,
+    388,
+    391,
+    [
+     "`gerador/` (Python). Lá estão como rodar, como funciona cada parte, a",
+     "investigação das fontes com as medições (`FONTES.md`) e o que ainda",
+     "falta (`PENDENCIAS.md`)."
+    ]
+   ],
+   [
+    "equal",
+    417,
+    418,
+    391,
+    392
+   ],
+   [
+    "replace",
+    418,
+    419,
+    392,
+    393,
+    [
+     "|O quê|Quando|Onde|"
+    ]
+   ],
+   [
+    "equal",
+    419,
+    420,
+    393,
+    394
+   ],
+   [
+    "replace",
+    420,
+    423,
+    394,
+    397,
+    [
+     "|Geração completa e **release** `dados-AAAA-MM-DD` (zips por estado, Brasil, catálogo e sha256; a partir da próxima, também os bancos SQLite)|**todo dia**, se algum arquivo mudou em relação à última release (dia sem dado novo não gera release)|Releases; `releases/latest/download/pardal-<UF>.zip` traz sempre a mais nova|",
+     "|**Commit** dos arquivos do repositório (`brasil/`, `estados/`, `catalogo.json`)|**uma vez por semana**: na primeira geração que passar a partir do **domingo** (se o domingo falhar, segunda tenta de novo, e assim por diante)|este repositório|",
+     "|**Retenção**|releases com mais de **90 dias** são apagadas, menos as semanais (as que foram para o repositório) e a mais nova|—|"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    434,
+    397,
+    408
+   ],
+   [
+    "replace",
+    434,
+    435,
+    408,
+    409,
+    [
+     "issue \"Geração falhando\" até a próxima passar."
+    ]
+   ],
+   [
+    "equal",
+    435,
+    445,
+    409,
+    419
+   ],
+   [
+    "replace",
+    445,
+    446,
+    419,
+    420,
+    [
+     "**Open Database License (ODbL) 1.0** (texto em `LICENSE`)."
+    ]
+   ],
+   [
+    "equal",
+    446,
+    450,
+    420,
+    424
+   ],
+   [
+    "replace",
+    450,
+    451,
+    424,
+    425,
+    [
+     " a atribuição na tabela `meta`."
+    ]
+   ],
+   [
+    "equal",
+    451,
+    452,
+    425,
+    426
+   ],
+   [
+    "replace",
+    452,
+    453,
+    426,
+    427,
+    [
+     "O **código** (pastas `gerador/` e `scripts/`) é **MIT** (`gerador/LICENSE`)."
+    ]
+   ],
+   [
+    "equal",
+    453,
+    456,
+    427,
+    430
+   ],
+   [
+    "replace",
+    456,
+    457,
+    430,
+    431,
+    [
+     "|Fonte|O que entra|Licença|"
+    ]
+   ],
+   [
+    "equal",
+    457,
+    458,
+    431,
+    432
+   ],
+   [
+    "replace",
+    458,
+    488,
+    432,
+    462,
+    [
+     "|OpenStreetMap (extratos da Geofabrik)|Radares, limites (`maxspeed`), pontes e túneis|ODbL 1.0 — © colaboradores do OpenStreetMap|",
+     "|DNIT — Controle de Velocidade (PNCV)|Radares das rodovias federais, com o sentido fiscalizado|Dado aberto governamental|",
+     "|DNIT — Sistema Nacional de Viação|Quilometragem das BRs, usada para casar com o Inmetro e para converter o sentido (crescente/decrescente) em rumo|Dado aberto governamental|",
+     "|PRF — Trechos aptos à fiscalização com radar portátil|A relação vigente (UF, BR, km inicial e final), posta na rodovia pelo SNV|Dado aberto governamental|",
+     "|PRF — Infrações|As multas de velocidade (art. 218) dos 12 meses mais novos, só a contagem por trecho apto ao radar portátil|Dado aberto governamental|",
+     "|PRF — Acidentes (agrupados por pessoa)|Os km com 5 ou mais acidentes com moto nos 12 meses mais novos, com os motociclistas mortos, só contagens|Dado aberto governamental|",
+     "|PRF — Radares fixos (planilha das concessões que a página oficial mostra)|A situação de cada equipamento das concessões federais (ativo, inoperante, estudo ou aferição vencidos) e a coordenada dos ativos; o radar inoperante ou vencido sai inativo, o ativo que nenhuma outra fonte tem entra com `source=PRF`|Sem licença escrita: tabela externa (Apps Script) apontada pela página da PRF|",
+     "|SIE-SC — Locais de operação do radar portátil|Rodovia SC, km e sentido; o km posto na via entre os marcos quilométricos do OSM|Dado aberto governamental|",
+     "|DNIT — Condições do Pavimento (ICM)|Os km com panela ruim ou péssima do levantamento mais novo, postos na rodovia pelo SNV|Dado aberto governamental|",
+     "|ANTT — Radar|Radares das concessões federais, com situação e sentido|CC-BY|",
+     "|ANTT — Sinalização|Placas de velocidade máxima das concessões federais, por sentido|CC-BY|",
+     "|Inmetro — PSIE, medidores de velocidade|Situação da aferição (ativo/inativo) e, nas rodovias federais e nas estaduais de SP (DER-SP), o limite do radar que não trazia nenhum; nos medidores com endereço urbano, a confirmação do radar, o limite e os radares que nenhuma outra fonte tem|Creative Commons|",
+     "|DER-SP / Artesp|Radares das rodovias estaduais, com o sentido fiscalizado|Dado aberto governamental|",
+     "|Goinfra (DER-GO) — lista de equipamentos de fiscalização eletrônica ativos|Radares fixos e lombadas eletrônicas das rodovias estaduais de Goiás, com limite e o sentido fiscalizado (PDF da página \"Relatório de equipamentos de monitoramento\")|Sem licença escrita: publicação oficial da Goinfra, sem termo de reuso (ver `gerador/FONTES.md`)|",
+     "|DER-PE|Lombadas e redutores eletrônicos (limite 40 ou 60 km/h) e equipamentos mistos das rodovias estaduais de Pernambuco, em duas listas do site do DER|Dado aberto governamental|",
+     "|DER-SE, AGETO-TO, Detran-MA, SEINFRA-BA|Radares e lombadas eletrônicas das rodovias estaduais de Sergipe, Tocantins, Maranhão e Bahia, com limite|Dado aberto governamental|",
+     "|DER-MG|Radares fixos das rodovias estaduais e federais delegadas de Minas Gerais (rodovia + km, postos na via pela malha estadual da IDE-Sisema e pelo SNV, conferidos pelo município)|Dado aberto governamental|",
+     "|IDE-Sisema (SEMAD-MG) — rodovias estaduais e federais de Minas Gerais|Quilometragem das MG, para pôr os radares do DER-MG na via|Dado aberto governamental|",
+     "|Goinfra — malha rodoviária estadual (KMZ do mapa rodoviário)|Quilometragem das rodovias de Goiás, para converter o sentido em rumo|Sem licença escrita: publicação oficial da Goinfra, sem termo de reuso|",
+     "|IBGE — malha das unidades da federação (API de malhas)|Contorno de cada estado, para decidir em que estado fica cada ponto|Dado aberto governamental|",
+     "|IBGE — CNEFE, cadastro de endereços do Censo 2022|Coordenada do endereço dos medidores do Inmetro que só informam rua e número ou um cruzamento|Dado aberto governamental|",
+     "|Prefeitura do Rio de Janeiro (IPP, SMTR/CET-Rio)|Limite por trecho de rua e radares da cidade|CC-BY 4.0|",
+     "|Prefeitura de São Paulo (GeoSampa, CET)|Limite pela classificação viária (vias de trânsito rápido e arteriais) e os radares ativos da cidade (locais fiscalizados da CET, com limite e sentido centro/bairro; reserva: o CSV que a CET publica no GitHub)|Dado aberto municipal|",
+     "|BHTrans (Belo Horizonte)|Radares e detectores de avanço de sinal|CC-BY|",
+     "|Detran-DF|Radares e lombadas eletrônicas|Dado aberto governamental|",
+     "|Prefeituras de Fortaleza, Recife, João Pessoa e Curitiba|Radares urbanos|Dado aberto governamental|",
+     "|EPTC (Porto Alegre)|Radares fixos, lombadas eletrônicas e detectores de avanço de sinal, com limite (relatório público da EPTC)|Dado aberto municipal|",
+     "|Transalvador (Salvador)|Radares fixos, com limite (mapa de equipamentos da Transalvador)|Dado aberto municipal|",
+     "|SEMTRAN (Porto Velho)|Radares fixos, com a validade da aferição (planilha publicada pela SEMTRAN)|Dado aberto municipal|",
+     "|Prefeitura de Mogi das Cruzes (Secretaria de Mobilidade Urbana)|Radares fixos, lombadas eletrônicas e detectores de avanço de sinal, com limite e situação (lista do portal de dados abertos)|Dado aberto municipal (o portal não declara licença)|"
+    ]
+   ],
+   [
+    "equal",
+    488,
+    493,
+    462,
+    467
+   ],
+   [
+    "replace",
+    493,
+    496,
+    467,
+    470,
+    [
+     "- **Carcará**: o mapa base, em PMTiles.",
+     "- **Andorinha**: as rotas, em tiles do Valhalla.",
+     "- **Sabiá**: a busca de lugares e endereços, em SQLite."
+    ]
+   ],
+   [
+    "equal",
+    496,
+    517,
+    470,
+    491
+   ],
+   [
+    "replace",
+    517,
+    519,
+    491,
+    493,
+    [
+     "(Carcará), routing (Andorinha) and",
+     "search (Sabiá)."
+    ]
+   ],
+   [
+    "equal",
+    519,
+    520,
+    493,
+    494
+   ],
+   [
+    "replace",
+    520,
+    521,
+    494,
+    495,
+    [
+     " Palavras-chave: radares Brasil, lista de radares, localização de radares, base de"
+    ]
+   ],
+   [
+    "equal",
+    521,
+    525,
+    495,
+    499
+   ],
+   [
+    "replace",
+    525,
+    526,
+    499,
+    500,
+    [
+     "limits Brazil, open data."
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

@@ -3674,5 +3674,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6c143891f741": {
+  "identity": {
+   "one_liner": "Yjs CRDT 的纯 Go 移植，与 yjs 双向字节级兼容的协同编辑库。",
+   "review": "该库将 Yjs 协同编辑 CRDT 框架移植为纯 Go 实现，V1/V2 更新格式与 yjs@13.6.33 字节一致，经 890 个跨语言 fixture 双向验证。提供 Map/Array/Text 等共享类型、UndoManager、快照、子文档与离线同步客户端。核心模块需 Go 1.23，SQLite 持久化模块需 Go 1.26 且有平台限制；部分 XML 观察者功能未实现。",
+   "highlights": [
+    "V1/V2 线上格式与 yjs@13.6.33 字节级一致，由 890 个跨语言 fixture 在 CI 中双向验证，例外为 Any 值（undefined、BigInt、-0）",
+    "纯 Go 无 CGO，可在 go tool dist list 全部 47 个目标编译；gomobile 可生成 Android AAR 与 iOS xcframework 移动 SDK",
+    "提供 y-websocket 协议服务器 yserve（含 SQLite 持久化与版本快照）、Go 同步客户端、HTTP 同步、NATS 背板与 Matrix 传输（后两者为独立模块）"
+   ],
+   "use_cases": [
+    "为使用 y-websocket 或 Hocuspocus 协议的 JavaScript 前端提供 Go 语言协同服务器后端",
+    "构建需要离线编辑与重连同步的机器人、CLI 工具、服务端代理",
+    "通过 gomobile 在 Swift/Kotlin 移动应用中嵌入协同编辑能力"
+   ]
+  },
+  "sha": "6c143891f741",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

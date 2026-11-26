@@ -3207,5 +3207,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f8da613261ce": {
+  "identity": {
+   "one_liner": "以 Conn3x circuit 在自有主机上用 Podman 部署 n8n 工作流自动化工具。",
+   "review": "这是一个 Conn3x circuit，用于在 Debian、Ubuntu、Fedora 和 Rocky Linux 主机上以 systemd/Quadlet 方式运行 n8n 官方镜像。数据默认存 SQLite，可切换 PostgreSQL；加密密钥由主机生成、不经 Conn3x，需自行备份 keys.env。可选自动创建 owner 账户。不含 TLS、防火墙、备份和队列模式配置。",
+   "highlights": [
+    "通过 Podman 按标签加 digest 固定镜像运行官方 n8n 镜像，注册为 systemd 服务，监听 127.0.0.1:5678",
+    "主机本地生成 N8N_ENCRYPTION_KEY（/etc/n8n/keys.env，0600），不写入 plan、state 或 CI 日志",
+    "支持 SQLite 或 PostgreSQL 存储，支持可选 owner 账户自动创建、public_url 代理变量推导与执行记录按龄清理"
+   ],
+   "use_cases": [
+    "在自管主机上部署 n8n，通过反向代理提供 TLS 访问的 webhook 与定时工作流",
+    "需将现有 n8n 实例纳入声明式管理，提供 keys.env 与数据目录后接入",
+    "单人或小团队的本地化工作流执行环境，数据保留在自控主机上"
+   ]
+  },
+  "sha": "f8da613261ce",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

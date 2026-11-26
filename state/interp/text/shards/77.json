@@ -3630,5 +3630,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2092b0ad281e": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 Entity Framework Core 提供程序，基于 ClickHouse.Driver 构建",
+   "review": "这是 ClickHouse 官方的 EF Core 提供程序，基于 ClickHouse.Driver，通过 NuGet 发布。当前处于活跃开发中，支持 LINQ 查询、INSERT、表引擎配置和迁移，可用 dotnet ef migrations 或 EnsureCreated 建表。插入走驱动原生 RowBinary 编码加 GZip 压缩；提供 BulkInsertAsync 绕过变更追踪做大批量写入；JSON 列路径查询须使用编译期常量键。",
+   "highlights": [
+    "支持 LINQ 查询（含 JOIN、子查询、集合运算、GROUP BY 聚合、字符串/数学/日期函数）、INSERT 与迁移，可配置 ClickHouse 表引擎设置",
+    "SaveChanges 走 InsertBinaryAsync 的 RowBinary 编码加 GZip 压缩写入，批大小可配置（默认 1000），另有 BulkInsertAsync 绕过变更追踪",
+    "覆盖 ClickHouse 类型映射：Int128/256、Decimal128/256、Map、Tuple、Variant、Dynamic、Json、地理类型等"
+   ],
+   "use_cases": [
+    "在 .NET 应用中以 EF Core 方式访问 ClickHouse，用 LINQ 做分析查询与时间桶聚合",
+    "需要用迁移建表并指定 ClickHouse 表引擎设置的项目",
+    "大批量数据写入场景，使用 BulkInsertAsync 高吞吐加载"
+   ]
+  },
+  "sha": "2092b0ad281e",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ac266f0183c6": {
+  "identity": {
+   "one_liner": "基于 Rails 与 JWT 的 REST API 用户认证示例项目",
+   "review": "该项目是一个使用 Ruby 2.7 与 Rails 6.0 构建的 REST API 应用，围绕 JWT 实现用户认证流程，数据存储采用 PostgreSQL。代码示例覆盖路由（api/v1 命名空间）、Rack::Cors 中间件、登录控制器、带 has_secure_password 的模型及 JsonWebToken 库。适合作为学习 Rails JWT 认证实现的参考；README 未提供测试、部署等更多信息。",
+   "highlights": [
+    "提供 api/v1 命名空间下的 REST API 路由结构，并配置 Rack::Cors 中间件处理跨域",
+    "使用 JWT gem 与自定义 JsonWebToken 类实现令牌认证，模型采用 has_secure_password 与 Bcrypt",
+    "支持通过 Carrierwave 挂载用户头像上传器"
+   ],
+   "use_cases": [
+    "学习如何在 Rails 6 中实现基于 JWT 的 API 认证",
+    "作为搭建 Rails + PostgreSQL 后端 API 的起点模板",
+    "配合 Postman、Insomnia 等客户端进行接口调试"
+   ]
+  },
+  "sha": "ac266f0183c6",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

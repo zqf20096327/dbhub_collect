@@ -3737,5 +3737,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8fcb54cc4253": {
+  "identity": {
+   "one_liner": "用 Rust 从零重写的 SQLite，支持页面级 MVCC 多写入者",
+   "review": "FrankenSQLite 是 SQLite 的独立 Rust 重实现，核心机制是页级 MVCC 与可串行化快照隔离（SSI），使触及不同页的写入者可并发。当前可运行路径为兼容模式，直接读写标准 SQLite 文件；unsafe 仅限 VFS 与 C ABI 两个 crate。SQL 方言为较大子集，RaptorQ 自愈存储仍属未完成的研究性设计。适合熟悉 SQLite 并希望尝试并发写入引擎的开发者。",
+   "highlights": [
+    "以页级 MVCC 与 SSI 实现多写入者并发，事务因写偏依赖或 B-tree 结构重叠可重试",
+    "兼容模式读写标准 SQLite 3.x 文件，支持 UTF-8 与 UTF-16le/be 编码，编码不匹配的附加数据库被拒绝",
+    "引擎核心为安全 Rust（workspace 级 forbid unsafe_code），unsafe 仅限 fsqlite-vfs 与可选 fsqlite-c-api；内置 XChaCha20-Poly1305 页级加密与可选 RaptorQ WAL 修复符号"
+   ],
+   "use_cases": [
+    "在单机嵌入式场景需要并发写入 SQLite 格式数据库",
+    "需在 Rust 项目中以安全内存模型读写现有 SQLite 文件",
+    "需要内置页级加密（PRAGMA key/rekey）且兼容 SQLite 文件格式的本地存储"
+   ]
+  },
+  "sha": "8fcb54cc4253",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

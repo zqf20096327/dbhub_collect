@@ -3194,5 +3194,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f10ef0af518c": {
+  "identity": {
+   "one_liner": "把十个编码渠道凭证池封装为 OpenAI/Responses/Anthropic 兼容 API 的网关服务",
+   "review": "该项目将 CodeBuddy、TRAE SOLO、Qoder、CodeArts、小浣熊等十个上游渠道的模型接口封装为 OpenAI、Responses、Anthropic、Gemini SDK 等多种兼容协议出口，供需要统一调用多家编码模型服务的开发者使用。核心机制包括公共凭证池、健康度调度、会话粘性、额度探测与每日签到自动化，支持三角色权限、审计日志、用量统计与 Docker 部署。基于 FastAPI 与 SQLite 实现，README 声明其逆向接口仅供学习研究，未做安全审计。",
+   "highlights": [
+    "提供 /v1/chat/completions（流式/非流式）、/v1/responses、/v1/messages、Gemini generateContent 等多协议端点",
+    "支持公共凭证池、健康度调度、到期额度优先与会话粘性，模型列表按渠道凭证加载",
+    "包含三角色权限（admin/operator/viewer）、审计日志、脱敏用量统计与月度账单导出"
+   ],
+   "use_cases": [
+    "团队共享多渠道凭证池，通过统一 API Key 与 OpenAI 兼容客户端接入多家编码模型",
+    "通过 admin 管理台维护凭证、签到、额度探测与按人/渠道/模型维度的用量统计",
+    "通过 /v1/messages 接入 Claude Code，或 /v1/responses 接入 Codex CLI"
+   ]
+  },
+  "sha": "f10ef0af518c",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0e592591bda8": {
+  "identity": {
+   "one_liner": "自托管的 Tasmota 设备机队管理器，单 Go 二进制内嵌 SQLite。",
+   "review": "TasmoFleet 是一个自托管的 Tasmota 设备管理工具，面向在家庭服务器上运行数十台设备的用户。它提供设备清单、配置备份（含 diff 与恢复）、设置策略与合规检查、以及带守卫的批量 OTA 固件更新（持久化任务在关闭浏览器后继续运行）。MQTT 为可选，无 MQTT 时通过 HTTP 轮询工作。项目处于 1.0 之前、单一维护者状态，更新前需查看 CHANGELOG。",
+   "highlights": [
+    "固件更新为服务端持久化任务，每次 OtaUrl/Upgrade 前检查硬件型号、芯片家族、safeboot 镜像与变体",
+    "备份包含 .dmp 原始文件与解码 JSON，可计划执行并在更新前自动进行，支持同机或替换设备恢复",
+    "支持 OIDC 单点登录、forward-auth 头或本地账户登录，带角色与审计日志；提供 Prometheus 指标"
+   ],
+   "use_cases": [
+    "集中管理家庭环境中的数十台 Tasmota 设备的固件版本与配置",
+    "按芯片家族、标签或设备下发设置规则并查看漂移、一键合规",
+    "需要定期备份设备配置并在更新前后比对差异的场景"
+   ]
+  },
+  "sha": "0e592591bda8",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0aab9d09f6a6": {
+  "identity": {
+   "one_liner": "GaussDB 智能体后端：网关隔离用户环境，opencode 跑诊断与知识库技能，部署于 K8s",
+   "review": "该仓库是 GaussDB/openGauss 数据库智能体的后端，负责接入网关（身份认证、环境分配、反向代理）、按用户隔离的运行环境（K8s Pod 或固定池化槽位，状态存 NAS）以及诊断、知识库导入两类技能包，v1.5.0 起新增基于 openFuyao 沙箱的运行模式。面向 DBA、运维与项目各方交付，提供源码、镜像、离线包与多份部署/验收手册。限制：主仓库由开发仓库同步生成，不接受直接改代码；Fuyao 沙箱模式在安全前提落实前仅限测试环境。",
+   "highlights": [
+    "包含接入网关、用户运行环境、知识库导入环境、标准知识库 Job、发版台与大盘前端六个组件，镜像提供 amd64/arm64 双架构",
+    "诊断技能包含 17 个诊断技能与 133 条白名单脚本，支持从 v1.4.x 起逐版本导入增量 SQL",
+    "提供部署自检脚本，核对技能包版本、白名单、脚本执行权限、监控开关与业务库切换状态"
+   ],
+   "use_cases": [
+    "为 DBA 与运维人员提供基于对话的 GaussDB 诊断环境（指标异常溯源到 SQL/会话/表等）",
+    "供知识库管理员导入 GaussDB 官方文档集、网页剪藏、扫描件 PDF 等构建标准知识库",
+    "在企业 K8s 或 openFuyao 平台上以按需/固定池化/沙箱三种模式部署智能体服务"
+   ]
+  },
+  "sha": "0aab9d09f6a6",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

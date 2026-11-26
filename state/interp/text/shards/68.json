@@ -3405,5 +3405,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a2d57210f0b": {
+  "identity": {
+   "one_liner": "单二进制运行的 Supabase 兼容后端，基于嵌入式 Postgres，无需 Docker",
+   "review": "tinbase 是一个可在本地运行的后端服务，实现 Supabase 的 REST、Auth、Storage、Realtime 等接口，官方 supabase-js SDK 可直接连接使用。它提供三种引擎：嵌入式原生 Postgres 17、PGlite（WASM，可在浏览器运行）和纯 JS 内存引擎。读取 supabase/migrations 迁移文件，支持 RLS。项目标注为 Alpha 阶段，官方说明不适用于生产环境。",
+   "highlights": [
+    "实现 Supabase 风格的 REST、Auth、Storage（含 S3 协议）、Edge Functions、Realtime、pgmq 队列、cron 调度与 pg_net HTTP 接口",
+    "提供 native、wasm（PGlite）、pgmem 三种引擎，均通过同一套 API 访问；所有服务均为 (Request) => Response 形式的 fetch handler，可在 Node 或浏览器中进程内嵌入",
+    "读取 supabase/migrations/*.sql 与 seed.sql，迁移文件可继续用于托管 Supabase；对无法安装的扩展（pg_cron 等）以内置实现替代或跳过"
+   ],
+   "use_cases": [
+    "本地开发 Supabase 项目，不安装 Docker 或 Supabase CLI 全套服务",
+    "在浏览器或 Node 进程内嵌入完整后端，配合 supabase-js 自定义 fetch 使用",
+    "运行原型与测试环境，应用现有 Supabase 迁移文件与种子数据"
+   ]
+  },
+  "sha": "1a2d57210f0b",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ef755d5526f": {
+  "identity": {
+   "one_liner": "开源 Go SaaS 起始项目生成器，本地生成含登录计费团队的完整应用",
+   "review": "goilerplate 是一个 CLI 工具，通过 `goilerplate new` 在本地生成 Go 语言 SaaS 项目，包含登录认证、Stripe/Polar 计费、团队工作区、管理后台、JSON API 与测试等模块。生成过程不需要账号与网络。要求 Go 1.26+ 和 Git；SvelteKit 前端选项额外需要 Node.js 22.17+ 与 pnpm。CLI 与仓库采用 MIT 许可证。",
+   "highlights": [
+    "支持 htmx、Datastar、SvelteKit 或 headless 四种前端框架，以及 SQLite 或 PostgreSQL 数据库",
+    "认证模块包含密码、magic link、Google/GitHub OAuth 与可撤销会话；计费模块支持 Stripe/Polar、订阅与签名 webhook",
+    "提供 new、update、doctor、changelog、version 五个子命令，其中 update 会在新 Git 分支上更新已生成项目"
+   ],
+   "use_cases": [
+    "需要本地生成包含认证、计费、团队功能的 Go SaaS 项目起点",
+    "为自有客户的 AI 代理生成含 JSON API 与 MCP 服务器的后端（--api 与 --mcp 选项）",
+    "选择 headless 模式生成仅含 Go 后端与 JSON API、无前端的项目"
+   ]
+  },
+  "sha": "2ef755d5526f",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e8d8e471a51": {
+  "identity": {
+   "one_liner": "基于C# WinForms与SQL Server的三层架构酒店管理桌面应用",
+   "review": "Sphinx Hotel 是一款运行于 Windows 的桌面酒店管理系统，覆盖预订、入住/退房、房态、客房服务订单、库存、账单与员工账户等模块。采用 WinForms + ADO.NET + SQL Server 存储过程的三层结构，数据操作均通过 T-SQL 存储过程完成。部署需本地 SQL Server 并先执行 Database 目录脚本建库，默认提供 admin/admin 种子账号，仅面向 Windows 环境。",
+   "highlights": [
+    "覆盖预订、入住/退房、房态、订单、库存、账单与用户管理等模块",
+    "采用表现层、业务逻辑层、数据访问层的三层架构，数据操作经 ADO.NET 调用 T-SQL 存储过程",
+    "提供基于角色的登录与加密口令的员工账户管理"
+   ],
+   "use_cases": [
+    "酒店前台处理预订、入住与退房流程",
+    "管理员维护房型、库存、服务项目与员工账户",
+    "学习 C# WinForms 三层架构与 ADO.NET 存储过程开发方式的参考项目"
+   ]
+  },
+  "sha": "9e8d8e471a51",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

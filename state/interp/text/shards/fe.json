@@ -3677,5 +3677,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "266451bed18f": {
+  "identity": {
+   "one_liner": "语义与上下文层：将 YAML 模型编译为 8 种 SQL 方言的规则引擎与语义 sidecar。",
+   "review": "OrionBelt 是一个以 sidecar 形式运行的语义层，用户在 YAML（OBML）中声明维度、度量和连接关系，系统通过 AST 编译为 BigQuery、ClickHouse、Snowflake 等 8 种方言的 SQL，并提供 PostgreSQL wire、Arrow Flight SQL、REST 和 MCP 四种接入面。安装方式为 pip install 或 Docker，需 Python 3.12+，许可证为 BUSL-1.1（源码可见但非 OSI 开源）。适用于 AI 代理查询、治理化分析等场景；其联邦查询、可移植表达式目录等功能在文档中有具体实现描述，但 pre-aggregation 缓存等能力 README 未提及。",
+   "highlights": [
+    "将 YAML 声明的模型编译为 BigQuery、ClickHouse、Databricks、Dremio、DuckDB/MotherDuck、MySQL、PostgreSQL、Snowflake 共 8 种方言的 SQL",
+    "提供 PostgreSQL wire（5432）、Arrow Flight SQL（8815）、REST（8000）和 MCP 四种接入接口，支持 Tableau、Power BI、DuckDB、psql 等客户端及 Claude、Cursor 等 AI 代理",
+    "通过 Composite Fact Layer 计划器阻止多事实表查询中的 fan-trap 连接路径；支持跨数据库联邦查询（v3.0.0+）以及直接读取 Parquet/CSV/JSON 文件和 Iceberg 表（v3.1.0+）"
+   ],
+   "use_cases": [
+    "AI 代理通过 oneshot 批量 API 提交任务级模型与查询，或将长期共享模型作为语义上下文供 MCP 客户端调用",
+    "统一管理以 YAML 评审的指标定义，并编译到多个数据仓库引擎，保持跨引擎结果一致",
+    "需要展示数字来源（列、表、连接路径）的治理化分析，或通过 Ossie/RDF 在工具间迁移语义模型"
+   ]
+  },
+  "sha": "266451bed18f",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b63c308e8c6d": {
+  "identity": {
+   "one_liner": "Rust 编写的 CRUD 基准测试套件，覆盖嵌入式引擎与数据库服务器",
+   "review": "CrudEval 用统一 runner 对键值、文档、图三类负载执行增删改查基准，覆盖 RocksDB、SQLite、Redis、MongoDB、PostgreSQL、Neo4j 等后端，是 UCSB 的 Rust 后继项目。运行使用种子数据并校验返回值，输出延迟分布、吞吐与资源配置为 JSON。各引擎通过 Cargo feature 单独编译；部分后端对 durability、范围读有已知限制。",
+   "highlights": [
+    "一个共享 runner 驱动嵌入式引擎（RocksDB、LMDB、SQLite、UStore）与服务器（Redis、MongoDB、PostgreSQL、Neo4j 等），通过 Cargo feature 按需编译后端",
+    "运行使用种子数据并校验返回值，将延迟分布、吞吐、资源占用与配置写入 JSON，报告含有效 durability 及批量/流水线/逐条循环的区分",
+    "支持多数据目录布局（ RocksDB db_paths、UStore NVMe 分盘）与 uniform/zipf/latest 分布，默认九阶段负载链沿用 UCSB"
+   ],
+   "use_cases": [
+    "对嵌入式存储引擎与数据库服务器进行统一的 CRUD 路径基准测试并收集延迟与吞吐数据",
+    "在多块 NVMe 盘上比较不同数据布局（原生分盘 vs RAID0）下的 RocksDB / UStore 表现",
+    "以文档或图负载对特定后端做能力验证，不支持的模型会被明确拒绝"
+   ]
+  },
+  "sha": "b63c308e8c6d",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3238,5 +3238,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d50c90f16e09": {
+  "identity": {
+   "one_liner": "基于 Alpine Linux 的 MariaDB Docker 镜像，支持环境变量生成配置和 Galera 集群。",
+   "review": "该仓库提供 MariaDB 的 Docker 容器镜像，基于 Alpine Linux 构建，支持 linux/amd64 与 linux/arm64 架构。镜像启动时根据环境变量生成 /etc/mysql/my.cnf，并可通过挂载 .cnf 文件覆盖配置；另含基于官方 mariadb 镜像的 Ubuntu 变体，内置 Galera 库与 garbd，适用于 Galera 集群或配合为官方镜像编写的 Kubernetes 运算符。需设置 WSREP_ON 环境变量以启用 Galera 相关配置，集群首个节点须执行引导。",
+   "highlights": [
+    "提供 Alpine 版（标签 12.3/11.8/11.4/10.11 等）与 Ubuntu 变体（含 Galera 库和 garbd）两类镜像，均按 linux/amd64 和 linux/arm64 构建",
+    "支持大量 MYSQL_/WSREP_ 前缀环境变量，容器每次启动时生成 my.cnf，并接受官方 mariadb 镜像的 MARIADB_ 初始化变量名",
+    "每个版本修订标签对应一个 Git 注释标签，旧标签在版本支持结束后仍保留可用"
+   ],
+   "use_cases": [
+    "以 Docker 或 Kubernetes 运行 MariaDB 数据库实例，通过环境变量调整服务器参数",
+    "搭建 Galera 多节点集群（Ubuntu 变体，通过 WSREP_ 变量配置）",
+    "复用为官方 mariadb 镜像编写的初始化工具或运算符"
+   ]
+  },
+  "sha": "d50c90f16e09",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "163b69be9968": {
+  "identity": {
+   "one_liner": "纯 Python 库，为 SQLite 提供 PyMongo 风格的文档型 NoSQL 接口",
+   "review": "NeoSQLite 是纯 Python 编写的库，在 SQLite 之上提供无模式文档存储和 PyMongo 风格 API，支持聚合管道、多种索引、GridFS 及事务。开发者可通过直接导入或经 NX-27017 Wire Protocol 服务器用 PyMongo 客户端连接。要求 Python 3.12+、SQLite 3.26+；通过 pip 安装。",
+   "highlights": [
+    "提供 PyMongo 风格 API 和 MongoDB Wire Protocol 服务器（nx-27017），并包含 $setWindowFields、$graphLookup、$fill 等聚合操作符",
+    "支持单键/复合/嵌套索引、FTS5 文本搜索、TTL 索引、基于 SQLite SAVEPOINT 的 ClientSession 事务，以及通过触发器实现的 watch() 变更流",
+    "实现 12 字节 MongoDB 兼容 ObjectId、GridFSBucket API 和 $function/$where 沙箱化 JavaScript 操作符（jsbox/Node.js 子进程）"
+   ],
+   "use_cases": [
+    "在单机 SQLite 环境中使用 MongoDB 文档模型和查询操作符的应用",
+    "已有 PyMongo 代码，需要不改代码接入 SQLite 后端的项目",
+    "需要文档存储配合 GridFS 文件、TTL 过期或 $jsonSchema 写入校验的场景"
+   ]
+  },
+  "sha": "163b69be9968",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e2b89a9f5412": {
+  "identity": {
+   "one_liner": "纯本地零遥测的 Electron 桌面 AI 工作台，统一管理多 Coding Agent 会话",
+   "review": "Prismux 是基于 Electron 44 + TypeScript + React 19 的 Windows 桌面应用，将 Claude Code、Codex、Antigravity、dsh（DeepSeek Harness）与 OpenCode 的会话收束到一个窗口运行。记忆收敛于单文件 SQLite（WAL + FTS5 + sqlite-vec），宣称零遥测，手机远控仅支持局域网/Tailscale 扫码配对。当前仅提供 Windows x64 安装包，macOS/Linux 通道已预留，官方仅维护 qq 与 fishdock-hook 两款默认不预装的插件。",
+   "highlights": [
+    "统一托管 Claude Code、Codex、Antigravity、dsh、OpenCode 多 Agent 会话，支持 2×2+ 递归任意分屏",
+    "长期记忆存储于单文件 ~/.prismux/data/memory.db（SQLite WAL + FTS5 + sqlite-vec），群聊作用域传输层隔离",
+    "内置生命周期钩子总线、Worktree 沙箱、Handoff 交接引擎等原语，插件经 Cordis 内核按需加载并支持零残留卸载"
+   ],
+   "use_cases": [
+    "在 Windows 本地同时使用多家 Coding Agent CLI 并希望统一窗口管理",
+    "需要会话长期记忆留在本机、不依赖云端账号的桌面工作流",
+    "通过 OneBot v11 协议将主秘书接入 QQ 私聊/群聊（qq 插件）"
+   ]
+  },
+  "sha": "e2b89a9f5412",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

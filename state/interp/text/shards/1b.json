@@ -3930,5 +3930,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "63675e0cfd33": {
+  "identity": {
+   "one_liner": "基于 Rust 的分片 Blob 存储服务器，实现 Redis 协议，后端使用 SQLite。",
+   "review": "Blobasaur 是用 Rust 编写的二进制大对象（Blob）存储服务器，通过实现 Redis 协议使现有 Redis 客户端可直接连接，每个分片对应一个 SQLite 数据库。它面向可信内网环境（无认证/ACL），支持 TTL、命名空间、分片迁移和 Prometheus 指标，可通过配置文件调整分片数与压缩算法。",
+   "highlights": [
+    "兼容 Redis 客户端命令（GET/SET/DEL/EXISTS/HGET/HSET/HSETEX/HDEL/HEXISTS），支持 Redis Cluster 协议与节点自动发现",
+    "数据按 multi-probe 一致性哈希分布到多个 SQLite 分片数据库，提供 shard migrate/vacuum 子命令进行分片迁移与校验",
+    "支持可配置的静态压缩（Gzip/Zstd/Lz4/Brotli）、TTL 过期与后台清理，并暴露 Prometheus 兼容指标"
+   ],
+   "use_cases": [
+    "在已有 Redis 客户端/运维体系下存储较大的二进制对象",
+    "需要以 SQLite 文件为存储介质、可调整分片数量的内网 Blob 服务",
+    "需要对存储数据启用压缩和 TTL 过期清理的场景"
+   ]
+  },
+  "sha": "63675e0cfd33",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fc85656d63ac": {
+  "identity": {
+   "one_liner": "本地优先的编码代理记忆库，SQLite存储知识图谱并提供MCP检索",
+   "review": "Engraphis 是一个供 MCP 兼容编码代理（如 Claude Code、Cursor）使用的本地记忆存储，用 SQLite 保存按工作区/仓库/会话划分的知识，保留时间性历史而非覆盖，召回时附带出处引用，证据不足时选择不答。核心为 Apache-2.0 许可、可离线运行，NumPy-only 核心支持 Python 3.9+，MCP 服务需 3.10+；可选本地 WebUI 仪表盘及付费 Pro/Team 方案提供 AI 增强。",
+   "highlights": [
+    "通过 MCP 服务向 Claude Code、Codex、Cursor、Cline、Zed、Windsurf 等客户端提供记忆读写接口",
+    "召回组合向量、词法、图谱和代码感知检索，并按上下文预算打包结果，附出处引用或拒绝回答",
+    "保留双时间线历史，仪表盘支持查看已被取代的历史版本"
+   ],
+   "use_cases": [
+    "在多会话之间延续项目决策上下文，避免重复告知代理已有决定",
+    "按工作区和仓库组织团队/个人项目知识，检索历史变更",
+    "自托管离线环境中的编码代理记忆管理"
+   ]
+  },
+  "sha": "fc85656d63ac",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c0468408d58": {
+  "identity": {
+   "one_liner": "以 DuckDB 扩展形式在 Apple Silicon Metal 与 NVIDIA CUDA GPU 上执行 SQL",
+   "review": "gpudb 是一个 DuckDB 社区扩展，提供 GPU 后端（Apple Silicon Metal 与 NVIDIA CUDA），v0.7 起支持在不改写查询的情况下经客户端将普通 SQL 路由到 GPU 执行，结果与原生一致。适用于已有 DuckDB 分析负载的用户。限制：DuckDB ≥ 1.5.5，macOS 15+ 或 x86-64 Linux（glibc 2.34+），窗口函数、显式事务等语句仍由 DuckDB 处理，百万行以下的表不触发 GPU 路径。",
+   "highlights": [
+    "以 DuckDB Community Extension 形式发布，可通过 INSTALL gpudb FROM community 安装，或经 pip 安装含扩展的 wheel",
+    "提供 gpu_* 函数接口与 gpudb shell / gpudb.connect() 客户端，客户端在语句进入 DuckDB 计划前检测并改写到 GPU",
+    "支持连接、子查询、CTE、视图、HAVING、ORDER BY LIMIT、count(DISTINCT)、DECIMAL/DATE/VARCHAR 键等 SQL 特性"
+   ],
+   "use_cases": [
+    "已有 DuckDB 应用、BI 工具或 ORM 的重复性聚合查询",
+    "大规模表的高基数 GROUP BY 与 top-k 分析",
+    " notebook 中的交互式数据分析"
+   ]
+  },
+  "sha": "2c0468408d58",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "36b75525e0d3": {
+  "identity": {
+   "one_liner": "自托管图册程序：图片存 Telegram 私有频道，经短码网关转发并生成 Telegraph 图集页",
+   "review": "SeSeGraph 是一个自托管的私人图册发布与管理程序，面向拥有 Linux 服务器、HTTPS 域名和 Telegram Bot 的个人用户。它将图片、GIF、MP4 或 ZIP 上传至私有频道作存储，通过 /i/{short_code} 网关流式转发，并自动生成 Telegraph 分享页。内置 SQLite（WAL 模式），单二进制约 15MB，前端经 go:embed 打包，支持 Compose、单容器与 systemd 三种部署方式，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "支持静态图、GIF/APNG/动态 WebP、20MB 内 MP4 及 ZIP 包上传，浏览器端解压排序并可读取包内 txt 预填标题与标签",
+    "短码网关对外转发不暴露 Token、频道 ID 与 file_id，MP4 支持 HTTP Range 拖动，默认 25 路并发加 100 请求排队",
+    "内置按月流量预警与 503 熔断、SQLite 每日定时备份推送频道，支持 http/https/socks5 代理分流 Telegram 与 Telegraph 上游"
+   ],
+   "use_cases": [
+    "搭建无需登录浏览的个人画廊，对外分享 Telegraph 链接与 /i/ 短码媒体外链，并可选开启 /rss.xml 订阅",
+    "以 Telegram 私有频道作图床、服务器只保存 SQLite 与缩略图缓存的低成本自托管部署",
+    "需要代理访问 Telegram/Telegraph、按月流量阈值告警与自动备份推送的场景"
+   ]
+  },
+  "sha": "36b75525e0d3",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

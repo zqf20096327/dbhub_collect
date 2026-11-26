@@ -3378,5 +3378,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ffc3d622479e": {
+  "identity": {
+   "one_liner": "面向 AI 代理的本地状态引擎，以类型化、Git 版本化的知识工件管理领域事实。",
+   "review": "Cruxible 是一个本地运行的状态引擎（Python 3.11+，Linux x86-64/macOS，Windows 走 WSL2），内嵌 SQLite 索引，无内置 LLM。它以 Claim/Subject/Evidence 模型存储带引用、签名审核和字段级历史的类型化事实，供多会话代理与团队维护可复验的知识。变更经 propose→review→settle 流程写入签名 Git 账本；Runbook 流水线可定时刷新事实，输入变化时仅重查受影响的条目，并区分 found、verified none 与 unknown。需自备 Git 并定义词汇表（kinds/fields）方可使用。",
+   "highlights": [
+    "提供 Python SDK、MCP 服务器和 CLI 三种客户端，共享 orient/query/get/set/write/authoring 同一套动词",
+    "支持两主体 cosign 流程：每个提案需独立审核者批准，全部变更记录在带签名的 Git 账本中，可读取任意历史版本",
+    "Runbook 流水线按计划或触发器拉取外部源，stale_after 标记过期证据，citation_drifted 检测被引用文件被修改"
+   ],
+   "use_cases": [
+    "漏洞分诊等跨源判定：合并 SBOM、OSV、CISA KEV、EPSS 与代码审查结论（README 的 security kit 示例）",
+    "代理多会话工作中维护已验证的中间事实，避免每次窗口重置后重新推导上下文",
+    "需要记录已验证缺失与未知状态之区别、并追踪依赖升级或代码改动影响范围的团队知识管理"
+   ]
+  },
+  "sha": "ffc3d622479e",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6faa2df859c1": {
+  "identity": {
+   "one_liner": "单二进制 Go 编写的 OLTP 数据库服务器，编译执行 T-SQL 与存储过程",
+   "review": "LionSQL 是一个用 Go 编写的单二进制 OLTP 数据库服务器，支持 T-SQL 方言、存储过程、触发器等语法，同时提供 PostgreSQL v3（端口 5433）与 TDS（端口 1433）两种线协议，客户端可用 psql、SSMS、pgx 等工具连接。存储引擎提供内存 OCC 与 WiredTiger MVCC 磁盘两种后端，并内置 Web 管理界面与静态站点托管（--app）。许可证为 GPL v3，构建需 Go 1.26+，Windows 下单二进制在运行时动态加载 wiredtiger.dll。",
+   "highlights": [
+    "同时提供 PostgreSQL v3 协议（端口 5433）和 MSSQL TDS 协议（端口 1433），支持 SSL/TLS 与预编译参数绑定",
+    "支持 CREATE PROCEDURE、函数、AFTER/INSTEAD OF 触发器，以及 IF...ELSE、WHILE、TRY...CATCH、游标、表变量等 T-SQL 过程语法",
+    "提供内存 OCC 与 WiredTiger MVCC 磁盘两种存储后端，README 称读取与写入互不阻塞，并支持 WAL 流复制与在线热备份"
+   ],
+   "use_cases": [
+    "需要用 MSSQL 客户端工具（SSMS、sqlcmd）或 T-SQL 存储过程的应用接入数据库",
+    "需要通过 PGWire 协议使用 psql、DBeaver、GORM、Prisma、pgx 等现有 PostgreSQL 生态工具",
+    "希望以单个二进制同时获得数据库、管理界面与静态站点托管的自托管部署场景"
+   ]
+  },
+  "sha": "6faa2df859c1",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

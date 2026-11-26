@@ -3087,5 +3087,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a960f529e77e": {
+  "identity": {
+   "one_liner": "自托管餐厅 POS 管理系统，离线优先，Postgres+API+Web 运行于本地局域网单台服务器。",
+   "review": "OrderRestro 是面向餐厅、咖啡馆、云厨房及多门店的开源自托管 POS 与管理系统，包含点单计费、桌台与预订、厨房显示、库存、员工考勤薪资、会计报表等 20 个模块（README 标注部分尚未完成）。整套 Postgres、API 与 Web 应用运行在店内局域网一台服务器上，通过 Docker Compose 或 CasaOS 安装，默认端口 1995。采用 NestJS/Next.js/TypeScript 构建，AGPL v3 协议。",
+   "highlights": [
+    "离线优先：断开外网后点单、计费、KDS、打印仍可运行",
+    "提供 QR/NFC 桌台点单、厨房多工位路由、桌台预订与等位管理",
+    "金额、税费、折扣与积分计算在服务端完成，权限采用可逐项开关的 RBAC"
+   ],
+   "use_cases": [
+    "单店或需要在局域网内运行、不依赖外网连接的餐厅日常点单计费与厨房出餐",
+    "需要员工排班、打卡、薪资核算与现金日结等后台管理的餐饮门店",
+    "多分支门店的跨店概览与库存调拨管理"
+   ]
+  },
+  "sha": "a960f529e77e",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1bd50d16c992": {
+  "identity": {
+   "one_liner": "本地优先的智能体任务控制板：持久队列、原子认领与事件审计，接入多种 MCP 编排工具",
+   "review": "Sugar 是运行在本地的编码智能体编队协调基础设施：提供基于 SQLite 的持久任务队列（原子认领、租约与心跳），并将任务流转、工具调用等事件写入仅追加的事件库。支持 Claude Code、Codex、Cursor、Goose 等 MCP 客户端通过 MCP、CLI、REST/SSE 读写任务与共享记忆，默认无账号、面板绑定回环地址。安装为 pipx install 'sugarai[all]'，需 Python 3.11+。",
+   "highlights": [
+    "持久 SQLite 任务队列，支持优先级、依赖、重试及原子认领加租约心跳，租约过期后由 reaper 重新入队",
+    "仅追加事件脊柱记录任务流转与各工具事件，支持 SHA-256 清单与可选 HMAC 签名的审计导出和验证",
+    "项目级与全局记忆库含七类记忆类型，通过本地嵌入实现语义检索并有 FTS5 关键词回退"
+   ],
+   "use_cases": [
+    "多个智能体在同一仓库工作时避免重复认领同一任务并保留执行历史",
+    "按模型、项目或任务归集 harness 上报的 token 与成本数据",
+    "需要导出可验证审计记录（事件、证据、追踪、AIBOM）的合规场景"
+   ]
+  },
+  "sha": "1bd50d16c992",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -30349,5 +30349,1025 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "83b65d819109+2": {
+  "fn": "Mistgate/mistgate",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Mistgate logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " Mistgate "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    6,
+    [
+     " A self-hosted panel for a small VPN: a few servers of your own and the people you share them with. ",
+     "Hysteria2, VLESS and AmneziaWG. Two Go binaries, SQLite and systemd. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    6,
+    7
+   ],
+   [
+    "replace",
+    6,
+    8,
+    7,
+    12,
+    [
+     "Status: beta",
+     "Latest release",
+     "Licence: AGPL-3.0",
+     "CI",
+     "Go version"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    12,
+    13
+   ],
+   [
+    "replace",
+    9,
+    16,
+    13,
+    14,
+    [
+     " Docs · Install · Protocols · Is it stable? · Compare · Русский · 简体中文 · فارسی · Türkçe "
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     " Beta. Expect changes before 1.0. Status and roadmap "
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    24,
+    17,
+    18,
+    [
+     "A Mistgate demo: a node is added over SSH from the browser, comes online with a profile and appears at once on a person"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    29,
+    18,
+    23
+   ],
+   [
+    "replace",
+    29,
+    30,
+    23,
+    24,
+    [
+     " How Mistgate fits together "
+    ]
+   ],
+   [
+    "equal",
+    30,
+    33,
+    24,
+    27
+   ],
+   [
+    "replace",
+    33,
+    131,
+    27,
+    98,
+    [
+     " Add a server from the browser ",
+     " Type the server's IP, choose how the panel logs in (its own SSH key, added once at your hoster, or the root password) and watch the install. The panel pins the server's SSH host key, checks the host, opens the ports in an active UFW or firewalld and installs the signed agent. No terminal on the new server; a one-time command is there if you prefer it. ",
+     " Docs → ",
+     "",
+     " A New node window: the server ",
+     "",
+     " One link per person, and a page of their own ",
+     " Each person gets one subscription link, a QR code and a page behind it with instructions for their platform, days left, traffic and their own devices. Mihomo apps get all protocols from the link, Happ gets Hysteria2 and VLESS, AmneziaVPN takes a key per device from the page. Groups decide which servers each person reaches. ",
+     " Docs → ",
+     "",
+     " A person ",
+     "",
+     " Checks from the client's side ",
+     " Every 5 minutes the panel connects to every protocol on every node the way an app does and shows the delay through each tunnel, so you hear about a broken server before the people on it do. A doctor on each node runs 23 host checks and offers ten fixes; none of them runs without your confirmation. ",
+     " Docs → ",
+     "",
+     " The client-eye checks table: nodes against protocols with the delay through each tunnel, and a failing node opened to show why ",
+     "",
+     " One TCP 443 for several protocols ",
+     " Many networks let through only TCP 443. A node can keep VLESS REALITY, VLESS over TLS, TrustTunnel and MTProto on that one port: the agent tells them apart by the name the client asks for. When you put a second profile on a taken port, the panel offers to put it beside the first and shows the DNS record to add. ",
+     " Docs → ",
+     "",
+     " The offer to put a profile beside another on port 443, then the card of the shared port with its counters ",
+     "",
+     " Decoy sites from a template ",
+     " A stranger who opens a node should see an ordinary small site, not a Mistgate page. Pick a country and one of ten kinds (a status page, documentation, a blog, a small business, a portfolio and more) and the panel builds a site in that country's language, with its own look and texts, different every time. Look at it, ask for another variant, then save. With your own free photo key a site gets real photographs, served from the node itself. ",
+     " Docs → ",
+     "",
+     " The From a template window: a country, a kind, the preview of the new site and the Another variant button Five sites of five kinds made by the generator, passing by ",
+     "",
+     " Updates that roll out and roll back ",
+     " Nodes never update on their own. A rollout installs one canary node first and gives it 5 minutes to pass a health check, then goes on in small batches. A node that fails gets its previous build back and the rollout pauses. The panel updates itself only when you confirm, and puts the old binary and data back if the new one does not stay up. ",
+     " Docs → ",
+     "",
+     " The Updates page: a rollout installs the canary, checks it for 5 minutes, then moves on to the other nodes ",
+     "",
+     " Updates of the servers' systems ",
+     " See which servers wait for security updates or a reboot, without logging in to each of them. Install security updates or reboot one server, or tick several and run them as a rollout: a few at a time, each node health-checked afterwards, a stop at the first that fails. ",
+     " Docs → ",
+     "",
+     " The Server systems tab: servers with their kernels and waiting updates, two ticked, installing, done ",
+     "",
+     " WARP exit, with a check that it works ",
+     " Send a profile's traffic out through Cloudflare WARP, with one account per node. The card shows the tunnel, the traffic and an egress check; the panel also fetches a list of sites through each node's WARP and raises an alert when some of them start to block it. A profile with the WARP exit never falls back to the node's own address. ",
+     " Docs → ",
+     "",
+     " The WARP card of a node: the tunnel is up and the egress check passes, then the tunnel goes down and the card offers a restart ",
+     "",
+     " DNS presets for the apps ",
+     " A preset says which DNS servers a person's app asks and how (plain, DoT or DoH), with split rules for a country or a list of sites, such as Russian sites direct, and ads blocked in the apps. Give one to everybody, to a group or to one person; the editor shows what each app will really get. ",
+     " Docs → ",
+     "",
+     " The DNS tab of Subscriptions: the presets, then one opened with its servers and what each app gets, then its split rules ",
+     "",
+     " An assistant and MCP, with a plan first ",
+     " A built-in assistant (a cloud model you connect with your own key) answers about your nodes and people and prepares changes. MCP gives an outside AI agent the same: it reads the fleet and plans changes, and you approve each risky one in the admin before it is applied. An API token can disable or rewrite at most 10 people an hour unless you lift the limit. ",
+     " Docs → ",
+     "",
+     " The assistant ",
+     "",
+     " Alerts in Telegram ",
+     " Connect your own bot and the panel writes to your chat when a node goes down or comes back, a check fails, a backup fails or an agent's plan waits for you. It only sends alerts: nothing is approved or changed from the chat. Each admin links their own chat. ",
+     " Docs → ",
+     "",
+     " The Integrations page: the bot, the chat that waits for Start, then linked, and a test message sent ",
+     "",
+     " Encrypted backups and a careful restore ",
+     " Backups go to your own Cloudflare R2 bucket, on a schedule or on demand, encrypted before they leave the panel with a key you keep offline. A restore checks the backup first and shows what it holds against what you have now; nothing changes until you confirm, and the data from before the restore is kept. ",
+     " Docs → ",
+     "",
+     " The Restore from a backup window: the file is checked, the summary compared with now, the restore, the panel is back "
+    ]
+   ],
+   [
+    "equal",
+    131,
+    134,
+    98,
+    101
+   ],
+   [
+    "replace",
+    134,
+    137,
+    101,
+    104,
+    [
+     "- When some networks cannot reach a server, people get to it through another of your nodes, which only forwards the encrypted traffic. The panel checks the path before switching it on and watches it afterwards; Ways in on the node page is a graph of how people reach the server, and the Nodes page maps the whole fleet. Relays",
+     "- Optional checks of whether your servers open from inside a country, network by network: Globalping probes on home and mobile networks over IPv4 and IPv6, volunteer and SIM probes, block lists and a TSPU probe from your own node. Most sources work only in Russia. Reachability",
+     "- No Docker, no database server. The panel idles at 39-44 MiB of memory on a 1 vCPU / 1 GB server. Benchmarks, including where Mistgate is slower."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    104,
+    105
+   ],
+   [
+    "replace",
+    138,
+    140,
+    105,
+    107,
+    [
+     "- Who gets which server: a node goes to everyone, to chosen groups or to nobody yet, and a person can be in several groups. Groups",
+     "- A desktop app for Windows, Mistgate, works with these panels and with plain subscription links."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    107,
+    108
+   ],
+   [
+    "replace",
+    141,
+    142,
+    108,
+    109,
+    [
+     "Not there yet: a Telegram bot beyond alerts, and the Cloudflare Workers edition is still a preview. Some defaults lean towards users in Russia; all of them are settings."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    109,
+    112
+   ],
+   [
+    "replace",
+    145,
+    146,
+    112,
+    113,
+    [
+     "|Protocol|On the node|What you can set|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    113,
+    114
+   ],
+   [
+    "replace",
+    147,
+    152,
+    114,
+    119,
+    [
+     "|Hysteria2|The official Hysteria2 core|UDP (QUIC). Salamander obfuscation (Gecko is experimental), port hopping, a Let's Encrypt or a pinned self-signed certificate.|",
+     "|VLESS|xray-core|REALITY over XHTTP or TCP (RAW + Vision); TLS over XHTTP or WebSocket, direct or behind a CDN.|",
+     "|AmneziaWG|amneziawg-go in userspace, or the kernel module|Versions 3.1 (the default) and 2.0, a separate key per device. 1.5 and 1.0 are not offered.|",
+     "|TrustTunnel|Mistgate's own engine in the node agent|Experimental. A VPN inside ordinary HTTPS (HTTP/2, HTTP/3 optional) with a real certificate; `tt://` keys for the official TrustTunnel apps.|",
+     "|MTProto|Mistgate's own MTProto core|Experimental. A proxy for the Telegram app only: Fake TLS with the node's own domain or another site as the name, a key per person, the decoy site for everyone else.|"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    119,
+    120
+   ],
+   [
+    "replace",
+    153,
+    154,
+    120,
+    121,
+    [
+     "Hysteria2 and VLESS can share a node, TCP 443 included. Not every app format carries every profile: see what works where."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    157,
+    121,
+    124
+   ],
+   [
+    "replace",
+    157,
+    158,
+    124,
+    125,
+    [
+     "A protocol is two halves compiled into the binaries. On the panel, one Go interface: a JSON Schema for its settings (the admin builds the form from it), validation, the spec a node runs, credential issuing, and its piece of each subscription format. On the node, an engine that runs the spec, swaps credentials without a restart and reports traffic and health. A new protocol goes only to agents that announce it, so older agents keep working. See the protocol plugin contract."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    161,
+    125,
+    128
+   ],
+   [
+    "replace",
+    161,
+    162,
+    128,
+    129,
+    [
+     "It is beta, and young: v0.1.0 was tagged on 2026-10-03, and the 0.2.0 line redraws the whole interface. Until 1.0 the API, the stored settings and the node protocol may still change. Releases do not go through an automated upgrade test from older versions yet; that is one of the conditions for 1.0."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    165,
+    129,
+    132
+   ],
+   [
+    "replace",
+    165,
+    166,
+    132,
+    133,
+    [
+     "The tunnels do not depend on the panel: a node keeps serving its last applied configuration while the panel is down, a user change does not restart the server, and older agents work with a newer panel. In the benchmark, adding and removing users and restarting the panel dropped no connection."
+    ]
+   ],
+   [
+    "equal",
+    166,
+    169,
+    133,
+    136
+   ],
+   [
+    "replace",
+    169,
+    172,
+    136,
+    139,
+    [
+     "- CI on every push and pull request (ci.yml): Go tests and vet, the race detector on the panel-agent session, `govulncheck`, the admin's lint and tests, the docs build, the installer on Debian and Ubuntu.",
+     "- An end-to-end run (scripts/e2e-wsl.sh): a real panel and node with real Hysteria2, AmneziaWG, Xray, mihomo and sing-box clients, plus agent updates, rollbacks and an install over SSH. It runs by hand before every release, in WSL or a VM, not in CI.",
+     "- GitHub Actions builds each tag as a draft. I rebuild it from the tag on a machine with the offline release key and sign only binaries that match byte for byte; nodes and the panel install only signed builds. Releases and signing"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    139,
+    140
+   ],
+   [
+    "replace",
+    173,
+    174,
+    140,
+    141,
+    [
+     " What an update is trusted for "
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    141,
+    142
+   ],
+   [
+    "replace",
+    175,
+    176,
+    142,
+    143,
+    [
+     "Updating (Updates):"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    181,
+    143,
+    148
+   ],
+   [
+    "replace",
+    181,
+    182,
+    148,
+    149,
+    [
+     "- Keep encrypted backups of `/var/lib/mistgate` anyway."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    149,
+    150
+   ],
+   [
+    "replace",
+    183,
+    184,
+    150,
+    151,
+    [
+     "Mistgate is written with AI coding agents. I review what they write and decide what is merged and released; the checks above are the same for their code as for anyone's. Commits made with an agent carry a `Co-Authored-By` line, and the rules agents follow in this repository are in AGENTS.md."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    193,
+    151,
+    160
+   ],
+   [
+    "replace",
+    193,
+    194,
+    160,
+    161,
+    [
+     "The installer verifies the signed panel manifest, starts Mistgate under systemd and prints the admin URL with a one-time setup link (valid for 30 minutes). It leaves the firewall alone. `--yes` skips the questions, `--dry-run` only verifies the release; manual installation and other options are in Install the panel."
+    ]
+   ],
+   [
+    "equal",
+    194,
+    198,
+    161,
+    165
+   ],
+   [
+    "replace",
+    198,
+    200,
+    165,
+    167,
+    [
+     "2. Add servers in **Nodes → Add node**, over SSH or with a one-time command (Add a node).",
+     "3. Add people: First users."
+    ]
+   ],
+   [
+    "equal",
+    200,
+    201,
+    167,
+    168
+   ],
+   [
+    "replace",
+    201,
+    202,
+    168,
+    169,
+    [
+     "An AI agent that can run `ssh` can do these steps with the prompt in the AI agent guide; you still create the owner account yourself."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    205,
+    169,
+    172
+   ],
+   [
+    "replace",
+    205,
+    206,
+    172,
+    173,
+    [
+     "||Mistgate|3x-ui|Remnawave|Hiddify|PasarGuard|s-ui|"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    207,
+    173,
+    174
+   ],
+   [
+    "replace",
+    207,
+    227,
+    174,
+    194,
+    [
+     "|Runs without Docker|✅|✅|❌|✅|🟡 partial|✅|",
+     "|Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite|",
+     "|Panel RAM, idle|39-44 MiB¹|73-76 MiB¹|436-464 MiB¹|not measured|273-277 MiB¹|not measured|",
+     "|Add a node from the panel (SSH)|✅|❌|❌|❌|❌|?|",
+     "|Hysteria2|✅ native|✅|🟡 partial|✅|✅|✅|",
+     "|VLESS REALITY|✅|✅|✅|✅|✅|✅|",
+     "|AmneziaWG|✅ native, 2.0 and 3.1|✅ 3.1|❌|❌|❌|❌|",
+     "|TrustTunnel|✅ experimental|❌|❌|❌|❌|❌|",
+     "|Telegram proxy (MTProto)|✅ experimental|✅|❌|✅|✅ in the source|❌|",
+     "|WireGuard|❌|✅|🟡 core config only|✅|✅|✅|",
+     "|TUIC|❌|✅|❌|✅|🟡 sing-box core, only in the source|✅|",
+     "|VMess, Trojan, Shadowsocks|❌|✅|🟡 partial|✅|✅|✅|",
+     "|Xray JSON or sing-box subscriptions|✅ both|Xray JSON|✅ both|✅ both|✅ both|sing-box|",
+     "|Relay through an entry node|✅|🟡 outbound chaining|🟡 bridge by hand|✅ relay domains|?|?|",
+     "|Decoy site|✅|🟡 Hysteria2 only|?|✅|?|?|",
+     "|Device limit|✅|✅|✅|?|✅|?|",
+     "|Several admins with roles|❌ one admin|?|❌|✅|✅|?|",
+     "|Health checks and alerts|✅ client-eye checks, node doctor, reachability from a country|✅ tunnel monitor (opt-in)|✅ status, Prometheus|🟡 partial|🟡 partial|🟡 status only|",
+     "|Telegram bot|🟡 alerts only|✅|🟡 partial|✅|✅|🟡 third-party bot|",
+     "|Built-in MCP server for AI agents|✅|❌|❌|?|?|?|"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    194,
+    195
+   ],
+   [
+    "replace",
+    228,
+    229,
+    195,
+    196,
+    [
+     "¹ Private memory of the whole panel group, idle, 0 to 200 users, no node attached, on a 1 vCPU / 1 GB test server (3x-ui includes its Xray core and fail2ban). Method, versions and limits: Benchmarks. \"?\" means the project's own README and docs do not say. \"❌\" for another project means it says so itself, or its source code does not mention the feature (a code search on 2026-11-24). \"native\" means the protocol's own core runs on the node, not a reimplementation inside Xray or sing-box."
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    196,
+    197
+   ],
+   [
+    "replace",
+    230,
+    231,
+    197,
+    198,
+    [
+     "Others are ahead in protocol breadth, community size, admin roles and full Telegram bots. The full table with sources, checked on 2026-10-09 and in part again on 2026-11-24, is in Comparison with other panels."
+    ]
+   ],
+   [
+    "equal",
+    231,
+    234,
+    198,
+    201
+   ],
+   [
+    "replace",
+    234,
+    235,
+    201,
+    202,
+    [
+     "Everything is at mistgate.app and in `docs/`. Good places to start:"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    236,
+    202,
+    203
+   ],
+   [
+    "replace",
+    236,
+    240,
+    203,
+    207,
+    [
+     "- Overview and Requirements",
+     "- Install the panel, Install a node over SSH, First users",
+     "- Health, Updates, Encrypted backups, Troubleshooting",
+     "- CLI, API, MCP, Architecture"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    242,
+    207,
+    209
+   ],
+   [
+    "replace",
+    242,
+    245,
+    209,
+    210,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    247,
+    210,
+    212
+   ],
+   [
+    "replace",
+    247,
+    248,
+    212,
+    213,
+    [
+     "Report vulnerabilities privately: see SECURITY.md. Back up the panel's data directory (`/var/lib/mistgate`): it holds the database, the master key and the CA your nodes trust."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    250,
+    213,
+    215
+   ],
+   [
+    "replace",
+    250,
+    253,
+    215,
+    216,
+    [
+     "Mistgate is free software under the GNU Affero General Public License v3.0 only. If you run a modified panel for others, its admin shows a \"Source code\" link (`serve --source-url`) that should point to your source."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    216,
+    217
+   ],
+   [
+    "replace",
+    254,
+    262,
+    217,
+    218,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "d8593e50bce5+2": {
+  "fn": "ArintonAkos/DataVo-DBMS",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "License",
+     "Docs",
+     "NuGet",
+     "Views"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    19,
+    6,
+    19
+   ],
+   [
+    "replace",
+    19,
+    26,
+    19,
+    20,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    53,
+    20,
+    47
+   ],
+   [
+    "replace",
+    53,
+    62,
+    47,
+    56,
+    [
+     "|Workload|DataVo|Comparison|Notes|",
+     "|:---|:---|:---|:---|",
+     "|**PK point lookup (100k rows)**|**55 ns** (InMemory, 56 B) · **216 ns** (LSM, 144 B)|SQLite: 716 ns / 1,654 ns (608 B)|Compiled LINQ; 8–12× faster on Linux/Windows x64 CI too|",
+     "|**Filtered aggregates (200k rows, `[Columnar]`)**|**27–90 µs** (0 B alloc, InMemory & LSM)|SQLite: 3.7–5.6 ms · DuckDB 1t: 123–701 µs|55–162× faster than SQLite; 2.6–8.4× faster than 1-thread DuckDB|",
+     "|**1M-row SQL (`GROUP BY`, 2–3 table `JOIN`)**|**2.3–9.7× faster** than SQLite (LSM Relaxed)|`GROUP BY` 4–1k groups: 2.8–3.0× · Columnar agg: 5–14×|28-query v0.4 matrix vs. SQLite WAL `NORMAL`|",
+     "|**Filtered top-10 vector search (50k × 384d)**|**0.67–3.6 ms** (HNSW) · **2.0–4.3 ms** (Flat)|SQLite + `sqlite-vec`: 9.8–14.4 ms (exact)|100% Recall@10 across all three, no short results|",
+     "|**Reactive IVM (3-table join, 50k updates)**|**192 ms** (3.1 µs P50)|DuckDB: 34.3 s · SQLite: 126.1 s|Incremental Z-sets vs. recomputing (single-table agg is ~1.1×)|",
+     "|**YCSB 80/20 mixed (12 threads, Relaxed)**|**510,695 ops/s** (0.66 ms write P99)|SQLite WAL `NORMAL`: 261,618 ops/s (3.77 ms P99)|Non-power-loss-durable mode on both engines|",
+     "|**Durable single update (`fsync` per commit)**|**~4.0 ms** (LSM Production)|SQLite WAL `FULL` + `fullfsync`: **~4.0 ms**|Drive flush dominates on macOS/Windows; SQLite leads on fast-flush Linux VM|"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    69,
+    56,
+    63
+   ],
+   [
+    "replace",
+    69,
+    70,
+    63,
+    64,
+    [
+     "Filtered aggregates"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    64,
+    65
+   ],
+   [
+    "replace",
+    71,
+    72,
+    65,
+    66,
+    [
+     "YCSB write P99 latency"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    74,
+    66,
+    68
+   ],
+   [
+    "replace",
+    74,
+    77,
+    68,
+    71,
+    [
+     "- DataVo vs SQLite (28 SQL shapes + hybrid vector, v0.4) · raw logs in `docs/public/benchmarks/2026-11-16-v04-final/`",
+     "- Benchmark Results & Cross-Platform CI (Part III: Platforms)",
+     "- Engineering deep-dives: Part 1: Where It Wins and Where It Loses · Part 2: Packed Buffers, Native AOT & Roslyn Codegen"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    71,
+    74
+   ],
+   [
+    "replace",
+    80,
+    81,
+    74,
+    75,
+    [
+     "Current release on nuget.org: **0.5.0** (25 November 2026; see the roadmap):"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    97,
+    75,
+    91
+   ],
+   [
+    "replace",
+    97,
+    98,
+    91,
+    92,
+    [
+     "Releases are published from CI with NuGet Trusted Publishing when a `v*.*.*` tag is pushed."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    92,
+    95
+   ],
+   [
+    "replace",
+    101,
+    102,
+    95,
+    96,
+    [
+     "Three runnable demos live under `examples/` (`dotnet run -c Release` in any of them):"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    96,
+    97
+   ],
+   [
+    "replace",
+    103,
+    106,
+    97,
+    100,
+    [
+     "- **HybridVectorRagAot**: hybrid retrieval with SQL metadata filters (`Category`, `CreatedAt DATETIME`) and HNSW vector similarity, published as one Native AOT binary with no native library beside it.",
+     "- **MicrosoftAiLocalRag**: local RAG retrieval over this repository's manual with `IEmbeddingGenerator<string, Embedding<float>>` and `DataVoVectorStore` (Microsoft.Extensions.VectorData): semantic and filtered hybrid search, `EXPLAIN`, and an LSM reopen. Runs offline; `--ollama` uses a local model.",
+     "- **LiveReactiveLeaderboard**: high-frequency game events feeding incremental `GROUP BY`, top-N and `JOIN` views through `SubscribeZeroAlloc`, checked against a full re-query."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    113,
+    100,
+    107
+   ],
+   [
+    "replace",
+    113,
+    123,
+    107,
+    108,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    131,
+    108,
+    116
+   ],
+   [
+    "replace",
+    131,
+    164,
+    116,
+    117,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    186,
+    117,
+    139
+   ],
+   [
+    "replace",
+    186,
+    187,
+    139,
+    140,
+    [
+     "SQL Server Change Tracking / CDC is available on request for Early Access partners. See DataVo-Sync docs, request Early Access, or email `datavodb@proton.me`."
+    ]
+   ],
+   [
+    "equal",
+    187,
+    190,
+    140,
+    143
+   ],
+   [
+    "replace",
+    190,
+    191,
+    143,
+    144,
+    [
+     "The full manual is live at arintonakos.github.io/DataVo-DBMS and in `docs/manual/`:"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    192,
+    144,
+    145
+   ],
+   [
+    "replace",
+    192,
+    198,
+    145,
+    151,
+    [
+     "- Introduction · Quickstart · Choosing an Interface · Status & Roadmap",
+     "- Storage Modes · LSM & Durability · Transactions & MVCC · Vector Search · Live Reactive Views",
+     "- SQL Compatibility · Query Planner & Fast Paths · Zero-Allocation Rows",
+     "- Roslyn Source Generators · Compiled LINQ · ADO.NET · Dapper · Entity Framework Core",
+     "- DataVo vs SQLite · Benchmark Results · Reproducing Benchmarks",
+     "- Limits & Unsupported Features · Configuration · AI Access & MCP"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    204,
+    151,
+    157
+   ],
+   [
+    "replace",
+    204,
+    206,
+    157,
+    158,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

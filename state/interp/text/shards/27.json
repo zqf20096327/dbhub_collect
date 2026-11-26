@@ -3266,5 +3266,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "10d4471fc627": {
+  "identity": {
+   "one_liner": "面向 SQL 数据库的 MCP 服务器，在服务端对查询结果做隐私脱敏。",
+   "review": "dbmcp 是一个 MCP 服务器，连接 MySQL、MariaDB、PostgreSQL 和 SQLite，提供 objects、read、write、explain 四类工具。默认开启只读模式，查询结果在返回 AI 客户端前被脱敏替换：内置 47 种数据类型检测，敏感值替换为带密钥的一致性占位符，以便保留计数、分组和连接能力；也可按列名配置规则，规则在别名、视图、CTE、连接等路径下生效，无法证明安全的语句会被拒绝。安装支持脚本、npm、Docker 和 Cargo，传输层有 stdio 与 HTTP 两种，HTTP 模式可配 bearer token。",
+   "highlights": [
+    "内置 47 种数据类型检测，敏感值替换为一致性占位令牌，保持等值相等以支持计数、分组与连接",
+    "按列名配置的脱敏规则适用于别名、表达式、视图、CTE、连接、联合等查询路径，无法证明安全的语句在执行前被拒绝",
+    "默认只读模式，可通过环境变量、env 文件和 YAML 配置文件分层配置，支持 SSH 隧道连接 MySQL/MariaDB/PostgreSQL"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor 等 MCP 客户端中让 AI 助手查询数据库，同时避免敏感字段值暴露给客户端",
+    "通过 objects 与 read 工具做 schema 发现与只读数据查询，结果分页返回",
+    "通过 explain 工具在只读事务中查看 SQL 执行计划，PostgreSQL 与 MySQL/MariaDB 可选 analyze"
+   ]
+  },
+  "sha": "10d4471fc627",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

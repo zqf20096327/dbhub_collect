@@ -3371,5 +3371,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "115ea0860fd4": {
+  "identity": {
+   "one_liner": "Duroxide 持久执行运行时的 MySQL 8.0+ 与 TiDB 存储提供者，基于 sqlx 实现纯客户端 SQL 事务。",
+   "review": "该项目为 Rust 持久执行运行时 Duroxide 提供 MySQL 8.0+ 与 TiDB 存储后端，通过 sqlx 实现 Provider 与 ProviderAdmin 契约。设计上避免存储过程、触发器、FOR UPDATE SKIP LOCKED 等特性，以兼容 SQL 代理与分布式 SQL 集群；通过固定加锁顺序与比较并设更新实现队列领取。支持自动迁移、表前缀、动态连接池解析，并附可选的内存 Provider 用于测试。部署于 TiDB 或复制 MySQL 时需单主 ACID 线性一致性。",
+   "highlights": [
+    "通过 sqlx 0.9 实现 Provider 与 ProviderAdmin 契约，在 MySQL 8.0 与 TiDB 8.5 上通过全部 232 项官方验证测试",
+    "不使用存储过程、触发器、RETURNING、FOR UPDATE SKIP LOCKED 及数据库咨询锁，队列轮询采用有界候选窗口加比较并设更新领取",
+    "支持表前缀隔离多应用/租户、自动迁移开关、动态连接池解析（DNS SRV、代理轮换、TLS 重载），并提供可选纯 Rust 内存 Provider"
+   ],
+   "use_cases": [
+    "为运行在 MySQL 8.0+ 或 TiDB 上的 Duroxide 持久执行应用提供存储层",
+    "需要经由 MySQL 连接代理或分布式 SQL 集群部署的场景",
+    "使用内存 Provider 进行无需数据库的单元与集成测试"
+   ]
+  },
+  "sha": "115ea0860fd4",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bfe5ab5de817": {
+  "identity": {
+   "one_liner": "为 Flyway 8.5.13 提供华为 GaussDB 商业版适配的 SPI 适配器",
+   "review": "本项目为 Flyway 8.5.13 提供华为 GaussDB 商业版适配，支持 JDK 8，通过 Java SPI 自动加载，以 jdbc:gaussdb: 前缀识别连接，复用 PostgreSQL 迁移方言并按 GaussDB 规则处理 JDBC 兼容版本与会话角色恢复。提供 Maven 核心适配器与 Spring Boot 2.7 starter 两个模块；真库验证覆盖 GaussDB A 兼容模式，依赖 Flyway 内部接口，升级 Flyway 需重新验证。",
+   "highlights": [
+    "通过 Java SPI 自动加载，以 jdbc:gaussdb: 识别连接，复用 PostgreSQL 迁移方言",
+    "提供 Maven 核心适配器与 Spring Boot 2.7 自动配置 starter（版本 0.1.1），starter 将迁移目录占位符 {vendor} 解析为 gaussdb",
+    "真库验证覆盖华为 GaussDB A 兼容模式，Spring Boot 兼容基线为 2.7.18"
+   ],
+   "use_cases": [
+    "在 Spring Boot 2.7 应用中使用 Flyway 管理华为 GaussDB 商业版数据库的迁移",
+    "通过 Flyway Java API 直接对 jdbc:gaussdb: 数据源执行 SQL 迁移脚本",
+    "需要在 GaussDB A 兼容模式下复用 PostgreSQL 迁移方言的项目"
+   ]
+  },
+  "sha": "bfe5ab5de817",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

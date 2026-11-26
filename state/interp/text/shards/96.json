@@ -3595,5 +3595,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "31f61f3f7280": {
+  "identity": {
+   "one_liner": "基于 TanStack Start 与 Cloudflare Workers 的开源 SaaS 网站、工作区与管理台源码。",
+   "review": "该仓库提供 SaaSy Land 网站、客户工作区与管理控制台的源码，整合多语言营销站、文档与博客、认证、新闻订阅、视频课程及 Polar 结算与许可管理，使用 TanStack Start、React、TypeScript、Bun 构建，部署于 Cloudflare Workers，数据层为 Drizzle + D1。网站源码采用 MIT 许可；CLI 与生成器模板为独立商业产品，不包含在此仓库中。",
+   "highlights": [
+    "包含网站、客户工作区与管理台三个部分，管理端各界面通过权限校验的 server functions 读取 D1 与 Polar 的真实数据",
+    "内置 Better Auth 认证、Drizzle + D1 数据层、Polar 结算与许可、Resend 邮件及 R2 存储",
+    "MDX 内容支持九种语言的本地化，并有 admin-data/no-literal-data lint 规则禁止管理端声明演示数据"
+   ],
+   "use_cases": [
+    "以 MIT 许可的网站源码为起点构建部署在 Cloudflare Workers 上的 SaaS 应用",
+    "搭建包含多语言营销站、文档、博客与课程功能的站点",
+    "研究 TanStack Start 全栈应用在 Cloudflare Workers 上的组织与实现方式"
+   ]
+  },
+  "sha": "31f61f3f7280",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41fa6cf74d33": {
+  "identity": {
+   "one_liner": "SQLite 运行时加载扩展，基于 hnswlib 提供 SQL 接口的进程内向量搜索",
+   "review": "Vectorlite 是一个 SQLite 运行时加载扩展，通过虚拟表模块和 SQL 函数提供基于 hnswlib 的近似最近邻向量搜索，主实现为 Rust，原生 C++ 仅保留 hnswlib 与 Highway SIMD 部分。可通过 Python、Node.js 包安装，或从 wheel 提取动态库供任何有 SQLite 驱动的语言使用。项目处于 beta 阶段，索引持久化已改为显式 save/load，官方支持 Linux x64、Windows x64 与 macOS Apple Silicon。",
+   "highlights": [
+    "支持 hnswlib 提供的全部向量距离类型：l2、cosine、ip，并可完全控制 HNSW 参数",
+    "使用 Google Highway 实现 SIMD 加速的向量距离计算，存储类型支持 float32、float16、bfloat16",
+    "支持索引序列化保存/加载，兼容 hnswlib 生成的原始索引文件；提供基于 SQLite 的实验性 DiskANN 后端"
+   ],
+   "use_cases": [
+    "需要将向量搜索嵌入已有 SQLite 应用的场景",
+    "使用任意带 SQLite 驱动的语言进行进程内向量检索",
+    "需要将向量数据与 rowid 关联的元数据进行谓词过滤查询（SQLite >= 3.38）"
+   ]
+  },
+  "sha": "41fa6cf74d33",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ba5d5ee9d99a": {
+  "identity": {
+   "one_liner": "基于 Stripe 的自托管许可证密钥与文件交付系统，兼容 Lemon Squeezy API",
+   "review": "Keypost 是部署在 Stripe 之上的数字交付层，负责生成许可证密钥、分发文件和处理退款、订阅等业务。它提供与 Lemon Squeezy 相同的 License API、JSON:API 和 webhook 事件结构，客户端仅需替换 base URL。技术栈为 Go 后端加 Next.js 前端，数据库使用 PostgreSQL 或 SQLite。README 强调其位于支付路径且不提供保修，部署者需自行测试并承担后果。",
+   "highlights": [
+    "提供与 Lemon Squeezy 兼容的 License API、JSON:API 与 16 种 webhook 事件，客户端仅需更改 base URL",
+    "支持一键导入历史订单、许可证密钥和文件，保留原始 ID 与密钥字符串，含 dry run 与 ID 冲突保护",
+    "内置管理后台，含退款、审计日志、文件签名下载链接、客户魔法链接自助页面，强制成员启用两步验证"
+   ],
+   "use_cases": [
+    "从 Lemon Squeezy 迁移并需继续交付许可证密钥与文件下载的数字产品卖家",
+    "需要自托管支付交付层并通过 Stripe Checkout、退款、订阅 webhook 驱动密钥签发的团队",
+    "已有调用 Lemon Squeezy API 的客户端代码，希望不改动客户端逻辑而接入 Stripe 的项目"
+   ]
+  },
+  "sha": "ba5d5ee9d99a",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a59e476c7a52": {
+  "identity": {
+   "one_liner": "T3 Code 个人环境运行的 Rust 加速组件与遥测禁用套件",
+   "review": "该项目包含三个 Rust crate（Rust bridge、原生 SQLite 绑定、maki 代码工具 CLI）以及 systemd drop-in 模板和补丁。用于替换 T3 Code 的 SQLite 驱动为原生 Rust 桥接以降低内存占用，并通过环境变量与源码补丁默认关闭产品遥测与 relay tracing。适用于自建 T3 Code 服务器的用户；需对上游源码应用补丁并重新构建，依赖 Node.js 26 与 Rust stable。",
+   "highlights": [
+    "将 SQLite 驱动替换为原生插件与 Rust bridge（通过 T3_RUST_BRIDGE_BIN、T3_NATIVE_SQLITE_PATH 等环境变量接入）",
+    "通过环境变量与补丁默认禁用产品遥测与 relay OTLP tracing",
+    "提供 code_index/code_slice/code_grep/code_diff/code_exec 五个 maki 工具，exec 支持运行时间与内存限制并过滤 API 密钥类环境变量"
+   ],
+   "use_cases": [
+    "在 Linux/macOS/Windows 上以预构建服务器运行 T3 Code 并降低内存占用",
+    "需要默认关闭向 ingest.t3.codes 的遥测上报的个人部署环境",
+    "通过 systemd user unit 将加速组件集成到现有 t3code.service，或使用 T3 Connect TLS 1.3 E2E 加密隧道连接客户端"
+   ]
+  },
+  "sha": "a59e476c7a52",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

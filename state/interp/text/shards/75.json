@@ -3261,5 +3261,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cc2fc80d844f": {
+  "identity": {
+   "one_liner": "Go 编写的开源业务平台，用类 1C 的 DSL 做记账类应用",
+   "review": "OneBase 是用 Go 编写的开源业务平台，单个二进制文件在 SQLite 或 PostgreSQL 上运行应用配置。元数据用 YAML 描述，业务逻辑用内置 DSL 编写，面向有记账平台使用经验的开发者。支持文档过账生成寄存器变动、报表虚拟表、REST API、MCP 服务器等机制；MIT 许可证发布。",
+   "highlights": [
+    "支持积累寄存器（余额与周转）、信息寄存器、科目表和双式记账的会计寄存器、FIFO 批次核销",
+    "配置可存放于 git 管理的文件（YAML 与 .os）或数据库内表 _onebase_config，两种模式可互相导入导出",
+    "提供 onebase check（编译并执行查询校验配置）、MCP 服务器、REST API，以及导入 1C 配置 XML 导出文件的功能"
+   ],
+   "use_cases": [
+    "开发贸易、仓储、会计记账类业务应用",
+    "需要文件级 git 协作或数据库内可视化配置器两种开发方式的团队",
+    "通过 MCP 服务器让 AI 代理编写和校验平台配置"
+   ]
+  },
+  "sha": "cc2fc80d844f",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8dc9988f24b4": {
+  "identity": {
+   "one_liner": "面向编码代理的分析工程技能集，通过 exmergo-dex-core 引擎执行探索、转换与维护循环。",
+   "review": "Dex 是 Exmergo 发布的 Agent Skills 集合，供 Claude Code、Codex 等加载 Agent Skills 的代理调用 exmergo-dex-core 引擎，实现数据的探索（列画像、ER 图、PIE 标记）、dbt 模型与语义层构建、以及 schema/指标漂移检测。源数据只读，构建在 dev target 上执行，变更以可审查 diff 写入仓库。要求 PATH 中有 uv 0.13.4+，且代理具备本地 shell，不能在 claude.ai 聊天中运行。",
+   "highlights": [
+    "提供 explore/transform/maintain 三个技能，在 Claude Code 中以 /dex:explore 等命令触发，Codex 有原生插件，其他代理可指向 AGENTS.md",
+    "内置防护：查询防火墙拦截个人数据进入上下文、SELECT-only、扫描前给出成本估算并在服务端封顶、花费记录本地台账、凭据不进入代理上下文",
+    "支持 Snowflake、BigQuery、Databricks、Redshift、Postgres、DuckDB、ClickHouse、Trino 八种连接器，demo 模式可在无凭据的本地 DuckDB 上运行"
+   ],
+   "use_cases": [
+    "让代理在大型数据仓库中定位相关表、生成列画像与验证过的关联关系后再编写 SQL",
+    "以可审查计划的方式创建、重构 dbt 模型、测试、文档与语义层指标，并在 dev target 上构建验证",
+    "数据源变更后对比快照，检测 schema、行量、grain 与指标定义的漂移并审查提议的修复"
+   ]
+  },
+  "sha": "8dc9988f24b4",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2f882088a8bf": {
+  "identity": {
+   "one_liner": "自托管开源备份软件，通过Web控制台与代理管理服务器、虚拟机、数据库和Microsoft 365备份",
+   "review": "BackupZit 是一个基于 Go 编写的自托管备份系统，采用控制台加代理架构：Linux 上运行 Web 控制台（依赖 PostgreSQL，但不存储备份数据），各受保护机器上的代理直接将去重、压缩、AES-256 加密后的备份写入所选存储。支持 Windows/Linux/macOS 文件与裸机恢复、Proxmox/ESXi/Hyper-V 虚拟机（含故障转移集群）、SQL Server/PostgreSQL/MySQL 数据库、NAS 共享和 Microsoft 365。许可证为 AGPLv3，MaxZit 提供商业支持。安装需一台 2 vCPU、2–4 GB 内存的虚拟机或服务器，代理通过 TCP 8443 连接控制台。",
+   "highlights": [
+    "提供代理支持的文件备份（Windows 使用 VSS 快照、macOS 使用 APFS 快照）和 Windows/Linux 整盘备份，附带用于裸机恢复的图形化恢复 ISO，支持异机恢复、GPT↔MBR 转换和引导修复",
+    "以无代理方式备份 Proxmox VE（包括基于 ZFS 的容器）、VMware ESXi/vCenter（通过每个主机的代理实现变更块跟踪和热添加）以及 Hyper-V 虚拟机（包括故障转移集群，支持恢复 vTPM）",
+    "支持多种存储后端（SFTP、兼容 S3 的对象存储、SMB、Azure Blob、轮换 USB 磁盘、本地磁盘和强化仓库），提供不可变备份（S3 Object Lock）、勒索软件检测、自动恢复测试、LDAP/SAML/OpenID Connect 登录以及具备 OpenAPI 规范的 REST API"
+   ],
+   "use_cases": [
+    "在没有云控制台的情况下备份具有不同操作系统、虚拟化管理程序（Proxmox VE、ESXi、Hyper-V）、数据库和 Microsoft 365 的混合环境，所有操作通过一个自托管控制台完成",
+    "通过恢复 ISO 或即时恢复（Proxmox 通过 NFS）从裸机恢复进行灾难恢复，通过备份复制作业维护第二份副本（3-2-1 策略）",
+    "通过不可变备份（S3 Object Lock 或强化仓库）、勒索软件检测和暂停保留策略以及审计日志，防范勒索软件和误删除"
+   ]
+  },
+  "sha": "2f882088a8bf",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "464de2c9ece3": {
+  "identity": {
+   "one_liner": "纯 PHP + SQLite 的摄影师多语言作品集 CMS，含网站与后台",
+   "review": "该项目为摄影师提供多语言作品集网站与后台面板，用纯 PHP 编写，默认使用 SQLite，可选 MySQL，无需构建步骤，将文件夹复制到服务器后打开 /admin/ 即可。功能包含 18 种界面语言、作品编辑器（含故事画布、双联画、章节）、媒体库（自动转 AVIF/WebP 并读取 EXIF）、26 个主题与实时设计编辑器。要求 PHP 8.1+ 及 pdo_sqlite、gd、mbstring、json 扩展。",
+   "highlights": [
+    "媒体库支持拖拽批量上传、文件夹、EXIF 读取与自动 AVIF/WebP 转换，删除前提示图片使用位置",
+    "提供 18 种预设语言、翻译表、自动翻译、语言专属 URL，以及 26 个主题和实时设计编辑器",
+    "无构建步骤，首个请求时自动创建 site.db，支持 MySQL 环境变量切换与脚本重置密码"
+   ],
+   "use_cases": [
+    "摄影师在共享主机（cPanel）上部署个人多语言作品集网站",
+    "需要后台面板管理作品分类、章节、图注与受密码保护链接的作品展示站点",
+    "本地快速试运行（git clone 后 ./start.sh）评估功能"
+   ]
+  },
+  "sha": "464de2c9ece3",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

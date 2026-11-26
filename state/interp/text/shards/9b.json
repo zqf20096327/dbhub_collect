@@ -3038,5 +3038,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0ad783b4d6dc": {
+  "identity": {
+   "one_liner": "自托管的 Claude Code 代理运行器，以代码验证和判官合并门控管理任务",
+   "review": "Hivemill 是一个用 Go 编写的自托管运行器，为每个任务启动一个 Claude Code 会话实现变更，由 Stop-hook 门控重跑 test:/cmd: 证明，再由只读判官会话将 diff 行为变化映射到验收标准后给出 MERGE/REJECT/HOLD 判定，最后机械合并。面向希望以规范加证明驱动自动化开发流程的开发者，需要 Claude Code、gh 和 herdr-core，支持 Linux/macOS。",
+   "highlights": [
+    "每个验收标准须指明证明（test:/cmd:/flow:/manual:），合并前由代码重跑所有 test 和 cmd 证明",
+    "三个 AI 角色：Planner 维护任务队列，任务会话实现并开 PR，判官以全新只读会话审查 diff",
+    "内置预算与用量上限、systemd/launchd 守护进程、会话恢复（reconcile）和 SQLite 快照备份"
+   ],
+   "use_cases": [
+    "希望每个合并 PR 都附带可验证的验收证明与成本报告的团队",
+    "需在笔记本、homelab 或服务器上无人值守运行任务流水线的个人或组织",
+    "需要将任务拆分、待决问题集中排队并通过晨报跟踪合并与失败情况的开发流程"
+   ]
+  },
+  "sha": "0ad783b4d6dc",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

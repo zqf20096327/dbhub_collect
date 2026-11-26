@@ -3124,5 +3124,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aafaee32c75f": {
+  "identity": {
+   "one_liner": "本地运行的 Oracle Cloud Infrastructure 模拟器，提供 OCI 协议兼容服务",
+   "review": "floci-oci 是一个开源的 Oracle Cloud Infrastructure 本地模拟器，用于开发、测试和 CI 场景。它通过 Docker 在本机 4599 端口提供 OCI 形状的服务，官方 OCI SDK、CLI 和 Terraform provider 可指向 localhost 使用现有工作流；请求签名仅解析不校验，无需真实云账号。基于 Quarkus 构建，支持 JDK 25 源码编译，MIT 许可。",
+   "highlights": [
+    "支持 Object Storage、IAM、Queue、Streaming、Vault/KMS、Functions、OKE、NoSQL、PostgreSQL、日志与监控等服务的本地实现",
+    "实现真实 OCI 线协议：opc-request-id、opc-next-page 分页、etag/if-match 条件请求、OCID、work requests 与 OCI 错误体",
+    "提供内存、持久化、混合和预写日志四种存储模式；支持 GraalVM native-image"
+   ],
+   "use_cases": [
+    "无云账号或凭据的本地开发与集成测试",
+    "CI 流水线中运行 OCI SDK、CLI 或 Terraform/OpenTofu 相关测试",
+    "配合 Fn Project sidecar 或 k3s sidecar 测试 Functions 与 OKE 集成"
+   ]
+  },
+  "sha": "aafaee32c75f",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "894dc6ddfac1": {
+  "identity": {
+   "one_liner": "基于 JSON 的动画 ID 跨平台映射数据库，npm 包发布",
+   "review": "该包提供 MyAnimeList、Annict、AniList 与 Syoboi Calendar 四个平台间动画条目 ID 的映射数据，以 npm 包形式分发，导入后返回 Anime 类型数组，各 ID 字段可选。数据库含 37331 条动画，每周发布一次更新。适合需要在多个动画平台数据源之间转换 ID 的 JavaScript/TypeScript 项目使用。",
+   "highlights": [
+    "提供 MAL、Annict、AniList、Syobocal 四个平台 ID 的相互映射",
+    "通过 npm/yarn 安装，导入后返回 Anime 类型数组，ID 字段均可选",
+    "数据库包含 37331 条动画数据，每周通过 npm 发布更新"
+   ],
+   "use_cases": [
+    "在应用中把某个平台的动画 ID 转换为其他平台的 ID",
+    "聚合 MyAnimeList、AniList、Annict、Syoboi Calendar 多源数据",
+    "TypeScript/Node.js 项目中直接引入使用映射数据"
+   ]
+  },
+  "sha": "894dc6ddfac1",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5bce6f92d317": {
+  "identity": {
+   "one_liner": "DSH 原生上下文管理插件，压缩前将事件归档到 SQLite 并支持按需检索。",
+   "review": "面向 DSH 0.2.1-rc.5 的插件，复用官方 BasicCompactionEngine，在压缩前把用户输入、工具输出、错误等事件存入本地 SQLite，并提供 ledger_status/search/read 三个工具按需找回原文。适用于使用 DSH 进行长会话工作的用户。限制包括：精确版本绑定、无语义搜索、二进制原件不可恢复、与其他压缩管理器不可同时启用。",
+   "highlights": [
+    "压缩前将用户输入、助手回复、工具参数与结果、错误及检查点按事件页归档到独立 SQLite，归档失败时不替换历史",
+    "提供 ledger_status、ledger_search（字面子串搜索）、ledger_read（分页读取）三个工具，返回带不可变引用的片段",
+    "会话隔离：工具从宿主获取当前 agent 会话身份，不接受自选 sessionId；搜索游标绑定会话与固定归档快照"
+   ],
+   "use_cases": [
+    "长会话经压缩或重启后，需要找回被摘要遮蔽的原始工具输出、报错原文或历史记录",
+    "在 fork 出的子会话中建立新归档引用，追溯继承前缀中的工程证据",
+    "在编辑前核对被摘要省略的文件位置或决策细节"
+   ]
+  },
+  "sha": "5bce6f92d317",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

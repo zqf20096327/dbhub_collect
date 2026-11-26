@@ -3057,5 +3057,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c21268973a93": {
+  "identity": {
+   "one_liner": "访问 AWS 私有资源的命令行工具，通过 SSM 隧道提供 localhost 连接与 MCP 服务",
+   "review": "airlock 是一个 Go 编写的单命令行工具，用于连接位于 AWS 私有网络中的 RDS、EKS、ElastiCache、DynamoDB、S3 与 CloudWatch Logs。它经 SSM 跳板机转发流量，将目标暴露在 localhost 端口供 IDE 和 CLI 使用，并为每个会话提供 MCP 服务端供 AI 助手调用，默认只读且调用写入 JSONL 审计日志。依赖 AWS CLI v2、Session Manager 插件及各账户区域的运行中跳板机。",
+   "highlights": [
+    "通过 SSM 端口转发（AWS-StartPortForwardingSessionToRemoteHost）连接私有子网内的 RDS、EKS、ElastiCache，无需 VPN、SSH 密钥或开放入站端口",
+    "每个会话同时提供 localhost 连接和受控 MCP 服务端，可注册到 Claude Code、VS Code、Codex、Cursor、Gemini CLI，默认只读并记录 JSONL 审计日志",
+    "支持 IAM 短期令牌登录数据库、并行会话、.airlock.json 项目栈、IntelliJ 数据源注册及配置导入导出"
+   ],
+   "use_cases": [
+    "开发者需要从本机访问 AWS 私有网络中的数据库、Kubernetes 集群或缓存",
+    "让 AI 助手通过 MCP 查询数据库而不直接提供密码，且调用可见、可审计",
+    "无 AWS 时直接访问本地或 Docker 中的 PostgreSQL、MySQL、SQL Server、MariaDB 数据库"
+   ]
+  },
+  "sha": "c21268973a93",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

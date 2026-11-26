@@ -3445,5 +3445,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "214309ed9861": {
+  "identity": {
+   "one_liner": "单二进制 MCP 守护进程，以4个原语提供JS编排、CDP浏览器控制与OS操作。",
+   "review": "lrmcp 是用 Go 编写的单文件 MCP 守护进程，面向本地 IDE/CLI 及云端 MCP 客户端。它通过 run/wait/session/capability_propose 四个原语，在持久化会话 JS VM 中调用进程、原子文件系统、浏览器级 CDP（含 Tracing.start）、Windows UIA 桌面控制等能力。安装需运行 setup local 初始化本地平面，浏览器侧需开启远程调试并加载配套扩展；远程访问经 OpenAI 或 Cloudflare 隧道热插接入。",
+   "highlights": [
+    "提供4个正交原语，顶层 let/const/function 在会话 VM 中跨轮次持久化，支持 Promise.allSettled 并发执行",
+    "通过 DevToolsActivePort 建立浏览器级 CDP 连接，含 traceStart/traceStop 与 ttfb_ms、lcp_ms、cls 等 Web Performance 指标读取",
+    "内嵌 SQLite WAL + FTS5 审计与本地 /ui Activity Studio，支持 OpenAI 与 Cloudflare 隧道热插拔"
+   ],
+   "use_cases": [
+    "需要 MCP 客户端在单次调用内并发完成浏览器操作、进程执行与文件读写的自动化任务",
+    "通过 tab.snapshot 语义定位器与 network/console/heapSnapshot 等 DevTools 接口进行网页调试与性能追踪",
+    "Windows 桌面应用的 UI Automation 观测与受控物理输入操作"
+   ]
+  },
+  "sha": "214309ed9861",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "720077ec70ad": {
+  "identity": {
+   "one_liner": "基于 pingap 与 Pingora 构建的分布式集中管控式 Web 应用防火墙。",
+   "review": "PingWAF 是用 Rust 编写的 WAF，运行于 pingap/Pingora 反向代理之上，提供控制平面与数据平面分离的部署模式，两者通过 gRPC 双向流同步规则、日志与证书事件。检测流程包含请求归一化、libinjection 与 Aho-Corasick 签名、表达式规则及异常评分四个阶段。README 注明该项目独立于 Cloudflare 与 pingap 维护者，所有防护功能默认关闭、需按站点启用。",
+   "highlights": [
+    "提供 all-in-one 单进程与 server+agent 分布式两种部署形态，规则变更经 gRPC 推送至各 agent",
+    "检测管线覆盖 SQL 注入、XSS、RCE、路径穿越与命令注入，支持 Cloudflare 风格表达式规则与四档异常评分判定（Pass/Monitor/Block/Challenge）",
+    "内置 ACME 自动证书签发（HTTP-01/DNS-01）、mTLS 客户端证书签发与吊销、多维度限流、IP/Geo 访问控制，以及嵌入二进制的多语言管理控制台"
+   ],
+   "use_cases": [
+    "需要在自有基础设施上运行、由统一控制台集中管理多个边缘节点安全策略的场景",
+    "需要按站点开关 CC/Bot 防护、限流、IP 或国家/ASN 访问控制的反向代理流量入口",
+    "需要边缘自动 TLS 证书管理（Let's Encrypt、mTLS）并将请求日志存储到 Elasticsearch/PostgreSQL 的部署"
+   ]
+  },
+  "sha": "720077ec70ad",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

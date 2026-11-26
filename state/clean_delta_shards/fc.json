@@ -40943,5 +40943,1596 @@
    ]
   ],
   "at": "2026-11-24"
+ },
+ "538e34a9e8c1+2": {
+  "fn": "LuciusChen/clutch",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "MELPA"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    3,
+    [
+     " Clutch"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    3,
+    4
+   ],
+   [
+    "replace",
+    9,
+    10,
+    4,
+    5,
+    [
+     " Query and browse databases—and stage SQL row edits—without leaving Emacs. "
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    5,
+    8
+   ],
+   [
+    "replace",
+    13,
+    14,
+    8,
+    9,
+    [
+     "Clutch query console with a result grid and XML value viewer"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    43,
+    9,
+    38
+   ],
+   [
+    "replace",
+    43,
+    44,
+    38,
+    39,
+    [
+     "For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and the user guide."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    51,
+    39,
+    46
+   ],
+   [
+    "replace",
+    51,
+    53,
+    46,
+    48,
+    [
+     "- **Compare table definitions:** use the table's object actions to compare DDL with a saved connection in Ediff. PostgreSQL comparison covers column definitions. Object workflow",
+     "- **See a table's relations:** navigate a clickable overview, inspect composite foreign keys, and save your own links in a Git-friendly file. ER guide"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    56,
+    48,
+    51
+   ],
+   [
+    "replace",
+    56,
+    57,
+    51,
+    52,
+    [
+     "- **Choose the backend path you need:** use native or pure-Elisp integrations when available, or the Java 17+ clutch-jdbc-agent for JDBC databases."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    52,
+    53
+   ],
+   [
+    "replace",
+    58,
+    59,
+    53,
+    54,
+    [
+     "Row editing stays within the row-editing boundaries: Clutch stages `UPDATE` and `DELETE` only when it can identify a stable source row."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    62,
+    54,
+    57
+   ],
+   [
+    "replace",
+    62,
+    63,
+    57,
+    58,
+    [
+     "|Backend|Support level|Requirements and notes|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    58,
+    59
+   ],
+   [
+    "replace",
+    64,
+    74,
+    59,
+    69,
+    [
+     "|MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11|",
+     "|PostgreSQL|Core SQL support|Requires `pgsql`, available from MELPA|",
+     "|XTDB|Basic SQL support over the PostgreSQL protocol|Requires `pgsql`; staged changes are submitted in Auto mode, and a column of mixed types, unless they are all numbers, is changed with SQL|",
+     "|SQLite|Core SQL support|Uses Emacs 29.1+ built-in `sqlite-*` functions; no external dependency|",
+     "|Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "|DuckDB|Core SQL model, generic JDBC entry|Uses a file-backed `jdbc:duckdb:...` URL and the DuckDB JDBC driver|",
+     "|MongoDB|Basic native document support; optional SQL Interface surface|Native use requires `mongodb.el`; SQL Interface uses `:surface sql-interface` and JDBC|",
+     "|Redis|Basic key/value support|Requires `redis.el`; includes a line-oriented command menu, bounded key browsing, and type-aware values|",
+     "|Cassandra|Basic CQL support via JDBC|CQL console, bounded read-only results, and table and column browsing. Table definition actions are unavailable.|",
+     "|ClickHouse / Snowflake / Redshift / DB2 / generic JDBC|Basic SQL / query-first support|Backend-specific limits apply to editing, transactions, and dialect behavior|"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    69,
+    70
+   ],
+   [
+    "replace",
+    75,
+    76,
+    70,
+    71,
+    [
+     "See Backend support levels for the precise support policy and non-relational boundaries."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    81,
+    71,
+    76
+   ],
+   [
+    "replace",
+    81,
+    82,
+    76,
+    77,
+    [
+     "|Backend|Extra Emacs package|"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    77,
+    78
+   ],
+   [
+    "replace",
+    83,
+    90,
+    78,
+    85,
+    [
+     "|`:backend mysql`|mysql.el|",
+     "|`:backend pg`|pgsql.el|",
+     "|`:backend xtdb`|pgsql.el|",
+     "|`:backend mongodb`|mongodb.el|",
+     "|`:backend redis`|redis.el|",
+     "|`:backend sqlite`|None; Emacs 29.1+ provides SQLite|",
+     "|`:backend jdbc` / Oracle / SQL Server / ClickHouse / DB2 / DuckDB|None in Emacs; uses the bundled JDBC adapter|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    95,
+    85,
+    90
+   ],
+   [
+    "replace",
+    95,
+    96,
+    90,
+    91,
+    [
+     "JDBC support ships with Clutch and requires Java 17+, `clutch-jdbc-agent.jar`, and a database driver jar where applicable. Clutch pins agent 0.2.32, which supports cancelling requests before execution, bounded BLOB previews, and ordered foreign-key metadata for ER views and composite-key navigation. On first connection, Clutch can prompt to download the agent and supported drivers. It verifies the configured agent jar against its SHA-256 before startup. See the JDBC backend guide for setup, supported drivers, connection examples, and transaction behavior."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    108,
+    91,
+    103
+   ],
+   [
+    "replace",
+    108,
+    109,
+    103,
+    104,
+    [
+     "Org-Babel integration lives in the separate ob-clutch package."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    121,
+    104,
+    116
+   ],
+   [
+    "replace",
+    121,
+    131,
+    116,
+    126,
+    [
+     "- User guide — saved connections, the query workflow and export, transactions, password management and encrypted profiles, SSH tunnels, TRAMP origins, SQL files, and everyday commands.",
+     "- Interactive client guide — key bindings, result workflows, object actions, REPL, transient menus, faces, timeouts, and customization.",
+     "- Backend support levels — support contracts for Core SQL, basic integrations, MongoDB SQL Interface, DuckDB, and Redis.",
+     "- Native backend guide — MySQL, PostgreSQL, XTDB, SQLite, MongoDB and Redis notes, TLS, timeouts, and native backend examples.",
+     "- MongoDB backend guide — supported helper syntax, document workflows, and native/SQL Interface boundaries. Collection discovery, field sampling and index warmup run asynchronously with a current `mongodb.el`.",
+     "- JDBC backend guide — driver setup, connection examples, Oracle and DuckDB notes, transactions, and generic JDBC URLs.",
+     "- Architecture guide — module layers, backend/surface ownership, connection flow, query/object flow, and JDBC runtime diagrams.",
+     "- Org-Babel guide — `ob-clutch` setup, source block examples, header arguments, and connection caching.",
+     "- JDBC agent protocol — sidecar RPC protocol and implementation notes.",
+     "- Product requirements — stable scope, required workflows, compatibility, and non-goals."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    126,
+    127
+   ],
+   [
+    "replace",
+    132,
+    133,
+    127,
+    128,
+    [
+     "For development, see CONTRIBUTING.md for local test targets, the code gate and live database runs, and AGENTS.md for project contracts and verification policy."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    135,
+    128,
+    130
+   ],
+   [
+    "replace",
+    135,
+    137,
+    130,
+    131,
+    [
+     "GPL-3.0-or-later. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "ffc5999758c2+2": {
+  "fn": "Ordisoftware/Hebrew-Calendar",
+  "clean_ver": "2",
+  "raw_lines": 13,
+  "ops": [
+   [
+    "replace",
+    0,
+    13,
+    0,
+    13,
+    [
+     "OS: Windows&nbsp;",
+     "License MPL 2.0&nbsp;",
+     "GitHub all releases downloads&nbsp;",
+     "GitHub release (latest by date)&nbsp;",
+     "GitHub repo size&nbsp;",
+     "GitHub code size in bytes&nbsp; ",
+     "UI: WinForms&nbsp;",
+     "Framework: .Net&nbsp;",
+     "IDE: Visual Studio&nbsp;",
+     "Lang: C#&nbsp;",
+     "DB: SQLite&nbsp; ",
+     "Ordisoftware.com Project&nbsp;",
+     "Manufacturing Software Guidelines&nbsp;"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    20,
+    13,
+    20
+   ],
+   [
+    "replace",
+    20,
+    32,
+    20,
+    32,
+    [
+     "1. Functionalities",
+     "2. Review",
+     "3. Requirements",
+     "4. Download",
+     "5. Screenshots",
+     "6. Videos",
+     "7. System FAQ",
+     "8. Application FAQ",
+     "9. Command-line options",
+     "10. Keyboard shortcuts",
+     "11. Future improvements",
+     "12. Changelog"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    55,
+    32,
+    55
+   ],
+   [
+    "replace",
+    55,
+    56,
+    55,
+    56,
+    [
+     "- Softpedia.com"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    56,
+    57
+   ],
+   [
+    "replace",
+    57,
+    58,
+    57,
+    58,
+    [
+     " _\"Efficient and intuitive calendar and reminder app for the Hebrew Torah\"_"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    58,
+    59
+   ],
+   [
+    "replace",
+    59,
+    60,
+    59,
+    60,
+    [
+     " Note"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    60,
+    61
+   ],
+   [
+    "replace",
+    61,
+    62,
+    61,
+    62,
+    [
+     "- Anxz.com"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    62,
+    63
+   ],
+   [
+    "replace",
+    63,
+    64,
+    63,
+    64,
+    [
+     " _\"Powerful comprehensive Hebrew calendar software that any user can easily use\"_"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    84,
+    64,
+    84
+   ],
+   [
+    "replace",
+    84,
+    88,
+    84,
+    88,
+    [
+     " * Alt + H for help menu,",
+     " * Alt + N for notices window,",
+     " * Alt + B for bookmarks manager,",
+     " * Alt + Arrows to navigate between lunar days."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    91,
+    88,
+    91
+   ],
+   [
+    "replace",
+    91,
+    92,
+    91,
+    92,
+    [
+     "Last release"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    95,
+    92,
+    95
+   ],
+   [
+    "replace",
+    95,
+    96,
+    95,
+    96,
+    [
+     "Monthly view&nbsp;&nbsp;&nbsp;&nbsp;Text report view"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    96,
+    97
+   ],
+   [
+    "replace",
+    97,
+    98,
+    97,
+    98,
+    [
+     "Next celebrations&nbsp;&nbsp;&nbsp;&nbsp;Parashot board"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    98,
+    99
+   ],
+   [
+    "replace",
+    99,
+    100,
+    99,
+    100,
+    [
+     "Celebrations board&nbsp;&nbsp;&nbsp;&nbsp;New moons board"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    100,
+    101
+   ],
+   [
+    "replace",
+    101,
+    102,
+    101,
+    102,
+    [
+     "Navigation window&nbsp;&nbsp;&nbsp;&nbsp;Dates diff calculator"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    102,
+    103
+   ],
+   [
+    "replace",
+    103,
+    104,
+    103,
+    104,
+    [
+     "Reminder box celebration&nbsp;&nbsp;&nbsp;&nbsp;Reminder box Shabat"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    104,
+    105
+   ],
+   [
+    "replace",
+    105,
+    106,
+    105,
+    106,
+    [
+     "Lock session box&nbsp;&nbsp;&nbsp;&nbsp;"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    106,
+    107
+   ],
+   [
+    "replace",
+    107,
+    108,
+    107,
+    108,
+    [
+     "Preferences window 1&nbsp;&nbsp;&nbsp;&nbsp;Preferences window 2"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    108,
+    109
+   ],
+   [
+    "replace",
+    109,
+    110,
+    109,
+    110,
+    [
+     "Preferences window 3&nbsp;&nbsp;&nbsp;&nbsp;Preferences window 4"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    110,
+    111
+   ],
+   [
+    "replace",
+    111,
+    112,
+    111,
+    112,
+    [
+     "Preferences window 5&nbsp;&nbsp;&nbsp;&nbsp;Export box"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    115,
+    112,
+    115
+   ],
+   [
+    "replace",
+    115,
+    116,
+    115,
+    116,
+    [
+     "Monthly view showing video&nbsp;&nbsp;&nbsp;&nbsp;Showing video"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    121,
+    116,
+    121
+   ],
+   [
+    "replace",
+    121,
+    122,
+    121,
+    122,
+    [
+     "|IDE Extension|Project NuGet|"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    122,
+    123
+   ],
+   [
+    "replace",
+    123,
+    124,
+    123,
+    124,
+    [
+     "|SonarLint Roslynator F0.Analyzers Parallel Helper Parallel Checker AsyncFixer Async Method Name Fixer U2U Consult Performance Analyzers TSQL Analyzer Serilog Analyzer Security Code Scan Puma Scan SharpSource Inclusiveness Analyzer|Microsoft.CodeAnalysis.NetAnalyzers Microsoft.VisualStudio.Threading.Analyzers MultithreadingAnalyzer Meziantou.Analyzer GCop.All.Common ReflectionAnalyzers IDisposableAnalyzers ErrorProne.NET.CoreAnalyzers ErrorProne.NET.Structs|"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    223,
+    124,
+    223
+   ],
+   [
+    "replace",
+    223,
+    224,
+    223,
+    224,
+    [
+     " `Ordisoftware.Hebrew.Calendar.exe --lang [en|fr]`"
+    ]
+   ],
+   [
+    "equal",
+    224,
+    227,
+    224,
+    227
+   ],
+   [
+    "replace",
+    227,
+    228,
+    227,
+    228,
+    [
+     " `Ordisoftware.Hebrew.Calendar.exe --withpreview | --nopreview`"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    231,
+    228,
+    231
+   ],
+   [
+    "replace",
+    231,
+    232,
+    231,
+    232,
+    [
+     " `Ordisoftware.Hebrew.Calendar.exe --show`"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    235,
+    232,
+    235
+   ],
+   [
+    "replace",
+    235,
+    236,
+    235,
+    236,
+    [
+     " `Ordisoftware.Hebrew.Calendar.exe --hide`"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    238,
+    236,
+    238
+   ],
+   [
+    "replace",
+    238,
+    240,
+    238,
+    240,
+    [
+     "",
+     " `Ordisoftware.Hebrew.Calendar.exe --generate`"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    242,
+    240,
+    242
+   ],
+   [
+    "replace",
+    242,
+    244,
+    242,
+    244,
+    [
+     "",
+     " `Ordisoftware.Hebrew.Calendar.exe --resetreminder`"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    246,
+    244,
+    246
+   ],
+   [
+    "replace",
+    246,
+    248,
+    246,
+    248,
+    [
+     "",
+     " `Ordisoftware.Hebrew.Calendar.exe --navigate`"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    250,
+    248,
+    250
+   ],
+   [
+    "replace",
+    250,
+    252,
+    250,
+    252,
+    [
+     "",
+     " `Ordisoftware.Hebrew.Calendar.exe --diffdates`"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    255,
+    252,
+    255
+   ],
+   [
+    "replace",
+    255,
+    256,
+    255,
+    256,
+    [
+     " `Ordisoftware.Hebrew.Calendar.exe --celebrationverses`"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    259,
+    256,
+    259
+   ],
+   [
+    "replace",
+    259,
+    260,
+    259,
+    260,
+    [
+     " `Ordisoftware.Hebrew.Calendar.exe --celebrations`"
+    ]
+   ],
+   [
+    "equal",
+    260,
+    262,
+    260,
+    262
+   ],
+   [
+    "replace",
+    262,
+    264,
+    262,
+    264,
+    [
+     "",
+     " `Ordisoftware.Hebrew.Calendar.exe --newmoons`"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    267,
+    264,
+    267
+   ],
+   [
+    "replace",
+    267,
+    268,
+    267,
+    268,
+    [
+     " `Ordisoftware.Hebrew.Calendar.exe --lunarmonths`"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    271,
+    268,
+    271
+   ],
+   [
+    "replace",
+    271,
+    272,
+    271,
+    272,
+    [
+     " `Ordisoftware.Hebrew.Calendar.exe --parashot`"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    275,
+    272,
+    275
+   ],
+   [
+    "replace",
+    275,
+    276,
+    275,
+    276,
+    [
+     " `Ordisoftware.Hebrew.Calendar.exe --parashah`"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    281,
+    276,
+    281
+   ],
+   [
+    "replace",
+    281,
+    282,
+    281,
+    282,
+    [
+     "It is therefore possible to use AutoHotKey to define for example this `Shift + Ctrl + Alt + P` command:"
+    ]
+   ],
+   [
+    "equal",
+    282,
+    294,
+    282,
+    294
+   ],
+   [
+    "replace",
+    294,
+    295,
+    294,
+    295,
+    [
+     "|Keys|Actions|"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    295,
+    296
+   ],
+   [
+    "replace",
+    296,
+    362,
+    296,
+    362,
+    [
+     "|Ctrl + Tab|Next view|",
+     "|Shift + Ctrl + Tab|Previous view|",
+     "|F1|Text report view|",
+     "|F2|monthly view|",
+     "|F3|Database grid view|",
+     "|F4|Next celebrations window|",
+     "|F5|Search a celebration window|",
+     "|F6|Search a moon month window|",
+     "|F7|Search a gregorian month window|",
+     "|F8 (or Ctrl + N)|Navigation window|",
+     "|Ctrl + T (or Numpad0)|Go to today|",
+     "|Ctrl + B (or Decimal)|Go to selected day|",
+     "|Ctrl + D|Search a day|",
+     "|Ctrl + S|Save current view to a file|",
+     "|Ctrl + C|Copy current view to clipboard|",
+     "|Ctrl + P|Print current view|",
+     "|Ctrl + Shift + C|Copy the text report selection to clipboard|",
+     "|Alt + V|View menu|",
+     "|Alt + T|Tools menu|",
+     "|Alt + L|Web links menu|",
+     "|Alt + H|Help menu|",
+     "|Alt + S|Settings menu|",
+     "|Alt + I|Information menu|",
+     "|Alt + E|Export folder|",
+     "|Alt + C|Windows calculator|",
+     "|Alt + D|Windows date and time settings|",
+     "|Alt + M|Windows weather|",
+     "|Alt + W|Online weather|",
+     "|Alt + G|Generate calendar|",
+     "|Alt + P|Show online parashah menu|",
+     "|Alt + B|Manage bookmarks|",
+     "|Alt + N|Notices window|",
+     "|Ctrl + F1|Parashot board|",
+     "|Ctrl + F2|Celebration verses board|",
+     "|Ctrl + F3|Celebrations board|",
+     "|Ctrl + F4|New moons board|",
+     "|Ctrl + F5|Lunar months board|",
+     "|Ctrl + Shift + S|Verses on Shabat|",
+     "|Ctrl + Shift + D|Dates difference calculator|",
+     "|Home|First month available in the database|",
+     "|End|Last month available in the database|",
+     "|Up (or PageUp)|Previous year|",
+     "|Down (or PageDown)|Next year|",
+     "|Left|Previous month|",
+     "|Right|Next month|",
+     "|Ctrl + Left|Previous month having a celebration|",
+     "|Ctrl + Right|Next month having a celebration|",
+     "|Ctrl + Home|First month having a celebration|",
+     "|Ctrl + End|Last month having a celebration|",
+     "|Shit + Up|Semaine précédente|",
+     "|Shit + Down|Previous week|",
+     "|Shit + Left|Previous day|",
+     "|Shit + Right|Next day|",
+     "|Alt + Left : Previous lunar month|",
+     "|Alt + Right : Next lunar month|",
+     "|Alt + Up (or PageUp) : Previous lunar year|",
+     "|Alt + Down (or PageDown) : Next lunar year|",
+     "|Add or Sub|Change active day|",
+     "|Shift + Click|Set active day|",
+     "|Ctrl + Click|Select day|",
+     "|F9|Preferences|",
+     "|F10|Log file window|",
+     "|F11|Usage statistics window|",
+     "|F12|About|",
+     "|Alt + F4 (or Escape)|Close window|",
+     "|Ctrl + Alt + F4|Exit application|"
+    ]
+   ],
+   [
+    "equal",
+    362,
+    399,
+    362,
+    399
+   ],
+   [
+    "replace",
+    399,
+    400,
+    399,
+    400,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    719,
+    400,
+    719
+   ],
+   [
+    "replace",
+    719,
+    720,
+    719,
+    720,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    720,
+    1402,
+    720,
+    1402
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "c0e2aef9e503+2": {
+  "fn": "TwojOMS/twoj-oms",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "replace",
+    0,
+    8,
+    0,
+    1,
+    [
+     "<a href=\"https://twojoms.pl\">"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    1,
+    2
+   ],
+   [
+    "replace",
+    9,
+    10,
+    2,
+    7,
+    [
+     " Twój OMS",
+     "",
+     " </a>",
+     "",
+     "CI"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    16,
+    7,
+    13
+   ],
+   [
+    "replace",
+    16,
+    19,
+    13,
+    16,
+    [
+     "**Demo** (bez zakładania konta: przycisk „Wejdź do demo”, dane zmyślone, reset co godzinę) ·",
+     "**Instalacja** · **Mapa kodu** · **Dla agenta AI** ·",
+     "**twojoms.pl**"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    16,
+    17
+   ],
+   [
+    "replace",
+    20,
+    21,
+    17,
+    18,
+    [
+     "Lista zamówień w demo: zamówienia z Allegro, sklepu WooCommerce i ERLI, przesyłki Allegro, DPD i InPost"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    25,
+    18,
+    22
+   ],
+   [
+    "replace",
+    25,
+    27,
+    22,
+    24,
+    [
+     "> documentation are in Polish. The live demo needs no account. MIT licence, no",
+     "> warranty, no support. If you drive the repo with an AI agent, start with AGENTS.md."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    31,
+    24,
+    28
+   ],
+   [
+    "replace",
+    31,
+    32,
+    28,
+    29,
+    [
+     " natywnych do kompilowania."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    34,
+    29,
+    31
+   ],
+   [
+    "replace",
+    34,
+    36,
+    31,
+    33,
+    [
+     " sprawdza typy.",
+     "- **Zależności:** 10 produkcyjnych, wszystkie w package.json."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    41,
+    33,
+    38
+   ],
+   [
+    "replace",
+    41,
+    42,
+    38,
+    39,
+    [
+     "Potrzebujesz Gita i Node.js 24 lub nowszego (`node --version`). Node pobierz z nodejs.org —"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    61,
+    39,
+    58
+   ],
+   [
+    "replace",
+    61,
+    63,
+    58,
+    60,
+    [
+     "poza katalogiem danych (Klucz poświadczeń). Szczegóły próby",
+     "i jej ograniczenia: docs/instalacja-klienta.md."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    70,
+    60,
+    67
+   ],
+   [
+    "replace",
+    70,
+    71,
+    67,
+    68,
+    [
+     "|Katalog|Co tam jest|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    68,
+    69
+   ],
+   [
+    "replace",
+    72,
+    77,
+    69,
+    74,
+    [
+     "|`src/core`|rdzeń bez wiedzy o firmie: kontrakt modułu, składanie aplikacji, migracje, uprawnienia, warstwa WWW|",
+     "|`src/moduly`|moduły funkcji, tabela niżej|",
+     "|`src/domena`|reguły biznesowe bez HTTP i bez bazy: status zamówienia, filtry listy, mapowania kanałów|",
+     "|`src/integracje`|szew między modułami a klientami usług zewnętrznych|",
+     "|`src/oms`|dostęp do bazy (`src/oms/db/`) i klienci API: Allegro, ERLI, WooCommerce, kurierzy, KSeF, inFakt, Fakturownia, GUS, Meta, GA4|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    74,
+    75
+   ],
+   [
+    "replace",
+    78,
+    79,
+    75,
+    76,
+    [
+     "|Moduł|Zakres|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    76,
+    77
+   ],
+   [
+    "replace",
+    80,
+    94,
+    77,
+    91,
+    [
+     "|`zamowienia`|lista i karta zamówienia, wyszukiwanie, filtry, wydruki, zamówienia ręczne|",
+     "|`kanaly`|kanały sprzedaży (Allegro, ERLI, WooCommerce): pobieranie zamówień, mapowanie, stan połączeń|",
+     "|`faktury`|faktury i proformy w PDF, inFakt albo Fakturownia, KSeF, sprzedaż do UE (WDT), paczka dla biura rachunkowego|",
+     "|`wysylka`|nadawanie paczek (DPD, InPost, Allegro, ERLI), etykiety, śledzenie, nadanie hurtem|",
+     "|`magazyn`|karty produktów, powiązania z ofertami w kanałach, stany; wysyłanie stanów do kanałów jest domyślnie wyłączone|",
+     "|`zwroty`|zwroty i korekty|",
+     "|`koszty`|koszty z KSeF i wpisane ręcznie, zestawienia|",
+     "|`raporty`, `marketing`|raporty sprzedaży i finansów, kampanie (Meta, GA4)|",
+     "|`wiadomosci`|wiadomości do klientów, poczta|",
+     "|`automatyzacje`|reguły „gdy zdarzenie, zrób akcję” z dziennikiem wykonań|",
+     "|`ustawienia`|konta z rolami i uprawnieniami do zakładek, integracje|",
+     "|`zdrowie`|`/health`, kopie zapasowe, alarmy|",
+     "|`api`|API v1 dla programów, na kluczach z zakresami|",
+     "|`rdzen`|wspólne tabele i dane firmy (NIP, rachunek), z których korzystają pozostałe moduły|"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    96,
+    91,
+    93
+   ],
+   [
+    "replace",
+    96,
+    98,
+    93,
+    95,
+    [
+     "docs/architektura.md. Nowy kanał sprzedaży albo kurier jako moduł:",
+     "docs/kanal-jako-modul.md, docs/kurier-jako-modul.md."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    105,
+    95,
+    102
+   ],
+   [
+    "replace",
+    105,
+    106,
+    102,
+    103,
+    [
+     "|Obszar|Integracje|Instrukcje|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    103,
+    104
+   ],
+   [
+    "replace",
+    107,
+    113,
+    104,
+    110,
+    [
+     "|Kanały sprzedaży|Allegro, ERLI, WooCommerce|konto Allegro, oferty Allegro, ERLI, stany w WooCommerce|",
+     "|Faktury|inFakt, Fakturownia, KSeF|program do faktur, Fakturownia, klienci WDT, schematy KSeF|",
+     "|Wysyłka|DPD, InPost, Wysyłam z Allegro, ERLI|DPD, InPost|",
+     "|Druk|drukarka etykiet przy komputerze z Windowsem|agent druku|",
+     "|Magazyn|karty produktów, stany w kanałach|magazyn|",
+     "|Pozostałe|GUS (REGON), Meta, GA4, poczta SMTP|poczta wychodząca|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    110,
+    111
+   ],
+   [
+    "replace",
+    114,
+    116,
+    111,
+    113,
+    [
+     "Wszystkie zmienne środowiska: docs/zmienne.md, generowany z rejestru `docs/konfiguracja.json`;",
+     "opis: docs/konfiguracja.md."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    120,
+    113,
+    117
+   ],
+   [
+    "replace",
+    120,
+    121,
+    117,
+    118,
+    [
+     "(docs/api/openapi.json), przykłady w docs/api/README.md."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    130,
+    118,
+    127
+   ],
+   [
+    "replace",
+    130,
+    137,
+    127,
+    134,
+    [
+     "- **Docker na Linuksie:** docs/instalacja-docker.md. Od czystego Debiana do panelu",
+     " w sieci lokalnej, dalej dostęp z zewnątrz przez HTTPS, przejście z próby na pracę, integracje po kolei i kopie.",
+     "- **Przez agenta AI:** docs/instalacja-przez-agenta.md. Scenariusz krok po",
+     " kroku z miejscami, w których agent musi się zatrzymać i zapytać człowieka.",
+     "- **Aktualizacje:** docs/aktualizacje-klienta.md. Własne zmiany trzymaj w osobnej",
+     " gałęzi, nowe wydania dołączaj przez `git merge` albo `git rebase`; migracje bazy są wyłącznie addytywne.",
+     " Klon sprzed 25 listopada 2026: Uporządkowanie historii repozytorium."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    139,
+    134,
+    136
+   ],
+   [
+    "replace",
+    139,
+    140,
+    136,
+    137,
+    [
+     "(SECURITY.md)."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    137,
+    138
+   ],
+   [
+    "replace",
+    141,
+    142,
+    138,
+    139,
+    [
+     "Wolisz, żeby ktoś postawił go za Ciebie? Opisz, jak sprzedajesz: twojoms.pl/wdrozenie."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    159,
+    139,
+    156
+   ],
+   [
+    "replace",
+    159,
+    162,
+    156,
+    159,
+    [
+     "Zasady zmian: CONTRIBUTING.md (najpierw test, potem kod). Reguły repozytorium i mapa kodu dla",
+     "agenta: AGENTS.md, docs/dla-agenta/. Lukę bezpieczeństwa zgłoś prywatnie, nie",
+     "w Issues: SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    166,
+    159,
+    163
+   ],
+   [
+    "replace",
+    166,
+    167,
+    163,
+    164,
+    [
+     " i bank działają według polskich reguł; interfejs, kod i dokumentacja są po polsku."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    169,
+    164,
+    166
+   ],
+   [
+    "replace",
+    169,
+    171,
+    166,
+    168,
+    [
+     " mają skutki poza komputerem. Pierwsze uruchomienie z prawdziwymi kluczami zrób na koncie testowym",
+     " i sprawdź każdą integrację osobno."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    174,
+    168,
+    171
+   ],
+   [
+    "replace",
+    174,
+    175,
+    171,
+    172,
+    [
+     "MIT. Nazwy Allegro, ERLI, WooCommerce, inFakt, Fakturownia, KSeF, DPD, InPost, Meta i inne należą do"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    172,
+    173
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

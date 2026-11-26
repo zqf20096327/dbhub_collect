@@ -2935,5 +2935,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f2d70098dc21": {
+  "identity": {
+   "one_liner": "Rust 编写的自托管错误追踪服务，兼容 Sentry 协议与 SDK",
+   "review": "Rustrak 是一个用 Rust 编写的自托管错误追踪服务，接收错误、日志、性能事务、发布健康和 AI 代理追踪数据。它实现 Sentry 协议，现有 Sentry SDK 仅改 DSN 即可接入；默认以单进程运行，使用 SQLite，也支持 PostgreSQL。适合已有 Sentry SDK 且希望自行部署监控服务的团队。采用 AGPL-3.0 许可（客户端包为 MIT），每六小时发送一次可关闭的匿名遥测。",
+   "highlights": [
+    "接受标准 Sentry envelope，兼容任意语言的 Sentry SDK，仅修改 DSN 即可接入；默认 SQLite，另提供 PostgreSQL 镜像",
+    "两阶段摄取：先解析并写入磁盘返回 200，再异步写库；README 称 4 核 SQLite 下以约 5k 事件/秒接受 20,000 事件突发，内存峰值低于 60 MB",
+    "包含错误分组、结构化日志（六种级别、保留 trace_id）、按 p95 排序的性能面板、AI 代理追踪（读取 Sentry Spans Protocol v2）、发布健康、Slack/SMTP/Webhook 告警、三角色项目权限与可配置保留策略"
+   ],
+   "use_cases": [
+    "以单个 Docker 容器在自有硬件上运行错误追踪，无需单独的数据库或消息代理",
+    "已有 Sentry SDK 的项目通过改一行 DSN 进行迁移或双写对比",
+    "监控 LLM/AI 代理运行：调用瀑布图、模型与工具统计、token 计数"
+   ]
+  },
+  "sha": "f2d70098dc21",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

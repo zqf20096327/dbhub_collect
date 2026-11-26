@@ -3581,5 +3581,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a3db39a60234": {
+  "identity": {
+   "one_liner": "Rust 实现的 DefraDB：内容寻址 CRDT 点对点文档数据库",
+   "review": "DefraDB.rs 是用 Rust 编写的 DefraDB 实现，提供点对点文档数据库能力，包含 CRDT、访问控制、GraphQL 查询引擎与全文检索。存储使用纯 Rust 的 Regolith LSM-tree 引擎，目标是与 Go 版 DefraDB v1.0.0-rc1 实现网络互通与 CLI、HTTP API、P2P 复制等层面的功能对齐。适用于需要在嵌入式设备、浏览器（WASM）或服务器上部署并参与 P2P 数据复制的开发者；构建通过 just 工具链完成，当前已在 Linux x86_64 上验证。",
+   "highlights": [
+    "提供 GraphQL 查询引擎，覆盖查询、变更、订阅、聚合与 explain，并支持可配置的查询深度/宽度护栏（默认 depth 20、width 100）",
+    "支持 P2P 复制（libp2p 主传输、iroh 可选）及本地 Zanzibar 访问控制引擎与远程 vera.rs 访问控制",
+    "存储后端为纯 Rust 的 ACID LSM-tree 引擎 Regolith，读取采用流式扫描以限制内存占用，支持磁盘与内存模式"
+   ],
+   "use_cases": [
+    "在嵌入式设备、边缘节点或浏览器（WASM）环境中嵌入运行文档数据库并与 Go 版节点互操作复制数据",
+    "需要点对点多节点数据同步、基于身份的文档访问控制（ACP/vera）或可搜索加密索引的应用",
+    "作为 C 兼容库嵌入 Go 等语言宿主程序，或通过 HTTP API/Postgres 协议接入现有客户端与 ORM"
+   ]
+  },
+  "sha": "a3db39a60234",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "23666c846fe7": {
+  "identity": {
+   "one_liner": "零依赖 Node.js CLI，通过 9 个技能工作流驱动 AI 代理进行规范驱动的工程。",
+   "review": "OmniSpec 是一个零运行时依赖的 Node.js CLI（要求 >=22.19.0），通过 `npx omni-spec init` 安装后生成适配 Cursor、Claude Code、Copilot 等多种 AI 代理的技能文件，引导代理按 9 个斜杠命令完成从规格制定到验证的流程。它包含 AST 多语言依赖映射、SQLite/FTS5 外置记忆及 HMAC-SHA256 校验门。验证仅记录已声明证据与快照，证据充分性需人工审查。",
+   "highlights": [
+    "提供 9 个斜杠命令（init/discuss/specify/clarify/plan/tasks/audit/implement/converge）构成的规范驱动工作流，按 feature、bugfix、debt、rfc 四种原型生成对应规格文件。",
+    "生成适配 Cursor、VS Code、Claude Code、Gemini CLI、Codex 等环境的原生技能文件，并支持 generic 模式供任意支持 Markdown 的 LLM 使用。",
+    "将 SQLite/FTS5 持久记忆存储在仓库外的系统目录，校验门通过 HMAC-SHA256 签名，并在 acceptance.json 中登记每个验收标准的证据。"
+   ],
+   "use_cases": [
+    "使用支持斜杠命令的 AI 代码代理在 Cursor、VS Code、Claude Code 等编辑器中进行开发的团队。",
+    "需要为 feature、bugfix、refactor 或 rfc 类工作产出规格、根本原因分析或迁移计划文件的工作流。",
+    "希望将代理内存和验证证据保存在项目仓库之外的项目。"
+   ]
+  },
+  "sha": "23666c846fe7",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

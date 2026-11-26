@@ -3441,5 +3441,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fc8ce0319db9": {
+  "identity": {
+   "one_liner": "基于 FastAPI、PostgreSQL、MCP 与 RAG 的只读订单售后核查助手",
+   "review": "面向电商买家与商家的订单与售后核查应用：买家查询订单、退货条件与运费规则，商家核对收款、退款与两期金额变化。程序负责授权、金额计算与引用校验，模型仅调用工具和解释结果；查询工具均为只读。默认使用合成数据运行，Shopify 商家订单读取已在开发店验证，买家售后与商品接入使用本地数据。MIT 许可证。",
+   "highlights": [
+    "按买家或店铺授权范围只读读取订单明细，以整数最小货币单位计算收款、退款与净额，保留币种和截止时间",
+    "政策检索先按店铺、品类和业务时间过滤，资格、运费、例外条款分别绑定文件与行号引用",
+    "提供 demo.py prepare/up/check 流程：生成凭据、容器化启动并导入合成数据，运行 15 项业务与接口检查"
+   ],
+   "use_cases": [
+    "买家查询退货资格、运费规则与一般政策条款",
+    "商家核对收款、退款金额及两期金额变化与原因记录",
+    "本地复现授权范围、政策版本匹配与条件澄清的演示与测试"
+   ]
+  },
+  "sha": "fc8ce0319db9",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb744449a647": {
+  "identity": {
+   "one_liner": "面向农业合作社的开源数字化转型系统，无头内核加清单式插件应用",
+   "review": "OpenTea DX-OS 是面向越南农业合作社的开源数字化平台，服务合作社管理层、技术员与农户三类角色。系统包含种植区地图、田间日志、二维码溯源、植物病害识别、LLM 助手等模块，通过 Keycloak SSO 分权、APISIX 网关统一路由、n8n 做数据管道，采用六边形架构与 Docker Compose 部署。完整栈含 18 个容器，约需 3.6 GiB 内存，可按 make 分组裁剪。",
+   "highlights": [
+    "提供 GIS 地块管理、田间日志、批次溯源二维码、基于 TensorFlow 的病害图像识别等业务模块",
+    "采用无头内核加清单插件架构：PostgreSQL/Keycloak/Hasura/APISIX/n8n 组成核心，mini-app 以独立容器安装",
+    "内置 ClamAV 文件检疫与 append-only 哈希链审计日志，支持 MQTT 传感器数据接入与 Parquet 冷存储"
+   ],
+   "use_cases": [
+    "合作社数字种植档案与农产品批次溯源管理",
+    "需要 SSO、API 网关与文件检疫的低成本一体化数据平台部署",
+    "物联网传感器数据采集与 LLM 辅助问答等农业信息化场景"
+   ]
+  },
+  "sha": "bb744449a647",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e570ce74861": {
+  "identity": {
+   "one_liner": "基于 Nuxt 与 Cloudflare 无服务器栈的随机内容社交发布平台",
+   "review": "Esposter 是一个用于发布随机内容的社交平台，采用 pnpm monorepo 组织：前端为 Nuxt/Vue 配合 Pinia，后端使用 Drizzle ORM、tRPC 和 Zod，部署在 Cloudflare（Workers、D1、R2、Queues、Durable Objects）上，基础设施由 Pulumi 管理。README 明确声明所有已发布包均为实验性质，API 可在任何版本变更。本地开发需依次完成符号链接、工具链、依赖和环境配置。",
+   "highlights": [
+    "基于 Cloudflare Workers、D1、R2、Queues 与 Durable Objects 构建实时功能，realtime Worker 导出 RoomObject、CallObject、UserObject 等 Durable Object 类",
+    "pnpm workspaces monorepo，包含 apps/web 主应用及多个已发布的独立包（如 tresjs-nuxt、nuxt-security-module、parse-tmx 等）",
+    "提供含六步检查的本地开发流程，支持通过 wrangler 在本地 D1 数据库上应用迁移，并以 Miniflare 提供内存版 D1/R2/Queues 用于测试"
+   ],
+   "use_cases": [
+    "部署一个运行在 Cloudflare 无服务器基础设施上的实时社交发布应用",
+    "本地开发与调试，通过 ai:setup 机器检查和 db-mock 包运行测试",
+    "复用仓库中独立发布的工具包，如 TresJS 的 Nuxt 模块、TMX 文件解析器、Nuxt 安全模块等"
+   ]
+  },
+  "sha": "1e570ce74861",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

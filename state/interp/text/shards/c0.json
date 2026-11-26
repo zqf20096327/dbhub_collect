@@ -3276,5 +3276,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dc4507a4dd94": {
+  "identity": {
+   "one_liner": "通过 Proton Bridge 让 MCP 客户端与 CLI 操作 Proton Mail 的本地服务器",
+   "review": "该项目是基于 Proton Bridge 的 MCP 服务器与 CLI 工具，用 TypeScript 编写、需 Node.js 24+，通过 Bridge 的 IMAP/SMTP 在本机 127.0.0.1 与 Proton Mail 通信。适合使用 Claude Desktop、Cline 等 MCP 客户端或需要脚本化邮件自动化的用户。提供 read-only、drafts、assisted、full 四种模式控制可执行操作，支持经 MCP elicitation 的人工审批、hash 链审计日志与本地全文索引；邮件内容会发送至模型提供商，除非模型本地运行。安装支持 .mcpb 包或 npm 全局安装，附 doctor 自检命令。",
+   "highlights": [
+    "提供 129 个工具（可用 PROTONMAIL_TOOL_TIER=core 缩减为 25 个），支持搜索、草稿、发送、归档、移动、批量处理线程、提取附件（含 PDF 文本与图片）、响应日历邀请",
+    "提供 read-only、drafts、assisted、full 四种模式，发送/删除可配置为需要用户通过 MCP elicitation 审批，所有变更记录于 hash 链式审计日志",
+    "同一工具集以完整 CLI 形式提供，可用于脚本、cron 与管道自动化；支持多账户隔离索引，安装器默认写入 drafts 模式"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 或 Cline 中阅读、搜索、整理 Proton Mail 并生成待审阅草稿",
+    "用 CLI 或 cron 定时任务做邮件脚本化处理与每日新邮件摘要通知",
+    "需要操作留痕与人工审批流程的邮件自动化场景"
+   ]
+  },
+  "sha": "dc4507a4dd94",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aa5d8e9c398d": {
+  "identity": {
+   "one_liner": "本地运行的求职助手：抓取、过滤、评分职位并准备申请材料",
+   "review": "Talaash（乌尔都语“搜索”）是在本机运行的求职助手，供自己投递软件职位的求职者使用。它从职业板、招聘板和 LinkedIn 游客搜索抓取职位，按国家/签证/资历过滤并基于 CV 打分，生成求职信与表单答案；由 bot CLI（Node/TypeScript）与 Next.js 仪表盘共享本地 PostgreSQL，经调度器每日运行。README 强调它不代替用户提交申请。需 Node 24+/PostgreSQL 15+ 及自有 AI（Claude CLI 或 OpenAI 兼容 API key）。",
+   "highlights": [
+    "支持 Greenhouse、Lever、Ashby、Workday 等招聘系统与 Himalayas、Remotive、RemoteOK 等职位板，以及 Chrome 扩展抓取任意职位页",
+    "对每个匹配职位生成关键词分与 AI 评审（0–100 分、结论、缺口、红旗），并保留每条被过滤职位的拒绝原因",
+    "CV 与求职信仅重排/改写 master CV 中的事实，含二次 AI 校验；所有数据存本地 PostgreSQL，仪表盘仅响应 127.0.0.1"
+   ],
+   "use_cases": [
+    "针对特定国家与远程岗位的软件职位日常搜索与筛选",
+    "填写职位申请表单前准备 CV 版本、求职信与表单答案",
+    "跟踪申请状态、跟进提醒与漏斗/响应率分析，数据可供脚本以 list --json 读取"
+   ]
+  },
+  "sha": "aa5d8e9c398d",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

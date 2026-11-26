@@ -3578,5 +3578,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a84e74c6517": {
+  "identity": {
+   "one_liner": "开源 AI 代理动作校验工具：回读数据库验证代理自报的成败是否属实",
+   "review": "Verilays 通过装饰器记录代理工具声称完成的动作，由 worker 以只读连接回读 Postgres，按期限得出 verified、mismatch、missing 等八种状态。面向使用 LLM 代理并需核查其数据库写入的开发者；仅支持 Postgres，且只核对记录与参数是否一致，不判断动作本身是否正确。",
+   "highlights": [
+    "提供 @verilays.action.postgres 装饰器包裹工具，支持 fields_to_compare、expected、exists=False、自定义 verify= 检查等配置",
+    "worker 以只读连接按周期回查数据库，输出 verified/mismatch/missing/ambiguous/failed/expired/check_error 等状态及差异报告",
+    "可与 Langfuse 集成，将判定作为 score 附到对应 trace 与工具调用；全部组件运行在用户自有基础设施内"
+   ],
+   "use_cases": [
+    "核查预订、下单等写库类代理工具是否真的写入了数据库且值正确",
+    "检测静默空操作、延迟写入、重复写入、事后被改等工具异常行为",
+    "在 Langfuse 可观测性流程中为工具调用附加数据库层面的校验结果"
+   ]
+  },
+  "sha": "1a84e74c6517",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

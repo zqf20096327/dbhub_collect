@@ -3363,5 +3363,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "50e39aebde69": {
+  "identity": {
+   "one_liner": "面向自主 AI 代理的身份基础设施，基于 OAuth 2.1 与 RFC 8693 签发可验证凭证",
+   "review": "ZeroID 是用于自主代理的身份管理系统，为每个代理分配全局唯一身份 URI，签发短生命周期凭证，并实现带范围缩减的代理间委托与实时级联吊销。协议栈包括 OAuth 2.1、WIMSE/SPIFFE、RFC 8693、DPoP、CIBA、CIMD 与 RAR。适用于需要记录“哪个代理、代表谁”的安全与合规场景；定位为代理身份专用层，与人类 IAM 及 NHI 平台通过联合而非替代方式协作。",
+   "highlights": [
+    "支持代理身份注册表，可按角色（orchestrator/autonomous/tool_agent）分类并管理完整生命周期：注册→激活→停用→注销",
+    "实现 OAuth 2.1 多种授权流程（client_credentials、jwt_bearer、token_exchange、authorization_code+PKCE、CIBA 等）及 RFC 9449 DPoP 发送方约束令牌",
+    "令牌携带完整的 on-behalf-of 委托链，每次委托步骤自动执行范围缩减，并支持基于 CAE/SSF 信号的实时级联吊销"
+   ],
+   "use_cases": [
+    "为无人在环的自主代理工作流提供可审计的委托授权链路",
+    "需要为代理注册并调用 MCP 服务器、服务与应用的场景",
+    "部署方希望通过带外渠道（邮件、Slack、移动推送）由最终用户批准代理发起的敏感操作（CIBA）"
+   ]
+  },
+  "sha": "50e39aebde69",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0f1cad6e86df": {
+  "identity": {
+   "one_liner": "基于追加日志的确定性应用运行时，可回放生产流量并以行为差异审查变更",
+   "review": "Kronik 是一个单二进制运行时，将系统实现为其历史的确定性函数：每次请求作为 turn，其输入、外部效果结果与状态变更先写入追加日志并 fsync 后才生效。变更通过 propose 在指定 LSN 分叉日志、用录制流量回放并生成行为差异，再经策略审批后 promote 或 rollback。面向以机器速度写代码的 agent、审阅者及希望在 VPS 上部署的小团队；当前为 pre-alpha、仅单节点，接口可能在版本间变动。",
+   "highlights": [
+    "支持以 TypeScript、Rust、Python 或 Go 编写带键值状态与 SQLite 数据库的 Wasm actor，并可运行 OCI 镜像中的 Linux 程序（gVisor）",
+    "提供 propose/approve/promote/rollback 流程、效果模拟器、watch 回滚守护，以及基于录制流量回放的行为差异报告",
+    "具备隐私模式（主体键封存、匿名化回放）、MCP 服务器、OpenAPI JSON API、OpenTelemetry 追踪与 Prometheus 指标"
+   ],
+   "use_cases": [
+    "部署前用已录制的生产流量回放并审查代码变更的行为差异",
+    "需要持久执行与确定性重放的 stateful Wasm actor 应用",
+    "涉及个人数据的场景，需封存/擦除主体数据并在分叉回放中以假名替代"
+   ]
+  },
+  "sha": "0f1cad6e86df",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d33b1e0573d": {
+  "identity": {
+   "one_liner": "运行于 Windows 本机的 QQ 群聊/私聊陪伴型 AI 机器人，经 OneBot 连 SnowLuma 与 DSH。",
+   "review": "小鲸鱼是部署在自己 Windows 电脑上的 QQ 机器人项目，以普通群成员身份参与群聊和私聊。消息先经白名单与唤醒规则筛选，再交 DSH agent 做语义判断，支持跨会话记忆、心情模拟、35 个可开关工具；还提供代码提案闭环，由用户自己的 coding agent 实现并确认合并。仅支持 Windows 10/11，语音等部分功能需本地 GPU。",
+   "highlights": [
+    "消息处理采用规则筛选加语义判断两级机制，包含未读队列、消息合并、夜间静默与发送频率限制",
+    "提供本地控制台（默认 http://127.0.0.1:3100）与 /live 实时状态页，含 13 个任务页，支持人格角色卡编辑",
+    "私聊吐槽可整理为带验收标准的开发提案，经用户确认后由用户自己的 coding agent 在隔离副本实现，合并前自动 verify，失败回滚"
+   ],
+   "use_cases": [
+    "在 QQ 群中作为按需应答的成员，处理被 @ 或话题相关时的接话、查资料、定提醒、排值日表等日常任务",
+    "通过私聊维护跨会话个人记忆与定时提醒",
+    "自托管场景下将使用反馈转为自己可控的开发提案工作流"
+   ]
+  },
+  "sha": "5d33b1e0573d",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

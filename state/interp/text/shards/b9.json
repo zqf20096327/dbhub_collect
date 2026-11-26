@@ -3385,5 +3385,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "44e7844af15f": {
+  "identity": {
+   "one_liner": "Go 嵌入式文档数据库，内置 btree/WAL 引擎，支持 MongoDB 风格查询。",
+   "review": "Any Store 是一个面向 Go 的嵌入式文档数据库，采用纯 Go 实现、无 CGO，存储引擎（btree/pager/WAL）参考 SQLite 设计但使用自有磁盘格式。它提供 MongoDB 风格的查询与聚合管道、多类型索引、全文与向量搜索、ACID 事务，并支持多进程访问同一数据库文件（限定 Linux/Darwin 的 amd64/arm64）。文档大小上限 1 GiB，所有数字以 float64 存储，整数精确至 2^53。通过 go get 安装，附带 CLI 检查与交互工具，MIT 协议。",
+   "highlights": [
+    "提供 MongoDB 风格查询语言、聚合管道（$match/$group/$lookup 等）与基于 btree 统计的成本查询计划器",
+    "支持复合/唯一/稀疏/多键索引、基于 BM25 的全文搜索（$text）和 ANN 向量搜索（$knn，含 IVF-SQ、HNSW、暴力扫描）",
+    "纯 Go 实现，跨平台编译（含 js/wasm 与 wasip1），默认页面校验和与可选 AES-GCM/(X)ChaCha20-Poly1305 加密"
+   ],
+   "use_cases": [
+    "Go 应用内嵌数据存储，无需部署独立数据库服务",
+    "需要单写者多读者事务与崩溃恢复（WAL）的本地持久化场景",
+    "Linux/Darwin 上多个进程共享读写同一数据库文件的场景"
+   ]
+  },
+  "sha": "44e7844af15f",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "081d9aa1b49c": {
+  "identity": {
+   "one_liner": "基于 Electron+Vue3+SQLite 的本地优先 IT 资产管理系统，支持局域网 H5 协同。",
+   "review": "IT-AMS 是一款 IT 资产管理系统，桌面端基于 Electron 与 Vue3，数据存储使用 SQLite，定位为本地优先架构。README 记录 V1.3 版本加入资产二维码、PC 端盘点任务与 H5 扫码盘点功能，桌面主机与手机 H5 共用同一数据库，数据保存在本机。安装包以 .zip/.dmg 形式托管在 GitHub Releases，不进入 git 历史。",
+   "highlights": [
+    "提供资产台账管理，覆盖在用、闲置、故障、报废等状态",
+    "支持二维码生成与手机 H5 扫码盘点，V1.3 提供 PC 盘点任务",
+    "采用本地优先架构，数据存储于 SQLite，支持局域网内协同访问"
+   ],
+   "use_cases": [
+    "中小团队建立 IT 设备台账并定期开展贴码、扫码盘点",
+    "需要资产变更记录留痕的仓库交接与设备流转管理",
+    "希望数据保留在自己电脑、通过办公室局域网协同的场景"
+   ]
+  },
+  "sha": "081d9aa1b49c",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

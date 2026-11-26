@@ -3483,5 +3483,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dc9be1873c64": {
+  "identity": {
+   "one_liner": "拦截 AI 编码代理 shell 命令的 Rust 门控工具，预览后果、备份并可回滚",
+   "review": "Termaxa 是一个单二进制 Rust 工具，挂在 Claude Code、Codex、Cursor、Copilot CLI 等代理的 hook 路径上，按仓库内策略对每条命令判定允许/询问/拒绝，执行前预览影响范围（删除文件、丢失提交、DROP 行数）、生成可回滚备份，并以哈希链日志记录决策。支持观察模式先记录后强制，内置熔断器与 doctor 探测。策略与 hook 配置需提交到仓库；行数估计依赖 pg_class.reltuples，可能过期。",
+   "highlights": [
+    "提供策略驱动的命令判定（allow/ask/deny），复合命令按最危险片段裁决",
+    "执行前预览影响范围并在 ~/.termaxa/ 下生成备份，支持 termaxa rollback 回滚",
+    "跨 shell 统计破坏性意图的熔断器，及 append-only 哈希链审计日志"
+   ],
+   "use_cases": [
+    "运行 AI 编码代理执行 shell 命令的开发者项目门控",
+    "无人值守/自动化会话中限制 rm -rf、force push、reset --hard 等破坏性命令",
+    "用 termaxa replay 审计本机代理已执行的历史命令以制定策略"
+   ]
+  },
+  "sha": "dc9be1873c64",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "01df7ae55cde": {
+  "identity": {
+   "one_liner": "自托管咖啡冲煮记录日志，FastAPI+React 单容器部署",
+   "review": "Bloom 是一个自托管的精品咖啡冲煮记录应用，记录咖啡豆、批次、每次冲煮及其品鉴结果。面向家庭咖啡爱好者和咖啡馆吧台使用，无公开注册，由管理员创建账号，支持 OIDC 单点登录。数据模型区分 bean（咖啡）、lot（每袋）、recipe（复用配方）。采用共享日志模式：所有认证用户可读全部内容并添加记录，仅创建者或管理员可编辑删除。通过 Docker Compose 单容器加 Postgres 部署，API 提供 Swagger 文档。AGPL-3.0 许可。",
+   "highlights": [
+    "以 bean/lot/recipe/brew/tasting 建模，冲煮记录含萃取率诊断和用户个人星级评分，咖啡目录可按烘焙商、烘焙度、产地筛选",
+    "单容器镜像（内含 SPA 编译）加 Postgres 经 Docker Compose 运行，UI 使用相对 URL，同一镜像可用于 localhost、局域网或反向代理场景",
+    "认证支持 OAuth2 password flow 的 JWT 令牌与 OIDC 单点登录（Keycloak、Authentik、Entra ID 等，角色从提供方组映射），无 SMTP 时密码重置链接写入日志"
+   ],
+   "use_cases": [
+    "家庭咖啡爱好者记录不同豆子、批次和冲煮参数以复现满意的风味结果",
+    "咖啡馆吧台团队共享冲煮与品鉴日志，管理员统一管理员工账号",
+    "已有 OIDC 基础设施（如 Keycloak、Entra ID）的环境接入单点登录使用"
+   ]
+  },
+  "sha": "01df7ae55cde",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0e2aef9e503": {
+  "identity": {
+   "one_liner": "面向波兰小卖家的自托管订单管理面板，Node.js + SQLite 模块化架构",
+   "review": "Twoj OMS 是一个自托管的电商订单管理面板，面向波兰的小型在线卖家。它将 Allegro、ERLI、WooCommerce 的订单汇集到同一列表，并对接 inFakt/Fakturownia/KSeF 开票与 DPD/InPost 发货，另含库存、退货、成本与报表模块。技术栈为 Node.js 24（内置 node:sqlite）、Fastify 与服务端渲染的 EJS/htmx，无前端构建步骤；每个功能是一个模块，通过 src/moduly/lista.ts 组装。界面、代码注释与文档均为波兰语，MIT 许可、不提供保证与支持。",
+   "highlights": [
+    "提供订单列表与卡片、多销售渠道（Allegro/ERLI/WooCommerce）拉单、发票（inFakt/Fakturownia/KSeF）、发货（DPD/InPost/Allegro/ERLI）、库存、退货、成本、报表与自动化规则等模块",
+    "SQLite 为 Node.js 24 内置（node:sqlite），无需数据库服务器和原生编译；生产依赖 10 个；API v1 支持带作用域的密钥并提供 OpenAPI 描述",
+    "每项集成可选并使用各自密钥；无任何密钥时以试验模式（OMS_TRYB=proba）运行，该模式检测到集成密钥会拒绝启动"
+   ],
+   "use_cases": [
+    "波兰卖家在自建 Linux/Docker 服务器上集中处理 Allegro、ERLI、WooCommerce 订单及配套开票与发货",
+    "通过 `git clone` + `npm ci` + 安装脚本在本地无密钥试运行（demo 数据每小时重置，另有在线 demo 无需注册）",
+    "需要 API v1 的商店、表格、脚本或 AI agent 集成；仓库含 AGENTS.md 与 AI agent 安装文档"
+   ]
+  },
+  "sha": "c0e2aef9e503",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab8963442beb": {
+  "identity": {
+   "one_liner": "面向转售商和小型3PL的仓库应用：命名箱位、只增库存账本与多平台同步",
+   "review": "Boxloft 是一个面向转售商和小型第三方仓储（3PL）的仓库管理 Web 应用，用 Python（后端）和 React（前端）加 SQLite 实现。用户把货品扫入以字母命名市场的箱子（A=Amazon、E=eBay、W=Walmart、L=本地），并提供只增式库存账本、两人同时操作的冲突拒绝、Amazon SP-API 与 eBay 每 15 分钟的订单同步。限制：不支持购买运单、不创建或编辑 listing、Walmart 销售需 CSV 导入、仅支持美国站点。",
+   "highlights": [
+    "提供 append-only 库存账本和乐观并发保存机制，旧数据保存会被拒绝并提示修改者",
+    "支持扫描 UPC 收货、按箱扫码拣货打包、按 ASIN 的库存审计（买入减退货减销量）",
+    "通过 SP-API 与 eBay 每 15 分钟同步订单，Walmart 订单及其他来源以 CSV 导入；支持 4x6/2x1 标签打印"
+   ],
+   "use_cases": [
+    "两人以上小型转售仓库的收货、入库、拣货与发货出库流程",
+    "按 ASIN 对账库存，扫描箱子核对缺失货品",
+    "在小型 Linux 服务器上自托管，用手机扫码作业"
+   ]
+  },
+  "sha": "ab8963442beb",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

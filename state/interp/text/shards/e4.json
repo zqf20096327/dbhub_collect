@@ -3397,5 +3397,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a51fa7a08c3f": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理记忆库，含知识图谱与本体约束",
+   "review": "CortexDB 是用 Go 编写的本地优先记忆库，将代理偏好、决策与项目事实存入单个 SQLite 文件，并提供知识图谱、本体约束、全文检索与可追溯召回。可通过 gRPC 服务器供多个代理和机器共享同一记忆，支持 Claude Code、Codex 等插件接入，也提供 Go/Rust/Python/Node 客户端。可在无嵌入模型下运行，添加模型后支持语义搜索。",
+   "highlights": [
+    "以单个 SQLite 文件存储，包含知识图谱、本体、推理历史与全文检索",
+    "提供 gRPC 服务器，多个代理与机器可共享同一记忆库",
+    "可在无嵌入模型下运行，配置模型后支持语义搜索召回"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex 等编码代理提供跨会话、跨机器的共享记忆",
+    "通过 Go 库在应用中实现记忆的写入与召回",
+    "通过 Web 实时视图查看图谱内容与每次召回记录"
+   ]
+  },
+  "sha": "a51fa7a08c3f",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3ea30ec954ff": {
+  "identity": {
+   "one_liner": "基于 Tauri + Rust 的本地文档全文搜索工具，支持按文件名或内容检索 PDF、Word、Excel、PPT。",
+   "review": "Paperlight 是一款 Windows（Linux 为 beta）桌面应用，索引本机 PDF、Word、Excel、PowerPoint 文件，支持按名称、文件夹或文档内容搜索，匹配片段高亮，可拖拽结果到其他应用。安装包约 5 MB，采用 SQLite FTS5 构建索引，只读访问文件、可离线运行。用户可选索引格式和文件夹，通过 winget 或安装包部署，也可从源码构建。",
+   "highlights": [
+    "读取 PDF、Word、Excel、PowerPoint 全文内容，支持容错匹配与片段高亮，文件变动约一秒内同步到索引",
+    "提供 Alt+Space 全局快捷搜索、收藏/标签/预览、字节级重复文件查找与存储占用统计",
+    "只读方式访问文件，无遥测无账号，支持应用内可选更新；技术栈为 Tauri 2、Rust、SQLite FTS5、React"
+   ],
+   "use_cases": [
+    "在大量下载目录、项目文件夹中按文档内容定位 PDF、Office 文件",
+    "通过快捷键从任意应用快速唤起搜索并打开或拖拽文档",
+    "查找字节相同的重复文档副本并查看各类型文件的磁盘占用"
+   ]
+  },
+  "sha": "3ea30ec954ff",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1ef4db0db46a": {
+  "identity": {
+   "one_liner": "嵌入式双时态语句图存储库，基于 SQLite/redb，用于智能体记忆。",
+   "review": "Tiramemsu 是一个以 Rust 库形式发布的嵌入式图数据库，将每条事实存为带 id 的语句行，从而支持来源、置信度与信念的多层叠加，并记录事务时间与有效时间。它通过 SQLite 触发器拒绝 DELETE 以保留全部历史，检索即撤销。提供 Python、Node、Rust 接口及 MCP 服务器；ELPI 推理需链接原生库，默认不启用。",
+   "highlights": [
+    "每条事实带独立 id，可承载来源、置信度、信念等多层元语句，撤销与更正按层传播",
+    "双时态模型同时记录事务时间与有效时间，提供 now、as_of、history、valid_at 视图查询",
+    "支持 SPARQL 1.1 与 openCypher 共用一个存储，并提供向量检索、FTS5 文本检索与 opt-in 的 N3/Datalog/ELPI 推理"
+   ],
+   "use_cases": [
+    "为 AI 智能体构建可追溯、可撤销的长期记忆库",
+    "需要按时间点回溯知识状态或审计事实来源与置信度的知识图谱应用",
+    "通过 MCP 将本地记忆文件接入 Claude Code、Claude Desktop 等客户端"
+   ]
+  },
+  "sha": "1ef4db0db46a",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "77631b0e6f4d": {
+  "identity": {
+   "one_liner": "在自有 Kubernetes 集群上运行 MySQL 和 PostgreSQL 的控制平面。",
+   "review": "PDS 是 Percona 开源的控制平面，供平台工程师在自有 Kubernetes 集群上创建、连接、扩缩容、备份、恢复、监控和删除 MySQL（Percona XtraDB Cluster）与 PostgreSQL（Percona Operator，经 PgBouncer）数据库，并可从同一界面开 Percona 支持工单。架构为 hub 与连接环境分离：hub 不运行数据库，数据留在用户集群与备份桶中。项目目前处于 alpha 阶段，尚无向后兼容承诺。",
+   "highlights": [
+    "提供 Dev/Staging/Prod 三种预置档案，可在固定上限内覆盖 CPU、内存、存储与成员数",
+    "通过 OpenEverest 调和 Instances，hub 从不直接连入客户 Kubernetes 集群，连接环境上的 agent 每 15 秒向 hub 心跳并取回任务",
+    "支持按需或定时备份并恢复为新数据库，经 PMM 采集指标，连接串密码仅写入剪贴板，并提供 MCP 服务器供 Claude Code、Cursor 等 agent 以 OAuth 登录"
+   ],
+   "use_cases": [
+    "平台工程师集中管理多个自有 Kubernetes 集群上的 MySQL 和 PostgreSQL 实例",
+    "在笔记本电脑上用 kind 集群搭建 hub 加连接环境的完整本地实验环境",
+    "自托管 hub，并通过 Claude Code/Cursor 插件或远程 MCP 服务器让 AI agent 操作控制平面"
+   ]
+  },
+  "sha": "77631b0e6f4d",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

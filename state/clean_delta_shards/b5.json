@@ -25117,5 +25117,682 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "b63c308e8c6d+2": {
+  "fn": "ashvardanian/CrudEval",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "CrudEval benchmarks thumbnail"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "replace",
+    5,
+    7,
+    5,
+    7,
+    [
+     "It is the Rust successor to UCSB and a sibling of RetriEval, TablEval and ServEval.",
+     "One shared runner drives embedded engines like RocksDB, LMDB, SQLite and UStore, and servers like Redis, MongoDB, PostgreSQL and Neo4j, with opt-in document and graph workloads."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    30,
+    7,
+    30
+   ],
+   [
+    "replace",
+    30,
+    36,
+    30,
+    31,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    40,
+    31,
+    35
+   ],
+   [
+    "replace",
+    40,
+    56,
+    35,
+    51,
+    [
+     "|Backend|Key-value|Documents|Graphs|",
+     "|:--------------------------------------------------------------|:-------:|:-------:|:----:|",
+     "|`crud-eval-rocksdb`, RocksDB 11.8.1|✓|||",
+     "|`crud-eval-lmdb`, through `heed`|✓|||",
+     "|`crud-eval-redis`, Redis, Valkey, Dragonfly, Garnet, or Kvrocks|✓|✓||",
+     "|`crud-eval-mongodb`, MongoDB or FerretDB|✓|✓||",
+     "|`crud-eval-redb`|✓|||",
+     "|`crud-eval-fjall`|✓|||",
+     "|`crud-eval-sqlite`|✓|✓||",
+     "|`crud-eval-postgres`|✓|✓|✓|",
+     "|`crud-eval-neo4j`, Neo4j or Memgraph|||✓|",
+     "|`crud-eval-falkordb`|||✓|",
+     "|`crud-eval-turso`, embedded Turso 0.8.1|✓|✓||",
+     "|`crud-eval-surrealdb`, SurrealDB 3.3.0||✓|✓|",
+     "|`crud-eval-scylladb`, ScyllaDB 2026.3.2|✓|✓||",
+     "|`crud-eval-ustore`, UStore on NVMe, RAM, RocksDB or LevelDB|✓|✓|✓|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    51,
+    52
+   ],
+   [
+    "replace",
+    57,
+    58,
+    52,
+    53,
+    [
+     "Every binary's flags, engine-specific ones included, are listed in the CLI Reference below."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    90,
+    53,
+    85
+   ],
+   [
+    "replace",
+    90,
+    93,
+    85,
+    88,
+    [
+     " RocksDB places whole levels on the paths in order, passing a level that does not fit the room left to a later path and the rest to the last one, while bulk-loaded SST files always land on the first; it is tiering, not striping.",
+     " Several paths also turn `level_compaction_dynamic_level_bytes` off, and the targets are soft, so a first disk barely larger than the data can still fill up.",
+     " A RAID0 volume passed as one `--data-dir` is RocksDB's striped layout."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    102,
+    88,
+    97
+   ],
+   [
+    "replace",
+    102,
+    103,
+    97,
+    98,
+    [
+     "Build both binaries first, with the packages from the Quickstart:"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    119,
+    98,
+    114
+   ],
+   [
+    "replace",
+    119,
+    126,
+    114,
+    115,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    134,
+    115,
+    123
+   ],
+   [
+    "replace",
+    134,
+    141,
+    123,
+    124,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    149,
+    124,
+    132
+   ],
+   [
+    "replace",
+    149,
+    153,
+    132,
+    133,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    155,
+    133,
+    135
+   ],
+   [
+    "replace",
+    155,
+    163,
+    135,
+    143,
+    [
+     "|Run|Layout|Load|Compaction|Phases|Estimate|",
+     "|:----------------|:-----|:-------|:-----------|:------|-------:|",
+     "|`ustore uuid-v7`|native|4–17 min|none|6–7 min|16 min|",
+     "|`ustore uuid-v4`|native|4–17 min|none|5–6 min|15 min|",
+     "|`rocksdb uuid-v7`|native|2–4 min|under 1 min|6–7 min|10 min|",
+     "|`rocksdb uuid-v7`|RAID0|2–4 min|under 1 min|6–7 min|10 min|",
+     "|`rocksdb uuid-v4`|RAID0|2–4 min|about 25 min|5–6 min|35 min|",
+     "|`ustore uuid-v7`|RAID0|4–17 min|none|6–7 min|16 min|"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    182,
+    143,
+    162
+   ],
+   [
+    "replace",
+    182,
+    197,
+    162,
+    177,
+    [
+     "|UCSB / YCSB|Workload|Meaning|",
+     "|:-------------|:-----------------------------|:-----------------------------------------------------|",
+     "|Init|`bulk-load`|Load fresh sequential keys in batches of up to 100,000|",
+     "||`ingest`|Load the same batches through the native bulk path|",
+     "|Read / C|`read`|Read one existing key|",
+     "|BatchRead|`batch-read-256`|Read up to 256 distinct keys per call|",
+     "|RangeSelect|`range-read-256`|Inclusive ordered range, at most 256 entries|",
+     "|Scan|`full-scan`|Page through disjoint contiguous shards|",
+     "|ReadUpdate / A|`read-50-update-50`|Half reads, half updates|",
+     "|B|`read-95-update-5`|Read-mostly mix|",
+     "|ReadUpsert / D|`read-latest-95-insert-5`|Read recent keys and insert fresh keys|",
+     "|E|`range-read-95-insert-5`|Short ranges of 1–100 entries, with inserts|",
+     "|F|`read-50-read-modify-write-50`|Read, then modify the returned record|",
+     "|BatchUpsert|`batch-insert-1000`|Insert 1,000 fresh keys per call|",
+     "|Remove|`delete-oldest`|Delete oldest live keys up to the phase budget|"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    230,
+    177,
+    210
+   ],
+   [
+    "replace",
+    230,
+    238,
+    210,
+    218,
+    [
+     "|Operation|Key-value|Documents|Graphs|",
+     "|:------------|:---------------------|:--------------------------------------------------------|:----------------------------------------------------------|",
+     "|Insert / load|UUID and binary value|JSON document|Vertex and outgoing edges|",
+     "|Read|Complete value|Complete document|Vertex version and outgoing adjacency|",
+     "|Update|Replace existing value|Set `/score` using the database's JSON/document operation|Rewire the first outgoing edge|",
+     "|Delete|Remove key|Remove document|Remove vertex and incident edges|",
+     "|Range read|Ordered keys|Ordered documents|Distinct two-hop outgoing neighbors, capped by range length|",
+     "|Full scan|Ordered keyspace|Ordered document collection|Ordered vertex scan with adjacency|"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    241,
+    218,
+    221
+   ],
+   [
+    "replace",
+    241,
+    242,
+    221,
+    222,
+    [
+     "Records are numbered by a sequential `u64` ordinal, and `--key-type` turns each ordinal into its key, with the same vocabulary as RetriEval's Keys & Order section."
+    ]
+   ],
+   [
+    "equal",
+    242,
+    291,
+    222,
+    271
+   ],
+   [
+    "replace",
+    291,
+    292,
+    271,
+    272,
+    [
+     "Drives names the drives and their layout, one file system per drive or one RAID0 volume, as in Several Drives."
+    ]
+   ],
+   [
+    "equal",
+    292,
+    303,
+    272,
+    283
+   ],
+   [
+    "replace",
+    303,
+    304,
+    283,
+    284,
+    [
+     "Dated run notes, smaller checks included, live in CHANGELOG.md."
+    ]
+   ],
+   [
+    "equal",
+    304,
+    307,
+    284,
+    287
+   ],
+   [
+    "replace",
+    307,
+    308,
+    287,
+    288,
+    [
+     "Binary values of 1 KB under `uuid-v7` keys, through the phases of Twelve Drives on AWS."
+    ]
+   ],
+   [
+    "equal",
+    308,
+    309,
+    288,
+    289
+   ],
+   [
+    "replace",
+    309,
+    312,
+    289,
+    292,
+    [
+     "|Machine|Class|Engine|Records|Drives|Load|Read|Read p99|Mixed|Mixed p99|Memory|Date|",
+     "|:------|:----|:-----|------:|:-----|---:|---:|-------:|----:|--------:|-----:|:---|",
+     "|-|-|-|-|-|-|-|-|-|-|-|-|"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    317,
+    292,
+    297
+   ],
+   [
+    "replace",
+    317,
+    320,
+    297,
+    300,
+    [
+     "|Machine|Class|Engine|Records|Drives|Load|Read|Read p99|Mixed|Mixed p99|Memory|Date|",
+     "|:------|:----|:-----|------:|:-----|---:|---:|-------:|----:|--------:|-----:|:---|",
+     "|-|-|-|-|-|-|-|-|-|-|-|-|"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    325,
+    300,
+    305
+   ],
+   [
+    "replace",
+    325,
+    328,
+    305,
+    308,
+    [
+     "|Machine|Class|Engine|Records|Drives|Load|Read|Read p99|Mixed|Mixed p99|Memory|Date|",
+     "|:------|:----|:-----|------:|:-----|---:|---:|-------:|----:|--------:|-----:|:---|",
+     "|-|-|-|-|-|-|-|-|-|-|-|-|"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    338,
+    308,
+    318
+   ],
+   [
+    "replace",
+    338,
+    340,
+    318,
+    319,
+    [
+     " Shared by every <code>crud-eval-*</code> binary "
+    ]
+   ],
+   [
+    "equal",
+    340,
+    345,
+    319,
+    324
+   ],
+   [
+    "replace",
+    345,
+    387,
+    324,
+    325,
+    [
+     "…（42 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    389,
+    325,
+    327
+   ],
+   [
+    "replace",
+    389,
+    393,
+    327,
+    328,
+    [
+     " Engine flags "
+    ]
+   ],
+   [
+    "equal",
+    393,
+    398,
+    328,
+    333
+   ],
+   [
+    "replace",
+    398,
+    414,
+    333,
+    334,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    415,
+    334,
+    335
+   ],
+   [
+    "delete",
+    415,
+    417,
+    335,
+    335
+   ],
+   [
+    "equal",
+    417,
+    420,
+    335,
+    338
+   ],
+   [
+    "replace",
+    420,
+    431,
+    338,
+    349,
+    [
+     "|Old interface|New interface|",
+     "|:-----------------------------------|:---------------------------------------------------|",
+     "|`ucsb_bench -db rocksdb`|`crud-eval-rocksdb`|",
+     "|CMake engine switches|Cargo `<engine>-backend` features|",
+     "|`run.py -sz 100MB,1GB -th 1,8`|`--records 100K,1M --threads 1,8`|",
+     "|Workload JSON files|`--workloads` and explicit workload names|",
+     "|Engine `.cfg` files|Typed engine-specific CLI options|",
+     "|`operations_count`|`--entries` or `--time-limit`|",
+     "|`value_length`|`--value-size`|",
+     "|`run.py -dp`|`--between-runs reopen-and-drop-caches`|",
+     "|Nested merged Google Benchmark files|One `<backend>-<config-hash>.json` per configuration|"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    466,
+    349,
+    384
+   ],
+   [
+    "replace",
+    466,
+    476,
+    384,
+    385,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    476,
+    478,
+    385,
+    387
+   ],
+   [
+    "replace",
+    478,
+    479,
+    387,
+    388,
+    [
+     "Directory guides describe source contracts, test coverage, plotting, and standalone server configurations."
+    ]
+   ],
+   [
+    "equal",
+    479,
+    517,
+    388,
+    426
+   ],
+   [
+    "replace",
+    517,
+    538,
+    426,
+    447,
+    [
+     "|Engine|`none`|`buffered`|`flushed`|`flush`|",
+     "|:------------|:-----------------------|:--------------------------------|:-------------------------------|:-----------------------|",
+     "|RocksDB|WAL off|WAL, no sync|WAL synced per write|memtables and WAL synced|",
+     "|LMDB|`NO_SYNC`|rejected|sync per commit|`force_sync`|",
+     "|redb|`Durability::None`|rejected|`Immediate`|an `Immediate` commit|",
+     "|fjall|no journal persist|`PersistMode::Buffer`|`PersistMode::SyncAll`|`SyncAll`|",
+     "|SQLite|WAL, `synchronous=OFF`|WAL, `synchronous=NORMAL`|WAL, `synchronous=FULL`|WAL checkpoint|",
+     "|Turso|`synchronous=OFF`|rejected|`synchronous=FULL`|WAL checkpoint|",
+     "|UStore|as `buffered`|log, no sync|log synced per commit|a flushed commit|",
+     "|PostgreSQL|`fsync=off`|`synchronous_commit=off`|`synchronous_commit=on`|`CHECKPOINT`|",
+     "|MongoDB|rejected|journal, no wait|`journal=true`|`fsync`|",
+     "|FerretDB|Postgres `fsync=off`|Postgres `synchronous_commit=off`|Postgres `synchronous_commit=on`|Postgres `CHECKPOINT`|",
+     "|Redis, Valkey|no AOF|AOF, `everysec`|AOF, `always`|none|",
+     "|Dragonfly|no snapshots|rejected|rejected|none|",
+     "|Garnet|no AOF|AOF, commit every 1,000 ms|AOF, commit wait|`COMMITAOF` with an AOF|",
+     "|Kvrocks|WAL off|WAL, no sync|WAL synced|`FLUSHMEMTABLE`|",
+     "|FalkorDB|no AOF|AOF, `everysec`|AOF, `always`|none|",
+     "|ScyllaDB|`durable_writes = false`|periodic commit log sync|batch commit log sync|`nodetool flush`|",
+     "|Neo4j|rejected|rejected|transaction log|`db.checkpoint()`|",
+     "|Memgraph|rejected|rejected|WAL flushed per commit|none|",
+     "|SurrealDB|rejected|rejected|SurrealKV `sync=every`|none|"
+    ]
+   ],
+   [
+    "equal",
+    538,
+    550,
+    447,
+    459
+   ],
+   [
+    "replace",
+    550,
+    551,
+    459,
+    460,
+    [
+     "Other policies make different tradeoffs; see the RocksDB leveled-compaction guide."
+    ]
+   ],
+   [
+    "equal",
+    551,
+    553,
+    460,
+    462
+   ],
+   [
+    "replace",
+    553,
+    554,
+    462,
+    463,
+    [
+     "The RocksDB tuning guide explains this write amplification and its tradeoffs with read and space amplification."
+    ]
+   ],
+   [
+    "equal",
+    554,
+    570,
+    463,
+    479
+   ],
+   [
+    "replace",
+    570,
+    576,
+    479,
+    485,
+    [
+     "|NAND|Bits per cell|Voltage states|",
+     "|:---|------------:|-------------:|",
+     "|SLC|1|2|",
+     "|MLC|2|4|",
+     "|TLC|3|8|",
+     "|QLC|4|16|"
+    ]
+   ],
+   [
+    "equal",
+    576,
+    584,
+    485,
+    493
+   ],
+   [
+    "replace",
+    584,
+    585,
+    493,
+    494,
+    [
+     "See Kioxia's NAND endurance brief for the distinction."
+    ]
+   ],
+   [
+    "equal",
+    585,
+    621,
+    494,
+    530
+   ],
+   [
+    "replace",
+    621,
+    622,
+    530,
+    531,
+    [
+     "The original work was introduced in Unbranding and Extending the Yahoo Cloud Serving Benchmark on March 22, 2022, followed by Beating RocksDB by up to 7x in almost every workload on September 13, 2022."
+    ]
+   ],
+   [
+    "equal",
+    622,
+    625,
+    531,
+    534
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

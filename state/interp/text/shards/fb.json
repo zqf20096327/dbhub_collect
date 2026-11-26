@@ -3161,5 +3161,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2e9de26c8d68": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的持久任务队列，多语言 Worker 共用一套 SQL 协议。",
+   "review": "Workhorse 将队列实现为 PostgreSQL 内的版本化 SQL 函数，提供 TypeScript、Python、Go、Rust、Ruby、Java、Kotlin、C# 的 Worker。任务入队与应用事务共用同一 PostgreSQL 事务，回滚时二者一致；由 PostgreSQL 负责调度、重试与恢复，无需额外 broker。Worker 通过 fence token 认领任务。适合已使用 PostgreSQL 且后台任务需与应用事务绑定的应用；队列规模需独立于应用数据库时，README 建议选择专用 broker。",
+   "highlights": [
+    "任务入队与应用数据变更共用同一 PostgreSQL 事务，回滚不会导致二者不一致",
+    "支持 TypeScript、Python、Go、Rust、Ruby、Java、Kotlin、C# 八种语言的 Worker，共用同一 SQL 协议",
+    "提供仪表盘展示任务活动、生命周期事件、队列与周期调度，无需暴露队列表作为运维接口"
+   ],
+   "use_cases": [
+    "应用已依赖 PostgreSQL，需要与应用事务共享的持久后台任务",
+    "多语言服务需要操作同一个队列并共享一致的等待与重试语义",
+    "需要仪表盘查看任务生命周期、健康状态与 Worker 容量的运维场景"
+   ]
+  },
+  "sha": "2e9de26c8d68",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ac14ede2da7": {
+  "identity": {
+   "one_liner": "自托管的 WhatsApp 群健身教练，FastAPI+SQLite 实现训练计划、组记录与渐进超负荷",
+   "review": "Fit-OS 是一个部署在 WhatsApp 群与 Web 仪表盘上的自托管健身教练系统，面向想在家中服务器上管理自己训练与体检数据的人。它按计划生成每日训练，用户以 `8x72.5` 这类自由文本记录组数，系统计算渐进超负荷与估计 1RM；核心数值由普通代码计算，Claude 教练为可选层，关闭后功能照常运行。数据存于本地 SQLite 文件，需 Docker 与 WAHA 接入 WhatsApp。",
+   "highlights": [
+    "支持自由文本组记录（如 `10x40`、`8x72.5 r2`、磅/体重/RPE 写法），含双渐进法配合 RIR 自动调节，并按实际拥有的重量取整",
+    "仪表盘包含 29 项生物指标（按性别与年龄的参考范围）、1300+ 动作库、e1RM 曲线与每周每肌群组数；支持可选的 Renpho 体脂秤与 WHOOP 集成",
+    "单容器运行，约 100 MB 内存，SQLite 存储，支持 amd64 与 arm64，一条 make 命令完成部署、回滚与 age 加密备份；界面与命令均支持英语和西班牙语"
+   ],
+   "use_cases": [
+    "在家中小服务器（树莓派/迷你 PC）上为多人自托管训练日志与体检数据，每人独立数据库",
+    "在健身房无手机操作场景下通过 WhatsApp 一行文本完成训练记录、破纪录提示与器械被占用时的替代动作推荐",
+    "需要将血液检查结果按性别、年龄参考区间长期可视化，并与训练数据一同查看"
+   ]
+  },
+  "sha": "2ac14ede2da7",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

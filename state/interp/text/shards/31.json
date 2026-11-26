@@ -3253,5 +3253,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2d77cab8cb0a": {
+  "identity": {
+   "one_liner": "Go 编写的 LLM 代理网关，单二进制提供路由代理与内嵌 Svelte 面板",
+   "review": "9router-go 用单个 Go 二进制实现 LLM 代理网关，包含 RTK 工具结果压缩、订阅/低价/免费模型的 fallback 组合路由、多账号轮询与按密钥代理绑定，面向通过 Claude Code、Cursor、Cline 等 CLI 工具接入 150+ 提供方的开发者。它直接读写 9Router 的同一 SQLite 数据库文件，无需迁移；默认端口 20130，数据存于 ~/.9router，支持 Docker 与多种自启动方式。",
+   "highlights": [
+    "单二进制运行（CGO_ENABLED=0 构建），无需 Node.js，默认端口 20130，数据目录 ~/.9router",
+    "组合路由支持 fallback、round-robin、sticky、capacity、fusion 策略，并按模型设置超时与熔断冷却",
+    "提供 OpenAI Chat、Claude Messages、Gemini、Ollama 兼容等接口，含 SQLite WAL 持久化、每密钥预算限制、Docker 与自启动服务安装"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、Cursor、Cline 等 CLI 编码工具配置本地代理端点（http://localhost:20130/v1）",
+    "已运行 9Router（Node.js 版）的用户直接复用其 SQLite 数据库，切换或并行运行 Go 版网关",
+    "需要多账号轮询、按 API 密钥绑定代理池或设置用量预算与硬性切断的场景"
+   ]
+  },
+  "sha": "2d77cab8cb0a",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3534,5 +3534,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ef8c6ac41eb2": {
+  "identity": {
+   "one_liner": "恢复 Signal Desktop SQLCipher 数据库密钥并提供只读查询的 Rust 命令行工具",
+   "review": "该项目提供 SignalDecryption 与 signal-sqlite 两个 Rust CLI，用于恢复 Signal Desktop 的 SQLCipher 密钥并以只读方式打开其加密数据库。密钥恢复按平台实现 Chromium os_crypt 方案：macOS 读 Keychain，Windows 经 DPAPI（须以该用户身份运行），Linux 读 Secret Service 或回退值。另支持 iOS/Android 数据库与 Android 加密备份（密钥须自设备提取）。构建需 Rust 与 Cargo。",
+   "highlights": [
+    "在 macOS、Windows、Linux 三平台按 Chromium os_crypt 方案恢复 config.json 中的 encryptedKey（PBKDF2、AES-128-CBC / AES-256-GCM / DPAPI 等）",
+    "signal-sqlite 用 SQLCipher 本身只读打开数据库，支持 query/tables/schema/repl/export 模式，并将数据库以只读 MCP 服务器形式暴露给 AI 代理",
+    "支持打开 iOS/Android 数据库（--cipher ios|android，需设备提取密钥）及解密 Android 加密备份（--backup，纯 Rust 内存重建）"
+   ],
+   "use_cases": [
+    "需以 SQL 直接检索 Signal Desktop 本地消息数据（含 WAL 中未合并数据）的桌面用户",
+    "对 Signal iOS/Android 数据库文件（自备设备提取密钥）或 Android 加密备份执行 SQL 查询与导出的场景",
+    "通过 MCP 协议让 AI 代理只读访问 Signal 数据库（仅 SELECT、禁 ATTACH、结果有上限）"
+   ]
+  },
+  "sha": "ef8c6ac41eb2",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3523,5 +3523,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3672b56f9dfb": {
+  "identity": {
+   "one_liner": "自托管夜间批处理分析引擎，用统计检测生成晨报",
+   "review": "Othor AI 是一个可自托管的分析引擎，以确定性夜间批处理运行：读取 PostgreSQL、MySQL、Google Sheets 等数据源，将业务模型编译为 SQL，物化指标后运行统计检测器与预测，每天输出带溯源链接的 Morning Brief。语言模型仅用于起草配置与措辞，不参与数值计算。面向企业主等非分析师用户，通过 Docker Compose、uv 和 make 安装运行，支持 Linux 与 macOS（Windows 需 WSL 2）。",
+   "highlights": [
+    "每晚对每个指标与维度运行 11 个统计检测器（含变点检测 PELT、预测偏离、双峰检验等），p 值经 Benjamini–Hochberg FDR 校正，产出按金额与置信度排序的发现列表",
+    "运行确定性可复现：锁定依赖与镜像、哈希链式追加运行台账，othor replay <run_id> 可逐字节重放任意一晚",
+    "强制只读连接（拒绝可写角色）、不读取个人数据列，数值由代码计算，模型输出含未经计算来源的数字会被丢弃或替换"
+   ],
+   "use_cases": [
+    "企业主希望每晚自动检测多数据库源中各指标与维度的异常、变点和指标关系断裂",
+    "需要每项数字都可溯源（定义、SQL、参数、运行记录）的内部分析报告场景",
+    "模型服务不可用时仍需完整运行检测与预测、仅文字降级为模板的环境"
+   ]
+  },
+  "sha": "3672b56f9dfb",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

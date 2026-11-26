@@ -3677,5 +3677,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cd6a35170e5d": {
+  "identity": {
+   "one_liner": "开源 text-to-SQL 引擎，管线各环节可配置、可在自有数据库上评测",
+   "review": "mnemiq 是 Apache-2.0 的 text-to-SQL 引擎，用于对自有数据库回答自然语言问题。它将 SQL 生成与执行决策分离：模型仅在第 05 阶段提出查询，前后均为确定性阶段——查询需只读、通过权限检查、按源方言编译并通过 EXPLAIN，否则返回拒绝及原因。评测采用按返回数据而非 SQL 字符串匹配的评分器 beacon。需注意：无角色时访问 fail-closed，不返回任何数据。",
+   "highlights": [
+    "查询执行前经确定性裁决层：只读校验、权限检查、方言编译与 EXPLAIN 验证，不通过则返回带原因的拒绝",
+    "管线主要环节（模型选择、schema 检索量、语义富化、验证阈值、行列策略）均为可配置项，支持命名 profile 与 `mnemiq sweep` 自动调参",
+    "内置评测 harness，按数据结果评分并分别报告正确/拒绝/错误三项，另支持 BIRD、Spider 基准；提供 MCP over HTTP 接口"
+   ],
+   "use_cases": [
+    "在自有数据库上评估 text-to-SQL 效果并调整配置、语义层与权限策略",
+    "需要行列级策略与审计追踪（含执行的 SQL、涉及表、富化版本）的受控数据问答",
+    "通过 MCP/HTTP API 为共享部署提供按请求身份（OIDC token）鉴权的自然语言查询服务"
+   ]
+  },
+  "sha": "cd6a35170e5d",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ddcb9be183c9": {
+  "identity": {
+   "one_liner": "每30分钟自动生成的DMR用户数据库，提供多机型格式文件",
+   "review": "该项目为DMR数字电台用户ID数据库的BETA版本，每30分钟自动生成，收录最新注册用户（约31.8万条）。提供Ailunce HD1、Anytone、Tytera MD-380/390、MD-2017及Pi-Star等多种格式，各格式头部与条目数不同。用户可通过SSH修改Pi-Star脚本替换下载源。数据可能不完整，追求完整性需用verified版本。",
+   "highlights": [
+    "每30分钟自动生成，自动纳入新注册的DMR用户",
+    "提供Ailunce HD1、Anytone、Tytera MD-380/390、MD-2017、Pi-Star等多种设备格式",
+    "BETA版约含318767条记录，多于verified版（约19.8万条）"
+   ],
+   "use_cases": [
+    "让Pi-Star热点的显示屏和网页界面显示更多呼号",
+    "为Ailunce HD1、Anytone、Tytera等DMR电台写入较新的用户ID数据库",
+    "需要包含最新注册用户、可接受部分信息不完整的场景"
+   ]
+  },
+  "sha": "ddcb9be183c9",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

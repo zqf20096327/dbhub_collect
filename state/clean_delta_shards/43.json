@@ -29942,5 +29942,1505 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "4706608ac7b6+2": {
+  "fn": "davefatkin/EinVault",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Ein, the EinVault mascot"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    1,
+    4
+   ],
+   [
+    "replace",
+    6,
+    8,
+    4,
+    6,
+    [
+     "License: MIT",
+     "Version"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    11,
+    6,
+    9
+   ],
+   [
+    "replace",
+    11,
+    12,
+    9,
+    10,
+    [
+     "Want a look before you self-host? There's a read-only demo at **demo.einvault.app**. Pick a role and explore; nothing you do there sticks."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    10,
+    12
+   ],
+   [
+    "replace",
+    14,
+    49,
+    12,
+    13,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    72,
+    13,
+    36
+   ],
+   [
+    "replace",
+    72,
+    73,
+    36,
+    37,
+    [
+     "EinVault dashboard"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    37,
+    40
+   ],
+   [
+    "replace",
+    76,
+    77,
+    40,
+    41,
+    [
+     "Companion overview"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    41,
+    44
+   ],
+   [
+    "replace",
+    80,
+    81,
+    44,
+    45,
+    [
+     "Caretaker dashboard"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    45,
+    46
+   ],
+   [
+    "replace",
+    82,
+    85,
+    46,
+    49,
+    [
+     "|Member dashboard (mobile)|Caretaker dashboard (mobile)|",
+     "|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------|",
+     "|Member dashboard mobile|Caretaker dashboard mobile|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    49,
+    50
+   ],
+   [
+    "replace",
+    86,
+    89,
+    50,
+    51,
+    [
+     "More screenshots"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    94,
+    51,
+    56
+   ],
+   [
+    "replace",
+    94,
+    95,
+    56,
+    57,
+    [
+     "Download `docker-compose.prod.yml` and set your domain before starting:"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    117,
+    57,
+    79
+   ],
+   [
+    "replace",
+    117,
+    135,
+    79,
+    97,
+    [
+     "||Default|Description|",
+     "|-----------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`TZ`|`UTC`|Container timezone. Set to your local timezone (e.g. `America/New_York`, `Europe/London`) so dates and times display correctly. Celebration notifications go out at 09:00 in this zone (UTC if unset).|",
+     "|`UPLOAD_MAX_MB`|`10`|Maximum size in MB for image (photo and avatar) uploads. `BODY_SIZE_LIMIT` is derived from the larger of this and `VIDEO_MAX_MB` at container start.|",
+     "|`VIDEO_MAX_MB`|`100`|Maximum size in MB for journal video uploads. Videos are stored as-is unless transcoding is enabled (see below).|",
+     "|`MAX_DAILY_MEDIA`|`5`|Maximum number of journal photos and videos (combined) per companion per day. (Renamed from `MAX_DAILY_PHOTOS`, still honored with a deprecation warning.)|",
+     "|`MAX_NOTE_MEDIA`|`10`|Maximum number of photos and videos (combined) attached to a single note.|",
+     "|`MAX_DOCUMENTS_PER_COMPANION`|`200`|Maximum number of documents (uploads and Paperless references combined) stored per companion.|",
+     "|`REMINDER_UNDO_SECONDS`|`7`|Default undo window (seconds) when dismissing a Reminder. `0` disables the undo window. Each user can override in their settings.|",
+     "|`CALENDAR_FEED_HISTORY_DAYS`|`90`|Days of past events the calendar feed includes. `0` includes all history (larger feeds).|",
+     "|`CALENDAR_FEED_ENABLED`|`true`|Set `false` to disable the calendar feed endpoint entirely.|",
+     "|`API_TOKENS_ENABLED`|`true`|Set `false` to disable the Bearer-token API (token creation and the `/api/logs`, `/api/journal`, `/api/quick-logs` endpoints) entirely.|",
+     "|`API_RATE_LIMIT_PER_MINUTE`|`30`|Bearer API requests allowed per client IP per minute. Behind a reverse proxy, set adapter-node's `ADDRESS_HEADER` so each client gets its own budget.|",
+     "|`DEMO_MODE`|`false`|Enable read-only public demo mode. See Running a demo instance.|",
+     "|`user`|`1000:1000`|UID:GID the container runs as. Change if your `./data` directory has different ownership.|",
+     "|`./data` volume|`./data`|Where the database and uploads are stored on the host.|",
+     "|`DATABASE_URL`|`/data/einvault.db`|Database path inside the container. Unlikely to need changing.|",
+     "|`TWOFA_ENC_KEY`|-|32-byte base64 key (`openssl rand -base64 32`) that encrypts stored TOTP secrets. Required to enable two-factor authentication.|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    146,
+    97,
+    108
+   ],
+   [
+    "replace",
+    146,
+    157,
+    108,
+    119,
+    [
+     "||Default|Description|",
+     "|-----------------------------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`VIDEO_TRANSCODE`|`false`|Enable background transcoding of uploaded videos to a web-playable MP4 plus a poster.|",
+     "|`VIDEO_KEEP_ORIGINAL`|`true`|Keep the original source file alongside the transcoded copy. The original is never served; it is retained for re-encoding or backup. `false` discards it.|",
+     "|`VIDEO_TRANSCODE_MAX_MB`|`VIDEO_MAX_MB`|Skip transcoding (store as-is) for inputs larger than this.|",
+     "|`VIDEO_TRANSCODE_MAX_SECONDS`|`600`|Skip transcoding for inputs longer than this.|",
+     "|`VIDEO_TRANSCODE_MAX_WIDTH`|`4096`|Skip transcoding for inputs wider than this.|",
+     "|`VIDEO_TRANSCODE_MAX_HEIGHT`|`4096`|Skip transcoding for inputs taller than this.|",
+     "|`VIDEO_FFMPEG_PATH`|`/usr/bin/ffmpeg`|Absolute path to the `ffmpeg` binary. Override if it lives elsewhere (e.g. `/opt/homebrew/bin/ffmpeg` on macOS).|",
+     "|`VIDEO_FFPROBE_PATH`|`/usr/bin/ffprobe`|Absolute path to the `ffprobe` binary.|",
+     "|`VIDEO_TMP_DIR`|`<data>/transcode-tmp`|Scratch directory for in-progress transcodes. Must be on disk with room for the source plus output. Do not point it at the in-memory `/tmp` tmpfs.|"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    166,
+    119,
+    128
+   ],
+   [
+    "replace",
+    166,
+    176,
+    128,
+    138,
+    [
+     "||Default|Description|",
+     "|------------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`STORAGE_BACKEND`|`local`|`local` writes to `./data/uploads`. `s3` writes new uploads to the configured bucket. Reads always honor the per-row provider, so switching does not invalidate old rows.|",
+     "|`S3_ENDPOINT`|-|Full endpoint URL, e.g. `https://s3.garage.example.com` or `https://s3.us-east-1.amazonaws.com`.|",
+     "|`S3_BUCKET`|-|Bucket name. Must already exist and should be private.|",
+     "|`S3_REGION`|`auto`|Region. For non-AWS providers, `auto` usually works.|",
+     "|`S3_ACCESS_KEY_ID`|-|Access key. Scope it to this bucket only.|",
+     "|`S3_SECRET_ACCESS_KEY`|-|Secret key.|",
+     "|`S3_FORCE_PATH_STYLE`|`false`|Set to `true` for Garage, MinIO, and older S3 deployments. Leave `false` for AWS and R2.|",
+     "|`S3_PRESIGN_TTL_SECONDS`|`300`|Lifetime of presigned download URLs. Shorter is stricter, longer improves browser cache reuse on reload.|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    183,
+    138,
+    145
+   ],
+   [
+    "replace",
+    183,
+    188,
+    145,
+    150,
+    [
+     "||Default|Description|",
+     "|-----------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`IMMICH_URL`|-|Base URL of your Immich server, e.g. `http://immich.local:2283`. No trailing slash. Required if `IMMICH_API_KEY` is set.|",
+     "|`IMMICH_API_KEY`|-|API key. Required permissions: `asset.read`, `asset.view`. Generate in Immich → Account Settings → API Keys. Required if `IMMICH_URL` is set.|",
+     "|`IMMICH_ALBUM_ID`|-|If set, the picker only shows assets in this album. If unset, the picker shows the user's most recent assets across the whole library.|"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    195,
+    150,
+    157
+   ],
+   [
+    "replace",
+    195,
+    196,
+    157,
+    158,
+    [
+     "When `PAPERLESS_URL` and `PAPERLESS_API_TOKEN` are set, members and admins get an \"Add from Paperless\" option on the Documents tab that searches a Paperless-ngx instance and attaches a document by reference. The document stays in Paperless; EinVault stores only a reference and proxies reads through the server using the token. EinVault never uploads to or deletes from Paperless. Caretakers cannot use the picker. EinVault serves the archived (OCR'd PDF) version of each referenced document."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    199,
+    158,
+    161
+   ],
+   [
+    "replace",
+    199,
+    204,
+    161,
+    166,
+    [
+     "||Default|Description|",
+     "|---------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`PAPERLESS_URL`|-|Base URL of your Paperless-ngx instance, e.g. `http://paperless.local:8000`. No trailing slash. Required if `PAPERLESS_API_TOKEN` is set.|",
+     "|`PAPERLESS_API_TOKEN`|-|API token. Generate in Paperless under Settings → \"My Profile\". Use a dedicated user limited to the documents you want visible. Required if `PAPERLESS_URL` is set.|",
+     "|`PAPERLESS_TAG_ID`|-|If set, only documents carrying this Paperless tag ID can be searched and imported. Strongly recommended; without it every member can search the whole library.|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    211,
+    166,
+    173
+   ],
+   [
+    "replace",
+    211,
+    219,
+    173,
+    181,
+    [
+     "||Default|Description|",
+     "|-------------|-------|-------------------------------------------------------------------------------------------------------------------------------|",
+     "|`SMTP_HOST`|-|SMTP server hostname. Required (with `SMTP_FROM`) to enable email.|",
+     "|`SMTP_PORT`|`587`|SMTP port. Use `465` with `SMTP_SECURE=true` for implicit TLS, or `587` (default) for STARTTLS.|",
+     "|`SMTP_SECURE`|`false`|`true` = implicit TLS (port 465). `false` = STARTTLS upgrade on connect.|",
+     "|`SMTP_USER`|-|SMTP username. Leave unset for unauthenticated relays.|",
+     "|`SMTP_PASS`|-|SMTP password. Leave unset for unauthenticated relays.|",
+     "|`SMTP_FROM`|-|RFC 5322 From address shown to recipients, e.g. `EinVault <einvault@example.com>`. Required (with `SMTP_HOST`) to enable email.|"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    222,
+    181,
+    184
+   ],
+   [
+    "replace",
+    222,
+    223,
+    184,
+    185,
+    [
+     "When `NTFY_URL` is set, EinVault can publish push notifications via ntfy. This configures the server only (base URL and optional access token). Each user sets their own topic name under Settings -> Notifications; a non-empty topic is that user's opt-in for pushes scoped to what they can see in the app (reminders due, shift alerts, celebrations). The notification scheduler runs when either SMTP or ntfy is configured. The forgot-password flow remains email-only."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    226,
+    185,
+    188
+   ],
+   [
+    "replace",
+    226,
+    231,
+    188,
+    193,
+    [
+     "||Default|Description|",
+     "|-------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`NTFY_URL`|-|ntfy server base URL, e.g. `https://ntfy.sh` or a self-hosted instance. No topic in the URL.|",
+     "|`NTFY_TOKEN`|-|Bearer token for self-hosted ntfy servers with auth enabled. Used for every publish regardless of topic.|",
+     "|`NOTIFY_SCAN_INTERVAL_MS`|`60000`|How often the notification scheduler scans for due reminders, shift alerts, and celebrations, in milliseconds. Values below 250 fall back to the default. Mainly useful for automated tests.|"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    260,
+    193,
+    222
+   ],
+   [
+    "replace",
+    260,
+    269,
+    222,
+    231,
+    [
+     "|||",
+     "|-------------------|---------------------------------------|",
+     "|Runs as root|No (runs as `node`, UID 1000)|",
+     "|`no-new-privileges`|Enabled|",
+     "|Linux capabilities|All dropped|",
+     "|Root filesystem|Read-only|",
+     "|Writable `/tmp`|tmpfs, 64 MB|",
+     "|CPU limit|0.5 cores (raise for video transcoding)|",
+     "|Memory limit|256 MB (raise for video transcoding)|"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    272,
+    231,
+    234
+   ],
+   [
+    "replace",
+    272,
+    279,
+    234,
+    241,
+    [
+     "|Tag|Description|",
+     "|--------------|---------------------------------------------------|",
+     "|`latest`|Latest stable release (published on version tags)|",
+     "|`x.y.z`|Pinned release|",
+     "|`x.y`|Latest patch of a minor release|",
+     "|`main`|Latest commit on `main`, unstable, for testing only|",
+     "|`sha-<commit>`|Specific commit build, useful for rollback|"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    282,
+    241,
+    244
+   ],
+   [
+    "replace",
+    282,
+    283,
+    244,
+    245,
+    [
+     "Each release image carries a Sigstore-signed SLSA provenance attestation and a SPDX SBOM, and only ships after Trivy clears the OS and library packages on both `linux/amd64` and `linux/arm64`. See SECURITY.md for the verification commands."
+    ]
+   ],
+   [
+    "equal",
+    283,
+    289,
+    245,
+    251
+   ],
+   [
+    "delete",
+    289,
+    291,
+    251,
+    251
+   ],
+   [
+    "equal",
+    291,
+    301,
+    251,
+    261
+   ],
+   [
+    "delete",
+    301,
+    303,
+    261,
+    261
+   ],
+   [
+    "equal",
+    303,
+    326,
+    261,
+    284
+   ],
+   [
+    "replace",
+    326,
+    335,
+    284,
+    285,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    354,
+    285,
+    304
+   ],
+   [
+    "delete",
+    354,
+    356,
+    304,
+    304
+   ],
+   [
+    "equal",
+    356,
+    361,
+    304,
+    309
+   ],
+   [
+    "delete",
+    361,
+    363,
+    309,
+    309
+   ],
+   [
+    "equal",
+    363,
+    374,
+    309,
+    320
+   ],
+   [
+    "replace",
+    374,
+    380,
+    320,
+    326,
+    [
+     "|Variable|Description|",
+     "|--------------------|---------------------------------------------------------------------------------------------------------------|",
+     "|`OIDC_ISSUER_URL`|IdP base URL. Discovery happens at `<issuer>/.well-known/openid-configuration`. e.g. `https://auth.example.com`|",
+     "|`OIDC_CLIENT_ID`|Client ID registered with your IdP.|",
+     "|`OIDC_CLIENT_SECRET`|Client secret. Omit for public clients (PKCE-only).|",
+     "|`OIDC_REDIRECT_URI`|Must match what's registered with the IdP. e.g. `https://einvault.yourdomain.com/auth/oidc/callback`|"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    383,
+    326,
+    329
+   ],
+   [
+    "replace",
+    383,
+    393,
+    329,
+    339,
+    [
+     "|Variable|Default|Description|",
+     "|-------------------------------|----------------------|-----------------------------------------------------------------------------------------------------------------|",
+     "|`OIDC_SCOPES`|`openid profile email`|Space-separated scopes requested from the IdP.|",
+     "|`OIDC_PROVIDER_NAME`|`SSO`|Display label on the login button.|",
+     "|`OIDC_ALLOW_SIGNUP`|`false`|If `true`, auto-creates accounts for users who authenticate but have no matching record. See below.|",
+     "|`OIDC_DEFAULT_ROLE`|`member`|Role assigned to auto-created users. Allowed: `member`, `caretaker`. Admin can only be granted via groups.|",
+     "|`OIDC_ADMIN_GROUPS`|_(unset)_|Comma-separated. Users whose `groups` claim contains any value here are promoted to admin on every login.|",
+     "|`OIDC_POST_LOGOUT_REDIRECT_URI`|_(unset)_|If set and the IdP advertises `end_session_endpoint`, logout triggers RP-initiated logout at the IdP.|",
+     "|`OIDC_STATE_SECRET`|_(random)_|Pin a long random string. Without it, in-flight logins break across server restarts.|",
+     "|`OIDC_ALLOW_INSECURE_HTTP`|`false`|Allows plain-HTTP issuer URLs. Exists for automated tests against a local mock IdP. Never set this in production.|"
+    ]
+   ],
+   [
+    "equal",
+    393,
+    417,
+    339,
+    363
+   ],
+   [
+    "replace",
+    417,
+    418,
+    363,
+    364,
+    [
+     "By default, logout destroys the local EinVault session and returns the user to `/auth/login`. Set `OIDC_POST_LOGOUT_REDIRECT_URI` (and register it with your IdP) to also end the IdP session via RP-initiated logout."
+    ]
+   ],
+   [
+    "equal",
+    418,
+    421,
+    364,
+    367
+   ],
+   [
+    "replace",
+    421,
+    429,
+    367,
+    373,
+    [
+     "|Provider|Notes|",
+     "|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|**Authelia**|Register the redirect URI under the OIDC client config. Set `client_secret_basic` (default) or `none` for public clients.|",
+     "|**Authentik**|Create an OAuth2/OIDC provider; scope mapping for `groups` is built-in. `OIDC_ADMIN_GROUPS` matches the `groups` claim directly.|",
+     "|**Keycloak**|Add a \"Group Membership\" mapper to the client with token claim name `groups` and \"Full group path\" off. EinVault does not read `realm_access.roles`. Add the redirect URI to \"Valid Redirect URIs\".|",
+     "|**PocketID**|Public-client first; omit `OIDC_CLIENT_SECRET`. Register the redirect URI in the client settings.|"
+    ]
+   ],
+   [
+    "equal",
+    429,
+    460,
+    373,
+    404
+   ],
+   [
+    "delete",
+    460,
+    462,
+    404,
+    404
+   ],
+   [
+    "equal",
+    462,
+    481,
+    404,
+    423
+   ],
+   [
+    "replace",
+    481,
+    506,
+    423,
+    448,
+    [
+     "|Method & path|Body|Purpose|",
+     "|-----------------------------------|---------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`GET /api/companions`|-|List the companions the token user may target (members/admins: all active; caretakers: assigned). Returns `{ companions: [...] }` with each companion's full profile. Use this to discover `companionId`s.|",
+     "|`GET /api/companions/{companionId}`|-|Get one companion. Full-scope tokens get the full profile; write-scope tokens get the minimal projection (no PII). An id the token can't reach reads as `404`, same as unknown, so it can't be used to probe which ids exist; an archived companion reads as `404` too, not as a retrievable \"deleted\" record. Returns `{ companion }`.|",
+     "|`POST /api/logs`|`{ companionId or companionIds, type, subtypes?, notes?, durationMinutes?, loggedAt? }`|Log a daily event. `type` is one of `walk`, `meal`, `bathroom`, `litter`, `treat`, `play`, `grooming`, `other`. Each species allows a subset (a cat has no `bathroom`, a dog no `litter`, and an `other` companion has neither those nor `walk`); a type any target companion can't have is rejected with `400 typeNotAllowedForSpecies`. `subtypes` is an optional array of kinds valid for that type (e.g. `[\"pee\"]` for `bathroom`, `[\"leash\"]` for `walk`; the full list per type is in `/api/docs`); a value that no target companion can take is rejected with `400 invalidSubtype`, and one that fits only some targets is kept for those and dropped for the rest. Returns `201 { ids, eventGroupId }`.|",
+     "|`GET /api/logs`|query `?companionId=&date=` (`date` optional `YYYY-MM-DD`)|Read back logged events for a companion, newest first. Each event includes its `subtypes` (`null` when none were logged). Returns `{ events: [...] }`.|",
+     "|`GET /api/journal`|query `?companionId=&date=` (`date` defaults to today)|Read back the journal entry for a companion/day. Returns `{ entry }` (or `{ entry: null }`).|",
+     "|`POST /api/journal`|`{ companionId, date?, body?, mood? }`|Upsert the journal entry for a day (`date` defaults to today). Sending both `body` and `mood` replaces them; omitting a key leaves that field untouched, so a mood-only or body-only post won't wipe the other. Caretaker tokens may only write today. Returns `201 { id, companionId, date }`.|",
+     "|`GET /api/notes`|query `?companionId=&tag=&match=&pinned=`|List a companion's notes, pinned first. Repeat `tag` to filter by several (up to 20); `match=all` returns only notes with every tag, default `any`. Full-scope tokens only, for members and admins. Returns `{ notes: [...], hasMore }`.|",
+     "|`POST /api/notes`|`{ companionId, title, body?, tags?, pinned?, sharedWithCaretakers? }`|Create a note. `body` is markdown (up to 20000 characters), `title` up to 200, and up to 10 tags of 32 characters each. Returns `201 { id, companionId }`.|",
+     "|`GET /api/notes/{id}`|-|Read one note.|",
+     "|`PATCH /api/notes/{id}`|`{ title?, body?, tags?, pinned?, sharedWithCaretakers? }`|Partial update; `tags` replaces the whole set. Returns the updated note.|",
+     "|`DELETE /api/notes/{id}`|-|Delete a note. Returns `204`.|",
+     "|`GET /api/quick-logs`|-|List the token user's enabled quick logs so a device can discover their ids. Returns `{ quickLogs: [...] }`.|",
+     "|`POST /api/quick-logs/{id}/execute`|`{ companionIds?, loggedAt? }` (optional)|Run a configured quick log. With no body it uses the quick log's remembered/assigned companions, so a physical button only needs the URL and token. Returns `201 { ids }`.|",
+     "|`POST /api/health-events`|`{ companionId, type, title, notes?, occurredAt?, vetName?, vetClinic? }`|Log a health event. `type` is one of `vet_visit`, `vaccination`, `medication`, `procedure`, `other`. `occurredAt` defaults to now and may be historical. Returns `201 { id, companionId }`.|",
+     "|`GET /api/health-events`|query `?companionId=&date=` (`date` optional `YYYY-MM-DD`)|Read back health events for a companion, newest first by `occurredAt`. Returns `{ events: [...] }`.|",
+     "|`POST /api/weight`|`{ companionId, weight, unit, notes?, recordedAt? }`|Log a weight entry. `unit` is `kg`, `lbs`, `g`, or `oz`. `recordedAt` defaults to now and may be historical. Returns `201 { id, companionId }`.|",
+     "|`GET /api/weight`|query `?companionId=`|Read back weight entries for a companion, newest first by `recordedAt`. Returns `{ entries: [...] }`.|",
+     "|`GET /api/reminders`|query `?companionId=&status=due\\|all`|List reminders. Default `status=due` lists not-yet-completed reminders oldest-due first; `status=all` also includes completed reminders, ordered by due date (newest first). Omit `companionId` to list across every companion the token user may access. Returns `{ reminders: [...] }`.|",
+     "|`POST /api/reminders/{id}/complete`|-|Mark a reminder done. A recurring reminder spawns its next occurrence. Returns `200 { id, completedAt, nextReminderId }` (`nextReminderId` is `null` for a one-off).|",
+     "|`GET /api/medications`|query `?companionId=&status=active\\|all`|List medications. Default `status=active`; caretakers only ever see active ones. Write-scope tokens may call it so a device can find ids; they get active medications only, with just `id`, `companionId`, `name`, `active` and `nextDueAt`. Returns `{ medications: [...] }`.|",
+     "|`POST /api/medications/{id}/doses`|`{ givenAt?, note? }` (optional)|Record a dose. Completes the matching linked reminder occurrence (a missed one from an earlier day, or one due within 3 hours of `givenAt`), otherwise logs a standalone dose. Returns `201 { doseId, completedReminderId }`; a `givenAt` before the start date is `400 givenBeforeStart`, one more than 5 minutes in the future is `400 givenInFuture` (up to 5 minutes ahead counts as now), an ended medication is `409 medicationEnded`.|",
+     "|`GET /api/shifts`|query `?from=&to=` (both optional `YYYY-MM-DD`)|List the caretaker shift schedule, most recent shifts first (up to 200; use `from`/`to` to window further back). Admins and members see every shift; a caretaker sees only their own. Returns `{ shifts: [...] }`.|",
+     "|`GET /api/users`|-|List the user roster, scoped to what the token user may see: an admin sees everyone, a member sees everyone except admins, a caretaker sees only themselves. Returns `{ users: [...] }` with `id`, `displayName`, `role`, `isActive` per user, plus `username` (omitted for a member-role token, since a member has no need to see other users' login identifiers).|"
+    ]
+   ],
+   [
+    "equal",
+    506,
+    514,
+    448,
+    456
+   ],
+   [
+    "delete",
+    514,
+    516,
+    456,
+    456
+   ],
+   [
+    "equal",
+    516,
+    528,
+    456,
+    468
+   ],
+   [
+    "delete",
+    528,
+    530,
+    468,
+    468
+   ],
+   [
+    "equal",
+    530,
+    535,
+    468,
+    473
+   ],
+   [
+    "replace",
+    535,
+    536,
+    473,
+    474,
+    [
+     "- **Session-based auth:** custom sessions with bcryptjs password hashing; optional OIDC SSO via `openid-client`"
+    ]
+   ],
+   [
+    "equal",
+    536,
+    538,
+    474,
+    476
+   ],
+   [
+    "delete",
+    538,
+    540,
+    476,
+    476
+   ],
+   [
+    "equal",
+    540,
+    541,
+    476,
+    477
+   ],
+   [
+    "replace",
+    541,
+    548,
+    477,
+    478,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    548,
+    549,
+    478,
+    479
+   ],
+   [
+    "replace",
+    549,
+    551,
+    479,
+    480,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "1ef4db0db46a+2": {
+  "fn": "Volland/tiramemsu",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Tiramemsu: a brain taking a bite out of a tiramisu whose layers are a graph "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " Tiramemsu "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     " Your agent’s brain loves Tiramemsu. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    8,
+    6,
+    8,
+    [
+     " Layered, never-forget memory for agents. ",
+     "An embedded graph database on SQLite. Every fact has an id, so facts can carry layers of provenance and belief, and every change is kept with when it was made and when it was true. "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     " Layered graphs, explained · Tiramemsu vs oxilite · Metagraphs · Design (lat.md) · Specs (OpenSpec) "
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "> **Status: new.** Designed and implemented in September and October 2026 as one Rust library, released as 0.12.0 on PyPI (`tiramemsu`), npm (`@tiramemsu/node`) and crates.io (every crate, from `tm-core` to the facade `tiramemsu`, the `tiramemsu-mcp` server and the `tm` command line). N3 reasoning comes with its reasoner eyeron from crates.io, and ELPI with lean-elpi's `leanelpi` binding from crates.io and its native library from a lean-elpi release. There is no network server; it runs on rusqlite natively, on SQLite compiled to WebAssembly in the browser, and (experimental) on redb. What is measured and what is not is listed under Status."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    17,
+    12,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     " Three layers: the fact alice worksAt acme with id e1, a confidence and a source about e1, and a belief supported by e1 "
+    ]
+   ],
+   [
+    "equal",
+    18,
+    30,
+    18,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "- **Vector recall.** Store the embeddings your model computes (`define_embedding_model`, `set_embedding`) beside the facts, in the same file and transaction, append-only. `View::vector_search`, SPARQL `?e tm:vectorMatch \"[…]\"` and Cypher `CALL tiramemsu.vector.search(...)` run one exact, view-aware search: as-of, history, valid time and graphs filter before ranking, so time travel never loses a hit to an index cut, and it works on every SQLite build including WASM. `View::recall` fuses text and vector recall by reciprocal rank and can expand each hit to its layers. Since 0.6 the query languages write too: Cypher `CREATE VECTOR INDEX` / `DROP INDEX` / `SHOW VECTOR INDEXES` and `CALL tiramemsu.vector.setEmbedding(...)`, SPARQL Update `tm:vectorEmbedding`. Samples: Vectors below and the vector cookbook. Design: `docs/vector-architecture.md`."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    35,
+    31,
+    35
+   ],
+   [
+    "replace",
+    35,
+    38,
+    35,
+    38,
+    [
+     "- **N3 reasoning (opt-in feature `n3`).** Notation3 rules run by eyeron over any view, aware of both clocks: facts that were never valid at the same time never combine, as-of views reason with the facts and the rules believed then, and every conclusion carries a proof of statement ids. `Db::materialize` stores conclusions as derived beliefs with the rule set among their supports, so they fall when a premise or a rule changes. Also as `tm reason` / `tm materialize`, MCP tools and the bridge. Read the N3 book;",
+     "- **Datalog (opt-in feature `datalog`).** A Soufflé-style Datalog in its own crate, `tm-datalog`, with no git dependency. A fact holds exactly when it follows from the facts valid at that instant, computed in one pass with interval sets, with DatalogMTL operators (`past`, `always_future`, `since`, ...), the 13 Allen relations, stratified negation and aggregates, and goal-directed evaluation (magic sets). `constraint ... error :- ...` rules are enforced at commit, seeded by what the transaction changed; `Db::materialize_program` stores conclusions as derived beliefs that fall with their premises and are reconciled when negation or aggregates are involved. A goal can be called from SPARQL (`SERVICE <urn:tiramemsu:dl:query>`) and Cypher (`CALL tiramemsu.datalog.query`). Also as `tm datalog`, `tm check`, `tm materialize-program`, MCP tools and the bridge. Read the guide and the article. Not built yet: incremental materialization.",
+     "- **ELPI (opt-in feature `elpi`).** λProlog programs run by lean-elpi, with higher-order clauses, hypothetical reasoning (`=>`, `pi`) and rules over rules. A program reads memory through host builtins (`tm.triple S P O E`, `tm.valid`), never a copy, on any view. `tm.violation-delta` validators run at commit, seeded by what the transaction changed. `tm.conclude` states the statements a conclusion rests on, and the run refuses support it never read. `Db::materialize_elpi` stores conclusions that fall with a premise, the program or a library it includes (`accumulate <iri>.`). A goal can be called from SPARQL (`SERVICE <urn:tiramemsu:elpi:query>`) and Cypher (`CALL tiramemsu.elpi.query`). Also as `tm elpi`, five MCP tools and the bridge. It links the native libleanelpi (macOS and Linux), so no package turns it on by default and Node, Python and wasm leave it out. Read the guide and the article. The library comes from a lean-elpi release, found through `LEANELPI_DIST`."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    41,
+    38,
+    41
+   ],
+   [
+    "replace",
+    41,
+    43,
+    41,
+    43,
+    [
+     "- **Two engines (experimental in 0.8).** A memory lives in SQLite (the default) or in redb, a pure-Rust key-value file with snapshot readers, chosen at creation (`tm create --backend redb`, `OpenOptions::backend`) and detected from the file header after that. Both hold the same ids, clocks and history, and `tm convert` moves a file between them. On redb, SPARQL and Cypher run on a native runner with hybrid and worst-case-optimal joins. It is faster than SQLite on cyclic queries, many concurrent readers, time-travel lookups and loading, and slower on probe-heavy star queries, Cypher paths and file size. Saved answers are SQLite-only for now. See the benchmark and Two engines, one memory.",
+     "- **Statement-graph export, proven.** `tm export --format sg-nt12` writes every statement with its id and both clocks as RDF 1.2 reification. It asserts what is live in the view you choose (`--as-of`, `--history`, `--valid-at`). The format is LeanRDF's, whose decoder is proven exact in Lean: `leanrdf-sg decode` checks a file, and LeanRDF's tests decode tiramemsu's recorded exports and reproduce them byte for byte. Read the guide."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    65,
+    43,
+    65
+   ],
+   [
+    "replace",
+    65,
+    66,
+    65,
+    66,
+    [
+     "Every statement and every layer on it has an id, both clocks, a structural link to what it is about, and a row that is never deleted. Together those answer questions that usually need glue code, each in one query. All of these are tests; the queries are in `lat.md/recipes.md` and explained in the article."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    66,
+    67
+   ],
+   [
+    "replace",
+    67,
+    68,
+    67,
+    68,
+    [
+     "|Question|How|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    68,
+    69
+   ],
+   [
+    "replace",
+    69,
+    82,
+    69,
+    82,
+    [
+     "|What did this belief rest on, back then?|A path from the belief through statement ids, inside `SERVICE <tm:asOf/150>`|",
+     "|What breaks if I retract this?|`View::dependents(eid)` on any view, with no write lock; equal to the path `(^sys:subject\\|^sys:object)*`|",
+     "|Who wrote this, and why was that forgotten?|`?r tm:txAdded ?t . ?t sys:author ?who`, and `tm:txRetracted` → `sys:reason`|",
+     "|How was this fact corrected over time?|`?r sys:supersedes+ ?old`|",
+     "|Where do my sources disagree?|Same subject and predicate, different objects, overlapping valid time, different authors|",
+     "|How late did we learn it?|`tm:addedAt` / `r.addedAt` against `tm:validFrom` / `tm:validTo`|",
+     "|Which of my answers are stale?|`View::sparql_with(q, &SparqlOptions { provenance: true })` cites the statement ids behind every row|",
+     "|Can I hand this fact to another agent?|`View::bundle(eid)` exports it with its layers and evidence; `Tx::import_bundle` asserts it idempotently|",
+     "|Where does memory disagree with itself?|`View::conflicts` lists overlapping distinct values with their evidence; `Db::preview_bundle` shows what an import would change first|",
+     "|Can I stop layers from rotting?|`(v:confidence sys:subjectType sys:STMT)` rejects a confidence on anything but a statement|",
+     "|What can I reach inside one session?|Recursive paths under `GRAPH <g>` / `GRAPH ?g` only cross the graph's statements|",
+     "|What does this edge contain?|`GRAPH <urn:tiramemsu:stmt:n> { … }`: a statement names a graph, its contents follow a supersede and go with a retraction|",
+     "|Could this have reached B, and when?|Time-respecting paths: valid time never goes backwards along the walk, and each row carries its earliest arrival|"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    89,
+    82,
+    89
+   ],
+   [
+    "replace",
+    89,
+    97,
+    89,
+    90,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    99,
+    90,
+    92
+   ],
+   [
+    "replace",
+    99,
+    100,
+    92,
+    93,
+    [
+     "|Crate|Role|"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    93,
+    94
+   ],
+   [
+    "replace",
+    101,
+    112,
+    94,
+    105,
+    [
+     "|`tm-core`|ObjectId codec, term dictionary, format-1 schema and triggers, the transaction engine, views, the `Executor` trait. No SQLite dependency.|",
+     "|`tm-rusqlite`|The rusqlite host: bundled SQLite, functions, virtual tables.|",
+     "|`tm-ir`|Logical algebra, per-pattern views, semantic flags.|",
+     "|`tm-exec`|Planner, SQL codegen, path engine, result decoding.|",
+     "|`tm-sparql`|SPARQL front end.|",
+     "|`tm-cypher`|openCypher front end.|",
+     "|`tm-n3`|N3 reasoning with eyeron over facts the facade loads: pruning, the valid-time sweep, proofs (feature `n3`).|",
+     "|`tm-datalog`|Datalog over the storage traits: parser, analysis, interval sets with DatalogMTL, magic-set goals, semi-naive evaluation, constraint checks (feature `datalog`).|",
+     "|`tm-elpi`|ELPI (λProlog) over a view through lean-elpi: host builtins, terms, queries, checks, conclusions with stated support (feature `elpi`).|",
+     "|`tm-elpi-store`|ELPI persistence: program nodes with includes, enforcement at commit, materialization plans (feature `elpi`).|",
+     "|`tiramemsu`|The facade: `Db`, `View`, `Tx`. The only crate an application needs.|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    105,
+    106
+   ],
+   [
+    "replace",
+    113,
+    114,
+    106,
+    107,
+    [
+     "Each layer depends only on the one below it, and time is resolved in exactly one place. The full design is in `lat.md/`, and every capability has a spec under `openspec/specs/`."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    117,
+    107,
+    110
+   ],
+   [
+    "replace",
+    117,
+    118,
+    110,
+    111,
+    [
+     "From `crates/tiramemsu/examples/quickstart.rs`. Run it with `cargo run -p tiramemsu --example quickstart`."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    123,
+    111,
+    116
+   ],
+   [
+    "replace",
+    123,
+    148,
+    116,
+    117,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    172,
+    117,
+    141
+   ],
+   [
+    "replace",
+    172,
+    173,
+    141,
+    142,
+    [
+     "See `crates/tiramemsu-cli` for every command."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    184,
+    142,
+    153
+   ],
+   [
+    "replace",
+    184,
+    198,
+    153,
+    154,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    206,
+    154,
+    162
+   ],
+   [
+    "replace",
+    206,
+    218,
+    162,
+    163,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    226,
+    163,
+    171
+   ],
+   [
+    "replace",
+    226,
+    232,
+    171,
+    172,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    247,
+    172,
+    187
+   ],
+   [
+    "replace",
+    247,
+    254,
+    187,
+    188,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    266,
+    188,
+    200
+   ],
+   [
+    "replace",
+    266,
+    271,
+    200,
+    201,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    275,
+    201,
+    205
+   ],
+   [
+    "replace",
+    275,
+    276,
+    205,
+    206,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    277,
+    206,
+    207
+   ],
+   [
+    "replace",
+    277,
+    281,
+    207,
+    211,
+    [
+     "|Size|About 88 000 lines of Rust in 9 crates and 4 bindings, 1 311 tests, 48 capability specs|",
+     "|SPARQL|634 of 781 in-scope W3C tests pass (66 more are skipped: named-graph data and unsupported formats). Every failing one is listed with a reason in `crates/tm-sparql/tests/w3c/expected-deviations.toml`, and an unexpected result fails the build|",
+     "|Cypher|2 615 of 3 880 openCypher TCK scenarios (67 %). Temporal types, `CALL`, and a few dual-view cases are deferred and listed in `crates/tm-cypher/tests/tck/allowlist.txt`|",
+     "|Speed|Raw SQLite lookups on the schema take about 4 µs at 11 million statements; about 150 bytes per statement with all indexes. See `bench/`|"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    286,
+    211,
+    216
+   ],
+   [
+    "replace",
+    286,
+    287,
+    216,
+    217,
+    [
+     "oxilite is a shipped, Oxigraph-compatible RDF database on SQLite by the same author. It stores quads and uses reifiers for annotations, keeps history in a change log, and runs on D1, WebAssembly and more. Tiramemsu stores statements with ids, keeps lifetime in the row and is bitemporal, but it is new, runs on rusqlite and in the browser on SQLite compiled to WebAssembly (not on D1), and has none of oxilite's SHACL or ShEx validation; it reasons with N3 rules through eyeron and with Datalog, both opt-in, rather than OWL. The article has the details and a benchmark."
+    ]
+   ],
+   [
+    "equal",
+    287,
+    290,
+    217,
+    220
+   ],
+   [
+    "replace",
+    290,
+    291,
+    220,
+    221,
+    [
+     "|Path|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    292,
+    221,
+    222
+   ],
+   [
+    "replace",
+    292,
+    299,
+    222,
+    229,
+    [
+     "|`crates/`|The crates: core, hosts (`tm-rusqlite`, `tm-wasm`), query engine and front ends, facade, MCP server|",
+     "|`lat.md/`|The design as a cross-linked knowledge graph: architecture, data model, time model, storage, query, tests|",
+     "|`openspec/specs/`|Requirements with scenarios, one folder per capability; `openspec/changes/archive/` has the changes that built them|",
+     "|`bindings/`|The JSON bridge, and the Node.js (`@tiramemsu/node`), Python (`tiramemsu`) and WebAssembly (`tiramemsu-wasm`) packages built on it; publishing guides in `docs/`|",
+     "|`bench/`|SQLite versus DuckDB, and ids versus reifiers, benchmarks with results|",
+     "|`docs/design-options.md`|The option analysis behind the design decisions|",
+     "|`site/`|The static website (GitHub Pages) and its articles|"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    305,
+    229,
+    235
+   ],
+   [
+    "delete",
+    305,
+    306,
+    235,
+    235
+   ],
+   [
+    "equal",
+    306,
+    307,
+    235,
+    236
+   ]
+  ],
+  "at": "2026-11-26"
+ },
+ "227f49b0ffbd+2": {
+  "fn": "Re-V0/Booruqt",
+  "clean_ver": "2",
+  "raw_lines": 25,
+  "ops": [
+   [
+    "equal",
+    0,
+    25,
+    0,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "Searching Safebooru; the details panel shows the clicked post"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    26,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "The Library tab: downloaded posts, searchable by tag, in real folders"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    32,
+    28,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "release on GitHub. Download the"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    45,
+    33,
+    45
+   ],
+   [
+    "replace",
+    45,
+    46,
+    45,
+    46,
+    [
+     "play, install the full FFmpeg from RPM Fusion:"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    208,
+    46,
+    208
+   ],
+   [
+    "replace",
+    208,
+    215,
+    208,
+    209,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    221,
+    209,
+    215
+   ],
+   [
+    "replace",
+    221,
+    222,
+    215,
+    216,
+    [
+     "`examples/` wants `argon2-cffi`."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    282,
+    216,
+    276
+   ],
+   [
+    "replace",
+    282,
+    283,
+    276,
+    277,
+    [
+     " (`XDG_PICTURES_DIR`, usually `~/Pictures`)"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    304,
+    277,
+    298
+   ],
+   [
+    "replace",
+    304,
+    312,
+    298,
+    299,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    321,
+    299,
+    308
+   ],
+   [
+    "replace",
+    321,
+    325,
+    308,
+    309,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    325,
+    326,
+    309,
+    310
+   ],
+   [
+    "replace",
+    326,
+    343,
+    310,
+    311,
+    [
+     "Copyright (c) 2026 re-v0. Mozilla Public License 2.0 — see LICENSE,"
+    ]
+   ]
+  ],
+  "at": "2026-11-26"
  }
 }

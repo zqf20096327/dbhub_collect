@@ -3788,5 +3788,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c7ca96b00cd3": {
+  "identity": {
+   "one_liner": "面向电商售后的 Python 全栈 Agent 演示，用 LangGraph 编排订单、政策 RAG 与人工审批",
+   "review": "这是一个将 Dify 原型迁移为代码实现的电商售后客服 Agent 演示项目，面向需要学习 Agent 工程化的开发者。它以 FastAPI 接收请求，经身份与租户校验后由 LangGraph 路由到订单查询、Chroma 政策检索、模拟物流或退款审批流程；审批任务持久化在 SQLite checkpoint 中并仅分配给指定审批人。所有订单、身份与物流均为虚构数据，退款仅更新演示状态，不调用真实外部退款接口。",
+   "highlights": [
+    "实现租户与角色边界：Customer/Service/Approver/Admin 权限由 SQLite 记录与 API 共同校验，退款审批任务含 tenant/requester/actor/approver 字段且请求人自批被拒绝",
+    "支持 Chroma Top-K 政策检索并校验回答引用来自本次检索结果；Langfuse（默认关闭）可记录请求、Graph 节点与模型 Generation",
+    "提供 pytest、RAG 评估与安全边界评估脚本、Docker Compose 三容器部署（Agent、mock-logistics、mock-shop）及 Vue 3 工作台"
+   ],
+   "use_cases": [
+    "学习 LangGraph 多节点路由与人工审批（human-in-the-loop）工作流的工程实现",
+    "参考带租户权限隔离、Bearer 演示身份与 X-Trace-ID 日志的多租户 API 结构",
+    "搭建包含检索评估（evaluate_retrieval）与故障注入测试的本地可复现 Agent 演示环境"
+   ]
+  },
+  "sha": "c7ca96b00cd3",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f12f7eb334fb": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的开源额外上下文层，基于 SQLite 分层存档与检索历史证据",
+   "review": "Memex 为长时运行 AI Agent 提供额外上下文层：将早期信息归档到本地 L2 会话/L3 工作区存档，通过混合检索在可配置 token 预算内物化回上下文。起于 DeepSeek Harness 插件，现通过 MCP server 支持 Claude Code、OpenAI Codex、Gemini CLI 等，核心库可嵌入 HTTP Agent。数据本地存储、无遥测；捕获与检索不保证覆盖所有相关事实。",
+   "highlights": [
+    "SQLite 支撑的混合检索与词法排序，分层存储含会话私有 L2、共享 L3 及无损冷层压缩",
+    "通过 stdio MCP server（packages/memex-mcp）接入多种 MCP 兼容 Agent，DeepSeek Harness 走原生 Cordis 集成",
+    "支持可配置 token 预算下的查询排序分页物化，并包含 vLLM paged-KV 外部前缀缓存的 KV 连接器实验"
+   ],
+   "use_cases": [
+    "跨多次压缩边界的长时开发会话中恢复早期需求、决策与工具输出",
+    "需要引用原始证据而非仅依赖生成摘要的 Agent 工作流",
+    "多 Agent 共享工作区级 L3 存档的场景"
+   ]
+  },
+  "sha": "f12f7eb334fb",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3e771a3d9e27": {
+  "identity": {
+   "one_liner": "居家护理全栈案例作品集，含独立演示示例",
+   "review": "该仓库是 Wesley Fonseca 的居家护理平台全栈案例展示，自2026年2月起开发，涵盖门户、后端、仪表盘与移动端四项交付。仓库本身不包含客户系统代码，只提供使用虚构数据的独立演示，由 Node.js 生成页面，需 Node.js 22+，通过 npm ci、npm run verify、npm start 本地运行，演示不依赖 API。",
+   "highlights": [
+    "包含会话计算与规则纯函数、测试、四项演示界面及案例报告源码等独立示例，数据为虚构数据",
+    "使用 npm run verify 校验、npm run format:check 检查格式，测试覆盖日历、去重生成、响应独立性与模拟重连",
+    "技术栈包括 Node.js、AdonisJS、PostgreSQL、Redis、React、React Native、Expo 等"
+   ],
+   "use_cases": [
+    "了解该居家护理案例中后端、Web、移动端各模块的职责划分",
+    "在本地运行演示画廊（/demonstracoes.html）查看会话计算等规则示例",
+    "作为作品集页面的构建与持续集成维护参考"
+   ]
+  },
+  "sha": "3e771a3d9e27",
+  "source": "readme",
+  "generated_at": "2026-11-26",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
