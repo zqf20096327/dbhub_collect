@@ -415,13 +415,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T11:08:04Z",
+  "collected_at": "2026-11-27T05:38:37Z",
   "default_branch": "sensei",
-  "pushed_at": "2026-11-26",
+  "pushed_at": "2026-11-27",
   "stars": 0,
   "tree": {
-   "sha": "4d74d8934d7b38bed1af118556f682bb87bac235",
-   "etag": "W/\"617c018824d6945f90e4834e26190a7ddfed277d976b24e1db325b1acec79ee0\"",
+   "sha": "14bc3e1e90987463a7e5f88bda849a01ce25094b",
+   "etag": "W/\"c845bcf611418ec520d06ec9c3b30276a17b82903b7f4f7a93f06bc5d5a3436d\"",
    "truncated": false,
    "path_count": 58,
    "matched": []
@@ -1083,15 +1083,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:26:51Z",
+  "collected_at": "2026-11-27T04:48:57Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
-  "stars": 1264,
+  "pushed_at": "2026-11-27",
+  "stars": 1265,
   "tree": {
-   "sha": "7f094bf4c44e4818bb1df08da50a897857d1eff0",
-   "etag": "W/\"2fee789c2661591a21a2117cc9dd07e31f2261fcc504a9b2181ecf7b506e09bd\"",
+   "sha": "5e491f4249e5421b77a56e315cf7b0583e97db41",
+   "etag": "W/\"a97712e1238191a9ff02086a530c32252d9f08e29e283257fb2b89242383126f\"",
    "truncated": false,
-   "path_count": 8897,
+   "path_count": 9124,
    "matched": [
     "pom.xml",
     "bench/pom.xml",
@@ -1160,17 +1160,20 @@
     ".github/workflows/native-image.yml",
     ".github/workflows/perf-regression.yml",
     ".github/workflows/publish-contract.yml",
+    ".github/workflows/release-assets.yml",
     ".github/workflows/reuse-compliance.yml",
-    ".github/workflows/studio-security-audit.yml"
+    ".github/workflows/studio-security-audit.yml",
+    ".github/workflows/supply-chain-scan.yml",
+    ".github/workflows/vex-validate.yml"
    ]
   },
   "files": [
    {
     "path": "pom.xml",
     "kind": "dep",
-    "blob_sha": "37a76345d3774a6290d3c47f3d49c32847eabaef",
+    "blob_sha": "12b7b0a3926e6f6500eeb947f7822e1bf9696c7f",
     "ecosystem": "maven",
-    "bytes": 54428,
+    "bytes": 56315,
     "names": [
      "org.junit:junit-bom",
      "org.assertj:assertj-bom",
@@ -1193,9 +1196,9 @@
    {
     "path": "bench/pom.xml",
     "kind": "dep",
-    "blob_sha": "6a8d68ccccdb2a0c56369ebad78f3f9816b8f6c8",
+    "blob_sha": "69390c521917d61dd8f63f6b61088d1a97957c8a",
     "ecosystem": "maven",
-    "bytes": 5245,
+    "bytes": 5946,
     "names": [
      "org.hdrhistogram:HdrHistogram",
      "com.arcadedb:arcadedb-network",
@@ -1203,6 +1206,8 @@
      "com.arcadedb:arcadedb-grpc-client",
      "io.micrometer:micrometer-core",
      "org.testcontainers:testcontainers",
+     "org.neo4j.driver:neo4j-java-driver",
+     "org.postgresql:postgresql",
      "ch.qos.logback:logback-classic",
      "org.junit.jupiter:junit-jupiter",
      "org.assertj:assertj-core"
@@ -1223,9 +1228,9 @@
    {
     "path": "census/pom.xml",
     "kind": "dep",
-    "blob_sha": "6fd4b3d3b2d06816b0278dd74db59beded16f149",
+    "blob_sha": "3fa6fecdb113ffef07b1853acbd87bfaf601aa50",
     "ecosystem": "maven",
-    "bytes": 11467,
+    "bytes": 11602,
     "names": [
      "com.arcadedb:arcadedb-engine",
      "com.arcadedb:arcadedb-network",
@@ -1271,9 +1276,9 @@
    {
     "path": "coverage/pom.xml",
     "kind": "dep",
-    "blob_sha": "fcd1b885a50432b001d781e595a0c5efd81cf7a2",
+    "blob_sha": "83c739476edb742d590457de18f4c29a8b1c6c0a",
     "ecosystem": "maven",
-    "bytes": 6908,
+    "bytes": 7043,
     "names": [
      "${project.groupId}:arcadedb-console",
      "${project.groupId}:arcadedb-engine",
@@ -1296,10 +1301,11 @@
    {
     "path": "e2e-go/go.mod",
     "kind": "dep",
-    "blob_sha": "5b89c3a94f7afb948396ae6e70d2cfbc5da942de",
+    "blob_sha": "4e8a7ed1f27778985604bbc058b4efbffc928204",
     "ecosystem": "go",
-    "bytes": 2766,
+    "bytes": 2965,
     "names": [
+     "github.com/jackc/pgx/v5",
      "github.com/neo4j/neo4j-go-driver/v5",
      "github.com/stretchr/testify",
      "github.com/testcontainers/testcontainers-go"
@@ -1324,6 +1330,8 @@
      "github.com/go-logr/stdr",
      "github.com/go-ole/go-ole",
      "github.com/google/uuid",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgservicefile",
      "github.com/klauspost/compress",
      "github.com/lufia/plan9stats",
      "github.com/magiconair/properties",
@@ -1352,7 +1360,8 @@
      "go.opentelemetry.io/otel/trace",
      "go.yaml.in/yaml/v3",
      "golang.org/x/crypto",
-     "golang.org/x/sys"
+     "golang.org/x/sys",
+     "golang.org/x/text"
     ]
    },
    {
@@ -1426,9 +1435,9 @@
    {
     "path": "e2e/pom.xml",
     "kind": "dep",
-    "blob_sha": "59ec0b25115aa131692c2609e82245cedb914547",
+    "blob_sha": "6f7ea88f9f398608c51203034ba59d1acce40c0c",
     "ecosystem": "maven",
-    "bytes": 6116,
+    "bytes": 6251,
     "names": [
      "org.junit.jupiter:junit-jupiter",
      "org.assertj:assertj-db",
@@ -1490,9 +1499,9 @@
    {
     "path": "gremlin-consumer-it/pom.xml",
     "kind": "dep",
-    "blob_sha": "1d0d3e0f80b75d5867cc3c6cc5fd4e00289463c9",
+    "blob_sha": "65a96d92353e374b4c4064c96e0bdfebbe40f93c",
     "ecosystem": "maven",
-    "bytes": 6043,
+    "bytes": 6178,
     "names": [
      "com.arcadedb:arcadedb-engine",
      "com.arcadedb:arcadedb-gremlin",
@@ -1503,9 +1512,9 @@
    {
     "path": "gremlin-it/pom.xml",
     "kind": "dep",
-    "blob_sha": "a3b9cdd7d8fc7809c7abbf236e1bc31966a3d75a",
+    "blob_sha": "3b7aed37122a62707580601b4e3a0fa94e21e889",
     "ecosystem": "maven",
-    "bytes": 17769,
+    "bytes": 17904,
     "names": [
      "com.arcadedb:arcadedb-engine",
      "com.arcadedb:arcadedb-network",
@@ -1599,12 +1608,13 @@
    {
     "path": "grpcw/pom.xml",
     "kind": "dep",
-    "blob_sha": "3cddd45861975c59c196dd7819897734e4e1f4b3",
+    "blob_sha": "378aacdcb8d4c71437ce46b67f476fedc69e0087",
     "ecosystem": "maven",
-    "bytes": 4219,
+    "bytes": 4482,
     "names": [
      "com.arcadedb:arcadedb-server",
      "com.arcadedb:arcadedb-grpc",
+     "com.arcadedb:arcadedb-engine",
      "com.arcadedb:arcadedb-ha-raft",
      "com.arcadedb:arcadedb-integration",
      "io.grpc:grpc-testing",
@@ -1614,10 +1624,11 @@
    {
     "path": "ha-raft/pom.xml",
     "kind": "dep",
-    "blob_sha": "68bd79f0f36a7c6984c33042819f35a0151f27bf",
+    "blob_sha": "cdb3d0060be37ca163e3c56f86909186e02d794d",
     "ecosystem": "maven",
-    "bytes": 6394,
+    "bytes": 7126,
     "names": [
+     "org.apache.ratis:ratis-thirdparty-misc",
      "com.arcadedb:arcadedb-engine",
      "com.arcadedb:arcadedb-network",
      "com.arcadedb:arcadedb-server",
@@ -1644,9 +1655,9 @@
    {
     "path": "load-tests/pom.xml",
     "kind": "dep",
-    "blob_sha": "781fb8e369dffca1034a07a3b84d6040a2afff7f",
+    "blob_sha": "350eb7bc620806bd3765421465eee56566dd182e",
     "ecosystem": "maven",
-    "bytes": 4386,
+    "bytes": 4521,
     "names": [
      "ch.qos.logback:logback-classic",
      "com.arcadedb:arcadedb-network",
@@ -1701,9 +1712,9 @@
    {
     "path": "native/pom.xml",
     "kind": "dep",
-    "blob_sha": "7a37d19aa1dbf856f756b35140fd06e27f4d001b",
+    "blob_sha": "a77b831422d909e95621ef8d4ebae779d9423bcb",
     "ecosystem": "maven",
-    "bytes": 39342,
+    "bytes": 39477,
     "names": [
      "org.graalvm.sdk:graal-sdk",
      "org.graalvm.sdk:collections",
@@ -1748,9 +1759,9 @@
    {
     "path": "package/pom.xml",
     "kind": "dep",
-    "blob_sha": "6f4a5dcdcd5930fd25d24d5f2509e040f7efd734",
+    "blob_sha": "50940ea234fb68dc43169a87e4ae51c1cd5de068",
     "ecosystem": "maven",
-    "bytes": 21233,
+    "bytes": 32646,
     "names": [
      "com.arcadedb:arcadedb-engine",
      "com.arcadedb:arcadedb-console",
@@ -1861,9 +1872,9 @@
    {
     "path": "studio/pom.xml",
     "kind": "dep",
-    "blob_sha": "e5954bc4de2dec62521294b6a38e4aedb10da130",
+    "blob_sha": "047fae129ced5aeddde075a605d58a20c5a421ae",
     "ecosystem": "maven",
-    "bytes": 5413
+    "bytes": 7393
    },
    {
     "path": "tracing/pom.xml",
@@ -2081,20 +2092,26 @@
    {
     "path": ".github/workflows/mvn-release.yml",
     "kind": "ci",
-    "blob_sha": "235a81b9bfcd7ac4437fcb8daad0b720e3e91280",
-    "bytes": 6092
+    "blob_sha": "4e8a6a271c28934ebe564cffc49df86a0d236555",
+    "bytes": 29613,
+    "images": [
+     "${{"
+    ]
    },
    {
     "path": ".github/workflows/mvn-test.yml",
     "kind": "ci",
-    "blob_sha": "daf1401739da76fb5257301234cc41968cc3df5c",
-    "bytes": 73281
+    "blob_sha": "72a746363ed5531a2ea04a154dec3279de1e584d",
+    "bytes": 73668
    },
    {
     "path": ".github/workflows/native-image.yml",
     "kind": "ci",
-    "blob_sha": "238aad4c295428a35cebbf901df9a54fb6700233",
-    "bytes": 45332
+    "blob_sha": "f63e94b86e5120ed1186785174439e82355d0440",
+    "bytes": 63538,
+    "images": [
+     "${{"
+    ]
    },
    {
     "path": ".github/workflows/perf-regression.yml",
@@ -2105,8 +2122,14 @@
    {
     "path": ".github/workflows/publish-contract.yml",
     "kind": "ci",
-    "blob_sha": "6fcb2a65b9c20faf229607c61c96b1af5b098753",
-    "bytes": 2691
+    "blob_sha": "ee9f8b9599687a9e94ff6dccd495ba6bf9957f8e",
+    "bytes": 5884
+   },
+   {
+    "path": ".github/workflows/release-assets.yml",
+    "kind": "ci",
+    "blob_sha": "2065d78887893eda4cee2321d04268026773ae83",
+    "bytes": 8939
    },
    {
     "path": ".github/workflows/reuse-compliance.yml",
@@ -2119,6 +2142,18 @@
     "kind": "ci",
     "blob_sha": "e53fd37720eb7db2b20e71fa173dfc9168c8ab6f",
     "bytes": 8671
+   },
+   {
+    "path": ".github/workflows/supply-chain-scan.yml",
+    "kind": "ci",
+    "blob_sha": "04a25f70b824cb7a80055c20ef6f5571b9e47303",
+    "bytes": 4195
+   },
+   {
+    "path": ".github/workflows/vex-validate.yml",
+    "kind": "ci",
+    "blob_sha": "df4dd093c0d2aa515a1b51b46ee7f83a2cad8d2a",
+    "bytes": 2108
    }
   ],
   "clues": {
@@ -2181,7 +2216,9 @@
     "engine/src/main/java/com/arcadedb/function/cypher/CustomFunctionAdapter.java",
     "engine/src/main/java/com/arcadedb/schema/trigger/TriggerListenerAdapter.java",
     "engine/src/test/java/com/arcadedb/function/cypher/CustomFunctionAdapterTest.java",
+    "gremlin/src/main/java/com/arcadedb/server/gremlin/GremlinLangVariableResolverPlugin.java",
     "gremlin/src/main/java/com/arcadedb/server/gremlin/GremlinServerPlugin.java",
+    "gremlin/src/test/java/com/arcadedb/server/gremlin/GremlinLangVariableResolverPluginTest.java",
     "grpc-client/src/test/java/com/arcadedb/remote/grpc/GrpcServerPluginIT.java",
     "grpcw/src/main/java/com/arcadedb/server/grpc/GrpcServerPlugin.java",
     "grpcw/src/test/java/com/arcadedb/server/grpc/GrpcServerPluginTest.java",
@@ -4225,13 +4262,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:14:40Z",
+  "collected_at": "2026-11-27T04:44:10Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
-  "stars": 2882,
+  "pushed_at": "2026-11-26",
+  "stars": 2890,
   "tree": {
-   "sha": "7d42d0b506eac64801864923149f796f5c7c8d7e",
-   "etag": "W/\"9bf488ffeb05fe05636d88e43de3079f39af535a84c69fd7c2a3ce37eccfd61b\"",
+   "sha": "f1359d096f1086070ff58e5bd07239d790203a68",
+   "etag": "W/\"0622958b1f5720d591acb153548311a3777fbf09a2d772e935e21f62586ba8b0\"",
    "truncated": false,
    "path_count": 4719,
    "matched": [
@@ -12842,15 +12879,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-23T01:10:02Z",
+  "collected_at": "2026-11-27T05:27:21Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-22",
+  "pushed_at": "2026-11-26",
   "stars": 15,
   "tree": {
-   "sha": "d8f9f4e6a78b98f7ff7c6815a588158a41d6e6b5",
-   "etag": "W/\"48f87423b513af01c1d4b9f9cfdfe6432791837b736fa8f17064aa5e6c40a4e7\"",
+   "sha": "cd96a48dc57cef92e67fb92d2674cc67344a3007",
+   "etag": "W/\"26c92fc39bc1ff7971bca526561655740710eb1a1ecc57a91d6a60a060d98c2a\"",
    "truncated": false,
-   "path_count": 280,
+   "path_count": 286,
    "matched": [
     "pyproject.toml",
     "Dockerfile",
@@ -14900,13 +14937,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:24:51Z",
+  "collected_at": "2026-11-27T04:55:14Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 497,
   "tree": {
-   "sha": "74afbecbd7e4823fac9b61fabafc7aa5ebc493cd",
-   "etag": "W/\"4c3b8a67920726802158ee3f6432213b958923c1a97579ad19894aa028ecb8f8\"",
+   "sha": "14d9dac4c1fe78c8fae5b82a363e820d90481e19",
+   "etag": "W/\"9063c894f8dc8b7357abce09c2c97decb70616f8f40767f8b2b7ba8ca0a03d6c\"",
    "truncated": false,
    "path_count": 114,
    "matched": [

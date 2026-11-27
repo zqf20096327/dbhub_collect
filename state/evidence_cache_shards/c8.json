@@ -2530,15 +2530,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:13:40Z",
+  "collected_at": "2026-11-27T04:34:36Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
-  "stars": 25344,
+  "pushed_at": "2026-11-27",
+  "stars": 25378,
   "tree": {
-   "sha": "03dccb7c277ed2469faef40d5eebd92f472f78a8",
-   "etag": "W/\"89a3b8f9f1d8ffe80c350e924ee328605d29b80ea6b7f126f7a7e9b299110a92\"",
+   "sha": "ebc067582a0c63470512aa96251c98892ef57e99",
+   "etag": "W/\"afb88018790a6cea50d14164948db4108fea70b423cd0b6cbf1a84a54ffb050b\"",
    "truncated": false,
-   "path_count": 4719,
+   "path_count": 4772,
    "matched": [
     "Cargo.toml",
     "pyproject.toml",
@@ -2585,12 +2585,14 @@
     "perf/query-batch/Cargo.toml",
     "perf/tatp/Cargo.toml",
     "perf/throughput/Cargo.toml",
+    "postgres/catalog/Cargo.toml",
     "postgres/cli/Cargo.toml",
     "postgres/client/Cargo.toml",
     "postgres/dump-fuzzer/Cargo.toml",
     "postgres/frontend/Cargo.toml",
     "postgres/parser/Cargo.toml",
     "postgres/regress/Cargo.toml",
+    "postgres/scanner/Cargo.toml",
     "postgres/server/Cargo.toml",
     "postgres/tests/Cargo.toml",
     "serverless/go/go.mod",
@@ -2598,8 +2600,6 @@
     "serverless/python/pyproject.toml",
     "serverless/rust/Cargo.toml",
     "sqlite/frontend/Cargo.toml",
-    "sqlite/parser/Cargo.toml",
-    "sync/engine/Cargo.toml",
     "Dockerfile.antithesis",
     "Dockerfile.cli",
     ".devcontainer/Dockerfile",
@@ -2651,9 +2651,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "80f390a822d648197c7e67615f8e367feb2907a9",
+    "blob_sha": "a068d5d0384c6ac7d46da92eb8bc5b86348ab861",
     "ecosystem": "cargo",
-    "bytes": 8378
+    "bytes": 8608
    },
    {
     "path": "pyproject.toml",
@@ -2684,9 +2684,9 @@
    {
     "path": "benches/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9e10bf94ec54214a295a1d950b53faa87e913d43",
+    "blob_sha": "da48599f9a7f6dc791aaf1cefcdabe6a527a51a9",
     "ecosystem": "cargo",
-    "bytes": 3742,
+    "bytes": 3820,
     "names": [
      "turso_core",
      "turso_sqlite",
@@ -2977,9 +2977,9 @@
    {
     "path": "bindings/c/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "20e9e6eb8f73bee1b1b8a749686db03438c00138",
+    "blob_sha": "d6af28ea9196fcd913378498d0deeb6f59f34f74",
     "ecosystem": "cargo",
-    "bytes": 1108,
+    "bytes": 1191,
     "names": [
      "turso_sqlite",
      "env_logger",
@@ -3462,14 +3462,29 @@
     ]
    },
    {
+    "path": "postgres/catalog/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "44622df1d20c956c17bfc7e3c7f12c397d65d284",
+    "ecosystem": "cargo",
+    "bytes": 621,
+    "names": [
+     "turso_core"
+    ],
+    "dev": [
+     "turso_pg_catalog_gen"
+    ]
+   },
+   {
     "path": "postgres/cli/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "4a399f85f0cede9ab20638281b4df42b6075168d",
+    "blob_sha": "0c5ed3197e457d656cc9e2ee5e0f174efa0e6604",
     "ecosystem": "cargo",
-    "bytes": 2110,
+    "bytes": 2162,
     "names": [
      "turso_core",
      "turso_pg",
+     "turso_pg_parser",
+     "turso_pg_scanner",
      "turso_pg_server",
      "anyhow.workspace",
      "clap",
@@ -3492,7 +3507,6 @@
      "ctrlc",
      "libc",
      "clap_complete",
-     "itertools.workspace",
      "mimalloc"
     ],
     "dev": [
@@ -3580,14 +3594,22 @@
    {
     "path": "postgres/regress/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "5a26c08edaa47cd0d2b548823ed63d8e28e19d6a",
+    "blob_sha": "e85a168362a75a9c0fd15ac461e7428705bcc84d",
     "ecosystem": "cargo",
-    "bytes": 459,
+    "bytes": 493,
     "names": [
      "anyhow.workspace",
      "clap",
-     "similar.workspace"
+     "similar.workspace",
+     "turso_pg_scanner.workspace"
     ]
+   },
+   {
+    "path": "postgres/scanner/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "88f14b65a09281aa6f878079bd1f22bbdd763fa7",
+    "ecosystem": "cargo",
+    "bytes": 304
    },
    {
     "path": "postgres/server/Cargo.toml",
@@ -3709,60 +3731,6 @@
      "turso_core",
      "rusqlite",
      "tempfile"
-    ]
-   },
-   {
-    "path": "sqlite/parser/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "cb78a2e27ab3ef7706cf9175bca73a521ff7fe67",
-    "ecosystem": "cargo",
-    "bytes": 624,
-    "names": [
-     "turso_ast",
-     "turso_macros",
-     "memchr"
-    ],
-    "dev": [
-     "fallible-iterator",
-     "criterion",
-     "codspeed-criterion-compat"
-    ]
-   },
-   {
-    "path": "sync/engine/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "4b49b2bf717f7f5ed00b4d18f62d02809329cb0e",
-    "ecosystem": "cargo",
-    "bytes": 1566,
-    "names": [
-     "turso_sqlite",
-     "turso_core",
-     "turso_parser",
-     "aristo",
-     "thiserror",
-     "tracing",
-     "serde_json.workspace",
-     "serde",
-     "bytes",
-     "genawaiter",
-     "http",
-     "uuid",
-     "base64",
-     "prost",
-     "roaring",
-     "crc32c",
-     "getrandom.workspace"
-    ],
-    "dev": [
-     "turso_core",
-     "ctor",
-     "tempfile",
-     "tracing-subscriber",
-     "tokio",
-     "uuid",
-     "rand",
-     "rand_chacha",
-     "futures"
     ]
    },
    {
@@ -3990,8 +3958,8 @@
    {
     "path": ".github/workflows/perf_nightly.yml",
     "kind": "ci",
-    "blob_sha": "72f4fd2a4e2e9a991a6d381a3d36beb25c28a180",
-    "bytes": 12264
+    "blob_sha": "a96a28b28c55e7875826555b3018a1dc4ae56f6b",
+    "bytes": 12388
    },
    {
     "path": ".github/workflows/publish-cli-npm.yml",
@@ -4026,8 +3994,8 @@
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "6d9b0572a39edf5c9ed895035e11052aacf6df1f",
-    "bytes": 19416
+    "blob_sha": "b25514e576c07b5de338c38416afc17737a74075",
+    "bytes": 19561
    },
    {
     "path": ".github/workflows/rust.yml",
@@ -4271,13 +4239,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T02:57:03Z",
+  "collected_at": "2026-11-27T04:47:44Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-03",
-  "stars": 1523,
+  "pushed_at": "2026-11-26",
+  "stars": 1521,
   "tree": {
    "sha": "07a372a9cd7369e396cbf6454672b52d092850b1",
-   "etag": "W/\"6d524d329007c93e2c3329cf07b43b7f7cc7043d1e0138748738726e6f022143\"",
+   "etag": "W/\"2ab15a2e1f2d1ae7e0027a2d0a778f293f28c397caf58f561cd1bb0a1948cde0\"",
    "truncated": false,
    "path_count": 408,
    "matched": [
@@ -10657,13 +10625,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-22T00:03:54Z",
+  "collected_at": "2026-11-27T04:39:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-21",
-  "stars": 7562,
+  "pushed_at": "2026-11-26",
+  "stars": 7572,
   "tree": {
-   "sha": "744050a0e7b3c10f3831c3039e18a9c8d1a2c00d",
-   "etag": "W/\"03b81860f29a6436dceff2b845f3d488d11e1a358024472f7706c1e467c2aa0a\"",
+   "sha": "598907bcd4013a1be060ac38e9b26f36f8467d6b",
+   "etag": "W/\"b56d527e9771f3bbce8d9b1b0fa5545e2ae0c074289ac2f46218acf29342db63\"",
    "truncated": false,
    "path_count": 92,
    "matched": [
@@ -11090,13 +11058,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:15:03Z",
+  "collected_at": "2026-11-27T04:44:32Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
-  "stars": 2665,
+  "pushed_at": "2026-11-26",
+  "stars": 2664,
   "tree": {
-   "sha": "880a0421c2659ed472e9e8d3105c0999667979f3",
-   "etag": "W/\"63541230165dc9f11a1ebcb92e917e0acb134c46110d4478d4df3c1fa5f45e93\"",
+   "sha": "c5c3f409df8fdab496ffbedf77c47b6235d298ec",
+   "etag": "W/\"155b1c37c0c69b1cf0bea6e0a34df2e46a98578478c154fe90ae8b0ddcc0af87\"",
    "truncated": false,
    "path_count": 279,
    "matched": [
@@ -11301,8 +11269,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "764b3617ba58d1fe5b7eddd6fc2c1d2681c4f3a3",
-    "bytes": 13066
+    "blob_sha": "650f6bc5d38138ac5de1be5187ea21368589463c",
+    "bytes": 13132
    },
    {
     "path": ".github/workflows/docs.yml",
@@ -11712,13 +11680,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:20:18Z",
+  "collected_at": "2026-11-27T04:50:09Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-26",
-  "stars": 1119,
+  "pushed_at": "2026-11-27",
+  "stars": 1118,
   "tree": {
-   "sha": "15c79c0d321c093ab9e4db876816c520ab4d6f5e",
-   "etag": "W/\"41abf2529a6b71b455b2c056df6eea148bbafa3c4a5aad9b301e7c77b7ef320d\"",
+   "sha": "00d9f3ddfff65f651983f588be1c1640118394da",
+   "etag": "W/\"c7f8fd6274358ce12e61a8655ae06f66daeac50d540a56ab79f82059285896ea\"",
    "truncated": false,
    "path_count": 2476,
    "matched": [
@@ -12379,13 +12347,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-24T06:46:59Z",
+  "collected_at": "2026-11-27T04:54:36Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-23",
+  "pushed_at": "2026-11-26",
   "stars": 521,
   "tree": {
-   "sha": "17a5c2ac905c9a37c780887f30b9f351c9070e36",
-   "etag": "W/\"f77f40992977ecf667f1e8e7250bd6aa135d264a0db923a9ac477428ae5e9d00\"",
+   "sha": "eea1347d01c2ca53658259ed7cc2723f02de02bc",
+   "etag": "W/\"83f40bca3d124c6dcb756b80b41af5a6c49767ddef7f4ce5ca6fe7bf9518abf9\"",
    "truncated": false,
    "path_count": 45,
    "matched": [
@@ -13973,13 +13941,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:37:19Z",
+  "collected_at": "2026-11-27T05:00:23Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-24",
-  "stars": 213,
+  "pushed_at": "2026-11-26",
+  "stars": 214,
   "tree": {
    "sha": "08914de6f6addb174326804cc001bb961f71af1e",
-   "etag": "W/\"7f115cdafde78223b73dc6c405b7a804a167fdacd6740f544ec1d6a09e121d61\"",
+   "etag": "W/\"f5634f2ceb81a3bf3a6fa9985033b133e82f988617a22fd211c9f159d3bcac14\"",
    "truncated": false,
    "path_count": 617,
    "matched": [
@@ -14411,15 +14379,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:30:33Z",
+  "collected_at": "2026-11-27T05:00:26Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
-  "stars": 209,
+  "pushed_at": "2026-11-26",
+  "stars": 213,
   "tree": {
-   "sha": "3303cd621d11ed3e8bb6d56b80a5c86e466813d3",
-   "etag": "W/\"6a74529a7eeab6d6c5fc1996ec143d229575f298e40ecb9ff04e6998811eda5b\"",
+   "sha": "1274794ef87e33c278f48bd3ce78338fdf59823c",
+   "etag": "W/\"9b1334e6bf7c8910b0f179fb8614588ac357cef0717c21076a37af9bb654af2f\"",
    "truncated": false,
-   "path_count": 4318,
+   "path_count": 4325,
    "matched": [
     "package.json",
     "docs/requirements.txt",
@@ -14451,7 +14419,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "77e03071660f1d28df01f3c24dd127a77c3ea804",
+    "blob_sha": "1e3c31ffe0f71b41cd0635c125f8b1013ea18a54",
     "ecosystem": "npm",
     "bytes": 14986,
     "names": [
@@ -15060,15 +15028,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:40:21Z",
+  "collected_at": "2026-11-27T05:10:16Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 67,
   "tree": {
-   "sha": "728055faf6e3024c39780ca1827607c3ad9dfc54",
-   "etag": "W/\"b90831063907b40f21607f44b84e0b16069b20c64676add2ce2e508ade4fc963\"",
+   "sha": "9eccca6a995158f4e1e49053d45beec2d8f0cdfb",
+   "etag": "W/\"9a59be220bc6d0b1263e7dcd49256e6fccba9b7ee124300e2953c699d8835aaa\"",
    "truncated": false,
-   "path_count": 4657,
+   "path_count": 4771,
    "matched": [
     "go.mod",
     "package.json",
@@ -15085,13 +15053,14 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "cff5afe14bfa7dd4db30e229565dfd1db58969dc",
+    "blob_sha": "2a00aeb506b11749f173a0534529bd2a2c6a0f62",
     "ecosystem": "go",
-    "bytes": 5910,
+    "bytes": 6794,
     "names": [
      "github.com/Azure/go-ntlmssp",
      "github.com/Microsoft/go-winio",
      "github.com/UserExistsError/conpty",
+     "github.com/anthropics/anthropic-sdk-go/v2",
      "github.com/charmbracelet/x/ansi",
      "github.com/cloudwego/eino",
      "github.com/cloudwego/eino-ext/components/model/openai",
@@ -15117,7 +15086,12 @@
      "github.com/meguminnnnnnnnn/go-openai",
      "github.com/moby/moby/api",
      "github.com/moby/moby/client",
+     "github.com/pion/ice/v4",
+     "github.com/pion/logging",
+     "github.com/pion/stun/v4",
+     "github.com/pion/transport/v5",
      "github.com/pkg/sftp",
+     "github.com/quic-go/quic-go",
      "github.com/redis/go-redis/v9",
      "github.com/syndtr/goleveldb",
      "github.com/ulikunitz/xz",
@@ -15168,6 +15142,7 @@
      "github.com/google/uuid",
      "github.com/goph/emperror",
      "github.com/hashicorp/go-uuid",
+     "github.com/invopop/jsonschema",
      "github.com/jackc/pgpassfile",
      "github.com/jackc/pgservicefile",
      "github.com/jackc/puddle/v2",
@@ -15193,45 +15168,45 @@
      "github.com/nikolalohinski/gonja",
      "github.com/opencontainers/go-digest",
      "github.com/opencontainers/image-spec",
+     "github.com/pb33f/ordered-map/v2",
      "github.com/pelletier/go-toml/v2",
+     "github.com/pion/dtls/v3",
+     "github.com/pion/mdns/v2",
+     "github.com/pion/randutil",
+     "github.com/pion/turn/v5",
      "github.com/pkg/errors",
      "github.com/remyoudompheng/bigfft",
      "github.com/sirupsen/logrus",
      "github.com/slongfield/pyfmt",
+     "github.com/standard-webhooks/standard-webhooks/libraries",
+     "github.com/tidwall/gjson",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tidwall/sjson",
      "github.com/twitchyliquid64/golang-asm",
      "github.com/wk8/go-ordered-map/v2",
+     "github.com/wlynxg/anet",
      "github.com/yargevad/filepathx",
      "go.opentelemetry.io/auto/sdk",
      "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp",
      "go.opentelemetry.io/otel",
      "go.opentelemetry.io/otel/metric",
-     "go.opentelemetry.io/otel/trace",
-     "go.uber.org/atomic",
-     "golang.org/x/arch",
-     "golang.org/x/exp",
-     "golang.org/x/sync",
-     "google.golang.org/protobuf",
-     "gopkg.in/yaml.v3",
-     "gorm.io/datatypes",
-     "gorm.io/hints",
-     "k8s.io/klog/v2",
-     "modernc.org/libc",
-     "modernc.org/mathutil",
-     "modernc.org/memory"
+     "go.opentelemetry.io/otel/trace"
     ]
    },
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "32140df92822a0b84c22cbd4d04454fbf021c1a0",
+    "blob_sha": "66dc1e81a211b9ab964bd1a974514a7f358bd603",
     "ecosystem": "npm",
-    "bytes": 2297,
+    "bytes": 2332,
     "names": [
      "@codemirror/commands",
      "@codemirror/lang-markdown",
      "@codemirror/lang-sql",
      "@codemirror/language",
      "@codemirror/legacy-modes",
+     "@codemirror/merge",
      "@codemirror/search",
      "@codemirror/state",
      "@codemirror/view",
@@ -15296,14 +15271,14 @@
    {
     "path": ".github/workflows/cache-warm.yml",
     "kind": "ci",
-    "blob_sha": "2f95ed6fe70e56a30e30665e810e816fc781c463",
-    "bytes": 13617
+    "blob_sha": "c1a1b37f05bce0bdc03f3f7303ceadcda8658e7b",
+    "bytes": 13643
    },
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "7c6421a1d236076c3a91568527dbee157e074e0b",
-    "bytes": 39794,
+    "blob_sha": "afee3026ee0a7a70a7ccd9be2f7c0fbb8190f701",
+    "bytes": 39820,
     "images": [
      "postgres:16@sha256:ca0bd484cb98bf4b24eb1010e73fb3fcbd6714d240fbc1a10eea5b7dbecb641d",
      "mysql:8.4@sha256:24989179f58856db763f418010c1169fecc944e3ec1ea7e921572d83eb070f70",
@@ -16188,13 +16163,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:44:24Z",
+  "collected_at": "2026-11-27T05:14:38Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 43,
   "tree": {
    "sha": "bb139fe6f54d59e81dbd0a3a32d40eaadb3b8480",
-   "etag": "W/\"3194f88858de06f248c5633dbaba9984c94678b24dbf5382ec00a6814baeb836\"",
+   "etag": "W/\"b24f3233a53eadd080819a490b31ddbe626c5d82ceeacfe37e379ede1fef0e60\"",
    "truncated": false,
    "path_count": 451,
    "matched": [
@@ -17563,13 +17538,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:58:03Z",
+  "collected_at": "2026-11-27T05:27:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 15,
   "tree": {
-   "sha": "e1e185cbafa5b27070f4dac6660bc3be42d7f04c",
-   "etag": "W/\"7da21fb7415ff85bcef8dc9143a22b73cc6330bd2afed625c4b1bce55f347c5f\"",
+   "sha": "09dd67a90d5901743394df983b635d88b58ce42e",
+   "etag": "W/\"d1c5f4a38eaa748a3df0b9a3bcd834f0e41f265a63a1ec84963a4a5216ce2e10\"",
    "truncated": false,
    "path_count": 562,
    "matched": [
@@ -18837,13 +18812,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-24T07:33:47Z",
+  "collected_at": "2026-11-27T05:32:28Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-24",
+  "pushed_at": "2026-11-27",
   "stars": 10,
   "tree": {
    "sha": "d268fc20253621cbe2cac0efe27134b7ecb49758",
-   "etag": "W/\"9e950e26017445bea3e2be5185c28e71ef9974ec9f093e442884f5538cd2fb6b\"",
+   "etag": "W/\"86526847518711bd9672162ae3a0b65afff8fa7f419301e56a98fe8a05b41ed8\"",
    "truncated": false,
    "path_count": 28,
    "matched": [
@@ -20157,13 +20132,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:12:17Z",
+  "collected_at": "2026-11-27T04:41:36Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-25",
-  "stars": 4530,
+  "pushed_at": "2026-11-26",
+  "stars": 4531,
   "tree": {
    "sha": "5ec7db6d86194c9ea23e79165a3681a8749ee68c",
-   "etag": "W/\"cb71243bc0093aee35dd79f2f889c413b89aa3719915e22fde1241be40b9e328\"",
+   "etag": "W/\"b18d3d1f7dbb0fd5a18dbc523bcb1fc7acbb60825a77f996adcdc25a9da35054\"",
    "truncated": false,
    "path_count": 832,
    "matched": [
@@ -20830,13 +20805,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:17:46Z",
+  "collected_at": "2026-11-27T04:47:08Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-25",
-  "stars": 1645,
+  "pushed_at": "2026-11-26",
+  "stars": 1647,
   "tree": {
    "sha": "c9964ab1f84ff8d95625621a081e20cb24990965",
-   "etag": "W/\"ec1c121640e41a3a6c0ceb5a7794546de150833f32ca92cf8d528bbd39c2c58b\"",
+   "etag": "W/\"a98e60655b9e3d0be3c74258995daea57045aea022ceeaaddf9632db71fa07f1\"",
    "truncated": false,
    "path_count": 1062,
    "matched": [

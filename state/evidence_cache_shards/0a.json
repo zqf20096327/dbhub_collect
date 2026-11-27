@@ -1461,18 +1461,17 @@
   "epoch": "sweep-1",
   "status": "partial",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:38:39Z",
+  "collected_at": "2026-11-27T05:08:23Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-27",
   "stars": 80,
   "tree": {
-   "sha": "c93d8ea2385a507c2831456509240184852a4726",
-   "etag": "W/\"3df7d65afe77996edba5f4cb13c312e4beb02d89ec341bb57dc351c429feac06\"",
+   "sha": "bf2f6072be172c526786ea42838b557ad61a9f2d",
+   "etag": "W/\"fe3395424f4264fc37fa0794f4b1f5997650c47eec28706a5b97814cf6040298\"",
    "truncated": true,
-   "path_count": 38723,
+   "path_count": 38685,
    "matched": [
     "package.json",
-    "infra/package.json",
     "apps/architecture-lab-proof/package.json",
     "apps/beep-effect-web/package.json",
     "apps/docket-intake/package.json",
@@ -1495,7 +1494,6 @@
     "apps/labs/semantica/package.json",
     "apps/labs/trustgraph-workbench/package.json",
     "apps/professional-desktop/src-tauri/Cargo.toml",
-    "infra/lambda/turbo-cache/package.json",
     "packages/_internal/db-admin/package.json",
     "packages/agents/client/package.json",
     "packages/agents/domain/package.json",
@@ -1531,6 +1529,8 @@
     "packages/drivers/ffmpeg/package.json",
     "packages/drivers/firecrawl/package.json",
     "packages/drivers/freshbooks/package.json",
+    "packages/drivers/git/package.json",
+    "packages/drivers/github-actions/package.json",
     "docker-compose.yml",
     "packages/tooling/test-kit/test-utils/docker/pglite/Dockerfile",
     ".github/workflows/beep-ci-binary.yml",
@@ -1552,7 +1552,6 @@
     ".github/workflows/deploy-turbo-cache.yml",
     ".github/workflows/fleet-lane-probe.yml",
     ".github/workflows/fleet-missed-event-check.yml",
-    ".github/workflows/fleet-shadow-check.yml",
     ".github/workflows/heavy-admit.yml",
     ".github/workflows/heavy.yml",
     ".github/workflows/history-notes-publish.yml",
@@ -1573,9 +1572,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "c1a0bbec0820c0f2e72e680f34c117db8e0dbffe",
+    "blob_sha": "682a2bc45d64f009f0e37129511fbcbb40293e14",
     "ecosystem": "npm",
-    "bytes": 25828,
+    "bytes": 25572,
     "dev": [
      "@beep/fc-runs",
      "@beep/glob",
@@ -1611,37 +1610,6 @@
      "ts-morph",
      "tsrs",
      "turbo",
-     "typescript",
-     "vitest"
-    ]
-   },
-   {
-    "path": "infra/package.json",
-    "kind": "dep",
-    "blob_sha": "a6e13d441fd1e64e0b208d48cc266921328e2d41",
-    "ecosystem": "npm",
-    "bytes": 2556,
-    "names": [
-     "@beep/identity",
-     "@beep/infra-hosts",
-     "@beep/openclaw",
-     "@beep/repo-ai-metrics",
-     "@beep/schema",
-     "@beep/utils",
-     "@pulumi/aws",
-     "@pulumi/command",
-     "@pulumi/gharunners",
-     "@pulumi/pulumi"
-    ],
-    "dev": [
-     "@beep/test-runner",
-     "@beep/test-utils",
-     "@effect/platform-node",
-     "@effect/platform-node-shared",
-     "@effect/vitest",
-     "@types/bun",
-     "@types/node",
-     "effect",
      "typescript",
      "vitest"
     ]
@@ -2366,24 +2334,6 @@
      "cc",
      "pkg-config",
      "tauri-build"
-    ]
-   },
-   {
-    "path": "infra/lambda/turbo-cache/package.json",
-    "kind": "dep",
-    "blob_sha": "aec6d6aaef7dcf7a57c62d13e5a0fd9d7ffc68f0",
-    "ecosystem": "npm",
-    "bytes": 967,
-    "names": [
-     "@aws-sdk/client-ssm",
-     "punycode",
-     "turborepo-remote-cache"
-    ],
-    "dev": [
-     "@types/aws-lambda",
-     "@types/bun",
-     "esbuild",
-     "typescript"
     ]
    },
    {
@@ -3192,6 +3142,58 @@
     ]
    },
    {
+    "path": "packages/drivers/git/package.json",
+    "kind": "dep",
+    "blob_sha": "2b4c9aa769820eaa8bd383ab2d288769724442b5",
+    "ecosystem": "npm",
+    "bytes": 2591,
+    "names": [
+     "@beep/identity",
+     "@beep/schema",
+     "@beep/utils",
+     "effect"
+    ],
+    "dev": [
+     "@beep/fc-runs",
+     "@effect/platform-node",
+     "@effect/vitest",
+     "@types/node",
+     "bun-types"
+    ]
+   },
+   {
+    "path": "packages/drivers/github-actions/package.json",
+    "kind": "dep",
+    "blob_sha": "d1c07e40aa732444af0f1cd6b5a07944b01c0b73",
+    "ecosystem": "npm",
+    "bytes": 3070,
+    "names": [
+     "@azure/storage-blob",
+     "@beep/github",
+     "@beep/github-commands",
+     "@beep/glob",
+     "@beep/identity",
+     "@beep/npm-spec",
+     "@beep/sbom",
+     "@beep/schema",
+     "@beep/utils",
+     "@beep/walker",
+     "@effect/platform-node",
+     "effect"
+    ],
+    "dev": [
+     "@azure/core-http-compat",
+     "@azure/core-rest-pipeline",
+     "@beep/fc-runs",
+     "@beep/memfs",
+     "@beep/test-utils",
+     "@effect/vitest",
+     "@types/node",
+     "@typescript/native",
+     "bun-types"
+    ]
+   },
+   {
     "path": "docker-compose.yml",
     "kind": "image",
     "blob_sha": "fcc5d4a7189380a219daa7bf3e3a2d6bafe089e5",
@@ -3244,8 +3246,8 @@
    {
     "path": ".github/workflows/cache-warm.yml",
     "kind": "ci",
-    "blob_sha": "685b1ecd3f2cf6d1ecfa469e0a70ef3c6a0e4ba8",
-    "bytes": 4254
+    "blob_sha": "dba31d1c5ba869b5192ccb0ebf108d7239c131b3",
+    "bytes": 4312
    },
    {
     "path": ".github/workflows/catalog-regeneration.yml",
@@ -3262,14 +3264,14 @@
    {
     "path": ".github/workflows/check.yml",
     "kind": "ci",
-    "blob_sha": "8773166aab3bd92ec4f49118c7cd834176f76826",
-    "bytes": 135831
+    "blob_sha": "a3daf1ab4cb3ff0005560908b41827670d3043b0",
+    "bytes": 136282
    },
    {
     "path": ".github/workflows/data-sync.yml",
     "kind": "ci",
-    "blob_sha": "2ffa8f782a5635b6c417592229b8b1a2327fdea5",
-    "bytes": 3750
+    "blob_sha": "7f372be4b473ee10b6dd2646fe7db559b13c721b",
+    "bytes": 3808
    },
    {
     "path": ".github/workflows/deploy-beep-effect-web.yml",
@@ -3322,14 +3324,8 @@
    {
     "path": ".github/workflows/fleet-missed-event-check.yml",
     "kind": "ci",
-    "blob_sha": "2e6136969710c854f5b73f960cbf46692105a909",
-    "bytes": 1430
-   },
-   {
-    "path": ".github/workflows/fleet-shadow-check.yml",
-    "kind": "ci",
-    "blob_sha": "a59c7e7cce2844b11fdf50737b8eab1a37ec8ed0",
-    "bytes": 39402
+    "blob_sha": "30df7c85475bcef1c25749e1dc0a0309061cd8c3",
+    "bytes": 3798
    },
    {
     "path": ".github/workflows/heavy-admit.yml",
@@ -3340,8 +3336,8 @@
    {
     "path": ".github/workflows/heavy.yml",
     "kind": "ci",
-    "blob_sha": "e6421f8d21c91b75fc6e95eb59533f5cb13558ca",
-    "bytes": 50126
+    "blob_sha": "ff73830d350461d94a90e50e1ccc0f9602abb842",
+    "bytes": 50561
    },
    {
     "path": ".github/workflows/history-notes-publish.yml",
@@ -3376,14 +3372,14 @@
    {
     "path": ".github/workflows/property-laws-nightly.yml",
     "kind": "ci",
-    "blob_sha": "5bfb6240b5c259c245032fabbd894348d4131f19",
-    "bytes": 5217
+    "blob_sha": "47ab3fc10ee0b962c6a88160e8f7cc9faf80c253",
+    "bytes": 5275
    },
    {
     "path": ".github/workflows/release-desktop.yml",
     "kind": "ci",
-    "blob_sha": "123fae776130d7764a2f84d0e2a54b6bcfd140d3",
-    "bytes": 25729
+    "blob_sha": "63f7a49217da2866b435a4675f0f09ff444b984e",
+    "bytes": 25757
    },
    {
     "path": ".github/workflows/rerun-runner-loss.yml",
@@ -3394,8 +3390,8 @@
    {
     "path": ".github/workflows/shard-overflow.yml",
     "kind": "ci",
-    "blob_sha": "15caa959ca722c8ee54b1235d0ddb7b00bccb392",
-    "bytes": 10286
+    "blob_sha": "9e9a5a248990ccc776ba49a19ef1ae88c39c89bc",
+    "bytes": 10344
    },
    {
     "path": ".github/workflows/skills-update-train.yml",
@@ -3406,8 +3402,8 @@
    {
     "path": ".github/workflows/storybook.yml",
     "kind": "ci",
-    "blob_sha": "baf8d430f9bc05ac3fc6c7ebe735ba27fe015d6f",
-    "bytes": 9799
+    "blob_sha": "6c69d63fee73c8f64c4b664de754b34537cd525b",
+    "bytes": 9857
    },
    {
     "path": ".github/workflows/vercel-deploy.yml",
@@ -3496,7 +3492,6 @@
     "goals/mcp-stateless-kit-and-drivers/README.md",
     "goals/openai-driver/README.md",
     "goals/pretext-driver/README.md",
-    "infra/r2-cache/adapter.sh",
     "apps/practice-claude-mod/plugin-test/oip-practice.test.ts",
     "apps/practice-claude-mod/plugin-test/tsconfig.json",
     "apps/practice-claude-mod/src/build-plugin.ts",
@@ -3628,7 +3623,8 @@
     "packages/drivers/alchemy-postgres/package.json",
     "packages/drivers/alchemy-postgres/tsconfig.check.json",
     "packages/drivers/alchemy-postgres/tsconfig.json",
-    "packages/drivers/alchemy-postgres/tsconfig.test.json"
+    "packages/drivers/alchemy-postgres/tsconfig.test.json",
+    "packages/drivers/alchemy-postgres/vitest.config.ts"
    ]
   },
   "fail_count": 0
@@ -9141,15 +9137,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:31:27Z",
+  "collected_at": "2026-11-27T05:01:41Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 187,
   "tree": {
-   "sha": "23aa12647137e25e52842eedf5ce2c503186bd49",
-   "etag": "W/\"7f554c0eb667f99944fd7505d14ae4b5b153549ff7d3d08de728b39758975338\"",
+   "sha": "a00eeb8e7e0fba2cef964a77cff8e224b0cbd9d2",
+   "etag": "W/\"ec8a8cb3eec5ad278d6e7512c50aa3cfe3ec608b3a9231693c5bea9715c1d199\"",
    "truncated": false,
-   "path_count": 2473,
+   "path_count": 2466,
    "matched": [
     "package.json",
     "api/package.json",
@@ -9215,7 +9211,7 @@
    {
     "path": "api/package.json",
     "kind": "dep",
-    "blob_sha": "1603fe0e3a1c60b5762bbdb03a8ea1dcb9c1eb7a",
+    "blob_sha": "7e9ba91001414f975d902fb8598ed43ddce213a8",
     "ecosystem": "npm",
     "bytes": 5999,
     "names": [
@@ -9350,7 +9346,7 @@
    {
     "path": "app/package.json",
     "kind": "dep",
-    "blob_sha": "d0ecc18c05ff8275d21552f81edcca0f9237f749",
+    "blob_sha": "d24a5398e0c80bcbd92f8a5106dbba5fec4efed2",
     "ecosystem": "npm",
     "bytes": 4001,
     "names": [
@@ -9442,7 +9438,7 @@
    {
     "path": "directus/package.json",
     "kind": "dep",
-    "blob_sha": "228c6468bd39f6798798e5f7c14b392f3e55d3db",
+    "blob_sha": "2e102da0242aae725f8046a91ddeac4204ecf3cb",
     "ecosystem": "npm",
     "bytes": 1239,
     "names": [
@@ -9468,7 +9464,7 @@
    {
     "path": "packages/composables/package.json",
     "kind": "dep",
-    "blob_sha": "19e56dc30752abd0ebcb4900a5880c5fa9e6f64f",
+    "blob_sha": "1e69502f293375cf7a4dfca4960851e8da1f25c0",
     "ecosystem": "npm",
     "bytes": 1145,
     "names": [
@@ -9506,7 +9502,7 @@
    {
     "path": "packages/create-directus-extension/package.json",
     "kind": "dep",
-    "blob_sha": "e3f5d3fd54caf4acc96bd74ca730988ca14b8b24",
+    "blob_sha": "6e1a4ed50db61730e696f1bccc65314098b3991a",
     "ecosystem": "npm",
     "bytes": 981,
     "names": [
@@ -9534,7 +9530,7 @@
    {
     "path": "packages/extensions-sdk/package.json",
     "kind": "dep",
-    "blob_sha": "5ab35e01dca3b05c2831286a318bbe47156c53bf",
+    "blob_sha": "530991519229661e92e0f849294249bd1868513e",
     "ecosystem": "npm",
     "bytes": 1889,
     "names": [
@@ -9574,7 +9570,7 @@
    {
     "path": "packages/schema/package.json",
     "kind": "dep",
-    "blob_sha": "61a56ee47099e96301a9963c84d1ec50099ef783",
+    "blob_sha": "264c9a350ee69a3bbb611d94988dc81d7b8fc40f",
     "ecosystem": "npm",
     "bytes": 1244,
     "names": [
@@ -9606,7 +9602,7 @@
    {
     "path": "packages/storage-driver-azure/package.json",
     "kind": "dep",
-    "blob_sha": "df0dcbbdc5f8f612a1a071636a29d3fe423368d5",
+    "blob_sha": "5f310d8d539bad340f2155f4e13126a47583c66d",
     "ecosystem": "npm",
     "bytes": 1071,
     "names": [
@@ -9626,7 +9622,7 @@
    {
     "path": "packages/storage-driver-cloudinary/package.json",
     "kind": "dep",
-    "blob_sha": "031896a1d14e0c26db48c4c941e41225de98e189",
+    "blob_sha": "6b2cb72cea3869cf2e6546fb26ff84c2ca21a056",
     "ecosystem": "npm",
     "bytes": 1102,
     "names": [
@@ -9647,7 +9643,7 @@
    {
     "path": "packages/storage-driver-gcs/package.json",
     "kind": "dep",
-    "blob_sha": "4eb46ffd761a8c8556c5599c6e4315db7aff1769",
+    "blob_sha": "1b486add1b89abcc2b1464f6f37e164c4f3511dc",
     "ecosystem": "npm",
     "bytes": 1065,
     "names": [
@@ -9667,7 +9663,7 @@
    {
     "path": "packages/storage-driver-local/package.json",
     "kind": "dep",
-    "blob_sha": "a2c1d66a62e9f9c20e1c88678585dc7c2c03c762",
+    "blob_sha": "5b8ca7b196768f6bacf5044e1115b5373601a0d9",
     "ecosystem": "npm",
     "bytes": 1035,
     "names": [
@@ -9686,7 +9682,7 @@
    {
     "path": "packages/storage-driver-s3/package.json",
     "kind": "dep",
-    "blob_sha": "3cc0c7f63b7700b1ab89c60eaa56bf71a474a1bf",
+    "blob_sha": "113cddbe580c994d587cb1170abceb0aeeea86e3",
     "ecosystem": "npm",
     "bytes": 1142,
     "names": [
@@ -9729,7 +9725,7 @@
    {
     "path": "packages/types/package.json",
     "kind": "dep",
-    "blob_sha": "d941ee6f35b1299aa6d2e3fff3028c48e33ffcf2",
+    "blob_sha": "4bfef76ca955282b84b899b8b988892d7cc4d46c",
     "ecosystem": "npm",
     "bytes": 1007,
     "dev": [
@@ -9771,7 +9767,7 @@
    {
     "path": "packages/utils/package.json",
     "kind": "dep",
-    "blob_sha": "06a7c200cb1766b7b23a2cda1337b90537915bd9",
+    "blob_sha": "8b5b024036ea07748d46d815c10894875ed85082",
     "ecosystem": "npm",
     "bytes": 1836,
     "names": [
@@ -10746,13 +10742,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:36:31Z",
+  "collected_at": "2026-11-27T05:06:30Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 104,
   "tree": {
-   "sha": "b598efd8980f291a3eaad7024e54a34b980b9465",
-   "etag": "W/\"c7e139585ba82b294e5daa2622f9afd1263cdd4bcdcac912a864f43c515d9fbc\"",
+   "sha": "ff9ee5642cbb8dcfcb746c3e3db8893aacf703af",
+   "etag": "W/\"06b39b5432436f11fd6e15a964ff63853795d43eea768e818270bd16ff34cfaf\"",
    "truncated": false,
    "path_count": 1485,
    "matched": [
@@ -13541,13 +13537,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-20T19:53:52Z",
+  "collected_at": "2026-11-27T05:20:30Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-20",
+  "pushed_at": "2026-11-26",
   "stars": 27,
   "tree": {
    "sha": "dc5faa0226b7935816427780fa2f5584a9986d2e",
-   "etag": "W/\"ba0eec5eae805fb35ca9dba0cf89becbf11c8062551188ac602aa20463b9b83e\"",
+   "etag": "W/\"3b67241ccfef624c538ce7da4423cbc962f653acf4c58f324701bdee989e0907\"",
    "truncated": false,
    "path_count": 3989,
    "matched": [
@@ -14832,13 +14828,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:56:58Z",
+  "collected_at": "2026-11-27T05:26:27Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 16,
   "tree": {
    "sha": "8b906821824c47d7cef8ae05b36768f7142e23f0",
-   "etag": "W/\"55d7fff60fed1575872a061377e8e2f8ed9fb88c91dce56e8838025bbd5fa17a\"",
+   "etag": "W/\"53485ebbda8f501acd6b33a62ba78fc2dcc079e799ac2c04d4ab2e93e2e999e8\"",
    "truncated": false,
    "path_count": 105,
    "matched": [
@@ -20344,6 +20340,1112 @@
     "cafe_spot_bangkok/windows/flutter/generated_plugin_registrant.cc",
     "cafe_spot_bangkok/windows/flutter/generated_plugin_registrant.h",
     "cafe_spot_bangkok/windows/flutter/generated_plugins.cmake"
+   ]
+  },
+  "fail_count": 0
+ },
+ "liaison-sh/liaison": {
+  "fn": "liaison-sh/liaison",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-27T04:31:08Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-27",
+  "stars": 4,
+  "tree": {
+   "sha": "a7a93efaed214a6280846b17124f27c85d5e9831",
+   "etag": "W/\"df2db1387b9a61306ba28bea1c0ba0ae39d72116ce382e1fa240bc04f477fd0b\"",
+   "truncated": false,
+   "path_count": 12732,
+   "matched": [
+    "package.json",
+    "apps/api/package.json",
+    "apps/db-gate/package.json",
+    "apps/desktop/package.json",
+    "apps/mobile/package.json",
+    "apps/web/package.json",
+    "bundled-apps/ads/package.json",
+    "bundled-apps/agreements/package.json",
+    "bundled-apps/api-connector/package.json",
+    "bundled-apps/boxtal/package.json",
+    "bundled-apps/calls/package.json",
+    "bundled-apps/database/package.json",
+    "bundled-apps/github/package.json",
+    "bundled-apps/gitlab/package.json",
+    "bundled-apps/google-drive/package.json",
+    "bundled-apps/invoicing/package.json",
+    "bundled-apps/monitoring/package.json",
+    "bundled-apps/pennylane/package.json",
+    "bundled-apps/shopify/package.json",
+    "bundled-apps/social/package.json",
+    "bundled-apps/stripe/package.json",
+    "packages/api-connector-core/package.json",
+    "packages/app-loader/package.json",
+    "packages/app-sdk/package.json",
+    "packages/app-ui/package.json",
+    "packages/cli/package.json",
+    "packages/control-plane-contract/package.json",
+    "packages/db-core/package.json",
+    "packages/evidence-check/package.json",
+    "packages/host-sdk/package.json",
+    "packages/mailbox-crypto/package.json",
+    "packages/sandbox-supervisor/package.json",
+    "packages/shared/package.json",
+    "packages/test-helpers/package.json",
+    "tools/pdfa-check/Cargo.toml",
+    "apps/desktop/sidecar/package.json",
+    "apps/desktop/src-tauri/Cargo.toml",
+    "apps/mobile/android/build.gradle",
+    "apps/mobile/android/app/build.gradle",
+    "docker-compose.yml",
+    "apps/api/Dockerfile",
+    "apps/db-gate/Dockerfile",
+    ".github/workflows/ci.yml",
+    ".github/workflows/cla.yml",
+    ".github/workflows/codeql.yml",
+    ".github/workflows/gate.yml",
+    ".github/workflows/nightly-integration.yml",
+    ".github/workflows/nightly.yml",
+    ".github/workflows/operator-drills.yml",
+    ".github/workflows/release.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "1b74f3e0e6b37bbf8537db8afe334563e3e3b6e9",
+    "ecosystem": "npm",
+    "bytes": 6566,
+    "dev": [
+     "@biomejs/biome",
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/db-core",
+     "@liaison/host",
+     "@liaison/shared",
+     "@liaison/test-helpers",
+     "@types/bun",
+     "@types/k6",
+     "@typescript/native-preview",
+     "esbuild",
+     "esbuild-plugin-solid",
+     "marked",
+     "pdf-parse",
+     "playwright",
+     "postgres",
+     "solid-js",
+     "typescript",
+     "xslt3",
+     "zod"
+    ]
+   },
+   {
+    "path": "apps/api/package.json",
+    "kind": "dep",
+    "blob_sha": "ddda6fefafd56b6234e64aadfbbbaabb1088d15a",
+    "ecosystem": "npm",
+    "bytes": 3592,
+    "names": [
+     "@ai-sdk/anthropic",
+     "@ai-sdk/google",
+     "@ai-sdk/mistral",
+     "@ai-sdk/openai",
+     "@ai-sdk/openai-compatible",
+     "@aws-sdk/client-s3",
+     "@aws-sdk/s3-request-presigner",
+     "@google/genai",
+     "@hono/zod-validator",
+     "@huggingface/transformers",
+     "@liaison/api-connector-core",
+     "@liaison/app-loader",
+     "@liaison/control-plane-contract",
+     "@liaison/db-core",
+     "@liaison/evidence-check",
+     "@liaison/host",
+     "@liaison/mailbox-crypto",
+     "@liaison/shared",
+     "@modelcontextprotocol/sdk",
+     "@napi-rs/canvas",
+     "@openrouter/ai-sdk-provider",
+     "@oslojs/otp",
+     "@pdf-lib/fontkit",
+     "age-encryption",
+     "ai",
+     "ajv",
+     "argon2",
+     "asn1js",
+     "bullmq",
+     "cron-parser",
+     "csv-parse",
+     "drizzle-orm",
+     "exa-js",
+     "fflate",
+     "ffmpeg-static",
+     "ffprobe-static",
+     "file-type",
+     "heic-convert",
+     "hono",
+     "hono-pino",
+     "imapflow",
+     "ioredis",
+     "jose",
+     "luxon",
+     "mailparser",
+     "meilisearch",
+     "nodemailer",
+     "pdf-lib",
+     "pdfjs-dist",
+     "pino",
+     "pkijs",
+     "postgres",
+     "quickjs-emscripten",
+     "recheck",
+     "sanitize-html",
+     "saxes",
+     "sharp",
+     "turndown",
+     "typescript",
+     "undici",
+     "web-push",
+     "yaml",
+     "zod"
+    ],
+    "dev": [
+     "@anthropic-ai/claude-agent-sdk",
+     "@liaison/sandbox-supervisor",
+     "@liaison/test-helpers",
+     "@types/bun",
+     "@types/ffprobe-static",
+     "@types/heic-convert",
+     "@types/luxon",
+     "@types/mailparser",
+     "@types/sanitize-html",
+     "@types/smtp-server",
+     "@types/turndown",
+     "@types/web-push",
+     "drizzle-kit",
+     "msw",
+     "pino-pretty",
+     "smtp-server"
+    ]
+   },
+   {
+    "path": "apps/db-gate/package.json",
+    "kind": "dep",
+    "blob_sha": "dcc4541e9647b55771e957859ecef878c460c723",
+    "ecosystem": "npm",
+    "bytes": 441,
+    "names": [
+     "@liaison/db-core",
+     "postgres",
+     "yaml"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "apps/desktop/package.json",
+    "kind": "dep",
+    "blob_sha": "95a224952808df2294d5c11f39a72c182ef884a1",
+    "ecosystem": "npm",
+    "bytes": 646,
+    "names": [
+     "@tauri-apps/api",
+     "solid-js"
+    ],
+    "dev": [
+     "@solidjs/testing-library",
+     "@tauri-apps/cli",
+     "@testing-library/jest-dom",
+     "@types/bun",
+     "jsdom",
+     "typescript",
+     "vite",
+     "vite-plugin-solid",
+     "vitest"
+    ]
+   },
+   {
+    "path": "apps/mobile/package.json",
+    "kind": "dep",
+    "blob_sha": "ce30099d3583796a7b76fa1d85cd58ddc92956b9",
+    "ecosystem": "npm",
+    "bytes": 1123,
+    "names": [
+     "@aparajita/capacitor-biometric-auth",
+     "@aparajita/capacitor-secure-storage",
+     "@capacitor/android",
+     "@capacitor/app",
+     "@capacitor/core",
+     "@capacitor/haptics",
+     "@capacitor/ios",
+     "@capacitor/keyboard",
+     "@capacitor/network",
+     "@capacitor/preferences",
+     "@capacitor/push-notifications",
+     "@capacitor/share",
+     "@capacitor/splash-screen",
+     "@capacitor/status-bar",
+     "@liaison/shared"
+    ],
+    "dev": [
+     "@capacitor/cli",
+     "@happy-dom/global-registrator",
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "apps/web/package.json",
+    "kind": "dep",
+    "blob_sha": "06e2df6de028d6831be6af93eaaa41ab32c6ced1",
+    "ecosystem": "npm",
+    "bytes": 2363,
+    "names": [
+     "@kobalte/core",
+     "@liaison/api-connector-core",
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "@liaison/mailbox-crypto",
+     "@liaison/shared",
+     "@solid-primitives/i18n",
+     "@solidjs/router",
+     "@tiptap/core",
+     "@tiptap/extension-link",
+     "@tiptap/extension-list",
+     "@tiptap/extension-table",
+     "@tiptap/extension-underline",
+     "@tiptap/extensions",
+     "@tiptap/markdown",
+     "@tiptap/pm",
+     "@tiptap/starter-kit",
+     "chart.js",
+     "class-variance-authority",
+     "clsx",
+     "cron-parser",
+     "dompurify",
+     "flexsearch",
+     "lucide-solid",
+     "marked",
+     "pino",
+     "qrcode",
+     "solid-js",
+     "streaming-markdown",
+     "tailwind-merge",
+     "unicode-emoji-json",
+     "zod"
+    ],
+    "dev": [
+     "@liaison/test-helpers",
+     "@playwright/test",
+     "@solidjs/testing-library",
+     "@tailwindcss/vite",
+     "@testing-library/jest-dom",
+     "@types/bun",
+     "@types/qrcode",
+     "bullmq",
+     "fake-indexeddb",
+     "fflate",
+     "ioredis",
+     "jsdom",
+     "pdf-parse",
+     "pdf-to-png-converter",
+     "tailwindcss",
+     "typescript",
+     "vite",
+     "vite-plugin-solid",
+     "vitest"
+    ]
+   },
+   {
+    "path": "bundled-apps/ads/package.json",
+    "kind": "dep",
+    "blob_sha": "11526307afc11e456141be21049d807ad0a9e01e",
+    "ecosystem": "npm",
+    "bytes": 823,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "chart.js",
+     "solid-js"
+    ],
+    "dev": [
+     "@solidjs/testing-library",
+     "@types/bun",
+     "jsdom",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "bundled-apps/agreements/package.json",
+    "kind": "dep",
+    "blob_sha": "8b506b5b1856257dd993b6de60df2def59a499da",
+    "ecosystem": "npm",
+    "bytes": 722,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/api-connector/package.json",
+    "kind": "dep",
+    "blob_sha": "18502fc1d541fc845bf69a209a274c55e0144d77",
+    "ecosystem": "npm",
+    "bytes": 834,
+    "names": [
+     "@liaison/api-connector-core",
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js",
+     "zod"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/boxtal/package.json",
+    "kind": "dep",
+    "blob_sha": "566de7c291becd4394050dfe3827c40f24818851",
+    "ecosystem": "npm",
+    "bytes": 686,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/calls/package.json",
+    "kind": "dep",
+    "blob_sha": "73484148adfb789387abfd3a2a790e9b8bdf5e8d",
+    "ecosystem": "npm",
+    "bytes": 644,
+    "names": [
+     "@liaison/app-sdk",
+     "zod"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/database/package.json",
+    "kind": "dep",
+    "blob_sha": "0175d540be4cbfef666cec2d3b85c30932d46f4d",
+    "ecosystem": "npm",
+    "bytes": 750,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js",
+     "zod"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/github/package.json",
+    "kind": "dep",
+    "blob_sha": "bf4cf959c8251971269f314ce4a285d736ed1f74",
+    "ecosystem": "npm",
+    "bytes": 614,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/host"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/gitlab/package.json",
+    "kind": "dep",
+    "blob_sha": "483dc86741e9d8d79aad3fd23e2b9380701b7e63",
+    "ecosystem": "npm",
+    "bytes": 633,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/host"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/google-drive/package.json",
+    "kind": "dep",
+    "blob_sha": "299fddfc3075697c79e7615dc7a340778502a682",
+    "ecosystem": "npm",
+    "bytes": 782,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js",
+     "zod"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/invoicing/package.json",
+    "kind": "dep",
+    "blob_sha": "c3f7b33bf03ead2ade162b04a52af2d6a9665fbc",
+    "ecosystem": "npm",
+    "bytes": 801,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js"
+    ],
+    "dev": [
+     "@solidjs/testing-library",
+     "@types/bun",
+     "jsdom",
+     "pdf-parse",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "bundled-apps/monitoring/package.json",
+    "kind": "dep",
+    "blob_sha": "2ee97e19765d9229ffdb74a8f8cbefb5aee5abb0",
+    "ecosystem": "npm",
+    "bytes": 757,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js",
+     "zod"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/pennylane/package.json",
+    "kind": "dep",
+    "blob_sha": "d788fe4fcd9350c6b19aa456012eabb24b8e2d31",
+    "ecosystem": "npm",
+    "bytes": 704,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/shopify/package.json",
+    "kind": "dep",
+    "blob_sha": "ebe732228f576bc849d65e046c6e7f9b3a548e8d",
+    "ecosystem": "npm",
+    "bytes": 679,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/social/package.json",
+    "kind": "dep",
+    "blob_sha": "b8a300a935f29852bcb8ed670f4173a767d530d5",
+    "ecosystem": "npm",
+    "bytes": 712,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "bundled-apps/stripe/package.json",
+    "kind": "dep",
+    "blob_sha": "5a8388241040b71c5045830cca87f173e300b3d6",
+    "ecosystem": "npm",
+    "bytes": 687,
+    "names": [
+     "@liaison/app-sdk",
+     "@liaison/app-ui",
+     "@liaison/host",
+     "solid-js"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/api-connector-core/package.json",
+    "kind": "dep",
+    "blob_sha": "e029932c55dd9f326fe05b32b944e46f6645a3a2",
+    "ecosystem": "npm",
+    "bytes": 569,
+    "names": [
+     "tldts",
+     "yaml",
+     "zod"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/app-loader/package.json",
+    "kind": "dep",
+    "blob_sha": "baae52fafafdc448c68e1c53d839218839b85a6f",
+    "ecosystem": "npm",
+    "bytes": 564,
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/app-sdk/package.json",
+    "kind": "dep",
+    "blob_sha": "bbbdb2ffb34dc64e46ff03562a1e0adecff23de3",
+    "ecosystem": "npm",
+    "bytes": 700,
+    "names": [
+     "zod"
+    ],
+    "dev": [
+     "@liaison/shared",
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/app-ui/package.json",
+    "kind": "dep",
+    "blob_sha": "17babd6d88fb312102c9153a6b1e278941263648",
+    "ecosystem": "npm",
+    "bytes": 806,
+    "names": [
+     "@liaison/host",
+     "solid-js"
+    ],
+    "dev": [
+     "@solidjs/testing-library",
+     "@testing-library/jest-dom",
+     "jsdom",
+     "typescript",
+     "vite-plugin-solid",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/cli/package.json",
+    "kind": "dep",
+    "blob_sha": "ebbc614dad6ef3c84f7143b1b3bb47bf8295ad88",
+    "ecosystem": "npm",
+    "bytes": 676,
+    "dev": [
+     "@types/bun",
+     "typescript",
+     "yaml"
+    ]
+   },
+   {
+    "path": "packages/control-plane-contract/package.json",
+    "kind": "dep",
+    "blob_sha": "19e36d7fc0c5fd0f38a6acb41d878a8a3abcefa7",
+    "ecosystem": "npm",
+    "bytes": 567,
+    "names": [
+     "zod"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/db-core/package.json",
+    "kind": "dep",
+    "blob_sha": "857c463545800970b6bfcd1c418f811e954ea49d",
+    "ecosystem": "npm",
+    "bytes": 330,
+    "names": [
+     "zod"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/evidence-check/package.json",
+    "kind": "dep",
+    "blob_sha": "92548f2c6d5ef9dbf23d303ec5c44a48407ac834",
+    "ecosystem": "npm",
+    "bytes": 452,
+    "names": [
+     "asn1js"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/host-sdk/package.json",
+    "kind": "dep",
+    "blob_sha": "73342ed307ad65d5cd37d2f6d5e57df34541fa4a",
+    "ecosystem": "npm",
+    "bytes": 256,
+    "dev": [
+     "typescript",
+     "@types/bun"
+    ]
+   },
+   {
+    "path": "packages/mailbox-crypto/package.json",
+    "kind": "dep",
+    "blob_sha": "83b6f79d58453b43b80acd8db903c914f272a03c",
+    "ecosystem": "npm",
+    "bytes": 320,
+    "names": [
+     "hash-wasm"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/sandbox-supervisor/package.json",
+    "kind": "dep",
+    "blob_sha": "950720df38b179e6ccf2e11b541b6f9fd61cc6fa",
+    "ecosystem": "npm",
+    "bytes": 451,
+    "names": [
+     "@liaison/app-loader",
+     "workerd"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/shared/package.json",
+    "kind": "dep",
+    "blob_sha": "edb9dffe4d07a07a67a606f0c4ad4859727b3ac8",
+    "ecosystem": "npm",
+    "bytes": 439,
+    "names": [
+     "@liaison/control-plane-contract",
+     "cron-parser",
+     "marked",
+     "zod"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/test-helpers/package.json",
+    "kind": "dep",
+    "blob_sha": "261cc30506db780e330d10b186ad241af0cc5989",
+    "ecosystem": "npm",
+    "bytes": 557,
+    "names": [
+     "postgres",
+     "ioredis"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "tools/pdfa-check/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "53344087eb088f445630db8d2dffc3cc0071cc2d",
+    "ecosystem": "cargo",
+    "bytes": 272,
+    "names": [
+     "oxidize-pdf"
+    ]
+   },
+   {
+    "path": "apps/desktop/sidecar/package.json",
+    "kind": "dep",
+    "blob_sha": "bd5b39e7eb4aac3a19caba10ae4b4a418f490d4c",
+    "ecosystem": "npm",
+    "bytes": 622,
+    "names": [
+     "@anthropic-ai/claude-agent-sdk",
+     "@anthropic-ai/claude-agent-sdk-darwin-arm64",
+     "@anthropic-ai/claude-agent-sdk-darwin-x64",
+     "@anthropic-ai/claude-agent-sdk-linux-x64",
+     "@anthropic-ai/claude-agent-sdk-win32-x64"
+    ],
+    "dev": [
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "apps/desktop/src-tauri/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "40f0cd88fc8809f48d7ab85bd43bd99c8e4b9553",
+    "ecosystem": "cargo",
+    "bytes": 5699,
+    "names": [
+     "tauri",
+     "tauri-plugin-shell",
+     "tauri-plugin-dialog",
+     "tauri-plugin-deep-link",
+     "tauri-plugin-single-instance",
+     "tauri-plugin-updater",
+     "tauri-plugin-opener",
+     "serde",
+     "serde_json",
+     "reqwest",
+     "percent-encoding",
+     "url",
+     "libc",
+     "getrandom",
+     "tokio",
+     "tokio-tungstenite",
+     "futures-util",
+     "rustls",
+     "notify-rust",
+     "tauri-plugin-notification",
+     "tauri-plugin-autostart",
+     "sha2",
+     "ed25519-dalek",
+     "base64",
+     "regex"
+    ],
+    "dev": [
+     "tauri-build",
+     "tokio"
+    ]
+   },
+   {
+    "path": "apps/mobile/android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "f8f0e43b6d57dca414ad5c0683621397a4ed3c72",
+    "ecosystem": "gradle",
+    "bytes": 637
+   },
+   {
+    "path": "apps/mobile/android/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "b29d71bead3a1df1f2f53b49b2b89c0d1d9338c5",
+    "ecosystem": "gradle",
+    "bytes": 3784,
+    "names": [
+     "androidx.appcompat:appcompat",
+     "androidx.coordinatorlayout:coordinatorlayout",
+     "androidx.core:core-splashscreen"
+    ],
+    "dev": [
+     "junit:junit"
+    ]
+   },
+   {
+    "path": "docker-compose.yml",
+    "kind": "image",
+    "blob_sha": "519efb20a86b2d2abd1ac3d3615683518395516d",
+    "bytes": 6135,
+    "images": [
+     "postgres:17-alpine",
+     "redis:7-alpine",
+     "getmeili/meilisearch:v1.11",
+     "chrislusf/seaweedfs:4.48"
+    ]
+   },
+   {
+    "path": "apps/api/Dockerfile",
+    "kind": "image",
+    "blob_sha": "a906ed2b672ad1170cf23651a28d8514d76f433c",
+    "bytes": 10653,
+    "images": [
+     "oven/bun:1.4.2@sha256:9114c058aeae42162ee16dd5084b95fe9473970bb6bcb5b232ab1630f0546895",
+     "base",
+     "deps"
+    ]
+   },
+   {
+    "path": "apps/db-gate/Dockerfile",
+    "kind": "image",
+    "blob_sha": "3fc3dadc3da634064c4800a2036ef887993fe2c7",
+    "bytes": 2540,
+    "images": [
+     "oven/bun:1.4.2-slim@sha256:cb3bbbb08e13a4a2ff400f24c7a2a1d5efa83f6ef8544d52d95a519631e2fc61"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "9c74826839ead3ba53658a7419c91acbb5592ca0",
+    "bytes": 21929
+   },
+   {
+    "path": ".github/workflows/cla.yml",
+    "kind": "ci",
+    "blob_sha": "cf4dbadd126aa95dabe5833788b0e81a73e36eef",
+    "bytes": 1621
+   },
+   {
+    "path": ".github/workflows/codeql.yml",
+    "kind": "ci",
+    "blob_sha": "a3f5cdf4e8c132e4b804c4597bdfd05b3cb23ed9",
+    "bytes": 5811
+   },
+   {
+    "path": ".github/workflows/gate.yml",
+    "kind": "ci",
+    "blob_sha": "5182a325aeb30bc3584833d1f82b25c2c8d407bd",
+    "bytes": 13631
+   },
+   {
+    "path": ".github/workflows/nightly-integration.yml",
+    "kind": "ci",
+    "blob_sha": "2b392d4a92dd48b8ac0c2ea4cca426a7b46eb360",
+    "bytes": 12101
+   },
+   {
+    "path": ".github/workflows/nightly.yml",
+    "kind": "ci",
+    "blob_sha": "d24c1f4b98ada63446491f55dedeaa24b459544e",
+    "bytes": 13004,
+    "images": [
+     "ghcr.io/liaison-sh/liaison"
+    ]
+   },
+   {
+    "path": ".github/workflows/operator-drills.yml",
+    "kind": "ci",
+    "blob_sha": "2b4567de3ce89f61bebff5dfd0cf45c02b87f43f",
+    "bytes": 12120
+   },
+   {
+    "path": ".github/workflows/release.yml",
+    "kind": "ci",
+    "blob_sha": "95a283acbbb696572b5ee98733e089de3d7d99cb",
+    "bytes": 19230,
+    "images": [
+     "ghcr.io/liaison-sh/liaison"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [
+    "docs/.sources/database-connector.txt",
+    "docs/database-connector.md"
+   ],
+   "paths": [
+    "apps/api/src/modules/apps/connections/sql/transports/postgres-direct-dialect.test.ts",
+    "docs/api-connector.md",
+    "docs/database-connector.md",
+    "scripts/api-connector-schema-doc.test.ts",
+    "scripts/api-connector-schema-doc.ts",
+    "bundled-apps/api-connector/README.md",
+    "bundled-apps/api-connector/app.manifest.json",
+    "bundled-apps/api-connector/handlers.ts",
+    "bundled-apps/api-connector/package.json",
+    "bundled-apps/api-connector/tsconfig.json",
+    "bundled-apps/api-connector/ui.tsx",
+    "docs/.sources/api-connector.txt",
+    "docs/.sources/database-connector.txt",
+    "packages/api-connector-core/adapter.schema.json",
+    "packages/api-connector-core/package.json",
+    "packages/api-connector-core/tsconfig.json",
+    ".claude/skills/api-connector-authoring/SKILL.md",
+    ".claude/skills/database-adapter-authoring/SKILL.md",
+    "apps/desktop/sidecar/session-driver.test.ts",
+    "apps/desktop/sidecar/session-driver.ts",
+    "apps/desktop/src/driver-bridge.test.ts",
+    "apps/desktop/src/driver-bridge.ts",
+    "bundled-apps/api-connector/src/handlers.test.ts",
+    "bundled-apps/api-connector/src/handlers.ts",
+    "bundled-apps/api-connector/src/manifest.test.ts",
+    "docs/.sources/api-connector/api-connections.txt",
+    "packages/api-connector-core/src/approval.test.ts",
+    "packages/api-connector-core/src/chain.ts",
+    "packages/api-connector-core/src/contract.test.ts",
+    "packages/api-connector-core/src/contract.ts",
+    "packages/api-connector-core/src/index.ts",
+    "packages/api-connector-core/src/json-schema.test.ts",
+    "packages/api-connector-core/src/json-schema.ts",
+    "packages/api-connector-core/src/nested-crm.test.ts",
+    "packages/api-connector-core/src/parse.ts",
+    "packages/api-connector-core/src/project.test.ts",
+    "packages/api-connector-core/src/project.ts",
+    "packages/api-connector-core/src/redirect-hosts.test.ts",
+    "packages/api-connector-core/src/render.test.ts",
+    "packages/api-connector-core/src/render.ts",
+    "packages/api-connector-core/src/schema.test.ts",
+    "packages/api-connector-core/src/schema.ts",
+    "packages/api-connector-core/src/static-headers.test.ts",
+    "packages/api-connector-core/src/write-json-schema.ts",
+    "scripts/test-suites.d/bundled-api-connector/api-connections.txt",
+    "apps/api/scripts/contract/record-api-connector.ts",
+    "apps/desktop/src-tauri/src/driver.rs",
+    "apps/desktop/src/node-jobs/adapters.test.ts",
+    "apps/desktop/src/node-jobs/adapters.ts",
+    "apps/web/src/framework/PluginMountBoundary.test.tsx",
+    "apps/web/src/framework/PluginMountBoundary.tsx",
+    "apps/web/src/lib/web-build-id-plugin.ts",
+    "bundled-apps/api-connector/src/ui/AdapterForm.tsx",
+    "bundled-apps/api-connector/src/ui/ApiConnectorAdapters.tsx",
+    "bundled-apps/api-connector/src/ui/CredentialsForm.tsx",
+    "bundled-apps/api-connector/src/ui/CustomerCard.tsx",
+    "bundled-apps/api-connector/src/ui/HistoryPanel.tsx",
+    "bundled-apps/api-connector/src/ui/TestPanel.tsx",
+    "bundled-apps/api-connector/src/ui/api.ts",
+    "bundled-apps/api-connector/src/ui/copy-keys.test.ts",
+    "bundled-apps/api-connector/src/ui/customer-card.test.ts",
+    "bundled-apps/api-connector/src/ui/customer-events.ts",
+    "bundled-apps/api-connector/src/ui/customer-format.ts",
+    "bundled-apps/api-connector/src/ui/en.json",
+    "bundled-apps/api-connector/src/ui/fr.json",
+    "bundled-apps/api-connector/src/ui/kit.tsx",
+    "bundled-apps/api-connector/src/ui/mounts.tsx",
+    "bundled-apps/api-connector/src/ui/params-form.test.ts",
+    "bundled-apps/api-connector/src/ui/params-form.ts",
+    "bundled-apps/pennylane/src/einvoicing/adapter.test.ts",
+    "bundled-apps/social/src/adapters/cursor.test.ts",
+    "bundled-apps/social/src/adapters/cursor.ts",
+    "bundled-apps/social/src/adapters/facebook.test.ts",
+    "bundled-apps/social/src/adapters/facebook.ts",
+    "bundled-apps/social/src/adapters/graph-paging.ts",
+    "bundled-apps/social/src/adapters/instagram.test.ts",
+    "bundled-apps/social/src/adapters/instagram.ts",
+    "bundled-apps/social/src/adapters/mock-fetch.ts",
+    "bundled-apps/social/src/adapters/newest-first.test.ts",
+    "bundled-apps/social/src/adapters/types.ts",
+    "bundled-apps/social/src/adapters/youtube.test.ts",
+    "bundled-apps/social/src/adapters/youtube.ts",
+    "apps/api/src/cli/api-connector/run-flags.test.ts",
+    "apps/api/src/cli/api-connector/run.ts",
+    "apps/api/src/cli/api-connector/validate-offline.test.ts",
+    "apps/api/src/cli/api-connector/validate.ts",
+    "apps/api/src/cli/provisioners/connector.test.ts",
+    "apps/api/src/cli/provisioners/connector.ts",
+    "apps/api/src/db/migrations/0300_api_adapters.sql",
+    "apps/api/src/modules/apps/connector-settings-manifests.test.ts",
+    "apps/api/src/tests/integration/pennylane-connector.integration.test.ts",
+    "apps/api/src/tests/live/api-connector-auto.live.test.ts",
+    "apps/api/src/tests/live/api-connector-demo-world.live.test.ts",
+    "apps/mobile/ios/App/App/LiaisonNativePlugin.swift",
+    "apps/web/src/modules/help/help-docs-plugin.ts",
+    "apps/web/src/modules/mailbox/worker-integrity-plugin.test.ts",
+    "apps/web/src/modules/mailbox/worker-integrity-plugin.ts",
+    "apps/web/src/tests/e2e/api-connector.scenario.test.ts",
+    "apps/web/src/tests/e2e/plugin-host-services.scenario.test.ts",
+    "apps/web/src/tests/e2e/plugin-ui-bundle.scenario.test.ts",
+    "packages/shared/src/tours/api-connector/settings.ts",
+    "apps/api/src/db/schema/kernel/api-adapters.ts",
+    "apps/api/src/modules/apps/moved-apps.d/api-connector.json",
+    "apps/api/src/modules/demo/api-connector/api-connector-demo.test.ts",
+    "apps/api/src/modules/demo/api-connector/connection.ts",
+    "apps/api/src/modules/demo/api-connector/index.ts",
+    "apps/api/src/modules/demo/api-connector/responder.ts",
+    "apps/api/src/modules/demo/api-connector/sentinel.ts",
+    "apps/desktop/sidecar/vendor/atelier/.claude-plugin/marketplace.json",
+    "apps/desktop/sidecar/vendor/atelier/.claude-plugin/plugin.json",
+    "apps/web/src/modules/mailbox/search-index/adapter-conformance.ts",
+    "apps/web/src/modules/mailbox/search-index/adapter.ts",
+    "apps/web/src/modules/mailbox/search-index/flexsearch-adapter.test.ts",
+    "apps/web/src/modules/mailbox/search-index/flexsearch-adapter.ts",
+    "apps/web/src/modules/mailbox/search-index/memory-adapter.test.ts",
+    "apps/web/src/modules/mailbox/search-index/memory-adapter.ts",
+    "apps/web/src/modules/settings/connectors/ConnectorsPage.management.test.tsx",
+    "apps/web/src/modules/settings/connectors/ConnectorsPage.test.tsx",
+    "apps/web/src/modules/settings/connectors/ConnectorsPage.tsx",
+    "apps/web/src/modules/settings/connectors/McpServerDetailPage.tsx",
+    "apps/web/src/modules/settings/connectors/connector-cards.test.tsx",
+    "apps/web/src/modules/settings/connectors/index.ts",
+    "apps/web/src/tests/e2e/settings-app-page.scenario.test.ts-snapshots/settings-connectors-gitlab-open-darwin.png",
+    "apps/web/src/tests/e2e/settings-app-page.scenario.test.ts-snapshots/settings-connectors-gitlab-open-linux.png",
+    "packages/shared/src/i18n/locales/en/api-connector.json",
+    "packages/shared/src/i18n/locales/fr/api-connector.json",
+    "apps/api/src/modules/apps/connections/api/adapter-history.test.ts",
+    "apps/api/src/modules/apps/connections/api/adapter-policy.ts",
+    "apps/api/src/modules/apps/connections/sql/adapters/liaison-self.ts",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/preflight__connector_write.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/provision__handler.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/provision__verify.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/summarizer__connector_write.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__connector_adapter_get.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__connector_adapter_reference.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__connector_adapter_test.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__connector_adapter_versions.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__connector_list_operations.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__connector_read.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__connector_write.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__customer_lookup.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__settings_adapter_delete.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__settings_adapter_restore.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__settings_adapter_save.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__settings_adapter_test.json",
+    "apps/api/src/modules/apps/contract/fixtures/api-connector/tool__settings_connections.json",
+    "apps/api/src/modules/apps/connections/api/__fixtures__/fixture-crm/adapter.ts",
+    "apps/api/src/modules/apps/connections/api/__fixtures__/fixture-crm/fixture-crm.adapter.yaml",
+    "apps/api/src/modules/apps/connections/sql/adapters/__fixtures__/toy-shop.test.ts",
+    "apps/api/src/modules/apps/connections/sql/adapters/__fixtures__/toy-shop.ts",
+    "apps/mobile/android/app/src/main/java/sh/liaison/mobile/LiaisonAuthSessionPlugin.java"
    ]
   },
   "fail_count": 0

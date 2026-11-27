@@ -1165,13 +1165,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:33:25Z",
+  "collected_at": "2026-11-27T05:03:24Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 145,
   "tree": {
    "sha": "55148d260b32197c6217768da9dcbcf5e06e981f",
-   "etag": "W/\"3e0b7e4b0ce15ac46fd708b529c5eac063bd3fd52aa26aca72414b03cc1f4ab5\"",
+   "etag": "W/\"850fb90331f75e7cf29972f682b9c09d9d6d4f96dbfdb11445baeb9c8e9085ce\"",
    "truncated": false,
    "path_count": 2650,
    "matched": [
@@ -1494,15 +1494,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-25T03:39:06Z",
+  "collected_at": "2026-11-27T05:01:58Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
-  "stars": 181,
+  "pushed_at": "2026-11-26",
+  "stars": 182,
   "tree": {
-   "sha": "a9dc574c2a93431350f71f159a18482c8acc7bf4",
-   "etag": "W/\"7ad97e01e8b06ea9994b41b66528f03a58e2e76942ff723c1467b208232fb34f\"",
+   "sha": "a5bf702a6b4cb3d73f7f8a3513ba82cf7b84ed4e",
+   "etag": "W/\"ded3012612f242a3faa42bba553d7a6fc5e124606ddb73f892187fcc526928a4\"",
    "truncated": false,
-   "path_count": 985,
+   "path_count": 1096,
    "matched": [
     "Cargo.toml",
     "benchmarks/Cargo.toml",
@@ -1513,6 +1513,7 @@
     "dispatch/Cargo.toml",
     "docs/package.json",
     "duckdb-planner/Cargo.toml",
+    "iceberg-tables/Cargo.toml",
     "metastore-disk/Cargo.toml",
     "object-storage/Cargo.toml",
     "parquet-engine/Cargo.toml",
@@ -1544,9 +1545,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "531e10da1891bc8510d7c3a2d88a01379d67c070",
+    "blob_sha": "3d8692fba81cb03594f0fa5aa201e194989337ad",
     "ecosystem": "cargo",
-    "bytes": 5474
+    "bytes": 5755
    },
    {
     "path": "benchmarks/Cargo.toml",
@@ -1632,9 +1633,9 @@
    {
     "path": "catalog/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "5252bd494f2c948a431a7f87c0e7039e5a9f62ba",
+    "blob_sha": "50d9e32dbfa1885442ef319e0741098065a14350",
     "ecosystem": "cargo",
-    "bytes": 1211,
+    "bytes": 1402,
     "names": [
      "planner",
      "dispatch",
@@ -1645,15 +1646,17 @@
      "thiserror",
      "async-trait",
      "crossbeam-deque",
+     "tokio",
+     "tracing",
      "base64"
     ]
    },
    {
     "path": "datastore-iceberg/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "659bc2df8f21288d6a21f8e3fdb18305f4fdb6d3",
+    "blob_sha": "0aed20bfc3349e12e8e3fcc1f61595c0264a3a88",
     "ecosystem": "cargo",
-    "bytes": 2808,
+    "bytes": 4190,
     "names": [
      "planner",
      "catalog",
@@ -1661,20 +1664,27 @@
      "object-storage",
      "parquet-engine",
      "arrow-array",
-     "arrow-schema",
      "thiserror",
      "serde_json",
      "async-trait",
      "tracing",
      "tokio",
-     "roaring",
+     "typetag",
+     "serde",
      "iceberg",
      "iceberg-catalog-rest",
+     "iceberg-tables",
+     "uuid",
      "reqwest"
     ],
     "dev": [
+     "iceberg-tables",
+     "bytes",
+     "futures",
+     "datastore-iceberg",
      "object-storage",
      "iceberg-storage-opendal",
+     "tracing-subscriber",
      "testcontainers",
      "tokio",
      "parquet",
@@ -1682,15 +1692,16 @@
      "arrow-schema",
      "ureq",
      "serde_json",
-     "url"
+     "url",
+     "tempfile"
     ]
    },
    {
     "path": "datastore-pivotlake/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ea88bc51c3e07e126e2502a2e3da0271769fbdb4",
+    "blob_sha": "d75c339988f57a4b327e2c466586b9010b93c6ac",
     "ecosystem": "cargo",
-    "bytes": 4212,
+    "bytes": 5063,
     "names": [
      "planner",
      "catalog",
@@ -1714,7 +1725,9 @@
      "url",
      "delta_kernel",
      "delta_kernel_default_engine",
-     "uuid"
+     "uuid",
+     "iceberg-tables",
+     "imbl"
     ],
     "dev": [
      "datastore-pivotlake",
@@ -1729,7 +1742,8 @@
      "tempfile",
      "core_affinity",
      "tracing-subscriber",
-     "criterion"
+     "criterion",
+     "tikv-jemalloc-sys"
     ]
    },
    {
@@ -1809,6 +1823,44 @@
     ]
    },
    {
+    "path": "iceberg-tables/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "fb5eb8241a84597a9da806e34522e7d9487f1bd4",
+    "ecosystem": "cargo",
+    "bytes": 3304,
+    "names": [
+     "planner",
+     "dispatch",
+     "object-storage",
+     "parquet-engine",
+     "arrow-array",
+     "arrow-buffer",
+     "arrow-ord",
+     "arrow-schema",
+     "arrow-cast",
+     "thiserror",
+     "tracing",
+     "tokio",
+     "roaring",
+     "serde_json",
+     "catalog",
+     "async-trait",
+     "typetag",
+     "serde",
+     "bytes",
+     "futures",
+     "uuid",
+     "iceberg",
+     "ahash",
+     "hashbrown"
+    ],
+    "dev": [
+     "iceberg-tables",
+     "tempfile",
+     "parquet"
+    ]
+   },
+   {
     "path": "metastore-disk/Cargo.toml",
     "kind": "dep",
     "blob_sha": "fe052c90827d6bc786b0cc2f71f063e96edc02b9",
@@ -1863,9 +1915,9 @@
    {
     "path": "parquet-engine/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d67dd353ab8f5711f38b1c44d596093343de3faa",
+    "blob_sha": "3c6cf5a3fb9a373dc3f1882ad99674c9c0ef9332",
     "ecosystem": "cargo",
-    "bytes": 1934,
+    "bytes": 1978,
     "names": [
      "planner",
      "dispatch",
@@ -1885,6 +1937,7 @@
      "tracing",
      "bytes",
      "crossbeam-deque",
+     "uuid",
      "ahash",
      "roaring",
      "snap",
@@ -3708,13 +3761,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:53:50Z",
+  "collected_at": "2026-11-27T05:23:34Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 20,
   "tree": {
-   "sha": "f19c1000edaafcdcf5974e336202c8d4632f84c8",
-   "etag": "W/\"3438f491cdcf211fc3915c3037cd957a3264a521439d7c8a774483e1e5cff06c\"",
+   "sha": "93da845a59fe30cec1709da25e1d573eaa797874",
+   "etag": "W/\"99d7490f0634df8c48f216b9671a0285d879a43dbcaa0c4ae4c7230d473cffd2\"",
    "truncated": false,
    "path_count": 2171,
    "matched": [
@@ -3976,7 +4029,7 @@
    {
     "path": "legal-api/pyproject.toml",
     "kind": "dep",
-    "blob_sha": "f156c8b4109ee8346a32a090044765ef98f9bad0",
+    "blob_sha": "1688b6073963887d5181a503c987647faf63ef31",
     "ecosystem": "pyproject",
     "bytes": 6129,
     "names": [
@@ -7066,15 +7119,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:11:31Z",
+  "collected_at": "2026-11-27T04:40:47Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-26",
+  "pushed_at": "2026-11-27",
   "stars": 5265,
   "tree": {
-   "sha": "7de5f719dd2084983d4234a77d4fe82c747b2e90",
-   "etag": "W/\"a0efb76da85db424491879ac5aa97d46e856c99d0cd0ef20242108cbc4e7b578\"",
+   "sha": "0524aaa4769d5d1140139f7af45d46c733f619aa",
+   "etag": "W/\"dcc32a6d0e3cc717f84c32ffa714605a91ad7502f08f48df8946d9dbb1e2eba2\"",
    "truncated": false,
-   "path_count": 8016,
+   "path_count": 8070,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -7751,15 +7804,16 @@
    {
     "path": "crates/pgls_query/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d5ed54b251afb2dba7d00ba78c6fac04f6b9a4b4",
+    "blob_sha": "28009a2cfebcaaf4609c69e7309c267059f03d01",
     "ecosystem": "cargo",
-    "bytes": 711,
+    "bytes": 752,
     "names": [
      "prost",
      "regex",
      "thiserror",
      "tracing",
-     "pgls_query_macros"
+     "pgls_query_macros",
+     "pgls_text_size"
     ],
     "dev": [
      "bindgen",
@@ -8366,15 +8420,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:18:42Z",
+  "collected_at": "2026-11-27T04:48:12Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 1449,
   "tree": {
-   "sha": "d227933638ce35a68d9ad7f719760066d16ce8e3",
-   "etag": "W/\"ec89693129223be291b8eac2d0968db9e2b55353d8d7c8e4f04c73c211368350\"",
+   "sha": "f82898b6ad0cbe3805ca01a282e34984377846d1",
+   "etag": "W/\"7221f3edc98a8951ee9d01564f67279217828c6e9c90383cf37e6ca7a8a539b2\"",
    "truncated": false,
-   "path_count": 19848,
+   "path_count": 19852,
    "matched": [
     "pom.xml",
     "mcp-server/pyproject.toml",
@@ -8635,8 +8689,8 @@
    {
     "path": ".github/workflows/behave-cloudberry.yml",
     "kind": "ci",
-    "blob_sha": "d2fc1b1491af02da4a1caf3b493fe65c7871301b",
-    "bytes": 49356,
+    "blob_sha": "307544ad713466ee872369a1ca6b4bbcfb0fde45",
+    "bytes": 47953,
     "images": [
      "apache/incubator-cloudberry:cbdb-build-rocky9-latest"
     ]
@@ -8644,8 +8698,8 @@
    {
     "path": ".github/workflows/build-cloudberry.yml",
     "kind": "ci",
-    "blob_sha": "805d3c541d63933eacb005db65b0eca7961f94ac",
-    "bytes": 100575,
+    "blob_sha": "0c0ab4e820b5515e0c01dc24f26178f9fa77c2a9",
+    "bytes": 95070,
     "images": [
      "apache/incubator-cloudberry:cbdb-build-rocky${{",
      "apache/incubator-cloudberry:cbdb-test-rocky${{"
@@ -8654,8 +8708,8 @@
    {
     "path": ".github/workflows/build-dbg-cloudberry.yml",
     "kind": "ci",
-    "blob_sha": "5a8e47f147ddef7da9074f801a3c480cca18a76a",
-    "bytes": 65836,
+    "blob_sha": "10465399aa4dcfff960111784928120cb0544831",
+    "bytes": 60480,
     "images": [
      "apache/incubator-cloudberry:cbdb-build-rocky9-latest",
      "apache/incubator-cloudberry:cbdb-test-rocky9-latest"
@@ -8664,8 +8718,8 @@
    {
     "path": ".github/workflows/build-deb-cloudberry.yml",
     "kind": "ci",
-    "blob_sha": "f9156479b2ee863beb943bdb5dc8f44b16d9e3eb",
-    "bytes": 75540,
+    "blob_sha": "8b08b65d06299c11d168c82bfb6c1b4ea54b274f",
+    "bytes": 71566,
     "images": [
      "apache/incubator-cloudberry:cbdb-build-ubuntu${{",
      "apache/incubator-cloudberry:cbdb-test-ubuntu${{"
@@ -8674,8 +8728,8 @@
    {
     "path": ".github/workflows/build-jit-cloudberry.yml",
     "kind": "ci",
-    "blob_sha": "60168464bb4d7d8f6b06b7f3556f16d47a3089a3",
-    "bytes": 12448,
+    "blob_sha": "2e121b22d55c7448d8adc162699f5b6c50472242",
+    "bytes": 11175,
     "images": [
      "[",
      "apache/incubator-cloudberry:cbdb-build-${{"
@@ -8717,8 +8771,8 @@
    {
     "path": ".github/workflows/package-convenience-binaries.yml",
     "kind": "ci",
-    "blob_sha": "d8ca3ac492231b36f219e4b5ec187499ddd01979",
-    "bytes": 29020,
+    "blob_sha": "76647333fbd3d88a770f7dcc8a924cbd45fe3b15",
+    "bytes": 29052,
     "images": [
      "apache/incubator-cloudberry:cbdb-build-ubuntu24.04-latest",
      "${{"
@@ -8736,8 +8790,8 @@
    {
     "path": ".github/workflows/sqlancer-cloudberry.yml",
     "kind": "ci",
-    "blob_sha": "0a6909ebfa751903ba51bac914d5cab9135bb640",
-    "bytes": 18418,
+    "blob_sha": "810591f89d49ec6195790b78fa33c9dfd4077e4a",
+    "bytes": 18464,
     "images": [
      "apache/incubator-cloudberry:cbdb-build-rocky9-latest"
     ]
@@ -10228,13 +10282,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:39:07Z",
+  "collected_at": "2026-11-27T05:08:35Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
-  "stars": 77,
+  "pushed_at": "2026-11-26",
+  "stars": 78,
   "tree": {
-   "sha": "8dea1843ae912d7ed9e9fd8fad317a92bc35a84c",
-   "etag": "W/\"f473af0d9677da3ddd63d892ec6e679c555a35f6454cf8c21f261548791dfdaa\"",
+   "sha": "f373d217b8c706bdf86fd9f36da9779c29b02c4a",
+   "etag": "W/\"60b181a10e17797603452bbae12ec5a8874a9a4d291e487ed32739966a92be12\"",
    "truncated": false,
    "path_count": 1647,
    "matched": [
@@ -10264,7 +10318,7 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "7fa3a616577ec31d30f0fc9df25b6675518e46ff",
+    "blob_sha": "7862b21232de4b404ceea57ded176cab3dea9179",
     "ecosystem": "pyproject",
     "bytes": 16148,
     "names": [
@@ -10359,10 +10413,10 @@
    {
     "path": "docker-compose.team.yml",
     "kind": "image",
-    "blob_sha": "ec6667c73c360a77dcf2c11b340b1ae2375c37f1",
+    "blob_sha": "f348e85d8e0decf61f6349260304837e29023d1b",
     "bytes": 6650,
     "images": [
-     "${TAM_TEAM_IMAGE:-total-agent-memory:15.0.1}",
+     "${TAM_TEAM_IMAGE:-total-agent-memory:15.0.2}",
      "${TAM_LITESTREAM_IMAGE:-litestream/litestream:0.5.17}",
      "${TAM_S3_LOCAL_IMAGE:-rustfs/rustfs:1.0.0}"
     ]
@@ -10380,7 +10434,7 @@
    {
     "path": "docker/Dockerfile.browser",
     "kind": "image",
-    "blob_sha": "c78fd2356246735ce3edc707281e294711055b5c",
+    "blob_sha": "4d113bd934eae035a80f8c69c417f9940f4b90b3",
     "bytes": 304,
     "images": [
      "${DEVELOPMENT_IMAGE}"
@@ -10398,7 +10452,7 @@
    {
     "path": "docker/Dockerfile.media",
     "kind": "image",
-    "blob_sha": "0abb88f75dcf409f54baf8fd47e4742b47dfb80f",
+    "blob_sha": "ccf8080392e11b53efde1566dad03ffeaf79100c",
     "bytes": 907,
     "images": [
      "postgres:18",
@@ -10408,7 +10462,7 @@
    {
     "path": "docker/Dockerfile.rerank",
     "kind": "image",
-    "blob_sha": "7eb799fe3db00914ac2acfa1b00a1b090f8dd8ca",
+    "blob_sha": "e7f2ed60105459616234708d647135de5262620e",
     "bytes": 254,
     "images": [
      "${DEV_IMAGE}"
@@ -10417,7 +10471,7 @@
    {
     "path": "docker/Dockerfile.vector-bench",
     "kind": "image",
-    "blob_sha": "68114fd4bfb2cd9b78d7abced6a28c26fab668bd",
+    "blob_sha": "d6e0646cb2ddbb5fa14f8073e4f88e99d808889b",
     "bytes": 151,
     "images": [
      "${DEV_IMAGE}"
@@ -10459,7 +10513,7 @@
    {
     "path": ".github/workflows/smoke.yml",
     "kind": "ci",
-    "blob_sha": "87248a2ddec63f03bd13ec2152af8f3b0f9d0055",
+    "blob_sha": "143c93f79f229f7d15cad7a109e2e71457f855cc",
     "bytes": 10853
    }
   ],
@@ -11916,15 +11970,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:46:25Z",
+  "collected_at": "2026-11-27T05:16:29Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 36,
   "tree": {
-   "sha": "1d0135dcc4489c536f6bc34f8afe560b9c2a2e41",
-   "etag": "W/\"3ef3b52f34c47e1a0d7cbb65e0e2fea001ee587b34b0163aebe705c60ac79569\"",
+   "sha": "96dafe0b177abcf49b02ffc725391eb943d83939",
+   "etag": "W/\"3ed6f08693145681903736db90264dbfb7b6c83531fe3fd8afb0a8deb666c061\"",
    "truncated": false,
-   "path_count": 3492,
+   "path_count": 3517,
    "matched": [
     "BE/go.mod",
     "CLI/Cargo.toml",
@@ -11965,9 +12019,9 @@
    {
     "path": "BE/go.mod",
     "kind": "dep",
-    "blob_sha": "5c3c7de58a611528ddd85a1ae5977e8c5b672b2f",
+    "blob_sha": "1f99f2b7fb00f5ad22f479196344a1630c24fe25",
     "ecosystem": "go",
-    "bytes": 4563,
+    "bytes": 4597,
     "names": [
      "github.com/SherClockHolmes/webpush-go",
      "github.com/aws/aws-sdk-go-v2",
@@ -11998,6 +12052,7 @@
      "github.com/russellhaering/gosaml2",
      "github.com/russellhaering/goxmldsig",
      "github.com/santhosh-tekuri/jsonschema/v6",
+     "github.com/robfig/cron/v3",
      "github.com/sirupsen/logrus",
      "github.com/stretchr/testify",
      "golang.org/x/crypto",
@@ -12076,9 +12131,9 @@
    {
     "path": "UI/package.json",
     "kind": "dep",
-    "blob_sha": "2930c04dc479a45d9e9505d91dddf86ffcb08700",
+    "blob_sha": "2f5dbca8db6a8d97c4d9b17a005726a09b6c89d6",
     "ecosystem": "npm",
-    "bytes": 2933,
+    "bytes": 2955,
     "names": [
      "@fontsource/jetbrains-mono",
      "@inlang/paraglide-js",
@@ -12132,6 +12187,7 @@
      "bits-ui",
      "clsx",
      "eslint",
+     "jsdom",
      "layerchart",
      "paneforge",
      "playwright",
@@ -12417,7 +12473,7 @@
    {
     "path": "devmachine/agent/Dockerfile",
     "kind": "image",
-    "blob_sha": "f0bf6409ed928176d9158da4011265a9f2640fe0",
+    "blob_sha": "04778a6df1bf884ee5aa5b8fb19616f93fd30da7",
     "bytes": 2937,
     "images": [
      "golang:1.26.11-alpine",
@@ -12528,8 +12584,8 @@
    {
     "path": ".github/workflows/test.yml",
     "kind": "ci",
-    "blob_sha": "d27c3ed55e2d8708e81b769fe044263900859527",
-    "bytes": 14511,
+    "blob_sha": "47803e1d4c3e2ccb39ace9582347c9e0c47bac5a",
+    "bytes": 14799,
     "images": [
      "postgres:16-alpine",
      "redis:7-alpine"
@@ -16489,13 +16545,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:40:03Z",
+  "collected_at": "2026-11-27T05:09:59Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 68,
   "tree": {
    "sha": "d7f825f6a015d49520cdc0deb84bf23e7da63326",
-   "etag": "W/\"07cc96327d21d7decf9aceecd48f8dad7942358b37d61f7c9327ed3b521ba2a5\"",
+   "etag": "W/\"11340cc35fc88e27281049baf56e04dd6becb349d871989784f61984e18b23a1\"",
    "truncated": false,
    "path_count": 494,
    "matched": [
@@ -18057,13 +18113,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-26T10:01:18Z",
+  "collected_at": "2026-11-27T05:20:21Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-25",
+  "pushed_at": "2026-11-26",
   "stars": 27,
   "tree": {
    "sha": "77547c557430ed14e8d3398291e1bafd3aad06a0",
-   "etag": "W/\"4676c7a91e6254f41bc7685c9aa4ee940f000720a7344921492f4c8677693e9c\"",
+   "etag": "W/\"0e2a079f692f1bd790a1926c4837a14b4b8e5b960152daebd4de224f7ad8c463\"",
    "truncated": false,
    "path_count": 23,
    "matched": [
