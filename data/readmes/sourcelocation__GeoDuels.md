@@ -46,12 +46,14 @@ A duel is two people racing a clock. Every guess has to land instantly, a deploy
 ```
  browser ──► front (Caddy) ──► web (Next.js)
                 │
-                ├── /api ──────► api (Go) ────────────────────────────┐
-                │                                                     │
-                └── /api/live ─► gateway (Go) ──► gameplay node (Go)  ├──► PostgreSQL
-                                   ▲            one match, one node   │    (state, jobs)
-                                   │                                  │
-                                   └──── NATS ◄── api, workers ───────┘
+                ├── /api ─────────► api (Go) ──────────────────────────────┐
+                │                                                          │
+                ├── /matchmaking ─► matchmaker (Go) ── writes matches ─────┤
+                │                                                          │
+                └── /live ────────► gateway (Go) ──► gameplay node (Go)    ├──► PostgreSQL
+                                      ▲            one match, one node     │    (state, jobs)
+                                      │                                    │
+                                      └── NATS ◄── api, matchmaker, workers┘
                                     live events to whoever holds the socket
 ```
 
@@ -60,7 +62,7 @@ A duel is two people racing a clock. Every guess has to land instantly, a deploy
 - **No unnecessary cross-server communication.** NATS only carries what truly has to cross servers *right now*. Postgres stores the rest: accounts, Glicko ratings, matches, chat history and the job queue.
 - **Bold and strict architecture.** No inheritance, no type casts. This alone puts constraints on code, incentivising everyone working on project to write better code - catches more bugs than you'd expect.
 - **Cheaters face an in-house private anticheat.** Stored in a private repo, it scores the speed and accuracy of every guess, and victims are refunded as if they'd beaten the cheater.
-- **Shipping is one merge.** release-please tags it, CI builds six images for amd64 and arm64, and Flux deploys them to k3s. Every pod migrates the database before it starts, so the new version goes live on its own.
+- **Shipping is one merge.** release-please tags it, CI builds seven images for amd64 and arm64, and Flux deploys them to k3s. Every pod migrates the database before it starts, so the new version goes live on its own.
 
 ## Run your own
 

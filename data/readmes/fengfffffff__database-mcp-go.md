@@ -11,7 +11,7 @@
 | 能力 | 说明 |
 |------|------|
 | 十种数据库 | 一套接口覆盖十种库, 每个库独立连接池 |
-| 六个 MCP 工具 | 执行语句, 查询与增删改数据源, 刷新配置 |
+| 六个 MCP 工具 | 执行语句与命令, 查询与增删改数据源, 刷新配置 |
 | 凭证集中 | 客户端只能拿到别名与库名 |
 | 事务语义 | SQL 类库多条语句同事务, 失败整体回滚 |
 | 双存储 | file 零依赖; mysql 密码加密落库 |
@@ -182,7 +182,7 @@ curl http://127.0.0.1:47319/healthz
 | `log.level` | info | 日志级别 |
 | `log.retain_days` | 14 | 保留天数, 超期文件自动清理 |
 | `log.console` | false | 是否同时输出到控制台 |
-| `log.sql` | true | 是否记录执行语句, 截断到 500 字 |
+| `log.command` | true | 是否记录执行内容, SQL 语句、MongoDB 命令文档与 Redis 命令都记, 截断到 500 字 |
 | `admin.username` | 无默认值 | 基础认证账号, 必填, 不能包含冒号 |
 | `admin.password` | 无默认值 | 基础认证密码, 必填 |
 
@@ -231,8 +231,8 @@ curl http://127.0.0.1:47319/healthz
 source:
   type: mysql
   mysql:
-    dsn: "user:password@tcp(127.0.0.1:3306)/database_mcp?parseTime=true&loc=Asia/Shanghai"
-    aes_key: "用 openssl rand -base64 32 生成后填入"
+    dsn: "user:password@tcp(127.0.0.1:3306)/core_service?parseTime=true&loc=Asia/Shanghai"
+    aes_key: "wS4WeHm2opebcZ9p6O8TcurmelrMZ1iVR75OmbGxN6Q="
     table: sys_mcp_database_config
 ```
 
@@ -285,7 +285,7 @@ CREATE TABLE `sys_mcp_database_config` (
 
 | 工具 | 用途 |
 |------|------|
-| `execute-sql` | 执行语句, SQL 用分号分隔多条; MongoDB 传 JSON 命令文档; Redis 每行一条命令 |
+| `execute-command` | 执行语句或命令, SQL 用分号分隔多条; MongoDB 传 JSON 命令文档; Redis 每行一条命令 |
 | `get-datasources` | 查询启用的实例与所辖数据库, 支持别名模糊过滤 |
 | `add-database-config` | 新增实例配置, 成功后配置缓存自动失效 |
 | `update-database-config` | 修改实例配置, 不传的字段保留原值 |
@@ -299,19 +299,19 @@ CREATE TABLE `sys_mcp_database_config` (
 SQL 类库:
 
 ```json
-{"alias": "生产库", "databaseName": "order", "sql": "SELECT id, status FROM t_order ORDER BY id DESC LIMIT 20"}
+{"alias": "生产库", "databaseName": "order", "command": "SELECT id, status FROM t_order ORDER BY id DESC LIMIT 20"}
 ```
 
 MongoDB 传 runCommand 语法的 JSON:
 
 ```json
-{"alias": "文档库", "databaseName": "app", "sql": "{\"find\": \"users\", \"filter\": {\"age\": {\"$gt\": 18}}, \"limit\": 5}"}
+{"alias": "文档库", "databaseName": "app", "command": "{\"find\": \"users\", \"filter\": {\"age\": {\"$gt\": 18}}, \"limit\": 5}"}
 ```
 
 Redis 每行一条命令:
 
 ```json
-{"alias": "缓存", "databaseName": "0", "sql": "SET greeting \"hello world\"\nGET greeting"}
+{"alias": "缓存", "databaseName": "0", "command": "SET greeting \"hello world\"\nGET greeting"}
 ```
 
 ### (3)、返回结构
@@ -342,7 +342,7 @@ Redis 每行一条命令:
 ### (4)、错误格式
 
 ```text
-SQL 执行失败 - 错误类别: 表不存在, 错误码: 1146, SQLSTATE: 42S02, 原始信息: Table 'db.t' doesn't exist, 建议: 核对库名与表名
+执行失败 - 错误类别: 表不存在, 错误码: 1146, SQLSTATE: 42S02, 原始信息: Table 'db.t' doesn't exist, 建议: 核对库名与表名
 第 2/3 条语句执行失败 - ... 语句: UPDATE t SET a = 1
 ```
 
@@ -386,7 +386,7 @@ SQL 执行失败 - 错误类别: 表不存在, 错误码: 1146, SQLSTATE: 42S02,
 1. `auth_token` 留空表示不校验, 只适合本机回环; 服务离开本机必须配置 token.
 2. 管理页始终开启, 只有一组基础认证, 没有权限体系; 必须配置账号与密码, 缺一项启动即失败, 不存在无认证放行. 基础认证走明文 HTTP, 跨机访问请套 HTTPS 或 SSH 隧道.
 3. file 模式的密码是明文, 注意文件权限; 要求密文存储时选 mysql 模式.
-4. `log.sql` 会把语句写入日志, 敏感场景设为 false.
+4. `log.command` 会把执行内容写入日志, 含 Redis 命令与缓存值, 敏感场景设为 false.
 5. 代理层不做业务语义过滤, 只拦会破坏连接的协议级命令; 能执行什么由数据库账号权限决定, 建议为每个数据源配置只读或受限账号.
 
 ## 七、已知限制

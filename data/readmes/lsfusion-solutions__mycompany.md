@@ -69,6 +69,14 @@ To customize MyCompany with an AI coding assistant, install the [lsFusion AI ski
 
 ![MyCompany retail POS cashier screen with barcode entry and touch product grid](docs/images/retail-pos.png)
 
+## 🧩 Community extensions
+
+Modules that MyCompany users have built for a particular country or workflow. Each is a separate project, developed and supported by its author rather than the MyCompany team.
+
+- **[EdoDoki](https://github.com/uginzx/lsfusion-edo-doki)** (Russia) — electronic document interchange (ЭДО) with customers via Doki by Kaluga Astral (the same web account as 1C-ЭДО). The module generates a УПД (universal transfer document) in the Federal Tax Service XML format 5.03 from an invoice and uploads it to Doki as a draft; you sign and send the draft in the Doki web interface, so no e-signature key is needed on the server. Requires the Russian regional modules. Documentation in Russian.
+
+Built a module that others can reuse? Open a pull request that adds it to this list.
+
 ## 🛠 Support
 
 - 📚 [Documentation](https://mycompany-docs.lsfusion.org)

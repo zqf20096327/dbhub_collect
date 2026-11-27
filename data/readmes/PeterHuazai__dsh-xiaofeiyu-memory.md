@@ -7,7 +7,7 @@
 这是一个 **DeepSeek Harness（DSH）插件**，也是一套可以独立运行的本地记忆库：
 多轮长对话里最容易出问题的两件事 ——「记住不该混的」和「忘掉不该记的」—— 它都做了工程化处理。
 
-> 作者说明：这是**非人工智能专业的学生**拿 DeepSeek Harness 写着玩的插件。功能是真的能跑（187 个自动化测试全绿），
+> 作者说明：这是**非人工智能专业的学生**拿 DeepSeek Harness 写着玩的插件。功能是真的能跑（201 个自动化测试全绿），
 > 但设计上一定还有不少幼稚和可以改进的地方，欢迎大家指正和评价，不喜也勿喷 🙏
 
 ---
@@ -136,7 +136,7 @@ src/db.mjs          SQLite schema + 影子日志 + 备份 + 配置
 src/engine.mjs      分词、遗忘曲线、remember/recall/feedback、三层判定、主干摘要、consolidate、休眠清理、附件
 src/vector.mjs      本地哈希向量 + 语义指纹 + 三后端探测 + ANN
 src/guard.mjs       守卫打分与审查、一键修复（planFix / applyFix）
-src/harness.mjs     DSH 历史会话扫描与导入（多帧 zstd、一项目一分区）
+src/harness.mjs     DSH 历史会话扫描与导入（多帧 zstd、一项目一分区；分区名/目录名都认，正文带文件与工具）
 src/tasks.mjs       任务闸门、汇报写删恢复、导入导出、参数夹紧
 src/vision.mjs      多模态描述（可选视觉模型）
 src/tools.mjs       search/digest/explain/link/expand/pin/health/dedupe/summarize
@@ -144,7 +144,7 @@ src/server.mjs      HTTP API + 静态看板
 src/cli.mjs         命令行
 web/index.html      看板（单文件内联）
 docs/DSH-PLUGIN.md  插件形态说明（两半端、槽位、waterfall 契约、安装与验证）
-tests/run-tests.mjs 187 个断言
+tests/run-tests.mjs 201 个断言
 ```
 
 ## 参数（都能在看板里改，`updateConfig` 会按合理区间夹紧）
@@ -177,7 +177,7 @@ tests/run-tests.mjs 187 个断言
 ## 测试
 
 ```bash
-node tests/run-tests.mjs            # 通过 187 / 失败 0
+node tests/run-tests.mjs            # 通过 201 / 失败 0
 node tests/plugin-smoke.mjs         # 插件冒烟：14 个工具真实注册、预置修复计划、第一轮注入（26 项全 PASS）
 node tests/client-panel.test.mjs    # 面板渲染与请求 URL（107 项断言）
 node tests/cordis-waterfall.test.mjs # 真 cordis 库复现 waterfall 契约（5 项）

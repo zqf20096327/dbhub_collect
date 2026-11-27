@@ -17,18 +17,18 @@ directory; the rest of this tree is the PostgreSQL source it is based on.  It
 is built for PostgreSQL 18 (this branch) and for PostgreSQL 19 (branch
 `kingres-19`), from one source of each extension.
 
-**Status.**  There is no release and no beta yet.  The first release will
-contain every phase of the roadmap except phase 8, which is future roadmap.
-Sharding, the ledger and its verifier, the control plane and the console are
-built; query pushdown, table lifecycle, high availability, signing and
-anchoring of the ledger, and analytics are still in progress; elasticity
-(phase 10) and distributed schemas (phase 11) are designed and not built yet.
-Many parts have
-been independently reviewed and their findings fixed; some fixes have not been
-reviewed again, and some findings are open.  In particular, failover must not
-be relied on yet, and nothing should be treated as anchored outside the
-database until an open finding in the anchoring is fixed.  The README of the
-project states the exact state of every phase.
+**Status.**  There is no release yet.  The first release will be 0.1.0.  It
+contains every phase of the roadmap except phase 8 (a global snapshot and a
+multi-node ledger), which is future roadmap, and phase 15 (management of
+third-party extensions), which comes after the first release.  Sharding,
+query pushdown, table lifecycle, elasticity, distributed schemas, high
+availability, the ledger with its verifier, signing and anchoring, the control
+plane and the console, analytics, configuration from the console and the export
+and import of tables and databases are built.  The README of the project states
+the exact state of every phase, and
+[kingres/docs/guide/limitations.md](kingres/docs/guide/limitations.md) lists what
+KingresDB does not do.  Failover is new in this release: test your recovery
+procedure before you rely on it.
 
 - [kingres/README.md](kingres/README.md): the status of every phase, the
   repository map and the documentation.

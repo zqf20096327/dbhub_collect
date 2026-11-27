@@ -1,0 +1,890 @@
+# Akena Watch — Siempre en Guardia
+
+Monitor de disponibilidad (uptime) en **un solo binario estático** — sin Docker,
+sin Node, sin instalaciones. Cópialo en **cualquier Linux**, ejecútalo y olvídate:
+vigila tus servicios, guarda el historial en SQLite embebida y avisa cuando algo
+falla. El mismo ejecutable corre en Linux plano, detrás de **CloudPanel 2** o en
+**Cloudflare Containers**.
+
+> 🌐 **Sitio web y descargas**: <https://akenawatch.com> — landing,
+> enlaces a los binarios de cada release y documentación base.
+>
+> 📋 **Novedades**: consulta el [CHANGELOG](CHANGELOG.md) para ver los cambios
+> de cada versión.
+
+> 🐾 **En memoria de Akena.** Este proyecto nace como tributo a una compañera
+> mestiza que, durante más de nueve años, fue guardiana y familia. Su nombre vive
+> en cada monitor, cada heartbeat y cada alerta: la misma fidelidad con la que
+> ella cuidó a los suyos es la que este vigilante dedica a tus servicios.
+> *Siempre en Guardia.*
+
+---
+
+## Instalación en 30 segundos
+
+```sh
+# 1) descarga el binario de la última release (Linux x86_64)
+curl -fsSL -o akena-watch https://github.com/xic17/akena-watch/releases/latest/download/akena-watch-linux-amd64
+chmod +x akena-watch
+
+# 2) ejecútalo (datos en ./data, puerto 8080)
+./akena-watch
+```
+
+Abre <http://localhost:8080>: el asistente te pedirá crear el administrador.
+
+O con el instalador, que detecta la plataforma, **verifica el `SHA256SUMS`** y lo
+deja listo en `/usr/local/bin`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/xic17/akena-watch/main/scripts/install.sh | sh
+```
+
+¿ARM o macOS? En la misma release están `akena-watch-linux-arm64`,
+`akena-watch-darwin-amd64` y `akena-watch-darwin-arm64`. ¿systemd, CloudPanel 2 o
+contenedor? → [Despliegue](#despliegue) · Sitio y binarios: <https://akenawatch.com>
+
+---
+
+## Contenido
+
+1. [Características](#características)
+2. [Arquitectura](#arquitectura)
+3. [Requisitos](#requisitos)
+4. [Inicio rápido](#inicio-rápido)
+5. [Primer arranque: crear el administrador](#primer-arranque-crear-el-administrador)
+6. [Usuarios y roles](#usuarios-y-roles)
+7. [Monitores](#monitores)
+8. [Canales de alerta](#canales-de-alerta)
+9. [Página de estado pública](#página-de-estado-pública)
+10. [Herramientas](#herramientas)
+    - [Ping en tiempo real](#ping-en-tiempo-real)
+    - [Inspección HTTP](#inspección-http)
+    - [Certificado TLS](#certificado-tls)
+    - [Vencimiento del dominio](#vencimiento-del-dominio)
+    - [Escaneo de puertos](#escaneo-de-puertos)
+    - [Whois](#whois)
+    - [DNS Lookup](#dns-lookup)
+11. [Configuración](#configuración)
+    - [Ejemplos al ejecutar](#ejemplos-al-ejecutar)
+    - [Modo demostración](#modo-demostración)
+12. [Despliegue](#despliegue)
+    - [Linux plano (systemd)](#linux-plano-systemd)
+    - [CloudPanel 2](#cloudpanel-2)
+    - [Cloudflare Containers](#cloudflare-containers)
+    - [Docker](#docker)
+13. [API](#api)
+14. [Seguridad](#seguridad)
+15. [Limitaciones conocidas](#limitaciones-conocidas)
+16. [Desarrollo](#desarrollo)
+17. [Roadmap](#roadmap)
+18. [Licencia](#licencia)
+19. [Autor](#autor)
+
+---
+
+## Características
+
+- **Primer arranque con wizard**: la primera ejecución pide crear el usuario y
+  contraseña del **administrador**; hasta entonces todo redirige a `/setup`.
+- **Multi-usuario**: el administrador crea **administradores** y **colaboradores**.
+  Cada usuario tiene sus **propios monitores** y canales de alerta.
+- **Compartir monitores** con otros usuarios (lectura o edición).
+- **Checks**: HTTP/S (método, estado esperado, palabra clave, invertir keyword),
+  TCP (host:puerto) y DNS.
+- **Scheduler** con intervalo por monitor (desde 10 segundos), ejecución en
+  goroutines y reintentos antes de alertar (evita falsos positivos).
+- **Historial** de heartbeats en SQLite con cálculo de **uptime** (24 h y 7 días).
+- **Resumen estadístico** en el dashboard: en línea, caídos, pausados, sin datos y
+  uptime medio de 24 h.
+- **Gráficas de latencia** (últimas 24 h) por monitor, dibujadas en SVG sin librerías.
+- **Tiempo real**: el dashboard se actualiza por WebSocket sin recargar
+  (estado, latencia, gráfica y resumen).
+- **Alertas** por webhook genérico, **Telegram** y **email SMTP**, con botón de
+  **prueba por canal** para validar la configuración.
+- **Detección de lentitud**: umbral de latencia por monitor y estado «lento» con
+  alerta única tras N checks consecutivos por encima del umbral.
+- **Aviso de expiración de certificado**: en monitores HTTP(S), alerta cuando al
+  certificado le quedan menos días que el umbral configurado (comprobación diaria).
+- **Aviso de vencimiento de dominio**: alerta cuando al registro del dominio del
+  monitor le quedan menos días que el umbral configurado (consulta diaria por RDAP
+  y WHOIS).
+- **Ventana de mantenimiento semanal**: franjas sin alertas (con soporte de cruce
+  de medianoche) en las que los checks y el historial se conservan.
+- **Pausar, reanudar y duplicar** monitores desde el listado.
+- **Herramientas** (se ejecutan desde el servidor, en pestañas):
+  - **Ping en tiempo real** por WebSocket (TCP o ICMP, con estadísticas y gráfica).
+  - **Inspección HTTP**: tiempos desglosados (DNS, conexión, TLS, TTFB), cadena de
+    redirecciones, cabeceras, certificado y vista previa del cuerpo.
+  - **Certificado TLS**: validez, emisor, SANs, serie, algoritmos y días restantes.
+  - **Vencimiento del dominio**: cuándo caduca el registro y cuántos días quedan
+    (RDAP y WHOIS).
+  - **Escaneo de puertos** TCP con perfiles o rango personalizado, servicio y latencia.
+  - **Whois** y **DNS Lookup** (A, AAAA, CNAME, MX, NS, TXT, PTR).
+- **Página de estado pública** por usuario, sin autenticación, con **historial
+  visual de las últimas 24 horas** por monitor.
+- **Un solo binario**: el frontend está embebido (`go:embed`); no hay
+  `node_modules`, ni pasos de build del frontend, ni dependencias de runtime.
+- Idioma de la interfaz: español.
+
+## Arquitectura
+
+```mermaid
+graph TD
+    B[Dashboard / navegador] -->|HTTP + WebSocket| S[Akena Watch<br/>binario Go]
+    S -->|checks periódicos| T[Servicios monitoreados<br/>HTTP / TCP / DNS]
+    S -->|alertas| N[Webhook / Telegram / SMTP]
+    S -->|SQLite| D[(AKENA_DATA_DIR/akena.db)]
+    subgraph Despliegues
+      L[Linux plano / CloudPanel 2<br/>systemd + nginx reverse proxy]
+      C[Cloudflare Containers<br/>Worker + contenedor + R2-FUSE]
+      K[Docker]
+    end
+```
+
+| Capa | Tecnología |
+|---|---|
+| Lenguaje | Go 1.23 (binario estático, sin cgo) |
+| Persistencia | SQLite embebida (`modernc.org/sqlite`, pure Go) |
+| HTTP | `net/http` estándar (Go 1.22+ routing) |
+| Tiempo real | `gorilla/websocket` |
+| Frontend | HTML + CSS + vanilla JS embebidos (sin toolchain) |
+| Contraseñas | bcrypt (`golang.org/x/crypto`) |
+
+## Requisitos
+
+- **Go 1.23+** solo para compilar desde el código fuente (los binarios
+  publicados en Releases no necesitan nada).
+- Cualquier **Linux x86_64 o arm64** para ejecutar.
+- Para el despliegue en Cloudflare: cuenta con plan **Workers Paid** y `wrangler`.
+- Docker solo si usas la imagen de contenedor.
+
+## Instalación para nuevos usuarios
+
+Los binarios se publican como **GitHub Releases** (linux y darwin, amd64 y
+arm64) con su checksum. Una sola línea:
+
+```sh
+AKENA_REPO=xic17/akena-watch sh -c "$(curl -sSL https://github.com/xic17/akena-watch/releases/latest/download/install.sh)"
+```
+
+> El script detecta la plataforma, descarga el binario correcto, **verifica
+> el checksum** e instala en `/usr/local/bin/akena-watch`. También puedes
+> ejecutarlo desde el repo (`sh scripts/install.sh`) o fijar versión:
+> `VERSION=v1.0.0`.
+
+Alternativas:
+
+```sh
+# manual: descarga desde Releases
+curl -sSL -o akena-watch https://github.com/xic17/akena-watch/releases/latest/download/akena-watch-linux-amd64
+chmod +x akena-watch
+./akena-watch
+
+# o desde el código fuente
+make build-linux-amd64
+./bin/akena-watch-linux-amd64
+```
+
+Comprueba la versión instalada: `akena-watch` imprime la versión al arrancar,
+y `GET /api/version` la expone por HTTP.
+
+## Inicio rápido
+
+```sh
+# compilar
+make build            # o: CGO_ENABLED=0 go build -o bin/akena-watch .
+
+# ejecutar (datos en ./data, puerto 8080)
+./bin/akena-watch
+
+# cambiar el puerto HTTP al ejecutar
+AKENA_PORT=9000 ./bin/akena-watch
+
+# puerto + interfaz de escucha (solo loopback, ideal detrás de un proxy)
+AKENA_BIND=127.0.0.1 AKENA_PORT=8080 ./bin/akena-watch
+```
+
+Abre `http://localhost:8080` → te lleva a `/setup`. Si cambiaste el puerto con
+`AKENA_PORT=9000`, abre `http://localhost:9000`.
+
+También puedes compilar para cualquier objetivo sin instalar nada en el destino:
+
+```sh
+make build-linux-amd64   # VPS x86_64 (CloudPanel, etc.)
+make build-linux-arm64   # Raspberry Pi / ARM
+```
+
+## Primer arranque: crear el administrador
+
+Con cero usuarios en la base de datos, **todas** las rutas redirigen a `/setup`:
+
+1. Entra en `http://servidor:8080/setup`.
+2. Crea el primer **administrador** (usuario + contraseña, mínimo 8 caracteres).
+3. Quedas autenticado y aterrizas en el dashboard.
+
+El wizard desaparece para siempre: una vez existe el primer usuario, `/setup`
+devuelve error y todo pide login.
+
+## Usuarios y roles
+
+| Rol | Gestiona usuarios | Monitores |
+|---|---|---|
+| **Administrador** | ✅ crear, editar (rol, correo, Telegram y **accesos**), eliminar | Ve todos los monitores del sistema y posee los suyos |
+| **Colaborador** | ❌ | Sus monitores, los que le compartan y los de sus **grupos/accesos** |
+
+Cada usuario puede llevar en su perfil un **correo** y un **ID de Telegram**
+(opcionales): se piden al crear el usuario (wizard y panel), se pueden editar
+desde **"Mi perfil"** (botón en la barra superior) y por el administrador en
+la edición de usuarios. El correo se valida en formato y es **único** entre
+usuarios (los vacíos no cuentan). El **ID de Telegram** (numérico, puede ser
+negativo para grupos/canales) habilita la opción de cada monitor
+**"Avisarme por Telegram"**: las alertas de caída/recuperación se envían
+**directamente a tu ID** usando el bot de tu primer canal de Telegram.
+
+Reglas de protección:
+
+- No puedes eliminarte a ti mismo ni quitarte el rol de administrador.
+- **Siempre debe existir al menos un administrador** (protegido por la API).
+- Eliminar un usuario borra en cascada sus monitores, historial, canales y
+  comparticiones.
+
+### Grupos y acceso de colaboradores
+
+Los monitores se pueden **categorizar por grupo** (campo "Grupo" al crear o
+editar un monitor: `web`, `api`, `base de datos`, …). En la **ficha del
+usuario** (editar usuario, cuando el rol es colaborador), el administrador
+elige qué monitores puede ver el colaborador, de dos formas combinables:
+
+- **Por grupos**: marcando los grupos completos (todos los monitores de ese
+  grupo, presentes y futuros).
+- **Manual**: marcando monitores específicos uno a uno.
+
+El acceso es de **solo vista** (ver estado, estadísticas y tiempo real); la
+edición sigue controlada por el propietario (compartir con edición) y el
+**borrado es exclusivo del propietario** (o de un administrador): un
+colaborador jamás puede eliminar un monitor que le compartieron otros
+colaboradores o que le asignó el admin. Los administradores ven todo por
+diseño.
+
+## Monitores
+
+Cada monitor se define con:
+
+- **Nombre** y **tipo**: `http` (URL completa), `tcp` (host:puerto), `dns` (host).
+- **HTTP**: método, estado esperado (default 200), palabra clave opcional
+  (buscar en el cuerpo, o alertar si *aparece* con "invertir keyword") y
+  **cuerpo JSON opcional** que se envía en cada check (para APIs con
+  POST/PUT/PATCH; se manda con `Content-Type: application/json`).
+- **Intervalo**: desde 10 segundos hasta 24 horas.
+- **Timeout**: 1–120 segundos.
+- **Reintentos**: N fallos consecutivos antes de disparar la alerta (default 1).
+- **Opciones**: activo, alertas habilitadas, público (página de estado),
+  canales de notificación asociados.
+- **Compartir** con otros usuarios: lectura o edición.
+
+### Detección de lentitud
+
+Además de `arriba` y `caído`, un monitor puede detectar **degradación**:
+
+- **Umbral de lentitud (ms)**: latencia a partir de la cual el servicio se
+  considera lento. `0` lo desactiva.
+- **Checks seguidos**: cuántos checks consecutivos por encima del umbral deben
+  producirse antes de avisar (default 3).
+
+Mientras se supera el umbral, el monitor muestra el estado **«lento»**
+(indicador ámbar, en el dashboard y en la página de estado pública) y, al
+alcanzar los checks configurados, envía una **alerta única** 🟡 por los canales
+asociados. Al normalizarse la latencia, el estado desaparece y el aviso se
+rearma. Aplica a los tres tipos de monitor (HTTP, TCP y DNS).
+
+### Aviso de expiración de certificado
+
+En monitores **HTTP(S)** se puede vigilar la caducidad del certificado TLS:
+
+- **Avisar si expira en ≤ (días)**: umbral en días. `0` lo desactiva.
+- El certificado se comprueba **una vez al día** (es una señal de evolución
+  lenta, no tiene sentido consultarla en cada check).
+- Cuando quedan menos días que el umbral, se envía una **alerta única** 🟠
+  indicando si expira hoy, en N días o si ya ha expirado.
+- Si el certificado se renueva (o vuelve a estar lejos del umbral), el aviso se
+  rearma para el siguiente ciclo.
+- Si el host está caído no se puede comprobar el certificado, por lo que no se
+  generan falsas alertas.
+
+### Aviso de vencimiento de dominio
+
+Además del certificado, se puede vigilar la **caducidad del registro del
+dominio** del monitor: un olvido en la renovación deja el sitio inaccesible
+mucho más tiempo que un certificado caducado.
+
+- **Avisar si el dominio vence en ≤ (días)**: umbral en días. `0` lo desactiva.
+- El dominio se deduce del destino del monitor (`https://panel.ejemplo.com/x` →
+  `ejemplo.com`), así que vale para monitores HTTP, TCP y DNS.
+- Se consulta **una vez al día** y se guarda la última fecha conocida, de forma
+  que la ficha del monitor la muestra sin repetir la consulta (que puede tardar
+  varios segundos).
+- Cuando quedan menos días que el umbral, se envía una **alerta única** 🗓️
+  indicando la fecha y si vence hoy, en N días o si ya ha vencido.
+- Si el dominio se renueva (o vuelve a estar lejos del umbral), el aviso se
+  rearma para el siguiente ciclo.
+- La consulta se hace por **RDAP** (estructurado) y, si el registro no lo publica
+  por esa vía, por **WHOIS**. Hay registros que sencillamente no publican la
+  fecha —`.de`, por ejemplo—: en ese caso no se inventa nada y no se alerta.
+- Mientras el monitor esté en su **ventana de mantenimiento**, la alerta no se
+  envía.
+
+### Ventana de mantenimiento
+
+Permite silenciar las alertas de un monitor durante una franja recurrente, sin
+dejar de vigilar el servicio:
+
+- **Día** de la semana y **franja horaria** (hora local del servidor).
+- Admite franjas que **cruzan la medianoche** (p. ej. domingo 23:00 → lunes
+  01:00).
+- Durante la ventana **no se envían alertas** (ni de caída, ni de lentitud, ni de
+  certificado), pero los **checks y el historial siguen intactos**: el uptime y
+  las gráficas no mienten.
+- Si el monitor sigue caído al terminar la ventana, la alerta se dispara en el
+  **siguiente check** (los reintentos se cuentan durante la ventana).
+- Mientras está activa, el monitor muestra la marca **«mantenimiento»** en el
+  dashboard y en la página de estado pública.
+
+### Pausar y reanudar
+
+Cada monitor se puede **pausar** desde el icono del listado. Un monitor pausado
+**no se comprueba ni alerta**, se muestra atenuado con la marca «pausado» y se
+refleja igual en la página de estado pública. Es la opción adecuada para
+desactivar un servicio que ya no existe; para mantenimientos puntuales es mejor
+la ventana de mantenimiento (conserva el historial).
+
+### Duplicar
+
+El botón **«Duplicar»** clona la configuración completa de un monitor —incluidos
+los canales de alerta— con el sufijo «(copia)» en el nombre. Las comparticiones
+no se copian, así que el clon queda a nombre del mismo propietario y se puede
+compartir por separado.
+
+El botón **Probar** ejecuta un check manual sin guardar nada en el historial.
+
+## Canales de alerta
+
+Se configuran por usuario y luego se asocian a cada monitor (varios por monitor):
+
+- **Webhook**: POST JSON a una URL. Por defecto envía `{"text": "..."}`, pero
+  puedes definir un **cuerpo JSON personalizado** con variables (estilo Uptime
+  Kuma) para alimentar sistemas como Slack, Discord, n8n o tu propia API:
+
+  ```jsonc
+  {
+    "text": "{{monitorName}} está {{status}}",
+    "url": "{{monitorUrl}}",
+    "latency": "{{latency}}",
+    "at": "{{localtime}}"
+  }
+  ```
+
+  | Variable | Contenido |
+  |---|---|
+  | `{{monitorName}}` | Nombre del monitor |
+  | `{{monitorUrl}}` | Destino monitorizado |
+  | `{{monitorType}}` | `http`, `tcp` o `dns` |
+  | `{{status}}` | `up` o `down` |
+  | `{{msg}}` | Detalle del error (o "sin error reportado") |
+  | `{{latency}}` | Latencia en ms (vacío si no aplica) |
+  | `{{time}}` | Fecha/hora en UTC (ISO 8601) |
+  | `{{localtime}}` | Fecha/hora local `DD/MM/AAAA HH:MM:SS` |
+
+  Los valores se insertan escapados como JSON; si la plantilla no produce
+  JSON válido, el envío falla con un mensaje claro.
+- **Telegram**: bot token + chat ID (`sendMessage` con Markdown).
+- **Email SMTP**: host, puerto, usuario, contraseña, desde, para.
+
+Las alertas avisan en la **transición** de estado: caída (🔴) y recuperación (🟢),
+con nombre del monitor, destino, detalle del error, latencia y hora.
+
+## Página de estado pública
+
+Cada usuario puede publicar una página sin autenticación en
+`/status/<usuario>` con los monitores marcados como **público**:
+
+- Configurable desde el dashboard (título + descripción).
+- Muestra estado actual, latencia, uptime de 30 días, historial visual de las
+  últimas 24 h y último check.
+- Se refresca sola cada 30 segundos.
+
+## Herramientas
+
+Sección de utilidades que se ejecutan **desde el servidor**: miden tu
+infraestructura desde donde corre Akena Watch, no desde el navegador.
+
+### Ping en tiempo real
+
+- **TCP** (por defecto): mide la latencia de conexión a `host:puerto`.
+  Funciona en cualquier entorno sin privilegios (también en Cloudflare
+  Containers).
+- **ICMP**: echo clásico. Funciona **sin configuración** si instalaste con
+  `install.sh` (concede `cap_net_raw` automáticamente) o con el servicio
+  systemd incluido (`AmbientCapabilities`), y también en Docker/Cloudflare
+  Containers (el contenedor corre como root).
+- Transmite cada paquete por WebSocket (`GET /ws/ping`): estadísticas en vivo
+  (enviados/recibidos/perdidos, mín/media/máx, % de pérdida), gráfica y log.
+  Si el error es permanente (p. ej. ICMP sin permisos), la sesión se detiene
+  con un único aviso claro en lugar de repetir el fallo.
+
+**Solo si ejecutas el binario a mano** como usuario sin privilegios verás
+`permission denied`; entonces elige una de estas:
+
+```sh
+# Opción A (recomendada): habilita el ping para todos los usuarios y
+# sobrevive a las actualizaciones del binario.
+sudo sysctl -w net.ipv4.ping_group_range="0 2147483647"
+echo "net.ipv4.ping_group_range=0 2147483647" | sudo tee /etc/sysctl.d/99-ping.conf
+
+# Opción B: da capacidad de red solo al binario.
+# ⚠️ Se pierde al actualizar el binario: hay que repetirlo.
+sudo setcap cap_net_raw+ep /usr/local/bin/akena-watch
+```
+
+### Inspección HTTP
+
+Lanza una petición desde el servidor, como un `curl`, y muestra el resultado
+completo (`POST /api/httpcheck`). Útil para diagnosticar por qué un monitor falla:
+¿es el DNS, el TLS, la aplicación?
+
+- **Petición configurable**: método (GET, POST, PUT, PATCH, DELETE, HEAD,
+  OPTIONS), cabeceras adicionales (una por línea, `Nombre: valor`) y cuerpo JSON
+  (se envía con `Content-Type: application/json` si no indicas otro).
+- **Tiempos desglosados**: DNS, conexión TCP, handshake TLS, TTFB (primer byte) y
+  total.
+- **Redirecciones**: cadena completa con el código de cada salto (hasta 10).
+- **Certificado**: protocolo TLS, sujeto, caducidad y días restantes.
+- **Cabeceras de respuesta** en tabla y **vista previa del cuerpo** (hasta 64 KB
+  leídos, 4 KB mostrados).
+- Timeout de 15 segundos por petición.
+
+### Certificado TLS
+
+Inspecciona el certificado de cualquier servidor (`POST /api/tlscheck`), con
+puerto configurable (por defecto 443):
+
+- **Estado**: válido, expira pronto (≤ 14 días), expirado o aún no válido.
+- **Días restantes** y **cadena** de certificados.
+- **Detalles**: emisor, protocolo y cifrado, sujeto, **SANs**, validez
+  (desde/hasta), número de serie, algoritmo de firma y tipo de clave (por
+  ejemplo `ECDSA P-256` o `RSA 2048 bits`).
+- Se conecta sin validar el certificado a propósito: permite ver certificados
+  caducados, autofirmados o que no coinciden con el host.
+- Si se consulta una IP, no se envía SNI (igual que un cliente real).
+
+### Vencimiento del dominio
+
+Averigua cuándo caduca el registro de un dominio (`GET /api/domain?domain=...`),
+aceptando un dominio o una URL:
+
+- **Fuente**: primero **RDAP** (JSON estructurado del registro) y, si el registro
+  no publica la fecha por esa vía, **WHOIS** (puerto 43), reconociendo los
+  formatos habituales de gTLD, `.uk`, `.mx`, `.cl`, `.br`, `.es`…
+- **Resultado**: dominio registrable, registrador, fecha de vencimiento, días
+  restantes y la fuente usada.
+- Si el registro no publica la fecha (`.de`, por ejemplo) o el dominio no existe,
+  se avisa con un mensaje claro en vez de inventar una fecha.
+- Es la misma consulta que hace el **aviso de vencimiento** de los monitores, así
+  que sirve para comprobarlo a mano antes de configurar el umbral.
+
+### Escaneo de puertos
+
+Comprueba qué puertos TCP aceptan conexión en un host
+(`POST /api/portscan`), mediante conexión completa (no SYN), por lo que **no
+necesita privilegios**:
+
+- **Perfiles predefinidos**: puertos comunes (23 puertos), web, bases de datos.
+- **Rango personalizado** (máximo 1024 puertos por escaneo).
+- Muestra **servicio** asociado (ssh, http, https, mysql…) y **latencia** de cada
+  puerto abierto, con el total escaneado y el tiempo empleado.
+- 50 conexiones en paralelo con 700 ms de timeout por puerto.
+
+### Whois
+
+Consulta el registro WHOIS de un **dominio o IP** desde el servidor
+(`GET /api/whois?domain=...`), con la cadena de referencias IANA → registro →
+registrador resuelta automáticamente. Muestra el texto completo del registro
+en una vista desplazable, con botón para copiarlo, y timeout de 20 segundos.
+
+### DNS Lookup
+
+Consulta los registros DNS de un host desde el servidor
+(`GET /api/dns?host=...&type=...`) usando el resolver del sistema:
+
+| Tipo | Descripción |
+|---|---|
+| `A` / `AAAA` | Direcciones IPv4 / IPv6 |
+| `CNAME` | Nombre canónico |
+| `MX` | Servidores de correo (preferencia incluida) |
+| `NS` | Servidores de nombres |
+| `TXT` | Texto (SPF, verificaciones, …) |
+| `PTR` | Resolución inversa (indica una IP) |
+
+Muestra los registros en una tabla con el tiempo de consulta, distingue
+"host inexistente" de "sin registros de ese tipo", y tolera URLs pegadas.
+
+## Configuración
+
+Todo se configura con variables de entorno — el binario es agnóstico de plataforma:
+
+| Variable | Default | Descripción |
+|---|---|---|
+| `AKENA_DATA_DIR` | `./data` | Directorio donde vive `akena.db` (persistencia) |
+| `AKENA_BIND` | `0.0.0.0` | Interfaz de escucha (`127.0.0.1` detrás de un proxy) |
+| `AKENA_PORT` | `PORT` o `8080` | Puerto HTTP |
+| `PORT` | — | Convención PaaS, usado si `AKENA_PORT` no está definido |
+| `AKENA_LOGIN_INTENTOS` | `5` | Fallos de acceso permitidos antes de bloquear |
+| `AKENA_LOGIN_BLOQUEO_SEG` | `30` | Segundos de bloqueo inicial (se dobla con cada fallo extra, tope 10 min) |
+| `AKENA_LOGIN_MEMORIA_MIN` | `15` | Minutos que se recuerda un fallo sin más actividad |
+| `AKENA_SOLO_PUBLICO` | — | `1` = bloquea destinos internos (loopback, rangos privados y metadatos del cloud) en monitores y herramientas |
+| `AKENA_DEMO_MIN` | — | Reinicia los datos cada N minutos (implica lo anterior y silencia las alertas) |
+| `AKENA_DEMO_USER` | `akena` | Administrador de la demo |
+| `AKENA_DEMO_PASS` | `Demo2026!Secure` | Contraseña del administrador de la demo |
+
+Las credenciales de canales de alerta (tokens, contraseñas SMTP) se guardan en la
+base de datos, que a su vez vive en el directorio que tú protejas.
+
+### Ejemplos al ejecutar
+
+```sh
+# puerto distinto
+AKENA_PORT=9000 ./bin/akena-watch
+
+# puerto + directorio de datos propio
+AKENA_PORT=9000 AKENA_DATA_DIR=/var/lib/akena ./bin/akena-watch
+
+# solo loopback + puerto propio (para exponerlo detrás de nginx/CloudPanel)
+AKENA_BIND=127.0.0.1 AKENA_PORT=8080 ./bin/akena-watch
+```
+
+Con systemd, edita la línea `Environment=AKENA_PORT=...` en
+`deploy/akena-watch.service` y reinicia:
+
+```sh
+sudo systemctl daemon-reload && sudo systemctl restart akena-watch
+```
+
+### Modo demostración
+
+`AKENA_DEMO_MIN=15` convierte la instancia en una demo pública que se limpia sola:
+
+- **Reinicio de datos**: cada N minutos borra usuarios, monitores, canales,
+  historial y sesiones, y vuelve a crear el administrador y tres monitores de
+  ejemplo. No hace falta cron ni reiniciar el proceso: también se descarta el
+  estado del planificador, así que no quedan monitores zombis corriendo.
+- **Alertas silenciadas**: aunque alguien cree un webhook o un bot de Telegram, la
+  instancia no envía nada (el botón «Probar» responde que las notificaciones
+  están desactivadas). Nadie usa tu infraestructura para mandar mensajes.
+- **Política de red estricta** (lo mismo que `AKENA_SOLO_PUBLICO=1`): monitores y
+  herramientas no pueden alcanzar loopback, rangos privados ni los metadatos del
+  cloud. Los destinos públicos siguen funcionando con normalidad.
+- **Aviso en la interfaz** con el intervalo de reinicio.
+- **Credenciales**: `AKENA_DEMO_USER` (por defecto `akena`) y `AKENA_DEMO_PASS`
+  (por defecto `Demo2026!Secure`), configurables.
+
+```sh
+AKENA_DEMO_MIN=15 AKENA_BIND=127.0.0.1 AKENA_PORT=8080 ./akena-watch
+```
+
+Las sesiones se cierran en cada reinicio; es lo esperado en una demo (y quien
+esté explorando entra otra vez con las mismas credenciales).
+
+---
+
+## Despliegue
+
+### Linux plano (systemd)
+
+```sh
+# 1. usuario de sistema y directorio
+sudo useradd --system --home /opt/akena-watch --shell /usr/sbin/nologin akena
+sudo mkdir -p /opt/akena-watch/data
+sudo chown -R akena:akena /opt/akena-watch
+
+# 2. copia el binario (make build-linux-amd64) a /opt/akena-watch/akena-watch
+
+# 3. servicio systemd (ya incluido en deploy/akena-watch.service)
+sudo cp deploy/akena-watch.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now akena-watch
+
+# 4. comprobar
+curl -s http://127.0.0.1:8080/ping   # 204
+```
+
+Actualizar es reemplazar el binario y `sudo systemctl restart akena-watch`.
+
+### CloudPanel 2
+
+CloudPanel 2 gestiona su propio nginx (puertos 80/443 + SSL) y el panel vive en
+el 8443. Akena Watch se queda **detrás**: escucha en `127.0.0.1:8080` y el tipo
+de sitio **Reverse Proxy** de CloudPanel enruta el tráfico hacia él.
+
+```mermaid
+graph LR
+    U[Internet] -->|443 HTTPS + Let's Encrypt| N[nginx de CloudPanel 2<br/>80/443]
+    N -->|proxy_pass http://127.0.0.1:8080| G[akena-watch<br/>binario Go]
+    G -->|checks| S[Servicios monitoreados]
+    N -.->|Upgrade/Connection<br/>WebSocket OK| G
+```
+
+**Pasos:**
+
+1. **Binario y datos**
+
+   ```sh
+   sudo useradd --system --home /opt/akena-watch --shell /usr/sbin/nologin akena
+   sudo mkdir -p /opt/akena-watch/data
+   sudo chown -R akena:akena /opt/akena-watch
+   # sube el binario (linux/amd64) a /opt/akena-watch/akena-watch
+   ```
+
+2. **Servicio systemd** (con bind solo a loopback)
+
+   ```sh
+   sudo cp deploy/akena-watch.service /etc/systemd/system/
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now akena-watch
+   curl -s http://127.0.0.1:8080/ping   # 204
+   ```
+
+   (CloudPanel 2 también permite crear el servicio desde el panel:
+   *Settings → Systemd Services*.)
+
+3. **Sitio Reverse Proxy** en la UI de CloudPanel:
+
+   - **Sites → Add Site → Reverse Proxy**
+   - **Domain Name**: `monitor.tudominio.com`
+   - **Reverse Proxy URL**: `http://127.0.0.1:8080`
+   - **SSL/TLS**: Let's Encrypt (renovación automática).
+
+4. **WebSocket**: la plantilla oficial de CloudPanel para Reverse Proxy ya
+   incluye el reenvío de WebSockets (headers `Upgrade`/`Connection` y timeouts
+   largos), por lo que el dashboard en tiempo real funciona sin tocar nada.
+
+**Notas CloudPanel:**
+
+- No uses `AKENA_PORT=80/443`: son del panel. El 8080 interno + proxy es el
+  patrón correcto.
+- Los datos viven en `/opt/akena-watch/data` (fuera del home del sitio):
+  inclúyelo en el backup del VPS, o muévelo bajo el home del site si prefieres
+  que el backup manager del panel lo capture.
+- Para varias instancias: otro puerto (8081, 8082) + otro sitio Reverse Proxy.
+
+### Cloudflare Containers
+
+Cloudflare Containers ejecuta tu Dockerfile en el borde, controlado por un
+Worker. La app Go es 100% agnóstica; lo específico de Cloudflare vive en
+`deploy/cloudflare/` (el **único** código de plataforma del proyecto).
+
+```mermaid
+graph TD
+    B[Browser] --> W[Worker akena-watch<br/>proxy + cron cada 1 min]
+    W -->|fetch| C[Contenedor basic<br/>binario Go + tigrisfs]
+    C -->|SQLite| F[(R2 montado con FUSE<br/>/data persistente)]
+    C -->|checks| T[Servicios monitoreados]
+```
+
+**Los 3 retos de Cloudflare y cómo se resuelven aquí:**
+
+| Reto | Solución |
+|---|---|
+| El disco del contenedor es **efímero** | `deploy/startup.sh` monta el bucket **R2 con FUSE** (tigrisfs) en `/data`; la SQLite sobrevive reinicios e instancias. Sin credenciales R2, `/data` es un directorio normal |
+| El contenedor **duerme** tras inactividad | Un **Cron Trigger** (`* * * * *`) hace ping a `/ping` cada minuto (`worker/index.ts`): el scheduler interno corre 24/7. `sleepAfter = "30m"` como red de seguridad |
+| Tiempo real | El Worker reenvía el WebSocket; la cookie viaja en el handshake (misma origen) |
+
+**Pasos:**
+
+1. Crea el bucket R2 (`akena-data`) y una clave de API R2.
+2. Configura `deploy/cloudflare/wrangler.jsonc`:
+   - `R2_BUCKET_NAME` y `R2_ACCOUNT_ID`.
+   - Guarda `AWS_ACCESS_KEY_ID` y `AWS_SECRET_ACCESS_KEY` como secrets del Worker
+     y pásalos al contenedor vía `envVars` (sección *Environment Variables* de
+     Containers).
+3. Despliega:
+
+   ```sh
+   cd deploy/cloudflare
+   npx wrangler deploy
+   ```
+
+4. Local: `npx wrangler dev` (levanta Worker + contenedor juntos).
+
+**Limitaciones en Cloudflare (documentadas y asumidas):**
+
+- **Sin ICMP ping** (no hay sockets crudos): usa checks TCP o HTTP.
+- Intervalos muy agresivos aumentan el uso de CPU (se factura por 10ms activos).
+- FUSE sobre R2 no es SSD: para heartbeats (escrituras pequeñas) es suficiente.
+- Costo orientativo: plan Workers Paid ($5/mes) + contenedor `basic` activo 24/7
+  (~$5–15/mes según uso; facturación por uso real).
+
+### Docker
+
+```sh
+make docker   # docker build -t akena-watch -f deploy/Dockerfile .
+docker run -d --name akena-watch -p 8080:8080 -v akena-data:/data akena-watch
+```
+
+Sin variables R2, `/data` es un volumen Docker normal. Con `R2_ACCOUNT_ID` y
+`R2_BUCKET_NAME` (más credenciales), monta R2 automáticamente.
+
+---
+
+## API
+
+Resumen de los endpoints principales (JSON; autenticación por cookie de sesión):
+
+| Método | Ruta | Acceso | Descripción |
+|---|---|---|---|
+| `POST` | `/api/setup` | público (1 vez) | Crea el primer administrador |
+| `POST` | `/api/login` / `/api/logout` | público | Sesión |
+| `GET` | `/api/me` | sesión | Usuario actual |
+| `PUT` | `/api/me` | sesión | Editar mi perfil (correo e ID de Telegram) |
+| `GET/POST` | `/api/monitors` | sesión | Listar / crear |
+| `GET/PUT/DELETE` | `/api/monitors/{id}` | sesión + permiso | Consultar / editar / borrar |
+| `POST` | `/api/monitors/{id}/test` | sesión + ver | Check manual (sin guardar) |
+| `PUT` | `/api/monitors/{id}/active` | sesión + editar | Pausar (`false`) o reanudar (`true`) |
+| `POST` | `/api/monitors/{id}/duplicate` | sesión + editar | Duplicar monitor (config + canales) |
+| `GET` | `/api/monitors/{id}/heartbeats?hours=24` | sesión + ver | Historial de un monitor |
+| `GET` | `/api/monitors/{id}/stats` | sesión + ver | Estadísticas detalladas (uptime 24 h/7 d/30 d, latencia mín/avg/p95/máx, últimos eventos) |
+| `GET` | `/api/heartbeats?hours=24` | sesión | Heartbeats recientes de todos los monitores visibles (gráficas) |
+| `PUT/DELETE` | `/api/monitors/{id}/share/{uid}` | propietario/admin | Compartir / quitar |
+| `GET/POST/PUT/DELETE` | `/api/notifications` | sesión (propias) | Canales de alerta |
+| `POST` | `/api/notifications/{id}/test` | sesión (propias) | Enviar mensaje de prueba por el canal |
+| `GET` | `/api/users` | sesión | Lista de usuarios (para compartir y gestionar) |
+| `GET` | `/api/groups` | sesión | Grupos de monitores con su cantidad |
+| `POST/PUT/DELETE` | `/api/users[/{id}]` | **admin** | Gestionar usuarios |
+| `PUT` | `/api/users/{id}/groups` | **admin** | Acceso del colaborador por grupos |
+| `PUT` | `/api/users/{id}/access` | **admin** | Acceso del colaborador a monitores específicos |
+| `GET/PUT` | `/api/statuspage` | sesión | Página de estado propia |
+| `GET` | `/status/{slug}[?json=1]` | público | Página de estado pública |
+| `GET` | `/ping` | público | Health check (keep-alive Cloudflare) |
+| `GET` | `/api/version` | público | Nombre y versión del binario |
+| `GET` | `/ws` | sesión (cookie o `?token=`) | WebSocket de tiempo real |
+| `GET` | `/ws/ping` | sesión (cookie o `?token=`) | Herramienta de ping en tiempo real (mensajes JSON) |
+| `GET` | `/api/whois?domain=...` | sesión | Registro WHOIS de un dominio o IP |
+| `GET` | `/api/dns?host=...&type=...` | sesión | Registros DNS (A, AAAA, CNAME, MX, NS, TXT, PTR) |
+| `POST` | `/api/httpcheck` | sesión | Inspección HTTP (tiempos, redirecciones, cabeceras, cuerpo) |
+| `POST` | `/api/tlscheck` | sesión | Certificado TLS de un host:puerto |
+| `POST` | `/api/portscan` | sesión | Escaneo de puertos TCP |
+| `GET` | `/api/domain?domain=...` | sesión | Vencimiento del registro de un dominio (RDAP y WHOIS) |
+
+## Seguridad
+
+- Contraseñas con **bcrypt**; sesiones con token aleatorio (32 bytes) en cookie
+  `HttpOnly` + `SameSite=Lax`, expiración de 30 días.
+- **Protección contra fuerza bruta**: tras `AKENA_LOGIN_INTENTOS` fallos (5 por
+  defecto) el acceso queda bloqueado para esa cuenta y esa IP; cada fallo
+  adicional dobla la espera hasta un tope de 10 minutos y un acierto borra el
+  historial (reiniciar el proceso también perdona los bloqueos). El contador por
+  usuario no se puede esquivar con cabeceras falsas; detrás de un proxy en la
+  misma máquina (el nginx de CloudPanel) se tiene en cuenta la IP real que este
+  informa en `X-Real-IP` o `X-Forwarded-For`, y solo desde loopback. Los intentos
+  fallidos quedan en el log con usuario e IP, nunca con la contraseña probada.
+- **CSRF**: las peticiones de estado con `Origin` de otro host se rechazan.
+- **Política de red**: las direcciones link-local (incluidos los metadatos del
+  cloud, `169.254.169.254`), no especificadas y multicast se rechazan siempre, en
+  monitores, herramientas y canales. Con `AKENA_SOLO_PUBLICO=1` —o en modo demo—
+  tampoco se permite loopback, rangos privados ni CGNAT. La comprobación se hace
+  al conectar, con la IP ya resuelta, así que una redirección o un DNS cambiante
+  tampoco se cuelan.
+- Validación estricta de entradas en el servidor (longitudes, tipos, rangos).
+- No se puede eliminar ni degradar al **último administrador**.
+- En CloudPanel se recomienda `AKENA_BIND=127.0.0.1` (el nginx del panel
+  expone solo 80/443).
+- Opcional: Cloudflare Access / Zero Trust delante del dashboard en Cloudflare
+  (la página de estado pública queda fuera del proxy por diseño).
+
+## Limitaciones conocidas
+
+- Los **monitores** no usan ICMP (bloqueado en entornos serverless y sin
+  permisos). La herramienta de ping sí soporta ICMP cuando el sistema lo
+  permite — ver [Herramientas](#herramientas) para habilitar permisos.
+- Los heartbeats se conservan hasta 5.000 por monitor (poda automática cada hora).
+- En Cloudflare Containers el contenedor puede reiniciarse en otro datacenter;
+  la persistencia vía R2 hace que eso sea transparente.
+
+## Publicar una versión
+
+El workflow **Release** (`make release` en CI) compila los binarios para
+linux/darwin × amd64/arm64, genera `SHA256SUMS` y los adjunta a una
+**GitHub Release** — de ahí los instala `scripts/install.sh`.
+
+```sh
+# desde el repo, con los cambios confirmados:
+git tag v1.0.0
+git push origin v1.0.0   # → GitHub Actions publica la release automáticamente
+```
+
+Localmente, `make release` hace lo mismo en `dist/` (la versión sale de
+`git describe`, p. ej. `v1.0.0`).
+
+## Desarrollo
+
+```sh
+make build   # compilar
+make test    # go test ./...
+make vet     # go vet ./...
+sh scripts/smoke.sh   # prueba funcional completa contra un servidor real
+```
+
+**Modo desarrollo con datos de prueba** (`make run-test` o `sh scripts/dev.sh`):
+recompila, reinicia la instancia anterior y arranca escuchando solo en
+`127.0.0.1`, con el directorio de datos de prueba (nunca los datos reales).
+El directorio se resuelve así: `AKENA_TEST_DATA_DIR` → `TEST_DATA_DIR` de
+`Makefile.local` (config personal, gitignoreada) → `./.test-data`.
+
+```sh
+make dev                          # atajo del script
+AKENA_TEST_DATA_DIR=/tmp/pruebas sh scripts/dev.sh   # otra carpeta de datos
+PORT=9000 sh scripts/dev.sh       # otro puerto
+```
+
+Estructura:
+
+```text
+akena-watch/
+├── main.go                     # entrada: env vars, arranque, versión
+├── internal/
+│   ├── store/                  # SQLite: usuarios, monitores, heartbeats, canales
+│   ├── monitor/                # checks (http/tcp/dns) + scheduler
+│   ├── notifier/               # webhook, telegram, smtp
+│   ├── ping/                   # motor de ping TCP/ICMP (herramientas)
+│   ├── server/                 # rutas, auth, hub WebSocket, handlers
+│   └── web/                    # templates + estáticos embebidos
+├── deploy/
+│   ├── Dockerfile              # multi-stage + tigrisfs (R2-FUSE)
+│   ├── startup.sh              # monta R2 si hay credenciales, ejecuta el binario
+│   ├── akena-watch.service     # systemd (Linux plano / CloudPanel 2)
+│   └── cloudflare/             # Worker + wrangler.jsonc (único código CF)
+├── scripts/
+│   ├── dev.sh                  # arranque en modo desarrollo con datos de prueba
+│   ├── install.sh              # instalador desde GitHub Releases
+│   └── smoke.sh                # prueba funcional
+├── .github/workflows/          # CI (validación) + Release (binarios)
+└── Makefile                    # build, test, vet, release
+```
+
+## Roadmap
+
+- 2FA (TOTP) para cuentas administrador.
+- Adaptador de persistencia sobre D1 (Cloudflare) sin tocar el resto del código.
+- Notificaciones adicionales: Discord, Slack, Pushover, ntfysh.
+- Más herramientas: inspección HTTP (headers/certificados), traceroute.
+- Exportación de datos (heartbeats y configuración).
+
+## Licencia
+
+[MIT](LICENSE). Proyecto original inspirado en el concepto de Uptime Kuma
+(MIT), reimplementado desde cero en Go como homenaje a Akena. 🐾
+
+## Autor
+
+**Tupac de Paz** — creador y desarrollador de Akena Watch. Este proyecto es
+un tributo a Akena, su guardiana durante más de nueve años. *Siempre en
+Guardia.* 🐾

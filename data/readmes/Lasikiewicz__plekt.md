@@ -24,7 +24,7 @@
 
 ---
 
-> **v2.3.0.** Plekt writes watched state and playback progress to connected media
+> **v2.4.0.** Plekt writes watched state and playback progress to connected media
 > servers, so **back up first** (Settings → Backup → Local). Report
 > issues on the [issue tracker](https://github.com/Lasikiewicz/plekt/issues).
 
@@ -83,7 +83,9 @@ check is still pending. Existing Unraid installs keep their current appdata path
 None of these talk to each other - they all talk to Plekt.
 
 - **Remembers** every watch, once, locally in SQLite
-- **Syncs** watched/unwatched state across Plex, Emby, Jellyfin, and Trakt
+- **Syncs** watched/unwatched state across Plex, Emby, Jellyfin, and Trakt, and preserves resume progress when a watched-state notification repeats during a rewatch
+- **Monitored libraries** - Choose which Plex, Emby, and Jellyfin libraries take part in watch sync under **Settings → Media servers**. Fresh installs and upgrades start with no libraries selected (showing a banner until configured), and newly added libraries remain unselected until opted in.
+- **Multiple episode copies** - Watch sync looks for matching copies across selected Emby and Jellyfin libraries, including separate HD and 4K libraries. Scheduled catch-up can mark a missed copy when Plekt already has a matching watch.
 - **Enriches** with posters, cast, episodes, and ratings from TMDB, TheTVDB, Fanart.tv, and OMDb
 - **Connects** to Overseerr/Jellyseerr for requests and availability
 
@@ -95,7 +97,9 @@ None of these talk to each other - they all talk to Plekt.
 - **Force Sync** - Flexible on-demand sync per-title (with season scoping) or library-wide with comprehensive live progress logging; Plex watched scans page every section and report failures in the preview. Confirmed plans report partially applied results with missing titles instead of counting unmatched items as done. Library replay uses four workers while keeping each item's order; cancellation also stops preview scans between pages. Title pushes finish local media servers before draining a paced, retrying Trakt queue
 - **Instant state restoration** - Automatically synchronizes watch history to newly added media and rebuilt server libraries
 - **Cross-platform resume** - Pause playback on one server and pick up right where you left off on another
-- **Up Next quick settings** - The dashboard cog includes **Sync Up Next to media apps**, sharing the same server-wide toggle as Settings and saving immediately.
+- **Up Next quick settings** - The dashboard cog includes **Sync Up Next to media apps**, five queue orders, and a separate **Part watched first** toggle. **Closest to finishing** counts released, unwatched episodes in the current season. **Custom** order is saved per account.
+- **Up Next sync** - Manual pushes use the current server queue. Plex, Emby and Jellyfin receive resume or rail updates only after a successful feed read. Jellyfin rail refresh updates the predecessor's play date while preserving watched state, play count and resume position.
+- **Up Next overrides and Mirror** - Choose **Latest released** or pin a show's queue placement. Preview and opt in to Mirror per app. Plex and Emby can hide eligible items and Jellyfin is order only.
 - **Theme-aware interface** - Dark mode uses Plekt's logo green for navigation and settings accents.
 
 - **Dropped titles** - Drop or un-drop a show or movie from its detail page or an Up Next card’s three-dot menu. History and resume progress stay intact. Dropped-only library/history views and a separate current-title count in Stats make intentional drops easy to find. A completed live play after the drop restores the title; historical imports and played flags leave it dropped. Drops sync both ways with Trakt (shows) and Simkl (shows and movies), with safe list restoration on un-drop. Failed writes retain their intent and retry after an hour; a new explicit action retries immediately. Overlapping event and scheduled runs cannot send the same action concurrently, including across processes.
@@ -103,6 +107,8 @@ None of these talk to each other - they all talk to Plekt.
 - **Mobile dashboard cards** - Compact lower rows with larger posters; posters-only history cards expand their details to the right.
 - **Now Playing dashboard** - Real-time playback monitoring with a panel that features part watched and Up Next items around live sessions (configurable from its cog), optional Plekt-authoritative Up Next sync that queues a coalesced provider push whenever the queue changes (to Plex/Emby Continue Watching and Jellyfin Next Up), show-level Up Next dismissals, media-type-aware Watch History, weekly watch activity trends, and recent history; desktop gives the four sections equal height and reserves matching space for their titles and card-rail sliders, while phones show taller, wider featured Up Next cards with larger posters. Clearing a part watched item on Plex, Emby or Jellyfin clears the other servers' resume positions too; Plex's per-minute check also catches cleared resume-only items and pending watched-flag reviews when their notifications are missed.
 - **Sync Activity hub** - Live grouped activity by movie/show, with all resume checkpoints and destination results preserved behind each row, clear reasons for skipped destinations, unresolved cross-platform matches with per-item Fix match actions, targeted retry for actual failed destinations (only the newest unresolved result per movie/episode is retried, individually or all at once as a background job that survives closing the tab; expected missing-library skips are excluded), show-wide Fix Match and retry-all controls for Trakt mismatches, dismiss controls for shows Trakt does not contain, compact tracker warnings with direct Simkl and Trakt history links, blocked-restore repair grouped by show with Fix Match and skip controls, and downloadable group logs
+- **Sync Activity retention** - Activity rows and retry and dismissal information remain available; recognized raw request and response body fields in debug data are trimmed after 90 days.
+- **Background-friendly activity** - Sync Activity skips its periodic refresh while the browser tab is hidden and refreshes on return when the view is active and unpaused.
 - **Rich analytics & stats** - In-depth all-time and period reports, top shows, and platform playback distribution; same-title shows with conflicting provider identities retain separate rankings and artwork. On desktop, the top-ten leaderboard and monthly activity chart use the available page height
 - **Server Logs controls** - Pause live updates, follow the newest entries, or filter text within a category. Scrolling up stops following; Download Logs exports every category for a range you pick (last hour, 6 hours, 24 hours, 3 days, or all kept logs).
 - **Playback detection cadence** - Set up plugins/playback webhooks for prompt updates. Plekt checks for missed activity every 5 minutes while idle to reduce background requests, then every 10 seconds once playback is detected. The dashboard refreshes separately every 10 seconds.
@@ -118,16 +124,19 @@ None of these talk to each other - they all talk to Plekt.
 - **Private calendar feed** - Subscribe from a calendar app to upcoming episodes, movie release dates or both for titles in your library; both are selected by default, and the **Subscribe** button on Upcoming generates or revokes the private URL
 - **Discover hub** - Personalized recommendations from your watch history plus cached trending, now-playing, airing-today, and genre feeds paint immediately from saved data, exclude titles you have already watched, and refresh live through the update stream with direct TMDB detail navigation; cards match the width used on other media pages
 - **External tracker sync** - Trakt and Simkl use device authorization and encrypted tokens, with independent connection/import controls. Trakt preserves per-play history and translated episode mapping; show replacement preserves Trakt-only plays or refuses conflicting targets before writing
-  Simkl uses explicit user/media-event checks, persisted activity cursors and baseline/delta observations, with durable watched writes confirmed by provider readback. Unsafe baseline observations stay available to explicit full-sync previews without filling Sync Attention; unsafe new deltas remain visible for review. Eligible concurrent writes share batches of up to 100 with a quota reserve; uncertain outcomes stay held without automatic resend. Ratings that could create watched/list state, unresolved anime/special identity, list-destructive unwatches, paid rewatches and automatic absence reconciliation remain blocked. Plekt retains its full local history independently of provider limits.
+  Simkl uses explicit user/media-event checks, persisted activity cursors and baseline/delta observations, with durable watched writes confirmed by provider readback. Unsafe baseline observations stay available to explicit full-sync previews without filling Sync Attention; unsafe new deltas remain visible for review. Eligible concurrent writes share batches of up to 100 with a quota reserve. Plekt rechecks held Trakt and Simkl watches automatically every six hours and clears the hold when the tracker confirms the exact item and watch date. Unconfirmed writes stay held without automatic resend. Ratings that could create watched/list state, unresolved anime/special identity, list-destructive unwatches, paid rewatches and automatic absence reconciliation remain blocked. Plekt retains its full local history independently of provider limits.
+  **Watch updates on hold** in Sync Activity groups updates by movie or show and identifies each tracker. Both Trakt and Simkl holds are rechecked automatically every six hours, and **Check watch status** runs that check immediately and shows how many updates are still on hold. **Cancel selected updates** removes the updates for selected titles from the queue and preserves local and tracker watch history. For alternate-order episodes skipped by Simkl, **Review Simkl updates** on the show matches each skipped watch by title and air date and sends only the selected watches that match exactly one Simkl episode with the same aired numbering.
+  **Retry failed** on a Sync Activity item shows what failed and what Plekt will retry. The popup stays open and shows the retry result and any app errors. A Simkl update that was never sent because the watch arrived without IDs is queued again for the next Simkl batch.
   Bulk manual watched actions gather Simkl writes into chunks of up to 100, independently of LAN concurrency, and queued captured intents gather up to 100 per run with individual watch-row outcomes. Single watches remain immediate. Batch preflights respect the known quota reserve; failed or invalid preflights save a hold until quota reset, surviving restarts. Four requests apply per chunk; unrelated sequential watches can form separate chunks. Manual full sync requires a one-hour item preview with deselection, fresh-state rechecks and a verified backup. First-run selected history imports start on Continue without a separate preview approval, retaining the backup and freshness guards. Selected imports propagate to their listed media-server destinations; dates already on a destination are preserved. Simkl selected sends show request estimates and retain the quota reserve. Sends audited as missing from Simkl's current progress remain held for review and skipped by later previews. Incremental checks read a separate ratings delta only when rating activity changes, so rating-only edits and explicit clears are captured. After first-run imports finish, the add-only initial outward pass exposes per-destination progress and remaining or held items above Sync / Idle.
 - **Seerr integration** - Discover and request movies and TV shows directly from detail pages via Overseerr or Jellyseerr; opening Settings skips automatic Seerr capability requests
 - **Movie collections** - Explore related franchise entries, sequels, prequels, and spin-offs from movie detail pages and collection search results
 - **Direct server deep links** - Quick one-click links to jump directly to any title in Plex, Emby, or Jellyfin
-- **Automated backups** - Built-in daily local backups with optional scheduled offsite backups to Backblaze B2; full restores first save a SQLite recovery snapshot, safety watch snapshots survive at least seven days, and interrupted restore fences recover after a three-minute stale heartbeat, while failure notices remain until dismissed
+- **Automated backups** - Built-in daily local backups with optional scheduled remote backups to Backblaze B2, S3-compatible storage (Cloudflare R2, AWS S3, MinIO, Wasabi, and others), WebDAV, Dropbox, or an external mounted folder; full restores first save a SQLite recovery snapshot, safety watch snapshots survive at least seven days, and interrupted restore fences recover after a three-minute stale heartbeat, while failure notices remain until dismissed
 - **Guided first-run setup** - A one-time account claim replaces the old generated-password dead end, followed by a resumable `/setup` wizard that offers enabled watch trackers together, connects media servers, adds metadata, configures webhooks, and tunes watch and Up Next sync. Continue on Import & sync starts an add-only initial outward pass after selected imports finish; its progress chip shows destination counts and remaining items, with interrupted or uncertain sends kept for review
 - **Self-hosted & private** - Runs entirely on your own hardware with dedicated SQLite storage and full data ownership
-- **Enterprise-grade security** - Hardened with strict Content Security Policy (CSP), scrypt password hashing, rate limiting, cross-site mutation checks and HMAC session signing; logout revokes the individual session across restarts
+- **Enterprise-grade security** - Hardened with strict Content Security Policy (CSP), scrypt password hashing, rate limiting, cross-site mutation checks, HMAC session signing, and an optional 90-day Remember me sign-in; logout revokes the individual session across restarts
 - **High-performance artwork cache** - Fast local caching for high-resolution posters, backdrops, and logos from TMDB, TheTVDB, and Fanart.tv; metadata is warmed in the background as media is discovered or a TV show is rematched so the dashboard stays cache-first
+- **Storage optimization** - Compresses large JSON payloads in local SQLite databases and shared metadata caches (showing an Upgrading Plekt progress screen during one-time upgrade compaction), optimizes cached artwork to smaller WebP files in the background, gzips rotated logs, and provides a Storage Optimization panel under Settings → General → Storage & Cache to inspect disk usage, compact databases, optimize artwork, and recompress legacy backups
 - **Comprehensive metadata** - Precision episode titles, season numbering, and air dates from TheTVDB, or season and episode structure from TMDB (a global default in Settings and per show in Fix Match, where stored watches are never renumbered and replacing the show on Trakt is a separate, optional confirmation); choose Aired or DVD order for a show and review DVD-to-aired episode links before new watches are saved; choose and save a poster per season in Edit Images, and use season posters on episode cards when available; rich cast, trailers, and reviews from TMDB; optional AniDB titles and descriptions for anime you confirm, movies uniquely linked by Wikidata, or shows TheTVDB clearly links, with episode numbering unchanged
 - **Unified multi-source search** - Blazingly fast search across your local libraries, TMDB movies/shows/collections, and TheTVDB with local media prioritized
 - **Progressive Web App (PWA)** - Installable directly on iOS, Android, macOS, and Windows with a native app experience
@@ -135,7 +144,9 @@ None of these talk to each other - they all talk to Plekt.
 Cached cast, videos and artwork stay available during temporary TMDB failures, with
 incomplete metadata retried after five minutes. Air-date checks use the server's local calendar day.
 
-See [`docs/architecture.md`](docs/architecture.md) for how each feature is actually built.
+See [`docs/architecture.md`](docs/architecture.md) for how each feature is actually built, and the
+[provider support matrix](docs/support-matrix.md) for what syncs with Plex, Emby, Jellyfin, Trakt, Simkl,
+Tautulli and Seerr, in which direction, how changes arrive and how you sign in.
 
 ---
 
@@ -449,6 +460,9 @@ instance by creating its administrator username and password. Claiming can only 
 once. Plekt then opens the guided `/setup` wizard. You can return to it later with
 **Reopen Onboarding** on the Settings → Tools page, and your progress is saved as you go.
 
+Select **Remember me for 90 days** on the login screen to extend that browser's sign-in
+from the usual seven days. Signing out revokes the session.
+
 The wizard has nine stages:
 
 **1. Overview.** Review what the wizard configures. Only a tested Plex, Emby, or
@@ -501,20 +515,19 @@ retention count, enter an encryption passphrase of at least 12 characters, and s
 **Remember the passphrase for scheduled backups**. Scheduled jobs cannot run unless the
 passphrase is remembered because nobody is present to enter it.
 
-To add an off-server Backblaze B2 mirror, create a private bucket and a restricted
-application key with read/write access to that bucket. The wizard places the matching
-fields beside each part of the guide: paste the bucket name and endpoint into **Bucket
-name** and **Region or S3 endpoint**, then paste `keyID` and `applicationKey` into **Key
-ID** and **Application key**. Save and test the destination before enabling scheduled
-uploads. Backblaze displays `applicationKey` only once, so copy it when the key is
-created.
+To add an off-server mirror, expand **Remote destinations** and use the **+** card to pick **Backblaze B2**, **S3-Compatible** (Cloudflare R2, AWS S3, MinIO, Wasabi, and others), **WebDAV** (Nextcloud, ownCloud, Hetzner Storage Box, NAS), **Dropbox**, or an **External / Mounted Folder**. Each destination has a setup guide and a **Test** action. The Dropbox form also includes **Connect Dropbox**. Save and test at least one destination before enabling scheduled remote uploads.
 
 **7. Import & sync.** Review the Trakt and media-server imports you selected. Imports
 continue in the background, so you do not need to wait on this page. Trakt runs first;
 selected server imports may show **Waiting** until it finishes.
 
 **8. Options.** Choose how app-marked watched flags are dated or sent to Manual Watch
-review, and whether to enable **Sync Up Next to media apps**. Up Next sync is enabled by
+Review, and whether to enable **Sync Up Next to media apps**. In Manual Watch Review,
+each pending movie or episode shows its metadata and proposed watch date alongside
+clickable date options, with **Dismiss (mark unwatched)** at the top right and **Confirm
+watched** at the bottom right, so you can confirm items individually or tick multiple
+items (including shows or seasons) and confirm or dismiss them together from the top bar
+without a second date pop-up. Up Next sync is enabled by
 default; when enabled, Plekt keeps its Up Next queue in sync with Plex and Emby's Continue
 Watching and Jellyfin's Next Up. Queue additions, removals, reorderings, and progress changes
 coalesce into a background provider push, including when the dashboard is closed. Turn it off to
@@ -588,9 +601,9 @@ Plekt runs automated daily backups; each type has its own schedule, retention, a
 manual Back Up Now button.
 
 - **Watch history backups** - snapshots of history, playstates, and resume markers (`data/backups/watch-history`)
-- **Full Plekt backups** - AES-256-GCM encrypted, includes settings/keys/credentials/history (`data/backups/plembfin`, including new installs; the folder name is retained for compatibility); restore checks SQLite integrity before import and explains recovery options if the database is corrupt
+- **Full Plekt backups** - gzip-compressed and AES-256-GCM encrypted, includes settings/keys/credentials/history (`data/backups/plekt`; existing `data/backups/plembfin` folders are migrated automatically on startup); restore checks SQLite integrity before import and explains recovery options if the database is corrupt
 - **Personal watchlist recovery** - full backups include the local canonical watchlist and sync ledger; restore pauses provider delivery until an explicit publish, while watch-history-only backups exclude it
-- **Remote backups** - optional Backblaze B2 copies of either type, with per-type schedules and retention settings (Settings → Backup → Remote)
+- **Remote backups** - optional mirrored copies of either type to Backblaze B2, S3-compatible buckets (Cloudflare R2, AWS S3, MinIO, Wasabi, etc.), WebDAV, Dropbox, or an external mounted folder, with per-type schedules and retention settings (Settings → Backup → Remote)
 
 Media and tracker connections remain as configured on the destination machine; reconnect
 any that are missing. Restoring history or wiping data rebuilds show progress automatically. Deduplicated history
@@ -602,7 +615,9 @@ playstate together or leaves both unchanged if it fails.
 ## Importing Watch History
 
 **From Trakt (one-time):** export your Trakt watch history as JSON, then upload it under
-**Settings → Connections → Trakt**. Imported watches propagate automatically; use
+**Settings → Connections → Trakt**. Only the history file (`watched-history.json` or
+`history.json`) is needed; per-show summaries and collection files from a full export are
+skipped because they are not individual watches. Imported watches propagate automatically; use
 **Settings → Sync → Sync Tools → Full Sync Watchstates** afterward to replay everything
 to a newly connected server.
 
@@ -695,6 +710,7 @@ is in [`.env.example`](.env.example).
 | `PLEKT_PUBLIC_URL` | _none_ | Fixed internet-reachable public origin for provider return links and calendar feed URLs (`http(s)://host`, no path). Calendar feeds otherwise use the browser's current origin; local hostnames and private IP addresses are not shown. |
 | `PLEKT_PUBLISHED_PORT` | _none_ | Host port Plekt is published on (5056 in the compose files); used by the startup webhook port advisory, which is skipped when unset. |
 | `PLEKT_MEDIA_AUTH_ENABLED` | `true` | Set `false` to expose manual server setup only. |
+| `PLEKT_DROPBOX_APP_KEY` | _bundled public app key_ | Use a different Dropbox app for backup destinations without a per-destination app key. The `DROPBOX_APP_KEY` alias is also accepted. |
 | `COOKIE_SECURE` | `false` | Set `true` behind HTTPS to enable the `Secure` cookie flag and HSTS. |
 | `TRUST_PROXY` | _unset_ | Set to `1` only behind one trusted reverse proxy; uses its forwarded client IP for login and API rate limits. Keep direct access to Plekt restricted to that proxy, and preserve the public `Host` header for browser origin checks. |
 | `TRAKT_CLIENT_ID` / `TRAKT_CLIENT_SECRET` | _built-in_ | Optional replacement for the bundled Trakt app. Both required together. |
@@ -723,6 +739,7 @@ is in [`.env.example`](.env.example).
 | `MIN_RESUME_POSITION_SEC` | `60` | Minimum position saved as resume progress (0-3600s). Settings takes precedence. |
 | `ACTIVE_SESSION_TTL_MIN` | `5` | Time before an active session goes stale (1-120 min). Settings takes precedence. |
 | `OUTBOUND_TIMEOUT_SEC` | `10` | Default outbound request timeout, including the response body (2-120s). |
+| `AUDIT_RETENTION_DAYS` | `90` | Days of diagnostic `watch_audit_events` history to keep (0-3650; `0` keeps them forever). Never deletes `watch_history`. Settings takes precedence. |
 | `OUTBOUND_PACING_PROFILE` | `standard` | Outbound request pacing: `gentle`, `standard`, or `fast`. Settings → Sync → Sync Tuning's **Fast Local-Network Sync** checkbox toggles between `standard` and `fast` and takes precedence; only enable `fast` when Plex, Emby, and Jellyfin are all self-hosted on the same trusted local network as Plekt. |
 | `PLEKT_DEBUG_OUTBOUND` | _off_ | Set `1` to log per-host outbound request counts once a minute. |
 | `PLEKT_DEBUG_CACHE_REBUILDS` | _off_ | Set `1` to log one line per derived-cache rebuild: which cache, how long it took, and which change caused it. |

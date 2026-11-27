@@ -55,7 +55,7 @@
 7. [Zirui Hu, Rong Zhang, Chengcheng Yang, Xuan Zhou, Quanqing Xu, Chuanhui Yang. Artemis: A Customizable Workload Generation Toolkit for Benchmarking Cardinality Estimation. In 2025 IEEE 41st International Conference on Data Engineering (ICDE), Hong Kong, 2025, pp. 4628-4631, doi: 10.1109/ICDE65448.2025.00369.](https://www.computer.org/csdl/proceedings-article/icde/2025/360300e628/26FZD0CCVji)
 8. [翁思扬, 俞融, 王清帅, 胡梓锐, 倪葎, 张蓉, 周烜, 周傲英, 徐泉清, 杨传辉, 刘维, 杨攀飞. HTAP 评测基准的评测能力综述. 软件学报, 2025, 36(1): 424–445.](https://www.jos.org.cn/jos/article/pdf/7225)
 ### Data+AI
-1. [Chunming Ma, Xujia Li, Quanqing Xu, Chuanhui Yang, Lei Chen. StreamPLAID: Efficient Incremental Indexing via Monotonic Radius Hierarchical Partitioning for Multi-Vector Retrieval. Accepted by PVLDB 2027.]
+1. [Chunming MA, Xujia Li, Quanqing Xu, Chuanhui Yang, and Lei Chen. StreamPLAID: Efficient Incremental Indexing via Monotonic Radius Hierarchical Partitioning for Multi-Vector Retrieval. PVLDB, 20(3): 899 - 911, 2026.](https://www.vldb.org/pvldb/vol20/p899-ma.pdf)
 2. [Xu Gao, Sai Wu, Xiu Tang, Chang Yao, Quanqing Xu, Chuanhui Yang, Gang Chen. DADO: a LLM-based Distribution-Aligned and Diversity-Optimized Data Generator. Accepted by TKDE 2026.](https://www.computer.org/csdl/journal/tk/5555/01/11701524/2kblZ7aXecU)
 3. [Naili Xing, Zhanhao Zhao, Peng Lu, Chuanhui Yang, Quanqing Xu, and Beng Chin Ooi. 2026. NeurQO: Query Optimization as a Learnable Function. Proc. ACM Manag. Data 4, 6 (SIGMOD), Article 363 (December 2026), 27 pages.](https://doi.org/10.1145/3856358)
 4. [Ziyi Li, Angjun Lin, Yuhao Lin, Quanqing Xu, Ruixuan Zhang, Yuanyuan Zhu, Jiawei Jiang, and Xiao Yan. 2026.

@@ -1,4 +1,4 @@
-<div align="center">
+<div align="center"> 
   <img src="./logo.png" width="96" alt="Маскот ПУЛЬС.Кампус — пиксельный осьминог в очках">
   <h1>ПУЛЬС.Кампус</h1>
   <p><strong>Цифровой деканат будущего</strong></p>

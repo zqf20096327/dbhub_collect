@@ -25,10 +25,10 @@ do with each one.
 
 </div>
 
-![A tour of SENTRI: first run, dashboard, Discover, Tech News, Peruvian communities and the calendar](docs/assets/demo/sentri.gif)
+![A tour of SENTRI: the Observer awakening, dashboard, Discover, Tech News, Peruvian communities and the calendar](docs/assets/demo/sentri.gif)
 
 <p align="center">
-  <sub>Real captures of the TUI · Gruvbox Dark theme · usable over SSH without Nerd Fonts</sub>
+  <sub>Recorded in kitty, so images use the kitty graphics protocol · Gruvbox Dark · usable over SSH without Nerd Fonts</sub>
 </p>
 
 ---
@@ -78,7 +78,7 @@ deciding **which opportunity deserves your time**.
 
 | First run | Dashboard |
 |---|---|
-| ![On first launch SENTRI collects from every source and the feed fills in live](docs/assets/demo/01-first-run.gif) | ![Dashboard with counters, charts, recommendations, upcoming dates and news](docs/assets/demo/02-dashboard.gif) |
+| ![First run: the Observer awakens, the setup wizard asks a few questions and the feed fills in live](docs/assets/demo/01-first-run.gif) | ![Dashboard with counters, charts, recommendations, upcoming dates and news](docs/assets/demo/02-dashboard.gif) |
 | **Peruvian ecosystem** | **Calendar** |
 | ![Communities and calls for speakers from Peru](docs/assets/demo/07-peru-communities.gif) | ![Calendar with month, week, day and agenda views](docs/assets/demo/08-calendar.gif) |
 
@@ -130,6 +130,8 @@ cargo run -p sentri-cli -- --help   # lists the commands
 ```sh
 sentri               # first run: the Observer awakens, then a setup wizard
 ```
+
+![The Observer awakening: initialization steps, the rotating 3D ward and the event log](docs/assets/demo/00-observer-awakening.gif)
 
 While SENTRI starts, an observation console opens: the Observer, an original
 3D ward drawn with terminal characters (depth-shaded, no images), wakes up,

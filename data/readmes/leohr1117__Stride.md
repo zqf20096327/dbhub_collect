@@ -1,0 +1,95 @@
+# Wupo
+
+Wupo ist eine Web-App, die den eigenen Alltag wie ein Rollenspiel führt: Du trägst ein, was du getan hast, bekommst dafür Erfahrungspunkte und steigst mit deinen Zielen und Fähigkeiten im Level auf.
+
+![Ziele in Wupo](docs/desktop-ziele.png)
+
+## Funktionen
+
+- **Einträge:** Eine Tätigkeit eintragen bringt XP; die Dauer wählst du ab 15 Minuten oder gibst sie selbst ein. Die Punkte verteilen sich in festen Prozent auf Attribute. Eine Tätigkeit kann auch nur XP abziehen. So ein Eintrag zählt nicht für die Tageskette, für Erfolge bei Einträgen und Stunden und nicht für die Erfahrung von Projekt und Fähigkeit. Tätigkeiten legst du selbst an und ordnest sie.
+- **Ziele:** Visionen, Organisationen und Projekte mit eigenem Level, dazu offene Vorhaben.
+- **Tageskette:** Ein Streak für jeden aktiven Tag, mit Schutz bei Pausen und einer Rückkehr nach einer Unterbrechung. Unter Bereiche lässt sich der Streak aussetzen; die Länge bleibt, neue Einträge haben dabei Momentum 1,0.
+- **Gegner und Bosse:** Vorhaben können als Gegner oder Boss mit Deadline laufen. Ist die Deadline verpasst, kostet das XP.
+- **Profil:** Können und Haben als Attribute, ein Baum aus Fähigkeiten, Investitionen, Klassen und Titel. Optional verlieren Attribute ohne Einträge mit der Zeit an Wert.
+- **Investitionen:** Eine Investition kann XP eines Attributs kosten. Beim Betrag gibt es Vorschläge, Betrag und Bonus-Stufe bleiben frei wählbar. Eine eigene Investition oder ein geschafftes Projekt gibt dauerhaft mehr XP. Eine Investition gibt Bonus auf ein Attribut, ein Projekt oder eine Vision, eine Fähigkeit, oder auf mehrere davon.
+- **Rückschau:** Verlauf aller Einträge, Rückblick und Statistik.
+- **Vorbilder:** Vergleich des eigenen Profils mit bekannten Personen.
+- **Basis:** Wiederkehrende Grundaufgaben.
+- **Verbindungen:** Erledigte Aufgaben aus Todoist und Termine aus einem Kalender (iCal-Adresse, z. B. Google oder iCloud) werden zu Einträgen; Mehr zeigt eine Übersicht mit dem Status beider Verbindungen, und jede hat eine eigene Seite.
+- **Benachrichtigungen:** Web-Push, wenn der Streak in Gefahr ist, ein Boss ansteht oder eine Rückkehr möglich ist, mit Ruhezeit.
+- **Anpassen:** Bereiche lassen sich einzeln abschalten. Ansichten, Farbpaletten und eigene Farben. Erfolge, Titel und die Hinweise auf Heute lassen sich ausblenden; die Hinweise gelten nur für dieses Gerät.
+- **Rechtliches:** Impressum, Datenschutzerklärung, Nutzungsbedingungen und Lizenzhinweise sind ohne Anmeldung erreichbar, von der Anmeldeseite und unter Mehr.
+- **Sonstiges:** Installierbar als PWA, mit einem Hinweis auf Heute nach der Anmeldung und einem Eintrag unter den Einstellungen. Sieben Sprachen (Deutsch, Englisch, Spanisch, Französisch, Japanisch, Russisch, Chinesisch). Ohne gewählte Sprache gilt die des Geräts, sonst Englisch. Eine früher im Browser gemerkte Sprache, Ansicht oder ein zugeklappter Bereich gilt weiter. Export und Import der Daten, mehrere Konten, auf Wunsch mit Selbst-Registrierung (nur nach Bestätigung der Nutzungsbedingungen, des Datenschutzes und des Mindestalters 16) oder Anmeldung über Google, Anmeldung mit Passwortmanagern, Handbuch in der App. Zu viele Anfragen in kurzer Zeit werden gebremst, die Registrierung zusätzlich je Adresse. Wupo schickt jetzt zusätzliche Sicherheitsangaben an den Browser. `GET /api/gesundheit` nennt ohne Anmeldung nur die laufende Version, etwa für eine Erreichbarkeitsprüfung, und zählt nicht zur Anfragegrenze. Ein Tagesprotokoll kann in einem eigenen Ordner liegen; Dateien werden nach 14 Tagen gelöscht.
+
+Änderungen je Version stehen in [CHANGELOG.md](CHANGELOG.md).
+
+## Technik
+
+- TypeScript, React 19, React Router, TanStack Query, Tailwind CSS 4, Framer Motion, Recharts, Vite
+- Server: Node.js (ab 23.6, führt TypeScript direkt aus), Fastify 5, SQLite über `node:sqlite`, Zod, web-push
+- Tests: Vitest und Playwright
+
+## Lokal starten
+
+Voraussetzung: Node.js 23.6 oder neuer.
+
+```bash
+npm install
+npm run dev
+```
+
+`npm run dev` startet den Server auf `127.0.0.1:3000` und den Vite-Entwicklungsserver (Standard `http://localhost:5173`), der `/api` an den Server weiterleitet. Beim ersten Aufruf legst du das erste Konto an.
+
+Weitere Befehle:
+
+```bash
+npm test               # Unit-Tests (Vitest)
+npm run typecheck      # Typprüfung
+npm run e2e            # Browser-Tests; legen testvoll und testteil selbst an, ohne Dateien aus data/
+npm run beispieldaten  # Beispielwelt in data/app.db; schaltet die nötigen Bereiche ein
+npm run build          # Produktions-Build nach client/dist
+npm start              # Server; Oberfläche aus STRIDE_CLIENT_DIR, Standard client/dist-live
+```
+
+Der Befehl `npm run build` schreibt `/lizenzen.txt` mit den Lizenzen der mitgelieferten Bibliotheken und merkt sich den Quellstand über `git rev-parse HEAD`, ersatzweise über die Build-Variable `STRIDE_COMMIT`.
+
+Die Daten liegen in `data/` (`app.db` und `zugang.db`). Liegt `app.db` schon vor, legt `npm run beispieldaten` nichts an. `npm run beispieldaten -- --ersetzen` sichert die alte Datei und baut die Beispielwelt neu. Dafür schaltet das Skript die Bereiche ein, die die Beispielwelt braucht, und aktiviert fehlende Attribute.
+
+### Umgebungsvariablen
+
+| Variable | Zweck |
+|---|---|
+| `PORT` | Port des Servers, Standard 3000 |
+| `STRIDE_APP_URL` | Öffentliche https-Adresse der App, ohne Pfad. Ohne sie gilt für die Rechtstexte `https://stride.leohr.de`. Die OAuth-Weiterleitung folgt dann dem aufgerufenen Host, `VAPID_SUBJECT` bleibt nötig und der Mail-Absender ist das Postfach, sofern kein eigener Absender gesetzt ist. Ist sie gesetzt, nutzen die OAuth-Weiterleitung, ein fehlender VAPID-Betreff und ohne eigenen Absender die Domain des Mail-Absenders diese Adresse. `ASCEND_APP_URL` wird weiter gelesen. |
+| `STRIDE_DB_PFAD` | Pfad der Datenbank, Standard `data/app.db`. Dieser Name gilt vor dem alten Namen `DB_PFAD`. |
+| `STRIDE_ZUGANG_PFAD` | Pfad der Zugangsdatenbank, Standard `data/zugang.db`. Dieser Name gilt vor dem alten Namen `ZUGANG_PFAD`. |
+| `LOG_LEVEL` | Log-Stufe, Standard `warn` |
+| `STRIDE_LOG_PFAD` | Ordner für das Tagesprotokoll. Jeder Tag ist eine Datei. Dateien werden nach 14 Tagen gelöscht. Ohne die Variable nur die Konsole. Nicht die Datenbankdatei eintragen. `ASCEND_LOG_PFAD` wird weiter gelesen. |
+| `STRIDE_CLIENT_DIR` | Ordner, aus dem der laufende Server die Oberfläche ausliefert. Standard ist `client/dist-live`. Ist der Ordner beim ersten Start noch leer, wird `client/dist` hineinkopiert. `npm run build` und die Browser-Tests schreiben und lesen weiter `client/dist`. Der alte Name `ASCEND_CLIENT_DIR` wird weiter gelesen. |
+| `STRIDE_TOKEN_SCHLUESSEL` | 32 Byte Base64. Damit wird der Todoist-Token verschlüsselt gespeichert. Ohne ihn lässt sich Todoist nicht neu einrichten, vorhandene Tokens bleiben unverschlüsselt und laufen weiter. Ist er gesetzt, packt der Start sie einmal. Wer ihn ändert, gibt die Tokens neu ein. Der alte Name `ASCEND_TOKEN_SCHLUESSEL` wird weiter gelesen. |
+| `STRIDE_ADMIN` | Admin wird einmal vergeben: Das Konto muss schon existieren, die Variable steht auf diesen Namen, nach dem Neustart zählt die gespeicherte Konto-ID. Ein späteres Konto mit demselben Namen ist kein Admin. Die Selbst-Registrierung dieses Namens bleibt gesperrt. `ASCEND_ADMIN` wird weiter gelesen. Fehlt das Konto beim ersten Start, wird nichts gespeichert und der nächste Start versucht es erneut. Nach dem Löschen des Admin-Kontos bindet beim nächsten Start nur ein anderer Name, und nur wenn dieses Konto schon existiert. Sonst warnt das Log, und eine spätere Registrierung bindet nicht. Derselbe Name bindet nie wieder. |
+| `STRIDE_REGISTRIERUNG` | `1` erlaubt neuen Nutzern, selbst ein Konto zu erstellen. Dabei müssen sie bestätigen, dass sie die Nutzungsbedingungen und den Datenschutz gelesen haben und mindestens 16 Jahre alt sind. Ohne diese Bestätigung entsteht kein Konto. Ändert sich die Fassung, erscheint nach der Anmeldung ein Dialog. Standard aus. |
+| `STRIDE_GOOGLE` | `1` erlaubt die Anmeldung über Google. Standard aus. Wirkt nur mit Client-ID und Secret. |
+| `STRIDE_GOOGLE_CLIENT_ID` | Client-ID der Google-Cloud-Anmeldung. |
+| `STRIDE_GOOGLE_CLIENT_SECRET` | Client-Geheimnis der Google-Cloud-Anmeldung. |
+| `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Schlüssel für Web-Push |
+| `STRIDE_SMTP_HOST` | SMTP-Server für das Kontaktformular. Ohne Host, Port, Postfach und Passwort ist das Formular nicht verfügbar. `ASCEND_SMTP_HOST` wird weiter gelesen. |
+| `STRIDE_SMTP_PORT` | Port dieses SMTP-Servers. |
+| `STRIDE_SMTP_BENUTZER` | Postfach, das die Nachricht sendet und sich am SMTP-Server anmeldet. Empfänger ist fest `kontakt@leohr.de`. Die Adresse des Besuchers wird nur als Antwortadresse gesetzt. Ist `STRIDE_APP_URL` gesetzt und kein eigener Absender angegeben, trägt der Absender dieselbe lokale Adresse an der Domain der App-URL. |
+| `STRIDE_SMTP_ABSENDER` | Optionaler Absender des Kontaktformulars. Ist die Variable gesetzt und eine gültige Mailadresse, ist sie der Absender. Sonst bleibt die bisherige Logik. `ASCEND_SMTP_ABSENDER` wird weiter gelesen. |
+| `STRIDE_SMTP_PASSWORT` | Passwort dieses Postfachs. Der Betreiber setzt es als Umgebungsvariable. |
+| `STRIDE_TEST` | Nur für Tests: `1` schaltet den Testmodus ein (alter Name `ASCEND_TEST`). Dann setzt `POST /api/test/heute` mit `{ datum }` die Spieluhr des Servers (Kette, Einträge, Verfall, Bosse, Buchungen, Kalender- und Todoist-Zuordnung). Sitzungen und Sperren bleiben echte Zeit. Der Server warnt beim Start. `datum: null` stellt die echte Uhr wieder her. |
+
+In der Google Cloud Console muss die Weiterleitungs-URI `https://<host>/api/zugang/google/zurueck` eingetragen sein. Ohne `STRIDE_APP_URL` ist `<host>` der aufgerufene Host. Mit gesetzter Variable ist es der Host dieser Adresse. Ohne den Wert `1` bei `STRIDE_GOOGLE` und ohne Client-ID und Secret bleibt die Anmeldung über Google aus. Ob neue Konten möglich sind, folgt nur `STRIDE_REGISTRIERUNG`.
+
+Eine Vorlage mit allen Variablen steht in `.env.example`. Die Werte werden als Umgebungsvariablen gesetzt, zum Beispiel mit `node --env-file=.env`.
+
+Das Kontaktformular unter `/kontakt` ist ohne Anmeldung erreichbar. Es sendet nur, wenn Host, Port, Postfach und Passwort gesetzt sind, und speichert die Nachricht nicht. Ein eigener Absender über `STRIDE_SMTP_ABSENDER` ist optional.
+
+## Lizenz
+
+GNU Affero General Public License v3.0, siehe [LICENSE](LICENSE).
+
+## Autor
+
+Wupo von leohr: Leonardo Hramzow, [leohr.de](https://leohr.de), [GitHub](https://github.com/leohr1117)

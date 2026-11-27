@@ -1,0 +1,587 @@
+# invest-radar · 投资雷达
+
+> 两个独立模块的「定投 / 盯盘」看板，共用一套零依赖基础设施：
+> **① 汪汪队买卖A股日报**（@ A 股宽基 ETF 主力资金 / 份额申赎） + **② 海外 QDII 定投决策面板**（场外 QDII 限额 · 多平台费率 · 跟踪误差 · 场内溢价 · 美股信号 · 定投建议）。
+>
+> **③ 回撤全景**（`/dd`，挂在汪汪队同一服务，零新增进程）：宽基指数与场内 ETF 的全历史回撤与修复复盘，可缩放折线 + 大事件标注 + 日/周/月/季/年三视图表格 + 今日客观信号。代码在 `drawdown/`，回补命令见下文。
+>
+> 仓库原名 `ashare-national-team-tracker`，因新增 QDII 模块并规划更多品种（含个股监控）而更名；两个模块代码分别在 `national_team/` 与 `qdii/`，共用代码在 `common/`。
+>
+> **Zero-dependency** Python dashboards — no `pip install` required, standard library only.
+
+[![CI](https://github.com/turbomind66/invest-radar/actions/workflows/ci.yml/badge.svg)](https://github.com/turbomind66/invest-radar/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/turbomind66/invest-radar?color=orange&label=release)](https://github.com/turbomind66/invest-radar/releases)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Zero Dependency](https://img.shields.io/badge/dependencies-0-brightgreen)](#快速开始)
+
+**[▶ 在线看板](https://turbomind66.github.io/invest-radar/)** · 由 GitHub Pages 托管，无需自行部署
+
+---
+
+## 这个项目解决什么问题
+
+市场常说的「汪汪队出手了」——中央汇金、证金公司等通过买入宽基 ETF 托底——**没有任何官方逐日披露**。散户只能从新闻里猜，或者在十几个 ETF 的行情页里来回翻。
+
+本项目把这件事固化成一条自动化流水线：
+
+```
+每个交易日 16:05  →  抓取宽基ETF行情与主力资金  →  存入 SQLite  →  仪表盘展示 + 三维筛选
+```
+
+打开页面即可知道：**今天汪汪队是净买入还是净卖出、买了多少、买的是哪一类宽基、哪只 ETF 被买得最多。**
+
+## 为什么用「宽基 ETF 主力净流入」作为代理
+
+- 汪汪队不直接买个股，**宽基指数 ETF 是其进场标准通道**（沪深300 / 中证500 / 中证1000 / 上证50 / 创业板 / 科创50 / 科创100 / 中证A500）。
+- 这些 ETF 体量巨大、日内波动小，**主力资金（大单）方向的异常变化**基本只能来自机构级资金，与「汪汪队护盘」高度相关。
+- 单一接口即可获得，无需历史对比推算，是最贴近真实的实时量化信号。
+
+> ⚠️ 这是**代理指标**，不等于官方披露的持仓变动。它回答的是「今天大资金在宽基 ETF 上是买还是卖」，而非「汇金今天买了多少股」。
+
+## 功能
+
+- **自动抓取**：交易日收盘后（16:05）自动抓取归档；启动或访问时若当天缺数据会自动补抓。
+- **历史回补**：走东方财富历史接口还原已收盘交易日的真实快照（收盘价 / 成交额 / 涨跌幅 / 主力净流入），**不用今天的实时值冒充历史**。
+- **三维筛选**（可组合）：
+  - 按**日期**：任选已归档交易日；
+  - 按**类别**：8 类宽基，多选；
+  - 按**基金**：观察池内单只 ETF，多选；选类别后基金列表自动收敛为该类别下标的；
+  - 类别与基金叠加取交集，卡片 / 趋势 / 条形 / 双饼图 / 明细表全站联动。
+- **类别双饼图**：「按类别汇总」拆成**净买入 / 净卖出两张饼图**并排展示。单张饼图表达不了负值（ECharts 会把净卖出扇区角度压成 0 直接吞掉，表现为「全是某一个买入类别」）；卖出图以绝对值计扇区占比，标签与提示框保留真实负号，红买绿卖与全站一致。
+- **四档资金流拆解**：东财「主力净买」= 超大单净 + 大单净的**净额**，分时图上的大额买入可能被更大额的超大单卖出对冲、或被算法拆成中小单，表面上「没统计上」。明细表增加**超大单 / 大单 / 中单 / 小单**四档净额列，买卖毛向一目了然。
+- **一级市场申赎监控（份额口径）**：ETF 的一级申购/赎回**不计入二级市场资金流**，是另一层证据。明细表增加**份额日变动（亿份）**与**一级净申购（亿元）**两列，汇总区给出一级净申购合计，趋势图叠加一级净申购曲线（右轴）。份额数据来自交易所公布的 ETF 份额（T+1 公布），与上交所 / 深交所逐日交叉校验一致。
+- **逐笔大额买单识别（方案C）**：在分时放量识别（方案A）基础上，进一步钻取到**逐笔成交层**——抓取东财逐笔成交明细，过滤大单（单笔 ≥ 30 万元），按 5 分钟窗口聚合，识别「集中扫货」（大单净买入主导、价格上行）与「集中抛压」（大单净卖出主导、价格下行）。当方案A 的护盘窗口同时出现方案C 的大买单印证，信号升级为「逐笔印证」。数据源为滚动窗口，盘后仅尾盘快照，盘中多次采样可累积全天大单分布；历史缺口不可回补（同分时模块）。
+
+  > ⚠️ **为什么这个面板盘后常常是空的**：源 `stock/details/get` 是**滚动窗口**——非交易时段会冻结、只保留当日最后一笔（实测约 1 万元，远低于 30 万大单阈值），所以 06:00 / 17:00 那两次**盘后调度永远采不到大单**。只有在**交易时段多次采样**才能累积出全天的大单分布。项目为此单开了 `tick-sample` 工作流（见「调度」），采样结果随 `data.json` 的 `tick_rows` 字段持久化，多次采样可累积、不会互相覆盖。
+- **容错降级**：主力资金接口不可用时，价格 / 涨跌 / 成交额仍显示真实数据，并明确标注缺失，**不会静默显示成「中性」**。
+- **数据更新于**：页面顶部常驻一条高对比度时间戳（`数据更新于 2026-10-28 09:32 · 1 小时前`），同时标明该时间戳对应的**数据日期**；超过 3 天未更新自动转琥珀色告警，时间未知则转中性灰态。静态站托管下也能一眼判断数据是否新鲜，不必翻 JSON。
+- **零依赖**：只用 Python 标准库（`http.server` + `sqlite3` + `urllib`），单命令启动。
+
+## 三种部署形态
+
+同一份代码既能跑成**有后端的服务**、**纯静态站**，也能**用 Docker 部署到自己的服务器**：
+
+| | 服务端模式 | 静态站模式（GitHub Pages） | Docker（自建服务器） |
+|---|---|---|---|
+| 启动 | `python national_team/app.py` | 无需部署，直接访问 Pages | `./deploy.sh` 或 `docker compose up -d` |
+| 抓取时机 | 进程内定时（16:05）+ 页面按钮即时抓取 | cron-job.org 每天 **06:00 / 17:00（北京时间）** 触发 Actions + 手动触发 | 容器内调度器：完整同步 **06:00 / 17:10** + 盘中采样 **09:30 起每 30 分钟至 14:50（共 10 次）** |
+| 数据存储 | 本地 SQLite | 仓库内 `docs/data.json` | 挂载卷内 SQLite（重建容器不丢） |
+| 筛选计算 | 服务端 SQL | 浏览器本地计算 | 服务端 SQL |
+| 手动刷新 | ✅ 立即抓取 | ➖ 只能触发 Actions（需等一两分钟）；本地用 `serve_docs.py` 起站则 ✅ | ✅ 一条命令即时抓取 |
+| 适合场景 | 本地看盘 | 零成本公开访问 | 数据自主可控、不受 Actions 停用影响 |
+
+静态站由 `national_team/staticsite.py` 产出：它把最近 90 个交易日的明细一次性打包成 `docs/data.json`（更早的历史留在仓库外的本地库，趋势图另用 `history_full` 全量汇总展示完整区间），并复用同一份 `templates/index.html` 注入 `window.__STATIC__` 标记，前端据此切到本地筛选。两种模式的筛选/汇总结果由测试强制保持一致（见「测试」）。
+
+#### 本地预览静态站（三个页面都能一键刷新）
+
+`docs/` 是纯静态目录，直接 `python -m http.server --directory docs` 只能看，页面上没有任何后端。
+想在本机看静态站又想点一下就抓最新数据，用：
+
+```bash
+python serve_docs.py          # http://127.0.0.1:5056/
+```
+
+它在静态文件服务之外，多挂了一个同源接口：
+
+| 接口 | 作用 |
+|---|---|
+| `GET /api/local/status` | 三个页面的刷新任务状态（前端启动时 probe 它，据此决定按钮行为） |
+| `GET /api/local/refresh?page=nt\|dd\|qdii\|all` | 后台起子进程抓取并重新导出 |
+
+页面打开后按钮会变成「🔄 更新数据」，点一下就在本机抓（汪汪队 1–2 分钟 / 回撤全景 30–60 秒 / 全球QDII 1–2 分钟），完成后自动重载。
+在 GitHub Pages 上这个接口不存在，probe 失败后按钮自动回到「⚙️ 去 Actions 手动更新」，两端共用同一份页面代码，行为不受影响。
+
+**产物写到 `.local_docs/`，不写 `docs/`**（已 gitignore）：`docs/` 既是 Pages 发布目录、也是 Actions 提交的快照，本地库覆盖它会冲掉线上已校准的数据。首次启动把 `docs/` 整份复制过去作初始数据，之后只同步 `*.html/*.js` 骨架，数据由抓取任务更新。
+
+**每天两次自动运行，各管一段**：
+
+| 时间（北京时间） | 目标日 | 做的事 |
+|---|---|---|
+| **17:00** | 当天 | 收盘后抓当天数据，并把当天 + 前两天用历史接口**强制重刷**一遍（上游资金流当晚陆续出数，越晚越全） |
+| **06:00** | 上一交易日 | 用历史接口**强制重刷**上一交易日 + 前两天，把前一天“已抓到但统计不全”的数据补齐（早盘抓的快照成交额只有开盘几分钟的量，这一步会修正成收盘真值） |
+| **09:30–14:50 每 30 分钟（共 10 次）**（交易时段） | 当天 | **盘中逐笔大单采样**（`tick-sample` 工作流）：只抓当日分时 + 逐笔大单，不跑全量回补，几秒完成。东财明细是滚动窗口、盘后冻结，必须盘中多次采样才能累积全天大单分布 |
+
+> 关键点：“已抓到但统计不全”的日期（如抓取时上游 f62 还没出数）不会被“补缺失”逻辑发现，所以每天两次运行都会**无条件重刷最近 3 个交易日**；重刷只更新资金流与价格，空值不覆盖旧值（COALESCE 语义），接口抽风也不会洗掉已归档数据。
+
+```bash
+python national_team/staticsite.py              # 同步缺失交易日 + 导出 docs/
+python national_team/staticsite.py --no-sync    # 只导出，不联网
+python national_team/staticsite.py --mode=tick  # 盘中轻量采样：只抓当日分时+逐笔大单，不跑全量回补
+```
+
+**首次启用 Pages（只需一次，需仓库管理员操作）**：`Settings → Pages → Build and deployment → Source` 选 **Deploy from a branch**，分支 `main`、目录 `/docs`，保存。之后每次 `daily-update` 提交 `docs/` 都会自动发布，无需再动设置。
+
+> 为什么不用 "GitHub Actions" 作为 Pages 源？因为工作流里的 `GITHUB_TOKEN` 没有开通 Pages 站点的权限（`Resource not accessible by integration`），且它提交的变更也不会触发其他工作流。分支发布由 push 直接触发，链路更短也更稳。
+
+> ⚠️ **静态站的已知限制**：GitHub Actions 的定时任务是最尽力调度，可能延迟几分钟到数十分钟；且**仓库连续 60 天无人工活动后，定时工作流会被 GitHub 自动停用**——到 Actions 页面手动点一次 `Run workflow` 即可恢复，或提交任意一次改动。数据文件由工作流自己提交，不算「人工活动」，这一点容易踩坑。
+
+## 快速开始
+
+```bash
+git clone https://github.com/turbomind66/invest-radar.git
+cd invest-radar
+
+python national_team/app.py
+# 打开 http://127.0.0.1:5000
+```
+
+- 默认端口 `5000`，可用环境变量 `PORT` 覆盖：`PORT=8080 python national_team/app.py`
+- 首次启动会自动抓取当天（若已收盘）并回补最近几个交易日，历史曲线从此刻起逐日累积。
+- 需要 Python 3.8+，无第三方依赖。
+
+手动补某一天的数据：
+
+```bash
+python national_team/backfill.py 2026-10-27
+```
+
+启动 QDII 面板（另一条独立的看板，默认端口 5001）：
+
+```bash
+python qdii/qdii_app.py
+# 打开 http://127.0.0.1:5001
+```
+
+## Docker 部署（自建服务器一键）
+
+把看板搬自己的 Debian / Ubuntu 服务器上：数据自主可控、不受 GitHub Actions 停用影响，盘中采样想加几个点就加几个点。**2 核 2G 这类小规格也能跑**（已给容器设资源上限，与其它服务共存无压力）。
+
+> 💡 **小内存机器（1GB）用哪种？两种都能跑，实测 Compose 五容器一共只占约 20MB。**
+> 五个容器的 `--memory` 上限合计 832MB（96+256+192+128+160），但**上限只是天花板、不是预留**——
+> 实测常驻：gateway 4.5MB / ntt-web 5.6MB / ntt-cron 1.9MB / qdii-web 4.4MB / qdii-cron 3.7MB，合计约 20MB。
+> 所以 1GB 机器跑 Compose **没有问题**，它就是推荐方式（v2.6.4 曾按"上限合计"推断"必然 OOM"，结论过强，此处更正）。
+> 部署/重建时若出现过 **SSH 短时断连、随后自愈**，更常见的原因是 `docker build` 瞬时峰值 + 抓取任务
+> 与机器上其它吃 CPU 的服务叠加（实测某台 1 核机器上另一个容器长期占 66% CPU），而非容器形态本身；
+> 部署现已自动转后台（`nohup`），断线也不会中断。
+> 若确实想把占用再减半、或只想要"一个容器完事"，可用方式二单容器（`--run`，上限 384MB、常驻 60–70MB）：
+> ```bash
+> docker compose down      # 不带 -v，ntt-data 数据卷保留，历史数据不丢
+> ./deploy.sh --run
+> ```
+> ⚠️ **两种形态不要同时跑**：它们抢同一个 48881 端口，Compose 的 `ntt-gateway` 会卡在 `Created` 起不来。
+> v2.6.7 起脚本会自动清掉另一种形态的残留容器，不用手动处理。
+
+### 方式一：Docker Compose（推荐，五个容器 · 对外只有一个端口）
+
+```bash
+git clone https://github.com/turbomind66/invest-radar.git
+cd invest-radar
+
+cp .env.example .env     # 端口已固定，一般不用改
+./deploy.sh              # 一键：检查环境 → 生成 .env → 构建 → 启动 → 自检
+```
+
+直接 `./deploy.sh` 即可：进度实时打印在屏幕上，**SSH 不小心断线也不会中断部署**（脚本会自动转后台，日志在 `/tmp/invest-radar-deploy.log`，重连后 `tail -f` 它就能接着看）；跑完还会自动列出容器状态与启动日志尾部。
+
+脚本跑完会打印访问地址（宿主机上已把 48881 绑定到回环地址，仅本机可测）：
+
+- 汪汪队看板 `http://127.0.0.1:48881/`
+- QDII 面板 `http://127.0.0.1:48881/qdii/`
+
+**公网怎么访问**：把域名交给 NPM（也是容器）反代到 **gateway 容器 IP:38881**，
+公网只走 443，**防火墙与 VPS 服务商后台不需要放行任何新端口**。
+两边页头都有选项卡，点一下即切换。等价的手动命令：`docker compose up -d --build`。
+
+> 服务器还没装 Docker？`./deploy.sh --install-docker` 会自动安装（含 compose 插件）。
+> 当前用户不在 docker 组时用 `sudo ./deploy.sh`。
+
+### 方式二：纯 docker run（单容器，web + 调度合一 · 想再省一半内存时用）
+
+```bash
+docker build -t invest-radar:latest .
+
+docker run -d --name ntt --restart unless-stopped --init \
+  -e APP_ROLE=all -e TZ=Asia/Shanghai -e NT_DB_PATH=/app/data/data.db \
+  -p 48881:38881 \
+  -v ntt-data:/app/data \
+  --memory=320m --cpus=0.75 \
+  invest-radar:latest
+```
+
+也可以直接 `./deploy.sh --run`，脚本会按上面的参数起好。
+
+### 五个容器各自干什么
+
+两个模块共用同一镜像与数据卷，共 5 个容器，但**只有 gateway 映射端口**：
+
+| 容器 | 角色 | 职责 | 端口 |
+|---|---|---|---|
+| `ntt-gateway` | `APP_ROLE=gateway` | **单端口入口**：`/` 与 `/nt/` → 汪汪队，`/qdii/` → QDII | 容器内 **38881**（宿主映射 `0.0.0.0:48881`，供 NPM 等反代经网桥访问） |
+| `ntt-web` | `APP_ROLE=web` | 汪汪队看板 + `/api/data`（不自己抓数，避免与定时任务抢写锁） | 5000（仅容器内） |
+| `ntt-cron` | `APP_ROLE=cron` | 汪汪队调度：完整同步 + 盘中逐笔采样 | 无 |
+| `qdii-web` | `APP_ROLE=qdii-web` | QDII 看板 + `/api/qdii/*` | 5001（仅容器内） |
+| `qdii-cron` | `APP_ROLE=qdii-cron` | QDII 调度：双日历抓取 | 无 |
+
+> 为什么要一个网关：两个看板是两个独立进程，本来就各占一个端口。加一层 `gateway.py`（同样零依赖、十几行逻辑）
+> 后，**对外只认 38881**，页头选项卡才能用相对路径 `/qdii/` 互跳，也不会出现「前缀没剥干净、请求打到另一个面板」的串台。
+> 本地不用 Docker 时直接 `python national_team/app.py`（5000）+ `python qdii/qdii_app.py`（5001）即可，行为不变。
+
+调度器是纯标准库实现（不装 cron），日志直接进 stdout：`docker compose logs -f cron`。
+
+### 数据存在哪、会不会丢
+
+- SQLite 在命名卷 `ntt-data`（容器内 `/app/data/data.db`），**停止、重建、升级容器都不丢**；只有 `docker volume rm` 才会删。
+- **首次启动会自动填充历史**：镜像内置 `docs/data.json` 种子，空库启动时自动恢复最近 90 个交易日并生成页面（实测恢复 90 天 × 14 只 ≈ 1260 行）。
+- ⚠️ 分时与逐笔大单**从部署当天起才开始累积**（上游只提供近 5 个交易日，更早的不可回补），跑几天后自然就完整了。
+- 备份一条命令：
+
+```bash
+docker run --rm -v ntt-data:/data -v "$PWD":/backup \
+  alpine tar czf /backup/ntt-data-$(date +%F).tgz -C /data .
+```
+
+### 环境变量
+
+| 变量 | 默认值 | 说明 |
+|---|---|---|
+| `GATEWAY_HOST_PORT` | `48881` | 宿主机端口（绑定 `0.0.0.0`，让 NPM 容器能经网桥访问；公网仍只走 443）。换端口：`./deploy.sh --port 50080` |
+| `GATEWAY_PORT` | `38881` | 网关在容器内监听的端口；NPM 反代就指向它（或直接填容器名 `gateway`） |
+| `PORT` | `5000` | 汪汪队看板内部端口（不对外映射，别改） |
+| `QDII_PORT` | `5001` | QDII 看板内部端口（不对外映射，别改） |
+| `TZ` | `Asia/Shanghai` | **不要改**：调度时间点与交易日判定都按北京时间 |
+| `NT_DB_PATH` | `/app/data/data.db` | 数据库路径，必须指向挂载卷 |
+| `APP_ROLE` | `all` | `gateway` / `web` / `cron` / `qdii-web` / `qdii-cron` / `all`（单容器用 all） |
+| `NT_AUTO_ENSURE` | `1` | 展示实例是否自行抓数。Compose 模式固定 `0`（交给 cron）；单容器保持 `1` |
+| `SCHED_FULL_TIMES` | `06:00,17:10` | 完整同步时间点 |
+| `SCHED_TICK_TIMES` | `09:30,10:00,10:30,11:00,11:30,13:00,13:30,14:00,14:30,14:50` | 盘中逐笔大单采样时间点（A股交易时段，约每 30 分钟一次） |
+| `SCHED_RUN_ON_START` | `1` | 启动即跑一次完整同步 |
+| `SCHED_FULL_WEEKDAY_ONLY` | `1` | 周末不跑全量同步 |
+| `SCHED_TIMEOUT` | `1800` | 单次任务超时（秒），超时自动终止，避免卡住堆积 |
+| `BASE_PATH` | 空 | 站点路径前缀。仅当反代**保留**前缀（如 `/nt`）时填，服务端会把前缀剥掉再匹配路由 |
+| `PEER_URL` / `QDII_PEER_URL` | 空 | 页头选项卡指向的对端面板。域名反代时必填：同域不同路径写 `/qdii/`、`/nt/`，跨域名写完整 URL；留空则按「本端口 ±1」推断 |
+
+### 资源占用与共存
+
+- 容器上限：gateway `0.25 核 / 96M`、web `0.5 核 / 256M`、cron `0.25 核 / 192M`；抓取只在定时任务那几秒有开销，其余时间几乎不占资源。
+- 日志已配轮转（单文件 10M、保留 3 个），不会把小硬盘写满。
+- 对外端口默认 `48881`（绑 `0.0.0.0`，供反代经网桥访问），服务器上已有服务占用时 `./deploy.sh --port 50080` 即可。
+
+### 一键升级（拉取 + 重建 + 重启）
+
+`deploy.sh` 默认会先执行 `git pull --ff-only` 再重建镜像，因此升级只要再跑一次脚本：
+
+```bash
+cd /opt/invest-radar/invest-radar
+./deploy.sh                 # 自动拉最新代码 → 重建镜像 → 重启容器 → 等健康检查
+./deploy.sh --no-pull       # 想用本地代码不拉取时（跳过 git pull）
+```
+
+- 本地若有**未提交改动**，脚本会跳过 `git pull` 并给出提示，避免拉取冲突导致部署中断。
+- 仓库不是 git 目录（手动拷贝的代码）或未装 git 时，同样自动跳过，不报错。
+- 数据在命名卷 `ntt-data` 里，重建容器不丢；升级前想备份见上方「数据存在哪」一节。
+
+### 常用运维
+
+```bash
+docker compose ps                 # 状态
+docker compose logs -f cron       # 抓取日志
+docker compose logs -f web        # 看板日志
+docker compose run --rm -T --entrypoint python cron national_team/staticsite.py   # 立刻抓一次
+docker compose restart cron       # 重启调度
+git pull && ./deploy.sh           # 升级（重新构建并启动，数据卷保留）
+```
+
+### Nginx 反向代理（可选，配 HTTPS）
+
+网关已经按路径分好流，**反代只需指向网关一个上游**，不用再写 location：
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name radar.example.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:48881;          # 网关：/ → 汪汪队，/qdii/ → QDII
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+    }
+}
+```
+
+NPM（容器部署）则填 **gateway 容器 IP + 38881**，公网只走 443，无需放行新端口。
+
+`.env` 里保持 `PEER_URL=/qdii/`、`QDII_PEER_URL=/nt/`（页头选项卡走相对路径，换域名不用改）。
+
+> **不用 Docker 的裸机部署**：`python3 -u gateway.py --port 48881` 监听 48881，
+> 上游是本机的 5000 / 5001（`NT_UPSTREAM` / `QDII_UPSTREAM` 默认就是回环），
+> 此时需自行放行 48881；前面有 NPM 的话仍只走 443。完整步骤见 [`部署文档.md`](部署文档.md) 3.6 节。
+
+> 若因为某种原因要**绕过网关**、直接反代到两个内部端口，则必须自己处理前缀：
+> `location /qdii/ { proxy_pass http://127.0.0.1:18081/; }`（结尾斜杠 = 剥前缀），
+> 或者在保留前缀的写法下给容器设 `QDII_BASE_PATH=/qdii`。
+
+> 用 Nginx Proxy Manager 图形界面的完整步骤见 [`部署文档.md`](部署文档.md) 3.5 节。
+
+### 排错速查
+
+| 现象 | 原因与处理 |
+|---|---|
+| 页面能开但没数据 | 首次同步需要几分钟，`docker compose logs -f cron` 看进度 |
+| 定时任务时间不对 | 容器时区必须为 `Asia/Shanghai`（镜像已装 `tzdata` 并设好） |
+| 重启后数据没了 | 卷没挂上；`docker volume inspect ntt-data` 确认，别把 `NT_DB_PATH` 指到容器可写层 |
+| 访问 502 且提示「无法连接上游」 | 网关起来了但后端没起；`docker compose ps` 看 `ntt-web` / `qdii-web` 是否 healthy |
+| 端口起不来 | `48881` 被占用，`./deploy.sh --port 50080` 换一个 |
+| 外网打不开 | 走 NPM 时只需 443 已放行；若公网直连裸机部署，需放行 `48881` |
+| NPM 502 | 填的 gateway 容器 IP 变了（重建后会变）；填容器名 `gateway` 更省心，或固定 IP |
+| `/qdii/` 打开是 404 | 网关的 `QDII_PREFIX` 与实际路径不一致（默认 `/qdii`），或 qdii-web 没起来 |
+
+## 数据源与口径
+
+| 数据 | 来源 | 说明 |
+|---|---|---|
+| 现价 / 涨跌幅 / 成交额 | 新浪行情 `hq.sinajs.cn` | 稳定，作为基础字段 |
+| **主力资金净流入** | 东方财富 `push2.eastmoney.com` | 核心指标，多镜像主机轮换容错 |
+| 历史 K 线（收盘/成交额/涨跌） | 东方财富 `push2his.eastmoney.com` | 用于历史回补 |
+| 历史主力资金 | 东方财富 `fflow/daykline` | 用于历史回补 |
+| 逐笔成交明细 | 东方财富 `stock/details/get` | 方案C：滚动窗口，每笔含时间/价/量/方向；盘后仅尾盘快照，盘中采样累积 |
+| 相关新闻 | 东方财富 / 新浪（尽力抓取） | 上游不通则提示，不影响核心数据 |
+
+均为公开接口，无需 API Key。生产环境每天只抓一次，不会触发上游限流；开发期高频探测可能被临时限制。
+
+### 可选数据源增强（同花顺 fuyao API）
+
+页面页头「⚙ 数据源增强」可**选填** API Key 或系统环境变量名，用于把「新闻 / ETF 行情」从被风控的新浪、东财部分切到同花顺官方源。定位是**增强源而非唯一源**：不填则完全关闭、零额外请求；填了也只在原源缺数据时补齐，接口异常自动静默回退。主力资金、逐笔大单与 QDII 海外信号仍走原方案——fuyao 的这几类接口实测被锁在同花顺 AI 客户端（`code=2004`），且没有海外行情数据。
+
+Key 可放在环境变量 `invest-radar-fuyaokey` 或 `FUYAO_API_KEY`（见 `.env.example`）；静态站由站点维护者在仓库 Secrets 配 `FUYAO_API_KEY` 后重新生成快照。该服务当前免费但无 SLA 承诺。完整实测记录、字段映射与接入设计见 [FUYAO_INTEGRATION.md](FUYAO_INTEGRATION.md)。
+
+## HTTP 接口
+
+| 接口 | 说明 |
+|---|---|
+| `GET /` | 仪表盘页面 |
+| `GET /api/data` | 数据 + 历史（JSON），支持筛选参数 |
+| `GET /api/options` | 筛选项清单（可选日期 / 类别 / 基金） |
+| `GET /api/refresh` | 立即抓取并刷新 |
+| `GET /api/status` | 最近抓取状态（含 `fuyao` 增强状态，不含 Key） |
+| `GET /api/fuyao/check` | 增强源连通性自检（无 Key 时不发网络请求） |
+
+筛选参数（可组合）：
+
+```
+/api/data?date=2026-10-27
+/api/data?cats=沪深300,中证500
+/api/data?codes=510300,159919
+/api/data?date=2026-10-27&cats=沪深300&codes=510300
+```
+
+响应包含 `filters`（生效的筛选条件）、`options`（可选项）、`summary`（当前范围汇总 + 当日全量对比）、`etf`（明细）、`history`（按筛选重算的历史）。
+
+## 目录结构
+
+```
+.
+├── common/                 # 两模块共用（重构抽取的公共层）
+│   ├── http.py             # 代理感知抓取：本地自动直连、公网走环境代理
+│   ├── lock.py             # 跨进程文件锁（fcntl），保证任务互斥抢写
+│   ├── market_calendar.py  # 双市场交易日判定：A 股日历 / 美股日历
+│   └── fuyao.py            # 可选增强源客户端（同花顺 API，无 Key 即关闭）
+├── national_team/          # ① 汪汪队买卖A股日报
+│   ├── app.py              # HTTP 服务 + 路由 + 数据组装
+│   ├── db.py               # SQLite 存储层（data.db）
+│   ├── fetcher.py          # 抓取层（实时行情、主力资金、历史回补、新闻）
+│   ├── intraday.py         # 分时归档 + 护盘/压盘识别 + 逐笔大单
+│   ├── staticsite.py       # 静态站导出（Pages：docs/data.json + index.html）
+│   ├── scheduler.py        # 容器内定时调度器
+│   ├── backfill.py         # 手动回补指定交易日
+│   ├── templates/index.html
+│   └── tests/
+├── qdii/                   # ② 海外 QDII 定投决策面板
+│   ├── constants.py        # 基金池种子 + 策略参数 + 指数基准映射
+│   ├── db.py               # 独立 SQLite（qdii.db，与 data.db 分离）
+│   ├── fetcher_pool.py     # 模块A：基金池初始化
+│   ├── fetcher_limit.py    # 模块B：每日申购状态 + 限额
+│   ├── fetcher_fee.py      # 模块C：多平台申赎规则 + 费率
+│   ├── fetcher_signal.py   # 模块D：美股信号（期货/现货/VIX/美债）
+│   ├── fetcher_premium.py  # 模块G：场内溢价率
+│   ├── tracking_error.py   # 模块E：跟踪误差（年化标准差）
+│   ├── strategy.py         # 模块F：定投决策引擎
+│   ├── board.py            # B+C 合并视图：一只基金一个块（状态/限额/年费/各平台申购）
+│   ├── qdii_app.py         # HTTP 服务 + /api/qdii/*
+│   ├── qdii_scheduler.py   # 双日历定时调度器
+│   ├── templates/index.html
+│   ├── tests/
+│   └── 开发文档.md          # 需求 / 数据源实测结论 / 开发步骤
+├── drawdown/               # ③ 回撤全景（/dd，挂 NT 子进程，零新增进程）
+│   ├── constants.py        # 标的清单（A股指数/场内ETF/海外指数/汇率）+ 事件种子
+│   ├── db.py               # 独立 SQLite（dd.db，与 data.db / qdii.db 分离）
+│   ├── fetcher.py          # 全历史抓取（东财 7 镜像轮换 + 新浪备源 + 断点续传）
+│   ├── engine.py           # 回撤计算（收盘价历史峰值口径）+ 事件识别 + 三视图
+│   ├── api.py              # 服务端与静态站同源的数据装配
+│   ├── backfill.py         # 回补入口：python -m drawdown.backfill [--force] [--export]
+│   ├── templates/index.html
+│   └── tests/
+├── docs/                   # Pages 产物（data.json / index.html / dd/）
+├── Dockerfile              # 容器镜像（python:3.12-slim，非 root，含 tzdata）
+├── docker-compose.yml      # 4 个服务：web / cron / qdii-web / qdii-cron
+├── docker/entrypoint.sh    # 容器入口：按 APP_ROLE 起对应进程
+├── deploy.sh               # 服务器一键部署脚本（compose 或 docker run）
+├── .env.example            # 部署环境变量模板
+├── national_team/tests/
+│   ├── test_db.py          # 数据层单元测试（离线）
+│   ├── test_static.py      # 静态导出测试（离线）
+│   ├── test_intraday.py    # 分时 / 逐笔模块测试（离线）
+│   ├── test_scheduler.py   # 容器调度器测试（离线，不依赖 docker）
+│   ├── test_frontend.js    # 前端渲染逻辑测试（DOM 桩件，离线）
+│   ├── test_static.js      # 双模式一致性测试（前端筛选 vs 服务端逻辑）
+│   ├── test_static_boot.js # 静态站产物启动测试（加载 docs/index.html 实跑）
+│   ├── test_fuyao.py       # 可选增强源：Key 解析 / 降级 / 字段映射（离线）
+│   └── gen_static_expected.py  # 为上面的一致性测试生成服务端期望值
+├── .github/workflows/
+│   ├── ci.yml              # 语法检查 + 全部测试
+│   ├── daily.yml           # 每个交易日收盘后抓取并提交 docs/
+│   └── tick-sample.yml     # 盘中逐笔大单采样（cron-job.org 触发）
+├── CHANGELOG.md            # 历史版本说明（README 只保留当前版本）
+├── FUYAO_INTEGRATION.md    # 可选数据源增强：实测结论 / 字段映射 / 接入方案
+├── requirements.txt
+└── LICENSE
+```
+
+## 测试
+
+```bash
+# 汪汪队：数据层 + 静态导出（离线，无需网络）
+python -m unittest discover -s national_team/tests -p "test_*.py" -q
+
+# QDII：解析器 / 跟踪误差数学 / 决策倍数（离线；用合成序列验证净值-指数日期对齐）
+python -m unittest discover -s qdii/tests -p "test_*.py" -q
+
+# 前端渲染逻辑（用 DOM / ECharts 桩件跑真实页面脚本，无需浏览器）
+node national_team/tests/test_frontend.js
+
+# 双模式一致性：前端本地筛选 vs 服务端 SQL 筛选，逐字段对比
+node national_team/tests/test_static.js
+
+# 静态站产物启动：直接加载 docs/index.html，按 Pages 的执行顺序跑一遍
+python national_team/staticsite.py --no-sync && node national_team/tests/test_static_boot.js
+```
+
+最后一项是关键：静态站把筛选逻辑搬进了浏览器，两条实现路径必须**逐字段等价**，否则同一天的数据在 Pages 和自建服务上会显示不同结果。该测试会调用 Python 侧 `build_payload` 生成期望值，再与前端 `computeStaticPayload` 的输出对比（9 种筛选组合 × 12 个字段 + 信号阈值）。
+
+---
+
+# ② 海外 QDII 定投决策面板
+
+> 针对「想定投标普500 / 纳指100 / 日经225 / 德指，但场外基金经常**暂停申购**或**限购几十元**」的实际痛点，把判断链路做成一条流水线：**今天能不能买 → 哪个平台能买 → 买多少 → 现在贵不贵 → 这只基金跟踪得准不准 → 场内是不是在溢价**。
+
+## 解决什么问题
+
+QDII 场外基金受外汇额度限制，**天天变化**：同一只基金在基金公司 / 天天基金 / 支付宝上的**申购状态与限额可能不一致**，且有额度时往往限 5～100 元/天。本模块每天自动把这些整理成一页。
+
+## 七模块能力（页面上 B + C 合并为一张「基金总览」表，共 6 张表）
+
+| 模块 | 内容 | 关键实现 |
+|---|---|---|
+| A 基金池 | **59 只 / 6 大类**的场外 QDII（LOF + ETF联接 + FOF） | 代码与简称取自天天基金全量搜索接口（`fundcode_search.js`），跟踪标的逐只核对 F10「跟踪标的」字段；`online_code` 场内映射按**同公司同指数**反查场内 ETF（无自家 ETF 的留空，不硬配） |
+| B 限额 | 每日申购状态（开放 / 限大额 / 暂停）+ 日限额 + 起购金额 | `Fund_JJJZ_Data.aspx` 全量；**必须 UTF-8 解码**（见踩坑） |
+| C 多平台费率 | 天天基金 + 支付宝 + 理财通三平台的在售状态、申购费、管理费、托管费、销售服务费、年费合计 | 天天基金 `FundRateInfo`；支付宝 `fund123.cn` 服务端渲染；**理财通无公开接口，按平台通用规则推算（页面标「推算」徽标）**；`get_platform_fee()` 按 `FUND_POOL` 顺序 + 平台固定秩排序，保证同代码相邻（rowspan 合并的前提） |
+| B+C 基金总览 | **申购状态、限额、多平台费率合并成一张表**：一只基金一个行块（代码/名称/类别/状态/日限额/起购/固定年费纵向合并，右侧跟各平台「在售 + 申购费」行）；**表头可排序** | `board.py` 按 code 做 join 输出 `/api/qdii/board`。固定年费是合同条款、各平台一致 → 提到基金级只列一次；真正按平台变的只有「在售」与「申购费」。`limit`/`fee` 两个原始接口保留排障用。排序**在后端做**（口径唯一、可单测）：点基金级列改「哪只基金在前」，点平台级列只改同一只基金内部各平台行的先后，**各基金顺序不变** |
+| D 全球市场信号 | **美股**（纳指现货+期货、标普500现货+期货）／**亚太**（日经225期货）／**欧洲**（德国DAX、法国CAC40、英国富时100）／**利率**（美债10Y、VIX） | 每类一个主信号，**优先海外指数现货**；取不到现货的（DAX/CAC40/纳指科技）用**境内对应场内 ETF 实时价代理**，英国富时100 用美股 `usEWU` 代理——代理口径在名称与类型标签里写明，不冒充指数。分组与标签由 `constants.MARKET_SIGNALS` 统一下发，加新市场只改常量 |
+| E 跟踪误差 | 年化 tracking error（**已并入 ④ 基金总览表**，不再单独一张） | 基金净值 vs **真实指数**日线（新浪美股指数/外盘期货为主、东财为备），基准**按大类**配置（`TRACK_BENCHMARK_BY_CATEGORY`），按交易日对齐 |
+| F 决策引擎 | **按大类**（标普500 / 纳斯达克100 / 日经225 / 德国DAX）给「建议倍数 + 理由」 | 固定周期 + 信号增强；跟跌加仓 + 避险防御；同大类不再区分具体基金 |
+| G 场内溢价 | **按场内 ETF** 逐只算溢价率（10 只：纳指 5 / 标普 3 / 日经 1 / DAX 1），并给**折算溢价** | 新浪场内价 + 东财单位净值 + 指数日线（新浪美股 `.NDX`/`.INX`、新浪外盘期货 `NK`）；折算 = 把 T+1 滞后净值按指数涨幅折到最新收盘日 |
+
+## 定投策略
+
+骨架是**固定周期 + 信号增强**，在此基础上叠加三类调节：
+
+- **跟跌加仓**：该大类对应指数的昨日跌幅越大，倍数越高（档位 `-2% / -4% / -6%`，可配置）。纳指用纳斯达克综合指数、标普用标普500；日经225 / 德国DAX 没有本地信号，借美股风向并在理由里注明。
+- **避险防御**：两条判据**维度不同、并列触发、互不替代**，任一硬阈值触发即倍数 ×0.5，理由里写明是谁触发的：
+  - **VIX**（日频收盘，CBOE）：看**绝对水平**——市场「已经」恐慌到什么程度，是结果。`>30` 硬触发；`20~30` 为预警区只提示；单日跳升 `≥20%` 提示情绪急变。
+  - **美债10Y**（实时，CNBC）：看**单日变动 bp**——无风险利率跳升压制估值，是原因（贴现率上行先杀高估值资产）。单日上行 `>30bp` 硬触发；`+15~30bp` 提示逼近。
+  - 未触发时理由里也写当日实际取值（`避险指标正常：VIX 16.9（阈值 30）、美债10Y 单日 -5bp（阈值 +30bp）`），避免「看不出策略到底有没有在用它们」。
+  - 两者同时触发只乘一次 0.5，不叠加。
+- **可买性**：大类全部暂停申购 → 倍数 0；只有部分可买或只给极小额度时，不封顶倍数，而是在「可买情况」列与理由里写明（**不显示金额**——金额随各人基准额换算，倍数才是结论）。
+
+## QDII HTTP 接口
+
+| 接口 | 说明 |
+|---|---|
+| `GET /` | QDII 看板页面（默认端口 5001） |
+| `GET /api/qdii/status` | 服务状态 / 基金池规模 |
+| `GET /api/qdii/funds` | 基金池 |
+| `GET /api/qdii/limit` | 最新申购状态与限额（原始数据） |
+| `GET /api/qdii/fee` | 多平台费率与规则（原始数据） |
+| `GET /api/qdii/board` | **申购状态 + 限额 + 多平台费率合并表**（页面主口径，含表头摘要）。可带排序参数：`sort`/`dir` = 基金级排序列与方向，`psort`/`pdir` = 平台级排序列与方向 |
+| `GET /api/qdii/signal` | 全球市场信号（含 `meta` 分组与类型标签、`groups` 分组顺序） |
+| `GET /api/qdii/premium` | 场内溢价率 |
+| `GET /api/qdii/tracking` | 跟踪误差（原始数据；页面已并入 ④ 基金总览表） |
+| `GET /api/qdii/decision` | **按大类**的定投建议倍数与理由（页面主口径） |
+| `GET /api/qdii/decision_fund` | 逐基金明细（追溯用，页面不展示） |
+
+## Docker：与汪汪队共存在同一份 Compose
+
+```bash
+docker compose up -d --build   # 一次性起 5 个服务
+```
+
+| 容器 | 角色 | 职责 | 端口 |
+|---|---|---|---|
+| `ntt-gateway` | `APP_ROLE=gateway` | 单端口入口，`/qdii/` 分发到 QDII | `${GATEWAY_HOST_PORT:-48881}` → 38881 |
+| `qdii-web` | `APP_ROLE=qdii-web` | QDII 看板 + `/api/qdii/*`（只展示） | 5001（仅容器内） |
+| `qdii-cron` | `APP_ROLE=qdii-cron` | 双日历调度抓取 | 无 |
+
+两个模块**共用镜像与数据卷**（`ntt-data`），但数据库文件独立（`data.db` / `qdii.db`），互不干扰。
+
+新增环境变量：
+
+| 变量 | 默认值 | 说明 |
+|---|---|---|
+| `QDII_PORT` | `5001` | QDII Web 容器内端口（不对外映射） |
+| `QDII_PREFIX` | `/qdii` | 网关分发 QDII 的路径前缀 |
+| `QDII_SCHED_LIMITTIMES` | `09:00` | 限额/费率/跟踪误差（A 股交易日） |
+| `QDII_SCHED_SIGNALTIME` | `14:30` | 美股信号（美股交易日） |
+| `QDII_SCHED_PREMIUMTIME` | `14:30` | 场内溢价（A 股交易日） |
+| `NT_QDII_DB_PATH` | `/app/data/qdii.db` | QDII 数据库路径，须指向挂载卷 |
+
+> **时区说明（重要）**：北京时间 14:30 = 美东约 01:30–02:30，**美股现货与美债已收盘**，取到的是上一交易日收盘值；美股期货（CME Globex 近 24 小时）才是实时。QDII T 日申购按海外收盘净值成交，因此「现货昨收」正是本次申购成交的方向参考，页面会明确标注「非实时」。
+
+## QDII 数据源
+
+| 数据 | 来源 |
+|---|---|
+| 申购状态 / 日限额 | 天天基金 `Fund_JJJZ_Data.aspx` |
+| 基金池代码 | 天天基金 `fundcode_search.js` |
+| 费率与规则（平台 A） | 天天基金 `FundRateInfo.ashx` |
+| 费率与规则（平台 B） | 支付宝 `fund123.cn`（服务端渲染 `window.context`） |
+| 费率与规则（平台 C） | **理财通无公开接口**：`fund.qq.com` / `licai.qq.com` 域名已下线，仅微信 App 内提供服务且需登录态 → 管理费/托管费沿用基金合同值，申购费按「A 类 1 折」推算，起购按 10 元，状态跟随基金公司限购公告 |
+| 基金历史净值 | 东财 `api.fund.eastmoney.com/f10/lsjz`（**每页固定 20 条，需翻页**） |
+| 指数日线（跟踪误差基准） | **新浪美股指数日K** `US_MinKService.getDailyK`（`.INX` 标普500 / `.NDX` 纳指100，全历史、稳定）；备源东财 `push2his`（`100.SPX` / `100.NDX100` / `100.N225` / `100.GDAXI`） |
+| 场内价格 | 新浪 `hq.sinajs.cn`（GBK） |
+| 美股期货 / 现货 / VIX | 新浪期货 + 新浪指数 + 腾讯 |
+
+## 实现中踩过的坑
+
+记录在此，便于后来者少走弯路：
+
+1. **东方财富 `clist` 接口在 `np=1` 时强制只返回 100 条**，需翻页抓全；且 `f20` / `f21`（规模字段）在 ETF 板块会令返回为空，不要一起带。
+2. **历史 K 线接口 `beg == end`（同一天）返回空数组**，必须传「目标日往前 12 天 → 目标日」的范围，再挑出目标日那一行。
+3. **历史接口的 `beg` / `end` 日期格式必须统一无横杠**（`%Y%m%d`），混用带横杠格式会被静默忽略并返回空。
+4. **本地 `127.0.0.1` 请求可能被系统代理劫持**（表现为 404 / Bad request syntax），写本地 HTTP 脚本时要绕过代理（`NO_PROXY` 或 `ProxyHandler({})`）。
+5. **盘前打开页面**：当天数据尚未生成，默认自动回退到最近一个有效数据日并在页面标注原因，避免首屏一片 `—`。
+6. **QDII 限额接口必须是 UTF-8 解码**（最隐蔽的一个）：`Fund_JJJZ_Data.aspx` 返回 UTF-8 字节，若按 GBK 解码**不会报错**（GBK 几乎不抛 `UnicodeDecodeError`，因此不会触发降级），只会静默产生乱码 `鏆傚仠鐢宠喘`。后果是「暂停申购」匹配不到「暂停」关键字而被判成 `OPEN`，**把暂停申购的基金推荐成可买**。数值字段不受影响，所以很容易漏。
+7. **跟踪误差必须用真实指数作基准，不能用场内 ETF 代替**：QDII ETF 自身折溢价噪声极大（实测溢价可达 15%+），用它当日线基准会把跟踪误差高估到 **30%+** 的荒谬水平。东财侧注意纳指100 是 `100.NDX100`（不是 `100.NDX`，后者无效会连接失败）。
+8. **QDII 净值的「T+1」是披露滞后，不是日期偏移**：东财 `lsjz` 的净值日期已对齐海外估值日，按同交易日直接配对才对。实测 161125 / 161130 / 040046 在 `lag=0` 时 TE = **1.23% / 1.55% / 1.06%**（符合指数基金 1~3% 常识），改成 `lag=1` 立刻虚高到 **18.6% / 30.5% / 31.1%**。
+9. **东财 `push2*` 主机族在部分网络出口整段返回 `RemoteDisconnected`**（同一出口下 `push2his` 的 `100.SPX` 能通、换成 `100.N225` 就断，说明不是参数问题）。所以基准源按「新浪优先 + 东财兜底」排序；日经225 / 德国DAX 无新浪日K（symbol 返回 `null`），只能走东财，受限出口下这两只会暂时缺值（页面显示占位，不编造数值）。
+10. **`lsjz` 净值接口忽略 `pageSize`**：无论传多大，每页固定只返回 **20 条**，必须翻页累积，否则只有 20 个样本点，算出来的跟踪误差不可信。
+11. **策略参数的单位**：跟跌档位阈值必须与 `change_pct` 同为**百分点**。曾写成小数 `-0.02`，导致 `-2.5 <= -0.06` 恒成立，跌 2.5% 就直接命中「跌 6%」最高档。已加回归测试守住。
+12. **新浪期货 `hf_*` 的字段位置不能猜**：15 段里 `[0]` 才是现价、`[7]` 是昨收、`[13]` 是名称。曾把 `[5]`（当日最低价）当价格、`parts[-1]`（占位 `"0"`）当名称，页面因此出现「名称 0、价格恒为最低价、涨跌 0.00%」。现在按实测位置解析，并用 `(现价/昨收-1)` 真实算涨跌幅。
+13. **场内溢价率的口径**：净值取的是**对应 ETF 的净值**，不是场外联接基金的净值。所以多只联接基金对应同一只 ETF 时（如 000834 / 040046 / 270042 都对应 513100）溢价率必然相同，这不是重复 bug；161125 / 161130 是 LOF，场内场外同一代码。表头已写明「对应ETF净值」以免误读。
+14. **数据库默认路径不要按「本文件所在目录」推导**：拆成 `national_team/` 三层结构后，`db.py` 若用 `os.path.dirname(__file__)` 拼路径，会悄悄新建一个空库（历史库还在仓库根），表现为「页面历史全没了、只剩当天」。默认路径必须固定指向仓库根 `data.db`，容器内再用 `NT_DB_PATH` 覆盖。
+15. **场内溢价率不能挂在场外基金上算**：场外联接基金与其 ETF **不存在唯一映射**（一只 ETF 可由多家公司跟踪，一只场外基金也可能投多个 ETF）。早期实现按 `FUND_POOL.online_code` 遍历，把 5 只纳指场外基金全指向 `513100`，结果表里 5 行溢价率完全一样，而广发 **159941 从未出现**（实测溢价 +13.97%，恰恰是最需要看的一只）。正确做法是维护**场内 ETF 清单**逐只算。
+16. **「纳指」≠「纳指100」**：口语说的纳指是**纳斯达克综合指数**（腾讯 `usIXIC`，约 3300 只成分），不是纳斯达克100（`usNDX`，100 只非金融大盘股）。两者数值差约 10%（实测 26550 vs 29813），混用会让人对不上行情软件。期货侧 CME 只有纳指100期货（`hf_NQ`），页面因此标注「纳指期货」并在小字说明是 24h 连续合约。
+17. **腾讯 `usVIX` 是死数据**：数值长期停在 2026-09-15 的 21.67，再怎么抓也不会变，拿它当避险开关等于开关永远不动。改用 CBOE 官方日收盘 CSV（`cdn.cboe.com`，实测可达、T+1），实测 10-28 收盘 16.91。
+
+## 更新日志
+
+当前版本 **v2.9.1**。完整历史版本说明见 [CHANGELOG.md](CHANGELOG.md) 与 [Releases](https://github.com/turbomind66/invest-radar/releases)。
+
+## 免责声明
+
+本项目仅对**公开行情数据**做整理与可视化，不构成任何投资建议。数据准确性依赖第三方公开接口，可能存在延迟、缺失或变动，请勿据此做出投资决策。
+
+## License
+
+[MIT](LICENSE) © 2026 turbomind66

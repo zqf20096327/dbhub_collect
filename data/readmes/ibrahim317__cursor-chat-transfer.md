@@ -1,4 +1,11 @@
-# Cursor Chat Transfer
+# ⚠️ ARCHIVED: Cursor Chat Transfer
+
+> [!WARNING]
+> **THIS PROJECT IS NO LONGER MAINTAINED.** I no longer use Cursor, so I cannot test or maintain this extension for current Cursor versions.
+>
+> **Want to continue maintaining it?** Fork the project and email me at [i.aboelsoud21@gmail.com](mailto:i.aboelsoud21@gmail.com). I'll be happy to link your fork here.
+>
+> For more context, see [my comment on issue #22](https://github.com/ibrahim317/cursor-chat-transfer/issues/22#issuecomment-7191382757).
 
 Transfer your AI chat conversations between Cursor IDE workspaces and devices with an intuitive UI.
 <p align="center">

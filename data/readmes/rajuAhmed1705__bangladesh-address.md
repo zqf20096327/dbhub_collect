@@ -54,8 +54,9 @@ A plain-text summary of the whole API for AI coding assistants is in [llms.txt](
 
 - **8 Divisions** - All administrative divisions
 - **64 Districts** - All districts
-- **495 Upazilas** - All upazilas (updated July 2021 with Eidgaon, Dasar, Madhyanagar)
+- **500 Upazilas** - All upazilas (updated July 2021 with Eidgaon, Dasar, Madhyanagar)
 - **26 Metropolitan Thanas** - Police stations in Dhaka, Chattogram, Rajshahi, Khulna
+- **12 City Corporations** - Urban administrative units from BBS/COD-AB
 
 ## Installation
 
@@ -108,7 +109,7 @@ upazilaNamesOf("Tangail")
 // Returns: Array of upazila names (strings) for Tangail district
 
 allUpazila()
-// Returns: Array of all 495 upazila names
+// Returns: Array of all 500 upazila names
 
 isUpazila("Savar")
 // Returns: true (Savar is an upazila)
@@ -244,7 +245,7 @@ searchLocations("pur")
 ```javascript
 import { upazilaData, thanaData } from '@bangladeshi/bangladesh-address'
 
-// upazilaData: Array of all 495 upazila objects
+// upazilaData: Array of all 500 upazila objects
 // thanaData: Array of all 26 thana objects
 ```
 
@@ -333,6 +334,16 @@ The data can also be fetched directly, without installing anything:
 
 Add a version after the package name (for example `bangladesh-address@2.2.0`) to pin the data to a release.
 
+## Data sources
+
+City corporation names, district/division references and BBS codes come from [Bangladesh - Subnational Administrative Boundaries (COD-AB)](https://data.humdata.org/dataset/cod-ab-bgd) on the Humanitarian Data Exchange. The data is published by UN OCHA from Bangladesh Bureau of Statistics (BBS) sources and licensed under [CC BY-IGO](https://creativecommons.org/licenses/by/3.0/igo/legalcode).
+
 ## Contribution
 
 If you want to contribute please follow the guideline. [Contribution](https://github.com/rajuAhmed1705/bangladesh-address/blob/master/CONTRIBUTING.md)
+
+## Support
+
+This package is free and maintained in spare time. If it saves you work, you can support it:
+
+❤️ [Support on Ko-fi](https://ko-fi.com/raju1705) or [donate with PayPal](https://www.paypal.me/raju1705)

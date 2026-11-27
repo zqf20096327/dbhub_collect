@@ -4,7 +4,7 @@
 
 ### Stop guessing what's happening inside your backend. See it with TracerNest.
 
-**Self-hosted observability and operations dashboard for Node.js applications.**
+**Self-hosted observability and operations dashboard for Node.js & Laravel 13 applications.**
 
 *Centralized visibility into application logs, HTTP requests and responses, application health, operational diagnostics, and critical events through a configurable dashboard integrated directly into your existing backend.*
 
@@ -13,13 +13,14 @@
 [![npm version](https://img.shields.io/npm/v/tracernest-logger)](https://www.npmjs.com/package/tracernest-logger)
 [![npm downloads](https://img.shields.io/npm/dm/tracernest-logger)](https://www.npmjs.com/package/tracernest-logger)
 [![Socket Security](https://socket.dev/api/badge/npm/package/tracernest-logger)](https://socket.dev/npm/package/tracernest-logger)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-10B981.svg?style=flat-square)](LICENSE)
-[![Zero Dependencies](https://img.shields.io/badge/dependencies-0-10B981.svg?style=flat-square)](package.json)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-38BDF8.svg?style=flat-square)](package.json)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-10B981.svg?style=flat-square)](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/LICENSE)
+[![Zero Dependencies](https://img.shields.io/badge/dependencies-0-10B981.svg?style=flat-square)](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/package.json)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-38BDF8.svg?style=flat-square)](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/package.json)
+[![Laravel Version](https://img.shields.io/badge/laravel-13%20%7C%2012%20%7C%2011-FF2D20.svg?style=flat-square)](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/laravel.md)
 [![GitHub Stars](https://img.shields.io/github/stars/ankit-kumar-khandelwal/tracernest-logger?style=flat-square)](https://github.com/ankit-kumar-khandelwal/tracernest-logger/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/ankit-kumar-khandelwal/tracernest-logger?style=flat-square)](https://github.com/ankit-kumar-khandelwal/tracernest-logger/network/members)
 
-[**npm Package**](https://www.npmjs.com/package/tracernest-logger) &bull; [**GitHub Repository**](https://github.com/ankit-kumar-khandelwal/tracernest-logger) &bull; [**Documentation**](docs/introduction.md) &bull; [**Report an Issue**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/issues)
+[**npm Package**](https://www.npmjs.com/package/tracernest-logger) &bull; [**GitHub Repository**](https://github.com/ankit-kumar-khandelwal/tracernest-logger) &bull; [**Documentation**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/introduction.md) &bull; [**Report an Issue**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/issues)
 
 </div>
 
@@ -27,7 +28,9 @@
 
 ## ⚡ Quick Start (30 Seconds)
 
-Get full backend observability running in 3 lines of code &mdash; **zero runtime dependencies**, **no separate monitoring port required**:
+Get full backend observability running in minutes &mdash; **zero runtime dependencies**, **no separate monitoring port required**:
+
+### Option A: Node.js (Express / Fastify)
 
 ```bash
 npm install tracernest-logger
@@ -56,7 +59,28 @@ app.listen(3000, () => {
 });
 ```
 
-*Open `http://localhost:3000/tracernest` in your browser to access your live self-hosted operations console.*
+### Option B: Laravel 13 (PHP 8.2+)
+
+```bash
+# 1. Install TracerNest in your Laravel project root
+npm install tracernest-logger
+
+# 2. Copy the integration bridge files
+mkdir -p app/Http/Middleware app/Http/Controllers config
+cp node_modules/tracernest-logger/integrations/laravel/TracerNestMiddleware.php app/Http/Middleware/
+cp node_modules/tracernest-logger/integrations/laravel/TracerNestController.php app/Http/Controllers/
+cp node_modules/tracernest-logger/integrations/laravel/tracernest.php config/
+```
+
+```php
+// In routes/web.php:
+require base_path('node_modules/tracernest-logger/integrations/laravel/routes.php');
+
+// In bootstrap/app.php:
+$middleware->append(\App\Http\Middleware\TracerNestMiddleware::class);
+```
+
+*Open `http://localhost:3000/tracernest` (or `http://localhost:8000/tracernest`) in your browser to access your live self-hosted operations console.*
 
 ---
 
@@ -81,7 +105,7 @@ app.listen(3000, () => {
   - [4. Dedicated Standalone Port (Optional)](#4-dedicated-standalone-port-optional)
   - [5. Docker Container Deployment](#5-docker-container-deployment)
   - [6. MySQL Database & Connection Pool Integration](#6-mysql-database--connection-pool-integration)
-  - [7. Laravel 13 Telemetry Integration](#7-laravel-13-telemetry-integration)
+  - [7. Laravel 13 Telemetry & Observability Integration](#7-laravel-13-telemetry--observability-integration-no-extra-ports-required)
 - [Configuration Reference](#configuration-reference)
 - [Security & Privacy](#security--privacy)
   - [Production Security Checklist](#production-security-checklist)
@@ -624,31 +648,74 @@ const tracer = new TracerNestLogger({
 > - **Automatic SQLite Cleanup with Master Key Preservation**: Once migration to MySQL completes successfully, all SQLite files (`.sqlite`, `.sqlite-wal`, `.sqlite-shm`, `.sql`) are safely deleted to prevent outdated files from lingering in your project or container. **The persistent master key (`.master.key`) is strictly preserved** so your AES-256-GCM encryption tokens and secrets remain intact.
 > - **Continuous Schema Auto-Updates**: When new versions of TracerNest are installed, any newly added tables or columns (`ALTER TABLE ... ADD COLUMN ...`) are automatically applied upon startup with zero manual migration scripts or maintenance downtime.
 
-### 7. Laravel 13 Telemetry Integration (No Extra Ports Required)
+### 7. Laravel 13 Telemetry & Observability Integration (No Extra Ports Required)
 
-TracerNest mounts directly inside **Laravel 13** (and Laravel 12 / 11) on the **exact same port** (e.g. `http://localhost:8000/tracernest` or `https://myapp.com/tracernest`). **No extra ports, second servers, or background processes are required.**
+TracerNest provides native, first-class telemetry observability and real-time flight recording for **Laravel 13** (as well as Laravel 12 and 11).
+
+> [!IMPORTANT]
+> **NO EXTRA PORTS REQUIRED**: You do **NOT** need to open any extra port or run a separate background process. TracerNest mounts directly inside your existing Laravel application on the **exact same port** (e.g. `http://localhost:8000/tracernest` or `https://myapp.com/tracernest`). **Zero extra ports, zero background daemons, and zero cloud subscriptions.**
+
+#### 🏛️ Single-Port Architecture in Laravel 13
+
+```text
++-----------------------------------------------------------------------------------+
+|                        Client Browser / Mobile App / API                          |
++-----------------------------------------------------------------------------------+
+                                         │
+                                         ▼ [Single Application Port: e.g. 8000 / 443]
++───────────────────────────────────────────────────────────────────────────────────+
+| Laravel 13 Application Runtime (PHP 8.2+ / Octane / FrankenPHP / Nginx)           |
+|                                                                                   |
+|  ┌─────────────────────────────────────────────────────────────────────────────┐  |
+|  │ Laravel Router                                                              │  |
+|  └───────┬─────────────────────────────────────────────────────────────┬───────┘  |
+|          │                                                             │          |
+|          ▼ [Standard API & Web Routes]                                 ▼ [/tracernest/*]
+|  ┌────────────────────────────────────────┐       ┌────────────────────────────┐  |
+|  │ TracerNestMiddleware                   │       │ TracerNestController       │  |
+|  │ • Intercepts Method, URL, Status       │       │ • Serves Embedded SPA UI   │  |
+|  │ • Captures Duration (0.01ms precision) │       │ • Streams Real-time SSE    │  |
+|  │ • Redacts Passwords, Tokens & Cards    │       │ • Executes Filter Queries  │  |
+|  │ • Respects Body Size & Excluded Routes │       │ • Authenticates Operators  │  |
+|  └───────────────────┬────────────────────┘       └────────────┬───────────────┘  |
+|                      │                                         │                  |
+|                      ▼                                         ▼                  |
+|  ┌─────────────────────────────────────────────────────────────────────────────┐  |
+|  │ Shared Database Connection (Laravel DB::connection())                       │  |
+|  │ Table: tracenest_logs (Zero Network Overhead / 0ms Direct Insert)           │  |
+|  └─────────────────────────────────────────────────────────────────────────────┘  |
++───────────────────────────────────────────────────────────────────────────────────+
+```
+
+#### Step 1: Install Package
+Every Laravel project includes a root `package.json` for frontend assets (Vite/Tailwind). Run in your Laravel root directory:
 
 ```bash
-# In your Laravel 13 project root
 npm install tracernest-logger
 ```
 
-#### Step 1: Copy Packaged Bridge Files
+#### Step 2: Copy Integration Bridge Files
+Copy the pre-packaged PHP bridge files directly into your Laravel `app/` and `config/` directories:
 
 ```bash
-# 1. Copy Middleware
+# 1. Copy Telemetry Middleware
 mkdir -p app/Http/Middleware
 cp node_modules/tracernest-logger/integrations/laravel/TracerNestMiddleware.php app/Http/Middleware/
 
-# 2. Copy Controller
+# 2. Copy Telemetry Controller
 mkdir -p app/Http/Controllers
 cp node_modules/tracernest-logger/integrations/laravel/TracerNestController.php app/Http/Controllers/
+
+# 3. Copy Configuration File
+cp node_modules/tracernest-logger/integrations/laravel/tracernest.php config/
 ```
 
-#### Step 2: Register in Laravel 13
-
-1. **In `routes/web.php`**, add one line to mount the dashboard on your existing Laravel port:
+#### Step 3: Register in Laravel 13
+1. **In `routes/web.php`**, mount the dashboard on your existing Laravel port:
 ```php
+use Illuminate\Support\Facades\Route;
+
+// Mount TracerNest Dashboard directly on your existing Laravel port
 require base_path('node_modules/tracernest-logger/integrations/laravel/routes.php');
 ```
 
@@ -658,16 +725,137 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
+        commands: __DIR__.'/../routes/console.php',
+        health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Automatically capture incoming HTTP requests, response payloads & durations
         $middleware->append(\App\Http\Middleware\TracerNestMiddleware::class);
     })
     ->create();
 ```
 
-#### Step 3: Open Your Dashboard
+#### Step 4: Setting Options in Laravel 13
 
-Start your standard Laravel server (`php artisan serve` or access via Laravel Herd / Docker / Nginx):
+TracerNest provides full control over telemetry capture, storage, and redaction. You can configure options either through **Environment Variables (`.env`)** or in **`config/tracernest.php`**.
+
+##### A. Via Environment Variables (`.env`)
+```ini
+# Enable/disable telemetry globally (default: true)
+TRACERNEST_ENABLED=true
+
+# Storage Mode: 'database' (direct MySQL/SQLite, recommended) or 'http' (remote ingest)
+TRACERNEST_MODE=database
+
+# Custom database connection from config/database.php (null uses default connection)
+TRACERNEST_DB_CONNECTION=mysql
+
+# Database table prefix (default: 'tracenest_')
+TRACERNEST_TABLE_PREFIX=tracenest_
+
+# URL path where dashboard is mounted (default: '/tracernest')
+TRACERNEST_PATH=/tracernest
+
+# Master signing & encryption key (defaults to your APP_KEY)
+TRACERNEST_KEY=base64:your-laravel-app-key-here
+
+# Log retention TTL in days (0 = retain indefinitely)
+TRACERNEST_RETENTION_DAYS=30
+
+# Maximum request & response body capture size in bytes (default: 65536 = 64KB)
+TRACERNEST_BODY_LIMIT=65536
+
+# Remote ingestion endpoint (only used when TRACERNEST_MODE=http)
+TRACERNEST_ENDPOINT=http://127.0.0.1:8001/tracernest
+```
+
+##### B. Via Configuration File (`config/tracernest.php`)
+```php
+return [
+    'enabled' => env('TRACERNEST_ENABLED', true),
+    'mode' => env('TRACERNEST_MODE', 'database'),
+    'connection' => env('TRACERNEST_DB_CONNECTION', null),
+    'table_prefix' => env('TRACERNEST_TABLE_PREFIX', 'tracenest_'),
+    'path' => env('TRACERNEST_PATH', '/tracernest'),
+    'key' => env('TRACERNEST_KEY', env('APP_KEY')),
+
+    // Exclude health checks, internal routes, and high-frequency polling:
+    'exclude_routes' => [
+        '/up',                      // Laravel 11/12/13 health check
+        '/healthz',                 // Kubernetes liveness probe
+        '/livewire/update',         // Livewire AJAX updates
+        '/sanctum/csrf-cookie',     // CSRF token generation
+        '/horizon/*',               // Laravel Horizon
+        '/telescope/*',             // Laravel Telescope
+    ],
+
+    // Automatically redact sensitive keys in request payloads and query strings:
+    'sanitize_fields' => [
+        'password',
+        'password_confirmation',
+        'current_password',
+        'secret',
+        'token',
+        'api_key',
+        'access_token',
+        'refresh_token',
+        'authorization',
+        'credit_card',
+        'card_number',
+        'cvv',
+        'cvc',
+        'ssn',
+    ],
+
+    'body_size_limit' => (int) env('TRACERNEST_BODY_LIMIT', 65536),
+    'retention_days' => (int) env('TRACERNEST_RETENTION_DAYS', 30),
+];
+```
+
+##### C. Complete Options Reference Table
+
+| Option Key | `.env` Variable | Type | Default | Purpose |
+| :--- | :--- | :--- | :--- | :--- |
+| `enabled` | `TRACERNEST_ENABLED` | `bool` | `true` | Master switch to enable or disable telemetry capture globally. |
+| `mode` | `TRACERNEST_MODE` | `string` | `'database'` | `'database'` (zero-overhead direct insert) or `'http'` (remote server ingest). |
+| `connection` | `TRACERNEST_DB_CONNECTION` | `string\|null` | `null` | Name of database connection from `config/database.php` (`null` = default DB). |
+| `table_prefix` | `TRACERNEST_TABLE_PREFIX` | `string` | `'tracenest_'` | Prefix for generated database tables (`tracenest_logs`, `tracenest_users`). |
+| `path` | `TRACERNEST_PATH` | `string` | `'/tracernest'` | URI prefix for the web dashboard on your Laravel server. |
+| `key` | `TRACERNEST_KEY` | `string` | `env('APP_KEY')` | Secret key used for HMAC session tokens and AES-256-GCM payload encryption. |
+| `endpoint` | `TRACERNEST_ENDPOINT` | `string` | `'http://127.0.0.1:8001/tracernest'` | Target URL when operating in remote `'http'` mode. |
+| `exclude_routes` | &mdash; | `array` | `['/up', ...]` | Array of route paths or wildcards (`'/horizon/*'`) excluded from capture. |
+| `sanitize_fields`| &mdash; | `array` | `['password', ...]`| Parameter keys masked with `••••••••••••` before saving. |
+| `body_size_limit`| `TRACERNEST_BODY_LIMIT` | `int` | `65536` (64 KB) | Byte limit for request and response body storage to protect database RAM. |
+| `retention_days` | `TRACERNEST_RETENTION_DAYS` | `int` | `30` | Number of days to retain logs before automated expiration (`expires_at`). |
+
+#### Step 5: Laravel Monolog 3 Logging Integration (Optional)
+To also capture standard Laravel logs (`Log::info()`, `Log::error()`, `Log::warning()`) and PHP exception stack traces:
+
+1. Copy the Monolog handler:
+```bash
+mkdir -p app/Logging
+cp node_modules/tracernest-logger/integrations/laravel/TracerNestMonologHandler.php app/Logging/
+```
+
+2. In `config/logging.php`, add `tracernest` to your logging channels:
+```php
+'channels' => [
+    'stack' => [
+        'driver' => 'stack',
+        'channels' => ['single', 'tracernest'],
+        'ignore_exceptions' => false,
+    ],
+
+    'tracernest' => [
+        'driver' => 'custom',
+        'via' => \App\Logging\TracerNestMonologHandler::class,
+        'level' => env('LOG_LEVEL', 'debug'),
+    ],
+],
+```
+
+#### Step 6: Access Your Dashboard
+Start your Laravel server (`php artisan serve`, Laravel Herd, FrankenPHP, Docker, or Nginx):
 
 Navigate in your browser to: **`http://localhost:8000/tracernest`**
 
@@ -675,7 +863,7 @@ Navigate in your browser to: **`http://localhost:8000/tracernest`**
 - **Zero extra servers or background daemons.**
 - Intercepts all incoming API requests and visualizes execution times, status codes, and payloads live in real time.
 
-*For complete setup options, Monolog 3 integration, and Docker examples, see [docs/laravel.md](docs/laravel.md).*
+*For complete setup options, Monolog 3 integration, and Docker examples, see the [Laravel 13 Documentation Guide](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/laravel.md).*
 
 ---
 
@@ -753,7 +941,7 @@ const tracer = new TracerNestLogger({
 });
 ```
 
-*For comprehensive options and advanced settings, visit [docs/configuration.md](docs/configuration.md).*
+*For comprehensive options and advanced settings, visit the [Configuration Reference Guide](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/configuration.md).*
 
 ---
 
@@ -800,20 +988,20 @@ project:
 
 ## Documentation Architecture
 
-Complete architectural guides and deep dives are available in the [`docs/`](docs/) directory:
+Complete architectural guides and deep dives are available in the [`docs/`](https://github.com/ankit-kumar-khandelwal/tracernest-logger/tree/main/docs) directory:
 
-- [**Introduction & Design Goals**](docs/introduction.md) &mdash; Design philosophy, problem context, and architecture.
-- [**Getting Started Guide**](docs/getting-started.md) &mdash; Detailed installation and framework setup.
-- [**Configuration Reference**](docs/configuration.md) &mdash; Full options catalog and usage examples.
-- [**Application Logging**](docs/application-logging.md) &mdash; Console interception, framework support, and ring buffers.
-- [**API Observability**](docs/api-observability.md) &mdash; Request/response interception, circular safety, and exclusions.
-- [**Health & Diagnostics**](docs/health-monitoring.md) &mdash; Dual-tier health probes and system metrics.
-- [**Security & Privacy**](docs/security.md) &mdash; Threat models, remediations, and production checklists.
-- [**Production Deployment**](docs/deployment.md) &mdash; Docker, Kubernetes, Nginx, and multi-instance clusters.
-- [**Laravel 13 Integration**](docs/laravel.md) &mdash; Native telemetry flight recorder for Laravel 13, 12 & 11.
-- [**Troubleshooting Guide**](docs/troubleshooting.md) &mdash; Solutions to common operational edge cases.
-- [**Architecture Deep Dive**](docs/architecture.md) &mdash; Internal component topology and memory lifecycles.
-- [**Production Debugging Playbook**](docs/production-debugging.md) &mdash; Step-by-step incident response playbook.
+- [**Introduction & Design Goals**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/introduction.md) &mdash; Design philosophy, problem context, and architecture.
+- [**Getting Started Guide**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/getting-started.md) &mdash; Detailed installation and framework setup.
+- [**Configuration Reference**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/configuration.md) &mdash; Full options catalog and usage examples.
+- [**Application Logging**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/application-logging.md) &mdash; Console interception, framework support, and ring buffers.
+- [**API Observability**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/api-observability.md) &mdash; Request/response interception, circular safety, and exclusions.
+- [**Health & Diagnostics**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/health-monitoring.md) &mdash; Dual-tier health probes and system metrics.
+- [**Security & Privacy**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/security.md) &mdash; Threat models, remediations, and production checklists.
+- [**Production Deployment**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/deployment.md) &mdash; Docker, Kubernetes, Nginx, and multi-instance clusters.
+- [**Laravel 13 Integration**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/laravel.md) &mdash; Native telemetry flight recorder for Laravel 13, 12 & 11.
+- [**Troubleshooting Guide**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/troubleshooting.md) &mdash; Solutions to common operational edge cases.
+- [**Architecture Deep Dive**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/architecture.md) &mdash; Internal component topology and memory lifecycles.
+- [**Production Debugging Playbook**](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/docs/production-debugging.md) &mdash; Step-by-step incident response playbook.
 
 ---
 
@@ -824,20 +1012,21 @@ TracerNest Logger follows [Semantic Versioning (SemVer)](https://semver.org/):
 - **Minor (1.X.0):** New features, performance enhancements, and backward-compatible additions.
 - **Patch (1.0.X):** Bug fixes, security hardening, and documentation updates.
 
-Current Release: **`1.8.9`**
+Current Release: **`1.9.0`**
 
 ---
 
 ## Community & Contributing
 
 We welcome contributions of all forms from the community!
-- **[Contributing Guide](CONTRIBUTING.md):** Development setup, zero-dependency policy, and PR submission guidelines.
-- **[Code of Conduct](CODE_OF_CONDUCT.md):** Standards and expectations for an inclusive, welcoming community.
-- **[Security Policy](SECURITY.md):** Responsible vulnerability reporting and security architecture details.
-- **[Changelog](CHANGELOG.md):** Release history and migration notes.
+- **[Contributing Guide](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/CONTRIBUTING.md):** Development setup, zero-dependency policy, and PR submission guidelines.
+- **[Code of Conduct](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/CODE_OF_CONDUCT.md):** Standards and expectations for an inclusive, welcoming community.
+- **[Accessibility Statement](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/ACCESSIBILITY.md):** Accessibility commitments, supported environments, and barrier reporting.
+- **[Security Policy](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/SECURITY.md):** Responsible vulnerability reporting and security architecture details.
+- **[Changelog](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/CHANGELOG.md):** Release history and migration notes.
 
 ---
 
 ## License
 
-TracerNest is licensed under the [Apache License, Version 2.0](LICENSE). Free for use in commercial applications, open-source projects, and enterprise infrastructure.
+TracerNest is licensed under the [Apache License, Version 2.0](https://github.com/ankit-kumar-khandelwal/tracernest-logger/blob/main/LICENSE). Free for use in commercial applications, open-source projects, and enterprise infrastructure.

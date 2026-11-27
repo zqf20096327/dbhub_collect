@@ -108,9 +108,9 @@ A base is a ZFS dataset holding a loaded database. A branch is a ZFS clone of a 
 
 ## Editions
 
-- **Core (this repository), Apache-2.0:** branches, bases, runtimes, clustering, CLI, API, web console, MCP, monitoring, notifications, anonymous (no sign-in) branches with limits, scheduled base refresh, backup of cluster state.
+- **Core (this repository), Apache-2.0:** branches, bases, unlimited console users (`admin` and email-based admins via Web/API/CLI), runtimes, clustering, CLI, API, web console, MCP, monitoring, notifications, anonymous (no sign-in) branches with limits, scheduled base refresh, backup of cluster state.
 - **Free modules** in the same apt repository: `proxysql` (routing).
-- **Paid modules** (auth/SSO, audit, history, diff, FSx storage) are separate, closed-source packages, self-hosted and enabled with a license key (monthly or yearly). See [docs/modules.md](docs/modules.md) for the extension points they use.
+- **Paid modules** (roles/teams/SSO via `auth`, `audit`, `history`, `diff`, `fsx` storage) are separate, closed-source packages, self-hosted and enabled with a license key (monthly or yearly). See [docs/modules.md](docs/modules.md) for the extension points they use.
 
 There is no hosted or cloud version of db-branch.
 

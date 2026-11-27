@@ -49,7 +49,7 @@ Every command takes the `.pgdb` first; a bare path is shorthand for `shell`. `-d
 | `logs <pgdb> [-f]` | The server's recent log (a 4 MB window), or the last server's log file |
 | `exec <pgdb> -- TOOL [args]` | Run a Postgres tool (pg_dump, pg_restore, psql, ...) against the server, with `PG*` set |
 | `env <pgdb>` | `DATABASE_URL` and `PG*` as shell exports: `eval "$(minipg env app.pgdb)"`; on Windows, PowerShell assignments: `minipg env app.pgdb \| Invoke-Expression` |
-| `run <pgdb> -- CMD [args]` | Run a host command with `DATABASE_URL` and `PG*` set; the server stays up until it exits, and its exit code is minipg's |
+| `run <pgdb> [--stop] -- CMD [args]` | Run a host command with `DATABASE_URL` and `PG*` set; the server stays up until it exits, and its exit code is minipg's. `--stop` stops the server it started when the command exits, and passes SIGINT/SIGTERM on to it |
 | `dump <pgdb> [pg_dump args]` | `pg_dump` to stdout (plain SQL unless args say otherwise) |
 | `restore <pgdb> [FILE]` | Restore a plain SQL or custom-format dump from FILE or stdin; stops at the first error |
 | `dbs <pgdb>` | List databases, the default marked `*` |
@@ -156,7 +156,8 @@ make stress   # the slow stress suite: kill -9 mid-write, soak, limits, recovery
 - **pg_restore from a pipe.** pg_restore misreads a custom-format archive on stdin inside h9, so `minipg restore` spools stdin to a temp file first.
 - **Cross-arch.** A `.pgdb` records the arch it was created on, and the server warns when it's opened on another.
 - **Windows roots.** Windows lets only administrators (or Developer Mode) make symlinks, so on Windows the root's symlinks are unpacked as hard links to their targets, and its few directory links as copies.
-- **Windows memory.** WHP commits a machine's whole guest memory up front: 2 GB for each server and 1 GB for each running tool. On an 8 GB machine, three or four servers at once is the limit, and the page file grows with them.
+- **Memory per connection.** h9 copies each Postgres backend's memory at fork, so a connection costs about 33 MB. minipg sizes the server's guest memory from `max_connections` and `shared_buffers`: 5 GB with Postgres's defaults, used only as it's touched. h9's 32 GB limit fits about 790 connections.
+- **Windows memory.** WHP commits a machine's whole guest memory up front: 5 GB for a server with Postgres's defaults (2 GB with `max_connections` 20) and 1 GB for each running tool, and the page file grows with them.
 
 ## License
 

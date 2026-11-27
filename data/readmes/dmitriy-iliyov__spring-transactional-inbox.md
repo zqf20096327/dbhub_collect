@@ -275,24 +275,27 @@ Errors come back as RFC 9457 problem details, with a `type` a client can branch 
 ## 🔁 See the inbox at work
 
 Send the last `order-created` event to Kafka **once more, under its original id** - exactly what a consumer restart
-or a topic replay would do:
+or a topic replay would do. `order-service` keeps every event it published in `published_events`, and its replay
+API sends any of them again:
 
 ```bash
-EVENT=$(docker compose exec -T postgres psql -U inbox -d orders -Atc \
-  "SELECT id || ' ' || payload FROM published_events
-   WHERE event_type = 'order-created' ORDER BY published_at DESC LIMIT 1")
+EVENT_ID=$(docker compose exec -T postgres psql -U inbox -d orders -Atc \
+  "SELECT id FROM published_events WHERE event_type = 'order-created' ORDER BY published_at DESC LIMIT 1")
 
-printf 'oncebox_event_id:%s,oncebox_event_type:order-created\t%s\n' "${EVENT%% *}" "${EVENT#* }" \
-  | docker compose exec -T kafka /opt/kafka/bin/kafka-console-producer.sh \
-      --bootstrap-server localhost:29092 --topic orders.events --reader-property parse.headers=true
+curl -X POST http://localhost:8080/api/v1/admin/event-replays \
+  -H 'Content-Type: application/json' \
+  -d "{\"eventIds\": [\"$EVENT_ID\"]}"
+# [{"eventId":"0195f0a0-...","eventType":"order-created","topic":"orders.events"}]
 ```
 
-The `published_events` log gives back the event's id and payload, and the console producer sends them with the same
-two headers the outbox sets. Both consumers receive it, and both skip it:
+The id is also in the `order.created` log line of `order-service` (`eventId` in JSON, `event <id>` on the
+console). Both consumers receive the record,
+and both skip it:
 
 ```bash
 curl http://localhost:8081/api/v1/customers/42/points   # same balance as before
 curl http://localhost:8025/api/v1/messages              # still one confirmation
+curl -s localhost:8081/actuator/prometheus | grep 'inbox_events_total{.*type="rejected_duplicates"'   # one higher
 ```
 
 The `loyalty-service` console shows the decision, under the event's id:
@@ -303,6 +306,25 @@ The `loyalty-service` console shows the decision, under the event's id:
 
 To see the second line of defence, delete the event's row from `inbox_events` in the `loyalty` database and send it once
 more: the inbox no longer knows it, and the points ledger still refuses a second accrual.
+
+### Event replay
+
+`POST /api/v1/admin/event-replays` takes `{"eventIds": [...]}`, 1 to 100 ids (a repeated id is sent once), and
+sends each event to the topic configured for its type, with the stored payload and the `oncebox_event_id`,
+`oncebox_event_type` and `oncebox_event_payload_type` headers it was first sent with. To a consumer the replayed record is the original
+one: an inbox that has seen the id skips it - counted in `inbox_events_total{type="rejected_duplicates"}`, with no
+second accrual and no second e-mail - and one that has not processes it. That is what makes a replay the way to
+re-drive consumers after an incident - a reset consumer group, a lost partition, a consumer bug that dropped events.
+
+- Every id is checked first: if any is unknown, the answer is `404` with the missing ids in `eventIds`, and nothing
+  is sent.
+- The answer comes once the broker has acknowledged every record (`app.event-replay.send-timeout`, 10 s). If the
+  broker fails, the answer is `500` and some records may already be on the topic; sending the same ids again is
+  safe.
+- Each replayed record is logged as `event.replayed` and counted in `event_replays_total`.
+
+The endpoint is administrative. Keep `/api/v1/admin/**` reachable from the internal network only - do not route it
+through a public ingress or gateway.
 
 ## 📜 Logs
 
@@ -322,6 +344,7 @@ service, so one query finds an order, a customer or an event across all of them.
 | `event.action` | Written by | When |
 |----------------|------------|------|
 | `order.created`, `order.cancelled` | `order-service` | the order and its event are stored |
+| `event.replayed` | `order-service` | a published event was sent again over the replay API and the broker acknowledged it |
 | `inbox.event.consumed` | `loyalty-service` | the event was handled and committed with its inbox record |
 | `inbox.event.skipped` | `loyalty-service` | the inbox already knew the event id - a redelivery or a replay |
 | `inbox.event.failed` | `loyalty-service` | handling threw; the record goes back to the error handler |
@@ -342,6 +365,7 @@ The inbox and outbox meters come from oncebox (`oncebox-metrics`); the business 
 | `outbox_events_by_status`, `outbox_dlq_events` | `order-service` | events waiting in the outbox and in its DLQ (cached for 15 s) |
 | `oncebox_*_tasks_total`, `oncebox_task_processing_duration_seconds` | all | runs of the background tasks: polling, clean-up, stuck recovery |
 | `orders_placed_total`, `orders_cancelled_total` | `order-service` | orders committed together with their event |
+| `event_replays_total{event_type}` | `order-service` | events sent again over the replay API, counted once the broker acknowledged the whole replay |
 | `loyalty_points_accrued_total`, `loyalty_points_reverted_total` | `loyalty-service` | points, counted when the inbox transaction commits |
 | `notifications_sent_total`, `notifications_failed_total` | `notification-service` | confirmations the mail server accepted or refused |
 | `notifications_send_duration_seconds{outcome}` | `notification-service` | how long one SMTP send takes, as a histogram: `sent` for accepted mails, `failed` for refused ones; only the SMTP call is timed |

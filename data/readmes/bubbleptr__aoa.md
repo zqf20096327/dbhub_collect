@@ -12,7 +12,7 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/sdk-dark.png">
-  <img alt="aoa SDK 架构：你的应用用 append、answer 往 Inbox 写事件和审批答复，用 schedule、followUp 设定时器，用 messages、watch 读 Outbox；每个 agent 有 Inbox、Worker、Timers、Memory、Outbox、Permissions 和 Tools，可以有多个 agent，用 send_to 互发；Worker 把 run 交给 runtime，第一档是内置的 pi，第二档是外部 harness，Codex 和 dsh 的适配器在 examples/；runtime 的工具调用回到 Permissions，放行的交给 Tools 执行，要审批的经 Outbox 发出；所有 agent 共用一个 SQLite 文件" src="docs/diagrams/sdk-light.png">
+  <img alt="aoa SDK 架构：你的应用用 append、answer 往 Inbox 写事件和审批答复，用 schedule、followUp 设定时器，用 messages、watch 读 Outbox；每个 agent 有 Inbox、Worker、Timers、Memory、Outbox、Permissions 和 Tools，可以有多个 agent，用 send_to 互发；Worker 把 run 交给 runtime，第一档是零依赖的 loop，第二档是外部 harness，Codex 和 dsh 的适配器在 examples/；runtime 的工具调用回到 Permissions，放行的交给 Tools 执行，要审批的经 Outbox 发出；所有 agent 共用一个 SQLite 文件" src="docs/diagrams/sdk-light.png">
 </picture>
 
 想直接用一个写代码的 agent，见建在这个 SDK 上的 [`aoa` 命令](apps/aoa/README.md)。
@@ -23,8 +23,6 @@
 
 ```bash
 bun add @aoa-dev/sdk
-# 用内置的 pi runtime 时再装它的 peer 依赖（用 @aoa-dev/sdk/loop 不需要）
-bun add @earendil-works/pi-ai@1.5.2 @earendil-works/pi-coding-agent@1.5.2 typebox@1.3.27
 ```
 
 ## 一个例子
@@ -33,7 +31,7 @@ bun add @earendil-works/pi-ai@1.5.2 @earendil-works/pi-coding-agent@1.5.2 typebo
 
 ```ts
 import { createHost, sqliteStore, type ToolDef } from "@aoa-dev/sdk";
-import { piRuntime } from "@aoa-dev/sdk/pi";
+import { dirTranscripts, loopRuntime, type LoopComplete, type LoopTurn } from "@aoa-dev/sdk/loop";
 
 const sendEmail: ToolDef = {
   name: "send_email",
@@ -46,18 +44,41 @@ const sendEmail: ToolDef = {
   },
 };
 
+// One model turn over an OpenAI-compatible API; any model SDK works the same way.
+const toChat = (m: LoopTurn) =>
+  m.role === "tool"
+    ? { role: "tool", tool_call_id: m.callId, content: m.content }
+    : m.role === "assistant"
+      ? { role: "assistant", content: m.text ?? "", tool_calls: m.toolCalls?.map((c) => ({ id: c.id, type: "function", function: { name: c.name, arguments: JSON.stringify(c.args) } })) }
+      : m;
+type ChatReply = { choices: { message: { content: string | null; tool_calls?: { id: string; function: { name: string; arguments: string } }[] } }[] };
+const complete: LoopComplete = async ({ systemPrompt, messages, tools, signal }) => {
+  const res = await fetch("https://api.deepseek.com/chat/completions", {
+    method: "POST",
+    signal,
+    headers: { "content-type": "application/json", authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}` },
+    body: JSON.stringify({
+      model: "deepseek-v4-pro",
+      messages: [{ role: "system", content: systemPrompt }, ...messages.map(toChat)],
+      tools: tools.map((t) => ({ type: "function", function: { name: t.name, description: t.description, parameters: t.schema } })),
+    }),
+  });
+  if (!res.ok) throw new Error(`model request failed: ${res.status}`);
+  const msg = ((await res.json()) as ChatReply).choices[0]!.message;
+  return {
+    text: msg.content ?? "",
+    toolCalls: msg.tool_calls?.map((c) => ({ id: c.id, name: c.function.name, args: JSON.parse(c.function.arguments) })),
+  };
+};
+
 const host = createHost({ store: sqliteStore("agent.db") });
 const agent = host.agent({
   name: "assistant",
   inbox: "assistant",
-  runtime: piRuntime({
-    provider: "deepseek",
-    modelId: "deepseek-v4-pro",
-    apiKey: process.env.DEEPSEEK_API_KEY,
-    agentDir: ".aoa/pi",
-    sessionsDir: ".aoa/sessions",
-    cwd: process.cwd(),
+  runtime: loopRuntime({
     systemPrompt: "You are a helpful assistant. When a task is done, tell the user with notify.",
+    complete,
+    transcripts: dirTranscripts(".aoa/sessions"),
   }),
   tools: [sendEmail],
 });
@@ -121,21 +142,32 @@ host.agent({
   policy: {
     rules: [{ name: "no-prod", match: (call) => (JSON.stringify(call.args).includes("prod") ? "block" : null) }],
     risk: { send_email: "medium" },
-    classify: piClassifier({ provider: "deepseek", modelId: "deepseek-flash", apiKey: process.env.DEEPSEEK_API_KEY }),
+    classify: async (call, ctx) => "unsure", // 换成你自己的模型判断；拿不准就返回 unsure，交给人
   },
 });
 ```
 
-`piClassifier` 的提示词是给写代码的 agent 写的；别的场景自己写一个 `classify`，它拿到调用和 session 是否沾过外人内容，返回 `allow`、`block` 或 `unsure`。
+`classify` 拿到调用和 session 是否沾过外人内容，返回 `allow`、`block` 或 `unsure`。`aoa` 命令用的是给写代码的 agent 写的 `piClassifier`（在仓库内的 `packages/pi`）。
 
 延后就是 deferred tool call：内核保存会话、结束这次 run，往 outbox 发一条审批请求，worker 接着处理别的事件。`agent.answer` 的答复作为新事件进 inbox，内核执行这一次调用，再开新 run 接着做。只有 `answer` 或可信的 `user_message` 算数，外人写的内容和其他 agent 的消息都不行。
 
-内核自带的工具（timers、notify、memory、`send_to`）自己标了 `low`。写代码用的 bash、read、edit、write 和配套的规则在可选的 `@aoa-dev/sdk/tools/coding` 里，不默认装上。
+内核自带的工具（timers、notify、memory、`send_to`）自己标了 `low`。写代码用的规则在可选的 `@aoa-dev/sdk/tools/coding` 里，不默认装上；bash、read、edit、write 这些工具本身用的是 pi 的实现，在仓库内的 `packages/pi`。
 
 ## Runtime
 
-- **第一档（内核管每次工具调用）**：`@aoa-dev/sdk/pi` 内置 pi 的多模型接入与会话管理（见 [`examples/tui`](examples/tui)）；不想装 pi 时，`@aoa-dev/sdk/loop` 零第三方依赖，传一个 `complete()` 函数就能接任意模型 SDK 或原生 `fetch`。
+- **第一档（内核管每次工具调用）**：`@aoa-dev/sdk/loop` 零第三方依赖，传一个 `complete()` 函数就能接任意模型 SDK 或原生 `fetch`。SDK 不内置任何厂商的 runtime；仓库里的 `packages/pi`（`@aoa-dev/pi`，不发布）把 pi 接成第一档，`aoa` 命令和 [`examples/tui`](examples/tui) 用它。
 - **第二档：外部 harness**（`HarnessRuntime`），用它们自己的工具和沙箱，把需要确认的操作经 `ask` 转成 aoa 的审批请求；SDK 定义接口并在一致性测试里覆盖六条约定，不内置具体 harness 实现。
+
+### 搭配 MCP 2.0 和 OAR
+
+[OAR](https://github.com/botiverse/oar)（Open Agent Runtime）用一套 API 驱动 Claude Code、Codex、Pi 等各家 coding harness，可以作为第二档 runtime 的来源。MCP 2.0 的 Skills、Tasks 和 Elicitation 让任意 MCP agent 在另一头派活：Skills 是自带的说明书，Tasks 让一次派单成为后台任务、结果直接回给调用者，Elicitation 让 worker 的提问直接到用户面前。
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/mcp-oar-dark.png">
+  <img alt="aoa 搭配 MCP 2.0 和 OAR：左边任意 MCP agent 通过 Skills（说明书）、Tasks（派单与结果）、Elicitation（提问）接入；中间 aoa 内核有 Inbox、Worker、Timers、Memory、Permissions、Outbox，状态在 SQLite；右边 OAR 用 prompt、steer、abort 控制会话，用 records 记录事实，用 requests 把审批和提问交回内核，驱动 Claude Code、Codex、Pi、Kimi Code、Grok Build、OpenCode 等。这是组合方式示意，aoa 尚未内置 OAR 适配器和 MCP 2.0 入口" src="docs/diagrams/mcp-oar-light.png">
+</picture>
+
+这是组合方式示意：aoa 尚未内置 OAR 适配器和 MCP 2.0 入口，OAR 接入时实现 `HarnessRuntime` 即可。
 
 ## 多个 agent
 
@@ -164,7 +196,7 @@ host.agent({ name: "checker", description: "checks drafts", inbox: "checker", ru
 
 | | |
 |---|---|
-| [`examples/tui`](examples/tui) | 极简终端对话 agent：用 `@aoa-dev/sdk/pi` 流式对话、规则放行只读检查、`/y` 审批写操作、Ctrl-C 中断与重启恢复 |
+| [`examples/tui`](examples/tui) | 极简终端对话 agent：用 `@aoa-dev/pi` 流式对话、规则放行只读检查、`/y` 审批写操作、Ctrl-C 中断与重启恢复 |
 | [`apps/aoa`](apps/aoa/README.md) | `aoa` 命令：写代码的后台 agent，CLI、MCP、GitHub、观察页 |
 
 0.x 期间接口可能有破坏性改动。设计见 [docs/design/](docs/design/README.md)，SDK 每一步的取舍见 [docs/design/sdk.md](docs/design/sdk.md)，规范见 [docs/spec.md](docs/spec.md)。
@@ -175,7 +207,8 @@ Bun + TypeScript 的 monorepo。
 
 | 包 | 作用 |
 |---|---|
-| `packages/sdk` | 唯一对外发布的包 `@aoa-dev/sdk`：五个原语、SQLite 存储（`sqliteStore`）、宿主、`@aoa-dev/sdk/loop`、`@aoa-dev/sdk/pi`、可选的编码工具和规则（`@aoa-dev/sdk/tools/coding`） |
+| `packages/sdk` | 唯一对外发布的包 `@aoa-dev/sdk`：五个原语、SQLite 存储（`sqliteStore`）、宿主、`@aoa-dev/sdk/loop`、可选的编码规则（`@aoa-dev/sdk/tools/coding`） |
+| `packages/pi` | `@aoa-dev/pi`（不发布）：pi 作为第一档 runtime、`piClassifier`、pi 的编码工具（`aoa` 命令和 `examples/tui` 用） |
 | `packages/channels/`：`local` · `github` | 本地和 GitHub 通道（`apps/aoa` 用） |
 | `packages/conformance` | 规范 §9 的 C1–C20 一致性测试 |
 | `examples/tui` | 极简终端对话示例 |

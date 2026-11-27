@@ -63,9 +63,9 @@ new files are read by `ffprobe`.
 
 ### 2. Watch / Listen from local files
 
-    library play video tv.db                           # the default post-action is to do nothing
-    library play video tv.db --post-action delete      # delete file after playing
-    library play audio finalists.db -k ask_delete      # ask whether to delete file after playing
+    library play video --db tv.db                           # the default post-action is to do nothing
+    library play video --db tv.db --post-action delete      # delete file after playing
+    library play audio --db finalists.db -k ask_delete      # ask whether to delete file after playing
 
 To stop playing press Ctrl+C in either the terminal or mpv
 
@@ -96,11 +96,11 @@ two million videos. More than you could likely watch in one sitting--maybe even 
 On a high-speed connection (>500 Mbps), it can take up to five hours to download
 the metadata for 180,000 videos.
 
-TIP! If you often copy and paste many URLs you can paste line-delimited 
+TIP! If you often copy and paste many URLs you can paste 
 
 [...截断...]
 
-text as arguments via a subshell. For example, in `fish` shell with [cb](https://github.com/niedzielski/cb):
+line-delimited text as arguments via a subshell. For example, in `fish` shell with [cb](https://github.com/niedzielski/cb):
 
     library database add video my.db (cb)
 
@@ -117,7 +117,7 @@ any videos not seen before.
 
 ### 2. Watch / Listen from websites
 
-    library play video maker.db
+    library play video --db maker.db
 
 To stop playing press Ctrl+C in either the terminal or mpv
 
@@ -135,7 +135,7 @@ flat commands are now only reachable through a group (for example
 `links extract`, `text extract`, and `torrent info`).
 
     $ library
-    library (v4.0.9; 143 subcommands)
+    library (v4.0.10; 143 subcommands)
 
     Media collection subcommands:
     ╭─────────────────────────────┬───────────────────────────────────────────────────────────────────────╮
@@ -166,5 +166,4 @@ flat commands are now only reachable through a group (for example
     ├────────────────┼────────────────────────────────────────────────────────┤
     │ play audio     │ Listen to audio                                        │
     ├────────────────┼────────────────────────────────────────────────────────┤
-    │ play text      │ Read text                                              │
-    ├─────────
+    │ play text      │ Read text                                         

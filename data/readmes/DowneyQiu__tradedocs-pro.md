@@ -1,4 +1,5 @@
 # TradeDocs Pro · 外贸单证工作台
+<img width="1920" height="1080" alt="封面_横版1920x1080" src="https://github.com/user-attachments/assets/23ab029c-cf87-4139-a41a-ce21237f7f38" />
 
 > **源码公开 · 免费自用**　|　分享者：**唐先生（Downey）· 拓珀新材料 Topo New Material**
 > 一套跑在自己电脑上、不联网、不上传的外贸单证工作台。

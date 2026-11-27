@@ -31,7 +31,7 @@
   libpq or ADO.NET strings and the form fills itself in) and a ready-to-use **demo** database.
 - **Several connections at once**: each open connection gets a tab on top and keeps its own tabs, results and
   transaction. **Side by side** (`⌘/Ctrl+\`) shows two of them next to each other, handy for comparing databases.
-- **SQL editor** (CodeMirror 6): table/column autocomplete, current-statement highlight, several results per run,
+- **SQL editor** (CodeMirror 6): table/column autocomplete (tables picked after `FROM`/`JOIN` get an alias), current-statement highlight, several results per run,
   inline errors, results capped at 100 rows by default (change it in the status bar). `⌘/Ctrl+Enter` runs everything or the selection, `⌘/Ctrl+Shift+Enter` runs the statement under the cursor.
 - **SQL snippets**: type a shortcut (`sel`, `ij`, `ups`, `ct`…) and pick it from autocomplete; templates adapt to each database.
 - **Table browser**: pagination, sorting, `WHERE` filter, structure tab (columns, indexes, DDL).

@@ -18,6 +18,54 @@ flowchart LR
 
 Formerly Memori. See the [rename guide](docs/rebrand.md) for changed commands, imports and existing vaults.
 
+## Try Lorevell 2.0 without Rust
+
+Search two Markdown notes and see how archiving changes the linked context. The text-only demo needs no model download or agent credentials.
+
+| Verified platform | Python | Wheel |
+| --- | --- | --- |
+| Apple Silicon macOS 27.0.1 | CPython 3.9.6 and 3.13.18 | `lorevell-2.0.0-cp39-abi3-macosx_11_0_arm64.whl` |
+| Ubuntu 24.04.5 LTS arm64 | CPython 3.12.3 | `lorevell-2.0.0-cp39-abi3-manylinux_2_39_aarch64.whl` |
+
+Download the wheel for your platform and its checksum from the [Lorevell 2.0 preview](https://github.com/archit15singh/lorevell/releases/tag/preview-2.0.0). To build from source, follow [Install from this checkout](#install-from-this-checkout).
+
+Set `wheel` to the absolute path of the wheel you received. Run these commands in a shell:
+
+```bash
+wheel="/absolute/path/to/lorevell-2.0.0-cp39-abi3-macosx_11_0_arm64.whl"
+trial="$(mktemp -d)"
+cd "$trial"
+python3 -m venv .venv
+.venv/bin/python -m pip install --no-index "$wheel"
+.venv/bin/lorevell --version
+
+.venv/bin/lorevell --vault vault init --no-git
+cat > vault/first.md <<'NOTE'
+---
+id: first
+type: procedure
+tags: [debugging]
+---
+
+quasar [[second]]
+NOTE
+cat > vault/second.md <<'NOTE'
+---
+id: second
+type: procedure
+tags: [debugging]
+---
+
+linked procedure
+NOTE
+
+.venv/bin/lorevell --vault vault search quasar --text-only --graph-limit 1
+.venv/bin/lorevell --vault vault archive second --text-only
+.venv/bin/lorevell --vault vault search quasar --text-only --graph-limit 1
+```
+
+Both searches return `first` at the top. The first shows `second` under **Linked context (one hop)**. The second has no linked context. Open `vault/archive/second.md` to read the archived note.
+
 ## Install from this checkout
 
 These instructions describe the breaking 2.0 interface. The branch does not publish or migrate an existing 1.x installation automatically. Python 3.9+ and a Rust toolchain are required for a source build; Python 3.13 is used in local verification.

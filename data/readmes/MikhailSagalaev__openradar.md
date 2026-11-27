@@ -1,6 +1,6 @@
 # openradar
 
-<p align="right"><b>English</b> · <a href="README.ru.md">Русский</a></p>
+<p align="right"><b>English</b> · <a href="README.ru.md">Русский</a> · <a href="README.zh-CN.md">简体中文</a></p>
 
 <p align="center">
   <picture>
@@ -15,6 +15,7 @@
   <a href="docs/stories.json"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FMikhailSagalaev%2Fopenradar%2Fmain%2Fdocs%2Fstories.json&query=%24.count&label=%F0%9F%8E%89%20found%20work%20through%20openradar&suffix=%20on%20the%20record&color=2ea44f" alt="Stories of work found through openradar"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPLv3-blue.svg" alt="License: AGPL v3"></a>
   <a href="docs/PROTOCOL.md"><img src="https://img.shields.io/badge/protocol-radar%2F2-purple.svg" alt="Protocol: radar/2"></a>
+  <a href="https://glama.ai/mcp/servers/MikhailSagalaev/openradar"><img src="https://glama.ai/mcp/servers/MikhailSagalaev/openradar/badges/score.svg" alt="MikhailSagalaev/openradar MCP server"></a>
 </p>
 
 openradar is an open base of job vacancies and freelance orders in IT, digital and creative industries. Parsers, nodes and people add posts from boards, career sites, RSS feeds, Telegram channels and email alerts; the hub merges duplicates and keeps one clean feed.
@@ -34,7 +35,7 @@ Job seekers should not have to pay for subscriptions to parsers or for respondin
 - **Browser extension.** Sign in with GitHub once, then add a vacancy or an order from any site in one click; it also shows what similar work usually pays and whether the pay on the page is below, within or above it. Includes 1-click **X-Ray Direct Outreach** to locate engineering leads and hiring managers across LinkedIn, Telegram, Habr and GitHub.
 - **Votes and submissions.** Signed-in users mark leads as useful, junk, scam or closed, and add posts by link.
 - **Market research.** [openradar.fun/research](https://openradar.fun/research): pay in vacancies and order budgets by role, grade, language, city and skill, with medians, quartiles and sample sizes. Monthly reports are frozen so they can be cited; the data is open under CC BY 4.0 (CSV and JSON). How it is counted: [methodology](https://openradar.fun/research/methodology).
-- **Connect an agent in one line:** `claude mcp add --transport http openradar https://openradar.fun/mcp`. Cursor, Gemini CLI, VS Code and Codex: [docs/MCP.md](docs/MCP.md).
+- **Connect an agent in one line:** `claude mcp add --transport http openradar https://openradar.fun/mcp` (or `gemini extensions install https://github.com/MikhailSagalaev/openradar`). Cursor, OpenCode, VS Code, Codex, Qwen Code and Kimi CLI: [docs/MCP.md](docs/MCP.md).
 - **RSS for any query**, an HTTP API and an MCP server over the same feed (including `xray_generate_dorks` for AI agent sourcing).
 - **Your own node.** Run it at home or on a server, connect your sources, filters and notifications (Telegram, webhook). Nothing leaves the node unless you share a source.
 

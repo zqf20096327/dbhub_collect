@@ -36,6 +36,7 @@ lines, and a markdown table. [`usql`][usql] uses each of them.
 [tblfmt-ci-status]: https://github.com/xo/tblfmt/actions/workflows/test.yml/badge.svg
 [goref-tblfmt]: https://pkg.go.dev/github.com/xo/tblfmt
 [goref-tblfmt-status]: https://pkg.go.dev/badge/github.com/xo/tblfmt.svg
+[discussions]: https://github.com/xo/tblfmt/discussions
 [discord]: https://discord.gg/yJKEzc7prt (Discord Discussion)
 [discord-status]: https://img.shields.io/discord/829150509658013727.svg?label=Discord&logo=Discord&colorB=7289da&style=flat-square (Discord Discussion)
 
@@ -123,7 +124,8 @@ The [Go Reference][goref-tblfmt] has the full API.
 ## Differences from `psql`
 
 `tblfmt` writes the same output as `psql`. The differences below are
-deliberate. If you find a different difference, report it as a bug.
+deliberate. If you find a different difference, report it as a bug in
+[Discussions][discussions].
 [docs/BACKLOG.md](docs/BACKLOG.md) lists the differences that are known
 faults.
 
@@ -250,7 +252,7 @@ go test -run '^$' -bench BenchmarkWrite -benchmem
 
 | Document | What it holds |
 | --- | --- |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | What a change must do, and the commands to run before a pull request |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Where to report a bug, what a change must do, and the commands to run before a commit |
 | [docs/PLAN.md](docs/PLAN.md) | Each decision that shapes `tblfmt`, and the reason for it |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | Known faults and work that is not done |
 | [AGENTS.md](AGENTS.md) | The rules for a coding agent. `CLAUDE.md` imports it |

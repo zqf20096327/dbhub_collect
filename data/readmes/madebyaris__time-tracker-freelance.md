@@ -73,6 +73,7 @@ Real app screenshots. Client names are redacted.
 - Start timers from a Quick Panel with global shortcuts.
 - Pause and resume without losing accurate billable time.
 - Optional idle detection — discard idle time, or turn it off when you need to.
+- Optional app tracking — while a timer is running, record which allowed apps were in the foreground.
 - Manage clients, projects, tasks, reports, and invoices.
 - Reports with week/month/quarter/year and custom ranges, client rollups, billable splits, and filter-aware CSV export.
 - Generate branded PDF invoices with your logo, address, tax ID, signature, and payment instructions.

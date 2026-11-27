@@ -5,7 +5,7 @@
 
 An agent's "done" is a self-report. Verilays is an open-source tool that checks your database to see if what the agent claimed actually happened.
 
-[Demo](#demo) · [Use it on your agent](#use-it-on-your-agent) · [How it works](#how-it-works) · [Statuses](#statuses) · [What's next](#whats-next)
+[Demo](#demo) · [Use it on your agent](#use-it-on-your-agent) · [Running it on your servers](#running-it-on-your-servers) · [How it works](#how-it-works) · [Statuses](#statuses) · [What's next](#whats-next)
 
 Your agent tells a customer "you're booked for Tuesday at 10:00". The tool returned success, the trace looks fine, and nothing reached the database. Or it landed at 11:00. Or it landed twice. Verilays records what each tool claimed, reads the record back from your own Postgres, and tells you which of these happened.
 
@@ -68,7 +68,7 @@ import verilays
 
 verilays.init("postgresql://verilays:verilays@localhost:55432/verilays")
 
-@verilays.action.postgres(db="shop", table="orders", lookup_field="id",
+@verilays.action.postgres(table="orders", lookup_field="id",
                           fields_to_compare=["customer", "amount"], deadline="2m")
 def create_order(customer, amount):
     ...
@@ -77,19 +77,25 @@ def create_order(customer, amount):
 
 The tool must return a dict holding `lookup_field` (`{"id": 42}`), or take it as an argument (`cancel_order(id)`) when it doesn't return it. Each name in `fields_to_compare` must be both a tool argument and a column. The worker then finds the row `orders.id = 42` and checks that its `customer` and `amount` match what the agent passed.
 
-The action is recorded under the function's name, `create_order`. If your agent knows the tool by another name, pass it first: `@verilays.action.postgres("place_order", db=...)`.
+When a column is named differently from the argument, map it, column first: `fields_to_compare={"customer_id": "customer", "amount_cents": "amount"}`. The same goes for the lookup: `lookup_field={"id": "order_id"}` when the tool returns `{"order_id": 42}`.
+
+The action is recorded under the function's name, `create_order`. If your agent knows the tool by another name, pass it first: `@verilays.action.postgres("place_order", table=...)`.
+
+If your tools write to more than one database, name each one with `db`: `db="crm"` checks the database in `VERILAYS_POSTGRES_CRM` instead of `VERILAYS_POSTGRES`.
+
+`deadline` is how long the write may take to show up: `"10s"`, `"5m"` or `"1h"` (default `"1m"`). Until then, a row that isn't there yet stays `pending` and is checked again, so a late write still ends up `verified`. Set it longer than your slowest write (a queue, a slow API, a webhook): a deadline that's too short turns a late write into `missing`.
 
 For a delete tool, pass `exists=False`: the action is verified once the row is gone, and a row still there at the deadline is a mismatch.
 
 For a value the tool sets that isn't one of its arguments, pass `expected={"status": "cancelled"}`. A field in both `fields_to_compare` and `expected` is checked against `expected`.
 
-A wrong setting, like `lookup_field=5` or `deadline="5 min"`, never breaks your tool: it still runs, isn't checked, and a warning says why (`create_order runs but is not checked: lookup_field must be str, got 5`).
+A wrong setting, like `lookup_field=5` or `deadline="5 min"`, never breaks your tool: it still runs, isn't checked, and a warning says why (`create_order runs but is not checked: lookup_field must be str | dict, got 5`). The same happens when `fields_to_compare` names an argument the tool doesn't take, such as a typo or a renamed argument.
 
-**3. Run the worker.** `db="shop"` means it reads that database's URL from `VERILAYS_POSTGRES_SHOP`:
+**3. Run the worker.** It reads the URL of the database to check from `VERILAYS_POSTGRES`:
 
 ```
 export VERILAYS_DSN=postgresql://verilays:verilays@localhost:55432/verilays
-VERILAYS_POSTGRES_SHOP=postgresql://user:pass@localhost:5432/shop verilays worker --every 10
+VERILAYS_POSTGRES=postgresql://user:pass@localhost:5432/shop verilays worker --every 10
 ```
 
 **4. Run your agent, then read the report:**
@@ -97,6 +103,20 @@ VERILAYS_POSTGRES_SHOP=postgresql://user:pass@localhost:5432/shop verilays worke
 ```
 verilays report
 ```
+
+### Using LangGraph?
+
+A LangGraph node takes one argument, the graph's state, so use `verilays.langgraph` instead of `verilays.action`. It's the same decorator, but `fields_to_compare` names keys of the state instead of arguments:
+
+```python
+@verilays.langgraph.postgres(table="bookings", lookup_field={"id": "booking_id"},
+                             fields_to_compare=["customer", "time"])
+def create_booking(state):
+    booking_id = db.insert(state["customer"], state["time"])
+    return {"booking_id": booking_id}
+```
+
+The state can be a dict, a `TypedDict`, a dataclass or a Pydantic model. Only the checked keys are saved. For a node that writes outside Postgres, use `@verilays.langgraph(system=..., verify=fn)`, which saves the whole state as the arguments.
 
 ### Using Langfuse?
 
@@ -110,6 +130,51 @@ export LANGFUSE_PUBLIC_KEY=pk-lf-... LANGFUSE_SECRET_KEY=sk-lf-... LANGFUSE_BASE
 Each verdict then shows up in Langfuse as a `verilays` score on the tool call, with a line saying what happened: `Missing: we didn't find the record in the system before the deadline`.
 
 On a `mismatch`, that line includes the real values from your database (`start_time: expected 10:00, got 11:00:00`), so they're sent to Langfuse too.
+
+### Running it on your servers
+
+In production you run two things: a Postgres for the action store, and the worker container. Copy [`.env.example`](.env.example) to `.env` and fill it in:
+
+```
+VERILAYS_DSN=postgresql://verilays:verilays@postgres:5432/verilays
+VERILAYS_POSTGRES=postgresql://readonly:password@your-db-host:5432/shop
+```
+
+Then a `docker-compose.yml` next to it:
+
+```yaml
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: verilays
+      POSTGRES_PASSWORD: verilays
+      POSTGRES_DB: verilays
+    volumes: [verilays-store:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "verilays"]
+      interval: 2s
+
+  verilays-worker:
+    build: https://github.com/yinoni/verilays.git#main
+    command: verilays worker --every 10
+    env_file: .env
+    restart: unless-stopped
+    depends_on:
+      postgres: {condition: service_healthy}
+
+volumes:
+  verilays-store:
+```
+
+```
+docker compose up -d
+docker compose exec verilays-worker verilays report
+```
+
+Your agent calls `verilays.init(...)` with the same store, at an address it can reach (expose `postgres`'s port, or use a Postgres you already run and drop the `postgres` service). Inside the container, `localhost` is the container itself: a database on the host is `host.docker.internal` (on Linux, also add `extra_hosts: ["host.docker.internal:host-gateway"]` to the worker).
+
+With a custom `verify=` check, the worker needs your code: build your own image on top of this one with your module copied in, and add `--app myagent.tools` to the command.
 
 ## How it works
 
@@ -132,7 +197,7 @@ Everything runs in your infrastructure: the action store is your Postgres, and t
 | `ambiguous` | verified, then changed or deleted before the deadline |
 | `failed` | the tool raised; the agent got the same exception |
 | `expired` | the check itself kept failing until the deadline, so we never found out |
-| `check_error` | the worker is set up wrong (e.g. a missing `VERILAYS_POSTGRES_*`); retried when it restarts |
+| `check_error` | the worker is set up wrong (e.g. a missing `VERILAYS_POSTGRES`); retried when it restarts |
 
 An action with the same `fields_to_compare` values as one inside `duplicate_window` (default `1m`) is listed as a duplicate of it.
 

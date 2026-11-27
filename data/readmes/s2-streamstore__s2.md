@@ -31,14 +31,14 @@ This repository contains:
 
 ## Development
 
-Use the nightly Cargo dependency commands so that the repository publication cooldown applies:
+Use Cargo dependency commands so that the repository publication cooldown applies:
 
 ```bash
-cargo +nightly add <crate>
-cargo +nightly update
-cargo +nightly update -p <crate>
-cargo +nightly remove <crate>
-cargo +nightly generate-lockfile
+cargo add <crate>
+cargo update
+cargo update -p <crate>
+cargo remove <crate>
+cargo generate-lockfile
 ```
 
 Use `--locked` with normal build, check, test, run, document, fetch, and metadata commands. The simulator is temporarily exempt until its separate lockfile is regenerated. The pull request dependency check verifies every proposed lock-file change before Rust build jobs start.
@@ -204,7 +204,7 @@ directory to isolate WAL latency from flushes and compaction. `--path` applies t
 | --- | --- | --- |
 | S3 bucket | `--bucket` | `--wal-bucket` / `S2LITE_WAL_BUCKET` |
 | Local directory | `--local-root` | `--wal-local-root` / `S2LITE_WAL_LOCAL_ROOT` |
-| S3 endpoint | `AWS_ENDPOINT_URL_S3` | `S2LITE_WAL_AWS_ENDPOINT_URL_S3` |
+| S3 endpoint | `AWS_ENDPOINT_URL_S3` / `AWS_ENDPOINT_URL` / profile `endpoint_url` | `S2LITE_WAL_AWS_ENDPOINT_URL_S3` |
 | AWS region | `AWS_REGION` | `S2LITE_WAL_AWS_REGION` |
 | Static credentials | `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` | `S2LITE_WAL_AWS_ACCESS_KEY_ID` + `S2LITE_WAL_AWS_SECRET_ACCESS_KEY` |
 | Session token | `AWS_SESSION_TOKEN` | `S2LITE_WAL_AWS_SESSION_TOKEN` |

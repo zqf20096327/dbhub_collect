@@ -3,26 +3,31 @@
 # Omasql — a fast SQLite GUI client for Linux
 
 [![CI](https://github.com/FabianJ-L/omasql/actions/workflows/ci.yml/badge.svg)](https://github.com/FabianJ-L/omasql/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/FabianJ-L/omasql)](https://github.com/FabianJ-L/omasql/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 **Omasql** is a light, keyboard-first SQLite database browser and SQL editor
 for Linux. Write queries with autocomplete, browse tables and the schema, and
-read results without leaving the keyboard. Built with Qt 6 and C++, made for
+read results without leaving the keyboard. When a statement fails, one key
+lets your coding agent fix it. Built with Qt 6 and C++, made for
 [Omarchy](https://omarchy.org) and Hyprland: it follows the Omarchy theme and
 language live, and runs on any Wayland or X11 desktop with Qt 6.
 
 Think DB Browser for SQLite or TablePlus, but small, fast to start, and
 driven from the keyboard.
 
-![Omasql: SQL editor with autocomplete, schema browser, results grid, and row inspector](docs/screenshot.png)
+![Omasql: typing a query with autocomplete, fixing a failed statement with AI, and browsing the results](docs/demo.gif)
 
 ## Install
 
-**Arch Linux / Omarchy**: download `omasql-*.pkg.tar.zst` from the
-[latest release](https://github.com/FabianJ-L/omasql/releases/latest), then
+**Arch Linux / Omarchy**, straight from the
+[latest release](https://github.com/FabianJ-L/omasql/releases/latest):
 
 ```sh
-sudo pacman -U omasql-*.pkg.tar.zst
+sudo pacman -U https://github.com/FabianJ-L/omasql/releases/download/v0.4.0/omasql-0.4.0-1-x86_64.pkg.tar.zst
 ```
+
+Omasql then shows up in the app launcher.
 
 **From source** (needs `qt6-base`, `qt6-declarative`, `qt6-wayland`, `sqlite`):
 
@@ -31,6 +36,20 @@ git clone https://github.com/FabianJ-L/omasql
 cd omasql
 bin/build && build/omasql some.db
 ```
+
+## Open a database
+
+```sh
+omasql shop.db                      # open a file; a new path creates one
+omasql 'file:shop.db?mode=ro'       # read-only: nothing you run can change it
+omasql :memory:                     # a scratch database, gone when you close it
+```
+
+Or press **Ctrl+O**, or pick a recent file on the start screen. Any
+[SQLite URI](https://www.sqlite.org/uri.html) works, so `?immutable=1` opens a
+file on read-only media. A database that can't be written, because it was
+opened with `mode=ro` or because the file isn't writable, shows
+**read-only** next to its name.
 
 ## Features
 
@@ -68,6 +87,10 @@ bin/build && build/omasql some.db
 - History, a scratch database in memory, and a draft per database that
   survives restarts.
 - DROP, and DELETE or UPDATE without WHERE, ask before running.
+- Follows the Omarchy theme and language as you switch them; English and
+  German so far.
+
+![Omasql: SQL editor with autocomplete, schema browser, results grid, and row inspector](docs/screenshot.png)
 
 ## Shortcuts
 
@@ -108,10 +131,17 @@ bin/build                 # build/omasql
 build/omasql some.db      # open a database (a new path creates one)
 bin/test                  # run the tests offscreen
 bin/install               # package and install, so it shows in the launcher
+bin/demo                  # record docs/demo.gif offscreen (needs ffmpeg)
 ```
 
 Needs `qt6-base`, `qt6-declarative`, `qt6-wayland`, and `sqlite`.
 History, recent files, and drafts live in `~/.local/state/omasql/`.
+
+## Feedback
+
+Bugs, ideas, and "it would be great if…" are welcome as
+[issues](https://github.com/FabianJ-L/omasql/issues). If Omasql is useful to
+you, a star helps others find it.
 
 ## License
 

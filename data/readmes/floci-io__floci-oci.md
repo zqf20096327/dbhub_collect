@@ -190,12 +190,14 @@ flowchart LR
 |---|---|
 | Identity | Compartments, users, groups, user-group memberships, policies, availability domains, regions, region subscriptions, tenancies |
 | Storage | Object Storage: namespaces, buckets, objects, versioning, listing, rename, copy, batch delete, multipart uploads, pre-authenticated requests |
-| Messaging | Queue (visibility timeouts, dead-letter queues, channels), Streaming (partitioned log, cursors, consumer groups), Notifications (topics, subscriptions, HTTPS and Functions delivery) |
+| Messaging | Queue (visibility timeouts, dead-letter queues, channels), Streaming (stream pools, partitioned log, cursors, consumer groups), Notifications (topics, subscriptions, HTTPS and Functions delivery) |
 | Security | Vault + KMS (vaults, keys, key versions, **real** AES-GCM / RSA / ECDSA crypto), Secrets and secret bundles |
 | Serverless | Functions on API versions `20260325` and `20181201` (applications, functions, work requests, runtime catalog, real invocation through an Fn Project sidecar) |
+| Containers | Container Instances: container instances running on Docker, containers, logs, start/stop/restart, restart policies, volumes, image pull secrets, shapes, work requests, one VNIC per instance |
 | Kubernetes | Container Engine for Kubernetes (OKE): clusters with their settings read back as sent, endpoint config updates, node pools, options, kubeconfig generation, work requests, real-mode k3s sidecar |
 | NoSQL | NoSQL Database: tables created from DDL, indexes, row put/get/delete with conditional writes, identity and UUID columns and TTL, SQL SELECT queries, work requests |
 | Database | Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default and custom configurations, backups, restore and point-in-time recovery, instance patches, failover and replicas, Kerberos and insight settings, work requests, real PostgreSQL sidecar |
+| Database | MySQL HeatWave: DB systems, start/stop/restart, shapes, versions, default and custom configurations, work requests, real MySQL sidecar |
 | Organizations | Child tenancies (each with its own home region and isolated storage), organizations, organization tenancies, links, invitations, domains, subscriptions and mappings, orders; Governance Rules (allowed regions enforced) |
 | Observability | Logging: log groups, logs, PutLogs ingestion and SearchLogs with the query language; Monitoring: custom metrics, MQL queries (SummarizeMetricsData), alarms evaluated every minute that notify Notifications topics and streams, alarm suppressions |
 | Async operations | Work requests, partitioned per service (Identity/Queue/Streaming use `SUCCEEDED`, Object Storage/OKE use `COMPLETED`) |
@@ -210,8 +212,9 @@ For operation-level compatibility, see the [Services Overview](https://floci.io/
 | Identity (IAM) | In-process | Compartment CRUD incl. `compartmentIdInSubtree` listing and async delete via work request; users, groups, memberships; policies (statements stored verbatim); reference data (3 ADs, regions, tenancy); etag concurrency on every mutation |
 | Object Storage | In-process | Bucket CRUD (delete requires empty); objects with `Content-MD5` verification, `opc-meta-*` metadata, Range/206 reads, conditional headers; ListObjects with `prefix`/`start`/`end`/`delimiter`/`fields` and `nextStartWith` truncation; rename; async copy via work request; batch delete with per-object success/failure results; multipart uploads (per-part `etag` + `opc-content-md5`); pre-authenticated requests with anonymous `/p/{token}/…` data path; replication policies, same-region or cross-region, with a read-only destination and `MakeBucketWritable`; object versioning with delete markers and ListObjectVersions; Amazon S3 Compatibility API on `<namespace>.compat.objectstorage.<region>…` (SigV4 with Customer Secret Keys, path style, multipart, aws-chunked) |
 | Networking (VCN) | In-process | VCNs with the default route table, security list and DHCP options real OCI creates; subnets with CIDR containment and overlap checks; internet, NAT and service gateways; route tables, security lists, network security groups with rule actions, DHCP options; dependency checks on delete; state only, no Docker networks |
+| DNS | In-process | Zones (`/20180115`) addressed by name or OCID, `GLOBAL` and `PRIVATE` scopes, protected apex SOA and NS records, zone, domain and RRSet reads, PUT and PATCH (`ADD`, `REMOVE`, `REQUIRE`, `PROHIBIT`, atomic, `412` on a failed precondition), RDATA normalized the way Terraform expects, serials and RRSet versions, private views, VCN-dedicated resolvers with attached views and forward rules (`dnsResolverAssociation`); zone records resolved for the sidecar containers through the embedded DNS server |
 | Queue | In-process | Work-request-driven control plane (mutations return no body); data plane with visibility timeouts, `0`-visibility peeks, long polling, dead-letter queues, per-channel filtering, stats; wrapped `{"items":[…]}` list shape |
-| Streaming | In-process | Partitioned append-only log with key-hash placement; opaque cursors (`TRIM_HORIZON`/`LATEST`/`AT_OFFSET`/`AFTER_OFFSET`/`AT_TIME`), group cursors with commit + resume, `opc-next-cursor` paging; CreateStream returns body *and* work request |
+| Streaming | Real Docker (Redpanda) / In-process | Stream pools, each with a Redpanda broker that holds its streams (topic = stream name) and serves Kafka clients at the pool's `bootstrapServers`; a `DefaultPool` per compartment; partitioned append-only log with key-hash placement; opaque cursors (`TRIM_HORIZON`/`LATEST`/`AT_OFFSET`/`AFTER_OFFSET`/`AT_TIME`), group cursors with commit + resume, `opc-next-cursor` paging; CreateStream returns body *and* work request. `mock: true` keeps the log in-process with no Kafka endpoint |
 | Vault + KMS | In-process, real crypto | Vaults and keys with schedule/cancel deletion (no DELETE verb), key rotation, AES and RSA key import via `GetWrappingKey`/`ImportKey`/`ImportKeyVersion`; AES-GCM encrypt/decrypt whose envelope survives rotation, RSA/ECDSA sign/verify via JCA, CRC32 `plaintextChecksum` |
 | Secrets | In-process | Secret versions with CURRENT/PREVIOUS/LATEST stages; the `Secret` shape never echoes content: retrieval is through `/20190301/secretbundles`, including the bodyless POST `getByName` |
 | Functions | Real Docker (Fn Project) | Applications and functions with deterministic image digests; invocation proxied to a shared `fnproject/fnserver` sidecar that runs your real FDK image. `mock: true` disables Docker entirely |
@@ -222,12 +225,14 @@ For operation-level compatibility, see the [Services Overview](https://floci.io/
 | Notifications | In-process | Topics and subscriptions (`/20181201`) with confirmation and unsubscribe links; PublishMessage with `RAW_TEXT` and `JSON` messages; real POST to HTTPS endpoints with the `X-OCI-NS-*` headers and Oracle's retry schedule; function subscriptions invoked in-process; email, Slack, PagerDuty and SMS recorded at `/_floci-oci/notifications/messages` |
 | OKE (Container Engine) | Real Docker (k3s) / In-process | Control plane CRUD (`/20180222`), options, kubeconfig YAML generator, work requests tracking; real-mode k3s sidecar driver (`rancher/k3s:v1.30.1-k3s1`) binding dynamic host ports (`6443..6543`) and persistent volumes (`/var/lib/rancher/k3s`). `mock: true` disables sidecar |
 | Container Registry (OCIR) | Real Docker (registry:2) / In-process | Container repositories and configuration (`/20160918/container`); `docker login`/`push`/`pull` at `<region-key>.ocir.localhost.floci.io:4599/<namespace>/<repo>` proxied to a shared `registry:2` sidecar; images listed live from the registry; create-on-first-push. `mock: true` disables the sidecar |
+| Container Instances | Real Docker / In-process | Container instances (`/20210415`) driven by work requests: one pause container per instance on the shared Docker network, each container joining its network namespace; images from any registry or the local OCIR, with `BASIC` and `VAULT` pull secrets; `EMPTYDIR` and `CONFIGFILE` volumes; CPU and memory limits; restart policies; `RetrieveLogs` from Docker; one VNIC per instance on `GetVnic` with the pod's address. `mock: true` disables Docker |
 | Database with PostgreSQL | Real Docker (PostgreSQL) / In-process | DB system CRUD (`/20220915`) driven by work requests, with a `DELETED` tombstone clients can poll; one `postgres:<major>-alpine` container per DB system, started in the background; connection details with a per-system CA certificate (`sslmode=verify-full` works); master password from the request or a Vault secret, never stored, reset in the running database; start/stop/restart keep the data volume; shapes and default configurations catalog. `mock: true` disables Docker |
+| MySQL HeatWave | Real Docker (MySQL) / In-process | DB system CRUD (`/20190415`) with work requests and a `DELETED` tombstone clients can poll; one `mysql:<version>` container per DB system, started in the background, with the admin user from the request (its password never stored); start/stop/restart keep the data volume; shapes, versions and default and custom configurations. `mock: true` disables Docker |
 | Organizations | In-process | `CreateChildTenancy` registers a child tenancy with its own home region; requests signed with it see only its own resources; organizations, organization tenancies and links live with the parent tenancy; invitations bring an existing tenancy in; domains, domain governance, subscriptions (one V2 subscription per tenancy), subscription mappings and order activation complete the Tenant Manager control plane; wrapped `{"items":[…]}` lists |
 | Governance Rules | In-process | Governance rules (`/20220504`) of type `QUOTA`, `TAG` and `ALLOWED_REGIONS`, inclusion criteria, tenancy attachments for children opted in to governance, enforced rules as the child sees them; `ALLOWED_REGIONS` refuses a governed child's region subscription outside the list |
 | Work Requests | In-process | `202` + `opc-work-request-id` responses, pollable per service (`/20160918`, `/20210201`, `/20180418`, `/20180222` and unversioned `/workRequests`) with errors/logs endpoints |
 
-Not implemented yet: identity domains, API keys/auth tokens, dynamic groups, tag namespaces, retention rules (stubbed empty for Terraform compatibility), lifecycle policies, queue consumer groups, stream pools' Kafka settings and connect harnesses, KMS key backup and replication, secret rotation, and pre-built functions (PBF).
+Not implemented yet: identity domains, API keys/auth tokens, dynamic groups, tag namespaces, retention rules (stubbed empty for Terraform compatibility), lifecycle policies, queue consumer groups, Streaming connect harnesses and Kafka SASL authentication, KMS key backup and replication, secret rotation, and pre-built functions (PBF).
 
 </details>
 
@@ -239,7 +244,10 @@ floci-oci runs a real container where in-process emulation would not be faithful
 |---|---|---|
 | Functions | `fnproject/fnserver:latest` | The open-source engine OCI Functions is built on. Your function image runs for real: fnserver spawns it as a sibling container and speaks the FDK http-stream contract |
 | OKE | `rancher/k3s:v1.30.1-k3s1` | Real local Kubernetes cluster execution via a k3s sidecar container with dynamic host port mapping (`6443..6543`) and named data volume `/var/lib/rancher/k3s` |
+| Streaming | `redpandadata/redpanda:v24.2.7` | A Kafka broker per stream pool, holding its streams as topics, with the Kafka port on a host port from `19092..19191` and a named data volume. Kafka clients and the OCI API see the same messages at the same offsets |
+| Container Instances | `registry.k8s.io/pause:3.10` plus your images | Every container of an instance runs as a real container, joined to one pause container's network namespace so they share `localhost` and the VNIC's address |
 | Database with PostgreSQL | `postgres:{major}-alpine` | A real PostgreSQL server per DB system, of the major the DB system asks for, with TLS, a host port from `15432..15531` and a named data volume; backup dumps are kept by the emulator, outside the containers |
+| MySQL HeatWave | `mysql:{version}` | A real MySQL server per DB system, of the version the DB system asks for, with a host port from `13306..13405` and a named data volume |
 
 Docker-backed services need the Docker socket:
 
@@ -250,8 +258,10 @@ docker run -d --name floci-oci \
   floci/floci-oci:latest
 ```
 
-Set `FLOCI_OCI_SERVICES_FUNCTIONS_MOCK=true`, `FLOCI_OCI_SERVICES_OKE_MOCK=true` or `FLOCI_OCI_SERVICES_PSQL_MOCK=true` to skip Docker entirely. The management
-plane stays fully usable and invocations, cluster records and DB systems return synthetic data. That is the default in
+Set `FLOCI_OCI_SERVICES_FUNCTIONS_MOCK=true`, `FLOCI_OCI_SERVICES_OKE_MOCK=true`, `FLOCI_OCI_SERVICES_PSQL_MOCK=true`,
+`FLOCI_OCI_SERVICES_MYSQL_MOCK=true`, `FLOCI_OCI_SERVICES_STREAMING_MOCK=true` or `FLOCI_OCI_SERVICES_CONTAINERINSTANCES_MOCK=true`
+to skip Docker entirely. The management plane stays fully usable and invocations, cluster records, DB systems and container
+instances return synthetic data; streams keep their messages in-process. Streaming needs Docker by default: without a daemon, set `FLOCI_OCI_SERVICES_STREAMING_MOCK=true`. That is the default in
 the test suite, so `./mvnw test` never needs a Docker daemon.
 
 `services/functions/` is also the **reference implementation** for contributing a
@@ -287,7 +297,7 @@ Unsigned requests fall back to `FLOCI_OCI_DEFAULT_TENANCY_ID`. Compartments are 
 
 ## SDK Integration
 
-Point your existing OCI SDK at `http://localhost:4599`. Any locally generated RSA key works: the signature is parsed for tenancy/user context, never verified.
+Point your existing OCI SDK at `http://localhost:4599`. Any locally generated RSA key works: by default the signature is parsed for tenancy/user context, never verified. `FLOCI_OCI_AUTH_SIGNATURE_VERIFICATION=known-keys` or `strict` verifies it against uploaded API keys ([Request signing](docs/services/identity.md#request-signing)).
 
 <details>
 <summary><strong>Java, oci-java-sdk</strong></summary>
@@ -439,10 +449,10 @@ The [`compatibility-tests`](./compatibility-tests/) directory validates floci-oc
 
 | Module | Language / Tool | SDK / Client | Tests |
 |---|---|---|---:|
-| `sdk-test-java` | Java | oci-java-sdk (incl. OKE integration, Organizations child tenancies, invitations, domains and subscriptions, governance rules, the Functions management plane, and a JDBC connection to a PostgreSQL DB system, custom configurations and an in-place restore) | 38 |
-| `sdk-test-python` | Python 3 | oci (incl. `UploadManager` streaming, Organizations invitations, domains, subscriptions and orders, governance rules, OKE clusters and node pools, PostgreSQL custom configurations, backups and instance patches) | 36 |
+| `sdk-test-java` | Java | oci-java-sdk (incl. OKE integration, Organizations child tenancies, invitations, domains and subscriptions, governance rules, the Functions management plane, and a JDBC connection to a PostgreSQL DB system, custom configurations and an in-place restore, Container Instances with their logs and VNIC) | 47 |
+| `sdk-test-python` | Python 3 | oci (incl. `UploadManager` streaming, Organizations invitations, domains, subscriptions and orders, governance rules, OKE clusters and node pools, PostgreSQL custom configurations, backups and instance patches, Container Instances) | 51 |
 | `sdk-test-go` | Go | oci-go-sdk (Identity, Object Storage incl. multipart, Queue, Streaming, KMS, Vault and Secrets, the Functions management plane, OKE) | 19 |
-| `sdk-test-cli` | Bash / BATS | OCI CLI 3.96.0 (all 10 services, incl. error codes, PAR access and kubectl through the OKE exec kubeconfig) | 69 |
+| `sdk-test-cli` | Bash / BATS | OCI CLI 3.96.0 (all 10 services, incl. error codes, PAR access, kubectl through the OKE exec kubeconfig, and Container Instances) | 81 |
 | `compat-terraform` | Terraform | oracle/oci provider (14 resources, zero-drift plan) | 6 |
 | `compat-opentofu` | OpenTofu | oracle/oci provider (14 resources, zero-drift plan) | 6 |
 

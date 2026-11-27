@@ -9,7 +9,7 @@ What it does:
 * **Map** - browse any day or range of time on a map, with a graph of battery level, speed and app events. The calendar shades each day by how far you travelled.
 * **Stats** - a yearly page per database: distance, countries and cities, active days and streaks, a monthly digest, distance by mode of travel and first visits.
 * **World** - a map of everywhere you have been, as hexagons that get finer as you zoom in. It can be published and embedded in another website.
-* **Places** - geofences: circles and GeoJSON shapes that Compass knows you are in or out of, and watches on the city, region or country you are in. Each can run web hooks when you arrive, leave or pass through.
+* **Places** - geofences: circles and GeoJSON shapes that Compass knows you are in or out of, and watches on the city, region or country you are in and the airport you are at. Each can run web hooks when you arrive, leave or pass through.
 * **Share** - links that show your current location and recent track to anyone who has them, for a set time or until you stop them.
 * **Trips** - trips recorded by a device can be posted to your website with Micropub, and other services can be pinged when a location arrives.
 * **API** - for writing and reading locations, used by [Overland](https://github.com/aaronpk/Overland-iOS) and other apps.
@@ -126,6 +126,7 @@ This downloads the list of cities with a population over 5,000 from GeoNames (ab
 Data sources:
 
 * City data from [GeoNames](https://www.geonames.org/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+* Airports for the Places page from the list in [Atlas](https://github.com/aaronpk/Atlas), with sizes from [OurAirports](https://ourairports.com/), which is in the public domain.
 * Country borders made with [Natural Earth](https://www.naturalearthdata.com/), which is in the public domain. Borders follow Natural Earth's de facto boundaries. Territories such as Puerto Rico, Hong Kong and Greenland are listed separately from their sovereign country, and places without an ISO code (Somaliland, Northern Cyprus) are included under Natural Earth's own codes.
 
 ### Stats
@@ -153,7 +154,19 @@ The Places page of a database holds its geofences. You can add two kinds:
 
 Every database also has three built-in areas that need no drawing: the **city**, **region** (state or province) and **country** you are in, worked out from the lookup tables that `geo:import` loads. They are always listed on the page, and can't be renamed or removed.
 
+A fourth built-in area is the **airport** you are at. Compass ships with a list of about 9,000 airports that have an IATA code, and records when you arrive at one and when you leave it, with its code and name. The list has only a point for each airport, so how far one reaches is assumed from its size: 2.5 km around a large airport, 1.5 km around a medium one and 750 m around a small one. Arriving or leaving has to hold for two minutes, so driving past one doesn't count. Someone who lives or works right next to an airfield will show as being at it.
+
 The search box above the map finds a place or an address by name, moves the map there and, when you are adding a circle, puts the circle on it and suggests its name. The search goes from your browser to OpenStreetMap's [Nominatim](https://nominatim.org/) server, which is free for light use. Set `PLACE_SEARCH_URL` in `.env` to your own Nominatim server to keep searches in house, or to an empty value to hide the box.
+
+**Suggested places.** The "See suggested places" link lists the spots where you have spent the most time, worked out from the stops the stats already record, so it needs the [stats](#stats) to be built. It looks for where you slept (at least three hours between midnight and 6 am counts as a night), where your weekday working hours went, and anywhere else you kept going back to. The spot with the most nights is offered as "Home", and the one with the most weekday hours that you don't also sleep at as "Work". A spot needs five nights, or ten hours on four different days over at least two weeks, so a single trip doesn't show up. The page only suggests: nothing becomes a place until you press "Add place" on it, after adjusting the name, position and size if you want. "Not a place" hides a suggestion for good, with a list at the bottom to bring it back. It looks at the last 12 months unless you choose 3 months or all time.
+
+**Filling in the past.** A new place starts knowing nothing: it shows as inside or outside "since" the moment it was made. To work it out from the locations already stored, run
+
+```
+$ php artisan places:backfill --days=30
+```
+
+(add a database name to do just one). It goes through the last 30 days as if your places had been there all along, so each one shows how long you have really been there or away, and its history lists the arrivals and departures from before it was made. No web hook is called for any of this, and it is safe to run again.
 
 A place stands on its own: once it exists, Compass keeps track of whether you are in it, and records every arrival and departure on the Places page and in the API. Nothing else has to be set up.
 
@@ -192,6 +205,7 @@ Compass sends a POST request with a JSON body:
 ```
 
 * `event` is `enter`, `exit`, `cross`, or `change` when the city, region or country changes. A `change` also has `from` and `to`, each with a `code` (a country code, a GeoNames region code such as `US.OR`, or a GeoNames city id) and a `name`, and `fence.level`.
+* For the airport, `enter` and `exit` have `airport` instead: the `code` (`PDX`) and `name` of the airport you arrived at or left.
 * `time` is when it happened. `delayed` is true when the location reached the server more than five minutes after that.
 * The `Compass-Signature` header is `sha256=` followed by the hex HMAC-SHA256 of the request body, keyed with the database's signing secret, which is shown on the Places page. Unlike the "ping" web hooks, no token for the database is sent.
 * Answer with a 2xx status. Anything else is retried after 10 seconds, 1 minute, 5 minutes, 30 minutes and 1 hour, and then marked as failed. Retrying needs a real queue; with `QUEUE_DRIVER=sync` a failed web hook is not tried again.
@@ -346,7 +360,7 @@ These take the read token.
 
 * token - (required) the read token for the database
 
-Returns `{"geofences": [...]}`. Each has `id`, `name`, `kind` (`circle`, `polygon` or `place`), its shape (`lat`, `lng` and `radius` in metres, or a GeoJSON `geometry`), `state` (`inside`, `outside` or `unknown`) and `since`. The built-in areas (`kind` is `place`) have `level`, `value` and `value_name` instead of a shape and a state. They appear once the Places page has been opened.
+Returns `{"geofences": [...]}`. Each has `id`, `name`, `kind` (`circle`, `polygon` or `place`), its shape (`lat`, `lng` and `radius` in metres, or a GeoJSON `geometry`), `state` (`inside`, `outside` or `unknown`) and `since`. The built-in areas (`kind` is `place`) have `level`, `value` and `value_name` instead of a shape and a state. For the airport, `value` is its code, or an empty string when you are at none. They appear once the Places page has been opened.
 
 #### What happened
 

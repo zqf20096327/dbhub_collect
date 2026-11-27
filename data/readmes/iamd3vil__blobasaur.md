@@ -73,9 +73,9 @@ You can download pre-compiled binaries for Linux from the [GitHub Releases page]
 
 1.  **Download the latest release:**
 
-    For example, to download version `v0.8.0`:
+    For example, to download version `v0.10.0`:
     ```bash
-    wget https://github.com/iamd3vil/blobasaur/releases/download/v0.8.0/blobasaur-Linux-musl-x86_64.tar.gz
+    wget https://github.com/iamd3vil/blobasaur/releases/download/v0.10.0/blobasaur-Linux-musl-x86_64.tar.gz
     ```
 
 2.  **Extract the archive:**
@@ -110,8 +110,8 @@ docker run -d \
 
 Available tags:
 - `latest` - Latest stable release
-- `x.y.z` - Specific version (e.g., `0.8.0`)
-- `x.y` - Latest patch for minor version (e.g., `0.2`)
+- `x.y.z` - Specific version (e.g., `0.10.0`)
+- `x.y` - Latest patch for minor version (e.g., `0.10`)
 
 ### Prerequisites
 
@@ -566,10 +566,8 @@ async_write = true
 
 **Features:**
 - Immediate response to clients
-- Inflight cache prevents race conditions: `GET`, `HGET`, `EXISTS`, `HEXISTS`, `DEL`, `HDEL` and `HSET` see writes and deletes that are acknowledged but not yet committed
+- Inflight cache prevents race conditions: `GET`, `HGET`, `EXISTS`, `HEXISTS`, `TTL`, `DEL`, `HDEL` and `HSET` see writes and deletes that are acknowledged but not yet committed, including their expiry
 - Acknowledged writes are committed before a graceful shutdown completes (see [Shutdown](#shutdown))
-
-**Known gap** (settles within milliseconds, once the queued op commits): `TTL` reads only committed data, so right after an async `SET ... EX` it can return `-2`.
 
 ### Storage Compression
 

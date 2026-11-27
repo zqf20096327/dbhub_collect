@@ -1,6 +1,6 @@
 # ☁️ ClouDrift · 云隙- AI 虚拟陪伴读书室
 
-![Version](https://img.shields.io/badge/Version-v1.1.1-f59e0b?style=flat-square)
+![Version](https://img.shields.io/badge/Version-v1.1.2-f59e0b?style=flat-square)
 ![Platform](https://img.shields.io/badge/Platform-PC%20%26%20Mobile%20LAN-10b981?style=flat-square)
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=flat-square)
 [![Changelog](https://img.shields.io/badge/Changelog-更新日志-6366f1?style=flat-square)](./CHANGELOG.md)
@@ -8,7 +8,8 @@
 ![Local-First](https://img.shields.io/badge/Local--First-Node.js%20%2B%20SQLite-10b981?style=flat-square)
 ![MCP](https://img.shields.io/badge/MCP-HTTP%20%7C%20SSE%20%7C%20Stdio-a855f7?style=flat-square)
 ![Author](https://img.shields.io/badge/Author-三云%20%7C%20cloudsssA-38bdf8?style=flat-square)
-> ✨ **最新动态 (v1.1.1)**：重磅上线 **🏡 2D 像素家园 & 痛墙/透明立牌 DIY**、**🎨 极简单行顶栏 & 独立「美化」面板（横竖双壁纸 2.5K 自适配 + 聊天背景自由拖放缩放）**、**☁️ 全站 SSOT 双端实时云同步（桌宠/天气/番茄钟/战绩/相框/角色隔空联动）** 与多项防重/防打扰深度精修！详细改动请移步 👉 [更新日志 CHANGELOG.md](./CHANGELOG.md)
+[![M8ven Score](https://m8ven.ai/badge/mcp/cloudsssa-cloudrift-room-h6yadh?v=7139dd937cf7cb737ea4fdaef5af5d17)](https://m8ven.ai/mcp/cloudsssa-cloudrift-room-h6yadh?s=readme)
+> ✨ **最新动态（v1.2.0）** · 🎭 小剧场和 📚 世界书仓库上线！把你和 TA 的故事变成一篇能独立打开的互动番外，或给角色藏一本只有聊到关键词才会翻开的设定集~ 预设殿堂新增备忘录与小剧场提示词，🔌 MCP 新增角色主动搭话事件支持，外部客户端可领取当前角色的 proactive_chat 事件，并将回复送入小手机。👉 [查看完整更新日志](./CHANGELOG.md)
 
 
 > ⚡ **开工于2026.11.21，历时不到 16 小时爆肝打造出初版，后续持续更新中！**  
@@ -113,6 +114,19 @@
 - **🔥 二次元痛墙挂画 & 桌面亚克力立牌 DIY**：直接上传自推美图或透明底立牌 PNG（本地硬盘落盘），一键挂上正面像素墙或立在**书桌/茶几桌面表层**，还支持一键开启复古像素滤镜无缝融入画风！
 - **外部贴图零代码热替换**：只需将同名透明 PNG 放入 `public/home/sprites/<item_id>.png`，刷新页面即可自动覆盖内置像素家具与窗景贴图，随心把小窝升级成独立游戏级精装房。
 - **装潢入脑感知**：当前小窝摆设会自动提炼极简摘要注入角色上下文，让 TA 真正知道屋里又添了什么新家具与痛墙周边。
+
+### 🎭 十、HTML 小剧场 · 把聊天写成番外
+
+* **从右上角菜单开场**：选好角色和用户人设，勾选这次想带上的世界书，再挑一个剧本模板，或者临时写一句脑洞。打开「携带最近聊天」后，昨晚聊到一半的约定也能成为今天的剧情起点。
+* **关掉面板，故事照写**：最多同时生成 3 篇，每篇单独显示剧名和已用秒数。写作期间可以继续专注或聊天，完成后会收到顶部提醒。
+* **每篇都是独立网页**：成品支持弹窗预览、新标签页打开、按标题或正文搜索，也能重试、续写或收藏。标星的作品会保留在自动清理名单之外；想让 TA 记住这段番外，还可以开启「将纯正文加入角色会话」，默认关闭。
+* **把喜欢的写法存下来**：剧本模板支持 `{{char}}` 和 `{{user}}`，开场时自动换成双方名字。小剧场的系统提示词、文风提示词，以及动态备忘录的维护提示词，也都可以在「预设殿堂」编辑并存进预设套装。
+
+### 📚 十一、世界书仓库 · 让设定在聊到时出现
+
+* **一本书可以交给谁读？** 从右上角菜单的「世界书」进入仓库。通用的城市、时代背景可以设为全局共用；某位角色的家族往事，则可以只在对应角色卡里勾选。
+* **常驻设定与关键词触发**：重要前提可以每轮带入，地点、人物和事件可以等聊到关键词时再出现。每本书可设置扫描最近几条消息，每个条目也能单独开关、调整顺序。
+* **让线索再往前走一步**：开启递归扫描后，提到「王都」会带出王都条目；如果介绍里又提到「国王」，还能接着带出国王的人设。最多追加几层，由你决定。
 
 ---
 
@@ -221,7 +235,7 @@ ClouDrift 内置**零依赖标准 MCP Server（`mcp-bridge.js` + `mcp-stdio.js`�
 ---
 
 ### 第三步：MCP 已开放的能力一览（8 项工具 + 2 项资源）
-
+> 💌 **外部搭子也能主动来信** · 客户端可通过 `get_pending_events` 领取当前角色的 `proactive_chat` 事件，再用 `send_study_chat` 把主动消息送进小手机。待处理事件按角色归属领取，外接时的记忆读取也跟随当前绑定身份。
 #### 🛠️ 8 项标准 MCP 工具（Tools）
 | 工具名 | 功能说明 | 关键参数 |
 | :--- | :--- | :--- |

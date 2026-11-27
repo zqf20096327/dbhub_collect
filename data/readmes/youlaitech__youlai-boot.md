@@ -2,9 +2,9 @@
 
 # <img alt="youlai-boot" width="40" height="40" src="./docs/images/logo/logo.png" valign="middle"> youlai-boot
 
-**Java 17 + Spring Boot 4.1.2 企业级权限管理系统后端**
+**Java 17 + Spring Boot 4.2.0 企业级权限管理系统后端**
 
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.2-6DB33F?logo=spring-boot)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.2.0-6DB33F?logo=spring-boot)](https://spring.io/projects/spring-boot)
 [![JDK](https://img.shields.io/badge/JDK-17%2B-007396?logo=openjdk)](https://openjdk.org/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache)](LICENSE)
 [![Gitee Star](https://gitee.com/youlaiorg/youlai-boot/badge/star.svg)](https://gitee.com/youlaiorg/youlai-boot/stargazers)
@@ -20,6 +20,7 @@
 [![在线预览](https://img.shields.io/badge/在线预览-2D8CF0?style=for-the-badge\&logo=google-chrome\&logoColor=white)](https://admin.youlai.tech)
 [![移动端预览](https://img.shields.io/badge/移动端预览-19BE6B?style=for-the-badge\&logo=android\&logoColor=white)](https://app.youlai.tech)
 [![阅读文档](https://img.shields.io/badge/阅读文档-8B5CF6?style=for-the-badge\&logo=gitbook\&logoColor=white)](https://www.youlai.tech/docs/server/spring-boot/)
+[![在线接口文档](https://img.shields.io/badge/在线接口文档-13C2C2?style=for-the-badge\&logo=swagger\&logoColor=white)](https://api.youlai.tech/doc.html)
 [![English](https://img.shields.io/badge/English-00B4D8?style=for-the-badge\&logo=google-translate\&logoColor=white)](./README.en.md)
 
 </div>
@@ -78,7 +79,7 @@
 
 ## 快速开始
 
-**环境要求**：JDK 17+ · MySQL 8.0+ · Redis 6.0+
+**环境要求**：JDK 17+ · MySQL 8.0+ · Redis 6.0+。中间件可用[部署运维](https://www.youlai.tech/docs/server/spring-boot/deploy.html)里的 compose 编排一键启动。
 
 1. 克隆项目：
 
@@ -115,7 +116,7 @@
    mvn spring-boot:run
    ```
 
-   启动后访问 <http://localhost:8000/doc.html>（apidoc）或 <http://localhost:8000/swagger-ui.html>（Swagger UI），能打开接口文档即说明后端已正常运行。
+   启动后访问 <http://localhost:8000/doc.html>（apishow）或 <http://localhost:8000/swagger-ui.html>（Swagger UI），能打开接口文档即说明后端已正常运行。
 
 5. 启动前端（可选）：
    如需可视化操作界面，启动配套前端 [vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)，访问 <http://localhost:3000>，使用 `admin` / `123456` 登录。
@@ -161,7 +162,6 @@ youlai-boot/
 │   │   ├── sms/               # 短信服务
 │   │   └── realtime/          # WebSocket 实时通信
 │   └── system/                # 系统业务（用户/角色/菜单/部门/字典等）
-├── docker-compose.yml         # 中间件一键编排（MySQL/Redis/RustFS/Xxl-Job）
 └── pom.xml                    # Maven 依赖管理
 ```
 

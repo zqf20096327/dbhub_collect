@@ -195,9 +195,25 @@ faster now.
 By default, the following features are enabled:
 
 - `auto-heal`
+- `aws_lc_rs`
 - `backup`
 - `sqlite`
 - `toml`
+
+### `aws_lc_rs` / `ring` / `fips`
+
+The rustls crypto backend. Exactly one of `aws_lc_rs` or `ring` must be selected whenever TLS is
+compiled in (the `sqlite` and `cache` features enable it), and `aws_lc_rs` is the default. Selecting
+both, or TLS with neither, is a compile error. Whichever you pick, the other backend's crates are
+never compiled in.
+
+`aws_lc_rs` prefers the post-quantum hybrid group X25519MLKEM768 ahead of X25519 in its TLS 1.3
+key exchange. `ring` has no post-quantum group at all, so a `ring` build negotiates X25519. A peer
+that supports both takes the group offered first, so the difference shows up as the group in the
+handshake, never as a failure.
+
+`fips` is the FIPS-validated aws-lc-rs build. It implies `aws_lc_rs` and cannot be combined with
+`ring`. It builds `aws-lc-fips-sys` from source, so it needs a C toolchain, `cmake` and `libclang`.
 
 ### `auto-heal`
 
@@ -341,9 +357,9 @@ that a stale or crashed client can never hold a lock forever.
 ### `external-state-machine`
 
 This opt-in feature is for applications that already own a trusted consensus log. It exposes a
-single-writer SQLite engine with true read-only pooled connections, bounded retry receipts, and
-validated page-image snapshots. It does not start a Hiqlite Raft group, network service, membership
-store, or raw-SQL replication protocol.
+single-writer SQLite engine with true read-only connections on threads of their own, bounded
+retry receipts, and validated page-image snapshots. It does not start a Hiqlite Raft group,
+network service, membership store, or raw-SQL replication protocol.
 
 The caller submits a dense monotonic sequence, an opaque exact native coordinate, a canonical
 command digest, and a typed `DeterministicSqliteOperation`. Every global entry must be represented
@@ -355,11 +371,13 @@ mode never invokes `auto-heal` or implicitly deletes its database. It also makes
 between SQLite, the caller's consensus log, or another storage engine. See the
 `external_state_machine` module documentation for the recovery, snapshot, and format contracts.
 
-`build_snapshot_into` publishes without replacing an existing caller-owned path, and restore closes
-and recreates the read pool so no pre-restore handle survives. Migrating a quiescent legacy database
-requires the explicit `adopt_existing_projection` constructor; the caller must prove that database
-is the agreed initial state. An outer manifest codec should map `ExternalSnapshotEvidence` into a
-frozen versioned format it owns, reconstruct the typed value with the public evidence constructors,
+`build_snapshot_into` publishes without replacing an existing caller-owned path, and restore
+closes and recreates the read connections. A read that is already inside its query is waited for up
+to a 30s grace; past it the restore proceeds and that one read keeps answering the rows it started
+on. Migrating a quiescent legacy database requires the explicit `adopt_existing_projection`
+constructor; the caller must prove that database is the agreed initial state. An outer manifest
+codec should map `ExternalSnapshotEvidence` into a frozen versioned format it owns, reconstruct the
+typed value with the public evidence constructors,
 and call `ExternalSqlite::validate_snapshot` to verify a decoded staged image before opening or
 mutating a live projection. The engine's Serde shape is descriptive, not a stable wire
 format promise; `EXTERNAL_SQLITE_SNAPSHOT_FORMAT` exposes the page-image identity without

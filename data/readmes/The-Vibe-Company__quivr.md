@@ -24,7 +24,8 @@ created by the Quivr team.
 - **Collect content** you send one by one or in batches, or that Quivr pulls from
   sources on a schedule. Files such as PDFs are read by plugins.
 - **Search** by keywords, by meaning, or both. Every result points to the exact passage,
-  document and version it comes from, so you can always cite it.
+  document and version it comes from, so you can always cite it. Search up to 16
+  corpora together. New corpora have their own partitions in the search index.
 - **Follow a topic.** Save an alert such as `"harbour strike" AND (ferry OR port)`, or a
   plain-language description, and Quivr records every new document that matches, with
   the reason. Your application reads the matches or receives them as signed webhooks.
@@ -32,8 +33,17 @@ created by the Quivr team.
   withdrawn document leaves search at once, and alerts that caught it are told.
 - **Plug in your own logic.** File formats, sources, embedding models, ranking and alert
   rules are plugins: small HTTP services you can replace, in any language.
+- **Opt in to source and record visibility** for delegated reads with
+  `visibility_mode: enforce`. [Configure delegated access](https://docs.quivr.thevibecompany.co/reference/configuration#delegated-reads).
+- **Audit access and changes.** List or export sensitive actions and permission refusals
+  by actor, and enable auditing for reads and searches through configuration.
 - **Let AI agents use it.** `quivr mcp` lets an agent search Quivr and quote what it
   finds, with the source of every passage.
+- **Use your own database.** Quivr runs with a non-superuser login on
+  [DBA-managed PostgreSQL 17](https://docs.quivr.thevibecompany.co/run-quivr/deploy#use-dba-managed-postgresql).
+
+Self-hosted processes accept credentials from dedicated environment variables or mounted
+files. [Secret bindings](https://docs.quivr.thevibecompany.co/reference/configuration#secret-bindings)
 
 ## How it works
 

@@ -2,10 +2,10 @@
 
 ## Download and play
 
-### [Download the complete gx-v0.1.19 portable — Client + Server + Data](https://drive.google.com/file/d/1jHGrS0KY3LRsDtzMgfFAH6BwmSX7Nasi/view?usp=sharing)
+### [Download the complete gx-v0.1.22 portable — Client + Server + Data](https://drive.google.com/file/d/1ju67PBPpMO6W68-bQ15QXVBdRO9qF6_U/view?usp=sharing)
 
 **One Google Drive download for Windows and Linux. Includes the client, GX Server,
-GX Studio, game data, external fonts and the development database.**
+game data, external fonts and the development database.**
 
 1. Extract the entire package to a writable folder. Keep `Client/` and `Server/` intact.
 2. Open `Server/build/gx_console.exe` (Windows) or `Server/build/gx_console` in a terminal (Linux), then enter `start server`.
@@ -14,7 +14,7 @@ GX Studio, game data, external fonts and the development database.**
 Requires a 64-bit OS and OpenGL 4.5. The server includes development test accounts;
 preserve your existing runtime database when upgrading.
 
-**Latest binary release: [gx-v0.1.19](https://github.com/Spelunkern/Shaiya-GX/releases/tag/gx-v0.1.19).**
+**Latest binary release: [gx-v0.1.22](https://github.com/Spelunkern/Shaiya-GX/releases/tag/gx-v0.1.22).**
 
 [Setup and requirements](docs/client-portable.md) · [GitHub binary updates (without client game data)](https://github.com/Spelunkern/Shaiya-GX/releases/latest)
 
@@ -86,7 +86,7 @@ GX Server retains Rapture's gameplay and protocol behavior. Its programs are `gx
 
 ## Guides
 
-- [GX Studio desktop data editor](docs/gx-studio.md)
+- [GX Studio](https://github.com/Spelunkern/GX-Studio) is the independent desktop editor for Shaiya GX client data, SQLite and supported GX World files.
 - [Map rules, weather and experience progression](docs/wiki/map-rules.md)
 - [GitHub Wiki: features, item effects, GM commands and configuration](https://github.com/Spelunkern/Shaiya-GX/wiki)
 - [Complete server reference: architecture, all packages and packet layouts](https://github.com/Spelunkern/Shaiya-GX/wiki/Server-Architecture)
@@ -127,4 +127,4 @@ Inventory: left-click uses an item, right-click equips/replaces it, drag moves i
 
 Source is [BSD 3-Clause](LICENSE). The original server copyright and terms are retained in [server/LICENSE](server/LICENSE). Third-party notices are in [NOTICE](NOTICE). Original Shaiya game content and trademarks retain their respective ownership; the source license does not grant rights to game assets.
 
-The complete [Client + Server + Data portable](https://drive.google.com/file/d/1jHGrS0KY3LRsDtzMgfFAH6BwmSX7Nasi/view?usp=sharing) is hosted on Drive. Updated client builds with external fonts are available in [GX releases](https://github.com/Spelunkern/Shaiya-GX/releases/latest); those archives do not include game data. Both executables may share one adjacent `data/` directory; see [portable client instructions](docs/client-portable.md).
+The complete [Client + Server + Data portable](https://drive.google.com/file/d/1ju67PBPpMO6W68-bQ15QXVBdRO9qF6_U/view?usp=sharing) is hosted on Drive. Updated client builds with external fonts are available in [GX releases](https://github.com/Spelunkern/Shaiya-GX/releases/latest); those archives do not include game data. Both executables may share one adjacent `data/` directory; see [portable client instructions](docs/client-portable.md).

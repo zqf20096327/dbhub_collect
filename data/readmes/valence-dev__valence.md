@@ -158,6 +158,7 @@ See [Writing a plugin](docs/writing-plugins.md) and the runnable
 | [packages/valence/](packages/valence/) | The Flutter host runtime, published as `valence`. Includes the §8 test matrix and an example app. |
 | [packages/bridge/](packages/bridge/) | The web bridge client, published as `@getvalence/bridge`. Zero runtime dependencies. |
 | [docs/migrating-from-0.3.md](docs/migrating-from-0.3.md) | Moving a 0.3 app with a generated host onto the packages, without losing data |
+| [docs/migrating-to-0.5.md](docs/migrating-to-0.5.md) | Moving a 0.4 host to 0.5: the Flutter, compileSdk, AGP and Gradle floors |
 | [AGENTS.md](AGENTS.md) | Rules for anyone (human or agent) changing this repo |
 
 ## Status
@@ -166,7 +167,9 @@ The runtime includes [host widget tests](docs/host-widget-tests.md) for startup/
 locks, bridge nonce forwarding, buffered events, trial-ready timeouts and disposal. They pump the real
 host with a stub native WebView; Android device verification remains a separate gate.
 
-**0.4 beta, package-first.** The runtime is no longer generated per app: `valence` (pub.dev) is the whole Flutter host and `@getvalence/bridge` (npm) is the whole web client, both with their own test suites, and `valence codegen` emits only the typed, app-specific half and imports the rest. Moving from 0.3 is [one documented pass](docs/migrating-from-0.3.md) that keeps your data, your update state and your signing key.
+**0.5 beta.** Needs Flutter 3.47+ and, on Android, compileSdk 37 with AGP 9.1.1 and Gradle 9.3.1; a 0.4 host moves up with [the 0.5 migration](docs/migrating-to-0.5.md).
+
+**Package-first since 0.4.** The runtime is no longer generated per app: `valence` (pub.dev) is the whole Flutter host and `@getvalence/bridge` (npm) is the whole web client, both with their own test suites, and `valence codegen` emits only the typed, app-specific half and imports the rest. Moving from 0.3 is [one documented pass](docs/migrating-from-0.3.md) that keeps your data, your update state and your signing key.
 
 **Want Valence set up in your app?** Write to [hello@getvalence.dev](mailto:hello@getvalence.dev).
 

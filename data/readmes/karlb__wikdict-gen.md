@@ -13,7 +13,7 @@ the [WikDict website][wikdict.com].
 
     git clone git@github.com:karlb/wikdict-gen.git
     cd wikdict-gen
-    make download   # fetch the dbnary dumps (into virtuoso/ttl/)
+    make download   # fetch the dbnary dumps (into dumps/)
     make            # load them into the store and build the dictionaries
 
 Use the resulting dictionaries in `dictionaries/wdweb` with [wikdict-web], try a quick lookup using the `search` command like

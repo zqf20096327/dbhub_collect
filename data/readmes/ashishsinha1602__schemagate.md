@@ -17,7 +17,7 @@
 
 Most text-to-SQL prompts carry the whole schema, and on a big database that is most of the prompt, on every question. schemagate sends the model only the tables the question needs: **91.1% fewer schema tokens (median) on databases with 50+ tables** ([benchmark](BENCHMARKS.md)). It filters by the caller's grants first, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, LlamaIndex, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite.
 
-> **Don't want to run it yourself?** [schemagate.app](https://schemagate.app) is the hosted version. Connect PostgreSQL, MySQL, SQL Server, Oracle or a spreadsheet, invite your team, and everyone asks questions in plain English, each person seeing only the data they're allowed to. Free 7-day trial, no card needed.
+> **Don't want to run it yourself?** [schemagate.app](https://schemagate.app) is the hosted version. Connect PostgreSQL, MySQL, SQL Server, Oracle or a spreadsheet, invite your team, and everyone asks questions in plain English, each person seeing only the data they're allowed to. Free 7-day trial, no card needed, or pay once with the [lifetime deal on AppSumo](https://appsumo.com/pl/lGXuEbqqvt/).
 
 ![One question on a 1,201-object schema: the whole schema is 146,695 prompt tokens; schemagate sends 13 tables, including all 3 the query needs, in 1,796.](https://raw.githubusercontent.com/ashishsinha1602/schemagate/main/docs/media/token-savings.gif)
 
@@ -1134,10 +1134,14 @@ Keep a URL with a password in `env`, as above, not in `--url`: command arguments
 visible to every process on the machine. Without uv: `pip install 'schemagate[mcp,postgres]'`,
 then run `schemagate-mcp` (or `python -m schemagate.mcp_server`, which still works).
 
-Nine tools, all read-only: `select_schema` (the DDL for a question, scoped to
+Twelve tools, all read-only: `select_schema` (the DDL for a question, scoped to
 the caller), `list_objects` (what this caller can see), `describe_object` (one
 object's full DDL), `run_query` (runs a single read, refused if it names
-anything the caller may not see), `semantic_query` (a read whose rows the
+anything the caller may not see), `explain_query` (the plan, with real timings
+on PostgreSQL), `compare_queries` (do two reads return the same rows, and which
+is faster), `optimize_query` (the server's model rewrites a slow read; only a
+rewrite proven to return the same rows can come back, see
+[docs/optimize.md](docs/optimize.md)), `semantic_query` (a read whose rows the
 server's model then filters or annotates by what a text column says),
 `answer`, `deep_answer` (like `answer`, but may explore in steps),
 `refresh_catalog` and `health`.

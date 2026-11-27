@@ -1,6 +1,11 @@
-# 漫画工作台 · Comic Desk
+# 元子的赛博工作台 · Comic Desk
 
-![漫画工作台截图：卡通风桌面，软木板挂便签和武器库，显示器是今日待办，桌上摆着各种小物件](docs/images/desk-screenshot.jpg)
+> **把 Claude Code / Codex 的会话变成每天能勾的待办，哪个 AI 在等你一眼看到。**
+> Turn your Claude Code / Codex sessions into a daily check-off todo list, and see at a glance which AI agent is waiting on you.
+>
+> 原名「漫画工作台」，仓库名 `comic-desk-local` 不变。作者：[元子](https://yuanzi.online)（WaytoAGI）。
+
+![元子的赛博工作台截图：卡通风桌面，软木板挂便签和武器库，显示器是今日待办，桌上摆着各种小物件](docs/images/desk-screenshot.jpg)
 
 **给同时用好几个 AI 助手的人的本机工作台。** 把 Claude Code、Codex 等几家的会话收进一份本机索引（不改原文件），变成每天能勾的待办——勾掉后又有新对话会自己回来；谁在等你点头、谁出错，顶栏一眼看到；做出来的图片和小页面也摆在同一张桌上。
 
@@ -116,3 +121,7 @@ python3 tools/audit_release.py --history
 ---
 
 如果这张桌子帮你理清了一堆 AI 会话，[给仓库点个 ⭐](https://github.com/Onlyaguest/comic-desk-local) 或把它转给同样在用好几个 AI 助手的朋友，就是最好的支持。踩到坑、想要什么功能，欢迎开 [Issue](https://github.com/Onlyaguest/comic-desk-local/issues)。
+
+作者：**元子**（WaytoAGI 元子）· 个人站 [yuanzi.online](https://yuanzi.online) · 「元子的赛博工作台」是她给自己每天和好几个 AI 一起干活搭的桌子，开源出来给同样在用的人。
+
+Made by **Yuanzi** (元子, WaytoAGI) — [yuanzi.online](https://yuanzi.online).

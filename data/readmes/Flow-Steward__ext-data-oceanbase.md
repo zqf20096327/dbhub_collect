@@ -8,7 +8,7 @@ Configure the host, port, database and user and store a nonempty password in sec
 
 ## Runtime and operation requirements
 
-Connect **OceanBase** datasets and run parameterized workflow writes. This repository contains one installable OceanBase extension, version **1.3.16**, with separate Linux AMD64 and ARM64 archives. No other database can be selected or installed from this package.
+Connect **OceanBase** datasets and run parameterized workflow writes. This repository contains one installable OceanBase extension, version **1.3.17**, with separate Linux AMD64 and ARM64 archives. No other database can be selected or installed from this package.
 
 ## Set up a OceanBase connection
 
@@ -67,8 +67,8 @@ Pushes to `main` and pull requests run the shared extension build workflow. The 
 After the versioned release commit is on `main`, publish by pushing its version tag:
 
 ```sh
-git tag v1.3.16
-git push origin v1.3.16
+git tag v1.3.17
+git push origin v1.3.17
 ```
 
 The release workflow runs the shared checks, builds the target archives and publishes the GitHub release and checksums. Do not move an existing tag. To rerun a release for an existing tag, dispatch the same workflow:

@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/nhan-dien/corelens-kem-chu-toi.png">
+  <img src="docs/nhan-dien/corelens-kem-chu-sang.png" alt="Dấu Corelens: chữ C ba dải kính quanh lõi đá" width="280">
+</picture>
+
 # Corelens
 
 **Tiếng Việt** · [English](README.en.md)
@@ -84,6 +89,7 @@ báo riêng theo [`SECURITY.md`](SECURITY.md). Tham gia dự án là đồng ý 
 | Giảng viên hướng dẫn | ThS. Trần Phước Đức | [`@tranphuocduc1998`](https://github.com/tranphuocduc1998) |
 | Điều phối kho mã | Nguyễn Thanh Sơn | [`@AlaVox-lab`](https://github.com/AlaVox-lab) |
 | Thành viên | Nguyễn Thanh Nguyên | [`@NguyentimAnh`](https://github.com/NguyentimAnh) |
+| Thành viên | Hoàng Xuân Hùng | [`@Hunghoang88-code`](https://github.com/Hunghoang88-code) |
 
 Công việc chia theo từng [issue](https://github.com/AlaVox-lab/corelens/issues), không cố định ai phụ
 trách không gian nào.

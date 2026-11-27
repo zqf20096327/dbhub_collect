@@ -25,7 +25,7 @@ The project covers the complete data lifecycle
 - SQL analytics and business KPIs
 - Automated testing with pytest
 - Continuous Integration using Jenkins and Docker
-- Interactive business reporting with Power BI
+- Interactive business reporting with Power BI 
 
 ## Architecture
 

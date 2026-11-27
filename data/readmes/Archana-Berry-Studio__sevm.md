@@ -117,6 +117,15 @@ Endpoint:
 | Vue SPA | ✅ | `public/index.html` + `vue.global.prod.js` (offline) |
 | demo HTTP | ✅ | `examples/sevm-app/src/server.js` → port 8080 |
 
+## Agent & shim workflow
+
+- `AGENTS.md` berisi kontrak arsitektur untuk agent: batas `mochi_modules/` vs `node_modules/`, layout modul baru, aturan ABI/dynalib, dan alur gap-driven.
+- `MISSING_SHIMS.json` mencatat shim yang sudah ada dan yang masih kurang.
+- `python script/scaffold_shim.py <nama> mochi` membuat kerangka modul native-first; mode `node` membuat paket JS-first hybrid.
+- Toolchain cross-compile ada di `cmake/` (MinGW, Linux, Android NDK).
+
+Shim baru: `mochitimers`, `mochiglobals`, `mochifetch`, dan `mochihttps` (delegasi ke WinHTTP lewat `mochihttp`).
+
 ## Catatan ukuran
 
 Engine inti (build `tier-core`, sudah di-strip) ± **1.21 MB** — masih di atas

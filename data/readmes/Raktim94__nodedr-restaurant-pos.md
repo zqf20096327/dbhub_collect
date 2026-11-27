@@ -169,16 +169,16 @@ by phase.
 
 | | Module | Status |
 |---|---|---|
-| 1 | POS & Billing — dine-in/takeaway, bill merge, multi-region tax (India GST, US Sales Tax, EU VAT, Spain IVA), discounts, gift cards, tips, payments, refunds; equal split is display-only and split tender is pending | ✅ core · 🚧 split billing/payment |
+| 1 | POS & Billing — dine-in/takeaway, bill merge, **split bill by guest (by line or quantity)**, several payment methods on one bill, multi-region tax (India GST, US Sales Tax, EU VAT, Spain IVA), discounts, gift cards, tips, payments, refunds; see [docs/SPLIT-BILLING.md](docs/SPLIT-BILLING.md) | ✅ |
 | 2 | Table & Reservation Management — visual floor plan with saved layouts, bulk table tools, booking, waitlist, **QR / NFC table ordering protected by a live table code staff open (a photo of the QR cannot order)**, table transfer, paging buzzers | ✅ |
 | 3 | Kitchen Management (KDS) — display, KOTs, multi-station routing, prep tracking, performance reporting | ✅ |
 | 4 | Menu Management — categories, modifier groups, combos, seasonal menus, availability scheduling | ✅ |
 | 5 | Inventory & Store Management — stock journal, **daily production and manufacturing costs (actual quantities, extra costs, cost per unit, optional menu-price change with history and reports)**, stock take, shopping list, expiry, stock areas and transfers, POs, suppliers, GRN, food waste, batch/lot | ✅ |
-| 6 | Procurement — vendor quotations, purchase requests/orders, invoices, supplier payments, and supplier performance | ✅ core · 🚧 returns, price variance, reorder suggestions |
+| 6 | Procurement — vendor quotations, purchase requests/orders, invoices, supplier payments, supplier performance, **purchase returns with supplier credit, price-variance check, and a shopping list that counts stock on order**; see [docs/PROCUREMENT.md](docs/PROCUREMENT.md) | ✅ |
 | 7 | CRM — profiles, loyalty points, **referral rewards (share a dish or link, points for both sides, redeem at checkout)**, memberships, gift vouchers, feedback, visit history | ✅ |
 | 8 | Staff Management — accounts & roles, attendance (clock in/out, also offline on the phone), shift scheduling, leave, payroll from clocked hours with breaks, overtime, late/absence rules and a worked-out payslip, tip pool split by hours | ✅ |
 | 9 | Accounting — expenses, nightly cash close with variance, profit & loss, balance sheet, budgets vs actual, bank-statement reconciliation, tax summary by rate | ✅ |
-| 10 | Delivery Management — zones by pincode, fee/minimum/ETA, driver assignment, status flow | ✅ · 🚧 live GPS, 3rd-party platforms |
+| 10 | Delivery Management — zones by pincode, fee/minimum/ETA, driver assignment, status flow, rider position, and a **customer tracking link** (distance and rough arrival while the rider is live); platform orders via a signed webhook; see [docs/DELIVERY-TRACKING.md](docs/DELIVERY-TRACKING.md) | ✅ · 🚧 direct Zomato/Swiggy API clients and a live map (need partner credentials / a map provider) |
 | 11 | Online Ordering — QR table ordering with modifiers, pay at the register or on the phone (held from the kitchen until paid), no duplicate orders, call waiter, request bill, **customer ratings after a paid order**, click & collect, scheduled orders | ✅ |
 | 12 | Branch Management — branch switcher, cross-branch overview, branch-to-branch stock transfers | ✅ |
 | 13 | Analytics — live dashboard plus 18 reports (peak hours, food cost & margins, retention…) with print, CSV, Excel and PDF export, and scheduled report emails | ✅ |
@@ -187,7 +187,7 @@ by phase.
 | 16 | Maintenance — equipment register, service schedules with overdue flags | ✅ |
 | 17 | Documents — SOPs, contracts, recipes, purchase paperwork, with file attachments (PDF, images, Office) | ✅ |
 | 18 | Security — RBAC, audit log, two-factor sign-in with recovery codes, backup/restore, session expiry, PIN login | ✅ |
-| 19 | Integrations — **UPI QR payments with payment-received sound**, customer-facing second screen, direct-USB ESC/POS printing + cash drawer, signed webhooks, SMTP email, REST/Swagger and [API & MCP server](./docs/integrations-api.md) | ✅ · payment-gateway checkout (Razorpay, Stripe, Cashfree — see [docs](./docs/PAYMENT-GATEWAYS.md)) · 🚧 accounting & delivery-platform connectors |
+| 19 | Integrations — **UPI QR payments with payment-received sound**, customer-facing second screen, direct-USB ESC/POS printing + cash drawer, signed webhooks, SMTP email, REST/Swagger and [API & MCP server](./docs/integrations-api.md) | ✅ · payment-gateway checkout (Razorpay, Stripe, Cashfree — see [docs](./docs/PAYMENT-GATEWAYS.md)) · **accounting journal export (CSV/Excel)**, see [docs/ACCOUNTING-EXPORT.md](docs/ACCOUNTING-EXPORT.md) · 🚧 live Tally/Zoho/QuickBooks connectors (need each customer's account) |
 | 20 | Admin Panel — restaurant/branch settings, per-branch tax regime, UPI payee, roles, permissions | ✅ |
 
 Already shipped and running against real Docker/Postgres today: auth +
@@ -209,6 +209,14 @@ pricing) and staff account management (create/deactivate staff, assign
 roles) under **Settings** in the sidebar, photo upload on menu items, and
 a language switcher for English, Spanish, French and Brazilian Portuguese on the guest-facing QR
 ordering page and staff sidebar.
+
+### What's new in 1.46.0
+
+Pause a dish until a return time; safer offline sync (a paging bug that could skip rows is fixed, and edits two devices disagree on are kept for review); backup restores verify checksums. See [CHANGELOG-1.46.0](docs/CHANGELOG-1.46.0.md) and [OFFLINE-ARCHITECTURE](docs/OFFLINE-ARCHITECTURE.md).
+
+### What's new in 1.45.0
+
+Split a bill by guest, purchase returns with supplier credit, a price-variance check, a better shopping list, a customer delivery tracking link, a balanced accounting journal export, expense approvals and a petty cash box, and reports that reach back five years with a read-only bill view. See [CHANGELOG-1.45.0](docs/CHANGELOG-1.45.0.md).
 
 ### What's new in 1.44.0
 
@@ -455,7 +463,7 @@ pnpm install
 docker compose up -d postgres
 cp apps/backend/.env.example apps/backend/.env   # point DATABASE_URL at your Postgres
 pnpm --filter @nodedr-restaurant/types build
-cd apps/backend && npx prisma migrate dev && npx ts-node prisma/seed.ts && cd ../..
+(cd apps/backend && pnpm exec prisma migrate dev && pnpm exec prisma db seed)
 pnpm dev   # runs backend (:4001) and web (:1995) together via Turborepo
 ```
 

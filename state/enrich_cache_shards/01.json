@@ -4,7 +4,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.2",
   "rel_pub": "2025-10-22",
-  "rel_days": 400,
+  "rel_days": 401,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -90,7 +90,7 @@
   "commit_7d": 2,
   "rel_ver": "v1.7.5.3555",
   "rel_pub": "2026-11-06",
-  "rel_days": 20,
+  "rel_days": 21,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -162,10 +162,10 @@
   ]
  },
  "strelov1/freehire": {
-  "commit_90d": 2921,
-  "commit_7d": 299,
-  "rel_ver": "deploy-20261125-0114",
-  "rel_pub": "2026-11-25",
+  "commit_90d": 2996,
+  "commit_7d": 250,
+  "rel_ver": "deploy-20261126-1922",
+  "rel_pub": "2026-11-26",
   "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
@@ -182,13 +182,48 @@
    "HTML": 1,
    "JavaScript": 1
   },
-  "enriched_at": "20261126",
+  "enriched_at": "20261127",
   "dim_ts": {
-   "commit": "20261124",
-   "release": "20261125",
+   "commit": "20261127",
+   "release": "20261127",
    "security": "20261126"
   },
   "rel_notes": [
+   {
+    "t": "deploy-20261126-1922",
+    "d": "2026-11-26",
+    "n": "## Changes\n- #5214 feat(quality-audit): retire boards whose tenant was renamed on its platform\n\n## How it was verified\n- Pre-flight: CI green on the target (24 success, 0 failed). No migrations, no new commands, no search changes, no new routes, no web changes. One new optional setting with a default (retire cap 50).\n- After the flip: the live color and the current tree serve the target, the previous color holds the previous build, the web server reloaded with no errors, background daemons run the new build"
+   },
+   {
+    "t": "deploy-20261126-1901",
+    "d": "2026-11-26",
+    "n": "## Changes\n- #5210 fix(quality-audit): stop reporting Apply buttons and the Recruitee site as board moves\n\n## How it was verified\n- Pre-flight: CI green on the target (23 success, 0 failed). No migrations, no new commands, no new settings, no search changes, no new routes.\n- After the flip: the live color and the current tree serve the target, the previous color holds the previous build, the web server reloaded with no errors, background daemons run the new build.\n- Public pages /jobs and /pricing return 20"
+   },
+   {
+    "t": "deploy-20261126-1743",
+    "d": "2026-11-26",
+    "n": "## Changes\n- #5213 feat(web): review hours and consent before turning on interview scheduling\n- #5212 fix(ci): stop integration packages racing for a shared Ryuk reaper\n\n## How it was verified\n- Pre-flight: CI green on 6ada9e96c (24 success, 0 failed); no migrations, no new cmd, no new env vars, no search settings change, no new routes; no release running, no dump, no pause, load 13.8; no open incident.\n- After the flip: the live color serves 6ada9e96c, previous build kept on the other color, nginx reloaded"
+   },
+   {
+    "t": "deploy-20261126-1402",
+    "d": "2026-11-26",
+    "n": "- Pre-flight: CI green on e4ff6dbcc (8 of 8 workflows); batch is one PR touching only the MCP 401 message text and its test; no migrations, no search settings change, no new cmd, no new env vars, no new routes.\n- After the flip: the live color serves e4ff6dbcc and the previous color the former build, nginx reloaded (new workers, no errors), mail-ingest, enrich and facetd run on the new build."
+   },
+   {
+    "t": "deploy-20261126-1333",
+    "d": "2026-11-26",
+    "n": "## Changes\n- #5207 feat(quality-audit): find chronic boards that moved to another ATS\n\n## How it was verified\n- Pre-flight: CI on the target commit 24 checks success, 6 skipped, 0 failed. No migrations, no search settings change, no new cmd, no new route, no web change. New optional settings for the audit tool are unset, so the new pass stays off until it is scheduled.\n- Release: one attempt, build and health checks passed, exit 0 in 5 min 36 s. After the flip the live color serves the target commit, the ot"
+   },
+   {
+    "t": "deploy-20261126-0451",
+    "d": "2026-11-26",
+    "n": "## Changes\n- #5205 test(api): lift fiber's 1s test timeout off the OG card tests\n\n## How it was verified\n- Pre-flight: CI on the target commit 23 success, 7 skipped, 0 failed. No migrations, no search settings change, no new commands, routes or env vars (test file only, +2/-1 lines). No release, backup or long transaction running; load 6-11.\n- Baseline (30 min before): p95 0.205 s at 149 rps, API 5xx 0, nginx 5xx 0, smoke 15/15.\n- After the flip: the new build is live and the previous build kept as fallback"
+   },
+   {
+    "t": "deploy-20261126-0404",
+    "d": "2026-11-26",
+    "n": "## Changes\n- #5203 fix(ingest): store an iCIMS board under the host its sitemap redirects to\n- #5204 docs(openspec): describe fit analysis as a paid feature on a daily allowance\n\n## How it was verified\n- Pre-flight: CI green on the target (32 checks success, 0 failed, 7 skipped). Flags: no migrations, no search/Meilisearch settings change, no new cmd, no new routes, no new env vars. No release running, no dump, no invalid index, production not paused.\n- Baseline before the release: p95 0.096 s, 5xx 0, publi"
+   },
    {
     "t": "deploy-20261125-0114",
     "d": "2026-11-25",
@@ -203,78 +238,43 @@
     "t": "deploy-20261125-0012",
     "d": "2026-11-25",
     "n": "## Changes\n- #5160 refactor(engage): share the founder-letter envelope in foundermail\n\n## How it was verified\n- Pre-flight: CI green on the target (23 success, 7 skipped, 0 failed); no migrations, no search settings change, no new env vars, routes or cmd binaries; no release, pg_dump or invalid index in flight, load 8.8.\n- After the flip: the live color serves the target commit, nginx reloaded (0 emerg), mail-ingest, search-drain and facetd run on the new build; /jobs, /pricing, /companies, /api/v1/jobs, /h"
-   },
-   {
-    "t": "deploy-20261124-2340",
-    "d": "2026-11-24",
-    "n": "## Changes\n- #5159 refactor(outbox): one StopOnCancel claimer and ClaimFunc adapter\n- #5151 ci(migrations): name the colliding file a merge added and document what closes the race\n\n## How it was verified\n- Pre-flight: CI green on the target (23 success, 7 skipped, 0 failed); no migrations, no search settings change, no new cmd, no new env vars or routes; no release, backup or invalid index in progress, load 10.8.\n- After the flip: the live color serves the target commit, the other color the previous build; "
-   },
-   {
-    "t": "deploy-20261124-2311",
-    "d": "2026-11-24",
-    "n": "- #5155 docs(db): say that account deletion erases usage by cascade, not by these queries"
-   },
-   {
-    "t": "web-v0.1.5",
-    "d": "2026-11-23",
-    "n": "* build: remove withdrawn deepmerge advisory exception (#4714) (#4923) (9107db303)\n* fix(interviews): preserve the transcript when protecting feedback (#5030) (2492b8d2c)\n* fix(interviews): ignore refreshes older than completed feedback (#5029) (1f56ba38f)\n* fix(interviews): refresh feedback across browser tabs (#5028) (ae3126515)\n* feat(interviews): launch Interview Prep with voice and feedback (#5026) (f7dc7b612)\n* build(deps): bump tailwind-variants in /design-system (#4893) (c2db9e048)\n* feat(web): show"
-   },
-   {
-    "t": "extension-v0.1.15",
-    "d": "2026-11-23",
-    "n": "Automated build from commit f7c323b2d937583ae1dc1de39f3e02e007336977."
-   },
-   {
-    "t": "deploy-20261123-1432",
-    "d": "2026-11-23",
-    "n": "## Changes\n- #5048 feat(web): add public job search tools\n\n## How it was verified\n- Pre-flight: CI green on 7bf42d191 (27 success, 0 failed). Flags: no migrations, no search-index settings change, no new cmd, no new env vars; the new web pages are served by the default web location, the two new API routes are under /api/.\n- After the flip: live color serves 7bf42d191, the other holds the previous build; nginx workers restarted after the flip with no emerg; daemons on the new build.\n- New routes: GET /api/v1"
-   },
-   {
-    "t": "deploy-20261123-1223",
-    "d": "2026-11-23",
-    "n": "## Changes\n- #5032 \"Just started hiring\" filter on /jobs/search\n\n## How it was verified\n- Pre-flight: CI green on the target commit (27 success, 3 skipped, 0 failed). One additive migration (0301, a concurrently built partial index on the company growth table; no drop or rename, so rollback stays possible). No search-index settings change, no new binaries, no new routes outside /api/, no new environment variables. No release, backup, long transaction, lock on the migrated table, invalid index or open incide"
-   },
-   {
-    "t": "deploy-20261123-1149",
-    "d": "2026-11-23",
-    "n": "## Changes\n- #5043 feat(ingest): log unresolved LinkedIn ATS discovery\n- #5044 fix(ingest): retry Jobs.ac.uk pagination on listing drift\n\n## How it was verified\n- Pre-flight: CI green on the target commit (23 checks success, 0 failed); no migrations, no search settings change, no new cmd, no new env vars, no new routes; no release/dump/long transaction running, load 8.\n- After the flip: live color serves the target commit, previous color the old build; nginx reloaded (workers newer than the flip, no emerg);"
    }
   ],
   "etag": {
-   "release": "W/\"b07e4b32556e32484f8cf5f145fb2dd26e8eb84258efa45636559de372caff9f\"",
+   "release": "W/\"ff6f6622aab690a549f7fcb801a6df8f9668d7d6eb2ff18d4b6645fe7c9f14d2\"",
    "security": "\"ce67373f957f03a279d5edf7222119911d714536c38d028c60cdb25f0cac3220\""
   },
   "rel_dates": [
+   "2026-11-26",
+   "2026-11-26",
+   "2026-11-26",
+   "2026-11-26",
+   "2026-11-26",
+   "2026-11-26",
+   "2026-11-26",
    "2026-11-25",
    "2026-11-25",
    "2026-11-25",
-   "2026-11-24",
-   "2026-11-24",
-   "2026-11-23",
-   "2026-11-23",
-   "2026-11-23",
-   "2026-11-23",
-   "2026-11-23",
-   "2026-11-23",
-   "2026-11-23",
-   "2026-11-23",
-   "2026-11-23",
-   "2026-11-23",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-22",
-   "2026-11-21",
-   "2026-11-21",
-   "2026-11-21"
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25",
+   "2026-11-25"
   ]
  },
  "proofrock/ws4sqlite": {
@@ -282,7 +282,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.16.6",
   "rel_pub": "2025-10-31",
-  "rel_days": 391,
+  "rel_days": 392,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -315,10 +315,10 @@
  },
  "caiopizzol/cnpj-data-pipeline": {
   "commit_90d": 43,
-  "commit_7d": 3,
+  "commit_7d": 0,
   "rel_ver": "v1.38.10",
   "rel_pub": "2026-10-18",
-  "rel_days": 39,
+  "rel_days": 40,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -392,7 +392,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.4.11",
   "rel_pub": "2026-09-22",
-  "rel_days": 65,
+  "rel_days": 66,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -414,7 +414,7 @@
   "commit_7d": 0,
   "rel_ver": "0.14.0",
   "rel_pub": "2025-05-21",
-  "rel_days": 554,
+  "rel_days": 555,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -454,7 +454,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1.0",
   "rel_pub": "2020-01-10",
-  "rel_days": 2512,
+  "rel_days": 2513,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -473,7 +473,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2021-04-21",
-  "rel_days": 2045,
+  "rel_days": 2046,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -496,7 +496,7 @@
   "commit_7d": 0,
   "rel_ver": "2.3.0",
   "rel_pub": "2018-10-22",
-  "rel_days": 2957,
+  "rel_days": 2958,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -516,7 +516,7 @@
   "commit_7d": 99,
   "rel_ver": "v3.1",
   "rel_pub": "2026-11-09",
-  "rel_days": 17,
+  "rel_days": 18,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -574,7 +574,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.1",
   "rel_pub": "2025-09-05",
-  "rel_days": 447,
+  "rel_days": 448,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -623,7 +623,7 @@
   "commit_7d": 0,
   "rel_ver": "0.40.1",
   "rel_pub": "2026-05-04",
-  "rel_days": 206,
+  "rel_days": 207,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -645,7 +645,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.9.0",
   "rel_pub": "2018-12-15",
-  "rel_days": 2903,
+  "rel_days": 2904,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -703,7 +703,7 @@
  "pomm-project/pomm-bundle": {
   "rel_ver": "3.0.0",
   "rel_pub": "2020-10-18",
-  "rel_days": 2230,
+  "rel_days": 2231,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -722,7 +722,7 @@
  "VMDashboard/vmdashboard": {
   "rel_ver": "v19.01.03",
   "rel_pub": "2020-11-25",
-  "rel_days": 2192,
+  "rel_days": 2193,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -743,7 +743,7 @@
  "andrei-polukhin/pgdbtemplate": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2026-05-07",
-  "rel_days": 203,
+  "rel_days": 204,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -777,7 +777,7 @@
  "simonw/paginate-json": {
   "rel_ver": "1.0",
   "rel_pub": "2023-08-30",
-  "rel_days": 1184,
+  "rel_days": 1185,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -868,7 +868,7 @@
  "jpazvd/wbopendata": {
   "rel_ver": "v18.8.0",
   "rel_pub": "2026-08-08",
-  "rel_days": 110,
+  "rel_days": 111,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -916,7 +916,7 @@
  "TeamDerUntergang/Telegram-UserBot": {
   "rel_ver": "v3.4",
   "rel_pub": "2020-06-18",
-  "rel_days": 2352,
+  "rel_days": 2353,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1001,7 +1001,7 @@
  "ansible-collections/community.elastic": {
   "rel_ver": "latest",
   "rel_pub": "2024-04-18",
-  "rel_days": 952,
+  "rel_days": 953,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1183,7 +1183,7 @@
  "oceanbase/dify-on-mysql": {
   "rel_ver": "1.8.0",
   "rel_pub": "2025-09-16",
-  "rel_days": 436,
+  "rel_days": 437,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1239,7 +1239,7 @@
  "Lombiq/UI-Testing-Toolbox": {
   "rel_ver": "v15.0.0",
   "rel_pub": "2026-07-18",
-  "rel_days": 131,
+  "rel_days": 132,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1275,7 +1275,7 @@
  "LuckyIndraEfendi/Mangazuna": {
   "rel_ver": "3.1",
   "rel_pub": "2024-02-09",
-  "rel_days": 1021,
+  "rel_days": 1022,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1323,7 +1323,7 @@
  "pierreforstmann/pg_readonly": {
   "rel_ver": "1.0.6",
   "rel_pub": "2026-07-15",
-  "rel_days": 134,
+  "rel_days": 135,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1355,7 +1355,7 @@
  "circuitsacul/apgorm": {
   "rel_ver": "v1.0.0-b.14",
   "rel_pub": "2022-11-22",
-  "rel_days": 1465,
+  "rel_days": 1466,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1398,7 +1398,7 @@
  "JumpCodeFrog/telegram-shop-bot": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-09-25",
-  "rel_days": 62,
+  "rel_days": 63,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1446,7 +1446,7 @@
  "kbennett2000/lan-games": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-05-28",
-  "rel_days": 182,
+  "rel_days": 183,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1483,7 +1483,7 @@
  "raw-lab/NFixDB": {
   "rel_ver": "v2.1",
   "rel_pub": "2024-04-23",
-  "rel_days": 947,
+  "rel_days": 948,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1543,7 +1543,7 @@
  "SiavashGolchoobian/SqlDeep": {
   "rel_ver": "v3.0.0.7",
   "rel_pub": "2025-01-03",
-  "rel_days": 692,
+  "rel_days": 693,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1665,7 +1665,7 @@
  "Marco-Sulla/ewa": {
   "rel_ver": "v1.5.7",
   "rel_pub": "2019-05-29",
-  "rel_days": 2738,
+  "rel_days": 2739,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1726,7 +1726,7 @@
   "commit_7d": 7,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-06-12",
-  "rel_days": 167,
+  "rel_days": 168,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2418,7 +2418,7 @@
  "DerKezorm/nexlore": {
   "rel_ver": "v1.5.1",
   "rel_pub": "2026-10-06",
-  "rel_days": 51,
+  "rel_days": 52,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -2468,7 +2468,7 @@
  "Vincentkeio/clover-mail": {
   "rel_ver": "v2.0.2",
   "rel_pub": "2026-10-15",
-  "rel_days": 42,
+  "rel_days": 43,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2547,7 +2547,7 @@
  "directus/monospace-starter": {
   "rel_ver": "monoerp@0.1.1",
   "rel_pub": "2026-11-03",
-  "rel_days": 23,
+  "rel_days": 24,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2586,7 +2586,7 @@
  "XWJ-z/ZXDesk": {
   "rel_ver": "v0.9.7",
   "rel_pub": "2026-11-05",
-  "rel_days": 21,
+  "rel_days": 22,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2630,7 +2630,7 @@
  "catzoidhub/DevCatz": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-11-04",
-  "rel_days": 22,
+  "rel_days": 23,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2727,7 +2727,7 @@
   },
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-11-06",
-  "rel_days": 20,
+  "rel_days": 21,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

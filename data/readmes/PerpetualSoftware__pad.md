@@ -57,6 +57,16 @@ Then, in a fresh agent session in your project, say:
 
 Your new workspace ships with the canonical `onboard` playbook auto-activated. The agent walks an interview, inspects your codebase if it has shell access, and adapts your workspace's collections, conventions, roles, and playbooks to match the project. It's the fastest way to go from empty workspace to "okay, this is mine."
 
+## Mobile apps
+
+Pad on your phone, for iOS and Android. Sign in to Pad Cloud or connect your own self-hosted server. More in the [mobile docs](https://getpad.dev/docs/mobile).
+
+<p>
+  <a href="https://apps.apple.com/app/id6785342186"><img src="docs/brand/stores/app-store-badge.svg" height="40" align="middle" alt="Download on the App Store"></a>
+  &nbsp;
+  <a href="https://play.google.com/store/apps/details?id=com.perpetualsoftware.pad"><img src="docs/brand/stores/google-play-badge.png" height="60" align="middle" alt="Get it on Google Play"></a>
+</p>
+
 ## Why Pad?
 
 Tools like Linear, Jira, and Notion are built for teams on the cloud. Pad is built for **developers on their machine** — and for the AI agents working alongside them. When you do want your projects on every device or a teammate on the board, [Pad Cloud](https://app.getpad.dev) hosts the same product with sync, workspace invites, and role-based access. A self-hosted workspace moves there by export and import; see the [move-to-Cloud guide](https://app.getpad.dev/console/move-to-cloud).
@@ -192,6 +202,8 @@ pad collection create "Bug Reports" \
 Items get reference numbers automatically (`TASK-5`, `BUG-12`) and can be moved between collections with field migration.
 
 ## Installation
+
+On your phone? See [Mobile apps](#mobile-apps) for the iOS and Android apps.
 
 ### Homebrew (macOS and Linux)
 
@@ -402,7 +414,7 @@ directory for `claude-code`, and an `[mcp_servers.pad]` table in
 project-scoped, it's install-on-request only — `--all` and `pad mcp status` cover
 the per-user clients (including Codex) and skip it.
 
-**Tool catalog (v0.130)** — twelve resource × action tools plus `pad_set_workspace`, and `pad_board` on remote HTTP with Apps enabled. Undeclared input keys are rejected with a structured error rather than silently dropped, and field values are typed against the collection schema on the server:
+**Tool catalog (v0.131)** — twelve resource × action tools plus `pad_set_workspace`, and `pad_board` on remote HTTP with Apps enabled. Undeclared input keys are rejected with a structured error rather than silently dropped, and field values are typed against the collection schema on the server:
 
 | Tool | Actions |
 |---|---|
@@ -410,7 +422,7 @@ the per-user clients (including Codex) and skip it.
 | `pad_workspace` | `list`, `members`, `invite`, `storage`, `audit-log`, `create`, `claim`, `deleted`, `restore`, `rename` |
 | `pad_collection` | `list`, `create`, `update`, `delete`, `list-archived`, `restore` |
 | `pad_project` | `dashboard`, `next`, `ready`, `stale`, `standup`, `changelog`, `report`, `activity`, `catch-up` |
-| `pad_role` | `list`, `create`, `update`, `delete` |
+| `pad_role` | `list`, `create`, `update`, `delete`, `park`, `unpark` |
 | `pad_search` | `query` |
 | `pad_playbook` | `list`, `get`, `run`, `match` |
 | `pad_library` | `list`, `get`, `activate` |
@@ -429,7 +441,7 @@ Plus resources at `pad://workspaces`, `pad://workspace/{ws}/dashboard`,
 and `pad://_meta/version`.
 
 **Stability contract.** The catalog is versioned
-(`tool_surface_version: "0.130"`) and advertised in the initialize handshake and at
+(`tool_surface_version: "0.131"`) and advertised in the initialize handshake and at
 `pad://_meta/version`, so external agents can pin against it; the per-version
 changelog lives in [`internal/mcp/version.go`](internal/mcp/version.go). Errors
 come back as structured envelopes (`{error: {code, message, hint, ...}}`) from a

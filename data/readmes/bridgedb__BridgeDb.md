@@ -15,7 +15,7 @@ Using BridgeDb dependencies
 The [BridgeDb releases](https://github.com/bridgedb/BridgeDb/releases) are published to 
 [Maven Central](https://search.maven.org/artifact/org.bridgedb/bridgedb-bundle), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
 
-Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `4.0.0`:
+Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `4.0.1`:
 
 For [Maven](https://maven.apache.org/):
 
@@ -24,7 +24,7 @@ For [Maven](https://maven.apache.org/):
     <dependency>
         <groupId>org.bridgedb</groupId>
         <artifactId>org.bridgedb.bio</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.1</version>
     </dependency>
 </dependencies>
 ```
@@ -32,19 +32,19 @@ For [Maven](https://maven.apache.org/):
 For [Gradle](https://gradle.org/):
 
 ```gradle
-compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '4.0.0'
+compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '4.0.1'
 ```
 
 For [Ivy](http://ant.apache.org/ivy/):
 
 ```xml
-<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="4.0.0"/>
+<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="4.0.1"/>
 ```
 
 For [Buildr](https://buildr.apache.org/):
 
 ```buildr
-'org.bridgedb:org.bridgedb.bio:jar:4.0.0'
+'org.bridgedb:org.bridgedb.bio:jar:4.0.1'
 ```
 
 
@@ -133,7 +133,7 @@ To make the release, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
 
 ```shell
-mvn versions:set -DnewVersion=4.0.0
+mvn versions:set -DnewVersion=4.0.1
 mvn clean deploy
 ```
 
@@ -143,7 +143,7 @@ and everything.
 To make a development (SNAPSHOT) release, use:
 
 ```shell
-mvn versions:set -DnewVersion=4.0.1-SNAPSHOT
+mvn versions:set -DnewVersion=4.0.2-SNAPSHOT
 mvn clean deploy
 ```
 
@@ -267,7 +267,7 @@ To install local properties you need to.
 3. Copy the keys from the original file  
 
 ### BridgeDB.properties
-(Default file is included in build and can be found in org.bridgedb.utils/resources)
+(Default file is included in build and can be found in org.bridgedb.utils/src/main/resources)
 
 This file contains the local setup information which **MUST** be configured correctly for the service to run. It is essential that the
 database user, password and database name are correct.
@@ -317,17 +317,17 @@ The BaseURI variable is no longer used but may be in the future so is worth sett
 Other Configuration files
 -------------------------
 ### log4j.properties
-(Default file is included in build and can be found in org.bridgedb.utils/resources)
+(Default file is included in build and can be found in org.bridgedb.utils/src/main/resources)
 
 Edit this to change the logger setup.
 The default can be found in the Utils Resource directory
 Please refer to the log4j documentation for more information.
 
 ### DataSource.ttl 
-(Included in the build and found at org.bridgedb.rdf/resources)
+(Included in the build and found at org.bridgedb.rdf/src/main/resources)
 
 RDF format of all the BridgeDb DataSource(s) and Registered UriPatterns,
-Found in $BRIDGEDB_HOME/org.bridgedb.rdf/resources
+Found in $BRIDGEDB_HOME/org.bridgedb.rdf/src/main/resources
 
 This file defines all the URI patterns that will match every BridgeDb DataSource.
 Warning: As additional UriPatterns are constantly being found and created this file is subject to continuous updates. 

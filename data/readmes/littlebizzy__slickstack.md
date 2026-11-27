@@ -12,10 +12,6 @@ SlickStack is a free LEMP stack automation script written in Bash designed to en
 
 &nbsp;
 
-<a href="https://emplibot.com"><img width="150" style="padding: 20px" src="https://slickstack.io/wp-content/uploads/2024/09/emplibot-square.png" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.osoelectric.com"><img width="150" src="https://slickstack.io/wp-content/uploads/2023/04/oso-logo-color-480x467.webp" /></a>
-
-&nbsp;
-
 Our sponsors: [alexbohariuc](https://github.com/alexbohariuc), [backamblock](https://github.com/backamblock), [gingibash](https://github.com/gingibash), [hamzah](https://github.com/hamzah), [liwernyap](https://github.com/liwernyap), [OSO Electric Equipment](https://github.com/Oso-Electric-Equipment), [romfeo](https://github.com/romfeo), [strxno](https://github.com/strxno), [trevplaig](https://github.com/trevplaig), [vivdev](https://github.com/vivdev), [vladbejenaru](https://github.com/vladbejenaru), [volneanschi](https://github.com/volneanschi)
 
 ## Installation
@@ -90,11 +86,11 @@ Use these guides for detailed setup, configuration, maintenance, troubleshooting
 
 The table below shows the main software used by SlickStack, which versions it currently supports, and what SlickStack configures or maintains for each component.
 
-*Last updated: Jul 20, 2026*
+*Last updated: Nov 26, 2026*
 
 | Module | Version | What SlickStack manages |
 | :------------- | :----------: | :---------- |
-| **[SlickStack](docs/architecture.md)** | `JUL2026D` | Bash control plane under `/var/www`, `ss-config`, installers, aliases, 14 fixed cron wrappers, timestamps, backups, synchronization, permissions, cache purges, service recovery, and full-stack reconciliation. |
+| **[SlickStack](docs/architecture.md)** | `NOV2026A` | Bash control plane under `/var/www`, `ss-config`, installers, aliases, 14 fixed cron wrappers, timestamps, backups, synchronization, permissions, cache purges, service recovery, and full-stack reconciliation. |
 | **[Ubuntu](docs/ubuntu.md)** | 24.04 | Ubuntu 24.04 is recommended for new servers; Ubuntu 22.04 remains supported, while 20.04 and 18.04 are legacy releases that require Ubuntu Pro or ESM for continued package maintenance. SlickStack manages package and kernel upgrades, required utilities, users, SSH, SFTP, sudoers, sysctl, swap, shell configuration, cron, and permissions. |
 | **[Nginx](docs/nginx.md)** | 1.24.x | `nginx.conf`, HTTPS redirects, production, staging, and development server blocks, WordPress routing, static-file handling, FastCGI cache, security headers, rate and connection limits, Cloudflare includes, and maintenance or error responses. |
 | **[OpenSSL](docs/ssl.md)** | 3.0.x | Default self-signed origin certificate, private key, Diffie-Hellman parameters, stable certificate paths, permissions, and Nginx activation. |

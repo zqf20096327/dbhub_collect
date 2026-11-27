@@ -111,15 +111,26 @@ command bus.
 - **Workbench:** datasheet with in-cell editing (edits stage into a
   pending batch and apply as one atomic write on Ctrl+S on Jet4 and
   SQLite; read-only sources and drivers without atomic batches keep the
-  immediate per-cell writes), sort/filter/freeze and undo/redo; table
-  design with the property sheet; QBE builder; form and report
-  designers with a runtime; relationship mapper; SQL window (names its
-  dialect, query-plan view on SQLite).
+  immediate per-cell writes), sort/filter/freeze and undo/redo; filter by
+  value from the column's own list (bounded, ordered, with the blank
+  entry), find and replace over the visible rows, movable columns and a
+  visible `(NULL)` marker, and large tables open from a bounded window
+  cache (scrolling loads windows, "Load all rows" upgrades); table design
+  with the property sheet; QBE
+  builder; form and report designers with a runtime; relationship mapper;
+  SQL window (names its dialect, query-plan view on SQLite).
 - **Programmability:** native saved queries (qualified dialect), macro
   inventory, VBA extraction, viewer and static analysis — no execution.
+- **Linked tables:** a Jet/ACE file's link records are listed read-only —
+  ODBC and Access-file links with their target, foreign name and flags,
+  connect strings with credentials redacted; nothing is resolved, dialled
+  or written.
 - **Export:** a report's print preview exports to a new PDF file — the
   preview's page sequence, selectable text in the shipped Inter face,
-  byte-identical re-export, an existing target refused.
+  byte-identical re-export, an existing target refused. A table exports
+  to CSV (the datasheet text behind a header row) or to a JSON document
+  carrying the field-kind schema and typed rows, deterministic and
+  without touching the source.
 - **Automation:** the same commands through the GUI, `datacraft-cli` and
   the `datacraft-mcp` stdio endpoint; journaled writes and inspectable
   snapshots.
@@ -154,11 +165,13 @@ lanes and CI runs — is in
 | **Jet4 `.mdb`** | ✅ tables, catalog, rows, OLE/memo, relationships, native queries, index metadata, RC4 passwords | ✅ create/alter/drop table, insert/update/delete, indexes, relationships, journaled batches, AutoNumber; engine-accepted and user-verified in real Access (2026-11-07) | writer verified on Jet4 only; index leaves are maintained but never split (M15); engine-refused files recover through the create-path re-encode (49.4, M67); unsupported `MSysQueries` constructs surface as `native_queries_error` |
 | **ACE `.accdb`** | ✅ 2007/2010/2016 tables, complex values, named macros, VBA project | ✅ create/alter/drop table, insert/update/delete, indexes, relationships on 2007/2010 | no external ACE oracle; the write reference is decode∘op∘decode against the pinned bytes; Office-encrypted files answer `Unsupported` |
 | **Access co-existence** | ✅ a sibling lock file (`.ldb`/`.laccdb`) opens the session read-only and is named in the snapshot, the status bar and the Info page | ⬜ read-only while the lock file exists | DataCraft never creates or deletes lock files; detection is existence-only (M59) |
+| **Linked-table inventory** | ✅ a Jet/ACE file's `MSysObjects` link records are listed read-only: ODBC (`Type` 4) and Access-file (`Type` 6) links with local name, external database or connect string, foreign name and flags; connect strings arrive with `PWD`/`PASSWORD` redacted, in the nav pane, the CLI and the MCP snapshot | ⬜ no resolution, no connection, nothing written — opening a link answers a precise refusal | the target is never dialled or checked, so a link whose target is gone still reports its record; the inventory is the whole of roadmap §9 stage 0 (server drivers are later stages) |
 | **SQLite** | ✅ catalog, rows, foreign keys; native views read-only; index/trigger inventory; file facts and bounded `quick_check` | ✅ create/drop table, insert/update/delete, `CREATE [UNIQUE] INDEX`, foreign-key create/delete | schema alteration after create remains unsupported; `WITHOUT ROWID` rowid writes answer `Unsupported`; native view/trigger definitions are never created or executed |
 | **CSV directories** | ✅ catalog, rows | ✅ create/drop table, insert/update/delete (one atomic rewrite per call) | column kinds inferred at open; values read as text; no schema alteration, relationships, native queries, macros or VBA; no engine-assigned AutoNumbers |
 | **SQL window** | ✅ read-only SQL over every source: on SQLite the statement runs natively (full dialect including window functions, real indexes, native views, `EXPLAIN QUERY PLAN`); Jet/ACE/CSV materialize into the shadow engine | ⬜ writes stay on the command bus — a write statement answers a precise capability refusal on every source | the dialect is named in the snapshot and the window; the shadow engine has no plan surface |
 | **Excel workbooks** | ✅ `.xlsx`/`.xlsm`/`.xls`/`.xlsb` — sheets as tables, typed cells, formula cells as their saved cached value | ⬜ read-only | macros are never read, executed or modified; ODF and password-protected workbooks answer a precise refusal; multi-sheet import uses the first data sheet |
 | **Report export (PDF)** | ✅ one command renders a report's print preview (page sequence, group bands and aggregates) to a new PDF; fixed metadata and stable order make re-export byte-identical; text stays selectable through an embedded Type0 font | ⬜ `pdf-export` core feature (enabled by the shipped clients); no interactive/scripted PDFs, PDF/A or PDF/UA claims, image embedding or printing | an existing target is refused; a build without the feature answers precisely; the source database and sidecar stay untouched |
+| **Table export (CSV / JSON)** | ✅ one command writes a whole table to a new file: CSV with a header row and the datasheet text (RFC 4180 quoting, declared decimal scale), or a JSON document carrying the field-kind schema and typed rows (numbers, booleans, `null`, dates as text, binary as hex, multi-value as an array); deterministic bytes | ⬜ no styling, formatting or filtered views — the export always carries the whole table in storage order | an existing target is refused; a value JSON cannot carry (a non-finite float) answers precisely with the row and field; the source database stays byte-identical |
 | **Maintenance** | ✅ Jet/ACE health facts and a bounded page sanity scan at open; SQLite facts + `quick_check` | ✅ Compact rewrites the open Jet4/ACE database into a fresh verified file and swaps it atomically at the same path | SQLite/CSV stay as-is (precise refusal); Jet3 is read-only; password-protected and Access-locked sessions refuse without touching the file |
 | **Form runtime (ADR-8)** | ✅ bound text/checkbox/combo editing with per-record commit, button actions, form-scoped filters | ✅ row writes through the driver (capability-gated) | no macro/VBA actions (ADR-2); design data lives in the sidecar; filters are session state, never written into Jet/ACE |
 | **Design layer (ADR-1)** | sidecar forms, queries, reports and views; native saved queries read-only; native Access forms/reports listed read-only | ✅ sidecar save/load; sibling auto-load; ⬜ native form/report writes | native form/report definitions are neither decoded nor written; the sidecar is versioned and database-name checked |

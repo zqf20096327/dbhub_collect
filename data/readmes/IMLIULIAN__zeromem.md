@@ -156,8 +156,16 @@ zmem disconnect --all           # 安全移除 ZeroMem 配置（不影响其他 
 zmem add "2026-03-01 记录：API 网关限流将在 2026-03-15 提升至每分钟 120 次。" --ns demo
 zmem add -f ./notes.md --ns my-project
 
-# 本地检索并回溯绑定原文证据
+# 本地检索并回溯绑定原文证据（支持事件时间区间过滤与替代链演化）
 zmem search "网关限流" --ns demo
+zmem search "项目 A" --ns demo --occurred-from 2025-01-01 --occurred-to 2025-12-31
+
+# 只读导出带原文引用的 Markdown（适配 Obsidian / Git 检视）
+zmem export --md -o ./zeromem-export.md
+zmem export --md --dir ./obsidian-zeromem
+
+# 走 SQLite Online Backup API 导出无 WAL 干净快照（安全放网盘同步）
+zmem backup -o ./zeromem-snapshot.db --sha256
 
 # 启动桌面悬浮状态条与工作台
 zmem-hud
@@ -171,8 +179,11 @@ from zeromem import Memory  # 同时兼容 from v2mem import Memory
 
 mem = Memory()  # 自动探测本机 V2 模型，默认使用 ~/.zeromem/memory.db（兼容已有 ~/.v2-memory/memory.db）
 mem.remember("2026-11-20 团队决定先用单文件 SQLite WAL，暂不引入 Redis。", ns="arch")
-for hit in mem.recall("为什么不用 Redis", ns="arch"):
+for hit in mem.recall("为什么不用 Redis", ns="arch", occurred_from="2026-01-01"):
     print(hit.text, "<- 原文:", hit.evidence)
+
+mem.export_markdown(output_dir="./obsidian-zeromem")
+mem.backup("./zeromem-snapshot.db", write_sha256=True)
 ```
 
 ### 2. 方案二：MCP 配置模板导出
@@ -224,11 +235,12 @@ zeromem/
 │   ├── hardware.py         # 纯标准库 OS / 显卡显存 / 统一内存自动探测与量化选档
 │   ├── connectors.py       # 7 款主流 AI Agent 自动探测、备份与安全接入/断开
 │   ├── ollama.py           # 纯标准库 Ollama 客户端、推理参数配置与权重拉取校验
-│   ├── store.py            # 单文件 SQLite（segments + facts + 双轨 FTS5）
-│   ├── memory.py           # remember() / recall() 核心闭环
+│   ├── store.py            # 单文件 SQLite（segments + facts + 双轨 FTS5 + fact_supersessions 演化边表）
+│   ├── memory.py           # remember()（含写前旧事实召回与替代标注） / recall()（含时间区间过滤）
+│   ├── portability.py      # 100% 只读 Markdown 导出（Obsidian/Git）与 SQLite Online Backup 安全快照
 │   ├── mcp_server.py       # 零依赖 MCP stdio 服务端（4 工具 + 检索引导 + 双帧兼容）
 │   ├── hud.py              # 零依赖原生桌面悬浮条与暗色记忆工作台
-│   └── cli.py              # setup / connect / disconnect / doctor / config / add / search / stats / mcp / ui
+│   └── cli.py              # setup / connect / disconnect / doctor / config / add / search / export / backup / stats / mcp / ui
 ├── docs/images/            # 5.2 万字对照实测图（中/英）与桌面工作台实拍图
 ├── modelfiles/             # 官方参数对齐的 Q8_0 / Q4_K_M Modelfile
 ├── demo.py                 # 纯合成端到端演示脚本
@@ -242,6 +254,8 @@ zeromem/
 ```bash
 # 离线单元测试（无需网络与 Ollama）
 python -m unittest discover -s tests -p "test_core.py" -v
+python -m unittest discover -s tests -p "test_governance.py" -v
+python -m unittest discover -s tests -p "test_timeline_and_portability.py" -v
 
 # 连接本机 V2 模型运行端到端冒烟测试
 python -m unittest discover -s tests -p "test_live_v2.py" -v
@@ -249,8 +263,10 @@ python -m unittest discover -s tests -p "test_live_v2.py" -v
 
 ---
 
-## 许可与署名
+## 许可、血缘归属与同名消歧
 
-- 协议：**Apache License 2.0**（详见 [LICENSE](LICENSE) 与 [NOTICE](NOTICE)）
-- 作者：**B站IM榴莲 (IMLIULIAN)** · **ZeroZoneX**
-- 配套模型：[`Qwen3.5-4B-Memory-V2`](https://huggingface.co/IMLIULIAN/qwen3.5-4b-memory-v2)（衍生自 `Qwen/Qwen3.5-4B`）
+- **开源协议**：**Apache License 2.0**（详见 [LICENSE](LICENSE) 与 [NOTICE](NOTICE)）
+- **作者**：**B站IM榴莲 (IMLIULIAN)** · **ZeroZoneX**
+- **配套模型**：[`Qwen3.5-4B-Memory-V2`](https://huggingface.co/IMLIULIAN/qwen3.5-4b-memory-v2)（衍生自 `Qwen/Qwen3.5-4B`，Apache-2.0）
+- **Schema 血缘与兼容致谢**：本引擎事实抽取/审校协议中的核心语义字段（`bank`、`type: world | experience | observation`、`occurred_start` / `occurred_end` / `mentioned_at`、`where`、`entities`）受开源项目 [**Vectorize Hindsight**](https://github.com/vectorize-io/hindsight)（MIT License）启发并保持概念/Schema 兼容；ZeroMem 的零依赖单文件 SQLite + 双轨 FTS5 存储层、写前原文对照审校、确定性规则守卫、时间线替代链、凭据脱敏、只读导出/在线备份、MCP 服务与桌面工作台均为独立从零实现，不含 Hindsight 源码。
+- **同名论文消歧**：本项目 **ZeroMem（零忆）** 是面向本地 4B 专模的零依赖 SQLite/FTS5 记忆引擎，与学术论文 *Zero-Mem: Zero-Token Memory Operations for LLM Agents*（Yilin Xiao et al., [arXiv:2607.29377](https://arxiv.org/abs/2607.29377), 2026 年 7 月，主张全流程不调用 LLM 的非生成式图谱/时间层次记忆）名称相近，但两者完全独立，无作者、代码、模型或隶属关系。

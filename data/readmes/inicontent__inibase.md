@@ -235,6 +235,22 @@ npx inibase -p <databaseFolderPath>
 # by default it will diplay a list of available commands (or type 'help')
 ```
 
+### Repairing column alignment
+
+Every column file (including dotted nested paths such as
+`options.values.image.txt`) must contain exactly one line per table row. Check
+a table without changing it, then repair missing/short files:
+
+```shell
+npx tsx scripts/repair-columns.ts <databaseFolderPath> <table> --check
+npx tsx scripts/repair-columns.ts <databaseFolderPath> <table> --fix
+```
+
+If a file is longer than the row count its values are no longer trustworthy.
+Use `--truncate` to keep the first lines, or `--quarantine` to move the original
+into `<table>/.repair-<timestamp>/` and replace it with a blank, line-aligned
+file (the safe choice for a newly added nested field).
+
 ## Examples
 
 <details>

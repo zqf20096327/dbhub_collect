@@ -42,7 +42,7 @@
 | **用户管理：三角色与一次性激活** | **审计日志：登录成败都留痕** |
 | ![用户管理](assets/screenshots/users.webp) | ![审计日志](assets/screenshots/audit.webp) |
 
-任务与配置（89 项可热更，DB 覆盖值优先于 `.env`）、服务端日志、运维告警见 `assets/screenshots/{settings,logs,alerts}.webp`。
+任务与配置（94 项可热更，DB 覆盖值优先于 `.env`）、服务端日志、运维告警见 `assets/screenshots/{settings,logs,alerts}.webp`。
 
 ## 快速开始
 
@@ -72,7 +72,7 @@ docker compose up -d --build
 docker compose exec coding2api python scripts/create_user.py admin --role admin
 ```
 
-拉镜像：`docker compose pull`（或 `docker pull ghcr.io/robbsluo/coding2api:v0.14.3`）。tag `v*` 推 main → `.github/workflows/publish.yml` → 发 `<tag>` + `:latest`。有公网 IP 的 VPS 要 https → 见「[公网部署](#公网部署docker--caddy-自动-https)」。
+拉镜像：`docker compose pull`（或 `docker pull ghcr.io/robbsluo/coding2api:v0.15.1`）。tag `v*` 推 main → `.github/workflows/publish.yml` → 发 `<tag>` + `:latest`。有公网 IP 的 VPS 要 https → 见「[公网部署](#公网部署docker--caddy-自动-https)」。
 
 ## 用户与角色
 
@@ -216,7 +216,7 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 - **额度＝积分**：每笔请求扣 1 分（与 token 无关），每日 00:00 发 300 分（7 天有效）。`billing_effective_multiplier` 当倍率，**0 = 限免**（如 `sn-sensenova-6-8-flash`），调度优先选。
 - **额度明细**：上游分四个池（每日 / 奖励 / 月度 / 充值），套餐明细按发放流水逐笔展开（`type=income` 的 `daily_grant` / `reward_grant`）。上游不给逐笔剩余 → 每日积分按「到期早的先消耗」分摊（推断）；奖励积分实测「每日额度用光后才扣」，按发放额列。流水拿不到才退回四池。到期阶梯与明细同源，参与「快过期先用」排序。
 - **每日签到**：上游没有领取接口——300 积分在**当天第一次网页登录**时补发一笔 `daily_grant`（旧结论「00:00 自动发放、登录只是延期」已于 2026-11-18 真号复测推翻）。故「签到」= 页面访问 → 摸余额 → 读流水核对，**只认流水不看 HTTP 200**；**今天没有 `daily_grant` 就是失败**；凌晨 00:00~01:30 之间把重试推到 01:30 等账单同步。流水用 `type=income` 过滤（`type=all` 里消费流水会把每日发放挤出窗口）。
-- **会话需重登**：`GET /api/web/auth/v1/user_info` 的 `trusted_device` 直说状态（`trusted=false` / `device_bind_state=suspicious` / `needs_relogin=true` / `reason=device_session_mismatch`）。进入后心跳恒回 `400 200811 device_bind_required`，当天也无 `daily_grant`，且**无自愈通道**（`devices_current_bind` 同样 400；`refresh` 只换回同一张 token）。签到与活跃上报读该信号，直接写「需在网页端重新登录后重新导入凭据」。**重新登录会立刻补发当天这笔**。
+- **会话需重登 vs 只差绑定**（`GET /api/web/auth/v1/user_info` 的 `trusted_device`）：`device_bind_state=suspicious`（`reason=device_session_mismatch`）/ `needs_relogin=true` → 会话已绑在别的设备，心跳恒回 `400 200811 device_bind_required`、当天无 `daily_grant`，且**无自愈通道**（`devices_current_bind` 同样 400；`refresh` 只换回同一张 token），签到与活跃上报直接写「需在网页端重新登录后重新导入凭据」。而 `device_bind_state=unbound`（`session_without_bound_device`，此时 `trusted` 必为 `false`）**只差一次绑定**：签到会调 `devices_current_bind` 绑一次，绑完即 `trusted=true`、当天积分随之到账——**这两种状态不能合并判定**，否则新导入账号的 bind 入口被挡死，永远报「需重登」。**重复 bind 会永久锁死账号**：上游首次绑定自行分配 device_id，之后若再拿派生值去 bind 会被判 `device_session_mismatch`（此后 bind/心跳恒 400），故已绑会话一律沿用 `user_info` 里那台设备、不再 bind。
 - **按需登录（可选，默认关）**：凭证行「更多操作 → 账号密码」填手机号与密码（也可在导入 JSON 带 `phone`/`password` / `phone_number`），打开 `RACCOON_AUTO_LOGIN` 后，签到发现「今天没发」就调 `POST /api/web/auth/v1/login_with_password` 换新会话并重核。实测口径：`phone`/`password` 走 **AES-CFB（key `senseraccoon2023`、16 字节随机 IV 前置、Base64）**，密码 ≥8 位，**不需要验证码**。限制：每天每凭证最多一次；上游拒绝（`200004 phone_or_password_verify_error`）→ 标「需重新登录」并停手；`password_status=unset` 的账号填了也登不进。接口 `PUT /api/credentials/{id}/login-secret`（都留空 = 清除），密码加密落库、**不回显**、导出不含。登录成功后调 `devices_current_bind` 绑新会话（不绑则 `trusted=false`、心跳恒 400）；绑定失败不判登录失败。`derive_device_id` ≤64 字符（上游对超长回 `500 value too long for character varying(64)`）。
 - **活跃上报**：`POST /api/web/auth/v1/devices_current_heartbeat`，补 `x-client-*` 头族即 200、幂等。默认关，与 CodeBuddy 共用 `ACTIVITY_REPORT_ENABLED` / `ACTIVITY_REPORT_HOUR`。
 - **并发上限约 5**（第 6 个回 `429 user_model_rate_limited`）→ `RACCOON_MAX_CONCURRENCY` 默认 2，独立节流器。该 429 实为账号×模型频率窗口（恢复中位数 25min），冷却首枪 60s、同链翻倍、封顶 30min。
@@ -451,8 +451,9 @@ curl -X POST http://127.0.0.1:8000/v1/fetch \
 - **尝试链响应头**（`EXPOSE_UPSTREAM_HEADERS=true` 才开，默认关）：`X-Upstream-Attempts` = 本次请求实际用过的凭证数，`X-Upstream-Degraded` = 是否走了 `MODEL_FALLBACK_GROUPS` 回退。关闭时中间件主动剥离同名头（含上游或中间盒回传的伪造值）。默认关的原因：这两个头等于把账号池规模、成本与路由指纹递给调用方。流式场景只反映**发响应头之前**的尝试，首帧之后的轮换无法回改已发出的头。
 - **内容拒绝冻结**：上游内容安全拒绝（当前只识别 CodeBuddy `11128`）不换号、不冷却，按发起者（用户名优先，无用户名用 API Key id）记一次。`ACCESS_FREEZE_THRESHOLD=N`（默认 `0` = 只记录）达到后对该「发起者 × 渠道」在发往上游前回 `403 provider_access_frozen`；`GET /api/access-freezes` 看命中与冻结状态，`POST /api/access-freezes/unfreeze` 解冻（operator+，写审计）。
 - **Credit**：CodeBuddy = 上游真值；TRAE 按官方单价推算并标 `≈`（`src/provider/trae/pricing.py`，未收录不推算）。历史用 `scripts/backfill_trae_credit.py` 补。
+- **TRAE 缓存不再上报**：TRAE 自 2026-10 起 `cache_read_input_tokens` 恒 0 / `prompt_cache_pool_record` 恒 null，但**缓存折扣仍生效**。本服务把这类「未上报」记为 NULL（不撒谎），报表缓存率显示 **`≈` 推算值**（数据仍是 NULL，不算作已上报），积分 / 成本按**可校准的假定命中率**估算（`TRAE_ASSUMED_CACHE_RATIO`，默认 `0.95`，来自生产 `credit_events` 余额差实测）。后台「缓存命中率校准」任务每 `CACHE_RATIO_INTERVAL_MINUTES`（默认 6h）用近 7 天余额差对 token **整窗合并**反推实际命中率（按 UTC 天切会让余额差与 token 错位），漂移 ≥0.01 才回写配置。**历史明细**用 `scripts/normalize_trae_cache.py` 一次性把分界之后的 0 置 NULL（预览默认，`--apply` 写库），再跑 `backfill_trae_credit.py --apply` / `backfill_cost.py --provider trae --apply` 按假定比例重算过去高估的积分与成本（限定渠道，避免顺带按今天口径改写其他渠道历史成本）。
 - **成本（估算 ≈）**：token × 公开刊例价，非上游真实扣费。`(输入−命中)×输入价 + 命中×缓存价 + 输出×输出价` 折 USD → 写入时按 `USD_CNY_RATE` 折 CNY，历史不重算。匹配不到就不计（成本是下限），渠道分发代号按显式等价规则归到基础模型。
-- **缓存命中率**：命中 token ÷ 输入 token（1 位小数），未上报或输入 0 → `—`。
+- **缓存命中率**：命中 token ÷ **已上报缓存明细的输入 token**（1 位小数）。未上报的渠道 / 请求不进分母（否则一篇大输入就把全场命中率拉成 0），全部未上报或分母 0 → `—`。
 - **输出速度** = `token 总量 ÷ 生成时间总和`（非逐条比值平均）。两口径：**正文速度** `output_tokens - reasoning_tokens`、**总产出速度**含思考。仅算经本服务路由、产出 ≥1 token 的成功请求；生成时间 = `latency_ms - ttfb_ms`，剔除窗口 <200ms 或单条 >1000 tok/s。无样本 → 估算口径（前置 `≈`），两口径皆无 → `—`。
 - **图表**：请求次数 / Token / 成本 / 单请求成本 / 耗时 / 首字延迟 / 成功率 / 缓存命中率。派生指标按 `sum ÷ sum` 算，无样本给 `—`（断线）不画 0；耗时 / 首字另配分位图（P50 + P95，读明细，仅 90 天）。时间轴按小时补齐。`metric` 取值域外显式 400；自定义范围非法时暂停取数。
 - **压缩收益面板**：触发次数（tool 输出 / 上下文体裁剪）、省下的字符与 token（下界估算）、同期前缀缓存命中率、两个压缩开关状态，同屏展示。省 token 必须与缓存代价一起看，否则无法判断「该开还是该关」；`GET /api/stats/compression?since=&until=`（operator+，按小时桶汇总，与总览同时间窗；不传两端为终身累计）。小时桶与终身累计落盘到 `DATA_DIR/compress_buckets.json`（60s 节流、退出补写），重启续接、保留 90 天。
@@ -485,7 +486,7 @@ curl -X POST http://127.0.0.1:8000/v1/fetch \
 
 ## 后台任务与告警
 
-12 类任务由 `TaskRunner` 调度，失败互不影响：额度探测、token 预刷新、签到、成长中心、活跃上报、明细清理、DB 备份、渠道模型列表刷新、模型目录刷新、运维告警、上游状态聚合、模型主动探活。「任务与配置」页看上次执行 / 结果 / 错误（30s 刷新，运行态只在本次进程）；每卡片「立即运行」（admin + CSRF）绕过时点窗口但绕不过开关，已在跑则 `busy=true` 不排队。
+14 类任务由 `TaskRunner` 调度，失败互不影响：额度探测、token 预刷新、签到、成长中心、活跃上报、明细清理、DB 备份、渠道模型列表刷新、模型目录刷新、运维告警、上游状态聚合、模型主动探活、OTLP 指标导出、缓存命中率校准。「任务与配置」页看上次执行 / 结果 / 错误（30s 刷新，运行态只在本次进程）；每卡片「立即运行」（admin + CSRF）绕过时点窗口但绕不过开关，已在跑则 `busy=true` 不排队。
 
 - **活跃上报**（默认关）：`ACTIVITY_REPORT_ENABLED=true` → 每天 `ACTIVITY_REPORT_HOUR`（默认 10 点）为每账号补发一条 `chat_request_send` 续连登，与积分 / 调度无关，适用 CodeBuddy 与国际站。**风险**：官方条款禁止脚本篡改活动数据（处罚 = 取消资格 + 追回礼品），默认关闭自行评估。
 - **成长中心**仅 CodeBuddy，周期 `GROWTH_INTERVAL_MINUTES`（默认 60）。
@@ -594,6 +595,8 @@ python3 scripts/restore_db.py data/backups/coding2api-20261014-030000.sqlite3 --
 | `CONVERSATION_STICKY_SECONDS` | `3600` | 会话粘性 TTL。优先级：请求体会话标识 > 请求头 > 消息前缀指纹；pin 最高。`≤0` 关 |
 | `MODEL_BLOCKLIST` | 见 `src/config.py` | 列表黑名单（fnmatch，仅影响展示），按归一后写法匹配 |
 | `TRAE_ACCOUNT_IDENTITIES` | `0` | TRAE 本账号拥有的访问身份（`0`=免费档，`1/2/3/5/100`=各档付费/团队/内部）。白名单不含本账号身份的会员模型选中必回 1005，故拉取时过滤；留空 = 不过滤。可热更 |
+| `TRAE_ASSUMED_CACHE_RATIO` | `0.95` | TRAE 未上报缓存命中时的假定命中率（`[0,1]`），只影响积分 / 成本估算，报表仍记 NULL。可热更，校准任务自动回写 |
+| `CACHE_RATIO_INTERVAL_MINUTES` | `360` | 缓存命中率校准周期（下限 60）。用近 7 天余额差整窗反推实际命中率，漂移 ≥0.01 才回写。可热更 |
 | `MODEL_FALLBACK_GROUPS` | `""` | 跨渠道 fallback 组：`组名=成员1,成员2;…`。留空不启用 |
 | `ALLOWED_HOSTS` | 空 | Host 白名单，防 DNS rebinding |
 | `ALLOW_TEST_HOST` | `false` | 放行 `testserver`，仅测试用 |

@@ -2,7 +2,7 @@
 
 Ứng dụng tự học **IELTS Band 6.5+ → 8.0** gọn nhẹ cho Windows 10/11 — mỗi ngày chỉ cần **30 phút Core**, lưu toàn bộ tiến độ, từ vựng và sổ lỗi ngay trên máy bạn bằng **SQLite offline**. Tích hợp **4 màu giao diện dịu mắt** (**Pastel Nam**, **Pastel Nữ**, **Mono Đen**, **Mono Trắng**), **Biểu đồ SVG Task 1**, **Chấm AI Writing & Speaking Audio**, **Học từ Lỗi Sai Thực Chiến** và **Thanh nhắc nhỏ dưới góc Windows**.
 
-> **[⬇️ Tải ngay bộ cài 1-file: XD4T-1ELTS-v1.7.0-Setup.exe](https://github.com/xd4t/XD4T-1ELTS/releases/latest/download/XD4T-1ELTS-v1.7.0-Setup.exe)** *(Windows 10/11 · Miễn phí · Bấm là cài, không cần cài thêm gì)*
+> **[⬇️ Tải ngay bộ cài 1-file: XD4T-1ELTS-v1.7.2-Setup.exe](https://github.com/xd4t/XD4T-1ELTS/releases/latest/download/XD4T-1ELTS-v1.7.2-Setup.exe)** *(Windows 10/11 · Miễn phí · Bấm là cài, không cần cài thêm gì)*
 >
 > **[📖 Hướng dẫn sử dụng chi tiết từ A–Z (cách học 30p/ngày, Study4, Biểu đồ Task 1, Luyện lỗi thực chiến & Phím tắt)](docs/HUONG-DAN-SU-DUNG.md)**
 
@@ -10,7 +10,7 @@
 
 ## Cài đặt trong 30 giây (3 bước)
 
-1. **Tải file** **`XD4T-1ELTS-v1.7.0-Setup.exe`** ở nút phía trên.
+1. **Tải file** **`XD4T-1ELTS-v1.7.2-Setup.exe`** ở nút phía trên.
 2. **Mở file vừa tải** → bấm **Next → Install → Finish** *(nếu Windows hiện bảng xanh "Windows protected your PC", chọn **More info** → **Run anyway**)*.
 3. **Mở app** từ Desktop / Start Menu, chọn màu giao diện + lộ trình (`Aim 6.5` hoặc `Aim 8.0`) và **bắt đầu học ngay**.
 

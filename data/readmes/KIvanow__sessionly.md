@@ -5,7 +5,7 @@
 <h3 align="center">What your agents did. What it cost. What survived.</h3>
 
 <p align="center">
-  A lab-neutral, local-first ledger for Claude Code, Codex, Cursor and Grok sessions.
+  A lab-neutral, local-first ledger for Claude Code, Codex, Cursor, Grok and OpenCode sessions.
 </p>
 
 <p align="center">
@@ -31,7 +31,7 @@ https://github.com/user-attachments/assets/2ff085fc-7731-4bae-9d10-5ec33f0f5eea
 
 
 
-Sessionly keeps a ledger of your Claude Code, Codex, Cursor and Grok sessions, on your own
+Sessionly keeps a ledger of your Claude Code, Codex, Cursor, Grok and OpenCode sessions, on your own
 machine: which tools ran, which files changed and what it cost. Then it counts how many of the
 agent's lines are still in the file later, and still in the pull request after review.
 
@@ -59,7 +59,7 @@ since.
 
 ## Why Sessionly
 
-- **Four agents, one record.** Claude Code, Codex, Cursor and Grok, on a machine or in the cloud,
+- **Five agents, one record.** Claude Code, Codex, Cursor, Grok and OpenCode, on a machine or in the cloud,
   mapped to the same tool names and the same session record. A row means the same thing whichever
   agent produced it.
 - **Survival, not volume.** Lines written is easy to inflate. Sessionly counts how many of an
@@ -84,7 +84,7 @@ cargo install sessionly
 Then:
 
 ```sh
-sessionly install     # adds the capture hooks for Claude Code, Codex, Cursor and Grok
+sessionly install     # adds the capture hooks for Claude Code, Codex, Cursor, Grok and OpenCode
 sessionly status      # hooks installed? how many sessions captured?
 sessionly import      # bring in sessions from before the hooks were installed
 ```
@@ -125,10 +125,11 @@ A small local program does the work. A server is optional.
    chose is applied first.
 
 ```
-Claude Code, Codex ──hooks───────┐
-Cursor, Grok ──────their files───┼──▶ sessionly (local Rust binary) ──▶ ~/.sessionly/ledger.db
-cloud agents ──────repo hooks────┘                 │
-                                                   └── upload, if connected ──▶ Sessionly server ──▶ team dashboard
+Claude Code, Codex ──hooks────────┐
+Cursor, Grok ──────their files────┼──▶ sessionly (local Rust binary) ──▶ ~/.sessionly/ledger.db
+OpenCode ──────────its database───┤
+cloud agents ──────repo hooks─────┘                 │
+                                                    └── upload, if connected ──▶ Sessionly server ──▶ team dashboard
 ```
 
 The ledger is derived data: delete it and `sessionly sync --force` rebuilds it.

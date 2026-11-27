@@ -1,222 +1,337 @@
-# Token Proxy
+# Token Proxy · Magpie 基座预发布
 
-English | [中文](README.zh-CN.md)
+`main` 基于 [yetone/magpie](https://github.com/yetone/magpie)，逐步移植旧版 Token Proxy 的功能。
+下载：[Token Proxy 预发布](https://github.com/mxyhi/token_proxy/releases)；源码与反馈：[mxyhi/token_proxy](https://github.com/mxyhi/token_proxy)。
 
-Local AI API gateway for OpenAI / Gemini / Anthropic. Runs on your machine, keeps tokens counted (SQLite), offers priority-based load balancing, optional API format conversion (OpenAI Chat/Responses ↔ Anthropic Messages, plus Gemini ↔ OpenAI/Anthropic, including SSE/tools/images), and one-click setup for Claude Code / Codex.
+每次推送 `main` 自动测试并构建 macOS、Windows、Linux 安装包，全部成功后发布 GitHub 预发布。
+当前包未做 Apple 开发者签名/公证；可重新运行安装脚本升级，也可手动下载；配置保存在 `~/.config/token-proxy-magpie`，不自动导入旧版 Tauri 数据。
+内部 Go 模块路径、可执行文件名和协议暂时保留；Unix 安装脚本提供 `token-proxy` 命令，Windows 包内仍为 `magpie.exe`，详见 [迁移说明](docs/token-proxy-migration.md)。
 
-> Default listen port: **9208** (release) / **19208** (debug builds).
+以下保留上游功能文档，其中官方安装命令与官网链接属于上游 Magpie。本分支 macOS/Linux 安装 `curl` 和 `jq` 后可运行下面的 Token Proxy 安装命令；Windows 请从上面的 Releases 手动下载。
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/mxyhi/token_proxy/main/install.sh | sh
+```
 
 ---
 
-## What you get
-- Multiple providers: `openai`, `openai-response`, `anthropic`, `gemini`, `kiro`, `codex`, `xai`
-- Built-in routing + optional format conversion (OpenAI Chat ⇄ Responses; Anthropic Messages ↔ OpenAI; Gemini ↔ OpenAI/Anthropic; SSE supported)
-- **Upstream is the only scheduling unit**: priority, proxy, enabled, models, and credential live on each upstream entry
-- No separate Accounts / Providers page — on **Upstreams**, use **Add Account** to log in or import Kiro / Codex / xAI; the same editor manages identity, quota, token refresh / auto-refresh (where the provider supports it), and routing
-- Account-backed upstreams: one account maps to one stable upstream; deleting it cascades account credentials; copy is disabled
-- Model alias mapping (exact / prefix* / wildcard*) and response model rewrite
-- Local access key + upstream credential injection (`credential.api_keys` or request-header fallback when local auth is off)
-- SQLite-powered dashboard (requests, tokens, cached tokens, latency, recent)
-- macOS tray live token rate (optional)
+<div align="center">
 
-## Screenshots
-|  |  |
-| --- | --- |
-| **Dashboard**<br>![Dashboard](images/dashboard.png) | **Core**<br>![Core settings](images/core.png) |
-| **Upstreams**<br>![Upstreams](images/upstream.png) | **Add upstream**<br>![Add upstream](images/add-upstream.png) |
+<a href="https://github.com/mxyhi/token_proxy/releases"><img src="site/public/img/icon-256.png" width="112" alt="magpie"></a>
 
-## Quick start (macOS)
-1) Install: move `Token Proxy.app` to `/Applications`. If blocked: `xattr -cr /Applications/Token\ Proxy.app`.
-2) Launch the app. The proxy starts automatically.
-3) Open **Config File** tab, edit and save (writes `config.jsonc` in the Tauri config dir). Defaults are usable; just paste your upstream API keys. Running proxies auto-apply the new config via reload or restart when needed.
-4) Call via curl (example with local auth):
-```bash
-curl -X POST \
-  -H "Authorization: Bearer YOUR_LOCAL_KEY" \
-  -H "Content-Type: application/json" \
-  http://127.0.0.1:9208/v1/chat/completions \
-  -d '{"model":"gpt-4.1-mini","messages":[{"role":"user","content":"hi"}]}'
+# magpie
+
+### Every agent's model. One place.
+
+**Claude Code on Kimi. Codex on DeepSeek. Gemini CLI on GLM. OpenCode on your ChatGPT plan.**<br>
+Switch any of them from the menu bar. One local gateway serves them all,<br>
+and when a quota runs out, it quietly moves on to your next account.
+
+[![Token Proxy pre-release](https://img.shields.io/badge/Token_Proxy-pre--release-111111)](https://github.com/mxyhi/token_proxy/releases) [![Stars](https://img.shields.io/github/stars/yetone/magpie?style=flat&color=111111)](https://github.com/yetone/magpie/stargazers) [![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/vGSnD3ZKQF) [![License](https://img.shields.io/badge/license-MIT-111111)](LICENSE)<br>
+![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white) ![Windows](https://img.shields.io/badge/Windows-0078D4?logo=windows&logoColor=white) ![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)
+
+Thanks to [Kimi](https://usemagpie.ai/go/kimi/readme) for supporting magpie and the open source community.
+
+<sub>Sponsors</sub>
+
+<a href="https://usemagpie.ai/go/wandapi/readme"><picture><source media="(prefers-color-scheme: dark)" srcset="site/public/img/sponsor-wandapi-dark.svg"><img src="site/public/img/sponsor-wandapi.svg" width="200" height="50" alt="WandAPI"></picture></a>&emsp;&emsp;<a href="https://usemagpie.ai/go/aigocode/readme"><picture><source media="(prefers-color-scheme: dark)" srcset="site/public/img/sponsor-aigocode-readme-dark.png"><img src="site/public/img/sponsor-aigocode-readme.png" width="200" height="50" alt="AIGoCode"></picture></a><br>
+<a href="https://usemagpie.ai/go/modelgo/readme"><picture><source media="(prefers-color-scheme: dark)" srcset="site/public/img/sponsor-modelgo-dark.svg"><img src="site/public/img/sponsor-modelgo.svg" width="200" height="50" alt="ModelGo"></picture></a>&emsp;&emsp;<a href="https://usemagpie.ai/go/x6ai/readme"><picture><source media="(prefers-color-scheme: dark)" srcset="site/public/img/sponsor-x6ai-dark.svg"><img src="site/public/img/sponsor-x6ai.svg" width="200" height="50" alt="x6.ai"></picture></a><br>
+<a href="https://usemagpie.ai/go/ccodes/readme"><picture><source media="(prefers-color-scheme: dark)" srcset="site/public/img/sponsor-ccodes-dark.png"><img src="site/public/img/sponsor-ccodes.png" width="200" height="50" alt="Ccode-AI"></picture></a>
+
+**[Download Token Proxy pre-release](https://github.com/mxyhi/token_proxy/releases)** &nbsp;·&nbsp; **[Upstream docs](https://usemagpie.ai/docs/start)** &nbsp;·&nbsp; **[Reference](docs/reference.md)** &nbsp;·&nbsp; **[Plugins](https://github.com/magpie-community/plugins)** &nbsp;·&nbsp; **[Discord](https://discord.gg/vGSnD3ZKQF)** &nbsp;·&nbsp; **English** · [简体中文](README.zh-CN.md)
+
+<br>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/img/agents-dark.png">
+  <img src="site/public/img/agents-light.png" width="900" alt="magpie's Agents page: Claude Code on Kimi K3, Codex on DeepSeek V4 Pro, Gemini CLI on GLM-5.3, each picked from one list">
+</picture>
+
+</div>
+
+<br>
+
+## Is magpie for you?
+
+Each agent keeps its model in its own file, in its own format, with its own keys and base URLs. A subscription you pay for works in one agent and nowhere else. magpie puts all of that behind one app and one local gateway:
+
+- **Pick any model for any agent** from one list. magpie edits the one key that matters in the agent's own config.
+- **Use one provider everywhere**: an API key, a local model, or the Claude, ChatGPT, Copilot, Gemini or Grok plan you're signed in to.
+- **Keep going when a quota runs out**: a provider's next account takes over, and a routing group moves on to another model or provider, so the agent never sees the error. With one account and no group there is nothing to move to, and the error reaches the agent.
+- **Keep your secrets off the vendor's servers**: once you turn masking on in **Settings → Privacy** (it's off by default), keys, passwords and emails in a prompt are masked on your computer before the request leaves it, and put back in the reply.
+
+It's for you if you use more than one agent, more than one provider, or more than one account. If you use one agent on its vendor's own plan and that's enough, you don't need it.
+
+This prerelease ships macOS, Windows and Linux packages. Docker, Nix and Termux instructions in upstream documentation refer to official Magpie; this fork does not publish those distributions.
+
+## Quick start
+
+**1 · Install.** Download Token Proxy from **[its pre-release](https://github.com/mxyhi/token_proxy/releases)**, or on macOS/Linux install `curl` and `jq`, then run:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/mxyhi/token_proxy/main/install.sh | sh
 ```
 
-You can also call using the Anthropic Messages format (useful for Claude Code clients):
-```bash
-curl -X POST \
-  -H "x-api-key: YOUR_LOCAL_KEY" \
-  -H "Content-Type: application/json" \
-  http://127.0.0.1:9208/v1/messages \
-  -d '{"model":"claude-3-5-sonnet-20241022","max_tokens":256,"messages":[{"role":"user","content":[{"type":"text","text":"hi"}]}]}'
+<sub>预发布包未做 Apple 开发者签名/公证，不支持自动更新；安装脚本会按 GitHub Release 的 SHA-256 校验文件。macOS 安装到 /Applications（不可写时使用 ~/Applications）；若有同名旧版应用，请设置 TOKEN_PROXY_APP_DIR 指向其他目录。Unix 命令为 ~/.local/bin/token-proxy。Linux 安装桌面程序；Linux 运行需要 GTK 3 和 WebKitGTK 4.1。配置目录为 ~/.config/token-proxy-magpie，不会自动迁移旧版 Tauri 或官方 Magpie 数据。</sub>
+
+**2 · Add a provider.** Open Token Proxy and go to **Providers → Add provider**. Pick a preset and paste a key, or sign in with a subscription.
+
+**3 · Pick a model** for each agent on the **Agents** page. Start a new session and it's on the new model.
+
+Or do it all from the terminal:
+
+```sh
+token-proxy provider add deepseek sk-…              # a preset needs only the key
+token-proxy claude deepseek/deepseek-v4-pro          # Claude Code on DeepSeek
+token-proxy codex moonshot/kimi-k2.5                 # Codex on Kimi
+token-proxy group add "Opus anywhere" models=claude/claude-opus-5-5,copilot/claude-opus-5.5 routing=smart
+token-proxy claude group/opus-anywhere               # fails over between subscriptions
+token-proxy save work && token-proxy use work             # profiles
+token-proxy quota                                    # what's left on every plan
+token-proxy settings set theme dark                  # every Settings switch, from the terminal
+token-proxy tool generate_image "a magpie, watercolour" -o hero.png   # magpie's image, vision and search tools, called directly
+token-proxy tui                                      # the whole thing, in a terminal
 ```
 
-## Workspace & CLI (Rust)
-- This repo is now a Cargo workspace; the Tauri app still lives in `src-tauri/`.
-- CLI crate: `crates/token_proxy_cli` (binary `token-proxy`).
-- Default config path: `./config.jsonc` (override with `--config`).
-- GitHub Releases also publish packaged CLI archives per target:
-  - Unix: `token-proxy_cli_<version>_<target>.tar.gz`
-  - Windows: `token-proxy_cli_<version>_<target>.zip`
+magpie finds the subscriptions your agents are signed in to by reading their sign-ins (Claude Code's and Codex's files, the Keychain). To keep it from reading them, turn off Settings → Privacy → *Subscription accounts*, or run `token-proxy accounts discovery off` (`on` turns it back on). `MAGPIE_NO_ACCOUNTS=1` turns it off for one run without changing the saved setting. API-key providers work either way.
 
-```bash
-# start proxy
-cargo run -p token_proxy_cli -- serve
+## Supported agents
 
-# start with custom config path
-cargo run -p token_proxy_cli -- --config ./config.jsonc serve
+<table>
+<tr><td>
 
-# config helpers
-cargo run -p token_proxy_cli -- config init
-cargo run -p token_proxy_cli -- --config ./config.jsonc config path
+Claude Code · Claude Desktop · Claude Science · Codex · Gemini CLI · Antigravity CLI · Dim · OpenCode · OpenChamber · MiMo Code · DevEco Code · Pi · oh-my-pi · StepCode · MothX · PenguinHarness · Aside · OmO · Prime Agent · mu · Goose · Cursor CLI · Cursor Private Inference · Zed · VS Code Chat · VS Code Insiders · VSCodium Chat · Zoo Code · JetBrains Air · Air (JetBrains IDEs) · Copilot (JetBrains) · Copilot CLI · Crush · DeepSeek Harness · Reasonix Studio · Command Code · fx · Devin · Hermes Agent · Mister Morph · Kimi Code · jcode · Mistral Vibe · Qwen Code · Muse Code · Empryo · nanobot · miniQ · Paimon · MiniMax Code · Droid · Cline · Qoder · Qoder CN · Grok Build · Kigi · Grok App · ZCode · WorkBuddy · WorkBuddy AI · CodeBuddy · Pencil · Paseo · OpenPencil · OpenBot · Craft Agents · Tuanjie Cowork · NewMax · LiveAgent · Raycast · Kiro Crew · OpenMausBot · T3 Code · OpenHanako · AtomCode · Open Code Review · Snow CLI · Alma · Shelley · Cindy · Lody · AionUi · Cherry Studio · Ante · AstrBot · QwenPaw · OpenClaw · Avibe · Kun · Nowledge Mem
+
+</td></tr>
+</table>
+
+magpie shows only the agents installed on your machine; setup notes for some of them are in the [reference](docs/reference.md#notes-on-some-agents). Anything else that takes a base URL can use the gateway too:
+
+```sh
+export OPENAI_BASE_URL=http://127.0.0.1:9208/v1     OPENAI_API_KEY=magpie
+export ANTHROPIC_BASE_URL=http://127.0.0.1:9208     ANTHROPIC_API_KEY=magpie
+export GOOGLE_GEMINI_BASE_URL=http://127.0.0.1:9208 GEMINI_API_KEY=magpie
 ```
 
-## Frontend tests
-```bash
-# watch mode
-pnpm test
+## How it fits together
 
-# run once (CI-friendly)
-pnpm test:run
+The gateway at `127.0.0.1:9208` speaks OpenAI Chat, OpenAI Responses, Anthropic Messages and Gemini, and translates between them, streaming, tool calls and reasoning included.
 
-# coverage (optional)
-pnpm test:coverage
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/img/architecture-dark.svg">
+  <img src="site/public/img/architecture.svg" alt="How magpie fits together: your agents send requests to the magpie gateway at 127.0.0.1:9208, which routes them through routing groups and plugins to your API keys, subscriptions and local models.">
+</picture>
 
-# TypeScript typecheck
-pnpm exec tsc --noEmit
+
+## What it does
+
+### Any model, any agent
+
+Click a value and a searchable list opens: every model of every provider you added, as `provider/model`. The agent's config is rewritten atomically, and its comments, order and formatting stay as they were. **Profiles** save every agent's setup under one name ("Budget", "Focus") and switch them all back in one move. Each agent can also have its own short list of models; a profile keeps that list too.
+
+<table>
+<tr>
+<td width="50%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/img/panel-dark.png">
+  <img src="site/public/img/panel-light.png" alt="The menu bar panel">
+</picture>
+</td>
+<td width="50%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/img/picker-dark.png">
+  <img src="site/public/img/picker-light.png" alt="The model picker">
+</picture>
+</td>
+</tr>
+</table>
+
+### Privacy masking
+
+Agents put what they read into the prompt: an `.env`, a config file, a log with a token in it. With masking on, magpie swaps those values for placeholders on your computer before a request leaves it, and swaps them back in the reply. Your agent and your files keep the real values; the vendor never sees them.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/img/masking-dark.png">
+  <img src="site/public/img/masking-light.png" width="900" alt="Insights › Masking: 5,812 values kept from vendors in 7 days, flowing from Claude Code and Codex through magpie to OpenAI, Kimi and DeepSeek, and each request's masked values">
+</picture>
+
+| | |
+| :-- | :-- |
+| **Found two ways** | Rules for what is certain (API keys, private keys, tokens, emails, and card and ID numbers whose checksum adds up), and, if you want it, a model that runs on this computer for the names, addresses and passwords no rule can find (a 1.6 GB download, on the CPU) |
+| **Put back everywhere** | A value becomes a placeholder such as `{{API_KEY_k3v9x2mq}}`, and every placeholder in the reply turns back into its value: streamed text and tool-call arguments too, so a command the agent runs has the real key |
+| **Nothing breaks** | A value gets the same placeholder every time, so the conversation, the prompt cache and thinking signatures stay valid. A value masked once is masked wherever it shows up later |
+| **Never on disk** | Values are held in memory only. The record keeps each value's kind, length and first characters. If masking is on and can't run, the request is held back (503), never sent as written |
+| **You can check it** | **Insights › Masking** lists every request it changed, with what the vendor got instead, side by side, and **Try it** in Settings shows what a text would become |
+| **Your rules** | Secrets and personal data each on or off, finer kinds (passport, IBAN, MAC, public IP…), your own words and patterns, and whether a value found is masked, only warned about, or held back (**Mask**, **Warn**, **Block**) |
+
+The cost: the model sees `{{API_KEY_…}}`, not the key, so a task about the value itself (why is this token refused?) can't be done on it. Put such values under **Never mask**. Rules can be wrong now and then; the Masking page is where you'd see it. It's off until you turn it on in **Settings → Privacy**. Emails at names kept for examples (`example.com`, `.test`, `.invalid`) are left as written.
+
+### Providers
+
+Pick a preset, paste a key. Model lists come from the vendor, with names and reasoning levels filled in from [models.dev](https://models.dev), so a model released this morning is in your picker on the next refresh.
+
+> **Presets include** Anthropic · OpenAI · Google Gemini · Google Vertex AI · Amazon Bedrock (runtime and Mantle) · DeepSeek · Kimi · Zhipu GLM · MiniMax · StepFun · LongCat · Qwen · Baidu Qianfan · Tencent Cloud · Huawei Cloud MaaS · Volcengine Ark · Mistral · Voyage AI · Groq · Nous Portal · xAI · OpenRouter · Vercel AI Gateway · GMI Cloud · Together · Fireworks · Fireworks Nexus · SiliconFlow · NVIDIA NIM · ModelScope · Ollama · LM Studio … and any OpenAI- or Anthropic-compatible URL.
+
+**Import** brings in the providers from CC Switch, Claude Code, Codex and Alma. **[Add to magpie](https://usemagpie.ai/docs/import)** links let a provider's website hand its config to magpie in one click. Each key and each account can go through a proxy of its own.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/img/add-dark.png">
+  <img src="site/public/img/add-light.png" width="900" alt="Add provider: subscriptions to sign in to, vendors, relays and local servers">
+</picture>
+
+### Subscriptions
+
+An agent you're signed in to is a subscription with models behind it, so magpie offers it as a provider to every other agent. Add several accounts per subscription and magpie fails over between them.
+
+- **Claude**: drives the real local `claude` binary and bridges your agent's tools over MCP
+- **Codex / ChatGPT**: your ChatGPT plan's models, in every other agent
+- **GitHub Copilot**, **Gemini (Code Assist)**, **Antigravity** (through your own agy CLI), **Grok (SuperGrok)** and more
+- **Any OpenCode auth plugin or pi package** from npm
+
+**Daily warm-up** starts each Claude and ChatGPT account's 5-hour window at the times you choose, or the moment the last one resets.
+
+### Routing groups
+
+A **routing group** is several models an agent picks as one, such as `group/daily-coding`. The gateway spreads requests over every member's keys and accounts:
+
+| Mode | What it does |
+| :-- | :-- |
+| **`smart`** | Of the subscriptions with quota left, use the one that renews soonest, so less is wasted at the reset |
+| **`order`** | Use the first model until it can't answer, then the next |
+| **`rotate`** | Move to the next member on each turn |
+| **`usage`** | Use the least-used member first |
+| **`pace`** | Use the account with the most of its week left per hour until it resets |
+
+A conversation **stays with the account that answered it** while the vendor's prompt cache is worth keeping. Groups can contain groups. **[Intent routing](https://usemagpie.ai/docs/intent)** has a small model of your choice read each new turn, so tests go to the strong model and quick questions to the cheap one. The Routing view shows every decision live.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/img/routing-dark.png">
+  <img width="760" src="site/public/img/routing-light.png" alt="The Routing view: four agents through magpie to seven providers, live">
+</picture>
+
+<table>
+<tr>
+<td width="50%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/img/intent-trace-dark.png">
+  <img src="site/public/img/intent-trace-light.png" alt="An intent-routed turn, explained step by step">
+</picture>
+</td>
+<td width="50%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/img/nested-routing-dark.png">
+  <img src="site/public/img/nested-routing-light.png" alt="A routing group inside a routing group">
+</picture>
+</td>
+</tr>
+</table>
+
+### Plugins
+
+```sh
+token-proxy plugin add opencode-gemini-auth   # an OpenCode plugin from npm
+token-proxy plugin login google-plugin        # its own sign-in flow, in magpie
 ```
 
-Notes:
-- Test files live in `src/**/*.test.{ts,tsx}`.
-- Global test setup (Tauri mocks + jsdom polyfills) is in `src/test/setup.ts`.
-- Vitest config is in `vitest.config.ts`.
+Plugins run on [Bun](https://bun.sh), downloaded the first time one needs it. A plugin signs in, lists its models and makes each request; agents use those models like any other provider's. Browse **[magpie-community/plugins](https://github.com/magpie-community/plugins)**, or [write your own](https://usemagpie.ai/docs/plugins).
 
-## Configuration reference
-- File: `config.jsonc` (comments + trailing commas allowed)
-- Location:
-  - CLI: `--config` (default: `./config.jsonc`)
-  - Tauri: **AppConfig** directory (resolved automatically by the app)
+A plugin can also be **gateway middleware**: JavaScript that sees what every agent sends and gets back. `onRequest` can rewrite a request or turn it away, `onEvent` sees each streamed event, `onResponse` the whole reply. A hook that throws or runs too long leaves the request as it was.
 
-### Core fields
-| Field | Default | Notes |
-| --- | --- | --- |
-| `host` | `127.0.0.1` | Listen address (IPv6 allowed; will be bracketed in URLs) |
-| `port` | `9208` release / `19208` debug | Change if the port is taken |
-| `local_api_keys` | `[]` | When nonempty: local auth uses format-specific headers (see Auth rules); local auth inputs are **not** forwarded upstream. |
-| `app_proxy_url` | `null` | Proxy for app updater & as placeholder for upstreams (`"$app_proxy_url"`). Supports `http/https/socks5/socks5h`. |
-| `log_level` | `silent` | `silent|error|warn|info|debug|trace`; debug/trace log request headers (auth redacted) and small bodies (≤64KiB). Release builds force `silent`. |
-| `max_request_body_bytes` | `104857600` (100 MiB) | 0 = fallback to default. Shared inbound, JSON filter, and format-conversion ceiling. |
-| `retryable_failure_cooldown_secs` | `0` | Cooldown window after retryable failures that should temporarily sideline an upstream. `0` disables cooldown. Reloading or restarting the running proxy resets current cooldown state. |
-| `same_upstream_retry_count` | `1` | Extra same-upstream retries after a retryable failure (excluding the first attempt). `0` disables same-upstream retry; max `5`. |
-| `codex_session_scoped_cooldown_enabled` | `false` | Only applies to Codex account-backed OpenAI Responses requests. When enabled, cooldown is isolated by `session_id`; final success clears that session, and requests without `session_id` do not share cooldown. |
-| `tray_token_rate.enabled` | `true` | macOS tray live rate; harmless elsewhere. |
-| `tray_token_rate.format` | `split` | `combined` (`total`), `split` (`↑in ↓out`), `both` (`total | ↑in ↓out`). |
-| `upstream_strategy` | `{ "order": "fill_first", "dispatch": { "type": "serial" } }` | Structured strategy object. `order` controls candidate ordering inside one priority group; `dispatch` controls serial / hedged / race execution. |
-
-### Upstream entries (`upstreams[]`)
-| Field | Default | Notes |
-| --- | --- | --- |
-| `id` | required | Unique per upstream. |
-| `providers` | required | One upstream can serve multiple providers. Account-based providers `kiro` / `codex` / `xai` must be alone (cannot mix with each other or with API-key providers). |
-| `base_url` | required | Full base; overlapping path parts are de-duplicated. (`providers=["kiro"]` / `["codex"]` can be empty; `xai` account-backed uses the fixed CLI gateway base.) |
-| `credential` | `{ "type": "passthrough" }` | **Discriminated union** — the only credential shape. See below. |
-| `preferred_endpoint` | `null` | `kiro` only: `ide` or `cli`. |
-| `proxy_url` | `null` | Per-upstream proxy (not an account field); supports `http/https/socks5/socks5h`; default is **no system proxy**. `$app_proxy_url` placeholder allowed. |
-| `priority` | `0` | Per-upstream scheduling weight (not an account field). Higher = tried earlier. |
-| `enabled` | `true` | Per-upstream toggle (not an account field). Disabled upstreams are skipped. |
-| `available_models` | `[]` | Inbound model allowlist; empty = no restriction. |
-| `model_mappings` | `{}` | Exact / `prefix*` / `*`. Priority: exact > longest prefix > wildcard. Response echoes original alias. |
-| `overrides.model_capabilities` | `{}` | Optional per-model tri-state capabilities, e.g. `{ "gpt-5": { "image_input": false, "native_web_search": true } }`; omitted values stay unknown. |
-| `convert_from_map` | `{}` | Explicitly allow inbound format conversion per provider. Example: `{ "openai-response": ["openai_chat", "anthropic_messages"] }`. |
-| `overrides.header` | `{}` | Set/remove headers (null removes). Hop-by-hop/Host/Content-Length are always ignored. |
-
-#### `credential` (required shape)
-
-| `type` | Shape | Notes |
-| --- | --- | --- |
-| `passthrough` | `{ "type": "passthrough" }` | No static upstream key; may rely on request-header fallback when `local_api_keys` is empty. **Not allowed** for `kiro` / `codex` / `xai`. |
-| `api_keys` | `{ "type": "api_keys", "api_keys": ["key-a", "key-b"] }` | Static keys; empty list behaves like passthrough after normalize. **Not allowed** for account-based providers. |
-| `account` | `{ "type": "account", "provider": "kiro"\|"codex"\|"xai", "account_id": "..." }` | Binds one Provider Account. `provider` must match the sole account-based entry in `providers[]`. One `(provider, account_id)` may bind only one upstream. |
-
-Kiro / Codex / xAI **must** use `credential.type = "account"`. Account login/import creates a stable binding via app lifecycle; do not invent frontend-only ids such as `kiro-default` / `codex-default` / `xai-default`. Deleting an account-backed upstream **cascades** deletion of that account credential; **copy is forbidden**.
-
-Legacy flat fields (`api_key`, `api_keys`, `kiro_account_id`, `codex_account_id`, `xai_account_id`) are **not** part of the documented schema. On load they are migrated once into `credential` and written back (no dual-format docs).
-
-## Routing & format conversion
-- Gemini native API: `/v1beta/models/*` (including `:generateContent`, `:streamGenerateContent`, `:countTokens`, `:embedContent`, `:batchEmbedContents`), model catalog/detail, `/v1beta/files*`, `/upload/v1beta/files*`, `/v1beta/cachedContents*`, `/v1beta/tunedModels*` → `gemini`.
-- Anthropic: `/v1/messages` (and subpaths) and `/v1/complete` → `anthropic` (Kiro shares the same format).
-- OpenAI create routes: `/v1/chat/completions` → `openai`; `/v1/responses` → `openai-response`.
-- OpenAI native pass-through routes are explicitly pinned to OpenAI-compatible providers and won't fall through to `anthropic`: `chat/completions/*`, `responses/*`, `assistants*`, `threads*`, `conversations*`, `chatkit*`, `containers*`, `evals*`, `files*`, `uploads*`, `batches*`, `vector_stores*`, `images/*`, `audio/*`, `embeddings`, `moderations`, `completions`, `fine_tuning/*`, `realtime/*`, `skills*`, `videos*`.
-- For `responses/*` resources, provider preference is `openai-response` → `openai`; for other OpenAI native resources, provider preference is `openai` → `openai-response`.
-- Other paths: choose the provider with the highest configured priority; tie-break is `openai` > `openai-response` > `anthropic`.
-- Cross-format fallback/conversion is controlled by `upstreams[].convert_from_map` (no global switch). If a provider has no eligible upstream for the inbound format, it won't be selected.
-- If `openai` is missing for `/v1/chat/completions`: fallback can be `openai-response`, `anthropic`, or `gemini` (priority-based; tie-break prefers `openai-response`).
-- For `/v1/messages`: choose between `anthropic` and `kiro` by priority; tie-break uses upstream id. If the chosen provider returns a retryable error, the proxy will fall back to the other native provider (Anthropic ↔ Kiro) when configured.
-- If neither `anthropic` nor `kiro` exists for `/v1/messages`: other providers can be selected only when allowed for `anthropic_messages` via `convert_from_map` (e.g. `openai-response`, `openai`, `gemini`).
-- If `openai-response` is missing for `/v1/responses`: fallback can be `openai`, `anthropic`, or `gemini` (priority-based; tie-break prefers `openai`).
-- If `gemini` is missing for `/v1beta/models/*:generateContent` or `*:streamGenerateContent`: fallback can be `openai-response`, `openai`, or `anthropic` (priority-based; tie-break prefers `openai-response`).
-- Other Gemini native endpoints are pass-through only and require a configured `gemini` upstream.
-
-## Auth rules (important)
-- Local access: `local_api_keys` nonempty → require format-specific key. Local auth inputs are reserved for gateway access and **not** used as upstream credentials.
-  - Model catalogs (`GET` / `HEAD` `/v1/models` and `/v1beta/openai/models`) require the same key and only include authorized upstreams. Connectivity probes and allowed CORS preflight keep their existing behavior.
-  - OpenAI / Responses: `Authorization: Bearer <key>`
-  - Anthropic `/v1/messages`: `x-api-key` or `x-anthropic-api-key`
-  - Gemini native API: `x-goog-api-key` or `?key=...`
-- When `local_api_keys` is nonempty, inbound request auth headers are **not** collected for upstream; configure `credential.api_keys` (or an account credential) on the upstream instead.
-- Upstream auth resolution (per request; runtime expands `credential.api_keys` into the attempt key):
-  - **OpenAI-compatible** (and most non-Anthropic providers): `credential.api_keys` → request `x-openai-api-key` / `Authorization` **only when** `local_api_keys` is empty → no key.
-  - **Anthropic**: `credential.api_keys` → request `x-api-key` / `x-anthropic-api-key` / bearer fallback **only when** `local_api_keys` is empty → no key. Missing `anthropic-version` is auto-filled with `2023-06-01`.
-  - **Gemini**: `credential.api_keys` → request `x-goog-api-key` → query `?key=...` (query/header fallback only when `local_api_keys` is empty) → skip attempt.
-  - **Account-backed** (`kiro` / `codex` / `xai`): uses the bound Provider Account identity (OAuth / Agent Assertion); not `api_keys`.
-
-### Local access keys and migration
-
-Manage keys in **API Key**, after Upstreams. Each key has a stable ID, name, secret, enabled state and scope:
-
-```json
-"local_api_keys": [
-  { "id": "desktop", "name": "Desktop", "key": "replace-with-your-secret", "enabled": true, "scope": { "type": "auto" } },
-  { "id": "limited", "name": "Limited", "key": "replace-with-another-secret", "enabled": true, "scope": { "type": "selected", "upstream_ids": ["your-upstream-id"] } }
-]
+```js
+// alias.middleware.js — magpie plugin add ./alias.middleware.js
+export function onRequest(body, ctx) {
+  if (body.model === "fast") return { ...body, model: "deepseek/deepseek-chat" };
+}
 ```
 
-An empty list disables local authentication. A nonempty list with all keys disabled rejects authenticated routes. Auto includes all eligible enabled upstreams, including future additions; selected scope never expands automatically. Disabled or deleted upstream bindings remain restricted and are shown as unavailable. Explicit unauthorized `upstream-id/model` routes return 403; missing, invalid or disabled keys return 401. Retries, parallel dispatch, provider fallback and cached/augmented model catalogs share this scope.
+<details>
+<summary><b>Ready-made middleware</b>, most of it what <a href="https://github.com/QuantumNous/new-api">New API</a> does for its channels, with the same JSON</summary>
 
-The legacy `local_api_key` is migrated unchanged to an enabled Auto entry, with a backup and a migration notice. Both old and new fields in one configuration are an error. Configurations saved by this version are not guaranteed to be readable by older versions. New requests use saved changes immediately; in-flight requests retain their original configuration.
+<br>
 
-Claude Code and Codex setup require an explicit selection when multiple keys are enabled. One enabled key is selected automatically. Client setup sends the selected ID to the backend; disabled or deleted selections are rejected.
+| Package | What it does |
+| :-- | :-- |
+| `param-override` | New API's `param_override`: set, delete, move or rewrite request fields, under conditions, or turn a request away |
+| `model-map` | New API's `model_mapping`: send a model under another name; replies keep the name asked for |
+| `system-prompt` | Your system prompt on every request, or some agents' or models' |
+| `word-guard` | New API's sensitive-word filter: turn away or mask words in what users send, and in replies |
+| `think-tags` | Take `<think>…</think>` out of replies, or put `reasoning_content` into them |
 
-## Load balancing & retries
-- Priorities: higher `priority` groups first.
-- `upstream_strategy.order` controls selection inside the same priority group:
-  - `fill_first`: keep the configured list order.
-  - `round_robin`: rotate the starting point across requests.
-- `upstream_strategy.dispatch` controls how requests are launched inside one priority group:
-  - `{"type":"serial"}`: try one candidate at a time.
-  - `{"type":"hedged","delay_ms":2000,"max_parallel":2}`: launch the first candidate immediately, then add one more attempt after `delay_ms` if the prior attempt is still unresolved, up to `max_parallel`.
-  - `{"type":"race","max_parallel":3}`: launch up to `max_parallel` candidates immediately and take the first successful result.
-- Retryable conditions: network timeout/connect errors, or status 400/401/403/404/408/413/422/429/307/5xx (including 504/524). Non-context-window 413 responses skip same-upstream retry and fail over directly; context-window errors remain terminal.
-- Explicit Responses field rejections and xAI invalid encrypted reasoning use bounded same-identity request repair before ordinary retry/failover. Repair retries do not consume `same_upstream_retry_count`, and the repaired body is retained for later attempts.
-- Same-upstream retry: on a retryable failure, retry the **same upstream** up to `same_upstream_retry_count` extra times (default `1`, excluding the first attempt) before failing over. After the first client-visible stream output, the proxy does not replay the same attempt.
-- Cooldown conditions: `401/403/408/429/5xx` will temporarily move the failed upstream behind ready peers for `retryable_failure_cooldown_secs` (default `0`, disabled); `400/404/422/307` stay retryable but do not trigger cross-request cooldown. With `codex_session_scoped_cooldown_enabled=true`, Codex account-backed OpenAI Responses cooldown is isolated by `session_id`; final successful requests do not keep same-session cooldown, and requests without `session_id` do not share cooldown.
-- `/v1/messages` only: after the chosen native provider is exhausted (retryable errors), the proxy can fall back to the other native provider (`anthropic` ↔ `kiro`) if it is configured.
+```sh
+token-proxy plugin add @magpie-community/middleware-model-map
+token-proxy plugin options model-map '{"mapping": {"fast": "deepseek/deepseek-chat"}}'
+```
 
-## Observability
-- SQLite log: `data.db` in config dir. Stores per-request stats (tokens, cached tokens, latency, model, upstream).
-- Token rate: macOS tray shows live total or split rates (configurable via `tray_token_rate`).
-- Debug/trace log bodies capped at 64KiB.
+Find them under Plugins › Discover › Gateway middleware. See [Gateway middleware](https://usemagpie.ai/docs/plugins#middleware).
 
-## Dashboard
-- In-app **Dashboard** page visualizes totals, token usage trend, **model usage** ranking (Top 20), and upstream model probes
-- Time range, upstream, and account filters apply to summary / series / models
-- Recent requests live on the **Logs** page (page size 50, offset supported)
-- The Logs panel supports a 30-second request-detail capture window: when enabled it stores request headers/bodies during that window, always keeps error responses for failed requests, and turns off automatically afterward.
+</details>
 
-## One-click CLI setup
-- Claude Code: writes `~/.claude/settings.json` `env` (`ANTHROPIC_BASE_URL`, `ANTHROPIC_MODEL=claude-sonnet-4-6`, `ANTHROPIC_AUTH_TOKEN` when local key is set).
-- Codex: writes `~/.codex/config.toml` `model="gpt-6.1-sol"`, `model_provider="token_proxy"`, and `[model_providers.token_proxy].base_url` → `http://127.0.0.1:<port>/v1`; writes `~/.codex/auth.json` `OPENAI_API_KEY`.
-- A `.token_proxy.bak` file is created before overwriting; restart the CLI to apply.
+### Usage and cost
 
-## FAQ
-- **Port already in use?** Change `port` in `config.jsonc`; remember to update your client base URL.
-- **Got 401?** If `local_api_keys` is nonempty, you must send the format-specific local key (OpenAI/Responses: `Authorization`, Anthropic: `x-api-key`, Gemini: `x-goog-api-key` or `?key=`). With local auth enabled, configure upstream keys in `upstreams[].credential` (`api_keys` or `account`).
-- **Got 504?** Upstream did not send response headers or the first body chunk within 120s. For streaming responses, a 120s idle timeout between chunks may also close the connection.
-- **413 Payload Too Large?** Body exceeded `max_request_body_bytes` (default 100 MiB) or the transform limit for format-conversion requests.
-- **Why no system proxy?** By design, `reqwest` is built with `.no_proxy()`; set per-upstream `proxy_url` if needed.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/img/usage-dark.png">
+  <img src="site/public/img/usage-light.png" width="900" alt="The Usage page: balances, tokens, cache hit rate and cost">
+</picture>
+
+| | |
+| :-- | :-- |
+| **Tokens and cost** | Tokens, cache reads and writes, reasoning and calls, with cost at list price in dollars or yuan; set your own price for any model |
+| **Quota** | Balances and quota windows for every key, plan and account (`token-proxy quota`), and a reminder before a window renews with much of it unused |
+| **Sessions** | Every agent conversation with its cost and title, reopened in your terminal with one click |
+| **Context** | How full each request's context window is, how much came from the cache, and what fills it |
+| **Bills** | By account and by upstream key, and OTLP export to your own observability stack |
+
+### Sharing
+
+| | |
+| :-- | :-- |
+| **Local network** | Turn on *Share on local network* and give each client a named gateway key with its own daily, weekly or monthly token and cost limit |
+| **[Remote magpie](https://usemagpie.ai/docs/remote)** | A laptop uses the providers, accounts and groups of the magpie on your desktop, and still wires its own agents |
+| **[Docker（上游发行版）](https://usemagpie.ai/docs/docker)** | Run `ghcr.io/yetone/magpie` on a server or a NAS and manage it from the web UI |
+| **Sync** | Back up to a file, or sync machines over WebDAV (Nutstore, Nextcloud…), S3, or an encrypted GitHub repository backup |
+
+### Also
+
+- **Library**: write instructions, MCP servers, skills and subagents once; magpie writes them into each agent's files in its format, and removes only what it wrote.
+- **Web search for any model**: a model that can't search gets magpie's search: a provider that can, or search APIs (Tavily, Brave, Exa, Firecrawl, You.com, DeepSeek, Doubao Search on Volcengine, Yuanbao Search on Tencent Cloud, TinyFish, SearXNG), asked in the order you drag them into, each one able to be switched off without losing its key. An API can hold several keys: searches take turns over them (or use them in order with `pick=order`), a key refused lately is asked last, and Tavily keys show what each has used of its limit, in Settings and in `token-proxy search`. Any agent can mount the same search as an MCP server, with a `web_search` tool and a `web_fetch` tool that reads a page by its URL.
+- **Images and video**: an image tool for any agent over MCP, with the model you choose, and videos with a Grok subscription or a MiniMax API key (MiniMax H3).
+- **Agents kept current**: the Agents page shows each CLI's version, updates it the way it was installed, and gives the commands for the ones you don't have.
+- **WSL**: on Windows, agents inside WSL distros are wired too, and their sessions counted.
+- **Keep awake**, light and dark, and your theme's look on [Omarchy](https://omarchy.org).
+
+## Documentation
+
+| | |
+| :-- | :-- |
+| **[Get started](https://usemagpie.ai/docs/start)** | The guided tour |
+| **[Reference](docs/reference.md)** | Every agent, provider option, gateway endpoint, CLI command and file |
+| **[Plugins](https://usemagpie.ai/docs/plugins)** | Use plugins and write your own |
+| **[Intent routing](https://usemagpie.ai/docs/intent)** | Route each turn by what it asks for |
+| **[Import links](https://usemagpie.ai/docs/import)** | "Add to magpie" buttons for provider websites |
+| **[Remote magpie](https://usemagpie.ai/docs/remote)** | Use one magpie's providers and groups from your other computers |
+| **[Docker（上游发行版）](https://usemagpie.ai/docs/docker)** | Run magpie on a server or a NAS |
+
+## Privacy
+
+Your prompts, replies, keys and accounts go only to the providers you use, and with [privacy masking](#privacy-masking) on, the secrets in them don't go even there. Once a day a released magpie tells us it is in use: a random id, its version and system, and which agents, providers and models it is used with, by magpie's own ids (a provider you added yourself is only `custom`), which of the plugins Discover lists are installed and which of the Library market’s MCP servers you use, by their market ids, so they can show how many use each one, and for each partner listed first in the add sheet or the Plugins page, how many times a day it was shown, opened and added, and how many times the Plugins page was opened (counts only). No names, URLs, accounts, keys, prompts or usage. Turn part or all of it off in **Settings → Privacy**, or with `DO_NOT_TRACK=1`. A partner's website and key links go through `usemagpie.ai/go/…`, which counts the click, and usemagpie.ai counts fetches of the partner list; the server sees these whatever the settings, and keeps no id or address. Icons named by a plugin, an import link or the library are fetched through `usemagpie.ai/api/icon`, so their hosts see Cloudflare's address, not yours; the server only passes the picture on, and counts and keeps nothing. An artifact you share goes to usemagpie.ai, with each version after, until you stop sharing it. The [Privacy page](https://usemagpie.ai/docs/privacy) lists everything magpie sends by itself, with an example and every switch; the [reference](docs/reference.md#counting-users) has the rules.
+
+## Community
+
+Questions, ideas, or a model that won't show up? Tell us on **[Discord](https://discord.gg/vGSnD3ZKQF)**. That is where feedback goes.
+
+**This repository doesn't take pull requests.** Only maintainers can open them. If you'd like a fix or a feature, describe it on Discord and we'll build it.
+
+If magpie saved you from editing one more config file, **a ⭐ helps others find it.**
+
+<a href="https://star-history.com/#yetone/magpie&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=yetone/magpie&type=Date&theme=dark">
+    <img src="https://api.star-history.com/svg?repos=yetone/magpie&type=Date" width="600" alt="Star history">
+  </picture>
+</a>
+
+## License
+
+[MIT](LICENSE)
+
+magpie is not affiliated with [Apache Magpie](https://magpie.apache.org) or the [Apache Software Foundation](https://apache.org).

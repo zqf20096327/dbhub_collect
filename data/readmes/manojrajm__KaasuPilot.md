@@ -7,13 +7,57 @@
 **An offline-first personal finance app for India: salary cycles, cards, loans and bank SMS, with all data kept on your phone.**
 
 [![Latest release](https://img.shields.io/github/v/release/manojrajm/KaasuPilot?color=00F0FF&label=release&logo=github)](https://github.com/manojrajm/KaasuPilot/releases)
+[![APK downloads](https://img.shields.io/github/downloads/manojrajm/KaasuPilot/total?color=00F0FF&label=%E2%AC%87%20downloads&logo=android&logoColor=white)](https://github.com/manojrajm/KaasuPilot/releases/latest)
 ![Platform](https://img.shields.io/badge/platform-Android-3DDC84?logo=android&logoColor=white)
 ![Expo SDK](https://img.shields.io/badge/Expo%20SDK-58-000020?logo=expo)
 ![React Native](https://img.shields.io/badge/React%20Native-0.88-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![Data](https://img.shields.io/badge/data-on--device%20only-0B1530)
 
+<br />
+
 [**Download the APK**](https://github.com/manojrajm/KaasuPilot/releases/latest) · [Features](#features) · [Architecture](#architecture) · [Getting started](#getting-started) · [Security & privacy](#security--privacy)
+
+<br />
+
+<table>
+  <tr>
+    <td align="center" width="25%">
+      <sub><b>TOTAL DOWNLOADS</b></sub><br /><br />
+      <a href="https://github.com/manojrajm/KaasuPilot/releases">
+        <img src="https://img.shields.io/github/downloads/manojrajm/KaasuPilot/total?style=for-the-badge&color=00F0FF&label=%E2%AC%87%20ALL%20APK&logo=android&logoColor=white" alt="Total APK downloads" />
+      </a><br />
+      <sub>Live across all releases</sub>
+    </td>
+    <td align="center" width="25%">
+      <sub><b>LATEST BUILD</b></sub><br /><br />
+      <a href="https://github.com/manojrajm/KaasuPilot/releases/latest">
+        <img src="https://img.shields.io/github/downloads/manojrajm/KaasuPilot/latest/total?style=for-the-badge&color=3DDC84&label=%E2%AC%87%20LATEST&logo=googleplay&logoColor=white" alt="Latest release APK downloads" />
+      </a><br />
+      <sub>Current release installs</sub>
+    </td>
+    <td align="center" width="25%">
+      <sub><b>ACTIVE RELEASE</b></sub><br /><br />
+      <a href="https://github.com/manojrajm/KaasuPilot/releases/latest">
+        <img src="https://img.shields.io/github/v/release/manojrajm/KaasuPilot?style=for-the-badge&color=7C3AED&label=VERSION&logo=github&logoColor=white" alt="Latest release version" />
+      </a><br />
+      <sub>Signed Android APK</sub>
+    </td>
+    <td align="center" width="25%">
+      <sub><b>COMMUNITY TRUST</b></sub><br /><br />
+      <a href="https://github.com/manojrajm/KaasuPilot/stargazers">
+        <img src="https://img.shields.io/github/stars/manojrajm/KaasuPilot?style=for-the-badge&color=F59E0B&label=STARS&logo=github&logoColor=white" alt="GitHub stars" />
+      </a><br />
+      <sub>100% on-device privacy</sub>
+    </td>
+  </tr>
+</table>
+
+<!-- APK-DOWNLOAD-COUNT:START -->
+<a href="https://github.com/manojrajm/KaasuPilot/releases/latest">
+  <img src="assets/images/apk_kpi_card.svg" alt="KasuPilot Live APK KPI Telemetry" width="100%" />
+</a>
+<!-- APK-DOWNLOAD-COUNT:END -->
 
 <br />
 

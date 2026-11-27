@@ -55,6 +55,32 @@ across 10 tables, 300 client threads on a separate host over the private network
 reconnects were recorded. See the [full benchmark report](docs/sysbench-100m-300clients-2026-11-16.md)
 for configuration, methodology, and complete results.
 
+### Smart indexing: fewer full scans without manual indexes
+
+Changing filters and agent-generated SQL make query patterns hard to predict.
+MyDB enables automatic **Zone Maps** on persistent user tables by default.
+Per-block summaries let eligible scans skip blocks that cannot match a
+predicate, reducing work without requiring a hand-built B-tree index for every
+filtering pattern. Serial, parallel, and vectorized scans retain final
+predicate checks; missing or untrusted summaries fall back to a regular scan.
+
+On **15 million TPC-H SF=10 orders**, with no user-created indexes in either
+database, MyDB 1.0.3 and MySQL 8.0.46 produced these lookup results:
+
+| Lookup | MyDB median (ms) | MySQL median (ms) | Speedup |
+| --- | ---: | ---: | ---: |
+| Order ID (ordered column) | **1.206** | 7,577.824 | **6,281.8x** |
+| Customer ID (scattered column) | **32.466** | 7,678.232 | **236.5x** |
+
+Single-threaded, warm-cache medians cover five random values with three
+executions per value; speedup is MySQL time / MyDB time. See the
+[no-index lookup benchmark](docs/zone-map-no-index-benchmark.md) for the schema,
+SQL, scanned pages, disk space, and full test conditions.
+
+The benefit depends on data layout and selectivity. See the
+[feature overview](docs/feature-overview.md) for the mechanism and fallbacks.
+
+
 **MyDB vs. MySQL 8.0**, measured November 17, 2026:
 
 | Workload | MyDB | MySQL | Advantage |
@@ -71,20 +97,19 @@ historical three-engine subset. TPC-derived results are unaudited. See the
 [detailed comparison](docs/performance-comparison.md) for results, test
 conditions, result differences, and limitations.
 
-**Cohere 1M HNSW**, November 14, 2026, 768-dimensional FLOAT32 cosine top-100:
+**Cohere 1M HNSW**, November 24, 2026: 768-dimensional FLOAT32 cosine Top-100,
+with MyDB query-candidate memoization disabled.
 
-| Measurement | MyDB | PostgreSQL 18.6 + pgvector 0.8.7 | Advantage |
+| Database memory limit | MyDB, 16 clients | PostgreSQL 18.6 + pgvector 0.8.7 | MyDB throughput |
 | --- | ---: | ---: | ---: |
-| Search, 1 client | 670 queries/s | 179 queries/s | **3.7x throughput** |
-| Search, 16 clients | 5,200 queries/s | 1,954 queries/s | **2.7x throughput** |
-| Search p99 latency, 16 clients | 5.6 ms | 14.7 ms | **2.6x lower latency** |
-| Recall@100 | 94.8% | 94.4% | Comparable (+0.4 pp) |
-| HNSW build | 53 s | 118 s | **2.2x speedup** |
+| 32 GiB | 5,121 queries/s | 2,142 queries/s | **2.39x** |
+| 2 GiB | 458 queries/s | 139 queries/s | **3.29x** |
 
-The reported search throughput ratio is 2.7x at 16 clients. Both engines used
-the same 16-vCPU host,and durable commits. Sources, exact settings, and
-reporting limits are documented in the
-[November 14 Cohere 1M result record](docs/vector-cohere-1m-hnsw-benchmark-2026-11-14.md).
+Both engines used the same 16-vCPU host and durable commits. At 32 GiB,
+Recall@100 was 94.741% vs 94.395%; at 2 GiB it was
+95.331% vs 94.341%. See the
+[Cohere 1M benchmark](docs/vector-cohere-1m-hnsw-benchmark-2026-11-24.md) for index-build times,
+latency, settings, and all query rounds.
 
 ## Testing
 
@@ -262,8 +287,8 @@ An agent's data needs change with every task: add a column, build an index, writ
 ### Model calls in SQL: generate text and embeddings
 
 - **Text generation**: `AI_GENERATE` accepts a prompt or text message history for summarization, classification, extraction, and answer generation over selected data.
-- **Native embeddings**: `AI_EMBED` returns a FLOAT32 `VECTOR` with validated dimensions. `AI_EMBED_DETAIL` also accepts explicit batches of texts.
-- **Local and remote services**: configure SQL connection and model objects for Ollama, OpenAI Responses, Chat Completions-compatible services, and Embeddings-compatible services. Model weights and inference run outside MyDB.
+- **Native embeddings**: `AI_EMBED` returns a FLOAT32 `VECTOR` with validated dimensions. Text and explicit image URL/BLOB inputs are supported through configured adapters; `AI_EMBED_DETAIL` also accepts batches of texts or image URLs.
+- **Local and remote services**: configure SQL connection and model objects for Ollama, OpenAI Responses, Chat Completions-compatible services, Embeddings-compatible services, DashScope multimodal embeddings, and vLLM Chat Embeddings. Model weights and inference run outside MyDB.
 - **Structured results**: generation can request JSON Schema output when the configured deployment supports it; MyDB parses and validates the result locally. `_DETAIL` functions expose model revision, provider-reported token usage, timings, and explicit call errors.
 
 Ordinary filtering, joins, sorting, and `LIMIT` run before calls in the final
@@ -271,16 +296,6 @@ SELECT projection, so applications can select the rows to enrich before
 contacting a model. Calls also support a single `SET @variable = AI_...`
 assignment. See [LLM and embedding calls](docs/ai.md) and the
 [AI function reference](docs/function/ai/README.md) for setup and supported SQL contexts.
-
-### Smart indexing: fewer full scans without manual indexes
-
-MyDB enables automatic **Zone Maps** on persistent user tables by default.
-Per-block summaries let eligible scans skip blocks that cannot match a
-predicate, reducing work without requiring a hand-built B-tree index for every
-filtering pattern. Serial, parallel, and vectorized scans retain final
-predicate checks; missing or untrusted summaries fall back to a regular scan.
-The benefit depends on data layout and selectivity. See the
-[feature overview](docs/feature-overview.md) for the mechanism and fallbacks.
 
 ### Online DDL: schemas that evolve with the task
 
@@ -433,6 +448,7 @@ The full coverage map, transactional differences, and unsupported features are l
 | **`generate_series()`** | Integer, decimal, and datetime series for time axes, gap filling, and data generation. |
 | **TABLESAMPLE** | Explore data with row/page sampling, percentage or exact row counts, and repeatable samples. |
 | **B-tree INCLUDE** | Cover query columns without adding them to the search key. |
+| **Partial indexes** | Index only rows satisfying a WHERE predicate, including conditional uniqueness and supported retrieval indexes. |
 | **`CREATE OR REPLACE` routines** | Replace procedure and function definitions while preserving routine grants. |
 | **SQL ROWID** | Locate heap rows directly; physical addresses can be reused. |
 
@@ -476,6 +492,11 @@ Unimplemented SQL or protocol capabilities return clear errors rather than faili
 
 ## Documentation
 
+The guides in this checkout follow the current source, which includes changes
+after the 1.0.2 release. Start with [current source changes](docs/current-source.md)
+for new capabilities and physical-format requirements. Use documentation from
+the matching Git tag when running a downloaded release.
+
 | Entry point | Contents |
 | --- | --- |
 | [Why MyDB](docs/why-mydb.md) | HTAP mixed workloads, AI capabilities, application benefits, and performance evidence |
@@ -483,6 +504,8 @@ Unimplemented SQL or protocol capabilities return clear errors rather than faili
 | [Feature overview](docs/feature-overview.md) | Capability map and implementation boundaries |
 | [AI model calls](docs/ai.md) / [Hybrid search](docs/hybrid-search.md) | Model setup, embeddings, generation, permissions, and retrieval fusion |
 | [SQL statements](docs/statement/README.md) / [Functions](docs/function/README.md) | Syntax, semantics, and usage examples |
+| [Partial indexes](docs/partial-indexes.md) / [Zone Maps](docs/zone-maps.md) | Predicate-qualified indexes and automatic scan pruning |
+| [Time travel](docs/time-travel.md) | Historical reads, retention, and schema boundaries |
 | [Configuration guide](docs/configuration.md) / [Config template](mydb.cnf.example) | Startup options, environment variables, and runtime settings |
 | [Data directory and recovery](docs/storage-format.md) | File roles, format compatibility, durability, and crash recovery |
 

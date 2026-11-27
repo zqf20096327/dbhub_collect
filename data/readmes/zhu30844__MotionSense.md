@@ -2,7 +2,13 @@
 
 English | [简体中文](README_cn.md)
 
-Last edited: 2026-11-25
+Last edited: 2026-11-26
+
+> **Status.** To use MotionSense, take a
+> [v1 release](https://github.com/zhu30844/MotionSense/releases) or the
+> [`1.x` branch](https://github.com/zhu30844/MotionSense/tree/1.x). `main` is
+> being reworked towards 2.0, and nothing on it is promised to work until 2.0
+> is released.
 
 Motion-triggered video recording for the Luckfox Pico Pro Max (Rockchip
 RV1106; support for the Pico Ultra is in progress). Records H.264 to HLS on
@@ -126,8 +132,7 @@ Configuration is one `config.json` on the SD card. The daemon writes it with
 the defaults on first boot and never overwrites it after that, so a blank card
 still records. [docs/BUILD.md](docs/BUILD.md#configuration) lists the keys.
 
-`S99motionsense` hands the camera over from the stock `rkipc` app and starts
-both. Each waits for the card to mount by itself, and is started again if it
+`S99motionsense` starts both; the vendor's `rkipc` app is not in the image. Each waits for the card to mount by itself, and is started again if it
 exits; a recorder that stops storing frames resets the board through the
 hardware watchdog. [docs/BUILD.md](docs/BUILD.md#supervision) has the
 details. The script ships in the

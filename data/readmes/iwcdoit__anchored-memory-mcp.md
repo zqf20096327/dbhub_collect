@@ -6,7 +6,7 @@
 ![Embedding](https://img.shields.io/badge/BGE-bge--small--zh--v1.5-F59E0B)
 ![MkDocs Material](https://img.shields.io/badge/MkDocs-Material-526CFE?logo=materialformkdocs&logoColor=white)
 
-面向 **Claude Code、Codex、Cursor** 等多工具协同研发场景的**轻量化、低 Token 开销**上下文与研发经验管理服务。基于 **Git** 维护项目确定性规范（AGENTS.md / CLAUDE.md / .ai 目录），通过 **Basic Memory + MCP 协议** 沉淀带 **代码锚点（Code Anchors）** 与 **可执行诊断剧本（Playbook）** 的活体研发记忆，结合 **SQLite FTS5 (BM25) + 本地轻量中文 Embedding (bge-small-zh-v1.5)** 混合检索与 **MkDocs** 知识站，在大幅降低 Agent 盲搜代码 Token 消耗的同时，实现跨会话记忆复用、防过期自愈与团队知识共享。
+面向 **Claude Code、Codex、Cursor** 等多工具与团队协同开发场景的轻量化研发记忆与上下文管理服务。日常用 AI 辅助研发时，排障经验和业务设计往往散落在单次对话里——换个会话就“失忆”，换个工具就不互通，写成静态文档又容易在代码重构后过期误导。本项目将**项目公共规范**随 Git 仓库版本化共享，将**跨会话的排障与设计笔记**沉淀到统一的 MCP 记忆服务中；每篇笔记直接关联真实的源码路径、核心方法与排查验证步骤，让 AI 下次遇到同类问题时能直接顺着笔记定位代码并核对逻辑是否变更，同时支持在网页端实时查阅。
 
 ![一图看懂 AI Coding 研发记忆库](docs/assets/anchored-memory-comic.svg)
 
@@ -37,7 +37,7 @@ Apply any more-specific AGENTS.md files within their directory scope.
 - **按需混合检索与内联锚点核验（memory-continue，零额外脚本轮次）**：
   仅在排查疑难故障或跨会话续接时，按 repository 过滤执行 BM25 + BGE 中文向量混合检索。AI 读回笔记后，直接顺着笔记的 **code_paths** 打开目标源码文件，在读代码的同时顺手核对 **code_symbols**（类名#方法名/常量）是否完好（对话内零额外脚本调用；同时服务端提供 coding_memory.drift 供离线/CI 零 Token 批量巡检三级漂移状态：**CLEAN** 零漂移 / **MODIFIED_SAFE** 符号完好 / **DRIFTED** 高危漂移）。
 
-- **受控可执行剧本直达（Playbook）**：
+- **可执行剧本直达（Playbook）**：
   笔记内置标准化 Playbook 章节，直接向 AI 提供精确的验证路径，杜绝盲猜试错：
   - **[probe] 只读诊断探针**：遇到同类症状时可直接复用的日志检索式或参数化只读排查 SQL。
   - **[verify] 回归验证命令**：精确到测试类的最小回归单测命令（如 mvn test -Dtest=xxxTest）。

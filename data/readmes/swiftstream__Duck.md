@@ -55,13 +55,17 @@ SQLite, Core Data, SwiftData, Realm, and similar tools all have valid use cases.
 
 ## Installation
 
+Use Duck 1.1.0 or later within the 1.x release series. Upgrading from 1.0? See the [release notes](RELEASE_NOTES.md#migration-from-10-important-behavior-changes) for changes to explicit Connection and Pool ownership.
+
+Duck uses release tags without a version prefix, such as `1.1.0`.
+
 ### Xcode
 
 For an iOS or macOS app, add Duck directly from Xcode:
 
 1. Choose `File -> Add Package Dependencies`.
 2. Enter `https://github.com/SwiftStream/Duck`.
-3. Use `Up to Next Major Version` starting from `1.0.0`.
+3. Use `Up to Next Major Version` starting from `1.1.0`.
 4. Add the `Duck` product to your app target.
 
 Then:
@@ -81,7 +85,7 @@ If your project is itself a Swift package, add Duck in the usual Swift Package M
 ```swift
 .package(
     url: "https://github.com/SwiftStream/Duck",
-    from: "1.0.0"
+    from: "1.1.0"
 )
 ```
 
@@ -147,7 +151,7 @@ private var appDatabaseDirectory: URL {
         .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
 }
 
-extension DatabaseIdentifier {
+extension Database {
     static var app: Self {
         Self(
             path: appDatabaseDirectory
@@ -190,7 +194,7 @@ func prepareDatabase() async throws {
         withIntermediateDirectories: true
     )
 
-    _ = try await DatabaseIdentifier.app
+    _ = try await Database.app
         .migrator([Todo.Create()])
         .migrate()
 }
@@ -312,19 +316,19 @@ Start with a Todo model. Reach for the deeper database machinery only when the a
 
 ## Database setup
 
-`DatabaseIdentifier` is the lightweight application-facing identity of a Duck database.
+`Database` is the lightweight application-facing identity of a Duck database.
 
 The Todo example above already created `.app` as a file-backed database in Application Support. That is the normal shape for an iOS or macOS application.
 
 You can create another file-backed identity anywhere you control:
 
 ```swift
-let archiveDatabase = DatabaseIdentifier(
+let archiveDatabase = Database(
     path: "/path/to/archive.duckdb"
 )
 ```
 
-Constructing an identifier does not open DuckDB. The first operation resolves it lazily, and equivalent identifiers resolve the same canonical runtime inside the process.
+Constructing a `Database` value does not open DuckDB. The first operation resolves its runtime lazily, and equivalent values share the same process-local runtime and bounded reusable Connection pool. `Database(memory: "name")` identifies a shared named in-memory database; `Database.memory()` creates a unique identity.
 
 Most app code can execute and decode directly on `.app`:
 
@@ -332,19 +336,20 @@ Most app code can execute and decode directly on `.app`:
 let todos = try await Todo.all(on: .app)
 ```
 
-Open an explicit `Connection` only when several operations should intentionally share one native connection or when statement, transaction, or appender lifetime matters:
+Borrow an explicit `Connection` only when several operations should intentionally share one exact lease or when statement, transaction, or Appender lifetime matters. Prefer the scoped form when the lifetime fits one lexical operation:
 
 ```swift
-let connection = try await DatabaseIdentifier.app.connect()
-let todos = try await Todo.all(on: connection)
+let todos = try await Database.app.connection { connection in
+    try await Todo.all(on: connection)
+}
 ```
 
-Operations passed the same `Connection` intentionally share that native connection. Each `Connection` is an actor that owns one native DuckDB connection and serializes work submitted to it.
+A public `Connection` is a thin actor handle bound to one exact lease authority over a reusable internal Connection runtime/core. Operations submitted through that handle are serialized by the underlying runtime. When the scoped body ends, the lease ends and a healthy core returns to the canonical Pool for reuse.
 
 For tests, previews, and genuinely temporary data, an in-memory database is one line:
 
 ```swift
-let database = DatabaseIdentifier.memory()
+let database = Database.memory()
 ```
 
 ## First query
@@ -460,14 +465,15 @@ let query = Todo
 let result = try await query.query(on: .app)
 ```
 
-or through an explicit connection:
+or through a scoped explicit Connection lease:
 
 ```swift
-let connection = try await DatabaseIdentifier.app.connect()
-let result = try await connection.query(query)
+let result = try await Database.app.connection { connection in
+    try await connection.query(query)
+}
 ```
 
-Both forms use the same execution engine.
+Both forms use the same execution engine. The scoped form also makes the lease return boundary explicit without depending on manual release or deinitialization timing.
 
 ## Decoding results
 
@@ -670,7 +676,7 @@ let saved = try await Todo(
 The same model APIs work inside a transaction:
 
 ```swift
-try await DatabaseIdentifier.app.transaction { transaction in
+try await Database.app.transaction { transaction in
     var todo = try await Todo(name: "Transactional Todo")
         .insert(on: transaction)
 
@@ -732,7 +738,7 @@ This model layer is deliberately focused rather than a broad ORM. It does not ad
 The Todo example already used a schema migration:
 
 ```swift
-_ = try await DatabaseIdentifier.app
+_ = try await Database.app
     .migrator([Todo.Create()])
     .migrate()
 ```
@@ -781,7 +787,7 @@ struct SeedWelcomeTodo: Migration {
 Then include it in the ordered migration list:
 
 ```swift
-_ = try await DatabaseIdentifier.app
+_ = try await Database.app
     .migrator([
         Todo.Create(),
         SeedWelcomeTodo()
@@ -816,101 +822,99 @@ print(rowsChanged)
 
 ## Reusable prepared statements
 
-Prepare one model-backed query shape and execute it repeatedly with new values:
+Prepare one model-backed query shape and reuse it while one scoped canonical Connection lease is live:
 
 ```swift
-let connection = try await DatabaseIdentifier.app.connect()
+try await Database.app.connection { connection in
+    let insertTodo = try await connection.prepare { parameters in
+        let id = parameters.parameter()
+        let name = parameters.parameter()
+        let createdAt = parameters.parameter()
 
-let insertTodo = try await connection.prepare { parameters in
-    let id = parameters.parameter()
-    let name = parameters.parameter()
-    let createdAt = parameters.parameter()
+        return SQL
+            .insertInto(
+                Todo.table,
+                fields: \Todo.$id, \Todo.$name, \Todo.$createdAt
+            )
+            .values
+            .values(id, name, createdAt)
+    }
 
-    return SQL
-        .insertInto(
-            Todo.table,
-            fields: \Todo.$id, \Todo.$name, \Todo.$createdAt
-        )
-        .values
-        .values(id, name, createdAt)
-}
-
-let todoID = UUID()
-
-try await insertTodo.execute(
-    todoID,
-    "Learn prepared statements",
-    Date()
-)
-
-try await insertTodo.execute(
-    UUID(),
-    "Reuse the same native statement",
-    Date()
-)
-```
-
-The SQL shape is prepared once. Only the parameter values change between executions.
-
-A reusable typed SELECT works the same way:
-
-```swift
-let findTodo = try await connection.prepare { parameters in
-    let id = parameters.parameter()
-
-    return Todo
-        .select
-        .where(\Todo.$id == id)
-}
-
-let result = try await findTodo.query(todoID)
-let todo = try result.first(decoding: Todo.self)
-```
-
-A query with no dynamic parameters can be prepared directly:
-
-```swift
-let activeTodos = try await connection.prepare(
-    Todo
-        .select
-        .where(\Todo.$deletedAt == nil)
-        .orderBy(.asc(\Todo.$createdAt))
-)
-
-let result = try await activeTodos.query()
-let todos = try result.all(decoding: Todo.self)
-```
-
-### Reuse a statement inside a transaction
-
-A `Statement` belongs to the `Connection` that prepared it.
-
-To use it inside a transaction on that owner connection, pass the explicit transaction:
-
-```swift
-try await connection.transaction { transaction in
-    let id = UUID()
+    let todoID = UUID()
 
     try await insertTodo.execute(
-        on: transaction,
-        id,
-        "Transactional Todo",
+        todoID,
+        "Learn prepared statements",
         Date()
     )
 
-    let result = try await findTodo.query(
-        on: transaction,
-        id
+    try await insertTodo.execute(
+        UUID(),
+        "Reuse the same native statement",
+        Date()
     )
 
+    let findTodo = try await connection.prepare { parameters in
+        let id = parameters.parameter()
+
+        return Todo
+            .select
+            .where(\Todo.$id == id)
+    }
+
+    let result = try await findTodo.query(todoID)
     let todo = try result.first(decoding: Todo.self)
-    print(todo?.name as Any)
+
+    let activeTodos = try await connection.prepare(
+        Todo
+            .select
+            .where(\Todo.$deletedAt == nil)
+            .orderBy(.asc(\Todo.$createdAt))
+    )
+
+    let activeResult = try await activeTodos.query()
+    let todos = try activeResult.all(decoding: Todo.self)
+
+    print(todo?.name as Any, todos.count)
 }
 ```
 
-A statement cannot execute on a transaction from another connection. Ordinary statement execution from a live same-connection transaction body is rejected; use the explicit `on: transaction` overload.
+The SQL shape is prepared once per `Statement`. Only the parameter values change between executions, and the scoped Connection lease is returned automatically when the body ends.
 
-`Statement` is `Sendable`, but native execution still belongs to its originating connection and follows that connection's serialization.
+### Reuse a statement inside a transaction
+
+A `Statement` belongs to the exact Connection lease that prepared it. Use it inside a transaction on that same owner connection by passing the explicit transaction:
+
+```swift
+try await Database.app.connection { connection in
+    let insertTodo = try await connection.prepare { parameters in
+        let id = parameters.parameter()
+        let name = parameters.parameter()
+        let createdAt = parameters.parameter()
+
+        return SQL
+            .insertInto(
+                Todo.table,
+                fields: \Todo.$id, \Todo.$name, \Todo.$createdAt
+            )
+            .values
+            .values(id, name, createdAt)
+    }
+
+    try await connection.transaction { transaction in
+        try await insertTodo.execute(
+            on: transaction,
+            UUID(),
+            "Transactional Todo",
+            Date()
+        )
+    }
+}
+```
+
+A statement cannot execute on a transaction from another Connection lease. Ordinary statement execution from a live same-connection transaction body is rejected; use the explicit `on: transaction` overload.
+
+`Statement` is `Sendable`, but native execution still belongs to its originating Connection runtime and follows that runtime's serialization and exact lease authority.
 
 Supported dynamic arguments include:
 
@@ -1047,16 +1051,16 @@ Duck supports two explicit transaction styles.
 Use a closure when one lexical scope owns the whole transaction:
 
 ```swift
-let connection = try await DatabaseIdentifier.app.connect()
+let result = try await Database.app.connection { connection in
+    try await connection.transaction { transaction in
+        let todo = Todo(name: "Transactional Todo")
+        try await todo.insertNonReturning(on: transaction)
 
-let result = try await connection.transaction { transaction in
-    let todo = Todo(name: "Transactional Todo")
-    try await todo.insertNonReturning(on: transaction)
-
-    return try await Todo
-        .select
-        .where(\Todo.$id == todo.id)
-        .query(on: transaction)
+        return try await Todo
+            .select
+            .where(\Todo.$id == todo.id)
+            .query(on: transaction)
+    }
 }
 
 let inserted = try result.first(decoding: Todo.self)
@@ -1075,12 +1079,14 @@ Structured child work may share the transaction when it is awaited before body r
 Use `connection.transaction()` when lifetime must span code that does not fit one closure:
 
 ```swift
-let transaction = try await connection.transaction()
+try await Database.app.connection { connection in
+    let transaction = try await connection.transaction()
 
-let todo = Todo(name: "Manual transaction")
-try await todo.insertNonReturning(on: transaction)
+    let todo = Todo(name: "Manual transaction")
+    try await todo.insertNonReturning(on: transaction)
 
-try await transaction.commit()
+    try await transaction.commit()
+}
 ```
 
 The handle owns a one-shot lifetime. The connection remains reserved until terminal `commit()` or `rollback()`.
@@ -1090,16 +1096,18 @@ There is no hidden deinitializer cleanup.
 With Swift 6.4 or newer, `rollbackIfNeeded()` provides nonthrowing best-effort asynchronous cleanup designed for `defer`:
 
 ```swift
-let transaction = try await connection.transaction()
+try await Database.app.connection { connection in
+    let transaction = try await connection.transaction()
 
-defer {
-    await transaction.rollbackIfNeeded()
+    defer {
+        await transaction.rollbackIfNeeded()
+    }
+
+    let todo = Todo(name: "Manual transaction")
+    try await todo.insertNonReturning(on: transaction)
+
+    try await transaction.commit()
 }
-
-let todo = Todo(name: "Manual transaction")
-try await todo.insertNonReturning(on: transaction)
-
-try await transaction.commit()
 ```
 
 On earlier compilers, explicitly finalize with `commit()` or `rollback()`.
@@ -1148,10 +1156,10 @@ let query = Todo
     .select
     .where(\Todo.$deletedAt == nil)
 
-let observation = try DatabaseIdentifier.app.observe(query)
+let observation = try Database.app.observe(query)
 ```
 
-Creating the observation captures the query synchronously without opening DuckDB. Each iterator resolves the canonical runtime lazily and owns its own private refresh connection.
+Creating the observation captures the query synchronously without opening DuckDB. Each iterator resolves the canonical runtime lazily. Before each refresh, it widens dependency tracking to the whole database, then borrows a scoped Connection lease from the canonical Pool. It returns the lease after materializing the read-only result and narrows dependency tracking only after that successful return.
 
 `QueryObservation` is reusable and latest-state, not an event log:
 
@@ -1164,13 +1172,15 @@ Refreshes use the normal prepared/bound execution path and run in a native READ 
 
 Invalidation is local to the canonical runtime behind the identifier.
 
-Mutations through equivalent identifiers, their connections, reusable statements, transactions, and Appenders participate in the same observation invalidation system.
+Mutations through equivalent `Database` values, their Connections, reusable Statements, transactions, and Appenders participate in the same observation invalidation system. Successful ordinary non-read-only execution and Appender writes conservatively invalidate the whole database. An unrelated table write can therefore cause a refresh; equal-result suppression happens after the query runs. Duck does not promise table-, column-, predicate-, or row-level mutation filtering. A declared target alone cannot describe all effects of a write, including writes performed by triggers.
 
 Transaction mutations publish only after definitive COMMIT or ROLLBACK finalization.
 
 Ordinary Appender rows follow native visibility, so rows DuckDB already made durable may become observable before the Appender body returns. Transaction Appender rows remain transaction-local until outer finalization.
 
-Changes through another identifier, another process, or direct external file mutation are outside the contract.
+Changes through a different logical database, another process, or direct external file mutation are outside the contract. The canonical runtime, Connection pool and Observation coordinator are process-local, even when two processes use the same file path.
+
+For an app and a WidgetKit extension sharing an App Group, do not open the same live primary DuckDB file for simultaneous app read-write and widget read access. Publish committed widget state from the app into the shared container instead: a small Codable projection is often sufficient; a separate finalized DuckDB snapshot is an option when the widget genuinely needs SQL. Let the widget read the published state and request a timeline reload after publication. Duck does not currently provide a cross-process observation or snapshot-publication helper.
 
 Duck does not expose polling, filesystem watching, Combine/SwiftUI publishers, typed observation, event history, public observation options, `Connection.observe`, or `DuckTransaction.observe`.
 
@@ -1178,14 +1188,49 @@ Cancellation or refresh failure terminates one iterator, not the reusable observ
 
 ## Connection pools
 
-Create a bounded pool from the same app database:
+Duck uses one canonical bounded pool per logical `Database` runtime. Ordinary `Database`-backed query/execute, model persistence, managed transactions, Appender work, migrations, scoped `Database.connection { ... }`, and manual `Database.connect()` leases all use that same reusable bounded resource rather than opening unrelated native Connections. Observation refreshes also use that same reusable bounded resource. Each iterator keeps its own worker and registration, while each refresh borrows and returns a scoped lease.
+
+Without explicit configuration, Duck uses a conservative **1/1** policy:
 
 ```swift
-let pool = try await DatabaseIdentifier.app
-    .pool(maximumConnections: 4)
+let database = Database.memory()
+let pool = try await database.pool()
+
+pool.minimumConnections // 1
+pool.maximumConnections // 1
 ```
 
-Checkout is scoped:
+The 1/1 default is deliberately conservative; it is **not** a claim that one Connection is optimal for every application. DuckDB's [connection best practices](https://duckdb.org/docs/stable/guides/performance/how_to_tune_workloads.html#best-practices-for-using-connections) recommend reusing Connections, note that frequently a single Connection works best, and explain that multiple Connections are useful only when the workload actually benefits from independent concurrent work. Individual DuckDB queries can already parallelize internally, so a larger pool should not be treated as a generic speed setting.
+
+When your application needs a different bound, configure it before the first canonical pool use. For a separate in-memory database, apply the `Todo.Create` migration to that same database before using the model:
+
+```swift
+let database = Database.memory()
+
+try await database.configure(
+    minimumConnections: 1,
+    maximumConnections: 4
+)
+
+_ = try await database
+    .migrator([Todo.Create()])
+    .migrate()
+
+let pool = try await database.pool()
+```
+
+`minimumConnections` is the number of reusable Connections opened eagerly before configuration completes. Set it to `0` for a fully lazy pool. Additional Connections are opened only as demand requires them, up to `maximumConnections`, then reused.
+
+The configuration rules are:
+
+- `maximumConnections > 0`;
+- `minimumConnections >= 0`;
+- `minimumConnections <= maximumConnections`;
+- equivalent `Database` values share the first frozen canonical configuration.
+
+Choose the maximum for the application's real concurrency requirements. Start small, prefer reuse, and increase it only when the application genuinely needs multiple independent Connection leases. Duck does not derive a universal pool size from local timing measurements.
+
+Use this prepared pool for scoped checkout:
 
 ```swift
 let todos = try await pool.connection { connection in
@@ -1196,19 +1241,36 @@ let todos = try await pool.connection { connection in
 }
 ```
 
-`maximumConnections` must be greater than zero.
+When all Connections are leased, checkout waits. That backpressure applies to ordinary `Database` conveniences too: with `maximumConnections = 1`, a long-lived manual lease blocks a concurrent `query(on: database)`, `database.transaction { ... }`, Database Appender, model persistence call, or migration until capacity returns. Equivalent `Database` values share the same queue. Queued requests are served in order; cancellation removes a queued request.
 
-Connections are opened lazily up to the maximum. When all are leased, checkout waits. Queued requests are served in order; cancellation removes a queued request.
+The closure owns one exact lease. Finish and await all work using its Connection before returning.
 
-The closure owns one exact lease. Finish and await all work using its connection before returning.
+Do not retain the leased Connection, a Statement prepared on it, a transaction, or an Appender for use after the lease.
 
-Do not retain the leased connection, a statement prepared on it, a transaction, or an Appender for use after the lease.
+A stale pooled Connection fails with `.poolLeaseExpired`.
 
-A stale pooled connection fails with `.poolLeaseExpired`.
+Starting another scoped or manual checkout from inherited live lease context of the same pool fails with `.poolReentrantCheckout`. Do not await ordinary `Database` operations that require another lease while retaining the first one; use the supplied Connection or Transaction instead. Deliberately externalized work can wait for capacity and form a caller-created dependency cycle.
 
-Starting another `pool.connection` from within a live lease of the same pool fails with `.poolReentrantCheckout`.
+For a longer-lived explicit lease, `Database.connect()` checks out from the same canonical pool. End that lease explicitly with `try await connection.release()`; release returns a healthy reusable core to the pool rather than physically disconnecting it. Arrange awaited release on error paths too; prefer the scoped form when possible.
+
+### Migrating from Duck 1.0
+
+`DatabaseIdentifier` remains a deprecated typealias of `Database`. Existing application-owned extensions and contextual `.app` calls still compile; new code should use `Database`.
+
+```swift
+let database = Database.memory()
+try await database.configure(minimumConnections: 1, maximumConnections: 2)
+
+let result = try await database.connection { connection in
+    try await connection.query(SQL.select(Int32(42) => "answer"))
+}
+```
+
+The old `connect()` spelling still compiles, but it now holds a manual canonical pool lease. Release it before requesting capacity that depends on it. The old `pool(maximumConnections:)` accessor is deprecated and configures/returns the same canonical pool, not a separate pool. Configure the bound before first use, then call `pool()` only when you need its handle.
 
 ### Managed transaction inside a pool
+
+Reuse the prepared `pool` from the configured in-memory database example above:
 
 ```swift
 try await pool.transaction { transaction in
@@ -1223,7 +1285,7 @@ If you create a flat transaction inside `pool.connection`, explicitly commit or 
 
 Prefer `pool.transaction` when the whole transaction fits one closure.
 
-Observation belongs to `DatabaseIdentifier`, not to the pool. There is no `pool.observe`.
+Observation belongs to `Database`, not to the pool. There is no `pool.observe`.
 
 ### Shutdown
 
@@ -1233,11 +1295,11 @@ When the owner is finished:
 try await pool.shutdown()
 ```
 
-Shutdown stops new checkouts, fails queued checkouts with `.poolClosed`, and waits for active leases to return.
+Shutdown stops new checkouts, fails queued checkouts with `.poolClosed`, and waits for active leases to return. Successful shutdown physically disconnects the pool's native Connections even if old Swift handles are still retained. Retirement keeps capacity accounted for until native disconnect completes, so a replacement cannot exceed the physical maximum. If safe retirement cannot be established, the pool reports an error and blocks new checkout rather than reporting successful shutdown. Shutdown is terminal for that process-local runtime; ordinary calls cannot silently open a standalone Connection afterward.
 
 Calling shutdown from inside a live lease of the same pool fails with `.poolShutdownFromLease`.
 
-The current pool does not expose manual checkout/release, checkout timeout, idle lifetime policy, session reset, statement cache, metrics, or a global registry.
+The current pool does not expose checkout timeout, idle lifetime policy, session reset, statement cache, public metrics, or a public global registry. Explicit manual lifetime is provided only through the canonical `Database.connect()` / `Connection.release()` lease.
 
 ## Values
 
@@ -1546,28 +1608,40 @@ Non-finite Decimal values reject.
 
 ## Concurrency
 
-One logical database can own multiple independent connection actors:
+One logical database can allow multiple simultaneous canonical Connection leases when the application explicitly configures capacity for that concurrency:
 
 ```swift
-let database = DatabaseIdentifier.memory()
+let database = Database.memory()
+
+try await database.configure(
+    minimumConnections: 2,
+    maximumConnections: 2
+)
 
 let first = try await database.connect()
 let second = try await database.connect()
+
+// Use both independent leases as needed.
+
+try await second.release()
+try await first.release()
 ```
 
-Operations submitted to one `Connection` are serialized through that connection's execution ownership, including across actor reentrancy.
+This illustrates the successful path; arrange awaited release for acquired manual leases on error paths too. Prefer scoped leases where possible.
 
-Separate connections do not share one Duck execution gate.
+Without explicit configuration, the conservative canonical default is 1/1, so a second simultaneous checkout waits until the first lease returns.
+
+Operations submitted through one `Connection` handle are serialized by its bound reusable Connection runtime, including across actor reentrancy. Separate live Connection leases may use separate pooled runtimes when configured capacity allows it.
 
 Duck's concurrency model is explicit:
 
-- a connection owns native execution;
-- a transaction reserves its connection;
-- an Appender holds scoped authority on its connection;
-- a pool leases connections;
-- observation iterators own private refresh connections.
+- a public `Connection` is an exact lease-bound handle over a pooled runtime/core;
+- a transaction reserves its exact Connection lease;
+- an Appender holds scoped authority on its exact Connection lease;
+- the canonical Pool owns bounded reusable Connection runtimes;
+- each Observation iterator owns its worker, registration, and bounded result channel; it borrows a scoped canonical-Pool lease for each refresh and holds no Connection while idle.
 
-The API does not pretend the underlying native connection is magically parallel.
+The API does not treat a larger Pool as automatic query parallelism. DuckDB may already parallelize an individual query internally, and the application chooses Pool capacity for its own independent concurrent work.
 
 ## Cancellation
 
@@ -1593,7 +1667,7 @@ Native diagnostic strings are useful diagnostics, but their exact text is not a 
 
 When a native operation leaves connection outcome ambiguous, Duck can fail-close that connection instead of pretending it is safe to keep using.
 
-Later work then receives `.connectionUnusable`; create a fresh connection.
+Later work on that lease receives `.connectionUnusable`. Return or release the unusable lease as required; canonical pooled work retires the failed core and may create a replacement within the configured capacity.
 
 This is deliberate: correctness beats optimistic recovery from a native state the library cannot prove.
 
@@ -1639,23 +1713,24 @@ Direct Appender uses an explicit table target:
 
 ```swift
 let todoTable = DB.Table(Todo.tableName)
-let connection = try await DatabaseIdentifier.app.connect()
 
-try await connection.appender(
-    to: todoTable,
-    columns: ["id", "name", "created_at"]
-) { appender in
-    try await appender.append(
-        UUID(),
-        "Imported Todo 1",
-        Date()
-    )
+try await Database.app.connection { connection in
+    try await connection.appender(
+        to: todoTable,
+        columns: ["id", "name", "created_at"]
+    ) { appender in
+        try await appender.append(
+            UUID(),
+            "Imported Todo 1",
+            Date()
+        )
 
-    try await appender.append(
-        UUID(),
-        "Imported Todo 2",
-        Date()
-    )
+        try await appender.append(
+            UUID(),
+            "Imported Todo 2",
+            Date()
+        )
+    }
 }
 ```
 
@@ -1663,23 +1738,24 @@ If every appended row must share one commit/rollback boundary, use the transacti
 
 ```swift
 let todoTable = DB.Table(Todo.tableName)
-let connection = try await DatabaseIdentifier.app.connect()
 let importedTodoNames = [
     "Imported Todo 3",
     "Imported Todo 4"
 ]
 
-try await connection.transaction { transaction in
-    try await transaction.appender(
-        to: todoTable,
-        columns: ["id", "name", "created_at"]
-    ) { appender in
-        for name in importedTodoNames {
-            try await appender.append(
-                UUID(),
-                name,
-                Date()
-            )
+try await Database.app.connection { connection in
+    try await connection.transaction { transaction in
+        try await transaction.appender(
+            to: todoTable,
+            columns: ["id", "name", "created_at"]
+        ) { appender in
+            for name in importedTodoNames {
+                try await appender.append(
+                    UUID(),
+                    name,
+                    Date()
+                )
+            }
         }
     }
 }
@@ -1775,8 +1851,8 @@ It does not currently advertise:
 - nested transactions;
 - custom transaction isolation;
 - public READ ONLY transaction mode;
-- manual pool checkout/release;
-- pool timeout/idle/session-reset/statement-cache/metrics/registry features;
+- capacity-bypassing public unpooled Connection creation;
+- pool timeout/idle/session-reset/statement-cache/public-metrics/registry features;
 - event-history observation;
 - typed/decoded observation;
 - filesystem or cross-process observation;
@@ -1805,7 +1881,8 @@ The checked-in demos and run instructions are here:
 ## Release notes
 
 - [Changelog](CHANGELOG.md)
-- [Duck 1.0.0 release notes](RELEASE_NOTES.md)
+- [Duck 1.1.0 release notes](RELEASE_NOTES.md)
+- [Duck 1.0.0 release notes](RELEASE_NOTES_1_0.md)
 
 ## Community
 

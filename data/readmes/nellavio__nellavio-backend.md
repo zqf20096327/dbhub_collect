@@ -9,7 +9,7 @@
 <h4 align="center">Open source Node.js backend for Nellavio dashboard</h4>
 <div align="center">
 
-[Getting Started](#how-to-run) &nbsp; [Data Viewer](https://data-viewer.nellavio.com) &nbsp; [Changelog](https://github.com/nellavio/nellavio/blob/main/CHANGELOG.md)
+[Getting Started](#how-to-run) &nbsp; [Data Viewer](https://data-viewer.nellavio.com) &nbsp; [API Docs](https://api-docs.nellavio.com) &nbsp; [Changelog](https://github.com/nellavio/nellavio/blob/main/CHANGELOG.md)
 
   <a href="https://github.com/nellavio/nellavio-backend/blob/master/license" style="text-decoration: none;">
     <img src="https://img.shields.io/badge/license-MIT-blue" alt="License" />
@@ -21,17 +21,18 @@
 
 ## Overview
 
-It provides data for [Nellavio](https://github.com/nellavio/nellavio) - an open source dashboard starter built with Next.js & TypeScript. The GraphQL API serves 20+ queries covering homepage metrics, orders, customers, products, analytics and more. Better Auth enables a production-ready authentication flow, handling session management, user credentials and RBAC with three roles (admin, editor, viewer) enforced via the admin plugin.
+It provides data for [Nellavio](https://github.com/nellavio/nellavio) - an open source dashboard starter built with Next.js & TypeScript. The REST API serves 7 endpoints covering homepage metrics, orders, customers, products, analytics, calendar events and notifications, described by an OpenAPI 3.1 document. Better Auth enables a production-ready authentication flow, handling session management, user credentials and RBAC with three roles (admin, editor, viewer) enforced via the admin plugin.
 
 The frontend works independently by default - it loads mock data from `backendBackup.json` and keeps route protection disabled. Connecting this backend enables real database functionality, live data fetching on each request and a complete authentication system.
 
 ## Tech stack
 
-Node.js, Fastify, PostgreSQL, Prisma, GraphQL, Docker, Better Auth
+Node.js, Fastify, PostgreSQL, Prisma, Zod, OpenAPI, Docker, Better Auth
 
 ## Endpoints
 
-- `/graphql` - GraphQL API with 20+ queries (products, orders, customers, analytics, etc.)
+- `/api/data/*` - REST API with 7 GET endpoints (homepage, analytics, orders, customers, products, events, notifications) - requires a session
+- `/docs` - Swagger UI with the OpenAPI document at `/docs/json` - available outside production only
 - `/api/auth/*` - Better Auth endpoints (sign-in, sign-up, session management)
 - `/api/auth/admin/*` - Admin endpoints (list-users, set-role, ban-user, update-user, etc.) - requires admin role
 - `/health` - Health check endpoint for monitoring
@@ -46,22 +47,26 @@ Node.js, Fastify, PostgreSQL, Prisma, GraphQL, Docker, Better Auth
 ├── src
 │   ├── assets               # Static assets
 │   ├── data                 # Mock data for seeding
-│   ├── graphql              # GraphQL API layer
-│   │   ├── schema.ts        # GraphQL schema & resolvers
-│   │   └── types.ts         # GraphQL type definitions
+│   ├── plugins              # Session check, error handler, API docs
+│   ├── routes               # REST API routes
+│   ├── schemas              # Zod response schemas
+│   ├── scripts              # OpenAPI document generator
+│   ├── services             # Homepage & analytics data
 │   ├── tests                # Test files
 │   │   └── helpers          # Test utilities
+│   ├── utils                # Utility functions
 │   ├── access.ts            # RBAC role & permission definitions
 │   ├── auth.ts              # Better Auth configuration
 │   ├── config.ts            # Environment validation
 │   ├── db.ts                # Prisma client
 │   └── server.ts            # Fastify server setup
+├── openapi.json             # Generated OpenAPI document
 └── package.json
 ```
 
 ## How to run
 
-You can run this backend locally using commands below and access the data in GraphQL UI http://localhost:4000/graphql or Prisma Studio http://localhost:5555/. Alternatively, you can deploy it on services like AWS, Back4App, Render or Heroku.
+You can run this backend locally using commands below and access the data in Swagger UI http://localhost:4000/docs or Prisma Studio http://localhost:5555/. Alternatively, you can deploy it on services like AWS, Back4App, Render or Heroku.
 
 ### Localhost
 
@@ -110,9 +115,10 @@ npm run dev
 
 Server will be available at:
 
-- GraphQL API: `http://localhost:4000/graphql`
+- REST API: `http://localhost:4000/api/data`
 - Better Auth: `http://localhost:4000/api/auth`
 - Health check: `http://localhost:4000/health`
+- Swagger UI: `http://localhost:4000/docs`
 
 7. Set up the first admin (optional):
 
@@ -151,23 +157,24 @@ After deploying backend, you can update your front-end `.env` file. Follow front
 
 Roles and permissions are defined in `src/access.ts` using Better Auth's `createAccessControl`. Three roles - **admin**, **editor** and **viewer** - each declare per-resource permissions (dashboard, analytics, orders, customers, products). The admin role additionally inherits Better Auth's built-in admin statements (`adminAc`), which grant access to user management endpoints.
 
-The roles are registered in `src/auth.ts` via the `admin` plugin with `viewer` as the default role. Admin endpoints (`/api/auth/admin/*`) such as `list-users`, `set-role` and `ban-user` are restricted to users with the admin role and use cookie-based session authentication. GraphQL resolvers currently use a binary auth gate (authenticated or not) - the per-resource permissions are ready to be checked in resolvers when needed.
+The roles are registered in `src/auth.ts` via the `admin` plugin with `viewer` as the default role. Admin endpoints (`/api/auth/admin/*`) such as `list-users`, `set-role` and `ban-user` are restricted to users with the admin role and use cookie-based session authentication. Data endpoints currently use a binary auth gate (authenticated or not) via the `verifySession` pre-handler - the per-resource permissions are ready to be checked in route handlers when needed.
 
 ## Available Commands
 
-| Command                | Action                                       |
-| :--------------------- | :------------------------------------------- |
-| `npm install`          | Installs dependencies                        |
-| `npm run build`        | Compiles TypeScript to JavaScript            |
-| `npm run dev`          | Starts dev server with hot reload            |
-| `npm start`            | Starts production server at `localhost:4000` |
-| `npm test`             | Runs test suite                              |
-| `npm run test:watch`   | Runs tests in watch mode                     |
-| `npm run lint`         | Runs ESLint to check code quality            |
-| `npm run lint:fix`     | Runs ESLint and auto-fixes issues            |
-| `npm run type-check`   | Runs TypeScript type checking                |
-| `npm run format`       | Formats code with Prettier                   |
-| `npm run format:check` | Checks if code is properly formatted         |
+| Command                    | Action                                        |
+| :------------------------- | :-------------------------------------------- |
+| `npm install`              | Installs dependencies                         |
+| `npm run build`            | Compiles TypeScript to JavaScript             |
+| `npm run dev`              | Starts dev server with hot reload             |
+| `npm start`                | Starts production server at `localhost:4000`  |
+| `npm test`                 | Runs test suite                               |
+| `npm run test:watch`       | Runs tests in watch mode                      |
+| `npm run lint`             | Runs ESLint to check code quality             |
+| `npm run lint:fix`         | Runs ESLint and auto-fixes issues             |
+| `npm run type-check`       | Runs TypeScript type checking                 |
+| `npm run format`           | Formats code with Prettier                    |
+| `npm run format:check`     | Checks if code is properly formatted          |
+| `npm run openapi:generate` | Regenerates `openapi.json` from route schemas |
 
 ### Prisma
 
@@ -188,6 +195,12 @@ You can run this application in a containerized environment using these Docker c
 | :---------------------------------------------------------- | :------------------------------------------ |
 | `docker build -t nellavio .`                                | Builds a Docker image from the Dockerfile   |
 | `docker run -p 4000:4000 -e DATABASE_URL="DB_URL" nellavio` | Runs the container with database connection |
+
+## API docs
+
+The REST API is described by the OpenAPI document in `openapi.json`, generated from the Zod route schemas. After changing a route or a schema, run `npm run openapi:generate` - the test suite fails when the file no longer matches the code. Outside production, Swagger UI is served at http://localhost:4000/docs. A static version of the API reference is available online:
+
+https://api-docs.nellavio.com/
 
 ## Data viewer
 

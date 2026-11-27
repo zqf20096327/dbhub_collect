@@ -19,16 +19,17 @@ in development and not yet published to PyPI.
 - [Security policy](SECURITY.md)
 
 The SDK is pre-1.0 while the TiDB Link HTTP API remains pre-1.0. Each SDK
-release declares its exact service baseline and supported scope. This package
-covers Organization/End User/Key provisioning, Template discovery, personal Agent
-and Session management, text commands with recoverable final results and continuous
-progress, Client Tools, explicit cancellation and checkpoint retry, conversation
-history, verified file attachments and downloads, Schedulers, Realtime
-Model/Connection preparation, prerecorded audio and User usage reads against one exact service revision.
-Resource workflows accept Organization authority with an explicit End User as well
-as existing User API Keys.
-See the TypeScript README for the supported boundaries
-and excluded capabilities.
+release declares its exact service baseline and supported scope. The SDKs
+cover End User provisioning, Template and Skill management, Connectors, Session
+management, text commands with recoverable final results and continuous
+progress, Client Tools and Session connections, File Notifications and reads
+of files in a Session's Drive, explicit cancellation and checkpoint retry,
+conversation history, verified file attachments and downloads, Realtime
+Model/Connection preparation, prerecorded audio and User usage reads against
+one exact service revision. Every resource workflow uses an Organization API
+Key with an explicitly selected End User; User API Keys are not supported. See
+[the TypeScript README](typescript/README.md#supported-scope) for the supported
+boundaries and excluded capabilities.
 
 ## Development
 

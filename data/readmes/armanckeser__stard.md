@@ -1,25 +1,91 @@
 <h1 align="center">Stard</h1>
 
-<p align="center"><b>A card battle built from your GitHub stars</b></p>
+<p align="center"><b>Organize your GitHub stars, or play a card battle with them</b></p>
 
-<p align="center">Every repo you've starred is a card. Build a team and beat other developers. No signup, free and open source.</p>
+<p align="center">Free and open source. Self-host the organizer or run with npx; play in the browser with no sign-in.</p>
+
+<table align="center">
+  <tr>
+    <th width="50%"><a href="#organize-your-stars">Organize your stars</a></th>
+    <th width="50%"><a href="#play-with-them">Play with them</a></th>
+  </tr>
+  <tr>
+    <td>Sort your stars into GitHub Lists, add tags, notes and ratings, and spot the dead repos. Runs on your machine with <code>npx</code> or self-hosted with Docker.</td>
+    <td>Every repo you starred becomes a card. Build a team and beat other developers. Type any GitHub username, no sign-in.</td>
+  </tr>
+  <tr>
+    <td align="center"><a href="#organize-your-stars"><img src="https://img.shields.io/badge/Organize_your_stars-2f6feb?style=for-the-badge" alt="Organize your stars" height="36"></a></td>
+    <td align="center"><a href="https://stard.armanckeser.com/run"><img src="https://img.shields.io/badge/Play_with_your_username-2f9e7a?style=for-the-badge" alt="Play with your username" height="36"></a></td>
+  </tr>
+</table>
 
 <p align="center">
-  <a href="https://stard.armanckeser.com/run"><img src="https://img.shields.io/badge/Play_with_your_username-2f9e7a?style=for-the-badge" alt="Play with your username" height="36"></a>
-</p>
-
-<p align="center">
-  <a href="https://stard.armanckeser.com/run"><img src="img/run.gif" alt="A round of a run in the demo: cards bought from the shop go straight onto the board, two teams of creatures fight and the round is won, then the run finishes with 5 wins and 1 loss and shows the final team" width="480" /></a>
-</p>
-
-<p align="center">
+  <a href="https://stard.armanckeser.com/organize">Organizer demo</a> ·
   <a href="https://stard.armanckeser.com/compose">Make your profile</a> ·
   <a href="https://www.npmjs.com/package/github-stars-organizer">npm</a> ·
   <a href="AGENT-API.md">Agent API</a> ·
   <a href="#option-b-self-host-with-docker">Self-host</a>
 </p>
 
-<p align="center"><b>Here to organize your stars?</b> Stard also sorts them into GitHub Lists and flags the dead ones. <a href="#it-also-organizes-the-stars">See the organizer</a></p>
+## Organize your stars
+
+I starred hundreds of repos over the years and could never find anything again. GitHub has Lists now, but sorting 500 stars into them one dropdown at a time is nobody's idea of a weekend, and a good chunk of what I had starred was dead anyway. Stard started as Stars Organizer to fix that:
+
+- **GitHub Lists.** Sort stars into your Lists by hand, or let Claude Code or Codex suggest Lists and do the sorting. Every change syncs back to GitHub.
+- **Tags, notes and 1–5 ratings** on top of your stars, searchable and filterable.
+- **Dead repos flagged.** Every repo gets a health score, and the abandoned repos come with active alternatives.
+- **Yours to run.** `npx` on your machine, or self-host with Docker. Your token stays on your own machine or server.
+
+<p align="center">
+  <img src="img/hero.gif" alt="Opening a repo's health breakdown, rating the repo four stars and adding a note, opening the Homelab list, then the Explore dashboard" width="800" />
+</p>
+
+### Option A: npx (recommended)
+
+Needs Node.js 20+ and the [GitHub CLI](https://cli.github.com/) logged in. Nothing to host:
+
+```bash
+npx github-stars-organizer
+```
+
+### Option B: self-host with Docker
+
+Needs Docker and a [classic token](https://github.com/settings/tokens/new?scopes=repo&description=Stars%20Organizer) with the `repo` scope, which is what lets Stard edit your Lists and unstar repos. Stard never reads or changes code; the key icon beside **Import Stars** shows which account and scopes the app is using. No clone:
+
+```bash
+GITHUB_TOKEN=ghp_... docker compose -f oci://ghcr.io/armanckeser/github-stars-organizer-stack:latest up -d
+```
+
+Open http://localhost:8080 and press **Import Stars**. That runs three containers (the app, Postgres and Electric); `ghcr.io/armanckeser/github-stars-organizer:aio` is all three in one, with the data under `/data`:
+
+```bash
+docker run -d -p 8080:8080 -v stars-data:/data -e GITHUB_TOKEN=ghp_... ghcr.io/armanckeser/github-stars-organizer:aio
+```
+
+The token can unstar repos and edit your Lists, so anyone who can reach the port can too. Set `AUTH_PASSWORD` to require a password, or sign in through your OIDC provider (Authentik, Authelia, Pocket ID...) with `AUTH_ENABLED=1` and the `OIDC_*` settings in [docker-compose.selfhost.yml](docker-compose.selfhost.yml). Or leave both unset behind a proxy that already checks who gets in.
+
+**From your server's app store:** add the catalog once, then install Stard like any other app.
+
+| Server | Where | Paste |
+| --- | --- | --- |
+| Cosmos | Market → Sources → Add Source | `https://armanckeser.github.io/selfhost-apps/servapps.json` |
+| CasaOS / ZimaOS | App Store → Add Source | `https://github.com/armanckeser/selfhost-apps/archive/refs/heads/casaos.zip` |
+| Runtipi | Settings → App Stores → Add App Store | `https://github.com/armanckeser/selfhost-apps` |
+| Portainer | Settings → App Templates → URL | `https://armanckeser.github.io/selfhost-apps/portainer/templates.json` |
+
+Unraid's Community Apps doesn't list Stard yet; [selfhost-apps](https://github.com/armanckeser/selfhost-apps#add-the-catalog-to-your-server) has the template to add by hand.
+
+Umbrel isn't listed: Umbrel installs take no settings, and Stard needs the token.
+
+An AI agent can act through the same API as the UI (`/api/*`). With sign-in on, the agent sends `Authorization: Bearer <AGENT_API_TOKEN>`; set that yourself, or read the token generated on first start from the `instance_secret` table. [AGENT-API.md](AGENT-API.md#self-hosted) lists the routes.
+
+## Play with them
+
+Every repo you've starred is a card. Build a team and beat other developers. [Play with your username](https://stard.armanckeser.com/run).
+
+<p align="center">
+  <a href="https://stard.armanckeser.com/run"><img src="img/run.gif" alt="A round of a run in the demo: cards bought from the shop go straight onto the board, two teams of creatures fight and the round is won, then the run finishes with 5 wins and 1 loss and shows the final team" width="480" /></a>
+</p>
 
 - Type a GitHub username, no sign-in. The shop deals cards from that account's stars, shuffled afresh for every run.
 - Buy cards onto your Drafts shelf, drag them onto your half of the board, then press **Fight**. Every card acts at once.
@@ -76,54 +142,6 @@ Every year-in-review sums up commits. This one sums up what you starred. Open `h
 - How many of the year's stars are still alive: pushed to in the last 90 days and not archived.
 
 The page has a card for your README, buttons to post it on X or Bluesky, and a link to sort those stars into Lists. Stars are read once a day and counted by UTC month; a year past 1,000 stars shows as "1,000+".
-
-
-### Option A: npx (recommended)
-
-Needs Node.js 20+ and the [GitHub CLI](https://cli.github.com/) logged in. Nothing to host:
-
-```bash
-npx github-stars-organizer
-```
-
-### Option B: self-host with Docker
-
-Needs Docker and a [classic token](https://github.com/settings/tokens/new?scopes=repo&description=Stars%20Organizer) with the `repo` scope, which is what lets Stard edit your Lists and unstar repos. Stard never reads or changes code; the key icon beside **Import Stars** shows which account and scopes the app is using. No clone:
-
-```bash
-GITHUB_TOKEN=ghp_... docker compose -f oci://ghcr.io/armanckeser/github-stars-organizer-stack:latest up -d
-```
-
-Open http://localhost:8080 and press **Import Stars**. That runs three containers (the app, Postgres and Electric); `ghcr.io/armanckeser/github-stars-organizer:aio` is all three in one, with its data under `/data`:
-
-```bash
-docker run -d -p 8080:8080 -v stars-data:/data -e GITHUB_TOKEN=ghp_... ghcr.io/armanckeser/github-stars-organizer:aio
-```
-
-The token can unstar repos and edit your Lists, so anyone who can reach the port can too. Set `AUTH_PASSWORD` to require a password, or sign in through your OIDC provider (Authentik, Authelia, Pocket ID...) with `AUTH_ENABLED=1` and the `OIDC_*` settings in [docker-compose.selfhost.yml](docker-compose.selfhost.yml). Or leave both unset behind a proxy that already checks who gets in.
-
-**From your server's app store:** add the catalog once, then install Stard like any other app.
-
-| Server | Where | Paste |
-| --- | --- | --- |
-| Cosmos | Market → Sources → Add Source | `https://armanckeser.github.io/selfhost-apps/servapps.json` |
-| CasaOS / ZimaOS | App Store → Add Source | `https://github.com/armanckeser/selfhost-apps/archive/refs/heads/casaos.zip` |
-| Runtipi | Settings → App Stores → Add App Store | `https://github.com/armanckeser/selfhost-apps` |
-| Portainer | Settings → App Templates → URL | `https://armanckeser.github.io/selfhost-apps/portainer/templates.json` |
-
-Unraid's Community Apps doesn't list it yet; [selfhost-apps](https://github.com/armanckeser/selfhost-apps#add-the-catalog-to-your-server) has the template to add by hand.
-
-Umbrel isn't listed: Umbrel installs take no settings, and Stard needs the token.
-
-An AI agent can act through the same API as the UI (`/api/*`). With sign-in on, it sends `Authorization: Bearer <AGENT_API_TOKEN>`; set that yourself, or read the one generated on first start from the `instance_secret` table. [AGENT-API.md](AGENT-API.md#self-hosted) lists the routes.
-
-## It also organizes the stars
-
-Stard started as Stars Organizer, and everything from it is still here. I starred hundreds of repos over the years and could never find anything again. GitHub has Lists now, but sorting 500 stars into them one dropdown at a time is pretty much nobody's idea of a weekend, and a good chunk of what I had starred was dead anyway. Stard lets Claude Code or Codex do the sorting, writes the Lists back to GitHub, and gives every repo a health score so the abandoned ones stand out.
-
-<p align="center">
-  <img src="img/hero.gif" alt="Opening a repo's health breakdown, rating it four stars and adding a note, opening the Homelab list, then the Explore dashboard" width="800" />
-</p>
 
 ## Compared with the alternatives
 

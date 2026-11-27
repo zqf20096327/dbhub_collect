@@ -38,23 +38,27 @@ just desktop-build     # optional Mac development bundle
 just desktop-open      # return to the original window if already running
 ```
 
-Ask about screenshots, compare sourced prices and review an action in Chat. Ask Jeeves to keep watching one of the compared prices, then adjust the threshold from your phone. Open **Work** to see which checks failed or passed after correction, review changed lines and continue the task. [Getting started](docs/guide.md) · [Mac desktop app](docs/operations.md#mac-desktop-app)
+[Recover a local Mac gateway connection](docs/operations.md#mac-desktop-app) if the desktop app reports that it cannot connect.
+
+Ask about screenshots, compare sourced prices and review an action in Chat. Ask Jeeves to keep watching one of the compared prices, then adjust the threshold from your phone. Open **Work** to download deliverables, see acceptance checks, review changed lines and continue the task. [Getting started](docs/guide.md) · [Mac desktop app](docs/operations.md#mac-desktop-app)
 
 ## What Jeeves can do
 
 Tell Jeeves what you need in your own words — even if the request is still vague. It turns an informal goal into a clear one, then delivers the result in the conversation. The kind of work spans information retrieval (web, internal and local sources), documents (slides, spreadsheets, Markdown), audio and video content, writing or improving programs, comparing prices and placing supported orders. [How conversation becomes work](docs/design/main-entry.md)
 
 - **Converse** in the terminal, the dashboard, or a connected chat. See [Feishu chat and approval cards](docs/guide.md#lark--feishu).
+- **Check flight seat advice** in the owner’s main chat. The dated-flight shortcut separates a public flight match from your booking and gives no exact seat advice without verified layout evidence. [What counts as a match](docs/internals/04-tools.md#web)
 - **Use Feishu business capabilities** through the official CLI and the `feishu-cli` skill (`just install-feishu-cli`); existing exec permissions and approvals apply
 - **Remember**: semantic facts (FTS5, CJK-capable), dated episodes and procedural Skills, with local keyword retrieval on each full turn ([docs/architecture.md](docs/architecture.md))
 - **Show its memory**: the dashboard's memory center opens the ledger, the memory library and the context meter; `/compact [focus]` compacts on demand ([docs/operations.md](docs/operations.md))
-- **Act**: 23 built-in tools (15 always on, 8 behind switches) plus MCP servers ([docs/configuration.md](docs/configuration.md))
+- **Act**: 26 built-in tools (15 always on, 11 behind switches) plus MCP servers ([docs/configuration.md](docs/configuration.md))
 - **Reach your calendar and mail**: CalDAV/ICS is read-only; IMAP reads with `BODY.PEEK`; SMTP drafts by default and every live recipient/content pair needs its own scoped approval and receipt. The phone shows the same task conversation as Mac Cowork and takes versioned send decisions in main chat. Feishu persists incoming events before ACK. Main chat can convert a queued task email into a recoverable draft. For both chat and task mail, a lost final SMTP reply requires reconciliation ([docs/configuration.md](docs/configuration.md#calendar-and-email))
 - **Start the day with a proposal**: opt into the [08:00 morning briefing](docs/operations.md#morning-brief-cron-friendly) for today’s calendar, unread mail with draft replies, and unfinished tasks.
+- **Review recurring work in chat** before activation. Combine records from several sources with filters and fields shown on the review card, and open the run history in Work. [Recurring work](docs/design/main-entry.md#6-recurring-work)
 - **Stay cheap**: the system prompt is a stable prefix plus a per-turn tail so the provider can cache it, and `JEEVES_TOOL_POLICY=deferred` keeps only the always-on tool schemas in the request ([docs/configuration.md](docs/configuration.md))
 - **Grow on your say-so**: Settings holds Skills, MCP connectors and memory, and scheduled jobs sit under **Work → Long-term**; the [Connections page](docs/guide.md#connection-status) shows what needs attention, configures local calendar/mail, and starts supported OAuth authorization. Browse the catalog, add a custom MCP connection and switch individual tools on or off. The resident Runtime renews bound MCP OAuth credentials. Configure MCP tool permissions in the [connector manifest](docs/configuration.md#connector-manifests). You add and delete your own entries, bundled ones are read-only.
 - **Follow the project's rules**: `AGENTS.md` / `AGENTS.override.md` / `CLAUDE.md` are discovered upwards from the working directory and joined into the per-turn tail ([docs/internals/06-app-server.md](docs/internals/06-app-server.md))
-- **Keep assigned work moving**: Jeeves works in the same task until it can deliver or hits a condition that requires it to stop. [Working on a long task](docs/design/main-entry.md#working-on-a-long-task)
+- **Keep assigned work moving**: Jeeves works in the same task until it can deliver or hits a condition that requires it to stop. A new assignment can wait for another task to pass verification. [Working on a long task](docs/design/main-entry.md#working-on-a-long-task)
 - **Be examined**: deterministic and replay evals gate every release; a judge scores answer quality ([docs/internals/08-quality.md](docs/internals/08-quality.md))
 
 ### Built-in tools
@@ -76,7 +80,8 @@ Tell Jeeves what you need in your own words — even if the request is still vag
 | `apply_patch` | apply a patch across files, all or nothing; same boundary and approval as `write_file` |
 | `run_command` | sandboxed, allowlisted shell commands; off unless `JEEVES_EXEC=1` ([SECURITY.md](SECURITY.md)) |
 | `delegate_task` | hand self-contained jobs to subagents; off unless `JEEVES_DELEGATE=1` |
-| `browser_observe` / `browser_act` | optional task browser with once-only approval and human takeover; needs the browser components installed |
+| `browser_observe` / `browser_act` / `browser_batch` | optional task browser with once-only approval, human takeover and bounded multi-step actions; needs the browser components installed |
+| `computer_observe` / `computer_act` | observe and act in the desktop window a person selected for this task; needs the macOS helper |
 | `find_tools` | search the deferred tool shelf and open what it finds for this session; on by default |
 | `schedule_job` | create or replace a scheduled job: name, five-field cron, one prompt; on by default |
 | `list_schedules` | list declared jobs with cron and prompt; on by default |

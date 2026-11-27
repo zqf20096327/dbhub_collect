@@ -6,6 +6,8 @@
 
 Borsa İstanbul hisseleri, TEFAS fonları, altın ve döviz için portföy takip uygulaması.
 
+**Türkçe** · [English](README.en.md)
+
 </div>
 
 Alım-satımlarınızı elle girersiniz; uygulama ortalama maliyeti, gerçekleşen ve gerçekleşmeyen kâr/zararı, temettüleri ve portföyün zaman içindeki değerini hesaplar. Banka veya aracı kurum hesabına bağlanmaz, yatırım tavsiyesi vermez.

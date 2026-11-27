@@ -3,8 +3,8 @@
 **Dig into your databases.** DGopher is a fast, free and open-source
 database client for Linux, macOS and Windows. One app for **PostgreSQL,
 MySQL, SQL Server, Oracle, ClickHouse, SQLite, DuckDB and Redis**, and for
-CockroachDB, YugabyteDB, TimescaleDB, MariaDB and TiDB as engines of their
-own.
+CockroachDB, YugabyteDB, TimescaleDB, MariaDB, TiDB and Valkey as engines
+of their own.
 
 [Download](https://github.com/saanuregh/dgopher/releases/latest) ·
 [Features](docs/features.md) · [Engine support](docs/engines.md) ·
@@ -47,8 +47,7 @@ own.
   TimescaleDB's hypertables. See [Engine support](docs/engines.md).
 
 DGopher is young and has not reached 1.0. [Known limitations](docs/limitations.md)
-lists what it does not do yet, and the [Roadmap](docs/roadmap.md) what is
-planned.
+lists what it does not do yet.
 
 ## Screenshots
 
@@ -127,9 +126,9 @@ To build from source, see [Development](docs/development.md).
 - **Admin:** server activity with running queries to cancel, locks and the
   slowest statements; users and privileges; and VACUUM, ANALYZE, REINDEX
   or OPTIMIZE from a table's menu.
-- **Redis:** a key browser, value editors for every type including Redis
-  8's, a console with completion, and monitor, slow log, memory and
-  Pub/Sub panels.
+- **Redis and Valkey:** a key browser, value editors for every type
+  including Redis 8's, a console with completion, and monitor, slow log,
+  memory and Pub/Sub panels.
 
 ### Connections and security
 
@@ -181,7 +180,7 @@ The [documentation index](docs/README.md) lists every page:
 - [Safety model](docs/safety.md) and [Audit log](docs/audit-log.md)
 - [Where things are kept](docs/storage.md) and [Project files](docs/project-files.md)
 - [Command line](docs/command-line.md) and [Troubleshooting](docs/troubleshooting.md)
-- [Known limitations](docs/limitations.md) and [Roadmap](docs/roadmap.md)
+- [Known limitations](docs/limitations.md)
 - For contributors: [Development](docs/development.md),
   [Architecture](docs/architecture.md), [Testing](docs/testing.md),
   [How SQL is read](docs/sql.md) and [CONTRIBUTING.md](CONTRIBUTING.md)

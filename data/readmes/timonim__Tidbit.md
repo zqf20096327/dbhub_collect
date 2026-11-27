@@ -1,31 +1,33 @@
 # TidBit
 
-TidBit is a concept for an e-ink display that snaps onto the back of an iPhone with MagSafe. It shows the few things you chose to see (your next meeting, the weather, what's playing) and stays quiet the rest of the time.
+TidBit is a concept for an e-ink display that snaps onto the back of an iPhone with MagSafe. It shows the few things you chose to see (your next meeting, the weather, what's playing, a focus timer) and stays quiet the rest of the time.
 
-This repository is the product website. It's a static site with no build step, published to GitHub Pages from `main`.
+This repository is the product website and interactive hardware studio. It's a static site with no build step, published to GitHub Pages from `main`.
 
 **Live site:** https://timonim.github.io/Tidbit/
 
 ## What's on the page
 
-- **The turn.** As you scroll, a 3D iPhone 18 Pro turns from its calm back (TidBit) to its noisy front (notifications) and back again.
-- **Why e-ink.** A side-by-side ledger of a phone screen against an e-paper panel.
-- **A day with TidBit.** Five moments in a day. The TidBit stays put while the steps scroll past, redrawing with an e-ink flash at each one.
-- **Specs.** A stylized dimensional drawing of TidBit that draws itself in.
-- **How it works.** Snap, Pair, Glance, sketched one step at a time.
-- **Integrations** and the developer waitlist.
+- **The turn.** As you scroll, an inertial 3D iPhone 18 Pro in Mist Blue turns from its calm back (TidBit) to its noisy glowing front (notifications) and back again on e-paper.
+- **Interactive 4-screen tour.** Zoom into TidBit to explore Today, Shortlist notifications, Music, and Focus directly on the live e-ink display or jump via the screen rail.
+- **How it works.** Snap, Pair, Glance — sketched to match the iPhone 18 Pro camera plateau, with click-to-replay motion.
+- **A day with TidBit.** A full-bleed draggable 24-hour watchmaker dial with 72 bezel ticks, shifting atmospheric light, and an authentic static e-ink clock that updates only when redrawing a moment. Visitors can grab and scrub around the ring with momentum coasting, jump to any marked time, or pause playback. Reduced-motion mode starts paused.
+- **Choose who gets through.** Two tactile trays with FLIP motion and a live quiet-ratio counter that redraws the e-ink display on every toggle.
+- **Specs.** Hardware metrics and an interactive dimensional cyanotype drawing in TidBit's sea-blue brand palette with clickable callouts 1–5.
+- **Integrations.** Hover or select any service to preview its live e-ink glance card.
+- **Interactive hardware studio (`tidbit.html`).** Standalone prototype with Daylight / Desk lamp / Night (0 nits) ambient lighting, MagSafe detach/snap animation, and keyboard shortcuts (`1–4`, `R`, `D`).
 
-All motion turns off for visitors who prefer reduced motion.
+All motion respects `prefers-reduced-motion: reduce`.
 
 ## Files
 
 | File | What it is |
 | --- | --- |
 | `index.html`, `home.css`, `home.js` | The home page |
-| `tidbit.html`, `styles.css`, `script.js` | The live e-ink screen and iPhone mockup, embedded in the home page. Add `?color=black`, `silver`, `blue` or `burgundy` to pick the phone's finish. |
+| `tidbit.html`, `styles.css`, `script.js` | The live e-ink OS and interactive hardware studio, also embedded in the home page via `?flat&layer=back\|tidbit`. Supports `?screen=combined\|notifications\|media\|productivity` and `?light=daylight\|lamp\|night`. |
 | `images/` | 1-bit dithered album covers for the e-ink screen |
 | `favicon.svg`, `og-image.jpg` | Icon and social sharing image |
-| `tools/drawing.py` | Generates the dimensional drawing in `index.html` |
+| `tools/drawing.py` | Generates the interactive dimensional drawing in `index.html` |
 
 ## Running it locally
 
@@ -42,10 +44,6 @@ To change the dimensional drawing, edit `tools/drawing.py` and run it. It prints
 ```bash
 python3 tools/drawing.py > drawing.svg
 ```
-
-## Still to do
-
-The waitlist form shows a confirmation but doesn't store emails yet. It needs a form service such as Formspree or Buttondown.
 
 ## Contact
 

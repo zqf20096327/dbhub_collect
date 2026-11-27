@@ -8,6 +8,7 @@ English | [简体中文](README.zh-CN.md)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg)](pyproject.toml)
 [![Dependencies: Zero](https://img.shields.io/badge/Dependencies-Zero-brightgreen.svg)](pyproject.toml)
 [![Protocol: MCP](https://img.shields.io/badge/MCP-2025--03--26-purple.svg)](docs/gateway-and-acl.md)
+[![M8ven Score](https://m8ven.ai/badge/mcp/minokun-wiki-context-89v7xk?v=2fb92c1707eabaf36a1626d017591156)](https://m8ven.ai/mcp/minokun-wiki-context-89v7xk?s=readme)
 
 ---
 

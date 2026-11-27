@@ -1,6 +1,6 @@
 # Orakl Network
 
-This repository is split to [on-chain](contracts) and off-chain oracle implementation.
+This repository is split to [onchain](contracts) and offchain oracle implementation.
 
 You can learn more about the Orakl Network from [documentation](https://orakl-network.gitbook.io).
 
@@ -70,11 +70,11 @@ Includes commands that node operators can use to manage VRF and RR.
 
 ### Contracts
 
-Contains all on-chain contracts for the service and related scripts.
+Contains all onchain contracts for the service and related scripts.
 
 ### Core
 
-Contains off-chain code for VRF and RR.
+Contains offchain code for VRF and RR.
 
 ### Delegator
 
@@ -82,10 +82,23 @@ A service to run fee payer for delegated transactions by push oracles.
 
 ### Node
 
-Contains off-chain code for off-chain aggregation and related services.
+Contains offchain code for offchain aggregation and related services.
 
 ### Others
 
 - Audit: Holds contract audit details.
 - Dockerfiles: Includes Dockerfiles for deployment.
 - Sentinel: Internal alarm service for stable service maintenance.
+
+## Releasing
+
+Create release tags (`<service>/vX.Y.Z`) with the [Release](./.github/workflows/release.yaml) workflow, not by hand. It runs only on `master`, checks the version (X.Y.Z, tag unused, greater than the service's latest tag) and that the `gate` check of the master HEAD commit is green (waits while it runs), then pushes an annotated tag with the orakl-bot App token. The tag push runs [tag+deploy](./.github/workflows/tag+deploy.yaml) (build, kairos deploy, pre-release); promote to mainnet with the `Promote` workflow.
+
+```sh
+# dry run: all checks, prints the tag, pushes nothing
+gh workflow run release.yaml --ref master -f service=node -f version=0.0.53 -f dry_run=true
+# release
+gh workflow run release.yaml --ref master -f service=node -f version=0.0.53 [-f notes="tag message"]
+```
+
+Versions are linear per service (no patch releases on an older line). Until a tag ruleset restricts `*/v*` tag creation to this workflow, manually pushed tags still deploy and skip these version checks; once it exists they are rejected.
