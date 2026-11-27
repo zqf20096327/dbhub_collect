@@ -2,7 +2,7 @@
 """build_site.py v1.0 -- 站点数据出口（P2：卡片不动，只产列表分片/库页数据/sitemap/robots）
 
 用法:
-  python -I build_site.py                     # 全部步骤（lists+vs+sitemap+robots）
+  python -I build_site.py                     # 全部步骤（lists+vs+cmp+sitemap+robots）
   python -I build_site.py --steps lists,sitemap,robots
   python -I build_site.py --selftest
   DBHUB_SITE_BASE=https://x.pages.dev python -I build_site.py   # sitemap 绝对 URL 的域名（P4 部署时注入）
@@ -15,6 +15,7 @@
   data/cat/{slug}-{n}.json    类目分页分片（100/页，星数降序；slug=misc 表「综合」兜未分类）
   data/all-{n}.json           全站总览分页（/projects 浏览页数据源）
   data/db/{slug}.json         17 库页数据（每库相关卡聚合，星数降序）
+  data/cmp/{bb}.json          对比页富字段 256 分桶（/compare/ 自选对比：综述/亮点/场景/能力/趋势/擂台等，bb=fn 的 FNV 低字节）
   sitemap.xml                 首页 + 17 库页 + 类目分页 + 全部活跃卡（单文件 <5 万 URL）
   robots.txt                  放行全部 + 指向 sitemap
 
@@ -27,7 +28,9 @@ URL 规范（与 P3 dbhub_page 改造约定一致，改这里必须同步那边�
 import argparse, datetime, glob, io, json, os, re, sys, time
 import xml.etree.ElementTree as ET
 
-VER = "build_site/1.4"   # 1.4：部署口径 A（用户裁定 11-21）——站内只部署归属过（dbs 非空）的卡，未归属不删源待归属补证自动回站；
+VER = "build_site/1.5"   # 1.5：新增对比页数据出口 build_cmp()（site/data/cmp/ 256 分桶，/compare/ 自选对比的富字段：
+                          #     综述/亮点/适用场景/能力标签/面向谁/趋势/擂台/提交量等——瘦索引只有 15 键装不下，单独出口）；
+                          # 1.4：部署口径 A（用户裁定 11-21）——站内只部署归属过（dbs 非空）的卡，未归属不删源待归属补证自动回站；
                           # 1.3：light() 增 mnt/off/sec/ai/created/pushed/relpub（P9 站点浏览「属性」筛选/排序字段）；
                           # 1.2：light() 增 dbs（站点旧版排版复刻需要：清单「库」列 + 冠军矩阵通用标记）；1.1：补 urls.json 契约出口
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -217,6 +220,80 @@ def build_vs(site):
           + f" -> site/data/vs in {time.time()-t0:.1f}s")
     return len(by_slug)
 
+# ---------- ①c 对比页数据（cmp：/compare/ 自选对比的富字段） ----------
+
+CMP_BUCKETS = 256
+CMP_VER = "cmp/1.0"
+
+def cmp_bucket(fn):
+    """分桶号（两位十六进制）：FNV-1a 32 位，按 UTF-16 码元逐个异或再乘质数，取低字节。
+    与 dbhub_page assets/compare.js 的 bucket() 逐位同式（跨仓不 import，两处各写一份并注释；
+    标准向量断言在两侧 selftest，全量一致性由 gen verify 的「fn 落在算出的桶里」对账兜底）。"""
+    h, b = 0x811C9DC5, fn.encode("utf-16-le")
+    for i in range(0, len(b), 2):
+        h = ((h ^ (b[i] | (b[i + 1] << 8))) * 0x01000193) & 0xFFFFFFFF
+    return format(h & 0xFF, "02x")
+
+def rich(fn, r, card, mentions=0):
+    """/compare/ 富字段（cmp/1.0）。瘦索引 15 键之外、对比页要并排的全部解读与信号：解读层走索引
+    （judge/text/tags，与项目卡同源），趋势/擂台/动态走卡 JSON。缺=None/[]，前端按「无数据 / 未解读」展示。
+    能力标签只出 high/mid（同卡面口径，low 不上）；许可证 NOASSERTION=未声明 -> None。"""
+    j, t, en = r.get("judge") or {}, r.get("text") or {}, r.get("enrich") or {}
+    news = (((card.get("news") or {}).get("items") or [{}])[0] or {})
+    pts = [p for p in ((card.get("trend") or {}).get("points") or [])
+           if isinstance(p, (list, tuple)) and len(p) == 2 and isinstance(p[1], int)]
+    lic = r.get("license")
+    return {
+        "aik": j.get("ai_kind"), "cf": j.get("conf"),
+        "pe": j.get("persona") or [], "eco": j.get("eco"), "ct": j.get("cat_tags") or [],
+        "ins": j.get("install") or [],
+        "rv": (t.get("review") or "").strip()[:600] or None,
+        "hl": [str(x)[:300] for x in (t.get("highlights") or []) if x][:6],
+        "uc": [str(x)[:300] for x in (t.get("use_cases") or []) if x][:6],
+        "cap": [[x[1], x[2]] for x in (r.get("tags") or []) if len(x) >= 3 and x[2] in ("high", "mid")],
+        "lic": lic if lic and lic != "NOASSERTION" else None,
+        "sec": en.get("sec_n") or 0,
+        "ver": re.sub(r"^(release/|v)", "", en.get("rel_ver") or "") or None,
+        "vpub": (en.get("rel_pub") or "")[:10] or None, "n90": en.get("rel_n90"),
+        "c90": en.get("commit_90d"), "ctr": en.get("contrib_n"),
+        "mts": mentions if isinstance(mentions, int) else 0,
+        "tr": [p[1] for p in pts], "td0": str(pts[0][0])[:10] if pts else None, "td1": str(pts[-1][0])[:10] if pts else None,
+        "ar": [[x.get("fn"), x.get("score")] for x in ((card.get("arena") or {}).get("rows") or []) if not x.get("me") and x.get("fn")],
+        "nw": [news.get("ver"), news.get("date"), (news.get("story") or "")[:220]] if news.get("ver") else None,
+        "rm": (r.get("readme0") or "")[:300] or None,
+    }
+
+def dumpc(obj, p):
+    io.open(p, "w", encoding="utf-8", newline="\n").write(json.dumps(obj, ensure_ascii=False, separators=(",", ":")))
+    return os.path.getsize(p)
+
+def build_cmp(site):
+    """对比页富字段 256 分桶。部署集与 lists 同口径（deployable + 非敌对名）；浏览器按 fn 算桶号、
+    每次对比只取 2 个小文件。gen 侧 verify 对账「桶内条数 == all 分片条数」。"""
+    t0 = time.time()
+    idx = loadj(ROOT + "/cache/index.json")["repos"]
+    man = loadj(ROOT + "/cards/manifest.json")["cards"]
+    mp = ROOT + "/cache/mentions.json"
+    mcounts = (loadj(mp).get("counts") or {}) if os.path.exists(mp) else {}
+    buckets = [{} for _ in range(CMP_BUCKETS)]; n_card = 0
+    for fn in sorted(man):
+        if fn not in idx or hostile(fn) or not deployable(idx[fn]): continue
+        p = os.path.join(ROOT, "cards", fn.replace("/", "__") + ".json")
+        card = {}
+        if os.path.exists(p):
+            try: card = loadj(p); n_card += 1
+            except Exception: card = {}
+        buckets[int(cmp_bucket(fn), 16)][fn] = rich(fn, idx[fn], card, mcounts.get(fn))
+    d = os.path.join(site, "data", "cmp"); os.makedirs(d, exist_ok=True)
+    for f in os.listdir(d): os.remove(os.path.join(d, f))       # 清场：条目换桶后旧桶文件不留
+    size = sum(dumpc({"asof": TODAY.isoformat(), "ver": CMP_VER, "items": b}, f"{d}/{i:02x}.json")
+               for i, b in enumerate(buckets))
+    n = sum(len(b) for b in buckets)
+    assert n == sum(1 for fn in man if fn in idx and not hostile(fn) and deployable(idx[fn])), "cmp 条数 != 部署集"
+    print(f"OK cmp: 部署集 {n} 条（读到卡 {n_card}）-> {CMP_BUCKETS} 桶 {size//1024//1024}.{(size//1024)%1000:03d} MB "
+          f"均 {size//max(n,1)} B/条 -> site/data/cmp in {time.time()-t0:.1f}s")
+    return n
+
 # ---------- ② sitemap ----------
 
 def build_sitemap(site):
@@ -306,20 +383,44 @@ def _selftest():
     u = {"card": "/p/{fn}/", "db": "/db/{slug}/", "cat_page": "/cat/{slug}/{n}.html", "vs": "/vs/{slug}/"}
     assert vs_slug(("a/b", "c/d")) == "a__b--c__d"                     # vs slug 无歧义拼接
     assert u["card"].format(fn="a/b") == "/p/a/b/" and u["db"].format(slug="x") == "/db/x/"  # 契约模式可格式化
-    print("OK build_site selftest: 23 asserts passed")
+    # 1.5 对比页数据出口：分桶函数（FNV-1a 32 标准向量的低字节，与 compare.js 同式）+ 富字段装配
+    assert cmp_bucket("") == "c5" and cmp_bucket("a") == "2c" and cmp_bucket("foobar") == "68"
+    assert cmp_bucket("o/r") == cmp_bucket("o/r") and len(cmp_bucket("中文/仓")) == 2     # 非 ASCII 走 UTF-16 码元，仍两位
+    assert len({cmp_bucket(f"o/r{i}") for i in range(400)}) > 200                          # 分布够散，不挤少数桶
+    rr = rich("a/b", {"judge": {"persona": ["ops"], "eco": "tool", "cat_tags": ["高可用"], "conf": "high",
+                                "ai_kind": "other", "install": ["source"]},
+                      "text": {"review": " 综述 ", "highlights": ["h1", "h2"], "use_cases": []},
+                      "tags": [["backup", "备份", "high"], ["orm", "ORM", "low"], ["x", "x"]],
+                      "license": "NOASSERTION", "readme0": "rm",
+                      "enrich": {"sec_n": 2, "rel_ver": "release/2.60.1", "rel_pub": "2026-11-16", "rel_n90": 4,
+                                 "commit_90d": 107, "contrib_n": 66}},
+                {"trend": {"points": [["2026-10-18", 4448], ["2026-11-22", 4503], ["bad", "x"]]},
+                 "arena": {"rows": [{"fn": "a/b", "me": True, "score": 1.0}, {"fn": "c/d", "score": 0.7}]},
+                 "news": {"items": [{"ver": "2.60.1", "date": "2026-11-16", "story": "s"}]}}, mentions=3)
+    assert rr["rv"] == "综述" and rr["hl"] == ["h1", "h2"] and rr["uc"] == []
+    assert rr["cap"] == [["备份", "high"]]                 # 仅 high/mid，low 与残缺条目不出
+    assert rr["lic"] is None and rr["sec"] == 2 and (rr["ver"], rr["vpub"], rr["n90"]) == ("2.60.1", "2026-11-16", 4)
+    assert rr["tr"] == [4448, 4503] and (rr["td0"], rr["td1"]) == ("2026-10-18", "2026-11-22")   # 坏点剔除
+    assert rr["ar"] == [["c/d", 0.7]] and rr["nw"] == ["2.60.1", "2026-11-16", "s"] and rr["mts"] == 3
+    assert rr["pe"] == ["ops"] and rr["ct"] == ["高可用"] and rr["ins"] == ["source"] and rr["cf"] == "high"
+    assert rich("p/q", {"license": "GPL-3.0"}, {}, None)["lic"] == "GPL-3.0"
+    r0 = rich("x/y", {}, {}, None)                          # 空仓全缺省安全
+    assert r0["rv"] is None and r0["hl"] == [] and r0["cap"] == [] and r0["tr"] == [] and r0["ar"] == []
+    assert r0["nw"] is None and r0["mts"] == 0 and r0["pe"] == [] and r0["lic"] is None and r0["c90"] is None
+    print("OK build_site selftest: 36 asserts passed")
     return 0
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--steps", default="all", help="all | lists,sitemap,robots 逗号分隔")
+    p.add_argument("--steps", default="all", help="all | lists,vs,cmp,sitemap,robots 逗号分隔")
     p.add_argument("--out", default="site", help="输出目录（相对运行位）")
     p.add_argument("--selftest", action="store_true")
     a = p.parse_args()
     if a.selftest: sys.exit(_selftest())
     site = os.path.join(ROOT, a.out); os.makedirs(site, exist_ok=True)
     steps = a.steps.split(",")
-    for s in (steps if "all" not in steps else ["lists", "vs", "sitemap", "robots"]):
-        {"lists": lambda: build_lists(site), "vs": lambda: build_vs(site),
+    for s in (steps if "all" not in steps else ["lists", "vs", "cmp", "sitemap", "robots"]):
+        {"lists": lambda: build_lists(site), "vs": lambda: build_vs(site), "cmp": lambda: build_cmp(site),
          "sitemap": lambda: build_sitemap(site),
          "robots": lambda: build_robots(site)}.get(s, lambda: p.error(f"unknown step {s}"))()
 

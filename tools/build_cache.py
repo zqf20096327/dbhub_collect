@@ -15,7 +15,9 @@
 """
 import argparse, datetime, io, json, os, re, subprocess, sys, time, glob
 
-VER = "build_cache/1.5"   # 1.5：dbs 数据源改「判定层引擎优先 + db_scan.v2 兜底」（与 11-01 裁定「归属移交程序判定、
+VER = "build_cache/1.6"   # 1.6：judge 增 persona / eco / cat_tags（判定卷三字段，站点 /compare/ 自选对比「面向谁 / 生态位 /
+                          #     多标签」数据源；只有 v4 判定卷带这三项，旧代条目缺=空值、下游按「未解读」处理）；
+                          # 1.5：dbs 数据源改「判定层引擎优先 + db_scan.v2 兜底」（与 11-01 裁定「归属移交程序判定、
                           #     首选引擎+存量兜底」同口径；修 P9.7 断点：引擎 0.3.0 填入判定层的归属从未被读取，
                           #     metabase/drawdb/airbyte 等仅引擎有归属的 914 仓被误剔出站、768 重叠中 238 仓值偏旧）；
                           # 1.4：judge 增 ai_kind 提升、全仓 official 标记（P9 站点浏览「属性」筛选数据源）；
@@ -123,6 +125,17 @@ def dbs_of(judge_e, scan_e):
     c = (scan_e or {}).get("cands") or {}
     return (sorted(c.keys()), "dbscan") if c else ([], "")
 
+def judge_fields(j):
+    """判定卷条目 -> 索引 judge 字段。1.6 增 persona/eco/cat_tags（v4 判定卷才有；旧代条目为空值）。"""
+    c = j.get("classification") or {}
+    return {"cat": c.get("cat_primary"),
+            "conf": (j.get("audit") or {}).get("confidence"),
+            "install": (j.get("signals") or {}).get("install"),
+            "ai_kind": c.get("ai_kind"),
+            "persona": c.get("persona") or [],
+            "eco": c.get("eco"),
+            "cat_tags": c.get("cat_tags") or []}
+
 def build_index():
     t0 = time.time(); repos = {}
     cn = vocab_cn()
@@ -181,10 +194,7 @@ def build_index():
             continue
         j = layers["judge"].get(sha)
         if j:
-            repos[k]["judge"] = {"cat": j.get("classification", {}).get("cat_primary"),
-                                 "conf": j.get("audit", {}).get("confidence"),
-                                 "install": j.get("signals", {}).get("install"),
-                                 "ai_kind": j.get("classification", {}).get("ai_kind")}
+            repos[k]["judge"] = judge_fields(j)
             n_j += 1
             d, _ = dbs_of(j, None)               # 引擎归属优先（1.5）：判定层 classification.dbs 在此进 index
             if d:
@@ -349,7 +359,15 @@ def _selftest():
                   {"cands": {"ClickHouse": ["x"]}}) == (["ClickHouse"], "dbscan")      # 引擎空才兜底
     assert dbs_of(None, {"cands": {"ClickHouse": ["x"]}}) == (["ClickHouse"], "dbscan")
     assert dbs_of({}, {}) == ([], "") and dbs_of(None, None) == ([], "")
-    print("OK build_cache selftest: 22 asserts passed")
+    jf = judge_fields({"classification": {"cat_primary": "管理", "persona": ["ops", "build"], "eco": "tool",
+                                          "ai_kind": "text2sql", "cat_tags": ["连接/代理"]},
+                       "audit": {"confidence": "high"}, "signals": {"install": ["binary", "docker"]}})
+    assert jf == {"cat": "管理", "conf": "high", "install": ["binary", "docker"], "ai_kind": "text2sql",
+                  "persona": ["ops", "build"], "eco": "tool", "cat_tags": ["连接/代理"]}
+    j0 = judge_fields({})                               # 1.6：旧代条目无三项 -> 空值（persona/cat_tags 恒为列表）
+    assert j0["persona"] == [] and j0["cat_tags"] == [] and j0["eco"] is None and j0["cat"] is None
+    assert judge_fields({"classification": None, "audit": None, "signals": None})["conf"] is None   # 显式 null 安全
+    print("OK build_cache selftest: 25 asserts passed")
     return 0
 
 def main():
