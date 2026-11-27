@@ -3494,5 +3494,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f93387ba69aa": {
+  "identity": {
+   "one_liner": "自托管的 agent 原生业务操作系统，AI 代理以人同权限运行业务应用。",
+   "review": "Liaison 是面向小公司的自托管业务工作区，包含邮件、工单、知识、发票、发货等模块，AI 代理通过与人相同的工具和行级安全权限操作业务流程，敏感动作需人工批准。技术栈为 Bun + Hono、PostgreSQL（RLS 隔离）、Redis、MeiliSearch 与 S3 兼容存储，支持 Docker Compose 一键部署、Web 及桌面端。",
+   "highlights": [
+    "AI 代理经行级安全策略（RLS）而非代理自身判断决定可见范围，敏感操作需人工批准后执行",
+    "MCP 双向打通：代理可调用既有外部工具，外部代理也可进入 Liaison 工作",
+    "内核应用之外支持以 .liaisonapp 安装 Shopify、开票、物流等打包应用，并提供 SDK 与沙箱运行时供自建插件"
+   ],
+   "use_cases": [
+    "小公司客服工单处理，代理可基于知识库起草回复并生成退货面单等操作",
+    "自托管部署后整合 Shopify 订单、发票、记账与物流发货流程",
+    "通过 MCP 连接已有内部系统，让代理代为执行订单、开票、发货等操作"
+   ]
+  },
+  "sha": "f93387ba69aa",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "241b7dd5589b": {
+  "identity": {
+   "one_liner": "本地优先的 AI 虚拟陪伴读书室，基于 Node.js 与 SQLite，内置 MCP Server 外接",
+   "review": "ClouDrift 是一个运行于本地浏览器（默认端口 3000）的 AI 陪伴读书室应用，需 Node.js v18+ 并填入兼容 OpenAI 格式的模型 API。功能包含番茄钟专注、PDF/TXT/DOCX 阅读器批注、内置聊天窗口、便利贴、留声机、像素家园与桌宠，记忆按角色存于独立 SQLite 库。支持独立运行，也可通过 MCP 模式（Streamable HTTP、SSE、Stdio 三种接入方式）桥接 AstrBot、Claude Desktop 等外部 AI 客户端。适合希望在本地部署 AI 学习陪伴工具的用户。",
+   "highlights": [
+    "内置零依赖 MCP Server，提供 8 项工具与 2 项资源，支持 Streamable HTTP、Legacy SSE 与 Stdio 三种接入方式",
+    "每个角色卡在 data/memory/ 下拥有独立 SQLite 数据库，上下文按 200 轮计窗，配备动态备忘录引擎与多模态单轮缓存",
+    "支持导入 PDF/TXT/DOCX 阅读、OpenAI 格式 API 配置、Tavily 搜索、MiniMax TTS，以及同 Wi-Fi 局域网下手机与电脑双端实时同步"
+   ],
+   "use_cases": [
+    "本地部署 AI 陪伴自习/番茄钟专注场景，配合阅读批注与待办清单使用",
+    "已有 AstrBot、Cherry Studio、Claude Desktop、Cursor 等 AI 客户端，通过 MCP 外接读书室实时状态与互动能力",
+    "同一局域网内手机与电脑双端同步使用聊天、记忆与专注数据"
+   ]
+  },
+  "sha": "241b7dd5589b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "190a3948f264": {
+  "identity": {
+   "one_liner": "自托管工作管理平台：看板、类型化列、五种视图、自动化与签名 API",
+   "review": "Tuesday.com 是一个基于 .NET 10、PostgreSQL 与 Blazor 的工作管理平台（work OS）的净室实现，MIT 许可，可自行部署。功能包含类型化列看板、五种视图投影同一读取模型、SignalR 实时协作、触发器—条件—动作自动化引擎、OAuth 2.0 与 TOTP 双因素认证。附带 MCP 服务器，供 AI 代理读写看板。适合想审计、修改和自托管源码的团队。",
+   "highlights": [
+    "类型化列（状态、人员、日期、数字、下拉等）带写入规则与校验；表格、看板、日历、时间线、甘特五种视图从同一读取模型投影",
+    "支持 TOTP 双因素、OpenIddict OAuth 2.0 令牌服务器、EF Core 全局查询过滤器实现的租户隔离、HMAC-SHA256 签名 webhook 及公共 REST API",
+    "自动化规则引擎支持 trigger→condition→action 结构与深度 3 循环保护；含健康检查端点、关联 ID、OpenTelemetry 追踪与非 root Docker 镜像"
+   ],
+   "use_cases": [
+    "在自有硬件上部署团队工作看板，通过类型化列与五种视图管理任务状态",
+    "通过公共 REST API 或内置 MCP 服务器，让脚本或 AI 代理读取看板、创建条目和发表更新",
+    "基于触发器（单元格变更、日期到期）配置自动化动作，如设置状态或通知负责人"
+   ]
+  },
+  "sha": "190a3948f264",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

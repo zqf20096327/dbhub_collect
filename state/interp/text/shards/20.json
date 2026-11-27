@@ -3137,5 +3137,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "98e5272dad6b": {
+  "identity": {
+   "one_liner": "自托管的 CAD 文件 PDM 系统，提供零件编号、版本、BOM 与图框自动填充",
+   "review": "EasyPDM 是一个自托管的开源 PDM 系统，面向小型工程团队，管理 CAD 文件的零件编号、版本、状态与 BOM。服务器支持 Windows 安装向导、Docker 脚本和 Linux 包三种部署方式，默认运行在 5000 端口，浏览器即可访问。通过 SolidWorks、FreeCAD、SolidCraft 插件可从 CAD 软件内直接上传和下载零部件；Autodesk Inventor 宏已停止开发。许可为 MIT。",
+   "highlights": [
+    "为每个零件和装配体提供编号、版本、状态与变更记录，支持进行中—审核中—已发布的状态流转和文件锁定",
+    "从装配体生成包含数量、材料、制造商和订购号的 BOM，可导出为 CSV",
+    "提供 SolidWorks 插件、FreeCAD 工作台和 SolidCraft 插件，支持从 CAD 软件内一键上传或下载装配体"
+   ],
+   "use_cases": [
+    "小型工程团队替代共享盘管理 CAD 文件版本",
+    "需要从装配体生成 BOM 并导出 CSV 的场景",
+    "需要在工程图标题栏自动填入名称、图号、版本、材料等信息的绘图流程"
+   ]
+  },
+  "sha": "98e5272dad6b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49e11e888f6e": {
+  "identity": {
+   "one_liner": "容器化数据库服务的入门模板，包含自动重启、动态代理发现与定时备份。",
+   "review": "该项目是一个用于学习容器化数据库服务恢复机制的教学模板，基于 Docker Compose v2 或 Podman Compose 运行 Python + SQLite 示例负载。包含 backend、Nginx proxy、backup 三个服务：后端数据库存于容器可写层，代理通过 resolv.conf 重新解析变化的后端 IP，备份服务每 60 秒生成快照写入宿主机。容器被替换后应用会从 backups/ 恢复最新有效快照。无用户账户体系，仅绑定本机端口。",
+   "highlights": [
+    "backup 服务每 60 秒通过后端获取一致性 SQLite 快照并写入宿主机 backups/ 目录，默认保留最新 60 份",
+    "backend 采用 always 重启策略，容器被替换且数据库文件缺失时启动时从最新有效快照恢复",
+    "Nginx 代理启动时读取容器 /etc/resolv.conf 中的 DNS，后端 IP 变化后可重新解析"
+   ],
+   "use_cases": [
+    "演示容器重启与容器重建两种情况下数据保留与备份恢复的差异",
+    "学习 Docker Compose v2 与 Podman Compose 在重启策略、健康检查上的行为差异",
+    "作为带定时备份与快照恢复的容器化服务起步模板"
+   ]
+  },
+  "sha": "49e11e888f6e",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

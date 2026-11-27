@@ -3721,5 +3721,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3bcbf218826d": {
+  "identity": {
+   "one_liner": "Flow Steward 的 OceanBase 独立数据连接器扩展，经 MySQL 兼容接口读写数据",
+   "review": "这是 Flow Steward 的可安装扩展（版本 1.3.17），通过 OceanBase 的 MySQL 兼容端点连接数据库：Dataset 查询只读、上限 100 行/480 KiB，工作流 execute_write 动作执行带命名参数的单条 INSERT/UPDATE/DELETE。不提供 Oracle 模式接口，SQL 为受限子集，不含触发器、模式管理与事务脚本。需要 host/port/database/user 与密钥中的非空密码。",
+   "highlights": [
+    "Dataset 连接测试、类型化 schema 检查、保存 SQL 与预览执行，读取走原生只读路径并限制 100 行、480 KiB",
+    "execute_write 动作执行单条参数化 INSERT/UPDATE/DELETE，参数与 SQL 分离并用原生驱动绑定，支持可选 param_schema",
+    "保存读查询支持最多三个表源、显式连接条件、单 SELECT 子集；每语句执行截止时间不超过五秒并有并发限制"
+   ],
+   "use_cases": [
+    "在 Flow Steward 工作流中读取 OceanBase 应用数据，为后续步骤提供查找与报表提取",
+    "通过工作流动作将执行输出写入 OceanBase 或更新既有记录",
+    "以 AMD64 或 ARM64 独立包形式部署，安装与运行时不额外下载驱动"
+   ]
+  },
+  "sha": "3bcbf218826d",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

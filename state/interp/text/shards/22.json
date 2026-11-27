@@ -3364,5 +3364,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "65f4bd8eab83": {
+  "identity": {
+   "one_liner": "捆绑 sqlean 扩展的 Python SQLite 包装器，可替代 sqlite3 模块",
+   "review": "sqlean.py 是一个 Python 包，基于 pysqlite3 项目实现，将 sqlite3 模块与十二个 sqlean 扩展打包在一起，可作为标准库 sqlite3 的替代导入使用。扩展默认关闭，需通过 enable_all() 或 enable() 启用；提供 Python 3.10+ 的预编译 wheel，也支持源码构建。",
+   "highlights": [
+    "内置 crypto、fileio、regexp、stats、uuid、vsv 等 12 个 SQLite 扩展",
+    "可作为标准库 sqlite3 的直接替代（drop-in replacement）导入",
+    "提供 Linux/macOS/Windows 的 Python 3.10+ 预编译 wheel"
+   ],
+   "use_cases": [
+    "在 Python 项目中通过 SQL 使用正则、模糊匹配、文件读写等 SQLite 扩展功能",
+    "无需自行编译扩展，直接 pip 安装并按需启用扩展的 SQLite 开发",
+    "将 vsv 扩展用于把 CSV 文件作为虚拟表查询"
+   ]
+  },
+  "sha": "65f4bd8eab83",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c9349ace53e6": {
+  "identity": {
+   "one_liner": "纯 C# 嵌入式数据库，基于 LSM 存储、列式索引与 HNSW 向量搜索。",
+   "review": "DataVo 是面向 .NET 10 的进程内嵌入式数据库，提供 SQL、LINQ、向量搜索与响应式视图，无外部服务器和原生二进制依赖。存储支持 InMemory 与 LSM 两种模式，事务为 MVCC 快照隔离，SQL 方言为自有实现；主键限单列 INT/GUID 聚簇。通过 NuGet 包安装，MIT 许可，另有 PostgreSQL 同步的商业附加组件。",
+   "highlights": [
+    "提供 InMemory（FlatRowStore 定宽行存储）与 Lsm（WAL + MemTable + 32 MB SSTable 后台压缩）两种存储模式，LsmStrictFsync 开启掉电持久化",
+    "支持 HNSW 与 SIMD FLAT 两种向量索引（余弦/欧氏距离），向量查询在事务与 WAL 边界内执行，并可按选择性自动切换索引方式",
+    "通过 Roslyn 源生成器在构建期编译 LINQ 查询，支持 Native AOT 发布且 IL2026/IL3050 以错误级别强制"
+   ],
+   "use_cases": [
+    "需要在 .NET 进程内嵌 SQL/向量检索的桌面、服务或 Unity（评估性）应用",
+    "结合 Microsoft.Extensions.VectorData 构建本地 RAG 与混合检索场景（示例含 HybridVectorRagAot、MicrosoftAiLocalRag）",
+    "高频写入下维护增量 GROUP BY、top-N 与多表 JOIN 视图的仪表盘（Z-set 响应式视图示例 LiveReactiveLeaderboard）"
+   ]
+  },
+  "sha": "c9349ace53e6",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

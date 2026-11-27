@@ -3125,5 +3125,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cf667c9f133b": {
+  "identity": {
+   "one_liner": "响应 Node condition 并执行污点、驱逐和缓解 Job 的 Kubernetes 控制器",
+   "review": "node-problem-mitigator 是一个 Kubernetes 控制器，监听 Node Problem Detector 等来源报告的节点 condition，依次执行污点节点、运行前置诊断 Job、按 PodDisruptionBudgets 驱逐、运行缓解 Job（如终止云实例）四个步骤。通过 Helm 安装，配置中需显式指定监听的 condition（默认不监听任何 condition），控制器自身不持有云凭证，需通过 ServiceAccount RBAC 或云身份绑定向 Job 授权。",
+   "highlights": [
+    "提供污点、前置诊断 Job、驱逐（遵守 PodDisruptionBudgets）、缓解 Job 四步可逐项开关的缓解流程",
+    "支持 dry-run 模式、enabled 停用开关、全局冷却（默认最多每 15 分钟一次缓解）、for 持续失败等待及节点/命名空间排除",
+    "通过注解 clickhouse.com/node-mitigated-condition=Manual 支持手动触发节点缓解；Helm chart 提供 AWS、GCP、Azure 云终止示例"
+   ],
+   "use_cases": [
+    "集群中运行 Node Problem Detector 且需要在节点持续故障时自动污点并驱逐工作负载",
+    "在 AWS、GCP 或 Azure 上根据云终止示例替换异常节点实例",
+    "需要在驱逐工作负载前运行诊断 Job 收集节点状态信息的场景"
+   ]
+  },
+  "sha": "cf667c9f133b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b0cb8c994d22": {
+  "identity": {
+   "one_liner": "本地A股技术形态选股与看盘终端，基于Baostock日线与SQLite缓存",
+   "review": "KLineRadar 是一个基于 Python（Starlette + Uvicorn）与离线 TradingView Lightweight Charts v5 构建的本地 A 股看盘与选股工具。它将全市场日线行情落盘至本地 SQLite，支持 20 套形态与指标策略扫描、多策略共振榜单、14 项 K 线指标交互图表，并提供 CSV、通达信 EBK 等导出。面向做技术形态研究与复盘的 A 股用户，首次拉取需联网，之后离线可用；README 明确声明不构成投资建议。",
+   "highlights": [
+    "支持全市场日线数据写入本地 stock_cache.sqlite3，缓存建立后选股与看盘离线运行，并有收盘后自动增量同步调度",
+    "内置 20 套选股策略（分趋势突破、涨停战法、均线共振、形态反转四类），支持多策略共振聚合与历史区间胜率统计",
+    "提供 6 项主图叠加与 8 项副图技术指标、日/周/月周期切换，选股结果可导出为 CSV、通达信 .ebk、纯代码 TXT"
+   ],
+   "use_cases": [
+    "本地离线复盘：同步历史日线后查看多周期 K 线与多指标联动读数",
+    "按策略组合扫描全市场个股，生成共振信号榜并按涨跌幅、换手率等排序筛选",
+    "将选股结果导出为通达信板块文件或 CSV，导入其他分析工具使用"
+   ]
+  },
+  "sha": "b0cb8c994d22",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

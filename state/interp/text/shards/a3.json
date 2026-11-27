@@ -3090,5 +3090,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "471923269619": {
+  "identity": {
+   "one_liner": "基于 SQLite FTS5 的动态记忆层，为 AGY 等 Agent 提供本地持久化检索与 MCP 服务",
+   "review": "AGY Memory Engine 是一个面向 Google Antigravity 及其他自主 Agent 框架的本地动态记忆层，采用单文件 SQLite 数据库（~/.gemini/memory.db）实现 Facts/Episodes/Learnings/Graph 四层存储。检索结合 FTS5 关键词与 sqlite-vec 进程内向量扩展（FastEmbed 嵌入），用 RRF 融合结果；同时提供 FastMCP 服务器、CLI 工具、Web 仪表盘和后台去抖 worker，可用 pip 类 Python 依赖安装运行，MIT 许可。其安全设计包括工具无关的抽取路径和失败保留待处理轮次；相关性门控依赖外部评估模型调用，缺失密钥或超时会让全部候选通过。",
+   "highlights": [
+    "混合检索：FTS5 + trigram 复合词分解的 CLI 预取，与 sqlite-vec 进程内向量搜索（FastEmbed/ONNX，384 维）经 RRF 融合",
+    "提供 8 个 MCP 工具（search_memory、store_memory、record_episode、record_learning、link_entities_mcp、list_memories、migrate_memory、optimize_memory），支持德英法意西荷瑞典语词形还原",
+    "自带零依赖 Web 仪表盘（默认端口 8085）与后台 worker/crontab 集成，README 报告 249/249 测试通过"
+   ],
+   "use_cases": [
+    "为 Antigravity、Claude Code、Cursor 等 MCP 兼容 Agent 添加本地长期记忆的读写能力",
+    "通过 Telegram Bot 与 hooks/crontab 组合，构建会话内容自动抽取入库的记忆管线",
+    "用内置 Web 仪表盘实时检索、浏览和监控记忆库内容"
+   ]
+  },
+  "sha": "471923269619",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d7de974b3565": {
+  "identity": {
+   "one_liner": "面向开发者的社交平台，集成300课编程学院与12个游戏化模块，基于 Next.js 构建",
+   "review": "TEKA NEXUS 是一个面向开发者的开源 Web 平台，包含社交动态、项目协作工作区、浏览器内编程学习学院（Python/HTML/CSS/JavaScript 共 300 课，支持自动判分与浏览器内运行）、12 个游戏模块及在线考试证书。技术上采用 Next.js 16、TypeScript、Prisma + PostgreSQL、socket.io 实时服务，支持 7 种语言（含波斯语和阿拉伯语的 RTL）。可经 bun/npm 安装运行，生产部署于 Vercel 与 Supabase。注意其中 8 大系统扩张里仅 2 个已完成，其余 6 个为计划中状态。",
+   "highlights": [
+    "提供 300 节双语课程，含浏览器内 Python 子集解释器、DOM 断言、computed-style 判分与沙箱 iframe 运行时等四种自动判分引擎",
+    "包含社交动态、私信、项目工作区（看板、里程碑、socket.io 实时团队聊天）与 GitHub 集成面板",
+    "支持 7 种语言界面及波斯语/阿拉伯语的完整 RTL，实现为可安装 PWA；认证采用 scrypt 哈希与 zod 校验的 REST 接口"
+   ],
+   "use_cases": [
+    "开发者通过浏览器学习 Python/HTML/CSS/JavaScript 课程并完成自动判分挑战与监考考试获取证书",
+    "开发者社区内发布动态、发起项目协作、使用看板与实时聊天进行团队开发",
+    "以波斯语为首选语言的开发者使用本地化（RTL）的开发者社区与学习平台"
+   ]
+  },
+  "sha": "d7de974b3565",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

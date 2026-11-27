@@ -3376,5 +3376,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f4cf521dec67": {
+  "identity": {
+   "one_liner": "Nellavio 仪表盘前端的开源 Node.js 后端，提供数据 API 与认证",
+   "review": "该后端为 Nellavio（Next.js/TypeScript 仪表盘启动器）提供数据源，包含 7 个 GET 数据端点、Better Auth 认证与三角色 RBAC。技术栈为 Fastify、PostgreSQL、Prisma、Zod 与 Docker，支持本地运行、容器部署及云平台部署。README 说明其数据层为示例数据，无真实业务逻辑，数据库 schema 有意简化。",
+   "highlights": [
+    "提供 7 个 REST 数据端点（首页指标、分析、订单、客户、产品、日历事件、通知），由 OpenAPI 3.1 文档描述",
+    "使用 Better Auth 实现会话管理、用户凭据及 admin/editor/viewer 三角色 RBAC，含用户管理端点",
+    "OpenAPI 文档由 Zod 路由 schema 生成，代码与文档不一致时测试套件会失败；支持 Docker 构建运行"
+   ],
+   "use_cases": [
+    "为 Nellavio 仪表盘前端提供真实数据库数据与认证能力",
+    "需要带角色控制的用户注册、登录与会话管理的仪表盘类项目后端参考",
+    "需要 OpenAPI 文档、Prisma 迁移与 Docker 部署的 Node.js API 项目起点"
+   ]
+  },
+  "sha": "f4cf521dec67",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aa342a740533": {
+  "identity": {
+   "one_liner": "面向 OpenShift 的 Web 应用快速部署模板，基于 GitHub Actions 实现 PR 流水线。",
+   "review": "这是 BC 政府开源的 OpenShift 应用模板，供团队在其平台上部署含 Postgres 数据库、Nest.js 后端与 React 前端的 Web 应用。它通过 scripts/ 目录的安装脚本配置 GitHub 环境变量、密钥与 OpenShift 服务账号，脚本默认预览、需加 --apply 才生效，且可重复运行。使用前需向平台方申请 DEV/TEST/PROD 三个命名空间（licence plate）。",
+   "highlights": [
+    "提供基于 Pull Request 的 CI/CD 流水线，通过 GitHub Actions 将容器发布到 ghcr.io 并导入 OpenShift",
+    "包含示例应用栈：Postgres + Flyway 数据库迁移、Nest.js 后端、React 前端及带 Coraza WAF 的 Caddy 服务器",
+    "集成 Renovate 依赖更新、OWASP ASVS Level 1/2 部分控制项、Prometheus 指标导出与 HPA 自动扩缩容"
+   ],
+   "use_cases": [
+    "BC 政府 OpenShift 平台（Silver/Gold 集群）上的新项目初始化，将本仓库作为 GitHub 模板创建应用仓库",
+    "需要 DEV/TEST/PROD 多环境部署流水线的 Node.js 全栈应用",
+    "需要数据库迁移（Flyway）、滚动更新与离站 S3 备份等运维机制的团队项目"
+   ]
+  },
+  "sha": "aa342a740533",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "756832efc165": {
+  "identity": {
+   "one_liner": "基于 Spring Boot + Vue 3 + MySQL 的题库与在线考试系统，集成遗传算法组卷与 DeepSeek 出题。",
+   "review": "面向管理员与学生的前后端分离考试系统：提供题库管理、限时答题与自动判分，遗传算法按目标难度和分类覆盖选题组卷，DeepSeek 负责出题、错题解析与学习周报（需自配 API Key）。定位为 Java/数据库课程设计参考，首次启动自动建 9 张业务表；README 提示密码用 MD5、Token 无到期机制等限制，面向课程学习场景。",
+   "highlights": [
+    "支持手动选题与遗传算法自动组卷，默认 20 个体、30 代进化、20% 精英保留、10% 变异率",
+    "管理员可进行题目区分度分析、Excel 成绩导出；学生可查看错题本、知识图谱与 AI 学习周报",
+    "不配置 DeepSeek Key 时题库与考试基础功能仍可运行，且不依赖 Redis 或 Docker"
+   ],
+   "use_cases": [
+    "Java Web / 数据库课程设计的需求拆分与实现参考",
+    "学习 Spring Boot + Vue 3 前后端分离、JDBC 数据访问与遗传算法组卷",
+    "搭建本地题库管理与在线考试流程，配合 DeepSeek 生成题目与学习分析"
+   ]
+  },
+  "sha": "756832efc165",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "97a9cfb56597": {
+  "identity": {
+   "one_liner": "seekdb 的 Go 绑定库，通过 libseekdb C API 管理嵌入式 seekdb 服务器",
+   "review": "该库为 Go 程序提供嵌入式 seekdb 数据库的管理接口，包含 Open、ConnectionOptions、Close 三个核心函数，SQL 查询需自行搭配 MySQL 协议驱动。构建需 Go 1.22+、CGO 和对应平台的 C 编译器，musl/Alpine 不支持。原生库以 Go module 形式分发并在首次 Open 时解压到用户缓存目录，不联网下载。",
+   "highlights": [
+    "提供 Open/ConnectionOptions/Close 三个 API，通过 libseekdb C API 管理嵌入式 seekdb 进程",
+    "四个平台原生库以独立版本化的 Go module 分发，构建时按 build constraints 嵌入选定平台的 bundle",
+    "SQL 查询通过 ConnectionOptions 返回的连接信息（POSIX 为 Unix socket，Windows 默认为 TCP 127.0.0.1 随机端口）配合任意 MySQL 协议驱动使用"
+   ],
+   "use_cases": [
+    "在 Go 应用中内嵌 seekdb，实现单进程内的本地数据库读写与持久化",
+    "分发自包含的可执行程序：原生运行时被打包嵌入，首次运行时解压到用户缓存目录",
+    "需要向量查询、事务、参数化语句等能力的本地嵌入式数据存储场景（README 提及 CI 覆盖这些 SQL 集成测试项）"
+   ]
+  },
+  "sha": "97a9cfb56597",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

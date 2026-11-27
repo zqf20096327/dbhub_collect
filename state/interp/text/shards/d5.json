@@ -3265,5 +3265,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "27dc5e39385f": {
+  "identity": {
+   "one_liner": "整合分子生物学先验知识资源、构建信号通路等数据库的 Python 模块",
+   "review": "pypath 是 OmniPath 数据库的构建工具，从 100 多个原始资源下载并预处理数据，整合为网络、酶-底物、复合物、注释与细胞间通讯五类数据库，可导出为 pandas DataFrame 或供 R、Web 服务、Cytoscape 使用。适合需要自建定制版本数据库或使用 ID 转换、同源翻译等工具的 Python 用户；仅消费数据者可直接用 OmniPath 客户端。首次构建需下载数据，耗时数分钟以上。",
+   "highlights": [
+    "提供对 100 多个原始数据资源的访问，构建网络、酶-底物、复合物、注释、细胞间通讯五类数据库，均可转换为 pandas.DataFrame",
+    "包含 utils 模块，支持多种基因、蛋白、miRNA 与小分子标识符类型的转换，以及基于 NCBI HomoloGene、Ensembl、UniProt 的跨物种直系同源翻译",
+    "omnipath 模块可自动将构建的数据库保存为 pickle 文件并在后续会话中加载，数据库定义可由用户扩展"
+   ],
+   "use_cases": [
+    "构建定制或最新版本的 OmniPath 类数据库",
+    "需要直接访问原始或预处理数据的分子生物学研究流程",
+    "使用标识符转换、同源基因翻译等独立工具模块"
+   ]
+  },
+  "sha": "27dc5e39385f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c809a4d68742": {
+  "identity": {
+   "one_liner": "面向 AI 代理的 governed 双时态知识库，以 RDF 图存储事实并强制本体校验",
+   "review": "Quipu 是一个面向 AI 代理及其管理者的双时态知识存储，将事实、决策与工作历史保存在同一张图中。写入需通过 SHACL 校验闸门，每条事实附时间戳且只追加不覆盖，可按事务回查任一历史状态。提供 SPARQL 1.1 查询、来源记录、签名共享导入和变更流，可通过 CLI、REST、MCP、Python 或 Rust 库使用，存储为本地 SQLite 单文件，可离线运行。",
+   "highlights": [
+    "支持 RDF 数据与 SPARQL 1.1 查询，写入时依据 SHACL 形状与策略进行校验，违反词表的写入会被拒绝并返回原因",
+    "事实采用追加式存储并记录记录时间与生效时间，可按任意历史事务状态查询图",
+    "提供签名共享的隔离验证与显式导入流程，并按序发布已提交变更流供其他工具订阅"
+   ],
+   "use_cases": [
+    "为多个 AI 代理集中维护项目事实、决策与工作历史，避免重复粘贴上下文",
+    "通过 MCP 服务器接入 Claude Code 等代理客户端，查询当前或历史知识",
+    "在团队间以签名共享包形式交换知识，经隔离验证后再决定是否导入"
+   ]
+  },
+  "sha": "c809a4d68742",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3da4e9df59ef": {
+  "identity": {
+   "one_liner": "后端完全内嵌于 SurrealDB 的数字银行示例项目，含账本、API 与实时反欺诈",
+   "review": "这是 Universidad Francisco de Vitoria 高级数据库课程的教学项目：将账本、转账、卡片、权限、HTTP API 与欺诈检测全部放进 SurrealDB 3.2.4 的 schema 中，前端为 SwiftUI iOS 应用，经 HAProxy 访问，存储可用单节点或三副本 TiKV 集群。配套 Kafka 做支付接入与告警外发，并提供 IBM 公开反洗钱数据集上的验证数据。代码采用 MIT 许可。",
+   "highlights": [
+    "权限、函数与 HTTP API 均定义在 schema 内，SurrealDB 节点无状态，可水平接入多个节点",
+    "转账图分析在数据库内实现：通过 LIVE SELECT 推送欺诈告警，并按事件类型分级响应（冻结或复审）",
+    "存储层基于 TiKV，Raft 协议要求三个 store 中两个确认后写入生效"
+   ],
+   "use_cases": [
+    "学习 SurrealDB 的 schema 设计、权限模型与 LIVE SELECT 机制",
+    "研究 TiKV 集群下节点故障与存储主节点切换的数据库课程实验",
+    "以 IBM 公开 AML 数据集为输入测试图模式欺诈检测逻辑"
+   ]
+  },
+  "sha": "3da4e9df59ef",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

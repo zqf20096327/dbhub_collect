@@ -3318,5 +3318,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1887abb85aee": {
+  "identity": {
+   "one_liner": "S2 持久化流 API 的 CLI、自托管服务端实现与 Rust SDK 仓库",
+   "review": "本仓库包含 s2-cli 命令行工具、s2-lite 自托管服务端和 s2-sdk Rust SDK。s2-lite 以 SlateDB 为存储引擎，数据持久化依赖对象存储（如 S3），也可在无外部依赖下以内存模式运行，用于集成测试。安装支持 Homebrew、Cargo、脚本和 Docker，部署支持 Helm。API 覆盖 basins/streams/records 接口，access-tokens 和 /metrics 端点尚不支持。",
+   "highlights": [
+    "s2-lite 为单节点二进制，以 SlateDB 为存储引擎，支持 S3 兼容桶、本地目录或内存三种存储方式",
+    "WAL 可置于独立桶或本地目录，通过 --wal-bucket / --wal-local-root 与主存储隔离",
+    "提供 /health 就绪检查和 Prometheus 文本格式的 /metrics 端点，兼容 CLI 及 TypeScript/Go/Rust/Python 多语言 SDK"
+   ],
+   "use_cases": [
+    "在自有基础设施上以对象存储为持久层自托管 S2 API 服务",
+    "使用内存模式（不指定 --bucket）作为 S2 模拟器运行集成测试",
+    "通过 CLI 或 SDK 进行流的追加写入与读取，测试流式会话与性能基准"
+   ]
+  },
+  "sha": "1887abb85aee",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2fb5969a8577": {
+  "identity": {
+   "one_liner": "基于 TiDB Cloud 的 Syed Mushtaq Ali Trophy 2026/27 板球数据 Streamlit 仪表盘",
+   "review": "该项目为印度国内 T20 赛事 Syed Mushtaq Ali Trophy 2026/27 提供数据仪表盘，前端使用 Streamlit、pandas 与 PyMySQL 实现，数据存储于 TiDB Cloud Starter 免费层，数据源为 Cricsheet 的逐球 JSON 并每日刷新。运行前需在 .streamlit/secrets.toml 中配置数据库凭据。数据版权归 Cricsheet，复用需注明来源。",
+   "highlights": [
+    "提供击球/投球排行榜，支持按队伍筛选与球员下钻查看",
+    "包含完整比赛记分卡与分组积分表",
+    "数据每日从 Cricsheet 逐球 JSON 刷新至 TiDB Cloud 数据库"
+   ],
+   "use_cases": [
+    "查看该赛事的球员击球与投球统计数据",
+    "查阅各场比赛记分卡与小组积分排名",
+    "作为 Streamlit + TiDB Cloud 数据应用的本地运行参考"
+   ]
+  },
+  "sha": "2fb5969a8577",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

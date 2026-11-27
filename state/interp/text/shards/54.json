@@ -3304,5 +3304,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e10189241154": {
+  "identity": {
+   "one_liner": "计算机使用代理（CUA）资源的可溯源编目，含 JSONL/SQLite 数据。",
+   "review": "该仓库维护一个计算机使用代理领域的资源目录，收录论文、GUI 模型、数据集、基准、工具等，条目按 curated/reviewed、awaiting review、discovered 三种审阅状态标注，并可对照原始来源快照核验。使用者可克隆仓库后用自带 Python 脚本（3.11+，无依赖）检索，也可下载 JSONL 目录、llms.txt、Atom 订阅源或 Hugging Face 镜像。需要 Python 3.11+ 运行本地脚本。",
+   "highlights": [
+    "收录 5,347 条 curated 资源与 1,718 篇已审阅论文/综述，覆盖 web、桌面、Android、iOS 等平台，条目记录来源快照与审阅状态",
+    "提供目录 JSONL、下载清单（含 SHA-256 校验）、Atom 订阅源、llms.txt 及 Hugging Face 只读镜像等多种数据出口",
+    "附带 Python 脚本 catalog.py，克隆后无需安装依赖即可按类型、环境、状态检索条目并输出 JSON"
+   ],
+   "use_cases": [
+    "按任务检索：查找综述、选择基准、寻找训练数据或构建代理的实现入口",
+    "下载结构化目录数据用于检索（RAG）文档构建或程序化处理",
+    "跟踪计算机使用代理领域的研究更新与工具、数据集发布"
+   ]
+  },
+  "sha": "e10189241154",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e545fcbb3883": {
+  "identity": {
+   "one_liner": "基于 PowerShell 与 dbatools 的 SQL Server 跨平台 Ansible 集合",
+   "review": "lowlydba.sqlserver 是一个 Ansible 集合，通过 PowerShell 模块（dbatools >= 2.0.0、dbops >= 0.9.0）实现对 SQL Server 的配置与维护自动化，供使用 Ansible 管理数据库的运维人员使用。安装方式为 ansible-galaxy collection install，遵循语义化版本与弃用周期机制。README 未逐条列出模块清单，需查阅官方文档站获取模块详情。",
+   "highlights": [
+    "通过 ansible-galaxy 安装，支持 requirements.yml 引用与指定版本安装",
+    "底层依赖 PowerShell 的 dbatools（>=2.0.0）与 dbops（>=0.9.0）模块实现 SQL Server 操作",
+    "官方测试覆盖 Ansible 2.20–2.22 与 devel，支持 SQL Server 2000 至当前版本（经 dbatools）"
+   ],
+   "use_cases": [
+    "用 Ansible playbook 自动化配置和维护 SQL Server 实例",
+    "在跨平台环境中借助 PowerShell/dbatools 管理 SQL Server",
+    "对 Azure SQL Database 托管实例进行尝试性自动化管理（README 标注 YMMV）"
+   ]
+  },
+  "sha": "e545fcbb3883",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "82a87f95012e": {
+  "identity": {
+   "one_liner": "Litestream SQLite 复制工具的 Django 集成，捆绑二进制并以 manage.py 命令暴露",
+   "review": "该包为 Django 项目提供 Litestream（SQLite 流式复制工具）的集成：Litestream 二进制随平台 wheel（Linux/macOS x86_64 与 arm64）捆绑分发，所有上游命令以 `python manage.py litestream <command>` 形式提供，配置从 Django settings 动态生成并可使用数据库别名代替文件路径。适用于在 Django 应用中管理 SQLite 复制与恢复的团队。注意每个数据库在 `LITESTREAM[\"dbs\"]` 中只能出现一次，时长使用 Go 语法（如 168h）。",
+   "highlights": [
+    "通过平台专用 wheel 自动安装 Litestream 二进制，无需手动下载；配置由 Django settings 动态生成，无需 YAML 文件",
+    "提供上游不存在的 `litestream config`（查看生成的 YAML 配置）和 `litestream verify`（写入验证行、等待复制、恢复并确认的端到端完整性检查）命令",
+    "可选 `[vfs]` 扩展支持只读按需分页读取云端副本，支持 S3、GCS、Azure Blob、本地文件、SFTP、NATS、WebDAV 等存储后端"
+   ],
+   "use_cases": [
+    "为 Django SQLite 数据库配置 Litestream 复制与恢复（`restore` 支持 `-timestamp`/`-txid` 时间点恢复）",
+    "通过 VFS 别名在不下载整个数据库的情况下以只读方式查询云端副本（如 `User.objects.using(\"prod_replica\")`）",
+    "部署前用 `litestream config` 核对生成配置，用 `litestream verify` 验证备份端到端可用"
+   ]
+  },
+  "sha": "82a87f95012e",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -27636,5 +27636,2930 @@
    ]
   ],
   "at": "2026-11-26"
+ },
+ "11bb6bdff254+2": {
+  "fn": "redbase-app/redb-identity",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "> Built on OpenIddict and redb.Route. Every endpoint is a `direct-vm://` route — call it over HTTP, gRPC, RabbitMQ, SignalR, or **straight from another in-process module with zero network overhead**. Ships as `.tpkg` packages for redb.Tsak. REDB-backed, cluster-ready, standards-compliant."
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    4,
+    7
+   ],
+   [
+    "replace",
+    7,
+    26,
+    7,
+    24,
+    [
+     "License: Apache 2.0",
+     "Website",
+     ".NET",
+     "Providers",
+     "NuGet: redb.Identity.Core",
+     "NuGet: redb.Identity.Http",
+     "NuGet: redb.Identity.Client",
+     "OIDC",
+     "OAuth",
+     "DPoP",
+     "PAR",
+     "JAR",
+     "DCR",
+     "SCIM-2E7D32)",
+     "FIDO2",
+     "Engine",
+     "Runtime"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    24,
+    26
+   ],
+   [
+    "replace",
+    28,
+    41,
+    26,
+    27,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    43,
+    27,
+    29
+   ],
+   [
+    "replace",
+    43,
+    44,
+    29,
+    30,
+    [
+     "|If you want…|redb.Identity gives you…|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    30,
+    31
+   ],
+   [
+    "replace",
+    45,
+    57,
+    31,
+    43,
+    [
+     "|A full OIDC / OAuth 2.1 server without ASP.NET coupling|A `direct-vm://`-only core: `token`, `authorize`, `userinfo`, `introspect`, `revoke`, `jwks`, `.well-known/openid-configuration`, PAR, JAR (signed request objects), Device Code, Dynamic Registration.|",
+     "|To call Identity from another in-process module **with no HTTP**|`To(\"direct-vm://identity-token\")` from your own `RouteBuilder`. Zero serialization, zero loopback, zero TLS handshake, same exchange.|",
+     "|HTTP / gRPC / RabbitMQ / SignalR endpoints|Drop in the matching facade `.tpkg`. Each facade is a thin transport bridge — no business logic.|",
+     "|A drop-in user / group / scope / client / consent / audit / session store|Built-in storage via redb.Core typed `*Props` objects. Code-first schemes, no migrations.|",
+     "|Multi-instance / cluster deployment|DataProtection key-ring + signing keys shared through redb object store. Cleanup timers run leader-only via `.Cluster(true)`.|",
+     "|Modern MFA|TOTP (RFC 6238) + SMS/Email OTP + WebAuthn (FIDO2) + Recovery codes.|",
+     "|Self-service for end users|`/me/profile`, `/me/sessions`, `/me/mfa`, `/me/webauthn`, `/me/consents`, `/me/federated`.|",
+     "|Federation|OIDC / GitHub external providers, stored as redb props objects, admin CRUD.|",
+     "|Backchannel logout that works across replicas|RFC 8417-style revoked-SID list (`/revoked-sids/add` + `/since`) + push-and-poll fallback.|",
+     "|SCIM 2.0 provisioning|Users + Groups + Bulk endpoints (RFC 7644).|",
+     "|RFC compliance|OIDC Core, OAuth 2.1, RFC 7662 (Introspection), RFC 7591/7592 (DCR), RFC 8628 (Device Code), RFC 9126 (PAR), **RFC 9101 (JAR — JWT-Secured Authorization Request, opt-in)**, RFC 9068 (JWT access-token profile — `at+jwt`, full claim set, `aud` issued and verified), RFC 8707 (Resource Indicators), RFC 8693 (Token Exchange, opt-in), RFC 9449 (DPoP), RFC 8417 / OIDC Backchannel Logout.|",
+     "|Conformance you can check|Exercised against the **official OpenID Foundation conformance suite** (Config OP, Basic OP). Unsigned `alg:none` request objects are refused, as FAPI 2.0 requires. Per-module results: OPENID_CERTIFICATION.md.|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    68,
+    43,
+    54
+   ],
+   [
+    "replace",
+    68,
+    74,
+    54,
+    55,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    76,
+    55,
+    57
+   ],
+   [
+    "replace",
+    76,
+    77,
+    57,
+    58,
+    [
+     "|Package|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    58,
+    59
+   ],
+   [
+    "replace",
+    78,
+    89,
+    59,
+    70,
+    [
+     "|`redb.Identity.Core`|OAuth 2.1 / OIDC engine — OpenIddict pipeline, redb stores, MFA, WebAuthn, federation, signing keys|",
+     "|`redb.Identity.Http`|HTTP / HTTPS facade — discovery, token, authorize, userinfo, introspect, JWKS, PAR, DCR, SCIM, `/me`, management|",
+     "|`redb.Identity.Grpc`|gRPC facade — service-to-service surface (token, introspect, revoke, userinfo, discovery, JWKS) + the management services; `.proto` contracts ship in `redb.Identity.Contracts` under `Protos/`|",
+     "|`redb.Identity.Soap`|WS-Trust facade — `Issue`, `Validate`, `Cancel`, `Renew` over SOAP on the same core routes; WSDL published on GET; TLS required, and its absence is a refusal to start|",
+     "|`redb.Identity.Management`|Transport-neutral management + self-service controllers — thin adapters over `direct-vm://identity-manage-*`, shared by every facade|",
+     "|`redb.Identity.Contracts`|Wire DTOs + route-name constants (shared by Core, Http, Client)|",
+     "|`redb.Identity.Client`|Typed HTTP SDK (`IIdentityClient`) + backchannel OIDC client|",
+     "|`redb.Identity.DataProtection`|redb-backed ASP.NET Core DataProtection key-ring|",
+     "|`redb.Identity.Core.Module`|redb.Tsak `.tpkg` host glue (only when hosting inside a Tsak worker)|",
+     "|`redb.Identity.Ldap`|LDAP / Active Directory federation provider|",
+     "|`redb.Identity.Resource.Dpop`|Resource-server DPoP (RFC 9449) validator for downstream APIs|"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    97,
+    70,
+    78
+   ],
+   [
+    "replace",
+    97,
+    98,
+    78,
+    79,
+    [
+     "|Image|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    79,
+    80
+   ],
+   [
+    "replace",
+    99,
+    103,
+    80,
+    84,
+    [
+     "|`redb-identity-backend`|Tsak Worker + Identity modules (OIDC only)|",
+     "|`redb-identity-managed`|+ Tsak dashboard|",
+     "|`redb-identity-full`|+ Identity Web BFF (login, consent, admin UI)|",
+     "|`redb-identity-web`|Identity Web BFF only|"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    106,
+    84,
+    87
+   ],
+   [
+    "replace",
+    106,
+    107,
+    87,
+    88,
+    [
+     "DEPLOYMENT.md."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    88,
+    91
+   ],
+   [
+    "replace",
+    110,
+    111,
+    91,
+    92,
+    [
+     "UPGRADING.md lists what to check and change for each version; CHANGELOG.md has the"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    92,
+    93
+   ],
+   [
+    "delete",
+    112,
+    114,
+    93,
+    93
+   ],
+   [
+    "equal",
+    114,
+    126,
+    93,
+    105
+   ],
+   [
+    "replace",
+    126,
+    127,
+    105,
+    106,
+    [
+     "DEPLOYMENT.md and HTTPS.md."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    136,
+    106,
+    115
+   ],
+   [
+    "replace",
+    136,
+    137,
+    115,
+    116,
+    [
+     "|Package|Tsak context|Contains|"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    116,
+    117
+   ],
+   [
+    "replace",
+    138,
+    143,
+    117,
+    122,
+    [
+     "|`redb.Identity.Contracts.tpkg`|`identity.contracts`|The shared DTO assembly every Identity module resolves against|",
+     "|`redb.Identity.Core.Module.tpkg`|`identity.core`|OIDC engine, redb stores, MFA, federation, signing keys|",
+     "|`redb.Identity.Http.tpkg`|`identity.http`|HTTP facade: protocol endpoints, management API, SCIM, `/me`|",
+     "|`redb.Identity.Grpc.tpkg`|`identity.grpc`|gRPC facade (optional)|",
+     "|`redb.Identity.Soap.tpkg`|`identity.soap`|WS-Trust facade (optional)|"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    155,
+    122,
+    134
+   ],
+   [
+    "replace",
+    155,
+    168,
+    134,
+    135,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    201,
+    135,
+    168
+   ],
+   [
+    "delete",
+    201,
+    203,
+    168,
+    168
+   ],
+   [
+    "equal",
+    203,
+    205,
+    168,
+    170
+   ],
+   [
+    "replace",
+    205,
+    206,
+    170,
+    171,
+    [
+     "Each item links to the migration steps in UPGRADING.md."
+    ]
+   ],
+   [
+    "equal",
+    206,
+    208,
+    171,
+    173
+   ],
+   [
+    "replace",
+    208,
+    210,
+    173,
+    175,
+    [
+     " refresh tokens issued by earlier versions stay valid.",
+     " OpenIddict 7"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    175,
+    176
+   ],
+   [
+    "replace",
+    211,
+    212,
+    176,
+    177,
+    [
+     " resource parameter"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    177,
+    178
+   ],
+   [
+    "replace",
+    213,
+    214,
+    178,
+    179,
+    [
+     " Client assertions"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    216,
+    179,
+    181
+   ],
+   [
+    "replace",
+    216,
+    217,
+    181,
+    182,
+    [
+     " `cnf.jkt`. DPoP"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    182,
+    183
+   ],
+   [
+    "replace",
+    218,
+    219,
+    183,
+    184,
+    [
+     " DataProtection key ring"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    184,
+    185
+   ],
+   [
+    "replace",
+    220,
+    223,
+    185,
+    186,
+    [
+     " and `full` compose stacks keep the Tsak key rings on a volume. See DEPLOYMENT.md."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    234,
+    186,
+    197
+   ],
+   [
+    "replace",
+    234,
+    235,
+    197,
+    198,
+    [
+     "||ASP.NET-bound IS (Duende, OpenIddict samples)|redb.Identity|Standalone IAM (Keycloak / Auth0)|"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    236,
+    198,
+    199
+   ],
+   [
+    "replace",
+    236,
+    245,
+    199,
+    206,
+    [
+     "|Call `token` from another in-process module|Loopback HTTP|**`To(\"direct-vm://identity-token\")`** — same exchange, zero copy|Network hop|",
+     "|Add a new transport (gRPC, MQ, SignalR)|Rewrite endpoints as gRPC services / consumers|Add a facade `.tpkg`, point it at `direct-vm://`|Vendor adapter (if it exists)|",
+     "|Replace HTTP with RabbitMQ entirely|Major refactor|**Drop the HTTP facade. Keep Core.**|Not possible|",
+     "|Storage|Custom EF Core schema + migrations|redb `RedbObject<TProps>` — code-first, no migrations|Vendor schema, vendor migrations|",
+     "|Multi-replica key sharing|DIY DataProtection persistence + JWKS rotation|Built-in: redb-backed key-ring + signing key store|Built-in (vendor-specific)|",
+     "|Embeddable in a Tsak worker|No|**Yes — as one or two `.tpkg` packages**|No|",
+     "|License|Mixed (Duende: commercial)|Apache 2.0|Mixed|"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    256,
+    206,
+    217
+   ],
+   [
+    "replace",
+    256,
+    276,
+    217,
+    218,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    288,
+    218,
+    230
+   ],
+   [
+    "replace",
+    288,
+    290,
+    230,
+    232,
+    [
+     " the `client_credentials` grant and only the granular scopes it needs, for example `identity:users:read`. Take a",
+     " token from `IdentityEndpoints.Token` and reuse it until it expires."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    291,
+    232,
+    233
+   ],
+   [
+    "replace",
+    291,
+    293,
+    233,
+    235,
+    [
+     " `IdentityEndpoints.AuthManagement`. It validates the token and leaves the management context",
+     " (`identity:management-scopes`, `identity:management-subject`) on the exchange, or stops it with `401`."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    235,
+    236
+   ],
+   [
+    "replace",
+    294,
+    298,
+    236,
+    240,
+    [
+     " `/api/v1/identity/groups`, ...) and `identity:authz-action` to `read` or `write`, and send the exchange through",
+     " `IdentityEndpoints.AuthzCheck`. It checks the token's scopes against the same table the facades use, or stops the",
+     " exchange with `403 insufficient_scope`. Skipping this step lets any token with a management scope reach every",
+     " operation."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    299,
+    240,
+    241
+   ],
+   [
+    "replace",
+    299,
+    300,
+    241,
+    242,
+    [
+     " send the exchange to the management route."
+    ]
+   ],
+   [
+    "equal",
+    300,
+    305,
+    242,
+    247
+   ],
+   [
+    "replace",
+    305,
+    322,
+    247,
+    248,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    334,
+    248,
+    260
+   ],
+   [
+    "replace",
+    334,
+    359,
+    260,
+    261,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    359,
+    367,
+    261,
+    269
+   ],
+   [
+    "replace",
+    367,
+    368,
+    269,
+    270,
+    [
+     "|Flow / endpoint|Needs HTTP + browser|Works on any transport|"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    369,
+    270,
+    271
+   ],
+   [
+    "replace",
+    369,
+    378,
+    271,
+    278,
+    [
+     "|`client_credentials` (M2M)|—|yes|",
+     "|`authorization_code` — redirect to `/authorize`|yes|—|",
+     "|`authorization_code` — `code → token` exchange|—|yes|",
+     "|`refresh_token`, `revoke`, `introspect`, `userinfo`|—|yes|",
+     "|`device_code` — initial request|—|yes|",
+     "|`device_code` — user verification URL|yes|—|",
+     "|Management API, SCIM 2.0, audit query|—|yes|"
+    ]
+   ],
+   [
+    "equal",
+    378,
+    390,
+    278,
+    290
+   ],
+   [
+    "replace",
+    390,
+    440,
+    290,
+    291,
+    [
+     "…（50 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    440,
+    464,
+    291,
+    315
+   ],
+   [
+    "replace",
+    464,
+    497,
+    315,
+    316,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    497,
+    500,
+    316,
+    319
+   ],
+   [
+    "delete",
+    500,
+    502,
+    319,
+    319
+   ],
+   [
+    "equal",
+    502,
+    509,
+    319,
+    326
+   ],
+   [
+    "replace",
+    509,
+    547,
+    326,
+    327,
+    [
+     "…（38 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    547,
+    548,
+    327,
+    328
+   ],
+   [
+    "delete",
+    548,
+    550,
+    328,
+    328
+   ],
+   [
+    "equal",
+    550,
+    553,
+    328,
+    331
+   ],
+   [
+    "replace",
+    553,
+    554,
+    331,
+    332,
+    [
+     "Every protocol endpoint (`/connect/*`) is *also* registered on `direct-vm://identity-*` for zero-network in-process calls — see IdentityEndpoints.cs."
+    ]
+   ],
+   [
+    "equal",
+    554,
+    557,
+    332,
+    335
+   ],
+   [
+    "replace",
+    557,
+    558,
+    335,
+    336,
+    [
+     "Wired in HttpFacadeRouteBuilder.cs."
+    ]
+   ],
+   [
+    "equal",
+    558,
+    559,
+    336,
+    337
+   ],
+   [
+    "replace",
+    559,
+    560,
+    337,
+    338,
+    [
+     "|Path|Method|Auth|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    560,
+    561,
+    338,
+    339
+   ],
+   [
+    "replace",
+    561,
+    575,
+    339,
+    353,
+    [
+     "|`/connect/token`|POST|client authentication; grants `authorization_code` / `client_credentials` / `password` / `refresh_token` / `device_code` / token exchange (opt-in)|OAuth 2.1 token endpoint|",
+     "|`/connect/authorize`|GET, POST|session cookie|Authorization endpoint (browser redirect); validates `resource` (RFC 8707)|",
+     "|`/connect/par`|POST|`client_credentials`|Pushed Authorization Request (RFC 9126); validates `resource`|",
+     "|`/connect/userinfo`|GET, POST|Bearer|OpenID Connect userinfo|",
+     "|`/connect/introspect`|POST|`client_credentials`|RFC 7662 token introspection|",
+     "|`/connect/revocation`|POST|`client_credentials`|RFC 7009 token revocation|",
+     "|`/connect/logout`|GET, POST|session cookie (optional)|OIDC RP-Initiated Logout|",
+     "|`/connect/register`|POST|Bearer (optional)|RFC 7591 Dynamic Client Registration|",
+     "|`/connect/register/{client_id}`|GET, PUT, DELETE|Bearer|RFC 7592 DCR Management|",
+     "|`/connect/deviceauthorization`|POST|`client_credentials`|RFC 8628 Device Authorization|",
+     "|`/connect/device/verify`|POST|anonymous|RFC 8628 §3.3 end-user verification|",
+     "|`/.well-known/openid-configuration`|GET|anonymous|OIDC Discovery 1.0|",
+     "|`/.well-known/oauth-authorization-server`|GET|anonymous|RFC 8414 metadata|",
+     "|`/.well-known/jwks`|GET|anonymous|JSON Web Key Set|"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    578,
+    353,
+    356
+   ],
+   [
+    "replace",
+    578,
+    579,
+    356,
+    357,
+    [
+     "|Path|Method|Purpose|Source|"
+    ]
+   ],
+   [
+    "equal",
+    579,
+    580,
+    357,
+    358
+   ],
+   [
+    "replace",
+    580,
+    593,
+    358,
+    371,
+    [
+     "|`/applications` (+ `/{id}/rotate-secret`)|GET/POST/PUT/DELETE|OAuth client CRUD + secret rotation|ApplicationsController.cs|",
+     "|`/users` (+ `/search`, `/{id}/change-password`)|GET/POST/PUT/DELETE|User management|UsersController.cs|",
+     "|`/groups` (+ `/{id}/children`, `/members`, `/move`)|GET/POST/PUT/DELETE|Hierarchical groups & membership|GroupsController.cs|",
+     "|`/scopes`|GET/POST/PUT/DELETE|OAuth scope catalogue|ScopesController.cs|",
+     "|`/claim-mappers`|GET/POST/PUT/DELETE|Declarative claim mapping rules|ClaimMappersController.cs|",
+     "|`/claim-scopes` (+ `/assignments`)|GET/POST/PUT/DELETE|Reusable Client Scope bundles + per-app assignment|ClaimScopesController.cs|",
+     "|`/audit`|GET|Audit log query|AuditController.cs|",
+     "|`/tokens`|GET/POST/DELETE|Token lifecycle management; the type filter accepts the short and the URI form (`refresh_token`, `urn:ietf:params:oauth:token-type:refresh_token`)|TokensController.cs|",
+     "|`/consents`|GET/DELETE|User-consent admin|ConsentsController.cs|",
+     "|`/sessions`|GET/POST/DELETE|Admin session control|SessionsController.cs|",
+     "|`/mfa`|GET/POST/DELETE|Admin MFA lifecycle|MfaController.cs|",
+     "|`/federation-providers`|GET/POST/PUT/DELETE|External IdP CRUD (redb-stored)|FederationProvidersController.cs|",
+     "|`/revoked-sids`|GET/POST|Backchannel revoked-SIDs delta feed|RevokedSidsController.cs|"
+    ]
+   ],
+   [
+    "equal",
+    593,
+    598,
+    371,
+    376
+   ],
+   [
+    "replace",
+    598,
+    599,
+    376,
+    377,
+    [
+     "|Path|Method|Purpose|Source|"
+    ]
+   ],
+   [
+    "equal",
+    599,
+    600,
+    377,
+    378
+   ],
+   [
+    "replace",
+    600,
+    607,
+    378,
+    385,
+    [
+     "|`/me`|GET, PUT|Profile read/update|MeController.cs|",
+     "|`/me/password`|PUT|Self-service password change|MePasswordController.cs|",
+     "|`/me/sessions`|GET, DELETE|List/revoke own sessions (SSO)|MeSessionsController.cs|",
+     "|`/me/mfa`|GET/POST/DELETE|Self-service MFA enroll/disable|MeMfaController.cs|",
+     "|`/me/webauthn`|GET/POST/PATCH/DELETE|WebAuthn credentials (FIDO2)|MeWebAuthnController.cs|",
+     "|`/me/consents`|GET, DELETE|Consent dashboard|MeConsentsController.cs|",
+     "|`/me/federated-identities`|GET/POST/DELETE|Link/unlink external IdP accounts|MeFederatedIdentitiesController.cs|"
+    ]
+   ],
+   [
+    "equal",
+    607,
+    611,
+    385,
+    389
+   ],
+   [
+    "replace",
+    611,
+    613,
+    389,
+    391,
+    [
+     "Contract: identity.v1.proto; usage:",
+     "redb.Identity.Grpc/README.md."
+    ]
+   ],
+   [
+    "equal",
+    613,
+    614,
+    391,
+    392
+   ],
+   [
+    "replace",
+    614,
+    615,
+    392,
+    393,
+    [
+     "|Method|Auth|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    615,
+    616,
+    393,
+    394
+   ],
+   [
+    "replace",
+    616,
+    623,
+    394,
+    401,
+    [
+     "|`/identity.v1.Identity/Token`|client credentials, fields or `authorization: Basic`|RFC 6749 §3.2|",
+     "|`/identity.v1.Identity/Introspect`|client credentials|RFC 7662|",
+     "|`/identity.v1.Identity/Revoke`|client credentials|RFC 7009|",
+     "|`/identity.v1.Identity/UserInfo`|`authorization: Bearer`|OIDC Core §5.3|",
+     "|`/identity.v1.Identity/Discovery`, `/Jwks`|anonymous|documents, passed through verbatim|",
+     "|`/redb.route.grpc.RedbService/Process`|as above|envelope fallback: JSON body + `operation` metadata|",
+     "|`/grpc.health.v1.Health/Check`|anonymous|k8s / Consul / Envoy probe|"
+    ]
+   ],
+   [
+    "equal",
+    623,
+    630,
+    401,
+    408
+   ],
+   [
+    "replace",
+    630,
+    631,
+    408,
+    409,
+    [
+     "|Path|Method|Auth|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    631,
+    632,
+    409,
+    410
+   ],
+   [
+    "replace",
+    632,
+    636,
+    410,
+    414,
+    [
+     "|`/Users`|GET/POST/PUT/PATCH/DELETE|Bearer + `scim` scope|RFC 7644 §3.2–3.5|",
+     "|`/Groups`|GET/POST/PUT/PATCH/DELETE|Bearer + `scim` scope|RFC 7644 §3.2–3.5|",
+     "|`/Bulk`|POST|Bearer + `scim` scope|RFC 7644 §3.7|",
+     "|`/ServiceProviderConfig`, `/ResourceTypes`, `/Schemas`|GET|anonymous|RFC 7643 §5 discovery|"
+    ]
+   ],
+   [
+    "equal",
+    636,
+    639,
+    414,
+    417
+   ],
+   [
+    "replace",
+    639,
+    640,
+    417,
+    418,
+    [
+     "|Path|Method|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    640,
+    641,
+    418,
+    419
+   ],
+   [
+    "replace",
+    641,
+    647,
+    419,
+    423,
+    [
+     "|`/api/auth/login`|POST|Form-based browser login over BFF|",
+     "|`/api/auth/logout`|POST|BFF logout|",
+     "|`/account/login`|GET|Back-compat redirect to `/login`|",
+     "|`/health`|GET|BFF liveness probe|"
+    ]
+   ],
+   [
+    "equal",
+    647,
+    654,
+    423,
+    430
+   ],
+   [
+    "replace",
+    654,
+    655,
+    430,
+    431,
+    [
+     "|RFC|Spec|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    655,
+    656,
+    431,
+    432
+   ],
+   [
+    "replace",
+    656,
+    673,
+    432,
+    449,
+    [
+     "|**6749**|OAuth 2.0 Authorization Framework|Authorization Code, Client Credentials, Refresh Token, Resource Owner Password Credentials (§4.3, opt-in). RFC 6749 §5.2 error mapping (`invalid_request`/`invalid_grant`/`unsupported_grant_type` → correct HTTP status), §10.5 single-use authorization code (atomic consume), §10.12-style one-time `jti` enforcement.|",
+     "|**6750**|Bearer Token Usage|`Authorization: Bearer …`. Query-parameter transport (§2.3) explicitly rejected by management API.|",
+     "|**7009**|Token Revocation|Always 200 (§2.1), idempotent re-revocation, refresh-token rotation.|",
+     "|**7591**|Dynamic Client Registration|`POST /connect/register`, optional initial access token (§1.2).|",
+     "|**7592**|DCR Management Protocol|`GET/PUT/DELETE /connect/register/{client_id}` with `registration_access_token`.|",
+     "|**7521 / 7523**|Assertion Framework + JWT Bearer client authentication|`private_key_jwt` — DCR accepts `token_endpoint_auth_method=private_key_jwt` with inline `jwks`; `/connect/token` + `/connect/introspect` authenticate via an RS256-signed client assertion (RFC 7521 §4.2 / RFC 7523 §2.2); advertised in discovery `token_endpoint_auth_methods_supported`. Assertions follow draft-ietf-oauth-rfc7523bis: `typ` header `client-authentication+jwt` and the issuer as `aud`, for every endpoint (UPGRADING.md). Tampered signature → 401 `invalid_client`. Pinned by `demo_private_key_jwt`.|",
+     "|**7636**|PKCE|`S256` mandated; `plain` rejected per OAuth 2.1 / RFC 7636 §4.2.|",
+     "|**7662**|Token Introspection|Answers only a client the token concerns: one in its `aud` or the client it was issued to; any other caller gets `active: false` (§2.2). A resource server is put into the audience through the `Resources` of the scopes its callers request.|",
+     "|**8252**|OAuth 2.0 for Native Apps (BCP 212)|Private-use URI scheme redirect (§7.1); loopback IP redirect (§7.3) on `127.0.0.1` / `[::1]` with any port (`AllowLoopbackRedirectPortWildcard`, on by default); `application_type=native` and `token_endpoint_auth_method=none` accepted by DCR (`Register_NativeApp_SetsApplicationType`).|",
+     "|**8414**|Authorization Server Metadata|`/.well-known/oauth-authorization-server` (separate from OIDC Discovery, for non-OIDC clients) — verified by `DiscoveryD1ConformanceTests`.|",
+     "|**8628**|Device Authorization Grant|`/connect/deviceauthorization`, `/connect/device/verify`, configurable `expires_in` / `interval` (§3.2).|",
+     "|**8693**|Token Exchange (opt-in)|`grant_type=urn:ietf:params:oauth:grant-type:token-exchange` on OpenIddict's built-in grant, switched on by `EnableTokenExchange`; delegation + impersonation. Subject and actor tokens are access tokens; a token bound to a presenter can be exchanged only by that client, and a token of a disabled or deleted user is refused with `invalid_grant`.|",
+     "|**8707**|Resource Indicators|`resource` on `/connect/authorize`, `/connect/par` and token exchange: an absolute URI listed in a scope's `Resources`, with the client's `rsrc:<resource>` permission, otherwise `invalid_target` (UPGRADING.md). The access-token `aud` is composed from the same model (see RFC 9068).|",
+     "|**9068**|JWT Profile for OAuth 2.0 Access Tokens|`typ: at+jwt` header (OpenIddict's default for access tokens; id_tokens stay `JWT`, internal tokens carry private `oi_*+jwt` types, so token-type confusion is structurally impossible). Required claims `iss`/`exp`/`aud`/`sub`/`client_id`/`iat`/`jti` plus `auth_time`/`acr`/`amr`, `scope`, and `roles`/`groups` under the §2.2.3 SCIM names. `aud` (§2.2/§3) is composed by `AttachAccessTokenResources`: Resources of the granted scopes ∪ the application's `AccessTokenAudiences`, the OP's own audience for `identity:*` scopes, `{issuer}/resources` (or `DefaultAccessTokenAudience`) as the default resource indicator, plus the requesting `client_id` (so the issuing client may introspect its own token — OpenIddict admits only audience members to introspection). The local validation stack behind the management API verifies `aud` (§4) — a token minted for another API is refused with 401. Pinned by `FullStackAccessTokenAudienceTests`. Note: with the default access-token encryption on, external resource servers see a JWE — set `DisableAccessTokenEncryption` for third-party RFC 9068 validation.|",
+     "|**9101**|JAR — JWT-Secured Authorization Request|`/connect/authorize` accepts a signed `request` object, resolves the client's keys, verifies the signature and takes the parameters from inside the JWT with §6.1 precedence (inner values win; outer values not repeated inside are dropped). `ValidateRequestObjectHandler` **replaces** OpenIddict's built-in `ValidateRequestParameter` / `ValidateRequestUriParameter`, which reject both unconditionally. Opt-in via `Features.EnableJar` (default `false` → `request_not_supported`, byte-identical to releases before the flag existed); `request_uri` fetching is a second switch (`Jar.EnableRequestUri`) behind `OutboundUrlGuard`, while PAR-issued `urn:ietf:params:oauth:request_uri:` values stay with OpenIddict. Unsigned `alg:none` objects are refused with the flag on or off. Discovery advertises `request_parameter_supported` / `request_uri_parameter_supported` / `request_object_signing_alg_values_supported` only while the flag is on — the server never announces a mode it will not serve. Signing-algorithm mismatch against the client's registered hint is `LogOnly` or `Enforce`. Pinned by 15 tests in `ValidateRequestObjectHandlerTests`.|",
+     "|**9126**|Pushed Authorization Requests (PAR)|`POST /connect/par`, configurable `Require PAR`, `request_uri` lifetime (§2.2).|",
+     "|**9449**|DPoP — Demonstrating Proof-of-Possession|Issuance binding (`cnf.jkt`) + `DPoP-Nonce` (§8) with HMAC-signed stateless nonces + resource-server validator (`redb.Identity.Resource.Dpop`). Per-`jkt` replay store (`DpopConsumedJtiProps`). A resource server of your own that validates these tokens with OpenIddict.Validation 7 must skip its proof-of-possession check for `cnf.jkt` and verify the DPoP proof itself (UPGRADING.md).|"
+    ]
+   ],
+   [
+    "equal",
+    673,
+    676,
+    449,
+    452
+   ],
+   [
+    "replace",
+    676,
+    677,
+    452,
+    453,
+    [
+     "|Spec|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    677,
+    678,
+    453,
+    454
+   ],
+   [
+    "replace",
+    678,
+    683,
+    454,
+    459,
+    [
+     "|**OIDC Core 1.0**|Authorization Code + PKCE, ID Token (RS256), Userinfo, claim mappers, `prompt=login\\|consent\\|none`, `max_age`, `acr_values`.|",
+     "|**OIDC Discovery 1.0**|`/.well-known/openid-configuration` — verified by `DiscoveryD1ConformanceTests` against §3 + RFC 8414 §2.|",
+     "|**OIDC RP-Initiated Logout 1.0**|`/connect/logout` with `post_logout_redirect_uri` allow-list.|",
+     "|**OIDC Backchannel Logout 1.0 / RFC 8417**|SET event sink (`BackchannelLogoutEndpoint`), push to RPs **plus** pull-based revoked-SID list (`/revoked-sids/add` + `/revoked-sids/since?cursor=`) for multi-replica RPs — survives lost RP nodes and partitions.|",
+     "|**OIDC Form Post Response Mode**|`response_mode=form_post`.|"
+    ]
+   ],
+   [
+    "equal",
+    683,
+    696,
+    459,
+    472
+   ],
+   [
+    "replace",
+    696,
+    697,
+    472,
+    473,
+    [
+     "breakdown: **`OPENID_CERTIFICATION.md`**."
+    ]
+   ],
+   [
+    "equal",
+    697,
+    700,
+    473,
+    476
+   ],
+   [
+    "replace",
+    700,
+    701,
+    476,
+    477,
+    [
+     "|RFC|Spec|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    701,
+    702,
+    477,
+    478
+   ],
+   [
+    "replace",
+    702,
+    709,
+    478,
+    485,
+    [
+     "|**7515**|JSON Web Signature|RS256 / ES256 issuance + validation.|",
+     "|**7517**|JSON Web Key + JWKS|`/.well-known/jwks` — verified by `JwksHttpContractTests` (RFC 7517 §5 top-level `keys` array).|",
+     "|**7518**|JSON Web Algorithms|Algorithm allow-list, asymmetric proofs only (matches RFC 9449 §4.2).|",
+     "|**7519**|JSON Web Token|ID tokens, access tokens, DPoP proofs.|",
+     "|**7638**|JWK Thumbprint|SHA-256 thumbprint, base64url-encoded — used as DPoP `jkt` per RFC 9449 §10 (`DpopProofValidator.ComputeJktAsync`, `DpopFullCycleTests`).|",
+     "|**7800**|PoP Key Semantics for JWTs|`cnf` claim with `jkt` (DPoP proof-of-possession-bound access tokens — `AttachDpopConfirmationClaimHandler`).|",
+     "|**8176**|Authentication Method Reference Values|`amr` claim values (`pwd`, `mfa`, `otp`, `face`, `fpt`, `hwk`, etc.) emitted by `IdentityPrincipalBuilder`, plus the standardised `mfa` marker per §2.|"
+    ]
+   ],
+   [
+    "equal",
+    709,
+    712,
+    485,
+    488
+   ],
+   [
+    "replace",
+    712,
+    713,
+    488,
+    489,
+    [
+     "|Surface|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    713,
+    714,
+    489,
+    490
+   ],
+   [
+    "replace",
+    714,
+    720,
+    490,
+    496,
+    [
+     "|`/scim/v2/Users` (CRUD + PATCH)|RFC 7644 §3|",
+     "|`/scim/v2/Groups` (CRUD + PATCH)|RFC 7644 §3|",
+     "|`/scim/v2/Bulk`|RFC 7644 §3.7, partial-success semantics|",
+     "|`/scim/v2/ServiceProviderConfig`, `/Schemas`, `/ResourceTypes`|Unauthenticated per RFC 7643 §5|",
+     "|Attribute names|Verbatim per RFC 7643 §7 — `IdentityCodecProfilesTests` pins that no naming policy mangles them.|",
+     "|Wire serialization|UTF-8 JSON per RFC 8259 §8.1; null attributes omitted per RFC 7644 §3.8.|"
+    ]
+   ],
+   [
+    "equal",
+    720,
+    723,
+    496,
+    499
+   ],
+   [
+    "replace",
+    723,
+    724,
+    499,
+    500,
+    [
+     "|RFC / Spec|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    724,
+    725,
+    500,
+    501
+   ],
+   [
+    "replace",
+    725,
+    729,
+    501,
+    505,
+    [
+     "|**4226**|HOTP — the basis for TOTP (20-byte HMAC-SHA1 key per §4).|",
+     "|**6238**|TOTP — with atomic verification (`SELECT FOR UPDATE` + `FailedAttempts++`) and replay protection per §5.2 (a code from an already-accepted step is rejected even within skew). Pinned by `TotpReplayTests`.|",
+     "|**WebAuthn Level 2 / FIDO2**|Registration + assertion (Fido2NetLib), consumed-challenge cleanup timer, per-credential admin.|",
+     "|SMS / Email OTP, Recovery codes|One-shot, marked consumed in the same transaction as session creation.|"
+    ]
+   ],
+   [
+    "equal",
+    729,
+    732,
+    505,
+    508
+   ],
+   [
+    "replace",
+    732,
+    733,
+    508,
+    509,
+    [
+     "|Spec|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    733,
+    734,
+    509,
+    510
+   ],
+   [
+    "replace",
+    734,
+    739,
+    510,
+    515,
+    [
+     "|**OIDC** external providers|Per-provider redb CRUD, `IdentityCookie` state binding.|",
+     "|**GitHub OAuth**|First-class adapter on top of the federation provider.|",
+     "|**LDAP** (binding)|Search + bind authentication.|",
+     "|**RFC 4514**|LDAP DN string representation — CN extraction in `LdapGroupMapper`.|",
+     "|**RFC 4515**|LDAP search filter escaping (`LdapExternalUserProviderTests`).|"
+    ]
+   ],
+   [
+    "equal",
+    739,
+    742,
+    515,
+    518
+   ],
+   [
+    "replace",
+    742,
+    743,
+    518,
+    519,
+    [
+     "|RFC|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    743,
+    744,
+    519,
+    520
+   ],
+   [
+    "replace",
+    744,
+    753,
+    520,
+    529,
+    [
+     "|**6265 / 6265bis**|`SameSite=Lax\\|Strict\\|None`; `__Host-` prefix only emitted when `Secure=true` per §4.1.3.2; empty-value cookie treated as delete directive per §5.2.2. Pinned by `CookieDefaultsTests` + `IdentityCookieFormatterTests`.|",
+     "|**6585**|Additional HTTP Status Codes — `429 Too Many Requests` + `Retry-After` on rate-limited `/connect/token`, `/connect/par`, `/connect/register` (§4). Pinned by `demo_throttle_rfc6585`.|",
+     "|**7230**|HTTP/1.1 Message Syntax — Bearer-header OWS tolerance (`ManagementBearerAuthProcessor`, `BearerParsingD6Tests`).|",
+     "|**7231**|HTTP/1.1 Semantics — `Retry-After` delta-seconds format (§7.1.3) emitted by rate-limit responses (`RateLimitMetricsAndRetryAfterTests`).|",
+     "|**7232**|HTTP Conditional Requests — `ETag` / `If-Match` → 412 on stale resource (SCIM, per RFC 7644 §3.14 + RFC 7232 §4.2 — `ScimEtagTests`).|",
+     "|**7234**|HTTP Caching — `Cache-Control` on metadata endpoints (§5.2).|",
+     "|**7235**|HTTP/1.1 Authentication — quoted-string escaping in `WWW-Authenticate` Bearer challenges (§2.1) on userinfo error responses.|",
+     "|**7807 / 9457**|`application/problem+json` for HTTP error responses — surfaced by the SDK as `ApiException`.|",
+     "|**8259**|UTF-8 JSON wire format — locked `JsonSerializerOptions` profiles in `Contracts`.|"
+    ]
+   ],
+   [
+    "equal",
+    753,
+    756,
+    529,
+    532
+   ],
+   [
+    "replace",
+    756,
+    757,
+    532,
+    533,
+    [
+     "|Primitive|Coverage|"
+    ]
+   ],
+   [
+    "equal",
+    757,
+    758,
+    533,
+    534
+   ],
+   [
+    "replace",
+    758,
+    768,
+    534,
+    544,
+    [
+     "|**Argon2id**|Password hashing — PHC string format with unpadded base64 per **RFC 7693 §3.5** (`Argon2idPasswordHasher`).|",
+     "|**PBKDF2 / RFC 2898**|Secret derivation for MFA shared-secret encryption (`MfaService` via `Rfc2898DeriveBytes.Pbkdf2(SHA-256)`).|",
+     "|Recovery codes|One-shot, pepper-encrypted, marked consumed in the same transaction as session creation.|",
+     "|Brute-force defense|Per-IP rate limits, per-`(IP+user)` failure ceiling with security-channel logger.|",
+     "|Trusted proxies|`X-Forwarded-For` sanitized BEFORE rate-limit / lockout sees it.|",
+     "|**SSRF guard on outbound fetches**|`OutboundUrlGuard` refuses loopback, **RFC 1918** private ranges, link-local (including the `169.254.169.254` cloud metadata address) and **RFC 6598** CGNAT space. It gates the only two URLs a client can make the server fetch: `jwks_uri` (`ClientKeyResolver`) and JAR `request_uri` (`ValidateRequestObjectHandler`). Private targets are reachable only by explicit opt-in (`ClientKeysOptions`), for single-network test hosts. Pinned by `OutboundUrlGuardTests`.|",
+     "|Idempotency|Cache placed AFTER authorization — revoked tokens can't unlock cached responses. Expired records are deleted hourly (`identity-idempotency-cleanup`).|",
+     "|Self-vs-admin|`RequireSelfOrAdminProcessor` on every `/me/*` route.|",
+     "|Constant-time comparisons|All secret comparisons.|",
+     "|**Facade pages: framing, CSRF, consent binding**|Every response through the facade's serializer carries `X-Frame-Options: DENY`, `Content-Security-Policy: frame-ancestors 'none'`, `X-Content-Type-Options: nosniff`, `Referrer-Policy` — the same set the web console's `SecurityHeadersMiddleware` emits. Form POSTs (`/login`, `/consent`, `/mfa`, `/mfa/recovery`) refuse a foreign `Origin`/`Referer` with 403 before reading the body (`AntiForgeryProcessors`; origin-less callers — the console's BFF, demos, API clients — pass). The consent page renders only from a server-signed ticket (`/consent?ct=…`, minted by the authorize endpoint — app name and scopes never come from the URL, so a crafted link cannot dress an attacker's client in a familiar name), and the decision is bound to the session cookie: no session → 401, a ticket minted for another user → 403, the form carries no `user_id`. Pinned by `FullStackFacadeFormHardeningTests`.|"
+    ]
+   ],
+   [
+    "equal",
+    768,
+    802,
+    544,
+    578
+   ],
+   [
+    "delete",
+    802,
+    804,
+    578,
+    578
+   ],
+   [
+    "equal",
+    804,
+    806,
+    578,
+    580
+   ],
+   [
+    "replace",
+    806,
+    807,
+    580,
+    581,
+    [
+     "> redb.Identity does not own a database schema. It is built on top of **REDB** — the typed object / props storage engine that ships with this repo (`redb.Core`, `redb.Core.Pro`, `redb.Postgres`, `redb.Postgres.Pro`, `redb.MSSql`, `redb.MSSql.Pro`, `redb.SQLite`, `redb.SQLite.Pro`). This is the single biggest architectural difference vs every other .NET identity server."
+    ]
+   ],
+   [
+    "equal",
+    807,
+    810,
+    581,
+    584
+   ],
+   [
+    "replace",
+    810,
+    811,
+    584,
+    585,
+    [
+     "|Property|redb.Identity|Typical EF-Core identity server (IdentityServer/OpenIddict-EF/ASP.NET Identity)|"
+    ]
+   ],
+   [
+    "equal",
+    811,
+    812,
+    585,
+    586
+   ],
+   [
+    "replace",
+    812,
+    819,
+    586,
+    593,
+    [
+     "|**Storage engines**|Postgres, MSSQL **and** SQLite from one codebase — swap by changing the provider package the host loads|One provider per build; switching requires re-writing the EF model + migrations|",
+     "|**Schema evolution**|No migrations. Add a property to a `*Props` class — the redb scheme picks it up at next `InitializeAsync`|Generate migration, review SQL, run `Update-Database`, hope rollback works|",
+     "|**Custom claims / per-tenant extensions**|`Dictionary<string,string>? CustomClaims` on `UserProps` — each key becomes a queryable, indexed props row|`jsonb`/`nvarchar(max)` blob; you write your own GIN / computed-column indexes|",
+     "|**Multi-provider federation links**|`Dictionary<string, ExternalIdentity>` on User — native props rows, hot reverse-lookup via `value_string = \"{provider}:{sub}\"`|One-to-many join table, scaffolding per provider|",
+     "|**Hot + cold attribute split**|Hot keys (login, password, status) stay in the relational `_users` table; cold OIDC profile lives in props rows linked by `RedbObject.key = _users._id`. No over-indexed wide rows, no JSON-blob lookups|Either everything in one wide table, or normalised into 8 satellite tables|",
+     "|**Multi-tenant data isolation**|a named redb instance (`Identity:RedbInstanceName`; the images ship `identity-sqlite`, with `identity-pg` and `identity-mssql` predefined) that can target a separate database or the one of your business module|Single `DbContext`; isolation requires separate ASP.NET apps|",
+     "|**Caching tier**|`Global*Cache` in `redb.Core` makes scheme + struct lookups O(1) in-process|Bring your own (`IDistributedCache` plumbing)|"
+    ]
+   ],
+   [
+    "equal",
+    819,
+    822,
+    593,
+    596
+   ],
+   [
+    "replace",
+    822,
+    823,
+    596,
+    597,
+    [
+     "|Engine|Open-source package|Pro package|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    823,
+    824,
+    597,
+    598
+   ],
+   [
+    "replace",
+    824,
+    827,
+    598,
+    601,
+    [
+     "|PostgreSQL 13+|`redb.Postgres`|`redb.Postgres.Pro`|Battle-tested production target; `LISTEN/NOTIFY`-aware caches in Pro|",
+     "|Microsoft SQL Server 2019+|`redb.MSSql`|`redb.MSSql.Pro`|Full parity for OAuth / SCIM / MFA / WebAuthn; Service Broker hooks in Pro|",
+     "|SQLite 3.44+|`redb.SQLite`|`redb.SQLite.Pro`|Single-file / embedded target for dev, edge and small deployments; same schemes, same contracts|"
+    ]
+   ],
+   [
+    "equal",
+    827,
+    832,
+    601,
+    606
+   ],
+   [
+    "replace",
+    832,
+    833,
+    606,
+    607,
+    [
+     "All defined via `[RedbScheme(\"identity.*\")]` in src/redb.Identity.Core/Models/ (+ DataProtection). Enumerate them with:"
+    ]
+   ],
+   [
+    "equal",
+    833,
+    838,
+    607,
+    612
+   ],
+   [
+    "replace",
+    838,
+    839,
+    612,
+    613,
+    [
+     "|Domain|Schemes|"
+    ]
+   ],
+   [
+    "equal",
+    839,
+    840,
+    613,
+    614
+   ],
+   [
+    "replace",
+    840,
+    851,
+    614,
+    625,
+    [
+     "|OAuth / OIDC core|`identity.application`, `identity.scope`, `identity.token`, `identity.authorization`, `identity.session`, `identity.idempotency_record`|",
+     "|Users & groups|`identity.user`, `identity.group`, `identity.group_member`, `identity.password_history`|",
+     "|Roles & assignments|`identity.role`, `identity.user_role_assignment`, `identity.group_role_assignment`, `identity.role_scope_assignment`|",
+     "|Account-lifecycle tokens|`identity.password_reset_token`, `identity.email_verification_token`, `identity.change_email_token`|",
+     "|MFA / WebAuthn|`identity.mfa`, `identity.mfa_otp`, `identity.webauthn_consumed_challenge`|",
+     "|Federation|`identity.federation_provider`, `identity.federated_identity`|",
+     "|Claims engine|`identity.claim_definition`, `identity.claim_mapper`, `identity.claim_scope`, `identity.claim_scope_assignment`|",
+     "|DPoP / replay|`identity.dpop_consumed_jti`|",
+     "|Webhooks|`identity.webhook_subscription`|",
+     "|Cluster / cleanup|`identity.revoked_sid`, `identity.system_flag`|",
+     "|Crypto / DP-keys|`identity.signing_key`, `identity.dp_key`, `identity.dp_key_import` (when the file key ring was moved into redb)|"
+    ]
+   ],
+   [
+    "equal",
+    851,
+    860,
+    625,
+    634
+   ],
+   [
+    "replace",
+    860,
+    880,
+    634,
+    635,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    880,
+    890,
+    635,
+    645
+   ],
+   [
+    "delete",
+    890,
+    892,
+    645,
+    645
+   ],
+   [
+    "equal",
+    892,
+    896,
+    645,
+    649
+   ],
+   [
+    "replace",
+    896,
+    897,
+    649,
+    650,
+    [
+     "|Concern|Mechanism|"
+    ]
+   ],
+   [
+    "equal",
+    897,
+    898,
+    650,
+    651
+   ],
+   [
+    "replace",
+    898,
+    906,
+    651,
+    657,
+    [
+     "|DataProtection key-ring across replicas|`RedbXmlRepository` — redb-persisted XML keys, registered as the ring's repository, so every node reads and writes the same ring. Every replica refreshes its in-memory snapshot every `XmlRepositoryRefreshInterval` (default 12 h, half of the 24 h DataProtection refresh of the active key). **Not** cluster-gated by design — every node must catch keys rotated by others.|",
+     "|OAuth signing keys across replicas|`PropsSigningKeyStore` — RSA 2048 PEMs, DataProtection-encrypted at rest, bootstrapped under a distributed lock so only one replica generates the first key. Off by default (`UsePropsSigningKeyStore=false`); switch it on for multi-replica.|",
+     "|Cleanup timers (tokens / sessions / MFA OTP / WebAuthn challenges / revoked SIDs)|Registered with `.Cluster(true)` — leader-only in a clustered Tsak deployment, silently ignored in standalone. Even without the marker, every cleanup uses `IBackgroundDeletionService` (claim pattern), so concurrent execution is safe — `.Cluster(true)` is belt-and-suspenders + log-noise reduction.|",
+     "|MFA atomicity under concurrency|`SELECT FOR UPDATE` on the MFA row + `FailedAttempts++` inside the same transaction. TOTP replay window enforced per RFC 6238 §5.2.|",
+     "|Backchannel logout across replicas|`/revoked-sids/add` writes the revocation; `/revoked-sids/since?cursor=` lets every RP replica pull deltas. Push-and-poll, not push-only — survives lost RP nodes and broken network partitions.|",
+     "|OpenIddict per-request scoping|`RedbRouteOpenIddictServerHandler` captures `IServiceScopeFactory` and opens a fresh per-request scope — works correctly under .tpkg child SP isolation.|"
+    ]
+   ],
+   [
+    "equal",
+    906,
+    920,
+    657,
+    671
+   ],
+   [
+    "replace",
+    920,
+    921,
+    671,
+    672,
+    [
+     "Defined in IdentityMetrics.cs:"
+    ]
+   ],
+   [
+    "equal",
+    921,
+    922,
+    672,
+    673
+   ],
+   [
+    "replace",
+    922,
+    923,
+    673,
+    674,
+    [
+     "|Instrument|Type|Tags|What it tells you|"
+    ]
+   ],
+   [
+    "equal",
+    923,
+    924,
+    674,
+    675
+   ],
+   [
+    "replace",
+    924,
+    934,
+    675,
+    685,
+    [
+     "|`identity.login.attempts`|Counter|—|Password login throughput|",
+     "|`identity.login.failures`|Counter|`reason`|Bad-password / unknown-user / locked / mfa-required|",
+     "|`identity.mfa.verifications`|Counter|`method`, `result`|TOTP / SMS / email / recovery code outcomes|",
+     "|`identity.mfa.lockouts`|Counter|`method`|MFA brute-force lockouts triggered|",
+     "|`identity.tokens.issued`|Counter|`grant_type`, `token_type`|Tokens minted by OpenIddict|",
+     "|`identity.tokens.errors`|Counter|`error`|`invalid_grant`, `invalid_client`, `invalid_dpop_proof`, …|",
+     "|`identity.rate_limit.rejections`|Counter|`endpoint`, `key_dimension`|Throttled requests (per-IP / per-client / per-user)|",
+     "|`identity.password.verify.duration`|Histogram (ms)|`algorithm`|Hash-verify wall-clock (BCrypt / PBKDF2 / Argon2) — catches CPU regressions|",
+     "|`identity.unique_violation`|Counter|`scheme`, `column`|DB unique-index hits (TOCTOU guard fired)|",
+     "|`identity.audit.write_failures`|Counter|`event_type`|Audit events whose row could not be written; a gap in the audit trail|"
+    ]
+   ],
+   [
+    "equal",
+    934,
+    940,
+    685,
+    691
+   ],
+   [
+    "replace",
+    940,
+    941,
+    691,
+    692,
+    [
+     "- **Source:** IdentitySecurityLog.cs"
+    ]
+   ],
+   [
+    "equal",
+    941,
+    945,
+    692,
+    696
+   ],
+   [
+    "replace",
+    945,
+    946,
+    696,
+    697,
+    [
+     "Surface under Tsak's aggregated `/api/health/{startup,live,ready}`. Defined in IdentityHealthContributor.cs."
+    ]
+   ],
+   [
+    "equal",
+    946,
+    947,
+    697,
+    698
+   ],
+   [
+    "replace",
+    947,
+    948,
+    698,
+    699,
+    [
+     "|Probe|Healthy when …|Failure semantics|"
+    ]
+   ],
+   [
+    "equal",
+    948,
+    949,
+    699,
+    700
+   ],
+   [
+    "replace",
+    949,
+    954,
+    700,
+    703,
+    [
+     "|`db`|`IRedbService.GetDbVersionAsync()` returns non-empty|Unhealthy — storage unreachable|",
+     "|`signing-keys`|≥ 1 signing credential registered with OpenIddict|Unhealthy — token issuance would fail|",
+     "|`data-protection`|Active key-ring exposes ≥ 1 key|Degraded — cookies still work on bootstrap key|"
+    ]
+   ],
+   [
+    "equal",
+    954,
+    957,
+    703,
+    706
+   ],
+   [
+    "replace",
+    957,
+    958,
+    706,
+    707,
+    [
+     "|Surface|Defense|"
+    ]
+   ],
+   [
+    "equal",
+    958,
+    959,
+    707,
+    708
+   ],
+   [
+    "replace",
+    959,
+    978,
+    708,
+    725,
+    [
+     "|Token endpoint|Per-IP rate limit + per-`client_id` throttle (token bucket) + RFC 6749 error mapping|",
+     "|Login endpoint|Per-IP rate limit + per-`(IP+username)` failure ceiling with security-channel logger|",
+     "|Facade HTML forms|`X-Frame-Options: DENY` + `frame-ancestors 'none'` on every page (no clickjacking of the consent \"Allow\"); cross-site `Origin`/`Referer` on `/login`, `/consent`, `/mfa*` → 403; consent page renders only from a server-signed ticket and the decision is bound to the session cookie, never to a form field|",
+     "|Reserved headers|Never trusted from the wire on any transport: `IdentityReservedInboundHeaders` (Contracts) names the internal-only headers (`session_*`, `reauth_marked_sid`, `client_id`, `client_secret`, `access_token`, `user_id`, `ip_address`, `user_agent`) and each facade — HTTP, gRPC (metadata and envelope headers), SOAP — strips them as its first step, so only the cookie / `Authorization` / Basic / body / path / transport can set them. A forged `session_user_id` cannot impersonate a user and a forged `ip_address`/`user_id`/`client_id` cannot sign the audit log. `operation` is stripped on HTTP only — the gRPC envelope route lets the caller name it by design|",
+     "|Audit attribution|`client_id` comes from Basic **or** the form body, so form-authenticated and public PKCE clients are attributed too; `ip_address` falls back to the transport's proxy-sanitized `redbHttp.RemoteAddress` and `user_agent` to the real `User-Agent`; on SQLite the `timestamp` column is `REAL` (Julian day), matching how the provider encodes `DateTimeOffset`|",
+     "|Consent page|Renders and grants only from a server-signed consent ticket (`?ct=…`); app name and scopes come from the ticket, not the URL (no trusted-UI phishing), and the ticket is bound to the session user (no cross-session replay). Pinned by `FullStackFacadeFormHardeningTests`|",
+     "|MFA verify|DB row-lock + `IdempotentConsumer` keyed by `(jti, code)` — defeats retransmit / captured-request replay|",
+     "|Recovery codes|One-shot — marked consumed in the same transaction as session creation|",
+     "|Role scopes|A scope attached to a role is an entitlement, never an addition: it reaches a token only when the client requests it and holds the `scp:` permission, and a gated scope (`AdminScopeEntitlement`: `identity:*`, `scim`, `GatedScopes`) stays only for users whose roles carry it. An administrator signing in to some other application gives it no management scope. Pinned by `RoleScopeAugmentationTests`|",
+     "|Self vs admin|`RequireSelfOrAdminProcessor` on every `/me/*` route — a token with `identity:account` can never mutate another user's MFA, password, sessions, or consents|",
+     "|Idempotency|Cache placed AFTER authorization so a revoked token cannot unlock cached responses; expired records are deleted hourly|",
+     "|Trusted proxies|`TrustedProxyResolverProcessor` — `redbHttp.RemoteAddress` is sanitized BEFORE any rate-limit / lockout sees it|",
+     "|Password history|Configurable depth, rejects reuse|",
+     "|Federation|OIDC + GitHub, secrets server-side, never returned over the wire|",
+     "|Audit|Flat `identity_audit_log` table + optional external multicast (Kafka / Elasticsearch / RabbitMQ / log) — typed payloads, then JSON for external transports|",
+     "|DPoP|RFC 9449 — issuance binding + resource-server `redb.Identity.Resource.Dpop` for downstream APIs|",
+     "|Secrets|Never in `context.json` — only via Tsak override env-vars (`Tsak__Contexts__identity.core__Override__Identity__*`)|"
+    ]
+   ],
+   [
+    "equal",
+    978,
+    981,
+    725,
+    728
+   ],
+   [
+    "replace",
+    981,
+    982,
+    728,
+    729,
+    [
+     "**109 typed audit events across 7 categories** — single source of truth in IdentityAuditEventIds.cs, with `IdentityAuditCategories.CategoryOf(eventType)` as the one mapping from event to bucket. Every event lands in the flat `identity_audit_log` table (see the storage section — audit is the one part of Identity that is deliberately relational, not props) and, if configured, is multicast to Kafka / Elasticsearch / RabbitMQ / log. Plaintext secrets are never persisted to audit — rotations log a `ClientSecretRotated` marker only."
+    ]
+   ],
+   [
+    "equal",
+    982,
+    983,
+    729,
+    730
+   ],
+   [
+    "replace",
+    983,
+    984,
+    730,
+    731,
+    [
+     "|Category|Count|Examples|"
+    ]
+   ],
+   [
+    "equal",
+    984,
+    985,
+    731,
+    732
+   ],
+   [
+    "replace",
+    985,
+    992,
+    732,
+    739,
+    [
+     "|`authentication`|14|`UserLoggedIn`, `UserLoggedOut`, `LoginFailed`, `PasswordChanged`, the password-reset chain (`Requested` / `TokenIssued` / `Completed` / `Failed`), email verification (`Sent` / `Completed` / `Failed`), email change (`Requested` / `Completed` / `Failed`)|",
+     "|`authorization`|14|`TokenIssued`, `TokenRevoked`, `TokenIntrospected`, `AuthorizationGranted`, `ConsentGranted` / `Revoked` / `AllConsentsRevoked`, `DeviceCodeIssued` / `Verified` / `Denied`, `ParRequestAccepted` / `Rejected`, `DpopBindingApplied`, `DpopReplayDetected`|",
+     "|`admin`|42|`ClientRegistered` / `Updated` / `Deleted` / `SecretRotated`, `Scope*`, `ClaimMapper*`, `ClaimScope*` (+ `Assigned` / `Unassigned`), `User*`, `Group*` (+ `Moved`), `Member*`, the role registry (`RoleCreated` / `Updated` / `Deleted`, `RoleAssignedUser` / `Group`, `RoleScopeAttached` / `Detached`) and webhook subscriptions (`Created` / `Updated` / `Deleted` / `SecretRotated`)|",
+     "|`federation`|9|`FederationChallengeInitiated`, `FederationStateValidationFailed`, `FederatedUserLoggedIn`, `FederatedIdentityLinked` / `Unlinked`, `FederatedEmailConflict`, `FederationProvider*`|",
+     "|`mfa`|10|`MfaEnrolled`, `MfaDisabled`, `MfaChallengeIssued`, `MfaVerifyFailed`, `MfaRecoveryCodeUsed` / `CodesDownloaded`, `MfaWebAuthnRegistered` / `Asserted` / `Revoked` / `SignCounterAnomaly`|",
+     "|`scim`|9|`ScimUserCreated` / `Replaced` / `Patched` / `Deleted`, `ScimGroupCreated` / `Replaced` / `Patched` / `Deleted`, `ScimBulkProcessed`|",
+     "|`system`|13|`SessionRevoked` / `AllSessionsRevoked` / `SessionsPruned`, `SidRevoked` / `RevokedSidsPruned`, `MfaOtpPruned`, `IdempotencyRecordsPruned`, `TokenCleanupRan` / `TokensPruned`, `TokensRevokedByUser`, plus the dry-run markers `AllSessionsRevocationPreviewed` / `TokensPrunePreviewed` / `IdempotencyRecordsPrunePreviewed`|"
+    ]
+   ],
+   [
+    "equal",
+    992,
+    994,
+    739,
+    741
+   ],
+   [
+    "delete",
+    994,
+    996,
+    741,
+    741
+   ],
+   [
+    "equal",
+    996,
+    1003,
+    741,
+    748
+   ],
+   [
+    "replace",
+    1003,
+    1004,
+    748,
+    749,
+    [
+     "|Demo|Contract exercised|"
+    ]
+   ],
+   [
+    "equal",
+    1004,
+    1005,
+    749,
+    750
+   ],
+   [
+    "replace",
+    1005,
+    1017,
+    750,
+    762,
+    [
+     "|`demo_discovery_jwks.ps1`|OIDC Discovery + JWKS shape, RFC 8414 metadata|",
+     "|`demo_client_credentials.ps1` / `demo_password_ropc.ps1` / `demo_authcode_pkce.ps1`|Core grants + PKCE (`S256`)|",
+     "|`demo_private_key_jwt.ps1`|`private_key_jwt` client auth (RFC 7521 / 7523)|",
+     "|`demo_dpop.ps1`|DPoP proof binding + replay (RFC 9449)|",
+     "|`demo_par.ps1` / `demo_par_per_client.ps1`|Pushed Authorization Requests (RFC 9126)|",
+     "|`demo_throttle_rfc6585.ps1`|`429 Too Many Requests` + `Retry-After` (RFC 6585)|",
+     "|`demo_backchannel_logout.ps1`|OIDC Back-Channel Logout + `logout_token` fan-out|",
+     "|`demo_scim.ps1` / `demo_scim_bulk.ps1` / `demo_scim_etag.ps1`|SCIM 2.0 CRUD + Bulk + ETag concurrency (RFC 7643 / 7644)|",
+     "|`demo_mfa_totp.ps1` / `demo_mfa_recovery_codes.ps1`|TOTP (RFC 6238) + one-shot recovery codes|",
+     "|`demo_federation_e2e.ps1` / `demo_federation_github.ps1`|OIDC + GitHub federation, provision-on-first-login|",
+     "|`demo_jwks_rotation.ps1`|Live JWKS key rotation / retire against a running server|",
+     "|`demo_roles_registry.ps1` / `demo_claim_definitions.ps1` / `demo_webhooks.ps1`|Roles, declarative claim schema, signed outbound webhooks|"
+    ]
+   ],
+   [
+    "equal",
+    1017,
+    1027,
+    762,
+    772
+   ],
+   [
+    "replace",
+    1027,
+    1030,
+    772,
+    773,
+    [
+     "`run_all.ps1` executes each demo in its own `pwsh` child process (a hard failure in one can't abort the rest), streams stdout live, captures a per-demo transcript to `demos/_logs/<demo>.log`, and prints a final pass/fail summary table. Browser-in-the-loop demos (e.g. `demo_device_code.ps1`) are skipped unless `-IncludeInteractive` is passed. Point the demos at a running server with `IDENTITY_BASE` (default `https://127.0.0.1:5002`), started per the Quick start above."
+    ]
+   ],
+   [
+    "equal",
+    1030,
+    1037,
+    773,
+    780
+   ],
+   [
+    "replace",
+    1037,
+    1060,
+    780,
+    781,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1060,
+    1073,
+    781,
+    794
+   ],
+   [
+    "delete",
+    1073,
+    1075,
+    794,
+    794
+   ],
+   [
+    "equal",
+    1075,
+    1086,
+    794,
+    805
+   ],
+   [
+    "replace",
+    1086,
+    1087,
+    805,
+    806,
+    [
+     "|Self-service|Admin|"
+    ]
+   ],
+   [
+    "equal",
+    1087,
+    1088,
+    806,
+    807
+   ],
+   [
+    "replace",
+    1088,
+    1091,
+    807,
+    808,
+    [
+     "|Profile, Password, MFA (TOTP), WebAuthn credentials, Sessions, Federated identities, Consents|Users (CRUD + password reset), Groups (tree + members), Applications (CRUD + scopes), Scopes, Claim Mappers, Federation providers, Sessions (revoke single/all), Tokens (prune), Audit (15 event types + JsonViewer), SCIM browser, Settings (health / discovery / JWKS)|"
+    ]
+   ],
+   [
+    "equal",
+    1091,
+    1098,
+    808,
+    815
+   ],
+   [
+    "replace",
+    1098,
+    1102,
+    815,
+    816,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1102,
+    1106,
+    816,
+    820
+   ],
+   [
+    "replace",
+    1106,
+    1107,
+    820,
+    821,
+    [
+     "|Project|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1107,
+    1108,
+    821,
+    822
+   ],
+   [
+    "replace",
+    1108,
+    1111,
+    822,
+    825,
+    [
+     "|`redb.Identity.Tests`|Unit + integration; real PostgreSQL / MSSQL / SQLite via `HttpIdentityFixture` for HTTP E2E|",
+     "|`redb.Identity.Client.Tests`|SDK transport / serialization contract|",
+     "|`redb.Identity.Web.Tests`|BFF smoke acceptance|"
+    ]
+   ],
+   [
+    "equal",
+    1111,
+    1122,
+    825,
+    836
+   ],
+   [
+    "delete",
+    1122,
+    1124,
+    836,
+    836
+   ],
+   [
+    "equal",
+    1124,
+    1137,
+    836,
+    849
+   ],
+   [
+    "replace",
+    1137,
+    1138,
+    849,
+    850,
+    [
+     "- Formal OpenID Certification submission; conformance results in `OPENID_CERTIFICATION.md`"
+    ]
+   ],
+   [
+    "equal",
+    1138,
+    1142,
+    850,
+    854
+   ],
+   [
+    "delete",
+    1142,
+    1144,
+    854,
+    854
+   ],
+   [
+    "equal",
+    1144,
+    1146,
+    854,
+    856
+   ],
+   [
+    "replace",
+    1146,
+    1151,
+    856,
+    861,
+    [
+     "- License: Apache 2.0",
+     "- Engine: OpenIddict (Apache 2.0)",
+     "- Runtime: redb.Route",
+     "- Container: redb.Tsak",
+     "- Storage: redb.Core"
+    ]
+   ],
+   [
+    "equal",
+    1151,
+    1152,
+    861,
+    862
+   ],
+   [
+    "replace",
+    1152,
+    1154,
+    862,
+    864,
+    [
+     "Contributions are welcome: see CONTRIBUTING.md. Report vulnerabilities as described in",
+     "SECURITY.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
+ },
+ "a22a9baf8cda+2": {
+  "fn": "Fish-under-sea/Prismux",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    3,
+    [
+     "中文 ",
+     " English ",
+     " 快速开始 "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    3,
+    4
+   ],
+   [
+    "replace",
+    2,
+    7,
+    4,
+    5,
+    [
+     " Prismux — 纯本地零遥测的液态玻璃 AI 超级工作台与 24 小时常驻秘书"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    12,
+    6,
+    10,
+    [
+     " VERSION：v0.2.4-RC.2（纯本地零遥测 · Win x64） ",
+     " VISUAL：0 TOKEN（8 分区液态玻璃） ",
+     " MEMORY：SQLITE VEC（单文件物理隔离） ",
+     " PLUGINS：1 PLUGIN（默认不预装） "
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    10,
+    11
+   ],
+   [
+    "replace",
+    13,
+    19,
+    11,
+    17,
+    [
+     " Electron 44",
+     " TypeScript 5.8",
+     " React 19",
+     " = 24.12\">",
+     " License MIT",
+     " Release Prismux v0.2.4-RC.2"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    17,
+    18
+   ],
+   [
+    "replace",
+    20,
+    28,
+    18,
+    21,
+    [
+     " Prismux · 纯本地零遥测的 8 分区液态玻璃 AI 超级工作台与 24 小时常驻秘书 ",
+     "基于统一第一方 <code>@prismux/*</code> Monorepo（Electron 44 + Effect + TypeScript + React 19） ，在一个桌面窗口里统一驾驭原生 CLI 身份的 Claude Code、Codex、Antigravity、跨盘自动发现的 <code>dsh</code>（DeepSeek Harness）、<code>Pi</code> 与 OpenCode；集 1:1 DSH NEXT 工作步骤与全 6 家只读上下文注入 / 技能加载 + 向右展开本轮用量浮层 、 合规 A+B+C 三引擎思考过程翻译（Mozilla Bergamot 纯本地离线 WASM + 独立轻模型 + DeepL / Azure / 火山 / 腾讯 / OpenAI 兼容官方 API，全原生中文设置） 、 1:1 AGY 蜂群与 ACP 无套壳透明队长 Logo 统一四标签右侧栏 、 夜间工场首屏化与已验证 Agent 邮箱自动折叠单行测试条 、 跨版本保留委派子代理与 641 ms 零误报 CLI 探测 、6 款诗意液态玻璃主题基底、类 WizTree 性能与存储面板及单文件 SQLite 混合记忆于一身。 ",
+     "默认全栈零冷启动外联、零遥测、纯本地扫码远控（零云端账号绑定）、官方插件严格按需零预装（仅保留 <code>qq</code>）——把效率、质感与隐私控制权完完整整还给你。 "
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    21,
+    22
+   ],
+   [
+    "replace",
+    29,
+    32,
+    22,
+    25,
+    [
+     " 下载 / Releases ",
+     " 更新记录 ",
+     " 反馈 / Issues "
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    25,
+    26
+   ],
+   [
+    "replace",
+    33,
+    38,
+    26,
+    27,
+    [
+     " Prismux v0.2.4-RC.2 8 秒实机 GPU 动态演示：8 分区液态玻璃实时折射、Codex 奔跑小人 7 档推理滑条与 Fast/Ultra Fast 切换、2×2 Orca 任意分屏与 24h 动态天穹昼夜渐变"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    27,
+    28
+   ],
+   [
+    "replace",
+    39,
+    40,
+    28,
+    29,
+    [
+     " 8 秒实机 Electron 44 GPU 动态实录 （查看 1200×750 16 FPS 高清 Animated WebP）：① 右侧壁纸抽屉实时调节 8 分区液态玻璃 折射通透度；② Codex 模型选择器滑动 <code>dsh-fish</code> 奔跑小人 7 档推理强度条 （<code>Mini → Ultra</code>）并秒切 <code>Fast / Ultra Fast</code>；③ 一键展开 2×2 Orca 全要素任意分屏 （内部零圆角、<code>1 px</code> 细线）与 24 小时动态天穹 昼夜平滑演化。 "
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    29,
+    30
+   ],
+   [
+    "replace",
+    41,
+    50,
+    30,
+    31,
+    [
+     " INTRO · 简介 "
+    ]
+   ],
+   [
+    "equal",
+    50,
+    69,
+    31,
+    50
+   ],
+   [
+    "replace",
+    69,
+    70,
+    50,
+    51,
+    [
+     " PREVIEW · 界面实景 "
+    ]
+   ],
+   [
+    "equal",
+    70,
+    73,
+    51,
+    54
+   ],
+   [
+    "replace",
+    73,
+    111,
+    54,
+    55,
+    [
+     " Prismux Orca 紧凑侧边栏、真实 OS 用户名问候、24 小时天穹右缘虚化与 8 分区液态玻璃主工作台"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    55,
+    56
+   ],
+   [
+    "replace",
+    112,
+    113,
+    56,
+    57,
+    [
+     " Orca 紧凑侧边栏 + 真实 OS 问候 + 24h 天穹右缘虚化 ：左侧呈现宿主机分组胶囊、工作区卡片与规范化模型简称（<code>Opus 5.5</code> / <code>6.2 Astra</code> / <code>Fable 5.2</code>），24 小时动态天穹柔和消融至首标签左缘，主画布以真实系统用户名问候并搭配白昼黑箭头发送键与 <code>20 px</code> 额度状态栏。 "
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    57,
+    58
+   ],
+   [
+    "replace",
+    114,
+    159,
+    58,
+    59,
+    [
+     " Prismux 8 分区液态玻璃方向性 Fresnel 银白微光用户气泡、独立清透概览卡片与默认 KaTeX 公式"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    160,
+    59,
+    60
+   ],
+   [
+    "replace",
+    160,
+    161,
+    60,
+    111,
+    [
+     " 8 分区液态玻璃：方向性 Fresnel 微光气泡 + 独立清透概览 ：新增 <code>userBubble</code> 与 <code>overviewPanel</code> 独立分区，用户消息胶囊采用左上受光渐弱的银白折射弧边（已移除上游 <code>Copy prompt link</code>），开箱支持 KaTeX 行内公式，夜空下发送箭头自动翻白保高对比。 ",
+     "",
+     " Prismux 2×2 Orca 全要素任意分屏网格、内部零圆角与 1 px 细微边界分割线",
+     "",
+     " 旗舰 2×2 Orca 全要素任意分屏（Split Anything） ：多 Agent 对话与多终端自由并排/上下递归拆分，仅保留外画布圆角、全部分屏内部交界严格零圆角（<code>rounded-none</code>），搭配 <code>1 px</code> 细微边界线与流畅拖拽调比，在动态壁纸与液态玻璃下零闪烁。 ",
+     "",
+     " Prismux Codex 模型选择器、7 档零截断 dsh-fish 奔跑小人推理强度滑条与互斥 Fast / Ultra Fast 开关",
+     "",
+     " Codex 7 档零截断 <code>dsh-fish</code> 奔跑小人滑条 + <code>Fast / Ultra Fast</code> ：常驻纯 Logo 一键切换代理，7 档推理强度规范缩写为 <code>Mini / Low / Med / High / XHigh / Max / Ultra</code> 零省略号截断，底部仅保留英文首字母大写互斥加速开关。 ",
+     "",
+     " Prismux 右侧壁纸与外观抽屉中实时调节 8 大工作台分区独立液态玻璃参数",
+     "",
+     " 右侧壁纸与 8 分区实时玻璃工作台 ：在工作台内就地展开「外观与玻璃」抽屉，无需离开当前对话即可实时微调窗口外框、右侧边栏、主内容画布、工作面板、输入框、弹窗、 用户消息气泡 与 概览面板 8 大分区的通透度与模糊半径。 ",
+     "",
+     " Prismux 精简 4 分组设置导航、prismux 终端字体预览与 DSH 工作步骤 3 项原生控制",
+     "",
+     " 4 分组精简设置导航 + DSH 完整思考与工具步骤控制 ：设置侧栏瘦身并彻底清除云端账号连接与重复项，终端字体预览统一品牌为 <code>prismux git:(main)</code>，界面区原生收编工作步骤展示、收起时机与收起后显示回复 3 项控制并默认开启条形强度与 KaTeX。 ",
+     "",
+     " FEATURES · 核心能力 ",
+     "",
+     " 1. 多 Agent 统一驾驭、原生 <code>dsh</code> 实连与订阅编排护栏 ",
+     " Electron 44 桌面端托管 24 小时守护进程 <code>@prismux/daemon</code>，支持 Claude Code、Codex、Antigravity（官方 <code>agy acp</code> + 事件驱动按需额度刷新，零凭据窃读）、原生 Windows 实机直连的 <code>DeepSeek Harness (dsh)</code> 与 OpenCode 同台并行并随时接任 <code>Chief Thread Slot</code> 主秘书（已彻底移除冗余 <code>omp</code>）。 ",
+     " 内置 <code>PrismuxProviderProbeService</code>（CCS / Magpie 中转零误判）与合并订阅风险免责中心；支持提供方与模型拖拽排序并全局同步、AGY 像素蜂群、Claude / Codex 只读协作侧边栏与 <code>/btw</code> 旁路提问；手机远控仅保留局域网 / Tailscale 纯二维码配对。 ",
+     "",
+     " 2. Orca 侧边栏、全要素任意分屏、DSH 工作流与五大内化原语 ",
+     " 全面落地 Orca 树状紧凑侧边栏（宿主机分组、工作区卡片、模型简称规范化、每轮简体中文自动总结命名与用户改名锁）、 Split Anything 2×2+ 递归任意分屏 （内部零圆角 + <code>1 px</code> 可拖分割线）及 DSH 思考与工具调用完整流程 （3 项展示与收起策略）。 ",
+     " 坚持克制减法（永久排除脱离会话的重型看板、AgentTeam DAG、Skill Lens 与 Visual Companion），聚焦五大核心原语： ",
+     "",
+     " <code>PersistentPtyPool</code>：每终端 <code>2 MB</code> 环形缓冲与断线无损回放 ",
+     " <code>HandoffEngine</code>：<code>/handoff</code> 上下文提纯交接与 <code>agent / oracle / review</code> 三档拨盘 ",
+     " <code>CollectorAndGuard</code>：多格式切片、传输层身份注入与 <code>60 s</code> 熔断保护 ",
+     " <code>LifecycleHookBus</code>：6 类生命周期钩子、退出码 <code>2</code> 拦截与默认 <code>onFailure: \"block\"</code> ",
+     " <code>WorktreeSandbox</code>：OS 级写隔离、默认 <code>prismux</code> 分支前缀与域名白名单网关 ",
+     "",
+     " 3. 单文件混合记忆、主秘书定制与左侧栏夜间全自动工场 ",
+     " 全部长期记忆收敛于单文件 <code>~/.prismux/data/memory.db</code>（SQLite WAL + FTS5 + <code>sqlite-vec</code>，非 <code>.asar</code> <code>vec0.dll</code> 开箱可用），融合 Mnemopi Prompt-Cache 友好召回、主秘书自定义命名与 <code>~/.prismux/chief/AGENTS.md</code> 持久规则，并支持 Obsidian Vault 策展迁移；传输层 <code>forwardIdentity</code> 物理锁定群聊作用域，杜绝读取私密与工作区记忆。 ",
+     " <code>夜间工场与邮箱</code> 升级为左侧主导航独立工作面板（与任务面板 / 工作区板 / 定时任务及左下角 Issue / PR 均支持原按钮 Toggle 关闭与统一圆角画框），自动完成邮件立项 → 记忆补全 → Worktree 编码 → Oracle 只读评审 → HTML 完工早报回信。 ",
+     "",
+     " 4. 0 Token 8 分区液态玻璃、24h 动态天穹与多源壁纸舞台 ",
+     " <code>@prismux/appearance</code> 提供全宽 1:1 光学天体三态胶囊、 8 大工作台分区独立实时液态玻璃 （窗口外框、右侧功能边栏、主内容画布、工作面板、输入框与卡片、弹窗与设置、方向性 Fresnel 微光 用户消息气泡 、独立通透 概览面板 ）与 ≥ 4.5:1 对比度自动钳制，并内嵌 <code>dsh-fish</code> 7 档奔跑小人思考滑条。 ",
+     " 顶部 24 小时 288 帧声明式 SVG 动态天穹向右柔和虚化消融至首标签左缘，发送按钮箭头按昼夜自动切换黑白；<code>@prismux/wallpaper</code> 驱动 Z-0 多源舞台（图片 / 视频 / 网页 / WebWallGL / Steam <code>431960</code>），SHA-256 永久去重与遮挡 <code>0 FPS</code> 挂起，对大模型严格保持 0 Token 开销 。 ",
+     "",
+     " 5. 桌面微交互、20 px 信息底栏与真实 OS 欢迎体验 ",
+     " 欢迎页直接读取本机真实 <code>osUsername</code>（告别路径硬猜与云端账号依赖）；收起态为 <code>54 px</code> 图标导轨配共享 <code>100 ms</code> 右侧气泡；右侧辅助边栏 7 项精简并支持双向拖拽排序，内置浏览器配置完整汉化（<code>默认配置 / 无痕模式</code>）。 ",
+     " <code>20 px</code> 底部状态栏整合实时日用量、Orca 多窗口额度条、Electron + Daemon + PTY 进程资源归因、本机端口监控、真 Electron <code>powerSaveBlocker</code> 防休眠（<code>开启 / 代理 / 关闭</code>）、Windows 系统托盘、零依赖手机模拟器与四级液态玻璃服务体检。 ",
+     "",
+     " 6. Cordis 按需插件、端到端加密同步与双源升级清扫体系 ",
+     " <code>@prismux/cordis-kernel</code> 强制校验顶层 <code>engines.prismux</code> SemVer，以 <code>ctx.effect()</code> 保障卸载零残留；内置 <code>512 KiB</code> 预算声明式液态玻璃 UI、托管单写锁与 <code>0600</code> 独立加密凭据；社区 npm 导入免本机 Git 且禁用安装脚本。 ",
+     " <code>@prismux/sync-vault</code> 使用跨运行时 <code>PRXC02</code> <code>aes-256-gcm</code> / Argon2id+AEAD 密封 <code>.prismux-backup</code>（支持 WebDAV / S3 / GitHub 独立开关、<code>If-Match</code> 乐观锁与便携 <code>data/</code> 模式）；双源更新器在 GitHub ↔ Gitee 与 npm ↔ npmmirror 间测速切换，NSIS 安装包与启动迁移钩子自动清扫旧版残留且严格守护记忆库与凭据零丢失。 ",
+     "",
+     " PLUGINS · 官方独立插件 "
+    ]
+   ],
+   [
+    "equal",
+    161,
+    167,
+    111,
+    117
+   ],
+   [
+    "replace",
+    167,
+    170,
+    117,
+    120,
+    [
+     "|插件 ID|独立归档包（`.wb-plugin`）|npm 包名（无作用域 / GitHub Packages）|运行域（`realms`）|核心能力与隔离边界|",
+     "|:---|:---|:---|:---|:---|",
+     "|`qq`|`prismux-plugin-qq-0.2.4-rc.2.wb-plugin` （`88,738 bytes` · SHA-256：`bccaba45cba1cf0f9cdac891a68d670e866876c1fcb30a2fc84dd9dee787472d`）|`prismux-plugin-qq` <code>@fish-under-sea/prismux-plugin-qq</code>|`daemon`、`ui`|OneBot v11 正 / 反向 WebSocket 自动探测（NapCatQQ / Lagrange.Core）；私聊主人直连主秘书，群聊启用防刷屏节奏器并硬隔离至 <code>social/qq-group-&lt;gid&gt;</code>|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    175,
+    120,
+    125
+   ],
+   [
+    "replace",
+    175,
+    177,
+    125,
+    127,
+    [
+     "- **《Prismux 插件创作完全指南》**：`docs/plugins/plugin-development-guide.md` — 涵盖 Cordis 双域内核、`engines.prismux` 顶层校验、`ctx.effect()` 卸载零残留、`ui: \"components\"` 声明式液态玻璃 UI、`0600` 加密凭据、`pnpm plugin:pack` 打包回环自检与最小可运行骨架。",
+     "- **《官方 Hook 钩子与浅色 / 深色 / 液态玻璃主题样式参考》**：`docs/plugins/official-hooks-and-theme-tokens.md` — 涵盖 `LifecycleHookBus` 6 大生命周期钩子（`SessionStart` / `PreToolUse` / `PostToolUse` / `Notification` / `SubagentStop` / `Stop`）、退出码 `2` 拦截与四档权限矩阵，以及 **8 大液态玻璃分区**与浅色 / 深色 / 玻璃语义样式 Token 全清单。"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    127,
+    128
+   ],
+   [
+    "replace",
+    178,
+    179,
+    128,
+    129,
+    [
+     " INSTALL · 下载与双源更新 "
+    ]
+   ],
+   [
+    "equal",
+    179,
+    182,
+    129,
+    132
+   ],
+   [
+    "replace",
+    182,
+    187,
+    132,
+    137,
+    [
+     "|分发渠道|适用场景|入口与下载说明|",
+     "|:---|:---|:---|",
+     "|**GitHub Releases**（国际直连）|海外网络 / GitHub CLI 环境|Prismux v0.2.4-RC.2 发布页 · 直下 `Prismux-Setup-0.2.4-rc.2-win-x64.exe`|",
+     "|**Gitee Releases**（国内镜像）|中国大陆直连加速下载|Prismux v0.2.4-RC.2 发布页（含 `80 MB` 7z 无损分卷、逐卷 SHA-256 汇总校验与全部活跃官方插件归档）|",
+     "|**软件内更新中心**（推荐）|自动测速 GitHub / Gitee、分卷实时加权下载与解压前逐卷 SHA-256 强制校验|在工作台打开 **设置 → 关于与更新**（`/settings/about#prismux-updates`），在 `智能测速 / 国内优先 / 国际优先` 间秒切，查看完整富文本更新日志并一键安装重启|"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    190,
+    137,
+    140
+   ],
+   [
+    "replace",
+    190,
+    197,
+    140,
+    147,
+    [
+     "|平台 / 发行资产|文件名 / 状态|说明与隔离策略|",
+     "|:---|:---|:---|",
+     "|**Windows x64 安装包（Electron 44 NSIS）**|`Prismux-Setup-0.2.4-rc.2-win-x64.exe` （`195.48 MB` · `204,974,147 bytes` · Gitee 同步提供 3 卷 80 MB `.7z` 分卷）|SHA-256：`bd028909d0d684d89c0ee8ba03ea76d4fae1d57fdabe76e20695c15a85e8af45`；内含完整 Electron 44 桌面端、内置 `resources/prismux-daemon/`、非 `.asar` `resources/native/sqlite-vec/vec0.dll`、`resources/tools/7za.exe`（附 `LICENSE-7zip-LGPL-2.1.txt`）与 8× 提速任务管理器级 `prismux-resource-monitor.exe`；升级自动清扫旧版与历史残留文件且严守 `~/.prismux/` 核心数据零丢失；默认安装至 `%LOCALAPPDATA%\\Programs\\Prismux`（支持界面改路径与 `/D=<目录>`）；**官方独立插件零预装、零 `browser-secret`**|",
+     "|**macOS（Apple Silicon / Intel）**|`暂未发布（已预留通道）`|后续版本将提供 `.dmg` 安装镜像，遵循同一套 `0-Token` 视觉与 `~/.prismux/` 隔离规范|",
+     "|**Linux（x86_64 / arm64）**|`暂未发布（已预留通道）`|后续版本将提供 `.AppImage` / `.deb` 发行包，同样支持双源更新与独立插件验签导入|",
+     "|**1 款官方独立插件包**|`prismux-plugin-qq-0.2.4-rc.2.wb-plugin` 与 `prismux-plugins-official.json`|确定性 ustar + gzip 归档，下载后在 **设置 → 插件中心**（`/settings/plugins`）按需验签导入（`pet` / `ssh` / `fishdock-hook` 已停用并移除）|",
+     "|**分离式合并校验清单**|`Prismux-0.2.4-rc.2-SHA256SUMS.txt` 与 `prismux-plugins-0.2.4-rc.2-SHA256SUMS.txt`|手动下载后可通过 `Get-FileHash Prismux-Setup-0.2.4-rc.2-win-x64.exe -Algorithm SHA256` 或 `7z t` 核对完整性（Gitee 渠道另附逐卷 `.7z.001..003` 校验值）|"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    147,
+    148
+   ],
+   [
+    "replace",
+    198,
+    199,
+    148,
+    149,
+    [
+     " PACKAGES · npm 与国内镜像 "
+    ]
+   ],
+   [
+    "equal",
+    199,
+    206,
+    149,
+    156
+   ],
+   [
+    "replace",
+    206,
+    210,
+    156,
+    157,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    215,
+    157,
+    162
+   ],
+   [
+    "replace",
+    215,
+    216,
+    162,
+    163,
+    [
+     " DEVELOP · 开发与验收 "
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    163,
+    164
+   ],
+   [
+    "replace",
+    217,
+    218,
+    164,
+    165,
+    [
+     "> **前置工具链**：`Node.js >= 24.12.0`、`pnpm >= 10.0.0`（仓库锁定 `pnpm@12.3.4`）、`Electron 44`、`React 19`、`vite-plus`（`vp`）与 `Rust >= 1.85`（仅用于编译 `native/resource-monitor` 原生资源监控二进制；Windows 下运行 Cargo 请固定传入 `-j 1` 与 `NO_PROXY=*`）。开工前请先阅读 `AGENTS.md`、`THIRD_PARTY_NOTICES.md` 与对应的本机环境档案 `docs/agents/local/<规范化用户名>.md`。"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    223,
+    165,
+    170
+   ],
+   [
+    "replace",
+    223,
+    238,
+    170,
+    171,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    240,
+    171,
+    173
+   ],
+   [
+    "replace",
+    240,
+    242,
+    173,
+    174,
+    [
+     " 展开查看：统一第一方 Monorepo 目录树 "
+    ]
+   ],
+   [
+    "equal",
+    242,
+    247,
+    174,
+    179
+   ],
+   [
+    "replace",
+    247,
+    286,
+    179,
+    180,
+    [
+     "…（39 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    288,
+    180,
+    182
+   ],
+   [
+    "replace",
+    288,
+    292,
+    182,
+    183,
+    [
+     " 展开查看：绝对工程红线 "
+    ]
+   ],
+   [
+    "equal",
+    292,
+    300,
+    183,
+    191
+   ],
+   [
+    "replace",
+    300,
+    301,
+    191,
+    192,
+    [
+     " 展开查看：M1–M5 与 v0.1.0 ~ v0.2.4-RC.1 演进里程碑 "
+    ]
+   ],
+   [
+    "equal",
+    301,
+    302,
+    192,
+    193
+   ],
+   [
+    "replace",
+    302,
+    304,
+    193,
+    212,
+    [
+     "|里程碑|核心交付内容|验收状态|",
+     "|:---|:---|:---|",
+     "|**M1**|Monorepo 骨架、核心服务端桥接、`apps/daemon` 进程监督、环境变量净化、主秘书槽位与 `2 MB` 环形 `PersistentPtyPool`|已完成并通过门禁|",
+     "|**M2**|单文件 SQLite WAL + FTS5 + `sqlite-vec` 混合记忆（非 `.asar` `vec0.dll` 开箱即用）、Mnemopi 召回与分域缓存、`forwardIdentity` 隔离、`LifecycleHookBus`、`HandoffEngine` 与 `WorktreeSandbox`|已完成并通过门禁|",
+     "|**M3**|`cordis-kernel`（预发布兼容 SemVer 校验、`ctx.effect()` 零残留、多源验签与免 Git 流式安装、声明式液态玻璃 UI）与 `sync-vault`（Argon2id + AEAD、`If-Match` 乐观锁、`60 s` 看门狗、便携 `data/` 模式）|已完成并通过门禁|",
+     "|**M4 / v0.1.0–v0.1.2**|`@prismux/appearance` 与 `@prismux/wallpaper` 外置沉淀、Electron 44 桌面运行时融合、全宽天体胶囊、`dsh-fish` 思考条、Windows Codex 零壳直启、官方 `agy acp` 额度联动、NSIS 用户目录安装包与插件中心重设计|已完成并通过实机签收|",
+     "|**M5**|`OvernightFactory` 夜间全自动工场前后端闭环、官方独立插件（`qq`）确定性打包验签与双源分卷自动更新体系（`pet` / `ssh` / `fishdock-hook` 已停用并移除）|已完成并通过门禁|",
+     "|**v0.1.3-Preview.1~3**|全栈零静默遥测硬切断、AGY 蜂群与 Claude/Codex 只读协作侧边栏、右侧栏 7 项精简与双向拖拽、1:1 原生 `/btw` 旁路提问、24 小时 288 帧动态天穹、常驻纯 Logo 切代理与双语图标 `/` 面板、`54 px` 图标导轨、`20 px` 多窗口额度状态栏与 Electron 44 BoringSSL 端到端加密同步加固|已完成并通过实机签收|",
+     "|**v0.2.0-RC.1**|Orca 紧凑树状侧边栏与模型简称规范化、中文每轮自动总结命名、**2×2+ Orca 全要素任意分屏（内部零圆角 + 1 px 拖拽分割线）**、**8 分区液态玻璃（独立 Fresnel 微光用户气泡与通透概览）**、24h 天穹右缘渐弱虚化与昼夜发送箭头自适应、DSH 完整思考与工具步骤 3 项设置、原生一级接入 `dsh` 与提供方/模型拖拽排序、Claude/Codex 加速参数精简大写与 7 档零截断标签、全面去云端独立化纯二维码远控与设置瘦身、真实 OS 用户名问候、统一 Monorepo 收编与 NSIS 升级残留清扫|已完成并通过实机签收|",
+     "|**v0.2.0-RC.2**|**统一第一方 `@prismux/*` Monorepo 物理收编与彻底去 T3 / `omp` 化**、**`PrismuxProviderProbeService`（CCS / Magpie 零误判）+ 合并订阅编排风险免责中心**、**DSH / CC / Codex 标杆级展开工作步骤（单向箭头、`pwsh.exe` 剥离、磨砂详情卡与 Diff）与 GPT 推理摘要**、跟随 `--pmx-accent` 的行内文件链接、Antigravity 事件驱动按需额度刷新、Windows `dsh` 实机直连与 Electron IPC 真 UI 调度双后门、**17 页低密度分段设置中心重构**、精简顶栏 `⋯` 分屏菜单与模态框取色器焦点隔离修复|已完成并通过实机签收|",
+     "|**v0.2.0-RC.3**|**浮空概览面板豁免底部输入框**、**全局右下角浮空液态玻璃撤销弹窗**、**精简 4 分组无分割线设置侧栏（「智能体配置」「秘书与记忆」「项目与归档」）+ 3 标签「智能体配置」**、**纯蓝鲸 DSH 图标 + `Pi` 回归 & `fx` 移除**、**实连 DSH 4 斜杠命令 & 14 本地技能 + 语义化 ACP 适配**、**任务管理器级 Windows CPU% 与专用工作集资源监测 + 统一探针驱动底栏用量端点标签**、通用全宽思考强度滑条、全宽定时任务、双语工作区板与侧栏悬停 3 键快捷操作|已完成并通过实机签收|",
+     "|**v0.2.1-RC.1**|**全局智能体单一真相源（23 处面板同步排序与自定义命名）**、**1:1 DSH NEXT 思考/命令层级与 4 档透明工作步骤 + 100% 中文动作 + 丝滑动效与三态玻璃适配**、**DSH 同款思考过程汉化（默认 Bing + 双侧智能中文免翻，支持 Google 与文本模型）**、**全 6 家 Agent 实时 AGY 风格中文 TodoList + 1:1 DSH `SearchBlock` / `WebBlock`**、**独立 `/diagnostics` 服务体检与全宽夜间工场（默认 IMAP/SMTP & Gmail 模板）**、主秘书与文本生成统一遵循 AGY 免责锁 + DSH 本地 `app.asar` 版本实探、新会话标签错配与幻影标签修复 + 12 类中文错误诊断卡、主次字色层级重构与外观实时配色预览、更新通道补齐 `Preview（Alpha / Beta / RC）` 与全套官方 Prismux Logo、清理历史 T3 图标目录并根治 Windows 单测 `D:\\tmp` / `D:\\Microsoft` 残留|已完成并通过全量验收|",
+     "|**v0.2.1-RC.2**|**DSH 对话遥测与 `/usage` 历史 Zstd 扫描全量打通（真实 TTFT/Decode/缓存/TPS）**、**DSH / Antigravity 跨盘零配置自动发现 + Tab 2 纯独立 API 文本生成（OpenAI/Anthropic/Gemini/自定义）**、**壁纸无 Cookie 路径令牌路由 + HEVC 4K + 真实分辨率与防闪烁 16:9 重构**、**Prismux 原生通用 API 中转站配额面板（New API/One API/OpenAI 兼容 + `cliproxy` 兼容）**、**一级 `Gitee` OpenAPI v5 源码托管集成（彻底移除 `Cursor Origin`）**、**夜间工场接入腾讯 `Agent 邮箱`（`agently-cli`）与网易 `163/126`**、ACP 全家桶官方品牌图标、时间线思考与工具图标主题强调色、更新弹窗进度条吸顶与侧栏语义配色、`/diagnostics` 紧凑卡片统一、精简右侧辅助面板并修复已禁用提供方误报未安装 CLI 缺陷|已完成并通过全量验收|",
+     "|**v0.2.2-RC.1**|**6 款诗意液态玻璃主题基底（`纯净官方 / 星语紫夜 / 翠星漫野 / 樱雪浮岚 / 沧海浮光 / 鎏金织月`）双向同步与 0 Token 隔离**、**Steam Web（零 Referer `../` 越界钳制 + 画布尺寸/就绪投放守卫）与 4K/8K Scene（`scene.pkg` 零拷贝字节范围流 MP4、视口缩放舞台与骨骼偶动画/DXT 安全回退）实时引擎 + `HTMLMediaElement`/`AudioContext` 全局静音控制器**、**全代理原生 CLI 身份保持（移除 Codex/Claude Code 身份覆写）**、**订阅风控免责弹窗双层磨砂模糊 + 5 秒倒计时 + 完整原文确认门禁**、**最大化右侧边栏 14px 内圆角画框覆盖、文件树全量主题强调色与玻璃适配、全宽 `/settings/*` 统一布局及展开思考透明头**|已完成并通过全量验收|",
+     "|**v0.2.2-RC.2**|**消除守护进程/服务端/前端轮询风暴与 Windows 盘符/WMI 同步探测卡顿（10m/5m TTL 缓存 + 拆分 `PrismuxTelemetryContext` + 稳定回调引用）**、**壁纸卡顿根治与默认关闭的「高级壁纸渲染引擎」安全门禁（旧版活跃 Web/Scene 首启平滑迁移 + 异步单飞扫描 + 虚拟化网格 + `shellCutout` 防抖）**、**DSH `[本地统计]` 用量去重与多核用量扫描**、**Rust `native/resource-monitor` Windows 8× 采样提速（~4 ms）+ Win32 `GetSystemPowerStatus` FFI 真实硬件/电源遥测 + Electron 9 合 1 preload 引导**、**「性能与存储」面板全面重构（6 格足迹总览 + 对称主机/采集 + 类 WizTree Squarified Treemap 存储下钻与安全分级清理）**、**全链路 C 盘与内存防膨胀自动配额护栏（256 MiB 磁盘缓存、SQLite 64 MiB WAL + 增量 `auto_vacuum`、PTY 死会话回收、过期安装包/worktree 清扫）及零遥测彻底清理**|已完成并通过全量验收|",
+     "|**v0.2.3-RC.1**|**根治 5s 鉴权风暴、设置页卡死与全栈 15 处内存泄漏（签名 `access_token` 换取 + 401/403/426 熔断、解除嵌套弹窗关闭竞态、路由结构共享、去 `flushSync` 测量、BrowserWindow / WebWallGL / 录屏 Blob / 6 类 Atom 集合泄漏治理）**、**液态玻璃试管上下文拆解面板、分色胶囊、Token 浮层精简与 DSH TPS 缓冲微突发/多步局部 `decodeMs` 统计异常根治（含前端历史异常自愈）**、**Codex→DSH 四级别名跨代理多 Agent 调度 + 统一 AGY / `subscription_oauth` 订阅风控护栏（`DelegationSubscriptionGuard`）、激活态 AGY 输入框 40% 开口流动 RGB 光带与侧栏二级 MCP 委派子代理文件树**、**分屏线程与模型彻底隔离、每屏专属「概览」浮层与分屏统一右侧栏跟随联动**、**侧栏菜单原位内联检查更新动效与发现新版本直出右下角更新提醒卡片**|已完成并通过全量验收|",
+     "|**v0.2.3-RC.2**|**工具调用与生命周期残留 `T3` 标识全面替换为 `Ciallo～(∠・ω< )⌒★`**、**侧栏二级委派子 Agent 灰框 `[AR]` 修复为 DeepSeek 鲸鱼及各厂商真实品牌图标（含 `selectedModel.name` 兜底不透明 `modelSlug`）**、**根治 `agent_mail` / `imap_smtp` / `gmail_oauth2` 邮件发信检查失败、新增实时探活与切回窗口自动显示「已配置」交互优化，并实装夜间工场端到端定时轮询、任务队列、真实执行器与邮件回执（保留个人 AGY 无人值守硬拦截）**、**左下角今日 Token 自动刷新固定为 30 分钟、修复点击「刷新」按钮首次点击即刻热更新，并全面并发化 / singleflight / SWR 提速配额查询**|已完成并通过全量验收|",
+     "|**v0.2.4-RC.1**|**1:1 DSH NEXT 工作步骤收敛与磨砂详情卡 + 全 6 家只读 `context_injection` / `skill_load`（DSH 技能保真）+ 富文本 Markdown、本轮用量浮层与动态 WCAG ≥ 4.5:1 强调色**、**1:1 AGY 蜂群与 ACP 统一四标签右侧栏 + 实时 `/swarm` SSE 流式侦测 + Hybrid Swarm/ACP 混合吸收 + 100% 原生中英 i18n**、**输入框右上角紧凑「邀请协作」多代理/模型/数量选择器（受统一订阅免责管控、闲置 0 Token）+ 内联斜杠视觉芯片（`[⏱ goal]`、`[🐝 swarm]`）**、**全栈去 T3 彻底清扫 + 按需精简提示词（委派 DSH -92% / ACP -58.4%）+ `fishdock-hook` 正式退役（仅保留 `qq`）**、**24 项零遥测、隐私安全与供应链合规加固（冷启动 0 外联、剥离 `heic-to` / `electron-updater` / `browser-secret` / T3 云端 / Bing 翻译、解压前 `.7z.001..N` 逐卷 SHA-256 强制校验与 GitHub Actions 40 位 SHA 钉扎）**|已完成并通过全量验收|",
+     "|**v0.2.4-RC.2**|**A+B+C 合规思考过程翻译全面回归（Mozilla Bergamot 纯本地离线 WASM + 独立轻模型 + DeepL / Azure / 火山 / 腾讯 / OpenAI 兼容自备 Key 官方 API，默认关闭）+ 设置页与下拉选项 100% 原生中文汉化**、**修复版本更新重拉快照导致侧边栏委派子代理被移出 + 美化动态强调色圆角胶囊展开按键**、**ACP 侧栏全面去套壳纯透明底 Logo + `[AC]` 替换为队长（主 Agent）Logo + 修复 Hive / 成员 / 看板 / Mentions 全视图对齐 + 对话末尾「本轮用量」浮窗向右展开不压左侧栏**、**根治服务体检 CLI 探测 `>1100ms` 降级回归（未装 CLI 纯 FS `<10ms` 秒判跳过、已装 CLI 641ms 全绿）与守护进程循环引用 TDZ**、**夜间工场首屏化 12 栅格重构 + 已验证 Agent 邮箱自动折叠仅留测试途径 + 测试收件人同行右侧对齐 + 重写中英致谢（重点致谢 DSH 及补全生态开源项目）**|已完成并通过全量验收|"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    305,
+    212,
+    213
+   ],
+   [
+    "replace",
+    305,
+    328,
+    213,
+    214,
+    [
+     " THANKS · 致谢与边界 "
+    ]
+   ],
+   [
+    "equal",
+    328,
+    331,
+    214,
+    217
+   ],
+   [
+    "replace",
+    331,
+    341,
+    217,
+    227,
+    [
+     "|文档|说明|",
+     "|:---|:---|",
+     "|`AGENTS.md`|跨机器统配入口、绝对工程红线、统一 Monorepo 架构、脚本与插件打包契约及提交流程|",
+     "|`THIRD_PARTY_NOTICES.md`|第三方开源许可、核心运行时依赖清单与历史归属声明|",
+     "|`docs/plugins/plugin-development-guide.md`|Prismux 插件创作完全指南（Cordis 双域、声明式 UI、凭据隔离与打包发布）|",
+     "|`docs/plugins/official-hooks-and-theme-tokens.md`|官方 6 大生命周期 Hook 钩子与浅色 / 深色 / 8 分区液态玻璃主题样式 Token 参考|",
+     "|`docs/specs/ui-ux-design-mandate.md`|世界级 UI/UX、天体三态胶囊、液态玻璃同步契约与安装包强制设计规范|",
+     "|`docs/specs/master-prompt-v1.3.md`|Prismux 全栈自主施工总指令书（架构宪法）|",
+     "|`docs/agents/README.md`|贡献者本机环境档案命名规范、模板与维护流程|",
+     "|`assets/readme/MAINTAINING.md`|README 立体像素头图、分栏横幅与动态演示维护指南|"
+    ]
+   ],
+   [
+    "equal",
+    341,
+    349,
+    227,
+    235
+   ],
+   [
+    "replace",
+    349,
+    351,
+    235,
+    237,
+    [
+     "- **`dsh-better-reasoning-effort-fish`**（HanaAyane/dsh-reasoning-effort PR #9 + HaoyueQin/dsh-better-reasoning-effort，MIT）：提供模型自动识别动态思考强度滑条（`<PrismuxReasoningEffortSlider />`、8 大家族主题与 RGBA WebP 奔跑小人）的参考与开源资产。",
+     "- **Google Antigravity（`agy`）**：启发并参考了 1:1 Swarm 蜂群多智能体四标签协同侧栏（概览 / 看板 / 成员 / 关系图）、实时消息看板、`/swarm` 与 `/goal` 工作流及官方 CLI / ACP 合规接入规范。"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    354,
+    237,
+    240
+   ],
+   [
+    "replace",
+    354,
+    361,
+    240,
+    247,
+    [
+     "- **T3 Code（`pingdotgg/t3code`）**（MIT）：Prismux 桌面宿主、编排服务端与 Web 工作台的早期历史基础来源，现已持续演进并收编为独立第一方 `@prismux/*` Monorepo。",
+     "- **Orca（`stablyai/orca`）**（MIT）：提供紧凑树状项目 / 工作区侧边栏、轻量工作区板（Workspace Board）与任务视图、全要素任意分屏（Split Anything）、端口扫描与资源监控、超紧凑状态栏及多窗口额度条参考对标。",
+     "- **Cordis（`shigma/cordis`）**（MIT）：启发 `@prismux/cordis-kernel` 时空可逆双域插件内核、`ctx.effect()` 卸载零残留与声明式插件 UI 架构。",
+     "- **Oh-My-Pi（`can1357/oh-my-pi`）**（MIT）：提供 Mnemopi Prompt-Cache 友好召回、分域缓存与状态栏刻度参考。",
+     "- **Magpie（`yetone/magpie`）**：启发 `@prismux/sync-vault` 口令密封 AEAD 加密同步、`If-Match` 乐观锁、60 秒停滞看门狗与便携模式设计规范。",
+     "- **Amp**：启发 `/handoff` 上下文提纯交接与 `agent / oracle / review` 三档角色拨盘工作流。",
+     "- **FISH-Dock**：提供 Warm Paper / Dark Olive 立体像素 README 视觉体系、1:1 光学天体三态胶囊与 360° Fresnel 液态玻璃主题规范。"
+    ]
+   ],
+   [
+    "equal",
+    361,
+    364,
+    247,
+    250
+   ],
+   [
+    "replace",
+    364,
+    368,
+    250,
+    254,
+    [
+     "- **多智能体与通信生态**：Agent Client Protocol（ACP）、Claude Code、OpenAI Codex、OpenCode、Pi Coding Agent、Tencent Agent Mail（`@tencent-qqmail/agently-cli`） 与 OneBot v11（NapCatQQ / Lagrange.Core）社区。",
+     "- **纯本地离线翻译与视觉生态**：Mozilla Bergamot Translator &amp; Firefox Translations（MPL-2.0，为按需校验下载的纯本地离线英→中 WASM 思考翻译提供引擎与量化模型）、Steam **Wallpaper Engine（`431960`）** 创意工坊壁纸生态与 WebGL 动态渲染社区。",
+     "- **核心运行时与基础设施**：Electron、Effect、React、TanStack、Vite / Vite+、Oxc / Oxlint、Tailwind CSS、SQLite 与 `sqlite-vec`、`@pierre/*`（Apache-2.0）、Ghostty（`libghostty-vt`） 与 `node-pty`、KaTeX、Tailscale、7-Zip 与 Jersey 20（SIL OFL 1.1）。",
+     "- 完整历史归属、第三方版权声明、Apache-2.0 `NOTICE` 与全部依赖许可清单详见 `THIRD_PARTY_NOTICES.md`。"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    371,
+    254,
+    257
+   ],
+   [
+    "replace",
+    371,
+    372,
+    257,
+    258,
+    [
+     "Prismux 本仓核心代码与排版工具链遵循 **MIT License**（见仓库根 `LICENSE`）；随视觉资产分发的像素字体 `Jersey20-Regular.ttf` 遵循 SIL Open Font License 1.1；所有开源基础与参考组件均在 `THIRD_PARTY_NOTICES.md` 中严格保留各自原始许可证与版权归属声明。"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    373,
+    258,
+    259
+   ],
+   [
+    "replace",
+    373,
+    374,
+    259,
+    260,
+    [
+     " Prismux v0.2.4-RC.2 · Electron 44 + TypeScript + React 19 · 纯本地零遥测 · 8 分区液态玻璃 · Orca 任意分屏 · 1 款按需官方插件"
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
+ },
+ "3bcbf218826d+2": {
+  "fn": "Flow-Steward/ext-data-oceanbase",
+  "clean_ver": "2",
+  "raw_lines": 16,
+  "ops": [
+   [
+    "equal",
+    0,
+    16,
+    0,
+    16
+   ],
+   [
+    "replace",
+    16,
+    22,
+    16,
+    22,
+    [
+     "|Setting|Meaning|",
+     "|---|---|",
+     "|`host`|OceanBase host. Required.|",
+     "|`port`|OceanBase port. Required.|",
+     "|`database`|OceanBase database. Required.|",
+     "|`user`|OceanBase user. Required.|"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    92,
+    22,
+    92
+   ],
+   [
+    "replace",
+    92,
+    93,
+    92,
+    93,
+    [
+     "See Workflow actions for choosing Dataset reads versus explicit writes, connection requirements and copyable field examples."
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
  }
 }

@@ -3350,5 +3350,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bae7128b0c85": {
+  "identity": {
+   "one_liner": "通过 TiDB Operator v2 在 Kubernetes 上运行 TiDB 的 OpenEverest 提供程序",
+   "review": "该仓库是 OpenEverest 的 TiDB 提供程序：把技术无关的 Instance 自定义资源翻译为 TiDB Operator v2 的原生资源（PDGroup、TiKVGroup、TiDBGroup，可选 TiFlashGroup/TiProxyGroup），Pod 生命周期完全委托给 Operator。适用于已在集群安装 OpenEverest 核心的用户，可通过 Instance API 进行扩缩容、配置、版本升级、TLS、监控与备份恢复。项目处于 Pre-alpha 阶段，CRD 与 chart 值频繁破坏性变更，不支持升级路径，不可用于生产。",
+   "highlights": [
+    "将单个 Instance CR 协调为共享 Cluster 及各组件组资源，并把健康状态与 MySQL 连接端点回写至 Instance.status",
+    "支持水平/垂直扩缩容、内联 TOML 配置、调度策略、版本升级（拒绝降级）、mTLS、监控与 S3 兼容存储的按需/定时备份及时间点恢复",
+    "Helm chart 自包含：内置 TiDB Operator v2，通过 pre-install Job 安装约 15 MB 的 CRD，并注册准入 Webhook 校验 Instance"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上以声明式 Instance API 部署和管理 MySQL 协议兼容的分布式 TiDB 集群",
+    "需要 HTAP 能力的团队：可选部署 TiFlash 列式副本并控制读写引擎隔离",
+    "需要对 S3 兼容对象存储执行定时备份与时间点恢复的数据库运维场景"
+   ]
+  },
+  "sha": "bae7128b0c85",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3571,5 +3571,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0534545e8b6d": {
+  "identity": {
+   "one_liner": "基于 go-zero 与 React 的全栈微服务管理后台，含 RBAC 与多租户。",
+   "review": "该项目是单仓库的微服务管理后台，后端为 go-zero（1 API + 5 RPC 架构），前端使用 React 与 Ant Design。开箱提供用户、部门、角色权限、文件与审计管理，通过 Docker Compose 一条命令启动；配置模型密钥后支持知识库问答（含引用来源）与带人工审批的工作流。适合需要企业后台或 SaaS 起点的开发者；AI 功能依赖外部模型服务，可能产生供应商费用。",
+   "highlights": [
+    "支持 RBAC + Casbin 接口权限、部门级数据范围与每租户独立容器栈及数据库",
+    "采用 goctl 代码生成与缓存 Model 数据层，提供完整初始化 SQL 与数据库版本化迁移命令",
+    "集成 Eino AI Agent，实现知识库问答（含来源引用，单篇限 64 KiB TXT/Markdown）与带审批的工作流"
+   ],
+   "use_cases": [
+    "快速本地体验：Git + Docker Compose 启动用户/部门/角色管理，演示账号 admin / Admin@123456",
+    "搭建企业内部管理后台或多租户 SaaS 项目的开发起点",
+    "基于自有资料构建带引用来源的知识库问答与审批工作流"
+   ]
+  },
+  "sha": "0534545e8b6d",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "deb6145bbf2a": {
+  "identity": {
+   "one_liner": "拦截 AI 编码代理 shell 命令的 Rust 网关，预览后果并支持回滚",
+   "review": "Termaxa 是一个置于代理 hook 路径的单二进制网关，面向运行 Claude Code、Codex、Cursor、Copilot CLI 或 Hermes Agent 的开发者。它按仓库内策略文件判定命令，预览删除范围、快照备份供回滚，含跨 shell 语义的熔断机制与哈希链审计日志。支持先观察后强制的接入流程。",
+   "highlights": [
+    "按仓库内 policy.yaml 规则判定命令，拆分复合命令并按最危险段裁决",
+    "执行前提供后果预览（删除文件、丢失提交、DROP 行数估算）并生成可回滚备份",
+    "熔断器按破坏性意图跨 shell 计数；决策记录入仅追加、哈希链式日志"
+   ],
+   "use_cases": [
+    "无人值守运行 AI 编码代理的项目防护",
+    "接入新网关前用 replay 评估历史命令命中情况",
+    "对 git reset --hard、force push、DROP TABLE 等操作预览损失并备份回滚"
+   ]
+  },
+  "sha": "deb6145bbf2a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

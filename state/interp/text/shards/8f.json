@@ -3258,5 +3258,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1f2ba075f10f": {
+  "identity": {
+   "one_liner": "开源时序数据湖仓：单二进制实现 Line Protocol 摄入、Parquet 存储与 Iceberg 表发布",
+   "review": "Arc 是 Go 编写的 SQL 时序数据库，面向航空航天遥测及机器数据场景。它通过 InfluxDB Line Protocol 与 Telegraf 兼容摄入写入 Parquet，后台压缩并发布为 Iceberg 表供 Snowflake、Athena 等读取，热冷数据用一套 SQL 查询。基于 DuckDB 查询引擎，采用 AGPL-3.0 许可，企业版提供自动分层与集群功能。",
+   "highlights": [
+    "支持 InfluxDB Line Protocol、Telegraf、MessagePack 列式写入，README 基准测试报告 MessagePack 列式路径达 38.1M 记录/秒",
+    "数据以标准 Parquet 存储于本地磁盘、S3、GCS、Azure Blob 或 S3 兼容存储，并发布为 Apache Iceberg 表（REST 目录与 AWS Glue 注册）",
+    "使用 DuckDB 作为查询引擎，支持窗口函数、CTE、join；查询支持 Arrow IPC、MessagePack、JSON 三种线上格式及可选 Arrow Flight SQL"
+   ],
+   "use_cases": [
+    "从 InfluxDB 迁移：通过 Line Protocol 双写并在重叠时间窗比对数据后逐步切换",
+    "遥测/IoT 全分辨率历史留存：本地热数据加自有对象存储冷数据，无需降采样删除",
+    "为 Snowflake、Databricks、Athena 等分析引擎提供原地读取的 Iceberg 表，免去导出管道"
+   ]
+  },
+  "sha": "1f2ba075f10f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7c3cbac669b7": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Go 持久化队列库，提供 FIFO 与优先级队列。",
+   "review": "sqliteq 是一个用 Go 编写的、以 SQLite 文件为存储的队列库，提供 FIFO 与优先级两种队列，带确认、批量出队、按 ID 去重入队、任务结果查看与取消、跨进程恢复和持久化暂停等 API。默认每队列一个文件以避免写锁竞争，可用 WithSingleFile 合并到单文件。构建依赖 cgo（mattn/go-sqlite3），需 Go 1.27+ 和 C 编译器，并实现了 VarMQ 的队列接口。",
+   "highlights": [
+    "提供 FIFO 与优先级队列（低优先级数字先出），默认每队列一个 SQLite 文件，可切换单文件模式",
+    "支持确认机制、一次 SQL 语句的批量出队、按 job ID 去重入队（EnqueueOnce）、任务完成/失败/取消的结果记录与跨进程 WatchOutcome 通知",
+    "按 owner id 与心跳做死进程恢复；持久化队列暂停（Pause 写入元数据表，重启后仍生效）；自动 WAL checkpoint 且页数可调；队列对象线程安全"
+   ],
+   "use_cases": [
+    "需要任务在进程重启后不丢失的 Go 应用后台任务队列",
+    "多个进程共享同一队列文件并协同消费（含死进程任务回收、跨进程取消与暂停）的场景",
+    "作为 VarMQ（≥ v1.11.0）的队列存储，供其 REST API 与 vartop 检查、暂停恢复队列"
+   ]
+  },
+  "sha": "7c3cbac669b7",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f870831cccbc": {
+  "identity": {
+   "one_liner": "自托管的多库 SQLite 服务器，支持分支、HTTP API 与 MCP 接入。",
+   "review": "Lumbung 是一个用 Go 编写的自托管服务，单实例承载多个 SQLite 数据库，通过 HTTP API、libSQL 协议、TypeScript SDK、CLI、MCP 端点和 Web 控制台访问。数据库支持分支的修改、diff、重置与提升，提供分支级快照恢复、回收站、夜间备份脚本，并内置 S3 兼容的文件桶。需要 Docker Compose 部署，端口默认仅绑定 localhost。",
+   "highlights": [
+    "每个数据库支持分支操作：修改、diff、重置与提升，不影响 main 分支；提供分支级快照与恢复、回收站和夜间备份脚本",
+    "提供 SQL 沙箱限制（禁止 ATTACH 其他文件、路径 VACUUM、加载扩展等），并在每次 CI 运行中执行 fuzz 测试",
+    "访问通过 HTTP API、libSQL 协议、TypeScript SDK、CLI、MCP 端点和 Web 控制台实现；支持工作区隔离与实例/工作区/数据库/桶级别的权限令牌"
+   ],
+   "use_cases": [
+    "在一台自托管服务器上集中管理多个应用的 SQLite 数据库，并通过分支隔离改动",
+    "让 AI 代理通过 MCP 端点访问数据库",
+    "将文件存储与数据库置于同一实例，使用 S3 兼容 API 管理对象"
+   ]
+  },
+  "sha": "f870831cccbc",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3628,5 +3628,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "06cd9de40bf5": {
+  "identity": {
+   "one_liner": "YAML 语义层编译器，将声明式模型编译为 8 种 SQL 方言并支持 AI 代理",
+   "review": "OrionBelt 是一个 source-available（BUSL-1.1，Python 3.12+，可 pip/Docker 安装）的语义与上下文层，含规则引擎。用户或 AI 代理在 YAML 中声明维度、度量与连接，其通过 AST 编译为 8 种方言（BigQuery、ClickHouse、Databricks 等）的 SQL，并用 Composite Fact Layer 规划器阻止产生 fan trap 的连接路径。提供 PostgreSQL wire、Arrow Flight SQL、REST 与 MCP 四种接入面，支持跨库联邦查询与 DuckDB 文件/湖仓数据源。模型可转换为 Apache Ossie 标准格式或 RDF/SPARQL 图查询，并提供血缘追踪。",
+   "highlights": [
+    "通过真实 AST 将 YAML 声明的维度、度量与指标编译为 8 种 SQL 方言（BigQuery、ClickHouse、Databricks、Dremio、DuckDB/MotherDuck、MySQL、PostgreSQL、Snowflake），并提供 portable 表达式目录统一跨引擎结果语义",
+    "提供 PostgreSQL wire（5432）、Arrow Flight SQL（8815）、REST（8000）与 MCP 四种接入面，支持 one-shot batch API 供代理提交临时模型与查询，并提供 PEP 249 驱动",
+    "提供查询与模型血缘（JSON/Mermaid/Turtle），支持 OBML 与 Apache Ossie 双向转换，模型可导出为 RDF（OWL、SHACL、SKOS、PROV）并回答只读 SPARQL 查询"
+   ],
+   "use_cases": [
+    "AI 代理需自行建模一组问题、一次请求提交模型与多条查询并按需持久化复用的 agentic 分析流程",
+    "指标定义需以可评审 YAML 维护、无 JavaScript/Python 的自托管多引擎环境，要求各引擎返回一致结果",
+    "需要展示数字来源（列、表、连接路径）或在工具间以 Ossie/RDF 迁移模型的治理分析场景"
+   ]
+  },
+  "sha": "06cd9de40bf5",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3a1cffe79363": {
+  "identity": {
+   "one_liner": "面向 Dart 的类型安全 SQL 工具集，无需代码生成或构建步骤",
+   "review": "raindrop 是一个面向 Dart 的类型安全 SQL 工具集，其特点是不依赖代码生成：数据模式以普通 Dart 代码表达，查询由编译器检查，无需运行或维护构建步骤。项目拆分为多个包，含 SQLite 与 PostgreSQL 驱动包、CLI 包及测试包。适用于在 Dart/Flutter 环境中使用 SQL 的开发者。",
+   "highlights": [
+    "数据模式以普通 Dart 代码定义，查询由编译器做类型检查，无需代码生成",
+    "提供 SQLite（raindrop_sqlite）与 PostgreSQL（raindrop_postgres）驱动包",
+    "配套提供 CLI（raindrop_cli）与测试（raindrop_test）包"
+   ],
+   "use_cases": [
+    "在 Dart 或 Flutter 项目中以类型安全方式编写 SQL 查询",
+    "连接 SQLite 或 PostgreSQL 数据库",
+    "在无构建步骤的工作流中管理数据库模式"
+   ]
+  },
+  "sha": "3a1cffe79363",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

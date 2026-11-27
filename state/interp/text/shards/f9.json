@@ -2864,5 +2864,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "79fb73734f4b": {
+  "identity": {
+   "one_liner": "Home Assistant 附加组件，通过浏览器或移动 API 读取 eduVULCAN 电子日志数据并生成实体",
+   "review": "Vultron 是一个 Home Assistant 附加组件（也支持 Docker 部署），用于从波兰电子日志系统 eduVULCAN.pl 抓取数据，为家长和学生提供成绩、课表、消息、考勤、作业等传感器实体和 Lovelace 卡片。默认以 headless Chromium 登录网页版，每 40-60 分钟同步一次；8.0.1 起可选 mobile_api 模式，注册为设备后每 15 分钟经移动 API 取数。支持多子女账号、幼儿园账号、GPE Gdańsk 提供者。README 明确指出使用该项目违反 EduVulcan.pl 服务条款，且安装前需先在网页端完成登录、接受新条款并切换子女档案。",
+   "highlights": [
+    "支持两种数据获取方式：headless Chromium 浏览器登录（每 40-60 分钟）和可选的移动 API（mobile_api，默认每 15 分钟，最小 10 分钟）",
+    "自动识别家长账号下所有子女并各自生成独立传感器集，含幼儿园账号的独立传感器路径（考勤、餐单、接送时间等）",
+    "内置调度机制：随机间隔请求、周末固定时段、夜间 01:00-05:59 停止、连续登录失败后自动停机以避免账号锁定"
+   ],
+   "use_cases": [
+    "家长在 Home Assistant 中查看子女的电子日志信息（成绩、消息未读计数、课表、考勤、作业与活动）",
+    "有 2FA/TOTP 或多个子女账号的家庭，需配置 totp_secret 并按 README 完成网页端预登录步骤",
+    "GPE Gdańsk（Gdańsk 平台）用户通过 provider: gdansk 选项接入其独立的登录与 API"
+   ]
+  },
+  "sha": "79fb73734f4b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a562ef81c2aa": {
+  "identity": {
+   "one_liner": "开源跨平台数据库 GUI 客户端，支持 24 种数据库并内置 AI 助手与 MCP 服务器。",
+   "review": "Graphite 是一个基于 Electron 的免费开源数据库客户端（MIT 许可），支持 SQLite、PostgreSQL、MySQL、MongoDB、Redis、ClickHouse 等 24 种数据库，运行于 macOS、Windows 和 Linux。核心机制包括多连接标签页、CodeMirror 6 SQL 编辑器、表格内联编辑、ER 图、备份恢复，以及带写入审批机制的 AI 助手和仅监听 127.0.0.1 的 MCP 服务器。安装方式为各平台安装包或便携版；macOS 版本未经公证，首次启动需绕过 Gatekeeper。",
+   "highlights": [
+    "支持 24 种数据库（含 MongoDB、Redis、DynamoDB、Cassandra 等），连接密码由操作系统钥匙串加密保存",
+    "AI 读操作由数据库自身的只读模式强制执行，写入操作需通过审批对话框确认，MCP 服务器仅监听 127.0.0.1 并要求 token",
+    "提供 SQL 自动补全与片段模板、ER 图导出（SVG/PNG）、无 pg_dump/mysqldump 的流式备份、多格式结果导出（CSV/JSON/SQL INSERT）"
+   ],
+   "use_cases": [
+    "需要在同一工具中管理多种 SQL、NoSQL 及云仓库数据库连接的开发者或 DBA",
+    "希望让 Claude Code、Cursor 等外部代理通过 MCP 安全查询数据库的用户",
+    "需要通过 SSH 隧道和 TLS（含双向认证）连接内网数据库的场景"
+   ]
+  },
+  "sha": "a562ef81c2aa",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "06aeffdda5e5": {
+  "identity": {
+   "one_liner": "面向移动端 AI Agent 的持久化执行运行时，基于 C++ 内核与 SQLite 记录实现断点恢复",
+   "review": "LarkX 是一个开源的移动优先执行运行时，用于在设备上构建可离线运行的持久化 AI Agent。它在设备端 SQLite 中保存单份执行记录，由 C++ 运行时决定下一步模型调用、工具调用或远程委托；进程被系统杀死后，应用重启并用相同注册恢复同一运行。远程委托支持 HTTP 任务协议与 A2A 1.0 JSON-RPC。需注意：本项目尚未在真机上执行过下载与推理，Swift/Kotlin SDK 仍为规划状态。",
+   "highlights": [
+    "提供 SQLite 持久化、已提交步骤重放、重试、取消、暂停恢复、所有权 fencing 与未知结果的 reconcile 流程",
+    "支持向独立部署的远程 Agent（LangGraph、Google ADK、OpenAI Agents SDK 等）委托单个任务，父运行保留在设备上，含离线排队与丢失确认后的恢复",
+    "提供可选的 Cactus 本地推理适配器，含按模型实例的完成队列；React Native SDK 已实现，经 npm 分发"
+   ],
+   "use_cases": [
+    "在移动应用中运行本地 Agent，需在进程被系统挂起或杀死后从已提交步骤恢复执行",
+    "设备端 Agent 需将单个任务委托给服务器上已部署的远程 Agent 框架，同时保持父运行状态在本地",
+    "离线优先的工作流：网络可用时委托远程任务，不可用时在设备上继续执行"
+   ]
+  },
+  "sha": "06aeffdda5e5",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3674,5 +3674,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "534e7f71d36f": {
+  "identity": {
+   "one_liner": "面向 iOS/macOS 的 Swift 封装 DuckDB 库，提供类型化 SQL 与响应式查询",
+   "review": "Duck 是将 DuckDB 2.0.0 嵌入 iOS/macOS 应用的 Swift 封装库，通过重新导出 Swift Stream SQL 查询 DSL 提供 fluent 与 result-builder 两种查询写法，内置 Codable 模型、迁移、事务、连接池、批量插入与响应式查询。要求 Swift 6.3、iOS 15+/macOS 12+。使用时需注意：同一源文件引入 Duck 与 SwiftUI 时，Table 类型名存在歧义，需以 SQL.Table 或 SwiftUI.Table 限定。",
+   "highlights": [
+    "内置 Codable Table 模型，支持通过类型安全列 keypath 构建查询并直接解码为类型化结果",
+    "基于 Swift Stream SQL 提供 fluent 链式与 SQL result-builder 两种查询形式，二者使用相同的准备与绑定行为",
+    "包含事务、可复用 prepared statements、迁移、连接池、批量插入、响应式查询观察及惰性初始化的运行时管理"
+   ],
+   "use_cases": [
+    "在 iOS/macOS 应用内执行分析型 SQL（过滤、连接、分组、聚合）处理较大规模数据",
+    "SwiftUI/UIKit 应用中需要查询结果自动驱动界面更新的场景",
+    "测试与预览环境中使用 Database.memory() 建立一次性内存数据库"
+   ]
+  },
+  "sha": "534e7f71d36f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f9fd4968916a": {
+  "identity": {
+   "one_liner": "MeterVanta：自托管的 AI 成本追踪与按用量计费平台",
+   "review": "MeterVanta 是一个开源（MIT）的 AI 成本管理与用量计费平台，面向在产品中使用 OpenAI、Anthropic、Gemini 等 AI 服务的软件公司、代理商和企业团队。应用侧在每次 AI 请求后上报用量数据，平台按供应商公布的价格计算成本，支持按客户/功能/智能体维度统计、月度预算与告警、Stripe 草稿发票及客户对账单页面。可部署在 Vercel 或自建服务器（Docker Compose + PostgreSQL），只接收 token 用量数据，不接触用户对话内容。",
+   "highlights": [
+    "按每次请求记录 AI 成本，使用供应商公布价格并保留带日期的价格记录",
+    "支持按客户、产品功能和 AI agent 维度统计支出，可设置月度预算并在 80%/100% 时通过邮件、Slack 或 webhook 告警",
+    "可创建含月费与加价的定价方案，在 Stripe 中生成草稿发票，并向客户提供只读对账单链接"
+   ],
+   "use_cases": [
+    "软件公司按客户统计 AI 用量成本并生成账单",
+    "代理商为客户运行 AI agent，按项目跟踪支出与预算",
+    "企业内部管理共享 AI 预算，监控各团队和功能的使用情况"
+   ]
+  },
+  "sha": "f9fd4968916a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cccd24024fb3": {
+  "identity": {
+   "one_liner": "面向人机双端的数据库迁移工具，CLI、GUI 与 Agent 共用同一迁移引擎",
+   "review": "Flydb 是面向开发、运维与实施人员的数据库版本迁移工具，提供本机 GUI、CLI 和 Agent 接入（Skill/MCP/复制上下文）三种入口，共用同一份配置与迁移引擎。运行要求 Java 8+，GUI 无需 Node.js 或外网；JDBC 驱动由使用者自行提供。支持 checksum 校验、并发锁、失败阻断与执行记录，内置 MySQL、PostgreSQL、Oracle 及达梦、人大金仓等国产数据库方言，可通过 DatabaseType SPI 扩展。",
+   "highlights": [
+    "提供 CLI、本机 GUI 与 Java API/Spring Boot 2/3 starter，三种入口共用同一迁移引擎与执行记录",
+    "支持 MySQL、PostgreSQL、Oracle、达梦、人大金仓、openGauss、OceanBase、TiDB 等 JDBC 数据库，方言经 DatabaseType SPI 扩展",
+    "包含 checksum 校验、并发锁、事务失败阻断、预览核验与结构化执行记录；提供 Skill 与 MCP 两种 Agent 接入方式"
+   ],
+   "use_cases": [
+    "管理开发、测试、生产多套环境的数据库版本升级与变更核对",
+    "在 CI 流水线或应用（含 Spring Boot）启动期自动执行迁移",
+    "让 AI Agent 读取配置、迁移状态与错误上下文，执行 validate、dry-run 等迁移操作"
+   ]
+  },
+  "sha": "cccd24024fb3",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

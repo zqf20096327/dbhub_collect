@@ -3337,5 +3337,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dd110084efa7": {
+  "identity": {
+   "one_liner": "基于代码锚点的本地 MCP 研发记忆库，支持 BM25+向量混合检索",
+   "review": "该项目是一个面向 Claude Code、Codex、Cursor 等多工具协同开发场景的记忆与上下文管理服务。它将项目规范通过 AGENTS.md 随 Git 版本化，将排障与设计笔记沉淀为带代码锚点和 Playbook 的 MCP 笔记，按 repository 元数据隔离。锚点可在读取笔记时核验符号是否变更，服务端提供 drift 巡检输出 CLEAN/MODIFIED_SAFE/DRIFTED 三级漂移状态；笔记按 draft/verified/stale/promoted 四态流转。部署支持 Docker Compose 三服务或 uv 本机运行，MkDocs 站点供浏览器查阅。适用于多微服务共享记忆库的团队。",
+   "highlights": [
+    "通过 MCP Streamable HTTP 协议提供按需读写，日常编码任务零 MCP 调用",
+    "基于 SQLite FTS5 (BM25) 与 bge-small-zh-v1.5 中文向量实现 text/vector/hybrid 三路混合检索",
+    "笔记绑定 code_paths/code_symbols 锚点，支持对话内核验与离线 CI 零 Token 批量巡检漂移"
+   ],
+   "use_cases": [
+    "多工具（Claude Code/Codex/Cursor）协同研发的跨会话记忆读写",
+    "多微服务团队共享统一记忆库并按 repository 隔离排障经验",
+    "源码重构后校验历史笔记锚点漂移，避免过期内容误导"
+   ]
+  },
+  "sha": "dd110084efa7",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f84cd1c80cad": {
+  "identity": {
+   "one_liner": "基于 oncebox 的 Spring Boot 事务性 Inbox 示例，配合 Outbox 实现 Kafka 幂等消费",
+   "review": "该项目是一组 Spring Boot 示例服务（order、loyalty、notification），演示基于 oncebox 库的事务性 Inbox/Outbox 机制：消费端记录事件 ID 与业务效果在同一事务提交，识别重复事件并跳过，支持 effectively-once（数据库写入）与 at-most-once（邮件发送）两种模式，依赖 PostgreSQL/MySQL/Oracle 存储。重复事件每次消费需一次插入，ID 表需 TTL 清理。适用于需处理 Kafka 至少一次投递重复的 Java 开发者。",
+   "highlights": [
+    "支持 @TransactionalConsumer 与 @NonTransactionalConsumer 两种注解，分别对应 effectively-once 和 at-most-once 语义",
+    "内置事件 ID 去重表、按 TTL 定时清理、失败重试（退避最多 5 次）及 orders.events.DLT 死信投递",
+    "Outbox 发布采用 FOR UPDATE SKIP LOCKED 批次锁定，支持多实例并行运行；错误以 RFC 9457 格式返回并提供 OpenAPI 文档"
+   ],
+   "use_cases": [
+    "消费端需在服务崩溃、 rebalance 或人工回放后安全处理 Kafka 重复投递的场景",
+    "需要保证数据库写入与消费记录原子提交（effectively-once）的业务，如积分账务",
+    "发送邮件等无法回滚且不可重复执行的外部副作用场景（at-most-once）"
+   ]
+  },
+  "sha": "f84cd1c80cad",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

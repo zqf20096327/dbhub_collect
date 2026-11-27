@@ -3082,5 +3082,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e233ae6caef7": {
+  "identity": {
+   "one_liner": "Lurp 用 Roslyn 将 .NET 解决方案索引到 SQLite，为 AI 代理提供代码语义检索",
+   "review": "Lurp 是一个 .NET 全局工具（dotnet tool），通过 Roslyn 编译器将 C# 解决方案索引为 SQLite 中的快照绑定语义图，存储符号、类型化关系、源码跨度及证据级别。代理通过 CLI 或 MCP 调用 context、impact、diff、search 等模式，读取持久化事实生成带 token 预算的上下文胶囊。运行需 .NET 10 运行时，索引需能构建目标方案的 SDK；仅支持 Windows 和 Linux，macOS 未测试。",
+   "highlights": [
+    "支持 context、impact、diff、search、grep、dead-candidates 等 17 种 CLI 模式，并提供 MCP 接口供代理调用",
+    "索引时捕获符号、类型化关系与来源证据（compiler_proved 到 runtime_unknown），胶囊输出按 token 预算裁剪并标注被省略的层级",
+    "包含 DI、路由与 EF Core 框架适配器，将框架中介的关系以带证据级别的类型化事实写入共享模型"
+   ],
+   "use_cases": [
+    "为 AI 代理提供 C# 代码库的符号查找、影响可达性与 token 受限上下文胶囊",
+    "比较两个索引快照间的语义差异（--mode=diff）",
+    "列出无入边的死代码候选，公共 API、测试与生成代码不会被标记为 proved_dead"
+   ]
+  },
+  "sha": "e233ae6caef7",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f72947f0e7e5": {
+  "identity": {
+   "one_liner": "本地运行的渗透测试报告生成器，基于 Flask、SQLite 与 LaTeX 输出 PDF。",
+   "review": "ptreport 是一个本地渗透测试报告生成工具，以 Web 界面运行于 127.0.0.1:5055，数据存储在单个 SQLite 文件中，通过 Tectonic/LaTeX 引擎导出 PDF，同时支持 HTML、Markdown、LaTeX 源码与 JSON 备份导出。它面向渗透测试人员，提供漏洞记录、CVSS 4.0/3.1 评分、CWE 编目、截图编辑、Burp Suite 扩展及多种扫描器（Nessus、Nmap、ZAP、OpenVAS）导入功能，支持英文与波兰文报告。要求 Python 3.10+，支持 Linux 与 macOS。",
+   "highlights": [
+    "支持 CVSS 4.0/3.1/3.0/2.0 评分计算与完整 MITRE CWE 5.0 目录的 CWE 编目",
+    "提供内置截图编辑器（裁剪、箭头、标注、不可逆像素化）及证据文件 SHA-256 校验",
+    "集成 Burp Suite 扩展、五种扫描器导入、CLI 命令行、JSON API 与内置 MCP 服务器"
+   ],
+   "use_cases": [
+    "渗透测试人员撰写漏洞发现并生成 PDF 报告",
+    "受合同或 NDA 限制不能使用云工具、需数据完全本地化的测试场景",
+    "从 Burp Suite 直接发送请求，或导入 Nessus/Nmap/ZAP/OpenVAS 扫描结果并复审"
+   ]
+  },
+  "sha": "f72947f0e7e5",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74daf03e6d6c": {
+  "identity": {
+   "one_liner": "单二进制 SQLite+FTS5 记忆库，含提示钩子与 MCP 服务器",
+   "review": "simple-memory 是一个面向编码代理的本地记忆存储工具，以单个 SQLite 文件（WAL 模式）保存事实与决策记录，无需外部数据库或嵌入服务。它提供 CLI 命令与 FTS5 检索，可通过提示钩子自动注入上下文，并以 MCP 服务器形式供任意 MCP 客户端查询。记录要求证据标签，写入与查询按 git 仓库自动划分作用域。",
+   "highlights": [
+    "存储于 ~/.simple-memory/memory.db 单文件中，无嵌入服务或后台守护进程；记录携带证据标签、类型、时间戳及工单/提交/路径引用",
+    "基于 FTS5 的折音与原始双模搜索，支持重音折叠、前缀匹配与加权 BM25 排序，支持 -term 排除与 --since/--until 时间过滤",
+    "提供 JSON-RPC 2.0 over stdio 的 MCP 服务器（八种工具），并为 Claude Code 与 agy 生成提示钩子配置片段"
+   ],
+   "use_cases": [
+    "为 Claude Code 或 Antigravity CLI 会话自动注入已验证事实与架构决策的匹配上下文",
+    "从任意 MCP 客户端按需查询和写入按仓库划分的记忆条目",
+    "在 git 仓库内记录带证据引用（ADR、工单）的决策，并用 --supersedes 替换过期条目"
+   ]
+  },
+  "sha": "74daf03e6d6c",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

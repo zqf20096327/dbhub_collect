@@ -3504,5 +3504,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5307cb59a74b": {
+  "identity": {
+   "one_liner": "基于 Raft 的嵌入式 SQLite 集群库，提供复制、高可用与内置缓存",
+   "review": "Hiqlite 是一个可嵌入的 SQLite 数据库库，基于 rusqlite 和 openraft 实现，可组成 Raft 集群提供强一致性写入、复制、自动 leader 切换和自愈能力，并附带磁盘-backed 的 K/V 缓存、分布式锁、计数器和 listen/notify 消息。面向希望在单进程 Rust 应用中运行高可用 SQLite、不想额外维护独立数据库服务的开发者。写入需经 Raft 两次网络往返，SQLite 单写者限制使性能更依赖单核速度。",
+   "highlights": [
+    "基于 openraft 组建集群，提供强一致的复制 EXECUTE 查询、事务执行、自动 leader 切换与自愈（含数据卷丢失恢复），支持自动数据库迁移",
+    "提供多个磁盘-backed 的内存 K/V 缓存，每条目可设独立 TTL，重启后可从磁盘 WAL + 快照重建内存数据；另有 dlock 分布式锁与 counters 分布式计数器特性",
+    "支持 TLS 加密网络、加密备份到 S3（cron 或手动）及远程恢复，提供 sql!() 编译期查询校验宏、FromRow 派生宏、集成调试 dashboard，可通过 server feature 以单节点、集群或代理方式运行独立二进制"
+   ],
+   "use_cases": [
+    "希望在 Rust 应用中嵌入 SQLite 并获得多节点复制、自动故障切换与自愈能力的场景",
+    "需要高可用本地读性能、同时又要求强一致写入的单进程应用",
+    "需要分布式锁、分布式计数器或跨节点实时消息（listen/notify）且希望复用同一存储层的系统"
+   ]
+  },
+  "sha": "5307cb59a74b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c2e319be0169": {
+  "identity": {
+   "one_liner": "面向 Qwen3.5-4B-Memory-V2 的零依赖本地记忆引擎，基于 SQLite FTS5 与 MCP 工具",
+   "review": "ZeroMem 是一个本地记忆引擎，仅用 Python 3.9+ 标准库实现，配合 Ollama 运行 Qwen3.5-4B-Memory-V2 模型完成事实抽取与写前审校。数据存于单个 SQLite 文件，用双轨 FTS5 索引支持中英检索与原文溯源，无需向量库或 Embedding 模型。提供 CLI/SDK 单次预注与 MCP 4 工具两种接入方案，入库前对常见密钥脱敏为 [REDACTED]。配套基于 tkinter 的暗色桌面工作台。适用于需要在本地管理事实记录并接入 AI Agent 的用户。",
+   "highlights": [
+    "零第三方 Python 依赖，仅用标准库实现含 MCP stdio 服务（NDJSON 与 Content-Length 双帧协议），提供 memory_remember/recall/stats/delete 4 个工具",
+    "单个 SQLite 文件存储，事实+原文双轨 FTS5（中文 2-gram+英文词法）索引，支持中英检索与原文证据溯源，入库前自动脱敏常见密钥",
+    "支持一键接入 Claude Desktop、Claude Code、Cursor、Windsurf、Codex、Antigravity、DSH 共 7 款 Agent 客户端，修改配置前自动创建 .bak 备份"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor 等支持 MCP 的 Agent 中挂载本地记忆检索",
+    "单主题问答场景下用 CLI/SDK 将记录预注入上下文，替代全量历史注入",
+    "断网或内网环境中导入本地 GGUF 权重并离线运行记忆引擎"
+   ]
+  },
+  "sha": "c2e319be0169",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

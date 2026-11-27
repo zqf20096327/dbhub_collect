@@ -3868,5 +3868,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d90daa9342d7": {
+  "identity": {
+   "one_liner": "给 AI 助手的求职搜索技能，提供中国校招/实习/社招岗位与招聘日历的本地查询",
+   "review": "job_radar 是一个可接入 AI 助手的求职搜索技能，通过 Skill 或 MCP 提供岗位搜索、单岗详情、招聘日历等 9 个工具，面向中国校招、实习和社招求职者。数据由 GitHub Actions 定时采集，本地下载快照后可离线查询，包名 jobsearchradar，需 Python 3.11+。招聘数据与代码分开发布，项目不代投、不要求上传简历。",
+   "highlights": [
+    "提供搜索、单岗详情、近期变化、公司对比、招聘日历和统计共 9 个查询工具，CLI 与 MCP 共用同一筛选规则",
+    "配置 2,202 个数据源、27 个采集适配器，发布快照含 363,217 条岗位记录，JD 正文覆盖率 97.6%",
+    "官方与聚合来源分开标注，保留原始招聘链接，缺失字段和学历冲突单独提示"
+   ],
+   "use_cases": [
+    "应届生和在校实习生按城市、招聘类型、毕业年份组合筛选校招/实习岗位，获取 JD 原文与投递入口",
+    "求职者查看招聘日历网申窗口，追踪岗位开岗、变更、下架历史",
+    "需要结构化岗位数据的脚本或 Agent 工作流，通过 MCP 调用并以 JSON 输出结果"
+   ]
+  },
+  "sha": "d90daa9342d7",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41989b48b8bc": {
+  "identity": {
+   "one_liner": "单租户自托管网站分析工具，数据存于单个 SQLite 文件",
+   "review": "Fusionaly 是一个自托管的网站分析服务，用 Go 编写、数据存储在单个 SQLite 文件中，通过一段脚本标签追踪页面浏览、点击和自定义事件。README 明确说明它面向小型站点和小团队，不针对每日千万级用户量，且不提供云托管版本。安装依赖 Docker 或其自带安装器，需配置域名和至少 32 字符的私钥。",
+   "highlights": [
+    "提供单 SQLite 文件存储，无需外部数据库、Redis 或消息队列，支持夜间自动更新与数据库实时备份",
+    "追踪页面浏览、SPA 导航、点击、表单和自定义事件，通过 data-fusionaly-event-name 属性标记元素",
+    "在 /mcp 端点提供四个只读 MCP 工具，供 AI 客户端查询流量数据，工具不能写入或读取账户设置"
+   ],
+   "use_cases": [
+    "在小规模 VPS 或树莓派上为自有站点收集访问来源、页面和事件数据",
+    "需要无 Cookie、无指纹识别且数据全部保留在自有服务器上的分析部署",
+    "通过支持 MCP 的 AI 客户端以自然语言查询自有站点的流量数据"
+   ]
+  },
+  "sha": "41989b48b8bc",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f6812971e1c7": {
+  "identity": {
+   "one_liner": "面向台灯制造的 AI MES，融合业务查询、RAG/GraphRAG 知识检索与确认式办理",
+   "review": "面向智能台灯制造教学场景的 AI 制造执行系统，业务侧基于 Spring Boot、Vue 3 和 MySQL，私有知识服务用 FastAPI、PostgreSQL、pgvector 与 Apache AGE 实现。提供自然语言查询库存工单、带出处的文档检索、知识图谱关联核对及预览确认后执行的业务办理，含 20 项查询分析与 19 项办理能力。样例资料为合成教学数据，引用校验不能自动证明回答被来源支持。",
+   "highlights": [
+    "业务能力目录包含 20 项查询分析与 19 项直接办理，办理流程为结构化计划、校验生成预览、用户确认后由领域服务执行",
+    "文档 RAG 保留原文位置，使用本地中文嵌入与 pgvector 检索；GraphRAG 由 LightRAG 抽取实体关系并存入 Apache AGE 图谱",
+    "支持研判工作单保存答复与来源快照，可导出交接稿并转业务草稿；未配置模型时仍可展示本地检索原文"
+   ],
+   "use_cases": [
+    "教学中演示自然语言查库存、工单及带文件版本引用的工艺资料检索",
+    "变更研判场景中沿知识图谱核对产品、物料、工序与检验关系并保存工作单",
+    "覆盖采购到发货九阶段流程的 MES 业务流程演示与验证练习"
+   ]
+  },
+  "sha": "f6812971e1c7",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f1610a8798bd": {
+  "identity": {
+   "one_liner": "自托管的 Web 数据库客户端，单个 Docker 容器运行，支持 MySQL/MariaDB/PostgreSQL 及兼容引擎",
+   "review": "Flase 是一个 AGPL v3+ 开源的 Web 数据库客户端，面向需要日常浏览和编辑 MySQL、MariaDB、PostgreSQL 及 TiDB、CockroachDB、YugabyteDB 数据库的开发者与 DBA。提供电子表格式数据网格、SQL 控制台、ER 图、导入导出和用户权限管理；密码不存服务器，支持 TLS 与 SSH 隧道，通过 JWT_SECRET 的单条 docker run 命令即可部署。",
+   "highlights": [
+    "虚拟化数据网格仅渲染可见行列，支持内联编辑、多选、变更 SQL 预览、查找替换和多种格式复制/导出",
+    "SQL 控制台基于 Monaco 编辑器，含补全、执行计划树、参数查询、无 WHERE 的 UPDATE/DELETE 检查与查询取消",
+    "支持流式 SQL dump（含 gzip）、CSV 导入、SSH 隧道、TLS 连接、服务器监控、ER 图与 Schema 比较"
+   ],
+   "use_cases": [
+    "通过浏览器日常查看和编辑数据库数据，替代在本地安装桌面客户端",
+    "部署在数据库旁的容器内，由管理员预定义连接、强制只读连接用于生产环境排查",
+    "经 SSH 隧道或 TLS 访问仅限堡垒机可达的数据库（如 RDS、Aurora、Supabase）"
+   ]
+  },
+  "sha": "f1610a8798bd",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

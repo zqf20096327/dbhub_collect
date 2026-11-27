@@ -3316,5 +3316,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "83b56002263e": {
+  "identity": {
+   "one_liner": "基于 Rust 与 GPUI 的跨平台桌面 PostgreSQL 客户端，MIT 开源。",
+   "review": "RSQL 是一个用 Rust 和 GPUI 编写的桌面 PostgreSQL 客户端，提供 macOS（Apple Silicon）、Windows x64 和 Linux 安装包，MIT 协议，无账户与遥测。它包含 SQL 编辑器、结果网格、模式浏览、查询计划、数据导入导出与服务器管理工具，适用于需要在本地桌面连接和运维 PostgreSQL 的开发与运维人员。注意：数据库和 SSH 密码目前以未加密形式存于本地 rsql.db。",
+   "highlights": [
+    "提供带模式感知补全的 SQL 编辑器、多标签与分屏、已保存查询及当前会话最近 500 条执行历史",
+    "支持结果网格分页浏览、单表主键结果的事务性编辑、CSV 导入以及 CSV/JSON/SQL INSERT/Markdown/XML 导出",
+    "包含对象浏览器、DDL 查看、schema 对比、ER 图 SVG 导出、EXPLAIN ANALYZE 查询计划、性能监控及 VACUUM/ANALYZE/REINDEX 维护操作"
+   ],
+   "use_cases": [
+    "编写、组织与执行 SQL 查询，并通过 EXPLAIN ANALYZE 查看各节点耗时、代价与行数估算",
+    "浏览与编辑表数据、对比 schema、导出 ER 图等 PostgreSQL 数据库日常管理",
+    "导入 CSV 数据或将查询结果导出为 CSV、JSON、SQL INSERT、Markdown、XML"
+   ]
+  },
+  "sha": "83b56002263e",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "81ae50abdf0e": {
+  "identity": {
+   "one_liner": "openGauss 版 LangGraph 检查点持久化库，含 Saver 与 Store 两类组件",
+   "review": "该库基于 langgraph-checkpoint-postgres==3.2.1 实现，为 LangGraph 提供 openGauss 持久化后端，供需要将检查点与跨线程记忆存入 openGauss 的应用使用。包含六个同步/异步类：全量与浅层 checkpoint saver 及支持 TTL、向量检索的 store。安装需 binary extra 以获取 psycopg 驱动，浅层与全量 saver 需使用不同 schema（同名表主键不同）；向量组合在 openGauss-lite 7.0.0-RC3 A 兼容模式下测试。",
+   "highlights": [
+    "提供 OpenGaussSaver/ShallowOpenGaussSaver 及对应异步类的 checkpoint 读写、复制、删除与 prune 操作",
+    "提供 OpenGaussStore，按命名空间和键跨线程共享 JSON 文档，支持 TTL 过期清理与可选向量索引（flat/hnsw/ivfflat，vector/halfvec 类型）",
+    "支持连接池配置与 pipeline 模式，可通过 from_conn_string 传入 libpq DSN 或读取 PG 系列环境变量"
+   ],
+   "use_cases": [
+    "为基于 LangGraph 的智能体应用接入 openGauss 持久化检查点，实现线程恢复",
+    "在多个线程间按命名空间共享文档记忆，并需要 TTL 或向量检索能力",
+    "需要全量历史与浅层（仅保留最新检查点）两种保存模式的部署场景"
+   ]
+  },
+  "sha": "81ae50abdf0e",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

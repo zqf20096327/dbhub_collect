@@ -2919,5 +2919,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c60d1e011eb4": {
+  "identity": {
+   "one_liner": "本地运行的 AI 开源贡献者入门助手，分析 GitHub 仓库并生成入门路径",
+   "review": "ContribIQ 是一个面向开源贡献者的入门助手：指向任意 GitHub 仓库后，它分析代码库、生成个性化入门路径、按用户技能画像为开放 issue 打分排序，并通过 pgvector 检索以自然语言回答代码问题。默认经 Ollama 在本地运行 LLM 推理；若改用托管模型则数据会发送到相应服务商。架构为 FastAPI + React 18 + PostgreSQL/pgvector + Valkey + TaskIQ，慢任务由后台 worker 执行。issues 表尚未填充。",
+   "highlights": [
+    "基于 pgvector 构建仓库 RAG 索引，以浏览器问答方式回答代码问题，默认 Ollama 设置下代码不出本机",
+    "架构图生成读取受限采样的 README、入口文件、路由/worker/数据库接线与 Compose 配置，每个节点和边附来源文件证据",
+    "后台任务经 Valkey 队列由 TaskIQ worker 执行，结果缓存 24 小时；后端 pytest 测试全部 mock 外部依赖，无需数据库"
+   ],
+   "use_cases": [
+    "为打算首次参与某个开源项目的贡献者生成个性化入门路径与匹配的 issue 列表",
+    "分析私有 fork 或雇主代码库时，希望 LLM 推理保留在本地执行",
+    "在不打开 IDE 的情况下用自然语言提问了解仓库代码结构"
+   ]
+  },
+  "sha": "c60d1e011eb4",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

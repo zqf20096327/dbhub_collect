@@ -3079,5 +3079,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e61a8d1c0c63": {
+  "identity": {
+   "one_liner": "Webhook 死信队列与回放网关，基于 SQLite 持久存储并提供签名保留转发",
+   "review": "HookArmor 是一个自托管的 Webhook 死信队列、入口代理与回放网关，使用 Node.js 与 SQLite 存储，面向使用 Stripe、Shopify、Clerk 等 Webhook 的开发者。它收到事件后立即落盘（fsync）并返回 200，下游失败时保存原始事件与错误信息，支持通过 Web UI 或 CLI 重放，并在转发时重新签名以规避 Stripe 5 分钟签名时效。需注意部署时必须挂载持久化数据卷，单个 SQLite 文件对应单进程。",
+   "highlights": [
+    "立即持久化到 SQLite 并返回 200 OK，失败事件进入死信队列，支持 CLI/Web 一键批量重放",
+    "转发与重放时使用当前时间戳重新签名，并注入 x-hookarmor-* 溯源头（投递 ID、尝试次数、是否重放等）",
+    "支持透明代理与隔离信任边界两种转发模式，提供 Slack/Discord 告警、热备份 CLI 与本地开发转发"
+   ],
+   "use_cases": [
+    "为 Stripe/Shopify 等 Webhook 端点提供下游故障期间的事件保存与事后重放",
+    "本地开发时将生产 Webhook 转发到 localhost 并自动重新签名",
+    "单实例自托管场景下做 Webhook 事件的持久化、告警与备份恢复"
+   ]
+  },
+  "sha": "e61a8d1c0c63",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9431b54b8063": {
+  "identity": {
+   "one_liner": "Go 服务，从 IT TOP 电子日志读取课表并供 iPhone Scriptable 小组件显示",
+   "review": "该项目是一个 Go 后端服务，从 IT TOP 电子日志获取课表，缓存后通过 HTTP API 提供给 iOS Scriptable 小组件使用，面向 IT TOP 学生。用户凭据经 AES-256-GCM 加密存于 PostgreSQL，缓存按用户隔离，无后台轮询、仅在请求时检查新鲜度，日志不可用且有当日数据时返回缓存。部署依赖 Linux VPS、Docker Compose、nginx 与 HTTPS 域名；服务器时区为 Europe/Moscow，项目为非官方学生作品，不保证兼容所有分校和账号。",
+   "highlights": [
+    "提供 GET /api/widget 接口返回当前/下一节课与考试信息，支持带 cooldown 的 force 手动刷新",
+    "使用 AES-256-GCM 加密存储日志账号密码，缓存仅含课表、考试与更新时间",
+    "包含两版 go:embed 内嵌的 Scriptable JS 模板，v2 支持亮暗主题、多种尺寸、锁屏与手动刷新"
+   ],
+   "use_cases": [
+    "IT TOP 学生在 iPhone 主屏/锁屏查看当前课表、下节课与考试提醒",
+    "自建 VPS 部署个人课表服务并通过 nginx HTTPS 对外提供 API",
+    "通过 Telegram 机器人集成 API 注册用户并分发个人 Scriptable 脚本"
+   ]
+  },
+  "sha": "9431b54b8063",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

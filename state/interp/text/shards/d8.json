@@ -3458,5 +3458,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f72113f5ce3b": {
+  "identity": {
+   "one_liner": "从 Wiktionary/dbnary 数据生成 WikDict 双语词典的生成器",
+   "review": "wikdict-gen 是 WikDict 项目的词典生成器：它把 dbnary 数据转储批量载入内嵌的 pyoxigraph RDF 存储，从中提取数据生成双语词典。词典主要供 wikdict.com 网站使用，也可用于 wikdict-web 或其他用途。构建通过 make 下载转储并执行，无需服务器或 Docker。",
+   "highlights": [
+    "将 dbnary 数据转储批量载入内嵌 pyoxigraph RDF 存储，无需服务器或 Docker",
+    "通过 make 命令下载转储、建库并生成词典",
+    "提供 search 命令进行快速查询，输出 dictionaries/wdweb 与 dictionaries/generic 两种格式"
+   ],
+   "use_cases": [
+    "为 wikdict-web 提供词典数据（dictionaries/wdweb）",
+    "供其他需要双语词典数据的场景使用（dictionaries/generic）",
+    "命令行快速查询词典条目（如 src/run.py search de en haus）"
+   ]
+  },
+  "sha": "f72113f5ce3b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb43782769aa": {
+  "identity": {
+   "one_liner": "Rust 单二进制 Kafka 兼容事件流平台，从日志派生 SQL/全文/向量索引",
+   "review": "Chronik Stream 用单个 Rust 二进制实现 Kafka 协议，并在 produce 确认后异步为同一日志构建 SQL（DataFusion/Parquet）、BM25 全文（Tantivy）和向量（HNSW）索引，能力按 topic 配置启用。README 明确列出限制：索引滞后约 1 秒到 60 秒、Kafka 功能为子集、曾有副本正确性缺陷、无独立验证，适合需要自行评估风险的团队。",
+   "highlights": [
+    "实现 Kafka 协议，任意 Kafka 客户端可 produce/consume，端口 9092；HTTP 查询端点（/_sql、/_search、/_vector）监听 6092",
+    "按 topic 启用 columnar、searchable、vector 等能力，未启用的 topic 无索引开销，produce 路径不受影响",
+    "支持 S3/GCS/Azure 分层存储，WAL 采用 group-commit fsync，批量窗口由 CHRONIK_WAL_PROFILE 配置"
+   ],
+   "use_cases": [
+    "希望在同一进程内用 SQL、全文或向量查询 Kafka 事件数据，而不部署独立的搜索引擎或向量库",
+    "事件日志（按时间追加、按内容/时间范围/语义相似度查询）场景，非通用 OLAP 或流处理",
+    "本地开发或原型：下载二进制或 Docker 镜像即可启动，用 kafka-python 和 curl 快速验证"
+   ]
+  },
+  "sha": "bb43782769aa",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

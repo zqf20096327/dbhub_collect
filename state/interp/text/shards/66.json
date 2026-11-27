@@ -3576,5 +3576,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9e48b7da1c90": {
+  "identity": {
+   "one_liner": "离线 Wikipedia 阅读器，用 SQLite 覆盖层在联网时同步新文章",
+   "review": "WekI 是一个本地优先的单用户 Wikipedia 离线阅读器：读取 Kiwix ZIM 快照，并在 SQLite 数据库中存储联网后同步的新文章、重定向和删除记录，读取时优先检查覆盖层再回退到原始归档。基于 Python 与 libzim，通过 uv 安装后在本地 8787 端口以 Web 界面运行。目前为实验版本，同步目标以 Simple English Wikipedia 为主，尚未支持全量英文 Wikipedia 同步。",
+   "highlights": [
+    "原始 ZIM 归档保持只读，更新内容、同步进度与搜索数据存于独立的 SQLite 覆盖层",
+    "同步中断后的未完成任务保存在持久化队列（backlog）中，可续传；使用数据库事务保证一致性",
+    "本地全文搜索合并归档与覆盖层数据；网络请求采用 bot User-Agent、受限并发、maxlag 与重试退避"
+   ],
+   "use_cases": [
+    "无网络环境下阅读已下载的 Wikipedia 快照（如 Simple English 归档）",
+    "联网后增量补齐快照日期之后更新的文章与变更",
+    "需要本地备份知识库时，通过脚本备份 SQLite 覆盖层并单独保管 ZIM 归档"
+   ]
+  },
+  "sha": "9e48b7da1c90",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

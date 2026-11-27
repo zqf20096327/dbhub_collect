@@ -3143,5 +3143,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0d389f1767c1": {
+  "identity": {
+   "one_liner": "将 CSV/JSON/Parquet/XLSX 等文件加载为内存 SQLite 表的 Go 库，无 cgo",
+   "review": "filesql 是一个 Go 库，通过 database/sql 接口将 CSV、TSV、LTSV、JSON、JSONL、Parquet、XLSX、ACH、Fedwire 文件加载为内存 SQLite 表，表名取自文件名，支持跨格式 JOIN。查询可用 SQLite 语法，或经 WithDialect 翻译 MySQL/PostgreSQL/GoogleSQL 方言（覆盖范围有限，如 QUALIFY 不支持且不能与自动保存并用）。同模块的 prep 包在入表前做清洗校验。需 Go 1.26.11+，MIT 许可。",
+   "highlights": [
+    "支持读取路径、目录、io.Reader 和 embed.FS，支持 gz/bz2/xz/zst/snappy 等 8 种压缩包装（ACH/Fedwire 除外）",
+    "提供 DumpDatabase、EnableAutoSave 等写回机制，CSV/TSV/LTSV 支持 UTF-8、Shift-JIS、EUC-JP 等多种编码输出",
+    "prep 包在数据成为表之前修剪、规范化、填默认值并报告带行号的校验错误"
+   ],
+   "use_cases": [
+    "对多格式本地文件（含压缩包）直接用 SQL 做查询和跨格式 JOIN",
+    "在 sqlc、GORM、sqlx、ent 等现有 Go 数据库工具链中使用文件数据（项目含集成示例）",
+    "加载前需要对行做清洗和校验并保留错误行号的 ETL 流程"
+   ]
+  },
+  "sha": "0d389f1767c1",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b480ae98c527": {
+  "identity": {
+   "one_liner": "Compass 是一个基于 Laravel、将 GPS 位置数据存储为平面文件的追踪服务器。",
+   "review": "Compass 是一个 GPS 追踪服务器，用 Laravel（PHP 8.4+）编写，位置数据以平面文件存储，MySQL 仅存账户与统计。提供地图浏览、年度统计、六边形世界地图、地理围栏（含内置城市/机场识别）、临时分享链接、Micropub 发布和读写位置 API。登录采用 IndieAuth，需自备授权端点；位置数据文件不会被统计重建过程修改。",
+   "highlights": [
+    "通过 API 读写位置，供 Overland 等应用使用；行程可通过 Micropub 发布到个人网站",
+    "基于内置数据离线计算位置所属国家、城市与时区，不调用外部服务；地理围栏支持圆形与 GeoJSON 形状并可触发 web hook",
+    "统计表由位置数据派生，可清空重建，原始位置文件保持不变"
+   ],
+   "use_cases": [
+    "自托管位置记录服务，配合 Overland 等 GPS 记录应用使用",
+    "IndieWeb 个人网站：记录行程并用 Micropub 发布到站点",
+    "生成年度行程统计与可嵌入网站的世界地图"
+   ]
+  },
+  "sha": "b480ae98c527",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4e6fe80e02d3": {
+  "identity": {
+   "one_liner": "读取服务器访问日志的自托管网站分析工具，无需 Cookie 与脚本",
+   "review": "Skald 是一个自托管的网站分析工具，用 Python 编写、依赖 SQLite，读取 Nginx 等服务器访问日志进行统计，也可接入 Vercel、Netlify、Cloudflare 等来源的日志。它将每个请求归入人、AI 助手、搜索引擎、爬虫、自有流量五类，并通过独立审计对每个数字重复计数。适合需要自托管且关注 AI 爬虫流量与安全探测的站点运营者。许可证为 Elastic License 2.0。",
+   "highlights": [
+    "从服务器访问日志读取数据，将请求归入五类分组，各分组合计等于日志总量",
+    "对爬虫身份进行反向 DNS 或所有者发布地址核验，伪造身份单独归类",
+    "内置独立审计，对每个统计数字用另一套解析器重算，不一致时 withheld 该日数据"
+   ],
+   "use_cases": [
+    "分析 JavaScript 追踪器无法覆盖的 AI 助手与爬虫流量占比",
+    "无 Cookie、无第三方脚本的访问统计部署",
+    "从访问日志排查针对 .env、登录接口等的扫描与攻击行为"
+   ]
+  },
+  "sha": "4e6fe80e02d3",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ccdd8cb46cb1": {
+  "identity": {
+   "one_liner": "纯 Rust 实现的开源数据库工具，重现经典 Access 工作流，读取/写入多种数据库格式。",
+   "review": "DataCraft 是一个用纯 Rust 编写的开源数据库工具，重现经典 Microsoft Access 的工作流（功能区、导航窗格、数据表视图、QBE 查询生成器、窗体/报表画布）。它面向需要操作多种数据库文件格式的人类用户和 AI 代理，提供桌面外壳、CLI 和 MCP/JSON-RPC 三种接口，全部走同一条命令总线。项目仍处于 pre-1.0 阶段，可能存在破坏性变更。",
+   "highlights": [
+    "读取 Jet3/Jet4 .mdb、ACE .accdb、SQLite 文件、CSV 目录和 Excel 工作簿，写入 Jet4/ACE 和 SQLite 的已验证表/行路径",
+    "同一命令总线支持桌面 GUI、CLI（datacraft-cli）和 MCP/JSON-RPC（datacraft-mcp）三种接口驱动",
+    "包含 VBA 提取与静态分析、宏清单、原生保存查询、SQL 窗口和报表导出 PDF 等能力"
+   ],
+   "use_cases": [
+    "在 macOS/Windows/Linux 上打开并编辑 Jet/ACE/SQLite/CSV 数据文件，无需安装 Access",
+    "通过 MCP 或 CLI 无头驱动数据库操作，供自动化脚本或 AI 代理调用",
+    "对 Access 数据库执行健康检查和 Compact 重写维护"
+   ]
+  },
+  "sha": "ccdd8cb46cb1",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3854,5 +3854,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6827d637a28f": {
+  "identity": {
+   "one_liner": "LabNow.ai 的容器镜像基础层，为 Agent 运行环境提供可复用镜像栈",
+   "review": "该项目构建并发布一组容器镜像，包含基础运行时、语言环境、GPU 框架镜像、PostgreSQL 及 k3s/k0s 离线安装资产，发布于 Quay.io 与 DockerHub。面向需要为 Agent 会话或用户提供按需环境的平台。注意它仅负责镜像本身，编排、生命周期、认证与沙箱安全策略由启动镜像的平台实现。",
+   "highlights": [
+    "提供从 `base`、`python-3.13` 到 `data-science-stack`、`torch`、`postgres-18`、`k3s-ctk` 等多类镜像目录",
+    "支持通过共享层与包 profile（如 `base,database`）组合构建自定义工具链镜像",
+    "由 GitHub Actions 工作流分别构建标准、GPU、数据库和 Kubernetes 工具镜像组"
+   ],
+   "use_cases": [
+    "为 Agent 执行环境或 EaaS 平台提供标准化、可复用的环境模板",
+    "通过挂载工作区运行所选镜像，快速搭建含特定语言与依赖的执行沙箱",
+    "借助 k3s-ctk/k0s-ctk 镜像导出二进制与离线镜像包，在气隙环境安装 Kubernetes"
+   ]
+  },
+  "sha": "6827d637a28f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "75c08a5cb5d2": {
+  "identity": {
+   "one_liner": "面向印度的离线优先记账应用，数据全部存于本机 SQLite",
+   "review": "KasuPilot 是一款面向印度用户的 Android 个人财务应用，覆盖工资周期、银行卡、贷款 EMI 和银行短信记账。数据存于设备端 SQLite，无后端与账号；通过 Kotlin 原生广播接收器在后台解析银行短信。以侧载 APK 分发，未上架 Google Play，目前处于个人使用阶段的实测期，卸载应用会删除全部数据。",
+   "highlights": [
+    "原生广播接收器与无头 JS 任务在应用关闭时读取并解析 SBI、HDFC、ICICI、Axis 等银行短信，含收据合并与按参考号去重",
+    "贷款模块提供摊销表、提前还款模拟、Snowball/Avalanche 还款策略与 EMI 本地提醒",
+    "卡号、有效期、CVV 存于硬件 Keystore，需生物识别或 PIN 验证后显示，30 秒后自动隐藏"
+   ],
+   "use_cases": [
+    "按工资周期管理日常收支与预算（含 50/30/20 信封法）",
+    "追踪多笔贷款的 EMI 还款计划与提前还款方案",
+    "在不使用云服务的前提下从银行短信自动生成交易流水"
+   ]
+  },
+  "sha": "75c08a5cb5d2",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

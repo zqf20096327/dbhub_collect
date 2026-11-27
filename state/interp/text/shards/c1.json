@@ -3258,5 +3258,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b998d1741554": {
+  "identity": {
+   "one_liner": "Kaia 区块链官方预言机，含链上合约与链下服务实现",
+   "review": "Orakl Network 是 Kaia 区块链的官方预言机，仓库分为链上合约与链下实现两部分，提供 VRF（可验证随机数）和 Request-Response（请求-响应）服务，主题标签还涉及数据喂送、链下聚合与储备证明。面向节点运营商与合约开发者，支持通过 docker-compose 或 yarn 启动 API、postgres、redis 等容器及 listener/worker/reporter 微服务；需在环境文件中配置钱包地址与私钥，可选择 baobab 或 cypress 链。",
+   "highlights": [
+    "提供 VRF 与 Request-Response 两种服务，通过 docker-compose 的 SERVICE 环境变量选择启动",
+    "支持 baobab 与 cypress 链，localhost 时自动部署 Coordinator 与 Prepayment 合约",
+    "核心微服务（listener、worker、reporter）可整体运行，也可按任意顺序分别启动"
+   ],
+   "use_cases": [
+    "为 Kaia 上的智能合约提供可验证随机数（VRF）服务",
+    "节点运营商通过 CLI 管理与运行 VRF / Request-Response 服务",
+    "通过 Delegator 服务为 push oracle 的委托交易支付手续费"
+   ]
+  },
+  "sha": "b998d1741554",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49b3bd6dbd3e": {
+  "identity": {
+   "one_liner": "DuckDB 社区扩展，通过 Metal/CUDA 后端在 GPU 上执行 SQL 查询",
+   "review": "gpudb 是一个 DuckDB Community Extension（Apache-2.0），将符合条件的 SQL 查询交由 Apple Silicon 的 Metal 后端或 NVIDIA CUDA 后端执行，其余仍由 DuckDB 处理。提供两种使用方式：显式 gpu_* 函数（任何 DuckDB ≥1.5.5 客户端可从社区注册表安装）和 gpudb 包装器（pip 安装），后者支持在查询前拦截改写普通 SQL。支持表超过一百万行、常驻显存的列才有机会走 GPU 路径；窗口函数、事务内语句等仍留在 DuckDB。适用于已在使用 DuckDB 且对大表反复执行聚合分析的团队。",
+   "highlights": [
+    "支持 Apple Silicon Metal 与 NVIDIA CUDA 两种 GPU 后端，同一套代码",
+    "提供显式 gpu_* 函数与自动拦截改写普通 SQL 的包装器两条路径",
+    "可用 gpu_last_stats()、gpudb shell 页脚等查看每条语句由哪个处理器执行及内核耗时"
+   ],
+   "use_cases": [
+    "已有 DuckDB 应用、BI 工具或 ORM，将 duckdb.connect 换为 gpudb.connect() 后复用原 SQL",
+    "对大表周期性执行相同聚合的仪表盘与监控查询",
+    "高基数 GROUP BY、top-k（HAVING / ORDER BY LIMIT）等只返回少量行的分析"
+   ]
+  },
+  "sha": "49b3bd6dbd3e",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c37102a3c2b9": {
+  "identity": {
+   "one_liner": "开源网页文档工作台：Vue 3 前端 + FastAPI 后端，集成 AI 写作与 OCR 识别",
+   "review": "DocuCraft 是一个网页文档工作台，提供 AI 写作、联网搜索、跨对话长期记忆、扫描件 OCR、Word/PDF 导出和浏览器内 PDF 编辑。前端为 Vue 3/Vite，后端为 Python 3.13/FastAPI，由 LangChain agent 编排 AI 工具，长期记忆存于服务端 SQLite。模型密钥、OCR 端点均由部署者配置，OCR 生产环境只连接自建 HTTP 服务，无内置识别引擎。适合需要自行部署并控制数据端点的个人或团队。",
+   "highlights": [
+    "支持规划 agent 确认目录后由写作 agent 生成正文，以及聊天、续写、润色、改写、缩写、扩写、总结等操作",
+    "OCR 支持返回文字、坐标词语与表格数据，可生成保留原图版式的文档；生产环境通过 OCR_ENDPOINT 连接自建 HTTP OCR 服务",
+    "PDF 可在浏览器中预览、擦除内容、添加或手写签名并另存；文档可导出为 DOCX、PDF 或 Markdown"
+   ],
+   "use_cases": [
+    "需要将扫描件识别为可校对文字和表格并导出文档的场景",
+    "需要 AI 辅助生成、修改长文档并跨对话保留记忆的写作流程",
+    "在浏览器中完成 PDF 预览、擦除和签名等轻量编辑任务"
+   ]
+  },
+  "sha": "c37102a3c2b9",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

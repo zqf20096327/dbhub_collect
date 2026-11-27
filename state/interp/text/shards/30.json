@@ -3295,5 +3295,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "442b74ba3624": {
+  "identity": {
+   "one_liner": "本地优先的 AI 教师题库与智能组卷工作台",
+   "review": "拣题（TeacherDB）是面向中小学教师的本地题库工具：批量导入 PDF、Word、照片试卷，由视觉模型整卷识别题干、LaTeX 公式、答案与知识点，经人工审校入库；支持全文检索、变式生成、智能组卷，导出含 OMML 原生公式的可编辑 Word/PDF。数据存本机 SQLite，模型 Key AES-GCM 加密。需 Node 22+、视觉模型 API，Word 导入须 Python 模式。",
+   "highlights": [
+    "支持 PDF、Word（.docx/.doc）、多图拍照三种导入方式，识别题干、LaTeX 公式、选项、答案、解析、知识点与题图",
+    "导出 Word 时将分式、根式、矩阵等输出为原生 OMML 公式，学生卷与解析答案分别下载",
+    "数据（SQLite、原卷图片）保存在本机，模型 API Key 经 AES-GCM 加密存储；提供 npm run doctor/backup/restore 等运维命令"
+   ],
+   "use_cases": [
+    "将 PDF、Word 或照片试卷批量转为可检索的个人题库",
+    "按知识点、题型筛选选题并生成周测、作业卷，导出可编辑 Word/PDF",
+    "基于已复核原题生成变式题，经独立审校评分（≥75 分）后人工采用入库"
+   ]
+  },
+  "sha": "442b74ba3624",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ea8ad7431eff": {
+  "identity": {
+   "one_liner": "以 Rust 库形式复现 PostgreSQL SQL 解析、系统目录与类型检查，无需服务器。",
+   "review": "pgtk 是一组 Rust 库，包含 pgtk-sql 解析器、pgtk-catalog 目录模型和 pgtk-analyze 类型检查器，在进程内完成 PostgreSQL 的语句解析与 parse analysis，不需要启动数据库。解析器按 gramm.y 的文法生成 AST，可按 Cargo feature 选择 PostgreSQL 14 至 19 beta 版本；分析结果在 PostgreSQL 回归测试集上与真实服务器比对并钉入基线。项目处于 1.0 之前，公开 API 在 minor 版本间可能变更。许可证为 MIT。",
+   "highlights": [
+    "解析器在每个受支持版本（14–19 beta）的 43,474 条回归测试语句上与 PostgreSQL 原生解析器结果一致，差异为 0",
+    "pgtk-analyze 在 41,732 条语句上给出与 PostgreSQL 17 服务器相同的类型、结果列或错误（含相同 SQLSTATE），覆盖递归 CTE、窗口函数、MERGE、SQL/JSON、JSON_TABLE 等特性",
+    "pgtk-catalog 从真实服务器加载一次系统目录即可离线使用，内置 PostgreSQL 17 fixture，并提供 postgres 与 tokio-postgres 适配器；pgtk-sql 还能报告每条语句所需的最低 PostgreSQL 版本"
+   ],
+   "use_cases": [
+    "在迁移执行前静态检查 SQL 的类型、结果列与错误，用于迁移 linter 或 CI 中的类型化查询宏",
+    "构建语言服务器、数据库代理或代码生成器，在编辑器中显示表达式类型与错误位置",
+    "检查语句的最低 PostgreSQL 版本要求，拦截需要新版本服务器的 SQL"
+   ]
+  },
+  "sha": "ea8ad7431eff",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cf1945d1b183": {
+  "identity": {
+   "one_liner": "GaussDB/openGauss 诊断智能体的 Kubernetes 容器化交付方案",
+   "review": "该仓库把 opencode 与 GaussDB/openGauss DBA 技能集打包进 Kubernetes，每个用户一个无状态 runtime Pod，会话与知识库状态存于 NAS（RWX PVC）。诊断与知识库导入分成两个镜像，接入支持 Web、CLI（opencode attach），并含前端大盘、固定池化、SM2 签名中间件对接、离线交付包与发版台。面向行内实施、运维与 DBA 用户。",
+   "highlights": [
+    "每个用户一个无状态 Pod，状态全部落在 NAS，历史会话通过挂载 users/<工号>/ 目录自动恢复",
+    "提供诊断（runtime）、知识库导入（kb-import）、前端（frontend）、标准知识库（kbstd）等多个镜像，支持 x86_64 与 aarch64 双架构离线包交付",
+    "内置慢 SQL / Top SQL / WDR / 死锁日志解析 / 参数体检等诊断技能，SQL 白名单机制控制在数据库上的执行范围"
+   ],
+   "use_cases": [
+    "为行内 DBA / 应用运维提供基于工号隔离的数据库诊断环境部署",
+    "离线环境下交付并部署知识库导入与标准文档集（K8s 或单机 Docker 演示）",
+    "实施 / 运维团队按交付文档完成从构建镜像到上线检查的部署流程"
+   ]
+  },
+  "sha": "cf1945d1b183",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3293,5 +3293,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c1a663e865b1": {
+  "identity": {
+   "one_liner": "PostgreSQL 冷热分层扩展，将单表行透明分布于本地分区与 Iceberg 对象存储。",
+   "review": "ColdFront 是一个处于 BETA 阶段、官方声明不可用于生产的 PostgreSQL 扩展，用于透明数据分层：同一张表的新行存于 PostgreSQL 分区，旧行存入 Apache Iceberg 对象存储（S3 兼容、Azure、GCS）。它运行在 PostgreSQL 内部并重写每条 SQL 语句到对应分层，应用只看到一个关系；冷层经由 pg_duckdb（含补丁构建）读写。支持 PostgreSQL 16/17/18，配置存于服务器而非文件。适合需要表分区生命周期管理并依赖 Lakekeeper 与对象存储基础设施的 PostgreSQL 用户。",
+   "highlights": [
+    "在 PostgreSQL 内部重写 SELECT/INSERT/UPDATE/DELETE 语句到对应分层，应用面对单一关系，冷层可读可写",
+    "冷层以 Apache Iceberg 格式存于 S3 兼容存储、Azure ADLS Gen2 或 Google Cloud Storage，通过 Lakekeeper 目录管理仓库",
+    "包含 coldfront 扩展及 archiver、partitioner、compactor 三个命令行工具，配置存放于 postgresql.conf 与 coldfront schema 表中"
+   ],
+   "use_cases": [
+    "将表中较旧的历史行从 PostgreSQL 分区迁移到对象存储上的 Iceberg 冷层，管理分区生命周期",
+    "基于对象存储构建 lakehouse，同时保持应用通过同一条 SQL 访问全部数据",
+    "在 Spock 分布式节点环境或单节点 PostgreSQL 16/17/18 上部署归档与压缩流程"
+   ]
+  },
+  "sha": "c1a663e865b1",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "10d0665c1f1a": {
+  "identity": {
+   "one_liner": "本地优先的 macOS 思维导图应用，自绘画布加 SQLite 存储，零第三方依赖。",
+   "review": "Mindscape 是一个运行在 macOS 14+ 的思维导图应用，用 SwiftUI、AppKit 与自绘 NSView 实现，数据全部保存在本地 SQLite 文件中，默认不联网、无账号与遥测。支持 8 种布局、8 套主题、大纲视图、快照回滚、PNG/PDF/Markdown/OPML/JSON 导入导出，并可开放本地 OpenAPI 供 AI Agent 调用。当前版本 0.7.3，采用 ad-hoc 签名，不支持直接导入 .xmind 文件。",
+   "highlights": [
+    "提供 8 种布局（思维导图、逻辑图、组织架构图、树形图、时间轴、括号图、自由布局等）与 8 套主题，导出支持 PNG/PDF/Markdown/OPML/JSON",
+    "所有数据存于单个 SQLite 文件（WAL 模式），含自动保存、150 步撤销重做与快照回滚机制",
+    "内置 OpenAPI 服务与 CLI，可在本机监听 127.0.0.1 供 AI Agent 创建目录、编辑节点与导出"
+   ],
+   "use_cases": [
+    "需要离线使用且数据完全留在本机的思维导图记录与整理",
+    "从 XMind、FreeMind 或 Markdown 大纲通过 OPML/Markdown 导入迁移已有导图",
+    "通过内置本地接口让 AI Agent 自动创建和编辑导图"
+   ]
+  },
+  "sha": "10d0665c1f1a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

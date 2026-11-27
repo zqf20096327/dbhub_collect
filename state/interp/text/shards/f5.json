@@ -3214,5 +3214,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "292000f9abc8": {
+  "identity": {
+   "one_liner": "基于 SQLite + JSONL 的本地优先、非侵入式 git 仓库问题跟踪 CLI",
+   "review": "br 是 Steve Yegge 的 beads（Go 版）的 Rust 移植，冻结在作者工具链依赖的\"经典\"SQLite + JSONL 架构上，命令名用 br 区别于原版 bd。问题数据存于仓库内 .beads/ 目录的 SQLite 库，变更后自动导出为 JSONL 供 git 协作；默认不自动 commit/push、不装钩子、无后台服务。面向需要在本地离线管理带依赖关系任务、并让 AI 编码代理读取结构化输出的开发者。",
+   "highlights": [
+    "本地 SQLite 存储配合 JSONL 导出，JSONL 可在 git 中合并，变更命令默认自动刷新导出文件",
+    "所有命令支持 --json 机器可读输出，另有 TOON/Plain/Quiet 等输出模式，提供依赖感知的 ready 查询与同步/恢复工具",
+    "默认非侵入：状态保存在 .beads/，不自动提交推送、不安装钩子、不运行后台服务，git 检查仅限显式调用的报告命令"
+   ],
+   "use_cases": [
+    "在离线或本地仓库内跟踪带优先级与依赖关系的开发任务，并通过 git 提交 JSONL 与团队同步",
+    "为 AI 编码代理/多代理工作流提供结构化（--json/TOON/MCP）的任务读取与协调接口",
+    "需要 beads 经典 SQLite+JSONL 架构稳定快照、配合 Agent Flywheel 类工具链的开发流程"
+   ]
+  },
+  "sha": "292000f9abc8",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "acbe13a74fc2": {
+  "identity": {
+   "one_liner": "本地 Apex 运行时工具链，用内嵌 PostgreSQL 执行、测试、调试 Apex",
+   "review": "Renmy（前身为 Nimbus）是一个 Salesforce Apex 开发工具链，核心为本地 Apex 运行时：在本机以内嵌 PostgreSQL 执行类、触发器、Flow、SOQL 和 DML，使 @isTest 测试无需 Salesforce org 即可运行。读取现有 sfdx-project.json，单二进制分发，离线可用。部分功能（调试器、变更测试、watch 模式等）标注为 Pro，需许可证。",
+   "highlights": [
+    "本地执行 Apex 类、触发器、Flow、SOQL 与 DML，测试无需连接 Salesforce org",
+    "提供 Language Server（LSP）、DAP 调试器、依赖关系图、变更测试与 OpenTelemetry 执行追踪",
+    "测试结果输出 JUnit 与 Cobertura XML，提供 renmy mcp 供 AI 代理调用，部署前先本地校验再向 Salesforce 验证"
+   ],
+   "use_cases": [
+    "在本地运行 Apex 测试以进行 TDD 循环和 CI，不依赖 scratch org 池",
+    "通过 MCP 将本地测试运行器接入 Claude Code、Cursor、Copilot 等代理的写测-修复流程",
+    "在 GitHub Actions、GitLab CI、SonarQube 等流水线中消费覆盖率与测试报告"
+   ]
+  },
+  "sha": "acbe13a74fc2",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3cb333aa5214": {
+  "identity": {
+   "one_liner": "基于 aiogram 的 Telegram 课程表机器人，支持变更通知与 iPhone 桌面小组件",
+   "review": "面向学生班级的 Telegram 课表机器人，用 Python 3.10+ 与 aiogram 3、PostgreSQL 构建。机器人以班长提供的教务系统账号登录课表网站，每日抓取当前与下周课表及考试安排并缓存入库，哈希变更时向开启通知的群组推送；凭据以 Fernet 加密存储且不出现在日志中。部署需 BotFather 令牌与 PostgreSQL，数据库表首次启动自动创建。",
+   "highlights": [
+    "提供按日/周翻页的课表、/n 查询当前与下一节课、考试提醒、群内临时消息回复",
+    "每日核对课表哈希，变更时向群组发送通知；数据缓存于 PostgreSQL",
+    "包含 Scriptable iPhone 小组件脚本、Telegram 内交互式小组件，以及带统计、错误查看与群发功能的管理面板"
+   ],
+   "use_cases": [
+    "学生班级在 Telegram 群内查询每日/每周课程、教室、教师信息",
+    "课表变动或考试临近时接收机器人自动提醒",
+    "在 iPhone 主屏幕通过 Scriptable 小组件查看课表"
+   ]
+  },
+  "sha": "3cb333aa5214",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e0a76026f218": {
+  "identity": {
+   "one_liner": "TiDB Link 官方 SDK 仓库，含 TypeScript 与 Python 两套客户端库",
+   "review": "该仓库提供用于访问 TiDB Link HTTP API 的官方 SDK，TypeScript 版需 Node.js 22.12+ 且无运行时依赖，Python 版提供 asyncio API（Python 3.11+，尚未发布到 PyPI）。覆盖会话管理、连接器、文件读取、实时连接等能力，认证使用 Organization API Key。SDK 与 API 均处于 pre-1.0 阶段，每次发布声明其服务基线与支持范围。",
+   "highlights": [
+    "TypeScript SDK 目标 Node.js 22.12+，使用平台 fetch API，无运行时依赖",
+    "Python SDK 提供 asyncio API，需 Python 3.11+，尚未发布至 PyPI",
+    "覆盖 Session 管理、连接器、文件通知与读取、取消与检查点重试、会话历史等接口"
+   ],
+   "use_cases": [
+    "在 Node.js 应用中集成 TiDB Link 的会话与连接器功能",
+    "用 Python asyncio 编写调用 TiDB Link API 的自动化流程",
+    "对接 End User 供给、模板与 Skill 管理及文件附件下载等资源流程"
+   ]
+  },
+  "sha": "e0a76026f218",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

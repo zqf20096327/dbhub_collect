@@ -31442,5 +31442,740 @@
    ]
   ],
   "at": "2026-11-26"
+ },
+ "38312cbe6f86+2": {
+  "fn": "raitoxlol/teresis",
+  "clean_ver": "2",
+  "raw_lines": 19,
+  "ops": [
+   [
+    "equal",
+    0,
+    19,
+    0,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "Look for `Provider: teresis` and `Status: available`. Start a new session. To check memory"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    20,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "Hermes Agent for named profiles and storage options."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    30,
+    23,
+    30
+   ],
+   [
+    "replace",
+    30,
+    41,
+    30,
+    41,
+    [
+     "|Problem|What Teresis does|",
+     "|---|---|",
+     "|Agents save the same fact repeatedly|Exact duplicates (after normalization) and near duplicates (Jaccard ≥ 0.9) reinforce the existing memory instead of adding rows.|",
+     "|Facts change (\"we moved to Postgres\")|A `key` makes a memory an updatable slot. The new value supersedes the old one, and `history`/`as_of` keep the full timeline. A new memory that strictly refines an old one supersedes it automatically.|",
+     "|Projects leak into each other|Scopes are paths (`global`, `user`, `project/atlas`, `project/atlas/agent-x`). Recall sees the scope plus its parents, never its siblings.|",
+     "|Agents misspell and inflect words|BM25 over a Porter-stemmed FTS5 index, plus a trigram index for fuzzy matching (`postgress` → PostgreSQL).|",
+     "|Paraphrased questions|Optional embeddings (Ollama or any OpenAI-compatible server) add a semantic channel. Without them Teresis stays fully functional and lexical.|",
+     "|Stale and temporary facts|Recency, importance, reinforcement and pinning act as gentle tie-breakers. `ttl_days` makes memories expire.|",
+     "|Context windows are finite|`budget_tokens` packs the best memories that fit. `context()` returns a ready-to-inject block.|",
+     "|Many agents, one store|WAL mode, `BEGIN IMMEDIATE` writes, busy timeouts. The test suite runs 4 processes writing concurrently.|",
+     "|Secrets leak into memory|Write-time pattern rules redact API keys, Bearer/JWT tokens, private keys, and inline passwords before storage or embedding.|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    64,
+    41,
+    64
+   ],
+   [
+    "replace",
+    64,
+    73,
+    64,
+    73,
+    [
+     "|Idea|From|In Teresis|",
+     "|---|---|---|",
+     "|Reconcile writes against existing memories instead of appending|mem0|Dedup, refinement and keyed supersession on every write|",
+     "|Facts have validity intervals; old values stay queryable|Zep/Graphiti|`superseded_at`, `history`, `recall(as_of=...)`|",
+     "|Always-in-context core memory vs searchable archive|Letta|`pinned` + `context()` vs `recall()`|",
+     "|Agents rate memories; trust rises and falls|holographic|`memory_feedback`|",
+     "|Surface contradictions for cleanup|holographic|`memory_conflicts`|",
+     "|Capture conversation turns automatically|supermemory, mem0|Episodes with a TTL, kept out of fact recall|",
+     "|Non-primary agent contexts must not write|supermemory|Read-only in subagent, cron and flush|"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    90,
+    73,
+    90
+   ],
+   [
+    "replace",
+    90,
+    105,
+    90,
+    105,
+    [
+     "|System|recall_any@5|recall_all@10|NDCG@10|ingest rounds/s|query p50|",
+     "|---|---|---|---|---|---|",
+     "|**teresis + all-minilm + MiniLM reranker**|**0.99**|**0.96**|**0.949**|cached*|2.8 s**|",
+     "|**teresis + all-minilm**|**0.99**|0.95|0.944|cached*|51 ms**|",
+     "|mem0 OSS 2.2.1 hybrid (BM25 + spaCy + all-minilm, infer=False)|0.97|0.93|0.932|60*|714 ms|",
+     "|LanceDB hybrid (BM25 + all-minilm, RRF)|0.97|0.93|0.930|cached*|23 ms|",
+     "|engram-search 0.1.7 (BM25 + all-minilm + RRF, no reranker)|0.97|0.91|0.905|cached*|120 ms|",
+     "|ChromaDB (all-minilm)|0.98|**0.96**|0.904|15.9*|27 ms|",
+     "|mem0 OSS 2.2.1 (vector only, all-minilm, infer=False)|0.98|**0.96**|0.903|8.3*|366 ms|",
+     "|total-agent-memory 14.10 (FastEmbed + FTS + RRF, no reranker)|0.97|0.92|0.900|10.8|108 ms|",
+     "|**teresis (no model)**|0.98|0.89|0.888|81|19 ms|",
+     "|SQLite FTS5 (BM25, porter)|0.96|0.87|0.881|18,983|0.5 ms|",
+     "|holographic (Hermes plugin)|0.94|0.85|0.859|7.2|23 ms|",
+     "|bm25s (pure BM25)|0.95|0.86|0.852|2,653|0.6 ms|",
+     "|naive LIKE, newest first|0.35|0.18|0.195|—|6 ms|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    112,
+    105,
+    112
+   ],
+   [
+    "replace",
+    112,
+    114,
+    112,
+    114,
+    [
+     " distractor sessions are mostly unrelated chat. The stricter metrics (`recall_all@10`, `NDCG@10`)",
+     " are where systems differ."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    114,
+    115
+   ],
+   [
+    "replace",
+    115,
+    116,
+    115,
+    116,
+    [
+     " times faster and ingests 5 times faster."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    116,
+    117
+   ],
+   [
+    "replace",
+    117,
+    119,
+    117,
+    119,
+    [
+     " `recall_all@10` (+0.077 on `multi-session`, +0.074 on `temporal-reasoning`) and leads mem0 on",
+     " `NDCG@10` (`0.936` vs `0.903`) and combined objective (`0.943` vs `0.932`)."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    119,
+    120
+   ],
+   [
+    "replace",
+    120,
+    121,
+    120,
+    121,
+    [
+     " Teresis scores the same with its recency and importance priors turned off."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    121,
+    122
+   ],
+   [
+    "replace",
+    122,
+    129,
+    122,
+    129,
+    [
+     " vector-only `mem0` shared CPU Ollama; `LanceDB` and `mem0 hybrid` reused an on-disk ingest cache",
+     " of the exact `all-minilm` vectors computed by `ChromaDB` (all query embeddings remained live and",
+     " uncached). `mem0` ran with telemetry disabled and `infer=False` (no LLM) in both vector-only and",
+     " v3 hybrid (`mem0ai[nlp]` + `fastembed` BM25 + spaCy) modes; both reused one local Qdrant",
+     " collection filtered by `user_id` across the 100 questions. `total-agent-memory` ran with its",
+     " built-in FastEmbed `paraphrase-multilingual-MiniLM-L12-v2` and `defer_cross_rerank=True` (no",
+     " cross-encoder) across 4 shards."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    129,
+    130
+   ],
+   [
+    "replace",
+    130,
+    131,
+    130,
+    131,
+    [
+     " head-to-head run while sharing CPU Ollama with mem0)."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    131,
+    132
+   ],
+   [
+    "replace",
+    132,
+    133,
+    132,
+    133,
+    [
+     " services that need accounts and would send data off the machine."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    147,
+    133,
+    147
+   ],
+   [
+    "replace",
+    147,
+    162,
+    147,
+    162,
+    [
+     "|System|recall_any@5|recall_any@10|recall_all@10|NDCG@10|ingest turns/s|query p50|",
+     "|---|---|---|---|---|---|---|",
+     "|**teresis + all-minilm + MiniLM reranker**|**0.718**|**0.758**|**0.624**|**0.589**|cached*|738 ms**|",
+     "|**teresis + all-minilm**|0.664|0.732|0.594|0.520|22**|37 ms**|",
+     "|**teresis (no model)**|0.641|0.716|0.587|0.516|297|17 ms**|",
+     "|total-agent-memory 14.10 (FastEmbed + FTS + RRF, no reranker)|0.612|0.696|0.572|0.488|12.5|45 ms|",
+     "|SQLite FTS5 (BM25, porter)|0.606|0.689|0.566|0.485|147,213|0.5 ms|",
+     "|LanceDB hybrid (BM25 + all-minilm, RRF)|0.589|0.686|0.555|0.457|63|19 ms|",
+     "|mem0 OSS 2.2.1 hybrid (BM25 + spaCy + all-minilm, infer=False)|0.564|0.682|0.553|0.433|50|221 ms|",
+     "|holographic (Hermes plugin)|0.562|0.638|0.530|0.449|41|10 ms|",
+     "|bm25s (pure BM25)|0.513|0.587|0.486|0.401|12,118|0.4 ms|",
+     "|engram-search 0.1.7 (BM25 + all-minilm + RRF, no reranker)|0.484|0.606|0.486|0.344|cached*|71 ms|",
+     "|mem0 OSS 2.2.1 (vector only, all-minilm, infer=False)|0.449|0.566|0.440|0.342|71|126 ms|",
+     "|ChromaDB (all-minilm)|0.448|0.563|0.439|0.341|60|11 ms|",
+     "|naive LIKE, newest first|0.025|0.049|0.038|0.021|—|0.8 ms|"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    165,
+    162,
+    165
+   ],
+   [
+    "replace",
+    165,
+    177,
+    165,
+    177,
+    [
+     "|System|multi-hop (282)|temporal (321)|open-domain (92)|single-hop (841)|",
+     "|---|---|---|---|---|",
+     "|teresis + all-minilm + MiniLM reranker|**0.674**|**0.763**|**0.413**|**0.749**|",
+     "|teresis + all-minilm|0.610|0.723|0.359|0.693|",
+     "|teresis (no model)|0.543|0.692|0.380|0.684|",
+     "|total-agent-memory (no reranker)|0.443|0.685|0.380|0.666|",
+     "|SQLite FTS5 (BM25)|0.457|0.682|0.359|0.653|",
+     "|LanceDB hybrid|0.560|0.654|0.348|0.601|",
+     "|mem0 OSS hybrid (infer=False)|0.539|0.660|0.337|0.560|",
+     "|holographic|0.372|0.635|0.337|0.623|",
+     "|mem0 OSS (vector only)|0.401|0.517|0.239|0.463|",
+     "|ChromaDB|0.401|0.517|0.239|0.460|"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    180,
+    177,
+    180
+   ],
+   [
+    "replace",
+    180,
+    182,
+    180,
+    182,
+    [
+     " Teresis with no model at all beats mem0 with embeddings by 18.8 points of recall_any@5. With the",
+     " same embedding model it leads by 20.5 points and queries 5.6 times faster."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    182,
+    183
+   ],
+   [
+    "replace",
+    183,
+    184,
+    183,
+    184,
+    [
+     " the no-model run is slightly ahead (`0.380` vs `0.359`, 92 questions, so within noise)."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    184,
+    185
+   ],
+   [
+    "replace",
+    185,
+    187,
+    185,
+    187,
+    [
+     " `infer=False` (no LLM) in both vector-only and v3 hybrid (`fastembed` BM25 + spaCy) modes;",
+     " `total-agent-memory` ran with its default FastEmbed MiniLM and `defer_cross_rerank=True`."
+    ]
+   ],
+   [
+    "equal",
+    187,
+    198,
+    187,
+    198
+   ],
+   [
+    "replace",
+    198,
+    204,
+    198,
+    204,
+    [
+     "|System|Clean acc|Raw acc (incl. 429s)|Updates (20)|Paraphrase (20)|Write LLM calls|Ingest time|",
+     "|---|---|---|---|---|---|---|",
+     "|**teresis + all-minilm**|**100/100 (100%)**|**100%**|**20/20**|**20/20**|**0**|56 s|",
+     "|**teresis (no model)**|**99/99 (100%)**|99% (1 API 429)|**20/20**|**20/20**|**0**|**23 s**|",
+     "|mem0 OSS (`infer=True`, `gemini-3.5-flash-lite` + BM25 + spaCy + `all-minilm`)|93/93 (100%)|93% (7 API 429s)|20/20|19/20*|88|321 s|",
+     "|holographic (Hermes plugin)|64/98 (65.3%)|64% (2 API 429s)|0/20|5/20|0|7 s|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    206,
+    204,
+    206
+   ],
+   [
+    "replace",
+    206,
+    209,
+    206,
+    209,
+    [
+     " `teresis`, 2 on `holographic`, 7 on `mem0-llm`). With `infer=True` + BM25 + spaCy enabled, mem0",
+     " matches Teresis's accuracy on this 200-fact set — at the cost of 88 write-time LLM calls and 14×",
+     " slower ingest than no-model Teresis."
+    ]
+   ],
+   [
+    "equal",
+    209,
+    210,
+    209,
+    210
+   ],
+   [
+    "replace",
+    210,
+    213,
+    210,
+    213,
+    [
+     " locally; ingesting the 220 turns queued 440 deriver work units (~440 LLM calls), exhausting the",
+     " 500-request/day Gemini free-tier quota before derivation finished (illustrating the operational",
+     " cost of per-turn LLM derivation vs deterministic local writes)."
+    ]
+   ],
+   [
+    "equal",
+    213,
+    226,
+    213,
+    226
+   ],
+   [
+    "replace",
+    226,
+    235,
+    226,
+    235,
+    [
+     "||Teresis|Stock Hermes|",
+     "|---|---|---|",
+     "|Total|**100/100**|60/100|",
+     "|Direct facts (40)|40|21|",
+     "|Paraphrased questions (20)|20|13|",
+     "|Preferences (10)|10|3|",
+     "|Changed values, newest must win (20)|20|13|",
+     "|Never told, must say so (10)|10|10|",
+     "|Median answer time|12.0 s|10.4 s|"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    243,
+    235,
+    243
+   ],
+   [
+    "replace",
+    243,
+    244,
+    243,
+    244,
+    [
+     " so the gap only appears once memory outgrows it."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    246,
+    244,
+    246
+   ],
+   [
+    "replace",
+    246,
+    249,
+    246,
+    249,
+    [
+     " providers, so that arm stored no vectors. Set `embed` and `embed_model` under `plugins.teresis`",
+     " instead. Even without embeddings Teresis scored 100%, because every question here contains the",
+     " project name, so this run cannot show what embeddings add."
+    ]
+   ],
+   [
+    "equal",
+    249,
+    250,
+    249,
+    250
+   ],
+   [
+    "replace",
+    250,
+    251,
+    250,
+    251,
+    [
+     " remember\" counts as a refusal. It applied to every arm, and the results files say so."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    258,
+    251,
+    258
+   ],
+   [
+    "replace",
+    258,
+    263,
+    258,
+    263,
+    [
+     "|System|hit@1|hit@5|MRR|leak@5|",
+     "|---|---|---|---|---|",
+     "|**teresis, lexical only**|**0.86**|0.91|0.89|0.00|",
+     "|**teresis + all-minilm (Ollama)**|**0.97**|0.97|0.97|0.00|",
+     "|naive LIKE baseline (newest first)|0.51|0.74|0.60|0.06|"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    282,
+    263,
+    282
+   ],
+   [
+    "replace",
+    282,
+    287,
+    282,
+    283,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    400,
+    283,
+    396
+   ],
+   [
+    "replace",
+    400,
+    408,
+    396,
+    404,
+    [
+     "|Hook|Behavior|",
+     "|---|---|",
+     "|`prefetch`|Hybrid recall over `hermes/<profile>` + `user` + `global`, injected before each turn. Trivial prompts (\"ok\", \"thanks\", slash commands) skip recall.|",
+     "|`sync_turn`|Saves the turn as an `episode` (30-day TTL, low importance, kept out of fact recall). If the turn is provably human-authored (see Auto-capture trust) it also extracts stated preferences, rules and decisions.|",
+     "|`on_memory_write`|Mirrors Hermes' built-in `memory` tool. `add` → remember, `replace` → new version of the matching memory, `remove` → forget.|",
+     "|`on_pre_compress`|Checkpoints a metadata-only episode. It does not extract anything by default, because the messages include model-written compaction summaries and system prompts.|",
+     "|`on_delegation`|Records the subagent task and its result as an episode.|",
+     "|subagent / cron / flush|Read-only. Write tools return an error, and the hooks do not save anything.|"
+    ]
+   ],
+   [
+    "equal",
+    408,
+    411,
+    404,
+    407
+   ],
+   [
+    "replace",
+    411,
+    427,
+    407,
+    423,
+    [
+     "|Key|Default|Notes|",
+     "|---|---|---|",
+     "|`db_path`|`\"\"`|Empty means the shared `~/.local/share/teresis/memory.db`, the same file your MCP agents use. Set `$HERMES_HOME/teresis.db` to isolate a profile.|",
+     "|`scope`|`hermes/<profile>`|Write scope|",
+     "|`extra_scopes`|`user`|Also searched on recall (comma-separated)|",
+     "|`embed` / `embed_model` / `embed_url`|`\"\"`|Embedder settings are per-profile, e.g. `ollama` / `all-minilm`.|",
+     "|`embed_auth` / `embed_timeout`|`profile` / `120`|OpenAI-compatible auth uses an optional Hermes-scoped `TERESIS_EMBED_KEY`; `none` sends no bearer. Timeout is seconds.|",
+     "|`rerank` / `rerank_model`|`\"\"`|Optional local ONNX cross-encoder (`fastembed` / `Xenova/ms-marco-MiniLM-L-6-v2`).|",
+     "|`capture_turns`|`true`|Save turns as episodes|",
+     "|`episode_ttl_days`|`30`|`0` keeps them forever|",
+     "|`auto_extract`|`true`|Rule-based; precision over recall. See Auto-capture trust.|",
+     "|`extract_on_pre_compress`|`false`|Compaction summaries are model-written, so extraction there is off. If you turn it on, rows land in the candidate quarantine only.|",
+     "|`candidate_ttl_days`|`14`|Unpromoted candidates expire after this many days|",
+     "|`system_authors` / `untrusted_platforms` / `interactive_platforms`|`\"\"`|Comma-separated additions to the built-in trust lists|",
+     "|`prefetch_k` / `prefetch_budget_tokens`|`6` / `700`|Injection size|",
+     "|`prefetch_min_score`|`0.45`|Score floor for automatic prefetch only. Tool `memory_recall` is not filtered.|"
+    ]
+   ],
+   [
+    "equal",
+    427,
+    444,
+    423,
+    440
+   ],
+   [
+    "replace",
+    444,
+    448,
+    440,
+    441,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    448,
+    457,
+    441,
+    450
+   ],
+   [
+    "replace",
+    457,
+    459,
+    450,
+    452,
+    [
+     "save or session start. See Embeddings and",
+     "Optional local reranker."
+    ]
+   ],
+   [
+    "equal",
+    459,
+    540,
+    452,
+    533
+   ],
+   [
+    "replace",
+    540,
+    543,
+    533,
+    536,
+    [
+     " - a human turn states it with a strong marker (`remember`, `always`, `never`, `from now on`, `I prefer`), which stores it directly,",
+     " - the same claim is seen in 2+ distinct sessions on 2+ distinct days, or",
+     " - you run `teresis review promote <id>`."
+    ]
+   ],
+   [
+    "equal",
+    543,
+    553,
+    536,
+    546
+   ],
+   [
+    "replace",
+    553,
+    554,
+    546,
+    547,
+    [
+     "Hermes passes `turn_author` and `platform`, not an explicit origin for the turn. A proposal for a `turn_origin` argument is in `docs/upstream-issue-turn-origin.md`. It is a draft and has not been filed."
+    ]
+   ],
+   [
+    "equal",
+    554,
+    578,
+    547,
+    571
+   ],
+   [
+    "replace",
+    578,
+    579,
+    571,
+    572,
+    [
+     " stored as two memories, and recency ranks the newer one first. Use keys for facts that change."
+    ]
+   ],
+   [
+    "equal",
+    579,
+    580,
+    572,
+    573
+   ],
+   [
+    "replace",
+    580,
+    581,
+    573,
+    574,
+    [
+     " without it."
+    ]
+   ],
+   [
+    "equal",
+    581,
+    582,
+    574,
+    575
+   ],
+   [
+    "replace",
+    582,
+    583,
+    575,
+    576,
+    [
+     " worth remembering, which keeps writes deterministic and fast."
+    ]
+   ],
+   [
+    "equal",
+    583,
+    585,
+    576,
+    578
+   ],
+   [
+    "replace",
+    585,
+    587,
+    578,
+    579,
+    [
+     "Apache-2.0. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
  }
 }

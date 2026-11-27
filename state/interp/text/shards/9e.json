@@ -3371,5 +3371,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d8147175c85b": {
+  "identity": {
+   "one_liner": "基于 MCP 的 AI 代理长期记忆服务，单个 Rust 二进制，本地混合检索。",
+   "review": "Uteke 为 AI 编码代理提供跨会话的长期记忆存储，通过 MCP 协议供 Claude Code、Cursor、Codex 等客户端接入，检索路径不调用 LLM。README 报告其在 LongMemEval-S 上 recall_any@5 为 98.2%，原始输出已提交可复现。首次运行需下载约 200 MB 嵌入模型；支持自托管（Apache-2.0）或 Uteke Cloud。",
+   "highlights": [
+    "混合检索：本地向量与 SQLite FTS5 全文搜索经 RRF 融合排序，查询约 45 ms、零 LLM token、仅用 CPU",
+    "Rooms 支持多代理共享记忆，每条记忆带作者归属，含时间点召回（--at）与过期衰减",
+    "检索路径零 LLM 调用，LongMemEval-S recall_any@5 为 98.2%，原始评测输出已提交于仓库可复现"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex 等 MCP 客户端配置跨会话共享的长期记忆",
+    "多代理协作场景：通过 Rooms 让多个代理读写同一记忆库并保留作者归属",
+    "数据需留在本地或自建基础设施的私有化部署，或通过 Uteke Cloud 实现多设备共享记忆"
+   ]
+  },
+  "sha": "d8147175c85b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4d26dc1fa5f2": {
+  "identity": {
+   "one_liner": "基于 Ubuntu 的 WordPress LEMP 服务器自动化部署脚本",
+   "review": "EngineScript 是一套运行在 Ubuntu 24.04/26.04 LTS 上的自动化脚本，用于在全新 VPS 上安装 Nginx、PHP、MariaDB、Redis 并部署 WordPress，启用 Nginx FastCGI 缓存。它面向 WordPress 用户，与 Cloudflare API 集成以自动配置 DNS 和 SSL，并提供 es.* 命令行工具与 Web 管理面板。安装会移除已有 Web 服务，仅适用于全新服务器。",
+   "highlights": [
+    "提供 es.menu、es.backup、es.cache 等命令行工具，管理域名、备份、缓存和服务器状态",
+    "通过 Cloudflare API 自动添加 DNS 记录、签发 SSL 证书并应用性能设置",
+    "支持可选的自动更新机制，涵盖 Nginx、PHP 补丁版本和 MariaDB 补丁版本，更新前备份数据库并在失败时回滚"
+   ],
+   "use_cases": [
+    "在全新 VPS（如 DigitalOcean droplet）上快速部署 WordPress 站点",
+    "通过 Import Domain 功能迁移已有 WordPress 站点到服务器",
+    "需要集中管理单台服务器上多个 WordPress 站点的场景"
+   ]
+  },
+  "sha": "4d26dc1fa5f2",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

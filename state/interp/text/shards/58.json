@@ -4147,5 +4147,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9f18fc088c75": {
+  "identity": {
+   "one_liner": "在 Cursor IDE 工作区与设备间导入导出 AI 聊天记录的扩展",
+   "review": "这是一款 Cursor IDE 扩展，用于在工作区之间及设备之间导出、导入 AI 聊天会话。它通过读取 Cursor 的 workspaceStorage 下的 SQLite 数据库实现读写，导出为 .cursor-chat.json 文件，导入时生成新 ID 的副本。使用需安装 sqlite3 CLI，导入后须完整重启 Cursor 才能显示。README 声明该项目已归档、不再维护。",
+   "highlights": [
+    "支持导出全部或选定聊天为 .cursor-chat.json 文件，包含所有消息与气泡内容",
+    "自动按名称和路径识别工作区，覆盖 Windows/macOS/Linux/SSH/WSL 等多种存储路径",
+    "导入时创建带新 ID 的副本，可安全重复导入"
+   ],
+   "use_cases": [
+    "更换电脑时迁移 Cursor 聊天历史",
+    "备份重要 AI 对话记录",
+    "在不同工作区之间转移相关对话上下文"
+   ]
+  },
+  "sha": "9f18fc088c75",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9abeac069104": {
+  "identity": {
+   "one_liner": "基于文件的无服务器关系型数据库，以预写日志实现单表 DML 与多表事务的崩溃原子性",
+   "review": "iniBase 是一个运行于 Node.js 的纯 TypeScript 文件型关系数据库，数据按数据库、表、列分别存于独立文件，无需数据库服务器进程。它提供 ACID 保证：单表 DML 崩溃原子，多表事务需显式 begin/commit/rollback。适合不想部署数据库服务的 Node 项目；事务有限制（无 read-your-writes、每表一次变更），Windows 需额外安装 Unix 工具，full 持久化模式下写入速度较慢。",
+   "highlights": [
+    "以每表写锁、预写日志（journal.jsonl）和 fsync 实现崩溃恢复，单表 DML 崩溃原子，多表事务通过 begin/commit/rollback API 提供",
+    "支持 gzip 压缩、增量写入日志、表连接、内置表单校验与唯一值约束、流式读取与内置缓存",
+    "事务含级联删除原子性，并有明确限制：事务内无 read-your-writes、每表仅一次变更、禁止 DDL"
+   ],
+   "use_cases": [
+    "Node.js 项目中替代托管数据库服务的本地文件存储场景",
+    "需要多表事务与崩溃恢复的小型单机或共享文件系统应用",
+    "已测试至 400 万条记录的数据集，适合关注磁盘占用与内存占用的场景"
+   ]
+  },
+  "sha": "9abeac069104",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

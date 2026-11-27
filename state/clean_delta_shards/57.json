@@ -33284,5 +33284,1028 @@
    ]
   ],
   "at": "2026-11-26"
+ },
+ "bb43782769aa+2": {
+  "fn": "lspecian/chronik-stream",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "CI (pull requests)",
+     "Release build",
+     "Release",
+     "Docker Image",
+     "License",
+     "Rust"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    13,
+    8,
+    13
+   ],
+   [
+    "replace",
+    13,
+    16,
+    13,
+    14,
+    [
+     "> Chronik is a young project with one main maintainer. Read Status and limitations before you rely on it."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    38,
+    14,
+    36
+   ],
+   [
+    "replace",
+    38,
+    43,
+    36,
+    37,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    45,
+    37,
+    39
+   ],
+   [
+    "replace",
+    45,
+    46,
+    39,
+    40,
+    [
+     "There is no pipeline between the log and the query engines; they are the same system. The cost is freshness: indexes trail the log by about a second (search) to about a minute (typed SQL columns) in the default configuration. See When data becomes queryable."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    51,
+    40,
+    45
+   ],
+   [
+    "replace",
+    51,
+    60,
+    45,
+    46,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    72,
+    46,
+    58
+   ],
+   [
+    "replace",
+    72,
+    94,
+    58,
+    59,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    100,
+    59,
+    65
+   ],
+   [
+    "replace",
+    100,
+    101,
+    65,
+    66,
+    [
+     "|Capability|Config|Query Endpoint|Engine|Latency|"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    66,
+    67
+   ],
+   [
+    "replace",
+    102,
+    107,
+    67,
+    72,
+    [
+     "|**Streaming**|always on|Kafka Fetch (9092)|WAL|< 1ms|",
+     "|**SQL**|`columnar.enabled=true`|`POST /_sql`|DataFusion + Arrow/Parquet|0-200ms|",
+     "|**Search**|`searchable=true`|`POST /_search`, `POST /{topic}/_search`|Tantivy (BM25)|1-500ms|",
+     "|**Vector**|`vector.enabled=true`|`POST /_vector/{topic}/search`|HNSW + embeddings|5-100ms|",
+     "|**Orchestrator**|automatic|`POST /_query`|RRF multi-backend fusion|10-500ms|"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    118,
+    72,
+    83
+   ],
+   [
+    "replace",
+    118,
+    125,
+    83,
+    84,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    141,
+    84,
+    100
+   ],
+   [
+    "replace",
+    141,
+    142,
+    100,
+    101,
+    [
+     "|Capability|Traditional Stack|Chronik|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    101,
+    102
+   ],
+   [
+    "replace",
+    143,
+    150,
+    102,
+    109,
+    [
+     "|Event streaming|Apache Kafka|Built-in (Kafka wire protocol; see compatibility)|",
+     "|Stream processing|Flink / Spark Streaming|Not provided. Ad-hoc SQL over the log only: no windows, state or stream joins|",
+     "|Data warehouse|ClickHouse / BigQuery|Parquet files per topic, queried with DataFusion|",
+     "|Full-text search|Elasticsearch / OpenSearch|Tantivy (BM25) with an Elasticsearch-style query API|",
+     "|Vector search|Pinecone / Weaviate / Qdrant|HNSW with pluggable embeddings|",
+     "|ETL pipelines|Kafka Connect / Debezium / dbt|Not needed for indexing into the built-in engines|",
+     "|Object storage|S3 sink connector|Native S3/GCS/Azure tiered storage|"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    191,
+    109,
+    150
+   ],
+   [
+    "replace",
+    191,
+    192,
+    150,
+    151,
+    [
+     "This uses kafka-python (`pip install kafka-python`). The topic is created with SQL and search enabled; capabilities are ordinary topic configs passed by the AdminClient."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    197,
+    151,
+    156
+   ],
+   [
+    "replace",
+    197,
+    216,
+    156,
+    157,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    254,
+    157,
+    195
+   ],
+   [
+    "replace",
+    254,
+    255,
+    195,
+    196,
+    [
+     "- **One main maintainer.** No third-party production users that I know of. Releases are frequent; see CHANGELOG.md."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    256,
+    196,
+    197
+   ],
+   [
+    "replace",
+    256,
+    260,
+    197,
+    201,
+    [
+     " - Until PR #29 (August 2026), `acks=1` and `acks=all` replicated nothing in clusters; the published throughput figures from that time are withdrawn.",
+     " - Until **v2.16.6 (2026-11-15)**, `acks=all` could acknowledge writes that no follower held (a timed-out quorum wait followed by an idempotent retry was reported as success).",
+     " - Until **v2.16.8 (2026-11-15)**, a follower stuck behind the leader could stay in the ISR, be elected, and lose records acknowledged at `acks=all`.",
+     " - Each entry in the CHANGELOG describes the bug and how it was reproduced (stock `kafka-verifiable-producer`, local 3-node cluster)."
+    ]
+   ],
+   [
+    "equal",
+    260,
+    261,
+    201,
+    202
+   ],
+   [
+    "replace",
+    261,
+    263,
+    202,
+    204,
+    [
+     "- **Indexes trail the log.** Search is about 1 s behind for small writes and tens of seconds after large bursts; typed SQL columns about 60 s. See When data becomes queryable.",
+     "- **Kafka coverage is a subset.** No KIP-848 consumer protocol, delegation tokens or partition reassignment; ACL requests are answered but not enforced. Kafka Streams and Kafka Connect are not validated. See Kafka Compatibility."
+    ]
+   ],
+   [
+    "equal",
+    263,
+    265,
+    204,
+    206
+   ],
+   [
+    "replace",
+    265,
+    266,
+    206,
+    207,
+    [
+     "- **Search builds against a Tantivy fork** (0.27 plus an upstream Block-WAND fix) until upstream releases it. See docs/TANTIVY_FORK.md."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    207,
+    208
+   ],
+   [
+    "replace",
+    267,
+    268,
+    208,
+    209,
+    [
+     "- **Default-off features.** Agent memory (`/memory/v1/*`) and the ontology layer are experimental. They are compiled only with `--features memory` (the Docker image and the `-gnu` release tarballs; not the static `linux-amd64`/`linux-arm64` tarballs or a default `cargo build`), and are switched on at runtime (`CHRONIK_MEMORY_ENABLED`, `CHRONIK_ONTOLOGY_ENABLED=true`). See Optional add-ons."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    274,
+    209,
+    215
+   ],
+   [
+    "replace",
+    274,
+    275,
+    215,
+    216,
+    [
+     "p50 latency under load, from PR #111:"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    276,
+    216,
+    217
+   ],
+   [
+    "replace",
+    276,
+    277,
+    217,
+    218,
+    [
+     "|p50|Chronik v2.20.2|OpenSearch 2.19.1|"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    278,
+    218,
+    219
+   ],
+   [
+    "replace",
+    278,
+    284,
+    219,
+    225,
+    [
+     "|query rounds in 60 s|**61,425**|14,250|",
+     "|match (text)|**0.55 ms**|0.96 ms|",
+     "|term|**0.44 ms**|17.96 ms|",
+     "|bool (text + filter)|**0.44 ms**|4.56 ms|",
+     "|match_all|**0.26 ms**|0.65 ms|",
+     "|date_histogram|**4.64 ms**|6.70 ms|"
+    ]
+   ],
+   [
+    "equal",
+    284,
+    295,
+    225,
+    236
+   ],
+   [
+    "replace",
+    295,
+    296,
+    236,
+    237,
+    [
+     "**Reproduce:** the scripts are in tests/search_bench (`gen.sh` builds the deterministic corpus, `run.sh` runs Chronik, `opensearch.sh` runs OpenSearch, `queries.js` is the k6 query mix). They need `KAFKA_HOME`, `kcat`, `jq` and Docker. The method and intermediate tables are in docs/design/SEARCH_PROFILES_AND_ARCHIVE_TIER.md §11. A one-command repro with recorded hardware and raw results is coming."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    299,
+    237,
+    240
+   ],
+   [
+    "replace",
+    299,
+    300,
+    240,
+    241,
+    [
+     "|System|NDCG@10|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    301,
+    241,
+    242
+   ],
+   [
+    "replace",
+    301,
+    303,
+    242,
+    244,
+    [
+     "|**Chronik BM25** (Tantivy)|**0.5927**|v2.4.0, 3-node cluster, run 2026-03-04|",
+     "|Elasticsearch BM25|~0.50-0.56|Published baselines, not run by us|"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    304,
+    244,
+    245
+   ],
+   [
+    "replace",
+    304,
+    305,
+    245,
+    246,
+    [
+     "Measured on the WANDS dataset (42,994 products, 480 queries). This compares against published Elasticsearch numbers, **not** a same-machine run, and ranking has changed since v2.4.0. A hybrid (BM25 + vector) figure is omitted: in that run the vector leg returned empty results, so it measured BM25 alone. See docs/DATASET_VALIDATION_REPORT.md."
+    ]
+   ],
+   [
+    "equal",
+    305,
+    308,
+    246,
+    249
+   ],
+   [
+    "replace",
+    308,
+    309,
+    249,
+    250,
+    [
+     "|Dataset|Records|Text Search p50|SQL p50|Errors|"
+    ]
+   ],
+   [
+    "equal",
+    309,
+    310,
+    250,
+    251
+   ],
+   [
+    "replace",
+    310,
+    313,
+    251,
+    254,
+    [
+     "|Amazon Appliances|2.1M|2.8ms @ 1000 VUs|43ms|0.00%|",
+     "|Amazon Grocery|14.3M|8.7ms @ 1000 VUs|360ms|0.00%|",
+     "|Amazon Electronics|43.9M|112ms @ 1000 VUs|185ms|0.00%|"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    326,
+    254,
+    267
+   ],
+   [
+    "replace",
+    326,
+    327,
+    267,
+    268,
+    [
+     "> docs/ROADMAP_REPLICATION.md. The historical"
+    ]
+   ],
+   [
+    "equal",
+    327,
+    328,
+    268,
+    269
+   ],
+   [
+    "replace",
+    328,
+    329,
+    269,
+    270,
+    [
+     "> BARE_METAL_PERFORMANCE.md."
+    ]
+   ],
+   [
+    "equal",
+    329,
+    361,
+    270,
+    302
+   ],
+   [
+    "replace",
+    361,
+    367,
+    302,
+    303,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    376,
+    303,
+    312
+   ],
+   [
+    "replace",
+    376,
+    381,
+    312,
+    313,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    381,
+    387,
+    313,
+    319
+   ],
+   [
+    "replace",
+    387,
+    388,
+    319,
+    320,
+    [
+     "Query Kafka topics with SQL. The topic needs `columnar.enabled=true`, set at create time by an AdminClient (see the Quick Start) or afterwards with `kafka-configs.sh` (see Per-Topic Capability Model). There is no HTTP endpoint for creating topics."
+    ]
+   ],
+   [
+    "equal",
+    388,
+    393,
+    320,
+    325
+   ],
+   [
+    "replace",
+    393,
+    407,
+    325,
+    326,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    407,
+    413,
+    326,
+    332
+   ],
+   [
+    "replace",
+    413,
+    414,
+    332,
+    333,
+    [
+     "|Table|Source|Columns|"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    415,
+    333,
+    334
+   ],
+   [
+    "replace",
+    415,
+    418,
+    334,
+    337,
+    [
+     "|`{topic}_hot`|In-memory Arrow buffer (recent records)|Envelope only (`_topic`, `_partition`, `_offset`, `_timestamp`, `_timestamp_type`, `_key`, `_value`)|",
+     "|`{topic}_cold`|Parquet files (written by the indexer, first flush ~60 s)|Envelope + columns inferred from JSON values|",
+     "|`{topic}`|Unified view (hot + cold)|Envelope + inferred columns once a cold table exists|"
+    ]
+   ],
+   [
+    "equal",
+    418,
+    419,
+    337,
+    338
+   ],
+   [
+    "replace",
+    419,
+    420,
+    338,
+    339,
+    [
+     "See docs/COLUMNAR_STORAGE_GUIDE.md for full SQL reference."
+    ]
+   ],
+   [
+    "equal",
+    420,
+    436,
+    339,
+    355
+   ],
+   [
+    "replace",
+    436,
+    455,
+    355,
+    356,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    455,
+    463,
+    356,
+    364
+   ],
+   [
+    "replace",
+    463,
+    468,
+    364,
+    365,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    468,
+    470,
+    365,
+    367
+   ],
+   [
+    "replace",
+    470,
+    471,
+    367,
+    368,
+    [
+     "See docs/RUNNING_A_CLUSTER.md for the complete cluster guide."
+    ]
+   ],
+   [
+    "equal",
+    471,
+    474,
+    368,
+    371
+   ],
+   [
+    "replace",
+    474,
+    476,
+    371,
+    373,
+    [
+     "- **Ontology layer** (v2.13.0+, experimental, off by default): define typed objects and relationships over your streams and query them with `get_object` (with point-in-time `as_of`), `traverse`/`related`/`neighbors`, and an MCP tools server. Needs a `--features memory` build and `CHRONIK_ONTOLOGY_ENABLED=true`. Authored with the `chronik` CLI. See docs/ONTOLOGY_SDK.md.",
+     "- **Agent memory** (`/memory/v1/*`, experimental, off by default): needs a `--features memory` build. See docs/ROADMAP_AGENT_MEMORY.md."
+    ]
+   ],
+   [
+    "equal",
+    476,
+    481,
+    373,
+    378
+   ],
+   [
+    "replace",
+    481,
+    482,
+    378,
+    379,
+    [
+     "|API|Versions|API|Versions|"
+    ]
+   ],
+   [
+    "equal",
+    482,
+    483,
+    379,
+    380
+   ],
+   [
+    "replace",
+    483,
+    501,
+    380,
+    398,
+    [
+     "|Produce|v0-v9|ApiVersions|v0-v4|",
+     "|Fetch|v0-v13|CreateTopics|v0-v7|",
+     "|ListOffsets|v0-v7|DeleteTopics|v0-v3|",
+     "|Metadata|v0-v12|CreatePartitions|v0-v1|",
+     "|OffsetCommit|v0-v8|DeleteRecords|v0-v1|",
+     "|OffsetFetch|v0-v8|DescribeConfigs|v0-v4|",
+     "|OffsetDelete|v0|AlterConfigs|v0-v2|",
+     "|OffsetForLeaderEpoch|v0|IncrementalAlterConfigs|v0|",
+     "|FindCoordinator|v0-v4|DescribeCluster|v1|",
+     "|JoinGroup|v0-v9|DescribeLogDirs|v0|",
+     "|SyncGroup|v0-v5|DescribeClientQuotas|v0-v1 (no quotas)|",
+     "|Heartbeat|v0-v4|InitProducerId|v0-v4|",
+     "|LeaveGroup|v0-v5|AddPartitionsToTxn|v0-v3|",
+     "|DescribeGroups|v0-v5|AddOffsetsToTxn|v0-v3|",
+     "|ListGroups|v0-v4|EndTxn|v0-v3|",
+     "|DeleteGroups|v0-v1|TxnOffsetCommit|v0-v3|",
+     "|SaslHandshake|v0-v1|DescribeAcls / CreateAcls / DeleteAcls|v0-v1 (not enforced)|",
+     "|SaslAuthenticate|v0-v2|Describe/AlterUserScramCredentials|v0|"
+    ]
+   ],
+   [
+    "equal",
+    501,
+    506,
+    398,
+    403
+   ],
+   [
+    "replace",
+    506,
+    507,
+    403,
+    404,
+    [
+     "**Clients:** exercised in local end-to-end scripts with the Java CLI tools (`kafka-topics`, `kafka-configs`, `kafka-console-*`, `kafka-verifiable-producer`), kafka-python and librdkafka-based clients (rdkafka, confluent-kafka). CI runs the Rust test suite, not external clients. See docs/kafka-client-compatibility.md."
+    ]
+   ],
+   [
+    "equal",
+    507,
+    508,
+    404,
+    405
+   ],
+   [
+    "replace",
+    508,
+    509,
+    405,
+    406,
+    [
+     "Chronik also provides a Confluent-compatible **Schema Registry** (Avro, JSON Schema, Protobuf) on the admin API port. See docs/SCHEMA_REGISTRY.md."
+    ]
+   ],
+   [
+    "equal",
+    509,
+    527,
+    406,
+    424
+   ],
+   [
+    "replace",
+    527,
+    551,
+    424,
+    425,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    551,
+    559,
+    425,
+    433
+   ],
+   [
+    "replace",
+    559,
+    570,
+    433,
+    434,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    570,
+    574,
+    434,
+    438
+   ],
+   [
+    "replace",
+    574,
+    575,
+    438,
+    439,
+    [
+     "Admin API and Schema Registry support API key and HTTP Basic Auth respectively. See docs/ADMIN_API_SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    575,
+    591,
+    439,
+    455
+   ],
+   [
+    "replace",
+    591,
+    592,
+    455,
+    456,
+    [
+     "|Profile|Flush Interval|Buffer|Use Case|"
+    ]
+   ],
+   [
+    "equal",
+    592,
+    593,
+    456,
+    457
+   ],
+   [
+    "replace",
+    593,
+    597,
+    457,
+    461,
+    [
+     "|`low-latency`|10ms|16MB|Real-time analytics, instant messaging|",
+     "|`balanced`|100ms|32MB|General-purpose workloads|",
+     "|`high-throughput`|500ms|128MB|Data pipelines, ETL, batch processing|",
+     "|`extreme`|2000ms|512MB|Bulk ingestion, data migrations|"
+    ]
+   ],
+   [
+    "equal",
+    597,
+    604,
+    461,
+    468
+   ],
+   [
+    "replace",
+    604,
+    626,
+    468,
+    469,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    626,
+    630,
+    469,
+    473
+   ],
+   [
+    "replace",
+    630,
+    631,
+    473,
+    474,
+    [
+     "Chronik Stream is in active development by one main maintainer. See Status and limitations for what is and isn't proven, the releases page for the current version, and CHANGELOG.md for release history."
+    ]
+   ],
+   [
+    "equal",
+    631,
+    637,
+    474,
+    480
+   ],
+   [
+    "replace",
+    637,
+    638,
+    480,
+    481,
+    [
+     "See docs/ROADMAP_RELEVANCE_ENGINE.md and docs/ROADMAP_REPLICATION.md."
+    ]
+   ],
+   [
+    "equal",
+    638,
+    641,
+    481,
+    484
+   ],
+   [
+    "replace",
+    641,
+    642,
+    484,
+    485,
+    [
+     "|Guide|Description|"
+    ]
+   ],
+   [
+    "equal",
+    642,
+    643,
+    485,
+    486
+   ],
+   [
+    "replace",
+    643,
+    657,
+    486,
+    500,
+    [
+     "|CHANGELOG.md|Release history|",
+     "|docs/RUNNING_A_CLUSTER.md|Cluster setup guide|",
+     "|docs/COLUMNAR_STORAGE_GUIDE.md|SQL and Parquet storage|",
+     "|docs/SEARCHABLE_TOPICS.md|Full-text search|",
+     "|docs/VECTOR_SEARCH_GUIDE.md|Vector search and embeddings|",
+     "|docs/SCHEMA_REGISTRY.md|Confluent-compatible Schema Registry|",
+     "|docs/API_REFERENCE.md|Unified REST API reference|",
+     "|docs/kafka-client-compatibility.md|Kafka client compatibility|",
+     "|docs/DATASET_VALIDATION_REPORT.md|Scale and quality validation|",
+     "|docs/DISASTER_RECOVERY.md|Disaster recovery: metadata images and the object-store archive (`CHRONIK_DR_RESTORE`)|",
+     "|docs/ADMIN_API_SECURITY.md|Admin API security|",
+     "|docs/TANTIVY_FORK.md|Why search builds against a Tantivy fork|",
+     "|BASELINE_PERFORMANCE.md|Performance benchmarks|",
+     "|BARE_METAL_PERFORMANCE.md|Cluster throughput testing (historical, withdrawn figures)|"
+    ]
+   ],
+   [
+    "equal",
+    657,
+    659,
+    500,
+    502
+   ],
+   [
+    "replace",
+    659,
+    662,
+    502,
+    503,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    663,
+    503,
+    504
+   ],
+   [
+    "replace",
+    663,
+    665,
+    504,
+    505,
+    [
+     "Apache License 2.0. See LICENSE for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
  }
 }

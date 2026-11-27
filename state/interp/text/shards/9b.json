@@ -3060,5 +3060,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8a8c35a894c1": {
+  "identity": {
+   "one_liner": "面向 RV1106 的移动侦测录像方案，按动静动态调整帧率并支持网页回放。",
+   "review": "MotionSense 运行于 Luckfox Pico Pro Max（RV1106），检测到移动时以约 30fps 录制 H.264 到 SD 卡（HLS 分片），静止时降为 1fps 以节省空间。由 C 守护进程处理硬件管线、Go agent 提供网页直播（WebRTC）与回放界面，事件与元数据存于 SQLite，并通过 unix socket 通信。README 明确说明其未做安全加固：HTTP 无认证，仅限自有局域网使用。",
+   "highlights": [
+    "自适应帧率录制：静止时 1 fps、检测到移动时约 30 fps，阈值与夜间模式可配置",
+    "HLS 录制按日期目录组织，剩余空间低于阈值时自动删除最旧一天，录制不中断",
+    "网页端提供 WebRTC 实时画面与按日回放，进度条标注帧率切换点，OSD 时间戳叠加于录像与直播"
+   ],
+   "use_cases": [
+    "长时间静止、偶有数秒活动的场景，如公共冰箱、宿舍、储物间、仓库通道",
+    "需要快速浏览一整天录像、只看移动片段的回放需求",
+    "基于 Luckfox Pico Pro Max 的局域网内自用监控记录装置"
+   ]
+  },
+  "sha": "8a8c35a894c1",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "883835c48c96": {
+  "identity": {
+   "one_liner": "面向 LLM 应用的 SQL 防火墙，基于 sqlglot 语法树校验并重写 AI 生成的 SQL。",
+   "review": "sqlguardllm 校验大模型生成的 SQL 并重写为只读查询：仅允许单条查询语句、表/列白名单、按用户注入行级过滤和行数限制，支持 sqlglot 的 32 种方言。校验基于解析后的语法树而非文本匹配，解析失败或缺上下文时默认拒绝。以 Python 引擎（pip 安装）或本地服务形式运行，Node.js/.NET 提供客户端。当前为 alpha 版（0.5.0a3），API 可能在 1.0 前变动。",
+   "highlights": [
+    "基于 sqlglot 语法树判定，覆盖 CTE、子查询中隐藏的写操作、SELECT INTO、行锁、ATTACH、PRAGMA、危险函数等节点",
+    "重写时将每个被过滤表替换为带行级过滤的派生表，并按目标方言生成 LIMIT/TOP/FETCH FIRST 行数限制，输出为重新生成的 SQL 而非原字符串",
+    "提供可选策略：连接数/子查询深度上限、禁笛卡尔积、必选过滤列、列脱敏（null/redact/hash/partial）、仅聚合读取；Python 引擎加 Node.js 18+/NuGet .NET 客户端"
+   ],
+   "use_cases": [
+    "text-to-SQL、数据代理、MCP 数据库工具等由 LLM 生成 SQL 的应用，在执行前进行校验与重写",
+    "需要按用户实施行级隔离和多租户过滤的查询场景",
+    "与只读数据库账号、语句超时、审计日志等层级配合使用的多层防护架构"
+   ]
+  },
+  "sha": "883835c48c96",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f6fa9777ae3": {
+  "identity": {
+   "one_liner": "基于 Flutter 与 Node.js/PostgreSQL 的多平台零售与餐饮 ERP/POS 系统",
+   "review": "Famalth Lynx 是一套面向零售、餐饮与多门店运营的 ERP 与 POS 系统，前端使用 Flutter，后端为 Node.js/Express 与 PostgreSQL。模块涵盖餐饮点餐与厨房显示、零售条码计费与库存批次管理、复式记账会计、人事薪资等。支持 Windows 本地离线运行并同步云端 PostgreSQL，提供 Windows 安装包与 Render 云部署文档。",
+   "highlights": [
+    "包含四个 Flutter 应用入口：POS 管理端、骑手端、顾客自助点餐端与供应商门户",
+    "提供复式记账会计模块，包含科目表、日记账凭证、试算平衡表与资产负债表生成",
+    "支持离线本地运行并自动同步云端 PostgreSQL，数据库备份至 Google Drive 与 S3/R2"
+   ],
+   "use_cases": [
+    "餐饮门店的桌台管理、厨房显示（KDS）与外卖派单场景",
+    "多门店零售的批次/效期库存管理、门店间调拨与采购收货流程",
+    "需要在 Windows 终端离线收银并定期同步云端数据库的混合部署场景"
+   ]
+  },
+  "sha": "5f6fa9777ae3",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

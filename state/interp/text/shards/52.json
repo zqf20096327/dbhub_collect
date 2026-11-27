@@ -3699,5 +3699,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "95fdf68ce8de": {
+  "identity": {
+   "one_liner": "面向 MySQL/PostgreSQL 等库的 AI SQL 审核与变更治理平台",
+   "review": "Yearning v4 是用 Go 单体二进制加 React 19 前端构建的数据库变更治理与 SQL 审核平台，元数据存储于 PostgreSQL，支持 MySQL、PostgreSQL、TiDB、OceanBase、PolarDB 等。核心机制包括 AI 预检、提交时冻结的多级审批快照、内置进程内 gh-ost 在线 DDL、基于 before-image 的跨引擎回滚，以及受管控的只读查询工作台。面向 DBA、平台团队与工程组织，提供 Docker 镜像、在线演示与官方文档。",
+   "highlights": [
+    "AI 预检支持最多 100,000 条语句的指纹分组去重，并提供 5 个只读代理工具检查元数据与执行计划",
+    "提交时冻结审批规则、数据源、审批人与 SQL SHA-256 哈希的快照，配置 1..N 串行数据源阶段与每阶段 1..10 审批步骤",
+    "内置进程内 gh-ost 在线 DDL 与不依赖 binlog/WAL 的 AST 及 before-image 跨引擎回滚，SQL 静态加密采用 AES-256-GCM"
+   ],
+   "use_cases": [
+    "数据库变更工单的 AI 预检、多级审批与受控执行",
+    "DDL/DML 变更的在线执行与自动生成回滚工单",
+    "为开发者提供经审批的只读查询与敏感列脱敏访问"
+   ]
+  },
+  "sha": "95fdf68ce8de",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "45bb6941fc4d": {
+  "identity": {
+   "one_liner": "Rust 编写的 MySQL 兼容 HTAP 数据库，内置向量与全文检索",
+   "review": "MyDB 是用 Rust 编写的通用数据库，面向 HTAP 混合负载、AI 代理与 MySQL 兼容三类场景，可复用 MySQL 客户端与 JDBC 驱动，并提供 REST、MCP 接口及 SQL 模型调用。核心机制包括自动 Zone Maps、在线 DDL、HNSW/IVF 向量索引和 MVCC 事务。1.0.3 为公共预览版，适用于功能验证与受控环境评估；默认账户密码为 root，仅接受回环连接。",
+   "highlights": [
+    "同一数据集上支持事务读写与分析查询，含并行执行、向量化扫描与默认开启的自动 Zone Maps",
+    "原生提供向量检索、混合检索（RRF 技术预览）、全文检索与外部 AI 模型调用，兼容 MySQL 客户端及 ROW/FULL binlog 集成",
+    "包含 12,077 项回归测试、约 106 万次模糊测试执行，以及 Jepsen、崩溃恢复和 I/O 故障注入测试"
+   ],
+   "use_cases": [
+    "需要在同一业务数据上混合运行事务读写与分析查询的应用",
+    "通过 SQL、REST 或 MCP 接口访问业务数据的 AI 代理服务",
+    "复用现有 MySQL 客户端和驱动、需连接现有 binlog 流的场景"
+   ]
+  },
+  "sha": "45bb6941fc4d",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

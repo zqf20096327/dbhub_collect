@@ -3540,5 +3540,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "63a9cf75f7ab": {
+  "identity": {
+   "one_liner": "以 Docker Compose 容器化部署 FreePBX 17 与 Asterisk 21 的 VoIP PBX 方案",
+   "review": "该项目以 Docker Compose 方式运行 FreePBX 17（含 Asterisk 21、PHP 8.2、独立 MariaDB），提供 SIP 通话所需的 PBX 环境，面向需要在容器中部署 FreePBX 的用户。RTP 端口范围通过宿主机 iptables 手动暴露而非 Docker 映射，以规避 Docker 暴露大端口段时的内存开销；维护版本为 17-nofail2ban，旧版 17 镜像不再接收安全更新。DAHDI 通道不受支持。",
+   "highlights": [
+    "支持数据持久化，预配置 Fail2ban、logrotate 与邮件通知",
+    "镜像基于 debian:bookworm-slim，构建时以固定摘要和 Snapshot 仓库校验 SHA-256 安装安全更新",
+    "发布镜像附带由 publish-image.yml 工作流签名的 GitHub attestation，可用 gh attestation verify 验证"
+   ],
+   "use_cases": [
+    "在 Docker 环境中部署支持 SIP 通话的 FreePBX/Asterisk PBX",
+    "需要可重建、可验证镜像来源、支持数据持久化的 PBX 容器化运行",
+    "通过 Let's Encrypt DNS challenge 为 PBX 管理界面配置 TLS 证书"
+   ]
+  },
+  "sha": "63a9cf75f7ab",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3224,5 +3224,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e71db1b6d5a1": {
+  "identity": {
+   "one_liner": "自托管的观看记录与播放状态同步中枢，连接 Plex/Jellyfin/Emby/Trakt",
+   "review": "Plekt 是一个自托管应用，在 Plex、Emby、Jellyfin 与 Trakt 之间双向同步已观看状态和续播进度，观看记录存储在本地 SQLite 数据库，并接入 TMDB、TheTVDB、Fanart.tv、OMDb 获取元数据，连接 Overseerr/Jellyseerr 获取请求信息。支持 Docker 与 Windows 安装器部署，前身名为 Plembfin，旧镜像名与环境变量在迁移期后仍被接受。README 提醒写入媒体服务器前需先备份。",
+   "highlights": [
+    "在 Plex、Emby、Jellyfin 与 Trakt 之间双向同步已观看/未观看状态，并在重看通知重复时保留续播进度",
+    "观看记录本地保存于 SQLite，支持按库选择参与同步、跨 HD/4K 多副本匹配及按标题或整库的手动强制同步",
+    "接入 TMDB、TheTVDB、Fanart.tv、OMDb 补充海报、演员、剧集与评分信息，并连接 Overseerr/Jellyseerr；支持 Docker 部署"
+   ],
+   "use_cases": [
+    "同时运行多个媒体服务器（如 Plex 与 Jellyfin），希望观看状态和续播位置保持一致的用户",
+    "使用 Trakt 追踪观看历史、需要本地保留完整记录的自托管媒体库用户",
+    "从 Plembfin 旧版迁移、希望保留原有数据库和配置的现有 Docker/Unraid 部署者"
+   ]
+  },
+  "sha": "e71db1b6d5a1",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ecdf19413b54": {
+  "identity": {
+   "one_liner": "开源车辆品牌与车型数据集，源自多国官方登记数据并按稳定 ID 归并",
+   "review": "VehiclesDB 是一个 CC BY 4.0 开放数据集，收录 6 类车型（汽车、摩托车、轻便摩托车、厢式车、卡车、客车）共 16,442 个车型、978 个品牌，覆盖 18 个国家的官方车辆登记或型式认证数据。收录条件为两个独立官方来源一致，或单一来源保有量足够大。提供 CSV、Parquet、JSON、SQLite 及 Ruby gem 多种分发格式，以 (kind, make_slug, model_slug) 三元组为永久稳定 ID，列仅追加不重命名。适合开发者用于零件兼容性筛选、市场表单、车队应用等场景。",
+   "highlights": [
+    "包含 16,442 个车型、978 个品牌、6 种车型类别，数据来自 18 个国家的官方车辆登记或型式认证来源",
+    "提供 CSV、Parquet、JSON、SQLite 文件与 Ruby gem，可通过 GitHub Release 资产或 jsDelivr、Hugging Face 获取",
+    "每条记录含每国可用性证据、来源引用与热度十分位数，旧 ID 通过 former_ids 保留别名"
+   ],
+   "use_cases": [
+    "构建带车型兼容性筛选的汽车零件目录",
+    "填充二手车/车辆交易平台的品牌车型选择器",
+    "车库管理、预约表单、车队与车牌类应用的数据基础"
+   ]
+  },
+  "sha": "ecdf19413b54",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "15e38ee5eede": {
+  "identity": {
+   "one_liner": "Home Assistant SQLite 数据库 recorder 管理面板",
+   "review": "Recorder Studio 是一个 Home Assistant 自定义集成，提供侧边栏面板用于管理 SQLite recorder 数据库：查看各实体占用、开关录制、清理历史。设置写入生成的 recorder_studio.yaml，仅支持 SQLite（MariaDB/PostgreSQL 需其 DB add-on），面板与 API 仅限管理员使用，通过 HACS/Marketplace 或手动复制安装。",
+   "highlights": [
+    "按设备或实体开关录制，批量保存写入生成的 recorder_studio.yaml，无需重启生效",
+    "显示数据库总量/记录数、每实体占比与空间估计、24 小时写入增长及磁盘满预测",
+    "提供清理、重打包、孤儿排除项清理、迁移引导，破坏性操作需确认（批量需输入 PURGE）"
+   ],
+   "use_cases": [
+    "排查占用数据库的大量噪声实体并停止其录制",
+    "按保留期清理历史、重打包回收磁盘空间",
+    "将分散在 YAML 中的 recorder 配置迁移到生成的配置文件"
+   ]
+  },
+  "sha": "15e38ee5eede",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "20fcafb4951b": {
+  "identity": {
+   "one_liner": "自托管的 Tasmota 设备机群管理器，单 Go 二进制内嵌 SQLite",
+   "review": "TasmoFleet 是一个自托管的 Tasmota 设备管理工具，用单个 Go 二进制加内嵌 SQLite 实现，通过 Docker 部署，面向拥有数十台设备的家庭服务器用户。它提供设备清单、备份（含差异对比与恢复）、固件批量更新（升级前有硬件校验）和按芯片家族/标签的配置策略。项目处于 pre-1.0 阶段，由单人维护，更新前需查阅 CHANGELOG；使用 MQTT 功能前需在 broker 上配置 ACL。",
+   "highlights": [
+    "提供设备清单、定时与升级前备份（含 .dmp 原始文件与解码 JSON 的对比、恢复到同设备或替换设备）",
+    "固件批量更新以服务端持久化任务运行，升级前校验硬件型号、芯片家族、safeboot 镜像与变体变更",
+    "支持 MQTT（可选，无 MQTT 时全部功能经 HTTP 轮询）、OIDC 单点登录/本地账户、webhook 与邮件通知、Prometheus 指标，可从 TasmoAdmin 导入设备列表"
+   ],
+   "use_cases": [
+    "家庭自托管服务器上统一管理数十台 Tasmota 设备（ESP8266/ESP32）的固件与配置",
+    "需要为多台设备定时备份并在升级前自动留存快照、支持差异对比与恢复的场景",
+    "通过 MQTT 或 HTTP 扫描发现设备，并按芯片家族、标签或单设备下发策略与批量命令"
+   ]
+  },
+  "sha": "20fcafb4951b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

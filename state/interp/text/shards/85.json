@@ -3474,5 +3474,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "150ed8cd1ae2": {
+  "identity": {
+   "one_liner": "本地运行的 Node MCP 服务器，为 Obsidian 仓库提供语义搜索、知识图谱与笔记编辑。",
+   "review": "obsidian-brain 是一个独立的 Node MCP 服务器，通过 stdio 进程直接读取磁盘上的 .md 文件，为 Claude Desktop、Cursor、VS Code 等 MCP 客户端提供笔记检索、图谱分析和写入能力，不依赖 Obsidian 运行或内部插件。核心机制是 SQLite 索引：标题粒度分块的嵌入与 FTS5 BM25 经 RRF 融合，写入即时落盘并增量重建索引。需 Node 22.12+，首次启动需下载约 34 MB 嵌入模型并建索引，耗时 30-60 秒。",
+   "highlights": [
+    "提供 19 个 MCP 工具，覆盖搜索读取（search/read_note）、图谱分析（rank_notes/detect_themes/find_path_between）与笔记写入（create_note/edit_note/delete_note）",
+    "混合检索：标题感知分块的向量嵌入与 FTS5 BM25 通过 RRF 融合排序",
+    "支持 Ollama、llama.cpp、LM Studio 等本地嵌入提供方，经环境变量切换，数据不离开本机"
+   ],
+   "use_cases": [
+    "让 MCP 客户端对本地 Markdown 仓库进行语义检索与问答",
+    "分析笔记间的链接结构与主题聚类（最 influential 笔记、桥接笔记）",
+    "通过对话批量创建、编辑、链接和移动笔记"
+   ]
+  },
+  "sha": "150ed8cd1ae2",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0284a416c071": {
+  "identity": {
+   "one_liner": "自托管数字标牌系统：上传 PDF/MP4 分发到浏览器屏幕，基于 Laravel 实现",
+   "review": "open-signage 是一个自托管的开源数字标牌系统，用 Laravel 构建，支持 Docker 或原生（PHP 8.3+、MySQL/SQLite）部署。用户上传 PDF（逐页转图）或 MP4 作为模板，分配给屏幕、分组或定时计划；屏幕端仅需浏览器访问 /discover，按 IP 识别注册，支持同步视频墙分组。登录依赖 Active Directory（LDAP），不支持本地账号，首次登录者成为超级管理员。适用于办公室信息屏、接待区、食堂菜单和学校等场景。",
+   "highlights": [
+    "PDF 逐页转换为图片幻灯片，MP4 以视频形式播放；上传上限 100 MB",
+    "支持单屏、分组和定时计划三种内容分配方式，按优先级规则决定当前显示内容",
+    "通过 /discover 页面按 IP 地址识别屏幕，支持远程重载和同步分组（视频墙）"
+   ],
+   "use_cases": [
+    "办公室、接待区或大堂的信息显示屏",
+    "食堂菜单屏或学校公告屏",
+    "多屏同步的视频墙场景"
+   ]
+  },
+  "sha": "0284a416c071",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e5206d8303d5": {
+  "identity": {
+   "one_liner": "ICU 库的预生成数据仓库，为 ClickHouse 提供过滤后的 ICU 数据包。",
+   "review": "该仓库存放为 ICU 库预生成的数据文件。ICU 原生的两阶段构建流程难以集成到其他项目的构建系统，此仓库通过 filter.json 过滤数据，仅保留 ClickHouse 用到的部分（排序、字符集转换、规范化、分词等），体积从 31.6 MiB 降至 13.6 MiB。仓库还提供在小端 Linux 机器上重新生成大端 ELF 与 Mach-O 格式数据文件的脚本与步骤。",
+   "highlights": [
+    "通过 filter.json 过滤 ICU 数据，仅保留 ClickHouse 可读取的内容，条目数从 4305 减至 694，体积从 31.6 MiB 减至 13.6 MiB",
+    "提供 dat_to_asm.py 脚本，可生成与目标平台字节序一致的大端 ELF 数据文件，以及 Mach-O 格式文件",
+    "保留内容包括转换器（4.9 MiB）、断行规则与词典（3.6 MiB）、排序规则（3.2 MiB）、规范化、字符属性与名称、字符串准备配置"
+   ],
+   "use_cases": [
+    "将 ICU 数据集成到 ClickHouse 构建流程，用于排序规则、字符集转换、规范化、分词和字符属性查询",
+    "需要在小端 Linux 机器上生成大端 ELF 或 Mach-O 格式 ICU 数据包的构建场景",
+    "ClickHouse 引入 ICU 其他功能模块时，修改 filter.json 并重新生成数据"
+   ]
+  },
+  "sha": "e5206d8303d5",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

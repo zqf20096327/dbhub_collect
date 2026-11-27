@@ -3241,5 +3241,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b91c49762fdd": {
+  "identity": {
+   "one_liner": "从数据模型生成外键一致、可复现合成数据并输出dbt项目的CLI工具",
+   "review": "model2data 读取 YAML 或 DBML 格式的数据模型，生成符合外键约束、日期顺序和度量指标的合成数据，并输出包含 seeds、staging 模型和测试的 dbt 项目，支持 DuckDB 或 Postgres。适用于需要测试数据的数据团队；通过 --seed 和 --as-of 保证同字节可复现，支持 --defects 制造测试失败场景。MIT 许可，支持 Python 3.10–3.14。",
+   "highlights": [
+    "按依赖顺序生成表数据，外键均指向存在的父行，支持 after 日期约束和复合键",
+    "约 40 种列名模式加全部 Faker provider，支持 locale 参数",
+    "提供确定性输出：相同模型、seed 和选项生成相同字节，--table-seed 可单独重生成单表"
+   ],
+   "use_cases": [
+    "生产数据不可访问时，为演示或开发生成符合模型的合成数据",
+    "在 CI 中以固定 seed 生成可复现 fixture 供 dbt 测试使用",
+    "通过 --defects training 生成含已知缺陷的数据，用于测试训练场景"
+   ]
+  },
+  "sha": "b91c49762fdd",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "76e4aa87eb92": {
+  "identity": {
+   "one_liner": "基于 Python/Tkinter 与 SQLite 的离线实验记录与数据分析桌面应用",
+   "review": "LabNote 是一款离线桌面应用，用于组织科学实验、记录数值测量并计算描述性统计和最小二乘线性回归。界面由 Tkinter 构建，数据存储在自动生成的 SQLite 数据库中，无需第三方依赖，安装 Python 3.10+ 后运行 main.py 即可使用。代码按 database/core/ui/utils/tests 分层组织，适合希望本地管理实验数据的用户；拟合仅限一元线性模型，示例数据需手动录入。",
+   "highlights": [
+    "提供实验的增删改查与测量值的添加、删除，数据存储于自动创建的 SQLite 数据库",
+    "计算均值、中位数、方差、标准差，以及最小二乘线性回归和 R²，散点图与回归线由 Tkinter Canvas 绘制",
+    "支持将实验数据导出为 CSV，计算函数包含单元测试"
+   ],
+   "use_cases": [
+    "离线记录实验与数值测量数据",
+    "对一组测量值计算描述性统计量并拟合线性回归",
+    "将实验数据导出为 CSV 进行后续处理"
+   ]
+  },
+  "sha": "76e4aa87eb92",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

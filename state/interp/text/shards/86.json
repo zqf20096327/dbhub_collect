@@ -3438,5 +3438,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "92f799e3e6e5": {
+  "identity": {
+   "one_liner": "Rust/Axum 编写的 URL 短链服务，支持 PostgreSQL、分层缓存与深链跳转",
+   "review": "基于 Axum 0.8 + PostgreSQL + SQLx 的 URL 短链服务，提供短链生成 API 与跳转端点。短键采用「前缀2位 + base62(id) + 后缀2位」格式，配合 moka L1 与可选 Redis L2 缓存。支持 iOS/Android 深链及商店回退、Open Graph 预览、点击 Webhook（含 SSRF 防护）。认证为访客 JWT，仅用于限流。MIT 许可证。",
+   "highlights": [
+    "短键基于数据库 id 编码（base62 + 前后缀随机字符），重复内容返回已有链接，不消耗序列",
+    "重定向支持 302 跳转或 200 HTML 页面（含深链、平台回退、Open Graph 标签），并提供每访问一次的异步点击 Webhook",
+    "两级缓存：进程内 moka L1 + 可选 Redis L2，Redis 缺失或宕机时以 L1 + PostgreSQL 继续运行"
+   ],
+   "use_cases": [
+    "需要为链接生成 iOS/Android 深链与商店回退跳转的移动应用团队",
+    "需要将点击事件通过 Webhook 异步推送至自有系统的链接分发场景",
+    "单容器部署、配合 Cloudflare Tunnel 运行的自托管短链服务"
+   ]
+  },
+  "sha": "92f799e3e6e5",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3648,5 +3648,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "99918e99f906": {
+  "identity": {
+   "one_liner": "基于 ZFS 克隆的 MySQL/PostgreSQL 秒级数据库分支工具，自托管",
+   "review": "db-branch 是一个自托管工具，在自有服务器上为 MySQL 和 PostgreSQL 创建写时复制数据库分支：分支是基础快照的 ZFS 克隆，创建时不复制数据，每个分支运行独立的数据库实例。提供 CLI、REST API、Web 控制台和 MCP 服务器四种接口，支持单节点或 Raft 集群部署，可选 ProxySQL 路由。适用于 AI agent 沙箱、每个 PR 一套数据库、版本升级预检等场景。分支按设计为可丢弃型，不支持跨分支合并；部分模块（审计、历史等）为闭源付费包。",
+   "highlights": [
+    "基于 ZFS 克隆创建分支，创建时不复制数据；官方测试集群上 PostgreSQL 分支约 0.5 秒、MySQL 分支约 3 秒就绪",
+    "提供 CLI、REST API、Web 控制台与内置 MCP 服务器，支持分支重置、检查点、fork、单分支内逻辑合并及按分支升级数据库版本",
+    "支持 Ubuntu 24.04/26.04 单节点或 Raft 多节点集群，可通过 apt 仓库安装，核心为 Apache-2.0 开源"
+   ],
+   "use_cases": [
+    "为 LLM 智能体提供隔离沙箱：通过 MCP 服务器创建分支执行风险查询或迁移后删除，不触及生产数据",
+    "为每次 CI 运行或 Pull Request 提供独立数据库副本，并用 --ttl 自动过期清理",
+    "在单个分支上先行测试大版本升级（如 MySQL 8.0 到 8.4），可用 --check-only 预检影响"
+   ]
+  },
+  "sha": "99918e99f906",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bfdc63a8c601": {
+  "identity": {
+   "one_liner": "开源本地优先的 Markdown 笔记库编辑器，直接打开 Obsidian 兼容笔记库",
+   "review": "Plainva 是运行于 Windows/macOS/Linux 的本地优先 Markdown 笔记库编辑器，基于 Tauri 与 TypeScript，无需迁移即可打开现有 Obsidian 笔记库。所有文件保持标准 Markdown/YAML，专属扩展集中在 plainva: 命名空间；通过 WebDAV、S3、Google Drive 等自有云存储同步。目前为 Beta（pre-1.0），官方提示对重要笔记库需自行备份。",
+   "highlights": [
+    "提供基于 frontmatter 的 .base 数据库视图（表格、看板、日历、画廊、时间线、关系图），格式保持 Obsidian 兼容",
+    "支持 WebDAV/Nextcloud、S3 兼容对象存储、Google Drive、OneDrive、Dropbox 同步，含离线队列、三方合并与冲突解决界面",
+    "内置 SQLite/FTS5 全文搜索、每写入快照的版本历史与每日 ZIP 备份"
+   ],
+   "use_cases": [
+    "直接编辑已有的 Obsidian 笔记库而不迁移或改写文件格式",
+    "通过自有的 Nextcloud/S3 等存储在桌面与移动端（Android/iOS beta）间同步笔记",
+    "让脚本、CLI 工具或 AI 代理以纯 Markdown/YAML 格式直接读写笔记库"
+   ]
+  },
+  "sha": "bfdc63a8c601",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bab2c0598938": {
+  "identity": {
+   "one_liner": "基于 Erlang/OTP、PostgreSQL 与 WebSocket 的可私有部署即时通讯平台后端。",
+   "review": "IMBoy 是可私有部署的即时通讯平台，本仓库为 Erlang/OTP 后端，Flutter 客户端与 React 管理后台在独立仓库。一期交付包含单聊、群聊、消息推送、组织与 RBAC、客服坐席及 HTTP/WebSocket API，使用 PostgreSQL 持久化，支持 Docker Compose 单节点部署与三步安装脚本。许可证为 BSL 1.1，四年后转为 MPL 2.0。",
+   "highlights": [
+    "提供单聊、群聊、消息推送、历史/离线与多端同步，以及已登录好友间基于 WebRTC 的一对一语音/视频通话",
+    "包含企业组织/部门/工作区与 RBAC、人工客服坐席与访客 Widget、HTTP API 与 WebSocket 长连接",
+    "支持 Docker Compose 单节点生产部署、安装脚本幂等配置、Release Identity 三元组镜像核验与版本升级流程"
+   ],
+   "use_cases": [
+    "需要私有部署即时通讯能力的团队或企业内部沟通系统",
+    "需要组织架构、RBAC 与客服坐席功能的业务场景",
+    "需要通过 Docker Compose 在自有服务器上部署并使用 PostgreSQL 持久化的项目"
+   ]
+  },
+  "sha": "bab2c0598938",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3653,5 +3653,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c548f4edc58d": {
+  "identity": {
+   "one_liner": "基于 Effect v4 的 monorepo，构建带引文溯源与人工审批的知识产权实务工作台。",
+   "review": "这是一个公开的 Effect v4 monorepo，作者在其中开发 Prose-to-Proof 工作台：文档输入后由模型提出候选论断，引用片段须复现原文并经律师（其父，独立知识产权执业者）批准后才进入实务记忆。项目默认本地存储客户数据，采用 DDD 分层、驱动包隔离第三方 SDK、哈希链式只追加的代理执行记录，并通过 CI 质量门与审查门控合并。仓库仅含合成测试数据，不含真实客户文件。",
+   "highlights": [
+    "模型提出的引用须复现源文本片段方可通过，机器输出不具备独立引文效力",
+    "代理工具调用采用默认拒绝权限模型，所有判定（含拒绝）写入哈希链式只追加记录",
+    "全库使用 Effect v4：领域代码无 async/await 与 try/catch，错误为类型化值，Schema 为形状与持久化的单一来源"
+   ],
+   "use_cases": [
+    "独立知识产权律师在本地管理 office actions、案件、发明人、权利要求与期限等实体并溯源引用",
+    "通过只读 MCP 服务器让 Claude Desktop 查询本地实务图谱",
+    "研究 Effect v4 工程实践：分层架构、类型化错误、跨切片隔离与 CI 质量门的可参考样本"
+   ]
+  },
+  "sha": "c548f4edc58d",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3e2b1982141c": {
+  "identity": {
+   "one_liner": "面向气候/地球科学的多源科研数据采集与同步框架，含断点续传与完整性校验",
+   "review": "RDH 是一个用于获取公开科研数据（ERA5、NCAR 等）的命令行工具，可通过 MCP 接入 AI 编程助手或独立在终端运行。它将数据发现、任务拆分、下载恢复、完整性校验与交付记录串成流程，任务状态存于 SQLite，凭据经环境变量引用。需 Python 3.12+，CDS 数据集需相应平台令牌。",
+   "highlights": [
+    "支持 Copernicus CDS、NSF NCAR GDEX/RDA 等数据源的查询、规划与下载，多源路由并记录选择原因",
+    "下载采用临时文件与原子提交，支持断点续传、有限重试、校验和与格式完整性检查，未通过验证的文件进入隔离目录",
+    "生成交付清单（Delivery Manifest）与检查报告，任务状态、事件和文件登记保存在 SQLite 数据库中"
+   ],
+   "use_cases": [
+    "批量获取 ERA5、NCAR 等气候与地球科学数据的学生和研究人员",
+    "需要保留数据来源、下载记录与完整性证据的课题组",
+    "希望经 MCP 让 AI 编程助手代为执行数据获取流程的用户"
+   ]
+  },
+  "sha": "3e2b1982141c",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "07788df8360e": {
+  "identity": {
+   "one_liner": "Java 编写的图书借阅管理系统，基于 Swing 界面与 SQLite 持久化，支持 CSV 导出",
+   "review": "UABJoteca 是 UFRPE/UABJ「程序设计 2」课程的 Java 面向对象项目，用于管理图书、用户、借阅与罚款。系统区分学生（借期 7 天、日罚 1 雷亚尔、上限 3 本）与教师（15 天、0.5 雷亚尔、上限 5 本），通过自定义异常与数据库约束（UNIQUE/FOREIGN KEY）保障业务规则。项目分层为 modelos、gerenciadores、excecoes、telas，采用 JDBC/DAO 模式。运行需 JDK 17+，可执行源码或 JAR，并可选加载预置数据库。",
+   "highlights": [
+    "支持图书、用户、借阅的 CRUD 操作，按学生/教师分别执行借期、日罚与并发借阅上限规则",
+    "通过 LivroDAO、UsuarioDAO、EmprestimoDAO 实现 SQLite 持久化，启动时自动建表",
+    "提供终端菜单 13 项操作、四种借阅筛选（全部/进行中/已结束/逾期），以及 CSV 报表导出"
+   ],
+   "use_cases": [
+    "课程教学中展示面向对象概念的实现（抽象类、继承、多态、封装、方法重载）",
+    "小型图书馆的图书流通登记、逾期罚款计算与借阅记录查询",
+    "演示多层架构（模型/管理器/DAO）与自定义异常在业务规则中的应用"
+   ]
+  },
+  "sha": "07788df8360e",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

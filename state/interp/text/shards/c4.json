@@ -3686,5 +3686,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "72d2eaab995f": {
+  "identity": {
+   "one_liner": "SeekDB 的 Swift 绑定，通过 SwiftPM 在 iOS 进程内运行 SeekDB 引擎",
+   "review": "该仓库是一个 SwiftPM 包，为 oceanbase/seekdb 提供 Swift API（SeekDB、ConnectionOptions、SeekDBError），通过 CSeekDB 模块调用 SeekDB.framework 的生命周期函数，在应用进程内的 8 MiB 栈线程上运行引擎。仅提供 iOS 切片，需 iOS 18+ 与 Swift 6.0+；不包含 SQL 客户端，应用需自行选择 MySQL 协议客户端（如 MySQLNIO），通过引擎打开后返回的 Unix socket 连接。TCP 端口模式被拒绝。",
+   "highlights": [
+    "在 iOS 应用进程内运行 seekdb 引擎，通过 seekdb_open/seekdb_close 等 C 接口封装为 Swift API",
+    "SwiftPM 包在无本地构建时自动从 Release 下载引擎二进制并校验 checksum，也可使用本地构建的 SeekDBEngine.xcframework",
+    "提供不可变 Sendable 的 ConnectionOptions，参数校验拒绝奇数长度键值对、空名称与内嵌 NUL 字节"
+   ],
+   "use_cases": [
+    "需要在 iOS 应用本地嵌入运行 SeekDB 数据库引擎的场景",
+    "已有 MySQL 协议客户端库、希望通过 Unix socket 连接进程内引擎的 Swift 应用",
+    "需要将 SeekDB 引擎以 xcframework 形式打包分发的 iOS 构建流程"
+   ]
+  },
+  "sha": "72d2eaab995f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

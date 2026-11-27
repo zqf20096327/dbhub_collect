@@ -3260,5 +3260,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1081035522e9": {
+  "identity": {
+   "one_liner": "AI代理本地记忆控制平面，提供可审计记录与受策略治理的上下文注入",
+   "review": "AtMem 是面向 AI 代理的本地长期记忆与审计系统，通过 Python 包安装，可接入 OpenClaw、Pydantic AI、LangChain/LangGraph 或自定义代理。其机制包括：所有事件记录到本地 Black Box、检索按策略授权、集成默认以 shadow 模式启动需显式激活注入。支持本地 Ollama 或 OpenAI 兼容模型，本地记忆不依赖外部 API。",
+   "highlights": [
+    "本地优先存储并支持 SQLCipher 加密迁移，本地记忆操作不要求外部 API",
+    "提供 Agent Black Box 事件记录与包含 24 个安全/质量用例的离线基准命令（atmem benchmark run）",
+    "所有集成默认运行于 shadow 模式，需通过 atmem control activate 显式启用上下文注入；支持 Pydantic AI 与 LangChain/LangGraph 原生适配器"
+   ],
+   "use_cases": [
+    "为 OpenClaw、Pydantic AI 或 LangGraph 代理添加受治理的长期记忆",
+    "需要本地留存代理模型与工具调用证据以供事后审计的场景",
+    "需要在激活前于 dashboard 审查检索行为、并由 HMAC 凭据委托上下文决策的部署"
+   ]
+  },
+  "sha": "1081035522e9",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c1cc1988a733": {
+  "identity": {
+   "one_liner": "Linux 下的键盘优先 SQLite 图形客户端与 SQL 编辑器，基于 Qt 6/C++ 构建。",
+   "review": "Omasql 是面向 Linux 的 SQLite 数据库浏览器和 SQL 编辑器，采用 Qt 6 和 C++ 编写，提供自动补全、模式浏览、结果过滤、外键跳转和 CSV/JSON 等导出功能，并为 Omarchy/Hyprland 桌面环境适配主题与语言，也可在任意 Wayland 或 X11 桌面上运行。支持只读 URI 打开、内存数据库、查询计划查看，出错语句可发送给系统配置的编码代理修复（发送前会请求确认，不发送数据行）。安装方式为 Arch 的 pacman 包或源码构建，依赖 qt6-base、qt6-declarative、qt6-wayland 和 sqlite。",
+   "highlights": [
+    "编辑器提供 SQL 高亮与输入时补全（FROM/JOIN 后的表、列、别名、关键字、函数），Ctrl+Enter 执行语句，后台运行查询并可用 Esc 取消",
+    "模式浏览器包含行数、主外键、索引及表/列过滤；结果网格支持排序、行过滤、外键链接跳转和查询计划（Ctrl+Shift+E）查看",
+    "结果可复制或导出为 CSV、JSON、Markdown 表格或 SQL INSERT 语句；DROP 及无 WHERE 的 DELETE/UPDATE 语句执行前会要求确认"
+   ],
+   "use_cases": [
+    "在 Omarchy、Hyprland 或其他 Wayland/X11 桌面上以键盘操作方式浏览和查询 SQLite 数据库文件",
+    "通过只读 URI（mode=ro、immutable=1）打开数据库进行不影响数据的查看",
+    "需要将查询结果导出为 CSV、JSON、Markdown 或 SQL INSERT 语句的工作流程"
+   ]
+  },
+  "sha": "c1cc1988a733",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

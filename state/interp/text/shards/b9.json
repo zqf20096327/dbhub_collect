@@ -3429,5 +3429,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4beb9c8c89ef": {
+  "identity": {
+   "one_liner": "面向 AI 代理的代码索引 MCP 服务器，用 tree-sitter 解析源码并存入 SQLite 供检索",
+   "review": "code-index-mcp 是一个为 AI 代理提供代码检索的 MCP 服务器：预先解析源码生成语法树，将函数、类、调用关系等存入 SQLite，通过 MCP 协议向 Claude Code、Cursor、VS Code 等客户端返回查询结果。服务器只读索引，需配合后台 daemon 构建索引。支持 1C:Enterprise 导出配置（bsl-indexer 构建），通过 HTTP 或 stdio 连接，支持 npm 安装或单个二进制运行。",
+   "highlights": [
+    "提供搜索、调用图（get_callers/callees、find_path、get_call_tree）、文件内容读取、grep 及 git 历史/变更等 MCP 工具；bsl-indexer 构建另含 1C 元数据、表单处理器、事件订阅、数据链接等专用工具",
+    "单个二进制文件（约 39–41 MB），索引存储于 SQLite，HTTP 服务器默认仅监听 127.0.0.1；一个服务器可通过仓库别名同时服务多个代码库",
+    "支持 HTTP 与 stdio 两种连接方式；附带 code-index-guard（PreToolUse 钩子）与 code-index-copy（带索引的项目复制）两个辅助工具"
+   ],
+   "use_cases": [
+    "为连接 MCP 客户端（Claude Code、Cursor、VS Code 等）的 AI 代理提供函数查找、调用链分析等代码检索能力",
+    "索引和查询 1C:Enterprise 8.3 配置导出（Configurator 与 1C:EDT 格式），包括元数据结构与数据引用关系",
+    "在 Linux 服务器上通过 Docker/systemd 部署共享索引服务，供团队多个会话与项目复用同一索引"
+   ]
+  },
+  "sha": "4beb9c8c89ef",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "412412ce78ce": {
+  "identity": {
+   "one_liner": "Go 编写的 AI 自然语言问数 Agent 兼 MCP Server 数据库安全网关",
+   "review": "AgentSQL（智盾）用 Go 实现，提供两个入口：自有页面用自然语言问数，以及供外部 AI Agent 调用的 MCP Server。两入口共用身份授权、受控 SQL 执行、结果脱敏与持久审计，支持 MySQL/PostgreSQL 数据源，SQLBot 为可选适配客户端。安装需 Linux glibc≥2.28 与 systemd，或 Docker 镜像；README 注明未在真实业务系统验证，兼容性分等级列出。",
+   "highlights": [
+    "自有页面问数与 MCP Server（stdio、Streamable HTTP、无状态 HTTP）两种入口，共用授权、受控执行、脱敏与审计",
+    "支持业务语义配置、双表关联汇总、单表过滤分组分析，历史记录与 CSV/XLSX 导出均重新校验授权",
+    "提供 Linux amd64/arm64 原生包（glibc≥2.28、systemd）与多架构 Docker 镜像两种安装方式"
+   ],
+   "use_cases": [
+    "员工在自有页面以自然语言查询已绑定并授权的数据源",
+    "外部 AI Agent 通过 MCP 协议在授权范围内安全查询数据库",
+    "需要 SQL 审计与结果脱敏的受控数据访问场景"
+   ]
+  },
+  "sha": "412412ce78ce",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

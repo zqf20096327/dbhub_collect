@@ -3455,5 +3455,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "516124b3029e": {
+  "identity": {
+   "one_liner": "Claude Code 会话术语表插件，本地自动捕获短标签定义供离线查询",
+   "review": "lecend 是一个 Claude Code 插件，配合单个 Rust 二进制运行。它在会话进行时后台捕获 W6、D4 等短标签，把定义和状态写入本地 SQLite 文件；用户执行 /lecend <label> 查询，输出仅用于显示、不进入模型上下文。捕获通过用户自己的 Claude 账户调用模型（默认 haiku），每轮约 800–3500 tokens，计入配额，可用 /lecend off 或设置关闭。仅支持 Claude Code，每会话独立术语表。",
+   "highlights": [
+    "后台自动捕获会话中的短标签，将定义、最新状态和来源引文存入本地 SQLite 文件",
+    "查询结果仅用于显示，不写入模型上下文；支持历史版本查看、手动编辑、pin/forget 管理",
+    "捕获可配置模型、预算上限（默认每会话 200 次调用）和 stoplist，可通过设置完全停用"
+   ],
+   "use_cases": [
+    "长时间 Claude Code 会话中查询早已滚出视野的标签定义，避免为此消耗模型 token",
+    "通过 /lecend pane 侧边栏实时查看本会话术语表的更新",
+    "对误捕获或通用标签（如 OLD/NEW）用 forget 或 stoplist 过滤"
+   ]
+  },
+  "sha": "516124b3029e",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

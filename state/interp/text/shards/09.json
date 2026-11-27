@@ -3515,5 +3515,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "69a0db6b6ba3": {
+  "identity": {
+   "one_liner": "Nebula mesh VPN 的自托管控制平面，单 Go 二进制管理证书与主机",
+   "review": "nebula-mesh 为 Slack Nebula mesh VPN 提供自托管的管理层，用于签发、轮换、吊销证书并通过 REST API/UI/CLI 分发配置。面向需要自行运维 Nebula 网络的运维人员。服务端用 Go + SQLite + htmx 实现，含 nebula-mgmt 与 nebula-agent 两个静态二进制；移动端主机可通过 QR 码加入。远程访问需自行终止 TLS。",
+   "highlights": [
+    "提供 Web UI、REST API 与 CLI 三种接口，含 TOTP 2FA、OIDC 登录、API 密钥与审计日志",
+    "实现 PKI 生命周期管理：per-operator CA（AES-256-GCM 信封加密存于 SQLite）、CA 轮换、基于 blocklist 的证书吊销",
+    "agent 轮询更新并以 temp+fsync+rename 原子写入证书/配置，通过 SIGHUP 重载 Nebula；支持单次令牌加入与 QR 码移动端加入"
+   ],
+   "use_cases": [
+    "在单台 VM 上自托管管理 Nebula mesh VPN 的证书签发、轮换与配置分发",
+    "管理 iOS/Android 等无 agent 移动主机的加入与证书更新",
+    "为跨网段路由（unsafe_routes/unsafe_networks）和多 overlay IP 的网络集中下发防火墙规则与高级配置"
+   ]
+  },
+  "sha": "69a0db6b6ba3",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "729b3b35ee90": {
+  "identity": {
+   "one_liner": "自托管的 Meta 广告 AI 助手应用，以审批制变更与确定性数据机制为核心",
+   "review": "Maxx 是一个基于 Next.js 的自托管 TypeScript 应用，用于管理 Meta 广告账户：可起草营销活动计划、生成并打分广告文案、审计账户数据、生成报表与警报，并通过 Meta API 创建广告系列。所有写入操作默认关闭且需逐条审批，活动以暂停状态创建；数字由确定性代码计算并标注来源与时间窗。适合自建 Meta 广告运营流程的团队；需要 Node.js 24、Supabase 和 Meta 系统用户令牌。",
+   "highlights": [
+    "提供 MCP 服务器，包含 46 个只读工具，可与 Claude Desktop 等 MCP 客户端配合使用",
+    "文案工作室按确定性规则对文案 0-100 打分，检查长度限制、可读性、禁用词、未验证声明与近似重复",
+    "活动创建时强制为暂停状态，每次变更包含幂等键、账户锁、预算上限与回滚计划"
+   ],
+   "use_cases": [
+    "起草并经审批在 Meta 创建完整广告系列（CBO/ABO、广告组与广告）",
+    "按年龄段、性别、版位、地区等维度分析受众与素材表现，导出 CSV 报表",
+    "通过签名 webhook、CSV 或 Acuity 适配器接入订单/线索/预订数据，与 Meta 模型化结果对照归因"
+   ]
+  },
+  "sha": "729b3b35ee90",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3507,5 +3507,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a515ccb9d29": {
+  "identity": {
+   "one_liner": "基于 SQLite 索引的本地与在线媒体库 CLI 工具集",
+   "review": "library 是一个用 pip 安装的命令行媒体工具集（v4.0.10 含 143 个子命令），通过 ffprobe 提取元数据建立 SQLite 索引来管理大规模本地媒体文件，也可用 yt-dlp、gallery-dl 等抓取 YouTube 频道、图库、Reddit 等在线来源的元数据，并借助 mpv 播放。命令按 database/filesystem/document/file 四类工作流组织；必需依赖 ffmpeg，libtorrent 绑定对 Python 版本有具体要求。适合需要批量编目和浏览大量视频/音频文件的用户。",
+   "highlights": [
+    "通过 ffprobe 扫描本地文件建立数据库索引，后续增量扫描只读取新文件",
+    "支持从 YouTube、Vimeo、gallery-dl、Reddit、Hacker News 等多种来源添加元数据",
+    "播放时可配置播放后动作（如 delete 或 ask_delete），按 database/filesystem/document/file 工作流分组子命令"
+   ],
+   "use_cases": [
+    "为数十 TB 量级的本地视频/音频文件夹建立可检索索引并批量播放",
+    "跟踪 YouTube 频道或播放列表的元数据更新（database update）",
+    "备份 Substack 文章、抓取开放目录与网页图库等在线媒体内容"
+   ]
+  },
+  "sha": "1a515ccb9d29",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "495c383eb6b9": {
+  "identity": {
+   "one_liner": "面向 LLM 的长期记忆后端，经网关在回复前注入相关记忆",
+   "review": "Stiller Brain 是一个由 Python 与 SQLite 实现的 LLM 长期记忆后端。AI 可通过 MCP 工具写入、查询、修改记忆与自写提醒；接入 ST 网关后，网关依据当前话题在回复前选取相关记忆注入上下文。提供自我定义、情感、学习、工具、规划等模块及幻觉黑匣子。支持 Windows/Linux 部署与 Android Termux 实验性本地部署。非商业源码预览，部分功能（如迁移前端）仍为实验状态。",
+   "highlights": [
+    "提供 OpenAI 兼容网关与带认证的 Streamable HTTP MCP 两种接入方式，可连接同一份数据",
+    "支持记忆自动浮现、自写提醒、主动整理、版本历史回看与图片存取",
+    "安装向导生成凭证与依赖，支持 Windows x64、Linux x64/ARM64 及 Android ARM64 实验路线"
+   ],
+   "use_cases": [
+    "为具备网关或 MCP 能力的模型与客户端接入长期记忆库",
+    "角色扮演等需要延续历史对话语境的使用场景",
+    "需要在回复前自动注入相关记忆、或由 AI 主动查存改记录的工作流"
+   ]
+  },
+  "sha": "495c383eb6b9",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ce634456e90": {
+  "identity": {
+   "one_liner": "基于MCP与Ollama的三层混合AI代理编排工具，用本地处理分流云端令牌消耗",
+   "review": "VieForge（内部称TierForge）是一个Python编写的三层混合AI代理框架：云端代理负责架构与审查，本地Python+SQLite检查点与Ollama模型承担批处理、日志压缩等任务。适用于在消费级工作站运行多个AI编码代理的用户。核心包含SHA-256去重、WAL检查点恢复、OS级GPU锁与每日消费上限；核心仅依赖Python标准库，MIT许可，支持Python 3.10+与三大操作系统。",
+   "highlights": [
+    "提供三层架构：云端代理、Python+SQLite+Ollama本地层、GPU子进程或带预算上限的付费API层",
+    "支持SQLite WAL逐项检查点恢复、SHA-256去重、日志压缩输出",
+    "提供跨工作区并发安全：Ollama显存租约管理、独占GPU队列、原子消费账本"
+   ],
+   "use_cases": [
+    "批量文档分类与JSON提取等重复性任务，由本地层处理以减少云端令牌用量",
+    "多项目并行的AI编码工作流中，用检查点恢复中断的批处理作业",
+    "消费级GPU工作站上运行重推理任务，配合--dry-run与每日美元上限控制付费API支出"
+   ]
+  },
+  "sha": "2ce634456e90",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

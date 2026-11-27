@@ -3683,5 +3683,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8418e73021bc": {
+  "identity": {
+   "one_liner": "用 Stricta 编写的单文件多写者关系数据库，提供 PostgreSQL 方言与线协议。",
+   "review": "StrictQL 是一个单文件关系数据库，每个数据库为一个 .strictql 文件，通过 PostgreSQL v3 线协议（Unix socket 或 localhost TCP）对外服务，使 psycopg、psql、Django ORM 等标准 PostgreSQL 客户端无需改动即可连接。其存储引擎基于 mmap 共享内存实现 MVCC 与乐观并发控制，支持多线程/多进程并发写入，写入通过追加式 WAL 与 fsync 持久化。由 Stricta 语言编写，经 LLVM 编译为原生代码；构建需先安装 Stricta 工具链。",
+   "highlights": [
+    "实现 PostgreSQL SQL 方言子集与 v3 线协议，支持简单与扩展查询、事务（BEGIN/COMMIT/ROLLBACK/SAVEPOINT）及 RETURNING、ON CONFLICT 等语法",
+    "采用 MVCC + 乐观并发控制，基于 mmap 共享内存和原子操作支持多线程、多进程并发写入",
+    "支持单文件持久化、CHECKPOINT/VACUUM 压缩、目录模式下单进程服务多个数据库，并可内嵌于 Stricta 程序使用"
+   ],
+   "use_cases": [
+    "需要 Django ORM/psycopg 连接但不想运行独立 PostgreSQL 服务器进程的本地开发或嵌入式场景",
+    "需要多进程并发写入而 SQLite 写串行化不满足的场景",
+    "在 Stricta 应用中以内嵌方式使用关系数据库引擎"
+   ]
+  },
+  "sha": "8418e73021bc",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1eb2ba76901f": {
+  "identity": {
+   "one_liner": "中国人民大学历年考题档案库，按课程、学年、教师班级归并存储",
+   "review": "该仓库收集中国人民大学开放课程平台（OBE/UniCourse）公开课件区的考试材料，覆盖16门课、35个教学班、60个文件（35.2 MB），以计算机类课程为主（如数据结构、数据库系统概论、编译原理）。文件按「课程/学年学期/教师班级/考试类型」目录层级组织，学年学期由上传时间推定，分类依据文件名判定。未收录数学类试卷，仅在README给出外部视频来源指引。",
+   "highlights": [
+    "收录60个文件共35.2 MB，含小测27个、期中17个、期中+小测12个、期末4个",
+    "采用 files/<课程>/<学年学期>/<教师班级>/<考试类型> 的目录结构组织",
+    "抓取自2026-11-05，来源为中国人民大学开放课程平台公开课件区"
+   ],
+   "use_cases": [
+    "查找人大计算机类课程（数据结构、数据库、编译原理等）的小测与期中试题材料",
+    "按教师班级或学年检索特定教学班的历届考试文件",
+    "本地归档与离线浏览课程考试材料"
+   ]
+  },
+  "sha": "1eb2ba76901f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3188,5 +3188,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1c1f3170e390": {
+  "identity": {
+   "one_liner": "打包并重定位 Apache HBase 所用第三方库的 Java 项目",
+   "review": "该项目为 Apache HBase 打包其内部使用的第三方库（protobuf、netty、gson、guava 等），统一以 org.apache.hbase.thirdparty 前缀重定位类名以避免依赖冲突。面向 HBase 项目自身使用，README 明确声明库及版本可能随 HBase 需求变更。自 4.1.12 起需同时配置 JDK 8 与 JDK 17 并使用 Maven toolchains 构建。",
+   "highlights": [
+    "以统一偏移 org.apache.hbase.thirdparty 对第三方库做类名重定位（shading）",
+    "按库拆分为多个子模块（hbase-shaded-protobuf、hbase-shaded-jetty、hbase-shaded-miscellaneous 等）以收窄依赖",
+    "4.1.12+ 版本通过 Maven toolchains 同时支持 JDK 8 与 JDK 17 构建，兼容 HBase 2.x 与 3.x"
+   ],
+   "use_cases": [
+    "作为 Apache HBase 构建的依赖来源",
+    "需要以重定位方式引入 protobuf、netty、guava 等库的场景",
+    "需要同时构建 JDK 8 字节码与 Jetty 12（JDK 17）模块的 HBase 发布流程"
+   ]
+  },
+  "sha": "1c1f3170e390",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d4b5ef9a3eab": {
+  "identity": {
+   "one_liner": "本地运行的 AI 多智能体消息室，基于 MCP 协议与 SQLite 实现",
+   "review": "Agent Hub 是一个仅在 127.0.0.1:18790 运行的本地房间服务，供 Claude Code、Codex、Cursor 等 AI 应用通过 MCP（stdio 或 Streamable HTTP）或 CLI 接入，在一个共享房间内互发消息并保留各自原生窗口。依赖 Node.js 22.13+ 内置 node:sqlite（WAL+FTS5），无 npm install、无 Docker、无云账户。消息通过 @mention 与 hub_wait 长轮询唤醒，文件范围用 hub_claim 加 409 冲突检测管理。",
+   "highlights": [
+    "提供 16 个 MCP Tools、5 个 Resources、2 个 Prompts，支持 NDJSON 与 Content-Length 两种 stdio 帧格式",
+    "内置 SQLite WAL + FTS5 全文检索的共享记录账本，支持 hub_claim/hub_release 范围占用与 409 冲突返回",
+    "SSE 事件流支持 Last-Event-ID 重放，Web UI 含 Ctrl+K 命令面板、线程抽屉与 Markdown/JSON 导出"
+   ],
+   "use_cases": [
+    "多个 AI 编码应用并行分工开发不同模块，用范围锁定避免文件冲突",
+    "跨模型代码评审：一个智能体实现、另一个被 @mention 唤醒后审查并回复",
+    "将架构决策、bug 根因等记入共享账本，供重启后的新会话通过 hub_finding_search 检索"
+   ]
+  },
+  "sha": "d4b5ef9a3eab",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

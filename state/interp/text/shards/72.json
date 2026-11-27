@@ -3588,5 +3588,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4ec7893f5641": {
+  "identity": {
+   "one_liner": "注重隐私的跨平台剪贴板管理器，支持端到端加密同步与OCR搜索",
+   "review": "Clippy 是一款桌面剪贴板管理器，支持文本、HTML、RTF、图片和文件内容的记录与搜索，通过 Google Drive 同步历史并支持端到端加密。技术栈为 Rust + Tauri + SolidJS，数据存储于 SQLite，提供 GUI 与 CLI 两种操作方式。README 注明仅在 Linux(x11) KDE Plasma、Windows、macOS 上测试过。",
+   "highlights": [
+    "支持文本/HTML/RTF/图片/文件的多类型剪贴板内容，图片可自动 OCR 提取文字（100+ 语言）并纳入搜索",
+    "提供 CLI（list/get/copy/add/search 等）与自定义脚本热键，剪贴板文本经 stdin 与 CLIPPY_TEXT 传入脚本",
+    "通过 Google Drive 同步收藏与历史，支持端到端加密、密码保护与按类型的历史清理"
+   ],
+   "use_cases": [
+    "需要跨设备同步剪贴板历史且要求加密传输的场景",
+    "复制图片后需按其中文字内容检索的场景",
+    "需要通过脚本或命令行自动化处理剪贴板内容的工作流"
+   ]
+  },
+  "sha": "4ec7893f5641",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "044987739edd": {
+  "identity": {
+   "one_liner": "PostgreSQL 迁移工具，以组件方式维护 SQL 并通过 pinning 生成可复现迁移",
+   "review": "Spawn 是一个用 Rust 编写的 PostgreSQL 数据库迁移与测试工具，面向重度依赖数据库逻辑（函数、视图、触发器）的开发者。它将 SQL 片段保存在可原位编辑的组件文件中，基于 Minijinja 模板编译进迁移，并通过 pin 机制固定已构建迁移的输出以保证可复现性。另提供基于黄金文件对比的 SQL 测试和可传参的可重复脚本功能。通过 shell 脚本安装，可用 spawn init --docker 生成 docker compose 项目骨架。",
+   "highlights": [
+    "迁移为带时间戳的文件夹与 up.sql 脚本，支持 new、build、pin、apply、status 等子命令",
+    "使用 Minijinja 模板实现组件复用，pin 后旧迁移输出不随组件修改而变化",
+    "提供黄金文件式 SQL 测试（test new/expect/run/compare）及宏驱动的测试数据生成"
+   ],
+   "use_cases": [
+    "需要在版本控制中原位维护函数、视图、触发器并生成可复现迁移的项目",
+    "为 PostgreSQL 函数、触发器、视图编写回归测试并对比预期输出",
+    "编写可重复运行、支持传入变量的 SQL 脚本用于数据播种或常规更新"
+   ]
+  },
+  "sha": "044987739edd",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b3542dfe9f95": {
+  "identity": {
+   "one_liner": "面向德国的自托管开源开票软件，支持 XRechnung/ZUGFeRD 电子发票",
+   "review": "OpenInvoice Germany 是一款可自托管的开源发票软件（AGPL-3.0），面向德国的自由职业者与中小企业。它生成符合 EN 16931 的 XRechnung 与 ZUGFeRD/Factur-X PDF/A-3 电子发票，并经官方 Schematron 校验；内置 GoBD 相关机制（不可变定稿、哈希链审计、取消而非删除）、§14 UStG 必填字段检查及多种税制方案。README 提示 GoBD 合规还需用户自行编写流程文档，且 MCP 功能若用云端 LLM 处理个人数据需自行评估 GDPR 义务。",
+   "highlights": [
+    "生成 XRechnung（UBL）与 ZUGFeRD/Factur-X 混合 PDF（PDF/A-3b），经官方 Schematron 规则校验，CI 中使用 KoSIT validator 与 veraPDF 交叉验证",
+    "提供 GoBD 机制：定稿后不可变、无间断编号、append-only 审计哈希链、取消而非删除、定期哈希链校验与审计导出",
+    "提供版本化 REST API（OpenAPI 文档、Bearer 认证、read/write/send/admin 作用域）、HMAC 签名 Webhooks，以及可选的 MCP AI 助手接入"
+   ],
+   "use_cases": [
+    "需向德国 B2B/B2G 客户开具结构化电子发票（XRechnung/ZUGFeRD）的企业与自由职业者",
+    "需要报价单、部分/预付/最终发票、订阅周期计费与催款流程的小型企业",
+    "希望以 API 或 MCP 助手自动化开票流程、并将数据保留在自有服务器上的自托管用户"
+   ]
+  },
+  "sha": "b3542dfe9f95",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

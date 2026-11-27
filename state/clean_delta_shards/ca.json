@@ -36889,5 +36889,1303 @@
    ]
   ],
   "at": "2026-11-26"
+ },
+ "f92ad82cdb37+2": {
+  "fn": "progrium/minipg",
+  "clean_ver": "2",
+  "raw_lines": 13,
+  "ops": [
+   [
+    "equal",
+    0,
+    13,
+    0,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "minipg embeds Docker Hub's `postgres:18-alpine` image and runs it with hyper9 (h9), used as a Zig library. h9's Linux personality runs Alpine's own Postgres binaries directly on the host's hypervisor, with h9's Plan 9 kernel answering their system calls. There's no Linux kernel to boot, no VM image, and no Docker."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "> **Early.** h9 is a research prototype and its Linux personality is young. See Known limits before trusting it with data you can't recreate."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "The **manual** is the full guide: concepts, everyday tasks, backup and restore, Postgres versions, CI, performance, durability, troubleshooting, and a reference for every command, variable, and file."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    40,
+    18,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "|Command|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    41,
+    42
+   ],
+   [
+    "replace",
+    42,
+    61,
+    42,
+    61,
+    [
+     "|`minipg <pgdb> [sql]`, `shell <pgdb\\|url> [sql]`|psql on the `.pgdb` (or any `postgres://` URL), or run the statements given|",
+     "|`init <pgdb> [--port N] [--user U]`|Create a `.pgdb` and initialize its cluster (about 4s); refuses if the path exists|",
+     "|`serve <pgdb> [-p PORT] [--listen ADDR] [--log FILE] [--trust] [-- postgres args]`|Run the server in the foreground; Ctrl-C stops it|",
+     "|`stop <pgdb>`|Stop its server cleanly|",
+     "|`status <pgdb>`|Running or not, port, clients, uptime; exits 3 when stopped|",
+     "|`url <pgdb>`|A `postgres://` URL with the password|",
+     "|`logs <pgdb> [-f]`|The server's recent log (a 4 MB window), or the last server's log file|",
+     "|`exec <pgdb> -- TOOL [args]`|Run a Postgres tool (pg_dump, pg_restore, psql, ...) against the server, with `PG*` set|",
+     "|`env <pgdb>`|`DATABASE_URL` and `PG*` as shell exports: `eval \"$(minipg env app.pgdb)\"`; on Windows, PowerShell assignments: `minipg env app.pgdb \\|Invoke-Expression`|",
+     "|`run <pgdb> [--stop] -- CMD [args]`|Run a host command with `DATABASE_URL` and `PG*` set; the server stays up until it exits, and its exit code is minipg's. `--stop` stops the server it started when the command exits, and passes SIGINT/SIGTERM on to it|",
+     "|`dump <pgdb> [pg_dump args]`|`pg_dump` to stdout (plain SQL unless args say otherwise)|",
+     "|`restore <pgdb> [FILE]`|Restore a plain SQL or custom-format dump from FILE or stdin; stops at the first error|",
+     "|`dbs <pgdb>`|List databases, the default marked `*`|",
+     "|`create <pgdb> NAME`, `drop <pgdb> NAME`|Create or drop a database; the default can't be dropped|",
+     "|`default <pgdb> [NAME]`|Show or set the default database (what `url`, `shell`, and the rest use)|",
+     "|`passwd <pgdb>`|Give the superuser a new generated password (or `POSTGRES_PASSWORD`) and save it|",
+     "|`versions`|Postgres versions embedded and downloaded|",
+     "|`fetch MAJOR`|Download a Postgres major's root (`postgres:MAJOR-alpine`)|",
+     "|`prune`|Remove downloaded roots; they come back on demand|"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    78,
+    61,
+    78
+   ],
+   [
+    "replace",
+    78,
+    79,
+    78,
+    79,
+    [
+     "|What|Linux|macOS|Windows|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    79,
+    80
+   ],
+   [
+    "replace",
+    80,
+    83,
+    80,
+    83,
+    [
+     "|Runtime (run.json, control socket)|`$XDG_RUNTIME_DIR/minipg/<key>/`|`$TMPDIR/minipg-$UID/<key>/`|`%LOCALAPPDATA%\\minipg\\run\\<key>\\`|",
+     "|Logs|`~/.local/state/minipg/logs/<key>.log`|`~/Library/Logs/minipg/<key>.log`|`%LOCALAPPDATA%\\minipg\\logs\\<key>.log`|",
+     "|Unpacked roots|`~/.cache/minipg/roots/<digest>/`|`~/Library/Caches/minipg/roots/<digest>/`|`%LOCALAPPDATA%\\minipg\\roots\\<digest>\\`|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    88,
+    83,
+    88
+   ],
+   [
+    "replace",
+    88,
+    89,
+    88,
+    89,
+    [
+     "|Platform|h9 backend|Needs|Tested|"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    89,
+    90
+   ],
+   [
+    "replace",
+    90,
+    94,
+    90,
+    94,
+    [
+     "|Linux x86_64|KVM, or h9's native backend without it|Linux 5.11 or later|Yes, native backend|",
+     "|Linux arm64|KVM|read/write `/dev/kvm`|Builds; not run|",
+     "|macOS (Apple Silicon)|Hypervisor.framework|the hypervisor entitlement (the build signs ad hoc)|Not run|",
+     "|Windows x86_64|Windows Hypervisor Platform (WHP)|Windows 10 1803 or later, with the Windows Hypervisor Platform feature on|Yes, on WHP|"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    112,
+    94,
+    112
+   ],
+   [
+    "replace",
+    112,
+    113,
+    112,
+    113,
+    [
+     "- src/server.zig is the server process. It holds the `.pgdb`'s lock, picks the port, writes `run.json`, serves the control socket, and runs Postgres in an h9 machine whose Linux root is the unpacked image and whose writable cwd is the `.pgdb` (`/mnt/term/cwd` in the guest). The image's `docker-entrypoint.sh` initializes the cluster on first start. A monitor thread logs in to see when Postgres is ready, then counts clients in `pg_stat_activity` for `status` and the idle timeout."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    113,
+    114
+   ],
+   [
+    "replace",
+    114,
+    116,
+    114,
+    116,
+    [
+     "- src/control.zig is the control protocol: one versioned request line over a unix socket, AF_UNIX on Windows too (`status`, `stop`, `logs [follow]`, `clients`).",
+     "- src/client.zig finds a running server or starts one; src/vm.zig builds the server and tool machines; src/pgwire.zig is the small Postgres client (SCRAM-SHA-256, simple queries) the server uses on the host."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    119,
+    116,
+    119
+   ],
+   [
+    "replace",
+    119,
+    120,
+    119,
+    120,
+    [
+     "Requires Zig 0.16, and for the root `curl`, `jq`, `tar`, and `xz`. hyper9 is a git submodule, since it can't be fetched as a Zig package yet:"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    125,
+    120,
+    125
+   ],
+   [
+    "replace",
+    125,
+    129,
+    125,
+    126,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    141,
+    126,
+    138
+   ],
+   [
+    "replace",
+    141,
+    142,
+    138,
+    139,
+    [
+     "scripts/root.sh pulls the image from Docker Hub's registry, drops what a server doesn't need (LLVM for JIT, headers, docs), and records the image's digest, version, and ENV beside the tarball. JIT is therefore unavailable, and minipg sets `jit=off`. macOS builds have to be made on a Mac (for the SDK's Hypervisor framework). Windows builds cross-compile from anywhere; on Windows itself, run root.sh from Git Bash or MSYS2."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    162,
+    139,
+    159
+   ],
+   [
+    "delete",
+    162,
+    163,
+    159,
+    159
+   ],
+   [
+    "equal",
+    163,
+    164,
+    159,
+    160
+   ]
+  ],
+  "at": "2026-11-27"
+ },
+ "f1d83618e146+2": {
+  "fn": "turborel/turborel",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "turborel"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    9,
+    1,
+    4
+   ],
+   [
+    "replace",
+    9,
+    10,
+    4,
+    5,
+    [
+     "> VERSIONING.md. The latest alpha is built for Linux,"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    5,
+    6
+   ],
+   [
+    "replace",
+    11,
+    12,
+    6,
+    7,
+    [
+     "> nightly,"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    28,
+    7,
+    23
+   ],
+   [
+    "replace",
+    28,
+    29,
+    23,
+    24,
+    [
+     " CONFORMANCE.md, whose claimed features SQL_FEATURES shows."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    24,
+    25
+   ],
+   [
+    "replace",
+    30,
+    33,
+    25,
+    28,
+    [
+     " on many threads at once and survive a crash with multi-version concurrency",
+     " control, a write-ahead log written once per transaction at its commit,",
+     " checkpoints and recovery."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    28,
+    29
+   ],
+   [
+    "replace",
+    34,
+    37,
+    29,
+    32,
+    [
+     " at the savepoint levels of routines and ATOMIC blocks.",
+     "- Data change delta tables, OLD, NEW and",
+     " FINAL TABLE of INSERT, UPDATE, DELETE and MERGE."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    32,
+    33
+   ],
+   [
+    "replace",
+    38,
+    39,
+    33,
+    34,
+    [
+     " judged in place and its other columns decoded of the rows kept alone."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    41,
+    34,
+    36
+   ],
+   [
+    "replace",
+    41,
+    42,
+    36,
+    37,
+    [
+     " FETCH FIRST for the rows kept."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    37,
+    38
+   ],
+   [
+    "replace",
+    43,
+    45,
+    38,
+    40,
+    [
+     " at a time, and FETCH FIRST's row goal passed through filters, joins and",
+     " groupings to an ordered read."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    40,
+    41
+   ],
+   [
+    "replace",
+    46,
+    47,
+    41,
+    42,
+    [
+     " filtered by pluggable kernels, and parallel morsels read by batch."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    42,
+    43
+   ],
+   [
+    "replace",
+    48,
+    50,
+    43,
+    45,
+    [
+     " and each bit for bit the portable body: filters, sums, extremes,",
+     " decimals, grouping hashes, vector distances and CRC-32C."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    45,
+    46
+   ],
+   [
+    "replace",
+    51,
+    53,
+    46,
+    48,
+    [
+     " states, merged in parallel in waves, of the column store too, its hash",
+     " keyed past long probes; EXCEPT and INTERSECT counted in it."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    48,
+    49
+   ],
+   [
+    "replace",
+    54,
+    56,
+    49,
+    51,
+    [
+     " parallel morsels, telling the left's scan a range and Bloom filter;",
+     " dense keys found by their place, their filter an exact bitmap."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    51,
+    52
+   ],
+   [
+    "replace",
+    57,
+    58,
+    52,
+    53,
+    [
+     " one row, a LEFT JOIN or MERGE from host arrays, and a join's bounds."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    53,
+    54
+   ],
+   [
+    "replace",
+    59,
+    60,
+    54,
+    55,
+    [
+     " rows each WHEN keeps."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    55,
+    56
+   ],
+   [
+    "replace",
+    61,
+    62,
+    56,
+    57,
+    [
+     " kernel, moving frames by prefix sums and segment trees."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    57,
+    58
+   ],
+   [
+    "replace",
+    63,
+    70,
+    58,
+    65,
+    [
+     " losers, and FETCH FIRST that makes only the rows it gives, reading its",
+     " other columns late and skipping groups past its bound.",
+     "- Partitioned tables by RANGE, LIST, HASH",
+     " or a strategy a plug-in registers, many levels deep, attached and",
+     " detached, rows routed and moved, reads pruned and merged in order, joins",
+     " routed by each probe, global indexes holding keys across partitions,",
+     " and every index method made on each partition."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    65,
+    66
+   ],
+   [
+    "replace",
+    71,
+    72,
+    66,
+    67,
+    [
+     " time, and reached by locators."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    67,
+    68
+   ],
+   [
+    "replace",
+    73,
+    79,
+    68,
+    74,
+    [
+     " and leaf hints to their rows, linear hash tables and R-trees over",
+     " points and rectangles are built in, R-trees packed when built and their",
+     " emptied nodes reclaimed up to the root. Any other method registers with its",
+     " own options, and a cost-based planner chooses among them for filters",
+     " and inner joins. Zone maps and Bloom filters skip what a scan cannot",
+     " match, and a row-store COUNT(*) is summed from its settled zones."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    74,
+    75
+   ],
+   [
+    "replace",
+    80,
+    83,
+    75,
+    78,
+    [
+     " the delta, optional column imprints, column sketches of compressed",
+     " texts, and sorted dictionaries judged by codes. COUNT(*), MIN and MAX",
+     " come from the groups' directory and summaries."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    78,
+    79
+   ],
+   [
+    "replace",
+    84,
+    105,
+    79,
+    100,
+    [
+     " column store rows straight into frozen groups, sent by column and",
+     " parsed into each column's type with no row of values made.",
+     "- Join ordering",
+     " by dynamic programming, DPccp and DPhyp, outer joins reordered where",
+     " sound, hash, merge and index joins chosen with the order, adaptive to",
+     " queries of a hundred tables, on statistics of most common values, a",
+     " sample of rows for correlated conditions and indexes' joint key counts,",
+     " joins estimated by keys and bounded, index joins chosen robustly.",
+     "- Column statistics",
+     " in a view: what the planner holds of each column, and each index's keys.",
+     "- Range joins of",
+     " bands and overlapping periods, one table sorted and searched by the other.",
+     "- Predicate transfer",
+     " shrinks a chain's tables by Bloom filters of each other's keys before",
+     " they are joined, from the smaller tables to the largest and back.",
+     "- EXPLAIN ANALYZE runs a",
+     " query or a data change and shows each operator's rows beside its",
+     " estimate, its batches, spills and index reads, and a program may give",
+     " the planner true row counts to test its plans.",
+     "- EXPLAIN of a data change",
+     " shows its plan, indexes, cascades, triggers and point path, running nothing."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    100,
+    101
+   ],
+   [
+    "replace",
+    106,
+    114,
+    101,
+    109,
+    [
+     " functions that return one value inlined, so each is computed once",
+     " rather than once for each row.",
+     "- Lateral derived tables,",
+     " whose query reads the tables before them in the FROM clause.",
+     "- Semi joins and antijoins",
+     " for EXISTS, NOT EXISTS, IN and NOT IN, ordered with the other joins,",
+     " and joins under MIN and MAX reduced to semi joins; mark joins for",
+     " those under OR, in CASE and in select lists."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    109,
+    110
+   ],
+   [
+    "replace",
+    115,
+    156,
+    110,
+    151,
+    [
+     " into set operations and below windows, and parts of conditions that can",
+     " raise computed on the table they read, so joins over them are reordered.",
+     "- SQL/XML: an XML type kept in tables, in arrays,",
+     " multisets, rows and distinct and structured types too, its values parsed",
+     " from XML 1.0 and 1.1 text and serialized back, XMLDOCUMENT, XMLCAST, IS",
+     " DOCUMENT and IS CONTENT, and XML published from SQL values, arrays and",
+     " multisets too, by",
+     " XMLELEMENT, XMLFOREST, XMLAGG, XMLCONCAT, XMLCOMMENT, XMLPI and XMLTEXT",
+     " with namespaces and XMLBINARY of a query, a statement or a definition,",
+     " tables, schemas and the catalog mapped to XML and XML Schema by",
+     " XMLMAP, identifiers and XML Names mapped by XMLNAME_TO_IDENTIFIER and",
+     " IDENTIFIER_TO_XMLNAME, and queried in XQuery 1.0 by XMLQUERY, XMLEXISTS",
+     " and XMLTABLE, statically typed on request, importing library modules",
+     " registered by CREATE XQUERY MODULE, written in-house with no",
+     " dependency, its modifiers shown in the",
+     " Information Schema, XML indexes of its paths and values, and XML",
+     " Schemas registered by CREATE XML SCHEMA, values validated by them with",
+     " XMLVALIDATE, IS VALID and XQuery's validate and kept in columns of",
+     " their XMLSCHEMA types, USAGE on them and their Information Schema views.",
+     "- SQL/MM Spatial, its 27 geometry types in 2D",
+     " and 3D with every constructor and mutator, exact relationships and",
+     " set operations, reference systems, angles, directions and vectors,",
+     " CHECK constraints over geometries,",
+     " and R-tree spatial queries, distance searches",
+     " and joins, outer joins too, priced by geometry statistics, spilled past",
+     " memory or through two trees at once,",
+     " serializable over the windows they read, and Simple feature access's",
+     " SQL option with GEOMETRY_COLUMNS, SPATIAL_REF_SYS, unprefixed names and",
+     " annotation text.",
+     "- Topologies of nodes, edges and faces, and",
+     " spatial networks with shortest paths.",
+     "- Linear referencing, locating along",
+     " roads, rails and other linear features by measure and offset.",
+     "- Full-text search by a text's words,",
+     " whatever their case and accents, through an inverted index of",
+     " block-compressed postings.",
+     "- SQL/MM Full-Text, its FULLTEXT type, CONTAINS",
+     " patterns and thesauri, ranked by BM25 or a ranking of your own.",
+     "- Full text in 43 languages, stemmed by",
+     " Snowball's own stemmers, with CJK and Thai read as character bigrams,",
+     " and more served by plug-ins, as dictionary segmenters."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    151,
+    152
+   ],
+   [
+    "replace",
+    157,
+    159,
+    152,
+    154,
+    [
+     " Collation Algorithm and CLDR's tailorings for 48 languages, so text sorts",
+     " and compares as its readers expect."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    160,
+    154,
+    155
+   ],
+   [
+    "replace",
+    160,
+    161,
+    155,
+    156,
+    [
+     " ChaCha20-Poly1305, for a whole database or one table."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    162,
+    156,
+    157
+   ],
+   [
+    "replace",
+    162,
+    171,
+    157,
+    166,
+    [
+     " once a majority of servers holds it, so three servers survive losing one.",
+     " Backups serve reads and elect a new primary within seconds, and a lost",
+     " server catches up when it rejoins.",
+     "- Backups, full and incremental, taken",
+     " online by BACKUP DATABASE, verified and restored offline, and recovery",
+     " to a point in time through an archive of the log, to pluggable targets.",
+     "- Monitoring: each connection's running",
+     " statement and what it waits on, statistics of every statement run, and",
+     " each table's size and last change and each index's searches."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    172,
+    166,
+    167
+   ],
+   [
+    "replace",
+    172,
+    174,
+    167,
+    169,
+    [
+     " with SEARCH and CYCLE, row pattern recognition (MATCH_RECOGNIZE), and",
+     " the statistical set functions and math functions of T621."
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    169,
+    170
+   ],
+   [
+    "replace",
+    175,
+    176,
+    170,
+    171,
+    [
+     " either store."
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    171,
+    172
+   ],
+   [
+    "replace",
+    177,
+    180,
+    172,
+    175,
+    [
+     " sequences and identity columns.",
+     "- UUIDs, with UUID_V4() and time-ordered",
+     " UUID_V7()."
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    175,
+    176
+   ],
+   [
+    "replace",
+    181,
+    183,
+    176,
+    178,
+    [
+     " path language, strict and lax, and its filters; IS JSON, JSON_OBJECT,",
+     " JSON_ARRAY, JSON_OBJECTAGG and JSON_ARRAYAGG."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    178,
+    179
+   ],
+   [
+    "replace",
+    184,
+    185,
+    179,
+    180,
+    [
+     " JSON in comparisons, grouping and ordering."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    187,
+    180,
+    182
+   ],
+   [
+    "replace",
+    187,
+    188,
+    182,
+    183,
+    [
+     " JSON_CONTAINS by an inverted index of paths and values."
+    ]
+   ],
+   [
+    "equal",
+    188,
+    189,
+    183,
+    184
+   ],
+   [
+    "replace",
+    189,
+    193,
+    184,
+    188,
+    [
+     " that cannot raise, used for lookups and ORDER BY.",
+     "- Vectors, a VECTOR type of dense or sparse",
+     " embeddings with distances, operators and nearest-neighbour search,",
+     " exact or approximate."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    188,
+    189
+   ],
+   [
+    "replace",
+    194,
+    197,
+    189,
+    192,
+    [
+     " vectors, kept up to date as rows change.",
+     "- Hybrid search, fusing BM25 and vector",
+     " top-k by RRF or weighted scores."
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    192,
+    193
+   ],
+   [
+    "replace",
+    198,
+    218,
+    193,
+    213,
+    [
+     " embedded after commit.",
+     "- External plug-ins: functions, metrics,",
+     " models and more from programs of other parties, run as processes of their",
+     " own, installed from signed package files, with a starter project and",
+     " `pack` for authors and licenses told.",
+     "- Every plug-in kind external, types,",
+     " collations, storage engines and index methods among them, with an SDK.",
+     "- Host plug-ins beneath the database,",
+     " its encodings, log, clock, files, keys and listeners among them.",
+     "- Replication and archive plug-ins:",
+     " a replica's transport, journal, state transfer and consensus, and a",
+     " backup's archive, served by host plug-ins that fail stop.",
+     "- Plug-in settings declared by",
+     " manifests and set as built-in ones, and a buffer eviction policy a",
+     " host plug-in programs.",
+     "- Optimizer rules and statistics as plug-ins:",
+     " rules that rewrite a stable plan form, and statistics both ways.",
+     "- Property graphs over tables or",
+     " queries' rows, queried by GRAPH_TABLE's path patterns through adjacency",
+     " indexes, LINE_GRAPH among them."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    219,
+    213,
+    214
+   ],
+   [
+    "replace",
+    219,
+    228,
+    214,
+    223,
+    [
+     " identities, CONNECTION constraints and each schema's SYS_GRAPH.",
+     "- Graph compatibility syntax:",
+     " MATCH in a WHERE clause, identity functions and hints, PGQL and",
+     " Cypher queries, as GRAPH_TABLE.",
+     "- GQL by EXECUTE GQL, GQL_TABLE or",
+     " a GQL session, over property graphs and typed or open graphs.",
+     "- Graph algorithms such as PAGERANK,",
+     " WCC, LOUVAIN and SSSP over a property graph or a table of edges, in",
+     " parallel, with INTO PROPERTY."
+    ]
+   ],
+   [
+    "equal",
+    228,
+    229,
+    223,
+    224
+   ],
+   [
+    "replace",
+    229,
+    231,
+    224,
+    226,
+    [
+     " worst-case optimal join of cycles, with label and reachability",
+     " indexes and graph statistics."
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    226,
+    227
+   ],
+   [
+    "replace",
+    232,
+    233,
+    227,
+    228,
+    [
+     " SUBMULTISET and IS A SET, and COLLECT, FUSION and INTERSECTION."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    228,
+    229
+   ],
+   [
+    "replace",
+    234,
+    235,
+    229,
+    230,
+    [
+     " in hierarchies, and references that are dereferenced."
+    ]
+   ],
+   [
+    "equal",
+    235,
+    236,
+    230,
+    231
+   ],
+   [
+    "replace",
+    236,
+    241,
+    231,
+    236,
+    [
+     " before its end, the period predicates OVERLAPS, EQUALS, CONTAINS,",
+     " PRECEDES, SUCCEEDS and IMMEDIATELY PRECEDES and SUCCEEDS, and UPDATE and",
+     " DELETE FOR PORTION OF a period, which keep the parts of a row outside it,",
+     " keys WITHOUT OVERLAPS of it, one row of a key at each point in time, and",
+     " foreign keys of a period, whose rows' periods their references cover."
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    236,
+    237
+   ],
+   [
+    "replace",
+    242,
+    245,
+    237,
+    240,
+    [
+     " columns the database stamps, WITH SYSTEM VERSIONING keeping each row an",
+     " update or delete ends as a historical row, read FOR SYSTEM_TIME AS OF,",
+     " BETWEEN or FROM … TO, and bitemporal with an application-time period."
+    ]
+   ],
+   [
+    "equal",
+    245,
+    246,
+    240,
+    241
+   ],
+   [
+    "replace",
+    246,
+    253,
+    241,
+    248,
+    [
+     " handlers, loops and SIGNAL, grouped into modules if wished, and",
+     " polymorphic table functions that take whole tables as arguments.",
+     "- A routine debugger: one connection attaches",
+     " to another's session and steps through its procedures, functions and",
+     " triggers by breakpoints, reading their stack and variables.",
+     " A procedure's body is compiled as it is first called, its key reads",
+     " and its changes run straight by the plans kept of them."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    248,
+    249
+   ],
+   [
+    "replace",
+    254,
+    255,
+    249,
+    250,
+    [
+     " statement, and roles with privileges granted and revoked."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    258,
+    250,
+    253
+   ],
+   [
+    "replace",
+    258,
+    259,
+    253,
+    254,
+    [
+     " checked or copied a row at a time."
+    ]
+   ],
+   [
+    "equal",
+    259,
+    260,
+    254,
+    255
+   ],
+   [
+    "replace",
+    260,
+    261,
+    255,
+    256,
+    [
+     " one file imported over several connections in contiguous ranges."
+    ]
+   ],
+   [
+    "equal",
+    261,
+    264,
+    256,
+    259
+   ],
+   [
+    "replace",
+    264,
+    265,
+    259,
+    260,
+    [
+     " variables, scripting and seven output formats (guide)."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    267,
+    260,
+    262
+   ],
+   [
+    "replace",
+    267,
+    279,
+    262,
+    274,
+    [
+     " users and passwords, prepared statements, pipelined requests whose",
+     " replies share a write, and cancellation.",
+     "- A native protocol that grows by",
+     " negotiated capabilities: structured errors and notices, row counts,",
+     " generated keys and server time in each completion, bulk copy,",
+     " compression, session status, columns' declared types, and reads",
+     " after a commit on replicas, with sample frames for every message.",
+     "- A client library that pipelines",
+     " requests, pools connections, fails over across servers, and takes its",
+     " settings from a URI, the environment, a service file or a password file.",
+     "- CALL prepared with `?` for OUT and INOUT",
+     " parameters, their values returned as a row over the protocol."
+    ]
+   ],
+   [
+    "equal",
+    279,
+    280,
+    274,
+    275
+   ],
+   [
+    "replace",
+    280,
+    285,
+    275,
+    280,
+    [
+     " grouping granted their share of it and spilling to disk past it.",
+     "- Parallel queries run by",
+     " morsels on a shared pool of workers, the same rows on any number of threads.",
+     "- xxHash for every checksum,",
+     " hash table and filter, XXH3 vectorized on SSE2, AVX2, AVX-512 and NEON."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    297,
+    280,
+    292
+   ],
+   [
+    "replace",
+    297,
+    310,
+    292,
+    305,
+    [
+     "- doc/: the manuals: a User's Guide, the SQL",
+     " Reference, an Operator's Guide, the Client Reference and Specialized Data.",
+     "- VERSIONING.md: releases, alpha, and the versions of",
+     " the file formats and the protocol.",
+     "- CONFORMANCE.md: what is implemented of the",
+     " standards.",
+     "- RULES.md: how Turborel is designed, written and verified.",
+     "- TODO.md: open work.",
+     "- CONTRIBUTING.md and SECURITY.md:",
+     " contributing, and reporting an issue or a vulnerability.",
+     "- LICENSE and TRADEMARK.md: the code is",
+     " under the BSD-2-Clause Plus Patent License; the name Turborel and its",
+     " logos are not, and TRADEMARK.md says how they may be used."
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
  }
 }

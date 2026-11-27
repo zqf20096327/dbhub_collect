@@ -3521,5 +3521,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a95bbed6e6f1": {
+  "identity": {
+   "one_liner": "基于 Spinel AOT 编译的 API-only Ruby 框架，编译为单一原生二进制",
+   "review": "Snails 是面向 API-only Ruby 应用的框架，保留路由、控制器、表单、后台任务等 Rails 约定，通过 Spinel 编译器将应用、框架与 HTTP 服务器编译为单一原生二进制。模型层不含 Active Record 与 gems，读写经由薄 SQL 层，校验在表单中完成。前端需使用独立 SPA 或原生应用。",
+   "highlights": [
+    "将应用、框架和 HTTP 服务器编译为一个原生二进制，单进程多线程运行于多核，无 worker 进程",
+    "提供路由、控制器、表单验证、后台任务、迁移等 Rails 约定；数据库读写经由薄 SQL 层，支持 sqlite 与 PostgreSQL",
+    "内置 cookies、signed cookies 和 CORS；生产示例中进程 RSS 约 20 MB，二进制约 4.3 MB"
+   ],
+   "use_cases": [
+    "为 SPA 前端或原生应用提供 JSON API 的后端服务",
+    "需遵循 Rails 约定但希望以原生二进制部署的 Ruby 项目",
+    "在内存受限（如 1 GB）节点上运行 API 服务的场景"
+   ]
+  },
+  "sha": "a95bbed6e6f1",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fe0f56dcb5ee": {
+  "identity": {
+   "one_liner": "面向财务场景的开源知识图谱平台，内置总账与投资组合扩展。",
+   "review": "RoboSystems 是一个开源（Apache 2.0）财务知识图谱平台，用于将企业账簿、投资组合及 SEC 公开申报数据以结构化、可追溯形式提供给 AI 代理。平台按租户提供独立 LadybugDB 图数据库，每张图均可作为 MCP 服务器，支持 REST API、GraphQL 与 Cypher 查询；含 RoboLedger 总账与 RoboInvestor 投资扩展，需 Docker 及 8GB 内存自托管运行。",
+   "highlights": [
+    "三类图共用一个平台：实体图（账簿/组合）、只读共享库（含 8000+ SEC 申报人）、用户自定义 schema 的通用图（Parquet 导入，Cypher 查询）",
+    "每张图内建 MCP 服务器与 AI Operators，支持子图工作区与语义记忆；API 写操作为具名操作并支持 Idempotency-Key 与 SSE 进度",
+    "基于 PostgreSQL、LadybugDB、DuckDB、LanceDB、OpenSearch 等开源引擎构建，图数据由账簿行重建（projection），支持单机、自有 AWS 账户或托管部署"
+   ],
+   "use_cases": [
+    "自托管或部署于自有 AWS 账户，让 AI 代理通过 MCP 读取公司账簿或投资组合数据",
+    "使用 SEC 共享库对照同行上市公司 XBRL 申报数据进行研究比较",
+    "运行 RoboLedger 总账进行记账、期间关账，并以 XBRL 2.1、holon(RDF)、Excel 等格式输出报告"
+   ]
+  },
+  "sha": "fe0f56dcb5ee",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e5db0268974a": {
+  "identity": {
+   "one_liner": "1С:Напарник 的 HTTP 网关与管理面板，兼容 OpenAI/Anthropic/Gemini API 格式",
+   "review": "该项目为「1С:Напарник разработчика」公共服务提供自托管网关与网页管理后台：将 OpenAI、Anthropic、Gemini 等常见协议的请求转换为 Напарник 的 API 并回传对应格式。面向需在 Cline、Zed、Claude Code 等 IDE 或代理工具中接入 Напарник 的团队。由 Go 编写并编译为单个二进制文件，SQLite 内嵌，管理界面通过 go:embed 打包，无 Node.js 等外部依赖；支持多监听端口、HTTPS、会话队列与按窗口的额度监控。",
+   "highlights": [
+    "同一端口支持 OpenAI Chat Completions、OpenAI Responses、Anthropic Messages、Gemini 四种入站协议，支持流式与非流式响应、tools 双向转换及 reasoning_content 转译",
+    "一个 Напарник 密钥可派发多个令牌：密钥以 AES-GCM 加密，令牌仅存哈希；提供按 5 小时/周窗口的用量监控、CSV 导出与 webhook 阈值告警",
+    "单二进制运行，SQLite 内置、前端经 go:embed 打包；支持多监听器、HTTPS（PEM 证书）、Windows 服务直装及无管理界面的 CLI 管理"
+   ],
+   "use_cases": [
+    "在 Cline、Zed、Claude Code、Codex CLI、Gemini CLI 等支持 OpenAI/Anthropic/Gemini 协议的 IDE 或代理工具中接入 1С:Напарник",
+    "团队共享一个 Напарник 密钥，为每位开发者或 IDE 独立发放令牌并监控各自的额度消耗",
+    "需要查询日志、用量图表、额度告警等集中管理能力，且以单二进制自托管方式部署（含 Windows 服务）的场景"
+   ]
+  },
+  "sha": "e5db0268974a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

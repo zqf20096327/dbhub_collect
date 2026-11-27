@@ -3436,5 +3436,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d9944216d533": {
+  "identity": {
+   "one_liner": "本地优先的单二进制项目管理工具，含 CLI、Web UI 与 AI 代理技能",
+   "review": "Pad 是一个用 Go 编写的项目管理工具，提供单二进制的 CLI、运行于 localhost:7777 的 Web UI 以及面向 AI 代理的 /pad 技能，数据存储在本地 SQLite 中。内置任务、想法、计划、文档、约定、剧本六类集合，支持自定义字段和 Claude Code、Cursor 等 8 种代理工具的接入。可通过 Pad Cloud 实现多设备同步与协作。",
+   "highlights": [
+    "提供 CLI 与 Web UI（看板/列表/表格视图、快捷键导航、wiki 链接、实时更新），数据由本地 SQLite 存储",
+    "安装 /pad 技能后，代理可通过自然语言读取、创建和更新项目条目，兼容 Claude Code、Cursor、Windsurf、Codex、OpenCode、GitHub Copilot、Amazon Q、JetBrains Junie",
+    "支持约定与剧本机制指导代理行为，代理操作在活动流中按名称记录归属；条目自动生成引用编号（如 TASK-5）"
+   ],
+   "use_cases": [
+    "在终端和本地浏览器中管理个人项目的任务、计划与文档",
+    "让 AI 编码代理通过 /pad 技能查询待办、更新任务状态并遵循项目约定",
+    "通过 Docker 在 127.0.0.1:7777 自托管，或经导出导入迁移到 Pad Cloud 进行团队协作"
+   ]
+  },
+  "sha": "d9944216d533",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e6e9fd7e5827": {
+  "identity": {
+   "one_liner": "把原始 JSON 转成 REST 后端的单二进制数据库引擎",
+   "review": "ElysianDB 用 Go 编写（标签标注），提供单个二进制/Docker 镜像，读取 JSON 数据并自动生成含 CRUD、分页、过滤、排序的 REST API，内置自有 internal 存储引擎（append-only 日志、写时复制、自动索引）、token/basic 认证、ACL、JS hooks、Admin UI 与 Redis 风格 TCP 协议。官方文档声明它不面向复杂跨实体 join 或重事务负载。支持 Docker 运行、/health 健康检查、热备份与 /metrics 端点。",
+   "highlights": [
+    "根据写入的 JSON 自动生成 CRUD REST 端点，支持分页、排序、过滤、投影和嵌套关联，并提供带逻辑运算符与数组遍历的 Query API",
+    "内置 internal 存储引擎，包含 append-only 日志、组提交、写时复制读取、按选择性自动构建的有序/位图/复合索引，支持 fsync 持久化与崩溃恢复",
+    "单二进制或 Docker 镜像分发，附带 Admin UI、/health 健康检查、Prometheus /metrics 端点、GET /api/backup 热备份及 JS/TS 官方客户端"
+   ],
+   "use_cases": [
+    "快速原型与 MVP 开发，无需定义模型、迁移或脚手架",
+    "内部工具、管理后台以及 API/数据集 mocking",
+    "访问模式可预测的读多写少 API 服务"
+   ]
+  },
+  "sha": "e6e9fd7e5827",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "73164cbf96b9": {
+  "identity": {
+   "one_liner": "ClickHouse 官方维护的 Apache Flink 连接器，支持 DataStream 与 Table API 写入。",
+   "review": "该仓库由 ClickHouse 团队维护，提供将 Flink DataStream 或 Flink SQL 数据写入 ClickHouse 的 Sink 实现。支持 Flink 1.17 至 2.0+ 多版本，需 Java 11+（Flink 2.0 线要求 Java 17+）。Table API 侧仅支持 insert 写入，不支持 update/delete；在作业提交时读取目标表真实列类型并校验 Flink schema，类型不匹配在 planning 阶段报错。可通过 Maven 依赖引入，附 Java/Scala 示例工程。",
+   "highlights": [
+    "支持 DataStream API 与 Table API/Flink SQL（仅 insert）两种写入方式",
+    "Table API 在 planning 阶段读取目标 ClickHouse 表列类型并校验 Flink schema，按名称区分大小写匹配列",
+    "提供批量刷新、重试策略、失败策略、时区、严格数值映射等可配置项，clickhouse.client/server 参数可透传"
+   ],
+   "use_cases": [
+    "将 Flink 流处理作业产生的数据批量写入 ClickHouse 表",
+    "通过 Flink SQL CREATE TABLE 与 INSERT INTO 以 insert-only 方式对接 ClickHouse",
+    "需要 upsert 语义时，配合 ReplacingMergeTree/AggregatingMergeTree 及 FINAL/argMax 使用"
+   ]
+  },
+  "sha": "73164cbf96b9",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e9519281b983": {
+  "identity": {
+   "one_liner": "将 SQL 查询结果集按 psql 全部格式及 JSON、Markdown 写出的 Go 库",
+   "review": "tblfmt 是一个 Go 包，用于把数据库查询返回的结果集写成文本表格。它面向 usql 项目和 Go 的 database/sql 类型，接受实现 ResultSet 接口的任意类型。输出与 psql 逐字节一致，并文档化了若干有意差异（如按字素簇测宽、csv 引号规则）。安装用 go get，测试用 go test。",
+   "highlights": [
+    "支持 psql 的 aligned、wrapped、unaligned、csv、html、asciidoc、latex、latex-longtable、troff-ms 格式，另支持 JSON、mysql 竖排格式、无框表格和 Markdown 表格",
+    "unaligned、csv、json 格式边读边写每行；表格格式按批保留行以计算列宽，批次大小可用 WithCount 设置",
+    "按 grapheme cluster 测量文本宽度，并在 html、asciidoc、vertical 等格式中转义控制字符"
+   ],
+   "use_cases": [
+    "在 Go 程序中通过 database/sql 或自定义 ResultSet 接口将查询结果格式化为表格",
+    "为数据库命令行客户端（如 usql）提供与 psql 一致的结果集输出格式",
+    "需要将查询结果输出为 csv、json、markdown、html、latex 等非表格格式的场景"
+   ]
+  },
+  "sha": "e9519281b983",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

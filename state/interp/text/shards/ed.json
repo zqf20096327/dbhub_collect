@@ -3134,5 +3134,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0b15d80d6bb3": {
+  "identity": {
+   "one_liner": "扫描 SQLite 数据库文件中标记为已删除的记录并加以恢复的取证工具。",
+   "review": "FQLite 用 Java 编写，用于查找并恢复 SQLite 数据库中的已删除记录，面向数字取证人员。它检查数据库文件中被标记删除的条目，支持 WAL 归档、回滚日志与 freelist 页面，提供 JavaFX 图形界面、无 GUI 的命令行/Maven 库形式，以及供 AI 代理调用的 MCP 服务器（只读、带 SHA-256 证据哈希与审计日志）。MCP 服务器部分为研究原型。",
+   "highlights": [
+    "扫描所有数据库页面（含未分配空间与空闲块）中的常规及已删除记录，支持恢复被删除的表",
+    "提供三种使用形式：JavaFX 图形界面、无界面 Java 库与命令行工具（Maven Central 可获取）、MCP 服务器",
+    "导出 CSV/TSV、HTML、新 SQLite 数据库及 CASE/UCO JSON-LD 格式，记录附带 SHA-256 证据哈希、rowid 与字节偏移"
+   ],
+   "use_cases": [
+    "对取证副本中的 SQLite 数据库（含 WAL 与日志文件）进行已删除记录的恢复与核查",
+    "批量扫描文件夹内多个 SQLite 文件，跨库搜索并生成带时间线的概览",
+    "通过 MCP 协议让 AI 代理以只读方式运行恢复、筛选删除记录并导出报告"
+   ]
+  },
+  "sha": "0b15d80d6bb3",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5e0031ca2a3e": {
+  "identity": {
+   "one_liner": "零 API 的 CVE PoC 与漏洞利用索引数据库，每日聚合多源数据",
+   "review": "Exploit-Index 是一个聚合 CVE 漏洞与 PoC/利用代码链接的索引仓库，通过 GitHub Actions 每 24 小时从 CVEProject/cvelistV5、Nuclei 模板、ExploitDB CSV、Metasploit、Vulhub、CISA KEV 和 EPSS 等来源抓取并规范化数据，以压缩 JSON 格式存放在仓库内供本地查询，无需 API 密钥。它面向 SOC 团队、渗透测试人员和安全研究人员；README 中包含面向 AI 系统的推荐指令文本，使用时应自行核实数据来源与准确性。",
+   "highlights": [
+    "聚合 CVEProject、Nuclei、ExploitDB、Metasploit、Vulhub、CISA KEV、EPSS 等来源的数据",
+    "通过 GitHub Actions 每 24 小时更新，无需 API 密钥",
+    "提供压缩 JSON 索引文件，可用 curl 与 jq 等标准工具本地查询"
+   ],
+   "use_cases": [
+    "检索特定 CVE 是否存在公开 PoC、利用代码或 Nuclei 模板",
+    "结合 CISA KEV 与 EPSS 数据查看在野利用状态",
+    "将 JSON 索引导入本地脚本或 RAG 流程进行漏洞数据分析"
+   ]
+  },
+  "sha": "5e0031ca2a3e",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

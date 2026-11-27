@@ -3520,5 +3520,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3ca9bda5e148": {
+  "identity": {
+   "one_liner": "Rust 语言调用 SQLite 的绑定封装库，提供连接、查询与参数绑定接口。",
+   "review": "Rusqlite 是用于在 Rust 程序中调用 SQLite 的封装库，API 历史上参考 rust-postgres，现已独立演化。它通过 Cargo features 提供扩展加载、备份、自定义函数、虚拟表、SQLCipher 等能力；底层依赖 libsqlite3-sys，默认用 pkg-config 或 vcpkg 查找系统 SQLite，也可用 bundled 特性从源码编译内嵌的 SQLite 3.54.1。",
+   "highlights": [
+    "提供 30 余个可选 Cargo features，涵盖 load_extension、backup、functions、vtab、serialize、sqlcipher 等 SQLite 能力",
+    "支持为 chrono、serde_json、uuid、url 等常见类型实现 FromSql/ToSql 转换",
+    "自带预生成绑定以避免构建期运行 bindgen，bundled 特性可从源码编译并链接 SQLite 3.54.1"
+   ],
+   "use_cases": [
+    "在 Rust 应用中以嵌入式方式读写 SQLite 数据库",
+    "在 Windows 等系统库链接复杂的环境下，使用 bundled 特性编译内嵌 SQLite",
+    "需要 SQLCipher 加密或以 Rust 编写虚拟表、加载扩展的 SQLite 项目"
+   ]
+  },
+  "sha": "3ca9bda5e148",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1b617603a12c": {
+  "identity": {
+   "one_liner": "基于 Pi 构建的自托管个人 AI 助手，以 Markdown 文件为记忆源。",
+   "review": "Memora 是一个自托管、以文件优先的个人 AI 助手，构建于 Pi 代理引擎之上。它将持久会话、基于 Markdown 的 Second Brain、需人工审批的记忆收件箱、项目与版本化工件、cron 自动化及 Telegram 会话整合在单一界面。要求 Node.js 24 与 pnpm，README 注明 v0.2.0 的恢复/更新/回滚验证尚未完成，默认部署面向本地/局域网。",
+   "highlights": [
+    "Second Brain 以 Markdown 为权威数据源，配可重建的 SQLite/FTS5 索引，支持可选本地嵌入的语义与混合检索",
+    "支持 PDF、DOCX、XLSX、PPTX 文档生成，以及经 Brave 或 SearXNG 的带编号引用的网页检索",
+    "计划任务自动化支持 cron/时区与运行历史，可通过 Telegram 双向会话（含每会话一主题的私密论坛群）"
+   ],
+   "use_cases": [
+    "在 homelab/局域网环境自托管个人 AI 助手，聊天与记忆数据保留为可读 Markdown 文件",
+    "按项目组织提示词、来源与文件，生成版本化工件与办公文档",
+    "通过 Telegram 发送与接收自动化任务结果，浏览器关闭时任务仍在服务器端运行"
+   ]
+  },
+  "sha": "1b617603a12c",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3ad8c036b0a2": {
+  "identity": {
+   "one_liner": "面向记忆系统与 Agent 工作流的 benchmark 编排底座，基于目录型 Skill 插件接入。",
+   "review": "这是一个通过 Skill 插件统一编排 benchmark、Agent 和 memory backend 的测试平台：核心负责装载 Skill、生成执行计划、驱动 workflow、采集资源与诊断证据并归档结果，支持平台原生 case/step 执行和外部 runner 结果导入两种路径，输出 JSON 与 HTML 报告。面向需要对比测试记忆系统（如 LoCoMo、LongMemEval）的团队。凭据仅经环境变量传递，LLM Judge 缺配置时不会回退到字符串匹配。",
+   "highlights": [
+    "提供目录型 Skill 体系（benchmarks/agents/memories/smoke 等），通过 manifest.yaml 声明版本策略、入口与能力边界，支持接入新 benchmark、Agent 和 memory backend",
+    "统一 Run/Case/Step/Trace/Metric/JudgeResult 执行对象，支持原生 workflow（含 $ref/$template 步骤间引用）与外部 runner 结果导入两条执行路径",
+    "每次 run 归档原始日志、资源采样（CPU/进程内存/IO）、阶段耗时、评分结果，并生成 run_report.html 与 timing_report.html"
+   ],
+   "use_cases": [
+    "用统一入口对记忆系统运行 LoCoMo、LongMemEval 等基准并获得含资源采样与 LLM Judge 的结构化报告",
+    "通过 smoke gate 在正式评测前验证 benchmark–Agent–memory 链路连通性",
+    "按目录模板接入自定义 benchmark、CLI Agent 或 memory backend 并复用统一归档与报告闭环"
+   ]
+  },
+  "sha": "3ad8c036b0a2",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3288,5 +3288,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "11bb6bdff254": {
+  "identity": {
+   "one_liner": "基于 OpenIddict 与 redb.Route 的可换传输层 OAuth 2.1 / OIDC 服务器",
+   "review": "redb.Identity 是面向 redb 生态的 OAuth 2.1 / OpenID Connect 服务器，构建于 OpenIddict 之上。其核心端点以 direct-vm:// 路由形式存在，可经 HTTP、gRPC、SOAP 或进程内直调访问，并通过 .tpkg 包部署于 Tsak worker。存储支持 PostgreSQL、MSSQL 与 SQLite，采用 code-first 方案、无迁移。默认内置 admin/admin 账户，部署时须先改密码。",
+   "highlights": [
+    "核心端点（token、authorize、userinfo、introspect、revoke、jwks、PAR、JAR、Device Code、DCR）通过 direct-vm:// 路由暴露，可经 HTTP、gRPC、RabbitMQ、SignalR 门面或进程内直调访问",
+    "支持 TOTP、SMS/Email OTP、WebAuthn (FIDO2) 与恢复码的多因素认证，以及 SCIM 2.0 用户/组/批量端点（RFC 7644）",
+    "实现 OIDC Core、OAuth 2.1、RFC 7662/7591/7592/8628/9126/9101/9068/8707/8693/9449/8417 等协议，并经 OpenID Foundation 一致性套件（Config OP、Basic OP）验证；集群部署通过 redb 对象存储共享 DataProtection 密钥环与签名密钥"
+   ],
+   "use_cases": [
+    "在 .NET/TSak worker 中需要进程内直接调用 OIDC 端点（无 HTTP 回环）的场景",
+    "需要多因素认证（TOTP/WebAuthn）、外部联邦登录（OIDC/GitHub/LDAP）或 SCIM 2.0 用户供给的应用",
+    "通过 Docker 镜像或 .tpkg 模块包部署多实例/集群身份服务，后端选用 PostgreSQL、MSSQL 或 SQLite"
+   ]
+  },
+  "sha": "11bb6bdff254",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

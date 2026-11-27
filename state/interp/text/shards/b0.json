@@ -3092,5 +3092,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7a864f7202fd": {
+  "identity": {
+   "one_liner": "自托管 AI 可见性追踪，单二进制加 SQLite，测量各 AI 引擎对品牌的提及与引用。",
+   "review": "这是一个可自行部署的 AI 可见性追踪工具（AEO/GEO/LLMO），面向品牌营销与竞品监测人员，追踪 ChatGPT、Claude、Perplexity、Gemini、Google AI Overview 等七个引擎对品牌的提及与引用。数据存于本地 SQLite 文件，指标由文本搜索从存储答案中推导，可通过 limelit export 导出 JSON/CSV。状态为 pre-release，11 个提供者中 6 个已实现。",
+   "highlights": [
+    "支持七个引擎：四个走厂商 API（带网页搜索），三个无 API 的引擎走抓取器",
+    "内置 MCP 服务器（stdio 或 HTTP），提供 14 个只读工具",
+    "仪表盘嵌入二进制，图表为服务端渲染 SVG，指标附样本量"
+   ],
+   "use_cases": [
+    "追踪品牌在各 AI 引擎答案中的出现频率、排名与引用来源",
+    "在同一组提示词下对比自身与竞品的声量份额与平均位置",
+    "将评测调度（每日/每小时）与运行次数上限结合，控制 API 支出"
+   ]
+  },
+  "sha": "7a864f7202fd",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "89a77f9d002f": {
+  "identity": {
+   "one_liner": "Go 短链接库：短链生成、点击统计、OG 预览页与 MCP 工具，支持可插拔存储。",
+   "review": "这是一个 Go 语言短链接库，提供短链生成、点击分析、链接过期、OG/Twitter Card 预览页，并通过 MCP 工具供 AI 客户端管理链接。核心仅一个依赖（go-nanoid），Redis/SQLite 驱动按需引入；默认带独立服务端（SQLite 存储、API Key 鉴权）。支持 iOS Universal Links / Android App Links 与商店回退跳转。",
+   "highlights": [
+    "支持内存、Redis、SQLite 三种存储及自定义 Store 实现，均含链接过期与点击统计功能",
+    "点击分析在重定向路径外后台异步采集，按平台、设备、浏览器、OS、referrer、日期细分，经 GET /stats/{shortID} 查询",
+    "mcpserver 子包基于官方 Go SDK 暴露 create_link、get_link、link_stats 等 6 个 MCP 工具，可挂载于 HTTP handler"
+   ],
+   "use_cases": [
+    "在 Go 服务中嵌入短链接生成与点击统计功能",
+    "为移动应用实现 Universal Links / App Links 的分发与商店回退跳转",
+    "让 AI 客户端通过 MCP 工具创建链接并查询点击报告"
+   ]
+  },
+  "sha": "89a77f9d002f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a22a9baf8cda": {
+  "identity": {
+   "one_liner": "纯本地零遥测的 Electron 桌面 AI 多 Agent 工作台与秘书系统",
+   "review": "Prismux 是基于 Electron 44 + TypeScript + React 19 的 Windows 桌面应用，将 Claude Code、Codex、Antigravity、dsh、OpenCode 等多个 CLI Agent 收束在同一窗口并行运行。记忆收敛于单文件 SQLite（WAL + FTS5 + sqlite-vec），界面为 8 分区液态玻璃视觉层，官方插件默认零预装，仅提供 qq 一款按需安装。当前仅发布 Windows x64 安装包，macOS/Linux 通道预留。",
+   "highlights": [
+    "支持 Claude Code、Codex、Antigravity、DeepSeek Harness (dsh)、OpenCode 同台并行运行",
+    "全部长期记忆存储于单文件 ~/.prismux/data/memory.db（SQLite WAL + FTS5 + sqlite-vec）",
+    "提供 Cordis 双域插件内核，校验 engines.prismux SemVer，支持 ctx.effect() 卸载清理"
+   ],
+   "use_cases": [
+    "需要在同一桌面窗口同时管理多个 Coding Agent CLI 会话",
+    "希望 Agent 长期记忆与运行数据保存于本地单文件数据库",
+    "需要通过手机在局域网内远控桌面 AI 工作台"
+   ]
+  },
+  "sha": "a22a9baf8cda",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

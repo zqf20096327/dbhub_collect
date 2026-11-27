@@ -33777,5 +33777,2011 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "40d392efa4d4+2": {
+  "fn": "jose-compu/logosdb",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "LogosDB MCP server"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "LogosDB v1.7.0 release banner"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    10,
+    6,
+    10,
+    [
+     "CI",
+     "Python",
+     "PyPI",
+     "Python versions"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    15,
+    10,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "Authors: Jose (@jose-compu)"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "**Contributing**: See CONTRIBUTING.md for build instructions, style guide, and PR workflow."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    21,
+    18,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "|Package|Version|Install|"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    27,
+    23,
+    27,
+    [
+     "|logosdb (Python / PyPI)|1.7.0|`pip install logosdb==1.7.0`|",
+     "|logosdb (Node.js)|1.7.0|`npm install logosdb@1.7.0`|",
+     "|logosdb-mcp-server|1.4.6|`npm install logosdb-mcp-server@1.4.6`|",
+     "|n8n-nodes-logosdb|1.0.3|`npm install n8n-nodes-logosdb@1.0.3`|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    32,
+    27,
+    32
+   ],
+   [
+    "replace",
+    32,
+    51,
+    32,
+    51,
+    [
+     " * Vectors and metadata are stored as flat binary files, memory-mapped for zero-copy reads.",
+     " * Approximate nearest-neighbor search via HNSW (hnswlib), O(log n) query time.",
+     " * Each vector row carries optional text and ISO 8601 timestamp metadata (JSONL sidecar).",
+     " * The basic operations are `Put(embedding, text, timestamp)`, `Get(id)`, and `Search(query, top_k)`.",
+     " * **Timestamp range filtering**: search within a time window (e.g., \"last 24 hours\").",
+     " * **Multiple distance metrics**: inner product, cosine similarity (auto-normalized), or L2 Euclidean.",
+     " * Bulk vector access for direct tensor construction (e.g. loading into GPU memory).",
+     " * Thread-safe API on a single open handle: an internal mutex serializes operations that touch the index and metadata (including search).",
+     " * Crash recovery: HNSW index is automatically backfilled from the append-only vector store on open.",
+     " * **Search filters and batch** (1.7.0): `search_filtered` / `search_batch` / `get_many` with allow/deny id sets, `min_score`, and timestamp cuts; see #134, #136, #144.",
+     " * Default embedder for examples is **MiniLM** (`sentence-transformers/all-MiniLM-L6-v2` in Python; `Xenova/all-MiniLM-L6-v2` in the MCP server unless `TRANSFORMERS_MODEL` is set). **BreadBowl** is an optional Python layout only (not a `logosdb` dependency; not on Node); weights load when you call `BreadBowl.from_pretrained`.",
+     " * **BreadBowl-Embed v1.3 slots** (optional example): 16 routing rows per passage (256-d, `DIST_IP`) plus `model.score()` rerank over stored value vectors. See docs/breadbowl-embed.md.",
+     " * **`SearchHit.score` ranges** (1.5.1): documented per distance metric — cosine in [-1, 1], inner product as the raw dot product, L2 as `1 / (1 + distance)` in (0, 1] (comments only; no scoring change).",
+     " * **`liveIds()` / `rawVectors()` / `exportNdjson()`** (1.5.0): list active row ids, read decoded float32 vectors in bulk, or stream live rows to NDJSON (Node; C/Python expose the same C API).",
+     " * **`dtype` storage option** (1.4.0): store vectors as float32 (default), float16 (~half size), or int8 (~quarter size) on Node and Python; search still dequantizes to float32.",
+     " * **`sync()` / `stats()` / `compact()`** (1.3.0): explicit durability flush, operation counters, and tombstone-free copy into a new directory (Python, Node.js, C++).",
+     " * Scales to millions of vectors.",
+     " * **Framework integrations**: LangChain and LlamaIndex VectorStore adapters.",
+     " * **MCP server**: first-class Claude Code integration via `logosdb-mcp-server`."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    58,
+    51,
+    58
+   ],
+   [
+    "replace",
+    58,
+    59,
+    58,
+    59,
+    [
+     "Full BEIR SciFact test split on this VM (5183 passages, 300 queries). Metrics are macro-averaged over test queries with at least one relevant passage. Copied from `benchmarks/breadbowl/results/scifact.json`. See docs/breadbowl-embed.md."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    59,
+    60
+   ],
+   [
+    "replace",
+    60,
+    61,
+    60,
+    61,
+    [
+     "|Arm|nDCG@10|recall@100|storage B/passage|load RSS B/passage|median search (s)|"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    61,
+    62
+   ],
+   [
+    "replace",
+    62,
+    66,
+    62,
+    66,
+    [
+     "|LogosDB routing (HNSW mean)|0.7333720611924206|0.9733333333333334|53,431|18,624|0.03066527800001495|",
+     "|LogosDB routing + value rerank|0.7444157064422888|0.9733333333333334|86,211|51,393|0.0332181550002133|",
+     "|Exact routing rescore (top 100)|0.7415911594628716|—|86,211|51,393|—|",
+     "|MiniLM-L6-v2 single vector|0.6450816521455776|0.925|4,817|11,255|0.0005794329999844194|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    75,
+    66,
+    75
+   ],
+   [
+    "replace",
+    75,
+    76,
+    75,
+    76,
+    [
+     "**Planning a deployment?** See docs/sizing.md for disk/RAM estimates based on N×dim, or run `python -m logosdb.sizing --rows 1_000_000 --dim 768`."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    80,
+    76,
+    80
+   ],
+   [
+    "replace",
+    80,
+    85,
+    80,
+    85,
+    [
+     " - C API with opaque handles and `errptr` convention (RocksDB/LevelDB style)",
+     " - C++ convenience wrapper (`logosdb::DB`) with RAII and exceptions",
+     " - `logosdb::Options` for HNSW tuning and distance metric selection",
+     " - `logosdb::SearchHit` result struct",
+     " - `logosdb_search_ts_range()` for timestamp-filtered search"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    88,
+    85,
+    88
+   ],
+   [
+    "replace",
+    88,
+    93,
+    88,
+    93,
+    [
+     " * This is not a general-purpose vector database. It is purpose-built for embedding-based memory retrieval in LLM inference (funes.cpp).",
+     " * Only a single process (possibly multi-threaded) can access a particular database at a time.",
+     " * There is no client-server support built into the library. An application that needs such support will have to wrap their own server around the library.",
+     " * For inner-product distance (`LOGOSDB_DIST_IP`, the default), vectors must be L2-normalized before insertion. Use `LOGOSDB_DIST_COSINE` for automatic normalization.",
+     " * Embedding generation is external — the caller provides pre-computed float vectors."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    95,
+    93,
+    95
+   ],
+   [
+    "replace",
+    95,
+    106,
+    95,
+    96,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    108,
+    96,
+    98
+   ],
+   [
+    "replace",
+    108,
+    109,
+    98,
+    99,
+    [
+     "Past releases are summarized in the CHANGELOG and the closed milestones."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    99,
+    100
+   ],
+   [
+    "replace",
+    110,
+    111,
+    100,
+    101,
+    [
+     "### **SHIPPED** 0.9.0 — minor — throughput and scale"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    101,
+    102
+   ],
+   [
+    "replace",
+    112,
+    114,
+    102,
+    104,
+    [
+     " * #87 — Streaming NDJSON import/export (`logosdb_export_ndjson` / `logosdb_import_ndjson` in C / C++ / Python) with `chunk_size`, byte-offset `--checkpoint`, and `--resume`. Parquet output is a follow-up.",
+     " * #80 — Batch ingest v2: `logosdb_put_batch` is now chunked and WAL-aware (`LOGOSDB_BATCH_CHUNK_SIZE`, default 1024). Durability matches per-row `logosdb_put`; speed-up vs single put is workload-dependent (≈1.4× at dim=64 on the bench; HNSW per-row cost dominates at larger dims)."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    104,
+    105
+   ],
+   [
+    "replace",
+    115,
+    116,
+    105,
+    106,
+    [
+     "### **SHIPPED** 0.10.0 — minor — search and metadata"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    106,
+    107
+   ],
+   [
+    "replace",
+    117,
+    119,
+    107,
+    109,
+    [
+     " * #85 — Hybrid retrieval mode: ANN score + lexical score fusion",
+     " * #84 — Filter API v2: structured metadata predicates beyond timestamp range"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    109,
+    110
+   ],
+   [
+    "replace",
+    120,
+    121,
+    110,
+    111,
+    [
+     "### **SHIPPED** 0.11.0 — minor — multi-tenancy and tooling"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    111,
+    112
+   ],
+   [
+    "replace",
+    122,
+    124,
+    112,
+    114,
+    [
+     " * #86 — Multi-tenant namespaces: quota and isolation within one DB root",
+     " * #89 — Recall benchmarking utility for HNSW tuning"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    114,
+    115
+   ],
+   [
+    "replace",
+    125,
+    126,
+    115,
+    116,
+    [
+     "### **SHIPPED** 0.12.0 — minor — integrations"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    116,
+    117
+   ],
+   [
+    "replace",
+    127,
+    128,
+    117,
+    118,
+    [
+     " * #78 — Feature: Codex plugin marketplace integration for LogosDB"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    129,
+    118,
+    119
+   ],
+   [
+    "replace",
+    129,
+    130,
+    119,
+    120,
+    [
+     "### **SHIPPED** 1.0.0 — first stable release"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    120,
+    121
+   ],
+   [
+    "replace",
+    131,
+    132,
+    121,
+    122,
+    [
+     " * Smart chunking, UTF-8/NFC policy, path-hardening, and expanded security tests (#98, #108–#112). See CHANGELOG `1.0.0`."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    122,
+    123
+   ],
+   [
+    "replace",
+    133,
+    134,
+    123,
+    124,
+    [
+     "### **SHIPPED** 1.0.1 — patch — release hygiene"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    124,
+    125
+   ],
+   [
+    "replace",
+    135,
+    136,
+    125,
+    126,
+    [
+     " * #116 — Sync `CHANGELOG`, version macros, package metadata, and post-1.0 docs."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    126,
+    127
+   ],
+   [
+    "replace",
+    137,
+    138,
+    127,
+    128,
+    [
+     "### **SHIPPED** 1.7.0 — minor — search filters and batch"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    139,
+    128,
+    129
+   ],
+   [
+    "replace",
+    139,
+    140,
+    129,
+    130,
+    [
+     " * #134, #136, #144 — `logosdb_search_filtered`, `logosdb_search_batch`, `logosdb_get_many` on the C core plus Python and Node. Ships with `logosdb-mcp-server` **1.4.6**."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    130,
+    131
+   ],
+   [
+    "replace",
+    141,
+    142,
+    131,
+    132,
+    [
+     "Episodic memory pattern (#136): store visit counts in a sidecar keyed by row id, one database directory per discrete action, use `min_score` to decide update vs `put`, and replay with `search_batch`."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    132,
+    133
+   ],
+   [
+    "replace",
+    143,
+    144,
+    133,
+    134,
+    [
+     "### **SHIPPED** 1.6.0 — minor — BreadBowl-Embed slots"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    134,
+    135
+   ],
+   [
+    "replace",
+    145,
+    146,
+    135,
+    136,
+    [
+     " * Examples, helper, CPU SciFact benchmark script, and docs/breadbowl-embed.md. Optional Python layout; no change to default MiniLM path. Ships with `logosdb-mcp-server` **1.4.5**."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    136,
+    137
+   ],
+   [
+    "replace",
+    147,
+    148,
+    137,
+    138,
+    [
+     "### **SHIPPED** 1.5.1 — patch — search score ranges"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    138,
+    139
+   ],
+   [
+    "replace",
+    149,
+    150,
+    139,
+    140,
+    [
+     " * #142 — Document `SearchHit.score` range per distance metric (comments only). Ships with `logosdb-mcp-server` **1.4.4**."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    151,
+    140,
+    141
+   ],
+   [
+    "replace",
+    151,
+    152,
+    141,
+    142,
+    [
+     "### **SHIPPED** 1.5.0 — minor — live ids and bulk export"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    142,
+    143
+   ],
+   [
+    "replace",
+    153,
+    154,
+    143,
+    144,
+    [
+     " * #135 — `logosdb_live_ids`, Python `live_ids()`, Node `liveIds()`, `rawVectors()`, `exportNdjson()`. Ships with `logosdb-mcp-server` **1.4.4**."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    155,
+    144,
+    145
+   ],
+   [
+    "replace",
+    155,
+    156,
+    145,
+    146,
+    [
+     "### **SHIPPED** 1.4.0 — minor — storage dtype"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    146,
+    147
+   ],
+   [
+    "replace",
+    157,
+    158,
+    147,
+    148,
+    [
+     " * #139 — `dtype` option on Node and Python `DB` constructors (`DTYPE_FLOAT32` / `DTYPE_FLOAT16` / `DTYPE_INT8`). Reopening with the wrong dtype fails. Ships with `logosdb-mcp-server` **1.4.3**."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    148,
+    149
+   ],
+   [
+    "replace",
+    159,
+    160,
+    149,
+    150,
+    [
+     "### **SHIPPED** 1.3.0 — minor — durability and compaction"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    150,
+    151
+   ],
+   [
+    "replace",
+    161,
+    162,
+    151,
+    152,
+    [
+     " * #138 — `sync()`, `stats()`, and `compact(src, dst)` on Python and Node.js bindings (C API unchanged). Ships with `logosdb-mcp-server` **1.4.2**."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    165,
+    152,
+    155
+   ],
+   [
+    "replace",
+    165,
+    167,
+    155,
+    157,
+    [
+     " * #10 — Windows support: abstract POSIX file I/O behind a portable layer",
+     " * #111 — Finish Python integration-adapter security audit (partially addressed in 1.0.0 for `vibe.py`)"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    172,
+    157,
+    162
+   ],
+   [
+    "replace",
+    172,
+    175,
+    162,
+    165,
+    [
+     " * Breaking changes to `include/logosdb/logosdb.h` or on-disk layout require a future major version, with migration notes.",
+     " * Tier-1 platforms for 1.x are **Linux and macOS**; Windows remains tracked in #10.",
+     " * Backup/restore and doctor tooling shipped in earlier 0.x releases; further hardening continues on the 1.x line."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    185,
+    165,
+    175
+   ],
+   [
+    "replace",
+    185,
+    186,
+    175,
+    176,
+    [
+     "This project supports CMake out of the box."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    196,
+    176,
+    186
+   ],
+   [
+    "replace",
+    196,
+    197,
+    186,
+    187,
+    [
+     "|Target|Description|"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    187,
+    188
+   ],
+   [
+    "replace",
+    198,
+    202,
+    188,
+    192,
+    [
+     "|`logosdb`|Static library (`liblogosdb.a`)|",
+     "|`logosdb-cli`|Command-line tool for put, search, info|",
+     "|`logosdb-bench`|Benchmark: HNSW vs brute-force, with ChromaDB comparison|",
+     "|`logosdb-test`|Unit tests|"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    209,
+    192,
+    199
+   ],
+   [
+    "replace",
+    209,
+    229,
+    199,
+    200,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    237,
+    200,
+    208
+   ],
+   [
+    "replace",
+    237,
+    259,
+    208,
+    209,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    267,
+    209,
+    217
+   ],
+   [
+    "replace",
+    267,
+    286,
+    217,
+    218,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    294,
+    218,
+    226
+   ],
+   [
+    "replace",
+    294,
+    310,
+    226,
+    227,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    318,
+    227,
+    235
+   ],
+   [
+    "replace",
+    318,
+    329,
+    235,
+    236,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    337,
+    236,
+    244
+   ],
+   [
+    "replace",
+    337,
+    347,
+    244,
+    245,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    351,
+    245,
+    249
+   ],
+   [
+    "replace",
+    351,
+    352,
+    249,
+    250,
+    [
+     "LogosDB ships Python bindings built with pybind11 and scikit-build-core."
+    ]
+   ],
+   [
+    "equal",
+    352,
+    371,
+    250,
+    269
+   ],
+   [
+    "replace",
+    371,
+    396,
+    269,
+    270,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    396,
+    404,
+    270,
+    278
+   ],
+   [
+    "replace",
+    404,
+    414,
+    278,
+    279,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    422,
+    279,
+    287
+   ],
+   [
+    "replace",
+    422,
+    433,
+    287,
+    288,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    433,
+    441,
+    288,
+    296
+   ],
+   [
+    "replace",
+    441,
+    448,
+    296,
+    297,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    448,
+    456,
+    297,
+    305
+   ],
+   [
+    "replace",
+    456,
+    464,
+    305,
+    306,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    472,
+    306,
+    314
+   ],
+   [
+    "replace",
+    472,
+    477,
+    314,
+    315,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    477,
+    487,
+    315,
+    325
+   ],
+   [
+    "replace",
+    487,
+    488,
+    325,
+    326,
+    [
+     "|Dataset|Dim|Disk|Typical Query RAM|"
+    ]
+   ],
+   [
+    "equal",
+    488,
+    489,
+    326,
+    327
+   ],
+   [
+    "replace",
+    489,
+    492,
+    327,
+    330,
+    [
+     "|100K|384|153 MB|<20 MB|",
+     "|1M|384|1.5 GB|<100 MB|",
+     "|10M|384|15 GB|<200 MB|"
+    ]
+   ],
+   [
+    "equal",
+    492,
+    501,
+    330,
+    339
+   ],
+   [
+    "replace",
+    501,
+    518,
+    339,
+    340,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    518,
+    520,
+    340,
+    342
+   ],
+   [
+    "replace",
+    520,
+    521,
+    342,
+    343,
+    [
+     "See docs/rag-on-prem.md for complete guide including:"
+    ]
+   ],
+   [
+    "equal",
+    521,
+    525,
+    343,
+    347
+   ],
+   [
+    "replace",
+    525,
+    526,
+    347,
+    348,
+    [
+     "See docs/sizing.md for detailed disk/RAM formulas and the `python -m logosdb.sizing` calculator."
+    ]
+   ],
+   [
+    "equal",
+    526,
+    544,
+    348,
+    366
+   ],
+   [
+    "replace",
+    544,
+    568,
+    366,
+    367,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    568,
+    584,
+    367,
+    383
+   ],
+   [
+    "replace",
+    584,
+    591,
+    383,
+    384,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    591,
+    595,
+    384,
+    388
+   ],
+   [
+    "replace",
+    595,
+    596,
+    388,
+    389,
+    [
+     "The `logosdb` package provides native bindings (N-API). The binding stores vectors you supply; it does not embed text. For a bundled embedding backend in an MCP agent, use `logosdb-mcp-server` below."
+    ]
+   ],
+   [
+    "equal",
+    596,
+    610,
+    389,
+    403
+   ],
+   [
+    "replace",
+    610,
+    611,
+    403,
+    404,
+    [
+     "Full API notes: nodejs/README.md."
+    ]
+   ],
+   [
+    "equal",
+    611,
+    620,
+    404,
+    413
+   ],
+   [
+    "replace",
+    620,
+    626,
+    413,
+    414,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    626,
+    630,
+    414,
+    418
+   ],
+   [
+    "replace",
+    630,
+    632,
+    418,
+    420,
+    [
+     "`logosdb-mcp-server` is a Model Context Protocol server that",
+     "exposes LogosDB to **Claude Code** (and any other MCP client) over stdio. It lets Claude index"
+    ]
+   ],
+   [
+    "equal",
+    632,
+    641,
+    420,
+    429
+   ],
+   [
+    "replace",
+    641,
+    642,
+    429,
+    430,
+    [
+     "- **Claude Code** installed and signed in (overview)."
+    ]
+   ],
+   [
+    "equal",
+    642,
+    652,
+    430,
+    440
+   ],
+   [
+    "replace",
+    652,
+    653,
+    440,
+    441,
+    [
+     "That installs the `mcp` workspace and runs **`prepare`**, which compiles TypeScript to `mcp/dist/index.js`. After you change MCP sources, run `npm run mcp:build` at the root or `npm run build` inside `mcp/`."
+    ]
+   ],
+   [
+    "equal",
+    653,
+    654,
+    441,
+    442
+   ],
+   [
+    "replace",
+    654,
+    655,
+    442,
+    443,
+    [
+     "**Option B — Any other project (published `logosdb-mcp-server`).** In your app’s root:"
+    ]
+   ],
+   [
+    "equal",
+    655,
+    666,
+    443,
+    454
+   ],
+   [
+    "replace",
+    666,
+    667,
+    454,
+    455,
+    [
+     "**If you use Option A (this clone):** the repo already contains `.claude/mcp.json`:"
+    ]
+   ],
+   [
+    "equal",
+    667,
+    672,
+    455,
+    460
+   ],
+   [
+    "replace",
+    672,
+    681,
+    460,
+    461,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    681,
+    683,
+    461,
+    463
+   ],
+   [
+    "replace",
+    683,
+    684,
+    463,
+    464,
+    [
+     "Open **this folder** as the Claude Code project so `./mcp/dist/index.js` resolves. If the client’s cwd is **not** the repo root, set `\"args\"` to an **absolute** path to `mcp/dist/index.js` (see Installing locally — Option C)."
+    ]
+   ],
+   [
+    "equal",
+    684,
+    691,
+    464,
+    471
+   ],
+   [
+    "replace",
+    691,
+    700,
+    471,
+    472,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    700,
+    702,
+    472,
+    474
+   ],
+   [
+    "replace",
+    702,
+    703,
+    474,
+    475,
+    [
+     "Default embeddings are **local Transformers.js** (no API keys); first run may download model weights. Optional **Ollama / OpenAI / Voyage** env vars are documented in `mcp/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    703,
+    706,
+    475,
+    478
+   ],
+   [
+    "replace",
+    706,
+    707,
+    478,
+    479,
+    [
+     "The server only indexes files that resolve under **`process.cwd()`** or **`LOGOSDB_INDEX_ROOT`** (if set). Symlinks that escape those roots are rejected. Keep indexing paths inside the project you opened, or set `LOGOSDB_INDEX_ROOT` to an absolute allowed root (details in `mcp/README.md` — Path confinement)."
+    ]
+   ],
+   [
+    "equal",
+    707,
+    720,
+    479,
+    492
+   ],
+   [
+    "replace",
+    720,
+    721,
+    492,
+    493,
+    [
+     "Use **one embedding backend consistently** per namespace on disk (do not change model dimension on existing data). See Environment variables and `mcp/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    721,
+    724,
+    493,
+    496
+   ],
+   [
+    "replace",
+    724,
+    725,
+    496,
+    497,
+    [
+     "Copy the **`CLAUDE.md`** template block from Agent instructions (`CLAUDE.md` and similar) into your project so the agent indexes and searches without being reminded every session."
+    ]
+   ],
+   [
+    "equal",
+    725,
+    728,
+    497,
+    500
+   ],
+   [
+    "replace",
+    728,
+    729,
+    500,
+    501,
+    [
+     "|Symptom|What to try|"
+    ]
+   ],
+   [
+    "equal",
+    729,
+    730,
+    501,
+    502
+   ],
+   [
+    "replace",
+    730,
+    734,
+    502,
+    506,
+    [
+     "|MCP fails to start / “Cannot find module”|From the same cwd Claude uses, run `node ./mcp/dist/index.js` (Option A) or `npx -y logosdb-mcp-server` (Option C) in a terminal; fix missing `npm install` or broken path.|",
+     "|Relative `./mcp/dist/index.js` not found|Use an **absolute** `args` path to `index.js`, or open the correct folder as the project root.|",
+     "|`logosdb_index_file` rejects a path|Path is outside cwd / `LOGOSDB_INDEX_ROOT`; use a path inside the project or set `LOGOSDB_INDEX_ROOT`.|",
+     "|Search looks wrong after changing model|New embeddings must use a **fresh** `LOGOSDB_PATH` or new namespace; dimensions must match.|"
+    ]
+   ],
+   [
+    "equal",
+    734,
+    735,
+    506,
+    507
+   ],
+   [
+    "replace",
+    735,
+    736,
+    507,
+    508,
+    [
+     "**Google Antigravity:** same stdio MCP pattern (`node` + local script, or `npx` + package). Step-by-step: `mcp/README.md` — Google Antigravity."
+    ]
+   ],
+   [
+    "equal",
+    736,
+    739,
+    508,
+    511
+   ],
+   [
+    "replace",
+    739,
+    740,
+    511,
+    512,
+    [
+     "This repo ships **project slash commands** under .claude/commands/ (in addition to `.claude/mcp.json` for the MCP server):"
+    ]
+   ],
+   [
+    "equal",
+    740,
+    741,
+    512,
+    513
+   ],
+   [
+    "replace",
+    741,
+    742,
+    513,
+    514,
+    [
+     "|Command|Role|"
+    ]
+   ],
+   [
+    "equal",
+    742,
+    743,
+    514,
+    515
+   ],
+   [
+    "replace",
+    743,
+    746,
+    515,
+    518,
+    [
+     "|`/index`|Index a **file or directory** via `logosdb_index_file` with **`incremental: true`** (new/changed files only; `commands/index.md`)|",
+     "|`/search`|Semantic search; optional ISO `ts_from` / `ts_to` on the MCP tool (`commands/search.md`)|",
+     "|`/forget`|Delete by row `id` **or** by natural-language `query` (`commands/forget.md`)|"
+    ]
+   ],
+   [
+    "equal",
+    746,
+    755,
+    518,
+    527
+   ],
+   [
+    "replace",
+    755,
+    767,
+    527,
+    528,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    767,
+    771,
+    528,
+    532
+   ],
+   [
+    "replace",
+    771,
+    772,
+    532,
+    533,
+    [
+     "|Variable|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    772,
+    773,
+    533,
+    534
+   ],
+   [
+    "replace",
+    773,
+    781,
+    534,
+    542,
+    [
+     "|`LOGOSDB_PATH`|`./.logosdb`|Root directory for all namespace databases|",
+     "|`EMBEDDING_PROVIDER`|*(local)*|Omit for Transformers.js on-device; or `ollama`, `openai`, `voyage`|",
+     "|`TRANSFORMERS_MODEL`|`Xenova/all-MiniLM-L6-v2`|Local embedding model (bundled MCP path)|",
+     "|`OLLAMA_*`|—|See `mcp/README.md` when using Ollama|",
+     "|`OPENAI_API_KEY`|—|Required when `EMBEDDING_PROVIDER=openai`|",
+     "|`VOYAGE_API_KEY`|—|Required when `EMBEDDING_PROVIDER=voyage`|",
+     "|`LOGOSDB_CHUNK_SIZE`|`800`|Target characters per chunk for `\"legacy\"` and `\"section\"` chunking modes|",
+     "|`LOGOSDB_CHUNK_MODE`|`auto`|Chunking strategy: `auto` (per-extension), `line` (code), `section` (markdown/rst), `legacy` (original paragraph/char). See `mcp/README.md` — Chunking strategies.|"
+    ]
+   ],
+   [
+    "equal",
+    781,
+    794,
+    542,
+    555
+   ],
+   [
+    "replace",
+    794,
+    795,
+    555,
+    556,
+    [
+     "|Tool|Description|"
+    ]
+   ],
+   [
+    "equal",
+    795,
+    796,
+    556,
+    557
+   ],
+   [
+    "replace",
+    796,
+    802,
+    557,
+    563,
+    [
+     "|`logosdb_index`|Embed and store a text snippet in a namespace|",
+     "|`logosdb_index_file`|Chunk, embed, and store a file or tree; optional **`incremental: true`** (skip unchanged, replace changed, prune deleted under a directory). When the path lives inside a Git working tree the walker honours `.gitignore` (root + nested + `.git/info/exclude` + global excludes) by default; disable with `respect_gitignore: false` or `LOGOSDB_RESPECT_GITIGNORE=0`.|",
+     "|`logosdb_search`|Semantic search; optional `ts_from` / `ts_to` (ISO 8601) for timestamp-window filter|",
+     "|`logosdb_list`|List all namespaces|",
+     "|`logosdb_info`|Stats for a namespace (count, dimension, path)|",
+     "|`logosdb_delete`|Delete by row `id`, or by natural-language `query` (`search_top_k`, `match_rank`)|"
+    ]
+   ],
+   [
+    "equal",
+    802,
+    858,
+    563,
+    619
+   ],
+   [
+    "replace",
+    858,
+    859,
+    619,
+    620,
+    [
+     "This repository’s checked-in `.claude/mcp.json` uses a **relative** path `./mcp/dist/index.js` after **`npm install` from the repo root** (workspace `prepare`). For **other** clients or if the process cwd is not the repo root, use an **absolute** path to `mcp/dist/index.js`:"
+    ]
+   ],
+   [
+    "equal",
+    859,
+    881,
+    620,
+    642
+   ],
+   [
+    "replace",
+    881,
+    885,
+    642,
+    646,
+    [
+     " LogosDB: version 1.7.0",
+     " CPU: Apple M-series (ARM64)",
+     " Dim: 2048",
+     " HNSW M: 16, ef_construction: 200, ef_search: 50"
+    ]
+   ],
+   [
+    "equal",
+    885,
+    888,
+    646,
+    649
+   ],
+   [
+    "replace",
+    888,
+    891,
+    649,
+    652,
+    [
+     " put (1K vectors): ~50 µs/op (~20,000 inserts/sec)",
+     " put (10K vectors): ~80 µs/op (~12,500 inserts/sec)",
+     " put (100K vectors): ~120 µs/op (~8,300 inserts/sec)"
+    ]
+   ],
+   [
+    "equal",
+    891,
+    896,
+    652,
+    657
+   ],
+   [
+    "replace",
+    896,
+    899,
+    657,
+    660,
+    [
+     " HNSW top-5 (1K): ~0.1 ms/query",
+     " HNSW top-5 (10K): ~0.3 ms/query",
+     " HNSW top-5 (100K): ~1.2 ms/query"
+    ]
+   ],
+   [
+    "equal",
+    899,
+    900,
+    660,
+    661
+   ],
+   [
+    "replace",
+    900,
+    903,
+    661,
+    664,
+    [
+     " Brute-force top-5 (1K): ~0.3 ms/query",
+     " Brute-force top-5 (10K): ~2.5 ms/query",
+     " Brute-force top-5 (100K): ~25 ms/query"
+    ]
+   ],
+   [
+    "equal",
+    903,
+    908,
+    664,
+    669
+   ],
+   [
+    "replace",
+    908,
+    909,
+    669,
+    670,
+    [
+     "VectorDB Bench is the standard open-source harness for comparing vector databases at realistic scale (load, optimize, serial/concurrent search, recall). LogosDB is integrated as a first-class backend:"
+    ]
+   ],
+   [
+    "equal",
+    909,
+    910,
+    670,
+    671
+   ],
+   [
+    "replace",
+    910,
+    911,
+    671,
+    672,
+    [
+     "|Location|Role|"
+    ]
+   ],
+   [
+    "equal",
+    911,
+    912,
+    672,
+    673
+   ],
+   [
+    "replace",
+    912,
+    916,
+    673,
+    677,
+    [
+     "|`vectordb_bench/backend/clients/logosdb/`|Client: `config.py`, `logosdb.py`, `cli.py`|",
+     "|`vectordb_bench/backend/clients/__init__.py`|`DB.LogosDB` enum + `init_cls` / `config_cls` / `case_config_cls` mappings|",
+     "|`vectordb_bench/cli/vectordbbench.py`|CLI subcommand `logosdb`|",
+     "|`pyproject.toml`|Optional extra `logosdb` (installs the Python bindings used by the client)|"
+    ]
+   ],
+   [
+    "equal",
+    916,
+    921,
+    677,
+    682
+   ],
+   [
+    "replace",
+    921,
+    922,
+    682,
+    683,
+    [
+     "|Metric|Value|"
+    ]
+   ],
+   [
+    "equal",
+    922,
+    923,
+    683,
+    684
+   ],
+   [
+    "replace",
+    923,
+    930,
+    684,
+    691,
+    [
+     "|Load duration|340.4 s|",
+     "|Insert duration|339.6 s|",
+     "|Optimize duration|0.8 s|",
+     "|Serial latency p99|4.6 ms|",
+     "|Serial latency p95|4.0 ms|",
+     "|Recall@100|**0.9347**|",
+     "|NDCG|**0.9464**|"
+    ]
+   ],
+   [
+    "equal",
+    930,
+    948,
+    691,
+    709
+   ],
+   [
+    "replace",
+    948,
+    949,
+    709,
+    710,
+    [
+     "Standard qdrant/vector-db-benchmark harness, **1.18M × 25** vectors, **cosine** distance (angular). Serial search."
+    ]
+   ],
+   [
+    "equal",
+    949,
+    950,
+    710,
+    711
+   ],
+   [
+    "replace",
+    950,
+    951,
+    711,
+    712,
+    [
+     "|Metric|Value|"
+    ]
+   ],
+   [
+    "equal",
+    951,
+    952,
+    712,
+    713
+   ],
+   [
+    "replace",
+    952,
+    957,
+    713,
+    718,
+    [
+     "|Upload time|345 s|",
+     "|Mean precision@10|0.939|",
+     "|RPS|9,401|",
+     "|Mean latency|0.092 ms|",
+     "|p99 latency|0.146 ms|"
+    ]
+   ],
+   [
+    "equal",
+    957,
+    958,
+    718,
+    719
+   ],
+   [
+    "replace",
+    958,
+    959,
+    719,
+    720,
+    [
+     "Source: qdrant/vector-db-benchmark."
+    ]
+   ],
+   [
+    "equal",
+    959,
+    966,
+    720,
+    727
+   ],
+   [
+    "replace",
+    966,
+    967,
+    727,
+    728,
+    [
+     "|Metric|ChromaDB|LogosDB|"
+    ]
+   ],
+   [
+    "equal",
+    967,
+    968,
+    728,
+    729
+   ],
+   [
+    "replace",
+    968,
+    978,
+    729,
+    739,
+    [
+     "|Language|Python + C (hnswlib)|Pure C/C++|",
+     "|Search algorithm|HNSW|HNSW (same hnswlib)|",
+     "|Storage|SQLite + Parquet|Binary mmap + JSONL|",
+     "|Startup overhead|Python runtime + deps|Zero (linked library)|",
+     "|Embedding generation|Built-in (Sentence Transformers)|External (caller provides vectors)|",
+     "|Target use case|General-purpose vector store|Embedded LLM inference memory|",
+     "|Search latency (100K, dim=2048)|~5-10 ms|~1-3 ms|",
+     "|Memory footprint (100K, dim=2048)|~1.5 GB (Python + SQLite)|~800 MB (mmap)|",
+     "|Cold start|~2-5 s (Python imports)|<10 ms|",
+     "|Dependencies|Python, NumPy, SQLite, hnswlib|hnswlib (header-only, vendored)|"
+    ]
+   ],
+   [
+    "equal",
+    978,
+    983,
+    739,
+    744
+   ],
+   [
+    "replace",
+    983,
+    1007,
+    744,
+    768,
+    [
+     " include/logosdb/logosdb.h Public C/C++ API (start here)",
+     " src/logosdb.cpp Core engine: wires storage + index + metadata",
+     " src/storage.h / storage.cpp Fixed-stride binary vector file with mmap",
+     " src/metadata.h / metadata.cpp Append-only JSONL text + timestamp store",
+     " src/hnsw_index.h / .cpp Thin wrapper around hnswlib",
+     " tools/logosdb-cli.cpp Command-line interface",
+     " tools/logosdb-bench.cpp Benchmark tool",
+     " tests/test_doctest.cpp C++ unit tests (doctest, incl. CLI integration)",
+     " tests/test_stress.cpp Stress/property tests (opt-in via --test-suite=stress)",
+     " tests/python/test_smoke.py Python smoke tests (pytest)",
+     " python/src/bindings.cpp pybind11 Python bindings",
+     " python/logosdb/ Python package (logosdb._core + stubs)",
+     " examples/python/ Python usage examples",
+     " pyproject.toml Python build/config (scikit-build-core)",
+     " third_party/hnswlib/ Vendored hnswlib (header-only)",
+     " package.json / package-lock.json Private npm workspace (MCP + `nodejs` logosdb); `npm install` at repo root only",
+     " nodejs/ npm `logosdb` native bindings (publish from this directory)",
+     " n8n/ n8n community node (`n8n-nodes-logosdb`)",
+     " assets/banners/ LinkedIn release banners (e.g. `linkedin-v1.4.0.png`)",
+     " mcp/ MCP server (logosdb-mcp-server npm package)",
+     " .claude/mcp.json Claude Code MCP config (local `node ./mcp/dist/index.js`)",
+     " .claude/commands/ Slash command prompts (/index, /search, /forget)",
+     " CHANGELOG Release history",
+     " LICENSE MIT license text"
+    ]
+   ],
+   [
+    "equal",
+    1007,
+    1009,
+    768,
+    770
+   ],
+   [
+    "replace",
+    1009,
+    1020,
+    770,
+    771,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
  }
 }

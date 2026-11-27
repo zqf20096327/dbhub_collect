@@ -3392,5 +3392,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b6bb256a0745": {
+  "identity": {
+   "one_liner": "自托管的 PHP 开源平台，用于搭建白标交友网站与社交网络",
+   "review": "pH7Builder（前称 pH7CMS）是一款自托管开源 PHP 平台，面向想自行运营交友/婚介/社区网站的创业者。基于 pH7Framework 与 PH7Tpl 的模块化 MVC 架构，包含会员资料、匹配、私信、付费会员、审核队列等模块。要求 PHP 8.3–8.5 与 MySQL 8.0+（不验证 MariaDB），生产环境需 HTTPS；SMTP 凭据通过 PH7_MAILER_DSN 环境变量提供。",
+   "highlights": [
+    "包含会员搜索、行为匹配、附近的人、私信聊天、付费会员计划、支付网关集成、审核队列、双因素认证等模块",
+    "支持多语言路由与翻译包、响应式主题、REST API、PWA（HTTPS 下）、SEO 控件与 cron 自动化",
+    "基于项目专属 pH7Framework 和 PH7Tpl 模板引擎的模块化 MVC 架构，MIT 许可发布"
+   ],
+   "use_cases": [
+    "自建白标交友网站或婚介社区，自行掌控代码、数据库与会员数据",
+    "需要付费会员、广告与联盟计划等商业化工具的会员制社区",
+    "搭建支持多语言、多主题的社交网络平台"
+   ]
+  },
+  "sha": "b6bb256a0745",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "95c851e0464a": {
+  "identity": {
+   "one_liner": "Malloy 分析引擎：一次定义数据模型，通过 MCP 与 REST 提供给代理与 BI。",
+   "review": "Malloy Publisher 是 Malloy 语言的开源分析引擎，用 Node.js 或 Docker 运行。用户用 Malloy 编写数据模型（来源、连接、度量、访问控制），服务器以 MCP 端点供 Claude、Cursor 等代理查询，以 REST 供应用与 BI 工具调用，并提供 `#@ persist`/`#@ preaggregate` 物化。内置 DuckDB 可读取本地 CSV、Parquet、JSON、Excel，也可连接 BigQuery、Snowflake、Postgres 等数据库。注意：服务器本身无认证，访问控制依赖外部网关设置 givens。",
+   "highlights": [
+    "同一数据模型经 MCP 与 REST 两种协议对外提供查询，运行时无状态",
+    "内置 DuckDB 读取 CSV、Parquet、JSON、换行分隔 JSON 与 Excel 文件，另可连接 BigQuery、Snowflake、Postgres、Databricks、MotherDuck 等",
+    "支持 `#@ persist` 将数据源物化为表、`#@ preaggregate` 预聚合，可按需或定时重建；提供 `compile_model`、`reload_package` 及 watch 模式验证编辑"
+   ],
+   "use_cases": [
+    "为 AI 代理提供统一数据模型端点，代理通过 get_context/execute_query 组合查询而非直接生成 SQL",
+    "在数据包内用带 `## artifact` 标签的 .malloy 文件声明报告，或生成无构建的 HTML 数据应用",
+    "本地用自身权限运行，或部署于云端网关之后，通过 `#(authorize)`、`#(access_filter)` 等控制用户可查询范围"
+   ]
+  },
+  "sha": "95c851e0464a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0025820f3e33": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 Entity Framework Core 提供程序，基于 ClickHouse.Driver 构建",
+   "review": "这是 ClickHouse 官方维护的 EF Core 提供程序，供 .NET 开发者用 EF Core 操作 ClickHouse。基于 ClickHouse.Driver，处于活跃开发中，支持 LINQ 查询、INSERT、表引擎配置与迁移（dotnet ef migrations / EnsureCreated）。插入走 RowBinary 编码加 GZip 压缩，批量大小默认 1000 可配置；不支持变更跟踪式的更新删除场景，BulkInsertAsync 不追踪实体。",
+   "highlights": [
+    "支持 LINQ 查询（含 JOIN、子查询、集合运算、GROUP BY 聚合、字符串/数学/日期时间函数）、插入与迁移，可用 engine-specific 设置定义 ClickHouse 表",
+    "映射 ClickHouse 类型到 CLR 类型，涵盖 Int128/256、Decimal128/256、Map、Tuple、Variant、Dynamic、JSON、地理类型等",
+    "SaveChanges 使用驱动原生 InsertBinaryAsync（RowBinary + GZip），另提供绕过变更跟踪的 BulkInsertAsync；JSON 列支持路径索引翻译为服务端查询"
+   ],
+   "use_cases": [
+    "在 .NET/EF Core 项目中以 ORM 方式读写 ClickHouse 分析数据",
+    "通过 dotnet ef migrations 或 EnsureCreated 创建带表引擎设置的 ClickHouse 表",
+    "高吞吐量数据加载：BulkInsertAsync 批量写入数十万级实体，不经过变更跟踪"
+   ]
+  },
+  "sha": "0025820f3e33",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2a33f876940a": {
+  "identity": {
+   "one_liner": "基于 LangGraph 多智能体的配送延迟语音客服助手",
+   "review": "Delivery Desk 是一个接听\"我的订单在哪\"类来电的语音助手项目，用 LangGraph 编排 Greeter、Order Status、Resolution 三个专职代理，结合 LiveKit 语音通道、Deepgram 语音识别、Cartesia 语音合成和 Silero。它以订单手机号后四位在代码层面强制校验来电者，可改期配送、提交退款或工单并发送邮件确认。数据均为演示用假数据，README 中的模型对比基于小规模场景集。",
+   "highlights": [
+    "以 LangGraph 图编排三个代理（Greeter、Order Status、Resolution），支持来电者随时打断与中途停顿",
+    "用订单手机号后四位在代码中强制校验来电者，未通过前工具调用被门控拦截",
+    "支持 LLM_BACKEND=local 切换到自托管模型，浏览器端可视化图执行、工具调用、打断与延迟瀑布图"
+   ],
+   "use_cases": [
+    "物流/配送场景中处理订单延迟咨询、改期、退款与工单创建",
+    "需要多代理交接、语音打断与来电者身份校验的对话式 AI 原型开发",
+    "本地/云端 LLM 在同一代理流程下的行为与延迟评测对比"
+   ]
+  },
+  "sha": "2a33f876940a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

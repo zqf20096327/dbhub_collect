@@ -3145,5 +3145,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "179d1a5bd0ef": {
+  "identity": {
+   "one_liner": "以 Podman systemd 服务自托管 n8n 工作流自动化的 Conn3x 基础设施模块",
+   "review": "该仓库是一个 Conn3x circuit（OpenTofu 风格模块），在 Debian/Ubuntu/Fedora/Rocky Linux 主机上以 Podman Quadlet 单元运行 n8n 官方镜像，按 tag 与 digest 锁定版本。数据默认存 SQLite（/var/lib/n8n），可切换 PostgreSQL；监听 127.0.0.1:5678，供反向代理前置。加密密钥在主机本地生成、不经 Conn3x 传递，丢失将导致凭据不可恢复。适合需要在自有主机上部署 n8n 并用声明式配置管理的运维人员。",
+   "highlights": [
+    "通过 circuit-podman 以 systemd Quadlet 单元运行官方 ghcr.io 镜像，按 tag+digest 锁定，默认监听 127.0.0.1:5678",
+    "N8N_ENCRYPTION_KEY 由主机用 /dev/urandom 生成并保存在 /etc/n8n/keys.env，不进入 plan、state 或 CI 日志；支持在首次 apply 前放入已有密钥以接管现有实例",
+    "支持可选 owner 账户自动创建（经 n8n 的 setup 端点）、PostgreSQL 后端配置、public_url 生成的四个 URL 环境变量、执行记录按 336 小时默认清理，且遥测/个性化问卷/版本检查均默认关闭"
+   ],
+   "use_cases": [
+    "在自有 Linux 主机上以声明式配置部署并升级自托管 n8n 实例",
+    "通过 circuit-caddy 反向代理提供 TLS 访问并生成正确的 webhook URL，或经 SSH 隧道本地访问编辑器",
+    "将已在运行的 n8n 实例迁入本模块管理（放入原加密密钥与 .n8n 数据目录或指向既有 PostgreSQL 库）"
+   ]
+  },
+  "sha": "179d1a5bd0ef",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

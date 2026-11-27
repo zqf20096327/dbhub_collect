@@ -36400,5 +36400,2877 @@
    ]
   ],
   "at": "2026-11-26"
+ },
+ "06cd9de40bf5+2": {
+  "fn": "ralforion/orionbelt-semantic-layer",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "OrionBelt Semantic Layer logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " OrionBelt&reg; Semantic and Context Layer, Rule Engine, and Semantic Sidecar "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     " Define shared metrics or model a set of questions in YAML. Let agents and BI tools query through one semantic compiler. "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    9,
+    6,
+    7,
+    [
+     " A semantic sidecar: it rides alongside the systems you already run instead of replacing them. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    7,
+    8
+   ],
+   [
+    "replace",
+    10,
+    13,
+    8,
+    9,
+    [
+     "Live Demo"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    9,
+    10
+   ],
+   [
+    "replace",
+    14,
+    23,
+    10,
+    15,
+    [
+     "Version 3.2.0",
+     "PyPI",
+     "Docker pulls",
+     "Python 3.12+",
+     "License: BUSL-1.1"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    26,
+    15,
+    18
+   ],
+   [
+    "replace",
+    26,
+    27,
+    18,
+    19,
+    [
+     "OrionBelt is a **semantic and context layer** with a **rule engine**, and it runs as a **semantic sidecar**. You or an agent declare dimensions, measures, metrics, and joins in YAML, scoped to one task or maintained as a shared model. OrionBelt compiles them into dialect-specific SQL through a real AST, and routes multi-fact queries through a Composite Fact Layer planner that blocks the join paths that produce fan traps. Queries ask for `\"Total Revenue\" by \"Country\"`; physical table and column mappings live in the model."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    36,
+    19,
+    28
+   ],
+   [
+    "replace",
+    36,
+    37,
+    28,
+    29,
+    [
+     "Follow the agent workflow guide for a complete example, or see the one-shot API contract."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    42,
+    29,
+    34
+   ],
+   [
+    "replace",
+    42,
+    43,
+    34,
+    35,
+    [
+     "|Surface|Port|Speaks|Connect with|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    35,
+    36
+   ],
+   [
+    "replace",
+    44,
+    48,
+    36,
+    40,
+    [
+     "|**PostgreSQL wire**|`5432`|Postgres protocol|DuckDB via `ATTACH`, Tableau, Dremio as a federated source, Power BI, Superset, DBeaver, Metabase, `psql`|",
+     "|**Arrow Flight SQL**|`8815`|gRPC + Arrow|DuckDB via `adbc_scanner`, Tableau and Power BI through the Flight SQL JDBC/ODBC drivers, ADBC clients (Python, Go, Java)|",
+     "|**REST**|`8000`|HTTP + JSON|your code, notebooks, `curl`, and the 8 PEP 249 drivers (which compile here, then execute on the warehouse directly)|",
+     "|**MCP**|stdio / HTTP|Model Context Protocol|AI agents: Claude, Cursor, Copilot, Windsurf|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    40,
+    41
+   ],
+   [
+    "replace",
+    49,
+    50,
+    41,
+    42,
+    [
+     "Both SQL surfaces speak OBSQL, so `SELECT \"Region\", \"Total Sales\" FROM sales_model` is the same query whichever one you came in through. ADBC is how you *use* the Flight SQL surface rather than a fifth surface of its own, and DuckDB is a client that can take either SQL surface."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    55,
+    42,
+    47
+   ],
+   [
+    "replace",
+    55,
+    56,
+    47,
+    48,
+    [
+     "**One query across databases (v3.0.0+).** A model's data objects can live in different databases, the orders in MySQL and the customers in PostgreSQL. A query that reads both is split into one query per database, run at once, and combined in an in-memory DuckDB. It returns the answer one database holding all the tables would return, or a named `FEDERATION_*` error, with a few exceptions that are not refused: text and NULL sorting, time zones, and text join keys between two engines that differ only in case, which MySQL matches and the combine step does not. See Federated queries and the results that can differ."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    48,
+    49
+   ],
+   [
+    "replace",
+    57,
+    58,
+    49,
+    50,
+    [
+     "**Files and lakehouse tables, no warehouse needed (v3.1.0+).** A DuckDB data source reads Parquet, CSV and JSON files where they are, on disk or in S3-compatible object storage, and Apache Iceberg tables behind a REST catalog. The model's dialect is `duckdb`; `DUCKDB_ALLOWED_PATHS` lists what a source may read, and `DUCKDB_MEMORY_LIMIT` bounds its memory. When one source's load needs more than one process, its queries can run on DuckDB workers. See Files and lakehouse tables and DuckDB workers."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    65,
+    50,
+    57
+   ],
+   [
+    "replace",
+    65,
+    75,
+    57,
+    58,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    99,
+    58,
+    82
+   ],
+   [
+    "replace",
+    99,
+    130,
+    82,
+    83,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    134,
+    83,
+    87
+   ],
+   [
+    "replace",
+    134,
+    135,
+    87,
+    88,
+    [
+     "**This is checked, not asserted.** 40 TPC-DS queries are built against a single OBML model and compared row by row against each engine's own reference SQL: 39 of 40 match on DuckDB at sf=1, 37 of 40 on ClickHouse at sf=10. Every one of the remaining differences traces to a reference variant rather than a compilation error, and each is documented. See the sweep, or the queries in `examples/tpcds_queries/`."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    140,
+    88,
+    93
+   ],
+   [
+    "replace",
+    140,
+    141,
+    93,
+    94,
+    [
+     "|Expression|What the engines do|What OrionBelt returns|"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    94,
+    95
+   ],
+   [
+    "replace",
+    142,
+    147,
+    95,
+    100,
+    [
+     "|`x / 0`|`inf` on one engine, an error on four, NULL on the rest|NULL, everywhere|",
+     "|`round(2.5)` on a float|ClickHouse, PostgreSQL and MySQL round ties to even and answer 2|3, everywhere|",
+     "|`greatest(1, NULL, 3)`|Four engines skip the NULL and answer 3|NULL, everywhere|",
+     "|`length('äbcd')`|ClickHouse and MySQL count bytes and answer 5|4 characters|",
+     "|`json_value(doc, '$.a')` where `a` is an object|Four engines return the serialized JSON|NULL: the path did not reach a scalar|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    100,
+    101
+   ],
+   [
+    "replace",
+    148,
+    149,
+    101,
+    102,
+    [
+     "Each row is executed against the live engines and asserted, not derived from vendor documentation. Set `expressionMode: portable` and a function outside the portable catalog becomes an error, so a model cannot pick up an engine dependency by accident."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    154,
+    102,
+    107
+   ],
+   [
+    "replace",
+    154,
+    157,
+    107,
+    110,
+    [
+     "- **Apache Ossie both ways.** OSI (Open Semantic Interchange) is the open standard for portable semantic models, now developed as Apache Ossie (incubating). OrionBelt converts OBML to Ossie and back, with schema validation in both directions, over REST, the CLI (`obsl convert`) and the UI. The converter is also a standalone package (`pip install osi-orionbelt`) and is being contributed upstream.",
+     "- **Lineage for every artefact and every query.** What a dimension, measure, metric or rule is built from, and for a query the joins the planner actually chose, its multi-fact `UNION ALL` legs and `exists` subqueries, down to columns and tables. As JSON, Mermaid or Turtle, over REST, the CLI (`obsl lineage`) and the UI.",
+     "- **The model as a standard graph.** Every loaded model exports as RDF (OWL, SHACL, SKOS, PROV) and answers read-only SPARQL, so *\"which measures read this column?\"* is a query rather than a code search, and lineage links into the same graph."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    174,
+    110,
+    127
+   ],
+   [
+    "replace",
+    174,
+    177,
+    127,
+    130,
+    [
+     "- You need pre-aggregation and caching tuned for high-concurrency dashboards at scale. Cube has years of production hardening there that OrionBelt does not.",
+     "- Your metrics already live in dbt and your team is happy there. MetricFlow keeps them where they are.",
+     "- You want an exploratory analysis language rather than a serving layer. Malloy is a better fit."
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    130,
+    131
+   ],
+   [
+    "replace",
+    178,
+    179,
+    131,
+    132,
+    [
+     "**Try the live demo** with a pre-loaded model, or open the Colab notebook and run it against TPC-H data."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    184,
+    132,
+    137
+   ],
+   [
+    "replace",
+    184,
+    188,
+    137,
+    141,
+    [
+     "- **Business rules** state conditions over the model's dimensions, measures and metrics: who counts as a high-value client, which categories must not sell at a loss. The rule engine compiles each rule to the query that reports its members or violations, and evaluates one rule or all of them over REST, MCP, the CLI (`obsl rules evaluate`) and the UI.",
+     "- **External concept mappings** link data objects, dimensions, measures, metrics and rules to the concepts your organisation already governs (schema.org, FIBO, an internal vocabulary), with provenance.",
+     "- **The OBSL graph** exposes every loaded model as RDF, so its artefacts, joins, rules and concept links can be queried with SPARQL.",
+     "- **Lineage** shows what a dimension, measure, metric, rule or query is built from, down to the tables and the joins the planner chose, as JSON, Mermaid, or Turtle linked into the OBSL graph, in the API, the CLI (`obsl lineage`) and the UI."
+    ]
+   ],
+   [
+    "equal",
+    188,
+    202,
+    141,
+    155
+   ],
+   [
+    "replace",
+    202,
+    206,
+    155,
+    156,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    216,
+    156,
+    166
+   ],
+   [
+    "replace",
+    216,
+    223,
+    166,
+    167,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    229,
+    167,
+    173
+   ],
+   [
+    "replace",
+    229,
+    230,
+    173,
+    174,
+    [
+     "Guides: Business Rules, External Concept Mappings, OBSL Graph & SPARQL."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    232,
+    174,
+    176
+   ],
+   [
+    "replace",
+    232,
+    237,
+    176,
+    177,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    241,
+    177,
+    181
+   ],
+   [
+    "replace",
+    241,
+    242,
+    181,
+    182,
+    [
+     "**Open the Live Demo** — Gradio UI with a pre-loaded example model. Paste a query, pick a dialect, see SQL instantly."
+    ]
+   ],
+   [
+    "equal",
+    242,
+    243,
+    182,
+    183
+   ],
+   [
+    "replace",
+    243,
+    244,
+    183,
+    184,
+    [
+     "API explorer: Swagger UI | ReDoc"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    249,
+    184,
+    189
+   ],
+   [
+    "replace",
+    249,
+    253,
+    189,
+    193,
+    [
+     "> -p 8080:8080 -p 5432:5432 -p 8815:8815 \\",
+     "> -e PGWIRE_ENABLED=true \\",
+     "> -e FLIGHT_ENABLED=true \\",
+     "> ralforion/orionbelt-semantic-layer-api:latest"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    193,
+    194
+   ],
+   [
+    "replace",
+    254,
+    255,
+    194,
+    195,
+    [
+     "> # REST + Gradio UI: http://localhost:8080/ui"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    257,
+    195,
+    197
+   ],
+   [
+    "replace",
+    257,
+    258,
+    197,
+    198,
+    [
+     "> -c 'SELECT \"Client Name\", \"Total Sales\" LIMIT 5'"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    268,
+    198,
+    208
+   ],
+   [
+    "replace",
+    268,
+    269,
+    208,
+    209,
+    [
+     "Open In Colab — Interactive notebook with TPC-H data: explore the model, compile queries across dialects, execute against DuckDB, and see results. Requires Python 3.12 runtime."
+    ]
+   ],
+   [
+    "equal",
+    269,
+    282,
+    209,
+    222
+   ],
+   [
+    "replace",
+    282,
+    312,
+    222,
+    223,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    354,
+    223,
+    265
+   ],
+   [
+    "replace",
+    354,
+    358,
+    265,
+    266,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    360,
+    266,
+    268
+   ],
+   [
+    "replace",
+    360,
+    361,
+    268,
+    269,
+    [
+     "See the CLI guide for all commands."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    368,
+    269,
+    276
+   ],
+   [
+    "replace",
+    368,
+    372,
+    276,
+    277,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    382,
+    277,
+    287
+   ],
+   [
+    "replace",
+    382,
+    389,
+    287,
+    288,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    391,
+    288,
+    290
+   ],
+   [
+    "replace",
+    391,
+    392,
+    290,
+    291,
+    [
+     "See the OBSQL reference for the full grammar."
+    ]
+   ],
+   [
+    "equal",
+    392,
+    401,
+    291,
+    300
+   ],
+   [
+    "replace",
+    401,
+    402,
+    300,
+    301,
+    [
+     "Open http://localhost:8080/docs to explore the API."
+    ]
+   ],
+   [
+    "equal",
+    402,
+    409,
+    301,
+    308
+   ],
+   [
+    "replace",
+    409,
+    422,
+    308,
+    309,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    428,
+    309,
+    315
+   ],
+   [
+    "replace",
+    428,
+    429,
+    315,
+    316,
+    [
+     "See `.env.template` for the full environment variable reference."
+    ]
+   ],
+   [
+    "equal",
+    429,
+    432,
+    316,
+    319
+   ],
+   [
+    "replace",
+    432,
+    433,
+    319,
+    320,
+    [
+     "> - MCP via stdio does not work in Docker. Use the MCP HTTP client for containerized deployments."
+    ]
+   ],
+   [
+    "equal",
+    433,
+    440,
+    320,
+    327
+   ],
+   [
+    "replace",
+    440,
+    441,
+    327,
+    328,
+    [
+     "**orionbelt-semantic-layer-mcp**"
+    ]
+   ],
+   [
+    "equal",
+    441,
+    448,
+    328,
+    335
+   ],
+   [
+    "replace",
+    448,
+    453,
+    335,
+    336,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    455,
+    336,
+    338
+   ],
+   [
+    "replace",
+    455,
+    458,
+    338,
+    339,
+    [
+     "Also works with Copilot, Cursor, and Windsurf. See the MCP repo for full setup options."
+    ]
+   ],
+   [
+    "equal",
+    458,
+    461,
+    339,
+    342
+   ],
+   [
+    "replace",
+    461,
+    462,
+    342,
+    343,
+    [
+     "||OrionBelt|dbt Semantic Layer|Cube|Malloy|"
+    ]
+   ],
+   [
+    "equal",
+    462,
+    463,
+    343,
+    344
+   ],
+   [
+    "replace",
+    463,
+    472,
+    344,
+    353,
+    [
+     "|**Model format**|YAML (OBML)|YAML on dbt models|YAML or JavaScript|Malloy language|",
+     "|**Runtime**|Self-hosted service|dbt Cloud|Cube Core (self-hosted) or Cube Cloud|Library, plus the Publisher server|",
+     "|**License**|BUSL-1.1 (converts to Apache 2.0)|Definitions open source; runtime in dbt Cloud|Apache 2.0 core + Cube Cloud|Open source|",
+     "|**Query surfaces**|OBSQL over PostgreSQL wire and Arrow Flight SQL, REST, MCP, DB-API drivers, CLI|GraphQL, JDBC (Cloud)|SQL API (PostgreSQL wire), REST, GraphQL|Malloy language; Publisher REST and MCP|",
+     "|**Multi-fact queries**|`UNION ALL` legs (CFL), fan-trap paths refused|`FULL OUTER JOIN` on shared entities|Per-fact subqueries joined on shared dimensions|Single-rooted sources|",
+     "|**Same answer on every engine**|Pinned and executed (`x/0`, rounding, NULLs, JSON)|Inherits engine semantics|Inherits engine semantics|Partly normalized: `greatest` / `least` NULL if any argument is, `round` half away from zero, `length` in characters; `x / 0` is left to the engine (`inf` on DuckDB), and \"perfect compatibility across all dialects for all functions is not guaranteed\"|",
+     "|**Lineage**|Per artefact and per query, down to columns and the joins chosen|Catalog DAG of semantic models and metrics; no per-query lineage|Cube Cloud Metadata API: lineage from cubes and members to source tables, with database names and SQL expressions, for catalog integrations; no per-query lineage|None documented|",
+     "|**Interchange**|Apache Ossie both ways; the model as RDF with SPARQL|No|Apache Ossie import and export through the Cube CLI and Platform API (Oct 2026; the CLI is in preview, access via Cube support)|No|",
+     "|**Business meaning in the model**|Rules compiled to the query that reports their findings; SKOS links to an external ontology|Column-level data tests; free-form `meta`|Free-form `meta` (`ai_context`)|Annotations, uninterpreted|"
+    ]
+   ],
+   [
+    "equal",
+    472,
+    473,
+    353,
+    354
+   ],
+   [
+    "replace",
+    473,
+    476,
+    354,
+    355,
+    [
+     "Full, two-sided comparisons, including where each of these tools is ahead: dbt, Cube, Malloy, LookML, AtScale."
+    ]
+   ],
+   [
+    "equal",
+    476,
+    486,
+    355,
+    365
+   ],
+   [
+    "replace",
+    486,
+    487,
+    365,
+    366,
+    [
+     "- **OSI Interoperability** — bidirectional conversion between OBML and the Open Semantic Interchange format, now developed as Apache Ossie (incubating)"
+    ]
+   ],
+   [
+    "equal",
+    487,
+    502,
+    366,
+    381
+   ],
+   [
+    "replace",
+    502,
+    503,
+    381,
+    382,
+    [
+     "- **MCP Server** — separate thin client for Claude, ChatGPT, Copilot, Cursor, Windsurf"
+    ]
+   ],
+   [
+    "equal",
+    503,
+    506,
+    382,
+    385
+   ],
+   [
+    "replace",
+    506,
+    507,
+    385,
+    386,
+    [
+     "- **DuckDB as a client** (v2.27.1+) - a plain DuckDB shell queries the layer, over either surface. `ATTACH ... (TYPE postgres)` mounts the model as a table (`SELECT ... FROM obsl.sales.model`, after `SET pg_use_text_protocol = true`, and on DuckDB 2.0.1+ `SET pg_enable_remote_pushdown = false`); the `adbc_scanner` community extension does it over Flight SQL with Arrow the whole way. Governed measures join to local tables and land in `CREATE TABLE AS`. Guide"
+    ]
+   ],
+   [
+    "equal",
+    507,
+    511,
+    386,
+    390
+   ],
+   [
+    "replace",
+    511,
+    512,
+    390,
+    391,
+    [
+     "- **One-shot Model + Queries**: submit task-specific OBML and independent sub-questions to `POST /v1/oneshot/batch`; get per-query results and optionally retain the model for follow-ups. See Agent Workflows."
+    ]
+   ],
+   [
+    "equal",
+    512,
+    533,
+    391,
+    412
+   ],
+   [
+    "delete",
+    533,
+    535,
+    412,
+    412
+   ],
+   [
+    "equal",
+    535,
+    543,
+    412,
+    420
+   ],
+   [
+    "replace",
+    543,
+    577,
+    420,
+    421,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    577,
+    585,
+    421,
+    429
+   ],
+   [
+    "replace",
+    585,
+    597,
+    429,
+    430,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    597,
+    599,
+    430,
+    432
+   ],
+   [
+    "replace",
+    599,
+    601,
+    432,
+    433,
+    [
+     " Generated SQL (Postgres) "
+    ]
+   ],
+   [
+    "equal",
+    601,
+    606,
+    433,
+    438
+   ],
+   [
+    "replace",
+    606,
+    610,
+    438,
+    439,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    610,
+    611,
+    439,
+    440
+   ],
+   [
+    "delete",
+    611,
+    613,
+    440,
+    440
+   ],
+   [
+    "equal",
+    613,
+    616,
+    440,
+    443
+   ],
+   [
+    "delete",
+    616,
+    618,
+    443,
+    443
+   ],
+   [
+    "equal",
+    618,
+    620,
+    443,
+    445
+   ],
+   [
+    "replace",
+    620,
+    623,
+    445,
+    446,
+    [
+     " OrionBelt Gradio UI showing side-by-side OBML model editor and compiled SQL output"
+    ]
+   ],
+   [
+    "equal",
+    623,
+    634,
+    446,
+    457
+   ],
+   [
+    "replace",
+    634,
+    637,
+    457,
+    458,
+    [
+     " OrionBelt Business Rules tab listing the model"
+    ]
+   ],
+   [
+    "equal",
+    637,
+    638,
+    458,
+    459
+   ],
+   [
+    "replace",
+    638,
+    641,
+    459,
+    460,
+    [
+     " OrionBelt Ontology Graph tab showing the semantic model as an interactive network of data objects, dimensions, measures, metrics, and join relationships"
+    ]
+   ],
+   [
+    "equal",
+    641,
+    657,
+    460,
+    476
+   ],
+   [
+    "delete",
+    657,
+    659,
+    476,
+    476
+   ],
+   [
+    "equal",
+    659,
+    661,
+    476,
+    478
+   ],
+   [
+    "replace",
+    661,
+    662,
+    478,
+    479,
+    [
+     "|Topic|Link|"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    663,
+    479,
+    480
+   ],
+   [
+    "replace",
+    663,
+    697,
+    480,
+    512,
+    [
+     "|Full docs site|ralforion.com/orionbelt-semantic-layer|",
+     "|Installation|getting-started/installation|",
+     "|Quick Start|getting-started/quickstart|",
+     "|Docker & Deployment|getting-started/docker|",
+     "|Development|getting-started/development|",
+     "|OBML Model Format|guide/model-format|",
+     "|Query Language|guide/query-language|",
+     "|SQL Dialects|guide/dialects|",
+     "|Period-over-Period Metrics|guide/period-over-period|",
+     "|Trend Analysis (rank / lag / lead / ntile, partitioned MAs, statistical aggregates)|guide/trend-analysis|",
+     "|Compilation Pipeline|guide/compilation|",
+     "|OBSL Graph & SPARQL|guide/obsl|",
+     "|Business Rules|guide/business-rules|",
+     "|External Concept Mappings|guide/concept-mappings|",
+     "|Gradio UI|guide/ui|",
+     "|AI Integrations|guide/integrations|",
+     "|OSI Interoperability|guide/osi|",
+     "|REST API Endpoints|api/endpoints|",
+     "|DB-API Drivers & Flight SQL|drivers|",
+     "|Architecture|reference/architecture|",
+     "|Configuration|reference/configuration|",
+     "|Sales Model Walkthrough|examples/sales-model|",
+     "|Multi-Dialect Output|examples/multi-dialect|",
+     "|Multi-Fact: Sales & Returns|examples/multi-fact|",
+     "|TPC-DS Benchmark|examples/tpcds|",
+     "|Quickstart Notebook|examples/quickstart.ipynb|",
+     "|**Comparison: Overview**|comparison/|",
+     "|Comparison: vs. dbt Semantic Layer|comparison/dbt|",
+     "|Comparison: vs. Malloy|comparison/malloy|",
+     "|Comparison: vs. LookML / Looker|comparison/lookml|",
+     "|Comparison: vs. Cube|comparison/cube|",
+     "|Comparison: vs. AtScale|comparison/atscale|"
+    ]
+   ],
+   [
+    "equal",
+    697,
+    700,
+    512,
+    515
+   ],
+   [
+    "replace",
+    700,
+    701,
+    515,
+    516,
+    [
+     "|Status|Area|"
+    ]
+   ],
+   [
+    "equal",
+    701,
+    702,
+    516,
+    517
+   ],
+   [
+    "replace",
+    702,
+    706,
+    517,
+    519,
+    [
+     "|Shipped|8 SQL dialects, REST API, MCP server, Gradio UI, DB-API drivers, Flight SQL, **PostgreSQL wire protocol (v2.5.0+)**: Tableau / DBeaver / Superset / Power BI / `psql` / **Dremio as a federated Postgres source**, OBSL/SPARQL, **Apache Ossie (OSI) 0.3 interop** with bidirectional schema validation, AI integrations (LangChain, CrewAI, ADK, etc.), model inheritance & extends, data types & numerical precision, timezone settings, grain & filter context overrides, **Trend Analysis**: partitioned rolling windows, `MetricType.WINDOW` for rank/lag/lead/ntile, 9 statistical aggregates (CORR, COVAR_*, REGR_*, STDDEV_*, VAR_*), **Unified authentication (v2.12.0)** across REST / Flight / pgwire / UI: `AUTH_MODE=api_key` with shared key store, pgwire SCRAM-SHA-256 + cleartext, **Artefacts Composability Resolution (ACR, v2.14.0)**: a `composables` endpoint that, given the query so far, returns which dimensions / measures / metrics can still be added (including CFL candidates), powering guided query building, **`obsl` CLI (v2.17.0+)** for automation & CI/CD: `validate`, `compile`, `execute`, `describe`, `lineage`, `convert`, `rules` and more, in-process or against a server with `--server`, **Federated queries (v3.0.0+)**: a model's data objects can live in different databases. A query reading more than one is split into one query per data source, run at once, and combined in an in-memory DuckDB, **Files and lakehouse tables (v3.1.0+)**: Parquet, CSV, JSON and Apache Iceberg read in place by a DuckDB data source, **Sign-in through your identity provider (v3.2.0+)**: `AUTH_MODE=oidc` with per-endpoint scopes on REST / Flight SQL / pgwire, queries that run as the signed-in user on Databricks / Snowflake / BigQuery, BI tokens for BI tools, and an audit log|",
+     "|Planned|DDL view generation (CREATE VIEW from queries), additional dialects, additional BI tool integrations, pre-aggregation / materialization layer|"
+    ]
+   ],
+   [
+    "equal",
+    706,
+    716,
+    519,
+    529
+   ],
+   [
+    "replace",
+    716,
+    719,
+    529,
+    530,
+    [
+     "Contact RALFORION d.o.o. for details."
+    ]
+   ],
+   [
+    "equal",
+    719,
+    722,
+    530,
+    533
+   ],
+   [
+    "replace",
+    722,
+    723,
+    533,
+    534,
+    [
+     "### OrionBelt Analytics"
+    ]
+   ],
+   [
+    "equal",
+    723,
+    726,
+    534,
+    537
+   ],
+   [
+    "replace",
+    726,
+    731,
+    537,
+    538,
+    [
+     " Architecture diagram showing OrionBelt Analytics generating ontologies from database schemas, feeding into OrionBelt Semantic Layer for SQL compilation"
+    ]
+   ],
+   [
+    "equal",
+    731,
+    747,
+    538,
+    554
+   ],
+   [
+    "replace",
+    747,
+    756,
+    554,
+    555,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    756,
+    781,
+    555,
+    580
+   ],
+   [
+    "delete",
+    781,
+    783,
+    580,
+    580
+   ],
+   [
+    "equal",
+    783,
+    784,
+    580,
+    581
+   ],
+   [
+    "replace",
+    784,
+    804,
+    581,
+    582,
+    [
+     "Copyright © 2026 RALFORION d.o.o."
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
+ },
+ "044987739edd+2": {
+  "fn": "saward/spawn",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "SQL test file that creates a fresh ephemeral database, loops over a JSON fixture of customers, and calls a reusable create_customer macro to seed each one"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "replace",
+    5,
+    29,
+    5,
+    6,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    33,
+    6,
+    10
+   ],
+   [
+    "replace",
+    33,
+    35,
+    10,
+    12,
+    [
+     "License",
+     "Docs"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    40,
+    12,
+    17
+   ],
+   [
+    "replace",
+    40,
+    41,
+    17,
+    18,
+    [
+     "This is just the tip of the iceberg. View features below to see more of what Spawn enables."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    44,
+    18,
+    21
+   ],
+   [
+    "replace",
+    44,
+    45,
+    21,
+    22,
+    [
+     "Terminal session showing spawn migration new, a colourised SQL build, spawn migration pin, and spawn migration apply, with the migration status table going from Pending to Applied"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    48,
+    22,
+    25
+   ],
+   [
+    "replace",
+    48,
+    49,
+    25,
+    26,
+    [
+     "SQL test file that creates a fresh ephemeral database, loops over a JSON fixture of customers, and calls a reusable create_customer macro to seed each one"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    26,
+    29
+   ],
+   [
+    "replace",
+    52,
+    53,
+    29,
+    30,
+    [
+     "Install Spawn"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    69,
+    30,
+    46
+   ],
+   [
+    "replace",
+    69,
+    82,
+    46,
+    47,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    90,
+    47,
+    55
+   ],
+   [
+    "replace",
+    90,
+    98,
+    55,
+    56,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    116,
+    56,
+    74
+   ],
+   [
+    "replace",
+    116,
+    118,
+    74,
+    76,
+    [
+     "- spawn init",
+     "- Welcome to Spawn"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    129,
+    76,
+    87
+   ],
+   [
+    "replace",
+    129,
+    138,
+    87,
+    88,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    146,
+    88,
+    96
+   ],
+   [
+    "replace",
+    146,
+    154,
+    96,
+    97,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    158,
+    97,
+    101
+   ],
+   [
+    "replace",
+    158,
+    160,
+    101,
+    103,
+    [
+     "- spawn migration apply",
+     "- spawn migration status"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    163,
+    103,
+    106
+   ],
+   [
+    "replace",
+    163,
+    164,
+    106,
+    107,
+    [
+     "Spawn uses Minijinja under the hood to provide powerful templating abilities to your migrations."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    200,
+    107,
+    143
+   ],
+   [
+    "replace",
+    200,
+    206,
+    143,
+    144,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    210,
+    144,
+    148
+   ],
+   [
+    "replace",
+    210,
+    214,
+    148,
+    152,
+    [
+     "- Welcome to Spawn",
+     "- Templating",
+     "- spawn migration new",
+     "- spawn migration build"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    265,
+    152,
+    203
+   ],
+   [
+    "replace",
+    265,
+    272,
+    203,
+    204,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    280,
+    204,
+    212
+   ],
+   [
+    "replace",
+    280,
+    289,
+    212,
+    213,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    295,
+    213,
+    219
+   ],
+   [
+    "replace",
+    295,
+    298,
+    219,
+    222,
+    [
+     "- spawn migration new",
+     "- spawn migration build",
+     "- spawn migration pin"
+    ]
+   ],
+   [
+    "equal",
+    298,
+    313,
+    222,
+    237
+   ],
+   [
+    "replace",
+    313,
+    325,
+    237,
+    238,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    325,
+    342,
+    238,
+    255
+   ],
+   [
+    "replace",
+    342,
+    359,
+    255,
+    256,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    359,
+    367,
+    256,
+    264
+   ],
+   [
+    "replace",
+    367,
+    374,
+    264,
+    265,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    385,
+    265,
+    276
+   ],
+   [
+    "replace",
+    385,
+    386,
+    276,
+    277,
+    [
+     "Spawn in action"
+    ]
+   ],
+   [
+    "equal",
+    386,
+    391,
+    277,
+    282
+   ],
+   [
+    "replace",
+    391,
+    398,
+    282,
+    289,
+    [
+     "- spawn test new",
+     "- spawn test run",
+     "- spawn test expect",
+     "- spawn test compare",
+     "- Test Macros",
+     "- Non-determinism in Tests",
+     "- Powerful regression tests for your PostgreSQL project"
+    ]
+   ],
+   [
+    "equal",
+    398,
+    401,
+    289,
+    292
+   ],
+   [
+    "replace",
+    401,
+    402,
+    292,
+    293,
+    [
+     "Spawn SQL tests are templates that can make use of the same powerful Minijinja templating features, along with some helper functions."
+    ]
+   ],
+   [
+    "equal",
+    402,
+    411,
+    293,
+    302
+   ],
+   [
+    "replace",
+    411,
+    424,
+    302,
+    303,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    424,
+    432,
+    303,
+    311
+   ],
+   [
+    "replace",
+    432,
+    465,
+    311,
+    312,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    465,
+    475,
+    312,
+    322
+   ],
+   [
+    "replace",
+    475,
+    480,
+    322,
+    323,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    480,
+    488,
+    323,
+    331
+   ],
+   [
+    "replace",
+    488,
+    545,
+    331,
+    332,
+    [
+     "…（57 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    545,
+    553,
+    332,
+    340
+   ],
+   [
+    "replace",
+    553,
+    568,
+    340,
+    341,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    568,
+    572,
+    341,
+    345
+   ],
+   [
+    "replace",
+    572,
+    575,
+    345,
+    348,
+    [
+     "- spawn test run",
+     "- Test Macros",
+     "- Non-determinism in Tests"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    601,
+    348,
+    374
+   ],
+   [
+    "replace",
+    601,
+    616,
+    374,
+    375,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    616,
+    626,
+    375,
+    385
+   ],
+   [
+    "replace",
+    626,
+    629,
+    385,
+    388,
+    [
+     "- spawn script new",
+     "- spawn script run",
+     "- spawn script pin"
+    ]
+   ],
+   [
+    "equal",
+    629,
+    670,
+    388,
+    429
+   ],
+   [
+    "replace",
+    670,
+    674,
+    429,
+    430,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    674,
+    678,
+    430,
+    434
+   ],
+   [
+    "replace",
+    678,
+    679,
+    434,
+    435,
+    [
+     "- Templating"
+    ]
+   ],
+   [
+    "equal",
+    679,
+    716,
+    435,
+    472
+   ],
+   [
+    "replace",
+    716,
+    717,
+    472,
+    473,
+    [
+     "- Templating"
+    ]
+   ],
+   [
+    "equal",
+    717,
+    722,
+    473,
+    478
+   ],
+   [
+    "replace",
+    722,
+    723,
+    478,
+    479,
+    [
+     "Let's say we want to create a handful of customers, using the macro from the Reusable components section above, but making use of data in a file in our `components` folder. _`spawn/components/tests/helpers/customers.json`_:"
+    ]
+   ],
+   [
+    "equal",
+    723,
+    728,
+    479,
+    484
+   ],
+   [
+    "replace",
+    728,
+    747,
+    484,
+    485,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    747,
+    755,
+    485,
+    493
+   ],
+   [
+    "replace",
+    755,
+    771,
+    493,
+    494,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    771,
+    779,
+    494,
+    502
+   ],
+   [
+    "replace",
+    779,
+    803,
+    502,
+    503,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    803,
+    807,
+    503,
+    507
+   ],
+   [
+    "replace",
+    807,
+    813,
+    507,
+    513,
+    [
+     "- Templating",
+     "- spawn test build",
+     "- spawn test run",
+     "- Test Macros",
+     "- Non-determinism in Tests",
+     "- Powerful regression tests for your PostgreSQL project"
+    ]
+   ],
+   [
+    "equal",
+    813,
+    822,
+    513,
+    522
+   ],
+   [
+    "replace",
+    822,
+    830,
+    522,
+    523,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    830,
+    834,
+    523,
+    527
+   ],
+   [
+    "replace",
+    834,
+    837,
+    527,
+    530,
+    [
+     "- CI/CD",
+     "- spawn check",
+     "- spawn pin cleanup"
+    ]
+   ],
+   [
+    "equal",
+    837,
+    846,
+    530,
+    539
+   ],
+   [
+    "replace",
+    846,
+    853,
+    539,
+    540,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    853,
+    861,
+    540,
+    548
+   ],
+   [
+    "replace",
+    861,
+    866,
+    548,
+    549,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    866,
+    875,
+    549,
+    558
+   ],
+   [
+    "replace",
+    875,
+    881,
+    558,
+    559,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    881,
+    885,
+    559,
+    563
+   ],
+   [
+    "replace",
+    885,
+    887,
+    563,
+    565,
+    [
+     "- Database Connections",
+     "- Configuration File (spawn.toml)"
+    ]
+   ],
+   [
+    "equal",
+    887,
+    902,
+    565,
+    580
+   ],
+   [
+    "replace",
+    902,
+    907,
+    580,
+    581,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    907,
+    937,
+    581,
+    611
+   ],
+   [
+    "replace",
+    937,
+    940,
+    611,
+    614,
+    [
+     "- Managing Secrets",
+     "- Configuration File (Secrets)",
+     "- Templating"
+    ]
+   ],
+   [
+    "equal",
+    940,
+    943,
+    614,
+    617
+   ],
+   [
+    "replace",
+    943,
+    954,
+    617,
+    628,
+    [
+     "|Feature|**Spawn**|**Sqitch**|**Flyway**|**dbmate**|",
+     "|:-------------------|:-----------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------|:----------------------------------------------------------------------------|:-------------------------------------------------------------|",
+     "|**Core Philosophy**|**Compiled.** Database logic is a codebase. Migrations are build artifacts.|**DAG.** A dependency graph of changes. No linear version numbers.|**Linear.** Run scripts V1 → V2. \"Repeatable\" scripts run at the end.|**Simple.** Just run these SQL files in order.|",
+     "|**Views/Functions**|**Pinned Components.** Edit in place. Snapshots locked per-migration (CAS).|**Versioned Copies.** The rework command creates a new physical file for old migrations.|**Repeatable.** Re-runs `R__` scripts every migration. Doesn't track history.|**Manual.** Copy-paste old logic into new migrations manually.|",
+     "|**Templating**|**Native (Minijinja).** Macros, loops, and variables inside SQL.|**None.** Raw SQL only.|**Basic.** `${placeholder}` substitution only.|**None.** Raw SQL only.|",
+     "|**Testing**|**Built-in.** `spawn test` with diff-based assertions against a real database.|**Verify Scripts.** Boolean (Pass/Fail) scripts run after deploy.|**None.** Relies on external CI tools.|**None.**|",
+     "|**Dependencies**|**Single Binary** (Rust) + `psql` CLI.|**Perl.**|**JRE / Binary.**|**Single Binary** (Go). Very easy install.|",
+     "|**Rollbacks**|🔄 _Planned._ Currently manual.|**First Class.** Every change _must_ have a revert script.|**Paid.** `Undo` functionality often gated behind Pro/Enterprise.|**Supported.** `down.sql` files are standard.|",
+     "|**DB Support**|**PostgreSQL** (Focus on depth).|**Massive.** Postgres, MySQL, Oracle, SQLite, Vertica, etc.|**Massive.** Every DB known to man.|**Broad.** Postgres, MySQL, SQLite, ClickHouse.|",
+     "|**Execution Engine**|**Native CLI Wrapper.** Full parity with `psql` (supports `\\copy`, `\\gset`, `\\set`).|**Native Drivers.**|**JDBC.** (Java Database Connectivity).|**Native Drivers.** (Go drivers).|",
+     "|**License**|**AGPL-3.0**|**MIT**|**Apache 2.0** (Community) / Proprietary (Teams).|**MIT**|"
+    ]
+   ],
+   [
+    "equal",
+    954,
+    956,
+    628,
+    630
+   ],
+   [
+    "replace",
+    956,
+    981,
+    630,
+    631,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    981,
+    985,
+    631,
+    635
+   ],
+   [
+    "replace",
+    985,
+    986,
+    635,
+    636,
+    [
+     "### 👉 docs.spawn.dev"
+    ]
+   ],
+   [
+    "equal",
+    986,
+    992,
+    636,
+    642
+   ],
+   [
+    "replace",
+    992,
+    995,
+    642,
+    643,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    995,
+    998,
+    643,
+    646
+   ]
+  ],
+  "at": "2026-11-27"
+ },
+ "8418e73021bc+2": {
+  "fn": "lucianmarin/strictql",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     "**StrictQL** is a single-file, multi-writer relational database written in Stricta. It combines **SQLite's single-file, zero-setup simplicity** with **PostgreSQL's SQL dialect, MVCC semantics, and v3 wire protocol**, allowing developers and frameworks like **Django ORM** (`django.db.backends.postgresql` / `psycopg`) to use StrictQL as a drop-in replacement for PostgreSQL without managing a separate database server."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    13,
+    3,
+    11
+   ],
+   [
+    "delete",
+    13,
+    15,
+    11,
+    11
+   ],
+   [
+    "equal",
+    15,
+    21,
+    11,
+    17
+   ],
+   [
+    "replace",
+    21,
+    34,
+    17,
+    18,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    39,
+    18,
+    23
+   ],
+   [
+    "replace",
+    39,
+    42,
+    23,
+    26,
+    [
+     " - Each transaction receives a monotonic `txid` via `atomic_add` on `mmap`-backed shared state (`multiprocessing.SharedMemory`).",
+     " - Readers see a consistent snapshot without blocking writers; writers buffer mutations and commit atomically via WAL append + `FileLock` coordination.",
+     " - **Atomic Checkpointing & Compaction**: `CHECKPOINT` / `VACUUM` atomically rewrites the database file with live rows only, truncates the WAL, and reloads compacted tables into memory to reclaim dead MVCC rows."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    48,
+    26,
+    32
+   ],
+   [
+    "replace",
+    48,
+    53,
+    32,
+    37,
+    [
+     " - `INSERT INTO ... (...) VALUES (...) [RETURNING ...]`",
+     " - `ON CONFLICT (...) DO NOTHING | DO UPDATE SET ...`",
+     " - `SELECT ... FROM ... [INNER | LEFT OUTER JOIN ...] [WHERE ...] [GROUP BY ...] [ORDER BY ...] [LIMIT ...] [OFFSET ...]`",
+     " - `UPDATE ... SET ... [WHERE ...] [RETURNING ...]`",
+     " - `DELETE FROM ... [WHERE ...] [RETURNING ...]`"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    62,
+    37,
+    46
+   ],
+   [
+    "delete",
+    62,
+    64,
+    46,
+    46
+   ],
+   [
+    "equal",
+    64,
+    67,
+    46,
+    49
+   ],
+   [
+    "replace",
+    67,
+    68,
+    49,
+    50,
+    [
+     "Install Stricta and fetch via Homebrew:"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    109,
+    50,
+    91
+   ],
+   [
+    "replace",
+    109,
+    113,
+    91,
+    92,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    92,
+    93
+   ],
+   [
+    "delete",
+    114,
+    116,
+    93,
+    93
+   ],
+   [
+    "equal",
+    116,
+    121,
+    93,
+    98
+   ],
+   [
+    "replace",
+    121,
+    122,
+    98,
+    99,
+    [
+     "|Benchmark (ms)|SQLite (emb)|Postgres 18 (unix)|StrictQL (emb)|vs Postgres 18|vs SQLite|"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    99,
+    100
+   ],
+   [
+    "replace",
+    123,
+    129,
+    100,
+    106,
+    [
+     "|`insert_200` (200 inserts, transactional)|6.48|8.51|**2.20**|**3.87× faster**|**2.95× faster**|",
+     "|`homepage_10x` (10× `ORDER BY` + `IN`)|2.33|2.99|**1.26**|**2.37× faster**|**1.85× faster**|",
+     "|`count_10x` (10× indexed `COUNT(*)`)|0.64|0.67|**0.19**|**3.53× faster**|**3.37× faster**|",
+     "|`distinct_10x` (10× `SELECT DISTINCT`)|0.74|1.23|**0.12**|**10.25× faster**|**6.17× faster**|",
+     "|`search_10x` (10× `ILIKE '%ai%'`)|0.85|0.76|**0.66**|**1.15× faster**|**1.29× faster**|",
+     "|**TOTAL**|**11.04**|**14.16**|**4.44**|**3.19× faster**|**2.49× faster**|"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    136,
+    106,
+    113
+   ],
+   [
+    "replace",
+    136,
+    137,
+    113,
+    114,
+    [
+     "|500-User Sync `psycopg2` (ms)|PG 18 + PgBouncer|StrictQL (500 conns)|Speedup|"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    114,
+    115
+   ],
+   [
+    "replace",
+    138,
+    142,
+    115,
+    119,
+    [
+     "|`500_writes_1500` (500 writers × 3 inserts)|34.34|**20.94**|**1.64× faster**|",
+     "|`500_reads` (500 `FeedResource` `JOIN`s)|24.68|**18.48**|**1.34× faster**|",
+     "|`500_mixed` (500 simultaneous write + feed read)|30.91|**19.57**|**1.58× faster**|",
+     "|**TOTAL**|**89.93**|**59.00**|**1.52× faster**|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    147,
+    119,
+    124
+   ],
+   [
+    "replace",
+    147,
+    148,
+    124,
+    125,
+    [
+     "|Endpoint|StrictQL|PostgreSQL|Ratio|"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    125,
+    126
+   ],
+   [
+    "replace",
+    149,
+    163,
+    126,
+    140,
+    [
+     "|`GET /api/discover`|**4.58 ms**|7.12 ms|**0.64×**|",
+     "|`GET /api/discover?q=subreply`|**5.71 ms**|31.63 ms|**0.18×**|",
+     "|`GET /api/trending`|**1.62 ms**|8.13 ms|**0.20×**|",
+     "|`GET /api/people`|**0.55 ms**|1.41 ms|**0.39×**|",
+     "|`GET /api/people?q=lucian`|**1.03 ms**|6.13 ms|**0.17×**|",
+     "|`GET /api/feed`|**2.76 ms**|10.26 ms|**0.27×**|",
+     "|`GET /api/mentions`|**2.19 ms**|9.63 ms|**0.23×**|",
+     "|`GET /api/replies`|**2.47 ms**|8.77 ms|**0.28×**|",
+     "|`GET /api/saved`|**2.50 ms**|14.34 ms|**0.17×**|",
+     "|`GET /api/following`|**1.49 ms**|9.60 ms|**0.15×**|",
+     "|`GET /api/followers`|**1.50 ms**|10.25 ms|**0.15×**|",
+     "|`GET /api/messages`|**1.09 ms**|10.14 ms|**0.11×**|",
+     "|`GET /api/notifications`|**0.65 ms**|5.25 ms|**0.12×**|",
+     "|`GET /api/lucian/posts`|**3.12 ms**|15.77 ms|**0.20×**|"
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
+ },
+ "17a84179fb26+2": {
+  "fn": "mohamedx2/liltech",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    6,
+    0,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     "The digital hub of LilTech 2026 — a student hackathon on November 21–22, 2026 at Campus EPI, Sousse, Tunisia."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    9,
+    5,
+    7
+   ],
+   [
+    "delete",
+    9,
+    13,
+    7,
+    7
+   ],
+   [
+    "equal",
+    13,
+    45,
+    7,
+    39
+   ],
+   [
+    "replace",
+    45,
+    49,
+    39,
+    40,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    53,
+    40,
+    44
+   ],
+   [
+    "replace",
+    53,
+    54,
+    44,
+    45,
+    [
+     " `{ \"error\": { \"code\": \"CTF_NOT_SOLVED\", \"message\": \"Solve the Mini-CTF first.\" } }`"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    57,
+    45,
+    48
+   ],
+   [
+    "replace",
+    57,
+    58,
+    48,
+    49,
+    [
+     "|Area|Technology|"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    49,
+    50
+   ],
+   [
+    "replace",
+    59,
+    68,
+    50,
+    59,
+    [
+     "|Monorepo|Nx 24, pnpm workspaces|",
+     "|Frontend|Next.js 16 (App Router), React 19, TypeScript|",
+     "|Backend|Node.js, Express 5, TypeScript|",
+     "|Database|PostgreSQL 17, Prisma 6|",
+     "|Validation|Zod|",
+     "|Logging|pino|",
+     "|Testing|Vitest, supertest|",
+     "|Quality|ESLint (flat config), Prettier, Husky, lint-staged, commitlint|",
+     "|Infrastructure|Docker, Docker Compose, GitHub Actions|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    75,
+    59,
+    66
+   ],
+   [
+    "replace",
+    75,
+    87,
+    66,
+    67,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    112,
+    67,
+    92
+   ],
+   [
+    "replace",
+    112,
+    113,
+    92,
+    93,
+    [
+     "The defaults work for local development. Every variable is documented in `.env.example`. Never commit your `.env`."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    120,
+    93,
+    100
+   ],
+   [
+    "replace",
+    120,
+    125,
+    100,
+    101,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    133,
+    101,
+    109
+   ],
+   [
+    "replace",
+    133,
+    153,
+    109,
+    110,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    188,
+    110,
+    145
+   ],
+   [
+    "replace",
+    188,
+    192,
+    145,
+    149,
+    [
+     " - writes `/opt/liltech/.env` from repository secrets (never stored in the repo),",
+     " - logs the VPS in to GHCR with an ephemeral job token,",
+     " - pulls images, applies Prisma migrations (one-shot `migrate` service) and provisions the optional administrator account (one-shot `seed` service), starts the stack (web `:3000`, API `:4000`, Postgres internal-only),",
+     " - smoke-tests `GET /api/health` from the runner."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    213,
+    149,
+    170
+   ],
+   [
+    "replace",
+    213,
+    214,
+    170,
+    171,
+    [
+     "See CONTRIBUTING.md for the full guide, and AGENTS.md for the engineering rules that apply to contributors and AI coding agents."
+    ]
+   ],
+   [
+    "equal",
+    214,
+    224,
+    171,
+    181
+   ],
+   [
+    "replace",
+    224,
+    225,
+    181,
+    182,
+    [
+     "See `docs/development/AI_SKILLS.md` for installation, verification, and usage. Skills are **optional for contributors** — the project builds and runs without them."
+    ]
+   ],
+   [
+    "equal",
+    225,
+    228,
+    182,
+    185
+   ],
+   [
+    "replace",
+    228,
+    232,
+    185,
+    189,
+    [
+     "- `docs/architecture/` — system overview and module boundaries",
+     "- `docs/api/` — API conventions and endpoint groups",
+     "- `docs/decisions/OPEN_QUESTIONS.md` — unresolved business decisions (do not guess them)",
+     "- `docs/development/` — setup guides and AI skills"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    234,
+    189,
+    191
+   ],
+   [
+    "replace",
+    234,
+    239,
+    191,
+    192,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    241,
+    192,
+    194
+   ],
+   [
+    "replace",
+    241,
+    242,
+    194,
+    195,
+    [
+     "Found a vulnerability? **Please do not open a public issue.** Report it privately via GitHub Security Advisories — see `SECURITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    242,
+    244,
+    195,
+    197
+   ],
+   [
+    "replace",
+    244,
+    247,
+    197,
+    198,
+    [
+     "**Not yet decided.** The maintainers must select and approve a license before public release — see `LICENSE` and issue #1-style discussion for the current state. Until then, all rights are reserved by the project maintainers."
+    ]
+   ],
+   [
+    "equal",
+    247,
+    250,
+    198,
+    201
+   ],
+   [
+    "replace",
+    250,
+    251,
+    201,
+    202,
+    [
+     "- The open-source communities behind every dependency in `package.json`"
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
  }
 }

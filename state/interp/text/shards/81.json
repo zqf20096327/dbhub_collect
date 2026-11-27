@@ -3569,5 +3569,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a08068e8a4a5": {
+  "identity": {
+   "one_liner": "本地会话记忆库：hooks 捕获决策与任务，SQLite 存储，MCP 提供召回",
+   "review": "CogniCore 为 Claude Code 和 Codex 提供本地优先的会话记忆。通过 hooks 在会话结束时提取决策、待办和精确值，存入 ~/.cognicore 下的 SQLite；下次打开项目时启动 hook 以约 700 token 预算生成简报，代理可用 cognicore_recall 补查。保存前对检测到的密钥脱敏；支持 ChatGPT 历史导入、托管同步及 Python SDK，需 Python 3.10+。",
+   "highlights": [
+    "通过 hooks 自动捕获会话中的决策、开放任务和票据 ID、文件路径等精确值，保存前对检测到的密钥进行脱敏",
+    "记忆以 SQLite 存于本地 ~/.cognicore/mcp，按 Git 仓库分组，重启会话时提供默认 700 token 的启动简报",
+    "提供本地 stdio MCP 服务器、可选托管同步连接器与 Python SDK，支持导入 ChatGPT 历史导出并按项目检索时间线"
+   ],
+   "use_cases": [
+    "在 Claude Code 与 Codex 之间跨工具交接同一项目的未完成工作",
+    "将项目长期决策写入 .cognicore/context.md 并通过 Git 供团队评审",
+    "通过 Python SDK 为自有代理添加可检索的 SQLite 记忆存储"
+   ]
+  },
+  "sha": "a08068e8a4a5",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

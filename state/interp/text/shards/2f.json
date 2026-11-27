@@ -3712,5 +3712,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ad13762f75a1": {
+  "identity": {
+   "one_liner": "本地插件，将工具输出存入本地 SQLite 索引，仅向代理上下文返回所需片段",
+   "review": "Context Mode 是面向 11 种编码代理（如 Claude Code、Codex、Gemini CLI）的本地插件：它将文件读取、命令执行、网页抓取等工具输出放入本地沙箱运行，完整结果索引到本机 SQLite（FTS5），代理按需检索，也可让代理写脚本只回传打印结果。需 Node 24.15.0+，Windows 需 Git Bash；数据存于 ~/.context-mode，无遥测；Context Mode Gateway 为另收费的独立托管服务，不属于本插件。",
+   "highlights": [
+    "在本地沙箱运行工具调用，输出索引至每项目独立的 SQLite 库，代理通过 9 个 MCP 工具（含 ctx_execute、ctx_index、ctx_search）按需检索",
+    "支持 Claude Code、Codex、Gemini CLI、Qwen Code、Pi、OMP、OpenCode、Copilot CLI、Kiro、VS Code、ZCode，提供统一 npm 安装路线与 setup/doctor 检查",
+    "安装后可离线运行；官方基准记录（36 行 ≥10KB 输出）中位数回复较原始输出缩小 99.4%，零遥测，许可证为 ELv2"
+   ],
+   "use_cases": [
+    "代理需抓取网页或大文件、又不希望完整输出占用上下文窗口的场景",
+    "对数千条 JSON 记录做统计查询——代理在沙箱写脚本处理，仅回传结论",
+    "长会话压缩后恢复，或需在多项目本地留存可搜索的工具输出索引"
+   ]
+  },
+  "sha": "ad13762f75a1",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

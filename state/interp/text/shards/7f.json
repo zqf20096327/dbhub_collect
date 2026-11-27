@@ -3363,5 +3363,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2c242fdc0553": {
+  "identity": {
+   "one_liner": "在 AWS/GCP/Azure 或自建服务器上原样运行 Cloudflare Workers 与 Durable Objects 的运行时平台。",
+   "review": "OpenOrange 在 Node.js 上实现 Workers API，将现有 Worker 项目（含 Wrangler 配置）不加改动地运行在 Rivet 之上，每个 Durable Object 映射为一个带独立 SQLite 的 Rivet Actor。提供 orange dev/deploy/migrate CLI，支持 Rivet Cloud、BYOC 和 Apache-2.0 自托管，依赖 Node.js 22+、pnpm，部署需 Docker。部分绑定如 KV、Queues、R2 支持，但 Vectorize、Images 等不支持。适合需要把 Cloudflare 工作负载迁到自选云或自有服务器、且代码不想改写的团队。",
+   "highlights": [
+    "读取现有 Wrangler 配置，无需修改代码即可运行 Workers 与 Durable Objects",
+    "每个 Durable Object 映射为 Rivet Actor，SQLite 数据存储于 S3",
+    "支持 Rivet Cloud、BYOC 及 Apache-2.0 自托管部署"
+   ],
+   "use_cases": [
+    "将现有 Cloudflare Workers 项目迁移至 AWS、GCP、Azure 或自有服务器",
+    "在 Kubernetes、ECS、Docker Compose 等平台自托管 Workers 应用",
+    "在内存、CPU 时长或存储超出 Cloudflare 平台限制的场景下运行 Worker"
+   ]
+  },
+  "sha": "2c242fdc0553",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e716b9e2268b": {
+  "identity": {
+   "one_liner": "基于 SQLite 的开源棋类对局数据库格式标准，支持 PGN 标签映射与 PQL 局面查询",
+   "review": "OCGDB 定义了一种以 SQLite 为存储底座的开放棋类对局数据库格式（2.0.0 版支持国际象棋、chess960、象棋及 jieqi）。表与字段命名遵循 PGN 标签，对局着法以文本或二进制编码存于 Moves/Moves1/Moves2 字段。面向需要在多应用间交换棋谱数据或用 SQL 直接查询棋库的开发者。README 中性能数据为作者自测结果；文件扩展名约定为 .ocgdb.db3。",
+   "highlights": [
+    "使用 SQL/SQLite 存储数据，表名、字段名贴近 PGN 标签（如 White、BlackElo、PlyCount）",
+    "提供 PQL（Position Query Language）用于近似局面搜索，并支持对局解析",
+    "支持 Moves（TEXT）、Moves2（每步 2 字节编码，含变例）、Moves1（压缩 1 字节编码）多种着法存储形式；2.0.0 支持 chess、chess960、xiangqi、jieqi"
+   ],
+   "use_cases": [
+    "需要在不同应用、编程语言之间交换棋谱数据库的场景",
+    "Web 应用或移动端直接以 SQL 查询棋局数据（棋手、赛事、着法等）",
+    "大规模 PGN 文件转换入库（README 给出 94,000,000 局 Lichess PGN 的转换示例）"
+   ]
+  },
+  "sha": "e716b9e2268b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

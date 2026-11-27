@@ -3837,5 +3837,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a17bf3ec219b": {
+  "identity": {
+   "one_liner": "本地 AI API 网关，统一管理多智能体的模型、密钥与配额切换",
+   "review": "Token Proxy 是一个运行在本机的 AI API 网关（基于 yetone/magpie 分支），监听 127.0.0.1:9208，支持 OpenAI Chat、OpenAI Responses、Anthropic Messages 和 Gemini 协议及其互转，供多智能体、多提供商用户使用。它用 SQLite 统计 token，按优先级做配额耗尽后的账户/模型切换，可改写各智能体配置文件并保留原格式，可选在本地对提示词中的密钥等做脱敏。预发布包未做 Apple 签名公证，不支持自动更新。",
+   "highlights": [
+    "网关监听 127.0.0.1:9208，支持 OpenAI Chat、OpenAI Responses、Anthropic Messages、Gemini 四种协议并在其间转换，含流式、工具调用与推理内容",
+    "提供基于优先级的负载均衡与配额耗尽后的账户/路由组故障转移，token 用量记录在 SQLite 中",
+    "提供隐私脱敏功能（默认关闭），在请求离开本机前将密钥、令牌、邮箱等替换为占位符并在回复中还原，值仅保存在内存"
+   ],
+   "use_cases": [
+    "多个 AI 编码智能体（Claude Code、Codex、Gemini CLI、OpenCode 等）需要共用不同 API 密钥或订阅账户的场景",
+    "单一提供商配额用尽时需要自动切换到其他账户或其他模型的场景",
+    "希望在请求离开本机前对提示词中的密钥、令牌等敏感值做脱敏的场景"
+   ]
+  },
+  "sha": "a17bf3ec219b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "943d1393ce83": {
+  "identity": {
+   "one_liner": "面向 .NET 的嵌入式对象数据库，序列化、记录存储与索引一体化",
+   "review": "Abraxas 是运行在应用进程内的 .NET 嵌入式数据库，直接持久化普通 C# 对象，无需基类或映射配置，支持按 ID 读取、条件查询和选择性值读取。通过 NuGet 安装，目标 .NET 8+，当前仅在 Windows 平台经过运行时验证。开源版有限制：单 RecordBase 最多 15 个存储、每存储 524,287 条记录、单条序列化记录约 2 GiB 以内。",
+   "highlights": [
+    "直接持久化普通 .NET 对象，保留嵌套、继承集合及共享/循环引用，无需属性标注或表映射",
+    "支持标量、文本、二进制、复合与部分索引，条件查询和计数可不依赖二级索引，可选择只读取部分值而不重建完整对象",
+    "文件后端存储支持多 GiB 数据集，提供备份/恢复 API 与 DurabilityMode 持久化选项"
+   ],
+   "use_cases": [
+    "维护较大本地结构化数据的应用，如 CAD/工程领域的零件、装配与规格库",
+    "测量、仿真结果与历史数据集的分析型存储，可筛选记录并流式读取所选值进行计算",
+    "设置、应用记录、持久化字典等较小规模的本地持久化需求"
+   ]
+  },
+  "sha": "943d1393ce83",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3380,5 +3380,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f92ad82cdb37": {
+  "identity": {
+   "one_liner": "单可执行文件运行的 PostgreSQL，数据库以 .pgdb 目录形式存在",
+   "review": "minipg 是一个把 PostgreSQL 打包为单个可执行文件的工具：内嵌 postgres:18-alpine 镜像，用 Zig 库 hyper9 (h9) 在宿主机 hypervisor 上直接运行 Alpine 的 Postgres 二进制，无需 Linux 内核、VM 镜像或 Docker。数据、配置、凭据集中于 .pgdb 目录，可像普通目录一样复制。适用于本地开发和 CI 测试；README 明确标注 h9 为早期研究原型，不建议存放无法重建的数据。",
+   "highlights": [
+    "内嵌 postgres:18-alpine 镜像，可通过 --pg 17 等下载其他大版本",
+    "提供 shell/url/serve/run/dump/restore/exec/env 等命令，run 可为宿主命令注入 DATABASE_URL",
+    "无需特权或 /dev/kvm 即可在 Linux 5.11+ 容器和 CI 中运行，Linux 为静态 musl 二进制"
+   ],
+   "use_cases": [
+    "本地开发：minipg run app.pgdb -- npm start 直接给应用提供 Postgres 连接",
+    "CI 测试：在 stock GitHub runner 上 init + run 两行即可跑集成测试",
+    "数据备份与迁移：dump/restore 导出和恢复 SQL 转储"
+   ]
+  },
+  "sha": "f92ad82cdb37",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "144961209b9a": {
+  "identity": {
+   "one_liner": "内嵌 sing-box 的自托管多服务器代理面板,单 Go 二进制 + SQLite",
+   "review": "m-ui 是一个自托管代理面板,把面板、订阅服务、数据面(内嵌 sing-box)和后台任务装进一个 Go 二进制,共用一个 SQLite 文件。它用“线路”概念合并 inbound/outbound/route 三类配置,保存前先让 sing-box 干跑校验、失败自动回滚,支持一主多副推送配置与统一配额判定。GPL-3.0 协议,提供 Debian/Ubuntu 一键安装脚本,面向从单机自用到多服务器对外运营的管理者。",
+   "highlights": [
+    "线路配置以入口协议+端口+出口为单位,支持 Hysteria2、AnyTLS、TUIC、VLESS(Reality/Vision)、Shadowsocks 等协议;保存前先经 sing-box 干跑校验,失败回滚,改用户/上游为热更新",
+    "支持一主多副部署:主机推送配置、回收流量、集中判定配额与到期;提供主机容灾、订阅按客户端自动输出 Clash/sing-box/通用链接三种格式",
+    "面板内置证书签发续期、WARP、备份还原、防火墙管理、Telegram 通知与机器人、外部 API、上游组自动切换等运维功能"
+   ],
+   "use_cases": [
+    "自托管单机或多服务器(一主多副)代理节点管理",
+    "带代理分销、套餐与配额体系的对外运营场景",
+    "需要在网页内完成证书、备份、防火墙等运维操作而少用终端的场景"
+   ]
+  },
+  "sha": "144961209b9a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

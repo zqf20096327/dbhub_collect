@@ -3140,5 +3140,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "da46632a3008": {
+  "identity": {
+   "one_liner": "面向生产数据库故障响应的 AI 代理系统，含治理审批与 playbook 认证机制",
+   "review": "aiHelpDesk 是一个用于数据库故障诊断与修复的代理系统，面向在 VM、容器或 K8s 上运维生产数据库的 SRE/DBA 团队。其执行动作受治理框架约束：破坏性操作需人工审批，所有工具调用写入审计日志。修复流程以 playbook 为核心，故障解决后自动生成 playbook 草稿，进入使用前需通过稳定性认证。它不处理数据库迁移、模式优化或通用 SQL 问题。",
+   "highlights": [
+    "提供故障注入测试工具 faulttest，可在 staging 环境注入 32 种已知故障模式（SQL、SSH、K8s）并验证修复恢复",
+    "包含八模块 AI 治理框架：防篡改审计、爆炸半径限制、非工作时段守卫、实时策略评估等",
+    "基于 Google ADK 和 A2A 协议构建多代理架构，专家代理（Database、Kubernetes、Sysadmin 等）可独立替换或扩展"
+   ],
+   "use_cases": [
+    "生产数据库事故诊断与修复，需人工审批与审计记录的团队",
+    "多数据库集群变更编排，含金丝雀阶段与回滚",
+    "在 staging 环境通过故障注入验证 agent 行为"
+   ]
+  },
+  "sha": "da46632a3008",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "78baa823bd33": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理交付执行与治理控制平面",
+   "review": "MAIster 是一个自托管平台，用于在私有代码上以可重复流程运行 AI 编码代理：任务绑定版本化 Flow 包，在隔离的 Git worktree 中由 ACP 适配器执行，经过人工输入与证据门控后晋升为 PR 或本地合并。面向在自有基础设施上管理多个私有仓库的技术负责人或小团队。当前处于 beta，尚非开箱即用的生产平台。",
+   "highlights": [
+    "通过 Agent Client Protocol (ACP) 驱动 Claude Code、Codex、Gemini CLI、OpenCode、MiMo 等代理，supervisor 为每个会话生成适配器进程并在边界处限制能力",
+    "提供 Next.js Web 控制平面与 Fastify supervisor 两个 Node 进程，经 HTTP 与 SSE 通信，状态存于 PostgreSQL；支持版本固定的 Flow 包安装与治理",
+    "在交付前校验类型化工件、就绪状态、diff 与预算，并保留可审计的运行账本；Flow 包含人工输入、证据门控、有限返工与共识等步骤"
+   ],
+   "use_cases": [
+    "在自有服务器上为多个私有仓库运行 AI 编码代理并治理其交付流程",
+    "需要人工审批、证据门控与成本控制后才能合并代理产出的团队工作流",
+    "在 Git worktree 隔离环境中并行运行多个代理任务并通过看板与评审界面管理"
+   ]
+  },
+  "sha": "78baa823bd33",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0d3a9d9587fd": {
+  "identity": {
+   "one_liner": "面向 nullbits TIDBIT R01 键盘的板载国际象棋 AI 与生命游戏固件及 WebHID OLED 工具站",
+   "review": "该项目为 nullbits TIDBIT R01（ATmega32U4，128×32 SSD1306 OLED）提供 QMK 固件与单文件 WebHID 网页工具。固件在板载运行双 AI 对弈的国际象棋（2 层 minimax + alpha-beta 剪枝）和 1×1 Conway 生命游戏，二者通过 C union 共享 RAM；网页端通过 WebHID 提供遥测图表、亮度调节与图片上传抖动显示。用户可用 dfu-programmer 刷入预编译 hex，或经 QMK 从源码编译。",
+   "highlights": [
+    "板载国际象棋 AI 对弈：2 层 minimax 搜索与 alpha-beta 剪枝，断开网页后仍可独立运行，附带 4 种竖屏 32×128 显示布局",
+    "1×1 Conway 生命游戏采用 128×32 位并行 SWAR 引擎，与象棋通过 C union 共享 RAM",
+    "WebHID Studio 提供实时 MCU 遥测图表、OLED 亮度滑块（0–255）、PNG/JPG/GIF 的 Floyd–Steinberg 抖动上传，并保留 VIA + RGB + 编码器支持"
+   ],
+   "use_cases": [
+    "为 TIDBIT R01 键盘的 OLED 屏刷入国际象棋 AI 对弈或生命游戏演示固件",
+    "通过浏览器 WebHID 连接设备，查看棋局评估/胜场/时长或生命游戏种群遥测数据并调节屏幕亮度",
+    "将 PNG/JPG/GIF 经抖动处理后推送到竖排 OLED 显示，或使用内置视觉器"
+   ]
+  },
+  "sha": "0d3a9d9587fd",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3217,5 +3217,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "34f0972c443f": {
+  "identity": {
+   "one_liner": "面向 Text-to-SQL 的感知权限的 schema 选择库，仅向 LLM 暴露调用者可读的表",
+   "review": "schemagate 是一个 Python 库（pip install schemagate），在 Text-to-SQL 流程中按调用者身份（Principal/角色）过滤数据库 schema，仅将被授权且与问题相关的表写入提示词。选择器基于 BM25 与哈希嵌入器，离线运行且不调用模型。支持 Postgres、Oracle、MySQL、SQL Server、SQLite，可配合 LangChain、LlamaIndex、MCP 使用。README 指出其限制：所需表可能被剪掉，未入选的表无法被查询。",
+   "highlights": [
+    "按调用者权限先行过滤：无权读取的表不出现在提示词中，而非排序靠后",
+    "选择器离线运行（BM25 加哈希 n-gram 嵌入器），不调用模型，依赖 SQLAlchemy，无 API key",
+    "提供 CLI（demo/select/studio）、本地浏览器页面与在线演示，支持 openai/anthropic/gemini/oci/local 等 provider"
+   ],
+   "use_cases": [
+    "为多角色共享数据库构建 Text-to-SQL 代理，不同调用者只能见到各自可读的表",
+    "大型 schema（50 表以上）下压缩 Text-to-SQL 提示词中的 schema 令牌",
+    "避免 RLS 场景中模型对无权表生成 SQL 后返回空结果的误读问题"
+   ]
+  },
+  "sha": "34f0972c443f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a143f264099f": {
+  "identity": {
+   "one_liner": "面向中小学的配置驱动学科AI教学平台，覆盖教学练评管五条主线",
+   "review": "SmartKBS 是一个面向小学、初中、高中三个学段的 AI 智慧教学平台，覆盖备课出题、课堂互动、练习考试、学情分析等 60+ 功能点。学科、年级、班级、题型与提示词模板均由配置文件驱动，不限定学科。基于 FastAPI + React 构建，接入 DashScope、DeepSeek 与本地 Ollama 三档引擎，数据存于本地 SQLite，支持完全离线部署，提供 Windows 桌面一键安装、源码与 Git 三种部署方式。适合学校、教研组或任课教师使用；幼儿与高校学段需自行扩展年级主数据。",
+   "highlights": [
+    "AI 调用按云端知识库 RAG、本地文库（Chroma 向量 + FTS 双索引）、直接调用大模型三级优先级自动降级，生成引擎可在 DashScope/DeepSeek/Ollama 间按云端/混合/本地三档切换",
+    "内置题库优先组卷机制：出题先查题库，AI 生成的题目入库留用；支持智能组卷与含原生公式的 Word 导出",
+    "提供 12 级称号积分、课堂闯关/抢答/抽问/投票/分组讨论/协作白板等课堂互动模块，以及按任教范围收口的年级数据读写"
+   ],
+   "use_cases": [
+    "学校或任课教师在内网或离线环境中部署教学平台，进行出题组卷、考试发布与自动批改",
+    "课堂教学中开展抢答、投票、分组讨论、协作白板等互动活动并进行点名考勤",
+    "基于考试、练习、对话等行为数据的回流，生成学情分析、成长档案与学生画像"
+   ]
+  },
+  "sha": "a143f264099f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cf4028253dbc": {
+  "identity": {
+   "one_liner": "可自托管的终端工作台，集成 SSH、WinRM、SFTP、Docker 与数据库管理",
+   "review": "NexTerm 是一个面向服务器运维人员的自托管工作台，支持持久终端、命令块、分屏与 AI 助手，可管理 SSH/WinRM 连接、远程文件、Docker 容器和 MySQL/PostgreSQL/Redis。桌面端覆盖 Windows/macOS/Linux，移动端为预览版；服务端通过脚本部署于 systemd 的 Linux，支持多用户与双因素认证。采用 MIT 许可，技术栈为 Go 与 React。",
+   "highlights": [
+    "提供持久终端：断网或关闭应用后任务继续运行，可接管并补回输出",
+    "支持 SSH、WinRM、Telnet、RDP/VNC 等多种连接方式，并可从 OpenSSH、Termius、PuTTY 等导入主机",
+    "内置远程文件传输（trzsz）、Docker、MySQL/PostgreSQL/Redis 管理与端口转发"
+   ],
+   "use_cases": [
+    "集中管理多台服务器的 SSH/WinRM 终端与文件传输",
+    "需要分屏布局模板和命令广播的批量运维场景",
+    "团队自托管部署，配合多用户认证与审计日志使用"
+   ]
+  },
+  "sha": "cf4028253dbc",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "948ccc020d28": {
+  "identity": {
+   "one_liner": "基于 Elixir 的联邦语义查询引擎，SQLite 分片 + 向量检索 + DuckDB 分析",
+   "review": "MosaicDB 是一个联邦 SQL 语义搜索与分析引擎，用 Elixir/Erlang 做控制面，数据存于多个不可变 SQLite 分片文件，通过 sqlite-vec 做向量检索、DuckDB 做跨分片 SQL 分析。适合需要对多源文档或代码库进行语义检索、图遍历和 LLM 集成的开发者。使用 mix 构建安装，可配置 CPU 或 CUDA GPU 运行，支持 RAG 摄取 PDF、DOCX 等格式，并内置 MCP 服务器供 Claude、Cursor 等 agent 调用。",
+   "highlights": [
+    "混合检索：sqlite-vec 向量相似度加质心分片路由与布隆过滤器预筛，配合 BM25、PageRank、时间衰减等多信号融合排序",
+    "内置属性图支持递归 CTE 遍历（callers/callees/ancestors/neighborhood），并提供 5 种分块策略的 RAG 管道与可插拔的 6 种索引策略",
+    "通过 stdio 和 HTTP 暴露 9 个 MCP 工具，Erlang/OTP 监督树实现分片故障自愈与熔断隔离，支持 libcluster 自动集群发现"
+   ],
+   "use_cases": [
+    "对代码库或文档集建立本地语义索引，执行向量搜索、混合过滤查询和调用关系图遍历",
+    "需要将检索能力以 MCP 协议接入 Claude、Cursor 等 LLM agent 的场景",
+    "跨多个不可变 SQLite 分片文件执行 DuckDB 联邦 SQL 分析（窗口函数、join、聚合）"
+   ]
+  },
+  "sha": "948ccc020d28",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

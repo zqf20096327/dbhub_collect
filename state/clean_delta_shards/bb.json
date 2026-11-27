@@ -37199,5 +37199,500 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "f08039cc0337+2": {
+  "fn": "PhongGuy/dbento",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# Dbento"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Dbento with the demo shop open: the explorer on the left, a saved query in the editor and its result in the grid"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    15,
+    5,
+    15
+   ],
+   [
+    "replace",
+    15,
+    27,
+    15,
+    27,
+    [
+     "|Database|`engine` in `dbento.toml`|Query language|Saved query files|",
+     "|---|---|---|---|",
+     "|PostgreSQL|`postgres`|SQL|`.sql`|",
+     "|SQLite|`sqlite`|SQL|`.sql`|",
+     "|MySQL and MariaDB|`mysql` (or `mariadb`)|SQL|`.sql`|",
+     "|SQL Server|`mssql` (or `sqlserver`)|T-SQL|`.sql`|",
+     "|DuckDB|`duckdb`|SQL|`.sql`|",
+     "|MongoDB|`mongodb` (or `mongo`)|a subset of mongosh: `find`, `aggregate`, `insertOne`, `updateMany` and more|`.js`|",
+     "|SurrealDB|`surrealdb` (or `surreal`)|SurrealQL, over WebSocket|`.surql`|",
+     "|Redis and Valkey|`redis` (or `valkey`)|Redis commands, one per line|`.redis`|",
+     "|Amazon DynamoDB|`dynamodb` (or `dynamo`)|PartiQL|`.partiql`|",
+     "|Amazon S3 and S3-compatible stores|`s3`|S3 browse commands, one per line or `;`: `ls`, `ls [-r] s3://bucket[/prefix]`, `stat s3://bucket/key` and `cat s3://bucket/key`|`.s3`|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "Other engines are tracked in the issue tracker."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    40,
+    29,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "Completion in a WHERE clause offering the columns of orders, the customers table and SQL keywords"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    46,
+    41,
+    46
+   ],
+   [
+    "replace",
+    46,
+    47,
+    46,
+    47,
+    [
+     "The orders table expanded in the explorer, with its index's CREATE INDEX statement in the definition dock"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    62,
+    47,
+    62
+   ],
+   [
+    "replace",
+    62,
+    63,
+    62,
+    63,
+    [
+     "Two staged price changes on products and the prompt: affects 2 rows, roll back or commit"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    76,
+    63,
+    76
+   ],
+   [
+    "replace",
+    76,
+    77,
+    76,
+    77,
+    [
+     "The app asking whether to approve an AI's UPDATE on the shop connection"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    100,
+    77,
+    100
+   ],
+   [
+    "replace",
+    100,
+    101,
+    100,
+    101,
+    [
+     "- Try it from a checkout without a database server: `make demo` (see Try the demo)."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    106,
+    101,
+    106
+   ],
+   [
+    "replace",
+    106,
+    107,
+    106,
+    107,
+    [
+     "All of the logic lives in one core library with no UI: the workspace format, the keychain, the database drivers behind one async interface, streamed results, and the safety checks. The `dbento` command line, the MCP server it hosts (`dbento mcp`) and the `dbento-app` desktop app are thin shells over it, so all three behave the same. The crates are described in CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    107,
+    110
+   ],
+   [
+    "replace",
+    110,
+    111,
+    110,
+    111,
+    [
+     "A workspace is any folder with a `dbento.toml` in it. Connections live in that file, and saved queries in `queries/<connection>/`, as `.sql` files or the extension of the connection's language, so a query file knows which connection it runs on. Folders group connections and give them a color. Every key, rule and error code is described in the workspace format."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    116,
+    111,
+    116
+   ],
+   [
+    "replace",
+    116,
+    132,
+    116,
+    117,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    140,
+    117,
+    125
+   ],
+   [
+    "replace",
+    140,
+    166,
+    125,
+    126,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    173,
+    126,
+    133
+   ],
+   [
+    "replace",
+    173,
+    174,
+    133,
+    134,
+    [
+     "- **SQL Server** can take a `read_only_user`, a user that can only read, for its read-only work (see Safety the database enforces)."
+    ]
+   ],
+   [
+    "equal",
+    174,
+    188,
+    134,
+    148
+   ],
+   [
+    "replace",
+    188,
+    189,
+    148,
+    149,
+    [
+     "`auth` can pin the sign-in to `\"agent\"`, `\"key\"` or `\"password\"`; without it Dbento tries the SSH agent, then key files, then a stored password. A `~/.ssh/config` that uses `Match`, `ProxyJump` or `ProxyCommand` for the host is refused; write the values in `dbento.toml` instead. All the keys are in the workspace format."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    206,
+    149,
+    166
+   ],
+   [
+    "replace",
+    206,
+    213,
+    166,
+    173,
+    [
+     "|System|Desktop app|Command line|",
+     "|---|---|---|",
+     "|Linux x86_64|.deb · AppImage|tar.gz|",
+     "|Linux arm64|.deb · AppImage|tar.gz|",
+     "|macOS Apple silicon|Dbento_aarch64.dmg|tar.gz|",
+     "|macOS Intel|Dbento_x86_64.dmg|tar.gz|",
+     "|Windows x64|Installer (.exe)|zip|"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    214,
+    173,
+    174
+   ],
+   [
+    "replace",
+    214,
+    215,
+    174,
+    175,
+    [
+     "The links point to the latest release; to build it yourself, see Build from source. The macOS and Windows packages have not yet been tested on those systems."
+    ]
+   ],
+   [
+    "equal",
+    215,
+    216,
+    175,
+    176
+   ],
+   [
+    "replace",
+    216,
+    217,
+    176,
+    177,
+    [
+     "Releases are listed on the releases page, with checksums. See Install notes for the first launch on macOS and Windows."
+    ]
+   ],
+   [
+    "equal",
+    217,
+    222,
+    177,
+    182
+   ],
+   [
+    "replace",
+    222,
+    229,
+    182,
+    189,
+    [
+     "|Platform|Desktop app|Command line|",
+     "|---|---|---|",
+     "|Linux x86_64|`dbento-app_<v>_amd64.deb`, `dbento-app_<v>_x86_64.AppImage`|`dbento-<v>-x86_64-unknown-linux-gnu.tar.gz`|",
+     "|Linux arm64|`dbento-app_<v>_arm64.deb`, `dbento-app_<v>_aarch64.AppImage`|`dbento-<v>-aarch64-unknown-linux-gnu.tar.gz`|",
+     "|macOS Apple silicon|`Dbento_<v>_aarch64.dmg`|`dbento-<v>-aarch64-apple-darwin.tar.gz`|",
+     "|macOS Intel|`Dbento_<v>_x86_64.dmg`|`dbento-<v>-x86_64-apple-darwin.tar.gz`|",
+     "|Windows x64|`dbento-app_<v>_x64-setup.exe`|`dbento-<v>-x86_64-pc-windows-msvc.zip`|"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    252,
+    189,
+    212
+   ],
+   [
+    "replace",
+    252,
+    253,
+    212,
+    213,
+    [
+     "You need Rust 1.99 or newer, a C and C++ compiler and libclang, and on Linux the system libraries listed in CONTRIBUTING.md. From a checkout, `make` builds and installs `dbento` and `dbento-app`, and on Linux adds a desktop entry and the icon under `~/.local/share` (`make uninstall` removes them again). On Windows, or without `make`:"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    213,
+    214
+   ],
+   [
+    "replace",
+    254,
+    256,
+    214,
+    216,
+    [
+     " cargo install --locked --path crates/dbento-cli",
+     " cargo install --locked --path crates/dbento-app"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    257,
+    216,
+    217
+   ],
+   [
+    "replace",
+    257,
+    258,
+    217,
+    218,
+    [
+     "The install options, the Cargo features and the demo workspace are in CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    258,
+    263,
+    218,
+    223
+   ],
+   [
+    "replace",
+    263,
+    264,
+    223,
+    224,
+    [
+     "From a checkout, `make demo` opens the app on a small SQLite shop with saved queries to try, with no database server or keychain needed. CONTRIBUTING.md says what it holds."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    274,
+    224,
+    234
+   ],
+   [
+    "replace",
+    274,
+    275,
+    234,
+    235,
+    [
+     "This writes `dbento.toml` and an empty `queries/` folder. Add a connection to `dbento.toml`, such as `app-dev` from the example above, then store its password in the keychain. `dbento secret set` prompts for it, or reads the first line of stdin, and never takes it from the command line:"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    313,
+    235,
+    273
+   ],
+   [
+    "replace",
+    313,
+    318,
+    273,
+    274,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    323,
+    274,
+    279
+   ],
+   [
+    "replace",
+    323,
+    326,
+    279,
+    280,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    280,
+    281
+   ],
+   [
+    "delete",
+    327,
+    328,
+    281,
+    281
+   ],
+   [
+    "equal",
+    328,
+    329,
+    281,
+    282
+   ],
+   [
+    "delete",
+    329,
+    334,
+    282,
+    282
+   ]
+  ],
+  "at": "2026-11-27"
  }
 }

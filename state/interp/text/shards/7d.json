@@ -3396,5 +3396,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8e2ff7849cf0": {
+  "identity": {
+   "one_liner": "Rust 编写的分片 Blob 存储服务器，实现 Redis 协议，每分片使用 SQLite 后端",
+   "review": "Blobasaur 是一个用 Rust 编写的分片 blob 存储服务器，通过实现 Redis 协议兼容标准 Redis 客户端，每个分片使用独立 SQLite 数据库存储二进制大对象。基于 Tokio 实现异步 I/O，支持 TTL 过期、命名空间、多算法压缩和 Redis 集群协议。无认证机制，仅适用于可信内网环境。提供 Prometheus 指标和分片迁移命令。",
+   "highlights": [
+    "实现 Redis 协议，支持 GET/SET/DEL/EXISTS/TTL/EXPIRE 及 HGET/HSET 等哈希命令，兼容任意 Redis 客户端",
+    "每个分片使用独立 SQLite 数据库，采用 multi-probe 一致性哈希分布数据，提供 shard migrate 命令在分片配置间迁移数据并支持完整性校验",
+    "支持可配置的落盘压缩（Gzip/Zstd/Lz4/Brotli）、键 TTL 过期与后台清理、Prometheus 指标端点及 Redis 集群协议节点发现与重定向"
+   ],
+   "use_cases": [
+    "需在可信内网中以 Redis 客户端协议存取二进制大对象的场景",
+    "需要落盘存储并依赖 SQLite 文件简化部署与备份的存储服务",
+    "需要调整分片数量并保留已有数据（含校验）的横向扩容场景"
+   ]
+  },
+  "sha": "8e2ff7849cf0",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f9a0ae87f76a": {
+  "identity": {
+   "one_liner": "单文件静态二进制的可用性监控工具，内置SQLite存储与状态页",
+   "review": "Akena Watch 是一个 Go 编写的网站/服务可用性监控程序，编译为单个静态二进制，前端经 go:embed 内嵌，运行时无需 Docker、Node 或其他依赖，数据存于内嵌 SQLite。它提供 HTTP/TCP/DNS 检查、多用户与角色、告警通道及公开状态页，适合需要在任意 Linux 服务器上自行部署监控的自托管用户。检查间隔最短 10 秒，界面语言目前为西班牙语。",
+   "highlights": [
+    "支持 HTTP(S)（含方法、期望状态码、关键词及 JSON 请求体）、TCP 与 DNS 三类检查，间隔可从 10 秒到 24 小时，并支持失败重试后才告警",
+    "多用户体系：管理员与协作者角色，支持按组或手动共享监控项，告警支持通用 webhook、Telegram 和 SMTP 邮件",
+    "内置工具页提供 Ping、HTTP 检查分解、TLS 证书详情、域名到期（RDAP/WHOIS）、TCP 端口扫描与 DNS 查询；仪表盘经 WebSocket 实时更新，含 24 小时 SVG 延迟图"
+   ],
+   "use_cases": [
+    "在 VPS 或 ARM 设备（如树莓派）上以单二进制自托管服务可用性监控",
+    "监控网站、API、TCP 端口与 DNS 解析，并跟踪 TLS 证书与域名到期时间",
+    "向团队或客户公开无需登录的状态页，展示各监控项最近 24 小时状态历史"
+   ]
+  },
+  "sha": "f9a0ae87f76a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "580ec6d7e0cb": {
+  "identity": {
+   "one_liner": "面向 Claude Code 的触发式项目记忆层，在工具执行前拦截并提示已知教训",
+   "review": "harness-memory 为 Claude Code 提供项目级记忆层：通过 9 个 hook 事件从会话中提取策略与教训（如命令修正、失败修复），在 PreToolUse 边界按 advise/confirm/soft_deny/deny 四级执行。数据存于项目内 SQLite，本地运行、无遥测、无守护进程。当前为 0.6.0-rc.2，仅支持 Claude Code，未发布到 npm，需从 GitHub 预发布 tarball 安装；学习功能需终端登录 claude CLI。",
+   "highlights": [
+    "提供四个记忆生命周期触发点（session_start、before_model、before_tool、after_tool），映射到 Claude Code 的 permissionDecision 通道",
+    "记忆经 episode→extraction→validation→reconcile 单一写路径生成，热路径只读取预计算的 JSON 快照，无需每次工具调用调用 LLM",
+    "人类记忆不可被自动路径降级或拒绝，自动提取的记忆带 TTL 与较低信任权重，可经 hm review 人工裁决"
+   ],
+   "use_cases": [
+    "在 agent 即将重复已知错误命令或操作前进行拦截或提示",
+    "将 CLAUDE.md、AGENTS.md 或 Claude Code 自动记忆中的条目转为在工具边界执行的规则",
+    "在本地按项目管理会话教训，数据保留在 .harness-memory/ 目录且不进入 git"
+   ]
+  },
+  "sha": "580ec6d7e0cb",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51c7af44b532": {
+  "identity": {
+   "one_liner": "本机优先的 AI 会话工作台，把 Claude Code/Codex 会话索引为每日待办",
+   "review": "这是一款面向同时使用多个 AI 编码助手的本机桌面工具。它将 Claude Code、Codex 等会话索引进本机 SQLite 数据库（不改原文件），把每天的会话转成可勾选的待办列表，会话有新对话时重新出现；另提供图片展台、HTML 小应用页和可选的 agent hooks 状态上报。默认离线样例模式，无账号、无 AI 调用。Mac 上需 Python 3.11+，无 pip 依赖，双击 start.command 启动后访问 127.0.0.1:7777。MIT 协议，数据目录需自行备份且排除 Git。",
+   "highlights": [
+    "索引 Claude Code、Codex 等会话到本机 SQLite，生成每日勾选待办，新对话到来时待办重新出现",
+    "顶栏显示「等你/出错」状态的 AI 自己报状态 hooks（可选，tools/agent_hooks.py 安装）",
+    "提供发稿台七步流程、图片展台、应用页面管理，以及编辑 data/sources.local.json 后读取本地真实会话的个人模式"
+   ],
+   "use_cases": [
+    "同时使用 Claude Code、Codex 等多个 AI 编码助手，需要集中查看每天会话和等待确认项",
+    "本地整理 AI 生成的图片和 HTML 小页面",
+    "写稿-审改-发布的逐段对比与采用流程管理"
+   ]
+  },
+  "sha": "51c7af44b532",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

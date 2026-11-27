@@ -3609,5 +3609,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "60d7fe391a1b": {
+  "identity": {
+   "one_liner": "本地运行的开源企业数据补全引擎，结合公开网络抓取、政府数据导入与本地 AI 模型。",
+   "review": "FORGE 读取 PostgreSQL 中的企业表并补全空字段：邮箱、技术栈、SSL 状态、行业分类等。数据来源包括网站抓取、FCC/NPI/SAM.gov 等政府记录，以及经 Ollama 运行的本地模型生成摘要。采用 COALESCE 写入（只更新 NULL 字段）并支持断点续跑。适合需要自建企业名录的销售或数据团队；AI 部分需自行安装 Ollama，处理速度依赖硬件。",
+   "highlights": [
+    "六层邮箱提取（mailto、正则、JSON-LD、混淆解码、联系页爬取等），并通过 RCPT TO 进行 SMTP 验证且不发送邮件",
+    "内置三个政府数据导入器：FCC ULS（约 300 万条）、NPI 注册库（约 700 万条）、SAM.gov（约 90 万实体）",
+    "通过 Ollama 运行本地模型（Gemma）生成业务摘要、行业分类与健康评分，支持 MCP 集成与 CSV 导出"
+   ],
+   "use_cases": [
+    "补全 PostgreSQL 企业表中缺失的联系方式与技术栈字段",
+    "从 FCC、NPI、SAM.gov 政府数据集批量导入特定行业企业名录",
+    "通过 forge contacts 从公司公开页面整理联系人、职位与合作邮箱表格"
+   ]
+  },
+  "sha": "60d7fe391a1b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17a84179fb26": {
+  "identity": {
+   "one_liner": "面向学生黑客松活动的一体化管理平台，覆盖报名到评分全流程。",
+   "review": "LilTech 2026 Platform 是为 2026 年 11 月在突尼斯苏斯举办的学生黑客松构建的活动平台，涵盖报名、QR 徽章签到、Mini-CTF 闸门、题目分发、作品提交、公告、评委打分与榜单发布。技术栈为 Nx monorepo，前端 Next.js 16，后端 Express 5 + Prisma 6 + PostgreSQL，以服务器端为事件时间与业务规则的唯一事实源。许可证尚未确定，生产 Dockerfile 为未实测的基础设施雏形。",
+   "highlights": [
+    "提供 team/jury/admin 三种角色账户，支持个人 QR 徽章生成、邮件发送与工作人员扫码签到",
+    "实现服务端校验的 Mini-CTF 旗标提交，包含尝试次数追踪与速率限制，解出后解锁主挑战",
+    "提供按赛道隔离的题目视图、服务端截止时间强制约束的作品提交、评委打分与实时排行榜，REST API 采用统一错误契约"
+   ],
+   "use_cases": [
+    "举办单夜多赛道黑客松，需要报名、签到、挑战分发到评分发布的一体化流程管理",
+    "需要 CTF 闸门机制控制挑战解锁，并按赛道隔离评委可见范围的活动场景",
+    "希望以 Docker Compose 与 GitHub Actions 自动化部署（构建推送 GHCR、SSH 到 VPS、运行迁移与冒烟测试）的类似活动"
+   ]
+  },
+  "sha": "17a84179fb26",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

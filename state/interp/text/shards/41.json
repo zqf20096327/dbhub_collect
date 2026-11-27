@@ -2986,5 +2986,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "181340ba1a48": {
+  "identity": {
+   "one_liner": "面向 Laravel 的数据库安全工具，检查迁移实际生成的 SQL 的锁与停机风险",
+   "review": "SQLens 是一个 Composer 包，供 PostgreSQL 18+ 和 MySQL 8.4+ 上的 Laravel 12/13 应用使用。它读取迁移真正生成的 SQL（而非 Blueprint 调用）进行 lint，审计现有 schema，检查 down() 是否真实反转 up()，并以 pass/fail/undetermined 三值输出结果。安装仅需 composer require，无需迁移表，所有检查以只读会话运行。",
+   "highlights": [
+    "lint/audit/security/deploy/analyse/format/guard/agent 八个套件，通过 artisan 命令（如 sqlens:lint、sqlens:audit）运行",
+    "检查结果为 pass、fail 或带命名原因的 undetermined，按 online/blocking/rewrite 分类停机风险",
+    "只读访问：不写数据库、不加锁、不要求数据访问，会话密封机制验证只读性"
+   ],
+   "use_cases": [
+    "在 CI 中对 Laravel 迁移做锁与停机风险的确定性检查",
+    "审计 PostgreSQL 或 MySQL 生产库 schema、权限与漂移（drift）",
+    "部署前判断发布是否需要维护窗口，配置 predeploy 权限角色"
+   ]
+  },
+  "sha": "181340ba1a48",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

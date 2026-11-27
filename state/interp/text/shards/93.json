@@ -3493,5 +3493,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c47c944715cb": {
+  "identity": {
+   "one_liner": "自托管的构建产物与大型文件仓库，内置UPack、OCI、Git LFS与npm协议。",
+   "review": "Arkvory 是一个部署在自有服务器上的产物仓库，存储构建输出、软件包、容器镜像和大文件，供部署代理、CI/CD 流水线、测试机与开发者读取。它提供 HTTP API、arkvoryctl 命令行客户端与 TypeScript SDK，并实现 OCI registry、Git LFS 服务器和 npm registry 协议。安装依赖 PostgreSQL 与本地内容目录，支持 Windows、Linux 包和 Docker Compose；单机部署停机时客户端需等待，HA 集群仅支持单站点 Linux 加 DRBD/Pacemaker。",
+   "highlights": [
+    "支持分块上传、断点续传与 HTTP Range 下载，单对象最大约 10 TiB，文件经 SHA-256 校验",
+    "实现 OCI 容器镜像、Git LFS、npm/Unity 包与 UPack 协议，附带 HTTP API、CLI 与 TypeScript SDK",
+    "提供阶段晋升、保留策略、定时备份、双/三节点 HA 集群（DRBD、Pacemaker、fencing）及异步只读镜像"
+   ],
+   "use_cases": [
+    "集中存储 CI/CD 产出的构建文件并供部署代理按阶段与版本范围拉取",
+    "为 Git 仓库托管大文件（Git LFS，含 Unity/Unreal 文件锁定）及 Unity Package Manager 的 scoped npm 包",
+    "Docker/Podman/Helm/ORAS 的私有镜像与图表仓库"
+   ]
+  },
+  "sha": "c47c944715cb",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "81b1fe941991": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3 微服务架构的数字钱包与支付后端系统",
+   "review": "PayFlow 是一个数字钱包与支付后端，由认证、钱包、通知三个微服务组成，各自持有独立 MySQL 数据库，通过 REST 与 RabbitMQ 通信。钱包核心采用悲观锁、幂等键和按 ID 顺序加锁防止重复扣款与死锁，金额用 BigDecimal 计算。适合需要学习或搭建支付类微服务后端样例的开发者，可用 Docker Compose 一键启动。",
+   "highlights": [
+    "支持 JWT 认证、BCrypt 密码哈希及 ADMIN/USER 角色权限控制",
+    "提供悲观锁定、幂等键、固定顺序加锁机制处理并发转账，并通过 RabbitMQ 事件驱动发送通知",
+    "包含 Swagger/OpenAPI 文档、JUnit 5 测试（60+ 用例）与 GitHub Actions CI"
+   ],
+   "use_cases": [
+    "搭建或研究数字钱包类后端：注册登录、充值、转账、交易历史、对账单与收款人管理",
+    "学习支付系统并发处理方案：悲观锁防双花、幂等键防重复扣款、顺序加锁防死锁",
+    "本地一键运行微服务示例：docker-compose 启动认证/钱包/通知三个服务及 RabbitMQ 控制台"
+   ]
+  },
+  "sha": "81b1fe941991",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

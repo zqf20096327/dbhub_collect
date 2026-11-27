@@ -3584,5 +3584,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "01b2b346ad00": {
+  "identity": {
+   "one_liner": "AI 聊天应用脚手架，基于 Next.js 与 EVE 智能体运行时生成可拥有源码的应用",
+   "review": "ChatJS 通过 CLI 脚手架生成一个可运行的 AI 聊天应用（Next.js、TypeScript、shadcn/ui、Better Auth），内置 EVE 智能体运行时负责会话与工具执行、状态持久化和断线重连。模型接入支持 Vercel AI Gateway、OpenRouter、OpenAI、LiteLLM 等。需 Node.js 24+、PostgreSQL，当前为 1.0 alpha 版本，API 与生成代码可能变动。",
+   "highlights": [
+    "通过 npx chat-js@alpha create 交互式生成聊天应用，工具与插件以可编辑源文件形式安装",
+    "EVE 运行时持久化执行状态、处理审批，客户端可重连进行中的响应",
+    "支持多模型网关及网页搜索、代码执行、图像生成、MCP 连接器等可选能力"
+   ],
+   "use_cases": [
+    "快速搭建具备流式响应、会话保存和登录鉴权的自研 AI 聊天应用",
+    "为智能体添加 MCP 连接器、网页搜索或代码执行等工具能力",
+    "需同时发布 Web 与 macOS/Windows/Linux 桌面端的 AI 应用"
+   ]
+  },
+  "sha": "01b2b346ad00",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f3bb9e2b8ee9": {
+  "identity": {
+   "one_liner": "基于 Electric 分叉的 Postgres 实时数据同步服务，通过 Shape 实现部分复制",
+   "review": "PgVolt 是 Beeldi 维护的 ElectricSQL 独立分叉，为 Postgres 提供读取路径的数据同步服务。它通过逻辑复制读取数据库变更，以 Shape 管理部分复制，经 HTTP API（/v1/shape）对外交付数据，兼容上游的 ELECTRIC_* 配置与客户端库。维护范围仅限同步服务、TypeScript/Elixir 客户端，无功能路线图，维护为尽力而为。",
+   "highlights": [
+    "与上游 Electric 保持 drop-in 兼容：ELECTRIC_* 配置、/v1/shape HTTP API 及上游客户端可无需改动使用，可替换 electricsql/electric 容器镜像",
+    "README 附带 19 项与上游 Electric 1.8.0 的合成基准测试及 10 个默认关闭的 opt-in 开关；包含 121 项修复、162 个新增测试文件，并有 TLA+ 形式化验证（fork/tla）",
+    "提供可选 Phoenix LiveDashboard（需设置 ELECTRIC_LIVE_DASHBOARD_PORT，默认仅监听回环地址且无鉴权），发布镜像为非 root 的 distroless cc-debian12"
+   ],
+   "use_cases": [
+    "已运行上游 Electric 并在大规模 shape 数量、突发写入或多租户场景下希望尝试该分叉的团队",
+    "需要将 Postgres 数据同步到前端应用（如通过 useShape React hook）或客户端库的应用开发",
+    "需要只读路径同步、局部复制（Shape）并配合 CDN 分发数据的架构"
+   ]
+  },
+  "sha": "f3bb9e2b8ee9",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

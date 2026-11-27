@@ -3349,5 +3349,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b0bc2f250a9a": {
+  "identity": {
+   "one_liner": "面向工业建筑的开源多租户 HSE 平台，以表单引擎驱动各类安全流程",
+   "review": "BeaconHS 是一个面向工业建筑行业的多租户健康、安全与环境（HSE）平台，覆盖事故、检查、培训、设备、许可证等模块，核心是一个支持条件逻辑、公式与自动化画布的表单构建器。技术栈为 Next.js + PostgreSQL RLS + BullMQ，采用 Turborepo 单仓结构，许可证为 AGPL-3.0，需自托管运行。",
+   "highlights": [
+    "提供事故、检查、培训、设备、许可证等模块，所有模块具备权限感知与租户隔离",
+    "内置表单构建器，支持条件逻辑、公式、签名、多步工作流及可视化自动化画布",
+    "采用 PostgreSQL 行级安全实现租户隔离，每次数据变更写入前后差异审计记录"
+   ],
+   "use_cases": [
+    "工业建筑企业自托管管理现场安全流程（检查、事故、许可、培训等）",
+    "用模板方式构建作业专属表单（如吊装计划、JSA、受限空间许可）",
+    "需要按租户隔离的多人/多站点 HSE 数据管理与合规留痕场景"
+   ]
+  },
+  "sha": "b0bc2f250a9a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3c894dd348de": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Prisma 的自托管人力资源管理系统，支持角色区分访问。",
+   "review": "这是一个用于管理员工、部门与职位、请假申请、绩效考评和公司公告的 Web 应用。采用 Next.js、TypeScript、Prisma 和 PostgreSQL 构建，区分 HR_ADMIN 与 EMPLOYEE 两种角色。通过 Docker Compose 部署，Caddy 自动获取 TLS 证书，支持通过迁移命令升级版本。",
+   "highlights": [
+    "提供员工、部门职位、请假、绩效考评与公告板管理功能",
+    "基于 Better Auth 与 argon2id 密码实现 HR_ADMIN 和 EMPLOYEE 双角色访问",
+    "提供单元、集成与 Playwright 端到端测试，并通过 CI 运行检查"
+   ],
+   "use_cases": [
+    "企业内部部署人力资源信息管理平台",
+    "员工自助查看个人数据、公告并提交请假申请",
+    "需要通过 Docker 独立部署并自行管理数据的企业场景"
+   ]
+  },
+  "sha": "3c894dd348de",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b5f8a2b96f3f": {
+  "identity": {
+   "one_liner": "电子墨水 MagSafe 显示器概念的产品网站与交互硬件工作室",
+   "review": "TidBit 是一个可通过 MagSafe 吸附在 iPhone 背面的电子墨水显示屏概念，本仓库为其静态产品网站与交互式硬件工作室，无构建步骤，发布于 GitHub Pages。页面包含 3D 翻转演示、四屏导览、24 小时表盘等交互内容；本地运行只需任意静态服务器。修改三维图纸需运行 tools/drawing.py 并将输出 SVG 粘贴回 index.html。",
+   "highlights": [
+    "提供独立交互硬件工作室 tidbit.html，支持 Daylight/Desk lamp/Night 三种环境光照及键盘快捷键（1–4、R、D）",
+    "静态站点无构建步骤，支持 URL 参数切换屏幕内容（?screen=）与环境光（?light=）",
+    "包含生成三维图纸的 Python 工具 tools/drawing.py"
+   ],
+   "use_cases": [
+    "预览 TidBit 电子墨水显示屏的各界面（Today、通知、音乐、专注）交互效果",
+    "本地静态服务器环境运行产品网站",
+    "用 Python 工具重新生成并嵌入三维尺寸图"
+   ]
+  },
+  "sha": "b5f8a2b96f3f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a1d5d1cbd628": {
+  "identity": {
+   "one_liner": "基于 CrewAI 的 4-agent 研究与博客写作流水线，含多模型故障转移",
+   "review": "这是一个端到端自主内容生成应用：用户输入研究主题后，由 Researcher→Analyst→Writer→Reviewer 四个 agent 依次完成网络检索、抓取、撰写与引文审计，生成带 Mermaid 图表和已访问来源引用的技术博客。面向需要长文技术写作的用户。运行需 Python 3.10-3.13、Node.js ≥20.9 及 OpenRouter 或 Gemini API 密钥，后端 FastAPI、前端 Next.js 16，数据存于 TiDB Cloud Serverless 并可回退本地 SQLite。注意 LLM 依赖免费模型，受配额限制。",
+   "highlights": [
+    "采用 CrewAI 编排 4 个角色 agent，并在图表设计与起草任务间并行执行",
+    "内置单元测试的多模型故障转移链：3 个 Gemini 模型加 7 个 OpenRouter 免费模型，遇 429、超时或中断自动切换",
+    "CitationGuard 记录实际访问过的 URL，对报告中未访问链接进行标记并剥离虚构图片链接"
+   ],
+   "use_cases": [
+    "输入一个技术主题，自动生成含架构图表与内联引用的长篇技术博客",
+    "在多 LLM 提供商之间自动切换以应对速率限制和服务中断",
+    "需要引文来源审计与提示注入、SSRF 等防护的内容生成流程"
+   ]
+  },
+  "sha": "a1d5d1cbd628",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2980,5 +2980,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "de00304261ea": {
+  "identity": {
+   "one_liner": "读取 MaxMind GeoIP2/GeoLite2 .mmdb 数据库的 Go 解码库，基于 maxminddb 实现",
+   "review": "该库用于在 Go 程序中读取 MaxMind GeoLite2 与 GeoIP2 的 .mmdb 格式数据库，将记录解码为结构化类型，支持 City、Country、ASN、ISP、Enterprise、Anonymous IP 等多种数据库类型的查询方法。v2 使用 netip.Addr 并提供 HasData() 判断数据是否存在。需要 Go 1.26 及以上，数据库文件需单独从 MaxMind 获取（GeoLite2 需注册）。Reader 可被多个 goroutine 并发使用，采用 ISC 许可证。",
+   "highlights": [
+    "支持查询 MaxMind City、Country、ASN、ISP、Domain、Connection Type、Enterprise、Anonymous IP/Plus 等数据库类型，不支持的类型返回 UnknownDatabaseTypeError",
+    "v2 相比 v1 减少约 56% 的内存分配和 34% 的内存占用，结果结构体包含 Network 与 IPAddress 字段",
+    "Reader 对多 goroutine 并发使用安全，结果结构体带 JSON 标签可序列化"
+   ],
+   "use_cases": [
+    "在 Go 服务中根据 IP 地址查询城市、国家、ASN、ISP 等地理与网络信息",
+    "识别匿名网络/代理 IP（配合 Anonymous IP 或 Anonymous Plus 数据库）",
+    "只需少量字段的应用可直接使用底层 maxminddb 的 Lookup 与自定义结果结构体"
+   ]
+  },
+  "sha": "de00304261ea",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dcd6846bd81c": {
+  "identity": {
+   "one_liner": "Hermes Agent 的自组织记忆插件，SQLite 存储、无 LLM 调用",
+   "review": "Limbic 是 Hermes Agent 的记忆插件，用 SQLite 和向量嵌入存储事实，通过使用频率自适应调整信任分与衰减率，被取代或长期未用的记忆会逐渐淡出并删除。面向运行 Hermes 的部署者，代理侧仅暴露 remember/recall/forget 三个工具。需注意 Python 须启用 SQLite 可加载扩展，升级更换嵌入模型后需重新索引。",
+   "highlights": [
+    "通过 remember()/recall() 写入与检索记忆，全程不调用 LLM",
+    "信任分、相关阈值与衰减半衰期按使用情况自适应调整，修正不下调至底线以下（默认 0.30）",
+    "按 user_id 归属记忆桶，支持 users.yaml 多用户隔离与 guardian 写入语义"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 提供跨会话的事实记忆与上下文检索",
+    "单配置多用户的聊天平台部署，按说话者隔离记忆",
+    "需要数据删除与导出（被遗忘权）的合规场景"
+   ]
+  },
+  "sha": "dcd6846bd81c",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "552bfa795e63": {
+  "identity": {
+   "one_liner": "开源内部工单运营门户，流程即数据，核心为仅含 API 的 Open-Core",
+   "review": "Corelens 是面向企业的开源内部请求运营门户，用于集中受理报修、软件申请、证明开具、采购提议等事务。其流程以数据而非硬编码方式定义，内含工作流引擎、按工作日历计时并自动升级的期限机制、只追加事件日志与流程挖掘服务，另提供可被其他应用复用的 /core/v1 核心平台 API。技术上组合 Keycloak、Apache APISIX、PostgreSQL、SeaweedFS、Apache Superset，可选本地大模型仅作建议、由人工确认。需 Git 与 Docker Compose v2 运行；代码为 MIT，流程挖掘服务因依赖 PM4Py 采用 AGPL-3.0。",
+   "highlights": [
+    "流程以数据形式存储在表中，修改流程无需改代码；每个状态转移写入只追加的事件日志，可重建实际运行流程并定位瓶颈",
+    "期限按工作日历与节假日计算，乘以优先级系数，超期自动升级",
+    "核心平台仅提供 /core/v1 API，其他应用可通过服务账号调用；可选本地大模型只给出类型、优先级、部门建议，需人工确认"
+   ],
+   "use_cases": [
+    "企业统一受理报修、软件申请、证明开具、采购提议等内部请求并按流程分派处理",
+    "通过只追加事件日志进行流程挖掘，分析实际执行流程与瓶颈",
+    "作为 /core/v1 核心平台，供其他应用通过服务账号以 API 方式接入复用"
+   ]
+  },
+  "sha": "552bfa795e63",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2957,5 +2957,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d9f866e30d77": {
+  "identity": {
+   "one_liner": "终端里的个人机会聚合器：收集多来源机会并按兴趣评分",
+   "review": "SENTRI 是一个用 Rust 和 Ratatui 编写的终端 TUI 应用，从 RSS/Atom、GitHub、Hacker News、Devpost、iCalendar 等连接器收集奖学金、黑客松、课程、职位、志愿者和开源项目等信息，基于规则评分并结合点赞等交互学习偏好。数据存储在本机内嵌 SQLite，无需账户。README 标明仅在 Linux 上开发和测试，需 Rust 1.89+，可通过 cargo 从源码安装。",
+   "highlights": [
+    "通过多个独立连接器收集 RSS/Atom、iCalendar、GitHub、Hacker News、GDG、Devpost、Kaggle 等来源，单个连接器失败不影响其他来源",
+    "基于规则的可解释评分，结合城市、国家、形式、截止日期等因素，并根据点赞、保存、忽略等交互调整推荐",
+    "本地优先：数据存于内嵌 SQLite 数据库，无账户和云服务；HTTP 客户端阻断 SSRF 并限制大小和时间"
+   ],
+   "use_cases": [
+    "学生和开发者希望在终端统一查看分散在各网站的机会信息",
+    "需要通过 SSH 在远程服务器上运行本地个人数据工具的场景",
+    "关注拉美（尤其是秘鲁）技术社区生态的用户，可接入 Peruanos.dev、Get on Board 等来源"
+   ]
+  },
+  "sha": "d9f866e30d77",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63bb5adad8b4": {
+  "identity": {
+   "one_liner": "自托管的 Telegram 个人 AI 助手，基于 PostgreSQL+pgvector 实现持久记忆",
+   "review": "Syne 是一个可自托管的个人 AI 助手，通过 Telegram（可选 WhatsApp/Discord）交互，数据全部存于用户自己的 PostgreSQL。核心机制：仅在被明确要求时写入记忆，用 pgvector 语义检索加小型知识图谱做召回，嵌入与规则评估在本地 Ollama 上运行；身份、规则等运行时配置存于数据库表中，可通过对话修改。需要 Docker、Python 3.11+、2GB 以上内存的 Linux 服务器，聊天模型需自备 API key。",
+   "highlights": [
+    "记忆仅在被明确要求时写入，pgvector HNSW 语义检索与知识图谱实体关系遍历双路召回",
+    "嵌入与规则评估模型经 Ollama 本地运行，支持按服务器配置分档选择模型，可重嵌入并保留记忆",
+    "提供 PDF/Word/Excel/PPT 读写、语音转写与合成、图像生成与 OCR 等可选扩展，支持 WebSocket 远程节点与子代理"
+   ],
+   "use_cases": [
+    "在自己服务器上搭建跨 Telegram/WhatsApp/Discord、共享同一份持久记忆的个人助手",
+    "需要按 owner/family/public 三级八进制权限控制记忆可见性的多用户场景",
+    "通过对话方式修改助手身份、行为与规则，替代编辑配置文件的管理方式"
+   ]
+  },
+  "sha": "63bb5adad8b4",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

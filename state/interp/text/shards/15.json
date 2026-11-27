@@ -3651,5 +3651,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f252837960b3": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编程代理可观测性与评测工具，记录会话并转为 eval。",
+   "review": "coding.sh 是一个运行在本地机器上的 AI 编程代理记录与评测工具，捕获 Claude Code、Codex CLI 等代理的每次 prompt、模型调用、工具调用和文件变更及估算成本，存入本地 SQLite 索引供本地 viewer、CLI 或 MCP 查询，并可将失败会话转为可回放 eval。它需要 Node 22.16 以上版本，MIT 许可、无运行时依赖、无账号；支持记录多种代理，部分代理适配器标注为尚未在真实环境运行。",
+   "highlights": [
+    "通过 hooks、transcript 或 coding.sh run 包装命令捕获代理会话（含子代理），并接收 OpenTelemetry 数据",
+    "会话存入本地 SQLite 索引，支持本地 viewer 浏览、CLI 全文搜索，以及通过 MCP 供代理读取",
+    "提供 eval 生成与实验对比（配对统计）、每日基准测试，以及基于 SQLite/Postgres/ClickHouse 的生产服务端与 TypeScript/Python SDK"
+   ],
+   "use_cases": [
+    "在本地查看 AI 编程代理的会话时间线、token 用量与估算成本",
+    "将失败的代理会话转化为可回放的 eval，用代码评分器或 LLM 评判器做 A/B 对比",
+    "通过 coding.sh serve 在服务端集中采集 API 应用的代理追踪数据"
+   ]
+  },
+  "sha": "f252837960b3",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e3737e4b8caa": {
+  "identity": {
+   "one_liner": "LLM 多 agent 自主渗透测试系统，Go 单体内嵌 Next.js 与 SQLite",
+   "review": "ARTEX 是一套由 LLM 多 agent 驱动的自主渗透测试系统，采用 Go 单体后端内嵌 Next.js 前端，业务库与流量库均使用随程序内嵌的 SQLite，无需安装 PostgreSQL。本仓库为基于原版 v0.3.15 提交 e6ec569 的自维护修改版，移除资产拦截功能、改为从本仓库发布更新。面向需要配置 LLM API Key 后进行授权目标探索的用户，支持 Docker、预编译二进制等多种部署方式。",
+   "highlights": [
+    "采用双图架构，agent 能力由 norma SDK 提供，支持 worker 间过程级信息交换与 planner 共享 todolist",
+    "业务库与流量库使用独立 SQLite 文件随程序内嵌，支持页面一键更新并自动校验、回滚",
+    "支持从 ScopeSentry 同步资产数据，支持流量录制代理按批次异步投影到显式授权任务"
+   ],
+   "use_cases": [
+    "对显式授权的 HTTP 服务进行接口与参数发现、漏洞验证探索",
+    "通过复测 Agent 会话对已知漏洞进行修复验证并记录结论",
+    "结合 ScopeSentry 资产数据进行归并后供 agent 探索使用"
+   ]
+  },
+  "sha": "e3737e4b8caa",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "686eeebf538b": {
+  "identity": {
+   "one_liner": "Clarity 团队维护的《命运2》游戏数据实时数据库仓库",
+   "review": "该仓库是 Clarity 团队发布的《命运2》实时数据资料库，由 @StardustD2 管理，数据以 Git 仓库形式存储与更新。README 说明商业化使用数据需建立伙伴关系（Partnership），并通过 Ko-Fi 接受捐赠以维持资源免费开放。维护者包括 @StardustD2 与 @Ice-mourne，并有编辑团队参与内容更新。",
+   "highlights": [
+    "提供由 Clarity 团队整理的《命运2》详细游戏数据",
+    "数据通过 Git 仓库实时更新，包含维护者与编辑者的版本提交记录",
+    "数据的使用与合作关系通过专门的 Partnerships 页面说明"
+   ],
+   "use_cases": [
+    "查阅 Clarity 团队提供的《命运2》游戏数据资料",
+    "希望在项目中引用该数据的开发者按 Partnerships 页面流程申请使用",
+    "通过仓库提交记录追踪数据的更新历史"
+   ]
+  },
+  "sha": "686eeebf538b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f5b56c1da499": {
+  "identity": {
+   "one_liner": "用 Rust 编写的 Python MySQL/MariaDB 驱动，提供 DB-API 2.0 与 asyncio 接口。",
+   "review": "rustmy 是一个以 Rust 实现、通过 PyO3 暴露给 Python 的 MySQL/MariaDB 驱动，面向需要直连或通过 SQLAlchemy、Django、pandas 访问 MySQL/MariaDB 的 Python 开发者。它实现 PEP 249 与 asyncio API（rustmy.aio），支持连接池、PreparedCursor 二进制协议预编译语句，pip install 即装即用，无需安装 libmysqlclient 等系统库。行为上兼容为 mysqlclient/PyMySQL/aiomysql 编写的代码。",
+   "highlights": [
+    "提供 DB-API 2.0 同步 API 与 asyncio API（rustmy.aio），并附 MySQL/MariaDB 的 SQLAlchemy 方言（mysql+rustmy://、mariadb+rustmy://）",
+    "支持线程与协程连接池、PreparedCursor 服务端预编译语句、流式游标，以及通过 install_as_MySQLdb() 接入 Django MySQL 后端",
+    "以 wheel 分发，TLS 使用 rustls、认证方法在 Rust 内实现，无需 libmysqlclient、编译器或 pkg-config；提供 free-threaded Python（3.14t/3.15t）wheel"
+   ],
+   "use_cases": [
+    "为现有基于 mysqlclient、PyMySQL、aiomysql 或 asyncmy 的应用替换驱动层",
+    "在 SQLAlchemy（含 create_async_engine）或 Django 项目中使用 MySQL/MariaDB",
+    "在无系统依赖安装条件的环境（无编译器、无 libmysqlclient）或 free-threaded Python 下连接 MySQL/MariaDB"
+   ]
+  },
+  "sha": "f5b56c1da499",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

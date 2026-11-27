@@ -3449,5 +3449,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e5fee75c83ce": {
+  "identity": {
+   "one_liner": "纯 Go 单文件 Web 服务器，内置 Lua/多模板/多数据库支持",
+   "review": "Algernon 是用 Go 编写的单可执行文件 Web 服务器，支持 HTTP/2、HTTP/3（QUIC）、Lua/Teal 脚本处理请求，以及 Markdown、Pongo2、Amber、Sass、JSX/TSX 等文件类型的即时渲染，可通过 Lua 脚本或 BoltDB、Redis、PostgreSQL、MySQL 等后端提供数据。适合需要将页面渲染与脚本逻辑集中在单个二进制中的开发者，无需配置即可启动。",
+   "highlights": [
+    "提供 HTTP/2、HTTP/3（QUIC）与常规 HTTP 服务，支持 IPv6",
+    "支持以 index.lua / index.tl 等特殊文件名作为目录处理器，并可即时渲染 .md、.po2、.amber、.scss、.jsx、.tsx 等扩展名文件",
+    "可选用 BoltDB（内置）、Redis、Valkey、PostgreSQL、SQLite、MariaDB/MySQL、MSSQL 作为数据库后端，支持限流、插件（JSON-RPC）与自动刷新"
+   ],
+   "use_cases": [
+    "本地预览 Markdown 文件（仅给定 .md 文件时在 3000 端口以 HTTP 提供，无需数据库）",
+    "以 Lua 或 Teal 脚本编写 HTTP 处理器并连接数据库后端的 Web 应用开发",
+    "将自包含应用打包为 .zip/.alg 归档加载运行，或通过附带工具 alg2docker 生成 Docker 镜像"
+   ]
+  },
+  "sha": "e5fee75c83ce",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f1e16e4d19f7": {
+  "identity": {
+   "one_liner": "自托管的 Rust 错误追踪服务，兼容 Sentry SDK 协议",
+   "review": "Rustrak 是用 Rust 编写的自托管错误追踪器，同时接收日志、事务、发布健康与 AI Agent 追踪。它实现 Sentry 协议，现有 Sentry SDK 只需修改 DSN 即可接入。默认以单进程运行并使用 SQLite，也提供 PostgreSQL 镜像；摄入采用两阶段写入，接受事件不等待数据库。适合希望在自己硬件上运行监控服务的团队。",
+   "highlights": [
+    "实现 Sentry 协议，支持各语言的 Sentry SDK 通过更换 DSN 接入，无需替换客户端库",
+    "单容器同时提供 API 与静态文件仪表盘，默认 SQLite，可选 PostgreSQL；两阶段摄入先写磁盘再异步入库",
+    "包含错误分组、p95 性能视图、结构化日志（trace 至 fatal 六级）、crash-free 会话统计、AI Agent 追踪瀑布图与 Slack/SMTP/Webhook 告警路由"
+   ],
+   "use_cases": [
+    "在自有服务器或单个 compose 文件中部署错误与日志监控",
+    "为已使用 Sentry SDK 的应用切换或并行比对后端（README 提到可指向第二个 DSN 进行对比）",
+    "收集 LLM Agent 运行轨迹，查看模型调用、工具调用与 handoff 的时序瀑布"
+   ]
+  },
+  "sha": "f1e16e4d19f7",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f1c6f6975942": {
+  "identity": {
+   "one_liner": "自托管电子书库服务器，含内置阅读器、KOReader 同步与阅读统计",
+   "review": "Tome 是一个自托管电子书库服务器，基于 FastAPI、React 和 SQLite 构建，以单个 Docker 镜像发布。它通过自定义 KOReader 插件（TomeSync）双向同步阅读进度并记录会话级阅读数据，同时提供 OPDS 订阅、元数据获取、OIDC 单点登录等能力。面向使用 KOReader 在电子墨水阅读器上阅读的自托管用户；不支持有声书、Kobo 同步和 Calibre 数据库。",
+   "highlights": [
+    "TomeSync 插件双向同步阅读位置、离线可用，并支持划线与笔记回传",
+    "内置阅读器支持 EPUB、CBZ/CBR 漫画与 PDF，含双页、RTL、webtoon 滚动模式",
+    "提供 OPDS 订阅、OIDC 单点登录、基于角色的访问控制及用户级 API token"
+   ],
+   "use_cases": [
+    "在 KOReader 电子墨水阅读器上阅读并需要进度同步与阅读统计的自托管用户",
+    "通过 OPDS 客户端（KOReader、Panels、Chunky 等）浏览和下载书库",
+    "在 NAS 上保留现有书籍文件、仅需挂载只读卷即可接入书库服务"
+   ]
+  },
+  "sha": "f1c6f6975942",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "492c36b4df8c": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 DSH 插件式本地长期记忆库，含分区隔离与遗忘曲线衰减机制",
+   "review": "该仓库实现一套可独立运行或作为 DeepSeek Harness 插件的本地记忆库，面向需要在多轮长对话中存取结论的场景。数据存于 SQLite，按分区隔离读写，用带 stability 参数的指数遗忘曲线控制留存，配合守卫打分拦截超限上下文。提供 14 个工具、本地看板、备份与影子日志重建。README 注明看板无鉴权、向量依赖本地哈希与可选 sqlite-vec。",
+   "highlights": [
+    "按分区隔离数据，读操作严格校验分区，召回支持词面与向量融合并带 token 预算上限（默认 1200）",
+    "实现遗忘曲线衰减与 FSRS 式自适应复习，条目按 retention 转休眠/归档，pinned 或高重要度条目不休眠",
+    "提供 14 个 xfy_memory_* 工具、四项打分守卫（含 warn/block 硬阈值）、一键修复计划与 confirm 确认执行"
+   ],
+   "use_cases": [
+    "作为 DSH 插件为多轮长对话提供分区化的长期记忆存取与任务收尾自动归档",
+    "作为独立命令行/HTTP 服务（node src/server.mjs）管理本地记忆库并查看可视化看板",
+    "需要记忆衰减、休眠归档、主干提取与召回质量评测（mem eval/daily）的知识管理流程"
+   ]
+  },
+  "sha": "492c36b4df8c",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

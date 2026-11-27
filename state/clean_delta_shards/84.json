@@ -36133,5 +36133,555 @@
    ]
   ],
   "at": "2026-11-26"
+ },
+ "1667c49b797f+2": {
+  "fn": "hicancan/local-runtime-mcp",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    6,
+    0,
+    4
+   ],
+   [
+    "replace",
+    6,
+    12,
+    4,
+    10,
+    [
+     "Release",
+     "CI",
+     "License",
+     "Go",
+     "Rust",
+     "Platform"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    10,
+    11
+   ],
+   [
+    "replace",
+    13,
+    14,
+    11,
+    12,
+    [
+     "**English** · 简体中文"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    12,
+    13
+   ],
+   [
+    "replace",
+    15,
+    20,
+    13,
+    14,
+    [
+     "Why `lrmcp` · Architecture · 4 Primitives · Quick Start · Remote Tunnels · Web & App MCP · Activity Studio · Security"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    27,
+    14,
+    21
+   ],
+   [
+    "replace",
+    27,
+    37,
+    21,
+    29,
+    [
+     "|Capability|Traditional Flat MCP / `chrome-devtools-mcp`|`lrmcp` (v18)|",
+     "|---|---|---|",
+     "|**Tool surface**|25–40 flat tools; large schemas & serial round-trips|**4 orthogonal primitives** (`run`, `wait`, `session`, `capability_propose`) + owner-approved site/app protocols|",
+     "|**Concurrency & state**|1 step per turn; intermediate data bloats LLM context|**Persistent per-session JS VM** (`Promise.allSettled`, AST top-level persistence, REPL auto-return) — filter in memory, return only answers|",
+     "|**Browser & DevTools**|Per-client `npx`/Node subprocess; re-prompts on reconnect; extension `chrome.debugger` banner conflicts|**One shared browser-root CDP WebSocket** (`DevToolsActivePort`): approve once, share across every local & cloud client. Full DevTools + **browser-process `Tracing.start`** + Web Performance API + **-77.8% AX incremental diff**|",
+     "|**Companion extension**|Heavy debugger scheduler|**Slim zero-`debugger` extension (~790L TS)** strictly for Web Bridge, owner `L` approval panel, and native `tabGroups`|",
+     "|**OS + Desktop + Cloud**|Browser-only, local stdio only|Native `proc` (pipe/PTY), SHA-256 atomic `fs`, `img`, Rust Windows WGC + UIA `desktop`, plus hot-plug **OpenAI & Cloudflare Tunnels**|",
+     "|**Governance & telemetry**|No cross-client audit; orphan browser tabs|Embedded **SQLite WAL + FTS5 audit**, local `/ui` Activity Studio, `session(done)` auto-closes temp tabs, **zero external telemetry**|"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    46,
+    29,
+    38
+   ],
+   [
+    "replace",
+    46,
+    76,
+    38,
+    39,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    39,
+    40
+   ],
+   [
+    "delete",
+    77,
+    79,
+    40,
+    40
+   ],
+   [
+    "equal",
+    79,
+    82,
+    40,
+    43
+   ],
+   [
+    "replace",
+    82,
+    88,
+    43,
+    49,
+    [
+     "|Primitive|Purpose|",
+     "|---|---|",
+     "|**`run(title, code, done_title?, yield_ms?, max_output_bytes?)`**|Execute async JavaScript in this session's persistent VM with full concurrent access to `proc`, `fs`, `browser`, `desktop`, `img`, `caps`, `emitImage`, `print`, `sleep`, `help()`, and Web globals (`URL`, `URLSearchParams`, `atob`, `btoa`, `setTimeout`, embedded-`tzdata` `Intl.DateTimeFormat` & `Date.toLocale*String`). Top-level `let`/`const`/`var`/`function`/`class` persist across turns; bare final expressions auto-return in `cell.value`.|",
+     "|**`wait(cell_id, yield_ms?, terminate?)`**|Collect incremental output/images or cancel any long-running cell cleanly.|",
+     "|**`session(action='start'\\|'update'\\|'done', ...)`**|Optional for single-shot read-only queries (call `run` directly). For multi-step or browser tasks, opens a named thread in `/ui` and automatically reclaims temporary browser tabs on `done` (unless marked via `tab.markHandoff()`).|",
+     "|**`capability_propose(name, definition, script)`**|Distill a repeatable website workflow explored via `run` into a deterministic Web MCP tool proposal for owner review in the extension's `L` panel.|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    95,
+    49,
+    56
+   ],
+   [
+    "replace",
+    95,
+    114,
+    56,
+    57,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    116,
+    57,
+    59
+   ],
+   [
+    "replace",
+    116,
+    118,
+    59,
+    60,
+    [
+     " Full Built-in JS SDK Reference (also available live inside <code>run</code> via <code>help(topic?)</code>) "
+    ]
+   ],
+   [
+    "equal",
+    118,
+    122,
+    60,
+    64
+   ],
+   [
+    "replace",
+    122,
+    125,
+    64,
+    67,
+    [
+     " - `proc.run(program, args?, { cwd?, env?, stdin?, keep_stdin_open?, timeout_seconds?, max_output_bytes?, max_output_tokens?, yield_time_ms?, io_mode?: \"pipe\"|\"pty\", columns?, rows? })`",
+     " - `proc.run({ cmd, shell?: \"pwsh\"|\"cmd\"|\"bash\"|\"sh\", cwd?, env?, ... })`",
+     " - `proc.continue({ session_id, output_cursor?, stdin?, close_stdin?, terminate?, yield_time_ms? })` · `proc.kill(session_id)`"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    67,
+    68
+   ],
+   [
+    "replace",
+    126,
+    132,
+    68,
+    74,
+    [
+     " - `fs.list(path, { max_depth?, include_hidden?, max_entries? }?)`",
+     " - `fs.stat(path, { with_sha256? }?)`",
+     " - `fs.read(path, { start_line?, end_line?, line_count?, max_bytes?, with_sha256? }?)` (1-based inclusive)",
+     " - `fs.write(path, content, { mode?: \"create\"|\"replace\", expected_sha256?, create_parents? }?)`",
+     " - `fs.patch(path, [{ before?, old, new, after? }], expected_sha256)`",
+     " - `fs.search(path, query, { regex?, case_sensitive?, include_hidden?, max_results? }?)`"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    74,
+    75
+   ],
+   [
+    "replace",
+    133,
+    141,
+    75,
+    83,
+    [
+     " - `browser.status()` · `browser.connect(browser_id?)` · `browser.tabs(browser_id? | { browser_id?, include_workers? }?)`",
+     " - `browser.open(url, { browser_id?, active?, session_name? }?)` (creates `about:blank` → attaches & enables domains → `Page.navigate` → awaits load)",
+     " - `browser.tab(id)` · `browser.cdp(method, params?, browser_id?)` · `browser.cleanup()`",
+     " - `browser.traceStart({ browser_id?, tab_id?, reload?, ignore_cache?, categories? }?)` · `browser.traceStop(file_path?, browser_id?)` (streams lossless raw trace via `IO.read` + reads exact kernel Web Performance API metrics: `ttfb_ms`, `fcp_ms`, `lcp_ms`, `dcl_ms`, `load_ms`, `cls`)",
+     " - `tab.goto(url)` · `reload()` · `back()` · `forward()` · `close()` · `markHandoff()`",
+     " - `tab.snapshot({ diff?: true, max_elements?, max_text? }?)` · `tab.screenshot({ full_page?, clip_x?, clip_y?, clip_width?, clip_height? }?)` · `tab.eval(jsOrFn, ...args)` · `tab.cdp(method, params?)`",
+     " - Semantic locators with auto-wait: `tab.getByRole(role, nameOrOpts?)` · `getByText` · `getByLabel` · `getByPlaceholder` · `locator(css)` → `.click()` / `.doubleClick()` / `.hover()` / `.fill(t)` / `.type(t)` / `.press(k)` / `.select(o)` / `.check(b)` / `.uploadFiles(paths)` / `.waitFor({ timeout_ms? })` / `.nth(i)`",
+     " - DevTools: `tab.network({ resource_types?, url_contains?, include_preserved?, failed_only?, limit? }?)` · `tab.networkBody(request_id)` · `tab.console({ levels?, limit? }?)` · `tab.emulate({ width?, height?, mobile?, cpu_throttling_rate?, network_preset?, color_scheme?, reduced_motion?, forced_colors?, user_agent?, geolocation?, extra_headers? })` · `tab.css(selectorOrLoc)` · `tab.heapSnapshot(file_path?)` · `tab.logpoint(url, line, expr, col?)` · `tab.screencastStart(opts?)` · `tab.screencastStop()`"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    83,
+    84
+   ],
+   [
+    "replace",
+    142,
+    143,
+    84,
+    85,
+    [
+     " - `desktop.targets({ pid?, title?, process? }?)` · `desktop.state(opts?)` · `desktop.wait(opts)` · `desktop.action(act)` · `desktop.control(\"status\"|\"acquire\"|\"release\", opts?)`"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    145,
+    85,
+    87
+   ],
+   [
+    "delete",
+    145,
+    149,
+    87,
+    87
+   ],
+   [
+    "equal",
+    149,
+    154,
+    87,
+    92
+   ],
+   [
+    "replace",
+    154,
+    155,
+    92,
+    93,
+    [
+     "Download the release archive from Releases (or build from source) into its own portable folder:"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    176,
+    93,
+    114
+   ],
+   [
+    "replace",
+    176,
+    181,
+    114,
+    115,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    184,
+    115,
+    118
+   ],
+   [
+    "delete",
+    184,
+    186,
+    118,
+    118
+   ],
+   [
+    "equal",
+    186,
+    195,
+    118,
+    127
+   ],
+   [
+    "replace",
+    195,
+    203,
+    127,
+    128,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    205,
+    128,
+    130
+   ],
+   [
+    "replace",
+    205,
+    207,
+    130,
+    131,
+    [
+     " OAuth, Named Remote Tokens & Configuration Reference "
+    ]
+   ],
+   [
+    "equal",
+    207,
+    214,
+    131,
+    138
+   ],
+   [
+    "replace",
+    214,
+    220,
+    138,
+    139,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    222,
+    139,
+    141
+   ],
+   [
+    "replace",
+    222,
+    231,
+    141,
+    150,
+    [
+     "|Environment Variable|YAML Field|",
+     "|---|---|",
+     "|`LOCAL_RUNTIME_MCP_LOCAL_LISTEN` / `_LOCAL_TOKEN`|`local.listen` / `local.token`|",
+     "|`LOCAL_RUNTIME_MCP_BROWSER_LISTEN` / `_BROWSER_TOKEN`|`browser.listen` / `browser.token`|",
+     "|`LOCAL_RUNTIME_MCP_OPENAI_TUNNEL_ID` / `_API_KEY`|`openai.tunnel_id` / `openai.api_key`|",
+     "|`LOCAL_RUNTIME_MCP_HTTP_LISTEN` / `_PUBLIC_HOST` / `_AUTH` / `_BEARER_TOKEN`|`http.*`|",
+     "|`LOCAL_RUNTIME_MCP_OAUTH_OWNER_TOKEN`|`http.oauth.owner_token`|",
+     "|`LOCAL_RUNTIME_MCP_CLOUDFLARE_TUNNEL_TOKEN` / `_CLOUDFLARED`|`cloudflare.tunnel_token` / `cloudflare.binary`|",
+     "|`LOCAL_RUNTIME_MCP_CLIENT_TOKEN_<ID>` / `_REMOTE_TOKEN_<ID>`|`grants.clients` / `grants.remote.tokens`|"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    150,
+    151
+   ],
+   [
+    "replace",
+    232,
+    237,
+    151,
+    152,
+    [
+     "See docs/connections.md for step-by-step OpenAI, Cloudflare, and OAuth walkthroughs."
+    ]
+   ],
+   [
+    "equal",
+    237,
+    246,
+    152,
+    161
+   ],
+   [
+    "delete",
+    246,
+    248,
+    161,
+    161
+   ],
+   [
+    "equal",
+    248,
+    256,
+    161,
+    169
+   ],
+   [
+    "replace",
+    256,
+    262,
+    169,
+    170,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    263,
+    170,
+    171
+   ],
+   [
+    "delete",
+    263,
+    265,
+    171,
+    171
+   ],
+   [
+    "equal",
+    265,
+    268,
+    171,
+    174
+   ],
+   [
+    "replace",
+    268,
+    272,
+    174,
+    178,
+    [
+     "|Platform|Process, Filesystem, Image|Browser CDP + DevTools|Desktop UIA|",
+     "|---|---|---|---|",
+     "|**Windows amd64**|Full|Chromium 120+ (`DevToolsActivePort`) + Slim Extension|Embedded Rust WGC + UIA|",
+     "|**Linux amd64 / arm64**|Full|Chromium 120+ (`DevToolsActivePort`) + Slim Extension|Reports platform unavailability|"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    273,
+    178,
+    179
+   ],
+   [
+    "replace",
+    273,
+    275,
+    179,
+    180,
+    [
+     " Build & Test From Source (Go 1.27 · Node.js 24 · Rust 1.96) "
+    ]
+   ],
+   [
+    "equal",
+    275,
+    280,
+    180,
+    185
+   ],
+   [
+    "replace",
+    280,
+    289,
+    185,
+    186,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    290,
+    186,
+    187
+   ],
+   [
+    "delete",
+    290,
+    294,
+    187,
+    187
+   ],
+   [
+    "equal",
+    294,
+    300,
+    187,
+    193
+   ],
+   [
+    "replace",
+    300,
+    302,
+    193,
+    195,
+    [
+     "- See SECURITY.md, PRIVACY.md, and THIRD_PARTY_NOTICES.md.",
+     "- Licensed under GNU AGPL v3.0 only."
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
  }
 }

@@ -2949,5 +2949,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "672b57a3295e": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码会话台账，记录五大代理的工具调用、文件改动、成本与代码留存率。",
+   "review": "Sessionly 是一个运行在本地的 Rust 命令行工具，为 Claude Code、Codex、Cursor、Grok 和 OpenCode 的会话建立统一台账，记录工具调用、文件改动、成本，并通过哈希匹配统计代理写入的行在事后与 PR 评审后的留存情况。数据存于 ~/.sessionly 的 SQLite 账本，代码不上传；可选连接服务器用于团队面板。需 Rust 1.89+，部分代理（如 Cursor）不报告成本，账本可删除后重建。",
+   "highlights": [
+    "通过钩子捕获或读取各代理自身保留的转录与会话文件，归一化为统一会话记录",
+    "在每次同步时重新统计会话写入的行在文件和 PR 评审后的留存数量",
+    "本地完成捕获、解析与脱敏，上传为可选且默认不含提示、命令或文件文本，源代码从不发送"
+   ],
+   "use_cases": [
+    "个人开发者按会话、成本、模型或工具统计本地 AI 编码代理的使用情况",
+    "团队通过自托管服务器或托管服务查看各成员代理会话与 PR 构成面板",
+    "捕获仓库中运行的云代理会话（Claude Code 云会话、Cursor 云代理、Codex 云任务）"
+   ]
+  },
+  "sha": "672b57a3295e",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ef65d4e1f68a": {
+  "identity": {
+   "one_liner": "本地 Oracle Cloud (OCI) 模拟器，Docker 容器运行兼容 OCI API 的服务",
+   "review": "floci-oci 是 Floci 模拟器家族中面向 OCI 的成员，以单个 Docker 容器在本机 4599 端口提供 OCI 形状的 API，无需 Oracle Cloud 账户或真实凭据。它实现 OCI 线协议细节（opc-request-id、分页头、OCID、work requests、错误体），官方 Java/Python SDK、OCI CLI 及 oracle/oci Terraform 提供者可直接指向 localhost 使用；请求签名只解析不校验。支持对象存储、IAM、Queue、Streaming、Vault/KMS、OKE、PostgreSQL/MySQL 等服务，可选四种持久化模式。基于 Quarkus，源码构建需 JDK 25。",
+   "highlights": [
+    "实现真实 OCI 线协议：opc-request-id、opc-next-page 分页、etag/if-match 条件请求、OCID、work requests 及 OCI 错误体",
+    "覆盖 Identity、Object Storage、Queue/Streaming/Notifications、Vault+KMS（真实 AES-GCM/RSA/ECDSA 加密）、Functions、OKE、NoSQL、PostgreSQL/MySQL 等服务类别",
+    "提供 in-memory、persistent、hybrid、write-ahead log 四种持久化配置，并支持 GraalVM native-image；附 bin/ocilocal CLI 包装器自动注入端点"
+   ],
+   "use_cases": [
+    "在 CI 流水线中运行 OCI 集成测试，无需真实租户、凭据或网络往返",
+    "本地开发调试 OCI SDK、OCI CLI 或 Terraform/OpenTofu 配置",
+    "搭建含对象存储版本化、多部分上传、预认证请求等能力的本地 OCI 环境进行功能验证"
+   ]
+  },
+  "sha": "ef65d4e1f68a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6bd22e43d9ce": {
+  "identity": {
+   "one_liner": "跨130+数据库引擎的桌面数据库管理器，Rust+Tauri构建",
+   "review": "DBine 是 AddLayer 开发的桌面多引擎数据库管理器，基于 Apache 2.0 协议开源，支持 Windows、macOS 和 Linux，用于连接和操作 130+ 关系型、文档、键值、时序等数据库及云服务。技术栈为 Tauri 2、Rust 核心与 Vue 3 + Element Plus 界面。可通过 Homebrew、winget、Flatpak 等方式安装，内置笔记本、架构对比、跨引擎迁移、本地 AI 助手与 MCP 服务器等功能。",
+   "highlights": [
+    "提供 130+ 数据库与云服务的连接管理，含 SSH 隧道、云 IAM 登录及 1Password/Vault 等密钥来源集成",
+    "CodeMirror 6 编辑器支持各引擎方言自动补全、脚本逐句执行、每标签页独立会话与手动事务",
+    "包含资源管理器缓存与过滤、依赖血缘图、服务器监控、Profiler 及结果加密保存"
+   ],
+   "use_cases": [
+    "从 DBeaver、DataGrip、SSMS 等工具导入连接，统一管理多个数据库环境",
+    "在只读连接下查看会话、锁并捕获数据库上其他客户端的实时查询",
+    "编辑单元格、插入行或文档时自动生成各引擎语言的更新代码供执行"
+   ]
+  },
+  "sha": "6bd22e43d9ce",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0157d9dd1e9": {
+  "identity": {
+   "one_liner": "简历与职位匹配分析工具，每条结论附简历或GitHub证据。",
+   "review": "ProofFit 用于对比简历与招聘需求：解析 PDF 简历为编号行、抓取公共 GitHub 仓库、逐条判定需求是否被证据支持并计算 0-100 分。面向求职者与招聘方。匹配引擎为关键词引擎（默认）或 Gemini 模型引擎，模型结论仅作提案，由代码校验证据后计分，模型不可用时回退关键词引擎。",
+   "highlights": [
+    "每条判定必须引用简历行号或 GitHub 仓库文件（如 Dockerfile、package.json），由 EvidenceValidator 在代码中校验，无证据即降级为「无证据」",
+    "支持两种引擎：无需模型的关键词引擎与 Gemini 模型引擎，后者失败时自动回退；分数由代码算术计算",
+    "后台任务以 PostgreSQL FOR UPDATE SKIP LOCKED 排队并续租，进度经 SSE 流式推送，报告缓存复用，OpenTelemetry 记录追踪且不含简历文本"
+   ],
+   "use_cases": [
+    "求职者核对简历能否证明职位要求，生成带证据的邮件文本或 PDF 报告",
+    "招聘方筛查候选人，包括通过 GitHub 公共代码验证技能、排除隐藏文字与提示注入的简历",
+    "对匹配工具进行回归评估：内置 35 个标注用例，可分别运行关键词与模型引擎"
+   ]
+  },
+  "sha": "c0157d9dd1e9",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4daf75d03b75": {
+  "identity": {
+   "one_liner": "面向 TiDB 的纯 Rust 异步 SQL 工具包，sqlx 思路的净室重写。",
+   "review": "tisqlx 是专为 TiDB 8.5+ 构建的异步 SQL 工具包，运行于 tokio 与 rustls，旧版本服务器在连接时被拒绝。提供编译期查询检查、事务级悲观/乐观模式与写冲突自动重试、迁移脏记录机制、跨多 TiDB 服务器的连接池和批量插入；由 tisqlx、tisqlx-core、tisqlx-macros、tisqlx-cli、tisqlx-rawkv 五个 crate 组成，适用对象为使用 TiDB 的 Rust 开发者。",
+   "highlights": [
+    "支持 query! 系列宏基于在线 TiDB 或仓库内离线数据进行编译期查询检查",
+    "事务支持悲观/乐观模式、stale reads，并在写冲突和死锁时自动重试整个事务",
+    "连接池可分布在多个 TiDB 服务器并跳过故障节点，批量插入按 TiDB 包与事务限制控制大小"
+   ],
+   "use_cases": [
+    "使用 TiDB 8.5 LTS 的 Rust 异步应用数据访问层",
+    "需要离线（无数据库）构建校验查询的项目",
+    "绕过 SQL 层直接通过 gRPC 访问 TiKV RawKV 接口的场景"
+   ]
+  },
+  "sha": "4daf75d03b75",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

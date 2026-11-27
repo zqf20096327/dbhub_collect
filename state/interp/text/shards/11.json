@@ -3799,5 +3799,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a63d262cd277": {
+  "identity": {
+   "one_liner": "面向越南农业合作社的开源数字化转型操作系统，无头核心+清单式插件应用",
+   "review": "OpenTea-DX-OS 是为越南农业合作社构建的数字化转型与运营平台，覆盖地块地图、田间日志、批次溯源（QR 码）、作物病害图像识别等模块，按 manager/officer/farmer 三种角色经 Keycloak SSO 授权。架构采用六边形（端口与适配器）设计，核心栈为 Next.js 14 + FastAPI + PostgreSQL 16（PostGIS/pgvector），全栈经 Docker Compose 部署（完整 18 容器约 3.6 GiB RAM，可用 make 命令按组精简）。AI 助手限定只输出带来源引用的事实，不替代决策；README 记录了存储签名校验、审计链不可检测 superuser 篡改等多项已知限制。",
+   "highlights": [
+    "无头核心包含 PostgreSQL、Keycloak SSO、Hasura（只读、按 htx_code 分权）、APISIX API 网关、n8n、SeaweedFS S3、ClamAV 文件检疫与 MQTT 感测数据接入",
+    "审计模块以 append-only 哈希链记录 9 张业务表的变更，并提供 audit.verify_chain() 完整性校验函数；被感染文件自动隔离并写入 audit.file_scans",
+    "容器栈可按 make up-core/up-docs/up-sensors/up-ai 等分组启停，mini-app 通过 ./dxos 以独立容器安装，网关仅在平台模式下加载已安装应用的路由"
+   ],
+   "use_cases": [
+    "农业合作社的种植地块管理、田间作业日志审批与农残安全间隔期自动计算",
+    "农产品批次溯源：生成 QR 码与认证文件，面向市场透明化",
+    "低内存环境下的模块化部署：仅运行核心登录与面板，或按需启用传感、AI、语音等容器组"
+   ]
+  },
+  "sha": "a63d262cd277",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

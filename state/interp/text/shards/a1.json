@@ -3303,5 +3303,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4e8a4a259042": {
+  "identity": {
+   "one_liner": "单二进制本地 PostgreSQL，内置 pgvector，无需安装配置",
+   "review": "pg0 提供一个包含 PostgreSQL 18 与 pgvector 0.8.5 的单文件可执行程序，通过 pg0 start 即可在本地启动服务器，数据存于 ~/.pg0/。面向需要本地数据库环境但不想处理安装、配置或 Docker 的开发者，可用于本地开发、测试与 CI/CD。支持多命名实例、Python SDK（pip 包 pg0-embedded）、内置 psql 客户端和只读 Web UI；默认参数针对向量/AI 负载预设，可用 -c 覆盖。注意 Alpine musl 版本依赖 ICU 74，需使用 Alpine 3.20。",
+   "highlights": [
+    "单个二进制文件包含 PostgreSQL 18 与 pgvector 0.8.5，零外部依赖，可离线运行",
+    "支持多命名实例并行运行，各实例独立数据目录，并提供 start/stop/drop/info/list/psql/logs/ui 八个子命令",
+    "内置只读 Web UI（默认 5050 端口，需终端打印的密钥链接访问），附带 Python SDK 与 bundled psql"
+   ],
+   "use_cases": [
+    "本地开发与测试中需要完整 PostgreSQL（JSON、数组、CTE、扩展等）但不想安装系统包",
+    "CI/CD 流水线或 Docker 容器内快速拉起带 pgvector 的 PostgreSQL",
+    "AI/向量应用的本地原型：启用 vector 扩展后直接进行向量相似度检索"
+   ]
+  },
+  "sha": "4e8a4a259042",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d6d9790e7c72": {
+  "identity": {
+   "one_liner": "门禁社区工单系统，支持AI辅助，基于Spring Boot构建",
+   "review": "HelpDesk 是一个面向门禁社区维护服务场景的 Web 应用，居民提交管道漏水、停电、电梯故障等工单，员工处理解决，管理员监督流程并查看分析面板。技术栈为 Spring Boot、Spring Modulith、Spring Security、PostgreSQL、Flyway，集成 Spring AI 与 Ollama/OpenAI 提供 RAG 助手，通过 RabbitMQ 传递工单事件发送邮件通知。需 JDK 25、Docker 及指定模型，本地用 mise 运行。",
+   "highlights": [
+    "支持居民提单、员工处理、管理员监督及分析仪表盘的三角色流程",
+    "集成 Spring AI 支持 RAG AI 助手，可用 Ollama（qwen3:8b）或 OpenAI",
+    "通过 OTLP 导出追踪、指标、日志到 Grafana LGTM 栈（Tempo/Prometheus/Loki）"
+   ],
+   "use_cases": [
+    "门禁社区中居民报修、物业员工跟进处理工单的日常管理",
+    "学习 Spring Modulith、Spring AI RAG、Testcontainers 等技术的参考项目",
+    "本地演示通过 Grafana 查看服务追踪、指标与日志的观测体系"
+   ]
+  },
+  "sha": "d6d9790e7c72",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

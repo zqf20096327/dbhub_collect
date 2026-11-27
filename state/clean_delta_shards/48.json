@@ -30316,5 +30316,398 @@
    ]
   ],
   "at": "2026-11-25"
+ },
+ "492c36b4df8c+2": {
+  "fn": "PeterHuazai/dsh-xiaofeiyu-memory",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**中文** | English"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    12,
+    3,
+    12
+   ],
+   [
+    "delete",
+    12,
+    14,
+    12,
+    12
+   ],
+   [
+    "equal",
+    14,
+    16,
+    12,
+    14
+   ],
+   [
+    "replace",
+    16,
+    27,
+    14,
+    25,
+    [
+     "|长对话里的老毛病|这里的做法|",
+     "|---|---|",
+     "|不同项目的记忆互相串味|**分区隔离**：一个话题一个分区，`recall` 必须带分区，跨分区查询在代码层被拒绝|",
+     "|什么都存，越存越慢、越存越乱|**遗忘曲线**：`retention = exp(-Δt / stability)`，用上就变牢、不用就衰减，低到阈值转休眠/归档，主干永远不睡|",
+     "|上下文太长 → 反复读同一堆东西 → 命中率掉 → 开始胡说|**守卫 + 审查**：上下文压力/命中率/重复读取/陈旧占比四项打分，到线就 `warn`/`block`，并给出「只按主干作答」的指令|",
+     "|守卫给了建议却不知道怎么执行|**一键修复**：面板卡片 / `mem fix` 先出计划（5 步、带影响条数和预览），勾选后带 `confirm` 才真执行|",
+     "|细节记得太细，主干反而想不起来|**三层记忆**：★主干 / ·场景 / 细节；`task end` 自动把结论并进主干、落一条场景；新会话第一轮自动注入主干速览|",
+     "|找不到上次那条结论|**两段式召回 + token 预算**：`index` 只给前 90 字，`recall` 默认 1200 tokens 硬上限，超了先降级再丢尾部并告诉你丢了几条|",
+     "|不知道记忆到底好不好用|**实时看板**：命中率趋势、每条的记忆曲线、每个分区的记忆板块，图表可交互、可导出导入、参数可在线微调|",
+     "|库坏了全丢|**多重保险**：SQLite 主库 + JSONL 影子日志（可从日志重建）+ 定时备份 + 完整性校验 + 回收站 + 汇报可恢复|",
+     "|重要结论记得不如随手记的牢|**FSRS 式自适应 + 主干强化**：命中降难度、拉长间隔，遗忘打折；主干有留存地板（默认 0.55）并可用 `reinforce` 追加强化|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    31,
+    25,
+    29
+   ],
+   [
+    "replace",
+    31,
+    33,
+    29,
+    31,
+    [
+     " `item_link` 也禁止跨分区连接（会直接抛「分区不可混用」）。**读操作走严格分区**：名字打错就报",
+     " `unknown partition`，不会偷偷建空分区；只有写入入口（`remember` / `task start` / `import`）才会自动化建。"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    31,
+    32
+   ],
+   [
+    "replace",
+    34,
+    38,
+    32,
+    36,
+    [
+     " - 被召回且回填 `used: true` → `stability *= (1 + growth)`，越用越牢；",
+     " - 回填 `used: false` → 衰减更快；",
+     " - `retention < forgetThreshold` → 转 `dormant`（休眠，可被显式召回），`< archiveThreshold` → `archived`；",
+     " - `pinned` 或 `importance >= trunkImportance` 的条目**永不休眠** —— 这就是「保留主干」。"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    36,
+    37
+   ],
+   [
+    "replace",
+    39,
+    40,
+    37,
+    38,
+    [
+     " 并且有**硬阈值**：上下文 token 越过 `contextWarnTokens` 直接 warn，越过 `contextBlockTokens` 直接 block（不靠分数加权碰运气）。"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    46,
+    38,
+    44
+   ],
+   [
+    "replace",
+    46,
+    47,
+    44,
+    45,
+    [
+     " `mem trunk --digest` 给一段紧凑主干，`xfy_memory_trunk` 工具同源。"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    45,
+    46
+   ],
+   [
+    "replace",
+    48,
+    49,
+    46,
+    47,
+    [
+     " 返回里带 `totalTokens / budgetDropped / budgetDowngraded / layers`。"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    47,
+    48
+   ],
+   [
+    "replace",
+    50,
+    51,
+    48,
+    49,
+    [
+     " `applyFix` 必须带 `confirm: true`；面板是勾选式卡片，CLI 是 `mem fix`（默认只预览）+ `mem fix --apply`。"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    49,
+    50
+   ],
+   [
+    "replace",
+    52,
+    53,
+    50,
+    51,
+    [
+     " `source.kind = 'xiaofeiyu-memory'` 的速览消息（约 100 tokens），第二轮起不再注入。开关是 `injectTrunk`。"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    51,
+    52
+   ],
+   [
+    "replace",
+    54,
+    55,
+    52,
+    53,
+    [
+     " （仍可用 `search` 翻到）。"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    71,
+    53,
+    69
+   ],
+   [
+    "replace",
+    71,
+    72,
+    69,
+    70,
+    [
+     "宿主带 `webServer` 时插件还会挂 `/xfy-memory`（HTTP API + 看板静态页），并把 `lib/client.js` 作为**原生 React 面板**注册到右侧栏与会话头按钮——不需要额外开服务。两半端的细节见 docs/DSH-PLUGIN.md。"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    79,
+    70,
+    77
+   ],
+   [
+    "replace",
+    79,
+    91,
+    77,
+    78,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    95,
+    78,
+    82
+   ],
+   [
+    "replace",
+    95,
+    111,
+    82,
+    98,
+    [
+     "|工具|干什么|",
+     "|---|---|",
+     "|`xfy_memory_recall`|分区内召回这次最该看的几条（词面 + 向量 + 衰减 + 重要度），返回 `eventId`；带 `budget` token 上限|",
+     "|`xfy_memory_remember`|写一条长期结论（同内容自动去重）；`kind` 支持 `trunk` / `scene`|",
+     "|`xfy_memory_search`|全量翻找 + 分页 + 排序，只给片段（想起关键词但记不清内容时用）|",
+     "|`xfy_memory_feedback`|回填「用上了没有」——命中率和遗忘曲线的唯一信号来源|",
+     "|`xfy_memory_guard`|四项打分 → `ok`/`warn`/`block` + 处置指令；`plan: true` 出修复计划，`apply: true` + `confirm: true` 才执行|",
+     "|`xfy_memory_trunk`|主干速览（比 `recall` 更省，只记得大方向时用），按 token 预算截断并给层计数|",
+     "|`xfy_memory_audit`|记忆体检报告（陈旧、膨胀、低命中、无主干、任务泄漏、备份过期…）|",
+     "|`xfy_memory_digest`|这段时间学到什么、用上什么、什么在冷掉（含每日桶）|",
+     "|`xfy_memory_health`|库结构体检 + 可选安全修复（补向量、删悬空关联）|",
+     "|`xfy_memory_dedupe`|找重复条目，只给建议不自动合并|",
+     "|`xfy_memory_summarize`|把散记忆归纳成一条钉住的主干，旧主干用 `superseded_by` 取代|",
+     "|`xfy_memory_link`|条目关联（结论↔依据），同分区硬校验|",
+     "|`xfy_memory_explain`|解释这条为什么被召回 / 为什么快忘了（打分逐项拆开）|",
+     "|`xfy_memory_task`|任务闸门：`start` 建会话并返回主干；`end` 必须写汇报文档并自动 consolidate|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    98,
+    101
+   ],
+   [
+    "replace",
+    114,
+    115,
+    101,
+    102,
+    [
+     "看板"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    124,
+    102,
+    111
+   ],
+   [
+    "replace",
+    124,
+    125,
+    111,
+    112,
+    [
+     "检索与自检"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    133,
+    112,
+    120
+   ],
+   [
+    "replace",
+    133,
+    147,
+    120,
+    121,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    151,
+    121,
+    125
+   ],
+   [
+    "replace",
+    151,
+    167,
+    125,
+    141,
+    [
+     "|键|默认|含义|",
+     "|---|---|---|",
+     "|`curve.stabilityBaseDays`|7|新记忆的初始稳定度（天）|",
+     "|`curve.forgetThreshold`|0.25|低于它转休眠|",
+     "|`curve.archiveThreshold`|0.02|低于它转归档|",
+     "|`curve.trunkImportance`|4|重要度达到它永不休眠|",
+     "|`recall.topK` / `minScore`|8 / 0.12|召回条数与分数线|",
+     "|`recall.detail` / `indexBodyChars`|index / 90|默认只给前 90 字正文（省 token）|",
+     "|`recall.budgetTokens`|1200|单次召回的 token 硬上限|",
+     "|`guard.contextWarnTokens` / `contextBlockTokens`|120000 / 200000|硬阈值|",
+     "|`vector.vectorWeight` / `vectorFloor` / `fpWeight`|0.6 / 0.15 / 1.5|向量融合与语义指纹权重|",
+     "|`curve.adaptive`|true|FSRS 式复习：命中降难度抬间隔，遗忘乘 0.45|",
+     "|`curve.trunkFloor` / `trunkBoostGrowth` / `trunkBoostMax`|0.55 / 1.35 / 4|主干留存地板与强化上限|",
+     "|`maintain.cleanupDays` / `mergeThreshold` / `digestTokens`|30 / 0.6 / 320|一键修复的清理窗口、合并阈值、主干摘要预算|",
+     "|`injectTrunk`（插件配置）|true|是否在新会话第一轮自动注入主干速览|",
+     "|`lifecycle.recycleDays`|30|回收站保留天数|"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    171,
+    141,
+    145
+   ],
+   [
+    "replace",
+    171,
+    172,
+    145,
+    146,
+    [
+     " 想要真 embedding 请把 `vector.provider` 指向任意 OpenAI 兼容的 `/v1/embeddings`。"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    191,
+    146,
+    165
+   ],
+   [
+    "delete",
+    191,
+    192,
+    165,
+    165
+   ],
+   [
+    "equal",
+    192,
+    193,
+    165,
+    166
+   ]
+  ],
+  "at": "2026-11-27"
  }
 }

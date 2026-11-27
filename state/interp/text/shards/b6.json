@@ -3364,5 +3364,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1bfe283a0579": {
+  "identity": {
+   "one_liner": "确定性回放运行时：记录生产流量并生成行为 diff 的单二进制 Wasm actor 平台",
+   "review": "Kronik 是一个单二进制运行时，将每个请求作为 turn，把输入、副作用结果与状态变更写入 append-only 日志，使系统成为其历史的确定性函数。用户可用 kronik propose 在日志分叉点重放昨日真实流量，生成行为 diff 审查代码变更。支持 TypeScript/Rust/Python/Go 编写带 SQLite 状态的 Wasm actor，也可运行 OCI 镜像中的 Linux 程序。当前为 pre-alpha、单节点，接口可能在版本间变更。",
+   "highlights": [
+    "变更可分叉日志并以录制流量重放，生成包含响应、状态、副作用与成本差异的行为 diff",
+    "turn 记录统一 fsync 后按 LSN 顺序应用，时间、随机数与 SQL 函数值随 turn 录制以保证重放结果一致",
+    "提供 JSON API（OpenAPI 描述）、CLI 与带 token scope 的 MCP 服务器；支持 TLS/ACME、快照恢复、Prometheus/OTLP 指标与隐私模式（PII 密封与假名重放）"
+   ],
+   "use_cases": [
+    "AI 编码代理产出的变更在部署前用真实历史流量做行为 diff 审查",
+    "无 Kubernetes 的小团队在 VPS 上部署有状态 Wasm actor 并执行 promote/rollback 流程",
+    "需要 GDPR 相关隐私能力（可密封、擦除、假名化重放主体数据）的事件溯源类服务"
+   ]
+  },
+  "sha": "1bfe283a0579",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "00614c4b43dc": {
+  "identity": {
+   "one_liner": "基于 Cloudflare Workers 的多租户 SaaS 起始模板仓库",
+   "review": "Rocketflare 是一个面向 Cloudflare Workers 的多租户 SaaS 起始模板，内置租户隔离、鉴权（魔法链接/OAuth/OIDC）、角色权限、队列与 Workflows、实时推送、R2 文件存储及可选 AI 层与分析插件，技术栈为 Hono + React 19 + Drizzle/Postgres(pgvector)。它以复制仓库方式使用而非依赖包，配套 CLI 技能（/rf-start、/rf-setup、/rf-upgrade 等）协助初始化、改名与升级，本地首跑无需外部凭据。",
+   "highlights": [
+    "单个 Worker 内提供 API（Hono）、队列、定时任务、Durable Object 实时与 Workflow，数据库为 Postgres 17 + pgvector，部署侧支持 Neon 或经 Hyperdrive 连接任意 Postgres",
+    "多租户与单租户共用一套 schema（TENANCY_MODE 可切换），行级过滤默认启用，RLS 策略随表生成，缺表会有目录测试在 CI 中报错",
+    "AI 层支持 Anthropic/OpenAI 兼容/Workers AI 聊天（SSE）、基于 Workflows 的 agents、Workers AI embeddings 写入 pgvector，并带 OTLP 追踪与 evals"
+   ],
+   "use_cases": [
+    "在 Cloudflare Workers 上搭建内部工具或 B2B 多租户产品",
+    "需要租户隔离、邀请/审批注册与角色权限的团队协作类应用",
+    "以 coding agent 驱动开发流程，使用共享 zod 契约保持 API、UI 与 CLI 一致的项目"
+   ]
+  },
+  "sha": "00614c4b43dc",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

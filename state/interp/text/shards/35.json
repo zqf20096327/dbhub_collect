@@ -3147,5 +3147,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "354e9e1378d6": {
+  "identity": {
+   "one_liner": "运行在本地的 MCP 记忆服务器，为 AI 编码代理提供持久化记忆检索。",
+   "review": "TAM 是面向 MCP 客户端（Claude Code、Codex CLI、Cursor 等）的本地记忆服务器，用 SQLite 存储决策、方案、错误与会话摘要，检索融合 BM25、本地嵌入、模糊匹配、知识图谱，并经交叉编码器重排。需 Python 3.11+，首次启动下载约 330 MB 模型；默认档写入和搜索不调用 LLM，可经 pip/npx/Docker 安装，也可作为带角色与审计的团队服务器运行。",
+   "highlights": [
+    "提供 74 个 MCP 工具，任何 MCP 客户端无需改代码即可接入",
+    "检索融合 BM25 全文、本地密集嵌入、模糊匹配与知识图谱，用倒数排名融合和本地交叉编码器重排",
+    "事实支持有效期（kg_add_fact/kg_at），单值事实的新值可废止旧值；数据 100% 存于本地"
+   ],
+   "use_cases": [
+    "让编码代理跨会话记住项目决策、修复方案和约定",
+    "研究者本地运行、检查和修改的记忆检索基线（附 LoCoMo/LongMemEval/BEAM 基准脚本）",
+    "团队部署：个人/部门/公司分区的多存储网关，带角色、署名与审计"
+   ]
+  },
+  "sha": "354e9e1378d6",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "925daad7cb1f": {
+  "identity": {
+   "one_liner": "为 Django 提供 TiDB 数据库方言的适配包",
+   "review": "django-tidb 为 Django ORM 增加TiDB 方言，使用者需将 DATABASES 的 ENGINE 设为 django_tidb，并按 Django 版本选择对应的包版本。它提供 BigAutoRandomField、AUTO_ID_CACHE 设置和 VectorField（Beta）等 TiDB 特有能力；要求 TiDB 6.2+、Python 3.12+，且需先安装 mysqlclient 或 pymysql 驱动。",
+   "highlights": [
+    "支持 AUTO_RANDOM 主键字段（BigAutoRandomField），可通过 shard_bits 和 range 参数控制行为",
+    "支持通过模型 Meta 中的 tidb_auto_id_cache 设置自增 ID 分配缓存大小",
+    "提供 VectorField（Beta），支持 L1/L2/余弦/内积距离函数及基于 TiFlash 的 HNSW 向量索引"
+   ],
+   "use_cases": [
+    "使用 Django 框架连接 TiDB 数据库的应用开发",
+    "需要在 Django 模型中使用 TiDB AUTO_RANDOM 或 AUTO_ID_CACHE 特性的场景",
+    "在 TiDB（需 TiFlash 节点）上存储和检索向量数据、按距离过滤查询的场景"
+   ]
+  },
+  "sha": "925daad7cb1f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

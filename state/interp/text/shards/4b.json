@@ -3065,5 +3065,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "97c79a10667b": {
+  "identity": {
+   "one_liner": "运行在 MochiBerry 引擎上的 SQLite + Express.js + Vue.js 原生扩展运行时",
+   "review": "SEVM 是在 MochiBerry 引擎之上构建的 Web 运行环境，提供 Express 风格 HTTP 服务、SQLite 存取与 Vue 3 前端 SPA。其核心机制是通过 dlopen 方式在运行时加载 .dll/.so 原生扩展（mochi_modules），配合 node_modules 下的 node:* shim 提供类 Node.js API，无需重新编译引擎。README 详细记录了原生模块的加载契约（必须导出 mbjs_init_module 符号等）。示例应用通过 mbjs.exe 启动，监听 8080 端口。",
+   "highlights": [
+    "通过 libdynalib 在运行时加载 .dll/.so/.lbrct 原生扩展，不改动引擎核心",
+    "提供 node:http、node:sqlite、node:fs、node:events 及 Express 的 shim 实现",
+    "内置 mochinode_net（Winsock2 HTTP）与 mochinode_sqlite（sqlite3 3.50.4 prepared statement）原生模块"
+   ],
+   "use_cases": [
+    "在 MochiBerry 引擎上运行 Express 风格的 HTTP API 与 SQLite 后端",
+    "为引擎开发自定义原生插件模块（含脚手架脚本与 ABI 契约文档）",
+    "使用 Vue 3 静态 SPA 配合 JSON API 构建示例应用"
+   ]
+  },
+  "sha": "97c79a10667b",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

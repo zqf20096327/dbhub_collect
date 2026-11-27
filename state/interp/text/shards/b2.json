@@ -3584,5 +3584,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "75067086432d": {
+  "identity": {
+   "one_liner": "GMSSH 桌面系统的 Web 端 MySQL 管理插件，前端 Vue 3、后端 Go，经 Unix Socket JSON-RPC 通信",
+   "review": "DBStudio 是 GMSSH 桌面系统的外部应用插件，提供 MySQL 的可视化管理：连接管理、表格内联编辑、CodeMirror 6 SQL 编辑器、表结构设计器与导入导出。前端 Vue 3 + Naive UI，后端 Go，通过 GMSSH 代理经 Unix Socket 以 JSON-RPC 通信；连接配置以 AES-256-GCM 加密存储。运行依赖 GMSSH 宿主环境，采用 MIT 协议。",
+   "highlights": [
+    "提供网格视图分页浏览、内联编辑、批量增删行，支持有/无主键表的安全 CRUD",
+    "表结构设计器支持列/索引/外键可视编辑，生成 DDL 预览与 ALTER TABLE 语句",
+    "导出兼容 mysqldump 并含纯 Go 回退实现，支持 CSV/JSON/SQL 表级导出与导入"
+   ],
+   "use_cases": [
+    "在 GMSSH 桌面环境中对 MySQL 进行可视化的日常数据与表结构管理",
+    "通过 SQL 编辑器执行多语句查询并复用查询历史",
+    "执行数据库级导入导出任务并通过面板跟踪实时进度"
+   ]
+  },
+  "sha": "75067086432d",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "512f6f2354eb": {
+  "identity": {
+   "one_liner": "基于 Flutter 壳与 WebView 的混合应用框架，提供签名 OTA UI 更新与离线 SQLite",
+   "review": "Valence 让 Web 应用（SvelteKit 等构建为静态文件的 SPA）作为 Flutter 应用的界面：Flutter 原生核心经应用商店分发一次，后续 UI 以签名 bundle 通过 OTA 分发，启动失败 15 秒内自动回滚。数据存于原生 SQLite 支持离线增量同步，一套 schema 生成 Dart 与 TypeScript 桥接代码。Android 已验证，iOS 实现存在但未经运行测试。",
+   "highlights": [
+    "UI 更新以 Ed25519 签名 bundle 分发，采用 10%→50%→100% 分阶段发布，启动失败或 ready() 超时自动回滚，内置 bundle 为最终后备",
+    "数据存于原生 SQLite，从应用内种子数据起步，按序列号增量同步；token 存于 Android Keystore，页面不可读取",
+    "单一 bridge.schema.json 生成 Dart 主机接口与 TypeScript 客户端；消息按 schema 严格解码，桥接仅限本地回环来源访问"
+   ],
+   "use_cases": [
+    "已有 SvelteKit/Next.js/Astro/Vite 等 SPA，希望以同一代码库同时作为网站与移动应用 UI",
+    "UI 更新频繁、希望绕开应用商店审核流程直接 OTA 推送的团队",
+    "需要离线可用的移动应用，数据在设备本地 SQLite 中维护并增量同步"
+   ]
+  },
+  "sha": "512f6f2354eb",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

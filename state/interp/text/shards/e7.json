@@ -3595,5 +3595,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "abc553ce677a": {
+  "identity": {
+   "one_liner": "Rust 编写的 Postgres 逻辑复制引擎，可嵌入应用或独立运行",
+   "review": "Supabase ETL 是用 Rust 实现的 Postgres 复制引擎，先从一致性快照做初始同步，再解码 WAL 持续变更到目标端。支持嵌入 Rust 应用（etl crate）或作为独立二进制/容器镜像运行。项目处于活跃开发期，API 可能频繁变更且未发布版本号；WAL 保留不足可能导致复制槽失效。",
+   "highlights": [
+    "支持 PostgreSQL 14–19 作为源端，目标端包含 ClickHouse、BigQuery、DuckLake、Snowflake",
+    "单 Rust 进程运行，内存缓冲变更并施加背压，无本地磁盘 spool，通过持久化状态存储保存检查点",
+    "提供 Rust 库 traits 用于自定义 destination 与 state store，并发布 Linux AMD64/ARM64 容器镜像"
+   ],
+   "use_cases": [
+    "将现有 Postgres 行数据复制并流式写入数据仓库或 lakehouse",
+    "在 Rust 应用中嵌入 CDC 复制能力",
+    "从 Postgres 快照初始同步后持续追踪 WAL 变更到 ClickHouse 等分析型数据库"
+   ]
+  },
+  "sha": "abc553ce677a",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

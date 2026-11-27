@@ -31495,5 +31495,1956 @@
    ]
   ],
   "at": "2026-11-26"
+ },
+ "7608cc5e7df1+2": {
+  "fn": "anyproto/any-store",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Go Reference",
+     "Go Report Card",
+     "MIT License"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    11,
+    5,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "* **Mongo-style queries** — `$eq/$in/$gt/...`, logical operators, dot-path fields, modifiers (`$set`, `$inc`, ...). Formal semantics in docs/query-filter-contract.md."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    12,
+    14
+   ],
+   [
+    "replace",
+    14,
+    19,
+    14,
+    19,
+    [
+     "* **Full-text search** — btree-resident inverted index with BM25 ranking via `$text`: phrases, prefixes, anchored and per-field matching for search-as-you-type. See docs/full-text-search.md.",
+     "* **Vector search** — btree-resident ANN indexes (IVF-SQ, HNSW, brute-force) via `$knn`. See docs/vector-search.md and docs/vector-engine.md.",
+     "* **Aggregation** — MongoDB-style pipelines: shaping (`$match`, `$group`, `$sort`, `$unwind`, `$facet`, ...), computed expressions (arithmetic, conditionals, comparisons, date math), field-to-field `$expr` predicates, primary-key `$lookup` joins, and materialization via `$merge`/`$out` — with planner pushdown. See docs/aggregation.md.",
+     "* **ACID transactions** — snapshot-isolated read transactions, single-writer write transactions. On an operating system's file system, a commit survives a process crash by default and reaches the disk with a later checkpoint, as in SQLite's WAL mode at `synchronous=NORMAL`, and `CommitSync` syncs every commit, the per-commit guarantee; the wasm example's IndexedDB file system gives neither (see Durability).",
+     "* **Multi-process** — SQLite-like contract on Linux and Darwin, amd64 and arm64: any number of OS processes may open, read and write the same database file at any time (WAL + shared-memory index, busy handling, cross-process DDL reconciliation). Other targets run one process at a time (see Multi-process)."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    19,
+    21
+   ],
+   [
+    "replace",
+    21,
+    23,
+    21,
+    23,
+    [
+     "* **Streaming iterators** — low-memory scans with a cursor API; AnyEnc arena encoding minimizes GC churn.",
+     "* **Cross-platform** — pure Go, no CGO; builds for every Go target but AIX and Solaris, `js/wasm` and `wasip1` included (see wasm/), with multi-process access on Linux and Darwin, amd64 and arm64."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    45,
+    23,
+    45
+   ],
+   [
+    "replace",
+    45,
+    86,
+    45,
+    46,
+    [
+     "…（41 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    88,
+    46,
+    48
+   ],
+   [
+    "replace",
+    88,
+    89,
+    48,
+    49,
+    [
+     "The full end-to-end example lives in `example/` and the API docs."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    94,
+    49,
+    54
+   ],
+   [
+    "replace",
+    94,
+    95,
+    54,
+    55,
+    [
+     "> **Numbers are float64.** Every number is stored as a float64, as in JSON: integers are exact up to 2^53 (9,007,199,254,740,992) in magnitude, and a larger one, written as a plain integer in JSON or given as a Go integer, becomes the nearest float64, in a document, a filter and an id alike (a JSON number with an exponent can round to another one: query contract, item 18). A filter given as a Go value is encoded as JSON, which takes every integer type, `uintptr` and named types included. An integer id given to `FindId` and the other id calls, or an integer operand of `query.NewComp`, is an `int`, `uint` or sized integer (`int64`, `uint64`, …): a `uintptr`, or a value of a named type such as `type myInt int64`, panics. Two such integers can then be one value, and as ids one document: with a document of id 2^53 in the collection, inserting id 2^53+1 fails with `ErrDocExists`, `UpsertOne` with it replaces that document, and `FindId(2^53+1)` returns it. Store integers that can go past 2^53, such as 64-bit hashes, as strings."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    127,
+    55,
+    87
+   ],
+   [
+    "replace",
+    127,
+    132,
+    87,
+    88,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    146,
+    88,
+    102
+   ],
+   [
+    "replace",
+    146,
+    153,
+    102,
+    103,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    163,
+    103,
+    113
+   ],
+   [
+    "replace",
+    163,
+    186,
+    113,
+    114,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    196,
+    114,
+    124
+   ],
+   [
+    "replace",
+    196,
+    202,
+    124,
+    125,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    204,
+    125,
+    127
+   ],
+   [
+    "replace",
+    204,
+    205,
+    127,
+    128,
+    [
+     "`$match`/`$sort`/`$limit` prefixes are pushed down into the index planner; the rest streams through the pipeline. Expressions compute derived values in `$project`/`$addFields`/`$group` (arithmetic, `$cond`/`$switch`, comparisons, `$dateDiff`-family date math over the first-class dateTime type); `$expr` brings field-to-field predicates into `$match`; `$lookup` resolves object-id relations as primary-key point lookups; `$facet` runs N sub-pipelines over one scan; `$merge`/`$out` materialize results into a collection where they are indexable like any other data. Operator reference and Mongo divergences: docs/aggregation.md."
+    ]
+   ],
+   [
+    "equal",
+    205,
+    210,
+    128,
+    133
+   ],
+   [
+    "replace",
+    210,
+    211,
+    133,
+    134,
+    [
+     "Every other target runs a database in one process at a time, with its WAL index in that process's memory. On Windows and the other Unix systems — FreeBSD and the other BSDs, illumos, and Linux on other architectures, 32-bit ones included — the process that opens the file first holds an exclusive lock on it, and another process's `Open` fails. On `js/wasm`, `wasip1` and Plan 9 any-store takes no lock: it does not stop a second process, or a second browser tab, from opening the file. The file system can: the OPFS file system of the wasm example opens a file through an exclusive sync access handle, which the browser refuses to a second opener. Where the file system does not, the application has to prevent it. AIX and Solaris are not supported: their `syscall` package has no `flock`, and the library does not build there."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    218,
+    134,
+    141
+   ],
+   [
+    "replace",
+    218,
+    219,
+    141,
+    142,
+    [
+     "The IndexedDB file system of the wasm example gives no durability guarantee, with `CommitSync` or without: it keeps each file in memory and stores it in IndexedDB only when the file is synced or closed, and its sync returns before IndexedDB has committed what it stores. A closed tab or a killed worker can lose commits that returned without error, as a power loss can elsewhere."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    226,
+    142,
+    149
+   ],
+   [
+    "replace",
+    226,
+    242,
+    149,
+    150,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    252,
+    150,
+    160
+   ],
+   [
+    "replace",
+    252,
+    253,
+    160,
+    161,
+    [
+     "Conceptually mirrors SQLite's `cksumvfs`, generalized to also surface AEAD failures via the same API."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    258,
+    161,
+    166
+   ],
+   [
+    "replace",
+    258,
+    268,
+    166,
+    167,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    270,
+    167,
+    169
+   ],
+   [
+    "replace",
+    270,
+    271,
+    169,
+    170,
+    [
+     "The page-1 DB header (first 100 bytes) is outside the per-page hash; its invariants are validated separately at open. Full design: docs/btree/specs/integrity.md."
+    ]
+   ],
+   [
+    "equal",
+    271,
+    276,
+    170,
+    175
+   ],
+   [
+    "replace",
+    276,
+    277,
+    175,
+    176,
+    [
+     "|Error|When|"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    278,
+    176,
+    177
+   ],
+   [
+    "replace",
+    278,
+    281,
+    177,
+    180,
+    [
+     "|`ErrHeaderCorrupt`|`Open`: the file header is unusable.|",
+     "|`ErrPageIntegrity`|A page fails its checksum or its AEAD authentication, on the read that meets it.|",
+     "|`ErrQuickCheckFailed`|`Open` after an unclean shutdown (`Durability.Sentinel`): the quick check, or the open's read of the catalog before it, found damage.|"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    310,
+    180,
+    209
+   ],
+   [
+    "replace",
+    310,
+    311,
+    209,
+    210,
+    [
+     "|Error|When|"
+    ]
+   ],
+   [
+    "equal",
+    311,
+    312,
+    210,
+    211
+   ],
+   [
+    "replace",
+    312,
+    315,
+    211,
+    214,
+    [
+     "|`ErrEncryptionKeyRequired`|The file is encrypted and `Config.Encryption` is empty.|",
+     "|`ErrNotEncrypted`|The file is not encrypted and `Config.Encryption` is not empty.|",
+     "|`ErrWrongKey`|`Config.Encryption` does not open the file: another passphrase or key than the file's, or another cipher.|"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    320,
+    214,
+    219
+   ],
+   [
+    "replace",
+    320,
+    321,
+    219,
+    220,
+    [
+     "An independent Go implementation following design conventions from SQLCipher (BSD-3-Clause) — reserved-tail page overhead, the page-1 plaintext-prefix rule, PBKDF2-HMAC-SHA256 key derivation. No SQLCipher code is included; the cryptography is Go-native and uses AEAD rather than SQLCipher's encrypt-then-MAC construction. Not SQLCipher-compatible on disk. See NOTICE.md."
+    ]
+   ],
+   [
+    "equal",
+    321,
+    326,
+    220,
+    225
+   ],
+   [
+    "replace",
+    326,
+    330,
+    225,
+    229,
+    [
+     "|Format|Created by|Opened by|",
+     "|------|----------|---------|",
+     "|5|v2.0.0 – v2.4.x|every v2 release|",
+     "|6|v2.5.0 and later|v2.5.0 and later|"
+    ]
+   ],
+   [
+    "equal",
+    330,
+    337,
+    229,
+    236
+   ],
+   [
+    "replace",
+    337,
+    338,
+    236,
+    237,
+    [
+     "`SchemaFormat` reports the format of an open database, and `CopyToLatestFormat` copies a database into a new file in the latest format. Moving a format 5 database onto format 6 is optional; docs/migration-format-5-to-6.md describes when to do it, what can differ in the copy, and how to put the copy in the old file's place."
+    ]
+   ],
+   [
+    "equal",
+    338,
+    341,
+    237,
+    240
+   ],
+   [
+    "replace",
+    341,
+    346,
+    240,
+    245,
+    [
+     "* **API reference** — pkg.go.dev/github.com/anyproto/any-store/v2",
+     "* **Query semantics** — docs/query-filter-contract.md",
+     "* **Full-text search** — docs/full-text-search.md",
+     "* **Vector search** — docs/vector-search.md, docs/vector-engine.md",
+     "* **Aggregation** — docs/aggregation.md"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    349,
+    245,
+    248
+   ],
+   [
+    "replace",
+    349,
+    363,
+    248,
+    249,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    363,
+    365,
+    249,
+    251
+   ],
+   [
+    "replace",
+    365,
+    366,
+    251,
+    252,
+    [
+     "Any Store is released under the MIT License — see LICENSE.md."
+    ]
+   ],
+   [
+    "equal",
+    366,
+    367,
+    252,
+    253
+   ],
+   [
+    "replace",
+    367,
+    368,
+    253,
+    254,
+    [
+     "The storage engine derives from SQLite (public domain) and follows page-encryption design conventions from SQLCipher (BSD-3-Clause). Neither project's source is included. Attribution and scope: NOTICE.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
+ },
+ "f6812971e1c7+2": {
+  "fn": "han139242/ai-mes-copilot",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "按演示指南试用 · 配置与启动 · 功能目录 · 验证记录 · English"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    13,
+    8,
+    13,
+    [
+     "|第一次体验|你会看到什么|",
+     "|---|---|",
+     "|问“哪些物料低于安全库存？”|工作台查询当前库存，返回结果表格与可追踪的业务入口|",
+     "|问“L100 当前生效的驱动板是什么？”|AI 工作台返回带文件和版本的引用，可打开原文，再沿图谱核对装配工序和检验规范|",
+     "|准备工单领料|后端校验业务条件并生成预览，确认后执行，再回查结果|"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    18,
+    13,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "|能力|使用示例|实现方式|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    27,
+    20,
+    27,
+    [
+     "|**业务查询与分析**|“哪些物料低于安全库存？”“工单还缺什么开工条件？”|从受权限控制的能力目录选择工具，查询当前业务数据，返回结论、表格、图表和下一步|",
+     "|**业务办理**|创建订单、排产、生成工单、领料、报工、入库和发货|结构化计划 → 校验与预览 → 用户确认 → 领域服务执行 → 回查|",
+     "|**私有文档 RAG**|“L100 当前生效的驱动板是什么？”|本地中文嵌入与 pgvector 检索，结合有效原文生成带文件、版本和位置的答复|",
+     "|**GraphRAG 与融合问答**|“驱动板、装配工序和检验规范怎样关联？”|LightRAG 抽取实体关系，AGE 保存图谱，关联检索与文档证据共同支持回答|",
+     "|**制造知识图谱**|在产品全景比较 L100、L200，在变更研判核对 ECO-L100-02|根据已发布资料组织产品、物料、工序与检验关系。点选实体和连线可核对原文，展开直接关联，或进入自由探索查看实体间路径|",
+     "|**研判工作单**|保存结论，补现场备注和人工核对项，导出交接稿|保存答复与来源快照，导出或转业务前复核版本，衔接原业务草稿|",
+     "|**多轮与个性化**|连续追问、按质检或仓储岗位解释|私有历史、岗位和篇幅偏好；工作台与浮窗共用草稿，重试保留下一问|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "业务能力目录含 **20 项查询分析、19 项直接办理**。知识检索、图谱和工作单属于独立扩展，具体行为见功能说明。"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    29,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "AI 工作台：业务问答、表格与来源"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    40,
+    31,
+    40
+   ],
+   [
+    "replace",
+    40,
+    54,
+    40,
+    41,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    60,
+    41,
+    47
+   ],
+   [
+    "replace",
+    60,
+    61,
+    47,
+    48,
+    [
+     "**AI 架构详解** 包含业务 Agent 时序图、RAG 入库与问答、GraphRAG、用户隔离、工作单闭环、技术取舍及关键代码入口。"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    75,
+    48,
+    62
+   ],
+   [
+    "replace",
+    75,
+    76,
+    62,
+    63,
+    [
+     "10 份关联资料覆盖产品、BOM、装配、检验、故障、设备、仓储、变更、岗位和交接，可构建 PDF、DOCX、XLSX、TXT、MD 五格式包，并提供 24 个核对问题。**全部为合成教学样例。**"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    63,
+    64
+   ],
+   [
+    "replace",
+    77,
+    78,
+    64,
+    65,
+    [
+     "现场顺序、可直接使用的问题、讲解台词和无模型时的展示方式见 **教师演示指南**。"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    85,
+    65,
+    72
+   ],
+   [
+    "replace",
+    85,
+    86,
+    72,
+    73,
+    [
+     "生产大屏：产线排期、质量与设备状态"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    89,
+    73,
+    76
+   ],
+   [
+    "replace",
+    89,
+    90,
+    76,
+    77,
+    [
+     "本地 YuNet / SFace 人脸认证与原账号、JWT 和退出流程衔接，支持录入、重录、解绑及管理员授权重置，实际真人验收范围见人脸说明。"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    98,
+    77,
+    85
+   ],
+   [
+    "replace",
+    98,
+    99,
+    85,
+    86,
+    [
+     "|场景|入口|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    86,
+    87
+   ],
+   [
+    "replace",
+    100,
+    105,
+    87,
+    92,
+    [
+     "|基础 MES：JDK 21、Node.js 24、MySQL 8|配置与启动|",
+     "|RAG / GraphRAG：Python 3.12、PostgreSQL、模型缓存|私有知识服务部署|",
+     "|课堂资料和提问|合成资料与构建方法|",
+     "|本轮检查结果及历史证据|验证说明|",
+     "|教师要求与现场待验项|阶段 2 要求对照|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    116,
+    92,
+    103
+   ],
+   [
+    "replace",
+    116,
+    117,
+    103,
+    104,
+    [
+     "模型密钥和数据库口令通过本机环境提供。公开仓库只含源码、测试、合成样例和说明。离线检索与真实生成分别验证；当前引用校验**不能自动证明每句回答都被来源支持**，关键结论需核对原文。Dify 加分工作流已在独立本机实例验证两条分支。第二位参与者、错误脸等真人现场项目见要求对照。 Dify 演示"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    129,
+    104,
+    116
+   ],
+   [
+    "replace",
+    129,
+    132,
+    116,
+    119,
+    [
+     "- AI 架构与关键实现 · 教师演示与讲解",
+     "- 功能目录 · 阶段 2 实现 · 开源参考",
+     "- 版本记录 · 贡献指南 · 历史代码边界"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    135,
+    119,
+    122
+   ],
+   [
+    "replace",
+    135,
+    136,
+    122,
+    123,
+    [
+     "感谢 @han139242、@AnHC-00、@zengjingye。成员署名见贡献者说明。"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    123,
+    124
+   ],
+   [
+    "replace",
+    137,
+    138,
+    124,
+    125,
+    [
+     "原创代码采用 MIT License，第三方依赖保留各自版权和许可证。欢迎通过 Issue 反馈问题或通过 Pull Request 改进。"
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
+ },
+ "f85b7c321390+2": {
+  "fn": "turbomind66/invest-radar",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "equal",
+    0,
+    11,
+    0,
+    11
+   ],
+   [
+    "replace",
+    11,
+    16,
+    11,
+    16,
+    [
+     "CI",
+     "Release",
+     "Python",
+     "License: MIT",
+     "Zero Dependency"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    20,
+    17,
+    18,
+    [
+     "**▶ 在线看板** · 由 GitHub Pages 托管，无需自行部署"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    46,
+    18,
+    44
+   ],
+   [
+    "replace",
+    46,
+    50,
+    44,
+    48,
+    [
+     " - 按**日期**：任选已归档交易日；",
+     " - 按**类别**：8 类宽基，多选；",
+     " - 按**基金**：观察池内单只 ETF，多选；选类别后基金列表自动收敛为该类别下标的；",
+     " - 类别与基金叠加取交集，卡片 / 趋势 / 条形 / 双饼图 / 明细表全站联动。"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    55,
+    48,
+    53
+   ],
+   [
+    "replace",
+    55,
+    56,
+    53,
+    54,
+    [
+     " > ⚠️ **为什么这个面板盘后常常是空的**：源 `stock/details/get` 是**滚动窗口**——非交易时段会冻结、只保留当日最后一笔（实测约 1 万元，远低于 30 万大单阈值），所以 06:00 / 17:00 那两次**盘后调度永远采不到大单**。只有在**交易时段多次采样**才能累积出全天的大单分布。项目为此单开了 `tick-sample` 工作流（见「调度」），采样结果随 `data.json` 的 `tick_rows` 字段持久化，多次采样可累积、不会互相覆盖。"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    64,
+    54,
+    62
+   ],
+   [
+    "replace",
+    64,
+    65,
+    62,
+    63,
+    [
+     "||服务端模式|静态站模式（GitHub Pages）|Docker（自建服务器）|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    63,
+    64
+   ],
+   [
+    "replace",
+    66,
+    72,
+    64,
+    70,
+    [
+     "|启动|`python national_team/app.py`|无需部署，直接访问 Pages|`./deploy.sh` 或 `docker compose up -d`|",
+     "|抓取时机|进程内定时（16:05）+ 页面按钮即时抓取|cron-job.org 每天 **06:00 / 17:00（北京时间）** 触发 Actions + 手动触发|容器内调度器：完整同步 **06:00 / 17:10** + 盘中采样 **09:30 起每 30 分钟至 14:50（共 10 次）**|",
+     "|数据存储|本地 SQLite|仓库内 `docs/data.json`|挂载卷内 SQLite（重建容器不丢）|",
+     "|筛选计算|服务端 SQL|浏览器本地计算|服务端 SQL|",
+     "|手动刷新|✅ 立即抓取|➖ 只能触发 Actions（需等一两分钟）；本地用 `serve_docs.py` 起站则 ✅|✅ 一条命令即时抓取|",
+     "|适合场景|本地看盘|零成本公开访问|数据自主可控、不受 Actions 停用影响|"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    86,
+    70,
+    84
+   ],
+   [
+    "replace",
+    86,
+    87,
+    84,
+    85,
+    [
+     "|接口|作用|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    85,
+    86
+   ],
+   [
+    "replace",
+    88,
+    90,
+    86,
+    88,
+    [
+     "|`GET /api/local/status`|三个页面的刷新任务状态（前端启动时 probe 它，据此决定按钮行为）|",
+     "|`GET /api/local/refresh?page=nt\\|dd\\|qdii\\|all`|后台起子进程抓取并重新导出|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    98,
+    88,
+    96
+   ],
+   [
+    "replace",
+    98,
+    99,
+    96,
+    97,
+    [
+     "|时间（北京时间）|目标日|做的事|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    97,
+    98
+   ],
+   [
+    "replace",
+    100,
+    103,
+    98,
+    101,
+    [
+     "|**17:00**|当天|收盘后抓当天数据，并把当天 + 前两天用历史接口**强制重刷**一遍（上游资金流当晚陆续出数，越晚越全）|",
+     "|**06:00**|上一交易日|用历史接口**强制重刷**上一交易日 + 前两天，把前一天“已抓到但统计不全”的数据补齐（早盘抓的快照成交额只有开盘几分钟的量，这一步会修正成收盘真值）|",
+     "|**09:30–14:50 每 30 分钟（共 10 次）**（交易时段）|当天|**盘中逐笔大单采样**（`tick-sample` 工作流）：只抓当日分时 + 逐笔大单，不跑全量回补，几秒完成。东财明细是滚动窗口、盘后冻结，必须盘中多次采样才能累积全天大单分布|"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    158,
+    101,
+    156
+   ],
+   [
+    "replace",
+    158,
+    159,
+    156,
+    157,
+    [
+     "> docker compose down # 不带 -v，ntt-data 数据卷保留，历史数据不丢"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    194,
+    157,
+    192
+   ],
+   [
+    "replace",
+    194,
+    199,
+    192,
+    193,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    207,
+    193,
+    201
+   ],
+   [
+    "replace",
+    207,
+    208,
+    201,
+    202,
+    [
+     "|容器|角色|职责|端口|"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    209,
+    202,
+    203
+   ],
+   [
+    "replace",
+    209,
+    214,
+    203,
+    208,
+    [
+     "|`ntt-gateway`|`APP_ROLE=gateway`|**单端口入口**：`/` 与 `/nt/` → 汪汪队，`/qdii/` → QDII|容器内 **38881**（宿主映射 `0.0.0.0:48881`，供 NPM 等反代经网桥访问）|",
+     "|`ntt-web`|`APP_ROLE=web`|汪汪队看板 + `/api/data`（不自己抓数，避免与定时任务抢写锁）|5000（仅容器内）|",
+     "|`ntt-cron`|`APP_ROLE=cron`|汪汪队调度：完整同步 + 盘中逐笔采样|无|",
+     "|`qdii-web`|`APP_ROLE=qdii-web`|QDII 看板 + `/api/qdii/*`|5001（仅容器内）|",
+     "|`qdii-cron`|`APP_ROLE=qdii-cron`|QDII 调度：双日历抓取|无|"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    235,
+    208,
+    229
+   ],
+   [
+    "replace",
+    235,
+    236,
+    229,
+    230,
+    [
+     "|变量|默认值|说明|"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    230,
+    231
+   ],
+   [
+    "replace",
+    237,
+    252,
+    231,
+    246,
+    [
+     "|`GATEWAY_HOST_PORT`|`48881`|宿主机端口（绑定 `0.0.0.0`，让 NPM 容器能经网桥访问；公网仍只走 443）。换端口：`./deploy.sh --port 50080`|",
+     "|`GATEWAY_PORT`|`38881`|网关在容器内监听的端口；NPM 反代就指向它（或直接填容器名 `gateway`）|",
+     "|`PORT`|`5000`|汪汪队看板内部端口（不对外映射，别改）|",
+     "|`QDII_PORT`|`5001`|QDII 看板内部端口（不对外映射，别改）|",
+     "|`TZ`|`Asia/Shanghai`|**不要改**：调度时间点与交易日判定都按北京时间|",
+     "|`NT_DB_PATH`|`/app/data/data.db`|数据库路径，必须指向挂载卷|",
+     "|`APP_ROLE`|`all`|`gateway` / `web` / `cron` / `qdii-web` / `qdii-cron` / `all`（单容器用 all）|",
+     "|`NT_AUTO_ENSURE`|`1`|展示实例是否自行抓数。Compose 模式固定 `0`（交给 cron）；单容器保持 `1`|",
+     "|`SCHED_FULL_TIMES`|`06:00,17:10`|完整同步时间点|",
+     "|`SCHED_TICK_TIMES`|`09:30,10:00,10:30,11:00,11:30,13:00,13:30,14:00,14:30,14:50`|盘中逐笔大单采样时间点（A股交易时段，约每 30 分钟一次）|",
+     "|`SCHED_RUN_ON_START`|`1`|启动即跑一次完整同步|",
+     "|`SCHED_FULL_WEEKDAY_ONLY`|`1`|周末不跑全量同步|",
+     "|`SCHED_TIMEOUT`|`1800`|单次任务超时（秒），超时自动终止，避免卡住堆积|",
+     "|`BASE_PATH`|空|站点路径前缀。仅当反代**保留**前缀（如 `/nt`）时填，服务端会把前缀剥掉再匹配路由|",
+     "|`PEER_URL` / `QDII_PEER_URL`|空|页头选项卡指向的对端面板。域名反代时必填：同域不同路径写 `/qdii/`、`/nt/`，跨域名写完整 URL；留空则按「本端口 ±1」推断|"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    292,
+    246,
+    286
+   ],
+   [
+    "replace",
+    292,
+    301,
+    286,
+    287,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    309,
+    287,
+    295
+   ],
+   [
+    "replace",
+    309,
+    310,
+    295,
+    296,
+    [
+     "> 此时需自行放行 48881；前面有 NPM 的话仍只走 443。完整步骤见 `部署文档.md` 3.6 节。"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    315,
+    296,
+    301
+   ],
+   [
+    "replace",
+    315,
+    316,
+    301,
+    302,
+    [
+     "> 用 Nginx Proxy Manager 图形界面的完整步骤见 `部署文档.md` 3.5 节。"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    319,
+    302,
+    305
+   ],
+   [
+    "replace",
+    319,
+    320,
+    305,
+    306,
+    [
+     "|现象|原因与处理|"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    321,
+    306,
+    307
+   ],
+   [
+    "replace",
+    321,
+    329,
+    307,
+    315,
+    [
+     "|页面能开但没数据|首次同步需要几分钟，`docker compose logs -f cron` 看进度|",
+     "|定时任务时间不对|容器时区必须为 `Asia/Shanghai`（镜像已装 `tzdata` 并设好）|",
+     "|重启后数据没了|卷没挂上；`docker volume inspect ntt-data` 确认，别把 `NT_DB_PATH` 指到容器可写层|",
+     "|访问 502 且提示「无法连接上游」|网关起来了但后端没起；`docker compose ps` 看 `ntt-web` / `qdii-web` 是否 healthy|",
+     "|端口起不来|`48881` 被占用，`./deploy.sh --port 50080` 换一个|",
+     "|外网打不开|走 NPM 时只需 443 已放行；若公网直连裸机部署，需放行 `48881`|",
+     "|NPM 502|填的 gateway 容器 IP 变了（重建后会变）；填容器名 `gateway` 更省心，或固定 IP|",
+     "|`/qdii/` 打开是 404|网关的 `QDII_PREFIX` 与实际路径不一致（默认 `/qdii`），或 qdii-web 没起来|"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    332,
+    315,
+    318
+   ],
+   [
+    "replace",
+    332,
+    333,
+    318,
+    319,
+    [
+     "|数据|来源|说明|"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    334,
+    319,
+    320
+   ],
+   [
+    "replace",
+    334,
+    340,
+    320,
+    326,
+    [
+     "|现价 / 涨跌幅 / 成交额|新浪行情 `hq.sinajs.cn`|稳定，作为基础字段|",
+     "|**主力资金净流入**|东方财富 `push2.eastmoney.com`|核心指标，多镜像主机轮换容错|",
+     "|历史 K 线（收盘/成交额/涨跌）|东方财富 `push2his.eastmoney.com`|用于历史回补|",
+     "|历史主力资金|东方财富 `fflow/daykline`|用于历史回补|",
+     "|逐笔成交明细|东方财富 `stock/details/get`|方案C：滚动窗口，每笔含时间/价/量/方向；盘后仅尾盘快照，盘中采样累积|",
+     "|相关新闻|东方财富 / 新浪（尽力抓取）|上游不通则提示，不影响核心数据|"
+    ]
+   ],
+   [
+    "equal",
+    340,
+    347,
+    326,
+    333
+   ],
+   [
+    "replace",
+    347,
+    348,
+    333,
+    334,
+    [
+     "Key 可放在环境变量 `invest-radar-fuyaokey` 或 `FUYAO_API_KEY`（见 `.env.example`）；静态站由站点维护者在仓库 Secrets 配 `FUYAO_API_KEY` 后重新生成快照。该服务当前免费但无 SLA 承诺。完整实测记录、字段映射与接入设计见 FUYAO_INTEGRATION.md。"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    351,
+    334,
+    337
+   ],
+   [
+    "replace",
+    351,
+    352,
+    337,
+    338,
+    [
+     "|接口|说明|"
+    ]
+   ],
+   [
+    "equal",
+    352,
+    353,
+    338,
+    339
+   ],
+   [
+    "replace",
+    353,
+    359,
+    339,
+    345,
+    [
+     "|`GET /`|仪表盘页面|",
+     "|`GET /api/data`|数据 + 历史（JSON），支持筛选参数|",
+     "|`GET /api/options`|筛选项清单（可选日期 / 类别 / 基金）|",
+     "|`GET /api/refresh`|立即抓取并刷新|",
+     "|`GET /api/status`|最近抓取状态（含 `fuyao` 增强状态，不含 Key）|",
+     "|`GET /api/fuyao/check`|增强源连通性自检（无 Key 时不发网络请求）|"
+    ]
+   ],
+   [
+    "equal",
+    359,
+    377,
+    345,
+    363
+   ],
+   [
+    "replace",
+    377,
+    439,
+    363,
+    364,
+    [
+     "…（62 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    439,
+    447,
+    364,
+    372
+   ],
+   [
+    "replace",
+    447,
+    458,
+    372,
+    373,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    458,
+    461,
+    373,
+    376
+   ],
+   [
+    "delete",
+    461,
+    463,
+    376,
+    376
+   ],
+   [
+    "equal",
+    463,
+    474,
+    376,
+    387
+   ],
+   [
+    "replace",
+    474,
+    475,
+    387,
+    388,
+    [
+     "|模块|内容|关键实现|"
+    ]
+   ],
+   [
+    "equal",
+    475,
+    476,
+    388,
+    389
+   ],
+   [
+    "replace",
+    476,
+    484,
+    389,
+    397,
+    [
+     "|A 基金池|**59 只 / 6 大类**的场外 QDII（LOF + ETF联接 + FOF）|代码与简称取自天天基金全量搜索接口（`fundcode_search.js`），跟踪标的逐只核对 F10「跟踪标的」字段；`online_code` 场内映射按**同公司同指数**反查场内 ETF（无自家 ETF 的留空，不硬配）|",
+     "|B 限额|每日申购状态（开放 / 限大额 / 暂停）+ 日限额 + 起购金额|`Fund_JJJZ_Data.aspx` 全量；**必须 UTF-8 解码**（见踩坑）|",
+     "|C 多平台费率|天天基金 + 支付宝 + 理财通三平台的在售状态、申购费、管理费、托管费、销售服务费、年费合计|天天基金 `FundRateInfo`；支付宝 `fund123.cn` 服务端渲染；**理财通无公开接口，按平台通用规则推算（页面标「推算」徽标）**；`get_platform_fee()` 按 `FUND_POOL` 顺序 + 平台固定秩排序，保证同代码相邻（rowspan 合并的前提）|",
+     "|B+C 基金总览|**申购状态、限额、多平台费率合并成一张表**：一只基金一个行块（代码/名称/类别/状态/日限额/起购/固定年费纵向合并，右侧跟各平台「在售 + 申购费」行）；**表头可排序**|`board.py` 按 code 做 join 输出 `/api/qdii/board`。固定年费是合同条款、各平台一致 → 提到基金级只列一次；真正按平台变的只有「在售」与「申购费」。`limit`/`fee` 两个原始接口保留排障用。排序**在后端做**（口径唯一、可单测）：点基金级列改「哪只基金在前」，点平台级列只改同一只基金内部各平台行的先后，**各基金顺序不变**|",
+     "|D 全球市场信号|**美股**（纳指现货+期货、标普500现货+期货）／**亚太**（日经225期货）／**欧洲**（德国DAX、法国CAC40、英国富时100）／**利率**（美债10Y、VIX）|每类一个主信号，**优先海外指数现货**；取不到现货的（DAX/CAC40/纳指科技）用**境内对应场内 ETF 实时价代理**，英国富时100 用美股 `usEWU` 代理——代理口径在名称与类型标签里写明，不冒充指数。分组与标签由 `constants.MARKET_SIGNALS` 统一下发，加新市场只改常量|",
+     "|E 跟踪误差|年化 tracking error（**已并入 ④ 基金总览表**，不再单独一张）|基金净值 vs **真实指数**日线（新浪美股指数/外盘期货为主、东财为备），基准**按大类**配置（`TRACK_BENCHMARK_BY_CATEGORY`），按交易日对齐|",
+     "|F 决策引擎|**按大类**（标普500 / 纳斯达克100 / 日经225 / 德国DAX）给「建议倍数 + 理由」|固定周期 + 信号增强；跟跌加仓 + 避险防御；同大类不再区分具体基金|",
+     "|G 场内溢价|**按场内 ETF** 逐只算溢价率（10 只：纳指 5 / 标普 3 / 日经 1 / DAX 1），并给**折算溢价**|新浪场内价 + 东财单位净值 + 指数日线（新浪美股 `.NDX`/`.INX`、新浪外盘期货 `NK`）；折算 = 把 T+1 滞后净值按指数涨幅折到最新收盘日|"
+    ]
+   ],
+   [
+    "equal",
+    484,
+    491,
+    397,
+    404
+   ],
+   [
+    "replace",
+    491,
+    495,
+    404,
+    408,
+    [
+     " - **VIX**（日频收盘，CBOE）：看**绝对水平**——市场「已经」恐慌到什么程度，是结果。`>30` 硬触发；`20~30` 为预警区只提示；单日跳升 `≥20%` 提示情绪急变。",
+     " - **美债10Y**（实时，CNBC）：看**单日变动 bp**——无风险利率跳升压制估值，是原因（贴现率上行先杀高估值资产）。单日上行 `>30bp` 硬触发；`+15~30bp` 提示逼近。",
+     " - 未触发时理由里也写当日实际取值（`避险指标正常：VIX 16.9（阈值 30）、美债10Y 单日 -5bp（阈值 +30bp）`），避免「看不出策略到底有没有在用它们」。",
+     " - 两者同时触发只乘一次 0.5，不叠加。"
+    ]
+   ],
+   [
+    "equal",
+    495,
+    499,
+    408,
+    412
+   ],
+   [
+    "replace",
+    499,
+    500,
+    412,
+    413,
+    [
+     "|接口|说明|"
+    ]
+   ],
+   [
+    "equal",
+    500,
+    501,
+    413,
+    414
+   ],
+   [
+    "replace",
+    501,
+    512,
+    414,
+    425,
+    [
+     "|`GET /`|QDII 看板页面（默认端口 5001）|",
+     "|`GET /api/qdii/status`|服务状态 / 基金池规模|",
+     "|`GET /api/qdii/funds`|基金池|",
+     "|`GET /api/qdii/limit`|最新申购状态与限额（原始数据）|",
+     "|`GET /api/qdii/fee`|多平台费率与规则（原始数据）|",
+     "|`GET /api/qdii/board`|**申购状态 + 限额 + 多平台费率合并表**（页面主口径，含表头摘要）。可带排序参数：`sort`/`dir` = 基金级排序列与方向，`psort`/`pdir` = 平台级排序列与方向|",
+     "|`GET /api/qdii/signal`|全球市场信号（含 `meta` 分组与类型标签、`groups` 分组顺序）|",
+     "|`GET /api/qdii/premium`|场内溢价率|",
+     "|`GET /api/qdii/tracking`|跟踪误差（原始数据；页面已并入 ④ 基金总览表）|",
+     "|`GET /api/qdii/decision`|**按大类**的定投建议倍数与理由（页面主口径）|",
+     "|`GET /api/qdii/decision_fund`|逐基金明细（追溯用，页面不展示）|"
+    ]
+   ],
+   [
+    "equal",
+    512,
+    519,
+    425,
+    432
+   ],
+   [
+    "replace",
+    519,
+    520,
+    432,
+    433,
+    [
+     "|容器|角色|职责|端口|"
+    ]
+   ],
+   [
+    "equal",
+    520,
+    521,
+    433,
+    434
+   ],
+   [
+    "replace",
+    521,
+    524,
+    434,
+    437,
+    [
+     "|`ntt-gateway`|`APP_ROLE=gateway`|单端口入口，`/qdii/` 分发到 QDII|`${GATEWAY_HOST_PORT:-48881}` → 38881|",
+     "|`qdii-web`|`APP_ROLE=qdii-web`|QDII 看板 + `/api/qdii/*`（只展示）|5001（仅容器内）|",
+     "|`qdii-cron`|`APP_ROLE=qdii-cron`|双日历调度抓取|无|"
+    ]
+   ],
+   [
+    "equal",
+    524,
+    529,
+    437,
+    442
+   ],
+   [
+    "replace",
+    529,
+    530,
+    442,
+    443,
+    [
+     "|变量|默认值|说明|"
+    ]
+   ],
+   [
+    "equal",
+    530,
+    531,
+    443,
+    444
+   ],
+   [
+    "replace",
+    531,
+    537,
+    444,
+    450,
+    [
+     "|`QDII_PORT`|`5001`|QDII Web 容器内端口（不对外映射）|",
+     "|`QDII_PREFIX`|`/qdii`|网关分发 QDII 的路径前缀|",
+     "|`QDII_SCHED_LIMITTIMES`|`09:00`|限额/费率/跟踪误差（A 股交易日）|",
+     "|`QDII_SCHED_SIGNALTIME`|`14:30`|美股信号（美股交易日）|",
+     "|`QDII_SCHED_PREMIUMTIME`|`14:30`|场内溢价（A 股交易日）|",
+     "|`NT_QDII_DB_PATH`|`/app/data/qdii.db`|QDII 数据库路径，须指向挂载卷|"
+    ]
+   ],
+   [
+    "equal",
+    537,
+    542,
+    450,
+    455
+   ],
+   [
+    "replace",
+    542,
+    543,
+    455,
+    456,
+    [
+     "|数据|来源|"
+    ]
+   ],
+   [
+    "equal",
+    543,
+    544,
+    456,
+    457
+   ],
+   [
+    "replace",
+    544,
+    553,
+    457,
+    466,
+    [
+     "|申购状态 / 日限额|天天基金 `Fund_JJJZ_Data.aspx`|",
+     "|基金池代码|天天基金 `fundcode_search.js`|",
+     "|费率与规则（平台 A）|天天基金 `FundRateInfo.ashx`|",
+     "|费率与规则（平台 B）|支付宝 `fund123.cn`（服务端渲染 `window.context`）|",
+     "|费率与规则（平台 C）|**理财通无公开接口**：`fund.qq.com` / `licai.qq.com` 域名已下线，仅微信 App 内提供服务且需登录态 → 管理费/托管费沿用基金合同值，申购费按「A 类 1 折」推算，起购按 10 元，状态跟随基金公司限购公告|",
+     "|基金历史净值|东财 `api.fund.eastmoney.com/f10/lsjz`（**每页固定 20 条，需翻页**）|",
+     "|指数日线（跟踪误差基准）|**新浪美股指数日K** `US_MinKService.getDailyK`（`.INX` 标普500 / `.NDX` 纳指100，全历史、稳定）；备源东财 `push2his`（`100.SPX` / `100.NDX100` / `100.N225` / `100.GDAXI`）|",
+     "|场内价格|新浪 `hq.sinajs.cn`（GBK）|",
+     "|美股期货 / 现货 / VIX|新浪期货 + 新浪指数 + 腾讯|"
+    ]
+   ],
+   [
+    "equal",
+    553,
+    577,
+    466,
+    490
+   ],
+   [
+    "replace",
+    577,
+    580,
+    490,
+    491,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    580,
+    585,
+    491,
+    496
+   ],
+   [
+    "replace",
+    585,
+    587,
+    496,
+    497,
+    [
+     "MIT © 2026 turbomind66"
+    ]
+   ]
+  ],
+  "at": "2026-11-27"
+ },
+ "72d2eaab995f+2": {
+  "fn": "oceanbase/seekdb-swift",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "MySQL-protocol client; the iOS example App uses MySQLNIO."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    16,
+    11,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "packages as `build/SeekDBEngine.xcframework` (see Build). When that exists"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    21,
+    17,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "Build says when to clear it. Both hold iOS slices only for now."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    42,
+    22,
+    42
+   ],
+   [
+    "replace",
+    42,
+    48,
+    42,
+    43,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    64,
+    43,
+    59
+   ],
+   [
+    "replace",
+    64,
+    65,
+    59,
+    60,
+    [
+     "it into a new 1.4.1 database. See the SeekDB upgrade notes."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    72,
+    60,
+    67
+   ],
+   [
+    "replace",
+    72,
+    73,
+    67,
+    68,
+    [
+     "the iOS build guide"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    79,
+    68,
+    74
+   ],
+   [
+    "replace",
+    79,
+    83,
+    74,
+    75,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    117,
+    75,
+    109
+   ],
+   [
+    "replace",
+    117,
+    125,
+    109,
+    110,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    152,
+    110,
+    137
+   ],
+   [
+    "replace",
+    152,
+    156,
+    137,
+    141,
+    [
+     " close only releases the handle. Opening the same directory again reuses the",
+     " running engine, also after every handle has been closed. Another directory is",
+     " rejected, and so is any open after the engine failed to start;",
+     " `seekdb_last_open_error` says why."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    141,
+    142
+   ],
+   [
+    "replace",
+    157,
+    160,
+    142,
+    145,
+    [
+     " `log_disk_size=2G` and `datafile_maxsize=20G`; parameters override them when the",
+     " database is created. TCP is not available: a non-zero `port`, or a",
+     " `mysql_port_mode` other than `disabled`, is rejected."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    145,
+    146
+   ],
+   [
+    "replace",
+    161,
+    165,
+    146,
+    150,
+    [
+     " The connection options carry `transport` `unix_socket`, the socket path in",
+     " `unix_socket` (a short alias under the App's tmp directory, or under `/tmp` on",
+     " the Simulator, when the real path is too long) and `user` `root`, with an empty",
+     " password."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    150,
+    151
+   ],
+   [
+    "replace",
+    166,
+    168,
+    151,
+    153,
+    [
+     " it there, so use absolute paths. The first open blocks until the engine accepts",
+     " connections; call it away from the UI thread."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    185,
+    153,
+    170
+   ],
+   [
+    "replace",
+    185,
+    187,
+    170,
+    172,
+    [
+     " release 0.1.0's device slice under a manifest rewritten to match it, placed as",
+     " `-o build_ios` and `-o build_ios_simulator` place them;"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    191,
+    172,
+    176
+   ],
+   [
+    "replace",
+    191,
+    192,
+    176,
+    177,
+    [
+     "manifests. The SwiftPM cache behaviour described under Build was observed"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    197,
+    177,
+    182
+   ],
+   [
+    "replace",
+    197,
+    199,
+    182,
+    184,
+    [
+     "oceanbase/seekdb-swift, the repository",
+     "that apps add by URL. To use the official iOS release archive,"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    223,
+    184,
+    208
+   ]
+  ],
+  "at": "2026-11-27"
  }
 }

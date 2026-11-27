@@ -3124,5 +3124,91 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "18a6df0666cd": {
+  "identity": {
+   "one_liner": "Couchbase 官方的 MCP 服务器，让 AI 客户端连接并操作 Couchbase 数据",
+   "review": "该仓库提供 self-hosted 的 MCP 服务器，包含两个子命令：operational 服务器连接 Capella 或自管 Couchbase 集群（52 个工具），operational-insights 服务器连接自管 Operational Insights 集群（13 个工具）。默认只读模式，写工具不加载，数据修改查询被阻止；需 Python 3.11+，通过 PyPI（uvx）、Docker 或源码安装。企业支持需授权 Couchbase AI Data Plane。",
+   "highlights": [
+    "提供集群健康、数据 schema、KV 操作、SQL++ 查询、索引管理、全文与向量搜索等分类工具",
+    "默认启用只读模式，可禁用单个工具或将其置于用户确认之后",
+    "支持 STDIO 和 Streamable HTTP 传输，HTTP 可选 OAuth 2.1（Auth0、Okta、Keycloak 等 JWKS IdP），并含健康检查与审计日志"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor、Windsurf、VS Code、JetBrains AI Assistant 等 MCP 客户端中通过自然语言查询 Couchbase 集群的 bucket/scope/collection、schema 与文档数据",
+    "通过自然语言执行 SQL++ 查询、生成 EXPLAIN 计划、获取索引建议并创建索引",
+    "检查集群健康状态、运行服务、慢查询与历史统计（部分工具仅限自管 Server 7.6+）"
+   ]
+  },
+  "sha": "18a6df0666cd",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b92c250e638f": {
+  "identity": {
+   "one_liner": "自托管 RSS 阅读器，用本地模型把订阅内容变成可检索知识。",
+   "review": "Alt 是一个基于 Docker Compose 在本机运行的 RSS 阅读与知识平台，面向希望在本地质理环境内处理订阅内容的用户。它按小时抓取 RSS/OPML 订阅源，通过本地 Ollama 模型生成摘要、标签、搜索索引与 RAG 问答，功能按 ai、rag、recap 等多个 stack 分组，用 Go 编写的 altctl CLI 启停；部分 stack（如摘要与 RAG）需要 NVIDIA GPU，Linux AppArmor 主机需先加载特定 profile。",
+   "highlights": [
+    "从 RSS/OPML 收集文章，按小时轮询并设每日流入上限，经本地 Ollama 流水线生成摘要、标签并索引到 Meilisearch",
+    "提供 Ask Augur 引用式问答（pgvector 检索 + 重排序）与 Acolyte 长报告生成，全部推理在本机运行，无需云端 LLM 密钥",
+    "由多个 Go/Rust/Python 服务组成，通过 Connect-RPC 与 Protobuf 通信，含 Pact 契约测试、mTLS 服务互认证及 ClickHouse 日志聚合"
+   ],
+   "use_cases": [
+    "在本机自托管 RSS 订阅，为文章自动生成摘要、标签与每日简报",
+    "基于个人订阅文章库进行带引用的检索问答",
+    "通过 Knowledge Home、Your Trail、Tag Verse 回顾与追踪已读内容"
+   ]
+  },
+  "sha": "b92c250e638f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b15a04f68433": {
+  "identity": {
+   "one_liner": "基于 Python Tkinter 与 SQLite 的个人财务管理器",
+   "review": "这是一个使用 Python 编写的个人财务管理桌面程序，采用 Tkinter 构建图形界面，数据存储使用 SQLite 数据库。README 仅提供两句说明，未给出功能清单、安装步骤与使用文档，具体能力需查阅源码确认。适合希望本地管理个人收支并阅读 Python 桌面应用源码的用户参考。",
+   "highlights": [
+    "使用 Tkinter 提供图形用户界面",
+    "使用 SQLite 存储财务数据"
+   ],
+   "use_cases": [
+    "本地记录与管理个人收支",
+    "作为 Python Tkinter 桌面应用的源码学习参考"
+   ]
+  },
+  "sha": "b15a04f68433",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "789e4eda2fe5": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码 CLI 代理编排控制平面，以 SQLite 账本持久化任务意图",
+   "review": "Tycho 是一个自托管控制平面，用于编排本机已有的 Claude Code、OpenAI Codex、Gemini（agy）和 DeepSeek（dsh）CLI 代理，覆盖工作站、Linux 服务器与移动设备。它以零后端依赖的 SQLite 账本持久化意图，通过出站 HTTP/HTTPS 让工作节点加入多机集群，无需入站 SSH。安装脚本不要求 root、Docker 或预装 Node。安全模型依赖 OS 用户与机器隔离，文档要求不以 root 运行。",
+   "highlights": [
+    "直接驱动原生 claude/codex/agy/dsh CLI，保留其真实工具、MCP 服务器、Git 凭据与订阅，不重新实现代理循环",
+    "单文件 SQLite 账本（Node 24 + node:sqlite），意图先持久化后执行，唯一索引强制每任务单个活跃 Run，重启后对账恢复",
+    "支持 IM 集成（企业微信 WebSocket、个人微信扫码、飞书桥、tycho-v1 签名自定义协议）、IANA 时区 Cron、事务性账本事件与签名 webhook 触发器"
+   ],
+   "use_cases": [
+    "在公共 VPS 部署 24×7 多机中心，工作节点通过 tycho node join 经出站连接加入，适配 Tailscale、局域网或 NAT 反向隧道场景",
+    "集中管理跨机器账号池与配额故障转移（operate/execute/decide 三层、5h/7d 遥测、P1→P2 冷却切换、本地配额探测插件）",
+    "通过 IM 通道与事件触发器驱动无人值守工作流，并通过 Web、3.6 MB Tauri 桌面端或 iOS/Android PWA 远程接入"
+   ]
+  },
+  "sha": "789e4eda2fe5",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3613,5 +3613,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c22fbdf071f2": {
+  "identity": {
+   "one_liner": "面向 Addax 离线引擎的 T+1 ODS 采集控制台，统一管理采集、调度与对账。",
+   "review": "Addax Admin 是配合 Addax 离线 ETL 引擎使用的管理与调度控制台，专注 T+1 ODS 层数据落地，自身不执行采集。它在同一界面提供采集定义、调度、补数回补、数据对账、告警与审计功能，支持 Hive、关系库为目标端及 MongoDB、Elasticsearch 源接入。需 Java 21、PostgreSQL、Redis，可用 Docker Compose、主机发行包或源码构建部署，默认账号 admin 需首次登录后修改密码。",
+   "highlights": [
+    "支持批量创建采集表、显式字段映射、表结构演化探测与日表/月表动态表名模板",
+    "提供增量采集、按日历补数回补、读取/写入行数对账、字段级血缘与数据质量断言",
+    "内置企业微信/钉钉/飞书/Webhook/邮件告警通道、源级三角色授权与可导出 CSV 的安全审计"
+   ],
+   "use_cases": [
+    "T+1 离线采集与 ODS 层数据落地",
+    "需要多节点高可用、审计与源级授权的数据团队",
+    "以 Hive 或关系型数据库为目标端的采集运维管理"
+   ]
+  },
+  "sha": "c22fbdf071f2",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "692066070a7e": {
+  "identity": {
+   "one_liner": "drt 是基于 YAML 声明式配置的开源反向 ETL CLI 工具，将数仓数据同步到业务工具。",
+   "review": "drt（data reverse tool）用于把仓库中的数据写回 Slack、HubSpot 等业务目的地，配置以 YAML 存放在用户自己的 Git 仓库中。核心机制包括 drt plan 只读预览变更集、drt apply 校验后写入、delete 守卫限制删除比例，以及 fill_empty 写入策略。项目提供 drt-core 包（含 DuckDB）、MCP 服务器和 Claude Code 技能；plan/apply 仅支持可回读的 SQL 数据库与数仓目的地，且属于普通运行前的守卫而非事务。",
+   "highlights": [
+    "提供 drt plan/drt apply 工作流：plan 输出键级变更集，apply 在数据或配置变化时拒绝写入，并支持 max_delete_pct 等删除守卫",
+    "内置 MCP 服务器（约 20 个工具）与 Claude Code 技能，可通过 AI 客户端运行同步、校验配置、检查死信队列",
+    "支持从 dbt manifest.json 和 Apache Ossie 语义模型生成同步配置，并提供 Mermaid DAG 文档生成、bash/zsh/fish shell 补全"
+   ],
+   "use_cases": [
+    "将数仓中 dbt 模型的字段回填到 CRM 等目的地，配合 fill_empty 策略只填充空值、保留人工录入内容",
+    "在 GitHub Actions、Dagster、Airflow 等调度环境中以 CI 方式运行同步，通过 --with-plan 在 PR 中生成 plan 评论、合并后 apply",
+    "通过 MCP 客户端或 Claude Code 以对话方式生成同步 YAML、诊断失败并经人工批准后应用变更"
+   ]
+  },
+  "sha": "692066070a7e",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d8fcce748600": {
+  "identity": {
+   "one_liner": "通过读取业务数据库核实 agent 工具调用是否真实落库的开源工具。",
+   "review": "Verilays 用装饰器包装会写数据的工具，记录工具声称的操作，再由 worker 以只读连接回查用户自己的 Postgres，比较返回值与实际记录，输出 verified/mismatch/missing 等状态报告。面向使用 LLM agent 且数据落 Postgres 的开发者，支持 LangGraph 与 Langfuse 集成；目前仅支持 Postgres，且只校验记录与参数一致，不判断操作本身是否正确。",
+   "highlights": [
+    "提供装饰器包装工具，由 worker 以只读连接回查 Postgres，输出 verified、mismatch、missing、ambiguous、failed 等 8 种状态",
+    "支持 deadline 重试延迟写入、字段名映射、expected 期望值、删除工具 exists=False 及自定义 verify= 检查函数",
+    "集成 LangGraph 状态节点与 Langfuse trace（校验结果作为 score 回写），配置错误时工具照常运行不中断"
+   ],
+   "use_cases": [
+    "监控客服/预订类 agent 的写操作，发现返回成功但未落库、值不符或重复写入的情况",
+    "在 Langfuse 可观测体系中为工具调用附加数据库层面的校验结果",
+    "生产环境以 Docker 部署 worker 与 action store，自托管运行且数据不出自有基础设施"
+   ]
+  },
+  "sha": "d8fcce748600",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

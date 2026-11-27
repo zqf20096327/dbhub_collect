@@ -3275,5 +3275,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8b430c1f2356": {
+  "identity": {
+   "one_liner": "自托管的数据库工作台，提供浏览器端数据浏览、查询与模式可视化",
+   "review": "WhoDB Community 是一个用 Go 与 React/TypeScript 编写的自托管数据库工作台，可在浏览器、桌面应用和终端 CLI 中运行。它提供表格式的数据浏览与编辑、交互式模式图、多单元查询草稿本，并支持通过 Ollama、OpenAI 等可选 AI 供应商进行自然语言提问。支持 PostgreSQL、MySQL、MongoDB、Redis、ClickHouse 等多种数据库，不同数据源的功能有所差异。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite、MongoDB、Redis、Elasticsearch、ClickHouse 等 20 余种数据源，可通过 Docker、桌面应用或 CLI 运行",
+    "提供带排序、筛选、分页和内联编辑的电子表格式数据网格，以及表与关系的交互式模式图",
+    "CLI 内置交互式终端 UI 和 MCP 服务器，AI 功能可选接入 Ollama、LM Studio 等本地或托管供应商"
+   ],
+   "use_cases": [
+    "在本地或自托管环境中检查和编辑数据库数据",
+    "通过模式图和查询草稿本了解不熟悉的数据库结构",
+    "将 WhoDB 的 MCP 服务器接入支持 MCP 的 AI 工具进行终端操作"
+   ]
+  },
+  "sha": "8b430c1f2356",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1667c49b797f": {
+  "identity": {
+   "one_liner": "单二进制 MCP 守护进程，以 4 个原语提供 JS 编排、浏览器 CDP、OS 与 Windows 桌面控制",
+   "review": "这是一个用 Go 编写的单文件 MCP 守护进程（约 33 MB，内嵌 Rust Windows UIA worker 与 SQLite 审计引擎），面向本地 IDE/CLI 及云端 MCP 客户端。它将工具面收敛为 run、wait、session、capability_propose 四个原语，在会话级持久 JS VM 中并发调用 proc、fs、browser、desktop、img 等模块；通过 DevToolsActivePort 与 Edge/Chrome 建立共享 CDP 连接，支持浏览器级 Tracing.start 与 Web Performance 指标读取。安装需运行 setup local 初始化守护进程、setup browser 装载配套扩展，并在浏览器开启远程调试后一次性授权。",
+   "highlights": [
+    "提供 4 个正交原语（run/wait/session/capability_propose），JS VM 中顶层声明跨轮次持久化，可在单次调用内用 Promise 并发访问进程、文件系统、浏览器、桌面等模块",
+    "通过 Edge/Chrome 的 DevToolsActivePort 建立共享 CDP WebSocket，支持 browser.traceStart/traceStop 及 ttfb_ms、lcp_ms、cls 等 Web Performance 指标读取",
+    "内嵌 SQLite WAL + FTS5 审计与本地 /ui Activity Studio，支持热插拔 OpenAI 与 Cloudflare 隧道且无需重启守护进程"
+   ],
+   "use_cases": [
+    "需要跨 IDE/CLI/云客户端共享同一浏览器调试会话的 MCP 自动化场景",
+    "通过 JS 脚本在单轮内并发完成浏览器操作、文件读写与进程管理的多步任务编排",
+    "Windows 桌面自动化：经 WGC 截屏与 UIA 观察及语义操作（含被遮挡窗口）"
+   ]
+  },
+  "sha": "1667c49b797f",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

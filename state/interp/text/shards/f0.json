@@ -3550,5 +3550,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "53728209d018": {
+  "identity": {
+   "one_liner": "基于 Cloudflare Workers 的 OpenAI 兼容 AI 安全网关，用于提示检查与 LLM 治理。",
+   "review": "Warden 是运行在 Cloudflare Workers（Hono + D1 SQLite + Durable Objects）上的开源安全网关，兼容 OpenAI SDK 接口，支持 Gemini、Groq、OpenRouter 及自定义端点。它对提示、SSE 流式响应和 agent 工具调用执行四级检测级联（文本归一化、确定性规则、风险分类器、Gemini LLM 裁决），并提供 PII 掩码、YAML 策略、审计哈希链与 Next.js 管理控制台，适合需要在 LLM 调用链路中插入安全检查与治理流程的团队。",
+   "highlights": [
+    "提供 OpenAI 兼容的 /v1/chat/completions 代理，可通过修改 baseURL 接入，支持 Gemini、Groq、OpenRouter 及自定义端点",
+    "实现四级检测级联与 512 字符滑动窗口 SSE 扫描器，检测 PII、密钥泄漏与提示注入；可逆 PII 掩码支持响应端还原",
+    "包含策略即代码（版本化 YAML、影子模式、回滚、历史流量 dry-run）、SHA-256 审计哈希链、RPM/USD 限额、语义缓存与高危工具调用人工审批接口"
+   ],
+   "use_cases": [
+    "为调用 Gemini、Groq 等上游 LLM 的应用在代理层统一执行提示注入检测与 PII 掩码",
+    "对自主 agent 的 tool_calls 实施白名单、参数校验、污染追踪与人工审批流程",
+    "多租户场景下的策略版本管理、用量预算限制与防篡改审计日志验证"
+   ]
+  },
+  "sha": "53728209d018",
+  "source": "readme",
+  "generated_at": "2026-11-27",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
